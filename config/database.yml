@@ -11,7 +11,7 @@
 development:
   adapter: mysql2
   encoding: utf8
-  database: mariology_development
+  database: c2_development
   pool: 5
   username: root
   password:
@@ -23,7 +23,7 @@ development:
 test:
   adapter: mysql2
   encoding: utf8
-  database: mariology_test
+  database: c2_test
   pool: 5
   username: root
   password:
@@ -32,7 +32,7 @@ test:
 production:
   adapter: mysql2
   encoding: utf8
-  database: mariology_production
+  database: c2_production
   pool: 5
   username: root
   password:
