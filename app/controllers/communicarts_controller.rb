@@ -1,6 +1,6 @@
 class CommunicartsController < ApplicationController
-  def send cart
-    @user = User.create(email: 'raphael.vilas@gmail.com')
-    CommunicartMailer.cart_notification_email(@User).deliver
+  def send_cart
+    CommunicartMailer.cart_notification_email(@user).deliver
+    render json: { message: "This was a success"}, status: 200
   end
 end
