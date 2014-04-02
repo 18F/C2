@@ -16,3 +16,5 @@
 /tmp
 .DS_Store
 .rspec
+custom_plan.rb
+zeus.json
