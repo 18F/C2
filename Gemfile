@@ -5,6 +5,7 @@ gem 'mysql2'
 gem 'turbolinks'
 gem 'jbuilder', '~> 1.2'
 gem 'haml'
+gem 'roadie'
 
 group :test, :development do
   gem 'letter_opener'

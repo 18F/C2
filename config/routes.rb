@@ -1,3 +1,3 @@
 C2::Application.routes.draw do
-  post 'communicarts/send_cart' => 'communicarts#send_cart'
+  post 'send_cart' => 'communicarts#send_cart'
 end

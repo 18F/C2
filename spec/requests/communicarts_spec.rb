@@ -45,7 +45,7 @@ describe 'CommunicartsController' do
             ]
           }
 
-      post "/communicarts/send_cart", params
+      post "/send_cart", params
       expect(response.status).to eq 200
     end
   end
