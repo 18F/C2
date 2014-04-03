@@ -5,8 +5,9 @@ class CommunicartsController < ApplicationController
     CommunicartMailer.cart_notification_email(params).deliver
     render json: { message: "This was a success"}, status: 200
   end
+
   def approval_reply_received
-    CommunicartMailer.cart_notification_email(@user).deliver
-    render json: { message: "approvral_reply_received"}, status: 200
+    CommunicartMailer.approval_reply_received_email(params).deliver
+    render json: { message: "approval_reply_received"}, status: 200
   end
 end
