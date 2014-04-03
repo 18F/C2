@@ -7,7 +7,7 @@ class CommunicartMailer < ActionMailer::Base
 
     @url = ENV['NOTIFICATION_URL']
     @json_post = analysis
-    mail(to: analysis['attention'], subject: "You have received a Communicart notification")
+    mail(to: analysis['attention'], subject: "please approve Cart Number: "+analysis["cartNumber"])
   end
 
   def approval_reply_received_email(analysis)
