@@ -2,8 +2,15 @@ require 'spec_helper'
 
 describe 'CommunicartsController' do
   describe "POST /communicarts/send_cart" do
-    it "makes a successful request" do
+    before do
+      ENV.stub(:[])
+      ENV.stub(:[]).with('NOTIFICATION_TO_EMAIL').and_return('george.jetson@spacelysprockets.com')
 
+      params = CommunicartMailer.default_params.merge({from:'reply@communicart-stub.com'})
+      CommunicartMailer.stub(:default_params).and_return(params)
+    end
+
+    it "makes a successful request" do
       params = {
         cartNumber: "2867637",
         category: "initiation",

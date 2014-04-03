@@ -1,5 +1,5 @@
 class CommunicartMailer < ActionMailer::Base
-  default from: ENV['GMAIL_USERNAME']
+  default from: ENV['NOTIFICATION_FROM_EMAIL']
 
   def cart_notification_email(user)
     @url = ENV['NOTIFICATION_URL']
