@@ -1,3 +1,5 @@
 
-At time <%= params["date"] %>, approver read.robert@gmail.com disapproved Cart Number 2867637.
-You may wish to contact the approver for more explanation.
+At time <%= @approval_reply["date"] %>, approver <%= @approval_reply["fromAddress"] %> <%= @approval %>  Cart Number <%= @approval_reply["cartNumber"] %>. <%= @approval_reply["approve"] == "APPROVE" ? 
+"Please purchase the cart with all deliberate speed." :
+"You may wish to contact the approver for more explanation."
+ %>

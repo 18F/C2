@@ -8,8 +8,10 @@ class CommunicartMailer < ActionMailer::Base
 
   def approval_reply_received_email(analysis)
     to_address = ENV['NOTIFICATION_TO_ADDRESS'] ? ENV['NOTIFICATION_TO_ADDRESS'] : 'read.robert@gmail.com'
-    @url = ENV['NOTIFICATION_URL']
-    mail(to: to_address, subject: "Your cart has been approved or disapproved.")
+    @approval = analysis["approve"] == "APPROVE" ? "approved" : "disapproved"
+    @approval_reply = analysis
+    @url = ENV['NOTIFICATION_URL'] 
+    mail(to: to_address, subject: "User "+analysis["fromAddress"]+" has "+@approval+" cart # "+analysis["cartNumber"])
   end
 end
 
