@@ -368,6 +368,11 @@ table {
   border-spacing: 0;
 }
 
+table.reply-section {
+  width: 940px;
+  background-color: #fff;
+  padding: 15px;
+}
 
 
 
@@ -1715,7 +1720,7 @@ p {
   <table class='reply-section'>
     <tr>
     <td>
-    ------------------
+    ------------------<br/>
 
 Please reply with the word 'APPROVE' or 'DISAPPROVE' begining a line with nothing else on that line.
 
@@ -1724,6 +1729,7 @@ Here is the comment sent to you:
 BEGIN COMMENT
 <%= @json_post["initiationComment"] %>
 END COMMENT
+<br/>
     </td>
     </tr>
   </table>
