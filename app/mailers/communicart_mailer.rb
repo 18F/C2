@@ -3,6 +3,7 @@ class CommunicartMailer < ActionMailer::Base
 
   def cart_notification_email(analysis)
     @url = ENV['NOTIFICATION_URL']
+    @json_post = analysis
     mail(to: analysis['attention'], subject: "You have received a Communicart notification")
   end
 
