@@ -1800,9 +1800,9 @@ END COMMENT
                   </td>
 
                   <td>
-                    <p class="fssi-compliant result-tag">FSSI&nbsp;Compliant</p>
-                    <p class="result-tag">Eco-Friendly</p>
-                    <p class="result-tag">Made by Vets</p>
+		    <%- cart_item['features'].each do |feature| %>
+                    <p class="result-tag"><%= feature %></p>
+		    <%- end %>
                   </td>
 
                   <td>

@@ -2,7 +2,6 @@ class CommunicartMailer < ActionMailer::Base
   default from: ENV['NOTIFICATION_FROM_EMAIL']
 
   def cart_notification_email(analysis)
-
     @json_post = analysis
 
     @url = ENV['NOTIFICATION_URL']
