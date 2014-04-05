@@ -1800,9 +1800,11 @@ END COMMENT
                   </td>
 
                   <td>
-		    <%- cart_item['features'].each do |feature| %>
-                    <p class="result-tag"><%= feature %></p>
-		    <%- end %>
+                    <%- unless cart_item['features'].nil? %>
+                      <%- cart_item['features'].each do |feature| %>
+                        <p class="result-tag"><%= feature %></p>
+                      <%- end %>
+                    <%- end %>
                   </td>
 
                   <td>
