@@ -11,6 +11,7 @@ group :test, :development do
   gem 'letter_opener'
   gem 'rspec-rails'
   gem 'pry-rails'
+  gem 'database_cleaner'
 end
 
 group :doc do
