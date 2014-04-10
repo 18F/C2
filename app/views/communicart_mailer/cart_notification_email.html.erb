@@ -374,6 +374,41 @@ table.reply-section {
   padding: 15px;
 }
 
+tr.cart_item_information td {
+  border-bottom: 1px solid #ccc;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: #fff;
+  padding-right: 10px;
+}
+
+table tr.total-price {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: #f0f0f0;
+}
+
+table tr.total-price td {
+  padding: 25px 10px 25px 10px;
+}
+
+table tr.total-price td.total-amount {
+  text-align: left;
+}
+
+table td.first {
+  padding-left: 10px;
+}
+
+table td.last {
+  padding-left: 10px;
+  padding-right: 10px;
+  text-align: left;
+}
+
+table td span.tag-values {
+  font-weight: normal;
+}
 
 
 /* WEBFLOW.CSS */
@@ -457,6 +492,7 @@ h6 {
 }
 p {
   margin: 0;
+  color: #000;
 }
 blockquote {
   margin: 0;
@@ -1472,13 +1508,18 @@ textarea.w-select {
 
 /* COMMUNICART.WEBFLOW.CSS */
 
-body {
+body.communicart-notification {
   background-color: #e6e6e6;
   font-family: Arial, Helvetica, sans-serif;
   color: #333;
   font-size: 14px;
   line-height: 20px;
 }
+
+body.communicart-notification p {
+  color: #333;
+}
+
 h1 {
   margin-top: 20px;
   margin-bottom: 10px;
@@ -1489,6 +1530,21 @@ h1 {
   font-style: normal;
   font-weight: 300;
 }
+
+h1.communicart_header, h4.communicart_description {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+h1.communicart_header {
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+
+h4.communicart_description {
+  margin-bottom: 10px;
+}
+
 h2 {
   margin-top: 20px;
   margin-bottom: 0px;
@@ -1499,12 +1555,12 @@ h2 {
   line-height: 36px;
   font-weight: 300;
 }
-h3 {
-  margin-top: 20px;
+h3.cart-header {
+  margin-top: 10px;
   margin-bottom: 10px;
   font-family:'Roboto Slab', sans-serif;
   color: white;
-  font-size: 28px;
+  font-size: 18px;
   line-height: 30px;
   font-style: normal;
   font-weight: 100;
@@ -1518,7 +1574,7 @@ h4 {
   line-height: 24px;
   font-weight: 400;
 }
-h5 {
+tr.header h5 {
   margin-top: 10px;
   margin-bottom: 10px;
   font-family: Georgia, serif;
@@ -1570,7 +1626,6 @@ p {
 .results-list {
   margin-bottom: 15px;
   padding: 15px;
-  background-color: white;
 }
 .button-submit {
   text-align: center;
@@ -1602,16 +1657,20 @@ p {
   padding-bottom: 0px;
   border-bottom-style: none;
 }
-.result-item-price {
+td p.result-item-price {
   padding: 15px 10px;
   background-color: #369;
   font-family: Georgia, serif;
   color: white;
-  font-size: 22px;
-  font-weight: 400;
   text-align: center;
 }
-.result-item-units {
+
+td p.result-item-price, td p.total-price p strong {
+  font-size: 22px;
+  font-weight: 400;
+}
+
+td p.result-item-units {
   padding: 10px;
   background-color: #336;
   color: #99c;
@@ -1624,6 +1683,7 @@ p {
   border-radius: 5px;
 }
 .result-tag {
+  font-weight: bold;
   padding: 5px 15px;
   border-radius: 4px;
   background-color: #ededed;
@@ -1679,11 +1739,7 @@ p {
 }
 
 .background-container {
-  background-color: #2d4c6e;
-/*  background-image: -webkit-linear-gradient(#2d4c6e, #162a40), -webkit-linear-gradient(black, white);
-  background-image: -o-linear-gradient(#2d4c6e, #162a40), -o-linear-gradient(black, white);
-  background-image: linear-gradient(#2d4c6e, #162a40), linear-gradient(black, white);
-*/}
+  background-color: #fff;
 .summary-block-header {
   background-color: #2774a1;
 }
@@ -1697,10 +1753,6 @@ p {
 </style>
 
 
-
-  <!-- <link rel="stylesheet" type="text/css" href="css/normalize.css"> -->
-  <!-- <link rel="stylesheet" type="text/css" href="css/webflow.css"> -->
-  <!-- <link rel="stylesheet" type="text/css" href="css/communicart.webflow.css"> -->
   <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js"></script>
   <script>
     WebFont.load({
@@ -1716,44 +1768,36 @@ p {
   <script type="text/javascript" src="js/modernizr.js"></script>
   <link rel="shortcut icon" type="image/x-icon" href="https://y7v4p6k4.ssl.hwcdn.net/placeholder/favicon.ico">
 </head>
-<body class="background-container">
+<body class="communicart-notification">
   <table class='reply-section'>
     <tr>
     <td>
-    ------------------<br/>
+  ------------------<br/>
+  <strong>Please reply ABOVE THIS LINE with the word 'APPROVE' or 'DISAPPROVE' on its own line.</strong>
+  <br/>
 
-Please reply with the word 'APPROVE' or 'DISAPPROVE' begining a line with nothing else on that line.
+  <p>
+    Additional comments:
+  </p>
 
-Here is the comment sent to you:
-
-BEGIN COMMENT
-<%= @json_post["initiationComment"] %>
-END COMMENT
-<br/>
+  <p>
+    <%= @json_post["initiationComment"] %>
+  </p>
+    <br/>
     </td>
     </tr>
   </table>
   <table class="w-container main-container" width='940'>
     <tr>
       <td>
-        <h1>Purchase Requisition</h1>
-        <h4>Q1 Supplies for Marketing Team</h4>
-      </td>
-    </tr>
-    <tr>
-      <td class="summary-block-header">
-        <h2>Cart Summary</h2>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <!--TODO: Content TBA-->
+        <h1 class="communicart_header">Purchase Requisition</h1>
+        <h4 class="communicart_description">Q1 Supplies for Marketing Team</h4>
       </td>
     </tr>
 
       <tr>
         <td class="w-container results-header-container">
-          <h3>GSA Advantage: Cart <%= @json_post["cartNumber"] %></h3>
+          <h3 class="cart-header">GSA Advantage: Cart #<%= @json_post["cartNumber"] %></h3>
         </td>
       </tr>
 
@@ -1762,19 +1806,19 @@ END COMMENT
 
           <table width=100%>
             <tr class='header'>
-              <td>
+              <td class="first" width="30%">
                 <h5>Name</h5>
               </td>
-              <td>
+              <td width="17.5%">
                 <h5>Description</h5>
               </td>
-              <td>
+              <td width="17.5%">
                 <h5>Details</h5>
               </td>
-              <td>
+              <td width="17.5%">
                 <h5>Tags</h5>
               </td>
-              <td>
+              <td class="last" width="17.5%">
                 <h5>Price</h5>
               </td>
             </tr>
@@ -1782,24 +1826,30 @@ END COMMENT
             <!--BEGIN CartItem Entry-->
               <%- @json_post['cartItems'].each do |cart_item| %>
 
-                <tr>
-                  <td>
+                <tr class="cart_item_information">
+                  <td class="first" valign="top">
                     <p><strong><%= cart_item['description'] %></strong>
                     </p>
                   </td>
 
-                  <td>
+                  <td valign="top">
                     <p><%= cart_item['details'] %></p>
                   </td>
 
-                  <td>
+                  <td valign="top">
                     <p><strong><%= cart_item['vendor'] %></strong>
                       <br><em><%= cart_item['partNumber'] %></em>
                       <br><a href="https://gsaadvantage.gov<%= cart_item['url'] %>">Link to the product</a>
                     </p>
                   </td>
 
-                  <td>
+                  <td valign="top">
+                    <p class="fssi-compliant result-tag">FSSI-Compliant</p>
+                    <p class="bpa result-tag">BPA</p>
+                    <p class="green result-tag">Green</p>
+                    <p class="ability-one result-tag">Eco-Friendly</p>
+                    <p class="result-tag">Socio: <span class="tag-values">s, v</span></</p>
+
                     <%- unless cart_item['features'].nil? %>
                       <%- cart_item['features'].each do |feature| %>
                         <p class="result-tag"><%= feature %></p>
@@ -1807,24 +1857,22 @@ END COMMENT
                     <%- end %>
                   </td>
 
-                  <td>
+                  <td class="last" valign="top">
                     <p class="result-item-price"><%= cart_item['price'] %></p>
                     <p class="result-item-units"><%= cart_item['qty'] %> units</p>
                   </td>
                 </tr>
-
-                <tr>
-                  <td colspan=3></td>
-                  <td class="total-price">
-                    <p><strong>Total Price</strong></p>
-                  </td>
-                  <td class="total-price"><p><strong>$xx.xx</strong></p></td>
-                </tr>
-
-
               <%- end %>
 
             <!--END CartItem Entry-->
+
+                <tr class="total-price">
+                  <td colspan=2></td>
+                  <td class="total-price" colspan=2>
+                    <p><strong>Total Price</strong></p>
+                  </td>
+                  <td class="total-price total-amount"><p><strong>$xx.xx</strong></p></td>
+                </tr>
 
           </table>
 
