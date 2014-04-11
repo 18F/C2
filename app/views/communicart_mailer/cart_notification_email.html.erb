@@ -1680,16 +1680,40 @@ td p.result-item-units {
   padding: 5px 15px;
   border-radius: 5px;
 }
-.result-tag {
+
+ul.result-tag li {
+  background-position: 5px 5px;
+  margin-left: 0;
+  margin-bottom: 5px;
   font-weight: bold;
-  padding: 5px 15px;
+  padding: 5px;
   border-radius: 4px;
   background-color: #ededed;
+  background-repeat: no-repeat;
+  padding-left: 7px;
+  list-style: none;
 }
-.result-tag.fssi-compliant {
+
+ul.result-tag li.bpa {
+  background-image: url('https://www.gsaadvantage.gov/images/adv12/images/new_icons/bpa.gif');
+  padding-left: 38px;
+}
+
+ul.result-tag li.green {
+  background-image: url('https://www.gsaadvantage.gov/images/adv12/images/icons/green.gif');
+  padding-left: 22px;
+}
+
+ul.result-tag li.sale {
+  background-image: url('https://www.gsaadvantage.gov/images/adv12/images/new_icons/sale.gif');
+  padding-left: 27px;
+}
+
+ul.result-tag li.fssi-compliant {
   background-color: #45ac48;
   color: white;
 }
+
 .summary-link {
   color: #3c62ae;
   font-size: 18px;
@@ -1769,20 +1793,21 @@ td p.result-item-units {
 <body class="communicart-notification">
   <table class='reply-section'>
     <tr>
-    <td>
-  ------------------<br/>
-  <strong>Please reply ABOVE THIS LINE with the word 'APPROVE' or 'DISAPPROVE' on its own line.</strong>
-  <br/>
+      <td>
+        ------------------
+        <br/>
+        <strong>Please reply ABOVE THIS LINE with the word 'APPROVE' or 'DISAPPROVE' on its own line.</strong>
+        <br/>
 
-  <p>
-    Additional comments:
-  </p>
+        <p>
+          Additional comments:
+        </p>
 
-  <p>
-    <%= @json_post["initiationComment"] %>
-  </p>
-    <br/>
-    </td>
+        <p>
+          <%= @json_post["initiationComment"] %>
+        </p>
+        <br/>
+      </td>
     </tr>
   </table>
   <table class="w-container main-container" width='940'>
@@ -1842,28 +1867,27 @@ td p.result-item-units {
                   </td>
 
                   <td valign="top">
-
-                    <%#- TODO: style handling for green %>
-                    <%- if cart_item['green'] == 'true' %>
-                      <p class="green result-tag">Green</p>
-                    <%- end %>
-
-                    <%- unless cart_item['socio'].empty? %>
-                    <p class="result-tag">Socio:
-                      <span class="tag-values">
-                      <%- cart_item['socio'].each_with_index do |socio_tag, index| %>
-                        <%= socio_tag %>
-                        <%= "," unless cart_item['socio'].count == index+1 %>
+                    <ul class="result-tag">
+                      <%- if cart_item['green'] == 'true' %>
+                        <li class="green">Green</li>
                       <%- end %>
-                    </span></p>
-                    <%- end %>
 
-                    <%#- TODO: style handling for fssi-compliant, bp, green, ability-one %>
-                    <%- unless cart_item['features'].nil? %>
-                      <%- cart_item['features'].each do |feature| %>
-                        <p class="#{feature} result-tag"><%= feature %></p>
+                      <%- unless cart_item['socio'].nil? %>
+                        <li class="socio">Socio:
+                          <span class="tag-values">
+                          <%- cart_item['socio'].each_with_index do |socio_tag, index| %>
+                            <%= socio_tag %><%= "," unless cart_item['socio'].count == index+1 %>
+                          <%- end %>
+                        </span></li>
                       <%- end %>
-                    <%- end %>
+
+
+                      <%- unless cart_item['features'].nil? %>
+                        <%- cart_item['features'].each do |feature| %>
+                          <li class="<%= "#{feature} " %>result-tag"><%= feature %></li>
+                        <%- end %>
+                      <%- end %>
+                    </ul>
                   </td>
 
                   <td class="last" valign="top">

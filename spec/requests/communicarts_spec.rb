@@ -26,6 +26,7 @@ describe 'CommunicartsController' do
             notes: "",
             qty: "24",
             details: "Direct Delivery 3-4 days delivered ARO",
+            socio: ["s","w"],
             partNumber: "7510-01-519-4381",
             price: "$2.46",
             features: []
@@ -37,6 +38,7 @@ describe 'CommunicartsController' do
             notes: "",
             qty: "5",
             details: "Direct Delivery 3-4 days delivered ARO",
+            socio: [],
             partNumber: "PIL31003",
             price: "$10.29",
             features: []
@@ -48,6 +50,7 @@ describe 'CommunicartsController' do
             notes: "",
             qty: "3",
             details: "Direct Delivery 3-4 days delivered ARO",
+            socio: ["s"],
             partNumber: "WLJ90310",
             price: "$32.67",
             features: []
