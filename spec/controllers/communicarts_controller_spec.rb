@@ -5,6 +5,7 @@ describe CommunicartsController do
   let(:params) {
 
   '{
+        "cartName": "Q1 Office supplies",
         "cartNumber": "2867637",
         "category": "initiation",
         "attention": "read.robert@gmail.com",
@@ -50,12 +51,35 @@ describe CommunicartsController do
     }
 
   describe 'POST send_cart' do
-    it 'creates a cart' do
-      json_params = JSON.parse(params)
-      CommunicartMailer.stub_chain(:cart_notification_email, :deliver)
-
-      Cart.should_receive(:create_from_cart_items).exactly(3).times
-      post 'send_cart', json_params
+    before do
+      @json_params = JSON.parse(params)
     end
+
+    it 'creates a cart' do
+      CommunicartMailer.stub_chain(:cart_notification_email, :deliver)
+      Cart.should_receive(:initialize_cart_with_items)
+      post 'send_cart', @json_params
+    end
+
+    it 'invokes a mailer' do
+      mock_mailer = double
+      CommunicartMailer.should_receive(:cart_notification_email).and_return(mock_mailer)
+      mock_mailer.should_receive(:deliver)
+      post 'send_cart', @json_params
+    end
+  end
+
+  describe 'POST approval_reply_received' do
+    before do
+      @json_params = JSON.parse(params)
+    end
+
+    it 'invokes a mailer' do
+      mock_mailer = double
+      CommunicartMailer.should_receive(:approval_reply_received_email).and_return(mock_mailer)
+      mock_mailer.should_receive(:deliver)
+      post 'approval_reply_received', @json_params
+    end
+
   end
 end

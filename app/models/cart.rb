@@ -11,7 +11,23 @@ class Cart < ActiveRecord::Base
     self.approvals.count > 0 && self.approvals.reject { |status| status == 'approved' }.empty?
   end
 
-  def self.create_from_cart_items(params)
-    Cart.create(name: params['description'], status: 'pending')
+  def self.initialize_cart_with_items(params)
+    Cart.create(name: params['cartName'], status: 'pending')
+
+    #TODO: accepts_nested_attributes_for
+    params['cartItems'].each do |cart_item_params|
+      CartItem.create(
+        :vendor => cart_item_params['vendor'],
+        :description => cart_item_params['description'],
+        :url => cart_item_params['url'],
+        :notes => cart_item_params['notes'],
+        :quantity => cart_item_params['qty'],
+        :details => cart_item_params['details'],
+        :part_number => cart_item_params['partNumber'],
+        :price => cart_item_params['price'],
+        :cart_id => cart_item_params['features']
+      )
+    end
+
   end
 end
