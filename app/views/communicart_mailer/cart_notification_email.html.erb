@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-<!-- This site was created in Webflow. http://www.webflow.com-->
-<!-- Last Published: Tue Mar 25 2014 14:15:53 GMT+0000 (UTC) -->
-<html data-wf-site="531e1ac95fe5f2ee6d0000c2">
+<html>
 <head>
   <meta charset="utf-8">
   <title>Communicart</title>
@@ -1844,15 +1842,26 @@ td p.result-item-units {
                   </td>
 
                   <td valign="top">
-                    <p class="fssi-compliant result-tag">FSSI-Compliant</p>
-                    <p class="bpa result-tag">BPA</p>
-                    <p class="green result-tag">Green</p>
-                    <p class="ability-one result-tag">Eco-Friendly</p>
-                    <p class="result-tag">Socio: <span class="tag-values">s, v</span></</p>
 
+                    <%#- TODO: style handling for green %>
+                    <%- if cart_item['green'] == 'true' %>
+                      <p class="green result-tag">Green</p>
+                    <%- end %>
+
+                    <%- unless cart_item['socio'].empty? %>
+                    <p class="result-tag">Socio:
+                      <span class="tag-values">
+                      <%- cart_item['socio'].each_with_index do |socio_tag, index| %>
+                        <%= socio_tag %>
+                        <%= "," unless cart_item['socio'].count == index+1 %>
+                      <%- end %>
+                    </span></p>
+                    <%- end %>
+
+                    <%#- TODO: style handling for fssi-compliant, bp, green, ability-one %>
                     <%- unless cart_item['features'].nil? %>
                       <%- cart_item['features'].each do |feature| %>
-                        <p class="result-tag"><%= feature %></p>
+                        <p class="#{feature} result-tag"><%= feature %></p>
                       <%- end %>
                     <%- end %>
                   </td>
