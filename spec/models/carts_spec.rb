@@ -26,5 +26,15 @@ describe Cart do
       end
     end
 
+    # context "Once the Cart Object has Cart Items we want the total_price to be correct." do
+    #   it 'total_price correctly matches the total_price' do
+    #     Cart.stub(:find_by_id).and_return(cart)
+    #     total = cart.CartItems.reduce(0) do |sum,value| 
+    #       sum + value
+    #       end
+    #     expect(cart.total_price).to eq(total)
+    #   end
+    # end
+
   end
 end

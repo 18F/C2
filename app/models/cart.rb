@@ -11,7 +11,12 @@ class Cart < ActiveRecord::Base
     self.approvals.count > 0 && self.approvals.reject { |status| status == 'approved' }.empty?
   end
 
+  def total_price
+    return 500
+  end
+
   def self.initialize_cart_with_items(params)
+    name = !params['cartName'].blank? ? params['cartName'] : params['cartNumber']
     Cart.create(name: params['cartName'], status: 'pending')
 
     #TODO: accepts_nested_attributes_for

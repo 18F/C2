@@ -3,7 +3,6 @@ class CommunicartsController < ApplicationController
 
   def send_cart
     Cart.initialize_cart_with_items(params)
-
     CommunicartMailer.cart_notification_email(params).deliver
     render json: { message: "This was a success"}, status: 200
   end
