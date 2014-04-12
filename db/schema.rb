@@ -16,6 +16,7 @@ ActiveRecord::Schema.define(version: 20140410025122) do
   create_table "approvals", force: true do |t|
     t.integer  "cart_id"
     t.string   "email_address"
+    t.string   "status"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

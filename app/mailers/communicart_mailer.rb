@@ -4,7 +4,7 @@
   def cart_notification_email(analysis)
     @json_post = analysis
     @url = ENV['NOTIFICATION_URL']
-    mail(to: analysis['attention'], subject: "Please approve Cart Number: "+analysis["cartNumber"])
+    mail(to: analysis['email'], subject: "Please approve Cart Number: "+analysis["cartNumber"])
   end
 
   def approval_reply_received_email(analysis)

@@ -5,10 +5,10 @@ describe CommunicartsController do
   let(:params) {
 
   '{
-        "cartName": "Q1 Office supplies",
+        "cartName": "",
         "cartNumber": "2867637",
         "category": "initiation",
-        "attention": "read.robert@gmail.com",
+        "email": "read.robert@gmail.com",
         "fromAddress": "",
         "gsaUserName": "",
         "initiationComment": "\r\n\r\nHi, this is a comment, I hope it works!\r\nThis is the second line of the comment.",
@@ -23,7 +23,9 @@ describe CommunicartsController do
             "socio": [],
             "partNumber": "7510-01-519-4381",
             "price": "$2.46",
-            "features": []
+            "features": [
+                "sale"
+            ]
           },
           {
             "vendor": "OFFICE DEPOT",
