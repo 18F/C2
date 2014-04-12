@@ -3,7 +3,7 @@ require 'ostruct'
 
 describe CommunicartMailer do
   describe 'cart notification email' do
-    let(:response) { OpenStruct.new(attention: 'attention.to.email@testing.com', cartNumber: '13579', cartItems: []) }
+    let(:response) { OpenStruct.new(email: 'email.to.email@testing.com', cartNumber: '13579', cartItems: []) }
     let(:mail) { CommunicartMailer.cart_notification_email(response) }
 
 
@@ -15,7 +15,7 @@ describe CommunicartMailer do
       ENV.stub(:[])
       ENV.stub(:[]).with('NOTIFICATION_TO_EMAIL').and_return('george.jetson@spacelysprockets.com')
 
-      mail.to.should == ["attention.to.email@testing.com"]
+      mail.to.should == ["email.to.email@testing.com"]
     end
 
     it 'renders the sender email' do

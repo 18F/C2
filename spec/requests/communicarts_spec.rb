@@ -14,7 +14,7 @@ describe 'CommunicartsController' do
       params = {
         cartNumber: "2867637",
         category: "initiation",
-        attention: "read.robert@gmail.com",
+        email: "read.robert@gmail.com",
         fromAddress: "",
         gsaUserName: "",
         initiationComment: "\r\n\r\nHi, this is a comment, I hope it works!\r\nThis is the second line of the comment.",
