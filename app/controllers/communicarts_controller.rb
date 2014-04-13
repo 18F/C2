@@ -5,10 +5,11 @@ class CommunicartsController < ApplicationController
     Cart.initialize_cart_with_items(params)
 
     approval_group_name = params['approvalGroup']
+
     if !approval_group_name.blank?
       approval_group = ApprovalGroup.find_by name:approval_group_name
       approval_group.approvers.each do | approver |
-        CommunicartMailer.cart_notification_email(approver.email,params).deliver
+        CommunicartMailer.cart_notification_email(approver.email_address,params).deliver
       end
     else
       CommunicartMailer.cart_notification_email(params["email"],params).deliver
