@@ -3,7 +3,16 @@ class CommunicartsController < ApplicationController
 
   def send_cart
     Cart.initialize_cart_with_items(params)
-    CommunicartMailer.cart_notification_email(params).deliver
+
+    approval_group_name = params['approvalGroup']
+    if !approval_group_name.blank?
+      approval_group = ApprovalGroup.find_by name:approval_group_name
+      approval_group.approvers.each do | approver |
+        CommunicartMailer.cart_notification_email(approver.email,params).deliver
+      end
+    else
+      CommunicartMailer.cart_notification_email(params["email"],params).deliver
+    end
     render json: { message: "This was a success"}, status: 200
   end
 

@@ -1,10 +1,10 @@
   class CommunicartMailer < ActionMailer::Base
   default from: ENV['NOTIFICATION_FROM_EMAIL']
 
-  def cart_notification_email(analysis)
+  def cart_notification_email(email,analysis)
     @json_post = analysis
     @url = ENV['NOTIFICATION_URL']
-    mail(to: analysis['email'], subject: "Please approve Cart Number: "+analysis["cartNumber"])
+    mail(to: email, subject: "Please approve Cart Number: "+analysis["cartNumber"])
   end
 
   def approval_reply_received_email(analysis)
