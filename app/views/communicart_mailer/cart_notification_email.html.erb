@@ -1814,7 +1814,9 @@ ul.result-tag li.fssi-compliant {
     <tr>
       <td>
         <h1 class="communicart_header">Purchase Requisition</h1>
-        <h4 class="communicart_description">Q1 Supplies for Marketing Team</h4>
+        <%- unless @json_post['cartName'] == "" %>
+          <h4 class="communicart_description"><%= @json_post['cartName']%></h4>
+        <%- end %>
       </td>
     </tr>
 
