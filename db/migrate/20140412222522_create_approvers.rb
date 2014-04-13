@@ -1,4 +1,4 @@
-class Approver < ActiveRecord::Migration
+class CreateApprovers < ActiveRecord::Migration
   def change
     create_table :approvers do |t|
       t.string :email_address
