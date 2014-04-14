@@ -122,4 +122,30 @@ describe 'CommunicartsController' do
       expect(response.status).to eq 200
     end
   end
+
+  describe 'POST /communicarts/approval_reply_received' do
+
+    let(:approval_params) {
+      '{
+      "cartNumber": "246810",
+      "category": "approvalreply",
+      "attention": "",
+      "fromAddress": "superviser.john@dotgovaddress.gov",
+      "gsaUserName": "",
+      "gsaUsername": null,
+      "date": "Sun, 13 Apr 2014 18:06:15 -0400",
+      "approve": "APPROVE",
+      "disapprove": null
+      }'
+    }
+    #TODO: Replace approve/disapprove with generic action
+
+
+    it 'looks up the approver'  do
+      Approver.should_receive(:find_by_).with
+    end
+
+    it 'triggers a mailer'
+    it 'returns a successful response'
+  end
 end

@@ -1,6 +1,6 @@
 class Cart < ActiveRecord::Base
-  # TODO: states: awaiting_approvals, approved, rejected
   has_many :approvals
+  has_one :approval_group
 
   def self.update_status_for_cart(cart_id)
     cart = Cart.find_by_id(cart_id)
@@ -32,3 +32,7 @@ class Cart < ActiveRecord::Base
 
   end
 end
+
+# TODO: states: awaiting_approvals, approved, rejected
+# TODO: Remove approvals in favor of approval group colletions of approvers
+# TODO: has_many approvers through approval_group

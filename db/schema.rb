@@ -11,12 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140412222522) do
+ActiveRecord::Schema.define(version: 20140415001802) do
 
   create_table "approval_groups", force: true do |t|
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "cart_id"
   end
 
   create_table "approvals", force: true do |t|
@@ -53,6 +54,7 @@ ActiveRecord::Schema.define(version: 20140412222522) do
     t.string   "status"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "approval_group_id"
   end
 
 end

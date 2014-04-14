@@ -18,6 +18,13 @@ class CommunicartsController < ApplicationController
   end
 
   def approval_reply_received
+
+    #Find the approver from params['fromAddress'] and params['cartNumber']
+    #Update the approver status
+    #Check the cart for status of all approvers in the approval group
+    #Update the cart if approval group all has 'APPROVED' status
+
+
     CommunicartMailer.approval_reply_received_email(params).deliver
     render json: { message: "approval_reply_received"}, status: 200
   end

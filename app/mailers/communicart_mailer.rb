@@ -8,7 +8,7 @@
   end
 
   def approval_reply_received_email(analysis)
-    to_address = ENV['NOTIFICATION_TO_ADDRESS'] ? ENV['NOTIFICATION_TO_ADDRESS'] : 'read.robert@gmail.com'
+    to_address = ENV['NOTIFICATION_TO_ADDRESS'] ? ENV['NOTIFICATION_TO_ADDRESS'] : 'read.robert@gmail.com' #TODO: Remove this default address
     @approval = analysis["approve"] == "APPROVE" ? "approved" : "disapproved"
     @approval_reply = analysis
     @url = ENV['NOTIFICATION_URL']
