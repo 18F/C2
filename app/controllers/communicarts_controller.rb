@@ -11,7 +11,7 @@ class CommunicartsController < ApplicationController
     # We add it back into the jparams
     # jparams.merge(totalPriceValue: 5.55)
     sum = jparams["cartItems"].reduce(0) do |sum,value|
-      sum + value["qty"].gsub(/[^\d\.]/, '').to_f + value["price"].gsub(/[^\d\.]/, '').to_f
+      sum + (value["qty"].gsub(/[^\d\.]/, '').to_f *  value["price"].gsub(/[^\d\.]/, '').to_f)
     end
     jparams = jparams.merge({ totalPriceValue: sum })
 
