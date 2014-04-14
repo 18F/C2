@@ -6,6 +6,8 @@ class CommunicartsController < ApplicationController
 
     approval_group_name = params['approvalGroup']
 
+    params['totalPrice'] = total_price_from_params(params['cartItems'])
+
     if !approval_group_name.blank?
       approval_group = ApprovalGroup.find_by name:approval_group_name
       approval_group.approvers.each do | approver |

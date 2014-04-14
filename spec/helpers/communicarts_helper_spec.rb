@@ -1,7 +1,5 @@
-require 'spec_helper'
-
-describe CommunicartsController do
-
+describe CommunicartsHelper do
+  describe "#total_price_from_params" do
   let(:params) {
 
   '{
@@ -55,41 +53,12 @@ describe CommunicartsController do
       }'
     }
 
-  describe 'POST send_cart' do
-    before do
-      @json_params = JSON.parse(params)
-      controller.stub(:total_price_from_params)
-    end
-
-    it 'creates a cart' do
-      CommunicartMailer.stub_chain(:cart_notification_email, :deliver)
-      Cart.should_receive(:initialize_cart_with_items)
-      post 'send_cart', @json_params
-    end
-
-    it 'invokes a mailer' do
-      mock_mailer = double
-      CommunicartMailer.should_receive(:cart_notification_email).and_return(mock_mailer)
-      mock_mailer.should_receive(:deliver)
-      post 'send_cart', @json_params
-    end
-
-    it 'sets totalPrice' do
-
-    end
-  end
-
-  describe 'POST approval_reply_received' do
     before do
       @json_params = JSON.parse(params)
     end
 
-    it 'invokes a mailer' do
-      mock_mailer = double
-      CommunicartMailer.should_receive(:approval_reply_received_email).and_return(mock_mailer)
-      mock_mailer.should_receive(:deliver)
-      post 'approval_reply_received', @json_params
+    it "should calculate a total price from the params" do
+      expect(total_price_from_params(@json_params['cartItems'])).to eq 208.5
     end
-
   end
 end

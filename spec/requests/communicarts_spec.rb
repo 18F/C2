@@ -5,6 +5,7 @@ describe 'CommunicartsController' do
     before do
       ENV.stub(:[])
       ENV.stub(:[]).with('NOTIFICATION_TO_EMAIL').and_return('george.jetson@spacelysprockets.com')
+      CommunicartsController.any_instance.stub(:total_price_from_params)
 
       params = CommunicartMailer.default_params.merge({from:'reply@communicart-stub.com'})
       CommunicartMailer.stub(:default_params).and_return(params)
