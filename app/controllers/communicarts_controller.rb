@@ -7,9 +7,8 @@ class CommunicartsController < ApplicationController
     approval_group_name = params['approvalGroup']
 
     params['totalPrice'] = total_price_from_params(params['cartItems'])
-
     if !approval_group_name.blank?
-      approval_group = ApprovalGroup.find_by name:approval_group_name
+      approval_group = ApprovalGroup.find_by_name :approval_group_name
       approval_group.approvers.each do | approver |
         CommunicartMailer.cart_notification_email(approver.email_address,params).deliver
       end
@@ -25,7 +24,8 @@ class CommunicartsController < ApplicationController
     approver.update_attributes(status: approve_or_disapprove_status)
     cart.update_approval_status
 
-    CommunicartMailer.approval_reply_received_email(params).deliver
+    cart_report = EmailStatusReport.new(cart)
+    CommunicartMailer.approval_reply_received_email(params, cart_report).deliver
     render json: { message: "approval_reply_received"}, status: 200
   end
 

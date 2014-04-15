@@ -129,6 +129,7 @@ describe CommunicartsController do
       Cart.stub(:find_by_external_id).and_return(cart)
       cart.stub_chain(:approval_group, :approvers, :where).and_return([approver])
       cart.stub(:update_approval_status)
+      EmailStatusReport.stub(:new)
 
       approver.should_receive(:update_attributes).with(status: 'approved')
       post 'approval_reply_received', @json_approval_params

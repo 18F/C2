@@ -5,21 +5,27 @@ describe 'CommunicartsController' do
     before do
       ENV.stub(:[])
       ENV.stub(:[]).with('NOTIFICATION_TO_EMAIL').and_return('george.jetson@spacelysprockets.com')
-      CommunicartsController.any_instance.stub(:total_price_from_params)
 
       params = CommunicartMailer.default_params.merge({from:'reply@communicart-stub.com'})
       CommunicartMailer.stub(:default_params).and_return(params)
+      CommunicartsController.any_instance.stub(:total_price_from_params)
+      CommunicartMailer.stub_chain(:cart_notification_email, :deliver)
+
+      approval_group = FactoryGirl.create(:approval_group_with_approvers)
+      ApprovalGroup.stub(:find_by_name).and_return(approval_group)
     end
 
 
     it "makes a successful request" do
       params = {
+        cartName: "Q1 Test Cart",
         cartNumber: "2867637",
         category: "initiation",
         email: "read.robert@gmail.com",
         fromAddress: "",
         gsaUserName: "",
         initiationComment: "\r\n\r\nHi, this is a comment, I hope it works!\r\nThis is the second line of the comment.",
+        approvalGroup: "MyApprovalGroup",
         cartItems: [
           {
             vendor: "DOCUMENT IMAGING DIMENSIONS, INC.",
@@ -66,16 +72,12 @@ describe 'CommunicartsController' do
 
     it "invokes two email messages based on approval group" do
 
-      FactoryGirl.create(:approval_group)
-      FactoryGirl.create(:approval_group_with_approvers)
-
-
-
       params = {
+        cartName: "Q1 Test Cart",
         cartNumber: "2867637",
         category: "initiation",
         email: "",
-        approvalGroup: "RobsApprovalGroup",
+        approvalGroup: "MyApprovalGroup",
         fromAddress: "",
         gsaUserName: "",
         initiationComment: "\r\n\r\nHi, this is a comment, I hope it works!\r\nThis is the second line of the comment.",
@@ -124,7 +126,4 @@ describe 'CommunicartsController' do
     end
   end
 
-  describe 'POST /communicarts/approval_reply_received' do
-
-  end
 end
