@@ -28,6 +28,7 @@ GEM
     addressable (2.3.6)
     arel (4.0.2)
     atomic (1.1.16)
+    awesome_print (1.2.0)
     builder (3.1.4)
     coderay (1.1.0)
     coffee-rails (4.0.1)
@@ -141,6 +142,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  awesome_print
   database_cleaner
   factory_girl_rails
   haml
