@@ -67,7 +67,7 @@ describe 'CommunicartsController' do
     it "invokes two email messages based on approval group" do
 
       FactoryGirl.create(:approval_group)
-      FactoryGirl.create(:multipleapprovers)
+      FactoryGirl.create(:approval_group_with_approvers)
 
 
 
@@ -122,5 +122,9 @@ describe 'CommunicartsController' do
       post "/send_cart", params
       expect(response.status).to eq 200
     end
+  end
+
+  describe 'POST /communicarts/approval_reply_received' do
+
   end
 end

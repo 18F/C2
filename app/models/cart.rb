@@ -1,14 +1,13 @@
 class Cart < ActiveRecord::Base
-  # TODO: states: awaiting_approvals, approved, rejected
   has_many :approvals
+  has_one :approval_group
 
-  def self.update_status_for_cart(cart_id)
-    cart = Cart.find_by_id(cart_id)
-    cart.update_attributes(status: 'approved') if cart.has_all_approvals?
+  def update_approval_status
+    update_attributes(status: 'approved') if all_approvals_received?
   end
 
-  def has_all_approvals?
-    self.approvals.count > 0 && self.approvals.reject { |status| status == 'approved' }.empty?
+  def all_approvals_received?
+    approval_group.approvers.where(status: 'approved').count == approval_group.approvers.count
   end
 
   def self.initialize_cart_with_items(params)
@@ -29,6 +28,9 @@ class Cart < ActiveRecord::Base
         :cart_id => cart_item_params['features']
       )
     end
-
   end
 end
+
+# TODO: states: awaiting_approvals, approved, rejected
+# TODO: Remove approvals in favor of approval group colletions of approvers
+# TODO: has_many approvers through approval_group
