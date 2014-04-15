@@ -1,5 +1,5 @@
 class Cart < ActiveRecord::Base
-  has_many :approvals
+  has_many :cart_items
   has_one :approval_group
 
   def update_approval_status
@@ -12,7 +12,9 @@ class Cart < ActiveRecord::Base
 
   def self.initialize_cart_with_items(params)
     name = !params['cartName'].blank? ? params['cartName'] : params['cartNumber']
-    Cart.create(name: name, status: 'pending')
+    cart = Cart.new(name: name, status: 'pending', external_id: params['cartNumber'])
+    cart.approval_group = ApprovalGroup.find_by_name(params['approvalGroup'])
+    cart.save
 
     #TODO: accepts_nested_attributes_for
     params['cartItems'].each do |cart_item_params|
@@ -29,8 +31,7 @@ class Cart < ActiveRecord::Base
       )
     end
   end
+
 end
 
 # TODO: states: awaiting_approvals, approved, rejected
-# TODO: Remove approvals in favor of approval group colletions of approvers
-# TODO: has_many approvers through approval_group
