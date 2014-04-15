@@ -55,6 +55,8 @@ describe CommunicartsController do
       }'
     }
 
+  let(:approver) { FactoryGirl.create(:approver) }
+
   describe 'POST send_cart' do
     before do
       @json_params = JSON.parse(params)
@@ -75,15 +77,56 @@ describe CommunicartsController do
   end
 
   describe 'POST approval_reply_received' do
+    let(:cart) { FactoryGirl.create(:cart_with_approval_group) }
+
+    let(:approval_params) {
+      '{
+      "cartNumber": "246810",
+      "category": "approvalreply",
+      "attention": "",
+      "fromAddress": "judy.jetson@spacelysprockets.com",
+      "gsaUserName": "",
+      "gsaUsername": null,
+      "date": "Sun, 13 Apr 2014 18:06:15 -0400",
+      "approve": "APPROVE",
+      "disapprove": null
+      }'
+    }
+    #TODO: Replace approve/disapprove with generic action
+
+
     before do
-      @json_params = JSON.parse(params)
+      CommunicartMailer.stub_chain(:approval_reply_received_email, :deliver)
+      @json_approval_params = JSON.parse(approval_params)
+    end
+
+    it 'finds the cart'  do
+      Cart.should_receive(:find_by_external_id).with(246810).and_return(cart)
+      post 'approval_reply_received', @json_approval_params
     end
 
     it 'invokes a mailer' do
+      Cart.should_receive(:find_by_external_id).and_return(cart)
       mock_mailer = double
+
       CommunicartMailer.should_receive(:approval_reply_received_email).and_return(mock_mailer)
       mock_mailer.should_receive(:deliver)
-      post 'approval_reply_received', @json_params
+      post 'approval_reply_received', @json_approval_params
+    end
+
+    it 'updates the cart status' do
+      Cart.stub(:find_by_external_id).and_return(cart)
+      cart.should_receive(:update_approval_status)
+      post 'approval_reply_received', @json_approval_params
+    end
+
+    it 'updates the approver status'  do
+      Cart.stub(:find_by_external_id).and_return(cart)
+      cart.stub_chain(:approval_group, :approvers, :where).and_return([approver])
+      cart.stub(:update_approval_status)
+
+      approver.should_receive(:update_attributes).with(status: 'approved')
+      post 'approval_reply_received', @json_approval_params
     end
 
   end

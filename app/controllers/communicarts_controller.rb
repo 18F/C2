@@ -18,14 +18,17 @@ class CommunicartsController < ApplicationController
   end
 
   def approval_reply_received
-
-    #Find the approver from params['fromAddress'] and params['cartNumber']
-    #Update the approver status
-    #Check the cart for status of all approvers in the approval group
-    #Update the cart if approval group all has 'APPROVED' status
-
+    cart = Cart.find_by_external_id(params['cartNumber'].to_i)
+    approver = cart.approval_group.approvers.where(email_address: params['fromAddress']).first
+    approver.update_attributes(status: approve_or_disapprove_status)
+    cart.update_approval_status
 
     CommunicartMailer.approval_reply_received_email(params).deliver
     render json: { message: "approval_reply_received"}, status: 200
+  end
+
+  def approve_or_disapprove_status
+    #TODO: Refactor duplication with ComunicartMailer#approval_reply_received_email
+    params["approve"] == "APPROVE" ? "approved" : "disapproved"
   end
 end
