@@ -8,7 +8,7 @@ class CommunicartsController < ApplicationController
 
     params['totalPrice'] = total_price_from_params(params['cartItems'])
     if !approval_group_name.blank?
-      approval_group = ApprovalGroup.find_by_name :approval_group_name
+      approval_group = ApprovalGroup.find_by_name approval_group_name
       approval_group.approvers.each do | approver |
         CommunicartMailer.cart_notification_email(approver.email_address,params).deliver
       end
