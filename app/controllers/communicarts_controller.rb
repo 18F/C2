@@ -8,7 +8,8 @@ class CommunicartsController < ApplicationController
 
     params['totalPrice'] = total_price_from_params(params['cartItems'])
     if !approval_group_name.blank?
-      approval_group = ApprovalGroup.find_by_name approval_group_name
+      approval_group = ApprovalGroup.find_by(name: approval_group_name)
+
       approval_group.approvers.each do | approver |
         CommunicartMailer.cart_notification_email(approver.email_address,params).deliver
       end
@@ -19,7 +20,7 @@ class CommunicartsController < ApplicationController
   end
 
   def approval_reply_received
-    cart = Cart.find_by_external_id(params['cartNumber'].to_i)
+    cart = Cart.find_by(external_id: (params['cartNumber'].to_i))
     approver = cart.approval_group.approvers.where(email_address: params['fromAddress']).first
     approver.update_attributes(status: approve_or_disapprove_status)
     cart.update_approval_status

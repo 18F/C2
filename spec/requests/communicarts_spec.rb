@@ -12,7 +12,7 @@ describe 'CommunicartsController' do
       CommunicartMailer.stub_chain(:cart_notification_email, :deliver)
 
       approval_group = FactoryGirl.create(:approval_group_with_approvers)
-      ApprovalGroup.stub(:find_by_name).and_return(approval_group)
+      ApprovalGroup.stub(:find_by).and_return(approval_group)
     end
 
 

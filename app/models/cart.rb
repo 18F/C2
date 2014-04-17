@@ -11,10 +11,22 @@ class Cart < ActiveRecord::Base
   end
 
   def self.initialize_cart_with_items(params)
+    approval_group_name = params['approvalGroup']
     name = !params['cartName'].blank? ? params['cartName'] : params['cartNumber']
     cart = Cart.new(name: name, status: 'pending', external_id: params['cartNumber'])
-    cart.approval_group = ApprovalGroup.find_by_name(params['approvalGroup'])
+
+    if !approval_group_name.blank?
+      cart.approval_group = ApprovalGroup.find_by_name(params['approvalGroup'])
+    else
+      cart.approval_group = ApprovalGroup.create(
+                              name: "approval-group-#{params['cartNumber']}",
+                              approvers_attributes: [
+                                { email_address: params['fromAddress'] }
+                              ]
+                            )
+    end
     cart.save
+
 
     #TODO: accepts_nested_attributes_for
     params['cartItems'].each do |cart_item_params|

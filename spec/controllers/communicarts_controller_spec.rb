@@ -55,6 +55,7 @@ describe CommunicartsController do
       }'
     }
 
+  let(:approval_group) { FactoryGirl.create(:approval_group_with_approvers, name: "anotherApprovalGroupName") }
   let(:approver) { FactoryGirl.create(:approver) }
 
   describe 'POST send_cart' do
@@ -69,16 +70,46 @@ describe CommunicartsController do
       post 'send_cart', @json_params
     end
 
-    it 'invokes a mailer' do
-      mock_mailer = double
-      CommunicartMailer.should_receive(:cart_notification_email).and_return(mock_mailer)
-      mock_mailer.should_receive(:deliver)
-      post 'send_cart', @json_params
+    context 'approval group' do
+      before do
+        CommunicartMailer.stub_chain(:cart_notification_email, :deliver)
+      end
+
+      context 'is indicated' do
+        before do
+          approval_group
+          @json_params['approvalGroup'] = "anotherApprovalGroupName"
+        end
+
+        it 'uses an existing approval group' do
+          ApprovalGroup.should_receive(:find_by_name).with("anotherApprovalGroupName")
+          post 'send_cart', @json_params
+        end
+
+        it 'invokes a mailer' do
+          mock_mailer = double
+          CommunicartMailer.should_receive(:cart_notification_email).and_return(mock_mailer)
+          mock_mailer.should_receive(:deliver)
+          post 'send_cart', @json_params
+        end
+
+      end
+
+      context 'is not indicated' do
+        it "creates a new approval group based on the 'fromAddress' parameter sent" do
+          ApprovalGroup.should_not_receive(:find_by_name)
+          ApprovalGroup.should_receive(:create).with(
+            {name: 'approval-group-2867637', approvers_attributes: [{ email_address: 'approver-address1234@some-dot-gov.gov' }]}
+            )
+
+          @json_params['fromAddress'] = 'approver-address1234@some-dot-gov.gov'
+          post 'send_cart', @json_params
+        end
+      end
     end
 
-    it 'sets totalPrice' do
+    it 'sets totalPrice'
 
-    end
   end
 
   describe 'POST approval_reply_received' do
@@ -106,12 +137,12 @@ describe CommunicartsController do
     end
 
     it 'finds the cart'  do
-      Cart.should_receive(:find_by_external_id).with(246810).and_return(cart)
+      Cart.should_receive(:find_by).with({:external_id=>246810}).and_return(cart)
       post 'approval_reply_received', @json_approval_params
     end
 
     it 'invokes a mailer' do
-      Cart.should_receive(:find_by_external_id).and_return(cart)
+      Cart.should_receive(:find_by).and_return(cart)
       mock_mailer = double
 
       CommunicartMailer.should_receive(:approval_reply_received_email).and_return(mock_mailer)
@@ -120,13 +151,13 @@ describe CommunicartsController do
     end
 
     it 'updates the cart status' do
-      Cart.stub(:find_by_external_id).and_return(cart)
+      Cart.stub(:find_by).and_return(cart)
       cart.should_receive(:update_approval_status)
       post 'approval_reply_received', @json_approval_params
     end
 
     it 'updates the approver status'  do
-      Cart.stub(:find_by_external_id).and_return(cart)
+      Cart.stub(:find_by).and_return(cart)
       cart.stub_chain(:approval_group, :approvers, :where).and_return([approver])
       cart.stub(:update_approval_status)
       EmailStatusReport.stub(:new)
