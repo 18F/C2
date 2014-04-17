@@ -36,6 +36,8 @@ describe 'Approving a cart with multiple approvers' do
   end
 
   it 'updates the cart and approver records as expected' do
+    CommunicartMailer.stub_chain(:approval_reply_received_email, :deliver)
+
     Cart.count.should == 1
     Approver.count.should == 3
     expect(Cart.first.approval_group.approvers.count).to eq 3
