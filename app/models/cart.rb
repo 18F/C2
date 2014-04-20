@@ -12,19 +12,29 @@ class Cart < ActiveRecord::Base
 
   def self.initialize_cart_with_items(params)
     approval_group_name = params['approvalGroup']
-    name = !params['cartName'].blank? ? params['cartName'] : params['cartNumber']
-    cart = Cart.new(name: name, status: 'pending', external_id: params['cartNumber'])
 
-    if !approval_group_name.blank?
-      cart.approval_group = ApprovalGroup.find_by_name(params['approvalGroup'])
+    name = !params['cartName'].blank? ? params['cartName'] : params['cartNumber']
+
+    existing_cart =  Cart.find_by(name: name)
+    if existing_cart.blank?
+      cart = Cart.new(name: name, status: 'pending', external_id: params['cartNumber'])
+
+      if !approval_group_name.blank?
+        cart.approval_group = ApprovalGroup.find_by_name(params['approvalGroup'])
+      else
+        cart.approval_group = ApprovalGroup.create(
+                                name: "approval-group-#{params['cartNumber']}",
+                                approvers_attributes: [
+                                  { email_address: params['fromAddress'] }
+                                ]
+                              )
+      end
+
     else
-      cart.approval_group = ApprovalGroup.create(
-                              name: "approval-group-#{params['cartNumber']}",
-                              approvers_attributes: [
-                                { email_address: params['fromAddress'] }
-                              ]
-                            )
+      cart = existing_cart
+      cart.cart_items.destroy_all
     end
+
     cart.save
 
 
@@ -39,7 +49,7 @@ class Cart < ActiveRecord::Base
         :details => cart_item_params['details'],
         :part_number => cart_item_params['partNumber'],
         :price => cart_item_params['price'],
-        :cart_id => cart_item_params['features']
+        :cart_id => cart.id
       )
     end
   end
