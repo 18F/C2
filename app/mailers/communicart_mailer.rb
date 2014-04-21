@@ -13,6 +13,7 @@
     @approval = analysis["approve"] == "APPROVE" ? "approved" : "disapproved"
     @approval_reply = analysis
     @report = report
+    @cart = report.cart.decorate
 
     @url = ENV['NOTIFICATION_URL']
     mail(to: to_address, subject: "User "+analysis["fromAddress"]+" has "+@approval+" cart # "+analysis["cartNumber"])

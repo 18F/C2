@@ -114,6 +114,7 @@ describe CommunicartsController do
 
   describe 'POST approval_reply_received' do
     let(:cart) { FactoryGirl.create(:cart_with_approval_group) }
+    let(:report) { EmailStatusReport.new(cart) }
 
     let(:approval_params) {
       '{
@@ -132,6 +133,7 @@ describe CommunicartsController do
 
 
     before do
+      # Remove stub to view email layout in development through letter_opener
       CommunicartMailer.stub_chain(:approval_reply_received_email, :deliver)
       @json_approval_params = JSON.parse(approval_params)
     end
@@ -160,7 +162,7 @@ describe CommunicartsController do
       Cart.stub(:find_by).and_return(cart)
       cart.stub_chain(:approval_group, :approvers, :where).and_return([approver])
       cart.stub(:update_approval_status)
-      EmailStatusReport.stub(:new)
+      EmailStatusReport.stub(:new).and_return(report)
 
       approver.should_receive(:update_attributes).with(status: 'approved')
       post 'approval_reply_received', @json_approval_params

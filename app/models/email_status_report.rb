@@ -1,4 +1,6 @@
 class EmailStatusReport
+  attr_accessor :cart
+
   def initialize(cart)
     @cart = cart
     @number_approved = @cart.approval_group.approvers.where(status: 'approved').count

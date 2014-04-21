@@ -11,6 +11,5 @@ FactoryGirl.define do
     part_number "MyString"
     price 1.5
     cart_id 123456
-    external_id 1357911
   end
 end

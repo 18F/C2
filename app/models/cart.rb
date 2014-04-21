@@ -39,6 +39,7 @@ class Cart < ActiveRecord::Base
 
 
     #TODO: accepts_nested_attributes_for
+    #TODO: save green, socio, and features information
     params['cartItems'].each do |cart_item_params|
       CartItem.create(
         :vendor => cart_item_params['vendor'],
