@@ -6,7 +6,13 @@ class CommunicartsController < ApplicationController
 
     approval_group_name = params['approvalGroup']
 
-    params['totalPrice'] = total_price_from_params(params['cartItems'])
+
+    sum = params['cartItems'].reduce(0) do |sum,value|
+      sum + (value["qty"].gsub(/[^\d\.]/, '').to_f *  value["price"].gsub(/[^\d\.]/, '').to_f)
+    end
+    params['totalPrice'] = "%0.2f" % sum
+
+
     if !approval_group_name.blank?
       approval_group = ApprovalGroup.find_by(name: approval_group_name)
 
@@ -35,13 +41,5 @@ class CommunicartsController < ApplicationController
   def approve_or_disapprove_status
     #TODO: Refactor duplication with ComunicartMailer#approval_reply_received_email
     params["approve"] == "APPROVE" ? "approved" : "disapproved"
-  end
-
-  def total_price_from_params(cart_items)
-    sum = cart_items.reduce(0) do |sum,value|
-      sum + (value["qty"].gsub(/[^\d\.]/, '').to_f *  value["price"].gsub(/[^\d\.]/, '').to_f)
-    end
-
-    return sum
   end
 end
