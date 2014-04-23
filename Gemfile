@@ -17,6 +17,10 @@ group :test, :development do
   gem 'awesome_print'
 end
 
+group :development do
+  gem 'railroady'
+end
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
