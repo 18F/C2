@@ -49,7 +49,7 @@ class Cart < ActiveRecord::Base
         :quantity => cart_item_params['qty'],
         :details => cart_item_params['details'],
         :part_number => cart_item_params['partNumber'],
-        :price => cart_item_params['price'],
+        :price => cart_item_params['price'].gsub("$","").to_f,
         :cart_id => cart.id
       )
     end

@@ -25,6 +25,7 @@ describe 'Approving a cart with multiple approvers' do
     approval_group.approvers << Approver.create(email_address: "approver1@some-dot-gov.gov")
     approval_group.approvers << Approver.create(email_address: "approver2@some-dot-gov.gov")
     approval_group.approvers << Approver.create(email_address: "approver3@some-dot-gov.gov")
+    approval_group.requester = Requester.create(email_address: 'test-requestser@some-dot-gov.gov')
 
     cart = Cart.new(
                     name: 'My Wonderfully Awesome Communicart',
@@ -33,7 +34,9 @@ describe 'Approving a cart with multiple approvers' do
                     )
 
     cart.approval_group = approval_group
+    cart.cart_items << FactoryGirl.create(:cart_item)
     cart.save
+
   end
 
   it 'updates the cart and approver records as expected' do

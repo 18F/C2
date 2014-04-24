@@ -72,7 +72,7 @@ describe 'Creating a cart' do
           "details": "Direct Delivery 3-4 days delivered ARO",
           "socio": [],
           "partNumber": "7510-01-519-4381",
-          "price": "$2.46",
+          "price": "$9.87",
           "features": [
               "sale"
           ]
@@ -91,9 +91,13 @@ describe 'Creating a cart' do
     expect(Cart.count).to eq 1
     cart = Cart.first
     expect(cart.cart_items.count).to eq 3
+    expect(cart.cart_items[0].price).to eq 2.46
+    expect(cart.cart_items[1].price).to eq 10.29
+    expect(cart.cart_items[2].price).to eq 32.67
 
     post 'send_cart', @json_params_2
     cart = Cart.first
     expect(cart.cart_items.count).to eq 1
+    expect(cart.cart_items[0].price).to eq 9.87
   end
 end
