@@ -31,8 +31,22 @@ class Cart < ActiveRecord::Base
       end
 
     else
+
       cart = existing_cart
       cart.cart_items.destroy_all
+      cart.approval_group = nil
+
+      #TODO: Refactor duplicated code
+      if !approval_group_name.blank?
+        cart.approval_group = ApprovalGroup.find_by_name(params['approvalGroup'])
+      else
+        cart.approval_group = ApprovalGroup.create(
+                                name: "approval-group-#{params['cartNumber']}",
+                                approvers_attributes: [
+                                  { email_address: params['fromAddress'] }
+                                ]
+                              )
+      end
     end
 
     cart.save

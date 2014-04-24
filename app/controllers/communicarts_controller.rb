@@ -12,7 +12,6 @@ class CommunicartsController < ApplicationController
     end
     params['totalPrice'] = "%0.2f" % sum
 
-
     if !approval_group_name.blank?
       approval_group = ApprovalGroup.find_by(name: approval_group_name)
 

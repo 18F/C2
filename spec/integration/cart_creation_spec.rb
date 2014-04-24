@@ -1,9 +1,16 @@
 require 'spec_helper'
 
 describe 'Creating a cart' do
+  before do
+    approval_group_1 = ApprovalGroup.create(name: "firstApprovalGroup")
+    approval_group_2 = ApprovalGroup.create(name: "secondApprovalGroup")
+  end
+
+
   let(:params_request_1) {
   '{
       "cartName": "",
+      "approvalGroup": "firstApprovalGroup",
       "cartNumber": "13579",
       "category": "initiation",
       "email": "test.email@some-dot-gov.gov",
@@ -56,6 +63,7 @@ describe 'Creating a cart' do
   let(:params_request_2) {
   '{
       "cartName": "",
+      "approvalGroup": "secondApprovalGroup",
       "cartNumber": "13579",
       "category": "initiation",
       "email": "test.email@some-dot-gov.gov",
@@ -81,7 +89,7 @@ describe 'Creating a cart' do
     }'
   }
 
-  it 'replaces existing cart items when initializing and existing cart' do
+  it 'replaces existing cart items and approval group when initializing and existing cart' do
     @json_params_1 = JSON.parse(params_request_1)
     @json_params_2 = JSON.parse(params_request_2)
 
@@ -94,10 +102,14 @@ describe 'Creating a cart' do
     expect(cart.cart_items[0].price).to eq 2.46
     expect(cart.cart_items[1].price).to eq 10.29
     expect(cart.cart_items[2].price).to eq 32.67
+    expect(cart.approval_group.name).to eq "firstApprovalGroup"
 
     post 'send_cart', @json_params_2
     cart = Cart.first
     expect(cart.cart_items.count).to eq 1
     expect(cart.cart_items[0].price).to eq 9.87
+    expect(cart.approval_group.name).to eq "secondApprovalGroup"
   end
+
+  it 'handles non-existent approval groups'
 end
