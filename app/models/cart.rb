@@ -1,7 +1,6 @@
 class Cart < ActiveRecord::Base
   has_many :cart_items
   has_one :approval_group
-  has_one :requester
 
   def update_approval_status
     update_attributes(status: 'approved') if all_approvals_received?

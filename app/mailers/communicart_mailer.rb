@@ -16,7 +16,7 @@
     @approval_reply = analysis
     @report = report
     @cart = report.cart.decorate
-    to_address = @cart.requester.email_address
+    to_address = @cart.approval_group.requester.email_address
 
     @url = ENV['NOTIFICATION_URL']
     mail(

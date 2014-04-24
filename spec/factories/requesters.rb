@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :requester do
     email_address "cart-requester@some-dot.gov"
-    cart_id 1234
+    approval_group_id 4567
   end
 end

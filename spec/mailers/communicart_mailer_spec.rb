@@ -33,7 +33,7 @@ describe CommunicartMailer do
 
     let(:report) {
       OpenStruct.new(
-                    cart: FactoryGirl.create(:cart_with_approval_group_and_requester)
+                    cart: FactoryGirl.create(:cart_with_approval_group)
                     )
     }
 

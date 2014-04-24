@@ -10,19 +10,5 @@ FactoryGirl.define do
       end
     end
 
-    factory :cart_with_requester do
-      after :create do |cart|
-        cart.requester = FactoryGirl.create(:requester)
-        cart.save
-      end
-    end
-
-    factory :cart_with_approval_group_and_requester do
-      after :create do |cart|
-        cart.approval_group = FactoryGirl.create(:approval_group_with_approvers)
-        cart.requester = FactoryGirl.create(:requester)
-        cart.save
-      end
-    end
   end
 end
