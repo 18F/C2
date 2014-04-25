@@ -1,0 +1,27 @@
+after_failure:
+  - mysql -e 'show databases;'
+  - cat ./config/database.yml
+  - echo $RAILS_ENV
+  - bundle exec rake --version
+  - ruby env
+before_script:
+  - cp config/database.yml.example config/database.yml
+install:
+  - bundle install --without development
+language: ruby
+notifications:
+  email:
+    recipients:
+      - raphael.villas@gsa.gov
+      - robert.read@gsa.gov
+script:
+  - bundle exec rake db:schema:load
+  - bundle exec rake db:test:prepare
+  - bundle exec rake spec
+services:
+  - mysql
+rvm:
+  - 2.0.0
+branches:
+  only:
+    - master
