@@ -79,7 +79,7 @@
                   <td valign="top">
                     <ul class="result-tag">
                       <%- if cart_item['green'] == 'true' %>
-                        <li class="green">Green</li>
+                        <li><div class="green"></div>Green</li>
                       <%- end %>
 
                       <%- unless cart_item['socio'].nil? %>
@@ -94,7 +94,7 @@
 
                       <%- unless cart_item['features'].nil? %>
                         <%- cart_item['features'].each do |feature| %>
-                          <li class="<%= "#{feature} " %>result-tag"><%= feature %></li>
+                          <li result-tag"><div class="<%= "#{feature}" %></div><%= feature %></li>
                         <%- end %>
                       <%- end %>
                     </ul>
