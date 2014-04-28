@@ -4,11 +4,16 @@
     <tr>
       <td class="w-container html-email-message">
         Hello,<br/>
-        The approver, <%= @approval_reply["fromAddress"] %>, <%= @approval %>  Cart Number <%= @approval_reply["cartNumber"] %>. <%= @approval_reply["approve"] == "APPROVE" ?
+        The approver, <%= @approval_reply["fromAddress"] %>, <%= @approval %>  Cart #<%= @approval_reply["cartNumber"] %>. <%= @approval_reply["approve"] == "APPROVE" ?
           "This activity has been logged for future reference. " :
           "You may wish to contact the approver for more explanation."
          %> Please see below for more details on the status of this cart.
-         <br/><br/>
+         <p>
+          <%- @cart.approval_group.approvers.each do | approver | %>
+            <%= approver.email_address %>
+            (<%= approver.status %>)<br/>
+          <%- end %>
+         </p>
          Thank you!
       </td
 >

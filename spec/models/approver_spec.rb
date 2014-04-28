@@ -13,6 +13,12 @@ describe Approver do
       approver.should be_valid
     end
 
+    it "automatically sets a default status of 'pending'" do
+      approver = Approver.new(@valid_attributes)
+      approver.save
+      expect(approver.status).to eq 'pending'
+    end
+
     it 'is invalid without an email address' do
       approver = Approver.new(@valid_attributes)
       approver.email_address = nil

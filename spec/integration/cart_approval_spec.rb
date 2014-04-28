@@ -41,7 +41,7 @@ describe 'Approving a cart with multiple approvers' do
 
   it 'updates the cart and approver records as expected' do
     # Remove stub to view email layout in development through letter_opener
-    CommunicartMailer.stub_chain(:approval_reply_received_email, :deliver)
+    # CommunicartMailer.stub_chain(:approval_reply_received_email, :deliver)
 
     Cart.count.should == 1
     Approver.count.should == 3

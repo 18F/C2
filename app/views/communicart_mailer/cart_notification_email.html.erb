@@ -20,12 +20,14 @@
   </table>
   <table class="w-container main-container" width='940'>
     <tr>
-      <td>
-        <h1 class="communicart_header">Purchase Requisition</h1>
-        <%- unless @json_post['cartName'] == "" %>
-          <h4 class="communicart_description"><%= @json_post['cartName']%></h4>
-        <%- end %>
-      </td>
+      <div>
+        <td>
+          <h1 class="communicart_header">Purchase Requisition</h1>
+          <%- unless @json_post['cartName'] == "" %>
+            <h4 class="communicart_description"><%= @json_post['cartName']%></h4>
+          <%- end %>
+        </td>
+      </div>
     </tr>
 
       <tr>
@@ -77,7 +79,9 @@
                   </td>
 
                   <td valign="top">
-                    <ul class="result-tag">
+                    <div>
+                      <ul class="result-tag">
+                    </div>
                       <%- if cart_item['green'] == 'true' %>
                         <li><div class="green"></div>Green</li>
                       <%- end %>
