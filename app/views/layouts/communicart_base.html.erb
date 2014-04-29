@@ -1796,9 +1796,57 @@ ul.result-tag li.fssi-compliant {
 
 .background-container {
   background-color: #fff;
+}
+
 .summary-block-header {
   background-color: #2774a1;
 }
+
+.approver_status {
+  min-width: 375px;
+  float: left;
+  clear: left;
+  padding: 7px;
+}
+
+p.pending {
+  background-color: #ffc;
+}
+
+p.approved {
+  background-color: #cfc;
+}
+
+span.icon-approved {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-image: url('https://s3.amazonaws.com/18f/c2/icon-checkmark.gif');
+}
+
+span.icon-pending {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+}
+
+span.status-label-approved {
+  color: #393;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+span.status-label-pending {
+  color: #996;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+p.rejected {
+  background-color: #fcc;
+}
+
+
 @media (max-width: 991px) {
 }
 @media (max-width: 767px) {
