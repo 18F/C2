@@ -1,5 +1,9 @@
 require 'spec_helper'
 
+describe 'Rejecting a cart with multiple approvers' do
+
+end
+
 describe 'Approving a cart with multiple approvers' do
 
   let(:approval_params) {
