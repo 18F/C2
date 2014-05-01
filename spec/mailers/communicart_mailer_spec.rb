@@ -3,6 +3,11 @@ require 'ostruct'
 
 describe CommunicartMailer do
   describe 'cart notification email' do
+    before do
+        ENV.stub(:[])
+        ENV.stub(:[]).with('NOTIFICATION_FROM_EMAIL').and_return('reply@communicart-stub.com')
+    end
+
     let(:analysis) { OpenStruct.new(email: 'email.to.email@testing.com', cartNumber: '13579', cartItems: []) }
     let(:cart) { Cart.new(name: "TestCart") }
     let(:mail) { CommunicartMailer.cart_notification_email(analysis.email, analysis, cart) }
@@ -16,14 +21,16 @@ describe CommunicartMailer do
     end
 
     it 'renders the sender email' do
-      params = CommunicartMailer.default_params.merge({from:'reply@communicart-stub.com'})
-
-      CommunicartMailer.stub(:default_params).and_return(params)
       mail.from.should == ['reply@communicart-stub.com']
     end
   end
 
   describe 'approval reply received email' do
+    before do
+        ENV.stub(:[])
+        ENV.stub(:[]).with('NOTIFICATION_FROM_EMAIL').and_return('reply@communicart-stub.com')
+    end
+
     let(:analysis) {
       OpenStruct.new(
                     approve: 'APPROVE',
@@ -50,9 +57,6 @@ describe CommunicartMailer do
     end
 
     it 'renders the sender email' do
-      params = CommunicartMailer.default_params.merge({from:'reply@communicart-stub.com'})
-
-      CommunicartMailer.stub(:default_params).and_return(params)
       mail.from.should == ['reply@communicart-stub.com']
     end
   end
