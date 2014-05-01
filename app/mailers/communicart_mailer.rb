@@ -14,14 +14,14 @@
          )
   end
 
-  def approval_reply_received_email(analysis, report, cartparam)
+  def approval_reply_received_email(analysis, report)
     @approval = analysis["approve"] == "APPROVE" ? "approved" : "disapproved"
     @approval_reply = analysis
     @report = report
     @cart = report.cart.decorate
     to_address = @cart.approval_group.requester.email_address
 
-    attachments['Communicart'+cartparam.name+'.details.csv'] = cartparam.create_items_csv
+    attachments['Communicart'+@cart.name+'.details.csv'] = @cart.create_items_csv
 
     @url = ENV['NOTIFICATION_URL']
     mail(

@@ -4,7 +4,8 @@ require 'ostruct'
 describe CommunicartMailer do
   describe 'cart notification email' do
     let(:analysis) { OpenStruct.new(email: 'email.to.email@testing.com', cartNumber: '13579', cartItems: []) }
-    let(:mail) { CommunicartMailer.cart_notification_email(analysis.email, analysis) }
+    let(:cart) { Cart.new(name: "TestCart") }
+    let(:mail) { CommunicartMailer.cart_notification_email(analysis.email, analysis, cart) }
 
     it 'renders the subject' do
       mail.subject.should == 'Please approve Cart Number: 13579'

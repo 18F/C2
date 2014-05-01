@@ -67,6 +67,9 @@ describe CommunicartsController do
     it 'creates a cart' do
       CommunicartMailer.stub_chain(:cart_notification_email, :deliver)
       Cart.should_receive(:initialize_cart_with_items)
+      mock_cart = double(:cart)
+      Cart.should_receive(:find_by).with(external_id: 2867637).and_return(mock_cart)
+      mock_cart.should_receive(:decorate)
       post 'send_cart', @json_params
     end
 
