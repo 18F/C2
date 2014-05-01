@@ -1,5 +1,5 @@
   class CommunicartMailer < ActionMailer::Base
-  default from: ENV['NOTIFICATION_FROM_EMAIL']
+  # default from: ENV['NOTIFICATION_FROM_EMAIL']
   layout 'communicart_base'
 
   def cart_notification_email(email,analysis,cart)
@@ -11,7 +11,8 @@
 
     mail(
          to: email,
-         subject: "Please approve Cart Number: #{analysis['cartNumber']}"
+         subject: "Please approve Cart Number: #{analysis['cartNumber']}",
+         from: ENV['NOTIFICATION_FROM_EMAIL']
          )
   end
 
@@ -32,7 +33,8 @@
     @url = ENV['NOTIFICATION_URL']
     mail(
          to: to_address,
-         subject: "User #{analysis['fromAddress']} has #{@approval} cart ##{analysis['cartNumber']}"
+         subject: "User #{analysis['fromAddress']} has #{@approval} cart ##{analysis['cartNumber']}",
+         from: ENV['NOTIFICATION_FROM_EMAIL']
          )
   end
 end

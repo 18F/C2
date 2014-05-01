@@ -20,7 +20,9 @@ describe 'Approving a cart with multiple approvers' do
   let(:approver) { FactoryGirl.create(:approver) }
 
   before do
-     @json_approval_params = JSON.parse(approval_params)
+    ENV['NOTIFICATION_FROM_EMAIL'] = 'sender@some-dot_gov.gov'
+
+    @json_approval_params = JSON.parse(approval_params)
 
     approval_group = ApprovalGroup.create(name: "A Testworthy Approval Group")
     approval_group.approvers << Approver.create(email_address: "approver1@some-dot-gov.gov")
