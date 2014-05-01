@@ -2,10 +2,14 @@ class CommunicartsController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def send_cart
-    Cart.initialize_cart_with_items(params)
+    cart = Cart.initialize_cart_with_items(params)
+
+    # Note: There surely should be a better way to fill this in since we just
+    # create the object above, but I don't really know how to do that...
+    cart = Cart.find_by(external_id: (params['cartNumber'].to_i))
+    cart.decorate
 
     approval_group_name = params['approvalGroup']
-
 
     sum = params['cartItems'].reduce(0) do |sum,value|
       sum + (value["qty"].gsub(/[^\d\.]/, '').to_f *  value["price"].gsub(/[^\d\.]/, '').to_f)
@@ -16,10 +20,10 @@ class CommunicartsController < ApplicationController
       approval_group = ApprovalGroup.find_by(name: approval_group_name)
 
       approval_group.approvers.each do | approver |
-        CommunicartMailer.cart_notification_email(approver.email_address,params).deliver
+        CommunicartMailer.cart_notification_email(approver.email_address,params,cart).deliver
       end
     else
-      CommunicartMailer.cart_notification_email(params["email"],params).deliver
+      CommunicartMailer.cart_notification_email(params["email"],params,cart).deliver
     end
     render json: { message: "This was a success"}, status: 200
   end
