@@ -1,3 +1,5 @@
+require 'csv'
+
 class Cart < ActiveRecord::Base
   has_many :cart_items
   has_one :approval_group
@@ -8,6 +10,16 @@ class Cart < ActiveRecord::Base
 
   def all_approvals_received?
     approval_group.approvers.where(status: 'approved').count == approval_group.approvers.count
+  end
+
+  def create_items_csv
+    csv_string = CSV.generate do |csv|
+    csv << ["description","details","vendor","url","notes","part_number","quantity","unit price","price for quantity"]
+    cart_items.each do |item|
+        csv << [item.description,item.details,item.vendor,item.url,item.notes,item.part_number,item.quantity,item.price,item.quantity*item.price]
+        end
+    end
+    return csv_string
   end
 
   def self.initialize_cart_with_items(params)
@@ -67,6 +79,7 @@ class Cart < ActiveRecord::Base
         :cart_id => cart.id
       )
     end
+    return cart
   end
 
 end

@@ -2,21 +2,26 @@
   default from: ENV['NOTIFICATION_FROM_EMAIL']
   layout 'communicart_base'
 
-  def cart_notification_email(email,analysis)
+  def cart_notification_email(email,analysis,cart)
     @json_post = analysis
     @url = ENV['NOTIFICATION_URL']
+
+    attachments['Communicart'+cart.name+'.details.csv'] = cart.create_items_csv
+
     mail(
          to: email,
          subject: "Please approve Cart Number: #{analysis['cartNumber']}"
          )
   end
 
-  def approval_reply_received_email(analysis, report)
+  def approval_reply_received_email(analysis, report, cartparam)
     @approval = analysis["approve"] == "APPROVE" ? "approved" : "disapproved"
     @approval_reply = analysis
     @report = report
     @cart = report.cart.decorate
     to_address = @cart.approval_group.requester.email_address
+
+    attachments['Communicart'+cartparam.name+'.details.csv'] = cartparam.create_items_csv
 
     @url = ENV['NOTIFICATION_URL']
     mail(
