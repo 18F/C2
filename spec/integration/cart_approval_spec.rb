@@ -12,7 +12,8 @@ describe 'Approving a cart with multiple approvers' do
       "gsaUsername": null,
       "date": "Sun, 13 Apr 2014 18:06:15 -0400",
       "approve": "APPROVE",
-      "disapprove": null
+      "disapprove": null,
+      "comment" : "spudcomment"
       }'
     }
 
@@ -64,6 +65,7 @@ describe 'Approving a cart with multiple approvers' do
 
     expect(Cart.first.approval_group.approvers.count).to eq 3
     expect(Cart.first.approval_group.approvers.where(status: 'approved').count).to eq 3
+    expect(Cart.first.comments.first.comment_text).to eq "spudcomment"
 
   end
 end

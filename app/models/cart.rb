@@ -2,6 +2,7 @@ require 'csv'
 
 class Cart < ActiveRecord::Base
   has_many :cart_items
+  has_many :comments
   has_one :approval_group
 
   def update_approval_status
@@ -17,6 +18,29 @@ class Cart < ActiveRecord::Base
     csv << ["description","details","vendor","url","notes","part_number","quantity","unit price","price for quantity"]
     cart_items.each do |item|
         csv << [item.description,item.details,item.vendor,item.url,item.notes,item.part_number,item.quantity,item.price,item.quantity*item.price]
+        end
+    end
+    return csv_string
+  end
+
+# Note: I think the model for this is a little wrong.  We need comments on the 
+# the cart, but in fact, we are operating on comments on approvals, which we don't model at present.
+  def create_comments_csv
+    csv_string = CSV.generate do |csv|
+    csv << ["comment","created_at"]
+    date_sorted_comments = comments.sort { |a,b| a.updated_at <=> b.updated_at }
+    date_sorted_comments.each do |item|
+        csv << [item.comment_text,item.updated_at]
+        end
+    end
+    return csv_string
+  end
+
+  def create_approvals_csv
+    csv_string = CSV.generate do |csv|
+    csv << ["status","approver","created_at"]
+    approval_group.approvers.each do |app|
+        csv << [app.status,app.email_address,app.updated_at]
         end
     end
     return csv_string

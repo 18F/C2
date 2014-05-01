@@ -109,6 +109,7 @@ describe 'Creating a cart' do
     expect(cart.cart_items.count).to eq 1
     expect(cart.cart_items[0].price).to eq 9.87
     expect(cart.approval_group.name).to eq "secondApprovalGroup"
+    expect(cart.comments.first.comment_text).to eq "Hi, this is a comment, I hope it works!\r\nThis is the second line of the comment." 
   end
 
   it 'handles non-existent approval groups'

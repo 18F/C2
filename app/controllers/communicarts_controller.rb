@@ -9,6 +9,8 @@ class CommunicartsController < ApplicationController
     cart = Cart.find_by(external_id: (params['cartNumber'].to_i))
     cart.decorate
 
+    Comment.create(comment_text: params['initiationComment'].strip,cart_id: cart.id) unless params['initiationComment'].blank?
+
     approval_group_name = params['approvalGroup']
 
     sum = params['cartItems'].reduce(0) do |sum,value|
@@ -31,6 +33,8 @@ class CommunicartsController < ApplicationController
   def approval_reply_received
     cart = Cart.find_by(external_id: (params['cartNumber'].to_i))
     cart.decorate
+
+    Comment.create(comment_text: params['comment'].strip,cart_id: cart.id) unless params['comment'].blank?
 
     approver = cart.approval_group.approvers.where(email_address: params['fromAddress']).first
     approver.update_attributes(status: approve_or_disapprove_status)

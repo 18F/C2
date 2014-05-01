@@ -7,6 +7,7 @@
     @url = ENV['NOTIFICATION_URL']
 
     attachments['Communicart'+cart.name+'.details.csv'] = cart.create_items_csv
+    attachments['Communicart'+cart.name+'.comments.csv'] = cart.create_comments_csv
 
     mail(
          to: email,
@@ -22,6 +23,11 @@
     to_address = @cart.approval_group.requester.email_address
 
     attachments['Communicart'+@cart.name+'.details.csv'] = @cart.create_items_csv
+    attachments['Communicart'+@cart.name+'.comments.csv'] = @cart.create_comments_csv
+
+    if @cart.all_approvals_received?
+      attachments['Communicart'+@cart.name+'.approvals.csv'] = @cart.create_approvals_csv      
+    end
 
     @url = ENV['NOTIFICATION_URL']
     mail(
