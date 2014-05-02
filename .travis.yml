@@ -5,6 +5,7 @@ after_failure:
   - bundle exec rake --version
   - ruby env
 before_script:
+  - mysql -e 'create database c2_test;'
   - cp config/database.yml.example config/database.yml
 install:
   - bundle install --without development
