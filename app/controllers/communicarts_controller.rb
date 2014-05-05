@@ -45,8 +45,9 @@ class CommunicartsController < ApplicationController
     render json: { message: "approval_reply_received"}, status: 200
   end
 
-  def approve_or_disapprove_status
+  def approve_or_reject_status
     #TODO: Refactor duplication with ComunicartMailer#approval_reply_received_email
-    params["approve"] == "APPROVE" ? "approved" : "disapproved"
+    return 'approved' if params["approve"] == "APPROVE"
+    return 'rejected' if params["disapprove"] == "REJECT"
   end
 end

@@ -1,5 +1,4 @@
   class CommunicartMailer < ActionMailer::Base
-  # default from: ENV['NOTIFICATION_FROM_EMAIL']
   layout 'communicart_base'
 
   def cart_notification_email(email,analysis,cart)
@@ -21,7 +20,7 @@
   end
 
   def approval_reply_received_email(analysis, report)
-    @approval = analysis["approve"] == "APPROVE" ? "approved" : "disapproved"
+    @approval = analysis["approve"] == "APPROVE" ? "approved" : "reject"
     @approval_reply = analysis
     @report = report
     @cart = report.cart.decorate
@@ -31,7 +30,7 @@
     attachments['Communicart'+@cart.name+'.comments.csv'] = @cart.create_comments_csv
 
     if @cart.all_approvals_received?
-      attachments['Communicart'+@cart.name+'.approvals.csv'] = @cart.create_approvals_csv      
+      attachments['Communicart'+@cart.name+'.approvals.csv'] = @cart.create_approvals_csv
     end
 
     @url = ENV['NOTIFICATION_URL']
