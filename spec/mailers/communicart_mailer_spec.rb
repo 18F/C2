@@ -2,6 +2,10 @@ require 'spec_helper'
 require 'ostruct'
 
 describe CommunicartMailer do
+ let(:approval_group) { FactoryGirl.create(:approval_group_with_approvers, name: "anotherApprovalGroupName") }
+  let(:approver) { FactoryGirl.create(:approver) }
+
+
   describe 'cart notification email' do
     before do
         ENV.stub(:[])
@@ -13,14 +17,23 @@ describe CommunicartMailer do
     let(:mail) { CommunicartMailer.cart_notification_email(analysis.email, analysis, cart) }
 
     it 'renders the subject' do
+      cart.stub(:approval_group).and_return(approval_group)
+      approval_group.stub(:approvers).and_return([approver])
+      approver.stub(:approver_comment).and_return([])
       mail.subject.should == 'Please approve Cart Number: 13579'
     end
 
     it 'renders the receiver email' do
+      cart.stub(:approval_group).and_return(approval_group)
+      approval_group.stub(:approvers).and_return([approver])
+      approver.stub(:approver_comment).and_return([])
       mail.to.should == ["email.to.email@testing.com"]
     end
 
     it 'renders the sender email' do
+      cart.stub(:approval_group).and_return(approval_group)
+      approval_group.stub(:approvers).and_return([approver])
+      approver.stub(:approver_comment).and_return([])
       mail.from.should == ['reply@communicart-stub.com']
     end
   end

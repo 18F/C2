@@ -129,7 +129,8 @@ describe CommunicartsController do
       "gsaUsername": null,
       "date": "Sun, 13 Apr 2014 18:06:15 -0400",
       "approve": "APPROVE",
-      "disapprove": null
+      "disapprove": null,
+      "comment": "Test Approval Comment"
       }'
     }
     #TODO: Replace approve/disapprove with generic action
@@ -168,6 +169,21 @@ describe CommunicartsController do
       EmailStatusReport.stub(:new).and_return(report)
 
       approver.should_receive(:update_attributes).with(status: 'approved')
+      post 'approval_reply_received', @json_approval_params
+    end
+    it 'adds the comment' do
+      Cart.stub(:find_by).and_return(cart)
+      cart.stub_chain(:approval_group, :approvers, :where).and_return([approver])
+      cart.stub(:update_approval_status)
+      EmailStatusReport.stub(:new).and_return(report)
+
+      approver.should_receive(:update_attributes).with(status: 'approved')
+
+      ApproverComment.should_receive(:create).with(
+        {comment_text: 'Test Approval Comment',approver_id: approver.id
+                                                     }
+            )
+
       post 'approval_reply_received', @json_approval_params
     end
 

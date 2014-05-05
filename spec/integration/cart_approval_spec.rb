@@ -67,7 +67,8 @@ describe 'Approving a cart with multiple approvers' do
 
     expect(Cart.first.approval_group.approvers.count).to eq 3
     expect(Cart.first.approval_group.approvers.where(status: 'approved').count).to eq 3
-    expect(Cart.first.comments.first.comment_text).to eq "spudcomment"
+    expect(Cart.first.approval_group.approvers.first.approver_comment.first.comment_text).to eq "spudcomment"
+#    expect(Cart.first.comments.first.comment_text).to eq "spudcomment"
 
   end
 end

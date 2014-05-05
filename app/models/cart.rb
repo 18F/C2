@@ -27,11 +27,18 @@ class Cart < ActiveRecord::Base
 # the cart, but in fact, we are operating on comments on approvals, which we don't model at present.
   def create_comments_csv
     csv_string = CSV.generate do |csv|
-    csv << ["comment","created_at"]
-    date_sorted_comments = comments.sort { |a,b| a.updated_at <=> b.updated_at }
-    date_sorted_comments.each do |item|
-        csv << [item.comment_text,item.updated_at]
+      csv << ["requester","cart comment","created_at"]
+      date_sorted_comments = comments.sort { |a,b| a.updated_at <=> b.updated_at }
+      date_sorted_comments.each do |item|
+        csv << [approval_group.requester.email_address,item.comment_text,item.updated_at]
+      end
+
+      csv << ["commenter","approver comment","created_at"]
+      approval_group.approvers.each do |app|
+        app.approver_comment.each do |com|
+          csv << [app.email_address,com.comment_text,com.updated_at]
         end
+      end
     end
     return csv_string
   end
