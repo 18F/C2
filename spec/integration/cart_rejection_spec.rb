@@ -52,14 +52,17 @@ describe 'Rejecting a cart with multiple approvers' do
 
     Cart.count.should == 1
     Approver.count.should == 3
-    expect(Cart.first.approval_group.approvers.count).to eq 3
-    expect(Cart.first.approval_group.approvers.where(status: 'approved').count).to eq 0
+
+    cart = Cart.first
+    expect(cart.approval_group.approvers.count).to eq 3
+    expect(cart.approval_group.approvers.where(status: 'approved').count).to eq 0
 
     post 'approval_reply_received', @json_rejection_params
 
-    expect(Cart.first.approval_group.approvers.count).to eq 3
-    expect(Cart.first.approval_group.approvers.where(status: 'approved').count).to eq 0
-    expect(Cart.first.approval_group.approvers.where(status: 'rejected').count).to eq 1
+    expect(cart.approval_group.approvers.count).to eq 3
+    expect(cart.approval_group.approvers.where(status: 'approved').count).to eq 0
+    expect(cart.approval_group.approvers.where(status: 'rejected').count).to eq 1
+    expect(cart.reload.status).to eq 'rejected'
 
     #User corrects the mistake
 

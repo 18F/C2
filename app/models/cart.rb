@@ -14,7 +14,12 @@ class Cart < ActiveRecord::Base
   end
 
   def update_approval_status
-    update_attributes(status: 'approved') if all_approvals_received?
+    return update_attributes(status: 'rejected') if has_rejection?
+    return update_attributes(status: 'approved') if all_approvals_received?
+  end
+
+  def has_rejection?
+    approval_group.approvers.map(&:status).include?('rejected')
   end
 
   def all_approvals_received?
