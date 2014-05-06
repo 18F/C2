@@ -111,6 +111,17 @@ describe CommunicartsController do
       end
     end
 
+    it 'creates a comment given a comment param' do
+      Comment.should_receive(:create)
+      post 'send_cart', @json_params
+    end
+
+    it 'does not create a comment when not given a comment param' do
+      Comment.should_not receive(:create)
+      @json_params['initiationComment'] = ''
+      post 'send_cart', @json_params
+    end
+
     it 'sets totalPrice'
 
   end
@@ -129,7 +140,8 @@ describe CommunicartsController do
       "gsaUsername": null,
       "date": "Sun, 13 Apr 2014 18:06:15 -0400",
       "approve": "APPROVE",
-      "disapprove": null
+      "disapprove": null,
+      "comment": "Great work!"
       }'
     }
     #TODO: Replace approve/disapprove with generic action
@@ -168,6 +180,27 @@ describe CommunicartsController do
       EmailStatusReport.stub(:new).and_return(report)
 
       approver.should_receive(:update_attributes).with(status: 'approved')
+      post 'approval_reply_received', @json_approval_params
+    end
+
+    it 'creates a comment given a comment param' do
+      Cart.stub(:find_by).and_return(cart)
+      cart.stub_chain(:approval_group, :approvers, :where).and_return([approver])
+      cart.stub(:update_approval_status)
+      EmailStatusReport.stub(:new).and_return(report)
+
+      Comment.should_receive(:create)
+      post 'approval_reply_received', @json_approval_params
+    end
+
+    it 'does not create a comment when not given a comment param' do
+      Cart.stub(:find_by).and_return(cart)
+      cart.stub_chain(:approval_group, :approvers, :where).and_return([approver])
+      cart.stub(:update_approval_status)
+      EmailStatusReport.stub(:new).and_return(report)
+      @json_approval_params['comment'] = ''
+
+      Comment.should_not receive(:create)
       post 'approval_reply_received', @json_approval_params
     end
 

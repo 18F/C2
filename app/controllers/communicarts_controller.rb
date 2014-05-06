@@ -9,7 +9,7 @@ class CommunicartsController < ApplicationController
     cart = Cart.find_by(external_id: (params['cartNumber'].to_i))
     cart.decorate
 
-    Comment.create(comment_text: params['initiationComment'].strip,cart_id: cart.id) unless params['initiationComment'].blank?
+    Comment.create(comment_text: params['initiationComment'].strip, cart_id: cart.id) unless params['initiationComment'].blank?
 
     approval_group_name = params['approvalGroup']
 

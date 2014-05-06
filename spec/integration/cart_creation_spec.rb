@@ -69,7 +69,6 @@ describe 'Creating a cart' do
       "email": "test.email@some-dot-gov.gov",
       "fromAddress": "approver1@some-dot-gov.gov",
       "gsaUserName": "",
-      "initiationComment": "\r\n\r\nHi, this is a comment, I hope it works!\r\nThis is the second line of the comment.",
       "cartItems": [
         {
           "vendor": "DOCUMENT IMAGING DIMENSIONS, INC.",
@@ -103,13 +102,15 @@ describe 'Creating a cart' do
     expect(cart.cart_items[1].price).to eq 10.29
     expect(cart.cart_items[2].price).to eq 32.67
     expect(cart.approval_group.name).to eq "firstApprovalGroup"
+    expect(cart.comments.count).to eq 1
 
     post 'send_cart', @json_params_2
     cart = Cart.first
     expect(cart.cart_items.count).to eq 1
     expect(cart.cart_items[0].price).to eq 9.87
     expect(cart.approval_group.name).to eq "secondApprovalGroup"
-    expect(cart.comments.first.comment_text).to eq "Hi, this is a comment, I hope it works!\r\nThis is the second line of the comment." 
+    expect(cart.comments.first.comment_text).to eq "Hi, this is a comment, I hope it works!\r\nThis is the second line of the comment."
+    expect(cart.comments.count).to eq 1
   end
 
   it 'handles non-existent approval groups'
