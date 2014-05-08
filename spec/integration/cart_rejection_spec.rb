@@ -121,8 +121,6 @@ describe 'Rejecting a cart with multiple approvers' do
 
   end
 
-  # context 'User corrects the rejected mistake'
-
   it 'updates the cart and approver records as expected' do
     # Remove stub to view email layout in development through letter_opener
     # CommunicartMailer.stub_chain(:rejection_reply_received_email, :deliver)
@@ -142,11 +140,7 @@ describe 'Rejecting a cart with multiple approvers' do
     expect(cart.approvals.where(status: 'rejected').count).to eq 1
     expect(cart.reload.status).to eq 'rejected'
 
-    #-- A cart with an approval group
-    # A mailer sends out with the current state of things (rejected) to the requester
-    # A mailer sends out an update to the approvers
     # User corrects the mistake and resubmits
-
     @json_params_1 = JSON.parse(params_request_1)
     post 'send_cart', @json_params_1
 
@@ -159,18 +153,12 @@ describe 'Rejecting a cart with multiple approvers' do
     expect(Cart.count).to eq 2
     expect(updated_cart.approvals.count).to eq 3
 
-    # A new set of emails is sent to everyone on the list (Implied, but do we change the content of the email?)
-
-    # If they respond to a previous one, they get an email that it has expired and to respond to 'this one'
-    # expect(updated_cart.approvals.collect{|a| a.status}.uniq).to eq ['pending']
+    # Repost an approval
     @json_repost_params = JSON.parse(repost_params)
     post 'approval_reply_received', @json_repost_params
 
     expect(updated_cart.approvals.where(status:'approved').count).to eq 1
     expect(updated_cart.approvals.where(status:'pending').count).to eq 2
-
-
-    # Start the web interface that allows people to just do everything in a web page experience
 
 
   end

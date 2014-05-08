@@ -24,7 +24,7 @@
     @cart = report.cart.decorate
     to_address = @cart.requester.email_address
     #TODO: Handle carts without approval groups (only emails passed)
-    #CURRENT TODO: Add a specific 'rejection' text block for the requester
+    #TODO: Add a specific 'rejection' text block for the requester
 
     attachments['Communicart' + @cart.name + '.details.csv'] = @cart.create_items_csv
     attachments['Communicart' + @cart.name + '.comments.csv'] = @cart.create_comments_csv

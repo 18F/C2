@@ -3,7 +3,6 @@ require 'spec_helper'
 describe 'Creating a cart' do
   before do
     approval_group_1 = FactoryGirl.create(:approval_group_with_approvers, name: "firstApprovalGroup")
-    # approval_group_1 = ApprovalGroup.create(name: "firstApprovalGroup")
     approval_group_2 = ApprovalGroup.create(name: "secondApprovalGroup")
     FactoryGirl.create(:user, email_address: "test.email.only@some-dot-gov.gov")
   end
