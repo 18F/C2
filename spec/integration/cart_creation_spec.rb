@@ -156,6 +156,8 @@ describe 'Creating a cart' do
     expect(cart.approvals.count).to eq 2
   end
 
+  it 'handles an email recipient sent in request'
+
   it 'handles non-existent approval groups'
 
   it 'traits get added to the database correct' do
