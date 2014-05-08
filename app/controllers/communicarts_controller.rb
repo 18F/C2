@@ -21,6 +21,7 @@ class CommunicartsController < ApplicationController
     if !approval_group_name.blank?
       approval_group = ApprovalGroup.find_by(name: approval_group_name)
       approval_group.approvers.each do | approver |
+        Approval.create!(user_id: approver.id, cart_id: cart.id)
         CommunicartMailer.cart_notification_email(approver.email_address,params,cart).deliver
       end
     else
