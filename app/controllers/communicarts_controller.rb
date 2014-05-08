@@ -20,9 +20,10 @@ class CommunicartsController < ApplicationController
 
     if !approval_group_name.blank?
       approval_group = ApprovalGroup.find_by(name: approval_group_name)
-      approval_group.approvers.each do | approver |
-        Approval.create!(user_id: approver.id, cart_id: cart.id)
-        CommunicartMailer.cart_notification_email(approver.email_address,params,cart).deliver
+
+      approval_group.users.each do | user |
+        Approval.create!(user_id: user.id, cart_id: cart.id)
+        CommunicartMailer.cart_notification_email(user.email_address,params,cart).deliver
       end
     else
       CommunicartMailer.cart_notification_email(params["email"],params,cart).deliver
@@ -35,10 +36,14 @@ class CommunicartsController < ApplicationController
     cart = Cart.find_by(external_id: (params['cartNumber'].to_i))
     cart.decorate
 
-    approver = cart.approval_group.approvers.where(email_address: params['fromAddress']).first
+    user = cart.approval_group.users.where(email_address: params['fromAddress']).first
+    ApproverComment.create(comment_text: params['comment'].strip, approver_id: user.id) unless params['comment'].blank?
+    Comment.create(comment_text: params['comment'].strip, cart_id: cart.id) unless params['comment'].blank?
 
-    ApproverComment.create(comment_text: params['comment'].strip,approver_id: approver.id) unless params['comment'].blank?
-    approver.update_attributes(status: approve_or_disapprove_status)
+    user = User.find_by(email_address: params['fromAddress'])
+    approval = cart.approvals.where(user_id: user.id).first
+
+    approval.update_attributes(status: approve_or_reject_status)
     cart.update_approval_status
 
     cart_report = EmailStatusReport.new(cart)

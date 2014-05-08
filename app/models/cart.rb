@@ -20,11 +20,11 @@ class Cart < ActiveRecord::Base
   end
 
   def has_rejection?
-    approval_group.approvers.map(&:status).include?('rejected')
+    approvals.map(&:status).include?('rejected')
   end
 
   def all_approvals_received?
-    approval_group.approvers.where(status: 'approved').count == approval_group.approvers.count
+    approvals.where(status: 'approved').count == approval_group.users.count
   end
 
   def create_items_csv

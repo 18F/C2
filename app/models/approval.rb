@@ -1,4 +1,4 @@
 class Approval < ActiveRecord::Base
-  belongs_to :Approval
+  belongs_to :cart
 
 end

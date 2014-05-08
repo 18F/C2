@@ -27,8 +27,8 @@ ActiveRecord::Schema.define(version: 20140516154809) do
     t.datetime "updated_at"
 
   create_table "approval_groups_users", id: false, force: true do |t|
-    t.integer "approval_group_id", null: false
-    t.integer "users_id",          null: false
+    t.integer "approval_group_id"
+    t.integer "user_id"
   end
 
   create_table "approvals", force: true do |t|
