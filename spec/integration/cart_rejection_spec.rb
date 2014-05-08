@@ -41,8 +41,6 @@ describe 'Rejecting a cart with multiple approvers' do
     (1..3).each do |num|
       email = "approver#{num}@some-dot-gov.gov"
 
-      #TODO: Remove approvers
-      approval_group.approvers << Approver.create(email_address: email)
       user = FactoryGirl.create(:user, email_address: email)
       approval_group.users << user
       cart.approvals << Approval.create!(user_id: user.id)
@@ -59,7 +57,7 @@ describe 'Rejecting a cart with multiple approvers' do
     # CommunicartMailer.stub_chain(:rejection_reply_received_email, :deliver)
 
     Cart.count.should == 1
-    Approver.count.should == 3
+    User.count.should == 3
 
     cart = Cart.first
     expect(cart.approvals.count).to eq 3

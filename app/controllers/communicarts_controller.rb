@@ -45,7 +45,6 @@ class CommunicartsController < ApplicationController
 
     approval.update_attributes(status: approve_or_reject_status)
     cart.update_approval_status
-
     cart_report = EmailStatusReport.new(cart)
     CommunicartMailer.approval_reply_received_email(params, cart_report).deliver
     render json: { message: "approval_reply_received"}, status: 200

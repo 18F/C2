@@ -47,8 +47,6 @@ describe 'Approving a cart with multiple approvers' do
     (1..3).each do |num|
       email = "approver#{num}@some-dot-gov.gov"
 
-      #TODO: Remove approvers
-      approval_group.approvers << Approver.create(email_address: email)
       user = FactoryGirl.create(:user, email_address: email)
       approval_group.users << user
       cart.approvals << Approval.create!(user_id: user.id)
@@ -63,25 +61,25 @@ describe 'Approving a cart with multiple approvers' do
     # CommunicartMailer.stub_chain(:approval_reply_received_email, :deliver)
 
     Cart.count.should == 1
-    Approver.count.should == 3
-    expect(Cart.first.approval_group.approvers.count).to eq 3
-    expect(Cart.first.approval_group.approvers.where(status: 'approved').count).to eq 0
+    User.count.should == 3
+    expect(Cart.first.approvals.count).to eq 3
+    expect(Cart.first.approvals.where(status: 'approved').count).to eq 0
 
     post 'approval_reply_received', @json_approval_params
 
-    expect(Cart.first.approval_group.approvers.count).to eq 3
+    expect(Cart.first.approvals.count).to eq 3
     expect(Cart.first.approvals.where(status: 'approved').count).to eq 1
 
     @json_approval_params["fromAddress"] = "approver2@some-dot-gov.gov"
     post 'approval_reply_received', @json_approval_params
 
-    expect(Cart.first.approval_group.approvers.count).to eq 3
+    expect(Cart.first.approvals.count).to eq 3
     expect(Cart.first.approvals.where(status: 'approved').count).to eq 2
 
     @json_approval_params["fromAddress"] = "approver3@some-dot-gov.gov"
     post 'approval_reply_received', @json_approval_params
 
-    expect(Cart.first.approval_group.approvers.count).to eq 3
+    expect(Cart.first.approvals.count).to eq 3
     expect(Cart.first.approvals.where(status: 'approved').count).to eq 3
     expect(Cart.first.comments.first.comment_text).to eq "spudcomment"
     expect(ApproverComment.count).to eq 3
