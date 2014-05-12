@@ -34,9 +34,9 @@ class CommunicartsController < ApplicationController
     cart = Cart.find_by(external_id: (params['cartNumber'].to_i))
     cart.decorate
 
-    Comment.create(comment_text: params['comment'].strip,cart_id: cart.id) unless params['comment'].blank?
-
     approver = cart.approval_group.approvers.where(email_address: params['fromAddress']).first
+
+    ApproverComment.create(comment_text: params['comment'].strip,approver_id: approver.id) unless params['comment'].blank?
     approver.update_attributes(status: approve_or_disapprove_status)
     cart.update_approval_status
 
