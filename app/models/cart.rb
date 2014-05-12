@@ -61,8 +61,9 @@ class Cart < ActiveRecord::Base
   def create_approvals_csv
     csv_string = CSV.generate do |csv|
     csv << ["status","approver","created_at"]
-    approval_group.approvers.each do |app|
-        csv << [app.status,app.email_address,Cart.human_readable_time(app.updated_at,Cart.default_time_zone_offset)]
+
+    approvals.each do |approval|
+        csv << [approval.status, approval.user.email_address,approval.updated_at]
         end
     end
     return csv_string
@@ -107,7 +108,7 @@ class Cart < ActiveRecord::Base
         :cart_id => cart.id
       )
       if !cart_item_params['traits'].empty?
-        cart_item_params['traits'].each do |trait| 
+        cart_item_params['traits'].each do |trait|
           if trait[1].kind_of?(Array)
             trait[1].each do |individual|
               if !individual.blank?
@@ -115,7 +116,7 @@ class Cart < ActiveRecord::Base
               end
             end
           end
-        end 
+        end
       end
     end
     return cart

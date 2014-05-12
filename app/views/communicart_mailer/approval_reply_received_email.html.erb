@@ -8,9 +8,9 @@
           The approver, <%= @approval_reply["fromAddress"] %>, <%= @approval %>  Cart #<%= @approval_reply["cartNumber"] %>.<br/>
           Please see below for more details.
         </p>
-          <%- @cart.approval_group.approvers.each do | approver | %>
-           <p class="approver_status <%= approver.status %>">
-              <span class="icon-<%= approver.status %>"></span><span class="status-label-<%= approver.status %>"><%= approver.status %>:</span> <%= approver.email_address %> <%= Cart.human_readable_time(Time.now,Cart.default_time_zone_offset)  %> 
+          <%- @cart.approvals.each do | approval | %>
+           <p class="approver_status <%= approval.status %>">
+              <span class="icon-<%= approval.status %>"></span><span class="status-label-<%= approval.status %>"><%= approval.status %>:</span> <%= approval.user.email_address %>
            </p>
           <%- end %>
       </td>

@@ -17,9 +17,6 @@ describe 'Approving a cart with multiple approvers' do
       }'
     }
 
-  let(:approver) { FactoryGirl.create(:approver) }
-
-
   before do
     ENV['NOTIFICATION_FROM_EMAIL'] = 'sender@some-dot_gov.gov'
 
@@ -56,7 +53,7 @@ describe 'Approving a cart with multiple approvers' do
 
   end
 
-  it 'updates the cart and approver records as expected' do
+  it 'updates the cart and approval records as expected' do
     # Remove stub to view email layout in development through letter_opener
     # CommunicartMailer.stub_chain(:approval_reply_received_email, :deliver)
 
