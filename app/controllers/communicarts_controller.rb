@@ -23,9 +23,13 @@ class CommunicartsController < ApplicationController
 
       approval_group.users.each do | user |
         Approval.create!(user_id: user.id, cart_id: cart.id)
+
         CommunicartMailer.cart_notification_email(user.email_address,params,cart).deliver
       end
     else
+      approval_user = User.find_or_create_by_email_address(params["email"])
+
+      Approval.create!(user_id: approval_user.id, cart_id: cart.id)
       CommunicartMailer.cart_notification_email(params["email"],params,cart).deliver
     end
 

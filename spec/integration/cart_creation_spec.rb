@@ -5,6 +5,7 @@ describe 'Creating a cart' do
     approval_group_1 = FactoryGirl.create(:approval_group_with_approvers, name: "firstApprovalGroup")
     # approval_group_1 = ApprovalGroup.create(name: "firstApprovalGroup")
     approval_group_2 = ApprovalGroup.create(name: "secondApprovalGroup")
+    FactoryGirl.create(:user, email_address: "test.email.only@some-dot-gov.gov")
   end
 
 
@@ -129,6 +130,35 @@ describe 'Creating a cart' do
     }'
   }
 
+  let(:params_request_email_only) {
+  '{
+      "cartName": "",
+      "approvalGroup": "",
+      "cartNumber": "13579",
+      "category": "initiation",
+      "email": "test.email.only@some-dot-gov.gov",
+      "fromAddress": "approver1@some-dot-gov.gov",
+      "gsaUserName": "",
+      "initiationComment": "\r\n\r\nHi, this is a comment, I hope it works!\r\nThis is the second line of the comment.",
+      "cartItems": [
+        {
+          "vendor": "DOCUMENT IMAGING DIMENSIONS, INC.",
+          "description": "ROUND RING VIEW BINDER WITH INTERIOR POC",
+          "url": "/advantage/catalog/product_detail.do?&oid=704213980&baseOid=&bpaNumber=GS-02F-XA002",
+          "notes": "",
+          "qty": "24",
+          "details": "Direct Delivery 3-4 days delivered ARO",
+          "socio": [],
+          "partNumber": "7510-01-519-4381",
+          "price": "$9.87",
+          "features": [
+              "sale"
+          ]
+        }
+      ]
+    }'
+  }
+
   it 'replaces existing cart items and approval group when initializing and existing cart' do
     @json_params_1 = JSON.parse(params_request_1)
     @json_params_2 = JSON.parse(params_request_2)
@@ -156,9 +186,19 @@ describe 'Creating a cart' do
     expect(cart.approvals.count).to eq 2
   end
 
-  it 'handles an email recipient sent in request'
+  it 'handles an email recipient sent in request' do
+    @json_params_email_only = JSON.parse(params_request_email_only)
+    expect(Cart.count).to eq 0
 
-  it 'handles non-existent approval groups'
+    post 'send_cart', @json_params_email_only
+    cart = Cart.first
+    expect(cart.cart_items.count).to eq 1
+    expect(cart.cart_items[0].price).to eq 9.87
+    expect(cart.approval_group.name).to eq "approval-group-13579"
+    expect(cart.comments.first.comment_text).to eq "Hi, this is a comment, I hope it works!\r\nThis is the second line of the comment."
+    expect(cart.approvals.count).to eq 1
+    expect(cart.approvals.first.user.email_address).to eq 'test.email.only@some-dot-gov.gov'
+  end
 
   it 'traits get added to the database correct' do
     @json_params_1 = JSON.parse(params_request_1)
@@ -176,4 +216,7 @@ describe 'Creating a cart' do
     expect(cart.cart_items.first.cart_item_traits[1].value).to eq "w"
     expect(cart.cart_items.first.cart_item_traits[2].value).to eq "bpa"
   end
+
+  it 'handles non-existent approval groups'
+  it 'handles non-existent email addresses'
 end

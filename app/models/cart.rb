@@ -77,6 +77,15 @@ class Cart < ActiveRecord::Base
     existing_cart =  Cart.find_by(name: name)
     if existing_cart.blank?
       cart = Cart.new(name: name, status: 'pending', external_id: params['cartNumber'])
+
+      if !approval_group_name.blank?
+        cart.approval_group = ApprovalGroup.find_by_name(params['approvalGroup'])
+      else
+        cart.approval_group = ApprovalGroup.create(
+                                name: "approval-group-#{params['cartNumber']}"
+                              )
+      end
+
     else
       cart = existing_cart
       cart.cart_items.destroy_all

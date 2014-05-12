@@ -137,7 +137,7 @@ describe CommunicartsController do
         it "creates a new approval group based on the 'fromAddress' parameter sent" do
           ApprovalGroup.should_not_receive(:find_by_name)
           ApprovalGroup.should_receive(:create).with(
-            {name: 'approval-group-2867637', approvers_attributes: [{ email_address: 'approver-address1234@some-dot-gov.gov' }]}
+            {name: 'approval-group-2867637'}
             )
 
           @json_params['fromAddress'] = 'approver-address1234@some-dot-gov.gov'
