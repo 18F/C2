@@ -23,7 +23,7 @@ class Cart < ActiveRecord::Base
     return csv_string
   end
 
-# Note: I think the model for this is a little wrong.  We need comments on the 
+# Note: I think the model for this is a little wrong.  We need comments on the
 # the cart, but in fact, we are operating on comments on approvals, which we don't model at present.
   def create_comments_csv
     csv_string = CSV.generate do |csv|
@@ -35,7 +35,7 @@ class Cart < ActiveRecord::Base
 
       csv << ["commenter","approver comment","created_at"]
       approval_group.approvers.each do |app|
-        app.approver_comment.each do |com|
+        app.approver_comments.each do |com|
           csv << [app.email_address,com.comment_text,com.updated_at]
         end
       end

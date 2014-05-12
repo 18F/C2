@@ -55,22 +55,24 @@ describe 'Approving a cart with multiple approvers' do
 
     expect(Cart.first.approval_group.approvers.count).to eq 3
     expect(Cart.first.approval_group.approvers.where(status: 'approved').count).to eq 1
-    expect(Cart.first.comments.count).to eq 1
+    expect(Cart.first.approval_group.approvers.first.approver_comments.count).to eq 1
 
     @json_approval_params["fromAddress"] = "approver2@some-dot-gov.gov"
     post 'approval_reply_received', @json_approval_params
 
     expect(Cart.first.approval_group.approvers.count).to eq 3
     expect(Cart.first.approval_group.approvers.where(status: 'approved').count).to eq 2
-    expect(Cart.first.comments.count).to eq 2
 
     @json_approval_params["fromAddress"] = "approver3@some-dot-gov.gov"
     post 'approval_reply_received', @json_approval_params
 
     expect(Cart.first.approval_group.approvers.count).to eq 3
     expect(Cart.first.approval_group.approvers.where(status: 'approved').count).to eq 3
-    expect(Cart.first.approval_group.approvers.first.approver_comment.first.comment_text).to eq "spudcomment"
-#    expect(Cart.first.comments.first.comment_text).to eq "spudcomment"
+    expect(Cart.first.approval_group.approvers.first.approver_comments.first.comment_text).to eq "spudcomment"
+    expect(Cart.first.approval_group.approvers[0].approver_comments.count).to eq 1
+    expect(Cart.first.approval_group.approvers[1].approver_comments.count).to eq 1
+    expect(Cart.first.approval_group.approvers[2].approver_comments.count).to eq 1
+    expect(ApproverComment.count).to eq 3
 
   end
 end

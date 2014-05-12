@@ -96,6 +96,17 @@ describe CommunicartsController do
           post 'send_cart', @json_params
         end
 
+        it 'creates a comment given a comment param' do
+          Comment.should_receive(:create)
+          post 'send_cart', @json_params
+        end
+
+        it 'does not create a comment when not given a comment param' do
+          Comment.should_not receive(:create)
+          @json_params['initiationComment'] = ''
+          post 'send_cart', @json_params
+        end
+
       end
 
       context 'is not indicated' do
@@ -108,18 +119,19 @@ describe CommunicartsController do
           @json_params['fromAddress'] = 'approver-address1234@some-dot-gov.gov'
           post 'send_cart', @json_params
         end
+
+        it 'creates a comment given a comment param' do
+          Comment.should_receive(:create)
+          post 'send_cart', @json_params
+        end
+
+        it 'does not create a comment when not given a comment param' do
+          Comment.should_not receive(:create)
+          @json_params['initiationComment'] = ''
+          post 'send_cart', @json_params
+        end
+
       end
-    end
-
-    it 'creates a comment given a comment param' do
-      Comment.should_receive(:create)
-      post 'send_cart', @json_params
-    end
-
-    it 'does not create a comment when not given a comment param' do
-      Comment.should_not receive(:create)
-      @json_params['initiationComment'] = ''
-      post 'send_cart', @json_params
     end
 
     it 'sets totalPrice'
@@ -204,7 +216,7 @@ describe CommunicartsController do
       cart.stub(:update_approval_status)
       EmailStatusReport.stub(:new).and_return(report)
 
-      Comment.should_receive(:create)
+      ApproverComment.should_receive(:create)
       post 'approval_reply_received', @json_approval_params
     end
 
