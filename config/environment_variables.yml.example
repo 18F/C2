@@ -1,4 +1,4 @@
-#Rename these values and save this file at config/envrionment_variables.yml
+#Rename these values and save this file at config/environment_variables.yml
 development:
   SMTP_DOMAIN: 'my_domain.com'
   GMAIL_USERNAME: our_email@gmail.com
