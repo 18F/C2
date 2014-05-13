@@ -20,7 +20,6 @@ class CommunicartsController < ApplicationController
 
     if !approval_group_name.blank?
       approval_group = ApprovalGroup.find_by(name: approval_group_name)
-
       approval_group.users.each do | user |
         Approval.create!(user_id: user.id, cart_id: cart.id)
 
@@ -30,7 +29,7 @@ class CommunicartsController < ApplicationController
       approval_user = User.find_or_create_by_email_address(params["email"])
 
       Approval.create!(user_id: approval_user.id, cart_id: cart.id)
-      CommunicartMailer.cart_notification_email(params["email"],params,cart).deliver
+      CommunicartMailer.cart_notification_email(params["email"], params, cart).deliver
     end
 
     render json: { message: "This was a success"}, status: 200
@@ -45,6 +44,8 @@ class CommunicartsController < ApplicationController
     Comment.create(comment_text: params['comment'].strip, cart_id: cart.id) unless params['comment'].blank?
 
     user = User.find_by(email_address: params['fromAddress'])
+
+    #CURRENT TODO: Handle carts that are in reject status and be able to tell if they are responding to an already rejected cart. Unique ID?
     approval = cart.approvals.where(user_id: user.id).first
 
     approval.update_attributes(status: approve_or_reject_status)
@@ -52,6 +53,20 @@ class CommunicartsController < ApplicationController
     cart_report = EmailStatusReport.new(cart)
     CommunicartMailer.approval_reply_received_email(params, cart_report).deliver
     render json: { message: "approval_reply_received"}, status: 200
+
+    perform_reject_specific_actions(params, cart) if approve_or_reject_status == 'rejected'
+  end
+
+
+private
+
+  def perform_reject_specific_actions(params, cart)
+    # Send out a rejection status email to the approvers
+    cart.approvals.each do |approval|
+      CommunicartMailer.rejection_update_email(params, cart).deliver
+    end
+
+    # Reset everything for the next time they send a cart request
   end
 
   def approve_or_reject_status

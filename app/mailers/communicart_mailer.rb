@@ -1,16 +1,13 @@
   class CommunicartMailer < ActionMailer::Base
   layout 'communicart_base'
 
-  def cart_notification_email(email,analysis,cart)
-    # Note:  This is ALMOST removable -- We should refactor this,
-    # which opens the door to a major refactoring of cart_notification_email.html.erb and
-    # approval_reply_received_email.html.erb.
+  def cart_notification_email(email, analysis, cart)
     @json_post = analysis
     @url = ENV['NOTIFICATION_URL']
     @cart = cart.decorate
 
-    attachments['Communicart'+cart.name+'.details.csv'] = cart.create_items_csv
-    attachments['Communicart'+cart.name+'.comments.csv'] = cart.create_comments_csv
+    attachments['Communicart' + cart.name + '.details.csv'] = cart.create_items_csv
+    attachments['Communicart' + cart.name + '.comments.csv'] = cart.create_comments_csv
 
     mail(
          to: email,
@@ -25,12 +22,14 @@
     @report = report
     @cart = report.cart.decorate
     to_address = @cart.approval_group.requester.email_address
+    #TODO: Handle carts without approval groups (only emails passed)
+    #CURRENT TODO: Add a specific 'rejection' text block for the requester
 
-    attachments['Communicart'+@cart.name+'.details.csv'] = @cart.create_items_csv
-    attachments['Communicart'+@cart.name+'.comments.csv'] = @cart.create_comments_csv
+    attachments['Communicart' + @cart.name + '.details.csv'] = @cart.create_items_csv
+    attachments['Communicart' + @cart.name + '.comments.csv'] = @cart.create_comments_csv
 
     if @cart.all_approvals_received?
-      attachments['Communicart'+@cart.name+'.approvals.csv'] = @cart.create_approvals_csv
+      attachments['Communicart' + @cart.name + '.approvals.csv'] = @cart.create_approvals_csv
     end
 
     @url = ENV['NOTIFICATION_URL']
@@ -40,5 +39,11 @@
          from: ENV['NOTIFICATION_FROM_EMAIL']
          )
   end
+
+  def rejection_update_email(params, cart)
+    # CURRENT TODO: Fill out the content of this email to the approvers
+
+  end
+
 end
 

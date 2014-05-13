@@ -24,7 +24,7 @@ class Cart < ActiveRecord::Base
   end
 
   def all_approvals_received?
-    approvals.where(status: 'approved').count == approval_group.users.count
+    approvals.where(status: 'approved').count == approvals.count
   end
 
   def create_items_csv
@@ -74,9 +74,20 @@ class Cart < ActiveRecord::Base
 
     name = !params['cartName'].blank? ? params['cartName'] : params['cartNumber']
 
-    existing_cart =  Cart.find_by(name: name)
-    if existing_cart.blank?
+    existing_pending_cart =  Cart.find_by(name: name, status: 'pending')
+
+    if existing_pending_cart.blank?
+
       cart = Cart.new(name: name, status: 'pending', external_id: params['cartNumber'])
+
+      #Copy existing approvals into a new set of approvals (Don't use approval groups)
+      #REFACTOR: fix this if block mess and replace duplication in communicarts_controller.rb for creating approvals
+      if last_rejected_cart = Cart.where(name: name, status: 'rejected').last
+        last_rejected_cart.approvals.each do | approval |
+          cart.approvals << Approval.create!(user_id: approval.user_id)
+        end
+      end
+
 
       if !approval_group_name.blank?
         cart.approval_group = ApprovalGroup.find_by_name(params['approvalGroup'])
@@ -87,9 +98,22 @@ class Cart < ActiveRecord::Base
       end
 
     else
-      cart = existing_cart
+
+      cart = existing_pending_cart
       cart.cart_items.destroy_all
       cart.approval_group = nil
+
+      #REFACTOR: duplicate code
+      if !approval_group_name.blank?
+        cart.approval_group = ApprovalGroup.find_by_name(params['approvalGroup'])
+      else
+        cart.approval_group = ApprovalGroup.create(
+                                name: "approval-group-#{params['cartNumber']}",
+                                approvers_attributes: [
+                                  { email_address: params['fromAddress'] }
+                                ]
+                              )
+      end
     end
 
     if !approval_group_name.blank?

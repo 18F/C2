@@ -12,5 +12,7 @@ FactoryGirl.define do
       end
    end
 
+   # TODO: Add factory of Approvals for approvers above
+
   end
 end
