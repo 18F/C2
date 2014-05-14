@@ -5,6 +5,7 @@ class Cart < ActiveRecord::Base
   has_many :comments
   has_many :approvals
   has_one :approval_group
+  has_one :requester
 
   def self.human_readable_time(t1,offset)
     return t1.utc.getlocal(offset).asctime
