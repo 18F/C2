@@ -24,14 +24,13 @@ describe 'Approving a cart with multiple approvers' do
 
     approval_group = ApprovalGroup.create(name: "A Testworthy Approval Group")
 
-    approval_group.requester = Requester.create(email_address: 'test-requestser@some-dot-gov.gov')
-
     cart = Cart.new(
                     name: 'My Wonderfully Awesome Communicart',
                     status: 'pending',
                     external_id: '10203040'
                     )
 
+    cart.requester = Requester.create(email_address: 'test-requestser@some-dot-gov.gov')
     cart.approval_group = approval_group
 
     # Want to test by adding some traits in here....

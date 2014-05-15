@@ -166,7 +166,7 @@ describe CommunicartsController do
   end
 
   describe 'POST approval_reply_received' do
-    let(:cart) { FactoryGirl.create(:cart_with_approval_group) }
+    let(:cart) { FactoryGirl.create(:cart_with_approval_group, external_id: 246810) }
     let(:approver) { FactoryGirl.create(:user, id: 1234) }
     let(:report) { EmailStatusReport.new(cart) }
 
@@ -204,18 +204,14 @@ describe CommunicartsController do
     context 'approved cart' do
       before do
         User.stub(:find_by).and_return(approver)
-        cart.stub_chain(:approvals, :where).and_return(approval_list)
-        Cart.should_receive(:find_by).and_return(cart)
+        approval.update_attributes(user_id: 1234)
+        cart.stub_chain(:approvals, :where).and_return([approval])
+        Cart.stub_chain(:where, :where, :first).and_return(cart)
 
         # Remove stub to view email layout in development through letter_opener
         CommunicartMailer.stub_chain(:approval_reply_received_email, :deliver)
         EmailStatusReport.stub(:new)
         @json_approval_params = JSON.parse(approval_params)
-      end
-
-      it 'finds the cart'  do
-        cart.stub(:update_approval_status)
-        post 'approval_reply_received', @json_approval_params
       end
 
       it 'invokes a mailer' do
@@ -255,12 +251,12 @@ describe CommunicartsController do
         rejection_approval_group.users << user1
         rejection_approval_group.users << user2
 
-        rejection_approval_group.requester = FactoryGirl.create(:requester, email_address: 'rejection-requester@some-dot-gov.gov')
         rejection_approval_group.save
 
         rejected_cart.approval_group = rejection_approval_group
         approval1 = Approval.create(user_id: user1.id, cart_id: rejected_cart.id)
         approval2 = Approval.create(user_id: user2.id, cart_id: rejected_cart.id)
+        rejected_cart.requester = FactoryGirl.create(:requester, email_address: 'rejection-requester@some-dot-gov.gov')
         rejected_cart.approvals << approval1
         rejected_cart.approvals << approval2
         rejected_cart.save
@@ -276,7 +272,7 @@ describe CommunicartsController do
       end
 
       it 'sends out a reject status email to the approvers' do
-        Cart.should_receive(:find_by).and_return(rejected_cart)
+        Cart.stub_chain(:where, :where, :first).and_return(rejected_cart)
         mock_mailer = double
         CommunicartMailer.should_receive(:rejection_update_email).exactly(2).times.and_return(mock_mailer)
         mock_mailer.should_receive(:deliver).exactly(2).times

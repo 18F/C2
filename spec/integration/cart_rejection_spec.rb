@@ -28,8 +28,8 @@ describe 'Rejecting a cart with multiple approvers' do
       "gsaUserName": "",
       "gsaUsername": null,
       "date": "Sun, 13 Apr 2014 18:06:15 -0400",
-      "approve": null,
-      "disapprove": "APPROVE",
+      "approve": "APPROVE",
+      "disapprove": "",
       "humanResponseText": "",
       "comment" : "This looks much better. We could definitely use 500 highlighters. Thank you!"
       }'
@@ -98,7 +98,6 @@ describe 'Rejecting a cart with multiple approvers' do
     @json_rejection_params = JSON.parse(rejection_params)
 
     approval_group = ApprovalGroup.create(name: "updatingRejectedApprovalGroup")
-    approval_group.requester = Requester.create(email_address: 'test-requestser@some-dot-gov.gov')
 
     cart = Cart.new(
                     name: '10203040',
@@ -106,6 +105,7 @@ describe 'Rejecting a cart with multiple approvers' do
                     external_id: '10203040'
                     )
 
+    cart.requester = Requester.create(email_address: 'test-requestser@some-dot-gov.gov')
     cart.approval_group = approval_group
     cart.cart_items << FactoryGirl.create(:cart_item)
 
@@ -162,9 +162,12 @@ describe 'Rejecting a cart with multiple approvers' do
     # A new set of emails is sent to everyone on the list (Implied, but do we change the content of the email?)
 
     # If they respond to a previous one, they get an email that it has expired and to respond to 'this one'
+    # expect(updated_cart.approvals.collect{|a| a.status}.uniq).to eq ['pending']
     @json_repost_params = JSON.parse(repost_params)
     post 'approval_reply_received', @json_repost_params
-    expect(updated_cart.approvals).to eq 10203040
+
+    expect(updated_cart.approvals.where(status:'approved').count).to eq 1
+    expect(updated_cart.approvals.where(status:'pending').count).to eq 2
 
 
     # Start the web interface that allows people to just do everything in a web page experience
