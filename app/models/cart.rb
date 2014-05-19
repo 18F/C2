@@ -45,13 +45,13 @@ class Cart < ActiveRecord::Base
       csv << ["requester","cart comment","created_at"]
       date_sorted_comments = comments.sort { |a,b| a.updated_at <=> b.updated_at }
       date_sorted_comments.each do |item|
-        csv << [approval_group.requester.email_address,item.comment_text,Cart.human_readable_time(item.updated_at,Cart.default_time_zone_offset)]
+        csv << [requester.email_address,item.comment_text,item.updated_at, Cart.human_readable_time(item.updated_at, Cart.default_time_zone_offset)]
       end
 
       csv << ["commenter","approver comment","created_at"]
-      approval_group.approvers.each do |app|
-        app.approver_comments.each do |com|
-          csv << [app.email_address,com.comment_text,com.updated_at]
+      approval_group.users.each do |user|
+        user.approver_comments.each do |com|
+          csv << [user.email_address, com.comment_text, com.updated_at]
         end
       end
     end
@@ -131,11 +131,6 @@ class Cart < ActiveRecord::Base
     end
     cart.save
 
-<<<<<<< HEAD
-=======
-
-    #TODO: save green, socio, and features information
->>>>>>> Cleanup
     params['cartItems'].each do |cart_item_params|
       ci = CartItem.create(
         :vendor => cart_item_params['vendor'],

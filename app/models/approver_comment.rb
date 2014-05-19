@@ -1,3 +1,3 @@
 class ApproverComment < ActiveRecord::Base
-  belongs_to :approver
+  belongs_to :user
 end

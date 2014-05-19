@@ -40,7 +40,7 @@ class CommunicartsController < ApplicationController
     cart.decorate
 
     user = cart.approval_group.users.where(email_address: params['fromAddress']).first
-    ApproverComment.create(comment_text: params['comment'].strip, approver_id: user.id) unless params['comment'].blank?
+    ApproverComment.create(comment_text: params['comment'].strip, user_id: user.id) unless params['comment'].blank?
     Comment.create(comment_text: params['comment'].strip, cart_id: cart.id) unless params['comment'].blank?
 
     user = User.find_by(email_address: params['fromAddress'])

@@ -11,20 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140514204825) do
+ActiveRecord::Schema.define(version: 20140519173249) do
 
   create_table "approval_groups", force: true do |t|
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "cart_id"
-  end
-
-  create_table "approver_comments", force: true do |t|
-    t.text     "comment_text"
-    t.integer  "approver_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "approval_groups_users", id: false, force: true do |t|
@@ -46,6 +39,12 @@ ActiveRecord::Schema.define(version: 20140514204825) do
     t.integer  "cart_item_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+
+  create_table "approver_comments", force: true do |t|
+    t.text     "comment_text"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "user_id"
   end
 
   create_table "cart_items", force: true do |t|
