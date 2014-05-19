@@ -4,6 +4,7 @@ class Cart < ActiveRecord::Base
   has_many :cart_items
   has_many :comments
   has_many :approvals
+  has_many :approval_users, through: :approvals, source: :user
   has_one :approval_group
   has_one :requester
 
@@ -38,18 +39,16 @@ class Cart < ActiveRecord::Base
     return csv_string
   end
 
-# Note: I think the model for this is a little wrong.  We need comments on the
-# the cart, but in fact, we are operating on comments on approvals, which we don't model at present.
   def create_comments_csv
     csv_string = CSV.generate do |csv|
       csv << ["requester","cart comment","created_at"]
       date_sorted_comments = comments.sort { |a,b| a.updated_at <=> b.updated_at }
       date_sorted_comments.each do |item|
-        csv << [requester.email_address,item.comment_text,item.updated_at, Cart.human_readable_time(item.updated_at, Cart.default_time_zone_offset)]
+        csv << [requester.email_address, item.comment_text, item.updated_at, Cart.human_readable_time(item.updated_at, Cart.default_time_zone_offset)]
       end
 
       csv << ["commenter","approver comment","created_at"]
-      approval_group.users.each do |user|
+      approval_users.each do |user|
         user.approver_comments.each do |com|
           csv << [user.email_address, com.comment_text, com.updated_at]
         end
@@ -89,6 +88,8 @@ class Cart < ActiveRecord::Base
         end
 
         cart.requester = Requester.create!(email_address: last_rejected_cart.requester.email_address)
+      else
+        cart.requester = Requester.create!(email_address: params['fromAddress'])
       end
 
 

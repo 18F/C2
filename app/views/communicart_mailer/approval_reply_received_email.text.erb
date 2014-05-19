@@ -1,5 +1,5 @@
 
-Current status: <%=  @report.generate_status_message %>
+Current status: <%=  @cart.generate_status_message %>
 
 At time <%= @approval_reply["date"] %>, approver <%= @approval_reply["fromAddress"] %> <%= @approval %>  Cart Number <%= @approval_reply["cartNumber"] %>. <%= @approval_reply["approve"] == "APPROVE" ?
 "This approval has been logged for future information" :

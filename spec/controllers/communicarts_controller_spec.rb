@@ -89,13 +89,14 @@ describe CommunicartsController do
       controller.stub(:total_price_from_params)
     end
 
-    context 'something' do
+    context 'initializing a cart' do
       it 'creates a cart' do
         CommunicartMailer.stub_chain(:cart_notification_email, :deliver)
-        Cart.should_receive(:initialize_cart_with_items)
+
+        Cart.stub(:initialize_cart_with_items)
         mock_cart = double(:cart, id: 1234)
       Cart.should_receive(:find_by).with(external_id: 2867637).and_return(mock_cart)
-      mock_cart.should_receive(:decorate)
+      mock_cart.should_receive(:decorate).and_return(mock_cart)
       post 'send_cart', @json_params
       end
     end
@@ -204,6 +205,7 @@ describe CommunicartsController do
     context 'approved cart' do
       before do
         User.stub(:find_by).and_return(approver)
+        cart.stub_chain(:approval_users, :where, :first).and_return(approver)
         approval.update_attributes(user_id: 1234)
         cart.stub_chain(:approvals, :where).and_return([approval])
         Cart.stub_chain(:where, :where, :first).and_return(cart)
@@ -232,16 +234,57 @@ describe CommunicartsController do
         approval_list.stub(:count)
         cart.stub_chain(:approvals, :count)
         cart.stub(:update_approval_status)
-        EmailStatusReport.stub(:new).and_return(report)
 
         approval.should_receive(:update_attributes).with(status: 'approved')
         post 'approval_reply_received', @json_approval_params
       end
+
+      it 'adds the comment' do
+        CommunicartMailer.stub_chain(:approval_reply_received_email, :deliver)
+
+        FactoryGirl.create(:approval, user_id: approver.id)
+        @json_approval_params = JSON.parse(approval_params)
+        @json_approval_params['fromAddress'] = approver.email_address
+
+        Cart.stub_chain(:where, :where, :first).and_return(cart)
+        cart.stub_chain(:approval_users, :where).and_return([approver])
+        cart.stub_chain(:cart_approvals, :where)
+        cart.stub(:update_approval_status)
+
+        Approval.any_instance.stub(:update_attributes)
+
+        ApproverComment.should_receive(:create).with(
+          {comment_text: 'Test Approval Comment', user_id: approver.id}
+              )
+        post 'approval_reply_received', @json_approval_params
+      end
+
+      it 'creates a comment given a comment param' do
+        Cart.stub(:find_by).and_return(cart)
+        cart.stub_chain(:approval_group, :approvers, :where).and_return([approver])
+        cart.stub(:update_approval_status)
+
+        ApproverComment.should_receive(:create)
+        post 'approval_reply_received', @json_approval_params
+      end
+
+      it 'does not create a comment when not given a comment param' do
+        approver.update_attributes(email_address: 'judy.jetson@spacelysprockets.com')
+        FactoryGirl.create(:approval, user_id: approver.id)
+        @json_approval_params = JSON.parse(approval_params)
+        Cart.stub(:find_by).and_return(cart)
+        cart.stub(:update_approval_status)
+        @json_approval_params['comment'] = ''
+
+        Comment.should_not receive(:create)
+        post 'approval_reply_received', @json_approval_params
+      end
+
     end
 
 
 
-    context 'A cart is rejected' do
+    context 'rejected cart' do
       let(:rejected_cart) { FactoryGirl.create(:cart, external_id: 109876, name: 'Cart soon to be rejected') }
 
       before do
@@ -282,43 +325,6 @@ describe CommunicartsController do
 
       it 'creates another set of approvals when another cart request for that same cart is intiiated'
 
-
-    end
-    it 'adds the comment' do
-      Cart.stub(:find_by).and_return(cart)
-      cart.stub_chain(:approval_group, :approvers, :where).and_return([approver])
-      cart.stub(:update_approval_status)
-      EmailStatusReport.stub(:new).and_return(report)
-
-      approver.should_receive(:update_attributes).with(status: 'approved')
-
-      ApproverComment.should_receive(:create).with(
-        {comment_text: 'Test Approval Comment',approver_id: approver.id
-                                                     }
-            )
-
-      post 'approval_reply_received', @json_approval_params
-    end
-
-    it 'creates a comment given a comment param' do
-      Cart.stub(:find_by).and_return(cart)
-      cart.stub_chain(:approval_group, :approvers, :where).and_return([approver])
-      cart.stub(:update_approval_status)
-      EmailStatusReport.stub(:new).and_return(report)
-
-      ApproverComment.should_receive(:create)
-      post 'approval_reply_received', @json_approval_params
-    end
-
-    it 'does not create a comment when not given a comment param' do
-      Cart.stub(:find_by).and_return(cart)
-      cart.stub_chain(:approval_group, :approvers, :where).and_return([approver])
-      cart.stub(:update_approval_status)
-      EmailStatusReport.stub(:new).and_return(report)
-      @json_approval_params['comment'] = ''
-
-      Comment.should_not receive(:create)
-      post 'approval_reply_received', @json_approval_params
     end
 
   end
