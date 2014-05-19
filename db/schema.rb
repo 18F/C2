@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 20140514204825) do
     t.integer  "approver_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
 
   create_table "approval_groups_users", id: false, force: true do |t|
     t.integer "approval_group_id"
