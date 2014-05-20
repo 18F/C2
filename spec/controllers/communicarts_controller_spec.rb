@@ -25,7 +25,17 @@ describe CommunicartsController do
             "price": "$2.46",
             "features": [
                 "sale"
-            ]
+            ],
+            "traits": {
+                "socio": [
+                    "s",
+                    "w"
+                ],
+                "features": [
+                    "bpa"
+                ],
+                "green": ""
+            }
           },
           {
             "vendor": "OFFICE DEPOT",
@@ -37,7 +47,18 @@ describe CommunicartsController do
             "socio": ["s","w"],
             "partNumber": "PIL31003",
             "price": "$10.29",
-            "features": []
+            "features": [],
+            "traits": {
+                "socio": [
+                    "s",
+                    "w"
+                ],
+                "features": [
+                    "bpa"
+                ],
+                "green": ""
+            }
+
           },
           {
             "vendor": "METRO OFFICE PRODUCTS",
@@ -49,7 +70,17 @@ describe CommunicartsController do
             "socio": ["s"],
             "partNumber": "WLJ90310",
             "price": "$32.67",
-            "features": []
+            "features": [],
+            "traits": {
+                "socio": [
+                    "s",
+                    "w"
+                ],
+                "features": [
+                    "bpa"
+                ],
+                "green": ""
+            }
           }
         ]
       }'
