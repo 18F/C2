@@ -77,12 +77,8 @@ class Cart < ActiveRecord::Base
                                                                        ]
                                                  )
     end
-
     cart.save
 
-
-    #TODO: accepts_nested_attributes_for
-    #TODO: save green, socio, and features information
     params['cartItems'].each do |cart_item_params|
       ci = CartItem.create(
         :vendor => cart_item_params['vendor'],

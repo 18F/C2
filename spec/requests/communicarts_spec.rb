@@ -37,7 +37,17 @@ describe 'CommunicartsController' do
             socio: ["s","w"],
             partNumber: "7510-01-519-4381",
             price: "$2.46",
-            features: []
+            features: [],
+            traits: {
+                socio: [
+                    "s",
+                    "w"
+                ],
+                features: [
+                    "bpa"
+                ],
+                green: ""
+            }
           },
           {
             vendor: "OFFICE DEPOT",
@@ -49,7 +59,17 @@ describe 'CommunicartsController' do
             socio: [],
             partNumber: "PIL31003",
             price: "$10.29",
-            features: []
+            features: [],
+            traits: {
+                socio: [
+                    "s",
+                    "w"
+                ],
+                features: [
+                    "bpa"
+                ],
+                green: ""
+            }
           },
           {
             vendor: "METRO OFFICE PRODUCTS",
@@ -61,7 +81,17 @@ describe 'CommunicartsController' do
             socio: ["s"],
             partNumber: "WLJ90310",
             price: "$32.67",
-            features: []
+            features: [],
+            traits: {
+                socio: [
+                    "s",
+                    "w"
+                ],
+                features: [
+                    "bpa"
+                ],
+                green: ""
+            }
           }
         ]
       }
@@ -92,7 +122,17 @@ describe 'CommunicartsController' do
             socio: ["s","w"],
             partNumber: "7510-01-519-4381",
             price: "$2.46",
-            features: []
+            features: [],
+            traits: {
+                socio: [
+                    "s",
+                    "w"
+                ],
+                features: [
+                    "bpa"
+                ],
+                green: ""
+            }
           },
           {
             vendor: "OFFICE DEPOT",
@@ -104,7 +144,17 @@ describe 'CommunicartsController' do
             socio: [],
             partNumber: "PIL31003",
             price: "$10.29",
-            features: []
+            features: [],
+            traits: {
+                socio: [
+                    "s",
+                    "w"
+                ],
+                features: [
+                    "bpa"
+                ],
+                green: ""
+            }
           },
           {
             vendor: "METRO OFFICE PRODUCTS",
@@ -116,7 +166,17 @@ describe 'CommunicartsController' do
             socio: ["s"],
             partNumber: "WLJ90310",
             price: "$32.67",
-            features: []
+            features: [],
+            traits: {
+                socio: [
+                    "s",
+                    "w"
+                ],
+                features: [
+                    "bpa"
+                ],
+                green: ""
+            }
           }
         ]
       }
