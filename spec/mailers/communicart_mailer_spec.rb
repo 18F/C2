@@ -37,14 +37,6 @@ describe CommunicartMailer do
       mail.from.should == ['reply@communicart-stub.com']
     end
 
-    it 'produces a body as one might hope' do
-      cart.stub(:approval_group).and_return(approval_group)
-      approval_group.stub(:approvers).and_return([approver])
-      approver.stub(:approver_comment).and_return([])
-      puts "XXX"
-      puts mail.body
-      puts "XXX"
-    end
   end
 
   describe 'approval reply received email' do

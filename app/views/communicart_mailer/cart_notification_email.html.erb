@@ -24,7 +24,7 @@
         <td>
           <h1 class="communicart_header">Purchase Requisition</h1>
           <%- unless @json_post['cartName'] == "" %>
-            <h4 class="communicart_description"><%= @json_post['cartName']%></h4>
+            <h4 class="communicart_description"><%= @cart.name%></h4>
           <%- end %>
         </td>
       </div>
@@ -59,43 +59,44 @@
             </tr>
 
             <!--BEGIN CartItem Entry-->
-              <%- @json_post['cartItems'].each do |cart_item| %>
+              <%- @cart.cart_items.each do |cart_item| %>
 
                 <tr class="cart_item_information">
                   <td class="first" valign="top">
-                    <p><strong><%= cart_item['description'] %></strong>
+                    <p><strong><%= cart_item.desription %></strong>
                     </p>
                   </td>
 
                   <td valign="top">
-                    <p><%= cart_item['details'] %></p>
+                    <p><%= cart_item.details %></p>
                   </td>
 
                   <td valign="top">
-                    <p><strong><%= cart_item['vendor'] %></strong>
-                      <br><em><%= cart_item['partNumber'] %></em>
+                    <p><strong><%= cart_item.vendor %></strong>
+                      <br><em><%= cart_item.part_number %></em>
                       <br><a href="https://gsaadvantage.gov<%= cart_item['url'] %>">Link to the product</a>
                     </p>
                   </td>
 
                   <td valign="top">
                       <ul class="result-tag">
-                      <%- if cart_item['green'] == 'true' %>
+			<!-- This is an intermediate state -->
+                      <%- if cart_item.green? %>
                         <li><div class="green"></div>Green</li>
                       <%- end %>
 
-                      <%- unless cart_item['socio'].nil? %>
+                      <%- unless cart_item.socio.empty? %>n
                         <li class="socio">Socio:
                           <span class="tag-values">
-                          <%- cart_item['socio'].each_with_index do |socio_tag, index| %>
-                            <%= socio_tag %><%= "," unless cart_item['socio'].count == index+1 %>
+                          <%- cart_item.socio.each_with_index do |socio_tag, index| %>
+                            <%= socio_tag %><%= "," unless cart_item.socio.count == index+1 %>
                           <%- end %>
                         </span></li>
                       <%- end %>
 
 
-                      <%- unless cart_item['features'].nil? %>
-                        <%- cart_item['features'].each do |feature| %>
+                      <%- unless cart_item.features.empty? %>
+                        <%- cart_item.features.each do |feature| %>
                           <li><div class="<%= feature %>"</div><%= feature %></li>
                         <%- end %>
                       <%- end %>
@@ -103,8 +104,8 @@
                   </td>
 
                   <td class="last" valign="top">
-                    <p class="result-item-price"><%= cart_item['price'] %></p>
-                    <p class="result-item-units"><%= cart_item['qty'] %> units</p>
+                    <p class="result-item-price"><%= cart_item.price %></p>
+                    <p class="result-item-units"><%= cart_item.quantity %> units</p>
                   </td>
                 </tr>
               <%- end %>

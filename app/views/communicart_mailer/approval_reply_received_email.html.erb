@@ -81,9 +81,23 @@
 
                   <td valign="top">
                     <ul class="result-tag">
-                      <%-# TODO: green saving/retrieving %>
-                      <%-# TODO: socio saving/retrieving %>
-                      <%-# TODO: features saving/retrieving %>
+                      <%- if cart_item.green? %>
+                        <li><div class="green"></div>Green</li>
+                      <%- end %>
+
+                      <%- cart_item.features.each do |feature| %>
+                         <li><div class="<%= feature %>"</div><%= feature %></li>
+                      <%- end %>
+
+                      <%- unless cart_item.socio.empty? %>n
+                        <li class="socio">Socio:
+                          <span class="tag-values">
+                          <%- cart_item.socio.each_with_index do |socio_tag, index| %>
+                            <%= socio_tag %><%= "," unless cart_item.socio.count == index+1 %>
+                          <%- end %>
+                        </span></li>
+                      <%- end %>
+
                     </ul>
                   </td>
 
