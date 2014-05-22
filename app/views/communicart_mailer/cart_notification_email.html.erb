@@ -23,16 +23,14 @@
       <div>
         <td>
           <h1 class="communicart_header">Purchase Requisition</h1>
-          <%- unless @json_post['cartName'] == "" %>
             <h4 class="communicart_description"><%= @cart.name%></h4>
-          <%- end %>
         </td>
       </div>
     </tr>
 
       <tr>
         <td class="w-container results-header-container">
-          <h3 class="cart-header">GSA Advantage: Cart #<%= @json_post["cartNumber"] %></h3>
+          <h3 class="cart-header">GSA Advantage: Cart #<%= @cart.external_id %></h3>
         </td>
       </tr>
 
@@ -114,7 +112,7 @@
                   <td class="total-price" colspan=2>
                     <p><strong>Total Price</strong></p>
                   </td>
-                  <td class="total-price total-amount"><p><strong>$<%= @json_post['totalPrice'] %></strong></p></td>
+                  <td class="total-price total-amount"><p><strong>$<%= number_with_precision(@cart.total_price, precision: 2) %></strong></p></td>
                 </tr>
 
           </table>

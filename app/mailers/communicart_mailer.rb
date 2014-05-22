@@ -3,6 +3,9 @@
   layout 'communicart_base'
 
   def cart_notification_email(email,analysis,cart)
+    # Note:  This is ALMOST removable -- We should refactor this,
+    # which opens the door to a major refactoring of cart_notification_email.html.erb and
+    # approval_reply_received_email.html.erb.
     @json_post = analysis
     @url = ENV['NOTIFICATION_URL']
     @cart = cart
