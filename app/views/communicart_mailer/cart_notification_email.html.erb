@@ -63,7 +63,7 @@
 
                 <tr class="cart_item_information">
                   <td class="first" valign="top">
-                    <p><strong><%= cart_item.desription %></strong>
+                    <p><strong><%= cart_item.description %></strong>
                     </p>
                   </td>
 
@@ -84,8 +84,7 @@
                       <%- if cart_item.green? %>
                         <li><div class="green"></div>Green</li>
                       <%- end %>
-
-                      <%- unless cart_item.socio.empty? %>n
+                      <%- unless cart_item.socio.empty? %>
                         <li class="socio">Socio:
                           <span class="tag-values">
                           <%- cart_item.socio.each_with_index do |socio_tag, index| %>
@@ -93,8 +92,6 @@
                           <%- end %>
                         </span></li>
                       <%- end %>
-
-
                       <%- unless cart_item.features.empty? %>
                         <%- cart_item.features.each do |feature| %>
                           <li><div class="<%= feature %>"</div><%= feature %></li>

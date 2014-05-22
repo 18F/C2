@@ -84,12 +84,10 @@
                       <%- if cart_item.green? %>
                         <li><div class="green"></div>Green</li>
                       <%- end %>
-
                       <%- cart_item.features.each do |feature| %>
                          <li><div class="<%= feature %>"</div><%= feature %></li>
                       <%- end %>
-
-                      <%- unless cart_item.socio.empty? %>n
+                      <%- unless cart_item.socio.empty? %>
                         <li class="socio">Socio:
                           <span class="tag-values">
                           <%- cart_item.socio.each_with_index do |socio_tag, index| %>
