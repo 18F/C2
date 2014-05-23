@@ -35,12 +35,6 @@ namespace :deploy do
   desc "Symlink configs"
   task :symlink_configs, :roles => :app do
     run "ln -nfs #{deploy_to}/shared/config/*.yml #{release_path}/config/"
-  end
-
-  desc "Symlinks configuration YAML files"
-  task :symlink_yml, :roles => :app do
-    run "ln -nfs #{deploy_to}/shared/config/database.yml #{release_path}/config/database.yml"
-    run "ln -nfs #{deploy_to}/shared/config/environment_variables.yml #{release_path}/config/environment_variables.yml"
     run "ln -nfs #{deploy_to}/shared/config/environments/#{rails_env}.rb #{release_path}/config/environments/#{rails_env}.rb"
   end
 
@@ -48,5 +42,4 @@ end
 
 after 'bundle:install', 'deploy:symlink_configs'
 after 'deploy:setup', 'deploy:add_shared_config'
-before 'deploy:assets:precompile', 'deploy:symlink_yml'
 after "deploy:update_code", "deploy:migrate"
