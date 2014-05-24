@@ -8,7 +8,7 @@
     # approval_reply_received_email.html.erb.
     @json_post = analysis
     @url = ENV['NOTIFICATION_URL']
-    @cart = cart
+    @cart = cart.decorate
 
     attachments['Communicart'+cart.name+'.details.csv'] = cart.create_items_csv
     attachments['Communicart'+cart.name+'.comments.csv'] = cart.create_comments_csv
