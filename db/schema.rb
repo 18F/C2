@@ -72,14 +72,6 @@ ActiveRecord::Schema.define(version: 20140516154809) do
     t.datetime "updated_at"
   end
 
-  create_table "item_traits", force: true do |t|
-    t.text     "name"
-    t.text     "value"
-    t.integer  "cart_item_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "requesters", force: true do |t|
     t.string   "email_address"
     t.datetime "created_at"

@@ -3,12 +3,7 @@ class CartItem < ActiveRecord::Base
   has_many :cart_item_traits
 
   def green?
-    cart_item_traits.each do |trait|
-      if trait.name == "green"
-        return true
-      end
-    end
-    return false
+    cart_item_traits.map(&:name).include?('green')
   end
 
   def trait_as_array(key)
