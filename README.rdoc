@@ -1,5 +1,9 @@
 == README
 
+
+For an overview of this project, please visit our github [pages][http://18f.github.io/C2/].
+
+
 This README would normally document whatever steps are necessary to get the
 application up and running.
 

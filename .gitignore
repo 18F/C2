@@ -20,4 +20,5 @@
 custom_plan.rb
 zeus.json
 config/environment_variables.yml
+config/environments/production.rb
 *~
