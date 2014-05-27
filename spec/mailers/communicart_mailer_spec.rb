@@ -36,6 +36,7 @@ describe CommunicartMailer do
       approver.stub(:approver_comment).and_return([])
       mail.from.should == ['reply@communicart-stub.com']
     end
+
   end
 
   describe 'approval reply received email' do

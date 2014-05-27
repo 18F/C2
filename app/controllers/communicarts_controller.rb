@@ -26,6 +26,7 @@ class CommunicartsController < ApplicationController
     else
       CommunicartMailer.cart_notification_email(params["email"],params,cart).deliver
     end
+
     render json: { message: "This was a success"}, status: 200
   end
 

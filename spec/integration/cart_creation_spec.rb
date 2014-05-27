@@ -30,7 +30,17 @@ describe 'Creating a cart' do
           "price": "$2.46",
           "features": [
               "sale"
-          ]
+          ],
+          "traits": {
+              "socio": [
+                  "s",
+                  "w"
+              ],
+              "features": [
+                  "bpa"
+              ],
+              "green": ""
+           }
         },
         {
           "vendor": "OFFICE DEPOT",
@@ -42,7 +52,17 @@ describe 'Creating a cart' do
           "socio": ["s","w"],
           "partNumber": "PIL31003",
           "price": "$10.29",
-          "features": []
+          "features": [],
+          "traits": {
+              "socio": [
+                  "s",
+                  "w"
+              ],
+              "features": [
+                  "bpa"
+              ],
+              "green": ""
+           }
         },
         {
           "vendor": "METRO OFFICE PRODUCTS",
@@ -54,7 +74,17 @@ describe 'Creating a cart' do
           "socio": ["s"],
           "partNumber": "WLJ90310",
           "price": "$32.67",
-          "features": []
+          "features": [],
+          "traits": {
+              "socio": [
+                  "s",
+                  "w"
+              ],
+              "features": [
+                  "bpa"
+              ],
+              "green": ""
+           }
         }
       ]
     }'
@@ -82,7 +112,17 @@ describe 'Creating a cart' do
           "price": "$9.87",
           "features": [
               "sale"
-          ]
+          ],
+          "traits": {
+              "socio": [
+                  "s",
+                  "w"
+              ],
+              "features": [
+                  "bpa"
+              ],
+              "green": ""
+           }
         }
       ]
     }'
@@ -105,6 +145,7 @@ describe 'Creating a cart' do
     expect(cart.comments.count).to eq 1
 
     post 'send_cart', @json_params_2
+
     cart = Cart.first
     expect(cart.cart_items.count).to eq 1
     expect(cart.cart_items[0].price).to eq 9.87
@@ -114,4 +155,21 @@ describe 'Creating a cart' do
   end
 
   it 'handles non-existent approval groups'
+
+  it 'traits get added to the database correct' do
+    @json_params_1 = JSON.parse(params_request_1)
+
+    expect(Cart.count).to eq 0
+
+    post 'send_cart', @json_params_1
+    expect(Cart.count).to eq 1
+    cart = Cart.first
+    expect(cart.cart_items.first.cart_item_traits.count).to eq 3
+    expect(cart.cart_items.first.cart_item_traits[0].name).to eq "socio"
+    expect(cart.cart_items.first.cart_item_traits[1].name).to eq "socio"
+    expect(cart.cart_items.first.cart_item_traits[2].name).to eq "features"
+    expect(cart.cart_items.first.cart_item_traits[0].value).to eq "s"
+    expect(cart.cart_items.first.cart_item_traits[1].value).to eq "w"
+    expect(cart.cart_items.first.cart_item_traits[2].value).to eq "bpa"
+  end
 end

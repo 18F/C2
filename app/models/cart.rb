@@ -15,9 +15,9 @@ class Cart < ActiveRecord::Base
 
   def create_items_csv
     csv_string = CSV.generate do |csv|
-    csv << ["description","details","vendor","url","notes","part_number","quantity","unit price","price for quantity"]
+    csv << ["description","details","vendor","url","notes","part_number","green","features","socio","quantity","unit price","price for quantity"]
     cart_items.each do |item|
-        csv << [item.description,item.details,item.vendor,item.url,item.notes,item.part_number,item.quantity,item.price,item.quantity*item.price]
+        csv << [item.description,item.details,item.vendor,item.url,item.notes,item.part_number,item.green?,item.features,item.socio,item.quantity,item.price,item.quantity*item.price]
         end
     end
     return csv_string
@@ -61,44 +61,26 @@ class Cart < ActiveRecord::Base
     existing_cart =  Cart.find_by(name: name)
     if existing_cart.blank?
       cart = Cart.new(name: name, status: 'pending', external_id: params['cartNumber'])
-
-      if !approval_group_name.blank?
-        cart.approval_group = ApprovalGroup.find_by_name(params['approvalGroup'])
-      else
-        cart.approval_group = ApprovalGroup.create(
-                                name: "approval-group-#{params['cartNumber']}",
-                                approvers_attributes: [
-                                  { email_address: params['fromAddress'] }
-                                ]
-                              )
-      end
-
     else
-
       cart = existing_cart
       cart.cart_items.destroy_all
       cart.approval_group = nil
-
-      #TODO: Refactor duplicated code
-      if !approval_group_name.blank?
-        cart.approval_group = ApprovalGroup.find_by_name(params['approvalGroup'])
-      else
-        cart.approval_group = ApprovalGroup.create(
-                                name: "approval-group-#{params['cartNumber']}",
-                                approvers_attributes: [
-                                  { email_address: params['fromAddress'] }
-                                ]
-                              )
-      end
     end
 
+    if !approval_group_name.blank?
+      cart.approval_group = ApprovalGroup.find_by_name(params['approvalGroup'])
+    else
+      cart.approval_group = ApprovalGroup.create(
+                                                 name: "approval-group-#{params['cartNumber']}",
+                                                 approvers_attributes: [
+                                                                        { email_address: params['fromAddress'] }
+                                                                       ]
+                                                 )
+    end
     cart.save
 
-
-    #TODO: accepts_nested_attributes_for
-    #TODO: save green, socio, and features information
     params['cartItems'].each do |cart_item_params|
-      CartItem.create(
+      ci = CartItem.create(
         :vendor => cart_item_params['vendor'],
         :description => cart_item_params['description'],
         :url => cart_item_params['url'],
@@ -109,6 +91,17 @@ class Cart < ActiveRecord::Base
         :price => cart_item_params['price'].gsub(/[\$\,]/,"").to_f,
         :cart_id => cart.id
       )
+      if !cart_item_params['traits'].empty?
+        cart_item_params['traits'].each do |trait| 
+          if trait[1].kind_of?(Array)
+            trait[1].each do |individual|
+              if !individual.blank?
+                ci.cart_item_traits << CartItemTrait.new(:name => trait[0],:value => individual,:cart_item_id => ci.id)
+              end
+            end
+          end
+        end 
+      end
     end
     return cart
   end

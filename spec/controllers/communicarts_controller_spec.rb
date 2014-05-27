@@ -23,9 +23,16 @@ describe CommunicartsController do
             "socio": [],
             "partNumber": "7510-01-519-4381",
             "price": "$2.46",
-            "features": [
-                "sale"
-            ]
+            "traits": {
+                "socio": [
+                    "s",
+                    "w"
+                ],
+                "features": [
+                    "bpa"
+                ],
+                "green": "true"
+            }
           },
           {
             "vendor": "OFFICE DEPOT",
@@ -34,10 +41,19 @@ describe CommunicartsController do
             "notes": "",
             "qty": "5",
             "details": "Direct Delivery 3-4 days delivered ARO",
-            "socio": ["s","w"],
             "partNumber": "PIL31003",
             "price": "$10.29",
-            "features": []
+            "traits": {
+                "socio": [
+                    "s",
+                    "w"
+                ],
+                "features": [
+                    "bpa"
+                ],
+                "green": "true"
+            }
+
           },
           {
             "vendor": "METRO OFFICE PRODUCTS",
@@ -46,10 +62,18 @@ describe CommunicartsController do
             "notes": "",
             "qty": "3",
             "details": "Direct Delivery 3-4 days delivered ARO",
-            "socio": ["s"],
             "partNumber": "WLJ90310",
             "price": "$32.67",
-            "features": []
+            "traits": {
+                "socio": [
+                    "s",
+                    "w"
+                ],
+                "features": [
+                    "bpa"
+                ],
+                "green": "true"
+            }
           }
         ]
       }'

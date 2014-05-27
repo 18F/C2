@@ -18,6 +18,7 @@ describe 'Approving a cart with multiple approvers' do
     }
 
   let(:approver) { FactoryGirl.create(:approver) }
+  
 
   before do
     ENV['NOTIFICATION_FROM_EMAIL'] = 'sender@some-dot_gov.gov'
@@ -37,7 +38,13 @@ describe 'Approving a cart with multiple approvers' do
                     )
 
     cart.approval_group = approval_group
+
+    # Want to test by adding some traits in here....
     cart.cart_items << FactoryGirl.create(:cart_item)
+    cart.cart_items[0].cart_item_traits << FactoryGirl.create(:cart_item_trait)
+    cart.cart_items[0].cart_item_traits << FactoryGirl.create(:cart_item_trait,name: "feature",value: "bpa")
+    cart.cart_items[0].cart_item_traits << FactoryGirl.create(:cart_item_trait,name: "socio",value: "w")
+    cart.cart_items[0].cart_item_traits << FactoryGirl.create(:cart_item_trait,name: "socio",value: "v")
     cart.save
 
   end

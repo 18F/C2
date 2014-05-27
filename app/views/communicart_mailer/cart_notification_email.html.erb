@@ -23,16 +23,14 @@
       <div>
         <td>
           <h1 class="communicart_header">Purchase Requisition</h1>
-          <%- unless @json_post['cartName'] == "" %>
-            <h4 class="communicart_description"><%= @json_post['cartName']%></h4>
-          <%- end %>
+            <h4 class="communicart_description"><%= @cart.name%></h4>
         </td>
       </div>
     </tr>
 
       <tr>
         <td class="w-container results-header-container">
-          <h3 class="cart-header">GSA Advantage: Cart #<%= @json_post["cartNumber"] %></h3>
+          <h3 class="cart-header">GSA Advantage: Cart #<%= @cart.external_id %></h3>
         </td>
       </tr>
 
@@ -59,43 +57,41 @@
             </tr>
 
             <!--BEGIN CartItem Entry-->
-              <%- @json_post['cartItems'].each do |cart_item| %>
+              <%- @cart.cart_items.each do |cart_item| %>
 
                 <tr class="cart_item_information">
                   <td class="first" valign="top">
-                    <p><strong><%= cart_item['description'] %></strong>
+                    <p><strong><%= cart_item.description %></strong>
                     </p>
                   </td>
 
                   <td valign="top">
-                    <p><%= cart_item['details'] %></p>
+                    <p><%= cart_item.details %></p>
                   </td>
 
                   <td valign="top">
-                    <p><strong><%= cart_item['vendor'] %></strong>
-                      <br><em><%= cart_item['partNumber'] %></em>
+                    <p><strong><%= cart_item.vendor %></strong>
+                      <br><em><%= cart_item.part_number %></em>
                       <br><a href="https://gsaadvantage.gov<%= cart_item['url'] %>">Link to the product</a>
                     </p>
                   </td>
 
                   <td valign="top">
                       <ul class="result-tag">
-                      <%- if cart_item['green'] == 'true' %>
+			<!-- This is an intermediate state -->
+                      <%- if cart_item.green? %>
                         <li><div class="green"></div>Green</li>
                       <%- end %>
-
-                      <%- unless cart_item['socio'].nil? %>
+                      <%- unless cart_item.socio.empty? %>
                         <li class="socio">Socio:
                           <span class="tag-values">
-                          <%- cart_item['socio'].each_with_index do |socio_tag, index| %>
-                            <%= socio_tag %><%= "," unless cart_item['socio'].count == index+1 %>
+                          <%- cart_item.socio.each_with_index do |socio_tag, index| %>
+                            <%= socio_tag %><%= "," unless cart_item.socio.count == index+1 %>
                           <%- end %>
                         </span></li>
                       <%- end %>
-
-
-                      <%- unless cart_item['features'].nil? %>
-                        <%- cart_item['features'].each do |feature| %>
+                      <%- unless cart_item.features.empty? %>
+                        <%- cart_item.features.each do |feature| %>
                           <li><div class="<%= feature %>"</div><%= feature %></li>
                         <%- end %>
                       <%- end %>
@@ -103,8 +99,8 @@
                   </td>
 
                   <td class="last" valign="top">
-                    <p class="result-item-price"><%= cart_item['price'] %></p>
-                    <p class="result-item-units"><%= cart_item['qty'] %> units</p>
+                    <p class="result-item-price"><%= cart_item.price %></p>
+                    <p class="result-item-units"><%= cart_item.quantity %> units</p>
                   </td>
                 </tr>
               <%- end %>
@@ -116,7 +112,7 @@
                   <td class="total-price" colspan=2>
                     <p><strong>Total Price</strong></p>
                   </td>
-                  <td class="total-price total-amount"><p><strong>$<%= @json_post['totalPrice'] %></strong></p></td>
+                  <td class="total-price total-amount"><p><strong>$<%= number_with_precision(@cart.total_price, precision: 2) %></strong></p></td>
                 </tr>
 
           </table>
