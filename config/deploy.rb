@@ -1,11 +1,14 @@
+require 'capistrano/ext/multistage'
 require "bundler/capistrano"
 require "rvm/capistrano"
+
+set :stages, %w(development staging production)
+set :default_stage, "development"
 
 set :application, "c2"
 set :repository,  "https://github.com/18F/C2.git"
 set :rails_env, :production
 set :branch, ENV['BRANCH'] || 'master'
-set :domain, '54.185.133.124'
 set :deploy_to, "/var/www/#{application}"
 set :user, "ubuntu"
 set :rvm_type, :user
@@ -15,10 +18,6 @@ set :scm, :git
 set :use_sudo, true
 
 default_run_options[:pty] = true
-
-role :app, domain
-role :web, domain
-role :db,  domain, :primary => true
 
 namespace :deploy do
   task :start do ; end
