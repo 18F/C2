@@ -5,6 +5,14 @@ class Cart < ActiveRecord::Base
   has_many :comments
   has_one :approval_group
 
+  def self.human_readable_time(t1,offset)
+    return t1.utc.getlocal(offset).asctime
+  end
+
+  def self.default_time_zone_offset
+    return "-04:00"
+  end
+
   def update_approval_status
     update_attributes(status: 'approved') if all_approvals_received?
   end
@@ -30,7 +38,7 @@ class Cart < ActiveRecord::Base
       csv << ["requester","cart comment","created_at"]
       date_sorted_comments = comments.sort { |a,b| a.updated_at <=> b.updated_at }
       date_sorted_comments.each do |item|
-        csv << [approval_group.requester.email_address,item.comment_text,item.updated_at]
+        csv << [approval_group.requester.email_address,item.comment_text,Cart.human_readable_time(item.updated_at,Cart.default_time_zone_offset)]
       end
 
       csv << ["commenter","approver comment","created_at"]
@@ -43,11 +51,12 @@ class Cart < ActiveRecord::Base
     return csv_string
   end
 
+
   def create_approvals_csv
     csv_string = CSV.generate do |csv|
     csv << ["status","approver","created_at"]
     approval_group.approvers.each do |app|
-        csv << [app.status,app.email_address,app.updated_at]
+        csv << [app.status,app.email_address,Cart.human_readable_time(app.updated_at,Cart.default_time_zone_offset)]
         end
     end
     return csv_string
