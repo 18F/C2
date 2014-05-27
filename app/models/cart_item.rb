@@ -3,30 +3,16 @@ class CartItem < ActiveRecord::Base
   has_many :cart_item_traits
 
   def green?
-    cart_item_traits.each do |trait|
-      if trait.name == "green"
-        return true
-      end
-    end
-    return false
-  end
-
-  def trait_as_array(key)
-    trts = []
-    cart_item_traits.each do |trait|
-      if trait.name == key
-        trts << trait.value
-      end
-    end
-    return trts
+    cart_item_traits.map(&:name).include?('green')
   end
 
   def features
-    return trait_as_array("feature")
+    cart_item_traits.select{ |trait| trait.name.include?("feature") }.map(&:value)
   end
 
   def socio
-    return trait_as_array("socio")
+    cart_item_traits.select{ |trait| trait.name.include?("socio") }.map(&:value)
   end
+
 end
 
