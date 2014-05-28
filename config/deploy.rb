@@ -39,6 +39,14 @@ namespace :deploy do
 
 end
 
+namespace :remote_task do
+  #example: cap remote_task:invoke task='db:reset'
+  desc "Run a rake task on the remote server."
+  task :invoke do
+    run("cd #{deploy_to}/current && bundle exec rake #{ENV['task']} RAILS_ENV=#{rails_env}")
+  end
+end
+
 after 'bundle:install', 'deploy:symlink_configs'
 after 'deploy:setup', 'deploy:add_shared_config'
 after "deploy:update_code", "deploy:migrate"
