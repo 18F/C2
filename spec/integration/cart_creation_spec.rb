@@ -152,7 +152,8 @@ describe 'Creating a cart' do
           "price": "$9.87",
           "features": [
               "sale"
-          ]
+          ],
+          "traits": {"socio": ["s","w"]}
         }
       ]
     }'
@@ -193,7 +194,6 @@ describe 'Creating a cart' do
     cart = Cart.first
     expect(cart.cart_items.count).to eq 1
     expect(cart.cart_items[0].price).to eq 9.87
-    expect(cart.approval_group.name).to eq "approval-group-13579"
     expect(cart.comments.first.comment_text).to eq "Hi, this is a comment, I hope it works!\r\nThis is the second line of the comment."
     expect(cart.approvals.count).to eq 1
     expect(cart.approvals.first.user.email_address).to eq 'test.email.only@some-dot-gov.gov'

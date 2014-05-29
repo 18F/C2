@@ -56,6 +56,7 @@ describe 'Rejecting a cart with multiple approvers' do
           "socio": [],
           "partNumber": "7510-01-519-4381",
           "price": "$2.46",
+          "traits": {"socio": ["s","w"]},
           "features": [
               "sale"
           ]
@@ -70,6 +71,7 @@ describe 'Rejecting a cart with multiple approvers' do
           "socio": ["s","w"],
           "partNumber": "PIL31003",
           "price": "$10.29",
+          "traits": {"socio": ["s","w"]},
           "features": []
         },
         {
@@ -82,6 +84,7 @@ describe 'Rejecting a cart with multiple approvers' do
           "socio": ["s"],
           "partNumber": "WLJ90310",
           "price": "$32.67",
+          "traits": {"socio": ["s","w"]},
           "features": []
         }
       ]

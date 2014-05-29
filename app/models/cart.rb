@@ -92,43 +92,18 @@ class Cart < ActiveRecord::Base
         cart.requester = Requester.create!(email_address: params['fromAddress'])
       end
 
-
-      if !approval_group_name.blank?
-        cart.approval_group = ApprovalGroup.find_by_name(params['approvalGroup'])
-      else
-        cart.approval_group = ApprovalGroup.create(
-                                name: "approval-group-#{params['cartNumber']}"
-                              )
-      end
-
     else
 
       cart = existing_pending_cart
       cart.cart_items.destroy_all
       cart.approval_group = nil
 
-      #REFACTOR: duplicate code
-      if !approval_group_name.blank?
-        cart.approval_group = ApprovalGroup.find_by_name(params['approvalGroup'])
-      else
-        cart.approval_group = ApprovalGroup.create(
-                                name: "approval-group-#{params['cartNumber']}",
-                                approvers_attributes: [
-                                  { email_address: params['fromAddress'] }
-                                ]
-                              )
-      end
     end
 
     if !approval_group_name.blank?
       cart.approval_group = ApprovalGroup.find_by_name(params['approvalGroup'])
     else
-      cart.approval_group = ApprovalGroup.create(
-                                                 name: "approval-group-#{params['cartNumber']}",
-                                                 approvers_attributes: [
-                                                                        { email_address: params['fromAddress'] }
-                                                                       ]
-                                                 )
+      cart.approval_group = ApprovalGroup.create(name: "approval-group-#{params['cartNumber']}")
     end
     cart.save
 
