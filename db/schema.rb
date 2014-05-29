@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(version: 20140519173249) do
     t.integer  "cart_item_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
 
   create_table "approver_comments", force: true do |t|
     t.text     "comment_text"
