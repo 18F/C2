@@ -1,5 +1,5 @@
-server '54.203.77.3', :app, :web, :primary => true
-set :domain, '54.203.77.3'
+server '54.214.142.37', :app, :web, :primary => true
+set :domain, '54.214.142.37'
 
 role :app, domain
 role :web, domain
