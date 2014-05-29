@@ -9,6 +9,7 @@ gem 'roadie'
 gem 'draper'
 gem 'capistrano', '~>2.1'
 gem 'rvm-capistrano'
+gem 'awesome_print'
 
 group :test, :development do
   gem 'letter_opener'
@@ -16,7 +17,6 @@ group :test, :development do
   gem 'pry-rails'
   gem 'database_cleaner'
   gem 'factory_girl_rails'
-  gem 'awesome_print'
 end
 
 group :development do
