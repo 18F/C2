@@ -1,7 +1,8 @@
 class User < ActiveRecord::Base
   validates_presence_of :email_address
   validates_uniqueness_of :email_address
-  has_and_belongs_to_many :approval_groups
+  has_many :user_roles
+  has_many :approval_groups, through: :user_roles
   has_many :approvals
   has_many :approver_comments
 
