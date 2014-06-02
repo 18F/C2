@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140519173249) do
+ActiveRecord::Schema.define(version: 20140602185100) do
 
   create_table "approval_groups", force: true do |t|
     t.string   "name"
@@ -33,19 +33,19 @@ ActiveRecord::Schema.define(version: 20140519173249) do
     t.datetime "updated_at"
   end
 
+  create_table "approver_comments", force: true do |t|
+    t.text     "comment_text"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "user_id"
+  end
+
   create_table "cart_item_traits", force: true do |t|
     t.text     "name"
     t.text     "value"
     t.integer  "cart_item_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "approver_comments", force: true do |t|
-    t.text     "comment_text"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "user_id"
   end
 
   create_table "cart_items", force: true do |t|
@@ -82,6 +82,12 @@ ActiveRecord::Schema.define(version: 20140519173249) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "cart_id"
+  end
+
+  create_table "user_roles", force: true do |t|
+    t.integer "approval_group_id"
+    t.integer "user_id"
+    t.string  "role"
   end
 
   create_table "users", force: true do |t|
