@@ -89,18 +89,6 @@ describe CommunicartsController do
       controller.stub(:total_price_from_params)
     end
 
-    context 'initializing a cart' do
-      it 'creates a cart' do
-        CommunicartMailer.stub_chain(:cart_notification_email, :deliver)
-
-        Cart.stub(:initialize_cart_with_items)
-        mock_cart = double(:cart, id: 1234)
-      Cart.should_receive(:find_by).with(external_id: 2867637).and_return(mock_cart)
-      mock_cart.should_receive(:decorate).and_return(mock_cart)
-      post 'send_cart', @json_params
-      end
-    end
-
     context 'approval group' do
       before do
         CommunicartMailer.stub_chain(:cart_notification_email, :deliver)

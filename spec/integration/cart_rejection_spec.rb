@@ -130,6 +130,7 @@ describe 'Rejecting a cart with multiple approvers' do
 
     Cart.count.should == 1
     User.count.should == 3
+    expect(Approval.count).to eq 3
 
     cart = Cart.first
     expect(cart.external_id).to eq 10203040
@@ -138,6 +139,7 @@ describe 'Rejecting a cart with multiple approvers' do
 
     post 'approval_reply_received', @json_rejection_params
 
+    expect(Approval.count).to eq 3
     expect(cart.approvals.count).to eq 3
     expect(cart.approvals.where(status: 'approved').count).to eq 0
     expect(cart.approvals.where(status: 'rejected').count).to eq 1
@@ -148,8 +150,11 @@ describe 'Rejecting a cart with multiple approvers' do
     post 'send_cart', @json_params_1
 
     expect(Cart.count).to eq 2
+    expect(Approval.count).to eq 6
     updated_cart = Cart.last
     expect(updated_cart.status).to eq 'pending'
+
+    original_cart = Cart.first
 
     # Cart with the same external ID should be associated with a new set of users with approvals in status 'pending'
     expect(updated_cart.external_id).to eq 10203040
@@ -160,6 +165,8 @@ describe 'Rejecting a cart with multiple approvers' do
     @json_repost_params = JSON.parse(repost_params)
     post 'approval_reply_received', @json_repost_params
 
+    expect(Approval.count).to eq 6
+    expect(cart.approvals.count).to eq 3
     expect(updated_cart.approvals.where(status:'approved').count).to eq 1
     expect(updated_cart.approvals.where(status:'pending').count).to eq 2
 

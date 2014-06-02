@@ -159,7 +159,7 @@ describe 'Creating a cart' do
     }'
   }
 
-  it 'replaces existing cart items and approval group when initializing and existing cart' do
+  it 'replaces existing cart items and approval group when initializing an existing cart' do
     @json_params_1 = JSON.parse(params_request_1)
     @json_params_2 = JSON.parse(params_request_2)
 
@@ -214,6 +214,16 @@ describe 'Creating a cart' do
     expect(cart.cart_items.first.cart_item_traits[0].value).to eq "s"
     expect(cart.cart_items.first.cart_item_traits[1].value).to eq "w"
     expect(cart.cart_items.first.cart_item_traits[2].value).to eq "bpa"
+  end
+
+  it 'creates a requester' do
+    @json_params_1 = JSON.parse(params_request_1)
+    post 'send_cart', @json_params_1
+
+    expect(Cart.count).to eq 1
+    expect(Cart.first.requester.email_address).not_to be_empty
+    expect(Cart.first.requester.email_address).to eq 'approver1@some-dot-gov.gov'
+
   end
 
   it 'handles non-existent approval groups'
