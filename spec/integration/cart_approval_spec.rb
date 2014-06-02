@@ -29,11 +29,11 @@ describe 'Approving a cart with multiple approvers' do
                     status: 'pending',
                     external_id: '10203040'
                     )
+    user = User.create!(email_address: 'test-requestser@some-dot-gov.gov')
 
-    cart.requester = Requester.create(email_address: 'test-requestser@some-dot-gov.gov')
+    UserRole.create!(user_id: user.id, approval_group_id: approval_group.id, role: 'requester')
     cart.approval_group = approval_group
 
-    # Want to test by adding some traits in here....
     cart.cart_items << FactoryGirl.create(:cart_item)
     cart.cart_items[0].cart_item_traits << FactoryGirl.create(:cart_item_trait)
     cart.cart_items[0].cart_item_traits << FactoryGirl.create(:cart_item_trait,name: "feature",value: "bpa")
@@ -44,7 +44,7 @@ describe 'Approving a cart with multiple approvers' do
       email = "approver#{num}@some-dot-gov.gov"
 
       user = FactoryGirl.create(:user, email_address: email)
-      approval_group.users << user
+      approval_group.user_roles << UserRole.create!(user_id: user.id, approval_group_id: approval_group.id, role: 'approver')
       cart.approvals << Approval.create!(user_id: user.id)
     end
 
@@ -57,7 +57,7 @@ describe 'Approving a cart with multiple approvers' do
     # CommunicartMailer.stub_chain(:approval_reply_received_email, :deliver)
 
     Cart.count.should == 1
-    User.count.should == 3
+    User.count.should == 4
     expect(Cart.first.approvals.count).to eq 3
     expect(Cart.first.approvals.where(status: 'approved').count).to eq 0
 

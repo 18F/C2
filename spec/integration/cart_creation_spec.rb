@@ -216,16 +216,7 @@ describe 'Creating a cart' do
     expect(cart.cart_items.first.cart_item_traits[2].value).to eq "bpa"
   end
 
-  it 'creates a requester' do
-    @json_params_1 = JSON.parse(params_request_1)
-    post 'send_cart', @json_params_1
-
-    expect(Cart.count).to eq 1
-    expect(Cart.first.requester.email_address).not_to be_empty
-    expect(Cart.first.requester.email_address).to eq 'approver1@some-dot-gov.gov'
-
-  end
-
+  it 'creates a requester'
   it 'handles non-existent approval groups'
   it 'handles non-existent email addresses'
 end

@@ -108,7 +108,8 @@ describe 'Rejecting a cart with multiple approvers' do
                     external_id: '10203040'
                     )
 
-    cart.requester = Requester.create(email_address: 'test-requestser@some-dot-gov.gov')
+    user = User.create!(email_address: 'test-requestser@some-dot-gov.gov')
+    UserRole.create!(user_id: user.id, approval_group_id: approval_group.id, role: 'requester')
     cart.approval_group = approval_group
     cart.cart_items << FactoryGirl.create(:cart_item)
 
@@ -116,7 +117,7 @@ describe 'Rejecting a cart with multiple approvers' do
       email = "approver#{num}@some-dot-gov.gov"
 
       user = FactoryGirl.create(:user, email_address: email)
-      approval_group.users << user
+      approval_group.user_roles << UserRole.create!(user_id: user.id, approval_group_id: approval_group.id, role: 'approver')
       cart.approvals << Approval.create!(user_id: user.id)
     end
 
@@ -129,7 +130,7 @@ describe 'Rejecting a cart with multiple approvers' do
     # CommunicartMailer.stub_chain(:rejection_reply_received_email, :deliver)
 
     Cart.count.should == 1
-    User.count.should == 3
+    User.count.should == 4
     expect(Approval.count).to eq 3
 
     cart = Cart.first

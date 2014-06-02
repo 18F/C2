@@ -279,24 +279,25 @@ describe CommunicartsController do
         rejection_approval_group = FactoryGirl.create(:approval_group, name: 'Test Approval Group 1')
         user1 = FactoryGirl.create(:user, email_address: 'email1@some-dot-gov.gov')
         user2 = FactoryGirl.create(:user, email_address: 'email2@some-dot-gov.gov')
-        rejection_approval_group.users << user1
-        rejection_approval_group.users << user2
+        rejection_approval_group.user_roles << UserRole.create!(user_id: user1.id, approval_group_id: approval_group.id, role: 'approver')
+        rejection_approval_group.user_roles << UserRole.create!(user_id: user2.id, approval_group_id: approval_group.id, role: 'approver')
 
         rejection_approval_group.save
 
         rejected_cart.approval_group = rejection_approval_group
         approval1 = Approval.create(user_id: user1.id, cart_id: rejected_cart.id)
         approval2 = Approval.create(user_id: user2.id, cart_id: rejected_cart.id)
-        rejected_cart.requester = FactoryGirl.create(:requester, email_address: 'rejection-requester@some-dot-gov.gov')
+        requester = FactoryGirl.create(:user, email_address: 'rejection-requester@some-dot-gov.gov')
+        UserRole.create!(user_id: user1.id, approval_group_id: rejection_approval_group.id, role: 'requester')
         rejected_cart.approvals << approval1
         rejected_cart.approvals << approval2
         rejected_cart.save
 
-        cart.stub(:update_approval_status)
+        rejected_cart.stub(:update_approval_status)
         @json_rejection_params = JSON.parse(rejection_params)
       end
 
-      it 'sets the cart to rejected status' do
+      it 'sets the approval to rejected status' do
         #FIXME: grab the specific approval
         Approval.any_instance.should_receive(:update_attributes).with({status: 'rejected'})
         post 'approval_reply_received', @json_rejection_params

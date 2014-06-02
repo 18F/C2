@@ -5,8 +5,11 @@ FactoryGirl.define do
 
     factory :cart_with_approval_group do
       after :create do |cart|
-        cart.requester = FactoryGirl.create(:requester)
-        cart.approval_group = FactoryGirl.create(:approval_group_with_approvers)
+        approval_group = FactoryGirl.create(:approval_group_with_approvers)
+        requester = FactoryGirl.create(:user, email_address: 'test-requester@communicart-stub.com')
+        UserRole.create!(user_id: requester.id, approval_group_id: approval_group.id, role: 'requester')
+
+        cart.approval_group = approval_group
         cart.save
       end
     end

@@ -6,7 +6,6 @@ class Cart < ActiveRecord::Base
   has_many :approvals
   has_many :approval_users, through: :approvals, source: :user
   has_one :approval_group
-  has_one :requester
 
   def self.human_readable_time(t1,offset)
     return t1.utc.getlocal(offset).asctime
@@ -57,6 +56,10 @@ class Cart < ActiveRecord::Base
     return csv_string
   end
 
+  def requester
+    approval_group.user_roles.where(role: 'requester').first.user
+  end
+
 
   def create_approvals_csv
     csv_string = CSV.generate do |csv|
@@ -87,10 +90,6 @@ class Cart < ActiveRecord::Base
           cart.approvals << new_approval
           CommunicartMailer.cart_notification_email(new_approval.user.email_address, params, cart).deliver
         end
-
-        cart.requester = Requester.create!(email_address: last_rejected_cart.requester.email_address)
-      else
-        cart.requester = Requester.create!(email_address: params['fromAddress'])
       end
 
     else
