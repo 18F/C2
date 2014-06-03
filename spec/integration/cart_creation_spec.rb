@@ -175,7 +175,8 @@ describe 'Creating a cart' do
     expect(cart.approval_group.name).to eq "firstApprovalGroup"
     expect(cart.comments.count).to eq 1
     expect(cart.approvals.count).to eq 4
-    expect(cart.approvals.where().count).to eq 4
+    expect(cart.approvals.where(role: 'approver').count).to eq 3
+    expect(cart.approvals.where(role: 'requester').count).to eq 1
 
     post 'send_cart', @json_params_2
 
