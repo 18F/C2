@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'ostruct'
 
 describe CommunicartMailer do
-  let(:approval_group) { FactoryGirl.create(:approval_group_with_approvers, name: "anotherApprovalGroupName") }
+  let(:approval_group) { FactoryGirl.create(:approval_group_with_approvers_and_requester, name: "anotherApprovalGroupName") }
   let(:approver) { FactoryGirl.create(:user) }
   let(:cart) { FactoryGirl.create(:cart, name: "TestCart") }
 

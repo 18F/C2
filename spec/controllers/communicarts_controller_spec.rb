@@ -79,7 +79,7 @@ describe CommunicartsController do
       }'
     }
 
-  let(:approval_group) { FactoryGirl.create(:approval_group_with_approvers, name: "anotherApprovalGroupName") }
+  let(:approval_group) { FactoryGirl.create(:approval_group_with_approvers_and_requester, name: "anotherApprovalGroupName") }
   let(:approval) { FactoryGirl.create(:approval) }
   let(:approval_list) { [approval] }
 

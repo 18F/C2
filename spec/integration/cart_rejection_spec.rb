@@ -154,6 +154,7 @@ describe 'Rejecting a cart with multiple approvers' do
     expect(Approval.count).to eq 6
     updated_cart = Cart.last
     expect(updated_cart.status).to eq 'pending'
+    expect(cart.approvals.count).to eq 3
 
     original_cart = Cart.first
 

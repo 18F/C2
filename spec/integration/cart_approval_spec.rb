@@ -61,18 +61,27 @@ describe 'Approving a cart with multiple approvers' do
     expect(Cart.first.approvals.count).to eq 3
     expect(Cart.first.approvals.where(status: 'approved').count).to eq 0
 
+    # mock_mailer_1 = double
+    # CommunicartMailer.should_receive(:approval_reply_received_email).exactly(3).times.and_return(mock_mailer_1)
+    # mock_mailer_1.should_receive(:deliver).exactly(3).times
     post 'approval_reply_received', @json_approval_params
 
     expect(Cart.first.approvals.count).to eq 3
     expect(Cart.first.approvals.where(status: 'approved').count).to eq 1
 
     @json_approval_params["fromAddress"] = "approver2@some-dot-gov.gov"
+    # mock_mailer_2 = double
+    # CommunicartMailer.should_receive(:approval_reply_received_email).exactly(3).times.and_return(mock_mailer_2)
+    # mock_mailer_2.should_receive(:deliver).exactly(3).times
     post 'approval_reply_received', @json_approval_params
 
     expect(Cart.first.approvals.count).to eq 3
     expect(Cart.first.approvals.where(status: 'approved').count).to eq 2
 
     @json_approval_params["fromAddress"] = "approver3@some-dot-gov.gov"
+    # mock_mailer_3 = double
+    # CommunicartMailer.should_receive(:approval_reply_received_email).exactly(3).times.and_return(mock_mailer_3)
+    # mock_mailer_3.should_receive(:deliver).exactly(3).times
     post 'approval_reply_received', @json_approval_params
 
     expect(Cart.first.approvals.count).to eq 3
