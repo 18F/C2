@@ -77,7 +77,10 @@ class Cart < ActiveRecord::Base
 
     name = !params['cartName'].blank? ? params['cartName'] : params['cartNumber']
 
-    existing_pending_cart =  Cart.find_by(name: name, status: 'pending')
+    if existing_pending_cart =  Cart.find_by(name: name, status: 'pending')
+      existing_pending_cart.approvals.map(&:destroy)
+    end
+
     if existing_pending_cart.blank?
 
       cart = Cart.new(name: name, status: 'pending', external_id: params['cartNumber'])
@@ -86,7 +89,7 @@ class Cart < ActiveRecord::Base
       #REFACTOR
       if last_rejected_cart = Cart.where(name: name, status: 'rejected').last
         last_rejected_cart.approvals.each do | approval |
-          new_approval = Approval.create!(user_id: approval.user_id)
+          new_approval = Approval.create!(user_id: approval.user_id, role: approval.role)
           cart.approvals << new_approval
           CommunicartMailer.cart_notification_email(new_approval.user.email_address, params, cart).deliver
         end

@@ -45,7 +45,7 @@ describe 'Approving a cart with multiple approvers' do
 
       user = FactoryGirl.create(:user, email_address: email)
       approval_group.user_roles << UserRole.create!(user_id: user.id, approval_group_id: approval_group.id, role: 'approver')
-      cart.approvals << Approval.create!(user_id: user.id)
+      cart.approvals << Approval.create!(user_id: user.id, role: 'approver')
     end
 
     cart.save

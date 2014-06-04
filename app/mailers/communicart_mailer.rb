@@ -23,6 +23,7 @@
     @approval = analysis["approve"] == "APPROVE" ? "approved" : "reject"
     @approval_reply = analysis
     @cart = cart.decorate
+
     to_address = cart.requester.email_address
     #TODO: Handle carts without approval groups (only emails passed)
     #TODO: Add a specific 'rejection' text block for the requester

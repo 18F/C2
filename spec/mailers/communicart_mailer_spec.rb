@@ -70,8 +70,6 @@ describe CommunicartMailer do
       ENV.stub(:[])
       ENV.stub(:[]).with('NOTIFICATION_FROM_EMAIL').and_return('reply@communicart-stub.com')
 
-      requester = FactoryGirl.create(:user, email_address: 'reply@communicart-stub.com')
-      UserRole.create!(user_id: requester.id, approval_group_id: approval_group.id, role: 'requester')
     end
 
     let(:analysis) {
@@ -92,7 +90,7 @@ describe CommunicartMailer do
     end
 
     it 'renders the receiver email' do
-      mail.to.should == ["test-requester@communicart-stub.com"]
+      mail.to.should == ["requester1@some-dot-gov.gov"]
     end
 
     it 'renders the sender email' do

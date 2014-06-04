@@ -166,6 +166,7 @@ describe 'Creating a cart' do
     expect(Cart.count).to eq 0
 
     post 'send_cart', @json_params_1
+
     expect(Cart.count).to eq 1
     cart = Cart.first
     expect(cart.cart_items.count).to eq 3
@@ -174,19 +175,23 @@ describe 'Creating a cart' do
     expect(cart.cart_items[2].price).to eq 32.67
     expect(cart.approval_group.name).to eq "firstApprovalGroup"
     expect(cart.comments.count).to eq 1
-    expect(cart.approvals.count).to eq 4
-    expect(cart.approvals.where(role: 'approver').count).to eq 3
+    expect(cart.approvals.count).to eq 3
+    expect(cart.approvals.where(role: 'approver').count).to eq 2
     expect(cart.approvals.where(role: 'requester').count).to eq 1
 
     post 'send_cart', @json_params_2
 
+    expect(Cart.count).to eq 1
     cart = Cart.first
     expect(cart.cart_items.count).to eq 1
     expect(cart.cart_items[0].price).to eq 9.87
     expect(cart.approval_group.name).to eq "secondApprovalGroup"
     expect(cart.comments.first.comment_text).to eq "Hi, this is a comment, I hope it works!\r\nThis is the second line of the comment."
     expect(cart.comments.count).to eq 1
-    expect(cart.approvals.count).to eq 4
+    expect(cart.approvals.count).to eq 0
+    expect(cart.approvals.where(role: 'approver').count).to eq 0
+    expect(cart.approvals.where(role: 'requester').count).to eq 0
+
   end
 
   # Suspending this case until we create mapping to emails
