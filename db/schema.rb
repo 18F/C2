@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140603222704) do
+ActiveRecord::Schema.define(version: 20140604204910) do
 
   create_table "approval_groups", force: true do |t|
     t.string   "name"
@@ -76,13 +76,6 @@ ActiveRecord::Schema.define(version: 20140603222704) do
     t.integer  "cart_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "requesters", force: true do |t|
-    t.string   "email_address"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "cart_id"
   end
 
   create_table "user_roles", force: true do |t|
