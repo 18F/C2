@@ -96,6 +96,10 @@ describe 'Rejecting a cart with multiple approvers' do
   let(:approver) { FactoryGirl.create(:approver) }
 
   before do
+    ActionMailer::Base.delivery_method = :test
+    ActionMailer::Base.perform_deliveries = true
+    ActionMailer::Base.deliveries = []
+
     ENV['NOTIFICATION_FROM_EMAIL'] = 'sender@some-dot_gov.gov'
 
     @json_rejection_params = JSON.parse(rejection_params)
@@ -125,6 +129,10 @@ describe 'Rejecting a cart with multiple approvers' do
 
   end
 
+  after do
+    ActionMailer::Base.deliveries.clear
+  end
+
   it 'updates the cart and approver records as expected' do
     # Remove stub to view email layout in development through letter_opener
     # CommunicartMailer.stub_chain(:rejection_reply_received_email, :deliver)
@@ -139,6 +147,7 @@ describe 'Rejecting a cart with multiple approvers' do
     expect(cart.approvals.where(status: 'approved').count).to eq 0
 
     post 'approval_reply_received', @json_rejection_params
+    expect(ActionMailer::Base.deliveries.count).to eq 1
 
     expect(Approval.count).to eq 3
     expect(cart.approvals.count).to eq 3
@@ -149,6 +158,7 @@ describe 'Rejecting a cart with multiple approvers' do
     # User corrects the mistake and resubmits
     @json_params_1 = JSON.parse(params_request_1)
     post 'send_cart', @json_params_1
+    expect(ActionMailer::Base.deliveries.count).to eq 4
 
     expect(Cart.count).to eq 2
     expect(Approval.count).to eq 6
@@ -166,12 +176,12 @@ describe 'Rejecting a cart with multiple approvers' do
     # Repost an approval
     @json_repost_params = JSON.parse(repost_params)
     post 'approval_reply_received', @json_repost_params
+    expect(ActionMailer::Base.deliveries.count).to eq 5
 
     expect(Approval.count).to eq 6
     expect(cart.approvals.count).to eq 3
     expect(updated_cart.approvals.where(status:'approved').count).to eq 1
     expect(updated_cart.approvals.where(status:'pending').count).to eq 2
-
 
   end
 end
