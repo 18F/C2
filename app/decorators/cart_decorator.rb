@@ -6,11 +6,11 @@ class CartDecorator < Draper::Decorator
   end
 
   def number_approved
-    object.approvals.where(status: 'approved').count
+    object.approvals.where(role: 'approver').where(status: 'approved').count
   end
 
   def total_approvers
-    object.approvals.count
+    object.approvals.where(role: 'approver').count
   end
 
 
