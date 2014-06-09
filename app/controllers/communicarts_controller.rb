@@ -23,7 +23,7 @@ class CommunicartsController < ApplicationController
       unless duplicated_approvals_exist_for(cart)
         approval_group.user_roles.each do | user_role |
           Approval.create!(user_id: user_role.user_id, cart_id: cart.id, role: user_role.role)
-          CommunicartMailer.cart_notification_email(user_role.user.email_address, params, cart).deliver
+          CommunicartMailer.cart_notification_email(user_role.user.email_address, params, cart).deliver if user_role.role == "approver"
         end
       end
     else
