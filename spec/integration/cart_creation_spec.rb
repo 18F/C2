@@ -175,6 +175,7 @@ describe 'Creating a cart' do
     expect(cart.cart_items[2].price).to eq 32.67
     expect(cart.approval_group.name).to eq "firstApprovalGroup"
     expect(cart.comments.count).to eq 1
+    expect(Approval.count).to eq 3
     expect(cart.approvals.count).to eq 3
     expect(cart.approvals.where(role: 'approver').count).to eq 2
     expect(cart.approvals.where(role: 'requester').count).to eq 1

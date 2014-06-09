@@ -18,6 +18,10 @@ describe 'Approving a cart with multiple approvers' do
     }
 
   before do
+    ActionMailer::Base.delivery_method = :test
+    ActionMailer::Base.perform_deliveries = true
+    ActionMailer::Base.deliveries = []
+
     ENV['NOTIFICATION_FROM_EMAIL'] = 'sender@some-dot_gov.gov'
 
     @json_approval_params = JSON.parse(approval_params)
@@ -34,6 +38,7 @@ describe 'Approving a cart with multiple approvers' do
     UserRole.create!(user_id: user.id, approval_group_id: approval_group.id, role: 'requester')
     cart.approval_group = approval_group
 
+    cart.approvals << Approval.create!(user_id: user.id, role: 'requester')
     cart.cart_items << FactoryGirl.create(:cart_item)
     cart.cart_items[0].cart_item_traits << FactoryGirl.create(:cart_item_trait)
     cart.cart_items[0].cart_item_traits << FactoryGirl.create(:cart_item_trait,name: "feature",value: "bpa")
@@ -52,42 +57,40 @@ describe 'Approving a cart with multiple approvers' do
 
   end
 
+  after do
+    ActionMailer::Base.deliveries.clear
+  end
+
   it 'updates the cart and approval records as expected' do
     # Remove stub to view email layout in development through letter_opener
     # CommunicartMailer.stub_chain(:approval_reply_received_email, :deliver)
 
     Cart.count.should == 1
     User.count.should == 4
-    expect(Cart.first.approvals.count).to eq 3
+    expect(Cart.first.status).to eq 'pending'
     expect(Cart.first.approvals.where(status: 'approved').count).to eq 0
 
-    # mock_mailer_1 = double
-    # CommunicartMailer.should_receive(:approval_reply_received_email).exactly(3).times.and_return(mock_mailer_1)
-    # mock_mailer_1.should_receive(:deliver).exactly(3).times
     post 'approval_reply_received', @json_approval_params
 
-    expect(Cart.first.approvals.count).to eq 3
+    expect(Cart.first.status).to eq 'pending'
+    expect(Cart.first.approvals.count).to eq 4
     expect(Cart.first.approvals.where(status: 'approved').count).to eq 1
 
     @json_approval_params["fromAddress"] = "approver2@some-dot-gov.gov"
-    # mock_mailer_2 = double
-    # CommunicartMailer.should_receive(:approval_reply_received_email).exactly(3).times.and_return(mock_mailer_2)
-    # mock_mailer_2.should_receive(:deliver).exactly(3).times
+    expect(ActionMailer::Base.deliveries.count).to eq 1
     post 'approval_reply_received', @json_approval_params
 
-    expect(Cart.first.approvals.count).to eq 3
     expect(Cart.first.approvals.where(status: 'approved').count).to eq 2
 
     @json_approval_params["fromAddress"] = "approver3@some-dot-gov.gov"
-    # mock_mailer_3 = double
-    # CommunicartMailer.should_receive(:approval_reply_received_email).exactly(3).times.and_return(mock_mailer_3)
-    # mock_mailer_3.should_receive(:deliver).exactly(3).times
+    expect(ActionMailer::Base.deliveries.count).to eq 2
     post 'approval_reply_received', @json_approval_params
 
-    expect(Cart.first.approvals.count).to eq 3
+    expect(Cart.first.status).to eq 'approved'
     expect(Cart.first.approvals.where(status: 'approved').count).to eq 3
     expect(Cart.first.comments.first.comment_text).to eq "spudcomment"
     expect(ApproverComment.count).to eq 3
+    expect(ActionMailer::Base.deliveries.count).to eq 3
 
   end
 end

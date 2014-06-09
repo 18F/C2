@@ -25,7 +25,8 @@ class Cart < ActiveRecord::Base
   end
 
   def all_approvals_received?
-    approvals.where(status: 'approved').count == approvals.count
+    approver_count = approvals.where(role: 'approver').count
+    approvals.where(role: 'approver').where(status: 'approved').count == approver_count
   end
 
   def create_items_csv
