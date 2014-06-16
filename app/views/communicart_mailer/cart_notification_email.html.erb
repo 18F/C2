@@ -11,9 +11,12 @@
           Additional comments:
         </p>
 
-        <p>
-          <%= @json_post["initiationComment"] %>
-        </p>
+        <% if @cart.comments %>
+          <p>
+            <%= @cart.comments.first %>
+          </p>
+        <% end %>
+
         <br/>
       </td>
     </tr>

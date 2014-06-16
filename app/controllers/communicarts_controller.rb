@@ -23,7 +23,7 @@ class CommunicartsController < ApplicationController
       unless duplicated_approvals_exist_for(cart)
         approval_group.user_roles.each do | user_role |
           Approval.create!(user_id: user_role.user_id, cart_id: cart.id, role: user_role.role)
-          CommunicartMailer.cart_notification_email(user_role.user.email_address, params, cart).deliver if user_role.role == "approver"
+          CommunicartMailer.cart_notification_email(user_role.user.email_address, cart).deliver if user_role.role == "approver"
         end
       end
     else
@@ -31,7 +31,7 @@ class CommunicartsController < ApplicationController
       #TODO: require a user to be sent if approval group isn't indicated
       approval_user = User.find_or_create_by(email_address: params["email"])
       Approval.create!(user_id: approval_user.id, cart_id: cart.id, role: 'approver')
-      CommunicartMailer.cart_notification_email(params["email"], params, cart).deliver
+      CommunicartMailer.cart_notification_email(params["email"], cart).deliver
     end
 
     render json: { message: "This was a success"}, status: 200

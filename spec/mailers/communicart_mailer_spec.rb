@@ -8,8 +8,7 @@ describe CommunicartMailer do
 
   describe 'cart notification email' do
 
-    let(:analysis) { OpenStruct.new(email: 'email.to.email@testing.com', cartNumber: '13579', cartItems: []) }
-    let(:mail) { CommunicartMailer.cart_notification_email(analysis.email, analysis, cart) }
+    let(:mail) { CommunicartMailer.cart_notification_email('email.to.email@testing.com', cart) }
 
     before do
       ENV.stub(:[])
@@ -17,6 +16,7 @@ describe CommunicartMailer do
     end
 
     it 'renders the subject' do
+      cart.update_attributes(external_id: 13579)
       cart.stub(:approval_group).and_return(approval_group)
       approval_group.stub(:approvers).and_return([approver])
       approver.stub(:approver_comment).and_return([])

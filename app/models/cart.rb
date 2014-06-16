@@ -92,7 +92,7 @@ class Cart < ActiveRecord::Base
         last_rejected_cart.approvals.each do | approval |
           new_approval = Approval.create!(user_id: approval.user_id, role: approval.role)
           cart.approvals << new_approval
-          CommunicartMailer.cart_notification_email(new_approval.user.email_address, params, cart).deliver
+          CommunicartMailer.cart_notification_email(new_approval.user.email_address, cart).deliver
         end
       end
 

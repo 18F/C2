@@ -1,8 +1,7 @@
   class CommunicartMailer < ActionMailer::Base
   layout 'communicart_base'
 
-  def cart_notification_email(email, analysis, cart)
-    @json_post = analysis
+  def cart_notification_email(email, cart)
     @url = ENV['NOTIFICATION_URL']
     @cart = cart.decorate
 
@@ -14,7 +13,7 @@
 
     mail(
          to: email,
-         subject: "Please approve Cart Number: #{analysis['cartNumber']}",
+         subject: "Please approve Cart Number: #{cart.external_id}",
          from: ENV['NOTIFICATION_FROM_EMAIL']
          )
   end
