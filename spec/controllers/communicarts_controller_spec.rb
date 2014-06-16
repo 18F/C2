@@ -101,7 +101,7 @@ describe CommunicartsController do
         end
 
         it 'uses an existing approval group' do
-          ApprovalGroup.should_receive(:find_by_name).with("anotherApprovalGroupName")
+          ApprovalGroup.should_receive(:find_by_name).with("anotherApprovalGroupName").and_return(approval_group)
           post 'send_cart', @json_params
         end
 
@@ -130,7 +130,7 @@ describe CommunicartsController do
           ApprovalGroup.should_not_receive(:find_by_name)
           ApprovalGroup.should_receive(:create).with(
             {name: 'approval-group-2867637'}
-            )
+            ).and_return(approval_group)
 
           @json_params['fromAddress'] = 'approver-address1234@some-dot-gov.gov'
           post 'send_cart', @json_params

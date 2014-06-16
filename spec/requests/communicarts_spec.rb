@@ -11,7 +11,7 @@ describe 'CommunicartsController' do
       CommunicartsController.any_instance.stub(:total_price_from_params)
       CommunicartMailer.stub_chain(:cart_notification_email, :deliver)
 
-      approval_group = FactoryGirl.create(:approval_group_with_approvers_and_requester)
+      approval_group = FactoryGirl.create(:approval_group_with_approvers_and_requester, name: 'MyApprovalGroup')
       ApprovalGroup.stub(:find_by).and_return(approval_group)
     end
 

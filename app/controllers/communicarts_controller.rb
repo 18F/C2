@@ -2,36 +2,15 @@ class CommunicartsController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def send_cart
-    Cart.initialize_cart_with_items(params)
-
-    # Note: There surely should be a better way to fill this in since we just
-    # create the object above, but I don't really know how to do that...
-    cart = Cart.where(external_id: (params['cartNumber'].to_i)).where(status: 'pending').first.decorate
+    cart = Cart.initialize_cart_with_items(params)
 
     Comment.create(comment_text: params['initiationComment'].strip, cart_id: cart.id) unless params['initiationComment'].blank?
 
-
-    sum = params['cartItems'].reduce(0) do |sum,value|
-      sum + (value["qty"].gsub(/[^\d\.]/, '').to_f *  value["price"].gsub(/[^\d\.]/, '').to_f)
-    end
-    params['totalPrice'] = "%0.2f" % sum
-
-    approval_group_name = params['approvalGroup']
-
-    if !approval_group_name.blank?
-      approval_group = ApprovalGroup.find_by(name: approval_group_name)
-      unless duplicated_approvals_exist_for(cart)
-        approval_group.user_roles.each do | user_role |
-          Approval.create!(user_id: user_role.user_id, cart_id: cart.id, role: user_role.role)
-          CommunicartMailer.cart_notification_email(user_role.user.email_address, cart).deliver if user_role.role == "approver"
-        end
+    unless duplicated_approvals_exist_for(cart)
+      cart.approval_group.user_roles.each do | user_role |
+        Approval.create!(user_id: user_role.user_id, cart_id: cart.id, role: user_role.role)
+        CommunicartMailer.cart_notification_email(user_role.user.email_address, cart).deliver if user_role.role == "approver"
       end
-    else
-      #No approval group is indicated, so create an approval with the user that was passed in.
-      #TODO: require a user to be sent if approval group isn't indicated
-      approval_user = User.find_or_create_by(email_address: params["email"])
-      Approval.create!(user_id: approval_user.id, cart_id: cart.id, role: 'approver')
-      CommunicartMailer.cart_notification_email(params["email"], cart).deliver
     end
 
     render json: { message: "This was a success"}, status: 200
