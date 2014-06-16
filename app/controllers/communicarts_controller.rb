@@ -3,15 +3,8 @@ class CommunicartsController < ApplicationController
 
   def send_cart
     cart = Cart.initialize_cart_with_items(params)
-
     Comment.create(comment_text: params['initiationComment'].strip, cart_id: cart.id) unless params['initiationComment'].blank?
-
-    unless duplicated_approvals_exist_for(cart)
-      cart.approval_group.user_roles.each do | user_role |
-        Approval.create!(user_id: user_role.user_id, cart_id: cart.id, role: user_role.role)
-        CommunicartMailer.cart_notification_email(user_role.user.email_address, cart).deliver if user_role.role == "approver"
-      end
-    end
+    cart.create_and_send_approvals unless duplicated_approvals_exist_for(cart)
 
     render json: { message: "This was a success"}, status: 200
   end

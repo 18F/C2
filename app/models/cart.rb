@@ -29,6 +29,13 @@ class Cart < ActiveRecord::Base
     approvals.where(role: 'approver').where(status: 'approved').count == approver_count
   end
 
+  def create_and_send_approvals
+    approval_group.user_roles.each do | user_role |
+      Approval.create!(user_id: user_role.user_id, cart_id: id, role: user_role.role)
+      CommunicartMailer.cart_notification_email(user_role.user.email_address, self).deliver if user_role.role == "approver"
+    end
+  end
+
   def create_items_csv
     csv_string = CSV.generate do |csv|
     csv << ["description","details","vendor","url","notes","part_number","green","features","socio","quantity","unit price","price for quantity"]
