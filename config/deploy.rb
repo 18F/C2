@@ -50,3 +50,4 @@ end
 after 'bundle:install', 'deploy:symlink_configs'
 after 'deploy:setup', 'deploy:add_shared_config'
 after "deploy:update_code", "deploy:migrate"
+after "deploy:update", "deploy:cleanup"
