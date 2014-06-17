@@ -1831,22 +1831,21 @@ span.icon-approved {
   background-image: url('https://s3.amazonaws.com/18f/c2/icon-checkmark.gif');
 }
 
-span.icon-pending {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
+span.status-label-approved, span.status-label-pending, span.status-label-rejected {
+  text-transform: uppercase;
+  font-weight: bold;
 }
 
 span.status-label-approved {
   color: #393;
-  text-transform: uppercase;
-  font-weight: bold;
 }
 
 span.status-label-pending {
   color: #996;
-  text-transform: uppercase;
-  font-weight: bold;
+}
+
+span.status-label-rejected {
+  color: #966;
 }
 
 p.rejected {

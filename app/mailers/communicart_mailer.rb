@@ -20,7 +20,7 @@
   end
 
   def approval_reply_received_email(analysis, cart)
-    @approval = analysis["approve"] == "APPROVE" ? "approved" : "reject"
+    @approval = analysis["approve"] == "APPROVE" ? "approved" : "rejected"
     @approval_reply = analysis
     @cart = cart.decorate
 
