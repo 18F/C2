@@ -209,21 +209,31 @@ describe 'Creating a cart' do
   #   expect(cart.approvals.first.user.email_address).to eq 'test.email.only@some-dot-gov.gov'
   # end
 
-  it 'traits get added to the database correct' do
-    @json_params_1 = JSON.parse(params_request_1)
+  context 'cart item traits' do
+    it 'get added to the database correct' do
+      @json_params_1 = JSON.parse(params_request_1)
 
-    expect(Cart.count).to eq 0
+      expect(Cart.count).to eq 0
 
-    post 'send_cart', @json_params_1
-    expect(Cart.count).to eq 1
-    cart = Cart.first
-    expect(cart.cart_items.first.cart_item_traits.count).to eq 3
-    expect(cart.cart_items.first.cart_item_traits[0].name).to eq "socio"
-    expect(cart.cart_items.first.cart_item_traits[1].name).to eq "socio"
-    expect(cart.cart_items.first.cart_item_traits[2].name).to eq "features"
-    expect(cart.cart_items.first.cart_item_traits[0].value).to eq "s"
-    expect(cart.cart_items.first.cart_item_traits[1].value).to eq "w"
-    expect(cart.cart_items.first.cart_item_traits[2].value).to eq "bpa"
+      post 'send_cart', @json_params_1
+      expect(Cart.count).to eq 1
+      cart = Cart.first
+      expect(cart.cart_items.first.cart_item_traits.count).to eq 3
+      expect(cart.cart_items.first.cart_item_traits[0].name).to eq "socio"
+      expect(cart.cart_items.first.cart_item_traits[1].name).to eq "socio"
+      expect(cart.cart_items.first.cart_item_traits[2].name).to eq "features"
+      expect(cart.cart_items.first.cart_item_traits[0].value).to eq "s"
+      expect(cart.cart_items.first.cart_item_traits[1].value).to eq "w"
+      expect(cart.cart_items.first.cart_item_traits[2].value).to eq "bpa"
+    end
+
+    it 'get handled when not sent by the client' do
+      @json_params_1 = JSON.parse(params_request_1)
+      @json_params_1["cartItems"][0]["traits"] = nil
+
+      post 'send_cart', @json_params_1
+      expect(response.status).to eq 200
+    end
   end
 
 end

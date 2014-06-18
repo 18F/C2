@@ -130,7 +130,7 @@ class Cart < ActiveRecord::Base
         :price => cart_item_params['price'].gsub(/[\$\,]/,"").to_f,
         :cart_id => cart.id
       )
-      if !cart_item_params['traits'].empty?
+      if cart_item_params['traits']
         cart_item_params['traits'].each do |trait|
           if trait[1].kind_of?(Array)
             trait[1].each do |individual|
