@@ -47,5 +47,15 @@
 
   end
 
+  def unfound_approval_group_email(analysis)
+    puts "to email = "+ENV['ADMINISTRATIVE_ERROR_EMAIL']
+    puts "to email = "+ENV['NOTIFICATION_FROM_EMAIL']
+    mail(
+         to: ENV['ADMINISTRATIVE_ERROR_EMAIL'],
+      #   subject: "Unknown user for cart initiated cart #{analysis['cartNumber']}, but approval group #{analysis['approvalGroup']} was not found: ",
+         from: ENV['NOTIFICATION_FROM_EMAIL']
+         ).deliver
+  end
+
 end
 

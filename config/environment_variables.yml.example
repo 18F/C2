@@ -6,7 +6,7 @@ development:
   NOTIFICATION_URL: 'localhost:3000'
   NOTIFICATION_TO_EMAIL: 'sending_to_person@gmail.com'
   NOTIFICATION_FROM_EMAIL: 'reply_our_email@gmail.com'
-
+  ADMINISTRATIVE_ERROR_EMAIL: 'someone_who_will_pay_attention_to_errors@gmail.com'
 production:
   GMAIL_USERNAME: my_email@my_domain.com
   GMAIL_PASSWORD: my_secret_production_password

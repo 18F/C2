@@ -78,6 +78,14 @@ ActiveRecord::Schema.define(version: 20140604204910) do
     t.datetime "updated_at"
   end
 
+  create_table "item_traits", force: true do |t|
+    t.text     "name"
+    t.text     "value"
+    t.integer  "cart_item_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "user_roles", force: true do |t|
     t.integer "approval_group_id"
     t.integer "user_id"

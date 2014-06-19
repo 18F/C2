@@ -20,10 +20,14 @@ class CommunicartsController < ApplicationController
 
     if !approval_group_name.blank?
       approval_group = ApprovalGroup.find_by(name: approval_group_name)
-      unless duplicated_approvals_exist_for(cart)
-        approval_group.user_roles.each do | user_role |
-          Approval.create!(user_id: user_role.user_id, cart_id: cart.id, role: user_role.role)
-          CommunicartMailer.cart_notification_email(user_role.user.email_address, params, cart).deliver if user_role.role == "approver"
+      if (approval_group.blank?)
+        CommunicartMailer.unfound_approval_group_email(params)
+      else
+        unless duplicated_approvals_exist_for(cart)
+          approval_group.user_roles.each do | user_role |
+            Approval.create!(user_id: user_role.user_id, cart_id: cart.id, role: user_role.role)
+            CommunicartMailer.cart_notification_email(user_role.user.email_address, params, cart).deliver if user_role.role == "approver"
+          end
         end
       end
     else
