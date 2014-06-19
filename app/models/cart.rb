@@ -82,22 +82,13 @@ class Cart < ActiveRecord::Base
 
   def self.initialize_cart_with_items(params)
     approval_group_name = params['approvalGroup']
-
     name = !params['cartName'].blank? ? params['cartName'] : params['cartNumber']
 
-    if existing_pending_cart =  Cart.find_by(name: name, status: 'pending')
-      cart = reset_existing_cart(existing_pending_cart)
+    if pending_cart = Cart.find_by(name: name, status: 'pending')
+      cart = reset_existing_cart(pending_cart)
     else
       cart = Cart.new(name: name, status: 'pending', external_id: params['cartNumber'])
-
-      #Copy existing approvals and requester into a new set of approvals
-      last_rejected_cart = Cart.where(name: name).last
-      if last_rejected_cart && last_rejected_cart.status == 'rejected'
-        last_rejected_cart.approvals.each do | approval |
-          cart.approvals << Approval.create!(user_id: approval.user_id, role: approval.role)
-          CommunicartMailer.cart_notification_email(approval.user.email_address, cart).deliver
-        end
-      end
+      copy_existing_approvals_to(cart, name)
     end
 
     if approval_group_name
@@ -134,11 +125,21 @@ class Cart < ActiveRecord::Base
     return cart
   end
 
-  def self.reset_existing_cart(existing_cart)
-    existing_cart.approvals.map(&:destroy)
-    existing_cart.cart_items.destroy_all
-    existing_cart.approval_group = nil
-    return existing_cart
+  def self.reset_existing_cart(cart)
+    cart.approvals.map(&:destroy)
+    cart.cart_items.destroy_all
+    cart.approval_group = nil
+    return cart
+  end
+
+  def self.copy_existing_approvals_to(new_cart, cart_name)
+    previous_cart = Cart.where(name: cart_name).last
+    if previous_cart && previous_cart.status == 'rejected'
+      previous_cart.approvals.each do | approval |
+        new_cart.approvals << Approval.create!(user_id: approval.user_id, role: approval.role)
+        CommunicartMailer.cart_notification_email(approval.user.email_address, new_cart).deliver
+      end
+    end
   end
 
 end
