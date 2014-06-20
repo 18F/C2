@@ -104,25 +104,20 @@ describe 'Rejecting a cart with multiple approvers' do
 
     @json_rejection_params = JSON.parse(rejection_params)
 
-    approval_group = ApprovalGroup.create(name: "updatingRejectedApprovalGroup")
-
     cart = Cart.new(
+                    id: 135791113,
                     name: '10203040',
                     status: 'pending',
                     external_id: '10203040'
                     )
+    approval_group = FactoryGirl.create(:approval_group_with_approver_and_requester_approvals, cart_id: cart.id, name: "updatingRejectedApprovalGroup")
 
-    user = User.create!(email_address: 'test-requestser@some-dot-gov.gov')
-    UserRole.create!(user_id: user.id, approval_group_id: approval_group.id, role: 'requester')
     cart.approval_group = approval_group
     cart.cart_items << FactoryGirl.create(:cart_item)
 
     (1..3).each do |num|
       email = "approver#{num}@some-dot-gov.gov"
-
-      user = FactoryGirl.create(:user, email_address: email)
-      approval_group.user_roles << UserRole.create!(user_id: user.id, approval_group_id: approval_group.id, role: 'approver')
-      cart.approvals << Approval.create!(user_id: user.id, role: 'approver')
+      user = User.find_or_create_by(email_address: email)
     end
 
     cart.save

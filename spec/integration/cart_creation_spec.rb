@@ -5,6 +5,9 @@ describe 'Creating a cart' do
     approval_group_1 = FactoryGirl.create(:approval_group_with_approvers_and_requester, name: "firstApprovalGroup")
     approval_group_2 = ApprovalGroup.create(name: "secondApprovalGroup")
     FactoryGirl.create(:user, email_address: "test.email.only@some-dot-gov.gov")
+
+    requester1 = User.create!(email_address: 'requester-approval-group2@some-dot-gov.gov')
+    UserRole.create!(user_id: requester1.id, approval_group_id: approval_group_2.id, role: 'requester')
   end
 
 
@@ -179,6 +182,7 @@ describe 'Creating a cart' do
     expect(cart.approvals.count).to eq 3
     expect(cart.approvals.where(role: 'approver').count).to eq 2
     expect(cart.approvals.where(role: 'requester').count).to eq 1
+    expect(cart.requester.email_address).to eq 'requester1@some-dot-gov.gov'
 
     post 'send_cart', @json_params_2
 
@@ -189,9 +193,10 @@ describe 'Creating a cart' do
     expect(cart.approval_group.name).to eq "secondApprovalGroup"
     expect(cart.comments.first.comment_text).to eq "Hi, this is a comment, I hope it works!\r\nThis is the second line of the comment."
     expect(cart.comments.count).to eq 1
-    expect(cart.approvals.count).to eq 0
+    expect(cart.approvals.count).to eq 1
     expect(cart.approvals.where(role: 'approver').count).to eq 0
-    expect(cart.approvals.where(role: 'requester').count).to eq 0
+    expect(cart.approvals.where(role: 'requester').count).to eq 1
+    expect(cart.requester.email_address).to eq 'requester-approval-group2@some-dot-gov.gov'
 
   end
 

@@ -65,7 +65,7 @@ class Cart < ActiveRecord::Base
   end
 
   def requester
-    approval_group.user_roles.where(role: 'requester').first.user
+    approvals.where(role: 'requester').first.user
   end
 
 
@@ -108,6 +108,7 @@ class Cart < ActiveRecord::Base
       cart = existing_pending_cart
       cart.cart_items.destroy_all
       cart.approval_group = nil
+      cart.save
 
     end
 
