@@ -68,7 +68,6 @@ class Cart < ActiveRecord::Base
     approval_group.user_roles.where(role: 'requester').first.user
   end
 
-
   def create_approvals_csv
     csv_string = CSV.generate do |csv|
     csv << ["status","approver","created_at"]
@@ -81,68 +80,71 @@ class Cart < ActiveRecord::Base
   end
 
   def self.initialize_cart_with_items(params)
-    approval_group_name = params['approvalGroup']
-
     name = !params['cartName'].blank? ? params['cartName'] : params['cartNumber']
 
-    if existing_pending_cart =  Cart.find_by(name: name, status: 'pending')
-      existing_pending_cart.approvals.map(&:destroy)
-    end
-
-    if existing_pending_cart.blank?
-
-      cart = Cart.new(name: name, status: 'pending', external_id: params['cartNumber'])
-
-      #Copy existing approvals and requester into a new set of approvals
-      #REFACTOR
-      if last_rejected_cart = Cart.where(name: name, status: 'rejected').last
-        last_rejected_cart.approvals.each do | approval |
-          new_approval = Approval.create!(user_id: approval.user_id, role: approval.role)
-          cart.approvals << new_approval
-          CommunicartMailer.cart_notification_email(new_approval.user.email_address, cart).deliver
-        end
-      end
-
+    if pending_cart = Cart.find_by(name: name, status: 'pending')
+      cart = reset_existing_cart(pending_cart)
     else
-
-      cart = existing_pending_cart
-      cart.cart_items.destroy_all
-      cart.approval_group = nil
-
+      cart = Cart.new(name: name, status: 'pending', external_id: params['cartNumber'])
+      copy_existing_approvals_to(cart, name)
     end
 
-    if !approval_group_name.blank?
+    if params['approvalGroup']
       cart.approval_group = ApprovalGroup.find_by_name(params['approvalGroup'])
     else
       cart.approval_group = ApprovalGroup.create(name: "approval-group-#{params['cartNumber']}")
     end
-    cart.save
 
-    params['cartItems'].each do |cart_item_params|
+    cart.save
+    cart.add_cart_items(params['cartItems'])
+    return cart
+  end
+
+  def self.reset_existing_cart(cart)
+    cart.approvals.map(&:destroy)
+    cart.cart_items.destroy_all
+    cart.approval_group = nil
+    return cart
+  end
+
+  def self.copy_existing_approvals_to(new_cart, cart_name)
+    previous_cart = Cart.where(name: cart_name).last
+    if previous_cart && previous_cart.status == 'rejected'
+      previous_cart.approvals.each do | approval |
+        new_cart.approvals << Approval.create!(user_id: approval.user_id, role: approval.role)
+        CommunicartMailer.cart_notification_email(approval.user.email_address, new_cart).deliver
+      end
+    end
+  end
+
+  def add_cart_items(cart_items_params)
+    cart_items_params.each do |params|
       ci = CartItem.create(
-        :vendor => cart_item_params['vendor'],
-        :description => cart_item_params['description'],
-        :url => cart_item_params['url'],
-        :notes => cart_item_params['notes'],
-        :quantity => cart_item_params['qty'],
-        :details => cart_item_params['details'],
-        :part_number => cart_item_params['partNumber'],
-        :price => cart_item_params['price'].gsub(/[\$\,]/,"").to_f,
-        :cart_id => cart.id
+        :vendor => params['vendor'],
+        :description => params['description'],
+        :url => params['url'],
+        :notes => params['notes'],
+        :quantity => params['qty'],
+        :details => params['details'],
+        :part_number => params['partNumber'],
+        :price => params['price'].gsub(/[\$\,]/,"").to_f,
+        :cart_id => id
       )
-      if cart_item_params['traits']
-        cart_item_params['traits'].each do |trait|
+      if params['traits']
+        params['traits'].each do |trait|
           if trait[1].kind_of?(Array)
             trait[1].each do |individual|
               if !individual.blank?
-                ci.cart_item_traits << CartItemTrait.new(:name => trait[0],:value => individual,:cart_item_id => ci.id)
+                ci.cart_item_traits << CartItemTrait.new( :name => trait[0],
+                                                          :value => individual,
+                                                          :cart_item_id => ci.id
+                                                        )
               end
             end
           end
         end
       end
     end
-    return cart
   end
 
 end
