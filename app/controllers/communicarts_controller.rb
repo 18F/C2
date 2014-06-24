@@ -2,7 +2,9 @@ class CommunicartsController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def send_cart
-    cart = Cart.initialize_cart_with_items(params)
+    cx = Cart.initialize_cart_with_items(params)
+    cart = Cart.find(cx.id)
+    cart.decorate
     Comment.create(comment_text: params['initiationComment'].strip, cart_id: cart.id) unless params['initiationComment'].blank?
     cart.create_and_send_approvals unless duplicated_approvals_exist_for(cart)
 
