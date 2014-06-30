@@ -36,7 +36,7 @@ private
 
   def perform_reject_specific_actions(params, cart)
     # Send out a rejection status email to the approvers
-    cart.approvals.each do |approval|
+    cart.approvals.where(role: 'approver').each do |approval|
       CommunicartMailer.rejection_update_email(params, cart).deliver
     end
 

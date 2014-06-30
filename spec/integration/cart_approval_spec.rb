@@ -33,7 +33,7 @@ describe 'Approving a cart with multiple approvers' do
                     status: 'pending',
                     external_id: '10203040'
                     )
-    user = User.create!(email_address: 'test-requestser@some-dot-gov.gov')
+    user = User.create!(email_address: 'test-requester@some-dot-gov.gov')
 
     UserRole.create!(user_id: user.id, approval_group_id: approval_group.id, role: 'requester')
     cart.approval_group = approval_group
@@ -75,6 +75,7 @@ describe 'Approving a cart with multiple approvers' do
     expect(Cart.first.status).to eq 'pending'
     expect(Cart.first.approvals.count).to eq 4
     expect(Cart.first.approvals.where(status: 'approved').count).to eq 1
+    expect(Cart.first.requester.email_address).to eq 'test-requester@some-dot-gov.gov'
 
     @json_approval_params["fromAddress"] = "approver2@some-dot-gov.gov"
     expect(ActionMailer::Base.deliveries.count).to eq 1

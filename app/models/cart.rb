@@ -65,7 +65,7 @@ class Cart < ActiveRecord::Base
   end
 
   def requester
-    approval_group.user_roles.where(role: 'requester').first.user
+    approvals.where(role: 'requester').first.user
   end
 
   def create_approvals_csv

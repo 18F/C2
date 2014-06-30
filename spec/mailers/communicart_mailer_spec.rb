@@ -66,10 +66,12 @@ describe CommunicartMailer do
   end
 
   describe 'approval reply received email' do
+    let(:requester) { FactoryGirl.create(:user, email_address: 'test-requester-1@some-dot-gov.gov') }
+
     before do
       ENV.stub(:[])
       ENV.stub(:[]).with('NOTIFICATION_FROM_EMAIL').and_return('reply@communicart-stub.com')
-
+      cart_with_approval_group.stub(:requester).and_return(requester)
     end
 
     let(:analysis) {
@@ -90,7 +92,7 @@ describe CommunicartMailer do
     end
 
     it 'renders the receiver email' do
-      mail.to.should == ["requester1@some-dot-gov.gov"]
+      mail.to.should == ["test-requester-1@some-dot-gov.gov"]
     end
 
     it 'renders the sender email' do
