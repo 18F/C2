@@ -11,7 +11,7 @@
           Additional comments:
         </p>
 
-        <% if @cart.comments %>
+        <% unless @cart.comments.empty? %>
           <p>
             <%= @cart.comments.first.comment_text %>
           </p>
