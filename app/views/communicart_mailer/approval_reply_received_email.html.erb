@@ -26,7 +26,8 @@
     <tr>
       <td>
         <h1 class="communicart_header">Purchase Requisition</h1>
-          <h4 class="communicart_description"><%= @cart.name %></h4>
+          <h4 class="communicart_description">Cart name: <%= @cart.name %></h4>
+          <h4 class="communicart_description">Requested by: <%= @cart.requester.full_name %></h4>
       </td>
     </tr>
 

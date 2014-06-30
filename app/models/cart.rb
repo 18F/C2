@@ -32,7 +32,10 @@ class Cart < ActiveRecord::Base
   def create_and_send_approvals
     approval_group.user_roles.each do | user_role |
       Approval.create!(user_id: user_role.user_id, cart_id: id, role: user_role.role)
-      CommunicartMailer.cart_notification_email(user_role.user.email_address, self).deliver if user_role.role == "approver"
+    end
+
+    approval_group.user_roles.where(role: "approver").each do | user_role |
+      CommunicartMailer.cart_notification_email(user_role.user.email_address, self).deliver
     end
   end
 
@@ -85,7 +88,7 @@ class Cart < ActiveRecord::Base
     if pending_cart = Cart.find_by(name: name, status: 'pending')
       cart = reset_existing_cart(pending_cart)
     else
-      cart = Cart.new(name: name, status: 'pending', external_id: params['cartNumber'])
+      cart = Cart.create!(name: name, status: 'pending', external_id: params['cartNumber'])
       copy_existing_approvals_to(cart, name)
     end
 
