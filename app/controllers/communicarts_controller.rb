@@ -1,5 +1,7 @@
 class CommunicartsController < ApplicationController
   skip_before_action :verify_authenticity_token
+  before_filter :validate_access, only: :approval_reply_received
+  #CURRENT TODO: Generate a unique token that expires after default days, to be used for approvals clicked from emails
 
   def send_cart
     cx = Cart.initialize_cart_with_items(params)
@@ -33,6 +35,11 @@ class CommunicartsController < ApplicationController
 
 
 private
+
+  def validate_access
+    token = ApiToken.find_by(access_id: params[:cch])
+    raise C2AuthenticationError unless token && token.is_valid?
+  end
 
   def perform_reject_specific_actions(params, cart)
     # Send out a rejection status email to the approvers

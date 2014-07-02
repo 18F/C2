@@ -174,6 +174,17 @@ describe CommunicartsController do
       }'
     }
 
+    let(:one_clickapproval_params) {
+      '{
+      "cch": "5a4b3c2d1e",
+      "cart_id": "12345"
+      "user_id": "54321",
+      "action": "approve",
+      "scope": "all"
+      }'
+    }
+
+
     let(:rejection_params) {
       '{
       "cartNumber": "109876",
