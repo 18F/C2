@@ -13,7 +13,7 @@
 
     mail(
          to: email,
-         subject: "Please approve Cart Number: #{cart.external_id}",
+         subject: "Communicart Approval Request from #{cart.requester.full_name}: Please review Cart ##{cart.external_id}",
          from: ENV['NOTIFICATION_FROM_EMAIL']
          )
   end

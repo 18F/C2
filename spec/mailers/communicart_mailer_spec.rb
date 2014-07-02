@@ -4,7 +4,7 @@ require 'ostruct'
 describe CommunicartMailer do
   let(:approval_group) { FactoryGirl.create(:approval_group_with_approvers_and_requester, name: "anotherApprovalGroupName") }
   let(:approver) { FactoryGirl.create(:user) }
-  let(:cart) { FactoryGirl.create(:cart, name: "TestCart") }
+  let(:cart) { FactoryGirl.create(:cart_with_approvals, name: "TestCart") }
 
   describe 'cart notification email' do
 
@@ -20,7 +20,7 @@ describe CommunicartMailer do
       cart.stub(:approval_group).and_return(approval_group)
       approval_group.stub(:approvers).and_return([approver])
       approver.stub(:approver_comment).and_return([])
-      mail.subject.should == 'Please approve Cart Number: 13579'
+      mail.subject.should == 'Communicart Approval Request from Liono Requester: Please review Cart #13579'
     end
 
     it 'renders the receiver email' do
