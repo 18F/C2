@@ -1,6 +1,8 @@
+require ::File.expand_path('authentication_error.rb',  'lib/errors')
+
 class CommunicartsController < ApplicationController
   skip_before_action :verify_authenticity_token
-  before_filter :validate_access, only: :approval_reply_received
+  # before_filter :validate_access, only: :approval_reply_received
   #CURRENT TODO: Generate a unique token that expires after default days, to be used for approvals clicked from emails
 
   def send_cart
@@ -37,8 +39,8 @@ class CommunicartsController < ApplicationController
 private
 
   def validate_access
-    token = ApiToken.find_by(access_id: params[:cch])
-    raise C2AuthenticationError unless token && token.is_valid?
+    token = ApiToken.find_by(access_token: params[:cch])
+    # IMPLEMENT: raise C2::AuthenticationError unless token && token.is_valid?
   end
 
   def perform_reject_specific_actions(params, cart)
