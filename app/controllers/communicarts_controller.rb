@@ -39,14 +39,16 @@ class CommunicartsController < ApplicationController
   def approval_response
     target_cart = Cart.find_by(id: params[:cart_id])
     approval = target_cart.approvals.where(user_id: params[:user_id]).first
-    approval.update_attributes(:status, params[:approver_action])
+    approval.update_attributes(status: params[:approver_action])
   end
 
 
 private
 
   def validate_access
-    raise 'something went wrong with the token' unless token = ApiToken.find_by(access_token: params[:cch])
+    raise 'something went wrong with the token (nonexistent)' unless token = ApiToken.find_by(access_token: params[:cch])
+    raise 'something went wrong with the token (expired)' unless token.expires_at > Time.now
+    raise 'something went wrong with the token (already used)' unless token.used_at.nil?
     raise 'something went wrong with the user' unless token.user_id == params[:user_id]
     raise 'something went wrong with the cart' unless token.cart_id == params[:cart_id]
     # CURRENT TODO: raise C2::AuthenticationError unless token && token.is_valid?

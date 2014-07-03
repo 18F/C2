@@ -340,12 +340,11 @@ describe CommunicartsController do
       }'
     }
 
-    let(:token) { token = ApiToken.create!(user_id: 108642, cart_id: 246810) }
+    let(:token) { token = ApiToken.create!(user_id: 108642, cart_id: 246810, expires_at: Time.now + 5.days) }
     let(:cart) { FactoryGirl.create(:cart_with_approvals) }
 
     before do
       @json_approval_params_with_token = JSON.parse(approval_params_with_token)
-      ApiToken.should_receive(:find_by).with(access_token: "5a4b3c2d1ee1d2c3b4a5").and_return(token)
       token.stub(:user_id).and_return('108642')
       token.stub(:cart_id).and_return('246810')
       Cart.stub(:find_by).with(id: '246810').and_return(cart)
@@ -353,6 +352,9 @@ describe CommunicartsController do
     end
 
     context 'valid params' do
+      before do
+        ApiToken.should_receive(:find_by).with(access_token: "5a4b3c2d1ee1d2c3b4a5").and_return(token)
+      end
 
       it 'will be successful' do
         Approval.any_instance.stub(:update_attributes)
@@ -369,10 +371,28 @@ describe CommunicartsController do
         mock_approval = mock_model('Approval')
         mock_approval = FactoryGirl.create(:approval)
         cart.stub_chain(:approvals, :where, :first).and_return(mock_approval)
-        mock_approval.should_receive(:update_attributes).with(:status, 'approve')
+        mock_approval.should_receive(:update_attributes).with(status: 'approve')
         put 'approval_response', @json_approval_params_with_token
       end
+    end
 
+    context 'Request token' do
+      it 'fails when the token does not exist' do
+        @json_approval_params_with_token["cch"] = nil
+        expect { put 'approval_response', @json_approval_params_with_token }.to raise_error
+      end
+
+      it 'fails when the token has expired' do
+        token.update_attributes(expires_at: Time.now - 8.days)
+        ApiToken.should_receive(:find_by).with(access_token: "5a4b3c2d1ee1d2c3b4a5").and_return(token)
+        expect { put 'approval_response', @json_approval_params_with_token }.to raise_error
+      end
+
+      it 'fails when the token has already been used once' do
+        token.update_attributes(used_at: Time.now - 1.hour)
+        ApiToken.should_receive(:find_by).with(access_token: "5a4b3c2d1ee1d2c3b4a5").and_return(token)
+        expect { put 'approval_response', @json_approval_params_with_token }.to raise_error
+      end
     end
   end
 
