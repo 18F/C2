@@ -35,7 +35,7 @@ class CommunicartsController < ApplicationController
     perform_reject_specific_actions(params, cart) if approve_or_reject_status == 'rejected'
   end
 
-  # CURRENT TODO: Move this to a RESTful carts_controller route
+  # CURRENT TODO: Move this to a RESTful carts_controller route and consider putting this into a command
   def approval_response
     target_cart = Cart.find_by(id: params[:cart_id])
     approval = target_cart.approvals.where(user_id: params[:user_id]).first

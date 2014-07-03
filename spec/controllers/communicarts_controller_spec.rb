@@ -340,7 +340,7 @@ describe CommunicartsController do
       }'
     }
 
-    let(:token) { token = ApiToken.create! }
+    let(:token) { token = ApiToken.create!(user_id: 108642, cart_id: 246810) }
     let(:cart) { FactoryGirl.create(:cart_with_approvals) }
 
     before do
