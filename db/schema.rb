@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140702164222) do
+ActiveRecord::Schema.define(version: 20140703191537) do
 
   create_table "api_tokens", force: true do |t|
     t.string   "access_token"
@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(version: 20140702164222) do
     t.datetime "expires_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "used_at"
   end
 
   create_table "approval_groups", force: true do |t|
