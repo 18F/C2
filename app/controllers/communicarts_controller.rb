@@ -37,7 +37,6 @@ class CommunicartsController < ApplicationController
 
   # CURRENT TODO: Move this to a RESTful carts_controller route
   def approval_response
-    #grab the approval and update it with action
     target_cart = Cart.find_by(id: params[:cart_id])
     approval = target_cart.approvals.where(user_id: params[:user_id]).first
     approval.update_attributes(:status, params[:approver_action])
@@ -47,10 +46,10 @@ class CommunicartsController < ApplicationController
 private
 
   def validate_access
-    # CURRENT TODO: raise C2::AuthenticationError unless token && token.is_valid?
     raise 'something went wrong with the token' unless token = ApiToken.find_by(access_token: params[:cch])
     raise 'something went wrong with the user' unless token.user_id == params[:user_id]
     raise 'something went wrong with the cart' unless token.cart_id == params[:cart_id]
+    # CURRENT TODO: raise C2::AuthenticationError unless token && token.is_valid?
   end
 
   def perform_reject_specific_actions(params, cart)
