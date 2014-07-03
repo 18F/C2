@@ -3,19 +3,19 @@ require 'spec_helper'
 describe 'Approving a cart with multiple approvers' do
 
   let(:approval_params) {
-      '{
-      "cartNumber": "10203040",
-      "category": "approvalreply",
-      "attention": "",
-      "fromAddress": "approver1@some-dot-gov.gov",
-      "gsaUserName": "",
-      "gsaUsername": null,
-      "date": "Sun, 13 Apr 2014 18:06:15 -0400",
-      "approve": "APPROVE",
-      "disapprove": null,
-      "comment" : "spudcomment"
-      }'
-    }
+    '{
+    "cartNumber": "10203040",
+    "category": "approvalreply",
+    "attention": "",
+    "fromAddress": "approver1@some-dot-gov.gov",
+    "gsaUserName": "",
+    "gsaUsername": null,
+    "date": "Sun, 13 Apr 2014 18:06:15 -0400",
+    "approve": "APPROVE",
+    "disapprove": null,
+    "comment" : "spudcomment"
+    }'
+  }
 
   before do
     ActionMailer::Base.delivery_method = :test

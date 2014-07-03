@@ -2,10 +2,10 @@ require ::File.expand_path('authentication_error.rb',  'lib/errors')
 
 class CommunicartsController < ApplicationController
   skip_before_action :verify_authenticity_token
-  # before_filter :validate_access, only: :approval_reply_received
-  #CURRENT TODO: Generate a unique token that expires after default days, to be used for approvals clicked from emails
+  before_filter :validate_access, only: :approval_response
 
   def send_cart
+  #CURRENT TODO: Generate a unique token that expires after default days, to be used for approvals clicked from emails
     cx = Cart.initialize_cart_with_items(params)
     cart = Cart.find(cx.id)
     cart.decorate
@@ -35,12 +35,22 @@ class CommunicartsController < ApplicationController
     perform_reject_specific_actions(params, cart) if approve_or_reject_status == 'rejected'
   end
 
+  # CURRENT TODO: Move this to a RESTful carts_controller route
+  def approval_response
+    #grab the approval and update it with action
+    target_cart = Cart.find_by(id: params[:cart_id])
+    approval = target_cart.approvals.where(user_id: params[:user_id]).first
+    approval.update_attributes(:status, params[:approver_action])
+  end
+
 
 private
 
   def validate_access
-    token = ApiToken.find_by(access_token: params[:cch])
-    # IMPLEMENT: raise C2::AuthenticationError unless token && token.is_valid?
+    # CURRENT TODO: raise C2::AuthenticationError unless token && token.is_valid?
+    raise 'something went wrong with the token' unless token = ApiToken.find_by(access_token: params[:cch])
+    raise 'something went wrong with the user' unless token.user_id == params[:user_id]
+    raise 'something went wrong with the cart' unless token.cart_id == params[:cart_id]
   end
 
   def perform_reject_specific_actions(params, cart)

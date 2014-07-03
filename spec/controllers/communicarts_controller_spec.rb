@@ -329,4 +329,51 @@ describe CommunicartsController do
     end
 
   end
+
+  describe 'PUT approval_response: Approving a cart through email endpoint' do
+    let(:approval_params_with_token) {
+      '{
+      "cch": "5a4b3c2d1ee1d2c3b4a5",
+      "cart_id": "246810",
+      "user_id": "108642",
+      "approver_action": "approve"
+      }'
+    }
+
+    let(:token) { token = ApiToken.create! }
+    let(:cart) { FactoryGirl.create(:cart_with_approvals) }
+
+    before do
+      @json_approval_params_with_token = JSON.parse(approval_params_with_token)
+      ApiToken.should_receive(:find_by).with(access_token: "5a4b3c2d1ee1d2c3b4a5").and_return(token)
+      token.stub(:user_id).and_return('108642')
+      token.stub(:cart_id).and_return('246810')
+      Cart.stub(:find_by).with(id: '246810').and_return(cart)
+      Approval.last.update_attributes(user_id: '108642')
+    end
+
+    context 'valid params' do
+
+      it 'will be successful' do
+        Approval.any_instance.stub(:update_attributes)
+        put 'approval_response', @json_approval_params_with_token
+        expect(response.status).to eq 200
+      end
+
+      it 'successfully validates the user_id and cart_id with the token' do
+        Approval.any_instance.stub(:update_attributes)
+        expect { put 'approval_response', @json_approval_params_with_token }.not_to raise_error
+      end
+
+      it 'updates the approval with the given action' do
+        mock_approval = mock_model('Approval')
+        mock_approval = FactoryGirl.create(:approval)
+        cart.stub_chain(:approvals, :where, :first).and_return(mock_approval)
+        mock_approval.should_receive(:update_attributes).with(:status, 'approve')
+        put 'approval_response', @json_approval_params_with_token
+      end
+
+    end
+  end
+
 end
