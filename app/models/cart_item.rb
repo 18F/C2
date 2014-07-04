@@ -1,6 +1,7 @@
 class CartItem < ActiveRecord::Base
   belongs_to :cart
   has_many :cart_item_traits
+  has_many :properties, as: :hasproperties
 
   def green?
     cart_item_traits.map(&:name).include?('green')
