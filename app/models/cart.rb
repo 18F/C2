@@ -12,6 +12,7 @@ class Cart < ActiveRecord::Base
     approve: 'approved',
     reject: 'rejected'
   }
+  has_many :properties, as: :hasproperties
 
   def self.human_readable_time(t1,offset)
     return t1.utc.getlocal(offset).asctime
