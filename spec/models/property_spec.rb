@@ -11,54 +11,41 @@ let(:informal_cart) { FactoryGirl.create(:cart, name: 'Informal Cart') }
       p.update_attribute(:hasproperties,cart_item)
       expect(cart_item.properties[0].value = "bud")
     end
+
+    it 'getProp and setProp work on a cart_item' do
+      cart_item.setProp('spud','bud')
+      v = cart_item.getProp('spud')
+      expect(v).to eq "bud"
+    end
+
     it 'two properties can be added to a cart_item' do
-      p0 = Property.create(property: 'spud',value: 'bud')
-      p1 = Property.create(property: 'love',value: 'dove')
-      p0.update_attribute(:hasproperties,cart_item)
-      p1.update_attribute(:hasproperties,cart_item)
-      cartProps = Property.where(:hasproperties_id => cart_item.id,:hasproperties_type => "CartItem")
-      # I don't actually believe this order is guaranteed!
-      expect(cartProps[0].value).to eq "bud"
-      expect(cartProps[0].property).to eq "spud"
-      expect(cartProps[1].value).to eq "dove"
-      expect(cartProps[1].property).to eq "love"
+      cart_item.setProp('spud','bud')
+      cart_item.setProp('love','dove')
+      expect(cart_item.getProp('spud')).to eq "bud"
+      expect(cart_item.getProp('love')).to eq "dove"
     end
 
     it 'two properties can be added to two distinct kinds of objects' do
-      p0 = Property.create(property: 'spud',value: 'bud')
-      p1 = Property.create(property: 'love',value: 'dove')
-      p0.update_attribute(:hasproperties,cart_item)
-      p1.update_attribute(:hasproperties,user)
-      cartProps = Property.where(:hasproperties_id => cart_item.id,:hasproperties_type => "CartItem")
-      userProps = Property.where(:hasproperties_id => user.id,:hasproperties_type => "User")
-      # I don't actually believe this order is guaranteed!
-      expect(cartProps[0].value).to eq "bud"
-      expect(cartProps[0].property).to eq "spud"
+      cart_item.setProp('spud','bud')
+      user.setProp('love','dove')
 
-      expect(userProps[0].value).to eq "dove"
-      expect(userProps[0].property).to eq "love"
+      expect(cart_item.getProp('spud')).to eq "bud"
+      expect(user.getProp('love')).to eq "dove"
     end
 
     it 'two properties can be added under oen tag.' do
-      p0 = Property.create(property: 'spud',value: 'bud')
-      p1 = Property.create(property: 'love',value: 'dove')
-      p2 = Property.create(property: 'spud',value: 'stud')
-      p0.update_attribute(:hasproperties,cart_item)
-      p1.update_attribute(:hasproperties,cart_item)
-      p2.update_attribute(:hasproperties,cart_item)
+      cart_item.setProp('spud','bud')
+      cart_item.setProp('love','dove')
+      cart_item.setProp('spud','stud')
 
-      cartProps = Property.where(:hasproperties_id => cart_item.id,:hasproperties_type => "CartItem",:property => 'spud')
-      # I don't actually believe this order is guaranteed!
-
-      expect(cartProps[0].value).to eq "bud"
-      expect(cartProps[0].property).to eq "spud"
-
-      expect(cartProps[1].value).to eq "stud"
-      expect(cartProps[1].property).to eq "spud"
-
+      expect(cart_item.getProp('spud')).to eq "stud"
+      expect(cart_item.getProp('love')).to eq "dove"
     end
 
     it 'Can create an informal cart with items that evolve over time' do
+
+      firstComment = 'cannot find this'
+      originatingEmail = 'get: description #1, #2, #3, and give to Jane, Jill and Tom'
       # first we create the Cart with a few items
       ci0 = CartItem.create(
         :description => 'description #1',
@@ -84,16 +71,13 @@ let(:informal_cart) { FactoryGirl.create(:cart, name: 'Informal Cart') }
         :cart_id => informal_cart.id
       )
       # Then we use our helper functions to decorate it with values
-      p0 = Property.create(property: 'comment0',value: 'cannot find this')
-      p1 = Property.create(property: 'comment1',value: 'found it on the web')
-      p2 = Property.create(property: 'comment2',value: 'but is it good enough?')
-      p0.update_attribute(:hasproperties,ci0)
-      p1.update_attribute(:hasproperties,ci0)
-      p2.update_attribute(:hasproperties,ci0)
-      
-      # Then we use our helper functions to read out those values
-      ci0Props = Property.where(:hasproperties_id => ci0.id,:hasproperties_type => "CartItem",:property => 'comment0')
-      expect(ci0Props[0].value).to eq 'cannot find this'
+      cart_item.setProp('comment0',firstComment)
+      cart_item.setProp('comment1','found it on the web')
+      cart_item.setProp('comment2','but is it good enough?')
+
+      informal_cart.setProp('originatingEmail',originatingEmail)
+      expect(cart_item.getProp('comment0')).to eq firstComment
+      expect(informal_cart.getProp('originatingEmail')).to eq originatingEmail
       
     end
   end
