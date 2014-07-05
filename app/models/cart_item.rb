@@ -1,4 +1,5 @@
 class CartItem < ActiveRecord::Base
+  include PropMixin
   belongs_to :cart
   has_many :cart_item_traits
   has_many :properties, as: :hasproperties

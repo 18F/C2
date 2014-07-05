@@ -1,6 +1,7 @@
 require 'csv'
 
 class Cart < ActiveRecord::Base
+  include PropMixin
   has_many :cart_items
   has_many :comments
   has_many :approvals
