@@ -11,6 +11,18 @@ class CommunicartsController < ApplicationController
     render json: { message: "This was a success"}, status: 200
   end
 
+  def create_informal_cart
+    # This is creating a bogus item, but really, we need to do some NLP to compute them---
+    # AND also get this working with Mario.
+    cx = Cart.initialize_informal_cart(params)
+    cart = Cart.find(cx.id)
+    cart.decorate
+    cart.setProp('original',params['body'])
+
+    render json: { message: "This was a success"}, status: 200
+  end
+
+
   def duplicated_approvals_exist_for(cart)
     cart.approvals.count > 0
   end

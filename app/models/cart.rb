@@ -105,6 +105,16 @@ class Cart < ActiveRecord::Base
     return cart
   end
 
+  def self.initialize_informal_cart(params)
+    cart = Cart.create!(name: 'sampleNameThatIsNotReally', status: 'pending')
+    cart.save
+    ci = CartItem.create(
+                         :cart_id => cart.id
+                         )
+
+    return cart
+  end
+
   def self.reset_existing_cart(cart)
     cart.approvals.map(&:destroy)
     cart.cart_items.destroy_all
