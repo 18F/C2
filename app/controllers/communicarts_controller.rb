@@ -35,11 +35,10 @@ class CommunicartsController < ApplicationController
     perform_reject_specific_actions(params, cart) if approve_or_reject_status == 'rejected'
   end
 
-  # CURRENT TODO: Move this to a RESTful carts_controller route and consider putting this into a command
   def approval_response
-    target_cart = Cart.find_by(id: params[:cart_id])
+    target_cart = Cart.find_by(id: params[:cart_id].to_i)
     approval = target_cart.approvals.where(user_id: params[:user_id]).first
-    approval.update_attributes(status: params[:approver_action])
+    approval.update_attributes(status: mapped_attributes(params[:approver_action]))
 
     @token.update_attributes(used_at: Time.now)
     flash[:notice] = "You have successfully updated Cart (no. 12345). See the cart details below"
@@ -47,6 +46,10 @@ class CommunicartsController < ApplicationController
 
 
 private
+
+  def mapped_attributes action
+    Cart::APPROVAL_ATTRIBUTES_MAP[action.to_sym]
+  end
 
   def validate_access
     raise 'something went wrong with the token (nonexistent)' unless @token = ApiToken.find_by(access_token: params[:cch])

@@ -8,6 +8,8 @@ class Cart < ActiveRecord::Base
   has_one :approval_group
   has_one :api_token
 
+  APPROVAL_ATTRIBUTES_MAP = { approve: 'approved' }
+
   def self.human_readable_time(t1,offset)
     return t1.utc.getlocal(offset).asctime
   end

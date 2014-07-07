@@ -345,10 +345,10 @@ describe CommunicartsController do
 
     before do
       @json_approval_params_with_token = JSON.parse(approval_params_with_token)
-      token.stub(:user_id).and_return('108642')
-      token.stub(:cart_id).and_return('246810')
-      Cart.stub(:find_by).with(id: '246810').and_return(cart)
-      Approval.last.update_attributes(user_id: '108642')
+      token.stub(:user_id).and_return(108642)
+      token.stub(:cart_id).and_return(246810)
+      Cart.stub(:find_by).with(id: 246810).and_return(cart)
+      Approval.last.update_attributes(user_id: 108642)
     end
 
     context 'valid params' do
@@ -371,7 +371,7 @@ describe CommunicartsController do
         mock_approval = mock_model('Approval')
         mock_approval = FactoryGirl.create(:approval)
         cart.stub_chain(:approvals, :where, :first).and_return(mock_approval)
-        mock_approval.should_receive(:update_attributes).with(status: 'approve')
+        mock_approval.should_receive(:update_attributes).with(status: 'approved')
         put 'approval_response', @json_approval_params_with_token
       end
     end
