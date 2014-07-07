@@ -38,7 +38,7 @@ class Cart < ActiveRecord::Base
     end
 
     approvals.where(role: "approver").each do | approval |
-      ApiToken.create!(user_id: approval.user_id, cart_id: self.id, expires_at: Time.now + 7.days) #TODO: Configure a reasonable default for expiration
+      ApiToken.create!(user_id: approval.user_id, cart_id: self.id, expires_at: Time.now + 7.days)
       CommunicartMailer.cart_notification_email(approval.user.email_address, self, approval).deliver
     end
   end

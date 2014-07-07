@@ -14,7 +14,7 @@ describe CommunicartMailer do
     before do
       ENV.stub(:[])
       ENV.stub(:[]).with('NOTIFICATION_FROM_EMAIL').and_return('reply@communicart-stub.com')
-      cart.stub(:api_token).and_return(api_token)
+      ApiToken.stub_chain(:where, :where, :last).and_return(api_token)
     end
 
     it 'renders the subject' do

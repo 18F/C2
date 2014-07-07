@@ -5,6 +5,7 @@
     @url = ENV['NOTIFICATION_URL']
     @cart = cart.decorate
     @approval = approval
+    @token = ApiToken.where(user_id: @approval.user_id).where(cart_id: @cart.id).last
 
     if cart.all_approvals_received?
       attachments['Communicart' + cart.name + '.details.csv'] = cart.create_items_csv

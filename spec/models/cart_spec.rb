@@ -29,7 +29,7 @@ describe Cart do
     let(:api_token) { FactoryGirl.create(:api_token) }
 
     before do
-      cart.stub(:api_token).and_return(api_token)
+      ApiToken.stub_chain(:where, :where, :last).and_return(api_token)
     end
 
     it 'creates a new token for each approver' do
