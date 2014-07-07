@@ -42,4 +42,6 @@ C2::Application.configure do
     enable_starttls_auto: true
   }
 
+  config.action_mailer.default_url_options = { :host => 'localhost' }
+
 end
