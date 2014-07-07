@@ -26,6 +26,11 @@ describe Cart do
 
   describe '#create_and_send_approvals' do
     let(:cart) { FactoryGirl.create(:cart_with_approval_group) }
+    let(:api_token) { FactoryGirl.create(:api_token) }
+
+    before do
+      cart.stub(:api_token).and_return(api_token)
+    end
 
     it 'creates a new token for each approver' do
       ApiToken.should_receive(:create!).exactly(2).times
