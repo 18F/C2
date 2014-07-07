@@ -117,6 +117,12 @@
                   <td class="total-price total-amount"><p><strong>$<%= number_with_precision(@cart.total_price, precision: 2) %></strong></p></td>
                 </tr>
 
+                <tr>
+                  <td colspan=5>
+                    <%= link_to "Approve all items with one click", "/approval_response", cart_id: @cart.id, user_id: @approval.user_id cch: @cart.api_token.access_token %>
+                  </td>
+                </tr>
+
           </table>
 
         </td>

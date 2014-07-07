@@ -6,6 +6,7 @@ class Cart < ActiveRecord::Base
   has_many :approvals
   has_many :approval_users, through: :approvals, source: :user
   has_one :approval_group
+  has_one :access_token
 
   def self.human_readable_time(t1,offset)
     return t1.utc.getlocal(offset).asctime
@@ -34,9 +35,9 @@ class Cart < ActiveRecord::Base
       Approval.create!(user_id: user_role.user_id, cart_id: self.id, role: user_role.role)
     end
 
-    approval_group.user_roles.where(role: "approver").each do | user_role |
-      ApiToken.create!(user_id: user_role.user_id, cart_id: self.id, expires_at: Time.now + 7.days) #TODO: Configure a reasonable default for expiration
-      CommunicartMailer.cart_notification_email(user_role.user.email_address, self).deliver
+    approvals.where(role: "approver").each do | approval |
+      ApiToken.create!(user_id: approval.user_id, cart_id: self.id, expires_at: Time.now + 7.days) #TODO: Configure a reasonable default for expiration
+      CommunicartMailer.cart_notification_email(approval.user.email_address, self).deliver
     end
   end
 
