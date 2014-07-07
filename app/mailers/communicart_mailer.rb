@@ -1,9 +1,10 @@
   class CommunicartMailer < ActionMailer::Base
   layout 'communicart_base'
 
-  def cart_notification_email(email, cart)
+  def cart_notification_email(email, cart, approval)
     @url = ENV['NOTIFICATION_URL']
     @cart = cart.decorate
+    @approval = approval
 
     if cart.all_approvals_received?
       attachments['Communicart' + cart.name + '.details.csv'] = cart.create_items_csv

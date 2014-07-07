@@ -393,6 +393,10 @@ describe CommunicartsController do
         ApiToken.should_receive(:find_by).with(access_token: "5a4b3c2d1ee1d2c3b4a5").and_return(token)
         expect { put 'approval_response', @json_approval_params_with_token }.to raise_error
       end
+
+      it 'marks a token as used' do
+        pending
+      end
     end
   end
 

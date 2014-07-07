@@ -1,1 +1,10 @@
 !!!
+%head
+  %title= "Communicart: Approval"
+%html
+  %body
+    - if flash[:notice]
+      = flash[:notice]
+
+    %h1
+      Here is the cart information
