@@ -33,23 +33,18 @@ class CommunicartsController < ApplicationController
     render json: { message: "approval_reply_received"}, status: 200
 
     perform_reject_specific_actions(params, cart) if approve_or_reject_status == 'rejected'
+
   end
 
   def approval_response
-    target_cart = Cart.find_by(id: params[:cart_id].to_i)
-    approval = target_cart.approvals.where(user_id: params[:user_id]).first
-    approval.update_attributes(status: mapped_attributes(params[:approver_action]))
-
+    Commands::Approval::UpdateFromApprovalResponse.new.perform(params)
     @token.update_attributes(used_at: Time.now)
+
     flash[:notice] = "You have successfully updated Cart (no. 12345). See the cart details below"
   end
 
 
 private
-
-  def mapped_attributes action
-    Cart::APPROVAL_ATTRIBUTES_MAP[action.to_sym]
-  end
 
   def validate_access
     raise 'something went wrong with the token (nonexistent)' unless @token = ApiToken.find_by(access_token: params[:cch])
