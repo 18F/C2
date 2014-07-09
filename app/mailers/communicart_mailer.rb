@@ -43,7 +43,7 @@
   end
 
   def rejection_update_email(params, cart)
-    # CURRENT TODO: Fill out the content of this email to the approvers
+    # TODO: Fill out the content of this email to the approvers
 
   end
 

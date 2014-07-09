@@ -5,7 +5,6 @@ class CommunicartsController < ApplicationController
   before_filter :validate_access, only: :approval_response
 
   def send_cart
-  #CURRENT TODO: Generate a unique token that expires after default days, to be used for approvals clicked from emails
     cx = Cart.initialize_cart_with_items(params)
     cart = Cart.find(cx.id)
     cart.decorate
@@ -47,16 +46,15 @@ class CommunicartsController < ApplicationController
 private
 
   def validate_access
-    raise 'something went wrong with the token (nonexistent)' unless @token = ApiToken.find_by(access_token: params[:cch])
+    raise AuthenticationError.new(message: 'something went wrong with the token (nonexistent)') unless @token = ApiToken.find_by(access_token: params[:cch])
 
     if @token.expires_at && @token.expires_at < Time.now
-      raise 'something went wrong with the token (expired)'
+      raise AuthenticationError.new(message: 'something went wrong with the token (expired)')
     end
 
-    raise 'something went wrong with the token (already used)' unless @token.used_at.nil?
-    raise 'something went wrong with the user (wrong user)' unless @token.user_id == params[:user_id].to_i
-    raise 'something went wrong with the cart (wrong cart)' unless @token.cart_id == params[:cart_id].to_i
-    # CURRENT TODO: raise C2::AuthenticationError unless token && token.is_valid?
+    raise AuthenticationError.new(message: 'something went wrong with the token (already used)') unless @token.used_at.nil?
+    raise AuthenticationError.new(message: 'something went wrong with the user (wrong user)') unless @token.user_id == params[:user_id].to_i
+    raise AuthenticationError.new(message: 'something went wrong with the cart (wrong cart)') unless @token.cart_id == params[:cart_id].to_i
   end
 
   def perform_reject_specific_actions(params, cart)
@@ -64,7 +62,6 @@ private
     cart.approvals.where(role: 'approver').each do |approval|
       CommunicartMailer.rejection_update_email(params, cart).deliver
     end
-
     # Reset everything for the next time they send a cart request
   end
 
@@ -72,5 +69,9 @@ private
     #TODO: Refactor duplication with ComunicartMailer#approval_reply_received_email
     return 'approved' if params["approve"] == "APPROVE"
     return 'rejected' if params["disapprove"] == "REJECT"
+  end
+
+  def authentication_error
+    flash[:notice] = "Something went wrong: #{error}"
   end
 end
