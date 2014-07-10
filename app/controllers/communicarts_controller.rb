@@ -4,6 +4,8 @@ class CommunicartsController < ApplicationController
   skip_before_action :verify_authenticity_token
   before_filter :validate_access, only: :approval_response
 
+  rescue_from AuthenticationError, with: :authentication_error
+
   def send_cart
     cx = Cart.initialize_cart_with_items(params)
     cart = Cart.find(cx.id)
@@ -72,6 +74,8 @@ private
   end
 
   def authentication_error
-    flash[:notice] = "Something went wrong: #{error}"
+    flash[:notice] = "Something went wrong, sir. How about doing this? #{params}"
+    # redirect_to "401.html"
+    render
   end
 end
