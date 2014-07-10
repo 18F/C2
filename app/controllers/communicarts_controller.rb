@@ -43,7 +43,9 @@ class CommunicartsController < ApplicationController
     Commands::Approval::UpdateFromApprovalResponse.new.perform(params)
     @token.update_attributes(used_at: Time.now)
 
-    flash[:notice] = "You have successfully updated Cart (no. 12345). See the cart details below"
+    @cart = Cart.find_by(id: params[:cart_id].to_i).decorate
+    @approval = @cart.approvals.where(user_id: params[:user_id]).first
+    flash[:notice] = "You have successfully updated Cart #{@cart.external_id}. See the cart details below"
   end
 
 

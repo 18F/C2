@@ -11,6 +11,8 @@ gem 'capistrano', '~>2.1'
 gem 'rvm-capistrano'
 gem 'awesome_print'
 gem 'jquery-rails', '~> 2.1'
+gem 'sass-rails'
+gem 'uglifier'
 
 group :test, :development do
   gem 'letter_opener'
