@@ -4,7 +4,9 @@ class CommunicartsController < ApplicationController
   skip_before_action :verify_authenticity_token
   before_filter :validate_access, only: :approval_response
 
-  rescue_from AuthenticationError, with: :authentication_error
+  rescue_from AuthenticationError do |exception|
+    authentication_error(exception)
+  end
 
   def send_cart
     cx = Cart.initialize_cart_with_items(params)
@@ -54,9 +56,9 @@ private
       raise AuthenticationError.new(message: 'something went wrong with the token (expired)')
     end
 
-    raise AuthenticationError.new(message: 'something went wrong with the token (already used)') unless @token.used_at.nil?
-    raise AuthenticationError.new(message: 'something went wrong with the user (wrong user)') unless @token.user_id == params[:user_id].to_i
-    raise AuthenticationError.new(message: 'something went wrong with the cart (wrong cart)') unless @token.cart_id == params[:cart_id].to_i
+    raise AuthenticationError.new(msg: 'Something went wrong with the token. It has already been used.') unless @token.used_at.nil?
+    raise AuthenticationError.new(msg: 'Something went wrong with the user (wrong person)') unless @token.user_id == params[:user_id].to_i
+    raise AuthenticationError.new(msg: 'Something went wrong with the cart (wrong cart)') unless @token.cart_id == params[:cart_id].to_i
   end
 
   def perform_reject_specific_actions(params, cart)
@@ -73,9 +75,8 @@ private
     return 'rejected' if params["disapprove"] == "REJECT"
   end
 
-  def authentication_error
-    flash[:notice] = "Something went wrong, sir. How about doing this? #{params}"
-    # redirect_to "401.html"
-    render
+  def authentication_error(e)
+    flash[:notice] = e.message
+    redirect_to "/498.html"
   end
 end
