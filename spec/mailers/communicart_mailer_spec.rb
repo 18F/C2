@@ -8,11 +8,13 @@ describe CommunicartMailer do
 
   describe 'cart notification email' do
 
-    let(:mail) { CommunicartMailer.cart_notification_email('email.to.email@testing.com', cart) }
+    let(:mail) { CommunicartMailer.cart_notification_email('email.to.email@testing.com', cart, cart.approvals.first) }
+    let(:api_token) { FactoryGirl.create(:api_token) }
 
     before do
       ENV.stub(:[])
       ENV.stub(:[]).with('NOTIFICATION_FROM_EMAIL').and_return('reply@communicart-stub.com')
+      ApiToken.stub_chain(:where, :where, :last).and_return(api_token)
     end
 
     it 'renders the subject' do

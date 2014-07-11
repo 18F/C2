@@ -174,6 +174,17 @@ describe CommunicartsController do
       }'
     }
 
+    let(:one_clickapproval_params) {
+      '{
+      "cch": "5a4b3c2d1e",
+      "cart_id": "12345"
+      "user_id": "54321",
+      "action": "approve",
+      "scope": "all"
+      }'
+    }
+
+
     let(:rejection_params) {
       '{
       "cartNumber": "109876",
@@ -318,4 +329,73 @@ describe CommunicartsController do
     end
 
   end
+
+  describe 'PUT approval_response: Approving a cart through email endpoint' do
+    let(:approval_params_with_token) {
+      '{
+      "cch": "5a4b3c2d1ee1d2c3b4a5",
+      "cart_id": "246810",
+      "user_id": "108642",
+      "approver_action": "approve"
+      }'
+    }
+
+    let(:token) { token = ApiToken.create!(user_id: 108642, cart_id: 246810, expires_at: Time.now + 5.days) }
+    let(:cart) { FactoryGirl.create(:cart_with_approvals) }
+    let(:requester) { FactoryGirl.create(:user) }
+
+    before do
+      @json_approval_params_with_token = JSON.parse(approval_params_with_token)
+      token.stub(:user_id).and_return(108642)
+      token.stub(:cart_id).and_return(246810)
+      Cart.stub(:find_by).with(id: 246810).and_return(cart)
+      Cart.any_instance.stub(:requester).and_return(requester)
+      Approval.last.update_attributes(user_id: 108642)
+    end
+
+    context 'valid params' do
+      before do
+        ApiToken.should_receive(:find_by).with(access_token: "5a4b3c2d1ee1d2c3b4a5").and_return(token)
+      end
+
+      it 'will be successful' do
+        Approval.any_instance.stub(:update_attributes)
+        put 'approval_response', @json_approval_params_with_token
+        expect(response.status).to eq 200
+      end
+
+      it 'successfully validates the user_id and cart_id with the token' do
+        Approval.any_instance.stub(:update_attributes)
+        expect { put 'approval_response', @json_approval_params_with_token }.not_to raise_error
+      end
+
+    end
+
+    context 'Request token' do
+      it 'fails when the token does not exist' do
+        @json_approval_params_with_token["cch"] = nil
+        bypass_rescue
+        expect { put 'approval_response', @json_approval_params_with_token }.to raise_error(AuthenticationError)
+      end
+
+      it 'fails when the token has expired' do
+        token.update_attributes(expires_at: Time.now - 8.days)
+        ApiToken.should_receive(:find_by).with(access_token: "5a4b3c2d1ee1d2c3b4a5").and_return(token)
+        bypass_rescue
+        expect { put 'approval_response', @json_approval_params_with_token }.to raise_error(AuthenticationError)
+      end
+
+      it 'fails when the token has already been used once' do
+        token.update_attributes(used_at: Time.now - 1.hour)
+        ApiToken.should_receive(:find_by).with(access_token: "5a4b3c2d1ee1d2c3b4a5").and_return(token)
+        bypass_rescue
+        expect { put 'approval_response', @json_approval_params_with_token }.to raise_error(AuthenticationError)
+      end
+
+      it 'marks a token as used' do
+        pending
+      end
+    end
+  end
+
 end

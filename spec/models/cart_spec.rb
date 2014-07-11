@@ -22,6 +22,27 @@ describe Cart do
         expect(cart.status).to eq('pending')
       end
     end
-
   end
+
+  describe '#create_and_send_approvals' do
+    let(:cart) { FactoryGirl.create(:cart_with_approval_group) }
+    let(:api_token) { FactoryGirl.create(:api_token) }
+
+    before do
+      ApiToken.stub_chain(:where, :where, :last).and_return(api_token)
+    end
+
+    it 'creates a new token for each approver' do
+      ApiToken.should_receive(:create!).exactly(2).times
+      cart.create_and_send_approvals
+    end
+
+    it 'sends a cart notification email' do
+      mock_mailer = double
+      CommunicartMailer.should_receive(:cart_notification_email).exactly(2).times.and_return(mock_mailer)
+      mock_mailer.should_receive(:deliver).exactly(2).times
+      cart.create_and_send_approvals
+    end
+  end
+
 end

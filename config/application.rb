@@ -30,5 +30,7 @@ module C2
       end
     end
 
+    config.exceptions_app = self.routes
+
   end
 end

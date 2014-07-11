@@ -26,3 +26,5 @@ rvm:
 branches:
   only:
     - master
+
+env: NOTIFICATION_FROM_EMAIL=test-reply-communicart.sender@some-dot-gov.gov

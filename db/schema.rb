@@ -11,7 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140604204910) do
+ActiveRecord::Schema.define(version: 20140703191537) do
+
+  create_table "api_tokens", force: true do |t|
+    t.string   "access_token"
+    t.integer  "user_id"
+    t.integer  "cart_id"
+    t.datetime "expires_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "used_at"
+  end
 
   create_table "approval_groups", force: true do |t|
     t.string   "name"

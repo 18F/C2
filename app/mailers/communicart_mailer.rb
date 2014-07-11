@@ -1,9 +1,11 @@
   class CommunicartMailer < ActionMailer::Base
   layout 'communicart_base'
 
-  def cart_notification_email(email, cart)
+  def cart_notification_email(email, cart, approval)
     @url = ENV['NOTIFICATION_URL']
     @cart = cart.decorate
+    @approval = approval
+    @token = ApiToken.where(user_id: @approval.user_id).where(cart_id: @cart.id).last
 
     if cart.all_approvals_received?
       attachments['Communicart' + cart.name + '.details.csv'] = cart.create_items_csv
@@ -22,7 +24,6 @@
     @approval = analysis["approve"] == "APPROVE" ? "approved" : "rejected"
     @approval_reply = analysis
     @cart = cart.decorate
-
     to_address = cart.requester.email_address
     #TODO: Handle carts without approval groups (only emails passed)
     #TODO: Add a specific 'rejection' text block for the requester
@@ -42,7 +43,7 @@
   end
 
   def rejection_update_email(params, cart)
-    # CURRENT TODO: Fill out the content of this email to the approvers
+    # TODO: Fill out the content of this email to the approvers
 
   end
 

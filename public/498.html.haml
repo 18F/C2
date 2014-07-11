@@ -1,0 +1,12 @@
+!!!
+%head
+  %title= "Something went wrong"
+%html
+
+  %body.communicart-notification
+    - if flash[:notice]
+      = flash[:notice]
+
+    %h1
+      Here is the cart information
+
