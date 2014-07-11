@@ -40,4 +40,11 @@ describe CartItem do
       expect(cart_item.socio).to eq ['s','w']
     end
   end
+
+  describe "#formatted_price" do
+    it 'returns a formatted version of a cart item price' do
+      cart_item.price = 1.8
+      expect(cart_item.formatted_price).to eq "$ 1.80"
+    end
+  end
 end
