@@ -52,10 +52,10 @@ class CommunicartsController < ApplicationController
 private
 
   def validate_access
-    raise AuthenticationError.new(message: 'something went wrong with the token (nonexistent)') unless @token = ApiToken.find_by(access_token: params[:cch])
+    raise AuthenticationError.new(msg: 'something went wrong with the token (nonexistent)') unless @token = ApiToken.find_by(access_token: params[:cch])
 
     if @token.expires_at && @token.expires_at < Time.now
-      raise AuthenticationError.new(message: 'something went wrong with the token (expired)')
+      raise AuthenticationError.new(msg: 'something went wrong with the token (expired)')
     end
 
     raise AuthenticationError.new(msg: 'Something went wrong with the token. It has already been used.') unless @token.used_at.nil?
