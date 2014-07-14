@@ -380,10 +380,23 @@ tr.cart_item_information td {
   padding-right: 10px;
 }
 
-table tr.total-price {
+table tr.total-price, tr.approval-actions {
   padding-top: 10px;
   padding-bottom: 10px;
   background-color: #f0f0f0;
+}
+
+tr.approval-actions a {
+  display: inline-block;
+  margin-bottom: 15px;
+}
+
+tr.approval-actions a.icon-approved {
+  display: inline-block;
+  width: inherit;
+  height: inherit;
+  background-repeat: no-repeat;
+  background-position: 5px 15px;
 }
 
 table tr.total-price td {
@@ -1824,7 +1837,7 @@ p.approved {
   background-color: #cfc;
 }
 
-span.icon-approved {
+.icon-approved {
   display: inline-block;
   width: 20px;
   height: 20px;
