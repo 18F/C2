@@ -342,14 +342,13 @@ describe CommunicartsController do
 
     let(:token) { token = ApiToken.create!(user_id: 108642, cart_id: 246810, expires_at: Time.now + 5.days) }
     let(:cart) { FactoryGirl.create(:cart_with_approvals) }
-    let(:requester) { FactoryGirl.create(:user) }
+    let(:approver) { FactoryGirl.create(:user, id: 108642, email_address: 'another_approver@some-dot-gov.gov') }
 
     before do
       @json_approval_params_with_token = JSON.parse(approval_params_with_token)
       token.stub(:user_id).and_return(108642)
       token.stub(:cart_id).and_return(246810)
       Cart.stub(:find_by).with(id: 246810).and_return(cart)
-      Cart.any_instance.stub(:requester).and_return(requester)
       Approval.last.update_attributes(user_id: 108642)
     end
 
@@ -359,12 +358,14 @@ describe CommunicartsController do
       end
 
       it 'will be successful' do
+        approver
         Approval.any_instance.stub(:update_attributes)
         put 'approval_response', @json_approval_params_with_token
         expect(response.status).to eq 200
       end
 
       it 'successfully validates the user_id and cart_id with the token' do
+        approver
         Approval.any_instance.stub(:update_attributes)
         expect { put 'approval_response', @json_approval_params_with_token }.not_to raise_error
       end
