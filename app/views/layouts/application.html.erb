@@ -7,16 +7,9 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-<% if flash[:notice] %>
-  <div class="flash success">
-    <%= flash[:notice] %>
-  </div>
-<% end %>
 
-<% if flash[:alert] %>
-  <div class="flash alert">
-    <%= flash[:alert] %>
-  </div>
+<% flash.each do |key, value| %>
+    <div class="alert alert-<%= key %>"><%= value %></div>
 <% end %>
 
 <%= render 'shared/topnav' if @current_user %>
