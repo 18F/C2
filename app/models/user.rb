@@ -5,7 +5,6 @@ class User < ActiveRecord::Base
   has_many :approval_groups, through: :user_roles
   has_many :approvals
   has_many :approver_comments
-  has_many :comments, as: :commentable
 
   def full_name
     "#{first_name} #{last_name}"
