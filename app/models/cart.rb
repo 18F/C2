@@ -2,11 +2,11 @@ require 'csv'
 
 class Cart < ActiveRecord::Base
   has_many :cart_items
-  has_many :comments
   has_many :approvals
   has_many :approval_users, through: :approvals, source: :user
   has_one :approval_group
   has_one :api_token
+  has_many :comments, as: :commentable
 
   APPROVAL_ATTRIBUTES_MAP = {
     approve: 'approved',

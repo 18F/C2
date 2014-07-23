@@ -1,3 +1,3 @@
 class Comment < ActiveRecord::Base
-  belongs_to :cart
+  belongs_to :commentable, polymorphic: true
 end

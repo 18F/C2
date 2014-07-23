@@ -11,8 +11,8 @@ class CommunicartsController < ApplicationController
   def send_cart
     cx = Cart.initialize_cart_with_items(params)
     cart = Cart.find(cx.id)
+    Comment.create(comment_text: params['initiationComment'].strip, commentable_id: cart.id, commentable_type: cart.class) unless params['initiationComment'].blank?
     cart.decorate
-    Comment.create(comment_text: params['initiationComment'].strip, cart_id: cart.id) unless params['initiationComment'].blank?
     cart.create_and_send_approvals unless duplicated_approvals_exist_for(cart)
 
     render json: { message: "This was a success"}, status: 200
@@ -26,8 +26,8 @@ class CommunicartsController < ApplicationController
     cart = Cart.where(external_id: (params['cartNumber'].to_i)).where(status:'pending').first.decorate
     user = cart.approval_users.where(email_address: params['fromAddress']).first
 
-    ApproverComment.create(comment_text: params['comment'].strip, user_id: user.id) unless params['comment'].blank?
-    Comment.create(comment_text: params['comment'].strip, cart_id: cart.id) unless params['comment'].blank?
+    ApproverComment.create(comment_text: params['comment'].strip, user_id: user.id) unless params['comment'].blank? #TODO: Handle with polymorphic comments
+    cart.comments << Comment.create(comment_text: params['comment'].strip) unless params['comment'].blank?
 
     approval = cart.approvals.where(user_id: user.id).first
     approval.update_attributes(status: approve_or_reject_status)
