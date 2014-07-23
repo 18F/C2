@@ -1,0 +1,26 @@
+.ag_display {
+  margin-left: 2em;
+  label {
+    margin-top: .75em;
+  }
+  input[type=submit] {
+    margin-top: 0.75em;
+  }
+
+  table {
+    margin-top: 1em;
+  }
+  td {
+    padding: .2em .75em .2em .2em ;
+  }
+  tr {
+//    border-bottom: 1px dashed darkblue;
+  }
+}
+
+.ag_new_form {
+  margin: .5em;
+  padding: 1em;
+  border: 1px solid darkblue;
+  background-color: #eeeeff;
+}
