@@ -252,10 +252,7 @@ describe CommunicartsController do
 
         Approval.any_instance.stub(:update_attributes)
 
-        ApproverComment.should_receive(:create).with(
-          {comment_text: 'Test Approval Comment', user_id: approver.id}
-              )
-        post 'approval_reply_received', @json_approval_params
+        expect{post 'approval_reply_received', @json_approval_params}.to change{Comment.count}.from(0).to(1)
       end
 
       it 'creates a comment given a comment param' do
@@ -263,7 +260,10 @@ describe CommunicartsController do
         cart.stub_chain(:approval_group, :approvers, :where).and_return([approver])
         cart.stub(:update_approval_status)
 
-        ApproverComment.should_receive(:create)
+        mock_comment = mock_model(Comment)
+        mock_comment.stub(:[]=)
+        mock_comment.stub(:save)
+        Comment.should_receive(:new).with(comment_text: 'Test Approval Comment').and_return(mock_comment)
         post 'approval_reply_received', @json_approval_params
       end
 

@@ -23,11 +23,18 @@ class CommunicartsController < ApplicationController
   end
 
   def approval_reply_received
-    cart = Cart.where(external_id: (params['cartNumber'].to_i)).where(status:'pending').first.decorate
+    cart = Cart.where(external_id: (params['cartNumber'].to_i)).where(status:'pending').first
     user = cart.approval_users.where(email_address: params['fromAddress']).first
 
-    ApproverComment.create(comment_text: params['comment'].strip, user_id: user.id) unless params['comment'].blank? #TODO: Handle with polymorphic comments
-    cart.comments << Comment.create(comment_text: params['comment'].strip) unless params['comment'].blank?
+    if params['comment']
+      new_comment = Comment.new(comment_text: params['comment'].strip)
+      user.comments << new_comment
+      user.save
+      cart.comments << new_comment
+      cart.save
+    end
+
+    cart.decorate
 
     approval = cart.approvals.where(user_id: user.id).first
     approval.update_attributes(status: approve_or_reject_status)
