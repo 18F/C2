@@ -1,7 +1,10 @@
 /**
  * Created by alexandermagee on 7/23/14.
  */
-function scrapePage() {
+function scrapePage(jQ) {
+    var ourServer = "http://localhost:3000/javascript/"
+    loadOGP(jQ);
+    $ = jQ;
     var hasTitle;
     var hasPrice = hasTitle = false;
     var cartItem = {};
@@ -34,6 +37,8 @@ function scrapePage() {
     for (var i in cartItem) {
         console.log(cartItem[i]);
     }
+    $("head").append("<link rel='stylesheet' href='"+ourServer+"../styles/overlay.css' type='text/css' media='screen'>");
+
 }
 
 function convertDollar(dollarsAndCentsString) {
@@ -65,7 +70,7 @@ function convertDollar(dollarsAndCentsString) {
  * jQuery plugin to read Open Graph Protocol data from the page
  */
 
-(function($) {
+var loadOGP = function($) {
 
     var checkNamespacePresent = function (node) {
         console.log("Checking for namespace on node", node);
@@ -118,4 +123,4 @@ function convertDollar(dollarsAndCentsString) {
 
         return data;
     }
-})(jQuery);
+};//(jQuery);
