@@ -2,7 +2,7 @@
  * Created by alexandermagee on 7/23/14.
  */
 function scrapePage(jQ) {
-    var ourServer = "http://localhost:3000/javascript/"
+    var ourServer = "http://localhost:3000/"
     loadOGP(jQ);
     $ = jQ;
     var hasTitle;
@@ -35,9 +35,19 @@ function scrapePage(jQ) {
         }
     }
     for (var i in cartItem) {
-        console.log(cartItem[i]);
+        console.log(i + " = " + cartItem[i]);
     }
-    $("head").append("<link rel='stylesheet' href='"+ourServer+"../styles/overlay.css' type='text/css' media='screen'>");
+    $("head").append("<link rel='stylesheet' href='"+ourServer+"assets/overlay.css' type='text/css' media='screen'>");
+    var qStr = $.param(cartItem);
+    console.log(qStr);
+    var iframeURL = ourServer+"overlay.html?v="+qStr;
+    console.log("iframe URL= " + iframeURL);
+    var div = document.createElement("div");
+    div.id = "communicart_bookmarklet";
+    $('#communicart_bookmarklet').height(175);
+    document.body.insertBefore(div, document.body.firstChild);
+//    $('#communicart_bookmarklet').slideDown(500);
+    $('#communicart_bookmarklet').html("<iframe frameborder='0' scrolling='no' name='instacalc_bookmarklet_iframe' id='instacalc_bookmarklet_iframe' src='" + iframeURL + "' width='666px' height='175px' style='textalign:right; backgroundColor: blue;'></iframe>");
 
 }
 
