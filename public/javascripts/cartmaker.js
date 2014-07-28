@@ -20,8 +20,11 @@ function scrapePage(jQ) {
         cartItem.title = ogData["title"][0];
         hasTitle = true;
     }
-    if (ogData.hasOwnProperty("description")) {
-        cartItem.description = ogData["description"][0];
+//    if (ogData.hasOwnProperty("description")) {
+//        cartItem.description = ogData["description"][0];
+//    }
+    if (ogData.hasOwnProperty("image")) {
+        cartItem.imageUrl =  ogData["image"][0];
     }
     if (!hasTitle) {
         cartItem.title = document.title;
@@ -47,7 +50,7 @@ function scrapePage(jQ) {
     $('#communicart_bookmarklet').height(175);
     document.body.insertBefore(div, document.body.firstChild);
 //    $('#communicart_bookmarklet').slideDown(500);
-    $('#communicart_bookmarklet').html("<iframe frameborder='0' scrolling='no' name='instacalc_bookmarklet_iframe' id='instacalc_bookmarklet_iframe' src='" + iframeURL + "' width='666px' height='175px' style='textalign:right; backgroundColor: blue;'></iframe>");
+    $('#communicart_bookmarklet').html("<iframe frameborder='0' scrolling='no' name='instacalc_bookmarklet_iframe' id='instacalc_bookmarklet_iframe' src='" + iframeURL + "' width='666px' height='300px' style='textalign:right; backgroundColor: blue;'></iframe>");
 
 }
 
@@ -76,45 +79,13 @@ function convertDollar(dollarsAndCentsString) {
     return amount;
 }
 
-/**
- * jQuery plugin to read Open Graph Protocol data from the page
- */
-
 var loadOGP = function($) {
-
-    var checkNamespacePresent = function (node) {
-        console.log("Checking for namespace on node", node);
-        var i, attr, attributes = node.attributes || {};
-        // we're looking for xmlns:og="http://opengraphprotocol.org/schema/"
-        for (i = 0; i < attributes.length; i++) {
-            attr = attributes[i];
-            if (attr.nodeName.substring(0,5) === "xmlns" && (
-                attr.nodeValue === "http://opengraphprotocol.org/schema/" || attr.nodeValue === "http://ogp.me/ns#")) {
-                return attr.nodeName.substring(6);
-            }
-        }
-        return null;
-    }
 
     $.fn.ogp = function() {
         var ns = null, data = {};
         $(this).each(function () {
-            $(this).parents().andSelf().each(function () {
-                ns = checkNamespacePresent(this);
-                console.log("Found %s on", ns, this);
-                if (ns !== null) {
-                    return false;
-                }
-            });
 
-            // give up if no namespace
-            if (ns === null) {
-                console.log("No namespace found");
-                return null;
-            }
-
-            // look for OGP data
-            ns = ns + ":";
+            ns = "og:";
             $('meta', this).each(function () {
                 console.log("Looking for data in element", this);
                 var prop = $(this).attr("property"), key, value;

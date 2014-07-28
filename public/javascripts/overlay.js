@@ -21,4 +21,27 @@ setTimeout(function(){
         $('#itemname').val(qs.title);
     }
     $('#itemquantity').val(1);
+    if (qs.hasOwnProperty("imageUrl")) {
+        loadProdImage(qs.imageUrl);
+    }
 }, 200);
+
+function loadProdImage(imageurl) {
+    var newImg = new Image();
+
+    newImg.onload = function() {
+        var height = newImg.height;
+        var width = newImg.width;
+        if (height > width) {
+            $('#prod_pic').height(160);
+            $('#prod_pic').width(160/height * width);
+        } else {
+            $('#prod_pic').width(160);
+            $('#prod_pic').height(160/width * height);
+        }
+        $('#prod_pic').attr('src', imageurl);
+    }
+
+    newImg.src = imageurl;
+
+}
