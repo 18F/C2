@@ -9,20 +9,20 @@
 </head>
 <body>
   <div id="formscreen">
-  <h3>Add item to cart?</h3>
-  <div float="left" id="pic_holder">
-      <img id="prod_pic"/>
+    <h3>Add item to cart?</h3>
+    <div float="left" id="pic_holder">
+        <img id="prod_pic"/>
+    </div>
+    <form>
+        <label>Name</label><input type="text" id="itemname" size="66"/>  <label>Price $</label><input type="text" id="itemprice" size="10"/>
+        <label>Quantity</label><input type="text" id="itemquantity" size="4"/><br/>
+    </form>
+    <a class="btn" id="cancel_btn" >Cancel</a><a class="btn" id="add_btn">Add to Cart</a>
   </div>
-  <form>
-      <label>Name</label><input type="text" id="itemname" size="66"/>  <label>Price $</label><input type="text" id="itemprice" size="10"/>
-      <label>Quantity</label><input type="text" id="itemquantity" size="4"/><br/>
-  </form>
-  <a class="btn" id="cancel_btn" >Cancel</a><a class="btn" id="add_btn">Add to Cart</a>
-</div>
-<div id="cartscreen">
-    <h3>Your cart</h3>
-    <table id="itemList"></table>
-    <a class="btn" id="send">Send for Approval</a><a class="btn" id="shop">Keep shopping</a>
-</div>
+  <div id="cartscreen">
+      <h3>Your cart</h3>
+      <table id="itemList"></table>
+      <a class="btn" id="send_btn">Send for Approval</a><a class="btn" id="shop_btn">Keep shopping</a>
+  </div>
 </body>
 </html>

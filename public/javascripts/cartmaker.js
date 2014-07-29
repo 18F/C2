@@ -5,45 +5,44 @@ function scrapePage(jQ) {
     var ourServer = "http://localhost:3000/"
     loadOGP(jQ);
     $ = jQ;
-    var hasTitle, hasUrl;
-    var hasPrice = hasTitle = hasUrl = false;
+
     var cartItem = {};
     cartItem.url = window.location.href;
 
+    //determine best descriptors from page
     //try open graph data
     var ogData = $('head').ogp();
+
     if (ogData.hasOwnProperty("price:amount")) {
         cartItem.price = convertDollar(ogData["price:amount"][0]);
-        hasPrice = true;
+    } else {
+        var price = $("[class*='price']").html();
+        if (price) {
+            cartItem.price = (convertDollar(price.trim()));
+        }
     }
+
     if (ogData.hasOwnProperty("title")) {
         cartItem.title = ogData["title"][0];
-        hasTitle = true;
+    } else {
+        cartItem.title = document.title;
     }
-   if (ogData.hasOwnProperty("url")) {
-       cartItem.description = ogData["url"][0];
-   }
+
+    if (ogData.hasOwnProperty("url")) {
+       cartItem.itemUrl = ogData["url"][0];
+    } else {
+       cartItem.itemUrl = $(location).attr('href');
+    }
+
     //TODO: what if og:image isn't spec'd?
     if (ogData.hasOwnProperty("image")) {
         cartItem.imageUrl =  ogData["image"][0];
     }
-    if (!hasTitle) {
-        cartItem.title = document.title;
-        hasTitle = true;
-    }
-    if (!hasPrice) {
-        var price = $("[class*='price']").html();
-        if (price) {
-            cartItem.price = (convertDollar(price.trim()));
-            hasPrice = true;
-        }
-    }
-    if (!hasUrl) {
-      cartItem.url = $(location).attr('href');
-    }
+
     for (var i in cartItem) {
         console.log(i + " = " + cartItem[i]);
     }
+
     $("head").append("<link rel='stylesheet' href='"+ourServer+"assets/overlay.css' type='text/css' media='screen'>");
     var qStr = $.param(cartItem);
     var iframeURL = ourServer+"overlay.html?v="+qStr;
@@ -55,6 +54,8 @@ function scrapePage(jQ) {
 //    $('#communicart_bookmarklet').slideDown(500);
     $('#communicart_bookmarklet').html("<iframe frameborder='0' scrolling='no' name='instacalc_bookmarklet_iframe' id='instacalc_bookmarklet_iframe' src='" +
      iframeURL + "' width='666px' height='600px' style='textalign:right; backgroundColor: blue;'></iframe>");
+
+     //handle communication from bookmarklet
      window.addEventListener("message", function (e) {
         //  console.log("message: " + e.data);
          if (e.data == "closeOverlay") {

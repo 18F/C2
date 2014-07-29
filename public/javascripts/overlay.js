@@ -39,6 +39,16 @@ setTimeout(function(){
       switchToCart();
 
     });
+    var j = 0;
+    while (true) {
+      var item = localStorage.getItem("cartItem_"+j);
+      if (item != null && j < 10) {
+        items.push(JSON.parse(item));
+      } else {
+        break;
+      }
+      j++;
+    }
 }, 200);
 
 function loadProdImage(imageurl) {
@@ -61,24 +71,24 @@ function loadProdImage(imageurl) {
 
 }
 
-function addCartItem(title, url, imageUrl, price, quantity) {
-    var item = {title: title, url: url, imageUrl: imageUrl, price: price, quantity: quantity};
+function addCartItem(title, itemUrl, imageUrl, price, quantity) {
+    var item = {title: title, itemUrl: itemUrl, imageUrl: imageUrl, price: price, quantity: quantity};
     items.push(item);
     var itemString = JSON.stringify(item);
-    sessionStorage.setItem("cartItem" + items.length - 1, itemString);
+    localStorage.setItem("cartItem_" + (items.length - 1), itemString);
 }
 
 function displayCart() {
     for (var i = 0; i < items.length; i++) {
       var item = items[i];
-      $("#itemList").append("<tr><td><a href='"+item.url+"' target='_blank'>" + item.title +
+      $("#itemList").append("<tr><td><a href='"+item.itemUrl+"' target='_blank'>" + item.title +
         "</a></td><td>$" + item.price +"</td><td>" + item.quantity +
         "</td><td><a class='deleter' id='del" + i +"'>remove</a><td></tr>");
     }
 }
 
 function switchToCart() {
-  $('#formscreen').fadeOut(500);
-  $('#cartscreen').fadeIn(500);
+  $('#formscreen').hide();
+  $('#cartscreen').show();
   displayCart();
 }
