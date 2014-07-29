@@ -4,6 +4,7 @@
 
  var items = [];
 
+//initialization
 setTimeout(function(){
     var qs = (function(a) {
         if (a == "") return {};
@@ -34,22 +35,45 @@ setTimeout(function(){
     });
 
     $('#add_btn').click(function() {
-      addCartItem($('#itemname').val(), qs.url, qs.imageUrl,
+      addCartItem($('#itemname').val(), qs.itemUrl, qs.imageUrl,
         $('#itemprice').val(), $('#itemquantity').val());
       switchToCart();
 
     });
-    var j = 0;
-    while (true) {
-      var item = localStorage.getItem("cartItem_"+j);
-      if (item != null && j < 10) {
-        items.push(JSON.parse(item));
-      } else {
-        break;
-      }
-      j++;
-    }
+
+    $('#send_btn').click(function() {
+      //do some stuff here to send cart
+      clearCart();
+    });
+
+    $('#shop_btn').click(function(){
+      window.parent.postMessage("closeOverlay", "*");
+    });
+    readCart(false);
+
 }, 200);
+
+function readCart(pCLearFirst) {
+  if (typeof pClearFirst != "undefined" && pClearFirst) {
+      items = [];
+  }
+  var j = 0;
+  while (true) {
+    var item = localStorage.getItem("cartItem_"+j);
+    if (item != null && j < 10) {
+      items.push(JSON.parse(item));
+    } else {
+      break;
+    }
+    j++;
+  }
+}
+
+function clearCart() {
+  for (var i = 0; i < items.length; i++) {
+    localStorage.removeItem("cartItem_"+i);
+  }
+}
 
 function loadProdImage(imageurl) {
     var newImg = new Image();
