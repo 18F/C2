@@ -5,8 +5,8 @@ function scrapePage(jQ) {
     var ourServer = "http://localhost:3000/"
     loadOGP(jQ);
     $ = jQ;
-    var hasTitle;
-    var hasPrice = hasTitle = false;
+    var hasTitle, hasUrl;
+    var hasPrice = hasTitle = hasUrl = false;
     var cartItem = {};
     cartItem.url = window.location.href;
 
@@ -20,9 +20,10 @@ function scrapePage(jQ) {
         cartItem.title = ogData["title"][0];
         hasTitle = true;
     }
-//    if (ogData.hasOwnProperty("description")) {
-//        cartItem.description = ogData["description"][0];
-//    }
+   if (ogData.hasOwnProperty("url")) {
+       cartItem.description = ogData["url"][0];
+   }
+    //TODO: what if og:image isn't spec'd?
     if (ogData.hasOwnProperty("image")) {
         cartItem.imageUrl =  ogData["image"][0];
     }
@@ -37,12 +38,14 @@ function scrapePage(jQ) {
             hasPrice = true;
         }
     }
+    if (!hasUrl) {
+      cartItem.url = $(location).attr('href');
+    }
     for (var i in cartItem) {
         console.log(i + " = " + cartItem[i]);
     }
     $("head").append("<link rel='stylesheet' href='"+ourServer+"assets/overlay.css' type='text/css' media='screen'>");
     var qStr = $.param(cartItem);
-    console.log(qStr);
     var iframeURL = ourServer+"overlay.html?v="+qStr;
     console.log("iframe URL= " + iframeURL);
     var div = document.createElement("div");
@@ -50,8 +53,18 @@ function scrapePage(jQ) {
     $('#communicart_bookmarklet').height(175);
     document.body.insertBefore(div, document.body.firstChild);
 //    $('#communicart_bookmarklet').slideDown(500);
-    $('#communicart_bookmarklet').html("<iframe frameborder='0' scrolling='no' name='instacalc_bookmarklet_iframe' id='instacalc_bookmarklet_iframe' src='" + iframeURL + "' width='666px' height='300px' style='textalign:right; backgroundColor: blue;'></iframe>");
+    $('#communicart_bookmarklet').html("<iframe frameborder='0' scrolling='no' name='instacalc_bookmarklet_iframe' id='instacalc_bookmarklet_iframe' src='" +
+     iframeURL + "' width='666px' height='600px' style='textalign:right; backgroundColor: blue;'></iframe>");
+     window.addEventListener("message", function (e) {
+        //  console.log("message: " + e.data);
+         if (e.data == "closeOverlay") {
+           $('#communicart_bookmarklet').remove();
+         }
+     });
+}
 
+function closeOverlay() {
+    $('#communicart_booklet').remove();
 }
 
 function convertDollar(dollarsAndCentsString) {

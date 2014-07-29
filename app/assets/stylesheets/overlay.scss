@@ -9,10 +9,44 @@
   border-radius: 5px;
   z-index: 9999;
   width: 666px;
-  height:300px;
+  height:600px;
 }
 
 #pic_holder {
   width: 200px;
   height: 200px;
+}
+
+#cartscreen {
+   display:none;
+  // opacity: 0;
+  top: 0px;
+  position: absolute;
+}
+
+#formscreen {
+  top: 0px;
+  position: absolute;
+}
+
+.btn {
+	background-color:#ffffff;
+	-moz-border-radius:9px;
+	-webkit-border-radius:9px;
+	border-radius:9px;
+	border:1px solid #ab193e;
+	display:inline-block;
+	cursor:pointer;
+	color:#ff4747;
+	font-family:arial;
+	font-size:16px;
+	padding:8px 28px;
+	text-decoration:none;
+}
+.btn:hover {
+	background-color:#5cbf2a;
+}
+.btn:active {
+	position:relative;
+	top:1px;
 }

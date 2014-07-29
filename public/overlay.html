@@ -2,19 +2,27 @@
 <html xmlns="http://www.w3.org/1999/html">
 <head lang="en">
     <meta charset="UTF-8">
-    <script language="JavaScript" src="javascripts/overlay.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script language="JavaScript" src="javascripts/overlay.js"></script>
+    <link rel="stylesheet" href="/assets/overlay.css" media="screen" type='text/css'></link>
     <title></title>
 </head>
 <body>
-<h3>Add item to cart?</h3>
-<div float="left" id="pic_holder">
-    <img id="prod_pic"/>
+  <div id="formscreen">
+  <h3>Add item to cart?</h3>
+  <div float="left" id="pic_holder">
+      <img id="prod_pic"/>
+  </div>
+  <form>
+      <label>Name</label><input type="text" id="itemname" size="66"/>  <label>Price $</label><input type="text" id="itemprice" size="10"/>
+      <label>Quantity</label><input type="text" id="itemquantity" size="4"/><br/>
+  </form>
+  <a class="btn" id="cancel_btn" >Cancel</a><a class="btn" id="add_btn">Add to Cart</a>
 </div>
-<form>
-    <label>Name</label><input type="text" id="itemname" size="66"/>  <label>Price $</label><input type="text" id="itemprice" size="10"/>
-    <label>Quantity</label><input type="text" id="itemquantity" size="4"/><br/>
-    <button id="cancel_btn" >Cancel</button><button id="add_btn">Add to Cart</button>
-</form>
+<div id="cartscreen">
+    <h3>Your cart</h3>
+    <table id="itemList"></table>
+    <a class="btn" id="send">Send for Approval</a><a class="btn" id="shop">Keep shopping</a>
+</div>
 </body>
 </html>
