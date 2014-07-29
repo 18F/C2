@@ -39,21 +39,30 @@ function scrapePage(jQ) {
         cartItem.imageUrl =  ogData["image"][0];
     }
 
+    if (ogData.hasOwnProperty("site_name")) {
+      cartItem.vendorName = ogData["site_name"][0];
+    } else {
+      var s = document.domain;
+      cartItem.vendorName = s;
+    }
+
     for (var i in cartItem) {
         console.log(i + " = " + cartItem[i]);
     }
 
     $("head").append("<link rel='stylesheet' href='"+ourServer+"assets/overlay.css' type='text/css' media='screen'>");
+
     var qStr = $.param(cartItem);
     var iframeURL = ourServer+"overlay.html?v="+qStr;
     console.log("iframe URL= " + iframeURL);
+
+    //do awkward bookmarklet panel insertion
     var div = document.createElement("div");
     div.id = "communicart_bookmarklet";
     $('#communicart_bookmarklet').height(175);
     document.body.insertBefore(div, document.body.firstChild);
-//    $('#communicart_bookmarklet').slideDown(500);
     $('#communicart_bookmarklet').html("<iframe frameborder='0' scrolling='no' name='instacalc_bookmarklet_iframe' id='instacalc_bookmarklet_iframe' src='" +
-     iframeURL + "' width='666px' height='600px' style='textalign:right; backgroundColor: blue;'></iframe>");
+        iframeURL + "' width='666px' height='600px' style='textalign:right; backgroundColor: blue;'></iframe>");
 
      //handle communication from bookmarklet
      window.addEventListener("message", function (e) {
