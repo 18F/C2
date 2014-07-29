@@ -1,0 +1,11 @@
+%h1
+  = "Comments for #{@commentable.class.name}"
+  = @commentable.id
+
+%h4 Comments
+- @comments.each do |c|
+  = c.comment_text
+  %br
+
+%br
+= link_to "Back the cart", @commentable.cart
