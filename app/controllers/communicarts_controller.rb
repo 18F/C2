@@ -11,9 +11,15 @@ class CommunicartsController < ApplicationController
   def send_cart
     cx = Cart.initialize_cart_with_items(params)
     cart = Cart.find(cx.id)
-    Comment.create(comment_text: params['initiationComment'].strip, commentable_id: cart.id, commentable_type: cart.class) unless params['initiationComment'].blank?
+
     cart.decorate
     cart.create_and_send_approvals unless duplicated_approvals_exist_for(cart)
+
+    unless params['initiationComment'].blank?
+      initiation_comment = Comment.new(comment_text: params['initiationComment'].strip)
+      cart.comments << initiation_comment
+      cart.requester.comments << initiation_comment
+    end
 
     render json: { message: "This was a success"}, status: 200
   end
@@ -28,10 +34,8 @@ class CommunicartsController < ApplicationController
 
     if params['comment']
       new_comment = Comment.new(comment_text: params['comment'].strip)
-      user.comments << new_comment
-      user.save
       cart.comments << new_comment
-      cart.save
+      user.comments << new_comment
     end
 
     cart.decorate

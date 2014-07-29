@@ -113,7 +113,11 @@ describe CommunicartsController do
         end
 
         it 'creates a comment given a comment param' do
-          Comment.should_receive(:create)
+          mock_comment = mock_model(Comment)
+          mock_comment.stub(:[]=)
+          mock_comment.stub(:save)
+
+          Comment.should_receive(:new).with(comment_text: "Hi, this is a comment, I hope it works!\r\nThis is the second line of the comment.").and_return(mock_comment)
           post 'send_cart', @json_params
         end
 
@@ -125,29 +129,6 @@ describe CommunicartsController do
 
       end
 
-      context 'is not indicated' do
-        it "creates a new approval group based on the 'fromAddress' parameter sent" do
-          ApprovalGroup.should_not_receive(:find_by_name)
-          ApprovalGroup.should_receive(:create).with(
-            {name: 'approval-group-2867637'}
-            ).and_return(approval_group)
-
-          @json_params['fromAddress'] = 'approver-address1234@some-dot-gov.gov'
-          post 'send_cart', @json_params
-        end
-
-        it 'creates a comment given a comment param' do
-          Comment.should_receive(:create)
-          post 'send_cart', @json_params
-        end
-
-        it 'does not create a comment when not given a comment param' do
-          Comment.should_not receive(:create)
-          @json_params['initiationComment'] = ''
-          post 'send_cart', @json_params
-        end
-
-      end
     end
 
     it 'sets totalPrice'
