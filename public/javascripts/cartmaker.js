@@ -40,10 +40,10 @@ function scrapePage(jQ) {
     }
 
     if (ogData.hasOwnProperty("site_name")) {
-      cartItem.vendorName = ogData["site_name"][0];
+      cartItem.vendor = ogData["site_name"][0];
     } else {
       var s = document.domain;
-      cartItem.vendorName = s;
+      cartItem.vendor = s;
     }
 
     for (var i in cartItem) {
