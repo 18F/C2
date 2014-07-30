@@ -1,0 +1,15 @@
+.row
+  .eight.columns
+    %h2
+      User Authentication
+    %p
+      Instantly authenticate users on your website with a MyUSA account.
+
+    .actions
+      - if !signed_in?
+        = button_to 'MyUSA Account Login', "/auth/myusa", :class => 'large button positive'
+      - else
+        %p
+          Currently logged in as:
+          %b= session['user']['email']
+        = button_to 'Logout', "logout", :class => 'large button positive'
