@@ -129,8 +129,8 @@ function displayCart() {
     $("#itemList").empty();
     for (var i = 0; i < items.length; i++) {
       var item = items[i];
-      $("#itemList").append("<tr id='itemrow_"+i+"'><td><a href='"+item.url+"' target='_blank'>" + item.title +
-        "</a></td><td>$" + item.price +"</td><td>" + item.quantity +
+      $("#itemList").append("<tr id='itemrow_"+i+"'><td><a href='"+item.url+"' target='_blank' class='itemlistname'>" + item.title +
+        "</a></td><td class='itemlistprice'>$" + item.price +"</td><td>" + item.quantity +
         "</td><td><a class='deleter' id='del_" + i +"'>remove</a><td></tr>");
     }
     $('.deleter').click(function() {
