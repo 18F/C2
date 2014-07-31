@@ -51,7 +51,7 @@ setTimeout(function(){
     $('#send_btn').click(function() {
       //do some stuff here to send cart
       sendCart();
-      // clearCart();
+      clearCart();
       closeOverlay();
     });
 
@@ -88,6 +88,12 @@ function clearCart() {
   }
 }
 
+function saveCart() {
+  for (var i = 0; i < items.length; i++) {
+    localStorage.setItem("cartItem_" +i, JSON.stringify(items[i]));
+  }
+}
+
 function closeOverlay() {
   window.parent.postMessage("closeOverlay", "*");
 }
@@ -120,12 +126,20 @@ function addCartItem(title, itemUrl, imageUrl, price, quantity, vendor) {
 }
 
 function displayCart() {
+    $("#itemList").empty();
     for (var i = 0; i < items.length; i++) {
       var item = items[i];
-      $("#itemList").append("<tr><td><a href='"+item.url+"' target='_blank'>" + item.title +
+      $("#itemList").append("<tr id='itemrow_"+i+"'><td><a href='"+item.url+"' target='_blank'>" + item.title +
         "</a></td><td>$" + item.price +"</td><td>" + item.quantity +
-        "</td><td><a class='deleter' id='del" + i +"'>remove</a><td></tr>");
+        "</td><td><a class='deleter' id='del_" + i +"'>remove</a><td></tr>");
     }
+    $('.deleter').click(function() {
+      var itemNum = parseInt($(this).attr("id").split("_")[1]);
+      clearCart();
+      items.splice(itemNum, 1);
+      saveCart();
+      displayCart();
+    });
 }
 
 function switchToCart() {

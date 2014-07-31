@@ -55,3 +55,15 @@
   color: #ff0000;
   display: none;
 }
+
+.deleter {
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: bold;
+  font-family: Arial,sans-serif;
+  font-size: smaller;
+}
+
+.deleter:hover {
+  color: #7a1a17;
+}
