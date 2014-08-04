@@ -165,6 +165,9 @@ function sendCart() {
     cartdata["cartName"] = $('#cartName').val();
   }
   cartdata["cartNumber"] = Math.floor(Math.random() * 1000000) + 300000;
+  if ($('#approvalgroup_input').val() != "") {
+    cartdata["approvalGroup"] = $('#approvalgroup_input').val();
+  }
   cartdata["cartItems"] = [];
   for (var i = 0; i < items.length; i++) {
     var tItem = items[i];
