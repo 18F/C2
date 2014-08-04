@@ -1,0 +1,16 @@
+<body class="communicart-notification">
+  <table class="w-container main-container" width='940'>
+
+    <tr>
+      <td class="w-container html-email-message">
+        <p>
+          Hello,<br/>
+          A comment has been created for the cart item <strong><%= @cart_item.description %>:</strong>
+        </p>
+        <p>
+          <%= @comment_text %>
+        </p>
+      </td>
+    </tr>
+  </table>
+</body>

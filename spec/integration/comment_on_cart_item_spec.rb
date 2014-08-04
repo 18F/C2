@@ -3,6 +3,10 @@ require 'spec_helper'
 describe 'Adding and retrieving comments from a cart item' do
 
   before do
+    ActionMailer::Base.delivery_method = :test
+    ActionMailer::Base.perform_deliveries = true
+    ActionMailer::Base.deliveries = []
+
     approval_group = ApprovalGroup.create(name: "A Testworthy Approval Group")
 
     cart = Cart.new(
@@ -36,21 +40,32 @@ describe 'Adding and retrieving comments from a cart item' do
 
 
   it 'updates the comments on a cart item as expected' do
+    ENV['NOTIFICATION_FROM_EMAIL'] = 'sender@some-dot_gov.gov'
+
     Cart.count.should == 1
     User.count.should == 4
     cart = Cart.first
     expect(cart.status).to eq 'pending'
     expect(cart.approvals.where(status: 'approved').count).to eq 0
     expect(cart.comments.count).to eq 0
+    expect(ActionMailer::Base.deliveries.count).to eq 0
 
     cart_item = cart.cart_items.first
     expect(cart_item.comments.count).to eq 0
 
-    cart_item.comments << Comment.create(comment_text: "This needs to change from a quantity of 250 to 500")
+    cart_item.comments << Comment.new(comment_text: "This needs to change from a quantity of 250 to 500")
+    cart_item.save
     expect(cart_item.comments.count).to eq 1
+    expect(ActionMailer::Base.deliveries.count).to eq 4
 
-    cart_item.comments << Comment.create(comment_text: "This needs to change from a quantity of 250 to 500")
+    cart_item.comments << Comment.new(comment_text: "Thank you for the update. I will change it no to 250 quantity")
+    cart_item.save
     expect(cart_item.comments.count).to eq 2
+    expect(ActionMailer::Base.deliveries.count).to eq 8
 
+  end
+
+  after do
+    ActionMailer::Base.deliveries.clear
   end
 end

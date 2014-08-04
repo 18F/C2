@@ -44,7 +44,18 @@
 
   def rejection_update_email(params, cart)
     # TODO: Fill out the content of this email to the approvers
+  end
 
+  def comment_added_email(comment, email_address)
+    @comment_text = comment.comment_text
+    @cart_item = comment.commentable
+    to_address = email_address
+
+    mail(
+         to: to_address,
+         subject: "A comment has been added to cart item ##{@cart_item.description}",
+         from: ENV['NOTIFICATION_FROM_EMAIL']
+         )
   end
 
 end
