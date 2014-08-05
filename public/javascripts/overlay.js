@@ -2,6 +2,30 @@
  * Created by alexandermagee on 7/25/14.
  */
 
+var CartItem = Backbone.Model.extend({
+  defaults: {
+    price: 0,
+    title: "",
+    url: "",
+    imageUrl: "",
+    quantity: 0,
+    vendor: ""
+  },
+  validate : function(attrs) {
+    if (price == 0) {
+      return "item must have a price!"
+    }
+  },
+  initialize: function() {
+    //put event code here.
+  }
+});
+
+var CartItemView = Backbone.View.extend({
+    tagName: 'tr',
+
+});
+
  var items = [];
 
 //initialization

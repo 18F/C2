@@ -3,8 +3,14 @@
 <head lang="en">
     <meta charset="UTF-8">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://documentcloud.github.com/underscore/underscore-min.js"></script>
+    <script src="http://documentcloud.github.com/backbone/backbone-min.js"></script>
     <script language="JavaScript" src="javascripts/overlay.js"></script>
     <link rel="stylesheet" href="/assets/overlay.css" media="screen" type='text/css'></link>
+    <!-- pureCSS
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css">
+  -->
     <title></title>
 </head>
 <body>
@@ -33,5 +39,12 @@
         <a class="btn" id="send_btn">Send for Approval</a><a class="btn" id="shop_btn">Keep shopping</a><a class="btn" id="clear_btn">Clear Cart</a>
       </div>
   </div>
+  <script type="text/template" id="cartitem-template">
+    <div>
+      <td><a href='<%= url %>' class='itemlistname'><%= title %></a></td><td class='itemlistprice'>$ <%= price %></td>
+        <td> <%= quantity %> </td><td><a class='deleter'>remove</a><td>
+      </td>
+    </div>
+  </script>
 </body>
 </html>
