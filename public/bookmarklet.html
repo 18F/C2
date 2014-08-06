@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Cartmaker Bookmarklet</title>
+</head>
+<body>
+<h3>Communicart Cartmaker bookmarklet </h3>
+<p>Here is bookmarklet you can add to your browser to enable one-click access to your Communicart.</p>
+<p>To add the bookmarklet to your browser:</p>
+<ul>
+    <li>Drag the link to the bookmark toolbar</li>
+</ul>
+<p>Here's the link to the <a title='cartmaker' href='javascript:(function(){function callback(){(function($){var jQuery=$;function callback(){scrapePage($)}var s=document.createElement("script");s.src="http://localhost:3000/javascripts/cartmaker.js";if(s.addEventListener){s.addEventListener("load",callback,false)}else if(s.readyState){s.onreadystatechange=callback}document.body.appendChild(s);})(jQuery.noConflict(true))}var s=document.createElement("script");s.src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js";if(s.addEventListener){s.addEventListener("load",callback,false)}else if(s.readyState){s.onreadystatechange=callback}document.body.appendChild(s);})()'>cartmaker</a>.</p>
+
+</body>
+</html>
