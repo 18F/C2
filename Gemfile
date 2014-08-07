@@ -13,6 +13,7 @@ gem 'awesome_print'
 gem 'jquery-rails', '~> 2.1'
 gem 'sass-rails'
 gem 'uglifier'
+gem 'omniauth-myusa', :git => 'https://github.com/18F/omniauth-myusa.git'
 
 group :test, :development do
   gem 'letter_opener'
