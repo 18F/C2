@@ -62,7 +62,6 @@ describe 'Adding and retrieving comments from a cart item' do
     cart_item.save
     expect(cart_item.comments.count).to eq 2
     expect(ActionMailer::Base.deliveries.count).to eq 8
-
   end
 
   after do
