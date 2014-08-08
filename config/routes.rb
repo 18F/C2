@@ -6,6 +6,14 @@ C2::Application.routes.draw do
   match "/auth/:provider/callback" => "home#oauth_callback", via: [:get]
   post "/logout" => "home#logout"
 
+  resources :carts do
+    resources :comments
+  end
+
+  resources :cart_items do
+    resources :comments
+  end
+
   get "/498", :to => "errors#token_authentication_error"
 
 end

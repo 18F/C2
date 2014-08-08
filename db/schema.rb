@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140703191537) do
+ActiveRecord::Schema.define(version: 20140723160957) do
 
   create_table "api_tokens", force: true do |t|
     t.string   "access_token"
@@ -45,10 +45,10 @@ ActiveRecord::Schema.define(version: 20140703191537) do
   end
 
   create_table "approver_comments", force: true do |t|
-    t.text     "comment_text"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "user_id"
+    t.integer  "comment_id"
   end
 
   create_table "cart_item_traits", force: true do |t|
@@ -82,10 +82,18 @@ ActiveRecord::Schema.define(version: 20140703191537) do
   end
 
   create_table "comments", force: true do |t|
-    t.text     "comment_text"
-    t.integer  "cart_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "commentable_type"
+    t.integer  "commentable_id"
+    t.text     "comment_text"
+  end
+
+  create_table "properties", force: true do |t|
+    t.text    "property"
+    t.text    "value"
+    t.integer "hasproperties_id"
+    t.string  "hasproperties_type"
   end
 
   create_table "user_roles", force: true do |t|

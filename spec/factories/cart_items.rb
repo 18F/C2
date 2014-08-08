@@ -5,7 +5,7 @@ FactoryGirl.define do
     url "http://some.product.url/12345"
     notes "This is a note for a test cart item"
     quantity 100
-    details "Details for a test cart itme"
+    details "Details for a test cart item"
     part_number "1A2B3C4D"
     price 1.5
     cart_id 1357911
