@@ -11,9 +11,15 @@ class CommunicartsController < ApplicationController
   def send_cart
     cx = Cart.initialize_cart_with_items(params)
     cart = Cart.find(cx.id)
+
     cart.decorate
-    Comment.create(comment_text: params['initiationComment'].strip, cart_id: cart.id) unless params['initiationComment'].blank?
     cart.create_and_send_approvals unless duplicated_approvals_exist_for(cart)
+
+    unless params['initiationComment'].blank?
+      initiation_comment = Comment.new(comment_text: params['initiationComment'].strip)
+      cart.comments << initiation_comment
+      cart.requester.comments << initiation_comment
+    end
 
     render json: { message: "This was a success"}, status: 200
   end
@@ -23,11 +29,16 @@ class CommunicartsController < ApplicationController
   end
 
   def approval_reply_received
-    cart = Cart.where(external_id: (params['cartNumber'].to_i)).where(status:'pending').first.decorate
+    cart = Cart.where(external_id: (params['cartNumber'].to_i)).where(status:'pending').first
     user = cart.approval_users.where(email_address: params['fromAddress']).first
 
-    ApproverComment.create(comment_text: params['comment'].strip, user_id: user.id) unless params['comment'].blank?
-    Comment.create(comment_text: params['comment'].strip, cart_id: cart.id) unless params['comment'].blank?
+    if params['comment']
+      new_comment = Comment.new(comment_text: params['comment'].strip)
+      cart.comments << new_comment
+      user.comments << new_comment
+    end
+
+    cart.decorate
 
     approval = cart.approvals.where(user_id: user.id).first
     approval.update_attributes(status: approve_or_reject_status)

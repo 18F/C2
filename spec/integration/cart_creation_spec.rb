@@ -20,7 +20,7 @@ describe 'Creating a cart' do
       "email": "test.email@some-dot-gov.gov",
       "fromAddress": "approver1@some-dot-gov.gov",
       "gsaUserName": "",
-      "initiationComment": "\r\n\r\nHi, this is a comment, I hope it works!\r\nThis is the second line of the comment.",
+      "initiationComment": "\r\n\r\nHi, this is a comment from the first approval group, I hope it works!\r\nThis is the second line of the comment.",
       "cartItems": [
         {
           "vendor": "DOCUMENT IMAGING DIMENSIONS, INC.",
@@ -103,6 +103,7 @@ describe 'Creating a cart' do
       "email": "test.email@some-dot-gov.gov",
       "fromAddress": "approver1@some-dot-gov.gov",
       "gsaUserName": "",
+      "initiationComment": "\r\n\r\nHi, this is a comment from the second approval group, I hope it works!\r\nThis is the second line of the comment.",
       "cartItems": [
         {
           "vendor": "DOCUMENT IMAGING DIMENSIONS, INC.",
@@ -132,35 +133,36 @@ describe 'Creating a cart' do
     }'
   }
 
-  let(:params_request_email_only) {
-  '{
-      "cartName": "",
-      "approvalGroup": "",
-      "cartNumber": "13579",
-      "category": "initiation",
-      "email": "test.email.only@some-dot-gov.gov",
-      "fromAddress": "approver1@some-dot-gov.gov",
-      "gsaUserName": "",
-      "initiationComment": "\r\n\r\nHi, this is a comment, I hope it works!\r\nThis is the second line of the comment.",
-      "cartItems": [
-        {
-          "vendor": "DOCUMENT IMAGING DIMENSIONS, INC.",
-          "description": "ROUND RING VIEW BINDER WITH INTERIOR POC",
-          "url": "/advantage/catalog/product_detail.do?&oid=704213980&baseOid=&bpaNumber=GS-02F-XA002",
-          "notes": "",
-          "qty": "24",
-          "details": "Direct Delivery 3-4 days delivered ARO",
-          "socio": [],
-          "partNumber": "7510-01-519-4381",
-          "price": "$9.87",
-          "features": [
-              "sale"
-          ],
-          "traits": {"socio": ["s","w"]}
-        }
-      ]
-    }'
-  }
+  # --- Suspending this case until we create mapping to emails
+  # let(:params_request_email_only) {
+  # '{
+  #     "cartName": "",
+  #     "approvalGroup": "",
+  #     "cartNumber": "13579",
+  #     "category": "initiation",
+  #     "email": "test.email.only@some-dot-gov.gov",
+  #     "fromAddress": "approver1@some-dot-gov.gov",
+  #     "gsaUserName": "",
+  #     "initiationComment": "\r\n\r\nHi, this is a comment, I hope it works!\r\nThis is the second line of the comment.",
+  #     "cartItems": [
+  #       {
+  #         "vendor": "DOCUMENT IMAGING DIMENSIONS, INC.",
+  #         "description": "ROUND RING VIEW BINDER WITH INTERIOR POC",
+  #         "url": "/advantage/catalog/product_detail.do?&oid=704213980&baseOid=&bpaNumber=GS-02F-XA002",
+  #         "notes": "",
+  #         "qty": "24",
+  #         "details": "Direct Delivery 3-4 days delivered ARO",
+  #         "socio": [],
+  #         "partNumber": "7510-01-519-4381",
+  #         "price": "$9.87",
+  #         "features": [
+  #             "sale"
+  #         ],
+  #         "traits": {"socio": ["s","w"]}
+  #       }
+  #     ]
+  #   }'
+  # }
 
   it 'replaces existing cart items and approval group when initializing an existing cart' do
     @json_params_1 = JSON.parse(params_request_1)
@@ -182,6 +184,8 @@ describe 'Creating a cart' do
     expect(cart.approvals.count).to eq 3
     expect(cart.approvals.where(role: 'approver').count).to eq 2
     expect(cart.approvals.where(role: 'requester').count).to eq 1
+    expect(cart.comments.first.comment_text).to eq "Hi, this is a comment from the first approval group, I hope it works!\r\nThis is the second line of the comment."
+    expect(cart.comments.first.users.first).to eq cart.requester
     expect(cart.requester.email_address).to eq 'requester1@some-dot-gov.gov'
 
     post 'send_cart', @json_params_2
@@ -191,8 +195,8 @@ describe 'Creating a cart' do
     expect(cart.cart_items.count).to eq 1
     expect(cart.cart_items[0].price).to eq 9.87
     expect(cart.approval_group.name).to eq "secondApprovalGroup"
-    expect(cart.comments.first.comment_text).to eq "Hi, this is a comment, I hope it works!\r\nThis is the second line of the comment."
-    expect(cart.comments.count).to eq 1
+    expect(cart.comments.count).to eq 2
+    expect(cart.comments.last.comment_text).to eq "Hi, this is a comment from the second approval group, I hope it works!\r\nThis is the second line of the comment."
     expect(cart.approvals.count).to eq 1
     expect(cart.approvals.where(role: 'approver').count).to eq 0
     expect(cart.approvals.where(role: 'requester').count).to eq 1
