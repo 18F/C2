@@ -65,6 +65,10 @@ describe 'Adding and retrieving comments from a cart item' do
 
   end
 
+  it "adds to the user's comments" do
+
+  end
+
   after do
     ActionMailer::Base.deliveries.clear
   end

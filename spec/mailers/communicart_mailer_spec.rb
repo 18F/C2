@@ -121,4 +121,11 @@ describe CommunicartMailer do
       end
     end
   end
+
+  describe 'comment_added_email' do
+    it 'does something' do
+      fail
+    end
+
+  end
 end
