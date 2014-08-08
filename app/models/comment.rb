@@ -10,7 +10,8 @@ private
     case self.commentable_type
       when "CartItem"
         self.commentable.cart.approvals.each do | approval |
-          CommunicartMailer.comment_added_email(self, approval.user.email_address).deliver
+          email = approval.user.email_address
+          CommunicartMailer.comment_added_email(self, email).deliver
         end
       else
         # Do nothing

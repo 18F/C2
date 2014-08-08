@@ -3,6 +3,5 @@
 FactoryGirl.define do
   factory :comment do
     comment_text "MyText"
-    cart_id 1
   end
 end

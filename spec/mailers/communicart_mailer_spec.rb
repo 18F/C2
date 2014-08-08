@@ -123,9 +123,30 @@ describe CommunicartMailer do
   end
 
   describe 'comment_added_email' do
-    it 'does something' do
-      fail
+    let(:cart_item) { FactoryGirl.create(:cart_item, description: "A cart item in need of a comment") }
+    let(:comment) { FactoryGirl.create(:comment, comment_text: 'Somebody give this cart item a comment') }
+    let(:email) { "commenter@some-dot-gov.gov" }
+    let(:mail) { CommunicartMailer.comment_added_email(comment, email) }
+
+    before do
+      ENV.stub(:[])
+      ENV.stub(:[]).with('NOTIFICATION_FROM_EMAIL').and_return('reply@communicart-stub.com')
+      cart_item.comments << comment
     end
 
+    it 'renders the subject' do
+      mail.subject.should == "A comment has been added to cart item 'A cart item in need of a comment'"
+    end
+
+    it 'renders the receiver email' do
+      mail.to.should == ["commenter@some-dot-gov.gov"]
+    end
+
+    it 'renders the sender email' do
+      mail.from.should == ['reply@communicart-stub.com']
+    end
   end
+
+  # TODO: describe 'rejection_update_email'
+
 end
