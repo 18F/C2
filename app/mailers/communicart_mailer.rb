@@ -13,6 +13,8 @@
       attachments['Communicart' + cart.name + '.approvals.csv'] = cart.create_approvals_csv
     end
 
+# This string is duplicated in Mario --- it is my design to move this into a YML file and remove
+# this redundancy.
     mail(
          to: email,
          subject: "Communicart Approval Request from #{cart.requester.full_name}: Please review Cart ##{cart.external_id}",
