@@ -1,0 +1,17 @@
+
+# config/application.yml
+defaults: &defaults
+#  email_title_for_approval_request: 
+#  email_title_for_approval_request_instructions: ": Please review Cart #"
+
+  email_title_for_approval_request_format: "Communicart Approval Request from %s: Please review Cart #%s"
+  email_title_for_approval_request_reg_exp: "^.*Communicart Approval Request from.*: Please review Cart #(\\d+)"
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults

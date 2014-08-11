@@ -13,16 +13,17 @@
       attachments['Communicart' + cart.name + '.approvals.csv'] = cart.create_approvals_csv
     end
 
-# This string is duplicated in Mario --- it is my design to move this into a YML file and remove
-# this redundancy.
+    approval_format = Settings.email_title_for_approval_request_format
     mail(
          to: email,
-         subject: "Communicart Approval Request from #{cart.requester.full_name}: Please review Cart ##{cart.external_id}",
+         subject: approval_format % [ cart.requester.full_name,cart.external_id],
          from: ENV['NOTIFICATION_FROM_EMAIL']
          )
   end
 
   def approval_reply_received_email(analysis, cart)
+# This is a shared constant between C2 and Mario, which should be moved to our 
+# YAML file
     @approval = analysis["approve"] == "APPROVE" ? "approved" : "rejected"
     @approval_reply = analysis
     @cart = cart.decorate
