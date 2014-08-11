@@ -82,11 +82,11 @@ ActiveRecord::Schema.define(version: 20140723160957) do
   end
 
   create_table "comments", force: true do |t|
+    t.text     "comment_text"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "commentable_type"
     t.integer  "commentable_id"
-    t.text     "comment_text"
+    t.string   "commentable_type"
   end
 
   create_table "properties", force: true do |t|
