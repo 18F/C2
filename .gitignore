@@ -24,3 +24,4 @@ config/environment_variables.yml
 config/environments/production.rb
 *~
 coverage
+.floo*
