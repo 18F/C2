@@ -32,6 +32,7 @@ end
 
 group :test do
   gem 'simplecov'
+  gem 'turnip'
 end
 
 group :doc do
