@@ -13,6 +13,14 @@
   </div>
 <% end %>
 
+<% if flash[:alert] %>
+  <div class="flash alert">
+    <%= flash[:alert] %>
+  </div>
+<% end %>
+
+<%= render 'shared/topnav' if @current_user %>
+
 <%= yield %>
 
 </body>

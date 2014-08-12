@@ -1,0 +1,8 @@
+.nav
+  - if !signed_in?
+    = link_to 'Sign in with MyUSA', "/auth/myusa"
+  - else
+    %p
+      Currently logged in as:
+      %b= session['user']['email']
+    = button_to 'Logout', "/logout", :class => 'large button positive'
