@@ -1,9 +1,6 @@
 
 # config/application.yml
-defaults: &defaults
-#  email_title_for_approval_request: 
-#  email_title_for_approval_request_instructions: ": Please review Cart #"
-
+constants:
   email_title_for_approval_request_format: "Communicart Approval Request from %s: Please review Cart #%s"
   email_title_for_approval_request_reg_exp: "^.*Communicart Approval Request from.*: Please review Cart #(\\d+)"
   reject_reg_exp: "^(REJECT)$"
@@ -12,11 +9,3 @@ defaults: &defaults
   approve_comment_reg_exp: "([\\s\\S]*?)^APPROVE"
   reply_comment_reg_exp: "([\\s\\S]*?)--------"
 
-development:
-  <<: *defaults
-
-test:
-  <<: *defaults
-
-production:
-  <<: *defaults
