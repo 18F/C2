@@ -23,29 +23,18 @@ var CartItem = Backbone.Model.extend({
 
 var CartItemView = Backbone.View.extend({
     tagName: 'tr',
-//    el: '#itemList',
     events: {
         "click .deleter" : "deleteme"
     },
-//    cartTpl: _.template($('#cartitem-template').html()),
     render: function() {
         this.$el.html(this.cartTpl(this.model.attributes));
         return this;
     },
     initialize: function() {
-//        this.$el = $('#itemList');
         this.cartTpl = _.template($('#cartitem-template').html());
         this.listenTo(this.model, 'change', this.render);
         this.listenTo(this.model, 'destroy', this.remove);
     },
-//
-//    syncRemove: function() {
-//        var col = this.model.collection;
-//        col.sync('delete', this.model, {success: function(rez) {console.log(rez);}});
-//        col.remove(this.model);
-//        this.remove();
-//    },
-
     deleteme : function(e) {
         e.preventDefault();
         var col = this.model.collection;
@@ -61,12 +50,11 @@ var Cart = Backbone.Collection.extend({
         var tHandler = function(rez) {console.log(rez);};
         p_handler = p_handler || tHandler;
         var num = this.length;
-        while (this.length) {//this.each(function(item){
+        while (this.length) {
             var item = this.at(0);
             this.sync('delete', item, {success: ((--num) ?  tHandler : p_handler)});
             this.remove(item);
-        };//, this);
-
+        };
     }
 });
 
@@ -76,10 +64,9 @@ var CartView = Backbone.View.extend({
     initialize: function () {
         _.bindAll(this, "render");
         this.listenTo(this.model, "remove", this.render);
-
     },
     render: function() {
-        this.$el  = $('#itemList');
+        this.$el  = $('#itemList'); //this is a result of timing...should fix
         this.$el.empty();
         this.model.each( function(item) {
             var iview = new CartItemView({model: item});
@@ -87,7 +74,7 @@ var CartView = Backbone.View.extend({
             this.$el.append(iview.render().el);
         }, this);
     }
-})
+});
 
 var items = new Cart();
 var itemView = new CartView({model: items});
@@ -148,10 +135,9 @@ setTimeout(function(){
     $('#clear_btn').click(function() {
         items.clear(closeOverlay);
     });
-
 }, 200);
 
-function readCart(pCLearFirst) {
+function readCart(pClearFirst) {
   if (typeof pClearFirst != "undefined" && pClearFirst) {
       items = [];
   }
@@ -159,26 +145,11 @@ function readCart(pCLearFirst) {
   while (true) {
     var item = localStorage.getItem("cartItem_"+j);
     if (item != null && j < 10) {
-//      items.push(JSON.parse(item));
         items.add(JSON.parse(item));
     } else {
       break;
     }
     j++;
-  }
-}
-
-function clearCart() {
-//  for (var i = 0; i < items.length; i++) {
-//    localStorage.removeItem("cartItem_"+i);
-//  }
-    items.each()
-//    items.sync("delete", items);
-}
-
-function saveCart() {
-  for (var i = 0; i < items.length; i++) {
-    localStorage.setItem("cartItem_" +i, JSON.stringify(items[i]));
   }
 }
 
@@ -201,9 +172,7 @@ function loadProdImage(imageurl) {
         }
         $('#prod_pic').attr('src', imageurl);
     }
-
     newImg.src = imageurl;
-
 }
 
 function addCartItem(title, itemUrl, imageUrl, price, quantity, vendor) {
@@ -212,27 +181,9 @@ function addCartItem(title, itemUrl, imageUrl, price, quantity, vendor) {
     item.save();
 }
 
-function displayCart() {
-    $("#itemList").empty();
-    for (var i = 0; i < items.length; i++) {
-      var item = items[i];
-      $("#itemList").append("<tr id='itemrow_"+i+"'><td><a href='"+item.itemurl+"' target='_blank' class='itemlistname'>" + item.title +
-        "</a></td><td class='itemlistprice'>$" + item.price +"</td><td>" + item.quantity +
-        "</td><td><a class='deleter' id='del_" + i +"'>remove</a><td></tr>");
-    }
-    $('.deleter').click(function() {
-      var itemNum = parseInt($(this).attr("id").split("_")[1]);
-      clearCart();
-      items.splice(itemNum, 1);
-      saveCart();
-      displayCart();
-    });
-}
-
 function switchToCart() {
-  $('#formscreen').hide();
-  $('#cartscreen').show();
-//  displayCart();
+    $('#formscreen').hide();
+    $('#cartscreen').show();
     items.fetch();
     itemView.render();
 }
