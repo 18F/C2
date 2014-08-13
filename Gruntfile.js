@@ -4,9 +4,16 @@ module.exports = function(grunt) {
 
     jasmine: {
       test: {
-        src: 'scripts/*.js',
+        src: [
+        "./public/javascripts/jquery.min.js",
+        "./public/javascripts/underscore-min.js",
+        "./public/javascripts/backbone-min.js",
+        "./public/javascripts/backbone-localstorage.js",
+        "./public/javascripts/overlay.js"
+        ],
+
         options: {
-          specs: ['./spec/**/*_spec.js']
+          specs: ['./spec/javascripts/**/*_spec.js']
         }
       }
     }
