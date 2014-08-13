@@ -6,7 +6,7 @@ module.exports = function(grunt) {
       test: {
         src: 'scripts/*.js',
         options: {
-          specs: 'test/*.spec.js'
+          specs: ['./spec/**/*_spec.js']
         }
       }
     }
