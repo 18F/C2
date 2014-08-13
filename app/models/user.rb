@@ -9,7 +9,11 @@ class User < ActiveRecord::Base
   has_many :comments, through: :approver_comments
 
   def full_name
-    "#{first_name} #{last_name}"
+    if first_name && last_name
+      "#{first_name} #{last_name}"
+    else
+      "#{email_address}"
+    end
   end
 
 end
