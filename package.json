@@ -1,0 +1,14 @@
+{
+  "name": "c2_cartmaker",
+  "version": "0.0.1",
+  "description": "A cartmaker for C2",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "author": "",
+  "license": "BSD",
+  "devDependencies": {
+    "grunt-contrib-jasmine": "~0.7.0"
+  }
+}
