@@ -36,7 +36,11 @@ GEM
     addressable (2.3.6)
     arel (4.0.2)
     atomic (1.1.16)
+    autoprefixer-rails (2.2.0.20140804)
+      execjs
     awesome_print (1.2.0)
+    bootstrap-sass (3.2.0.1)
+      sass (~> 3.2)
     builder (3.1.4)
     capistrano (2.15.5)
       highline
@@ -211,7 +215,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  autoprefixer-rails
   awesome_print
+  bootstrap-sass (~> 3.2.0)
   capistrano (~> 2.1)
   database_cleaner
   draper
