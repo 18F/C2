@@ -1,6 +1,3 @@
-/**
- * Created by alexandermagee on 7/25/14.
- */
 
 var CartItem = Backbone.Model.extend({
   defaults: {
