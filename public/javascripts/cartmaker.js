@@ -1,6 +1,3 @@
-/**
- * Created by alexandermagee on 7/23/14.
- */
 function scrapePage(jQ) {
     var ourServer = "http://localhost:3000/"
     loadOGP(jQ);
