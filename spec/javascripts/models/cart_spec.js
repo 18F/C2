@@ -1,11 +1,18 @@
-describe('CartItem', function() {
-  it('should set default values', function() {
-    var cartItem = new CartItem();
-    expect(cartItem.get('price')).toEqual(0);
-    expect(cartItem.get('title')).toEqual('');
-    expect(cartItem.get('itemurl')).toEqual('');
-    expect(cartItem.get('imageUrl')).toEqual('');
-    expect(cartItem.get('quantity')).toEqual(0);
-    expect(cartItem.get('vendor')).toEqual('');
-  });
-});
+ describe('Cart', function() {
+    it('Should have 3 items', function() {
+        var cart = new Cart();
+        for (var i = 0; i < 3; i++) {
+            cart.add(new CartItem());
+        }
+        expect(cart.length).toEqual(3);
+    });
+
+    it('Should have no items after being cleared', function() {
+        var cart = new Cart();
+        for (var i = 0; i < 3; i++) {
+            cart.add(new CartItem());
+        }
+        cart.clear();
+        expect(cart.length).toEqual(0);
+    });
+ });
