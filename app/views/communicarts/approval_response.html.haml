@@ -64,7 +64,7 @@
                     - unless cart_item.features.empty?
                       - cart_item.features.each do |feature|
                         %li
-                          <div class="#{feature}"
+                          <div class="#{feature}">
                           = feature
                 %td.last{:valign => "top"}
                   %p.result-item-price= cart_item.price
