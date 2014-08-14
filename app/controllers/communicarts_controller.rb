@@ -2,7 +2,7 @@ require ::File.expand_path('authentication_error.rb',  'lib/errors')
 
 class CommunicartsController < ApplicationController
   skip_before_action :verify_authenticity_token
-#  before_filter :validate_access, only: :approval_response
+  before_filter :validate_access, only: :approval_response
 
   rescue_from AuthenticationError do |exception|
     authentication_error(exception)
@@ -52,7 +52,7 @@ class CommunicartsController < ApplicationController
 
   def approval_response
     Commands::Approval::UpdateFromApprovalResponse.new.perform(params)
-#    @token.update_attributes(used_at: Time.now)
+    @token.update_attributes(used_at: Time.now)
 
     @cart = Cart.find_by(id: params[:cart_id].to_i).decorate
     @approval = @cart.approvals.where(user_id: params[:user_id]).first
