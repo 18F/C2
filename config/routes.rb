@@ -5,6 +5,7 @@ C2::Application.routes.draw do
   root :to => 'home#index'
   match "/auth/:provider/callback" => "home#oauth_callback", via: [:get]
   post "/logout" => "home#logout"
+  get 'overlay', to: "overlay#index"
 
   resources :carts do
     resources :comments

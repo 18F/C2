@@ -50,7 +50,7 @@ function scrapePage(jQ) {
     $("head").append("<link rel='stylesheet' href='"+ourServer+"assets/overlay.css' type='text/css' media='screen'>");
 
     var qStr = $.param(cartItem);
-    var iframeURL = ourServer+"overlay.html?v="+qStr;
+    var iframeURL = ourServer+"overlay?v="+qStr;
     console.log("iframe URL= " + iframeURL);
 
     //do awkward bookmarklet panel insertion
@@ -59,7 +59,7 @@ function scrapePage(jQ) {
     $('#communicart_bookmarklet').height(175);
     document.body.insertBefore(div, document.body.firstChild);
     $('#communicart_bookmarklet').html("<iframe frameborder='0' scrolling='no' name='instacalc_bookmarklet_iframe' id='instacalc_bookmarklet_iframe' src='" +
-        iframeURL + "' width='666px' height='330px' style='textalign:right; backgroundColor: blue;'></iframe>");
+        iframeURL + "' width='794px' height='384px' style='textalign:right; backgroundColor: blue;'></iframe>");
 
      //handle communication from bookmarklet
      window.addEventListener("message", function (e) {
