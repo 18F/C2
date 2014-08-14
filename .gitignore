@@ -22,6 +22,7 @@ public/assets
 zeus.json
 config/environment_variables.yml
 config/environments/production.rb
+config/deploy/*.rb
 *~
 coverage
 .floo*
