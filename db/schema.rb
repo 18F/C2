@@ -89,13 +89,6 @@ ActiveRecord::Schema.define(version: 20140723160957) do
     t.string   "commentable_type"
   end
 
-  create_table "properties", force: true do |t|
-    t.text    "property"
-    t.text    "value"
-    t.integer "hasproperties_id"
-    t.string  "hasproperties_type"
-  end
-
   create_table "user_roles", force: true do |t|
     t.integer "approval_group_id"
     t.integer "user_id"
