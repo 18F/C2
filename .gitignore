@@ -28,3 +28,4 @@ coverage
 .floo*
 node_modules/
 .grunt/
+
