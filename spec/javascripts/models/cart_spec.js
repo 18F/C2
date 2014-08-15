@@ -1,5 +1,5 @@
  describe('Cart', function() {
-    it('Should have 3 items', function() {
+    it('Should have cart items', function() {
         var cart = new Cart();
         for (var i = 0; i < 3; i++) {
             cart.add(new CartItem());
