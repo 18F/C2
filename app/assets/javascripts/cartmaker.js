@@ -1,5 +1,6 @@
 function scrapePage(jQ) {
-    var ourServer = "http://localhost:3000/"
+    var ourServer = window.overlayloc + '/';//"http://localhost:3000/"
+    console.log("ourServer", ourServer);
     loadOGP(jQ);
     $ = jQ;
 
