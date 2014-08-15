@@ -26,3 +26,5 @@ config/deploy/*.rb
 *~
 coverage
 .floo*
+node_modules/
+.grunt/

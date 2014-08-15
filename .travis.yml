@@ -7,6 +7,8 @@ after_failure:
 before_script:
   - mysql -e 'create database c2_test;'
   - cp config/database.yml.example config/database.yml
+before_install:
+  - npm install -g grunt-cli
 install:
   - bundle install --without development
 language: ruby
@@ -15,6 +17,8 @@ notifications:
     recipients:
       - raphael.villas@gsa.gov
       - robert.read@gsa.gov
+      - alexander.magee@gsa.gov
+      - anna.flowerhorne@gsa.gov
 script:
   - bundle exec rake db:schema:load
   - bundle exec rake db:test:prepare

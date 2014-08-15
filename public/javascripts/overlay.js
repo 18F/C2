@@ -44,7 +44,7 @@ var Cart = Backbone.Collection.extend({
     model: CartItem,
     localStorage: new Store("communicart"),
     clear: function(p_handler) {
-        var tHandler = function(rez) {console.log(rez);};
+        var tHandler = function(rez) {;};
         p_handler = p_handler || tHandler;
         var num = this.length;
         while (this.length) {
