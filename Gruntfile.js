@@ -5,10 +5,10 @@ module.exports = function(grunt) {
     jasmine: {
       test: {
         src: [
-        "./public/javascripts/jquery.min.js",
-        "./public/javascripts/underscore-min.js",
-        "./public/javascripts/backbone-min.js",
-        "./public/javascripts/backbone-localstorage.js",
+        "./vendor/assets/javascripts/jquery.min.js",
+        "./vendor/assets/javascripts/underscore-min.js",
+        "./vendor/assets/javascripts/backbone-min.js",
+        "./vendor/assets/javascripts/backbone-localstorage.js",
         "./app/assets/javascripts/overlay/overlay.js"
         ],
 
