@@ -14,9 +14,18 @@ function scrapePage(jQ) {
     if (ogData.hasOwnProperty("price:amount")) {
         cartItem.price = convertDollar(ogData["price:amount"][0]);
     } else {
-        var price = $("[class*='price']").html();
+        //this should be refactored a touch.
+
+        //for staples
+        var price = $("[name='p_1']").val();
         if (price) {
             cartItem.price = (convertDollar(price.trim()));
+        } else  {
+            //Crate & Barrel etc
+            price = $("[class*='price']").html();
+            if (price) {
+                cartItem.price = (convertDollar(price.trim()));
+            }
         }
     }
 
