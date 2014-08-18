@@ -16,9 +16,9 @@ class CommunicartsController < ApplicationController
     cart.create_and_send_approvals unless duplicated_approvals_exist_for(cart)
 
     unless params['initiationComment'].blank?
-      initiation_comment = Comment.new(comment_text: params['initiationComment'].strip)
+      initiation_comment = Comment.new(user_id: cart.requester.id,comment_text: params['initiationComment'].strip)
       cart.comments << initiation_comment
-      cart.requester.comments << initiation_comment
+#      cart.requester.comments << initiation_comment
     end
 
     render json: { message: "This was a success"}, status: 200
@@ -33,9 +33,8 @@ class CommunicartsController < ApplicationController
     user = cart.approval_users.where(email_address: params['fromAddress']).first
 
     if params['comment']
-      new_comment = Comment.new(comment_text: params['comment'].strip)
+      new_comment = Comment.new(user_id: user.id,comment_text: params['comment'].strip)
       cart.comments << new_comment
-      user.comments << new_comment
     end
 
     cart.decorate
