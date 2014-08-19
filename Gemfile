@@ -33,6 +33,7 @@ end
 group :test do
   gem 'simplecov'
   gem 'turnip'
+  gem 'capybara'
 end
 
 group :doc do
