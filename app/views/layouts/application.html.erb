@@ -9,7 +9,7 @@
 <body>
 
 <% flash.each do |key, value| %>
-    <div class="alert alert-<%= key %>"><%= value %></div>
+    <div class="alert alert-<%= key %> <%= key %>"><%= value %></div>
 <% end %>
 
 <%= render 'shared/topnav' if @current_user %>
