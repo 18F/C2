@@ -93,8 +93,8 @@ FactoryGirl.create(:cart_item)
     # We can add approval comments to both carts and distinguish them.
     expect(cart.comments[0].user_id).not_to eq cart.comments[1].user_id
 
-    expect(cart.get_approver_comments(cart.comments)[0][0]).to eq user.email_address
-    expect(cart.get_approver_comments(cart.comments)[1][0]).to eq user2.email_address
+    expect(cart.comments[0].user_id).to eq user.id
+    expect(cart.comments[1].user_id).to eq user2.id
 
     # We want the code int he cart model to only put comments for the correct cart into the CSV.
 
@@ -107,7 +107,6 @@ FactoryGirl.create(:cart_item)
 
     csv = cart2.create_comments_csv
 
-    puts csv
     expect(csv.lines.count).to eq 3
 
   end

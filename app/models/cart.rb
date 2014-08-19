@@ -64,12 +64,12 @@ class Cart < ActiveRecord::Base
         csv << [requester.email_address, item.comment_text, item.updated_at, Cart.human_readable_time(item.updated_at, Cart.default_time_zone_offset)]
       end
 
-      csv << ["commenter","approver comment","created_at"]
-      approval_users.each do |user|
-        user.comments.each do |comment|
-          csv << [user.email_address, comment.comment_text, comment.updated_at]
-        end
-      end
+      # csv << ["commenter","approver comment","created_at"]
+      # approval_users.each do |user|
+      #   user.comments.each do |comment|
+      #     csv << [user.email_address, comment.comment_text, comment.updated_at]
+      #   end
+      # end
     end
     return csv_string
   end
