@@ -1,4 +1,5 @@
 class ApprovalGroupsController < ApplicationController
+  before_filter :authenticate_user!
 
   def show
     @approval_group = ApprovalGroup.find(params[:id])
