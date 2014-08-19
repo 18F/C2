@@ -1,5 +1,6 @@
 function scrapePage(jQ) {
-    var ourServer = "http://localhost:3000/"
+    var ourServer = window.overlayloc + '/';//"http://localhost:3000/"
+    console.log("ourServer", ourServer);
     loadOGP(jQ);
     $ = jQ;
 
@@ -13,9 +14,18 @@ function scrapePage(jQ) {
     if (ogData.hasOwnProperty("price:amount")) {
         cartItem.price = convertDollar(ogData["price:amount"][0]);
     } else {
-        var price = $("[class*='price']").html();
+        //this should be refactored a touch.
+
+        //for staples
+        var price = $("[name='p_1']").val();
         if (price) {
             cartItem.price = (convertDollar(price.trim()));
+        } else  {
+            //Crate & Barrel etc
+            price = $("[class*='price']").html();
+            if (price) {
+                cartItem.price = (convertDollar(price.trim()));
+            }
         }
     }
 
@@ -50,7 +60,7 @@ function scrapePage(jQ) {
     $("head").append("<link rel='stylesheet' href='"+ourServer+"assets/overlay.css' type='text/css' media='screen'>");
 
     var qStr = $.param(cartItem);
-    var iframeURL = ourServer+"overlay.html?v="+qStr;
+    var iframeURL = ourServer+"overlay?v="+qStr;
     console.log("iframe URL= " + iframeURL);
 
     //do awkward bookmarklet panel insertion
@@ -59,7 +69,7 @@ function scrapePage(jQ) {
     $('#communicart_bookmarklet').height(175);
     document.body.insertBefore(div, document.body.firstChild);
     $('#communicart_bookmarklet').html("<iframe frameborder='0' scrolling='no' name='instacalc_bookmarklet_iframe' id='instacalc_bookmarklet_iframe' src='" +
-        iframeURL + "' width='666px' height='330px' style='textalign:right; backgroundColor: blue;'></iframe>");
+        iframeURL + "' width='794px' height='384px' style='textalign:right; backgroundColor: blue;'></iframe>");
 
      //handle communication from bookmarklet
      window.addEventListener("message", function (e) {
