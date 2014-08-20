@@ -1,6 +1,7 @@
 require 'csv'
 
 class Cart < ActiveRecord::Base
+  include PropMixin
   has_many :cart_items
   has_many :approvals
   has_many :approval_users, through: :approvals, source: :user
@@ -12,6 +13,7 @@ class Cart < ActiveRecord::Base
     approve: 'approved',
     reject: 'rejected'
   }
+  has_many :properties, as: :hasproperties
 
   def self.human_readable_time(t1,offset)
     return t1.utc.getlocal(offset).asctime
@@ -101,6 +103,16 @@ class Cart < ActiveRecord::Base
 
     cart.save
     cart.add_cart_items(params['cartItems'])
+    return cart
+  end
+
+  def self.initialize_informal_cart(params)
+    cart = Cart.create!(name: 'sampleNameThatIsNotReally', status: 'pending')
+    cart.save
+    ci = CartItem.create(
+                         :cart_id => cart.id
+                         )
+
     return cart
   end
 

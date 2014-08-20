@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  include PropMixin
   validates_presence_of :email_address
   validates_uniqueness_of :email_address
 
@@ -7,6 +8,7 @@ class User < ActiveRecord::Base
   has_many :approvals
   has_many :approver_comments
   has_many :comments, through: :approver_comments
+  has_many :properties, as: :hasproperties
 
   def full_name
     if first_name && last_name

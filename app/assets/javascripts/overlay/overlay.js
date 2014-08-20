@@ -1,4 +1,3 @@
-
 var CartItem = Backbone.Model.extend({
   defaults: {
     price: 0,
@@ -220,7 +219,7 @@ function sendCart() {
   });
   $.ajax({
       type : "POST",
-      url: "http://localhost:3000/send_cart",
+      url: window.location.origin + "/send_cart",
       dataType: "json",
       contentType: "application/json",
       data: JSON.stringify(cartdata)

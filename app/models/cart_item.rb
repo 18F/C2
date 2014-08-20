@@ -1,7 +1,9 @@
 class CartItem < ActiveRecord::Base
+  include PropMixin
   belongs_to :cart
   has_many :cart_item_traits
   has_many :comments, as: :commentable
+  has_many :properties, as: :hasproperties
 
   def green?
     cart_item_traits.map(&:name).include?('green')
