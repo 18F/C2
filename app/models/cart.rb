@@ -61,7 +61,8 @@ class Cart < ActiveRecord::Base
       csv << ["commenter","cart comment","created_at"]
       date_sorted_comments = comments.sort { |a,b| a.updated_at <=> b.updated_at }
       date_sorted_comments.each do |item|
-        csv << [requester.email_address, item.comment_text, item.updated_at, Cart.human_readable_time(item.updated_at, Cart.default_time_zone_offset)]
+        user = User.find(item.user_id)
+        csv << [user.email_address, item.comment_text, item.updated_at, Cart.human_readable_time(item.updated_at, Cart.default_time_zone_offset)]
       end
     end
     return csv_string
