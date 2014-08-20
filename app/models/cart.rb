@@ -58,18 +58,11 @@ class Cart < ActiveRecord::Base
 
   def create_comments_csv
     csv_string = CSV.generate do |csv|
-      csv << ["requester","cart comment","created_at"]
+      csv << ["commenter","cart comment","created_at"]
       date_sorted_comments = comments.sort { |a,b| a.updated_at <=> b.updated_at }
       date_sorted_comments.each do |item|
         csv << [requester.email_address, item.comment_text, item.updated_at, Cart.human_readable_time(item.updated_at, Cart.default_time_zone_offset)]
       end
-
-      # csv << ["commenter","approver comment","created_at"]
-      # approval_users.each do |user|
-      #   user.comments.each do |comment|
-      #     csv << [user.email_address, comment.comment_text, comment.updated_at]
-      #   end
-      # end
     end
     return csv_string
   end
