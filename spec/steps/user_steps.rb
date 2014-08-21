@@ -24,10 +24,6 @@ module UserSteps
     visit "/carts/#{@cart.id}"
   end
 
-  step "the user is logged in" do
-    login_with_oauth
-  end
-
   step "I login" do
     login_with_oauth
   end
