@@ -69,18 +69,22 @@
             %td
               %strong
                 Comments:
-              - cart_item.comments.each do |c|
+              - if !cart_item.comments.empty?
+                - cart_item.comments.each do |c|
+                  %br
+                  - unless c.users.empty?
+                    %em
+                      = "#{c.users.first.full_name}: "
+                  = c.comment_text
+              - else
                 %br
-                - unless c.users.empty?
-                  %em
-                    = "#{c.users.first.full_name}: "
-                = c.comment_text
+                No comments have been added yet
 
               %p
                 = form_for [cart_item, Comment.new] do |f|
                   = f.text_area :comment_text, rows: 5, cols: 55
                   %p
-                    = submit_tag "Add a comment"
+                    = submit_tag "Add a comment", id: :add_a_comment
                   %br
 
           / END Comments

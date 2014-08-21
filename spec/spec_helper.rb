@@ -3,6 +3,7 @@ require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'simplecov'
 require 'steps/user_steps'
+require 'integration_spec_helper'
 SimpleCov.start 'rails'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
@@ -17,6 +18,9 @@ ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 RSpec.configure do |config|
   #Add modules for Turnip acceptance tests
   config.include UserSteps
+
+  #Add modules for helpers
+  config.include IntegrationSpecHelper, :type => :controller
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
@@ -47,4 +51,29 @@ RSpec.configure do |config|
   config.after(:each) do
     DatabaseCleaner.clean
   end
+
+  # config.before(type: :feature) do
+    # request.env["omniauth.auth"] = OmniAuth.config.mock_auth[:myusa] #Testing
+    # OmniAuth.config.mock_auth[:myusa] = {
+    #   'provider' => 'myusa',
+    #   'uid' => '123545'
+    # }
+  # end
+
+  # OmniAuth.config.mock_auth[:myusa] = {
+  #   :provider => 'myusa',
+  #   :uid => '123545',
+  #   :name => "George Jetson"
+  # }
+
+  Capybara.default_host = 'http://localhost:3000'
+
+  OmniAuth.config.test_mode = true
+  OmniAuth.config.add_mock(:myusa, {
+    :raw_info => {"name"=>"George Jetson"},
+    :uid => '12345',
+    :nickname => 'georgejetsonmyusa'
+  })
+
 end
+
