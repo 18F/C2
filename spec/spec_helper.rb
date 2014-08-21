@@ -20,7 +20,7 @@ RSpec.configure do |config|
   config.include UserSteps
 
   #Add modules for helpers
-  config.include IntegrationSpecHelper, :type => :controller
+  config.include IntegrationSpecHelper
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
@@ -52,22 +52,7 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 
-  # config.before(type: :feature) do
-    # request.env["omniauth.auth"] = OmniAuth.config.mock_auth[:myusa] #Testing
-    # OmniAuth.config.mock_auth[:myusa] = {
-    #   'provider' => 'myusa',
-    #   'uid' => '123545'
-    # }
-  # end
-
-  # OmniAuth.config.mock_auth[:myusa] = {
-  #   :provider => 'myusa',
-  #   :uid => '123545',
-  #   :name => "George Jetson"
-  # }
-
   Capybara.default_host = 'http://localhost:3000'
-
   OmniAuth.config.test_mode = true
   OmniAuth.config.add_mock(:myusa, {
     :raw_info => {"name"=>"George Jetson"},
