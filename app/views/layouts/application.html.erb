@@ -6,7 +6,12 @@
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
   <%= csrf_meta_tags %>
 </head>
-<body>
+<body class="bodyclass">
+<% if flash[:notice] %>
+  <div class="flash success">
+    <%= flash[:notice] %>
+  </div>
+<% end %>
 
 <% flash.each do |key, value| %>
     <div class="alert alert-<%= key %> <%= key %>"><%= value %></div>

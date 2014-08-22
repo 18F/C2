@@ -2,16 +2,16 @@
   position:absolute;
   top:200px;
   left:200px;
-  border: 1px solid rgba(128, 128, 128, .9);
-  background-color: rgba(250,250,250,0.95);
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
+//  border: 1px solid rgba(128, 128, 128, .9);
+//  background-color: rgba(250,250,250,0.95);
+//  -webkit-border-radius: 5px;
+//  -moz-border-radius: 5px;
+//  border-radius: 5px;
   z-index: 9999;
-  width: 798px;
-  height:388px;
-  padding-left: 2px;
-  padding-top: 5px;
+  width: 600px;
+  height:600px;
+//  padding-left: 2px;
+//  padding-top: 5px;
 }
 
 #pic_holder {
@@ -23,12 +23,12 @@
    display:none;
   // opacity: 0;
   top: 0px;
-  position: absolute;
+  //position: absolute;
 }
 
 #formscreen {
   top: 0px;
-  position: absolute;
+//  position: absolute;
 }
 
 .btn {
@@ -90,4 +90,15 @@
   margin: 20px 5px;
   border-top: 1px solid #333333;
   padding-top: 5px;
+}
+
+.bodyclass {
+  padding: 0;
+  margin: 0;
+  background-color: rgba(1, 1, 1, 0.01);
+}
+
+.overlay-panel {
+  height: 100%;
+  margin-bottom: 0;
 }

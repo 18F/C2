@@ -2,15 +2,21 @@
     <%= javascript_include_tag "backbone-min.js" %>
     <%= javascript_include_tag "backbone-localstorage.js" %>
     <%= javascript_include_tag "overlay/overlay" %>
-
+<div class="panel panel-default overlay-panel">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      GSA Communicart
+    </h3>
+  </div>
+  <div class="panel-body">
   <div id="formscreen">
     <h3>Add item to cart?</h3>
     <div float="left" id="pic_holder">
         <img id="prod_pic"/>
     </div>
 
-    <form  class="form-inline" role="form" width="700px">
-        <div class="form-group"> <label>Name</label><input type="text" id="itemname" size="46"/></div>
+    <form  class="form-inline" role="form" width="520px">
+        <div class="form-group"> <label>Name</label><input type="text" id="itemname" size="35"/></div>
       <div class="form-group"><label>Price $</label><input type="text" id="itemprice" size="8"/></div>
         <div class="form-group"><label>Quantity</label><input type="text" id="itemquantity" size="4"/></div><br/>
     </form>
@@ -18,7 +24,6 @@
     <div class="error" id="priceError"><p>Please enter a price</p></div>
   </div>
   <div id="cartscreen">
-      <h3>GSA Communicart</h3>
       <label>Cart Name:</label>
       <input type="text" size="30" id="cartName"/>
       <table id="itemList" class="table table-bordered"></table>
@@ -30,10 +35,9 @@
         <a class="btn" id="send_btn">Send for Approval</a><a class="btn" id="shop_btn">Keep shopping</a><a class="btn" id="clear_btn">Clear Cart</a>
       </div>
   </div>
+  </div>
+</div>
   <script type="text/template" id="cartitem-template">
       <td><a href='<%%= itemurl %>' class='itemlistname'><%%= title %></a></td><td class='itemlistprice'>$ <%%= price %></td>
-        <td> <%%= quantity %> </td><td><a class='deleter'>remove</a><td>
-      </td>
-  </script><!--
-</body>
-</html>-->
+        <td> <%%= quantity %> </td><td><a class='deleter'>remove</a></td>
+  </script>
