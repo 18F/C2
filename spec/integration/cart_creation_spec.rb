@@ -166,7 +166,7 @@ describe 'Creating a cart' do
     expect(cart.approval_group.name).to eq "secondApprovalGroup"
     expect(cart.comments.count).to eq 2
     expect(cart.comments.last.comment_text).to eq "Hi, this is a comment from the second approval group, I hope it works!\r\nThis is the second line of the comment."
-#    expect(cart.requester.comments.first.comment_text).to eq "Hi, this is a comment from the second approval group, I hope it works!\r\nThis is the second line of the comment."
+    expect(cart.requester.comments.first.comment_text).to eq "Hi, this is a comment from the second approval group, I hope it works!\r\nThis is the second line of the comment."
     expect(cart.approvals.count).to eq 1
     expect(cart.approvals.where(role: 'approver').count).to eq 0
     expect(cart.approvals.where(role: 'requester').count).to eq 1
