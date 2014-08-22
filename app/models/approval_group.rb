@@ -5,10 +5,9 @@ class ApprovalGroup < ActiveRecord::Base
   has_many :users, through: :user_roles
 
   def requester_id
-    ur =  user_roles.find { |r| r.role == "requester"}
-    return ur.user_id
+    if ur = user_roles.find { |r| r.role == "requester"}
+      return ur.user_id
+    end
   end
 
 end
-
-# comment

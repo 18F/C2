@@ -12,7 +12,7 @@ Feature: Creating a comment on a cart item
     And I should see 'No comments have been added yet'
     When I fill out 'comment_comment_text' with 'This is my first comment'
     And I click 'Add a comment' button
-    Then I should see 'You successfully added a comment for CartItem 1'
+    Then I should see "You successfully added a comment" #TODO: Match the entire message with cart number included
     And I should see 'This is my first comment'
 
 
