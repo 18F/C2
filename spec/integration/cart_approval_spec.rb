@@ -90,9 +90,10 @@ describe 'Approving a cart with multiple approvers' do
     expect(Cart.first.status).to eq 'approved'
     expect(Cart.first.approvals.where(status: 'approved').count).to eq 3
     expect(Cart.first.comments.first.comment_text).to eq "spudcomment"
-  
-#    expect(Cart.first.comments.first.user_id).to eq Cart.first.approvals.first.user_id
-    
+
+    approver = User.find_by(email_address: 'approver1@some-dot-gov.gov')
+    expect(Cart.first.comments.first.user_id).to eq approver.id
+
     expect(Cart.first.comments.count).to eq 3
     expect(ActionMailer::Base.deliveries.count).to eq 3
 
