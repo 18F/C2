@@ -13,7 +13,6 @@ Feature: Adding an approval group
     And I fill out 'Approver 1' with 'test-approver-1@some-dot-gov.gov'
     And I fill out 'Approver 2' with 'test-approver-2@some-dot-gov.gov'
     And I click 'Create Approval Group' button
-    And show me the page
     Then I should see alert text 'Group created successfully'
     Then I should see a header 'MyAwesomeApprovalGroup'
 
