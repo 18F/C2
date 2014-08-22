@@ -1850,10 +1850,18 @@ p.rejected {
   background-color: #fcc;
 }
 
-.flash.success {
-  border: 1px solid #a6d17a;
-  background-color: #c8f29e;
+.flash{
   padding: 10px;
+
+  &.success {
+    border: 1px solid #a6d17a;
+    background-color: #c8f29e;
+  }
+
+  &.alert {
+    border: 1px solid #c99;
+    background-color: #fcc;
+  }
 }
 
 

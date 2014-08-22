@@ -1,0 +1,9 @@
+.nav
+  - if !signed_in?
+    = link_to 'Sign in with MyUSA', "/auth/myusa"
+  - else
+    %p
+      [MyUSA]&nbsp;
+      %strong
+        =session['user']['email']
+      = link_to 'Logout', "/logout", method: :post

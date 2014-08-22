@@ -5,16 +5,21 @@ class HomeController < ApplicationController
 
   def oauth_callback
     auth = request.env["omniauth.auth"]
+    return_to = session[:return_to]
+
+    reset_session
     session[:user] = auth.extra.raw_info.to_hash
     session[:token] = auth.credentials.token
-    redirect_to session[:return_to] || root_url
+    flash[:notice] = "You successfully signed in"
+    redirect_to return_to || root_url
   end
 
   def index
   end
 
   def logout
-    session[:user] = nil # :before_filter sets to empty hash
+    reset_session
+    @mygov_access_token = nil
     redirect_to root_url
   end
 

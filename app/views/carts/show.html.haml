@@ -1,108 +1,102 @@
-!!!
-%head
-  %title= "Communicart: Cart #{@cart.id}"
-%html
+%table.w-container.main-container{:width => "940"}
+  %tr
+    %td
+      %h1.communicart_header
+        = "Cart #{@cart.id}"
+      %h4.communicart_description
+        Requested by: #{@cart.requester.full_name}
+  %tr
+    %td.w-container.results-header-container
+      %h3.cart-header
+        GSA Advantage: Cart ##{@cart.external_id}
+  %tr
+    %td.w-container.results-list
+      %table{:width => "100%"}
+        %tr.header
+          %td.first{:width => "30%"}
+            %h5 Name
+          %td{:width => "17.5%"}
+            %h5 Description
+          %td{:width => "17.5%"}
+            %h5 Details
+          %td{:width => "17.5%"}
+            %h5 Tags
+          %td.last{:width => "17.5%"}
+            %h5 Price
+        / BEGIN CartItem Entry
+        - @cart.cart_items.each do |cart_item|
+          %tr.cart_item_information
+            %td.first{:valign => "top"}
+              %p
+                %strong= cart_item.description
+            %td{:valign => "top"}
+              %p= cart_item.details
+            %td{:valign => "top"}
+              %p
+                %strong= cart_item.vendor
+                %br
+                  %em= cart_item.part_number
+                  %br
+                    %a{:href => "https://gsaadvantage.gov#{cart_item['url']}"} Link to the product
+            %td{:valign => "top"}
+              %ul.result-tag
+                / This is an intermediate state
+                - if cart_item.green?
+                  %li
+                    .green>
+                    Green
+                - unless cart_item.socio.empty?
+                  %li.socio
+                    Socio:
+                    %span.tag-values
+                      - cart_item.socio.each_with_index do |socio_tag, index|
+                        = socio_tag
+                        = "," unless cart_item.socio.count == index+1
+                - unless cart_item.features.empty?
+                  - cart_item.features.each do |feature|
+                    %li
+                      <div class="#{feature}"
+                      = feature
+            %td.last{:valign => "top"}
+              %p.result-item-price= cart_item.price
+              %p.result-item-units
+                = cart_item.quantity
+                units
 
-  %body.communicart-notification
-    - if flash[:notice]
-      .flash.success
-        = flash[:notice]
 
-    %table.w-container.main-container{:width => "940"}
-      %tr
-        %td
-          %h1.communicart_header
-            = "Cart #{@cart.id}"
-          %h4.communicart_description
-            Requested by: #{@cart.requester.full_name}
-      %tr
-        %td.w-container.results-header-container
-          %h3.cart-header
-            GSA Advantage: Cart ##{@cart.external_id}
-      %tr
-        %td.w-container.results-list
-          %table{:width => "100%"}
-            %tr.header
-              %td.first{:width => "30%"}
-                %h5 Name
-              %td{:width => "17.5%"}
-                %h5 Description
-              %td{:width => "17.5%"}
-                %h5 Details
-              %td{:width => "17.5%"}
-                %h5 Tags
-              %td.last{:width => "17.5%"}
-                %h5 Price
-            / BEGIN CartItem Entry
-            - @cart.cart_items.each do |cart_item|
-              %tr.cart_item_information
-                %td.first{:valign => "top"}
+          / BEGIN Comments
+          %tr
+            %td
+              %strong
+                Comments:
+              - if !cart_item.comments.empty?
+                - cart_item.comments.each do |c|
+                  %br
+                  - unless c.users.empty?
+                    %em
+                      = "#{c.users.first.full_name}: "
+                  = c.comment_text
+              - else
+                %br
+                No comments have been added yet
+
+              %p
+                = form_for [cart_item, Comment.new] do |f|
+                  = f.text_area :comment_text, rows: 5, cols: 55
                   %p
-                    %strong= cart_item.description
-                %td{:valign => "top"}
-                  %p= cart_item.details
-                %td{:valign => "top"}
-                  %p
-                    %strong= cart_item.vendor
-                    %br
-                      %em= cart_item.part_number
-                      %br
-                        %a{:href => "https://gsaadvantage.gov#{cart_item['url']}"} Link to the product
-                %td{:valign => "top"}
-                  %ul.result-tag
-                    / This is an intermediate state
-                    - if cart_item.green?
-                      %li
-                        .green>
-                        Green
-                    - unless cart_item.socio.empty?
-                      %li.socio
-                        Socio:
-                        %span.tag-values
-                          - cart_item.socio.each_with_index do |socio_tag, index|
-                            = socio_tag
-                            = "," unless cart_item.socio.count == index+1
-                    - unless cart_item.features.empty?
-                      - cart_item.features.each do |feature|
-                        %li
-                          <div class="#{feature}"
-                          = feature
-                %td.last{:valign => "top"}
-                  %p.result-item-price= cart_item.price
-                  %p.result-item-units
-                    = cart_item.quantity
-                    units
+                    = submit_tag "Add a comment", id: :add_a_comment
+                  %br
+
+          / END Comments
 
 
-              / BEGIN Comments
-              %tr
-                %td
-                  %strong
-                    Comments:
-                  - cart_item.comments.each do |c|
-                    %br
-                    - unless c.users.empty?
-                      %em
-                        = "#{c.users.first.full_name}: "
-                    = c.comment_text
-
-                  %p
-                    = form_for [cart_item, Comment.new] do |f|
-                      = f.text_area :comment_text, rows: 5, cols: 55
-                      %p
-                        = submit_tag "Add a comment"
-                      %br
-
-              / END Comments
-
-
-            / END CartItem Entry
-            %tr.total-price
-              %td{:colspan => "2"}
-              %td.total-price{:colspan => "2"}
-                %p
-                  %strong Total Price
-              %td.total-price.total-amount
-                %p
-                  %strong
-                    $#{number_with_precision(@cart.total_price, precision: 2)}
+        / END CartItem Entry
+        %tr.total-price
+          %td{:colspan => "2"}
+          %td.total-price{:colspan => "2"}
+            %p
+              %strong Total Price
+          %td.total-price.total-amount
+            %p
+              %strong
+                $#{number_with_precision(@cart.total_price, precision: 2)}

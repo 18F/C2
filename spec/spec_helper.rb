@@ -2,27 +2,25 @@ ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'simplecov'
+require 'steps/user_steps'
+require 'integration_spec_helper'
 SimpleCov.start 'rails'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
+Dir.glob("./spec/steps/**/*steps.rb") { |f| load f, true }
 
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 
 RSpec.configure do |config|
-  # ## Mock Framework
-  #
-  # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
-  #
-  # config.mock_with :mocha
-  # config.mock_with :flexmock
-  # config.mock_with :rr
+  #Add modules for Turnip acceptance tests
+  config.include UserSteps
 
-  # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  #Add modules for helpers
+  config.include IntegrationSpecHelper
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
@@ -53,4 +51,14 @@ RSpec.configure do |config|
   config.after(:each) do
     DatabaseCleaner.clean
   end
+
+  Capybara.default_host = 'http://localhost:3000'
+  OmniAuth.config.test_mode = true
+  OmniAuth.config.add_mock(:myusa, {
+    :raw_info => {"name"=>"George Jetson"},
+    :uid => '12345',
+    :nickname => 'georgejetsonmyusa'
+  })
+
 end
+
