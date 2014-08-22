@@ -4,12 +4,8 @@ module UserSteps
     @user = FactoryGirl.create(:user, first_name: "George", last_name: "Jetson")
   end
 
-  step "I should see :text alert text" do |text|
+  step "I should see alert text :text" do |text|
     page.find('.alert').should have_content(text)
-  end
-
-  step "I should see :text success text" do |text|
-    page.find('.success').should have_content(text)
   end
 
   step "I should see :text" do |text|
@@ -45,5 +41,11 @@ module UserSteps
     Capybara.match = :first
     click_button(button_name)
   end
+
+  step 'I should see a header :text' do |text|
+    #TODO: Search through all header tags
+    page.find('h3').should have_content(text)
+  end
+
 
 end

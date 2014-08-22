@@ -1,0 +1,11 @@
+<div class="ag_display">
+<h3> <%= @approval_group.name %> </h3>
+<table>
+<% @approval_group.user_roles.each do |role| %>
+    <tr>
+      <td><%= role.user.email_address %></td>
+      <td><%= role.role %></td>
+    </tr>
+<% end %>
+</table>
+</div>
