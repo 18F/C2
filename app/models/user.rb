@@ -6,8 +6,6 @@ class User < ActiveRecord::Base
   has_many :user_roles
   has_many :approval_groups, through: :user_roles
   has_many :approvals
-  has_many :approver_comments
-  has_many :comments, through: :approver_comments
   has_many :properties, as: :hasproperties
 
   def full_name
