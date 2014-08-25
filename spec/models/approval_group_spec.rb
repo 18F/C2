@@ -5,6 +5,7 @@ describe ApprovalGroup do
   let(:cart) { FactoryGirl.create(:cart, name: 'test-cart') }
   let(:user1) { FactoryGirl.create(:user, email_address: 'user1@some-dot-gov.gov') }
   let(:user2) { FactoryGirl.create(:user, email_address: 'user2@some-dot-gov.gov') }
+  let(:requester) { FactoryGirl.create(:user, id: 13579) }
 
   context 'valid attributes' do
     it 'should be valid with valid attributes' do
@@ -44,4 +45,14 @@ describe ApprovalGroup do
     end
   end
 
+  describe '#requester_id' do
+    it "returns the requester's id" do
+      UserRole.create!(user_id: requester.id, approval_group_id: approval_group.id, role: 'requester')
+      expect(approval_group.requester_id).to eq 13579
+    end
+
+    it 'returns nil when there is no requester' do
+      expect(approval_group.requester_id).to eq nil
+    end
+  end
 end

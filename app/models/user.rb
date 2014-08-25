@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
   has_many :approval_groups, through: :user_roles
   has_many :approvals
   has_many :properties, as: :hasproperties
+  has_many :comments
 
   def full_name
     if first_name && last_name
