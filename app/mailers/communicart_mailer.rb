@@ -7,6 +7,27 @@
     @approval = approval
     @token = ApiToken.where(user_id: @approval.user_id).where(cart_id: @cart.id).last
 
+    puts "inside cart notification email"
+    if cart.all_approvals_received?
+      attachments['Communicart' + cart.name + '.details.csv'] = cart.create_items_csv
+      attachments['Communicart' + cart.name + '.comments.csv'] = cart.create_comments_csv
+      attachments['Communicart' + cart.name + '.approvals.csv'] = cart.create_approvals_csv
+    end
+
+    approval_format = Settings.email_title_for_approval_request_format
+    mail(
+         to: email,
+         subject: approval_format % [ cart.requester.full_name,cart.external_id],
+         from: ENV['NOTIFICATION_FROM_EMAIL']
+         )
+  end
+
+  def cart_observer_email(email, cart)
+    @url = ENV['NOTIFICATION_URL']
+    @cart = cart.decorate
+
+    puts "inside cart observer email"
+    binding.pry
     if cart.all_approvals_received?
       attachments['Communicart' + cart.name + '.details.csv'] = cart.create_items_csv
       attachments['Communicart' + cart.name + '.comments.csv'] = cart.create_comments_csv

@@ -46,6 +46,13 @@ class Cart < ActiveRecord::Base
       ApiToken.create!(user_id: approval.user_id, cart_id: self.id, expires_at: Time.now + 7.days)
       CommunicartMailer.cart_notification_email(approval.user.email_address, self, approval).deliver
     end
+    approval_group.user_roles.where(role: 'observer').each do |observer|
+      puts "cart.rb line 50"
+      #binding.pry
+      CommunicartMailer.cart_observer_email(observer.user.email_address, self).deliver
+      #CommunicartMailer.cart_notification_email(observer.user.email_address, self, approvals.first).deliver
+      puts observer.user.email_address
+    end
   end
 
   def create_items_csv
