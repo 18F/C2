@@ -64,10 +64,14 @@ function scrapePage(jQ) {
     console.log("iframe URL= " + iframeURL);
 
     //do awkward bookmarklet panel insertion
+
+    //REFACTOR: Instantiate the main backbone view if the one doesn't exist already
+    $('#communicart_bookmarklet').remove();
     var div = document.createElement("div");
     div.id = "communicart_bookmarklet";
     $('#communicart_bookmarklet').height(175);
     document.body.insertBefore(div, document.body.firstChild);
+
     $('#communicart_bookmarklet').html("<iframe frameborder='0' scrolling='no' name='instacalc_bookmarklet_iframe' id='instacalc_bookmarklet_iframe' src='" +
         iframeURL + "' width='600px' height='600px' style='textalign:right;'></iframe>");
 
