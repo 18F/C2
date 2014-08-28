@@ -7,7 +7,6 @@
     @approval = approval
     @token = ApiToken.where(user_id: @approval.user_id).where(cart_id: @cart.id).last
 
-    puts "inside cart notification email"
     if cart.all_approvals_received?
       attachments['Communicart' + cart.name + '.details.csv'] = cart.create_items_csv
       attachments['Communicart' + cart.name + '.comments.csv'] = cart.create_comments_csv
@@ -26,8 +25,6 @@
     @url = ENV['NOTIFICATION_URL']
     @cart = cart.decorate
 
-    puts "inside cart observer email"
-    binding.pry
     if cart.all_approvals_received?
       attachments['Communicart' + cart.name + '.details.csv'] = cart.create_items_csv
       attachments['Communicart' + cart.name + '.comments.csv'] = cart.create_comments_csv
