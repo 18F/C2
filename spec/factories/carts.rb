@@ -42,5 +42,15 @@ FactoryGirl.define do
       end
     end
 
+    factory :cart_with_observers do
+      after :create do |cart|
+        #TODO: change approval_group to use a factory that adds observers
+        approval_group = FactoryGirl.create(:approval_group_with_approvers_observers_and_requester)
+
+        cart.approval_group = approval_group
+        cart.save
+      end
+    end
+
   end
 end

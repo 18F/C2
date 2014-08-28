@@ -21,6 +21,24 @@
          )
   end
 
+  def cart_observer_email(email, cart)
+    @url = ENV['NOTIFICATION_URL']
+    @cart = cart.decorate
+
+    if cart.all_approvals_received?
+      attachments['Communicart' + cart.name + '.details.csv'] = cart.create_items_csv
+      attachments['Communicart' + cart.name + '.comments.csv'] = cart.create_comments_csv
+      attachments['Communicart' + cart.name + '.approvals.csv'] = cart.create_approvals_csv
+    end
+
+    approval_format = Settings.email_title_for_approval_request_format
+    mail(
+         to: email,
+         subject: approval_format % [ cart.requester.full_name,cart.external_id],
+         from: ENV['NOTIFICATION_FROM_EMAIL']
+         )
+  end
+
   def approval_reply_received_email(analysis, cart)
 # This is a shared constant between C2 and Mario, which should be moved to our 
 # YAML file

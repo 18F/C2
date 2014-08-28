@@ -148,5 +148,51 @@ describe CommunicartMailer do
   end
 
   # TODO: describe 'rejection_update_email'
+  describe 'cart observer received email' do
+    let(:observer) { FactoryGirl.create(:user, email_address: 'test-observer-1@some-dot-gov.gov') }
+    let(:requester) { FactoryGirl.create(:user, email_address: 'test-requester-1@some-dot-gov.gov') }
+
+    before do
+      ENV.stub(:[])
+      ENV.stub(:[]).with('NOTIFICATION_FROM_EMAIL').and_return('reply@communicart-stub.com')
+      cart_with_observers.stub(:requester).and_return(requester)
+    end
+
+    let(:cart_with_observers) { FactoryGirl.create(:cart_with_observers, external_id: 1965) }
+
+    let(:mail) { CommunicartMailer.cart_observer_email(cart_with_observers.observers.first.user.email_address, cart_with_observers) }
+
+    it 'renders the subject' do
+      mail.subject.should == 'Communicart Approval Request from Liono Thunder: Please review Cart #1965'
+    end
+
+    it 'renders the receiver email' do
+      mail.to.should == ["observer1@some-dot-gov.gov"]
+    end
+
+    it 'renders the sender email' do
+      mail.from.should == ['reply@communicart-stub.com']
+    end
+
+    context 'attaching a csv of the cart activity' do
+      it 'generates csv attachments for an approved cart' do
+        cart_with_observers.stub(:all_approvals_received?).and_return(true)
+
+        cart_with_observers.should_receive(:create_items_csv)
+        cart_with_observers.should_receive(:create_comments_csv)
+        cart_with_observers.should_receive(:create_approvals_csv)
+        mail
+      end
+
+      it 'does not generate csv attachments for an unapproved cart' do
+        cart_with_observers.stub(:all_approvals_received?).and_return(false)
+
+        cart_with_observers.should_not_receive(:create_items_csv)
+        cart_with_observers.should_not_receive(:create_comments_csv)
+        cart_with_observers.should_not_receive(:create_approvals_csv)
+        mail
+      end
+    end
+  end 
 
 end

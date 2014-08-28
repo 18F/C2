@@ -45,4 +45,20 @@ describe Cart do
     end
   end
 
+  describe '#create_and_send_observer_emails' do
+    let(:cart) { FactoryGirl.create(:cart_with_observers) }
+    let(:api_token) { FactoryGirl.create(:api_token) }
+
+    before do
+      ApiToken.stub_chain(:where, :where, :last).and_return(api_token)
+    end
+
+    it 'sends a cart notification email' do
+      mock_mailer = double
+      CommunicartMailer.should_receive(:cart_observer_email).exactly(3).times.and_return(mock_mailer)
+      mock_mailer.should_receive(:deliver).exactly(3).times
+      cart.create_and_send_approvals
+    end
+  end
+
 end
