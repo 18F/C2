@@ -48,7 +48,6 @@ class Cart < ActiveRecord::Base
     end
     approval_group.user_roles.where(role: 'observer').each do |observer|
       CommunicartMailer.cart_observer_email(observer.user.email_address, self).deliver
-      #CommunicartMailer.cart_notification_email(observer.user.email_address, self, approvals.first).deliver
     end
   end
 
