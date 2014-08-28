@@ -46,7 +46,6 @@ describe Cart do
   end
 
   describe '#create_and_send_observer_emails' do
-    #TODO: write a factory for cart with three observers
     let(:cart) { FactoryGirl.create(:cart_with_observers) }
     let(:api_token) { FactoryGirl.create(:api_token) }
 
@@ -56,9 +55,8 @@ describe Cart do
 
     it 'sends a cart notification email' do
       mock_mailer = double
-      CommunicartMailer.should_receive(:cart_observer_email).exactly(3).times
-      #CommunicartMailer.should_receive(:cart_observer_email).exactly(3).times.and_return(mock_mailer)
-      #mock_mailer.should_receive(:deliver).exactly(3).times
+      CommunicartMailer.should_receive(:cart_observer_email).exactly(3).times.and_return(mock_mailer)
+      mock_mailer.should_receive(:deliver).exactly(3).times
       cart.create_and_send_approvals
     end
   end

@@ -47,11 +47,8 @@ class Cart < ActiveRecord::Base
       CommunicartMailer.cart_notification_email(approval.user.email_address, self, approval).deliver
     end
     approval_group.user_roles.where(role: 'observer').each do |observer|
-      puts "cart.rb line 50"
-      #binding.pry
       CommunicartMailer.cart_observer_email(observer.user.email_address, self).deliver
       #CommunicartMailer.cart_notification_email(observer.user.email_address, self, approvals.first).deliver
-      puts observer.user.email_address
     end
   end
 
@@ -79,6 +76,10 @@ class Cart < ActiveRecord::Base
 
   def requester
     approvals.where(role: 'requester').first.user
+  end
+
+  def observers
+    approval_group.user_roles.where(role: 'observer')
   end
 
   def create_approvals_csv
