@@ -18,7 +18,11 @@ class CartItem < ActiveRecord::Base
   end
 
   def formatted_price
-    "$ #{'%.2f' % price}"
+    "$#{'%.2f' % price}"
+  end
+
+  def subtotal
+    "$#{'%.2f' % (price * quantity)}"
   end
 
 end

@@ -102,6 +102,7 @@
                   <td class="last" valign="top">
                     <p class="result-item-price"><%= cart_item.formatted_price %></p>
                     <p class="result-item-units"><%= cart_item.quantity %> units</p>
+                    <p class="result-item-sub-total">Sub-total: <%= cart_item.subtotal %></p>
                   </td>
                 </tr>
               <%- end %>
