@@ -24,6 +24,7 @@ describe 'Creating a cart' do
       "cartItems": [
         {
           "vendor": "DOCUMENT IMAGING DIMENSIONS, INC.",
+          "shopping_venue": "GSA Advantage",
           "description": "ROUND RING VIEW BINDER WITH INTERIOR POC",
           "url": "/advantage/catalog/product_detail.do?&oid=704213980&baseOid=&bpaNumber=GS-02F-XA002",
           "notes": "",
@@ -48,6 +49,7 @@ describe 'Creating a cart' do
         },
         {
           "vendor": "OFFICE DEPOT",
+          "shopping_venue": "Mega Site Aggreator.com",
           "description": "PEN,ROLLER,GELINK,G-2,X-FINE",
           "url": "/advantage/catalog/product_detail.do?&oid=703389586&baseOid=&bpaNumber=GS-02F-XA009",
           "notes": "",
@@ -107,6 +109,7 @@ describe 'Creating a cart' do
       "cartItems": [
         {
           "vendor": "DOCUMENT IMAGING DIMENSIONS, INC.",
+          "shopping_venue": "GSA Advantage",
           "description": "ROUND RING VIEW BINDER WITH INTERIOR POC",
           "url": "/advantage/catalog/product_detail.do?&oid=704213980&baseOid=&bpaNumber=GS-02F-XA002",
           "notes": "",
