@@ -14,7 +14,7 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
-/doc
+/doc/*.svg
 .DS_Store
 .rspec
 custom_plan.rb
