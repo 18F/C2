@@ -24,7 +24,7 @@ describe 'Creating a cart' do
       "cartItems": [
         {
           "vendor": "DOCUMENT IMAGING DIMENSIONS, INC.",
-          "shopping_venue": "GSA Advantage",
+          "shoppingVenue": "GSA Advantage",
           "description": "ROUND RING VIEW BINDER WITH INTERIOR POC",
           "url": "/advantage/catalog/product_detail.do?&oid=704213980&baseOid=&bpaNumber=GS-02F-XA002",
           "notes": "",
@@ -49,7 +49,7 @@ describe 'Creating a cart' do
         },
         {
           "vendor": "OFFICE DEPOT",
-          "shopping_venue": "Mega Site Aggreator.com",
+          "shoppingVenue": "Mega Site Aggreator.com",
           "description": "PEN,ROLLER,GELINK,G-2,X-FINE",
           "url": "/advantage/catalog/product_detail.do?&oid=703389586&baseOid=&bpaNumber=GS-02F-XA009",
           "notes": "",
@@ -109,7 +109,7 @@ describe 'Creating a cart' do
       "cartItems": [
         {
           "vendor": "DOCUMENT IMAGING DIMENSIONS, INC.",
-          "shopping_venue": "GSA Advantage",
+          "shoppingVenue": "GSA Advantage",
           "description": "ROUND RING VIEW BINDER WITH INTERIOR POC",
           "url": "/advantage/catalog/product_detail.do?&oid=704213980&baseOid=&bpaNumber=GS-02F-XA002",
           "notes": "",
@@ -201,6 +201,20 @@ describe 'Creating a cart' do
 
       post 'send_cart', @json_params_1
       expect(response.status).to eq 200
+    end
+  end
+
+  context 'cart item venue' do
+    it 'added shoppingVenue symbol' do
+      @json_params_1 = JSON.parse(params_request_1)
+
+      expect(Cart.count).to eq 0
+
+      post 'send_cart', @json_params_1
+      expect(Cart.count).to eq 1
+      cart = Cart.first
+      expect(cart.cart_items.first.cart_item_traits.count).to eq 3
+      expect(cart.cart_items.first.getProp('shoppingVenue')).to eq "GSA Advantage"
     end
   end
 
