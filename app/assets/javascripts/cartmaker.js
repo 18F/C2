@@ -94,7 +94,7 @@ function convertDollar(dollarsAndCentsString) {
     // First, discard the '$' glyph, if it was passed in.
     if (dollarsAndCentsString.split('$').length == 2)
         dollarsAndCentsString = dollarsAndCentsString.split('$')[1];
-    // If the user delimmited the groups of digits with commas, remove them.
+    // If the user delimited the groups of digits with commas, remove them.
     dollarsAndCentsString = dollarsAndCentsString.replace(/,/g, '');
     // Next, divide the resulting string in to dollars and cents.
     var hasDecimal = (dollarsAndCentsString.split('.')).length == 2;
