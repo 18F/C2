@@ -100,7 +100,7 @@ private
   end
 
   def authentication_error(e)
-    flash[:notice] = e.message
+    flash[:error] = e.message
     redirect_to "/498.html"
   end
 end

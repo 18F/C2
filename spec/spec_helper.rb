@@ -3,6 +3,7 @@ require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'simplecov'
 require 'steps/user_steps'
+require 'steps/approval_steps'
 require 'integration_spec_helper'
 SimpleCov.start 'rails'
 
@@ -18,6 +19,7 @@ ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 RSpec.configure do |config|
   #Add modules for Turnip acceptance tests
   config.include UserSteps
+  config.include ApprovalSteps
 
   #Add modules for helpers
   config.include IntegrationSpecHelper
