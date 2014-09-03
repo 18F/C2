@@ -14,6 +14,14 @@ var CartItem = Backbone.Model.extend({
   },
   initialize: function() {
     //put event code here.
+  },
+  subtotal: function() {
+      return (this.attributes.price * this.attributes.quantity).toFixed(2);
+  },
+  toJSON: function() {
+    var json = Backbone.Model.prototype.toJSON.apply(this, arguments);
+    json.subtotal = this.subtotal();
+    return json;
   }
 });
 
@@ -23,7 +31,8 @@ var CartItemView = Backbone.View.extend({
         "click .deleter" : "deleteme"
     },
     render: function() {
-        this.$el.html(this.cartTpl(this.model.attributes));
+        var j = this.model.toJSON();
+        this.$el.html(this.cartTpl(j));
         return this;
     },
     initialize: function() {
@@ -64,6 +73,7 @@ var CartView = Backbone.View.extend({
     render: function() {
         this.$el  = $('#itemList'); //this is a result of timing...should fix
         this.$el.empty();
+        this.$el.append('<tr><th>Items</th><th class="ra">Each</th><th class="qty">Qty</th><th class="ra">Subtotal</th><th></th></tr>')
         this.model.each( function(item) {
             var iview = new CartItemView({model: item});
             var ir = iview.render().el;
