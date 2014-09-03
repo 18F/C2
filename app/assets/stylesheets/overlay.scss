@@ -2,61 +2,76 @@
   position:absolute;
   top:200px;
   left:200px;
-//  border: 1px solid rgba(128, 128, 128, .9);
-//  background-color: rgba(250,250,250,0.95);
-//  -webkit-border-radius: 5px;
-//  -moz-border-radius: 5px;
-//  border-radius: 5px;
   z-index: 9999;
   width: 600px;
   height:600px;
-//  padding-left: 2px;
-//  padding-top: 5px;
 }
 
 #pic_holder {
+  padding-top: 1em;
   width: 200px;
   height: 200px;
+  background-color: #fff;
+  border: 1px solid #888;
 }
+
+#prod_pic {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+}
+
 
 #cartscreen {
    display:none;
-  // opacity: 0;
   top: 0px;
-  //position: absolute;
 }
 
 #formscreen {
   top: 0px;
-//  position: absolute;
 }
 
 .btn {
-	background-color:#ffffff;
+	background-color: #d0d0d0;
 	-moz-border-radius:9px;
 	-webkit-border-radius:9px;
-	border-radius:9px;
-	border:1px solid #ab193e;
+	border-radius:6px;
+	border:1px solid #a7a7a7;
 	display:inline-block;
 	cursor:pointer;
-	color:#ff4747;
+	color:#333;
 	font-family:arial;
-	font-size:16px;
-	padding:8px 20px;
-  margin: 5px;
+	font-size:.8em;
+	padding:6px 20px;
+    margin: 5px;
 	text-decoration:none;
 }
 .btn:hover {
-	background-color:#7a1a17;
+	background-color:#999999;
 }
 .btn:active {
 	position:relative;
 	top:1px;
 }
 
-.error {
-  color: #ff0000;
+.priceerror {
+  p {
+    color: #ff0000;
+    font-family:arial;
+  }
   display: none;
+}
+
+.cctitle {
+  font-weight: bold;
+  color: #333;
+  font-size: 12px;
+}
+
+#ccheader {
+  background-color: #d0d0d0;
 }
 
 .deleter {
@@ -74,7 +89,39 @@
 .itemlistname {
   font-family: Arial,sans-serif;
   text-decoration: none;
-  color: #ab193e;
+//  color: #7c9ae1;
+}
+
+#itemList {
+  border: 0;
+  border-spacing: 0;
+  border-collapse:collapse;
+  th {
+    color: #899ab2;
+    font-weight: normal;
+    border-top: none;
+    font-size: .8em;
+  }
+  .price {
+    text-align: right;
+    width: 4em;
+    padding-left: .75em;
+    padding-right: .25em;
+  }
+  td {
+    border-top: none;
+  }
+
+  .qty {
+    padding-left: 1.5em;
+    width: 2em;
+
+  }
+}
+
+th.ra {
+  text-align: right;
+//  padding-right: 1.5em;
 }
 
 #cartscreen {
@@ -101,4 +148,6 @@
 .overlay-panel {
   height: 100%;
   margin-bottom: 0;
+  border-color: #888888;
+  background-color: #efefef;
 }

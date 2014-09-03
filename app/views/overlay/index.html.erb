@@ -3,41 +3,45 @@
     <%= javascript_include_tag "backbone-localstorage.js" %>
     <%= javascript_include_tag "overlay/overlay" %>
 <div class="panel panel-default overlay-panel">
-  <div class="panel-heading">
-    <h3 class="panel-title">
+  <div class="panel-heading" id="ccheader">
+    <h3 class="panel-title cctitle">
       GSA Communicart
     </h3>
   </div>
   <div class="panel-body">
-  <div id="formscreen">
-    <h3>Add item to cart?</h3>
-    <div float="left" id="pic_holder">
-        <img id="prod_pic"/>
-    </div>
-
-    <form  class="form-inline" role="form" width="520px">
-        <div class="form-group"> <label>Name</label><input type="text" id="itemname" size="35"/></div>
-      <div class="form-group"><label>Price $</label><input type="text" id="itemprice" size="8"/></div>
-        <div class="form-group"><label>Quantity</label><input type="text" id="itemquantity" size="4"/></div><br/>
-    </form>
-    <a class="btn" id="cancel_btn" >Cancel</a><a class="btn" id="add_btn">Add to Cart</a><a class="btn" id="goto_btn">Go to Cart</a>
-    <div class="error" id="priceError"><p>Please enter a price</p></div>
-  </div>
-  <div id="cartscreen">
-      <label>Cart Name:</label>
-      <input type="text" size="30" id="cartName"/>
-      <table id="itemList" class="table table-bordered"></table>
-      <div id="approvalgroup_entry">
-        <label>Approval Group Name:</label>
-        <input type="text" id="approvalgroup_input" size="30"/>
+      <div id="formscreen">
+        <div class="row">
+          <div class="col-xs-5">
+            <div id="pic_holder">
+                <img id="prod_pic" />
+            </div>
+          </div>
+          <div class="col-xs-7">
+            <form  class="form-inline" role="form">
+                <div class="form-group"> <label>Name</label><input type="text" id="itemname" size="35"/></div>
+                <div class="form-group"><label>Price $</label><input type="text" id="itemprice" size="8"/></div>
+                <div class="form-group"><label>Quantity</label><input type="text" id="itemquantity" size="4"/></div><br/>
+            </form>
+          </div>
+        </div>
+        <a class="btn" id="cancel_btn" >Cancel</a><a class="btn" id="add_btn">Add to Cart</a><a class="btn" id="goto_btn">Go to Cart</a>
+        <div class="priceerror" id="priceError"><p>Please enter a price</p></div>
       </div>
-      <div class="buttonbar">
-        <a class="btn" id="send_btn">Send for Approval</a><a class="btn" id="shop_btn">Keep shopping</a><a class="btn" id="clear_btn">Clear Cart</a>
+      <div id="cartscreen">
+          <label>Cart Name:</label>
+          <input type="text" size="30" id="cartName"/>
+          <table  class="table table-condensed" id="itemList"></table>
+          <div id="approvalgroup_entry">
+            <label>Approval Group Name:</label>
+            <input type="text" id="approvalgroup_input" size="30"/>
+          </div>
+          <div class="buttonbar">
+            <a class="btn" id="send_btn">Send for Approval</a><a class="btn" id="shop_btn">Keep shopping</a><a class="btn" id="clear_btn">Clear Cart</a>
+          </div>
       </div>
-  </div>
   </div>
 </div>
   <script type="text/template" id="cartitem-template">
-      <td><a href='<%%= itemurl %>' class='itemlistname'><%%= title %></a></td><td class='itemlistprice'>$ <%%= price %></td>
-        <td> <%%= quantity %> </td><td><a class='deleter'>remove</a></td>
+      <td><a href='<%%= itemurl %>' class='itemlistname'><%%= title %></a></td><td class='price'>$<%%= price %></td>
+        <td class="qty"> <%%= quantity %> </td><td class="price">$<%%= subtotal %> </td><td><a class='deleter'>remove</a></td>
   </script>
