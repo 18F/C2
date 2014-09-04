@@ -72,9 +72,9 @@
               - if !cart_item.comments.empty?
                 - cart_item.comments.each do |c|
                   %br
-                  - unless c.users.empty?
+                  - unless c.user.nil?
                     %em
-                      = "#{c.users.first.full_name}: "
+                      = "#{c.user.full_name}: "
                   = c.comment_text
               - else
                 %br
