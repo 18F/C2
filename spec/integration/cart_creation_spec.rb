@@ -23,8 +23,10 @@ describe 'Creating a cart' do
       "initiationComment": "\r\n\r\nHi, this is a comment from the first approval group, I hope it works!\r\nThis is the second line of the comment.",
       "cartItems": [
         {
+          "properties": [
+            {"shoppingVenue": "GSA Advantage"}
+          ],
           "vendor": "DOCUMENT IMAGING DIMENSIONS, INC.",
-          "shoppingVenue": "GSA Advantage",
           "description": "ROUND RING VIEW BINDER WITH INTERIOR POC",
           "url": "/advantage/catalog/product_detail.do?&oid=704213980&baseOid=&bpaNumber=GS-02F-XA002",
           "notes": "",
@@ -48,8 +50,10 @@ describe 'Creating a cart' do
            }
         },
         {
+          "properties": [
+            {"shoppingVenue": "GSA Advantage"}
+            ],
           "vendor": "OFFICE DEPOT",
-          "shoppingVenue": "Mega Site Aggreator.com",
           "description": "PEN,ROLLER,GELINK,G-2,X-FINE",
           "url": "/advantage/catalog/product_detail.do?&oid=703389586&baseOid=&bpaNumber=GS-02F-XA009",
           "notes": "",
@@ -108,8 +112,10 @@ describe 'Creating a cart' do
       "initiationComment": "\r\n\r\nHi, this is a comment from the second approval group, I hope it works!\r\nThis is the second line of the comment.",
       "cartItems": [
         {
+          "properties": [
+            {"shoppingVenue": "GSA Advantage"}
+          ],
           "vendor": "DOCUMENT IMAGING DIMENSIONS, INC.",
-          "shoppingVenue": "GSA Advantage",
           "description": "ROUND RING VIEW BINDER WITH INTERIOR POC",
           "url": "/advantage/catalog/product_detail.do?&oid=704213980&baseOid=&bpaNumber=GS-02F-XA002",
           "notes": "",
@@ -215,6 +221,7 @@ describe 'Creating a cart' do
       cart = Cart.first
       expect(cart.cart_items.first.cart_item_traits.count).to eq 3
       expect(cart.cart_items.first.getProp('shoppingVenue')).to eq "GSA Advantage"
+      # expect(cart.cart_items.first.getProp('betterDescription')).to eq "GSA Advantage"
     end
   end
 
