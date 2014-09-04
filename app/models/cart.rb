@@ -155,8 +155,10 @@ class Cart < ActiveRecord::Base
       )
 
       if params['properties']
-        params['properties'].each do |property|
-          ci.setProp(property.keys.first, property.values.first)
+        params['properties'].each do |item_property_values|
+          item_property_values.each do |key,val|
+            ci.setProp(key,val)
+          end
         end
       end
 
