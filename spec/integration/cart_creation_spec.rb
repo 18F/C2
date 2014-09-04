@@ -24,7 +24,8 @@ describe 'Creating a cart' do
       "cartItems": [
         {
           "properties": [
-            {"shoppingVenue": "GSA Advantage"}
+            {"shoppingVenue": "GSA Advantage"},
+            {"betterDescription": "This is a more awesome description"}
           ],
           "vendor": "DOCUMENT IMAGING DIMENSIONS, INC.",
           "description": "ROUND RING VIEW BINDER WITH INTERIOR POC",
@@ -51,7 +52,6 @@ describe 'Creating a cart' do
         },
         {
           "properties": [
-            {"shoppingVenue": "GSA Advantage"}
             ],
           "vendor": "OFFICE DEPOT",
           "description": "PEN,ROLLER,GELINK,G-2,X-FINE",
@@ -221,7 +221,7 @@ describe 'Creating a cart' do
       cart = Cart.first
       expect(cart.cart_items.first.cart_item_traits.count).to eq 3
       expect(cart.cart_items.first.getProp('shoppingVenue')).to eq "GSA Advantage"
-      # expect(cart.cart_items.first.getProp('betterDescription')).to eq "GSA Advantage"
+      expect(cart.cart_items.first.getProp('betterDescription')).to eq 'This is a more awesome description'
     end
   end
 
