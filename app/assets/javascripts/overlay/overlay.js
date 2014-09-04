@@ -73,7 +73,8 @@ var CartView = Backbone.View.extend({
     render: function() {
         this.$el  = $('#itemList'); //this is a result of timing...should fix
         this.$el.empty();
-        this.$el.append('<tr><th>Items</th><th class="ra">Each</th><th class="qty">Qty</th><th class="ra">Subtotal</th><th></th></tr>')
+        this.$el.append('<tr><th>Items</th><th class="ra">Each</th><th class="qty">Qty</th><th class="ra">Subtotal</th><th></th></tr>');
+        var cartTotal = 0.00;
         this.model.each( function(item) {
             var iview = new CartItemView({model: item});
             var ir = iview.render().el;
