@@ -1,78 +1,102 @@
-<table width=100%>
-<tr class='header'>
-  <td class="first" width="30%">
-    <h5>Name</h5>
-  </td>
-  <td width="17.5%">
-    <h5>Description</h5>
-  </td>
-  <td width="17.5%">
-    <h5>Details</h5>
-  </td>
-  <td width="17.5%">
-    <h5>Tags</h5>
-  </td>
-  <td class="last" width="17.5%">
-    <h5>Price</h5>
-  </td>
-</tr>
+ <table class="w-container main-container" width='940'>
+    <tr>
+      <td>
+        <h1 class="communicart_header">Purchase Request</h1>
 
-<!--BEGIN CartItem Entry-->
-  <%- @cart.cart_items.each do |cart_item| %>
-
-    <tr class="cart_item_information">
-      <td class="first" valign="top">
-        <p><strong><%= cart_item.description %></strong>
-        </p>
+        <h4 class="communicart_description">Requested by:
+        <%= @cart.requester.full_name %></h4>
       </td>
+    </tr>
 
-      <td valign="top">
-        <p><%= cart_item.details %></p>
+    <tr>
+      <td class="w-container results-header-container">
+        <h3 class="cart-header">GSA Advantage: Cart #<%= @cart.external_id %></h3>
       </td>
+    </tr>
 
-      <td valign="top">
-        <p>
-          <strong><%= cart_item.getProp('shoppingVenue') %></strong>
-          <br><strong><%= cart_item.vendor %></strong>
-          <br><em><%= cart_item.part_number %></em>
-          <br><a href="https://gsaadvantage.gov<%= cart_item.url %>">Link to the product</a>
-        </p>
-      </td>
+    <tr>
+      <td class="w-container results-list">
+        <table width="100%">
+          <tr class='header'>
+            <td class="first" width="30%">
+              <h5>Name</h5>
+            </td>
 
-      <td valign="top">
-        <ul class="result-tag">
-          <%- if cart_item.green? %>
-            <li><div class="green"></div>Green</li>
-          <%- end %>
-          <%- cart_item.features.each do |feature| %>
-             <li><div class="<%= feature %>"</div><%= feature %></li>
-          <%- end %>
-          <%- unless cart_item.socio.empty? %>
-            <li class="socio">Socio:
-              <span class="tag-values">
-              <%- cart_item.socio.each_with_index do |socio_tag, index| %>
+            <td width="17.5%">
+              <h5>Description</h5>
+            </td>
+
+            <td width="17.5%">
+              <h5>Details</h5>
+            </td>
+
+            <td width="17.5%">
+              <h5>Tags</h5>
+            </td>
+
+            <td class="last" width="17.5%">
+              <h5>Price</h5>
+            </td>
+          </tr><!--BEGIN CartItem Entry-->
+          <%- @cart.cart_items.each do |cart_item| %>
+
+          <tr class="cart_item_information">
+            <td class="first" valign="top">
+              <p><strong><%= cart_item.description %></strong></p>
+            </td>
+
+            <td valign="top">
+              <p><%= cart_item.details %></p>
+            </td>
+
+            <td valign="top">
+              <p><strong><%= cart_item.getProp('shoppingVenue') %></strong><br />
+              <strong><%= cart_item.vendor %></strong><br />
+              <em><%= cart_item.part_number %></em><br />
+              <a href="https://gsaadvantage.gov%3C%=%20cart_item.url%20%%3E">Link to the
+              product</a></p>
+            </td>
+
+            <td valign="top">
+              <ul class="result-tag">
+                <%- if cart_item.green? %>
+
+                <li>
+                  <div class="green"></div>Green
+                </li><%- end %><%- cart_item.features.each do |feature| %>
+
+                <li>
+                  <div class="<%= feature %>"></div><%= feature %>
+                </li><%- end %><%- unless cart_item.socio.empty? %>
+
+                <li class="socio">Socio: <span class=
+                "tag-values"><%- cart_item.socio.each_with_index do |socio_tag, index| %>
                 <%= socio_tag %><%= "," unless cart_item.socio.count == index+1 %>
-              <%- end %>
-            </span></li>
-          <%- end %>
+                <%- end %></span></li><%- end %>
+              </ul>
+            </td>
 
-        </ul>
-      </td>
+            <td class="last" valign="top">
+              <p class="result-item-price"><%= cart_item.formatted_price %></p>
 
-      <td class="last" valign="top">
-        <p class="result-item-price"><%= cart_item.formatted_price %></p>
-        <p class="result-item-units"><%= cart_item.quantity %> units</p>
+              <p class="result-item-units"><%= cart_item.quantity %> units</p>
+            </td>
+          </tr><%- end %><!--END CartItem Entry-->
+
+          <tr class="total-price">
+            <td colspan="2"></td>
+
+            <td class="total-price" colspan="2">
+              <p><strong>Total Price</strong></p>
+            </td>
+
+            <td class="total-price total-amount">
+              <p>
+              <strong>$<%= number_with_precision(@cart.total_price, precision: 2) %></strong></p>
+            </td>
+          </tr>
+        </table>
       </td>
     </tr>
-  <%- end %>
+  </table>
 
-<!--END CartItem Entry-->
-
-    <tr class="total-price">
-      <td colspan=2></td>
-      <td class="total-price" colspan=2>
-        <p><strong>Total Price</strong></p>
-      </td>
-      <td class="total-price total-amount"><p><strong>$<%= number_with_precision(@cart.total_price, precision: 2) %></strong></p></td>
-    </tr>
-</table>
