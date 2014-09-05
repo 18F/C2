@@ -72,7 +72,9 @@
                   </td>
 
                   <td valign="top">
-                    <p><strong><%= cart_item.vendor %></strong>
+                    <p>
+                      <strong><%= cart_item.getProp('shoppingVenue') %></strong>
+                      <br><strong><%= cart_item.vendor %></strong>
                       <br><em><%= cart_item.part_number %></em>
                       <br><a href="https://gsaadvantage.gov<%= cart_item.url %>">Link to the product</a>
                     </p>

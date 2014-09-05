@@ -42,6 +42,8 @@
                   %p= cart_item.details
                 %td{:valign => "top"}
                   %p
+                    %strong cart_item.getProp('shoppingVenue')
+                    %br
                     %strong= cart_item.vendor
                     %br
                       %em= cart_item.part_number

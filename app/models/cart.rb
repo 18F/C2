@@ -153,6 +153,15 @@ class Cart < ActiveRecord::Base
         :price => params['price'].gsub(/[\$\,]/,"").to_f,
         :cart_id => id
       )
+
+      if params['properties']
+        params['properties'].each do |item_property_values|
+          item_property_values.each do |key,val|
+            ci.setProp(key,val)
+          end
+        end
+      end
+
       if params['traits']
         params['traits'].each do |trait|
           if trait[1].kind_of?(Array)
