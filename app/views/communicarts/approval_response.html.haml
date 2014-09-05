@@ -7,6 +7,8 @@
     - if flash[:notice]
       .flash.success
         = flash[:notice]
+-# REFACTOR: We believe this is the same as shared/cart.html.erb and
+-#  can be replaced with a single call to it.
 
     %table.w-container.main-container{:width => "940"}
       %tr

@@ -2,6 +2,10 @@
   %tr
     %td
       %h1.communicart_header
+-# REFACTOR: we believe that if "Purchase Request" in
+-#  shared/cart.html.erb is parametrized so that the snippet 
+-# below can be passed in, this whole file can be replaced by a single
+-#  call to render shared/cart.html.erb
         = "Cart #{@cart.id}"
       %h4.communicart_description
         Requested by: #{@cart.requester.full_name}
