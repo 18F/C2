@@ -1,16 +1,18 @@
+<!-- "cart" is the critical local variable for using this partial -->
+<!-- "title" is used to customize the tile in the h1 below -->
  <table class="w-container main-container" width='940'>
     <tr>
       <td>
-        <h1 class="communicart_header">Purchase Request</h1>
+        <h1 class="communicart_header"><%= title %></h1>
 
         <h4 class="communicart_description">Requested by:
-        <%= @cart.requester.full_name %></h4>
+        <%= cart.requester.full_name %></h4>
       </td>
     </tr>
 
     <tr>
       <td class="w-container results-header-container">
-        <h3 class="cart-header">GSA Advantage: Cart #<%= @cart.external_id %></h3>
+        <h3 class="cart-header">GSA Advantage: Cart #<%= cart.external_id %></h3>
       </td>
     </tr>
 
@@ -38,7 +40,7 @@
               <h5>Price</h5>
             </td>
           </tr><!--BEGIN CartItem Entry-->
-          <%- @cart.cart_items.each do |cart_item| %>
+          <%- cart.cart_items.each do |cart_item| %>
 
           <tr class="cart_item_information">
             <td class="first" valign="top">
@@ -92,7 +94,7 @@
 
             <td class="total-price total-amount">
               <p>
-              <strong>$<%= number_with_precision(@cart.total_price, precision: 2) %></strong></p>
+              <strong>$<%= number_with_precision(cart.total_price, precision: 2) %></strong></p>
             </td>
           </tr>
         </table>

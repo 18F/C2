@@ -21,7 +21,16 @@
       </td>
     </tr>
   </table>
+  <%= render partial: "shared/cart", locals: {cart: @cart, title:  "Purchase Request"} %>
+  <table class='reply-section'>
+    <tr class="approval-actions">
+        <td colspan=5 align="center">
+             <%= link_to "Approve all items with one click", approval_response_url(cart_id: @cart.id, user_id: @approval.user_id, cch: @token.access_token, approver_action: 'approve'), {class: 'form-button'} %>
+        </td>
+     </tr>
+  </table>
 
-  <%= render partial: "shared/cart", locals: {cart: @cart} %>
+   
+
 
 </body>
