@@ -16,34 +16,12 @@
       </td>
     </tr>
 
-
     <tr>
       <td class="w-container status-header-container <%= 'status-completed' if @cart.all_approvals_received? %>">
         <p class="results-header">Approval Status: <%=  @cart.generate_status_message %></p>
       </td>
     </tr>
-
-    <tr>
-      <td>
-        <h1 class="communicart_header">Purchase Request</h1>
-          <h4 class="communicart_description">Requested by: <%= @cart.requester.full_name %></h4>
-      </td>
-    </tr>
-
-      <tr>
-        <td class="w-container results-header-container">
-          <h3 class="cart-header">GSA Advantage: Cart #<%= @cart.external_id %></h3>
-        </td>
-      </tr>
-
-      <tr>
-        <td class="w-container results-list">
-          <!--<%= render partial: "shared/hello" %>-->
-          <%= render partial: "shared/cart", locals: {cart: @cart} %>
-        </td>
-      </tr>
-
-
-  </table>
+</table>
+<%= render partial: "shared/cart", locals: {cart: @cart, title:  "Purchase Request"} %>
 
 </body>
