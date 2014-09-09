@@ -9,16 +9,24 @@ class CommunicartsController < ApplicationController
   end
 
   def send_cart
-    cx = Cart.initialize_cart_with_items(params)
-    cart = Cart.find(cx.id)
 
-    cart.decorate
-    cart.create_and_send_approvals unless duplicated_approvals_exist_for(cart)
+    if !params['approvalGroup'].present?
+      Cart.handle_no_approval_group(params)
+    else
 
-    unless params['initiationComment'].blank?
-      initiation_comment = Comment.new(user_id: cart.requester.id,comment_text: params['initiationComment'].strip)
-      cart.comments << initiation_comment
-#      cart.requester.comments << initiation_comment
+      # Create a cart: use approval group param, initialize cart items
+      cx = Cart.initialize_cart_with_items(params)
+      cart = Cart.find(cx.id)
+
+      cart.decorate
+      cart.create_and_send_approvals unless duplicated_approvals_exist_for(cart)
+
+      #Add comments
+      unless params['initiationComment'].blank?
+        initiation_comment = Comment.new(user_id: cart.requester.id,comment_text: params['initiationComment'].strip)
+        cart.comments << initiation_comment
+  #      cart.requester.comments << initiation_comment
+      end
     end
 
     render json: { message: "This was a success"}, status: 200
