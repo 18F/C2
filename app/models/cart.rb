@@ -8,6 +8,7 @@ class Cart < ActiveRecord::Base
   has_one :approval_group
   has_one :api_token
   has_many :comments, as: :commentable
+  #TODO: after_save default status
 
   APPROVAL_ATTRIBUTES_MAP = {
     approve: 'approved',
@@ -105,6 +106,8 @@ class Cart < ActiveRecord::Base
     if params['approvalGroup']
       cart.approval_group = ApprovalGroup.find_by_name(params['approvalGroup'])
     else
+      #Creates a new approval group
+      # We need to create users
       cart.approval_group = ApprovalGroup.create(name: "approval-group-#{params['cartNumber']}")
     end
 
@@ -121,6 +124,17 @@ class Cart < ActiveRecord::Base
                          )
 
     return cart
+  end
+
+  def self.handle_no_approval_group params
+    params['toAddress'].each do |email|
+      cart_name = params['cartName']
+      cart = Cart.find_or_create_by(name: cart_name)
+
+      user = User.find_or_create_by(email_address: email)
+      Approval.create!(cart_id: cart.id, user_id: user.id, role: 'approver')
+    end
+
   end
 
   def self.reset_existing_cart(cart)
