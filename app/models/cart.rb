@@ -9,6 +9,7 @@ class Cart < ActiveRecord::Base
   has_one :api_token
   has_many :comments, as: :commentable
   #TODO: after_save default status
+  #TODO: validates_uniqueness_of :name
 
   APPROVAL_ATTRIBUTES_MAP = {
     approve: 'approved',
@@ -98,7 +99,7 @@ class Cart < ActiveRecord::Base
 
     if pending_cart = Cart.find_by(name: name, status: 'pending')
       cart = reset_existing_cart(pending_cart)
-    else
+    else #no existing cart or the existing cart is already approved
       cart = Cart.create!(name: name, status: 'pending', external_id: params['cartNumber'])
       copy_existing_approvals_to(cart, name)
     end
@@ -125,6 +126,14 @@ class Cart < ActiveRecord::Base
 
     return cart
   end
+
+  def add_initial_comments(comments)
+    unless comments.blank?
+      self.comments << Comment.create!(user_id: self.requester.id, comment_text: comments.strip)
+      # self.save
+    end
+  end
+
 
   def self.handle_no_approval_group params
     params['toAddress'].each do |email|
