@@ -9,16 +9,14 @@ class CommunicartsController < ApplicationController
   end
 
   def send_cart
-
     if !params['approvalGroup'].present?
       Cart.handle_no_approval_group(params)
     else
-
-      # Create a cart: use approval group param, initialize cart items
       cx = Cart.initialize_cart_with_items(params)
       cart = Cart.find(cx.id).decorate
 
-      cart.create_and_send_approvals unless duplicated_approvals_exist_for(cart) #TODO: Move into a command
+      cart.process_approvals_from_approval_group unless duplicated_approvals_exist_for(cart) #TODO: Move into a command
+      cart.deliver_approval_emails
       cart.reload.add_initial_comments(params['initiationComment'])
     end
 

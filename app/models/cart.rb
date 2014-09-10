@@ -39,16 +39,18 @@ class Cart < ActiveRecord::Base
     approvals.where(role: 'approver').where(status: 'approved').count == approver_count
   end
 
-  def create_and_send_approvals
+  def process_approvals_from_approval_group
     approval_group.user_roles.each do | user_role |
       Approval.create!(user_id: user_role.user_id, cart_id: self.id, role: user_role.role)
     end
+  end
 
-    approvals.where(role: "approver").each do | approval |
+  def deliver_approval_emails
+    approvals.where(role: "approver").each do |approval|
       ApiToken.create!(user_id: approval.user_id, cart_id: self.id, expires_at: Time.now + 7.days)
       CommunicartMailer.cart_notification_email(approval.user.email_address, self, approval).deliver
     end
-    approval_group.user_roles.where(role: 'observer').each do |observer|
+    approvals.where(role: 'observer').each do |observer|
       CommunicartMailer.cart_observer_email(observer.user.email_address, self).deliver
     end
   end
@@ -76,11 +78,11 @@ class Cart < ActiveRecord::Base
   end
 
   def requester
-    approvals.where(role: 'requester').first.user
+    approvals.where(role: 'requester').first.user if approvals.any? { |a| a.role == 'requester' }
   end
 
   def observers
-    approval_group.user_roles.where(role: 'observer')
+    approval_group.user_roles.where(role: 'observer') #TODO: Pull from approvals, not approval groups
   end
 
   def create_approvals_csv
@@ -128,10 +130,7 @@ class Cart < ActiveRecord::Base
   end
 
   def add_initial_comments(comments)
-    unless comments.blank?
-      self.comments << Comment.create!(user_id: self.requester.id, comment_text: comments.strip)
-      # self.save
-    end
+    self.comments << Comment.create!(user_id: self.requester.id, comment_text: comments.strip) unless comments.blank?
   end
 
 
