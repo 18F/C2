@@ -117,7 +117,7 @@ describe CommunicartsController do
           mock_comment.stub(:[]=)
           mock_comment.stub(:save)
 
-          Comment.should_receive(:new).with(user_id: approval_group.requester_id, comment_text: "Hi, this is a comment, I hope it works!\r\nThis is the second line of the comment.").and_return(mock_comment)
+          Comment.should_receive(:create!).with(user_id: approval_group.requester_id, comment_text: "Hi, this is a comment, I hope it works!\r\nThis is the second line of the comment.").and_return(mock_comment)
           post 'send_cart', @json_params
         end
 
