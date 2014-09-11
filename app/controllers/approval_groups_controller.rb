@@ -27,9 +27,13 @@ class ApprovalGroupsController < ApplicationController
   end
 
   def search
+    @groups = []
     user = User.find_by_email_address(params[:email])
-    roles = UserRole.where("user_id = ? AND role='requester'", user.id ).select(:approval_group_id).distinct.map(&:approval_group_id)
-    @groups = ApprovalGroup.where(id: roles )
+    unless user.nil?
+      roles = UserRole.where("user_id = ? AND role='requester'", user.id ).select(:approval_group_id).distinct.map(&:approval_group_id)
+      @groups = ApprovalGroup.where(id: roles )
+    end
+
     render :index
   end
 
