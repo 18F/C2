@@ -1,5 +1,5 @@
 class ApprovalGroupsController < ApplicationController
-  # before_filter :authenticate_user!
+   before_filter :authenticate_user!, :except => [:search]
 
   def index
     @groups = ApprovalGroup.all
