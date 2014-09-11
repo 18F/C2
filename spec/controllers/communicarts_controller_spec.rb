@@ -131,7 +131,33 @@ describe CommunicartsController do
 
     end
 
-    it 'sets totalPrice'
+    context 'no approval_group' do
+      it 'creates a cart with default attributes'
+      #-no approval group name [change to existing]
+      #-default cart name
+      #-adds cart items
+      #-looks for approvers in fromAddress attribute
+
+
+
+# • Initialize cart: params(cartName, cartNumber, approvalGroup)
+# - Set the cart name (and other attributes that aren't required) ... uses this name to find existing pending cart
+
+# - Overwrite the cart if it exists (name exists and is pending) #creates a new cart if no existing cart or if existing cart is approved
+# - else Create a new cart and use the 'cartNumber' as the external_id ##=> not needed with Navigator
+
+# - If approvalGroup, set the approvalGroup #but what if this was one they thought existed?
+# - If approvalGroup not sent, create one using the cartNumber #which for Navigator they don't have
+# # Do we need to make external_id varchar?
+# - Add cart items to the cart ## Put this into a command?
+
+# • Decorate the cart
+# • Add comments on the cart
+
+
+# • Intelligently handle errors and display useful error messages
+
+    end
 
   end
 

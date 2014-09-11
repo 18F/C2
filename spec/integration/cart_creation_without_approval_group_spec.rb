@@ -18,7 +18,7 @@ describe 'Creating a cart without an approval group' do
       "approvalGroup": "",
       "category": "initiation",
       "email": "test.email@some-dot-gov.gov",
-      "fromAddress": "approver1@some-dot-gov.gov",
+      "fromAddress": "requester-pcard-holder@some-dot-gov.gov",
       "toAddress": ["some-approver-1@some-dot-gov.gov","some-approver-2@some-dot-gov.gov"],
       "gsaUserName": "",
       "initiationComment": "\r\n\r\nHi, this is a comment from the first approval group, I hope it works!\r\nThis is the second line of the comment.",
@@ -59,10 +59,11 @@ describe 'Creating a cart without an approval group' do
 
     post 'send_cart', @json_params_1
 
+    expect(User.count).to eq 3
     expect(User.first.email_address).to eq 'some-approver-1@some-dot-gov.gov'
-    expect(User.last.email_address).to eq 'some-approver-2@some-dot-gov.gov'
-    expect(Approval.all.map(&:role)).to eq ['approver','approver']
-    expect(Approval.count).to eq 2
+    expect(User.last.email_address).to eq 'requester-pcard-holder@some-dot-gov.gov'
+    expect(Approval.all.map(&:role)).to eq ['approver','approver','requester']
+    expect(Approval.count).to eq 3
     expect(Cart.first.name).to eq "A Cart With No Approvals"
 
   end

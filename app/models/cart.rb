@@ -39,12 +39,6 @@ class Cart < ActiveRecord::Base
     approvals.where(role: 'approver').where(status: 'approved').count == approver_count
   end
 
-  def process_approvals_from_approval_group
-    approval_group.user_roles.each do | user_role |
-      Approval.create!(user_id: user_role.user_id, cart_id: self.id, role: user_role.role)
-    end
-  end
-
   def deliver_approval_emails
     approvals.where(role: "approver").each do |approval|
       ApiToken.create!(user_id: approval.user_id, cart_id: self.id, expires_at: Time.now + 7.days)
@@ -96,27 +90,36 @@ class Cart < ActiveRecord::Base
     return csv_string
   end
 
-  def self.initialize_cart_with_items(params)
+  def self.initialize_cart_with_items params
+    begin
+      cart = self.existing_or_new_cart params
+      cart.initialize_approval_group params
+      return cart
+    rescue Exception => e
+      raise
+    end
+  end
+
+  def self.existing_or_new_cart(params)
     name = !params['cartName'].blank? ? params['cartName'] : params['cartNumber']
 
     if pending_cart = Cart.find_by(name: name, status: 'pending')
       cart = reset_existing_cart(pending_cart)
-    else #no existing cart or the existing cart is already approved
+    else
+      #There is no existing cart or the existing cart is already approved
       cart = Cart.create!(name: name, status: 'pending', external_id: params['cartNumber'])
       copy_existing_approvals_to(cart, name)
     end
-
-    if params['approvalGroup']
-      cart.approval_group = ApprovalGroup.find_by_name(params['approvalGroup'])
-    else
-      #Creates a new approval group
-      # We need to create users
-      cart.approval_group = ApprovalGroup.create(name: "approval-group-#{params['cartNumber']}")
-    end
-
-    cart.save
-    cart.add_cart_items(params['cartItems'])
     return cart
+  end
+
+  def initialize_approval_group(params)
+    if params['approvalGroup']
+      self.approval_group = ApprovalGroup.find_by_name(params['approvalGroup'])
+    else
+      # TODO: Create users
+      self.approval_group = ApprovalGroup.create(name: "approval-group-#{params['cartNumber']}")
+    end
   end
 
   def self.initialize_informal_cart(params)
@@ -130,19 +133,26 @@ class Cart < ActiveRecord::Base
   end
 
   def add_initial_comments(comments)
-    self.comments << Comment.create!(user_id: self.requester.id, comment_text: comments.strip) unless comments.blank?
+    self.comments << Comment.create!(user_id: self.requester.id, comment_text: comments.strip)
   end
 
 
-  def self.handle_no_approval_group params
-    params['toAddress'].each do |email|
-      cart_name = params['cartName']
-      cart = Cart.find_or_create_by(name: cart_name)
+  def process_approvals_without_approval_group(params)
+    raise 'approvalGroup exists' if params['approvalGroup'].present?
 
+    params['toAddress'].each do |email|
       user = User.find_or_create_by(email_address: email)
-      Approval.create!(cart_id: cart.id, user_id: user.id, role: 'approver')
+      Approval.create!(cart_id: self.id, user_id: user.id, role: 'approver')
     end
 
+    requester = User.find_or_create_by(email_address: params['fromAddress'])
+    Approval.create!(cart_id: self.id, user_id: requester.id, role: 'requester')
+  end
+
+  def process_approvals_from_approval_group
+    approval_group.user_roles.each do | user_role |
+      Approval.create!(user_id: user_role.user_id, cart_id: self.id, role: user_role.role)
+    end
   end
 
   def self.reset_existing_cart(cart)

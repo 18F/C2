@@ -9,18 +9,24 @@ class CommunicartsController < ApplicationController
   end
 
   def send_cart
-    if !params['approvalGroup'].present?
-      Cart.handle_no_approval_group(params)
-    else
-      cx = Cart.initialize_cart_with_items(params)
-      cart = Cart.find(cx.id).decorate
+    begin
+      cart = Cart.initialize_cart_with_items(params).reload.decorate
 
-      cart.process_approvals_from_approval_group unless duplicated_approvals_exist_for(cart) #TODO: Move into a command
+      if !params['approvalGroup'].present?
+        cart.process_approvals_without_approval_group(params)
+      else
+        cart.process_approvals_from_approval_group unless cart.approvals.any?
+      end
+
       cart.deliver_approval_emails
-      cart.reload.add_initial_comments(params['initiationComment'])
-    end
+      cart.add_cart_items(params['cartItems'])
+      cart.add_initial_comments(params['initiationComment']) unless params['initiationComment'].blank?
 
-    render json: { message: "This was a success"}, status: 200
+      render json: { message: "This was a success"}, status: 200
+
+    rescue Exception => e
+
+    end
   end
 
   def create_informal_cart
@@ -34,10 +40,6 @@ class CommunicartsController < ApplicationController
     render json: { message: "This was a success"}, status: 200
   end
 
-
-  def duplicated_approvals_exist_for(cart)
-    cart.approvals.count > 0
-  end
 
   def approval_reply_received
     cart = Cart.where(external_id: (params['cartNumber'].to_i)).where(status:'pending').first
