@@ -1,7 +1,9 @@
 require 'csv'
+require ::File.expand_path('time_helper.rb',  'lib/')
 
 class Cart < ActiveRecord::Base
   include PropMixin
+  include TimeHelper
   has_many :cart_items
   has_many :approvals
   has_many :approval_users, through: :approvals, source: :user
@@ -16,14 +18,6 @@ class Cart < ActiveRecord::Base
     reject: 'rejected'
   }
   has_many :properties, as: :hasproperties
-
-  def self.human_readable_time(t1,offset)
-    return t1.utc.getlocal(offset).asctime
-  end
-
-  def self.default_time_zone_offset
-    return "-04:00"
-  end
 
   def update_approval_status
     return update_attributes(status: 'rejected') if has_rejection?
