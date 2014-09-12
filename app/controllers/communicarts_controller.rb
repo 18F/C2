@@ -9,6 +9,7 @@ class CommunicartsController < ApplicationController
   end
 
   def send_cart
+    # CURRENT: Put this in a command so that we can call it from the new api
     begin
       cart = Cart.initialize_cart_with_items(params).reload.decorate
 
@@ -25,7 +26,7 @@ class CommunicartsController < ApplicationController
       render json: { message: "This was a success"}, status: 200
 
     rescue Exception => e
-
+      raise StandardError, e
     end
   end
 
