@@ -116,20 +116,9 @@ class Cart < ActiveRecord::Base
     end
   end
 
-  def self.initialize_informal_cart(params)
-    cart = Cart.create!(name: 'sampleNameThatIsNotReally', status: 'pending')
-    cart.save
-    ci = CartItem.create(
-                         :cart_id => cart.id
-                         )
-
-    return cart
-  end
-
   def add_initial_comments(comments)
     self.comments << Comment.create!(user_id: self.requester.id, comment_text: comments.strip)
   end
-
 
   def process_approvals_without_approval_group(params)
     raise 'approvalGroup exists' if params['approvalGroup'].present?

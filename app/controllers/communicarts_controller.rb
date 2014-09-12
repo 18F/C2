@@ -19,18 +19,6 @@ class CommunicartsController < ApplicationController
     end
   end
 
-  def create_informal_cart
-    # This is creating a bogus item, but really, we need to do some NLP to compute them---
-    # AND also get this working with Mario.
-    cx = Cart.initialize_informal_cart(params)
-    cart = Cart.find(cx.id)
-    cart.decorate
-    cart.setProp('original',params['body'])
-
-    render json: { message: "This was a success"}, status: 200
-  end
-
-
   def approval_reply_received
     cart = Cart.where(external_id: (params['cartNumber'].to_i)).where(status:'pending').first
     user = cart.approval_users.where(email_address: params['fromAddress']).first
