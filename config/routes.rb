@@ -1,4 +1,5 @@
 C2::Application.routes.draw do
+  get 'approval_groups/search' => "approval_groups#search"
   resources :approval_groups
   post 'send_cart' => 'communicarts#send_cart'
   post 'create_informal_cart' => 'communicarts#create_informal_cart'

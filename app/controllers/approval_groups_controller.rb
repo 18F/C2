@@ -1,5 +1,9 @@
 class ApprovalGroupsController < ApplicationController
-  before_filter :authenticate_user!
+   before_filter :authenticate_user!, :except => [:search]
+
+  def index
+    @groups = ApprovalGroup.all
+  end
 
   def show
     @approval_group = ApprovalGroup.find(params[:id])
@@ -22,8 +26,20 @@ class ApprovalGroupsController < ApplicationController
     redirect_to @approval_group
   end
 
+  def search
+    @groups = []
+    user = User.find_by_email_address(params[:email])
+    unless user.nil?
+      roles = UserRole.where("user_id = ? AND role='requester'", user.id ).select(:approval_group_id).distinct.map(&:approval_group_id)
+      @groups = ApprovalGroup.where(id: roles )
+    end
+
+    render :index
+  end
+
   private
     def approval_group_params
       params.require(:approval_group).permit(:name, :requester, :@approver1, :@approver2)
     end
+
 end
