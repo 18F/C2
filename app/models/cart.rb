@@ -59,7 +59,7 @@ class Cart < ActiveRecord::Base
       date_sorted_comments = comments.sort { |a,b| a.updated_at <=> b.updated_at }
       date_sorted_comments.each do |item|
         user = User.find(item.user_id)
-        csv << [user.email_address, item.comment_text, item.updated_at, Cart.human_readable_time(item.updated_at, Cart.default_time_zone_offset)]
+        csv << [user.email_address, item.comment_text, item.updated_at, human_readable_time(item.updated_at, default_time_zone_offset)]
       end
     end
     return csv_string
@@ -133,8 +133,9 @@ class Cart < ActiveRecord::Base
 
   def process_approvals_without_approval_group(params)
     raise 'approvalGroup exists' if params['approvalGroup'].present?
+    approver_emails = params['toAddress']
 
-    params['toAddress'].each do |email|
+    approver_emails.each do |email|
       user = User.find_or_create_by(email_address: email)
       Approval.create!(cart_id: self.id, user_id: user.id, role: 'approver')
     end

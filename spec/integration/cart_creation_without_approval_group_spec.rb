@@ -21,7 +21,7 @@ describe 'Creating a cart without an approval group' do
       "fromAddress": "requester-pcard-holder@some-dot-gov.gov",
       "toAddress": ["some-approver-1@some-dot-gov.gov","some-approver-2@some-dot-gov.gov"],
       "gsaUserName": "",
-      "initiationComment": "\r\n\r\nHi, this is a comment from the first approval group, I hope it works!\r\nThis is the second line of the comment.",
+      "initiationComment": "I have to say that this is great.",
       "cartItems": [
         {
           "vendor": "DOCUMENT IMAGING DIMENSIONS, INC.",
@@ -51,21 +51,58 @@ describe 'Creating a cart without an approval group' do
     }'
   }
 
-  it 'should create new users' do
+  before do
+    ActionMailer::Base.delivery_method = :test
+    ActionMailer::Base.perform_deliveries = true
+    ActionMailer::Base.deliveries = []
+    ENV['NOTIFICATION_FROM_EMAIL'] = 'sender@some-dot_gov.gov'
+
     @json_params_1 = JSON.parse(params_request_1)
     expect(User.count).to eq 0
     expect(Cart.count).to eq 0
     expect(Approval.count).to eq 0
+  end
 
+  after do
+    ActionMailer::Base.deliveries.clear
+  end
+
+  it 'set the appropriate cart values' do
+    post 'send_cart', @json_params_1
+    expect(Cart.first.name).to eq "A Cart With No Approvals"
+  end
+
+  it 'should create new users' do
     post 'send_cart', @json_params_1
 
     expect(User.count).to eq 3
     expect(User.first.email_address).to eq 'some-approver-1@some-dot-gov.gov'
     expect(User.last.email_address).to eq 'requester-pcard-holder@some-dot-gov.gov'
+
+  end
+
+  it 'does not create an approval group' do
+    expect{ post 'send_cart', @json_params_1 }.not_to change{ApprovalGroup.count}.by(1)
+  end
+
+  it 'creates approvals' do
+    post 'send_cart', @json_params_1
     expect(Approval.all.map(&:role)).to eq ['approver','approver','requester']
     expect(Approval.count).to eq 3
-    expect(Cart.first.name).to eq "A Cart With No Approvals"
+  end
 
+  it 'delivers emails to approver email addresses indicated in the toAddress field' do
+    post 'send_cart', @json_params_1
+    expect(ActionMailer::Base.deliveries.count).to eq 2
+  end
+
+  it 'adds cart items to the cart' do
+    expect{ post 'send_cart', @json_params_1 }.to change{CartItem.count}.by(1)
+  end
+
+  it 'adds initial comments from the requester' do
+    post 'send_cart', @json_params_1
+    expect(Cart.first.comments.first.comment_text).to eq 'I have to say that this is great.'
   end
 
 end
