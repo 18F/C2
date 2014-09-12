@@ -9,24 +9,13 @@ class CommunicartsController < ApplicationController
   end
 
   def send_cart
-    # CURRENT: Put this in a command so that we can call it from the new api
     begin
-      cart = Cart.initialize_cart_with_items(params).reload.decorate
-
-      if !params['approvalGroup'].present?
-        cart.process_approvals_without_approval_group(params)
-      else
-        cart.process_approvals_from_approval_group unless cart.approvals.any?
-      end
-
-      cart.deliver_approval_emails
-      cart.add_cart_items(params['cartItems'])
-      cart.add_initial_comments(params['initiationComment']) unless params['initiationComment'].blank?
-
+      Commands::Approval::InitiateCartApproval.new.perform(params)
       render json: { message: "This was a success"}, status: 200
 
     rescue Exception => e
       raise StandardError, e
+      render json: { message: "Something went wrong", errors: e }, status: 500
     end
   end
 
