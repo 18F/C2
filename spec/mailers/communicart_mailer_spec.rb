@@ -193,6 +193,6 @@ describe CommunicartMailer do
         mail
       end
     end
-  end 
+  end
 
 end
