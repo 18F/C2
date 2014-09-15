@@ -13,6 +13,7 @@ module Commands
           end
 
           cart.deliver_approval_emails
+          cart.import_cart_properties(params['properties'])
           cart.add_cart_items(params['cartItems'])
           cart.add_initial_comments(params['initiationComment']) unless params['initiationComment'].blank?
 
