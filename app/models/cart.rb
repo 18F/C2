@@ -156,41 +156,50 @@ class Cart < ActiveRecord::Base
     end
   end
 
-  def add_cart_items(cart_items_params)
-    cart_items_params.each do |params|
-      ci = CartItem.create(
-        :vendor => params['vendor'],
-        :description => params['description'],
-        :url => params['url'],
-        :notes => params['notes'],
-        :quantity => params['qty'],
-        :details => params['details'],
-        :part_number => params['partNumber'],
-        :price => params['price'].gsub(/[\$\,]/,"").to_f,
-        :cart_id => id
-      )
-
-      if params['properties']
-        params['properties'].each do |item_property_values|
-          item_property_values.each do |key,val|
-            ci.setProp(key,val)
-          end
-        end
+  def import_cart_properties(cart_properties_params)
+    unless cart_properties_params.blank?
+      cart_properties_params.each do |key,val|
+        self.setProp(key, val)
       end
+    end
+  end
 
-      if params['traits']
-        params['traits'].each do |trait|
-          if trait[1].kind_of?(Array)
-            trait[1].each do |individual|
-              if !individual.blank?
-                ci.cart_item_traits << CartItemTrait.new( :name => trait[0],
-                                                          :value => individual,
-                                                          :cart_item_id => ci.id
-                                                        )
+  def add_cart_items(cart_items_params)
+    unless cart_items_params.blank?
+      cart_items_params.each do |params|
+        ci = CartItem.create(
+          :vendor => params['vendor'],
+          :description => params['description'],
+          :url => params['url'],
+          :notes => params['notes'],
+          :quantity => params['qty'],
+          :details => params['details'],
+          :part_number => params['partNumber'],
+          :price => params['price'].gsub(/[\$\,]/,"").to_f,
+          :cart_id => id
+        )
+
+        if params['traits']
+          params['traits'].each do |trait|
+            if trait[1].kind_of?(Array)
+              trait[1].each do |individual|
+                if !individual.blank?
+                  ci.cart_item_traits << CartItemTrait.new( :name => trait[0],
+                                                            :value => individual,
+                                                            :cart_item_id => ci.id
+                                                          )
+                end
               end
             end
           end
         end
+
+        unless params['properties'].blank?
+          params['properties'].each do |key,val|
+            ci.setProp(key, val)
+          end
+        end
+
       end
     end
   end
