@@ -23,10 +23,10 @@ describe 'Creating a cart' do
       "initiationComment": "\r\n\r\nHi, this is a comment from the first approval group, I hope it works!\r\nThis is the second line of the comment.",
       "cartItems": [
         {
-          "properties": [
-            {"shoppingVenue": "GSA Advantage"},
-            {"betterDescription": "This is a more awesome description"}
-          ],
+          "properties": {
+            "shoppingVenue": "GSA Advantage",
+            "betterDescription": "This is a more awesome description"
+          },
           "vendor": "DOCUMENT IMAGING DIMENSIONS, INC.",
           "description": "ROUND RING VIEW BINDER WITH INTERIOR POC",
           "url": "/advantage/catalog/product_detail.do?&oid=704213980&baseOid=&bpaNumber=GS-02F-XA002",
@@ -51,8 +51,7 @@ describe 'Creating a cart' do
            }
         },
         {
-          "properties": [
-            ],
+          "properties": {},
           "vendor": "OFFICE DEPOT",
           "description": "PEN,ROLLER,GELINK,G-2,X-FINE",
           "url": "/advantage/catalog/product_detail.do?&oid=703389586&baseOid=&bpaNumber=GS-02F-XA009",
@@ -112,9 +111,9 @@ describe 'Creating a cart' do
       "initiationComment": "\r\n\r\nHi, this is a comment from the second approval group, I hope it works!\r\nThis is the second line of the comment.",
       "cartItems": [
         {
-          "properties": [
-            {"shoppingVenue": "GSA Advantage"}
-          ],
+          "properties": {
+            "shoppingVenue": "GSA Advantage"
+          },
           "vendor": "DOCUMENT IMAGING DIMENSIONS, INC.",
           "description": "ROUND RING VIEW BINDER WITH INTERIOR POC",
           "url": "/advantage/catalog/product_detail.do?&oid=704213980&baseOid=&bpaNumber=GS-02F-XA002",
@@ -167,7 +166,6 @@ describe 'Creating a cart' do
     expect(cart.requester.email_address).to eq 'requester1@some-dot-gov.gov'
 
     post 'send_cart', @json_params_2
-
     expect(Cart.count).to eq 1
     cart = Cart.first
     expect(cart.cart_items.count).to eq 1
