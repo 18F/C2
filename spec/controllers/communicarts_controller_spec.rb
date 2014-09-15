@@ -131,32 +131,8 @@ describe CommunicartsController do
 
     end
 
-    context 'no approval_group' do
-      it 'creates a cart with default attributes'
-      #-no approval group name [change to existing]
-      #-default cart name
-      #-adds cart items
-      #-looks for approvers in fromAddress attribute
-
-
-
-# • Initialize cart: params(cartName, cartNumber, approvalGroup)
-# - Set the cart name (and other attributes that aren't required) ... uses this name to find existing pending cart
-
-# - Overwrite the cart if it exists (name exists and is pending) #creates a new cart if no existing cart or if existing cart is approved
-# - else Create a new cart and use the 'cartNumber' as the external_id ##=> not needed with Navigator
-
-# - If approvalGroup, set the approvalGroup #but what if this was one they thought existed?
-# - If approvalGroup not sent, create one using the cartNumber #which for Navigator they don't have
-# # Do we need to make external_id varchar?
-# - Add cart items to the cart ## Put this into a command?
-
-# • Decorate the cart
-# • Add comments on the cart
-
-
-# • Intelligently handle errors and display useful error messages
-
+    context 'no approval_group is indicated' do
+      #TODO: Write specs
     end
 
   end
@@ -292,8 +268,10 @@ describe CommunicartsController do
 
     context 'rejected cart' do
       let(:rejected_cart) { FactoryGirl.create(:cart, external_id: 109876, name: 'Cart soon to be rejected') }
+      let(:cart_item) {FactoryGirl.create(:cart_item)}
 
       before do
+        rejected_cart.cart_items << cart_item
         rejection_approval_group = FactoryGirl.create(:approval_group, name: 'Test Approval Group 1')
         user1 = FactoryGirl.create(:user, email_address: 'email1@some-dot-gov.gov')
         user2 = FactoryGirl.create(:user, email_address: 'email2@some-dot-gov.gov')

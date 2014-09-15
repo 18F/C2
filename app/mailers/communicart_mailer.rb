@@ -40,7 +40,7 @@
   end
 
   def approval_reply_received_email(analysis, cart)
-# This is a shared constant between C2 and Mario, which should be moved to our 
+# This is a shared constant between C2 and Mario, which should be moved to our
 # YAML file
     @approval = analysis["approve"] == "APPROVE" ? "approved" : "rejected"
     @approval_reply = analysis

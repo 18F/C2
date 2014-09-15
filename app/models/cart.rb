@@ -116,7 +116,7 @@ class Cart < ActiveRecord::Base
     end
   end
 
-  def add_initial_comments(comments)
+  def import_initial_comments(comments)
     self.comments << Comment.create!(user_id: self.requester.id, comment_text: comments.strip)
   end
 
@@ -164,7 +164,7 @@ class Cart < ActiveRecord::Base
     end
   end
 
-  def add_cart_items(cart_items_params)
+  def import_cart_items(cart_items_params)
     unless cart_items_params.blank?
       cart_items_params.each do |params|
         ci = CartItem.create(

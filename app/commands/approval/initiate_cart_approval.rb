@@ -12,10 +12,10 @@ module Commands
             cart.process_approvals_from_approval_group unless cart.approvals.any?
           end
 
-          cart.deliver_approval_emails
           cart.import_cart_properties(params['properties'])
-          cart.add_cart_items(params['cartItems'])
-          cart.add_initial_comments(params['initiationComment']) unless params['initiationComment'].blank?
+          cart.import_cart_items(params['cartItems'])
+          cart.import_initial_comments(params['initiationComment']) unless params['initiationComment'].blank?
+          cart.deliver_approval_emails
 
         rescue => error
           raise "Something went wrong: #{error}"
