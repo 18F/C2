@@ -39,6 +39,16 @@ describe CommunicartMailer do
       mail.from.should == ['reply@communicart-stub.com']
     end
 
+   it 'renders the navigator template' do
+      cart.setProp('origin','navigator')
+      cart.stub(:approval_group).and_return(approval_group)
+      approval_group.stub(:approvers).and_return([approver])
+      approver.stub(:approver_comment).and_return([])
+# This is very fragile, it is based on a particular term coming from the navigator teplate.
+# If the template changes, this test will break --- I know of no other way of tesitng this.
+      expect(mail.body.encoded).to match('NAVIGATOR')
+    end
+
     context 'attaching a csv of the cart activity' do
       it 'generates csv attachments for an approved cart' do
         cart.stub(:approval_group).and_return(approval_group)

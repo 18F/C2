@@ -28,6 +28,7 @@ class Cart < ActiveRecord::Base
     approvals.map(&:status).include?('rejected')
   end
 
+
   def all_approvals_received?
     approver_count = approvals.where(role: 'approver').count
     approvals.where(role: 'approver').where(status: 'approved').count == approver_count
@@ -202,6 +203,16 @@ class Cart < ActiveRecord::Base
 
       end
     end
+  end
+
+# These are magic Constants specific to Navigotor.
+# We may wish to orginize a Navigator-plugin at some time.
+ def cart_template_name
+    return (self.getProp('origin') == 'navigator') ? "shared/navigator_cart" : "shared/cart"
+  end
+
+  def prefix_template_name
+    return (self.getProp('origin') == 'navigator') ? "shared/navigator_prefix" : nil
   end
 
 end
