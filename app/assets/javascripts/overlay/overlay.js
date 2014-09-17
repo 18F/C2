@@ -1,11 +1,12 @@
 var CartItem = Backbone.Model.extend({
   defaults: {
-    price: 0,
+    price: 0.00,
     title: "",
     itemurl: "",
     imageUrl: "",
     quantity: 0,
-    vendor: ""
+    vendor: "",
+    subtotal: 0.00
   },
   validate : function(attrs) {
     if (attrs.price == 0) {
@@ -14,6 +15,17 @@ var CartItem = Backbone.Model.extend({
   },
   initialize: function() {
     //put event code here.
+    this.on("change:price change:quantity", this.calcSubtotal, this);
+    this.calcSubtotal();
+  },
+  calcSubtotal :  function() {
+      var p = parseFloat(this.attributes.price);
+      var q = parseInt(this.attributes.quantity);
+      this.set({subtotal: (p * q).toFixed(2)},{silent:true});
+  },
+  toJSON: function() {
+    var json = Backbone.Model.prototype.toJSON.apply(this, arguments);
+    return json;
   }
 });
 
@@ -23,7 +35,8 @@ var CartItemView = Backbone.View.extend({
         "click .deleter" : "deleteme"
     },
     render: function() {
-        this.$el.html(this.cartTpl(this.model.attributes));
+        var j = this.model.toJSON();
+        this.$el.html(this.cartTpl(j));
         return this;
     },
     initialize: function() {
@@ -64,11 +77,15 @@ var CartView = Backbone.View.extend({
     render: function() {
         this.$el  = $('#itemList'); //this is a result of timing...should fix
         this.$el.empty();
+        this.$el.append('<tr><th>Items</th><th class="ra">Each</th><th class="qty">Qty</th><th class="ra">Subtotal</th><th></th></tr>');
+        var cartTotal = 0.00;
         this.model.each( function(item) {
             var iview = new CartItemView({model: item});
             var ir = iview.render().el;
             this.$el.append(iview.render().el);
+            cartTotal += parseFloat(item.get("subtotal"));
         }, this);
+        $('#cartTotal').html("Total: $"+cartTotal.toFixed(2));
     }
 });
 
