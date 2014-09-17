@@ -5,11 +5,10 @@ module Commands
 
         begin
           cart = Cart.initialize_cart_with_items(params).reload.decorate
-
-          if !params['approvalGroup'].present?
-            cart.process_approvals_without_approval_group(params)
-          else
+          if params['approvalGroup'] && !params['approvalGroup'].blank?
             cart.process_approvals_from_approval_group unless cart.approvals.any?
+          else
+            cart.process_approvals_without_approval_group(params)
           end
 
           cart.import_cart_properties(params['properties'])

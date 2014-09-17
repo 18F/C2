@@ -109,10 +109,8 @@ class Cart < ActiveRecord::Base
 
   def initialize_approval_group(params)
     if params['approvalGroup']
+      #TODO: Handle approvalGroup non-existent approval group
       self.approval_group = ApprovalGroup.find_by_name(params['approvalGroup'])
-    else
-      # TODO: Create users
-      self.approval_group = ApprovalGroup.create(name: "approval-group-#{params['cartNumber']}")
     end
   end
 
@@ -151,7 +149,7 @@ class Cart < ActiveRecord::Base
     if previous_cart && previous_cart.status == 'rejected'
       previous_cart.approvals.each do | approval |
         new_cart.approvals << Approval.create!(user_id: approval.user_id, role: approval.role)
-        CommunicartMailer.cart_notification_email(approval.user.email_address, new_cart).deliver
+        CommunicartMailer.cart_notification_email(approval.user.email_address, new_cart, template).deliver
       end
     end
   end
