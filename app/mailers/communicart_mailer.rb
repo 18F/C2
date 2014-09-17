@@ -22,14 +22,7 @@
     @cart_template = cart.cart_template_name
     @prefix_template = cart.prefix_template_name
 
-# Note: This phrase is duplicated three times and should be removed to a subroutine or function.
     set_attachments(cart)
-
-    # if cart.all_approvals_received?
-    #   attachments['Communicart' + cart.name + '.details.csv'] = cart.create_items_csv
-    #   attachments['Communicart' + cart.name + '.comments.csv'] = cart.create_comments_csv
-    #   attachments['Communicart' + cart.name + '.approvals.csv'] = cart.create_approvals_csv
-    # end
 
     approval_format = Settings.email_title_for_approval_request_format
     mail(
@@ -46,11 +39,6 @@
     @prefix_template = cart.prefix_template_name
 
     set_attachments(cart)
-    # if cart.all_approvals_received?
-    #   attachments['Communicart' + cart.name + '.details.csv'] = cart.create_items_csv
-    #   attachments['Communicart' + cart.name + '.comments.csv'] = cart.create_comments_csv
-    #   attachments['Communicart' + cart.name + '.approvals.csv'] = cart.create_approvals_csv
-    # end
 
     approval_format = Settings.email_title_for_approval_request_format
     mail(
@@ -71,11 +59,6 @@
     #TODO: Add a specific 'rejection' text block for the requester
 
     set_attachments(cart)
-    # if cart.all_approvals_received?
-    #   attachments['Communicart' + cart.name + '.details.csv'] = cart.create_items_csv
-    #   attachments['Communicart' + cart.name + '.comments.csv'] = cart.create_comments_csv
-    #   attachments['Communicart' + cart.name + '.approvals.csv'] = cart.create_approvals_csv
-    # end
 
     @url = ENV['NOTIFICATION_URL']
     mail(
