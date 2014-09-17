@@ -108,6 +108,14 @@ class Cart < ActiveRecord::Base
       cart.approval_group = ApprovalGroup.create(name: "approval-group-#{params['cartNumber']}")
     end
 
+    if params['properties']
+      params['properties'].each do |cart_property_values|
+        cart_property_values.each do |key,val|
+          cart.setProp(key,val)
+        end
+      end
+    end
+
     cart.save
     cart.add_cart_items(params['cartItems'])
     return cart
