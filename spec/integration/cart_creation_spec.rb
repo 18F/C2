@@ -227,7 +227,7 @@ describe 'Creating a cart' do
   end
 
   context 'cart origin property' do
-    it 'added cart origin symbol' do
+    it 'added origin symbol' do
       @json_params_1 = JSON.parse(params_request_1)
 
       expect(Cart.count).to eq 0
