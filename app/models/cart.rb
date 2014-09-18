@@ -170,7 +170,7 @@ class Cart < ActiveRecord::Base
           :description => params['description'],
           :url => params['url'],
           :notes => params['notes'],
-          :quantity => params['qty'],
+          :quantity => params['qty'] || 0,
           :details => params['details'],
           :part_number => params['partNumber'],
           :price => params['price'].gsub(/[\$\,]/,"").to_f,
