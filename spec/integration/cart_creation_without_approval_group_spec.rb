@@ -130,5 +130,4 @@ describe 'Creating a cart without an approval group' do
     end
   end
 
-
 end
