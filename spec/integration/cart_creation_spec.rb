@@ -112,9 +112,6 @@ describe 'Creating a cart' do
       "fromAddress": "approver1@some-dot-gov.gov",
       "gsaUserName": "",
       "initiationComment": "\r\n\r\nHi, this is a comment from the second approval group, I hope it works!\r\nThis is the second line of the comment.",
-      "properties": {
-        "origin": "navigator"
-        },
       "cartItems": [
         {
           "properties": {
