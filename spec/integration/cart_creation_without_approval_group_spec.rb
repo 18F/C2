@@ -6,7 +6,7 @@ describe 'Creating a cart without an approval group' do
   '{
       "cartName": "A Cart With No Approvals",
       "cartNumber": "13579",
-      "approvalGroup": "",
+      "approvalGroup": null,
       "category": "initiation",
       "email": "test.email@some-dot-gov.gov",
       "fromAddress": "requester-pcard-holder@some-dot-gov.gov",
@@ -129,6 +129,5 @@ describe 'Creating a cart without an approval group' do
       expect(Property.where(hasproperties_type: "CartItem").size).to eq 12
     end
   end
-
 
 end
