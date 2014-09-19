@@ -47,7 +47,19 @@ class Cart < ActiveRecord::Base
     csv_string = CSV.generate do |csv|
     csv << ["description","details","vendor","url","notes","part_number","green","features","socio","quantity","unit price","price for quantity"]
     cart_items.each do |item|
-        csv << [item.description,item.details,item.vendor,item.url,item.notes,item.part_number,item.green?,item.features,item.socio,item.quantity,item.price,item.quantity*item.price]
+        csv << [item.description,
+                item.details,
+                item.vendor,
+                item.url,
+                item.notes,
+                item.part_number,
+                item.green?,
+                item.features,
+                item.socio,
+                item.quantity,
+                item.price,
+                item.quantity * item.price
+               ]
         end
     end
     return csv_string
@@ -115,7 +127,7 @@ class Cart < ActiveRecord::Base
   end
 
   def import_initial_comments(comments)
-    self.comments << Comment.create!(user_id: self.requester.id, comment_text: comments.strip)
+    self.comments << Comment.create!(user_id: self.requester.id, comment_text: comments)
   end
 
   def process_approvals_without_approval_group(params)
@@ -165,15 +177,17 @@ class Cart < ActiveRecord::Base
   def import_cart_items(cart_items_params)
     unless cart_items_params.blank?
       cart_items_params.each do |params|
+        params.delete_if {|k,v| v =~ /^\s*$/}
+
         ci = CartItem.create(
-          :vendor => params['vendor'],
-          :description => params['description'],
-          :url => params['url'],
-          :notes => params['notes'],
-          :quantity => params['qty'] || 0,
-          :details => params['details'],
-          :part_number => params['partNumber'],
-          :price => params['price'].gsub(/[\$\,]/,"").to_f,
+          :vendor => params.fetch(:vendor, nil),
+          :description => params.fetch(:description, nil),
+          :url => params.fetch(:url, nil),
+          :notes => params.fetch(:notes, nil),
+          :quantity => params.fetch(:qty , 0),
+          :details => params.fetch(:details, nil),
+          :part_number => params.fetch(:partNumber , nil),
+          :price => params.fetch(:price, nil).gsub(/[\$\,]/,"").to_f,
           :cart_id => id
         )
 
