@@ -22,8 +22,16 @@ describe 'Creating a cart' do
       "gsaUserName": "",
       "initiationComment": "\r\n\r\nHi, this is a comment from the first approval group, I hope it works!\r\nThis is the second line of the comment.",
       "properties": {
-        "origin": "navigator"
-        },
+        "origin": "navigator",
+        "contractingVehicle": "IT Schedule 70",
+        "LOCATION": "LSA",
+        "lsaSates": [
+            "MD",
+            "DC",
+            "VA",
+            "WV"
+        ]
+    },
       "cartItems": [
         {
           "properties": {
