@@ -7,6 +7,7 @@ after_failure:
 before_script:
   - mysql -e 'create database c2_test;'
   - cp config/database.yml.example config/database.yml
+  - cp .rspec.example .rspec
   - npm install -g grunt-cli
 install:
   - bundle install --without development
@@ -22,7 +23,7 @@ notifications:
 script:
   - bundle exec rake db:schema:load
   - bundle exec rake db:test:prepare
-  - bundle exec rake spec
+  - bundle exec rspec spec
   - grunt jasmine
 services:
   - mysql

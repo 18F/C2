@@ -26,6 +26,7 @@ config/deploy/*.rb
 *~
 coverage
 .floo*
+.rspec
 node_modules/
 .grunt/
 config/feature_flags.yml
