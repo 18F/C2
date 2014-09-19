@@ -127,7 +127,7 @@ class Cart < ActiveRecord::Base
   end
 
   def import_initial_comments(comments)
-    self.comments << Comment.create!(user_id: self.requester.id, comment_text: comments)
+    self.comments << Comment.create!(user_id: self.requester.id, comment_text: comments.strip)
   end
 
   def process_approvals_without_approval_group(params)
