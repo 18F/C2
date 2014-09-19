@@ -1,0 +1,26 @@
+<!-- "cart" is the critical local variable for using this partial -->
+<!-- "title" is used to customize the tile in the h1 below -->
+ <table class="w-container main-container" width='940'>
+    <tr>
+      <td>
+        <h1 class="communicart_header"><%= title %></h1>
+
+        <h4 class="communicart_description">Requested by:
+        <%= cart.requester.full_name %></h4>
+      </td>
+    </tr>
+    <tr>
+      <td><hr></td>
+    </tr>
+
+    <tr>
+      <td class="w-container results-list" align="left">
+        <!--BEGIN display of properties Entry-->
+        <%- cart.properties.each do |cart_property| %>
+          <p><strong><%= cart_property.property %></strong>: <%= cart_property.value %></p>
+        <%- end %>
+        <!--END display of properties Entry-->
+      </td>
+    </tr>
+  </table>
+
