@@ -22,6 +22,6 @@
       </td>
     </tr>
 </table>
-<%= render partial: "shared/cart", locals: {cart: @cart, title:  "Purchase Request"} %>
+<%= render partial: @cart_template, locals: {cart: @cart, title:  "Purchase Request"} %>
 
 </body>

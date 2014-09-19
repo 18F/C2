@@ -21,6 +21,9 @@ describe 'Creating a cart' do
       "fromAddress": "approver1@some-dot-gov.gov",
       "gsaUserName": "",
       "initiationComment": "\r\n\r\nHi, this is a comment from the first approval group, I hope it works!\r\nThis is the second line of the comment.",
+      "properties": {
+        "origin": "navigator"
+        },
       "cartItems": [
         {
           "properties": {
@@ -220,6 +223,19 @@ describe 'Creating a cart' do
       expect(cart.cart_items.first.cart_item_traits.count).to eq 3
       expect(cart.cart_items.first.getProp('shoppingVenue')).to eq "GSA Advantage"
       expect(cart.cart_items.first.getProp('betterDescription')).to eq 'This is a more awesome description'
+    end
+  end
+
+  context 'cart origin property' do
+    it 'added origin symbol' do
+      @json_params_1 = JSON.parse(params_request_1)
+
+      expect(Cart.count).to eq 0
+
+      post 'send_cart', @json_params_1
+      expect(Cart.count).to eq 1
+      cart = Cart.first
+      expect(cart.getProp('origin')).to eq 'navigator'
     end
   end
 
