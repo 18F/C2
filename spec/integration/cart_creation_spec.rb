@@ -25,6 +25,19 @@ describe 'Creating a cart' do
         "origin": "navigator",
         "contractingVehicle": "IT Schedule 70",
         "LOCATION": "LSA",
+        "configuration": {
+            "cpu": "Intel Core i5-3320M processor or better Intel CPU",
+            "memory": "6.0 GB 1600 MHz",
+            "displayTechnology": "Intel 4000 or higher",
+            "hardDrive": "320GB 7200RPM",
+            "operatingSystem": "Windows 7 64 bit",
+            "displaySize": "Analog Stereo Output",
+            "sound": "Analog Stereo Output",
+            "speakers": "Integrated Stereo",
+            "opticalDrive": "8x DVD +/- RW",
+            "mouse": "Trackpoint pad & optical USB w/ scroll",
+            "keyboard": "Integrated"
+        },
         "lsaSates": [
             "MD",
             "DC",
