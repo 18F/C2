@@ -63,7 +63,7 @@ template {
  *    user zoom.
  */
 html {
-  font-family: sans-serif;
+  font-family: Helvetica, Arial, sans-serif;
   /* 1 */
 
   -ms-text-size-adjust: 100%;
@@ -86,6 +86,7 @@ body {
  * Remove the gray background color from active links in IE 10.
  */
 a {
+  color: #18f;
   background: transparent;
 }
 /**
@@ -367,7 +368,7 @@ table {
 }
 
 table.reply-section {
-  width: 940px;
+  width: 800px;
   background-color: #fff;
   padding: 15px;
 }
@@ -378,6 +379,15 @@ tr.cart_item_information td {
   padding-bottom: 10px;
   background-color: #fff;
   padding-right: 10px;
+}
+
+tr.cart_item_information p {
+  color: #666;
+}
+
+p.cart_item_description strong {
+  font-size: 125%;
+  font-weight: 300;
 }
 
 table tr.total-price, tr.approval-actions {
@@ -502,6 +512,7 @@ h6 {
   margin: 0;
 }
 p {
+  font-family: Helvetica, Arial, sans-serif;
   margin: 0;
   color: #000;
 }
@@ -633,7 +644,7 @@ textarea.w-select {
 .w-container {
   margin-left: auto;
   margin-right: auto;
-  max-width: 940px;
+  max-width: 800px;
 }
 .w-container:before,
 .w-container:after {
@@ -1521,7 +1532,7 @@ textarea.w-select {
 
 body.communicart-notification {
   background-color: #e6e6e6;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Helvetica, Arial, sans-serif;
   color: #333;
   font-size: 14px;
   line-height: 20px;
@@ -1534,15 +1545,15 @@ body.communicart-notification p {
 h1 {
   margin-top: 20px;
   margin-bottom: 10px;
-  font-family:'Roboto Slab', sans-serif;
-  color: #7a7a7a;
+  color: 000;
   font-size: 38px;
   line-height: 44px;
   font-style: normal;
   font-weight: 300;
 }
 
-h1.communicart_header, h4.communicart_description {
+h1.communicart_header, h4.communicart_description, div.communicart_description p {
+  line-height: 1.5em;
   padding-right: 15px;
   padding-left: 15px;
 }
@@ -1560,7 +1571,6 @@ h2 {
   margin-top: 20px;
   margin-bottom: 0px;
   padding-left: 15px;
-  font-family:'Roboto Slab', sans-serif;
   color: white;
   font-size: 18px;
   line-height: 36px;
@@ -1569,7 +1579,6 @@ h2 {
 h3.cart-header {
   margin-top: 10px;
   margin-bottom: 10px;
-  font-family:'Roboto Slab', sans-serif;
   color: white;
   font-size: 18px;
   line-height: 30px;
@@ -1579,7 +1588,6 @@ h3.cart-header {
 h4 {
   margin-top: 10px;
   margin-bottom: 10px;
-  font-family:'Roboto Slab', sans-serif;
   color: #adadad;
   font-size: 20px;
   line-height: 24px;
@@ -1589,9 +1597,8 @@ p.results-header {
   margin-top: 10px;
   margin-bottom: 10px;
   color: #fff !important;
-  font-family:'Roboto Slab', sans-serif;
   font-size: 16px;
-  line-height: 18px;
+  line-height: 18px[];
   font-style: normal;
   font-weight: 100;
 }
@@ -1601,9 +1608,9 @@ td.html-email-message {
   padding: 15px;
 }
 tr.header h5 {
+  text-transform: uppercase;
   margin-top: 10px;
   margin-bottom: 10px;
-  font-family: Georgia, serif;
   color: #e8e8e8;
   font-size: 14px;
   line-height: 20px;
@@ -1618,7 +1625,6 @@ h6 {
 }
 p {
   margin-bottom: 5px;
-  font-family: Georgia, serif;
   font-size: 14px;
   line-height: 18px;
 }
@@ -1638,7 +1644,7 @@ p {
 }
 .header {
   padding-top: 0px;
-  background-color: #999;
+  background-color: #333;
   color: white;
 }
 .summary-list {
@@ -1662,7 +1668,6 @@ p {
   border-bottom: 5px solid #b87a00;
   border-radius: 5px;
   background-color: #fbaf17;
-  font-family:'Roboto Slab', sans-serif;
   color: black;
   font-size: 18px;
   font-weight: 400;
@@ -1686,7 +1691,6 @@ p {
 td p.result-item-price {
   padding: 15px 10px;
   background-color: #369;
-  font-family: Georgia, serif;
   color: white;
   text-align: center;
 }
@@ -1767,13 +1771,11 @@ ul.result-tag li.fssi-compliant {
 .summary-price {
   padding: 5px 7px;
   background-color: #cadbf1;
-  font-family: Georgia, serif;
   font-size: 18px;
   text-align: left;
 }
 .product-list-item {
   padding-top: 5px;
-  font-family: Georgia, serif;
   font-size: 18px;
   font-weight: 500;
   list-style-type: decimal;
@@ -1876,20 +1878,6 @@ p.rejected {
 </style>
 
 
-  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js"></script>
-  <script>
-    WebFont.load({
-      google: {
-        families: ["Roboto Slab:100,300,regular","Actor:regular"]
-      }
-    });
-  </script>
-  <script type="text/javascript" src="https://use.typekit.net/fft6oup.js"></script>
-  <script type="text/javascript">
-    try{Typekit.load();}catch(e){}
-  </script$2.46>
-  <script type="text/javascript" src="js/modernizr.js"></script>
-  <link rel="shortcut icon" type="image/x-icon" href="https://y7v4p6k4.ssl.hwcdn.net/placeholder/favicon.ico">
 </head>
 
 
