@@ -4,28 +4,52 @@
     <%= javascript_include_tag "overlay/overlay" %>
 <div class="panel panel-default overlay-panel">
   <div class="panel-heading" id="ccheader">
+    <div class="row"><div class="col-xs-8">
     <h3 class="panel-title cctitle">
-      GSA Communicart
-    </h3>
+      <b><i class="fa fa-shopping-cart"></i> COMMUNI</b>CART
+    </h3></div>
+      <div class="col-xs-4">
+      <h3 class="panel-title ralign cctitle"><a id="close_box">
+      <span class="fa-stack">
+        <i class="fa fa-square fa-stack-2x"></i>
+        <i class="fa fa-times fa-stack-1x" style="color:#07519B"></i>
+      </span></a></h3>
+        </div>
+
+    </div>
+
   </div>
   <div class="panel-body">
       <div id="formscreen">
         <div class="row">
-          <div class="col-xs-5">
+          <div class="col-xs-12">
+            <div class="instruction-hdr">Ready to add this item to your cart?</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-6">
             <div id="pic_holder">
                 <img id="prod_pic" />
             </div>
           </div>
-          <div class="col-xs-7">
-            <form  class="form-inline" role="form">
-                <div class="form-group"> <label>Name</label><input type="text" id="itemname" size="35"/></div>
-                <div class="form-group"><label>Price $</label><input type="text" id="itemprice" size="8"/></div>
-                <div class="form-group"><label>Quantity</label><input type="text" id="itemquantity" size="4"/></div><br/>
-            </form>
+          <div class="col-xs-6">
+
+              <div class="row f-row"><div class="col-xs-12"> <label>NAME</label><input type="text" id="itemname" size="35"/></div></div>
+              <div class="row f-row">
+                <div class="col-xs-6"><label>PRICE</label><input type="text" id="itemprice" size="16"/></div>
+                <div class="col-xs-6"> <label>QTY</label><input type="text" id="itemquantity" size="4"/></div>
+              </div>
+            <div class="row"><div class="col-xs-12">
+              <div class="priceerror" id="priceError"><p>Please enter a price</p></div>
+              <a class="btn add_btn" id="add_btn">Add to Cart</a>
+            </div></div>
+            <div class="row link-row">
+              <div class="col-xs-6"><a id="cancel_btn" class="cancel-link">Cancel</a> <a id="cancel_btn" class="cancel-link"><i class="fa fa-times"></i></a> </div>
+              <div class="col-xs-6"><a id="goto_btn" class="go-link">Go to your cart</a> <a id="goto_btn" class="go-link"><i class="fa fa-angle-double-right"></i></a> </div>
+            </div>
           </div>
         </div>
-        <a class="btn" id="cancel_btn" >Cancel</a><a class="btn" id="add_btn">Add to Cart</a><a class="btn" id="goto_btn">Go to Cart</a>
-        <div class="priceerror" id="priceError"><p>Please enter a price</p></div>
       </div>
       <div id="cartscreen">
           <div class="clear-cart-div">

@@ -3,20 +3,25 @@
   top:200px;
   left:200px;
   z-index: 9999;
-  width: 600px;
-  height:600px;
+  width: 620px;
+  height:456px;
+}
+
+body {
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 300;
 }
 
 #pic_holder {
-  padding-top: 1em;
-  width: 200px;
-  height: 200px;
+//  padding-top: 1em;
+  width: 280px;
+  height: 280px;
   background-color: #fff;
   border: 1px solid #888;
 }
 
 #prod_pic {
-  position: absolute;
+  position: relative;
   top: 50%;
   left: 50%;
   margin-right: -50%;
@@ -61,17 +66,29 @@
     color: #ff0000;
     font-family:arial;
   }
-  display: none;
+  visibility: hidden;
 }
 
 .cctitle {
-  font-weight: bold;
-  color: #333;
-  font-size: 12px;
+//  font-weight: bold;
+  color: #fff;
+  font-size: 16px;
+  font-family: Raleway, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 200;
+  background-color: #07519B;
 }
 
 #ccheader {
-  background-color: #d0d0d0;
+  background-color: #07519B;
+}
+
+.ralign {
+  text-align: right;
+  font-size: 12px;
+  margin-top: -2px;
+  a {
+    cursor: pointer;
+  }
 }
 
 .deleter {
@@ -149,7 +166,7 @@ th.ra {
   height: 100%;
   margin-bottom: 0;
   border-color: #888888;
-  background-color: #efefef;
+  background-color: #FFF;
 }
 
 .cartTotal {
@@ -173,5 +190,50 @@ th.ra {
     margin-left: 1.5em;
     cursor: pointer;
   }
+}
 
+.instruction-hdr {
+  color: #030303;
+  font-size: 2em;
+  margin: .6em .6em 1em .6em;
+  font-family: 'Raleway', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 100;
+}
+
+.f-row {
+  margin-bottom: 1.3em;
+  input {
+    height: 28px;
+    font-size: .8em;
+  }
+  label {
+    font-weight: normal;
+  }
+}
+
+.add_btn {
+  width: 260px;
+  background-color: #07519B;
+  color: #fff;
+  border: 1px solid #054970;
+  border-radius: 6px;
+  margin-left: 0px;
+  font-size: 1.4em;
+  font-weight: lighter;
+}
+
+.link-row {
+  margin-top: 20px;
+  a {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
+.cancel-link {
+  color: #CD2210;
+}
+
+.go-link {
+  color: #1089FF;
 }
