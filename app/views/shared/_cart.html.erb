@@ -2,7 +2,7 @@
 <!-- "title" is used to customize the tile in the h1 below -->
  <table class="w-container main-container" width='800'>
     <tr>
-      <td>
+      <td width="500">
         <h1 class="communicart_header">
           <%= title %>
         </h1>
@@ -18,10 +18,13 @@
           </p>
         </div>
       </td>
+      <td align="right" class="communicart_description" width="300">
+        <img src="https://s3.amazonaws.com/18f/c2/img_logo_communicart.gif" width="229" height="43" />
+      </td>
     </tr>
 
     <tr>
-      <td class="w-container results-list">
+      <td class="w-container results-list" colspan="2">
         <table width="100%">
           <tr class='header'>
             <td class="first" width="50%">
@@ -67,33 +70,32 @@
 
             <!-- Price -->
             <td valign="top">
-              <p class="result-item-price"><%= cart_item.formatted_price %></p>
+              <p class="result-item-price"><strong><%= cart_item.subtotal %></strong></p>
 
-              <p class="result-item-units"><%= cart_item.quantity %> units</p>
+              <p class="result-item-units"><%= cart_item.formatted_price %> x <%= cart_item.quantity %> units</p>
             </td>
 
             <!-- Vendor -->
             <td valign="top">
-              <p>
-                <strong>
-                  <%= cart_item.getProp('shoppingVenue') %>
-                </strong><br />
-                <strong>
-                  <%= cart_item.vendor %>
-                </strong><br />
-                <em><%= cart_item.part_number %></em><br />
+              <p class="vendor-information">
+                <%- if cart_item.getProp('shoppingVenue') %>
+                  <%= cart_item.getProp('shoppingVenue') %> <br />
+                <%- end %>
+                  <span class="info-title">
+                    <strong><%= cart_item.vendor %></strong>
+                  </span>
+                  <%= cart_item.part_number %><br />
 
-                <ul class="result-tag">
+                <span class="result-tag">
                   <%- unless cart_item.socio.empty? %>
-                    <li class="socio">Socio:
+                    SOCIO:
                       <span class= "tag-values">
                         <%- cart_item.socio.each_with_index do |socio_tag, index| %>
                         <%= socio_tag %><%= "," unless cart_item.socio.count == index+1 %>
                         <%- end %>
                       </span>
-                    </li>
                   <%- end %>
-                </ul>
+                </span>
 
               </p>
             </td>

@@ -375,7 +375,7 @@ table.reply-section {
 
 tr.cart_item_information td {
   border-bottom: 1px solid #ccc;
-  padding-top: 10px;
+  padding-top: 30px;
   padding-bottom: 10px;
   background-color: #fff;
   padding-right: 10px;
@@ -383,30 +383,53 @@ tr.cart_item_information td {
 
 tr.cart_item_information p {
   color: #666;
+  font-size: 80%;
+}
+
+p.cart_item_description {
+  padding-bottom: 30px;
 }
 
 p.cart_item_description strong {
-  font-size: 125%;
+  font-size: 130%;
   font-weight: 300;
 }
 
-table tr.total-price, tr.approval-actions {
+table tr.total-price, tr#approval-actions {
   padding-top: 10px;
   padding-bottom: 10px;
-  background-color: #f0f0f0;
+  background-color: #f5f5f5;
 }
 
-tr.approval-actions a {
+span.summary-label {
+  padding-top: 25px;
+  padding-right: 65px;
+}
+
+.tip-highlight {
+  font-weight: bold;
+  color: #cc2115;
+}
+
+tr#approval-actions a {
   display: inline-block;
-  margin-bottom: 15px;
 }
 
-tr.approval-actions a.icon-approved {
+tr#approval-actions p {
+  padding-bottom: 15px;
+}
+
+tr#approval-actions a.icon-approved {
   display: inline-block;
   width: inherit;
   height: inherit;
   background-repeat: no-repeat;
   background-position: 5px 15px;
+}
+
+span.action-block {
+  display: block;
+  width: 300px;
 }
 
 table tr.total-price td {
@@ -1531,7 +1554,7 @@ textarea.w-select {
 /* COMMUNICART.WEBFLOW.CSS */
 
 body.communicart-notification {
-  background-color: #e6e6e6;
+  background-color: #fff;
   font-family: Helvetica, Arial, sans-serif;
   color: #333;
   font-size: 14px;
@@ -1552,10 +1575,13 @@ h1 {
   font-weight: 300;
 }
 
-h1.communicart_header, h4.communicart_description, div.communicart_description p {
-  line-height: 1.5em;
+.communicart_header, h4.communicart_description, div.communicart_description p{
   padding-right: 15px;
   padding-left: 15px;
+}
+
+.communicart_description img {
+  margin: 15px;
 }
 
 h1.communicart_header {
@@ -1615,6 +1641,7 @@ tr.header h5 {
   font-size: 14px;
   line-height: 20px;
   font-weight: 400;
+  font-size: 80%;
 }
 h6 {
   margin-top: 10px;
@@ -1663,14 +1690,17 @@ p {
   text-align: center;
 }
 .form-button {
+  display: inline-block;
   margin-top: 15px;
   padding: 15px 25px;
-  border-bottom: 5px solid #b87a00;
+  border-bottom: 2px solid #095ba7;
   border-radius: 5px;
-  background-color: #fbaf17;
+  background-color: #0d66bf;
   color: black;
-  font-size: 18px;
+  font-size: 120%;
   font-weight: 400;
+  color: #fff;
+  text-decoration: none;
 }
 .result-item {
   padding-top: 10px;
@@ -1689,10 +1719,8 @@ p {
   border-bottom-style: none;
 }
 td p.result-item-price {
-  padding: 15px 10px;
-  background-color: #369;
-  color: white;
-  text-align: center;
+  padding: 5px 10px 30px 10px;
+  color: #000;
 }
 
 td p.result-item-price, td p.total-price p strong {
@@ -1702,12 +1730,19 @@ td p.result-item-price, td p.total-price p strong {
 
 td p.result-item-units {
   padding: 10px;
-  background-color: #336;
-  color: #99c;
   font-weight: 400;
-  text-align: center;
-  text-transform: uppercase;
 }
+
+td p.vendor-information strong {
+  font-weight: normal;
+  color: #000;
+}
+
+p.vendor-information .info-title {
+  display: block;
+  padding-bottom: 30px;
+}
+
 .tag {
   padding: 5px 15px;
   border-radius: 5px;
@@ -1718,15 +1753,8 @@ ul.result-tag {
 }
 
 ul.result-tag li {
-  background-position: 5px 5px;
   margin-left: 0;
   margin-bottom: 5px;
-  font-weight: bold;
-  padding: 5px;
-  border-radius: 4px;
-  background-color: #ededed;
-  background-repeat: no-repeat;
-  padding-left: 7px;
   list-style: none;
 }
 
@@ -1808,7 +1836,7 @@ ul.result-tag li.fssi-compliant {
   padding-top: 0px;
   padding-right: 15px;
   padding-left: 15px;
-  background-color: #e3e3e3;
+  background-color: #f5f5f5;
   box-shadow: none;
 }
 .email-intro-container {
