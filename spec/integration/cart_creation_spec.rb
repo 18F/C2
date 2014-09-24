@@ -22,21 +22,20 @@ describe 'Creating a cart' do
       "gsaUserName": "",
       "initiationComment": "\r\n\r\nHi, this is a comment from the first approval group, I hope it works!\r\nThis is the second line of the comment.",
       "properties": {
+        "origin": "navigator",
         "contractingVehicle": "IT Schedule 70",
-        "LOCATION": "LSA",
-        "configuration": {
-          "cpu": "Intel Core i5-3320M processor or better Intel CPU",
-          "memory": "6.0 GB 1600 MHz",
-          "displayTechnology": "Intel 4000 or higher",
-          "hardDrive": "320GB 7200RPM",
-          "operatingSystem": "Windows 7 64 bit",
-          "displaySize": "Analog Stereo Output",
-          "sound": "Analog Stereo Output",
-          "speakers": "Integrated Stereo",
-          "opticalDrive": "8x DVD +/- RW",
-          "mouse": "Trackpoint pad & optical USB w/ scroll",
-          "keyboard": "Integrated"
-        },
+        "location": "LSA",
+        "cpu": "Intel Core i5-3320M processor or better Intel CPU",
+        "memory": "6.0 GB 1600 MHz",
+        "displayTechnology": "Intel 4000 or higher",
+        "hardDrive": "320GB 7200RPM",
+        "operatingSystem": "Windows 7 64 bit",
+        "displaySize": "Analog Stereo Output",
+        "sound": "Analog Stereo Output",
+        "speakers": "Integrated Stereo",
+        "opticalDrive": "8x DVD +/- RW",
+        "mouse": "Trackpoint pad & optical USB w/ scroll",
+        "keyboard": "Integrated",
         "lsaSates": [
             "MD",
             "DC",
@@ -50,8 +49,8 @@ describe 'Creating a cart' do
             "shoppingVenue": "GSA Advantage",
             "betterDescription": "This is a more awesome description"
           },
-          "vendor": "Document Imaging Dimensions, Inc.",
-          "description": "Round Ring View Binder With Interior Poc",
+          "vendor": "DOCUMENT IMAGING DIMENSIONS, INC.",
+          "description": "ROUND RING VIEW BINDER WITH INTERIOR POC",
           "url": "/advantage/catalog/product_detail.do?&oid=704213980&baseOid=&bpaNumber=GS-02F-XA002",
           "notes": "",
           "qty": "24",
@@ -75,8 +74,8 @@ describe 'Creating a cart' do
         },
         {
           "properties": {},
-          "vendor": "Office Depot",
-          "description": "Pen,roller,gelink,g-2,x-fine",
+          "vendor": "OFFICE DEPOT",
+          "description": "PEN,ROLLER,GELINK,G-2,X-FINE",
           "url": "/advantage/catalog/product_detail.do?&oid=703389586&baseOid=&bpaNumber=GS-02F-XA009",
           "notes": "",
           "qty": "5",
@@ -97,8 +96,8 @@ describe 'Creating a cart' do
            }
         },
         {
-          "vendor": "Metro Office Products",
-          "description": "Paper,ledger,11x8.5",
+          "vendor": "METRO OFFICE PRODUCTS",
+          "description": "PAPER,LEDGER,11X8.5",
           "url": "/advantage/catalog/product_detail.do?&oid=681115589&baseOid=&bpaNumber=GS-02F-XA004",
           "notes": "",
           "qty": "3",
@@ -137,8 +136,8 @@ describe 'Creating a cart' do
           "properties": {
             "shoppingVenue": "GSA Advantage"
           },
-          "vendor": "Document Imaging Dimensions, Inc.",
-          "description": "Round Ring View Binder With Interior Poc",
+          "vendor": "DOCUMENT IMAGING DIMENSIONS, INC.",
+          "description": "ROUND RING VIEW BINDER WITH INTERIOR POC",
           "url": "/advantage/catalog/product_detail.do?&oid=704213980&baseOid=&bpaNumber=GS-02F-XA002",
           "notes": "",
           "qty": "24",
@@ -243,6 +242,19 @@ describe 'Creating a cart' do
       expect(cart.cart_items.first.cart_item_traits.count).to eq 3
       expect(cart.cart_items.first.getProp('shoppingVenue')).to eq "GSA Advantage"
       expect(cart.cart_items.first.getProp('betterDescription')).to eq 'This is a more awesome description'
+    end
+  end
+
+  context 'cart origin property' do
+    it 'added origin symbol' do
+      @json_params_1 = JSON.parse(params_request_1)
+
+      expect(Cart.count).to eq 0
+
+      post 'send_cart', @json_params_1
+      expect(Cart.count).to eq 1
+      cart = Cart.first
+      expect(cart.getProp('origin')).to eq 'navigator'
     end
   end
 

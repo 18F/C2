@@ -14,8 +14,18 @@ describe 'Creating a cart without an approval group' do
       "gsaUserName": "",
       "initiationComment": "I have to say that this is great.",
       "properties": {
-        "something": "awesome",
-        "another something": "awesome again"
+        "configType":"Standard",
+        "cpu":"Intel Core i5-3320M processor or better Intel CPU",
+        "memory":"6.0 GB 1600 MHz ",
+        "displayTechnology":"Intel 4000 or higher ",
+        "hardDrive":"320GB 7200RPM",
+        "operatingSystem":"Windows 7 64 bit",
+        "displaySize":"Windows 7 64 bit",
+        "sound ":"Analog Stereo Output",
+        "speakers":"Integrated Stereo",
+        "opticalDrive ":"8x DVD +/- RW",
+        "mouse ":"Trackpoint pad & optical USB w/ scroll ",
+        "keyboard ":"Integrated"
         },
       "cartItems": [
         {
@@ -30,18 +40,6 @@ describe 'Creating a cart without an approval group' do
           "price": "$2.46",
 
           "properties": {
-            "configType":"Standard",
-            "cpu":"Intel Core i5-3320M processor or better Intel CPU",
-            "memory":"6.0 GB 1600 MHz ",
-            "displayTechnology":"Intel 4000 or higher ",
-            "hardDrive":"320GB 7200RPM",
-            "operatingSystem":"Windows 7 64 bit",
-            "displaySize":"Windows 7 64 bit",
-            "sound ":"Analog Stereo Output",
-            "speakers":"Integrated Stereo",
-            "opticalDrive ":"8x DVD +/- RW",
-            "mouse ":"Trackpoint pad & optical USB w/ scroll ",
-            "keyboard ":"Integrated"
           },
 
           "features": [
