@@ -5,10 +5,13 @@
     <tr>
       <td>
         <h1 class="communicart_header"><%= title %></h1>
-        <p>
-          Requested by:
-          <strong><%= cart.requester.full_name %></strong>
-        </p>
+
+        <div class="communicart_description">
+          <p>
+            Requested by:
+            <strong><%= cart.requester.full_name %></strong>
+          </p>
+        </div>
       </td>
       <td align="right" class="communicart_description" width="300">
         <img src="https://s3.amazonaws.com/18f/c2/img_logo_acquisition_gateway.gif" width="226" height="81" />
