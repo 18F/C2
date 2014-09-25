@@ -13,7 +13,7 @@ describe 'Creating a cart' do
 
   let(:params_request_1) {
   '{
-      "cartName": "",
+      "cartName": "Test Cart Name",
       "approvalGroup": "firstApprovalGroup",
       "cartNumber": "13579",
       "category": "initiation",
@@ -23,6 +23,7 @@ describe 'Creating a cart' do
       "initiationComment": "\r\n\r\nHi, this is a comment from the first approval group, I hope it works!\r\nThis is the second line of the comment.",
       "properties": {
         "origin": "navigator",
+        "configType": "Standard",
         "contractingVehicle": "IT Schedule 70",
         "location": "LSA",
         "cpu": "Intel Core i5-3320M processor or better Intel CPU",

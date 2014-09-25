@@ -68,4 +68,17 @@ describe Cart do
     end
   end
 
+  describe '#process_approvals_without_approval_group' do
+    let(:cart) { FactoryGirl.create(:cart_with_approval_group, name: 'Cart with some approvals') }
+    let(:user1) { FactoryGirl.create(:user, email_address: 'user1@some-dot-gov.gov') }
+
+    it 'excludes blank email addresses' do
+      User.stub(:find_or_create_by).and_return(user1)
+      params = { 'toAddress' => ["email1@some-dot-gov.gov", "email2@some-dot-gov", ""] }
+      User.should_receive(:find_or_create_by).exactly(2).times
+      cart.process_approvals_without_approval_group params
+    end
+
+  end
+
 end
