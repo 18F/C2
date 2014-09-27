@@ -5,19 +5,18 @@
 <div class="panel panel-default overlay-panel">
   <div class="panel-heading" id="ccheader">
     <div class="row"><div class="col-xs-8">
-    <h3 class="panel-title cctitle">
-      <b><i class="fa fa-shopping-cart"></i> COMMUNI</b>CART
-    </h3></div>
+      <h3 class="panel-title cctitle">
+        <span style="font-weight: 600"><i class="fa fa-shopping-cart"></i> COMMUNI</span>CART
+      </h3></div>
       <div class="col-xs-4">
-      <h3 class="panel-title ralign cctitle"><a id="close_box">
-      <span class="fa-stack">
-        <i class="fa fa-square fa-stack-2x"></i>
-        <i class="fa fa-times fa-stack-1x" style="color:#07519B"></i>
-      </span></a></h3>
-        </div>
-
+        <h3 class="panel-title ralign cctitle"><a id="close_box">
+          <span class="fa-stack">
+            <i class="fa fa-square fa-stack-2x"></i>
+            <i class="fa fa-times fa-stack-1x" style="color:#07519B"></i>
+          </span></a>
+        </h3>
+      </div>
     </div>
-
   </div>
   <div class="panel-body">
       <div id="formscreen">
@@ -26,7 +25,6 @@
             <div class="instruction-hdr">Ready to add this item to your cart?</div>
           </div>
         </div>
-
         <div class="row">
           <div class="col-xs-6">
             <div id="pic_holder">
@@ -34,7 +32,6 @@
             </div>
           </div>
           <div class="col-xs-6">
-
               <div class="row f-row"><div class="col-xs-12"> <label>NAME</label><input type="text" id="itemname" size="35"/></div></div>
               <div class="row f-row">
                 <div class="col-xs-6"><label>PRICE</label><input type="text" id="itemprice" size="16"/></div>
@@ -45,33 +42,68 @@
               <a class="btn add_btn" id="add_btn">Add to Cart</a>
             </div></div>
             <div class="row link-row">
-              <div class="col-xs-6"><a id="cancel_btn" class="cancel-link">Cancel</a> <a id="cancel_btn" class="cancel-link"><i class="fa fa-times"></i></a> </div>
+              <div class="col-xs-6"><a id="cancel_btn" class="cancel-link">Cancel</a> <a id="lcancel_btn" class="cancel-link"><i class="fa fa-times"></i></a> </div>
               <div class="col-xs-6"><a id="goto_btn" class="go-link">Go to your cart</a> <a id="goto_btn" class="go-link"><i class="fa fa-angle-double-right"></i></a> </div>
             </div>
           </div>
         </div>
       </div>
+
       <div id="cartscreen">
-          <div class="clear-cart-div">
+     <!--     <div class="clear-cart-div">
             <a id="clear_btn">Clear All</a>
+          </div> -->
+        <div class="row">
+          <div class="col-xs-6">
+            <div class="cartscreen-hdr">Ready to send this cart to your approvers?</div>
           </div>
-          <label>Cart Name:</label>
-          <input type="text" size="30" id="cartName"/>
+          <div class="col-xs-6">
+            <label>Cart Name:</label>
+            <input type="text" size="30" id="cartName"/>
+          </div>
+        </div>
+
           <div id="cart_view">
-            <table  class="table table-condensed" id="itemList"></table>
+            <table  class="table table-condensed item-table" id="itemListHeaders">
+                <tr><th style="width: 20em">Items</th><th class="ra">Price</th><th class="qty">Qty</th><th></th></tr>
+            </table>
+            <div class="cart_scroll">
+                <table  class="table table-condensed item-table" id="itemList"></table>
+            </div>
             <div class="cartTotal" id="cartTotal"></div>
           </div>
-          <div id="approvalgroup_entry">
-            <label>Approval Group Name:</label>
-            <input type="text" id="approvalgroup_input" size="30"/>
+          <div class="row buttonbar">
+            <div class="col-xs-6">
+              <div id="approvalgroup_entry">
+                <label>APPROVAL GROUP NAME</label>
+                <input type="text" id="approvalgroup_input" size="30"/>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="app-btn">
+                <a class="btn" id="send_btn">Send for Approval</a>
+              </div>
+            </div>
           </div>
-          <div class="buttonbar">
-            <a id="shop_btn">Close and Keep Shopping</a><a class="btn" id="send_btn">Send for Approval</a>
+        <div class="row">
+          <div class="col-xs-6">
+            <div class="clear-link"><a class="clear-btn">Clear Cart</a> <a class="clear-btn"><i class="fa fa-times"></i></a> </div>
           </div>
+          <div class="col-xs-6">
+            <div class="shop-link"><a class="shop-btn">Keep Shopping</a> <a class="shop-btn"><i class="fa fa-angle-double-right"></i></a></div>
+          </div>
+        </div>
+
+
       </div>
   </div>
 </div>
+
   <script type="text/template" id="cartitem-template">
-      <td><a href='<%%= itemurl %>' class='itemlistname'><%%= title %></a></td><td class='price'>$<%%= price %></td>
-        <td class="qty"> <%%= quantity %> </td><td class="price">$<%%= subtotal %> </td><td><a class='deleter'>remove</a></td>
+      <td><a href='<%%= itemurl %>' class='itemlistname'><%%= title %></a></td><td class='price'>$ <%%= subtotal %>
+    <%% if (quantity > 1) { %>
+    <br /><span class="smtxt">($ <%%= price %> per unit)</span>
+    <%% } %>
+  </td>
+        <td class="qty"> <%%= quantity %> </td><td class="del-d"><a class='deleter'>remove</a> <i class="fa fa-times del-red" style="color: #CD2210"></i></td>
   </script>

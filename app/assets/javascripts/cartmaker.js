@@ -80,6 +80,9 @@ function scrapePage(jQ) {
         //  console.log("message: " + e.data);
          if (e.data == "closeOverlay") {
            $('#communicart_bookmarklet').remove();
+         } else if (e.data == "expandOverlay") {
+             $('#communicart_bookmarklet').height(610);
+             $('#instacalc_bookmarklet_iframe').height(610);
          }
      });
 }

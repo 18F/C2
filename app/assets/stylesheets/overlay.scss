@@ -1,3 +1,5 @@
+$delete-red: #CD2210;
+
 #communicart_bookmarklet {
   position:absolute;
   top:200px;
@@ -13,11 +15,10 @@ body {
 }
 
 #pic_holder {
-//  padding-top: 1em;
   width: 280px;
   height: 280px;
   background-color: #fff;
-  border: 1px solid #888;
+  border: 1px solid #ccc;
 }
 
 #prod_pic {
@@ -36,6 +37,9 @@ body {
 
 #formscreen {
   top: 0px;
+  label {
+    font-family: Raleway, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
 }
 
 .btn {
@@ -70,11 +74,10 @@ body {
 }
 
 .cctitle {
-//  font-weight: bold;
   color: #fff;
   font-size: 16px;
   font-family: Raleway, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-weight: 200;
+  font-weight: 300;
   background-color: #07519B;
 }
 
@@ -94,9 +97,8 @@ body {
 .deleter {
   cursor: pointer;
   text-decoration: none;
-  font-weight: bold;
-  font-family: Arial,sans-serif;
-  font-size: smaller;
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+  color: $delete-red;
 }
 
 .deleter:hover {
@@ -104,42 +106,61 @@ body {
 }
 
 .itemlistname {
-  font-family: Arial,sans-serif;
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
   text-decoration: none;
-//  color: #7c9ae1;
+  width: 20em;
+}
+
+#itemListHeaders {
+  th {
+    text-transform: uppercase;
+    font-family: Raleway, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 200;
+    color: #fff;
+    background-color: #000;
+  }
+  .qty {
+    width: 2em;
+  }
+  .ra {
+    width: 11em;
+    padding-left: 1em;
+  }
+  margin-bottom: 0;
 }
 
 #itemList {
   border: 0;
   border-spacing: 0;
   border-collapse:collapse;
-  th {
-    color: #899ab2;
-    font-weight: normal;
-    border-top: none;
-    font-size: .8em;
-  }
   .price {
-    text-align: right;
-    width: 4em;
-    padding-left: .75em;
-    padding-right: .25em;
+    width: 11em;
+    padding-left: 1em;
+    font-weight: 500;
+  }
+  .smtxt {
+    font-size: .6em;
+    font-weight: 200;
   }
   td {
     border-top: none;
+    line-height: 1.2;
   }
-
   .qty {
-    padding-left: 1.5em;
     width: 2em;
-
+    text-align: right;
   }
+  .del-d {
+    width: 9em;
+    text-align: right;
+    padding-right: 2em;
+  }
+  a {
+    text-decoration: underline;
+  }
+
 }
 
-th.ra {
-  text-align: right;
-//  padding-right: 1.5em;
-}
 
 #cartscreen {
   font-family: Arial,sans-serif;
@@ -150,11 +171,59 @@ th.ra {
   margin-top: -10px;
 }
 
-#approvalgroup_entry {
-  margin: 20px 5px;
-  border-top: 1px solid #333333;
-  padding-top: 5px;
+#cart_view {
+  margin-top: 1.5em;
 }
+
+.cart_scroll {
+  height: 210px;
+  overflow-y: auto;
+}
+
+#approvalgroup_entry {
+  margin:  5px;
+}
+
+.app-btn {
+  padding-top: 10px;
+}
+
+.buttonbar {
+  margin: 2em -1em;
+}
+
+.clear-link {
+  margin-left: 5px;
+  color: #CD2210;
+  a {
+    color: #CD2210;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
+.shop-link {
+  width: 100%;
+  margin-right: 5px;
+  text-align: right;
+  a {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
+#send_btn {
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background-color: #07519B;
+  color: #fff;
+  border: 1px solid #054970;
+  border-radius: 6px;
+  margin-left: 0px;
+  font-size: 1.4em;
+  font-weight: lighter;
+  width: 100%;
+}
+
 
 .bodyclass {
   padding: 0;
@@ -165,14 +234,29 @@ th.ra {
 .overlay-panel {
   height: 100%;
   margin-bottom: 0;
-  border-color: #888888;
+  border-color: #ccc;
   background-color: #FFF;
+  .panel-body {
+    padding: 20px;
+  }
 }
 
 .cartTotal {
-  font-weight: bold;
-  text-align: right;
-  margin-right: 4em;
+  background-color: #EFEFEF;
+  width: 100%;
+  font-family: Raleway, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  text-align: center;
+  font-size: 1.6em;
+  padding: .5em;
+  border-top: 1px solid #cccccc;
+}
+
+.total-cap {
+  font-weight: 200;
+}
+
+.total-amt {
+  font-weight: 500;
 }
 
 .clear-cart-div {
@@ -183,22 +267,24 @@ th.ra {
   }
 }
 
-.buttonbar {
-  text-align: right;
-  margin-right: 1em;
-  a {
-    margin-left: 1.5em;
-    cursor: pointer;
-  }
-}
+
 
 .instruction-hdr {
   color: #030303;
   font-size: 2em;
-  margin: .6em .6em 1em .6em;
+  margin: .6em .6em 1em 0;
   font-family: 'Raleway', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 100;
 }
+
+.cartscreen-hdr {
+  color: #030303;
+  font-size: 2em;
+  line-height: 1.2em;
+  font-family: 'Raleway', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 100;
+}
+
 
 .f-row {
   margin-bottom: 1.3em;
@@ -220,6 +306,7 @@ th.ra {
   margin-left: 0px;
   font-size: 1.4em;
   font-weight: lighter;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 .link-row {
@@ -227,11 +314,13 @@ th.ra {
   a {
     text-decoration: underline;
     cursor: pointer;
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; ;
   }
 }
 
 .cancel-link {
   color: #CD2210;
+
 }
 
 .go-link {
