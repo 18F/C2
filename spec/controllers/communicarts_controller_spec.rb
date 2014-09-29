@@ -9,7 +9,8 @@ describe CommunicartsController do
         "cartNumber": "2867637",
         "category": "initiation",
         "email": "test-email@some-dot-gov.gov",
-        "fromAddress": "",
+        "fromAddress": "from-address@some-dot-gov.gov",
+        "toAddress": ["to-address@some-dot-gov.gov"],
         "gsaUserName": "",
         "initiationComment": "\r\n\r\nHi, this is a comment, I hope it works!\r\nThis is the second line of the comment.",
         "properties": {
@@ -134,15 +135,19 @@ describe CommunicartsController do
     end
 
     context 'template rendering' do
-      before do
-        approval_group
-        @json_params['approvalGroup'] = "anotherApprovalGroupName"
-      end
-
       it 'renders a navigation template' do
+        approval_group
         post 'send_cart', @json_params
         response.should render_template(partial: '_navigator_cart')
       end
+
+      it 'renders the default template' do
+        approval_group
+        @json_params['properties'] = {}
+        post 'send_cart', @json_params
+        response.should render_template(partial: '_cart')
+      end
+
     end
 
     context 'no approval_group is indicated' do

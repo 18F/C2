@@ -27,7 +27,7 @@
   <%= render partial: @cart_template, locals: {cart: @cart, title:  "Purchase Request"} %>
   <table class='reply-section'>
     <tr height="25"><td colspan=2 height="25" bgcolor="#f5f5f5"></td></tr>
-<!-- TODO: Pull out as partial -->
+
     <%- if @cart_template.blank? %>
       <tr id="approval-actions">
         <td align="right" width="50%">
@@ -43,7 +43,6 @@
       </tr>
     <%- end %>
 
-<!-- TODO: Pull out as partial -->
     <tr id="approval-actions">
       <td colspan=2 align="center">
         <p>
