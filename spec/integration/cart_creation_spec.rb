@@ -124,7 +124,7 @@ describe 'Creating a cart' do
 
   let(:params_request_2) {
   '{
-      "cartName": "",
+      "cartName": "Test Cart Name",
       "approvalGroup": "secondApprovalGroup",
       "cartNumber": "13579",
       "category": "initiation",
@@ -189,7 +189,7 @@ describe 'Creating a cart' do
     expect(cart.requester.email_address).to eq 'requester1@some-dot-gov.gov'
 
     post 'send_cart', @json_params_2
-    expect(Cart.count).to eq 1
+    expect(Cart.count).to eq 1 #WHY???
     cart = Cart.first
     expect(cart.cart_items.count).to eq 1
     expect(cart.cart_items[0].price).to eq 9.87

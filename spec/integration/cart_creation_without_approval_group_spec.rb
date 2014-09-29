@@ -124,9 +124,9 @@ describe 'Creating a cart without an approval group' do
     end
 
     it 'creates cart item properties' do
-      expect(Property.count).to eq 2
+      expect(Property.count).to eq 0
       post 'send_cart', @json_params_1
-      expect(Property.where(hasproperties_type: "CartItem").size).to eq 12
+      expect(Property.where(hasproperties_type: "CartItem").size).to eq 2
     end
   end
 
