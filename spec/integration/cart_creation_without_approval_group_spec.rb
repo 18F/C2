@@ -40,6 +40,8 @@ describe 'Creating a cart without an approval group' do
           "price": "$2.46",
 
           "properties": {
+            "somekey1":"value1",
+            "somekey2":"value2"
           },
 
           "features": [
@@ -112,7 +114,7 @@ describe 'Creating a cart without an approval group' do
 
     it 'adds cart properties' do
       post 'send_cart', @json_params_1
-      expect(Cart.first.properties.count).to eq 2
+      expect(Cart.first.properties.count).to eq 12
     end
   end
 
@@ -122,7 +124,7 @@ describe 'Creating a cart without an approval group' do
     end
 
     it 'creates cart item properties' do
-      expect(Property.count).to eq 0
+      expect(Property.count).to eq 2
       post 'send_cart', @json_params_1
       expect(Property.where(hasproperties_type: "CartItem").size).to eq 12
     end
