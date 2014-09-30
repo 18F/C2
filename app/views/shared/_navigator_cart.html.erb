@@ -1,26 +1,117 @@
 <!-- "cart" is the critical local variable for using this partial -->
 <!-- "title" is used to customize the tile in the h1 below -->
- <table class="w-container main-container" width='940'>
+<div id="navigator-layout">
+ <table class="w-container main-container" width='800'>
     <tr>
       <td>
         <h1 class="communicart_header"><%= title %></h1>
 
-        <h4 class="communicart_description">Requested by:
-        <%= cart.requester.full_name %></h4>
+        <div class="communicart_description">
+          <p>
+            Requested by:
+            <strong><%= cart.requester.full_name %></strong>
+          </p>
+        </div>
       </td>
-    </tr>
-    <tr>
-      <td><hr></td>
+      <td align="right" class="communicart_description" width="300">
+        <img src="https://s3.amazonaws.com/18f/c2/img_logo_acquisition_gateway.gif" width="226" height="81" alt="Acquisition Gateway logo" />
+      </td>
+
     </tr>
 
     <tr>
-      <td class="w-container results-list" align="left">
-        <!--BEGIN display of properties Entry-->
-        <%- cart.properties.each do |cart_property| %>
-          <p><strong><%= cart_property.property %></strong>: <%= cart_property.value %></p>
-        <%- end %>
-        <!--END display of properties Entry-->
+      <td class="w-container results-list" colspan="2">
+        <table width="100%">
+          <tr class='header'>
+            <td class="first" width="33%" scope="col">
+              <h5>Cart Title</h5>
+            </td>
+
+            <td class="first" width="33%" scope="col">
+              <h5>Contract Vehicle</h5>
+            </td>
+
+           <td width="34%" scope="col">
+              <h5>Product Configuration</h5>
+            </td>
+          </tr>
+          <tr class="cart_item_information">
+            <!-- Product -->
+            <td class="first" valign="top">
+              <%= cart.try(:name) || "" %>
+            </td>
+            <td class="first" valign="top">
+              <%= (cart.properties.detect{|p| p.property == 'contractingVehicle'}.try(:value) || "") %>
+            </td>
+            <td class="first" valign="top">
+              <%= (cart.properties.detect{|p| p.property == 'configType'}.try(:value) || "") %>
+            </td>
+          </tr>
+        </table>
+
+
       </td>
     </tr>
+
+
+
+    <tr>
+      <td class="w-container results-list">
+        <table width="100%">
+          <tr class='header'>
+            <td class="first">
+              <h5>Specs</h5>
+            </td>
+          </tr>
+              <%
+                navigator_exclusions = ['origin',
+                                        'contractingVehicle',
+                                        'location',
+                                        'configType'
+                                       ]
+              %>
+              <%- cart.properties.where.not(property: navigator_exclusions).each do |cart_property| %>
+          <tr class="cart_item_information">
+            <td class="w-container results-list" align="left" colspan="2">
+              <strong><%= (cart_property.property).split(/(?=[A-Z])/).join(" ") %></strong>: <%= cart_property.value %>
+            </td>
+          </tr>
+              <%- end %>
+        </table>
+      </td>
+
+      <td class="w-container results-list" valign="top">
+        <table width="100%">
+          <tr class='header'>
+            <td class="first">
+              <h5>Other</h5>
+            </td>
+          </tr>
+
+          <tr class="cart_item_information">
+            <td class="w-container results-list" align="left">
+              <p>
+                <strong>Socio-Economic:</strong><br/>
+                Information there
+              </p>
+
+              <p>
+                <strong>Place of Performance:</strong><br/>
+                <%= (cart.properties.detect{|p| p.property == 'location'}.try(:value) || "") %>
+              </p>
+
+            </td>
+          </tr>
+        </table>
+      </td>
+
+
+    </tr>
+
+
+
   </table>
+
+</div>
+
 

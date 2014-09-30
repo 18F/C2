@@ -1,142 +1,146 @@
 <!-- "cart" is the critical local variable for using this partial -->
 <!-- "title" is used to customize the tile in the h1 below -->
- <table class="w-container main-container" width='940'>
+ <table class="w-container main-container" width='800'>
     <tr>
-      <td>
-        <h1 class="communicart_header"><%= title %></h1>
+      <td width="500">
+        <h1 class="communicart_header">
+          <%= title %>
+        </h1>
 
-        <h4 class="communicart_description">Requested by:
-        <%= cart.requester.full_name %></h4>
+        <div class="communicart_description">
+          <p>
+            Requested by:
+            <strong><%= cart.requester.full_name %></strong>
+          </p>
+          <p>
+            GSA Advantage:
+            <strong>[Some description] - Cart #<%= cart.external_id %></strong>
+          </p>
+        </div>
+      </td>
+      <td align="right" class="communicart_description" width="300">
+        <img src="https://s3.amazonaws.com/18f/c2/img_logo_communicart.gif" width="229" height="43" />
       </td>
     </tr>
 
     <tr>
-      <td class="w-container results-header-container">
-        <h3 class="cart-header">GSA Advantage: Cart #<%= cart.external_id %></h3>
-      </td>
-    </tr>
-
-    <tr>
-      <td class="w-container results-list">
+      <td class="w-container results-list" colspan="2">
         <table width="100%">
           <tr class='header'>
-            <td class="first" width="30%">
-              <h5>Name</h5>
+            <td class="first" width="50%">
+              <h5>Product</h5>
             </td>
 
-            <td width="17.5%">
-              <h5>Description</h5>
-            </td>
-
-            <td width="17.5%">
-              <h5>Details</h5>
-            </td>
-
-            <td width="17.5%">
-              <h5>Tags</h5>
-            </td>
-
-            <td class="last" width="17.5%">
+            <td width="25%">
               <h5>Price</h5>
             </td>
+
+            <td width="25%">
+              <h5>Vendor</h5>
+            </td>
+
           </tr><!--BEGIN CartItem Entry-->
+
+
           <%- cart.cart_items.each do |cart_item| %>
 
           <tr class="cart_item_information">
+            <!-- Product -->
             <td class="first" valign="top">
-              <p><strong><%= cart_item.description %></strong></p>
-            </td>
+              <p class="cart_item_description"><strong><a href="<%= cart_item.url %>"><%= cart_item.description %></a></strong></p>
 
-            <td valign="top">
               <p><%= cart_item.details %></p>
-            </td>
 
-            <td valign="top">
-              <p><strong><%= cart_item.getProp('shoppingVenue') %></strong><br />
-              <strong><%= cart_item.vendor %></strong><br />
-              <em><%= cart_item.part_number %></em><br />
-              <a href="<%= cart_item.url %>">Link to the
-              product</a></p>
-            </td>
-
-            <td valign="top">
               <ul class="result-tag">
                 <%- if cart_item.green? %>
 
                 <li>
                   <div class="green"></div>Green
-                </li><%- end %><%- cart_item.features.each do |feature| %>
+                </li><%- end %>
 
-                <li>
-                  <div class="<%= feature %>"></div><%= feature %>
-                </li><%- end %><%- unless cart_item.socio.empty? %>
-
-                <li class="socio">Socio: <span class=
-                "tag-values"><%- cart_item.socio.each_with_index do |socio_tag, index| %>
-                <%= socio_tag %><%= "," unless cart_item.socio.count == index+1 %>
-                <%- end %></span></li><%- end %>
+                <%- cart_item.features.each do |feature| %>
+                  <li>
+                    <div class="<%= feature %>"></div>
+                    <%= feature %>
+                  </li>
+                <%- end %>
               </ul>
+
             </td>
 
-            <td class="last" valign="top">
-              <p class="result-item-price"><%= cart_item.formatted_price %></p>
+            <!-- Price -->
+            <td valign="top">
+              <p class="result-item-price"><strong><%= cart_item.subtotal %></strong></p>
 
-              <p class="result-item-units"><%= cart_item.quantity %> units</p>
+              <p class="result-item-units"><%= cart_item.formatted_price %> x <%= cart_item.quantity %> units</p>
             </td>
+
+            <!-- Vendor -->
+            <td valign="top">
+              <p class="vendor-information">
+                <%- if cart_item.getProp('shoppingVenue') %>
+                  <%= cart_item.getProp('shoppingVenue') %> <br />
+                <%- end %>
+                  <span class="info-title">
+                    <strong><%= cart_item.vendor %></strong>
+                  </span>
+                  <%= cart_item.part_number %><br />
+
+                <span class="result-tag">
+                  <%- unless cart_item.socio.empty? %>
+                    SOCIO:
+                      <span class= "tag-values">
+                        <%- cart_item.socio.each_with_index do |socio_tag, index| %>
+                        <%= socio_tag %><%= "," unless cart_item.socio.count == index+1 %>
+                        <%- end %>
+                      </span>
+                  <%- end %>
+                </span>
+
+              </p>
+            </td>
+
           </tr>
-
-
-          <!--BEGIN Comments-->
-          <% if @show_comments %>
-            <tr>
-              <td>
-                <strong>
-                  Comments:
-                </strong>
-                <% if !cart_item.comments.empty? %>
-                  <% cart_item.comments.each do |c| %>
-                    <br/>
-                    <% unless c.user.nil? %>
-                      <em>
-                        <%= "#{c.user.full_name}: " %>
-                      </em>
-                    <% end %>
-                    <%= c.comment_text %>
-                  <% end %>
-                <% else %>
-                  <br/>
-                  No comments have been added yet
-                <% end %>
-                <p>
-                  <%= form_for [cart_item, Comment.new] do |f| %>
-                    <%= f.text_area :comment_text, rows: 5, cols: 55 %>
-                    <p>
-                      <%= submit_tag "Add a comment", id: :add_a_comment %>
-                    </p>
-                    <br/>
-                  <% end %>
-                </p>
-              </td>
-            </tr>
-          <% end %>
-          <!--END Comments-->
-
-          <%- end %><!--END CartItem Entry-->
-
-          <tr class="total-price">
-            <td colspan="2"></td>
-
-            <td class="total-price" colspan="2">
-              <p><strong>Total Price</strong></p>
-            </td>
-
-            <td class="total-price total-amount">
+          <%- if @show_comments %>
+          <tr>
+            <td>
+              <strong>
+                Comments:
+              </strong>
+              <% if !cart_item.comments.empty? %>
+              <% cart_item.comments.each do |c| %>
+              <br/>
+              <% unless c.user.nil? %>
+              <em>
+                <%= "#{c.user.full_name}: " %>
+              </em>
+              <% end %>
+              <%= c.comment_text %>
+              <% end %>
+              <% else %>
+              <br>
+              No comments have been added yet
+            </br>
+            <% end %>
+            <p>
+              <%= form_for [cart_item, Comment.new] do |f| %>
+              <%= f.text_area :comment_text, rows: 5, cols: 55 %>
               <p>
-              <strong>$<%= number_with_precision(cart.total_price, precision: 2) %></strong></p>
-            </td>
-          </tr>
+                <%= submit_tag "Add a comment", id: :add_a_comment %>
+              </p>
+              <br/>
+              <% end %>
+            </p>
+          </td>
+        </tr>
+        <%- end %>
+
+
+          <%- end %>
         </table>
+
       </td>
     </tr>
   </table>
+
 

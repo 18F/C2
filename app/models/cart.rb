@@ -133,15 +133,17 @@ class Cart < ActiveRecord::Base
 
   def process_approvals_without_approval_group(params)
     raise 'approvalGroup exists' if params['approvalGroup'].present?
-    approver_emails = params['toAddress']
+    approver_emails = params['toAddress'].select { |email| !email.empty? }
 
     approver_emails.each do |email|
       user = User.find_or_create_by(email_address: email)
       Approval.create!(cart_id: self.id, user_id: user.id, role: 'approver')
     end
 
-    requester = User.find_or_create_by(email_address: params['fromAddress'])
-    Approval.create!(cart_id: self.id, user_id: requester.id, role: 'requester')
+    if params['fromAddress']
+      requester = User.find_or_create_by(email_address: params['fromAddress'])
+      Approval.create!(cart_id: self.id, user_id: requester.id, role: 'requester')
+    end
   end
 
   def process_approvals_from_approval_group

@@ -363,8 +363,12 @@ table {
 
 table.reply-section {
   width: 940px;
-  background-color: #fff;
+  background-color: #f5f5f5;
   padding: 15px;
+}
+
+table.reply-section {
+  border: 1px solid red;
 }
 
 tr.cart_item_information td {
@@ -389,8 +393,8 @@ table tr.total-price td.total-amount {
   text-align: left;
 }
 
-table td.first {
-  padding-left: 10px;
+#approval_actions td {
+  border: 1px solid red;
 }
 
 table td.last {

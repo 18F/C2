@@ -13,7 +13,7 @@ describe 'Creating a cart' do
 
   let(:params_request_1) {
   '{
-      "cartName": "Test Cart Name",
+      "cartName": "",
       "approvalGroup": "firstApprovalGroup",
       "cartNumber": "13579",
       "category": "initiation",
@@ -23,20 +23,21 @@ describe 'Creating a cart' do
       "initiationComment": "\r\n\r\nHi, this is a comment from the first approval group, I hope it works!\r\nThis is the second line of the comment.",
       "properties": {
         "origin": "navigator",
-        "configType": "Standard",
         "contractingVehicle": "IT Schedule 70",
-        "location": "LSA",
-        "cpu": "Intel Core i5-3320M processor or better Intel CPU",
-        "memory": "6.0 GB 1600 MHz",
-        "displayTechnology": "Intel 4000 or higher",
-        "hardDrive": "320GB 7200RPM",
-        "operatingSystem": "Windows 7 64 bit",
-        "displaySize": "Analog Stereo Output",
-        "sound": "Analog Stereo Output",
-        "speakers": "Integrated Stereo",
-        "opticalDrive": "8x DVD +/- RW",
-        "mouse": "Trackpoint pad & optical USB w/ scroll",
-        "keyboard": "Integrated",
+        "LOCATION": "LSA",
+        "configuration": {
+            "cpu": "Intel Core i5-3320M processor or better Intel CPU",
+            "memory": "6.0 GB 1600 MHz",
+            "displayTechnology": "Intel 4000 or higher",
+            "hardDrive": "320GB 7200RPM",
+            "operatingSystem": "Windows 7 64 bit",
+            "displaySize": "Analog Stereo Output",
+            "sound": "Analog Stereo Output",
+            "speakers": "Integrated Stereo",
+            "opticalDrive": "8x DVD +/- RW",
+            "mouse": "Trackpoint pad & optical USB w/ scroll",
+            "keyboard": "Integrated"
+        },
         "lsaSates": [
             "MD",
             "DC",
@@ -124,7 +125,7 @@ describe 'Creating a cart' do
 
   let(:params_request_2) {
   '{
-      "cartName": "Test Cart Name",
+      "cartName": "",
       "approvalGroup": "secondApprovalGroup",
       "cartNumber": "13579",
       "category": "initiation",
@@ -189,7 +190,7 @@ describe 'Creating a cart' do
     expect(cart.requester.email_address).to eq 'requester1@some-dot-gov.gov'
 
     post 'send_cart', @json_params_2
-    expect(Cart.count).to eq 1 #WHY???
+    expect(Cart.count).to eq 1
     cart = Cart.first
     expect(cart.cart_items.count).to eq 1
     expect(cart.cart_items[0].price).to eq 9.87

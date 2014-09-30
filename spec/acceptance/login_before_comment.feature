@@ -9,6 +9,7 @@ Feature: Creating a comment on a cart item
     When I login
     Then I should see alert text 'You successfully signed in'
     And I should see 'Requested by: Liono Requester'
+    And show me the page
     And I should see 'No comments have been added yet'
     When I fill out 'comment_comment_text' with 'This is my first comment'
     And I click 'Add a comment' button
