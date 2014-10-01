@@ -1,6 +1,6 @@
-<!-- "cart" is the critical local variable for using this partial -->
-<!-- "title" is used to customize the tile in the h1 below -->
- <table class="w-container main-container" width='800'>
+<%#-- "cart" is the critical local variable for using this partial --%>
+<%#-- "title" is used to customize the tile in the h1 below --%>
+ <table class="w-container main-container" width='800' border=0>
     <tr>
       <td width="500">
         <h1 class="communicart_header">
@@ -24,6 +24,64 @@
     </tr>
 
     <tr>
+      <td colspan="2" padding="10">
+        <%#-- BEGIN approval status --%>
+        <table id= "status-container-detail" width="790">
+
+          <tr>
+            <td colspan="2" class="w-container status-header-container <%= 'status-completed' if @cart.all_approvals_received? %>">
+              <p class="results-header">Approval Status: <%=  @cart.generate_status_message %></p>
+            </td>
+          </tr>
+
+          <tr class="status-header-container-detail">
+            <td class="first">
+              <p>
+                <strong>Pending</strong>
+                <ul class='status-detail'>
+                  <%- if @cart.approvals.where(role: 'approver').where(status: 'pending').any? %>
+                    <%- @cart.approvals.where(role: 'approver').where(status: 'pending').each do | approval | %>
+                        <li class="icon-<%= approval.status %> status-label-<%= approval.status %>">
+                          <a href='#'><%= approval.user.email_address %></a>
+                       </li>
+                     </p>
+                    <%- end %>
+                  <%- else %>
+                    <li>
+                      You are not waiting for anyone to approve your request
+                    </li>
+                  <%- end %>
+                </ul>
+              </p>
+            </td>
+
+            <td>
+              <p>
+                <strong>Approved</strong>
+                <span class='status-detail'>
+                  <%- if @cart.approvals.where(role: 'approver').where(status: 'approved').any? %>
+                      <%- @cart.approvals.where(role: 'approver').where(status: 'approved').each do | approval | %>
+                          <p>
+                            <a href='#'><%= approval.user.email_address %></a>
+                         </p>
+                       </p>
+                      <%- end %>
+                  <%- else %>
+                    <p>
+                      You currently have no approvals
+                    </p>
+                  <%- end %>
+                </span>
+              </p>
+            </td>
+          </tr>
+
+        </table>
+        <%#-- END approval status --%>
+      </td>
+    </tr>
+
+    <tr>
       <td class="w-container results-list" colspan="2">
         <table width="100%">
           <tr class='header'>
@@ -39,43 +97,39 @@
               <h5>Vendor</h5>
             </td>
 
-          </tr><!--BEGIN CartItem Entry-->
+          </tr><%#-- BEGIN CartItem Entry --%>
 
 
           <%- cart.cart_items.each do |cart_item| %>
 
           <tr class="cart_item_information">
-            <!-- Product -->
+            <%#-- Product --%>
             <td class="first" valign="top">
               <p class="cart_item_description"><strong><a href="<%= cart_item.url %>"><%= cart_item.description %></a></strong></p>
 
               <p><%= cart_item.details %></p>
 
-              <ul class="result-tag">
+              <span class="result-tag">
                 <%- if cart_item.green? %>
 
-                <li>
-                  <div class="green"></div>Green
-                </li><%- end %>
+                <span class="c2bullet green">•</span>&nbsp;Green
+                <%- end %>
 
                 <%- cart_item.features.each do |feature| %>
-                  <li>
-                    <div class="<%= feature %>"></div>
-                    <%= feature %>
-                  </li>
+                 <span class="c2bullet <%= feature %>">•</span>&nbsp;<%= feature %>
                 <%- end %>
-              </ul>
+              </span>
 
             </td>
 
-            <!-- Price -->
+            <%#-- Price --%>
             <td valign="top">
               <p class="result-item-price"><strong><%= cart_item.subtotal %></strong></p>
 
               <p class="result-item-units"><%= cart_item.formatted_price %> x <%= cart_item.quantity %> units</p>
             </td>
 
-            <!-- Vendor -->
+            <%#-- Vendor --%>
             <td valign="top">
               <p class="vendor-information">
                 <%- if cart_item.getProp('shoppingVenue') %>
@@ -88,10 +142,10 @@
 
                 <span class="result-tag">
                   <%- unless cart_item.socio.empty? %>
-                    SOCIO:
+                    <span class="c2bullet">•</span>&nbsp;<strong>SOCIO:</strong>
                       <span class= "tag-values">
                         <%- cart_item.socio.each_with_index do |socio_tag, index| %>
-                        <%= socio_tag %><%= "," unless cart_item.socio.count == index+1 %>
+                        <%= socio_tag %><%= ", " unless cart_item.socio.count == index+1 %>
                         <%- end %>
                       </span>
                   <%- end %>
