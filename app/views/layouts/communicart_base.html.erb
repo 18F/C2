@@ -444,8 +444,9 @@ table tr.total-price td.total-amount {
   text-align: left;
 }
 
-table td.first {
+table#status-container-detail td.first {
   padding-left: 10px;
+  width: 50%;
 }
 
 table td.last {
@@ -1638,14 +1639,18 @@ td.html-email-message {
 }
 tr.header h5 {
   text-transform: uppercase;
-  margin-top: 10px;
-  margin-bottom: 10px;
   color: #e8e8e8;
   font-size: 14px;
   line-height: 20px;
   font-weight: 400;
   font-size: 80%;
 }
+
+tr.header td, tr.header td.first {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
 h6 {
   margin-top: 10px;
   margin-bottom: 10px;
@@ -1833,7 +1838,7 @@ tr#status-container-detail {
   margin: 15px;
 }
 
-tr.status-header-container-detail td.first {
+.main-container table td.first, tr.status-header-container-detail td.first {
   padding: 15px;
 }
 
@@ -1875,6 +1880,7 @@ tr.status-header-container-detail {
   background-color: #f5f5f5;
   box-shadow: none;
 }
+
 .email-intro-container {
   padding: 15px;
   background-color: #fff;
@@ -1903,11 +1909,16 @@ p.approved {
   background-color: #cfc;
 }
 
+.icon-pending {
+  background-image: url('https://s3.amazonaws.com/18f/c2/icon-pending.gif');
+  background-repeat: no-repeat;
+  padding-left: 21px;
+}
+
 .icon-approved {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
   background-image: url('https://s3.amazonaws.com/18f/c2/icon-checkmark.gif');
+  background-repeat: no-repeat;
+  padding-left: 21px;
 }
 
 span.status-label-approved, span.status-label-pending, span.status-label-rejected {

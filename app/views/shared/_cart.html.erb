@@ -26,7 +26,7 @@
     <tr>
       <td colspan="2" padding="10">
         <%#-- BEGIN approval status --%>
-        <table id= "status-container-detail" width="790">
+        <table id="status-container-detail" width="790">
 
           <tr>
             <td colspan="2" class="w-container status-header-container <%= 'status-completed' if @cart.all_approvals_received? %>">
@@ -41,7 +41,7 @@
                 <ul class='status-detail'>
                   <%- if @cart.approvals.where(role: 'approver').where(status: 'pending').any? %>
                     <%- @cart.approvals.where(role: 'approver').where(status: 'pending').each do | approval | %>
-                        <li class="icon-<%= approval.status %> status-label-<%= approval.status %>">
+                        <li class="icon-pending status-label-pending">
                           <a href='#'><%= approval.user.email_address %></a>
                        </li>
                      </p>
@@ -58,12 +58,12 @@
             <td>
               <p>
                 <strong>Approved</strong>
-                <span class='status-detail'>
+                <ul class='status-detail'>
                   <%- if @cart.approvals.where(role: 'approver').where(status: 'approved').any? %>
                       <%- @cart.approvals.where(role: 'approver').where(status: 'approved').each do | approval | %>
-                          <p>
+                          <li class="icon-approved status-label-approved">
                             <a href='#'><%= approval.user.email_address %></a>
-                         </p>
+                          </li>
                        </p>
                       <%- end %>
                   <%- else %>
@@ -71,7 +71,7 @@
                       You currently have no approvals
                     </p>
                   <%- end %>
-                </span>
+                </ul>
               </p>
             </td>
           </tr>
