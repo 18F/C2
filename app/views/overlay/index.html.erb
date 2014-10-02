@@ -22,7 +22,7 @@
       <div id="formscreen">
         <div class="row">
           <div class="col-xs-12">
-            <div class="instruction-hdr">Ready to add this item to your cart?</div>
+            <div class="instruction hdr">Ready to add this item to your cart?</div>
           </div>
         </div>
         <div class="row">
@@ -50,19 +50,21 @@
       </div>
 
       <div id="cartscreen">
-     <!--     <div class="clear-cart-div">
-            <a id="clear_btn">Clear All</a>
-          </div> -->
         <div class="row">
-          <div class="col-xs-6">
-            <div class="cartscreen-hdr">Ready to send this cart to your approvers?</div>
+          <div class="col-xs-12">
+            <div class="hdr">Ready to send this cart to your approvers?</div>
+            <div class="option"><a class="shop-btn">Or keep shopping</a> </div>
           </div>
-          <div class="col-xs-6">
+        </div>
+        <div class="row">
+          <div class="col-xs-12">
             <label>Cart Name:</label>
             <input type="text" size="30" id="cartName"/>
           </div>
         </div>
-
+        <div id="spindiv">
+          <i class="fa fa-circle-o-notch fa-spin fa-5x"></i>
+        </div>
           <div id="cart_view">
             <table  class="table table-condensed item-table" id="itemListHeaders">
                 <tr><th style="width: 20em">Items</th><th class="ra">Price</th><th class="qty">Qty</th><th></th></tr>
@@ -73,28 +75,43 @@
             <div class="cartTotal" id="cartTotal"></div>
           </div>
           <div class="row buttonbar">
+            <div class="col-xs-3"></div>
             <div class="col-xs-6">
               <div id="approvalgroup_entry">
                 <label>APPROVAL GROUP NAME</label>
                 <input type="text" id="approvalgroup_input" size="30"/>
               </div>
             </div>
+            <div class="col-xs-3"></div>
+          </div>
+          <div class="row">
+            <div class="col-xs-3"></div>
             <div class="col-xs-6">
               <div class="app-btn">
                 <a class="btn" id="send_btn">Send for Approval</a>
               </div>
             </div>
+            <div class="col-xs-3"></div>
           </div>
         <div class="row">
-          <div class="col-xs-6">
+          <div class="col-xs-3"></div>
+          <div class="col-xs-3">
             <div class="clear-link"><a class="clear-btn">Clear Cart</a> <a class="clear-btn"><i class="fa fa-times"></i></a> </div>
           </div>
-          <div class="col-xs-6">
+          <div class="col-xs-3">
             <div class="shop-link"><a class="shop-btn">Keep Shopping</a> <a class="shop-btn"><i class="fa fa-angle-double-right"></i></a></div>
           </div>
+          <div class="col-xs-3"></div>
         </div>
-
-
+      </div>
+      <div id="confirmscreen">
+          <div class="hdr confirm-hdr">
+            Success!
+          </div>
+        <div class="confirm-body">
+          <p><span id="cart-name-sp">cart name</span> was sent to <span id="approval-group-name-sp">approval group name</span>.</p>
+          <p>We will send you an email when your request is approved. In the meantime, you can <a id="view-link">view your request here</a>.</p>
+        </div>
       </div>
   </div>
 </div>

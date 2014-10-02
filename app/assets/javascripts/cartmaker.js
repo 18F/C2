@@ -81,8 +81,11 @@ function scrapePage(jQ) {
          if (e.data == "closeOverlay") {
            $('#communicart_bookmarklet').remove();
          } else if (e.data == "expandOverlay") {
-             $('#communicart_bookmarklet').height(610);
-             $('#instacalc_bookmarklet_iframe').height(610);
+             $('#communicart_bookmarklet').height(630);
+             $('#instacalc_bookmarklet_iframe').height(630);
+         } else if (e.data == 'contractOverlay') {
+             $('#communicart_bookmarklet').height(242);
+             $('#instacalc_bookmarklet_iframe').height(242);
          }
      });
 }

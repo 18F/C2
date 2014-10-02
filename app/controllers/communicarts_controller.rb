@@ -10,8 +10,10 @@ class CommunicartsController < ApplicationController
 
   def send_cart
     begin
-      Commands::Approval::InitiateCartApproval.new.perform(params)
-      render json: { message: "This was a success"}, status: 200
+      cart = Commands::Approval::InitiateCartApproval.new.perform(params)
+      # Rails.logger.debug cart.as_json
+      jcart = cart.as_json
+      render json: jcart, status: 200
 
     rescue Exception => e
       raise StandardError, e

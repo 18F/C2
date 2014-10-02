@@ -5,7 +5,7 @@ $delete-red: #CD2210;
   top:200px;
   left:200px;
   z-index: 9999;
-  width: 620px;
+  width: 640px;
   height:456px;
 }
 
@@ -31,7 +31,7 @@ body {
 
 
 #cartscreen {
-   display:none;
+  display:none;
   top: 0px;
 }
 
@@ -40,6 +40,11 @@ body {
   label {
     font-family: Raleway, 'Helvetica Neue', Helvetica, Arial, sans-serif;
   }
+}
+
+#confirmscreen {
+  display: none;
+  top: 0px;
 }
 
 .btn {
@@ -161,22 +166,29 @@ body {
 
 }
 
-
-#cartscreen {
-  font-family: Arial,sans-serif;
-}
-
 #cartName {
-  margin-bottom: 20px;
-  margin-top: -10px;
+  margin-bottom: 5px;
+  margin-top: 0px;
 }
 
 #cart_view {
-  margin-top: 1.5em;
+  margin-top: 1em;
+}
+
+#spindiv {
+  z-index: 19;
+  position: absolute;
+  top: 200px;
+  left:280px;
+  display: none;
+  background-color: #fff;
+  border: 1px solid #676767;
+  border-radius: 5px;
+  padding: 20px;
 }
 
 .cart_scroll {
-  height: 210px;
+  height: 180px;
   overflow-y: auto;
 }
 
@@ -185,11 +197,11 @@ body {
 }
 
 .app-btn {
-  padding-top: 10px;
+//  padding-top: 10px;
 }
 
 .buttonbar {
-  margin: 2em -1em;
+  margin: .8em -1em 0 -1em;
 }
 
 .clear-link {
@@ -269,15 +281,11 @@ body {
 
 
 
-.instruction-hdr {
-  color: #030303;
-  font-size: 2em;
+.instruction {
   margin: .6em .6em 1em 0;
-  font-family: 'Raleway', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-weight: 100;
 }
 
-.cartscreen-hdr {
+.hdr {
   color: #030303;
   font-size: 2em;
   line-height: 1.2em;
@@ -285,6 +293,26 @@ body {
   font-weight: 100;
 }
 
+.confirm-hdr {
+  margin-bottom: 40px;
+}
+.option {
+  margin-bottom: 10px;
+  a {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
+.confirm-body {
+  p {
+    margin-bottom: 15px;
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+  span {
+    font-weight: bold;
+  }
+}
 
 .f-row {
   margin-bottom: 1.3em;

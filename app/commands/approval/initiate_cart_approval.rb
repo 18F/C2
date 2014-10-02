@@ -14,8 +14,12 @@ module Commands
           cart.import_cart_properties(params['properties'])
           cart.import_cart_items(params['cartItems'])
           cart.import_initial_comments(params['initiationComment']) unless params['initiationComment'].blank?
-          cart.deliver_approval_emails
-
+          # cart.deliver_approval_emails
+          c2 = cart.instance_variable_get(:@object)
+          c3 = cart.object
+          # Rails.logger.debug "***c2***", c2
+           Rails.logger.debug c3
+          return c3
         rescue => error
           raise "Something went wrong: #{error}"
         end

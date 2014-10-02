@@ -142,7 +142,7 @@ setTimeout(function(){
     $('#send_btn').click(function() {
       //do some stuff here to send cart
       sendCart();
-      items.clear(closeOverlay);
+      $('#spindiv').show();
     });
 
     $('.shop-btn').click(function(){
@@ -177,6 +177,10 @@ function expandOverlay() {
     window.parent.postMessage("expandOverlay", "*");
 }
 
+function contractOverlay() {
+    window.parent.postMessage("contractOverlay", "*");
+}
+
 function loadProdImage(imageurl) {
     var newImg = new Image();
 
@@ -195,7 +199,7 @@ function loadProdImage(imageurl) {
             $('#prod_pic').height(240/width * height);
         }
         $('#prod_pic').attr('src', imageurl);
-    }
+    };
     newImg.src = imageurl;
 }
 
@@ -212,6 +216,17 @@ function switchToCart() {
     items.fetch();
     itemView.render();
     $('#over')
+}
+
+function switchToConfirm() {
+    $('#cart-name-sp').html($('#cartName').val());
+    $('#approval-group-name-sp').html($('#approvalgroup_input').val())
+    contractOverlay()
+    $('#formscreen').hide();
+    $('#cartscreen').hide();
+    items.clear();
+    $('#spindiv').hide();
+    $('#confirmscreen').show();
 }
 
 function doValidate() {
@@ -252,6 +267,9 @@ function sendCart() {
       url: window.location.origin + "/send_cart",
       dataType: "json",
       contentType: "application/json",
-      data: JSON.stringify(cartdata)
+      data: JSON.stringify(cartdata),
+      success: function(obj) {
+        switchToConfirm();
+      }
   });
 }
