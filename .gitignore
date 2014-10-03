@@ -28,4 +28,4 @@ coverage
 .floo*
 node_modules/
 .grunt/
-
+config/feature_flags.yml

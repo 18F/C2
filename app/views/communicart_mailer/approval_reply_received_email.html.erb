@@ -13,6 +13,7 @@
 
 </table>
 <%= render partial: @cart_template, locals: {cart: @cart, title:  "Purchase Request"} %>
-<%= render partial: 'shared/reply_section', locals: { cart: @cart} %>
+
+<%= render partial: 'shared/reply_section', locals: { cart: @cart} if ENV['flag_web_app_landing'] == 'true' %>
 
 </body>
