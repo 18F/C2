@@ -13,15 +13,16 @@
         </p>
       </td>
     </tr>
-
-    <tr id="approval-actions">
-      <td colspan=2 align="center">
-        <p>
-          <strong>
-            <%= link_to "Or, view this request in your browser", "#" %>
-          </strong>
-        </p>
-      </td>
-    </tr>
+    <%- if ENV['flag_web_app_landing'] == 'true' %>
+      <tr id="approval-actions">
+        <td colspan=2 align="center">
+          <p>
+            <strong>
+              <%= link_to "Or, view this request in your browser", "#" %>
+            </strong>
+          </p>
+        </td>
+      </tr>
+    <%- end %>
 
   </table>
