@@ -112,11 +112,11 @@
               <span class="result-tag">
                 <%- if cart_item.green? %>
 
-                <span class="c2bullet green">•</span>&nbsp;Green
+                <span class="c2bullet green">•</span>&nbsp;<span class='bullet-label'>Green</span>
                 <%- end %>
 
                 <%- cart_item.features.each do |feature| %>
-                 <span class="c2bullet <%= feature %>">•</span>&nbsp;<%= feature %>
+                 <span class="c2bullet <%= feature %>">•</span>&nbsp;<span class='bullet-label'><%= feature %></span>
                 <%- end %>
               </span>
 
@@ -142,7 +142,7 @@
 
                 <span class="result-tag">
                   <%- unless cart_item.socio.empty? %>
-                    <span class="c2bullet">•</span>&nbsp;<strong>SOCIO:</strong>
+                    <span class="c2bullet">•</span>&nbsp;<span class='bullet-label'><strong>SOCIO:</strong></span>
                       <span class= "tag-values">
                         <%- cart_item.socio.each_with_index do |socio_tag, index| %>
                         <%= socio_tag %><%= ", " unless cart_item.socio.count == index+1 %>
