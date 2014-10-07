@@ -10,7 +10,7 @@ class HomeController < ApplicationController
     reset_session
     session[:user] = auth.extra.raw_info.to_hash
     session[:token] = auth.credentials.token
-    flash[:success] = "You successfully signed in"
+   # flash[:success] = "You successfully signed in"
     redirect_to return_to || root_url
   end
 
