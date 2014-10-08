@@ -1,0 +1,58 @@
+    <tr>
+      <td colspan="2" padding="10">
+        <%#-- BEGIN approval status: --%>
+        <table id="status-container-detail" width="770">
+
+
+          <tr>
+            <td colspan="2" class="w-container status-header-container <%= 'status-completed' if @cart.all_approvals_received? %>">
+              <p class="results-header">Approval Status: <%=  @cart.generate_status_message %></p>
+            </td>
+          </tr>
+
+          <tr class="status-header-container-detail">
+            <td class="first">
+              <p>
+                <strong>Pending</strong>
+                <ul class='status-detail'>
+                  <%- if @cart.approvals.where(role: 'approver').where(status: 'pending').any? %>
+                  <%- @cart.approvals.where(role: 'approver').where(status: 'pending').each do | approval | %>
+                  <li class="icon-pending status-label-pending">
+                    <a href='#'><%= approval.user.email_address %></a>
+                  </li>
+                </p>
+                <%- end %>
+                <%- else %>
+                <li>
+                  You are not waiting for anyone to approve your request
+                </li>
+                <%- end %>
+              </ul>
+            </p>
+          </td>
+
+          <td>
+            <p>
+              <strong>Approved</strong>
+              <ul class='status-detail'>
+                <%- if @cart.approvals.where(role: 'approver').where(status: 'approved').any? %>
+                <%- @cart.approvals.where(role: 'approver').where(status: 'approved').each do | approval | %>
+                <li class="icon-approved status-label-approved">
+                  <a href='#'><%= approval.user.email_address %></a>
+                </li>
+              </p>
+              <%- end %>
+              <%- else %>
+              <p>
+                You currently have no approvals
+              </p>
+              <%- end %>
+            </ul>
+          </p>
+        </td>
+      </tr>
+
+    </table>
+    <%#-- END approval status --%>
+  </td>
+</tr>
