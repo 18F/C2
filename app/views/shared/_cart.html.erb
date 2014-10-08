@@ -99,6 +99,7 @@
             </td>
 
           </tr>
+        <%- if ENV['flag_comment_cart_item_ui'] == 'true' %>
           <%- if @show_comments %>
           <tr>
             <td>
@@ -132,6 +133,7 @@
           </td>
         </tr>
         <%- end %>
+      <%- end %>
 
 
           <%- end %>
