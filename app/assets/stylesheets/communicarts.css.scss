@@ -1938,3 +1938,54 @@ span.status-label-rejected {
 p.rejected {
   background-color: #fcc;
 }
+
+/** C2 Styles **/
+#communicart_header {
+  width: 800px;
+  padding: 40px 35px;
+  background-color: #07519b;
+  color: #fff;
+  margin: 0 auto;
+}
+
+#communicart_header a {
+  color: #fff;
+}
+
+#header-identity {
+  display: inline-block;
+}
+
+#header-identity h1 {
+  margin: 0;
+}
+
+#communicart_header #header-nav {
+  display: inline-block;
+  float: right;
+  color: #fff;
+}
+
+#breadcrumb-nav {
+  width: 800px;
+}
+
+#communicart_header #header-nav li {
+  display: inline-block;
+  padding-right: 12px;
+}
+
+#communicart_logo {
+  background-image: url('/assets/img-logo-communicart-portal.png');
+  background-repeat: no-repeat;
+  width: 200px;
+  height: 30px;
+  text-indent: -2000px;
+}
+
+@media (max-width: 991px) {
+}
+@media (max-width: 767px) {
+}
+@media (max-width: 479px) {
+}
