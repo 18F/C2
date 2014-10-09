@@ -15,6 +15,7 @@
   </div>
   <div class="home-main-body">
         <% unless signed_in? %>
+        <div class="lightbox">
             <div class="needs-auth">
               <h3>Please sign in</h3>
               <p>In order to view this page, you'll need to sign in with a MyUSA account.</p>
@@ -22,6 +23,7 @@
               <link href='//s3.amazonaws.com/myusa-static/button.min.css' rel='stylesheet' type='text/css'>
               <%= link_to 'Connect with MyUSA', "/auth/myusa", :class => 'btn btn-social btn-myusa' %>
             </div>
+        </div>
         <% end %>
 
       <div class="row">
