@@ -1,5 +1,5 @@
 <body class="communicart-notification">
-  <table class="w-container main-container" width='940'>
+  <table class="w-container main-container" width='800'>
 
     <tr>
       <td class="w-container html-email-message">
@@ -8,20 +8,12 @@
           The approver, <%= @approval_reply["fromAddress"] %>, <%= @approval %>  Cart #<%= @approval_reply["cartNumber"] %>.<br/>
           Please see below for more details.
         </p>
-          <%- @cart.approvals.where(role: 'approver').each do | approval | %>
-           <p class="approver_status <%= approval.status %>">
-              <span class="icon-<%= approval.status %>"></span><span class="status-label-<%= approval.status %>"><%= approval.status %>:</span> <%= approval.user.email_address %>
-           </p>
-          <%- end %>
       </td>
     </tr>
 
-    <tr>
-      <td class="w-container status-header-container <%= 'status-completed' if @cart.all_approvals_received? %>">
-        <p class="results-header">Approval Status: <%=  @cart.generate_status_message %></p>
-      </td>
-    </tr>
 </table>
 <%= render partial: @cart_template, locals: {cart: @cart, title:  "Purchase Request"} %>
+
+<%= render partial: 'shared/reply_section', locals: { cart: @cart} %>
 
 </body>

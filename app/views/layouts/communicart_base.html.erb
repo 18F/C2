@@ -444,8 +444,9 @@ table tr.total-price td.total-amount {
   text-align: left;
 }
 
-table td.first {
+table#status-container-detail td.first {
   padding-left: 10px;
+  width: 50%;
 }
 
 table td.last {
@@ -1626,11 +1627,10 @@ h4 {
 p.results-header {
   margin-top: 10px;
   margin-bottom: 10px;
-  color: #fff !important;
   font-size: 16px;
   line-height: 18px;
   font-style: normal;
-  font-weight: 100;
+  font-weight: 500;
 }
 td.html-email-message {
   font-size: 14px;
@@ -1639,14 +1639,18 @@ td.html-email-message {
 }
 tr.header h5 {
   text-transform: uppercase;
-  margin-top: 10px;
-  margin-bottom: 10px;
   color: #e8e8e8;
   font-size: 14px;
   line-height: 20px;
   font-weight: 400;
   font-size: 80%;
 }
+
+tr.header td, tr.header td.first {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
 h6 {
   margin-top: 10px;
   margin-bottom: 10px;
@@ -1752,8 +1756,14 @@ p.vendor-information .info-title {
   border-radius: 5px;
 }
 
-ul.result-tag {
+span.result-tag {
   padding-left: 0;
+}
+
+span.result-tag {
+  font-size: 80%;
+  display: inline-block;
+  float: left;
 }
 
 ul.result-tag li {
@@ -1771,28 +1781,35 @@ ul.result-tag li {
   height: 18px;
 }
 
-.green {
-  background-image: url('https://www.gsaadvantage.gov/images/adv12/images/icons/green.gif');
+span.green {
   background-repeat: no-repeat;
-  padding-left: 22px;
   display: inline-block;
-  width: 15px;
   height: 15px;
-  margin-right: 5px;
+  color: #54a133;
+  padding-left: 7px;
 }
 
-.sale {
-  background-image: url('https://www.gsaadvantage.gov/images/adv12/images/new_icons/sale.gif');
-  padding-left: 27px;
-  background-repeat: no-repeat;
+.c2bullet {
+  padding-left: 7px;
+  height: 15px;
   display: inline-block;
-  width: 18px;
-  height: 18px;
+  font-size: 250%;
+  line-height: .6em;
+  color: #f2c33e;
+  vertical-align: top;
+}
+
+.bullet-label {
+  vertical-align: top;
+  line-height: 1.6em;
 }
 
 ul.result-tag li.fssi-compliant {
-  background-color: #45ac48;
   color: white;
+}
+
+ul.result-tag span {
+  background-color: #45ac48;
 }
 
 .summary-link {
@@ -1822,11 +1839,37 @@ ul.result-tag li.fssi-compliant {
   background-color: #f0f0f0;
   font-size: 16px;
 }
-.status-header-container {
-  color: #fff !important;
-  padding-left: 15px;
-  background-color: #369;
+
+table#status-container-detail {
+  margin: 15px;
 }
+
+.main-container table td.first, tr.status-header-container-detail td.first {
+  padding: 15px;
+}
+
+#status-container-detail strong {
+  display: block;
+  text-transform: uppercase;
+}
+
+ul.status-detail {
+  list-style: none;
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+}
+
+.status-header-container {
+  padding-left: 15px;
+  background-color: #ffc47d;
+}
+
+tr.status-header-container-detail {
+  background-color: #fff;
+  border-bottom: 1px solid #ff9e19;
+}
+
 .status-completed {
   background-color: green;
 }
@@ -1843,6 +1886,7 @@ ul.result-tag li.fssi-compliant {
   background-color: #f5f5f5;
   box-shadow: none;
 }
+
 .email-intro-container {
   padding: 15px;
   background-color: #fff;
@@ -1871,11 +1915,16 @@ p.approved {
   background-color: #cfc;
 }
 
+.icon-pending {
+  background-image: url('https://s3.amazonaws.com/18f/c2/icon-pending.gif');
+  background-repeat: no-repeat;
+  padding-left: 21px;
+}
+
 .icon-approved {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
   background-image: url('https://s3.amazonaws.com/18f/c2/icon-checkmark.gif');
+  background-repeat: no-repeat;
+  padding-left: 21px;
 }
 
 span.status-label-approved, span.status-label-pending, span.status-label-rejected {
