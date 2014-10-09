@@ -81,6 +81,8 @@ GEM
       railties (>= 3.0.0)
     faraday (0.9.0)
       multipart-post (>= 1.2, < 3)
+    font-awesome-sass (4.2.0)
+      sass (~> 3.2)
     gherkin (2.12.2)
       multi_json (~> 1.3)
     haml (4.0.3)
@@ -241,6 +243,7 @@ DEPENDENCIES
   database_cleaner
   draper
   factory_girl_rails
+  font-awesome-sass
   haml
   jbuilder (~> 1.2)
   jquery-rails (~> 2.1)

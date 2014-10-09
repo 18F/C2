@@ -9,7 +9,7 @@ module.exports = function(grunt) {
         "./vendor/assets/javascripts/underscore-min.js",
         "./vendor/assets/javascripts/backbone-min.js",
         "./vendor/assets/javascripts/backbone-localstorage.js",
-        "./app/assets/javascripts/overlay/overlay.js"
+        "./app/assets/javascripts/overlay/overlay.js.erb"
         ],
 
         options: {

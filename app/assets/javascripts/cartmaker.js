@@ -73,13 +73,19 @@ function scrapePage(jQ) {
     document.body.insertBefore(div, document.body.firstChild);
 
     $('#communicart_bookmarklet').html("<iframe frameborder='0' scrolling='no' name='instacalc_bookmarklet_iframe' id='instacalc_bookmarklet_iframe' src='" +
-        iframeURL + "' width='600px' height='600px' style='textalign:right;'></iframe>");
+        iframeURL + "' width='620px' height='456px' style='textalign:right;'></iframe>");
 
      //handle communication from bookmarklet
      window.addEventListener("message", function (e) {
         //  console.log("message: " + e.data);
          if (e.data == "closeOverlay") {
            $('#communicart_bookmarklet').remove();
+         } else if (e.data == "expandOverlay") {
+             $('#communicart_bookmarklet').height(630);
+             $('#instacalc_bookmarklet_iframe').height(630);
+         } else if (e.data == 'contractOverlay') {
+             $('#communicart_bookmarklet').height(242);
+             $('#instacalc_bookmarklet_iframe').height(242);
          }
      });
 }

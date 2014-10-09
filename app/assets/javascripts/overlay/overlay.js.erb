@@ -77,7 +77,6 @@ var CartView = Backbone.View.extend({
     render: function() {
         this.$el  = $('#itemList'); //this is a result of timing...should fix
         this.$el.empty();
-        this.$el.append('<tr><th>Items</th><th class="ra">Each</th><th class="qty">Qty</th><th class="ra">Subtotal</th><th></th></tr>');
         var cartTotal = 0.00;
         this.model.each( function(item) {
             var iview = new CartItemView({model: item});
@@ -85,7 +84,7 @@ var CartView = Backbone.View.extend({
             this.$el.append(iview.render().el);
             cartTotal += parseFloat(item.get("subtotal"));
         }, this);
-        $('#cartTotal').html("Total: $"+cartTotal.toFixed(2));
+        $('#cartTotal').html("<span class='total-cap'>TOTAL</span><span class='total-amt'>   $ "+cartTotal.toFixed(2)+"</span>");
     }
 });
 
@@ -117,13 +116,17 @@ setTimeout(function(){
     $('#itemquantity').val(1);
     if (qs.hasOwnProperty("imageUrl")) {
         loadProdImage(qs.imageUrl);
+    } else {
+        loadProdImage(null);
     }
 
     //Buttons
-    $('#cancel_btn').click(function() {
+    $('.cancel-link').click(function() {
         closeOverlay();
     });
-
+    $('#close_box').click(function() {
+        closeOverlay();
+    });
     $('#add_btn').click(function() {
       if (doValidate()) {
         addCartItem($('#itemname').val(), qs.itemUrl, qs.imageUrl,
@@ -132,20 +135,20 @@ setTimeout(function(){
       }
     });
 
-    $('#goto_btn').click(function() {
+    $('.go-link').click(function() {
         switchToCart();
     });
 
     $('#send_btn').click(function() {
       //do some stuff here to send cart
       sendCart();
-      items.clear(closeOverlay);
+      $('#spindiv').show();
     });
 
-    $('#shop_btn').click(function(){
+    $('.shop-btn').click(function(){
       closeOverlay();
     });
-    $('#clear_btn').click(function() {
+    $('.clear-btn').click(function() {
         items.clear(closeOverlay);
     });
 }, 200);
@@ -170,21 +173,33 @@ function closeOverlay() {
   window.parent.postMessage("closeOverlay", "*");
 }
 
+function expandOverlay() {
+    window.parent.postMessage("expandOverlay", "*");
+}
+
+function contractOverlay() {
+    window.parent.postMessage("contractOverlay", "*");
+}
+
 function loadProdImage(imageurl) {
     var newImg = new Image();
+
+    if (imageurl == null) {
+        imageurl = "<%= image_path 'not_found.png' %>";
+    }
 
     newImg.onload = function() {
         var height = newImg.height;
         var width = newImg.width;
         if (height > width) {
-            $('#prod_pic').height(160);
-            $('#prod_pic').width(160/height * width);
+            $('#prod_pic').height(240);
+            $('#prod_pic').width(240/height * width);
         } else {
-            $('#prod_pic').width(160);
-            $('#prod_pic').height(160/width * height);
+            $('#prod_pic').width(240);
+            $('#prod_pic').height(240/width * height);
         }
         $('#prod_pic').attr('src', imageurl);
-    }
+    };
     newImg.src = imageurl;
 }
 
@@ -197,16 +212,29 @@ function addCartItem(title, itemUrl, imageUrl, price, quantity, vendor) {
 function switchToCart() {
     $('#formscreen').hide();
     $('#cartscreen').show();
+    expandOverlay();
     items.fetch();
     itemView.render();
+    $('#over')
+}
+
+function switchToConfirm() {
+    $('#cart-name-sp').html($('#cartName').val());
+    $('#approval-group-name-sp').html($('#approvalgroup_input').val())
+    contractOverlay()
+    $('#formscreen').hide();
+    $('#cartscreen').hide();
+    items.clear();
+    $('#spindiv').hide();
+    $('#confirmscreen').show();
 }
 
 function doValidate() {
   if ($('#itemprice').val() == "") {
-    $('#priceError').show();
+    $('#priceError').css("visibility", "visible");
     return false;
   } else {
-    $('#priceError').hide();
+    $('#priceError').css("visibility", "hidden");
   }
   //add more conditions here
   return true;
@@ -239,6 +267,9 @@ function sendCart() {
       url: window.location.origin + "/send_cart",
       dataType: "json",
       contentType: "application/json",
-      data: JSON.stringify(cartdata)
+      data: JSON.stringify(cartdata),
+      success: function(obj) {
+        switchToConfirm();
+      }
   });
 }
