@@ -77,7 +77,7 @@ body {
  * Remove the gray background color from active links in IE 10.
  */
 a {
-  color: #18f;
+  color: #006be6;
   background: transparent;
 }
 /**
@@ -1940,9 +1940,11 @@ p.rejected {
 }
 
 /** C2 Styles **/
+$c2blue: #006be6;
+
 #communicart_header {
   width: 800px;
-  padding: 40px 35px;
+  padding: 40px 10px 40px 35px;
   background-color: #07519b;
   color: #fff;
   margin: 0 auto;
@@ -1966,8 +1968,23 @@ p.rejected {
   color: #fff;
 }
 
-#breadcrumb-nav {
+ul#breadcrumb-nav {
   width: 800px;
+  margin: 0 auto;
+  padding: 10px 40px 0 33px;
+  background-color: #f5f5f5;
+
+    li {
+      background-image: url('/assets/icon-back-arrow.png');
+      background-repeat: no-repeat;
+      list-style: none;
+      padding-left: 17px;
+      margin: 0;
+
+      a {
+        color: $c2blue;
+      }
+    }
 }
 
 #communicart_header #header-nav li {
