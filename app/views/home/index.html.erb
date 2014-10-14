@@ -1,0 +1,61 @@
+<% if signed_in? %>
+    <div class="row logged-in-band">
+      <div class="col-sm-3">
+         Logged in as: <strong><%= session['user']['email'] %></strong>
+      </div>
+      <div class="col-sm-9">
+        <%= button_to 'Logout', "logout", :class => 'btn-logout' %>
+      </div>
+    </div>
+<% end %>
+<div class="home-main">
+  <div class="home-hdr">
+    <h1><i class="fa fa-shopping-cart"></i><span class="communi"> COMMUNI</span><span class="cart">CART</span></h1>
+    <h1 id="project_title">The Communicart for Common Acquisition Platform</h1>
+  </div>
+  <div class="home-main-body">
+        <% unless signed_in? %>
+        <div class="lightbox">
+            <div class="needs-auth">
+              <h3>Please sign in</h3>
+              <p>In order to view this page, you'll need to sign in with a MyUSA account.</p>
+              <link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+              <link href='//s3.amazonaws.com/myusa-static/button.min.css' rel='stylesheet' type='text/css'>
+              <%= link_to 'Connect with MyUSA', "/auth/myusa", :class => 'btn btn-social btn-myusa' %>
+            </div>
+        </div>
+        <% end %>
+
+      <div class="row">
+        <div class="col-sm-12">
+          <h2 id="project_tagline">&quot;P-Card holders deserve easy, modern, automated management of their shopping carts.&quot;</h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <p>
+            Welcome to Communicart, an early-stage project to save taxpayer money by making government acquisition more efficient by empowering P-Card holders and GSA Advantage users to purchase as
+            efficiently and effectively as possible.</p>
+          <h3>
+            The Communicart Product (so far...)
+          </h3>
+
+          <p>We want to ease the communication around shopping carts by building a new object---a <em>Communicart</em>.
+            The Communicart combines the features of a shopping cart with the ease of an informal email conversation to create a permanent, searchable, archived record of why a
+            a particular group of objects was purchased, and who approved the purchase.</p>
+          <p>In the future, we hope to make the Communicart the center of price research and other Market Intelligence.</p>
+          <p>To see what we have working today, you may wish to view this 10-minute video which walks through the features that we currently have implemented.</p>
+            <iframe width="420" height="315" src="https://www.youtube.com/embed/Y4SoAdFMOPA?rel=0" frameborder="0" allowfullscreen></iframe>
+          <p>Our previous functionality, from our initial iteration, was described in <a href="https://www.youtube.com/embed/p8mvNfCLJQI">this video.</a></p>
+          <p>We are building tools that work with Communicart. One example is the Cartmaker, which utilizes Communicart to trigger email approvals from various e-commerce websites.</p>
+            <iframe width="560" height="315" src="//www.youtube.com/embed/TNnmPgsvguA" frameborder="0" allowfullscreen></iframe>
+          <h3>Our Plans</h3>
+          <p>We've been working on this project since February, 2014.  Our goal is to have a very minimal, but usable product, released by the end of April,
+            and then to churn and burn---to produce improvements as rapidly as we possible.</p>
+          <h3><a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+          <p>Communicart is being developed by the <a href="https://github.com/18f" >18F Team</a> and you, the users who give us feedback.</p>
+
+        </div>
+      </div>
+    </div>
+</div>
