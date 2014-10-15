@@ -496,6 +496,11 @@ body {
   background-color: #fff;
   color: #333;
 }
+
+body.webapp .main-container {
+  background-color: #fff;
+}
+
 img {
   max-width: 100%;
   vertical-align: middle;
@@ -1549,6 +1554,10 @@ textarea.w-select {
 
 /* COMMUNICART.WEBFLOW.CSS */
 
+$c2blue: #006be6;
+$white: #fff;
+$webpadding: 40px;
+
 body.communicart-notification {
   background-color: #fff;
   font-family: Helvetica, Arial, sans-serif;
@@ -1569,6 +1578,22 @@ h1 {
   line-height: 44px;
   font-style: normal;
   font-weight: 300;
+}
+
+body.webapp {
+  font-family: Raleway, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+  .communicart_header, h4.communicart_description, div.communicart_description p {
+    padding-right: $webpadding;
+    padding-left: $webpadding;
+    background-color: $white;
+  }
+
+  .results-list {
+    margin-bottom: $webpadding;
+    padding: $webpadding;
+  }
+
 }
 
 .communicart_header, h4.communicart_description, div.communicart_description p{
@@ -1681,10 +1706,12 @@ p {
   box-shadow: none;
   font-family: Arial, Helvetica, sans-serif;
 }
+
 .results-list {
   margin-bottom: 15px;
   padding: 15px;
 }
+
 .button-submit {
   text-align: center;
 }
@@ -1749,6 +1776,10 @@ p.vendor-information .info-title {
 
 span.result-tag {
   padding-left: 0;
+}
+
+td.cart-total {
+  border: 1px solid red;
 }
 
 span.result-tag {
@@ -1940,18 +1971,16 @@ p.rejected {
 }
 
 /** C2 Styles **/
-$c2blue: #006be6;
-
 #communicart_header {
   width: 800px;
   padding: 40px 10px 40px 35px;
   background-color: #07519b;
-  color: #fff;
+  color: $white;
   margin: 0 auto;
 }
 
 #communicart_header a {
-  color: #fff;
+  color: $white;
 }
 
 #header-identity {
@@ -1972,7 +2001,6 @@ ul#breadcrumb-nav {
   width: 800px;
   margin: 0 auto;
   padding: 10px 40px 0 33px;
-  background-color: #f5f5f5;
 
     li {
       background-image: url('/assets/icon-back-arrow.png');
