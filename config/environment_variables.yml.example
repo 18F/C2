@@ -10,3 +10,11 @@ development:
 production:
   GMAIL_USERNAME: my_email@my_domain.com
   GMAIL_PASSWORD: my_secret_production_password
+
+test:
+  GMAIL_USERNAME: my_test_email@mydomain.com
+  GMAIL_PASSWORD: my_test_password123
+  SMTP_DOMAIN: 'some-dot-gov.gov'
+  NOTIFICATION_URL: 'localhost:3000'
+  NOTIFICATION_TO_EMAIL: 'to.some.email@some-dot-gov.com'
+  NOTIFICATION_FROM_EMAIL: 'reply-email@some-dot-gov.com'
