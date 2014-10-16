@@ -147,9 +147,14 @@ body {
     font-size: .6em;
     font-weight: 200;
   }
+  tr {
+    border-bottom: 1px solid #bdbdbd;
+  }
+  
   td {
     border-top: none;
     line-height: 1.2;
+    padding: 15px 0px;
   }
   .qty {
     width: 2em;
