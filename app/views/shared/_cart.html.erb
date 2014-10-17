@@ -1,6 +1,6 @@
 <%#-- "cart" is the critical local variable for using this partial --%>
 <%#-- "title" is used to customize the tile in the h1 below --%>
- <table class="w-container main-container" width='800' border=0>
+ <table class="w-container main-container" border=0>
     <tr>
       <td width="500">
         <h1 class="communicart_header">
@@ -100,12 +100,6 @@
 
           </tr>
 
-          <tr>
-            <td class='cart-total' colspan='3'>
-              Total: $190.42 (replace me)
-            </td>
-          </tr>
-
         <%- if ENV['flag_comment_cart_item_ui'] == 'true' %>
           <%- if @show_comments %>
           <tr>
@@ -113,7 +107,7 @@
               <strong>
                 Comments:
               </strong>
-              <% if !cart_item.comments.empty? %>
+              <% unless cart_item.comments.empty? %>
               <% cart_item.comments.each do |c| %>
               <br/>
               <% unless c.user.nil? %>
@@ -144,10 +138,86 @@
 
 
           <%- end %>
-        </table>
+
+
+          <%- if local_assigns[:delivery] == 'web' %>
+
+            <tr>
+              <td class='cart-total' colspan='3'>
+                <span class="total-label">Total:</span> <strong>$<%= cart.total_price %></strong>
+              </td>
+            </tr>
+
+          <%- end %>
+          </table>
 
       </td>
     </tr>
   </table>
+
+<div id="approval-status-container">
+  <div id="approval-status">
+    <h3>Request approved by</h3>
+    <ul>
+      <li class='icon-approved'>
+        <%= link_to 'approver1.lastname@gsa.gov', '/some/path' %> on September 30th, 2014 at 4:16pm
+      </li>
+      <li class='icon-approved'>
+        <%= link_to 'approver2.lastname@gsa.gov', '/some/path' %> on September 31st, 2014 at 3:16pm
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div id="cart-comments-container">
+  <div id="cart-comments">
+    <h3>Comments on this purchase request</h3>
+      <%- if @show_comments %>
+          <% unless cart.comments.empty? %>
+            <% cart.comments.each do |c| %>
+
+              <div class='comment-item'>
+                <div class='row'>
+                  <p class='comment-sender col-xs-6'>
+                    requester@test.com
+                  </p>
+
+                  <p class='comment-date col-xs-6'>
+                    commented 9/28/14 at 9:12am
+                  </p>
+                </div>
+
+                <div class='row'>
+                  <p class='comment-text col-xs-6'>
+                    <% unless c.user.nil? %>
+                    <em>
+                      <%= "#{c.user.full_name}: " %>
+                    </em>
+                    <% end %>
+                    <%= c.comment_text %>
+                  </p>
+                </div>
+              </div>
+            <% end %>
+
+          <% else %>
+          <br>
+          No comments have been added yet
+        </br>
+        <% end %>
+        <p>
+          <%= form_for [cart, Comment.new] do |f| %>
+          <%= f.text_area :comment_text, rows: 5, cols: 55 %>
+          <p>
+            <%= submit_tag "Add a comment", id: :add_a_comment %>
+          </p>
+          <br/>
+          <% end %>
+        </p>
+      <%- end %>
+  </div>
+</div>
+
+
 
 

@@ -498,6 +498,7 @@ body {
 }
 
 body.webapp .main-container {
+  width: 1020px;
   background-color: #fff;
 }
 
@@ -1557,6 +1558,9 @@ textarea.w-select {
 $c2blue: #006be6;
 $white: #fff;
 $webpadding: 40px;
+$webwidth: 1020px;
+$bgdetails: #efefef;
+$borderdetails: #bdbdbd;
 
 body.communicart-notification {
   background-color: #fff;
@@ -1779,7 +1783,13 @@ span.result-tag {
 }
 
 td.cart-total {
-  border: 1px solid red;
+  background-color: $bgdetails;
+  text-align: center;
+  padding: 40px 0;
+
+  .total-label {
+    text-transform: uppercase;
+  }
 }
 
 span.result-tag {
@@ -1972,11 +1982,14 @@ p.rejected {
 
 /** C2 Styles **/
 #communicart_header {
-  width: 800px;
   padding: 40px 10px 40px 35px;
   background-color: #07519b;
   color: $white;
   margin: 0 auto;
+
+  .container {
+    width: $webwidth;
+  }
 }
 
 #communicart_header a {
@@ -2013,6 +2026,45 @@ ul#breadcrumb-nav {
         color: $c2blue;
       }
     }
+}
+
+#approval-status-container {
+  width: 100%;
+  margin-bottom: 60px;
+
+  #approval-status {
+    margin: 0 auto;
+    width: $webwidth;
+
+    ul {
+      margin-top: 45px;
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 20px;
+      padding-left: 18px;
+    }
+  }
+}
+
+#cart-comments-container {
+  width: 100%;
+  background-color: $bgdetails;
+  border-top: 1px solid $borderdetails;
+  padding: 40px 0;
+
+  #cart-comments {
+    margin: 0 auto;
+    width: $webwidth;
+
+    .comment-item {
+      border-bottom: 1px solid #ccc;
+      padding: 20px 40px;
+      background-color: #fff;
+    }
+  }
 }
 
 #communicart_header #header-nav li {

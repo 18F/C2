@@ -2,7 +2,8 @@ class CartDecorator < Draper::Decorator
   delegate_all
 
   def total_price
-    object.cart_items.reduce(0) do |sum,citem| sum + (citem.quantity * citem.price) end
+    price = object.cart_items.reduce(0) do |sum,citem| sum + citem.quantity * citem.price end
+    "%0.02f" % price
   end
 
   def number_approved
