@@ -1,8 +1,9 @@
 <%#-- "cart" is the critical local variable for using this partial --%>
 <%#-- "title" is used to customize the tile in the h1 below --%>
- <table class="w-container main-container" border=0>
+<div class="row">
+ <table class="w-container main-container xs-col-12" border='0' width='100%'>
     <tr>
-      <td width="500">
+      <td>
         <h1 class="communicart_header">
           <%= title %>
         </h1>
@@ -18,7 +19,7 @@
           </p>
         </div>
       </td>
-      <td align="right" class="communicart_description" width="300">
+      <td align="right" class="communicart_description">
         <img src="https://s3.amazonaws.com/18f/c2/img_logo_communicart.gif" width="229" height="43" alt="Communicart logo" />
       </td>
     </tr>
@@ -154,16 +155,19 @@
       </td>
     </tr>
   </table>
+</div>
 
 <div id="approval-status-container">
   <div id="approval-status">
     <h3>Request approved by</h3>
     <ul>
       <li class='icon-approved'>
-        <%= link_to 'approver1.lastname@gsa.gov', '/some/path' %> on September 30th, 2014 at 4:16pm
+        <%= link_to 'approver1.lastname@gsa.gov', '/some/path' %>
+        <span class='timestamp'>on September 30th, 2014 at 4:16pm</span>
       </li>
       <li class='icon-approved'>
-        <%= link_to 'approver2.lastname@gsa.gov', '/some/path' %> on September 31st, 2014 at 3:16pm
+        <%= link_to 'approver2.lastname@gsa.gov', '/some/path' %>
+        <span class='timestamp'>on September 31st, 2014 at 3:16pm</span>
       </li>
     </ul>
   </div>
@@ -173,17 +177,30 @@
   <div id="cart-comments">
     <h3>Comments on this purchase request</h3>
       <%- if @show_comments %>
+        <%= form_for [cart, Comment.new] do |f| %>
+        <%= f.text_area :comment_text, rows: 5, cols: 55 %>
+
+        <div class='row'>
+          <p class='col-xs-6 text-area-info'>
+            These comments will be sent to your requester through email
+          </p>
+          <p class='col-xs-6 text-area-button'>
+            <%= submit_tag "Send note", id: :add_a_comment %>
+          </p>
+        </div>
+      <%- end %>
+
           <% unless cart.comments.empty? %>
             <% cart.comments.each do |c| %>
 
               <div class='comment-item'>
                 <div class='row'>
                   <p class='comment-sender col-xs-6'>
-                    requester@test.com
+                    <strong>requester@test.com</strong>
                   </p>
 
                   <p class='comment-date col-xs-6'>
-                    commented 9/28/14 at 9:12am
+                    <%= c.created_at %>
                   </p>
                 </div>
 
@@ -203,17 +220,7 @@
           <% else %>
           <br>
           No comments have been added yet
-        </br>
         <% end %>
-        <p>
-          <%= form_for [cart, Comment.new] do |f| %>
-          <%= f.text_area :comment_text, rows: 5, cols: 55 %>
-          <p>
-            <%= submit_tag "Add a comment", id: :add_a_comment %>
-          </p>
-          <br/>
-          <% end %>
-        </p>
       <%- end %>
   </div>
 </div>

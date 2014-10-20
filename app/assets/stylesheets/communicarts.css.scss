@@ -497,11 +497,6 @@ body {
   color: #333;
 }
 
-body.webapp .main-container {
-  width: 1020px;
-  background-color: #fff;
-}
-
 img {
   max-width: 100%;
   vertical-align: middle;
@@ -1561,6 +1556,7 @@ $webpadding: 40px;
 $webwidth: 1020px;
 $bgdetails: #efefef;
 $borderdetails: #bdbdbd;
+$lightgray: #838383;
 
 body.communicart-notification {
   background-color: #fff;
@@ -1981,6 +1977,24 @@ p.rejected {
 }
 
 /** C2 Styles **/
+body.webapp {
+  table.reply-section,
+  .w-container,
+  ul#breadcrumb-nav {
+    width: $webwidth;
+  }
+
+  .w-container {
+    max-width: $webwidth;
+  }
+
+  .main-container {
+    /*width: 1020px;*/
+    background-color: #fff;
+  }
+
+}
+
 #communicart_header {
   padding: 40px 10px 40px 35px;
   background-color: #07519b;
@@ -2059,12 +2073,39 @@ ul#breadcrumb-nav {
     margin: 0 auto;
     width: $webwidth;
 
+    #add_a_comment {
+      color: $white;
+      background-color: $c2blue;
+      border: 0;
+      padding: 15px;
+    }
+
+    textarea {
+      width: $webwidth;
+    }
+
     .comment-item {
       border-bottom: 1px solid #ccc;
       padding: 20px 40px;
       background-color: #fff;
+
+      .comment-date {
+        color: $lightgray;
+      }
     }
   }
+}
+
+.text-area-info {
+  color: #666;
+}
+
+.text-area-button {
+  text-align: right;
+}
+
+.timestamp {
+  color: $lightgray;
 }
 
 #communicart_header #header-nav li {
