@@ -11,8 +11,11 @@ class CommunicartsController < ApplicationController
   def send_cart
     begin
       cart = Commands::Approval::InitiateCartApproval.new.perform(params)
-      # Rails.logger.debug cart.as_json
-      jcart = cart.as_json
+      jcart = cart.as_json(include: {cart_items:
+                                         {
+                                             include: :cart_item_traits
+                                         }
+      })
       render json: jcart, status: 200
 
     rescue Exception => e
