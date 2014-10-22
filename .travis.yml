@@ -28,9 +28,5 @@ services:
   - mysql
 rvm:
   - 2.0.0
-branches:
-  only:
-    - master
-    - /^ci[-_].*$/
 
 env: NOTIFICATION_FROM_EMAIL=test-reply-communicart.sender@some-dot-gov.gov

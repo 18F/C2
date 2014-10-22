@@ -1,6 +1,4 @@
-# C2
-
-[![Build Status](https://travis-ci.org/18F/C2.svg?branch=master)](https://travis-ci.org/18F/C2)
+# C2 [![Build Status](https://travis-ci.org/18F/C2.svg?branch=master)](https://travis-ci.org/18F/C2)
 
 For an overview of this project, please visit our github [pages](http://18f.github.io/C2/).
 
@@ -12,9 +10,9 @@ team need to have all three installed to have C2 function as demoed on our gitub
 
 These repos are:
 
-[C2](https://github.com/18F/C2) -- this repo.
-[mario](https://github.com/18F/Mario) -- the Mario repo reads email, in some cases invokes a scraper, and ultimately posts JSON back to C2.
-[gsa-advantage-scrape](https://github.com/18F/gsa-advantage-scrape) -- This is a scraper for GSA Advantage which is independently usable,
+* [C2](https://github.com/18F/C2) -- this repo.
+* [mario](https://github.com/18F/Mario) -- the Mario repo reads email, in some cases invokes a scraper, and ultimately posts JSON back to C2.
+* [gsa-advantage-scrape](https://github.com/18F/gsa-advantage-scrape) -- This is a scraper for GSA Advantage which is independently usable,
 but it is used, at least in some cases, by Mario.
 
 These three repos must be installed, and must be configured to connect to each other properly.  Although there are of course many
