@@ -3,10 +3,17 @@
 set -e
 set -x
 
+# create config files, if not already present
 if [ ! -f config/database.yml ]; then
   cp config/database.yml.example config/database.yml
 fi
+if [ ! -f config/environment_variables.yml ]; then
+  cp config/environment_variables.yml.example config/environment_variables.yml
+fi
+
 bundle
+
 rake db:setup
 RAILS_ENV=test rake db:setup
+
 echo "DONE"

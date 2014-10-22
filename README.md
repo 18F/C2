@@ -34,19 +34,19 @@ Although C2 can be used without Mario, the normal mode is to use Mario, which al
 C2 is basically a standard rails application, so it can be installed with basic approaches.
 
 ```bash
-git clone https://github.com/18F/C2
+git clone https://github.com/18F/C2.git
 cd C2
 ```
 
 To get the database and tests running:
 
 1. Start MySQL if it isn't already running: `mysql.server start` at command line.
-1. Run `script/bootstrap`, which will print "DONE" if successful.
+1. Run `script/bootstrap`, which will print "DONE" if successful. *NOTE: This will delete any existing records in your database.*
     * If you have a password on MySQL, it will give you an error about not being able to connect to the database. Update the info in [`config/database.yml`](config/database.yml.example) with your creds.
 1. Run the specs with `bundle exec rspec spec` at the command line.
 
 To get app running:
 
-- Create an environment config file by copying config/environment_variables.yml.example to config/environment_variables.yml
+- Modify [`config/environment_variables.yml`](config/environment_variables.yml.example):
   - `GMAIL_USERNAME` should be rensender you're using (e.g. communicart.sender@gmail.com or communicart.test@gmail.com)
   - `GMAIL_PASSWORD` is the password for that email account
