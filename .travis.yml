@@ -6,6 +6,7 @@ after_failure:
   - ruby env
 before_script:
   - script/bootstrap
+  - cp .rspec.example .rspec
 language: ruby
 notifications:
   email:
@@ -14,7 +15,7 @@ notifications:
       - alexander.magee@gsa.gov
       - raphael.villas@gsa.gov
 script:
-  - bundle exec rake spec
+  - bundle exec rspec spec
   - grunt jasmine
 services:
   - mysql
