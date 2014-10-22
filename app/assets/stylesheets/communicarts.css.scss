@@ -2121,6 +2121,18 @@ ul#breadcrumb-nav {
   text-indent: -2000px;
 }
 
+/** Landing **/
+.home-main {
+  padding: 0 40px;
+  width: $webwidth;
+  margin: 0 auto 40px auto;
+
+  h3 {
+    margin-top: .8em;
+    margin-bottom: .2em;
+  }
+}
+
 @media (max-width: 991px) {
 }
 @media (max-width: 767px) {
