@@ -12,9 +12,7 @@ notifications:
     recipients:
       - aidan.feldman@gsa.gov
       - alexander.magee@gsa.gov
-      - anna.flowerhorne@gsa.gov
       - raphael.villas@gsa.gov
-      - robert.read@gsa.gov
 script:
   - bundle exec rake spec
   - grunt jasmine
