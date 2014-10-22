@@ -31,23 +31,19 @@ Although C2 can be used without Mario, the normal mode is to use Mario, which al
 
 ## Installing C2
 
-C2 is basically a standard rails application, so it can be installed with basic apparoaches.
+C2 is basically a standard rails application, so it can be installed with basic approaches.
 
-```
+```bash
 git clone https://github.com/18F/C2
 cd C2
 ```
 
-To get database and tests running:
+To get the database and tests running:
 
-- Start mysql if it isn't already (mysql.server start at command line)
-- Create a db config file by copying config/database.yml.example to config/database.yml
-- Assuming that you don't have a password on mysql, you can use that file as is.
-  Otherwise, update the info in the yml to match your creds.
-- Create two database in mysql: 'c2_development' and 'c2_test'
-- Run `rake db:migrate` and `RAILS_ENV=test rake db:migrate` from the project directory
-- Run the specs with `rspec spec` at the command line 
-
+1. Start MySQL if it isn't already running: `mysql.server start` at command line.
+1. Run `script/bootstrap`, which will print "DONE" if successful.
+    * If you have a password on MySQL, it will give you an error about not being able to connect to the database. Update the info in [`config/database.yml`](config/database.yml.example) with your creds.
+1. Run the specs with `bundle exec rspec spec` at the command line.
 
 To get app running:
 
