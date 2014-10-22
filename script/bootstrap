@@ -12,8 +12,10 @@ if [ ! -f config/environment_variables.yml ]; then
 fi
 
 bundle
+npm install -g grunt-cli
+npm install
 
-rake db:setup
-RAILS_ENV=test rake db:setup
+bundle exec rake db:setup
+bundle exec rake db:test:prepare
 
 echo "DONE"
