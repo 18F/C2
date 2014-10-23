@@ -6,10 +6,17 @@
     </div>
 
     <ul id='header-nav'>
-      <li>approver.lastname@gsa.gov<img src='/assets/icon-user.png' width='18' height='18' />
-      </li>
+
+      <%- if !signed_in? %>
+        <%= link_to 'Sign in with MyUSA', "/auth/myusa" %>
+      <%- else %>
+        <li>
+          <%= session['user']['email'] %> <img src='/assets/icon-user.png' width='18' height='18' />
+        </li>
+      <%- end %>
+
       <li>
-        <a href='#' class='login-link'>Logout
+        <%= link_to 'Logout', "/logout", method: :post, class: 'login-link' %>
         <img src='/assets/icon-logout.png' width='18' height='18' /></a>
       </li>
     </ul>

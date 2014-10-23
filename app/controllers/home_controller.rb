@@ -4,7 +4,6 @@ class HomeController < ApplicationController
   before_filter :setup_mygov_access_token
 
   def oauth_callback
-    binding.pry
     auth = request.env["omniauth.auth"]
     return_to = session[:return_to]
 

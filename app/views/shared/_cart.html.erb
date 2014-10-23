@@ -19,8 +19,16 @@
           </p>
         </div>
       </td>
-      <td align="right" class="communicart_description">
-        <img src="https://s3.amazonaws.com/18f/c2/img_logo_communicart.gif" width="229" height="43" alt="Communicart logo" />
+      <td class="communicart_description">
+        <div class="purchase-status">
+          <%- if local_assigns[:delivery] == 'web' %>
+            The real status: <%= cart.status %><br/>
+            <img src='/assets/icon-pending.gif' />
+            <h5 class="pending">Pending approval</h5>
+          <%- else %>
+              <img src="https://s3.amazonaws.com/18f/c2/img_logo_communicart.gif" width="229" height="43" alt="Communicart logo" />
+          <%- end %>
+        </div>
       </td>
     </tr>
 
