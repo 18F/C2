@@ -1976,6 +1976,37 @@ p.rejected {
   background-color: #fcc;
 }
 
+.needs-auth {
+  left: 50%;
+  top: 50%;
+  width: 500px;
+  margin-left: -250px;
+  margin-top: -110px;
+  padding: 1em 2em;
+  border: 2px solid #07519B;
+  border-radius: 8px;
+  background-color: #fff;
+  position: absolute;
+  z-index: 10;
+  h3 {
+    margin-bottom: 1em;
+  }
+  p {
+    margin-bottom: 1.3em;
+  }
+  text-align: center;
+}
+
+.lightbox {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, .85);
+  z-index: 100;
+}
+
 /** C2 Styles **/
 body.webapp {
   table.reply-section,
