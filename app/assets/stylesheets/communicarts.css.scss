@@ -1594,6 +1594,9 @@ body.webapp {
     padding: $webpadding;
   }
 
+  .row {
+    margin-right: 0;
+  }
 }
 
 .communicart_header, h4.communicart_description, div.communicart_description p{
@@ -2061,6 +2064,10 @@ body.webapp {
 
 }
 
+.alert {
+  margin-bottom: 0;
+}
+
 #communicart_header {
   padding: 40px 10px 40px 35px;
   background-color: #07519b;
@@ -2162,12 +2169,19 @@ ul#breadcrumb-nav {
   }
 }
 
+.text-area-info-container {
+  border: 1px solid #bdbdbd;
+  margin-left: 0px;
+}
+
 .text-area-info {
   color: #666;
+  height: 55px;
 }
 
 .text-area-button {
   text-align: right;
+  margin: 0px;
 }
 
 .timestamp {

@@ -5,7 +5,11 @@
     <tr>
       <td>
         <h1 class="communicart_header">
-          <%= title %>
+          <%- if local_assigns[:delivery] == 'web' %>
+            Purchase Request
+          <%- else %>
+            <%= title %>
+          <%- end %>
         </h1>
 
         <div class="communicart_description">
@@ -186,10 +190,12 @@
         <%= form_for [cart, Comment.new] do |f| %>
         <%= f.text_area :comment_text, rows: 5, cols: 55 %>
 
-        <div class='row'>
-          <p class='col-xs-6 text-area-info'>
-            These comments will be sent to your requester through email
-          </p>
+        <div class='row text-area-info-container'>
+          <div class='col-xs-6 text-area-info'>
+            <p>
+              These comments will be sent to your requester through email
+            </p>
+          </div>
           <p class='col-xs-6 text-area-button'>
             <%= submit_tag "Send note", id: :add_a_comment %>
           </p>
