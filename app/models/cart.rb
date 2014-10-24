@@ -17,6 +17,13 @@ class Cart < ActiveRecord::Base
     approve: 'approved',
     reject: 'rejected'
   }
+
+  DISPLAY_STATUS_MAP = {
+    pending: 'pending approval',
+    approved: 'approved',
+    rejected: 'rejected'
+  }
+
   has_many :properties, as: :hasproperties
 
   def update_approval_status

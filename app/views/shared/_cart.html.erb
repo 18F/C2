@@ -22,9 +22,7 @@
       <td class="communicart_description">
         <div class="purchase-status">
           <%- if local_assigns[:delivery] == 'web' %>
-            The real status: <%= cart.status %><br/>
-            <img src='/assets/icon-pending.gif' />
-            <h5 class="pending">Pending approval</h5>
+            <h5 class="<%= cart.status %>"><%= Cart::DISPLAY_STATUS_MAP[cart.status.to_sym] %></h5>
           <%- else %>
               <img src="https://s3.amazonaws.com/18f/c2/img_logo_communicart.gif" width="229" height="43" alt="Communicart logo" />
           <%- end %>
