@@ -16,7 +16,6 @@
 /tmp
 /doc/*.svg
 .DS_Store
-.rspec
 custom_plan.rb
 public/assets
 zeus.json

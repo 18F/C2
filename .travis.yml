@@ -6,7 +6,6 @@ after_failure:
   - ruby env
 before_script:
   - script/bootstrap
-  - cp .rspec.example .rspec
 language: ruby
 notifications:
   email:
