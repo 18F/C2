@@ -98,13 +98,9 @@ class Cart < ActiveRecord::Base
   end
 
   def self.initialize_cart_with_items params
-    begin
-      cart = self.existing_or_new_cart params
-      cart.initialize_approval_group params
-      return cart
-    rescue Exception => e
-      raise
-    end
+    cart = self.existing_or_new_cart params
+    cart.initialize_approval_group params
+    cart
   end
 
   def self.existing_or_new_cart(params)
