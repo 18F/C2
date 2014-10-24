@@ -16,7 +16,7 @@ class CommunicartsController < ApplicationController
                                              include: :cart_item_traits
                                          }
       })
-      render json: jcart, status: 200
+      render json: jcart, status: 201
 
     rescue Exception => e
       raise StandardError, e

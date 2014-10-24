@@ -150,6 +150,23 @@ describe CommunicartsController do
 
     end
 
+    context 'method return' do
+      it 'returns 201' do
+        approval_group
+        post 'send_cart', @json_params
+        expect(response.status).to eq(201)
+      end
+
+      it 'returns cart as json' do
+        approval_group
+        post 'send_cart', @json_params
+        json_response = JSON.parse(response.body)
+        json_response["name"].should == "2867637"
+        json_response["cart_items"][0]["description"].should == "ROUND RING VIEW BINDER WITH INTERIOR POC"
+        json_response["cart_items"][1]["cart_item_traits"][0]["name"].should == "socio"
+      end
+    end
+
     context 'no approval_group is indicated' do
       #TODO: Write specs
     end
