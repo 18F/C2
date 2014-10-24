@@ -228,7 +228,7 @@ describe 'Creating a cart' do
       @json_params_1["cartItems"][0]["traits"] = nil
 
       post 'send_cart', @json_params_1
-      expect(response.status).to eq 200
+      expect(response.status).to eq 201
     end
   end
 

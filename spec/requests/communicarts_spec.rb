@@ -18,7 +18,7 @@ describe 'CommunicartsController' do
 
     it "makes a successful request" do
       post "/send_cart", cart_initialize_params
-      expect(response.status).to eq 200
+      expect(response.status).to eq 201
     end
 
     it "invokes two email messages based on approval group" do
@@ -27,7 +27,7 @@ describe 'CommunicartsController' do
       mock_mailer.should_receive(:deliver).exactly(2).times
 
       post "/send_cart", cart_initialize_params
-      expect(response.status).to eq 200
+      expect(response.status).to eq 201
     end
   end
 
