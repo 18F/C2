@@ -12,7 +12,7 @@ if [ ! -f config/environment_variables.yml ]; then
 fi
 
 # http://docs.travis-ci.com/user/caching/#Bundler
-if [ "$CI" -ne "true" ]; then
+if [ ! "$CI" = "true" ]; then
   bundle
 fi
 
