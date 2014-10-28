@@ -16,4 +16,8 @@ module ApprovalSteps
     @cart.approvals.last.update_attributes(user_id: @user.id)
   end
 
+  step "feature flag :flag_name is :value" do |flag, value|
+    ENV[flag] = value
+  end
+
 end

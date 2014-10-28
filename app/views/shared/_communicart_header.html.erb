@@ -7,7 +7,7 @@
 
     <ul id='header-nav'>
 
-      <%- if !signed_in? %>
+      <%- if !@current_user %>
         <%= link_to 'Sign in with MyUSA', "/auth/myusa" %>
       <%- else %>
         <li>
