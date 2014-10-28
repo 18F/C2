@@ -4,6 +4,7 @@ after_failure:
   - echo $RAILS_ENV
   - bundle exec rake --version
   - ruby env
+cache: bundler
 install: script/bootstrap
 language: ruby
 notifications:
