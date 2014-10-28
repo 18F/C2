@@ -1,5 +1,5 @@
 after_failure:
-  - mysql -e 'show databases;'
+  - psql -l
   - cat ./config/database.yml
   - echo $RAILS_ENV
   - bundle exec rake --version
@@ -16,8 +16,8 @@ notifications:
 script:
   - bundle exec rspec spec
   - grunt jasmine
-services:
-  - mysql
+addons:
+  postgresql: "9.3"
 rvm:
   - 2.0.0
 
