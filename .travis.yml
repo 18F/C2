@@ -7,9 +7,8 @@ after_failure:
 before_script:
   - script/bootstrap
 cache:
-  directories:
-    - node_modules
-    - vendor/bundle
+  - bundler
+  - npm
 language: ruby
 notifications:
   email:
