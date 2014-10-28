@@ -10,7 +10,10 @@ var CartItem = Backbone.Model.extend({
   },
   validate : function(attrs) {
     if (attrs.price == 0) {
-      return "item must have a price!"
+      return "item must have a non-zero price!";
+    }
+    if (isNaN(parseFloat(attrs.price))) {
+      return "item price must be a number";
     }
   },
   initialize: function() {
@@ -128,12 +131,16 @@ setTimeout(function(){
         closeOverlay();
     });
     $('#add_btn').click(function() {
-      if (doValidate()) {
-        addCartItem($('#itemname').val(), qs.itemUrl, qs.imageUrl,
-          $('#itemprice').val(), $('#itemquantity').val(), qs.vendor);
+      if (addCartItem($('#itemname').val(), qs.itemUrl, qs.imageUrl,
+          $('#itemprice').val(), $('#itemquantity').val(), qs.vendor)){
+        $('#priceError').html('<p></p>');
+        $('#priceError').css("visibility", "hidden");
         switchToCart();
-      return false;
+      } else {
+        $('#priceError').html('<p>Please enter a price</p>');
+        $('#priceError').css("visibility", "visible");
       }
+      return false;
     });
 
     $('.go-link').click(function() {
@@ -209,9 +216,14 @@ function loadProdImage(imageurl, alt) {
 }
 
 function addCartItem(title, itemUrl, imageUrl, price, quantity, vendor) {
-    var item = new CartItem({title: title, itemurl: itemUrl, imageUrl: imageUrl, price: price, quantity: quantity, vendor: vendor});
+  var item = new CartItem({title: title, itemurl: itemUrl, imageUrl: imageUrl, price: price, quantity: quantity, vendor: vendor});
+  if (item.isValid()) {
     items.add(item);
     item.save();
+    return true;
+  } else {
+    return false;
+  }
 }
 
 function switchToCart() {
@@ -233,19 +245,6 @@ function switchToConfirm() {
     items.clear();
     $('#spindiv').hide();
     $('#confirmscreen').show();
-}
-
-function doValidate() {
-  if (isNaN(parseFloat($('#itemprice').val()))) {
-    $('#priceError').html('<p>Please enter a price</p>');
-    $('#priceError').css("visibility", "visible");
-    return false;
-  } else {
-    $('#priceError').html('<p></p>');
-    $('#priceError').css("visibility", "hidden");
-  }
-  //add more conditions here
-  return true;
 }
 
 function sendCart() {
