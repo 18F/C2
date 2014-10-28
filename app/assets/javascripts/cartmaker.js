@@ -30,9 +30,9 @@ function scrapePage(jQ) {
     }
 
     if (ogData.hasOwnProperty("title")) {
-        cartItem.title = ogData["title"][0];
+        cartItem.title = escape(ogData["title"][0]);
     } else {
-        cartItem.title = document.title;
+        cartItem.title = escape(document.title);
     }
 
     if (ogData.hasOwnProperty("url")) {
@@ -72,7 +72,7 @@ function scrapePage(jQ) {
     $('#communicart_bookmarklet').height(175);
     document.body.insertBefore(div, document.body.firstChild);
 
-    $('#communicart_bookmarklet').html("<iframe frameborder='0' scrolling='no' name='instacalc_bookmarklet_iframe' id='instacalc_bookmarklet_iframe' src='" +
+    $('#communicart_bookmarklet').html("<iframe frameborder='0' scrolling='no' name='Communicart Cartmaker' id='instacalc_bookmarklet_iframe' src='" +
         iframeURL + "' width='620px' height='456px' style='textalign:right;'></iframe>");
 
      //handle communication from bookmarklet

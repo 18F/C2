@@ -9,7 +9,7 @@
         <span style="font-weight: 600"><i class="fa fa-shopping-cart"></i> COMMUNI</span>CART
       </h3></div>
       <div class="col-xs-4">
-        <h3 class="panel-title ralign cctitle"><a id="close_box">
+        <h3 class="panel-title ralign cctitle"><a id="close_box" title="exit" href="#">
           <span class="fa-stack">
             <i class="fa fa-square fa-stack-2x"></i>
             <i class="fa fa-times fa-stack-1x" style="color:#07519B"></i>
@@ -22,7 +22,7 @@
       <div id="formscreen">
         <div class="row">
           <div class="col-xs-12">
-            <div class="instruction hdr">Ready to add this item to your cart?</div>
+            <h2 class="instruction hdr">Ready to add this item to your cart?</h2>
           </div>
         </div>
         <div class="row">
@@ -32,18 +32,18 @@
             </div>
           </div>
           <div class="col-xs-6">
-              <div class="row f-row"><div class="col-xs-12"> <label>NAME</label><input type="text" id="itemname" size="35"/></div></div>
+              <div class="row f-row"><div class="col-xs-12"> <label for="itemname">NAME</label><input type="text" id="itemname" size="35"/></div></div>
               <div class="row f-row">
-                <div class="col-xs-6"><label>PRICE</label><input type="text" id="itemprice" size="16"/></div>
-                <div class="col-xs-6"> <label>QTY</label><input type="text" id="itemquantity" size="4"/></div>
+                <div class="col-xs-6"><label for="itemprice">PRICE</label><input type="text" id="itemprice" size="16"/></div>
+                <div class="col-xs-6"> <label for="itemquantity">QTY</label><input type="text" id="itemquantity" size="4"/></div>
               </div>
             <div class="row"><div class="col-xs-12">
-              <div class="priceerror" id="priceError"><p>Please enter a price</p></div>
-              <a class="btn add_btn" id="add_btn">Add to Cart</a>
+              <div class="priceerror" id="priceError"><p></p></div>
+              <a class="btn add_btn" id="add_btn" href="#">Add to Cart</a>
             </div></div>
             <div class="row link-row">
-              <div class="col-xs-6"><a id="cancel_btn" class="cancel-link">Cancel</a> <a id="lcancel_btn" class="cancel-link"><i class="fa fa-times"></i></a> </div>
-              <div class="col-xs-6"><a id="goto_btn" class="go-link">Go to your cart</a> <a id="goto_btn" class="go-link"><i class="fa fa-angle-double-right"></i></a> </div>
+              <div class="col-xs-6"><a id="cancel_btn" class="cancel-link" href="#">Cancel</a> <a id="lcancel_btn" title="cancel" class="cancel-link"><i class="fa fa-times"></i></a> </div>
+              <div class="col-xs-6"><a id="goto_btn" class="go-link" href="#">Go to your cart</a> <a id="goto_btn" title="Go to cart" class="go-link"><i class="fa fa-angle-double-right"></i></a> </div>
             </div>
           </div>
         </div>
@@ -52,8 +52,8 @@
       <div id="cartscreen">
         <div class="row">
           <div class="col-xs-12">
-            <div class="hdr">Ready to send this cart to your approvers?</div>
-            <div class="option"><a class="shop-btn">Or keep shopping</a> </div>
+            <h2 class="hdr">Ready to send this cart to your approvers?</h2>
+            <div class="option"><a class="shop-btn" href="#">Or keep shopping</a> </div>
           </div>
         </div>
         <div class="row">
@@ -77,33 +77,27 @@
           <div class="row buttonbar">
             <div class="col-xs-6">
               <div id="approvalgroup_entry">
-                <label>APPROVAL GROUP NAME</label>
+                <label for="approvalgroup_input">APPROVAL GROUP NAME</label>
                 <input type="text" id="approvalgroup_input" size="30"/>
               </div>
             </div>
             <div class="col-xs-6">
               <div class="app-btn">
-                <a class="btn" id="send_btn">Send for Approval</a>
+                <a class="btn" id="send_btn" a href="#">Send for Approval</a>
               </div>
             </div>
           </div>
         <div class="row">
           <div class="col-xs-6">
-            <div class="clear-link"><a class="clear-btn">Clear Cart</a> <a class="clear-btn"><i class="fa fa-times"></i></a> </div>
+            <div class="clear-link"><a class="clear-btn" href="#">Clear Cart</a> <a class="clear-btn"><i class="fa fa-times"></i></a> </div>
           </div>
           <div class="col-xs-6">
-            <div class="shop-link"><a class="shop-btn">Keep Shopping</a> <a class="shop-btn"><i class="fa fa-angle-double-right"></i></a></div>
+            <div class="shop-link"><a class="shop-btn" href="#">Keep Shopping</a> <a class="shop-btn"><i class="fa fa-angle-double-right"></i></a></div>
           </div>
         </div>
       </div>
       <div id="confirmscreen">
-          <div class="hdr confirm-hdr">
-            Success!
-          </div>
-        <div class="confirm-body">
-          <p><span id="cart-name-sp">cart name</span> was sent to <span id="approval-group-name-sp">approval group name</span>.</p>
-          <p>We will send you an email when your request is approved. In the meantime, you can <a id="view-link">view your request here</a>.</p>
-        </div>
+
       </div>
   </div>
 </div>
@@ -114,5 +108,5 @@
     <br /><span class="smtxt">($ <%%= price %> per unit)</span>
     <%% } %>
   </td>
-        <td class="qty"> <%%= quantity %> </td><td class="del-d"><a class='deleter'>remove</a> <i class="fa fa-times del-red" style="color: #CD2210"></i></td>
+        <td class="qty"> <%%= quantity %> </td><td class="del-d"><a class='deleter' href="#">remove</a> <i class="fa fa-times del-red" style="color: #CD2210"></i></td>
   </script>
