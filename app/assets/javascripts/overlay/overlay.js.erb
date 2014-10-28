@@ -118,7 +118,7 @@ setTimeout(function(){
     }
     $('#itemquantity').val(1);
     if (qs.hasOwnProperty("imageUrl")) {
-        loadProdImage(qs.imageUrl, qs['title']);
+        loadProdImage(qs.imageUrl, unescape(qs['title']));
     } else {
         loadProdImage(null);
     }
