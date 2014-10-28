@@ -16,6 +16,7 @@ class CommunicartsController < ApplicationController
                                        }
     })
     render json: jcart, status: 201
+    # TODO respond with JSON in case of error
     # render json: { message: "Something went wrong", errors: e }, status: 500
   end
 
