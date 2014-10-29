@@ -6,6 +6,9 @@ after_failure:
   - ruby env
 before_script:
   - script/bootstrap
+cache:
+  - bundler
+  - npm
 language: ruby
 notifications:
   email:

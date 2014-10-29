@@ -11,7 +11,11 @@ if [ ! -f config/environment_variables.yml ]; then
   cp config/environment_variables.yml.example config/environment_variables.yml
 fi
 
-bundle
+# http://docs.travis-ci.com/user/caching/#Bundler
+if [ ! "$CI" = "true" ]; then
+  bundle
+fi
+
 npm install -g grunt-cli
 npm install
 

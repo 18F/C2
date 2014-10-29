@@ -1,12 +1,12 @@
 # C2 [![Build Status](https://travis-ci.org/18F/C2.svg?branch=master)](https://travis-ci.org/18F/C2)
 
-For an overview of this project, please visit our github [pages](http://18f.github.io/C2/).
+For an overview of this project, please visit our [homepage](http://18f.github.io/C2/).
 
 ## INSTALLATION
 
 In order to foster as much reuse as possible, the C2 project is a molecule of 3 repos,
 each of which in theory might be reusable independently.  In practice, we on the
-team need to have all three installed to have C2 function as demoed on our gitub [pages][http://18f.github.io/C2/].
+team need to have all three installed to have C2 function as demoed on our [homepage](http://18f.github.io/C2/).
 
 These repos are:
 
@@ -20,7 +20,7 @@ ways to do this, this section describes one preferred mechanism for doing this.
 
 ## Installing the scraper
 
-Follow the instructions in the gsa-advantage-scrape (https://github.com/18F/gsa-advantage-scrape) README.  This assumes that
+Follow the instructions in the [gsa-advantage-scrape](https://github.com/18F/gsa-advantage-scrape) README.  This assumes that
 you are installing with Apache, on the same machine, although you could install it some other way.
 
 ## Installing Mario
