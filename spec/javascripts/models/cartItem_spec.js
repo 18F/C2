@@ -12,12 +12,28 @@ describe('CartItem', function() {
 
   it('should not be valid', function(){
     var cartItem = new CartItem();
-      expect(cartItem.isValid()).toBeFalsy();
+    expect(cartItem.isValid()).toBeFalsy();
+    cartItem.set({price: "fwe"});
+    expect(cartItem.isValid()).toBeFalsy();
+    cartItem.set({price: ""});
+    expect(cartItem.isValid()).toBeFalsy();
+  });
+
+  it('should be valid', function() {
+    var cartItem = new CartItem();
+    cartItem.set({price: "1.22"});
+    expect(cartItem.isValid()).toBeTruthy();
+    cartItem.set({price: "1"});
+    expect(cartItem.isValid()).toBeTruthy();
+    cartItem.set({price: 1.22});
+    expect(cartItem.isValid()).toBeTruthy();
+    cartItem.set({price: 7});
+    expect(cartItem.isValid()).toBeTruthy();
   });
 
   it('should have subtotal of 33', function() {
-      var cartItem = new CartItem();
-      cartItem.set({price: 11.00, quantity: 3});
-      expect(cartItem.get('subtotal')).toEqual('33.00');
+    var cartItem = new CartItem();
+    cartItem.set({price: 11.00, quantity: 3});
+    expect(cartItem.get('subtotal')).toEqual('33.00');
   });
 });

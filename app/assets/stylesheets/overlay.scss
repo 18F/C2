@@ -84,6 +84,9 @@ body {
   font-family: Raleway, 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 300;
   background-color: #07519B;
+  a:focus {
+    border: 3px solid lightblue;
+  }
 }
 
 #ccheader {
@@ -340,8 +343,11 @@ body {
   font-size: 1.4em;
   font-weight: lighter;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-}
 
+}
+a.add_btn:focus {
+  color: #fff;
+}
 .link-row {
   margin-top: 20px;
   a {
@@ -357,5 +363,5 @@ body {
 }
 
 .go-link {
-  color: #1089FF;
+  color: #07519B;
 }
