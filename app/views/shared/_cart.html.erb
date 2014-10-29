@@ -24,13 +24,13 @@
         </div>
       </td>
       <td class="communicart_description">
-        <div class="purchase-status">
           <%- if local_assigns[:delivery] == 'web' %>
+          <div class="purchase-status">
             <h5 class="<%= cart.status %>"><%= Cart::DISPLAY_STATUS_MAP[cart.status.to_sym] %></h5>
+          </div>
           <%- else %>
               <img src="https://s3.amazonaws.com/18f/c2/img_logo_communicart.gif" width="229" height="43" alt="Communicart logo" />
           <%- end %>
-        </div>
       </td>
     </tr>
 
