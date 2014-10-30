@@ -226,8 +226,7 @@ class Cart < ActiveRecord::Base
     end
   end
 
-# These are magic Constants specific to Navigotor.
-# We may wish to orginize a Navigator-plugin at some time.
+# TODO: Move template logic out of the model
  def cart_template_name
     return (self.getProp('origin') == 'navigator') ? "shared/navigator_cart" : "shared/cart"
   end

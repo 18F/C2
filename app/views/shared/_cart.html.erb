@@ -167,76 +167,79 @@
   </table>
 </div>
 
-<div id="approval-status-container">
-  <div id="approval-status">
-    <h3>Request approved by</h3>
-    <ul>
-      <li class='icon-approved'>
-        <%= link_to 'approver1.lastname@gsa.gov', '/some/path' %>
-        <span class='timestamp'>on September 30th, 2014 at 4:16pm</span>
-      </li>
-      <li class='icon-approved'>
-        <%= link_to 'approver2.lastname@gsa.gov', '/some/path' %>
-        <span class='timestamp'>on September 31st, 2014 at 3:16pm</span>
-      </li>
-    </ul>
+
+<%- if local_assigns[:delivery] == 'web' %>
+  <div id="approval-status-container">
+    <div id="approval-status">
+      <h3>Request approved by</h3>
+      <ul>
+        <li class='icon-approved'>
+          <%= link_to 'approver1.lastname@gsa.gov', '/some/path' %>
+          <span class='timestamp'>on September 30th, 2014 at 4:16pm</span>
+        </li>
+        <li class='icon-approved'>
+          <%= link_to 'approver2.lastname@gsa.gov', '/some/path' %>
+          <span class='timestamp'>on September 31st, 2014 at 3:16pm</span>
+        </li>
+      </ul>
+    </div>
   </div>
-</div>
 
-<div id="cart-comments-container">
-  <div id="cart-comments">
-    <h3>Comments on this purchase request</h3>
-      <%- if @show_comments %>
-        <%= form_for [cart, Comment.new] do |f| %>
-        <%= f.text_area :comment_text, rows: 5, cols: 55 %>
+  <div id="cart-comments-container">
+    <div id="cart-comments">
+      <h3>Comments on this purchase request</h3>
+        <%- if @show_comments %>
+          <%= form_for [cart, Comment.new] do |f| %>
+          <%= f.text_area :comment_text, rows: 5, cols: 55 %>
 
-        <div class='row text-area-info-container'>
-          <div class='col-xs-6 text-area-info'>
-            <p>
-              These comments will be sent to your requester through email
+          <div class='row text-area-info-container'>
+            <div class='col-xs-6 text-area-info'>
+              <p>
+                These comments will be sent to your requester through email
+              </p>
+            </div>
+            <p class='col-xs-6 text-area-button'>
+              <%= submit_tag "Send note", id: :add_a_comment %>
             </p>
           </div>
-          <p class='col-xs-6 text-area-button'>
-            <%= submit_tag "Send note", id: :add_a_comment %>
-          </p>
-        </div>
-      <%- end %>
+        <%- end %>
 
-          <% unless cart.comments.empty? %>
-            <% cart.comments.each do |c| %>
+            <% unless cart.comments.empty? %>
+              <% cart.comments.each do |c| %>
 
-              <div class='comment-item'>
-                <div class='row'>
-                  <p class='comment-sender col-xs-6'>
-                    <strong>requester@test.com</strong>
-                  </p>
+                <div class='comment-item'>
+                  <div class='row'>
+                    <p class='comment-sender col-xs-6'>
+                      <strong>requester@test.com</strong>
+                    </p>
 
-                  <p class='comment-date col-xs-6'>
-                    <%= c.created_at %>
-                  </p>
+                    <p class='comment-date col-xs-6'>
+                      <%= c.created_at %>
+                    </p>
+                  </div>
+
+                  <div class='row'>
+                    <p class='comment-text col-xs-6'>
+                      <% unless c.user.nil? %>
+                      <em>
+                        <%= "#{c.user.full_name}: " %>
+                      </em>
+                      <% end %>
+                      <%= c.comment_text %>
+                    </p>
+                  </div>
                 </div>
+              <% end %>
 
-                <div class='row'>
-                  <p class='comment-text col-xs-6'>
-                    <% unless c.user.nil? %>
-                    <em>
-                      <%= "#{c.user.full_name}: " %>
-                    </em>
-                    <% end %>
-                    <%= c.comment_text %>
-                  </p>
-                </div>
-              </div>
-            <% end %>
-
-          <% else %>
-          <br>
-          No comments have been added yet
-        <% end %>
-      <%- end %>
+            <% else %>
+            <br>
+            No comments have been added yet
+          <% end %>
+        <%- end %>
+    </div>
   </div>
-</div>
 
+<%- end %>
 
 
 

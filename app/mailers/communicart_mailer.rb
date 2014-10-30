@@ -2,7 +2,7 @@
 # mailer_helper.rb
   class CommunicartMailer < ActionMailer::Base
   layout 'communicart_base'
-  helper_method:set_attachments 
+  helper_method:set_attachments
 
 
   def set_attachments(cart)
@@ -49,8 +49,6 @@
   end
 
   def approval_reply_received_email(analysis, cart)
-# This is a shared constant between C2 and Mario, which should be moved to our
-# YAML file
     @approval = analysis["approve"] == "APPROVE" ? "approved" : "rejected"
     @approval_reply = analysis
     @cart = cart.decorate
