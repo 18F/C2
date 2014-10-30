@@ -1554,6 +1554,7 @@ $c2blue: #006be6;
 $white: #fff;
 $webpadding: 40px;
 $webwidth: 1020px;
+$web-content-width: 960px;
 $bgdetails: #efefef;
 $borderdetails: #bdbdbd;
 $lightgray: #838383;
@@ -1613,7 +1614,7 @@ body.webapp {
 .purchase-status {
   border: 1px solid #ff9e19;
   padding: 30px 0px;
-  margin-right: 40px;
+  margin: 20px 40px 0 0;
   text-align: center;
 
   img {
@@ -2068,13 +2069,14 @@ body.webapp {
 }
 
 #communicart_header {
+  width: 100%;
   padding: 40px 10px 40px 35px;
   background-color: #07519b;
   color: $white;
   margin: 0 auto;
 
   .container {
-    width: $webwidth;
+    width: 100%;
   }
 }
 
@@ -2117,10 +2119,12 @@ ul#breadcrumb-nav {
 #approval-status-container {
   width: 100%;
   margin-bottom: 60px;
+  padding-left: $webpadding;
+  padding-right: $webpadding;
 
   #approval-status {
     margin: 0 auto;
-    width: $webwidth;
+    width: $web-content-width;
 
     ul {
       margin-top: 45px;
@@ -2140,10 +2144,12 @@ ul#breadcrumb-nav {
   background-color: $bgdetails;
   border-top: 1px solid $borderdetails;
   padding: 40px 0;
+  padding-left: $webpadding;
+  padding-right: $webpadding;
 
   #cart-comments {
     margin: 0 auto;
-    width: $webwidth;
+    width: $web-content-width;
 
     #add_a_comment {
       color: $white;
@@ -2153,7 +2159,7 @@ ul#breadcrumb-nav {
     }
 
     textarea {
-      width: $webwidth;
+      width: $web-content-width;
     }
 
     .comment-item {
