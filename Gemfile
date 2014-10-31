@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.0.0'
+gem 'rails', '~> 4.0.11'
 gem 'mysql2'
 gem 'turbolinks'
 gem 'jbuilder', '~> 1.2'
