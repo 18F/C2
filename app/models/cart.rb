@@ -17,6 +17,13 @@ class Cart < ActiveRecord::Base
     approve: 'approved',
     reject: 'rejected'
   }
+
+  DISPLAY_STATUS_MAP = {
+    pending: 'pending approval',
+    approved: 'approved',
+    rejected: 'rejected'
+  }
+
   has_many :properties, as: :hasproperties
 
   def update_approval_status
@@ -215,8 +222,7 @@ class Cart < ActiveRecord::Base
     end
   end
 
-# These are magic Constants specific to Navigotor.
-# We may wish to orginize a Navigator-plugin at some time.
+# TODO: Move template logic out of the model
  def cart_template_name
     return (self.getProp('origin') == 'navigator') ? "shared/navigator_cart" : "shared/cart"
   end

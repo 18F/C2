@@ -8,6 +8,8 @@ Feature: Approving a cart from approval link
     And a valid token
     When I go to the approval_response page with token
     Then I should see alert text 'You have successfully updated Cart 109876. See the cart details below'
+    And show me the page
+    And I should see 'Approval Status: 1 of 3 approved.'
 
   Scenario: Approving with a non-existent token
     When I go to the approval_response page with invalid token '1a2b3c4d'

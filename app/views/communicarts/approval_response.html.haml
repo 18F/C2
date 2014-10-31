@@ -4,8 +4,5 @@
 %html
 
   %body.communicart-notification
-    - if flash[:notice]
-      .flash.success
-        = flash[:notice]
 = render partial: "shared/cart", locals: {cart: @cart, title: "Cart #{@cart.id}"}
 
