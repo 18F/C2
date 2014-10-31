@@ -1,4 +1,6 @@
 class ApprovalGroup < ActiveRecord::Base
+  enum flow: [:parallel, :linear]
+
   belongs_to :cart
   validates_presence_of :name
   validates_uniqueness_of :name
