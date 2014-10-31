@@ -1937,8 +1937,13 @@ tr.status-header-container-detail {
   border-bottom: 1px solid #ff9e19;
 }
 
+tr.status-completed-detail {
+  border-bottom: 1px solid #4c9d2a;
+}
+
 .status-completed {
-  background-color: green;
+  background-color: #bad7ab;
+  border-bottom: 1px solid #4c9d2a;
 }
 
 .results-header-container {

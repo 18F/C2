@@ -10,7 +10,7 @@
             </td>
           </tr>
 
-          <tr class="status-header-container-detail">
+          <tr class="status-header-container-detail <%= 'status-completed_detail' if @cart.all_approvals_received? %>">
             <td class="first">
               <p>
                 <strong>Pending</strong>
