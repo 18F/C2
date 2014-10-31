@@ -70,6 +70,7 @@ function scrapePage(jQ) {
     var div = document.createElement("div");
     div.id = "communicart_bookmarklet";
     $('#communicart_bookmarklet').height(175);
+
     document.body.insertBefore(div, document.body.firstChild);
 
     $('#communicart_bookmarklet').html("<iframe frameborder='0' scrolling='no' name='instacalc_bookmarklet_iframe' id='instacalc_bookmarklet_iframe' src='" +

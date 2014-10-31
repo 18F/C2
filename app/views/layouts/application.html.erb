@@ -13,7 +13,7 @@
     <div class="alert alert-<%= key %>"><%= value %></div>
 <% end %>
 
-<%= render 'shared/communicart_header' %>
+<%= render 'shared/communicart_header' unless @hide_header %>
 
 <%= yield %>
 
