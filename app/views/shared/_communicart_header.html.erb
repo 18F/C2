@@ -13,13 +13,14 @@
         </li>
       <%- else %>
         <li>
-          <%= session['user']['email'] %> <img src='/assets/icon-user.png' width='18' height='18' />
+          <%= session['user']['email'] %>
+          <%= image_tag 'icon-user.png', alt: ' ' %>
         </li>
       <%- end %>
 
       <li>
         <%= link_to 'Logout', "/logout", method: :post, class: 'login-link' %>
-        <img src='/assets/icon-logout.png' width='18' height='18' /></a>
+        <%= image_tag 'icon-logout.png', alt: 'Logout' %>
       </li>
     </ul>
   </div>
