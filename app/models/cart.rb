@@ -98,13 +98,9 @@ class Cart < ActiveRecord::Base
   end
 
   def self.initialize_cart_with_items params
-    begin
-      cart = self.existing_or_new_cart params
-      cart.initialize_approval_group params
-      return cart
-    rescue Exception => e
-      raise
-    end
+    cart = self.existing_or_new_cart params
+    cart.initialize_approval_group params
+    cart
   end
 
   def self.existing_or_new_cart(params)
@@ -164,7 +160,7 @@ class Cart < ActiveRecord::Base
     if previous_cart && previous_cart.status == 'rejected'
       previous_cart.approvals.each do | approval |
         new_cart.approvals << Approval.create!(user_id: approval.user_id, role: approval.role)
-        CommunicartMailer.cart_notification_email(approval.user.email_address, new_cart, template).deliver
+        CommunicartMailer.cart_notification_email(approval.user.email_address, new_cart, approval).deliver
       end
     end
   end

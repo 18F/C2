@@ -42,6 +42,13 @@ let(:informal_cart) { FactoryGirl.create(:cart, name: 'Informal Cart') }
       expect(cart_item.getProp('love')).to eq "dove"
     end
 
+    it 'a HashWithIndifferentAccess can be set to a property' do
+      hsh = ActiveSupport::HashWithIndifferentAccess.new(love: 'dove')
+      cart_item.setProp('spud', hsh)
+
+      expect(cart_item.getProp('spud')).to eq hsh
+    end
+
     it 'Can create an informal cart with items that evolve over time' do
 
       firstComment = 'cannot find this'
@@ -78,7 +85,7 @@ let(:informal_cart) { FactoryGirl.create(:cart, name: 'Informal Cart') }
       informal_cart.setProp('originatingEmail',originatingEmail)
       expect(cart_item.getProp('comment0')).to eq firstComment
       expect(informal_cart.getProp('originatingEmail')).to eq originatingEmail
-      
+
     end
   end
 end

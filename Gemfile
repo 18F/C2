@@ -23,6 +23,7 @@ group :test, :development do
   gem 'letter_opener'
   gem 'rspec-rails'
   gem 'pry-rails'
+  gem 'pry-byebug'
   gem 'database_cleaner'
   gem 'factory_girl_rails'
 end

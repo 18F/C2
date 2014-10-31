@@ -9,19 +9,15 @@ class CommunicartsController < ApplicationController
   end
 
   def send_cart
-    begin
-      cart = Commands::Approval::InitiateCartApproval.new.perform(params)
-      jcart = cart.as_json(include: {cart_items:
-                                         {
-                                             include: :cart_item_traits
-                                         }
-      })
-      render json: jcart, status: 201
-
-    rescue Exception => e
-      raise StandardError, e
-      render json: { message: "Something went wrong", errors: e }, status: 500
-    end
+    cart = Commands::Approval::InitiateCartApproval.new.perform(params)
+    jcart = cart.as_json(include: {cart_items:
+                                       {
+                                           include: :cart_item_traits
+                                       }
+    })
+    render json: jcart, status: 201
+    # TODO respond with JSON in case of error
+    # render json: { message: "Something went wrong", errors: e }, status: 500
   end
 
   def approval_reply_received
