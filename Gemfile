@@ -20,7 +20,6 @@ gem 'omniauth-myusa', :git => 'https://github.com/18F/omniauth-myusa.git'
 gem 'font-awesome-sass'
 
 group :test, :development do
-  gem 'letter_opener'
   gem 'rspec-rails'
   gem 'pry-rails'
   gem 'pry-byebug'
@@ -30,6 +29,7 @@ end
 
 group :development do
   gem 'guard-rspec', require: false
+  gem 'letter_opener'
   gem 'railroady'
 end
 
