@@ -197,7 +197,7 @@ function loadProdImage(imageurl, alt) {
 
     if (imageurl == null) {
         imageurl = "<%= image_path 'noimage.png' %>";
-        imagealt = "Product image not found"
+        imagealt = "Sorry! We couldn't get the image for you."
     }
 
     newImg.onload = function() {
