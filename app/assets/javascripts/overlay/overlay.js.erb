@@ -80,6 +80,8 @@ var CartView = Backbone.View.extend({
     render: function() {
         this.$el  = $('#itemList'); //this is a result of timing...should fix
         this.$el.empty();
+        this.$el.html('<tr><th scope="col" style="width: 20em">Items</th><th scope="col" class="ra">Price</th>'+
+            '<th scope="col" class="qty">Qty</th><th scope="col"></th></tr>');
         var cartTotal = 0.00;
         this.model.each( function(item) {
             var iview = new CartItemView({model: item});
@@ -194,7 +196,7 @@ function loadProdImage(imageurl, alt) {
     var imagealt = alt;
 
     if (imageurl == null) {
-        imageurl = "<%= image_path 'not_found.png' %>";
+        imageurl = "<%= image_path 'noimage.png' %>";
         imagealt = "Product image not found"
     }
 
