@@ -8,7 +8,9 @@
     <ul id='header-nav'>
 
       <%- if !@current_user %>
-        <%= link_to 'Sign in with MyUSA', "/auth/myusa" %>
+        <li>
+          <%= link_to 'Sign in with MyUSA', "/auth/myusa" %>
+        </li>
       <%- else %>
         <li>
           <%= session['user']['email'] %> <img src='/assets/icon-user.png' width='18' height='18' />
