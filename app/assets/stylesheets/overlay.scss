@@ -29,7 +29,6 @@ body {
   transform: translate(-50%, -50%);
 }
 
-
 #cartscreen {
   display:none;
   top: 0px;
@@ -62,9 +61,11 @@ body {
     margin: 5px;
 	text-decoration:none;
 }
+
 .btn:hover {
 	background-color:#999999;
 }
+
 .btn:active {
 	position:relative;
 	top:1px;
@@ -205,7 +206,7 @@ body {
 }
 
 .app-btn {
-//  padding-top: 10px;
+  padding-top: 10px;
 }
 
 .buttonbar {
@@ -287,8 +288,6 @@ body {
   }
 }
 
-
-
 .instruction {
   margin: .6em .6em 1em 0;
 }
@@ -299,6 +298,7 @@ body {
   line-height: 1.2em;
   font-family: 'Raleway', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 100;
+  padding-left: 0px;
 }
 
 .confirm-hdr {
@@ -343,11 +343,12 @@ body {
   font-size: 1.4em;
   font-weight: lighter;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-
 }
+
 a.add_btn:focus {
   color: #fff;
 }
+
 .link-row {
   margin-top: 20px;
   a {
@@ -359,7 +360,6 @@ a.add_btn:focus {
 
 .cancel-link {
   color: #CD2210;
-
 }
 
 .go-link {

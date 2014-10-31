@@ -11,9 +11,13 @@
       </td>
     </tr>
 
-</table>
-<%= render partial: @cart_template, locals: {cart: @cart, title:  "Purchase Request"} %>
+    <tr>
+      <td>
+        <%= render partial: @cart_template, locals: {cart: @cart, title:  "Purchase Request"} %>
 
-<%= render partial: 'shared/reply_section', locals: { cart: @cart} %>
+        <%= render partial: 'shared/reply_section', locals: { cart: @cart} %>
+      </td>
+    </tr>
+</table>
 
 </body>

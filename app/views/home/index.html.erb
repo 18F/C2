@@ -1,13 +1,3 @@
-<% if signed_in? %>
-    <div class="row logged-in-band">
-      <div class="col-sm-3">
-         Logged in as: <strong><%= session['user']['email'] %></strong>
-      </div>
-      <div class="col-sm-9">
-        <%= button_to 'Logout', "logout", :class => 'btn-logout' %>
-      </div>
-    </div>
-<% end %>
 <div class="home-main">
   <div class="home-hdr">
     <h1><i class="fa fa-shopping-cart"></i><span class="communi"> COMMUNI</span><span class="cart">CART</span></h1>

@@ -1,7 +1,3 @@
-// Place all the styles related to the communicarts controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
-
 /* NORMALIZE.CSS */
 
 /*! normalize.css v2.1.3 | MIT License | git.io/normalize */
@@ -58,7 +54,7 @@ template {
  *    user zoom.
  */
 html {
-  font-family: sans-serif;
+  font-family: Helvetica, Arial, sans-serif;
   /* 1 */
 
   -ms-text-size-adjust: 100%;
@@ -81,6 +77,7 @@ body {
  * Remove the gray background color from active links in IE 10.
  */
 a {
+  color: #006be6;
   background: transparent;
 }
 /**
@@ -247,7 +244,7 @@ textarea {
   font-size: 100%;
   /* 2 */
 
-  margin: 5px 0;
+  margin: 0;
   /* 3 */
 
 }
@@ -363,26 +360,71 @@ table {
 
 table.reply-section {
   width: 800px;
-  background-color: #f5f5f5;
+  background-color: #fff;
   padding: 15px;
-}
-
-table.reply-section {
-  border: 1px solid red;
 }
 
 tr.cart_item_information td {
   border-bottom: 1px solid #ccc;
-  padding-top: 10px;
+  padding-top: 30px;
   padding-bottom: 10px;
   background-color: #fff;
   padding-right: 10px;
 }
 
-table tr.total-price {
+#navigator-layout tr.cart_item_information strong {
+  text-transform: uppercase;
+}
+
+tr.cart_item_information p {
+  color: #666;
+  font-size: 80%;
+}
+
+p.cart_item_description {
+  padding-bottom: 30px;
+}
+
+p.cart_item_description strong {
+  font-size: 130%;
+  font-weight: 300;
+}
+
+table tr.total-price, tr#approval-actions {
   padding-top: 10px;
   padding-bottom: 10px;
-  background-color: #f0f0f0;
+  background-color: #f5f5f5;
+}
+
+span.summary-label {
+  padding-top: 25px;
+  padding-right: 65px;
+}
+
+.tip-highlight {
+  font-weight: bold;
+  color: #cc2115;
+}
+
+tr#approval-actions a {
+  display: inline-block;
+}
+
+tr#approval-actions p {
+  padding-bottom: 15px;
+}
+
+tr#approval-actions a.icon-approved {
+  display: inline-block;
+  width: inherit;
+  height: inherit;
+  background-repeat: no-repeat;
+  background-position: 5px 15px;
+}
+
+span.action-block {
+  display: block;
+  width: 300px;
 }
 
 table tr.total-price td {
@@ -393,8 +435,9 @@ table tr.total-price td.total-amount {
   text-align: left;
 }
 
-#approval_actions td {
-  border: 1px solid red;
+table#status-container-detail td.first {
+  padding-left: 10px;
+  width: 50%;
 }
 
 table td.last {
@@ -449,11 +492,11 @@ html {
 }
 body {
   margin: 0;
-  padding: 0px 20px;
   min-height: 100%;
   background-color: #fff;
   color: #333;
 }
+
 img {
   max-width: 100%;
   vertical-align: middle;
@@ -489,6 +532,7 @@ h6 {
   margin: 0;
 }
 p {
+  font-family: Helvetica, Arial, sans-serif;
   margin: 0;
   color: #000;
 }
@@ -620,7 +664,7 @@ textarea.w-select {
 .w-container {
   margin-left: auto;
   margin-right: auto;
-  max-width: 940px;
+  max-width: 800px;
 }
 .w-container:before,
 .w-container:after {
@@ -1506,9 +1550,18 @@ textarea.w-select {
 
 /* COMMUNICART.WEBFLOW.CSS */
 
+$c2blue: #006be6;
+$white: #fff;
+$webpadding: 40px;
+$webwidth: 1020px;
+$web-content-width: 960px;
+$bgdetails: #efefef;
+$borderdetails: #bdbdbd;
+$lightgray: #838383;
+
 body.communicart-notification {
   background-color: #fff;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Helvetica, Arial, sans-serif;
   color: #333;
   font-size: 14px;
   line-height: 20px;
@@ -1521,17 +1574,74 @@ body.communicart-notification p {
 h1 {
   margin-top: 20px;
   margin-bottom: 10px;
-  font-family:'Roboto Slab', sans-serif;
-  color: #7a7a7a;
+  color: 000;
   font-size: 38px;
   line-height: 44px;
   font-style: normal;
   font-weight: 300;
 }
 
-h1.communicart_header, h4.communicart_description {
+body.webapp {
+  font-family: Raleway, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+  .communicart_header, h4.communicart_description, div.communicart_description p {
+    padding-right: $webpadding;
+    padding-left: $webpadding;
+    background-color: $white;
+  }
+
+  .results-list {
+    margin-bottom: $webpadding;
+    padding: $webpadding;
+  }
+
+  .row {
+    margin-right: 0;
+  }
+}
+
+.communicart_header, h4.communicart_description, div.communicart_description p{
   padding-right: 15px;
   padding-left: 15px;
+}
+
+.communicart_description {
+  img {
+    margin-bottom: 7px;
+  }
+}
+
+.purchase-status {
+  border: 1px solid #ff9e19;
+  padding: 30px 0px;
+  margin: 20px 40px 0 0;
+  text-align: center;
+
+  img {
+    margin: 0;
+  }
+
+  h5 {
+    color: #000;
+    text-transform: uppercase;
+    font-weight: bold;
+
+    &.approved {
+      min-width: 155px;
+      background-image: url('/assets/icon-checkmark.gif');
+      background-repeat: no-repeat;
+      background-position: center -0.2em;
+      padding-top: 15px;
+    }
+
+    &.pending {
+      min-width: 155px;
+      background-image: url('/assets/icon-pending.gif');
+      background-repeat: no-repeat;
+      background-position: center -0.2em;
+      padding-top: 20px;
+    }
+  }
 }
 
 h1.communicart_header {
@@ -1547,7 +1657,6 @@ h2 {
   margin-top: 20px;
   margin-bottom: 0px;
   padding-left: 15px;
-  font-family:'Roboto Slab', sans-serif;
   color: white;
   font-size: 18px;
   line-height: 36px;
@@ -1556,7 +1665,6 @@ h2 {
 h3.cart-header {
   margin-top: 10px;
   margin-bottom: 10px;
-  font-family:'Roboto Slab', sans-serif;
   color: white;
   font-size: 18px;
   line-height: 30px;
@@ -1566,7 +1674,6 @@ h3.cart-header {
 h4 {
   margin-top: 10px;
   margin-bottom: 10px;
-  font-family:'Roboto Slab', sans-serif;
   color: #adadad;
   font-size: 20px;
   line-height: 24px;
@@ -1575,12 +1682,10 @@ h4 {
 p.results-header {
   margin-top: 10px;
   margin-bottom: 10px;
-  color: #fff !important;
-  font-family:'Roboto Slab', sans-serif;
   font-size: 16px;
   line-height: 18px;
   font-style: normal;
-  font-weight: 100;
+  font-weight: 500;
 }
 td.html-email-message {
   font-size: 14px;
@@ -1588,14 +1693,19 @@ td.html-email-message {
   padding: 15px;
 }
 tr.header h5 {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  font-family: Georgia, serif;
+  text-transform: uppercase;
   color: #e8e8e8;
   font-size: 14px;
   line-height: 20px;
   font-weight: 400;
+  font-size: 80%;
 }
+
+tr.header td, tr.header td.first {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
 h6 {
   margin-top: 10px;
   margin-bottom: 10px;
@@ -1605,7 +1715,6 @@ h6 {
 }
 p {
   margin-bottom: 5px;
-  font-family: Georgia, serif;
   font-size: 14px;
   line-height: 18px;
 }
@@ -1625,7 +1734,7 @@ p {
 }
 .header {
   padding-top: 0px;
-  background-color: #999;
+  background-color: #333;
   color: white;
 }
 .summary-list {
@@ -1636,23 +1745,27 @@ p {
   box-shadow: none;
   font-family: Arial, Helvetica, sans-serif;
 }
+
 .results-list {
   margin-bottom: 15px;
   padding: 15px;
 }
+
 .button-submit {
   text-align: center;
 }
 .form-button {
+  display: inline-block;
   margin-top: 15px;
   padding: 15px 25px;
-  border-bottom: 5px solid #b87a00;
+  border-bottom: 2px solid #095ba7;
   border-radius: 5px;
-  background-color: #fbaf17;
-  font-family:'Roboto Slab', sans-serif;
+  background-color: #0d66bf;
   color: black;
-  font-size: 18px;
+  font-size: 120%;
   font-weight: 400;
+  color: #fff;
+  text-decoration: none;
 }
 .result-item {
   padding-top: 10px;
@@ -1671,11 +1784,8 @@ p {
   border-bottom-style: none;
 }
 td p.result-item-price {
-  padding: 15px 10px;
-  background-color: #369;
-  font-family: Georgia, serif;
-  color: white;
-  text-align: center;
+  padding: 5px 10px 30px 10px;
+  color: #000;
 }
 
 td p.result-item-price, td p.total-price p strong {
@@ -1685,31 +1795,47 @@ td p.result-item-price, td p.total-price p strong {
 
 td p.result-item-units {
   padding: 10px;
-  background-color: #336;
-  color: #99c;
   font-weight: 400;
-  text-align: center;
-  text-transform: uppercase;
 }
+
+td p.vendor-information strong {
+  font-weight: normal;
+  color: #000;
+}
+
+p.vendor-information .info-title {
+  display: block;
+  padding-bottom: 30px;
+}
+
 .tag {
   padding: 5px 15px;
   border-radius: 5px;
 }
 
-ul.result-tag {
+span.result-tag {
   padding-left: 0;
 }
 
+td.cart-total {
+  background-color: $bgdetails;
+  text-align: center;
+  padding: 40px 0;
+
+  .total-label {
+    text-transform: uppercase;
+  }
+}
+
+span.result-tag {
+  font-size: 80%;
+  display: inline-block;
+  float: left;
+}
+
 ul.result-tag li {
-  background-position: 5px 5px;
   margin-left: 0;
   margin-bottom: 5px;
-  font-weight: bold;
-  padding: 5px;
-  border-radius: 4px;
-  background-color: #ededed;
-  background-repeat: no-repeat;
-  padding-left: 7px;
   list-style: none;
 }
 
@@ -1722,28 +1848,35 @@ ul.result-tag li {
   height: 18px;
 }
 
-.green {
-  background-image: url('https://www.gsaadvantage.gov/images/adv12/images/icons/green.gif');
+span.green {
   background-repeat: no-repeat;
-  padding-left: 22px;
   display: inline-block;
-  width: 15px;
   height: 15px;
-  margin-right: 5px;
+  color: #54a133;
+  padding-left: 7px;
 }
 
-.sale {
-  background-image: url('https://www.gsaadvantage.gov/images/adv12/images/new_icons/sale.gif');
-  padding-left: 27px;
-  background-repeat: no-repeat;
+.c2bullet {
+  padding-left: 7px;
+  height: 15px;
   display: inline-block;
-  width: 18px;
-  height: 18px;
+  font-size: 250%;
+  line-height: .6em;
+  color: #f2c33e;
+  vertical-align: top;
+}
+
+.bullet-label {
+  vertical-align: top;
+  line-height: 1.6em;
 }
 
 ul.result-tag li.fssi-compliant {
-  background-color: #45ac48;
   color: white;
+}
+
+ul.result-tag span {
+  background-color: #45ac48;
 }
 
 .summary-link {
@@ -1754,13 +1887,11 @@ ul.result-tag li.fssi-compliant {
 .summary-price {
   padding: 5px 7px;
   background-color: #cadbf1;
-  font-family: Georgia, serif;
   font-size: 18px;
   text-align: left;
 }
 .product-list-item {
   padding-top: 5px;
-  font-family: Georgia, serif;
   font-size: 18px;
   font-weight: 500;
   list-style-type: decimal;
@@ -1775,13 +1906,44 @@ ul.result-tag li.fssi-compliant {
   background-color: #f0f0f0;
   font-size: 16px;
 }
-.status-header-container {
-  color: #fff !important;
-  padding-left: 15px;
-  background-color: #369;
+
+table#status-container-detail {
+  margin: 15px;
 }
+
+.main-container table td.first, tr.status-header-container-detail td.first {
+  padding: 15px;
+}
+
+#status-container-detail strong {
+  display: block;
+  text-transform: uppercase;
+}
+
+ul.status-detail {
+  list-style: none;
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+}
+
+.status-header-container {
+  padding-left: 15px;
+  background-color: #ffc47d;
+}
+
+tr.status-header-container-detail {
+  background-color: #fff;
+  border-bottom: 1px solid #ff9e19;
+}
+
+tr.status-completed-detail {
+  border-bottom: 1px solid #4c9d2a;
+}
+
 .status-completed {
-  background-color: green;
+  background-color: #bad7ab;
+  border-bottom: 1px solid #4c9d2a;
 }
 
 .results-header-container {
@@ -1790,14 +1952,13 @@ ul.result-tag li.fssi-compliant {
   background-color: #595959;
 }
 .main-container {
-  margin-top: 20px;
-  margin-bottom: 20px;
   padding-top: 0px;
   padding-right: 15px;
   padding-left: 15px;
-  background-color: #e3e3e3;
+  background-color: #f5f5f5;
   box-shadow: none;
 }
+
 .email-intro-container {
   padding: 15px;
   background-color: #fff;
@@ -1826,11 +1987,16 @@ p.approved {
   background-color: #cfc;
 }
 
-span.icon-approved {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
+.icon-pending {
+  background-image: url('https://s3.amazonaws.com/18f/c2/icon-pending.gif');
+  background-repeat: no-repeat;
+  padding-left: 21px;
+}
+
+.icon-approved {
   background-image: url('https://s3.amazonaws.com/18f/c2/icon-checkmark.gif');
+  background-repeat: no-repeat;
+  padding-left: 21px;
 }
 
 span.status-label-approved, span.status-label-pending, span.status-label-rejected {
@@ -1854,70 +2020,6 @@ p.rejected {
   background-color: #fcc;
 }
 
-.alert-notice {
-  border: 1px solid #a6d17a;
-  background-color: #c8f29e;
-}
-
-.alert-error {
-  border: 1px solid #c99;
-  background-color: #fcc;
-  display: block;
-  visibility: visible;
-}
-
-.flash{
-  padding: 10px;
-
-  &.success {
-    border: 1px solid #a6d17a;
-    background-color: #c8f29e;
-  }
-
-  &.alert {
-    border: 1px solid #c99;
-    background-color: #fcc;
-  }
-}
-
-/* temp home page stuff */
-
-.home-main {
-  margin: auto;
-  max-width: 920px;
-  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  h2 {
-    color: #000;
-    font-family: Raleway, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-style: italic;
-    margin-top: 0px;
-    margin-bottom: 10px;
-  }
-  p {
-    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    margin-bottom: 10px;
-    font-size: 16px;
-    line-height: 125%;
-  }
-  h3 {
-    margin-top: 20px;
-    margin-bottom: 10px;
-  }
-}
-
-.home-main-body {
-  margin: 0px 10px;
-}
-
-.communi {
-  font-family: Raleway, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-weight: 600;
-}
-.cart {
-  font-family: Raleway, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-weight: 300;
-}
-
 .needs-auth {
   left: 50%;
   top: 50%;
@@ -1939,31 +2041,6 @@ p.rejected {
   text-align: center;
 }
 
-.logged-in-band {
-  background-color: #DFF0D8;
-  padding-bottom: 3px;
-  padding-left: 30px;
-}
-
-.home-hdr {
-  background-color: #07519B;
-  padding: 20px 20px;
-  margin-bottom: 10px;
-  h1, h2 {
-    color: #fff;
-    margin-bottom: 0px;
-    margin-top: 10px;
-  }
-}
-
-.btn-logout {
-  border: none;
-  background:none;
-  padding: 0;
-  margin: 0;
-  color: #07519B;
-}
-
 .lightbox {
   position: fixed;
   left: 0;
@@ -1974,8 +2051,176 @@ p.rejected {
   z-index: 100;
 }
 
-#project_title {
-  font-size: 30px;
+/** C2 Styles **/
+body.webapp {
+  table.reply-section,
+  .w-container,
+  ul#breadcrumb-nav {
+    width: $webwidth;
+  }
+
+  .w-container {
+    max-width: $webwidth;
+  }
+
+  .main-container {
+    background-color: #fff;
+  }
+
+}
+
+.alert {
+  margin-bottom: 0;
+}
+
+#communicart_header {
+  width: 100%;
+  padding: 40px 10px 40px 35px;
+  background-color: #07519b;
+  color: $white;
+  margin: 0 auto;
+
+  .container {
+    width: 100%;
+  }
+}
+
+#communicart_header a {
+  color: $white;
+}
+
+#header-identity {
+  display: inline-block;
+}
+
+#header-identity h1 {
+  margin: 0;
+}
+
+#communicart_header #header-nav {
+  display: inline-block;
+  float: right;
+  color: #fff;
+}
+
+ul#breadcrumb-nav {
+  width: 800px;
+  margin: 0 auto;
+  padding: 10px 40px 0 33px;
+
+    li {
+      background-image: url('/assets/icon-back-arrow.png');
+      background-repeat: no-repeat;
+      list-style: none;
+      padding-left: 17px;
+      margin: 0;
+
+      a {
+        color: $c2blue;
+      }
+    }
+}
+
+#approval-status-container {
+  width: 100%;
+  margin-bottom: 60px;
+  padding-left: $webpadding;
+  padding-right: $webpadding;
+
+  #approval-status {
+    margin: 0 auto;
+    width: $web-content-width;
+
+    ul {
+      margin-top: 45px;
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 20px;
+      padding-left: 18px;
+    }
+  }
+}
+
+#cart-comments-container {
+  width: 100%;
+  background-color: $bgdetails;
+  border-top: 1px solid $borderdetails;
+  padding: 40px 0;
+  padding-left: $webpadding;
+  padding-right: $webpadding;
+
+  #cart-comments {
+    margin: 0 auto;
+    width: $web-content-width;
+
+    #add_a_comment {
+      color: $white;
+      background-color: $c2blue;
+      border: 0;
+      padding: 15px;
+    }
+
+    textarea {
+      width: $web-content-width;
+    }
+
+    .comment-item {
+      border-bottom: 1px solid #ccc;
+      padding: 20px 40px;
+      background-color: #fff;
+
+      .comment-date {
+        color: $lightgray;
+      }
+    }
+  }
+}
+
+.text-area-info-container {
+  border: 1px solid #bdbdbd;
+  margin-left: 0px;
+}
+
+.text-area-info {
+  color: #666;
+  height: 55px;
+}
+
+.text-area-button {
+  text-align: right;
+  margin: 0px;
+}
+
+.timestamp {
+  color: $lightgray;
+}
+
+#communicart_header #header-nav li {
+  display: inline-block;
+  padding-right: 12px;
+}
+
+#communicart_logo {
+  background-image: url('/assets/img-logo-communicart-portal.png');
+  background-repeat: no-repeat;
+  width: 200px;
+  height: 30px;
+  text-indent: -2000px;
+}
+
+/** Landing **/
+.home-main {
+  padding: 0 40px;
+  width: $webwidth;
+  margin: 0 auto 40px auto;
+
+  h3 {
+    margin-top: .8em;
+    margin-bottom: .2em;
+  }
 }
 
 @media (max-width: 991px) {
@@ -1984,4 +2229,3 @@ p.rejected {
 }
 @media (max-width: 479px) {
 }
-

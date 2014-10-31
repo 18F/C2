@@ -58,7 +58,7 @@
         </div>
         <div class="row">
           <div class="col-xs-12">
-            <label>Cart Name:</label>
+            <label for="cartName">Cart Name:</label>
             <input type="text" size="30" id="cartName"/>
           </div>
         </div>
@@ -67,7 +67,7 @@
         </div>
           <div id="cart_view">
             <table  class="table table-condensed item-table" id="itemListHeaders">
-                <tr><th style="width: 20em">Items</th><th class="ra">Price</th><th class="qty">Qty</th><th></th></tr>
+
             </table>
             <div class="cart_scroll">
                 <table  class="table table-condensed item-table" id="itemList"></table>
@@ -108,5 +108,5 @@
     <br /><span class="smtxt">($ <%%= price %> per unit)</span>
     <%% } %>
   </td>
-        <td class="qty"> <%%= quantity %> </td><td class="del-d"><a class='deleter' href="#">remove</a> <i class="fa fa-times del-red" style="color: #CD2210"></i></td>
+        <td class="qty"> <%%= quantity %> </td><td class="del-d"><a class='deleter' title="Removes (<%%= title %>) from cart" href="#">remove</a> <i class="fa fa-times del-red" style="color: #CD2210"></i></td>
   </script>

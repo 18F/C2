@@ -17,6 +17,13 @@ class Cart < ActiveRecord::Base
     approve: 'approved',
     reject: 'rejected'
   }
+
+  DISPLAY_STATUS_MAP = {
+    pending: 'pending approval',
+    approved: 'approved',
+    rejected: 'rejected'
+  }
+
   has_many :properties, as: :hasproperties
 
   def update_approval_status
@@ -98,13 +105,9 @@ class Cart < ActiveRecord::Base
   end
 
   def self.initialize_cart_with_items params
-    begin
-      cart = self.existing_or_new_cart params
-      cart.initialize_approval_group params
-      return cart
-    rescue Exception => e
-      raise
-    end
+    cart = self.existing_or_new_cart params
+    cart.initialize_approval_group params
+    cart
   end
 
   def self.existing_or_new_cart(params)
@@ -164,7 +167,7 @@ class Cart < ActiveRecord::Base
     if previous_cart && previous_cart.status == 'rejected'
       previous_cart.approvals.each do | approval |
         new_cart.approvals << Approval.create!(user_id: approval.user_id, role: approval.role)
-        CommunicartMailer.cart_notification_email(approval.user.email_address, new_cart, template).deliver
+        CommunicartMailer.cart_notification_email(approval.user.email_address, new_cart, approval).deliver
       end
     end
   end
@@ -219,8 +222,7 @@ class Cart < ActiveRecord::Base
     end
   end
 
-# These are magic Constants specific to Navigotor.
-# We may wish to orginize a Navigator-plugin at some time.
+# TODO: Move template logic out of the model
  def cart_template_name
     return (self.getProp('origin') == 'navigator') ? "shared/navigator_cart" : "shared/cart"
   end

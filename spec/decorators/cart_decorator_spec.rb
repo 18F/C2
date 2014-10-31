@@ -14,7 +14,7 @@ describe CartDecorator do
     cart.cart_items << FactoryGirl.create(:cart_item, description: "Item 2", price: 2.25, quantity: 3)
     cart.cart_items << FactoryGirl.create(:cart_item, description: "Item 3", price: 3.50, quantity: 4)
 
-    expect(cart.total_price).to eq (2 * 1.0 + 3 * 2.25 + 4 * 3.5)
+    expect(cart.total_price).to eq 22.75
 
     end
   end

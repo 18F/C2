@@ -104,8 +104,7 @@ describe 'Rejecting a cart with multiple approvers' do
 
     @json_rejection_params = JSON.parse(rejection_params)
 
-    cart = Cart.new(
-                    id: 135791113,
+    cart = Cart.create(
                     name: '10203040',
                     status: 'pending',
                     external_id: '10203040'
