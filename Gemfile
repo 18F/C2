@@ -28,6 +28,7 @@ group :test, :development do
 end
 
 group :development do
+  gem 'guard-rspec', require: false
   gem 'railroady'
 end
 
