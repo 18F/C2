@@ -416,9 +416,7 @@ describe CommunicartsController do
         expect { put 'approval_response', @json_approval_params_with_token }.to raise_error(AuthenticationError)
       end
 
-      it 'marks a token as used' do
-        pending
-      end
+      skip 'marks a token as used'
     end
   end
 

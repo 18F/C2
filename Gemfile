@@ -20,12 +20,13 @@ gem 'omniauth-myusa', :git => 'https://github.com/18F/omniauth-myusa.git'
 gem 'font-awesome-sass'
 
 group :test, :development do
-  gem 'letter_opener', require: false
-  gem 'rspec-rails'
-  gem 'pry-rails'
-  gem 'pry-byebug'
   gem 'database_cleaner'
   gem 'factory_girl_rails'
+  gem 'letter_opener', require: false
+  gem 'pry-byebug'
+  gem 'pry-rails'
+  gem 'rspec-activemodel-mocks'
+  gem 'rspec-rails', '~> 2.14'
 end
 
 group :development do
