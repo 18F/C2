@@ -1,22 +1,22 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 4.1.7'
-gem 'mysql2'
-gem 'turbolinks'
-gem 'haml'
-gem 'roadie-rails'
-gem 'draper'
-gem 'capistrano', '~> 2.1'
-gem 'rvm-capistrano'
-gem 'awesome_print'
-gem 'jquery-rails'
-gem 'bootstrap-sass', '~> 3.3.0'
-gem 'sass-rails', '>= 3.2'
 gem 'autoprefixer-rails'
-gem 'uglifier'
-gem 'settingslogic'
-gem 'omniauth-myusa', git: 'https://github.com/18F/omniauth-myusa.git'
+gem 'awesome_print'
+gem 'bootstrap-sass', '~> 3.3.0'
+gem 'capistrano', '~> 2.1'
+gem 'draper'
 gem 'font-awesome-sass'
+gem 'haml'
+gem 'jquery-rails'
+gem 'mysql2'
+gem 'omniauth-myusa', git: 'https://github.com/18F/omniauth-myusa.git'
+gem 'rails', '~> 4.1.7'
+gem 'roadie-rails'
+gem 'rvm-capistrano'
+gem 'sass-rails', '>= 3.2'
+gem 'settingslogic'
+gem 'turbolinks'
+gem 'uglifier'
 
 group :test, :development do
   gem 'database_cleaner'
@@ -34,9 +34,9 @@ group :development do
 end
 
 group :test do
+  gem 'capybara'
   gem 'simplecov'
   gem 'turnip'
-  gem 'capybara'
 end
 
 group :doc do
