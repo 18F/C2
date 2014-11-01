@@ -1,13 +1,13 @@
 require 'spec_helper'
 
-describe Cart do
+describe Cart, :type => :model do
   describe '#update_approval_status' do
     let(:cart) { FactoryGirl.create(:cart_with_approval_group) }
     let(:cart_id) { 1357910 }
 
     context "All approvals are in 'approved' status" do
       it 'updates a status based on the cart_id passed in from the params' do
-        cart.stub(:all_approvals_received?).and_return(true)
+        allow(cart).to receive(:all_approvals_received?).and_return(true)
 
         cart.update_approval_status
         expect(cart.status).to eq('approved')
@@ -16,7 +16,7 @@ describe Cart do
 
     context "Not all approvals are in 'approved'status" do
       it 'does not update the cart status' do
-        cart.stub(:all_approvals_received?).and_return(false)
+        allow(cart).to receive(:all_approvals_received?).and_return(false)
 
         cart.update_approval_status
         expect(cart.status).to eq('pending')
@@ -37,7 +37,7 @@ describe Cart do
     let(:api_token) { FactoryGirl.create(:api_token) }
 
     before do
-      ApiToken.stub_chain(:where, :where, :last).and_return(api_token)
+      allow(ApiToken).to receive_message_chain(:where, :where, :last).and_return(api_token)
       cart.approvals << approval1
       cart.approvals << approval2
       cart.approvals << approval3
@@ -46,14 +46,14 @@ describe Cart do
 
     context 'approvers' do
       it 'creates a new token for each approver' do
-        ApiToken.should_receive(:create!).exactly(2).times
+        expect(ApiToken).to receive(:create!).exactly(2).times
         cart.deliver_approval_emails
       end
 
       it 'sends a cart notification email to approvers' do
         mock_mailer = double
-        CommunicartMailer.should_receive(:cart_notification_email).exactly(2).times.and_return(mock_mailer)
-        mock_mailer.should_receive(:deliver).exactly(2).times
+        expect(CommunicartMailer).to receive(:cart_notification_email).exactly(2).times.and_return(mock_mailer)
+        expect(mock_mailer).to receive(:deliver).exactly(2).times
         cart.deliver_approval_emails
       end
     end
@@ -61,8 +61,8 @@ describe Cart do
     context 'observers' do
       it 'sends a cart notification email to observers' do
         mock_mailer = double
-        CommunicartMailer.should_receive(:cart_observer_email).exactly(1).times.and_return(mock_mailer)
-        mock_mailer.should_receive(:deliver).exactly(1).times
+        expect(CommunicartMailer).to receive(:cart_observer_email).exactly(1).times.and_return(mock_mailer)
+        expect(mock_mailer).to receive(:deliver).exactly(1).times
         cart.deliver_approval_emails
       end
     end
@@ -73,9 +73,9 @@ describe Cart do
     let(:user1) { FactoryGirl.create(:user, email_address: 'user1@some-dot-gov.gov') }
 
     it 'excludes blank email addresses' do
-      User.stub(:find_or_create_by).and_return(user1)
+      allow(User).to receive(:find_or_create_by).and_return(user1)
       params = { 'toAddress' => ["email1@some-dot-gov.gov", "email2@some-dot-gov", ""] }
-      User.should_receive(:find_or_create_by).exactly(2).times
+      expect(User).to receive(:find_or_create_by).exactly(2).times
       cart.process_approvals_without_approval_group params
     end
 

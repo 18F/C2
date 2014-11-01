@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe User do
+describe User, :type => :model do
 
   let(:user) { FactoryGirl.create(:user, first_name: "George", last_name: "Jetson") }
 

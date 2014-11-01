@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Approving a cart with multiple approvers' do
+describe 'Approving a cart with multiple approvers', :type => :request do
 
   let(:approval_params) {
     '{
@@ -65,8 +65,8 @@ describe 'Approving a cart with multiple approvers' do
     # Remove stub to view email layout in development through letter_opener
     # CommunicartMailer.stub_chain(:approval_reply_received_email, :deliver)
 
-    Cart.count.should == 1
-    User.count.should == 4
+    expect(Cart.count).to eq(1)
+    expect(User.count).to eq(4)
     expect(Cart.first.status).to eq 'pending'
     expect(Cart.first.approvals.where(status: 'approved').count).to eq 0
 

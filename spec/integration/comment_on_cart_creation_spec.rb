@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Adding and retrieving comments from a cart item' do
+describe 'Adding and retrieving comments from a cart item', :type => :request do
 
   before do
     approval_group = ApprovalGroup.create(name: "A Testworthy Approval Group")

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Property do
+describe Property, :type => :model do
   let(:cart_item) { FactoryGirl.create(:cart_item) }
   let(:user) { User.create!(email_address: 'test-requester@some-dot-gov.gov') }
 let(:informal_cart) { FactoryGirl.create(:cart, name: 'Informal Cart') }

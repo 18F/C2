@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Rejecting a cart with multiple approvers' do
+describe 'Rejecting a cart with multiple approvers', :type => :request do
 
   #TODO: approve/disapprove/comment > humanResponseText
   let(:rejection_params) {
@@ -131,8 +131,8 @@ describe 'Rejecting a cart with multiple approvers' do
     # Remove stub to view email layout in development through letter_opener
     # CommunicartMailer.stub_chain(:rejection_reply_received_email, :deliver)
 
-    Cart.count.should == 1
-    User.count.should == 4
+    expect(Cart.count).to eq(1)
+    expect(User.count).to eq(4)
     expect(Approval.count).to eq 3
 
     cart = Cart.first

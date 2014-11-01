@@ -56,7 +56,7 @@ describe 'Commands::Approval::InitiateCartApproval' do
 
   describe '#perform' do
     before do
-      Cart.stub_chain(:initialize_cart_with_items, :reload, :decorate).and_return(cart)
+      allow(Cart).to receive_message_chain(:initialize_cart_with_items, :reload, :decorate).and_return(cart)
     end
 
     context 'handling absence of approvalGroup' do
@@ -65,7 +65,7 @@ describe 'Commands::Approval::InitiateCartApproval' do
           command_params = JSON.parse(params_request)
           command_params["approvalGroup"] = val
 
-          cart.should_receive(:process_approvals_without_approval_group).with(command_params)
+          expect(cart).to receive(:process_approvals_without_approval_group).with(command_params)
           Commands::Approval::InitiateCartApproval.new.perform(command_params)
         end
       end
@@ -76,9 +76,9 @@ describe 'Commands::Approval::InitiateCartApproval' do
         it "processes the approval group" do
           command_params = JSON.parse(params_request)
           command_params["approvalGroup"] = "someApprovalGroup"
-          cart.stub_chain(:approvals, :any?).and_return false
+          allow(cart).to receive_message_chain(:approvals, :any?).and_return false
 
-          cart.should_receive(:process_approvals_from_approval_group)
+          expect(cart).to receive(:process_approvals_from_approval_group)
           Commands::Approval::InitiateCartApproval.new.perform(command_params)
         end
       end
@@ -87,9 +87,9 @@ describe 'Commands::Approval::InitiateCartApproval' do
         it 'refrains from processing the approvals' do
           command_params = JSON.parse(params_request)
           command_params["approvalGroup"] = "someApprovalGroup"
-          cart.stub_chain(:approvals, :any?).and_return true
+          allow(cart).to receive_message_chain(:approvals, :any?).and_return true
 
-          cart.should_not_receive(:process_approvals_from_approval_group)
+          expect(cart).not_to receive(:process_approvals_from_approval_group)
           Commands::Approval::InitiateCartApproval.new.perform(command_params)
         end
       end
