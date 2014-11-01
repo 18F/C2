@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe CartItem, :type => :model do
+describe CartItem do
   let(:cart_item) { FactoryGirl.create(:cart_item) }
   let(:trait) { FactoryGirl.create(:cart_item_trait) }
   let(:feature_trait) { FactoryGirl.create(:cart_item_trait, name: 'feature', value: 'bpa') }

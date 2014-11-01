@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Cart, :type => :model do
+describe Cart do
   describe '#update_approval_status' do
     let(:cart) { FactoryGirl.create(:cart_with_approval_group) }
     let(:cart_id) { 1357910 }

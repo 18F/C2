@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Testing User Ownership of Comments', :type => :request do
+describe 'Testing User Ownership of Comments' do
 
 # Create Two carts with the same user to prove we can detect user who created comment.
   before do

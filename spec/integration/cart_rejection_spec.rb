@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Rejecting a cart with multiple approvers', :type => :request do
+describe 'Rejecting a cart with multiple approvers' do
 
   #TODO: approve/disapprove/comment > humanResponseText
   let(:rejection_params) {

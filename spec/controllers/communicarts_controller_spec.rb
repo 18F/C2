@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe CommunicartsController, :type => :controller do
+describe CommunicartsController do
 
   let(:params) {
 

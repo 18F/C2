@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'request_helper'
 
-describe 'CommunicartsController', :type => :request do
+describe 'CommunicartsController' do
   describe "POST /communicarts/send_cart" do
     before do
       allow(ENV).to receive(:[])

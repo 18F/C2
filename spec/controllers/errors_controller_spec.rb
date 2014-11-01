@@ -1,5 +1,5 @@
 require 'spec_helper'
 
-describe ErrorsController, :type => :controller do
+describe ErrorsController do
 
 end

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Creating a cart', :type => :request do
+describe 'Creating a cart' do
   before do
     approval_group_1 = FactoryGirl.create(:approval_group_with_approvers_and_requester, name: "firstApprovalGroup")
     approval_group_2 = ApprovalGroup.create(name: "secondApprovalGroup")

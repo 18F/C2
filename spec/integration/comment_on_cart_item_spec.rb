@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Adding and retrieving comments from a cart item', :type => :request do
+describe 'Adding and retrieving comments from a cart item' do
 
   before do
     ActionMailer::Base.delivery_method = :test

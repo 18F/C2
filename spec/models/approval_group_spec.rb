@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ApprovalGroup, :type => :model do
+describe ApprovalGroup do
   let(:approval_group) { FactoryGirl.create(:approval_group, name: 'test-approval-group') }
   let(:cart) { FactoryGirl.create(:cart, name: 'test-cart') }
   let(:user1) { FactoryGirl.create(:user, email_address: 'user1@some-dot-gov.gov') }
