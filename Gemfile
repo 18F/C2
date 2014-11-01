@@ -26,7 +26,7 @@ group :test, :development do
   gem 'pry-byebug'
   gem 'pry-rails'
   gem 'rspec-activemodel-mocks'
-  gem 'rspec-rails', '~> 2.14'
+  gem 'rspec-rails'
 end
 
 group :development do
