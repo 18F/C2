@@ -23,9 +23,8 @@ services:
   - mysql
 rvm:
   - 2.0.0
-addons:
-  code_climate:
-    repo_token:
-      secure: "g9iGfydrbxADhLKpO3dDde0Ez+zjZIDOJlg3OAMJw7gkwogXqMBeUN9lRH/778bEr6Pr6C0cJJTJ66Z0nMr9NXkk3weQkbxXha8Bp7+zJo1+DdqMaJZBHeUZc+3rk3S0dtQUx2zBa65X1pDWDzQQCgBYyvvI19kWeEpvvmH6Z/k="
-
-env: NOTIFICATION_FROM_EMAIL=test-reply-communicart.sender@some-dot-gov.gov
+env:
+  global:
+    # https://github.com/codeclimate/ruby-test-reporter/issues/28#issuecomment-60523477
+    - secure: CODECLIMATE_REPO_TOKEN=e10db1a0de46345d5588bd6364efbd873b220b1f904eb4604eaa47343fa75d22
+    - NOTIFICATION_FROM_EMAIL=test-reply-communicart.sender@some-dot-gov.gov
