@@ -90,12 +90,12 @@ describe CommunicartsController do
   describe 'POST send_cart' do
     before do
       @json_params = JSON.parse(params)
-      controller.stub(:total_price_from_params)
+      allow(controller).to receive(:total_price_from_params)
     end
 
     context 'approval group' do
       before do
-        CommunicartMailer.stub_chain(:cart_notification_email, :deliver)
+        allow(CommunicartMailer).to receive_message_chain(:cart_notification_email, :deliver)
       end
 
       context 'is indicated' do
@@ -105,29 +105,29 @@ describe CommunicartsController do
         end
 
         it 'uses an existing approval group' do
-          ApprovalGroup.should_receive(:find_by_name).with("anotherApprovalGroupName").and_return(approval_group)
+          expect(ApprovalGroup).to receive(:find_by_name).with("anotherApprovalGroupName").and_return(approval_group)
           post 'send_cart', @json_params
         end
 
         it 'invokes a mailer' do
           mock_mailer = double
-          CommunicartMailer.should_receive(:cart_notification_email).and_return(mock_mailer)
-          mock_mailer.should_receive(:deliver)
+          expect(CommunicartMailer).to receive(:cart_notification_email).and_return(mock_mailer)
+          expect(mock_mailer).to receive(:deliver)
           post 'send_cart', @json_params
         end
 
         it 'creates a comment given a comment param' do
           mock_comment = mock_model(Comment)
-          mock_comment.stub(:[]=)
-          mock_comment.stub(:has_attribute?).with('commentable_id').and_return(true)
-          mock_comment.stub(:save)
+          allow(mock_comment).to receive(:[]=)
+          allow(mock_comment).to receive(:has_attribute?).with('commentable_id').and_return(true)
+          allow(mock_comment).to receive(:save)
 
-          Comment.should_receive(:create!).with(user_id: approval_group.requester_id, comment_text: "Hi, this is a comment, I hope it works!\r\nThis is the second line of the comment.").and_return(mock_comment)
+          expect(Comment).to receive(:create!).with(user_id: approval_group.requester_id, comment_text: "Hi, this is a comment, I hope it works!\r\nThis is the second line of the comment.").and_return(mock_comment)
           post 'send_cart', @json_params
         end
 
         it 'does not create a comment when not given a comment param' do
-          Comment.should_not receive(:create)
+          expect(Comment).not_to receive(:create)
           @json_params['initiationComment'] = ''
           post 'send_cart', @json_params
         end
@@ -139,14 +139,14 @@ describe CommunicartsController do
       it 'renders a navigation template' do
         approval_group
         post 'send_cart', @json_params
-        response.should render_template(partial: '_navigator_cart')
+        expect(response).to render_template(partial: '_navigator_cart')
       end
 
       it 'renders the default template' do
         approval_group
         @json_params['properties'] = {}
         post 'send_cart', @json_params
-        response.should render_template(partial: '_cart')
+        expect(response).to render_template(partial: '_cart')
       end
 
     end
@@ -162,9 +162,9 @@ describe CommunicartsController do
         approval_group
         post 'send_cart', @json_params
         json_response = JSON.parse(response.body)
-        json_response["name"].should == "2867637"
-        json_response["cart_items"][0]["description"].should == "ROUND RING VIEW BINDER WITH INTERIOR POC"
-        json_response["cart_items"][1]["cart_item_traits"][0]["name"].should == "socio"
+        expect(json_response["name"]).to eq("2867637")
+        expect(json_response["cart_items"][0]["description"]).to eq("ROUND RING VIEW BINDER WITH INTERIOR POC")
+        expect(json_response["cart_items"][1]["cart_item_traits"][0]["name"]).to eq("socio")
       end
     end
 
@@ -223,68 +223,68 @@ describe CommunicartsController do
 
     context 'approved cart' do
       before do
-        User.stub(:find_by).and_return(approver)
-        cart.stub_chain(:approval_users, :where, :first).and_return(approver)
+        allow(User).to receive(:find_by).and_return(approver)
+        allow(cart).to receive_message_chain(:approval_users, :where, :first).and_return(approver)
         approval.update_attributes(user_id: 1234)
-        cart.stub_chain(:approvals, :where).and_return([approval])
-        Cart.stub_chain(:where, :where, :first).and_return(cart)
+        allow(cart).to receive_message_chain(:approvals, :where).and_return([approval])
+        allow(Cart).to receive_message_chain(:where, :where, :first).and_return(cart)
 
         # Remove stub to view email layout in development through letter_opener
-        CommunicartMailer.stub_chain(:approval_reply_received_email, :deliver)
-        EmailStatusReport.stub(:new)
+        allow(CommunicartMailer).to receive_message_chain(:approval_reply_received_email, :deliver)
+        allow(EmailStatusReport).to receive(:new)
         @json_approval_params = JSON.parse(approval_params)
       end
 
       it 'invokes a mailer' do
-        cart.stub(:update_approval_status)
+        allow(cart).to receive(:update_approval_status)
         mock_mailer = double
 
-        CommunicartMailer.should_receive(:approval_reply_received_email).and_return(mock_mailer)
-        mock_mailer.should_receive(:deliver)
+        expect(CommunicartMailer).to receive(:approval_reply_received_email).and_return(mock_mailer)
+        expect(mock_mailer).to receive(:deliver)
         post 'approval_reply_received', @json_approval_params
       end
 
       it 'updates the cart status' do
-        cart.should_receive(:update_approval_status)
+        expect(cart).to receive(:update_approval_status)
         post 'approval_reply_received', @json_approval_params
       end
 
       it 'updates the approval status' do
-        approval_list.stub(:count)
-        cart.stub_chain(:approvals, :count)
-        cart.stub(:update_approval_status)
+        allow(approval_list).to receive(:count)
+        allow(cart).to receive_message_chain(:approvals, :count)
+        allow(cart).to receive(:update_approval_status)
 
-        approval.should_receive(:update_attributes).with(status: 'approved')
+        expect(approval).to receive(:update_attributes).with(status: 'approved')
         post 'approval_reply_received', @json_approval_params
       end
 
       it 'adds the comment' do
-        CommunicartMailer.stub_chain(:approval_reply_received_email, :deliver)
+        allow(CommunicartMailer).to receive_message_chain(:approval_reply_received_email, :deliver)
 
         FactoryGirl.create(:approval, user_id: approver.id)
         @json_approval_params = JSON.parse(approval_params)
         @json_approval_params['fromAddress'] = approver.email_address
 
-        Cart.stub_chain(:where, :where, :first).and_return(cart)
-        cart.stub_chain(:approval_users, :where).and_return([approver])
-        cart.stub_chain(:cart_approvals, :where)
-        cart.stub(:update_approval_status)
+        allow(Cart).to receive_message_chain(:where, :where, :first).and_return(cart)
+        allow(cart).to receive_message_chain(:approval_users, :where).and_return([approver])
+        allow(cart).to receive_message_chain(:cart_approvals, :where)
+        allow(cart).to receive(:update_approval_status)
 
-        Approval.any_instance.stub(:update_attributes)
+        allow_any_instance_of(Approval).to receive(:update_attributes)
 
         expect{post 'approval_reply_received', @json_approval_params}.to change{Comment.count}.from(0).to(1)
       end
 
       it 'creates a comment given a comment param' do
-        Cart.stub(:find_by).and_return(cart)
-        cart.stub_chain(:approval_group, :approvers, :where).and_return([approver])
-        cart.stub(:update_approval_status)
+        allow(Cart).to receive(:find_by).and_return(cart)
+        allow(cart).to receive_message_chain(:approval_group, :approvers, :where).and_return([approver])
+        allow(cart).to receive(:update_approval_status)
 
         mock_comment = mock_model(Comment)
-        mock_comment.stub(:[]=)
-        mock_comment.stub(:has_attribute?).with('commentable_id').and_return(true)
-        mock_comment.stub(:save)
-        Comment.should_receive(:new).with(:user_id=>1234,comment_text: 'Test Approval Comment').and_return(mock_comment)
+        allow(mock_comment).to receive(:[]=)
+        allow(mock_comment).to receive(:has_attribute?).with('commentable_id').and_return(true)
+        allow(mock_comment).to receive(:save)
+        expect(Comment).to receive(:new).with(:user_id=>1234,comment_text: 'Test Approval Comment').and_return(mock_comment)
         post 'approval_reply_received', @json_approval_params
       end
 
@@ -292,11 +292,11 @@ describe CommunicartsController do
         approver.update_attributes(email_address: 'judy.jetson@spacelysprockets.com')
         FactoryGirl.create(:approval, user_id: approver.id)
         @json_approval_params = JSON.parse(approval_params)
-        Cart.stub(:find_by).and_return(cart)
-        cart.stub(:update_approval_status)
+        allow(Cart).to receive(:find_by).and_return(cart)
+        allow(cart).to receive(:update_approval_status)
         @json_approval_params['comment'] = ''
 
-        Comment.should_not receive(:create)
+        expect(Comment).not_to receive(:create)
         post 'approval_reply_received', @json_approval_params
       end
 
@@ -328,21 +328,21 @@ describe CommunicartsController do
         rejected_cart.approvals << approval2
         rejected_cart.save
 
-        rejected_cart.stub(:update_approval_status)
+        allow(rejected_cart).to receive(:update_approval_status)
         @json_rejection_params = JSON.parse(rejection_params)
       end
 
       it 'sets the approval to rejected status' do
         #FIXME: grab the specific approval
-        Approval.any_instance.should_receive(:update_attributes).with({status: 'rejected'})
+        expect_any_instance_of(Approval).to receive(:update_attributes).with({status: 'rejected'})
         post 'approval_reply_received', @json_rejection_params
       end
 
       it 'sends out a reject status email to the approvers' do
-        Cart.stub_chain(:where, :where, :first).and_return(rejected_cart)
+        allow(Cart).to receive_message_chain(:where, :where, :first).and_return(rejected_cart)
         mock_mailer = double
-        CommunicartMailer.should_receive(:rejection_update_email).exactly(2).times.and_return(mock_mailer)
-        mock_mailer.should_receive(:deliver).exactly(2).times
+        expect(CommunicartMailer).to receive(:rejection_update_email).exactly(2).times.and_return(mock_mailer)
+        expect(mock_mailer).to receive(:deliver).exactly(2).times
 
         post 'approval_reply_received', @json_rejection_params
       end
@@ -369,27 +369,27 @@ describe CommunicartsController do
 
     before do
       @json_approval_params_with_token = JSON.parse(approval_params_with_token)
-      token.stub(:user_id).and_return(108642)
-      token.stub(:cart_id).and_return(246810)
-      Cart.stub(:find_by).with(id: 246810).and_return(cart)
+      allow(token).to receive(:user_id).and_return(108642)
+      allow(token).to receive(:cart_id).and_return(246810)
+      allow(Cart).to receive(:find_by).with(id: 246810).and_return(cart)
       Approval.last.update_attributes(user_id: 108642)
     end
 
     context 'valid params' do
       before do
-        ApiToken.should_receive(:find_by).with(access_token: "5a4b3c2d1ee1d2c3b4a5").and_return(token)
+        expect(ApiToken).to receive(:find_by).with(access_token: "5a4b3c2d1ee1d2c3b4a5").and_return(token)
       end
 
       it 'will be successful' do
         approver
-        Approval.any_instance.stub(:update_attributes)
+        allow_any_instance_of(Approval).to receive(:update_attributes)
         put 'approval_response', @json_approval_params_with_token
         expect(response.status).to eq 200
       end
 
       it 'successfully validates the user_id and cart_id with the token' do
         approver
-        Approval.any_instance.stub(:update_attributes)
+        allow_any_instance_of(Approval).to receive(:update_attributes)
         expect { put 'approval_response', @json_approval_params_with_token }.not_to raise_error
       end
 
@@ -404,21 +404,19 @@ describe CommunicartsController do
 
       it 'fails when the token has expired' do
         token.update_attributes(expires_at: Time.now - 8.days)
-        ApiToken.should_receive(:find_by).with(access_token: "5a4b3c2d1ee1d2c3b4a5").and_return(token)
+        expect(ApiToken).to receive(:find_by).with(access_token: "5a4b3c2d1ee1d2c3b4a5").and_return(token)
         bypass_rescue
         expect { put 'approval_response', @json_approval_params_with_token }.to raise_error(AuthenticationError)
       end
 
       it 'fails when the token has already been used once' do
         token.update_attributes(used_at: Time.now - 1.hour)
-        ApiToken.should_receive(:find_by).with(access_token: "5a4b3c2d1ee1d2c3b4a5").and_return(token)
+        expect(ApiToken).to receive(:find_by).with(access_token: "5a4b3c2d1ee1d2c3b4a5").and_return(token)
         bypass_rescue
         expect { put 'approval_response', @json_approval_params_with_token }.to raise_error(AuthenticationError)
       end
 
-      it 'marks a token as used' do
-        pending
-      end
+      skip 'marks a token as used'
     end
   end
 
