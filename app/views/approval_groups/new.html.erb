@@ -1,21 +1,21 @@
 <div class="ag_new_form">
-<h1>Create new Approval Group</h1>
-<div class="ag_display">
-<%= form_for(@approval_group) do |f| %>
-    <%= f.label :name %>
-    <%= f.text_field :name %>
+  <h1>Create new Approval Group</h1>
+  <div class="ag_display">
+    <%= form_for(@approval_group) do |f| %>
+      <%= f.label :name %>
+      <%= f.text_field :name %>
 
-  <label for="approval_group_requester">Requester</label>
-  <input id="approval_group_requester" name="approval_group[requester]" type="email">
+      <label for="approval_group_requester">Requester</label>
+      <input id="approval_group_requester" name="approval_group[requester]" type="email">
 
-  <label for="approval_group_approver1">Approver 1</label>
-  <input id="approval_group_approver1" name="approval_group[approver1]" type="email">
+      <label for="approval_group_approver1">Approver 1</label>
+      <input id="approval_group_approver1" name="approval_group[approver1]" type="email">
 
-  <label for="approval_group_approver2">Approver 2</label>
-  <input id="approval_group_approver2" name="approval_group[approver2]" type="email">
-<br />
-  <!--<input type="submit" name="commit" value="Create Approval Group">-->
-   <%= f.submit "Create Approval Group" %>
-<% end %>
-</div>
+      <label for="approval_group_approver2">Approver 2</label>
+      <input id="approval_group_approver2" name="approval_group[approver2]" type="email">
+      <br />
+      <!--<input type="submit" name="commit" value="Create Approval Group">-->
+      <%= f.submit "Create Approval Group" %>
+    <% end %>
+  </div>
 </div>
