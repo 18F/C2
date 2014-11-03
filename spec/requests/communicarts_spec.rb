@@ -14,6 +14,8 @@ describe 'CommunicartsController' do
 
       approval_group = FactoryGirl.create(:approval_group_with_approver_and_requester_approvals, name: 'MyApprovalGroup')
       allow(ApprovalGroup).to receive(:find_by).and_return(approval_group)
+
+      #App creation
     end
 
     it "makes a successful request" do
