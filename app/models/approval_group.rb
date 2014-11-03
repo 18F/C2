@@ -1,7 +1,5 @@
 class ApprovalGroup < ActiveRecord::Base
-  # TODO for Rails 4:
-  # enum flow: [:parallel, :linear]
-  as_enum :flow, [:parallel, :linear], source: :flow
+  enum flow: [:parallel, :linear]
 
   belongs_to :cart
   validates_presence_of :name

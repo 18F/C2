@@ -15,7 +15,6 @@ gem 'roadie', '~> 2.4'
 gem 'rvm-capistrano'
 gem 'sass-rails', '>= 3.2'
 gem 'settingslogic'
-gem 'simple_enum' # for Rails 4 compatability
 gem 'turbolinks'
 gem 'uglifier'
 

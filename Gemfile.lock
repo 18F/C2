@@ -237,8 +237,6 @@ GEM
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
     settingslogic (2.0.9)
-    simple_enum (2.1.1)
-      activesupport (>= 4.0.0)
     simplecov (0.9.1)
       docile (~> 1.1.0)
       multi_json (~> 1.0)
@@ -303,7 +301,6 @@ DEPENDENCIES
   sass-rails (>= 3.2)
   sdoc
   settingslogic
-  simple_enum
   simplecov
   turbolinks
   turnip

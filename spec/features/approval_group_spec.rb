@@ -16,6 +16,6 @@ describe "approval groups" do
     }.to change { ApprovalGroup.count }.by(1)
 
     group = ApprovalGroup.last
-    expect(group.flow).to eq(:linear)
+    expect(group.flow).to eq('linear')
   end
 end
