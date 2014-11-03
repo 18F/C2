@@ -1,6 +1,7 @@
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
+require 'rails/test_help'
 require 'simplecov'
 require 'steps/user_steps'
 require 'steps/approval_steps'
@@ -11,10 +12,6 @@ SimpleCov.start 'rails'
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 Dir.glob("./spec/steps/**/*steps.rb") { |f| load f, true }
-
-# Checks for pending migrations before tests are run.
-# If you are not using ActiveRecord, you can remove this line.
-ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 
 RSpec.configure do |config|
   #Add modules for Turnip acceptance tests
