@@ -8,13 +8,15 @@
       <label for="approval_group_requester">Requester</label>
       <input id="approval_group_requester" name="approval_group[requester]" type="email">
 
+      <%= f.label :flow, 'Approval flow' %>
+      <%= f.select :flow, enum_option_pairs(ApprovalGroup, :flow) %>
+
       <label for="approval_group_approver1">Approver 1</label>
       <input id="approval_group_approver1" name="approval_group[approver1]" type="email">
 
       <label for="approval_group_approver2">Approver 2</label>
       <input id="approval_group_approver2" name="approval_group[approver2]" type="email">
-      <br />
-      <!--<input type="submit" name="commit" value="Create Approval Group">-->
+
       <%= f.submit "Create Approval Group" %>
     <% end %>
   </div>
