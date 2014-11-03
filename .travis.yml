@@ -23,5 +23,9 @@ services:
   - mysql
 rvm:
   - 2.0.0
+addons:
+  code_climate:
+    repo_token:
+      secure: "g9iGfydrbxADhLKpO3dDde0Ez+zjZIDOJlg3OAMJw7gkwogXqMBeUN9lRH/778bEr6Pr6C0cJJTJ66Z0nMr9NXkk3weQkbxXha8Bp7+zJo1+DdqMaJZBHeUZc+3rk3S0dtQUx2zBa65X1pDWDzQQCgBYyvvI19kWeEpvvmH6Z/k="
 
 env: NOTIFICATION_FROM_EMAIL=test-reply-communicart.sender@some-dot-gov.gov
