@@ -35,6 +35,7 @@ end
 
 group :test do
   gem 'capybara'
+  gem 'codeclimate-test-reporter', require: false
   gem 'simplecov'
   gem 'turnip'
 end
