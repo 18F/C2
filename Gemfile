@@ -18,6 +18,7 @@ gem 'uglifier'
 gem 'settingslogic'
 gem 'omniauth-myusa', :git => 'https://github.com/18F/omniauth-myusa.git'
 gem 'font-awesome-sass'
+gem 'simple_enum' # for Rails 4 compatability
 
 group :test, :development do
   gem 'letter_opener', require: false
