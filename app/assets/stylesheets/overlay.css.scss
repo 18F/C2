@@ -1,5 +1,8 @@
 $delete-red: #CD2210;
 
+@import "bootstrap-sprockets";
+@import "bootstrap";
+
 #communicart_bookmarklet {
   position:absolute;
   top:200px;
@@ -12,6 +15,7 @@ $delete-red: #CD2210;
 body {
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 300;
+  background: #fff;
 }
 
 #pic_holder {
