@@ -4,12 +4,14 @@ $delete-red: #CD2210;
 @import "bootstrap";
 
 #communicart_bookmarklet {
-  position:absolute;
-  top:200px;
-  left:200px;
+  position:fixed;
+  top:50%;
+  left:50%;
   z-index: 9999;
   width: 640px;
   height:456px;
+  margin-left: -320px;
+  margin-top: -228px;
 }
 
 body {

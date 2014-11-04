@@ -57,7 +57,7 @@ function scrapePage(jQ) {
         console.log(i + " = " + cartItem[i]);
     }
 
-    $("head").append("<link rel='stylesheet' href='"+ourServer+"assets/overlay.css' type='text/css' media='screen'>");
+    $("head").append("<link rel='stylesheet' href='"+ourServer+"assets/overlay/overlay.css' type='text/css' media='screen'>");
 
     var qStr = $.param(cartItem);
     var iframeURL = ourServer+"overlay?v="+qStr;
