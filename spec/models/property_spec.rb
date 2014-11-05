@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Property do
   let(:cart_item) { FactoryGirl.create(:cart_item) }

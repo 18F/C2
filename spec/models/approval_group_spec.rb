@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe ApprovalGroup do
   let(:approval_group) { FactoryGirl.create(:approval_group, name: 'test-approval-group') }

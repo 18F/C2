@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'ostruct'
 
 describe CommunicartMailer do
@@ -20,30 +20,22 @@ describe CommunicartMailer do
     it 'renders the subject' do
       cart.update_attributes(external_id: 13579)
       allow(cart).to receive(:approval_group).and_return(approval_group)
-      allow(approval_group).to receive(:approvers).and_return([approver])
-      allow(approver).to receive(:approver_comment).and_return([])
       expect(mail.subject).to eq('Communicart Approval Request from Liono Requester: Please review Cart #13579')
     end
 
     it 'renders the receiver email' do
       allow(cart).to receive(:approval_group).and_return(approval_group)
-      allow(approval_group).to receive(:approvers).and_return([approver])
-      allow(approver).to receive(:approver_comment).and_return([])
       expect(mail.to).to eq(["email.to.email@testing.com"])
     end
 
     it 'renders the sender email' do
       allow(cart).to receive(:approval_group).and_return(approval_group)
-      allow(approval_group).to receive(:approvers).and_return([approver])
-      allow(approver).to receive(:approver_comment).and_return([])
       expect(mail.from).to eq(['reply@communicart-stub.com'])
     end
 
     context 'attaching a csv of the cart activity' do
       it 'generates csv attachments for an approved cart' do
         allow(cart).to receive(:approval_group).and_return(approval_group)
-        allow(approval_group).to receive(:approvers).and_return([approver])
-        allow(approver).to receive(:approver_comment).and_return([])
         allow(cart).to receive(:all_approvals_received?).and_return(true)
 
         expect(cart).to receive(:create_items_csv)
@@ -54,8 +46,6 @@ describe CommunicartMailer do
 
       it 'does not generate csv attachments for an unapproved cart' do
         allow(cart).to receive(:approval_group).and_return(approval_group)
-        allow(approval_group).to receive(:approvers).and_return([approver])
-        allow(approver).to receive(:approver_comment).and_return([])
         allow(cart).to receive(:all_approvals_received?).and_return(false)
 
         expect(cart).not_to receive(:create_items_csv)

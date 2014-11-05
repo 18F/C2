@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe ApprovalGroupsController do
   let(:user1) { FactoryGirl.create(:user, email_address: 'user1@some-dot-gov.gov') }
