@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'api-auth'
 gem 'autoprefixer-rails'
 gem 'awesome_print'
 gem 'bootstrap-sass', '~> 3.3.0'

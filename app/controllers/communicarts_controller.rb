@@ -3,6 +3,7 @@ require ::File.expand_path('authentication_error.rb',  'lib/errors')
 class CommunicartsController < ApplicationController
   skip_before_action :verify_authenticity_token
   before_filter :validate_access, only: :approval_response
+  before_filter :api_authenticate
 
   rescue_from AuthenticationError do |exception|
     authentication_error(exception)
@@ -48,6 +49,13 @@ class CommunicartsController < ApplicationController
     @cart = Cart.find_by(id: params[:cart_id].to_i).decorate
     @approval = @cart.approvals.where(user_id: params[:user_id]).first
     flash[:notice] = "You have successfully updated Cart #{@cart.external_id}. See the cart details below"
+  end
+
+  def api_authenticate
+    @current_app = App.find_by_access_id(ApiAuth.access_id(request))
+    return ApiAuth.authentic?(request, @current_app.secret_key) unless @current_app.nil?
+
+    raise 'Failed to authenticate api request'
   end
 
 

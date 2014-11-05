@@ -3,6 +3,7 @@ require 'request_helper'
 
 describe 'CommunicartsController' do
   describe "POST /communicarts/send_cart" do
+
     before do
       allow(ENV).to receive(:[])
       allow(ENV).to receive(:[]).with('NOTIFICATION_TO_EMAIL').and_return('george.jetson@spacelysprockets.com')
@@ -14,6 +15,8 @@ describe 'CommunicartsController' do
 
       approval_group = FactoryGirl.create(:approval_group_with_approver_and_requester_approvals, name: 'MyApprovalGroup')
       allow(ApprovalGroup).to receive(:find_by).and_return(approval_group)
+
+      CommunicartsController.skip_before_filter :api_authenticate
     end
 
     it "makes a successful request" do

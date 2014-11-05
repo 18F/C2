@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140825151228) do
+ActiveRecord::Schema.define(version: 20140919201449) do
 
   create_table "api_tokens", force: true do |t|
     t.string   "access_token"
@@ -44,6 +44,14 @@ ActiveRecord::Schema.define(version: 20140825151228) do
     t.string   "role"
   end
 
+  create_table "apps", force: true do |t|
+    t.string   "name"
+    t.string   "access_id"
+    t.string   "secret_key"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "cart_item_traits", force: true do |t|
     t.text     "name"
     t.text     "value"
@@ -60,7 +68,7 @@ ActiveRecord::Schema.define(version: 20140825151228) do
     t.integer  "quantity"
     t.text     "details"
     t.string   "part_number"
-    t.float    "price"
+    t.float    "price",       limit: 24
     t.integer  "cart_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -75,11 +83,11 @@ ActiveRecord::Schema.define(version: 20140825151228) do
   end
 
   create_table "comments", force: true do |t|
-    t.text     "comment_text"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "commentable_id"
     t.string   "commentable_type"
+    t.integer  "commentable_id"
+    t.text     "comment_text"
     t.integer  "user_id"
   end
 
@@ -102,6 +110,9 @@ ActiveRecord::Schema.define(version: 20140825151228) do
     t.string   "last_name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "github_uid"
+    t.string   "name"
+    t.string   "display_name"
   end
 
 end
