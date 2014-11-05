@@ -8,6 +8,8 @@ describe 'Creating a cart' do
 
     requester1 = User.create!(email_address: 'requester-approval-group2@some-dot-gov.gov')
     UserRole.create!(user_id: requester1.id, approval_group_id: approval_group_2.id, role: 'requester')
+
+    CommunicartsController.skip_before_filter :api_authenticate
   end
 
 

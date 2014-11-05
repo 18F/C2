@@ -72,6 +72,8 @@ describe 'Creating a cart without an approval group' do
     expect(User.count).to eq 0
     expect(Cart.count).to eq 0
     expect(Approval.count).to eq 0
+
+    CommunicartsController.skip_before_filter :api_authenticate
   end
 
   after do

@@ -4,21 +4,6 @@ require 'request_helper'
 describe 'CommunicartsController' do
   describe "POST /communicarts/send_cart" do
 
-    #App creation
-    let(:app) { FactoryGirl.create(:app) }
-    let(:headers) {
-      { 'Content-MD5' => "",
-        'Content-Type' => "text/plain",
-        'Date' => "Mon, 23 Jan 1984 03:29:56 GMT" }
-    }
-
-    let(:uri) { '/send_cart' }
-    let(:request) {
-      uri = URI('http://send_cart')
-      Net::HTTP.post_form(uri, cart_initialize_params)
-    }
-    let(:signed_request) { request.sign!(request, app.access_id, app.secret_key) }
-
     before do
       allow(ENV).to receive(:[])
       allow(ENV).to receive(:[]).with('NOTIFICATION_TO_EMAIL').and_return('george.jetson@spacelysprockets.com')
@@ -31,14 +16,11 @@ describe 'CommunicartsController' do
       approval_group = FactoryGirl.create(:approval_group_with_approver_and_requester_approvals, name: 'MyApprovalGroup')
       allow(ApprovalGroup).to receive(:find_by).and_return(approval_group)
 
-      request['Content-MD5'] = ""
-      request['Content-Type'] = "text/plain"
-      request['Date'] = Time.now
+      CommunicartsController.skip_before_filter :api_authenticate
     end
 
     it "makes a successful request" do
-      # post "/send_cart", cart_initialize_params, headers
-      post signed_request
+      post "/send_cart", cart_initialize_params
       expect(response.status).to eq 201
     end
 
