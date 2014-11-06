@@ -1,12 +1,12 @@
 class ApprovalGroup < ActiveRecord::Base
-  enum flow: [:parallel, :linear]
+  FLOWS = %w(parallel linear).freeze
 
   belongs_to :cart
   has_many :user_roles
   has_many :users, through: :user_roles
 
+  validates :flow, presence: true, inclusion: {in: FLOWS}
   validates :name, presence: true, uniqueness: true
-  validates :flow, presence: true
 
 
   def requester_id
@@ -14,5 +14,4 @@ class ApprovalGroup < ActiveRecord::Base
       return ur.user_id
     end
   end
-
 end

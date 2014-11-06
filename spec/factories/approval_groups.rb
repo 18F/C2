@@ -1,6 +1,7 @@
 FactoryGirl.define do
   factory :approval_group do
     name "RobsApprovalGroup"
+    flow 'parallel'
 
     factory :approval_group_with_approvers_and_requester do
       after :create do |approval_group|
@@ -33,7 +34,7 @@ FactoryGirl.define do
         for i in 1..2
           approver = User.find_by(email_address: 'approver#{i}@some-dot-gov.gov') || FactoryGirl.create(:user, email_address: 'approver#{i}@some-dot-gov.gov')
           UserRole.create!(user_id: approver.id, approval_group_id: approval_group.id, role: 'approver')
-        end  
+        end
 
         for i in 1..3
           observer = User.find_by(email_address: "observer#{i}@some-dot-gov.gov") || FactoryGirl.create(:user, email_address: "observer#{i}@some-dot-gov.gov")

@@ -28,7 +28,7 @@ ActiveRecord::Schema.define(version: 20141031215718) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "cart_id"
-    t.integer  "flow",       default: 0
+    t.string   "flow"
   end
 
   create_table "approval_groups_users", id: false, force: true do |t|
@@ -61,7 +61,7 @@ ActiveRecord::Schema.define(version: 20141031215718) do
     t.integer  "quantity"
     t.text     "details"
     t.string   "part_number"
-    t.float    "price"
+    t.float    "price",       limit: 24
     t.integer  "cart_id"
     t.datetime "created_at"
     t.datetime "updated_at"

@@ -10,7 +10,9 @@
 
       <% if ENV['F_FLOW_OPTION'] %>
         <%= f.label :flow, 'Approval flow' %>
-        <%= f.select :flow, humanized_options_for_select(ApprovalGroup.flows) %>
+        <%= f.select :flow, humanized_options_for_select(ApprovalGroup::FLOWS) %>
+      <% else %>
+        <%= f.hidden_field :flow, value: 'parallel' %>
       <% end %>
 
       <label for="approval_group_approver1">Approver 1</label>
