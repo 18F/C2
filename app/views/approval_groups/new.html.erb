@@ -8,8 +8,10 @@
       <label for="approval_group_requester">Requester</label>
       <input id="approval_group_requester" name="approval_group[requester]" type="email">
 
-      <%= f.label :flow, 'Approval flow' %>
-      <%= f.select :flow, humanized_options_for_select(ApprovalGroup.flows) %>
+      <% if ENV['F_FLOW_OPTION'] %>
+        <%= f.label :flow, 'Approval flow' %>
+        <%= f.select :flow, humanized_options_for_select(ApprovalGroup.flows) %>
+      <% end %>
 
       <label for="approval_group_approver1">Approver 1</label>
       <input id="approval_group_approver1" name="approval_group[approver1]" type="email">
