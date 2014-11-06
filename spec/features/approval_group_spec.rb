@@ -21,10 +21,12 @@ describe "approval groups" do
     end
   end
 
-  it "hides the flow option" do
-    login_with_oauth
-    visit '/approval_groups/new'
+  without_feature 'F_FLOW_OPTION' do
+    it "hides the flow option" do
+      login_with_oauth
+      visit '/approval_groups/new'
 
-    expect(page).to_not have_content('Approval flow')
+      expect(page).to_not have_content('Approval flow')
+    end
   end
 end
