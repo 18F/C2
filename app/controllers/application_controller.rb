@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
 
 private
   def current_user
-    @current_user ||= User.find_by(email_address: session[:user]['email']) if session[:user]
+    @current_user ||= User.find_or_create_by(email_address: session[:user]['email']) if session[:user]
   end
 
   def user_signed_in?
