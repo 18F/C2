@@ -34,7 +34,7 @@ class CommunicartsController < ApplicationController
     approval = cart.approvals.where(user_id: user.id).first
     approval.update_attributes(status: approve_or_reject_status)
     cart.update_approval_status
-    CommunicartMailer.approval_reply_received_email(params, cart).deliver
+    CommunicartMailer.approval_reply_received_email(approval).deliver
     render json: { message: "approval_reply_received"}, status: 200
 
     perform_reject_specific_actions(params, cart) if approve_or_reject_status == 'rejected'

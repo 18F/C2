@@ -48,8 +48,15 @@
          )
   end
 
-  def approval_reply_received_email(analysis, cart)
-    @approval = analysis["approve"] == "APPROVE" ? "approved" : "rejected"
+  def approval_reply_received_email(approval)
+    cart = approval.cart
+    @approval = approval.status
+    analysis = {
+      'approve' => @approval,
+      'fromAddress' => approval.user.email_address,
+      'cartNumber' => cart.external_id
+    }
+
     @approval_reply = analysis
     @cart = cart.decorate
     @cart_template = cart.cart_template_name
@@ -83,4 +90,3 @@
   end
 
 end
-
