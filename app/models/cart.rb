@@ -111,7 +111,7 @@ class Cart < ActiveRecord::Base
   end
 
   def self.existing_or_new_cart(params)
-    name = !params['cartName'].blank? ? params['cartName'] : params['cartNumber']
+    name = params['cartName'].presence || params['cartNumber']
 
     if pending_cart = Cart.find_by(name: name, status: 'pending')
       cart = reset_existing_cart(pending_cart)
