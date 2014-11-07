@@ -13,7 +13,7 @@
 
     <tr>
       <td>
-        <%= render partial: @cart_template, locals: {cart: @cart, title:  "Purchase Request"} %>
+        <%= render partial: @cart.cart_template_name, locals: {cart: @cart, title:  "Purchase Request"} %>
 
         <%= render partial: 'shared/reply_section', locals: { cart: @cart} %>
       </td>

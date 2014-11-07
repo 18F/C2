@@ -19,7 +19,6 @@
     @cart = cart.decorate
     @approval = approval
     @token = ApiToken.where(user_id: @approval.user_id).where(cart_id: @cart.id).last
-    @cart_template = cart.cart_template_name
     @prefix_template = cart.prefix_template_name
 
     set_attachments(cart)
@@ -35,7 +34,6 @@
   def cart_observer_email(email, cart)
     @url = ENV['NOTIFICATION_URL']
     @cart = cart.decorate
-    @cart_template = cart.cart_template_name
     @prefix_template = cart.prefix_template_name
 
     set_attachments(cart)
@@ -52,7 +50,6 @@
     cart = approval.cart
     @approval = approval
     @cart = cart.decorate
-    @cart_template = cart.cart_template_name
     to_address = cart.requester.email_address
     #TODO: Handle carts without approval groups (only emails passed)
     #TODO: Add a specific 'rejection' text block for the requester
