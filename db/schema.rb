@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140825151228) do
+ActiveRecord::Schema.define(version: 20141031215718) do
 
   create_table "api_tokens", force: true do |t|
     t.string   "access_token"
@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(version: 20140825151228) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "cart_id"
+    t.string   "flow"
   end
 
   create_table "approval_groups_users", id: false, force: true do |t|
@@ -60,7 +61,7 @@ ActiveRecord::Schema.define(version: 20140825151228) do
     t.integer  "quantity"
     t.text     "details"
     t.string   "part_number"
-    t.float    "price"
+    t.float    "price",       limit: 24
     t.integer  "cart_id"
     t.datetime "created_at"
     t.datetime "updated_at"

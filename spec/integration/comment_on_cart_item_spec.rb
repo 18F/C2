@@ -7,7 +7,7 @@ describe 'Adding and retrieving comments from a cart item' do
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
 
-    approval_group = ApprovalGroup.create(name: "A Testworthy Approval Group")
+    approval_group = FactoryGirl.create(:approval_group)
 
     cart = Cart.new(
                     name: 'My Wonderfully Awesome Communicart',

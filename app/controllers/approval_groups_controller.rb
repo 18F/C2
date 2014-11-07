@@ -15,7 +15,7 @@ class ApprovalGroupsController < ApplicationController
 
   def create
     p_hash = params[:approval_group]
-    @approval_group = ApprovalGroup.create!(name: p_hash[:name])
+    @approval_group = ApprovalGroup.create!(name: p_hash[:name], flow: p_hash[:flow])
     @requester = User.find_or_create_by(email_address: p_hash[:requester])
     @approver1 = User.find_or_create_by(email_address: p_hash[:approver1])
     @approver2 = User.find_or_create_by(email_address: p_hash[:approver2])

@@ -1,6 +1,7 @@
 FactoryGirl.define do
   factory :approval_group do
     name "RobsApprovalGroup"
+    flow 'parallel'
 
     factory :approval_group_with_approvers_and_requester do
       after :create do |approval_group|
