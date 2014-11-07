@@ -52,7 +52,10 @@ class CommunicartsController < ApplicationController
 private
 
   def validate_access
-    raise AuthenticationError.new(msg: 'something went wrong with the token (nonexistent)') unless @token = ApiToken.find_by(access_token: params[:cch])
+    @token = ApiToken.find_by(access_token: params[:cch])
+    unless @token
+      raise AuthenticationError.new(msg: 'something went wrong with the token (nonexistent)')
+    end
 
     if @token.expires_at && @token.expires_at < Time.now
       raise AuthenticationError.new(msg: 'something went wrong with the token (expired)')
@@ -65,6 +68,7 @@ private
 
   def perform_reject_specific_actions(params, cart)
     # Send out a rejection status email to the approvers
+    # TODO verify this logic
     cart.approvals.where(role: 'approver').each do |approval|
       CommunicartMailer.rejection_update_email(params, cart).deliver
     end

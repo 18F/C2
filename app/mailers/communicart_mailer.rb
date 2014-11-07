@@ -1,8 +1,6 @@
-# -*- coding: utf-8 -*-
-# mailer_helper.rb
-  class CommunicartMailer < ActionMailer::Base
+class CommunicartMailer < ActionMailer::Base
   layout 'communicart_base'
-  helper_method:set_attachments
+  helper_method :set_attachments
 
 
   def set_attachments(cart)
@@ -14,7 +12,7 @@
   end
 
 
-   def cart_notification_email(email, cart, approval)
+  def cart_notification_email(email, cart, approval)
     @url = ENV['NOTIFICATION_URL']
     @cart = cart.decorate
     @approval = approval
