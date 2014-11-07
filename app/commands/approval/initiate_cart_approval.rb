@@ -13,7 +13,6 @@ module Commands
         cart.import_cart_items(params['cartItems'])
         cart.import_initial_comments(params['initiationComment']) unless params['initiationComment'].blank?
         cart.deliver_approval_emails
-        c2 = cart.instance_variable_get(:@object)
         c3 = cart.object
 
         c3

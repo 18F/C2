@@ -5,7 +5,7 @@
       <td class="w-container html-email-message">
         <p>
           Hello,<br/>
-          The approver, <%= @approval_reply["fromAddress"] %>, <%= @approval %>  Cart #<%= @approval_reply["cartNumber"] %>.<br/>
+          The approver, <%= @approval.user.email_address %>, <%= @approval.status %>  Cart #<%= @cart.external_id %>.<br/>
           Please see below for more details.
         </p>
       </td>
@@ -13,7 +13,7 @@
 
     <tr>
       <td>
-        <%= render partial: @cart_template, locals: {cart: @cart, title:  "Purchase Request"} %>
+        <%= render partial: @cart.cart_template_name, locals: {cart: @cart, title:  "Purchase Request"} %>
 
         <%= render partial: 'shared/reply_section', locals: { cart: @cart} %>
       </td>
