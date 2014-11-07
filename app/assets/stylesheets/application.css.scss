@@ -10,7 +10,8 @@
  *
  *= require font-awesome
  *= require_self
- *= require_tree .
+ *= require_tree ./common
+ *= require_tree ./webapp
  */
 
 @import "bootstrap-sprockets";

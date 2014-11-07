@@ -7,11 +7,7 @@ class ApplicationController < ActionController::Base
 
 private
   def current_user
-    begin
-      @current_user ||= User.find_by(email_address: session[:user]['email']) if session[:user]
-    rescue Exception => e
-      nil
-    end
+    @current_user ||= User.find_or_create_by(email_address: session[:user]['email']) if session[:user]
   end
 
   def user_signed_in?

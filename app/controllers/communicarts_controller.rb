@@ -29,24 +29,22 @@ class CommunicartsController < ApplicationController
       cart.comments << new_comment
     end
 
-    cart.decorate
-
     approval = cart.approvals.where(user_id: user.id).first
-    approval.update_attributes(status: approve_or_reject_status)
-    cart.update_approval_status
-    CommunicartMailer.approval_reply_received_email(params, cart).deliver
+    Commands::Approval::UpdateFromApprovalResponse.new.perform(approval, approve_or_reject_status)
     render json: { message: "approval_reply_received"}, status: 200
 
     perform_reject_specific_actions(params, cart) if approve_or_reject_status == 'rejected'
-
   end
 
   def approval_response
-    Commands::Approval::UpdateFromApprovalResponse.new.perform(params)
-    @token.update_attributes(used_at: Time.now)
-
     @cart = Cart.find_by(id: params[:cart_id].to_i).decorate
     @approval = @cart.approvals.where(user_id: params[:user_id]).first
+    action = params[:approver_action]
+    new_status = Cart::APPROVAL_ATTRIBUTES_MAP[action.to_sym]
+
+    Commands::Approval::UpdateFromApprovalResponse.new.perform(@approval, new_status)
+    @token.update_attributes(used_at: Time.now)
+
     flash[:notice] = "You have successfully updated Cart #{@cart.external_id}. See the cart details below"
   end
 
@@ -54,7 +52,10 @@ class CommunicartsController < ApplicationController
 private
 
   def validate_access
-    raise AuthenticationError.new(msg: 'something went wrong with the token (nonexistent)') unless @token = ApiToken.find_by(access_token: params[:cch])
+    @token = ApiToken.find_by(access_token: params[:cch])
+    unless @token
+      raise AuthenticationError.new(msg: 'something went wrong with the token (nonexistent)')
+    end
 
     if @token.expires_at && @token.expires_at < Time.now
       raise AuthenticationError.new(msg: 'something went wrong with the token (expired)')
@@ -67,6 +68,7 @@ private
 
   def perform_reject_specific_actions(params, cart)
     # Send out a rejection status email to the approvers
+    # TODO verify this logic
     cart.approvals.where(role: 'approver').each do |approval|
       CommunicartMailer.rejection_update_email(params, cart).deliver
     end

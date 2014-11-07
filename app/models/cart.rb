@@ -53,8 +53,8 @@ class Cart < ActiveRecord::Base
 
   def create_items_csv
     csv_string = CSV.generate do |csv|
-    csv << ["description","details","vendor","url","notes","part_number","green","features","socio","quantity","unit price","price for quantity"]
-    cart_items.each do |item|
+      csv << ["description","details","vendor","url","notes","part_number","green","features","socio","quantity","unit price","price for quantity"]
+      cart_items.each do |item|
         csv << [item.description,
                 item.details,
                 item.vendor,
@@ -68,9 +68,10 @@ class Cart < ActiveRecord::Base
                 item.price,
                 item.quantity * item.price
                ]
-        end
+      end
     end
-    return csv_string
+
+    csv_string
   end
 
   def create_comments_csv
@@ -82,26 +83,29 @@ class Cart < ActiveRecord::Base
         csv << [user.email_address, item.comment_text, item.updated_at, human_readable_time(item.updated_at, default_time_zone_offset)]
       end
     end
-    return csv_string
+
+    csv_string
   end
 
   def requester
-    approvals.where(role: 'requester').first.user if approvals.any? { |a| a.role == 'requester' }
+    approvals.where(role: 'requester').first.try(:user)
   end
 
   def observers
-    approval_group.user_roles.where(role: 'observer') #TODO: Pull from approvals, not approval groups
+    # TODO: Pull from approvals, not approval groups
+    approval_group.user_roles.where(role: 'observer')
   end
 
   def create_approvals_csv
     csv_string = CSV.generate do |csv|
-    csv << ["status","approver","created_at"]
+      csv << ["status","approver","created_at"]
 
-    approvals.each do |approval|
+      approvals.each do |approval|
         csv << [approval.status, approval.user.email_address,approval.updated_at]
-        end
+      end
     end
-    return csv_string
+
+    csv_string
   end
 
   def self.initialize_cart_with_items params
@@ -111,9 +115,10 @@ class Cart < ActiveRecord::Base
   end
 
   def self.existing_or_new_cart(params)
-    name = !params['cartName'].blank? ? params['cartName'] : params['cartNumber']
+    name = params['cartName'].presence || params['cartNumber']
 
-    if pending_cart = Cart.find_by(name: name, status: 'pending')
+    pending_cart = Cart.find_by(name: name, status: 'pending')
+    if pending_cart
       cart = reset_existing_cart(pending_cart)
     else
       #There is no existing cart or the existing cart is already approved
@@ -221,14 +226,4 @@ class Cart < ActiveRecord::Base
       end
     end
   end
-
-# TODO: Move template logic out of the model
- def cart_template_name
-    return (self.getProp('origin') == 'navigator') ? "shared/navigator_cart" : "shared/cart"
-  end
-
-  def prefix_template_name
-    return (self.getProp('origin') == 'navigator') ? "shared/navigator_prefix" : nil
-  end
-
 end

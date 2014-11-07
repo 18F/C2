@@ -10,8 +10,7 @@ class ApprovalGroup < ActiveRecord::Base
 
 
   def requester_id
-    if ur = user_roles.find { |r| r.role == "requester"}
-      return ur.user_id
-    end
+    role = self.user_roles.where(role: 'requester').first
+    role.try(:user_id)
   end
 end
