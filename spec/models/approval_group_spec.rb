@@ -11,6 +11,12 @@ describe ApprovalGroup do
     it 'should be valid with valid attributes' do
       expect(approval_group).to be_valid
     end
+
+    it "fails validation with a flow that isn't in the list" do
+      approval_group.flow = 'badflow'
+      expect(approval_group).to_not be_valid
+      expect(approval_group.errors[:flow]).to_not be_empty
+    end
   end
 
   context 'relationships' do
