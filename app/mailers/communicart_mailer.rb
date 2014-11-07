@@ -19,7 +19,7 @@
     @cart = cart.decorate
     @approval = approval
     @token = ApiToken.where(user_id: @approval.user_id).where(cart_id: @cart.id).last
-    @prefix_template = cart.prefix_template_name
+    @prefix_template = @cart.prefix_template_name
 
     set_attachments(cart)
 
@@ -34,7 +34,7 @@
   def cart_observer_email(email, cart)
     @url = ENV['NOTIFICATION_URL']
     @cart = cart.decorate
-    @prefix_template = cart.prefix_template_name
+    @prefix_template = @cart.prefix_template_name
 
     set_attachments(cart)
 

@@ -27,5 +27,19 @@ class CartDecorator < Draper::Decorator
     "#{number_approved} of #{total_approvers} approved."
   end
 
+  def cart_template_name
+    if self.getProp('origin') == 'navigator'
+      'shared/navigator_cart'
+    else
+      'shared/cart'
+    end
+  end
 
+  def prefix_template_name
+    if self.getProp('origin') == 'navigator'
+      'shared/navigator_prefix'
+    else
+      nil
+    end
+  end
 end

@@ -221,14 +221,4 @@ class Cart < ActiveRecord::Base
       end
     end
   end
-
-# TODO: Move template logic out of the model
- def cart_template_name
-    return (self.getProp('origin') == 'navigator') ? "shared/navigator_cart" : "shared/cart"
-  end
-
-  def prefix_template_name
-    return (self.getProp('origin') == 'navigator') ? "shared/navigator_prefix" : nil
-  end
-
 end
