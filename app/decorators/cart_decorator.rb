@@ -16,7 +16,11 @@ class CartDecorator < Draper::Decorator
 
 
   def generate_status_message
-    number_approved == total_approvers ? completed_status_message : progress_status_message
+    if number_approved == total_approvers
+      completed_status_message
+    else
+      progress_status_message
+    end
   end
 
   def completed_status_message
@@ -27,5 +31,19 @@ class CartDecorator < Draper::Decorator
     "#{number_approved} of #{total_approvers} approved."
   end
 
+  def cart_template_name
+    if self.getProp('origin') == 'navigator'
+      'shared/navigator_cart'
+    else
+      'shared/cart'
+    end
+  end
 
+  def prefix_template_name
+    if self.getProp('origin') == 'navigator'
+      'shared/navigator_prefix'
+    else
+      nil
+    end
+  end
 end

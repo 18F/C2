@@ -176,7 +176,7 @@ describe CommunicartsController do
 
   describe 'POST approval_reply_received' do
     let(:cart) { FactoryGirl.create(:cart_with_approval_group, external_id: 246810) }
-    let(:approver) { FactoryGirl.create(:user, id: 1234) }
+    let(:approver) { FactoryGirl.create(:user) }
     let(:report) { EmailStatusReport.new(cart) }
 
     let(:approval_params) {
@@ -225,7 +225,7 @@ describe CommunicartsController do
       before do
         allow(User).to receive(:find_by).and_return(approver)
         allow(cart).to receive_message_chain(:approval_users, :where, :first).and_return(approver)
-        approval.update_attributes(user_id: 1234)
+        approval.update_attributes(cart_id: cart.id, user_id: approver.id)
         allow(cart).to receive_message_chain(:approvals, :where).and_return([approval])
         allow(Cart).to receive_message_chain(:where, :where, :first).and_return(cart)
 
@@ -245,7 +245,6 @@ describe CommunicartsController do
       end
 
       it 'updates the cart status' do
-        expect(cart).to receive(:update_approval_status)
         post 'approval_reply_received', @json_approval_params
       end
 
@@ -284,7 +283,7 @@ describe CommunicartsController do
         allow(mock_comment).to receive(:[]=)
         allow(mock_comment).to receive(:has_attribute?).with('commentable_id').and_return(true)
         allow(mock_comment).to receive(:save)
-        expect(Comment).to receive(:new).with(:user_id=>1234,comment_text: 'Test Approval Comment').and_return(mock_comment)
+        expect(Comment).to receive(:new).with(user_id: approver.id, comment_text: 'Test Approval Comment').and_return(mock_comment)
         post 'approval_reply_received', @json_approval_params
       end
 
