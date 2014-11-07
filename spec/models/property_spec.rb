@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Property do
   let(:cart_item) { FactoryGirl.create(:cart_item) }
   let(:user) { User.create!(email_address: 'test-requester@some-dot-gov.gov') }
-let(:informal_cart) { FactoryGirl.create(:cart, name: 'Informal Cart') }
+  let(:informal_cart) { FactoryGirl.create(:cart, name: 'Informal Cart') }
 
   describe '#properties' do
     it 'One property can be added to a cart_item' do
@@ -50,11 +50,10 @@ let(:informal_cart) { FactoryGirl.create(:cart, name: 'Informal Cart') }
     end
 
     it 'Can create an informal cart with items that evolve over time' do
-
       firstComment = 'cannot find this'
       originatingEmail = 'get: description #1, #2, #3, and give to Jane, Jill and Tom'
       # first we create the Cart with a few items
-      ci0 = CartItem.create(
+      CartItem.create!(
         :description => 'description #1',
         :url => 'something for a different vendor',
         :notes => 'just a note: Bob, give this to Jane.',
@@ -62,7 +61,7 @@ let(:informal_cart) { FactoryGirl.create(:cart, name: 'Informal Cart') }
         :cart_id => informal_cart.id
       )
       # first we create the Cart with a few items
-      ci1 = CartItem.create(
+      CartItem.create!(
         :description => 'description #2',
         :url => 'something for a different vendor',
         :notes => 'just a note: Bob, give this to Jill.',
@@ -70,7 +69,7 @@ let(:informal_cart) { FactoryGirl.create(:cart, name: 'Informal Cart') }
         :cart_id => informal_cart.id
       )
       # first we create the Cart with a few items
-      ci2 = CartItem.create(
+      CartItem.create!(
         :description => 'description #3',
         :url => 'something for a different vendor',
         :notes => 'just a note: Bob, give this to Tom.',

@@ -25,11 +25,10 @@ describe ApprovalGroup do
     end
 
     it 'has users' do
-      user_role = UserRole.create!(user_id: user1.id, approval_group_id: approval_group.id, role: 'approver')
-      user_role = UserRole.create!(user_id: user2.id, approval_group_id: approval_group.id, role: 'requester')
+      UserRole.create!(user_id: user1.id, approval_group_id: approval_group.id, role: 'approver')
+      UserRole.create!(user_id: user2.id, approval_group_id: approval_group.id, role: 'requester')
       expect(approval_group.users).to eq [user1, user2]
     end
-
   end
 
   context 'invalid attributes' do
