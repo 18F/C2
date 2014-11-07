@@ -50,14 +50,7 @@
 
   def approval_reply_received_email(approval)
     cart = approval.cart
-    @approval = approval.status
-    analysis = {
-      'approve' => @approval,
-      'fromAddress' => approval.user.email_address,
-      'cartNumber' => cart.external_id
-    }
-
-    @approval_reply = analysis
+    @approval = approval
     @cart = cart.decorate
     @cart_template = cart.cart_template_name
     to_address = cart.requester.email_address
@@ -69,7 +62,7 @@
     @url = ENV['NOTIFICATION_URL']
     mail(
          to: to_address,
-         subject: "User #{analysis['fromAddress']} has #{@approval} cart ##{analysis['cartNumber']}",
+         subject: "User #{approval.user.email_address} has #{approval.status} cart ##{cart.external_id}",
          from: ENV['NOTIFICATION_FROM_EMAIL']
          )
   end
