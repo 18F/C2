@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe 'Rejecting a cart with multiple approvers' do
 
-  #TODO: approve/disapprove/comment > humanResponseText
+  # TODO: approve/disapprove/comment > humanResponseText
   let(:rejection_params) {
-      '{
+    '{
       "cartNumber": "10203040",
       "category": "approvalreply",
       "attention": "",
@@ -16,11 +16,11 @@ describe 'Rejecting a cart with multiple approvers' do
       "disapprove": "REJECT",
       "humanResponseText": "",
       "comment" : "Please order 500 highlighters instead of 300 highlighters"
-      }'
-    }
+    }'
+  }
 
   let(:repost_params) {
-      '{
+    '{
       "cartNumber": "10203040",
       "category": "approvalreply",
       "attention": "",
@@ -32,8 +32,8 @@ describe 'Rejecting a cart with multiple approvers' do
       "disapprove": "",
       "humanResponseText": "",
       "comment" : "This looks much better. We could definitely use 500 highlighters. Thank you!"
-      }'
-    }
+    }'
+  }
 
   let(:params_request_1) {
   '{
@@ -116,11 +116,10 @@ describe 'Rejecting a cart with multiple approvers' do
 
     (1..3).each do |num|
       email = "approver#{num}@some-dot-gov.gov"
-      user = User.find_or_create_by(email_address: email)
+      User.find_or_create_by(email_address: email)
     end
 
     cart.save
-
   end
 
   after do
@@ -131,8 +130,8 @@ describe 'Rejecting a cart with multiple approvers' do
     # Remove stub to view email layout in development through letter_opener
     # CommunicartMailer.stub_chain(:rejection_reply_received_email, :deliver)
 
-    Cart.count.should == 1
-    User.count.should == 4
+    expect(Cart.count).to eq(1)
+    expect(User.count).to eq(4)
     expect(Approval.count).to eq 3
 
     cart = Cart.first
@@ -159,8 +158,6 @@ describe 'Rejecting a cart with multiple approvers' do
     updated_cart = Cart.last
     expect(updated_cart.status).to eq 'pending'
     expect(cart.approvals.count).to eq 3
-
-    original_cart = Cart.first
 
     # Cart with the same external ID should be associated with a new set of users with approvals in status 'pending'
     expect(updated_cart.external_id).to eq 10203040

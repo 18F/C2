@@ -1,41 +1,43 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.0.0'
-gem 'pg'
-gem 'turbolinks'
-gem 'jbuilder', '~> 1.2'
-gem 'haml'
-gem 'roadie'
-gem 'draper'
-gem 'capistrano', '~>2.1'
-gem 'rvm-capistrano'
-gem 'awesome_print'
-gem 'jquery-rails', '~> 2.1'
-gem 'bootstrap-sass', '~> 3.2.0'
-gem 'sass-rails'
 gem 'autoprefixer-rails'
-gem 'uglifier'
-gem 'settingslogic'
-gem 'omniauth-myusa', :git => 'https://github.com/18F/omniauth-myusa.git'
+gem 'awesome_print'
+gem 'bootstrap-sass', '~> 3.3.0'
+gem 'capistrano', '~> 2.1'
+gem 'draper'
 gem 'font-awesome-sass'
+gem 'haml'
+gem 'jquery-rails'
+gem 'omniauth-myusa', git: 'https://github.com/18F/omniauth-myusa.git'
+gem 'pg'
+gem 'rails', '~> 4.1.7'
+gem 'roadie', '~> 2.4'
+gem 'rvm-capistrano'
+gem 'sass-rails', '>= 3.2'
+gem 'settingslogic'
+gem 'turbolinks'
+gem 'uglifier'
 
 group :test, :development do
-  gem 'letter_opener'
-  gem 'rspec-rails'
-  gem 'pry-rails'
-  gem 'pry-byebug'
   gem 'database_cleaner'
   gem 'factory_girl_rails'
+  gem 'letter_opener', require: false
+  gem 'pry-byebug'
+  gem 'pry-rails'
+  gem 'rspec-activemodel-mocks'
+  gem 'rspec-rails'
 end
 
 group :development do
+  gem 'guard-rspec', require: false
   gem 'railroady'
 end
 
 group :test do
+  gem 'capybara'
+  gem 'codeclimate-test-reporter'
   gem 'simplecov'
   gem 'turnip'
-  gem 'capybara'
 end
 
 group :doc do

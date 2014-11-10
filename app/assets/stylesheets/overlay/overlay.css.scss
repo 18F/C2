@@ -1,17 +1,25 @@
 $delete-red: #CD2210;
+$overlay-width: 640px;
+$overlay-height: 456px;
+
+@import "bootstrap-sprockets";
+@import "bootstrap";
 
 #communicart_bookmarklet {
-  position:absolute;
-  top:200px;
-  left:200px;
+  position:fixed;
+  top:50%;
+  left:50%;
   z-index: 9999;
-  width: 640px;
-  height:456px;
+  width: $overlay-width;
+  height:$overlay-height;
+  margin-left: -1 * $overlay-width/2 ;
+  margin-top: -.5 * $overlay-height;
 }
 
 body {
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 300;
+  background: #fff;
 }
 
 #pic_holder {
@@ -28,7 +36,6 @@ body {
   margin-right: -50%;
   transform: translate(-50%, -50%);
 }
-
 
 #cartscreen {
   display:none;
@@ -62,9 +69,11 @@ body {
     margin: 5px;
 	text-decoration:none;
 }
+
 .btn:hover {
 	background-color:#999999;
 }
+
 .btn:active {
 	position:relative;
 	top:1px;
@@ -84,6 +93,9 @@ body {
   font-family: Raleway, 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 300;
   background-color: #07519B;
+  a:focus {
+    border: 3px solid lightblue;
+  }
 }
 
 #ccheader {
@@ -202,7 +214,7 @@ body {
 }
 
 .app-btn {
-//  padding-top: 10px;
+  padding-top: 10px;
 }
 
 .buttonbar {
@@ -284,8 +296,6 @@ body {
   }
 }
 
-
-
 .instruction {
   margin: .6em .6em 1em 0;
 }
@@ -296,6 +306,7 @@ body {
   line-height: 1.2em;
   font-family: 'Raleway', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 100;
+  padding-left: 0px;
 }
 
 .confirm-hdr {
@@ -342,6 +353,10 @@ body {
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+a.add_btn:focus {
+  color: #fff;
+}
+
 .link-row {
   margin-top: 20px;
   a {
@@ -353,9 +368,8 @@ body {
 
 .cancel-link {
   color: #CD2210;
-
 }
 
 .go-link {
-  color: #1089FF;
+  color: #07519B;
 }

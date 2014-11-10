@@ -1,11 +1,7 @@
 
 Current status: <%=  @cart.generate_status_message %>
 
-At time <%= @approval_reply["date"] %>, approver <%= @approval_reply["fromAddress"] %> <%= @approval %>  Cart Number <%= @approval_reply["cartNumber"] %>. <%= @approval_reply["approve"] == "APPROVE" ?
+At time <%= @approval.created_at %>, approver <%= @approval.user.email_address %> <%= @approval.status %>  Cart Number <%= @cart.external_id %>. <%= @approval.status == 'approved' ?
 "This approval has been logged for future information" :
 "You may wish to contact the approver for more explanation."
  %>
-
-
-
-

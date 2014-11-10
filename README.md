@@ -1,12 +1,14 @@
-# C2 [![Build Status](https://travis-ci.org/18F/C2.svg?branch=master)](https://travis-ci.org/18F/C2)
+# C2
 
-For an overview of this project, please visit our github [pages](http://18f.github.io/C2/).
+[![Build Status](https://travis-ci.org/18F/C2.svg?branch=master)](https://travis-ci.org/18F/C2) [![Code Climate](https://codeclimate.com/github/18F/C2/badges/gpa.svg)](https://codeclimate.com/github/18F/C2) [![Test Coverage](https://codeclimate.com/github/18F/C2/badges/coverage.svg)](https://codeclimate.com/github/18F/C2)
+
+For an overview of this project, please visit our [homepage](http://18f.github.io/C2/).
 
 ## INSTALLATION
 
 In order to foster as much reuse as possible, the C2 project is a molecule of 3 repos,
 each of which in theory might be reusable independently.  In practice, we on the
-team need to have all three installed to have C2 function as demoed on our gitub [pages][http://18f.github.io/C2/].
+team need to have all three installed to have C2 function as demoed on our [homepage](http://18f.github.io/C2/).
 
 These repos are:
 
@@ -20,7 +22,7 @@ ways to do this, this section describes one preferred mechanism for doing this.
 
 ## Installing the scraper
 
-Follow the instructions in the gsa-advantage-scrape (https://github.com/18F/gsa-advantage-scrape) README.  This assumes that
+Follow the instructions in the [gsa-advantage-scrape](https://github.com/18F/gsa-advantage-scrape) README.  This assumes that
 you are installing with Apache, on the same machine, although you could install it some other way.
 
 ## Installing Mario
@@ -43,9 +45,15 @@ To get the database and tests running:
 1. Run `script/bootstrap`, which will print "DONE" if successful. *NOTE: This will delete any existing records in your database.*
     * If you have a password on PostgreSQL, it will give you an error about not being able to connect to the database. Update the info in [`config/database.yml`](config/database.yml.example) with your creds.
 1. Run the specs with `bundle exec rspec spec` at the command line.
+    * To run tests automatically as files are changed, run `bundle exec guard`.
+    * To see previews of the mailers, run with the environment variable `MAIL_PREVIEW=true`.
 1. Run the frontend tests with `grunt jasmine`.
 
-To get app running, modify [`config/environment_variables.yml`](config/environment_variables.yml.example):
+To get the app running:
 
-- `GMAIL_USERNAME` should be rensender you're using (e.g. communicart.sender@gmail.com or communicart.test@gmail.com)
-- `GMAIL_PASSWORD` is the password for that email account
+1. Register an application on [MyUSA](https://myusa-staging.18f.us/authorizations)
+1. Modify [`config/environment_variables.yml`](config/environment_variables.yml.example):
+    - `GMAIL_USERNAME` should be rensender you're using (e.g. communicart.sender@gmail.com or communicart.test@gmail.com)
+    - `GMAIL_PASSWORD` is the password for that email account
+    - `MYGOV_CLIENT_ID` is the Consumer Public Key provided by MyUSA
+    - `MYGOV_SECRET_ID` is the Consumer Secret Key provided by MyUSA

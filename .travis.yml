@@ -6,6 +6,9 @@ after_failure:
   - ruby env
 before_script:
   - script/bootstrap
+cache:
+  - bundler
+  - npm
 language: ruby
 notifications:
   email:
@@ -20,5 +23,8 @@ addons:
   postgresql: "9.3"
 rvm:
   - 2.0.0
-
-env: NOTIFICATION_FROM_EMAIL=test-reply-communicart.sender@some-dot-gov.gov
+env:
+  global:
+    # https://github.com/codeclimate/ruby-test-reporter/issues/28#issuecomment-60523477
+    - secure: CODECLIMATE_REPO_TOKEN=e10db1a0de46345d5588bd6364efbd873b220b1f904eb4604eaa47343fa75d22
+    - NOTIFICATION_FROM_EMAIL=test-reply-communicart.sender@some-dot-gov.gov

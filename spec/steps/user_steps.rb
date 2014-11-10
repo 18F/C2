@@ -7,16 +7,16 @@ module UserSteps
 
   step "I should see alert text :text" do |text|
     page.assert_selector('.alert', :count => 1)
-    page.find('.alert').should have_content(text)
+    expect(page.find('.alert')).to have_content(text)
   end
 
   step "I should see :text" do |text|
-    page.find('body').should have_content(text)
+    expect(page.find('body')).to have_content(text)
   end
 
   step 'I should see a header :text' do |text|
     #TODO: Search through all header tags
-    page.find('h3').should have_content(text)
+    expect(page.find('h3')).to have_content(text)
   end
 
   step "I go to :page_name" do |page_name|

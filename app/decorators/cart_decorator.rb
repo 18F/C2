@@ -2,7 +2,8 @@ class CartDecorator < Draper::Decorator
   delegate_all
 
   def total_price
-    object.cart_items.reduce(0) do |sum,citem| sum + (citem.quantity * citem.price) end
+    price = object.cart_items.reduce(0) do |sum,citem| sum + citem.quantity * citem.price end
+    Float("%0.02f" % price)
   end
 
   def number_approved
@@ -15,7 +16,11 @@ class CartDecorator < Draper::Decorator
 
 
   def generate_status_message
-    number_approved == total_approvers ? completed_status_message : progress_status_message
+    if number_approved == total_approvers
+      completed_status_message
+    else
+      progress_status_message
+    end
   end
 
   def completed_status_message
@@ -26,5 +31,19 @@ class CartDecorator < Draper::Decorator
     "#{number_approved} of #{total_approvers} approved."
   end
 
+  def cart_template_name
+    if self.getProp('origin') == 'navigator'
+      'shared/navigator_cart'
+    else
+      'shared/cart'
+    end
+  end
 
+  def prefix_template_name
+    if self.getProp('origin') == 'navigator'
+      'shared/navigator_prefix'
+    else
+      nil
+    end
+  end
 end

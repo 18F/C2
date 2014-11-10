@@ -7,7 +7,7 @@ describe 'Adding and retrieving comments from a cart item' do
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
 
-    approval_group = ApprovalGroup.create(name: "A Testworthy Approval Group")
+    approval_group = FactoryGirl.create(:approval_group)
 
     cart = Cart.new(
                     name: 'My Wonderfully Awesome Communicart',
@@ -42,8 +42,8 @@ describe 'Adding and retrieving comments from a cart item' do
   it 'updates the comments on a cart item as expected' do
     ENV['NOTIFICATION_FROM_EMAIL'] = 'sender@some-dot_gov.gov'
 
-    Cart.count.should == 1
-    User.count.should == 4
+    expect(Cart.count).to eq(1)
+    expect(User.count).to eq(4)
     cart = Cart.first
     expect(cart.status).to eq 'pending'
     expect(cart.approvals.where(status: 'approved').count).to eq 0

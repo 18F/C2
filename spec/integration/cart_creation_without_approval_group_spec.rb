@@ -87,7 +87,7 @@ describe 'Creating a cart without an approval group' do
   end
 
   it 'does not create an approval group' do
-    expect{ post 'send_cart', @json_params_1 }.not_to change{ApprovalGroup.count}.by(1)
+    expect{ post 'send_cart', @json_params_1 }.not_to change{ ApprovalGroup.count }
   end
 
   it 'creates approvals' do

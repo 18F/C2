@@ -28,7 +28,7 @@ describe 'Testing User Ownership of Comments' do
     cart.cart_items[0].cart_item_traits << FactoryGirl.create(:cart_item_trait,name: "socio",value: "v")
 
     users = []
-    
+
 
     (0..3).each do |num|
       email = "approver#{num}@some-dot-gov.gov"
@@ -49,28 +49,25 @@ describe 'Testing User Ownership of Comments' do
     cart2.approval_group = approval_group
 
     cart2.approvals << Approval.create!(user_id: user.id, role: 'requester')
-    cart2.cart_items << 
+    cart2.cart_items <<
 FactoryGirl.create(:cart_item)
     cart2.cart_items[0].cart_item_traits << FactoryGirl.create(:cart_item_trait)
     cart2.cart_items[0].cart_item_traits << FactoryGirl.create(:cart_item_trait,name: "socio",value: "w")
 
     (1..3).each do |num|
-      email = "approver#{num}@some-dot-gov.gov"
-
       approval_group.user_roles << UserRole.create!(user_id: users[num].id, approval_group_id: approval_group.id, role: 'approver')
       cart2.approvals << Approval.create!(user_id: users[num].id, role: 'approver')
     end
-    
-    cart2.save
 
+    cart2.save
   end
 
 
   it 'updates the comments on a cart item as expected' do
     ENV['NOTIFICATION_FROM_EMAIL'] = 'sender@some-dot_gov.gov'
 
-    Cart.count.should == 2
-    User.count.should == 5 # 5 = 4 approvers + 1 requester
+    expect(Cart.count).to eq(2)
+    expect(User.count).to eq(5) # 5 = 4 approvers + 1 requester
     cart = Cart.first
     expect(cart.status).to eq 'pending'
     expect(cart.approvals.where(status: 'approved').count).to eq 0
@@ -78,7 +75,7 @@ FactoryGirl.create(:cart_item)
     expect(ActionMailer::Base.deliveries.count).to eq 0
 
     cart2 = Cart.last
-    
+
     # Cart2 has a comment that has the correct user.
 
 

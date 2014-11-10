@@ -10,7 +10,10 @@ var CartItem = Backbone.Model.extend({
   },
   validate : function(attrs) {
     if (attrs.price == 0) {
-      return "item must have a price!"
+      return "item must have a non-zero price!";
+    }
+    if (isNaN(parseFloat(attrs.price))) {
+      return "item price must be a number";
     }
   },
   initialize: function() {
@@ -77,6 +80,8 @@ var CartView = Backbone.View.extend({
     render: function() {
         this.$el  = $('#itemList'); //this is a result of timing...should fix
         this.$el.empty();
+        this.$el.html('<tr><th scope="col" style="width: 20em">Items</th><th scope="col" class="ra">Price</th>'+
+            '<th scope="col" class="qty">Qty</th><th scope="col"></th></tr>');
         var cartTotal = 0.00;
         this.model.each( function(item) {
             var iview = new CartItemView({model: item});
@@ -111,11 +116,11 @@ setTimeout(function(){
         $('#itemprice').val(price);
     }
     if (qs.hasOwnProperty("title")) {
-        $('#itemname').val(qs.title);
+      $('#itemname').val(unescape(qs.title));
     }
     $('#itemquantity').val(1);
     if (qs.hasOwnProperty("imageUrl")) {
-        loadProdImage(qs.imageUrl);
+        loadProdImage(qs.imageUrl, unescape(qs['title']));
     } else {
         loadProdImage(null);
     }
@@ -128,11 +133,16 @@ setTimeout(function(){
         closeOverlay();
     });
     $('#add_btn').click(function() {
-      if (doValidate()) {
-        addCartItem($('#itemname').val(), qs.itemUrl, qs.imageUrl,
-          $('#itemprice').val(), $('#itemquantity').val(), qs.vendor);
+      if (addCartItem($('#itemname').val(), qs.itemUrl, qs.imageUrl,
+          $('#itemprice').val(), $('#itemquantity').val(), qs.vendor)){
+        $('#priceError').html('<p></p>');
+        $('#priceError').css("visibility", "hidden");
         switchToCart();
+      } else {
+        $('#priceError').html('<p>Please enter a price</p>');
+        $('#priceError').css("visibility", "visible");
       }
+      return false;
     });
 
     $('.go-link').click(function() {
@@ -181,11 +191,13 @@ function contractOverlay() {
     window.parent.postMessage("contractOverlay", "*");
 }
 
-function loadProdImage(imageurl) {
+function loadProdImage(imageurl, alt) {
     var newImg = new Image();
+    var imagealt = alt;
 
     if (imageurl == null) {
-        imageurl = "<%= image_path 'not_found.png' %>";
+        imageurl = "<%= image_path 'noimage.png' %>";
+        imagealt = "Sorry! We couldn't get the image for you."
     }
 
     newImg.onload = function() {
@@ -201,12 +213,19 @@ function loadProdImage(imageurl) {
         $('#prod_pic').attr('src', imageurl);
     };
     newImg.src = imageurl;
+    $('#prod_pic').attr('alt', imagealt);
+
 }
 
 function addCartItem(title, itemUrl, imageUrl, price, quantity, vendor) {
-    var item = new CartItem({title: title, itemurl: itemUrl, imageUrl: imageUrl, price: price, quantity: quantity, vendor: vendor});
+  var item = new CartItem({title: title, itemurl: itemUrl, imageUrl: imageUrl, price: price, quantity: quantity, vendor: vendor});
+  if (item.isValid()) {
     items.add(item);
     item.save();
+    return true;
+  } else {
+    return false;
+  }
 }
 
 function switchToCart() {
@@ -215,10 +234,11 @@ function switchToCart() {
     expandOverlay();
     items.fetch();
     itemView.render();
-    $('#over')
 }
 
 function switchToConfirm() {
+    $('#confirmscreen').html('<div class="hdr confirm-hdr">Success!</div><div class="confirm-body"><p><span id="cart-name-sp">cart name</span> was sent to <span id="approval-group-name-sp">approval group name</span>.</p>' +
+                    '<p>We will send you an email when your request is approved. In the meantime, you can <a id="view-link">view your request here</a>.</p></div>');
     $('#cart-name-sp').html($('#cartName').val());
     $('#approval-group-name-sp').html($('#approvalgroup_input').val())
     contractOverlay()
@@ -227,17 +247,6 @@ function switchToConfirm() {
     items.clear();
     $('#spindiv').hide();
     $('#confirmscreen').show();
-}
-
-function doValidate() {
-  if ($('#itemprice').val() == "") {
-    $('#priceError').css("visibility", "visible");
-    return false;
-  } else {
-    $('#priceError').css("visibility", "hidden");
-  }
-  //add more conditions here
-  return true;
 }
 
 function sendCart() {

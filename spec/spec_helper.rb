@@ -1,6 +1,11 @@
 ENV["RAILS_ENV"] ||= 'test'
+
+require 'codeclimate-test-reporter'
+CodeClimate::TestReporter.start
+
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
+require 'rails/test_help'
 require 'simplecov'
 require 'steps/user_steps'
 require 'steps/approval_steps'
@@ -11,10 +16,6 @@ SimpleCov.start 'rails'
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 Dir.glob("./spec/steps/**/*steps.rb") { |f| load f, true }
-
-# Checks for pending migrations before tests are run.
-# If you are not using ActiveRecord, you can remove this line.
-ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 
 RSpec.configure do |config|
   #Add modules for Turnip acceptance tests
@@ -33,6 +34,8 @@ RSpec.configure do |config|
   # automatically. This will be the default behavior in future versions of
   # rspec-rails.
   config.infer_base_class_for_anonymous_controllers = false
+
+  config.infer_spec_type_from_file_location!
 
   # Run specs in random order to surface order dependencies. If you find an
   # order dependency and want to debug it, you can fix the order by providing
@@ -63,4 +66,3 @@ RSpec.configure do |config|
   })
 
 end
-
