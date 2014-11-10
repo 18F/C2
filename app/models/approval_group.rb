@@ -14,7 +14,8 @@ class ApprovalGroup < ActiveRecord::Base
   end
 
   def approvers
-    self.users_by_role('approver')
+    # position only important for linear approvals
+    self.users_by_role('approver').order('user_roles.position ASC')
   end
 
   def observers
