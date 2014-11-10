@@ -10,8 +10,12 @@ class ApprovalGroup < ActiveRecord::Base
 
 
   def approvers
-    # position only important for linear approvals
-    self.users.where(user_roles: {role: 'approver'}).order('user_roles.position ASC')
+    relation = self.users.where(user_roles: {role: 'approver'})
+    # position only relevant for linear approvals
+    if self.flow == 'linear'
+      relation = relation.order('user_roles.position ASC')
+    end
+    relation
   end
 
   def requester_id
