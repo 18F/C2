@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141031215718) do
+ActiveRecord::Schema.define(version: 20141110194855) do
 
   create_table "api_tokens", force: true do |t|
     t.string   "access_token"
@@ -95,6 +95,7 @@ ActiveRecord::Schema.define(version: 20141031215718) do
     t.integer "approval_group_id"
     t.integer "user_id"
     t.string  "role"
+    t.integer "position"
   end
 
   create_table "users", force: true do |t|
