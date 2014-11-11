@@ -26,7 +26,7 @@ class HomeController < ApplicationController
 private
 
   def setup_session_user
-    session[:user] = {} if session[:user].nil?
+    session[:user] ||= {}
   end
 
   def setup_mygov_client
@@ -34,7 +34,8 @@ private
   end
 
   def setup_mygov_access_token
-    @mygov_access_token = OAuth2::AccessToken.new(@mygov_client, session[:token]) if session
+    if session
+      @mygov_access_token = OAuth2::AccessToken.new(@mygov_client, session[:token])
+    end
   end
-
 end

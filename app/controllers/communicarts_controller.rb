@@ -21,24 +21,27 @@ class CommunicartsController < ApplicationController
   end
 
   def approval_reply_received
-    cart = Cart.where(external_id: (params['cartNumber'].to_i)).where(status:'pending').first
+    cart = Cart.where(external_id: params['cartNumber'].to_i).where(status: 'pending').first
     user = cart.approval_users.where(email_address: params['fromAddress']).first
+    approval = cart.approvals.where(user_id: user.id).first
+    new_status = approve_or_reject_status
 
     if params['comment']
-      new_comment = Comment.new(user_id: user.id,comment_text: params['comment'].strip)
-      cart.comments << new_comment
+      cart.comments.create(user_id: user.id, comment_text: params['comment'].strip)
     end
 
-    approval = cart.approvals.where(user_id: user.id).first
-    Commands::Approval::UpdateFromApprovalResponse.new.perform(approval, approve_or_reject_status)
+    Commands::Approval::UpdateFromApprovalResponse.new.perform(approval, new_status)
     render json: { message: "approval_reply_received"}, status: 200
 
-    perform_reject_specific_actions(params, cart) if approve_or_reject_status == 'rejected'
+    if new_status == 'rejected'
+      perform_reject_specific_actions(params, cart)
+    end
   end
 
   def approval_response
     @cart = Cart.find_by(id: params[:cart_id].to_i).decorate
     @approval = @cart.approvals.where(user_id: params[:user_id]).first
+
     action = params[:approver_action]
     new_status = Cart::APPROVAL_ATTRIBUTES_MAP[action.to_sym]
 
@@ -53,17 +56,17 @@ private
 
   def validate_access
     @token = ApiToken.find_by(access_token: params[:cch])
-    unless @token
+    if !@token
       raise AuthenticationError.new(msg: 'something went wrong with the token (nonexistent)')
-    end
-
-    if @token.expires_at && @token.expires_at < Time.now
+    elsif @token.expires_at && @token.expires_at < Time.now
       raise AuthenticationError.new(msg: 'something went wrong with the token (expired)')
+    elsif @token.used_at
+      raise AuthenticationError.new(msg: 'Something went wrong with the token. It has already been used.')
+    elsif @token.user_id != params[:user_id].to_i
+      raise AuthenticationError.new(msg: 'Something went wrong with the user (wrong person)')
+    elsif @token.cart_id != params[:cart_id].to_i
+      raise AuthenticationError.new(msg: 'Something went wrong with the cart (wrong cart)')
     end
-
-    raise AuthenticationError.new(msg: 'Something went wrong with the token. It has already been used.') unless @token.used_at.nil?
-    raise AuthenticationError.new(msg: 'Something went wrong with the user (wrong person)') unless @token.user_id == params[:user_id].to_i
-    raise AuthenticationError.new(msg: 'Something went wrong with the cart (wrong cart)') unless @token.cart_id == params[:cart_id].to_i
   end
 
   def perform_reject_specific_actions(params, cart)
@@ -76,9 +79,12 @@ private
   end
 
   def approve_or_reject_status
-    #TODO: Refactor duplication with ComunicartMailer#approval_reply_received_email
-    return 'approved' if params["approve"] == "APPROVE"
-    return 'rejected' if params["disapprove"] == "REJECT"
+    # TODO: Refactor duplication with ComunicartMailer#approval_reply_received_email
+    if params['approve'] == 'APPROVE'
+      'approved'
+    elsif params['disapprove'] == 'REJECT'
+      'rejected'
+    end
   end
 
   def authentication_error(e)

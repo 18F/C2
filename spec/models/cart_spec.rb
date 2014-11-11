@@ -24,7 +24,7 @@ describe Cart do
     end
   end
 
-  describe '#deliver_approval_emails' do
+  describe '#deliver_new_cart_emails' do
     let(:cart) { FactoryGirl.create(:cart_with_approval_group, name: 'Cart with some approvals') }
     let(:user1) { FactoryGirl.create(:user, email_address: 'user1@some-dot-gov.gov') }
     let(:user2) { FactoryGirl.create(:user, email_address: 'user2@some-dot-gov.gov') }
@@ -47,14 +47,14 @@ describe Cart do
     context 'approvers' do
       it 'creates a new token for each approver' do
         expect(ApiToken).to receive(:create!).exactly(2).times
-        cart.deliver_approval_emails
+        cart.deliver_new_cart_emails
       end
 
       it 'sends a cart notification email to approvers' do
         mock_mailer = double
         expect(CommunicartMailer).to receive(:cart_notification_email).exactly(2).times.and_return(mock_mailer)
         expect(mock_mailer).to receive(:deliver).exactly(2).times
-        cart.deliver_approval_emails
+        cart.deliver_new_cart_emails
       end
     end
 
@@ -63,7 +63,7 @@ describe Cart do
         mock_mailer = double
         expect(CommunicartMailer).to receive(:cart_observer_email).exactly(1).times.and_return(mock_mailer)
         expect(mock_mailer).to receive(:deliver).exactly(1).times
-        cart.deliver_approval_emails
+        cart.deliver_new_cart_emails
       end
     end
   end
