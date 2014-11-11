@@ -27,8 +27,11 @@ class Cart < ActiveRecord::Base
   has_many :properties, as: :hasproperties
 
   def update_approval_status
-    return update_attributes(status: 'rejected') if has_rejection?
-    return update_attributes(status: 'approved') if all_approvals_received?
+    if self.has_rejection?
+      self.update_attributes(status: 'rejected')
+    elsif self.all_approvals_received?
+      self.update_attributes(status: 'approved')
+    end
   end
 
   def has_rejection?
