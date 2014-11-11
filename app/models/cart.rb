@@ -151,8 +151,10 @@ class Cart < ActiveRecord::Base
   end
 
   def process_approvals_without_approval_group(params)
-    raise 'approvalGroup exists' if params['approvalGroup'].present?
-    approver_emails = params['toAddress'].select { |email| !email.empty? }
+    if params['approvalGroup'].present?
+      raise 'approvalGroup exists'
+    end
+    approver_emails = params['toAddress'].select(&:present?)
 
     approver_emails.each do |email|
       user = User.find_or_create_by(email_address: email)
@@ -166,7 +168,7 @@ class Cart < ActiveRecord::Base
   end
 
   def process_approvals_from_approval_group
-    approval_group.user_roles.each do | user_role |
+    approval_group.user_roles.each do |user_role|
       Approval.create!(user_id: user_role.user_id, cart_id: self.id, role: user_role.role)
     end
   end
@@ -181,7 +183,7 @@ class Cart < ActiveRecord::Base
   def self.copy_existing_approvals_to(new_cart, cart_name)
     previous_cart = Cart.where(name: cart_name).last
     if previous_cart && previous_cart.status == 'rejected'
-      previous_cart.approvals.each do | approval |
+      previous_cart.approvals.each do |approval|
         new_cart.approvals << Approval.create!(user_id: approval.user_id, role: approval.role)
         CommunicartMailer.cart_notification_email(approval.user.email_address, new_cart, approval).deliver
       end
@@ -190,7 +192,7 @@ class Cart < ActiveRecord::Base
 
   def import_cart_properties(cart_properties_params)
     unless cart_properties_params.blank?
-      cart_properties_params.each do |key,val|
+      cart_properties_params.each do |key, val|
         self.setProp(key, val)
       end
     end
@@ -217,7 +219,7 @@ class Cart < ActiveRecord::Base
           params['traits'].each do |trait|
             if trait[1].kind_of?(Array)
               trait[1].each do |individual|
-                if !individual.blank?
+                if individual.present?
                   ci.cart_item_traits << CartItemTrait.new( :name => trait[0],
                                                             :value => individual,
                                                             :cart_item_id => ci.id
