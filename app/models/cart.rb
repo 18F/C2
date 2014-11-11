@@ -44,14 +44,22 @@ class Cart < ActiveRecord::Base
     approvals.where(role: 'approver').where(status: 'approved').count == approver_count
   end
 
-  def deliver_approval_emails
+  def deliver_approver_emails
     approvals.where(role: "approver").each do |approval|
       ApiToken.create!(user_id: approval.user_id, cart_id: self.id, expires_at: Time.now + 7.days)
       CommunicartMailer.cart_notification_email(approval.user.email_address, self, approval).deliver
     end
+  end
+
+  def deliver_observer_emails
     approvals.where(role: 'observer').each do |observer|
       CommunicartMailer.cart_observer_email(observer.user.email_address, self).deliver
     end
+  end
+
+  def deliver_new_cart_emails
+    self.deliver_approver_emails
+    self.deliver_observer_emails
   end
 
   def create_items_csv

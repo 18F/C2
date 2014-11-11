@@ -16,7 +16,7 @@ module Commands
         unless params['initiationComment'].blank?
           cart.import_initial_comments(params['initiationComment'])
         end
-        cart.deliver_approval_emails
+        cart.deliver_new_cart_emails
 
         cart.object
       end
