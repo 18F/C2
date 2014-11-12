@@ -1,4 +1,3 @@
-require 'rails_helper'
 require 'ostruct'
 
 describe CommunicartMailer do

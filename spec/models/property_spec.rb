@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 describe Property do
   let(:cart_item) { FactoryGirl.create(:cart_item) }
   let(:user) { User.create!(email_address: 'test-requester@some-dot-gov.gov') }

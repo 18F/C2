@@ -1,4 +1,3 @@
-require 'rails_helper'
 require 'request_helper'
 
 describe 'CommunicartsController' do

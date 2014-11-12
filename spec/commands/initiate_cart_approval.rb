@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 describe 'Commands::Approval::InitiateCartApproval' do
 
   let(:cart) { double("cart").as_null_object }

@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 describe 'Approving a cart with multiple approvers' do
 
   let(:approval_params) {

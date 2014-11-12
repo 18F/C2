@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 describe Cart do
   describe '#update_approval_status' do
     let(:cart) { FactoryGirl.create(:cart_with_approval_group) }

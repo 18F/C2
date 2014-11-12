@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 describe CommunicartsController do
 
   let(:params) {

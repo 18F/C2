@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 describe User do
 
   let(:user) { FactoryGirl.create(:user, first_name: "George", last_name: "Jetson") }

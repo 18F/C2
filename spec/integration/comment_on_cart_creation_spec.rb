@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 describe 'Adding and retrieving comments from a cart item' do
 
   before do

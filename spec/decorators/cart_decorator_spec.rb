@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 describe CartDecorator do
   describe '#total_price' do
     it 'returns a sum of its cart items total prices' do
