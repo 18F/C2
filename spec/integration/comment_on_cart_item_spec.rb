@@ -3,10 +3,6 @@ require 'spec_helper'
 describe 'Adding and retrieving comments from a cart item' do
 
   before do
-    ActionMailer::Base.delivery_method = :test
-    ActionMailer::Base.perform_deliveries = true
-    ActionMailer::Base.deliveries = []
-
     approval_group = FactoryGirl.create(:approval_group)
 
     cart = Cart.new(

@@ -18,10 +18,6 @@ describe 'Approving a cart with multiple approvers' do
   }
 
   before do
-    ActionMailer::Base.delivery_method = :test
-    ActionMailer::Base.perform_deliveries = true
-    ActionMailer::Base.deliveries = []
-
     ENV['NOTIFICATION_FROM_EMAIL'] = 'sender@some-dot_gov.gov'
 
     @json_approval_params = JSON.parse(approval_params)

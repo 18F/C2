@@ -63,9 +63,6 @@ describe 'Creating a cart without an approval group' do
   }
 
   before do
-    ActionMailer::Base.delivery_method = :test
-    ActionMailer::Base.perform_deliveries = true
-    ActionMailer::Base.deliveries = []
     ENV['NOTIFICATION_FROM_EMAIL'] = 'sender@some-dot_gov.gov'
 
     @json_params_1 = JSON.parse(params_request_1)

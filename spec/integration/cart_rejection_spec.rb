@@ -96,10 +96,6 @@ describe 'Rejecting a cart with multiple approvers' do
   let(:approver) { FactoryGirl.create(:approver) }
 
   before do
-    ActionMailer::Base.delivery_method = :test
-    ActionMailer::Base.perform_deliveries = true
-    ActionMailer::Base.deliveries = []
-
     ENV['NOTIFICATION_FROM_EMAIL'] = 'sender@some-dot_gov.gov'
 
     @json_rejection_params = JSON.parse(rejection_params)
