@@ -103,8 +103,4 @@ FactoryGirl.create(:cart_item)
     expect(csv.lines.count).to eq 3
 
   end
-
-  after do
-    ActionMailer::Base.deliveries.clear
-  end
 end

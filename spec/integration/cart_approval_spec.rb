@@ -53,10 +53,6 @@ describe 'Approving a cart with multiple approvers' do
 
   end
 
-  after do
-    ActionMailer::Base.deliveries.clear
-  end
-
   it 'updates the cart and approval records as expected' do
     # Remove stub to view email layout in development through letter_opener
     # CommunicartMailer.stub_chain(:approval_reply_received_email, :deliver)

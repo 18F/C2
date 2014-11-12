@@ -71,10 +71,6 @@ describe 'Creating a cart without an approval group' do
     expect(Approval.count).to eq 0
   end
 
-  after do
-    ActionMailer::Base.deliveries.clear
-  end
-
   it 'creates new users' do
     post 'send_cart', @json_params_1
 
