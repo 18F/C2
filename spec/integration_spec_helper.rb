@@ -16,8 +16,8 @@ module IntegrationSpecHelper
       token: '1a2b3c4d'
     )
 
-    allow(OmniAuth.config.mock_auth[:myusa]).to receive(:extra).and_return(extra_mock)
-    allow(OmniAuth.config.mock_auth[:myusa]).to receive(:credentials).and_return(credentials_mock)
+    OmniAuth.config.mock_auth[:myusa].extra = extra_mock
+    OmniAuth.config.mock_auth[:myusa].credentials = credentials_mock
 
     mock_session = double("session_info",
       user: { email: 'hello@hello.com' }
