@@ -1,5 +1,4 @@
 require 'csv'
-require ::File.expand_path('time_helper.rb',  'lib/')
 
 class Cart < ActiveRecord::Base
   include PropMixin
@@ -10,21 +9,11 @@ class Cart < ActiveRecord::Base
   has_one :approval_group
   has_one :api_token
   has_many :comments, as: :commentable
+  has_many :properties, as: :hasproperties
+
   #TODO: after_save default status
   #TODO: validates_uniqueness_of :name
 
-  APPROVAL_ATTRIBUTES_MAP = {
-    approve: 'approved',
-    reject: 'rejected'
-  }
-
-  DISPLAY_STATUS_MAP = {
-    pending: 'pending approval',
-    approved: 'approved',
-    rejected: 'rejected'
-  }
-
-  has_many :properties, as: :hasproperties
 
   def update_approval_status
     if self.has_rejection?
@@ -34,32 +23,20 @@ class Cart < ActiveRecord::Base
     end
   end
 
-  def has_rejection?
-    approvals.map(&:status).include?('rejected')
+  def rejections
+    self.approvals.where(status: 'rejected')
   end
 
+  def has_rejection?
+    self.rejections.any?
+  end
+
+  def approver_approvals
+    self.approvals.where(role: 'approver')
+  end
 
   def all_approvals_received?
-    approver_count = approvals.where(role: 'approver').count
-    approvals.where(role: 'approver').where(status: 'approved').count == approver_count
-  end
-
-  def deliver_approver_emails
-    approvals.where(role: "approver").each do |approval|
-      ApiToken.create!(user_id: approval.user_id, cart_id: self.id, expires_at: Time.now + 7.days)
-      CommunicartMailer.cart_notification_email(approval.user.email_address, self, approval).deliver
-    end
-  end
-
-  def deliver_observer_emails
-    approvals.where(role: 'observer').each do |observer|
-      CommunicartMailer.cart_observer_email(observer.user.email_address, self).deliver
-    end
-  end
-
-  def deliver_new_cart_emails
-    self.deliver_approver_emails
-    self.deliver_observer_emails
+    self.approver_approvals.where('status != ?', 'approved').empty?
   end
 
   def create_items_csv

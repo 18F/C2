@@ -4,7 +4,9 @@ module Commands
       def perform(approval, new_status)
         approval.update_attributes(status: new_status)
         approval.cart.update_approval_status
-        CommunicartMailer.approval_reply_received_email(approval).deliver
+
+        dispatcher = ParallelDispatcher.new
+        dispatcher.deliver_approval_email(approval)
       end
     end
   end
