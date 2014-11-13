@@ -23,8 +23,12 @@ class Cart < ActiveRecord::Base
     end
   end
 
+  def rejections
+    self.approvals.where(status: 'rejected')
+  end
+
   def has_rejection?
-    approvals.map(&:status).include?('rejected')
+    self.rejections.any?
   end
 
   def approver_approvals
