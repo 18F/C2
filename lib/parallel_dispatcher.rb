@@ -1,6 +1,6 @@
 class ParallelDispatcher
   def deliver_approver_emails(cart)
-    cart.approvals.where(role: "approver").each do |approval|
+    cart.approver_approvals.each do |approval|
       ApiToken.create!(user_id: approval.user_id, cart_id: cart.id, expires_at: Time.now + 7.days)
       CommunicartMailer.cart_notification_email(approval.user.email_address, cart, approval).deliver
     end
