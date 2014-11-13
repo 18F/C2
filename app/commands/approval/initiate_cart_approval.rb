@@ -17,8 +17,7 @@ module Commands
           cart.import_initial_comments(params['initiationComment'])
         end
 
-        dispatcher = ParallelDispatcher.new
-        dispatcher.deliver_new_cart_emails(cart)
+        Dispatcher.deliver_new_cart_emails(cart)
 
         cart.object
       end

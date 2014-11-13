@@ -4,6 +4,7 @@ class Approval < ActiveRecord::Base
 
   belongs_to :cart
   belongs_to :user
+  has_one :approval_group, through: :cart
 
   validates :role, presence: true, inclusion: {in: ROLES}
   # TODO validates_uniqueness_of :user_id, scope: cart_id
