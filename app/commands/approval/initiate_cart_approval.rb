@@ -16,7 +16,9 @@ module Commands
         unless params['initiationComment'].blank?
           cart.import_initial_comments(params['initiationComment'])
         end
-        cart.deliver_new_cart_emails
+
+        dispatcher = ParallelDispatcher.new
+        dispatcher.deliver_new_cart_emails(cart)
 
         cart.object
       end
