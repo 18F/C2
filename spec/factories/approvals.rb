@@ -4,5 +4,9 @@ FactoryGirl.define do
     user_id 1
     status 'pending'
     role 'approver'
+
+    factory :approval_with_user do
+      user
+    end
   end
 end

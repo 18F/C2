@@ -1,13 +1,14 @@
 require 'spec_helper'
 
 describe ParallelDispatcher do
+  let(:dispatcher) { ParallelDispatcher.new }
+
   after :each do
     ActionMailer::Base.deliveries.clear
   end
 
   describe '#deliver_new_cart_emails' do
     it "sends emails to all approvers" do
-      dispatcher = ParallelDispatcher.new
       cart = FactoryGirl.create(:cart_with_approvals)
 
       dispatcher.deliver_new_cart_emails(cart)
@@ -24,20 +25,13 @@ describe ParallelDispatcher do
   end
 
   context 'old tests' do
-    let(:cart) { FactoryGirl.create(:cart_with_approval_group, name: 'Cart with some approvals') }
-    let(:dispatcher) { ParallelDispatcher.new }
-    let(:user1) { FactoryGirl.create(:user, email_address: 'user1@some-dot-gov.gov') }
-    let(:user2) { FactoryGirl.create(:user, email_address: 'user2@some-dot-gov.gov') }
-    let(:user3) { FactoryGirl.create(:user, email_address: 'user3@some-dot-gov.gov') }
-    let(:user4) { FactoryGirl.create(:user, email_address: 'user4@some-dot-gov.gov') }
-    let(:approval1) { FactoryGirl.create(:approval, user_id: user1.id, cart_id: cart.id, role: 'approver') }
-    let(:approval2) { FactoryGirl.create(:approval, user_id: user2.id, cart_id: cart.id, role: 'approver') }
-    let(:approval3) { FactoryGirl.create(:approval, user_id: user3.id, cart_id: cart.id, role: 'requester') }
-    let(:approval4) { FactoryGirl.create(:approval, user_id: user4.id, cart_id: cart.id, role: 'observer') }
-    let(:api_token) { FactoryGirl.create(:api_token) }
+    let(:cart) { FactoryGirl.create(:cart_with_approval_group) }
+    let(:approval1) { FactoryGirl.create(:approval_with_user, role: 'approver') }
+    let(:approval2) { FactoryGirl.create(:approval_with_user, role: 'approver') }
+    let(:approval3) { FactoryGirl.create(:approval_with_user, role: 'requester') }
+    let(:approval4) { FactoryGirl.create(:approval_with_user, role: 'observer') }
 
     before do
-      allow(ApiToken).to receive_message_chain(:where, :where, :last).and_return(api_token)
       cart.approvals << approval1
       cart.approvals << approval2
       cart.approvals << approval3
@@ -46,7 +40,10 @@ describe ParallelDispatcher do
 
     context 'approvers' do
       it 'creates a new token for each approver' do
+        api_token = FactoryGirl.create(:api_token)
+        allow(ApiToken).to receive_message_chain(:where, :where, :last).and_return(api_token)
         expect(ApiToken).to receive(:create!).exactly(2).times
+
         dispatcher.deliver_new_cart_emails(cart)
       end
 
