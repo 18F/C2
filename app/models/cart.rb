@@ -13,11 +13,6 @@ class Cart < ActiveRecord::Base
   #TODO: after_save default status
   #TODO: validates_uniqueness_of :name
 
-  APPROVAL_ATTRIBUTES_MAP = {
-    approve: 'approved',
-    reject: 'rejected'
-  }
-
   DISPLAY_STATUS_MAP = {
     pending: 'pending approval',
     approved: 'approved',
