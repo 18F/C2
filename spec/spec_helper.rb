@@ -55,6 +55,7 @@ RSpec.configure do |config|
 
   config.after(:each) do
     DatabaseCleaner.clean
+    ActionMailer::Base.deliveries.clear
   end
 
   Capybara.default_host = 'http://localhost:3000'
