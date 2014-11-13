@@ -5,6 +5,8 @@ class Approval < ActiveRecord::Base
   belongs_to :user
   has_one :approval_group, through: :cart
 
+  acts_as_list scope: :cart
+
   validates :role, presence: true, inclusion: {in: UserRole::ROLES}
   # TODO validates_uniqueness_of :user_id, scope: cart_id
   validates :status, presence: true, inclusion: {in: STATUSES}

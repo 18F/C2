@@ -7,6 +7,7 @@ class Cart < ActiveRecord::Base
   has_many :approvals
   has_many :approval_users, through: :approvals, source: :user
   has_one :approval_group
+  has_many :user_roles, through: :approval_group
   has_one :api_token
   has_many :comments, as: :commentable
   has_many :properties, as: :hasproperties
@@ -146,7 +147,12 @@ class Cart < ActiveRecord::Base
 
   def process_approvals_from_approval_group
     approval_group.user_roles.each do |user_role|
-      Approval.create!(user_id: user_role.user_id, cart_id: self.id, role: user_role.role)
+      Approval.create!(
+        cart_id: self.id,
+        position: user_role.position,
+        role: user_role.role,
+        user_id: user_role.user_id
+      )
     end
   end
 
