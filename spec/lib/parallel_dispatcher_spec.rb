@@ -6,10 +6,6 @@ describe ParallelDispatcher do
   let(:deliveries) { ActionMailer::Base.deliveries }
   let(:delivery_emails) { deliveries.map {|email| email.to[0] }.sort }
 
-  after do
-    ActionMailer::Base.deliveries.clear
-  end
-
   describe '#deliver_new_cart_emails' do
     it "sends emails to all approvers" do
       dispatcher.deliver_new_cart_emails(cart)
