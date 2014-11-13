@@ -1,5 +1,4 @@
 require 'csv'
-require ::File.expand_path('time_helper.rb',  'lib/')
 
 class Cart < ActiveRecord::Base
   include PropMixin
@@ -10,16 +9,11 @@ class Cart < ActiveRecord::Base
   has_one :approval_group
   has_one :api_token
   has_many :comments, as: :commentable
+  has_many :properties, as: :hasproperties
+
   #TODO: after_save default status
   #TODO: validates_uniqueness_of :name
 
-  DISPLAY_STATUS_MAP = {
-    pending: 'pending approval',
-    approved: 'approved',
-    rejected: 'rejected'
-  }
-
-  has_many :properties, as: :hasproperties
 
   def update_approval_status
     if self.has_rejection?
