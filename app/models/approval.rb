@@ -1,10 +1,11 @@
 class Approval < ActiveRecord::Base
+  ROLES = %w(approver requester observer)
   STATUSES = %w(pending approved rejected)
 
   belongs_to :cart
   belongs_to :user
 
-  validates_presence_of :role
+  validates :role, presence: true, inclusion: {in: ROLES}
   # TODO validates_uniqueness_of :user_id, scope: cart_id
   validates :status, presence: true, inclusion: {in: STATUSES}
 

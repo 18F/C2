@@ -2,12 +2,9 @@ require 'spec_helper'
 
 describe ParallelDispatcher do
   let(:cart) { FactoryGirl.create(:cart_with_approvals) }
-  let(:observer_approval) { FactoryGirl.create(:approval_with_user, role: 'observer') }
   let(:dispatcher) { ParallelDispatcher.new }
-
-  before do
-    cart.approvals << observer_approval
-  end
+  let(:deliveries) { ActionMailer::Base.deliveries }
+  let(:delivery_emails) { deliveries.map {|email| email.to[0] }.sort }
 
   after do
     ActionMailer::Base.deliveries.clear
@@ -17,43 +14,27 @@ describe ParallelDispatcher do
     it "sends emails to all approvers" do
       dispatcher.deliver_new_cart_emails(cart)
 
-      deliveries = ActionMailer::Base.deliveries
-      expect(deliveries.count).to eq (3)
-
-      emails = deliveries.map {|email| email.to[0] }.sort
-      expect(emails).to eq([
+      expect(deliveries.count).to eq (2)
+      expect(delivery_emails).to eq([
         'approver1@some-dot-gov.gov',
-        'approver2@some-dot-gov.gov',
-        observer_approval.user.email_address
+        'approver2@some-dot-gov.gov'
       ])
     end
-  end
 
-  context 'old tests' do
-    context 'approvers' do
-      it 'creates a new token for each approver' do
-        api_token = FactoryGirl.create(:api_token)
-        allow(ApiToken).to receive_message_chain(:where, :where, :last).and_return(api_token)
-        expect(ApiToken).to receive(:create!).exactly(2).times
+    it 'creates a new token for each approver' do
+      api_token = FactoryGirl.create(:api_token)
+      allow(ApiToken).to receive_message_chain(:where, :where, :last).and_return(api_token)
+      expect(ApiToken).to receive(:create!).exactly(2).times
 
-        dispatcher.deliver_new_cart_emails(cart)
-      end
-
-      it 'sends a cart notification email to approvers' do
-        mock_mailer = double
-        expect(CommunicartMailer).to receive(:cart_notification_email).exactly(2).times.and_return(mock_mailer)
-        expect(mock_mailer).to receive(:deliver).exactly(2).times
-        dispatcher.deliver_new_cart_emails(cart)
-      end
+      dispatcher.deliver_new_cart_emails(cart)
     end
 
-    context 'observers' do
-      it 'sends a cart notification email to observers' do
-        mock_mailer = double
-        expect(CommunicartMailer).to receive(:cart_observer_email).exactly(1).times.and_return(mock_mailer)
-        expect(mock_mailer).to receive(:deliver).exactly(1).times
-        dispatcher.deliver_new_cart_emails(cart)
-      end
+    it 'sends a cart notification email to observers' do
+      observer_approval = FactoryGirl.create(:approval_with_user, role: 'observer')
+      cart.approvals << observer_approval
+
+      expect(CommunicartMailer).to receive_message_chain(:cart_observer_email, :deliver)
+      dispatcher.deliver_new_cart_emails(cart)
     end
   end
 end
