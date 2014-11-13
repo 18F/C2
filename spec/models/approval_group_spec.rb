@@ -35,6 +35,23 @@ describe ApprovalGroup do
       UserRole.create!(user_id: user2.id, approval_group_id: approval_group.id, role: 'requester')
       expect(approval_group.users).to eq [user1, user2]
     end
+
+    describe '#approvers' do
+      it "returns associated users in natural order for parallel flow" do
+        UserRole.create!(user_id: user1.id, approval_group_id: approval_group.id, role: 'approver', position: 1)
+        UserRole.create!(user_id: user2.id, approval_group_id: approval_group.id, role: 'approver', position: 0)
+        expect(approval_group.users).to eq([user1, user2])
+        expect(approval_group.approvers).to eq([user1, user2])
+      end
+
+      it "returns associated users in order of position for linear flow" do
+        approval_group.flow = 'linear'
+        UserRole.create!(user_id: user1.id, approval_group_id: approval_group.id, role: 'approver', position: 1)
+        UserRole.create!(user_id: user2.id, approval_group_id: approval_group.id, role: 'approver', position: 0)
+        expect(approval_group.users).to eq([user1, user2])
+        expect(approval_group.approvers).to eq([user2, user1])
+      end
+    end
   end
 
   context 'invalid attributes' do

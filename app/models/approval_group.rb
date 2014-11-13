@@ -9,8 +9,29 @@ class ApprovalGroup < ActiveRecord::Base
   validates :name, presence: true, uniqueness: true
 
 
+  def users_by_role(role)
+    self.users.where(user_roles: {role: role})
+  end
+
+  def approvers
+    relation = self.users_by_role('approver')
+    # position only relevant for linear approvals
+    if self.flow == 'linear'
+      relation = relation.order('user_roles.position ASC')
+    end
+    relation
+  end
+
+  def observers
+    self.user_by_role('observer')
+  end
+
   def requester_id
     role = self.user_roles.where(role: 'requester').first
     role.try(:user_id)
+  end
+
+  def requester
+    self.users_by_role('requester').first
   end
 end

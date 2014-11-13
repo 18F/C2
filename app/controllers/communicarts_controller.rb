@@ -24,7 +24,7 @@ class CommunicartsController < ApplicationController
     cart = Cart.where(external_id: params['cartNumber'].to_i).where(status: 'pending').first
     user = cart.approval_users.where(email_address: params['fromAddress']).first
     approval = cart.approvals.where(user_id: user.id).first
-    new_status = approve_or_reject_status
+    new_status = approval_reply_received_status
 
     if params['comment']
       cart.comments.create(user_id: user.id, comment_text: params['comment'].strip)
@@ -42,10 +42,7 @@ class CommunicartsController < ApplicationController
     @cart = Cart.find_by(id: params[:cart_id].to_i).decorate
     @approval = @cart.approvals.where(user_id: params[:user_id]).first
 
-    action = params[:approver_action]
-    new_status = Cart::APPROVAL_ATTRIBUTES_MAP[action.to_sym]
-
-    Commands::Approval::UpdateFromApprovalResponse.new.perform(@approval, new_status)
+    Commands::Approval::UpdateFromApprovalResponse.new.perform(@approval, approval_response_status)
     @token.update_attributes(used_at: Time.now)
 
     flash[:notice] = "You have successfully updated Cart #{@cart.external_id}. See the cart details below"
@@ -78,11 +75,20 @@ private
     # Reset everything for the next time they send a cart request
   end
 
-  def approve_or_reject_status
+  def approval_reply_received_status
     # TODO: Refactor duplication with ComunicartMailer#approval_reply_received_email
     if params['approve'] == 'APPROVE'
       'approved'
     elsif params['disapprove'] == 'REJECT'
+      'rejected'
+    end
+  end
+
+  def approval_response_status
+    case params[:approver_action]
+    when 'approve'
+      'approved'
+    when 'reject'
       'rejected'
     end
   end
