@@ -4,10 +4,6 @@ describe 'Testing User Ownership of Comments' do
 
 # Create Two carts with the same user to prove we can detect user who created comment.
   before do
-    ActionMailer::Base.delivery_method = :test
-    ActionMailer::Base.perform_deliveries = true
-    ActionMailer::Base.deliveries = []
-
     approval_group = ApprovalGroup.create(name: "A Testworthy Approval Group")
 
     cart = Cart.new(
@@ -106,9 +102,5 @@ FactoryGirl.create(:cart_item)
 
     expect(csv.lines.count).to eq 3
 
-  end
-
-  after do
-    ActionMailer::Base.deliveries.clear
   end
 end
