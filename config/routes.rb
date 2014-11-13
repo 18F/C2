@@ -20,4 +20,6 @@ C2::Application.routes.draw do
   get 'bookmarklet', to: redirect('bookmarklet.html')
   get "/498", :to => "errors#token_authentication_error"
 
+  match "*path" => "application#xss_options_request", :via => :options
+
 end
