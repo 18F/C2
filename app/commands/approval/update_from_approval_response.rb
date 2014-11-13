@@ -5,7 +5,7 @@ module Commands
         approval.update_attributes(status: new_status)
         approval.cart.update_approval_status
 
-        Dispatcher.deliver_approval_email(approval)
+        Dispatcher.on_approval_status_change(approval)
       end
     end
   end

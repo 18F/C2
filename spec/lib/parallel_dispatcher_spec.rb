@@ -30,9 +30,9 @@ describe ParallelDispatcher do
     end
   end
 
-  describe '#deliver_approval_email' do
+  describe '#on_approval_status_change' do
     it "sends to the requester" do
-      dispatcher.deliver_approval_email(cart.approvals.first)
+      dispatcher.on_approval_status_change(cart.approvals.first)
       expect(delivery_emails).to eq(['requester@some-dot-gov.gov'])
     end
   end

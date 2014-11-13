@@ -1,10 +1,17 @@
 class Dispatcher
+  def email_observers(cart)
+    cart.approvals.where(role: 'observer').each do |observer|
+      CommunicartMailer.cart_observer_email(observer.user.email_address, cart).deliver
+    end
+  end
+
   def deliver_new_cart_emails(cart)
     raise "Must be implemented by subclass"
   end
 
-  def deliver_approval_email(approval)
-    raise "Must be implemented by subclass"
+  def on_approval_status_change(approval)
+    CommunicartMailer.approval_reply_received_email(approval).deliver
+    self.email_observers(approval.cart)
   end
 
   def self.get_dispatcher(approval_group)
@@ -24,8 +31,8 @@ class Dispatcher
     dispatcher.deliver_new_cart_emails(cart)
   end
 
-  def self.deliver_approval_email(approval)
+  def self.on_approval_status_change(approval)
     dispatcher = self.get_dispatcher(approval.approval_group)
-    dispatcher.deliver_approval_email(approval)
+    dispatcher.on_approval_status_change(approval)
   end
 end
