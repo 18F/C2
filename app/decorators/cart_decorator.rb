@@ -15,6 +15,14 @@ class CartDecorator < Draper::Decorator
   end
 
 
+  def display_status
+    if cart.status == 'pending'
+      'pending approval'
+    else
+      cart.status
+    end
+  end
+
   def generate_status_message
     if number_approved == total_approvers
       completed_status_message
