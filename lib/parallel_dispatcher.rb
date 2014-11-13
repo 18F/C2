@@ -16,4 +16,8 @@ class ParallelDispatcher
     self.deliver_approver_emails(cart)
     self.deliver_observer_emails(cart)
   end
+
+  def deliver_approval_email(approval)
+    CommunicartMailer.approval_reply_received_email(approval).deliver
+  end
 end

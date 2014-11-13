@@ -13,8 +13,6 @@ describe ParallelDispatcher do
   describe '#deliver_new_cart_emails' do
     it "sends emails to all approvers" do
       dispatcher.deliver_new_cart_emails(cart)
-
-      expect(deliveries.count).to eq (2)
       expect(delivery_emails).to eq([
         'approver1@some-dot-gov.gov',
         'approver2@some-dot-gov.gov'
@@ -30,11 +28,16 @@ describe ParallelDispatcher do
     end
 
     it 'sends a cart notification email to observers' do
-      observer_approval = FactoryGirl.create(:approval_with_user, role: 'observer')
-      cart.approvals << observer_approval
-
+      cart.approvals << FactoryGirl.create(:approval_with_user, role: 'observer')
       expect(CommunicartMailer).to receive_message_chain(:cart_observer_email, :deliver)
       dispatcher.deliver_new_cart_emails(cart)
+    end
+  end
+
+  describe '#deliver_approval_email' do
+    it "sends to the requester" do
+      dispatcher.deliver_approval_email(cart.approvals.first)
+      expect(delivery_emails).to eq(['requester@some-dot-gov.gov'])
     end
   end
 end
