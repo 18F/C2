@@ -43,7 +43,7 @@ class CartDecorator < Draper::Decorator
     if self.getProp('origin') == 'navigator'
       'shared/navigator_cart'
     else
-      'shared/cart'
+      'shared/cart_mail'
     end
   end
 

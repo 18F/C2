@@ -146,7 +146,7 @@ describe CommunicartsController do
         approval_group
         @json_params['properties'] = {}
         post 'send_cart', @json_params
-        expect(response).to render_template(partial: '_cart')
+        expect(response).to render_template(partial: '_cart_mail')
       end
 
     end

@@ -1,3 +1,5 @@
+@import "constants";
+
 /* NORMALIZE.CSS */
 
 /*! normalize.css v2.1.3 | MIT License | git.io/normalize */
@@ -1550,14 +1552,7 @@ textarea.w-select {
 
 /* COMMUNICART.WEBFLOW.CSS */
 
-$c2blue: #006be6;
-$white: #fff;
-$webpadding: 40px;
-$webwidth: 1020px;
-$web-content-width: 960px;
-$bgdetails: #efefef;
-$borderdetails: #bdbdbd;
-$lightgray: #838383;
+
 
 body.communicart-notification {
   background-color: #fff;
@@ -1581,24 +1576,7 @@ h1 {
   font-weight: 300;
 }
 
-body.webapp {
-  font-family: Raleway, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
-  .communicart_header, h4.communicart_description, div.communicart_description p {
-    padding-right: $webpadding;
-    padding-left: $webpadding;
-    background-color: $white;
-  }
-
-  .results-list {
-    margin-bottom: $webpadding;
-    padding: $webpadding;
-  }
-
-  .row {
-    margin-right: 0;
-  }
-}
 
 .communicart_header, h4.communicart_description, div.communicart_description p{
   padding-right: 15px;
@@ -1813,9 +1791,6 @@ p.vendor-information .info-title {
   border-radius: 5px;
 }
 
-span.result-tag {
-  padding-left: 0;
-}
 
 td.cart-total {
   background-color: $bgdetails;
@@ -1831,6 +1806,7 @@ span.result-tag {
   font-size: 80%;
   display: inline-block;
   float: left;
+  padding-left: 0;
 }
 
 ul.result-tag li {
@@ -2085,41 +2061,7 @@ body.webapp {
   }
 }
 
-#communicart_header a {
-  color: $white;
-}
 
-#header-identity {
-  display: inline-block;
-}
-
-#header-identity h1 {
-  margin: 0;
-}
-
-#communicart_header #header-nav {
-  display: inline-block;
-  float: right;
-  color: #fff;
-}
-
-ul#breadcrumb-nav {
-  width: 800px;
-  margin: 0 auto;
-  padding: 10px 40px 0 33px;
-
-    li {
-      background-image: url('/assets/icon-back-arrow.png');
-      background-repeat: no-repeat;
-      list-style: none;
-      padding-left: 17px;
-      margin: 0;
-
-      a {
-        color: $c2blue;
-      }
-    }
-}
 
 #approval-status-container {
   width: 100%;
@@ -2144,40 +2086,7 @@ ul#breadcrumb-nav {
   }
 }
 
-#cart-comments-container {
-  width: 100%;
-  background-color: $bgdetails;
-  border-top: 1px solid $borderdetails;
-  padding: 40px 0;
-  padding-left: $webpadding;
-  padding-right: $webpadding;
 
-  #cart-comments {
-    margin: 0 auto;
-    width: $web-content-width;
-
-    #add_a_comment {
-      color: $white;
-      background-color: $c2blue;
-      border: 0;
-      padding: 15px;
-    }
-
-    textarea {
-      width: $web-content-width;
-    }
-
-    .comment-item {
-      border-bottom: 1px solid #ccc;
-      padding: 20px 40px;
-      background-color: #fff;
-
-      .comment-date {
-        color: $lightgray;
-      }
-    }
-  }
-}
 
 .text-area-info-container {
   border: 1px solid #bdbdbd;
@@ -2198,19 +2107,6 @@ ul#breadcrumb-nav {
   color: $lightgray;
 }
 
-#communicart_header #header-nav li {
-  display: inline-block;
-  padding-right: 12px;
-}
-
-#communicart_logo {
-  background-image: url('/assets/img-logo-communicart-portal.png');
-  background-repeat: no-repeat;
-  width: 200px;
-  height: 30px;
-  text-indent: -2000px;
-}
-
 /** Landing **/
 .home-main {
   padding: 0 40px;
@@ -2221,11 +2117,4 @@ ul#breadcrumb-nav {
     margin-top: .8em;
     margin-bottom: .2em;
   }
-}
-
-@media (max-width: 991px) {
-}
-@media (max-width: 767px) {
-}
-@media (max-width: 479px) {
 }
