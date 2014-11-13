@@ -1,43 +1,35 @@
 require 'spec_helper'
 
 describe ParallelDispatcher do
+  let(:cart) { FactoryGirl.create(:cart_with_approvals) }
+  let(:observer_approval) { FactoryGirl.create(:approval_with_user, role: 'observer') }
   let(:dispatcher) { ParallelDispatcher.new }
 
-  after :each do
+  before do
+    cart.approvals << observer_approval
+  end
+
+  after do
     ActionMailer::Base.deliveries.clear
   end
 
   describe '#deliver_new_cart_emails' do
     it "sends emails to all approvers" do
-      cart = FactoryGirl.create(:cart_with_approvals)
-
       dispatcher.deliver_new_cart_emails(cart)
 
       deliveries = ActionMailer::Base.deliveries
-      expect(deliveries.count).to eq (2)
+      expect(deliveries.count).to eq (3)
 
       emails = deliveries.map {|email| email.to[0] }.sort
       expect(emails).to eq([
         'approver1@some-dot-gov.gov',
-        'approver2@some-dot-gov.gov'
+        'approver2@some-dot-gov.gov',
+        observer_approval.user.email_address
       ])
     end
   end
 
   context 'old tests' do
-    let(:cart) { FactoryGirl.create(:cart_with_approval_group) }
-    let(:approval1) { FactoryGirl.create(:approval_with_user, role: 'approver') }
-    let(:approval2) { FactoryGirl.create(:approval_with_user, role: 'approver') }
-    let(:approval3) { FactoryGirl.create(:approval_with_user, role: 'requester') }
-    let(:approval4) { FactoryGirl.create(:approval_with_user, role: 'observer') }
-
-    before do
-      cart.approvals << approval1
-      cart.approvals << approval2
-      cart.approvals << approval3
-      cart.approvals << approval4
-    end
-
     context 'approvers' do
       it 'creates a new token for each approver' do
         api_token = FactoryGirl.create(:api_token)
