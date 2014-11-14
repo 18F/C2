@@ -1,0 +1,387 @@
+@import "../common/constants";
+
+.inset {
+  max-width: $web-content-width;
+  margin: 0 auto;
+  padding: 0 25px;
+  p {
+    margin: 0;
+  }
+}
+
+#communicart_header {
+  width: 100%;
+  padding: 40px 10px 40px 35px;
+  background-color: #07519b;
+  color: $white;
+  margin: 0 auto;
+
+  .container {
+    width: 100%;
+  }
+}
+
+#communicart_header a {
+  color: $white;
+}
+
+#header-identity {
+  display: inline-block;
+}
+
+#header-identity h1 {
+  margin: 0;
+}
+
+#communicart_header #header-nav {
+  display: inline-block;
+  float: right;
+  color: #fff;
+}
+
+.communicart_description {
+  img {
+    margin-bottom: 7px;
+  }
+}
+
+.cart-table {
+  width: 100%;
+
+  margin: 20px auto;
+  td {
+    padding: 15px;
+  }
+}
+tr.header h5 {
+  text-transform: uppercase;
+  color: #e8e8e8;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  font-size: 80%;
+}
+
+tr.header td, tr.header td.first {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+th.first {
+  width: 50%;
+  padding-left: 15px;
+}
+
+th.next {
+  width:25%;
+  padding-left: 15px;
+}
+
+th h5 {
+  text-transform: uppercase;
+  color: #e8e8e8;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  font-size: 80%;
+}
+
+tr.cart_item_information td {
+  border-bottom: 1px solid #ccc;
+  padding-top: 30px;
+  padding-bottom: 10px;
+  background-color: #fff;
+  padding-right: 10px;
+}
+
+span.result-tag {
+  font-size: 80%;
+  display: inline-block;
+  float: left;
+  padding-left: 0;
+}
+
+ul.result-tag li {
+  margin-left: 0;
+  margin-bottom: 5px;
+  list-style: none;
+}
+
+ul.result-tag li.fssi-compliant {
+  color: white;
+}
+
+ul.result-tag span {
+  background-color: #45ac48;
+}
+
+table td span.tag-values {
+  font-weight: normal;
+}
+
+td p.result-item-price {
+  padding: 5px 10px 30px 10px;
+  color: #000;
+}
+
+td p.result-item-price, td p.total-price p strong {
+  font-size: 22px;
+  font-weight: 400;
+}
+
+td p.result-item-units {
+  padding: 10px;
+  font-weight: 400;
+}
+
+td.cart-total {
+  background-color: $bgdetails;
+  text-align: center;
+  padding: 40px 0;
+
+  .total-label {
+    text-transform: uppercase;
+  }
+}
+
+.c2bullet {
+  padding-left: 7px;
+  height: 15px;
+  display: inline-block;
+  font-size: 250%;
+  line-height: .6em;
+  color: #f2c33e;
+  vertical-align: top;
+}
+
+.bullet-label {
+  vertical-align: top;
+  line-height: 1.6em;
+}
+
+p.cart_item_description {
+  padding-bottom: 30px;
+}
+
+p.cart_item_description strong {
+  font-size: 130%;
+  font-weight: 300;
+}
+
+td p.vendor-information strong {
+  font-weight: normal;
+  color: #000;
+}
+
+p.vendor-information .info-title {
+  display: block;
+  padding-bottom: 30px;
+}
+
+table tr.total-price, tr#approval-actions {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: #f5f5f5;
+}
+
+#navigator-layout tr.cart_item_information strong {
+  text-transform: uppercase;
+}
+
+tr.cart_item_information p {
+  color: #666;
+  font-size: 80%;
+}
+
+.header {
+  padding-top: 0px;
+  background-color: #333;
+  color: white;
+}
+
+.approval-status-container {
+  width: 100%;
+  max-width: $web-content-width;
+  margin: 0 auto 60px auto;
+  padding-left: $webpadding;
+  padding-right: $webpadding;
+
+  #approval-status {
+    margin: 0 auto;
+    width: 100%;
+
+    ul {
+      margin-top: 45px;
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 20px;
+      padding-left: 18px;
+    }
+  }
+}
+
+.icon-approved {
+  background-image: url('https://s3.amazonaws.com/18f/c2/icon-checkmark.gif');
+  background-repeat: no-repeat;
+  padding-left: 21px;
+}
+
+.timestamp {
+  color: $lightgray;
+}
+
+.cart-comments-container {
+  width: 100%;
+  max-width: $web-content-width;
+  background-color: $bgdetails;
+  border-top: 1px solid $borderdetails;
+  padding: 65px 0;
+  padding-left: $webpadding;
+  padding-right: $webpadding;
+  margin: 0 auto;
+
+  #cart-comments {
+    margin: 0 auto;
+
+    #add_a_comment {
+      color: $white;
+      background-color: $c2blue;
+      border: 0;
+      padding: 15px;
+    }
+
+    textarea {
+      width: 100%;
+    }
+
+    .comment-item {
+      border-bottom: 1px solid #ccc;
+      padding: 20px 40px;
+      background-color: #fff;
+
+      .comment-date {
+        color: $medgray;
+      }
+    }
+  }
+}
+
+body.webapp {
+  font-family: Raleway, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+  .communicart_header, h4.communicart_description, div.communicart_description p {
+    padding-right: 0;
+    padding-left: 0;
+    background-color: $white;
+  }
+
+  .results-list {
+    margin-bottom: $webpadding;
+    padding: $webpadding;
+  }
+
+  .row {
+    margin-right: 0;
+  }
+}
+
+.purchase-status {
+  border: 1px solid #ff9e19;
+  padding: 30px 0px;
+  margin: 20px auto 0 auto;
+  text-align: center;
+
+  img {
+    margin: 0;
+  }
+
+  h5 {
+    color: #000;
+    text-transform: uppercase;
+    font-weight: bold;
+
+    &.approved {
+      min-width: 155px;
+      background-image: url('/assets/icon-checkmark.gif');
+      background-repeat: no-repeat;
+      background-position: center -0.2em;
+      padding-top: 15px;
+    }
+
+    &.pending {
+      min-width: 155px;
+      background-image: url('/assets/icon-pending.gif');
+      background-repeat: no-repeat;
+      background-position: center -0.2em;
+      padding-top: 20px;
+    }
+  }
+}
+
+.text-area-info-container {
+  border: 1px solid #bdbdbd;
+  border-top: 0;
+  margin-left: 0px;
+  vertical-align: middle;
+}
+
+.text-area-button {
+  text-align: right;
+  margin: 0px;
+  padding-right: 0px;
+}
+
+.text-area-info-web {
+  color: #666;
+}
+
+@media (max-width: 480px) {
+  tr.cart_item_information p {
+    font-size: 67%;
+  }
+
+  td p.result-item-price, td p.total-price p strong {
+    font-size: 1em;
+  }
+
+  .inset {
+    padding: 0 0 0 15px;
+  }
+
+  h1.communicart_header {
+    margin-bottom: 10px;
+  }
+
+  .cart-comments-container #cart-comments .comment-item {
+    padding: 10px 15px;
+  }
+
+  .text-area-info-web {
+    padding: 4px 4px;
+    p {
+      font-size: .9em;
+      line-height: 1.1em;
+    }
+  }
+  .cart-comments-container #cart-comments #add_a_comment {
+    padding: 10px;
+  }
+
+  .cart-comments-container {
+    padding: 10px;
+  }
+
+
+
+  h1 {
+    font-size: 2em;
+    line-height: initial;
+  }
+
+  #communicart_header {
+    padding: 10px;
+  }
+}
