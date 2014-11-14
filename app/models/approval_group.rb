@@ -14,12 +14,7 @@ class ApprovalGroup < ActiveRecord::Base
   end
 
   def approvers
-    relation = self.users_by_role('approver')
-    # position only relevant for linear approvals
-    if self.flow == 'linear'
-      relation = relation.order('user_roles.position ASC')
-    end
-    relation
+    self.users_by_role('approver')
   end
 
   def observers

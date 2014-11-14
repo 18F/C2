@@ -13,6 +13,15 @@ class Approval < ActiveRecord::Base
 
   after_initialize :set_default_status
 
+
+  # TODO this should be a proper association
+  def user_role
+    UserRole.find_by(approval_group_id: cart.approval_group.id, user_id: user_id)
+  end
+
+
+  private
+
   def set_default_status
     self.status ||= 'pending'
   end

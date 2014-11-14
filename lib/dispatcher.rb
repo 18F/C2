@@ -1,4 +1,10 @@
 class Dispatcher
+  def email_approver(approval)
+    cart = approval.cart
+    ApiToken.create!(user_id: approval.user_id, cart_id: cart.id, expires_at: Time.now + 7.days)
+    CommunicartMailer.cart_notification_email(approval.user.email_address, cart, approval).deliver
+  end
+
   def email_observers(cart)
     cart.approvals.where(role: 'observer').each do |observer|
       CommunicartMailer.cart_observer_email(observer.user.email_address, cart).deliver
@@ -6,7 +12,7 @@ class Dispatcher
   end
 
   def deliver_new_cart_emails(cart)
-    raise "Must be implemented by subclass"
+    self.email_observers(cart)
   end
 
   def on_approval_status_change(approval)
