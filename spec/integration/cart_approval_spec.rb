@@ -25,6 +25,7 @@ describe 'Approving a cart with multiple approvers' do
     approval_group = FactoryGirl.create(:approval_group)
 
     cart = Cart.new(
+                    flow: 'parallel',
                     name: 'My Wonderfully Awesome Communicart',
                     status: 'pending',
                     external_id: '10203040'

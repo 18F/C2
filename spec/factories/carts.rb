@@ -1,5 +1,6 @@
 FactoryGirl.define do
   factory :cart do
+    flow 'parallel'
     name 'Test Cart needing approval'
     status 'pending'
 

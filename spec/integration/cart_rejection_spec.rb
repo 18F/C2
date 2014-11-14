@@ -101,6 +101,7 @@ describe 'Rejecting a cart with multiple approvers' do
     @json_rejection_params = JSON.parse(rejection_params)
 
     cart = Cart.create!(
+                    flow: 'parallel',
                     name: '10203040',
                     status: 'pending',
                     external_id: '10203040'

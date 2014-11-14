@@ -14,6 +14,7 @@ class Cart < ActiveRecord::Base
 
   #TODO: after_save default status
   #TODO: validates_uniqueness_of :name
+  validates :flow, presence: true, inclusion: {in: ApprovalGroup::FLOWS}
 
 
   def update_approval_status
@@ -115,7 +116,8 @@ class Cart < ActiveRecord::Base
       cart = reset_existing_cart(pending_cart)
     else
       #There is no existing cart or the existing cart is already approved
-      cart = Cart.create!(name: name, status: 'pending', external_id: params['cartNumber'])
+      flow = params['flow'].presence || 'parallel'
+      cart = Cart.create!(flow: flow, name: name, status: 'pending', external_id: params['cartNumber'])
       copy_existing_approvals_to(cart, name)
     end
     return cart
@@ -124,7 +126,9 @@ class Cart < ActiveRecord::Base
   def initialize_approval_group(params)
     if params['approvalGroup']
       #TODO: Handle approvalGroup non-existent approval group
-      self.approval_group = ApprovalGroup.find_by_name(params['approvalGroup'])
+      approval_group = ApprovalGroup.find_by_name(params['approvalGroup'])
+      self.approval_group = approval_group
+      self.flow = approval_group.flow
     end
   end
 

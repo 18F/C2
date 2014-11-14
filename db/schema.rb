@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141113223924) do
+ActiveRecord::Schema.define(version: 20141114190008) do
 
   create_table "api_tokens", force: true do |t|
     t.string   "access_token"
@@ -74,6 +74,7 @@ ActiveRecord::Schema.define(version: 20141113223924) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "external_id"
+    t.string   "flow"
   end
 
   create_table "comments", force: true do |t|

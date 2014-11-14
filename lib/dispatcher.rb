@@ -20,25 +20,22 @@ class Dispatcher
     self.email_observers(approval.cart)
   end
 
-  def self.get_dispatcher(approval_group)
-    # TODO switch based on flow
-    # case approval_group.flow
-    # when 'parallel'
-    #   ParallelDispatcher
-    # when 'linear'
-    #   LinearDispatcher
-    # end
-
-    ParallelDispatcher.new
+  def self.get_dispatcher(cart)
+    case cart.flow
+    when 'parallel'
+      ParallelDispatcher.new
+    when 'linear'
+      LinearDispatcher.new
+    end
   end
 
   def self.deliver_new_cart_emails(cart)
-    dispatcher = self.get_dispatcher(cart.approval_group)
+    dispatcher = self.get_dispatcher(cart)
     dispatcher.deliver_new_cart_emails(cart)
   end
 
   def self.on_approval_status_change(approval)
-    dispatcher = self.get_dispatcher(approval.approval_group)
+    dispatcher = self.get_dispatcher(approval.cart)
     dispatcher.on_approval_status_change(approval)
   end
 end
