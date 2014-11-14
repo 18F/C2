@@ -3,8 +3,6 @@ require 'spec_helper'
 describe LinearDispatcher do
   let(:cart) { FactoryGirl.create(:cart) }
   let(:dispatcher) { LinearDispatcher.new }
-  let(:deliveries) { ActionMailer::Base.deliveries }
-  let(:delivery_emails) { deliveries.map {|email| email.to[0] }.sort }
 
   describe '#next_approval' do
     context "no approvals" do
@@ -59,7 +57,7 @@ describe LinearDispatcher do
   xdescribe '#on_approval_status_change' do
     it "sends to the requester and the next approver" do
       dispatcher.on_approval_status_change(cart.approvals.first)
-      expect(delivery_emails).to eq([
+      expect(email_recipients).to eq([
         'approver2@some-dot-gov.gov',
         'requester@some-dot-gov.gov'
       ])
