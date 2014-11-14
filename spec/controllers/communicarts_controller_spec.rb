@@ -318,11 +318,11 @@ describe CommunicartsController do
         rejection_approval_group.save
 
         rejected_cart.approval_group = rejection_approval_group
-        approval1 = Approval.create(user_id: user1.id, cart_id: rejected_cart.id, role: 'approver')
-        approval2 = Approval.create(user_id: user2.id, cart_id: rejected_cart.id, role: 'approver')
+        approval1 = Approval.create!(user_id: user1.id, cart_id: rejected_cart.id, role: 'approver')
+        approval2 = Approval.create!(user_id: user2.id, cart_id: rejected_cart.id, role: 'approver')
         requester = FactoryGirl.create(:user, email_address: 'rejection-requester@some-dot-gov.gov')
         UserRole.create!(user_id: requester.id, approval_group_id: rejection_approval_group.id, role: 'requester')
-        Approval.create(user_id: requester.id, cart_id: rejected_cart.id, role: 'requester')
+        Approval.create!(user_id: requester.id, cart_id: rejected_cart.id, role: 'requester')
         rejected_cart.approvals << approval1
         rejected_cart.approvals << approval2
         rejected_cart.save

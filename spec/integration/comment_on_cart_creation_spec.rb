@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'Adding and retrieving comments from a cart item' do
 
   before do
-    approval_group = ApprovalGroup.create(name: "A Testworthy Approval Group")
+    approval_group = ApprovalGroup.create!(name: "A Testworthy Approval Group")
 
     cart = Cart.new(
                     name: 'My Wonderfully Awesome Communicart',

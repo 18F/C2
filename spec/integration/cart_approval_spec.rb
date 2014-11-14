@@ -49,7 +49,7 @@ describe 'Approving a cart with multiple approvers' do
       cart.approvals << Approval.create!(user_id: user.id, role: 'approver')
     end
 
-    cart.save
+    cart.save!
 
   end
 
