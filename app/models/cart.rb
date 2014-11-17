@@ -124,7 +124,7 @@ class Cart < ActiveRecord::Base
   end
 
   def import_initial_comments(comments)
-    self.comments << Comment.create!(user_id: self.requester.id, comment_text: comments.strip)
+    self.comments.create!(user_id: self.requester.id, comment_text: comments.strip)
   end
 
   def process_approvals_without_approval_group(params)
@@ -135,18 +135,18 @@ class Cart < ActiveRecord::Base
 
     approver_emails.each do |email|
       user = User.find_or_create_by(email_address: email)
-      Approval.create!(cart_id: self.id, user_id: user.id, role: 'approver')
+      self.approvals.create!(user_id: user.id, role: 'approver')
     end
 
     if params['fromAddress']
       requester = User.find_or_create_by(email_address: params['fromAddress'])
-      Approval.create!(cart_id: self.id, user_id: requester.id, role: 'requester')
+      self.approvals.create!(user_id: requester.id, role: 'requester')
     end
   end
 
   def process_approvals_from_approval_group
     approval_group.user_roles.each do |user_role|
-      Approval.create!(user_id: user_role.user_id, cart_id: self.id, role: user_role.role)
+      self.approvals.create!(user_id: user_role.user_id, role: user_role.role)
     end
   end
 
@@ -161,7 +161,7 @@ class Cart < ActiveRecord::Base
     previous_cart = Cart.where(name: cart_name).last
     if previous_cart && previous_cart.status == 'rejected'
       previous_cart.approvals.each do |approval|
-        new_cart.approvals << Approval.create!(user_id: approval.user_id, role: approval.role)
+        new_cart.approvals.create!(user_id: approval.user_id, role: approval.role)
         CommunicartMailer.cart_notification_email(approval.user.email_address, new_cart, approval).deliver
       end
     end
@@ -181,7 +181,7 @@ class Cart < ActiveRecord::Base
         params = params.dup
         params.delete_if {|k,v| v.blank? }
 
-        ci = CartItem.create(
+        ci = self.cart_items.create!(
           :vendor => params.fetch(:vendor, nil),
           :description => params.fetch(:description, nil),
           :url => params.fetch(:url, nil),
@@ -189,8 +189,7 @@ class Cart < ActiveRecord::Base
           :quantity => params.fetch(:qty , 0),
           :details => params.fetch(:details, nil),
           :part_number => params.fetch(:partNumber , nil),
-          :price => params.fetch(:price, nil).gsub(/[\$\,]/,"").to_f,
-          :cart_id => id
+          :price => params.fetch(:price, nil).gsub(/[\$\,]/,"").to_f
         )
 
         if params['traits']
