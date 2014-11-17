@@ -117,13 +117,11 @@ describe CommunicartsController do
         end
 
         it 'creates a comment given a comment param' do
-          mock_comment = mock_model(Comment)
-          allow(mock_comment).to receive(:[]=)
-          allow(mock_comment).to receive(:has_attribute?).with('commentable_id').and_return(true)
-          allow(mock_comment).to receive(:save)
-
-          expect(Comment).to receive(:create!).with(user_id: approval_group.requester_id, comment_text: "Hi, this is a comment, I hope it works!\r\nThis is the second line of the comment.").and_return(mock_comment)
           post 'send_cart', @json_params
+
+          comment = Comment.last
+          expect(comment.user_id).to eq(approval_group.requester_id)
+          expect(comment.comment_text).to eq("Hi, this is a comment, I hope it works!\r\nThis is the second line of the comment.")
         end
 
         it 'does not create a comment when not given a comment param' do
