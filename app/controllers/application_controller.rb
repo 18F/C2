@@ -10,7 +10,6 @@ class ApplicationController < ActionController::Base
     headers['Access-Control-Allow-Origin'] = '*'
     headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, OPTIONS'
     headers['Access-Control-Max-Age'] = "1728000"
-    headers["Access-Control-Allow-Headers"] = "Content-Type, X-Requested-With"
   end
 
   def allow_cors_request
@@ -18,13 +17,10 @@ class ApplicationController < ActionController::Base
       headers['Access-Control-Allow-Origin'] = '*'
       headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, OPTIONS'
       headers['Access-Control-Allow-Headers'] = 'X-Requested-With, X-Prototype-Version'
+      headers['Access-Control-Max-Age'] = '1728000'
+      render :text => '', :content_type => 'text/plain'
     end
   end
-
-  def xss_options_request
-    render :text => ""
-  end
-
 
 private
   def current_user
