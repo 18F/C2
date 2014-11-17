@@ -178,7 +178,8 @@ class Cart < ActiveRecord::Base
   def import_cart_items(cart_items_params)
     unless cart_items_params.blank?
       cart_items_params.each do |params|
-        params.delete_if {|k,v| v =~ /^\s*$/}
+        params = params.dup
+        params.delete_if {|k,v| v.blank? }
 
         ci = CartItem.create(
           :vendor => params.fetch(:vendor, nil),
