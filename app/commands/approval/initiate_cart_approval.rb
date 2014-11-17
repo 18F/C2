@@ -10,7 +10,7 @@ module Commands
       end
 
       def setup_cart(params)
-        cart = Cart.initialize_cart_with_items(params).reload.decorate
+        cart = Cart.initialize_cart_with_items(params).reload
         if params['approvalGroup'].present?
           unless cart.approvals.any?
             cart.process_approvals_from_approval_group
@@ -30,7 +30,7 @@ module Commands
         dispatcher = ParallelDispatcher.new
         dispatcher.deliver_new_cart_emails(cart)
 
-        cart.object
+        cart
       end
     end
   end
