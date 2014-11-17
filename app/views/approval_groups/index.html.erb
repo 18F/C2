@@ -1,17 +1,31 @@
 <% if @groups.empty? %>
     <p>Sorry, no Approval Groups found for <%= params[:email] %>.</p>
 <% else %>
-    <% @groups.map do |ag| %>
-        <div class="ag_display">
-          <h3> <%= ag.name %> </h3>
-          <table>
-            <% ag.user_roles.each do |role| %>
-                <tr>
-                  <td><%= role.user.email_address %></td>
-                  <td><%= role.role %></td>
-                </tr>
-            <% end %>
-          </table>
+    <% @groups.each_with_index do |ag, i| %>
+    <div class="row">
+        <% if i == 0 %>
+          <div class="ag_display">
+        <% else %>
+          <div class="ag_display ag-border">
+        <% end %>
+        <div class="col-sm-6 col-xs-12">
+            <h3> <%= ag.name %> </h3>
+          </div>
+          <div class="col-sm-6 col-xs-12">
+            <% if ag.user_roles.any? %>
+              <table>
+                <% ag.user_roles.each do |role| %>
+                    <tr>
+                      <td><%= role.user.email_address %></td>
+                      <td><%= role.role %></td>
+                    </tr>
+                <% end %>
+              </table>
+            <% else %>
+              <p class="no-users">no users for this group.</p>
+              <% end %>
+          </div>
         </div>
+      </div>
     <% end %>
 <% end %>
