@@ -1,5 +1,4 @@
 class ApplicationController < ActionController::Base
-  skip_before_action :verify_authenticity_token
   before_filter :allow_cors_request
   after_filter :cors_set_access_control_headers
   protect_from_forgery with: :null_session
@@ -14,10 +13,7 @@ class ApplicationController < ActionController::Base
 
   def allow_cors_request
     if request.method == :options
-      headers['Access-Control-Allow-Origin'] = '*'
-      headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, OPTIONS'
       headers['Access-Control-Allow-Headers'] = 'X-Requested-With, X-Prototype-Version'
-      headers['Access-Control-Max-Age'] = '1728000'
       render :text => '', :content_type => 'text/plain'
     end
   end
