@@ -12,7 +12,11 @@ module Commands
       def setup_cart(params)
         cart = Cart.initialize_cart_with_items(params)
         cart.save!
+
+        # Reload needed because of caching of the associations.
+        # TODO Remove need for this.
         cart.reload
+
         if params['approvalGroup'].present?
           unless cart.approvals.any?
             cart.process_approvals_from_approval_group
