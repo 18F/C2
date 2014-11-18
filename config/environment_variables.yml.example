@@ -9,7 +9,6 @@ development:
   MYGOV_CLIENT_ID: consumer_public_key
   MYGOV_SECRET_ID: consumer_secret_key
   MYGOV_HOME: https://myusa-staging.18f.us
-  MYGOV_SCOPES: profile.email
 
 production:
   GMAIL_USERNAME: my_email@my_domain.com
@@ -25,4 +24,3 @@ test:
   MYGOV_CLIENT_ID: consumer_public_key
   MYGOV_SECRET_ID: consumer_secret_key
   MYGOV_HOME: https://myusa-staging.18f.us
-  MYGOV_SCOPES: profile.email

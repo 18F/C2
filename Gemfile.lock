@@ -139,7 +139,6 @@ GEM
     multi_json (1.10.1)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
-    mysql2 (0.3.16)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-sftp (2.1.2)
@@ -163,6 +162,7 @@ GEM
       multi_json (~> 1.3)
       oauth2 (~> 1.0)
       omniauth (~> 1.2)
+    pg (0.17.1)
     pry (0.10.1)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -291,8 +291,8 @@ DEPENDENCIES
   haml
   jquery-rails
   letter_opener
-  mysql2
   omniauth-myusa!
+  pg
   pry-byebug
   pry-rails
   railroady

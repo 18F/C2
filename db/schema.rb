@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20141114190008) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "api_tokens", force: true do |t|
     t.string   "access_token"
     t.integer  "user_id"
@@ -62,7 +65,7 @@ ActiveRecord::Schema.define(version: 20141114190008) do
     t.integer  "quantity"
     t.text     "details"
     t.string   "part_number"
-    t.float    "price",       limit: 24
+    t.float    "price"
     t.integer  "cart_id"
     t.datetime "created_at"
     t.datetime "updated_at"
