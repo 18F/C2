@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe ApprovalGroupsController do
   let(:user1) { FactoryGirl.create(:user, email_address: 'user1@some-dot-gov.gov') }
   let(:user2) { FactoryGirl.create(:user, email_address: 'user2@some-dot-gov.gov') }

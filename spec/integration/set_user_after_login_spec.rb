@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe 'User creation when logging in with Oauth to view a protected page' do
   let(:mock_raw_info) { double }
 

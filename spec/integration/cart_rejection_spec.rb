@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe 'Rejecting a cart with multiple approvers' do
 
   # TODO: approve/disapprove/comment > humanResponseText

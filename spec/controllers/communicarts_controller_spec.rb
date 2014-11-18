@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe CommunicartsController do
 
   let(:params) {
@@ -90,7 +88,6 @@ describe CommunicartsController do
   describe 'POST send_cart' do
     before do
       @json_params = JSON.parse(params)
-      allow(controller).to receive(:total_price_from_params)
     end
 
     context 'approval group' do
@@ -264,7 +261,6 @@ describe CommunicartsController do
 
         allow(Cart).to receive_message_chain(:where, :where, :first).and_return(cart)
         allow(cart).to receive_message_chain(:approval_users, :where).and_return([approver])
-        allow(cart).to receive_message_chain(:cart_approvals, :where)
         allow(cart).to receive(:update_approval_status)
 
         allow_any_instance_of(Approval).to receive(:update_attributes)

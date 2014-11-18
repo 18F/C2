@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe ApprovalGroup do
   let(:approval_group) { FactoryGirl.create(:approval_group, name: 'test-approval-group') }
   let(:cart) { FactoryGirl.create(:cart, name: 'test-cart') }

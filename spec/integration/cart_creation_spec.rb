@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe 'Creating a cart' do
   before do
     FactoryGirl.create(:approval_group_with_approvers_and_requester, name: "firstApprovalGroup")
