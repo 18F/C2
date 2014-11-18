@@ -164,13 +164,15 @@ describe 'Creating a cart with an existing approval group' do
     }'
   }
 
+  let(:json_params_1) { JSON.parse(params_request_1) }
+  let(:json_params_2) { JSON.parse(params_request_2) }
+
+  before do
+    expect(Cart.count).to eq(0)
+  end
+
   it 'replaces existing cart items and approval group when initializing an existing cart' do
-    @json_params_1 = JSON.parse(params_request_1)
-    @json_params_2 = JSON.parse(params_request_2)
-
-    expect(Cart.count).to eq 0
-
-    post 'send_cart', @json_params_1
+    post 'send_cart', json_params_1
 
     expect(Cart.count).to eq 1
     cart = Cart.first
@@ -188,7 +190,7 @@ describe 'Creating a cart with an existing approval group' do
     expect(cart.comments.first.user_id).to eq cart.requester.id
     expect(cart.requester.email_address).to eq 'requester1@some-dot-gov.gov'
 
-    post 'send_cart', @json_params_2
+    post 'send_cart', json_params_2
     expect(Cart.count).to eq 1 #WHY???
     cart = Cart.first
     expect(cart.cart_items.count).to eq 1
@@ -206,11 +208,7 @@ describe 'Creating a cart with an existing approval group' do
 
   context 'cart item traits' do
     it 'get added to the database correctly' do
-      @json_params_1 = JSON.parse(params_request_1)
-
-      expect(Cart.count).to eq 0
-
-      post 'send_cart', @json_params_1
+      post 'send_cart', json_params_1
       expect(Cart.count).to eq 1
       cart = Cart.first
       expect(cart.cart_items.first.cart_item_traits.count).to eq 3
@@ -223,21 +221,16 @@ describe 'Creating a cart with an existing approval group' do
     end
 
     it 'get handled when not sent by the client' do
-      @json_params_1 = JSON.parse(params_request_1)
-      @json_params_1["cartItems"][0]["traits"] = nil
+      json_params_1["cartItems"][0]["traits"] = nil
 
-      post 'send_cart', @json_params_1
+      post 'send_cart', json_params_1
       expect(response.status).to eq 201
     end
   end
 
   context 'cart item venue' do
     it 'added shoppingVenue symbol' do
-      @json_params_1 = JSON.parse(params_request_1)
-
-      expect(Cart.count).to eq 0
-
-      post 'send_cart', @json_params_1
+      post 'send_cart', json_params_1
       expect(Cart.count).to eq 1
       cart = Cart.first
       expect(cart.cart_items.first.cart_item_traits.count).to eq 3
@@ -248,11 +241,7 @@ describe 'Creating a cart with an existing approval group' do
 
   context 'cart origin property' do
     it 'added origin symbol' do
-      @json_params_1 = JSON.parse(params_request_1)
-
-      expect(Cart.count).to eq 0
-
-      post 'send_cart', @json_params_1
+      post 'send_cart', json_params_1
       expect(Cart.count).to eq 1
       cart = Cart.first
       expect(cart.getProp('origin')).to eq 'navigator'
