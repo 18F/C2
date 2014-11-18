@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe "approval groups" do
   with_feature 'F_FLOW_OPTION' do
     it "saves the linear flow option" do

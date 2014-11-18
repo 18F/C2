@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe ParallelDispatcher do
   let(:cart) { FactoryGirl.create(:cart_with_approvals) }
   let(:dispatcher) { ParallelDispatcher.new }
