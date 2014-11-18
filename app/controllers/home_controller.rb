@@ -26,15 +26,16 @@ class HomeController < ApplicationController
 private
 
   def setup_session_user
-    session[:user] = {} if session[:user].nil?
+    session[:user] ||= {}
   end
 
   def setup_mygov_client
-    @mygov_client = OAuth2::Client.new(ENV['MYGOV_CLIENT_ID'], ENV['MYGOV_SECRET_ID'], {:site => ENV['MYGOV_HOME'], :token_url => "/oauth/authorize"})
+    @mygov_client = OAuth2::Client.new(MYGOV_CLIENT_ID, MYGOV_SECRET_ID, site: MYGOV_HOME, token_url: '/oauth/authorize')
   end
 
   def setup_mygov_access_token
-    @mygov_access_token = OAuth2::AccessToken.new(@mygov_client, session[:token]) if session
+    if session
+      @mygov_access_token = OAuth2::AccessToken.new(@mygov_client, session[:token])
+    end
   end
-
 end

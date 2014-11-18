@@ -1,8 +1,8 @@
 describe 'Rejecting a cart with multiple approvers' do
 
-  #TODO: approve/disapprove/comment > humanResponseText
+  # TODO: approve/disapprove/comment > humanResponseText
   let(:rejection_params) {
-      '{
+    '{
       "cartNumber": "10203040",
       "category": "approvalreply",
       "attention": "",
@@ -14,11 +14,11 @@ describe 'Rejecting a cart with multiple approvers' do
       "disapprove": "REJECT",
       "humanResponseText": "",
       "comment" : "Please order 500 highlighters instead of 300 highlighters"
-      }'
-    }
+    }'
+  }
 
   let(:repost_params) {
-      '{
+    '{
       "cartNumber": "10203040",
       "category": "approvalreply",
       "attention": "",
@@ -30,8 +30,8 @@ describe 'Rejecting a cart with multiple approvers' do
       "disapprove": "",
       "humanResponseText": "",
       "comment" : "This looks much better. We could definitely use 500 highlighters. Thank you!"
-      }'
-    }
+    }'
+  }
 
   let(:params_request_1) {
   '{
@@ -94,10 +94,6 @@ describe 'Rejecting a cart with multiple approvers' do
   let(:approver) { FactoryGirl.create(:approver) }
 
   before do
-    ActionMailer::Base.delivery_method = :test
-    ActionMailer::Base.perform_deliveries = true
-    ActionMailer::Base.deliveries = []
-
     ENV['NOTIFICATION_FROM_EMAIL'] = 'sender@some-dot_gov.gov'
 
     @json_rejection_params = JSON.parse(rejection_params)
@@ -114,15 +110,10 @@ describe 'Rejecting a cart with multiple approvers' do
 
     (1..3).each do |num|
       email = "approver#{num}@some-dot-gov.gov"
-      user = User.find_or_create_by(email_address: email)
+      User.find_or_create_by(email_address: email)
     end
 
     cart.save
-
-  end
-
-  after do
-    ActionMailer::Base.deliveries.clear
   end
 
   it 'updates the cart and approver records as expected' do
@@ -157,8 +148,6 @@ describe 'Rejecting a cart with multiple approvers' do
     updated_cart = Cart.last
     expect(updated_cart.status).to eq 'pending'
     expect(cart.approvals.count).to eq 3
-
-    original_cart = Cart.first
 
     # Cart with the same external ID should be associated with a new set of users with approvals in status 'pending'
     expect(updated_cart.external_id).to eq 10203040

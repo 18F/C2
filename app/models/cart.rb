@@ -1,5 +1,4 @@
 require 'csv'
-require ::File.expand_path('time_helper.rb',  'lib/')
 
 class Cart < ActiveRecord::Base
   include PropMixin
@@ -10,51 +9,40 @@ class Cart < ActiveRecord::Base
   has_one :approval_group
   has_one :api_token
   has_many :comments, as: :commentable
+  has_many :properties, as: :hasproperties
+
   #TODO: after_save default status
   #TODO: validates_uniqueness_of :name
 
-  APPROVAL_ATTRIBUTES_MAP = {
-    approve: 'approved',
-    reject: 'rejected'
-  }
-
-  DISPLAY_STATUS_MAP = {
-    pending: 'pending approval',
-    approved: 'approved',
-    rejected: 'rejected'
-  }
-
-  has_many :properties, as: :hasproperties
 
   def update_approval_status
-    return update_attributes(status: 'rejected') if has_rejection?
-    return update_attributes(status: 'approved') if all_approvals_received?
+    if self.has_rejection?
+      self.update_attributes(status: 'rejected')
+    elsif self.all_approvals_received?
+      self.update_attributes(status: 'approved')
+    end
+  end
+
+  def rejections
+    self.approvals.where(status: 'rejected')
   end
 
   def has_rejection?
-    approvals.map(&:status).include?('rejected')
+    self.rejections.any?
   end
 
+  def approver_approvals
+    self.approvals.where(role: 'approver')
+  end
 
   def all_approvals_received?
-    approver_count = approvals.where(role: 'approver').count
-    approvals.where(role: 'approver').where(status: 'approved').count == approver_count
-  end
-
-  def deliver_approval_emails
-    approvals.where(role: "approver").each do |approval|
-      ApiToken.create!(user_id: approval.user_id, cart_id: self.id, expires_at: Time.now + 7.days)
-      CommunicartMailer.cart_notification_email(approval.user.email_address, self, approval).deliver
-    end
-    approvals.where(role: 'observer').each do |observer|
-      CommunicartMailer.cart_observer_email(observer.user.email_address, self).deliver
-    end
+    self.approver_approvals.where('status != ?', 'approved').empty?
   end
 
   def create_items_csv
     csv_string = CSV.generate do |csv|
-    csv << ["description","details","vendor","url","notes","part_number","green","features","socio","quantity","unit price","price for quantity"]
-    cart_items.each do |item|
+      csv << ["description","details","vendor","url","notes","part_number","green","features","socio","quantity","unit price","price for quantity"]
+      cart_items.each do |item|
         csv << [item.description,
                 item.details,
                 item.vendor,
@@ -68,9 +56,10 @@ class Cart < ActiveRecord::Base
                 item.price,
                 item.quantity * item.price
                ]
-        end
+      end
     end
-    return csv_string
+
+    csv_string
   end
 
   def create_comments_csv
@@ -82,26 +71,29 @@ class Cart < ActiveRecord::Base
         csv << [user.email_address, item.comment_text, item.updated_at, human_readable_time(item.updated_at, default_time_zone_offset)]
       end
     end
-    return csv_string
+
+    csv_string
   end
 
   def requester
-    approvals.where(role: 'requester').first.user if approvals.any? { |a| a.role == 'requester' }
+    approvals.where(role: 'requester').first.try(:user)
   end
 
   def observers
-    approval_group.user_roles.where(role: 'observer') #TODO: Pull from approvals, not approval groups
+    # TODO: Pull from approvals, not approval groups
+    approval_group.user_roles.where(role: 'observer')
   end
 
   def create_approvals_csv
     csv_string = CSV.generate do |csv|
-    csv << ["status","approver","created_at"]
+      csv << ["status","approver","created_at"]
 
-    approvals.each do |approval|
+      approvals.each do |approval|
         csv << [approval.status, approval.user.email_address,approval.updated_at]
-        end
+      end
     end
-    return csv_string
+
+    csv_string
   end
 
   def self.initialize_cart_with_items params
@@ -111,9 +103,10 @@ class Cart < ActiveRecord::Base
   end
 
   def self.existing_or_new_cart(params)
-    name = !params['cartName'].blank? ? params['cartName'] : params['cartNumber']
+    name = params['cartName'].presence || params['cartNumber']
 
-    if pending_cart = Cart.find_by(name: name, status: 'pending')
+    pending_cart = Cart.find_by(name: name, status: 'pending')
+    if pending_cart
       cart = reset_existing_cart(pending_cart)
     else
       #There is no existing cart or the existing cart is already approved
@@ -131,27 +124,29 @@ class Cart < ActiveRecord::Base
   end
 
   def import_initial_comments(comments)
-    self.comments << Comment.create!(user_id: self.requester.id, comment_text: comments.strip)
+    self.comments.create!(user_id: self.requester.id, comment_text: comments.strip)
   end
 
   def process_approvals_without_approval_group(params)
-    raise 'approvalGroup exists' if params['approvalGroup'].present?
-    approver_emails = params['toAddress'].select { |email| !email.empty? }
+    if params['approvalGroup'].present?
+      raise 'approvalGroup exists'
+    end
+    approver_emails = params['toAddress'].select(&:present?)
 
     approver_emails.each do |email|
       user = User.find_or_create_by(email_address: email)
-      Approval.create!(cart_id: self.id, user_id: user.id, role: 'approver')
+      self.approvals.create!(user_id: user.id, role: 'approver')
     end
 
     if params['fromAddress']
       requester = User.find_or_create_by(email_address: params['fromAddress'])
-      Approval.create!(cart_id: self.id, user_id: requester.id, role: 'requester')
+      self.approvals.create!(user_id: requester.id, role: 'requester')
     end
   end
 
   def process_approvals_from_approval_group
-    approval_group.user_roles.each do | user_role |
-      Approval.create!(user_id: user_role.user_id, cart_id: self.id, role: user_role.role)
+    approval_group.user_roles.each do |user_role|
+      self.approvals.create!(user_id: user_role.user_id, role: user_role.role)
     end
   end
 
@@ -165,8 +160,8 @@ class Cart < ActiveRecord::Base
   def self.copy_existing_approvals_to(new_cart, cart_name)
     previous_cart = Cart.where(name: cart_name).last
     if previous_cart && previous_cart.status == 'rejected'
-      previous_cart.approvals.each do | approval |
-        new_cart.approvals << Approval.create!(user_id: approval.user_id, role: approval.role)
+      previous_cart.approvals.each do |approval|
+        new_cart.approvals.create!(user_id: approval.user_id, role: approval.role)
         CommunicartMailer.cart_notification_email(approval.user.email_address, new_cart, approval).deliver
       end
     end
@@ -174,7 +169,7 @@ class Cart < ActiveRecord::Base
 
   def import_cart_properties(cart_properties_params)
     unless cart_properties_params.blank?
-      cart_properties_params.each do |key,val|
+      cart_properties_params.each do |key, val|
         self.setProp(key, val)
       end
     end
@@ -183,9 +178,10 @@ class Cart < ActiveRecord::Base
   def import_cart_items(cart_items_params)
     unless cart_items_params.blank?
       cart_items_params.each do |params|
-        params.delete_if {|k,v| v =~ /^\s*$/}
+        params = params.dup
+        params.delete_if {|k,v| v.blank? }
 
-        ci = CartItem.create(
+        ci = self.cart_items.create!(
           :vendor => params.fetch(:vendor, nil),
           :description => params.fetch(:description, nil),
           :url => params.fetch(:url, nil),
@@ -193,15 +189,14 @@ class Cart < ActiveRecord::Base
           :quantity => params.fetch(:qty , 0),
           :details => params.fetch(:details, nil),
           :part_number => params.fetch(:partNumber , nil),
-          :price => params.fetch(:price, nil).gsub(/[\$\,]/,"").to_f,
-          :cart_id => id
+          :price => params.fetch(:price, nil).gsub(/[\$\,]/,"").to_f
         )
 
         if params['traits']
           params['traits'].each do |trait|
             if trait[1].kind_of?(Array)
               trait[1].each do |individual|
-                if !individual.blank?
+                if individual.present?
                   ci.cart_item_traits << CartItemTrait.new( :name => trait[0],
                                                             :value => individual,
                                                             :cart_item_id => ci.id
@@ -221,14 +216,4 @@ class Cart < ActiveRecord::Base
       end
     end
   end
-
-# TODO: Move template logic out of the model
- def cart_template_name
-    return (self.getProp('origin') == 'navigator') ? "shared/navigator_cart" : "shared/cart"
-  end
-
-  def prefix_template_name
-    return (self.getProp('origin') == 'navigator') ? "shared/navigator_prefix" : nil
-  end
-
 end

@@ -21,10 +21,10 @@ module C2
     # config.i18n.default_locale = :de
 
     config.before_configuration do
-      files = ['environment_variables.yml','feature_flags.yml'].each do |filename|
+      ['environment_variables.yml','feature_flags.yml'].each do |filename|
         env_file = Rails.root.join("config", filename).to_s
 
-        if File.exists?(env_file)
+        if File.exist?(env_file)
           YAML.load_file(env_file)[Rails.env].each do |key, value|
             ENV[key.to_s] = value
           end
@@ -34,5 +34,6 @@ module C2
 
     config.exceptions_app = self.routes
 
+    config.autoload_paths << Rails.root.join('lib')
   end
 end

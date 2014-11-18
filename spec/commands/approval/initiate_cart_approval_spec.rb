@@ -1,7 +1,4 @@
-describe 'Commands::Approval::InitiateCartApproval' do
-
-  let(:cart) { double("cart").as_null_object }
-
+describe Commands::Approval::InitiateCartApproval do
   let(:params_request) {
   '{
       "cartName": "A Cart With No Approvals",
@@ -52,43 +49,45 @@ describe 'Commands::Approval::InitiateCartApproval' do
     }'
   }
 
+  let(:command_params) { JSON.parse(params_request).with_indifferent_access }
+  let(:cart) { FactoryGirl.build(:cart) }
+  let(:command) { Commands::Approval::InitiateCartApproval.new }
+
   describe '#perform' do
     before do
-      allow(Cart).to receive_message_chain(:initialize_cart_with_items, :reload, :decorate).and_return(cart)
+      expect(Cart).to receive_message_chain(:initialize_cart_with_items, :reload).and_return(cart)
+      expect(command).to receive(:import_details)
+      expect_any_instance_of(ParallelDispatcher).to receive(:deliver_new_cart_emails)
     end
 
     context 'handling absence of approvalGroup' do
       { blank:"", nil: nil }.each do |key,val|
         it "bypasses processing the approval group with #{key} value" do
-          command_params = JSON.parse(params_request)
           command_params["approvalGroup"] = val
-
           expect(cart).to receive(:process_approvals_without_approval_group).with(command_params)
-          Commands::Approval::InitiateCartApproval.new.perform(command_params)
+          command.perform(command_params)
         end
       end
     end
 
     context 'handling the presence of approvalGroup' do
+      before do
+        command_params["approvalGroup"] = "someApprovalGroup"
+      end
+
       context 'no existing approvals' do
         it "processes the approval group" do
-          command_params = JSON.parse(params_request)
-          command_params["approvalGroup"] = "someApprovalGroup"
           allow(cart).to receive_message_chain(:approvals, :any?).and_return false
-
           expect(cart).to receive(:process_approvals_from_approval_group)
-          Commands::Approval::InitiateCartApproval.new.perform(command_params)
+          command.perform(command_params)
         end
       end
 
       context 'existing approvals' do
         it 'refrains from processing the approvals' do
-          command_params = JSON.parse(params_request)
-          command_params["approvalGroup"] = "someApprovalGroup"
           allow(cart).to receive_message_chain(:approvals, :any?).and_return true
-
           expect(cart).not_to receive(:process_approvals_from_approval_group)
-          Commands::Approval::InitiateCartApproval.new.perform(command_params)
+          command.perform(command_params)
         end
       end
     end

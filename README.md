@@ -1,4 +1,6 @@
-# C2 [![Build Status](https://travis-ci.org/18F/C2.svg?branch=master)](https://travis-ci.org/18F/C2)
+# C2
+
+[![Build Status](https://travis-ci.org/18F/C2.svg?branch=master)](https://travis-ci.org/18F/C2) [![Code Climate](https://codeclimate.com/github/18F/C2/badges/gpa.svg)](https://codeclimate.com/github/18F/C2) [![Test Coverage](https://codeclimate.com/github/18F/C2/badges/coverage.svg)](https://codeclimate.com/github/18F/C2)
 
 For an overview of this project, please visit our [homepage](http://18f.github.io/C2/).
 
@@ -39,9 +41,9 @@ cd C2
 To get the database and tests running:
 
 1. Install Node.js 0.10
-1. Start MySQL if it isn't already running: `mysql.server start` at command line.
+1. Start PostgreSQL.
 1. Run `script/bootstrap`, which will print "DONE" if successful. *NOTE: This will delete any existing records in your database.*
-    * If you have a password on MySQL, it will give you an error about not being able to connect to the database. Update the info in [`config/database.yml`](config/database.yml.example) with your creds.
+    * If you have a password on PostgreSQL, it will give you an error about not being able to connect to the database. Update the info in [`config/database.yml`](config/database.yml.example) with your creds.
 1. Run the specs with `bundle exec rspec spec` at the command line.
     * To run tests automatically as files are changed, run `bundle exec guard`.
     * To see previews of the mailers, run with the environment variable `MAIL_PREVIEW=true`.

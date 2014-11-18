@@ -16,15 +16,11 @@ describe 'Approving a cart with multiple approvers' do
   }
 
   before do
-    ActionMailer::Base.delivery_method = :test
-    ActionMailer::Base.perform_deliveries = true
-    ActionMailer::Base.deliveries = []
-
     ENV['NOTIFICATION_FROM_EMAIL'] = 'sender@some-dot_gov.gov'
 
     @json_approval_params = JSON.parse(approval_params)
 
-    approval_group = ApprovalGroup.create(name: "A Testworthy Approval Group")
+    approval_group = FactoryGirl.create(:approval_group)
 
     cart = Cart.new(
                     name: 'My Wonderfully Awesome Communicart',
@@ -53,10 +49,6 @@ describe 'Approving a cart with multiple approvers' do
 
     cart.save
 
-  end
-
-  after do
-    ActionMailer::Base.deliveries.clear
   end
 
   it 'updates the cart and approval records as expected' do

@@ -8,16 +8,16 @@ describe ApprovalGroupsController do
 
   context 'search' do
     it 'can find a group with email' do
-      user_role = UserRole.create!(user_id: user1.id, approval_group_id: approval_group1.id, role: 'approver')
-      user_role = UserRole.create!(user_id: user2.id, approval_group_id: approval_group1.id, role: 'requester')
+      UserRole.create!(user_id: user1.id, approval_group_id: approval_group1.id, role: 'approver')
+      UserRole.create!(user_id: user2.id, approval_group_id: approval_group1.id, role: 'requester')
       get :search,  email: user2.email_address
       expect(assigns(:groups).first).to eq(approval_group1)
       # expect(response).to render_template(:index)
     end
 
     it 'finds nothing when no group available' do
-      user_role = UserRole.create!(user_id: user1.id, approval_group_id: approval_group1.id, role: 'approver')
-      user_role = UserRole.create!(user_id: user2.id, approval_group_id: approval_group1.id, role: 'requester')
+      UserRole.create!(user_id: user1.id, approval_group_id: approval_group1.id, role: 'approver')
+      UserRole.create!(user_id: user2.id, approval_group_id: approval_group1.id, role: 'requester')
       get :search,  email: 'user222@some-dot-gov.gov'
       expect(assigns(:groups)).to be_empty
     end

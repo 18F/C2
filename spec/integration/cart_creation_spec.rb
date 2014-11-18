@@ -1,7 +1,7 @@
 describe 'Creating a cart' do
   before do
-    approval_group_1 = FactoryGirl.create(:approval_group_with_approvers_and_requester, name: "firstApprovalGroup")
-    approval_group_2 = ApprovalGroup.create(name: "secondApprovalGroup")
+    FactoryGirl.create(:approval_group_with_approvers_and_requester, name: "firstApprovalGroup")
+    approval_group_2 = FactoryGirl.create(:approval_group, name: "secondApprovalGroup")
     FactoryGirl.create(:user, email_address: "test.email.only@some-dot-gov.gov")
 
     requester1 = User.create!(email_address: 'requester-approval-group2@some-dot-gov.gov')

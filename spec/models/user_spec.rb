@@ -21,13 +21,12 @@ describe User do
       expect(user.full_name).to eq 'George Jetson'
     end
 
-    it "returns the user's email address if no first name and last name" do |variable|
+    it "returns the user's email address if no first name and last name" do
       user.first_name = nil
       user.last_name = nil
       user.email_address = 'george.jetson@spacelysprockets.com'
 
       expect(user.full_name).to eq 'george.jetson@spacelysprockets.com'
     end
-
   end
 end

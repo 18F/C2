@@ -9,6 +9,12 @@ describe ApprovalGroup do
     it 'should be valid with valid attributes' do
       expect(approval_group).to be_valid
     end
+
+    it "fails validation with a flow that isn't in the list" do
+      approval_group.flow = 'badflow'
+      expect(approval_group).to_not be_valid
+      expect(approval_group.errors[:flow]).to_not be_empty
+    end
   end
 
   context 'relationships' do
@@ -23,11 +29,10 @@ describe ApprovalGroup do
     end
 
     it 'has users' do
-      user_role = UserRole.create!(user_id: user1.id, approval_group_id: approval_group.id, role: 'approver')
-      user_role = UserRole.create!(user_id: user2.id, approval_group_id: approval_group.id, role: 'requester')
+      UserRole.create!(user_id: user1.id, approval_group_id: approval_group.id, role: 'approver')
+      UserRole.create!(user_id: user2.id, approval_group_id: approval_group.id, role: 'requester')
       expect(approval_group.users).to eq [user1, user2]
     end
-
   end
 
   context 'invalid attributes' do

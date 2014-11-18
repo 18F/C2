@@ -3,83 +3,83 @@ describe CommunicartsController do
   let(:params) {
 
   '{
-        "cartName": "",
-        "cartNumber": "2867637",
-        "category": "initiation",
-        "email": "test-email@some-dot-gov.gov",
-        "fromAddress": "from-address@some-dot-gov.gov",
-        "toAddress": ["to-address@some-dot-gov.gov"],
-        "gsaUserName": "",
-        "initiationComment": "\r\n\r\nHi, this is a comment, I hope it works!\r\nThis is the second line of the comment.",
-        "properties": {
-          "origin":"navigator"
-        },
-        "cartItems": [
-          {
-            "vendor": "DOCUMENT IMAGING DIMENSIONS, INC.",
-            "description": "ROUND RING VIEW BINDER WITH INTERIOR POC",
-            "url": "/advantage/catalog/product_detail.do?&oid=704213980&baseOid=&bpaNumber=GS-02F-XA002",
-            "notes": "",
-            "qty": "24",
-            "details": "Direct Delivery 3-4 days delivered ARO",
-            "socio": [],
-            "partNumber": "7510-01-519-4381",
-            "price": "$2.46",
-            "traits": {
-                "socio": [
-                    "s",
-                    "w"
-                ],
-                "features": [
-                    "bpa"
-                ],
-                "green": "true"
-            }
-          },
-          {
-            "vendor": "OFFICE DEPOT",
-            "description": "PEN,ROLLER,GELINK,G-2,X-FINE",
-            "url": "/advantage/catalog/product_detail.do?&oid=703389586&baseOid=&bpaNumber=GS-02F-XA009",
-            "notes": "",
-            "qty": "5",
-            "details": "Direct Delivery 3-4 days delivered ARO",
-            "partNumber": "PIL31003",
-            "price": "$10.29",
-            "traits": {
-                "socio": [
-                    "s",
-                    "w"
-                ],
-                "features": [
-                    "bpa"
-                ],
-                "green": "true"
-            }
-
-          },
-          {
-            "vendor": "METRO OFFICE PRODUCTS",
-            "description": "PAPER,LEDGER,11X8.5",
-            "url": "/advantage/catalog/product_detail.do?&oid=681115589&baseOid=&bpaNumber=GS-02F-XA004",
-            "notes": "",
-            "qty": "3",
-            "details": "Direct Delivery 3-4 days delivered ARO",
-            "partNumber": "WLJ90310",
-            "price": "$32.67",
-            "traits": {
-                "socio": [
-                    "s",
-                    "w"
-                ],
-                "features": [
-                    "bpa"
-                ],
-                "green": "true"
-            }
+      "cartName": "",
+      "cartNumber": "2867637",
+      "category": "initiation",
+      "email": "test-email@some-dot-gov.gov",
+      "fromAddress": "from-address@some-dot-gov.gov",
+      "toAddress": ["to-address@some-dot-gov.gov"],
+      "gsaUserName": "",
+      "initiationComment": "\r\n\r\nHi, this is a comment, I hope it works!\r\nThis is the second line of the comment.",
+      "properties": {
+        "origin":"navigator"
+      },
+      "cartItems": [
+        {
+          "vendor": "DOCUMENT IMAGING DIMENSIONS, INC.",
+          "description": "ROUND RING VIEW BINDER WITH INTERIOR POC",
+          "url": "/advantage/catalog/product_detail.do?&oid=704213980&baseOid=&bpaNumber=GS-02F-XA002",
+          "notes": "",
+          "qty": "24",
+          "details": "Direct Delivery 3-4 days delivered ARO",
+          "socio": [],
+          "partNumber": "7510-01-519-4381",
+          "price": "$2.46",
+          "traits": {
+              "socio": [
+                  "s",
+                  "w"
+              ],
+              "features": [
+                  "bpa"
+              ],
+              "green": "true"
           }
-        ]
-      }'
-    }
+        },
+        {
+          "vendor": "OFFICE DEPOT",
+          "description": "PEN,ROLLER,GELINK,G-2,X-FINE",
+          "url": "/advantage/catalog/product_detail.do?&oid=703389586&baseOid=&bpaNumber=GS-02F-XA009",
+          "notes": "",
+          "qty": "5",
+          "details": "Direct Delivery 3-4 days delivered ARO",
+          "partNumber": "PIL31003",
+          "price": "$10.29",
+          "traits": {
+              "socio": [
+                  "s",
+                  "w"
+              ],
+              "features": [
+                  "bpa"
+              ],
+              "green": "true"
+          }
+
+        },
+        {
+          "vendor": "METRO OFFICE PRODUCTS",
+          "description": "PAPER,LEDGER,11X8.5",
+          "url": "/advantage/catalog/product_detail.do?&oid=681115589&baseOid=&bpaNumber=GS-02F-XA004",
+          "notes": "",
+          "qty": "3",
+          "details": "Direct Delivery 3-4 days delivered ARO",
+          "partNumber": "WLJ90310",
+          "price": "$32.67",
+          "traits": {
+              "socio": [
+                  "s",
+                  "w"
+              ],
+              "features": [
+                  "bpa"
+              ],
+              "green": "true"
+          }
+        }
+      ]
+    }'
+  }
 
   let(:approval_group) { FactoryGirl.create(:approval_group_with_approvers_and_requester, name: "anotherApprovalGroupName") }
   let(:approval) { FactoryGirl.create(:approval) }
@@ -114,13 +114,11 @@ describe CommunicartsController do
         end
 
         it 'creates a comment given a comment param' do
-          mock_comment = mock_model(Comment)
-          allow(mock_comment).to receive(:[]=)
-          allow(mock_comment).to receive(:has_attribute?).with('commentable_id').and_return(true)
-          allow(mock_comment).to receive(:save)
-
-          expect(Comment).to receive(:create!).with(user_id: approval_group.requester_id, comment_text: "Hi, this is a comment, I hope it works!\r\nThis is the second line of the comment.").and_return(mock_comment)
           post 'send_cart', @json_params
+
+          comment = Comment.last
+          expect(comment.user_id).to eq(approval_group.requester_id)
+          expect(comment.comment_text).to eq("Hi, this is a comment, I hope it works!\r\nThis is the second line of the comment.")
         end
 
         it 'does not create a comment when not given a comment param' do
@@ -143,7 +141,7 @@ describe CommunicartsController do
         approval_group
         @json_params['properties'] = {}
         post 'send_cart', @json_params
-        expect(response).to render_template(partial: '_cart')
+        expect(response).to render_template(partial: '_cart_mail')
       end
 
     end
@@ -173,7 +171,7 @@ describe CommunicartsController do
 
   describe 'POST approval_reply_received' do
     let(:cart) { FactoryGirl.create(:cart_with_approval_group, external_id: 246810) }
-    let(:approver) { FactoryGirl.create(:user, id: 1234) }
+    let(:approver) { FactoryGirl.create(:user) }
     let(:report) { EmailStatusReport.new(cart) }
 
     let(:approval_params) {
@@ -222,7 +220,7 @@ describe CommunicartsController do
       before do
         allow(User).to receive(:find_by).and_return(approver)
         allow(cart).to receive_message_chain(:approval_users, :where, :first).and_return(approver)
-        approval.update_attributes(user_id: 1234)
+        approval.update_attributes(cart_id: cart.id, user_id: approver.id)
         allow(cart).to receive_message_chain(:approvals, :where).and_return([approval])
         allow(Cart).to receive_message_chain(:where, :where, :first).and_return(cart)
 
@@ -242,7 +240,6 @@ describe CommunicartsController do
       end
 
       it 'updates the cart status' do
-        expect(cart).to receive(:update_approval_status)
         post 'approval_reply_received', @json_approval_params
       end
 
@@ -280,7 +277,7 @@ describe CommunicartsController do
         allow(mock_comment).to receive(:[]=)
         allow(mock_comment).to receive(:has_attribute?).with('commentable_id').and_return(true)
         allow(mock_comment).to receive(:save)
-        expect(Comment).to receive(:new).with(:user_id=>1234,comment_text: 'Test Approval Comment').and_return(mock_comment)
+        expect(Comment).to receive(:new).with(user_id: approver.id, comment_text: 'Test Approval Comment').and_return(mock_comment)
         post 'approval_reply_received', @json_approval_params
       end
 
@@ -359,7 +356,7 @@ describe CommunicartsController do
       }'
     }
 
-    let(:token) { token = ApiToken.create!(user_id: 108642, cart_id: 246810, expires_at: Time.now + 5.days) }
+    let(:token) { ApiToken.create!(user_id: 108642, cart_id: 246810, expires_at: Time.now + 5.days) }
     let(:cart) { FactoryGirl.create(:cart_with_approvals) }
     let(:approver) { FactoryGirl.create(:user, id: 108642, email_address: 'another_approver@some-dot-gov.gov') }
 

@@ -58,28 +58,19 @@ describe CommunicartMailer do
 
   describe 'approval reply received email' do
     let(:requester) { FactoryGirl.create(:user, email_address: 'test-requester-1@some-dot-gov.gov') }
+    let(:cart_with_approval_group) { FactoryGirl.create(:cart_with_approvals, external_id: 13579) }
+    let(:approval) { cart_with_approval_group.approvals.first }
+    let(:mail) { CommunicartMailer.approval_reply_received_email(approval) }
 
     before do
+      approval.update_attribute(:status, 'approved')
       allow(ENV).to receive(:[])
       allow(ENV).to receive(:[]).with('NOTIFICATION_FROM_EMAIL').and_return('reply@communicart-stub.com')
       allow(cart_with_approval_group).to receive(:requester).and_return(requester)
     end
 
-    let(:analysis) {
-      OpenStruct.new(
-                    approve: 'APPROVE',
-                    fromAddress: 'approver-test@some-dot-gov.gov',
-                    cartNumber: '13579'
-                    )
-    }
-
-    let(:cart_with_approval_group) { FactoryGirl.create(:cart_with_approval_group) }
-
-    let(:mail) { CommunicartMailer.approval_reply_received_email(analysis, cart_with_approval_group) }
-
-
     it 'renders the subject' do
-      expect(mail.subject).to eq('User approver-test@some-dot-gov.gov has approved cart #13579')
+      expect(mail.subject).to eq('User approver1@some-dot-gov.gov has approved cart #13579')
     end
 
     it 'renders the receiver email' do
@@ -148,8 +139,8 @@ describe CommunicartMailer do
     end
 
     let(:cart_with_observers) { FactoryGirl.create(:cart_with_observers, external_id: 1965) }
-
-    let(:mail) { CommunicartMailer.cart_observer_email(cart_with_observers.observers.first.user.email_address, cart_with_observers) }
+    let(:observer) { cart_with_observers.observers.first }
+    let(:mail) { CommunicartMailer.cart_observer_email(observer.user.email_address, cart_with_observers) }
 
     it 'renders the subject' do
       expect(mail.subject).to eq('Communicart Approval Request from Liono Thunder: Please review Cart #1965')

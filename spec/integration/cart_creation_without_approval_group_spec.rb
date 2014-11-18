@@ -61,19 +61,12 @@ describe 'Creating a cart without an approval group' do
   }
 
   before do
-    ActionMailer::Base.delivery_method = :test
-    ActionMailer::Base.perform_deliveries = true
-    ActionMailer::Base.deliveries = []
     ENV['NOTIFICATION_FROM_EMAIL'] = 'sender@some-dot_gov.gov'
 
     @json_params_1 = JSON.parse(params_request_1)
     expect(User.count).to eq 0
     expect(Cart.count).to eq 0
     expect(Approval.count).to eq 0
-  end
-
-  after do
-    ActionMailer::Base.deliveries.clear
   end
 
   it 'creates new users' do

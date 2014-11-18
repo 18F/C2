@@ -19,10 +19,6 @@ module IntegrationSpecHelper
     OmniAuth.config.mock_auth[:myusa].extra = extra_mock
     OmniAuth.config.mock_auth[:myusa].credentials = credentials_mock
 
-    mock_session = double("session_info",
-      user: { email: 'hello@hello.com' }
-    )
-
     user = @user ||= FactoryGirl.create(:user)
     allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
 
