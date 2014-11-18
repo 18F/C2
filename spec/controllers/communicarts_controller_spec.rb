@@ -273,12 +273,13 @@ describe CommunicartsController do
         allow(cart).to receive_message_chain(:approval_group, :approvers, :where).and_return([approver])
         allow(cart).to receive(:update_approval_status)
 
-        mock_comment = mock_model(Comment)
-        allow(mock_comment).to receive(:[]=)
-        allow(mock_comment).to receive(:has_attribute?).with('commentable_id').and_return(true)
-        allow(mock_comment).to receive(:save)
-        expect(Comment).to receive(:new).with(user_id: approver.id, comment_text: 'Test Approval Comment').and_return(mock_comment)
-        post 'approval_reply_received', @json_approval_params
+        expect {
+          post 'approval_reply_received', @json_approval_params
+        }.to change { Comment.count }.from(0).to(1)
+
+        comment = Comment.last
+        expect(comment.user_id).to eq(approver.id)
+        expect(comment.comment_text).to eq('Test Approval Comment')
       end
 
       it 'does not create a comment when not given a comment param' do

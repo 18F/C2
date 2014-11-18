@@ -24,7 +24,6 @@ group :test, :development do
   gem 'letter_opener', require: false
   gem 'pry-byebug'
   gem 'pry-rails'
-  gem 'rspec-activemodel-mocks'
   gem 'rspec-rails'
 end
 
