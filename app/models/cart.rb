@@ -105,6 +105,9 @@ class Cart < ActiveRecord::Base
   def self.initialize_cart_with_items params
     cart = self.existing_or_new_cart params
     cart.initialize_approval_group params
+    cart.initialize_flow(params)
+    self.copy_existing_approvals_to(cart, name)
+
     cart
   end
 
@@ -116,11 +119,10 @@ class Cart < ActiveRecord::Base
       cart = reset_existing_cart(pending_cart)
     else
       #There is no existing cart or the existing cart is already approved
-      flow = params['flow'].presence || 'parallel'
-      cart = Cart.create!(flow: flow, name: name, status: 'pending', external_id: params['cartNumber'])
-      copy_existing_approvals_to(cart, name)
+      cart = Cart.new(name: name, status: 'pending', external_id: params['cartNumber'])
     end
-    return cart
+
+    cart
   end
 
   def initialize_approval_group(params)
@@ -128,8 +130,11 @@ class Cart < ActiveRecord::Base
       #TODO: Handle approvalGroup non-existent approval group
       approval_group = ApprovalGroup.find_by_name(params['approvalGroup'])
       self.approval_group = approval_group
-      self.flow = approval_group.flow
     end
+  end
+
+  def initialize_flow(params)
+    self.flow = params['flow'].presence || self.flow || self.approval_group.try(:flow) || 'parallel'
   end
 
   def import_initial_comments(comments)

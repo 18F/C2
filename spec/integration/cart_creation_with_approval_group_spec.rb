@@ -1,9 +1,10 @@
 require 'spec_helper'
 
 describe 'Creating a cart with an existing approval group' do
+  let!(:approval_group_1) { FactoryGirl.create(:approval_group_with_approvers_and_requester, name: "firstApprovalGroup") }
+  let!(:approval_group_2) { FactoryGirl.create(:approval_group, name: "secondApprovalGroup") }
+
   before do
-    FactoryGirl.create(:approval_group_with_approvers_and_requester, name: "firstApprovalGroup")
-    approval_group_2 = FactoryGirl.create(:approval_group, name: "secondApprovalGroup")
     FactoryGirl.create(:user, email_address: "test.email.only@some-dot-gov.gov")
 
     requester1 = User.create!(email_address: 'requester-approval-group2@some-dot-gov.gov')
@@ -248,4 +249,13 @@ describe 'Creating a cart with an existing approval group' do
     end
   end
 
+  it "assigns the flow from the approval group" do
+    approval_group_1.update_attribute(:flow, 'linear')
+
+    post 'send_cart', json_params_1
+    expect(Cart.count).to eq 1
+    cart = Cart.first
+
+    expect(cart.flow).to eq('linear')
+  end
 end
