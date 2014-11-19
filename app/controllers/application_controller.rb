@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   before_filter :allow_cors_request
   after_filter :cors_set_access_control_headers
-  protect_from_forgery with: :null_session
+  protect_from_forgery with: :exception
 
   helper_method :current_user, :user_signed_in?
 
