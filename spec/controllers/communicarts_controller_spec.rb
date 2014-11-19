@@ -130,17 +130,24 @@ describe CommunicartsController do
       end
 
       context "CORS requests" do
-        it "should set the Access-Control-Allow-Origin header to allow CORS from anywhere" do
+        it "sets the Access-Control-Allow-Origin header to allow CORS from anywhere" do
           post 'send_cart', @json_params
-          response.headers['Access-Control-Allow-Origin'].should == '*'
+          expect(response.headers['Access-Control-Allow-Origin']).to eq('*')
         end
 
-        it "should allow general HTTP methods thru CORS (GET/POST/PUT)" do
+        it "allows general HTTP methods (GET/POST/PUT) through CORS" do
           post 'send_cart', @json_params
           allowed_http_methods = response.header['Access-Control-Allow-Methods']
           %w{GET POST PUT}.each do |method|
-            allowed_http_methods.should include(method)
+            expect(allowed_http_methods).to include(method)
           end
+        end
+
+        it "skips the actual action for OPTIONS requests" do
+          expect_any_instance_of(CommunicartsController).to_not receive(:send_cart)
+          # http://arnab-deka.com/posts/2012/09/allowing-and-testing-cors-requests-in-rails/
+          process 'send_cart', 'OPTIONS'
+          expect(response.body).to be_blank
         end
       end
 

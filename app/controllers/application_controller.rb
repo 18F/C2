@@ -1,24 +1,26 @@
 class ApplicationController < ActionController::Base
-  before_filter :allow_cors_request
-  after_filter :cors_set_access_control_headers
+  before_filter :allow_cors
   protect_from_forgery with: :exception
 
   helper_method :current_user, :user_signed_in?
 
-  def cors_set_access_control_headers
+
+  private
+
+  def allow_cors
     headers['Access-Control-Allow-Origin'] = '*'
     headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, OPTIONS'
     headers['Access-Control-Max-Age'] = "1728000"
-  end
 
-  def allow_cors_request
-    if request.method == :options
+    if request.method == 'OPTIONS'
+      # pre-flight request
+      # https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#Preflighted_requests
       headers['Access-Control-Allow-Headers'] = 'X-Requested-With, X-Prototype-Version'
-      render :text => '', :content_type => 'text/plain'
+      # short-circuit the response
+      head :ok
     end
   end
 
-private
   def current_user
     @current_user ||= User.find_or_create_by(email_address: session[:user]['email']) if session[:user]
   end
