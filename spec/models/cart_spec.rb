@@ -35,4 +35,16 @@ describe Cart do
 
   end
 
+  describe '#find_cart_without_name' do
+    let(:cart) { FactoryGirl.create(:cart_with_approval_group, name: '30003') }
+    let(:cart_id) { 1357910 }
+    let(:cart_name) {'30003'}
+    it 'finds cart' do
+      puts cart.name
+      puts cart
+      c = Cart.existing_or_new_cart({'cartNumber' => 30003})
+      expect(c.name).to eq('30003');
+    end
+  end
+
 end

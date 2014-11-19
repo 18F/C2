@@ -282,12 +282,11 @@ body.webapp {
     margin-bottom: $webpadding;
     padding: $webpadding;
   }
-
-  .row {
-    margin-right: 0;
-  }
 }
 
+.row {
+  margin-right: 0;
+}
 .purchase-status {
   border: 1px solid #ff9e19;
   padding: 30px 0px;
