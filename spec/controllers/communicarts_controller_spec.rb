@@ -128,6 +128,22 @@ describe CommunicartsController do
         end
 
       end
+
+      context "CORS requests" do
+        it "should set the Access-Control-Allow-Origin header to allow CORS from anywhere" do
+          post 'send_cart', @json_params
+          response.headers['Access-Control-Allow-Origin'].should == '*'
+        end
+
+        it "should allow general HTTP methods thru CORS (GET/POST/PUT)" do
+          post 'send_cart', @json_params
+          allowed_http_methods = response.header['Access-Control-Allow-Methods']
+          %w{GET POST PUT}.each do |method|
+            allowed_http_methods.should include(method)
+          end
+        end
+      end
+
     end
 
     context 'template rendering' do
