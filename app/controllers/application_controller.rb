@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
       # https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#Preflighted_requests
       headers['Access-Control-Allow-Headers'] = 'X-Requested-With, X-Prototype-Version'
       # short-circuit the response
-      head :ok
+      head :no_content
     end
   end
 

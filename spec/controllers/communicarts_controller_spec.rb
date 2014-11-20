@@ -147,7 +147,8 @@ describe CommunicartsController do
           expect_any_instance_of(CommunicartsController).to_not receive(:send_cart)
           # http://arnab-deka.com/posts/2012/09/allowing-and-testing-cors-requests-in-rails/
           process 'send_cart', 'OPTIONS'
-          expect(response.body).to be_blank
+          expect(response.status).to eq(204)
+          expect(response.body).to eq('')
         end
       end
 
