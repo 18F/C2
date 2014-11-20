@@ -1,0 +1,2 @@
+class ApprovalGroupError < StandardError
+end

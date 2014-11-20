@@ -1,4 +1,6 @@
 require ::File.expand_path('authentication_error.rb',  'lib/errors')
+require ::File.expand_path('approval_group_error.rb',  'lib/errors')
+
 
 class CommunicartsController < ApplicationController
   skip_before_action :verify_authenticity_token
@@ -8,7 +10,10 @@ class CommunicartsController < ApplicationController
     authentication_error(exception)
   end
 
+  rescue_from ApprovalGroupError, :with =>   :approval_group_error
+
   def send_cart
+
     cart = Commands::Approval::InitiateCartApproval.new.perform(params)
     jcart = cart.as_json(include: {cart_items:
                                        {
@@ -16,8 +21,6 @@ class CommunicartsController < ApplicationController
                                        }
     })
     render json: jcart, status: 201
-    # TODO respond with JSON in case of error
-    # render json: { message: "Something went wrong", errors: e }, status: 500
   end
 
   def approval_reply_received
@@ -97,4 +100,9 @@ private
     flash[:error] = e.message
     redirect_to "/498.html"
   end
+
+  def approval_group_error
+    render json: { message: "Approval Group Not Found" }, status: 400
+  end
+
 end

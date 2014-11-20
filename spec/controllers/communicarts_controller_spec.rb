@@ -85,6 +85,16 @@ describe CommunicartsController do
       #TODO: Write specs
     end
 
+    context 'nonexistent approval_group is specified' do
+      it 'should return 400 error' do
+        json_params['approvalGroup'] = "nogrouphere"
+        post  'send_cart', json_params
+        expect(response.status).to eq(400)
+        bod = JSON.parse response.body
+        expect(JSON.parse(response.body)['message']).to eq("Approval Group Not Found")
+      end
+    end
+
   end
 
   describe 'POST approval_reply_received' do
