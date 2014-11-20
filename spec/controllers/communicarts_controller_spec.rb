@@ -6,9 +6,7 @@ describe CommunicartsController do
   let(:approval_list) { [approval] }
 
   describe 'POST send_cart' do
-    before do
-      @json_params = JSON.parse(params)
-    end
+    let(:json_params) { JSON.parse(params) }
 
     context 'approval group' do
       before do
@@ -18,23 +16,23 @@ describe CommunicartsController do
       context 'is indicated' do
         before do
           approval_group
-          @json_params['approvalGroup'] = "anotherApprovalGroupName"
+          json_params['approvalGroup'] = "anotherApprovalGroupName"
         end
 
         it 'uses an existing approval group' do
           expect(ApprovalGroup).to receive(:find_by_name).with("anotherApprovalGroupName").and_return(approval_group)
-          post 'send_cart', @json_params
+          post 'send_cart', json_params
         end
 
         it 'invokes a mailer' do
           mock_mailer = double
           expect(CommunicartMailer).to receive(:cart_notification_email).and_return(mock_mailer)
           expect(mock_mailer).to receive(:deliver)
-          post 'send_cart', @json_params
+          post 'send_cart', json_params
         end
 
         it 'creates a comment given a comment param' do
-          post 'send_cart', @json_params
+          post 'send_cart', json_params
 
           comment = Comment.last
           expect(comment.user_id).to eq(approval_group.requester_id)
@@ -43,8 +41,8 @@ describe CommunicartsController do
 
         it 'does not create a comment when not given a comment param' do
           expect(Comment).not_to receive(:create)
-          @json_params['initiationComment'] = ''
-          post 'send_cart', @json_params
+          json_params['initiationComment'] = ''
+          post 'send_cart', json_params
         end
 
       end
@@ -53,14 +51,14 @@ describe CommunicartsController do
     context 'template rendering' do
       it 'renders a navigation template' do
         approval_group
-        post 'send_cart', @json_params
+        post 'send_cart', json_params
         expect(response).to render_template(partial: '_navigator_cart')
       end
 
       it 'renders the default template' do
         approval_group
-        @json_params['properties'] = {}
-        post 'send_cart', @json_params
+        json_params['properties'] = {}
+        post 'send_cart', json_params
         expect(response).to render_template(partial: '_cart_mail')
       end
 
@@ -69,13 +67,13 @@ describe CommunicartsController do
     context 'method return' do
       it 'returns 201' do
         approval_group
-        post 'send_cart', @json_params
+        post 'send_cart', json_params
         expect(response.status).to eq(201)
       end
 
       it 'returns cart as json' do
         approval_group
-        post 'send_cart', @json_params
+        post 'send_cart', json_params
         json_response = JSON.parse(response.body)
         expect(json_response["name"]).to eq("2867637")
         expect(json_response["cart_items"][0]["description"]).to eq("ROUND RING VIEW BINDER WITH INTERIOR POC")
