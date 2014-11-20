@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe 'Creating a cart without an approval group' do
 
   let(:params_request_1) {

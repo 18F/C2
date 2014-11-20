@@ -16,8 +16,8 @@ module IntegrationSpecHelper
       token: '1a2b3c4d'
     )
 
-    allow(OmniAuth.config.mock_auth[:myusa]).to receive(:extra).and_return(extra_mock)
-    allow(OmniAuth.config.mock_auth[:myusa]).to receive(:credentials).and_return(credentials_mock)
+    OmniAuth.config.mock_auth[:myusa].extra = extra_mock
+    OmniAuth.config.mock_auth[:myusa].credentials = credentials_mock
 
     user = @user ||= FactoryGirl.create(:user)
     allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)

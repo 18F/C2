@@ -1,4 +1,3 @@
-require 'spec_helper'
 require 'request_helper'
 
 describe 'CommunicartsController' do
@@ -9,7 +8,6 @@ describe 'CommunicartsController' do
 
       params = CommunicartMailer.default_params.merge({from:'reply@communicart-stub.com'})
       allow(CommunicartMailer).to receive(:default_params).and_return(params)
-      allow_any_instance_of(CommunicartsController).to receive(:total_price_from_params)
       allow(CommunicartMailer).to receive_message_chain(:cart_notification_email, :deliver)
 
       approval_group = FactoryGirl.create(:approval_group_with_approver_and_requester_approvals, name: 'MyApprovalGroup')

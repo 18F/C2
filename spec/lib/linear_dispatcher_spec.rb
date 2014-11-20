@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe LinearDispatcher do
   let(:cart) { FactoryGirl.create(:cart) }
   let(:dispatcher) { LinearDispatcher.new }

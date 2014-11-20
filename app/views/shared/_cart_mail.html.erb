@@ -151,15 +151,12 @@
           <%- end %>
 
 
-          <%- if local_assigns[:delivery] == 'web' %>
-
             <tr>
               <td class='cart-total' colspan='3'>
-                <span class="total-label">Total:</span> <strong>$<%= cart.total_price %></strong>
+                <span class="total-label">Total: <strong>$<%= cart.total_price %></strong></span>
               </td>
             </tr>
 
-          <%- end %>
           </table>
 
       </td>

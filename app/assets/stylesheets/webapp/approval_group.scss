@@ -1,21 +1,23 @@
-.ag_display {
-  margin-left: 2em;
+.ag-form {
   label {
     margin-top: .75em;
   }
   input[type=submit] {
     margin-top: 0.75em;
   }
+}
 
-  table {
-    margin-top: 1em;
-  }
+.ag_display {
+  margin-left: 2em;
   td {
     padding: .2em .75em .2em .2em ;
   }
-  tr {
-//    border-bottom: 1px dashed darkblue;
-  }
+  padding-top: 1em;
+  margin-bottom: 2.5em;
+}
+
+.ag-separator {
+  border-top: 1px dashed darkblue;
 }
 
 .ag_new_form {
@@ -23,4 +25,16 @@
   padding: 1em;
   border: 1px solid darkblue;
   background-color: #eeeeff;
+}
+
+//break at xs size
+@media (max-width: 768px) {
+  .no-users {
+    margin-top: 1em;
+  }
+  .ag_display {
+    table {
+      margin-top: 1em;
+    }
+  }
 }

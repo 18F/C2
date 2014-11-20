@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe CommunicartsController do
 
   let(:params) {
@@ -90,7 +88,6 @@ describe CommunicartsController do
   describe 'POST send_cart' do
     before do
       @json_params = JSON.parse(params)
-      allow(controller).to receive(:total_price_from_params)
     end
 
     context 'approval group' do
@@ -131,6 +128,29 @@ describe CommunicartsController do
         end
 
       end
+
+      context "CORS requests" do
+        it "sets the Access-Control-Allow-Origin header to allow CORS from anywhere" do
+          post 'send_cart', @json_params
+          expect(response.headers['Access-Control-Allow-Origin']).to eq('*')
+        end
+
+        it "allows general HTTP methods (GET/POST/PUT) through CORS" do
+          post 'send_cart', @json_params
+          allowed_http_methods = response.header['Access-Control-Allow-Methods']
+          %w{GET POST PUT}.each do |method|
+            expect(allowed_http_methods).to include(method)
+          end
+        end
+
+        it "skips the actual action for OPTIONS requests" do
+          expect_any_instance_of(CommunicartsController).to_not receive(:send_cart)
+          # http://arnab-deka.com/posts/2012/09/allowing-and-testing-cors-requests-in-rails/
+          process 'send_cart', 'OPTIONS'
+          expect(response.body).to be_blank
+        end
+      end
+
     end
 
     context 'template rendering' do
@@ -264,7 +284,6 @@ describe CommunicartsController do
 
         allow(Cart).to receive_message_chain(:where, :where, :first).and_return(cart)
         allow(cart).to receive_message_chain(:approval_users, :where).and_return([approver])
-        allow(cart).to receive_message_chain(:cart_approvals, :where)
         allow(cart).to receive(:update_approval_status)
 
         allow_any_instance_of(Approval).to receive(:update_attributes)
@@ -277,12 +296,13 @@ describe CommunicartsController do
         allow(cart).to receive_message_chain(:approval_group, :approvers, :where).and_return([approver])
         allow(cart).to receive(:update_approval_status)
 
-        mock_comment = mock_model(Comment)
-        allow(mock_comment).to receive(:[]=)
-        allow(mock_comment).to receive(:has_attribute?).with('commentable_id').and_return(true)
-        allow(mock_comment).to receive(:save)
-        expect(Comment).to receive(:new).with(user_id: approver.id, comment_text: 'Test Approval Comment').and_return(mock_comment)
-        post 'approval_reply_received', @json_approval_params
+        expect {
+          post 'approval_reply_received', @json_approval_params
+        }.to change { Comment.count }.from(0).to(1)
+
+        comment = Comment.last
+        expect(comment.user_id).to eq(approver.id)
+        expect(comment.comment_text).to eq('Test Approval Comment')
       end
 
       it 'does not create a comment when not given a comment param' do

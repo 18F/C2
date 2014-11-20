@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe 'Creating a cart with an existing approval group' do
   let!(:approval_group_1) { FactoryGirl.create(:approval_group_with_approvers_and_requester, name: "firstApprovalGroup") }
   let!(:approval_group_2) { FactoryGirl.create(:approval_group, name: "secondApprovalGroup") }

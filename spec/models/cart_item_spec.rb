@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe CartItem do
   let(:cart_item) { FactoryGirl.create(:cart_item) }
   let(:trait) { FactoryGirl.create(:cart_item_trait) }

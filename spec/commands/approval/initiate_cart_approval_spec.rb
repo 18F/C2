@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Commands::Approval::InitiateCartApproval do
   let(:params_request) {
   '{

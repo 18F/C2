@@ -1,7 +1,4 @@
-require 'spec_helper'
-
 describe "Approving a cart with multiple approvers in parallel" do
-
   let(:approval_params) {
     '{
     "cartNumber": "10203040",

@@ -1,11 +1,26 @@
 class ApplicationController < ActionController::Base
-  # Prevent CSRF attacks by raising an exception.
-  # For APIs, you may want to use :null_session instead.
+  before_filter :allow_cors
   protect_from_forgery with: :exception
 
   helper_method :current_user, :user_signed_in?
 
-private
+
+  private
+
+  def allow_cors
+    headers['Access-Control-Allow-Origin'] = '*'
+    headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, OPTIONS'
+    headers['Access-Control-Max-Age'] = "1728000"
+
+    if request.method == 'OPTIONS'
+      # pre-flight request
+      # https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#Preflighted_requests
+      headers['Access-Control-Allow-Headers'] = 'X-Requested-With, X-Prototype-Version'
+      # short-circuit the response
+      head :ok
+    end
+  end
+
   def current_user
     @current_user ||= User.find_or_create_by(email_address: session[:user]['email']) if session[:user]
   end

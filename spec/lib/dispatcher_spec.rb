@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Dispatcher do
   let(:cart) { FactoryGirl.create(:cart) }
 
