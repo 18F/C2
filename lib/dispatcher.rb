@@ -20,7 +20,7 @@ class Dispatcher
     self.email_observers(approval.cart)
   end
 
-  def self.get_dispatcher(cart)
+  def self.initialize_dispatcher(cart)
     case cart.flow
     when 'parallel'
       ParallelDispatcher.new
@@ -30,12 +30,12 @@ class Dispatcher
   end
 
   def self.deliver_new_cart_emails(cart)
-    dispatcher = self.get_dispatcher(cart)
+    dispatcher = self.initialize_dispatcher(cart)
     dispatcher.deliver_new_cart_emails(cart)
   end
 
   def self.on_approval_status_change(approval)
-    dispatcher = self.get_dispatcher(approval.cart)
+    dispatcher = self.initialize_dispatcher(approval.cart)
     dispatcher.on_approval_status_change(approval)
   end
 end
