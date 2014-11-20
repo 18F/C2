@@ -1,8 +1,7 @@
 describe Cart do
-  describe '#update_approval_status' do
-    let(:cart) { FactoryGirl.create(:cart_with_approval_group) }
-    let(:cart_id) { 1357910 }
+  let(:cart) { FactoryGirl.create(:cart_with_approval_group) }
 
+  describe '#update_approval_status' do
     context "All approvals are in 'approved' status" do
       it 'updates a status based on the cart_id passed in from the params' do
         allow(cart).to receive(:all_approvals_received?).and_return(true)
@@ -22,8 +21,20 @@ describe Cart do
     end
   end
 
+  describe '#process_approvals_from_approval_group' do
+    it "copies positions from the user_roles" do
+      cart.user_roles.each do |role|
+        role.position += 1
+        role.save!
+      end
+
+      cart.process_approvals_from_approval_group
+
+      expect(cart.approvals.map(&:position)).to eq(cart.user_roles.map(&:position))
+    end
+  end
+
   describe '#process_approvals_without_approval_group' do
-    let(:cart) { FactoryGirl.create(:cart_with_approval_group, name: 'Cart with some approvals') }
     let(:user1) { FactoryGirl.create(:user, email_address: 'user1@some-dot-gov.gov') }
 
     it 'excludes blank email addresses' do

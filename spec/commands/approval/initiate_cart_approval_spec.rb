@@ -55,7 +55,7 @@ describe Commands::Approval::InitiateCartApproval do
 
   describe '#perform' do
     before do
-      expect(Cart).to receive_message_chain(:initialize_cart_with_items, :reload).and_return(cart)
+      expect(Cart).to receive(:initialize_cart_with_items).and_return(cart)
       expect(command).to receive(:import_details)
       expect_any_instance_of(ParallelDispatcher).to receive(:deliver_new_cart_emails)
     end

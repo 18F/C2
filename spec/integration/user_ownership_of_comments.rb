@@ -2,7 +2,7 @@ describe 'Testing User Ownership of Comments' do
 
 # Create Two carts with the same user to prove we can detect user who created comment.
   before do
-    approval_group = ApprovalGroup.create(name: "A Testworthy Approval Group")
+    approval_group = ApprovalGroup.create!(name: "A Testworthy Approval Group")
 
     cart = Cart.new(
                     name: 'My Wonderfully Awesome Communicart',

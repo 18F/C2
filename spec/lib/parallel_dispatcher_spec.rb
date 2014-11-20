@@ -1,13 +1,11 @@
 describe ParallelDispatcher do
   let(:cart) { FactoryGirl.create(:cart_with_approvals) }
   let(:dispatcher) { ParallelDispatcher.new }
-  let(:deliveries) { ActionMailer::Base.deliveries }
-  let(:delivery_emails) { deliveries.map {|email| email.to[0] }.sort }
 
   describe '#deliver_new_cart_emails' do
     it "sends emails to all approvers" do
       dispatcher.deliver_new_cart_emails(cart)
-      expect(delivery_emails).to eq([
+      expect(email_recipients).to eq([
         'approver1@some-dot-gov.gov',
         'approver2@some-dot-gov.gov'
       ])
@@ -28,10 +26,10 @@ describe ParallelDispatcher do
     end
   end
 
-  describe '#deliver_approval_email' do
+  describe '#on_approval_status_change' do
     it "sends to the requester" do
-      dispatcher.deliver_approval_email(cart.approvals.first)
-      expect(delivery_emails).to eq(['requester@some-dot-gov.gov'])
+      dispatcher.on_approval_status_change(cart.approvals.first)
+      expect(email_recipients).to eq(['requester@some-dot-gov.gov'])
     end
   end
 end

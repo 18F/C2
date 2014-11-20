@@ -9,7 +9,7 @@ module ApprovalSteps
   end
 
   step "a valid token" do
-    @token = ApiToken.create(user_id: @user.id, cart_id: @cart.id)
+    @token = ApiToken.create!(user_id: @user.id, cart_id: @cart.id)
   end
 
   step "the user is associated with one of the cart's approvals" do

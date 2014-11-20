@@ -11,7 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141031215718) do
+ActiveRecord::Schema.define(version: 20141114190008) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "api_tokens", force: true do |t|
     t.string   "access_token"
@@ -43,6 +46,7 @@ ActiveRecord::Schema.define(version: 20141031215718) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "role"
+    t.integer  "position"
   end
 
   create_table "cart_item_traits", force: true do |t|
@@ -61,7 +65,7 @@ ActiveRecord::Schema.define(version: 20141031215718) do
     t.integer  "quantity"
     t.text     "details"
     t.string   "part_number"
-    t.float    "price",       limit: 24
+    t.float    "price"
     t.integer  "cart_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -73,6 +77,7 @@ ActiveRecord::Schema.define(version: 20141031215718) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "external_id"
+    t.string   "flow"
   end
 
   create_table "comments", force: true do |t|
@@ -95,6 +100,7 @@ ActiveRecord::Schema.define(version: 20141031215718) do
     t.integer "approval_group_id"
     t.integer "user_id"
     t.string  "role"
+    t.integer "position"
   end
 
   create_table "users", force: true do |t|

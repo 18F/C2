@@ -7,12 +7,14 @@ class Cart < ActiveRecord::Base
   has_many :approvals
   has_many :approval_users, through: :approvals, source: :user
   has_one :approval_group
+  has_many :user_roles, through: :approval_group
   has_one :api_token
   has_many :comments, as: :commentable
   has_many :properties, as: :hasproperties
 
   #TODO: after_save default status
   #TODO: validates_uniqueness_of :name
+  validates :flow, presence: true, inclusion: {in: ApprovalGroup::FLOWS}
 
 
   def update_approval_status
@@ -33,6 +35,10 @@ class Cart < ActiveRecord::Base
 
   def approver_approvals
     self.approvals.where(role: 'approver')
+  end
+
+  def awaiting_approvals
+    self.approver_approvals.where(status: 'pending')
   end
 
   def all_approvals_received?
@@ -99,6 +105,9 @@ class Cart < ActiveRecord::Base
   def self.initialize_cart_with_items params
     cart = self.existing_or_new_cart params
     cart.initialize_approval_group params
+    cart.initialize_flow(params)
+    self.copy_existing_approvals_to(cart, name)
+
     cart
   end
 
@@ -110,17 +119,22 @@ class Cart < ActiveRecord::Base
       cart = reset_existing_cart(pending_cart)
     else
       #There is no existing cart or the existing cart is already approved
-      cart = Cart.create!(name: name, status: 'pending', external_id: params['cartNumber'])
-      copy_existing_approvals_to(cart, name)
+      cart = Cart.new(name: name, status: 'pending', external_id: params['cartNumber'])
     end
-    return cart
+
+    cart
   end
 
   def initialize_approval_group(params)
     if params['approvalGroup']
       #TODO: Handle approvalGroup non-existent approval group
-      self.approval_group = ApprovalGroup.find_by_name(params['approvalGroup'])
+      approval_group = ApprovalGroup.find_by_name(params['approvalGroup'])
+      self.approval_group = approval_group
     end
+  end
+
+  def initialize_flow(params)
+    self.flow = params['flow'].presence || self.flow || self.approval_group.try(:flow) || 'parallel'
   end
 
   def import_initial_comments(comments)
@@ -146,7 +160,11 @@ class Cart < ActiveRecord::Base
 
   def process_approvals_from_approval_group
     approval_group.user_roles.each do |user_role|
-      self.approvals.create!(user_id: user_role.user_id, role: user_role.role)
+      self.approvals.create!(
+        position: user_role.position,
+        role: user_role.role,
+        user_id: user_role.user_id
+      )
     end
   end
 

@@ -1,5 +1,4 @@
-describe 'Approving a cart with multiple approvers' do
-
+describe "Approving a cart with multiple approvers in parallel" do
   let(:approval_params) {
     '{
     "cartNumber": "10203040",
@@ -23,6 +22,7 @@ describe 'Approving a cart with multiple approvers' do
     approval_group = FactoryGirl.create(:approval_group)
 
     cart = Cart.new(
+                    flow: 'parallel',
                     name: 'My Wonderfully Awesome Communicart',
                     status: 'pending',
                     external_id: '10203040'
@@ -47,7 +47,7 @@ describe 'Approving a cart with multiple approvers' do
       cart.approvals << Approval.create!(user_id: user.id, role: 'approver')
     end
 
-    cart.save
+    cart.save!
 
   end
 

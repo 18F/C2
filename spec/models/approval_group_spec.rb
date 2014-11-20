@@ -33,6 +33,14 @@ describe ApprovalGroup do
       UserRole.create!(user_id: user2.id, approval_group_id: approval_group.id, role: 'requester')
       expect(approval_group.users).to eq [user1, user2]
     end
+
+    describe '#approvers' do
+      it "returns associated users" do
+        UserRole.create!(user_id: user1.id, approval_group_id: approval_group.id, role: 'approver', position: 1)
+        UserRole.create!(user_id: user2.id, approval_group_id: approval_group.id, role: 'approver', position: 0)
+        expect(approval_group.approvers).to eq([user1, user2])
+      end
+    end
   end
 
   context 'invalid attributes' do

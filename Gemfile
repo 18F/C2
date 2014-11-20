@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'acts_as_list'
 gem 'autoprefixer-rails'
 gem 'awesome_print'
 gem 'bootstrap-sass', '~> 3.3.0'
