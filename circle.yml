@@ -1,0 +1,19 @@
+dependencies:
+  pre:
+    - cp config/environment_variables.yml.example config/environment_variables.yml
+    - npm install -g grunt-cli
+
+test:
+  override:
+    - bundle exec rspec spec
+    - grunt jasmine
+
+deployment:
+  production:
+    branch: production
+    commands:
+      - ./deploy.sh $CIRCLE_SHA1 production
+  demo:
+    branch: master
+    commands:
+      - ./deploy.sh $CIRCLE_SHA1 demo
