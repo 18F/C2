@@ -19,7 +19,4 @@ C2::Application.routes.draw do
 
   get 'bookmarklet', to: redirect('bookmarklet.html')
   get "/498", :to => "errors#token_authentication_error"
-
-  match "send_cart" => "communicarts#send_cart", :via => :options
-
 end
