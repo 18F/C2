@@ -34,13 +34,13 @@ C2::Application.configure do
     config.action_mailer.delivery_method = :letter_opener
   else
     config.action_mailer.delivery_method = :smtp
+    # http://help.mandrill.com/entries/21738467-Using-Mandrill-s-SMTP-integration-with-Web-Frameworks
     config.action_mailer.smtp_settings = {
-      address:              'smtp.gmail.com',
-      port:                 587,
-      domain:               ENV['SMTP_DOMAIN'],
-      user_name:            ENV['GMAIL_USERNAME'],
-      password:             ENV['GMAIL_PASSWORD'],
-      authentication:       'plain',
+      address:              'smtp.mandrillapp.com',
+      port:                 25,
+      user_name:            ENV.fetch('MANDRILL_USERNAME'),
+      password:             ENV.fetch('MANDRILL_API_KEY'),
+      authentication:       'login',
       enable_starttls_auto: true
     }
   end
