@@ -101,8 +101,8 @@ private
     redirect_to "/498.html"
   end
 
-  def approval_group_error
-    render json: { message: "Approval Group Not Found" }, status: 400
+  def approval_group_error(error)
+    render json: { message: error.to_s }, status: 400
   end
 
 end

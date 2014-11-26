@@ -129,7 +129,7 @@ class Cart < ActiveRecord::Base
     if params['approvalGroup']
       self.approval_group = ApprovalGroup.find_by_name(params['approvalGroup'])
       if self.approval_group.nil?
-        raise ApprovalGroupError.new(msg: 'Approval Group does not exist')
+        raise ApprovalGroupError.new('Approval Group Not Found')
       end
     end
   end
@@ -144,7 +144,7 @@ class Cart < ActiveRecord::Base
 
   def process_approvals_without_approval_group(params)
     if params['approvalGroup'].present?
-      raise ApprovalGroupError.new(msg: 'Approval Group already exists')
+      raise ApprovalGroupError.new('Approval Group already exists')
     end
     approver_emails = params['toAddress'].select(&:present?)
 
