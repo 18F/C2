@@ -146,6 +146,7 @@ GEM
     net-ssh (2.9.1)
     net-ssh-gateway (1.2.0)
       net-ssh (>= 2.6.5)
+    newrelic_rpm (3.9.7.266)
     nokogiri (1.6.3.1)
       mini_portile (= 0.6.0)
     oauth2 (1.0.0)
@@ -288,6 +289,7 @@ DEPENDENCIES
   haml
   jquery-rails
   letter_opener
+  newrelic_rpm
   omniauth-myusa!
   pg
   pry-byebug

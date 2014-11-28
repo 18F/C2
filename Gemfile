@@ -19,6 +19,7 @@ gem 'sass-rails', '>= 3.2'
 gem 'settingslogic'
 gem 'turbolinks'
 gem 'uglifier'
+gem 'newrelic_rpm'
 
 group :test, :development do
   gem 'database_cleaner'
