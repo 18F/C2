@@ -47,21 +47,9 @@ class Cart < ActiveRecord::Base
 
   def create_items_csv
     csv_string = CSV.generate do |csv|
-      csv << ["description","details","vendor","url","notes","part_number","green","features","socio","quantity","unit price","price for quantity"]
+      csv << CartItem.attributes
       cart_items.each do |item|
-        csv << [item.description,
-                item.details,
-                item.vendor,
-                item.url,
-                item.notes,
-                item.part_number,
-                item.green?,
-                item.features,
-                item.socio,
-                item.quantity,
-                item.price,
-                item.quantity * item.price
-               ]
+        csv << item.to_a
       end
     end
 

@@ -25,6 +25,24 @@ class CartItem < ActiveRecord::Base
     "$#{'%.2f' % (price * quantity)}"
   end
 
+  # matches .attributes
+  def to_a
+    [
+      self.description,
+      self.details,
+      self.vendor,
+      self.url,
+      self.notes,
+      self.part_number,
+      self.green?,
+      self.features,
+      self.socio,
+      self.quantity,
+      self.price,
+      self.quantity * self.price
+    ]
+  end
+
   def initialize_traits(traits_params)
     traits_params.each do |trait|
       if trait[1].kind_of?(Array)
@@ -44,6 +62,24 @@ class CartItem < ActiveRecord::Base
     props.each do |key,val|
       self.setProp(key, val)
     end
+  end
+
+  # matches #to_a
+  def self.attributes
+    [
+      'description',
+      'details',
+      'vendor',
+      'url',
+      'notes',
+      'part_number',
+      'green',
+      'features',
+      'socio',
+      'quantity',
+      'unit price',
+      'price for quantity'
+    ]
   end
 
   def self.from_params(params)
