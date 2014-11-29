@@ -1,9 +1,10 @@
 module TimeHelper
-  def human_readable_time(t1,offset)
-    return t1.utc.getlocal(offset).asctime
+  def self.human_readable_time(t1)
+    offset = self.default_time_zone_offset
+    t1.utc.getlocal(offset).asctime
   end
 
-  def default_time_zone_offset
-    return "-04:00"
+  def self.default_time_zone_offset
+    '-04:00'
   end
 end

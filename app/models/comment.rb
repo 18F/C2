@@ -13,7 +13,7 @@ class Comment < ActiveRecord::Base
       self.user.email_address,
       self.comment_text,
       self.updated_at,
-      human_readable_time(self.updated_at, default_time_zone_offset)
+      TimeHelper.human_readable_time(self.updated_at)
     ]
   end
 
