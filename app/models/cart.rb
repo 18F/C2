@@ -195,44 +195,13 @@ class Cart < ActiveRecord::Base
   end
 
   def import_cart_items(cart_items_params)
-    unless cart_items_params.blank?
-      cart_items_params.each do |params|
-        params = params.dup
-        params.delete_if {|k,v| v.blank? }
+    cart_items_params.each do |params|
+      params = params.dup
+      params.delete_if {|k,v| v.blank? }
 
-        ci = self.cart_items.create!(
-          :vendor => params.fetch(:vendor, nil),
-          :description => params.fetch(:description, nil),
-          :url => params.fetch(:url, nil),
-          :notes => params.fetch(:notes, nil),
-          :quantity => params.fetch(:qty , 0),
-          :details => params.fetch(:details, nil),
-          :part_number => params.fetch(:partNumber , nil),
-          :price => params.fetch(:price, nil).gsub(/[\$\,]/,"").to_f
-        )
-
-        if params['traits']
-          params['traits'].each do |trait|
-            if trait[1].kind_of?(Array)
-              trait[1].each do |individual|
-                if individual.present?
-                  ci.cart_item_traits << CartItemTrait.new( :name => trait[0],
-                                                            :value => individual,
-                                                            :cart_item_id => ci.id
-                                                          )
-                end
-              end
-            end
-          end
-        end
-
-        unless params['properties'].blank?
-          params['properties'].each do |key,val|
-            ci.setProp(key, val)
-          end
-        end
-
-      end
+      ci = CartItem.from_params(params)
+      ci.cart = self
+      ci.save!
     end
   end
 end
