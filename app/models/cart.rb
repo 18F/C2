@@ -119,14 +119,22 @@ class Cart < ActiveRecord::Base
     end
   end
 
+  def create_approval_from_user_role(user_role)
+    approval = Approval.new_from_user_role(user_role)
+    approval.cart = self
+    approval.save!
+    approval
+  end
+
   def process_approvals_from_approval_group
     approval_group.user_roles.each do |user_role|
-      self.approvals.create!(
-        position: user_role.position,
-        role: user_role.role,
-        user_id: user_role.user_id
-      )
+      self.create_approval_from_user_role(user_role)
     end
+  end
+
+  def copy_existing_approval(approval)
+    new_approval = self.approvals.create!(user_id: approval.user_id, role: approval.role)
+    Dispatcher.new.email_approver(new_approval)
   end
 
   def self.reset_existing_cart(cart)
@@ -141,20 +149,23 @@ class Cart < ActiveRecord::Base
     previous_cart = Cart.where(name: cart_name).last
     if previous_cart && previous_cart.status == 'rejected'
       previous_cart.approvals.each do |approval|
-        new_cart.approvals.create!(user_id: approval.user_id, role: approval.role)
-        CommunicartMailer.cart_notification_email(approval.user.email_address, new_cart, approval).deliver
+        new_cart.copy_existing_approval(approval)
       end
     end
   end
 
+  def import_cart_item(params)
+    params = params.dup
+    params.delete_if {|k,v| v.blank? }
+
+    ci = CartItem.from_params(params)
+    ci.cart = self
+    ci.save!
+  end
+
   def import_cart_items(cart_items_params)
     cart_items_params.each do |params|
-      params = params.dup
-      params.delete_if {|k,v| v.blank? }
-
-      ci = CartItem.from_params(params)
-      ci.cart = self
-      ci.save!
+      self.import_cart_item(params)
     end
   end
 end

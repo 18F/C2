@@ -19,6 +19,14 @@ class Approval < ActiveRecord::Base
     UserRole.find_by(approval_group_id: cart.approval_group.id, user_id: user_id)
   end
 
+  def self.new_from_user_role(user_role)
+    self.new(
+      position: user_role.position,
+      role: user_role.role,
+      user_id: user_role.user_id
+    )
+  end
+
 
   private
 
