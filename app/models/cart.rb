@@ -2,7 +2,7 @@ require 'csv'
 
 class Cart < ActiveRecord::Base
   include PropMixin
-  include TimeHelper
+
   has_many :cart_items
   has_many :approvals
   has_many :approval_users, through: :approvals, source: :user
@@ -46,27 +46,23 @@ class Cart < ActiveRecord::Base
   end
 
   def create_items_csv
-    csv_string = CSV.generate do |csv|
+    CSV.generate do |csv|
       csv << CartItem.attributes
       cart_items.each do |item|
         csv << item.to_a
       end
     end
-
-    csv_string
   end
 
   def create_comments_csv
-    csv_string = CSV.generate do |csv|
-      csv << ["commenter","cart comment","created_at"]
-      date_sorted_comments = comments.sort { |a,b| a.updated_at <=> b.updated_at }
-      date_sorted_comments.each do |item|
-        user = User.find(item.user_id)
-        csv << [user.email_address, item.comment_text, item.updated_at, human_readable_time(item.updated_at, default_time_zone_offset)]
+    CSV.generate do |csv|
+      csv << Comment.attributes
+      date_sorted_comments = comments.order('updated_at ASC')
+      date_sorted_comments.each do |comment|
+        user = comment.user
+        csv << comment.to_a
       end
     end
-
-    csv_string
   end
 
   def requester
