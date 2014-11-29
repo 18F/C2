@@ -142,20 +142,28 @@ class Cart < ActiveRecord::Base
     self.comments.create!(user_id: self.requester.id, comment_text: comments.strip)
   end
 
+  def create_approver_approvals(emails)
+    emails.each do |email|
+      user = User.find_or_create_by(email_address: email)
+      self.approvals.create!(user_id: user.id, role: 'approver')
+    end
+  end
+
+  def create_requester(email)
+    requester = User.find_or_create_by(email_address: email)
+    self.approvals.create!(user_id: requester.id, role: 'requester')
+  end
+
   def process_approvals_without_approval_group(params)
     if params['approvalGroup'].present?
       raise ApprovalGroupError.new('Approval Group already exists')
     end
     approver_emails = params['toAddress'].select(&:present?)
+    self.create_approver_approvals(approver_emails)
 
-    approver_emails.each do |email|
-      user = User.find_or_create_by(email_address: email)
-      self.approvals.create!(user_id: user.id, role: 'approver')
-    end
-
-    if params['fromAddress']
-      requester = User.find_or_create_by(email_address: params['fromAddress'])
-      self.approvals.create!(user_id: requester.id, role: 'requester')
+    requester_email = params['fromAddress']
+    if requester_email
+      self.create_requester(requester_email)
     end
   end
 
