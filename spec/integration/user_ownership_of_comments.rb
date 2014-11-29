@@ -96,7 +96,7 @@ FactoryGirl.create(:cart_item)
 
     # Invoke Create_comments_csv and check...
 
-    csv = cart2.create_comments_csv
+    csv = CartExporter.new(cart2).comments_csv
 
     expect(csv.lines.count).to eq 3
 

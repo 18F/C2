@@ -5,9 +5,10 @@ class CommunicartMailer < ActionMailer::Base
 
   def set_attachments(cart)
     if cart.all_approvals_received?
-      attachments['Communicart' + cart.name + '.details.csv'] = cart.create_items_csv
-      attachments['Communicart' + cart.name + '.comments.csv'] = cart.create_comments_csv
-      attachments['Communicart' + cart.name + '.approvals.csv'] = cart.create_approvals_csv
+      exporter = CartExporter.new(cart)
+      attachments['Communicart' + cart.name + '.details.csv'] = exporter.items_csv
+      attachments['Communicart' + cart.name + '.comments.csv'] = exporter.comments_csv
+      attachments['Communicart' + cart.name + '.approvals.csv'] = exporter.approvals_csv
     end
   end
 

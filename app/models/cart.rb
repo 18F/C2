@@ -45,25 +45,6 @@ class Cart < ActiveRecord::Base
     self.approver_approvals.where('status != ?', 'approved').empty?
   end
 
-  def create_items_csv
-    CSV.generate do |csv|
-      csv << CartItem.attributes
-      cart_items.each do |item|
-        csv << item.to_a
-      end
-    end
-  end
-
-  def create_comments_csv
-    CSV.generate do |csv|
-      csv << Comment.attributes
-      date_sorted_comments = comments.order('updated_at ASC')
-      date_sorted_comments.each do |comment|
-        csv << comment.to_a
-      end
-    end
-  end
-
   def requester
     approvals.where(role: 'requester').first.try(:user)
   end
@@ -71,18 +52,6 @@ class Cart < ActiveRecord::Base
   def observers
     # TODO: Pull from approvals, not approval groups
     approval_group.user_roles.where(role: 'observer')
-  end
-
-  def create_approvals_csv
-    csv_string = CSV.generate do |csv|
-      csv << ["status","approver","created_at"]
-
-      approvals.each do |approval|
-        csv << [approval.status, approval.user.email_address,approval.updated_at]
-      end
-    end
-
-    csv_string
   end
 
   def self.initialize_cart_with_items params

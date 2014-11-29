@@ -5,6 +5,12 @@ describe CommunicartMailer do
   let(:approver) { FactoryGirl.create(:user) }
   let(:cart) { FactoryGirl.create(:cart_with_approvals, name: "TestCart") }
 
+  def expect_csvs_to_be_exported
+    expect_any_instance_of(CartExporter).to receive(:items_csv)
+    expect_any_instance_of(CartExporter).to receive(:comments_csv)
+    expect_any_instance_of(CartExporter).to receive(:approvals_csv)
+  end
+
   describe 'cart notification email' do
 
     let(:mail) { CommunicartMailer.cart_notification_email('email.to.email@testing.com', cart, cart.approvals.first) }
@@ -33,23 +39,20 @@ describe CommunicartMailer do
     end
 
     context 'attaching a csv of the cart activity' do
-      it 'generates csv attachments for an approved cart' do
+      before do
         allow(cart).to receive(:approval_group).and_return(approval_group)
-        allow(cart).to receive(:all_approvals_received?).and_return(true)
 
-        expect(cart).to receive(:create_items_csv)
-        expect(cart).to receive(:create_comments_csv)
-        expect(cart).to receive(:create_approvals_csv)
+      end
+
+      it 'generates csv attachments for an approved cart' do
+        allow(cart).to receive(:all_approvals_received?).and_return(true)
+        expect_csvs_to_be_exported
         mail
       end
 
       it 'does not generate csv attachments for an unapproved cart' do
-        allow(cart).to receive(:approval_group).and_return(approval_group)
         allow(cart).to receive(:all_approvals_received?).and_return(false)
-
-        expect(cart).not_to receive(:create_items_csv)
-        expect(cart).not_to receive(:create_comments_csv)
-        expect(cart).not_to receive(:create_approvals_csv)
+        expect(CartExporter).not_to receive(:new)
         mail
       end
     end
@@ -84,19 +87,13 @@ describe CommunicartMailer do
     context 'attaching a csv of the cart activity' do
       it 'generates csv attachments for an approved cart' do
         allow(cart_with_approval_group).to receive(:all_approvals_received?).and_return(true)
-
-        expect(cart_with_approval_group).to receive(:create_items_csv)
-        expect(cart_with_approval_group).to receive(:create_comments_csv)
-        expect(cart_with_approval_group).to receive(:create_approvals_csv)
+        expect_csvs_to_be_exported
         mail
       end
 
       it 'does not generate csv attachments for an unapproved cart' do
         allow(cart_with_approval_group).to receive(:all_approvals_received?).and_return(false)
-
-        expect(cart_with_approval_group).not_to receive(:create_items_csv)
-        expect(cart_with_approval_group).not_to receive(:create_comments_csv)
-        expect(cart_with_approval_group).not_to receive(:create_approvals_csv)
+        expect(CartExporter).not_to receive(:new)
         mail
       end
     end
@@ -157,19 +154,13 @@ describe CommunicartMailer do
     context 'attaching a csv of the cart activity' do
       it 'generates csv attachments for an approved cart' do
         allow(cart_with_observers).to receive(:all_approvals_received?).and_return(true)
-
-        expect(cart_with_observers).to receive(:create_items_csv)
-        expect(cart_with_observers).to receive(:create_comments_csv)
-        expect(cart_with_observers).to receive(:create_approvals_csv)
+        expect_csvs_to_be_exported
         mail
       end
 
       it 'does not generate csv attachments for an unapproved cart' do
         allow(cart_with_observers).to receive(:all_approvals_received?).and_return(false)
-
-        expect(cart_with_observers).not_to receive(:create_items_csv)
-        expect(cart_with_observers).not_to receive(:create_comments_csv)
-        expect(cart_with_observers).not_to receive(:create_approvals_csv)
+        expect(CartExporter).not_to receive(:new)
         mail
       end
     end
