@@ -58,12 +58,6 @@ class CartItem < ActiveRecord::Base
     end
   end
 
-  def import_properties(props)
-    props.each do |key,val|
-      self.setProp(key, val)
-    end
-  end
-
   # matches #to_a
   def self.attributes
     [
@@ -99,7 +93,7 @@ class CartItem < ActiveRecord::Base
 
     props = params[:properties]
     unless props.blank?
-      cart.import_properties(props)
+      cart.set_props(props)
     end
 
     cart

@@ -2,7 +2,9 @@ module Commands
   module Approval
     class InitiateCartApproval < Commands::Base
       def import_details(cart, params)
-        cart.import_cart_properties(params['properties'])
+        unless params['properties'].blank?
+          cart.set_props(params['properties'])
+        end
         unless params['cartItems'].blank?
           cart.import_cart_items(params['cartItems'])
         end

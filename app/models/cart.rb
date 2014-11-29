@@ -59,7 +59,6 @@ class Cart < ActiveRecord::Base
       csv << Comment.attributes
       date_sorted_comments = comments.order('updated_at ASC')
       date_sorted_comments.each do |comment|
-        user = comment.user
         csv << comment.to_a
       end
     end
@@ -165,7 +164,8 @@ class Cart < ActiveRecord::Base
     cart.approvals.map(&:destroy)
     cart.cart_items.destroy_all
     cart.approval_group = nil
-    return cart
+
+    cart
   end
 
   def self.copy_existing_approvals_to(new_cart, cart_name)
@@ -174,14 +174,6 @@ class Cart < ActiveRecord::Base
       previous_cart.approvals.each do |approval|
         new_cart.approvals.create!(user_id: approval.user_id, role: approval.role)
         CommunicartMailer.cart_notification_email(approval.user.email_address, new_cart, approval).deliver
-      end
-    end
-  end
-
-  def import_cart_properties(cart_properties_params)
-    unless cart_properties_params.blank?
-      cart_properties_params.each do |key, val|
-        self.setProp(key, val)
       end
     end
   end
