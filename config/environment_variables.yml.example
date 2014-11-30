@@ -1,8 +1,7 @@
 # Rename these values and save this file at config/environment_variables.yml
 development:
-  SMTP_DOMAIN: 'my_domain.com'
-  GMAIL_USERNAME: our_email@gmail.com
-  GMAIL_PASSWORD: our_secret_password
+  MANDRILL_USERNAME: our_email@gmail.com
+  MANDRILL_API_KEY: our_development_key
   NOTIFICATION_URL: 'localhost:3000'
   NOTIFICATION_TO_EMAIL: 'sending_to_person@gmail.com'
   NOTIFICATION_FROM_EMAIL: 'reply_our_email@gmail.com'
@@ -11,13 +10,12 @@ development:
   MYGOV_HOME: https://myusa-staging.18f.us
 
 production:
-  GMAIL_USERNAME: my_email@my_domain.com
-  GMAIL_PASSWORD: my_secret_production_password
+  MANDRILL_USERNAME: my_email@my_domain.com
+  MANDRILL_API_KEY: our_production_key
 
 test:
-  GMAIL_USERNAME: my_test_email@mydomain.com
-  GMAIL_PASSWORD: my_test_password123
-  SMTP_DOMAIN: 'some-dot-gov.gov'
+  MANDRILL_USERNAME: my_test_email@mydomain.com
+  MANDRILL_API_KEY: our_test_key
   NOTIFICATION_URL: 'localhost:3000'
   NOTIFICATION_TO_EMAIL: 'to.some.email@some-dot-gov.com'
   NOTIFICATION_FROM_EMAIL: 'reply-email@some-dot-gov.com'
