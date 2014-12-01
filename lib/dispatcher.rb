@@ -2,7 +2,7 @@ class Dispatcher
   def email_approver(approval)
     cart = approval.cart
     ApiToken.create!(user_id: approval.user_id, cart_id: cart.id, expires_at: Time.now + 7.days)
-    CommunicartMailer.cart_notification_email(approval.user.email_address, cart, approval).deliver
+    CommunicartMailer.cart_notification_email(approval.user.email_address, approval).deliver
   end
 
   def email_observers(cart)
