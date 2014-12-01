@@ -20,6 +20,12 @@ module PropMixin
     p0.update_attribute(:hasproperties,self)
   end
 
+  def set_props(props)
+    props.each do |key, val|
+      self.setProp(key, val)
+    end
+  end
+
   def getProp(p)
     ps = Property.where(:hasproperties_id => id,:hasproperties_type => self.class.name, :property => p)
     if ps.empty?
