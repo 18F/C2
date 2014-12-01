@@ -30,6 +30,7 @@ end
 
 group :development do
   gem 'guard-rspec', require: false
+  gem 'mail_view'
   gem 'railroady'
 end
 
