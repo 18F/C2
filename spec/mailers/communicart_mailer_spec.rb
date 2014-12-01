@@ -6,9 +6,9 @@ describe CommunicartMailer do
   let(:cart) { FactoryGirl.create(:cart_with_approvals, name: "TestCart") }
 
   def expect_csvs_to_be_exported
-    expect_any_instance_of(CartExporter).to receive(:items_csv)
-    expect_any_instance_of(CartExporter).to receive(:comments_csv)
-    expect_any_instance_of(CartExporter).to receive(:approvals_csv)
+    expect_any_instance_of(Exporter::Items).to receive(:to_csv)
+    expect_any_instance_of(Exporter::Comments).to receive(:to_csv)
+    expect_any_instance_of(Exporter::Approvals).to receive(:to_csv)
   end
 
   describe 'cart notification email' do
@@ -52,7 +52,7 @@ describe CommunicartMailer do
 
       it 'does not generate csv attachments for an unapproved cart' do
         allow(cart).to receive(:all_approvals_received?).and_return(false)
-        expect(CartExporter).not_to receive(:new)
+        expect_any_instance_of(Exporter::Base).not_to receive(:to_csv)
         mail
       end
     end
@@ -93,7 +93,7 @@ describe CommunicartMailer do
 
       it 'does not generate csv attachments for an unapproved cart' do
         allow(cart_with_approval_group).to receive(:all_approvals_received?).and_return(false)
-        expect(CartExporter).not_to receive(:new)
+        expect_any_instance_of(Exporter::Base).not_to receive(:to_csv)
         mail
       end
     end
@@ -160,7 +160,7 @@ describe CommunicartMailer do
 
       it 'does not generate csv attachments for an unapproved cart' do
         allow(cart_with_observers).to receive(:all_approvals_received?).and_return(false)
-        expect(CartExporter).not_to receive(:new)
+        expect_any_instance_of(Exporter::Base).not_to receive(:to_csv)
         mail
       end
     end
