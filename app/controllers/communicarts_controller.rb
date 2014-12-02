@@ -72,7 +72,7 @@ private
   def perform_reject_specific_actions(params, cart)
     # Send out a rejection status email to the approvers
     # TODO verify this logic
-    cart.approvals.where(role: 'approver').each do |approval|
+    cart.approver_approvals.each do |approval|
       CommunicartMailer.rejection_update_email(params, cart).deliver
     end
     # Reset everything for the next time they send a cart request

@@ -41,6 +41,10 @@ class Cart < ActiveRecord::Base
     self.approver_approvals.where(status: 'pending')
   end
 
+  def completed_approvals
+    self.approver_approvals.where(status: 'approved')
+  end
+
   def all_approvals_received?
     self.approver_approvals.where('status != ?', 'approved').empty?
   end
