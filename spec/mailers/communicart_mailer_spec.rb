@@ -12,8 +12,8 @@ describe CommunicartMailer do
   end
 
   describe 'cart notification email' do
-
-    let(:mail) { CommunicartMailer.cart_notification_email('email.to.email@testing.com', cart, cart.approvals.first) }
+    let(:approval) { cart.approvals.first }
+    let(:mail) { CommunicartMailer.cart_notification_email('email.to.email@testing.com', approval) }
     let(:api_token) { FactoryGirl.create(:api_token) }
 
     before do

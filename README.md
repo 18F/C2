@@ -46,8 +46,12 @@ To get the database and tests running:
     * If you have a password on PostgreSQL, it will give you an error about not being able to connect to the database. Update the info in [`config/database.yml`](config/database.yml.example) with your creds.
 1. Run the specs with `bundle exec rspec spec` at the command line.
     * To run tests automatically as files are changed, run `bundle exec guard`.
-    * To see previews of the mailers, run with the environment variable `MAIL_PREVIEW=true`.
 1. Run the frontend tests with `grunt jasmine`.
+
+To see previews of the mailers, you have a couple options:
+
+* Run the server/console/specs with the environment variable `MAIL_PREVIEW=true`.
+* Start the server, and visit http://localhost:3000/mail_view/.
 
 To get the app running:
 

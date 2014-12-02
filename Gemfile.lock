@@ -125,6 +125,8 @@ GEM
     lumberjack (1.0.9)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
+    mail_view (2.0.4)
+      tilt
     method_source (0.8.2)
     mime-types (2.4.3)
     mini_portile (0.6.0)
@@ -132,6 +134,7 @@ GEM
     multi_json (1.10.1)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
+    newrelic_rpm (3.9.7.266)
     nokogiri (1.6.3.1)
       mini_portile (= 0.6.0)
     oauth2 (1.0.0)
@@ -271,6 +274,7 @@ DEPENDENCIES
   haml
   jquery-rails
   letter_opener
+  mail_view
   newrelic_rpm
   omniauth-myusa!
   pg

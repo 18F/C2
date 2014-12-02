@@ -12,7 +12,8 @@ class CommunicartMailer < ActionMailer::Base
   end
 
 
-  def cart_notification_email(email, cart, approval)
+  def cart_notification_email(email, approval)
+    cart = approval.cart
     @url = ENV['NOTIFICATION_URL']
     @cart = cart.decorate
     @approval = approval
