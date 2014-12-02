@@ -1,5 +1,6 @@
+<%- if ENV['flag_web_app_landing'] == 'true' %>
   <table class='reply-section'>
-    <%- if ENV['flag_web_app_landing'] == 'true' %>
+
       <tr id="approval-actions">
         <td colspan=2 align="center">
           <p>
@@ -9,6 +10,5 @@
           </p>
         </td>
       </tr>
-    <%- end %>
-
   </table>
+<%- end %>
