@@ -7,7 +7,7 @@ class CartDecorator < Draper::Decorator
   end
 
   def number_approved
-    object.completed_approvals.count
+    object.approved_approvals.count
   end
 
   def total_approvers

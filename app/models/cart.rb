@@ -38,10 +38,10 @@ class Cart < ActiveRecord::Base
   end
 
   def awaiting_approvals
-    self.approver_approvals.where(status: 'pending')
+    self.approver_approvals.pending
   end
 
-  def completed_approvals
+  def approved_approvals
     self.approver_approvals.where(status: 'approved')
   end
 

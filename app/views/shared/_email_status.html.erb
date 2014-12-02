@@ -33,8 +33,8 @@
             <p>
               <strong>Approved</strong>
               <ul class='status-detail'>
-                <%- if @cart.completed_approvals.any? %>
-                  <%- @cart.completed_approvals.each do |approval| %>
+                <%- if @cart.approved_approvals.any? %>
+                  <%- @cart.approved_approvals.each do |approval| %>
                     <li class="icon-approved status-label-approved">
                       <a href='#'><%= approval.user.email_address %></a>
                     </li>

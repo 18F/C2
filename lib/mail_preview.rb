@@ -1,6 +1,6 @@
 class MailPreview < MailView
   def cart_notification_email
-    CommunicartMailer.cart_notification_email(email, approval)
+    CommunicartMailer.cart_notification_email(email, pending_approval)
   end
 
   def cart_observer_email
@@ -8,7 +8,7 @@ class MailPreview < MailView
   end
 
   def approval_reply_received_email
-    CommunicartMailer.approval_reply_received_email(approval)
+    CommunicartMailer.approval_reply_received_email(received_approval)
   end
 
   def comment_added_email
@@ -22,8 +22,12 @@ class MailPreview < MailView
     'recipient@example.com'
   end
 
-  def approval
-    Approval.last
+  def awaiting_approval
+    Approval.pending.last
+  end
+
+  def received_approval
+    Approval.received.last
   end
 
   def cart
