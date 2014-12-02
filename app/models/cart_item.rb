@@ -54,6 +54,11 @@ class CartItem < ActiveRecord::Base
             )
           end
         end
+      else
+        self.cart_item_traits.build(
+          name: trait[0],
+          value: handle_trait_values_for(trait)
+        )
       end
     end
   end
@@ -98,4 +103,9 @@ class CartItem < ActiveRecord::Base
 
     cart
   end
+
+  def handle_trait_values_for trait
+    return trait[1].presence || "true"
+  end
+
 end

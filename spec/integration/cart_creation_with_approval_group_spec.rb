@@ -114,7 +114,7 @@ describe 'Creating a cart with an existing approval group' do
               "features": [
                   "bpa"
               ],
-              "green": ""
+              "green": "true"
            }
         }
       ]
@@ -156,7 +156,7 @@ describe 'Creating a cart with an existing approval group' do
               "features": [
                   "bpa"
               ],
-              "green": ""
+              "green": "true"
            }
         }
       ]
@@ -190,7 +190,7 @@ describe 'Creating a cart with an existing approval group' do
     expect(cart.requester.email_address).to eq 'requester1@some-dot-gov.gov'
 
     post 'send_cart', json_params_2
-    expect(Cart.count).to eq 1 #WHY???
+    expect(Cart.reload.count).to eq 1 #WHY???
     cart = Cart.first
     expect(cart.cart_items.count).to eq 1
     expect(cart.cart_items[0].price).to eq 9.87
@@ -210,13 +210,15 @@ describe 'Creating a cart with an existing approval group' do
       post 'send_cart', json_params_1
       expect(Cart.count).to eq 1
       cart = Cart.first
-      expect(cart.cart_items.first.cart_item_traits.count).to eq 3
+      expect(cart.cart_items.first.cart_item_traits.count).to eq 4
       expect(cart.cart_items.first.cart_item_traits[0].name).to eq "socio"
       expect(cart.cart_items.first.cart_item_traits[1].name).to eq "socio"
       expect(cart.cart_items.first.cart_item_traits[2].name).to eq "features"
+      expect(cart.cart_items.first.cart_item_traits[3].name).to eq "green"
       expect(cart.cart_items.first.cart_item_traits[0].value).to eq "s"
       expect(cart.cart_items.first.cart_item_traits[1].value).to eq "w"
       expect(cart.cart_items.first.cart_item_traits[2].value).to eq "bpa"
+      expect(cart.cart_items.first.cart_item_traits[3].value).to eq "true"
     end
 
     it 'get handled when not sent by the client' do
