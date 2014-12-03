@@ -212,7 +212,7 @@ describe 'Creating a cart' do
       post 'send_cart', @json_params_1
       expect(Cart.count).to eq 1
       cart = Cart.first
-      expect(cart.cart_items.first.cart_item_traits.count).to eq 3
+      expect(cart.cart_items.first.cart_item_traits.count).to eq 4
       expect(cart.cart_items.first.cart_item_traits[0].name).to eq "socio"
       expect(cart.cart_items.first.cart_item_traits[1].name).to eq "socio"
       expect(cart.cart_items.first.cart_item_traits[2].name).to eq "features"
@@ -239,7 +239,7 @@ describe 'Creating a cart' do
       post 'send_cart', @json_params_1
       expect(Cart.count).to eq 1
       cart = Cart.first
-      expect(cart.cart_items.first.cart_item_traits.count).to eq 3
+      expect(cart.cart_items.first.cart_item_traits.count).to eq 4
       expect(cart.cart_items.first.getProp('shoppingVenue')).to eq "GSA Advantage"
       expect(cart.cart_items.first.getProp('betterDescription')).to eq 'This is a more awesome description'
     end
