@@ -41,15 +41,15 @@ class CartDecorator < Draper::Decorator
 
   def cart_template_name
     if self.getProp('origin') == 'navigator'
-      'shared/navigator_cart'
+      'navigator_cart'
     else
-      'shared/cart_mail'
+      'cart_mail'
     end
   end
 
   def prefix_template_name
     if self.getProp('origin') == 'navigator'
-      'shared/navigator_prefix'
+      'navigator_prefix'
     else
       nil
     end
