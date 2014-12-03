@@ -15,7 +15,7 @@
         <td colspan="2">
           <table>
             <%- last_status = nil %>
-            <%- @cart.ordered_approvals.each do |approval| %>
+            <%- @cart.approvals_in_list_order.each do |approval| %>
               <tr>
                 <td>
                   <%- if approval.status != last_status %>
