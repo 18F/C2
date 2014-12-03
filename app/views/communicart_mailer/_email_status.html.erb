@@ -1,7 +1,6 @@
 <tr class="email-status">
   <td colspan="2" padding="10">
     <table id="status-container-detail" width="770">
-
       <tr class="status-header-container">
         <td>
           <strong>Approval Status</strong>
@@ -12,47 +11,28 @@
           (<%= @cart.number_approved %> of <%= @cart.total_approvers %> approved)
         </td>
       </tr>
-
       <tr class="status-header-container-detail">
-        <td class="first">
-          <p>
-            <strong>Pending</strong>
-            <ul class='status-detail'>
-              <%- if @cart.awaiting_approvals.any? %>
-                <%- @cart.awaiting_approvals.each do |approval| %>
-                  <li class="icon-pending status-label-pending">
-                    <a href='#'><%= approval.user.email_address %></a>
-                  </li>
-                <%- end %>
-              <%- else %>
-                <li>
-                  You are not waiting for anyone to approve your request
-                </li>
-              <%- end %>
-            </ul>
-          </p>
-        </td>
-
-        <td>
-          <p>
-            <strong>Approved</strong>
-            <ul class='status-detail'>
-              <%- if @cart.approved_approvals.any? %>
-                <%- @cart.approved_approvals.each do |approval| %>
-                  <li class="icon-approved status-label-approved">
-                    <a href='#'><%= approval.user.email_address %></a>
-                  </li>
-                <%- end %>
-              <%- else %>
-                <p>
-                  You currently have no approvals
-                </p>
-              <%- end %>
-            </ul>
-          </p>
+        <td colspan="2">
+          <table>
+            <%- last_status = nil %>
+            <%- @cart.ordered_approvals.each do |approval| %>
+              <tr>
+                <td>
+                  <%- if approval.status != last_status %>
+                    <strong><%= approval.status %></strong>
+                  <%- end %>
+                </td>
+                <td>
+                  <%= status_icon_tag(approval.status) %>
+                  <%= approval.user.full_name %>
+                  <%= mail_to approval.user.email_address %>
+                </td>
+              </tr>
+              <%- last_status = approval.status %>
+            <%- end %>
+          </table>
         </td>
       </tr>
-
     </table>
   </td>
 </tr>

@@ -41,6 +41,14 @@ class Cart < ActiveRecord::Base
     self.approver_approvals.pending
   end
 
+  def ordered_approvals
+    self.approver_approvals.order('position ASC')
+  end
+
+  def ordered_awaiting_approvals
+    self.ordered_approvals.pending
+  end
+
   def approved_approvals
     self.approver_approvals.where(status: 'approved')
   end

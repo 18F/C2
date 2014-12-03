@@ -7,46 +7,10 @@
     background-color: #fff;
     margin: 15px;
     padding: 15px;
-
-    td.first {
-      padding-left: 0; // override
-      width: 50%;
-    }
   }
 
   .status-header-container td {
     border-bottom: 1px solid #ccc;
     padding-bottom: 20px;
-  }
-
-  tr.status-header-container-detail {
-    strong {
-      display: block;
-    }
-  }
-
-  ul.status-detail {
-    list-style: none;
-    display: inline-block;
-    padding: 0;
-    margin: 0;
-  }
-
-
-  span.status-label-approved, span.status-label-pending, span.status-label-rejected {
-    text-transform: uppercase;
-    font-weight: bold;
-  }
-
-  span.status-label-approved {
-    color: #393;
-  }
-
-  span.status-label-pending {
-    color: #996;
-  }
-
-  span.status-label-rejected {
-    color: #966;
   }
 }
