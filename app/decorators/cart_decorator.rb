@@ -24,7 +24,7 @@ class CartDecorator < Draper::Decorator
   end
 
   def generate_status_message
-    if number_approved == total_approvers
+    if self.all_approvals_received?
       completed_status_message
     else
       progress_status_message
