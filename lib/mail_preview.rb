@@ -22,7 +22,7 @@ class MailPreview < MailView
     'recipient@example.com'
   end
 
-  def awaiting_approval
+  def pending_approval
     Approval.pending.last
   end
 
@@ -35,6 +35,6 @@ class MailPreview < MailView
   end
 
   def comment
-    Comment.last
+    Comment.where(commentable_type: 'Cart').last
   end
 end
