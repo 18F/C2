@@ -7,7 +7,9 @@
           <strong>Approval Status</strong>
         </td>
         <td>
-          <strong><%= @cart.status %></strong> (<%= @cart.number_approved %> of <%= @cart.total_approvers %> approved)
+          <%= status_icon_tag(@cart.status) %>
+          <strong><%= @cart.status %></strong>
+          (<%= @cart.number_approved %> of <%= @cart.total_approvers %> approved)
         </td>
       </tr>
 
