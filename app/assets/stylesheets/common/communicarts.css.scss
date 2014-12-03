@@ -1,7 +1,13 @@
 @import "constants";
 @import "webflow";
 
+table {
+  border-spacing: 0;
+}
 
+table.center {
+  margin-left: 15px;
+}
 
 table.reply-section {
   width: 800px;
