@@ -34,7 +34,7 @@
       </td>
     </tr>
 
-    <%= render partial: "shared/email_status" unless local_assigns[:delivery] == 'web' %>
+    <%= render partial: "email_status" unless local_assigns[:delivery] == 'web' %>
 
     <tr>
       <td class="w-container results-list" colspan="2">

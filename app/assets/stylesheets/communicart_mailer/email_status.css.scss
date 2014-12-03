@@ -1,0 +1,62 @@
+.email-status {
+  strong {
+    text-transform: uppercase;
+  }
+
+  .status-header-container {
+    padding-left: 15px;
+    background-color: #ffc47d;
+  }
+
+  .status-completed {
+    background-color: #bad7ab;
+    border-bottom: 1px solid #4c9d2a;
+  }
+
+  tr.status-header-container-detail {
+    background-color: #fff;
+    border-bottom: 1px solid #ff9e19;
+
+    strong {
+      display: block;
+    }
+  }
+
+  tr.status-completed-detail {
+    border-bottom: 1px solid #4c9d2a;
+  }
+
+  table#status-container-detail {
+    margin: 15px;
+
+    td.first {
+      padding-left: 10px;
+      width: 50%;
+    }
+  }
+
+  ul.status-detail {
+    list-style: none;
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+  }
+
+
+  span.status-label-approved, span.status-label-pending, span.status-label-rejected {
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+  span.status-label-approved {
+    color: #393;
+  }
+
+  span.status-label-pending {
+    color: #996;
+  }
+
+  span.status-label-rejected {
+    color: #966;
+  }
+}

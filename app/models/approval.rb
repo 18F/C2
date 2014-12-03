@@ -13,6 +13,9 @@ class Approval < ActiveRecord::Base
 
   after_initialize :set_default_status
 
+  scope :pending, -> { where(status: 'pending') }
+  scope :received, -> { where('status != ?', 'pending') }
+
 
   # TODO this should be a proper association
   def user_role

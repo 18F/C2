@@ -7,11 +7,11 @@ class CartDecorator < Draper::Decorator
   end
 
   def number_approved
-    object.approvals.where(role: 'approver').where(status: 'approved').count
+    object.approved_approvals.count
   end
 
   def total_approvers
-    object.approvals.where(role: 'approver').count
+    object.approver_approvals.count
   end
 
 
@@ -24,7 +24,7 @@ class CartDecorator < Draper::Decorator
   end
 
   def generate_status_message
-    if number_approved == total_approvers
+    if self.all_approvals_received?
       completed_status_message
     else
       progress_status_message
@@ -41,15 +41,15 @@ class CartDecorator < Draper::Decorator
 
   def cart_template_name
     if self.getProp('origin') == 'navigator'
-      'shared/navigator_cart'
+      'navigator_cart'
     else
-      'shared/cart_mail'
+      'cart_mail'
     end
   end
 
   def prefix_template_name
     if self.getProp('origin') == 'navigator'
-      'shared/navigator_prefix'
+      'navigator_prefix'
     else
       nil
     end
