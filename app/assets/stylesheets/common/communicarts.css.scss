@@ -207,14 +207,6 @@ h4 {
   line-height: 24px;
   font-weight: 400;
 }
-p.results-header {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  font-size: 16px;
-  line-height: 18px;
-  font-style: normal;
-  font-weight: 500;
-}
 td.html-email-message {
   font-size: 14px;
   background-color: #fff;
@@ -434,15 +426,10 @@ ul.result-tag span {
   font-size: 16px;
 }
 
-.main-container table td.first, tr.status-header-container-detail td.first {
+.main-container table td.first {
   padding: 15px;
 }
 
-.results-header-container {
-  padding-left: 15px;
-  border-bottom-color: black;
-  background-color: #595959;
-}
 .main-container {
   padding-top: 0px;
   padding-right: 15px;

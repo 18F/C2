@@ -2,14 +2,16 @@
   <td colspan="2" padding="10">
     <table id="status-container-detail" width="770">
 
-
-      <tr>
-        <td colspan="2" class="w-container status-header-container <%= 'status-completed' if @cart.all_approvals_received? %>">
-          <p class="results-header">Approval Status: <%= @cart.generate_status_message %></p>
+      <tr class="status-header-container">
+        <td>
+          <strong>Approval Status</strong>
+        </td>
+        <td>
+          <strong><%= @cart.status %></strong> (<%= @cart.number_approved %> of <%= @cart.total_approvers %> approved)
         </td>
       </tr>
 
-      <tr class="status-header-container-detail <%= 'status-completed_detail' if @cart.all_approvals_received? %>">
+      <tr class="status-header-container-detail">
         <td class="first">
           <p>
             <strong>Pending</strong>

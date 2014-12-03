@@ -3,35 +3,25 @@
     text-transform: uppercase;
   }
 
-  .status-header-container {
-    padding-left: 15px;
-    background-color: #ffc47d;
-  }
-
-  .status-completed {
-    background-color: #bad7ab;
-    border-bottom: 1px solid #4c9d2a;
-  }
-
-  tr.status-header-container-detail {
+  table#status-container-detail {
     background-color: #fff;
-    border-bottom: 1px solid #ff9e19;
+    margin: 15px;
+    padding: 15px;
 
-    strong {
-      display: block;
+    td.first {
+      padding-left: 0; // override
+      width: 50%;
     }
   }
 
-  tr.status-completed-detail {
-    border-bottom: 1px solid #4c9d2a;
+  .status-header-container td {
+    border-bottom: 2px solid #f5f5f5;
+    padding-bottom: 20px;
   }
 
-  table#status-container-detail {
-    margin: 15px;
-
-    td.first {
-      padding-left: 10px;
-      width: 50%;
+  tr.status-header-container-detail {
+    strong {
+      display: block;
     }
   }
 
