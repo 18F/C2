@@ -12,7 +12,7 @@ describe 'Creating a cart with an existing approval group' do
 
   let(:params_request_1) {
   '{
-      "cartName": "Test Cart Name",
+      "cartName": "Test Cart Name 1",
       "approvalGroup": "firstApprovalGroup",
       "cartNumber": "13579",
       "category": "initiation",
@@ -123,7 +123,7 @@ describe 'Creating a cart with an existing approval group' do
 
   let(:params_request_2) {
   '{
-      "cartName": "Test Cart Name",
+      "cartName": "Test Cart Name 2",
       "approvalGroup": "secondApprovalGroup",
       "cartNumber": "13579",
       "category": "initiation",
@@ -190,12 +190,12 @@ describe 'Creating a cart with an existing approval group' do
     expect(cart.requester.email_address).to eq 'requester1@some-dot-gov.gov'
 
     post 'send_cart', json_params_2
-    expect(Cart.reload.count).to eq 1 #WHY???
-    cart = Cart.first
+    expect(Cart.count).to eq 2
+    cart = Cart.last
     expect(cart.cart_items.count).to eq 1
     expect(cart.cart_items[0].price).to eq 9.87
     expect(cart.approval_group.name).to eq "secondApprovalGroup"
-    expect(cart.comments.count).to eq 2
+    expect(cart.comments.count).to eq 1
     expect(cart.comments.last.comment_text).to eq "Hi, this is a comment from the second approval group, I hope it works!\r\nThis is the second line of the comment."
     expect(cart.requester.comments.first.comment_text).to eq "Hi, this is a comment from the second approval group, I hope it works!\r\nThis is the second line of the comment."
     expect(cart.approvals.count).to eq 1
@@ -234,7 +234,7 @@ describe 'Creating a cart with an existing approval group' do
       post 'send_cart', json_params_1
       expect(Cart.count).to eq 1
       cart = Cart.first
-      expect(cart.cart_items.first.cart_item_traits.count).to eq 3
+      expect(cart.cart_items.first.cart_item_traits.count).to eq 4
       expect(cart.cart_items.first.getProp('shoppingVenue')).to eq "GSA Advantage"
       expect(cart.cart_items.first.getProp('betterDescription')).to eq 'This is a more awesome description'
     end
