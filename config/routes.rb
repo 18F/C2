@@ -8,6 +8,7 @@ C2::Application.routes.draw do
   match "/auth/:provider/callback" => "home#oauth_callback", via: [:get]
   post "/logout" => "home#logout"
   get 'overlay', to: "overlay#index"
+  get 'users/:id/carts' =>"users#find_carts_for_user"
 
   resources :carts do
     resources :comments

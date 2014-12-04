@@ -1,0 +1,26 @@
+<div class="inset">
+  <div class="row pending-pr">
+    <div class="col-md-12">
+      <h3>Pending Purchase Requests</h3>
+      <%= render partial: "shared/cart_list", locals: { carts: @open_carts, role: 'requester'} %>
+    </div>
+  </div>
+  <div class="row past-pr">
+    <div class="col-sm-10">
+      <h3>Recent Purchase Requests</h3>
+    </div>
+    <div class="col-sm-2">View the archive</div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <%= render partial: "shared/cart_list", locals: { carts: @closed_carts, role: 'requester'} %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-10">
+
+    </div>
+    <div class="col-sm-2">View the archive</div>
+
+  </div>
+</div>
