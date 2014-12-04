@@ -1,0 +1,22 @@
+<%#-- "carts" is the critical local variable for using this partial --%>
+<%#-- "role" (either 'requester' or 'approver') modifies the list slightly --%>
+<table class="cart-list">
+  <tr class="header">
+    <th class="first" scope="col"><h5>Request</h5></th><th class="sixth" scope="col"><h5>Total Price</h5></th>
+    <th class="sixth" scope="col"><h5><%= if role=='requester' then 'To' else 'From' end%> </h5></th><th class="sixth" scope="col"><h5>Date</h5></th>
+  </tr>
+  <%- carts.each do |cart| %>
+    <tr>
+      <td class="first"><a href="/carts/<%= cart.id %>"><%= cart.name %></a></td>
+      <td class="sixth"><%= number_to_currency(cart.decorate.total_price) %></td>
+      <td class="sixth">
+        <%- cart.approvals.each do |approval| %>
+          <%- if approval.role == "approver" && approval.status == "pending" %>
+            <p><%= User.find(approval.user_id).email_address %></p>
+          <%- end %>
+        <%- end %>
+      </td>
+      <td class="sixth"><%= cart.created_at.strftime("%-m/%-d/%y") %></td>
+    </tr>
+  <%- end %>
+</table>

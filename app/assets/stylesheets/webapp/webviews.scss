@@ -53,6 +53,29 @@
     padding: 15px;
   }
 }
+
+.cart-list {
+  width: 100%;
+  background: #fff;
+  margin: 20px auto;
+  td {
+    padding: 15px;
+  }
+  tr {
+    border-bottom: 1px solid #ccc;
+  }
+}
+
+.pending-pr {
+  background: #F5F5F5;
+  border-bottom: 1px solid #BDBDBD;
+  padding-top: 40px;
+}
+
+.past-pr {
+  padding-top: 40px;
+}
+
 tr.header h5 {
   text-transform: uppercase;
   color: #e8e8e8;
@@ -74,6 +97,11 @@ th.first {
 
 th.next {
   width:25%;
+  padding-left: 15px;
+}
+
+th.sixth {
+  width:17%;
   padding-left: 15px;
 }
 
