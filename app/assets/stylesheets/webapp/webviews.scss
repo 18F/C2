@@ -31,6 +31,7 @@
 
 #header-identity h1 {
   margin: 0;
+  color: #fff;
 }
 
 #communicart_header #header-nav {
@@ -60,6 +61,7 @@
   margin: 20px auto;
   td {
     padding: 15px;
+    vertical-align: top;
   }
   tr {
     border-bottom: 1px solid #ccc;
@@ -298,7 +300,9 @@ tr.cart_item_information p {
 }
 
 body.webapp {
-  font-family: Raleway, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  color: black;
 
   .communicart_header, h4.communicart_description, div.communicart_description p {
     padding-right: 0;
@@ -310,11 +314,57 @@ body.webapp {
     margin-bottom: $webpadding;
     padding: $webpadding;
   }
+
+  h1 {
+    font-family: Raleway, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: bold;
+    font-size: 48px;
+    color: black;
+  }
+
+  h2 {
+    font-family: Raleway, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    font-size: 34px;
+    color: black;
+    padding-left: 0;
+  }
+
+  h3 {
+    font-family: Raleway, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    font-size: 28px;
+    color: black;
+  }
+
+  a {
+    text-decoration: underline;
+    color: #1188ff;
+  }
+  p {
+    font-size: 16px;
+  }
+}
+
+.sidebar {
+  margin: 20px 10px 20px 0;
+  padding: 10px 10px 5px 5px;
+  border: 1px solid #ddd;
+
+  p {
+    margin-top: 10px;
+  }
+
+  h5 {
+    margin: 5px;
+    border-bottom: 1px solid #e8e8e8;
+  }
 }
 
 .row {
   margin-right: 0;
 }
+
 .purchase-status {
   border: 1px solid #ff9e19;
   padding: 30px 0px;

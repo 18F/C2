@@ -2,6 +2,7 @@ describe UsersController do
   let(:user1) { FactoryGirl.create(:user, email_address: 'user1@some-dot-gov.gov') }
   let(:user2) { FactoryGirl.create(:user, email_address: 'user2@some-dot-gov.gov') }
   let(:user3) { FactoryGirl.create(:user, email_address: 'user3@some-dot-gov.gov') }
+  let(:user4) { FactoryGirl.create(:user, email_address: 'user4@some-dot-gov.gov') }
   let(:approval_group1) { FactoryGirl.create(:approval_group, name: 'test-approval-group1') }
   let(:approval_group2) { FactoryGirl.create(:approval_group, name: 'test-approval-group2') }
   @cart1
@@ -25,7 +26,7 @@ describe UsersController do
     end
 
     it 'should find nothing' do
-      get :find_carts_for_user, id: user1.id
+      get :find_carts_for_user, id: user4.id
       expect(assigns(:open_carts).first).to be_nil
     end
 
