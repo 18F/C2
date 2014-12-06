@@ -15,6 +15,7 @@ class HomeController < ApplicationController
   end
 
   def index
+    @user_id = User.find_by_email_address(session[:user]['email']).id
   end
 
   def logout
