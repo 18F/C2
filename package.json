@@ -4,7 +4,7 @@
   "description": "A cartmaker for C2",
   "main": "Gruntfile.js",
   "scripts": {
-    "test": "grunt travis --verbose"
+    "test": "grunt --verbose"
   },
   "author": "",
   "license": "BSD",
