@@ -24,7 +24,7 @@ ul#breadcrumb-nav {
   padding: 10px 40px 0 33px;
 
   li {
-    background-image: url('/assets/icon-back-arrow.png');
+    background-image: image-url('icon-back-arrow.png');
     background-repeat: no-repeat;
     list-style: none;
     padding-left: 17px;
@@ -37,7 +37,7 @@ ul#breadcrumb-nav {
 }
 
 #communicart_logo {
-  background-image: url('/assets/img-logo-communicart-portal.png');
+  background-image: image-url('img-logo-communicart-portal.png');
   background-repeat: no-repeat;
   width: 200px;
   height: 30px;
