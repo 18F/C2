@@ -1,4 +1,6 @@
 class CommunicartMailer < ActionMailer::Base
+  include Roadie::Rails::Automatic
+
   layout 'communicart_base'
   helper_method :set_attachments
 
