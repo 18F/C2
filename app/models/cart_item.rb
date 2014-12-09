@@ -47,20 +47,16 @@ class CartItem < ActiveRecord::Base
     traits_params.each do |trait|
       if trait[1].kind_of?(Array)
         trait[1].each do |individual|
-          if individual.present?
-            self.cart_item_traits.build(
-              name: trait[0],
-              value: individual
-            )
-          end
+          build_traits(trait[0], individual) if individual.present?
         end
       else
-        self.cart_item_traits.build(
-          name: trait[0],
-          value: handle_trait_values_for(trait)
-        )
+        build_traits(trait[0], trait_value(trait))
       end
     end
+  end
+
+  def build_traits(name, value)
+    cart_item_traits.build(name: name, value: value)
   end
 
   # matches #to_a
@@ -104,8 +100,8 @@ class CartItem < ActiveRecord::Base
     cart
   end
 
-  def handle_trait_values_for trait
-    return trait[1].presence || "true"
+  def trait_value trait
+    trait[1].presence || "true"
   end
 
 end
