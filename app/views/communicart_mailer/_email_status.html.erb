@@ -16,6 +16,10 @@
           <table>
             <%- last_status = nil %>
             <%- @cart.approvals_in_list_order.each do |approval| %>
+              <tr class="spacer-row">
+                <td></td>
+                <td class="<% if last_status %>status-<%= approval.status %>-line<% end %>"></td>
+              </tr>
               <tr class="approval-row">
                 <td>
                   <%- if approval.status != last_status %>
