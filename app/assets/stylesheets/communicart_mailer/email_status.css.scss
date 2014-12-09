@@ -18,8 +18,28 @@
     }
   }
 
+  .status-icon {
+    position: relative;
+    left: -7px;
+    vertical-align: -2px;
+  }
+
   .approval-row > td {
-    padding-top: 20px;
     padding-right: 60px;
+  }
+
+  .spacer-row {
+    height: 20px;
+
+    // TODO verify colors
+    .status-approved-line {
+      border-left: 2px solid #4cad4b;
+    }
+    .status-pending-line {
+      border-left: 2px solid #ffaa18;
+    }
+    .status-rejected-line {
+      border-left: 2px solid #ff562f;
+    }
   }
 }
