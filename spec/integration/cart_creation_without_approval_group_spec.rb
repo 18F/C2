@@ -83,7 +83,7 @@ describe 'Creating a cart without an approval group' do
 
   it 'creates approvals' do
     post 'send_cart', @json_params_1
-    expect(Approval.all.map(&:role)).to eq ['approver','approver','requester']
+    expect(Approval.all.map(&:role)).to match_array ['approver','approver','requester']
     expect(Approval.count).to eq 3
   end
 
