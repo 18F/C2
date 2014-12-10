@@ -14,6 +14,28 @@ class CartDecorator < Draper::Decorator
     object.approver_approvals.count
   end
 
+  def approvals_by_status
+    object.approver_approvals.order(
+      # http://stackoverflow.com/a/6332081/358804
+      <<-SQL
+        CASE status
+        WHEN 'approved' THEN 1
+        WHEN 'rejected' THEN 2
+        WHEN 'pending' THEN 3
+        ELSE 4
+        END
+      SQL
+    )
+  end
+
+  def approvals_in_list_order
+    if object.flow == 'linear'
+      object.ordered_approvals
+    else
+      self.approvals_by_status
+    end
+  end
+
 
   def display_status
     if cart.status == 'pending'

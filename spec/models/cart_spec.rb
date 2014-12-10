@@ -58,4 +58,12 @@ describe Cart do
     end
   end
 
+  describe '#ordered_awaiting_approvals' do
+    let(:cart) { FactoryGirl.create(:cart_with_approvals) }
+
+    it "returns users in order of position" do
+      cart.approvals.first.update_attribute(:position, 5)
+      expect(cart.ordered_awaiting_approvals).to eq(cart.awaiting_approvals.order('id DESC'))
+    end
+  end
 end

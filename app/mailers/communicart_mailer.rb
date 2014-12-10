@@ -1,15 +1,6 @@
 class CommunicartMailer < ActionMailer::Base
   layout 'communicart_base'
-  helper_method :set_attachments
-
-
-  def set_attachments(cart)
-    if cart.all_approvals_received?
-      attachments['Communicart' + cart.name + '.details.csv'] = Exporter::Items.new(cart).to_csv
-      attachments['Communicart' + cart.name + '.comments.csv'] = Exporter::Comments.new(cart).to_csv
-      attachments['Communicart' + cart.name + '.approvals.csv'] = Exporter::Approvals.new(cart).to_csv
-    end
-  end
+  add_template_helper CommunicartMailerHelper
 
 
   def cart_notification_email(email, approval)
@@ -78,4 +69,14 @@ class CommunicartMailer < ActionMailer::Base
          )
   end
 
+
+  private
+
+  def set_attachments(cart)
+    if cart.all_approvals_received?
+      attachments['Communicart' + cart.name + '.details.csv'] = Exporter::Items.new(cart).to_csv
+      attachments['Communicart' + cart.name + '.comments.csv'] = Exporter::Comments.new(cart).to_csv
+      attachments['Communicart' + cart.name + '.approvals.csv'] = Exporter::Approvals.new(cart).to_csv
+    end
+  end
 end

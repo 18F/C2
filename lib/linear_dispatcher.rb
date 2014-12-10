@@ -1,10 +1,6 @@
 class LinearDispatcher < Dispatcher
-  def ordered_approvals(cart)
-    cart.awaiting_approvals.order('position ASC')
-  end
-
   def next_approval(cart)
-    self.ordered_approvals(cart).first
+    cart.ordered_awaiting_approvals.first
   end
 
   def email_next_approver(cart)
