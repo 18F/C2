@@ -14,11 +14,12 @@ describe "Approving a cart with multiple approvers in parallel" do
     }'
   }
   let(:json_approval_params) { JSON.parse(approval_params) }
-  let(:cart) { FactoryGirl.build(:cart, external_id: '10203040', flow: 'linear') }
+  let(:cart) { FactoryGirl.build(:cart, external_id: '10203040') }
 
   before do
     ENV['NOTIFICATION_FROM_EMAIL'] = 'sender@some-dot_gov.gov'
 
+    cart.proposal.update_attribute(:flow, 'linear')
     approval_group = FactoryGirl.create(:approval_group)
     user = User.create!(email_address: 'test-requester@some-dot-gov.gov')
     UserRole.create!(user_id: user.id, approval_group_id: approval_group.id, role: 'requester')

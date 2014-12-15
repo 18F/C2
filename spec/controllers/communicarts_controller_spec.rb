@@ -157,7 +157,7 @@ describe CommunicartsController do
       end
 
       it 'invokes a mailer' do
-        allow(cart).to receive(:update_approval_status)
+        expect(cart).to receive(:update_approval_status)
         mock_mailer = double
 
         expect(CommunicartMailer).to receive(:approval_reply_received_email).and_return(mock_mailer)

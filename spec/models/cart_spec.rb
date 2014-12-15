@@ -13,7 +13,7 @@ describe Cart do
 
     context "Not all approvals are in 'approved'status" do
       it 'does not update the cart status' do
-        allow(cart).to receive(:all_approvals_received?).and_return(false)
+        expect(cart).to receive(:all_approvals_received?).and_return(false)
 
         cart.update_approval_status
         expect(cart.status).to eq('pending')

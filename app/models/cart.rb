@@ -13,16 +13,32 @@ class Cart < ActiveRecord::Base
   has_many :comments, as: :commentable
   has_many :properties, as: :hasproperties
 
-  #TODO: after_save default status
   #TODO: validates_uniqueness_of :name
-  validates :flow, presence: true, inclusion: {in: ApprovalGroup::FLOWS}
+  validates :proposal_id, presence: true
 
+
+  ## TODO deprecated ##
+  def flow
+    self.proposal.flow
+  end
+
+  def status
+    self.proposal.status
+  end
+  #####################
+
+  def new_approval_status
+    if self.has_rejection?
+      'rejected'
+    elsif self.all_approvals_received?
+      'approved'
+    end
+  end
 
   def update_approval_status
-    if self.has_rejection?
-      self.update_attributes(status: 'rejected')
-    elsif self.all_approvals_received?
-      self.update_attributes(status: 'approved')
+    new_status = self.new_approval_status
+    if new_status
+      self.proposal.update_attribute(:status, new_status)
     end
   end
 
@@ -70,7 +86,7 @@ class Cart < ActiveRecord::Base
   def self.initialize_cart_with_items params
     cart = self.existing_or_new_cart params
     cart.initialize_approval_group params
-    cart.initialize_flow(params)
+    cart.setup_proposal(params)
     self.copy_existing_approvals_to(cart, name)
 
     cart
@@ -79,12 +95,12 @@ class Cart < ActiveRecord::Base
   def self.existing_or_new_cart(params)
     name = params['cartName'].presence || params['cartNumber'].to_s
 
-    pending_cart = Cart.find_by(name: name, status: 'pending')
+    pending_cart = Cart.joins(:proposal).find_by(name: name, proposals: {status: 'pending'})
     if pending_cart
       cart = reset_existing_cart(pending_cart)
     else
       #There is no existing cart or the existing cart is already approved
-      cart = Cart.new(name: name, status: 'pending', external_id: params['cartNumber'])
+      cart = self.new(name: name, external_id: params['cartNumber'])
     end
 
     cart
@@ -99,8 +115,13 @@ class Cart < ActiveRecord::Base
     end
   end
 
-  def initialize_flow(params)
-    self.flow = params['flow'].presence || self.flow || self.approval_group.try(:flow) || 'parallel'
+  def determine_flow(params)
+    params['flow'].presence || self.approval_group.try(:flow) || 'parallel'
+  end
+
+  def setup_proposal(params)
+    flow = self.determine_flow(params)
+    self.create_proposal!(flow: flow, status: 'pending')
   end
 
   def import_initial_comments(comments)
