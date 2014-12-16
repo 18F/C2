@@ -75,14 +75,10 @@ RSpec.configure do |config|
   config.after(:each) do
     DatabaseCleaner.clean
     ActionMailer::Base.deliveries.clear
+    OmniAuth.config.mock_auth[:myusa] = nil
   end
 
 
   Capybara.default_host = 'http://localhost:3000'
   OmniAuth.config.test_mode = true
-  OmniAuth.config.add_mock(:myusa, {
-    :raw_info => {"name"=>"George Jetson"},
-    :uid => '12345',
-    :nickname => 'georgejetsonmyusa'
-  })
 end
