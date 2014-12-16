@@ -1,10 +1,7 @@
 FactoryGirl.define do
   factory :cart do
     name 'Test Cart needing approval'
-
-    after :build do |cart|
-      cart.create_proposal!(flow: 'parallel', status: 'pending')
-    end
+    proposal
 
     factory :cart_with_approval_group do
       after :create do |cart|

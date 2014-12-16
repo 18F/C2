@@ -98,12 +98,7 @@ describe 'Rejecting a cart with multiple approvers' do
 
     @json_rejection_params = JSON.parse(rejection_params)
 
-    cart = Cart.create!(
-                    flow: 'parallel',
-                    name: '10203040',
-                    status: 'pending',
-                    external_id: '10203040'
-                    )
+    cart = FactoryGirl.create(:cart, name: '10203040', external_id: '10203040')
     approval_group = FactoryGirl.create(:approval_group_with_approver_and_requester_approvals, cart_id: cart.id, name: "updatingRejectedApprovalGroup")
 
     cart.approval_group = approval_group
