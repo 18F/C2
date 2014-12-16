@@ -1,27 +1,31 @@
 module IntegrationSpecHelper
-  def login_with_oauth(service = :myusa)
-    mock_raw_info = double("raw_info_mock")
-
-    allow(mock_raw_info).to receive(:to_hash).and_return(
-      email: 'george.jetson@some-dot-gov.gov',
-      first_name: "George",
-      last_name: "Jetson"
+  def setup_mock_auth(service_name = :myusa)
+    OmniAuth.config.mock_auth[service_name] = OmniAuth::AuthHash.new(
+      provider: service_name.to_s,
+      raw_info: {
+        'name' => "George Jetson"
+      },
+      uid: '12345',
+      nickname: 'georgejetsonmyusa',
+      extra: {
+        'raw_info' => {
+          'email' => 'george.jetson@some-dot-gov.gov',
+          'first_name' => 'George',
+          'last_name' => 'Jetson'
+        }
+      },
+      credentials: {
+        'token' => '1a2b3c4d'
+      }
     )
+  end
 
-    extra_mock = double("mock_extra",
-      raw_info: mock_raw_info
-    )
-
-    credentials_mock = double("myusa_creds",
-      token: '1a2b3c4d'
-    )
-
-    OmniAuth.config.mock_auth[:myusa].extra = extra_mock
-    OmniAuth.config.mock_auth[:myusa].credentials = credentials_mock
+  def login_with_oauth(service_name = :myusa)
+    setup_mock_auth(service_name)
 
     user = @user ||= FactoryGirl.create(:user)
     allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
 
-    visit "/auth/#{service}"
+    visit "/auth/#{service_name}"
   end
 end
