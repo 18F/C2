@@ -10,7 +10,7 @@ describe CommunicartsController do
 
     context 'approval group' do
       before do
-        allow(CommunicartMailer).to receive_message_chain(:cart_notification_email, :deliver)
+        expect(CommunicartMailer).to receive_message_chain(:cart_notification_email, :deliver)
       end
 
       context 'is indicated' do
@@ -145,19 +145,19 @@ describe CommunicartsController do
 
     context 'approved cart' do
       before do
-        allow(User).to receive(:find_by).and_return(approver)
-        allow(cart).to receive_message_chain(:approval_users, :where, :first).and_return(approver)
+        expect(User).to receive(:find_by).and_return(approver)
+        expect(cart).to receive_message_chain(:approval_users, :where, :first).and_return(approver)
         approval.update_attributes(cart_id: cart.id, user_id: approver.id)
-        allow(cart).to receive_message_chain(:approvals, :where).and_return([approval])
-        allow(Cart).to receive_message_chain(:where, :where, :first).and_return(cart)
+        expect(cart).to receive_message_chain(:approvals, :where).and_return([approval])
+        expect(Cart).to receive_message_chain(:where, :where, :first).and_return(cart)
 
         # Remove stub to view email layout in development through letter_opener
-        allow(CommunicartMailer).to receive_message_chain(:approval_reply_received_email, :deliver)
+        expect(CommunicartMailer).to receive_message_chain(:approval_reply_received_email, :deliver)
         @json_approval_params = JSON.parse(approval_params)
       end
 
       it 'invokes a mailer' do
-        allow(cart).to receive(:update_approval_status)
+        expect(cart).to receive(:update_approval_status)
         mock_mailer = double
 
         expect(CommunicartMailer).to receive(:approval_reply_received_email).and_return(mock_mailer)
@@ -170,34 +170,34 @@ describe CommunicartsController do
       end
 
       it 'updates the approval status' do
-        allow(approval_list).to receive(:count)
-        allow(cart).to receive_message_chain(:approvals, :count)
-        allow(cart).to receive(:update_approval_status)
+        expect(approval_list).to receive(:count)
+        expect(cart).to receive_message_chain(:approvals, :count)
+        expect(cart).to receive(:update_approval_status)
 
         expect(approval).to receive(:update_attributes).with(status: 'approved')
         post 'approval_reply_received', @json_approval_params
       end
 
       it 'adds the comment' do
-        allow(CommunicartMailer).to receive_message_chain(:approval_reply_received_email, :deliver)
+        expect(CommunicartMailer).to receive_message_chain(:approval_reply_received_email, :deliver)
 
         FactoryGirl.create(:approval, user_id: approver.id)
         @json_approval_params = JSON.parse(approval_params)
         @json_approval_params['fromAddress'] = approver.email_address
 
-        allow(Cart).to receive_message_chain(:where, :where, :first).and_return(cart)
-        allow(cart).to receive_message_chain(:approval_users, :where).and_return([approver])
-        allow(cart).to receive(:update_approval_status)
+        expect(Cart).to receive_message_chain(:where, :where, :first).and_return(cart)
+        expect(cart).to receive_message_chain(:approval_users, :where).and_return([approver])
+        expect(cart).to receive(:update_approval_status)
 
-        allow_any_instance_of(Approval).to receive(:update_attributes)
+        expect_any_instance_of(Approval).to receive(:update_attributes)
 
         expect{post 'approval_reply_received', @json_approval_params}.to change{Comment.count}.from(0).to(1)
       end
 
       it 'creates a comment given a comment param' do
-        allow(Cart).to receive(:find_by).and_return(cart)
-        allow(cart).to receive_message_chain(:approval_group, :approvers, :where).and_return([approver])
-        allow(cart).to receive(:update_approval_status)
+        expect(Cart).to receive(:find_by).and_return(cart)
+        expect(cart).to receive_message_chain(:approval_group, :approvers, :where).and_return([approver])
+        expect(cart).to receive(:update_approval_status)
 
         expect {
           post 'approval_reply_received', @json_approval_params
@@ -212,8 +212,8 @@ describe CommunicartsController do
         approver.update_attributes(email_address: 'judy.jetson@spacelysprockets.com')
         FactoryGirl.create(:approval, user_id: approver.id)
         @json_approval_params = JSON.parse(approval_params)
-        allow(Cart).to receive(:find_by).and_return(cart)
-        allow(cart).to receive(:update_approval_status)
+        expect(Cart).to receive(:find_by).and_return(cart)
+        expect(cart).to receive(:update_approval_status)
         @json_approval_params['comment'] = ''
 
         expect(Comment).not_to receive(:create)
@@ -248,7 +248,7 @@ describe CommunicartsController do
         rejected_cart.approvals << approval2
         rejected_cart.save
 
-        allow(rejected_cart).to receive(:update_approval_status)
+        expect(rejected_cart).to receive(:update_approval_status)
         @json_rejection_params = JSON.parse(rejection_params)
       end
 
@@ -259,7 +259,7 @@ describe CommunicartsController do
       end
 
       it 'sends out a reject status email to the approvers' do
-        allow(Cart).to receive_message_chain(:where, :where, :first).and_return(rejected_cart)
+        expect(Cart).to receive_message_chain(:where, :where, :first).and_return(rejected_cart)
         mock_mailer = double
         expect(CommunicartMailer).to receive(:rejection_update_email).exactly(2).times.and_return(mock_mailer)
         expect(mock_mailer).to receive(:deliver).exactly(2).times
@@ -289,9 +289,9 @@ describe CommunicartsController do
 
     before do
       @json_approval_params_with_token = JSON.parse(approval_params_with_token)
-      allow(token).to receive(:user_id).and_return(108642)
-      allow(token).to receive(:cart_id).and_return(246810)
-      allow(Cart).to receive(:find_by).with(id: 246810).and_return(cart)
+      expect(token).to receive(:user_id).and_return(108642)
+      expect(token).to receive(:cart_id).and_return(246810)
+      expect(Cart).to receive(:find_by).with(id: 246810).and_return(cart)
       Approval.last.update_attributes(user_id: 108642)
     end
 
@@ -302,14 +302,14 @@ describe CommunicartsController do
 
       it 'will be successful' do
         approver
-        allow_any_instance_of(Approval).to receive(:update_attributes)
+        expect_any_instance_of(Approval).to receive(:update_attributes)
         put 'approval_response', @json_approval_params_with_token
         expect(response.status).to eq 200
       end
 
       it 'successfully validates the user_id and cart_id with the token' do
         approver
-        allow_any_instance_of(Approval).to receive(:update_attributes)
+        expect_any_instance_of(Approval).to receive(:update_attributes)
         expect { put 'approval_response', @json_approval_params_with_token }.not_to raise_error
       end
 

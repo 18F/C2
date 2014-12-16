@@ -23,7 +23,7 @@ describe Dispatcher do
       expect(CommunicartMailer).to receive_message_chain(:cart_notification_email, :deliver)
 
       api_token = FactoryGirl.create(:api_token)
-      allow(ApiToken).to receive_message_chain(:where, :where, :last).and_return(api_token)
+      expect(ApiToken).to receive_message_chain(:where, :where, :last).and_return(api_token)
       expect(ApiToken).to receive(:create!).exactly(1).times
 
       dispatcher.email_approver(approval)
