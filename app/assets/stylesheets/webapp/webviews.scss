@@ -9,37 +9,6 @@
   }
 }
 
-#communicart_header {
-  width: 100%;
-  padding: 40px 10px 40px 35px;
-  background-color: #07519b;
-  color: $white;
-  margin: 0 auto;
-
-  .container {
-    width: 100%;
-  }
-}
-
-#communicart_header a {
-  color: $white;
-}
-
-#header-identity {
-  display: inline-block;
-}
-
-#header-identity h1 {
-  margin: 0;
-  color: #fff;
-}
-
-#communicart_header #header-nav {
-  display: inline-block;
-  float: right;
-  color: #fff;
-}
-
 .communicart_description {
   img {
     margin-bottom: 7px;
@@ -53,29 +22,6 @@
   td {
     padding: 15px;
   }
-}
-
-.cart-list {
-  width: 100%;
-  background: #fff;
-  margin: 20px auto;
-  td {
-    padding: 15px;
-    vertical-align: top;
-  }
-  tr {
-    border-bottom: 1px solid #ccc;
-  }
-}
-
-.pending-pr {
-  background: #F5F5F5;
-  border-bottom: 1px solid #BDBDBD;
-  padding-top: 40px;
-}
-
-.past-pr {
-  padding-top: 40px;
 }
 
 tr.header h5 {

@@ -17,7 +17,8 @@ class HomeController < ApplicationController
 
   def index
     if session[:user] && session[:user]['email']
-      @user_id = User.find_by_email_address(session[:user]['email']).id
+      u = User.find_by_email_address(session[:user]['email'])
+      @user_id = u.id unless u.nil?
     end
   end
 

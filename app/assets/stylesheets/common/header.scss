@@ -10,9 +10,10 @@
 
 #header-identity h1 {
   margin: 0;
+  color: #fff;
 }
 
-#communicart_header #header-nav {
+.header-nav {
   display: inline-block;
   float: right;
   color: #fff;
@@ -44,13 +45,18 @@ ul#breadcrumb-nav {
   text-indent: -2000px;
 }
 
-#header-nav li {
+.header-nav li {
   display: inline-block;
   padding-right: 12px;
 }
 
+.mycart-link {
+  clear: all;
+  margin-top: -20px;
+}
+
 @media (max-width: 480px) {
-  #header-nav {
+  .header-nav {
     padding-start: 0px;
     text-align: right;
     li {
