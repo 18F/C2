@@ -17,33 +17,24 @@ describe CommunicartMailer do
     let(:api_token) { FactoryGirl.create(:api_token) }
 
     before do
-      expect(ENV).to receive(:[])
-      expect(ENV).to receive(:[]).with('NOTIFICATION_FROM_EMAIL').and_return('reply@communicart-stub.com')
+      expect_any_instance_of(CommunicartMailer).to receive(:from_email).and_return('reply@communicart-stub.com')
       expect(ApiToken).to receive_message_chain(:where, :where, :last).and_return(api_token)
     end
 
     it 'renders the subject' do
       cart.update_attributes(external_id: 13579)
-      expect(cart).to receive(:approval_group).and_return(approval_group)
       expect(mail.subject).to eq('Communicart Approval Request from Liono Requester: Please review Cart #13579')
     end
 
     it 'renders the receiver email' do
-      expect(cart).to receive(:approval_group).and_return(approval_group)
       expect(mail.to).to eq(["email.to.email@testing.com"])
     end
 
     it 'renders the sender email' do
-      expect(cart).to receive(:approval_group).and_return(approval_group)
       expect(mail.from).to eq(['reply@communicart-stub.com'])
     end
 
     context 'attaching a csv of the cart activity' do
-      before do
-        expect(cart).to receive(:approval_group).and_return(approval_group)
-
-      end
-
       it 'generates csv attachments for an approved cart' do
         expect(cart).to receive(:all_approvals_received?).and_return(true)
         expect_csvs_to_be_exported
@@ -67,9 +58,8 @@ describe CommunicartMailer do
 
     before do
       approval.update_attribute(:status, 'approved')
-      expect(ENV).to receive(:[])
-      expect(ENV).to receive(:[]).with('NOTIFICATION_FROM_EMAIL').and_return('reply@communicart-stub.com')
-      expect(cart_with_approval_group).to receive(:requester).and_return(requester)
+      expect_any_instance_of(CommunicartMailer).to receive(:from_email).and_return('reply@communicart-stub.com')
+      expect(cart_with_approval_group).to receive(:requester).and_return(requester).at_least(:once)
     end
 
     it 'renders the subject' do
@@ -86,13 +76,13 @@ describe CommunicartMailer do
 
     context 'attaching a csv of the cart activity' do
       it 'generates csv attachments for an approved cart' do
-        expect(cart_with_approval_group).to receive(:all_approvals_received?).and_return(true)
+        expect(cart_with_approval_group).to receive(:all_approvals_received?).and_return(true).at_least(:once)
         expect_csvs_to_be_exported
         mail
       end
 
       it 'does not generate csv attachments for an unapproved cart' do
-        expect(cart_with_approval_group).to receive(:all_approvals_received?).and_return(false)
+        expect(cart_with_approval_group).to receive(:all_approvals_received?).and_return(false).at_least(:once)
         expect_any_instance_of(Exporter::Base).not_to receive(:to_csv)
         mail
       end
@@ -106,8 +96,7 @@ describe CommunicartMailer do
     let(:mail) { CommunicartMailer.comment_added_email(comment, email) }
 
     before do
-      expect(ENV).to receive(:[])
-      expect(ENV).to receive(:[]).with('NOTIFICATION_FROM_EMAIL').and_return('reply@communicart-stub.com')
+      expect_any_instance_of(CommunicartMailer).to receive(:from_email).and_return('reply@communicart-stub.com')
       cart_item.comments << comment
     end
 
@@ -130,9 +119,8 @@ describe CommunicartMailer do
     let(:requester) { FactoryGirl.create(:user, email_address: 'test-requester-1@some-dot-gov.gov') }
 
     before do
-      expect(ENV).to receive(:[])
-      expect(ENV).to receive(:[]).with('NOTIFICATION_FROM_EMAIL').and_return('reply@communicart-stub.com')
-      expect(cart_with_observers).to receive(:requester).and_return(requester)
+      expect_any_instance_of(CommunicartMailer).to receive(:from_email).and_return('reply@communicart-stub.com')
+      expect(cart_with_observers).to receive(:requester).and_return(requester).at_least(:once)
     end
 
     let(:cart_with_observers) { FactoryGirl.create(:cart_with_observers, external_id: 1965) }

@@ -12,10 +12,8 @@ describe ParallelDispatcher do
     end
 
     it 'creates a new token for each approver' do
-      api_token = FactoryGirl.create(:api_token)
-      expect(ApiToken).to receive_message_chain(:where, :where, :last).and_return(api_token)
       expect(ApiToken).to receive(:create!).exactly(2).times
-
+      expect(dispatcher).to receive(:send_notification_email).twice
       dispatcher.deliver_new_cart_emails(cart)
     end
 

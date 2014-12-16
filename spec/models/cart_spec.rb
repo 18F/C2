@@ -38,12 +38,10 @@ describe Cart do
     let(:user1) { FactoryGirl.create(:user, email_address: 'user1@some-dot-gov.gov') }
 
     it 'excludes blank email addresses' do
-      expect(User).to receive(:find_or_create_by).and_return(user1)
+      expect(User).to receive(:find_or_create_by).and_return(user1).exactly(2).times
       params = { 'toAddress' => ["email1@some-dot-gov.gov", "email2@some-dot-gov", ""] }
-      expect(User).to receive(:find_or_create_by).exactly(2).times
       cart.process_approvals_without_approval_group params
     end
-
   end
 
   describe '#find_cart_without_name' do
