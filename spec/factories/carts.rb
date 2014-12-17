@@ -25,6 +25,13 @@ FactoryGirl.define do
         cart.save!
       end
 
+      factory :cart_with_all_approvals_approved do
+        after :create do |cart|
+          cart.approvals.each {|a| a.update_attribute :status, 'approved'}
+          cart.update_attribute :status, 'approved'
+        end
+      end
+
       factory :cart_with_approvals_and_items do
         after :create do |cart|
           cart.cart_items << FactoryGirl.create(:cart_item, cart_id: cart.id)

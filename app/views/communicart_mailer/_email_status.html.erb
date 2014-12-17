@@ -15,18 +15,16 @@
         <td colspan="2">
           <table>
             <%- last_status = nil %>
-            <%- @cart.approvals_in_list_order.each do |approval| %>
-              <tr class="spacer-row">
-                <td></td>
-                <td class="<% if last_status %>status-<%= approval.status %>-line<% end %>"></td>
-              </tr>
+            <%- @cart.approvals_in_list_order.each_with_index do |approval,index| %>
               <tr class="approval-row">
                 <td>
                   <%- if approval.status != last_status %>
                     <strong><%= approval.status %></strong>
                   <%- end %>
                 </td>
-                <td>
+                <td
+                <%="class=last" if index == @cart.approvals_in_list_order.count - 1 %>
+                >
                   <%= status_icon_tag(approval.status) %>
                   <%= approval.user.full_name %>
                   <%= mail_to approval.user.email_address %>

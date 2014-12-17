@@ -20,19 +20,40 @@
 
   .status-icon {
     position: relative;
-    left: -7px;
-    vertical-align: -2px;
+    padding-bottom: 50px;
   }
 
   .approval-row > td {
-    padding-right: 60px;
+    vertical-align: top;
+    /*padding-right: 60px;*/
+    padding: 0 60px 0 0;
+
+    &.last {
+      img.approved, img.pending, img.rejected {
+        background-image: none;
+      }
+    }
+
+    img {
+      &.approved {
+        background-image: url('/assets/bg_approved_status.gif');
+      }
+
+      &.pending {
+        background-image: url('/assets/bg_pending_status.gif');
+      }
+
+      &.rejected {
+        background-image: url('/assets/bg_rejected_status.gif');
+      }
+    }
   }
 
   .spacer-row {
     height: 20px;
 
     // TODO verify colors
-    .status-approved-line {
+/*    .status-approved-line {
       border-left: 2px solid #4cad4b;
     }
     .status-pending-line {
@@ -41,5 +62,5 @@
     .status-rejected-line {
       border-left: 2px solid #ff562f;
     }
-  }
+*/  }
 }
