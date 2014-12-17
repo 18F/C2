@@ -77,7 +77,7 @@ describe Commands::Approval::InitiateCartApproval do
 
       context 'no existing approvals' do
         it "processes the approval group" do
-          allow(cart).to receive_message_chain(:approvals, :any?).and_return false
+          expect(cart).to receive_message_chain(:approvals, :any?).and_return false
           expect(cart).to receive(:process_approvals_from_approval_group)
           command.perform(command_params)
         end
@@ -85,7 +85,7 @@ describe Commands::Approval::InitiateCartApproval do
 
       context 'existing approvals' do
         it 'refrains from processing the approvals' do
-          allow(cart).to receive_message_chain(:approvals, :any?).and_return true
+          expect(cart).to receive_message_chain(:approvals, :any?).and_return true
           expect(cart).not_to receive(:process_approvals_from_approval_group)
           command.perform(command_params)
         end

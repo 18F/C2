@@ -4,7 +4,7 @@ describe Cart do
   describe '#update_approval_status' do
     context "All approvals are in 'approved' status" do
       it 'updates a status based on the cart_id passed in from the params' do
-        allow(cart).to receive(:all_approvals_received?).and_return(true)
+        expect(cart).to receive(:all_approvals_received?).and_return(true)
 
         cart.update_approval_status
         expect(cart.status).to eq('approved')
@@ -13,7 +13,7 @@ describe Cart do
 
     context "Not all approvals are in 'approved'status" do
       it 'does not update the cart status' do
-        allow(cart).to receive(:all_approvals_received?).and_return(false)
+        expect(cart).to receive(:all_approvals_received?).and_return(false)
 
         cart.update_approval_status
         expect(cart.status).to eq('pending')
@@ -38,12 +38,10 @@ describe Cart do
     let(:user1) { FactoryGirl.create(:user, email_address: 'user1@some-dot-gov.gov') }
 
     it 'excludes blank email addresses' do
-      allow(User).to receive(:find_or_create_by).and_return(user1)
+      expect(User).to receive(:find_or_create_by).and_return(user1).exactly(2).times
       params = { 'toAddress' => ["email1@some-dot-gov.gov", "email2@some-dot-gov", ""] }
-      expect(User).to receive(:find_or_create_by).exactly(2).times
       cart.process_approvals_without_approval_group params
     end
-
   end
 
   describe '#find_cart_without_name' do
