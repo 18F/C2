@@ -4,6 +4,7 @@ class Approval < ActiveRecord::Base
   belongs_to :cart
   belongs_to :user
   has_one :approval_group, through: :cart
+  delegate :full_name, :email_address, :to => :user, :prefix => true
 
   acts_as_list scope: :cart
 
@@ -29,7 +30,6 @@ class Approval < ActiveRecord::Base
       user_id: user_role.user_id
     )
   end
-
 
   private
 

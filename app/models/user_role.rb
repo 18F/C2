@@ -3,6 +3,7 @@ class UserRole < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :approval_group
+  delegate :email_address, :to => :user, :prefix => true
 
   acts_as_list scope: :approval_group
 

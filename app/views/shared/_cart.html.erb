@@ -104,7 +104,7 @@
                     <br/>
                     <% unless c.user.nil? %>
                       <em>
-                        <%= "#{c.user.full_name}: " %>
+                        <%= "#{c.user_full_name}: " %>
                       </em>
                     <% end %>
                     <%= c.comment_text %>
@@ -189,7 +189,7 @@
                 <p class='comment-text col-sm-6 col-xs-12'>
                   <% unless c.user.nil? %>
                     <em>
-                      <%= "#{c.user.full_name}: " %>
+                      <%= "#{c.user_full_name}: " %>
                     </em>
                   <% end %>
                   <%= c.comment_text %>

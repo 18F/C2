@@ -7,7 +7,7 @@ class Dispatcher
 
   def email_observers(cart)
     cart.approvals.where(role: 'observer').each do |observer|
-      CommunicartMailer.cart_observer_email(observer.user.email_address, cart).deliver
+      CommunicartMailer.cart_observer_email(observer.user_email_address, cart).deliver
     end
   end
 
@@ -43,7 +43,7 @@ class Dispatcher
   private
 
   def send_notification_email(approval)
-    email = approval.user.email_address
+    email = approval.user_email_address
     CommunicartMailer.cart_notification_email(email, approval).deliver
   end
 end
