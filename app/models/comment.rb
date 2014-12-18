@@ -3,6 +3,7 @@ class Comment < ActiveRecord::Base
 
   belongs_to :commentable, polymorphic: true
   belongs_to :user
+  delegate :full_name, :email_address, :to => :user, :prefix => true
 
   after_create :notify_approval_group
 
@@ -10,7 +11,7 @@ class Comment < ActiveRecord::Base
   # match .attributes
   def to_a
     [
-      self.user.email_address,
+      self.user_email_address,
       self.comment_text,
       self.updated_at,
       TimeHelper.human_readable_time(self.updated_at)
@@ -32,7 +33,7 @@ private
     case self.commentable_type
       when "CartItem"
         self.commentable.cart.approvals.each do | approval |
-          email = approval.user.email_address
+          email = approval.user_email_address
           CommunicartMailer.comment_added_email(self, email).deliver
         end
       else

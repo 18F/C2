@@ -24,8 +24,10 @@
                 </td>
                 <td>
                   <%= status_icon_tag(approval.status) %>
-                  <%= approval.user.full_name %>
-                  <%= mail_to approval.user.email_address %>
+                  <ul>
+                    <li><%= approval.user_full_name %></li>
+                    <li><%= mail_to approval.user_email_address %></li>
+                  </ul>
                 </td>
               </tr>
               <%- last_status = approval.status %>
