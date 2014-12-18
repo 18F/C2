@@ -23,7 +23,7 @@
                   <%- end %>
                 </td>
                 <td
-                <%="class=last" if index == @cart.approvals_in_list_order.count - 1 %>
+                  <%= order_class(index, @cart.approvals_in_list_order.count) %>
                 >
                   <%= status_icon_tag(approval.status) %>
                   <%= approval.user.full_name %>
