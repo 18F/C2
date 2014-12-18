@@ -22,7 +22,6 @@ gem 'newrelic_rpm'
 group :test, :development do
   gem 'database_cleaner'
   gem 'factory_girl_rails'
-  gem 'letter_opener', require: false
   gem 'pry-byebug'
   gem 'pry-rails'
   gem 'rspec-rails'
