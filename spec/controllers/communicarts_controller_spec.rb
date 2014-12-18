@@ -143,9 +143,8 @@ describe CommunicartsController do
         approval.update_attributes(cart_id: cart.id, user_id: approver.id)
         expect(cart).to receive_message_chain(:approvals, :where).and_return([approval])
         expect(Cart).to receive_message_chain(:where, :where, :first).and_return(cart)
-
-        # Remove stub to view email layout in development through letter_opener
         expect(CommunicartMailer).to receive_message_chain(:approval_reply_received_email, :deliver)
+
         @json_approval_params = JSON.parse(approval_params)
       end
 

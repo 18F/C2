@@ -52,9 +52,6 @@ describe "Approving a cart with multiple approvers in parallel" do
   end
 
   it 'updates the cart and approval records as expected' do
-    # Remove stub to view email layout in development through letter_opener
-    # CommunicartMailer.stub_chain(:approval_reply_received_email, :deliver)
-
     expect(Cart.count).to eq(1)
     expect(User.count).to eq(4)
     expect(Cart.first.status).to eq 'pending'

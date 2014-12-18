@@ -27,9 +27,6 @@ C2::Application.configure do
   # number of complex assets.
   config.assets.debug = true
 
-  # Uncomment the following line when developing to view HTML emails in a browser
-  # config.action_mailer.delivery_method = :letter_opener
-
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
