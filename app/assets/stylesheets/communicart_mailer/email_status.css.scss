@@ -25,16 +25,28 @@
 
   .approval-row > td {
     vertical-align: top;
-    /*padding-right: 60px;*/
     padding: 0 60px 0 0;
 
     &.last {
       img.approved, img.pending, img.rejected {
         background-image: none;
       }
+
+      img {
+        padding-top: 0;
+      }
+    }
+
+    &.first {
+      padding: 0;
+
+      img {
+        padding-top: 0;
+      }
     }
 
     img {
+      padding-top: 2px;
       &.approved {
         background-image: url('/assets/bg_approved_status.gif');
       }
