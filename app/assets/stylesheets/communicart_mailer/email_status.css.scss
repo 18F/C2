@@ -7,6 +7,10 @@
     background-color: #fff;
     margin: 15px;
     padding: 15px;
+
+    table.approval_details {
+      padding-top: 25px;
+    }
   }
 
   .status-header-container td {
@@ -16,11 +20,15 @@
     &:last-child {
       text-align: right;
     }
+
+    .status-icon {
+      padding-bottom: 5px;
+    }
   }
 
   .status-icon {
     position: relative;
-    padding-bottom: 50px;
+    padding-bottom: 35px;
   }
 
   .approval-row > td {
@@ -46,6 +54,7 @@
     }
 
     img {
+      float: left;
       padding-top: 2px;
       &.approved {
         background-image: url('/assets/bg_approved_status.gif');
@@ -59,20 +68,14 @@
         background-image: url('/assets/bg_rejected_status.gif');
       }
     }
+
+    ul {
+        display: inline-block;
+        padding: 0 0 0 7px;
+        margin: 0;
+      li {
+        display: inline-block;
+      }
+    }
   }
-
-  .spacer-row {
-    height: 20px;
-
-    // TODO verify colors
-/*    .status-approved-line {
-      border-left: 2px solid #4cad4b;
-    }
-    .status-pending-line {
-      border-left: 2px solid #ffaa18;
-    }
-    .status-rejected-line {
-      border-left: 2px solid #ff562f;
-    }
-*/  }
 }
