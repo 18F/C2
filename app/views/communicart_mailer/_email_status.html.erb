@@ -13,7 +13,7 @@
       </tr>
       <tr class="status-header-container-detail">
         <td colspan="2">
-          <table>
+          <table class="approval_details">
             <%- last_status = nil %>
             <%- @cart.approvals_in_list_order.each_with_index do |approval,index| %>
               <tr class="approval-row">
@@ -23,11 +23,13 @@
                   <%- end %>
                 </td>
                 <td
-                  <%= order_class(index, @cart.approvals_in_list_order.count) %>
+                  <%= generate_bookend_class(index, @cart.approvals_in_list_order.count) %>
                 >
                   <%= status_icon_tag(approval.status) %>
-                  <%= approval.user.full_name %>
-                  <%= mail_to approval.user.email_address %>
+                  <ul>
+                    <li><%= approval.user.full_name %></li>
+                    <li><%= mail_to approval.user.email_address %></li>
+                  </ul>
                 </td>
               </tr>
               <%- last_status = approval.status %>
