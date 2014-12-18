@@ -4,8 +4,13 @@ module CommunicartMailerHelper
   end
 
   def generate_bookend_class(index, count)
-    return "class=last" if index == count - 1
-    return "class=first" if index == 0
-    return ""
+    case index
+    when count - 1
+      'class=last'
+    when 0
+      'class=first'
+    else
+      ''
+    end
   end
 end
