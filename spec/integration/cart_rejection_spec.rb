@@ -118,9 +118,6 @@ describe 'Rejecting a cart with multiple approvers' do
   end
 
   it 'updates the cart and approver records as expected' do
-    # Remove stub to view email layout in development through letter_opener
-    # CommunicartMailer.stub_chain(:rejection_reply_received_email, :deliver)
-
     expect(Cart.count).to eq(1)
     expect(User.count).to eq(4)
     expect(Approval.count).to eq 3

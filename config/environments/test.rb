@@ -26,14 +26,8 @@ C2::Application.configure do
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false
 
-  # Tell Action Mailer not to deliver emails to the real world.
-  if ENV['MAIL_PREVIEW']
-    require 'letter_opener'
-    config.action_mailer.delivery_method = :letter_opener
-  else
-    # Accumulates sent emails in the ActionMailer::Base.deliveries array.
-    config.action_mailer.delivery_method = :test
-  end
+  # Accumulates sent emails in the ActionMailer::Base.deliveries array.
+  config.action_mailer.delivery_method = :test
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr

@@ -48,16 +48,15 @@ To get the database and tests running:
     * To run tests automatically as files are changed, run `bundle exec guard`.
 1. Run the frontend tests with `grunt jasmine`.
 
-To see previews of the mailers, you have a couple options:
+To see previews of the mailers:
 
-* Run the server/console/specs with the environment variable `MAIL_PREVIEW=true`.
 * Start the server, and visit http://localhost:3000/mail_view/.
 
 To get the app running:
 
 1. Register an application on [MyUSA](https://myusa-staging.18f.us/authorizations)
 1. Modify [`config/environment_variables.yml`](config/environment_variables.yml.example):
-    - `GMAIL_USERNAME` should be rensender you're using (e.g. communicart.sender@gmail.com or communicart.test@gmail.com)
+    - `GMAIL_USERNAME` should be the email for the sender you're using (e.g. communicart.sender@gmail.com or communicart.test@gmail.com)
     - `GMAIL_PASSWORD` is the password for that email account
     - `MYGOV_CLIENT_ID` is the Consumer Public Key provided by MyUSA
     - `MYGOV_SECRET_ID` is the Consumer Secret Key provided by MyUSA
