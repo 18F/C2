@@ -2,6 +2,7 @@ class HomeController < ApplicationController
   before_filter :setup_session_user
   before_filter :setup_mygov_client
   before_filter :setup_mygov_access_token
+  after_filter :handle_new_users_from_oauth
 
   def oauth_callback
     auth = request.env["omniauth.auth"]
@@ -36,6 +37,12 @@ private
   def setup_mygov_access_token
     if session
       @mygov_access_token = OAuth2::AccessToken.new(@mygov_client, session[:token])
+    end
+  end
+
+  def handle_new_users_from_oauth
+    unless session[:user].blank?
+      User.find_or_create_by(email_address: session[:user]['email'])
     end
   end
 end

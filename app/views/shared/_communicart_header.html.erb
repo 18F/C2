@@ -6,7 +6,7 @@
     </div>
 
     <ul id='header-nav'>
-      <%- if !session[:user].nil? && session[:user].empty? %>
+      <%- unless signed_in? %>
         <li>
           <%= link_to 'Sign in with MyUSA', "/auth/myusa" %>
         </li>

@@ -6,4 +6,9 @@ module ApplicationHelper
     end
     options_for_select(options)
   end
+
+  def signed_in?
+    session[:user] && !session[:user].empty?
+  end
+
 end
