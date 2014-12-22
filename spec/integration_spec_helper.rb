@@ -24,8 +24,6 @@ module IntegrationSpecHelper
 
     user = @user ||= FactoryGirl.create(:user)
     # TODO make this an expect()
-    allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
-
     setup_mock_auth(service_name, user)
 
     visit "/auth/#{service_name}"

@@ -5,11 +5,11 @@ class ApplicationController < ActionController::Base
   private
 
   def current_user
-    @current_user ||= User.find_by(email_address: session[:user]['email']) if session[:user]
+    User.find_by(email_address: session[:user]['email']) if session[:user].present?
   end
 
   def signed_in?
-    !!current_user && !session[:user].empty?
+    !!current_user
   end
 
   def authenticate_user!
