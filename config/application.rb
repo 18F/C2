@@ -25,7 +25,18 @@ module C2
         env_file = Rails.root.join("config", filename).to_s
 
         if File.exist?(env_file)
-          YAML.load_file(env_file)[Rails.env].each do |key, value|
+          yaml = YAML.load_file(env_file)
+          env_data = yaml[Rails.env]
+
+          # TODO remove deprecation
+          data = if env_data
+            ActiveSupport::Deprecation.warn("Please remove the environment keys from #{filename}.")
+            env_data
+          else
+            yaml
+          end
+
+          data.each do |key, value|
             ENV[key.to_s] = value
           end
         end
