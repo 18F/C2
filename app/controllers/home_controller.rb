@@ -2,7 +2,6 @@ class HomeController < ApplicationController
   before_filter :setup_session_user
   before_filter :setup_mygov_client
   before_filter :setup_mygov_access_token
-  after_filter :handle_new_users_from_oauth
 
   def oauth_callback
     auth = request.env["omniauth.auth"]
@@ -10,6 +9,7 @@ class HomeController < ApplicationController
 
     reset_session
     session[:user] = auth.extra.raw_info.to_hash
+    handle_new_users_from_oauth
     session[:token] = auth.credentials.token
     flash[:success] = "You successfully signed in"
     redirect_to return_to || root_url
