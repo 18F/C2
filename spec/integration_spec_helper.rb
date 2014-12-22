@@ -21,9 +21,7 @@ module IntegrationSpecHelper
   end
 
   def login_with_oauth(service_name = :myusa)
-
     user = @user ||= FactoryGirl.create(:user)
-    # TODO make this an expect()
     setup_mock_auth(service_name, user)
 
     visit "/auth/#{service_name}"
