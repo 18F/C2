@@ -6,8 +6,7 @@
     </div>
 
     <ul id='header-nav'>
-
-      <%- if !@current_user %>
+      <%- unless signed_in? %>
         <li>
           <%= link_to 'Sign in with MyUSA', "/auth/myusa" %>
         </li>
@@ -16,12 +15,11 @@
           <%= session['user']['email'] %>
           <%= image_tag 'icon-user.png', alt: ' ' %>
         </li>
+        <li>
+          <%= link_to 'Logout', "/logout", method: :post, class: 'login-link' %>
+          <%= image_tag 'icon-logout.png', alt: 'Logout' %>
+        </li>
       <%- end %>
-
-      <li>
-        <%= link_to 'Logout', "/logout", method: :post, class: 'login-link' %>
-        <%= image_tag 'icon-logout.png', alt: 'Logout' %>
-      </li>
     </ul>
   </div>
 </div>

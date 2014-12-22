@@ -14,6 +14,10 @@ module UserSteps
     expect(page.find('body')).to have_content(text)
   end
 
+  step "I should not see :text" do |text|
+    expect(page.find('body')).to_not have_content(text)
+  end
+
   step 'I should see a header :text' do |text|
     #TODO: Search through all header tags
     expect(page.find('h3')).to have_content(text)
@@ -51,6 +55,15 @@ module UserSteps
   step 'I click :button_name button' do |button_name|
     Capybara.match = :first
     click_button(button_name)
+  end
+
+  step 'I click :link_name' do |link_name|
+    Capybara.match = :first
+    click_on(link_name)
+  end
+
+  step 'the page loads' do
+    page.has_css?('.home-main-body')
   end
 
 end

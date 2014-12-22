@@ -6,4 +6,5 @@ module ApplicationHelper
     end
     options_for_select(options)
   end
+
 end

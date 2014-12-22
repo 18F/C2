@@ -9,6 +9,7 @@ class HomeController < ApplicationController
 
     reset_session
     session[:user] = auth.extra.raw_info.to_hash
+    handle_new_users_from_oauth
     session[:token] = auth.credentials.token
     flash[:success] = "You successfully signed in"
     redirect_to return_to || root_url
@@ -36,6 +37,12 @@ private
   def setup_mygov_access_token
     if session
       @mygov_access_token = OAuth2::AccessToken.new(@mygov_client, session[:token])
+    end
+  end
+
+  def handle_new_users_from_oauth
+    unless session[:user].blank?
+      User.find_or_create_by(email_address: session[:user]['email'])
     end
   end
 end
