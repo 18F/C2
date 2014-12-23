@@ -55,7 +55,7 @@ To get the app running:
 
 1. Register an application on [MyUSA](https://myusa-staging.18f.us/authorizations)
 1. Modify [`.env`](.env.example):
-    - `GMAIL_USERNAME` should be the email for the sender you're using (e.g. communicart.sender@gmail.com or communicart.test@gmail.com)
-    - `GMAIL_PASSWORD` is the password for that email account
-    - `MYGOV_CLIENT_ID` is the Consumer Public Key provided by MyUSA
-    - `MYGOV_SECRET_ID` is the Consumer Secret Key provided by MyUSA
+    - `SMTP_USERNAME` should be the email for the sender you're using (e.g. communicart.sender@gmail.com or communicart.test@gmail.com)
+    - `SMTP_PASSWORD` is the password for that email account
+    - `MYUSA_KEY` is the Consumer Public Key provided by MyUSA
+    - `MYUSA_SECRET` is the Consumer Secret Key provided by MyUSA
