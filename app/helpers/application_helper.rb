@@ -12,12 +12,16 @@ module ApplicationHelper
   end
 
   def bootstrap_alert_class(key)
-    case key.to_sym
-    when :error
-      'bg-danger'
-    else
-      "bg-#{key}"
-    end
+    suffix = case key.to_sym
+      when :notice
+        'info'
+      when :error
+        'danger'
+      else
+        key
+      end
+
+    "bg-#{suffix}"
   end
 
   def flash_message(val)
