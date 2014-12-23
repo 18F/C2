@@ -10,8 +10,8 @@
 </head>
 <body class="bodyclass webapp">
 
-<% flash.each do |key, value| %>
-    <div class="alert alert-<%= key %>"><%= value %></div>
+<% flash_list.each do |key, value| %>
+  <div class="alert alert-<%= key %>"><%= value %></div>
 <% end %>
 
 <%= render 'shared/communicart_header' unless @hide_header %>
