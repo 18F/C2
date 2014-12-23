@@ -8,8 +8,8 @@ development: *default
 test: *default
 production:
   <<: *default
-  username: <%= ENV.fetch['DB_USERNAME'] %>
-  password: <%= ENV.fetch['DB_PASSWORD'] %>
+  username: <%= ENV['DB_USERNAME'] %>
+  password: <%= ENV['DB_PASSWORD'] %>
   database: <%= ENV['DB_NAME'] || 'c2_production' %>
-  host: <%= ENV.fetch['DB_HOST'] %>
-  port: <%= ENV.fetch['DB_PORT'] %>
+  host: <%= ENV['DB_HOST'] %>
+  port: <%= ENV['DB_PORT'] %>
