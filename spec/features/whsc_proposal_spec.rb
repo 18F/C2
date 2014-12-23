@@ -6,8 +6,10 @@ describe "White House Service Center proposals" do
   end
 
   context "when signed in" do
+    let(:requester) { FactoryGirl.create(:user) }
+
     before do
-      login_with_oauth
+      login_as(requester)
     end
 
     it "saves a Cart with the attributes" do
@@ -27,7 +29,7 @@ describe "White House Service Center proposals" do
       expect(cart.getProp(:vendor)).to eq('ACME')
       # TODO should this persist as a number?
       expect(cart.getProp(:amount)).to eq('123.45')
-      expect(cart.requester).to eq(oauth_user)
+      expect(cart.requester).to eq(requester)
     end
 
     it "doesn't save when the amount is too high" do
