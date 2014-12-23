@@ -7,8 +7,8 @@ set -x
 if [ ! -f config/database.yml ]; then
   cp config/database.yml.example config/database.yml
 fi
-if [ ! -f config/environment_variables.yml ]; then
-  cp config/environment_variables.yml.example config/environment_variables.yml
+if [ ! -f .env ]; then
+  cp .env.example .env
 fi
 
 bundle
