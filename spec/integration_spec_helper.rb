@@ -28,4 +28,9 @@ module IntegrationSpecHelper
     setup_mock_auth(service_name, oauth_user)
     visit "/auth/#{service_name}"
   end
+
+  def login_as(user)
+    @oauth_user = user
+    login_with_oauth
+  end
 end
