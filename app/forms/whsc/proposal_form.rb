@@ -4,6 +4,7 @@ module Whsc
 
     attribute :amount, :decimal
     attribute :description, :text
+    attribute :requester, :user
     attribute :vendor, :string
 
     validates :amount, numericality: {
@@ -11,6 +12,7 @@ module Whsc
       less_than_or_equal_to: 3000
     }
     validates :description, presence: true
+    validates :requester, presence: true
     validates :vendor, presence: true
 
 
@@ -24,6 +26,7 @@ module Whsc
           vendor: self.vendor,
           amount: self.amount
         )
+        cart.set_requester(self.requester)
       end
 
       cart

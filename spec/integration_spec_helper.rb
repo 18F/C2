@@ -20,10 +20,12 @@ module IntegrationSpecHelper
     )
   end
 
-  def login_with_oauth(service_name = :myusa)
-    user = @user ||= FactoryGirl.create(:user)
-    setup_mock_auth(service_name, user)
+  def oauth_user
+    @oauth_user ||= FactoryGirl.create(:user)
+  end
 
+  def login_with_oauth(service_name = :myusa)
+    setup_mock_auth(service_name, oauth_user)
     visit "/auth/#{service_name}"
   end
 end

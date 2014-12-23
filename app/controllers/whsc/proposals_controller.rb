@@ -8,6 +8,7 @@ module Whsc
 
     def create
       @proposal_form = Whsc::ProposalForm.new(params[:whsc_proposal])
+      @proposal_form.requester = current_user
       if @proposal_form.valid?
         cart = @proposal_form.create_cart
         if cart.persisted?

@@ -113,9 +113,13 @@ class Cart < ActiveRecord::Base
     end
   end
 
+  def set_requester(user)
+    self.approvals.create!(user_id: user.id, role: 'requester')
+  end
+
   def create_requester(email)
-    requester = User.find_or_create_by(email_address: email)
-    self.approvals.create!(user_id: requester.id, role: 'requester')
+    user = User.find_or_create_by(email_address: email)
+    self.set_requester(user)
   end
 
   def process_approvals_without_approval_group(params)

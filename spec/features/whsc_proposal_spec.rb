@@ -25,6 +25,7 @@ describe "White House Service Center proposals" do
       expect(cart.getProp(:vendor)).to eq('ACME')
       # TODO should this persist as a number?
       expect(cart.getProp(:amount)).to eq('123.45')
+      expect(cart.requester).to eq(oauth_user)
     end
 
     it "doesn't save when the amount is too high" do
