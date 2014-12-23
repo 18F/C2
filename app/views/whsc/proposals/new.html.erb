@@ -7,6 +7,6 @@
   <%= f.label :vendor %>
   <%= f.text_field :vendor %>
   <%= f.label :amount %>
-  <%= f.number_field :amount %>
+  <%= f.number_field :amount, step: 0.01 %>
   <%= f.submit "Submit for approval" %>
 <% end %>
