@@ -1,12 +1,23 @@
-<h3>White House Service Center</h3>
-<h2>Credit Card Purchase Request</h2>
+<div class="container content">
+  <h4>White House Service Center</h4>
+  <h3>Credit Card Purchase Request</h3>
 
-<%= form_for @proposal_form do |f| %>
-  <%= f.label :description %>
-  <%= f.text_area :description %>
-  <%= f.label :vendor %>
-  <%= f.text_field :vendor %>
-  <%= f.label :amount %>
-  <%= f.number_field :amount, step: 0.01 %>
-  <%= f.submit "Submit for approval" %>
-<% end %>
+  <%= form_for @proposal_form do |f| %>
+    <div class="form-group">
+      <%= f.label :description %>
+      <%= f.text_area :description, class: 'form-control' %>
+    </div>
+    <div class="form-group">
+      <%= f.label :vendor %>
+      <%= f.text_field :vendor, class: 'form-control' %>
+    </div>
+    <div class="form-group">
+      <%= f.label :amount %>
+      <div class="input-group">
+        <div class="input-group-addon">$</div>
+        <%= f.number_field :amount, class: 'form-control', step: 0.01 %>
+      </div>
+    </div>
+    <%= f.submit "Submit for approval", class: 'btn btn-default' %>
+  <% end %>
+</div>

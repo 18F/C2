@@ -7,6 +7,19 @@ module ApplicationHelper
     options_for_select(options)
   end
 
+  def controller_name
+    params[:controller].gsub(/\W/, '-')
+  end
+
+  def bootstrap_alert_class(key)
+    case key.to_sym
+    when :error
+      'bg-danger'
+    else
+      "bg-#{key}"
+    end
+  end
+
   def flash_message(val)
     if val.is_a?(Enumerable)
       val.join('. ')
