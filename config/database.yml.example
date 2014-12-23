@@ -1,9 +1,0 @@
-default: &default
-  adapter: postgresql
-  encoding: unicode
-  database: c2_<%= Rails.env %>
-  pool: 5
-
-development: *default
-test: *default
-production: *default

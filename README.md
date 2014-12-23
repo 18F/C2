@@ -43,7 +43,6 @@ To get the database and tests running:
 1. Install Node.js 0.10
 1. Start PostgreSQL.
 1. Run `script/bootstrap`, which will print "DONE" if successful. *NOTE: This will delete any existing records in your database.*
-    * If you have a password on PostgreSQL, it will give you an error about not being able to connect to the database. Update the info in [`config/database.yml`](config/database.yml.example) with your creds.
 1. Run the specs with `bundle exec rspec spec` at the command line.
     * To run tests automatically as files are changed, run `bundle exec guard`.
 1. Run the frontend tests with `grunt jasmine`.

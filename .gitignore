@@ -19,7 +19,6 @@
 custom_plan.rb
 public/assets
 zeus.json
-config/database.yml
 config/environment_variables.yml
 config/environments/production.rb
 *~
