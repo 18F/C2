@@ -20,6 +20,8 @@ describe "White House Service Center proposals" do
         click_on 'Submit for approval'
       }.to change { Cart.count }.from(0).to(1)
 
+      expect(page).to have_content("Proposal submitted")
+
       cart = Cart.last
       expect(cart.name).to eq("buying stuff")
       expect(cart.getProp(:vendor)).to eq('ACME')
