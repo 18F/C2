@@ -3,7 +3,7 @@ module Whsc
     include SimpleFormObject
 
     attribute :amount, :decimal
-    attribute :name, :string
+    attribute :description, :text
     attribute :vendor, :string
   end
 end
