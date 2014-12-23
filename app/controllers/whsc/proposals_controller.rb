@@ -5,11 +5,15 @@ module Whsc
     end
 
     def create
-      form = Whsc::ProposalForm.new(params[:proposal_form])
+      form = Whsc::ProposalForm.new(params[:whsc_proposal])
       if form.valid?
-        Cart.create!(
+        cart = Cart.create!(
           flow: 'linear',
           name: form.description
+        )
+        cart.set_props(
+          vendor: form.vendor,
+          amount: form.amount
         )
       end
       redirect_to new_whsc_proposal_path
