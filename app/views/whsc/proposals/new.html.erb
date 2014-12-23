@@ -1,2 +1,12 @@
 <h3>White House Service Center</h3>
 <h2>Credit Card Purchase Request</h2>
+
+<%= form_for @proposal do |f| %>
+  <%= f.label :name, "Description" %>
+  <%= f.text_field :name %>
+  <%= f.label :vendor %>
+  <%= f.text_field :vendor %>
+  <%= f.label :amount %>
+  <%= f.number_field :amount %>
+  <%= f.submit %>
+<% end %>
