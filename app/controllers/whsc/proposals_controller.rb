@@ -1,5 +1,7 @@
 module Whsc
   class ProposalsController < ApplicationController
+    before_filter :authenticate_user!
+
     def new
       @proposal_form = Whsc::ProposalForm.new
     end
