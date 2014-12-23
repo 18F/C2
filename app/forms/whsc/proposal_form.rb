@@ -12,5 +12,21 @@ module Whsc
     }
     validates :description, presence: true
     validates :vendor, presence: true
+
+
+    def create_cart
+      cart = Cart.new(
+        flow: 'linear',
+        name: self.description
+      )
+      if cart.save
+        cart.set_props(
+          vendor: self.vendor,
+          amount: self.amount
+        )
+      end
+
+      cart
+    end
   end
 end
