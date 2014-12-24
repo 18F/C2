@@ -32,7 +32,11 @@ module UserSteps
   end
 
   step "I login" do
-    login_with_oauth
+    if @user
+      login_as(@user)
+    else
+      login_with_oauth
+    end
   end
 
   step 'show me the page' do

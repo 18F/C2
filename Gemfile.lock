@@ -221,6 +221,9 @@ GEM
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
     settingslogic (2.0.9)
+    simple_form_object (0.0.5)
+      activemodel (~> 4.0)
+      activesupport (~> 4.0)
     simplecov (0.9.1)
       docile (~> 1.1.0)
       multi_json (~> 1.0)
@@ -285,6 +288,7 @@ DEPENDENCIES
   sass-rails (>= 3.2)
   sdoc
   settingslogic
+  simple_form_object
   simplecov
   turbolinks
   turnip
