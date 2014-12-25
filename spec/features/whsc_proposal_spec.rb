@@ -35,6 +35,14 @@ describe "White House Service Center proposals" do
       expect(cart.approvers.map(&:email_address)).to eq(['approver@example.com'])
     end
 
+    it "defaults to the approver from the last request" do
+      cart = FactoryGirl.create(:cart_with_approvals)
+      cart.set_requester(requester)
+
+      visit '/whsc/proposals/new'
+      expect(find_field("Approving Official's Email Address").value).to eq('approver1@some-dot-gov.gov')
+    end
+
     it "doesn't save when the amount is too high" do
       visit '/whsc/proposals/new'
       fill_in 'Description', with: "buying stuff"
