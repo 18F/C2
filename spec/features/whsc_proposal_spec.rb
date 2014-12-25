@@ -17,6 +17,7 @@ describe "White House Service Center proposals" do
       fill_in 'Description', with: "buying stuff"
       fill_in 'Vendor', with: 'ACME'
       fill_in 'Amount', with: 123.45
+      fill_in "Approving Official's Email Address", with: 'approver@example.com'
 
       expect {
         click_on 'Submit for approval'
@@ -26,10 +27,12 @@ describe "White House Service Center proposals" do
 
       cart = Cart.last
       expect(cart.name).to eq("buying stuff")
+      expect(cart.flow).to eq('linear')
       expect(cart.getProp(:vendor)).to eq('ACME')
       # TODO should this persist as a number?
       expect(cart.getProp(:amount)).to eq('123.45')
       expect(cart.requester).to eq(requester)
+      expect(cart.approvers.map(&:email_address)).to eq(['approver@example.com'])
     end
 
     it "doesn't save when the amount is too high" do

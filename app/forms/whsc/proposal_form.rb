@@ -3,6 +3,7 @@ module Whsc
     include SimpleFormObject
 
     attribute :amount, :decimal
+    attribute :approver_email, :text
     attribute :description, :text
     attribute :requester, :user
     attribute :vendor, :string
@@ -11,6 +12,7 @@ module Whsc
       greater_than_or_equal_to: 0,
       less_than_or_equal_to: 3000
     }
+    validates :approver_email, presence: true
     validates :description, presence: true
     validates :requester, presence: true
     validates :vendor, presence: true
@@ -27,6 +29,7 @@ module Whsc
           amount: self.amount
         )
         cart.set_requester(self.requester)
+        cart.add_approver(self.approver_email)
       end
 
       cart

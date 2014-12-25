@@ -37,6 +37,11 @@ class Cart < ActiveRecord::Base
     self.approvals.where(role: 'approver')
   end
 
+  def approvers
+    # TODO do through SQL
+    self.approver_approvals.map(&:user)
+  end
+
   def awaiting_approvals
     self.approver_approvals.pending
   end
@@ -106,10 +111,14 @@ class Cart < ActiveRecord::Base
     self.comments.create!(user_id: self.requester.id, comment_text: comments.strip)
   end
 
+  def add_approver(email)
+    user = User.find_or_create_by(email_address: email)
+    self.approvals.create!(user_id: user.id, role: 'approver')
+  end
+
   def create_approver_approvals(emails)
     emails.each do |email|
-      user = User.find_or_create_by(email_address: email)
-      self.approvals.create!(user_id: user.id, role: 'approver')
+      self.add_approver(email)
     end
   end
 
