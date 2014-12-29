@@ -2,8 +2,11 @@ module Whsc
   class ProposalForm
     include SimpleFormObject
 
+    EXPENSE_TYPES = %w(BA61 BA80)
+
     attribute :amount, :decimal
     attribute :description, :text
+    attribute :expense_type, :text
     attribute :requester, :user
     attribute :vendor, :string
 
@@ -12,6 +15,7 @@ module Whsc
       less_than_or_equal_to: 3000
     }
     validates :description, presence: true
+    validates :expense_type, inclusion: {in: EXPENSE_TYPES}, presence: true
     validates :requester, presence: true
     validates :vendor, presence: true
 
@@ -23,8 +27,9 @@ module Whsc
       )
       if cart.save
         cart.set_props(
-          vendor: self.vendor,
-          amount: self.amount
+          amount: self.amount,
+          expense_type: self.expense_type,
+          vendor: self.vendor
         )
         cart.set_requester(self.requester)
       end
