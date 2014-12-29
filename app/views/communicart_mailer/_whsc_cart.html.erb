@@ -1,0 +1,47 @@
+<div id="whsc-layout">
+ <table class="w-container main-container" width='800'>
+    <tr>
+      <td>
+        <h1 class="communicart_header">WHSC: <%= title %></h1>
+
+        <div class="communicart_description">
+          <p>
+            Requested by:
+            <strong><%= cart.requester.full_name %></strong>
+          </p>
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="w-container results-list">
+        <table width="100%">
+          <tr class='header'>
+            <td class="first" width="33%" scope="col" colspan="2">
+              <h5>FY15 Credit Card Purchase Request</h5>
+            </td>
+          </tr>
+          </tr>
+              <% whsc_exclusions = ['origin'] %>
+              <%- cart.properties.where.not(property: whsc_exclusions).each do |cart_property| %>
+                <tr class="cart_item_information">
+                  <td class="w-container results-list" align="left" width="33%">
+                    <strong><%= (cart_property.property).split(/(?=[A-Z])/).join(" ") %></strong>
+                  </td>
+                  <td with="66%">
+                    <%= cart_property.value %>
+                  </td>
+                </tr>
+              <%- end %>
+        </table>
+
+
+      </td>
+    </tr>
+
+
+  </table>
+
+</div>
+
+

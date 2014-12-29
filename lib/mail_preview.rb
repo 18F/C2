@@ -15,6 +15,10 @@ class MailPreview < MailView
     CommunicartMailer.comment_added_email(comment, email)
   end
 
+  def whsc_email
+    CommunicartMailer.cart_notification_email(email, pending_approval)
+  end
+
 
   private
 
@@ -23,7 +27,8 @@ class MailPreview < MailView
   end
 
   def pending_approval
-    Approval.pending.last
+    approval = Approval.pending.last
+    approval
   end
 
   def received_approval
