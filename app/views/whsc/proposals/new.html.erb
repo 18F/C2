@@ -29,6 +29,10 @@
         <%= f.number_field :amount, class: 'form-control', step: 0.01 %>
       </div>
     </div>
+    <div class="form-group">
+      <%= f.label :approver_email, "Approving Official's Email Address" %>
+      <%= f.email_field :approver_email, class: 'form-control' %>
+    </div>
     <%= f.submit "Submit for approval", class: 'btn btn-default' %>
   <% end %>
 </div>
