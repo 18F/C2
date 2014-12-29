@@ -48,5 +48,7 @@ module C2
 
     config.autoload_paths << Rails.root.join('app/forms')
     config.autoload_paths << Rails.root.join('lib')
+
+    config.assets.precompile << 'common/communicarts.css'
   end
 end
