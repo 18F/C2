@@ -23,10 +23,10 @@
           </tr>
           </tr>
               <% whsc_exclusions = ['origin'] %>
-              <%- cart.properties.where.not(property: whsc_exclusions).each do |cart_property| %>
+              <%- cart.properties.where.not(property: cart.property_exclusions).each do |cart_property| %>
                 <tr class="cart_item_information">
                   <td class="w-container results-list" align="left" width="33%">
-                    <strong><%= (cart_property.property).split(/(?=[A-Z])/).join(" ") %></strong>
+                    <strong><%= (cart_property.property.capitalize).split(/(?=[A-Z])/).join(" ") %></strong>
                   </td>
                   <td with="66%">
                     <%= cart_property.value %>
