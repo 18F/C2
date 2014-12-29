@@ -15,6 +15,7 @@ describe "White House Service Center proposals" do
     it "saves a Cart with the attributes" do
       visit '/whsc/proposals/new'
       fill_in 'Description', with: "buying stuff"
+      choose 'BA80'
       fill_in 'Vendor', with: 'ACME'
       fill_in 'Amount', with: 123.45
 
@@ -26,6 +27,7 @@ describe "White House Service Center proposals" do
 
       cart = Cart.last
       expect(cart.name).to eq("buying stuff")
+      expect(cart.getProp(:expense_type)).to eq('BA80')
       expect(cart.getProp(:vendor)).to eq('ACME')
       # TODO should this persist as a number?
       expect(cart.getProp(:amount)).to eq('123.45')
@@ -35,6 +37,7 @@ describe "White House Service Center proposals" do
     it "doesn't save when the amount is too high" do
       visit '/whsc/proposals/new'
       fill_in 'Description', with: "buying stuff"
+      choose 'BA80'
       fill_in 'Vendor', with: 'ACME'
       fill_in 'Amount', with: 10_000
 

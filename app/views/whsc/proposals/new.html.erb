@@ -8,6 +8,17 @@
       <%= f.text_area :description, class: 'form-control' %>
     </div>
     <div class="form-group">
+      <%= f.label :expense_type %>
+      <% Whsc::ProposalForm::EXPENSE_TYPES.each do |expense_type| %>
+        <div class="radio">
+          <label>
+            <%= f.radio_button :expense_type, expense_type %>
+            <%= expense_type %>
+          </label>
+        </div>
+      <% end %>
+    </div>
+    <div class="form-group">
       <%= f.label :vendor %>
       <%= f.text_field :vendor, class: 'form-control' %>
     </div>
