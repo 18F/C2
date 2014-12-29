@@ -48,6 +48,17 @@ describe CommunicartMailer do
       end
     end
 
+    context 'custom templates' do
+      it 'renders a default template when an origin is not indicated' do
+        expect(mail.body.encoded).to include('Purchase Request')
+      end
+
+      it 'renders a custom template when origin is indicated' do
+        approval.cart.properties << Property.create!(property: 'origin', value:'whsc')
+        expect(mail.body.encoded).to include('WHSC: Purchase Request')
+      end
+    end
+
   end
 
   describe 'approval reply received email' do
