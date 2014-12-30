@@ -224,6 +224,17 @@ describe CommunicartsController do
         post 'approval_reply_received', @json_rejection_params
       end
 
+      it "sends a rejection notice to the requester" do
+        post 'approval_reply_received', @json_rejection_params
+
+        deliveries = ActionMailer::Base.deliveries
+        expect(deliveries.size).to eq(1)
+        mail = deliveries.last
+        expect(mail.to).to eq([rejected_cart.requester.email_address])
+        from_address = @json_rejection_params['fromAddress']
+        expect(mail.html_part.to_s).to include("The approver, #{from_address}, rejected")
+      end
+
       it "sends out a reject status email to the approvers"
 
       it 'creates another set of approvals when another cart request for that same cart is intiiated'
