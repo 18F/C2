@@ -18,7 +18,7 @@ describe CommunicartMailer do
 
     before do
       expect_any_instance_of(CommunicartMailer).to receive(:from_email).and_return('reply@communicart-stub.com')
-      expect(ApiToken).to receive_message_chain(:where, :where, :last).and_return(api_token)
+      expect(approval).to receive(:api_token).and_return(api_token)
     end
 
     it 'renders the subject' do
