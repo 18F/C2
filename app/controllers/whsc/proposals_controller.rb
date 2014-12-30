@@ -17,6 +17,7 @@ module Whsc
       if @proposal_form.valid?
         cart = @proposal_form.create_cart
         if cart.persisted?
+          Dispatcher.deliver_new_cart_emails(cart)
           flash[:success] = "Proposal submitted!"
           redirect_to new_whsc_proposal_path
         else
