@@ -12,7 +12,6 @@ describe ApprovalGroupsController do
       UserRole.create!(user_id: user2.id, approval_group_id: approval_group1.id, role: 'requester')
       get :search,  email: user2.email_address
       expect(assigns(:groups).first).to eq(approval_group1)
-      # expect(response).to render_template(:index)
     end
 
     it 'finds nothing when no group available' do
