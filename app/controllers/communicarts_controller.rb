@@ -35,10 +35,6 @@ class CommunicartsController < ApplicationController
 
     Commands::Approval::UpdateFromApprovalResponse.new.perform(approval, new_status)
     render json: { message: "approval_reply_received"}, status: 200
-
-    if new_status == 'rejected'
-      perform_reject_specific_actions(params, cart)
-    end
   end
 
   def approval_response
@@ -67,15 +63,6 @@ private
     elsif @token.cart_id != params[:cart_id].to_i
       raise AuthenticationError.new(msg: 'Something went wrong with the cart (wrong cart)')
     end
-  end
-
-  def perform_reject_specific_actions(params, cart)
-    # Send out a rejection status email to the approvers
-    # TODO verify this logic
-    cart.approver_approvals.each do |approval|
-      CommunicartMailer.rejection_update_email(params, cart).deliver
-    end
-    # Reset everything for the next time they send a cart request
   end
 
   def approval_reply_received_status

@@ -113,7 +113,6 @@ describe CommunicartMailer do
     end
   end
 
-  # TODO: describe 'rejection_update_email'
   describe 'cart observer received email' do
     let(:observer) { FactoryGirl.create(:user, email_address: 'test-observer-1@some-dot-gov.gov') }
     let(:requester) { FactoryGirl.create(:user, email_address: 'test-requester-1@some-dot-gov.gov') }
