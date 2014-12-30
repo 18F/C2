@@ -15,10 +15,6 @@ class MailPreview < MailView
     CommunicartMailer.comment_added_email(comment, email)
   end
 
-  def whsc_email
-    CommunicartMailer.cart_notification_email(email, pending_approval)
-  end
-
 
   private
 

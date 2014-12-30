@@ -1,8 +1,6 @@
 class CartDecorator < Draper::Decorator
   delegate_all
 
-  CUSTOM_TEMPLATES = %w(navigator whsc)
-
   def total_price
     price = object.cart_items.reduce(0) do |sum,citem| sum + citem.quantity * citem.price end
     Float("%0.02f" % price)
@@ -64,7 +62,7 @@ class CartDecorator < Draper::Decorator
 
   def cart_template_name
     origin_name = self.getProp('origin')
-    if CUSTOM_TEMPLATES.include? origin_name
+    if Cart::ORIGINS.include? origin_name
       "#{origin_name}_cart"
     else
       'cart_mail'

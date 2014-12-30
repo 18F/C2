@@ -16,6 +16,7 @@ class Cart < ActiveRecord::Base
   #TODO: validates_uniqueness_of :name
   validates :flow, presence: true, inclusion: {in: ApprovalGroup::FLOWS}
 
+  ORIGINS = %w(navigator whsc)
 
   def update_approval_status
     if self.has_rejection?
