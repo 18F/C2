@@ -27,8 +27,7 @@ class MailPreview < MailView
   end
 
   def pending_approval
-    approval = Approval.pending.last
-    approval
+    Approval.pending.last
   end
 
   def received_approval
