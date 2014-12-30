@@ -30,10 +30,6 @@ class CommunicartMailer < ActionMailer::Base
          )
   end
 
-  def rejection_update_email(params, cart)
-    # TODO: Fill out the content of this email to the approvers
-  end
-
   def comment_added_email(comment, to_email)
     @comment_text = comment.comment_text
     @cart_item = comment.commentable
