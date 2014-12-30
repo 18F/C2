@@ -29,6 +29,7 @@ describe "White House Service Center proposals" do
       cart = Cart.last
       expect(cart.name).to eq("buying stuff")
       expect(cart.flow).to eq('linear')
+      expect(cart.getProp(:origin)).to eq('whsc')
       expect(cart.getProp(:expense_type)).to eq('BA80')
       expect(cart.getProp(:vendor)).to eq('ACME')
       # TODO should this persist as a number?

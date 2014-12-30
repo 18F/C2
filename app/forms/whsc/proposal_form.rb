@@ -4,6 +4,7 @@ module Whsc
 
     EXPENSE_TYPES = %w(BA61 BA80)
 
+    attribute :origin, :string
     attribute :amount, :decimal
     attribute :approver_email, :text
     attribute :description, :text
@@ -29,6 +30,7 @@ module Whsc
       )
       if cart.save
         cart.set_props(
+          origin: self.origin,
           amount: self.amount,
           expense_type: self.expense_type,
           vendor: self.vendor
