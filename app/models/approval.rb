@@ -32,14 +32,10 @@ class Approval < ActiveRecord::Base
   end
 
   def api_token
-    ApiToken.
-      where(
-        cart_id: self.cart_id,
-        used_at: nil,
-        user_id: self.user_id
-      ).
-      where('expires_at >= ?', Time.now).
-      last
+    ApiToken.fresh.where(
+      cart_id: self.cart_id,
+      user_id: self.user_id
+    ).last
   end
 
   def self.new_from_user_role(user_role)
