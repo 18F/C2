@@ -4,11 +4,8 @@ class CommunicartMailer < ActionMailer::Base
 
 
   def cart_notification_email(email, approval)
-    cart = approval.cart
     @approval = approval
-    @token = ApiToken.where(user_id: @approval.user_id).where(cart_id: cart.id).last
-
-    send_cart_email(email, cart)
+    send_cart_email(email, approval.cart)
   end
 
   def cart_observer_email(email, cart)

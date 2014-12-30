@@ -23,6 +23,10 @@ class Approval < ActiveRecord::Base
     UserRole.find_by(approval_group_id: cart.approval_group.id, user_id: user_id)
   end
 
+  def api_token
+    ApiToken.where(user_id: self.user_id).where(cart_id: self.cart_id).last
+  end
+
   def self.new_from_user_role(user_role)
     self.new(
       position: user_role.position,
