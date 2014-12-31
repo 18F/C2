@@ -6,15 +6,6 @@ GIT
       omniauth (~> 1.0)
       omniauth-oauth2 (~> 1.0)
 
-GIT
-  remote: https://github.com/afeld/capistrano-ec2_tagged.git
-  revision: 9b514142fa29e8320c4f6f148b3330d92c2c29bd
-  ref: 9b514142
-  specs:
-    capistrano-ec2_tagged (0.1.1)
-      aws-sdk-v1
-      capistrano (~> 3.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -75,6 +66,9 @@ GEM
       i18n
       rake (>= 10.0.0)
       sshkit (~> 1.3)
+    capistrano-ec2_tagged (0.1.2)
+      aws-sdk-v1
+      capistrano (~> 3.0)
     capistrano-stats (1.1.1)
     capybara (2.4.4)
       mime-types (>= 1.16)
@@ -304,7 +298,7 @@ DEPENDENCIES
   aws-sdk (= 2.0.6.pre)
   bootstrap-sass (~> 3.3.0)
   capistrano
-  capistrano-ec2_tagged!
+  capistrano-ec2_tagged
   capybara
   codeclimate-test-reporter
   database_cleaner

@@ -36,7 +36,7 @@ group :development do
   # Capistrano stuff
   gem 'aws-sdk', '2.0.6.pre', require: false
   gem 'capistrano', require: false
-  gem 'capistrano-ec2_tagged', git: 'https://github.com/afeld/capistrano-ec2_tagged.git', ref: '9b514142', require: false
+  gem 'capistrano-ec2_tagged', require: false
 end
 
 group :test do
