@@ -35,6 +35,7 @@ group :development do
 end
 
 group :test do
+  gem 'addressable'
   gem 'capybara'
   gem 'codeclimate-test-reporter'
   gem 'simplecov'

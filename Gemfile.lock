@@ -262,6 +262,7 @@ PLATFORMS
 
 DEPENDENCIES
   acts_as_list
+  addressable
   autoprefixer-rails
   awesome_print
   bootstrap-sass (~> 3.3.0)
