@@ -1,5 +1,6 @@
 # Load DSL and set up stages
 require 'capistrano/setup'
+require_relative 'lib/capistrano/server_with_nat'
 
 # Include tasks from other gems included in your Gemfile
 #
@@ -19,9 +20,8 @@ require 'capistrano/setup'
 # require 'capistrano/rails/assets'
 # require 'capistrano/rails/migrations'
 # require 'capistrano/passenger'
+require 'capistrano/console'
 
-require 'capistrano/ec2_tagged'
-require_relative 'lib/capistrano/server_with_nat'
 
 # Load custom tasks from `lib/capistrano/tasks' if you have any defined
 Dir.glob('lib/capistrano/tasks/*.rake').each { |r| import r }

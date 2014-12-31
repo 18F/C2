@@ -1,4 +1,6 @@
+require 'capistrano/ec2_tagged'
 require 'net/ssh/proxy/command'
+
 
 def nat_server(name)
   ec2_tagged('Name' => name).each do |ip|
