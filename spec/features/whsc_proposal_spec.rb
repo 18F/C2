@@ -13,6 +13,8 @@ describe "White House Service Center proposals" do
     end
 
     it "saves a Cart with the attributes" do
+      expect(Dispatcher).to receive(:deliver_new_cart_emails)
+
       visit '/whsc/proposals/new'
       fill_in 'Description', with: "buying stuff"
       choose 'BA80'
