@@ -6,6 +6,15 @@ GIT
       omniauth (~> 1.0)
       omniauth-oauth2 (~> 1.0)
 
+GIT
+  remote: https://github.com/afeld/capistrano-ec2_tagged.git
+  revision: 9b514142fa29e8320c4f6f148b3330d92c2c29bd
+  ref: 9b514142
+  specs:
+    capistrano-ec2_tagged (0.1.1)
+      aws-sdk-v1
+      capistrano (~> 3.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -42,6 +51,18 @@ GEM
     autoprefixer-rails (4.0.1.1)
       execjs
     awesome_print (1.2.0)
+    aws-sdk (2.0.6.pre)
+      aws-sdk-resources (= 2.0.6.pre)
+    aws-sdk-core (2.0.6)
+      builder (~> 3.0)
+      jmespath (~> 1.0)
+      multi_json (~> 1.0)
+      multi_xml (~> 0.5)
+    aws-sdk-resources (2.0.6.pre)
+      aws-sdk-core (= 2.0.6)
+    aws-sdk-v1 (1.60.2)
+      json (~> 1.4)
+      nokogiri (>= 1.4.4)
     bootstrap-sass (3.3.1.0)
       sass (~> 3.2)
     builder (3.2.2)
@@ -117,7 +138,9 @@ GEM
     hashie (3.3.2)
     hike (1.2.3)
     hitimes (1.2.2)
-    i18n (0.6.11)
+    i18n (0.7.0)
+    jmespath (1.0.2)
+      multi_json (~> 1.0)
     jquery-rails (3.1.2)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
@@ -134,7 +157,7 @@ GEM
       tilt
     method_source (0.8.2)
     mime-types (2.4.3)
-    mini_portile (0.6.1)
+    mini_portile (0.6.2)
     minitest (5.4.3)
     multi_json (1.10.1)
     multi_xml (0.5.5)
@@ -278,8 +301,10 @@ DEPENDENCIES
   acts_as_list
   autoprefixer-rails
   awesome_print
+  aws-sdk (= 2.0.6.pre)
   bootstrap-sass (~> 3.3.0)
   capistrano
+  capistrano-ec2_tagged!
   capybara
   codeclimate-test-reporter
   database_cleaner

@@ -33,3 +33,10 @@ set :repo_url, 'git@example.com:me/my_repo.git'
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
+
+require 'aws-sdk'
+creds = Aws::SharedCredentials.new
+
+set :aws_access_key_id, creds.access_key_id
+set :aws_secret_access_key, creds.secret_access_key
+set :aws_region, 'us-west-2'
