@@ -19,19 +19,4 @@ npm install
 bundle exec rake db:setup
 RAILS_ENV=test bundle exec rake db:setup
 
-
-pip install --upgrade awscli
-
-function are_aws_creds_set {
-  (aws configure get aws_access_key_id && aws configure get aws_secret_access_key) > /dev/null
-}
-
-function setawscreds {
-  echo "You need to set up an AWS access key in order to use Capistrano – see http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html#cli-quick-configuration."
-  exit 1
-}
-
-are_aws_creds_set || setawscreds
-
-
 echo "DONE"
