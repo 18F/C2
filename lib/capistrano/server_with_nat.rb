@@ -1,19 +1,21 @@
 require 'net/ssh/proxy/command'
 
-def server_with_nat(nat_name, asg_name)
-  nat_user = 'ec2-user'
-  nat_ips = ec2_tagged('Name' => nat_name)
-  nat_ips.each do |ip|
-    server ip, user: nat_user, roles: %w{nat}
+def nat_server(name)
+  ec2_tagged('Name' => name).each do |ip|
+    server ip, user: 'ec2-user', roles: %w{nat}
   end
+end
 
-  ec2_tagged('Name' => asg_name).each do |asg_ip|
+def asg_server(name)
+  nat = primary(:nat)
+  ec2_tagged('Name' => name).each do |asg_ip|
     server asg_ip, user: 'ubuntu', roles: %w{app}, ssh_options: {
-      proxy: Net::SSH::Proxy::Command.new("ssh #{nat_user}@#{nat_ips.first} -W %h:%p")
+      proxy: Net::SSH::Proxy::Command.new("ssh #{nat.user}@#{nat.hostname} -W %h:%p")
     }
   end
 end
 
 def cloud_cutter_env(cc_env)
-  server_with_nat "cf-cap-#{cc_env}-nat", "cf-cap-#{cc_env}-asg"
+  nat_server "cf-cap-#{cc_env}-nat"
+  asg_server "cf-cap-#{cc_env}-asg"
 end
