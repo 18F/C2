@@ -21,6 +21,7 @@ require 'capistrano/setup'
 # require 'capistrano/passenger'
 
 require 'capistrano/ec2_tagged'
+require_relative 'lib/capistrano/server_with_nat'
 
 # Load custom tasks from `lib/capistrano/tasks' if you have any defined
 Dir.glob('lib/capistrano/tasks/*.rake').each { |r| import r }
