@@ -1,1 +1,1 @@
-server_with_nat 'cf-cap-prod-nat', 'cf-cap-prod-asg'
+cloud_cutter_env 'prod'

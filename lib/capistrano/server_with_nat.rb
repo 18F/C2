@@ -13,3 +13,7 @@ def server_with_nat(nat_name, asg_name)
     }
   end
 end
+
+def cloud_cutter_env(cc_env)
+  server_with_nat "cf-cap-#{cc_env}-nat", "cf-cap-#{cc_env}-asg"
+end
