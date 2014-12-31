@@ -26,10 +26,10 @@
         <%= image_tag 'icon-logout.png', alt: 'Logout' %>
       </li>
     </ul>
-    <%- if @user_id %>
+    <%- if user_signed_in? %>
       <div class="mycart-link">
         <ul class="header-nav">
-            <li><%= link_to("My Requests", "/users/#{@user_id}/carts") %> <%= image_tag "img-cart.png", width: '18px', height:'16px' %></li>
+            <li><%= link_to("My Requests", "/carts/index") %> <%= image_tag "img-cart.png", width: '18px', height:'16px' %></li>
         </ul>
       </div>
     <%- end %>

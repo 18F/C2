@@ -1,0 +1,10 @@
+<div class="row past-pr">
+  <div class="col-sm-12">
+    <h3>All Past Purchase Requests</h3>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-12">
+    <%= render partial: "shared/cart_list", locals: { carts: closed_carts, role: role, closed: true} %>
+  </div>
+</div>

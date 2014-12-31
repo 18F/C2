@@ -1,5 +1,4 @@
 class HomeController < ApplicationController
-  before_filter :setup_session_user
   before_filter :setup_mygov_client
   before_filter :setup_mygov_access_token
 
@@ -16,23 +15,16 @@ class HomeController < ApplicationController
   end
 
   def index
-    if session[:user] && session[:user]['email']
-      u = User.find_by_email_address(session[:user]['email'])
-      @user_id = u.id unless u.nil?
-    end
   end
 
   def logout
     reset_session
+    @current_user = nil
     @mygov_access_token = nil
     redirect_to root_url
   end
 
 private
-
-  def setup_session_user
-    session[:user] ||= {}
-  end
 
   def setup_mygov_client
     @mygov_client = OAuth2::Client.new(MYGOV_CLIENT_ID, MYGOV_SECRET_ID, site: MYGOV_HOME, token_url: '/oauth/authorize')
