@@ -6,7 +6,7 @@
         <br/>
         <strong>Please reply to this email with the response 'APPROVE' or 'REJECT' on its own line.</strong>
         <br/>
-<% if !@prefix_template.blank? %>
+<% unless @prefix_template.blank? %>
   <%= render partial: @prefix_template, locals: {cart: @cart, title:  "Purchase Request"} %>
 <% end %>
         <p>
@@ -26,7 +26,7 @@
 
 <div style="width:800px">
   <%= render partial: @cart.cart_template_name, locals: {cart: @cart, title:  "Purchase Request"} %>
-  <table class='reply-section center' >
+  <table class='reply-section'>
     <tr height="25"><td colspan=2 height="25" bgcolor="#f5f5f5"></td></tr>
     <tr id="approval-actions">
       <td colspan=2 align="center">

@@ -21,6 +21,7 @@
     <div class="form-group">
       <%= f.label :vendor %>
       <%= f.text_field :vendor, class: 'form-control' %>
+      <%= f.hidden_field :origin, value: 'whsc' %>
     </div>
     <div class="form-group">
       <%= f.label :amount %>
