@@ -29,6 +29,7 @@ group :test, :development do
 end
 
 group :development do
+  gem 'capistrano'
   gem 'guard-rspec', require: false
   gem 'mail_view'
   gem 'railroady'
