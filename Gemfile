@@ -32,6 +32,11 @@ group :development do
   gem 'guard-rspec', require: false
   gem 'mail_view'
   gem 'railroady'
+
+  # Capistrano stuff
+  gem 'aws-sdk', '2.0.6.pre', require: false
+  gem 'capistrano', require: false
+  gem 'capistrano-ec2_tagged', require: false
 end
 
 group :test do
