@@ -29,6 +29,7 @@ group :test, :development do
 end
 
 group :development do
+  gem 'aws-sdk', '2.0.6.pre', require: false
   gem 'guard-rspec', require: false
   gem 'mail_view'
   gem 'railroady'
