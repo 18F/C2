@@ -4,17 +4,7 @@
     <h1 id="project_title">Communicart for the Common Acquisition Platform</h1>
   </div>
   <div class="home-main-body">
-      <% unless signed_in? %>
-        <div class="lightbox">
-          <div class="needs-auth">
-            <h3>Please sign in</h3>
-            <p>In order to view this page, you'll need to sign in with a MyUSA account.</p>
-            <link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-            <link href='//s3.amazonaws.com/myusa-static/button.min.css' rel='stylesheet' type='text/css'>
-            <%= link_to 'Connect with MyUSA', "/auth/myusa", :class => 'btn btn-social btn-myusa' %>
-          </div>
-        </div>
-      <% end %>
+
       <div class="row">
         <div class="col-sm-12">
           <h2 id="project_tagline">&quot;P-Card holders deserve easy, modern, automated management of their shopping carts.&quot;</h2>

@@ -5,7 +5,7 @@
       <h1>Approval Portal</h1>
     </div>
 
-    <ul id='header-nav'>
+    <ul class='header-nav'>
       <%- unless signed_in? %>
 
         <li>
@@ -21,12 +21,8 @@
           <%= image_tag 'icon-logout.png', alt: 'Logout' %>
         </li>
       <%- end %>
-      <li>
-        <%= link_to 'Logout', "/logout", method: :post, class: 'login-link' %>
-        <%= image_tag 'icon-logout.png', alt: 'Logout' %>
-      </li>
     </ul>
-    <%- if user_signed_in? %>
+    <%- if signed_in? %>
       <div class="mycart-link">
         <ul class="header-nav">
             <li><%= link_to("My Requests", "/carts/index") %> <%= image_tag "img-cart.png", width: '18px', height:'16px' %></li>
