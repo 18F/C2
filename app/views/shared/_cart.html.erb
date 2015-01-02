@@ -1,5 +1,3 @@
-<%#-- "cart" is the critical local variable for using this partial --%>
-<%#-- "title" is used to customize the tile in the h1 below --%>
 <div class="inset">
 <div class="row">
 
@@ -20,11 +18,25 @@
     </div>
   </div>
 
-  <div class="col-md-4  col-xs-12 communicart_description">
-      <div class="purchase-status">
-        <h5 class="<%= cart.status %>"><%= cart.display_status %></h5>
+
+
+    <%- if cart.flow == 'linear' %>
+      <div class="col-md-12">
+         <table class="col-md-12 data_container" border='0'>
+           <%= render partial: "shared/approval_status" %>
+        </table>
       </div>
-  </div>
+    <%- else %>
+      <div class="col-md-4  col-xs-12 communicart_description">
+        <div class="purchase-status">
+          <h5 class="<%= cart.status %>"><%= cart.display_status %></h5>
+        </div>
+      </div>
+    <%- end %>
+
+
+
+
 </div>
 <div class="row">
   <div class="col-md-12">
