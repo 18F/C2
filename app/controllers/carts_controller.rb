@@ -9,6 +9,8 @@ class CartsController < ApplicationController
   end
 
   def index
+    # TODO: handle role on a cart-by-cart basis
+    # (including action buttons in approver/open case)
     @role = 'requester'
     my_carts = current_user.carts.where(approvals: {role: @role})
     if my_carts.empty?
