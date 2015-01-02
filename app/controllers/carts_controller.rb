@@ -10,10 +10,10 @@ class CartsController < ApplicationController
 
   def index
     @role = 'requester'
-    my_carts = Cart.joins(:approvals).where(:approvals => {:role => @role, :user_id => @current_user[:id]})
+    my_carts = current_user.carts.where(approvals: {role: @role})
     if my_carts.empty?
       @role = 'approver'
-      my_carts = Cart.joins(:approvals).where(:approvals => {:role => @role, :user_id => @current_user[:id]})
+      my_carts = current_user.carts.where(approvals: {role: @role})
     end
     @closed_carts = my_carts.closed
     @open_carts = my_carts.open
@@ -21,6 +21,6 @@ class CartsController < ApplicationController
 
   def archive
     @role = params[:role] || 'requester'
-    @closed_cart_full_list = Cart.joins(:approvals).where(:approvals => {:role => @role, :user_id => @current_user[:id]}).closed
+    @closed_cart_full_list = current_user.carts.where(approvals: {role: @role}).closed
   end
 end
