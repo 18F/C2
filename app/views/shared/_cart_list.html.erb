@@ -15,11 +15,9 @@
       <td class="first"><a href="/carts/<%= cart.id %>"><%= cart.name %></a></td>
       <td class="sixth"><%= number_to_currency(cart.decorate.total_price) %></td>
       <td class="sixth">
-        <%- cart.approvals.each do |approval| %>
-          <%- if approval.role != role && (closed || approval.status == "pending") %>
-            <p><%= User.find(approval.user_id).email_address %></p>
+        <%- show_appropriate_approval_emails(cart, role, closed).each do |email| %>
+            <p><%= email %></p>
           <%- end %>
-        <%- end %>
       </td>
       <td class="sixth"><%= cart.created_at.strftime("%-m/%-d/%y") %></td>
     </tr>
