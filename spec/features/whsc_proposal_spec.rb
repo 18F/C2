@@ -1,4 +1,4 @@
-describe "White House Service Center proposals" do
+describe "National Capital Region proposals" do
   it "requires sign-in" do
     visit '/whsc/proposals/new'
     expect(current_path).to eq('/')

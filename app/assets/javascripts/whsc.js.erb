@@ -1,0 +1,12 @@
+$(document).ready(initializeDocument);
+
+function initializeDocument() {
+  //only enable bank account field when BA80 is selected as an expense_type
+  $("input:radio[name='whsc_proposal[expense_type]']").click(function(event){
+    if ($("input:radio[name='whsc_proposal[expense_type]']:checked").val() == 'BA80') {
+      $('#whsc_proposal_RWA_number').attr('disabled', false);
+    } else {
+      $('#whsc_proposal_RWA_number').attr('disabled', true);
+    }
+  });
+}

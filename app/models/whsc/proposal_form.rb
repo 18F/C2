@@ -11,6 +11,9 @@ module Whsc
     attribute :expense_type, :text
     attribute :requester, :user
     attribute :vendor, :string
+    attribute :not_to_exceed, :boolean
+    attribute :building_number, :string
+    attribute :RWA_number, :string
 
     validates :amount, numericality: {
       greater_than_or_equal_to: 0,
@@ -53,7 +56,10 @@ module Whsc
           amount: self.amount,
           expense_type: self.expense_type,
           origin: self.origin,
-          vendor: self.vendor
+          vendor: self.vendor,
+          not_to_exceed: self.not_to_exceed,
+          building_number: self.building_number,
+          RWA_number: self.RWA_number
         )
         cart.set_requester(self.requester)
 
