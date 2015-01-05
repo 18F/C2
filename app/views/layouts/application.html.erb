@@ -14,7 +14,7 @@
   <div class="alert alert-<%= key %> <%= bootstrap_alert_class(key) %>"><%= value %></div>
 <% end %>
 
-<%= render 'shared/communicart_header' unless @hide_header %>
+<%= render 'layouts/communicart_header' unless @hide_header %>
 
 <%= yield %>
 
