@@ -1,6 +1,6 @@
 <tr class="email-status">
   <td colspan="2" padding="10">
-    <table id="status-container-detail" width="770">
+    <table id="status-container-detail" width="770" class="col-md-12">
       <tr class="status-header-container">
         <td>
           <strong>Approval Status</strong>
@@ -13,7 +13,7 @@
       </tr>
       <tr class="status-header-container-detail">
         <td colspan="2">
-          <table class="approval_details">
+          <table class="approval_details data_container">
             <%- last_status = nil %>
             <%- @cart.approvals_in_list_order.each_with_index do |approval,index| %>
               <tr class="approval-row">
