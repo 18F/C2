@@ -36,7 +36,12 @@ module Whsc
           vendor: self.vendor
         )
         cart.set_requester(self.requester)
+
         cart.add_approver(self.approver_email)
+        cart.add_approver('communicart.budget.approver@gmail.com')
+        if cart.getProp(:expense_type) == 'BA61'
+          cart.add_approver('communicart.ofm.approver@gmail.com')
+        end
       end
 
       cart

@@ -37,7 +37,10 @@ describe "White House Service Center proposals" do
       # TODO should this persist as a number?
       expect(cart.getProp(:amount)).to eq('123.45')
       expect(cart.requester).to eq(requester)
-      expect(cart.approvers.map(&:email_address)).to eq(['approver@example.com'])
+      expect(cart.approvers.map(&:email_address)).to eq(%w(
+        approver@example.com
+        communicart.budget.approver@gmail.com
+      ))
     end
 
     it "defaults to the approver from the last request" do
