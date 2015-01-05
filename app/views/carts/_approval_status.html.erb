@@ -1,5 +1,9 @@
 <%- if @cart.flow == 'linear' %>
-  <%= render partial: "linear_approval_status" %>
+  <div class="col-md-12">
+    <table class="col-md-12 data_container" border='0'>
+      <%= render partial: "shared/email_status" %>
+    </table>
+  </div>
 <%- else %>
   <div class="col-md-4  col-xs-12 communicart_description">
     <div class="purchase-status">
@@ -7,3 +11,5 @@
     </div>
   </div>
 <%- end %>
+
+
