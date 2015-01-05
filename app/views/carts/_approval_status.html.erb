@@ -1,7 +1,7 @@
 <%- if @cart.flow == 'linear' %>
   <div class="col-md-12">
     <table class="col-md-12 data_container" border='0'>
-      <%= render partial: "communicart_mailer/email_status" %>
+      <%= render partial: "shared/email_status" %>
     </table>
   </div>
 <%- else %>
