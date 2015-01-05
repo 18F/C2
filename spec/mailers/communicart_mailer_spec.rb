@@ -54,7 +54,7 @@ describe CommunicartMailer do
       end
 
       it 'renders a custom template when origin is indicated' do
-        approval.cart.properties << Property.create!(property: 'origin', value:'whsc')
+        approval.cart.properties << Property.create!(property: 'origin', value:'ncr')
         expect(mail.body.encoded).to include('National Capital Region: Purchase Request')
       end
     end

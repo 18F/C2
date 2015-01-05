@@ -16,10 +16,10 @@ class Cart < ActiveRecord::Base
   #TODO: validates_uniqueness_of :name
   validates :flow, presence: true, inclusion: {in: ApprovalGroup::FLOWS}
 
-  ORIGINS = %w(navigator whsc)
   scope :approved, -> { where(status: 'approved') }
   scope :open, -> { where(status: 'pending') }
   scope :closed, -> { where(:status => ['approved', 'rejected']) }
+  ORIGINS = %w(navigator ncr)
 
   def update_approval_status
     if self.has_rejection?

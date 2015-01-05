@@ -9,7 +9,7 @@
     </div>
     <div class="form-group">
       <%= f.label :expense_type %>
-      <% Whsc::ProposalForm::EXPENSE_TYPES.each do |expense_type| %>
+      <% Ncr::ProposalForm::EXPENSE_TYPES.each do |expense_type| %>
         <div class="radio">
           <label>
             <%= f.radio_button :expense_type, expense_type %>
@@ -24,12 +24,17 @@
     </div>
     <div class="form-group">
       <%= f.label :building_number %>
-      <%= f.text_field :building_number, class: 'form-control' %>
+      <%= f.select(:building_number, [], {}, {class: 'form-control', multiple: false}) do %>
+        <%= content_tag(:option, '', value: '') %>
+        <% Ncr::ProposalForm::BUILDING_NUMBERS.each do |building| %>
+          <%= content_tag(:option, building, value: building) %>
+        <% end %>
+      <% end %>
     </div>
     <div class="form-group">
       <%= f.label :vendor %>
       <%= f.text_field :vendor, class: 'form-control' %>
-      <%= f.hidden_field :origin, value: 'whsc' %>
+      <%= f.hidden_field :origin, value: 'ncr' %>
     </div>
     <div class="form-group">
       <%= f.label :amount %>
