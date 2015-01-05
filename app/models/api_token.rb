@@ -3,6 +3,10 @@ class ApiToken < ActiveRecord::Base
   validates_presence_of :user_id, :cart_id
   belongs_to :cart
 
+  scope :unexpired, -> { where('expires_at >= ?', Time.now) }
+  scope :unused, -> { where(used_at: nil) }
+  scope :fresh, -> { unused.unexpired }
+
   def generate_token
     begin
       self.access_token = SecureRandom.hex

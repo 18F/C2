@@ -6,11 +6,8 @@ class CommunicartMailer < ActionMailer::Base
 
 
   def cart_notification_email(email, approval)
-    cart = approval.cart
     @approval = approval
-    @token = ApiToken.where(user_id: @approval.user_id).where(cart_id: cart.id).last
-
-    send_cart_email(email, cart)
+    send_cart_email(email, approval.cart)
   end
 
   def cart_observer_email(email, cart)
@@ -33,10 +30,6 @@ class CommunicartMailer < ActionMailer::Base
          subject: "User #{approval.user.email_address} has #{approval.status} cart ##{cart.external_id}",
          from: from_email
          )
-  end
-
-  def rejection_update_email(params, cart)
-    # TODO: Fill out the content of this email to the approvers
   end
 
   def comment_added_email(comment, to_email)

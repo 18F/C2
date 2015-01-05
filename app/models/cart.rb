@@ -16,6 +16,10 @@ class Cart < ActiveRecord::Base
   #TODO: validates_uniqueness_of :name
   validates :flow, presence: true, inclusion: {in: ApprovalGroup::FLOWS}
 
+  ORIGINS = %w(navigator whsc)
+  scope :approved, -> { where(status: 'approved') }
+  scope :open, -> { where(status: 'pending') }
+  scope :closed, -> { where(:status => ['approved', 'rejected']) }
 
   def update_approval_status
     if self.has_rejection?
@@ -35,6 +39,11 @@ class Cart < ActiveRecord::Base
 
   def approver_approvals
     self.approvals.where(role: 'approver')
+  end
+
+  def approvers
+    # TODO do through SQL
+    self.approver_approvals.map(&:user)
   end
 
   def awaiting_approvals
@@ -106,10 +115,14 @@ class Cart < ActiveRecord::Base
     self.comments.create!(user_id: self.requester.id, comment_text: comments.strip)
   end
 
+  def add_approver(email)
+    user = User.find_or_create_by(email_address: email)
+    self.approvals.create!(user_id: user.id, role: 'approver')
+  end
+
   def create_approver_approvals(emails)
     emails.each do |email|
-      user = User.find_or_create_by(email_address: email)
-      self.approvals.create!(user_id: user.id, role: 'approver')
+      self.add_approver(email)
     end
   end
 

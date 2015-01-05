@@ -1,0 +1,33 @@
+<div class="inset">
+  <div class="row pending-pr">
+    <div class="col-md-12">
+      <h3>Pending Purchase Requests</h3>
+      <%= render partial: "cart_list", locals: { carts: @open_carts, role: @role, closed: false} %>
+    </div>
+  </div>
+  <div class="row past-pr">
+    <div class="col-sm-10">
+      <h3>Recent Purchase Requests</h3>
+    </div>
+    <div class="col-sm-2">
+      <%- if @closed_carts.size > CartsController::CLOSED_CART_LIMIT %>
+        <%= link_to "View the archive", url_for(:controller => 'carts', :action => 'archive', :role => @role) %>
+      <%- end %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <%= render partial: "cart_list", locals: { carts: @closed_carts, role: @role, closed: true,
+                                                        limit: CartsController::CLOSED_CART_LIMIT} %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-10">
+    </div>
+    <div class="col-sm-2">
+      <%- if @closed_carts.size > CartsController::CLOSED_CART_LIMIT %>
+        <%= link_to "View the archive", url_for(:controller => 'carts', :action => 'archive', :role => @role) %>
+      <%- end %>
+    </div>
+  </div>
+</div>

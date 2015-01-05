@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
   has_many :user_roles
   has_many :approval_groups, through: :user_roles
   has_many :approvals
+  has_many :carts, through: :approvals
   has_many :properties, as: :hasproperties
   has_many :comments
 
@@ -17,4 +18,11 @@ class User < ActiveRecord::Base
     end
   end
 
+  def requested_carts
+    self.carts.where(approvals: {role: 'requester'})
+  end
+
+  def last_requested_cart
+    self.requested_carts.order('carts.created_at DESC').first
+  end
 end

@@ -18,7 +18,7 @@ describe CommunicartMailer do
 
     before do
       expect_any_instance_of(CommunicartMailer).to receive(:from_email).and_return('reply@communicart-stub.com')
-      expect(ApiToken).to receive_message_chain(:where, :where, :last).and_return(api_token)
+      expect(approval).to receive(:api_token).and_return(api_token)
     end
 
     it 'renders the subject' do
@@ -45,6 +45,17 @@ describe CommunicartMailer do
         expect(cart).to receive(:all_approvals_received?).and_return(false)
         expect_any_instance_of(Exporter::Base).not_to receive(:to_csv)
         mail
+      end
+    end
+
+    context 'custom templates' do
+      it 'renders a default template when an origin is not indicated' do
+        expect(mail.body.encoded).to include('Purchase Request')
+      end
+
+      it 'renders a custom template when origin is indicated' do
+        approval.cart.properties << Property.create!(property: 'origin', value:'whsc')
+        expect(mail.body.encoded).to include('White House Service Center: Purchase Request')
       end
     end
 
@@ -113,7 +124,6 @@ describe CommunicartMailer do
     end
   end
 
-  # TODO: describe 'rejection_update_email'
   describe 'cart observer received email' do
     let(:observer) { FactoryGirl.create(:user, email_address: 'test-observer-1@some-dot-gov.gov') }
     let(:requester) { FactoryGirl.create(:user, email_address: 'test-requester-1@some-dot-gov.gov') }
