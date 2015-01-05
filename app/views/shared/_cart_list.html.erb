@@ -14,7 +14,7 @@
   <%- else %>
     <%-cart_list = carts %> 
   <%- end %>
-  <%- cart_list.each_with_index do |cart, index| %>
+  <%- cart_list.each do |cart| %>
     <tr>
       <td class="first"><a href="/carts/<%= cart.id %>"><%= cart.name %></a></td>
       <td class="sixth"><%= number_to_currency(cart.decorate.total_price) %></td>
