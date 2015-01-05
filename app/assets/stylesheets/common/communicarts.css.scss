@@ -4,6 +4,11 @@
 
 
 table {
+
+  &.data_container {
+    margin-top: 15px;
+  }
+
   border-spacing: 0;
 }
 
@@ -14,7 +19,6 @@ table.center {
 table.reply-section {
   width: 800px;
   background-color: #fff;
-  padding: 15px;
 }
 
 tr.cart_item_information td {
@@ -215,10 +219,9 @@ td.html-email-message {
 tr.header h5 {
   text-transform: uppercase;
   color: #e8e8e8;
-  font-size: 14px;
+  font-size: 12px;
   line-height: 20px;
-  font-weight: 400;
-  font-size: 80%;
+  font-weight: 500;
 }
 
 tr.header td, tr.header td.first {
@@ -356,15 +359,6 @@ ul.result-tag li {
   margin-left: 0;
   margin-bottom: 5px;
   list-style: none;
-}
-
-.bpa {
-  background-image: url('https://www.gsaadvantage.gov/images/adv12/images/new_icons/bpa.gif');
-  background-repeat: no-repeat;
-  padding-left: 38px;
-  display: inline-block;
-  width: 29px;
-  height: 18px;
 }
 
 span.green {

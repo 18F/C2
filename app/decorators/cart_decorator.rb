@@ -36,7 +36,6 @@ class CartDecorator < Draper::Decorator
     end
   end
 
-
   def display_status
     if cart.status == 'pending'
       'pending approval'
@@ -62,8 +61,9 @@ class CartDecorator < Draper::Decorator
   end
 
   def cart_template_name
-    if self.getProp('origin') == 'navigator'
-      'navigator_cart'
+    origin_name = self.getProp('origin')
+    if Cart::ORIGINS.include? origin_name
+      "#{origin_name}_cart"
     else
       'cart_mail'
     end
@@ -76,4 +76,16 @@ class CartDecorator < Draper::Decorator
       nil
     end
   end
+
+  def property_exclusions
+    case self.getProp('origin')
+    when 'navigator'
+      ['origin', 'contractingVehicle', 'location', 'configType']
+    when 'whsc'
+      ['origin']
+    else
+      []
+    end
+  end
+
 end

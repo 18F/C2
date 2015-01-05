@@ -224,14 +224,18 @@ describe CommunicartsController do
         post 'approval_reply_received', @json_rejection_params
       end
 
-      it 'sends out a reject status email to the approvers' do
-        expect(Cart).to receive_message_chain(:where, :where, :first).and_return(rejected_cart)
-        mock_mailer = double
-        expect(CommunicartMailer).to receive(:rejection_update_email).exactly(2).times.and_return(mock_mailer)
-        expect(mock_mailer).to receive(:deliver).exactly(2).times
-
+      it "sends a rejection notice to the requester" do
         post 'approval_reply_received', @json_rejection_params
+
+        deliveries = ActionMailer::Base.deliveries
+        expect(deliveries.size).to eq(1)
+        mail = deliveries.last
+        expect(mail.to).to eq([rejected_cart.requester.email_address])
+        from_address = @json_rejection_params['fromAddress']
+        expect(mail.html_part.to_s).to include("The approver, #{from_address}, rejected")
       end
+
+      it "sends out a reject status email to the approvers"
 
       it 'creates another set of approvals when another cart request for that same cart is intiiated'
 

@@ -8,6 +8,8 @@ C2::Application.routes.draw do
   match "/auth/:provider/callback" => "home#oauth_callback", via: [:get]
   post "/logout" => "home#logout"
   get 'overlay', to: "overlay#index"
+  get 'carts/index' => "carts#index"
+  get 'carts/archive' => 'carts#archive'
 
   resources :carts do
     resources :comments
@@ -15,6 +17,10 @@ C2::Application.routes.draw do
 
   resources :cart_items do
     resources :comments
+  end
+
+  namespace :whsc do
+    resources :proposals
   end
 
   get 'bookmarklet', to: redirect('bookmarklet.html')
