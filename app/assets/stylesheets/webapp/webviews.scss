@@ -9,36 +9,6 @@
   }
 }
 
-#communicart_header {
-  width: 100%;
-  padding: 40px 10px 40px 35px;
-  background-color: #07519b;
-  color: $white;
-  margin: 0 auto;
-
-  .container {
-    width: 100%;
-  }
-}
-
-#communicart_header a {
-  color: $white;
-}
-
-#header-identity {
-  display: inline-block;
-}
-
-#header-identity h1 {
-  margin: 0;
-}
-
-#communicart_header #header-nav {
-  display: inline-block;
-  float: right;
-  color: #fff;
-}
-
 .communicart_description {
   img {
     margin-bottom: 7px;
@@ -53,6 +23,7 @@
     padding: 15px;
   }
 }
+
 tr.header h5 {
   text-transform: uppercase;
   color: #e8e8e8;
@@ -74,6 +45,11 @@ th.first {
 
 th.next {
   width:25%;
+  padding-left: 15px;
+}
+
+th.sixth {
+  width:17%;
   padding-left: 15px;
 }
 
@@ -270,7 +246,9 @@ tr.cart_item_information p {
 }
 
 body.webapp {
-  font-family: Raleway, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  color: black;
 
   .communicart_header, h4.communicart_description, div.communicart_description p {
     padding-right: 0;
@@ -282,11 +260,57 @@ body.webapp {
     margin-bottom: $webpadding;
     padding: $webpadding;
   }
+
+  h1 {
+    font-family: Raleway, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: bold;
+    font-size: 48px;
+    color: black;
+  }
+
+  h2 {
+    font-family: Raleway, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    font-size: 34px;
+    color: black;
+    padding-left: 0;
+  }
+
+  h3 {
+    font-family: Raleway, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    font-size: 28px;
+    color: black;
+  }
+
+  a {
+    text-decoration: underline;
+    color: #1188ff;
+  }
+  p {
+    font-size: 16px;
+  }
+}
+
+.sidebar {
+  margin: 20px 10px 20px 0;
+  padding: 10px 10px 5px 5px;
+  border: 1px solid #ddd;
+
+  p {
+    margin-top: 10px;
+  }
+
+  h5 {
+    margin: 5px;
+    border-bottom: 1px solid #e8e8e8;
+  }
 }
 
 .row {
   margin-right: 0;
 }
+
 .purchase-status {
   border: 1px solid #ff9e19;
   padding: 30px 0px;

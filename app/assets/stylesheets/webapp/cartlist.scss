@@ -1,0 +1,22 @@
+.cart-list {
+  width: 100%;
+  background: #fff;
+  margin: 20px auto;
+  td {
+    padding: 15px;
+    vertical-align: top;
+  }
+  tr {
+    border-bottom: 1px solid #ccc;
+  }
+}
+
+.pending-pr {
+  background: #F5F5F5;
+  border-bottom: 1px solid #BDBDBD;
+  padding-top: 40px;
+}
+
+.past-pr {
+  padding-top: 40px;
+}
