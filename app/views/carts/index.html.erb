@@ -2,7 +2,7 @@
   <div class="row pending-pr">
     <div class="col-md-12">
       <h3>Pending Purchase Requests</h3>
-      <%= render partial: "shared/cart_list", locals: { carts: @open_carts, role: @role, closed: false} %>
+      <%= render partial: "cart_list", locals: { carts: @open_carts, role: @role, closed: false} %>
     </div>
   </div>
   <div class="row past-pr">
@@ -17,7 +17,7 @@
   </div>
   <div class="row">
     <div class="col-sm-12">
-      <%= render partial: "shared/cart_list", locals: { carts: @closed_carts, role: @role, closed: true,
+      <%= render partial: "cart_list", locals: { carts: @closed_carts, role: @role, closed: true,
                                                         limit: CartsController::CLOSED_CART_LIMIT} %>
     </div>
   </div>

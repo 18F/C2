@@ -260,11 +260,13 @@ body.webapp {
     margin-bottom: $webpadding;
     padding: $webpadding;
   }
+}
 
+.controller-carts {
   h1 {
     font-family: Raleway, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-weight: bold;
-    font-size: 48px;
+    font-weight: 300;
+    font-size: 38px;
     color: black;
   }
 
@@ -279,7 +281,7 @@ body.webapp {
   h3 {
     font-family: Raleway, 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-weight: 300;
-    font-size: 28px;
+    font-size: 24px;
     color: black;
   }
 
@@ -288,7 +290,7 @@ body.webapp {
     color: #1188ff;
   }
   p {
-    font-size: 16px;
+    font-size: 14px;
   }
 }
 
