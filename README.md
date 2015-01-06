@@ -43,7 +43,6 @@ To get the database and tests running:
 1. Install Node.js 0.10
 1. Start PostgreSQL.
 1. Run `script/bootstrap`, which will print "DONE" if successful. *NOTE: This will delete any existing records in your C2 database.*
-    * If you have a password on PostgreSQL, it will give you an error about not being able to connect to the database. Update the info in [`config/database.yml`](config/database.yml.example) with your creds.
 1. Run the specs with `bundle exec rspec spec` at the command line.
     * To run tests automatically as files are changed, run `bundle exec guard`.
 1. Run the frontend tests with `grunt jasmine`.
@@ -55,11 +54,7 @@ To see previews of the mailers:
 To get the app running:
 
 1. Register an application on [MyUSA](https://myusa-staging.18f.us/authorizations)
-1. Modify [`config/environment_variables.yml`](config/environment_variables.yml.example):
-    - `GMAIL_USERNAME` should be the email for the sender you're using (e.g. communicart.sender@gmail.com or communicart.test@gmail.com)
-    - `GMAIL_PASSWORD` is the password for that email account
-    - `MYGOV_CLIENT_ID` is the Consumer Public Key provided by MyUSA
-    - `MYGOV_SECRET_ID` is the Consumer Secret Key provided by MyUSA
+1. Modify [`.env`](.env.example)
 
 ## More info
 

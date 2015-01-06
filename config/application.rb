@@ -20,18 +20,6 @@ module C2
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    config.before_configuration do
-      ['environment_variables.yml','feature_flags.yml'].each do |filename|
-        env_file = Rails.root.join("config", filename).to_s
-
-        if File.exist?(env_file)
-          YAML.load_file(env_file)[Rails.env].each do |key, value|
-            ENV[key.to_s] = value
-          end
-        end
-      end
-    end
-
     # http://git.io/ETVYsQ
     config.middleware.insert_before 0, Rack::Cors, logger: Rails.logger do
       allow do
@@ -43,6 +31,18 @@ module C2
           max_age: 1728000
       end
     end
+
+    config.action_mailer.raise_delivery_errors = true
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.smtp_settings = {
+      address:              'smtp.gmail.com',
+      port:                 587,
+      domain:               ENV.fetch('SMTP_DOMAIN'),
+      user_name:            ENV.fetch('SMTP_USERNAME'),
+      password:             ENV.fetch('SMTP_PASSWORD'),
+      authentication:       'plain',
+      enable_starttls_auto: true
+    }
 
     config.exceptions_app = self.routes
 
