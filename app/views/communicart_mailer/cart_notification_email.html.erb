@@ -33,13 +33,11 @@
         <p>
           <%= link_to "Approve all items with one click", approve_all_url(@approval), class: 'form-button' %>
         </p>
-        <% if ENV['FLAG_WEB_APP_LANDING'] == 'true' %>
-          <p>
-            <strong>
-              <%= link_to "Or, view this request in your browser", "#" %>
-            </strong>
-          </p>
-        <% end %>
+        <p>
+          <strong>
+            <%= link_to "Or, view this request in your browser", carts_url %>
+          </strong>
+        </p>
         <p>
         <span class="action-block">
             <span class="tip-highlight">TIP:</span> <strong>If you want to reject this request</strong>, reply to this email with the word "Reject"

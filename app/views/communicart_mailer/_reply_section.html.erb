@@ -1,14 +1,11 @@
-<%- if ENV['FLAG_WEB_APP_LANDING'] == 'true' %>
-  <table class='reply-section'>
-
-      <tr id="approval-actions">
-        <td colspan=2 align="center">
-          <p>
-            <strong>
-              <%= link_to "Or, view this request in your browser", "#" %>
-            </strong>
-          </p>
-        </td>
-      </tr>
-  </table>
-<%- end %>
+<table class='reply-section'>
+  <tr id="approval-actions">
+    <td colspan=2 align="center">
+      <p>
+        <strong>
+          <%= link_to "Or, view this request in your browser", carts_url %>
+        </strong>
+      </p>
+    </td>
+  </tr>
+</table>

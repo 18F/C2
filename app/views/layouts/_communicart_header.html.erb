@@ -32,9 +32,6 @@
   </div>
 </div>
 
-<%- if ENV['FLAG_WEB_APP_LANDING'] == 'true' %>
-  <ul id='breadcrumb-nav'>
-    <li><a href='#'>Back to main portal</a></li>
-  </ul>
-<%- end %>
-
+<ul id='breadcrumb-nav'>
+  <li><%= link_to "Back to main portal", carts_path %></li>
+</ul>
