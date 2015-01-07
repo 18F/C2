@@ -32,6 +32,8 @@
   </div>
 </div>
 
-<ul id='breadcrumb-nav'>
-  <li><%= link_to "Back to main portal", carts_path %></li>
-</ul>
+<%- unless excluded_portal_link %>
+  <ul id='breadcrumb-nav'>
+    <li><%= link_to "Back to main portal", carts_path %></li>
+  </ul>
+<%- end %>
