@@ -12,7 +12,7 @@
   <%- if defined? limit %>
     <%- cart_list = carts.limit(limit) %>
   <%- else %>
-    <%-cart_list = carts %> 
+    <%-cart_list = carts %>
   <%- end %>
   <%- cart_list.each do |cart| %>
     <tr>

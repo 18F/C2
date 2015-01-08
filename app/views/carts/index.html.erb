@@ -2,32 +2,34 @@
   <div class="row pending-pr">
     <div class="col-md-12">
       <h3>Pending Purchase Requests</h3>
-      <%= render partial: "cart_list", locals: { carts: @carts.open, role: @role, closed: false} %>
+      <%- if @carts.open.any? %>
+        <%= render partial: "cart_list", locals: { carts: @carts.open, role: @role, closed: false} %>
+      <%- else %>
+        <p class="empty-list-label">No pending purchase requests</p>
+      <%- end %>
     </div>
   </div>
   <div class="row past-pr">
     <div class="col-sm-10">
-      <h3>Recent Purchase Requests</h3>
+      <h3>Recently Closed Purchase Requests</h3>
     </div>
-    <div class="col-sm-2">
-      <%- if @carts.closed.size > CartsController::CLOSED_CART_LIMIT %>
-        <%= link_to "View the archive", url_for(:controller => 'carts', :action => 'archive', :role => @role) %>
-      <%- end %>
-    </div>
+
+    <%= render partial: 'archive_link' %>
+
   </div>
-  <div class="row">
-    <div class="col-sm-12">
-      <%= render partial: "cart_list", locals: { carts: @carts.closed, role: @role, closed: true,
-                                                        limit: CartsController::CLOSED_CART_LIMIT} %>
+  <%- if @carts.closed.any? %>
+    <div class="row">
+      <div class="col-sm-12">
+        <%= render partial: "cart_list", locals: { carts: @carts.closed, role: @role, closed: true,
+                                                          limit: CartsController::CLOSED_CART_LIMIT} %>
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-10">
+
+    <div class="row">
+      <%= render partial: "archive_link" %>
     </div>
-    <div class="col-sm-2">
-      <%- if @carts.closed.size > CartsController::CLOSED_CART_LIMIT %>
-        <%= link_to "View the archive", url_for(:controller => 'carts', :action => 'archive', :role => @role) %>
-      <%- end %>
-    </div>
-  </div>
+
+  <%- else %>
+    <p class="empty-list-label">No recently closed purchase requests</p>
+  <%- end %>
 </div>

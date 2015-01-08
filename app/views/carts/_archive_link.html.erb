@@ -1,0 +1,5 @@
+<div class="col-sm-2">
+  <%- if @carts.closed.size > CartsController::CLOSED_CART_LIMIT %>
+    <%= link_to "View the archive", url_for(:controller => 'carts', :action => 'archive', :role => @role) %>
+  <%- end %>
+</div>
