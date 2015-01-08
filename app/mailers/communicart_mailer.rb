@@ -22,7 +22,6 @@ class CommunicartMailer < ActionMailer::Base
 
     set_attachments(cart)
 
-    @url = ENV['NOTIFICATION_URL']
     mail(
          to: to_address,
          subject: "User #{approval.user.email_address} has #{approval.status} cart ##{cart.external_id}",
@@ -58,7 +57,6 @@ class CommunicartMailer < ActionMailer::Base
   end
 
   def send_cart_email(email, cart)
-    @url = ENV['NOTIFICATION_URL']
     @cart = cart.decorate
     @prefix_template = @cart.prefix_template_name
 
