@@ -45,8 +45,6 @@ module C2
     }
 
     config.exceptions_app = self.routes
-
-    config.autoload_paths << Rails.root.join('app/forms')
     config.autoload_paths << Rails.root.join('lib')
   end
 end
