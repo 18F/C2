@@ -11,7 +11,8 @@ class CartsController < ApplicationController
   def index
     # TODO: handle role on a cart-by-cart basis
     # (including action buttons in approver/open case)
-    @carts = current_user.carts.where(approvals: { role: requester_or_approver })
+    @role = requester_or_approver
+    @carts = current_user.carts.where(approvals: { role: @role })
   end
 
   def archive
