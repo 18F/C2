@@ -64,4 +64,39 @@ describe Cart do
       expect(cart.ordered_awaiting_approvals).to eq(cart.awaiting_approvals.order('id DESC'))
     end
   end
+
+  context 'scopes' do
+    let(:approved_cart1) { FactoryGirl.create(:cart, status: 'approved') }
+    let(:approved_cart2) { FactoryGirl.create(:cart, status: 'approved') }
+    let(:pending_cart)  { FactoryGirl.create(:cart, status: 'pending') }
+    let(:rejected_cart)   { FactoryGirl.create(:cart, status: 'rejected') }
+
+    describe 'approved' do
+      it "returns approved carts" do
+        approved_cart1
+        approved_cart2
+        pending_cart
+        expect(Cart.approved).to eq [approved_cart1, approved_cart2]
+      end
+    end
+
+    describe 'open' do
+      it 'returns open carts' do
+        approved_cart1
+        pending_cart
+        expect(Cart.open).to eq [pending_cart]
+      end
+    end
+
+    describe 'closed' do
+      it 'returns closed carts' do
+        approved_cart1
+        pending_cart
+        rejected_cart
+        expect(Cart.closed).to eq [approved_cart1, rejected_cart]
+      end
+    end
+
+  end
+
 end
