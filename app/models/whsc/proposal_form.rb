@@ -30,6 +30,19 @@ module Whsc
       ENV['NCR_FINANCE_APPROVER_EMAIL'] || 'communicart.ofm.approver@gmail.com'
     end
 
+    def requires_finance_approval?
+      self.expense_type == 'BA61'
+    end
+
+    def approver_emails
+      emails = [self.approver_email, self.budget_approver_email]
+      if self.requires_finance_approval?
+        emails << self.finance_approver_email
+      end
+
+      emails
+    end
+
     def create_cart
       cart = Cart.new(
         flow: 'linear',
@@ -37,17 +50,15 @@ module Whsc
       )
       if cart.save
         cart.set_props(
-          origin: self.origin,
           amount: self.amount,
           expense_type: self.expense_type,
+          origin: self.origin,
           vendor: self.vendor
         )
         cart.set_requester(self.requester)
 
-        cart.add_approver(self.approver_email)
-        cart.add_approver(self.budget_approver_email)
-        if cart.getProp(:expense_type) == 'BA61'
-          cart.add_approver(self.finance_approver_email)
+        self.approver_emails.each do |email|
+          cart.add_approver(email)
         end
       end
 
