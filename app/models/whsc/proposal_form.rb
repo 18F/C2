@@ -22,6 +22,13 @@ module Whsc
     validates :requester, presence: true
     validates :vendor, presence: true
 
+    def budget_approver_email
+      ENV['NCR_BUDGET_APPROVER_EMAIL'] || 'communicart.budget.approver@gmail.com'
+    end
+
+    def finance_approver_email
+      ENV['NCR_FINANCE_APPROVER_EMAIL'] || 'communicart.ofm.approver@gmail.com'
+    end
 
     def create_cart
       cart = Cart.new(
@@ -38,9 +45,9 @@ module Whsc
         cart.set_requester(self.requester)
 
         cart.add_approver(self.approver_email)
-        cart.add_approver('communicart.budget.approver@gmail.com')
+        cart.add_approver(self.budget_approver_email)
         if cart.getProp(:expense_type) == 'BA61'
-          cart.add_approver('communicart.ofm.approver@gmail.com')
+          cart.add_approver(self.finance_approver_email)
         end
       end
 
