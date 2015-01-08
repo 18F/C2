@@ -53,7 +53,7 @@ class CommunicartMailer < ActionMailer::Base
 
   # for easier stubbing in tests
   def from_email
-    ENV['NOTIFICATION_FROM_EMAIL']
+    ENV.fetch('NOTIFICATION_FROM_EMAIL')
   end
 
   def send_cart_email(email, cart)
