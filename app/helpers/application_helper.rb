@@ -40,6 +40,6 @@ module ApplicationHelper
 
   def excluded_portal_link
     controller_name == 'home' ||
-    controller_name == 'carts' && action_name == 'index'
+    current_page?(carts_path)
   end
 end
