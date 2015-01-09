@@ -37,4 +37,9 @@ module ApplicationHelper
       [key, flash_message(val)]
     end
   end
+
+  def excluded_portal_link
+    controller_name == 'home' ||
+    current_page?(carts_path)
+  end
 end
