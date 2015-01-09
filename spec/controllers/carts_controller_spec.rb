@@ -1,52 +1,32 @@
 describe CartsController do
-  let(:user1) { FactoryGirl.create(:user) }
-  let(:user2) { FactoryGirl.create(:user) }
-  let(:user3) { FactoryGirl.create(:user) }
-  let(:user4) { FactoryGirl.create(:user) }
+  let(:user) { FactoryGirl.create(:user) }
   let(:approval_group1) { FactoryGirl.create(:approval_group, name: 'test-approval-group1') }
-  let(:approval_group2) { FactoryGirl.create(:approval_group, name: 'test-approval-group2') }
 
   before do
-    UserRole.create!(user_id: user1.id, approval_group_id: approval_group1.id, role: 'approver')
-    UserRole.create!(user_id: user2.id, approval_group_id: approval_group1.id, role: 'requester')
-    UserRole.create!(user_id: user3.id, approval_group_id: approval_group1.id, role: 'approver')
+    UserRole.create!(user_id: user.id, approval_group_id: approval_group1.id, role: 'requester')
     p = {'approvalGroup' => 'test-approval-group1', 'cartName' => 'cart1' }
     @cart1 = Commands::Approval::InitiateCartApproval.new.perform(p)
     session[:user] = {}
   end
 
-  describe('index') do
-
-    it 'should find the open cart' do
-      session[:user]['email'] = user2.email_address
+  describe '#index' do
+    it 'sets @role' do
+      session[:user]['email'] = user.email_address
       get :index
-      expect(assigns(:open_carts).first).to eq(@cart1)
+      expect(assigns(:role)).to eq 'requester'
     end
 
-    it 'should find nothing' do
-      session[:user]['email'] = user4.email_address
+    it 'sets @carts' do
+      approval_group1
+      session[:user]['email'] = user.email_address
       get :index
-      expect(assigns(:open_carts).first).to be_nil
-    end
-
-    it 'should find the approved cart' do
-      session[:user]['email'] = user2.email_address
-      @cart1.update_attributes(status: 'approved')
-      get :index
-      expect(assigns(:closed_carts).first).to eq(@cart1)
-    end
-
-    it 'should find the rejected cart' do
-      session[:user]['email'] = user2.email_address
-      @cart1.update_attributes(status: 'rejected')
-      get :index
-      expect(assigns(:closed_carts).first).to eq(@cart1)
+      expect(assigns(:carts)).to eq [@cart1]
     end
   end
 
-  describe('archive') do
+  describe '#archive' do
     it 'should show all the closed carts' do
-      session[:user]['email'] = user2.email_address
+      session[:user]['email'] = user.email_address
       carts = Array.new
       (1..4).each do |i|
         p = {}
@@ -58,6 +38,19 @@ describe CartsController do
       end
       get :archive
       expect(assigns(:closed_cart_full_list).size).to eq(3)
+    end
+  end
+
+  describe '#requester_or_approver helper' do
+    it 'returns requester role set on approval' do
+      session[:user]['email'] = user.email_address
+      expect(controller.send(:requester_or_approver)).to eq 'requester'
+    end
+
+    it 'returns approver role set on approval' do
+      user.approvals.first.update_attributes(role: 'approver')
+      session[:user]['email'] = user.email_address
+      expect(controller.send(:requester_or_approver)).to eq 'approver'
     end
   end
 end
