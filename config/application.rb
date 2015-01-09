@@ -44,6 +44,13 @@ module C2
       enable_starttls_auto: true
     }
 
+    config.action_mailer.default_url_options = {
+      scheme: ENV['DEFAULT_URL_SCHEME'] || 'http',
+      host: ENV['HOST_URL'] || ENV['DEFAULT_URL_HOST'] || 'localhost',
+      port: ENV['DEFAULT_URL_PORT'] || 3000
+    }
+    config.roadie.url_options = config.action_mailer.default_url_options
+
     config.exceptions_app = self.routes
     config.autoload_paths << Rails.root.join('lib')
 
