@@ -27,7 +27,7 @@ class HomeController < ApplicationController
 private
 
   def setup_mygov_client
-    @mygov_client = OAuth2::Client.new(MYGOV_CLIENT_ID, MYGOV_SECRET_ID, site: MYGOV_HOME, token_url: '/oauth/authorize')
+    @mygov_client = OAuth2::Client.new(MYUSA_KEY, MYUSA_SECRET, site: MYUSA_URL, token_url: '/oauth/authorize')
   end
 
   def setup_mygov_access_token

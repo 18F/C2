@@ -1,12 +1,12 @@
-MYGOV_CLIENT_ID = ENV.fetch('MYGOV_CLIENT_ID')
-MYGOV_SECRET_ID = ENV.fetch('MYGOV_SECRET_ID')
-MYGOV_HOME = ENV.fetch('MYGOV_HOME')
+MYUSA_KEY = ENV.fetch('MYUSA_KEY')
+MYUSA_SECRET = ENV.fetch('MYUSA_SECRET')
+MYUSA_URL = ENV['MYUSA_URL'] || 'https://myusa.18f.us'
 
 Rails.application.config.middleware.use OmniAuth::Builder do
-  provider :myusa, MYGOV_CLIENT_ID, MYGOV_SECRET_ID, {
+  provider :myusa, MYUSA_KEY, MYUSA_SECRET, {
     scope: 'profile.email',
     client_options: {
-      site: MYGOV_HOME,
+      site: MYUSA_URL,
       token_url: "/oauth/authorize"
     }
   }

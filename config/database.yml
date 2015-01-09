@@ -1,0 +1,14 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  database: <%= ENV['DB_NAME'] || "c2_#{Rails.env}" %>
+  pool: 5
+
+development: *default
+test: *default
+production:
+  <<: *default
+  username: <%= ENV['DB_USERNAME'] %>
+  password: <%= ENV['DB_PASSWORD'] %>
+  host: <%= ENV['DB_HOST'] %>
+  port: <%= ENV['DB_PORT'] %>
