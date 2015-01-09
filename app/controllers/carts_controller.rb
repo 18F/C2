@@ -20,6 +20,8 @@ class CartsController < ApplicationController
     @closed_cart_full_list = current_user.carts.where(approvals: {role: @role}).closed
   end
 
+  private
+
   def requester_or_approver
     ['requester','approver'].each do |role|
       break role if current_user.carts.where(approvals: { role: role }).any?
