@@ -13,6 +13,7 @@
  *= require normalize
  *= require_tree ./common
  *= require_tree ./webapp
+ *= require chosen.min
  */
 
 @import "bootstrap-sprockets";

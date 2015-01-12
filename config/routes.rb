@@ -18,7 +18,7 @@ C2::Application.routes.draw do
     resources :comments
   end
 
-  namespace :whsc do
+  namespace :ncr do
     resources :proposals
   end
 

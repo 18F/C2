@@ -81,7 +81,7 @@ class CartDecorator < Draper::Decorator
     case self.getProp('origin')
     when 'navigator'
       ['origin', 'contractingVehicle', 'location', 'configType']
-    when 'whsc'
+    when 'ncr'
       ['origin']
     else
       []
