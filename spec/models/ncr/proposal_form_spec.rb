@@ -1,4 +1,4 @@
-describe Whsc::ProposalForm do
+describe Ncr::ProposalForm do
   describe '#create_cart' do
     def approver_emails(form)
       cart = form.create_cart
