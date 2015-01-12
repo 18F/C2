@@ -56,15 +56,15 @@
       float: left;
       padding-top: 2px;
       &.approved {
-        background-image: url('/assets/bg_approved_status.gif');
+        background-image: image-url('bg_approved_status.gif');
       }
 
       &.pending {
-        background-image: url('/assets/bg_pending_status.gif');
+        background-image: image-url('bg_pending_status.gif');
       }
 
       &.rejected {
-        background-image: url('/assets/bg_rejected_status.gif');
+        background-image: image-url('bg_rejected_status.gif');
       }
     }
 
