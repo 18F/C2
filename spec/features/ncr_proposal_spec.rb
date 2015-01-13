@@ -28,20 +28,22 @@ describe "National Capital Region proposals" do
 
       expect(page).to have_content("Proposal submitted")
 
-      cart = Cart.last
+      cart = Cart.last.decorate
+
       expect(cart.name).to eq("buying stuff")
       expect(cart.flow).to eq('linear')
       expect(cart.getProp(:origin)).to eq('ncr')
       expect(cart.getProp(:expense_type)).to eq('BA80')
       expect(cart.getProp(:vendor)).to eq('ACME')
       # TODO should this persist as a number?
-      expect(cart.getProp(:amount)).to eq('123.45')
+      expect(cart.getProp(:amount)).to eq("123.45")
       expect(cart.getProp(:building_number)).to eq('Entire Jackson Place Complex')
       expect(cart.requester).to eq(requester)
       expect(cart.approvers.map(&:email_address)).to eq(%w(
         approver@example.com
         communicart.budget.approver@gmail.com
       ))
+      expect(cart.total_price).to eq('123.45')
     end
 
     it "defaults to the approver from the last request" do
