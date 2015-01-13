@@ -27,3 +27,8 @@ node_modules/
 .grunt/
 config/feature_flags.yml
 .env
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
