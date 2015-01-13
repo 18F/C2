@@ -27,3 +27,4 @@ node_modules/
 .grunt/
 config/feature_flags.yml
 .env
+manifest.yml
