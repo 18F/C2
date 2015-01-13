@@ -8,8 +8,8 @@ development: *default
 test: *default
 production:
   <<: *default
-  database: <%= ENV['RDS_DB_NAME'] %>
-  username: <%= ENV['RDS_USERNAME'] %>
-  password: <%= ENV['RDS_PASSWORD'] %>
-  host: <%= ENV['RDS_HOSTNAME'] %>
-  port: <%= ENV['RDS_PORT'] %>
+  database: <%= ENV['RDS_DB_NAME'] || ENV['DB_NAME'] %>
+  username: <%= ENV['RDS_USERNAME'] || ENV['DB_USERNAME'] %>
+  password: <%= ENV['RDS_PASSWORD'] || ENV['DB_PASSWORD'] %>
+  host: <%= ENV['RDS_HOSTNAME'] || ENV['DB_HOST'] %>
+  port: <%= ENV['RDS_PORT'] || ENV['DB_PORT'] %>
