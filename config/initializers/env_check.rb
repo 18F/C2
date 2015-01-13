@@ -2,7 +2,11 @@
 
 def get_keys(env_file)
   path = Rails.root.join(env_file)
-  contents = File.read(path)
+  contents = if File.exists?(path)
+      File.read(path)
+    else
+      ''
+    end
   env_hash = Dotenv::Parser.call(contents)
   env_hash.keys
 end
