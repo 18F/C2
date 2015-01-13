@@ -20,7 +20,7 @@ describe CommunicartMailerHelper do
       expect(approval.api_token).to eq(nil)
 
       expect {
-        helper.approve_all_url(approval)
+        helper.approve_all_url(approval, true)
       }.to raise_error
     end
   end

@@ -14,21 +14,12 @@ module CommunicartMailerHelper
     end
   end
 
-  def approve_all_url(approval)
+  def approve_all_url(approval, approve = true)
     approval_response_url(
       cart_id: approval.cart_id,
       user_id: approval.user_id,
       cch: approval.api_token.access_token,
-      approver_action: 'approve'
-    )
-  end
-
-  def reject_all_url(approval)
-    approval_response_url(
-      cart_id: approval.cart_id,
-      user_id: approval.user_id,
-      cch: approval.api_token.access_token,
-      approver_action: 'reject'
+      approver_action: approve ? 'approve' : "reject"
     )
   end
 end

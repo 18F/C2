@@ -167,7 +167,6 @@ describe 'Rejecting a cart with multiple approvers' do
     expect(Cart.count).to eq(1)
     expect(User.count).to eq(4)
     expect(Approval.count).to eq 3
-
     cart = Cart.first
     expect(cart.external_id).to eq 10203040
     expect(cart.approvals.count).to eq 3
