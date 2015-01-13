@@ -31,8 +31,8 @@
     <tr id="approval-actions">
       <td colspan=2 align="center">
         <p>
-          <%= link_to "Approve all items with one click", approve_all_url(@approval, true), class: 'form-button' %>
-          <%= link_to "Reject all items with one click", approve_all_url(@approval, false), class: 'form-button' %>
+          <%= link_to "Approve", approve_all_url(@approval, true), class: 'form-button' %>
+          <%= link_to "Reject", approve_all_url(@approval, false), class: 'reject-link' %>
 
         </p>
         <p>
