@@ -14,7 +14,7 @@ module CommunicartMailerHelper
     end
   end
 
-  def approve_all_url(approval, action = 'approve')
+  def approval_action_url(approval, action = 'approve')
     approval_response_url(
       cart_id: approval.cart_id,
       user_id: approval.user_id,
