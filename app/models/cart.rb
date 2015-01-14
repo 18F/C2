@@ -12,6 +12,8 @@ class Cart < ActiveRecord::Base
   has_many :comments, as: :commentable
   has_many :properties, as: :hasproperties
 
+  after_initialize :set_defaults
+
   #TODO: after_save default status
   #TODO: validates_uniqueness_of :name
   validates :flow, presence: true, inclusion: {in: ApprovalGroup::FLOWS}
@@ -196,5 +198,9 @@ class Cart < ActiveRecord::Base
     cart_items_params.each do |params|
       self.import_cart_item(params)
     end
+  end
+
+  def set_defaults
+    self.status ||= 'pending'
   end
 end
