@@ -28,8 +28,7 @@ describe "National Capital Region proposals" do
 
       expect(page).to have_content("Proposal submitted")
 
-      cart = Cart.last.decorate
-
+      cart = Cart.last
       expect(cart.name).to eq("buying stuff")
       expect(cart.flow).to eq('linear')
       expect(cart.getProp(:origin)).to eq('ncr')
@@ -43,7 +42,6 @@ describe "National Capital Region proposals" do
         approver@example.com
         communicart.budget.approver@gmail.com
       ))
-      expect(cart.total_price).to eq('123.45')
     end
 
     it "defaults to the approver from the last request" do

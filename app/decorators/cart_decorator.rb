@@ -3,7 +3,7 @@ class CartDecorator < Draper::Decorator
 
   def total_price
     if self.getProp('origin') == 'ncr'
-      price = self.getProp('amount')
+      price = self.getProp('amount').to_f
     else
       price = object.cart_items.reduce(0) do |sum,citem| sum + citem.quantity * citem.price end
       Float("%0.02f" % price)
