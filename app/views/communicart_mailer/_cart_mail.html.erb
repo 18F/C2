@@ -69,7 +69,7 @@
           <td valign="top">
             <p class="result-item-price"><strong><%= cart_item.subtotal %></strong></p>
 
-            <p class="result-item-units"><%= cart_item.formatted_price %> x <%= cart_item.quantity %> units</p>
+            <p class="result-item-units"><%= number_to_currency(cart_item.price) %> x <%= cart_item.quantity %> units</p>
           </td>
 
           <%#-- Vendor --%>

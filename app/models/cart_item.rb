@@ -17,10 +17,6 @@ class CartItem < ActiveRecord::Base
     cart_item_traits.select{ |trait| trait.name.include?("socio") }.map(&:value)
   end
 
-  def formatted_price
-    "$#{'%.2f' % price}"
-  end
-
   def subtotal
     "$#{'%.2f' % (price * quantity)}"
   end
