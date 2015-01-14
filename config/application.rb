@@ -37,7 +37,7 @@ module C2
     config.action_mailer.smtp_settings = {
       address:              'smtp.gmail.com',
       port:                 587,
-      domain:               ENV.fetch('SMTP_DOMAIN'),
+      domain:               ENV['SMTP_DOMAIN'] || 'gmail.com',
       user_name:            ENV.fetch('SMTP_USERNAME'),
       password:             ENV.fetch('SMTP_PASSWORD'),
       authentication:       'plain',
