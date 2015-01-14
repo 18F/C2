@@ -141,7 +141,7 @@
 
       <tr>
         <td class='cart-total' colspan='3'>
-          <span class="total-label">Total: <strong>$<%= cart.total_price %></strong></span>
+          <span class="total-label">Total: <strong><%= number_to_currency(cart.total_price) %></strong></span>
         </td>
       </tr>
 
