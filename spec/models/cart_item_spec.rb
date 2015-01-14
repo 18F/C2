@@ -40,10 +40,10 @@ describe CartItem do
   end
 
   describe "#subtotal" do
-    it 'returns a formatted version of the unit price times the quantity' do
+    it 'returns a the unit price times the quantity' do
       cart_item.price = 1.8
       cart_item.quantity = 250
-      expect(cart_item.subtotal).to eq "$450.00"
+      expect(cart_item.subtotal).to eq 450.0
     end
   end
 end

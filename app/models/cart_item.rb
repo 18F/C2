@@ -18,7 +18,7 @@ class CartItem < ActiveRecord::Base
   end
 
   def subtotal
-    "$#{'%.2f' % (price * quantity)}"
+    price * quantity
   end
 
   # matches .attributes
