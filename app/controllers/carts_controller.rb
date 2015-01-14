@@ -12,12 +12,12 @@ class CartsController < ApplicationController
     # TODO: handle role on a cart-by-cart basis
     # (including action buttons in approver/open case)
     @role = requester_or_approver
-    @carts = current_user.carts.where(approvals: { role: @role })
+    @carts = current_user.carts.where(approvals: { role: @role }).order('created_at DESC')
   end
 
   def archive
     @role = params[:role] || 'requester'
-    @closed_cart_full_list = current_user.carts.where(approvals: {role: @role}).closed
+    @closed_cart_full_list = current_user.carts.where(approvals: {role: @role}).closed.order('created_at DESC')
   end
 
   private
