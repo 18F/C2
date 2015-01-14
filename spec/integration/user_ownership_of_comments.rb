@@ -58,8 +58,6 @@ FactoryGirl.create(:cart_item)
 
 
   it 'updates the comments on a cart item as expected' do
-    ENV['NOTIFICATION_FROM_EMAIL'] = 'sender@some-dot_gov.gov'
-
     expect(Cart.count).to eq(2)
     expect(User.count).to eq(5) # 5 = 4 approvers + 1 requester
     cart = Cart.first
