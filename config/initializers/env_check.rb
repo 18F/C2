@@ -1,21 +1,26 @@
 # verify that all keys in .env.example are present in the ENV, and warn about ones that are no longer used
 
-def get_keys(env_file)
-  path = Rails.root.join(env_file)
+def get_keys(path)
   contents = File.read(path)
   env_hash = Dotenv::Parser.call(contents)
   env_hash.keys
 end
 
-required_keys = get_keys('.env.example')
+env_example_path = Rails.root.join('.env.example')
+required_keys = get_keys(env_example_path)
 required_keys.each do |key|
   ENV.fetch(key)
 end
 
-env_keys = get_keys('.env')
-extra_keys = env_keys - required_keys
-extra_keys.each do |key|
-  $stderr.puts "NOTE: extra key in `.env`: #{key}"
+env_path = Rails.root.join('.env')
+if File.exist?(env_path)
+  env_keys = get_keys(env_path)
+  extra_keys = env_keys - required_keys
+  extra_keys.each do |key|
+    Rails.logger.warn("Extra key in `.env`: #{key}")
+  end
+else
+  Rails.logger.warn("No .env file.")
 end
 
 
