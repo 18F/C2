@@ -22,12 +22,25 @@ describe CartDecorator do
   end
 
   describe '#total_price' do
-    it 'returns a sum of its cart items total prices' do
-      cart.cart_items << FactoryGirl.create(:cart_item, description: "Item 1", price: 1.00, quantity: 2)
-      cart.cart_items << FactoryGirl.create(:cart_item, description: "Item 2", price: 2.25, quantity: 3)
-      cart.cart_items << FactoryGirl.create(:cart_item, description: "Item 3", price: 3.50, quantity: 4)
-
-      expect(cart.total_price).to eq 22.75
+    context 'the client origin is NCR' do
+      it 'gets price from the cart properties' do
+        cart.setProp('origin','ncr')
+        cart.setProp('amount','357.89')
+        expect(cart.total_price).to eq 357.89
+      end
     end
+
+    context 'other client origins' do
+      it 'returns a sum of its cart items total prices' do
+        cart.setProp('origin','some-other-client')
+        cart.cart_items << FactoryGirl.create(:cart_item, description: "Item 1", price: 1.00, quantity: 2)
+        cart.cart_items << FactoryGirl.create(:cart_item, description: "Item 2", price: 2.25, quantity: 3)
+        cart.cart_items << FactoryGirl.create(:cart_item, description: "Item 3", price: 3.50, quantity: 4)
+
+        expect(cart.total_price).to eq 22.75
+      end
+    end
+
+
   end
 end

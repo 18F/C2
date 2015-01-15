@@ -35,7 +35,7 @@ describe "National Capital Region proposals" do
       expect(cart.getProp(:expense_type)).to eq('BA80')
       expect(cart.getProp(:vendor)).to eq('ACME')
       # TODO should this persist as a number?
-      expect(cart.getProp(:amount)).to eq('123.45')
+      expect(cart.getProp(:amount)).to eq("123.45")
       expect(cart.getProp(:building_number)).to eq('Entire Jackson Place Complex')
       expect(cart.requester).to eq(requester)
       expect(cart.approvers.map(&:email_address)).to eq(%w(
