@@ -15,8 +15,6 @@ describe "Approving a cart with multiple approvers in parallel" do
   }
 
   before do
-    ENV['NOTIFICATION_FROM_EMAIL'] = 'sender@some-dot_gov.gov'
-
     @json_approval_params = JSON.parse(approval_params)
 
     approval_group = FactoryGirl.create(:approval_group)

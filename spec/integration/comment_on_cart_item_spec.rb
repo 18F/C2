@@ -35,8 +35,6 @@ describe 'Adding and retrieving comments from a cart item' do
 
 
   it 'updates the comments on a cart item as expected' do
-    ENV['NOTIFICATION_FROM_EMAIL'] = 'sender@some-dot_gov.gov'
-
     expect(Cart.count).to eq(1)
     expect(User.count).to eq(4)
     cart = Cart.first

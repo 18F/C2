@@ -61,8 +61,6 @@ describe 'Creating a cart without an approval group' do
   }
 
   before do
-    ENV['NOTIFICATION_FROM_EMAIL'] = 'sender@some-dot_gov.gov'
-
     @json_params_1 = JSON.parse(params_request_1)
     expect(User.count).to eq 0
     expect(Cart.count).to eq 0
