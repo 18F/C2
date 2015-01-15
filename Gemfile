@@ -19,7 +19,6 @@ gem 'settingslogic'
 gem 'simple_form_object'
 gem 'turbolinks'
 gem 'uglifier'
-gem 'newrelic_rpm'
 
 group :test, :development do
   gem 'database_cleaner'
