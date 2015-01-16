@@ -28,7 +28,7 @@
             <%- unless cart.decorate.property_exclusions.include? property %>
               <tr class="cart_item_information">
                 <td class="w-container results-list" align="left" width="33%">
-                  <strong><%= property.capitalize %></strong>
+                  <strong><%= property.underscore.humanize %></strong>
                 </td>
                 <td with="66%">
                   <%= value %>
