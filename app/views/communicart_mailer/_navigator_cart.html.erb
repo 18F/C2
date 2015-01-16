@@ -63,14 +63,13 @@
               <h5>Specs</h5>
             </td>
           </tr>
-              <%- cart.properties.where.not(property: cart.property_exclusions).each do |cart_property| %>
-
+          <%- cart.deserialized_properties.each do |property,value| %>
           <tr class="cart_item_information">
             <td class="w-container results-list" align="left" colspan="2">
-              <strong><%= (cart_property.property).split(/(?=[A-Z])/).join(" ") %></strong>: <%= cart_property.value %>
+              <strong><%= property.underscore.humanize %></strong>: <%= value %>
             </td>
           </tr>
-              <%- end %>
+          <%- end %>
         </table>
       </td>
 
