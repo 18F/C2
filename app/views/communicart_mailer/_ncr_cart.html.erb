@@ -24,16 +24,18 @@
             </td>
           </tr>
           </tr>
-              <%- cart.deserialized_properties.each do |property,value| %>
-                <tr class="cart_item_information">
-                  <td class="w-container results-list" align="left" width="33%">
-                    <strong><%= property.capitalize %></strong>
-                  </td>
-                  <td with="66%">
-                    <%= value %>
-                  </td>
-                </tr>
-              <%- end %>
+          <%- cart.deserialized_properties.each do |property,value| %>
+            <%- unless cart.decorate.property_exclusions.include? property %>
+              <tr class="cart_item_information">
+                <td class="w-container results-list" align="left" width="33%">
+                  <strong><%= property.capitalize %></strong>
+                </td>
+                <td with="66%">
+                  <%= value %>
+                </td>
+              </tr>
+            <%- end %>
+          <%- end %>
         </table>
 
 
