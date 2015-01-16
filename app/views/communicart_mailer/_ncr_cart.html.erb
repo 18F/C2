@@ -24,13 +24,13 @@
             </td>
           </tr>
           </tr>
-              <%- cart.properties.where.not(property: cart.property_exclusions).each do |cart_property| %>
+              <%- cart.deserialized_properties.each do |property,value| %>
                 <tr class="cart_item_information">
                   <td class="w-container results-list" align="left" width="33%">
-                    <strong><%= (cart_property.property.capitalize).split(/(?=[A-Z])/).join(" ") %></strong>
+                    <strong><%= property.capitalize %></strong>
                   </td>
                   <td with="66%">
-                    <%= cart_property.value %>
+                    <%= value %>
                   </td>
                 </tr>
               <%- end %>
