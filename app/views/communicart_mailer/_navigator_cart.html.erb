@@ -64,11 +64,13 @@
             </td>
           </tr>
           <%- cart.deserialized_properties.each do |property,value| %>
-          <tr class="cart_item_information">
-            <td class="w-container results-list" align="left" colspan="2">
-              <strong><%= property.underscore.humanize %></strong>: <%= value %>
-            </td>
-          </tr>
+            <%- unless cart.decorate.property_exclusions.include? property %>
+              <tr class="cart_item_information">
+                <td class="w-container results-list" align="left" colspan="2">
+                  <strong><%= property.underscore.humanize %></strong>: <%= value %>
+                </td>
+              </tr>
+            <%- end %>
           <%- end %>
         </table>
       </td>
