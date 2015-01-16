@@ -16,6 +16,8 @@ class Approval < ActiveRecord::Base
 
   scope :pending, -> { where(status: 'pending') }
   scope :received, -> { where('status != ?', 'pending') }
+  scope :approved, -> { where('status != ?', 'approved') }
+
 
 
   # TODO this should be a proper association
