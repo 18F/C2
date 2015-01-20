@@ -25,7 +25,7 @@
           </tr>
           </tr>
           <%- cart.deserialized_properties.each do |property,value| %>
-            <%- unless cart.decorate.property_exclusions.include? property %>
+            <%- unless cart.property_exclusions.include? property %>
               <tr class="cart_item_information">
                 <td class="w-container results-list" align="left" width="33%">
                   <strong><%= property.underscore.humanize %></strong>
