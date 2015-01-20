@@ -5,6 +5,10 @@ module UserSteps
     @user.update_attributes(first_name: "George", last_name: "Jetson")
   end
 
+  step 'the user is :email' do |email|
+    @user = User.find_by(email_address: email)
+  end
+
   step "I should see alert text :text" do |text|
     page.assert_selector('.alert', :count => 1)
     expect(page.find('.alert')).to have_content(text)
@@ -43,8 +47,13 @@ module UserSteps
     save_and_open_page
   end
 
-  step 'a cart with a cart item and approvals' do
-    @cart = FactoryGirl.create(:cart_with_approvals_and_items)
+  step 'a cart :external_id with a cart item and approvals' do |external_id|
+    @cart = FactoryGirl.create(:cart_with_approvals_and_items, external_id: external_id)
+  end
+
+  #CURRENTTODO: Refactor with above
+  step 'a cart :external_id with a cart item' do |external_id|
+    @cart = FactoryGirl.create(:cart_with_item, external_id: external_id)
   end
 
   step 'a cart :external_id with a cart item and approvals' do |external_id|
