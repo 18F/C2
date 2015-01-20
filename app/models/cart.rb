@@ -205,9 +205,4 @@ class Cart < ActiveRecord::Base
     self.status ||= 'pending'
   end
 
-  def deserialized_properties
-    properties_copy = {}
-    self.properties.collect{|p| properties_copy[p.property] = YAML::load(p.value)}
-    properties_copy
-  end
 end
