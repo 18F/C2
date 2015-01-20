@@ -21,6 +21,7 @@ class Cart < ActiveRecord::Base
   scope :approved, -> { where(status: 'approved') }
   scope :open, -> { where(status: 'pending') }
   scope :closed, -> { where(:status => ['approved', 'rejected']) }
+
   ORIGINS = %w(navigator ncr)
 
   def update_approval_status
@@ -203,4 +204,5 @@ class Cart < ActiveRecord::Base
   def set_defaults
     self.status ||= 'pending'
   end
+
 end
