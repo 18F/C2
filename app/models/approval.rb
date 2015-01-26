@@ -14,9 +14,10 @@ class Approval < ActiveRecord::Base
 
   after_initialize :set_default_status
 
-  scope :pending, -> { where(status: 'pending').where('role != ?', 'requester') }
-  scope :received, -> { where('status != ?', 'pending').where('role != ?', 'requester') }
-  scope :approved, -> { where('status = ?', 'approved').where('role != ?', 'requester') }
+  scope :approvable, -> { where.not(role: ['requester','observer']) }
+  scope :pending, ->    { approvable.where(status: 'pending') }
+  scope :received, ->   { approvable.where.not(status: 'pending') }
+  scope :approved, ->   { approvable.where(status: 'approved') }
 
 
   # TODO this should be a proper association
