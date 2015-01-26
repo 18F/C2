@@ -40,6 +40,7 @@ class CommunicartsController < ApplicationController
   def approval_response
     @cart = Cart.find_by(id: params[:cart_id].to_i).decorate
     @approval = @cart.approvals.where(user_id: params[:user_id]).first
+    @show_comments = true
 
     Commands::Approval::UpdateFromApprovalResponse.new.perform(@approval, approval_response_status)
     @token.update_attributes(used_at: Time.now)
