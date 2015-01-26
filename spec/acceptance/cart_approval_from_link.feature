@@ -15,8 +15,11 @@ Feature: Approving a cart from approval link
     And a valid token
     When I go to the approval_response page with token
     Then I should see alert text 'You have successfully updated Cart 109876. See the cart details below'
-    # And I should see 'Comments on this proposal'
     And I should see 'No comments have been added yet'
+    When I fill out 'comment_comment_text' with 'A comment on this proposal'
+    And I click 'Send note' button
+    Then I should not see 'No comments have been added yet'
+    And I should see 'A comment on this proposal'
 
   Scenario: Approving with a non-existent token
     When I go to the approval_response page with invalid token '1a2b3c4d'
