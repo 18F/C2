@@ -47,13 +47,12 @@ module UserSteps
     save_and_open_page
   end
 
-  step 'a cart :external_id with a cart item and approvals' do |external_id|
-    @cart = FactoryGirl.create(:cart_with_approvals_and_items, external_id: external_id)
-  end
-
-  #CURRENTTODO: Refactor with above
   step 'a cart :external_id with a cart item' do |external_id|
     @cart = FactoryGirl.create(:cart_with_item, external_id: external_id)
+  end
+
+  step 'a cart with a cart item and approvals' do
+    @cart = FactoryGirl.create(:cart_with_approvals_and_items)
   end
 
   step 'a cart :external_id with a cart item and approvals' do |external_id|
