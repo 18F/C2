@@ -168,7 +168,7 @@
           </div>
         <%- end %>
 
-        <% unless cart.comments.empty? %>
+        <% if cart.comments.any? %>
           <% cart.comments.each do |c| %>
             <div class='comment-item'>
               <div class='row'>
@@ -194,7 +194,9 @@
           <% end %>
         <% else %>
           <br>
-          No comments have been added yet
+          <span class='empty-list-label'>
+            No comments have been added yet
+          </span>
         <% end %>
       <%- end %>
     </div>
