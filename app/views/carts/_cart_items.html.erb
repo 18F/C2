@@ -1,0 +1,21 @@
+<table class="cart-table">
+  <tr class='header'>
+    <th class="first" scope="col">
+      <h5>Product</h5>
+    </th>
+    <th class="next" scope="col">
+      <h5>Price</h5>
+    </th>
+    <th class="next" scope="col">
+      <h5>Vendor</h5>
+    </th>
+  </tr>
+  <%- cart.cart_items.each do |cart_item| %>
+    <%= render partial: 'carts/cart_item', locals: {cart_item: cart_item} %>
+  <%- end %>
+  <tr>
+    <td class='cart-total' colspan='3'>
+      <span class="total-label">Total:</span> <strong><%= number_to_currency(cart.total_price) %></strong>
+    </td>
+  </tr>
+</table>
