@@ -39,36 +39,79 @@ describe "Approving a cart with multiple approvers in parallel" do
     cart.reload
   end
 
-  it 'updates the cart and approval records as expected' do
-    expect(User.count).to eq(4)
-    expect(cart.status).to eq 'pending'
-    expect(cart.approvals.where(status: 'approved').count).to eq 0
+  context 'default mailing behavior' do
+    it 'updates the cart and approval records as expected' do
+      expect(User.count).to eq(4)
+      expect(cart.status).to eq 'pending'
+      expect(cart.approvals.where(status: 'approved').count).to eq 0
 
-    approve
+      approve
 
-    expect(cart.status).to eq 'pending'
-    expect(cart.approvals.count).to eq 4
-    expect(cart.approvals.where(status: 'approved').count).to eq 1
-    expect(cart.requester.email_address).to eq 'test-requester@some-dot-gov.gov'
-    expect(email_recipients).to eq([
-      'approver2@some-dot-gov.gov',
-      'test-requester@some-dot-gov.gov'
-    ])
+      expect(cart.status).to eq 'pending'
+      expect(cart.approvals.count).to eq 4
+      expect(cart.approvals.where(status: 'approved').count).to eq 1
+      expect(cart.requester.email_address).to eq 'test-requester@some-dot-gov.gov'
+      expect(email_recipients).to eq([
+        'approver2@some-dot-gov.gov',
+        'test-requester@some-dot-gov.gov'
+        ])
 
-    json_approval_params["fromAddress"] = "approver2@some-dot-gov.gov"
-    approve
+      json_approval_params["fromAddress"] = "approver2@some-dot-gov.gov"
+      approve
 
-    expect(cart.approvals.where(status: 'approved').count).to eq 2
-    expect(email_recipients).to eq([
-      'approver3@some-dot-gov.gov',
-      'test-requester@some-dot-gov.gov'
-    ])
+      expect(cart.approvals.where(status: 'approved').count).to eq 2
+      expect(email_recipients).to eq([
+        'approver3@some-dot-gov.gov',
+        'test-requester@some-dot-gov.gov'
+        ])
 
-    json_approval_params["fromAddress"] = "approver3@some-dot-gov.gov"
-    approve
+      json_approval_params["fromAddress"] = "approver3@some-dot-gov.gov"
+      approve
 
-    expect(cart.status).to eq 'approved'
-    expect(cart.approvals.where(status: 'approved').count).to eq 3
-    expect(email_recipients).to eq(['test-requester@some-dot-gov.gov'])
+      expect(cart.status).to eq 'approved'
+      expect(cart.approvals.where(status: 'approved').count).to eq 3
+      expect(email_recipients).to eq(['test-requester@some-dot-gov.gov'])
+    end
   end
+
+  context 'NCR mailing behavior' do
+
+    it 'only sends out emails when for first and last approvals' do
+      cart.setProp('origin','ncr')
+      expect(User.count).to eq(4)
+      expect(cart.status).to eq 'pending'
+      expect(cart.approvals.where(status: 'approved').count).to eq 0
+
+      approve
+
+      expect(cart.status).to eq 'pending'
+      expect(cart.approvals.count).to eq 4
+      expect(cart.approvals.where(status: 'approved').count).to eq 1
+      expect(cart.requester.email_address).to eq 'test-requester@some-dot-gov.gov'
+      expect(email_recipients).to eq([
+        'approver2@some-dot-gov.gov'
+        ])
+
+      json_approval_params["fromAddress"] = "approver2@some-dot-gov.gov"
+      approve
+
+      expect(cart.approvals.where(status: 'approved').count).to eq 2
+      expect(email_recipients).to eq([
+        'approver3@some-dot-gov.gov'
+        ])
+
+      json_approval_params["fromAddress"] = "approver3@some-dot-gov.gov"
+      approve
+
+      expect(cart.status).to eq 'approved'
+      expect(cart.approvals.where(status: 'approved').count).to eq 3
+      expect(email_recipients).to eq(['test-requester@some-dot-gov.gov'])
+    end
+
+    it 'sends a requester an email when a request has been rejected' do
+    end
+
+  end
+
+
 end
