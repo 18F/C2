@@ -205,4 +205,12 @@ class Cart < ActiveRecord::Base
     self.status ||= 'pending'
   end
 
+  def origin
+    self.getProp('origin')
+  end
+
+  def gsa_advantage?
+    # TODO set the origin
+    self.origin.blank?
+  end
 end
