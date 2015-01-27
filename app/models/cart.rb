@@ -209,8 +209,25 @@ class Cart < ActiveRecord::Base
     self.getProp('origin')
   end
 
+  def ncr?
+    self.origin == 'ncr'
+  end
+
   def gsa_advantage?
     # TODO set the origin
     self.origin.blank?
+  end
+
+  # TODO use this when retrieving
+  def public_identifier_method
+    if self.ncr?
+      :id
+    else
+      :external_id
+    end
+  end
+
+  def public_identifier
+    self.send(self.public_identifier_method)
   end
 end
