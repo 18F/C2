@@ -1,5 +1,6 @@
 class MailPreview < MailView
   def cart_notification_email
+    # TODO mock access token, if one isn't present
     mail = CommunicartMailer.cart_notification_email(email, pending_approval)
     inline_styles(mail)
   end

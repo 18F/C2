@@ -3,7 +3,7 @@
 
   <div class="col-md-8 col-xs-12">
     <h1 class="communicart_header">
-      <%= title %>: <%= cart.name %>
+      Purchase Request <%= cart.id %>
     </h1>
 
     <div class="communicart_description">
@@ -11,10 +11,12 @@
         Requested by:
         <strong><%= cart.requester.full_name %></strong>
       </p>
-      <p>
-        GSA Advantage:
-        <strong>Cart #<%= cart.external_id %></strong>
-      </p>
+      <% if cart.gsa_advantage? %>
+        <p>
+          GSA Advantage:
+          <strong>Cart #<%= cart.external_id %></strong>
+        </p>
+      <% end %>
     </div>
   </div>
 
