@@ -23,6 +23,9 @@
     <%= render partial: "carts/approval_status"  %>
   </div>
   <div class="row">
+    <%= render partial: 'shared/cart_properties', locals: {cart: cart} %>
+  </div>
+  <div class="row">
     <div class="col-md-12">
       <%= render partial: 'carts/cart_items', locals: {cart: cart} %>
     </div>
