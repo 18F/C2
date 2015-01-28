@@ -1,6 +1,7 @@
 @import "constants";
 @import "webflow";
 @import "../communicart_mailer/email_status";
+@import "cart_item_information";
 
 
 table {
@@ -21,21 +22,8 @@ table.reply-section {
   background-color: #fff;
 }
 
-tr.cart_item_information td {
-  border-bottom: 1px solid #ccc;
-  padding-top: 30px;
-  padding-bottom: 10px;
-  background-color: #fff;
-  padding-right: 10px;
-}
-
 #navigator-layout tr.cart_item_information strong {
   text-transform: uppercase;
-}
-
-tr.cart_item_information p {
-  color: #666;
-  font-size: 80%;
 }
 
 p.cart_item_description {
