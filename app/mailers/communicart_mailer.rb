@@ -58,16 +58,20 @@ class CommunicartMailer < ActionMailer::Base
     ENV['NOTIFICATION_FROM_EMAIL'] || 'sender@some-dot_gov.gov'
   end
 
+  def subject(cart)
+    approval_format = Settings.email_title_for_approval_request_format
+    approval_format % [cart.requester.full_name, cart.public_identifier]
+  end
+
   def send_cart_email(email, cart)
     @cart = cart.decorate
     @prefix_template = @cart.prefix_template_name
 
     set_attachments(cart)
 
-    approval_format = Settings.email_title_for_approval_request_format
     mail(
       to: email,
-      subject: approval_format % [ cart.requester.full_name,cart.external_id],
+      subject: subject(cart),
       from: from_email
     )
   end
