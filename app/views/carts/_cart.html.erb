@@ -38,7 +38,7 @@
           <%- cart.approvals.approved.each do |approval| %>
             <li class='icon-approved'>
               <%= approval.user_email_address %>
-              <span class='timestamp'>on <%= approval.updated_at.strftime("%B %-d, %Y at %I:%M%p") %></span>
+              <span class='timestamp'>on <%= l approval.updated_at %></span>
             </li>
           <%- end %>
         </ul>
@@ -96,7 +96,7 @@
                 <strong>requester@test.com</strong>
               </p>
               <p class='comment-date col-sm-6 col-xs-12'>
-                <%= c.created_at.strftime("%b %e, %l:%M %p") %>
+                <%= l c.created_at %>
               </p>
             </div>
 

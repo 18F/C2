@@ -25,7 +25,7 @@
           <p><%= email %></p>
         <%- end %>
       </td>
-      <td class="sixth"><%= cart.created_at.strftime("%-m/%-d/%y") %></td>
+      <td class="sixth"><%= l cart.created_at.to_date %></td>
     </tr>
   <%- end %>
 </table>
