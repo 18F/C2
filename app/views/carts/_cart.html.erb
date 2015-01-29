@@ -1,12 +1,15 @@
 <div class="inset">
   <div class="row">
 
-    <div class="col-md-8 col-xs-12">
+    <div class="col-md-12 col-xs-12">
       <h1 class="communicart_header">
-        Purchase Request <%= cart.id %>
+        <%= cart.name %>
       </h1>
 
       <div class="communicart_description">
+        <p>
+          Purchase Request: <strong>#<%= cart.id %></strong>
+        </p>
         <p>
           Requested by:
           <strong><%= cart.requester.full_name %></strong>
