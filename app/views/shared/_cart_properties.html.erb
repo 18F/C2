@@ -1,4 +1,4 @@
-<table width="100%" class="data_container cart_properties">
+<table width="100%" class="data_container cart_properties table">
   <tr class='header'>
     <td class="first" width="33%" scope="col" colspan="2">
       <h5>FY15 Credit Card Purchase Request</h5>
@@ -7,10 +7,10 @@
   <%- cart.deserialized_properties.each do |property,value| %>
     <%- unless cart.property_exclusions.include? property %>
       <tr class="cart_item_information">
-        <td class="w-container results-list" align="left" width="33%">
+        <td class="results-list" align="left">
           <strong><%= property.underscore.humanize %></strong>
         </td>
-        <td with="66%">
+        <td>
           <%= value %>
         </td>
       </tr>

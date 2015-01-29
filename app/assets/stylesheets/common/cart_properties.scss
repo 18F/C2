@@ -1,5 +1,18 @@
+@import "bootstrap/variables";
+
 .cart_properties {
+  $sideMargin: $grid-gutter-width / 2;
+
+  td:first-child {
+    width: 25%;
+  }
+
   .header td {
-    padding: 10px;
+    padding: $sideMargin;
+  }
+
+  // force specificity
+  body.webapp & .cart_item_information td {
+    padding: 12px $sideMargin;
   }
 }
