@@ -29,6 +29,9 @@
                   <span class="approver">
                     <%= mail_to approval.user_email_address, approval.user_full_name %>
                   </span>
+                  <% if approval.approved? %>
+                    <span class='timestamp'>on <%= date_with_tooltip(approval.approved_at) %></span>
+                  <% end %>
                 </td>
               </tr>
               <%- last_status = approval.status %>

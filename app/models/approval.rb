@@ -48,6 +48,24 @@ class Approval < ActiveRecord::Base
     )
   end
 
+  def pending?
+    self.status == 'pending'
+  end
+
+  def approved?
+    self.status == 'approved'
+  end
+
+  # TODO we should probably store this value
+  def approved_at
+    if self.approved?
+      self.updated_at
+    else
+      nil
+    end
+  end
+
+
   private
 
   def set_default_status
