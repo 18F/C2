@@ -1,6 +1,4 @@
 class Comment < ActiveRecord::Base
-  include TimeHelper
-
   belongs_to :commentable, polymorphic: true
   belongs_to :user
   delegate :full_name, :email_address, :to => :user, :prefix => true
@@ -14,7 +12,7 @@ class Comment < ActiveRecord::Base
       self.user_email_address,
       self.comment_text,
       self.updated_at,
-      TimeHelper.human_readable_time(self.updated_at)
+      I18n.l(self.updated_at)
     ]
   end
 

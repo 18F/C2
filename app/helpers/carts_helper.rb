@@ -11,7 +11,7 @@ module CartsHelper
     else
       cart.approvals.each do |approval|
         # when we're a requester, if cart is closed, we show all emails. If not, we just show ones for which  we're awaiting response
-        if approval.role != role && (show_closed || approval.status == 'pending')
+        if approval.role != role && (show_closed || approval.pending?)
           emails.push(approval.user.email_address)
         end
       end
