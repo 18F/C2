@@ -19,7 +19,7 @@ module Ncr
         if cart.persisted?
           Dispatcher.deliver_new_cart_emails(cart)
           flash[:success] = "Proposal submitted!"
-          redirect_to new_ncr_proposal_path
+          redirect_to cart_path(cart)
         else
           flash[:error] = cart.errors.full_messages
           render 'new'
