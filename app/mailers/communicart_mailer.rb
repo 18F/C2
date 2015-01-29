@@ -3,6 +3,7 @@ class CommunicartMailer < ActionMailer::Base
 
   layout 'communicart_base'
   add_template_helper CommunicartMailerHelper
+  add_template_helper TimeHelper
 
 
   def cart_notification_email(email, approval)
