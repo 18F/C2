@@ -18,9 +18,16 @@ describe CartsController do
 
     it 'sets @carts' do
       approval_group1
+
+      cart2 = FactoryGirl.create(:cart)
+      cart2.approvals.create!(role: 'approver', user: user)
+
+      cart3 = FactoryGirl.create(:cart)
+      cart3.approvals.create!(role: 'observer', user: user)
+
       session[:user]['email'] = user.email_address
       get :index
-      expect(assigns(:carts)).to eq [@cart1]
+      expect(assigns(:carts).sort).to eq [@cart1, cart2, cart3]
     end
   end
 
