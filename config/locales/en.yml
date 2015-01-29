@@ -25,4 +25,4 @@ en:
       default: "%-m/%-d/%y"
   time:
     formats:
-      default: "%b %-d, %Y at %I:%M%p"
+      default: "%b %-d, %Y at %I:%M%p %Z"

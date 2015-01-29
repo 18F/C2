@@ -42,4 +42,8 @@ module ApplicationHelper
     controller_name == 'home' ||
     current_page?(carts_path)
   end
+
+  def date_with_tooltip(time)
+    content_tag('span', l(time.to_date), title: l(time))
+  end
 end

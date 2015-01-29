@@ -25,7 +25,7 @@
           <p><%= email %></p>
         <%- end %>
       </td>
-      <td class="sixth"><%= l cart.created_at.to_date %></td>
+      <td class="sixth"><%= date_with_tooltip(cart.created_at) %></td>
     </tr>
   <%- end %>
 </table>
