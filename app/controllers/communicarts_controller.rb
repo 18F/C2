@@ -38,13 +38,14 @@ class CommunicartsController < ApplicationController
   end
 
   def approval_response
-    @cart = Cart.find_by(id: params[:cart_id].to_i).decorate
-    @approval = @cart.approvals.where(user_id: params[:user_id]).first
+    @cart = Cart.find(params[:cart_id]).decorate
+    @approval = @cart.approvals.find_by(user_id: params[:user_id])
     @show_comments = true
 
     Commands::Approval::UpdateFromApprovalResponse.new.perform(@approval, approval_response_status)
     @token.update_attributes(used_at: Time.now)
-    flash[:success] = "You have #{approval_response_status} Cart #{@cart.external_id}."
+
+    flash[:success] = "You have #{approval_response_status} Cart #{@cart.public_identifier}."
   end
 
 
