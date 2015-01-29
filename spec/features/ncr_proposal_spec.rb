@@ -27,6 +27,7 @@ describe "National Capital Region proposals" do
       }.to change { Cart.count }.from(0).to(1)
 
       expect(page).to have_content("Proposal submitted")
+      expect(current_path).to eq("/carts/#{Cart.last.id}")
 
       cart = Cart.last
       expect(cart.name).to eq("buying stuff")
