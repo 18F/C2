@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
     if first_name && last_name
       "#{first_name} #{last_name}"
     else
-      "#{email_address}"
+      email_address
     end
   end
 

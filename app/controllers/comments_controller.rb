@@ -1,4 +1,5 @@
 class CommentsController < ApplicationController
+  before_filter :authenticate_user!
 
   def index
     @commentable = find_commentable
@@ -8,6 +9,7 @@ class CommentsController < ApplicationController
   def create
     @commentable = find_commentable
     @comment = @commentable.comments.build(comment_params)
+    @comment.user = current_user
     if @comment.save
       flash[:notice] = "You successfully added a comment for #{@commentable.class.name} #{@commentable.id}"
       redirect_to id: nil
