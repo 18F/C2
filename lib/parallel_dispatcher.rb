@@ -9,5 +9,4 @@ class ParallelDispatcher < Dispatcher
     self.email_all_approvers(cart)
     super
   end
-
 end

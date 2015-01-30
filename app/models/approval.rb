@@ -5,6 +5,7 @@ class Approval < ActiveRecord::Base
   belongs_to :user
   has_one :approval_group, through: :cart
   delegate :full_name, :email_address, :to => :user, :prefix => true
+  delegate :approvals, :to => :cart, :prefix => true
 
   acts_as_list scope: :cart
 
