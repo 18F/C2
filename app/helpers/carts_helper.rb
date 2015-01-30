@@ -5,10 +5,10 @@ module CartsHelper
     if cart.pending?
       approvers = cart.currently_awaiting_approvers
       if approvers.include?(user)
-        "Waiting for approval"
+        content_tag('strong', "Please review")
       else
         names = approvers.map{|approver| approver.full_name }
-        "Waiting for approval from: #{names.join(', ')}"
+        content_tag('em', "Waiting for review from:") + ' ' + names.join(', ')
       end
     else
       cart.status.titlecase
