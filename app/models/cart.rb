@@ -66,6 +66,16 @@ class Cart < ActiveRecord::Base
     self.ordered_approvals.pending
   end
 
+  # users with outstanding cart_notification_emails
+  def currently_awaiting_approvers
+    if self.parallel?
+      self.awaiting_approvers
+    else # linear
+      approval = self.ordered_awaiting_approvals.first
+      [approval.user]
+    end
+  end
+
   def approved_approvals
     self.approver_approvals.where(status: 'approved')
   end
