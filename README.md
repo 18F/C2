@@ -41,7 +41,8 @@ cd C2
 To get the database and tests running:
 
 1. Install Node.js 0.10
-1. Start PostgreSQL.
+1. Start PostgreSQL. You will need to be able to create databases; set the
+   `DB_`* variables in your environment if needed.
 1. Run `script/bootstrap`, which will print "DONE" if successful. *NOTE: This will delete any existing records in your C2 database.*
 1. Run the specs with `bundle exec rspec spec` at the command line.
     * To run tests automatically as files are changed, run `bundle exec guard`.
@@ -49,13 +50,9 @@ To get the database and tests running:
 
 To see previews of the mailers:
 
-* Start the server, and visit http://localhost:3000/mail_view/.
+* Start the server (`bundle exec rails server`), and visit http://localhost:3000/mail_view/.
 
 To get the app running:
 
 1. Register an application on [MyUSA](https://myusa-staging.18f.us/authorizations)
 1. Modify [`.env`](.env.example)
-
-## More info
-
-* [Capistrano commands](docs/capistrano.md)
