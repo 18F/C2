@@ -53,6 +53,11 @@ class Cart < ActiveRecord::Base
     self.approver_approvals.pending
   end
 
+  def awaiting_approvers
+    # TODO do through SQL
+    self.awaiting_approvals.map(&:user)
+  end
+
   def ordered_approvals
     self.approver_approvals.order('position ASC')
   end
@@ -229,6 +234,10 @@ class Cart < ActiveRecord::Base
 
   def public_identifier
     self.send(self.public_identifier_method)
+  end
+
+  def parallel?
+    self.flow == 'parallel'
   end
 
   def pending?

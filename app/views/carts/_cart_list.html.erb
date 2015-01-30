@@ -21,7 +21,7 @@
       <td class="first"><a href="/carts/<%= cart.id %>"><%= cart.name %></a></td>
       <td class="sixth"><%= number_to_currency(cart.decorate.total_price) %></td>
       <td class="sixth">
-        <p><%= display_status(cart) %></p>
+        <p><%= display_status(cart, current_user) %></p>
       </td>
       <td class="sixth"><%= date_with_tooltip(cart.created_at) %></td>
     </tr>
