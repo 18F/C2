@@ -11,7 +11,7 @@ class HomeController < ApplicationController
     handle_new_users_from_oauth
     session[:token] = auth.credentials.token
     flash[:success] = "You successfully signed in"
-    redirect_to return_to || root_url
+    redirect_to return_to || carts_path
   end
 
   def index
