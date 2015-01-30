@@ -54,8 +54,11 @@ To see previews of the mailers:
 
 To get the app running:
 
-1. Register an application on [MyUSA](https://myusa-staging.18f.us/authorizations)
-1. Modify [`.env`](.env.example)
+1. Register an application on [MyUSA](https://myusa-staging.18f.us/authorizations).
+   Note that your application will need access to the user's email.
+1. Modify [`.env`](.env.example). In particular, be sure to set the `MYUSA_KEY`
+  and `MYUSA_SECRET` values based on the above and set `MYUSA_URL` to
+  `https://myusa-staging.18f.us`.
 
 ## More info
 
