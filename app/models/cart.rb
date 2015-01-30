@@ -230,4 +230,9 @@ class Cart < ActiveRecord::Base
   def public_identifier
     self.send(self.public_identifier_method)
   end
+
+  def pending?
+    # TODO validates :status, inclusion: {in: Approval::STATUSES}
+    self.status.blank? || self.status == 'pending'
+  end
 end

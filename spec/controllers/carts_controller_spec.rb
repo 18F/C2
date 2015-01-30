@@ -10,12 +10,6 @@ describe CartsController do
   end
 
   describe '#index' do
-    it 'sets @role' do
-      session[:user]['email'] = user.email_address
-      get :index
-      expect(assigns(:role)).to eq 'requester'
-    end
-
     it 'sets @carts' do
       approval_group1
 
@@ -45,19 +39,6 @@ describe CartsController do
       end
       get :archive
       expect(assigns(:closed_cart_full_list).size).to eq(3)
-    end
-  end
-
-  describe '#requester_or_approver helper' do
-    it 'returns requester role set on approval' do
-      session[:user]['email'] = user.email_address
-      expect(controller.send(:requester_or_approver)).to eq 'requester'
-    end
-
-    it 'returns approver role set on approval' do
-      user.approvals.first.update_attributes(role: 'approver')
-      session[:user]['email'] = user.email_address
-      expect(controller.send(:requester_or_approver)).to eq 'approver'
     end
   end
 end

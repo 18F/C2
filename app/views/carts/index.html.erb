@@ -20,8 +20,7 @@
   <%- if @carts.closed.any? %>
     <div class="row">
       <div class="col-sm-12">
-        <%= render partial: "cart_list", locals: { carts: @carts.closed, role: @role, closed: true,
-                                                          limit: CartsController::CLOSED_CART_LIMIT} %>
+        <%= render partial: "cart_list", locals: { carts: @carts.closed, limit: CartsController::CLOSED_CART_LIMIT} %>
       </div>
     </div>
 
