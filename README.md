@@ -56,3 +56,7 @@ To get the app running:
 
 1. Register an application on [MyUSA](https://myusa-staging.18f.us/authorizations)
 1. Modify [`.env`](.env.example)
+
+## More info
+
+* [Capistrano commands](doc/capistrano.md)
