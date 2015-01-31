@@ -1,11 +1,7 @@
-Each file path in this folder should correspond a the view, and should have an encompassing scope.
-For example:
+Each stylesheet in this directory should correspond to the path of a view, and should have a single top-level class that follows the pattern `.m-DIR-FILE`. For example, `stylesheets/modules/carts/cart_items.scss` should correspond to `views/carts/_cart_items.html.erb`, and contain the following:
 
 ```scss
-// carts/cart_items.scss
-// corresponds to
-// carts/_cart_items.html.erb
-.view-carts-cart_items {
+.m-carts-cart_items {
   // ...
 }
 ```
