@@ -8,7 +8,7 @@
     <th class="first" scope="col"><h5>Request</h5></th>
     <th class="sixth" scope="col"><h5>Total Price</h5></th>
     <th class="sixth" scope="col"><h5><%= if role=='requester' then 'To' else 'From' end%> </h5></th>
-    <th class="sixth" scope="col"><h5>Date</h5></th>
+    <th class="sixth" scope="col"><h5>Submitted</h5></th>
   </tr>
   <%- if defined? limit %>
     <%- cart_list = carts.limit(limit) %>
@@ -25,7 +25,7 @@
           <p><%= email %></p>
         <%- end %>
       </td>
-      <td class="sixth"><%= cart.created_at.strftime("%-m/%-d/%y") %></td>
+      <td class="sixth"><%= date_with_tooltip(cart.created_at) %></td>
     </tr>
   <%- end %>
 </table>

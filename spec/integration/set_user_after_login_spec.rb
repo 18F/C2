@@ -22,4 +22,12 @@ describe 'User creation when logging in with Oauth to view a protected page' do
     get '/approval_groups/new'
     expect(User.count).to eq 1
   end
+
+  it 'redirects a newly logged in user to the carts screen' do
+    FactoryGirl.create(:user, email_address: 'george-test@some-dot-gov.gov')
+
+    expect(User.count).to eq 1
+    get '/auth/myusa/callback'
+    expect(response).to redirect_to('/carts')
+  end
 end

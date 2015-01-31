@@ -3,15 +3,18 @@ class CommunicartMailer < ActionMailer::Base
 
   layout 'communicart_base'
   add_template_helper CommunicartMailerHelper
+  add_template_helper TimeHelper
 
 
-  def cart_notification_email(email, approval)
+  def cart_notification_email(to_email, approval)
     @approval = approval
-    send_cart_email(email, approval.cart)
+    from_email = user_email(approval.cart.requester)
+    send_cart_email(from_email, to_email, approval.cart)
   end
 
-  def cart_observer_email(email, cart)
-    send_cart_email(email, cart)
+  def cart_observer_email(to_email, cart)
+    # TODO have the from_email be whomever triggered this notification
+    send_cart_email(sender, to_email, cart)
   end
 
   def approval_reply_received_email(approval)
@@ -27,7 +30,7 @@ class CommunicartMailer < ActionMailer::Base
     mail(
          to: to_address,
          subject: "User #{approval.user.email_address} has #{approval.status} cart ##{cart.external_id}",
-         from: from_email
+         from: user_email(approval.user)
          )
   end
 
@@ -38,7 +41,7 @@ class CommunicartMailer < ActionMailer::Base
     mail(
          to: to_email,
          subject: "A comment has been added to cart item '#{@cart_item.description}'",
-         from: from_email
+         from: user_email(comment.user)
          )
   end
 
@@ -54,8 +57,15 @@ class CommunicartMailer < ActionMailer::Base
   end
 
   # for easier stubbing in tests
-  def from_email
-    ENV['NOTIFICATION_FROM_EMAIL'] || 'sender@some-dot_gov.gov'
+  def sender
+    ENV['NOTIFICATION_FROM_EMAIL'] || 'user_email@some-dot_gov.gov'
+  end
+
+  def user_email(user)
+    # http://stackoverflow.com/a/8106387/358804
+    address = Mail::Address.new(sender)
+    address.display_name = user.full_name
+    address.format
   end
 
   def subject(cart)
@@ -63,14 +73,14 @@ class CommunicartMailer < ActionMailer::Base
     approval_format % [cart.requester.full_name, cart.public_identifier]
   end
 
-  def send_cart_email(email, cart)
+  def send_cart_email(from_email, to_email, cart)
     @cart = cart.decorate
     @prefix_template = @cart.prefix_template_name
 
     set_attachments(cart)
 
     mail(
-      to: email,
+      to: to_email,
       subject: subject(cart),
       from: from_email
     )

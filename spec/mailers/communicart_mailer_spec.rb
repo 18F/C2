@@ -1,6 +1,11 @@
 require 'ostruct'
 
 describe CommunicartMailer do
+  def sender_names(mail)
+    # http://stackoverflow.com/a/7213323/358804
+    mail[:from].display_names
+  end
+
   let(:approval_group) { FactoryGirl.create(:approval_group_with_approvers_and_requester, name: "anotherApprovalGroupName") }
   let(:approver) { FactoryGirl.create(:user) }
   let(:cart) { FactoryGirl.create(:cart_with_approvals, name: "TestCart") }
@@ -17,7 +22,7 @@ describe CommunicartMailer do
     let(:api_token) { FactoryGirl.create(:api_token) }
 
     before do
-      expect_any_instance_of(CommunicartMailer).to receive(:from_email).and_return('reply@communicart-stub.com')
+      expect_any_instance_of(CommunicartMailer).to receive(:sender).and_return('reply@communicart-stub.com')
       expect(approval).to receive(:api_token).and_return(api_token).twice
     end
 
@@ -32,6 +37,7 @@ describe CommunicartMailer do
 
     it 'renders the sender email' do
       expect(mail.from).to eq(['reply@communicart-stub.com'])
+      expect(sender_names(mail)).to eq(['Liono Requester'])
     end
 
     context 'attaching a csv of the cart activity' do
@@ -55,7 +61,7 @@ describe CommunicartMailer do
 
       it 'renders a custom template when origin is indicated' do
         approval.cart.properties << Property.create!(property: 'origin', value:'ncr')
-        expect(mail.body.encoded).to include('National Capital Region: Purchase Request')
+        expect(mail.body.encoded).to include('Purchase Request')
       end
     end
 
@@ -64,12 +70,13 @@ describe CommunicartMailer do
   describe 'approval reply received email' do
     let(:requester) { FactoryGirl.create(:user, email_address: 'test-requester-1@some-dot-gov.gov') }
     let(:cart_with_approval_group) { FactoryGirl.create(:cart_with_approvals, external_id: 13579) }
-    let(:approval) { cart_with_approval_group.approvals.first }
+    let(:approval) { cart_with_approval_group.approver_approvals.first }
+    let(:approver) { approval.user }
     let(:mail) { CommunicartMailer.approval_reply_received_email(approval) }
 
     before do
       approval.update_attribute(:status, 'approved')
-      expect_any_instance_of(CommunicartMailer).to receive(:from_email).and_return('reply@communicart-stub.com')
+      expect_any_instance_of(CommunicartMailer).to receive(:sender).and_return('reply@communicart-stub.com')
       expect(cart_with_approval_group).to receive(:requester).and_return(requester).at_least(:once)
     end
 
@@ -83,6 +90,7 @@ describe CommunicartMailer do
 
     it 'renders the sender email' do
       expect(mail.from).to eq(['reply@communicart-stub.com'])
+      expect(sender_names(mail)).to eq([approver.full_name])
     end
 
     context 'attaching a csv of the cart activity' do
@@ -101,18 +109,18 @@ describe CommunicartMailer do
   end
 
   describe 'comment_added_email' do
-    let(:cart_item) { FactoryGirl.create(:cart_item, description: "A cart item in need of a comment") }
-    let(:comment) { FactoryGirl.create(:comment, comment_text: 'Somebody give this cart item a comment') }
+    let(:cart_item) { FactoryGirl.create(:cart_item) }
+    let(:comment) { FactoryGirl.create(:comment) }
     let(:email) { "commenter@some-dot-gov.gov" }
     let(:mail) { CommunicartMailer.comment_added_email(comment, email) }
 
     before do
-      expect_any_instance_of(CommunicartMailer).to receive(:from_email).and_return('reply@communicart-stub.com')
+      expect_any_instance_of(CommunicartMailer).to receive(:sender).and_return('reply@communicart-stub.com')
       cart_item.comments << comment
     end
 
     it 'renders the subject' do
-      expect(mail.subject).to eq("A comment has been added to cart item 'A cart item in need of a comment'")
+      expect(mail.subject).to eq("A comment has been added to cart item 'This is a test cart item'")
     end
 
     it 'renders the receiver email' do
@@ -121,6 +129,7 @@ describe CommunicartMailer do
 
     it 'renders the sender email' do
       expect(mail.from).to eq(['reply@communicart-stub.com'])
+      expect(sender_names(mail)).to eq([comment.user.full_name])
     end
   end
 
@@ -129,7 +138,7 @@ describe CommunicartMailer do
     let(:requester) { FactoryGirl.create(:user, email_address: 'test-requester-1@some-dot-gov.gov') }
 
     before do
-      expect_any_instance_of(CommunicartMailer).to receive(:from_email).and_return('reply@communicart-stub.com')
+      expect_any_instance_of(CommunicartMailer).to receive(:sender).and_return('reply@communicart-stub.com')
       expect(cart_with_observers).to receive(:requester).and_return(requester).at_least(:once)
     end
 
@@ -147,6 +156,7 @@ describe CommunicartMailer do
 
     it 'renders the sender email' do
       expect(mail.from).to eq(['reply@communicart-stub.com'])
+      expect(sender_names(mail)).to eq([nil])
     end
 
     context 'attaching a csv of the cart activity' do
