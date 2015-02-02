@@ -27,5 +27,6 @@ C2::Application.routes.draw do
 
   if Rails.env.development?
     mount MailPreview => 'mail_view'
+    mount LetterOpenerWeb::Engine => 'letter_opener'
   end
 end
