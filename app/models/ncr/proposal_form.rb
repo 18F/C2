@@ -31,6 +31,9 @@ module Ncr
       'Entire WH Complex',
       'Administrative Expense'
     ]
+    OFFICES = [
+      'Example Office'
+    ]
     attribute :origin, :string
     attribute :amount, :decimal
     attribute :approver_email, :text
@@ -41,6 +44,7 @@ module Ncr
     attribute :not_to_exceed, :boolean
     attribute :building_number, :string
     attribute :rwa_number, :string
+    attribute :office, :string
 
     validates :amount, numericality: {
       greater_than_or_equal_to: 0,
@@ -52,6 +56,7 @@ module Ncr
     validates :requester, presence: true
     validates :vendor, presence: true
     validates :building_number, presence: true
+    validates :office, presence: true
 
     def budget_approver_email
       ENV['NCR_BUDGET_APPROVER_EMAIL'] || 'communicart.budget.approver@gmail.com'
@@ -87,7 +92,8 @@ module Ncr
           vendor: self.vendor,
           not_to_exceed: self.not_to_exceed,
           building_number: self.building_number,
-          rwa_number: self.rwa_number
+          rwa_number: self.rwa_number,
+          office: self.office
         )
         cart.set_requester(self.requester)
         self.approver_emails.each do |email|

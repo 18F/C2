@@ -5,6 +5,7 @@ FactoryGirl.define do
     sequence(:description) {|n| "Proposal #{n}" }
     expense_type 'BA80'
     building_number 'Entire WH Complex'
+    office 'Example Office'
     association :requester, factory: :user
     sequence(:vendor) {|n| "Vendor #{n}" }
   end
