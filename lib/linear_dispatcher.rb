@@ -4,8 +4,7 @@ class LinearDispatcher < Dispatcher
   end
 
   def email_next_approver(cart)
-    approval = self.next_approval(cart)
-    if approval
+    if approval = self.next_approval(cart)
       self.email_approver(approval)
     end
   end

@@ -10,13 +10,25 @@ class Dispatcher
     end
   end
 
+  def email_sent_confirmation(cart)
+    CommunicartMailer.sent_confirmation_email(cart).deliver
+  end
+
   def deliver_new_cart_emails(cart)
     self.email_observers(cart)
+    self.email_sent_confirmation(cart)
   end
 
   def on_approval_status_change(approval)
-    CommunicartMailer.approval_reply_received_email(approval).deliver
+    if self.requires_approval_notice?(approval) || approval.status == 'rejected'
+      CommunicartMailer.approval_reply_received_email(approval).deliver
+    end
+
     self.email_observers(approval.cart)
+  end
+
+  def requires_approval_notice?(approval)
+    true
   end
 
   def self.initialize_dispatcher(cart)
@@ -24,7 +36,11 @@ class Dispatcher
     when 'parallel'
       ParallelDispatcher.new
     when 'linear'
-      LinearDispatcher.new
+      if cart.getProp('origin') == 'ncr'
+        NcrDispatcher.new
+      else
+        LinearDispatcher.new
+      end
     end
   end
 
