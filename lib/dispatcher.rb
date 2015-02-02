@@ -10,8 +10,13 @@ class Dispatcher
     end
   end
 
+  def email_sent_confirmation(cart)
+    CommunicartMailer.sent_confirmation_email(cart).deliver
+  end
+
   def deliver_new_cart_emails(cart)
     self.email_observers(cart)
+    self.email_sent_confirmation(cart)
   end
 
   def on_approval_status_change(approval)

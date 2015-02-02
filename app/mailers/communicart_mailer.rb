@@ -17,6 +17,17 @@ class CommunicartMailer < ActionMailer::Base
     send_cart_email(sender, to_email, cart)
   end
 
+  def sent_confirmation_email(cart)
+    @cart = cart.decorate
+    to_address = cart.requester.email_address
+
+    mail(
+         to: to_address,
+         subject: "Your request for Proposal ##{cart.id} has been sent successfully.",
+         from: from_email
+         )
+  end
+
   def approval_reply_received_email(approval)
     cart = approval.cart
     @approval = approval

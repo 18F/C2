@@ -1,0 +1,9 @@
+<body class="communicart-notification">
+  <div>
+    Hi <%= @cart.requester.full_name %>,<br/>
+    You just submitted a request for approval. Here is are details about your request:
+  </div>
+  <%= render partial: @cart.cart_template_name, locals: {cart: @cart, title:
+  "Purchase Request"} %>
+
+</body>
