@@ -14,6 +14,11 @@ class CommunicartMailer < ActionMailer::Base
     send_cart_email(email, cart)
   end
 
+  def sent_confirmation(cart)
+    @cart = cart.decorate
+    @user = cart.requester
+  end
+
   def approval_reply_received_email(approval)
     cart = approval.cart
     @approval = approval
