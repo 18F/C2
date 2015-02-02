@@ -15,7 +15,9 @@ class Dispatcher
   end
 
   def on_approval_status_change(approval)
-    CommunicartMailer.approval_reply_received_email(approval).deliver if self.requires_approval_notice? approval
+    if self.requires_approval_notice?(approval) || approval.status == 'rejected'
+      CommunicartMailer.approval_reply_received_email(approval).deliver
+    end
 
     self.email_observers(approval.cart)
   end
