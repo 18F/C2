@@ -17,8 +17,6 @@ describe "Approving a cart with multiple approvers in parallel" do
   let(:cart) { FactoryGirl.build(:cart, external_id: '10203040', flow: 'linear') }
 
   before do
-    ENV['NOTIFICATION_FROM_EMAIL'] = 'sender@some-dot_gov.gov'
-
     approval_group = FactoryGirl.create(:approval_group)
     user = User.create!(email_address: 'test-requester@some-dot-gov.gov')
     UserRole.create!(user_id: user.id, approval_group_id: approval_group.id, role: 'requester')

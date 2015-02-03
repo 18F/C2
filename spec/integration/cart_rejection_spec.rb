@@ -94,8 +94,6 @@ describe 'Rejecting a cart with multiple approvers' do
   let(:approver) { FactoryGirl.create(:approver) }
 
   before do
-    ENV['NOTIFICATION_FROM_EMAIL'] = 'sender@some-dot_gov.gov'
-
     @json_rejection_params = JSON.parse(rejection_params)
 
     cart = Cart.create!(
@@ -161,6 +159,23 @@ describe 'Rejecting a cart with multiple approvers' do
     expect(cart.approvals.count).to eq 3
     expect(updated_cart.approvals.where(status:'approved').count).to eq 1
     expect(updated_cart.approvals.where(status:'pending').count).to eq 2
+  end
 
+  it 'handles a one-click rejection as expected' do
+    expect(Cart.count).to eq(1)
+    expect(User.count).to eq(4)
+    expect(Approval.count).to eq 3
+    cart = Cart.first
+    expect(cart.external_id).to eq 10203040
+    expect(cart.approvals.count).to eq 3
+    expect(cart.approvals.where(status: 'approved').count).to eq 0
+    approval = cart.approvals.first
+    get approval_response_url, {
+      cart_id: approval.cart_id,
+      user_id: approval.user_id,
+      cch: approval.create_api_token!.access_token,
+      approver_action: 'reject'
+    }
+    expect(cart.rejections.count).to eq 1
   end
 end

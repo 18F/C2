@@ -1,4 +1,4 @@
-.email-status {
+.m-shared-email_status {
   strong {
     text-transform: uppercase;
   }
@@ -68,13 +68,8 @@
       }
     }
 
-    ul {
-        display: inline-block;
-        padding: 0 0 0 7px;
-        margin: 0;
-      li {
-        display: inline-block;
-      }
+    .approver {
+      padding-left: 7px;
     }
   }
 }

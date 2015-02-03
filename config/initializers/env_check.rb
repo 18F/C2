@@ -12,12 +12,6 @@ required_keys.each do |key|
   ENV.fetch(key)
 end
 
-env_keys = get_keys('.env')
-extra_keys = env_keys - required_keys
-extra_keys.each do |key|
-  $stderr.puts "NOTE: extra key in `.env`: #{key}"
-end
-
 
 if ENV['HOST_URL']
   Rails.logger.warn("HOST_URL is deprecated – use DEFAULT_URL_HOST instead.")

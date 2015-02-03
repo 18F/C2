@@ -1,12 +1,12 @@
 describe CommunicartMailerHelper do
-  describe '#approve_all_url' do
+  describe '#approval_action_url' do
     let(:approval) { FactoryGirl.build(:approval) }
 
     it "returns a URL" do
       token = FactoryGirl.build(:api_token)
       expect(approval).to receive(:api_token).and_return(token)
 
-      url = helper.approve_all_url(approval)
+      url = helper.approval_action_url(approval)
       uri = Addressable::URI.parse(url)
       expect(uri.query_values).to eq(
         'approver_action' => 'approve',
@@ -20,7 +20,7 @@ describe CommunicartMailerHelper do
       expect(approval.api_token).to eq(nil)
 
       expect {
-        helper.approve_all_url(approval)
+        helper.approval_action_url(approval)
       }.to raise_error
     end
   end

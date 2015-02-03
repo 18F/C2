@@ -21,6 +21,12 @@ describe Cart do
     end
   end
 
+  describe '#default value should be correct' do
+    it 'sets status to pending by default' do
+      expect(cart.status).to eq('pending')
+    end
+  end
+
   describe '#process_approvals_from_approval_group' do
     it "copies positions from the user_roles" do
       cart.user_roles.each do |role|
@@ -29,8 +35,7 @@ describe Cart do
       end
 
       cart.process_approvals_from_approval_group
-
-      expect(cart.approvals.map(&:position)).to eq(cart.user_roles.map(&:position))
+      expect(cart.approvals.order('user_id ASC').map(&:position)).to eq(cart.user_roles.order('user_id ASC').map(&:position))
     end
   end
 

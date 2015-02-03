@@ -12,6 +12,8 @@ class Cart < ActiveRecord::Base
   has_many :comments, as: :commentable
   has_many :properties, as: :hasproperties
 
+  after_initialize :set_defaults
+
   #TODO: after_save default status
   #TODO: validates_uniqueness_of :name
   validates :flow, presence: true, inclusion: {in: ApprovalGroup::FLOWS}
@@ -19,6 +21,7 @@ class Cart < ActiveRecord::Base
   scope :approved, -> { where(status: 'approved') }
   scope :open, -> { where(status: 'pending') }
   scope :closed, -> { where(:status => ['approved', 'rejected']) }
+
   ORIGINS = %w(navigator ncr)
 
   def update_approval_status
@@ -50,12 +53,27 @@ class Cart < ActiveRecord::Base
     self.approver_approvals.pending
   end
 
+  def awaiting_approvers
+    # TODO do through SQL
+    self.awaiting_approvals.map(&:user)
+  end
+
   def ordered_approvals
     self.approver_approvals.order('position ASC')
   end
 
   def ordered_awaiting_approvals
     self.ordered_approvals.pending
+  end
+
+  # users with outstanding cart_notification_emails
+  def currently_awaiting_approvers
+    if self.parallel?
+      self.awaiting_approvers
+    else # linear
+      approval = self.ordered_awaiting_approvals.first
+      [approval.user]
+    end
   end
 
   def approved_approvals
@@ -196,5 +214,44 @@ class Cart < ActiveRecord::Base
     cart_items_params.each do |params|
       self.import_cart_item(params)
     end
+  end
+
+  def set_defaults
+    self.status ||= 'pending'
+  end
+
+  def origin
+    self.getProp('origin')
+  end
+
+  def ncr?
+    self.origin == 'ncr'
+  end
+
+  def gsa_advantage?
+    # TODO set the origin
+    self.origin.blank?
+  end
+
+  # TODO use this when retrieving
+  def public_identifier_method
+    if self.ncr?
+      :id
+    else
+      :external_id
+    end
+  end
+
+  def public_identifier
+    self.send(self.public_identifier_method)
+  end
+
+  def parallel?
+    self.flow == 'parallel'
+  end
+
+  def pending?
+    # TODO validates :status, inclusion: {in: Approval::STATUSES}
+    self.status.blank? || self.status == 'pending'
   end
 end

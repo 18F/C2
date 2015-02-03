@@ -35,8 +35,6 @@ describe 'Adding and retrieving comments from a cart item' do
 
 
   it 'updates the comments on a cart item as expected' do
-    ENV['NOTIFICATION_FROM_EMAIL'] = 'sender@some-dot_gov.gov'
-
     expect(Cart.count).to eq(1)
     expect(User.count).to eq(4)
     cart = Cart.first
@@ -48,12 +46,12 @@ describe 'Adding and retrieving comments from a cart item' do
     cart_item = cart.cart_items.first
     expect(cart_item.comments.count).to eq 0
 
-    cart_item.comments << Comment.new(user_id: 34567,comment_text: "This needs to change from a quantity of 250 to 500")
+    cart_item.comments << FactoryGirl.build(:comment)
     cart_item.save
     expect(cart_item.comments.count).to eq 1
     expect(ActionMailer::Base.deliveries.count).to eq 4
 
-    cart_item.comments << Comment.new(user_id: 34567,comment_text: "Thank you for the update. I will change it no to 250 quantity")
+    cart_item.comments << FactoryGirl.build(:comment)
     cart_item.save
     expect(cart_item.comments.count).to eq 2
     expect(ActionMailer::Base.deliveries.count).to eq 8

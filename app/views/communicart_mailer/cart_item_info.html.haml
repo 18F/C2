@@ -20,7 +20,7 @@
       = @notification.compliances.first
   .w-col.w-col-2
     %p.result-item-price
-      = cart_item.formatted_price
+      = number_to_currency(cart_item.price)
     %p.result-item-price
       = @notification.cart_item.price
     %p.result-item-units

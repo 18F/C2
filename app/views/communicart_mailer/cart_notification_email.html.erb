@@ -31,18 +31,14 @@
     <tr id="approval-actions">
       <td colspan=2 align="center">
         <p>
-          <%= link_to "Approve all items with one click", approve_all_url(@approval), class: 'form-button' %>
+          <%= link_to "Approve", approval_action_url(@approval), class: 'form-button' %>
+          <%= link_to "Reject", approval_action_url(@approval, 'reject'), class: 'reject-link' %>
+
         </p>
         <p>
           <strong>
-            <%= link_to "Or, view this request in your browser", carts_url %>
+            <%= link_to "Comment on this request, or view it in your browser", cart_url(@cart) %>
           </strong>
-        </p>
-        <p>
-        <span class="action-block">
-            <span class="tip-highlight">TIP:</span> <strong>If you want to reject this request</strong>, reply to this email with the word "Reject"
-            on its own line and some comments as to why the request has been rejected.
-        </span>
         </p>
       </td>
     </tr>

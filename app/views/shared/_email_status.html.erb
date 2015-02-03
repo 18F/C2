@@ -1,4 +1,4 @@
-<tr class="email-status">
+<tr class="m-shared-email_status">
   <td colspan="2" padding="10">
     <table id="status-container-detail" width="770" class="col-md-12">
       <tr class="status-header-container">
@@ -26,10 +26,12 @@
                   <%= generate_bookend_class(index, @cart.approvals_in_list_order.count) %>
                 >
                   <%= status_icon_tag(approval.status) %>
-                  <ul>
-                    <li><%= approval.user_full_name %></li>
-                    <li><%= mail_to approval.user_email_address %></li>
-                  </ul>
+                  <span class="approver">
+                    <%= mail_to approval.user_email_address, approval.user_full_name %>
+                  </span>
+                  <% if approval.approved? %>
+                    <span class='timestamp'>on <%= date_with_tooltip(approval.approved_at) %></span>
+                  <% end %>
                 </td>
               </tr>
               <%- last_status = approval.status %>

@@ -219,6 +219,7 @@ describe 'Creating a cart' do
       expect(cart.cart_items.first.cart_item_traits[0].value).to eq "s"
       expect(cart.cart_items.first.cart_item_traits[1].value).to eq "w"
       expect(cart.cart_items.first.cart_item_traits[2].value).to eq "bpa"
+      expect(cart.cart_items.first.cart_item_traits[2].value).to eq "bpa"
     end
 
     it 'get handled when not sent by the client' do

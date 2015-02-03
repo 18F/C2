@@ -1,6 +1,7 @@
 @import "constants";
 @import "webflow";
-@import "../communicart_mailer/email_status";
+@import "../modules/shared/email_status";
+@import "cart_item_information";
 
 
 table {
@@ -21,21 +22,8 @@ table.reply-section {
   background-color: #fff;
 }
 
-tr.cart_item_information td {
-  border-bottom: 1px solid #ccc;
-  padding-top: 30px;
-  padding-bottom: 10px;
-  background-color: #fff;
-  padding-right: 10px;
-}
-
 #navigator-layout tr.cart_item_information strong {
   text-transform: uppercase;
-}
-
-tr.cart_item_information p {
-  color: #666;
-  font-size: 80%;
 }
 
 p.cart_item_description {
@@ -58,11 +46,6 @@ span.summary-label {
   padding-right: 65px;
 }
 
-.tip-highlight {
-  font-weight: bold;
-  color: #cc2115;
-}
-
 tr#approval-actions a {
   display: inline-block;
 }
@@ -77,11 +60,6 @@ tr#approval-actions a.icon-approved {
   height: inherit;
   background-repeat: no-repeat;
   background-position: 5px 15px;
-}
-
-span.action-block {
-  display: block;
-  width: 300px;
 }
 
 table tr.total-price td {
@@ -560,8 +538,6 @@ body.webapp {
   }
 }
 
-
-
 .text-area-info-container {
   border: 1px solid #bdbdbd;
   margin-left: 0px;
@@ -591,4 +567,8 @@ body.webapp {
     margin-top: .8em;
     margin-bottom: .2em;
   }
+}
+
+.reject-link {
+  margin-left: 15px;
 }

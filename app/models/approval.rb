@@ -14,8 +14,10 @@ class Approval < ActiveRecord::Base
 
   after_initialize :set_default_status
 
-  scope :pending, -> { where(status: 'pending') }
-  scope :received, -> { where('status != ?', 'pending') }
+  scope :approvable, -> { where.not(role: ['requester','observer']) }
+  scope :pending, ->    { approvable.where(status: 'pending') }
+  scope :received, ->   { approvable.where.not(status: 'pending') }
+  scope :approved, ->   { approvable.where(status: 'approved') }
 
 
   # TODO this should be a proper association
@@ -45,6 +47,24 @@ class Approval < ActiveRecord::Base
       user_id: user_role.user_id
     )
   end
+
+  def pending?
+    self.status == 'pending'
+  end
+
+  def approved?
+    self.status == 'approved'
+  end
+
+  # TODO we should probably store this value
+  def approved_at
+    if self.approved?
+      self.updated_at
+    else
+      nil
+    end
+  end
+
 
   private
 
