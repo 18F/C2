@@ -174,4 +174,24 @@ describe CommunicartMailer do
     end
   end
 
+  describe 'sent confirmation email' do
+    let(:mail) { CommunicartMailer.sent_confirmation_email(cart) }
+
+    before do
+      expect_any_instance_of(CommunicartMailer).to receive(:sender).and_return('reply-communicart-stub@some-dot-gov.gov')
+    end
+
+    it 'renders the subject' do
+      expect(mail.subject).to eq "Your request for Proposal ##{cart.id} has been sent successfully."
+    end
+
+    it 'renders the receiver email' do
+      expect(mail.to).to eq(["requester@some-dot-gov.gov"])
+    end
+
+    it 'renders the sender email' do
+      expect(mail.from).to eq(["reply-communicart-stub@some-dot-gov.gov"])
+    end
+  end
+
 end

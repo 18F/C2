@@ -20,6 +20,7 @@ class CommunicartMailer < ActionMailer::Base
   def sent_confirmation_email(cart)
     @cart = cart.decorate
     to_address = cart.requester.email_address
+    from_email = user_email(cart.requester)
 
     mail(
          to: to_address,
