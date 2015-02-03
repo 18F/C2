@@ -303,7 +303,17 @@ describe CommunicartsController do
         expect { put 'approval_response', @json_approval_params_with_token }.to raise_error(AuthenticationError)
       end
 
-      skip 'marks a token as used'
+      it 'marks a token as used' do
+        expect(ApiToken).to receive(:find_by).with(access_token: "5a4b3c2d1ee1d2c3b4a5").and_return(token)
+        expect_any_instance_of(Approval).to receive(:update_attributes)
+        approver
+
+        put 'approval_response', @json_approval_params_with_token
+
+        expect(response.status).to eq(200)
+        token.reload
+        expect(token.used_at).to_not eq(nil)
+      end
     end
   end
 

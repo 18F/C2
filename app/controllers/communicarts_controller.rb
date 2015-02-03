@@ -43,7 +43,7 @@ class CommunicartsController < ApplicationController
     @show_comments = true
 
     Commands::Approval::UpdateFromApprovalResponse.new.perform(@approval, approval_response_status)
-    @token.update_attributes(used_at: Time.now)
+    @token.update_attribute(:used_at, Time.now)
 
     flash[:success] = "You have #{approval_response_status} Cart #{@cart.public_identifier}."
   end
