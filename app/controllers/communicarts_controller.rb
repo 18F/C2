@@ -63,6 +63,8 @@ private
       raise AuthenticationError.new(msg: 'Something went wrong with the user (wrong person)')
     elsif @token.cart_id != params[:cart_id].to_i
       raise AuthenticationError.new(msg: 'Something went wrong with the cart (wrong cart)')
+    else
+      sign_in(@token.user)
     end
   end
 
