@@ -269,7 +269,7 @@ describe CommunicartsController do
 
       it 'will be successful' do
         put 'approval_response', @json_approval_params_with_token
-        expect(response.status).to eq 200
+        expect(response).to redirect_to(cart_path(cart))
       end
 
       it 'successfully validates the user_id and cart_id with the token' do
@@ -310,7 +310,7 @@ describe CommunicartsController do
 
         put 'approval_response', @json_approval_params_with_token
 
-        expect(response.status).to eq(200)
+        expect(response).to redirect_to(cart_path(cart))
         token.reload
         expect(token.used_at).to_not eq(nil)
       end
