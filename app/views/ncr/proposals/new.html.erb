@@ -33,12 +33,9 @@
     </div>
     <div class="form-group">
       <%= f.label :office %>
-      <%= f.select(:office, [], {}, {class: 'form-control', multiple: false}) do %>
-        <%= content_tag(:option, '', value: '') %>
-        <% Ncr::ProposalForm::OFFICES.each do |office| %>
-          <%= content_tag(:option, office, value: office) %>
-        <% end %>
-      <% end %>
+      <%= f.collection_select(
+            :office, Ncr::ProposalForm::OFFICES, :to_s, :to_s,
+            {include_blank: true}, {class: 'form-control'}) %>
     </div>
     <div class="form-group">
       <%= f.label :vendor %>
