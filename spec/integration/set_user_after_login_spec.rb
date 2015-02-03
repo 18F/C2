@@ -1,6 +1,7 @@
 describe 'User creation when logging in with Oauth to view a protected page' do
+  StructUser = Struct.new(:email_address, :first_name, :last_name)
+
   before do
-    StructUser = Struct.new(:email_address, :first_name, :last_name)
     user = StructUser.new('george-test@some-dot-gov.gov', 'Georgie', 'Jetsonian')
     setup_mock_auth(:myusa, user)
   end
