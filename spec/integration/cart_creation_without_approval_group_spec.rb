@@ -85,9 +85,9 @@ describe 'Creating a cart without an approval group' do
     expect(Approval.count).to eq 3
   end
 
-  it 'delivers emails to approver email addresses indicated in the toAddress field' do
+  it 'delivers emails to requester and approver email addresses indicated in the toAddress field' do
     post 'send_cart', @json_params_1
-    expect(ActionMailer::Base.deliveries.count).to eq 2
+    expect(ActionMailer::Base.deliveries.count).to eq 3
   end
 
   it 'adds initial comments from the requester' do
