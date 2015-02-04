@@ -11,7 +11,7 @@ class Dispatcher
   end
 
   def email_sent_confirmation(cart)
-    CommunicartMailer.sent_confirmation_email(cart).deliver
+    CommunicartMailer.proposal_created_confirmation(cart).deliver
   end
 
   def deliver_new_cart_emails(cart)
@@ -36,7 +36,7 @@ class Dispatcher
     when 'parallel'
       ParallelDispatcher.new
     when 'linear'
-      if cart.getProp('origin') == 'ncr'
+      if cart.ncr?
         NcrDispatcher.new
       else
         LinearDispatcher.new

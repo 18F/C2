@@ -17,7 +17,7 @@ class CommunicartMailer < ActionMailer::Base
     send_cart_email(sender, to_email, cart)
   end
 
-  def sent_confirmation_email(cart)
+  def proposal_created_confirmation(cart)
     @cart = cart.decorate
     to_address = cart.requester.email_address
     from_email = user_email(cart.requester)

@@ -175,7 +175,7 @@ describe CommunicartMailer do
   end
 
   describe 'sent confirmation email' do
-    let(:mail) { CommunicartMailer.sent_confirmation_email(cart) }
+    let(:mail) { CommunicartMailer.proposal_created_confirmation(cart) }
 
     before do
       expect_any_instance_of(CommunicartMailer).to receive(:sender).and_return('reply-communicart-stub@some-dot-gov.gov')
