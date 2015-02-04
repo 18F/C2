@@ -137,7 +137,7 @@ describe 'Rejecting a cart with multiple approvers' do
     # User corrects the mistake and resubmits
     @json_params_1 = JSON.parse(params_request_1)
     post 'send_cart', @json_params_1
-    expect(ActionMailer::Base.deliveries.count).to eq 3
+    expect(ActionMailer::Base.deliveries.count).to eq 4
 
     expect(Cart.count).to eq 2
     expect(Approval.count).to eq 6
@@ -153,7 +153,7 @@ describe 'Rejecting a cart with multiple approvers' do
     # Repost an approval
     @json_repost_params = JSON.parse(repost_params)
     post 'approval_reply_received', @json_repost_params
-    expect(ActionMailer::Base.deliveries.count).to eq 4
+    expect(ActionMailer::Base.deliveries.count).to eq 5
 
     expect(Approval.count).to eq 6
     expect(cart.approvals.count).to eq 3

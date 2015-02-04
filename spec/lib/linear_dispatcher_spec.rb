@@ -1,6 +1,8 @@
 describe LinearDispatcher do
   let(:cart) { FactoryGirl.create(:cart) }
   let(:dispatcher) { LinearDispatcher.new }
+  let(:requester) { FactoryGirl.create(:user, email_address: 'requester@some-dot-gov-domain.gov') }
+  let(:approver) { FactoryGirl.create(:user, email_address: 'approver@some-dot-gov-domain.gov') }
 
   describe '#next_approval' do
     context "no approvals" do
@@ -37,8 +39,13 @@ describe LinearDispatcher do
   end
 
   describe '#deliver_new_cart_emails' do
+    before do
+      cart.approvals << FactoryGirl.create(:approval, cart_id: cart.id, user_id: requester.id, status: 'pending', role: 'requester', position: 1)
+    end
+
     it "sends emails to the first approver" do
-      approval = cart.approvals.create!(role: 'approver')
+      approver
+      approval = cart.approvals.create!(user_id: approver.id, role: 'approver')
       expect(dispatcher).to receive(:email_approver).with(approval)
 
       dispatcher.deliver_new_cart_emails(cart)

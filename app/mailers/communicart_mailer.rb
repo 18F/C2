@@ -17,12 +17,23 @@ class CommunicartMailer < ActionMailer::Base
     send_cart_email(sender, to_email, cart)
   end
 
+  def proposal_created_confirmation(cart)
+    @cart = cart.decorate
+    to_address = cart.requester.email_address
+    from_email = user_email(cart.requester)
+
+    mail(
+         to: to_address,
+         subject: "Your request for Proposal ##{cart.id} has been sent successfully.",
+         from: from_email
+         )
+  end
+
   def approval_reply_received_email(approval)
     cart = approval.cart
     @approval = approval
     @cart = cart.decorate
     to_address = cart.requester.email_address
-    #TODO: Handle carts without approval groups (only emails passed)
     #TODO: Add a specific 'rejection' text block for the requester
 
     set_attachments(cart)
