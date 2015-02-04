@@ -5,7 +5,7 @@ class CartDecorator < Draper::Decorator
     if self.getProp('origin') == 'ncr'
       self.getProp('amount').to_f
     else
-      object.cart_items.reduce(0) { |sum,citem| sum + citem.quantity * citem.price }
+      object.cart_items.reduce(0) { |sum,citem| sum + citem.subtotal }
     end
   end
 
