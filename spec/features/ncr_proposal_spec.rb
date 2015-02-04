@@ -22,6 +22,7 @@ describe "National Capital Region proposals" do
       fill_in 'Amount', with: 123.45
       fill_in "Approving Official's Email Address", with: 'approver@example.com'
       select 'Entire Jackson Place Complex', :from => 'ncr_proposal_building_number'
+      select Ncr::ProposalForm::OFFICES[0], :from => 'ncr_proposal_office'
       expect {
         click_on 'Submit for approval'
       }.to change { Cart.count }.from(0).to(1)
@@ -38,6 +39,7 @@ describe "National Capital Region proposals" do
       # TODO should this persist as a number?
       expect(cart.getProp(:amount)).to eq("123.45")
       expect(cart.getProp(:building_number)).to eq('Entire Jackson Place Complex')
+      expect(cart.getProp(:office)).to eq(Ncr::ProposalForm::OFFICES[0])
       expect(cart.requester).to eq(requester)
       expect(cart.approvers.map(&:email_address)).to eq(%w(
         approver@example.com

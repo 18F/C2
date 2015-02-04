@@ -32,6 +32,8 @@ group :development do
   gem 'guard-rspec', require: false
   gem 'mail_view'
   gem 'railroady'
+  gem 'letter_opener'
+  gem 'letter_opener_web'
 
   # Capistrano stuff
   gem 'aws-sdk', '2.0.6.pre', require: false

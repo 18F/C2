@@ -1,36 +1,13 @@
 module Ncr
+  DATA = YAML.load_file("#{Rails.root}/config/data/ncr.yaml")
+
   class ProposalForm
     include SimpleFormObject
 
     EXPENSE_TYPES = %w(BA61 BA80)
 
-    BUILDING_NUMBERS = [
-      'DC0017ZZ ,WHITE HOUSE-WEST WING1600 PA AVE. NW',
-      'DC0027ZZ ,MAIL FACILITY2701 SOUTH CAPITOL ST.',
-      'DC0035ZZ ,DWIGHT D. EISENHOWER EXECUTIVE17TH AND PA AVE. NW',
-      'DC0037ZZ ,WHITE HOUSE - EAST WING1600 PA AVE., NW',
-      'DC0042ZZ ,PRESIDENTS GUEST HOU1651-53 PA AVE NW',
-      'DC0048ZZ ,WINDER600 SEVENTEENTH STREET',
-      'DC0078ZZ ,1724 F STREET NW1724 F STREET NW',
-      'DC0105ZZ ,NEW EXECUTIVE OFFICE725 17TH STREET NW',
-      'Entire Jackson Place Complex',
-      'DC0117ZZ ,JACKSON PL COMPLEX708 JACKSON PLACE NW',
-      'DC0118ZZ ,JACKSON PL COMPLEX712 JACKSON PL NW',
-      'DC0119ZZ ,JACKSON PL COMPLEX716 JACKSON PLACE NW',
-      'DC0120ZZ ,JACKSON PL COMPLEX718 JACKSON PL NW',
-      'DC0121ZZ ,JACKSON PL COMPLEX722 JACKSON PL NW',
-      'DC0122ZZ ,JACKSON PL COMPLEX726 JACKSON PL NW',
-      'DC0123ZZ ,JACKSON PL COMPLEX730 JACKSON PL NW',
-      'DC0124ZZ ,JACKSON PL COMPLEX734 JACKSON PLACE NW',
-      'DC0125ZZ ,JACKSON PL COMPLEX736 JACKSON PLACE NW',
-      'DC0126ZZ ,JACKSON PL COMPLEX740 JACKSON PLACE NW',
-      'DC0127ZZ ,JACKSON PL COMPLEX744 JACKSON PLACE NW',
-      'DC0458ZZ ,REMOTE DELIVERY SITE2701 SOUTH CAPITOL ST.',
-      'DC0469ZZ ,VEHICLE MAIN FAC2702 S CAPITOL ST SE',
-      'DC0545ZZ ,RDS/VMF GUARDHOUSE2701 S. CAPITOL STREET',
-      'Entire WH Complex',
-      'Administrative Expense'
-    ]
+    BUILDING_NUMBERS = DATA['BUILDING_NUMBERS']
+    OFFICES = DATA['OFFICES']
     attribute :origin, :string
     attribute :amount, :decimal
     attribute :approver_email, :text
@@ -41,6 +18,7 @@ module Ncr
     attribute :not_to_exceed, :boolean
     attribute :building_number, :string
     attribute :rwa_number, :string
+    attribute :office, :string
 
     validates :amount, numericality: {
       greater_than_or_equal_to: 0,
@@ -52,6 +30,7 @@ module Ncr
     validates :requester, presence: true
     validates :vendor, presence: true
     validates :building_number, presence: true
+    validates :office, presence: true
 
     def budget_approver_email
       ENV['NCR_BUDGET_APPROVER_EMAIL'] || 'communicart.budget.approver@gmail.com'
@@ -87,7 +66,8 @@ module Ncr
           vendor: self.vendor,
           not_to_exceed: self.not_to_exceed,
           building_number: self.building_number,
-          rwa_number: self.rwa_number
+          rwa_number: self.rwa_number,
+          office: self.office
         )
         cart.set_requester(self.requester)
         self.approver_emails.each do |email|
