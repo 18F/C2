@@ -28,7 +28,17 @@ class Dispatcher
   end
 
   def requires_approval_notice?(approval)
-    true
+    if approval.cart.getProp('origin') == 'ncr'
+      self.with_approval_notice_requirements { approval.is_final_approval? }
+    else
+      true
+    end
+  end
+
+  def with_approval_notice_requirements &requirements
+    if block_given?
+      requirements.call
+    end
   end
 
   def self.initialize_dispatcher(cart)
@@ -36,11 +46,7 @@ class Dispatcher
     when 'parallel'
       ParallelDispatcher.new
     when 'linear'
-      if cart.getProp('origin') == 'ncr'
-        NcrDispatcher.new
-      else
-        LinearDispatcher.new
-      end
+      LinearDispatcher.new
     end
   end
 

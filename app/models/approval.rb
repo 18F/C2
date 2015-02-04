@@ -66,6 +66,10 @@ class Approval < ActiveRecord::Base
     end
   end
 
+  def is_final_approval?
+    cart.ordered_approvals.last == self
+  end
+
 
   private
 
