@@ -27,6 +27,7 @@ Feature: Approving a cart from approval link
     And I click 'Logout'
     When I go to the approval_response page with token
     Then I should see alert text 'You have approved Cart 109876.'
+    And I should see 'supervisor3@test.gov'
     And I should see 'Request approved by'
     And I should not see 'Waiting for approval from'
     And I should see 'Logout'
