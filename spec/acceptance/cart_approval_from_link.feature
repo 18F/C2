@@ -23,10 +23,27 @@ Feature: Approving a cart from approval link
 
     Given the user is 'supervisor3@test.gov'
     And a valid token
+    And I go to '/'
+    And I click 'Logout'
     When I go to the approval_response page with token
     Then I should see alert text 'You have approved Cart 109876.'
     And I should see 'Request approved by'
     And I should not see 'Waiting for approval from'
+    And I should see 'Logout'
+    And I should not see 'Sign in'
+
+  Scenario: Cannot reuse a token
+    Given the user is associated with one of the cart's approvals
+    And a valid token
+    And I go to '/'
+    And I click 'Logout'
+    When I go to the approval_response page with token
+    Then I should see alert text 'You have approved Cart 109876.'
+    When I go to the approval_response page with token again
+    Then I should see alert text 'You have approved Cart 109876.'
+    When I click 'Logout'
+    And I go to the approval_response page with token again
+    Then I should see alert text 'something went wrong with the token (nonexistent)'
 
   Scenario: Viewing existing comments
     Given the user is associated with one of the cart's approvals
