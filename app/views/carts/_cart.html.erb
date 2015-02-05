@@ -100,9 +100,11 @@
         <% cart.comments.each do |c| %>
           <div class='comment-item'>
             <div class='row'>
-              <p class='comment-sender col-sm-6 col-xs-12'>
-                <strong><%= c.user_email_address %></strong>
-              </p>
+              <% unless c.user.nil? %>
+                <p class='comment-sender col-sm-6 col-xs-12'>
+                  <strong><%= c.user_full_name %></strong>
+                </p>
+              <% end %>
               <p class='comment-date col-sm-6 col-xs-12'>
                 <%= date_with_tooltip(c.created_at) %>
               </p>
@@ -110,11 +112,6 @@
 
             <div class='row'>
               <p class='comment-text col-sm-6 col-xs-12'>
-                <% unless c.user.nil? %>
-                  <em>
-                    <%= "#{c.user_full_name}: " %>
-                  </em>
-                <% end %>
                 <%= c.comment_text %>
               </p>
             </div>

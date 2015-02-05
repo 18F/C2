@@ -1,20 +1,18 @@
 <% if comments.any? %>
-  <h3>Comments</h3>
-  <table>
+  <strong>Recent Comments</strong>
+  <table cellpadding='10'>
     <% comments.each do |c| %>
     <tr>
-      <td>
+      <td valign='top'>
         <p>
           <%= l(c.created_at.to_date) %>
         </p>
       </td>
 
-      <td>
+      <td valign='top'>
         <p>
           <% unless c.user.nil? %>
-          <em>
-            <%= "#{c.user_full_name} (#{c.user_email_address})" %>
-          </em><br/>
+            <strong><%= c.user_full_name %></strong><br/>
           <% end %>
           <%= c.comment_text %>
         </p>
