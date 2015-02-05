@@ -6,23 +6,14 @@
         <br/>
         <strong>Please reply to this email with the response 'APPROVE' or 'REJECT' on its own line.</strong>
         <br/>
-<% unless @prefix_template.blank? %>
-  <%= render partial: @prefix_template, locals: {cart: @cart, title:  "Purchase Request"} %>
-<% end %>
-        <p>
-          Additional comments:
-        </p>
-
-        <% unless @cart.comments.empty? %>
-          <p>
-            <%= @cart.comments.first.comment_text %>
-          </p>
+        <% unless @prefix_template.blank? %>
+          <%= render partial: @prefix_template, locals: {cart: @cart, title:  "Purchase Request"} %>
         <% end %>
-
-        <br/>
       </td>
     </tr>
   </table>
+
+<%= render partial: 'comments', locals: { comments: @cart.comments } %>
 
 <div style="width:800px">
   <%= render partial: @cart.cart_template_name, locals: {cart: @cart, title:  "Purchase Request"} %>

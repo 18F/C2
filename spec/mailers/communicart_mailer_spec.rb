@@ -40,6 +40,10 @@ describe CommunicartMailer do
       expect(sender_names(mail)).to eq(['Liono Requester'])
     end
 
+    it 'renders comments' do
+      expect(mail.body.encoded).to include('Comments')
+    end
+
     context 'attaching a csv of the cart activity' do
       it 'generates csv attachments for an approved cart' do
         expect(cart).to receive(:all_approvals_received?).and_return(true)

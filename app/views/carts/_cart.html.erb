@@ -101,7 +101,7 @@
           <div class='comment-item'>
             <div class='row'>
               <p class='comment-sender col-sm-6 col-xs-12'>
-                <strong>requester@test.com</strong>
+                <strong><%= c.user_email_address %></strong>
               </p>
               <p class='comment-date col-sm-6 col-xs-12'>
                 <%= date_with_tooltip(c.created_at) %>
