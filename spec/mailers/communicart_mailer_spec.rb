@@ -40,9 +40,18 @@ describe CommunicartMailer do
       expect(sender_names(mail)).to eq(['Liono Requester'])
     end
 
-    it 'renders comments' do
-      expect(mail.body.encoded).to include('Comments')
+    context 'comments' do
+      it 'does not render comments when empty' do
+        expect(cart.comments.count).to eq 0
+        expect(mail.body.encoded).not_to include('Comments')
+      end
+
+      it 'renders comments when present' do
+        cart.comments << FactoryGirl.create(:comment)
+        expect(mail.body.encoded).to include('Comments')
+      end
     end
+
 
     context 'attaching a csv of the cart activity' do
       it 'generates csv attachments for an approved cart' do
