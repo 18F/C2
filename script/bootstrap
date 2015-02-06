@@ -13,7 +13,7 @@ bundle
 npm install -g grunt-cli
 npm install
 
-bundle exec rake db:setup
-RAILS_ENV=test bundle exec rake db:setup
+bin/rake db:setup
+RAILS_ENV=test bin/rake db:setup
 
 echo "DONE"

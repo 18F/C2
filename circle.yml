@@ -5,7 +5,7 @@ dependencies:
 
 test:
   override:
-    - bundle exec rspec spec
+    - bin/rspec
     - grunt jasmine
 
 deployment:
