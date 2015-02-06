@@ -74,9 +74,7 @@ describe CommunicartsController do
       end
     end
 
-    context 'no approval_group is indicated' do
-      #TODO: Write specs
-    end
+    skip 'no approval_group is indicated'
 
     context 'nonexistent approval_group is specified' do
       it 'should return 400 error' do
@@ -265,21 +263,23 @@ describe CommunicartsController do
     context 'valid params' do
       before do
         expect(ApiToken).to receive(:find_by).with(access_token: "5a4b3c2d1ee1d2c3b4a5").and_return(token)
+        approver
+        expect_any_instance_of(Approval).to receive(:update_attributes)
       end
 
       it 'will be successful' do
-        approver
-        expect_any_instance_of(Approval).to receive(:update_attributes)
         put 'approval_response', @json_approval_params_with_token
-        expect(response.status).to eq 200
+        expect(response).to redirect_to(cart_path(cart))
       end
 
       it 'successfully validates the user_id and cart_id with the token' do
-        approver
-        expect_any_instance_of(Approval).to receive(:update_attributes)
         expect { put 'approval_response', @json_approval_params_with_token }.not_to raise_error
       end
 
+      it "signs the user in" do
+        put 'approval_response', @json_approval_params_with_token
+        expect(controller.send(:signed_in?)).to eq(true)
+      end
     end
 
     context 'Request token' do
@@ -303,7 +303,17 @@ describe CommunicartsController do
         expect { put 'approval_response', @json_approval_params_with_token }.to raise_error(AuthenticationError)
       end
 
-      skip 'marks a token as used'
+      it 'marks a token as used' do
+        expect(ApiToken).to receive(:find_by).with(access_token: "5a4b3c2d1ee1d2c3b4a5").and_return(token)
+        expect_any_instance_of(Approval).to receive(:update_attributes)
+        approver
+
+        put 'approval_response', @json_approval_params_with_token
+
+        expect(response).to redirect_to(cart_path(cart))
+        token.reload
+        expect(token.used_at).to_not eq(nil)
+      end
     end
   end
 
