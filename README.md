@@ -44,13 +44,13 @@ To get the database and tests running:
 1. Start PostgreSQL. You will need to be able to create databases; set the
    `DB_`* variables in your environment if needed.
 1. Run `script/bootstrap`, which will print "DONE" if successful. *NOTE: This will delete any existing records in your C2 database.*
-1. Run the specs with `bundle exec rspec spec` at the command line.
+1. Run the specs with `bin/rspec` at the command line.
     * To run tests automatically as files are changed, run `bundle exec guard`.
 1. Run the frontend tests with `grunt jasmine`.
 
 To see previews of the mailers:
 
-* Start the server (`bundle exec rails server`), and visit http://localhost:3000/mail_view/.
+* Start the server (`bin/rails server`), and visit http://localhost:3000/mail_view/.
 
 To get the app running:
 

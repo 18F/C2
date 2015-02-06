@@ -34,6 +34,8 @@ group :development do
   gem 'railroady'
   gem 'letter_opener'
   gem 'letter_opener_web'
+  gem 'spring'
+  gem 'spring-commands-rspec'
 
   # Capistrano stuff
   gem 'aws-sdk', '2.0.6.pre', require: false
