@@ -60,8 +60,9 @@ RSpec.configure do |config|
   config.include UserSteps
 
   # Add modules for helpers
-  config.include IntegrationSpecHelper
-
+  [:feature, :request].each do |type|
+    config.include IntegrationSpecHelper, type: type
+  end
 
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
