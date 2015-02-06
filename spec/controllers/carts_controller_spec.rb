@@ -6,7 +6,7 @@ describe CartsController do
     UserRole.create!(user_id: user.id, approval_group_id: approval_group1.id, role: 'requester')
     p = {'approvalGroup' => 'test-approval-group1', 'cartName' => 'cart1' }
     @cart1 = Commands::Approval::InitiateCartApproval.new.perform(p)
-    session[:user] = {}
+    login_as(user)
   end
 
   describe '#index' do
@@ -19,7 +19,6 @@ describe CartsController do
       cart3 = FactoryGirl.create(:cart)
       cart3.approvals.create!(role: 'observer', user: user)
 
-      session[:user]['email'] = user.email_address
       get :index
       expect(assigns(:carts).sort).to eq [@cart1, cart2, cart3]
     end
@@ -27,7 +26,6 @@ describe CartsController do
 
   describe '#archive' do
     it 'should show all the closed carts' do
-      session[:user]['email'] = user.email_address
       carts = Array.new
       (1..4).each do |i|
         p = {}

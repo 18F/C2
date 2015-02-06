@@ -60,6 +60,7 @@ RSpec.configure do |config|
   config.include UserSteps
 
   # Add modules for helpers
+  config.include ControllerSpecHelper, type: :controller
   [:feature, :request].each do |type|
     config.include IntegrationSpecHelper, type: type
   end
