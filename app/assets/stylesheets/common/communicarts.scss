@@ -11,16 +11,24 @@ table {
     margin-top: 15px;
   }
 
+  &.reply-section, &.comments-section {
+    width: 800px;
+    background-color: #fff;
+
+    td {
+      padding: 7px 15px;
+
+      &.comment-detail {
+        border-top: 1px solid #ccc;
+      }
+    }
+  }
+
   border-spacing: 0;
 }
 
 table.center {
   margin-left: 15px;
-}
-
-table.reply-section {
-  width: 800px;
-  background-color: #fff;
 }
 
 #navigator-layout tr.cart_item_information strong {
@@ -193,7 +201,6 @@ h4 {
 td.html-email-message {
   font-size: 14px;
   background-color: #fff;
-  padding: 15px;
 }
 tr.header h5 {
   text-transform: uppercase;

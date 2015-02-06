@@ -13,8 +13,6 @@
     </tr>
   </table>
 
-<%= render partial: 'comments', locals: { comments: @cart.comments } %>
-
 <div style="width:800px">
   <%= render partial: @cart.cart_template_name, locals: { cart: @cart, title:  "Purchase Request" } %>
   <table class='reply-section'>

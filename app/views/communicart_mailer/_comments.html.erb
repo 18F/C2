@@ -1,15 +1,19 @@
 <% if comments.any? %>
-  <strong>Recent Comments</strong>
-  <table cellpadding='10'>
+  <table class='comments-section'>
+    <tr>
+      <td colspan='2' class='w-container'>
+        <strong>Recent Comments</strong>
+      </td>
+    </tr>
     <% comments.each do |c| %>
     <tr>
-      <td valign='top'>
+      <td valign='top' class='comment-detail'>
         <p>
           <%= l(c.created_at.to_date) %>
         </p>
       </td>
 
-      <td valign='top'>
+      <td valign='top' class='comment-detail'>
         <p>
           <% unless c.user.nil? %>
             <strong><%= c.user_full_name %></strong><br/>
