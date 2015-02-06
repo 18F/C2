@@ -135,10 +135,7 @@ describe "Approving a cart with multiple approvers in parallel" do
       reject
 
       expect(cart.approvals.where(status: 'approved').count).to eq 1
-      expect(email_recipients).to eq([
-        'approver3@some-dot-gov.gov',
-        'test-requester@some-dot-gov.gov'
-        ])
+      expect(email_recipients).to eq(['test-requester@some-dot-gov.gov'])
 
     end
 

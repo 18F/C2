@@ -70,7 +70,7 @@ class Cart < ActiveRecord::Base
   def currently_awaiting_approvers
     if self.parallel?
       self.awaiting_approvers
-    else # linear
+    else # linear. Assumes the cart is open
       approval = self.ordered_awaiting_approvals.first
       [approval.user]
     end
