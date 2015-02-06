@@ -2,7 +2,9 @@ class LinearDispatcher < Dispatcher
   def next_pending_approval(cart)
     # we don't care how the cart was approved/rejected
     if cart.pending?
-      return cart.ordered_awaiting_approvals.first
+      cart.ordered_awaiting_approvals.first
+    else
+      nil
     end
   end
 
