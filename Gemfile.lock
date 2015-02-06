@@ -226,8 +226,6 @@ GEM
     rb-fsevent (0.9.4)
     rb-inotify (0.9.5)
       ffi (>= 0.5.0)
-    rdoc (4.2.0)
-      json (~> 1.4)
     request_store (1.1.0)
     roadie (3.0.2)
       css_parser (~> 1.3.4)
@@ -262,9 +260,6 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (~> 1.1)
-    sdoc (0.4.1)
-      json (~> 1.7, >= 1.7.7)
-      rdoc (~> 4.0)
     settingslogic (2.0.9)
     shellany (0.0.1)
     simple_form_object (0.0.5)
@@ -345,7 +340,6 @@ DEPENDENCIES
   roadie-rails
   rspec-rails
   sass-rails (>= 3.2)
-  sdoc
   settingslogic
   simple_form_object
   simplecov

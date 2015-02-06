@@ -38,14 +38,14 @@ class CommunicartsController < ApplicationController
   end
 
   def approval_response
-    @cart = Cart.find(params[:cart_id]).decorate
-    @approval = @cart.approvals.find_by(user_id: params[:user_id])
-    @show_comments = true
+    cart = Cart.find(params[:cart_id]).decorate
+    approval = cart.approvals.find_by(user_id: params[:user_id])
 
-    Commands::Approval::UpdateFromApprovalResponse.new.perform(@approval, approval_response_status)
-    @token.update_attributes(used_at: Time.now)
+    Commands::Approval::UpdateFromApprovalResponse.new.perform(approval, approval_response_status)
+    @token.update_attribute(:used_at, Time.now)
 
-    flash[:success] = "You have #{approval_response_status} Cart #{@cart.public_identifier}."
+    flash[:success] = "You have #{approval_response_status} Cart #{cart.public_identifier}."
+    redirect_to cart_path(cart)
   end
 
 
@@ -63,6 +63,8 @@ private
       raise AuthenticationError.new(msg: 'Something went wrong with the user (wrong person)')
     elsif @token.cart_id != params[:cart_id].to_i
       raise AuthenticationError.new(msg: 'Something went wrong with the cart (wrong cart)')
+    else
+      sign_in(@token.user)
     end
   end
 
