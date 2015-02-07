@@ -92,34 +92,23 @@ describe CommunicartsController do
     let(:cart) { FactoryGirl.create(:cart_with_approval_group, external_id: 246810) }
     let(:approver) { FactoryGirl.create(:user) }
 
-    let(:one_clickapproval_params) {
-      '{
-      "cch": "5a4b3c2d1e",
-      "cart_id": "12345"
-      "user_id": "54321",
-      "action": "approve",
-      "scope": "all"
-      }'
-    }
-
     #TODO: Replace approve/disapprove with generic action
 
     context 'approved cart' do
       let(:approval_params) {
-        '{
-        "cartNumber": "246810",
-        "category": "approvalreply",
-        "attention": "",
-        "fromAddress": "judy.jetson@spacelysprockets.com",
-        "gsaUserName": "",
-        "gsaUsername": null,
-        "date": "Sun, 13 Apr 2014 18:06:15 -0400",
-        "approve": "APPROVE",
-        "disapprove": null,
-        "comment": "Test Approval Comment"
-        }'
+        {
+          cartNumber: '246810',
+          category: 'approvalreply',
+          attention: '',
+          fromAddress: 'judy.jetson@spacelysprockets.com',
+          gsaUserName: '',
+          gsaUsername: nil,
+          date: 'Sun, 13 Apr 2014 18:06:15 -0400',
+          approve: 'APPROVE',
+          disapprove: nil,
+          comment: 'Test Approval Comment'
+        }.with_indifferent_access
       }
-      let(:json_approval_params) { JSON.parse(approval_params) }
 
       before do
         expect(User).to receive(:find_by).and_return(approver).at_least(:once) # TODO only once
@@ -131,27 +120,27 @@ describe CommunicartsController do
       end
 
       it 'updates the cart status' do
-        post 'approval_reply_received', json_approval_params
+        post 'approval_reply_received', approval_params
       end
 
       it 'updates the approval status' do
-        post 'approval_reply_received', json_approval_params
+        post 'approval_reply_received', approval_params
         approval.reload
         expect(approval).to be_approved
       end
 
       it 'adds the comment' do
         FactoryGirl.create(:approval, user_id: approver.id)
-        json_approval_params['fromAddress'] = approver.email_address
+        approval_params['fromAddress'] = approver.email_address
 
         expect {
-          post 'approval_reply_received', json_approval_params
+          post 'approval_reply_received', approval_params
         }.to change{ Comment.count }.from(0).to(1)
       end
 
       it 'creates a comment given a comment param' do
         expect {
-          post 'approval_reply_received', json_approval_params
+          post 'approval_reply_received', approval_params
         }.to change { Comment.count }.from(0).to(1)
 
         comment = Comment.last
@@ -162,10 +151,10 @@ describe CommunicartsController do
       it 'does not create a comment when not given a comment param' do
         approver.update_attributes(email_address: 'judy.jetson@spacelysprockets.com')
         FactoryGirl.create(:approval, user_id: approver.id)
-        json_approval_params['comment'] = ''
+        approval_params['comment'] = ''
 
         expect(Comment).not_to receive(:create)
-        post 'approval_reply_received', json_approval_params
+        post 'approval_reply_received', approval_params
       end
 
     end
@@ -174,19 +163,18 @@ describe CommunicartsController do
 
     context 'rejected cart' do
       let(:rejection_params) {
-        '{
-        "cartNumber": "109876",
-        "category": "approvalreply",
-        "attention": "",
-        "fromAddress": "email1@some-dot-gov.gov",
-        "gsaUserName": "",
-        "gsaUsername": null,
-        "date": "Sun, 13 Apr 2014 18:06:15 -0400",
-        "approve": "",
-        "disapprove": "REJECT"
-        }'
+        {
+          cartNumber: '109876',
+          category: 'approvalreply',
+          attention: '',
+          fromAddress: 'email1@some-dot-gov.gov',
+          gsaUserName: '',
+          gsaUsername: nil,
+          date: 'Sun, 13 Apr 2014 18:06:15 -0400',
+          approve: '',
+          disapprove: 'REJECT'
+        }.with_indifferent_access
       }
-      let(:json_rejection_params) { JSON.parse(rejection_params) }
 
       let(:rejected_cart) { FactoryGirl.create(:cart, external_id: 109876, name: 'Cart soon to be rejected') }
       let(:cart_item) {FactoryGirl.create(:cart_item)}
@@ -215,17 +203,17 @@ describe CommunicartsController do
       it 'sets the approval to rejected status' do
         #FIXME: grab the specific approval
         expect_any_instance_of(Approval).to receive(:update_attribute).with(:status, 'rejected')
-        post 'approval_reply_received', json_rejection_params
+        post 'approval_reply_received', rejection_params
       end
 
       it "sends a rejection notice to the requester" do
-        post 'approval_reply_received', json_rejection_params
+        post 'approval_reply_received', rejection_params
 
         deliveries = ActionMailer::Base.deliveries
         expect(deliveries.size).to eq(1)
         mail = deliveries.last
         expect(mail.to).to eq([rejected_cart.requester.email_address])
-        from_address = json_rejection_params['fromAddress']
+        from_address = rejection_params['fromAddress']
         expect(mail.html_part.to_s).to include("The approver, #{from_address}, rejected")
       end
 
@@ -239,14 +227,13 @@ describe CommunicartsController do
 
   describe 'PUT approval_response: Approving a cart through email endpoint' do
     let(:approval_params_with_token) {
-      '{
-      "cch": "5a4b3c2d1ee1d2c3b4a5",
-      "cart_id": "246810",
-      "user_id": "108642",
-      "approver_action": "approve"
-      }'
+      {
+        cch: '5a4b3c2d1ee1d2c3b4a5',
+        cart_id: '246810',
+        user_id: '108642',
+        approver_action: 'approve'
+      }
     }
-    let(:json_approval_params_with_token) { JSON.parse(approval_params_with_token) }
 
     let(:token) { ApiToken.create!(user_id: 108642, cart_id: 246810, expires_at: Time.now + 5.days) }
     let!(:cart) { FactoryGirl.create(:cart_with_approvals, id: 246810) }
@@ -264,48 +251,48 @@ describe CommunicartsController do
       end
 
       it 'will be successful' do
-        put 'approval_response', json_approval_params_with_token
+        put 'approval_response', approval_params_with_token
         approval.reload
         expect(approval).to be_approved
         expect(response).to redirect_to(cart_path(cart))
       end
 
       it 'successfully validates the user_id and cart_id with the token' do
-        expect { put 'approval_response', json_approval_params_with_token }.not_to raise_error
+        expect { put 'approval_response', approval_params_with_token }.not_to raise_error
       end
 
       it "signs the user in" do
-        put 'approval_response', json_approval_params_with_token
+        put 'approval_response', approval_params_with_token
         expect(controller.send(:signed_in?)).to eq(true)
       end
     end
 
     context 'Request token' do
       it 'fails when the token does not exist' do
-        json_approval_params_with_token["cch"] = nil
+        approval_params_with_token["cch"] = nil
         bypass_rescue
-        expect { put 'approval_response', json_approval_params_with_token }.to raise_error(AuthenticationError)
+        expect { put 'approval_response', approval_params_with_token }.to raise_error(AuthenticationError)
       end
 
       it 'fails when the token has expired' do
         token.update_attributes(expires_at: Time.now - 8.days)
         expect(ApiToken).to receive(:find_by).with(access_token: "5a4b3c2d1ee1d2c3b4a5").and_return(token)
         bypass_rescue
-        expect { put 'approval_response', json_approval_params_with_token }.to raise_error(AuthenticationError)
+        expect { put 'approval_response', approval_params_with_token }.to raise_error(AuthenticationError)
       end
 
       it 'fails when the token has already been used once' do
         token.update_attributes(used_at: Time.now - 1.hour)
         expect(ApiToken).to receive(:find_by).with(access_token: "5a4b3c2d1ee1d2c3b4a5").and_return(token)
         bypass_rescue
-        expect { put 'approval_response', json_approval_params_with_token }.to raise_error(AuthenticationError)
+        expect { put 'approval_response', approval_params_with_token }.to raise_error(AuthenticationError)
       end
 
       it 'marks a token as used' do
         expect(ApiToken).to receive(:find_by).with(access_token: "5a4b3c2d1ee1d2c3b4a5").and_return(token)
         approver # create
 
-        put 'approval_response', json_approval_params_with_token
+        put 'approval_response', approval_params_with_token
 
         approval.reload
         expect(approval).to be_approved
