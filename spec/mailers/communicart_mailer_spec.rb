@@ -6,9 +6,9 @@ describe CommunicartMailer do
     mail[:from].display_names
   end
 
-  let(:approval_group) { FactoryGirl.create(:approval_group_with_approvers_and_requester, name: "anotherApprovalGroupName") }
+  let(:approval_group) { FactoryGirl.create(:approval_group_with_approvers_and_requester) }
   let(:approver) { FactoryGirl.create(:user) }
-  let(:cart) { FactoryGirl.create(:cart_with_approvals, name: "TestCart") }
+  let(:cart) { FactoryGirl.create(:cart_with_approvals) }
 
   def expect_csvs_to_be_exported
     expect_any_instance_of(Exporter::Items).to receive(:to_csv)
