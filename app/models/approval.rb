@@ -57,6 +57,10 @@ class Approval < ActiveRecord::Base
     self.status == 'approved'
   end
 
+  def rejected?
+    self.status == 'rejected'
+  end
+
   # TODO we should probably store this value
   def approved_at
     if self.approved?

@@ -135,8 +135,9 @@ describe CommunicartsController do
       end
 
       it 'updates the approval status' do
-        expect(approval).to receive(:update_attributes).with(status: 'approved')
         post 'approval_reply_received', json_approval_params
+        approval.reload
+        expect(approval).to be_approved
       end
 
       it 'adds the comment' do
@@ -213,7 +214,7 @@ describe CommunicartsController do
 
       it 'sets the approval to rejected status' do
         #FIXME: grab the specific approval
-        expect_any_instance_of(Approval).to receive(:update_attributes).with({status: 'rejected'})
+        expect_any_instance_of(Approval).to receive(:update_attribute).with(:status, 'rejected')
         post 'approval_reply_received', json_rejection_params
       end
 
@@ -259,12 +260,13 @@ describe CommunicartsController do
     context 'valid params' do
       before do
         expect(ApiToken).to receive(:find_by).with(access_token: "5a4b3c2d1ee1d2c3b4a5").and_return(token)
-        approver
-        expect_any_instance_of(Approval).to receive(:update_attributes)
+        approver # create
       end
 
       it 'will be successful' do
         put 'approval_response', json_approval_params_with_token
+        approval.reload
+        expect(approval).to be_approved
         expect(response).to redirect_to(cart_path(cart))
       end
 
@@ -301,11 +303,12 @@ describe CommunicartsController do
 
       it 'marks a token as used' do
         expect(ApiToken).to receive(:find_by).with(access_token: "5a4b3c2d1ee1d2c3b4a5").and_return(token)
-        expect_any_instance_of(Approval).to receive(:update_attributes)
-        approver
+        approver # create
 
         put 'approval_response', json_approval_params_with_token
 
+        approval.reload
+        expect(approval).to be_approved
         expect(response).to redirect_to(cart_path(cart))
         token.reload
         expect(token.used_at).to_not eq(nil)
