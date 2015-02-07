@@ -95,12 +95,17 @@ describe CommunicartsController do
     #TODO: Replace approve/disapprove with generic action
 
     context 'approved cart' do
+      let(:cart) { FactoryGirl.create(:cart_with_approvals, external_id: 246810) }
+      let(:approval_list) { cart.approver_approvals }
+      let(:approval) { approval_list.first }
+      let(:approver) { approval.user }
+
       let(:approval_params) {
         {
-          cartNumber: '246810',
+          cartNumber: cart.external_id,
           category: 'approvalreply',
           attention: '',
-          fromAddress: 'judy.jetson@spacelysprockets.com',
+          fromAddress: approver.email_address,
           gsaUserName: '',
           gsaUsername: nil,
           date: 'Sun, 13 Apr 2014 18:06:15 -0400',
@@ -111,11 +116,6 @@ describe CommunicartsController do
       }
 
       before do
-        expect(User).to receive(:find_by).and_return(approver).at_least(:once) # TODO only once
-        expect(cart).to receive_message_chain(:approval_users, :where, :first).and_return(approver)
-        approval.update_attributes(cart_id: cart.id, user_id: approver.id)
-        expect(cart).to receive_message_chain(:approvals, :where).and_return([approval])
-        expect(Cart).to receive_message_chain(:where, :where, :first).and_return(cart)
         expect(CommunicartMailer).to receive_message_chain(:approval_reply_received_email, :deliver)
       end
 
