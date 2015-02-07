@@ -1,71 +1,64 @@
 describe CommunicartsController do
-  let(:params) { read_fixture('cart_without_approval_group') }
-
-  let(:approval_group) { FactoryGirl.create(:approval_group_with_approvers_and_requester, name: "anotherApprovalGroupName") }
-  let(:approval) { FactoryGirl.create(:approval) }
-  let(:approval_list) { [approval] }
-
   describe 'POST send_cart' do
+    let(:params) { read_fixture('cart_without_approval_group') }
     let(:json_params) { JSON.parse(params) }
 
-    context 'approval group' do
+    let(:approval_group) { FactoryGirl.create(:approval_group_with_approvers_and_requester, name: "anotherApprovalGroupName") }
+
+    context 'approval group is indicated' do
       before do
         expect(Dispatcher).to receive(:deliver_new_cart_emails)
+        approval_group # create
+        json_params['approvalGroup'] = "anotherApprovalGroupName"
       end
 
-      context 'is indicated' do
-        before do
-          approval_group
-          json_params['approvalGroup'] = "anotherApprovalGroupName"
-        end
+      it 'uses an existing approval group' do
+        post 'send_cart', json_params
+      end
 
-        it 'uses an existing approval group' do
-          expect(ApprovalGroup).to receive(:find_by_name).with("anotherApprovalGroupName").and_return(approval_group)
-          post 'send_cart', json_params
-        end
+      it 'creates a comment given a comment param' do
+        post 'send_cart', json_params
 
-        it 'creates a comment given a comment param' do
-          post 'send_cart', json_params
+        comment = Comment.last
+        expect(comment.user_id).to eq(approval_group.requester_id)
+        expect(comment.comment_text).to eq("Hi, this is a comment, I hope it works!\r\nThis is the second line of the comment.")
+      end
 
-          comment = Comment.last
-          expect(comment.user_id).to eq(approval_group.requester_id)
-          expect(comment.comment_text).to eq("Hi, this is a comment, I hope it works!\r\nThis is the second line of the comment.")
-        end
-
-        it 'does not create a comment when not given a comment param' do
-          expect(Comment).not_to receive(:create)
-          json_params['initiationComment'] = ''
-          post 'send_cart', json_params
-        end
-
+      it 'does not create a comment when not given a comment param' do
+        expect(Comment).not_to receive(:create)
+        json_params['initiationComment'] = ''
+        post 'send_cart', json_params
       end
     end
 
     context 'template rendering' do
+      before do
+        approval_group # create
+      end
+
       it 'renders a navigation template' do
-        approval_group
         post 'send_cart', json_params
         expect(response).to render_template(partial: '_navigator_cart')
       end
 
       it 'renders the default template' do
-        approval_group
         json_params['properties'] = {}
         post 'send_cart', json_params
         expect(response).to render_template(partial: '_cart_mail')
       end
-
     end
 
     context 'method return' do
+      before do
+        approval_group # create
+      end
+
       it 'returns 201' do
-        approval_group
         post 'send_cart', json_params
         expect(response.status).to eq(201)
       end
 
       it 'returns cart as json' do
-        approval_group
         post 'send_cart', json_params
         json_response = JSON.parse(response.body)
         expect(json_response["name"]).to eq("2867637")
@@ -81,17 +74,15 @@ describe CommunicartsController do
         json_params['approvalGroup'] = "nogrouphere"
         post  'send_cart', json_params
         expect(response.status).to eq(400)
-        bod = JSON.parse response.body
-        expect(JSON.parse(response.body)['message']).to eq("Approval Group Not Found")
+        data = JSON.parse(response.body)
+        expect(data['message']).to eq("Approval Group Not Found")
       end
     end
-
   end
 
   describe 'POST approval_reply_received' do
     let(:cart) { FactoryGirl.create(:cart_with_approvals, external_id: 246810) }
-    let(:approval_list) { cart.approver_approvals }
-    let(:approval) { approval_list.first }
+    let(:approval) { cart.approver_approvals.first }
     let(:approver) { approval.user }
 
     let(:params) {
@@ -127,7 +118,6 @@ describe CommunicartsController do
       end
 
       it 'adds the comment' do
-        FactoryGirl.create(:approval, user_id: approver.id)
         params['fromAddress'] = approver.email_address
 
         expect {
@@ -146,14 +136,10 @@ describe CommunicartsController do
       end
 
       it 'does not create a comment when not given a comment param' do
-        approver.update_attributes(email_address: 'judy.jetson@spacelysprockets.com')
-        FactoryGirl.create(:approval, user_id: approver.id)
         params['comment'] = ''
-
         expect(Comment).not_to receive(:create)
         post 'approval_reply_received', params
       end
-
     end
 
 
@@ -165,9 +151,9 @@ describe CommunicartsController do
       end
 
       it 'sets the approval to rejected status' do
-        #FIXME: grab the specific approval
-        expect_any_instance_of(Approval).to receive(:update_attribute).with(:status, 'rejected')
         post 'approval_reply_received', params
+        approval.reload
+        expect(approval).to be_rejected
       end
 
       it "sends a rejection notice to the requester" do
