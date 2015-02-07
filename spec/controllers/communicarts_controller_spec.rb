@@ -89,17 +89,14 @@ describe CommunicartsController do
   end
 
   describe 'POST approval_reply_received' do
-    let(:cart) { FactoryGirl.create(:cart_with_approval_group, external_id: 246810) }
-    let(:approver) { FactoryGirl.create(:user) }
+    let(:cart) { FactoryGirl.create(:cart_with_approvals, external_id: 246810) }
+    let(:approval_list) { cart.approver_approvals }
+    let(:approval) { approval_list.first }
+    let(:approver) { approval.user }
 
     #TODO: Replace approve/disapprove with generic action
 
     context 'approved cart' do
-      let(:cart) { FactoryGirl.create(:cart_with_approvals, external_id: 246810) }
-      let(:approval_list) { cart.approver_approvals }
-      let(:approval) { approval_list.first }
-      let(:approver) { approval.user }
-
       let(:approval_params) {
         {
           cartNumber: cart.external_id,
@@ -164,10 +161,10 @@ describe CommunicartsController do
     context 'rejected cart' do
       let(:rejection_params) {
         {
-          cartNumber: '109876',
+          cartNumber: cart.external_id,
           category: 'approvalreply',
           attention: '',
-          fromAddress: 'email1@some-dot-gov.gov',
+          fromAddress: approver.email_address,
           gsaUserName: '',
           gsaUsername: nil,
           date: 'Sun, 13 Apr 2014 18:06:15 -0400',
@@ -175,30 +172,6 @@ describe CommunicartsController do
           disapprove: 'REJECT'
         }.with_indifferent_access
       }
-
-      let(:rejected_cart) { FactoryGirl.create(:cart, external_id: 109876, name: 'Cart soon to be rejected') }
-      let(:cart_item) {FactoryGirl.create(:cart_item)}
-
-      before do
-        rejected_cart.cart_items << cart_item
-        rejection_approval_group = FactoryGirl.create(:approval_group, name: 'Test Approval Group 1')
-        user1 = FactoryGirl.create(:user, email_address: 'email1@some-dot-gov.gov')
-        user2 = FactoryGirl.create(:user, email_address: 'email2@some-dot-gov.gov')
-        rejection_approval_group.user_roles << UserRole.create!(user_id: user1.id, approval_group_id: approval_group.id, role: 'approver')
-        rejection_approval_group.user_roles << UserRole.create!(user_id: user2.id, approval_group_id: approval_group.id, role: 'approver')
-
-        rejection_approval_group.save
-
-        rejected_cart.approval_group = rejection_approval_group
-        approval1 = Approval.create!(user_id: user1.id, cart_id: rejected_cart.id, role: 'approver')
-        approval2 = Approval.create!(user_id: user2.id, cart_id: rejected_cart.id, role: 'approver')
-        requester = FactoryGirl.create(:user, email_address: 'rejection-requester@some-dot-gov.gov')
-        UserRole.create!(user_id: requester.id, approval_group_id: rejection_approval_group.id, role: 'requester')
-        Approval.create!(user_id: requester.id, cart_id: rejected_cart.id, role: 'requester')
-        rejected_cart.approvals << approval1
-        rejected_cart.approvals << approval2
-        rejected_cart.save
-      end
 
       it 'sets the approval to rejected status' do
         #FIXME: grab the specific approval
@@ -212,7 +185,7 @@ describe CommunicartsController do
         deliveries = ActionMailer::Base.deliveries
         expect(deliveries.size).to eq(1)
         mail = deliveries.last
-        expect(mail.to).to eq([rejected_cart.requester.email_address])
+        expect(mail.to).to eq([cart.requester.email_address])
         from_address = rejection_params['fromAddress']
         expect(mail.html_part.to_s).to include("The approver, #{from_address}, rejected")
       end
