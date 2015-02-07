@@ -94,50 +94,50 @@ describe CommunicartsController do
     let(:approval) { approval_list.first }
     let(:approver) { approval.user }
 
+    let(:params) {
+      {
+        cartNumber: cart.external_id,
+        category: 'approvalreply',
+        attention: '',
+        fromAddress: approver.email_address,
+        gsaUserName: '',
+        gsaUsername: nil,
+        date: 'Sun, 13 Apr 2014 18:06:15 -0400',
+        approve: 'APPROVE',
+        disapprove: nil,
+        comment: 'Test Approval Comment'
+      }.with_indifferent_access
+    }
+
     #TODO: Replace approve/disapprove with generic action
 
     context 'approved cart' do
-      let(:approval_params) {
-        {
-          cartNumber: cart.external_id,
-          category: 'approvalreply',
-          attention: '',
-          fromAddress: approver.email_address,
-          gsaUserName: '',
-          gsaUsername: nil,
-          date: 'Sun, 13 Apr 2014 18:06:15 -0400',
-          approve: 'APPROVE',
-          disapprove: nil,
-          comment: 'Test Approval Comment'
-        }.with_indifferent_access
-      }
-
       before do
         expect(CommunicartMailer).to receive_message_chain(:approval_reply_received_email, :deliver)
       end
 
       it 'updates the cart status' do
-        post 'approval_reply_received', approval_params
+        post 'approval_reply_received', params
       end
 
       it 'updates the approval status' do
-        post 'approval_reply_received', approval_params
+        post 'approval_reply_received', params
         approval.reload
         expect(approval).to be_approved
       end
 
       it 'adds the comment' do
         FactoryGirl.create(:approval, user_id: approver.id)
-        approval_params['fromAddress'] = approver.email_address
+        params['fromAddress'] = approver.email_address
 
         expect {
-          post 'approval_reply_received', approval_params
+          post 'approval_reply_received', params
         }.to change{ Comment.count }.from(0).to(1)
       end
 
       it 'creates a comment given a comment param' do
         expect {
-          post 'approval_reply_received', approval_params
+          post 'approval_reply_received', params
         }.to change { Comment.count }.from(0).to(1)
 
         comment = Comment.last
@@ -148,10 +148,10 @@ describe CommunicartsController do
       it 'does not create a comment when not given a comment param' do
         approver.update_attributes(email_address: 'judy.jetson@spacelysprockets.com')
         FactoryGirl.create(:approval, user_id: approver.id)
-        approval_params['comment'] = ''
+        params['comment'] = ''
 
         expect(Comment).not_to receive(:create)
-        post 'approval_reply_received', approval_params
+        post 'approval_reply_received', params
       end
 
     end
@@ -159,34 +159,25 @@ describe CommunicartsController do
 
 
     context 'rejected cart' do
-      let(:rejection_params) {
-        {
-          cartNumber: cart.external_id,
-          category: 'approvalreply',
-          attention: '',
-          fromAddress: approver.email_address,
-          gsaUserName: '',
-          gsaUsername: nil,
-          date: 'Sun, 13 Apr 2014 18:06:15 -0400',
-          approve: '',
-          disapprove: 'REJECT'
-        }.with_indifferent_access
-      }
+      before do
+        params[:approve] = ''
+        params[:disapprove] = 'REJECT'
+      end
 
       it 'sets the approval to rejected status' do
         #FIXME: grab the specific approval
         expect_any_instance_of(Approval).to receive(:update_attribute).with(:status, 'rejected')
-        post 'approval_reply_received', rejection_params
+        post 'approval_reply_received', params
       end
 
       it "sends a rejection notice to the requester" do
-        post 'approval_reply_received', rejection_params
+        post 'approval_reply_received', params
 
         deliveries = ActionMailer::Base.deliveries
         expect(deliveries.size).to eq(1)
         mail = deliveries.last
         expect(mail.to).to eq([cart.requester.email_address])
-        from_address = rejection_params['fromAddress']
+        from_address = params['fromAddress']
         expect(mail.html_part.to_s).to include("The approver, #{from_address}, rejected")
       end
 
