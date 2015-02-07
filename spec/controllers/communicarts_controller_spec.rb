@@ -176,30 +176,21 @@ describe CommunicartsController do
   end
 
   describe 'PUT approval_response: Approving a cart through email endpoint' do
+    let!(:cart) { FactoryGirl.create(:cart_with_approvals) }
+    let!(:approval) { cart.approver_approvals.first }
+    let!(:approver) { approval.user }
+    let!(:token) { approval.create_api_token! }
+
     let(:approval_params_with_token) {
       {
-        cch: '5a4b3c2d1ee1d2c3b4a5',
-        cart_id: '246810',
-        user_id: '108642',
+        cch: token.access_token,
+        cart_id: cart.id.to_s,
+        user_id: approver.id.to_s,
         approver_action: 'approve'
-      }
+      }.with_indifferent_access
     }
 
-    let(:token) { ApiToken.create!(user_id: 108642, cart_id: 246810, expires_at: Time.now + 5.days) }
-    let!(:cart) { FactoryGirl.create(:cart_with_approvals, id: 246810) }
-    let(:approver) { FactoryGirl.create(:user, id: 108642, email_address: 'another_approver@some-dot-gov.gov') }
-    let(:approval) { cart.approver_approvals.last }
-
-    before do
-      approval.update_attributes(user_id: 108642)
-    end
-
     context 'valid params' do
-      before do
-        expect(ApiToken).to receive(:find_by).with(access_token: "5a4b3c2d1ee1d2c3b4a5").and_return(token)
-        approver # create
-      end
-
       it 'will be successful' do
         put 'approval_response', approval_params_with_token
         approval.reload
@@ -219,29 +210,24 @@ describe CommunicartsController do
 
     context 'Request token' do
       it 'fails when the token does not exist' do
-        approval_params_with_token["cch"] = nil
+        approval_params_with_token[:cch] = nil
         bypass_rescue
         expect { put 'approval_response', approval_params_with_token }.to raise_error(AuthenticationError)
       end
 
       it 'fails when the token has expired' do
         token.update_attributes(expires_at: Time.now - 8.days)
-        expect(ApiToken).to receive(:find_by).with(access_token: "5a4b3c2d1ee1d2c3b4a5").and_return(token)
         bypass_rescue
         expect { put 'approval_response', approval_params_with_token }.to raise_error(AuthenticationError)
       end
 
       it 'fails when the token has already been used once' do
         token.update_attributes(used_at: Time.now - 1.hour)
-        expect(ApiToken).to receive(:find_by).with(access_token: "5a4b3c2d1ee1d2c3b4a5").and_return(token)
         bypass_rescue
         expect { put 'approval_response', approval_params_with_token }.to raise_error(AuthenticationError)
       end
 
       it 'marks a token as used' do
-        expect(ApiToken).to receive(:find_by).with(access_token: "5a4b3c2d1ee1d2c3b4a5").and_return(token)
-        approver # create
-
         put 'approval_response', approval_params_with_token
 
         approval.reload
