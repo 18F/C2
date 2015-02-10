@@ -8,7 +8,8 @@
     <%- unless cart.property_exclusions.include? property %>
       <tr class="cart_item_information">
         <td class="results-list" align="left">
-          <strong><%= property.underscore.humanize %></strong>
+          <strong><%= I18n.t('helpers.label.cart.' + property,
+                             default: property.underscore.humanize) %></strong>
         </td>
         <td>
           <%= value %>
