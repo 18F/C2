@@ -35,7 +35,7 @@
     padding: 0 60px 0 0;
 
     &.last {
-      img.approved, img.pending, img.rejected {
+      img.approved.linear, img.pending.linear, img.rejected.linear {
         background-image: none;
       }
 
@@ -55,15 +55,15 @@
     img {
       float: left;
       padding-top: 2px;
-      &.approved {
+      &.approved.linear {
         background-image: image-url('bg_approved_status.gif');
       }
 
-      &.pending {
+      &.pending.linear {
         background-image: image-url('bg_pending_status.gif');
       }
 
-      &.rejected {
+      &.rejected.linear {
         background-image: image-url('bg_rejected_status.gif');
       }
     }
