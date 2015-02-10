@@ -42,7 +42,7 @@ class CommunicartsController < ApplicationController
     approval = cart.approvals.find_by(user_id: params[:user_id])
 
     Commands::Approval::UpdateFromApprovalResponse.new.perform(approval, approval_response_status)
-    @token.update_attribute(:used_at, Time.now)
+    @token.update_attribute(:used_at, Time.now) if @token
 
     flash[:success] = "You have #{approval_response_status} Cart #{cart.public_identifier}."
     redirect_to cart_path(cart)
@@ -52,6 +52,9 @@ class CommunicartsController < ApplicationController
 private
 
   def validate_access
+    request_from_email = params['email_delivery'].presence || true
+    return unless request_from_email == true
+
     @token = ApiToken.find_by(access_token: params[:cch])
     if !@token
       raise AuthenticationError.new(msg: 'something went wrong with the token (nonexistent)')
