@@ -4,6 +4,11 @@ module ApprovalSteps
     visit "/approval_response?cart_id=#{@cart.id}&user_id=#{@user.id}&approver_action=approve&cch=#{@token.access_token}"
   end
 
+  #TODO: Merge into previous step
+  step 'I go to the approval_response page without a token' do
+    visit "/approval_response?cart_id=#{@cart.id}&user_id=#{@user.id}&approver_action=approve&email_delivery=false" #Not sure: keep user_id?
+  end
+
   step 'I go to the approval_response page with invalid token :token' do |token|
     visit "/approval_response?cart_id=#{@cart.id}&user_id=#{@user.id}&approver_action=approve&cch=#{token}"
   end
