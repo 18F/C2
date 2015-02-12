@@ -1,5 +1,7 @@
 class Approval < ActiveRecord::Base
-  STATUSES = %w(pending approved rejected)
+  include WorkflowHelper::ThreeStateWorkflow
+
+  workflow_column :status
 
   belongs_to :cart
   belongs_to :user
@@ -11,7 +13,8 @@ class Approval < ActiveRecord::Base
 
   validates :role, presence: true, inclusion: {in: UserRole::ROLES}
   # TODO validates_uniqueness_of :user_id, scope: cart_id
-  validates :status, presence: true, inclusion: {in: STATUSES}
+  validates :status, presence: true,
+            inclusion: {in: workflow_spec.states.keys.map(&:to_s)}
 
   after_initialize :set_default_status
 

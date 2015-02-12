@@ -2,9 +2,8 @@ require 'csv'
 
 class Cart < ActiveRecord::Base
   include PropMixin
-  include WorkflowHelper::ThreeStateWorkflow
 
-  workflow_column :status
+  STATUSES = %w(pending approved rejected)
 
   has_many :cart_items
   has_many :approvals
@@ -258,7 +257,7 @@ class Cart < ActiveRecord::Base
   end
 
   def pending?
-    # TODO validates :status, inclusion: {in: Approval::STATUSES}
+    # TODO validates :status, inclusion: {in: STATUSES}
     self.status.blank? || self.status == 'pending'
   end
 end
