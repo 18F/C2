@@ -2,6 +2,9 @@ require 'csv'
 
 class Cart < ActiveRecord::Base
   include PropMixin
+  include WorkflowHelper::ThreeStateWorkflow
+
+  workflow_column :status
 
   has_many :cart_items
   has_many :approvals
