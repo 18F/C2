@@ -8,7 +8,7 @@ Feature: Approving a cart from the web application
 
   #Parallel
   Scenario: An approver visits the page to approve
-  Given The user is 'supervisor1@test.gov'
+  Given the user is 'supervisor1@test.gov'
   When I go to the approval_response page without a token
   Then I should see alert text 'You have approved Cart 109876.'
   And I should see 'Request approved by'
