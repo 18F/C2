@@ -69,7 +69,8 @@ class Cart < ActiveRecord::Base
   # users with outstanding cart_notification_emails
   def currently_awaiting_approvers
     if self.parallel?
-      self.awaiting_approvers
+      # TODO do through SQL
+      self.ordered_awaiting_approvals.map(&:user)
     else # linear. Assumes the cart is open
       approval = self.ordered_awaiting_approvals.first
       [approval.user]
