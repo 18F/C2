@@ -1,5 +1,7 @@
 class Approval < ActiveRecord::Base
-  STATUSES = %w(pending approved rejected)
+  include WorkflowHelper::ThreeStateWorkflow
+
+  workflow_column :status
 
   belongs_to :cart
   belongs_to :user
@@ -11,9 +13,8 @@ class Approval < ActiveRecord::Base
 
   validates :role, presence: true, inclusion: {in: UserRole::ROLES}
   # TODO validates_uniqueness_of :user_id, scope: cart_id
-  validates :status, presence: true, inclusion: {in: STATUSES}
-
-  after_initialize :set_default_status
+  validates :status, presence: true,
+            inclusion: {in: workflow_spec.states.keys.map(&:to_s)}
 
   scope :approvable, -> { where.not(role: ['requester','observer']) }
   scope :pending, ->    { approvable.where(status: 'pending') }
@@ -49,18 +50,6 @@ class Approval < ActiveRecord::Base
     )
   end
 
-  def pending?
-    self.status == 'pending'
-  end
-
-  def approved?
-    self.status == 'approved'
-  end
-
-  def rejected?
-    self.status == 'rejected'
-  end
-
   # TODO we should probably store this value
   def approved_at
     if self.approved?
@@ -70,10 +59,15 @@ class Approval < ActiveRecord::Base
     end
   end
 
+  # Used by the state machine
+  def on_rejected_entry(new_state, event)
+    self.cart.update_approval_status
+    Dispatcher.on_approval_status_change(self)  # todo - move this out
+  end
 
-  private
-
-  def set_default_status
-    self.status ||= 'pending'
+  # Used by the state machine
+  def on_approved_entry(new_state, event)
+    self.cart.update_approval_status
+    Dispatcher.on_approval_status_change(self)  # todo - move this out
   end
 end

@@ -3,6 +3,8 @@ require 'csv'
 class Cart < ActiveRecord::Base
   include PropMixin
 
+  STATUSES = %w(pending approved rejected)
+
   has_many :cart_items
   has_many :approvals
   has_many :approval_users, through: :approvals, source: :user
@@ -67,7 +69,8 @@ class Cart < ActiveRecord::Base
   # users with outstanding cart_notification_emails
   def currently_awaiting_approvers
     if self.parallel?
-      self.awaiting_approvers
+      # TODO do through SQL
+      self.ordered_awaiting_approvals.map(&:user)
     else # linear. Assumes the cart is open
       approval = self.ordered_awaiting_approvals.first
       [approval.user]
@@ -248,8 +251,12 @@ class Cart < ActiveRecord::Base
     self.flow == 'parallel'
   end
 
+  def linear?
+    self.flow == 'linear'
+  end
+
   def pending?
-    # TODO validates :status, inclusion: {in: Approval::STATUSES}
+    # TODO validates :status, inclusion: {in: STATUSES}
     self.status.blank? || self.status == 'pending'
   end
 end
