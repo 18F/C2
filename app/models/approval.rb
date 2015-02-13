@@ -1,5 +1,5 @@
 class Approval < ActiveRecord::Base
-  include WorkflowHelper::ThreeStateWorkflow
+  include ThreeStateWorkflow
 
   workflow_column :status
 
