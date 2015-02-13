@@ -3,6 +3,8 @@ require 'csv'
 class Cart < ActiveRecord::Base
   include PropMixin
 
+  STATUSES = %w(pending approved rejected)
+
   has_many :cart_items
   has_many :approvals
   has_many :approval_users, through: :approvals, source: :user
@@ -256,7 +258,7 @@ class Cart < ActiveRecord::Base
   end
 
   def pending?
-    # TODO validates :status, inclusion: {in: Approval::STATUSES}
+    # TODO validates :status, inclusion: {in: STATUSES}
     self.status.blank? || self.status == 'pending'
   end
 end

@@ -81,7 +81,6 @@ describe CommunicartsController do
         json_params['approvalGroup'] = "nogrouphere"
         post  'send_cart', json_params
         expect(response.status).to eq(400)
-        bod = JSON.parse response.body
         expect(JSON.parse(response.body)['message']).to eq("Approval Group Not Found")
       end
     end
@@ -151,8 +150,8 @@ describe CommunicartsController do
       end
 
       it 'updates the approval status' do
-        expect(approval).to receive(:update_attributes).with(status: 'approved')
         post 'approval_reply_received', @json_approval_params
+        expect(approval.approved?).to be true
       end
 
       it 'adds the comment' do
@@ -218,7 +217,7 @@ describe CommunicartsController do
 
       it 'sets the approval to rejected status' do
         #FIXME: grab the specific approval
-        expect_any_instance_of(Approval).to receive(:update_attributes).with({status: 'rejected'})
+        expect_any_instance_of(Approval).to receive(:reject!)
         post 'approval_reply_received', @json_rejection_params
       end
 
@@ -264,7 +263,7 @@ describe CommunicartsController do
       before do
         expect(ApiToken).to receive(:find_by).with(access_token: "5a4b3c2d1ee1d2c3b4a5").and_return(token)
         approver
-        expect_any_instance_of(Approval).to receive(:update_attributes)
+        expect_any_instance_of(Approval).to receive(:approve!)
       end
 
       it 'will be successful' do
@@ -305,7 +304,7 @@ describe CommunicartsController do
 
       it 'marks a token as used' do
         expect(ApiToken).to receive(:find_by).with(access_token: "5a4b3c2d1ee1d2c3b4a5").and_return(token)
-        expect_any_instance_of(Approval).to receive(:update_attributes)
+        expect_any_instance_of(Approval).to receive(:approve!)
         approver
 
         put 'approval_response', @json_approval_params_with_token
