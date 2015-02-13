@@ -4,9 +4,8 @@ module ApprovalSteps
     visit "/approval_response?cart_id=#{@cart.id}&user_id=#{@user.id}&approver_action=approve&cch=#{@token.access_token}"
   end
 
-  #TODO: Merge into previous step
   step 'I go to the approval_response page without a token' do
-    visit "/carts/#{@cart.id}?email_delivery=false" #Not sure: keep user_id?
+    visit "/carts/#{@cart.id}?email_delivery=false"
   end
 
   step 'I go to the approval_response page with invalid token :token' do |token|
@@ -26,8 +25,14 @@ module ApprovalSteps
     ENV[flag] = value
   end
 
-  step 'The cart has been approved by the logged in user' do
+  step 'the cart has been approved by the logged in user' do
     approval = @cart.approvals.where(user_id: @current_user.id).first
+    approval.update_attributes(status: 'approved')
+  end
+
+  step 'the cart has been approved by :email' do |email|
+    user = User.find_by(email_address: email)
+    approval = @cart.approvals.where(user_id: user.id).first
     approval.update_attributes(status: 'approved')
   end
 
