@@ -5,7 +5,10 @@ module WorkflowHelper
     included do
       include Workflow
       workflow do
-        state :pending
+        state :pending do
+          event :approve, :transitions_to => :approved
+          event :reject, :transitions_to => :rejected
+        end
         state :approved
         state :rejected
       end

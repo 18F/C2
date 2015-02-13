@@ -27,13 +27,17 @@ class CommunicartsController < ApplicationController
     cart = Cart.where(external_id: params['cartNumber'].to_i).where(status: 'pending').first
     user = cart.approval_users.where(email_address: params['fromAddress']).first
     approval = cart.approvals.where(user_id: user.id).first
-    new_status = approval_reply_received_status
 
     if params['comment']
       cart.comments.create(user_id: user.id, comment_text: params['comment'].strip)
     end
 
-    Commands::Approval::UpdateFromApprovalResponse.new.perform(approval, new_status)
+    if params['approve'] == 'APPROVE'
+      approval.approve!
+    elsif params['disapprove'] == 'REJECT'
+      approval.reject!
+    end
+
     render json: { message: "approval_reply_received"}, status: 200
   end
 
@@ -41,10 +45,16 @@ class CommunicartsController < ApplicationController
     cart = Cart.find(params[:cart_id]).decorate
     approval = cart.approvals.find_by(user_id: params[:user_id])
 
-    Commands::Approval::UpdateFromApprovalResponse.new.perform(approval, approval_response_status)
+    case params[:approver_action]
+    when 'approve'
+      approval.approve!
+      flash[:success] = "You have approved Cart #{cart.public_identifier}."
+    when 'reject'
+      approval.reject!
+      flash[:success] = "You have rejected Cart #{cart.public_identifier}."
+    end
     @token.update_attribute(:used_at, Time.now)
 
-    flash[:success] = "You have #{approval_response_status} Cart #{cart.public_identifier}."
     redirect_to cart_path(cart)
   end
 
@@ -65,24 +75,6 @@ private
       raise AuthenticationError.new(msg: 'Something went wrong with the cart (wrong cart)')
     else
       sign_in(@token.user)
-    end
-  end
-
-  def approval_reply_received_status
-    # TODO: Refactor duplication with ComunicartMailer#approval_reply_received_email
-    if params['approve'] == 'APPROVE'
-      'approved'
-    elsif params['disapprove'] == 'REJECT'
-      'rejected'
-    end
-  end
-
-  def approval_response_status
-    case params[:approver_action]
-    when 'approve'
-      'approved'
-    when 'reject'
-      'rejected'
     end
   end
 
