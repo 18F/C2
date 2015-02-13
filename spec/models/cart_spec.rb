@@ -109,7 +109,7 @@ describe Cart do
       it 'returns open carts' do
         approved_cart1
         pending_cart
-        expect(Cart.open).to eq [pending_cart]
+        expect(Cart.pending).to eq [pending_cart]
       end
     end
 

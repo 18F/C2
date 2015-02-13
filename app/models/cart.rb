@@ -21,7 +21,7 @@ class Cart < ActiveRecord::Base
   validates :flow, presence: true, inclusion: {in: ApprovalGroup::FLOWS}
 
   scope :approved, -> { where(status: 'approved') }
-  scope :open, -> { where(status: 'pending') }
+  scope :pending, -> { where(status: 'pending') }
   scope :closed, -> { where(:status => ['approved', 'rejected']) }
 
   ORIGINS = %w(navigator ncr)
