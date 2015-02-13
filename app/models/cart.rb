@@ -250,6 +250,10 @@ class Cart < ActiveRecord::Base
     self.flow == 'parallel'
   end
 
+  def linear?
+    self.flow == 'linear'
+  end
+
   def pending?
     # TODO validates :status, inclusion: {in: Approval::STATUSES}
     self.status.blank? || self.status == 'pending'
