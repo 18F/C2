@@ -26,8 +26,14 @@ module ApprovalSteps
     ENV[flag] = value
   end
 
-  step 'The cart has been approved by the logged in user' do
+  step 'the cart has been approved by the logged in user' do
     approval = @cart.approvals.where(user_id: @current_user.id).first
+    approval.update_attributes(status: 'approved')
+  end
+
+  step 'the cart has been approved by :email' do |email|
+    user = User.find_by(email_address: email)
+    approval = @cart.approvals.where(user_id: user.id).first
     approval.update_attributes(status: 'approved')
   end
 
