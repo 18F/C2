@@ -83,7 +83,7 @@ class Cart < ActiveRecord::Base
   end
 
   def requester
-    self.approval_users.where(role: 'requester').first
+    self.approval_users.where(approvals: {role: 'requester'}).first
   end
 
   def observers
