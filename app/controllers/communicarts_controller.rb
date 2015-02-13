@@ -42,7 +42,10 @@ class CommunicartsController < ApplicationController
     approval = cart.approvals.find_by(user_id: params[:user_id])
 
     Commands::Approval::UpdateFromApprovalResponse.new.perform(approval, approval_response_status)
-    @token.update_attribute(:used_at, Time.now) if @token
+
+    if @token
+      @token.update_attribute(:used_at, Time.now)
+    end
 
     flash[:success] = "You have #{approval_response_status} Cart #{cart.public_identifier}."
     redirect_to cart_path(cart)
@@ -53,7 +56,7 @@ private
 
   def validate_access
     request_from_email = params['email_delivery'].presence || true
-    return unless request_from_email == true
+    return unless request_from_email
 
     @token = ApiToken.find_by(access_token: params[:cch])
     if !@token
