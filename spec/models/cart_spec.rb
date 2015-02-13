@@ -21,6 +21,12 @@ describe Cart do
     end
   end
 
+  describe '#default value should be correct' do
+    it 'sets status to pending by default' do
+      expect(cart.status).to eq('pending')
+    end
+  end
+
   describe '#process_approvals_from_approval_group' do
     it "copies positions from the user_roles" do
       cart.user_roles.each do |role|
@@ -29,8 +35,7 @@ describe Cart do
       end
 
       cart.process_approvals_from_approval_group
-
-      expect(cart.approvals.map(&:position)).to eq(cart.user_roles.map(&:position))
+      expect(cart.approvals.order('user_id ASC').map(&:position)).to eq(cart.user_roles.order('user_id ASC').map(&:position))
     end
   end
 
@@ -49,8 +54,6 @@ describe Cart do
     let(:cart_id) { 1357910 }
     let(:cart_name) {'30003'}
     it 'finds cart' do
-      puts cart.name
-      puts cart
       c = Cart.existing_or_new_cart({'cartNumber' => 30003})
       expect(c.name).to eq('30003');
     end
@@ -64,4 +67,39 @@ describe Cart do
       expect(cart.ordered_awaiting_approvals).to eq(cart.awaiting_approvals.order('id DESC'))
     end
   end
+
+  context 'scopes' do
+    let(:approved_cart1) { FactoryGirl.create(:cart, status: 'approved') }
+    let(:approved_cart2) { FactoryGirl.create(:cart, status: 'approved') }
+    let(:pending_cart)  { FactoryGirl.create(:cart, status: 'pending') }
+    let(:rejected_cart)   { FactoryGirl.create(:cart, status: 'rejected') }
+
+    describe 'approved' do
+      it "returns approved carts" do
+        approved_cart1
+        approved_cart2
+        pending_cart
+        expect(Cart.approved).to eq [approved_cart1, approved_cart2]
+      end
+    end
+
+    describe 'open' do
+      it 'returns open carts' do
+        approved_cart1
+        pending_cart
+        expect(Cart.open).to eq [pending_cart]
+      end
+    end
+
+    describe 'closed' do
+      it 'returns closed carts' do
+        approved_cart1
+        pending_cart
+        rejected_cart
+        expect(Cart.closed).to eq [approved_cart1, rejected_cart]
+      end
+    end
+
+  end
+
 end

@@ -41,23 +41,25 @@ cd C2
 To get the database and tests running:
 
 1. Install Node.js 0.10
-1. Start PostgreSQL.
-1. Run `script/bootstrap`, which will print "DONE" if successful. *NOTE: This will delete any existing records in your database.*
-    * If you have a password on PostgreSQL, it will give you an error about not being able to connect to the database. Update the info in [`config/database.yml`](config/database.yml.example) with your creds.
-1. Run the specs with `bundle exec rspec spec` at the command line.
+1. Start PostgreSQL. You will need to be able to create databases; set the
+   `DB_`* variables in your environment if needed.
+1. Run `script/bootstrap`, which will print "DONE" if successful. *NOTE: This will delete any existing records in your C2 database.*
+1. Run the specs with `bin/rspec` at the command line.
     * To run tests automatically as files are changed, run `bundle exec guard`.
 1. Run the frontend tests with `grunt jasmine`.
 
-To see previews of the mailers, you have a couple options:
+To see previews of the mailers:
 
-* Run the server/console/specs with the environment variable `MAIL_PREVIEW=true`.
-* Start the server, and visit http://localhost:3000/mail_view/.
+* Start the server (`bin/rails server`), and visit http://localhost:3000/mail_view/.
 
 To get the app running:
 
-1. Register an application on [MyUSA](https://myusa-staging.18f.us/authorizations)
-1. Modify [`config/environment_variables.yml`](config/environment_variables.yml.example):
-    - `GMAIL_USERNAME` should be rensender you're using (e.g. communicart.sender@gmail.com or communicart.test@gmail.com)
-    - `GMAIL_PASSWORD` is the password for that email account
-    - `MYGOV_CLIENT_ID` is the Consumer Public Key provided by MyUSA
-    - `MYGOV_SECRET_ID` is the Consumer Secret Key provided by MyUSA
+1. Register an application on [MyUSA](https://myusa-staging.18f.us/authorizations).
+   Note that your application will need access to the user's email.
+1. Modify [`.env`](.env.example). In particular, be sure to set the `MYUSA_KEY`
+  and `MYUSA_SECRET` values based on the above and set `MYUSA_URL` to
+  `https://myusa-staging.18f.us`.
+
+## More info
+
+* [Capistrano commands](doc/capistrano.md)

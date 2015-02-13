@@ -1,0 +1,75 @@
+.m-shared-email_status {
+  strong {
+    text-transform: uppercase;
+  }
+
+  table#status-container-detail {
+    background-color: #fff;
+    padding: 15px;
+
+    table.approval_details {
+      padding-top: 25px;
+    }
+  }
+
+  .status-header-container td {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 20px;
+
+    &:last-child {
+      text-align: right;
+    }
+
+    .status-icon {
+      padding-bottom: 5px;
+    }
+  }
+
+  .status-icon {
+    position: relative;
+    padding-bottom: 35px;
+  }
+
+  .approval-row > td {
+    vertical-align: top;
+    padding: 0 60px 0 0;
+
+    &.last {
+      img.approved.linear, img.pending.linear, img.rejected.linear {
+        background-image: none;
+      }
+
+      img {
+        padding-top: 0;
+      }
+    }
+
+    &.first {
+      padding: 0;
+
+      img {
+        padding-top: 0;
+      }
+    }
+
+    img {
+      float: left;
+      padding-top: 2px;
+      &.approved.linear {
+        background-image: image-url('bg_approved_status.gif');
+      }
+
+      &.pending.linear {
+        background-image: image-url('bg_pending_status.gif');
+      }
+
+      &.rejected.linear {
+        background-image: image-url('bg_rejected_status.gif');
+      }
+    }
+
+    .approver {
+      padding-left: 7px;
+    }
+  }
+}

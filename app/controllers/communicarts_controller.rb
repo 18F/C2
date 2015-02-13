@@ -38,20 +38,17 @@ class CommunicartsController < ApplicationController
 
     Commands::Approval::UpdateFromApprovalResponse.new.perform(approval, new_status)
     render json: { message: "approval_reply_received"}, status: 200
-
-    if new_status == 'rejected'
-      perform_reject_specific_actions(params, cart)
-    end
   end
 
   def approval_response
-    @cart = Cart.find_by(id: params[:cart_id].to_i).decorate
-    @approval = @cart.approvals.where(user_id: params[:user_id]).first
+    cart = Cart.find(params[:cart_id]).decorate
+    approval = cart.approvals.find_by(user_id: params[:user_id])
 
-    Commands::Approval::UpdateFromApprovalResponse.new.perform(@approval, approval_response_status)
-    @token.update_attributes(used_at: Time.now)
+    Commands::Approval::UpdateFromApprovalResponse.new.perform(approval, approval_response_status)
+    @token.update_attribute(:used_at, Time.now)
 
-    flash[:notice] = "You have successfully updated Cart #{@cart.external_id}. See the cart details below"
+    flash[:success] = "You have #{approval_response_status} Cart #{cart.public_identifier}."
+    redirect_to cart_path(cart)
   end
 
 
@@ -69,16 +66,9 @@ private
       raise AuthenticationError.new(msg: 'Something went wrong with the user (wrong person)')
     elsif @token.cart_id != params[:cart_id].to_i
       raise AuthenticationError.new(msg: 'Something went wrong with the cart (wrong cart)')
+    else
+      sign_in(@token.user)
     end
-  end
-
-  def perform_reject_specific_actions(params, cart)
-    # Send out a rejection status email to the approvers
-    # TODO verify this logic
-    cart.approver_approvals.each do |approval|
-      CommunicartMailer.rejection_update_email(params, cart).deliver
-    end
-    # Reset everything for the next time they send a cart request
   end
 
   def approval_reply_received_status

@@ -74,9 +74,7 @@ describe CommunicartsController do
       end
     end
 
-    context 'no approval_group is indicated' do
-      #TODO: Write specs
-    end
+    skip 'no approval_group is indicated'
 
     context 'nonexistent approval_group is specified' do
       it 'should return 400 error' do
@@ -143,9 +141,8 @@ describe CommunicartsController do
         approval.update_attributes(cart_id: cart.id, user_id: approver.id)
         expect(cart).to receive_message_chain(:approvals, :where).and_return([approval])
         expect(Cart).to receive_message_chain(:where, :where, :first).and_return(cart)
-
-        # Remove stub to view email layout in development through letter_opener
         expect(CommunicartMailer).to receive_message_chain(:approval_reply_received_email, :deliver)
+
         @json_approval_params = JSON.parse(approval_params)
       end
 
@@ -225,14 +222,18 @@ describe CommunicartsController do
         post 'approval_reply_received', @json_rejection_params
       end
 
-      it 'sends out a reject status email to the approvers' do
-        expect(Cart).to receive_message_chain(:where, :where, :first).and_return(rejected_cart)
-        mock_mailer = double
-        expect(CommunicartMailer).to receive(:rejection_update_email).exactly(2).times.and_return(mock_mailer)
-        expect(mock_mailer).to receive(:deliver).exactly(2).times
-
+      it "sends a rejection notice to the requester" do
         post 'approval_reply_received', @json_rejection_params
+
+        deliveries = ActionMailer::Base.deliveries
+        expect(deliveries.size).to eq(1)
+        mail = deliveries.last
+        expect(mail.to).to eq([rejected_cart.requester.email_address])
+        from_address = @json_rejection_params['fromAddress']
+        expect(mail.html_part.to_s).to include("The approver, #{from_address}, rejected")
       end
+
+      it "sends out a reject status email to the approvers"
 
       it 'creates another set of approvals when another cart request for that same cart is intiiated'
 
@@ -262,21 +263,23 @@ describe CommunicartsController do
     context 'valid params' do
       before do
         expect(ApiToken).to receive(:find_by).with(access_token: "5a4b3c2d1ee1d2c3b4a5").and_return(token)
+        approver
+        expect_any_instance_of(Approval).to receive(:update_attributes)
       end
 
       it 'will be successful' do
-        approver
-        expect_any_instance_of(Approval).to receive(:update_attributes)
         put 'approval_response', @json_approval_params_with_token
-        expect(response.status).to eq 200
+        expect(response).to redirect_to(cart_path(cart))
       end
 
       it 'successfully validates the user_id and cart_id with the token' do
-        approver
-        expect_any_instance_of(Approval).to receive(:update_attributes)
         expect { put 'approval_response', @json_approval_params_with_token }.not_to raise_error
       end
 
+      it "signs the user in" do
+        put 'approval_response', @json_approval_params_with_token
+        expect(controller.send(:signed_in?)).to eq(true)
+      end
     end
 
     context 'Request token' do
@@ -300,7 +303,17 @@ describe CommunicartsController do
         expect { put 'approval_response', @json_approval_params_with_token }.to raise_error(AuthenticationError)
       end
 
-      skip 'marks a token as used'
+      it 'marks a token as used' do
+        expect(ApiToken).to receive(:find_by).with(access_token: "5a4b3c2d1ee1d2c3b4a5").and_return(token)
+        expect_any_instance_of(Approval).to receive(:update_attributes)
+        approver
+
+        put 'approval_response', @json_approval_params_with_token
+
+        expect(response).to redirect_to(cart_path(cart))
+        token.reload
+        expect(token.used_at).to_not eq(nil)
+      end
     end
   end
 

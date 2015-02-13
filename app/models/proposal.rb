@@ -4,10 +4,11 @@ class Proposal < ActiveRecord::Base
   validates :flow, presence: true, inclusion: {in: ApprovalGroup::FLOWS}
   validates :status, presence: true, inclusion: {in: Approval::STATUSES}
 
-  after_initialize :set_default_flow
+  after_initialize :set_defaults
 
 
-  def set_default_flow
+  def set_defaults
     self.flow ||= 'parallel'
+    self.status ||= 'pending'
   end
 end

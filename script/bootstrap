@@ -4,11 +4,8 @@ set -e
 set -x
 
 # create config files, if not already present
-if [ ! -f config/database.yml ]; then
-  cp config/database.yml.example config/database.yml
-fi
-if [ ! -f config/environment_variables.yml ]; then
-  cp config/environment_variables.yml.example config/environment_variables.yml
+if [ ! -f .env ]; then
+  cp .env.example .env
 fi
 
 bundle
@@ -16,7 +13,7 @@ bundle
 npm install -g grunt-cli
 npm install
 
-bundle exec rake db:setup
-RAILS_ENV=test bundle exec rake db:setup
+bin/rake db:setup
+RAILS_ENV=test bin/rake db:setup
 
 echo "DONE"

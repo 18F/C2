@@ -8,6 +8,7 @@ C2::Application.routes.draw do
   match "/auth/:provider/callback" => "home#oauth_callback", via: [:get]
   post "/logout" => "home#logout"
   get 'overlay', to: "overlay#index"
+  get 'carts/archive' => 'carts#archive'
 
   resources :carts do
     resources :comments
@@ -17,10 +18,15 @@ C2::Application.routes.draw do
     resources :comments
   end
 
+  namespace :ncr do
+    resources :proposals
+  end
+
   get 'bookmarklet', to: redirect('bookmarklet.html')
   get "/498", :to => "errors#token_authentication_error"
 
   if Rails.env.development?
     mount MailPreview => 'mail_view'
+    mount LetterOpenerWeb::Engine => 'letter_opener'
   end
 end

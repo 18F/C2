@@ -1,0 +1,39 @@
+<div id='communicart_header'>
+  <div class='container'>
+    <div id='header-identity'>
+      <div id="communicart_logo">Communicart</div>
+      <h1>Approval Portal</h1>
+    </div>
+
+    <ul class='header-nav'>
+      <%- unless signed_in? %>
+
+        <li>
+          <%= link_to 'Sign in with MyUSA', "/auth/myusa" %>
+        </li>
+      <%- else %>
+        <li>
+          <%= session['user']['email'] %>
+          <%= image_tag 'icon-user.png', alt: ' ' %>
+        </li>
+        <li>
+          <%= link_to 'Logout', "/logout", method: :post, class: 'login-link' %>
+          <%= image_tag 'icon-logout.png', alt: 'Logout' %>
+        </li>
+      <%- end %>
+    </ul>
+    <%- if signed_in? %>
+      <div class="mycart-link">
+        <ul class="header-nav">
+            <li><%= link_to("My Requests", carts_path) %> <%= image_tag "img-cart.png", width: '18px', height:'16px' %></li>
+        </ul>
+      </div>
+    <%- end %>
+  </div>
+</div>
+
+<%- unless excluded_portal_link %>
+  <ul id='breadcrumb-nav'>
+    <li><%= link_to "Back to main portal", carts_path %></li>
+  </ul>
+<%- end %>

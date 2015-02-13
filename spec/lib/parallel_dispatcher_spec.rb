@@ -3,11 +3,12 @@ describe ParallelDispatcher do
   let(:dispatcher) { ParallelDispatcher.new }
 
   describe '#deliver_new_cart_emails' do
-    it "sends emails to all approvers" do
+    it "sends emails to the requester and all approvers" do
       dispatcher.deliver_new_cart_emails(cart)
       expect(email_recipients).to eq([
         'approver1@some-dot-gov.gov',
-        'approver2@some-dot-gov.gov'
+        'approver2@some-dot-gov.gov',
+        'requester@some-dot-gov.gov'
       ])
     end
 

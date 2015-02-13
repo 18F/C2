@@ -1,0 +1,34 @@
+<div class="inset">
+  <div class="row pending-pr">
+    <div class="col-md-12">
+      <h3>Pending Purchase Requests</h3>
+      <%- if @carts.open.any? %>
+        <%= render partial: "cart_list", locals: { carts: @carts.open, role: @role, closed: false} %>
+      <%- else %>
+        <p class="empty-list-label">No pending purchase requests</p>
+      <%- end %>
+    </div>
+  </div>
+  <div class="row past-pr">
+    <div class="col-sm-10">
+      <h3>Recently Closed Purchase Requests</h3>
+    </div>
+
+    <%= render partial: 'archive_link' %>
+
+  </div>
+  <%- if @carts.closed.any? %>
+    <div class="row">
+      <div class="col-sm-12">
+        <%= render partial: "cart_list", locals: { carts: @carts.closed, limit: CartsController::CLOSED_CART_LIMIT} %>
+      </div>
+    </div>
+
+    <div class="row">
+      <%= render partial: "archive_link" %>
+    </div>
+
+  <%- else %>
+    <p class="empty-list-label">No recently closed purchase requests</p>
+  <%- end %>
+</div>

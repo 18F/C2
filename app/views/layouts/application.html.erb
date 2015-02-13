@@ -8,13 +8,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
   <%= csrf_meta_tags %>
 </head>
-<body class="bodyclass webapp">
+<body class="bodyclass webapp controller-<%= controller_name %> action-<%= params[:action] %>">
 
-<% flash.each do |key, value| %>
-    <div class="alert alert-<%= key %>"><%= value %></div>
+<% flash_list.each do |key, value| %>
+  <div class="alert alert-<%= key %> <%= bootstrap_alert_class(key) %>"><%= value %></div>
 <% end %>
 
-<%= render 'shared/communicart_header' unless @hide_header %>
+<%= render 'layouts/communicart_header' unless @hide_header %>
 
 <%= yield %>
 

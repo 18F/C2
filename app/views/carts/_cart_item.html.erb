@@ -1,0 +1,84 @@
+<tr class="cart_item_information">
+  <%#-- Product --%>
+  <td class="first" valign="top">
+    <p class="cart_item_description"><strong><a href="<%= cart_item.url %>"><%= cart_item.description %></a></strong></p>
+    <p><%= cart_item.details %></p>
+
+    <span class="result-tag">
+      <%- if cart_item.green? %>
+      <span class="c2bullet green">•</span>&nbsp;<span class='bullet-label'>Green</span>
+      <%- end %>
+
+      <%- cart_item.features.each do |feature| %>
+      <span class="c2bullet <%= feature %>">•</span>&nbsp;<span class='bullet-label'><%= feature %></span>
+      <%- end %>
+    </span>
+
+  </td>
+
+  <%#-- Price --%>
+  <td valign="top">
+    <p class="result-item-price"><strong><%= number_to_currency(cart_item.subtotal) %></strong></p>
+    <p class="result-item-units"><%= number_to_currency(cart_item.price) %> x <%= cart_item.quantity %> units</p>
+  </td>
+
+  <%#-- Vendor --%>
+  <td valign="top">
+    <p class="vendor-information">
+      <%- if cart_item.getProp('shoppingVenue') %>
+        <%= cart_item.getProp('shoppingVenue') %> <br />
+      <%- end %>
+      <span class="info-title">
+        <strong><%= cart_item.vendor %></strong>
+      </span>
+      <%= cart_item.part_number %><br />
+
+      <span class="result-tag">
+        <%- unless cart_item.socio.empty? %>
+          <span class="c2bullet">•</span>&nbsp;<span class='bullet-label'><strong>SOCIO:</strong></span>
+          <span class= "tag-values">
+            <%- cart_item.socio.each_with_index do |socio_tag, index| %>
+              <%= socio_tag %><%= ", " unless cart_item.socio.count == index+1 %>
+            <%- end %>
+          </span>
+        <%- end %>
+      </span>
+    </p>
+  </td>
+</tr>
+
+<%- if ENV['FLAG_ITEM_COMMENT_UI'] == 'true' %>
+  <%- if @show_comments %>
+    <tr>
+      <td>
+        <strong>
+          Comments:
+        </strong>
+        <% if cart_item.comments.empty? %>
+          <br>
+          No comments have been added yet
+          </br>
+        <% else %>
+          <% cart_item.comments.each do |c| %>
+            <br/>
+            <% unless c.user.nil? %>
+              <em>
+                <%= "#{c.user_full_name}: " %>
+              </em>
+            <% end %>
+            <%= c.comment_text %>
+          <% end %>
+        <% end %>
+        <p>
+          <%= form_for [cart_item, Comment.new] do |f| %>
+            <%= f.text_area :comment_text, rows: 5, cols: 55 %>
+            <p>
+              <%= submit_tag "Add a comment", id: :add_a_comment %>
+            </p>
+            <br/>
+          <% end %>
+        </p>
+      </td>
+    </tr>
+  <%- end %>
+<%- end %>

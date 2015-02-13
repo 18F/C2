@@ -14,7 +14,7 @@
         </div>
       </td>
       <td align="right" class="communicart_description" width="300">
-        <img src="/assets/img_logo_acquisition_gateway.gif" width="226" height="81" alt="Acquisition Gateway logo" />
+        <img src="<%= image_url('img_logo_acquisition_gateway.gif') %>" width="226" height="81" alt="Acquisition Gateway logo" />
       </td>
 
     </tr>
@@ -63,20 +63,15 @@
               <h5>Specs</h5>
             </td>
           </tr>
-              <%
-                navigator_exclusions = ['origin',
-                                        'contractingVehicle',
-                                        'location',
-                                        'configType'
-                                       ]
-              %>
-              <%- cart.properties.where.not(property: navigator_exclusions).each do |cart_property| %>
-          <tr class="cart_item_information">
-            <td class="w-container results-list" align="left" colspan="2">
-              <strong><%= (cart_property.property).split(/(?=[A-Z])/).join(" ") %></strong>: <%= cart_property.value %>
-            </td>
-          </tr>
-              <%- end %>
+          <%- cart.deserialized_properties.each do |property,value| %>
+            <%- unless cart.property_exclusions.include? property %>
+              <tr class="cart_item_information">
+                <td class="w-container results-list" align="left" colspan="2">
+                  <strong><%= property.underscore.humanize %></strong>: <%= value %>
+                </td>
+              </tr>
+            <%- end %>
+          <%- end %>
         </table>
       </td>
 
@@ -113,5 +108,3 @@
   </table>
 
 </div>
-
-

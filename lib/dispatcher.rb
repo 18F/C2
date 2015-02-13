@@ -1,23 +1,34 @@
 class Dispatcher
   def email_approver(approval)
-    cart = approval.cart
-    ApiToken.create!(user_id: approval.user_id, cart_id: cart.id, expires_at: Time.now + 7.days)
+    approval.create_api_token!
     send_notification_email(approval)
   end
 
   def email_observers(cart)
     cart.approvals.where(role: 'observer').each do |observer|
-      CommunicartMailer.cart_observer_email(observer.user.email_address, cart).deliver
+      CommunicartMailer.cart_observer_email(observer.user_email_address, cart).deliver
     end
+  end
+
+  def email_sent_confirmation(cart)
+    CommunicartMailer.proposal_created_confirmation(cart).deliver
   end
 
   def deliver_new_cart_emails(cart)
     self.email_observers(cart)
+    self.email_sent_confirmation(cart)
   end
 
   def on_approval_status_change(approval)
-    CommunicartMailer.approval_reply_received_email(approval).deliver
+    if self.requires_approval_notice?(approval) || approval.status == 'rejected'
+      CommunicartMailer.approval_reply_received_email(approval).deliver
+    end
+
     self.email_observers(approval.cart)
+  end
+
+  def requires_approval_notice?(approval)
+    true
   end
 
   def self.initialize_dispatcher(cart)
@@ -25,7 +36,11 @@ class Dispatcher
     when 'parallel'
       ParallelDispatcher.new
     when 'linear'
-      LinearDispatcher.new
+      if cart.ncr?
+        NcrDispatcher.new
+      else
+        LinearDispatcher.new
+      end
     end
   end
 
@@ -43,7 +58,7 @@ class Dispatcher
   private
 
   def send_notification_email(approval)
-    email = approval.user.email_address
+    email = approval.user_email_address
     CommunicartMailer.cart_notification_email(email, approval).deliver
   end
 end

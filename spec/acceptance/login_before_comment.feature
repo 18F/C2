@@ -5,7 +5,7 @@ Feature: Creating a comment on a cart item
 
   Scenario: Logging in and adding a comment
     When I go to the cart view page
-    And feature flag 'flag_comment_cart_item_ui' is 'true'
+    And feature flag 'FLAG_ITEM_COMMENT_UI' is 'true'
     Then I should see alert text 'You need to sign in for access to this page.'
     When I login
     Then I should see alert text 'You successfully signed in'

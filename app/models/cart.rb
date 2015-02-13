@@ -13,9 +13,17 @@ class Cart < ActiveRecord::Base
   has_many :comments, as: :commentable
   has_many :properties, as: :hasproperties
 
-  #TODO: validates_uniqueness_of :name
-  validates :proposal_id, presence: true
+  accepts_nested_attributes_for :proposal
 
+  #TODO: validates_uniqueness_of :name
+  validates :proposal, presence: true
+
+  scope :with_status, ->(status) { joins(:proposal).where(proposals: {status: status}) }
+  scope :approved, -> { with_status('approved') }
+  scope :open, -> { with_status('pending') }
+  scope :closed, -> { with_status(['approved', 'rejected']) }
+
+  ORIGINS = %w(navigator ncr)
 
   ## TODO deprecated ##
   def flow
@@ -54,8 +62,18 @@ class Cart < ActiveRecord::Base
     self.approvals.where(role: 'approver')
   end
 
+  def approvers
+    # TODO do through SQL
+    self.approver_approvals.map(&:user)
+  end
+
   def awaiting_approvals
     self.approver_approvals.pending
+  end
+
+  def awaiting_approvers
+    # TODO do through SQL
+    self.awaiting_approvals.map(&:user)
   end
 
   def ordered_approvals
@@ -64,6 +82,16 @@ class Cart < ActiveRecord::Base
 
   def ordered_awaiting_approvals
     self.ordered_approvals.pending
+  end
+
+  # users with outstanding cart_notification_emails
+  def currently_awaiting_approvers
+    if self.parallel?
+      self.awaiting_approvers
+    else # linear. Assumes the cart is open
+      approval = self.ordered_awaiting_approvals.first
+      [approval.user]
+    end
   end
 
   def approved_approvals
@@ -128,16 +156,24 @@ class Cart < ActiveRecord::Base
     self.comments.create!(user_id: self.requester.id, comment_text: comments.strip)
   end
 
+  def add_approver(email)
+    user = User.find_or_create_by(email_address: email)
+    self.approvals.create!(user_id: user.id, role: 'approver')
+  end
+
   def create_approver_approvals(emails)
     emails.each do |email|
-      user = User.find_or_create_by(email_address: email)
-      self.approvals.create!(user_id: user.id, role: 'approver')
+      self.add_approver(email)
     end
   end
 
+  def set_requester(user)
+    self.approvals.create!(user_id: user.id, role: 'requester')
+  end
+
   def create_requester(email)
-    requester = User.find_or_create_by(email_address: email)
-    self.approvals.create!(user_id: requester.id, role: 'requester')
+    user = User.find_or_create_by(email_address: email)
+    self.set_requester(user)
   end
 
   def process_approvals_without_approval_group(params)
@@ -201,5 +237,44 @@ class Cart < ActiveRecord::Base
     cart_items_params.each do |params|
       self.import_cart_item(params)
     end
+  end
+
+  def origin
+    self.getProp('origin')
+  end
+
+  def ncr?
+    self.origin == 'ncr'
+  end
+
+  def gsa_advantage?
+    # TODO set the origin
+    self.origin.blank?
+  end
+
+  # TODO use this when retrieving
+  def public_identifier_method
+    if self.ncr?
+      :id
+    else
+      :external_id
+    end
+  end
+
+  def public_identifier
+    self.send(self.public_identifier_method)
+  end
+
+  def parallel?
+    self.flow == 'parallel'
+  end
+
+  def linear?
+    self.flow == 'linear'
+  end
+
+  def pending?
+    # TODO validates :status, inclusion: {in: Approval::STATUSES}
+    self.status.blank? || self.status == 'pending'
   end
 end

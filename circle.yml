@@ -1,11 +1,11 @@
 dependencies:
   pre:
-    - cp config/environment_variables.yml.example config/environment_variables.yml
+    - cp .env.example .env
     - npm install -g grunt-cli
 
 test:
   override:
-    - bundle exec rspec spec
+    - bin/rspec
     - grunt jasmine
 
 deployment:

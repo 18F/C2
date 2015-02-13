@@ -10,7 +10,7 @@ module Exporter
 
     def rows
       self.approvals.map do |approval|
-        [approval.status, approval.user.email_address,approval.updated_at]
+        [approval.status, approval.user_email_address,approval.updated_at]
       end
     end
   end

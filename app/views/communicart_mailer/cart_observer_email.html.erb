@@ -1,26 +1,3 @@
 <body class="communicart-notification">
-  <table class='reply-section'>
-    <tr>
-      <td class="w-container html-email-message">
-        ------------------
-        <br/>
-
-        <p>
-          Additional comments:
-        </p>
-
-        <% unless @cart.comments.empty? %>
-          <p>
-            <%= @cart.comments.first.comment_text %>
-          </p>
-        <% end %>
-
-        <br/>
-      </td>
-    </tr>
-  </table>
- <%= render partial: @cart.cart_template_name, locals: {cart: @cart, title:
-  "Purchase Request"} %>
-
-
+  <%= render partial: @cart.cart_template_name, locals: {cart: @cart, title: "Purchase Request"} %>
 </body>

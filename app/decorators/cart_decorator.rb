@@ -2,8 +2,11 @@ class CartDecorator < Draper::Decorator
   delegate_all
 
   def total_price
-    price = object.cart_items.reduce(0) do |sum,citem| sum + citem.quantity * citem.price end
-    Float("%0.02f" % price)
+    if self.getProp('origin') == 'ncr'
+      self.getProp('amount').to_f
+    else
+      object.cart_items.reduce(0) { |sum,citem| sum + citem.subtotal }
+    end
   end
 
   def number_approved
@@ -36,7 +39,6 @@ class CartDecorator < Draper::Decorator
     end
   end
 
-
   def display_status
     if cart.status == 'pending'
       'pending approval'
@@ -62,8 +64,9 @@ class CartDecorator < Draper::Decorator
   end
 
   def cart_template_name
-    if self.getProp('origin') == 'navigator'
-      'navigator_cart'
+    origin_name = self.getProp('origin')
+    if Cart::ORIGINS.include? origin_name
+      "#{origin_name}_cart"
     else
       'cart_mail'
     end
@@ -76,4 +79,16 @@ class CartDecorator < Draper::Decorator
       nil
     end
   end
+
+  def property_exclusions
+    case self.getProp('origin')
+    when 'navigator'
+      ['origin', 'contractingVehicle', 'location', 'configType']
+    when 'ncr'
+      ['origin']
+    else
+      []
+    end
+  end
+
 end

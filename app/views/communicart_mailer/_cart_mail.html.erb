@@ -5,11 +5,7 @@
     <tr>
       <td>
         <h1 class="communicart_header">
-          <%- if local_assigns[:delivery] == 'web' %>
-            Purchase Request
-          <%- else %>
-            <%= title %>
-          <%- end %>
+          <%= title %>
         </h1>
 
         <div class="communicart_description">
@@ -19,224 +15,140 @@
           </p>
           <p>
             GSA Advantage:
+            GSA Advantage:
             <strong>[Some description] - Cart #<%= cart.external_id %></strong>
           </p>
         </div>
       </td>
       <td class="communicart_description">
-          <%- if local_assigns[:delivery] == 'web' %>
-          <div class="purchase-status">
-            <h5 class="<%= cart.status %>"><%= cart.display_status %></h5>
-          </div>
-          <%- else %>
-              <img src="/assets/img_logo_communicart.gif" width="229" height="43" alt="Communicart logo" />
-          <%- end %>
+        <img src="<%= image_url('img_logo_communicart.gif') %>" width="229" height="43" alt="Communicart logo" />
       </td>
     </tr>
 
-    <%= render partial: "email_status" unless local_assigns[:delivery] == 'web' %>
+  <%= render partial: "shared/email_status" %>
+  <tr>
+    <td class="w-container results-list" colspan="2">
+      <table width="100%">
+        <tr class='header'>
+          <td class="first" width="50%" scope="col">
+            <h5>Product</h5>
+          </td>
+          <td width="25%" scope="col">
+            <h5>Price</h5>
+          </td>
 
-    <tr>
-      <td class="w-container results-list" colspan="2">
-        <table width="100%">
-          <tr class='header'>
-            <td class="first" width="50%" scope="col">
-              <h5>Product</h5>
-            </td>
+          <td width="25%" scope="col">
+            <h5>Vendor</h5>
+          </td>
 
-            <td width="25%" scope="col">
-              <h5>Price</h5>
-            </td>
-
-            <td width="25%" scope="col">
-              <h5>Vendor</h5>
-            </td>
-
-          </tr><%#-- BEGIN CartItem Entry --%>
+        </tr><%#-- BEGIN CartItem Entry --%>
 
 
-          <%- cart.cart_items.each do |cart_item| %>
+        <%- cart.cart_items.each do |cart_item| %>
 
-          <tr class="cart_item_information">
-            <%#-- Product --%>
-            <td class="first" valign="top">
-              <p class="cart_item_description"><strong><a href="<%= cart_item.url %>"><%= cart_item.description %></a></strong></p>
+        <tr class="cart_item_information">
+          <%#-- Product --%>
+          <td class="first" valign="top">
+            <p class="cart_item_description"><strong><a href="<%= cart_item.url %>"><%= cart_item.description %></a></strong></p>
 
-              <p><%= cart_item.details %></p>
+            <p><%= cart_item.details %></p>
+
+            <span class="result-tag">
+              <%- if cart_item.green? %>
+
+              <span class="c2bullet green">•</span>&nbsp;<span class='bullet-label'>Green</span>
+              <%- end %>
+
+              <%- cart_item.features.each do |feature| %>
+              <span class="c2bullet <%= feature %>">•</span>&nbsp;<span class='bullet-label'><%= feature %></span>
+              <%- end %>
+            </span>
+
+          </td>
+
+          <%#-- Price --%>
+          <td valign="top">
+            <p class="result-item-price"><strong><%= number_to_currency(cart_item.subtotal) %></strong></p>
+
+            <p class="result-item-units"><%= number_to_currency(cart_item.price) %> x <%= cart_item.quantity %> units</p>
+          </td>
+
+          <%#-- Vendor --%>
+          <td valign="top">
+            <p class="vendor-information">
+              <%- if cart_item.getProp('shoppingVenue') %>
+              <%= cart_item.getProp('shoppingVenue') %> <br />
+              <%- end %>
+              <span class="info-title">
+                <strong><%= cart_item.vendor %></strong>
+              </span>
+              <%= cart_item.part_number %><br />
 
               <span class="result-tag">
-                <%- if cart_item.green? %>
-
-                <span class="c2bullet green">•</span>&nbsp;<span class='bullet-label'>Green</span>
-                <%- end %>
-
-                <%- cart_item.features.each do |feature| %>
-                 <span class="c2bullet <%= feature %>">•</span>&nbsp;<span class='bullet-label'><%= feature %></span>
+                <%- unless cart_item.socio.empty? %>
+                <span class="c2bullet">•</span>&nbsp;<span class='bullet-label'><strong>SOCIO:</strong></span>
+                <span class= "tag-values">
+                  <%- cart_item.socio.each_with_index do |socio_tag, index| %>
+                  <%= socio_tag %><%= ", " unless cart_item.socio.count == index+1 %>
+                  <%- end %>
+                </span>
                 <%- end %>
               </span>
 
-            </td>
-
-            <%#-- Price --%>
-            <td valign="top">
-              <p class="result-item-price"><strong><%= cart_item.subtotal %></strong></p>
-
-              <p class="result-item-units"><%= cart_item.formatted_price %> x <%= cart_item.quantity %> units</p>
-            </td>
-
-            <%#-- Vendor --%>
-            <td valign="top">
-              <p class="vendor-information">
-                <%- if cart_item.getProp('shoppingVenue') %>
-                  <%= cart_item.getProp('shoppingVenue') %> <br />
-                <%- end %>
-                  <span class="info-title">
-                    <strong><%= cart_item.vendor %></strong>
-                  </span>
-                  <%= cart_item.part_number %><br />
-
-                <span class="result-tag">
-                  <%- unless cart_item.socio.empty? %>
-                    <span class="c2bullet">•</span>&nbsp;<span class='bullet-label'><strong>SOCIO:</strong></span>
-                      <span class= "tag-values">
-                        <%- cart_item.socio.each_with_index do |socio_tag, index| %>
-                        <%= socio_tag %><%= ", " unless cart_item.socio.count == index+1 %>
-                        <%- end %>
-                      </span>
-                  <%- end %>
-                </span>
-
-              </p>
-            </td>
-
-          </tr>
-
-        <%- if ENV['flag_comment_cart_item_ui'] == 'true' %>
-          <%- if @show_comments %>
-          <tr>
-            <td>
-              <strong>
-                Comments:
-              </strong>
-              <% unless cart_item.comments.empty? %>
-              <% cart_item.comments.each do |c| %>
-              <br/>
-              <% unless c.user.nil? %>
-              <em>
-                <%= "#{c.user.full_name}: " %>
-              </em>
-              <% end %>
-              <%= c.comment_text %>
-              <% end %>
-              <% else %>
-              <br>
-              No comments have been added yet
-            </br>
-            <% end %>
-            <p>
-              <%= form_for [cart_item, Comment.new] do |f| %>
-              <%= f.text_area :comment_text, rows: 5, cols: 55 %>
-              <p>
-                <%= submit_tag "Add a comment", id: :add_a_comment %>
-              </p>
-              <br/>
-              <% end %>
             </p>
           </td>
+
         </tr>
-        <%- end %>
-      <%- end %>
 
-
-          <%- end %>
-
-
-            <tr>
-              <td class='cart-total' colspan='3'>
-                <span class="total-label">Total: <strong>$<%= cart.total_price %></strong></span>
-              </td>
-            </tr>
-
-          </table>
-
-      </td>
-    </tr>
-  </table>
-</div>
-
-
-<%- if local_assigns[:delivery] == 'web' %>
-  <div id="approval-status-container">
-    <div id="approval-status">
-      <h3>Request approved by</h3>
-      <ul>
-        <li class='icon-approved'>
-          <%= link_to 'approver1.lastname@gsa.gov', '/some/path' %>
-          <span class='timestamp'>on September 30th, 2014 at 4:16pm</span>
-        </li>
-        <li class='icon-approved'>
-          <%= link_to 'approver2.lastname@gsa.gov', '/some/path' %>
-          <span class='timestamp'>on September 31st, 2014 at 3:16pm</span>
-        </li>
-      </ul>
-    </div>
-  </div>
-
-  <div id="cart-comments-container">
-    <div id="cart-comments">
-      <h3>Comments on this purchase request</h3>
+        <%- if ENV['FLAG_ITEM_COMMENT_UI'] == 'true' %>
         <%- if @show_comments %>
-          <%= form_for [cart, Comment.new] do |f| %>
-          <%= f.text_area :comment_text, rows: 5, cols: 55 %>
-
-          <div class='row text-area-info-container'>
-            <div class='col-xs-6 text-area-info'>
-              <p>
-                These comments will be sent to your requester through email
-              </p>
-            </div>
-            <p class='col-xs-6 text-area-button'>
-              <%= submit_tag "Send note", id: :add_a_comment %>
-            </p>
-          </div>
-        <%- end %>
-
-            <% unless cart.comments.empty? %>
-              <% cart.comments.each do |c| %>
-
-                <div class='comment-item'>
-                  <div class='row'>
-                    <p class='comment-sender col-xs-6'>
-                      <strong>requester@test.com</strong>
-                    </p>
-
-                    <p class='comment-date col-xs-6'>
-                      <%= c.created_at %>
-                    </p>
-                  </div>
-
-                  <div class='row'>
-                    <p class='comment-text col-xs-6'>
-                      <% unless c.user.nil? %>
-                      <em>
-                        <%= "#{c.user.full_name}: " %>
-                      </em>
-                      <% end %>
-                      <%= c.comment_text %>
-                    </p>
-                  </div>
-                </div>
-              <% end %>
-
+        <tr>
+          <td>
+            <strong>
+              Comments:
+            </strong>
+            <% unless cart_item.comments.empty? %>
+            <% cart_item.comments.each do |c| %>
+            <br/>
+            <% unless c.user.nil? %>
+            <em>
+              <%= "#{c.user_full_name}: " %>
+            </em>
+            <% end %>
+            <%= c.comment_text %>
+            <% end %>
             <% else %>
             <br>
             No comments have been added yet
+          </br>
           <% end %>
-        <%- end %>
-    </div>
-  </div>
+          <p>
+            <%= form_for [cart_item, Comment.new] do |f| %>
+            <%= f.text_area :comment_text, rows: 5, cols: 55 %>
+            <p>
+              <%= submit_tag "Add a comment", id: :add_a_comment %>
+            </p>
+            <br/>
+            <% end %>
+          </p>
+        </td>
+      </tr>
+      <%- end %>
+      <%- end %>
 
-<%- end %>
+
+      <%- end %>
 
 
+      <tr>
+        <td class='cart-total' colspan='3'>
+          <span class="total-label">Total: <strong><%= number_to_currency(cart.total_price) %></strong></span>
+        </td>
+      </tr>
 
+    </table>
+
+  </td>
+</tr>
+</table>
+</div>
