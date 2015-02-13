@@ -21,7 +21,7 @@ describe CartsHelper do
 
         it "excludes approved approvals" do
           cart = FactoryGirl.create(:cart_with_approvals, flow: 'parallel')
-          cart.approvals.first.update_attribute(:status, 'approved')
+          cart.approvals.first.approve!
           expect(helper.display_status(cart, current_user)).to eq("<em>Waiting for review from:</em> Liono Approver2")
         end
 
@@ -40,7 +40,7 @@ describe CartsHelper do
 
         it "excludes approved approvals" do
           cart = FactoryGirl.create(:cart_with_approvals, flow: 'linear')
-          cart.approvals.first.update_attribute(:status, 'approved')
+          cart.approvals.first.approve!
           expect(helper.display_status(cart, current_user)).to eq("<em>Waiting for review from:</em> Liono Approver2")
         end
 

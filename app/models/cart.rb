@@ -2,8 +2,9 @@ require 'csv'
 
 class Cart < ActiveRecord::Base
   include PropMixin
+  include WorkflowHelper::ThreeStateWorkflow
 
-  STATUSES = %w(pending approved rejected)
+  workflow_column :status
 
   has_many :cart_items
   has_many :approvals
@@ -14,9 +15,6 @@ class Cart < ActiveRecord::Base
   has_many :comments, as: :commentable
   has_many :properties, as: :hasproperties
 
-  after_initialize :set_defaults
-
-  #TODO: after_save default status
   #TODO: validates_uniqueness_of :name
   validates :flow, presence: true, inclusion: {in: ApprovalGroup::FLOWS}
 
@@ -26,20 +24,8 @@ class Cart < ActiveRecord::Base
 
   ORIGINS = %w(navigator ncr)
 
-  def update_approval_status
-    if self.has_rejection?
-      self.update_attributes(status: 'rejected')
-    elsif self.all_approvals_received?
-      self.update_attributes(status: 'approved')
-    end
-  end
-
   def rejections
     self.approvals.where(status: 'rejected')
-  end
-
-  def has_rejection?
-    self.rejections.any?
   end
 
   def approver_approvals
@@ -197,7 +183,7 @@ class Cart < ActiveRecord::Base
 
   def self.copy_existing_approvals_to(new_cart, cart_name)
     previous_cart = Cart.where(name: cart_name).last
-    if previous_cart && previous_cart.status == 'rejected'
+    if previous_cart && previous_cart.rejected?
       previous_cart.approvals.each do |approval|
         new_cart.copy_existing_approval(approval)
       end
@@ -217,10 +203,6 @@ class Cart < ActiveRecord::Base
     cart_items_params.each do |params|
       self.import_cart_item(params)
     end
-  end
-
-  def set_defaults
-    self.status ||= 'pending'
   end
 
   def origin
@@ -257,8 +239,9 @@ class Cart < ActiveRecord::Base
     self.flow == 'linear'
   end
 
-  def pending?
-    # TODO validates :status, inclusion: {in: STATUSES}
-    self.status.blank? || self.status == 'pending'
+  def on_pending_entry(new_state, event)
+    if self.all_approvals_received?
+      self.approve!
+    end
   end
 end

@@ -61,13 +61,13 @@ class Approval < ActiveRecord::Base
 
   # Used by the state machine
   def on_rejected_entry(new_state, event)
-    self.cart.update_approval_status
+    self.cart.reject!
     Dispatcher.on_approval_status_change(self)  # todo - move this out
   end
 
   # Used by the state machine
   def on_approved_entry(new_state, event)
-    self.cart.update_approval_status
+    self.cart.partial_approve!
     Dispatcher.on_approval_status_change(self)  # todo - move this out
   end
 end

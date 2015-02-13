@@ -40,7 +40,7 @@ class CartDecorator < Draper::Decorator
   end
 
   def display_status
-    if cart.status == 'pending'
+    if cart.pending?
       'pending approval'
     else
       cart.status
