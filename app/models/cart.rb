@@ -47,8 +47,7 @@ class Cart < ActiveRecord::Base
   end
 
   def approvers
-    # TODO do through SQL
-    self.approver_approvals.map(&:user)
+    self.approval_users.merge(self.approver_approvals)
   end
 
   def awaiting_approvals
@@ -56,8 +55,7 @@ class Cart < ActiveRecord::Base
   end
 
   def awaiting_approvers
-    # TODO do through SQL
-    self.awaiting_approvals.map(&:user)
+    self.approval_users.merge(self.awaiting_approvals)
   end
 
   def ordered_approvals
@@ -88,7 +86,7 @@ class Cart < ActiveRecord::Base
   end
 
   def requester
-    approvals.where(role: 'requester').first.try(:user)
+    self.approval_users.where(approvals: {role: 'requester'}).first
   end
 
   def observers
