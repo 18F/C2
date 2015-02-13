@@ -45,6 +45,8 @@ Feature: Approving a cart from the web application
     When I go to the approval_response page without a token
     Then I should see 'Approve'
     And I should see 'Reject'
+    When I click 'Approve'
+    Then I should see alert text 'You have approved Cart 11223344.'
 
   Scenario: An approver visits the page to approve out of turn
     Given a linear cart '11223344' with a cart item
