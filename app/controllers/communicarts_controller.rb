@@ -1,6 +1,6 @@
 require ::File.expand_path('authentication_error.rb',  'lib/errors')
 require ::File.expand_path('approval_group_error.rb',  'lib/errors')
-
+include ParamHelper
 
 class CommunicartsController < ApplicationController
   skip_before_action :verify_authenticity_token
@@ -55,8 +55,7 @@ class CommunicartsController < ApplicationController
 private
 
   def validate_access
-    request_from_email = params['email_delivery'].presence || true
-    return unless request_from_email == true
+    return if bypass_token_validation?
 
     @token = ApiToken.find_by(access_token: params[:cch])
     if !@token
@@ -99,6 +98,10 @@ private
 
   def approval_group_error(error)
     render json: { message: error.to_s }, status: 400
+  end
+
+  def bypass_token_validation?
+    params['web'] && to_bool(params['web']) == true
   end
 
 end
