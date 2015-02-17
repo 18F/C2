@@ -10,7 +10,7 @@ class CommunicartsController < ApplicationController
     authentication_error(exception)
   end
 
-  rescue_from ApprovalGroupError, :with =>   :approval_group_error
+  rescue_from ApprovalGroupError, with: :approval_group_error
 
   def send_cart
 
