@@ -5,7 +5,7 @@ module ApprovalSteps
   end
 
   step 'I go to the approval_response page without a token' do
-    visit "/carts/#{@cart.id}?email_delivery=false"
+    visit "/carts/#{@cart.id}"
   end
 
   step 'I go to the approval_response page with invalid token :token' do |token|
