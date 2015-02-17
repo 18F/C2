@@ -239,6 +239,7 @@ class Cart < ActiveRecord::Base
     self.flow == 'linear'
   end
 
+  # Used by the state machine
   def on_pending_entry(new_state, event)
     if self.all_approvals_received?
       self.approve!
