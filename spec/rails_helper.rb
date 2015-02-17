@@ -7,7 +7,6 @@ require 'rspec/rails'
 
 require 'steps/user_steps'
 require 'steps/approval_steps'
-require 'integration_spec_helper'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -32,7 +31,7 @@ ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  config.fixture_path = "#{::Rails.root}/spec/support/fixtures"
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
@@ -60,8 +59,10 @@ RSpec.configure do |config|
   config.include UserSteps
 
   # Add modules for helpers
-  config.include IntegrationSpecHelper
-
+  config.include ControllerSpecHelper, type: :controller
+  [:feature, :request].each do |type|
+    config.include IntegrationSpecHelper, type: type
+  end
 
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction

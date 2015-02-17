@@ -71,5 +71,21 @@ describe "National Capital Region proposals" do
       # keeps the form values
       expect(find_field('Amount').value).to eq('10000')
     end
+
+    it "includes has overwritten field names" do
+      visit '/ncr/proposals/new'
+      expect(page).to have_content("RWA Number")
+      fill_in 'Description', with: "buying stuff"
+      choose 'BA80'
+      fill_in 'RWA Number', with: 'NumNum', disabled: true
+      fill_in 'Vendor', with: 'ACME'
+      fill_in 'Amount', with: 123.45
+      fill_in "Approving Official's Email Address", with: 'approver@example.com'
+      select 'Entire Jackson Place Complex', :from => 'ncr_proposal_building_number'
+      select Ncr::ProposalForm::OFFICES[0], :from => 'ncr_proposal_office'
+      click_on 'Submit for approval'
+      expect(current_path).to eq("/carts/#{Cart.last.id}")
+      expect(page).to have_content("RWA Number")
+    end
   end
 end

@@ -26,3 +26,9 @@ en:
   time:
     formats:
       default: "%b %-d, %Y at %I:%M%p %Z"
+  helpers:
+    label:
+      ncr/proposal:
+        rwa_number: "RWA Number"
+      cart:
+        rwa_number: "RWA Number"

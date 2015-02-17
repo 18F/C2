@@ -19,6 +19,7 @@ gem 'settingslogic'
 gem 'simple_form_object'
 gem 'turbolinks'
 gem 'uglifier'
+gem 'workflow'
 
 group :test, :development do
   gem 'database_cleaner'
