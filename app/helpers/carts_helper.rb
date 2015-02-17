@@ -30,9 +30,8 @@ module CartsHelper
   end
 
   def current_linear_approval?(cart, user)
-    return false unless cart.linear?
     approval = Approval.find_by(cart_id: cart.id, user_id: user.id)
-    cart.pending? && cart.ordered_awaiting_approvals.first == approval
+    cart.linear? && cart.ordered_awaiting_approvals.first == approval
   end
 
 
