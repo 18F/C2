@@ -88,7 +88,7 @@ describe CommunicartMailer do
     let(:mail) { CommunicartMailer.approval_reply_received_email(approval) }
 
     before do
-      approval.update_attribute(:status, 'approved')
+      approval.approve!
       expect_any_instance_of(CommunicartMailer).to receive(:sender).and_return('reply@communicart-stub.com')
       expect(cart_with_approval_group).to receive(:requester).and_return(requester).at_least(:once)
     end

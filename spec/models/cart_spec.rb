@@ -1,13 +1,13 @@
 describe Cart do
   let(:cart) { FactoryGirl.create(:cart_with_approval_group) }
 
-  describe '#update_approval_status' do
+  describe 'partial approvals' do
     context "All approvals are in 'approved' status" do
       it 'updates a status based on the cart_id passed in from the params' do
         expect(cart).to receive(:all_approvals_received?).and_return(true)
 
-        cart.update_approval_status
-        expect(cart.status).to eq('approved')
+        cart.partial_approve!
+        expect(cart.approved?).to eq true
       end
     end
 
@@ -15,15 +15,15 @@ describe Cart do
       it 'does not update the cart status' do
         expect(cart).to receive(:all_approvals_received?).and_return(false)
 
-        cart.update_approval_status
-        expect(cart.status).to eq('pending')
+        cart.partial_approve!
+        expect(cart.pending?).to eq true
       end
     end
   end
 
   describe '#default value should be correct' do
     it 'sets status to pending by default' do
-      expect(cart.status).to eq('pending')
+      expect(cart.pending?).to eq true
     end
   end
 

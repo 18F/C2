@@ -26,7 +26,7 @@ describe LinearDispatcher do
     it "returns nil if the cart is rejected" do
       next_app = cart.approvals.create!(position: 5, role: 'approver')
       expect(dispatcher.next_pending_approval(cart)).to eq(next_app)
-      cart.status = 'rejected'
+      cart.reject!
       expect(dispatcher.next_pending_approval(cart)).to eq(nil)
     end
 

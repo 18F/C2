@@ -132,7 +132,7 @@ describe 'Rejecting a cart with multiple approvers' do
     expect(cart.approvals.count).to eq 3
     expect(cart.approvals.where(status: 'approved').count).to eq 0
     expect(cart.approvals.where(status: 'rejected').count).to eq 1
-    expect(cart.reload.status).to eq 'rejected'
+    expect(cart.reload.rejected?).to eq true
 
     # User corrects the mistake and resubmits
     @json_params_1 = JSON.parse(params_request_1)
@@ -142,7 +142,7 @@ describe 'Rejecting a cart with multiple approvers' do
     expect(Cart.count).to eq 2
     expect(Approval.count).to eq 6
     updated_cart = Cart.last
-    expect(updated_cart.status).to eq 'pending'
+    expect(updated_cart.pending?).to eq true
     expect(cart.approvals.count).to eq 3
 
     # Cart with the same external ID should be associated with a new set of users with approvals in status 'pending'
