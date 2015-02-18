@@ -27,6 +27,7 @@ group :test, :development do
   gem 'pry-byebug'
   gem 'pry-rails'
   gem 'rspec-rails'
+  gem 'rack_session_access'
 end
 
 group :development do

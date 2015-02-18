@@ -1,0 +1,19 @@
+<% if display_response_actions?(cart, current_user) %>
+  <div id='reply-section'>
+    <p>
+      <%= link_to "Approve",
+          approval_response_path(approver_action: 'approve',
+                                 cart_id: cart.id,
+                                 scheme: 'https',
+                                 user_id: current_user.id,
+                                 ), class: 'form-button' %>
+
+      <%= link_to "Reject",
+          approval_response_path(approver_action: 'reject',
+                                 cart_id: cart.id,
+                                 scheme: 'https',
+                                 user_id: current_user.id,
+                                 ), class: 'reject-link' %>
+    </p>
+  </div>
+<% end %>

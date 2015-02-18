@@ -10,7 +10,7 @@ class CommunicartsController < ApplicationController
     authentication_error(exception)
   end
 
-  rescue_from ApprovalGroupError, :with =>   :approval_group_error
+  rescue_from ApprovalGroupError, with: :approval_group_error
 
   def send_cart
 
@@ -53,7 +53,10 @@ class CommunicartsController < ApplicationController
       approval.reject!
       flash[:success] = "You have rejected Cart #{cart.public_identifier}."
     end
-    @token.update_attribute(:used_at, Time.now)
+
+    if @token
+      @token.update_attribute(:used_at, Time.now)
+    end
 
     redirect_to cart_path(cart)
   end
@@ -62,6 +65,8 @@ class CommunicartsController < ApplicationController
 private
 
   def validate_access
+    return if signed_in?
+
     @token = ApiToken.find_by(access_token: params[:cch])
     if !@token
       raise AuthenticationError.new(msg: 'something went wrong with the token (nonexistent)')
