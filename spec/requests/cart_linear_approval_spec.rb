@@ -49,12 +49,12 @@ describe "Approving a cart with multiple approvers in parallel" do
   context 'default mailing behavior' do
     it 'updates the cart and approval records as expected' do
       expect(User.count).to eq(4)
-      expect(cart.status).to eq 'pending'
+      expect(cart.pending?).to eq true
       expect(cart.approvals.approved.count).to eq 0
 
       approve
 
-      expect(cart.status).to eq 'pending'
+      expect(cart.pending?).to eq true
       expect(cart.approvals.count).to eq 4
       expect(cart.approvals.approved.count).to eq 1
       expect(cart.requester.email_address).to eq 'test-requester@some-dot-gov.gov'
@@ -75,7 +75,7 @@ describe "Approving a cart with multiple approvers in parallel" do
       json_approval_params["fromAddress"] = "approver3@some-dot-gov.gov"
       approve
 
-      expect(cart.status).to eq 'approved'
+      expect(cart.approved?).to eq true
       expect(cart.approvals.approved.count).to eq 3
       expect(email_recipients).to eq(['test-requester@some-dot-gov.gov'])
     end
@@ -86,12 +86,12 @@ describe "Approving a cart with multiple approvers in parallel" do
     it 'only sends out emails for first and last approvals' do
       cart.setProp('origin','ncr')
       expect(User.count).to eq(4)
-      expect(cart.status).to eq 'pending'
+      expect(cart.pending?).to eq true
       expect(cart.approvals.approved.count).to eq 0
 
       approve
 
-      expect(cart.status).to eq 'pending'
+      expect(cart.pending?).to eq true
       expect(cart.approvals.count).to eq 4
       expect(cart.approvals.approved.count).to eq 1
       expect(cart.requester.email_address).to eq 'test-requester@some-dot-gov.gov'
@@ -110,7 +110,7 @@ describe "Approving a cart with multiple approvers in parallel" do
       json_approval_params["fromAddress"] = "approver3@some-dot-gov.gov"
       approve
 
-      expect(cart.status).to eq 'approved'
+      expect(cart.approved?).to eq true
       expect(cart.approvals.approved.count).to eq 3
       expect(email_recipients).to eq(['test-requester@some-dot-gov.gov'])
     end
@@ -118,12 +118,12 @@ describe "Approving a cart with multiple approvers in parallel" do
     it 'sends a requester an email when a request has been rejected' do
       cart.setProp('origin','ncr')
       expect(User.count).to eq(4)
-      expect(cart.status).to eq 'pending'
+      expect(cart.pending?).to eq true
       expect(cart.approvals.approved.count).to eq 0
 
       approve
 
-      expect(cart.status).to eq 'pending'
+      expect(cart.pending?).to eq true
       expect(cart.approvals.count).to eq 4
       expect(cart.approvals.approved.count).to eq 1
       expect(cart.requester.email_address).to eq 'test-requester@some-dot-gov.gov'

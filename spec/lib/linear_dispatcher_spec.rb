@@ -26,7 +26,7 @@ describe LinearDispatcher do
     it "returns nil if the cart is rejected" do
       next_app = cart.approvals.create!(position: 5, role: 'approver')
       expect(dispatcher.next_pending_approval(cart)).to eq(next_app)
-      cart.status = 'rejected'
+      next_app.update_attribute(:status, 'rejected')  # skip state machine
       expect(dispatcher.next_pending_approval(cart)).to eq(nil)
     end
 
@@ -66,9 +66,12 @@ describe LinearDispatcher do
     end
   end
 
-  xdescribe '#on_approval_status_change' do
+  describe '#on_approval_approved' do
     it "sends to the requester and the next approver" do
-      dispatcher.on_approval_status_change(cart.approvals.first)
+      cart = FactoryGirl.create(:cart_with_approvals)
+      approval = cart.approvals.first
+      approval.update_attribute(:status, 'approved')  # avoiding state machine
+      dispatcher.on_approval_approved(approval)
       expect(email_recipients).to eq([
         'approver2@some-dot-gov.gov',
         'requester@some-dot-gov.gov'

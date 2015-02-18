@@ -52,12 +52,12 @@ describe "Approving a cart with multiple approvers in parallel" do
   it 'updates the cart and approval records as expected' do
     expect(Cart.count).to eq(1)
     expect(User.count).to eq(4)
-    expect(Cart.first.status).to eq 'pending'
+    expect(Cart.first.pending?).to eq true
     expect(Cart.first.approvals.approved.count).to eq 0
 
     post 'approval_reply_received', @json_approval_params
 
-    expect(Cart.first.status).to eq 'pending'
+    expect(Cart.first.pending?).to eq true
     expect(Cart.first.approvals.count).to eq 4
     expect(Cart.first.approvals.approved.count).to eq 1
     expect(Cart.first.requester.email_address).to eq 'test-requester@some-dot-gov.gov'
@@ -72,7 +72,7 @@ describe "Approving a cart with multiple approvers in parallel" do
     expect(ActionMailer::Base.deliveries.count).to eq 2
     post 'approval_reply_received', @json_approval_params
 
-    expect(Cart.first.status).to eq 'approved'
+    expect(Cart.first.approved?).to eq true
     expect(Cart.first.approvals.approved.count).to eq 3
     expect(Cart.first.comments.first.comment_text).to eq "spudcomment"
 

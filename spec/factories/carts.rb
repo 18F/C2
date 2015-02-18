@@ -34,8 +34,7 @@ FactoryGirl.define do
 
       factory :cart_with_all_approvals_approved do
         after :create do |cart|
-          cart.approvals.each {|a| a.update_attribute :status, 'approved'}
-          cart.update_attribute :status, 'approved'
+          cart.approvals.each {|a| a.approve!}
         end
       end
 
