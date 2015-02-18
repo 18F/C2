@@ -238,9 +238,16 @@ class Cart < ActiveRecord::Base
   end
 
   # Used by the state machine
-  def on_pending_entry(new_state, event)
+  def on_pending_entry(prev_state, event)
     if self.all_approvals_received?
       self.approve!
+    end
+  end
+
+  # Used by the state machine
+  def on_rejected_entry(prev_state, event)
+    if prev_state.name != :rejected
+      Dispatcher.on_cart_rejected(self)
     end
   end
 end

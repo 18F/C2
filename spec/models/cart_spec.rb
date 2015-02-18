@@ -124,4 +124,17 @@ describe Cart do
 
   end
 
+  describe '#on_rejected_entry' do
+    it 'sends only one rejection email' do
+      cart = FactoryGirl.create(:cart_with_approvals)
+      # skip workflow
+      cart.approver_approvals.first.update_attribute(:status, 'rejected')
+      cart.reject!
+      expect(email_recipients).to eq(['requester@some-dot-gov.gov'])
+
+      cart.reject!
+      expect(email_recipients).to eq(['requester@some-dot-gov.gov'])
+    end
+  end
+
 end
