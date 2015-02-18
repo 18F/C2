@@ -16,10 +16,13 @@ class Approval < ActiveRecord::Base
   validates :status, presence: true,
             inclusion: {in: workflow_spec.states.keys.map(&:to_s)}
 
-  scope :approvable, -> { where.not(role: ['requester','observer']) }
+  scope :approvable, -> { where(role: 'approver') }
+  scope :observing, -> { where(role: 'observer') }
+  scope :requesting, -> { where(role: 'requester') }
   scope :pending, ->    { approvable.where(status: 'pending') }
   scope :received, ->   { approvable.where.not(status: 'pending') }
   scope :approved, ->   { approvable.where(status: 'approved') }
+  scope :rejected, ->   { approvable.where(status: 'rejected') }
 
 
   # TODO this should be a proper association

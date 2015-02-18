@@ -22,7 +22,7 @@ class Cart < ActiveRecord::Base
 
   scope :approved, -> { where(status: 'approved') }
   scope :pending, -> { where(status: 'pending') }
-  scope :closed, -> { where(:status => ['approved', 'rejected']) }
+  scope :closed, -> { where(status: ['approved', 'rejected']) }
 
   ORIGINS = %w(navigator ncr)
 
@@ -35,7 +35,7 @@ class Cart < ActiveRecord::Base
   end
 
   def rejections
-    self.approvals.where(status: 'rejected')
+    self.approver_approvals.rejected
   end
 
   def has_rejection?
@@ -43,7 +43,7 @@ class Cart < ActiveRecord::Base
   end
 
   def approver_approvals
-    self.approvals.where(role: 'approver')
+    self.approvals.approvable
   end
 
   def approvers
@@ -78,11 +78,11 @@ class Cart < ActiveRecord::Base
   end
 
   def approved_approvals
-    self.approver_approvals.where(status: 'approved')
+    self.approver_approvals.approved
   end
 
   def all_approvals_received?
-    self.approver_approvals.where('status != ?', 'approved').empty?
+    self.approver_approvals.pending.empty?
   end
 
   def requester
@@ -106,7 +106,7 @@ class Cart < ActiveRecord::Base
   def self.existing_or_new_cart(params)
     name = params['cartName'].presence || params['cartNumber'].to_s
 
-    pending_cart = Cart.find_by(name: name, status: 'pending')
+    pending_cart = Cart.pending.find_by(name: name)
     if pending_cart
       cart = reset_existing_cart(pending_cart)
     else
