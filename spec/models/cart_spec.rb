@@ -68,6 +68,27 @@ describe Cart do
     end
   end
 
+  describe '#currently_awaiting_approvers' do
+    it "gives a consistently ordered list when in parallel" do
+      cart = FactoryGirl.create(:cart_with_approvals)
+      last_names = cart.currently_awaiting_approvers.map(&:last_name)
+      expect(last_names).to eq(['Approver1', 'Approver2'])
+
+      cart.approvals.first.update_attribute(:position, 5)
+      last_names = cart.currently_awaiting_approvers.map(&:last_name)
+      expect(last_names).to eq(['Approver2', 'Approver1'])
+    end
+    it "gives only the first approver when linear" do
+      cart = FactoryGirl.create(:cart_with_approvals, flow: 'linear')
+      last_names = cart.currently_awaiting_approvers.map(&:last_name)
+      expect(last_names).to eq(['Approver1'])
+
+      cart.approvals.first.update_attribute(:position, 5)
+      last_names = cart.currently_awaiting_approvers.map(&:last_name)
+      expect(last_names).to eq(['Approver2'])
+    end
+  end
+
   context 'scopes' do
     let(:approved_cart1) { FactoryGirl.create(:cart, status: 'approved') }
     let(:approved_cart2) { FactoryGirl.create(:cart, status: 'approved') }

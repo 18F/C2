@@ -63,8 +63,7 @@ class Cart < ActiveRecord::Base
   end
 
   def approvers
-    # TODO do through SQL
-    self.approver_approvals.map(&:user)
+    self.approval_users.merge(self.approver_approvals)
   end
 
   def awaiting_approvals
@@ -72,8 +71,7 @@ class Cart < ActiveRecord::Base
   end
 
   def awaiting_approvers
-    # TODO do through SQL
-    self.awaiting_approvals.map(&:user)
+    self.approval_users.merge(self.awaiting_approvals)
   end
 
   def ordered_approvals
@@ -87,7 +85,8 @@ class Cart < ActiveRecord::Base
   # users with outstanding cart_notification_emails
   def currently_awaiting_approvers
     if self.parallel?
-      self.awaiting_approvers
+      # TODO do through SQL
+      self.ordered_awaiting_approvals.map(&:user)
     else # linear. Assumes the cart is open
       approval = self.ordered_awaiting_approvals.first
       [approval.user]
@@ -103,7 +102,7 @@ class Cart < ActiveRecord::Base
   end
 
   def requester
-    approvals.where(role: 'requester').first.try(:user)
+    self.approval_users.where(approvals: {role: 'requester'}).first
   end
 
   def observers
@@ -274,7 +273,7 @@ class Cart < ActiveRecord::Base
   end
 
   def pending?
-    # TODO validates :status, inclusion: {in: Approval::STATUSES}
+    # TODO validates :status, inclusion: {in: STATUSES}
     self.status.blank? || self.status == 'pending'
   end
 end
