@@ -87,5 +87,49 @@ describe "National Capital Region proposals" do
       expect(current_path).to eq("/carts/#{Cart.last.id}")
       expect(page).to have_content("RWA Number")
     end
+
+    it "can be restarted if pending" do
+      proposal = FactoryGirl.build(:proposal_form)
+      proposal.requester = requester
+      cart = proposal.create_cart
+
+      visit "/ncr/proposals/#{cart.id}/edit"
+      expect(find_field("ncr_proposal_building_number").value).to eq(
+        'Entire WH Complex')
+      fill_in 'Vendor', with: 'ACME'
+      click_on 'Submit for approval'
+      expect(current_path).to eq("/carts/#{cart.id}")
+      expect(page).to have_content("ACME")
+      expect(page).to have_content("resubmitted")
+    end
+    it "can be restarted if rejected" do
+      proposal = FactoryGirl.build(:proposal_form)
+      proposal.requester = requester
+      cart = proposal.create_cart
+      cart.update_attribute(:status, "rejected")  # avoid workflow
+
+      visit "/ncr/proposals/#{cart.id}/edit"
+      expect(current_path).to eq("/ncr/proposals/#{cart.id}/edit")
+    end
+    it "cannot be restarted if approved" do
+      proposal = FactoryGirl.build(:proposal_form)
+      proposal.requester = requester
+      cart = proposal.create_cart
+      cart.update_attribute(:status, "approved")  # avoid workflow
+
+      visit "/ncr/proposals/#{cart.id}/edit"
+      expect(current_path).to eq("/ncr/proposals/new")
+      expect(page).to have_content('already approved')
+    end
+
+    it "cannot be edited by someone other than the requester" do
+      proposal = FactoryGirl.build(:proposal_form)
+      proposal.requester = FactoryGirl.create(:user)
+      cart = proposal.create_cart
+
+      visit "/ncr/proposals/#{cart.id}/edit"
+      expect(current_path).to eq("/ncr/proposals/new")
+      expect(page).to have_content('cannot restart')
+    end
   end
 end
