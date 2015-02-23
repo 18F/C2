@@ -126,4 +126,6 @@
   </div>
 </div>
 
-<%= render partial: 'approval_actions', locals: { current_user: @current_user, cart: cart} %>
+<% if display_response_actions?(cart, @current_user) %>
+  <%= render partial: 'approval_actions', locals: { current_user: @current_user, cart: cart} %>
+<% end %>

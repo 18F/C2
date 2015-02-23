@@ -29,4 +29,17 @@ describe User do
       expect(user.full_name).to eq 'george.jetson@spacelysprockets.com'
     end
   end
+
+  describe '#is_approver?' do
+    let(:cart) { FactoryGirl.create(:cart) }
+
+    it 'returns true when user is an approver' do
+      cart.add_approver user.email_address
+      expect(user.is_approver? cart).to eq true
+    end
+
+    it 'returns false when user is not an approver' do
+      expect(user.is_approver? cart).to eq false
+    end
+  end
 end

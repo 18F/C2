@@ -22,6 +22,10 @@ class User < ActiveRecord::Base
     self.carts.where(approvals: {role: 'requester'})
   end
 
+  def is_approver?(cart)
+    cart.approvers.include? self
+  end
+
   def last_requested_cart
     self.requested_carts.order('carts.created_at DESC').first
   end

@@ -69,4 +69,25 @@ Feature: Approving a cart from the web application
     And I go to the approval_response page without a token
     Then I should see 'Approve'
     And I should see 'Reject'
+    When I click 'Approve'
+    Then I should see alert text 'You have approved Cart 66778899.'
+
+  Scenario: A requester for a parallel cart visits the page
+    Given a parallel cart '66778899' with a cart item
+    And the cart has an approval for 'supervisor1@test.gov' in position 1
+    And the cart has an approval for 'supervisor2@test.gov' in position 2
+    Given the logged in user is 'requester1@some-dot-gov.gov'
+    When I go to the approval_response page without a token
+    Then I should not see 'Approve'
+    And I should not see 'Reject'
+    When the logged in user is 'supervisor1@test.gov'
+    And I go to the approval_response page without a token
+    Then I should see 'Approve'
+    And I should see 'Reject'
+    When the logged in user is 'supervisor2@test.gov'
+    And I go to the approval_response page without a token
+    Then I should see 'Approve'
+    And I should see 'Reject'
+    When I click 'Approve'
+    Then I should see alert text 'You have approved Cart 66778899.'
 
