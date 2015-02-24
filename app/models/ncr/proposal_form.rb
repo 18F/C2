@@ -99,7 +99,11 @@ module Ncr
     end
 
     def self.from_cart(cart)
-      form = self.new(cart.deserialized_properties)
+      relevant_properties = self._attributes.map(&:name).map(&:to_s)
+      properties = cart.deserialized_properties.select{
+        |key, val| relevant_properties.include? key
+      }
+      form = self.new(properties)
       form.approver_email = cart.ordered_approvals.first.user.email_address
       form.description = cart.name
       form

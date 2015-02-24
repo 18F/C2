@@ -101,6 +101,9 @@ describe "National Capital Region proposals" do
       expect(current_path).to eq("/carts/#{cart.id}")
       expect(page).to have_content("ACME")
       expect(page).to have_content("resubmitted")
+      # Verify it is actually saved
+      cart.reload
+      expect(cart.getProp('vendor')).to eq('ACME')
     end
     it "can be restarted if rejected" do
       proposal = FactoryGirl.build(:proposal_form)

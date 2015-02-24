@@ -29,4 +29,21 @@ describe Ncr::ProposalForm do
       ))
     end
   end
+
+  describe 'from_cart' do
+    it 'sets the correct fields' do
+      cart = FactoryGirl.create(:cart_with_approvals)
+      form = Ncr::ProposalForm.from_cart(cart)
+      expect(form.approver_email).to eq('approver1@some-dot-gov.gov')
+      expect(form.description).to eq('Test Cart needing approval')
+      expect(form.amount).to be_nil
+    end
+
+    it 'also sets properties and ignores extra props' do
+      cart = FactoryGirl.create(:cart_with_approvals)
+      cart.set_props(some_field: "a value", amount: 1234.56)
+      form = Ncr::ProposalForm.from_cart(cart)
+      expect(form.amount).to eq(1234.56)
+    end
+  end
 end
