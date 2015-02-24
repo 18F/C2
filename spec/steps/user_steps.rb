@@ -6,7 +6,7 @@ module UserSteps
   end
 
   step 'the user is :email' do |email|
-    @user = User.find_by(email_address: email)
+    @user = User.find_or_create_by(email_address: email)
   end
 
   step 'the logged in user is :email' do |email|
