@@ -16,6 +16,8 @@ module CartsHelper
   end
 
   def display_response_actions?(cart, user)
+    return false unless user.approver_of? cart
+
     parallel_approval_is_pending?(cart, user) ||
     current_linear_approval?(cart, user)
   end
