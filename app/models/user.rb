@@ -22,7 +22,7 @@ class User < ActiveRecord::Base
     self.carts.where(approvals: {role: 'requester'})
   end
 
-  def is_approver?(cart)
+  def approver_of?(cart)
     cart.approvers.include? self
   end
 
