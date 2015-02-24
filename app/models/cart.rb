@@ -252,8 +252,11 @@ class Cart < ActiveRecord::Base
   end
 
   def restart
+    # Note that none of the state machine's history is stored
     self.api_tokens.update_all(expires_at: Time.now)
-    self.approver_approvals.update_all(status: 'pending')
+    self.approver_approvals.each do |approval|
+      approval.restart!
+    end
     Dispatcher.deliver_new_cart_emails(self)
   end
 end

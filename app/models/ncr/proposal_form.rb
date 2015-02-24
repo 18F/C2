@@ -73,6 +73,7 @@ module Ncr
       cart.name = self.description
       if cart.save
         cart.approver_approvals.destroy_all
+        # @todo: do we actually want to clear all properties?
         cart.clear_props!
         self.set_props_on(cart)
         self.approver_emails.each do |email|
