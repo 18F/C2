@@ -11,6 +11,7 @@ module Ncr
       if approver
         @proposal_form.approver_email = approver.email_address
       end
+      render 'form'
     end
 
     def create
@@ -24,11 +25,11 @@ module Ncr
           redirect_to cart_path(cart)
         else
           flash[:error] = cart.errors.full_messages
-          render 'new'
+          render 'form'
         end
       else
         flash[:error] = @proposal_form.errors.full_messages
-        render 'new'
+        render 'form'
       end
     end
 
@@ -49,7 +50,7 @@ module Ncr
       cart = Cart.find(params[:id])
       @proposal_form = Ncr::ProposalForm.from_cart(cart)
       @form_url, @form_method = {action: "update"}, "put"
-      render 'new'
+      render 'form'
     end
 
     def update
@@ -64,11 +65,11 @@ module Ncr
           redirect_to cart_path(cart)
         else
           flash[:error] = cart.errors.full_messages
-          render 'new'
+          render 'form'
         end
       else
         flash[:error] = @proposal_form.errors.full_messages
-        render 'new'
+        render 'form'
       end
     end
 
