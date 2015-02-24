@@ -1,8 +1,7 @@
 module Ncr
   class ProposalsController < ApplicationController
     before_filter :authenticate_user!
-    before_filter :not_approved, only: [:edit, :update]
-    before_filter :cart_owner, only: [:edit, :update]
+    before_filter :redirect_if_cart_cant_be_edited, only: [:edit, :update]
 
     def new
       @proposal_form = Ncr::ProposalForm.new
@@ -33,38 +32,23 @@ module Ncr
       end
     end
 
-    def not_approved
-      cart = Cart.find(params[:id])
-      if cart.approved?
-        redirect_to new_ncr_proposal_path, :alert => "That proposal's already approved. New proposal?"
-      end
-    end
-    def cart_owner
-      cart = Cart.find(params[:id])
-      if cart.requester != current_user
-        redirect_to new_ncr_proposal_path, :alert => 'You cannot restart that proposal'
-      end
-    end
-
     def edit
-      cart = Cart.find(params[:id])
-      @proposal_form = Ncr::ProposalForm.from_cart(cart)
+      @proposal_form = Ncr::ProposalForm.from_cart(self.cart)
       @form_url, @form_method = {action: "update"}, "put"
       render 'form'
     end
 
     def update
-      cart = Cart.find(params[:id])
       @proposal_form = Ncr::ProposalForm.new(params[:ncr_proposal])
       @form_url, @form_method = {action: "update"}, "put"
       @proposal_form.requester = current_user
       if @proposal_form.valid?
-        @proposal_form.update_cart(cart)
-        if cart.persisted?
+        @proposal_form.update_cart(self.cart)
+        if not self.cart.errors.any?
           flash[:success] = "Proposal resubmitted!"
-          redirect_to cart_path(cart)
+          redirect_to cart_path(self.cart)
         else
-          flash[:error] = cart.errors.full_messages
+          flash[:error] = self.cart.errors.full_messages
           render 'form'
         end
       else
@@ -85,6 +69,18 @@ module Ncr
 
     def suggested_approver
       last_approvers.try(:first)
+    end
+
+    def cart
+      @cart ||= Cart.find(params[:id])
+    end
+
+    def redirect_if_cart_cant_be_edited
+      if self.cart.approved?
+        redirect_to new_ncr_proposal_path, :alert => "That proposal's already approved. New proposal?"
+      elsif self.cart.requester != current_user
+        redirect_to new_ncr_proposal_path, :alert => 'You cannot restart that proposal'
+      end
     end
   end
 end
