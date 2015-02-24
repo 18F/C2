@@ -151,8 +151,8 @@ describe Cart do
       cart.restart!
 
       expect(cart.pending?).to eq(true)
-      expect(cart.api_tokens.where("expires_at < ?", Time.now).length).to eq(2)
-      expect(cart.api_tokens.where("expires_at > ?", Time.now).length).to eq(2)
+      expect(cart.api_tokens.expired.length).to eq(2)
+      expect(cart.api_tokens.unexpired.length).to eq(2)
       expect(cart.approver_approvals.length).to eq(2)
       expect(cart.approver_approvals[0].pending?).to eq(true)
       expect(cart.approver_approvals[1].pending?).to eq(true)

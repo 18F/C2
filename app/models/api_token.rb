@@ -5,6 +5,7 @@ class ApiToken < ActiveRecord::Base
   belongs_to :user
 
   scope :unexpired, -> { where('expires_at >= ?', Time.now) }
+  scope :expired, -> { where('expires_at < ?', Time.now) }
   scope :unused, -> { where(used_at: nil) }
   scope :fresh, -> { unused.unexpired }
 
