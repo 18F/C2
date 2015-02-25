@@ -129,3 +129,6 @@
 <% if display_response_actions?(cart, @current_user) %>
   <%= render partial: 'approval_actions', locals: { current_user: @current_user, cart: cart} %>
 <% end %>
+<% if display_restart?(cart, @current_user) %>
+   <%= render partial: 'ncr/restart_link', locals: {cart: cart} %>
+<% end %>
