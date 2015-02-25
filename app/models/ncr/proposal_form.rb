@@ -59,23 +59,54 @@ module Ncr
         name: self.description
       )
       if cart.save
-        cart.set_props(
-          origin: self.origin,
-          amount: self.amount,
-          expense_type: self.expense_type,
-          vendor: self.vendor,
-          not_to_exceed: self.not_to_exceed,
-          building_number: self.building_number,
-          rwa_number: self.rwa_number,
-          office: self.office
-        )
-        cart.set_requester(self.requester)
+        self.set_props_on(cart)
         self.approver_emails.each do |email|
           cart.add_approver(email)
         end
+        Dispatcher.deliver_new_cart_emails(cart)
       end
 
       cart
+    end
+
+    def update_cart(cart)
+      cart.name = self.description
+      if cart.save
+        cart.approver_approvals.destroy_all
+        # @todo: do we actually want to clear all properties?
+        cart.clear_props!
+        self.set_props_on(cart)
+        self.approver_emails.each do |email|
+          cart.add_approver(email)
+        end
+        cart.restart!
+      end
+      cart
+    end
+
+    def set_props_on(cart)
+      cart.set_props(
+        origin: self.origin,
+        amount: self.amount,
+        expense_type: self.expense_type,
+        vendor: self.vendor,
+        not_to_exceed: self.not_to_exceed,
+        building_number: self.building_number,
+        rwa_number: self.rwa_number,
+        office: self.office
+      )
+      cart.set_requester(self.requester)
+    end
+
+    def self.from_cart(cart)
+      relevant_properties = self._attributes.map(&:name).map(&:to_s)
+      properties = cart.deserialized_properties.select{
+        |key, val| relevant_properties.include? key
+      }
+      form = self.new(properties)
+      form.approver_email = cart.ordered_approvals.first.user.email_address
+      form.description = cart.name
+      form
     end
   end
 end

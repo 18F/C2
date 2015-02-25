@@ -11,7 +11,7 @@ class Cart < ActiveRecord::Base
   has_many :approval_users, through: :approvals, source: :user
   has_one :approval_group
   has_many :user_roles, through: :approval_group
-  has_one :api_token
+  has_many :api_tokens
   has_many :comments, as: :commentable
   has_many :properties, as: :hasproperties
 
@@ -249,5 +249,14 @@ class Cart < ActiveRecord::Base
     if prev_state.name != :rejected
       Dispatcher.on_cart_rejected(self)
     end
+  end
+
+  def restart
+    # Note that none of the state machine's history is stored
+    self.api_tokens.update_all(expires_at: Time.now)
+    self.approver_approvals.each do |approval|
+      approval.restart!
+    end
+    Dispatcher.deliver_new_cart_emails(self)
   end
 end
