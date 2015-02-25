@@ -68,7 +68,7 @@ class Cart < ActiveRecord::Base
   end
 
   def all_approvals_received?
-    self.approver_approvals.pending.empty?
+    self.approver_approvals.received.empty?
   end
 
   def requester
