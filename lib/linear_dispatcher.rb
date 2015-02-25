@@ -19,7 +19,7 @@ class LinearDispatcher < Dispatcher
     super
   end
 
-  def on_approval_status_change(approval)
+  def on_approval_approved(approval)
     self.email_next_pending_approver(approval.cart)
     super
   end

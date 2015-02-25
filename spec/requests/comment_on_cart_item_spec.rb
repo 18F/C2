@@ -33,7 +33,7 @@ describe 'Adding and retrieving comments from a cart item' do
     expect(Cart.count).to eq(1)
     expect(User.count).to eq(4)
     cart = Cart.first
-    expect(cart.status).to eq 'pending'
+    expect(cart.pending?).to eq true
     expect(cart.approvals.where(status: 'approved').count).to eq 0
     expect(cart.comments.count).to eq 0
     expect(ActionMailer::Base.deliveries.count).to eq 0

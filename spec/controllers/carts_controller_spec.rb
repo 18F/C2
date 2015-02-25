@@ -32,7 +32,7 @@ describe CartsController do
         p['approvalGroup'] =  'test-approval-group1'
         p['cartName'] = "cart#{i}"
         temp_cart = Commands::Approval::InitiateCartApproval.new.perform(p)
-        temp_cart.proposal.update_attributes(status: 'approved') unless i==3
+        temp_cart.approve! unless i==3
         carts.push(temp_cart)
       end
       get :archive

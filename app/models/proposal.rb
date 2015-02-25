@@ -1,16 +1,30 @@
 class Proposal < ActiveRecord::Base
-  STATUSES = %w(pending approved rejected)
+  include WorkflowHelper::ThreeStateWorkflow
+
+  workflow_column :status
 
   has_one :cart
 
   validates :flow, presence: true, inclusion: {in: ApprovalGroup::FLOWS}
-  validates :status, presence: true, inclusion: {in: STATUSES}
 
   after_initialize :set_defaults
 
 
   def set_defaults
     self.flow ||= 'parallel'
-    self.status ||= 'pending'
+  end
+
+  # Used by the state machine
+  def on_pending_entry(prev_state, event)
+    if self.cart.all_approvals_received?
+      self.approve!
+    end
+  end
+
+  # Used by the state machine
+  def on_rejected_entry(prev_state, event)
+    if prev_state.name != :rejected
+      Dispatcher.on_cart_rejected(self.cart)
+    end
   end
 end

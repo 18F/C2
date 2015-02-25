@@ -25,37 +25,22 @@ class Cart < ActiveRecord::Base
 
   ORIGINS = %w(navigator ncr)
 
-  ## TODO deprecated ##
-  def flow
-    self.proposal.flow
-  end
+  delegate(
+    # TODO include Workflow states/events automatically
+    :approve!,
+    :approved?,
+    :flow,
+    :partial_approve!,
+    :pending?,
+    :reject!,
+    :rejected?,
+    :status,
 
-  def status
-    self.proposal.status
-  end
-  #####################
-
-  def new_approval_status
-    if self.has_rejection?
-      'rejected'
-    elsif self.all_approvals_received?
-      'approved'
-    end
-  end
-
-  def update_approval_status
-    new_status = self.new_approval_status
-    if new_status
-      self.proposal.update_attribute(:status, new_status)
-    end
-  end
+    to: :proposal
+  )
 
   def rejections
     self.approvals.where(status: 'rejected')
-  end
-
-  def has_rejection?
-    self.rejections.any?
   end
 
   def approver_approvals
@@ -216,7 +201,7 @@ class Cart < ActiveRecord::Base
 
   def self.copy_existing_approvals_to(new_cart, cart_name)
     previous_cart = Cart.where(name: cart_name).last
-    if previous_cart && previous_cart.status == 'rejected'
+    if previous_cart && previous_cart.rejected?
       previous_cart.approvals.each do |approval|
         new_cart.copy_existing_approval(approval)
       end
@@ -270,10 +255,5 @@ class Cart < ActiveRecord::Base
 
   def linear?
     self.flow == 'linear'
-  end
-
-  def pending?
-    # TODO validates :status, inclusion: {in: STATUSES}
-    self.status.blank? || self.status == 'pending'
   end
 end

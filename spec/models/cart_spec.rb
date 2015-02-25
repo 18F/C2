@@ -1,29 +1,29 @@
 describe Cart do
   let(:cart) { FactoryGirl.create(:cart_with_approval_group) }
 
-  describe '#update_approval_status' do
+  describe 'partial approvals' do
     context "All approvals are in 'approved' status" do
       it 'updates a status based on the cart_id passed in from the params' do
-        expect(cart).to receive(:all_approvals_received?).and_return(true)
+        expect_any_instance_of(Cart).to receive(:all_approvals_received?).and_return(true)
 
-        cart.update_approval_status
-        expect(cart.status).to eq('approved')
+        cart.partial_approve!
+        expect(cart.approved?).to eq true
       end
     end
 
     context "Not all approvals are in 'approved'status" do
       it 'does not update the cart status' do
-        expect(cart).to receive(:all_approvals_received?).and_return(false)
+        expect_any_instance_of(Cart).to receive(:all_approvals_received?).and_return(false)
 
-        cart.update_approval_status
-        expect(cart.status).to eq('pending')
+        cart.partial_approve!
+        expect(cart.pending?).to eq true
       end
     end
   end
 
   describe '#default value should be correct' do
     it 'sets status to pending by default' do
-      expect(cart.status).to eq('pending')
+      expect(cart.pending?).to eq true
     end
   end
 
@@ -121,6 +121,19 @@ describe Cart do
       end
     end
 
+  end
+
+  describe '#on_rejected_entry' do
+    it 'sends only one rejection email' do
+      cart = FactoryGirl.create(:cart_with_approvals)
+      # skip workflow
+      cart.approver_approvals.first.update_attribute(:status, 'rejected')
+      cart.reject!
+      expect(email_recipients).to eq(['requester@some-dot-gov.gov'])
+
+      cart.reject!
+      expect(email_recipients).to eq(['requester@some-dot-gov.gov'])
+    end
   end
 
 end
