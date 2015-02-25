@@ -59,8 +59,8 @@ module UserSteps
     @cart = FactoryGirl.create(:cart_with_item, external_id: external_id)
   end
 
-  step 'a linear cart :external_id with a cart item' do |external_id|
-    @cart = FactoryGirl.create(:cart_with_item, external_id: external_id, flow: 'linear')
+  step 'a :cart_type cart :external_id with a cart item' do |cart_type, external_id|
+    @cart = FactoryGirl.create(:cart_with_item, external_id: external_id, flow: cart_type)
   end
 
   step 'a cart with a cart item and approvals' do

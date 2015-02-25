@@ -104,6 +104,7 @@ describe CartsHelper do
     it 'checks parallel and linear cart requirements' do
       user = FactoryGirl.create(:user)
       cart = FactoryGirl.create(:cart, flow: 'linear')
+      cart.add_approver user.email_address
 
       expect(helper).to receive(:parallel_approval_is_pending?)
       expect(helper).to receive(:current_linear_approval?)

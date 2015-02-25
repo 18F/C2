@@ -27,4 +27,13 @@ class Proposal < ActiveRecord::Base
       Dispatcher.on_cart_rejected(self.cart)
     end
   end
+
+  def restart
+    # Note that none of the state machine's history is stored
+    self.cart.api_tokens.update_all(expires_at: Time.now)
+    self.cart.approver_approvals.each do |approval|
+      approval.restart!
+    end
+    Dispatcher.deliver_new_cart_emails(self.cart)
+  end
 end
