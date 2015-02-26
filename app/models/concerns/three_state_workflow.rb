@@ -27,8 +27,22 @@ module ThreeStateWorkflow
   end
 
   module ClassMethods
+    # returns an array of symbols
     def statuses
-      self.workflow_spec.states.keys
+      self.workflow_spec.state_names
+    end
+
+    # returns a set of symbols
+    def events
+      results = Set.new
+      # collect events from every state
+      self.workflow_spec.states.each do |state_name, state|
+        state.events.each do |event_name, event|
+          results << event_name
+        end
+      end
+
+      results
     end
   end
 end

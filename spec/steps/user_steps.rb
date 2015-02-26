@@ -60,8 +60,7 @@ module UserSteps
   end
 
   step 'a :cart_type cart :external_id with a cart item' do |cart_type, external_id|
-    @cart = FactoryGirl.create(:cart_with_item, external_id: external_id)
-    @cart.update_attributes(flow: cart_type)
+    @cart = FactoryGirl.create(:cart_with_item, external_id: external_id, flow: cart_type)
   end
 
   step 'a cart with a cart item and approvals' do

@@ -55,8 +55,8 @@ module Ncr
 
     def create_cart
       cart = Cart.new(
-        flow: 'linear',
-        name: self.description
+        name: self.description,
+        proposal_attributes: {flow: 'linear'}
       )
       if cart.save
         self.set_props_on(cart)

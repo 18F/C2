@@ -105,20 +105,22 @@ describe "National Capital Region proposals" do
       cart.reload
       expect(cart.getProp('vendor')).to eq('ACME')
     end
+
     it "can be restarted if rejected" do
       proposal = FactoryGirl.build(:proposal_form)
       proposal.requester = requester
       cart = proposal.create_cart
-      cart.update_attribute(:status, "rejected")  # avoid workflow
+      cart.proposal.update_attributes(status: 'rejected')  # avoid workflow
 
       visit "/ncr/proposals/#{cart.id}/edit"
       expect(current_path).to eq("/ncr/proposals/#{cart.id}/edit")
     end
+
     it "cannot be restarted if approved" do
       proposal = FactoryGirl.build(:proposal_form)
       proposal.requester = requester
       cart = proposal.create_cart
-      cart.update_attribute(:status, "approved")  # avoid workflow
+      cart.proposal.update_attributes(status: 'approved')  # avoid workflow
 
       visit "/ncr/proposals/#{cart.id}/edit"
       expect(current_path).to eq("/ncr/proposals/new")
