@@ -1,5 +1,5 @@
 class Approval < ActiveRecord::Base
-  include WorkflowHelper::ThreeStateWorkflow
+  include ThreeStateWorkflow
 
   workflow_column :status
 
@@ -16,10 +16,14 @@ class Approval < ActiveRecord::Base
   validates :status, presence: true,
             inclusion: {in: workflow_spec.states.keys.map(&:to_s)}
 
-  scope :approvable, -> { where.not(role: ['requester','observer']) }
-  scope :pending, ->    { approvable.where(status: 'pending') }
+  scope :approvable, -> { where(role: 'approver') }
+  scope :observing, -> { where(role: 'observer') }
+  scope :requesting, -> { where(role: 'requester') }
+
+  workflow_spec.states.keys.each do |state|
+    scope state, -> { approvable.where(status: state) }
+  end
   scope :received, ->   { approvable.where.not(status: 'pending') }
-  scope :approved, ->   { approvable.where(status: 'approved') }
 
 
   # TODO this should be a proper association

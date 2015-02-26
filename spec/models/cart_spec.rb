@@ -109,7 +109,7 @@ describe Cart do
       it 'returns open carts' do
         approved_cart1
         pending_cart
-        expect(Cart.open).to eq [pending_cart]
+        expect(Cart.pending).to eq [pending_cart]
       end
     end
 
@@ -136,6 +136,7 @@ describe Cart do
       expect(email_recipients).to eq(['requester@some-dot-gov.gov'])
     end
   end
+
   describe '#restart' do
     it 'resets approval states when rejected' do
       cart = FactoryGirl.create(:cart_with_approvals)
@@ -144,8 +145,8 @@ describe Cart do
 
       cart.approver_approvals.first.approve!
       cart.approver_approvals.last.reject!
-      expect(cart.approvals.where(status: 'approved').length).to eq(1)
-      expect(cart.approvals.where(status: 'rejected').length).to eq(1)
+      expect(cart.approvals.approved.size).to eq(1)
+      expect(cart.approvals.rejected.size).to eq(1)
       expect(cart.rejected?).to eq(true)
 
       cart.restart!
@@ -158,5 +159,4 @@ describe Cart do
       expect(cart.approver_approvals[1].pending?).to eq(true)
     end
   end
-
 end

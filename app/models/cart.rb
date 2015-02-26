@@ -2,7 +2,7 @@ require 'csv'
 
 class Cart < ActiveRecord::Base
   include PropMixin
-  include WorkflowHelper::ThreeStateWorkflow
+  include ThreeStateWorkflow
 
   workflow_column :status
 
@@ -18,18 +18,19 @@ class Cart < ActiveRecord::Base
   #TODO: validates_uniqueness_of :name
   validates :flow, presence: true, inclusion: {in: ApprovalGroup::FLOWS}
 
-  scope :approved, -> { where(status: 'approved') }
-  scope :open, -> { where(status: 'pending') }
-  scope :closed, -> { where(:status => ['approved', 'rejected']) }
+  workflow_spec.states.keys.each do |state|
+    scope state, -> { where(status: state) }
+  end
+  scope :closed, -> { where(status: ['approved', 'rejected']) }
 
   ORIGINS = %w(navigator ncr)
 
   def rejections
-    self.approvals.where(status: 'rejected')
+    self.approver_approvals.rejected
   end
 
   def approver_approvals
-    self.approvals.where(role: 'approver')
+    self.approvals.approvable
   end
 
   def approvers
@@ -64,20 +65,20 @@ class Cart < ActiveRecord::Base
   end
 
   def approved_approvals
-    self.approver_approvals.where(status: 'approved')
+    self.approver_approvals.approved
   end
 
   def all_approvals_received?
-    self.approver_approvals.where('status != ?', 'approved').empty?
+    self.approver_approvals.where.not(status: 'approved').empty?
   end
 
   def requester
-    self.approval_users.where(approvals: {role: 'requester'}).first
+    self.approval_users.merge(Approval.requesting).first
   end
 
   def observers
     # TODO: Pull from approvals, not approval groups
-    approval_group.user_roles.where(role: 'observer')
+    approval_group.user_roles.observers
   end
 
   def self.initialize_cart_with_items params
@@ -92,7 +93,7 @@ class Cart < ActiveRecord::Base
   def self.existing_or_new_cart(params)
     name = params['cartName'].presence || params['cartNumber'].to_s
 
-    pending_cart = Cart.find_by(name: name, status: 'pending')
+    pending_cart = Cart.pending.find_by(name: name)
     if pending_cart
       cart = reset_existing_cart(pending_cart)
     else
