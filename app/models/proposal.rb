@@ -1,11 +1,16 @@
 class Proposal < ActiveRecord::Base
-  include WorkflowHelper::ThreeStateWorkflow
+  include ThreeStateWorkflow
 
   workflow_column :status
 
   has_one :cart
 
   validates :flow, presence: true, inclusion: {in: ApprovalGroup::FLOWS}
+
+  self.statuses.each do |status|
+    scope status, -> { where(status: status) }
+  end
+  scope :closed, -> { where(status: ['approved', 'rejected']) }
 
   after_initialize :set_defaults
 

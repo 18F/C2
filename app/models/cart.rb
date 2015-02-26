@@ -18,13 +18,6 @@ class Cart < ActiveRecord::Base
   #TODO: validates_uniqueness_of :name
   validates :proposal, presence: true
 
-  scope :with_status, ->(status) { joins(:proposal).where(proposals: {status: status}) }
-  scope :approved, -> { with_status('approved') }
-  scope :open, -> { with_status('pending') }
-  scope :closed, -> { with_status(['approved', 'rejected']) }
-
-  ORIGINS = %w(navigator ncr)
-
   delegate(
     # TODO include Workflow states/events automatically
     :approve!,
@@ -40,12 +33,21 @@ class Cart < ActiveRecord::Base
     to: :proposal
   )
 
+  scope :with_status, ->(status) { joins(:proposal).where(proposals: {status: status}) }
+  Proposal.statuses.each do |status|
+    scope status, -> { with_status(status) }
+  end
+  scope :closed, -> { with_status(['approved', 'rejected']) }
+
+  ORIGINS = %w(navigator ncr)
+
+
   def rejections
-    self.approvals.where(status: 'rejected')
+    self.approver_approvals.rejected
   end
 
   def approver_approvals
-    self.approvals.where(role: 'approver')
+    self.approvals.approvable
   end
 
   def approvers
@@ -80,20 +82,20 @@ class Cart < ActiveRecord::Base
   end
 
   def approved_approvals
-    self.approver_approvals.where(status: 'approved')
+    self.approver_approvals.approved
   end
 
   def all_approvals_received?
-    self.approver_approvals.where('status != ?', 'approved').empty?
+    self.approver_approvals.where.not(status: 'approved').empty?
   end
 
   def requester
-    self.approval_users.where(approvals: {role: 'requester'}).first
+    self.approval_users.merge(Approval.requesting).first
   end
 
   def observers
     # TODO: Pull from approvals, not approval groups
-    approval_group.user_roles.where(role: 'observer')
+    approval_group.user_roles.observers
   end
 
   def self.initialize_cart_with_items params
@@ -108,7 +110,7 @@ class Cart < ActiveRecord::Base
   def self.existing_or_new_cart(params)
     name = params['cartName'].presence || params['cartNumber'].to_s
 
-    pending_cart = Cart.joins(:proposal).find_by(name: name, proposals: {status: 'pending'})
+    pending_cart = Cart.pending.find_by(name: name)
     if pending_cart
       cart = reset_existing_cart(pending_cart)
     else

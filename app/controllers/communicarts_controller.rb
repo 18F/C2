@@ -24,10 +24,8 @@ class CommunicartsController < ApplicationController
   end
 
   def approval_reply_received
-    cart = Cart.joins(:proposal).where(
-      external_id: params['cartNumber'].to_i,
-      proposals: {status: 'pending'}
-    ).first
+    cart_id = params['cartNumber'].to_i
+    cart = Cart.where(external_id: cart_id).pending.first
     user = cart.approval_users.where(email_address: params['fromAddress']).first
     approval = cart.approvals.where(user_id: user.id).first
 

@@ -5,7 +5,7 @@ class Dispatcher
   end
 
   def email_observers(cart)
-    cart.approvals.where(role: 'observer').each do |observer|
+    cart.approvals.observing.each do |observer|
       CommunicartMailer.cart_observer_email(observer.user_email_address, cart).deliver
     end
   end
