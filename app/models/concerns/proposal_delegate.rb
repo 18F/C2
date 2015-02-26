@@ -21,7 +21,7 @@ module ProposalDelegate
       to: :proposal
     )
 
-    # effectively, delegate scopes to the Proposal
+    # effectively, delegate the scopes
     scope :with_proposal_scope, ->(status) { joins(:proposal).merge(Proposal.send(status)) }
     Proposal.statuses.each do |status|
       scope status, -> { with_proposal_scope(status) }
