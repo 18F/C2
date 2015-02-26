@@ -158,7 +158,7 @@ describe 'Rejecting a cart with multiple approvers' do
     expect(Approval.count).to eq 6
     expect(cart.approvals.count).to eq 3
     expect(updated_cart.approvals.approved.count).to eq 1
-    expect(updated_cart.approvals.where(status:'pending').count).to eq 2
+    expect(updated_cart.approvals.pending.count).to eq 1
   end
 
   it 'handles a one-click rejection as expected' do

@@ -69,11 +69,11 @@ class Cart < ActiveRecord::Base
   end
 
   def all_approvals_received?
-    self.approver_approvals.where('status != ?', 'approved').empty?
+    self.approver_approvals.where.not(status: 'approved').empty?
   end
 
   def requester
-    self.approval_users.where(approvals: {role: 'requester'}).first
+    self.approval_users.merge(Approval.requesting).first
   end
 
   def observers
