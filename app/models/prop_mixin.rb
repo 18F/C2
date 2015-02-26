@@ -20,6 +20,11 @@ module PropMixin
     p0.update_attribute(:hasproperties,self)
   end
 
+  def clear_props!
+    Property.where(hasproperties_id: id,
+                   hasproperties_type: self.class.name).destroy_all
+  end
+
   def set_props(props)
     props.each do |key, val|
       self.setProp(key, val)

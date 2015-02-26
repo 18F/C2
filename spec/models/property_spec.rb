@@ -85,4 +85,20 @@ describe Property do
 
     end
   end
+
+  describe '#clear_props!' do
+    it 'removes all existing properties' do
+      cart_item.setProp('spud','bud')
+      cart_item.setProp('abc','def')
+      informal_cart.setProp('abc', 'abc')
+      expect(cart_item.properties.length).to be(2)
+      expect(informal_cart.properties.length).to be(1)
+
+      cart_item.clear_props!
+      cart_item.clear_association_cache()
+      informal_cart.clear_association_cache()
+      expect(cart_item.properties.length).to be(0)
+      expect(informal_cart.properties.length).to be(1)
+    end
+  end
 end

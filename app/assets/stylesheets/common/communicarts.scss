@@ -280,6 +280,10 @@ p {
   color: #fff;
   text-decoration: none;
 }
+.controller-carts a.form-button {
+  color: #fff;
+}
+
 .result-item {
   padding-top: 10px;
   padding-bottom: 10px;
@@ -525,8 +529,6 @@ body.webapp {
   }
 }
 
-
-
 #approval-status-container {
   width: 100%;
   margin-bottom: 60px;
@@ -548,6 +550,10 @@ body.webapp {
       padding-left: 18px;
     }
   }
+}
+
+#reply-section {
+  text-align: center;
 }
 
 .text-area-info-container {
