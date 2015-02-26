@@ -32,9 +32,17 @@ module ThreeStateWorkflow
       self.workflow_spec.state_names
     end
 
-    # returns an array of symbols
+    # returns a set of symbols
     def events
-      workflow_spec.states.values.flat_map(&:events).flat_map(&:keys).uniq
+      results = Set.new
+      # collect events from every state
+      self.workflow_spec.states.each do |state_name, state|
+        state.events.each do |event_name, event|
+          results << event_name
+        end
+      end
+
+      results
     end
   end
 end
