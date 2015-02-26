@@ -27,8 +27,14 @@ module ThreeStateWorkflow
   end
 
   module ClassMethods
+    # returns an array of symbols
     def statuses
-      self.workflow_spec.states.keys
+      self.workflow_spec.state_names
+    end
+
+    # returns an array of symbols
+    def events
+      workflow_spec.states.values.flat_map(&:events).flat_map(&:keys).uniq
     end
   end
 end

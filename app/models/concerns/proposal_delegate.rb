@@ -6,27 +6,25 @@ module ProposalDelegate
 
     validates :proposal, presence: true
 
-    delegate(
-      # TODO include Workflow states/events automatically
-      :approve!,
-      :approved?,
-      :flow,
-      :partial_approve!,
-      :pending?,
-      :reject!,
-      :rejected?,
-      :restart!,
-      :status,
 
-      to: :proposal
-    )
+    ### effectively, delegate the scopes and workflow actions/states ###
 
-    # effectively, delegate the scopes
     scope :with_proposal_scope, ->(status) { joins(:proposal).merge(Proposal.send(status)) }
+    scope :closed, -> { with_proposal_scope(:closed) }
+
     Proposal.statuses.each do |status|
       scope status, -> { with_proposal_scope(status) }
+      delegate "#{status}?".to_sym, to: :proposal
     end
-    scope :closed, -> { with_proposal_scope(:closed) }
+
+    Proposal.events.each do |event|
+      delegate "#{event}!".to_sym, to: :proposal
+    end
+
+    delegate(:flow, :status, to: :proposal)
+
+    ####################################################################
+
 
     accepts_nested_attributes_for :proposal
   end
