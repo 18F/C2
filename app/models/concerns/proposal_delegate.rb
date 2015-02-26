@@ -3,11 +3,12 @@ module ProposalDelegate
 
   included do
     belongs_to :proposal
+    accepts_nested_attributes_for :proposal
 
     validates :proposal, presence: true
 
 
-    ### effectively, delegate the scopes and workflow actions/states ###
+    ### delegate the workflow actions/scopes/states ###
 
     scope :with_proposal_scope, ->(status) { joins(:proposal).merge(Proposal.send(status)) }
     scope :closed, -> { with_proposal_scope(:closed) }
@@ -21,11 +22,8 @@ module ProposalDelegate
       delegate "#{event}!".to_sym, to: :proposal
     end
 
-    delegate(:flow, :status, to: :proposal)
+    delegate :flow, :status, to: :proposal
 
-    ####################################################################
-
-
-    accepts_nested_attributes_for :proposal
+    ###################################################
   end
 end
