@@ -19,10 +19,11 @@ class Approval < ActiveRecord::Base
   scope :approvable, -> { where(role: 'approver') }
   scope :observing, -> { where(role: 'observer') }
   scope :requesting, -> { where(role: 'requester') }
-  scope :pending, ->    { approvable.where(status: 'pending') }
+
+  workflow_spec.states.keys.each do |state|
+    scope state, -> { approvable.where(status: state) }
+  end
   scope :received, ->   { approvable.where.not(status: 'pending') }
-  scope :approved, ->   { approvable.where(status: 'approved') }
-  scope :rejected, ->   { approvable.where(status: 'rejected') }
 
 
   # TODO this should be a proper association
