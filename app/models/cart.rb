@@ -33,11 +33,12 @@ class Cart < ActiveRecord::Base
     to: :proposal
   )
 
-  scope :with_status, ->(status) { joins(:proposal).where(proposals: {status: status}) }
+  # effectively, delegate scopes to the Proposal
+  scope :with_proposal_scope, ->(status) { joins(:proposal).merge(Proposal.send(status)) }
   Proposal.statuses.each do |status|
-    scope status, -> { with_status(status) }
+    scope status, -> { with_proposal_scope(status) }
   end
-  scope :closed, -> { with_status(['approved', 'rejected']) }
+  scope :closed, -> { with_proposal_scope(:closed) }
 
   ORIGINS = %w(navigator ncr)
 
