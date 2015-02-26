@@ -21,7 +21,6 @@ C2::Application.routes.draw do
     resources :proposals
   end
 
-  get 'bookmarklet', to: redirect('bookmarklet.html')
   get "/498", :to => "errors#token_authentication_error"
 
   if Rails.env.development?
