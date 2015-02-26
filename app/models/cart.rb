@@ -18,8 +18,8 @@ class Cart < ActiveRecord::Base
   #TODO: validates_uniqueness_of :name
   validates :flow, presence: true, inclusion: {in: ApprovalGroup::FLOWS}
 
-  workflow_spec.states.keys.each do |state|
-    scope state, -> { where(status: state) }
+  self.statuses.each do |status|
+    scope status, -> { where(status: status) }
   end
   scope :closed, -> { where(status: ['approved', 'rejected']) }
 

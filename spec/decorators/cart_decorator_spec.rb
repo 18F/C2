@@ -4,7 +4,7 @@ describe CartDecorator do
   describe '#approvals_by_status' do
     it "orders by approved, rejected, then pending" do
       # make two approvals for each status, in random order
-      statuses = Approval.workflow_spec.states.keys.map(&:to_s)
+      statuses = Approval.statuses.map(&:to_s)
       statuses = statuses.dup + statuses.clone
       statuses.shuffle.each do |status|
         FactoryGirl.create(:approval, cart: cart, status: status)
