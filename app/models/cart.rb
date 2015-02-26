@@ -77,7 +77,7 @@ class Cart < ActiveRecord::Base
 
   def observers
     # TODO: Pull from approvals, not approval groups
-    approval_group.user_roles.where(role: 'observer')
+    approval_group.user_roles.observers
   end
 
   def self.initialize_cart_with_items params
