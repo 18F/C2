@@ -2,8 +2,8 @@ require 'csv'
 
 class Cart < ActiveRecord::Base
   include PropMixin
+  include ProposalDelegate
 
-  belongs_to :proposal
   has_many :cart_items
   has_many :approvals
   has_many :approval_users, through: :approvals, source: :user
@@ -13,32 +13,7 @@ class Cart < ActiveRecord::Base
   has_many :comments, as: :commentable
   has_many :properties, as: :hasproperties
 
-  accepts_nested_attributes_for :proposal
-
   #TODO: validates_uniqueness_of :name
-  validates :proposal, presence: true
-
-  delegate(
-    # TODO include Workflow states/events automatically
-    :approve!,
-    :approved?,
-    :flow,
-    :partial_approve!,
-    :pending?,
-    :reject!,
-    :rejected?,
-    :restart!,
-    :status,
-
-    to: :proposal
-  )
-
-  # effectively, delegate scopes to the Proposal
-  scope :with_proposal_scope, ->(status) { joins(:proposal).merge(Proposal.send(status)) }
-  Proposal.statuses.each do |status|
-    scope status, -> { with_proposal_scope(status) }
-  end
-  scope :closed, -> { with_proposal_scope(:closed) }
 
   ORIGINS = %w(navigator ncr)
 
