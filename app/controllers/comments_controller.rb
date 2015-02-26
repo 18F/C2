@@ -7,12 +7,16 @@ class CommentsController < ApplicationController
   end
 
   def create
-    @commentable = find_commentable
-    @comment = @commentable.comments.build(comment_params)
-    @comment.user = current_user
-    if @comment.save
-      flash[:notice] = "You successfully added a comment for #{@commentable.class.name} #{@commentable.id}"
-      redirect_to id: nil
+    commentable = find_commentable
+    comment = commentable.comments.build(comment_params)
+    comment.user = current_user
+    if comment.save
+      flash[:notice] = "You successfully added a comment for #{commentable.class.name} #{commentable.id}"
+      if commentable.respond_to?(:cart)
+        redirect_to commentable.cart
+      else
+        redirect_to commentable
+      end
     else
       raise 'something went wrong'
     end
