@@ -23,7 +23,5 @@ config/environment_variables.yml
 *~
 coverage
 .floo*
-node_modules/
-.grunt/
 config/feature_flags.yml
 .env

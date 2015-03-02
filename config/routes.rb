@@ -5,7 +5,6 @@ C2::Application.routes.draw do
   root :to => 'home#index'
   match "/auth/:provider/callback" => "home#oauth_callback", via: [:get]
   post "/logout" => "home#logout"
-  get 'overlay', to: "overlay#index"
 
   resources :approval_groups, except: [:edit, :update] do
     collection do
@@ -29,7 +28,6 @@ C2::Application.routes.draw do
     resources :proposals
   end
 
-  get 'bookmarklet', to: redirect('bookmarklet.html')
   get "/498", :to => "errors#token_authentication_error"
 
   if Rails.env.development?
