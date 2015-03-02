@@ -1,3 +1,4 @@
+# This migration splits the `carts` table in two, moving half of the columns to a `proposals` table, and setting the foreign key on the Carts.
 class CreateProposals < ActiveRecord::Migration
   ## http://makandracards.com/makandra/15575-how-to-write-complex-migrations-in-rails ##
   class TempCart < ActiveRecord::Base
