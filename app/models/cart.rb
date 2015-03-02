@@ -2,9 +2,7 @@ require 'csv'
 
 class Cart < ActiveRecord::Base
   include PropMixin
-  include ThreeStateWorkflow
-
-  workflow_column :status
+  include ProposalDelegate
 
   has_many :cart_items
   has_many :approvals
@@ -16,14 +14,9 @@ class Cart < ActiveRecord::Base
   has_many :properties, as: :hasproperties
 
   #TODO: validates_uniqueness_of :name
-  validates :flow, presence: true, inclusion: {in: ApprovalGroup::FLOWS}
-
-  self.statuses.each do |status|
-    scope status, -> { where(status: status) }
-  end
-  scope :closed, -> { where(status: ['approved', 'rejected']) }
 
   ORIGINS = %w(navigator ncr)
+
 
   def rejections
     self.approver_approvals.rejected
@@ -84,7 +77,7 @@ class Cart < ActiveRecord::Base
   def self.initialize_cart_with_items params
     cart = self.existing_or_new_cart params
     cart.initialize_approval_group params
-    cart.initialize_flow(params)
+    cart.setup_proposal(params)
     self.copy_existing_approvals_to(cart, name)
 
     cart
@@ -98,7 +91,7 @@ class Cart < ActiveRecord::Base
       cart = reset_existing_cart(pending_cart)
     else
       #There is no existing cart or the existing cart is already approved
-      cart = Cart.new(name: name, status: 'pending', external_id: params['cartNumber'])
+      cart = self.new(name: name, external_id: params['cartNumber'])
     end
 
     cart
@@ -113,8 +106,13 @@ class Cart < ActiveRecord::Base
     end
   end
 
-  def initialize_flow(params)
-    self.flow = params['flow'].presence || self.flow || self.approval_group.try(:flow) || 'parallel'
+  def determine_flow(params)
+    params['flow'].presence || self.approval_group.try(:flow) || 'parallel'
+  end
+
+  def setup_proposal(params)
+    flow = self.determine_flow(params)
+    self.create_proposal!(flow: flow, status: 'pending')
   end
 
   def import_initial_comments(comments)
@@ -236,28 +234,5 @@ class Cart < ActiveRecord::Base
 
   def linear?
     self.flow == 'linear'
-  end
-
-  # Used by the state machine
-  def on_pending_entry(prev_state, event)
-    if self.all_approvals_received?
-      self.approve!
-    end
-  end
-
-  # Used by the state machine
-  def on_rejected_entry(prev_state, event)
-    if prev_state.name != :rejected
-      Dispatcher.on_cart_rejected(self)
-    end
-  end
-
-  def restart
-    # Note that none of the state machine's history is stored
-    self.api_tokens.update_all(expires_at: Time.now)
-    self.approver_approvals.each do |approval|
-      approval.restart!
-    end
-    Dispatcher.deliver_new_cart_emails(self)
   end
 end

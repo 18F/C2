@@ -1,7 +1,21 @@
 FactoryGirl.define do
   factory :cart do
-    flow 'parallel'
     name 'Test Cart needing approval'
+
+    # hack to allow the :flow and :status to be passed as arguments to the factory
+    # https://github.com/thoughtbot/factory_girl/blob/master/GETTING_STARTED.md#associations
+    transient do
+      flow 'parallel'
+      status 'pending'
+    end
+
+    after(:build) do |cart, evaluator|
+      cart.proposal = create(:proposal,
+        flow: evaluator.flow,
+        status: evaluator.status
+      )
+    end
+
 
     factory :cart_with_approval_group do
       after :create do |cart|

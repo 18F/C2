@@ -4,7 +4,7 @@ describe Cart do
   describe 'partial approvals' do
     context "All approvals are in 'approved' status" do
       it 'updates a status based on the cart_id passed in from the params' do
-        expect(cart).to receive(:all_approvals_received?).and_return(true)
+        expect_any_instance_of(Cart).to receive(:all_approvals_received?).and_return(true)
 
         cart.partial_approve!
         expect(cart.approved?).to eq true
@@ -13,7 +13,7 @@ describe Cart do
 
     context "Not all approvals are in 'approved'status" do
       it 'does not update the cart status' do
-        expect(cart).to receive(:all_approvals_received?).and_return(false)
+        expect_any_instance_of(Cart).to receive(:all_approvals_received?).and_return(false)
 
         cart.partial_approve!
         expect(cart.pending?).to eq true
@@ -79,8 +79,7 @@ describe Cart do
       expect(last_names).to eq(['Approver2', 'Approver1'])
     end
     it "gives only the first approver when linear" do
-      cart = FactoryGirl.create(:cart_with_approvals)
-      cart.update_attribute(:flow, 'linear')
+      cart = FactoryGirl.create(:cart_with_approvals, flow: 'linear')
       last_names = cart.currently_awaiting_approvers.map(&:last_name)
       expect(last_names).to eq(['Approver1'])
 

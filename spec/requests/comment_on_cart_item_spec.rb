@@ -3,12 +3,7 @@ describe 'Adding and retrieving comments from a cart item' do
   before do
     approval_group = FactoryGirl.create(:approval_group)
 
-    cart = Cart.new(
-                    flow: 'parallel',
-                    name: 'My Wonderfully Awesome Communicart',
-                    status: 'pending',
-                    external_id: '10203040'
-                    )
+    cart = FactoryGirl.build(:cart)
     user = User.create!(email_address: 'test-requester@some-dot-gov.gov')
 
     UserRole.create!(user_id: user.id, approval_group_id: approval_group.id, role: 'requester')
