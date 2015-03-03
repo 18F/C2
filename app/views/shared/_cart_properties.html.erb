@@ -7,7 +7,7 @@
   <%- cart.deserialized_properties.each do |property,value| %>
     <%- unless cart.property_exclusions.include? property %>
       <tr class="cart_item_information">
-        <td class="results-list" align="left">
+        <td class="results-list" align="left" scope="row">
           <strong><%= I18n.t('helpers.label.cart.' + property,
                              default: property.underscore.humanize) %></strong>
         </td>
