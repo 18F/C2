@@ -45,8 +45,5 @@ class CreateProposals < ActiveRecord::Migration
         end
       end
     end
-
-    remove_column :carts, :flow, :string
-    remove_column :carts, :status, :string
   end
 end
