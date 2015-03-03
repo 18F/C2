@@ -80,8 +80,7 @@ class CommunicartMailer < ActionMailer::Base
   end
 
   def subject(cart)
-    approval_format = Settings.email_title_for_approval_request_format
-    approval_format % [cart.requester.full_name, cart.public_identifier]
+    "Communicart Approval Request from #{cart.requester.full_name}: Please review Cart ##{cart.public_identifier}"
   end
 
   def send_cart_email(from_email, to_email, cart)

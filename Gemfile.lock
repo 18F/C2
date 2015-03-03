@@ -263,7 +263,6 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (~> 1.1)
-    settingslogic (2.0.9)
     shellany (0.0.1)
     simple_form_object (0.0.5)
       activemodel (~> 4.0)
@@ -345,7 +344,6 @@ DEPENDENCIES
   roadie-rails
   rspec-rails
   sass-rails (>= 3.2)
-  settingslogic
   simple_form_object
   simplecov
   spring
