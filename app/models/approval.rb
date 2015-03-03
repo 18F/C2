@@ -1,5 +1,5 @@
 class Approval < ActiveRecord::Base
-  include WorkflowHelper::ThreeStateWorkflow
+  include ThreeStateWorkflow
 
   workflow_column :status
 
@@ -13,13 +13,15 @@ class Approval < ActiveRecord::Base
 
   validates :role, presence: true, inclusion: {in: UserRole::ROLES}
   # TODO validates_uniqueness_of :user_id, scope: cart_id
-  validates :status, presence: true,
-            inclusion: {in: workflow_spec.states.keys.map(&:to_s)}
 
-  scope :approvable, -> { where.not(role: ['requester','observer']) }
-  scope :pending, ->    { approvable.where(status: 'pending') }
+  scope :approvable, -> { where(role: 'approver') }
+  scope :observing, -> { where(role: 'observer') }
+  scope :requesting, -> { where(role: 'requester') }
+
+  self.statuses.each do |status|
+    scope status, -> { approvable.where(status: status) }
+  end
   scope :received, ->   { approvable.where.not(status: 'pending') }
-  scope :approved, ->   { approvable.where(status: 'approved') }
 
 
   # TODO this should be a proper association

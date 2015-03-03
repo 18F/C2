@@ -3,12 +3,7 @@ describe 'Adding and retrieving comments from a cart item' do
   before do
     approval_group = FactoryGirl.create(:approval_group)
 
-    cart = Cart.new(
-                    flow: 'parallel',
-                    name: 'My Wonderfully Awesome Communicart',
-                    status: 'pending',
-                    external_id: '10203040'
-                    )
+    cart = FactoryGirl.build(:cart)
     user = User.create!(email_address: 'test-requester@some-dot-gov.gov')
 
     UserRole.create!(user_id: user.id, approval_group_id: approval_group.id, role: 'requester')
@@ -39,7 +34,7 @@ describe 'Adding and retrieving comments from a cart item' do
     expect(User.count).to eq(4)
     cart = Cart.first
     expect(cart.pending?).to eq true
-    expect(cart.approvals.where(status: 'approved').count).to eq 0
+    expect(cart.approvals.approved.count).to eq 0
     expect(cart.comments.count).to eq 0
     expect(ActionMailer::Base.deliveries.count).to eq 0
 

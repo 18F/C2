@@ -19,7 +19,7 @@ class User < ActiveRecord::Base
   end
 
   def requested_carts
-    self.carts.where(approvals: {role: 'requester'})
+    self.carts.merge(Approval.requesting)
   end
 
   def approver_of?(cart)

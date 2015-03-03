@@ -11,4 +11,8 @@ class UserRole < ActiveRecord::Base
   validates_presence_of :approval_group_id
   validates :role, presence: true, inclusion: {in: ROLES}
   # TODO Limit requester to only one at this time
+
+  ROLES.each do |role|
+    scope role.pluralize.to_sym, -> { where(role: role) }
+  end
 end

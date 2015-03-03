@@ -69,7 +69,7 @@ class CommunicartMailer < ActionMailer::Base
 
   # for easier stubbing in tests
   def sender
-    ENV['NOTIFICATION_FROM_EMAIL'] || 'user_email@some-dot_gov.gov'
+    ENV['NOTIFICATION_FROM_EMAIL'] || 'noreply@some.gov'
   end
 
   def user_email(user)

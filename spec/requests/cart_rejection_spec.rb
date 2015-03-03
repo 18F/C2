@@ -96,12 +96,7 @@ describe 'Rejecting a cart with multiple approvers' do
   before do
     @json_rejection_params = JSON.parse(rejection_params)
 
-    cart = Cart.create!(
-                    flow: 'parallel',
-                    name: '10203040',
-                    status: 'pending',
-                    external_id: '10203040'
-                    )
+    cart = FactoryGirl.create(:cart, name: '10203040', external_id: '10203040')
     approval_group = FactoryGirl.create(:approval_group_with_approver_and_requester_approvals, cart_id: cart.id, name: "updatingRejectedApprovalGroup")
 
     cart.approval_group = approval_group
@@ -123,15 +118,15 @@ describe 'Rejecting a cart with multiple approvers' do
     cart = Cart.first
     expect(cart.external_id).to eq 10203040
     expect(cart.approvals.count).to eq 3
-    expect(cart.approvals.where(status: 'approved').count).to eq 0
+    expect(cart.approvals.approved.count).to eq 0
 
     post 'approval_reply_received', @json_rejection_params
     expect(ActionMailer::Base.deliveries.count).to eq 1
 
     expect(Approval.count).to eq 3
     expect(cart.approvals.count).to eq 3
-    expect(cart.approvals.where(status: 'approved').count).to eq 0
-    expect(cart.approvals.where(status: 'rejected').count).to eq 1
+    expect(cart.approvals.approved.count).to eq 0
+    expect(cart.approvals.rejected.count).to eq 1
     expect(cart.reload.rejected?).to eq true
 
     # User corrects the mistake and resubmits
@@ -157,8 +152,8 @@ describe 'Rejecting a cart with multiple approvers' do
 
     expect(Approval.count).to eq 6
     expect(cart.approvals.count).to eq 3
-    expect(updated_cart.approvals.where(status:'approved').count).to eq 1
-    expect(updated_cart.approvals.where(status:'pending').count).to eq 2
+    expect(updated_cart.approvals.approved.count).to eq 1
+    expect(updated_cart.approvals.pending.count).to eq 1
   end
 
   it 'handles a one-click rejection as expected' do
@@ -168,7 +163,7 @@ describe 'Rejecting a cart with multiple approvers' do
     cart = Cart.first
     expect(cart.external_id).to eq 10203040
     expect(cart.approvals.count).to eq 3
-    expect(cart.approvals.where(status: 'approved').count).to eq 0
+    expect(cart.approvals.approved.count).to eq 0
     approval = cart.approvals.first
     get approval_response_url, {
       cart_id: approval.cart_id,

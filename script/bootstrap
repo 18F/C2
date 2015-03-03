@@ -10,9 +10,6 @@ fi
 
 bundle
 
-npm install -g grunt-cli
-npm install
-
 bin/rake db:setup
 RAILS_ENV=test bin/rake db:setup
 

@@ -18,13 +18,7 @@ describe "Approving a cart with multiple approvers in parallel" do
     @json_approval_params = JSON.parse(approval_params)
 
     approval_group = FactoryGirl.create(:approval_group)
-
-    cart = Cart.new(
-                    flow: 'parallel',
-                    name: 'My Wonderfully Awesome Communicart',
-                    status: 'pending',
-                    external_id: '10203040'
-                    )
+    cart = FactoryGirl.build(:cart, external_id: '10203040')
     user = User.create!(email_address: 'test-requester@some-dot-gov.gov')
 
     UserRole.create!(user_id: user.id, approval_group_id: approval_group.id, role: 'requester')
@@ -53,27 +47,27 @@ describe "Approving a cart with multiple approvers in parallel" do
     expect(Cart.count).to eq(1)
     expect(User.count).to eq(4)
     expect(Cart.first.pending?).to eq true
-    expect(Cart.first.approvals.where(status: 'approved').count).to eq 0
+    expect(Cart.first.approvals.approved.count).to eq 0
 
     post 'approval_reply_received', @json_approval_params
 
     expect(Cart.first.pending?).to eq true
     expect(Cart.first.approvals.count).to eq 4
-    expect(Cart.first.approvals.where(status: 'approved').count).to eq 1
+    expect(Cart.first.approvals.approved.count).to eq 1
     expect(Cart.first.requester.email_address).to eq 'test-requester@some-dot-gov.gov'
 
     @json_approval_params["fromAddress"] = "approver2@some-dot-gov.gov"
     expect(ActionMailer::Base.deliveries.count).to eq 1
     post 'approval_reply_received', @json_approval_params
 
-    expect(Cart.first.approvals.where(status: 'approved').count).to eq 2
+    expect(Cart.first.approvals.approved.count).to eq 2
 
     @json_approval_params["fromAddress"] = "approver3@some-dot-gov.gov"
     expect(ActionMailer::Base.deliveries.count).to eq 2
     post 'approval_reply_received', @json_approval_params
 
     expect(Cart.first.approved?).to eq true
-    expect(Cart.first.approvals.where(status: 'approved').count).to eq 3
+    expect(Cart.first.approvals.approved.count).to eq 3
     expect(Cart.first.comments.first.comment_text).to eq "spudcomment"
 
     approver = User.find_by(email_address: 'approver1@some-dot-gov.gov')

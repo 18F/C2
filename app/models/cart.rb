@@ -2,9 +2,7 @@ require 'csv'
 
 class Cart < ActiveRecord::Base
   include PropMixin
-  include WorkflowHelper::ThreeStateWorkflow
-
-  workflow_column :status
+  include ProposalDelegate
 
   has_many :cart_items
   has_many :approvals
@@ -16,20 +14,16 @@ class Cart < ActiveRecord::Base
   has_many :properties, as: :hasproperties
 
   #TODO: validates_uniqueness_of :name
-  validates :flow, presence: true, inclusion: {in: ApprovalGroup::FLOWS}
-
-  scope :approved, -> { where(status: 'approved') }
-  scope :open, -> { where(status: 'pending') }
-  scope :closed, -> { where(:status => ['approved', 'rejected']) }
 
   ORIGINS = %w(navigator ncr)
 
+
   def rejections
-    self.approvals.where(status: 'rejected')
+    self.approver_approvals.rejected
   end
 
   def approver_approvals
-    self.approvals.where(role: 'approver')
+    self.approvals.approvable
   end
 
   def approvers
@@ -64,26 +58,26 @@ class Cart < ActiveRecord::Base
   end
 
   def approved_approvals
-    self.approver_approvals.where(status: 'approved')
+    self.approver_approvals.approved
   end
 
   def all_approvals_received?
-    self.approver_approvals.where('status != ?', 'approved').empty?
+    self.approver_approvals.where.not(status: 'approved').empty?
   end
 
   def requester
-    self.approval_users.where(approvals: {role: 'requester'}).first
+    self.approval_users.merge(Approval.requesting).first
   end
 
   def observers
     # TODO: Pull from approvals, not approval groups
-    approval_group.user_roles.where(role: 'observer')
+    approval_group.user_roles.observers
   end
 
   def self.initialize_cart_with_items params
     cart = self.existing_or_new_cart params
     cart.initialize_approval_group params
-    cart.initialize_flow(params)
+    cart.setup_proposal(params)
     self.copy_existing_approvals_to(cart, name)
 
     cart
@@ -92,12 +86,12 @@ class Cart < ActiveRecord::Base
   def self.existing_or_new_cart(params)
     name = params['cartName'].presence || params['cartNumber'].to_s
 
-    pending_cart = Cart.find_by(name: name, status: 'pending')
+    pending_cart = Cart.pending.find_by(name: name)
     if pending_cart
       cart = reset_existing_cart(pending_cart)
     else
       #There is no existing cart or the existing cart is already approved
-      cart = Cart.new(name: name, status: 'pending', external_id: params['cartNumber'])
+      cart = self.new(name: name, external_id: params['cartNumber'])
     end
 
     cart
@@ -112,8 +106,13 @@ class Cart < ActiveRecord::Base
     end
   end
 
-  def initialize_flow(params)
-    self.flow = params['flow'].presence || self.flow || self.approval_group.try(:flow) || 'parallel'
+  def determine_flow(params)
+    params['flow'].presence || self.approval_group.try(:flow) || 'parallel'
+  end
+
+  def setup_proposal(params)
+    flow = self.determine_flow(params)
+    self.create_proposal!(flow: flow, status: 'pending')
   end
 
   def import_initial_comments(comments)
@@ -235,28 +234,5 @@ class Cart < ActiveRecord::Base
 
   def linear?
     self.flow == 'linear'
-  end
-
-  # Used by the state machine
-  def on_pending_entry(prev_state, event)
-    if self.all_approvals_received?
-      self.approve!
-    end
-  end
-
-  # Used by the state machine
-  def on_rejected_entry(prev_state, event)
-    if prev_state.name != :rejected
-      Dispatcher.on_cart_rejected(self)
-    end
-  end
-
-  def restart
-    # Note that none of the state machine's history is stored
-    self.api_tokens.update_all(expires_at: Time.now)
-    self.approver_approvals.each do |approval|
-      approval.restart!
-    end
-    Dispatcher.deliver_new_cart_emails(self)
   end
 end

@@ -14,38 +14,36 @@ describe CartsHelper do
 
     context "pending" do
       context "parallel" do
+        let(:cart) { FactoryGirl.create(:cart_with_approvals, flow: 'parallel') }
+
         it "displays outstanding approvers" do
-          cart = FactoryGirl.create(:cart_with_approvals, flow: 'parallel')
           expect(helper.display_status(cart, current_user)).to eq("<em>Waiting for review from:</em> Liono Approver1, Liono Approver2")
         end
 
         it "excludes approved approvals" do
-          cart = FactoryGirl.create(:cart_with_approvals, flow: 'parallel')
           cart.approvals.first.approve!
           expect(helper.display_status(cart, current_user)).to eq("<em>Waiting for review from:</em> Liono Approver2")
         end
 
         it "references the current user" do
-          cart = FactoryGirl.create(:cart_with_approvals, flow: 'parallel')
           current_user = cart.approvers.first
           expect(helper.display_status(cart, current_user)).to eq("<strong>Please review</strong>")
         end
       end
 
       context "linear" do
+        let(:cart) { FactoryGirl.create(:cart_with_approvals, flow: 'linear') }
+
         it "displays the first approver" do
-          cart = FactoryGirl.create(:cart_with_approvals, flow: 'linear')
           expect(helper.display_status(cart, current_user)).to eq("<em>Waiting for review from:</em> Liono Approver1")
         end
 
         it "excludes approved approvals" do
-          cart = FactoryGirl.create(:cart_with_approvals, flow: 'linear')
           cart.approvals.first.approve!
           expect(helper.display_status(cart, current_user)).to eq("<em>Waiting for review from:</em> Liono Approver2")
         end
 
         it "references the current user" do
-          cart = FactoryGirl.create(:cart_with_approvals, flow: 'linear')
           current_user = cart.approvers.first
           expect(helper.display_status(cart, current_user)).to eq("<strong>Please review</strong>")
         end
@@ -55,18 +53,20 @@ describe CartsHelper do
 
   describe '#parallel_approval_is_pending?' do
     let (:user) { FactoryGirl.create(:user) }
-    let (:cart) { FactoryGirl.create(:cart, flow: 'parallel') }
     let (:approval) { FactoryGirl.create(:approval, cart_id: cart.id, user_id: user.id) }
     subject { helper.parallel_approval_is_pending?(cart, user) }
 
     context 'linear' do
+      let(:cart) { FactoryGirl.create(:cart, flow: 'linear') }
+
       it 'returns false with non-parallel carts' do
-        cart.update_attributes(flow: 'linear')
         expect(subject).to eq false
       end
     end
 
     context 'parallel' do
+      let(:cart) { FactoryGirl.create(:cart, flow: 'parallel') }
+
       it 'returns true with pending approval' do
         approval
         expect(subject).to eq(true)
@@ -90,7 +90,7 @@ describe CartsHelper do
     subject { helper.current_linear_approval?(cart, user) }
 
     it 'returns false with non-linear carts' do
-      cart.update_attributes(flow: 'parallel')
+      cart.proposal.update_attributes(flow: 'parallel')
       expect(subject).to eq false
     end
 
