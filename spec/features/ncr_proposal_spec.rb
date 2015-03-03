@@ -148,15 +148,15 @@ describe "National Capital Region proposals" do
       click_on('Restart this Cart?')
       expect(current_path).to eq("/ncr/proposals/#{cart.id}/edit")
 
-      cart.update_attribute(:status, 'rejected') # avoid state machine
+      cart.proposal.update_attribute(:status, 'rejected') # avoid state machine
       visit "/carts/#{cart.id}"
       expect(page).to have_content('Restart this Cart?')
 
-      cart.update_attribute(:status, 'approved') # avoid state machine
+      cart.proposal.update_attribute(:status, 'approved') # avoid state machine
       visit "/carts/#{cart.id}"
       expect(page).not_to have_content('Restart this Cart?')
 
-      cart.update_attribute(:status, 'pending') # avoid state machine
+      cart.proposal.update_attribute(:status, 'pending') # avoid state machine
       cart.setProp('origin', 'somewhereElse')
       visit "/carts/#{cart.id}"
       expect(page).not_to have_content('Restart this Cart?')
