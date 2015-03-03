@@ -8,14 +8,15 @@
       <%= f.text_area :description, class: 'form-control' %>
     </div>
     <div class="form-group">
-      <%= f.label :expense_type %>
-      <% Ncr::ProposalForm::EXPENSE_TYPES.each do |expense_type| %>
-        <div class="radio">
-          <label>
-            <%= f.radio_button :expense_type, expense_type %>
-            <%= expense_type %>
-          </label>
-        </div>
+      <%= field_set_tag "Expense type" do %>
+        <% Ncr::ProposalForm::EXPENSE_TYPES.each do |expense_type| %>
+          <div class="radio">
+            <%= f.label :expense_type, value: expense_type do %>
+              <%= f.radio_button :expense_type, expense_type %>
+              <%= expense_type %>
+            <% end %>
+          </div>
+        <% end %>
       <% end %>
     </div>
     <div class="form-group">
@@ -40,24 +41,26 @@
       <%= f.hidden_field :origin, value: 'ncr' %>
     </div>
     <div class="form-group">
-      <%= f.label :amount %>
-      <div class="input-group">
-        <div class="input-group-addon">$</div>
-        <%= f.number_field :amount, class: 'form-control', step: 0.01 %>
-      </div>
+      <%= field_set_tag "Amount" do %>
+        <%= f.label :amount, "Dollar Amount", :class => 'sr-only'  %>
+        <div class="input-group">
+          <div class="input-group-addon">$</div>
+          <%= f.number_field :amount, class: 'form-control', step: 0.01 %>
+        </div>
+      <% end %> 
     </div>
     <div class="form-group">
       <div class="radio">
-        <label>
+        <%= f.label :not_to_exceed, value: false do %>
           <%= f.radio_button :not_to_exceed, false %>
           Exact
-        </label>
+        <% end %>
       </div>
       <div class="radio">
-        <label>
+        <%= f.label :not_to_exceed, value: true do %>
           <%= f.radio_button :not_to_exceed, true %>
           Not to exceed
-        </label>
+        <% end %>
       </div>
     </div>
     <div class="form-group">
