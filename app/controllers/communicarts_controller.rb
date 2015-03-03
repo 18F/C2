@@ -23,25 +23,6 @@ class CommunicartsController < ApplicationController
     render json: jcart, status: 201
   end
 
-  def approval_reply_received
-    cart_id = params['cartNumber'].to_i
-    cart = Cart.where(external_id: cart_id).pending.first
-    user = cart.approval_users.where(email_address: params['fromAddress']).first
-    approval = cart.approvals.where(user_id: user.id).first
-
-    if params['comment']
-      cart.comments.create(user_id: user.id, comment_text: params['comment'].strip)
-    end
-
-    if params['approve'] == 'APPROVE'
-      approval.approve!
-    elsif params['disapprove'] == 'REJECT'
-      approval.reject!
-    end
-
-    render json: { message: "approval_reply_received"}, status: 200
-  end
-
   def approval_response
     cart = Cart.find(params[:cart_id]).decorate
     approval = cart.approvals.find_by(user_id: params[:user_id])
