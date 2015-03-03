@@ -8,7 +8,7 @@ class CreateProposals < ActiveRecord::Migration
 
   class TempProposal < ActiveRecord::Base
     self.table_name = 'proposals'
-    has_many :temp_carts
+    has_one :temp_cart, foreign_key: 'proposal_id'
   end
   ######################################################################################
 
@@ -32,6 +32,7 @@ class CreateProposals < ActiveRecord::Migration
             created_at: cart.created_at,
             updated_at: cart.updated_at
           )
+          cart.save!
         end
       end
 
