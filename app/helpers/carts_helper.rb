@@ -22,7 +22,7 @@ module CartsHelper
     current_linear_approval?(cart, user)
   end
 
-  # Move this to an NCR specific template?
+  # Todo: Move this to an NCR specific template?
   def display_restart?(cart, user)
     cart.ncr? && user == cart.requester && (cart.pending? || cart.rejected?)
   end

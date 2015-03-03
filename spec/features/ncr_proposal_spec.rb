@@ -134,5 +134,36 @@ describe "National Capital Region proposals" do
       expect(current_path).to eq("/ncr/proposals/new")
       expect(page).to have_content('cannot restart')
     end
+
+    it "can be accessed from the cart profile page" do
+      proposal = FactoryGirl.build(:proposal_form)
+      proposal.requester = requester
+      cart = proposal.create_cart
+      cart.setProp('origin', 'ncr')
+
+      visit "/carts/#{cart.id}"
+      expect(page).to have_content('Restart this Cart?')
+      click_on('Restart this Cart?')
+      expect(current_path).to eq("/ncr/proposals/#{cart.id}/edit")
+
+      cart.update_attribute(:status, 'rejected') # avoid state machine
+      visit "/carts/#{cart.id}"
+      expect(page).to have_content('Restart this Cart?')
+
+      cart.update_attribute(:status, 'approved') # avoid state machine
+      visit "/carts/#{cart.id}"
+      expect(page).not_to have_content('Restart this Cart?')
+
+      cart.update_attribute(:status, 'pending') # avoid state machine
+      cart.setProp('origin', 'somewhereElse')
+      visit "/carts/#{cart.id}"
+      expect(page).not_to have_content('Restart this Cart?')
+
+      cart.setProp('origin', 'ncr')
+      req = cart.approvals.where(role: 'requester').first
+      req.update_attribute(:user, FactoryGirl.create(:user))
+      visit "/carts/#{cart.id}"
+      expect(page).not_to have_content('Restart this Cart?')
+    end
   end
 end
