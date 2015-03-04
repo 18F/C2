@@ -47,21 +47,19 @@
           <div class="input-group-addon">$</div>
           <%= f.number_field :amount, class: 'form-control', step: 0.01 %>
         </div>
-      <% end %> 
-    </div>
-    <div class="form-group">
-      <div class="radio">
-        <%= f.label :not_to_exceed, value: false do %>
-          <%= f.radio_button :not_to_exceed, false %>
-          Exact
-        <% end %>
-      </div>
-      <div class="radio">
-        <%= f.label :not_to_exceed, value: true do %>
-          <%= f.radio_button :not_to_exceed, true %>
-          Not to exceed
-        <% end %>
-      </div>
+        <div class="radio">
+          <%= f.label :not_to_exceed, value: false do %>
+            <%= f.radio_button :not_to_exceed, false %>
+            Exact
+          <% end %>
+        </div>
+        <div class="radio">
+          <%= f.label :not_to_exceed, value: true do %>
+            <%= f.radio_button :not_to_exceed, true %>
+            Not to exceed
+          <% end %>
+        </div>
+      <% end %>
     </div>
     <div class="form-group">
       <%= f.label :approver_email, "Approving Official's Email Address" %>
