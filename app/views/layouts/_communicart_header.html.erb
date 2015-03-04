@@ -25,7 +25,9 @@
     <%- if signed_in? %>
       <div class="mycart-link">
         <ul class="header-nav">
-            <li><%= link_to("My Requests", carts_path) %> <%= image_tag "img-cart.png", width: '18px', height:'16px' %></li>
+          <li><%= link_to "My Requests", carts_path %> <%= image_tag "img-cart.png", width: '18px', height:'16px' %></li>
+          <%# TODO only show to NCR people %>
+          <li><%= link_to "New Request", new_ncr_proposal_path %></li>
         </ul>
       </div>
     <%- end %>
