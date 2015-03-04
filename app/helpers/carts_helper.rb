@@ -22,9 +22,8 @@ module CartsHelper
     current_linear_approval?(cart, user)
   end
 
-  # Todo: Move this to an NCR specific template?
-  def display_restart?(cart, user)
-    cart.ncr? && user == cart.requester && (cart.pending? || cart.rejected?)
+  def display_restart?(cart)
+    current_user == cart.requester && (cart.pending? || cart.rejected?)
   end
 
   def parallel_approval_is_pending?(cart, user)
