@@ -203,7 +203,9 @@ class Cart < ActiveRecord::Base
   end
 
   def origin
-    self.getProp('origin')
+    # In practice, carts should always have an origin. Account for test cases
+    # and old data with this "or"
+    self.getProp('origin') || ''
   end
 
   def ncr?

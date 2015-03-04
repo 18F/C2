@@ -42,4 +42,14 @@ module ApplicationHelper
     controller_name == 'home' ||
     current_page?(carts_path)
   end
+
+  def client_partial(origin, path, args={})
+    to_check = origin + "/" + path
+    if lookup_context.template_exists?(to_check, [], true)
+      args[:partial] = to_check
+      render(args)
+    else
+      ""
+    end
+  end
 end
