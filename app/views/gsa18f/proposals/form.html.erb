@@ -1,0 +1,69 @@
+<div class="container content">
+  <h4>National Capital Region</h4>
+  <h3>Purchase Card Approval Request</h3>
+
+  <%= form_for @proposal_form, url: @form_url, method: @form_method do |f| %>
+    <div class="form-group">
+      <%= f.label :description %>
+      <%= f.text_area :description, class: 'form-control' %>
+    </div>
+    <div class="form-group">
+      <%= f.label :expense_type %>
+      <% Ncr::ProposalForm::EXPENSE_TYPES.each do |expense_type| %>
+        <div class="radio">
+          <label>
+            <%= f.radio_button :expense_type, expense_type %>
+            <%= expense_type %>
+          </label>
+        </div>
+      <% end %>
+    </div>
+    <div class="form-group">
+      <%= f.label :rwa_number %>
+      <%= f.text_field :rwa_number, disabled:true, class: 'form-control' %>
+    </div>
+    <div class="form-group">
+      <%= f.label :building_number %>
+      <%= f.collection_select(
+            :building_number, Ncr::ProposalForm::BUILDING_NUMBERS, :to_s, :to_s,
+            {include_blank: true}, {class: 'form-control'}) %>
+    </div>
+    <div class="form-group">
+      <%= f.label :office %>
+      <%= f.collection_select(
+            :office, Ncr::ProposalForm::OFFICES, :to_s, :to_s,
+            {include_blank: true}, {class: 'form-control'}) %>
+    </div>
+    <div class="form-group">
+      <%= f.label :vendor %>
+      <%= f.text_field :vendor, class: 'form-control' %>
+      <%= f.hidden_field :origin, value: 'ncr' %>
+    </div>
+    <div class="form-group">
+      <%= f.label :amount %>
+      <div class="input-group">
+        <div class="input-group-addon">$</div>
+        <%= f.number_field :amount, class: 'form-control', step: 0.01 %>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="radio">
+        <label>
+          <%= f.radio_button :not_to_exceed, false %>
+          Exact
+        </label>
+      </div>
+      <div class="radio">
+        <label>
+          <%= f.radio_button :not_to_exceed, true %>
+          Not to exceed
+        </label>
+      </div>
+    </div>
+    <div class="form-group">
+      <%= f.label :approver_email, "Approving Official's Email Address" %>
+      <%= f.email_field :approver_email, class: 'form-control' %>
+    </div>
+    <%= f.submit "Submit for approval", class: 'btn btn-default' %>
+  <% end %>
+</div>
