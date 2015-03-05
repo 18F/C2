@@ -36,7 +36,7 @@ describe 'Adding and retrieving comments from a cart item' do
     expect(cart.pending?).to eq true
     expect(cart.approvals.approved.count).to eq 0
     expect(cart.comments.count).to eq 0
-    expect(ActionMailer::Base.deliveries.count).to eq 0
+    expect(deliveries.count).to eq 0
 
     cart_item = cart.cart_items.first
     expect(cart_item.comments.count).to eq 0
@@ -44,11 +44,11 @@ describe 'Adding and retrieving comments from a cart item' do
     cart_item.comments << FactoryGirl.build(:comment)
     cart_item.save
     expect(cart_item.comments.count).to eq 1
-    expect(ActionMailer::Base.deliveries.count).to eq 4
+    expect(deliveries.count).to eq 4
 
     cart_item.comments << FactoryGirl.build(:comment)
     cart_item.save
     expect(cart_item.comments.count).to eq 2
-    expect(ActionMailer::Base.deliveries.count).to eq 8
+    expect(deliveries.count).to eq 8
   end
 end

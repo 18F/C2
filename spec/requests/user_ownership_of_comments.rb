@@ -64,7 +64,7 @@ FactoryGirl.create(:cart_item)
     expect(cart.pending?).to eq true
     expect(cart.approvals.approved.count).to eq 0
     expect(cart.comments.count).to eq 0
-    expect(ActionMailer::Base.deliveries.count).to eq 0
+    expect(deliveries.count).to eq 0
 
     cart2 = Cart.last
 

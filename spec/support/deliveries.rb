@@ -1,3 +1,7 @@
+def deliveries
+  ActionMailer::Base.deliveries
+end
+
 def email_recipients
-  ActionMailer::Base.deliveries.map {|email| email.to[0] }.sort
+  deliveries.map {|email| email.to[0] }.sort
 end
