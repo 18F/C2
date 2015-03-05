@@ -7,6 +7,11 @@ describe "National Capital Region proposals" do
 
   context "when signed in" do
     let(:requester) { FactoryGirl.create(:user) }
+    let(:ncr_cart) {
+      proposal = FactoryGirl.build(:proposal_form)
+      proposal.requester = requester
+      proposal.create_cart
+    }
 
     before do
       login_as(requester)
@@ -89,52 +94,80 @@ describe "National Capital Region proposals" do
     end
 
     it "can be restarted if pending" do
-      proposal = FactoryGirl.build(:proposal_form)
-      proposal.requester = requester
-      cart = proposal.create_cart
-
-      visit "/ncr/proposals/#{cart.id}/edit"
+      visit "/ncr/proposals/#{ncr_cart.id}/edit"
       expect(find_field("ncr_proposal_building_number").value).to eq(
         'Entire WH Complex')
       fill_in 'Vendor', with: 'ACME'
       click_on 'Submit for approval'
-      expect(current_path).to eq("/carts/#{cart.id}")
+      expect(current_path).to eq("/carts/#{ncr_cart.id}")
       expect(page).to have_content("ACME")
       expect(page).to have_content("resubmitted")
       # Verify it is actually saved
-      cart.reload
-      expect(cart.getProp('vendor')).to eq('ACME')
+      ncr_cart.reload
+      expect(ncr_cart.getProp('vendor')).to eq('ACME')
     end
 
     it "can be restarted if rejected" do
-      proposal = FactoryGirl.build(:proposal_form)
-      proposal.requester = requester
-      cart = proposal.create_cart
-      cart.proposal.update_attributes(status: 'rejected')  # avoid workflow
+      ncr_cart.proposal.update_attributes(status: 'rejected')  # avoid workflow
 
-      visit "/ncr/proposals/#{cart.id}/edit"
-      expect(current_path).to eq("/ncr/proposals/#{cart.id}/edit")
+      visit "/ncr/proposals/#{ncr_cart.id}/edit"
+      expect(current_path).to eq("/ncr/proposals/#{ncr_cart.id}/edit")
     end
 
     it "cannot be restarted if approved" do
-      proposal = FactoryGirl.build(:proposal_form)
-      proposal.requester = requester
-      cart = proposal.create_cart
-      cart.proposal.update_attributes(status: 'approved')  # avoid workflow
+      ncr_cart.proposal.update_attributes(status: 'approved')  # avoid workflow
 
-      visit "/ncr/proposals/#{cart.id}/edit"
+      visit "/ncr/proposals/#{ncr_cart.id}/edit"
       expect(current_path).to eq("/ncr/proposals/new")
       expect(page).to have_content('already approved')
     end
 
     it "cannot be edited by someone other than the requester" do
-      proposal = FactoryGirl.build(:proposal_form)
-      proposal.requester = FactoryGirl.create(:user)
-      cart = proposal.create_cart
+      req = ncr_cart.approvals.where(role: 'requester').first
+      req.update_attribute(:user, FactoryGirl.create(:user))
 
-      visit "/ncr/proposals/#{cart.id}/edit"
+      visit "/ncr/proposals/#{ncr_cart.id}/edit"
       expect(current_path).to eq("/ncr/proposals/new")
       expect(page).to have_content('cannot restart')
+    end
+
+    it "shows a restart link from a pending cart" do
+      ncr_cart.setProp('origin', 'ncr')
+
+      visit "/carts/#{ncr_cart.id}"
+      expect(page).to have_content('Restart this Cart?')
+      click_on('Restart this Cart?')
+      expect(current_path).to eq("/ncr/proposals/#{ncr_cart.id}/edit")
+    end
+
+    it "shows a restart link from a rejected cart" do
+      ncr_cart.setProp('origin', 'ncr')
+      ncr_cart.proposal.update_attribute(:status, 'rejected') # avoid state machine
+
+      visit "/carts/#{ncr_cart.id}"
+      expect(page).to have_content('Restart this Cart?')
+    end
+
+    it "does not show a restart link for an approved cart" do
+      ncr_cart.setProp('origin', 'ncr')
+      ncr_cart.proposal.update_attribute(:status, 'approved') # avoid state machine
+
+      visit "/carts/#{ncr_cart.id}"
+      expect(page).not_to have_content('Restart this Cart?')
+    end
+
+    it "does not show a restart link for another client" do
+      ncr_cart.setProp('origin', 'somewhereElse')
+      visit "/carts/#{ncr_cart.id}"
+      expect(page).not_to have_content('Restart this Cart?')
+    end
+
+    it "does not show a restart link for non requester" do
+      req = ncr_cart.approvals.where(role: 'requester').first
+      req.update_attribute(:user, FactoryGirl.create(:user))
+
+      visit "/carts/#{ncr_cart.id}"
+      expect(page).not_to have_content('Restart this Cart?')
     end
   end
 end
