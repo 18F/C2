@@ -1,13 +1,13 @@
 #module Ncr
 module Gsa18f
-  DATA = YAML.load_file("#{Rails.root}/config/data/ncr.yaml")
+  DATA = YAML.load_file("#{Rails.root}/config/data/18f.yaml")
 
   class ProposalForm
     include SimpleFormObject
 
     EXPENSE_TYPES = %w(BA61 BA80)
 
-    BUILDING_NUMBERS = DATA['BUILDING_NUMBERS']
+    URGENCY = DATA['URGENCY']
     OFFICES = DATA['OFFICES']
     attribute :origin, :string
     attribute :amount, :decimal
@@ -19,19 +19,30 @@ module Gsa18f
     attribute :not_to_exceed, :boolean
     attribute :building_number, :string
     attribute :rwa_number, :string
+    
+    
+    #18f additions
     attribute :office, :string
+    attribute :justification, :text
+    attribute :link_to_product, :string
+    attribute :quantity, :decimal
+    attribute :date_requested, :string
+    attribute :urgency, :string
+    attribute :additional_info, :string
+    attribute :cost_per_unit, :decimal
+    attribute :product_name_and_description, :text
 
-    validates :amount, numericality: {
+    validates :cost_per_unit, numericality: {
       greater_than_or_equal_to: 0,
       less_than_or_equal_to: 3000
     }
     validates :approver_email, presence: true
-    validates :description, presence: true
-    validates :expense_type, inclusion: {in: EXPENSE_TYPES}, presence: true
-    validates :requester, presence: true
-    validates :vendor, presence: true
-    validates :building_number, presence: true
-    validates :office, presence: true
+    validates :product_name_and_description, presence: true
+    #validates :expense_type, inclusion: {in: EXPENSE_TYPES}, presence: true
+    #validates :requester, presence: true
+    #validates :vendor, presence: true
+    #validates :building_number, presence: true
+    #validates :office, presence: true
 
     def budget_approver_email
       ENV['NCR_BUDGET_APPROVER_EMAIL'] || 'communicart.budget.approver@gmail.com'
