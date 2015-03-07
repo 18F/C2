@@ -90,7 +90,6 @@ describe CommunicartsController do
       {
         cch: token.access_token,
         cart_id: cart.id.to_s,
-        user_id: approver.id.to_s,
         approver_action: 'approve'
       }.with_indifferent_access
     }

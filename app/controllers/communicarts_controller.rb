@@ -13,7 +13,6 @@ class CommunicartsController < ApplicationController
   rescue_from ApprovalGroupError, with: :approval_group_error
 
   def send_cart
-
     cart = Commands::Approval::InitiateCartApproval.new.perform(params)
     jcart = cart.as_json(include: {cart_items:
                                        {
@@ -25,7 +24,7 @@ class CommunicartsController < ApplicationController
 
   def approval_response
     cart = Cart.find(params[:cart_id]).decorate
-    approval = cart.approvals.find_by(user_id: params[:user_id])
+    approval = cart.approvals.find_by(user_id: user_id)
 
     case params[:approver_action]
     when 'approve'
@@ -44,7 +43,7 @@ class CommunicartsController < ApplicationController
   end
 
 
-private
+  private
 
   def validate_access
     return if signed_in?
@@ -56,12 +55,18 @@ private
       raise AuthenticationError.new(msg: 'something went wrong with the token (expired)')
     elsif @token.used_at
       raise AuthenticationError.new(msg: 'Something went wrong with the token. It has already been used.')
-    elsif @token.user_id != params[:user_id].to_i
-      raise AuthenticationError.new(msg: 'Something went wrong with the user (wrong person)')
     elsif @token.cart_id != params[:cart_id].to_i
       raise AuthenticationError.new(msg: 'Something went wrong with the cart (wrong cart)')
     else
       sign_in(@token.user)
+    end
+  end
+
+  def user_id
+    if signed_in?
+      current_user.id
+    else
+      @token.user_id
     end
   end
 
@@ -73,5 +78,4 @@ private
   def approval_group_error(error)
     render json: { message: error.to_s }, status: 400
   end
-
 end
