@@ -119,6 +119,7 @@ class Cart < ActiveRecord::Base
     self.comments.create!(user_id: self.requester.id, comment_text: comments.strip)
   end
 
+  # returns the Approval
   def add_approver(email)
     user = User.find_or_create_by(email_address: email)
     self.approvals.create!(user_id: user.id, role: 'approver')
