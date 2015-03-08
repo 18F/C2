@@ -62,8 +62,6 @@ describe CommunicartsController do
         post 'send_cart', json_params
         json_response = JSON.parse(response.body)
         expect(json_response["name"]).to eq("2867637")
-        expect(json_response["cart_items"][0]["description"]).to eq("ROUND RING VIEW BINDER WITH INTERIOR POC")
-        expect(json_response["cart_items"][1]["cart_item_traits"][0]["name"]).to eq("socio")
       end
     end
 

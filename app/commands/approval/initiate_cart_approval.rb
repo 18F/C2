@@ -5,16 +5,13 @@ module Commands
         unless params['properties'].blank?
           cart.set_props(params['properties'])
         end
-        unless params['cartItems'].blank?
-          cart.import_cart_items(params['cartItems'])
-        end
         unless params['initiationComment'].blank?
           cart.import_initial_comments(params['initiationComment'])
         end
       end
 
       def setup_cart(params)
-        cart = Cart.initialize_cart_with_items(params)
+        cart = Cart.initialize_cart(params)
         cart.save!
 
         # Reload needed because of caching of the associations.

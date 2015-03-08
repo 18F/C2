@@ -15,11 +15,6 @@ describe 'Testing User Ownership of Comments' do
     cart.approval_group = approval_group
 
     cart.approvals << Approval.create!(user_id: user.id, role: 'requester')
-    cart.cart_items << FactoryGirl.create(:cart_item)
-    cart.cart_items[0].cart_item_traits << FactoryGirl.create(:cart_item_trait)
-    cart.cart_items[0].cart_item_traits << FactoryGirl.create(:cart_item_trait,name: "feature",value: "bpa")
-    cart.cart_items[0].cart_item_traits << FactoryGirl.create(:cart_item_trait,name: "socio",value: "w")
-    cart.cart_items[0].cart_item_traits << FactoryGirl.create(:cart_item_trait,name: "socio",value: "v")
 
     users = []
 
@@ -43,10 +38,6 @@ describe 'Testing User Ownership of Comments' do
     cart2.approval_group = approval_group
 
     cart2.approvals << Approval.create!(user_id: user.id, role: 'requester')
-    cart2.cart_items <<
-FactoryGirl.create(:cart_item)
-    cart2.cart_items[0].cart_item_traits << FactoryGirl.create(:cart_item_trait)
-    cart2.cart_items[0].cart_item_traits << FactoryGirl.create(:cart_item_trait,name: "socio",value: "w")
 
     (1..3).each do |num|
       approval_group.user_roles << UserRole.create!(user_id: users[num].id, approval_group_id: approval_group.id, role: 'approver')
@@ -57,7 +48,7 @@ FactoryGirl.create(:cart_item)
   end
 
 
-  it 'updates the comments on a cart item as expected' do
+  it 'updates the comments on a cart as expected' do
     expect(Cart.count).to eq(2)
     expect(User.count).to eq(5) # 5 = 4 approvers + 1 requester
     cart = Cart.first

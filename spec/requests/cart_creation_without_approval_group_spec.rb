@@ -1,7 +1,7 @@
 describe 'Creating a cart without an approval group' do
 
   let(:params_request_1) {
-  '{
+    '{
       "cartName": "A Cart With No Approvals",
       "cartNumber": "13579",
       "approvalGroup": null,
@@ -24,39 +24,7 @@ describe 'Creating a cart without an approval group' do
         "opticalDrive ":"8x DVD +/- RW",
         "mouse ":"Trackpoint pad & optical USB w/ scroll ",
         "keyboard ":"Integrated"
-        },
-      "cartItems": [
-        {
-          "vendor": "DOCUMENT IMAGING DIMENSIONS, INC.",
-          "description": "ROUND RING VIEW BINDER WITH INTERIOR POC",
-          "url": "/advantage/catalog/product_detail.do?&oid=704213980&baseOid=&bpaNumber=GS-02F-XA002",
-          "notes": "",
-          "qty": "24",
-          "details": "Direct Delivery 3-4 days delivered ARO",
-          "socio": [],
-          "partNumber": "7510-01-519-4381",
-          "price": "$2.46",
-
-          "properties": {
-            "somekey1":"value1",
-            "somekey2":"value2"
-          },
-
-          "features": [
-              "sale"
-          ],
-          "traits": {
-              "socio": [
-                  "s",
-                  "w"
-              ],
-              "features": [
-                  "bpa"
-              ],
-              "green": ""
-           }
-        }
-      ]
+      }
     }'
   }
 
@@ -108,17 +76,4 @@ describe 'Creating a cart without an approval group' do
       expect(Cart.first.properties.count).to eq 12
     end
   end
-
-  context 'cart items' do
-    it 'adds cart items to the cart' do
-      expect{ post 'send_cart', @json_params_1 }.to change{CartItem.count}.by(1)
-    end
-
-    it 'creates cart item properties' do
-      expect(Property.count).to eq 0
-      post 'send_cart', @json_params_1
-      expect(Property.where(hasproperties_type: "CartItem").size).to eq 2
-    end
-  end
-
 end

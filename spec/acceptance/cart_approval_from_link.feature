@@ -1,6 +1,6 @@
 Feature: Approving a cart from approval link
   Background:
-    Given a cart '109876' with a cart item
+    Given a cart '109876'
 
     And the cart has an approval for 'supervisor1@test.gov'
     And the cart has an approval for 'supervisor2@test.gov'

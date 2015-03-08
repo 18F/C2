@@ -55,19 +55,19 @@ module UserSteps
     save_and_open_page
   end
 
-  step 'a cart :external_id with a cart item' do |external_id|
-    @cart = FactoryGirl.create(:cart_with_item, external_id: external_id)
+  step 'a cart :external_id' do |external_id|
+    @cart = FactoryGirl.create(:cart_with_requester, external_id: external_id)
   end
 
-  step 'a :cart_type cart :external_id with a cart item' do |cart_type, external_id|
-    @cart = FactoryGirl.create(:cart_with_item, external_id: external_id, flow: cart_type)
+  step 'a :cart_type cart :external_id' do |cart_type, external_id|
+    @cart = FactoryGirl.create(:cart_with_requester, external_id: external_id, flow: cart_type)
   end
 
-  step 'a cart with a cart item and approvals' do
+  step 'a cart and approvals' do
     @cart = FactoryGirl.create(:cart_with_approvals_and_items)
   end
 
-  step 'a cart :external_id with a cart item and approvals' do |external_id|
+  step 'a cart :external_id and approvals' do |external_id|
     @cart = FactoryGirl.create(:cart_with_approvals_and_items, external_id: external_id)
   end
 
