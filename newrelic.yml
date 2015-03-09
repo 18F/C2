@@ -1,11 +1,9 @@
-#
-# This file configures the New Relic Agent.  New Relic monitors Ruby, Java,
-# .NET, PHP, Python and Node applications with deep visibility and low
-# overhead.  For more information, visit www.newrelic.com.
+# This file configures the New Relic Agent.
 #
 # Generated March 09, 2015
 #
 # This configuration file is custom generated for Communicart-CAP
+# https://rpm.newrelic.com/apm/921394
 
 
 # Here are the settings that are common to all environments
@@ -15,7 +13,7 @@ common: &default_settings
   # You must specify the license key associated with your New Relic
   # account.  This key binds your Agent's data to your account in the
   # New Relic service.
-  license_key: 'xxx'
+  # license_key: 'xxx'
 
   # Agent Enabled (Ruby/Rails Only)
   # Use this setting to force the agent to run or not run.
@@ -49,7 +47,7 @@ common: &default_settings
   # See https://newrelic.com/docs/site/renaming-applications for more details
   # on renaming your New Relic applications.
   #
-  app_name: My Application
+  app_name: C2
 
   # When "true", the agent collects performance data about your
   # application and reports this data to the New Relic service at
@@ -88,9 +86,9 @@ common: &default_settings
   # your users' browsers to download and render your web pages by injecting a small amount
   # of JavaScript code into the header and footer of each page.
   browser_monitoring:
-      # By default the agent automatically injects the monitoring JavaScript
-      # into web pages. Set this attribute to false to turn off this behavior.
-      auto_instrument: true
+    # By default the agent automatically injects the monitoring JavaScript
+    # into web pages. Set this attribute to false to turn off this behavior.
+    auto_instrument: true
 
   # Proxy settings for connecting to the New Relic server.
   #
@@ -182,8 +180,6 @@ common: &default_settings
 # ------------------------------------------
 # Environment-specific settings are in this section.
 # For Rails applications, RAILS_ENV is used to determine the environment.
-# For Java applications, pass -Dnewrelic.environment <environment> to set
-# the environment.
 
 # NOTE if your application has other named environments, you should
 # provide newrelic configuration settings for these environments here.
@@ -192,7 +188,7 @@ development:
   <<: *default_settings
   # Turn on communication to New Relic service in development mode
   monitor_mode: true
-  app_name: My Application (Development)
+  app_name: C2 (Development)
 
   # Rails Only - when running in Developer Mode, the New Relic Agent will
   # present performance information on the last 100 transactions you have
@@ -214,11 +210,3 @@ test:
 production:
   <<: *default_settings
   monitor_mode: true
-
-# Many applications have a staging environment which behaves
-# identically to production. Support for that environment is provided
-# here.  By default, the staging environment has the agent turned on.
-staging:
-  <<: *default_settings
-  monitor_mode: true
-  app_name: My Application (Staging)
