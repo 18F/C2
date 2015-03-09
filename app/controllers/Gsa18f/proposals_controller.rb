@@ -7,9 +7,9 @@ module Gsa18f
       @proposal_form = Gsa18f::ProposalForm.new
       @form_url, @form_method_18f = {action: "create"}, "post"
       approver = self.suggested_approver
-      if approver
-        @proposal_form.approver_email = approver.email_address
-      end
+      # if approver
+      #   @proposal_form.approver_email = approver.email_address
+      # end
       render 'form'
     end
 
