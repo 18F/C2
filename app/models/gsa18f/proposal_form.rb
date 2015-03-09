@@ -5,23 +5,12 @@ module Gsa18f
   class ProposalForm
     include SimpleFormObject
 
-    EXPENSE_TYPES = %w(BA61 BA80)
-
     URGENCY = DATA['URGENCY']
     OFFICES = DATA['OFFICES']
-    attribute :origin, :string
-    attribute :amount, :decimal
-    attribute :approver_email, :text
-    attribute :description, :text
-    attribute :expense_type, :text
-    attribute :requester, :user
-    attribute :vendor, :string
-    attribute :not_to_exceed, :boolean
-    attribute :building_number, :string
-    attribute :rwa_number, :string
-    
     
     #18f additions
+    #attribute :approver_email, :text
+    attribute :requester, :user
     attribute :office, :string
     attribute :justification, :text
     attribute :link_to_product, :string
@@ -31,43 +20,34 @@ module Gsa18f
     attribute :additional_info, :string
     attribute :cost_per_unit, :decimal
     attribute :product_name_and_description, :text
+    attribute :origin, :string
 
     validates :cost_per_unit, numericality: {
       greater_than_or_equal_to: 0,
       less_than_or_equal_to: 3000
     }
-    validates :approver_email, presence: true
     validates :product_name_and_description, presence: true
-    #validates :expense_type, inclusion: {in: EXPENSE_TYPES}, presence: true
-    #validates :requester, presence: true
-    #validates :vendor, presence: true
-    #validates :building_number, presence: true
-    #validates :office, presence: true
 
-    def budget_approver_email
-      ENV['NCR_BUDGET_APPROVER_EMAIL'] || 'communicart.budget.approver@gmail.com'
-    end
+    # def budget_approver_email
+    #   ENV['NCR_BUDGET_APPROVER_EMAIL'] || 'communicart.budget.approver@gmail.com'
+    # end
 
-    def finance_approver_email
-      ENV['NCR_FINANCE_APPROVER_EMAIL'] || 'communicart.ofm.approver@gmail.com'
-    end
+    # def finance_approver_email
+    #   ENV['NCR_FINANCE_APPROVER_EMAIL'] || 'communicart.ofm.approver@gmail.com'
+    # end
 
-    def requires_finance_approval?
-      self.expense_type == 'BA61'
-    end
+    # def requires_finance_approval?
+    #   self.expense_type == 'BA61'
+    # end
 
     def approver_emails
-      emails = [self.approver_email, self.budget_approver_email]
-      if self.requires_finance_approval?
-        emails << self.finance_approver_email
-      end
-
+      emails = ['Richard.L.Miller@gsa.gov']
       emails
     end
 
     def create_cart
       cart = Cart.new(
-        name: self.description,
+        name: self.product_name_and_description,
         proposal_attributes: {flow: 'linear'}
       )
       if cart.save
@@ -82,7 +62,7 @@ module Gsa18f
     end
 
     def update_cart(cart)
-      cart.name = self.description
+      cart.name = self.product_name_and_description
       if cart.save
         cart.approver_approvals.destroy_all
         # @todo: do we actually want to clear all properties?
@@ -95,17 +75,18 @@ module Gsa18f
       end
       cart
     end
-
+    
     def set_props_on(cart)
       cart.set_props(
         origin: self.origin,
-        amount: self.amount,
-        expense_type: self.expense_type,
-        vendor: self.vendor,
-        not_to_exceed: self.not_to_exceed,
-        building_number: self.building_number,
-        rwa_number: self.rwa_number,
-        office: self.office
+        office: self.office,
+        justification: self.justification,
+        link_to_product: self.link_to_product,
+        cost_per_unit: self.cost_per_unit,
+        quantity: self.quantity,
+        date_requested: self.date_requested,
+        urgency: self.urgency,
+        additional_info: self.additional_info
       )
       cart.set_requester(self.requester)
     end

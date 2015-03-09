@@ -54,15 +54,24 @@
     <div class="form-group">
       <%= f.label :urgency %>
       <%= f.collection_select(
-            :office, Gsa18f::ProposalForm::URGENCY, :to_s, :to_s,
+            :urgency, Gsa18f::ProposalForm::URGENCY, :to_s, :to_s,
             {include_blank: true}, {class: 'form-control'}) %>
     </div>
+    <!-- Additional Info -->
+    <div class="form-group">
+      <%= f.label :additional_info, 'Please include any additional information you feel we need to correctly execute the purchase' %>
+      <%= f.text_area :additional_info, class: 'form-control' %>
+    </div>
+    <div class="form-group">
+      <%= f.hidden_field :origin, value: 'ncr' %>
+    </div>
+    
     <!-- Supervisor Email
     - Auto fill, Static ATM -->
-    <div class="form-group">
+    <!-- <div class="form-group">
       <%= f.label :approver_email, "Approving Supervisor's Email Address" %>
-      <%= f.email_field :approver_email, value: 'nick.bristow+supervisor@gsa.gov' , class: 'form-control' %>
-    </div>
+      <%= f.email_field :approver_email, value: 'Richard.L.Miller@gsa.gov' , class: 'form-control' %>
+    </div> -->
     <%= f.submit "Submit for approval", class: 'btn btn-default' %>
   <% end %>
 </div>
