@@ -96,9 +96,9 @@ GEM
     debugger-linecache (1.2.0)
     diff-lcs (1.2.5)
     docile (1.1.5)
-    dotenv (1.0.2)
-    dotenv-rails (1.0.2)
-      dotenv (= 1.0.2)
+    dotenv (2.0.0)
+    dotenv-rails (2.0.0)
+      dotenv (= 2.0.0)
     draper (1.4.0)
       actionpack (>= 3.0)
       activemodel (>= 3.0)
@@ -173,6 +173,7 @@ GEM
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (2.9.2)
+    newrelic_rpm (3.10.0.279)
     nokogiri (1.6.5)
       mini_portile (~> 0.6.0)
     notiffany (0.0.3)
@@ -333,6 +334,7 @@ DEPENDENCIES
   letter_opener
   letter_opener_web
   mail_view
+  newrelic_rpm
   omniauth-myusa!
   pg
   pry-byebug
