@@ -33,16 +33,6 @@ module C2
     end
 
     config.action_mailer.raise_delivery_errors = true
-    config.action_mailer.delivery_method = :smtp
-    config.action_mailer.smtp_settings = {
-      address:              'smtp.gmail.com',
-      port:                 587,
-      domain:               ENV['SMTP_DOMAIN'] || 'gmail.com',
-      user_name:            ENV.fetch('SMTP_USERNAME'),
-      password:             ENV.fetch('SMTP_PASSWORD'),
-      authentication:       'plain',
-      enable_starttls_auto: true
-    }
 
     config.action_mailer.default_url_options = {
       scheme: ENV['DEFAULT_URL_SCHEME'] || 'http',

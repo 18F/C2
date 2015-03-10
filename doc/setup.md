@@ -1,3 +1,5 @@
+# App Setup
+
 ## Installation
 
 C2 is basically a standard Rails application, so it can be installed with basic approaches. It requires Ruby 1.9+ and PostgreSQL.
