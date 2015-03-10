@@ -46,12 +46,11 @@ class CommunicartMailer < ActionMailer::Base
   end
 
   def comment_added_email(comment, to_email)
-    @comment_text = comment.comment_text
-    @cart_item = comment.commentable
+    @comment = comment
 
     mail(
          to: to_email,
-         subject: "A comment has been added to cart item '#{@cart_item.description}'",
+         subject: "A comment has been added to '#{comment.commentable.name}'",
          from: user_email(comment.user)
          )
   end
@@ -61,7 +60,6 @@ class CommunicartMailer < ActionMailer::Base
 
   def set_attachments(cart)
     if cart.all_approvals_received?
-      attachments['Communicart' + cart.name + '.details.csv'] = Exporter::Items.new(cart).to_csv
       attachments['Communicart' + cart.name + '.comments.csv'] = Exporter::Comments.new(cart).to_csv
       attachments['Communicart' + cart.name + '.approvals.csv'] = Exporter::Approvals.new(cart).to_csv
     end

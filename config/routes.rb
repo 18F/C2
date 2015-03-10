@@ -19,10 +19,6 @@ C2::Application.routes.draw do
     resources :comments, only: [:index, :create]
   end
 
-  resources :cart_items, only: [] do
-    resources :comments, only: [:index, :create]
-  end
-
   namespace :ncr do
     resources :proposals
   end

@@ -4,7 +4,6 @@ class Cart < ActiveRecord::Base
   include PropMixin
   include ProposalDelegate
 
-  has_many :cart_items
   has_many :approvals
   has_many :approval_users, through: :approvals, source: :user
   has_one :approval_group
@@ -74,7 +73,7 @@ class Cart < ActiveRecord::Base
     approval_group.user_roles.observers
   end
 
-  def self.initialize_cart_with_items params
+  def self.initialize_cart params
     cart = self.existing_or_new_cart params
     cart.initialize_approval_group params
     cart.setup_proposal(params)
@@ -173,7 +172,6 @@ class Cart < ActiveRecord::Base
 
   def self.reset_existing_cart(cart)
     cart.approvals.map(&:destroy)
-    cart.cart_items.destroy_all
     cart.approval_group = nil
 
     cart
@@ -185,21 +183,6 @@ class Cart < ActiveRecord::Base
       previous_cart.approvals.each do |approval|
         new_cart.copy_existing_approval(approval)
       end
-    end
-  end
-
-  def import_cart_item(params)
-    params = params.dup
-    params.delete_if {|k,v| v.blank? }
-
-    ci = CartItem.from_params(params)
-    ci.cart = self
-    ci.save!
-  end
-
-  def import_cart_items(cart_items_params)
-    cart_items_params.each do |params|
-      self.import_cart_item(params)
     end
   end
 

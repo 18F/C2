@@ -1,6 +1,6 @@
 describe Commands::Approval::InitiateCartApproval do
   let(:params_request) {
-  '{
+    '{
       "cartName": "A Cart With No Approvals",
       "cartNumber": "13579",
       "approvalGroup": null,
@@ -13,39 +13,7 @@ describe Commands::Approval::InitiateCartApproval do
       "properties": {
         "something": "awesome",
         "another something": "awesome again"
-        },
-      "cartItems": [
-        {
-          "vendor": "DOCUMENT IMAGING DIMENSIONS, INC.",
-          "description": "ROUND RING VIEW BINDER WITH INTERIOR POC",
-          "url": "/advantage/catalog/product_detail.do?&oid=704213980&baseOid=&bpaNumber=GS-02F-XA002",
-          "notes": "",
-          "qty": "24",
-          "details": "Direct Delivery 3-4 days delivered ARO",
-          "socio": [],
-          "partNumber": "7510-01-519-4381",
-          "price": "$2.46",
-
-          "properties": {
-            "configType":"Standard",
-            "cpu":"Intel Core i5-3320M processor or better Intel CPU",
-            "memory":"6.0 GB 1600 MHz ",
-            "displayTechnology":"Intel 4000 or higher ",
-            "hardDrive":"320GB 7200RPM",
-            "operatingSystem":"Windows 7 64 bit",
-            "displaySize":"Windows 7 64 bit",
-            "sound ":"Analog Stereo Output",
-            "speakers":"Integrated Stereo",
-            "opticalDrive ":"8x DVD +/- RW",
-            "mouse ":"Trackpoint pad & optical USB w/ scroll ",
-            "keyboard ":"Integrated"
-          },
-
-          "features": [
-              "sale"
-          ]
-        }
-      ]
+      }
     }'
   }
 
@@ -55,7 +23,7 @@ describe Commands::Approval::InitiateCartApproval do
 
   describe '#perform' do
     before do
-      expect(Cart).to receive(:initialize_cart_with_items).and_return(cart)
+      expect(Cart).to receive(:initialize_cart).and_return(cart)
       expect(command).to receive(:import_details)
       expect_any_instance_of(ParallelDispatcher).to receive(:deliver_new_cart_emails)
     end

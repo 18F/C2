@@ -11,7 +11,6 @@ describe CommunicartMailer do
   let(:cart) { FactoryGirl.create(:cart_with_approvals) }
 
   def expect_csvs_to_be_exported
-    expect_any_instance_of(Exporter::Items).to receive(:to_csv)
     expect_any_instance_of(Exporter::Comments).to receive(:to_csv)
     expect_any_instance_of(Exporter::Approvals).to receive(:to_csv)
   end
@@ -122,18 +121,17 @@ describe CommunicartMailer do
   end
 
   describe 'comment_added_email' do
-    let(:cart_item) { FactoryGirl.create(:cart_item) }
-    let(:comment) { FactoryGirl.create(:comment) }
+    let(:cart) { FactoryGirl.create(:cart) }
+    let(:comment) { FactoryGirl.create(:comment, commentable: cart) }
     let(:email) { "commenter@some-dot-gov.gov" }
     let(:mail) { CommunicartMailer.comment_added_email(comment, email) }
 
     before do
       expect_any_instance_of(CommunicartMailer).to receive(:sender).and_return('reply@communicart-stub.com')
-      cart_item.comments << comment
     end
 
     it 'renders the subject' do
-      expect(mail.subject).to eq("A comment has been added to cart item 'This is a test cart item'")
+      expect(mail.subject).to eq("A comment has been added to 'Test Cart needing approval'")
     end
 
     it 'renders the receiver email' do

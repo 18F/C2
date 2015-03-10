@@ -14,11 +14,7 @@ class CommunicartsController < ApplicationController
 
   def send_cart
     cart = Commands::Approval::InitiateCartApproval.new.perform(params)
-    jcart = cart.as_json(include: {cart_items:
-                                       {
-                                           include: :cart_item_traits
-                                       }
-    })
+    jcart = cart.as_json
     render json: jcart, status: 201
   end
 

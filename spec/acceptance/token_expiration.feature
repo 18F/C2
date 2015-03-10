@@ -2,7 +2,7 @@ Feature: Approving a cart from the web application expires the token
   Scenario: An approver visits the page to approve
     # Given the user is 'supervisor1@test.gov'
     Given a valid user 'supervisor1@test.gov'
-    And a cart '1357531' with a cart item
+    And a cart '1357531'
 
     And a valid token
     And the cart has an approval for 'supervisor1@test.gov' in position 1
