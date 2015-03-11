@@ -26,7 +26,9 @@ class CommunicartsController < ApplicationController
     when 'approve'
       current_status = approval.status  
       approval.approve!
-      if current_status == approval.status
+      if approval.status == 'rejected'
+        flash[:success] = "You have already rejected Cart #{cart.public_identifier}."
+      elsif current_status == approval.status
         flash[:success] = "You have already #{params[:approver_action]}d Cart #{cart.public_identifier}."
       else  
         flash[:success] = "You have approved Cart #{cart.public_identifier}."
