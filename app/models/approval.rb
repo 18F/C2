@@ -4,6 +4,7 @@ class Approval < ActiveRecord::Base
   workflow_column :status
 
   belongs_to :cart
+  has_one :proposal, through: :cart
   belongs_to :user
   has_one :api_token, -> { fresh }
   has_one :approval_group, through: :cart
