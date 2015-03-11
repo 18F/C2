@@ -51,4 +51,10 @@ group :test do
   gem 'codeclimate-test-reporter'
   gem 'simplecov'
   gem 'turnip'
+
+  # For better test reporting in CircleCI
+  # http://blog.circleci.com/announcing-detailed-test-failure-reporting/
+  # with a fix from
+  # https://github.com/circleci/rspec_junit_formatter/pull/4
+  gem 'rspec_junit_formatter', git: 'https://github.com/amitree/rspec_junit_formatter.git', ref: '33a0fdd'
 end

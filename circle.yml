@@ -1,11 +1,6 @@
 dependencies:
   pre:
     - cp .env.example .env
-
-test:
-  override:
-    - bin/rspec
-
 deployment:
   production:
     branch: production

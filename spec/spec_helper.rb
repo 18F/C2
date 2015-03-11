@@ -16,10 +16,19 @@
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
 require 'codeclimate-test-reporter'
-CodeClimate::TestReporter.start
+SimpleCov.start 'rails' do
+  formatter SimpleCov::Formatter::MultiFormatter[
+    SimpleCov::Formatter::HTMLFormatter,
+    CodeClimate::TestReporter::Formatter
+  ]
 
-require 'simplecov'
-SimpleCov.start 'rails'
+  # Allow the coverage results to be viewed through CircleCI
+  # https://circleci.com/docs/code-coverage
+  if ENV['CIRCLE_ARTIFACTS']
+    dir = File.join(ENV['CIRCLE_ARTIFACTS'], 'coverage')
+    coverage_dir(dir)
+  end
+end
 
 require 'rack_session_access/capybara'
 
