@@ -55,3 +55,15 @@ As emails are sent, they will be visible at http://localhost:3000/letter_opener.
 ```bash
 bundle exec guard
 ```
+
+## Deploying
+
+1. [Create a token](https://github.com/settings/tokens/new?description=C2%20deploy&scopes=repo_deployment) with [`repo_deployment`](https://developer.github.com/v3/oauth/#scopes) scope
+    * Note that you need `write` access to the repository.
+1. Run
+
+    ```bash
+    GH_KEY=... ./deploy.sh <branch> <environment>
+    ```
+
+1. View the status at https://shipme.github.io/#/envs?repo=18f%2Fc2.
