@@ -4,7 +4,7 @@ dependencies:
 
 test:
   override:
-    - bin/rspec
+    - bin/rspec --format RspecJunitFormatter --out $CIRCLE_TEST_REPORTS/rspec/rspec.xml
 
 deployment:
   production:
