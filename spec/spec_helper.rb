@@ -19,7 +19,13 @@ require 'codeclimate-test-reporter'
 CodeClimate::TestReporter.start
 
 require 'simplecov'
-SimpleCov.start 'rails'
+SimpleCov.start 'rails' do
+  # https://circleci.com/docs/code-coverage
+  if ENV['CIRCLE_ARTIFACTS']
+    dir = File.join(ENV['CIRCLE_ARTIFACTS'], 'coverage')
+    coverage_dir(dir)
+  end
+end
 
 require 'rack_session_access/capybara'
 
