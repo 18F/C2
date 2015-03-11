@@ -1,8 +1,15 @@
 # App Setup
 
+## Dependencies
+
+* Ruby 1.9+
+* PostgreSQL
+* A [MyUSA](https://alpha.my.usa.gov/) account
+* An SMTP server (`production` mode only)
+
 ## Installation
 
-C2 is basically a standard Rails application, so it can be installed with basic approaches. It requires Ruby 1.9+ and PostgreSQL.
+C2 is a fairly typical Rails application, so the setup is straightforward:
 
 1. Run
 
@@ -14,7 +21,7 @@ C2 is basically a standard Rails application, so it can be installed with basic 
     ./script/bootstrap
     ```
 
-1. Register an application on [MyUSA](https://myusa-staging.18f.us/authorizations). Note that your application will need the `email` scope.
+1. [Register an application on MyUSA](https://alpha.my.usa.gov/applications/new) that provides the `email` scope.
 1. Add the required `MYUSA_*` values in your [`.env`](.env.example).
 
 ### Troubleshooting
@@ -28,6 +35,7 @@ C2 is basically a standard Rails application, so it can be installed with basic 
 
 ```bash
 ./bin/rails s
+open http://localhost:3000
 ```
 
 ### Viewing the mailers
