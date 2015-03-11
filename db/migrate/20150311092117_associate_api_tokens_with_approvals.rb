@@ -3,8 +3,6 @@ class AssociateApiTokensWithApprovals < ActiveRecord::Migration
     add_reference :api_tokens, :approval
 
     reversible do |dir|
-      # http://stackoverflow.com/a/6257679/358804
-
       dir.up do
         execute <<-SQL
           UPDATE api_tokens
