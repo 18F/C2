@@ -16,10 +16,12 @@
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
 require 'codeclimate-test-reporter'
-CodeClimate::TestReporter.start
-
-require 'simplecov'
 SimpleCov.start 'rails' do
+  formatter SimpleCov::Formatter::MultiFormatter[
+    SimpleCov::Formatter::HTMLFormatter,
+    CodeClimate::TestReporter::Formatter
+  ]
+
   # https://circleci.com/docs/code-coverage
   if ENV['CIRCLE_ARTIFACTS']
     dir = File.join(ENV['CIRCLE_ARTIFACTS'], 'coverage')
