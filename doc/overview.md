@@ -57,4 +57,4 @@ Their application initiates requests through the `/send_cart` API. They use the 
 
 ## Production
 
-18F's production and staging [deployments](http://12factor.net/codebase) of C2 live in AWS, and are configured by Cloud Formation + Chef. See the details in [our Chef cookbook in cloud-cutter](https://github.com/18F/cloud-cutter/blob/master/chef/site-cookbooks/c2/).
+18F's production and staging [deployments](http://12factor.net/codebase) of C2 live in AWS, and are configured by [a Cloud Formation template](https://github.com/18F/cloud-cutter/blob/master/provision/cap/production.json) and [a Chef cookbook](https://github.com/18F/cloud-cutter/blob/master/chef/site-cookbooks/c2/).
