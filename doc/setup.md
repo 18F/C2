@@ -22,7 +22,9 @@ C2 is a fairly typical Rails application, so the setup is straightforward:
     ```
 
 1. [Register an application on MyUSA](https://alpha.my.usa.gov/applications/new) that provides the `email` scope.
-1. Add the required `MYUSA_*` values in your [`.env`](.env.example).
+1. Add the required `MYUSA_*` values in your [`.env`](../.env.example).
+
+Per [the Twelve-Factor guidelines](http://12factor.net/config), all necessary configuration should be possible through environment variables. See [`.env.example`](../.env.example) for the full list.
 
 ### Troubleshooting
 
@@ -58,8 +60,9 @@ bundle exec guard
 
 ## Deploying
 
-1. [Create a token](https://github.com/settings/tokens/new?description=C2%20deploy&scopes=repo_deployment) with [`repo_deployment`](https://developer.github.com/v3/oauth/#scopes) scope
-    * Note that you need `write` access to the repository.
+Note that you need `write` access to the repository.
+
+1. [Create a token](https://github.com/settings/tokens/new?description=C2%20deploy&scopes=repo_deployment) with [`repo_deployment`](https://developer.github.com/v3/oauth/#scopes) scope.
 1. Run
 
     ```bash
