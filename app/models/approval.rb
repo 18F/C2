@@ -5,7 +5,9 @@ class Approval < ActiveRecord::Base
 
   belongs_to :cart
   belongs_to :user
+  has_one :api_token, -> { fresh }
   has_one :approval_group, through: :cart
+
   delegate :full_name, :email_address, :to => :user, :prefix => true
   delegate :approvals, :to => :cart, :prefix => true
 
@@ -27,21 +29,6 @@ class Approval < ActiveRecord::Base
   # TODO this should be a proper association
   def user_role
     UserRole.find_by(approval_group_id: cart.approval_group.id, user_id: user_id)
-  end
-
-  def create_api_token!
-    ApiToken.create!(
-      cart_id: self.cart_id,
-      expires_at: Time.now + 7.days,
-      user_id: self.user_id
-    )
-  end
-
-  def api_token
-    ApiToken.fresh.where(
-      cart_id: self.cart_id,
-      user_id: self.user_id
-    ).last
   end
 
   def self.new_from_user_role(user_role)

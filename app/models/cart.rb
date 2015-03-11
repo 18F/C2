@@ -8,7 +8,7 @@ class Cart < ActiveRecord::Base
   has_many :approval_users, through: :approvals, source: :user
   has_one :approval_group
   has_many :user_roles, through: :approval_group
-  has_many :api_tokens
+  has_many :api_tokens, through: :approvals
   has_many :comments, as: :commentable
   has_many :properties, as: :hasproperties
 
@@ -155,7 +155,7 @@ class Cart < ActiveRecord::Base
 
     requester_email = params['fromAddress']
     if requester_email
-      self.create_requester(requester_email)
+      self.add_requester(requester_email)
     end
   end
 

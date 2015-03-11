@@ -10,11 +10,13 @@ describe Approval do
 
     it "returns nil if the token's been used" do
       token.update_attribute(:used_at, 1.day.ago)
+      approval.reload
       expect(approval.api_token).to eq(nil)
     end
 
     it "returns nil if the token's expired" do
       token.update_attribute(:expires_at, 1.day.ago)
+      approval.reload
       expect(approval.api_token).to eq(nil)
     end
   end
