@@ -23,9 +23,9 @@ FactoryGirl.define do
         UserRole.create!(user_id: approver2.id, approval_group_id: approval_group.id, role: 'approver')
         UserRole.create!(user_id: requester1.id, approval_group_id: approval_group.id, role: 'requester')
 
-        Approval.create!(user_id: approver1.id, cart_id: approval_group.cart_id, role: 'approver', status: 'pending')
-        Approval.create!(user_id: approver2.id, cart_id: approval_group.cart_id, role: 'approver', status: 'pending')
-        Approval.create!(user_id: requester1.id, cart_id: approval_group.cart_id, role: 'requester', status: 'pending')
+        Approval.create!(user_id: approver1.id, proposal_id: approval_group.proposal_id, role: 'approver', status: 'pending')
+        Approval.create!(user_id: approver2.id, proposal_id: approval_group.proposal_id, role: 'approver', status: 'pending')
+        Approval.create!(user_id: requester1.id, proposal_id: approval_group.proposal_id, role: 'requester', status: 'pending')
       end
     end
 

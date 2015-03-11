@@ -4,6 +4,8 @@ class Proposal < ActiveRecord::Base
   workflow_column :status
 
   has_one :cart
+  has_many :approvals
+  has_many :approval_users, through: :approvals, source: :user
 
   validates :flow, presence: true, inclusion: {in: ApprovalGroup::FLOWS}
 

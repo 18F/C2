@@ -15,7 +15,7 @@ class ApiToken < ActiveRecord::Base
   delegate :cart_id, to: :approval
 
   def used?
-    !self.used_at
+    !!self.used_at
   end
 
   def use!

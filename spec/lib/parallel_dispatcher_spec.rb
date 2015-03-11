@@ -25,7 +25,7 @@ describe ParallelDispatcher do
     end
 
     it 'sends a cart notification email to observers' do
-      cart.approvals << FactoryGirl.create(:approval_with_user, role: 'observer')
+      cart.add_observer('observer1@some-dot-gov.gov')
       expect(CommunicartMailer).to receive_message_chain(:cart_observer_email, :deliver)
       dispatcher.deliver_new_cart_emails(cart)
     end

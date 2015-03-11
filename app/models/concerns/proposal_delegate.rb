@@ -3,6 +3,9 @@ module ProposalDelegate
 
   included do
     belongs_to :proposal
+    has_many :approvals, through: :proposal
+    has_many :approval_users, through: :approvals, source: :user
+
     accepts_nested_attributes_for :proposal
 
     validates :proposal, presence: true

@@ -39,13 +39,13 @@ ActiveRecord::Schema.define(version: 20150311092117) do
   end
 
   create_table "approvals", force: true do |t|
-    t.integer  "cart_id"
     t.integer  "user_id"
     t.string   "status"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "role"
     t.integer  "position"
+    t.integer  "proposal_id"
   end
 
   create_table "carts", force: true do |t|

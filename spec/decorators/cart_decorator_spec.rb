@@ -7,7 +7,7 @@ describe CartDecorator do
       statuses = Approval.statuses.map(&:to_s)
       statuses = statuses.dup + statuses.clone
       statuses.shuffle.each do |status|
-        FactoryGirl.create(:approval, cart: cart, status: status)
+        FactoryGirl.create(:approval, proposal_id: cart.proposal_id, status: status)
       end
 
       expect(cart.approvals_by_status.map(&:status)).to eq(%w(

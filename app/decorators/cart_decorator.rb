@@ -22,7 +22,7 @@ class CartDecorator < Draper::Decorator
     object.approver_approvals.order(
       # http://stackoverflow.com/a/6332081/358804
       <<-SQL
-        CASE status
+        CASE approvals.status
         WHEN 'approved' THEN 1
         WHEN 'rejected' THEN 2
         WHEN 'pending' THEN 3
