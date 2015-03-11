@@ -52,7 +52,7 @@ group :test do
   gem 'simplecov'
   gem 'turnip'
 
-  # For automatic parallelism in CircleCI
+  # For better test reporting in CircleCI
   # http://blog.circleci.com/announcing-automatic-test-balancing/
   # with a fix from
   # https://github.com/circleci/rspec_junit_formatter/pull/4

@@ -22,6 +22,7 @@ SimpleCov.start 'rails' do
     CodeClimate::TestReporter::Formatter
   ]
 
+  # Allow the coverage results to be viewed through CircleCI
   # https://circleci.com/docs/code-coverage
   if ENV['CIRCLE_ARTIFACTS']
     dir = File.join(ENV['CIRCLE_ARTIFACTS'], 'coverage')
