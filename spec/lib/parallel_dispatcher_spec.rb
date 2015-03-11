@@ -13,9 +13,6 @@ describe ParallelDispatcher do
     end
 
     it 'creates a new token for each approver' do
-      # expect(ApiToken).to receive(:create!).exactly(2).times
-      # expect_any_instance_of(Approval).to receive(:create_api_token!).twice
-
       expect(dispatcher).to receive(:send_notification_email).twice
       dispatcher.deliver_new_cart_emails(cart)
 
