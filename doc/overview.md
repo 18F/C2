@@ -13,15 +13,35 @@ Proposals have two types of workflows:
 * Linear (a.k.a serial)
     * Once the request is submitted, it goes to the first approver. Iff they approve, it goes to the next, and so forth.
 
+## User accounts
+
+User records are created in C2 one of two ways:
+
+* Via MyUSA, where they give C2 permission to use their email address via OAuth
+* By being added as an approver or observer on a Proposal
+
+They can then log in one of two ways:
+
+* Via OAuth with MyUSA
+* By clicking a link in a notification email, which contain a short-lived one-time-use token
+
+### Roles
+
+The system doesn't have any notion of user-level "roles", other than on a Proposal-by-Proposal basis. They can be one of:
+
+* Approver
+* Observer
+* Requester
+
+## Data types
+
+TODO
+
 ## Use cases
 
 This application contains code for several independent but similar use cases. Users will generally be segmented into one use case or another in terms of how the Proposals are initiated, though the approval workflow is (largely) the same.
 
-### Navigator
-
-* Submitted via the `/send_cart` API
-
-### National Capitol Region (NCR) service centers
+### [National Capitol Region (NCR) service centers](http://www.gsa.gov/portal/category/21528)
 
 The NCR use case was built around GSA service centers (paint shops, landscapers, etc.) needing approvals for their superiors and various budget officials for credit card purchases. They use the "linear" workflow described [above](#proposal-flows):
 
@@ -31,17 +51,10 @@ The NCR use case was built around GSA service centers (paint shops, landscapers,
 1. If the AO approves, it goes to one or two other budget office approvers, depending on the type of request.
 1. Once all approvers have approved (or any one of them reject) the Proposal, the requester gets a notification.
 
-## TODO
+### [Navigator](https://github.com/GSA/CAP-ACQUISITION_NAVIGATOR)
 
-* Data types
-    * Proposals
-    * Carts
-* Accounts
-    * Authentication
-        * MyUSA
-    * Creation via being added as an approver/observer
-    * Roles
-        * Proposal-by-proposal basis
-* Reporting
-    * When logged in, users are able to see past Proposals they were involved with, as approvers, observers, or the original requester
-* For information about how 18F's deployment of C2 is configured, see [the Chef cookbook in cloud-cutter](https://github.com/18F/cloud-cutter/blob/master/chef/site-cookbooks/c2/).
+Their application initiates requests through the `/send_cart` API. They use the parallel flow, and specify approval groups rather than individual approvers.
+
+## Production
+
+18F's production and staging [deployments](http://12factor.net/codebase) of C2 live in AWS, and are configured by Cloud Formation + Chef. See the details in [our Chef cookbook in cloud-cutter](https://github.com/18F/cloud-cutter/blob/master/chef/site-cookbooks/c2/).
