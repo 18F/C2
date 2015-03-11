@@ -15,6 +15,7 @@ module ThreeStateWorkflow
       state :approved do
         event :restart, :transitions_to => :pending
         event :approve, :transitions_to => :approved
+        event :partial_approve, :transitions_to => :approved
       end
       state :rejected do
         # partial approvals and rejections can't break out of this state
