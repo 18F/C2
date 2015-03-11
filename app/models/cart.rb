@@ -119,9 +119,21 @@ class Cart < ActiveRecord::Base
   end
 
   # returns the Approval
-  def add_approver(email)
+  def add_approval(email, role)
     user = User.find_or_create_by(email_address: email)
-    self.approvals.create!(user_id: user.id, role: 'approver')
+    self.approvals.create!(user_id: user.id, role: role)
+  end
+
+  def add_approver(email)
+    self.add_approval(email, 'approver')
+  end
+
+  def add_observer(email)
+    self.add_approval(email, 'observer')
+  end
+
+  def add_requester(email)
+    self.add_approval(email, 'requester')
   end
 
   def create_approver_approvals(emails)
@@ -132,11 +144,6 @@ class Cart < ActiveRecord::Base
 
   def set_requester(user)
     self.approvals.create!(user_id: user.id, role: 'requester')
-  end
-
-  def create_requester(email)
-    user = User.find_or_create_by(email_address: email)
-    self.set_requester(user)
   end
 
   def process_approvals_without_approval_group(params)
