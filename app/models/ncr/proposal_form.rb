@@ -61,9 +61,7 @@ module Ncr
       )
       if cart.save
         self.set_props_on(cart)
-        self.approver_emails.each do |email|
-          cart.add_approver(email)
-        end
+        self.add_approvals_on(cart)
         Dispatcher.deliver_new_cart_emails(cart)
       end
 
@@ -77,9 +75,7 @@ module Ncr
         # @todo: do we actually want to clear all properties?
         cart.clear_props!
         self.set_props_on(cart)
-        self.approver_emails.each do |email|
-          cart.add_approver(email)
-        end
+        self.add_approvals_on(cart)
         cart.restart!
       end
       cart
@@ -97,11 +93,26 @@ module Ncr
       )
       case self.expense_type
         when 'BA61'
-          cart.set_props(emergency: self.emergency)
+          cart.set_props(emergency: self.emergency == "1")
         when 'BA80'
           cart.set_props(rwa_number: self.rwa_number)
       end
       cart.set_requester(self.requester)
+    end
+
+    def add_approvals_on(cart)
+      # Hack to account for SimpleFormObject bugs
+      if self.emergency == true || self.emergency == "1"
+        self.approver_emails.each do |email|
+          cart.add_observer(email)
+        end
+        # skip state machine
+        cart.proposal.update_attribute(:status, 'approved')
+      else
+        self.approver_emails.each do |email|
+          cart.add_approver(email)
+        end
+      end
     end
 
     def self.from_cart(cart)

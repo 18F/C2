@@ -124,6 +124,11 @@ class Cart < ActiveRecord::Base
     self.approvals.create!(user_id: user.id, role: 'approver')
   end
 
+  def add_observer(email)
+    user = User.find_or_create_by(email_address: email)
+    self.approvals.create!(user_id: user.id, role: 'observer')
+  end
+
   def create_approver_approvals(emails)
     emails.each do |email|
       self.add_approver(email)
