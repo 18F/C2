@@ -35,7 +35,7 @@ The system doesn't have any notion of user-level "roles", other than on a Propos
 
 ## Data types
 
-TODO
+You can see the up-to-date database schema in [`db/schema.rb`](../db/schema.rb).
 
 ## Use cases
 
