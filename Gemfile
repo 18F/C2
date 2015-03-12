@@ -50,5 +50,6 @@ group :test do
   gem 'capybara'
   gem 'codeclimate-test-reporter'
   gem 'simplecov'
+  gem 'timecop'
   gem 'turnip'
 end
