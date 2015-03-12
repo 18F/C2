@@ -27,6 +27,10 @@ C2::Application.routes.draw do
     resources :proposals
   end
 
+  namespace :gsa18f do
+    resources :proposals
+  end
+
   get "/498", :to => "errors#token_authentication_error"
 
   if Rails.env.development?
