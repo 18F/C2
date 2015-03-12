@@ -12,9 +12,7 @@ class ApiToken < ActiveRecord::Base
   scope :unused, -> { where(used_at: nil) }
   scope :fresh, -> { unused.unexpired }
 
-  def cart_id
-    self.approval.cart_id
-  end
+  delegate :cart_id, to: :approval
 
   def generate_token
     begin
