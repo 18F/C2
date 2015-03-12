@@ -180,5 +180,29 @@ describe "National Capital Region proposals" do
       visit "/carts/#{ncr_cart.id}"
       expect(page).not_to have_content('Restart this Cart?')
     end
+
+    it "approves emergencies" do
+      visit '/ncr/proposals/new'
+
+      fill_in 'Description', with: "buying stuff"
+      choose 'BA61'
+      choose "I received a verbal NTP to address this emergency"
+      fill_in 'Vendor', with: 'ACME'
+      fill_in 'Amount', with: 123.45
+      fill_in "Approving Official's Email Address", with: 'approver@example.com'
+      select 'Entire Jackson Place Complex', :from => 'ncr_proposal_building_number'
+      select Ncr::ProposalForm::OFFICES[0], :from => 'ncr_proposal_office'
+      expect {
+        click_on 'Submit for approval'
+      }.to change { Cart.count }.from(0).to(1)
+
+      expect(page).to have_content("Proposal submitted")
+      expect(current_path).to eq("/carts/#{Cart.last.id}")
+      expect(page).to have_content("0 of 0 approved")
+
+      cart = Cart.last
+      expect(cart.getProp(:emergency)).to eq(true)
+      expect(cart.approved?).to eq(true)
+    end
   end
 end
