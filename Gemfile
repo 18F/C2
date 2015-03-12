@@ -49,6 +49,7 @@ group :test do
   gem 'addressable'
   gem 'capybara'
   gem 'codeclimate-test-reporter'
+  gem "poltergeist"
   gem 'simplecov'
   gem 'turnip'
 

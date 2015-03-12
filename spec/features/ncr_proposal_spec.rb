@@ -79,10 +79,9 @@ describe "National Capital Region proposals" do
 
     it "includes has overwritten field names" do
       visit '/ncr/proposals/new'
-      expect(page).to have_content("RWA Number")
       fill_in 'Description', with: "buying stuff"
       choose 'BA80'
-      fill_in 'RWA Number', with: 'NumNum', disabled: true
+      fill_in 'RWA Number', with: 'NumNum'
       fill_in 'Vendor', with: 'ACME'
       fill_in 'Amount', with: 123.45
       fill_in "Approving Official's Email Address", with: 'approver@example.com'
@@ -91,6 +90,18 @@ describe "National Capital Region proposals" do
       click_on 'Submit for approval'
       expect(current_path).to eq("/carts/#{Cart.last.id}")
       expect(page).to have_content("RWA Number")
+    end
+
+    it "hides fields based on expense", :js => true do
+      visit '/ncr/proposals/new'
+      expect(find_field("RWA Number", visible: false).visible?).to be false
+      expect(find_field("emergency", visible: false).visible?).to be false
+      choose 'BA61'
+      expect(find_field("RWA Number", visible: false).visible?).to be false
+      expect(find_field("emergency", visible: false).visible?).to be true
+      choose 'BA80'
+      expect(find_field("RWA Number", visible: false).visible?).to be true
+      expect(find_field("emergency", visible: false).visible?).to be false
     end
 
     it "can be restarted if pending" do

@@ -17,6 +17,7 @@ module Ncr
     attribute :vendor, :string
     attribute :not_to_exceed, :boolean
     attribute :building_number, :string
+    attribute :emergency, :boolean
     attribute :rwa_number, :string
     attribute :office, :string
 
@@ -92,9 +93,14 @@ module Ncr
         vendor: self.vendor,
         not_to_exceed: self.not_to_exceed,
         building_number: self.building_number,
-        rwa_number: self.rwa_number,
         office: self.office
       )
+      case self.expense_type
+        when 'BA61'
+          cart.set_props(emergency: self.emergency)
+        when 'BA80'
+          cart.set_props(rwa_number: self.rwa_number)
+      end
       cart.set_requester(self.requester)
     end
 

@@ -1,0 +1,27 @@
+{
+  "camelcase": true,
+  "curly": true,
+  "eqeqeq": true,
+  "forin": true,
+  "immed": true,
+  "latedef": true,
+  "indent": 2,
+  "loopfunc": true,
+  "newcap": true,
+  "noarg": true,
+  "plusplus": false,
+  "quotmark": true,
+  "sub": true,
+  "strict": true,
+  "undef": false,
+  "unused": true,
+  "validthis": true,
+  "boss": true,
+  "browser": true,
+  "globalstrict": true,
+  "sub": true,
+
+  "globals": {
+    "$": true
+  }
+}
