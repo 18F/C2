@@ -14,7 +14,7 @@ class Cart < ActiveRecord::Base
 
   #TODO: validates_uniqueness_of :name
 
-  ORIGINS = %w(navigator ncr)
+  ORIGINS = %w(navigator ncr gsa18f)
 
 
   def rejections
