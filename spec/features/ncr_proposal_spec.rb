@@ -186,7 +186,7 @@ describe "National Capital Region proposals" do
 
       fill_in 'Description', with: "buying stuff"
       choose 'BA61'
-      choose "I received a verbal NTP to address this emergency"
+      check "I received a verbal NTP to address this emergency"
       fill_in 'Vendor', with: 'ACME'
       fill_in 'Amount', with: 123.45
       fill_in "Approving Official's Email Address", with: 'approver@example.com'

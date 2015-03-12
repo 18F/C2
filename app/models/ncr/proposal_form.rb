@@ -93,7 +93,8 @@ module Ncr
       )
       case self.expense_type
         when 'BA61'
-          cart.set_props(emergency: self.emergency == "1")
+          # Hack to account for SimpleFormObject bugs
+          cart.set_props(emergency: self.emergency != false && self.emergency != "0")
         when 'BA80'
           cart.set_props(rwa_number: self.rwa_number)
       end
