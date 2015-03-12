@@ -17,12 +17,23 @@ class CommunicartMailer < ActionMailer::Base
     send_cart_email(sender, to_email, cart)
   end
 
+  def proposal_created_confirmation(cart)
+    @cart = cart.decorate
+    to_address = cart.requester.email_address
+    from_email = user_email(cart.requester)
+
+    mail(
+         to: to_address,
+         subject: "Your request for Proposal ##{cart.id} has been sent successfully.",
+         from: from_email
+         )
+  end
+
   def approval_reply_received_email(approval)
     cart = approval.cart
     @approval = approval
     @cart = cart.decorate
     to_address = cart.requester.email_address
-    #TODO: Handle carts without approval groups (only emails passed)
     #TODO: Add a specific 'rejection' text block for the requester
 
     set_attachments(cart)
@@ -35,12 +46,11 @@ class CommunicartMailer < ActionMailer::Base
   end
 
   def comment_added_email(comment, to_email)
-    @comment_text = comment.comment_text
-    @cart_item = comment.commentable
+    @comment = comment
 
     mail(
          to: to_email,
-         subject: "A comment has been added to cart item '#{@cart_item.description}'",
+         subject: "A comment has been added to '#{comment.commentable.name}'",
          from: user_email(comment.user)
          )
   end
@@ -50,7 +60,6 @@ class CommunicartMailer < ActionMailer::Base
 
   def set_attachments(cart)
     if cart.all_approvals_received?
-      attachments['Communicart' + cart.name + '.details.csv'] = Exporter::Items.new(cart).to_csv
       attachments['Communicart' + cart.name + '.comments.csv'] = Exporter::Comments.new(cart).to_csv
       attachments['Communicart' + cart.name + '.approvals.csv'] = Exporter::Approvals.new(cart).to_csv
     end
@@ -58,7 +67,7 @@ class CommunicartMailer < ActionMailer::Base
 
   # for easier stubbing in tests
   def sender
-    ENV['NOTIFICATION_FROM_EMAIL'] || 'user_email@some-dot_gov.gov'
+    ENV['NOTIFICATION_FROM_EMAIL'] || 'noreply@some.gov'
   end
 
   def user_email(user)
@@ -69,8 +78,7 @@ class CommunicartMailer < ActionMailer::Base
   end
 
   def subject(cart)
-    approval_format = Settings.email_title_for_approval_request_format
-    approval_format % [cart.requester.full_name, cart.public_identifier]
+    "Communicart Approval Request from #{cart.requester.full_name}: Please review Cart ##{cart.public_identifier}"
   end
 
   def send_cart_email(from_email, to_email, cart)

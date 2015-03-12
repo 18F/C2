@@ -2,6 +2,7 @@
 @import "webflow";
 @import "../modules/shared/email_status";
 @import "cart_item_information";
+@import "cart_properties";
 
 
 table {
@@ -10,16 +11,28 @@ table {
     margin-top: 15px;
   }
 
+  &.reply-section, &.comments-section {
+    width: 800px;
+    background-color: #fff;
+
+    td {
+      padding: 7px 15px;
+
+      &.first {
+        width: 155px;
+      }
+
+      &.comment-detail {
+        border-top: 1px solid #ccc;
+      }
+    }
+  }
+
   border-spacing: 0;
 }
 
 table.center {
   margin-left: 15px;
-}
-
-table.reply-section {
-  width: 800px;
-  background-color: #fff;
 }
 
 #navigator-layout tr.cart_item_information strong {
@@ -192,7 +205,6 @@ h4 {
 td.html-email-message {
   font-size: 14px;
   background-color: #fff;
-  padding: 15px;
 }
 tr.header h5 {
   text-transform: uppercase;
@@ -268,6 +280,10 @@ p {
   color: #fff;
   text-decoration: none;
 }
+.controller-carts a.form-button {
+  color: #fff;
+}
+
 .result-item {
   padding-top: 10px;
   padding-bottom: 10px;
@@ -469,16 +485,6 @@ p.rejected {
   text-align: center;
 }
 
-.lightbox {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, .85);
-  z-index: 100;
-}
-
 /** C2 Styles **/
 body.webapp {
   table.reply-section,
@@ -513,8 +519,6 @@ body.webapp {
   }
 }
 
-
-
 #approval-status-container {
   width: 100%;
   margin-bottom: 60px;
@@ -536,6 +540,10 @@ body.webapp {
       padding-left: 18px;
     }
   }
+}
+
+.centered {
+  text-align: center;
 }
 
 .text-area-info-container {
@@ -560,7 +568,7 @@ body.webapp {
 /** Landing **/
 .home-main {
   padding: 0 40px;
-  width: $webwidth;
+  max-width: $webwidth;
   margin: 0 auto 40px auto;
 
   h3 {

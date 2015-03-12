@@ -3,13 +3,13 @@ describe Dispatcher do
 
   describe '.deliver_new_cart_emails' do
     it "uses the ParallelDispatcher for parallel approvals" do
-      cart.flow = 'parallel'
+      cart.proposal.flow = 'parallel'
       expect_any_instance_of(ParallelDispatcher).to receive(:deliver_new_cart_emails).with(cart)
       Dispatcher.deliver_new_cart_emails(cart)
     end
 
     it "uses the LinearDispatcher for linear approvals" do
-      cart.flow = 'linear'
+      cart.proposal.flow = 'linear'
       expect_any_instance_of(LinearDispatcher).to receive(:deliver_new_cart_emails).with(cart)
       Dispatcher.deliver_new_cart_emails(cart)
     end

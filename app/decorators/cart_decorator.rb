@@ -5,7 +5,8 @@ class CartDecorator < Draper::Decorator
     if self.getProp('origin') == 'ncr'
       self.getProp('amount').to_f
     else
-      object.cart_items.reduce(0) { |sum,citem| sum + citem.quantity * citem.price }
+      # TODO won't be present for all Carts
+      0.0
     end
   end
 
@@ -40,7 +41,7 @@ class CartDecorator < Draper::Decorator
   end
 
   def display_status
-    if cart.status == 'pending'
+    if cart.pending?
       'pending approval'
     else
       cart.status

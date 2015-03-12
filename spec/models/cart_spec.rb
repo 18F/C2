@@ -1,29 +1,29 @@
 describe Cart do
   let(:cart) { FactoryGirl.create(:cart_with_approval_group) }
 
-  describe '#update_approval_status' do
+  describe 'partial approvals' do
     context "All approvals are in 'approved' status" do
       it 'updates a status based on the cart_id passed in from the params' do
-        expect(cart).to receive(:all_approvals_received?).and_return(true)
+        expect_any_instance_of(Cart).to receive(:all_approvals_received?).and_return(true)
 
-        cart.update_approval_status
-        expect(cart.status).to eq('approved')
+        cart.partial_approve!
+        expect(cart.approved?).to eq true
       end
     end
 
     context "Not all approvals are in 'approved'status" do
       it 'does not update the cart status' do
-        expect(cart).to receive(:all_approvals_received?).and_return(false)
+        expect_any_instance_of(Cart).to receive(:all_approvals_received?).and_return(false)
 
-        cart.update_approval_status
-        expect(cart.status).to eq('pending')
+        cart.partial_approve!
+        expect(cart.pending?).to eq true
       end
     end
   end
 
   describe '#default value should be correct' do
     it 'sets status to pending by default' do
-      expect(cart.status).to eq('pending')
+      expect(cart.pending?).to eq true
     end
   end
 
@@ -54,8 +54,6 @@ describe Cart do
     let(:cart_id) { 1357910 }
     let(:cart_name) {'30003'}
     it 'finds cart' do
-      puts cart.name
-      puts cart
       c = Cart.existing_or_new_cart({'cartNumber' => 30003})
       expect(c.name).to eq('30003');
     end
@@ -67,6 +65,27 @@ describe Cart do
     it "returns users in order of position" do
       cart.approvals.first.update_attribute(:position, 5)
       expect(cart.ordered_awaiting_approvals).to eq(cart.awaiting_approvals.order('id DESC'))
+    end
+  end
+
+  describe '#currently_awaiting_approvers' do
+    it "gives a consistently ordered list when in parallel" do
+      cart = FactoryGirl.create(:cart_with_approvals)
+      last_names = cart.currently_awaiting_approvers.map(&:last_name)
+      expect(last_names).to eq(['Approver1', 'Approver2'])
+
+      cart.approvals.first.update_attribute(:position, 5)
+      last_names = cart.currently_awaiting_approvers.map(&:last_name)
+      expect(last_names).to eq(['Approver2', 'Approver1'])
+    end
+    it "gives only the first approver when linear" do
+      cart = FactoryGirl.create(:cart_with_approvals, flow: 'linear')
+      last_names = cart.currently_awaiting_approvers.map(&:last_name)
+      expect(last_names).to eq(['Approver1'])
+
+      cart.approvals.first.update_attribute(:position, 5)
+      last_names = cart.currently_awaiting_approvers.map(&:last_name)
+      expect(last_names).to eq(['Approver2'])
     end
   end
 
@@ -89,7 +108,7 @@ describe Cart do
       it 'returns open carts' do
         approved_cart1
         pending_cart
-        expect(Cart.open).to eq [pending_cart]
+        expect(Cart.pending).to eq [pending_cart]
       end
     end
 
@@ -104,4 +123,39 @@ describe Cart do
 
   end
 
+  describe '#on_rejected_entry' do
+    it 'sends only one rejection email' do
+      cart = FactoryGirl.create(:cart_with_approvals)
+      # skip workflow
+      cart.approver_approvals.first.update_attribute(:status, 'rejected')
+      cart.reject!
+      expect(email_recipients).to eq(['requester@some-dot-gov.gov'])
+
+      cart.reject!
+      expect(email_recipients).to eq(['requester@some-dot-gov.gov'])
+    end
+  end
+
+  describe '#restart' do
+    it 'resets approval states when rejected' do
+      cart = FactoryGirl.create(:cart_with_approvals)
+      Dispatcher.deliver_new_cart_emails(cart)
+      expect(cart.api_tokens.length).to eq(2)
+
+      cart.approver_approvals.first.approve!
+      cart.approver_approvals.last.reject!
+      expect(cart.approvals.approved.size).to eq(1)
+      expect(cart.approvals.rejected.size).to eq(1)
+      expect(cart.rejected?).to eq(true)
+
+      cart.restart!
+
+      expect(cart.pending?).to eq(true)
+      expect(cart.api_tokens.expired.length).to eq(2)
+      expect(cart.api_tokens.unexpired.length).to eq(2)
+      expect(cart.approver_approvals.length).to eq(2)
+      expect(cart.approver_approvals[0].pending?).to eq(true)
+      expect(cart.approver_approvals[1].pending?).to eq(true)
+    end
+  end
 end

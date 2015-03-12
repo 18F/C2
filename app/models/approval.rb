@@ -1,23 +1,27 @@
 class Approval < ActiveRecord::Base
-  STATUSES = %w(pending approved rejected)
+  include ThreeStateWorkflow
+
+  workflow_column :status
 
   belongs_to :cart
   belongs_to :user
   has_one :approval_group, through: :cart
   delegate :full_name, :email_address, :to => :user, :prefix => true
+  delegate :approvals, :to => :cart, :prefix => true
 
   acts_as_list scope: :cart
 
   validates :role, presence: true, inclusion: {in: UserRole::ROLES}
   # TODO validates_uniqueness_of :user_id, scope: cart_id
-  validates :status, presence: true, inclusion: {in: STATUSES}
 
-  after_initialize :set_default_status
+  scope :approvable, -> { where(role: 'approver') }
+  scope :observing, -> { where(role: 'observer') }
+  scope :requesting, -> { where(role: 'requester') }
 
-  scope :approvable, -> { where.not(role: ['requester','observer']) }
-  scope :pending, ->    { approvable.where(status: 'pending') }
+  self.statuses.each do |status|
+    scope status, -> { approvable.where(status: status) }
+  end
   scope :received, ->   { approvable.where.not(status: 'pending') }
-  scope :approved, ->   { approvable.where(status: 'approved') }
 
 
   # TODO this should be a proper association
@@ -48,14 +52,6 @@ class Approval < ActiveRecord::Base
     )
   end
 
-  def pending?
-    self.status == 'pending'
-  end
-
-  def approved?
-    self.status == 'approved'
-  end
-
   # TODO we should probably store this value
   def approved_at
     if self.approved?
@@ -65,10 +61,14 @@ class Approval < ActiveRecord::Base
     end
   end
 
+  # Used by the state machine
+  def on_rejected_entry(new_state, event)
+    self.cart.reject!
+  end
 
-  private
-
-  def set_default_status
-    self.status ||= 'pending'
+  # Used by the state machine
+  def on_approved_entry(new_state, event)
+    self.cart.partial_approve!
+    Dispatcher.on_approval_approved(self)
   end
 end

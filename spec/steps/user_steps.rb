@@ -9,6 +9,14 @@ module UserSteps
     @user = User.find_by(email_address: email)
   end
 
+  step 'the logged in user is :email' do |email|
+    @user = User.find_by(email_address: email)
+
+    user_info = {'email'=> email}
+    page.set_rack_session('user' => user_info)
+    @current_user = @user
+  end
+
   step "I should see alert text :text" do |text|
     page.assert_selector('.alert', :count => 1)
     expect(page.find('.alert')).to have_content(text)
@@ -47,15 +55,19 @@ module UserSteps
     save_and_open_page
   end
 
-  step 'a cart :external_id with a cart item' do |external_id|
-    @cart = FactoryGirl.create(:cart_with_item, external_id: external_id)
+  step 'a cart :external_id' do |external_id|
+    @cart = FactoryGirl.create(:cart_with_requester, external_id: external_id)
   end
 
-  step 'a cart with a cart item and approvals' do
+  step 'a :cart_type cart :external_id' do |cart_type, external_id|
+    @cart = FactoryGirl.create(:cart_with_requester, external_id: external_id, flow: cart_type)
+  end
+
+  step 'a cart and approvals' do
     @cart = FactoryGirl.create(:cart_with_approvals_and_items)
   end
 
-  step 'a cart :external_id with a cart item and approvals' do |external_id|
+  step 'a cart :external_id and approvals' do |external_id|
     @cart = FactoryGirl.create(:cart_with_approvals_and_items, external_id: external_id)
   end
 

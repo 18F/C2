@@ -2,51 +2,31 @@ require 'csv'
 
 class Cart < ActiveRecord::Base
   include PropMixin
+  include ProposalDelegate
 
-  has_many :cart_items
   has_many :approvals
   has_many :approval_users, through: :approvals, source: :user
   has_one :approval_group
   has_many :user_roles, through: :approval_group
-  has_one :api_token
+  has_many :api_tokens
   has_many :comments, as: :commentable
   has_many :properties, as: :hasproperties
 
-  after_initialize :set_defaults
-
-  #TODO: after_save default status
   #TODO: validates_uniqueness_of :name
-  validates :flow, presence: true, inclusion: {in: ApprovalGroup::FLOWS}
-
-  scope :approved, -> { where(status: 'approved') }
-  scope :open, -> { where(status: 'pending') }
-  scope :closed, -> { where(:status => ['approved', 'rejected']) }
 
   ORIGINS = %w(navigator ncr)
 
-  def update_approval_status
-    if self.has_rejection?
-      self.update_attributes(status: 'rejected')
-    elsif self.all_approvals_received?
-      self.update_attributes(status: 'approved')
-    end
-  end
 
   def rejections
-    self.approvals.where(status: 'rejected')
-  end
-
-  def has_rejection?
-    self.rejections.any?
+    self.approver_approvals.rejected
   end
 
   def approver_approvals
-    self.approvals.where(role: 'approver')
+    self.approvals.approvable
   end
 
   def approvers
-    # TODO do through SQL
-    self.approver_approvals.map(&:user)
+    self.approval_users.merge(self.approver_approvals)
   end
 
   def awaiting_approvals
@@ -54,8 +34,7 @@ class Cart < ActiveRecord::Base
   end
 
   def awaiting_approvers
-    # TODO do through SQL
-    self.awaiting_approvals.map(&:user)
+    self.approval_users.merge(self.awaiting_approvals)
   end
 
   def ordered_approvals
@@ -69,34 +48,35 @@ class Cart < ActiveRecord::Base
   # users with outstanding cart_notification_emails
   def currently_awaiting_approvers
     if self.parallel?
-      self.awaiting_approvers
-    else # linear
+      # TODO do through SQL
+      self.ordered_awaiting_approvals.map(&:user)
+    else # linear. Assumes the cart is open
       approval = self.ordered_awaiting_approvals.first
       [approval.user]
     end
   end
 
   def approved_approvals
-    self.approver_approvals.where(status: 'approved')
+    self.approver_approvals.approved
   end
 
   def all_approvals_received?
-    self.approver_approvals.where('status != ?', 'approved').empty?
+    self.approver_approvals.where.not(status: 'approved').empty?
   end
 
   def requester
-    approvals.where(role: 'requester').first.try(:user)
+    self.approval_users.merge(Approval.requesting).first
   end
 
   def observers
     # TODO: Pull from approvals, not approval groups
-    approval_group.user_roles.where(role: 'observer')
+    approval_group.user_roles.observers
   end
 
-  def self.initialize_cart_with_items params
+  def self.initialize_cart params
     cart = self.existing_or_new_cart params
     cart.initialize_approval_group params
-    cart.initialize_flow(params)
+    cart.setup_proposal(params)
     self.copy_existing_approvals_to(cart, name)
 
     cart
@@ -105,12 +85,12 @@ class Cart < ActiveRecord::Base
   def self.existing_or_new_cart(params)
     name = params['cartName'].presence || params['cartNumber'].to_s
 
-    pending_cart = Cart.find_by(name: name, status: 'pending')
+    pending_cart = Cart.pending.find_by(name: name)
     if pending_cart
       cart = reset_existing_cart(pending_cart)
     else
       #There is no existing cart or the existing cart is already approved
-      cart = Cart.new(name: name, status: 'pending', external_id: params['cartNumber'])
+      cart = self.new(name: name, external_id: params['cartNumber'])
     end
 
     cart
@@ -125,14 +105,20 @@ class Cart < ActiveRecord::Base
     end
   end
 
-  def initialize_flow(params)
-    self.flow = params['flow'].presence || self.flow || self.approval_group.try(:flow) || 'parallel'
+  def determine_flow(params)
+    params['flow'].presence || self.approval_group.try(:flow) || 'parallel'
+  end
+
+  def setup_proposal(params)
+    flow = self.determine_flow(params)
+    self.create_proposal!(flow: flow, status: 'pending')
   end
 
   def import_initial_comments(comments)
     self.comments.create!(user_id: self.requester.id, comment_text: comments.strip)
   end
 
+  # returns the Approval
   def add_approver(email)
     user = User.find_or_create_by(email_address: email)
     self.approvals.create!(user_id: user.id, role: 'approver')
@@ -186,7 +172,6 @@ class Cart < ActiveRecord::Base
 
   def self.reset_existing_cart(cart)
     cart.approvals.map(&:destroy)
-    cart.cart_items.destroy_all
     cart.approval_group = nil
 
     cart
@@ -194,34 +179,17 @@ class Cart < ActiveRecord::Base
 
   def self.copy_existing_approvals_to(new_cart, cart_name)
     previous_cart = Cart.where(name: cart_name).last
-    if previous_cart && previous_cart.status == 'rejected'
+    if previous_cart && previous_cart.rejected?
       previous_cart.approvals.each do |approval|
         new_cart.copy_existing_approval(approval)
       end
     end
   end
 
-  def import_cart_item(params)
-    params = params.dup
-    params.delete_if {|k,v| v.blank? }
-
-    ci = CartItem.from_params(params)
-    ci.cart = self
-    ci.save!
-  end
-
-  def import_cart_items(cart_items_params)
-    cart_items_params.each do |params|
-      self.import_cart_item(params)
-    end
-  end
-
-  def set_defaults
-    self.status ||= 'pending'
-  end
-
   def origin
-    self.getProp('origin')
+    # In practice, carts should always have an origin. Account for test cases
+    # and old data with this "or"
+    self.getProp('origin') || ''
   end
 
   def ncr?
@@ -250,8 +218,7 @@ class Cart < ActiveRecord::Base
     self.flow == 'parallel'
   end
 
-  def pending?
-    # TODO validates :status, inclusion: {in: Approval::STATUSES}
-    self.status.blank? || self.status == 'pending'
+  def linear?
+    self.flow == 'linear'
   end
 end

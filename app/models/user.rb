@@ -19,10 +19,19 @@ class User < ActiveRecord::Base
   end
 
   def requested_carts
-    self.carts.where(approvals: {role: 'requester'})
+    self.carts.merge(Approval.requesting)
+  end
+
+  def approver_of?(cart)
+    cart.approvers.include? self
   end
 
   def last_requested_cart
     self.requested_carts.order('carts.created_at DESC').first
+  end
+
+  def self.from_oauth_hash(auth_hash)
+    user_data = auth_hash.extra.raw_info.to_hash
+    self.find_or_create_by(email_address: user_data['email'])
   end
 end

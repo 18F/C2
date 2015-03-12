@@ -26,9 +26,7 @@
     <%= render partial: "carts/approval_status"  %>
   </div>
   <div class="row">
-    <div class="col-md-12">
-      <%= render partial: 'carts/cart_items', locals: {cart: cart} %>
-    </div>
+    <%= render partial: 'shared/cart_properties', locals: {cart: cart} %>
   </div>
 </div>
 
@@ -95,9 +93,11 @@
         <% cart.comments.each do |c| %>
           <div class='comment-item'>
             <div class='row'>
-              <p class='comment-sender col-sm-6 col-xs-12'>
-                <strong>requester@test.com</strong>
-              </p>
+              <% unless c.user.nil? %>
+                <p class='comment-sender col-sm-6 col-xs-12'>
+                  <strong><%= c.user_full_name %></strong>
+                </p>
+              <% end %>
               <p class='comment-date col-sm-6 col-xs-12'>
                 <%= date_with_tooltip(c.created_at) %>
               </p>
@@ -105,11 +105,6 @@
 
             <div class='row'>
               <p class='comment-text col-sm-6 col-xs-12'>
-                <% unless c.user.nil? %>
-                  <em>
-                    <%= "#{c.user_full_name}: " %>
-                  </em>
-                <% end %>
                 <%= c.comment_text %>
               </p>
             </div>
@@ -123,3 +118,10 @@
     <%- end %>
   </div>
 </div>
+
+<% if display_response_actions?(cart, @current_user) %>
+  <%= render partial: 'approval_actions', locals: { current_user: @current_user, cart: cart} %>
+<% end %>
+<% if display_restart?(cart) %>
+  <%= client_partial(cart.origin, 'restart_link', locals: {cart: cart}) %>
+<% end %>

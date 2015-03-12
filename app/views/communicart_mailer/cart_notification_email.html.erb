@@ -2,48 +2,19 @@
   <table class='reply-section'>
     <tr>
       <td class="w-container html-email-message">
-        ------------------
-        <br/>
-        <strong>Please reply to this email with the response 'APPROVE' or 'REJECT' on its own line.</strong>
-        <br/>
-<% unless @prefix_template.blank? %>
-  <%= render partial: @prefix_template, locals: {cart: @cart, title:  "Purchase Request"} %>
-<% end %>
-        <p>
-          Additional comments:
-        </p>
-
-        <% unless @cart.comments.empty? %>
-          <p>
-            <%= @cart.comments.first.comment_text %>
-          </p>
+        <% unless @prefix_template.blank? %>
+          <%= render partial: @prefix_template, locals: {cart: @cart, title:  "Purchase Request"} %>
         <% end %>
-
-        <br/>
       </td>
     </tr>
   </table>
 
 <div style="width:800px">
-  <%= render partial: @cart.cart_template_name, locals: {cart: @cart, title:  "Purchase Request"} %>
-  <table class='reply-section'>
-    <tr height="25"><td colspan=2 height="25" bgcolor="#f5f5f5"></td></tr>
-    <tr id="approval-actions">
-      <td colspan=2 align="center">
-        <p>
-          <%= link_to "Approve", approval_action_url(@approval), class: 'form-button' %>
-          <%= link_to "Reject", approval_action_url(@approval, 'reject'), class: 'reject-link' %>
+  <%= render partial: 'comments', locals: { comments: @cart.comments } %>
 
-        </p>
-        <p>
-          <strong>
-            <%= link_to "Comment on this request, or view it in your browser", cart_url(@cart) %>
-          </strong>
-        </p>
-      </td>
-    </tr>
+  <%= render partial: @cart.cart_template_name, locals: { cart: @cart, title:  "Purchase Request" } %>
 
+  <%= render partial: 'email_reply', locals: { cart: @cart, approval: @approval } %>
 
-  </table>
 </div>
 </body>

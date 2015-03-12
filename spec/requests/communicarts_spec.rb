@@ -1,5 +1,3 @@
-require 'request_helper'
-
 describe 'CommunicartsController' do
   describe "POST /communicarts/send_cart" do
     before do

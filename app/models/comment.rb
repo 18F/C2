@@ -26,18 +26,10 @@ class Comment < ActiveRecord::Base
     ]
   end
 
-private
+
+  private
+
   def notify_approval_group
-    case self.commentable_type
-      when "CartItem"
-        self.commentable.cart.approvals.each do | approval |
-          email = approval.user_email_address
-          CommunicartMailer.comment_added_email(self, email).deliver
-        end
-      else
-        # Do nothing
-    end
-
+    # TODO notify for Carts, though probably not if they are already getting an approval/rejection notification
   end
-
 end

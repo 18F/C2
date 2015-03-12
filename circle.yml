@@ -1,13 +1,6 @@
 dependencies:
   pre:
     - cp .env.example .env
-    - npm install -g grunt-cli
-
-test:
-  override:
-    - bundle exec rspec spec
-    - grunt jasmine
-
 deployment:
   production:
     branch: production
