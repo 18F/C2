@@ -58,3 +58,7 @@ group :test do
   # https://github.com/circleci/rspec_junit_formatter/pull/4
   gem 'rspec_junit_formatter', git: 'https://github.com/amitree/rspec_junit_formatter.git', ref: '33a0fdd'
 end
+
+group :production do
+  gem 'rails_12factor'
+end
