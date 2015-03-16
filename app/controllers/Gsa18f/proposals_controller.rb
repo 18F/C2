@@ -7,10 +7,6 @@ module Gsa18f
       @proposal_form = Gsa18f::ProposalForm.new
       @form_url = {action: "create"}
       @form_method = "post"
-      approver = self.suggested_approver
-      # if approver
-      #   @proposal_form.approver_email = approver.email_address
-      # end
       render 'form'
     end
 
@@ -65,14 +61,6 @@ module Gsa18f
 
     def last_cart
       current_user.last_requested_cart
-    end
-
-    def last_approvers
-      last_cart.try(:approvers)
-    end
-
-    def suggested_approver
-      last_approvers.try(:first)
     end
 
     def cart

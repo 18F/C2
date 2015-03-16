@@ -1,4 +1,3 @@
-#module Ncr
 module Gsa18f
   DATA = YAML.load_file("#{Rails.root}/config/data/18f.yaml")
 
@@ -8,13 +7,11 @@ module Gsa18f
     URGENCY = DATA['URGENCY']
     OFFICES = DATA['OFFICES']
     
-    #18f additions
-    #attribute :approver_email, :text
     attribute :requester, :user
     attribute :office, :string
     attribute :justification, :text
     attribute :link_to_product, :string
-    attribute :quantity, :decimal
+    attribute :quantity, :integer
     attribute :date_requested, :datetime
     attribute :urgency, :string
     attribute :additional_info, :string
@@ -31,9 +28,8 @@ module Gsa18f
     }
     validates :product_name_and_description, presence: true
 
-    def approver_emails
-      emails = ['Richard.L.Miller@gsa.gov']
-      emails
+    def set_approver_on(cart)
+      cart.add_approver(ENV['GSA18F_APPROVER_EMAIL'] || 'Richard.L.Miller@gsa.gov')
     end
 
     def create_cart
@@ -43,9 +39,7 @@ module Gsa18f
       )
       if cart.save
         self.set_props_on(cart)
-        self.approver_emails.each do |email|
-          cart.add_approver(email)
-        end
+        self.set_approver_on(cart)
         Dispatcher.deliver_new_cart_emails(cart)
       end
 
@@ -59,9 +53,7 @@ module Gsa18f
         # @todo: do we actually want to clear all properties?
         cart.clear_props!
         self.set_props_on(cart)
-        self.approver_emails.each do |email|
-          cart.add_approver(email)
-        end
+        self.set_approver_on(cart)
         cart.restart!
       end
       cart
