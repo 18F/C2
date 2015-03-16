@@ -29,7 +29,7 @@ module Gsa18f
     validates :product_name_and_description, presence: true
 
     def set_approver_on(cart)
-      cart.add_approver(ENV['GSA18F_APPROVER_EMAIL'] || 'Richard.L.Miller@gsa.gov')
+      cart.add_approver(ENV['GSA18F_APPROVER_EMAIL'] || '18fapprover@gsa.gov')
     end
 
     def create_cart
