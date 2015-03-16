@@ -14,6 +14,17 @@ class ApiToken < ActiveRecord::Base
 
   delegate :cart_id, to: :approval
 
+  def used?
+    !self.used_at
+  end
+
+  def use!
+    self.update_attributes!(used_at: Time.now)
+  end
+
+
+  private
+
   def generate_token
     begin
       self.access_token = SecureRandom.hex

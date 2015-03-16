@@ -136,7 +136,7 @@ describe CommunicartsController do
         expect(approval).to be_approved
         expect(response).to redirect_to(cart_path(cart))
         token.reload
-        expect(token.used_at).to_not eq(nil)
+        expect(token.used?).to eq(true)
       end
     end
   end
