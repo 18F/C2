@@ -81,6 +81,11 @@ module Ncr
       cart
     end
 
+    # SimpleFormObject does not convert inputs properly
+    def emergency?
+      ActiveRecord::ConnectionAdapters::Column.value_to_boolean(self.emergency)
+    end
+
     def set_props_on(cart)
       cart.set_props(
         origin: self.origin,
@@ -93,8 +98,7 @@ module Ncr
       )
       case self.expense_type
         when 'BA61'
-          # Hack to account for SimpleFormObject bugs
-          cart.set_props(emergency: self.emergency != false && self.emergency != "0")
+          cart.set_props(emergency: self.emergency?)
         when 'BA80'
           cart.set_props(rwa_number: self.rwa_number)
       end
@@ -102,8 +106,7 @@ module Ncr
     end
 
     def add_approvals_on(cart)
-      # Hack to account for SimpleFormObject bugs
-      if self.emergency == true || self.emergency == "1"
+      if self.emergency?
         self.approver_emails.each do |email|
           cart.add_observer(email)
         end
