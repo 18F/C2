@@ -22,6 +22,7 @@ C2 is a fairly typical Rails application, so the setup is straightforward:
     ```
 
 1. [Register an application on MyUSA](https://alpha.my.usa.gov/applications/new) that provides the `email` scope.
+    * Note that the MyUSA app will need to be whitelisted on their end if you need other people to log into it. This matters for staging servers more than local development, so you may not need to worry about it.
 1. Add the required `MYUSA_*` values in your [`.env`](../.env.example).
 
 Per [the Twelve-Factor guidelines](http://12factor.net/config), all necessary configuration should be possible through environment variables. See [`.env.example`](../.env.example) for the full list.
