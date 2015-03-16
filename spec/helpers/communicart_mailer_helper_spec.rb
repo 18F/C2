@@ -11,8 +11,7 @@ describe CommunicartMailerHelper do
       expect(uri.query_values).to eq(
         'approver_action' => 'approve',
         'cart_id' => approval.cart_id.to_s,
-        'cch' => token.access_token,
-        'user_id' => approval.user_id.to_s
+        'cch' => token.access_token
       )
     end
 
