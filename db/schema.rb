@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150308001735) do
+ActiveRecord::Schema.define(version: 20150312220100) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,6 +64,18 @@ ActiveRecord::Schema.define(version: 20150308001735) do
     t.integer  "commentable_id"
     t.string   "commentable_type"
     t.integer  "user_id"
+  end
+
+  create_table "ncr_work_orders", force: true do |t|
+    t.decimal "amount"
+    t.text    "description"
+    t.string  "expense_type"
+    t.string  "vendor"
+    t.boolean "not_to_exceed"
+    t.string  "building_number"
+    t.boolean "emergency"
+    t.string  "rwa_number"
+    t.string  "office"
   end
 
   create_table "properties", force: true do |t|
