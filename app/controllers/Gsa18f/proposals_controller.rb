@@ -5,7 +5,8 @@ module Gsa18f
 
     def new
       @proposal_form = Gsa18f::ProposalForm.new
-      @form_url, @form_method_18f = {action: "create"}, "post"
+      @form_url = {action: "create"}
+      @form_method = "post"
       approver = self.suggested_approver
       # if approver
       #   @proposal_form.approver_email = approver.email_address
@@ -15,7 +16,8 @@ module Gsa18f
 
     def create
       @proposal_form = Gsa18f::ProposalForm.new(params[:gsa18f_proposal])
-      @form_url, @form_method_18f = {action: "create"}, "post"
+      @form_url = {action: "create"}
+      @form_method = "post"
       @proposal_form.requester = current_user
       if @proposal_form.valid?
         cart = @proposal_form.create_cart
@@ -34,13 +36,15 @@ module Gsa18f
 
     def edit
       @proposal_form = Gsa18f::ProposalForm.from_cart(self.cart)
-      @form_url, @form_method_18f = {action: "update"}, "put"
+      @form_url = {action: "update"}
+      @form_method = "put"
       render 'form'
     end
 
     def update
       @proposal_form = Gsa18f::ProposalForm.new(params[:gsa18f_proposal])
-      @form_url, @form_method_18f = {action: "update"}, "put"
+      @form_url = {action: "update"}
+      @form_method =  "put"
       @proposal_form.requester = current_user
       if @proposal_form.valid?
         @proposal_form.update_cart(self.cart)

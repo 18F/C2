@@ -15,7 +15,7 @@ module Gsa18f
     attribute :justification, :text
     attribute :link_to_product, :string
     attribute :quantity, :decimal
-    attribute :date_requested, :string
+    attribute :date_requested, :datetime
     attribute :urgency, :string
     attribute :additional_info, :string
     attribute :cost_per_unit, :decimal
@@ -26,19 +26,10 @@ module Gsa18f
       greater_than_or_equal_to: 0,
       less_than_or_equal_to: 3000
     }
+    validates :quantity, numericality: {
+      greater_than_or_equal_to: 1
+    }
     validates :product_name_and_description, presence: true
-
-    # def budget_approver_email
-    #   ENV['NCR_BUDGET_APPROVER_EMAIL'] || 'communicart.budget.approver@gmail.com'
-    # end
-
-    # def finance_approver_email
-    #   ENV['NCR_FINANCE_APPROVER_EMAIL'] || 'communicart.ofm.approver@gmail.com'
-    # end
-
-    # def requires_finance_approval?
-    #   self.expense_type == 'BA61'
-    # end
 
     def approver_emails
       emails = ['Richard.L.Miller@gsa.gov']
@@ -97,8 +88,7 @@ module Gsa18f
         |key, val| relevant_properties.include? key
       }
       form = self.new(properties)
-      form.approver_email = cart.ordered_approvals.first.user.email_address
-      form.description = cart.name
+      form.product_name_and_description = cart.name
       form
     end
   end

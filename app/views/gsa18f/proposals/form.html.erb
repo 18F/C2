@@ -45,9 +45,7 @@
     <div class="form-group">
       <%= f.label :date_requested %>
       <div class="input-group">
-          <%= f.date_field :date_requested, as: :date, start_year: Date.today.year,
-                              end_year: Date.today.year + 2, discard_day: true,
-                              order: [:month, :year] %>
+          <%= f.date_field :date_requested, as: :date, value: f.object.date_requested %>
       </div>
     </div>
     <!-- Urgency -->
