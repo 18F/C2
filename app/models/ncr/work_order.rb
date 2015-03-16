@@ -2,6 +2,8 @@ module Ncr
   DATA = YAML.load_file("#{Rails.root}/config/data/ncr.yaml")
 
   class WorkOrder < ActiveRecord::Base
+    # In practice, each work order only has one proposal
+    has_many :proposals, as: :clientdata
 
     EXPENSE_TYPES = %w(BA61 BA80)
 

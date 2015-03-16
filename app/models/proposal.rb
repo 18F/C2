@@ -4,6 +4,7 @@ class Proposal < ActiveRecord::Base
   workflow_column :status
 
   has_one :cart
+  belongs_to :clientdata, polymorphic: true
 
   validates :flow, presence: true, inclusion: {in: ApprovalGroup::FLOWS}
 
