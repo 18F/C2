@@ -51,7 +51,7 @@ describe "GSA 18f Purchase Request Form" do
       expect(cart.getProp(:urgency)).to eq(Gsa18f::ProposalForm::URGENCY[0])
       expect(cart.requester).to eq(requester)
       expect(cart.approvers.map(&:email_address)).to eq(%w(
-        Richard.L.Miller@gsa.gov
+        18fapprover@gsa.gov
       ))
     end
 
@@ -172,7 +172,7 @@ describe "GSA 18f Purchase Request Form" do
       expect(cart.getProp(:urgency)).to eq(Gsa18f::ProposalForm::URGENCY[0])
       expect(cart.requester).to eq(requester)
       expect(cart.approvers.map(&:email_address)).to eq(%w(
-        Richard.L.Miller@gsa.gov
+        18fapprover@gsa.gov
       ))
     end
 

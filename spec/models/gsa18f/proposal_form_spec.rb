@@ -11,7 +11,7 @@ describe Gsa18f::ProposalForm do
       expect(form).to be_valid
 
       expect(approver_emails(form)).to eq(%w(
-        Richard.L.Miller@gsa.gov
+        18fapprover@gsa.gov
       ))
     end
 
