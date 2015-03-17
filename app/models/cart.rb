@@ -14,7 +14,7 @@ class Cart < ActiveRecord::Base
 
   #TODO: validates_uniqueness_of :name
 
-  ORIGINS = %w(navigator ncr)
+  ORIGINS = %w(navigator ncr gsa18f)
 
 
   def rejections
@@ -122,6 +122,11 @@ class Cart < ActiveRecord::Base
   def add_approver(email)
     user = User.find_or_create_by(email_address: email)
     self.approvals.create!(user_id: user.id, role: 'approver')
+  end
+
+  def add_observer(email)
+    user = User.find_or_create_by(email_address: email)
+    self.approvals.create!(user_id: user.id, role: 'observer')
   end
 
   def create_approver_approvals(emails)

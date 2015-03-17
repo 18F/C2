@@ -46,4 +46,43 @@ describe Ncr::ProposalForm do
       expect(form.amount).to eq(1234.56)
     end
   end
+
+  describe '#set_props_on' do
+    let (:cart) { FactoryGirl.create(:cart) }
+    it "sets the correct properties for BA61" do
+      form = FactoryGirl.build(:proposal_form, expense_type: 'BA61',
+                               emergency: false, rwa_number: '12345')
+      form.set_props_on(cart)
+      expect(cart.getProp(:emergency)).to be(false)
+      expect(cart.getProp(:rwa_number)).to be_nil
+    end
+    it "sets the correct properties for BA80" do
+      form = FactoryGirl.build(:proposal_form, expense_type: 'BA80',
+                               emergency: false, rwa_number: '12345')
+      form.set_props_on(cart)
+      expect(cart.getProp(:emergency)).to be_nil
+      expect(cart.getProp(:rwa_number)).to eq('12345')
+    end
+  end
+
+  describe '#add_approvals_on' do
+    let (:cart) { FactoryGirl.create(:cart) }
+    it "creates approvers when not an emergency" do
+      form = FactoryGirl.build(:proposal_form, expense_type: 'BA61')
+      form.add_approvals_on(cart)
+      expect(cart.approvals.observing.length).to eq(0)
+      expect(cart.approvals.approvable.length).to eq(3)
+      cart.clear_association_cache
+      expect(cart.approved?).to eq(false)
+    end
+    it "creates observers when in an emergency" do
+      form = FactoryGirl.build(:proposal_form, expense_type: 'BA61',
+                               emergency: true)
+      form.add_approvals_on(cart)
+      expect(cart.approvals.observing.length).to eq(3)
+      expect(cart.approvals.approvable.length).to eq(0)
+      cart.clear_association_cache
+      expect(cart.approved?).to eq(true)
+    end
+  end
 end
