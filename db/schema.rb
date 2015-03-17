@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150316150232) do
+ActiveRecord::Schema.define(version: 20150317161033) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -68,7 +68,6 @@ ActiveRecord::Schema.define(version: 20150316150232) do
 
   create_table "ncr_work_orders", force: true do |t|
     t.decimal "amount"
-    t.text    "description"
     t.string  "expense_type"
     t.string  "vendor"
     t.boolean "not_to_exceed"
