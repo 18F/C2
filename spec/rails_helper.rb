@@ -64,6 +64,9 @@ RSpec.configure do |config|
     config.include IntegrationSpecHelper, type: type
   end
 
+  # Much of the config here pieced together from
+  # http://stackoverflow.com/questions/8178120/capybara-with-js-true-causes-test-to-fail/28083267
+
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation)
