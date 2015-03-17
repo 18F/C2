@@ -28,10 +28,6 @@ module Gsa18f
     }
     validates :product_name_and_description, presence: true
 
-    def ordered_urgencies
-      URGENCY.each_with_index().to_a
-    end
-
     def approver_email
       ENV['GSA18F_APPROVER_EMAIL'] || '18fapprover@gsa.gov'
     end
