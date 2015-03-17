@@ -79,10 +79,9 @@ describe "National Capital Region proposals" do
 
     it "includes has overwritten field names" do
       visit '/ncr/proposals/new'
-      expect(page).to have_content("RWA Number")
       fill_in 'Description', with: "buying stuff"
       choose 'BA80'
-      fill_in 'RWA Number', with: 'NumNum', disabled: true
+      fill_in 'RWA Number', with: 'NumNum'
       fill_in 'Vendor', with: 'ACME'
       fill_in 'Amount', with: 123.45
       fill_in "Approving Official's Email Address", with: 'approver@example.com'
@@ -91,6 +90,20 @@ describe "National Capital Region proposals" do
       click_on 'Submit for approval'
       expect(current_path).to eq("/carts/#{Cart.last.id}")
       expect(page).to have_content("RWA Number")
+    end
+
+    it "hides fields based on expense", :js => true do
+      visit '/ncr/proposals/new'
+      expect(page).to have_no_field("RWA Number")
+      expect(page).to have_no_field("emergency")
+      choose 'BA61'
+      expect(page).to have_no_field("RWA Number")
+      expect(page).to have_field("emergency")
+      expect(find_field("emergency", visible: false)).to be_visible
+      choose 'BA80'
+      expect(page).to have_field("RWA Number")
+      expect(page).to have_no_field("emergency")
+      expect(find_field("RWA Number")).to be_visible
     end
 
     it "can be restarted if pending" do
@@ -168,6 +181,52 @@ describe "National Capital Region proposals" do
 
       visit "/carts/#{ncr_cart.id}"
       expect(page).not_to have_content('Restart this Cart?')
+    end
+
+    context "selected common values on proposal page" do
+      before do
+        visit '/ncr/proposals/new'
+
+        fill_in 'Description', with: "buying stuff"
+        fill_in 'Vendor', with: 'ACME'
+        fill_in 'Amount', with: 123.45
+        fill_in "Approving Official's Email Address", with: 'approver@example.com'
+        select 'Entire Jackson Place Complex', :from => 'ncr_proposal_building_number'
+        select Ncr::ProposalForm::OFFICES[0], :from => 'ncr_proposal_office'
+      end
+
+      it "approves emergencies" do
+        choose 'BA61'
+        check "I received a verbal NTP to address this emergency"
+        expect {
+          click_on 'Submit for approval'
+        }.to change { Cart.count }.from(0).to(1)
+
+        expect(page).to have_content("Proposal submitted")
+        expect(current_path).to eq("/carts/#{Cart.last.id}")
+        expect(page).to have_content("0 of 0 approved")
+
+        cart = Cart.last
+        expect(cart.getProp(:emergency)).to eq(true)
+        expect(cart.approved?).to eq(true)
+      end
+
+      it "does not set emergencies if form type changes" do
+        choose 'BA61'
+        check "I received a verbal NTP to address this emergency"
+        choose 'BA80'
+        fill_in 'RWA Number', with: "a 'number'"
+        expect {
+          click_on 'Submit for approval'
+        }.to change { Cart.count }.from(0).to(1)
+
+        expect(page).to have_content("Proposal submitted")
+        expect(current_path).to eq("/carts/#{Cart.last.id}")
+
+        cart = Cart.last
+        expect(cart.getProp(:emergency)).to be_nil
+        expect(cart.approved?).to eq(false)
+      end
     end
   end
 end

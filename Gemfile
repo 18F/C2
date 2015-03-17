@@ -9,6 +9,7 @@ gem 'draper'
 gem 'font-awesome-sass'
 gem 'haml'
 gem 'jquery-rails'
+gem 'jquery-turbolinks'
 gem 'newrelic_rpm'
 gem 'omniauth-myusa', git: 'https://github.com/18F/omniauth-myusa.git'
 gem 'pg'
@@ -49,6 +50,7 @@ group :test do
   gem 'addressable'
   gem 'capybara'
   gem 'codeclimate-test-reporter'
+  gem "poltergeist"
   gem 'simplecov'
   gem 'turnip'
 

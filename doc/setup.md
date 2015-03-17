@@ -47,6 +47,11 @@ As emails are sent, they will be visible at http://localhost:3000/letter_opener.
 
 ## Running tests
 
+### PhantomJS
+
+You will need to install [PhantomJS](http://phantomjs.org/download.html) and
+have it in your PATH. This is used for javascript and interface testing.
+
 ### Running the entire suite once
 
 ```bash
