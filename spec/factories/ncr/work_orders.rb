@@ -5,9 +5,9 @@ FactoryGirl.define do
     expense_type "BA61"
     vendor "Some Vend"
     not_to_exceed false
-    building_number Ncr::WorkOrder::BUILDING_NUMBERS[0]
+    building_number Ncr::BUILDING_NUMBERS[0]
     emergency false
     rwa_number "RWWAAA #"
-    office Ncr::WorkOrder::OFFICES[0]
+    office Ncr::OFFICES[0]
   end
 end

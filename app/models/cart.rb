@@ -190,7 +190,6 @@ class Cart < ActiveRecord::Base
       end
     end
   end
-
   def origin
     # In practice, carts should always have an origin. Account for test cases
     # and old data with this "or"
@@ -240,5 +239,13 @@ class Cart < ActiveRecord::Base
        value]
     }
     props
+  end
+  def client
+    # TODO set the origin
+    if self.origin.blank?
+      "gsa_advantage"
+    else
+      self.origin
+    end
   end
 end
