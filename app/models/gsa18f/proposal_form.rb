@@ -28,8 +28,20 @@ module Gsa18f
     }
     validates :product_name_and_description, presence: true
 
-    def set_approver_on(cart)
-      cart.add_approver(ENV['GSA18F_APPROVER_EMAIL'] || '18fapprover@gsa.gov')
+    def ordered_urgencies
+      URGENCY.each_with_index().to_a
+    end
+
+    def approver_email
+      ENV['GSA18F_APPROVER_EMAIL'] || '18fapprover@gsa.gov'
+    end
+
+    def set_approver_on(cart) 
+      cart.add_approver(self.approver_email)
+    end
+
+    def set_origin_on(cart)
+      cart.set_props(origin: 'gsa18f')
     end
 
     def create_cart
@@ -40,6 +52,7 @@ module Gsa18f
       if cart.save
         self.set_props_on(cart)
         self.set_approver_on(cart)
+        self.set_origin_on(cart)
         Dispatcher.deliver_new_cart_emails(cart)
       end
 
@@ -54,6 +67,7 @@ module Gsa18f
         cart.clear_props!
         self.set_props_on(cart)
         self.set_approver_on(cart)
+        self.set_origin_on(cart)
         cart.restart!
       end
       cart
@@ -61,7 +75,6 @@ module Gsa18f
     
     def set_props_on(cart)
       cart.set_props(
-        origin: self.origin,
         office: self.office,
         justification: self.justification,
         link_to_product: self.link_to_product,

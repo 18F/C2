@@ -23,7 +23,7 @@
     <!-- Link to Product -->
     <div class="form-group">
       <%= f.label :link_to_product %>
-      <p> Search GSA Advantage first; then Amazon; then other vendor. Paste link here.</p>
+      <p> Search <a href='https://www.gsaadvantage.gov/advantage/main/start_page.do' target='_blank'>GSA Advantage</a> first; then <a href='http://www.amazon.com' target='_blank'>Amazon;</a> then other vendor. Paste link here.</p>
       <%= f.text_field :link_to_product, class: 'form-control' %>
     </div>
     <!-- Amount  -->
@@ -49,7 +49,7 @@
       </div>
     </div>
     <!-- Urgency -->
-    <div class="form-group">
+     <div class="form-group">
       <%= f.label :urgency %>
       <%= f.collection_select(
             :urgency, Gsa18f::ProposalForm::URGENCY, :to_s, :to_s,
@@ -60,16 +60,6 @@
       <%= f.label :additional_info, 'Please include any additional information you feel we need to correctly execute the purchase' %>
       <%= f.text_area :additional_info, class: 'form-control' %>
     </div>
-    <div class="form-group">
-      <%= f.hidden_field :origin, value: 'gsa18f' %>
-    </div>
-    
-    <!-- Supervisor Email
-    - Auto fill, Static ATM -->
-    <!-- <div class="form-group">
-      <%= f.label :approver_email, "Approving Supervisor's Email Address" %>
-      <%= f.email_field :approver_email, value: 'Richard.L.Miller@gsa.gov' , class: 'form-control' %>
-    </div> -->
     <%= f.submit "Submit for approval", class: 'btn btn-default' %>
   <% end %>
 </div>

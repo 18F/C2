@@ -59,10 +59,6 @@ module Gsa18f
 
     protected
 
-    def last_cart
-      current_user.last_requested_cart
-    end
-
     def cart
       @cart ||= Cart.find(params[:id])
     end

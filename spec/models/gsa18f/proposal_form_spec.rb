@@ -6,7 +6,7 @@ describe Gsa18f::ProposalForm do
       approvals.map {|a| a.user.email_address }
     end
 
-    it "adds Ric Miller as approver email" do
+    it "adds 18fapprover@gsa.gov as approver email" do
       form = FactoryGirl.build(:gsa18f_proposal_form, product_name_and_description: 'test')
       expect(form).to be_valid
 
