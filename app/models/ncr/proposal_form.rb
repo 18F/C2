@@ -83,6 +83,7 @@ module Ncr
 
     # SimpleFormObject does not convert inputs properly
     def emergency?
+      self.expense_type == 'BA61' &&
       ActiveRecord::ConnectionAdapters::Column.value_to_boolean(self.emergency)
     end
 

@@ -68,18 +68,18 @@ describe Ncr::ProposalForm do
   describe '#add_approvals_on' do
     let (:cart) { FactoryGirl.create(:cart) }
     it "creates approvers when not an emergency" do
-      form = FactoryGirl.build(:proposal_form, expense_type: 'BA80')
+      form = FactoryGirl.build(:proposal_form, expense_type: 'BA61')
       form.add_approvals_on(cart)
       expect(cart.approvals.observing.length).to eq(0)
-      expect(cart.approvals.approvable.length).to eq(2)
+      expect(cart.approvals.approvable.length).to eq(3)
       cart.clear_association_cache
       expect(cart.approved?).to eq(false)
     end
     it "creates observers when in an emergency" do
-      form = FactoryGirl.build(:proposal_form, expense_type: 'BA80',
+      form = FactoryGirl.build(:proposal_form, expense_type: 'BA61',
                                emergency: true)
       form.add_approvals_on(cart)
-      expect(cart.approvals.observing.length).to eq(2)
+      expect(cart.approvals.observing.length).to eq(3)
       expect(cart.approvals.approvable.length).to eq(0)
       cart.clear_association_cache
       expect(cart.approved?).to eq(true)
