@@ -20,6 +20,12 @@ class Proposal < ActiveRecord::Base
     self.flow ||= 'parallel'
   end
 
+  # Use this until all clients are migrated to models (and we no longer have a
+  # dependence on "Cart"
+  def clientdata_legacy
+    self.clientdata || self.cart
+  end
+
 
   #### state machine methods ####
   # TODO remove dependence on Cart

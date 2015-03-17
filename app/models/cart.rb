@@ -221,4 +221,19 @@ class Cart < ActiveRecord::Base
   def linear?
     self.flow == 'linear'
   end
+
+
+  # The following methods are an interface which should be matched by client
+  # models
+  def fields_for_display
+    # Some fields aren't meant for the clients' eyes
+    exclusions = ['origin', 'contractingVehicle', 'location', 'configType']
+    props = self.deserialized_properties.to_a
+    props = props.select {|k,v| !exclusions.include? k }
+    props = props.map {|key,value|
+      [I18n.t('helpers.label.cart.' + key, default: key.underscore.humanize),
+       value]
+    }
+    props
+  end
 end

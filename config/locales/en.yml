@@ -32,3 +32,7 @@ en:
         rwa_number: "RWA Number"
       cart:
         rwa_number: "RWA Number"
+  activerecord:
+    attributes:
+      ncr/work_order:
+        rwa_number: "RWA Number"

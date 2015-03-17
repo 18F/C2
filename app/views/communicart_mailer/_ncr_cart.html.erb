@@ -16,7 +16,8 @@
 
     <tr>
       <td>
-        <%= render partial: 'shared/cart_properties', locals: {cart: cart} %>
+        <%= render partial: 'shared/proposal_properties',
+                   locals: {proposal: cart.proposal} %>
       </td>
     </tr>
   </table>
