@@ -77,7 +77,6 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
     ActionMailer::Base.deliveries.clear
     OmniAuth.config.mock_auth[:myusa] = nil
-    Timecop.return
   end
 
 

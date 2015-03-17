@@ -13,12 +13,13 @@ describe ParallelDispatcher do
     end
 
     it 'creates a new token for each approver' do
-      Timecop.freeze
-      expect(dispatcher).to receive(:send_notification_email).twice
-      dispatcher.deliver_new_cart_emails(cart)
+      Timecop.freeze do
+        expect(dispatcher).to receive(:send_notification_email).twice
+        dispatcher.deliver_new_cart_emails(cart)
 
-      cart.approver_approvals.each do |approval|
-        expect(approval.api_token.expires_at).to eq(7.days.from_now)
+        cart.approver_approvals.each do |approval|
+          expect(approval.api_token.expires_at).to eq(7.days.from_now)
+        end
       end
     end
 

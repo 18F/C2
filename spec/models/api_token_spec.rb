@@ -14,9 +14,10 @@ describe ApiToken do
     end
 
     it "sets the expiry" do
-      Timecop.freeze
-      token = ApiToken.create!(approval_id: 1)
-      expect(token.expires_at).to eq(7.days.from_now)
+      Timecop.freeze do
+        token = ApiToken.create!(approval_id: 1)
+        expect(token.expires_at).to eq(7.days.from_now)
+      end
     end
   end
 end
