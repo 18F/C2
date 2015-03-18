@@ -121,5 +121,5 @@
 <% end %>
 <% if display_restart?(cart) %>
   <%= client_partial(proposal.clientdata_legacy.client,
-                     'restart_link', locals: {proposal: proposal}) %>
+                     'restart_link', locals: {proposal: proposal, cart: cart}) %>
 <% end %>
