@@ -1,7 +1,6 @@
 FactoryGirl.define do
   factory :ncr_work_order, class: Ncr::WorkOrder do
     amount 1000
-    description "Some description"
     expense_type "BA61"
     vendor "Some Vend"
     not_to_exceed false

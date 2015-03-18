@@ -14,6 +14,7 @@ module Ncr
   class WorkOrder < ActiveRecord::Base
     # In practice, each work order only has one proposal
     has_many :proposals, as: :clientdata
+    after_initialize :set_defaults
 
     validates :amount, numericality: {
       greater_than_or_equal_to: 0,
@@ -23,6 +24,11 @@ module Ncr
     validates :vendor, presence: true
     validates :building_number, presence: true
     validates :office, presence: true
+
+    def set_defaults
+      self.not_to_exceed ||= false
+      self.emergency ||= false
+    end
 
     # @todo - this is an awkward dance due to the lingering Cart model. Remove
     # that dependence

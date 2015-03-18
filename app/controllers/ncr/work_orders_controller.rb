@@ -19,7 +19,10 @@ module Ncr
       if !@approver_email.is_a?(String) || @approver_email.strip().empty?
         errors = errors << "Approver email is required"
       end
-      errors = errors + @work_order.errors.full_messages
+      if !@work_order.valid?
+        errors = errors + @work_order.errors.full_messages
+      end
+      errors
     end
 
     def create
@@ -80,16 +83,22 @@ module Ncr
 
     def redirect_if_cart_cant_be_edited
       if self.cart.approved?
-        redirect_to new_ncr_proposal_path, :alert => "That proposal's already approved. New proposal?"
+        redirect_to new_ncr_work_order_path, :alert => "That proposal's already approved. New proposal?"
       elsif self.cart.requester != current_user
-        redirect_to new_ncr_proposal_path, :alert => 'You cannot restart that proposal'
+        redirect_to new_ncr_work_order_path, :alert => 'You cannot restart that proposal'
       end
     end
 
     def permitted_params
-      params.require(:ncr_work_order).permit(
-        :amount, :expense_type, :vendor, :not_to_exceed, :building_number,
-        :emergency, :rwa_number, :office)
+      fields = [:amount, :expense_type, :vendor, :not_to_exceed,
+                :building_number, :office]
+      case params[:ncr_work_order][:expense_type]
+      when 'BA61'
+        fields = fields << :emergency
+      when 'BA80'
+        fields = fields << :rwa_number
+      end
+      params.require(:ncr_work_order).permit(*fields)
     end
   end
 end
