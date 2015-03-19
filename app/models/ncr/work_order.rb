@@ -8,7 +8,7 @@ module Ncr
 
   class WorkOrder < ActiveRecord::Base
     # In practice, each work order only has one proposal
-    has_many :proposals, as: :clientdata
+    has_many :proposals, as: :client_data
 
     EXPENSE_TYPES = %w(BA61 BA80)
 
