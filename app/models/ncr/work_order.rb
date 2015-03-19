@@ -24,17 +24,19 @@ module Ncr
     validates :building_number, presence: true
     validates :office, presence: true
 
-    # Methods for Client Data interface
-    def fields_for_display
-      exclusions = ["id"]
-      attributes = self.attribute_names
+    # Ignore values in these fields, depending on the expense type
+    def ignore_fields
       case self.expense_type
       when "BA61"
-        exclusions = exclusions.push("rwa_number")
+        ["rwa_number"]
       when "BA80"
-        exclusions = exclusions.push("emergency")
+        ["emergency"]
       end
-      attributes = attributes - exclusions
+    end
+
+    # Methods for Client Data interface
+    def fields_for_display
+      attributes = self.attribute_names - ["id"] - self.ignore_fields
       attributes.map{|key| [WorkOrder.human_attribute_name(key), self[key]]}
     end
   end

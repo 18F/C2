@@ -228,17 +228,13 @@ class Cart < ActiveRecord::Base
   end
 
 
+  # Some fields aren't meant for the clients' eyes
+  EXCLUDE_FIELDS_FROM_DISPLAY = ['origin', 'contractingVehicle', 'location', 'configType']
   # The following methods are an interface which should be matched by client
   # models
   def fields_for_display
-    # Some fields aren't meant for the clients' eyes
-    exclusions = ['origin', 'contractingVehicle', 'location', 'configType']
-    props = self.deserialized_properties.to_a
-    props = props.select {|k,v| !exclusions.include? k }
-    props = props.map {|key,value|
-      [I18n.t('helpers.label.cart.' + key, default: key.underscore.humanize),
-       value]
-    }
-    props
+    self.properties_with_names.reject{ |key,value,label| 
+      EXCLUDE_FIELDS_FROM_DISPLAY.include? key}.map{ |key,value,label|
+      [label, value] }
   end
 end
