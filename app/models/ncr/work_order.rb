@@ -72,19 +72,22 @@ module Ncr
       end
     end
 
-    # Ignore values in these fields, depending on the expense type
-    def ignore_fields
-      case self.expense_type
+    # Ignore values in certain fields if they aren't relevant. May want to
+    # split these into different models
+    def self.relevant_fields(expense_type)
+      fields = [:amount, :expense_type, :vendor, :not_to_exceed,
+                :building_number, :office]
+      case expense_type
       when "BA61"
-        ["rwa_number"]
+        fields + [:emergency]
       when "BA80"
-        ["emergency"]
+        fields + [:rwa_number]
       end
     end
-    #
+
     # Methods for Client Data interface
     def fields_for_display
-      attributes = self.attribute_names - ["id"] - self.ignore_fields
+      attributes = Ncr::WorkOrder.relevant_fields(self.expense_type)
       attributes.map{|key| [WorkOrder.human_attribute_name(key), self[key]]}
     end
     def client

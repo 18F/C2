@@ -91,14 +91,8 @@ module Ncr
     end
 
     def permitted_params
-      fields = [:amount, :expense_type, :vendor, :not_to_exceed,
-                :building_number, :office]
-      case params[:ncr_work_order][:expense_type]
-      when 'BA61'
-        fields = fields << :emergency
-      when 'BA80'
-        fields = fields << :rwa_number
-      end
+      fields = Ncr::WorkOrder.relevant_fields(
+        params[:ncr_work_order][:expense_type])
       params.require(:ncr_work_order).permit(*fields)
     end
   end
