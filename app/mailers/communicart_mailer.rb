@@ -78,7 +78,7 @@ class CommunicartMailer < ActionMailer::Base
   end
 
   def subject(cart)
-    "Communicart Approval Request from #{cart.requester.full_name}: Please review Cart ##{cart.public_identifier}"
+    "Communicart Approval Request from #{cart.requester.full_name}: Please review Cart ##{cart.proposal.clientdata_legacy.public_identifier}"
   end
 
   def send_cart_email(from_email, to_email, cart)

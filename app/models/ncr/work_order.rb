@@ -88,6 +88,10 @@ module Ncr
     def client
       "ncr"
     end
+    # @todo - this is pretty ugly
+    def public_identifier
+      self.proposals[0].cart.id
+    end
   end
 end
 

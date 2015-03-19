@@ -20,7 +20,6 @@ C2::Application.routes.draw do
   end
 
   namespace :ncr do
-    resources :proposals
     resources :work_orders
   end
 

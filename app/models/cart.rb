@@ -205,19 +205,6 @@ class Cart < ActiveRecord::Base
     self.origin.blank?
   end
 
-  # TODO use this when retrieving
-  def public_identifier_method
-    if self.ncr?
-      :id
-    else
-      :external_id
-    end
-  end
-
-  def public_identifier
-    self.send(self.public_identifier_method)
-  end
-
   def parallel?
     self.flow == 'parallel'
   end
@@ -247,5 +234,10 @@ class Cart < ActiveRecord::Base
     else
       self.origin
     end
+  end
+  # @todo - the method name (e.g. :external_id) should live on a "client"
+  # model
+  def public_identifier
+    self.external_id
   end
 end
