@@ -8,7 +8,7 @@ describe "GSA 18f Purchase Request Form" do
   context "when signed in" do
     let(:requester) { FactoryGirl.create(:user) }
     let(:gsa18f) {
-      proposal = FactoryGirl.build(:proposal_form)
+      proposal = FactoryGirl.build(:gsa18f_proposal_form)
       proposal.requester = requester
       proposal.create_cart
     }

@@ -102,9 +102,8 @@ describe "National Capital Region proposals" do
     end
 
     let (:work_order) {
-      wo = FactoryGirl.build(:ncr_work_order)
-      wo.save_and_build_cart('approver@email.com', 'Description Here',
-                             requester)
+      wo = FactoryGirl.create(:ncr_work_order)
+      wo.create_cart('approver@email.com', 'Description Here', requester)
       wo
     }
     let(:ncr_cart) {

@@ -31,7 +31,8 @@ module Ncr
       @work_order = Ncr::WorkOrder.new(permitted_params)
 
       if self.errors.empty?
-        cart = @work_order.save_and_build_cart(
+        @work_order.save
+        cart = @work_order.create_cart(
           @approver_email, @description, current_user)
         flash[:success] = "Proposal submitted!"
         redirect_to cart_path(cart)
@@ -57,8 +58,8 @@ module Ncr
       if self.errors.empty?
         cart = self.cart
         cart.name = @description
-        cart = @work_order.save_and_update_cart(
-          @approver_email, @description, cart)
+        @work_order.save
+        @work_order.update_cart(@approver_email, @description, cart)
         flash[:success] = "Proposal resubmitted!"
         redirect_to cart_path(cart)
       else

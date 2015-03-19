@@ -32,8 +32,7 @@ module Ncr
 
     # @todo - this is an awkward dance due to the lingering Cart model. Remove
     # that dependence
-    def save_and_build_cart(approver_email, description, requester)
-      self.save
+    def create_cart(approver_email, description, requester)
       cart = Cart.create(
         name: description,
         proposal_attributes: {flow: 'linear', clientdata: self}
@@ -43,8 +42,7 @@ module Ncr
       Dispatcher.deliver_new_cart_emails(cart)
       cart
     end
-    def save_and_update_cart(approver_email, description, cart)
-      self.save
+    def update_cart(approver_email, description, cart)
       cart.name = description
       cart.approver_approvals.destroy_all
       self.add_approvals_on(cart, approver_email)

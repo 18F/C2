@@ -33,4 +33,57 @@ describe Ncr::WorkOrder do
       expect(fields).to include(["Office", Ncr::OFFICES[0]])
     end
   end
+
+  describe '#add_approvals_on' do
+    let (:cart) { FactoryGirl.create(:cart) }
+    it "creates approvers when not an emergency" do
+      form = FactoryGirl.build(:ncr_work_order, expense_type: 'BA61')
+      form.add_approvals_on(cart, 'bob@example.com')
+      expect(cart.approvals.observing.length).to eq(0)
+      expect(cart.approvals.approvable.length).to eq(3)
+      cart.reload
+      expect(cart.approved?).to eq(false)
+    end
+    it "creates observers when in an emergency" do
+      form = FactoryGirl.build(:ncr_work_order, expense_type: 'BA61',
+                               emergency: true)
+      form.add_approvals_on(cart, 'bob@example.com')
+      expect(cart.approvals.observing.length).to eq(3)
+      expect(cart.approvals.approvable.length).to eq(0)
+      cart.clear_association_cache
+      expect(cart.approved?).to eq(true)
+    end
+  end
+  describe '#create_cart' do
+    let(:requester) { FactoryGirl.create(:user) }
+    def approver_emails(cart)
+      approvals = cart.ordered_approvals
+      approvals.map {|a| a.user.email_address }
+    end
+
+    it "adds the budget approver for a BA80 request" do
+      form = FactoryGirl.create(:ncr_work_order, expense_type: 'BA80')
+      cart = form.create_cart('aaa@example.com', 'Desc1', requester)
+
+      expect(cart.name).to eq('Desc1')
+      expect(cart.requester).to eq(requester)
+      expect(approver_emails(cart)).to eq(%w(
+        aaa@example.com
+        communicart.budget.approver@gmail.com
+      ))
+    end
+
+    it "adds the two approvers for a BA61 request" do
+      form = FactoryGirl.build(:ncr_work_order, expense_type: 'BA61')
+      cart = form.create_cart('bbb@example.com', 'Desc2', requester)
+
+      expect(cart.name).to eq('Desc2')
+      expect(cart.requester).to eq(requester)
+      expect(approver_emails(cart)).to eq(%w(
+        bbb@example.com
+        communicart.budget.approver@gmail.com
+        communicart.ofm.approver@gmail.com
+      ))
+    end
+  end
 end
