@@ -44,7 +44,7 @@ class Dispatcher
       ParallelDispatcher.new
     when 'linear'
       # @todo: dynamic dispatch for selection
-      if cart.proposal.clientdata_legacy.client == "ncr"
+      if cart.proposal.client_data_legacy.client == "ncr"
         NcrDispatcher.new
       else
         LinearDispatcher.new

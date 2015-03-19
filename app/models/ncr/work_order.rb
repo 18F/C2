@@ -13,7 +13,7 @@ module Ncr
 
   class WorkOrder < ActiveRecord::Base
     # In practice, each work order only has one proposal
-    has_many :proposals, as: :clientdata
+    has_many :proposals, as: :client_data
     after_initialize :set_defaults
 
     validates :amount, numericality: {
@@ -35,7 +35,7 @@ module Ncr
     def create_cart(approver_email, description, requester)
       cart = Cart.create(
         name: description,
-        proposal_attributes: {flow: 'linear', clientdata: self}
+        proposal_attributes: {flow: 'linear', client_data: self}
       )
       cart.set_requester(requester)
       self.add_approvals_on(cart, approver_email)
@@ -72,17 +72,19 @@ module Ncr
       end
     end
 
-    # Methods for Client Data interface
-    def fields_for_display
-      exclusions = ["id"]
-      attributes = self.attribute_names
+    # Ignore values in these fields, depending on the expense type
+    def ignore_fields
       case self.expense_type
       when "BA61"
-        exclusions = exclusions.push("rwa_number")
+        ["rwa_number"]
       when "BA80"
-        exclusions = exclusions.push("emergency")
+        ["emergency"]
       end
-      attributes = attributes - exclusions
+    end
+    #
+    # Methods for Client Data interface
+    def fields_for_display
+      attributes = self.attribute_names - ["id"] - self.ignore_fields
       attributes.map{|key| [WorkOrder.human_attribute_name(key), self[key]]}
     end
     def client

@@ -33,13 +33,13 @@ describe "National Capital Region proposals" do
 
       expect(cart.name).to eq("buying stuff")
       expect(cart.flow).to eq('linear')
-      clientdata = cart.proposal.clientdata
-      expect(clientdata.client).to eq('ncr')
-      expect(clientdata.expense_type).to eq('BA80')
-      expect(clientdata.vendor).to eq('ACME')
-      expect(clientdata.amount).to eq(123.45)
-      expect(clientdata.building_number).to eq(Ncr::BUILDING_NUMBERS[0])
-      expect(clientdata.office).to eq(Ncr::OFFICES[0])
+      client_data = cart.proposal.client_data
+      expect(client_data.client).to eq('ncr')
+      expect(client_data.expense_type).to eq('BA80')
+      expect(client_data.vendor).to eq('ACME')
+      expect(client_data.amount).to eq(123.45)
+      expect(client_data.building_number).to eq(Ncr::BUILDING_NUMBERS[0])
+      expect(client_data.office).to eq(Ncr::OFFICES[0])
       expect(cart.requester).to eq(requester)
       expect(cart.approvers.map(&:email_address)).to eq(%w(
         approver@example.com
@@ -169,7 +169,7 @@ describe "National Capital Region proposals" do
     end
 
     it "does not show a restart link for another client" do
-      ncr_cart.proposal.clientdata = nil
+      ncr_cart.proposal.client_data = nil
       ncr_cart.proposal.save()
       visit "/carts/#{ncr_cart.id}"
       expect(page).not_to have_content('Restart this Cart?')
@@ -207,7 +207,7 @@ describe "National Capital Region proposals" do
         expect(current_path).to eq("/carts/#{cart.id}")
         expect(page).to have_content("0 of 0 approved")
 
-        expect(cart.proposal.clientdata.emergency).to eq(true)
+        expect(cart.proposal.client_data.emergency).to eq(true)
         expect(cart.approved?).to eq(true)
       end
 
@@ -224,7 +224,7 @@ describe "National Capital Region proposals" do
         expect(page).to have_content("Proposal submitted")
         expect(current_path).to eq("/carts/#{cart.id}")
 
-        expect(cart.proposal.clientdata.emergency).to eq(false)
+        expect(cart.proposal.client_data.emergency).to eq(false)
         expect(cart.approved?).to eq(false)
       end
     end

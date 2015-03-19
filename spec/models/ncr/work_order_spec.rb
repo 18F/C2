@@ -6,15 +6,16 @@ describe Ncr::WorkOrder do
         not_to_exceed: false, emergency: true, rwa_number: "RWWAAA #",
         building_number: Ncr::BUILDING_NUMBERS[0],
         office: Ncr::OFFICES[0])
-      fields = wo.fields_for_display
-      expect(fields).to include(["Amount", 1000])
-      expect(fields).to include(["Expense type", "BA61"])
-      expect(fields).to include(["Vendor", "Some Vend"])
-      expect(fields).to include(["Not to exceed", false])
-      expect(fields).to include(["Emergency", true])
-      expect(fields).to include(["Building number", Ncr::BUILDING_NUMBERS[0]])
-      expect(fields).not_to include(["RWA Number", "RWWAAA #"])
-      expect(fields).to include(["Office", Ncr::OFFICES[0]])
+      expect(wo.fields_for_display.sort).to eq([
+        ["Amount", 1000],
+        ["Building number", Ncr::BUILDING_NUMBERS[0]],
+        ["Emergency", true],
+        ["Expense type", "BA61"],
+        ["Not to exceed", false],
+        ["Office", Ncr::OFFICES[0]],
+        # No RWA Number
+        ["Vendor", "Some Vend"]
+      ])
     end
     it "shows BA80 fields" do
       wo = Ncr::WorkOrder.new(
@@ -22,15 +23,16 @@ describe Ncr::WorkOrder do
         not_to_exceed: false, emergency: true, rwa_number: "RWWAAA #",
         building_number: Ncr::BUILDING_NUMBERS[0],
         office: Ncr::OFFICES[0])
-      fields = wo.fields_for_display
-      expect(fields).to include(["Amount", 1000])
-      expect(fields).to include(["Expense type", "BA80"])
-      expect(fields).to include(["Vendor", "Some Vend"])
-      expect(fields).to include(["Not to exceed", false])
-      expect(fields).not_to include(["Emergency", true])
-      expect(fields).to include(["Building number", Ncr::BUILDING_NUMBERS[0]])
-      expect(fields).to include(["RWA Number", "RWWAAA #"])
-      expect(fields).to include(["Office", Ncr::OFFICES[0]])
+      expect(wo.fields_for_display.sort).to eq([
+        ["Amount", 1000],
+        ["Building number", Ncr::BUILDING_NUMBERS[0]],
+        # No Emergency
+        ["Expense type", "BA80"],
+        ["Not to exceed", false],
+        ["Office", Ncr::OFFICES[0]],
+        ["RWA Number", "RWWAAA #"],
+        ["Vendor", "Some Vend"]
+      ])
     end
   end
 

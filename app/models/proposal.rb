@@ -4,7 +4,7 @@ class Proposal < ActiveRecord::Base
   workflow_column :status
 
   has_one :cart
-  belongs_to :clientdata, polymorphic: true
+  belongs_to :client_data, polymorphic: true
 
   validates :flow, presence: true, inclusion: {in: ApprovalGroup::FLOWS}
 
@@ -22,8 +22,8 @@ class Proposal < ActiveRecord::Base
 
   # Use this until all clients are migrated to models (and we no longer have a
   # dependence on "Cart"
-  def clientdata_legacy
-    self.clientdata || self.cart
+  def client_data_legacy
+    self.client_data || self.cart
   end
 
 

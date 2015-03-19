@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150317161033) do
+ActiveRecord::Schema.define(version: 20150319174617) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -89,11 +89,11 @@ ActiveRecord::Schema.define(version: 20150317161033) do
     t.string   "flow"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "clientdata_id"
-    t.string   "clientdata_type"
+    t.integer  "client_data_id"
+    t.string   "client_data_type"
   end
 
-  add_index "proposals", ["clientdata_id", "clientdata_type"], name: "index_proposals_on_clientdata_id_and_clientdata_type", using: :btree
+  add_index "proposals", ["client_data_id", "client_data_type"], name: "index_proposals_on_client_data_id_and_client_data_type", using: :btree
 
   create_table "user_roles", force: true do |t|
     t.integer "approval_group_id"
