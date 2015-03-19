@@ -18,8 +18,8 @@ describe ParallelDispatcher do
         dispatcher.deliver_new_cart_emails(cart)
 
         cart.approver_approvals.each do |approval|
-          # https://github.com/travisjeffery/timecop/issues/100
-          expect(approval.api_token.expires_at).to eq(7.days.from_now.to_time)
+          # handle float comparison
+          expect(approval.api_token.expires_at).to be_within(1.second).of(7.days.from_now)
         end
       end
     end
