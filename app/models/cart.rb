@@ -8,7 +8,7 @@ class Cart < ActiveRecord::Base
   has_many :approval_users, through: :approvals, source: :user
   has_one :approval_group
   has_many :user_roles, through: :approval_group
-  has_many :api_tokens
+  has_many :api_tokens, through: :approvals
   has_many :comments, as: :commentable
   has_many :properties, as: :hasproperties
 
@@ -119,9 +119,21 @@ class Cart < ActiveRecord::Base
   end
 
   # returns the Approval
-  def add_approver(email)
+  def add_approval(email, role)
     user = User.find_or_create_by(email_address: email)
-    self.approvals.create!(user_id: user.id, role: 'approver')
+    self.approvals.create!(user_id: user.id, role: role)
+  end
+
+  def add_approver(email)
+    self.add_approval(email, 'approver')
+  end
+
+  def add_observer(email)
+    self.add_approval(email, 'observer')
+  end
+
+  def add_requester(email)
+    self.add_approval(email, 'requester')
   end
 
   def add_observer(email)
@@ -139,11 +151,6 @@ class Cart < ActiveRecord::Base
     self.approvals.create!(user_id: user.id, role: 'requester')
   end
 
-  def create_requester(email)
-    user = User.find_or_create_by(email_address: email)
-    self.set_requester(user)
-  end
-
   def process_approvals_without_approval_group(params)
     if params['approvalGroup'].present?
       raise ApprovalGroupError.new('Approval Group already exists')
@@ -153,7 +160,7 @@ class Cart < ActiveRecord::Base
 
     requester_email = params['fromAddress']
     if requester_email
-      self.create_requester(requester_email)
+      self.add_requester(requester_email)
     end
   end
 

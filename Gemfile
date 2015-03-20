@@ -52,6 +52,7 @@ group :test do
   gem 'codeclimate-test-reporter'
   gem "poltergeist"
   gem 'simplecov'
+  gem 'timecop'
   gem 'turnip'
 
   # For better test reporting in CircleCI
