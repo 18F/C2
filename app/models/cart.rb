@@ -14,7 +14,7 @@ class Cart < ActiveRecord::Base
 
   #TODO: validates_uniqueness_of :name
 
-  ORIGINS = %w(navigator ncr)
+  ORIGINS = %w(navigator ncr gsa18f)
 
 
   def rejections
@@ -136,6 +136,11 @@ class Cart < ActiveRecord::Base
     self.add_approval(email, 'requester')
   end
 
+  def add_observer(email)
+    user = User.find_or_create_by(email_address: email)
+    self.approvals.create!(user_id: user.id, role: 'observer')
+  end
+
   def create_approver_approvals(emails)
     emails.each do |email|
       self.add_approver(email)
@@ -227,5 +232,16 @@ class Cart < ActiveRecord::Base
 
   def linear?
     self.flow == 'linear'
+  end
+
+
+  # Some fields aren't meant for the clients' eyes
+  EXCLUDE_FIELDS_FROM_DISPLAY = ['origin', 'contractingVehicle', 'location', 'configType']
+  # The following methods are an interface which should be matched by client
+  # models
+  def fields_for_display
+    self.properties_with_names.reject{ |key,value,label| 
+      EXCLUDE_FIELDS_FROM_DISPLAY.include? key}.map{ |key,value,label|
+      [label, value] }
   end
 end

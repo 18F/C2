@@ -9,6 +9,7 @@ gem 'draper'
 gem 'font-awesome-sass'
 gem 'haml'
 gem 'jquery-rails'
+gem 'jquery-turbolinks'
 gem 'newrelic_rpm'
 gem 'omniauth-myusa', git: 'https://github.com/18F/omniauth-myusa.git'
 gem 'pg'
@@ -49,7 +50,18 @@ group :test do
   gem 'addressable'
   gem 'capybara'
   gem 'codeclimate-test-reporter'
+  gem "poltergeist"
   gem 'simplecov'
   gem 'timecop'
   gem 'turnip'
+
+  # For better test reporting in CircleCI
+  # http://blog.circleci.com/announcing-detailed-test-failure-reporting/
+  # with a fix from
+  # https://github.com/circleci/rspec_junit_formatter/pull/4
+  gem 'rspec_junit_formatter', git: 'https://github.com/amitree/rspec_junit_formatter.git', ref: '33a0fdd'
+end
+
+group :production do
+  gem 'rails_12factor'
 end

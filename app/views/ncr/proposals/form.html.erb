@@ -9,19 +9,35 @@
     </div>
     <div class="form-group">
       <%= field_set_tag "Expense type" do %>
-        <% Ncr::ProposalForm::EXPENSE_TYPES.each do |expense_type| %>
-          <div class="radio">
-            <%= f.label :expense_type, value: expense_type do %>
-              <%= f.radio_button :expense_type, expense_type %>
-              <%= expense_type %>
-            <% end %>
-          </div>
-        <% end %>
+        <div class="radio">
+          <%= f.label :expense_type, value: "BA61" do %>
+            <%= f.radio_button :expense_type, "BA61",
+                               :"data-filter-control" => "expense-type" %>
+            BA61
+          <% end %>
+        </div>
+        <div class="form-group" data-filter-key="expense-type"
+                                data-filter-value="BA61">
+          <%= f.label :emergency do %>
+            <%= f.check_box :emergency %>
+            I received a verbal NTP to address this emergency
+          <% end %>
+        </div>
+        <!-- Work order will go here -->
+        <div class="radio">
+          <%= f.label :expense_type, value: "BA80" do %>
+            <%= f.radio_button :expense_type, "BA80",
+                               :"data-filter-control" => "expense-type" %>
+            BA80
+          <% end %>
+        </div>
+        <div class="form-group" data-filter-key="expense-type"
+                                data-filter-value="BA80">
+          <%= f.label :rwa_number %>
+          <%= f.text_field :rwa_number, class: 'form-control' %>
+        </div>
+        <!-- Work order will go here -->
       <% end %>
-    </div>
-    <div class="form-group">
-      <%= f.label :rwa_number %>
-      <%= f.text_field :rwa_number, disabled:true, class: 'form-control' %>
     </div>
     <div class="form-group">
       <%= f.label :building_number %>

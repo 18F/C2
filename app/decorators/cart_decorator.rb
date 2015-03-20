@@ -2,10 +2,12 @@ class CartDecorator < Draper::Decorator
   delegate_all
 
   def total_price
-    if self.getProp('origin') == 'ncr'
+    case self.getProp('origin')
+    when 'ncr'
       self.getProp('amount').to_f
+    when 'gsa18f'
+      self.getProp('cost_per_unit').to_f * self.getProp('quantity').to_f
     else
-      # TODO won't be present for all Carts
       0.0
     end
   end
@@ -78,17 +80,6 @@ class CartDecorator < Draper::Decorator
       'navigator_prefix'
     else
       nil
-    end
-  end
-
-  def property_exclusions
-    case self.getProp('origin')
-    when 'navigator'
-      ['origin', 'contractingVehicle', 'location', 'configType']
-    when 'ncr'
-      ['origin']
-    else
-      []
     end
   end
 

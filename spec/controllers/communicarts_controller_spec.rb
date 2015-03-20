@@ -110,6 +110,24 @@ describe CommunicartsController do
       end
     end
 
+    context 'valid params approving twice' do
+      it 'will be successful' do
+        put 'approval_response', approval_params_with_token
+        approval.reload
+        expect(approval).to be_approved
+        expect(response).to redirect_to(cart_path(cart))
+      end
+
+      it 'successfully validates the user_id and cart_id with the token twice' do
+        
+        expect do
+          put 'approval_response', approval_params_with_token
+          put 'approval_response', approval_params_with_token
+        end.not_to raise_error
+      end
+    end
+
+
     context 'Request token' do
       it 'fails when the token does not exist' do
         approval_params_with_token[:cch] = nil
