@@ -197,10 +197,6 @@ class Cart < ActiveRecord::Base
     self.getProp('origin') || ''
   end
 
-  def ncr?
-    self.origin == 'ncr'
-  end
-
   def gsa_advantage?
     # TODO set the origin
     self.origin.blank?
