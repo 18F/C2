@@ -83,17 +83,4 @@ class CartDecorator < Draper::Decorator
     end
   end
 
-  def property_exclusions
-    case self.getProp('origin')
-    when 'navigator'
-      ['origin', 'contractingVehicle', 'location', 'configType']
-    when 'ncr'
-      ['origin']
-    when 'gsa18f'
-      ['origin']
-    else
-      []
-    end
-  end
-
 end
