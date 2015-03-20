@@ -17,6 +17,7 @@ module Ncr
     attribute :vendor, :string
     attribute :not_to_exceed, :boolean
     attribute :building_number, :string
+    attribute :emergency, :boolean
     attribute :rwa_number, :string
     attribute :office, :string
 
@@ -60,9 +61,7 @@ module Ncr
       )
       if cart.save
         self.set_props_on(cart)
-        self.approver_emails.each do |email|
-          cart.add_approver(email)
-        end
+        self.add_approvals_on(cart)
         Dispatcher.deliver_new_cart_emails(cart)
       end
 
@@ -76,12 +75,16 @@ module Ncr
         # @todo: do we actually want to clear all properties?
         cart.clear_props!
         self.set_props_on(cart)
-        self.approver_emails.each do |email|
-          cart.add_approver(email)
-        end
+        self.add_approvals_on(cart)
         cart.restart!
       end
       cart
+    end
+
+    # SimpleFormObject does not convert inputs properly
+    def emergency?
+      self.expense_type == 'BA61' &&
+      ActiveRecord::ConnectionAdapters::Column.value_to_boolean(self.emergency)
     end
 
     def set_props_on(cart)
@@ -92,10 +95,29 @@ module Ncr
         vendor: self.vendor,
         not_to_exceed: self.not_to_exceed,
         building_number: self.building_number,
-        rwa_number: self.rwa_number,
         office: self.office
       )
+      case self.expense_type
+        when 'BA61'
+          cart.set_props(emergency: self.emergency?)
+        when 'BA80'
+          cart.set_props(rwa_number: self.rwa_number)
+      end
       cart.set_requester(self.requester)
+    end
+
+    def add_approvals_on(cart)
+      if self.emergency?
+        self.approver_emails.each do |email|
+          cart.add_observer(email)
+        end
+        # skip state machine
+        cart.proposal.update_attribute(:status, 'approved')
+      else
+        self.approver_emails.each do |email|
+          cart.add_approver(email)
+        end
+      end
     end
 
     def self.from_cart(cart)

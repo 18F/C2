@@ -20,15 +20,19 @@ class CommunicartsController < ApplicationController
 
   def approval_response
     cart = Cart.find(params[:cart_id]).decorate
-    approval = cart.approvals.find_by(user_id: user_id)
-
-    case params[:approver_action]
-    when 'approve'
-      approval.approve!
-      flash[:success] = "You have approved Cart #{cart.public_identifier}."
-    when 'reject'
-      approval.reject!
-      flash[:success] = "You have rejected Cart #{cart.public_identifier}."
+    approval = cart.approvals.find_by(user_id: user_id) 
+    
+    if !approval.pending?
+      flash[:error] = "You have already logged a response for Cart #{cart.public_identifier}"
+    else
+      case params[:approver_action]
+      when 'approve'
+        approval.approve!
+        flash[:success] = "You have approved Cart #{cart.public_identifier}."
+      when 'reject'
+        approval.reject!
+        flash[:success] = "You have rejected Cart #{cart.public_identifier}."
+      end
     end
 
     if @token

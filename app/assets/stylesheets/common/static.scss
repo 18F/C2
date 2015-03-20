@@ -15,3 +15,7 @@ h3 {
   border: 1px solid #333399;
   width: 30em;
 }
+
+[aria-hidden=true] {
+  display: none !important;
+}

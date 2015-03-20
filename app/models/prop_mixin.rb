@@ -46,4 +46,12 @@ module PropMixin
     self.properties.collect{|p| properties_copy[p.property] = YAML::load(p.value)}
     properties_copy
   end
+
+  # Returns a list of property triples: [key, value, humanized key]
+  def properties_with_names
+    props = self.deserialized_properties.to_a
+    props.map {|key, value|
+      [key, value, 
+       I18n.t('helpers.label.cart.' + key, default: key.underscore.humanize)]}
+  end
 end

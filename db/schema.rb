@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150311092117) do
+ActiveRecord::Schema.define(version: 20150319174617) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -65,6 +65,17 @@ ActiveRecord::Schema.define(version: 20150311092117) do
     t.integer  "user_id"
   end
 
+  create_table "ncr_work_orders", force: true do |t|
+    t.decimal "amount"
+    t.string  "expense_type"
+    t.string  "vendor"
+    t.boolean "not_to_exceed"
+    t.string  "building_number"
+    t.boolean "emergency"
+    t.string  "rwa_number"
+    t.string  "office"
+  end
+
   create_table "properties", force: true do |t|
     t.text    "property"
     t.text    "value"
@@ -77,7 +88,11 @@ ActiveRecord::Schema.define(version: 20150311092117) do
     t.string   "flow"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "client_data_id"
+    t.string   "client_data_type"
   end
+
+  add_index "proposals", ["client_data_id", "client_data_type"], name: "index_proposals_on_client_data_id_and_client_data_type", using: :btree
 
   create_table "user_roles", force: true do |t|
     t.integer "approval_group_id"
