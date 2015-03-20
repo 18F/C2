@@ -136,13 +136,13 @@ describe CommunicartsController do
       end
 
       it 'fails when the token has expired' do
-        token.update_attributes(expires_at: Time.now - 8.days)
+        token.update_attributes(expires_at: 8.days.ago)
         bypass_rescue
         expect { put 'approval_response', approval_params_with_token }.to raise_error(AuthenticationError)
       end
 
       it 'fails when the token has already been used once' do
-        token.update_attributes(used_at: Time.now - 1.hour)
+        token.update_attributes(used_at: 1.hour.ago)
         bypass_rescue
         expect { put 'approval_response', approval_params_with_token }.to raise_error(AuthenticationError)
       end
@@ -154,7 +154,7 @@ describe CommunicartsController do
         expect(approval).to be_approved
         expect(response).to redirect_to(cart_path(cart))
         token.reload
-        expect(token.used_at).to_not eq(nil)
+        expect(token.used?).to eq(true)
       end
     end
   end

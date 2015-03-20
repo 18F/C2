@@ -71,21 +71,21 @@ describe Cart do
   describe '#currently_awaiting_approvers' do
     it "gives a consistently ordered list when in parallel" do
       cart = FactoryGirl.create(:cart_with_approvals)
-      last_names = cart.currently_awaiting_approvers.map(&:last_name)
-      expect(last_names).to eq(['Approver1', 'Approver2'])
+      emails = cart.currently_awaiting_approvers.map(&:email_address)
+      expect(emails).to eq(%w(approver1@some-dot-gov.gov approver2@some-dot-gov.gov))
 
       cart.approvals.first.update_attribute(:position, 5)
-      last_names = cart.currently_awaiting_approvers.map(&:last_name)
-      expect(last_names).to eq(['Approver2', 'Approver1'])
+      emails = cart.currently_awaiting_approvers.map(&:email_address)
+      expect(emails).to eq(%w(approver2@some-dot-gov.gov approver1@some-dot-gov.gov))
     end
     it "gives only the first approver when linear" do
       cart = FactoryGirl.create(:cart_with_approvals, flow: 'linear')
-      last_names = cart.currently_awaiting_approvers.map(&:last_name)
-      expect(last_names).to eq(['Approver1'])
+      emails = cart.currently_awaiting_approvers.map(&:email_address)
+      expect(emails).to eq(%w(approver1@some-dot-gov.gov))
 
       cart.approvals.first.update_attribute(:position, 5)
-      last_names = cart.currently_awaiting_approvers.map(&:last_name)
-      expect(last_names).to eq(['Approver2'])
+      emails = cart.currently_awaiting_approvers.map(&:email_address)
+      expect(emails).to eq(%w(approver2@some-dot-gov.gov))
     end
   end
 
@@ -137,6 +137,7 @@ describe Cart do
   end
 
   describe '#restart' do
+    # TODO simplify this test
     it 'resets approval states when rejected' do
       cart = FactoryGirl.create(:cart_with_approvals)
       Dispatcher.deliver_new_cart_emails(cart)
@@ -144,6 +145,8 @@ describe Cart do
 
       cart.approver_approvals.first.approve!
       cart.approver_approvals.last.reject!
+      cart.reload
+
       expect(cart.approvals.approved.size).to eq(1)
       expect(cart.approvals.rejected.size).to eq(1)
       expect(cart.rejected?).to eq(true)
@@ -151,7 +154,7 @@ describe Cart do
       cart.restart!
 
       expect(cart.pending?).to eq(true)
-      expect(cart.api_tokens.expired.length).to eq(2)
+      expect(cart.api_tokens.unscoped.expired.length).to eq(2)
       expect(cart.api_tokens.unexpired.length).to eq(2)
       expect(cart.approver_approvals.length).to eq(2)
       expect(cart.approver_approvals[0].pending?).to eq(true)

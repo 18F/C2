@@ -14,10 +14,10 @@ describe CartsController do
       approval_group1
 
       cart2 = FactoryGirl.create(:cart)
-      cart2.approvals.create!(role: 'approver', user: user)
+      cart2.proposal.approvals.create!(role: 'approver', user: user)
 
       cart3 = FactoryGirl.create(:cart)
-      cart3.approvals.create!(role: 'observer', user: user)
+      cart3.proposal.approvals.create!(role: 'observer', user: user)
 
       get :index
       expect(assigns(:carts).sort).to eq [@cart1, cart2, cart3]

@@ -13,13 +13,19 @@ describe ParallelDispatcher do
     end
 
     it 'creates a new token for each approver' do
-      expect(ApiToken).to receive(:create!).exactly(2).times
-      expect(dispatcher).to receive(:send_notification_email).twice
-      dispatcher.deliver_new_cart_emails(cart)
+      Timecop.freeze do
+        expect(dispatcher).to receive(:send_notification_email).twice
+        dispatcher.deliver_new_cart_emails(cart)
+
+        cart.approver_approvals.each do |approval|
+          # handle float comparison
+          expect(approval.api_token.expires_at).to be_within(1.second).of(7.days.from_now)
+        end
+      end
     end
 
     it 'sends a cart notification email to observers' do
-      cart.approvals << FactoryGirl.create(:approval_with_user, role: 'observer')
+      cart.add_observer('observer1@some-dot-gov.gov')
       expect(CommunicartMailer).to receive_message_chain(:cart_observer_email, :deliver)
       dispatcher.deliver_new_cart_emails(cart)
     end

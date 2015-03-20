@@ -18,7 +18,7 @@ module ApprovalSteps
 
   step "the cart has an approval for :email in position :position" do |email, position|
     approver = User.find_or_create_by(email_address: email)
-    @cart.approvals << FactoryGirl.create(:approval, role: 'approver', user_id: approver.id, position: position)
+    @cart.proposal.approvals << FactoryGirl.create(:approval, role: 'approver', user_id: approver.id, position: position)
   end
 
   step "feature flag :flag_name is :value" do |flag, value|

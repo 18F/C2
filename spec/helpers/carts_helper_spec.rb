@@ -13,6 +13,12 @@ describe CartsHelper do
     end
 
     context "pending" do
+      before do
+        cart.approvers.each_with_index do |approver, i|
+          approver.update_attributes(first_name: 'Liono', last_name: "Approver#{i+1}")
+        end
+      end
+
       context "parallel" do
         let(:cart) { FactoryGirl.create(:cart_with_approvals, flow: 'parallel') }
 
@@ -52,8 +58,8 @@ describe CartsHelper do
   end
 
   describe '#parallel_approval_is_pending?' do
-    let (:user) { FactoryGirl.create(:user) }
-    let (:approval) { FactoryGirl.create(:approval, cart_id: cart.id, user_id: user.id) }
+    let (:approval) { cart.add_approver('approver1@some-dot-gov.gov') }
+    let (:user) { approval.user }
     subject { helper.parallel_approval_is_pending?(cart, user) }
 
     context 'linear' do
@@ -77,26 +83,37 @@ describe CartsHelper do
         expect(subject).to eq(false)
       end
 
-      it 'returns false with a non-existent approval' do
-        expect(subject).to eq(false)
+      context 'with a non-existent approval' do
+        let(:approval) { nil }
+        let(:user) { FactoryGirl.create(:user) }
+
+        it 'returns false' do
+          expect(subject).to eq(false)
+        end
       end
     end
   end
 
   describe '#current_linear_approval?' do
-    let (:user) { FactoryGirl.create(:user) }
-    let (:cart) { FactoryGirl.create(:cart, flow: 'linear') }
-    let (:approval) { FactoryGirl.create(:approval, cart_id: cart.id, user_id: user.id, status: 'pending') }
+    let (:approval) { cart.add_approver('approver1@some-dot-gov.gov') }
+    let (:user) { approval.user }
     subject { helper.current_linear_approval?(cart, user) }
 
-    it 'returns false with non-linear carts' do
-      cart.proposal.update_attributes(flow: 'parallel')
-      expect(subject).to eq false
+    context 'when flow is parallel' do
+      let (:cart) { FactoryGirl.create(:cart, flow: 'parallel') }
+
+      it 'returns false with non-linear carts' do
+        expect(subject).to eq false
+      end
     end
 
-    it 'returns true when the approval is next' do
-      approval
-      expect(subject).to eq true
+    context 'when flow is linear' do
+      let (:cart) { FactoryGirl.create(:cart, flow: 'linear') }
+
+      it 'returns true when the approval is next' do
+        approval
+        expect(subject).to eq true
+      end
     end
   end
 

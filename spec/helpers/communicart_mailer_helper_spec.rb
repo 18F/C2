@@ -1,8 +1,7 @@
 describe CommunicartMailerHelper do
   describe '#approval_action_url' do
-    let(:approval) { FactoryGirl.build(:approval) }
-
     it "returns a URL" do
+      approval = FactoryGirl.build(:approval, :with_cart)
       token = FactoryGirl.build(:api_token)
       expect(approval).to receive(:api_token).and_return(token)
 
@@ -16,6 +15,7 @@ describe CommunicartMailerHelper do
     end
 
     it "throws an error if there's no token" do
+      approval = FactoryGirl.build(:approval)
       expect(approval.api_token).to eq(nil)
 
       expect {

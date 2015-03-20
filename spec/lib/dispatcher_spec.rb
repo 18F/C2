@@ -19,9 +19,9 @@ describe Dispatcher do
     let(:dispatcher) { Dispatcher.new }
 
     it 'creates a new token for the approver' do
-      approval = FactoryGirl.create(:approval_with_user, cart_id: cart.id)
+      approval = cart.add_approver('approver1@some-dot-gov.gov')
       expect(CommunicartMailer).to receive_message_chain(:cart_notification_email, :deliver)
-      expect(ApiToken).to receive(:create!).exactly(1).times
+      expect(approval).to receive(:create_api_token!).once
 
       dispatcher.email_approver(approval)
     end
