@@ -27,5 +27,4 @@ config/feature_flags.yml
 .env
 
 # Ignore Cloud Foundry files
-.cfignore
-manifest.yml
+*manifest.yml
