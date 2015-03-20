@@ -26,9 +26,13 @@ module CartsHelper
     current_user == cart.requester && (cart.pending? || cart.rejected?)
   end
 
+  def approval_by(cart, user)
+    cart.approvals.find_by(approvals: { user_id: user.id })
+  end
+
   def parallel_approval_is_pending?(cart, user)
     return false unless cart.parallel?
-    if approval = Approval.find_by(cart_id: cart.id, user_id: user.id)
+    if approval = approval_by(cart, user)
       approval.pending?
     else
       false
@@ -36,9 +40,7 @@ module CartsHelper
   end
 
   def current_linear_approval?(cart, user)
-    approval = Approval.find_by(cart_id: cart.id, user_id: user.id)
+    approval = approval_by(cart, user)
     cart.linear? && cart.ordered_awaiting_approvals.first == approval
   end
-
-
 end

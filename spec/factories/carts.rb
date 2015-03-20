@@ -29,20 +29,15 @@ FactoryGirl.define do
     factory :cart_with_requester do
       after :create do |cart|
         requester = FactoryGirl.create(:user, email_address: 'requester1@some-dot-gov.gov', first_name: 'Panthro', last_name: 'Requester')
-        cart.approvals << FactoryGirl.create(:approval, role: 'requester', user_id: requester.id)
+        cart.proposal.approvals << FactoryGirl.create(:approval, role: 'requester', user_id: requester.id)
       end
     end
 
     factory :cart_with_approvals do
       after :create do |cart|
-        approver1 = FactoryGirl.create(:user, email_address: 'approver1@some-dot-gov.gov', first_name: 'Liono', last_name: 'Approver1')
-        approver2 = FactoryGirl.create(:user, email_address: 'approver2@some-dot-gov.gov', first_name: 'Liono', last_name: 'Approver2')
-        requester = FactoryGirl.create(:user, email_address: 'requester@some-dot-gov.gov', first_name: 'Liono', last_name: 'Requester')
-
-        cart.approvals << FactoryGirl.create(:approval, role: 'approver', user_id: approver1.id)
-        cart.approvals << FactoryGirl.create(:approval, role: 'approver', user_id: approver2.id)
-        cart.approvals << FactoryGirl.create(:approval, role: 'requester', user_id: requester.id)
-        cart.save!
+        cart.add_approver('approver1@some-dot-gov.gov')
+        cart.add_approver('approver2@some-dot-gov.gov')
+        cart.add_requester('requester@some-dot-gov.gov')
       end
 
       factory :cart_with_all_approvals_approved do

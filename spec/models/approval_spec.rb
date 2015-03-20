@@ -1,5 +1,5 @@
 describe Approval do
-  let(:approval) { FactoryGirl.create(:approval) }
+  let(:approval) { FactoryGirl.create(:approval, :with_cart) }
 
   describe '#api_token' do
     let!(:token) { approval.create_api_token! }

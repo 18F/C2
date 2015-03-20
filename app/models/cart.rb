@@ -4,8 +4,6 @@ class Cart < ActiveRecord::Base
   include PropMixin
   include ProposalDelegate
 
-  has_many :approvals
-  has_many :approval_users, through: :approvals, source: :user
   has_one :approval_group
   has_many :user_roles, through: :approval_group
   has_many :api_tokens, through: :approvals
@@ -119,9 +117,10 @@ class Cart < ActiveRecord::Base
   end
 
   # returns the Approval
+  # TODO move to Proposal
   def add_approval(email, role)
     user = User.find_or_create_by(email_address: email)
-    self.approvals.create!(user_id: user.id, role: role)
+    self.proposal.approvals.create!(user_id: user.id, role: role)
   end
 
   def add_approver(email)
@@ -136,11 +135,6 @@ class Cart < ActiveRecord::Base
     self.add_approval(email, 'requester')
   end
 
-  def add_observer(email)
-    user = User.find_or_create_by(email_address: email)
-    self.approvals.create!(user_id: user.id, role: 'observer')
-  end
-
   def create_approver_approvals(emails)
     emails.each do |email|
       self.add_approver(email)
@@ -148,7 +142,7 @@ class Cart < ActiveRecord::Base
   end
 
   def set_requester(user)
-    self.approvals.create!(user_id: user.id, role: 'requester')
+    self.proposal.approvals.create!(user_id: user.id, role: 'requester')
   end
 
   def process_approvals_without_approval_group(params)
@@ -166,7 +160,7 @@ class Cart < ActiveRecord::Base
 
   def create_approval_from_user_role(user_role)
     approval = Approval.new_from_user_role(user_role)
-    approval.cart = self
+    approval.proposal_id = self.proposal_id
     approval.save!
     approval
   end
@@ -240,7 +234,7 @@ class Cart < ActiveRecord::Base
   # The following methods are an interface which should be matched by client
   # models
   def fields_for_display
-    self.properties_with_names.reject{ |key,value,label| 
+    self.properties_with_names.reject{ |key,value,label|
       EXCLUDE_FIELDS_FROM_DISPLAY.include? key}.map{ |key,value,label|
       [label, value] }
   end

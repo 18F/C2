@@ -36,7 +36,7 @@ class CommunicartsController < ApplicationController
     end
 
     if @token
-      @token.update_attribute(:used_at, Time.now)
+      @token.use!
     end
 
     redirect_to cart_path(cart)
@@ -53,7 +53,7 @@ class CommunicartsController < ApplicationController
       raise AuthenticationError.new(msg: 'something went wrong with the token (nonexistent)')
     elsif @token.expires_at && @token.expires_at < Time.now
       raise AuthenticationError.new(msg: 'something went wrong with the token (expired)')
-    elsif @token.used_at
+    elsif @token.used?
       raise AuthenticationError.new(msg: 'Something went wrong with the token. It has already been used.')
     elsif @token.cart_id != params[:cart_id].to_i
       raise AuthenticationError.new(msg: 'Something went wrong with the cart (wrong cart)')
