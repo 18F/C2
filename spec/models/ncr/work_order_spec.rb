@@ -15,13 +15,14 @@ describe Ncr::WorkOrder do
         ["Office", Ncr::OFFICES[0]],
         # No RWA Number
         ["Vendor", "Some Vend"]
+        # No Work Order
       ])
     end
     it "shows BA80 fields" do
       wo = Ncr::WorkOrder.new(
         amount: 1000, expense_type: "BA80", vendor: "Some Vend", 
         not_to_exceed: false, emergency: true, rwa_number: "RWWAAA #",
-        building_number: Ncr::BUILDING_NUMBERS[0],
+        building_number: Ncr::BUILDING_NUMBERS[0], code: "Some WO#",
         office: Ncr::OFFICES[0])
       expect(wo.fields_for_display.sort).to eq([
         ["Amount", 1000],
@@ -31,7 +32,8 @@ describe Ncr::WorkOrder do
         ["Not to exceed", false],
         ["Office", Ncr::OFFICES[0]],
         ["RWA Number", "RWWAAA #"],
-        ["Vendor", "Some Vend"]
+        ["Vendor", "Some Vend"],
+        ["Work Order", "Some WO#"]
       ])
     end
   end

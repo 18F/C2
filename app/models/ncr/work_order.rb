@@ -82,7 +82,7 @@ module Ncr
       when "BA61"
         fields + [:emergency]
       when "BA80"
-        fields + [:rwa_number]
+        fields + [:rwa_number, :code]
       end
     end
 

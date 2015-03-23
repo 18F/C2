@@ -90,13 +90,16 @@ describe "National Capital Region proposals" do
     it "hides fields based on expense", :js => true do
       visit '/ncr/work_orders/new'
       expect(page).to have_no_field("RWA Number")
+      expect(page).to have_no_field("Work Order")
       expect(page).to have_no_field("emergency")
       choose 'BA61'
       expect(page).to have_no_field("RWA Number")
+      expect(page).to have_no_field("Work Order")
       expect(page).to have_field("emergency")
       expect(find_field("emergency", visible: false)).to be_visible
       choose 'BA80'
       expect(page).to have_field("RWA Number")
+      expect(page).to have_field("Work Order")
       expect(page).to have_no_field("emergency")
       expect(find_field("RWA Number")).to be_visible
     end
