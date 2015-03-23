@@ -88,4 +88,10 @@ describe Ncr::WorkOrder do
       ))
     end
   end
+  describe '#total_price' do
+    let (:work_order) { FactoryGirl.create(:ncr_work_order, amount: 45.36)}
+    it 'gets price from amount field' do
+      expect(work_order.total_price).to eq(45.36)
+    end
+  end
 end

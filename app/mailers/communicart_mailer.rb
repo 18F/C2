@@ -83,6 +83,7 @@ class CommunicartMailer < ActionMailer::Base
 
   def send_cart_email(from_email, to_email, cart)
     @cart = cart.decorate
+    # only used by navigator. @todo: remove
     @prefix_template = @cart.prefix_template_name
 
     set_attachments(cart)

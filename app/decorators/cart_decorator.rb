@@ -1,17 +1,6 @@
 class CartDecorator < Draper::Decorator
   delegate_all
 
-  def total_price
-    case self.getProp('origin')
-    when 'ncr'
-      self.getProp('amount').to_f
-    when 'gsa18f'
-      self.getProp('cost_per_unit').to_f * self.getProp('quantity').to_f
-    else
-      0.0
-    end
-  end
-
   def number_approved
     object.approved_approvals.count
   end
@@ -66,8 +55,9 @@ class CartDecorator < Draper::Decorator
     "#{number_approved} of #{total_approvers} approved."
   end
 
+  # @TODO: remove in favor of client_partial or similar
   def cart_template_name
-    origin_name = self.getProp('origin')
+    origin_name = self.proposal.client_data_legacy.client
     if Cart::ORIGINS.include? origin_name
       "#{origin_name}_cart"
     else

@@ -20,23 +20,4 @@ describe CartDecorator do
       ))
     end
   end
-
-  describe '#total_price' do
-    context 'the client origin is NCR' do
-      it 'gets price from the cart properties' do
-        cart.setProp('origin','ncr')
-        cart.setProp('amount','357.89')
-        expect(cart.total_price).to eq 357.89
-      end
-    end
-
-    context 'other client origins' do
-      it 'returns 0, for the moment' do
-        cart.setProp('origin','some-other-client')
-        expect(cart.total_price).to eq(0.0)
-      end
-    end
-
-
-  end
 end

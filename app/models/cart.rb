@@ -233,4 +233,12 @@ class Cart < ActiveRecord::Base
   def public_identifier
     self.external_id
   end
+  def total_price
+    case self.getProp('origin')
+    when 'gsa18f'
+      self.getProp('cost_per_unit').to_f * self.getProp('quantity').to_f
+    else
+      0.0
+    end
+  end
 end

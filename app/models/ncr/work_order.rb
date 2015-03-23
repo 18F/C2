@@ -16,6 +16,7 @@ module Ncr
     has_many :proposals, as: :client_data
     after_initialize :set_defaults
 
+    # @TODO: use integer number of cents to avoid floating point issues
     validates :amount, numericality: {
       greater_than_or_equal_to: 0,
       less_than_or_equal_to: 3000
@@ -96,6 +97,9 @@ module Ncr
     # @todo - this is pretty ugly
     def public_identifier
       self.proposals[0].cart.id
+    end
+    def total_price
+      self.amount or 0.0
     end
   end
 end

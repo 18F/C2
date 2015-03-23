@@ -70,9 +70,11 @@ describe CommunicartMailer do
         expect(mail.body.encoded).to include('Purchase Request')
       end
 
-      it 'renders a custom template when origin is indicated' do
-        approval.cart.properties << Property.create!(property: 'origin', value:'ncr')
-        expect(mail.body.encoded).to include('Purchase Request')
+      it 'renders a custom template for ncr carts' do
+        work_order = FactoryGirl.create(:ncr_work_order)
+        approval.cart.proposal.client_data = work_order
+        approval.cart.proposal.save
+        expect(mail.body.encoded).to include('ncr-layout')
       end
     end
 
