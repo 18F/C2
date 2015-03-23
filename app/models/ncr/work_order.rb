@@ -12,8 +12,7 @@ module Ncr
   OFFICES = DATA['OFFICES']
 
   class WorkOrder < ActiveRecord::Base
-    # In practice, each work order only has one proposal
-    has_many :proposals, as: :client_data
+    has_one :proposal, as: :client_data
     after_initialize :set_defaults
 
     # @TODO: use integer number of cents to avoid floating point issues
@@ -33,20 +32,21 @@ module Ncr
 
     # @todo - this is an awkward dance due to the lingering Cart model. Remove
     # that dependence
-    def create_cart(approver_email, description, requester)
+    def init_and_save_cart(approver_email, description, requester)
       cart = Cart.create(
         name: description,
         proposal_attributes: {flow: 'linear', client_data: self}
       )
       cart.set_requester(requester)
-      self.add_approvals_on(cart, approver_email)
+      self.add_approvals(approver_email)
       Dispatcher.deliver_new_cart_emails(cart)
       cart
     end
+
     def update_cart(approver_email, description, cart)
       cart.name = description
       cart.approver_approvals.destroy_all
-      self.add_approvals_on(cart, approver_email)
+      self.add_approvals(approver_email)
       cart.restart!
       cart
     end
@@ -62,12 +62,13 @@ module Ncr
       end
     end
 
-    def add_approvals_on(cart, approver_email)
+    def add_approvals(approver_email)
       emails = [approver_email] + self.system_approvers
+      cart = self.proposal.cart
       if self.emergency
         emails.each {|email| cart.add_observer(email) }
         # skip state machine
-        cart.proposal.update_attribute(:status, 'approved')
+        self.proposal.update_attribute(:status, 'approved')
       else
         emails.each {|email| cart.add_approver(email) }
       end
@@ -86,18 +87,25 @@ module Ncr
       end
     end
 
+    def relevant_fields
+      Ncr::WorkOrder.relevant_fields(self.expense_type)
+    end
+
     # Methods for Client Data interface
     def fields_for_display
-      attributes = Ncr::WorkOrder.relevant_fields(self.expense_type)
+      attributes = self.relevant_fields
       attributes.map{|key| [WorkOrder.human_attribute_name(key), self[key]]}
     end
+
     def client
       "ncr"
     end
+
     # @todo - this is pretty ugly
     def public_identifier
-      self.proposals[0].cart.id
+      self.proposal.cart.id
     end
+
     def total_price
       self.amount or 0.0
     end

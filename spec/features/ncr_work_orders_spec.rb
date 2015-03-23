@@ -103,11 +103,11 @@ describe "National Capital Region proposals" do
 
     let (:work_order) {
       wo = FactoryGirl.create(:ncr_work_order)
-      wo.create_cart('approver@email.com', 'Description Here', requester)
+      wo.init_and_save_cart('approver@email.com', 'Description Here', requester)
       wo
     }
     let(:ncr_cart) {
-      work_order.proposals.first.cart
+      work_order.proposal.cart
     }
     it "can be restarted if pending" do
       visit "/ncr/work_orders/#{work_order.id}/edit"
