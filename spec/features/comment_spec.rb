@@ -6,7 +6,7 @@ describe "commenting" do
 
       visit "/carts/#{cart.id}"
       fill_in 'comment[comment_text]', with: 'foo'
-      click_on 'Send note'
+      click_on 'Comment'
 
       expect(current_path).to eq("/carts/#{cart.id}")
       cart.reload

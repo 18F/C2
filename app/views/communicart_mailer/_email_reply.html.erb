@@ -4,10 +4,12 @@
     <td colspan=2 align="center">
       <p>
         <%= link_to "Approve", approval_action_url(approval), class: 'form-button' %>
+        or
+        <%= link_to "Comment", cart_url(cart, anchor: 'cart-comments'), class: 'form-button' %>
       </p>
       <p>
         <strong>
-          <%= link_to "Comment on this request, or view it in your browser", cart_url(cart) %>
+          <%= link_to "Or view it in your browser", cart_url(cart) %>
         </strong>
       </p>
     </td>
