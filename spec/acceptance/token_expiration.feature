@@ -9,7 +9,6 @@ Feature: Approving a cart from the web application expires the token
     Given the logged in user is 'supervisor1@test.gov'
     When I go to the approval_response page without a token
     And I should see 'Approve'
-    And I should see 'Reject'
     When I click 'Approve'
     Then I should see alert text 'You have approved Cart 1357531.'
     When I click 'Logout'
