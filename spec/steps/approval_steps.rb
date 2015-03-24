@@ -13,12 +13,13 @@ module ApprovalSteps
   end
 
   step "a valid token" do
-    @token = ApiToken.create!(user_id: @user.id, cart_id: @cart.id)
+    @token = ApiToken.create!(approval_id: @approval.id)
   end
 
   step "the cart has an approval for :email in position :position" do |email, position|
     approver = User.find_or_create_by(email_address: email)
-    @cart.proposal.approvals << FactoryGirl.create(:approval, role: 'approver', user_id: approver.id, position: position)
+    @approval = FactoryGirl.create(:approval, role: 'approver', user_id: approver.id, position: position)
+    @cart.proposal.approvals << @approval
   end
 
   step "feature flag :flag_name is :value" do |flag, value|

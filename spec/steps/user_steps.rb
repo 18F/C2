@@ -6,7 +6,7 @@ module UserSteps
   end
 
   step 'the user is :email' do |email|
-    @user = User.find_by(email_address: email)
+    @user = User.find_or_create_by(email_address: email)
   end
 
   step 'the logged in user is :email' do |email|
@@ -61,6 +61,12 @@ module UserSteps
 
   step 'a :cart_type cart :external_id' do |cart_type, external_id|
     @cart = FactoryGirl.create(:cart_with_requester, external_id: external_id, flow: cart_type)
+  end
+
+  step 'a cart :external_id with approver :approver_email' do |external_id, approver_email|
+    @cart = FactoryGirl.create(:cart_with_requester, external_id: external_id)
+    @cart.add_approver(approver_email)
+    @approval = @cart.approvals.first
   end
 
   step 'a cart and approvals' do
