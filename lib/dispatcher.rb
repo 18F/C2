@@ -41,7 +41,9 @@ class Dispatcher
   def on_cart_comment_created(comment)
     cart = comment.commentable
     users_to_notify = cart.currently_awaiting_approvers
-    users_to_notify << cart.requester
+    if cart.requester
+      users_to_notify << cart.requester
+    end
     observers = cart.approvals.observing.map(&:user)
     users_to_notify.concat(observers)
 
