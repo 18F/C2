@@ -9,7 +9,7 @@ describe "commenting" do
 
     it "saves the comment" do
       fill_in 'comment[comment_text]', with: 'foo'
-      click_on 'Comment'
+      click_on 'Send a Comment'
 
       expect(current_path).to eq("/carts/#{cart.id}")
       cart.reload
@@ -18,7 +18,7 @@ describe "commenting" do
 
     it "warns if the comment body is empty" do
       fill_in 'comment[comment_text]', with: ''
-      click_on 'Send note'
+      click_on 'Send a Comment'
 
       expect(current_path).to eq("/carts/#{cart.id}")
       expect(page).to have_content("can't be blank")
@@ -26,7 +26,7 @@ describe "commenting" do
 
     it "sends an email" do
       fill_in 'comment[comment_text]', with: 'foo'
-      click_on 'Send note'
+      click_on 'Send a Comment'
 
       expect(email_recipients).to eq(['approver1@some-dot-gov.gov',
                                       'approver2@some-dot-gov.gov'])

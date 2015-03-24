@@ -4,8 +4,6 @@ class Comment < ActiveRecord::Base
   belongs_to :user
   delegate :full_name, :email_address, :to => :user, :prefix => true
 
-  after_create :notify_approval_group
-
   validates :comment_text, presence: true
 
   # match .attributes
@@ -26,12 +24,5 @@ class Comment < ActiveRecord::Base
       'created_at',
       'updated_at'
     ]
-  end
-
-
-  private
-
-  def notify_approval_group
-    # TODO notify for Carts, though probably not if they are already getting an approval/rejection notification
   end
 end
