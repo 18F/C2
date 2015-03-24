@@ -70,9 +70,11 @@ describe CommunicartMailer do
         expect(mail.body.encoded).to include('Purchase Request')
       end
 
-      it 'renders a custom template when origin is indicated' do
-        approval.cart.properties << Property.create!(property: 'origin', value:'ncr')
-        expect(mail.body.encoded).to include('Purchase Request')
+      it 'renders a custom template for ncr carts' do
+        work_order = FactoryGirl.create(:ncr_work_order)
+        approval.cart.proposal.client_data = work_order
+        approval.cart.proposal.save
+        expect(mail.body.encoded).to include('ncr-layout')
       end
     end
 
@@ -101,6 +103,18 @@ describe CommunicartMailer do
     it 'renders the sender email' do
       expect(mail.from).to eq(['reply@communicart-stub.com'])
       expect(sender_names(mail)).to eq([approver.full_name])
+    end
+
+    context 'comments' do
+      it 'renders comments when present' do
+        cart_with_approval_group.comments << Comment.new(comment_text: 'My added comment')
+        expect(mail.body.encoded).to include('Comments')
+      end
+
+      it 'does not render empty comments' do
+        expect(mail.body.encoded).to_not include('Comments')
+      end
+
     end
 
     context 'attaching a csv of the cart activity' do

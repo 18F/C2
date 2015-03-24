@@ -36,3 +36,4 @@ en:
     attributes:
       ncr/work_order:
         rwa_number: "RWA Number"
+        code: "Work Order"
