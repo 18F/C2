@@ -19,8 +19,9 @@ class Cart < ActiveRecord::Base
     self.approver_approvals.rejected
   end
 
+  # TODO remove
   def approver_approvals
-    self.approvals.approvable
+    self.approvals
   end
 
   def approvers
@@ -60,15 +61,6 @@ class Cart < ActiveRecord::Base
 
   def all_approvals_received?
     self.approver_approvals.where.not(status: 'approved').empty?
-  end
-
-  def requester
-    self.approval_users.merge(Approval.requesting).first
-  end
-
-  def observers
-    # TODO: Pull from approvals, not approval groups
-    approval_group.user_roles.observers
   end
 
   def self.initialize_cart params
@@ -113,26 +105,23 @@ class Cart < ActiveRecord::Base
   end
 
   def import_initial_comments(comments)
-    self.comments.create!(user_id: self.requester.id, comment_text: comments.strip)
+    self.comments.create!(user_id: self.proposal.requester_id, comment_text: comments.strip)
   end
 
   # returns the Approval
-  # TODO move to Proposal
-  def add_approval(email, role)
-    user = User.find_or_create_by(email_address: email)
-    self.proposal.approvals.create!(user_id: user.id, role: role)
-  end
-
   def add_approver(email)
-    self.add_approval(email, 'approver')
+    user = User.find_or_create_by(email_address: email)
+    self.proposal.approvals.create!(user_id: user.id)
   end
 
   def add_observer(email)
-    self.add_approval(email, 'observer')
+    user = User.find_or_create_by(email_address: email)
+    self.proposal.observations.create!(user_id: user.id)
   end
 
   def add_requester(email)
-    self.add_approval(email, 'requester')
+    user = User.find_or_create_by(email_address: email)
+    self.set_requester(user)
   end
 
   def create_approver_approvals(emails)
@@ -142,7 +131,7 @@ class Cart < ActiveRecord::Base
   end
 
   def set_requester(user)
-    self.proposal.approvals.create!(user_id: user.id, role: 'requester')
+    self.proposal.update_attributes!(requester_id: user.id)
   end
 
   def process_approvals_without_approval_group(params)
@@ -159,10 +148,23 @@ class Cart < ActiveRecord::Base
   end
 
   def create_approval_from_user_role(user_role)
-    approval = Approval.new_from_user_role(user_role)
-    approval.proposal_id = self.proposal_id
-    approval.save!
-    approval
+    case user_role.role
+    when 'approver'
+      Approval.create!(
+        position: user_role.position,
+        proposal_id: self.proposal_id,
+        user_id: user_role.user_id
+      )
+    when 'observer'
+      Observation.create!(
+        proposal_id: self.proposal_id,
+        user_id: user_role.user_id
+      )
+    when 'requester'
+      self.set_requester(user_role.user)
+    else
+      raise "Unknown role #{user_role.inspect}"
+    end
   end
 
   def process_approvals_from_approval_group

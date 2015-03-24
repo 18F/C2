@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
   has_many :user_roles
   has_many :approval_groups, through: :user_roles
   has_many :approvals
-  has_many :carts, through: :approvals
+  has_many :observations
   has_many :properties, as: :hasproperties
   has_many :comments
 
@@ -18,8 +18,12 @@ class User < ActiveRecord::Base
     end
   end
 
+  def carts
+    Cart.outer_joins(:approvals, :observations).where("proposals.requester_id = #{self.id} OR approvals.user_id = #{self.id} OR observations.user_id = #{self.id}").distinct
+  end
+
   def requested_carts
-    self.carts.merge(Approval.requesting)
+    Cart.joins(:proposal).where(proposals: {requester_id: self.id})
   end
 
   def approver_of?(cart)
@@ -27,7 +31,7 @@ class User < ActiveRecord::Base
   end
 
   def last_requested_cart
-    self.requested_carts.order('carts.created_at DESC').first
+    self.requested_carts.order('created_at DESC').first
   end
 
   def self.from_oauth_hash(auth_hash)

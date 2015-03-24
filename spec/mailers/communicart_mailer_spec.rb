@@ -164,9 +164,10 @@ describe CommunicartMailer do
       expect(cart_with_observers).to receive(:requester).and_return(requester).at_least(:once)
     end
 
+    # TODO rename to :cart
     let(:cart_with_observers) { FactoryGirl.create(:cart_with_observers, external_id: 1965) }
     let(:observer) { cart_with_observers.observers.first }
-    let(:mail) { CommunicartMailer.cart_observer_email(observer.user_email_address, cart_with_observers) }
+    let(:mail) { CommunicartMailer.cart_observer_email(observer.email_address, cart_with_observers) }
 
     it 'renders the subject' do
       expect(mail.subject).to eq('Communicart Approval Request from Liono Thunder: Please review Cart #1965')
