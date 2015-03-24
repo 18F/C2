@@ -1,11 +1,13 @@
 <table class='reply-section'>
   <tr height="25"><td colspan=2 height="25" bgcolor="#f5f5f5"></td></tr>
   <tr id="approval-actions">
-    <td colspan=2 align="center">
-      <p>
-        <%= link_to "Approve", approval_action_url(approval), class: 'form-button' %>
-        <%= link_to "Reject", approval_action_url(approval, 'reject'), class: 'reject-link' %>
-      </p>
+    <td colspan="2" align="center">
+      <% if show_approval_actions %>
+        <p>
+          <%= link_to "Approve", approval_action_url(approval), class: 'form-button' %>
+          <%= link_to "Reject", approval_action_url(approval, 'reject'), class: 'reject-link' %>
+        </p>
+      <% end %>
       <p>
         <strong>
           <%= link_to "Comment on this request, or view it in your browser", cart_url(cart) %>

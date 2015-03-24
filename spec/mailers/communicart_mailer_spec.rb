@@ -105,6 +105,18 @@ describe CommunicartMailer do
       expect(sender_names(mail)).to eq([approver.full_name])
     end
 
+    context 'comments' do
+      it 'renders comments when present' do
+        cart_with_approval_group.comments << Comment.new(comment_text: 'My added comment')
+        expect(mail.body.encoded).to include('Comments')
+      end
+
+      it 'does not render empty comments' do
+        expect(mail.body.encoded).to_not include('Comments')
+      end
+
+    end
+
     context 'attaching a csv of the cart activity' do
       it 'generates csv attachments for an approved cart' do
         expect(approval.cart).to receive(:all_approvals_received?).and_return(true).at_least(:once)

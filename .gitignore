@@ -24,7 +24,7 @@ config/environment_variables.yml
 coverage
 .floo*
 config/feature_flags.yml
-.env
+.env*
 
 # Ignore Cloud Foundry files
 cf-ssh.yml

@@ -14,7 +14,7 @@
 
   <%= render partial: @cart.cart_template_name, locals: { cart: @cart, title:  "Purchase Request" } %>
 
-  <%= render partial: 'email_reply', locals: { cart: @cart, approval: @approval } %>
+  <%= render partial: 'email_reply', locals: { cart: @cart, approval: @approval, show_approval_actions: true } %>
 
 </div>
 </body>

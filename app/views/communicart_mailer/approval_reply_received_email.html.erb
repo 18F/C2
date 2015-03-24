@@ -1,6 +1,5 @@
 <body class="communicart-notification">
-  <table class="w-container main-container" width='800'>
-
+  <table class='reply-section'>
     <tr>
       <td class="w-container html-email-message">
         <p>
@@ -8,14 +7,17 @@
           The approver, <%= @approval.user_email_address %>, <%= @approval.status %>  Cart #<%= @cart.proposal.client_data_legacy.public_identifier %>.<br/>
           Please see below for more details.
         </p>
+
       </td>
     </tr>
 
     <tr>
       <td>
+        <%= render partial: 'comments', locals: { comments: @cart.comments } %>
+
         <%= render partial: @cart.cart_template_name, locals: {cart: @cart, title:  "Purchase Request"} %>
 
-        <%= render partial: 'reply_section', locals: { cart: @cart} %>
+        <%= render partial: 'email_reply', locals: { cart: @cart, show_approval_actions: false } %>
       </td>
     </tr>
 </table>
