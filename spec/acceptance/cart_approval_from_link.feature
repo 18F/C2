@@ -53,7 +53,7 @@ Feature: Approving a cart from approval link
     Then I should see alert text 'You have approved Cart 109876.'
     And I should see 'No comments have been added yet'
     When I fill out 'comment_comment_text' with 'A comment on this proposal'
-    And I click 'Send note' button
+    And I click 'Comment' button
     Then I should not see 'No comments have been added yet'
     And I should see 'A comment on this proposal'
 
