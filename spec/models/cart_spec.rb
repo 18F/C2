@@ -138,7 +138,7 @@ describe Cart do
 
   describe '#restart' do
     # TODO simplify this test
-    it 'resets approval states when rejected' do
+    it 'resets approval states for pending approvals when rejected' do
       cart = FactoryGirl.create(:cart_with_approvals)
       Dispatcher.deliver_new_cart_emails(cart)
       expect(cart.api_tokens.length).to eq(2)
@@ -157,10 +157,11 @@ describe Cart do
       expect(cart.api_tokens.unscoped.expired.length).to eq(2)
       expect(cart.api_tokens.unexpired.length).to eq(2)
       expect(cart.approver_approvals.length).to eq(2)
-      expect(cart.approver_approvals[0].pending?).to eq(true)
+      expect(cart.approver_approvals[0].approved?).to eq(true)
       expect(cart.approver_approvals[1].pending?).to eq(true)
     end
   end
+
   describe '#total_price' do
     context 'the client origin is 18f' do
       it 'gets price from two fields' do
