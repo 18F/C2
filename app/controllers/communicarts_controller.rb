@@ -21,8 +21,9 @@ class CommunicartsController < ApplicationController
   def approval_response
     cart = Cart.find(params[:cart_id]).decorate
     client_data = cart.proposal.client_data_legacy
-    approval = cart.approvals.find_by(user_id: user_id) 
-    
+    approval = cart.approvals.find_by(user_id: user_id)
+    @token ||= ApiToken.find_by(approval_id: approval.id)
+
     if !approval.pending?
       flash[:error] = "You have already logged a response for Cart #{client_data.public_identifier}"
     else
@@ -36,7 +37,7 @@ class CommunicartsController < ApplicationController
       end
     end
 
-    if @token
+    if @token && !@token.used?
       @token.use!
     end
 

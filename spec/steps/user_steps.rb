@@ -63,6 +63,13 @@ module UserSteps
     @cart = FactoryGirl.create(:cart_with_requester, external_id: external_id, flow: cart_type)
   end
 
+  step 'a cart :external_id with approver :approver_email' do |external_id, approver_email|
+    @cart = FactoryGirl.create(:cart_with_requester, external_id: external_id)
+    approver_user = User.new(email_address: approver_email)
+    @cart.add_approver(approver_email)
+    @approval = @cart.approvals.first
+  end
+
   step 'a cart and approvals' do
     @cart = FactoryGirl.create(:cart_with_approvals_and_items)
   end
