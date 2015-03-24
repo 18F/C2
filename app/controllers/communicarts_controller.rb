@@ -23,9 +23,11 @@ class CommunicartsController < ApplicationController
     client_data = cart.proposal.client_data_legacy
     approval = cart.approvals.find_by(user_id: user_id)
     @token ||= ApiToken.find_by(approval_id: approval.id)
-
+    
     if !approval.pending?
       flash[:error] = "You have already logged a response for Cart #{client_data.public_identifier}"
+    elsif !approval.is_approvable?
+      flash[:error] = "Sorry. You are not allowed to approve your own request."
     else
       case params[:approver_action]
       when 'approve'
@@ -40,7 +42,6 @@ class CommunicartsController < ApplicationController
     if @token && !@token.used?
       @token.use!
     end
-
     redirect_to cart_path(cart)
   end
 
