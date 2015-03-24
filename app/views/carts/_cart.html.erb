@@ -14,12 +14,8 @@
           Requested by:
           <strong><%= cart.requester.full_name %></strong>
         </p>
-        <% if cart.gsa_advantage? %>
-          <p>
-            GSA Advantage:
-            <strong>Cart #<%= cart.external_id %></strong>
-          </p>
-        <% end %>
+        <%= client_partial(proposal.client_data_legacy.client, 'external_id',
+                           locals: {cart: cart}) %>
       </div>
     </div>
 
@@ -85,7 +81,7 @@
             </p>
           </div>
           <p class='col-xs-5 col-sm-6 text-area-button'>
-            <%= submit_tag "Send note", id: :add_a_comment %>
+            <%= submit_tag "Send a Comment", id: :add_a_comment %>
           </p>
         </div>
       <%- end %>
@@ -124,5 +120,6 @@
   <%= render partial: 'approval_actions', locals: { current_user: @current_user, cart: cart} %>
 <% end %>
 <% if display_restart?(cart) %>
-  <%= client_partial(cart.origin, 'restart_link', locals: {cart: cart}) %>
+  <%= client_partial(proposal.client_data_legacy.client,
+                     'restart_link', locals: {proposal: proposal, cart: cart}) %>
 <% end %>

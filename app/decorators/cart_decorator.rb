@@ -1,17 +1,6 @@
 class CartDecorator < Draper::Decorator
   delegate_all
 
-  def total_price
-    case self.getProp('origin')
-    when 'ncr'
-      self.getProp('amount').to_f
-    when 'gsa18f'
-      self.getProp('cost_per_unit').to_f * self.getProp('quantity').to_f
-    else
-      0.0
-    end
-  end
-
   def number_approved
     object.approved_approvals.count
   end
@@ -59,15 +48,16 @@ class CartDecorator < Draper::Decorator
   end
 
   def completed_status_message
-    "All #{number_approved} of #{total_approvers} approvals have been received. Please move forward with the purchase  of Cart ##{object.external_id}."
+    "All #{number_approved} of #{total_approvers} approvals have been received. Please move forward with the purchase  of Cart ##{object.proposal.client_data_legacy.public_identifier}."
   end
 
   def progress_status_message
     "#{number_approved} of #{total_approvers} approved."
   end
 
+  # @TODO: remove in favor of client_partial or similar
   def cart_template_name
-    origin_name = self.getProp('origin')
+    origin_name = self.proposal.client_data_legacy.client
     if Cart::ORIGINS.include? origin_name
       "#{origin_name}_cart"
     else
@@ -76,7 +66,7 @@ class CartDecorator < Draper::Decorator
   end
 
   def prefix_template_name
-    if self.getProp('origin') == 'navigator'
+    if self.client == 'navigator'
       'navigator_prefix'
     else
       nil
