@@ -66,7 +66,7 @@ class CartDecorator < Draper::Decorator
   end
 
   def prefix_template_name
-    if self.getProp('origin') == 'navigator'
+    if self.client == 'navigator'
       'navigator_prefix'
     else
       nil

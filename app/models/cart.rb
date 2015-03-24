@@ -191,12 +191,9 @@ class Cart < ActiveRecord::Base
       end
     end
   end
-  def origin
-    self.getProp('origin') || 'gsa_advantage'
-  end
 
   def gsa_advantage?
-    self.origin == 'gsa_advantage'
+    self.client == 'gsa_advantage'
   end
 
   def parallel?
@@ -219,7 +216,7 @@ class Cart < ActiveRecord::Base
   end
 
   def client
-    self.origin
+    self.getProp('origin') || 'gsa_advantage'
   end
 
   # @todo - the method name (e.g. :external_id) should live on a "client"
@@ -229,7 +226,7 @@ class Cart < ActiveRecord::Base
   end
 
   def total_price
-    if self.origin == 'gsa18f'
+    if self.client == 'gsa18f'
       self.getProp('cost_per_unit').to_f * self.getProp('quantity').to_f
     else
       0.0

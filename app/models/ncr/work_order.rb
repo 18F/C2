@@ -96,7 +96,7 @@ module Ncr
     end
 
     def total_price
-      self.amount or 0.0
+      self.amount || 0.0
     end
 
     protected
