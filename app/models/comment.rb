@@ -1,10 +1,12 @@
 class Comment < ActiveRecord::Base
+  include ObservableModel
   belongs_to :commentable, polymorphic: true
   belongs_to :user
   delegate :full_name, :email_address, :to => :user, :prefix => true
 
   after_create :notify_approval_group
 
+  validates :comment_text, presence: true
 
   # match .attributes
   def to_a
