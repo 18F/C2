@@ -40,7 +40,7 @@ class CommunicartMailer < ActionMailer::Base
 
     mail(
          to: to_address,
-         subject: "User #{approval.user.email_address} has #{approval.status} cart ##{cart.external_id}",
+         subject: "User #{approval.user.email_address} has #{approval.status} cart ##{cart.proposal.client_data_legacy.public_identifier}",
          from: user_email(approval.user)
          )
   end
@@ -78,11 +78,12 @@ class CommunicartMailer < ActionMailer::Base
   end
 
   def subject(cart)
-    "Communicart Approval Request from #{cart.requester.full_name}: Please review Cart ##{cart.public_identifier}"
+    "Communicart Approval Request from #{cart.requester.full_name}: Please review Cart ##{cart.proposal.client_data_legacy.public_identifier}"
   end
 
   def send_cart_email(from_email, to_email, cart)
     @cart = cart.decorate
+    # only used by navigator. @todo: remove
     @prefix_template = @cart.prefix_template_name
 
     set_attachments(cart)

@@ -192,32 +192,8 @@ class Cart < ActiveRecord::Base
     end
   end
 
-  def origin
-    # In practice, carts should always have an origin. Account for test cases
-    # and old data with this "or"
-    self.getProp('origin') || ''
-  end
-
-  def ncr?
-    self.origin == 'ncr'
-  end
-
   def gsa_advantage?
-    # TODO set the origin
-    self.origin.blank?
-  end
-
-  # TODO use this when retrieving
-  def public_identifier_method
-    if self.ncr?
-      :id
-    else
-      :external_id
-    end
-  end
-
-  def public_identifier
-    self.send(self.public_identifier_method)
+    self.client == 'gsa_advantage'
   end
 
   def parallel?
@@ -237,5 +213,23 @@ class Cart < ActiveRecord::Base
     self.properties_with_names.reject{ |key,value,label|
       EXCLUDE_FIELDS_FROM_DISPLAY.include? key}.map{ |key,value,label|
       [label, value] }
+  end
+
+  def client
+    self.getProp('origin') || 'gsa_advantage'
+  end
+
+  # @todo - the method name (e.g. :external_id) should live on a "client"
+  # model
+  def public_identifier
+    self.external_id
+  end
+
+  def total_price
+    if self.client == 'gsa18f'
+      self.getProp('cost_per_unit').to_f * self.getProp('quantity').to_f
+    else
+      0.0
+    end
   end
 end

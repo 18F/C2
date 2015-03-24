@@ -2,10 +2,10 @@
   <h4>National Capital Region</h4>
   <h3>Purchase Card Approval Request</h3>
 
-  <%= form_for @proposal_form, url: @form_url, method: @form_method do |f| %>
+  <%= form_for @work_order do |f| %>
     <div class="form-group">
-      <%= f.label :description %>
-      <%= f.text_area :description, class: 'form-control' %>
+      <%= label_tag :description %>
+      <%= text_area_tag :description, @description, class: 'form-control' %>
     </div>
     <div class="form-group">
       <%= field_set_tag "Expense type" do %>
@@ -42,19 +42,18 @@
     <div class="form-group">
       <%= f.label :building_number %>
       <%= f.collection_select(
-            :building_number, Ncr::ProposalForm::BUILDING_NUMBERS, :to_s, :to_s,
-            {include_blank: true}, {class: 'form-control'}) %>
+            :building_number, Ncr::BUILDING_NUMBERS, :to_s, :to_s,
+            {include_blank: true}, {class: 'form-control jsChosen'}) %>
     </div>
     <div class="form-group">
       <%= f.label :office %>
       <%= f.collection_select(
-            :office, Ncr::ProposalForm::OFFICES, :to_s, :to_s,
-            {include_blank: true}, {class: 'form-control'}) %>
+            :office, Ncr::OFFICES, :to_s, :to_s,
+            {include_blank: true}, {class: 'form-control jsChosen'}) %>
     </div>
     <div class="form-group">
       <%= f.label :vendor %>
       <%= f.text_field :vendor, class: 'form-control' %>
-      <%= f.hidden_field :origin, value: 'ncr' %>
     </div>
     <div class="form-group">
       <%= field_set_tag "Amount" do %>
@@ -78,8 +77,9 @@
       <% end %>
     </div>
     <div class="form-group">
-      <%= f.label :approver_email, "Approving Official's Email Address" %>
-      <%= f.email_field :approver_email, class: 'form-control' %>
+      <%= label_tag :approver_email, "Approving Official's Email Address" %>
+      <%= email_field_tag :approver_email, @approver_email,
+                          class: 'form-control' %>
     </div>
     <%= f.submit "Submit for approval", class: 'btn btn-default' %>
   <% end %>
