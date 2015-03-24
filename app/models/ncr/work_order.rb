@@ -51,17 +51,6 @@ module Ncr
       cart
     end
 
-    def system_approvers
-      emails = [ENV['NCR_BUDGET_APPROVER_EMAIL'] ||
-                'communicart.budget.approver@gmail.com']
-      if self.expense_type == 'BA61'
-        emails << (ENV['NCR_FINANCE_APPROVER_EMAIL'] ||
-                   'communicart.ofm.approver@gmail.com')
-      else
-        emails
-      end
-    end
-
     def add_approvals(approver_email)
       emails = [approver_email] + self.system_approvers
       cart = self.proposal.cart
@@ -109,6 +98,24 @@ module Ncr
     def total_price
       self.amount or 0.0
     end
+
+    protected
+    def budget_approver
+      ENV['NCR_BUDGET_APPROVER_EMAIL'] || 'communicart.budget.approver@gmail.com'
+    end
+
+    def finance_approver
+      ENV['NCR_FINANCE_APPROVER_EMAIL'] || 'communicart.ofm.approver@gmail.com'
+    end
+
+    def system_approvers
+      emails = [self.budget_approver]
+      if self.expense_type == 'BA61'
+        emails << self.finance_approver
+      end
+      emails
+    end
+
   end
 end
 
