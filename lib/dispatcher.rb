@@ -39,15 +39,7 @@ class Dispatcher
   end
 
   def on_cart_comment_created(comment)
-    cart = comment.commentable
-    users_to_notify = cart.currently_awaiting_approvers
-    if cart.requester
-      users_to_notify << cart.requester
-    end
-    observers = cart.approvals.observing.map(&:user)
-    users_to_notify.concat(observers)
-
-    users_to_notify.each{|user|
+    self.all_users_for_cart(comment.commentable).each{|user|
       # Commenter doesn't need to see the message again
       if user != comment.user
         CommunicartMailer.comment_added_email(
@@ -88,6 +80,16 @@ class Dispatcher
   def self.on_cart_comment_created(comment)
     dispatcher = self.initialize_dispatcher(comment.commentable)
     dispatcher.on_cart_comment_created(comment)
+  end
+
+  protected
+
+  def all_users_for_cart(cart)
+    users_to_notify = cart.currently_awaiting_approvers
+    if cart.requester
+      users_to_notify << cart.requester
+    end
+    users_to_notify + cart.approvals.observing.map(&:user)
   end
 
   private
