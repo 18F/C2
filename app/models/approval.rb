@@ -65,7 +65,7 @@ class Approval < ActiveRecord::Base
     Dispatcher.on_approval_approved(self)
   end
 
-  def is_approvable?
+  def approvable?
     self.role == 'approver'
   end
 end

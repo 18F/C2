@@ -26,7 +26,7 @@ class CommunicartsController < ApplicationController
     
     if !approval.pending?
       flash[:error] = "You have already logged a response for Cart #{client_data.public_identifier}"
-    elsif !approval.is_approvable?
+    elsif !approval.approvable?
       flash[:error] = "Sorry. You are not allowed to approve your own request."
     else
       case params[:approver_action]
