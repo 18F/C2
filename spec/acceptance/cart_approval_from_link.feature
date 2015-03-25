@@ -33,6 +33,11 @@ Feature: Approving a cart from approval link
     And I should see 'Logout'
     And I should not see 'Sign in'
 
+    Given the user is 'user1@test.gov'
+    And a valid token
+    When I go to the approval_response page with token
+    Then I should see alert text 'Sorry. You are not allowed to approve your own request.'
+
   Scenario: Cannot reuse a token
     Given the user is associated with one of the cart's approvals
     And a valid token
