@@ -1,3 +1,6 @@
-Hello,
-A comment has been created for <%= @comment.commentable.name %>:
+<% cart = @comment.commentable %>
+Action need on Request #<%= cart.proposal.public_identifier %> (<%= cart.proposal.name %>):
+
 <%= @comment.comment_text %>
+
+View / Update Request: <%= cart_url(cart, anchor: 'cart-comments') %>

@@ -1,7 +1,7 @@
 
 Current status: <%=  @cart.generate_status_message %>
 
-At time <%= @approval.created_at %>, approver <%= @approval.user_email_address %> <%= @approval.status %>  Cart Number <%= @cart.proposal.client_data_legacy.public_identifier %>. <%= @approval.approved? ?
+At time <%= @approval.created_at %>, approver <%= @approval.user_email_address %> <%= @approval.status %>  Cart Number <%= @cart.proposal.public_identifier %>. <%= @approval.approved? ?
 "This approval has been logged for future information" :
 "You may wish to contact the approver for more explanation."
  %>

@@ -11,14 +11,15 @@ class CommentsController < ApplicationController
     comment = commentable.comments.build(comment_params)
     comment.user = current_user
     if comment.save
-      flash[:notice] = "You successfully added a comment for #{commentable.class.name} #{commentable.id}"
-      if commentable.respond_to?(:cart)
-        redirect_to commentable.cart
-      else
-        redirect_to commentable
-      end
+      flash[:success] = "You successfully added a comment for #{commentable.class.name} #{commentable.id}"
     else
-      raise 'something went wrong'
+      flash[:error] = comment.errors.full_messages
+    end
+
+    if commentable.respond_to?(:cart)
+      redirect_to commentable.cart
+    else
+      redirect_to commentable
     end
   end
 
