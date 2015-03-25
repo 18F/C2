@@ -19,7 +19,7 @@
     <%- proposal = cart.proposal %>
     <tr>
       <td class="sixth"><a href="/carts/<%= cart.id %>"><%= cart.id %></a></td>
-      <td class="first"><a href="/carts/<%= cart.id %>"><%= cart.name %></a></td>
+      <td class="first"><a href="/carts/<%= cart.id %>"><%= cart.proposal.name %></a></td>
       <td class="sixth"><%= number_to_currency(proposal.client_data_legacy.total_price) %></td>
       <td class="sixth">
         <p><%= display_status(cart, current_user) %></p>
