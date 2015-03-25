@@ -138,7 +138,7 @@ describe Cart do
 
   describe '#restart' do
     # TODO simplify this test
-    it 'resets approval states for pending approvals when rejected' do
+    it 'resets approval states for pending approvals when restarted' do
       cart = FactoryGirl.create(:cart_with_approvals)
       Dispatcher.deliver_new_cart_emails(cart)
       expect(cart.api_tokens.length).to eq(2)
