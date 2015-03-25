@@ -129,7 +129,7 @@ describe Cart do
     it 'sends only one rejection email' do
       cart = FactoryGirl.create(:cart_with_approvals)
       # skip workflow
-      cart.approver_approvals.first.update_attribute(:status, 'rejected')
+      cart.approvals.first.update_attribute(:status, 'rejected')
       cart.reject!
       expect(email_recipients).to eq(['requester@some-dot-gov.gov'])
 
@@ -145,8 +145,8 @@ describe Cart do
       Dispatcher.deliver_new_cart_emails(cart)
       expect(cart.api_tokens.length).to eq(2)
 
-      cart.approver_approvals.first.approve!
-      cart.approver_approvals.last.reject!
+      cart.approvals.first.approve!
+      cart.approvals.last.reject!
       cart.reload
 
       expect(cart.approvals.approved.size).to eq(1)
@@ -158,9 +158,9 @@ describe Cart do
       expect(cart.pending?).to eq(true)
       expect(cart.api_tokens.unscoped.expired.length).to eq(2)
       expect(cart.api_tokens.unexpired.length).to eq(2)
-      expect(cart.approver_approvals.length).to eq(2)
-      expect(cart.approver_approvals[0].pending?).to eq(true)
-      expect(cart.approver_approvals[1].pending?).to eq(true)
+      expect(cart.approvals.length).to eq(2)
+      expect(cart.approvals[0].pending?).to eq(true)
+      expect(cart.approvals[1].pending?).to eq(true)
     end
   end
   describe '#total_price' do

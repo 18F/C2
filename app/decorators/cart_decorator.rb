@@ -6,11 +6,11 @@ class CartDecorator < Draper::Decorator
   end
 
   def total_approvers
-    object.approver_approvals.count
+    object.approvals.count
   end
 
   def approvals_by_status
-    object.approver_approvals.order(
+    object.approvals.order(
       # http://stackoverflow.com/a/6332081/358804
       <<-SQL
         CASE approvals.status

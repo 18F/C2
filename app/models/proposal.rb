@@ -5,7 +5,7 @@ class Proposal < ActiveRecord::Base
 
   has_one :cart
   has_many :approvals
-  has_many :approval_users, through: :approvals, source: :user
+  has_many :approvers, through: :approvals, source: :user
   has_many :observations
   belongs_to :client_data, polymorphic: true
   belongs_to :requester, class_name: 'User'
@@ -49,7 +49,7 @@ class Proposal < ActiveRecord::Base
   def restart
     # Note that none of the state machine's history is stored
     self.cart.api_tokens.update_all(expires_at: Time.now)
-    self.cart.approver_approvals.each do |approval|
+    self.cart.approvals.each do |approval|
       approval.restart!
     end
     Dispatcher.deliver_new_cart_emails(self.cart)
