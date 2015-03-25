@@ -107,7 +107,8 @@ describe CommunicartMailer do
 
     context 'comments' do
       it 'renders comments when present' do
-        cart_with_approval_group.comments << Comment.new(comment_text: 'My added comment')
+        cart_with_approval_group.comments << FactoryGirl.create(
+          :comment, comment_text: 'My added comment')
         expect(mail.body.encoded).to include('Comments')
       end
 

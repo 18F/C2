@@ -38,6 +38,17 @@ class Dispatcher
     self.email_observers(approval.cart)
   end
 
+  def on_cart_comment_created(comment)
+    self.all_users_for_cart(comment.commentable).each{|user|
+      # Commenter doesn't need to see the message again
+      if user != comment.user
+        CommunicartMailer.comment_added_email(
+          comment, user.email_address).deliver
+      end
+    }
+  end
+
+  # todo: replace with dynamic dispatch
   def self.initialize_dispatcher(cart)
     case cart.flow
     when 'parallel'
@@ -65,6 +76,21 @@ class Dispatcher
   def self.on_approval_approved(approval)
     dispatcher = self.initialize_dispatcher(approval.cart)
     dispatcher.on_approval_approved(approval)
+  end
+
+  def self.on_cart_comment_created(comment)
+    dispatcher = self.initialize_dispatcher(comment.commentable)
+    dispatcher.on_cart_comment_created(comment)
+  end
+
+  protected
+
+  def all_users_for_cart(cart)
+    users_to_notify = cart.currently_awaiting_approvers
+    if cart.requester
+      users_to_notify << cart.requester
+    end
+    users_to_notify + cart.approvals.observing.map(&:user)
   end
 
   private
