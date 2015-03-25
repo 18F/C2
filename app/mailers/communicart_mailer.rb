@@ -6,8 +6,9 @@ class CommunicartMailer < ActionMailer::Base
   add_template_helper TimeHelper
 
 
-  def cart_notification_email(to_email, approval)
+  def cart_notification_email(to_email, approval, show_approval_actions=true)
     @approval = approval
+    @show_approval_actions = show_approval_actions
     from_email = user_email(approval.cart.requester)
     send_cart_email(from_email, to_email, approval.cart)
   end
