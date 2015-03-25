@@ -31,7 +31,7 @@ describe "National Capital Region proposals" do
       expect(page).to have_content("Proposal submitted")
       expect(current_path).to eq("/carts/#{cart.id}")
 
-      expect(cart.name).to eq("buying stuff")
+      expect(cart.proposal.name).to eq("buying stuff")
       expect(cart.flow).to eq('linear')
       client_data = cart.proposal.client_data
       expect(client_data.client).to eq('ncr')

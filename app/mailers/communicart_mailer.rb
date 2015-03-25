@@ -40,7 +40,7 @@ class CommunicartMailer < ActionMailer::Base
 
     mail(
          to: to_address,
-         subject: "User #{approval.user.email_address} has #{approval.status} cart ##{cart.proposal.client_data_legacy.public_identifier}",
+         subject: "User #{approval.user.email_address} has #{approval.status} cart ##{cart.proposal.public_identifier}",
          from: user_email(approval.user)
          )
   end
@@ -50,7 +50,7 @@ class CommunicartMailer < ActionMailer::Base
 
     mail(
          to: to_email,
-         subject: "A comment has been added to '#{comment.commentable.name}'",
+         subject: "A comment has been added to '#{comment.commentable.proposal.name}'",
          from: user_email(comment.user)
          )
   end
@@ -60,8 +60,8 @@ class CommunicartMailer < ActionMailer::Base
 
   def set_attachments(cart)
     if cart.all_approvals_received?
-      attachments['Communicart' + cart.name + '.comments.csv'] = Exporter::Comments.new(cart).to_csv
-      attachments['Communicart' + cart.name + '.approvals.csv'] = Exporter::Approvals.new(cart).to_csv
+      attachments['Communicart' + cart.proposal.public_identifier.to_s + '.comments.csv'] = Exporter::Comments.new(cart).to_csv
+      attachments['Communicart' + cart.proposal.public_identifier.to_s + '.approvals.csv'] = Exporter::Approvals.new(cart).to_csv
     end
   end
 
@@ -78,7 +78,7 @@ class CommunicartMailer < ActionMailer::Base
   end
 
   def subject(cart)
-    "Communicart Approval Request from #{cart.requester.full_name}: Please review Cart ##{cart.proposal.client_data_legacy.public_identifier}"
+    "Communicart Approval Request from #{cart.requester.full_name}: Please review Cart ##{cart.proposal.public_identifier}"
   end
 
   def send_cart_email(from_email, to_email, cart)

@@ -70,7 +70,7 @@ describe 'Creating a cart without an approval group' do
   context 'cart' do
     it 'sets the appropriate cart values' do
       post 'send_cart', @json_params_1
-      expect(Cart.first.name).to eq "A Cart With No Approvals"
+      expect(Cart.first.proposal.name).to eq "A Cart With No Approvals"
     end
 
     it 'adds cart properties' do

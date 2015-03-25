@@ -7,6 +7,9 @@ class Proposal < ActiveRecord::Base
   has_many :approvals
   has_many :approval_users, through: :approvals, source: :user
   belongs_to :client_data, polymorphic: true
+  # The following list also servers as an interface spec for client_datas
+  delegate :fields_for_display, :client, :public_identifier, :total_price,
+           :name, to: :client_data_legacy
 
   validates :flow, presence: true, inclusion: {in: ApprovalGroup::FLOWS}
 
