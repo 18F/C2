@@ -14,7 +14,7 @@
           Requested by:
           <strong><%= cart.requester.full_name %></strong>
         </p>
-        <%= client_partial(proposal.client_data_legacy.client, 'external_id',
+        <%= client_partial(proposal.client, 'external_id',
                            locals: {cart: cart}) %>
       </div>
     </div>
@@ -120,6 +120,6 @@
   <%= render partial: 'approval_actions', locals: { current_user: @current_user, cart: cart} %>
 <% end %>
 <% if display_restart?(cart) %>
-  <%= client_partial(proposal.client_data_legacy.client,
+  <%= client_partial(proposal.client,
                      'restart_link', locals: {proposal: proposal, cart: cart}) %>
 <% end %>

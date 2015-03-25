@@ -40,7 +40,7 @@ class CommunicartMailer < ActionMailer::Base
 
     mail(
          to: to_address,
-         subject: "User #{approval.user.email_address} has #{approval.status} cart ##{cart.proposal.client_data_legacy.public_identifier}",
+         subject: "User #{approval.user.email_address} has #{approval.status} cart ##{cart.proposal.public_identifier}",
          from: user_email(approval.user)
          )
   end

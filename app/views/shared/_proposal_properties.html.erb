@@ -4,7 +4,7 @@
       <h5>FY15 Credit Card Purchase Request</h5>
     </td>
   </tr>
-  <%- proposal.client_data_legacy.fields_for_display.each do |name, value| %>
+  <%- proposal.fields_for_display.each do |name, value| %>
     <tr class="cart_item_information">
       <td class="results-list" align="left" scope="row">
         <strong><%= name %>
