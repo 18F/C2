@@ -17,16 +17,25 @@ module Populator
     end
   end
 
+  def random_bool(pct_true=0.5)
+    rand < pct_true
+  end
+
   def random_ncr_data
     50.times do |i|
       requested_at = rand(3.months.ago..1.day.ago)
       proposal = FactoryGirl.create(:proposal, created_at: requested_at, updated_at: requested_at)
-      work_order = FactoryGirl.create(:ncr_work_order, proposal: proposal)
+      work_order = FactoryGirl.create(:ncr_work_order,
+        emergency: random_bool(0.1),
+        proposal: proposal,
+        vendor: Faker::Company.name
+      )
 
-      # TODO randomize vendor name
-      # TODO randomly approve approvals and proposals at different times
+      unless work_order.emergency
+        # TODO randomly approve approvals and proposals at different times
+      end
+
       # TODO add random comments
-      # TODO mark random requests as emergencies
     end
   end
 end
