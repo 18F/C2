@@ -8,7 +8,18 @@ describe 'CommunicartsController' do
     end
 
     it "makes a successful request" do
-      post "/send_cart", cart_initialize_params
+      params = {
+        cartName: "Q1 Test Cart",
+        cartNumber: "2867637",
+        category: "initiation",
+        email: "test-email@some-dot-gov.gov",
+        fromAddress: "",
+        gsaUserName: "",
+        initiationComment: "\r\n\r\nHi, this is a comment, I hope it works!\r\nThis is the second line of the comment.",
+        approvalGroup: "MyApprovalGroup"
+      }
+
+      post "/send_cart", params
       expect(response.status).to eq 201
     end
   end
