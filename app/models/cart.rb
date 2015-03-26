@@ -28,7 +28,7 @@ class Cart < ActiveRecord::Base
   end
 
   def ordered_approvals
-    self.approvals.order('position ASC')
+    self.approvals.ordered
   end
 
   def ordered_awaiting_approvals

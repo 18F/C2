@@ -20,7 +20,8 @@ class Approval < ActiveRecord::Base
   self.statuses.each do |status|
     scope status, -> { where(status: status) }
   end
-  scope :received, ->   { approvable.where.not(status: 'pending') }
+  scope :received, -> { approvable.where.not(status: 'pending') }
+  scope :ordered, -> { order('position ASC') }
 
 
   # TODO remove
