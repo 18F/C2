@@ -8,10 +8,11 @@ describe Populator do
   end
 
   describe '.random_ncr_data' do
-    it "creates ten carts" do
+    it "creates the specified number of work orders" do
+      num_proposals = 5
       expect {
-        Populator.random_ncr_data
-      }.to change{ Ncr::WorkOrder.count }.from(0).to(50)
+        Populator.random_ncr_data(num_proposals)
+      }.to change{ Ncr::WorkOrder.count }.from(0).to(num_proposals)
     end
   end
 end

@@ -21,8 +21,8 @@ module Populator
     rand < pct_true
   end
 
-  def random_ncr_data
-    50.times do |i|
+  def random_ncr_data(num_proposals=50)
+    num_proposals.times do |i|
       requested_at = rand(3.months.ago..1.day.ago)
       proposal = FactoryGirl.create(:proposal,
         :with_cart,
