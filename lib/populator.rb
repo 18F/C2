@@ -24,7 +24,15 @@ module Populator
   def random_ncr_data
     50.times do |i|
       requested_at = rand(3.months.ago..1.day.ago)
-      proposal = FactoryGirl.create(:proposal, created_at: requested_at, updated_at: requested_at)
+      proposal = FactoryGirl.create(:proposal,
+        :with_cart,
+        :with_approvers,
+        :with_observers,
+        :with_requester,
+        created_at: requested_at,
+        updated_at: requested_at
+      )
+
       work_order = FactoryGirl.create(:ncr_work_order,
         emergency: random_bool(0.1),
         proposal: proposal,
@@ -35,7 +43,20 @@ module Populator
         # TODO randomly approve approvals and proposals at different times
       end
 
-      # TODO add random comments
+      cart = proposal.cart
+      users = proposal.users
+
+      num_comments = rand(5)
+      num_comments.times do |i|
+        commented_at = rand(requested_at..Time.now)
+
+        cart.comments.create!(
+          comment_text: Faker::Hacker.say_something_smart,
+          created_at: commented_at,
+          updated_at: commented_at,
+          user_id: users.sample.id
+        )
+      end
     end
   end
 end
