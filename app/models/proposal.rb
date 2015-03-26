@@ -15,6 +15,7 @@ class Proposal < ActiveRecord::Base
            :name, to: :client_data_legacy
 
   validates :flow, presence: true, inclusion: {in: ApprovalGroup::FLOWS}
+  # TODO validates :requester_id, presence: true
 
   self.statuses.each do |status|
     scope status, -> { where(status: status) }
