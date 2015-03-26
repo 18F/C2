@@ -7,6 +7,7 @@ class Proposal < ActiveRecord::Base
   has_many :approvals
   has_many :approvers, through: :approvals, source: :user
   has_many :observations
+  has_many :observers, through: :observations, source: :user
   belongs_to :client_data, polymorphic: true
   belongs_to :requester, class_name: 'User'
 
@@ -33,6 +34,13 @@ class Proposal < ActiveRecord::Base
   # dependence on "Cart"
   def client_data_legacy
     self.client_data || self.cart
+  end
+
+  # Returns a list of all users involved with the Proposal.
+  def users
+    # TODO use SQL
+    results = self.approvers + self.observers + [self.requester]
+    results.compact
   end
 
   # returns the Approval
