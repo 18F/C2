@@ -71,9 +71,8 @@ describe Ncr::WorkOrder do
 
     it "adds the budget approver for a BA80 request" do
       form = FactoryGirl.create(:ncr_work_order, expense_type: 'BA80')
-      cart = form.init_and_save_cart('aaa@example.com', 'Desc1', requester)
+      cart = form.init_and_save_cart('aaa@example.com', requester)
 
-      expect(form.proposal.name).to eq('Desc1')
       expect(cart.requester).to eq(requester)
       expect(approver_emails(cart)).to eq(%w(
         aaa@example.com
@@ -83,9 +82,8 @@ describe Ncr::WorkOrder do
 
     it "adds the two approvers for a BA61 request" do
       form = FactoryGirl.build(:ncr_work_order, expense_type: 'BA61')
-      cart = form.init_and_save_cart('bbb@example.com', 'Desc2', requester)
+      cart = form.init_and_save_cart('bbb@example.com', requester)
 
-      expect(form.proposal.name).to eq('Desc2')
       expect(cart.requester).to eq(requester)
       expect(approver_emails(cart)).to eq(%w(
         bbb@example.com
