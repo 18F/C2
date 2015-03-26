@@ -51,4 +51,9 @@ class Approval < ActiveRecord::Base
     self.cart.partial_approve!
     Dispatcher.on_approval_approved(self)
   end
+
+  # TODO remove
+  def approvable?
+    true
+  end
 end

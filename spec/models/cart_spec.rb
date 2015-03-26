@@ -35,7 +35,7 @@ describe Cart do
       end
 
       cart.process_approvals_from_approval_group
-      expect(cart.approvals.order('user_id ASC').map(&:position)).to eq(cart.user_roles.order('user_id ASC').map(&:position))
+      expect(cart.approvals.order('user_id ASC').map(&:position)).to eq(cart.user_roles.approvers.order('user_id ASC').map(&:position))
     end
   end
 

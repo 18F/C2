@@ -57,9 +57,11 @@ describe 'Creating a cart without an approval group' do
 
   it 'delivers emails to requester and approver email addresses indicated in the toAddress field' do
     post 'send_cart', @json_params_1
-    expect(email_recipients).to eq(%w( requester-pcard-holder@some-dot-gov.gov
-                                       some-approver-1@some-dot-gov.gov
-                                       some-approver-2@some-dot-gov.gov ))
+    # Two emails go out, one for the cart, one for the comments
+    expect(email_recipients.uniq.sort).to eq(
+      %w( requester-pcard-holder@some-dot-gov.gov
+          some-approver-1@some-dot-gov.gov
+          some-approver-2@some-dot-gov.gov ))
   end
 
   it 'adds initial comments from the requester' do
@@ -70,7 +72,7 @@ describe 'Creating a cart without an approval group' do
   context 'cart' do
     it 'sets the appropriate cart values' do
       post 'send_cart', @json_params_1
-      expect(Cart.first.name).to eq "A Cart With No Approvals"
+      expect(Cart.first.proposal.name).to eq "A Cart With No Approvals"
     end
 
     it 'adds cart properties' do

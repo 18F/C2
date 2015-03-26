@@ -48,7 +48,7 @@ class CartDecorator < Draper::Decorator
   end
 
   def completed_status_message
-    "All #{number_approved} of #{total_approvers} approvals have been received. Please move forward with the purchase  of Cart ##{object.proposal.client_data_legacy.public_identifier}."
+    "All #{number_approved} of #{total_approvers} approvals have been received. Please move forward with the purchase  of Cart ##{object.proposal.public_identifier}."
   end
 
   def progress_status_message
@@ -57,7 +57,7 @@ class CartDecorator < Draper::Decorator
 
   # @TODO: remove in favor of client_partial or similar
   def cart_template_name
-    origin_name = self.proposal.client_data_legacy.client
+    origin_name = self.proposal.client
     if Cart::ORIGINS.include? origin_name
       "#{origin_name}_cart"
     else

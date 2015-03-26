@@ -22,12 +22,12 @@ class MigrateNcrToModels < ActiveRecord::Migration
   end
 
   def up
-    carts = Cart.joins(:properties)
+    carts = TempCart.joins(:properties)
                 .where(properties: {property: "origin"})
                 .where("properties.value like '%ncr%'")
     carts.find_each { |cart|
       props = cart.props
-      work_order = NcrWorkOrder.create(
+      work_order = TempNcrWorkOrder.create(
         amount: props["amount"],
         expense_type: props["expense_type"],
         vendor: props["vendor"],
@@ -43,13 +43,13 @@ class MigrateNcrToModels < ActiveRecord::Migration
     }
   end
   def down
-    NcrWorkOrder.includes(:proposals).find_each{ |work_order|
+    TempNcrWorkOrder.includes(:proposals).find_each{ |work_order|
       proposal = work_order.proposals.first
       proposal.client_data_id = nil
       proposal.client_data_type = nil
       proposal.save()
       cart = proposal.cart
-      Property.create(
+      TempProperty.create(
         property: 'origin',
         value: YAML::dump('ncr'),
         hasproperties_id: cart.id,
@@ -59,7 +59,7 @@ class MigrateNcrToModels < ActiveRecord::Migration
        :emergency, :rwa_number, :office].each{ |field|
         value = work_order[field]
         if !value.nil?
-          Property.create(
+          TempProperty.create(
             property: field,
             value: YAML::dump(value.to_s),
             hasproperties_id: cart.id,
