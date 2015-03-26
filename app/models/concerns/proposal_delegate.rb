@@ -14,6 +14,8 @@ module ProposalDelegate
     validates :proposal, presence: true
 
 
+    delegate :add_approver, :add_observer, :add_requester, :set_requester, to: :proposal
+
     ### delegate the workflow actions/scopes/states ###
 
     scope :with_proposal_scope, ->(status) { joins(:proposal).merge(Proposal.send(status)) }

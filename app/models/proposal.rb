@@ -35,6 +35,26 @@ class Proposal < ActiveRecord::Base
     self.client_data || self.cart
   end
 
+  # returns the Approval
+  def add_approver(email)
+    user = User.find_or_create_by(email_address: email)
+    self.approvals.create!(user_id: user.id)
+  end
+
+  def add_observer(email)
+    user = User.find_or_create_by(email_address: email)
+    self.observations.create!(user_id: user.id)
+  end
+
+  def add_requester(email)
+    user = User.find_or_create_by(email_address: email)
+    self.set_requester(user)
+  end
+
+  def set_requester(user)
+    self.update_attributes!(requester_id: user.id)
+  end
+
 
   #### state machine methods ####
   # TODO remove dependence on Cart
