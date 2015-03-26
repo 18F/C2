@@ -129,8 +129,8 @@ describe "GSA 18f Purchase Request Form" do
       gsa18f.setProp('origin', 'gsa18f')
 
       visit "/carts/#{gsa18f.id}"
-      expect(page).to have_content('Restart this Cart?')
-      click_on('Restart this Cart?')
+      expect(page).to have_content('Modify Request')
+      click_on('Modify Request')
       expect(current_path).to eq("/gsa18f/proposals/#{gsa18f.id}/edit")
     end
 
@@ -145,15 +145,15 @@ describe "GSA 18f Purchase Request Form" do
       fill_in 'gsa18f_proposal_additional_info', with: 'none'
       select Gsa18f::ProposalForm::URGENCY[0], :from => 'gsa18f_proposal_urgency'
       select Gsa18f::ProposalForm::OFFICES[0], :from => 'gsa18f_proposal_office'
-      
+
       click_on 'Submit for approval'
 
       expect(page).to have_content("Proposal submitted")
       expect(current_path).to eq("/carts/#{Cart.last.id}")
-      expect(page).to have_content('Restart this Cart?')
-      
-      click_on('Restart this Cart?')
-      
+      expect(page).to have_content('Modify Request')
+
+      click_on('Modify Request')
+
       expect(current_path).to eq("/gsa18f/proposals/#{Cart.last.id}/edit")
 
       click_on 'Submit for approval'
@@ -181,7 +181,7 @@ describe "GSA 18f Purchase Request Form" do
       gsa18f.proposal.update_attribute(:status, 'rejected') # avoid state machine
 
       visit "/carts/#{gsa18f.id}"
-      expect(page).to have_content('Restart this Cart?')
+      expect(page).to have_content('Modify Request')
     end
 
     it "does not show a restart link for an approved cart" do
@@ -189,13 +189,13 @@ describe "GSA 18f Purchase Request Form" do
       gsa18f.proposal.update_attribute(:status, 'approved') # avoid state machine
 
       visit "/carts/#{gsa18f.id}"
-      expect(page).not_to have_content('Restart this Cart?')
+      expect(page).not_to have_content('Modify Request')
     end
 
     it "does not show a restart link for another client" do
       gsa18f.setProp('origin', 'somewhereElse')
       visit "/carts/#{gsa18f.id}"
-      expect(page).not_to have_content('Restart this Cart?')
+      expect(page).not_to have_content('Modify Request')
     end
 
     it "does not show a restart link for non requester" do
@@ -203,7 +203,7 @@ describe "GSA 18f Purchase Request Form" do
       req.update_attribute(:user, FactoryGirl.create(:user))
 
       visit "/carts/#{gsa18f.id}"
-      expect(page).not_to have_content('Restart this Cart?')
+      expect(page).not_to have_content('Modify Request')
     end
   end
 end
