@@ -10,11 +10,18 @@ class Dispatcher
     end
   end
 
+  def email_already_approved_with_changes(cart)
+    cart.approved_approvals.each do |approval|
+      CommunicartMailer.cart_notification_email(approval.user_email_address, approval, false).deliver
+    end
+  end
+
   def email_sent_confirmation(cart)
     CommunicartMailer.proposal_created_confirmation(cart).deliver
   end
 
   def deliver_new_cart_emails(cart)
+    self.email_already_approved_with_changes(cart)
     self.email_observers(cart)
     self.email_sent_confirmation(cart)
   end

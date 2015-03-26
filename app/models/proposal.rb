@@ -50,6 +50,7 @@ class Proposal < ActiveRecord::Base
   def restart
     # Note that none of the state machine's history is stored
     self.cart.api_tokens.update_all(expires_at: Time.now)
+    # self.cart.approver_approvals.where.not(status: 'approved').each do |approval|
     self.cart.approver_approvals.each do |approval|
       approval.restart!
     end

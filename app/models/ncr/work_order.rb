@@ -45,7 +45,7 @@ module Ncr
 
     def update_cart(approver_email, description, cart)
       cart.name = description
-      cart.approver_approvals.destroy_all
+      cart.approver_approvals.where.not(status: 'approved').destroy_all
       self.add_approvals(approver_email)
       cart.restart!
       cart
