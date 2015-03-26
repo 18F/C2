@@ -77,9 +77,10 @@ describe Cart do
       expect(emails).to eq(%w(approver1@some-dot-gov.gov approver2@some-dot-gov.gov))
 
       cart.approvals.first.update_attribute(:position, 5)
-      emails = cart.currently_awaiting_approvers.map(&:email_address)
-      expect(emails).to eq(%w(approver2@some-dot-gov.gov approver1@some-dot-gov.gov))
+      emails = cart.currently_awaiting_approvers.map(&:email_address).sort
+      expect(emails).to eq(%w(approver1@some-dot-gov.gov approver2@some-dot-gov.gov))
     end
+
     it "gives only the first approver when linear" do
       cart = FactoryGirl.create(:cart_with_approvals, flow: 'linear')
       emails = cart.currently_awaiting_approvers.map(&:email_address)
@@ -139,30 +140,34 @@ describe Cart do
   end
 
   describe '#restart' do
-    # TODO simplify this test
     it 'resets approval states when rejected' do
       cart = FactoryGirl.create(:cart_with_approvals)
-      Dispatcher.deliver_new_cart_emails(cart)
-      expect(cart.api_tokens.length).to eq(2)
 
       cart.approvals.first.approve!
       cart.approvals.last.reject!
       cart.reload
-
-      expect(cart.approvals.approved.size).to eq(1)
-      expect(cart.approvals.rejected.size).to eq(1)
       expect(cart.rejected?).to eq(true)
 
       cart.restart!
 
       expect(cart.pending?).to eq(true)
-      expect(cart.api_tokens.unscoped.expired.length).to eq(2)
-      expect(cart.api_tokens.unexpired.length).to eq(2)
       expect(cart.approvals.length).to eq(2)
       expect(cart.approvals[0].pending?).to eq(true)
       expect(cart.approvals[1].pending?).to eq(true)
     end
+
+    it "creates new API tokens" do
+      cart = FactoryGirl.create(:cart_with_approvals)
+      Dispatcher.deliver_new_cart_emails(cart)
+      expect(cart.api_tokens.length).to eq(2)
+
+      cart.restart!
+
+      expect(cart.api_tokens.unscoped.expired.length).to eq(2)
+      expect(cart.api_tokens.unexpired.length).to eq(2)
+    end
   end
+
   describe '#total_price' do
     context 'the client origin is 18f' do
       it 'gets price from two fields' do
@@ -172,6 +177,7 @@ describe Cart do
         expect(cart.total_price).to eq(18.50*20)
       end
     end
+
     it 'returns 0 otherwise' do
       expect(cart.total_price).to eq(0.0)
     end

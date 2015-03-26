@@ -28,7 +28,7 @@ class Cart < ActiveRecord::Base
   end
 
   def ordered_approvals
-    self.approvals.order('position ASC')
+    self.approvals.ordered
   end
 
   def ordered_awaiting_approvals
@@ -38,11 +38,9 @@ class Cart < ActiveRecord::Base
   # users with outstanding cart_notification_emails
   def currently_awaiting_approvers
     if self.parallel?
-      # TODO do through SQL
-      self.ordered_awaiting_approvals.map(&:user)
+      self.awaiting_approvers
     else # linear. Assumes the cart is open
-      approval = self.ordered_awaiting_approvals.first
-      [approval.user]
+      self.approvers.merge(self.ordered_awaiting_approvals).limit(1)
     end
   end
 

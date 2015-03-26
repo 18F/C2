@@ -19,7 +19,7 @@ FactoryGirl.define do
 
     factory :cart_with_approval_group do
       after :create do |cart|
-        approval_group = FactoryGirl.create(:approval_group_with_approver_and_requester_approvals)
+        approval_group = FactoryGirl.create(:approval_group_with_approvers_and_requester)
         cart.approval_group = approval_group
         cart.add_requester('requester1@some-dot-gov.gov')
         cart.save!
@@ -44,20 +44,6 @@ FactoryGirl.define do
         after :create do |cart|
           cart.approvals.each {|a| a.approve!}
         end
-      end
-    end
-
-    factory :cart_with_observers do
-      after :create do |cart|
-        for i in 1..2
-          cart.add_approver("approver#{i}@some-dot-gov.gov")
-        end
-
-        for i in 1..3
-          cart.add_observer("observer#{i}@some-dot-gov.gov")
-        end
-
-        cart.add_requester('requester1@some-dot-gov.gov')
       end
     end
   end

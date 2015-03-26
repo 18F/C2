@@ -22,13 +22,12 @@ class CommunicartsController < ApplicationController
     cart = Cart.find(params[:cart_id]).decorate
     proposal = cart.proposal
     approval = cart.approvals.find_by(user_id: user_id)
-    
     @token ||= ApiToken.find_by(approval_id: approval.id)
-    
-    if !approval.pending?
+
+    if !approval
+      flash[:error] = "Sorry, you're not an approver on #{proposal.public_identifier}."
+    elsif !approval.pending?
       flash[:error] = "You have already logged a response for Cart #{proposal.public_identifier}"
-    elsif !approval.approvable?
-      flash[:error] = "Sorry. You are not allowed to approve your own request."
     else
       case params[:approver_action]
       when 'approve'
