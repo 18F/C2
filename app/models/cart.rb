@@ -16,28 +16,19 @@ class Cart < ActiveRecord::Base
 
 
   def rejections
-    self.approver_approvals.rejected
-  end
-
-  # TODO remove
-  def approver_approvals
-    self.approvals
-  end
-
-  def approvers
-    self.approval_users.merge(self.approver_approvals)
+    self.approvals.rejected
   end
 
   def awaiting_approvals
-    self.approver_approvals.pending
+    self.approvals.pending
   end
 
   def awaiting_approvers
-    self.approval_users.merge(self.awaiting_approvals)
+    self.approvers.merge(self.awaiting_approvals)
   end
 
   def ordered_approvals
-    self.approver_approvals.order('position ASC')
+    self.approvals.order('position ASC')
   end
 
   def ordered_awaiting_approvals
@@ -56,11 +47,11 @@ class Cart < ActiveRecord::Base
   end
 
   def approved_approvals
-    self.approver_approvals.approved
+    self.approvals.approved
   end
 
   def all_approvals_received?
-    self.approver_approvals.where.not(status: 'approved').empty?
+    self.approvals.where.not(status: 'approved').empty?
   end
 
   def self.initialize_cart params
@@ -124,7 +115,7 @@ class Cart < ActiveRecord::Base
     self.set_requester(user)
   end
 
-  def create_approver_approvals(emails)
+  def create_approvals(emails)
     emails.each do |email|
       self.add_approver(email)
     end
@@ -139,7 +130,7 @@ class Cart < ActiveRecord::Base
       raise ApprovalGroupError.new('Approval Group already exists')
     end
     approver_emails = params['toAddress'].select(&:present?)
-    self.create_approver_approvals(approver_emails)
+    self.create_approvals(approver_emails)
 
     requester_email = params['fromAddress']
     if requester_email

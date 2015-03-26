@@ -83,7 +83,7 @@ describe CommunicartMailer do
   describe 'approval reply received email' do
     # TODO use same cart
     let(:cart_with_approval_group) { FactoryGirl.create(:cart_with_approvals, external_id: 13579) }
-    let(:approval) { cart_with_approval_group.approver_approvals.first }
+    let(:approval) { cart_with_approval_group.approvals.first }
     let(:approver) { approval.user }
     let(:mail) { CommunicartMailer.approval_reply_received_email(approval) }
 

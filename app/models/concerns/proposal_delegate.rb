@@ -4,8 +4,7 @@ module ProposalDelegate
   included do
     belongs_to :proposal
     has_many :approvals, through: :proposal
-    # TODO change to :approvers
-    has_many :approval_users, through: :approvals, source: :user
+    has_many :approvers, through: :approvals, source: :user
     has_many :observations, through: :proposal
     has_many :observers, through: :observations, source: :user
     has_one :requester, through: :proposal

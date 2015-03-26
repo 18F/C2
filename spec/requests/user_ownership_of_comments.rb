@@ -63,8 +63,8 @@ describe 'Testing User Ownership of Comments' do
 
 
     # basically add an approval comment as currently done --- CONSIDER MAKING THIS A FUNCTION
-     user = cart.approval_users.where(email_address: "approver1@some-dot-gov.gov").first
-     user2 = cart.approval_users.where(email_address: "approver2@some-dot-gov.gov").first
+     user = cart.approvers.where(email_address: "approver1@some-dot-gov.gov").first
+     user2 = cart.approvers.where(email_address: "approver2@some-dot-gov.gov").first
      new_comment = Comment.new(user_id: user.id,comment_text: "spud")
      snd_comment = Comment.new(user_id: user2.id,comment_text: "second")
      cart.comments << new_comment
