@@ -1,3 +1,4 @@
+# TODO move to spec/requests/communicarts_spec.rb
 def cart_initialize_params
   {
     cartName: "Q1 Test Cart",

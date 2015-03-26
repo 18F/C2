@@ -6,12 +6,16 @@ class Proposal < ActiveRecord::Base
   has_one :cart
   has_many :approvals
   has_many :approval_users, through: :approvals, source: :user
+  has_many :observations
   belongs_to :client_data, polymorphic: true
+  belongs_to :requester, class_name: 'User'
+
   # The following list also servers as an interface spec for client_datas
   delegate :fields_for_display, :client, :public_identifier, :total_price,
            :name, to: :client_data_legacy
 
   validates :flow, presence: true, inclusion: {in: ApprovalGroup::FLOWS}
+  # TODO validates :requester_id, presence: true
 
   self.statuses.each do |status|
     scope status, -> { where(status: status) }

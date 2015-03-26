@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150323152603) do
+ActiveRecord::Schema.define(version: 20150324015230) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,7 +43,6 @@ ActiveRecord::Schema.define(version: 20150323152603) do
     t.string   "status"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "role"
     t.integer  "position"
     t.integer  "proposal_id"
   end
@@ -77,6 +76,13 @@ ActiveRecord::Schema.define(version: 20150323152603) do
     t.string  "code"
   end
 
+  create_table "observations", force: true do |t|
+    t.integer  "proposal_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "properties", force: true do |t|
     t.text    "property"
     t.text    "value"
@@ -91,6 +97,7 @@ ActiveRecord::Schema.define(version: 20150323152603) do
     t.datetime "updated_at"
     t.integer  "client_data_id"
     t.string   "client_data_type"
+    t.integer  "requester_id"
   end
 
   add_index "proposals", ["client_data_id", "client_data_type"], name: "index_proposals_on_client_data_id_and_client_data_type", using: :btree

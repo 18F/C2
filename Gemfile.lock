@@ -48,6 +48,8 @@ GEM
     acts_as_list (0.6.0)
       activerecord (>= 3.0)
     addressable (2.3.6)
+    ar_outer_joins (0.2.0)
+      activerecord (>= 3.2)
     arel (5.0.1.20140414130214)
     autoprefixer-rails (4.0.2.2)
       execjs
@@ -343,6 +345,7 @@ PLATFORMS
 DEPENDENCIES
   acts_as_list
   addressable
+  ar_outer_joins
   autoprefixer-rails
   awesome_print
   aws-sdk (= 2.0.6.pre)

@@ -35,15 +35,17 @@ describe Cart do
       end
 
       cart.process_approvals_from_approval_group
-      expect(cart.approvals.order('user_id ASC').map(&:position)).to eq(cart.user_roles.order('user_id ASC').map(&:position))
+      expect(cart.approvals.order('user_id ASC').map(&:position)).to eq(cart.user_roles.approvers.order('user_id ASC').map(&:position))
     end
   end
 
   describe '#process_approvals_without_approval_group' do
-    let(:user1) { FactoryGirl.create(:user, email_address: 'user1@some-dot-gov.gov') }
-
     it 'excludes blank email addresses' do
-      expect(User).to receive(:find_or_create_by).and_return(user1).exactly(2).times
+      expect(User).to receive(:find_or_create_by).with(email_address: 'requester1@some-dot-gov.gov').and_call_original
+      expect(User).to receive(:find_or_create_by).with(email_address: 'email1@some-dot-gov.gov').and_call_original
+      # was leaving off the '.gov' a typo? -AF
+      expect(User).to receive(:find_or_create_by).with(email_address: 'email2@some-dot-gov').and_call_original
+
       params = { 'toAddress' => ["email1@some-dot-gov.gov", "email2@some-dot-gov", ""] }
       cart.process_approvals_without_approval_group params
     end

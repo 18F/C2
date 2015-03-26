@@ -14,15 +14,10 @@ class Approval < ActiveRecord::Base
 
   acts_as_list scope: :proposal
 
-  validates :role, presence: true, inclusion: {in: UserRole::ROLES}
   # TODO validates_uniqueness_of :user_id, scope: cart_id
 
-  scope :approvable, -> { where(role: 'approver') }
-  scope :observing, -> { where(role: 'observer') }
-  scope :requesting, -> { where(role: 'requester') }
-
   self.statuses.each do |status|
-    scope status, -> { approvable.where(status: status) }
+    scope status, -> { where(status: status) }
   end
   scope :received, ->   { approvable.where.not(status: 'pending') }
 
@@ -35,14 +30,6 @@ class Approval < ActiveRecord::Base
   # TODO remove
   def cart_id
     self.proposal.cart.id
-  end
-
-  def self.new_from_user_role(user_role)
-    self.new(
-      position: user_role.position,
-      role: user_role.role,
-      user_id: user_role.user_id
-    )
   end
 
   # TODO we should probably store this value
@@ -65,7 +52,8 @@ class Approval < ActiveRecord::Base
     Dispatcher.on_approval_approved(self)
   end
 
+  # TODO remove
   def approvable?
-    self.role == 'approver'
+    true
   end
 end
