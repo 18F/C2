@@ -77,9 +77,10 @@ describe Cart do
       expect(emails).to eq(%w(approver1@some-dot-gov.gov approver2@some-dot-gov.gov))
 
       cart.approvals.first.update_attribute(:position, 5)
-      emails = cart.currently_awaiting_approvers.map(&:email_address)
-      expect(emails).to eq(%w(approver2@some-dot-gov.gov approver1@some-dot-gov.gov))
+      emails = cart.currently_awaiting_approvers.map(&:email_address).sort
+      expect(emails).to eq(%w(approver1@some-dot-gov.gov approver2@some-dot-gov.gov))
     end
+
     it "gives only the first approver when linear" do
       cart = FactoryGirl.create(:cart_with_approvals, flow: 'linear')
       emails = cart.currently_awaiting_approvers.map(&:email_address)

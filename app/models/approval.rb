@@ -8,6 +8,7 @@ class Approval < ActiveRecord::Base
   belongs_to :user
   has_one :api_token, -> { fresh }
   has_one :approval_group, through: :cart
+  has_one :user_role, -> { where(approval_group_id: cart.approval_group.id, user_id: self.user_id) }
 
   delegate :full_name, :email_address, :to => :user, :prefix => true
   delegate :approvals, :to => :cart, :prefix => true
@@ -21,11 +22,6 @@ class Approval < ActiveRecord::Base
   end
   scope :received, ->   { approvable.where.not(status: 'pending') }
 
-
-  # TODO this should be a proper association
-  def user_role
-    UserRole.find_by(approval_group_id: cart.approval_group.id, user_id: user_id)
-  end
 
   # TODO remove
   def cart_id
