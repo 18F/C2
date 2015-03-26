@@ -54,9 +54,8 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
 
   # Add modules for Turnip acceptance tests
-  # TODO scope to feature specs
-  config.include ApprovalSteps
-  config.include UserSteps
+  config.include ApprovalSteps, type: :feature
+  config.include UserSteps, type: :feature
 
   # Add modules for helpers
   config.include ControllerSpecHelper, type: :controller
