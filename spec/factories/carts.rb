@@ -46,19 +46,5 @@ FactoryGirl.define do
         end
       end
     end
-
-    factory :cart_with_observers do
-      after :create do |cart|
-        for i in 1..2
-          cart.add_approver("approver#{i}@some-dot-gov.gov")
-        end
-
-        for i in 1..3
-          cart.add_observer("observer#{i}@some-dot-gov.gov")
-        end
-
-        cart.add_requester('requester1@some-dot-gov.gov')
-      end
-    end
   end
 end
