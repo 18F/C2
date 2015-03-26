@@ -22,8 +22,11 @@ module Populator
   end
 
   def random_ncr_data(num_proposals=50)
+    # all of the hard-coded numbers within here are fairly arbitrary
+
     num_proposals.times do |i|
       requested_at = rand(3.months.ago..1.day.ago)
+
       proposal = FactoryGirl.create(:proposal,
         :with_cart,
         :with_approvers,
@@ -46,6 +49,7 @@ module Populator
       cart = proposal.cart
       users = proposal.users
 
+      # add comments
       num_comments = rand(5)
       num_comments.times do |i|
         commented_at = rand(requested_at..Time.now)
