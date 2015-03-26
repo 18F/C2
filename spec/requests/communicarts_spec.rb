@@ -3,7 +3,7 @@ describe 'CommunicartsController' do
     before do
       expect(Dispatcher).to receive(:deliver_new_cart_emails)
 
-      approval_group = FactoryGirl.create(:approval_group_with_approver_and_requester_approvals, name: 'MyApprovalGroup')
+      approval_group = FactoryGirl.create(:approval_group_with_approvers_and_requester, name: 'MyApprovalGroup')
       expect(ApprovalGroup).to receive(:find_by).and_return(approval_group)
     end
 
