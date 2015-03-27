@@ -5,8 +5,8 @@ class Dispatcher
   end
 
   def email_observers(cart)
-    cart.approvals.observing.each do |observer|
-      CommunicartMailer.cart_observer_email(observer.user_email_address, cart).deliver
+    cart.observations.each do |observation|
+      CommunicartMailer.cart_observer_email(observation.user_email_address, cart).deliver
     end
   end
 
@@ -90,7 +90,7 @@ class Dispatcher
     if cart.requester
       users_to_notify << cart.requester
     end
-    users_to_notify + cart.approvals.observing.map(&:user)
+    users_to_notify + cart.observers
   end
 
   private

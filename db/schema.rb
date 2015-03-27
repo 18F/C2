@@ -43,7 +43,6 @@ ActiveRecord::Schema.define(version: 20150325170839) do
     t.string   "status"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "role"
     t.integer  "position"
     t.integer  "proposal_id"
   end
@@ -79,6 +78,13 @@ ActiveRecord::Schema.define(version: 20150325170839) do
     t.text    "description"
   end
 
+  create_table "observations", force: true do |t|
+    t.integer  "proposal_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "properties", force: true do |t|
     t.text    "property"
     t.text    "value"
@@ -93,6 +99,7 @@ ActiveRecord::Schema.define(version: 20150325170839) do
     t.datetime "updated_at"
     t.integer  "client_data_id"
     t.string   "client_data_type"
+    t.integer  "requester_id"
   end
 
   add_index "proposals", ["client_data_id", "client_data_type"], name: "index_proposals_on_client_data_id_and_client_data_type", using: :btree

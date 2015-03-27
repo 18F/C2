@@ -1,6 +1,6 @@
 class ParallelDispatcher < Dispatcher
   def email_all_approvers(cart)
-    cart.approver_approvals.each do |approval|
+    cart.approvals.each do |approval|
       self.email_approver(approval)
     end
   end

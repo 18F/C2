@@ -6,7 +6,9 @@ describe CommunicartMailer do
     mail[:from].display_names
   end
 
-  let(:cart) { FactoryGirl.create(:cart_with_approvals) }
+  let(:cart) { FactoryGirl.create(:cart_with_approvals, external_id: 13579) }
+  let(:approval) { cart.approvals.first }
+  let(:approver) { approval.user }
   let(:requester) { cart.requester }
 
   def expect_csvs_to_be_exported
@@ -15,7 +17,6 @@ describe CommunicartMailer do
   end
 
   describe 'cart notification email' do
-    let(:approval) { cart.approvals.first }
     let(:mail) { CommunicartMailer.cart_notification_email('email.to.email@testing.com', approval) }
 
     before do
@@ -24,7 +25,6 @@ describe CommunicartMailer do
     end
 
     it 'renders the subject' do
-      cart.update_attributes(external_id: 13579)
       requester.update_attributes(first_name: 'Liono', last_name: 'Requester')
       expect(mail.subject).to eq('Communicart Approval Request from Liono Requester: Please review Cart #13579')
     end
@@ -81,10 +81,6 @@ describe CommunicartMailer do
   end
 
   describe 'approval reply received email' do
-    # TODO use same cart
-    let(:cart_with_approval_group) { FactoryGirl.create(:cart_with_approvals, external_id: 13579) }
-    let(:approval) { cart_with_approval_group.approver_approvals.first }
-    let(:approver) { approval.user }
     let(:mail) { CommunicartMailer.approval_reply_received_email(approval) }
 
     before do
@@ -107,8 +103,7 @@ describe CommunicartMailer do
 
     context 'comments' do
       it 'renders comments when present' do
-        cart_with_approval_group.comments << FactoryGirl.create(
-          :comment, comment_text: 'My added comment')
+        cart.comments << FactoryGirl.create(:comment, comment_text: 'My added comment')
         expect(mail.body.encoded).to include('Comments')
       end
 
@@ -157,20 +152,16 @@ describe CommunicartMailer do
   end
 
   describe 'cart observer received email' do
-    let(:observer) { FactoryGirl.create(:user, email_address: 'test-observer-1@some-dot-gov.gov') }
-    let(:requester) { FactoryGirl.create(:user, email_address: 'test-requester-1@some-dot-gov.gov') }
+    let(:observation) { cart.add_observer('observer1@some-dot-gov.gov') }
+    let(:observer) { observation.user }
+    let(:mail) { CommunicartMailer.cart_observer_email(observer.email_address, cart) }
 
     before do
       expect_any_instance_of(CommunicartMailer).to receive(:sender).and_return('reply@communicart-stub.com')
-      expect(cart_with_observers).to receive(:requester).and_return(requester).at_least(:once)
     end
 
-    let(:cart_with_observers) { FactoryGirl.create(:cart_with_observers, external_id: 1965) }
-    let(:observer) { cart_with_observers.observers.first }
-    let(:mail) { CommunicartMailer.cart_observer_email(observer.user_email_address, cart_with_observers) }
-
     it 'renders the subject' do
-      expect(mail.subject).to eq('Communicart Approval Request from Liono Thunder: Please review Cart #1965')
+      expect(mail.subject).to eq("Communicart Approval Request from requester@some-dot-gov.gov: Please review Cart #13579")
     end
 
     it 'renders the receiver email' do
@@ -184,13 +175,13 @@ describe CommunicartMailer do
 
     context 'attaching a csv of the cart activity' do
       it 'generates csv attachments for an approved cart' do
-        expect(cart_with_observers).to receive(:all_approvals_received?).and_return(true)
+        expect(cart).to receive(:all_approvals_received?).and_return(true)
         expect_csvs_to_be_exported
         mail
       end
 
       it 'does not generate csv attachments for an unapproved cart' do
-        expect(cart_with_observers).to receive(:all_approvals_received?).and_return(false)
+        expect(cart).to receive(:all_approvals_received?).and_return(false)
         expect_any_instance_of(Exporter::Base).not_to receive(:to_csv)
         mail
       end

@@ -4,8 +4,8 @@ describe CartsController do
 
   before do
     UserRole.create!(user_id: user.id, approval_group_id: approval_group1.id, role: 'requester')
-    p = {'approvalGroup' => 'test-approval-group1', 'cartName' => 'cart1' }
-    @cart1 = Commands::Approval::InitiateCartApproval.new.perform(p)
+    params = {'approvalGroup' => 'test-approval-group1', 'cartName' => 'cart1' }
+    @cart1 = Commands::Approval::InitiateCartApproval.new.perform(params)
     login_as(user)
   end
 
@@ -14,10 +14,10 @@ describe CartsController do
       approval_group1
 
       cart2 = FactoryGirl.create(:cart)
-      cart2.proposal.approvals.create!(role: 'approver', user: user)
+      cart2.proposal.approvals.create!(user: user)
 
       cart3 = FactoryGirl.create(:cart)
-      cart3.proposal.approvals.create!(role: 'observer', user: user)
+      cart3.proposal.observations.create!(user: user)
 
       get :index
       expect(assigns(:carts).sort).to eq [@cart1, cart2, cart3]
@@ -28,10 +28,10 @@ describe CartsController do
     it 'should show all the closed carts' do
       carts = Array.new
       (1..4).each do |i|
-        p = {}
-        p['approvalGroup'] =  'test-approval-group1'
-        p['cartName'] = "cart#{i}"
-        temp_cart = Commands::Approval::InitiateCartApproval.new.perform(p)
+        params = {}
+        params['approvalGroup'] =  'test-approval-group1'
+        params['cartName'] = "cart#{i}"
+        temp_cart = Commands::Approval::InitiateCartApproval.new.perform(params)
         temp_cart.approve! unless i==3
         carts.push(temp_cart)
       end

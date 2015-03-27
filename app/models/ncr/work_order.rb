@@ -43,7 +43,7 @@ module Ncr
     end
 
     def update_cart(approver_email, cart)
-      cart.approver_approvals.destroy_all
+      cart.proposal.approvals.destroy_all
       self.add_approvals(approver_email)
       cart.restart!
       cart
@@ -116,4 +116,3 @@ module Ncr
 
   end
 end
-
