@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'active_model_serializers'
 gem 'acts_as_list'
 gem 'ar_outer_joins'
 gem 'autoprefixer-rails'

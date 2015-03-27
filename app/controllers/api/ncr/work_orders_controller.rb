@@ -1,10 +1,8 @@
 module Api
   module Ncr
     class WorkOrdersController < ApplicationController
-      respond_to :json
-
       def index
-        respond_with ::Ncr::WorkOrder.all
+        render json: ::Ncr::WorkOrder.all, root: false
       end
     end
   end
