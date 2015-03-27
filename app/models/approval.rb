@@ -8,41 +8,25 @@ class Approval < ActiveRecord::Base
   belongs_to :user
   has_one :api_token, -> { fresh }
   has_one :approval_group, through: :cart
+  has_one :user_role, -> { where(approval_group_id: cart.approval_group.id, user_id: self.user_id) }
 
   delegate :full_name, :email_address, :to => :user, :prefix => true
   delegate :approvals, :to => :cart, :prefix => true
 
   acts_as_list scope: :proposal
 
-  validates :role, presence: true, inclusion: {in: UserRole::ROLES}
   # TODO validates_uniqueness_of :user_id, scope: cart_id
 
-  scope :approvable, -> { where(role: 'approver') }
-  scope :observing, -> { where(role: 'observer') }
-  scope :requesting, -> { where(role: 'requester') }
-
   self.statuses.each do |status|
-    scope status, -> { approvable.where(status: status) }
+    scope status, -> { where(status: status) }
   end
-  scope :received, ->   { approvable.where.not(status: 'pending') }
+  scope :received, -> { approvable.where.not(status: 'pending') }
+  scope :ordered, -> { order('position ASC') }
 
-
-  # TODO this should be a proper association
-  def user_role
-    UserRole.find_by(approval_group_id: cart.approval_group.id, user_id: user_id)
-  end
 
   # TODO remove
   def cart_id
     self.proposal.cart.id
-  end
-
-  def self.new_from_user_role(user_role)
-    self.new(
-      position: user_role.position,
-      role: user_role.role,
-      user_id: user_role.user_id
-    )
   end
 
   # TODO we should probably store this value
@@ -63,9 +47,5 @@ class Approval < ActiveRecord::Base
   def on_approved_entry(new_state, event)
     self.cart.partial_approve!
     Dispatcher.on_approval_approved(self)
-  end
-
-  def approvable?
-    self.role == 'approver'
   end
 end

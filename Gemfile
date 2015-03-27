@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'acts_as_list'
+gem 'ar_outer_joins'
 gem 'autoprefixer-rails'
 gem 'awesome_print'
 gem 'bootstrap-sass', '~> 3.3.0'
@@ -25,6 +26,7 @@ gem 'workflow'
 group :test, :development do
   gem 'database_cleaner'
   gem 'factory_girl_rails'
+  gem 'faker'
   gem 'pry-byebug'
   gem 'pry-rails'
   gem 'rspec-rails'

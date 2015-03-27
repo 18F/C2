@@ -17,7 +17,7 @@ describe ParallelDispatcher do
         expect(dispatcher).to receive(:send_notification_email).twice
         dispatcher.deliver_new_cart_emails(cart)
 
-        cart.approver_approvals.each do |approval|
+        cart.approvals.each do |approval|
           # handle float comparison
           expect(approval.api_token.expires_at).to be_within(1.second).of(7.days.from_now)
         end

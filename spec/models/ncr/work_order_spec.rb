@@ -2,7 +2,7 @@ describe Ncr::WorkOrder do
   describe 'fields_for_display' do
     it "shows BA61 fields" do
       wo = Ncr::WorkOrder.new(
-        amount: 1000, expense_type: "BA61", vendor: "Some Vend", 
+        amount: 1000, expense_type: "BA61", vendor: "Some Vend",
         not_to_exceed: false, emergency: true, rwa_number: "RWWAAA #",
         building_number: Ncr::BUILDING_NUMBERS[0],
         office: Ncr::OFFICES[0])
@@ -20,7 +20,7 @@ describe Ncr::WorkOrder do
     end
     it "shows BA80 fields" do
       wo = Ncr::WorkOrder.new(
-        amount: 1000, expense_type: "BA80", vendor: "Some Vend", 
+        amount: 1000, expense_type: "BA80", vendor: "Some Vend",
         not_to_exceed: false, emergency: true, rwa_number: "RWWAAA #",
         building_number: Ncr::BUILDING_NUMBERS[0], code: "Some WO#",
         office: Ncr::OFFICES[0])
@@ -45,8 +45,8 @@ describe Ncr::WorkOrder do
       cart.proposal.client_data = form
       cart.proposal.save
       form.add_approvals('bob@example.com')
-      expect(cart.approvals.observing.length).to eq(0)
-      expect(cart.approvals.approvable.length).to eq(3)
+      expect(cart.observations.length).to eq(0)
+      expect(cart.approvals.length).to eq(3)
       cart.reload
       expect(cart.approved?).to eq(false)
     end
@@ -56,8 +56,8 @@ describe Ncr::WorkOrder do
       cart.proposal.client_data = form
       cart.proposal.save
       form.add_approvals('bob@example.com')
-      expect(cart.approvals.observing.length).to eq(3)
-      expect(cart.approvals.approvable.length).to eq(0)
+      expect(cart.observations.length).to eq(3)
+      expect(cart.approvals.length).to eq(0)
       cart.clear_association_cache
       expect(cart.approved?).to eq(true)
     end

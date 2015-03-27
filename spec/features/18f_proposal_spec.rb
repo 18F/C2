@@ -117,8 +117,7 @@ describe "GSA 18f Purchase Request Form" do
     end
 
     it "cannot be edited by someone other than the requester" do
-      req = gsa18f.approvals.where(role: 'requester').first
-      req.update_attribute(:user, FactoryGirl.create(:user))
+      gsa18f.set_requester(FactoryGirl.create(:user))
 
       visit "/gsa18f/proposals/#{gsa18f.id}/edit"
       expect(current_path).to eq("/gsa18f/proposals/new")
@@ -199,9 +198,7 @@ describe "GSA 18f Purchase Request Form" do
     end
 
     it "does not show a restart link for non requester" do
-      req = gsa18f.approvals.where(role: 'requester').first
-      req.update_attribute(:user, FactoryGirl.create(:user))
-
+      gsa18f.set_requester(FactoryGirl.create(:user))
       visit "/carts/#{gsa18f.id}"
       expect(page).not_to have_content('Modify Request')
     end

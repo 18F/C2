@@ -80,7 +80,7 @@ describe CommunicartsController do
 
   describe 'PUT approval_response: Approving a cart through email endpoint' do
     let!(:cart) { FactoryGirl.create(:cart_with_approvals) }
-    let!(:approval) { cart.approver_approvals.first }
+    let!(:approval) { cart.approvals.first }
     let!(:approver) { approval.user }
     let!(:token) { approval.create_api_token! }
 

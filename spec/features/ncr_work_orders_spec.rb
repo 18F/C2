@@ -142,8 +142,7 @@ describe "National Capital Region proposals" do
     end
 
     it "cannot be edited by someone other than the requester" do
-      req = ncr_cart.approvals.where(role: 'requester').first
-      req.update_attribute(:user, FactoryGirl.create(:user))
+      ncr_cart.set_requester(FactoryGirl.create(:user))
 
       visit "/ncr/work_orders/#{work_order.id}/edit"
       expect(current_path).to eq("/ncr/work_orders/new")
@@ -179,9 +178,7 @@ describe "National Capital Region proposals" do
     end
 
     it "does not show a restart link for non requester" do
-      req = ncr_cart.approvals.where(role: 'requester').first
-      req.update_attribute(:user, FactoryGirl.create(:user))
-
+      ncr_cart.set_requester(FactoryGirl.create(:user))
       visit "/carts/#{ncr_cart.id}"
       expect(page).not_to have_content('Modify Request')
     end
