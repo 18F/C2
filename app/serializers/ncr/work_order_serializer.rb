@@ -12,5 +12,7 @@ module Ncr
       :rwa_number,
       :vendor
     )
+
+    has_one :proposal
   end
 end
