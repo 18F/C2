@@ -64,7 +64,7 @@ module Ncr
     # Ignore values in certain fields if they aren't relevant. May want to
     # split these into different models
     def self.relevant_fields(expense_type)
-      fields = [:amount, :expense_type, :vendor, :not_to_exceed,
+      fields = [:description, :amount, :expense_type, :vendor, :not_to_exceed,
                 :building_number, :office]
       case expense_type
       when "BA61"
