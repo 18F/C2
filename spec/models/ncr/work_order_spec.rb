@@ -5,10 +5,11 @@ describe Ncr::WorkOrder do
         amount: 1000, expense_type: "BA61", vendor: "Some Vend", 
         not_to_exceed: false, emergency: true, rwa_number: "RWWAAA #",
         building_number: Ncr::BUILDING_NUMBERS[0],
-        office: Ncr::OFFICES[0])
+        office: Ncr::OFFICES[0], description: "Ddddd")
       expect(wo.fields_for_display.sort).to eq([
         ["Amount", 1000],
         ["Building number", Ncr::BUILDING_NUMBERS[0]],
+        ["Description", "Ddddd"],
         ["Emergency", true],
         ["Expense type", "BA61"],
         ["Not to exceed", false],
@@ -23,10 +24,11 @@ describe Ncr::WorkOrder do
         amount: 1000, expense_type: "BA80", vendor: "Some Vend", 
         not_to_exceed: false, emergency: true, rwa_number: "RWWAAA #",
         building_number: Ncr::BUILDING_NUMBERS[0], code: "Some WO#",
-        office: Ncr::OFFICES[0])
+        office: Ncr::OFFICES[0], description: "Ddddd")
       expect(wo.fields_for_display.sort).to eq([
         ["Amount", 1000],
         ["Building number", Ncr::BUILDING_NUMBERS[0]],
+        ["Description", "Ddddd"],
         # No Emergency
         ["Expense type", "BA80"],
         ["Not to exceed", false],
