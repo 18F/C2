@@ -97,30 +97,10 @@ class Cart < ActiveRecord::Base
     self.comments.create!(user_id: self.proposal.requester_id, comment_text: comments.strip)
   end
 
-  # returns the Approval
-  def add_approver(email)
-    user = User.find_or_create_by(email_address: email)
-    self.proposal.approvals.create!(user_id: user.id)
-  end
-
-  def add_observer(email)
-    user = User.find_or_create_by(email_address: email)
-    self.proposal.observations.create!(user_id: user.id)
-  end
-
-  def add_requester(email)
-    user = User.find_or_create_by(email_address: email)
-    self.set_requester(user)
-  end
-
   def create_approvals(emails)
     emails.each do |email|
       self.add_approver(email)
     end
-  end
-
-  def set_requester(user)
-    self.proposal.update_attributes!(requester_id: user.id)
   end
 
   def process_approvals_without_approval_group(params)
