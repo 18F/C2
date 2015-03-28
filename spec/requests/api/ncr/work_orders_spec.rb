@@ -8,6 +8,11 @@ describe 'NCR Work Orders API' do
     time.iso8601(3)
   end
 
+  before do
+    # TODO clean this up
+    ENV['API_ENABLED'] = '1'
+  end
+
   describe 'GET /api/v1/ncr/work_orders.json' do
     it "responds with the list of work orders" do
       proposal = FactoryGirl.create(:proposal)
@@ -87,6 +92,14 @@ describe 'NCR Work Orders API' do
     end
 
     it "can be paginated"
+
+    it "gives a 404 if API isn't enabled" do
+      ENV.delete('API_ENABLED')
+
+      expect {
+        get '/api/v1/ncr/work_orders.json'
+      }.to raise_error(ActionController::RoutingError)
+    end
 
     describe "CORS" do
       let(:origin) { 'http://corsexample.com/' }

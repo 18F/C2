@@ -1,5 +1,7 @@
 # API
 
+***If you are running the server and want to enable the API, set the environment variable `API_ENABLED=true`.***
+
 This API is currently in a very limited alpha, and may not be enabled in 18F's production deployment. Note that this API may change or access may be restricted at any time, without warning.
 
 ## Schemas
