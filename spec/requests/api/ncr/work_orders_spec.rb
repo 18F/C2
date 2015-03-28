@@ -116,7 +116,18 @@ describe 'NCR Work Orders API' do
       expect(json).to eq([])
     end
 
-    it "can be paginated"
+    it "can be `limit`ed" do
+      3.times do
+        proposal = FactoryGirl.create(:proposal)
+        FactoryGirl.create(:ncr_work_order, proposal: proposal)
+      end
+
+      json = get_json('/api/v1/ncr/work_orders.json?limit=2')
+
+      expect(json.size).to eq(2)
+    end
+
+    it "can be `offset`"
 
     it "gives a 404 if API isn't enabled" do
       ENV.delete('API_ENABLED')
