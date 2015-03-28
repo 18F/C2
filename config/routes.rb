@@ -5,6 +5,14 @@ C2::Application.routes.draw do
   match "/auth/:provider/callback" => "home#oauth_callback", via: [:get]
   post "/logout" => "home#logout"
 
+  namespace :api do
+    scope :v1 do
+      namespace :ncr do
+        resources :work_orders, only: [:index]
+      end
+    end
+  end
+
   resources :approval_groups, except: [:edit, :update] do
     collection do
       get 'search'

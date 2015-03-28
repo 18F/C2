@@ -27,6 +27,7 @@ module Populator
     num_proposals.times do |i|
       requested_at = rand(3.months.ago..1.day.ago)
 
+      # TODO all of these things should have the same created_at/updated_at... use Timecop
       proposal = FactoryGirl.create(:proposal,
         :with_cart,
         :with_approvers,

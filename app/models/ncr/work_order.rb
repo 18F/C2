@@ -24,6 +24,7 @@ module Ncr
     validates :vendor, presence: true
     validates :building_number, presence: true
     validates :office, presence: true
+    # TODO validates :proposal, presence: true
 
     def set_defaults
       self.not_to_exceed ||= false
