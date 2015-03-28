@@ -22,9 +22,10 @@ describe 'NCR Work Orders API' do
 
       expect(json).to eq([
         {
-          'amount' => work_order.amount.to_s, # TODO should not be a string
+          'amount' => work_order.amount.to_s,
           'building_number' => work_order.building_number,
           'code' => work_order.code,
+          'name' => nil,
           'emergency' => work_order.emergency,
           'expense_type' => work_order.expense_type,
           'id' => work_order.id,
@@ -43,6 +44,15 @@ describe 'NCR Work Orders API' do
           'vendor' => work_order.vendor
         }
       ])
+    end
+
+    it "displays the name from the cart" do
+      proposal = FactoryGirl.create(:proposal, :with_cart)
+      work_order = FactoryGirl.create(:ncr_work_order, proposal: proposal)
+
+      json = get_json('/api/v1/ncr/work_orders.json')
+
+      expect(json[0]['name']).to eq(work_order.name)
     end
 
     it "shows the newest first"

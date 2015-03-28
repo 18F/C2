@@ -4,10 +4,10 @@ module Ncr
       :amount,
       :building_number,
       :code,
-      # TODO :description
       :emergency,
       :expense_type,
       :id,
+      :name,
       :not_to_exceed,
       :office,
       :rwa_number,

@@ -103,7 +103,7 @@ module Ncr
     end
 
     def name
-      self.cart.name
+      self.cart.try(:name)
     end
 
     protected

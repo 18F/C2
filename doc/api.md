@@ -17,7 +17,7 @@ Attribute | Type | Note
 `status` | string | Can be `pending`, `approved`, or `rejected`
 `user` | [User](#user) | a.k.a. "the approver"
 
-### [NCR](overview.md#national-capitol-region-ncr-service-centers) Work Orders
+### [NCR](overview.md#national-capitol-region-ncr-service-centers) Work Order
 
 Attribute | Type | Note
 --- | --- | ---
@@ -27,6 +27,7 @@ Attribute | Type | Note
 `emergency` | boolean | Whether the work order was pre-approved or not (can only be `true` for BA61)
 `expense_type` | string | `BA61` or `BA80`
 `id` | integer |
+`name` | string | Shown as "description" in the form
 `not_to_exceed` | boolean | If the `amount` is exact, or an upper limit
 `office` | string | The group within the service center who submitted the work order
 `proposal` | [Proposal](#proposal) |
@@ -65,6 +66,8 @@ None.
 
 #### Response
 
+Returns an array of [Work Orders](#ncr-work-order).
+
 ```javascript
 [
   {
@@ -74,6 +77,7 @@ None.
     "emergency": false,
     "expense_type": "BA80",
     "id": 16,
+    "name": "Blue paint for the Blue Room",
     "not_to_exceed": false,
     "office": "P1121209 Security Management",
     "proposal": {
