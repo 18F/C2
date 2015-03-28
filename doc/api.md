@@ -21,15 +21,15 @@ Attribute | Type | Note
 
 Attribute | Type | Note
 --- | --- | ---
-`amount` | string (decimal) |
-`building_number` | string |
+`amount` | string (decimal) | The cost of the work order
+`building_number` | string | ([full list](../config/data/ncr.yaml))
 `code` | `null` for BA61, string for BA80 | Identifier for the type of work
 `emergency` | boolean | Whether the work order was pre-approved or not (can only be `true` for BA61)
 `expense_type` | string | `BA61` or `BA80`
 `id` | integer |
 `name` | string | Shown as "description" in the form
 `not_to_exceed` | boolean | If the `amount` is exact, or an upper limit
-`office` | string | The group within the service center who submitted the work order
+`office` | string | The group within the service center who submitted the work order ([full list](../config/data/ncr.yaml))
 `proposal` | [Proposal](#proposal) |
 `rwa_number` | `null` for BA61, string for BA80 | Essentially the internal bank account number
 `vendor` | string |
