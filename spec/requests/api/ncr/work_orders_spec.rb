@@ -40,6 +40,8 @@ describe 'NCR Work Orders API' do
       ])
     end
 
+    it "shows the newest first"
+
     it "includes the requester" do
       proposal = FactoryGirl.create(:proposal, :with_requester)
       FactoryGirl.create(:ncr_work_order, proposal: proposal)
