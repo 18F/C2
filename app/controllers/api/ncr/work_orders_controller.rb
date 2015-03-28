@@ -1,19 +1,17 @@
 module Api
   module Ncr
     class WorkOrdersController < ApplicationController
-      before_action :block_unless_enabled
-
       def index
-        render json: ::Ncr::WorkOrder.all, root: false
-      end
+        orders = ::Ncr::WorkOrder.joins(:proposal).order('proposals.created_at DESC')
 
-
-      private
-
-      def block_unless_enabled
-        unless ENV['API_ENABLED']
-          raise ActionController::RoutingError.new('Not Found')
+        if params[:limit]
+          orders = orders.limit(params[:limit].to_i)
         end
+        if params[:offset]
+          orders = orders.offset(params[:offset].to_i)
+        end
+
+        render json: orders, root: false
       end
     end
   end

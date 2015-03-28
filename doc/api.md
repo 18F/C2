@@ -17,18 +17,19 @@ Attribute | Type | Note
 `status` | string | Can be `pending`, `approved`, or `rejected`
 `user` | [User](#user) | a.k.a. "the approver"
 
-### [NCR](overview.md#national-capitol-region-ncr-service-centers) Work Orders
+### [NCR](overview.md#national-capitol-region-ncr-service-centers) Work Order
 
 Attribute | Type | Note
 --- | --- | ---
-`amount` | string (decimal) |
-`building_number` | string |
+`amount` | string (decimal) | The cost of the work order
+`building_number` | string | ([full list](../config/data/ncr.yaml))
 `code` | `null` for BA61, string for BA80 | Identifier for the type of work
 `emergency` | boolean | Whether the work order was pre-approved or not (can only be `true` for BA61)
 `expense_type` | string | `BA61` or `BA80`
 `id` | integer |
+`name` | string | Shown as "description" in the form
 `not_to_exceed` | boolean | If the `amount` is exact, or an upper limit
-`office` | string | The group within the service center who submitted the work order
+`office` | string | The group within the service center who submitted the work order ([full list](../config/data/ncr.yaml))
 `proposal` | [Proposal](#proposal) |
 `rwa_number` | `null` for BA61, string for BA80 | Essentially the internal bank account number
 `vendor` | string |
@@ -59,11 +60,22 @@ Attribute | Type | Note
 
 ### `GET /api/v1/ncr/work_orders.json`
 
-#### Parameters
+#### Query parameters
 
-None.
+All are optional.
+
+Name | Values
+--- | ---
+`limit` | an integer >= 0
+`offset` | an integer >= 0
+
+##### Example
+
+http://c2-dev.cf.18f.us/api/v1/ncr/work_orders.json?limit=5&offset=10
 
 #### Response
+
+Returns an array of [Work Orders](#ncr-work-order), in descending order of creation.
 
 ```javascript
 [
@@ -74,6 +86,7 @@ None.
     "emergency": false,
     "expense_type": "BA80",
     "id": 16,
+    "name": "Blue paint for the Blue Room",
     "not_to_exceed": false,
     "office": "P1121209 Security Management",
     "proposal": {

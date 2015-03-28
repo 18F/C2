@@ -15,16 +15,17 @@ describe 'NCR Work Orders API' do
 
   describe 'GET /api/v1/ncr/work_orders.json' do
     it "responds with the list of work orders" do
-      proposal = FactoryGirl.create(:proposal)
-      work_order = FactoryGirl.create(:ncr_work_order, proposal: proposal)
+      work_order = FactoryGirl.create(:ncr_work_order, :with_proposal)
+      proposal = work_order.proposal
 
       json = get_json('/api/v1/ncr/work_orders.json')
 
       expect(json).to eq([
         {
-          'amount' => work_order.amount.to_s, # TODO should not be a string
+          'amount' => work_order.amount.to_s,
           'building_number' => work_order.building_number,
           'code' => work_order.code,
+          'name' => nil,
           'emergency' => work_order.emergency,
           'expense_type' => work_order.expense_type,
           'id' => work_order.id,
@@ -45,12 +46,31 @@ describe 'NCR Work Orders API' do
       ])
     end
 
-    it "shows the newest first"
+    it "displays the name from the cart" do
+      work_order = FactoryGirl.create(:ncr_work_order, :with_cart)
+      json = get_json('/api/v1/ncr/work_orders.json')
+      expect(json[0]['name']).to eq(work_order.name)
+    end
+
+    it "returns the newest first" do
+      Timecop.freeze do
+        # create WorkOrders one minute apart
+        2.times do |i|
+          Timecop.freeze(i.minutes.ago) do
+            FactoryGirl.create(:ncr_work_order, :with_proposal)
+          end
+        end
+      end
+
+      json = get_json('/api/v1/ncr/work_orders.json')
+
+      times = json.map {|order| DateTime.parse(order['proposal']['created_at']) }
+      expect(times[1]).to eq(times[0] - 1.minute)
+    end
 
     it "includes the requester" do
-      proposal = FactoryGirl.create(:proposal, :with_requester)
-      FactoryGirl.create(:ncr_work_order, proposal: proposal)
-      requester = proposal.requester
+      work_order = FactoryGirl.create(:ncr_work_order, :with_requester)
+      requester = work_order.proposal.requester
 
       json = get_json('/api/v1/ncr/work_orders.json')
 
@@ -62,11 +82,11 @@ describe 'NCR Work Orders API' do
     end
 
     it "includes approvers" do
-      proposal = FactoryGirl.create(:proposal, :with_approvers)
-      FactoryGirl.create(:ncr_work_order, proposal: proposal)
+      work_order = FactoryGirl.create(:ncr_work_order, :with_approvers)
 
       json = get_json('/api/v1/ncr/work_orders.json')
 
+      proposal = work_order.proposal
       approvals = proposal.approvals
       expect(approvals.size).to eq(2)
 
@@ -91,7 +111,26 @@ describe 'NCR Work Orders API' do
       expect(json).to eq([])
     end
 
-    it "can be paginated"
+    it "can be `limit`ed" do
+      3.times do
+        FactoryGirl.create(:ncr_work_order, :with_approvers)
+      end
+
+      json = get_json('/api/v1/ncr/work_orders.json?limit=2')
+
+      expect(json.size).to eq(2)
+    end
+
+    it "can be `offset`" do
+      work_orders = 3.times.map do
+        FactoryGirl.create(:ncr_work_order, :with_approvers)
+      end
+
+      json = get_json('/api/v1/ncr/work_orders.json?offset=1')
+
+      ids = json.map {|order| order['id'] }
+      expect(ids).to eq(work_orders.map(&:id).reverse[1..-1])
+    end
 
     it "gives a 404 if API isn't enabled" do
       ENV.delete('API_ENABLED')
