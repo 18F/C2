@@ -27,6 +27,11 @@ None.
       "created_at": "2015-02-21T07:05:42.445Z",
       "flow": "parallel",
       "id": 12,
+      "requester": {
+        "created_at": "2015-02-10T07:05:42.445Z",
+        "id": 71,
+        "updated_at": "2015-02-10T07:05:42.445Z"
+      },
       "status": "pending",
       "updated_at": "2015-03-28T01:13:33.564Z"
     },

@@ -1,12 +1,20 @@
 describe 'NCR Work Orders API' do
+  def get_json(url)
+    get(url)
+    JSON.parse(response.body)
+  end
+
+  def time_to_s(time)
+    time.iso8601(3)
+  end
+
   describe 'GET /api/v1/ncr/work_orders.json' do
     it "responds with the list of work orders" do
       proposal = FactoryGirl.create(:proposal)
       work_order = FactoryGirl.create(:ncr_work_order, proposal: proposal)
 
-      get '/api/v1/ncr/work_orders.json'
+      json = get_json('/api/v1/ncr/work_orders.json')
 
-      json = JSON.parse(response.body)
       expect(json).to eq([
         {
           'amount' => work_order.amount.to_s, # TODO should not be a string
@@ -18,11 +26,12 @@ describe 'NCR Work Orders API' do
           'not_to_exceed' => work_order.not_to_exceed,
           'office' => work_order.office,
           'proposal' => {
-            'created_at' => proposal.created_at.iso8601(3),
+            'created_at' => time_to_s(proposal.created_at),
             'flow' => proposal.flow,
             'id' => proposal.id,
+            'requester' => nil,
             'status' => 'pending',
-            'updated_at' => proposal.updated_at.iso8601(3)
+            'updated_at' => time_to_s(proposal.updated_at)
           },
           'rwa_number' => work_order.rwa_number,
           'vendor' => work_order.vendor
@@ -30,15 +39,26 @@ describe 'NCR Work Orders API' do
       ])
     end
 
-    it "includes the requester"
+    it "includes the requester" do
+      proposal = FactoryGirl.create(:proposal, :with_requester)
+      requester = proposal.requester
+      work_order = FactoryGirl.create(:ncr_work_order, proposal: proposal)
+
+      json = get_json('/api/v1/ncr/work_orders.json')
+
+      expect(json[0]['proposal']['requester']).to eq({
+        'created_at' => time_to_s(requester.created_at),
+        'id' => requester.id,
+        'updated_at' => time_to_s(requester.updated_at)
+      })
+    end
 
     it "includes approvers"
 
     it "includes observers"
 
     it "responds with an empty list for no work orders" do
-      get '/api/v1/ncr/work_orders.json'
-      json = JSON.parse(response.body)
+      json = get_json('/api/v1/ncr/work_orders.json')
       expect(json).to eq([])
     end
 

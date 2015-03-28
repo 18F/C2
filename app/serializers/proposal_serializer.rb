@@ -7,5 +7,5 @@ class ProposalSerializer < ActiveModel::Serializer
     :updated_at
   )
 
-  # TODO has_one :requester
+  has_one :requester
 end
