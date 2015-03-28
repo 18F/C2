@@ -55,7 +55,22 @@ describe 'NCR Work Orders API' do
       expect(json[0]['name']).to eq(work_order.name)
     end
 
-    it "shows the newest first"
+    it "returns the newest first" do
+      Timecop.freeze do
+        # create WorkOrders one minute apart
+        2.times do |i|
+          Timecop.freeze(i.minutes.ago) do
+            proposal = FactoryGirl.create(:proposal)
+            FactoryGirl.create(:ncr_work_order, proposal: proposal)
+          end
+        end
+      end
+
+      json = get_json('/api/v1/ncr/work_orders.json')
+
+      times = json.map {|order| DateTime.parse(order['proposal']['created_at']) }
+      expect(times[1]).to eq(times[0] - 1.minute)
+    end
 
     it "includes the requester" do
       proposal = FactoryGirl.create(:proposal, :with_requester)

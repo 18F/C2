@@ -66,7 +66,7 @@ None.
 
 #### Response
 
-Returns an array of [Work Orders](#ncr-work-order).
+Returns an array of [Work Orders](#ncr-work-order), in descending order of creation.
 
 ```javascript
 [
