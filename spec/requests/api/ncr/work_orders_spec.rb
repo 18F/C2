@@ -15,8 +15,8 @@ describe 'NCR Work Orders API' do
 
   describe 'GET /api/v1/ncr/work_orders.json' do
     it "responds with the list of work orders" do
-      proposal = FactoryGirl.create(:proposal)
-      work_order = FactoryGirl.create(:ncr_work_order, proposal: proposal)
+      work_order = FactoryGirl.create(:ncr_work_order, :with_proposal)
+      proposal = work_order.proposal
 
       json = get_json('/api/v1/ncr/work_orders.json')
 
@@ -47,11 +47,8 @@ describe 'NCR Work Orders API' do
     end
 
     it "displays the name from the cart" do
-      proposal = FactoryGirl.create(:proposal, :with_cart)
-      work_order = FactoryGirl.create(:ncr_work_order, proposal: proposal)
-
+      work_order = FactoryGirl.create(:ncr_work_order, :with_cart)
       json = get_json('/api/v1/ncr/work_orders.json')
-
       expect(json[0]['name']).to eq(work_order.name)
     end
 
@@ -60,8 +57,7 @@ describe 'NCR Work Orders API' do
         # create WorkOrders one minute apart
         2.times do |i|
           Timecop.freeze(i.minutes.ago) do
-            proposal = FactoryGirl.create(:proposal)
-            FactoryGirl.create(:ncr_work_order, proposal: proposal)
+            FactoryGirl.create(:ncr_work_order, :with_proposal)
           end
         end
       end
@@ -73,9 +69,8 @@ describe 'NCR Work Orders API' do
     end
 
     it "includes the requester" do
-      proposal = FactoryGirl.create(:proposal, :with_requester)
-      FactoryGirl.create(:ncr_work_order, proposal: proposal)
-      requester = proposal.requester
+      work_order = FactoryGirl.create(:ncr_work_order, :with_requester)
+      requester = work_order.proposal.requester
 
       json = get_json('/api/v1/ncr/work_orders.json')
 
@@ -87,11 +82,11 @@ describe 'NCR Work Orders API' do
     end
 
     it "includes approvers" do
-      proposal = FactoryGirl.create(:proposal, :with_approvers)
-      FactoryGirl.create(:ncr_work_order, proposal: proposal)
+      work_order = FactoryGirl.create(:ncr_work_order, :with_approvers)
 
       json = get_json('/api/v1/ncr/work_orders.json')
 
+      proposal = work_order.proposal
       approvals = proposal.approvals
       expect(approvals.size).to eq(2)
 
@@ -118,8 +113,7 @@ describe 'NCR Work Orders API' do
 
     it "can be `limit`ed" do
       3.times do
-        proposal = FactoryGirl.create(:proposal, :with_approvers)
-        FactoryGirl.create(:ncr_work_order, proposal: proposal)
+        FactoryGirl.create(:ncr_work_order, :with_approvers)
       end
 
       json = get_json('/api/v1/ncr/work_orders.json?limit=2')
@@ -129,8 +123,7 @@ describe 'NCR Work Orders API' do
 
     it "can be `offset`" do
       work_orders = 3.times.map do
-        proposal = FactoryGirl.create(:proposal, :with_approvers)
-        FactoryGirl.create(:ncr_work_order, proposal: proposal)
+        FactoryGirl.create(:ncr_work_order, :with_approvers)
       end
 
       json = get_json('/api/v1/ncr/work_orders.json?offset=1')

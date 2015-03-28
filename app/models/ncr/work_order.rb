@@ -12,6 +12,8 @@ module Ncr
   OFFICES = DATA['OFFICES']
 
   class WorkOrder < ActiveRecord::Base
+    # TODO include ProposalDelegate
+
     has_one :proposal, as: :client_data
     # TODO remove the dependence
     has_one :cart, through: :proposal
