@@ -24,6 +24,17 @@ None.
     "not_to_exceed": false,
     "office": "P1121209 Security Management",
     "proposal": {
+      "approvals": [
+        {
+          "id": 92,
+          "status": "pending",
+          "user": {
+            "created_at": "2015-01-10T07:05:42.445Z",
+            "id": 43,
+            "updated_at": "2015-01-10T07:05:42.445Z"
+          }
+        }
+      ],
       "created_at": "2015-02-21T07:05:42.445Z",
       "flow": "parallel",
       "id": 12,
@@ -35,8 +46,8 @@ None.
       "status": "pending",
       "updated_at": "2015-03-28T01:13:33.564Z"
     },
-    "rwa_number": "RWWAAA #",
-    "vendor": "Batz Group"
+    "rwa_number": "123456A",
+    "vendor": "ACME Corp"
   },
   // ...
 ]

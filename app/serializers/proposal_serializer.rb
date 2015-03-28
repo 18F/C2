@@ -8,4 +8,5 @@ class ProposalSerializer < ActiveModel::Serializer
   )
 
   has_one :requester
+  has_many :approvals
 end

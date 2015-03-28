@@ -26,6 +26,7 @@ describe 'NCR Work Orders API' do
           'not_to_exceed' => work_order.not_to_exceed,
           'office' => work_order.office,
           'proposal' => {
+            'approvals' => [],
             'created_at' => time_to_s(proposal.created_at),
             'flow' => proposal.flow,
             'id' => proposal.id,
@@ -41,19 +42,40 @@ describe 'NCR Work Orders API' do
 
     it "includes the requester" do
       proposal = FactoryGirl.create(:proposal, :with_requester)
+      FactoryGirl.create(:ncr_work_order, proposal: proposal)
       requester = proposal.requester
-      work_order = FactoryGirl.create(:ncr_work_order, proposal: proposal)
 
       json = get_json('/api/v1/ncr/work_orders.json')
 
-      expect(json[0]['proposal']['requester']).to eq({
+      expect(json[0]['proposal']['requester']).to eq(
         'created_at' => time_to_s(requester.created_at),
         'id' => requester.id,
         'updated_at' => time_to_s(requester.updated_at)
-      })
+      )
     end
 
-    it "includes approvers"
+    it "includes approvers" do
+      proposal = FactoryGirl.create(:proposal, :with_approvers)
+      FactoryGirl.create(:ncr_work_order, proposal: proposal)
+
+      json = get_json('/api/v1/ncr/work_orders.json')
+
+      approvals = proposal.approvals
+      expect(approvals.size).to eq(2)
+
+      approval = proposal.approvals[0]
+      approver = approval.user
+
+      expect(json[0]['proposal']['approvals'][0]).to eq(
+        'id' => approval.id,
+        'status' => 'pending',
+        'user' => {
+          'created_at' => time_to_s(approver.created_at),
+          'id' => approver.id,
+          'updated_at' => time_to_s(approver.updated_at)
+        }
+      )
+    end
 
     it "includes observers"
 
@@ -61,6 +83,8 @@ describe 'NCR Work Orders API' do
       json = get_json('/api/v1/ncr/work_orders.json')
       expect(json).to eq([])
     end
+
+    it "can be paginated"
 
     describe "CORS" do
       let(:origin) { 'http://corsexample.com/' }
