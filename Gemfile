@@ -23,10 +23,10 @@ gem 'turbolinks'
 gem 'uglifier'
 gem 'workflow'
 gem 'factory_girl_rails'
+gem 'faker'
 
 group :test, :development do
   gem 'database_cleaner'
-  gem 'faker'
   gem 'pry-byebug'
   gem 'pry-rails'
   gem 'rspec-rails'
