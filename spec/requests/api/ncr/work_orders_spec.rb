@@ -41,5 +41,35 @@ describe 'NCR Work Orders API' do
       json = JSON.parse(response.body)
       expect(json).to eq([])
     end
+
+    describe "CORS" do
+      let(:origin) { 'http://corsexample.com/' }
+      let(:headers) {
+        {
+          'HTTP_ORIGIN' => origin,
+          'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'GET'
+        }
+      }
+
+      it "sets the Access-Control-Allow-Origin header to allow requests from anywhere" do
+        get '/api/v1/ncr/work_orders.json', {}, headers
+        expect(response.headers['Access-Control-Allow-Origin']).to eq(origin)
+      end
+
+      it "allows general HTTP methods (GET/POST/PUT)" do
+        get '/api/v1/ncr/work_orders.json', {}, headers
+
+        allowed_http_methods = response.header['Access-Control-Allow-Methods']
+        %w{GET POST PUT}.each do |method|
+          expect(allowed_http_methods).to include(method)
+        end
+      end
+
+      it "supports OPTIONS requests" do
+        options '/api/v1/ncr/work_orders.json', {}, headers
+        expect(response.status).to eq(200)
+        expect(response.body).to eq('')
+      end
+    end
   end
 end
