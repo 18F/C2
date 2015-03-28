@@ -4,6 +4,7 @@ This API is currently in a very limited alpha, and may not be enabled in 18F's p
 
 ## Schemas
 
+* All decimals are strings ([more info](https://github.com/rails-api/active_model_serializers/issues/202))
 * All times are in [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) format
 
 ### Approval
@@ -18,9 +19,9 @@ Attribute | Type | Note
 
 Attribute | Type | Note
 --- | --- | ---
-`amount` | string (decimal) | [More info](https://github.com/rails-api/active_model_serializers/issues/202)
+`amount` | string (decimal) |
 `building_number` | string |
-`code` | `null` for BA61 , string for BA80 | Identifier for the type of work
+`code` | `null` for BA61, string for BA80 | Identifier for the type of work
 `emergency` | boolean | Whether the work order was pre-approved or not (can only be `true` for BA61)
 `expense_type` | string | `BA61` or `BA80`
 `id` | integer |
