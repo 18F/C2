@@ -13,6 +13,9 @@ module Ncr
 
   class WorkOrder < ActiveRecord::Base
     has_one :proposal, as: :client_data
+    # TODO remove the dependence
+    has_one :cart, through: :proposal
+
     after_initialize :set_defaults
 
     # @TODO: use integer number of cents to avoid floating point issues
@@ -54,13 +57,12 @@ module Ncr
 
     def add_approvals(approver_email)
       emails = [approver_email] + self.system_approvers
-      cart = self.proposal.cart
       if self.emergency
-        emails.each {|email| cart.add_observer(email) }
+        emails.each {|email| self.cart.add_observer(email) }
         # skip state machine
         self.proposal.update_attribute(:status, 'approved')
       else
-        emails.each {|email| cart.add_approver(email) }
+        emails.each {|email| self.cart.add_approver(email) }
       end
     end
 
@@ -93,7 +95,7 @@ module Ncr
 
     # @todo - this is pretty ugly
     def public_identifier
-      self.proposal.cart.id
+      self.cart.id
     end
 
     def total_price
@@ -101,7 +103,7 @@ module Ncr
     end
 
     def name
-      self.proposal.cart.name
+      self.cart.name
     end
 
     protected
