@@ -7,6 +7,9 @@ module Api
         if params[:limit]
           orders = orders.limit(params[:limit].to_i)
         end
+        if params[:offset]
+          orders = orders.offset(params[:offset].to_i)
+        end
 
         render json: orders, root: false
       end

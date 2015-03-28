@@ -67,10 +67,11 @@ All are optional.
 Name | Values
 --- | ---
 `limit` | an integer >= 0
+`offset` | an integer >= 0
 
 ##### Example
 
-http://c2-dev.cf.18f.us/api/v1/ncr/work_orders.json?limit=5
+http://c2-dev.cf.18f.us/api/v1/ncr/work_orders.json?limit=5&offset=10
 
 #### Response
 

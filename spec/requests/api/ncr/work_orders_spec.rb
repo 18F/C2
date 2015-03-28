@@ -118,7 +118,7 @@ describe 'NCR Work Orders API' do
 
     it "can be `limit`ed" do
       3.times do
-        proposal = FactoryGirl.create(:proposal)
+        proposal = FactoryGirl.create(:proposal, :with_approvers)
         FactoryGirl.create(:ncr_work_order, proposal: proposal)
       end
 
@@ -127,7 +127,17 @@ describe 'NCR Work Orders API' do
       expect(json.size).to eq(2)
     end
 
-    it "can be `offset`"
+    it "can be `offset`" do
+      work_orders = 3.times.map do
+        proposal = FactoryGirl.create(:proposal, :with_approvers)
+        FactoryGirl.create(:ncr_work_order, proposal: proposal)
+      end
+
+      json = get_json('/api/v1/ncr/work_orders.json?offset=1')
+
+      ids = json.map {|order| order['id'] }
+      expect(ids).to eq(work_orders.map(&:id).reverse[1..-1])
+    end
 
     it "gives a 404 if API isn't enabled" do
       ENV.delete('API_ENABLED')
