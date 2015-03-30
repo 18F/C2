@@ -22,10 +22,16 @@
     <%= render partial: "carts/approval_status"  %>
   </div>
   <div class="row">
-    <%= render partial: 'shared/proposal_properties',
-               locals: {proposal: proposal} %>
+    <%= client_partial(proposal.client, 'proposal_properties',
+                       locals: {proposal: proposal }) %>
   </div>
 </div>
+
+<% if display_restart?(cart) %>
+  <%= client_partial(proposal.client, 'restart_link',
+                     locals: {proposal: proposal, cart: cart})
+  %>
+<% end %>
 
 <%- if cart.flow == 'parallel'  %>
   <%- if cart.approvals.approved.any?  %>
@@ -66,6 +72,8 @@
     </div>
   <%- end %>
 <%- end %>
+
+
 
 <div class="cart-comments-container">
   <div id="cart-comments">
@@ -118,8 +126,4 @@
 
 <% if display_response_actions?(cart, @current_user) %>
   <%= render partial: 'approval_actions', locals: { current_user: @current_user, cart: cart} %>
-<% end %>
-<% if display_restart?(cart) %>
-  <%= client_partial(proposal.client,
-                     'restart_link', locals: {proposal: proposal, cart: cart}) %>
 <% end %>

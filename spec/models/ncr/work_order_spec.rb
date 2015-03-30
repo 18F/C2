@@ -5,10 +5,11 @@ describe Ncr::WorkOrder do
         amount: 1000, expense_type: "BA61", vendor: "Some Vend",
         not_to_exceed: false, emergency: true, rwa_number: "RWWAAA #",
         building_number: Ncr::BUILDING_NUMBERS[0],
-        office: Ncr::OFFICES[0])
+        office: Ncr::OFFICES[0], description: "Ddddd")
       expect(wo.fields_for_display.sort).to eq([
         ["Amount", 1000],
         ["Building number", Ncr::BUILDING_NUMBERS[0]],
+        ["Description", "Ddddd"],
         ["Emergency", true],
         ["Expense type", "BA61"],
         ["Not to exceed", false],
@@ -23,10 +24,11 @@ describe Ncr::WorkOrder do
         amount: 1000, expense_type: "BA80", vendor: "Some Vend",
         not_to_exceed: false, emergency: true, rwa_number: "RWWAAA #",
         building_number: Ncr::BUILDING_NUMBERS[0], code: "Some WO#",
-        office: Ncr::OFFICES[0])
+        office: Ncr::OFFICES[0], description: "Ddddd")
       expect(wo.fields_for_display.sort).to eq([
         ["Amount", 1000],
         ["Building number", Ncr::BUILDING_NUMBERS[0]],
+        ["Description", "Ddddd"],
         # No Emergency
         ["Expense type", "BA80"],
         ["Not to exceed", false],
@@ -71,9 +73,8 @@ describe Ncr::WorkOrder do
 
     it "adds the budget approver for a BA80 request" do
       form = FactoryGirl.create(:ncr_work_order, expense_type: 'BA80')
-      cart = form.init_and_save_cart('aaa@example.com', 'Desc1', requester)
+      cart = form.init_and_save_cart('aaa@example.com', requester)
 
-      expect(form.proposal.name).to eq('Desc1')
       expect(cart.requester).to eq(requester)
       expect(approver_emails(cart)).to eq(%w(
         aaa@example.com
@@ -83,9 +84,8 @@ describe Ncr::WorkOrder do
 
     it "adds the two approvers for a BA61 request" do
       form = FactoryGirl.build(:ncr_work_order, expense_type: 'BA61')
-      cart = form.init_and_save_cart('bbb@example.com', 'Desc2', requester)
+      cart = form.init_and_save_cart('bbb@example.com', requester)
 
-      expect(form.proposal.name).to eq('Desc2')
       expect(cart.requester).to eq(requester)
       expect(approver_emails(cart)).to eq(%w(
         bbb@example.com

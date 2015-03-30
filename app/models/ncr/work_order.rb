@@ -12,7 +12,12 @@ module Ncr
   OFFICES = DATA['OFFICES']
 
   class WorkOrder < ActiveRecord::Base
+    # TODO include ProposalDelegate
+
     has_one :proposal, as: :client_data
+    # TODO remove the dependence
+    has_one :cart, through: :proposal
+
     after_initialize :set_defaults
 
     # @TODO: use integer number of cents to avoid floating point issues
@@ -24,6 +29,7 @@ module Ncr
     validates :vendor, presence: true
     validates :building_number, presence: true
     validates :office, presence: true
+    # TODO validates :proposal, presence: true
 
     def set_defaults
       self.not_to_exceed ||= false
@@ -32,9 +38,8 @@ module Ncr
 
     # @todo - this is an awkward dance due to the lingering Cart model. Remove
     # that dependence
-    def init_and_save_cart(approver_email, description, requester)
+    def init_and_save_cart(approver_email, requester)
       cart = Cart.create(
-        name: description,
         proposal_attributes: {flow: 'linear', client_data: self}
       )
       cart.set_requester(requester)
@@ -43,8 +48,7 @@ module Ncr
       cart
     end
 
-    def update_cart(approver_email, description, cart)
-      cart.name = description
+    def update_cart(approver_email, cart)
       cart.proposal.approvals.destroy_all
       self.add_approvals(approver_email)
       cart.restart!
@@ -53,20 +57,19 @@ module Ncr
 
     def add_approvals(approver_email)
       emails = [approver_email] + self.system_approvers
-      cart = self.proposal.cart
       if self.emergency
-        emails.each {|email| cart.add_observer(email) }
+        emails.each {|email| self.cart.add_observer(email) }
         # skip state machine
         self.proposal.update_attribute(:status, 'approved')
       else
-        emails.each {|email| cart.add_approver(email) }
+        emails.each {|email| self.cart.add_approver(email) }
       end
     end
 
     # Ignore values in certain fields if they aren't relevant. May want to
     # split these into different models
     def self.relevant_fields(expense_type)
-      fields = [:amount, :expense_type, :vendor, :not_to_exceed,
+      fields = [:description, :amount, :expense_type, :vendor, :not_to_exceed,
                 :building_number, :office]
       case expense_type
       when "BA61"
@@ -92,17 +95,13 @@ module Ncr
 
     # @todo - this is pretty ugly
     def public_identifier
-      self.proposal.cart.id
+      self.cart.id
     end
 
     def total_price
       self.amount || 0.0
     end
 
-    def name
-      self.proposal.cart.name
-    end
-    
     # may be replaced with paper-trail or similar at some point
     def version
       self.updated_at.to_i

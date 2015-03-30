@@ -2,15 +2,6 @@ describe "CORS requests for cart creation" do
   let(:params) { read_fixture('cart_without_approval_group') }
   let(:json_params) { JSON.parse(params) }
 
-  # Add support for testing `options` requests in rspec.
-  # https://gist.github.com/melcher/8854953
-  def options(*args)
-    reset! unless integration_session
-    integration_session.__send__(:process, :options, *args).tap do
-      copy_session_variables!
-    end
-  end
-
   it "sets the Access-Control-Allow-Origin header to allow CORS from anywhere" do
     origin = 'http://corsexample.com/'
     post '/send_cart', json_params, {

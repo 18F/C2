@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   helper TimeHelper
+  add_template_helper ClientHelper
 
   protect_from_forgery with: :exception
   helper_method :current_user, :signed_in?

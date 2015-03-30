@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'active_model_serializers'
 gem 'acts_as_list'
 gem 'ar_outer_joins'
 gem 'autoprefixer-rails'
@@ -22,11 +23,11 @@ gem 'simple_form_object'
 gem 'turbolinks'
 gem 'uglifier'
 gem 'workflow'
+gem 'factory_girl_rails'
+gem 'faker'
 
 group :test, :development do
   gem 'database_cleaner'
-  gem 'factory_girl_rails'
-  gem 'faker'
   gem 'pry-byebug'
   gem 'pry-rails'
   gem 'rspec-rails'
