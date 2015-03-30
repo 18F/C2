@@ -2,7 +2,7 @@
   <p>
     <%= link_to "Approve",
         approval_response_path(approver_action: 'approve',
-                               cart_id: cart.id,
+                               cart_id: cart.id, version: cart.proposal.version
                                ), class: 'form-button' %>
   </p>
 </div>

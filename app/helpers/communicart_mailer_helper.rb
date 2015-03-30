@@ -18,6 +18,7 @@ module CommunicartMailerHelper
     approval_response_url(
       cart_id: approval.cart_id,
       cch: approval.api_token.access_token,
+      version: approval.proposal.version,
       approver_action: action
     )
   end

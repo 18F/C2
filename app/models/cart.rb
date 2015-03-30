@@ -203,4 +203,9 @@ class Cart < ActiveRecord::Base
       0.0
     end
   end
+
+  # may be replaced with paper-trail or similar at some point
+  def version
+    self.updated_at.to_i
+  end
 end

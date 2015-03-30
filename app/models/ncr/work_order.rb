@@ -102,6 +102,11 @@ module Ncr
     def name
       self.proposal.cart.name
     end
+    
+    # may be replaced with paper-trail or similar at some point
+    def version
+      self.updated_at.to_i
+    end
 
     protected
     def budget_approver

@@ -28,6 +28,8 @@ class CommunicartsController < ApplicationController
       flash[:error] = "Sorry, you're not an approver on #{proposal.public_identifier}."
     elsif !approval.pending?
       flash[:error] = "You have already logged a response for Cart #{proposal.public_identifier}"
+    elsif params[:version] && params[:version] != proposal.version.to_s
+      flash[:error] = "This request has recently been changed. Please review the modified request before approving."
     else
       case params[:approver_action]
       when 'approve'
