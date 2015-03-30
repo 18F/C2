@@ -10,7 +10,8 @@ describe CommunicartMailerHelper do
       expect(uri.query_values).to eq(
         'approver_action' => 'approve',
         'cart_id' => approval.cart_id.to_s,
-        'cch' => token.access_token
+        'cch' => token.access_token,
+        'version' => approval.proposal.version.to_s
       )
     end
 
