@@ -141,6 +141,8 @@ describe 'NCR Work Orders API' do
       }.to raise_error(ActionController::RoutingError)
     end
 
+    it "matches the format in the API documentation"
+
     describe "CORS" do
       let(:origin) { 'http://corsexample.com/' }
       let(:headers) {

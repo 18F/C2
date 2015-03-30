@@ -1,4 +1,6 @@
 class UserSerializer < ActiveModel::Serializer
+  # make sure to keep docs/api.md up-to-date
+
   attributes(
     :created_at,
     :id,

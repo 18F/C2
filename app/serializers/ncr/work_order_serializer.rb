@@ -1,5 +1,7 @@
 module Ncr
   class WorkOrderSerializer < ActiveModel::Serializer
+    # make sure to keep docs/api.md up-to-date
+
     attributes(
       :amount,
       :building_number,

@@ -24,10 +24,11 @@ Attribute | Type | Note
 `amount` | string (decimal) | The cost of the work order
 `building_number` | string | ([full list](../config/data/ncr.yaml))
 `code` | `null` for BA61, string for BA80 | Identifier for the type of work
+`description` | string |
 `emergency` | boolean | Whether the work order was pre-approved or not (can only be `true` for BA61)
 `expense_type` | string | `BA61` or `BA80`
 `id` | integer |
-`name` | string | Shown as "description" in the form
+`name` | string |
 `not_to_exceed` | boolean | If the `amount` is exact, or an upper limit
 `office` | string | The group within the service center who submitted the work order ([full list](../config/data/ncr.yaml))
 `proposal` | [Proposal](#proposal) |
@@ -83,6 +84,7 @@ Returns an array of [Work Orders](#ncr-work-order), in descending order of creat
     "amount": "1000.00",
     "building_number": "DC0017ZZ ,WHITE HOUSE-WEST WING1600 PA AVE. NW",
     "code": "ABC",
+    "description": "Existing paint is starting to crack.",
     "emergency": false,
     "expense_type": "BA80",
     "id": 16,
