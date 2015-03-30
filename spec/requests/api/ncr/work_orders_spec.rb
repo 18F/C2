@@ -25,10 +25,11 @@ describe 'NCR Work Orders API' do
           'amount' => work_order.amount.to_s,
           'building_number' => work_order.building_number,
           'code' => work_order.code,
-          'name' => nil,
+          'description' => work_order.description,
           'emergency' => work_order.emergency,
           'expense_type' => work_order.expense_type,
           'id' => work_order.id,
+          'name' => work_order.name,
           'not_to_exceed' => work_order.not_to_exceed,
           'office' => work_order.office,
           'proposal' => {

@@ -16,7 +16,8 @@ describe "National Capital Region proposals" do
       expect(Dispatcher).to receive(:deliver_new_cart_emails)
 
       visit '/ncr/work_orders/new'
-      fill_in 'Description', with: "buying stuff"
+      fill_in 'Name', with: "buying stuff"
+      fill_in 'Description', with: "desc content"
       choose 'BA80'
       fill_in 'Vendor', with: 'ACME'
       fill_in 'Amount', with: 123.45
@@ -40,6 +41,7 @@ describe "National Capital Region proposals" do
       expect(client_data.amount).to eq(123.45)
       expect(client_data.building_number).to eq(Ncr::BUILDING_NUMBERS[0])
       expect(client_data.office).to eq(Ncr::OFFICES[0])
+      expect(client_data.description).to eq('desc content')
       expect(cart.requester).to eq(requester)
       expect(cart.approvers.map(&:email_address)).to eq(%w(
         approver@example.com
@@ -57,7 +59,7 @@ describe "National Capital Region proposals" do
 
     it "doesn't save when the amount is too high" do
       visit '/ncr/work_orders/new'
-      fill_in 'Description', with: "buying stuff"
+      fill_in 'Name', with: "buying stuff"
       choose 'BA80'
       fill_in 'Vendor', with: 'ACME'
       fill_in 'Amount', with: 10_000
@@ -74,7 +76,7 @@ describe "National Capital Region proposals" do
 
     it "includes has overwritten field names" do
       visit '/ncr/work_orders/new'
-      fill_in 'Description', with: "buying stuff"
+      fill_in 'Name', with: "buying stuff"
       choose 'BA80'
       fill_in 'RWA Number', with: 'NumNum'
       fill_in 'Vendor', with: 'ACME'
@@ -106,7 +108,7 @@ describe "National Capital Region proposals" do
 
     let (:work_order) {
       wo = FactoryGirl.create(:ncr_work_order)
-      wo.init_and_save_cart('approver@email.com', 'Description Here', requester)
+      wo.init_and_save_cart('approver@email.com', requester)
       wo
     }
     let(:ncr_cart) {
@@ -187,7 +189,7 @@ describe "National Capital Region proposals" do
       before do
         visit '/ncr/work_orders/new'
 
-        fill_in 'Description', with: "buying stuff"
+        fill_in 'Name', with: "buying stuff"
         fill_in 'Vendor', with: 'ACME'
         fill_in 'Amount', with: 123.45
         fill_in "Approving Official's Email Address", with: 'approver@example.com'

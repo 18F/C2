@@ -38,9 +38,8 @@ module Ncr
 
     # @todo - this is an awkward dance due to the lingering Cart model. Remove
     # that dependence
-    def init_and_save_cart(approver_email, description, requester)
+    def init_and_save_cart(approver_email, requester)
       cart = Cart.create(
-        name: description,
         proposal_attributes: {flow: 'linear', client_data: self}
       )
       cart.set_requester(requester)
@@ -49,8 +48,7 @@ module Ncr
       cart
     end
 
-    def update_cart(approver_email, description, cart)
-      cart.name = description
+    def update_cart(approver_email, cart)
       cart.proposal.approvals.destroy_all
       self.add_approvals(approver_email)
       cart.restart!
@@ -71,7 +69,7 @@ module Ncr
     # Ignore values in certain fields if they aren't relevant. May want to
     # split these into different models
     def self.relevant_fields(expense_type)
-      fields = [:amount, :expense_type, :vendor, :not_to_exceed,
+      fields = [:description, :amount, :expense_type, :vendor, :not_to_exceed,
                 :building_number, :office]
       case expense_type
       when "BA61"
@@ -102,10 +100,6 @@ module Ncr
 
     def total_price
       self.amount || 0.0
-    end
-
-    def name
-      self.cart.try(:name)
     end
 
     protected

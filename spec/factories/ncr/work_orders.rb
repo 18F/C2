@@ -8,6 +8,7 @@ FactoryGirl.define do
     emergency false
     rwa_number "RWWAAA #"
     office Ncr::OFFICES[0]
+    name "NCR Name"
 
     trait :with_proposal do
       proposal

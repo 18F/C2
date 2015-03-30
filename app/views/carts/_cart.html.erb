@@ -22,8 +22,8 @@
     <%= render partial: "carts/approval_status"  %>
   </div>
   <div class="row">
-    <%= render partial: 'shared/proposal_properties',
-               locals: {proposal: proposal} %>
+    <%= client_partial(proposal.client, 'proposal_properties',
+                       locals: {proposal: proposal }) %>
   </div>
 </div>
 

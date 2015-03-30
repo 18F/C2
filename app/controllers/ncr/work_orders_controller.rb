@@ -11,13 +11,12 @@ module Ncr
 
     def create
       @approver_email = params[:approver_email]
-      @description = params[:description]
       @work_order = Ncr::WorkOrder.new(permitted_params)
 
       if self.errors.empty?
         @work_order.save
         cart = @work_order.init_and_save_cart(
-          @approver_email, @description, current_user)
+          @approver_email, current_user)
         flash[:success] = "Proposal submitted!"
         redirect_to cart_path(cart)
       else
@@ -29,21 +28,18 @@ module Ncr
     def edit
       @work_order = self.work_order
       @approver_email = self.cart.ordered_approvals.first.user.email_address
-      @description = self.cart.name
       render 'form'
     end
 
     def update
       @approver_email = params[:approver_email]
-      @description = params[:description]
       @work_order = self.work_order
       @work_order.update(permitted_params)
 
       if self.errors.empty?
         cart = self.cart
-        cart.name = @description
         @work_order.save
-        @work_order.update_cart(@approver_email, @description, cart)
+        @work_order.update_cart(@approver_email, cart)
         flash[:success] = "Proposal resubmitted!"
         redirect_to cart_path(cart)
       else
@@ -77,16 +73,12 @@ module Ncr
     def permitted_params
       fields = Ncr::WorkOrder.relevant_fields(
         params[:ncr_work_order][:expense_type])
-      params.require(:ncr_work_order).permit(*fields)
+      params.require(:ncr_work_order).permit(:name, *fields)
     end
 
     protected
     def errors
-      # @TODO we can use a nested model once we get rid of the Cart requirement
       errors = []
-      if @description.blank?
-        errors = errors << "Description is required"
-      end
       if @approver_email.blank?
         errors = errors << "Approver email is required"
       end
