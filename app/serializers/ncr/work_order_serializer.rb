@@ -4,6 +4,7 @@ module Ncr
       :amount,
       :building_number,
       :code,
+      :description,
       :emergency,
       :expense_type,
       :id,
