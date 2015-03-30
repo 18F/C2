@@ -59,6 +59,7 @@ RSpec.configure do |config|
 
   # Add modules for helpers
   config.include ControllerSpecHelper, type: :controller
+  config.include RequestSpecHelper, type: :request
   [:feature, :request].each do |type|
     config.include IntegrationSpecHelper, type: type
   end
