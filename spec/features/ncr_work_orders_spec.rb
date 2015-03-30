@@ -151,8 +151,8 @@ describe "National Capital Region proposals" do
 
     it "shows a restart link from a pending cart" do
       visit "/carts/#{ncr_cart.id}"
-      expect(page).to have_content('Restart this Cart?')
-      click_on('Restart this Cart?')
+      expect(page).to have_content('Modify Request')
+      click_on('Modify Request')
       expect(current_path).to eq("/ncr/work_orders/#{work_order.id}/edit")
     end
 
@@ -160,27 +160,27 @@ describe "National Capital Region proposals" do
       ncr_cart.proposal.update_attribute(:status, 'rejected') # avoid state machine
 
       visit "/carts/#{ncr_cart.id}"
-      expect(page).to have_content('Restart this Cart?')
+      expect(page).to have_content('Modify Request')
     end
 
     it "does not show a restart link for an approved cart" do
       ncr_cart.proposal.update_attribute(:status, 'approved') # avoid state machine
 
       visit "/carts/#{ncr_cart.id}"
-      expect(page).not_to have_content('Restart this Cart?')
+      expect(page).not_to have_content('Modify Request')
     end
 
     it "does not show a restart link for another client" do
       ncr_cart.proposal.client_data = nil
       ncr_cart.proposal.save()
       visit "/carts/#{ncr_cart.id}"
-      expect(page).not_to have_content('Restart this Cart?')
+      expect(page).not_to have_content('Modify Request')
     end
 
     it "does not show a restart link for non requester" do
       ncr_cart.set_requester(FactoryGirl.create(:user))
       visit "/carts/#{ncr_cart.id}"
-      expect(page).not_to have_content('Restart this Cart?')
+      expect(page).not_to have_content('Modify Request')
     end
 
     context "selected common values on proposal page" do
