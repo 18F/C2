@@ -22,10 +22,6 @@ module CartsHelper
     current_linear_approval?(cart, user)
   end
 
-  def display_restart?(cart)
-    current_user == cart.requester && (cart.pending? || cart.rejected?)
-  end
-
   def approval_by(cart, user)
     cart.approvals.find_by(approvals: { user_id: user.id })
   end

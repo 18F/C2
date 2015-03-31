@@ -228,6 +228,8 @@ GEM
       pry (~> 0.10)
     pry-rails (0.3.2)
       pry (>= 0.9.10)
+    pundit (0.3.0)
+      activesupport (>= 3.0.0)
     rack (1.5.2)
     rack-cors (0.3.1)
     rack-test (0.6.3)
@@ -378,6 +380,7 @@ DEPENDENCIES
   poltergeist
   pry-byebug
   pry-rails
+  pundit
   rack-cors
   rack_session_access
   railroady

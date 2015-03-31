@@ -1,7 +1,8 @@
 module Ncr
   class WorkOrdersController < ApplicationController
     before_filter :authenticate_user!
-    before_filter :redirect_if_cart_cant_be_edited, only: [:edit, :update]
+    before_filter ->{authorize self.work_order.proposal}, only: [:edit, :update] 
+    rescue_from Pundit::NotAuthorizedError, with: :auth_errors
 
     def new
       @work_order = Ncr::WorkOrder.new
@@ -32,9 +33,9 @@ module Ncr
     end
 
     def update
-      @approver_email = params[:approver_email]
       @work_order = self.work_order
       @work_order.update(permitted_params)
+      @approver_email = params[:approver_email]
 
       if self.errors.empty?
         cart = self.cart
@@ -62,14 +63,6 @@ module Ncr
       self.work_order.proposal.cart
     end
 
-    def redirect_if_cart_cant_be_edited
-      if self.cart.approved?
-        redirect_to new_ncr_work_order_path, :alert => "That proposal's already approved. New proposal?"
-      elsif self.cart.requester != current_user
-        redirect_to new_ncr_work_order_path, :alert => 'You cannot restart that proposal'
-      end
-    end
-
     def permitted_params
       fields = Ncr::WorkOrder.relevant_fields(
         params[:ncr_work_order][:expense_type])
@@ -86,6 +79,15 @@ module Ncr
         errors = errors + @work_order.errors.full_messages
       end
       errors
+    end
+
+    def auth_errors(exception)
+      if exception.query == :not_approved?
+        message = "That proposal's already approved. New proposal?"
+      else
+        message = "You cannot restart that proposal"
+      end
+      redirect_to new_ncr_work_order_path, :alert => message
     end
 
   end
