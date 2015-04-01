@@ -43,11 +43,6 @@ group :development do
   gem 'letter_opener_web'
   gem 'spring'
   gem 'spring-commands-rspec'
-
-  # Capistrano stuff
-  gem 'aws-sdk', '2.0.6.pre', require: false
-  gem 'capistrano', require: false
-  gem 'capistrano-ec2_tagged', require: false
 end
 
 group :test do
