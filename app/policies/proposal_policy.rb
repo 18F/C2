@@ -1,6 +1,5 @@
 class ProposalPolicy
   include TreePolicy
-  attr_reader :user, :proposal
 
   def perm_trees
     {
