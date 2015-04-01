@@ -14,10 +14,8 @@ module TreePolicy
     value = self.perm_trees[key]
     if value.nil?   # Base case
       [key]
-    elsif value.kind_of?(Array)   # branching tree
+    else    # deferring to the composing permissions
       value.flat_map{|k| self.flatten_tree(k) }
-    else    # deferring to another query/permission
-      self.flatten_tree(value)
     end
   end
 

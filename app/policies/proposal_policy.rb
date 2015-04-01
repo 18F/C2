@@ -4,7 +4,7 @@ class ProposalPolicy
   def perm_trees
     {
       edit?: [:author?, :not_approved?],
-      update?: :edit?
+      update?: [:edit?]
     }
   end
 
