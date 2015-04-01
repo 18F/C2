@@ -27,7 +27,7 @@
   </div>
 </div>
 
-<% if display_restart?(cart) %>
+<% if policy(proposal).edit? %>
   <%= client_partial(proposal.client, 'restart_link',
                      locals: {proposal: proposal, cart: cart})
   %>
