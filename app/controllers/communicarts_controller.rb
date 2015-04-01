@@ -22,26 +22,29 @@ class CommunicartsController < ApplicationController
     cart = Cart.find(params[:cart_id]).decorate
     proposal = cart.proposal
     approval = cart.approvals.find_by(user_id: user_id)
-    @token ||= ApiToken.find_by(approval_id: approval.id)
-
-    if !approval
-      flash[:error] = "Sorry, you're not an approver on #{proposal.public_identifier}."
-    elsif !approval.pending?
-      flash[:error] = "You have already logged a response for Cart #{proposal.public_identifier}"
-    else
-      case params[:approver_action]
-      when 'approve'
-        approval.approve!
-        flash[:success] = "You have approved Cart #{proposal.public_identifier}."
-      when 'reject'
-        approval.reject!
-        flash[:success] = "You have rejected Cart #{proposal.public_identifier}."
+    
+    if approval
+      if !approval.pending?
+        flash[:error] = "You have already logged a response for Cart #{proposal.public_identifier}"
+      else
+        @token ||= ApiToken.find_by(approval_id: approval.id)
+        case params[:approver_action]
+        when 'approve'
+          approval.approve!
+          flash[:success] = "You have approved Cart #{proposal.public_identifier}."
+        when 'reject'
+          approval.reject!
+          flash[:success] = "You have rejected Cart #{proposal.public_identifier}."
+        end
       end
+      
+      if @token && !@token.used?
+        @token.use!
+      end
+    else
+      flash[:error] = "Sorry, you're not an approver on Proposal #{proposal.public_identifier}."
     end
 
-    if @token && !@token.used?
-      @token.use!
-    end
     redirect_to cart_path(cart)
   end
 
