@@ -22,7 +22,6 @@ class CommunicartsController < ApplicationController
     cart = Cart.find(params[:cart_id]).decorate
     proposal = cart.proposal
     approval = cart.approvals.find_by(user_id: user_id)
-    @token ||= ApiToken.find_by(approval_id: approval.id)
 
     if !approval
       flash[:error] = "Sorry, you're not an approver on #{proposal.public_identifier}."
@@ -31,6 +30,7 @@ class CommunicartsController < ApplicationController
     elsif params[:version] && params[:version] != proposal.version.to_s
       flash[:error] = "This request has recently been changed. Please review the modified request before approving."
     else
+      @token ||= ApiToken.find_by(approval_id: approval.id)
       case params[:approver_action]
       when 'approve'
         approval.approve!
@@ -40,10 +40,11 @@ class CommunicartsController < ApplicationController
         flash[:success] = "You have rejected Cart #{proposal.public_identifier}."
       end
     end
-
+      
     if @token && !@token.used?
       @token.use!
     end
+
     redirect_to cart_path(cart)
   end
 

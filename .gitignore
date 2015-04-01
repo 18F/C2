@@ -19,11 +19,9 @@
 custom_plan.rb
 public/assets
 zeus.json
-config/environment_variables.yml
 *~
 coverage
 .floo*
-config/feature_flags.yml
 .env*
 !.env.example
 

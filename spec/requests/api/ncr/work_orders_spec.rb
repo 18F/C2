@@ -10,7 +10,7 @@ describe 'NCR Work Orders API' do
 
   before do
     # TODO clean this up
-    ENV['API_ENABLED'] = '1'
+    ENV['API_ENABLED'] = 'true'
   end
 
   describe 'GET /api/v1/ncr/work_orders.json' do
@@ -140,6 +140,8 @@ describe 'NCR Work Orders API' do
         get '/api/v1/ncr/work_orders.json'
       }.to raise_error(ActionController::RoutingError)
     end
+
+    it "matches the format in the API documentation"
 
     describe "CORS" do
       let(:origin) { 'http://corsexample.com/' }
