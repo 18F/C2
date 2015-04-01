@@ -12,8 +12,9 @@ class Proposal < ActiveRecord::Base
   belongs_to :requester, class_name: 'User'
 
   # The following list also servers as an interface spec for client_datas
+  # Note: clients should also implement :version
   delegate :fields_for_display, :client, :public_identifier, :total_price,
-           :name, :version, to: :client_data_legacy
+           :name, to: :client_data_legacy
 
   validates :flow, presence: true, inclusion: {in: ApprovalGroup::FLOWS}
   # TODO validates :requester_id, presence: true
@@ -63,6 +64,9 @@ class Proposal < ActiveRecord::Base
     self.update_attributes!(requester_id: user.id)
   end
 
+  def version
+    [self.updated_at.to_i, self.client_data_legacy.version].max
+  end
 
   #### state machine methods ####
   # TODO remove dependence on Cart
