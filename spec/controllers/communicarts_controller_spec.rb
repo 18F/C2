@@ -83,6 +83,7 @@ describe CommunicartsController do
     let!(:approval) { cart.approvals.first }
     let!(:approver) { approval.user }
     let!(:token) { approval.create_api_token! }
+    let!(:proposal) { cart.proposal }
 
     let(:approval_params_with_token) {
       {
@@ -157,6 +158,30 @@ describe CommunicartsController do
         expect(token.used?).to eq(true)
       end
     end
-  end
 
+    context "version number" do
+      it "doesn't need to be present" do
+        put 'approval_response', approval_params_with_token
+        approval.reload
+        expect(approval).to be_approved
+        expect(flash[:error]).not_to be_present
+      end
+      it "works if version matches" do
+        params = approval_params_with_token
+        params[:version] = proposal.version.to_s
+        put 'approval_response', params
+        approval.reload
+        expect(approval).to be_approved
+        expect(flash[:error]).not_to be_present
+      end
+      it "doesn't work if versions don't match" do
+        params = approval_params_with_token
+        params[:version] = (proposal.version - 1).to_s
+        put 'approval_response', params
+        approval.reload
+        expect(approval).not_to be_approved
+        expect(flash[:error]).to be_present
+      end
+    end
+  end
 end

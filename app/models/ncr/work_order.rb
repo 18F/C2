@@ -102,6 +102,11 @@ module Ncr
       self.amount || 0.0
     end
 
+    # may be replaced with paper-trail or similar at some point
+    def version
+      self.updated_at.to_i
+    end
+
     protected
     def budget_approver
       ENV['NCR_BUDGET_APPROVER_EMAIL'] || 'communicart.budget.approver@gmail.com'

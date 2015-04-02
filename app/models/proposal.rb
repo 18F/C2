@@ -12,6 +12,7 @@ class Proposal < ActiveRecord::Base
   belongs_to :requester, class_name: 'User'
 
   # The following list also servers as an interface spec for client_datas
+  # Note: clients should also implement :version
   delegate :fields_for_display, :client, :public_identifier, :total_price,
            :name, to: :client_data_legacy
 
@@ -63,6 +64,11 @@ class Proposal < ActiveRecord::Base
     self.update_attributes!(requester_id: user.id)
   end
 
+  # Be careful if altering the identifier. You run the risk of "expiring" all
+  # pending approval emails
+  def version
+    [self.updated_at.to_i, self.client_data_legacy.version].max
+  end
 
   #### state machine methods ####
   # TODO remove dependence on Cart
