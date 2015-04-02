@@ -21,6 +21,11 @@ class ProposalPolicy
     !@proposal.approved?
   end
 
+  def approve_reject?
+    actionable_approvers = @proposal.currently_awaiting_approvers
+    actionable_approvers.include? @user
+  end
+
   def edit?
     self.test_all(:edit?)
   end

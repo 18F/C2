@@ -25,7 +25,7 @@
                 <td
                   <%= generate_bookend_class(index, @cart.approvals_in_list_order.count) %>
                 >
-                  <%= status_icon_tag(approval.status, @cart.linear?) %>
+                  <%= status_icon_tag(approval.status, @cart.proposal.linear?) %>
                   <span class="approver">
                     <%= mail_to approval.user_email_address, approval.user_full_name %>
                   </span>
