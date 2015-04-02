@@ -64,6 +64,8 @@ class Proposal < ActiveRecord::Base
     self.update_attributes!(requester_id: user.id)
   end
 
+  # Be careful if altering the identifier. You run the risk of "expiring" all
+  # pending approval emails
   def version
     [self.updated_at.to_i, self.client_data_legacy.version].max
   end
