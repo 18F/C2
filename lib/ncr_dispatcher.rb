@@ -9,6 +9,6 @@ class NcrDispatcher < LinearDispatcher
   end
 
   def final_approval(cart)
-    cart.approvals.ordered.last
+    cart.approvals.last
   end
 end

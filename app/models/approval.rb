@@ -21,7 +21,7 @@ class Approval < ActiveRecord::Base
     scope status, -> { where(status: status) }
   end
   scope :received, -> { approvable.where.not(status: 'pending') }
-  scope :ordered, -> { order('position ASC') }
+  default_scope { order('position ASC') }
 
 
   # TODO remove

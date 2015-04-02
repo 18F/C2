@@ -1,6 +1,6 @@
 describe NcrDispatcher do
   let!(:cart) { FactoryGirl.create(:cart_with_approvals) }
-  let(:approvals) { cart.approvals.ordered }
+  let(:approvals) { cart.approvals }
   let(:approval_1) { approvals.first }
   let(:approval_2) { approvals.second }
   let(:ncr_dispatcher) { NcrDispatcher.new }

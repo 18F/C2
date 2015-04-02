@@ -74,7 +74,7 @@ class Proposal < ActiveRecord::Base
   end
 
   def ordered_awaiting_approvals
-    self.approvals.ordered.pending
+    self.approvals.pending
   end
 
   def currently_awaiting_approvals
