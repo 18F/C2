@@ -28,7 +28,7 @@ module Ncr
 
     def edit
       @work_order = self.work_order
-      @approver_email = self.cart.ordered_approvals.first.user.email_address
+      @approver_email = self.work_order.proposal.approvals.ordered.first.user.email_address
       render 'form'
     end
 

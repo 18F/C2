@@ -19,31 +19,6 @@ class Cart < ActiveRecord::Base
     self.approvals.rejected
   end
 
-  def awaiting_approvals
-    self.approvals.pending
-  end
-
-  def awaiting_approvers
-    self.approvers.merge(self.awaiting_approvals)
-  end
-
-  def ordered_approvals
-    self.approvals.ordered
-  end
-
-  def ordered_awaiting_approvals
-    self.ordered_approvals.pending
-  end
-
-  # users with outstanding cart_notification_emails
-  def currently_awaiting_approvers
-    if self.parallel?
-      self.awaiting_approvers
-    else # linear. Assumes the cart is open
-      self.approvers.merge(self.ordered_awaiting_approvals).limit(1)
-    end
-  end
-
   def approved_approvals
     self.approvals.approved
   end
@@ -166,15 +141,6 @@ class Cart < ActiveRecord::Base
   def gsa_advantage?
     self.client == 'gsa_advantage'
   end
-
-  def parallel?
-    self.flow == 'parallel'
-  end
-
-  def linear?
-    self.flow == 'linear'
-  end
-
 
   # Some fields aren't meant for the clients' eyes
   EXCLUDE_FIELDS_FROM_DISPLAY = ['origin', 'contractingVehicle', 'location', 'configType']

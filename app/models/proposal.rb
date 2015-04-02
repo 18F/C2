@@ -31,6 +31,15 @@ class Proposal < ActiveRecord::Base
     self.flow ||= 'parallel'
   end
 
+  def parallel?
+    self.flow == 'parallel'
+  end
+
+  def linear?
+    self.flow == 'linear'
+  end
+
+
   # Use this until all clients are migrated to models (and we no longer have a
   # dependence on "Cart"
   def client_data_legacy
@@ -62,6 +71,26 @@ class Proposal < ActiveRecord::Base
 
   def set_requester(user)
     self.update_attributes!(requester_id: user.id)
+  end
+
+  def ordered_awaiting_approvals
+    self.approvals.ordered.pending
+  end
+
+  def currently_awaiting_approvals
+    if self.parallel?
+      self.ordered_awaiting_approvals
+    else  # linear
+      self.ordered_awaiting_approvals.limit(1)
+    end
+  end
+
+  def currently_awaiting_approvers
+    self.approvers.merge(self.currently_awaiting_approvals)
+  end
+
+  def ordered_awaiting_approvers
+    self.approvers.merge(self.ordered_awaiting_approvals)
   end
 
   # Be careful if altering the identifier. You run the risk of "expiring" all

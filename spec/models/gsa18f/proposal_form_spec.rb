@@ -2,7 +2,7 @@ describe Gsa18f::ProposalForm do
   describe '#create_cart' do
     def approver_emails(form)
       cart = form.create_cart
-      approvals = cart.ordered_approvals
+      approvals = cart.approvals.ordered
       approvals.map {|a| a.user.email_address }
     end
 

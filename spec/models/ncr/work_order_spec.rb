@@ -67,7 +67,7 @@ describe Ncr::WorkOrder do
   describe '#init_and_save_cart' do
     let(:requester) { FactoryGirl.create(:user) }
     def approver_emails(cart)
-      approvals = cart.ordered_approvals
+      approvals = cart.approvals.ordered
       approvals.map {|a| a.user.email_address }
     end
 

@@ -3,7 +3,7 @@ module CartsHelper
   # https://github.com/rspec/rspec-rails/issues/1076
   def display_status(cart, user)
     if cart.pending?
-      approvers = cart.currently_awaiting_approvers
+      approvers = cart.proposal.currently_awaiting_approvers
       if approvers.include?(user)
         content_tag('strong', "Please review")
       else

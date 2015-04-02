@@ -86,7 +86,7 @@ class Dispatcher
   protected
 
   def all_users_for_cart(cart)
-    users_to_notify = cart.currently_awaiting_approvers
+    users_to_notify = cart.proposal.currently_awaiting_approvers
     if cart.requester
       users_to_notify << cart.requester
     end

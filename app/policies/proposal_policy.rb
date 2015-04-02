@@ -22,7 +22,7 @@ class ProposalPolicy
   end
 
   def approve_reject?
-    actionable_approvers = @proposal.cart.currently_awaiting_approvers
+    actionable_approvers = @proposal.currently_awaiting_approvers
     actionable_approvers.include? @user
   end
 

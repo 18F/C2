@@ -61,37 +61,6 @@ describe Cart do
     end
   end
 
-  describe '#ordered_awaiting_approvals' do
-    let(:cart) { FactoryGirl.create(:cart_with_approvals) }
-
-    it "returns users in order of position" do
-      cart.approvals.first.update_attribute(:position, 5)
-      expect(cart.ordered_awaiting_approvals).to eq(cart.awaiting_approvals.order('id DESC'))
-    end
-  end
-
-  describe '#currently_awaiting_approvers' do
-    it "gives a consistently ordered list when in parallel" do
-      cart = FactoryGirl.create(:cart_with_approvals)
-      emails = cart.currently_awaiting_approvers.map(&:email_address)
-      expect(emails).to eq(%w(approver1@some-dot-gov.gov approver2@some-dot-gov.gov))
-
-      cart.approvals.first.update_attribute(:position, 5)
-      emails = cart.currently_awaiting_approvers.map(&:email_address).sort
-      expect(emails).to eq(%w(approver1@some-dot-gov.gov approver2@some-dot-gov.gov))
-    end
-
-    it "gives only the first approver when linear" do
-      cart = FactoryGirl.create(:cart_with_approvals, flow: 'linear')
-      emails = cart.currently_awaiting_approvers.map(&:email_address)
-      expect(emails).to eq(%w(approver1@some-dot-gov.gov))
-
-      cart.approvals.first.update_attribute(:position, 5)
-      emails = cart.currently_awaiting_approvers.map(&:email_address)
-      expect(emails).to eq(%w(approver2@some-dot-gov.gov))
-    end
-  end
-
   context 'scopes' do
     let(:approved_cart1) { FactoryGirl.create(:cart, status: 'approved') }
     let(:approved_cart2) { FactoryGirl.create(:cart, status: 'approved') }

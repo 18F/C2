@@ -25,7 +25,7 @@ class CartDecorator < Draper::Decorator
 
   def approvals_in_list_order
     if object.flow == 'linear'
-      object.ordered_approvals
+      object.approvals.ordered
     else
       self.approvals_by_status
     end
