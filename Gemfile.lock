@@ -205,6 +205,7 @@ GEM
       activesupport (>= 3.0.0)
     rack (1.5.2)
     rack-cors (0.3.1)
+    rack-ssl-enforcer (0.2.8)
     rack-test (0.6.3)
       rack (>= 1.0)
     rack_session_access (0.1.1)
@@ -348,6 +349,7 @@ DEPENDENCIES
   pry-rails
   pundit
   rack-cors
+  rack-ssl-enforcer
   rack_session_access
   railroady
   rails (~> 4.1.8)
