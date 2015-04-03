@@ -35,8 +35,6 @@ C2::Application.routes.draw do
     resources :proposals
   end
 
-  get "/498", :to => "errors#token_authentication_error"
-
   if Rails.env.development?
     mount MailPreview => 'mail_view'
     mount LetterOpenerWeb::Engine => 'letter_opener'
