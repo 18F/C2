@@ -91,7 +91,7 @@
       <%= label_tag :approver_email, "Approving Official's Email Address" %>
       <%= email_field_tag :approver_email, @approver_email,
                           class: 'form-control js-selectize',
-                          data: {src: '/api/v1/users.json'} %>
+                          data: {attr: 'email_address', src: '/api/v1/users.json'} %>
     </div>
     <%= f.submit "Submit for approval", class: 'btn btn-default' %>
   <% end %>

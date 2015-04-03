@@ -10,10 +10,10 @@ $ ->
       opts.maxItems = 1
 
     if src
-      # TODO make configurable
-      opts.labelField = 'email_address'
-      opts.searchField = ['email_address', 'first_name', 'last_name']
-      opts.valueField = 'email_address'
+      attr = $el.attr('data-attr')
+      opts.labelField = attr
+      opts.searchField = [attr]
+      opts.valueField = attr
 
     $el.selectize(opts)
 
