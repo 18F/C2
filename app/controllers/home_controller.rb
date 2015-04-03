@@ -1,6 +1,7 @@
 class HomeController < ApplicationController
   before_filter :setup_mygov_client
   before_filter :setup_mygov_access_token
+  # just to cut down on exception spam
   before_action :authenticate_user!, only: :error
 
   def oauth_callback
