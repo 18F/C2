@@ -5,7 +5,7 @@ module Api
     private
 
     def enable?
-      signed_in? || ENV['API_ENABLED'] == 'true'
+      signed_in? || ENV['PUBLIC_API_ENABLED'] == 'true'
     end
 
     def fail_if_not_enabled
