@@ -43,7 +43,6 @@ module C2
     }
     config.roadie.url_options = config.action_mailer.default_url_options
 
-    config.exceptions_app = self.routes
     config.autoload_paths << Rails.root.join('lib')
 
     config.assets.precompile << 'common/communicarts.css'
