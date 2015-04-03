@@ -15,10 +15,10 @@ describe 'Users API' do
     ENV['API_ENABLED'] = 'true'
   end
 
-  describe 'GET /api/v1/ncr/users.json' do
+  describe 'GET /api/v1/users.json' do
     it "responds with the list of users" do
       user = FactoryGirl.create(:user)
-      json = get_json('/api/v1/ncr/users.json')
+      json = get_json('/api/v1/users.json')
       expect(json).to eq([
         {
           'created_at' => time_to_s(user.created_at),
@@ -32,7 +32,7 @@ describe 'Users API' do
     end
 
     it "responds with an empty list for no users" do
-      json = get_json('/api/v1/ncr/users.json')
+      json = get_json('/api/v1/users.json')
       expect(json).to eq([])
     end
 
@@ -41,7 +41,7 @@ describe 'Users API' do
         FactoryGirl.create(:user)
       end
 
-      json = get_json('/api/v1/ncr/users.json?limit=2')
+      json = get_json('/api/v1/users.json?limit=2')
       expect(json.size).to eq(2)
     end
 
@@ -50,7 +50,7 @@ describe 'Users API' do
         FactoryGirl.create(:user)
       end
 
-      json = get_json('/api/v1/ncr/users.json?offset=1')
+      json = get_json('/api/v1/users.json?offset=1')
 
       ids = json.map {|user| user['id'] }
       expect(ids).to eq(users.map(&:id)[1..-1])
@@ -60,7 +60,7 @@ describe 'Users API' do
       ENV.delete('API_ENABLED')
 
       expect {
-        get '/api/v1/ncr/users.json'
+        get '/api/v1/users.json'
       }.to raise_error(ActionController::RoutingError)
     end
 
@@ -76,12 +76,12 @@ describe 'Users API' do
       }
 
       it "sets the Access-Control-Allow-Origin header to allow requests from anywhere" do
-        get '/api/v1/ncr/users.json', {}, headers
+        get '/api/v1/users.json', {}, headers
         expect(response.headers['Access-Control-Allow-Origin']).to eq(origin)
       end
 
       it "allows general HTTP methods (GET/POST/PUT)" do
-        get '/api/v1/ncr/users.json', {}, headers
+        get '/api/v1/users.json', {}, headers
 
         allowed_http_methods = response.header['Access-Control-Allow-Methods']
         %w{GET POST PUT}.each do |method|
@@ -90,7 +90,7 @@ describe 'Users API' do
       end
 
       it "supports OPTIONS requests" do
-        options '/api/v1/ncr/users.json', {}, headers
+        options '/api/v1/users.json', {}, headers
         expect(response.status).to eq(200)
         expect(response.body).to eq('')
       end

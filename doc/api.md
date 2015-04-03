@@ -62,7 +62,7 @@ Attribute | Type | Note
 
 ## Endpoints
 
-### `GET /api/v1/ncr/users.json`
+### `GET /api/v1/users.json`
 
 #### Query parameters
 
@@ -75,7 +75,7 @@ Name | Values
 
 ##### Example
 
-http://c2-dev.cf.18f.us/api/v1/ncr/users.json?limit=5&offset=10
+http://c2-dev.cf.18f.us/api/v1/users.json?limit=5&offset=10
 
 #### Response
 
