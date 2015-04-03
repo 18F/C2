@@ -1,15 +1,6 @@
 describe 'NCR Work Orders API' do
   # TODO share common functionality w/ other API specs
 
-  def get_json(url)
-    get(url)
-    JSON.parse(response.body)
-  end
-
-  def time_to_s(time)
-    time.iso8601(3)
-  end
-
   describe 'GET /api/v1/ncr/work_orders.json' do
     without_feature 'API_ENABLED' do
       it "gives a 404" do
@@ -40,12 +31,12 @@ describe 'NCR Work Orders API' do
             'office' => work_order.office,
             'proposal' => {
               'approvals' => [],
-              'created_at' => time_to_s(proposal.created_at),
+              'created_at' => time_to_json(proposal.created_at),
               'flow' => proposal.flow,
               'id' => proposal.id,
               'requester' => nil,
               'status' => 'pending',
-              'updated_at' => time_to_s(proposal.updated_at)
+              'updated_at' => time_to_json(proposal.updated_at)
             },
             'rwa_number' => work_order.rwa_number,
             'vendor' => work_order.vendor
@@ -82,9 +73,9 @@ describe 'NCR Work Orders API' do
         json = get_json('/api/v1/ncr/work_orders.json')
 
         expect(json[0]['proposal']['requester']).to eq(
-          'created_at' => time_to_s(requester.created_at),
+          'created_at' => time_to_json(requester.created_at),
           'id' => requester.id,
-          'updated_at' => time_to_s(requester.updated_at)
+          'updated_at' => time_to_json(requester.updated_at)
         )
       end
 
@@ -104,9 +95,9 @@ describe 'NCR Work Orders API' do
           'id' => approval.id,
           'status' => 'pending',
           'user' => {
-            'created_at' => time_to_s(approver.created_at),
+            'created_at' => time_to_json(approver.created_at),
             'id' => approver.id,
-            'updated_at' => time_to_s(approver.updated_at)
+            'updated_at' => time_to_json(approver.updated_at)
           }
         )
       end

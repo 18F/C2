@@ -1,15 +1,6 @@
 describe 'Users API' do
   # TODO share common functionality w/ other API specs
 
-  def get_json(url)
-    get(url)
-    JSON.parse(response.body)
-  end
-
-  def time_to_s(time)
-    time.iso8601(3)
-  end
-
   describe 'GET /api/v1/users.json' do
     without_feature 'API_ENABLED' do
       it "gives a 404" do
@@ -25,9 +16,9 @@ describe 'Users API' do
         json = get_json('/api/v1/users.json')
         expect(json).to eq([
           {
-            'created_at' => time_to_s(user.created_at),
+            'created_at' => time_to_json(user.created_at),
             'id' => user.id,
-            'updated_at' => time_to_s(user.updated_at)
+            'updated_at' => time_to_json(user.updated_at)
           }
         ])
       end
@@ -39,12 +30,12 @@ describe 'Users API' do
         json = get_json('/api/v1/users.json')
         expect(json).to eq([
           {
-            'created_at' => time_to_s(user.created_at),
+            'created_at' => time_to_json(user.created_at),
             'email_address' => user.email_address,
             'first_name' => user.first_name,
             'id' => user.id,
             'last_name' => user.last_name,
-            'updated_at' => time_to_s(user.updated_at)
+            'updated_at' => time_to_json(user.updated_at)
           }
         ])
       end
