@@ -14,6 +14,6 @@
 //= require jquery.turbolinks
 //= require jquery_ujs
 //= require turbolinks
-//= require_directory .
 //= require bootstrap-sprockets
 //= require selectize
+//= require_directory .

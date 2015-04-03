@@ -1,0 +1,2 @@
+$ ->
+  $('.js-selectize').selectize()
