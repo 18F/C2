@@ -41,12 +41,16 @@ You can see the up-to-date database schema in [`db/schema.rb`](../db/schema.rb).
 
 This application contains code for several independent but similar use cases. Users will generally be segmented into one use case or another in terms of how the Proposals are initiated, though the approval workflow is (largely) the same.
 
+### 18F Equipment
+
+In the "old days", 18F staff would make requests for software and equipment via a spreadsheet that our Operations team lead would check periodically. The team is growing quickly and we now ask that employees get sign-off on their equipment/software requests from their manager before it goes to the Ops team, so are moving this process to C2. You will see references to `Gsa18f` throughout the code.
+
 ### [National Capitol Region (NCR) service centers](http://www.gsa.gov/portal/category/21528)
 
 The NCR use case was built around GSA service centers (paint shops, landscapers, etc.) needing approvals for their superiors and various budget officials for credit card purchases. They use the "linear" workflow described [above](#proposal-flows):
 
 1. The requester logs in via MyUSA.
-1. The requester submits a new purchase request via the form at `/ncr/proposals/new`.
+1. The requester submits a new purchase request via the form at `/ncr/work_orders/new`.
 1. Their "approving officer" (the "AO" – their supervisor) receives an email notification with the request.
 1. If the AO approves, it goes to one or two other budget office approvers, depending on the type of request.
 1. Once all approvers have approved (or any one of them reject) the Proposal, the requester gets a notification.

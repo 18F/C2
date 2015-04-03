@@ -3,6 +3,7 @@ C2::Application.routes.draw do
   match 'approval_response', to: 'communicarts#approval_response', via: [:get, :put]
   root :to => 'home#index'
   match "/auth/:provider/callback" => "home#oauth_callback", via: [:get]
+  get '/error' => 'home#error'
   post "/logout" => "home#logout"
 
   namespace :api, constraints: lambda {|req| ENV['API_ENABLED'] == 'true' } do
@@ -36,8 +37,6 @@ C2::Application.routes.draw do
   namespace :gsa18f do
     resources :proposals
   end
-
-  get "/498", :to => "errors#token_authentication_error"
 
   if Rails.env.development?
     mount MailPreview => 'mail_view'

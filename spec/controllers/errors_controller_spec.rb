@@ -1,3 +1,0 @@
-describe ErrorsController do
-
-end

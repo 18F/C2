@@ -40,7 +40,7 @@ class CommunicartsController < ApplicationController
         flash[:success] = "You have rejected Cart #{proposal.public_identifier}."
       end
     end
-      
+
     if @token && !@token.used?
       @token.use!
     end
@@ -78,7 +78,7 @@ class CommunicartsController < ApplicationController
 
   def authentication_error(e)
     flash[:error] = e.message
-    redirect_to "/498.html"
+    render 'authentication_error', status: 403
   end
 
   def approval_group_error(error)
