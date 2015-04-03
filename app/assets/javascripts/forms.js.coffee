@@ -20,5 +20,12 @@ $ ->
     if src
       # load options from server
       selectize = $el[0].selectize
-      $.getJSON src, (data) ->
-        selectize.addOption(data)
+      # TODO make sorting smarter, e.g. approvers/vendors they have used before
+      $.ajax(
+        url: src
+        data: {limit: 100}
+        dataType: 'json'
+        cache: true
+        success: (data) ->
+          selectize.addOption(data)
+      )
