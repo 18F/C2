@@ -11,6 +11,8 @@ C2::Application.routes.draw do
       namespace :ncr do
         resources :work_orders, only: [:index]
       end
+
+      resources :users, only: [:index]
     end
   end
 
