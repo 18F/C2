@@ -2,21 +2,22 @@ describe 'NCR Work Orders API' do
   # TODO share common functionality w/ other API specs
 
   describe 'GET /api/v1/ncr/work_orders.json' do
-    without_feature 'API_ENABLED' do
-      it "gives a 404" do
-        expect {
-          get '/api/v1/ncr/work_orders.json'
-        }.to raise_error(ActionController::RoutingError)
+    without_feature 'PUBLIC_API_ENABLED' do
+      it "gives a 403" do
+        json = get_json('/api/v1/ncr/work_orders.json')
+        expect(response.status).to eq(403)
+        expect(json['message']).to eq("Not authorized")
       end
     end
 
-    with_feature 'API_ENABLED' do
+    with_feature 'PUBLIC_API_ENABLED' do
       it "responds with the list of work orders" do
         work_order = FactoryGirl.create(:ncr_work_order, :with_proposal)
         proposal = work_order.proposal
 
         json = get_json('/api/v1/ncr/work_orders.json')
 
+        expect(response.status).to eq(200)
         expect(json).to eq([
           {
             'amount' => work_order.amount.to_s,

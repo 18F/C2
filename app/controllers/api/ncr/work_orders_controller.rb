@@ -1,6 +1,6 @@
 module Api
   module Ncr
-    class WorkOrdersController < ApplicationController
+    class WorkOrdersController < BaseController
       def index
         orders = ::Ncr::WorkOrder.joins(:proposal).order('proposals.created_at DESC')
 
