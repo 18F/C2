@@ -1,2 +1,2 @@
 $ ->
-  $('.jsChosen').chosen()
+  $('.jsChosen').selectize()

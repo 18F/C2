@@ -16,4 +16,4 @@
 //= require turbolinks
 //= require_directory .
 //= require bootstrap-sprockets
-//= require chosen.jquery.min.js
+//= require selectize
