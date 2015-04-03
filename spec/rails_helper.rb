@@ -63,6 +63,7 @@ RSpec.configure do |config|
   [:feature, :request].each do |type|
     config.include IntegrationSpecHelper, type: type
   end
+  config.include FeatureSpecHelper, type: :feature
 
   # Much of the config here pieced together from
   # http://stackoverflow.com/questions/8178120/capybara-with-js-true-causes-test-to-fail/28083267
