@@ -78,7 +78,7 @@ class CommunicartsController < ApplicationController
 
   def authentication_error(e)
     flash[:error] = e.message
-    render 'authentication_error', status: 498
+    render 'authentication_error', status: 403
   end
 
   def approval_group_error(error)
