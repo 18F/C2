@@ -10,9 +10,9 @@
  *
  *= require_self
  *= require normalize
+ *= require selectize.bootstrap3
  *= require_tree ./common
  *= require_tree ./webapp
- *= require selectize.bootstrap3
  */
 
 @import "bootstrap-sprockets";
