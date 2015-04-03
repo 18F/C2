@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
   # TreePolicy
   def authorize(record, query=nil)
     # use the action as a default permission
-    query ||= (params[:action].to_s + "?").to_sym
+    query ||= ("can_" + params[:action].to_s + "?").to_sym
 
     pol = policy(record)
     # if an instance of TreePolicy, convert the query into the base/"real"

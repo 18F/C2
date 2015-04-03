@@ -82,7 +82,7 @@ module Ncr
     end
 
     def auth_errors(exception)
-      if exception.query == :not_approved?
+      if exception.query == :is_not_approved?
         message = "That proposal's already approved. New proposal?"
       else
         message = "You cannot restart that proposal"
