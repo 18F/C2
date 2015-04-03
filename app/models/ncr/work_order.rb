@@ -28,7 +28,6 @@ module Ncr
     validates :expense_type, inclusion: {in: EXPENSE_TYPES}, presence: true
     validates :vendor, presence: true
     validates :building_number, presence: true
-    validates :office, presence: true
     # TODO validates :proposal, presence: true
 
     def set_defaults
