@@ -1,4 +1,6 @@
 describe 'NCR Work Orders API' do
+  # TODO share common functionality w/ other API specs
+
   def get_json(url)
     get(url)
     JSON.parse(response.body)

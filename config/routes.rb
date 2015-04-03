@@ -8,6 +8,7 @@ C2::Application.routes.draw do
   namespace :api, constraints: lambda {|req| ENV['API_ENABLED'] == 'true' } do
     scope :v1 do
       namespace :ncr do
+        resources :users, only: [:index]
         resources :work_orders, only: [:index]
       end
     end

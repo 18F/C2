@@ -6,9 +6,6 @@ class UserSerializer < ActiveModel::Serializer
     :id,
     :updated_at
 
-    # leaving out personal info for now
-    # :first_name,
-    # :last_name,
-    # :email_address
+    # leaving out personal info for now - see FullUserSerializer
   )
 end

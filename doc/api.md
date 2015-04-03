@@ -54,10 +54,46 @@ Attribute | Type | Note
 Attribute | Type | Note
 --- | --- | ---
 `created_at` | string (time) |
+`email_address` | string | only shown for "full" user
+`first_name` | string | only shown for "full" user
 `id` | integer |
+`last_name` | string | only shown for "full" user
 `updated_at` | string (time) |
 
 ## Endpoints
+
+### `GET /api/v1/ncr/users.json`
+
+#### Query parameters
+
+All are optional.
+
+Name | Values
+--- | ---
+`limit` | an integer >= 0
+`offset` | an integer >= 0
+
+##### Example
+
+http://c2-dev.cf.18f.us/api/v1/ncr/users.json?limit=5&offset=10
+
+#### Response
+
+Returns an array of ["full" Users](#user).
+
+```javascript
+[
+  {
+    "created_at": "2015-01-10T07:05:42.445Z",
+    "email_address": "liono@some-dot-gov.gov",
+    "first_name": "Liono",
+    "id": 43,
+    "last_name": "Appolo",
+    "updated_at": "2015-01-10T07:05:42.445Z"
+  },
+  // ...
+]
+```
 
 ### `GET /api/v1/ncr/work_orders.json`
 
