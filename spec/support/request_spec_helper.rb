@@ -1,9 +1,17 @@
 module RequestSpecHelper
-  # requires IntegrationSpecHelper
+  def get_json(url)
+    get(url)
+    JSON.parse(response.body)
+  end
 
+  # requires IntegrationSpecHelper
   def login_as(user)
     setup_mock_auth(:myusa, user)
     get '/auth/myusa/callback'
+  end
+
+  def time_to_json(time)
+    time.iso8601(3)
   end
 
   # Add support for testing `options` requests in rspec.
