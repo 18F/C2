@@ -54,10 +54,10 @@ Attribute | Type | Note
 Attribute | Type | Note
 --- | --- | ---
 `created_at` | string (time) |
-`email_address` | string | only shown for "full" user
-`first_name` | string | only shown for "full" user
+`email_address` | string | only shown when logged in
+`first_name` | string | only shown when logged in
 `id` | integer |
-`last_name` | string | only shown for "full" user
+`last_name` | string | only shown when logged in
 `updated_at` | string (time) |
 
 ## Endpoints
@@ -79,7 +79,7 @@ http://c2-dev.cf.18f.us/api/v1/users.json?limit=5&offset=10
 
 #### Response
 
-Returns an array of ["full" Users](#user).
+Returns an array of [Users](#user).
 
 ```javascript
 [

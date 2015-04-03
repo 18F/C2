@@ -10,7 +10,18 @@ module Api
         users = users.offset(params[:offset].to_i)
       end
 
-      render json: users, root: false, each_serializer: FullUserSerializer
+      render json: users, root: false, each_serializer: self.serializer
+    end
+
+
+    protected
+
+    def serializer
+      if signed_in?
+        FullUserSerializer
+      else
+        UserSerializer
+      end
     end
   end
 end

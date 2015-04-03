@@ -22,6 +22,20 @@ describe 'Users API' do
       expect(json).to eq([
         {
           'created_at' => time_to_s(user.created_at),
+          'id' => user.id,
+          'updated_at' => time_to_s(user.updated_at)
+        }
+      ])
+    end
+
+    it "includes the personal details when signed in" do
+      user = FactoryGirl.create(:user)
+      login_as(user)
+
+      json = get_json('/api/v1/users.json')
+      expect(json).to eq([
+        {
+          'created_at' => time_to_s(user.created_at),
           'email_address' => user.email_address,
           'first_name' => user.first_name,
           'id' => user.id,
