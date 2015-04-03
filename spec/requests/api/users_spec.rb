@@ -3,10 +3,10 @@ describe 'Users API' do
 
   describe 'GET /api/v1/users.json' do
     without_feature 'API_ENABLED' do
-      it "gives a 404" do
-        expect {
-          get '/api/v1/users.json'
-        }.to raise_error(ActionController::RoutingError)
+      it "gives a 403" do
+        json = get_json('/api/v1/users.json')
+        expect(response.status).to eq(403)
+        expect(json['message']).to eq("Not authorized")
       end
     end
 
@@ -14,6 +14,8 @@ describe 'Users API' do
       it "responds with the list of users" do
         user = FactoryGirl.create(:user)
         json = get_json('/api/v1/users.json')
+
+        expect(response.status).to eq(200)
         expect(json).to eq([
           {
             'created_at' => time_to_json(user.created_at),

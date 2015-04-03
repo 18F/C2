@@ -3,10 +3,10 @@ describe 'NCR Work Orders API' do
 
   describe 'GET /api/v1/ncr/work_orders.json' do
     without_feature 'API_ENABLED' do
-      it "gives a 404" do
-        expect {
-          get '/api/v1/ncr/work_orders.json'
-        }.to raise_error(ActionController::RoutingError)
+      it "gives a 403" do
+        json = get_json('/api/v1/ncr/work_orders.json')
+        expect(response.status).to eq(403)
+        expect(json['message']).to eq("Not authorized")
       end
     end
 
@@ -17,6 +17,7 @@ describe 'NCR Work Orders API' do
 
         json = get_json('/api/v1/ncr/work_orders.json')
 
+        expect(response.status).to eq(200)
         expect(json).to eq([
           {
             'amount' => work_order.amount.to_s,
