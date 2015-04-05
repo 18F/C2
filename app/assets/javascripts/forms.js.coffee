@@ -9,6 +9,9 @@ $ ->
     src: ->
       @$el.attr('data-src')
 
+    isRemote: ->
+      !!@src()
+
     selectizeOpts: ->
       opts = {}
 
@@ -16,7 +19,7 @@ $ ->
         opts.create = true
         opts.maxItems = 1
 
-      if @src()
+      if @isRemote()
         attr = @$el.attr('data-attr')
         opts.labelField = attr
         opts.searchField = [attr]
@@ -35,8 +38,7 @@ $ ->
       selectize = @selectizeObj()
       selectize.addOption(data)
 
-    # load options from server
-    loadOptions: ->
+    loadRemoteOptions: ->
       # TODO make sorting smarter, e.g. approvers/vendors they have used before
       $.ajax(
         url: @src()
@@ -48,8 +50,8 @@ $ ->
       )
 
     loadOptionsIfRemote: ->
-      if @src()
-        @loadOptions()
+      if @isRemote()
+        @loadRemoteOptions()
 
 
   $('.js-selectize').each (i, el) ->
