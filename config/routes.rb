@@ -16,12 +16,6 @@ C2::Application.routes.draw do
     end
   end
 
-  resources :approval_groups, except: [:edit, :update] do
-    collection do
-      get 'search'
-    end
-  end
-
   resources :carts, only: [:index, :show] do
     collection do
       get 'archive'
