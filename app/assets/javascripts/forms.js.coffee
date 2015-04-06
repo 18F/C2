@@ -41,7 +41,6 @@ class Selectizer
     # TODO make sorting smarter, e.g. approvers/vendors they have used before
     $.ajax(
       url: @src()
-      data: {limit: 100}
       dataType: 'json'
       cache: true
       context: @
