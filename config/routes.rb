@@ -6,7 +6,7 @@ C2::Application.routes.draw do
   get '/error' => 'home#error'
   post "/logout" => "home#logout"
 
-  namespace :api, constraints: lambda {|req| ENV['API_ENABLED'] == 'true' } do
+  namespace :api do
     scope :v1 do
       namespace :ncr do
         resources :work_orders, only: [:index]
