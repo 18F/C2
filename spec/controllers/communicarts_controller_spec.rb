@@ -130,24 +130,6 @@ describe CommunicartsController do
 
 
     context 'Request token' do
-      it 'fails when the token does not exist' do
-        approval_params_with_token[:cch] = nil
-        bypass_rescue
-        expect { put 'approval_response', approval_params_with_token }.to raise_error(AuthenticationError)
-      end
-
-      it 'fails when the token has expired' do
-        token.update_attributes(expires_at: 8.days.ago)
-        bypass_rescue
-        expect { put 'approval_response', approval_params_with_token }.to raise_error(AuthenticationError)
-      end
-
-      it 'fails when the token has already been used once' do
-        token.update_attributes(used_at: 1.hour.ago)
-        bypass_rescue
-        expect { put 'approval_response', approval_params_with_token }.to raise_error(AuthenticationError)
-      end
-
       it 'marks a token as used' do
         put 'approval_response', approval_params_with_token
 

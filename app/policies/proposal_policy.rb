@@ -4,7 +4,8 @@ class ProposalPolicy
   def perm_trees
     {
       can_edit?: [:is_author?, :is_not_approved?],
-      can_update?: [:can_edit?]
+      can_update?: [:can_edit?],
+      can_approve_or_reject?: [:is_approver?, :is_pending_approver?]
     }
   end
 
@@ -21,9 +22,17 @@ class ProposalPolicy
     !@proposal.approved?
   end
 
-  def can_approve_reject?
+  def is_approver?
+    !@proposal.approvals.find_by(user: @user).nil?
+  end
+
+  def is_pending_approver?
     actionable_approvers = @proposal.currently_awaiting_approvers
     actionable_approvers.include? @user
+  end
+
+  def can_approve_or_reject?
+    self.test_all(:can_approve_or_reject?)
   end
 
   def can_edit?

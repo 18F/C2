@@ -124,6 +124,6 @@
   </div>
 </div>
 
-<% if policy(cart.proposal).can_approve_reject? %>
+<% if policy(cart.proposal).can_approve_or_reject? %>
   <%= render partial: 'approval_actions', locals: { current_user: @current_user, cart: cart} %>
 <% end %>

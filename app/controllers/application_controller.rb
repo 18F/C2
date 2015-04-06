@@ -10,11 +10,12 @@ class ApplicationController < ActionController::Base
   protected
   # We are overriding this method to account for permission trees. See
   # TreePolicy
-  def authorize(record, query=nil)
+  def authorize(record, query=nil, user=nil)
     # use the action as a default permission
     query ||= ("can_" + params[:action].to_s + "?").to_sym
+    user ||= @current_user
 
-    pol = policy(record)
+    pol = Pundit.policy(user, record)
     # if an instance of TreePolicy, convert the query into the base/"real"
     # permissions (see TreePolicy#flatten_tree)
     if pol.respond_to?(:flatten_tree)
@@ -24,7 +25,12 @@ class ApplicationController < ActionController::Base
     end
 
     queries.each do |q|
-      super(record, q)  # have Pundit process each permission
+      unless pol.public_send(q)
+        # will need to replace this when a new version of pundit arrives
+        ex = NotAuthorizedError.new("not allowd to #{q} this #{record}")
+        ex.query, ex.record, ex.policy = q, record, pol
+        raise ex
+      end
     end
 
     true    # mimic the Pundit library

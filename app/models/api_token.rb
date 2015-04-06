@@ -3,6 +3,7 @@ class ApiToken < ActiveRecord::Base
 
   belongs_to :approval
   has_one :cart, through: :approval
+  has_one :proposal, through: :approval
   has_one :user, through: :approval
 
   validates_presence_of :approval_id

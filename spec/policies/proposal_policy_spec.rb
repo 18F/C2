@@ -1,7 +1,7 @@
 describe ProposalPolicy do
   subject { described_class }
 
-  permissions :can_approve_reject? do
+  permissions :can_approve_or_reject? do
     context "parallel cart" do
       let(:proposal) {FactoryGirl.create(:proposal, :with_cart, :with_approvers,
                                          flow: 'parallel')}
