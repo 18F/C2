@@ -8,3 +8,7 @@ OFFICES:
   - 'Dayton'
   - 'San Francisco'
   - 'Me! (Remote Worker)'
+RECURRENCE:
+  - 'Daily'
+  - 'Monthly'
+  - 'Yearly'

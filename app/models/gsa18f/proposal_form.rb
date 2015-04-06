@@ -6,6 +6,7 @@ module Gsa18f
 
     URGENCY = DATA['URGENCY']
     OFFICES = DATA['OFFICES']
+    RECURRENCE = DATA['RECURRENCE']
 
     attribute :requester, :user
     attribute :office, :string
@@ -17,6 +18,9 @@ module Gsa18f
     attribute :additional_info, :string
     attribute :cost_per_unit, :decimal
     attribute :product_name_and_description, :text
+    attribute :recurring, :boolean
+    attribute :recurring_interval, :string
+    attribute :recurring_length, :integer
     attribute :origin, :string
 
     validates :cost_per_unit, numericality: {
@@ -78,7 +82,10 @@ module Gsa18f
         quantity: self.quantity,
         date_requested: self.date_requested,
         urgency: self.urgency,
-        additional_info: self.additional_info
+        additional_info: self.additional_info,
+        recurring_interval: self.recurring_interval,
+        recurring_length: self.recurring_length,
+        recurring: self.recurring
       )
       cart.set_requester(self.requester)
     end

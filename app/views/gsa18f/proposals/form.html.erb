@@ -41,6 +41,30 @@
         <%= f.number_field :quantity, class: 'form-control', step: 1 %>
       </div>
     </div>
+    <div class="form-group">
+      <%= f.label :recurring do %>
+            <%= f.check_box :recurring, :"data-filter-control" => "recurring" %>
+            Recurring Charge
+          <% end %>
+    </div>
+    <!-- Recurring Frequency -->
+    <div data-filter-key="recurring"
+                                data-filter-value="1">
+      <div class="form-group">
+        <%= f.label :recurring_interval %>
+        <div class="input-group">
+          <%= f.collection_select(
+              :recurring_interval, Gsa18f::ProposalForm::RECURRENCE, :to_s, :to_s,
+              {include_blank: false}, {class: 'form-control'}) %>
+        </div>
+      </div>
+      <div class="form-group">
+        <%= f.label :recurring_length %>
+        <div class="input-group">
+          <%= f.number_field :recurring_length, class: 'form-control', step: 1 %>
+        </div>
+      </div>
+    </div>
     <!-- Date Requested -->
     <div class="form-group">
       <%= f.label :date_requested %>
