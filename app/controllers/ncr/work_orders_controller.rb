@@ -69,7 +69,6 @@ module Ncr
       params.require(:ncr_work_order).permit(:name, *fields)
     end
 
-    protected
     def errors
       errors = []
       if @approver_email.blank?

@@ -39,4 +39,21 @@ describe CartsController do
       expect(assigns(:closed_cart_full_list).size).to eq(3)
     end
   end
+
+  describe '#show' do
+    it 'should allow the requester to see it' do
+      proposal = FactoryGirl.create(:proposal, :with_cart, requester: user)
+      get :show, id: proposal.cart.id
+      expect(response).not_to redirect_to("/carts/")
+      expect(flash[:alert]).not_to be_present
+    end
+
+    it 'should redirect random users' do
+      proposal = FactoryGirl.create(:proposal, :with_cart,
+                                    requester: FactoryGirl.create(:user))
+      get :show, id: proposal.cart.id
+      expect(response).to redirect_to(carts_path)
+      expect(flash[:alert]).to be_present
+    end
+  end
 end

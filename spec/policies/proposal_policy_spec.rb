@@ -62,4 +62,25 @@ describe ProposalPolicy do
       end
     end
   end
+
+  permissions :can_show? do
+    let(:proposal) {FactoryGirl.create(:proposal, :with_cart, :with_approvers,
+                                       :with_requester, :with_observers)}
+
+    it "allows the requester to see it" do
+      expect(subject).to permit(proposal.requester, proposal)
+    end
+
+    it "allows an approver to see it" do
+      expect(subject).to permit(proposal.approvers[0], proposal)
+    end
+
+    it "allows an observer to see it" do
+      expect(subject).to permit(proposal.observers[0], proposal)
+    end
+
+    it "does not allow anyone else to see it" do
+      expect(subject).not_to permit(FactoryGirl.create(:user), proposal)
+    end
+  end
 end

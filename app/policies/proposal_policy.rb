@@ -26,6 +26,10 @@ class ProposalPolicy
     !@proposal.approvals.find_by(user: @user).nil?
   end
 
+  def is_observer?
+    @proposal.observers.include? @user
+  end
+
   def is_pending_approver?
     actionable_approvers = @proposal.currently_awaiting_approvers
     actionable_approvers.include? @user
@@ -41,5 +45,9 @@ class ProposalPolicy
 
   def can_update?
     self.can_edit?
+  end
+
+  def can_show?
+    self.is_author? || self.is_approver? || self.is_observer?
   end
 end
