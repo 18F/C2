@@ -16,12 +16,6 @@ C2::Application.routes.draw do
     end
   end
 
-  resources :approval_groups, except: [:edit, :update] do
-    collection do
-      get 'search'
-    end
-  end
-
   resources :carts, only: [:index, :show] do
     collection do
       get 'archive'
@@ -31,11 +25,11 @@ C2::Application.routes.draw do
   end
 
   namespace :ncr do
-    resources :work_orders
+    resources :work_orders, except: [:index, :destroy]
   end
 
   namespace :gsa18f do
-    resources :proposals
+    resources :proposals, except: [:index, :destroy]
   end
 
   if Rails.env.development?
