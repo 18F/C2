@@ -31,11 +31,11 @@ C2::Application.routes.draw do
   end
 
   namespace :ncr do
-    resources :work_orders
+    resources :work_orders, except: [:index, :destroy]
   end
 
   namespace :gsa18f do
-    resources :proposals
+    resources :proposals, except: [:index, :destroy]
   end
 
   if Rails.env.development?
