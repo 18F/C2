@@ -12,11 +12,13 @@ class CartsController < ApplicationController
   end
 
   def index
-    @proposals = Proposal.where(requester: current_user).order('created_at DESC')
+    @proposals = policy_scope(Proposal).where(requester: current_user).order(
+      'created_at DESC')
   end
 
   def archive
-    @closed_proposals_full_list = Proposal.where(requester: current_user).closed.order('created_at DESC')
+    @closed_proposals_full_list = policy_scope(Proposal).where(
+      requester: current_user).closed.order('created_at DESC')
   end
 
   protected

@@ -50,4 +50,22 @@ class ProposalPolicy
   def can_show?
     self.is_author? || self.is_approver? || self.is_observer?
   end
+
+  # equivalent of can_show?
+  class Scope
+    def initialize(user, scope)
+      @user = user
+      @scope = scope
+    end
+
+    def resolve
+      @scope.joins(
+        "LEFT JOIN approvals ON approvals.proposal_id = proposals.id",
+        "LEFT JOIN observations ON observations.proposal_id = proposals.id"
+      ).where(
+        "requester_id = :user_id " +
+        "or observations.user_id = :user_id " +
+        "or approvals.user_id = :user_id", user_id: @user.id)
+    end
+  end
 end
