@@ -1,3 +1,4 @@
+# @todo Rename
 class CartsController < ApplicationController
   before_filter :authenticate_user!
   before_filter ->{authorize self.cart.proposal}, only: [:show]
@@ -11,12 +12,11 @@ class CartsController < ApplicationController
   end
 
   def index
-    # TODO: include action buttons for approvers
-    @carts = current_user.carts.order('created_at DESC')
+    @proposals = Proposal.where(requester: current_user).order('created_at DESC')
   end
 
   def archive
-    @closed_cart_full_list = current_user.carts.closed.order('created_at DESC')
+    @closed_proposals_full_list = Proposal.where(requester: current_user).closed.order('created_at DESC')
   end
 
   protected

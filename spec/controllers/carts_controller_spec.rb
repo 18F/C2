@@ -10,17 +10,15 @@ describe CartsController do
   end
 
   describe '#index' do
-    it 'sets @carts' do
+    it 'sets @proposals' do
       approval_group1
 
-      cart2 = FactoryGirl.create(:cart)
-      cart2.proposal.approvals.create!(user: user)
-
-      cart3 = FactoryGirl.create(:cart)
-      cart3.proposal.observations.create!(user: user)
+      proposal2 = FactoryGirl.create(:proposal, requester: user)
+      proposal3 = FactoryGirl.create(:proposal, requester: user)
 
       get :index
-      expect(assigns(:carts).sort).to eq [@cart1, cart2, cart3]
+      expect(assigns(:proposals).sort).to eq [
+        @cart1.proposal, proposal2, proposal3]
     end
   end
 
@@ -36,7 +34,7 @@ describe CartsController do
         carts.push(temp_cart)
       end
       get :archive
-      expect(assigns(:closed_cart_full_list).size).to eq(3)
+      expect(assigns(:closed_proposals_full_list).size).to eq(3)
     end
   end
 
