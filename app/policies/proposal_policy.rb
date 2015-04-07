@@ -59,13 +59,15 @@ class ProposalPolicy
     end
 
     def resolve
-      @scope.joins(
-        "LEFT JOIN approvals ON approvals.proposal_id = proposals.id",
-        "LEFT JOIN observations ON observations.proposal_id = proposals.id"
-      ).where(
-        "requester_id = :user_id " +
-        "or observations.user_id = :user_id " +
-        "or approvals.user_id = :user_id", user_id: @user.id)
+      # Use subselects instead of left joins to avoid duplication removal
+      where_clause = <<-SQL
+        requester_id = :user_id
+        OR EXISTS (SELECT id FROM approvals
+                   WHERE proposal_id = proposals.id AND user_id = :user_id)
+        OR EXISTS (SELECT id FROM observations
+                   WHERE proposal_id = proposals.id AND user_id = :user_id)
+        SQL
+      @scope.where(where_clause, user_id: @user.id)
     end
   end
 end
