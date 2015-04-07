@@ -23,6 +23,7 @@ class Selectizer
       opts.labelField = attr
       opts.searchField = [attr]
       opts.valueField = attr
+      opts.sortField = [{field: '$score'}, {field: attr}]
 
     opts
 
