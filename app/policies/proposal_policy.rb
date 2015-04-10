@@ -21,7 +21,8 @@ class ProposalPolicy
   end
 
   def observer!
-    @proposal.observers.include? @user
+    check(@proposal.observers.include?(@user),
+          "Sorry, you're not an observer on this proposal")
   end
 
   def pending_approver!
@@ -41,7 +42,8 @@ class ProposalPolicy
   alias_method :can_update!, :can_edit!
 
   def can_show!
-    self.author! || self.approver! || self.observer!
+    check(author? || approver? || observer?,
+          "You are not allowed to see this cart")
   end
 
   # equivalent of can_show?
