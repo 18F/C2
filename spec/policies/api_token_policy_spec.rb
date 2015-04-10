@@ -13,7 +13,7 @@ describe ApiTokenPolicy do
     }.with_indifferent_access
   }
 
-  permissions :is_valid? do
+  permissions :valid? do
     it "allows valid parameters" do
       expect(subject).to permit(approval_params_with_token, :api_token)
     end

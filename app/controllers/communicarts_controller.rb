@@ -35,7 +35,7 @@ class CommunicartsController < ApplicationController
 
   def validate_access
     if !signed_in?
-      authorize(:api_token, :is_valid?, params)
+      authorize(:api_token, :valid!, params)
       # validated above
       sign_in(ApiToken.find_by(access_token: params[:cch]).user)
     end
@@ -44,52 +44,19 @@ class CommunicartsController < ApplicationController
       user_id: current_user, proposal_id: self.cart.proposal})
     tokens.where(used_at: nil).update_all(used_at: Time.now)
 
-    authorize(self.cart.proposal, :can_approve_or_reject?)
-    # Imitate an authorization error
-    # will need to replace this when a new version of pundit arrives
+    authorize(self.cart.proposal, :can_approve_or_reject!)
     if params[:version] && params[:version] != self.cart.proposal.version.to_s
-      ex = NotAuthorizedError.new("not allowd to update this proposal")
-      ex.query, ex.record = :is_up_to_date?, self.cart.proposal
-      raise ex
+      raise NotAuthorizedError.new(
+        "This request has recently changed. Please review the modified request before approving.")
     end
-  end
-
-  def token_validation_errors(query)
-    message = "Something went wrong with the token "
-    case query
-    when :exists?
-      message += "(nonexistent)"
-    when :is_not_expired?
-      message += "(expired)"
-    when :is_not_used?
-      message += "(already used)"
-    when :is_correct_cart?
-      message += "(wrong cart)"
-    end
-    flash[:error] = message
-    render 'authentication_error', status: 403
-  end
-
-  def user_access_errors(query, default_message)
-    case query
-    when :is_approver?
-      message = "Sorry, you're not an approver on #{self.cart.proposal.public_identifier}."
-    when :is_pending_approver?
-      message = "You have already logged a response for Cart #{self.cart.proposal.public_identifier}."
-    when :is_up_to_date?
-      message = "This request has recently changed. Please review the modified request before approving."
-    else
-      message = default_message
-    end
-    flash[:error] = message
-    redirect_to cart_path(self.cart)
   end
 
   def auth_errors(exception)
+    flash[:error] = exception.message
     if exception.record == :api_token
-      self.token_validation_errors(exception.query)
+      render 'authentication_error', status: 403
     else
-      self.user_access_errors(exception.query, exception.message)
+      redirect_to cart_path(self.cart)
     end
   end
 
