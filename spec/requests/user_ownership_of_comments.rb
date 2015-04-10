@@ -67,8 +67,8 @@ describe 'Testing User Ownership of Comments' do
      user2 = cart.approvers.where(email_address: "approver2@some-dot-gov.gov").first
      new_comment = Comment.new(user_id: user.id,comment_text: "spud")
      snd_comment = Comment.new(user_id: user2.id,comment_text: "second")
-     cart.comments << new_comment
-     cart.comments << snd_comment
+     cart.proposal.comments << new_comment
+     cart.proposal.comments << snd_comment
 
     # We can add approval comments to both carts and distinguish them.
     expect(cart.comments[0].user_id).not_to eq cart.comments[1].user_id

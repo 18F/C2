@@ -38,8 +38,8 @@ class Dispatcher
     self.email_observers(approval.cart)
   end
 
-  def on_cart_comment_created(comment)
-    self.all_users_for_cart(comment.commentable).each{|user|
+  def on_comment_created(comment)
+    self.all_users_for(comment.proposal).each{|user|
       # Commenter doesn't need to see the message again
       if user != comment.user
         CommunicartMailer.comment_added_email(
@@ -49,13 +49,13 @@ class Dispatcher
   end
 
   # todo: replace with dynamic dispatch
-  def self.initialize_dispatcher(cart)
-    case cart.flow
+  def self.initialize_dispatcher(proposal)
+    case proposal.flow
     when 'parallel'
       ParallelDispatcher.new
     when 'linear'
       # @todo: dynamic dispatch for selection
-      if cart.proposal.client == "ncr"
+      if proposal.client == "ncr"
         NcrDispatcher.new
       else
         LinearDispatcher.new
@@ -64,33 +64,33 @@ class Dispatcher
   end
 
   def self.deliver_new_cart_emails(cart)
-    dispatcher = self.initialize_dispatcher(cart)
+    dispatcher = self.initialize_dispatcher(cart.proposal)
     dispatcher.deliver_new_cart_emails(cart)
   end
 
   def self.on_cart_rejected(cart)
-    dispatcher = self.initialize_dispatcher(cart)
+    dispatcher = self.initialize_dispatcher(cart.proposal)
     dispatcher.on_cart_rejected(cart)
   end
 
   def self.on_approval_approved(approval)
-    dispatcher = self.initialize_dispatcher(approval.cart)
+    dispatcher = self.initialize_dispatcher(approval.proposal)
     dispatcher.on_approval_approved(approval)
   end
 
-  def self.on_cart_comment_created(comment)
-    dispatcher = self.initialize_dispatcher(comment.commentable)
-    dispatcher.on_cart_comment_created(comment)
+  def self.on_comment_created(comment)
+    dispatcher = self.initialize_dispatcher(comment.proposal)
+    dispatcher.on_comment_created(comment)
   end
 
   protected
 
-  def all_users_for_cart(cart)
-    users_to_notify = cart.proposal.currently_awaiting_approvers
-    if cart.requester
-      users_to_notify << cart.requester
+  def all_users_for(proposal)
+    users_to_notify = proposal.currently_awaiting_approvers
+    if proposal.requester
+      users_to_notify << proposal.requester
     end
-    users_to_notify + cart.observers
+    users_to_notify + proposal.observers
   end
 
   private

@@ -55,7 +55,7 @@ module Populator
       num_comments.times do |i|
         commented_at = rand(requested_at..Time.now)
 
-        cart.comments.create!(
+        cart.proposal.comments.create!(
           comment_text: Faker::Hacker.say_something_smart,
           created_at: commented_at,
           updated_at: commented_at,

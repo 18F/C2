@@ -51,7 +51,7 @@ class CommunicartMailer < ActionMailer::Base
 
     mail(
          to: to_email,
-         subject: "A comment has been added to '#{comment.commentable.proposal.name}'",
+         subject: "A comment has been added to '#{comment.proposal.name}'",
          from: user_email(comment.user)
          )
   end

@@ -6,6 +6,7 @@ class Proposal < ActiveRecord::Base
   has_one :cart
   has_many :approvals
   has_many :approvers, through: :approvals, source: :user
+  has_many :comments
   has_many :observations
   has_many :observers, through: :observations, source: :user
   belongs_to :client_data, polymorphic: true
