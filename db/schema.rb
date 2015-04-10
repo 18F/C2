@@ -11,7 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20150410142248) do
+=======
+ActiveRecord::Schema.define(version: 20150410163833) do
+>>>>>>> updated model
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,6 +51,28 @@ ActiveRecord::Schema.define(version: 20150410142248) do
     t.integer  "proposal_id"
   end
 
+  create_table "cart_item_traits", force: true do |t|
+    t.text     "name"
+    t.text     "value"
+    t.integer  "cart_item_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "cart_items", force: true do |t|
+    t.string   "vendor"
+    t.text     "description"
+    t.string   "url"
+    t.text     "notes"
+    t.integer  "quantity"
+    t.text     "details"
+    t.string   "part_number"
+    t.float    "price"
+    t.integer  "cart_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "carts", force: true do |t|
     t.string   "name"
     t.datetime "created_at"
@@ -64,6 +90,21 @@ ActiveRecord::Schema.define(version: 20150410142248) do
   end
 
   add_index "comments", ["proposal_id"], name: "index_comments_on_proposal_id", using: :btree
+  
+  create_table "gsa18f_procurements", force: true do |t|
+    t.string   "office"
+    t.text     "justification"
+    t.string   "link_to_product"
+    t.integer  "quantity"
+    t.datetime "date_requested"
+    t.string   "additional_info"
+    t.decimal  "cost_per_unit"
+    t.text     "product_name_and_description"
+    t.boolean  "recurring"
+    t.string   "recurring_interval"
+    t.integer  "recurring_length"
+    t.string   "urgency"
+  end
 
   create_table "ncr_work_orders", force: true do |t|
     t.decimal  "amount"

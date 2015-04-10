@@ -1,17 +1,17 @@
 module Gsa18f
-  class ProposalsController < ApplicationController
+  class ProcurementsController < ApplicationController
     before_filter :authenticate_user!
     before_filter :redirect_if_cart_cant_be_edited, only: [:edit, :update]
 
     def new
-      @proposal_form = Gsa18f::ProposalForm.new
+      @proposal_form = Gsa18f::Procurement.new
       @form_url = {action: "create"}
       @form_method = "post"
       render 'form'
     end
 
     def create
-      @proposal_form = Gsa18f::ProposalForm.new(params[:gsa18f_proposal])
+      @proposal_form = Gsa18f::Procurement.new(params[:gsa18f_proposal])
       @form_url = {action: "create"}
       @form_method = "post"
       @proposal_form.requester = current_user
@@ -31,14 +31,14 @@ module Gsa18f
     end
 
     def edit
-      @proposal_form = Gsa18f::ProposalForm.from_cart(self.cart)
+      @proposal_form = Gsa18f::Procurement.from_cart(self.cart)
       @form_url = {action: "update"}
       @form_method = "put"
       render 'form'
     end
 
     def update
-      @proposal_form = Gsa18f::ProposalForm.new(params[:gsa18f_proposal])
+      @proposal_form = Gsa18f::Procurement.new(params[:gsa18f_proposal])
       @form_url = {action: "update"}
       @form_method =  "put"
       @proposal_form.requester = current_user

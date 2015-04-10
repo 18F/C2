@@ -2,19 +2,19 @@ class Filter
   constructor: ($root, @key) ->
     @$ = (selector) -> $root.find(selector)
 
-  addRadio: ($el) ->
+  addInput: ($el) ->
     $el.click () => @filter($el)
     # Initial state
     if $el.is(":checked")
-      @filter($el.val())
+      @filter($el)
 
   addRadios: () ->
     @$("input:radio[data-filter-control=#{ @key }]").each (idx, control) =>
-      @addRadio($(control))
+      @addInput($(control))
 
   addChkBoxes: () ->
     @$("input:checkbox[data-filter-control=#{ @key }]").each (idx, control) =>
-      @addRadio($(control))
+      @addInput($(control))
 
   filter: ($el) ->
     value = $el.val()
