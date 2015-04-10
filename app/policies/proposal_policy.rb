@@ -1,54 +1,47 @@
 class ProposalPolicy
-  include TreePolicy
-
-  def perm_trees
-    {
-      can_edit?: [:is_author?, :is_not_approved?],
-      can_update?: [:can_edit?],
-      can_approve_or_reject?: [:is_approver?, :is_pending_approver?]
-    }
+  include ExceptionPolicy
+  def initialize(user, record)
+    super(user, record)
+    @proposal = record
   end
 
-  def initialize(user, proposal)
-    @user = user
-    @proposal = proposal
+  def author!
+    check(@proposal.requester_id == @user.id,
+          "You are not the requester")
   end
 
-  def is_author?
-    @proposal.requester_id == @user.id
+  def not_approved!
+    check(!@proposal.approved?,
+          "That proposal's already approved. New proposal?")
   end
 
-  def is_not_approved?
-    !@proposal.approved?
+  def approver!
+    check(@proposal.approvals.exists?(user: @user),
+          "Sorry, you're not an approver on this proposal")
   end
 
-  def is_approver?
-    !@proposal.approvals.find_by(user: @user).nil?
-  end
-
-  def is_observer?
+  def observer!
     @proposal.observers.include? @user
   end
 
-  def is_pending_approver?
+  def pending_approver!
     actionable_approvers = @proposal.currently_awaiting_approvers
-    actionable_approvers.include? @user
+    check(actionable_approvers.include?(@user),
+          "You have already logged a response for this proposal")
   end
 
-  def can_approve_or_reject?
-    self.test_all(:can_approve_or_reject?)
+  def can_approve_or_reject!
+    approver! && pending_approver!
   end
 
-  def can_edit?
-    self.test_all(:can_edit?)
+  def can_edit!
+    author! && not_approved!
   end
 
-  def can_update?
-    self.can_edit?
-  end
+  alias_method :can_update!, :can_edit!
 
-  def can_show?
-    self.is_author? || self.is_approver? || self.is_observer?
+  def can_show!
+    self.author! || self.approver! || self.observer!
   end
 
   # equivalent of can_show?
@@ -59,7 +52,8 @@ class ProposalPolicy
     end
 
     def resolve
-      # Use subselects instead of left joins to avoid duplication removal
+      # use subselects instead of left joins to avoid an explicit
+      # duplication-removal step
       where_clause = <<-SQL
         requester_id = :user_id
         OR EXISTS (SELECT id FROM approvals
