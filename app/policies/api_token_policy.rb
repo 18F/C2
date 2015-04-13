@@ -17,7 +17,7 @@ class ApiTokenPolicy
   end
 
   def not_expired!
-    exists! && check(!@api_token.expires_at || @api_token.expires_at > Time.now,
+    exists! && check(!@api_token.expired?,
                      "Something went wrong with the token (expired)")
   end
 
