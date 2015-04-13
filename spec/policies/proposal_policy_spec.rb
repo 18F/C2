@@ -62,4 +62,61 @@ describe ProposalPolicy do
       end
     end
   end
+
+  permissions :can_show? do
+    let(:proposal) {FactoryGirl.create(:proposal, :with_cart, :with_approvers,
+                                       :with_requester, :with_observers)}
+
+    it "allows the requester to see it" do
+      expect(subject).to permit(proposal.requester, proposal)
+    end
+
+    it "allows an approver to see it" do
+      expect(subject).to permit(proposal.approvers[0], proposal)
+    end
+
+    it "allows an observer to see it" do
+      expect(subject).to permit(proposal.observers[0], proposal)
+    end
+
+    it "does not allow anyone else to see it" do
+      expect(subject).not_to permit(FactoryGirl.create(:user), proposal)
+    end
+  end
+
+  context "testing scope" do
+    let(:proposal) {
+      FactoryGirl.create(:proposal, :with_requester, :with_approvers,
+                         :with_observers)}
+    it "allows the requester to see" do
+      user = proposal.requester
+      proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
+      expect(proposals).to include(proposal)
+    end
+
+    it "allows an requester to see, when there are no observers/approvers" do
+      proposal = FactoryGirl.create(:proposal, :with_requester)
+      user = proposal.requester
+      proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
+      expect(proposals).to include(proposal)
+    end
+
+    it "allows an approver to see" do
+      user = proposal.approvers[0]
+      proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
+      expect(proposals).to include(proposal)
+    end
+
+    it "allows an observer to see" do
+      user = proposal.approvers[0]
+      proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
+      expect(proposals).to include(proposal)
+    end
+
+    it "does not allow anyone else to see" do
+      user = FactoryGirl.create(:user)
+      proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
+      expect(proposals).not_to include(proposal)
+    end
+  end
 end

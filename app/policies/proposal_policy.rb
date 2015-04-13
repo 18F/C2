@@ -16,8 +16,13 @@ class ProposalPolicy
   end
 
   def approver!
-    check(!@proposal.approvals.find_by(user: @user).nil?,
+    check(@proposal.approvals.exists?(user: @user),
           "Sorry, you're not an approver on this proposal")
+  end
+
+  def observer!
+    check(@proposal.observers.include?(@user),
+          "Sorry, you're not an observer on this proposal")
   end
 
   def pending_approver!
@@ -35,4 +40,30 @@ class ProposalPolicy
   end
 
   alias_method :can_update!, :can_edit!
+
+  def can_show!
+    check(@proposal.users.include?(@user),
+          "You are not allowed to see this cart")
+  end
+
+  # equivalent of can_show?
+  class Scope
+    def initialize(user, scope)
+      @user = user
+      @scope = scope
+    end
+
+    def resolve
+      # use subselects instead of left joins to avoid an explicit
+      # duplication-removal step
+      where_clause = <<-SQL
+        requester_id = :user_id
+        OR EXISTS (SELECT id FROM approvals
+                   WHERE proposal_id = proposals.id AND user_id = :user_id)
+        OR EXISTS (SELECT id FROM observations
+                   WHERE proposal_id = proposals.id AND user_id = :user_id)
+        SQL
+      @scope.where(where_clause, user_id: @user.id)
+    end
+  end
 end
