@@ -42,7 +42,7 @@ class ProposalPolicy
   alias_method :can_update!, :can_edit!
 
   def can_show!
-    check(author? || approver? || observer?,
+    check(@proposal.users.include?(@user),
           "You are not allowed to see this cart")
   end
 
