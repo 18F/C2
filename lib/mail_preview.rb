@@ -40,7 +40,7 @@ class MailPreview < MailView
   end
 
   def comment
-    Comment.where(commentable_type: 'Cart').last
+    Comment.last
   end
 
 

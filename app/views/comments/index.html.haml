@@ -1,6 +1,6 @@
 %h1
-  = "Comments for #{@commentable.class.name}"
-  = @commentable.id
+  = "Comments"
+  = @proposal.id
 
 %h4 Comments
 - @comments.each do |c|
@@ -8,4 +8,4 @@
   %br
 
 %br
-= link_to "Back to cart", "/carts/#{@commentable.id}"
+= link_to "Back to cart", "/carts/#{@proposal.cart.id}"

@@ -7,7 +7,6 @@ class Cart < ActiveRecord::Base
   has_one :approval_group
   has_many :user_roles, through: :approval_group
   has_many :api_tokens, through: :approvals
-  has_many :comments, as: :commentable
   has_many :properties, as: :hasproperties
 
   #TODO: validates_uniqueness_of :name
@@ -69,7 +68,7 @@ class Cart < ActiveRecord::Base
   end
 
   def import_initial_comments(comments)
-    self.comments.create!(user_id: self.proposal.requester_id, comment_text: comments.strip)
+    self.proposal.comments.create!(user_id: self.proposal.requester_id, comment_text: comments.strip)
   end
 
   def create_approvals(emails)

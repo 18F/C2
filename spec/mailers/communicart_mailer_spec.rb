@@ -46,7 +46,7 @@ describe CommunicartMailer do
       end
 
       it 'renders comments when present' do
-        cart.comments << FactoryGirl.create(:comment)
+        cart.proposal.comments << FactoryGirl.create(:comment)
         expect(mail.body.encoded).to include('Comments')
       end
     end
@@ -103,7 +103,7 @@ describe CommunicartMailer do
 
     context 'comments' do
       it 'renders comments when present' do
-        cart.comments << FactoryGirl.create(:comment, comment_text: 'My added comment')
+        cart.proposal.comments << FactoryGirl.create(:comment, comment_text: 'My added comment')
         expect(mail.body.encoded).to include('Comments')
       end
 
@@ -129,7 +129,7 @@ describe CommunicartMailer do
 
   describe 'comment_added_email' do
     let(:cart) { FactoryGirl.create(:cart) }
-    let(:comment) { FactoryGirl.create(:comment, commentable: cart) }
+    let(:comment) { FactoryGirl.create(:comment, proposal: cart.proposal) }
     let(:email) { "commenter@some-dot-gov.gov" }
     let(:mail) { CommunicartMailer.comment_added_email(comment, email) }
 
