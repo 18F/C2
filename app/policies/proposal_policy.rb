@@ -1,36 +1,38 @@
 class ProposalPolicy
-  include TreePolicy
-
-  def perm_trees
-    {
-      edit?: [:author?, :not_approved?],
-      update?: [:edit?]
-    }
+  include ExceptionPolicy
+  def initialize(user, record)
+    super(user, record)
+    @proposal = record
   end
 
-  def initialize(user, proposal)
-    @user = user
-    @proposal = proposal
+  def author!
+    check(@proposal.requester_id == @user.id,
+          "You are not the requester")
   end
 
-  def author?
-    @proposal.requester_id == @user.id
+  def not_approved!
+    check(!@proposal.approved?,
+          "That proposal's already approved. New proposal?")
   end
 
-  def not_approved?
-    !@proposal.approved?
+  def approver!
+    check(!@proposal.approvals.find_by(user: @user).nil?,
+          "Sorry, you're not an approver on this proposal")
   end
 
-  def approve_reject?
+  def pending_approver!
     actionable_approvers = @proposal.currently_awaiting_approvers
-    actionable_approvers.include? @user
+    check(actionable_approvers.include?(@user),
+          "You have already logged a response for this proposal")
   end
 
-  def edit?
-    self.test_all(:edit?)
+  def can_approve_or_reject!
+    approver! && pending_approver!
   end
 
-  def update?
-    self.edit?
+  def can_edit!
+    author! && not_approved!
   end
+
+  alias_method :can_update!, :can_edit!
 end

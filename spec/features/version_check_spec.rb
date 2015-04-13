@@ -11,7 +11,7 @@ describe "Version check" do
 
     click_on 'Approve'
 
-    expect(page).to have_content("This request has recently been changed.")
+    expect(page).to have_content("This request has recently changed.")
     expect(current_path).to eq("/carts/#{proposal.cart.id}")
   end
 end

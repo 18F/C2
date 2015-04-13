@@ -11,4 +11,4 @@ Feature: Approving a cart from the web application expires the token
     Then I should see alert text 'You have approved Cart 1357531.'
     When I click 'Logout'
     And I go to the approval_response page with token
-    Then I should see alert text 'Something went wrong with the token. It has already been used.'
+    Then I should see alert text 'Something went wrong with the token (already used)'

@@ -3,6 +3,7 @@ class ApiToken < ActiveRecord::Base
 
   belongs_to :approval
   has_one :cart, through: :approval
+  has_one :proposal, through: :approval
   has_one :user, through: :approval
 
   validates_presence_of :approval_id
@@ -16,6 +17,11 @@ class ApiToken < ActiveRecord::Base
 
   def used?
     !!self.used_at
+  end
+
+  # @todo: validate presence of expires_at
+  def expired?
+    self.expires_at && self.expires_at < Time.now
   end
 
   def use!
