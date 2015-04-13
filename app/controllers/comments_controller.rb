@@ -1,5 +1,7 @@
 class CommentsController < ApplicationController
   before_filter :authenticate_user!
+  before_filter ->{authorize self.proposal, :can_show!}
+  rescue_from Pundit::NotAuthorizedError, with: :auth_errors
 
   def index
     @proposal = self.proposal
@@ -27,4 +29,7 @@ class CommentsController < ApplicationController
     params.require(:comment).permit(:comment_text)
   end
 
+  def auth_errors(exception)
+    redirect_to carts_path, :alert => "You are not allowed to see that cart"
+  end
 end
