@@ -19,6 +19,11 @@ class ApiToken < ActiveRecord::Base
     !!self.used_at
   end
 
+  # @todo: validate presence of expires_at
+  def expired?
+    self.expires_at && self.expires_at < Time.now
+  end
+
   def use!
     self.update_attributes!(used_at: Time.now)
   end
