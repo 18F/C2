@@ -12,7 +12,7 @@ describe "National Capital Region proposals" do
       login_as(requester)
     end
 
-    it "saves a Cart with the attributes" do
+    it "saves a Proposal with the attributes" do
       expect(Dispatcher).to receive(:deliver_new_cart_emails)
 
       visit '/ncr/work_orders/new'
@@ -26,15 +26,15 @@ describe "National Capital Region proposals" do
       select Ncr::OFFICES[0], :from => 'ncr_work_order_office'
       expect {
         click_on 'Submit for approval'
-      }.to change { Cart.count }.from(0).to(1)
+      }.to change { Proposal.count }.from(0).to(1)
 
-      cart = Cart.last
+      proposal = Proposal.last
       expect(page).to have_content("Proposal submitted")
-      expect(current_path).to eq("/carts/#{cart.id}")
+      expect(current_path).to eq("/proposals/#{proposal.id}")
 
-      expect(cart.proposal.name).to eq("buying stuff")
-      expect(cart.flow).to eq('linear')
-      client_data = cart.proposal.client_data
+      expect(proposal.name).to eq("buying stuff")
+      expect(proposal.flow).to eq('linear')
+      client_data = proposal.client_data
       expect(client_data.client).to eq('ncr')
       expect(client_data.expense_type).to eq('BA80')
       expect(client_data.vendor).to eq('ACME')
@@ -42,8 +42,8 @@ describe "National Capital Region proposals" do
       expect(client_data.building_number).to eq(Ncr::BUILDING_NUMBERS[0])
       expect(client_data.office).to eq(Ncr::OFFICES[0])
       expect(client_data.description).to eq('desc content')
-      expect(cart.requester).to eq(requester)
-      expect(cart.approvers.map(&:email_address)).to eq(%w(
+      expect(proposal.requester).to eq(requester)
+      expect(proposal.approvers.map(&:email_address)).to eq(%w(
         approver@example.com
         communicart.budget.approver@gmail.com
       ))
@@ -66,7 +66,7 @@ describe "National Capital Region proposals" do
 
       expect {
         click_on 'Submit for approval'
-      }.to_not change { Cart.count }
+      }.to_not change { Proposal.count }
 
       expect(current_path).to eq('/ncr/work_orders')
       expect(page).to have_content("Amount must be less than or equal to 3000")
@@ -85,7 +85,7 @@ describe "National Capital Region proposals" do
       select Ncr::BUILDING_NUMBERS[0], :from => 'ncr_work_order_building_number'
       select Ncr::OFFICES[0], :from => 'ncr_work_order_office'
       click_on 'Submit for approval'
-      expect(current_path).to eq("/carts/#{Cart.last.id}")
+      expect(current_path).to eq("/proposals/#{Proposal.last.id}")
       expect(page).to have_content("RWA Number")
     end
 
@@ -111,8 +111,8 @@ describe "National Capital Region proposals" do
       wo.init_and_save_cart('approver@email.com', requester)
       wo
     }
-    let(:ncr_cart) {
-      work_order.proposal.cart
+    let(:ncr_proposal) {
+      work_order.proposal
     }
     it "can be restarted if pending" do
       visit "/ncr/work_orders/#{work_order.id}/edit"
@@ -120,7 +120,7 @@ describe "National Capital Region proposals" do
         Ncr::BUILDING_NUMBERS[0])
       fill_in 'Vendor', with: 'New ACME'
       click_on 'Submit for approval'
-      expect(current_path).to eq("/carts/#{ncr_cart.id}")
+      expect(current_path).to eq("/proposals/#{ncr_proposal.id}")
       expect(page).to have_content("New ACME")
       expect(page).to have_content("resubmitted")
       # Verify it is actually saved
@@ -129,14 +129,14 @@ describe "National Capital Region proposals" do
     end
 
     it "can be restarted if rejected" do
-      ncr_cart.proposal.update_attributes(status: 'rejected')  # avoid workflow
+      ncr_proposal.update_attributes(status: 'rejected')  # avoid workflow
 
       visit "/ncr/work_orders/#{work_order.id}/edit"
       expect(current_path).to eq("/ncr/work_orders/#{work_order.id}/edit")
     end
 
     it "cannot be restarted if approved" do
-      ncr_cart.proposal.update_attributes(status: 'approved')  # avoid workflow
+      ncr_proposal.update_attributes(status: 'approved')  # avoid workflow
 
       visit "/ncr/work_orders/#{work_order.id}/edit"
       expect(current_path).to eq("/ncr/work_orders/new")
@@ -144,7 +144,7 @@ describe "National Capital Region proposals" do
     end
 
     it "cannot be edited by someone other than the requester" do
-      ncr_cart.set_requester(FactoryGirl.create(:user))
+      ncr_proposal.set_requester(FactoryGirl.create(:user))
 
       visit "/ncr/work_orders/#{work_order.id}/edit"
       expect(current_path).to eq("/ncr/work_orders/new")
@@ -152,36 +152,36 @@ describe "National Capital Region proposals" do
     end
 
     it "shows a restart link from a pending cart" do
-      visit "/carts/#{ncr_cart.id}"
+      visit "/proposals/#{ncr_proposal.id}"
       expect(page).to have_content('Modify Request')
       click_on('Modify Request')
       expect(current_path).to eq("/ncr/work_orders/#{work_order.id}/edit")
     end
 
     it "shows a restart link from a rejected cart" do
-      ncr_cart.proposal.update_attribute(:status, 'rejected') # avoid state machine
+      ncr_proposal.update_attribute(:status, 'rejected') # avoid state machine
 
-      visit "/carts/#{ncr_cart.id}"
+      visit "/proposals/#{ncr_proposal.id}"
       expect(page).to have_content('Modify Request')
     end
 
     it "does not show a restart link for an approved cart" do
-      ncr_cart.proposal.update_attribute(:status, 'approved') # avoid state machine
+      ncr_proposal.update_attribute(:status, 'approved') # avoid state machine
 
-      visit "/carts/#{ncr_cart.id}"
+      visit "/proposals/#{ncr_proposal.id}"
       expect(page).not_to have_content('Modify Request')
     end
 
     it "does not show a restart link for another client" do
-      ncr_cart.proposal.client_data = nil
-      ncr_cart.proposal.save()
-      visit "/carts/#{ncr_cart.id}"
+      ncr_proposal.client_data = nil
+      ncr_proposal.save()
+      visit "/proposals/#{ncr_proposal.id}"
       expect(page).not_to have_content('Modify Request')
     end
 
     it "does not show a restart link for non requester" do
-      ncr_cart.set_requester(FactoryGirl.create(:user))
-      visit "/carts/#{ncr_cart.id}"
+      ncr_proposal.set_requester(FactoryGirl.create(:user))
+      visit "/proposals/#{ncr_proposal.id}"
       expect(page).not_to have_content('Modify Request')
     end
 
@@ -202,15 +202,15 @@ describe "National Capital Region proposals" do
         check "I received a verbal NTP to address this emergency"
         expect {
           click_on 'Submit for approval'
-        }.to change { Cart.count }.from(0).to(1)
+        }.to change { Proposal.count }.from(0).to(1)
 
-        cart = Cart.last
+        proposal = Proposal.last
         expect(page).to have_content("Proposal submitted")
-        expect(current_path).to eq("/carts/#{cart.id}")
+        expect(current_path).to eq("/proposals/#{proposal.id}")
         expect(page).to have_content("0 of 0 approved")
 
-        expect(cart.proposal.client_data.emergency).to eq(true)
-        expect(cart.approved?).to eq(true)
+        expect(proposal.client_data.emergency).to eq(true)
+        expect(proposal.approved?).to eq(true)
       end
 
       it "does not set emergencies if form type changes" do
@@ -220,14 +220,14 @@ describe "National Capital Region proposals" do
         fill_in 'RWA Number', with: "a 'number'"
         expect {
           click_on 'Submit for approval'
-        }.to change { Cart.count }.from(0).to(1)
+        }.to change { Proposal.count }.from(0).to(1)
 
-        cart = Cart.last
+        proposal = Proposal.last
         expect(page).to have_content("Proposal submitted")
-        expect(current_path).to eq("/carts/#{cart.id}")
+        expect(current_path).to eq("/proposals/#{proposal.id}")
 
-        expect(cart.proposal.client_data.emergency).to eq(false)
-        expect(cart.approved?).to eq(false)
+        expect(proposal.client_data.emergency).to eq(false)
+        expect(proposal.approved?).to eq(false)
       end
     end
   end

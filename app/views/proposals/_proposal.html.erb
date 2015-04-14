@@ -3,23 +3,35 @@
 
     <div class="col-md-12 col-xs-12">
       <h1 class="communicart_header">
-        <%= cart.proposal.name %>
+        <%= proposal.name %>
       </h1>
 
       <div class="communicart_description">
         <p>
-          Purchase Request: <strong>#<%= cart.id %></strong>
+          Purchase Request: <strong>#<%= proposal.public_identifier %></strong>
         </p>
         <p>
           Requested by:
-          <strong><%= cart.requester.full_name %></strong>
+          <strong><%= proposal.requester.full_name %></strong>
         </p>
         <%= client_partial(proposal.client, 'external_id',
-                           locals: {cart: cart}) %>
+                           locals: {proposal: proposal}) %>
       </div>
     </div>
 
-    <%= render partial: "carts/approval_status"  %>
+    <%- if @proposal.linear? %>
+      <div class="col-md-12">
+        <table class="col-md-12 data_container" border='0'>
+          <%= render partial: "shared/email_status" %>
+        </table>
+      </div>
+    <%- else %>
+      <div class="col-md-4  col-xs-12 communicart_description">
+        <div class="purchase-status">
+          <h5 class="<%= @proposal.status %>"><%= @proposal.display_status %></h5>
+        </div>
+      </div>
+    <%- end %>
   </div>
   <div class="row">
     <%= client_partial(proposal.client, 'proposal_properties',
@@ -29,17 +41,17 @@
 
 <% if policy(proposal).can_edit? %>
   <%= client_partial(proposal.client, 'restart_link',
-                     locals: {proposal: proposal, cart: cart})
+                     locals: {proposal: proposal})
   %>
 <% end %>
 
-<%- if cart.flow == 'parallel'  %>
-  <%- if cart.approvals.approved.any?  %>
+<%- if proposal.flow == 'parallel'  %>
+  <%- if proposal.approvals.approved.any?  %>
     <div class="approval-status-container">
       <div id="approval-status">
         <h3>Request approved by</h3>
         <ul>
-          <%- cart.approvals.approved.each do |approval| %>
+          <%- proposal.approvals.approved.each do |approval| %>
             <li class='icon-approved'>
               <%= approval.user_email_address %>
               <span class='timestamp'>on <%= l approval.updated_at %></span>
@@ -50,19 +62,19 @@
     </div>
   <%- end %>
 
-  <%- if cart.approvals.pending.any?  %>
+  <%- if proposal.approvals.pending.any?  %>
     <div class="approval-status-container">
       <div id="approval-status">
         <h3>Waiting for approval from</h3>
         <ul class="left">
-          <%- cart.approvals.pending.each do |approval| %>
+          <%- proposal.approvals.pending.each do |approval| %>
           <li class='icon-pending'>
             <%= approval.user_email_address %>
           </li>
           <%- end %>
         </ul>
         <ul class="right">
-          <%- cart.approvals.approved.each do |approval| %>
+          <%- proposal.approvals.approved.each do |approval| %>
           <li class='icon-approved'>
             <%= approval.user_email_address %>
           </li>
@@ -79,7 +91,7 @@
   <div id="cart-comments">
     <h3>Comments on this purchase request</h3>
     <%- if @show_comments %>
-      <%= form_for [cart, Comment.new] do |f| %>
+      <%= form_for [proposal, Comment.new] do |f| %>
         <%= f.text_area :comment_text, rows: 5 %>
 
         <div class='row text-area-info-container'>
@@ -94,8 +106,8 @@
         </div>
       <%- end %>
 
-      <% if cart.comments.any? %>
-        <% cart.comments.each do |c| %>
+      <% if proposal.comments.any? %>
+        <% proposal.comments.each do |c| %>
           <div class='comment-item'>
             <div class='row'>
               <% unless c.user.nil? %>
@@ -124,6 +136,14 @@
   </div>
 </div>
 
-<% if policy(cart.proposal).can_approve_or_reject? %>
-  <%= render partial: 'approval_actions', locals: { current_user: @current_user, cart: cart} %>
+<% if policy(proposal).can_approve_or_reject? %>
+  <div class="centered">
+    <p>
+      <%= link_to "Approve",
+          approval_response_path(approver_action: 'approve',
+                                 # @todo: get rid of cart
+                                 cart_id: proposal.cart.id, version: proposal.version
+                                 ), class: 'form-button' %>
+    </p>
+  </div>
 <% end %>

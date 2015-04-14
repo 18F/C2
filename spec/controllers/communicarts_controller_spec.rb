@@ -38,7 +38,7 @@ describe CommunicartsController do
 
       it 'renders a navigation template' do
         post 'send_cart', json_params
-        expect(response).to render_template(partial: '_navigator_cart')
+        expect(response).to render_template(partial: 'navigator/_cart_mail')
       end
 
       it 'renders the default template' do
