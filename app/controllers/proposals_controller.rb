@@ -17,7 +17,7 @@ class ProposalsController < ApplicationController
 
   def archive
     @closed_proposals = policy_scope(Proposal).where(
-      requester: curret_user).closed.order('created_at DESC')
+      requester: current_user).closed.order('created_at DESC')
   end
 
   protected

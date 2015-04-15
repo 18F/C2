@@ -40,12 +40,12 @@ class Approval < ActiveRecord::Base
 
   # Used by the state machine
   def on_rejected_entry(new_state, event)
-    self.cart.reject!
+    self.proposal.reject!
   end
 
   # Used by the state machine
   def on_approved_entry(new_state, event)
-    self.cart.partial_approve!
+    self.proposal.partial_approve!
     Dispatcher.on_approval_approved(self)
   end
 end

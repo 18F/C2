@@ -22,9 +22,10 @@
       <td class="sixth"><%= number_to_currency(proposal.total_price) %></td>
       <td class="sixth">
         <% approvers = proposal.currently_awaiting_approvers %>
-        <% if approvers.include? current_user %>
+        <% if proposal.pending? && approvers.include?(current_user) %>
+          <%# This isn't used anywhere %>
           <p><strong>Please review</strong></p>
-        <% elsif approvers %>
+        <% elsif proposal.pending? %>
           <p><em>Waiting for review from:
             <%= approvers.map(&:full_name).join(', ') %></em></p>
         <% else %>
