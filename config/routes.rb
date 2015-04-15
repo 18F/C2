@@ -20,8 +20,6 @@ C2::Application.routes.draw do
     collection do
       get 'archive'
     end
-
-    resources :comments, only: [:index, :create]
   end
 
   resources :proposals, only: [:index, :show] do
