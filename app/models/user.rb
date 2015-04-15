@@ -5,10 +5,14 @@ class User < ActiveRecord::Base
 
   has_many :user_roles
   has_many :approval_groups, through: :user_roles
+
   has_many :approvals
   has_many :observations
   has_many :properties, as: :hasproperties
   has_many :comments
+
+  has_many :outgoing_delegates, class_name: 'ApprovalDelegate', foreign_key: 'assigner_id'
+  has_many :incoming_delegates, class_name: 'ApprovalDelegate', foreign_key: 'assignee_id'
 
   def full_name
     if first_name && last_name
