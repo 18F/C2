@@ -16,6 +16,7 @@ gem 'jquery-rails'
 gem 'jquery-turbolinks'
 gem 'newrelic_rpm'
 gem 'omniauth-myusa', git: 'https://github.com/18F/omniauth-myusa.git'
+gem "paperclip", "~> 4.2"
 gem 'pg'
 gem 'pundit'
 gem 'rack-cors', require: 'rack/cors'

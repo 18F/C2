@@ -124,6 +124,11 @@
   </div>
 </div>
 
+<%= form_for [cart, Attachment.new] do |f| %>
+  <%= f.file_field :file %>
+  <%= submit_tag "Send a File", id: :add_a_comment %>
+<%- end %>
+
 <% if policy(cart.proposal).can_approve_or_reject? %>
   <%= render partial: 'approval_actions', locals: { current_user: @current_user, cart: cart} %>
 <% end %>
