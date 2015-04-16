@@ -56,6 +56,9 @@ GEM
     autoprefixer-rails (4.0.2.2)
       execjs
     awesome_print (1.6.1)
+    aws-sdk-v1 (1.60.2)
+      json (~> 1.4)
+      nokogiri (>= 1.4.4)
     bootstrap-sass (3.3.1.0)
       sass (~> 3.2)
     builder (3.2.2)
@@ -334,6 +337,7 @@ DEPENDENCIES
   ar_outer_joins
   autoprefixer-rails
   awesome_print
+  aws-sdk-v1
   bootstrap-sass (~> 3.3.0)
   capybara
   codeclimate-test-reporter

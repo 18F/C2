@@ -146,7 +146,7 @@
       <div class="line-item">
         <div class="row">
           <p class="col-sm-6 col-xs-12">
-            <a href="<%= attachment.file.url %>"><%= attachment.file_file_name %></a>
+            <a href="<%= attachment.file.expiring_url(10*60) %>"><%= attachment.file_file_name %></a>
           </p>
           <p class="col-sm-3 col-xs-6">
             <strong><%= attachment.user.full_name %></strong>
