@@ -54,7 +54,7 @@ module Gsa18f
         proposal_attributes: {flow: 'linear', client_data: self}
       )
       cart.set_requester(requester)
-      self.add_approvals(approver_email)
+      self.add_approvals(self.system_approvers)
       Dispatcher.deliver_new_cart_emails(cart)
       cart
     end
@@ -67,7 +67,7 @@ module Gsa18f
     end
 
     def add_approvals(approver_email)
-      self.cart.add_approver(self.system_approvers)
+      approver_email.each{|email| self.cart.add_approver(email)}
     end
 
     # Ignore values in certain fields if they aren't relevant. May want to
@@ -78,12 +78,13 @@ module Gsa18f
         :product_name_and_description]
       case recurring
       when "1"
-        fields + [:recurring_interval, :recurring_length]
+        fields += [:recurring_interval, :recurring_length]
       end
+      fields
     end
 
     def relevant_fields
-      Ncr::WorkOrder.relevant_fields(self.recurring)
+      Gsa18f::Procurement.relevant_fields(self.recurring)
     end
      # attribute :requester, :user
     # attribute :office, :string
@@ -102,7 +103,7 @@ module Gsa18f
     # Methods for Client Data interface
     def fields_for_display
       attributes = self.relevant_fields
-      attributes.map{|key| [ProposalForm.human_attribute_name(key), self[key]]}
+      attributes.map{|key| [Procurement.human_attribute_name(key), self[key]]}
     end
 
     def client
@@ -115,7 +116,7 @@ module Gsa18f
     end
 
     def total_price
-      self.amount || 0.0
+      self.cost_per_unit * self.quantity || 0.0
     end
 
     # may be replaced with paper-trail or similar at some point
@@ -123,82 +124,18 @@ module Gsa18f
       self.updated_at.to_i
     end
 
-    protected
     def approver_email
       ENV['GSA18F_APPROVER_EMAIL'] || '18fapprover@gsa.gov'
     end
 
+    def name
+      self.product_name_and_description
+    end
+
+    protected
     def system_approvers
       emails = [self.approver_email]
       emails
     end
-
-    # def approver_email
-    #   ENV['GSA18F_APPROVER_EMAIL'] || '18fapprover@gsa.gov'
-    # end
-
-    # def set_approver_on(cart)
-    #   cart.add_approver(self.approver_email)
-    # end
-
-    # def set_origin_on(cart)
-    #   cart.set_props(origin: 'gsa18f')
-    # end
-
-    # def create_cart
-    #   cart = Cart.new(
-    #     name: self.product_name_and_description,
-    #     proposal_attributes: {flow: 'linear'}
-    #   )
-    #   if cart.save
-    #     self.set_props_on(cart)
-    #     self.set_approver_on(cart)
-    #     self.set_origin_on(cart)
-    #     Dispatcher.deliver_new_cart_emails(cart)
-    #   end
-
-    #   cart
-    # end
-
-    # def update_cart(cart)
-    #   cart.name = self.product_name_and_description
-    #   if cart.save
-    #     cart.proposal.approvals.destroy_all
-    #     # @todo: do we actually want to clear all properties?
-    #     cart.clear_props!
-    #     self.set_props_on(cart)
-    #     self.set_approver_on(cart)
-    #     self.set_origin_on(cart)
-    #     cart.restart!
-    #   end
-    #   cart
-    # end
-
-    # def set_props_on(cart)
-    #   cart.set_props(
-    #     office: self.office,
-    #     justification: self.justification,
-    #     link_to_product: self.link_to_product,
-    #     cost_per_unit: self.cost_per_unit,
-    #     quantity: self.quantity,
-    #     date_requested: self.date_requested,
-    #     urgency: self.urgency,
-    #     additional_info: self.additional_info,
-    #     recurring_interval: self.recurring_interval,
-    #     recurring_length: self.recurring_length,
-    #     recurring: self.recurring
-    #   )
-    #   cart.set_requester(self.requester)
-    # end
-
-    # def self.from_cart(cart)
-    #   relevant_properties = self._attributes.map(&:name).map(&:to_s)
-    #   properties = cart.deserialized_properties.select{
-    #     |key, val| relevant_properties.include? key
-    #   }
-    #   form = self.new(properties)
-    #   form.product_name_and_description = cart.name
-    #   form
-    # end
   end
 end

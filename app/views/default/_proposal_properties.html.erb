@@ -4,15 +4,17 @@
       <h5>FY15 Credit Card Purchase Request</h5>
     </td>
   </tr>
-  <% binding.pry %>
   <%- proposal.fields_for_display.each do |name, value| %>
-  test
     <tr class="cart_item_information">
       <td class="results-list" align="left" scope="row">
         <strong><%= name %>
       </td>
       <td>
-        <%= value %>
+        <% if value.class == BigDecimal %>
+          <%= number_to_currency(value) %>
+        <% else %>
+          <%= value %>
+        <% end %>
       </td>
     </tr>
   <%- end %>

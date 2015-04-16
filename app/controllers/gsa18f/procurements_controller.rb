@@ -4,30 +4,39 @@ module Gsa18f
     before_filter :redirect_if_cart_cant_be_edited, only: [:edit, :update]
 
     def new
-      @proposal_form = Gsa18f::Procurement.new
-      @form_url = {action: "create"}
-      @form_method = "post"
+      @procurement = Gsa18f::Procurement.new
       render 'form'
     end
 
     def create
-      @proposal_form = Gsa18f::Procurement.new(params[:gsa18f_proposal])
-      @form_url = {action: "create"}
-      @form_method = "post"
-      @proposal_form.requester = current_user
-      if @proposal_form.valid?
-        cart = @proposal_form.create_cart
-        if cart.persisted?
-          flash[:success] = "Proposal submitted!"
-          redirect_to cart_path(cart)
-        else
-          flash[:error] = cart.errors.full_messages
-          render 'form'
-        end
+      @procurement = Gsa18f::Procurement.new(permitted_params)
+      @approver_email = @procurement.approver_email;
+      if self.errors.empty?
+        @procurement.save
+        cart = @procurement.init_and_save_cart(
+          @approver_email, current_user)
+        flash[:success] = "Procurement submitted!"
+        redirect_to cart_path(cart)
       else
-        flash[:error] = @proposal_form.errors.full_messages
+        flash[:error] = errors
         render 'form'
       end
+      # @form_url = {action: "create"}
+      # @form_method = "post"
+      # @proposal_form.requester = current_user
+      # if @proposal_form.valid?
+      #   cart = @proposal_form.create_cart
+      #   if cart.persisted?
+      #     flash[:success] = "Proposal submitted!"
+      #     redirect_to cart_path(cart)
+      #   else
+      #     flash[:error] = cart.errors.full_messages
+      #     render 'form'
+      #   end
+      # else
+      #   flash[:error] = @proposal_form.errors.full_messages
+      #   render 'form'
+      # end
     end
 
     def edit
@@ -57,7 +66,20 @@ module Gsa18f
       end
     end
 
+    def permitted_params
+      fields = Gsa18f::Procurement.relevant_fields(
+        params[:gsa18f_procurement][:recurring])
+      params.require(:gsa18f_procurement).permit(:name, *fields)
+    end
+
     protected
+    def errors
+      errors = []
+      if !@procurement.valid?
+        errors += @procurement.errors.full_messages
+      end
+      errors
+    end
 
     def cart
       @cart ||= Cart.find(params[:id])

@@ -2,7 +2,7 @@
   <h3>GSA 18f</h3>
   <h4>Purchase Request - Supplies</h4>
   <p>Eg; ergonomic keyboards, foamcore boards, ergonomic mice, monitor stands, post-its, sharpies, etc. </p>
-  <%= form_for @proposal_form, url: @form_url, method: @form_method do |f| %>
+  <%= form_for @procurement do |f| %>
     <!-- Office Location -->
     <div class="form-group">
       <%= f.label :office %>

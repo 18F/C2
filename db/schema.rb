@@ -10,12 +10,7 @@
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
-
-<<<<<<< HEAD
-ActiveRecord::Schema.define(version: 20150410142248) do
-=======
-ActiveRecord::Schema.define(version: 20150410163833) do
->>>>>>> updated model
+ActiveRecord::Schema.define(version: 20150414194609) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -104,6 +99,8 @@ ActiveRecord::Schema.define(version: 20150410163833) do
     t.string   "recurring_interval"
     t.integer  "recurring_length"
     t.string   "urgency"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "ncr_work_orders", force: true do |t|
