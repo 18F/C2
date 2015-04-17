@@ -1,18 +1,3 @@
-# attribute :requester, :user
-# attribute :office, :string
-# attribute :justification, :text
-# attribute :link_to_product, :string
-# attribute :quantity, :integer
-# attribute :date_requested, :datetime
-# attribute :urgency, :string
-# attribute :additional_info, :string
-# attribute :cost_per_unit, :decimal
-# attribute :product_name_and_description, :text
-# attribute :recurring, :boolean
-# attribute :recurring_interval, :string
-# attribute :recurring_length, :integer
-# attribute :origin, :string
-
 module Gsa18f
   # Make sure all table names use 'gsa18f_XXX'
   def self.table_name_prefix
