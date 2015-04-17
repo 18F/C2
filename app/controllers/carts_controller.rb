@@ -8,7 +8,7 @@ class CartsController < ApplicationController
   def show
     @cart = self.cart.decorate
     @proposal = self.cart.proposal
-    @show_comments = true
+    @include_comments_files = true
   end
 
   def index
