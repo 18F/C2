@@ -4,6 +4,7 @@ class Attachment < ActiveRecord::Base
 
   validates_presence_of :file
   validates_presence_of :proposal
+  validates_presence_of :user
 
   belongs_to :proposal
   belongs_to :user
