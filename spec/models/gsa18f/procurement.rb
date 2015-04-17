@@ -1,4 +1,4 @@
-describe Gsa18f::ProposalForm do
+describe Gsa18f::Procurement do
   describe '#create_cart' do
     def approver_emails(form)
       cart = form.create_cart
@@ -6,7 +6,7 @@ describe Gsa18f::ProposalForm do
     end
 
     it "adds 18fapprover@gsa.gov as approver email" do
-      form = FactoryGirl.build(:gsa18f_proposal_form, product_name_and_description: 'test')
+      form = FactoryGirl.build(:gsa18f_procurement, product_name_and_description: 'test')
       expect(form).to be_valid
 
       expect(approver_emails(form)).to eq(%w(

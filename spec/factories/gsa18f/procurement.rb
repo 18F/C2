@@ -6,6 +6,20 @@ FactoryGirl.define do
     sequence(:product_name_and_description) {|n| "Proposal #{n}" }
     office Gsa18f::Procurement::OFFICES[0]
     urgency Gsa18f::Procurement::URGENCY[0]
-    association :requester, factory: :user
+    trait :with_proposal do
+      proposal
+    end
+
+    trait :with_cart do
+      association :proposal, :with_cart
+    end
+
+    trait :with_requester do
+      association :proposal, :with_requester
+    end
+
+    trait :with_approvers do
+      association :proposal, :with_approvers
+    end
   end
 end

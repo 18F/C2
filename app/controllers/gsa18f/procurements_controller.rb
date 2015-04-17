@@ -21,47 +21,25 @@ module Gsa18f
         flash[:error] = errors
         render 'form'
       end
-      # @form_url = {action: "create"}
-      # @form_method = "post"
-      # @proposal_form.requester = current_user
-      # if @proposal_form.valid?
-      #   cart = @proposal_form.create_cart
-      #   if cart.persisted?
-      #     flash[:success] = "Proposal submitted!"
-      #     redirect_to cart_path(cart)
-      #   else
-      #     flash[:error] = cart.errors.full_messages
-      #     render 'form'
-      #   end
-      # else
-      #   flash[:error] = @proposal_form.errors.full_messages
-      #   render 'form'
-      # end
     end
 
     def edit
-      @proposal_form = Gsa18f::Procurement.from_cart(self.cart)
-      @form_url = {action: "update"}
-      @form_method = "put"
+      @procurement = self.procurement
       render 'form'
     end
 
     def update
-      @proposal_form = Gsa18f::Procurement.new(params[:gsa18f_proposal])
-      @form_url = {action: "update"}
-      @form_method =  "put"
-      @proposal_form.requester = current_user
-      if @proposal_form.valid?
-        @proposal_form.update_cart(self.cart)
-        if not self.cart.errors.any?
-          flash[:success] = "Proposal resubmitted!"
-          redirect_to cart_path(self.cart)
-        else
-          flash[:error] = self.cart.errors.full_messages
-          render 'form'
-        end
+      @procurement = self.procurement
+      @procurement.update(permitted_params)
+      @approver_email = @procurement.approver_email;
+      if self.errors.empty?
+        cart = self.cart
+        @procurement.save
+        @procurement.update_cart(@approver_email, cart)
+        flash[:success] = "Procurement resubmitted!"
+        redirect_to cart_path(cart)
       else
-        flash[:error] = @proposal_form.errors.full_messages
+        flash[:error] = errors
         render 'form'
       end
     end
@@ -73,6 +51,11 @@ module Gsa18f
     end
 
     protected
+    
+    def procurement
+      @procurement ||= Gsa18f::Procurement.find(params[:id])
+    end
+
     def errors
       errors = []
       if !@procurement.valid?
@@ -82,14 +65,14 @@ module Gsa18f
     end
 
     def cart
-      @cart ||= Cart.find(params[:id])
+      self.procurement.proposal.cart
     end
 
     def redirect_if_cart_cant_be_edited
       if self.cart.approved?
-        redirect_to new_gsa18f_proposal_path, :alert => "That proposal's already approved. New proposal?"
+        redirect_to new_gsa18f_procurement_path, :alert => "That proposal's already approved. New proposal?"
       elsif self.cart.requester != current_user
-        redirect_to new_gsa18f_proposal_path, :alert => 'You cannot restart that proposal'
+        redirect_to new_gsa18f_procurement_path, :alert => 'You cannot restart that proposal'
       end
     end
   end

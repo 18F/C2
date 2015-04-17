@@ -1,3 +1,18 @@
+# attribute :requester, :user
+# attribute :office, :string
+# attribute :justification, :text
+# attribute :link_to_product, :string
+# attribute :quantity, :integer
+# attribute :date_requested, :datetime
+# attribute :urgency, :string
+# attribute :additional_info, :string
+# attribute :cost_per_unit, :decimal
+# attribute :product_name_and_description, :text
+# attribute :recurring, :boolean
+# attribute :recurring_interval, :string
+# attribute :recurring_length, :integer
+# attribute :origin, :string
+
 module Gsa18f
   # Make sure all table names use 'gsa18f_XXX'
   def self.table_name_prefix
@@ -28,21 +43,6 @@ module Gsa18f
       greater_than_or_equal_to: 1
     }
     validates :product_name_and_description, presence: true
-    
-    # attribute :requester, :user
-    # attribute :office, :string
-    # attribute :justification, :text
-    # attribute :link_to_product, :string
-    # attribute :quantity, :integer
-    # attribute :date_requested, :datetime
-    # attribute :urgency, :string
-    # attribute :additional_info, :string
-    # attribute :cost_per_unit, :decimal
-    # attribute :product_name_and_description, :text
-    # attribute :recurring, :boolean
-    # attribute :recurring_interval, :string
-    # attribute :recurring_length, :integer
-    # attribute :origin, :string
 
     def set_defaults
       # self.not_to_exceed ||= false
@@ -54,20 +54,20 @@ module Gsa18f
         proposal_attributes: {flow: 'linear', client_data: self}
       )
       cart.set_requester(requester)
-      self.add_approvals(self.system_approvers)
+      self.add_approvals(approver_email)
       Dispatcher.deliver_new_cart_emails(cart)
       cart
     end
     
     def update_cart(approver_email, cart)
       cart.proposal.approvals.destroy_all
-      self.add_approvals(self.system_approvers)
+      self.add_approvals(approver_email)
       cart.restart!
       cart
     end
 
     def add_approvals(approver_email)
-      approver_email.each{|email| self.cart.add_approver(email)}
+      self.cart.add_approver(approver_email)
     end
 
     # Ignore values in certain fields if they aren't relevant. May want to
@@ -75,32 +75,17 @@ module Gsa18f
     def self.relevant_fields(recurring)
       fields = [:office, :justification, :link_to_product, :quantity,
         :date_requested, :urgency, :additional_info, :cost_per_unit, 
-        :product_name_and_description]
-      case recurring
-      when "1"
+        :product_name_and_description, :recurring]
+      if recurring
         fields += [:recurring_interval, :recurring_length]
-      end
+      end 
       fields
     end
 
     def relevant_fields
       Gsa18f::Procurement.relevant_fields(self.recurring)
     end
-     # attribute :requester, :user
-    # attribute :office, :string
-    # attribute :justification, :text
-    # attribute :link_to_product, :string
-    # attribute :quantity, :integer
-    # attribute :date_requested, :datetime
-    # attribute :urgency, :string
-    # attribute :additional_info, :string
-    # attribute :cost_per_unit, :decimal
-    # attribute :product_name_and_description, :text
-    # attribute :recurring, :boolean
-    # attribute :recurring_interval, :string
-    # attribute :recurring_length, :integer
-    # attribute :origin, :string
-    # Methods for Client Data interface
+
     def fields_for_display
       attributes = self.relevant_fields
       attributes.map{|key| [Procurement.human_attribute_name(key), self[key]]}
