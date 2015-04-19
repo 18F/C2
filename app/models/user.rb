@@ -30,10 +30,6 @@ class User < ActiveRecord::Base
     Cart.joins(:proposal).where(proposals: {requester_id: self.id})
   end
 
-  def approver_of?(cart)
-    cart.approvers.include? self
-  end
-
   def last_requested_cart
     self.requested_carts.order('created_at DESC').first
   end
