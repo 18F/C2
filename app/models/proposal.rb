@@ -45,6 +45,14 @@ class Proposal < ActiveRecord::Base
     self.approval_delegates.exists?(assignee_id: user.id)
   end
 
+  def approval_for(user)
+    # TODO convert to SQL
+    self.approvals.find do |approval|
+      approver = approval.user
+      approver == user || approver.outgoing_delegates.exists?(assignee_id: user)
+    end
+  end
+
   # Use this until all clients are migrated to models (and we no longer have a
   # dependence on "Cart"
   def client_data_legacy
