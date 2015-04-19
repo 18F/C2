@@ -6,6 +6,7 @@ class Proposal < ActiveRecord::Base
   has_one :cart
   has_many :approvals
   has_many :approvers, through: :approvals, source: :user
+  has_many :approval_delegates, through: :approvers, source: :outgoing_delegates
   has_many :comments
   has_many :observations
   has_many :observers, through: :observations, source: :user
@@ -40,6 +41,9 @@ class Proposal < ActiveRecord::Base
     self.flow == 'linear'
   end
 
+  def delegate?(user)
+    self.approval_delegates.exists?(assignee_id: user.id)
+  end
 
   # Use this until all clients are migrated to models (and we no longer have a
   # dependence on "Cart"
