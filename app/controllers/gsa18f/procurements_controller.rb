@@ -10,11 +10,9 @@ module Gsa18f
 
     def create
       @procurement = Gsa18f::Procurement.new(permitted_params)
-      @approver_email = @procurement.approver_email;
       if self.errors.empty?
         @procurement.save
-        cart = @procurement.init_and_save_cart(
-          @approver_email, current_user)
+        cart = @procurement.init_and_save_cart(current_user)
         flash[:success] = "Procurement submitted!"
         redirect_to cart_path(cart)
       else

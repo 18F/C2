@@ -34,12 +34,12 @@ module Gsa18f
       # self.emergency ||= false
     end
 
-    def init_and_save_cart(approver_email, requester)
+    def init_and_save_cart(requester)
       cart = Cart.create(
         proposal_attributes: {flow: 'linear', client_data: self}
       )
       cart.set_requester(requester)
-      self.add_approvals(approver_email)
+      self.add_approvals
       Dispatcher.deliver_new_cart_emails(cart)
       cart
     end
@@ -51,7 +51,7 @@ module Gsa18f
       cart
     end
 
-    def add_approvals(approver_email)
+    def add_approvals
       self.cart.add_approver(approver_email)
     end
 
@@ -94,15 +94,15 @@ module Gsa18f
       self.updated_at.to_i
     end
 
-    def approver_email
-      ENV['GSA18F_APPROVER_EMAIL'] || '18fapprover@gsa.gov'
-    end
-
     def name
       self.product_name_and_description
     end
 
     protected
+    def approver_email
+      ENV['GSA18F_APPROVER_EMAIL'] || '18fapprover@gsa.gov'
+    end
+
     def system_approvers
       emails = [self.approver_email]
       emails
