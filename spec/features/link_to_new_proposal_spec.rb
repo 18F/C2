@@ -1,5 +1,6 @@
 describe "Link to New Proposal" do
   it "is not visible if the user has no client" do
+    pending "skipping for user testing"
     login_as(FactoryGirl.create(:user))
     visit '/'
     expect(page).not_to have_content('New NCR Request')
