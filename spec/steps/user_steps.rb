@@ -56,15 +56,15 @@ module UserSteps
   end
 
   step 'a cart :external_id' do |external_id|
-    @cart = FactoryGirl.create(:cart_with_requester, external_id: external_id)
+    @cart = FactoryGirl.create(:cart, :with_requester, external_id: external_id)
   end
 
   step 'a :cart_type cart :external_id' do |cart_type, external_id|
-    @cart = FactoryGirl.create(:cart_with_requester, external_id: external_id, flow: cart_type)
+    @cart = FactoryGirl.create(:cart, :with_requester, external_id: external_id, flow: cart_type)
   end
 
   step 'a cart :external_id with approver :approver_email' do |external_id, approver_email|
-    @cart = FactoryGirl.create(:cart_with_requester, external_id: external_id)
+    @cart = FactoryGirl.create(:cart, :with_requester, external_id: external_id)
     @cart.add_approver(approver_email)
     @approval = @cart.approvals.first
   end

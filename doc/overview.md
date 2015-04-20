@@ -29,9 +29,25 @@ They can then log in one of two ways:
 
 The system doesn't have any notion of user-level "roles", other than on a Proposal-by-Proposal basis. They can be one of:
 
-* Approver
-* Observer
-* Requester
+#### Approver
+
+A User who can approve a Proposal directly.
+
+#### Delegate
+
+A User who can approve Proposals on behalf of an approver. They can be added via the console with
+
+```ruby
+approver.add_delegate(other_user)
+```
+
+#### Observer
+
+A User who gets notifications for and can comment on a Proposal.
+
+#### Requester
+
+The User who initiated a Proposal.
 
 ## Data types
 

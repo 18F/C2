@@ -17,6 +17,13 @@ FactoryGirl.define do
     end
 
 
+    trait :with_requester do
+      after :create do |cart|
+        cart.add_requester('requester@some-dot-gov.gov')
+      end
+    end
+
+
     factory :cart_with_approval_group do
       after :create do |cart|
         approval_group = FactoryGirl.create(:approval_group_with_approvers_and_requester)
@@ -26,18 +33,12 @@ FactoryGirl.define do
       end
     end
 
-    factory :cart_with_requester do
-      after :create do |cart|
-        requester = FactoryGirl.create(:user, email_address: 'requester1@some-dot-gov.gov', first_name: 'Panthro', last_name: 'Requester')
-        cart.set_requester(requester)
-      end
-    end
-
     factory :cart_with_approvals do
+      with_requester
+
       after :create do |cart|
         cart.add_approver('approver1@some-dot-gov.gov')
         cart.add_approver('approver2@some-dot-gov.gov')
-        cart.add_requester('requester@some-dot-gov.gov')
       end
 
       factory :cart_with_all_approvals_approved do

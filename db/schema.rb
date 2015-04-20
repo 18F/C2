@@ -25,6 +25,13 @@ ActiveRecord::Schema.define(version: 20150415165247) do
     t.integer  "approval_id"
   end
 
+  create_table "approval_delegates", force: true do |t|
+    t.integer  "assigner_id"
+    t.integer  "assignee_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "approval_groups", force: true do |t|
     t.string   "name"
     t.datetime "created_at"
@@ -131,6 +138,7 @@ ActiveRecord::Schema.define(version: 20150415165247) do
     t.string   "last_name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "client_slug"
   end
 
 end
