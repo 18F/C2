@@ -40,6 +40,7 @@ describe CommentsController do
       expect {
         post :create, params
       }.to change{ proposal.comments.count }.from(0).to(1)
+      expect(Comment.last.user).to eq(delegate)
     end
 
     it "does not allow others to comment" do
