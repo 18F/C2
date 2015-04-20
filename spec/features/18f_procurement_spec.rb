@@ -7,11 +7,14 @@ describe "GSA 18f Purchase Request Form" do
 
   context "when signed in" do
     let(:requester) { FactoryGirl.create(:user) }
-    # let(:gsa18f) {
-    #   proposal = FactoryGirl.build(:gsa18f_procurement)
-    #   proposal.requester = requester
-    #   proposal.create_cart
-    # }
+    let(:gsa18f) {
+      pr = FactoryGirl.create(:gsa18f_procurement)
+      pr.init_and_save_cart(requester)
+      pr
+    }
+    let(:gsa18f_cart) {
+      gsa18f.proposal.cart
+    }
 
     before do
       login_as(requester)
@@ -86,14 +89,6 @@ describe "GSA 18f Purchase Request Form" do
       expect(page).to have_content("Quantity must be greater than or equal to 1")
       # keeps the form values
     end
-    let(:gsa18f) {
-      pr = FactoryGirl.create(:gsa18f_procurement)
-      pr.init_and_save_cart(requester)
-      pr
-    }
-    let(:gsa18f_cart) {
-      gsa18f.proposal.cart
-    }
 
     it "can be restarted if pending" do
       visit "/gsa18f/procurements/#{gsa18f.id}/edit"

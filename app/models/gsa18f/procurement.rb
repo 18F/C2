@@ -45,7 +45,7 @@ module Gsa18f
     end
 
     def add_approvals
-      self.cart.add_approver(approver_email)
+      self.cart.add_approver(Gsa18f::Procurement.approver_email)
     end
 
     # Ignore values in certain fields if they aren't relevant. May want to
@@ -91,11 +91,11 @@ module Gsa18f
       self.product_name_and_description
     end
 
-    protected
-    def approver_email
+    def self.approver_email
       ENV['GSA18F_APPROVER_EMAIL'] || '18fapprover@gsa.gov'
     end
 
+    protected
     def system_approvers
       emails = [self.approver_email]
       emails
