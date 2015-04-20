@@ -29,11 +29,9 @@ module Gsa18f
     def update
       @procurement = self.procurement
       @procurement.update(permitted_params)
-      @approver_email = @procurement.approver_email;
       if self.errors.empty?
         cart = self.cart
-        @procurement.save
-        @procurement.update_cart(@approver_email, cart)
+        @procurement.update_cart(cart)
         flash[:success] = "Procurement resubmitted!"
         redirect_to cart_path(cart)
       else

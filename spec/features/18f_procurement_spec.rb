@@ -88,7 +88,7 @@ describe "GSA 18f Purchase Request Form" do
     end
     let(:gsa18f) {
       pr = FactoryGirl.create(:gsa18f_procurement)
-      pr.init_and_save_cart('approver@email.com', requester)
+      pr.init_and_save_cart(requester)
       pr
     }
     let(:gsa18f_cart) {

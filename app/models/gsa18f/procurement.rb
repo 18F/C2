@@ -44,9 +44,9 @@ module Gsa18f
       cart
     end
     
-    def update_cart(approver_email, cart)
+    def update_cart(cart)
       cart.proposal.approvals.destroy_all
-      self.add_approvals(approver_email)
+      self.add_approvals
       cart.restart!
       cart
     end
