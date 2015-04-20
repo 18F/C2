@@ -33,7 +33,7 @@ describe 'CommunicartsController' do
 
         # TODO move to factory trait
         delegate = FactoryGirl.create(:user)
-        approver.outgoing_delegates.create!(assignee_id: delegate.id)
+        approver.add_delegate(delegate)
 
         login_as(delegate)
         params = {

@@ -7,7 +7,7 @@ FactoryGirl.define do
     trait :with_delegate do
       after(:create) do |user|
         delegate = FactoryGirl.create(:user)
-        user.outgoing_delegates.create!(assignee: delegate)
+        user.add_delegate(delegate)
       end
     end
   end

@@ -7,7 +7,8 @@ describe ProposalPolicy do
 
       approval = proposal.approvals.first
       delegate = FactoryGirl.create(:user)
-      approval.user.outgoing_delegates.create!(assignee: delegate)
+      approver = approval.user
+      approver.add_delegate(delegate)
 
       expect(subject).to permit(delegate, proposal)
     end

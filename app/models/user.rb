@@ -34,6 +34,10 @@ class User < ActiveRecord::Base
     self.requested_carts.order('created_at DESC').first
   end
 
+  def add_delegate(other)
+    self.outgoing_delegates.create!(assignee: other)
+  end
+
   def self.from_oauth_hash(auth_hash)
     user_data = auth_hash.extra.raw_info.to_hash
     self.find_or_create_by(email_address: user_data['email'])
