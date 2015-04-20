@@ -1,9 +1,8 @@
 describe CommunicartMailerHelper do
   describe '#approval_action_url' do
     it "returns a URL" do
-      approval = FactoryGirl.build(:approval, :with_cart)
-      token = FactoryGirl.build(:api_token)
-      expect(approval).to receive(:api_token).and_return(token)
+      approval = FactoryGirl.create(:approval, :with_cart, :with_user)
+      token = approval.create_api_token!
 
       url = helper.approval_action_url(approval)
       uri = Addressable::URI.parse(url)
@@ -11,6 +10,20 @@ describe CommunicartMailerHelper do
         'approver_action' => 'approve',
         'cart_id' => approval.cart_id.to_s,
         'cch' => token.access_token,
+        'version' => approval.proposal.version.to_s
+      )
+    end
+
+    it "doesn't include a token if the approver has delegates" do
+      approver = FactoryGirl.create(:user, :with_delegate)
+      approval = FactoryGirl.create(:approval, :with_cart, user: approver)
+      approval.create_api_token!
+
+      url = helper.approval_action_url(approval)
+      uri = Addressable::URI.parse(url)
+      expect(uri.query_values).to eq(
+        'approver_action' => 'approve',
+        'cart_id' => approval.cart_id.to_s,
         'version' => approval.proposal.version.to_s
       )
     end
