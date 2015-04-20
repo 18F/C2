@@ -49,7 +49,7 @@ class Proposal < ActiveRecord::Base
     # TODO convert to SQL
     self.approvals.find do |approval|
       approver = approval.user
-      approver == user || approver.outgoing_delegates.exists?(assignee_id: user)
+      approver == user || approver.outgoing_delegates.exists?(assignee_id: user.id)
     end
   end
 
@@ -59,10 +59,15 @@ class Proposal < ActiveRecord::Base
     self.client_data || self.cart
   end
 
+  # TODO convert to an association
+  def delegates
+    self.approval_delegates.map(&:assignee)
+  end
+
   # Returns a list of all users involved with the Proposal.
   def users
     # TODO use SQL
-    results = self.approvers + self.observers + [self.requester]
+    results = self.approvers + self.observers + self.delegates + [self.requester]
     results.compact
   end
 
