@@ -40,13 +40,13 @@ module Gsa18f
       end
     end
 
+    protected
+
     def permitted_params
       fields = Gsa18f::Procurement.relevant_fields(
         params[:gsa18f_procurement][:recurring])
       params.require(:gsa18f_procurement).permit(:name, *fields)
     end
-
-    protected
     
     def procurement
       @procurement ||= Gsa18f::Procurement.find(params[:id])
@@ -71,5 +71,6 @@ module Gsa18f
         redirect_to new_gsa18f_procurement_path, :alert => 'You cannot restart that proposal'
       end
     end
+    
   end
 end
