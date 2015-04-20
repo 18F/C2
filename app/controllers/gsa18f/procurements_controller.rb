@@ -53,11 +53,8 @@ module Gsa18f
     end
 
     def errors
-      errors = []
-      if !@procurement.valid?
-        errors += @procurement.errors.full_messages
-      end
-      errors
+      @procurement.valid?
+      @procurement.errors.full_messages
     end
 
     def cart
@@ -71,6 +68,6 @@ module Gsa18f
         redirect_to new_gsa18f_procurement_path, :alert => 'You cannot restart that proposal'
       end
     end
-    
+
   end
 end
