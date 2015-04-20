@@ -25,6 +25,6 @@ class AttachmentsController < ApplicationController
   end
 
   def auth_errors(exception)
-    redirect_to carts_path, :alert => "You are not allowed to see that cart"
+    redirect_to carts_path, :alert => "You are not allowed to add an attachment to that proposal"
   end
 end

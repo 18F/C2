@@ -356,7 +356,7 @@ DEPENDENCIES
   mail_view
   newrelic_rpm
   omniauth-myusa!
-  paperclip (~> 4.2)
+  paperclip
   pg
   poltergeist
   pry-byebug
