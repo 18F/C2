@@ -17,8 +17,6 @@ module Gsa18f
     has_one :proposal, as: :client_data
     # TODO remove the dependence
     has_one :cart, through: :proposal
-
-    after_initialize :set_defaults
     
     validates :cost_per_unit, numericality: {
       greater_than_or_equal_to: 0,
@@ -28,11 +26,6 @@ module Gsa18f
       greater_than_or_equal_to: 1
     }
     validates :product_name_and_description, presence: true
-
-    def set_defaults
-      # self.not_to_exceed ||= false
-      # self.emergency ||= false
-    end
 
     def init_and_save_cart(requester)
       cart = Cart.create(
@@ -86,7 +79,7 @@ module Gsa18f
     end
 
     def total_price
-      self.cost_per_unit * self.quantity || 0.0
+      (self.cost_per_unit * self.quantity) || 0.0
     end
 
     # may be replaced with paper-trail or similar at some point
