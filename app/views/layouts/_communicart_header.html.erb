@@ -27,7 +27,7 @@
         <ul class="header-nav">
           <li><%= link_to "My Requests", proposals_path %> <%= image_tag "img-cart.png", width: '18px', height:'16px' %></li>
           <%# TODO only show to NCR people %>
-          <li><%= link_to "New NCR Request", new_ncr_work_order_path %></li>
+          <%= client_partial(current_user.client_slug, "header_links") %>
         </ul>
       </div>
     <%- end %>
