@@ -6,6 +6,7 @@ class Proposal < ActiveRecord::Base
   has_one :cart
   has_many :approvals
   has_many :approvers, through: :approvals, source: :user
+  has_many :approval_delegates, through: :approvers, source: :outgoing_delegates
   has_many :comments
   has_many :observations
   has_many :observers, through: :observations, source: :user
@@ -40,6 +41,17 @@ class Proposal < ActiveRecord::Base
     self.flow == 'linear'
   end
 
+  def delegate?(user)
+    self.approval_delegates.exists?(assignee_id: user.id)
+  end
+
+  def approval_for(user)
+    # TODO convert to SQL
+    self.approvals.find do |approval|
+      approver = approval.user
+      approver == user || approver.outgoing_delegates.exists?(assignee_id: user.id)
+    end
+  end
 
   # Use this until all clients are migrated to models (and we no longer have a
   # dependence on "Cart"
@@ -47,10 +59,15 @@ class Proposal < ActiveRecord::Base
     self.client_data || self.cart
   end
 
+  # TODO convert to an association
+  def delegates
+    self.approval_delegates.map(&:assignee)
+  end
+
   # Returns a list of all users involved with the Proposal.
   def users
     # TODO use SQL
-    results = self.approvers + self.observers + [self.requester]
+    results = self.approvers + self.observers + self.delegates + [self.requester]
     results.compact
   end
 
