@@ -16,10 +16,10 @@ module Ncr
 
       if self.errors.empty?
         @work_order.save
-        cart = @work_order.init_and_save_cart(
+        @work_order.init_and_save_cart(
           @approver_email, current_user)
         flash[:success] = "Proposal submitted!"
-        redirect_to cart_path(cart)
+        redirect_to proposal_path(@work_order.proposal)
       else
         flash[:error] = errors
         render 'form'
@@ -42,7 +42,7 @@ module Ncr
         @work_order.save
         @work_order.update_cart(@approver_email, cart)
         flash[:success] = "Proposal resubmitted!"
-        redirect_to cart_path(cart)
+        redirect_to proposal_path(@work_order.proposal)
       else
         flash[:error] = errors
         render 'form'

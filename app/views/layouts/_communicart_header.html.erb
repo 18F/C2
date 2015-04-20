@@ -25,7 +25,7 @@
     <%- if signed_in? %>
       <div class="mycart-link">
         <ul class="header-nav">
-          <li><%= link_to "My Requests", carts_path %> <%= image_tag "img-cart.png", width: '18px', height:'16px' %></li>
+          <li><%= link_to "My Requests", proposals_path %> <%= image_tag "img-cart.png", width: '18px', height:'16px' %></li>
           <%# TODO only show to NCR people %>
           <li><%= link_to "New NCR Request", new_ncr_work_order_path %></li>
         </ul>
@@ -36,6 +36,6 @@
 
 <%- unless excluded_portal_link %>
   <ul id='breadcrumb-nav'>
-    <li><%= link_to "Back to main portal", carts_path %></li>
+    <li><%= link_to "Back to main portal", proposals_path %></li>
   </ul>
 <%- end %>

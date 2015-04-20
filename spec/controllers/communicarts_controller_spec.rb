@@ -98,7 +98,7 @@ describe CommunicartsController do
         put 'approval_response', approval_params_with_token
         approval.reload
         expect(approval).to be_approved
-        expect(response).to redirect_to(cart_path(cart))
+        expect(response).to redirect_to(proposal_path(cart.proposal))
       end
 
       it 'successfully validates the user_id and cart_id with the token' do
@@ -116,7 +116,7 @@ describe CommunicartsController do
         put 'approval_response', approval_params_with_token
         approval.reload
         expect(approval).to be_approved
-        expect(response).to redirect_to(cart_path(cart))
+        expect(response).to redirect_to(proposal_path(cart.proposal))
       end
 
       it 'successfully validates the user_id and cart_id with the token twice' do
@@ -153,7 +153,7 @@ describe CommunicartsController do
 
         approval.reload
         expect(approval).to be_approved
-        expect(response).to redirect_to(cart_path(cart))
+        expect(response).to redirect_to(proposal_path(cart.proposal))
         token.reload
         expect(token.used?).to eq(true)
       end

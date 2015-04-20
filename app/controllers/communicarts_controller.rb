@@ -27,7 +27,7 @@ class CommunicartsController < ApplicationController
         flash[:success] = "You have rejected Cart #{proposal.public_identifier}."
     end
 
-    redirect_to cart_path(cart)
+    redirect_to proposal_path(proposal)
   end
 
 
@@ -56,7 +56,7 @@ class CommunicartsController < ApplicationController
     if exception.record == :api_token
       render 'authentication_error', status: 403
     else
-      redirect_to cart_path(self.cart)
+      redirect_to proposal_path(self.cart.proposal)
     end
   end
 

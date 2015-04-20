@@ -30,6 +30,6 @@ describe 'User creation when logging in with Oauth to view a protected page' do
 
     get '/auth/myusa/callback'
 
-    expect(response).to redirect_to('/carts')
+    expect(response).to redirect_to('/proposals')
   end
 end

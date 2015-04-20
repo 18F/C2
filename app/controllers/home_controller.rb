@@ -14,7 +14,7 @@ class HomeController < ApplicationController
 
     session[:token] = auth.credentials.token
     flash[:success] = "You successfully signed in"
-    redirect_to return_to || carts_path
+    redirect_to return_to || proposals_path
   end
 
   def index
