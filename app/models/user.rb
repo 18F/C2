@@ -5,10 +5,14 @@ class User < ActiveRecord::Base
 
   has_many :user_roles
   has_many :approval_groups, through: :user_roles
+
   has_many :approvals
   has_many :observations
   has_many :properties, as: :hasproperties
   has_many :comments
+
+  has_many :outgoing_delegates, class_name: 'ApprovalDelegate', foreign_key: 'assigner_id'
+  has_many :incoming_delegates, class_name: 'ApprovalDelegate', foreign_key: 'assignee_id'
 
   def full_name
     if first_name && last_name
@@ -26,12 +30,12 @@ class User < ActiveRecord::Base
     Cart.joins(:proposal).where(proposals: {requester_id: self.id})
   end
 
-  def approver_of?(cart)
-    cart.approvers.include? self
-  end
-
   def last_requested_cart
     self.requested_carts.order('created_at DESC').first
+  end
+
+  def add_delegate(other)
+    self.outgoing_delegates.create!(assignee: other)
   end
 
   def self.from_oauth_hash(auth_hash)

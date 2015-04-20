@@ -23,4 +23,32 @@ describe 'CommunicartsController' do
       expect(response.status).to eq 201
     end
   end
+
+  describe 'PUT /approval_response' do
+    context "without a token" do
+      it "accepts responses from a signed-in delegate" do
+        cart = FactoryGirl.create(:cart_with_approvals)
+        approval = cart.approvals.first
+        approver = approval.user
+
+        # TODO move to factory trait
+        delegate = FactoryGirl.create(:user)
+        approver.add_delegate(delegate)
+
+        login_as(delegate)
+        params = {
+          cart_id: cart.id.to_s,
+          approver_action: 'approve'
+        }
+
+        put '/approval_response', params
+
+        approval.reload
+        expect(approval.status).to eq('approved')
+        expect(approval.user).to eq(delegate)
+      end
+
+      it "redirects them to log in when not signed in"
+    end
+  end
 end

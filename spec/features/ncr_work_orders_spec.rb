@@ -5,7 +5,7 @@ describe "National Capital Region proposals" do
     expect(page).to have_content("You need to sign in")
   end
 
-  context "when signed in" do
+  context "when signed in as the requester" do
     let(:requester) { FactoryGirl.create(:user) }
 
     before do
