@@ -127,6 +127,7 @@ ActiveRecord::Schema.define(version: 20150415025447) do
     t.string   "last_name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "client_slug"
   end
 
 end
