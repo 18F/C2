@@ -20,7 +20,7 @@ describe CommunicartMailerHelper do
       approval.create_api_token!
 
       url = helper.approval_action_url(approval)
-      expect(url).to eq("http://test.host/carts/#{approval.cart_id}")
+      expect(url).to eq("http://test.host/proposals/#{approval.proposal_id}")
     end
 
     it "throws an error if there's no token" do

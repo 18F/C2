@@ -28,7 +28,7 @@ module CommunicartMailerHelper
         version: approval.proposal.version
       )
     else
-      cart_url(approval.cart_id)
+      proposal_url(approval.proposal_id)
     end
   end
 end
