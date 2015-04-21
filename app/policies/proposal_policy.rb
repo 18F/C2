@@ -15,8 +15,16 @@ class ProposalPolicy
           "That proposal's already approved. New proposal?")
   end
 
+  def approver?
+    @proposal.approvals.exists?(user: @user)
+  end
+
+  def delegate?
+    @proposal.delegate?(@user)
+  end
+
   def approver!
-    check(@proposal.approvals.exists?(user: @user),
+    check(self.approver? || self.delegate?,
           "Sorry, you're not an approver on this proposal")
   end
 
@@ -25,14 +33,28 @@ class ProposalPolicy
           "Sorry, you're not an observer on this proposal")
   end
 
-  def pending_approver!
-    actionable_approvers = @proposal.currently_awaiting_approvers
-    check(actionable_approvers.include?(@user),
-          "You have already logged a response for this proposal")
+  def actionable_approvers
+    @proposal.currently_awaiting_approvers
+  end
+
+  def pending_approver?
+    self.actionable_approvers.include?(@user)
+  end
+
+  def pending_delegate?
+    # TODO convert to SQL
+    self.actionable_approvers.any? do |approver|
+      approver.outgoing_delegates.exists?(assignee_id: @user.id)
+    end
+  end
+
+  def pending_approval!
+    check(self.pending_approver? || self.pending_delegate?,
+          "A response has already been logged a response for this proposal")
   end
 
   def can_approve_or_reject!
-    approver! && pending_approver!
+    approver! && pending_approval!
   end
 
   def can_edit!
