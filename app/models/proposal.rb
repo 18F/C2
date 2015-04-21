@@ -6,6 +6,7 @@ class Proposal < ActiveRecord::Base
   has_one :cart
   has_many :approvals
   has_many :approvers, through: :approvals, source: :user
+  has_many :attachments
   has_many :approval_delegates, through: :approvers, source: :outgoing_delegates
   has_many :comments
   has_many :observations
