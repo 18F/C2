@@ -2,8 +2,7 @@ describe Gsa18f::ProposalForm do
   describe '#create_cart' do
     def approver_emails(form)
       cart = form.create_cart
-      approvals = cart.ordered_approvals
-      approvals.map {|a| a.user.email_address }
+      cart.approvals.map {|a| a.user.email_address }
     end
 
     it "adds 18fapprover@gsa.gov as approver email" do

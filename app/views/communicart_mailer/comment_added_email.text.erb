@@ -1,6 +1,6 @@
-<% cart = @comment.commentable %>
-Action need on Request #<%= cart.proposal.public_identifier %> (<%= cart.proposal.name %>):
+<% proposal = @comment.proposal %>
+Action need on Request #<%= proposal.public_identifier %> (<%= proposal.name %>):
 
 <%= @comment.comment_text %>
 
-View / Update Request: <%= cart_url(cart, anchor: 'cart-comments') %>
+View / Update Request: <%= cart_url(proposal.cart, anchor: 'cart-comments') %>

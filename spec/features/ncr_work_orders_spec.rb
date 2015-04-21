@@ -5,7 +5,7 @@ describe "National Capital Region proposals" do
     expect(page).to have_content("You need to sign in")
   end
 
-  context "when signed in" do
+  context "when signed in as the requester" do
     let(:requester) { FactoryGirl.create(:user) }
 
     before do
@@ -16,7 +16,8 @@ describe "National Capital Region proposals" do
       expect(Dispatcher).to receive(:deliver_new_cart_emails)
 
       visit '/ncr/work_orders/new'
-      fill_in 'Description', with: "buying stuff"
+      fill_in 'Name', with: "buying stuff"
+      fill_in 'Description', with: "desc content"
       choose 'BA80'
       fill_in 'Vendor', with: 'ACME'
       fill_in 'Amount', with: 123.45
@@ -40,6 +41,7 @@ describe "National Capital Region proposals" do
       expect(client_data.amount).to eq(123.45)
       expect(client_data.building_number).to eq(Ncr::BUILDING_NUMBERS[0])
       expect(client_data.office).to eq(Ncr::OFFICES[0])
+      expect(client_data.description).to eq('desc content')
       expect(cart.requester).to eq(requester)
       expect(cart.approvers.map(&:email_address)).to eq(%w(
         approver@example.com
@@ -57,7 +59,7 @@ describe "National Capital Region proposals" do
 
     it "doesn't save when the amount is too high" do
       visit '/ncr/work_orders/new'
-      fill_in 'Description', with: "buying stuff"
+      fill_in 'Name', with: "buying stuff"
       choose 'BA80'
       fill_in 'Vendor', with: 'ACME'
       fill_in 'Amount', with: 10_000
@@ -74,7 +76,7 @@ describe "National Capital Region proposals" do
 
     it "includes has overwritten field names" do
       visit '/ncr/work_orders/new'
-      fill_in 'Description', with: "buying stuff"
+      fill_in 'Name', with: "buying stuff"
       choose 'BA80'
       fill_in 'RWA Number', with: 'NumNum'
       fill_in 'Vendor', with: 'ACME'
@@ -106,7 +108,7 @@ describe "National Capital Region proposals" do
 
     let (:work_order) {
       wo = FactoryGirl.create(:ncr_work_order)
-      wo.init_and_save_cart('approver@email.com', 'Description Here', requester)
+      wo.init_and_save_cart('approver@email.com', requester)
       wo
     }
     let(:ncr_cart) {
@@ -142,18 +144,17 @@ describe "National Capital Region proposals" do
     end
 
     it "cannot be edited by someone other than the requester" do
-      req = ncr_cart.approvals.where(role: 'requester').first
-      req.update_attribute(:user, FactoryGirl.create(:user))
+      ncr_cart.set_requester(FactoryGirl.create(:user))
 
       visit "/ncr/work_orders/#{work_order.id}/edit"
       expect(current_path).to eq("/ncr/work_orders/new")
-      expect(page).to have_content('cannot restart')
+      expect(page).to have_content('not the requester')
     end
 
     it "shows a restart link from a pending cart" do
       visit "/carts/#{ncr_cart.id}"
-      expect(page).to have_content('Restart this Cart?')
-      click_on('Restart this Cart?')
+      expect(page).to have_content('Modify Request')
+      click_on('Modify Request')
       expect(current_path).to eq("/ncr/work_orders/#{work_order.id}/edit")
     end
 
@@ -161,36 +162,34 @@ describe "National Capital Region proposals" do
       ncr_cart.proposal.update_attribute(:status, 'rejected') # avoid state machine
 
       visit "/carts/#{ncr_cart.id}"
-      expect(page).to have_content('Restart this Cart?')
+      expect(page).to have_content('Modify Request')
     end
 
     it "does not show a restart link for an approved cart" do
       ncr_cart.proposal.update_attribute(:status, 'approved') # avoid state machine
 
       visit "/carts/#{ncr_cart.id}"
-      expect(page).not_to have_content('Restart this Cart?')
+      expect(page).not_to have_content('Modify Request')
     end
 
     it "does not show a restart link for another client" do
       ncr_cart.proposal.client_data = nil
       ncr_cart.proposal.save()
       visit "/carts/#{ncr_cart.id}"
-      expect(page).not_to have_content('Restart this Cart?')
+      expect(page).not_to have_content('Modify Request')
     end
 
     it "does not show a restart link for non requester" do
-      req = ncr_cart.approvals.where(role: 'requester').first
-      req.update_attribute(:user, FactoryGirl.create(:user))
-
+      ncr_cart.set_requester(FactoryGirl.create(:user))
       visit "/carts/#{ncr_cart.id}"
-      expect(page).not_to have_content('Restart this Cart?')
+      expect(page).not_to have_content('Modify Request')
     end
 
     context "selected common values on proposal page" do
       before do
         visit '/ncr/work_orders/new'
 
-        fill_in 'Description', with: "buying stuff"
+        fill_in 'Name', with: "buying stuff"
         fill_in 'Vendor', with: 'ACME'
         fill_in 'Amount', with: 123.45
         fill_in "Approving Official's Email Address", with: 'approver@example.com'

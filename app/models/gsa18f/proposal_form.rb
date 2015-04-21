@@ -6,7 +6,7 @@ module Gsa18f
 
     URGENCY = DATA['URGENCY']
     OFFICES = DATA['OFFICES']
-    
+
     attribute :requester, :user
     attribute :office, :string
     attribute :justification, :text
@@ -32,7 +32,7 @@ module Gsa18f
       ENV['GSA18F_APPROVER_EMAIL'] || '18fapprover@gsa.gov'
     end
 
-    def set_approver_on(cart) 
+    def set_approver_on(cart)
       cart.add_approver(self.approver_email)
     end
 
@@ -58,7 +58,7 @@ module Gsa18f
     def update_cart(cart)
       cart.name = self.product_name_and_description
       if cart.save
-        cart.approver_approvals.destroy_all
+        cart.proposal.approvals.destroy_all
         # @todo: do we actually want to clear all properties?
         cart.clear_props!
         self.set_props_on(cart)
@@ -68,7 +68,7 @@ module Gsa18f
       end
       cart
     end
-    
+
     def set_props_on(cart)
       cart.set_props(
         office: self.office,

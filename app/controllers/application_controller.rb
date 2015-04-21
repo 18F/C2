@@ -1,8 +1,30 @@
 class ApplicationController < ActionController::Base
+  include Pundit    # For authorization checks
+
   helper TimeHelper
+  add_template_helper ClientHelper
 
   protect_from_forgery with: :exception
   helper_method :current_user, :signed_in?
+
+  protected
+  # We are overriding this method to account for permission trees. See
+  # TreePolicy
+  def authorize(record, query=nil, user=nil)
+    user ||= @current_user
+    policy = Pundit.policy(user, record)
+
+    # use the action as a default permission
+    query ||= ("can_" + params[:action].to_s + "!").to_sym
+    unless policy.public_send(query)
+      # the method might raise its own exception, or it might return a
+      # boolean. Both systems are accommodated
+      # will need to replace this when a new version of pundit arrives
+      ex = NotAuthorizedError.new("not allowed to #{q} this #{record}")
+      ex.query, ex.record, ex.policy = q, record, pol
+      raise ex
+    end
+  end
 
   private
 
@@ -31,4 +53,5 @@ class ApplicationController < ActionController::Base
       redirect_to root_url, :alert => 'You need to sign in for access to this page.'
     end
   end
+
 end

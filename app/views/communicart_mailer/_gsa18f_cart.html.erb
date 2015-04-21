@@ -1,4 +1,4 @@
-<div id="ncr-layout">
+<div id="gsa18f-layout">
   <table class="w-container main-container" width='800'>
     <tr>
       <td>
@@ -16,7 +16,8 @@
 
     <tr>
       <td>
-        <%= render partial: 'shared/proposal_properties', locals: {proposal: cart.proposal} %>
+        <%= client_partial(cart.proposal.client, 'proposal_properties',
+                           locals: {proposal: cart.proposal}) %>
       </td>
     </tr>
   </table>

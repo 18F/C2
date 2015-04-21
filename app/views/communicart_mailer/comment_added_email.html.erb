@@ -1,18 +1,18 @@
 <body class="communicart-notification">
   <table class="w-container main-container" width='800'>
-    <% cart = @comment.commentable %>
+    <% proposal = @comment.proposal %>
     <tr><td class="w-container html-email-message">
       <p>
         Action need on Request 
-        #<%= cart.proposal.public_identifier %>
-        (<%= cart.proposal.name %>):
+        #<%= proposal.public_identifier %>
+        (<%= proposal.name %>):
       </p>
     </td></tr>
     <tr><td class="w-container html-email-message">
       <%= @comment.comment_text %>
     </td></tr>
     <tr><td class="w-container html-email-message">
-      <%= link_to "View / Update Request", cart_url(cart, anchor: 'cart-comments'), class: 'form-button' %>
+      <%= link_to "View / Update Request", cart_url(proposal.cart, anchor: 'cart-comments'), class: 'form-button' %>
     </td></tr>
   </table>
 </body>

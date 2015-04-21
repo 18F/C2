@@ -35,6 +35,8 @@ require 'rack_session_access/capybara'
 require 'capybara/poltergeist'
 Capybara.javascript_driver = :poltergeist
 
+require "pundit/rspec"
+
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
@@ -60,6 +62,7 @@ RSpec.configure do |config|
   end
 
   config.raise_errors_for_deprecations!
+  config.backtrace_exclusion_patterns << %r{/gems/}
 
 # The settings below are suggested to provide a good initial experience
 # with RSpec, but feel free to customize to your heart's content.

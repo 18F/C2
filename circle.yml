@@ -1,12 +1,4 @@
 dependencies:
   pre:
     - cp .env.example .env
-deployment:
-  production:
-    branch: production
-    commands:
-      - ./deploy.sh $CIRCLE_SHA1 production
-  demo:
-    branch: master
-    commands:
-      - ./deploy.sh $CIRCLE_SHA1 demo
+

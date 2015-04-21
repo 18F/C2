@@ -4,8 +4,15 @@
 
   <%= form_for @work_order do |f| %>
     <div class="form-group">
-      <%= label_tag :description %>
-      <%= text_area_tag :description, @description, class: 'form-control' %>
+      <%= f.label :name %>
+      <%= f.text_field :name, class: 'form-control' %>
+    </div>
+    <div class="form-group">
+      <%= f.label :description %>
+      <%= f.text_area :description, class: 'form-control', 'aria-describedby'=>'description-add-info' %>
+      <span class="form-instructions" id='description-add-info'>
+        Include request details (e.g. Maximo ticket number, Room Number, Estimated number of hours)
+      </span>
     </div>
     <div class="form-group">
       <%= field_set_tag "Expense type" do %>
@@ -47,17 +54,19 @@
       <%= f.label :building_number %>
       <%= f.collection_select(
             :building_number, Ncr::BUILDING_NUMBERS, :to_s, :to_s,
-            {include_blank: true}, {class: 'form-control jsChosen'}) %>
+            {include_blank: true}, {class: 'form-control js-selectize'}) %>
     </div>
     <div class="form-group">
       <%= f.label :office %>
       <%= f.collection_select(
             :office, Ncr::OFFICES, :to_s, :to_s,
-            {include_blank: true}, {class: 'form-control jsChosen'}) %>
+            {include_blank: true}, {class: 'form-control js-selectize'}) %>
     </div>
     <div class="form-group">
       <%= f.label :vendor %>
-      <%= f.text_field :vendor, class: 'form-control' %>
+      <%= f.text_field :vendor,
+            class: 'form-control js-selectize',
+            data: {attr: 'vendor', src: '/api/v1/ncr/work_orders.json'} %>
     </div>
     <div class="form-group">
       <%= field_set_tag "Amount" do %>
@@ -83,7 +92,8 @@
     <div class="form-group">
       <%= label_tag :approver_email, "Approving Official's Email Address" %>
       <%= email_field_tag :approver_email, @approver_email,
-                          class: 'form-control' %>
+                          class: 'form-control js-selectize',
+                          data: {attr: 'email_address', src: '/api/v1/users.json'} %>
     </div>
     <%= f.submit "Submit for approval", class: 'btn btn-default' %>
   <% end %>

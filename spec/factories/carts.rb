@@ -17,27 +17,28 @@ FactoryGirl.define do
     end
 
 
+    trait :with_requester do
+      after :create do |cart|
+        cart.add_requester('requester@some-dot-gov.gov')
+      end
+    end
+
+
     factory :cart_with_approval_group do
       after :create do |cart|
-        approval_group = FactoryGirl.create(:approval_group_with_approver_and_requester_approvals)
-
+        approval_group = FactoryGirl.create(:approval_group_with_approvers_and_requester)
         cart.approval_group = approval_group
+        cart.add_requester('requester1@some-dot-gov.gov')
         cart.save!
       end
     end
 
-    factory :cart_with_requester do
-      after :create do |cart|
-        requester = FactoryGirl.create(:user, email_address: 'requester1@some-dot-gov.gov', first_name: 'Panthro', last_name: 'Requester')
-        cart.proposal.approvals << FactoryGirl.create(:approval, role: 'requester', user_id: requester.id)
-      end
-    end
-
     factory :cart_with_approvals do
+      with_requester
+
       after :create do |cart|
         cart.add_approver('approver1@some-dot-gov.gov')
         cart.add_approver('approver2@some-dot-gov.gov')
-        cart.add_requester('requester@some-dot-gov.gov')
       end
 
       factory :cart_with_all_approvals_approved do
@@ -46,16 +47,5 @@ FactoryGirl.define do
         end
       end
     end
-
-    factory :cart_with_observers do
-      after :create do |cart|
-        #TODO: change approval_group to use a factory that adds observers
-        approval_group = FactoryGirl.create(:approval_group_with_approvers_observers_and_requester)
-
-        cart.approval_group = approval_group
-        cart.save!
-      end
-    end
-
   end
 end

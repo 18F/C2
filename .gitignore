@@ -19,14 +19,15 @@
 custom_plan.rb
 public/assets
 zeus.json
-config/environment_variables.yml
 *~
 coverage
 .floo*
-config/feature_flags.yml
 .env*
 !.env.example
 
 # Ignore Cloud Foundry files
 cf-ssh.yml
 *manifest.yml
+
+# Ignore file uploads
+/public/system

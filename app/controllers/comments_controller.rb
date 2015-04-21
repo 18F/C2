@@ -1,40 +1,35 @@
 class CommentsController < ApplicationController
   before_filter :authenticate_user!
+  before_filter ->{authorize self.proposal, :can_show!}
+  rescue_from Pundit::NotAuthorizedError, with: :auth_errors
 
   def index
-    @commentable = find_commentable
-    @comments = @commentable.comments
+    @proposal = self.proposal
+    @comments = @proposal.comments
   end
 
   def create
-    commentable = find_commentable
-    comment = commentable.comments.build(comment_params)
+    comment = self.proposal.comments.build(comment_params)
     comment.user = current_user
     if comment.save
-      flash[:success] = "You successfully added a comment for #{commentable.class.name} #{commentable.id}"
+      flash[:success] = "You successfully added a comment"
     else
       flash[:error] = comment.errors.full_messages
     end
 
-    if commentable.respond_to?(:cart)
-      redirect_to commentable.cart
-    else
-      redirect_to commentable
-    end
+    redirect_to proposal.cart
   end
 
-private
-  def find_commentable
-    params.each do |name, val|
-      if name =~ /^(.+)_id$/
-        return $1.classify.constantize.find(val)
-      end
-    end
-    nil
+  protected
+  def proposal
+    @cached_proposal ||= Cart.find(params[:cart_id]).proposal
   end
 
   def comment_params
     params.require(:comment).permit(:comment_text)
   end
 
+  def auth_errors(exception)
+    redirect_to carts_path, :alert => "You are not allowed to see that cart"
+  end
 end

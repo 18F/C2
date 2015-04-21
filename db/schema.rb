@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150323152603) do
+ActiveRecord::Schema.define(version: 20150415165247) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,13 @@ ActiveRecord::Schema.define(version: 20150323152603) do
     t.datetime "updated_at"
     t.datetime "used_at"
     t.integer  "approval_id"
+  end
+
+  create_table "approval_delegates", force: true do |t|
+    t.integer  "assigner_id"
+    t.integer  "assignee_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "approval_groups", force: true do |t|
@@ -43,9 +50,19 @@ ActiveRecord::Schema.define(version: 20150323152603) do
     t.string   "status"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "role"
     t.integer  "position"
     t.integer  "proposal_id"
+  end
+
+  create_table "attachments", force: true do |t|
+    t.string   "file_file_name"
+    t.string   "file_content_type"
+    t.integer  "file_file_size"
+    t.datetime "file_updated_at"
+    t.integer  "proposal_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "carts", force: true do |t|
@@ -60,21 +77,33 @@ ActiveRecord::Schema.define(version: 20150323152603) do
     t.text     "comment_text"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "commentable_id"
-    t.string   "commentable_type"
     t.integer  "user_id"
+    t.integer  "proposal_id"
   end
 
+  add_index "comments", ["proposal_id"], name: "index_comments_on_proposal_id", using: :btree
+
   create_table "ncr_work_orders", force: true do |t|
-    t.decimal "amount"
-    t.string  "expense_type"
-    t.string  "vendor"
-    t.boolean "not_to_exceed"
-    t.string  "building_number"
-    t.boolean "emergency"
-    t.string  "rwa_number"
-    t.string  "office"
-    t.string  "code"
+    t.decimal  "amount"
+    t.string   "expense_type"
+    t.string   "vendor"
+    t.boolean  "not_to_exceed"
+    t.string   "building_number"
+    t.boolean  "emergency"
+    t.string   "rwa_number"
+    t.string   "office"
+    t.string   "code"
+    t.string   "name"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "observations", force: true do |t|
+    t.integer  "proposal_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "properties", force: true do |t|
@@ -91,6 +120,7 @@ ActiveRecord::Schema.define(version: 20150323152603) do
     t.datetime "updated_at"
     t.integer  "client_data_id"
     t.string   "client_data_type"
+    t.integer  "requester_id"
   end
 
   add_index "proposals", ["client_data_id", "client_data_type"], name: "index_proposals_on_client_data_id_and_client_data_type", using: :btree
@@ -108,6 +138,7 @@ ActiveRecord::Schema.define(version: 20150323152603) do
     t.string   "last_name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "client_slug"
   end
 
 end

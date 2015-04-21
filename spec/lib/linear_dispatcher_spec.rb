@@ -13,34 +13,34 @@ describe LinearDispatcher do
     end
 
     it "returns nil if all are non-pending" do
-      proposal.approvals.create!(role: 'approver', status: 'approved')
+      proposal.approvals.create!(status: 'approved')
       expect(dispatcher.next_pending_approval(cart)).to eq(nil)
     end
 
     it "returns the first pending approval by position" do
-      proposal.approvals.create!(position: 6, role: 'approver')
-      last_approval = proposal.approvals.create!(position: 5, role: 'approver')
+      proposal.approvals.create!(position: 6)
+      last_approval = proposal.approvals.create!(position: 5)
 
       expect(dispatcher.next_pending_approval(cart)).to eq(last_approval)
     end
 
     it "returns nil if the cart is rejected" do
-      next_app = proposal.approvals.create!(position: 5, role: 'approver')
+      next_app = proposal.approvals.create!(position: 5)
       expect(dispatcher.next_pending_approval(cart)).to eq(next_app)
       next_app.update_attribute(:status, 'rejected')  # skip state machine
       expect(dispatcher.next_pending_approval(cart)).to eq(nil)
     end
 
     it "skips approved approvals" do
-      first_approval = proposal.approvals.create!(position: 6, role: 'approver')
-      proposal.approvals.create!(position: 5, role: 'approver', status: 'approved')
+      first_approval = proposal.approvals.create!(position: 6)
+      proposal.approvals.create!(position: 5, status: 'approved')
 
       expect(dispatcher.next_pending_approval(cart)).to eq(first_approval)
     end
 
     it "skips non-approvers" do
-      proposal.approvals.create!(role: 'observer')
-      approval = proposal.approvals.create!(role: 'approver')
+      proposal.observations.create!
+      approval = proposal.approvals.create!
 
       expect(dispatcher.next_pending_approval(cart)).to eq(approval)
     end
@@ -48,19 +48,19 @@ describe LinearDispatcher do
 
   describe '#deliver_new_cart_emails' do
     before do
-      proposal.approvals.create!(user_id: requester.id, role: 'requester', position: 1)
+      proposal.update_attributes!(requester_id: requester.id)
     end
 
     it "sends emails to the first approver" do
       approver
-      approval = proposal.approvals.create!(user_id: approver.id, role: 'approver')
+      approval = proposal.approvals.create!(user_id: approver.id)
       expect(dispatcher).to receive(:email_approver).with(approval)
 
       dispatcher.deliver_new_cart_emails(cart)
     end
 
     it "sends a cart notification email to observers" do
-      proposal.approvals.create!(role: 'observer')
+      proposal.observations.create!
       expect(dispatcher).to receive(:email_observers).with(cart)
 
       dispatcher.deliver_new_cart_emails(cart)

@@ -6,11 +6,12 @@ class CartDecorator < Draper::Decorator
   end
 
   def total_approvers
-    object.approver_approvals.count
+    object.approvals.count
   end
 
   def approvals_by_status
-    object.approver_approvals.order(
+    # Override default scope
+    object.approvals.reorder(
       # http://stackoverflow.com/a/6332081/358804
       <<-SQL
         CASE approvals.status
@@ -25,7 +26,7 @@ class CartDecorator < Draper::Decorator
 
   def approvals_in_list_order
     if object.flow == 'linear'
-      object.ordered_approvals
+      object.approvals
     else
       self.approvals_by_status
     end

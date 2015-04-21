@@ -1,3 +1,9 @@
+This project uses several third-party tools, each of which has its own
+license. Consult the files in `vendor` for more. All other work is covered by
+the following text.
+
+# Public Domain
+
 As a work of the United States Government, this project is in the
 public domain within the United States.
 

@@ -3,11 +3,16 @@ C2::Application.routes.draw do
   match 'approval_response', to: 'communicarts#approval_response', via: [:get, :put]
   root :to => 'home#index'
   match "/auth/:provider/callback" => "home#oauth_callback", via: [:get]
+  get '/error' => 'home#error'
   post "/logout" => "home#logout"
 
-  resources :approval_groups, except: [:edit, :update] do
-    collection do
-      get 'search'
+  namespace :api do
+    scope :v1 do
+      namespace :ncr do
+        resources :work_orders, only: [:index]
+      end
+
+      resources :users, only: [:index]
     end
   end
 
@@ -19,15 +24,18 @@ C2::Application.routes.draw do
     resources :comments, only: [:index, :create]
   end
 
+  # todo: integrate once proposal urls are complete
+  resources :proposals, only: [] do
+    resources :attachments, only: [:create]
+  end
+
   namespace :ncr do
-    resources :work_orders
+    resources :work_orders, except: [:index, :destroy]
   end
 
   namespace :gsa18f do
-    resources :proposals
+    resources :proposals, except: [:index, :destroy]
   end
-
-  get "/498", :to => "errors#token_authentication_error"
 
   if Rails.env.development?
     mount MailPreview => 'mail_view'

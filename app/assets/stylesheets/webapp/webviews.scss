@@ -1,5 +1,9 @@
 @import "../common/constants";
 
+.modify {
+  margin-bottom: 30px;
+}
+
 .inset {
   max-width: $web-content-width;
   margin: 0 auto;
@@ -209,38 +213,55 @@ tr.cart_item_information p {
   color: $lightgray;
 }
 
-.cart-comments-container {
+.proposal-submodel-container {
   width: 100%;
   max-width: $web-content-width;
   background-color: $bgdetails;
   border-top: 1px solid $borderdetails;
-  padding: 65px 0;
+  padding: 0 0 65px 0;
   padding-left: $webpadding;
   padding-right: $webpadding;
   margin: 0 auto;
+  @media (max-width: $break-small) {
+    padding: 10px;
+  }
+
+  input[type=submit] {
+    color: $white;
+    background-color: $c2blue;
+    border: 0;
+    padding: 15px;
+
+    @media(max-width: $break-small) {
+      padding: 10px;
+    }
+  }
 
   #cart-comments {
     margin: 0 auto;
 
-    #add_a_comment {
-      color: $white;
-      background-color: $c2blue;
-      border: 0;
-      padding: 15px;
-    }
-
     textarea {
       width: 100%;
     }
+  }
 
-    .comment-item {
-      border-bottom: 1px solid #ccc;
-      padding: 20px 40px;
-      background-color: #fff;
+  h3 {
+    padding-top: 65px;
+    @media (max-width: $break-small) {
+      padding-top: 10px;
+    }
+  }
 
-      .comment-date {
-        color: $medgray;
-      }
+  .date {
+    color: $medgray;
+  }
+
+  .line-item {
+    border-bottom: 1px solid #ccc;
+    padding: 20px 40px;
+    background-color: #fff;
+    @media(max-width: $break-small) {
+      padding: 10px 15px;
     }
   }
 }
@@ -363,7 +384,7 @@ body.webapp {
   color: #666;
 }
 
-@media (max-width: 480px) {
+@media (max-width: $break-small) {
   tr.cart_item_information p {
     font-size: 67%;
   }
@@ -380,10 +401,6 @@ body.webapp {
     margin-bottom: 10px;
   }
 
-  .cart-comments-container #cart-comments .comment-item {
-    padding: 10px 15px;
-  }
-
   .text-area-info-web {
     padding: 4px 4px;
     p {
@@ -391,14 +408,6 @@ body.webapp {
       line-height: 1.1em;
     }
   }
-  .cart-comments-container #cart-comments #add_a_comment {
-    padding: 10px;
-  }
-
-  .cart-comments-container {
-    padding: 10px;
-  }
-
 
 
   h1 {

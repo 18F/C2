@@ -4,6 +4,7 @@ class CommunicartMailer < ActionMailer::Base
   layout 'communicart_base'
   add_template_helper CommunicartMailerHelper
   add_template_helper TimeHelper
+  add_template_helper ClientHelper
 
 
   def cart_notification_email(to_email, approval, show_approval_actions=true)
@@ -51,7 +52,7 @@ class CommunicartMailer < ActionMailer::Base
 
     mail(
          to: to_email,
-         subject: "A comment has been added to '#{comment.commentable.proposal.name}'",
+         subject: "A comment has been added to '#{comment.proposal.name}'",
          from: user_email(comment.user)
          )
   end
