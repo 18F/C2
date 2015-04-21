@@ -48,6 +48,7 @@ module C2
     config.assets.precompile << 'common/communicarts.css'
 
     # Paperclip's attachment settings are determined by S3 env vars
+    # If not set, we'll use the default, which is filesystem-baseed storage
     if ENV['S3_BUCKET_NAME'] && ENV['S3_ACCESS_KEY_ID'] && ENV['S3_SECRET_ACCESS_KEY']
       Paperclip::Attachment.default_options.merge!(
         bucket: ENV['S3_BUCKET_NAME'],

@@ -8,4 +8,9 @@ class Attachment < ActiveRecord::Base
 
   belongs_to :proposal
   belongs_to :user
+
+  # Default url for attachments expires after 10 minutes
+  def url
+    self.file.expiring_url(10*60)
+  end
 end

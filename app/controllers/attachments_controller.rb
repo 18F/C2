@@ -17,7 +17,7 @@ class AttachmentsController < ApplicationController
 
   protected
   def proposal
-    @cached_proposal ||= Cart.find(params[:cart_id]).proposal
+    @cached_proposal ||= Proposal.find(params[:proposal_id])
   end
 
   def attachments_params

@@ -4,7 +4,7 @@ describe AttachmentsController do
                                          :with_observers, :with_requester,
                                          :with_cart) }
     let (:params) {{
-      cart_id: proposal.cart.id, 
+      proposal_id: proposal.id, 
       attachment: { file: fixture_file_upload('icon-user.png', 'image/png') }
     }}
                      

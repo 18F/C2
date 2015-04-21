@@ -124,7 +124,7 @@
 
     <div id="files">
       <h3>Attachments to this proposal</h3>
-      <%= form_for [cart, Attachment.new] do |f| %>
+      <%= form_for [cart.proposal, Attachment.new] do |f| %>
         <div class="line-item">
           <div class="row">
             <%= f.file_field :file %>
@@ -132,9 +132,7 @@
         </div>
         <div class='row text-area-info-container'>
           <div class='col-xs-7 col-sm-6 text-area-info-web'>
-            <p>
-              Attaching a file will associate it with this proposal
-            </p>
+            <p>Attach a file (e.g. receipts, contract documents, etc.)</p>
           </div>
           <p class='col-xs-5 col-sm-6 text-area-button'>
             <%= submit_tag "Attach a File", id: :add_a_file %>
@@ -145,7 +143,7 @@
         <div class="line-item">
           <div class="row">
             <p class="col-sm-6 col-xs-12">
-              <a href="<%= attachment.file.expiring_url(10*60) %>"><%= attachment.file_file_name %></a>
+              <a href="<%= attachment.url %>"><%= attachment.file_file_name %></a>
             </p>
             <p class="col-sm-3 col-xs-6">
               <strong><%= attachment.user.full_name %></strong>

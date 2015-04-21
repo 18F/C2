@@ -22,6 +22,10 @@ C2::Application.routes.draw do
     end
 
     resources :comments, only: [:index, :create]
+  end
+
+  # todo: integrate once proposal urls are complete
+  resources :proposals, only: [] do
     resources :attachments, only: [:create]
   end
 
