@@ -94,11 +94,5 @@ module Gsa18f
     def self.approver_email
       ENV['GSA18F_APPROVER_EMAIL'] || '18fapprover@gsa.gov'
     end
-
-    protected
-    def system_approvers
-      emails = [self.approver_email]
-      emails
-    end
   end
 end
