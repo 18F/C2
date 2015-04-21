@@ -14,18 +14,13 @@ describe CommunicartMailerHelper do
       )
     end
 
-    it "doesn't include a token if the approver has delegates" do
+    it "links to the cart if the approver has delegates" do
       approver = FactoryGirl.create(:user, :with_delegate)
       approval = FactoryGirl.create(:approval, :with_cart, user: approver)
       approval.create_api_token!
 
       url = helper.approval_action_url(approval)
-      uri = Addressable::URI.parse(url)
-      expect(uri.query_values).to eq(
-        'approver_action' => 'approve',
-        'cart_id' => approval.cart_id.to_s,
-        'version' => approval.proposal.version.to_s
-      )
+      expect(url).to eq("http://test.host/carts/#{approval.cart_id}")
     end
 
     it "throws an error if there's no token" do
