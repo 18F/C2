@@ -106,11 +106,16 @@ module Ncr
       self.updated_at.to_i
     end
 
+
     protected
+
+    # BA61: Tier 1 approver
+    # BA80: The primary approver for BA80
     def budget_approver
       ENV['NCR_BUDGET_APPROVER_EMAIL'] || 'communicart.budget.approver@gmail.com'
     end
 
+    # Tier 2 approvals (BA61 only)
     def finance_approver
       ENV['NCR_FINANCE_APPROVER_EMAIL'] || 'communicart.ofm.approver@gmail.com'
     end
