@@ -17,15 +17,14 @@ class CommunicartsController < ApplicationController
   def approval_response
     proposal = self.cart.proposal
     approval = proposal.approval_for(current_user)
+    if approval.user.delegates_to?(current_user)
+      # assign them to the approval
+      approval.update_attributes!(user: current_user)
+    end
 
     case params[:approver_action]
       when 'approve'
-        if approval.user.delegates_to?(current_user)
-          # assign them to the approval
-          approval.update_attributes!(user: current_user)
-        end
         approval.approve!
-
         flash[:success] = "You have approved Cart #{proposal.public_identifier}."
       when 'reject'
         approval.reject!
