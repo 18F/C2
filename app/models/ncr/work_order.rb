@@ -109,21 +109,19 @@ module Ncr
 
     protected
 
-    # BA61: Tier 1 approver
-    # BA80: The primary approver for BA80
-    def budget_approver
-      ENV["NCR_#{self.expense_type}_BUDGET_APPROVER_EMAIL"] || 'communicart.budget.approver@gmail.com'
+    def tier1_approver
+      ENV["NCR_#{self.expense_type}_TIER1_APPROVER_EMAIL"] || 'communicart.budget.approver@gmail.com'
     end
 
     # Tier 2 approvals (BA61 only)
-    def finance_approver
-      ENV['NCR_FINANCE_APPROVER_EMAIL'] || 'communicart.ofm.approver@gmail.com'
+    def budget_approver
+      ENV['NCR_BUDGET_APPROVER_EMAIL'] || 'communicart.ofm.approver@gmail.com'
     end
 
     def system_approvers
-      emails = [self.budget_approver]
+      emails = [self.tier1_approver]
       if self.expense_type == 'BA61'
-        emails << self.finance_approver
+        emails << self.budget_approver
       end
       emails
     end
