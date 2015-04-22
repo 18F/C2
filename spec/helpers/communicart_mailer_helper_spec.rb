@@ -20,7 +20,15 @@ describe CommunicartMailerHelper do
       approval.create_api_token!
 
       url = helper.approval_action_url(approval)
-      expect(url).to eq("http://test.host/carts/#{approval.cart_id}")
+
+      uri = Addressable::URI.parse(url)
+      expect(uri.path).to eq('/approval_response')
+      cart = approval.cart
+      expect(uri.query_values).to eq(
+        'approver_action' => 'approve',
+        'cart_id' => cart.id.to_s,
+        'version' => cart.version.to_s
+      )
     end
 
     it "throws an error if there's no token" do
