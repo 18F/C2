@@ -15,7 +15,6 @@ describe User do
     end
   end
 
-
   describe '#full_name' do
     it 'return first name and last name' do
       expect(user.full_name).to eq 'George Jetson'
@@ -27,6 +26,13 @@ describe User do
       user.email_address = 'george.jetson@spacelysprockets.com'
 
       expect(user.full_name).to eq 'george.jetson@spacelysprockets.com'
+    end
+  end
+
+  describe '.for_email' do
+    it "downcases and strips the email" do
+      user = User.for_email('   miXedCaSe@some-doT-gov.gov')
+      expect(user.email_address).to eq('mixedcase@some-dot-gov.gov')
     end
   end
 end

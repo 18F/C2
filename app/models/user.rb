@@ -42,6 +42,10 @@ class User < ActiveRecord::Base
     self.outgoing_delegates.exists?(assignee_id: other.id)
   end
 
+  def self.for_email(email)
+    User.find_or_create_by(email_address: email.strip.downcase)
+  end
+
   def self.from_oauth_hash(auth_hash)
     user_data = auth_hash.extra.raw_info.to_hash
     self.find_or_create_by(email_address: user_data['email'])
