@@ -18,10 +18,10 @@ describe CommunicartMailer do
 
   describe 'cart notification email' do
     let(:mail) { CommunicartMailer.cart_notification_email('email.to.email@testing.com', approval) }
+    let!(:token) { approval.create_api_token! }
 
     before do
       expect_any_instance_of(CommunicartMailer).to receive(:sender).and_return('reply@communicart-stub.com')
-      approval.create_api_token!
     end
 
     it 'renders the subject' do
@@ -37,6 +37,20 @@ describe CommunicartMailer do
       requester.update_attributes(first_name: 'Liono', last_name: 'Requester')
       expect(mail.from).to eq(['reply@communicart-stub.com'])
       expect(sender_names(mail)).to eq(['Liono Requester'])
+    end
+
+    it "uses the approval URL" do
+      body = mail.body.encoded
+      doc = Capybara.string(body)
+      link = doc.find_link('Approve')
+      expect(link).to_not be_nil
+      uri = Addressable::URI.parse(link[:href])
+      expect(uri.query_values).to eq(
+        'approver_action' => 'approve',
+        'cart_id' => cart.id.to_s,
+        'cch' => token.access_token,
+        'version' => cart.version.to_s
+      )
     end
 
     context 'comments' do
