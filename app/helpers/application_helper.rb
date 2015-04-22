@@ -46,4 +46,17 @@ module ApplicationHelper
   def auth_path
     '/auth/myusa'
   end
+
+  def decimal?(val)
+    val.is_a?(Numeric) && !val.is_a?(Integer)
+  end
+
+  def property_to_s(val)
+    # assume all decimals are currency
+    if decimal?(val)
+      number_to_currency(val)
+    else
+      val.to_s
+    end
+  end
 end
