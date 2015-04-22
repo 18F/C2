@@ -109,21 +109,15 @@ module Ncr
 
     protected
 
-    def tier1_approver
-      ENV["NCR_#{self.expense_type}_TIER1_APPROVER_EMAIL"] || 'communicart.budget.approver@gmail.com'
-    end
-
-    # Tier 2 approvals (BA61 only)
-    def budget_approver
-      ENV['NCR_BUDGET_APPROVER_EMAIL'] || 'communicart.ofm.approver@gmail.com'
-    end
-
     def system_approvers
-      emails = [self.tier1_approver]
       if self.expense_type == 'BA61'
-        emails << self.budget_approver
+        [
+          ENV["NCR_BA61_TIER1_BUDGET_MAILBOX"] || 'communicart.budget.approver@gmail.com',
+          ENV["NCR_BA61_TIER2_BUDGET_MAILBOX"] || 'communicart.ofm.approver@gmail.com'
+        ]
+      else
+        [ENV["NCR_BA80_BUDGET_MAILBOX"] || 'communicart.budget.approver@gmail.com']
       end
-      emails
     end
 
   end
