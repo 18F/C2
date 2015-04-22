@@ -1,7 +1,7 @@
 module Ncr
   class WorkOrdersController < ApplicationController
     before_filter :authenticate_user!
-    before_filter ->{authorize self.work_order.proposal}, only: [:edit, :update] 
+    before_filter ->{authorize self.work_order.proposal}, only: [:edit, :update]
     rescue_from Pundit::NotAuthorizedError, with: :auth_errors
 
     def new
