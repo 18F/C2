@@ -66,7 +66,8 @@ module Gsa18f
 
     def fields_for_display
       attributes = self.relevant_fields
-      attributes.map{|key| [Procurement.human_attribute_name(key), self[key]]}
+      attributes.map! {|key| [Procurement.human_attribute_name(key), self[key]]}
+      attributes.push(["Total Price", total_price])
     end
 
     def client
