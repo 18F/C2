@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   include Pundit    # For authorization checks
 
-  helper TimeHelper
+  helper ValueHelper
   add_template_helper ClientHelper
 
   protect_from_forgery with: :exception

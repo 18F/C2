@@ -3,7 +3,7 @@ class CommunicartMailer < ActionMailer::Base
 
   layout 'communicart_base'
   add_template_helper CommunicartMailerHelper
-  add_template_helper TimeHelper
+  add_template_helper ValueHelper
   add_template_helper ClientHelper
 
 

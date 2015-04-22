@@ -1,4 +1,4 @@
-describe ApplicationHelper do
+describe ValueHelper do
   describe '#property_to_s' do
     it "doesn't modify strings" do
       expect(helper.property_to_s('foo')).to eq('foo')
