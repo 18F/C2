@@ -17,8 +17,16 @@ describe CommunicartMailer do
   end
 
   describe 'cart notification email' do
-    let(:mail) { CommunicartMailer.cart_notification_email('email.to.email@testing.com', approval) }
     let!(:token) { approval.create_api_token! }
+    let(:mail) { CommunicartMailer.cart_notification_email('email.to.email@testing.com', approval) }
+    let(:body) { mail.body.encoded }
+    let(:approval_uri) do
+      doc = Capybara.string(body)
+      link = doc.find_link('Approve')
+      expect(link).to_not be_nil
+      url = link[:href]
+      Addressable::URI.parse(url)
+    end
 
     before do
       expect_any_instance_of(CommunicartMailer).to receive(:sender).and_return('reply@communicart-stub.com')
@@ -40,12 +48,7 @@ describe CommunicartMailer do
     end
 
     it "uses the approval URL" do
-      body = mail.body.encoded
-      doc = Capybara.string(body)
-      link = doc.find_link('Approve')
-      expect(link).to_not be_nil
-      uri = Addressable::URI.parse(link[:href])
-      expect(uri.query_values).to eq(
+      expect(approval_uri.query_values).to eq(
         'approver_action' => 'approve',
         'cart_id' => cart.id.to_s,
         'cch' => token.access_token,
@@ -56,12 +59,12 @@ describe CommunicartMailer do
     context 'comments' do
       it 'does not render comments when empty' do
         expect(cart.comments.count).to eq 0
-        expect(mail.body.encoded).not_to include('Comments')
+        expect(body).not_to include('Comments')
       end
 
       it 'renders comments when present' do
         cart.proposal.comments << FactoryGirl.create(:comment)
-        expect(mail.body.encoded).to include('Comments')
+        expect(body).to include('Comments')
       end
     end
 
@@ -81,17 +84,16 @@ describe CommunicartMailer do
 
     context 'custom templates' do
       it 'renders a default template when an origin is not indicated' do
-        expect(mail.body.encoded).to include('Purchase Request')
+        expect(body).to include('Purchase Request')
       end
 
       it 'renders a custom template for ncr carts' do
         work_order = FactoryGirl.create(:ncr_work_order)
         approval.cart.proposal.client_data = work_order
         approval.cart.proposal.save
-        expect(mail.body.encoded).to include('ncr-layout')
+        expect(body).to include('ncr-layout')
       end
     end
-
   end
 
   describe 'approval reply received email' do
