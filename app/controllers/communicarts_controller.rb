@@ -57,10 +57,16 @@ class CommunicartsController < ApplicationController
   end
 
   def auth_errors(exception)
-    flash[:error] = exception.message
     if exception.record == :api_token
-      render 'authentication_error', status: 403
+      session[:return_to] = request.fullpath
+      if signed_in?
+        flash[:error] = exception.message
+        render 'authentication_error', status: 403
+      else
+        redirect_to root_path, alert: "Please sign in to complete this action."
+      end
     else
+      flash[:error] = exception.message
       redirect_to cart_path(self.cart)
     end
   end

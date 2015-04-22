@@ -42,4 +42,8 @@ module ApplicationHelper
     controller_name == 'home' ||
     current_page?(carts_path)
   end
+
+  def auth_path
+    '/auth/myusa'
+  end
 end

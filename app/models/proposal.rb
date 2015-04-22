@@ -74,17 +74,17 @@ class Proposal < ActiveRecord::Base
 
   # returns the Approval
   def add_approver(email)
-    user = User.find_or_create_by(email_address: email)
+    user = User.for_email(email)
     self.approvals.create!(user_id: user.id)
   end
 
   def add_observer(email)
-    user = User.find_or_create_by(email_address: email)
+    user = User.for_email(email)
     self.observations.create!(user_id: user.id)
   end
 
   def add_requester(email)
-    user = User.find_or_create_by(email_address: email)
+    user = User.for_email(email)
     self.set_requester(user)
   end
 
