@@ -22,10 +22,6 @@ class User < ActiveRecord::Base
     end
   end
 
-  def carts
-    Cart.outer_joins(:approvals, :observations).where("proposals.requester_id = #{self.id} OR approvals.user_id = #{self.id} OR observations.user_id = #{self.id}").distinct
-  end
-
   def requested_carts
     Cart.joins(:proposal).where(proposals: {requester_id: self.id})
   end
