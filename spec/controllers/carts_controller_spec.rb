@@ -35,7 +35,7 @@ describe CartsController do
         carts.push(temp_cart)
       end
       get :archive
-      expect(assigns(:closed_proposals_full_list).size).to eq(3)
+      expect(assigns(:proposals).size).to eq(3)
     end
   end
 

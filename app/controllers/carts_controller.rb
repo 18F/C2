@@ -16,7 +16,7 @@ class CartsController < ApplicationController
   end
 
   def archive
-    @closed_proposals_full_list = policy_scope(Proposal).closed.order('created_at DESC')
+    @proposals = policy_scope(Proposal).closed.order('created_at DESC')
   end
 
   protected
