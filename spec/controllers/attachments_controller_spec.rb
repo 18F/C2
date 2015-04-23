@@ -13,7 +13,7 @@ describe AttachmentsController do
       post :create, params
       expect(flash[:success]).to be_present
       expect(flash[:error]).not_to be_present
-      expect(response).to redirect_to(proposal.cart)
+      expect(response).to redirect_to(proposal)
       expect(proposal.attachments.count).to eq(1)
     end
 
@@ -22,7 +22,7 @@ describe AttachmentsController do
       post :create, params
       expect(flash[:success]).to be_present
       expect(flash[:alert]).not_to be_present
-      expect(response).to redirect_to(proposal.cart)
+      expect(response).to redirect_to(proposal)
       expect(proposal.attachments.count).to eq(1)
     end
 
@@ -31,7 +31,7 @@ describe AttachmentsController do
       post :create, params
       expect(flash[:success]).to be_present
       expect(flash[:alert]).not_to be_present
-      expect(response).to redirect_to(proposal.cart)
+      expect(response).to redirect_to(proposal)
       expect(proposal.attachments.count).to eq(1)
     end
 
@@ -40,7 +40,7 @@ describe AttachmentsController do
       post :create, params
       expect(flash[:success]).not_to be_present
       expect(flash[:alert]).to be_present
-      expect(response).to redirect_to(carts_path)
+      expect(response).to redirect_to(proposals_path)
       expect(proposal.attachments.count).to eq(0)
     end
   end

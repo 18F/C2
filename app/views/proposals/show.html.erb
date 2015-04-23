@@ -136,7 +136,7 @@
 
     <div id="files">
       <h3>Attachments to this proposal</h3>
-      <%= form_for [cart.proposal, Attachment.new] do |f| %>
+      <%= form_for [@proposal, Attachment.new] do |f| %>
         <div class="line-item">
           <div class="row">
             <%= f.file_field :file %>
@@ -151,7 +151,7 @@
           </p>
         </div>
       <%- end %>
-      <% cart.proposal.attachments.each do |attachment| %>
+      <% @proposal.attachments.each do |attachment| %>
         <div class="line-item">
           <div class="row">
             <p class="col-sm-6 col-xs-12">
@@ -166,7 +166,7 @@
           </div>
         </div>
       <% end %>
-      <% if cart.proposal.attachments.empty? %>
+      <% if @proposal.attachments.empty? %>
         <p class="empty-list-label">
           No attachments have been added yet
         </p>
