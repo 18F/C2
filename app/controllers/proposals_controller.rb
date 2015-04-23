@@ -7,6 +7,7 @@ class ProposalsController < ApplicationController
   def show
     @proposal = self.proposal.decorate
     @show_comments = true
+    @include_comments_files = true
   end
 
   def index

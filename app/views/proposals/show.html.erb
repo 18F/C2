@@ -87,10 +87,10 @@
 
 
 
-<div class="cart-comments-container">
-  <div id="cart-comments">
-    <h3>Comments on this purchase request</h3>
-    <%- if @show_comments %>
+<%- if @include_comments_files %>
+  <div class="cart-comments-container proposal-submodel-container">
+    <div id="cart-comments">
+      <h3>Comments on this purchase request</h3>
       <%= form_for [@proposal, Comment.new] do |f| %>
         <%= f.text_area :comment_text, rows: 5 %>
 
@@ -108,14 +108,14 @@
 
       <% if @proposal.comments.any? %>
         <% @proposal.comments.each do |c| %>
-          <div class='comment-item'>
+          <div class='line-item'>
             <div class='row'>
               <% unless c.user.nil? %>
                 <p class='comment-sender col-sm-6 col-xs-12'>
                   <strong><%= c.user_full_name %></strong>
                 </p>
               <% end %>
-              <p class='comment-date col-sm-6 col-xs-12'>
+              <p class='date col-sm-6 col-xs-12'>
                 <%= date_with_tooltip(c.created_at) %>
               </p>
             </div>
@@ -132,9 +132,48 @@
         No comments have been added yet
       </p>
       <% end %>
-    <%- end %>
+    </div>
+
+    <div id="files">
+      <h3>Attachments to this proposal</h3>
+      <%= form_for [cart.proposal, Attachment.new] do |f| %>
+        <div class="line-item">
+          <div class="row">
+            <%= f.file_field :file %>
+          </div>
+        </div>
+        <div class='row text-area-info-container'>
+          <div class='col-xs-7 col-sm-6 text-area-info-web'>
+            <p>Attach a file (e.g. receipts, contract documents, etc.)</p>
+          </div>
+          <p class='col-xs-5 col-sm-6 text-area-button'>
+            <%= submit_tag "Attach a File", id: :add_a_file %>
+          </p>
+        </div>
+      <%- end %>
+      <% cart.proposal.attachments.each do |attachment| %>
+        <div class="line-item">
+          <div class="row">
+            <p class="col-sm-6 col-xs-12">
+              <a href="<%= attachment.url %>"><%= attachment.file_file_name %></a>
+            </p>
+            <p class="col-sm-3 col-xs-6">
+              <strong><%= attachment.user.full_name %></strong>
+            </p>
+            <p class="col-sm-3 col-xs-6 date righted">
+              <%= date_with_tooltip(attachment.created_at) %>
+            </p>
+          </div>
+        </div>
+      <% end %>
+      <% if cart.proposal.attachments.empty? %>
+        <p class="empty-list-label">
+          No attachments have been added yet
+        </p>
+      <% end %>
+    </div>
   </div>
-</div>
+<%- end %>
 
 <% if policy(@proposal).can_approve_or_reject? %>
   <div class="centered">

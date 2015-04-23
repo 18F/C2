@@ -32,6 +32,11 @@ C2::Application.routes.draw do
     resources :comments, only: [:index, :create]
   end
 
+  # todo: integrate once proposal urls are complete
+  resources :proposals, only: [] do
+    resources :attachments, only: [:create]
+  end
+
   namespace :ncr do
     resources :work_orders, except: [:index, :destroy]
   end

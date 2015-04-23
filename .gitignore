@@ -28,3 +28,6 @@ coverage
 # Ignore Cloud Foundry files
 cf-ssh.yml
 *manifest.yml
+
+# Ignore file uploads
+/public/system
