@@ -14,7 +14,8 @@ describe CartsController do
       approval_group1
 
       proposal2 = FactoryGirl.create(:proposal, requester: user)
-      proposal3 = FactoryGirl.create(:proposal, requester: user)
+      proposal3 = FactoryGirl.create(:proposal)
+      proposal3.approvals.create!(user: user)
 
       get :index
       expect(assigns(:proposals).sort).to eq [
