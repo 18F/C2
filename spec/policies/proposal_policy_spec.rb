@@ -113,13 +113,22 @@ describe ProposalPolicy do
     end
 
     it "allows an approver to see" do
-      user = proposal.approvers[0]
+      user = proposal.approvers.first
       proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
       expect(proposals).to eq([proposal])
     end
 
+    it "allows a delegate to see" do
+      delegate = FactoryGirl.create(:user)
+      approver = proposal.approvers.first
+      approver.add_delegate(delegate)
+
+      proposals = ProposalPolicy::Scope.new(delegate, Proposal).resolve
+      expect(proposals).to eq([proposal])
+    end
+
     it "allows an observer to see" do
-      user = proposal.approvers[0]
+      user = proposal.approvers.first
       proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
       expect(proposals).to eq([proposal])
     end
