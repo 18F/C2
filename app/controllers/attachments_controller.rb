@@ -12,7 +12,7 @@ class AttachmentsController < ApplicationController
       flash[:error] = attachment.errors.full_messages
     end
 
-    redirect_to proposal.cart
+    redirect_to proposal
   end
 
   protected
@@ -25,6 +25,6 @@ class AttachmentsController < ApplicationController
   end
 
   def auth_errors(exception)
-    redirect_to carts_path, :alert => "You are not allowed to add an attachment to that proposal"
+    redirect_to proposals_path, :alert => "You are not allowed to add an attachment to that proposal"
   end
 end

@@ -1,8 +1,8 @@
 <%#-- "proposals" is the critical local variable for using this partial --%>
 <%#-- "role" (either 'requester' or 'approver') modifies the list slightly --%>
-<%#-- "closed" (bool) determines whether we're showing closed carts or not. --%>
+<%#-- "closed" (bool) determines whether we're showing closed proposals or not. --%>
 <%#-- "limit" is the maximum number of proposals to show. --%>
-<table class="cart-list">
+<table class="proposal-list">
   <tr class="header">
     <th class="sixth" scope="col"><h5>ID</h5></th>
     <th class="first" scope="col"><h5>Request</h5></th>
@@ -17,11 +17,20 @@
   <%- end %>
   <%- proposals_list.each do |proposal| %>
     <tr>
-      <td class="sixth"><a href="/carts/<%= proposal.cart.id %>"><%= proposal.cart.id %></a></td>
-      <td class="first"><a href="/carts/<%= proposal.cart.id %>"><%= proposal.name %></a></td>
+      <td class="sixth"><a href="<%= proposal_url(proposal) %>"><%= proposal.public_identifier %></a></td>
+      <td class="first"><a href="<%= proposal_url(proposal) %>"><%= proposal.name %></a></td>
       <td class="sixth"><%= number_to_currency(proposal.total_price) %></td>
       <td class="sixth">
-        <p><%= display_status(proposal.cart, current_user) %></p>
+        <% approvers = proposal.currently_awaiting_approvers %>
+        <% if proposal.pending? && approvers.include?(current_user) %>
+          <%# This isn't used anywhere %>
+          <p><strong>Please review</strong></p>
+        <% elsif proposal.pending? %>
+          <p><em>Waiting for review from:
+            <%= approvers.map(&:full_name).join(', ') %></em></p>
+        <% else %>
+          <%= proposal.status.titlecase %>
+        <% end %>
       </td>
       <td class="sixth"><%= date_with_tooltip(proposal.created_at) %></td>
     </tr>

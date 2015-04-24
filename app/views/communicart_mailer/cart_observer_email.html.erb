@@ -1,3 +1,4 @@
 <body class="communicart-notification">
-  <%= render partial: @cart.cart_template_name, locals: {cart: @cart, title: "Purchase Request"} %>
+  <%= client_partial(@cart.proposal.client, 'cart_mail',
+                     locals: {cart: @cart, title: "Purchase Request"}) %>
 </body>

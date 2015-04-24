@@ -20,7 +20,6 @@ describe CommunicartMailerHelper do
       approval.create_api_token!
 
       url = helper.approval_action_url(approval)
-
       uri = Addressable::URI.parse(url)
       expect(uri.path).to eq('/approval_response')
       cart = approval.cart

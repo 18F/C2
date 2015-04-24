@@ -38,7 +38,7 @@ describe CommunicartsController do
 
       it 'renders a navigation template' do
         post 'send_cart', json_params
-        expect(response).to render_template(partial: '_navigator_cart')
+        expect(response).to render_template(partial: 'navigator/_cart_mail')
       end
 
       it 'renders the default template' do
@@ -98,7 +98,7 @@ describe CommunicartsController do
         put 'approval_response', approval_params_with_token
         approval.reload
         expect(approval).to be_approved
-        expect(response).to redirect_to(cart_path(cart))
+        expect(response).to redirect_to(proposal_path(cart.proposal))
       end
 
       it 'successfully validates the user_id and cart_id with the token' do
@@ -116,7 +116,7 @@ describe CommunicartsController do
         put 'approval_response', approval_params_with_token
         approval.reload
         expect(approval).to be_approved
-        expect(response).to redirect_to(cart_path(cart))
+        expect(response).to redirect_to(proposal_path(cart.proposal))
       end
 
       it 'successfully validates the user_id and cart_id with the token twice' do
@@ -158,7 +158,7 @@ describe CommunicartsController do
 
         approval.reload
         expect(approval).to be_approved
-        expect(response).to redirect_to(cart_path(cart))
+        expect(response).to redirect_to(proposal_path(cart.proposal))
         token.reload
         expect(token.used?).to eq(true)
       end

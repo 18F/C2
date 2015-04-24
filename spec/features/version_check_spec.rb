@@ -4,7 +4,7 @@ describe "Version check" do
 
   it "occurs if the cart is modified in after seeing the profile page" do
     login_as(proposal.approvals.first.user)
-    visit "/carts/#{proposal.cart.id}"
+    visit "/proposals/#{proposal.id}"
 
     sleep 1.second  # wait to get a new update time
     proposal.cart.update_attribute(:name, 'Some other name')
@@ -12,6 +12,6 @@ describe "Version check" do
     click_on 'Approve'
 
     expect(page).to have_content("This request has recently changed.")
-    expect(current_path).to eq("/carts/#{proposal.cart.id}")
+    expect(current_path).to eq("/proposals/#{proposal.id}")
   end
 end

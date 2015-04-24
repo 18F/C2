@@ -3,7 +3,7 @@ describe CommentsController do
     let (:proposal) { FactoryGirl.create(:proposal, :with_approvers,
                                          :with_observers, :with_requester,
                                          :with_cart) }
-    let (:params) { {cart_id: proposal.cart.id,
+    let (:params) { {proposal_id: proposal.id, 
                      comment: {comment_text: 'Some comment'}} }
 
     it "allows the requester to comment" do
@@ -11,7 +11,7 @@ describe CommentsController do
       post :create, params
       expect(flash[:success]).to be_present
       expect(flash[:error]).not_to be_present
-      expect(response).to redirect_to(proposal.cart)
+      expect(response).to redirect_to(proposal)
     end
 
     it "allows an approver to comment" do
@@ -19,7 +19,7 @@ describe CommentsController do
       post :create, params
       expect(flash[:success]).to be_present
       expect(flash[:alert]).not_to be_present
-      expect(response).to redirect_to(proposal.cart)
+      expect(response).to redirect_to(proposal)
     end
 
     it "allows an observer to comment" do
@@ -27,7 +27,7 @@ describe CommentsController do
       post :create, params
       expect(flash[:success]).to be_present
       expect(flash[:alert]).not_to be_present
-      expect(response).to redirect_to(proposal.cart)
+      expect(response).to redirect_to(proposal)
     end
 
     it "allows a delegate to comment" do
@@ -48,7 +48,7 @@ describe CommentsController do
       post :create, params
       expect(flash[:success]).not_to be_present
       expect(flash[:alert]).to be_present
-      expect(response).to redirect_to(carts_path)
+      expect(response).to redirect_to(proposals_path)
     end
   end
 end
