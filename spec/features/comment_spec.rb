@@ -4,14 +4,14 @@ describe "commenting" do
 
     before do
       login_as(cart.requester)
-      visit "/carts/#{cart.id}"
+      visit "/proposals/#{cart.proposal.id}"
     end
 
     it "saves the comment" do
       fill_in 'comment[comment_text]', with: 'foo'
       click_on 'Send a Comment'
 
-      expect(current_path).to eq("/carts/#{cart.id}")
+      expect(current_path).to eq("/proposals/#{cart.proposal.id}")
       cart.reload
       expect(cart.comments.map(&:comment_text)).to eq(['foo'])
     end
@@ -20,7 +20,7 @@ describe "commenting" do
       fill_in 'comment[comment_text]', with: ''
       click_on 'Send a Comment'
 
-      expect(current_path).to eq("/carts/#{cart.id}")
+      expect(current_path).to eq("/proposals/#{cart.proposal.id}")
       expect(page).to have_content("can't be blank")
     end
 

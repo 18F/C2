@@ -1,4 +1,4 @@
-describe CartsController do
+describe ProposalsController do
   let(:user) { FactoryGirl.create(:user) }
   let(:approval_group1) { FactoryGirl.create(:approval_group, name: 'test-approval-group1') }
 
@@ -24,7 +24,7 @@ describe CartsController do
   end
 
   describe '#archive' do
-    it 'should show all the closed carts' do
+    it 'should show all the closed proposals' do
       carts = Array.new
       (1..4).each do |i|
         params = {}
@@ -42,16 +42,16 @@ describe CartsController do
   describe '#show' do
     it 'should allow the requester to see it' do
       proposal = FactoryGirl.create(:proposal, :with_cart, requester: user)
-      get :show, id: proposal.cart.id
-      expect(response).not_to redirect_to("/carts/")
+      get :show, id: proposal.id
+      expect(response).not_to redirect_to("/proposals/")
       expect(flash[:alert]).not_to be_present
     end
 
     it 'should redirect random users' do
       proposal = FactoryGirl.create(:proposal, :with_cart,
                                     requester: FactoryGirl.create(:user))
-      get :show, id: proposal.cart.id
-      expect(response).to redirect_to(carts_path)
+      get :show, id: proposal.id
+      expect(response).to redirect_to(proposals_path)
       expect(flash[:alert]).to be_present
     end
   end

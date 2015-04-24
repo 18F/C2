@@ -8,8 +8,8 @@ describe "Add attachments" do
     login_as(proposal.requester)
   end
 
-  it "is visible on a cart" do
-    visit cart_path(proposal.cart)
+  it "is visible on a proposal" do
+    visit proposal_path(proposal)
     expect(page).to have_content(attachment.file_file_name)
   end
 
@@ -30,7 +30,7 @@ describe "Add attachments" do
     end
 
     it "uses an expiring url with aws" do
-      visit cart_path(proposal.cart)
+      visit proposal_path(proposal)
       url = find("#files a")[:href]
       expect(url).to include('my-bucket')
       expect(url).to include('akey')

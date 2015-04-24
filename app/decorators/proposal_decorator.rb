@@ -1,8 +1,8 @@
-class CartDecorator < Draper::Decorator
+class ProposalDecorator < Draper::Decorator
   delegate_all
 
   def number_approved
-    object.approved_approvals.count
+    object.approvals.approved.count
   end
 
   def total_approvers
@@ -33,45 +33,26 @@ class CartDecorator < Draper::Decorator
   end
 
   def display_status
-    if cart.pending?
+    if object.pending?
       'pending approval'
     else
-      cart.status
+      object.status
     end
   end
 
   def generate_status_message
-    if self.all_approvals_received?
-      completed_status_message
-    else
+    if object.approvals.where.not(status: 'pending').empty?
       progress_status_message
+    else
+      completed_status_message
     end
   end
 
   def completed_status_message
-    "All #{number_approved} of #{total_approvers} approvals have been received. Please move forward with the purchase  of Cart ##{object.proposal.public_identifier}."
+    "All #{number_approved} of #{total_approvers} approvals have been received. Please move forward with the purchase  of Cart ##{object.public_identifier}."
   end
 
   def progress_status_message
     "#{number_approved} of #{total_approvers} approved."
   end
-
-  # @TODO: remove in favor of client_partial or similar
-  def cart_template_name
-    origin_name = self.proposal.client
-    if Cart::ORIGINS.include? origin_name
-      "#{origin_name}_cart"
-    else
-      'cart_mail'
-    end
-  end
-
-  def prefix_template_name
-    if self.client == 'navigator'
-      'navigator_prefix'
-    else
-      nil
-    end
-  end
-
 end
