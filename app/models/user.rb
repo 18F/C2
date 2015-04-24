@@ -38,6 +38,10 @@ class User < ActiveRecord::Base
     self.outgoing_delegates.create!(assignee: other)
   end
 
+  def delegates_to?(other)
+    self.outgoing_delegates.exists?(assignee_id: other.id)
+  end
+
   def self.for_email(email)
     User.find_or_create_by(email_address: email.strip.downcase)
   end

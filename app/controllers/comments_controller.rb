@@ -17,12 +17,12 @@ class CommentsController < ApplicationController
       flash[:error] = comment.errors.full_messages
     end
 
-    redirect_to proposal.cart
+    redirect_to proposal
   end
 
   protected
   def proposal
-    @cached_proposal ||= Cart.find(params[:cart_id]).proposal
+    @cached_proposal ||= Proposal.find(params[:proposal_id])
   end
 
   def comment_params
@@ -30,6 +30,7 @@ class CommentsController < ApplicationController
   end
 
   def auth_errors(exception)
-    redirect_to carts_path, :alert => "You are not allowed to see that cart"
+    redirect_to proposals_path,
+                :alert => "You are not allowed to see that proposal"
   end
 end

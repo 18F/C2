@@ -11,9 +11,9 @@
     <% end %>
     <tr>
       <td class="w-container html-email-message">
-        <% unless @prefix_template.blank? %>
-          <%= render partial: @prefix_template, locals: {cart: @cart, title:  "Purchase Request"} %>
-        <% end %>
+        <%= client_partial(
+          @proposal.client, "mail_prefix",
+          locals: {proposal: @proposal, title: "Purchase Request"}) %>
       </td>
     </tr>
   </table>
@@ -21,7 +21,8 @@
 <div style="width:800px">
   <%= render partial: 'comments', locals: { comments: @cart.comments } %>
 
-  <%= render partial: @cart.cart_template_name, locals: { cart: @cart, title:  "Purchase Request" } %>
+  <%= client_partial(@cart.proposal.client, 'cart_mail',
+                     locals: {cart: @cart, title: "Purchase Request"}) %>
 
   <%= render partial: 'email_reply', locals: { cart: @cart, approval: @approval, show_approval_actions: @show_approval_actions } %>
 

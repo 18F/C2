@@ -5,6 +5,8 @@
 </div>
 <div class="row">
   <div class="col-sm-12">
-    <%= render partial: "proposal_list", locals: { proposals: @closed_proposals_full_list, role: @role, closed: true} %>
+    <%= render partial: "proposal_list",
+               locals: {proposals: @closed_proposals, role: @role,
+                        closed: true} %>
   </div>
 </div>

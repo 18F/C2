@@ -1,16 +1,17 @@
-describe 'carts' do
-  describe 'GET /carts/:id' do
+describe 'proposals' do
+  describe 'GET /proposals/:id' do
     it "can be viewed by a delegate" do
-      cart = FactoryGirl.create(:cart, :with_requester)
+      proposal = FactoryGirl.create(:proposal, :with_requester, :with_cart)
       approver = FactoryGirl.create(:user, :with_delegate)
-      cart.proposal.approvals.create!(user: approver)
+      proposal.approvals.create!(user: approver)
 
       delegate = approver.outgoing_delegates.first.assignee
       login_as(delegate)
 
-      get "/carts/#{cart.id}"
+      get "/proposals/#{proposal.id}"
 
       expect(response.status).to eq(200)
     end
   end
 end
+

@@ -19,7 +19,7 @@ module Gsa18f
         cart = @proposal_form.create_cart
         if cart.persisted?
           flash[:success] = "Proposal submitted!"
-          redirect_to cart_path(cart)
+          redirect_to proposal_path(cart.proposal)
         else
           flash[:error] = cart.errors.full_messages
           render 'form'
@@ -46,7 +46,7 @@ module Gsa18f
         @proposal_form.update_cart(self.cart)
         if not self.cart.errors.any?
           flash[:success] = "Proposal resubmitted!"
-          redirect_to cart_path(self.cart)
+          redirect_to proposal_path(self.cart.proposal)
         else
           flash[:error] = self.cart.errors.full_messages
           render 'form'
