@@ -48,6 +48,9 @@ class Dispatcher
     }
   end
 
+  def on_proposal_update(proposal)
+  end
+
   # todo: replace with dynamic dispatch
   def self.initialize_dispatcher(proposal)
     case proposal.flow
@@ -86,6 +89,11 @@ class Dispatcher
   def self.email_approver(approval)
     dispatcher = self.initialize_dispatcher(approval.proposal)
     dispatcher.email_approver(approval)
+  end
+
+  def self.on_proposal_update(proposal)
+    dispatcher = self.initialize_dispatcher(proposal)
+    dispatcher.on_proposal_update(proposal)
   end
 
   protected

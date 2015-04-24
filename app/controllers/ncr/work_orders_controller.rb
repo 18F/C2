@@ -35,7 +35,7 @@ module Ncr
 
     def update
       @work_order = self.work_order
-      @work_order.update(permitted_params)
+      @work_order.assign_attributes(permitted_params)   # don't hit db yet
       @approver_email = params[:approver_email]
 
       if self.errors.empty?

@@ -126,6 +126,7 @@ class Proposal < ActiveRecord::Base
     end
   end
 
+  # @Todo: this is not used anymore. Delete?
   def restart
     # Note that none of the state machine's history is stored
     self.cart.api_tokens.update_all(expires_at: Time.now)

@@ -59,7 +59,6 @@ class CommunicartMailer < ActionMailer::Base
          )
   end
 
-
   private
 
   def set_attachments(cart)

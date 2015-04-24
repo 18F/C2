@@ -12,6 +12,7 @@ module Ncr
   OFFICES = DATA['OFFICES']
 
   class WorkOrder < ActiveRecord::Base
+    include ObservableModel
     # TODO include ProposalDelegate
 
     has_one :proposal, as: :client_data
