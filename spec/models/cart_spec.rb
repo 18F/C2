@@ -2,10 +2,10 @@ describe Cart do
   let(:cart) { FactoryGirl.create(:cart_with_approval_group) }
 
   describe 'partial approvals' do
+    let (:cart) { FactoryGirl.create(:cart_with_approvals) }
     context "All approvals are in 'approved' status" do
       it 'updates a status based on the cart_id passed in from the params' do
-        expect_any_instance_of(Cart).to receive(:all_approvals_received?).and_return(true)
-
+        cart.approvals.update_all(status: 'approved')
         cart.partial_approve!
         expect(cart.approved?).to eq true
       end
@@ -13,8 +13,6 @@ describe Cart do
 
     context "Not all approvals are in 'approved'status" do
       it 'does not update the cart status' do
-        expect_any_instance_of(Cart).to receive(:all_approvals_received?).and_return(false)
-
         cart.partial_approve!
         expect(cart.pending?).to eq true
       end
@@ -109,8 +107,7 @@ describe Cart do
   end
 
   describe '#restart' do
-    # TODO simplify this test
-    it 'resets approval states for pending approvals when restarted' do
+    it 'resets approval states when rejected' do
       cart = FactoryGirl.create(:cart_with_approvals)
 
       cart.approvals.first.approve!

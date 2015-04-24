@@ -115,7 +115,7 @@ class Proposal < ActiveRecord::Base
   # TODO remove dependence on Cart
 
   def on_pending_entry(prev_state, event)
-    if self.cart.all_approvals_received?
+    if self.approvals.where.not(status: 'approved').empty?
       self.approve!
     end
   end
@@ -130,7 +130,6 @@ class Proposal < ActiveRecord::Base
   def restart
     # Note that none of the state machine's history is stored
     self.cart.api_tokens.update_all(expires_at: Time.now)
-    # self.cart.approver_approvals.where.not(status: 'approved').each do |approval|
     self.cart.approvals.each do |approval|
       approval.restart!
     end
