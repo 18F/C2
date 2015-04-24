@@ -14,7 +14,8 @@ describe ProposalsController do
       approval_group1
 
       proposal2 = FactoryGirl.create(:proposal, requester: user)
-      proposal3 = FactoryGirl.create(:proposal, requester: user)
+      proposal3 = FactoryGirl.create(:proposal)
+      proposal3.approvals.create!(user: user)
 
       get :index
       expect(assigns(:proposals).sort).to eq [
@@ -34,7 +35,7 @@ describe ProposalsController do
         carts.push(temp_cart)
       end
       get :archive
-      expect(assigns(:closed_proposals).size).to eq(3)
+      expect(assigns(:proposals).size).to eq(3)
     end
   end
 

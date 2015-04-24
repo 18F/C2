@@ -79,9 +79,23 @@ class ProposalPolicy
       # use subselects instead of left joins to avoid an explicit
       # duplication-removal step
       where_clause = <<-SQL
+        -- requester
         requester_id = :user_id
+        -- approver
         OR EXISTS (SELECT id FROM approvals
                    WHERE proposal_id = proposals.id AND user_id = :user_id)
+        -- delegate
+        OR EXISTS (
+          SELECT approvals.id FROM approvals
+          LEFT OUTER JOIN approval_delegates
+          -- the approver...
+          ON approval_delegates.assigner_id = approvals.user_id
+          -- ...on the proposal...
+          WHERE approvals.proposal_id = proposals.id
+          -- ...who has the specifified user as a delegate
+          AND approval_delegates.assignee_id = :user_id
+        )
+        -- observer
         OR EXISTS (SELECT id FROM observations
                    WHERE proposal_id = proposals.id AND user_id = :user_id)
         SQL
