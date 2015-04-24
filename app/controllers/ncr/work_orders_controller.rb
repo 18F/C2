@@ -3,6 +3,7 @@ module Ncr
     before_filter :authenticate_user!
     before_filter ->{authorize self.work_order.proposal}, only: [:edit, :update]
     rescue_from Pundit::NotAuthorizedError, with: :auth_errors
+    helper_method :approver_email_frozen
 
     def new
       @work_order = Ncr::WorkOrder.new
@@ -28,7 +29,7 @@ module Ncr
 
     def edit
       @work_order = self.work_order
-      @approver_email = self.work_order.proposal.approvals.first.user.email_address
+      @approver_email = @work_order.proposal.approvals.first.user_email_address
       render 'form'
     end
 
@@ -38,9 +39,10 @@ module Ncr
       @approver_email = params[:approver_email]
 
       if self.errors.empty?
-        cart = self.cart
         @work_order.save
-        @work_order.update_cart(@approver_email, cart)
+        if !self.approver_email_frozen
+          @work_order.update_approver(@approver_email)
+        end
         flash[:success] = "Proposal resubmitted!"
         redirect_to proposal_path(@work_order.proposal)
       else
@@ -61,6 +63,10 @@ module Ncr
     end
     def cart
       self.work_order.proposal.cart
+    end
+
+    def approver_email_frozen
+      !self.work_order.proposal.approvals.first.pending?
     end
 
     def permitted_params

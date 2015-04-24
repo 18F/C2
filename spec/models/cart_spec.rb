@@ -135,9 +135,6 @@ describe Cart do
 
       expect(cart.api_tokens.unscoped.expired.length).to eq(2)
       expect(cart.api_tokens.unexpired.length).to eq(2)
-      expect(cart.approver_approvals.length).to eq(2)
-      expect(cart.approver_approvals[0].approved?).to eq(true)
-      expect(cart.approver_approvals[1].pending?).to eq(true)
     end
   end
 
