@@ -35,7 +35,11 @@ describe 'NCR Work Orders API' do
               'created_at' => time_to_json(proposal.created_at),
               'flow' => proposal.flow,
               'id' => proposal.id,
-              'requester' => nil,
+              'requester' => {
+                'created_at' => time_to_json(proposal.requester.created_at),
+                'id' => proposal.requester_id,
+                'updated_at' => time_to_json(proposal.requester.updated_at)
+              },
               'status' => 'pending',
               'updated_at' => time_to_json(proposal.updated_at)
             },
@@ -68,7 +72,7 @@ describe 'NCR Work Orders API' do
       end
 
       it "includes the requester" do
-        work_order = FactoryGirl.create(:ncr_work_order, :with_requester)
+        work_order = FactoryGirl.create(:ncr_work_order, :with_proposal)
         requester = work_order.proposal.requester
 
         json = get_json('/api/v1/ncr/work_orders.json')

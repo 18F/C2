@@ -76,7 +76,7 @@ describe ProposalPolicy do
 
   permissions :can_show? do
     let(:proposal) {FactoryGirl.create(:proposal, :with_cart, :with_approvers,
-                                       :with_requester, :with_observers)}
+                                       :with_observers)}
 
     it "allows the requester to see it" do
       expect(subject).to permit(proposal.requester, proposal)
@@ -97,8 +97,7 @@ describe ProposalPolicy do
 
   context "testing scope" do
     let(:proposal) {
-      FactoryGirl.create(:proposal, :with_requester, :with_approvers,
-                         :with_observers)}
+      FactoryGirl.create(:proposal, :with_approvers, :with_observers)}
     it "allows the requester to see" do
       user = proposal.requester
       proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
@@ -106,7 +105,7 @@ describe ProposalPolicy do
     end
 
     it "allows an requester to see, when there are no observers/approvers" do
-      proposal = FactoryGirl.create(:proposal, :with_requester)
+      proposal = FactoryGirl.create(:proposal)
       user = proposal.requester
       proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
       expect(proposals).to eq([proposal])

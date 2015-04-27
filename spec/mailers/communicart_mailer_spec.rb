@@ -6,10 +6,22 @@ describe CommunicartMailer do
     mail[:from].display_names
   end
 
-  let(:cart) { FactoryGirl.create(:cart_with_approvals, external_id: 13579) }
-  let(:approval) { cart.approvals.first }
+  around(:each) do |example|
+    old_val = ENV['NOTIFICATION_FROM_EMAIL']
+    ENV['NOTIFICATION_FROM_EMAIL'] = 'reply@stub.gov'
+    example.run
+    ENV['NOTIFICATION_FROM_EMAIL'] = old_val
+  end
+
+  let(:proposal) { 
+    proposal = FactoryGirl.create(:proposal, :with_approvers, :with_cart)
+    proposal.cart.update_attribute(:external_id, 13579)
+    proposal
+  }
+  let(:cart) { proposal.cart }
+  let(:approval) { proposal.approvals.first }
   let(:approver) { approval.user }
-  let(:requester) { cart.requester }
+  let(:requester) { proposal.requester }
 
   def expect_csvs_to_be_exported
     expect_any_instance_of(Exporter::Comments).to receive(:to_csv)
@@ -28,10 +40,6 @@ describe CommunicartMailer do
       Addressable::URI.parse(url)
     end
 
-    before do
-      expect_any_instance_of(CommunicartMailer).to receive(:sender).and_return('reply@communicart-stub.com')
-    end
-
     it 'renders the subject' do
       requester.update_attributes(first_name: 'Liono', last_name: 'Requester')
       expect(mail.subject).to eq('Communicart Approval Request from Liono Requester: Please review Cart #13579')
@@ -43,7 +51,7 @@ describe CommunicartMailer do
 
     it 'renders the sender email' do
       requester.update_attributes(first_name: 'Liono', last_name: 'Requester')
-      expect(mail.from).to eq(['reply@communicart-stub.com'])
+      expect(mail.from).to eq(['reply@stub.gov'])
       expect(sender_names(mail)).to eq(['Liono Requester'])
     end
 
@@ -59,12 +67,12 @@ describe CommunicartMailer do
 
     context 'comments' do
       it 'does not render comments when empty' do
-        expect(cart.comments.count).to eq 0
+        expect(proposal.comments.count).to eq 0
         expect(body).not_to include('Comments')
       end
 
       it 'renders comments when present' do
-        cart.proposal.comments << FactoryGirl.create(:comment)
+        FactoryGirl.create(:comment, proposal: proposal)
         expect(body).to include('Comments')
       end
     end
@@ -102,7 +110,6 @@ describe CommunicartMailer do
 
     before do
       approval.approve!
-      expect_any_instance_of(CommunicartMailer).to receive(:sender).and_return('reply@communicart-stub.com')
     end
 
     it 'renders the subject' do
@@ -110,17 +117,18 @@ describe CommunicartMailer do
     end
 
     it 'renders the receiver email' do
-      expect(mail.to).to eq(['requester@some-dot-gov.gov'])
+      expect(mail.to).to eq([proposal.requester.email_address])
     end
 
     it 'renders the sender email' do
-      expect(mail.from).to eq(['reply@communicart-stub.com'])
+      expect(mail.from).to eq(['reply@stub.gov'])
       expect(sender_names(mail)).to eq([approver.full_name])
     end
 
     context 'comments' do
       it 'renders comments when present' do
-        cart.proposal.comments << FactoryGirl.create(:comment, comment_text: 'My added comment')
+        FactoryGirl.create(:comment, comment_text: 'My added comment',
+                           proposal: proposal)
         expect(mail.body.encoded).to include('Comments')
       end
 
@@ -150,10 +158,6 @@ describe CommunicartMailer do
     let(:email) { "commenter@some-dot-gov.gov" }
     let(:mail) { CommunicartMailer.comment_added_email(comment, email) }
 
-    before do
-      expect_any_instance_of(CommunicartMailer).to receive(:sender).and_return('reply@communicart-stub.com')
-    end
-
     it 'renders the subject' do
       expect(mail.subject).to eq("A comment has been added to 'Test Cart needing approval'")
     end
@@ -163,7 +167,7 @@ describe CommunicartMailer do
     end
 
     it 'renders the sender email' do
-      expect(mail.from).to eq(['reply@communicart-stub.com'])
+      expect(mail.from).to eq(['reply@stub.gov'])
       expect(sender_names(mail)).to eq([comment.user.full_name])
     end
   end
@@ -173,12 +177,8 @@ describe CommunicartMailer do
     let(:observer) { observation.user }
     let(:mail) { CommunicartMailer.cart_observer_email(observer.email_address, cart) }
 
-    before do
-      expect_any_instance_of(CommunicartMailer).to receive(:sender).and_return('reply@communicart-stub.com')
-    end
-
     it 'renders the subject' do
-      expect(mail.subject).to eq("Communicart Approval Request from requester@some-dot-gov.gov: Please review Cart #13579")
+      expect(mail.subject).to eq("Communicart Approval Request from #{proposal.requester.full_name}: Please review Cart #13579")
     end
 
     it 'renders the receiver email' do
@@ -186,7 +186,7 @@ describe CommunicartMailer do
     end
 
     it 'renders the sender email' do
-      expect(mail.from).to eq(['reply@communicart-stub.com'])
+      expect(mail.from).to eq(['reply@stub.gov'])
       expect(sender_names(mail)).to eq([nil])
     end
 
@@ -208,21 +208,16 @@ describe CommunicartMailer do
   describe 'sent confirmation email' do
     let(:mail) { CommunicartMailer.proposal_created_confirmation(cart) }
 
-    before do
-      expect_any_instance_of(CommunicartMailer).to receive(:sender).and_return('reply-communicart-stub@some-dot-gov.gov')
-    end
-
     it 'renders the subject' do
       expect(mail.subject).to eq "Your request for Proposal ##{cart.id} has been sent successfully."
     end
 
     it 'renders the receiver email' do
-      expect(mail.to).to eq(["requester@some-dot-gov.gov"])
+      expect(mail.to).to eq([proposal.requester.email_address])
     end
 
     it 'renders the sender email' do
-      expect(mail.from).to eq(["reply-communicart-stub@some-dot-gov.gov"])
+      expect(mail.from).to eq(["reply@stub.gov"])
     end
   end
-
 end

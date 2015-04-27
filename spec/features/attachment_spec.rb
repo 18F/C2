@@ -1,6 +1,6 @@
 describe "Add attachments" do
   let (:proposal) {
-    FactoryGirl.create(:proposal, :with_requester, :with_cart)
+    FactoryGirl.create(:proposal, :with_cart)
   }
   let! (:attachment) { FactoryGirl.create(:attachment, proposal: proposal) }
 

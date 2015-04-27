@@ -1,7 +1,7 @@
 describe 'proposals' do
   describe 'GET /proposals/:id' do
     it "can be viewed by a delegate" do
-      proposal = FactoryGirl.create(:proposal, :with_requester, :with_cart)
+      proposal = FactoryGirl.create(:proposal, :with_cart)
       approver = FactoryGirl.create(:user, :with_delegate)
       proposal.approvals.create!(user: approver)
 

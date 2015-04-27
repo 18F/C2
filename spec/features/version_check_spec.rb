@@ -1,6 +1,5 @@
 describe "Version check" do
-  let(:proposal) { FactoryGirl.create(:proposal, :with_approvers, :with_cart,
-                                       :with_requester) }
+  let(:proposal) { FactoryGirl.create(:proposal, :with_approvers, :with_cart) }
 
   it "occurs if the cart is modified in after seeing the profile page" do
     login_as(proposal.approvals.first.user)

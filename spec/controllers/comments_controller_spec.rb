@@ -1,8 +1,7 @@
 describe CommentsController do
   describe 'permission checking' do
     let (:proposal) { FactoryGirl.create(:proposal, :with_approvers,
-                                         :with_observers, :with_requester,
-                                         :with_cart) }
+                                         :with_observers, :with_cart) }
     let (:params) { {proposal_id: proposal.id, 
                      comment: {comment_text: 'Some comment'}} }
 

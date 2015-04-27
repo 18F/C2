@@ -18,10 +18,6 @@ FactoryGirl.define do
       association :proposal, :with_cart
     end
 
-    trait :with_requester do
-      association :proposal, :with_requester
-    end
-
     trait :with_approvers do
       association :proposal, :with_approvers
     end
