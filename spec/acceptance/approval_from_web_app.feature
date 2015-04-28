@@ -7,7 +7,7 @@ Feature: Approving a cart from the web application
     When I go to the approval_response page without a token
     And I should see 'Approve'
     When I click 'Approve'
-    Then I should see alert text 'You have approved Cart 2468642.'
+    Then I should see alert text 'You have approved Cart #2468642.'
 
   Scenario: An approver visits the page after previously responding
     Given a cart '2468642'
@@ -33,7 +33,7 @@ Feature: Approving a cart from the web application
     When I go to the approval_response page without a token
     Then I should see 'Approve'
     When I click 'Approve'
-    Then I should see alert text 'You have approved Cart 11223344.'
+    Then I should see alert text 'You have approved Cart #11223344.'
 
   Scenario: An approver visits the page to approve out of turn
     Given a linear cart '11223344'
@@ -54,7 +54,7 @@ Feature: Approving a cart from the web application
     And I go to the approval_response page without a token
     Then I should see 'Approve'
     When I click 'Approve'
-    Then I should see alert text 'You have approved Cart 66778899.'
+    Then I should see alert text 'You have approved Cart #66778899.'
 
   Scenario: A requester for a parallel cart visits the page
     Given a parallel cart '66778899'
@@ -70,7 +70,7 @@ Feature: Approving a cart from the web application
     And I go to the approval_response page without a token
     Then I should see 'Approve'
     When I click 'Approve'
-    Then I should see alert text 'You have approved Cart 66778899.'
+    Then I should see alert text 'You have approved Cart #66778899.'
 
   Scenario: Displaying approval actions for a parallel cart
     Given a parallel cart '66778899'
@@ -81,7 +81,7 @@ Feature: Approving a cart from the web application
     And I should see 'Approve'
 
     When I click 'Approve'
-    Then I should see alert text 'You have approved Cart 66778899.'
+    Then I should see alert text 'You have approved Cart #66778899.'
     And I should not see 'Approve'
 
   Scenario: Displaying approval actions for a linear cart
@@ -98,7 +98,7 @@ Feature: Approving a cart from the web application
     And I should see 'Approve'
 
     When I click 'Approve'
-    Then I should see alert text 'You have approved Cart 99887766.'
+    Then I should see alert text 'You have approved Cart #99887766.'
     And I should not see 'Approve'
 
     When the logged in user is 'supervisor2@test.gov'

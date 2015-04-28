@@ -25,10 +25,10 @@ class CommunicartsController < ApplicationController
     case params[:approver_action]
       when 'approve'
         approval.approve!
-        flash[:success] = "You have approved Cart #{proposal.public_identifier}."
+        flash[:success] = "You have approved #{proposal.public_identifier}."
       when 'reject'
         approval.reject!
-        flash[:success] = "You have rejected Cart #{proposal.public_identifier}."
+        flash[:success] = "You have rejected #{proposal.public_identifier}."
     end
 
     redirect_to proposal_path(proposal)
