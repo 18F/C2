@@ -16,12 +16,25 @@ C2::Application.routes.draw do
     end
   end
 
-  resources :carts, only: [:index, :show] do
+  # Redirects for carts. @todo Eventually, delete
+  get "/carts", to: redirect("/proposals")
+  get "/carts/archive", to: redirect("/proposals/archive")
+  get "/carts/:id", to: redirect { |path_params, req|
+    cart = Cart.find(path_params[:id])
+    "/proposals/" + cart.proposal.id.to_s
+  }
+
+  resources :proposals, only: [:index, :show] do
     collection do
       get 'archive'
     end
 
     resources :comments, only: [:index, :create]
+  end
+
+  # todo: integrate once proposal urls are complete
+  resources :proposals, only: [] do
+    resources :attachments, only: [:create]
   end
 
   namespace :ncr do

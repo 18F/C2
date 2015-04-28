@@ -40,7 +40,7 @@ module UserSteps
   end
 
   step "I go to the cart view page" do
-    visit "/carts/#{@cart.id}"
+    visit "/proposals/#{@cart.proposal.id}"
   end
 
   step "I login" do

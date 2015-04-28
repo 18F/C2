@@ -14,7 +14,7 @@ module Gsa18f
         @procurement.save
         cart = @procurement.init_and_save_cart(current_user)
         flash[:success] = "Procurement submitted!"
-        redirect_to cart_path(cart)
+        redirect_to proposal_path(cart.proposal)
       else
         flash[:error] = errors
         render 'form'
@@ -33,7 +33,7 @@ module Gsa18f
         cart = self.cart
         @procurement.update_cart(cart)
         flash[:success] = "Procurement resubmitted!"
-        redirect_to cart_path(cart)
+        redirect_to proposal_path(cart.proposal)
       else
         flash[:error] = errors
         render 'form'

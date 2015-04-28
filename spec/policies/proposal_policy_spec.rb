@@ -102,32 +102,41 @@ describe ProposalPolicy do
     it "allows the requester to see" do
       user = proposal.requester
       proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
-      expect(proposals).to include(proposal)
+      expect(proposals).to eq([proposal])
     end
 
     it "allows an requester to see, when there are no observers/approvers" do
       proposal = FactoryGirl.create(:proposal, :with_requester)
       user = proposal.requester
       proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
-      expect(proposals).to include(proposal)
+      expect(proposals).to eq([proposal])
     end
 
     it "allows an approver to see" do
-      user = proposal.approvers[0]
+      user = proposal.approvers.first
       proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
-      expect(proposals).to include(proposal)
+      expect(proposals).to eq([proposal])
+    end
+
+    it "allows a delegate to see" do
+      delegate = FactoryGirl.create(:user)
+      approver = proposal.approvers.first
+      approver.add_delegate(delegate)
+
+      proposals = ProposalPolicy::Scope.new(delegate, Proposal).resolve
+      expect(proposals).to eq([proposal])
     end
 
     it "allows an observer to see" do
-      user = proposal.approvers[0]
+      user = proposal.approvers.first
       proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
-      expect(proposals).to include(proposal)
+      expect(proposals).to eq([proposal])
     end
 
     it "does not allow anyone else to see" do
       user = FactoryGirl.create(:user)
       proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
-      expect(proposals).not_to include(proposal)
+      expect(proposals).to be_empty
     end
   end
 end

@@ -3,7 +3,7 @@ class CommunicartMailer < ActionMailer::Base
 
   layout 'communicart_base'
   add_template_helper CommunicartMailerHelper
-  add_template_helper TimeHelper
+  add_template_helper ValueHelper
   add_template_helper ClientHelper
 
 
@@ -19,7 +19,8 @@ class CommunicartMailer < ActionMailer::Base
   end
 
   def proposal_created_confirmation(cart)
-    @cart = cart.decorate
+    @cart = cart
+    @proposal = cart.proposal.decorate
     to_address = cart.requester.email_address
     from_email = user_email(cart.requester)
 
@@ -33,7 +34,8 @@ class CommunicartMailer < ActionMailer::Base
   def approval_reply_received_email(approval)
     cart = approval.cart
     @approval = approval
-    @cart = cart.decorate
+    @cart = cart
+    @proposal = cart.proposal.decorate
     to_address = cart.requester.email_address
     #TODO: Add a specific 'rejection' text block for the requester
 
@@ -83,9 +85,8 @@ class CommunicartMailer < ActionMailer::Base
   end
 
   def send_cart_email(from_email, to_email, cart)
-    @cart = cart.decorate
-    # only used by navigator. @todo: remove
-    @prefix_template = @cart.prefix_template_name
+    @cart = cart
+    @proposal = cart.proposal.decorate
 
     set_attachments(cart)
 

@@ -280,7 +280,7 @@ p {
   color: #fff;
   text-decoration: none;
 }
-.controller-carts a.form-button {
+.controller-proposals a.form-button {
   color: #fff;
 }
 
@@ -504,7 +504,7 @@ body.webapp {
 }
 
 .alert {
-  margin-bottom: 0;
+  margin-top: 20px;
 }
 
 #communicart_header {
@@ -544,6 +544,10 @@ body.webapp {
 
 .centered {
   text-align: center;
+}
+
+.righted {
+  text-align: right;
 }
 
 .text-area-info-container {

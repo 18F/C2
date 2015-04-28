@@ -38,7 +38,7 @@ describe "GSA 18f Purchase Request Form" do
       }.to change { Cart.count }.from(0).to(1)
 
       expect(page).to have_content("Procurement submitted")
-      expect(current_path).to eq("/carts/#{Cart.last.id}")
+      expect(current_path).to eq("/proposals/#{Proposal.last.id}")
 
       cart = Cart.last
       expect(cart.proposal.name).to eq("buying stuff")
@@ -97,7 +97,7 @@ describe "GSA 18f Purchase Request Form" do
       fill_in 'Quantity', with: 1
       fill_in "Product Name and Description", with: 'resubmitted'
       click_on 'Submit for approval'
-      expect(current_path).to eq("/carts/#{gsa18f_cart.id}")
+      expect(current_path).to eq("/proposals/#{gsa18f.proposal.id}")
       expect(page).to have_content("http://www.submitted.com")
       expect(page).to have_content("resubmitted")
       # Verify it is actually saved
@@ -129,7 +129,7 @@ describe "GSA 18f Purchase Request Form" do
     end
 
     it "shows a restart link from a pending cart" do
-      visit "/carts/#{gsa18f_cart.id}"
+      visit "/proposals/#{gsa18f.proposal.id}"
       expect(page).to have_content('Modify Request')
       click_on('Modify Request')
       expect(current_path).to eq("/gsa18f/procurements/#{gsa18f.id}/edit")
@@ -150,11 +150,11 @@ describe "GSA 18f Purchase Request Form" do
       click_on 'Submit for approval'
 
       expect(page).to have_content("Procurement submitted")
-      expect(current_path).to eq("/carts/#{Cart.last.id}")
+      expect(current_path).to eq("/proposals/#{Proposal.last.id}")
       expect(page).to have_content('Modify Request')
 
       click_on('Modify Request')
-      expect(current_path).to eq("/gsa18f/procurements/#{Cart.last.proposal.client_data.id}/edit")
+      expect(current_path).to eq("/gsa18f/procurements/#{Gsa18f::Procurement.last.id}/edit")
 
       click_on 'Submit for approval'
 
@@ -180,27 +180,27 @@ describe "GSA 18f Purchase Request Form" do
     it "shows a restart link from a rejected cart" do
       gsa18f_cart.proposal.update_attribute(:status, 'rejected') # avoid state machine
 
-      visit "/carts/#{gsa18f_cart.id}"
+      visit "/proposals/#{gsa18f.proposal.id}"
       expect(page).to have_content('Modify Request')
     end
 
     it "does not show a restart link for an approved cart" do
       gsa18f_cart.proposal.update_attribute(:status, 'approved') # avoid state machine
 
-      visit "/carts/#{gsa18f_cart.id}"
+      visit "/proposals/#{gsa18f.proposal.id}"
       expect(page).not_to have_content('Modify Request')
     end
 
     it "does not show a restart link for another client" do
       gsa18f_cart.proposal.client_data = nil
       gsa18f_cart.proposal.save()
-      visit "/carts/#{gsa18f_cart.id}"
+      visit "/proposals/#{gsa18f.proposal.id}"
       expect(page).not_to have_content('Modify Request')
     end
 
     it "does not show a restart link for non requester" do
       gsa18f_cart.set_requester(FactoryGirl.create(:user))
-      visit "/carts/#{gsa18f_cart.id}"
+      visit "/proposals/#{gsa18f.proposal.id}"
       expect(page).not_to have_content('Modify Request')
     end
   end

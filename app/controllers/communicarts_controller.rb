@@ -17,22 +17,21 @@ class CommunicartsController < ApplicationController
   def approval_response
     proposal = self.cart.proposal
     approval = proposal.approval_for(current_user)
+    if approval.user.delegates_to?(current_user)
+      # assign them to the approval
+      approval.update_attributes!(user: current_user)
+    end
 
     case params[:approver_action]
       when 'approve'
         approval.approve!
-        unless approval.user == current_user
-          # delegate - assign them to the approval
-          approval.update_attributes!(user_id: current_user.id)
-        end
-
         flash[:success] = "You have approved Cart #{proposal.public_identifier}."
       when 'reject'
         approval.reject!
         flash[:success] = "You have rejected Cart #{proposal.public_identifier}."
     end
 
-    redirect_to cart_path(cart)
+    redirect_to proposal_path(proposal)
   end
 
 
@@ -57,11 +56,17 @@ class CommunicartsController < ApplicationController
   end
 
   def auth_errors(exception)
-    flash[:error] = exception.message
     if exception.record == :api_token
-      render 'authentication_error', status: 403
+      session[:return_to] = request.fullpath
+      if signed_in?
+        flash[:error] = exception.message
+        render 'authentication_error', status: 403
+      else
+        redirect_to root_path, alert: "Please sign in to complete this action."
+      end
     else
-      redirect_to cart_path(self.cart)
+      flash[:error] = exception.message
+      redirect_to proposal_path(self.cart.proposal)
     end
   end
 

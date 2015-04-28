@@ -1,5 +1,5 @@
-describe CartDecorator do
-  let(:cart) { FactoryGirl.build(:cart).decorate }
+describe ProposalDecorator do
+  let(:proposal) { FactoryGirl.build(:proposal).decorate }
 
   describe '#approvals_by_status' do
     it "orders by approved, rejected, then pending" do
@@ -7,10 +7,10 @@ describe CartDecorator do
       statuses = Approval.statuses.map(&:to_s)
       statuses = statuses.dup + statuses.clone
       statuses.shuffle.each do |status|
-        FactoryGirl.create(:approval, proposal_id: cart.proposal_id, status: status)
+        FactoryGirl.create(:approval, proposal: proposal, status: status)
       end
 
-      expect(cart.approvals_by_status.map(&:status)).to eq(%w(
+      expect(proposal.approvals_by_status.map(&:status)).to eq(%w(
         approved
         approved
         rejected

@@ -38,7 +38,7 @@ describe CommunicartsController do
 
       it 'renders a navigation template' do
         post 'send_cart', json_params
-        expect(response).to render_template(partial: '_navigator_cart')
+        expect(response).to render_template(partial: 'navigator/_cart_mail')
       end
 
       it 'renders the default template' do
@@ -98,7 +98,7 @@ describe CommunicartsController do
         put 'approval_response', approval_params_with_token
         approval.reload
         expect(approval).to be_approved
-        expect(response).to redirect_to(cart_path(cart))
+        expect(response).to redirect_to(proposal_path(cart.proposal))
       end
 
       it 'successfully validates the user_id and cart_id with the token' do
@@ -116,11 +116,11 @@ describe CommunicartsController do
         put 'approval_response', approval_params_with_token
         approval.reload
         expect(approval).to be_approved
-        expect(response).to redirect_to(cart_path(cart))
+        expect(response).to redirect_to(proposal_path(cart.proposal))
       end
 
       it 'successfully validates the user_id and cart_id with the token twice' do
-        
+
         expect do
           put 'approval_response', approval_params_with_token
           put 'approval_response', approval_params_with_token
@@ -130,22 +130,27 @@ describe CommunicartsController do
 
 
     context 'Request token' do
-      it 'fails when the token does not exist' do
+      def expect_redirect_to_login
+        expect(response).to redirect_to('/')
+        # TODO expect(response.body).to include("You need to sign in")
+      end
+
+      it 'redirects to sign in when the token does not exist' do
         approval_params_with_token[:cch] = nil
         put 'approval_response', approval_params_with_token
-        expect(response.status).to be(403)
+        expect_redirect_to_login
       end
 
-      it 'fails when the token has expired' do
+      it 'redirects to sign in when the token has expired' do
         token.update_attributes(expires_at: 8.days.ago)
         put 'approval_response', approval_params_with_token
-        expect(response.status).to be(403)
+        expect_redirect_to_login
       end
 
-      it 'fails when the token has already been used once' do
+      it 'redirects to sign in when the token has already been used once' do
         token.update_attributes(used_at: 1.hour.ago)
         put 'approval_response', approval_params_with_token
-        expect(response.status).to be(403)
+        expect_redirect_to_login
       end
 
       it 'marks a token as used' do
@@ -153,7 +158,7 @@ describe CommunicartsController do
 
         approval.reload
         expect(approval).to be_approved
-        expect(response).to redirect_to(cart_path(cart))
+        expect(response).to redirect_to(proposal_path(cart.proposal))
         token.reload
         expect(token.used?).to eq(true)
       end

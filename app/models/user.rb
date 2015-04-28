@@ -22,10 +22,6 @@ class User < ActiveRecord::Base
     end
   end
 
-  def carts
-    Cart.outer_joins(:approvals, :observations).where("proposals.requester_id = #{self.id} OR approvals.user_id = #{self.id} OR observations.user_id = #{self.id}").distinct
-  end
-
   def requested_carts
     Cart.joins(:proposal).where(proposals: {requester_id: self.id})
   end
@@ -36,6 +32,14 @@ class User < ActiveRecord::Base
 
   def add_delegate(other)
     self.outgoing_delegates.create!(assignee: other)
+  end
+
+  def delegates_to?(other)
+    self.outgoing_delegates.exists?(assignee_id: other.id)
+  end
+
+  def self.for_email(email)
+    User.find_or_create_by(email_address: email.strip.downcase)
   end
 
   def self.from_oauth_hash(auth_hash)

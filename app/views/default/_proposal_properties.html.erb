@@ -10,13 +10,8 @@
         <strong><%= name %>
       </td>
       <td>
-        <% if value.class == BigDecimal %>
-          <%= number_to_currency(value) %>
-        <% else %>
-          <%= value %>
-        <% end %>
+        <%= property_to_s(value) %>
       </td>
     </tr>
   <%- end %>
 </table>
-
