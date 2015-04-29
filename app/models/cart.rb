@@ -155,10 +155,8 @@ class Cart < ActiveRecord::Base
     self.getProp('origin') || 'gsa_advantage'
   end
 
-  # @todo - the method name (e.g. :external_id) should live on a "client"
-  # model
   def public_identifier
-    self.external_id
+    "Cart ##{self.external_id || self.id}"
   end
 
   def total_price

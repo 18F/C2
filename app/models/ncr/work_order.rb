@@ -97,9 +97,8 @@ module Ncr
       "ncr"
     end
 
-    # @todo - this is pretty ugly
     def public_identifier
-      self.cart.id
+      "FY" + self.fiscal_year.to_s.rjust(2, "0") + "-#{self.id}"
     end
 
     def total_price
@@ -113,6 +112,14 @@ module Ncr
 
 
     protected
+
+    def fiscal_year
+      year = self.created_at.year
+      if self.created_at.month >= 10
+        year += 1
+      end
+      year % 100   # convert to two-digit
+    end
 
     def system_approvers
       if self.expense_type == 'BA61'

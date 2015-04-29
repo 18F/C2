@@ -27,7 +27,7 @@ class CommunicartMailer < ActionMailer::Base
 
     mail(
          to: to_address,
-         subject: "Your request for Proposal ##{cart.id} has been sent successfully.",
+         subject: "Your request for #{@proposal.public_identifier} has been sent successfully.",
          from: from_email
          )
   end
@@ -43,7 +43,7 @@ class CommunicartMailer < ActionMailer::Base
 
     mail(
          to: to_address,
-         subject: "User #{approval.user.email_address} has #{approval.status} cart ##{@proposal.public_identifier}",
+         subject: "User #{approval.user.email_address} has #{approval.status} #{@proposal.public_identifier}",
          from: user_email(approval.user)
          )
   end
@@ -53,7 +53,7 @@ class CommunicartMailer < ActionMailer::Base
 
     mail(
          to: to_email,
-         subject: "A comment has been added to '#{comment.proposal.name}'",
+         subject: "A comment has been added to #{comment.proposal.public_identifier}",
          from: user_email(comment.user)
          )
   end
@@ -79,10 +79,6 @@ class CommunicartMailer < ActionMailer::Base
     address.format
   end
 
-  def subject(cart)
-    "Communicart Approval Request from #{cart.requester.full_name}: Please review Cart ##{cart.proposal.public_identifier}"
-  end
-
   def send_cart_email(from_email, to_email, cart)
     @cart = cart
     @proposal = cart.proposal.decorate
@@ -91,7 +87,7 @@ class CommunicartMailer < ActionMailer::Base
 
     mail(
       to: to_email,
-      subject: subject(cart),
+      subject: "Communicart Approval Request from #{@proposal.requester.full_name}: Please review #{@proposal.public_identifier}",
       from: from_email
     )
   end

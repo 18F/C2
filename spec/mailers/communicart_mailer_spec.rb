@@ -113,7 +113,7 @@ describe CommunicartMailer do
     end
 
     it 'renders the subject' do
-      expect(mail.subject).to eq('User approver1@some-dot-gov.gov has approved cart #13579')
+      expect(mail.subject).to eq('User approver1@some-dot-gov.gov has approved Cart #13579')
     end
 
     it 'renders the receiver email' do
@@ -159,7 +159,7 @@ describe CommunicartMailer do
     let(:mail) { CommunicartMailer.comment_added_email(comment, email) }
 
     it 'renders the subject' do
-      expect(mail.subject).to eq("A comment has been added to 'Test Cart needing approval'")
+      expect(mail.subject).to eq("A comment has been added to Cart ##{cart.id}")
     end
 
     it 'renders the receiver email' do
@@ -208,7 +208,7 @@ describe CommunicartMailer do
     let(:mail) { CommunicartMailer.proposal_created_confirmation(cart) }
 
     it 'renders the subject' do
-      expect(mail.subject).to eq "Your request for Proposal ##{cart.id} has been sent successfully."
+      expect(mail.subject).to eq "Your request for Cart #13579 has been sent successfully."
     end
 
     it 'renders the receiver email' do

@@ -101,6 +101,19 @@ describe Ncr::WorkOrder do
     end
   end
 
+  describe '#public_identifier' do
+    it 'includes the fiscal year' do
+      work_order = FactoryGirl.create(:ncr_work_order, :with_proposal,
+                                      created_at: Date.new(2007, 1, 15))
+      expect(work_order.public_identifier).to eq(
+        "FY07-#{work_order.id}")
+
+      work_order.update_attribute(:created_at, Date.new(2007, 10, 1))
+      expect(work_order.public_identifier).to eq(
+        "FY08-#{work_order.id}")
+    end
+  end
+
   describe '#update_approver' do
     let (:work_order) { FactoryGirl.create(:ncr_work_order, :full) }
     it 'sends an email when the approver changes' do
