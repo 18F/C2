@@ -24,7 +24,10 @@ describe Proposal do
 
   describe '#users' do
     it "returns all approvers, observers, and the requester" do
-      proposal = FactoryGirl.create(:proposal, :with_approvers, :with_observers, :with_requester)
+      requester = FactoryGirl.create(
+        :user, email_address: 'requester@some-dot-gov.gov')
+      proposal = FactoryGirl.create(
+        :proposal, :with_approvers, :with_observers, requester: requester)
 
       emails = proposal.users.map(&:email_address).sort
       expect(emails).to eq(%w(
@@ -36,9 +39,9 @@ describe Proposal do
       ))
     end
 
-    it "returns an empty array for no users" do
+    it "returns only the rquester when it has no other users" do
       proposal = FactoryGirl.create(:proposal)
-      expect(proposal.users).to eq([])
+      expect(proposal.users).to eq([proposal.requester])
     end
   end
 end

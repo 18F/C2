@@ -1,8 +1,7 @@
 describe AttachmentPolicy do
   subject { described_class }
   let(:proposal) {
-    FactoryGirl.create(:proposal, :with_requester, :with_approvers,
-                       :with_observers)
+    FactoryGirl.create(:proposal, :with_approvers, :with_observers)
   }
   let(:attachment) { FactoryGirl.create(:attachment, proposal: proposal) } 
 

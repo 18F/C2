@@ -32,7 +32,6 @@ module Populator
         :with_cart,
         :with_approvers,
         :with_observers,
-        :with_requester,
         created_at: requested_at,
         updated_at: requested_at
       )
@@ -52,7 +51,7 @@ module Populator
 
       # add comments
       num_comments = rand(5)
-      num_comments.times do |i|
+      num_comments.times do |j|
         commented_at = rand(requested_at..Time.now)
 
         cart.proposal.comments.create!(

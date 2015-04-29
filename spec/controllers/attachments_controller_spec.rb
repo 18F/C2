@@ -1,8 +1,7 @@
 describe AttachmentsController do
   describe 'permission checking' do
     let (:proposal) { FactoryGirl.create(:proposal, :with_approvers,
-                                         :with_observers, :with_requester,
-                                         :with_cart) }
+                                         :with_observers, :with_cart) }
     let (:params) {{
       proposal_id: proposal.id, 
       attachment: { file: fixture_file_upload('icon-user.png', 'image/png') }
@@ -47,7 +46,7 @@ describe AttachmentsController do
 
   describe 'error handling' do
     it "gives an error when a file was not selected" do
-      proposal = FactoryGirl.create(:proposal, :with_requester)
+      proposal = FactoryGirl.create(:proposal)
       login_as(proposal.requester)
       post :create, { proposal_id: proposal.id }
       expect(flash[:success]).not_to be_present

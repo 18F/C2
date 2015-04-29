@@ -6,7 +6,8 @@ Feature: login navigation
 
   Scenario: Logged in users
     When I go to '/'
-    When I login
+    When the user is 'liono1@some-cartoon-show.com'
+    And I login
     Then I should see alert text 'You successfully signed in'
     And I should see 'liono1@some-cartoon-show.com'
     And I should see 'Logout'

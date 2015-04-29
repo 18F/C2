@@ -1,6 +1,5 @@
 describe "redirecting from carts" do
-  let(:proposal) {
-    FactoryGirl.create(:proposal, :with_requester, :with_approvers, :with_cart)}
+  let(:proposal) { FactoryGirl.create(:proposal, :with_approvers, :with_cart)}
   before do
     login_as(proposal.requester)
   end

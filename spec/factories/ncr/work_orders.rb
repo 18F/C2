@@ -18,16 +18,12 @@ FactoryGirl.define do
       association :proposal, :with_cart, flow: 'linear'
     end
 
-    trait :with_requester do
-      association :proposal, :with_requester, flow: 'linear'
-    end
-
     trait :with_approvers do
       association :proposal, :with_approvers, flow: 'linear'
     end
 
     trait :full do
-      association :proposal, :with_cart, :with_requester, :with_approvers,
+      association :proposal, :with_cart, :with_approvers,
         flow: 'linear'
     end
   end

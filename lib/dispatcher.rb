@@ -39,12 +39,8 @@ class Dispatcher
   end
 
   def on_comment_created(comment)
-    self.all_users_for(comment.proposal).each{|user|
-      # Commenter doesn't need to see the message again
-      if user != comment.user
-        CommunicartMailer.comment_added_email(
-          comment, user.email_address).deliver
-      end
+    comment.listeners.each{|user|
+      CommunicartMailer.comment_added_email(comment, user.email_address).deliver
     }
   end
 
@@ -94,16 +90,6 @@ class Dispatcher
   def self.on_proposal_update(proposal)
     dispatcher = self.initialize_dispatcher(proposal)
     dispatcher.on_proposal_update(proposal)
-  end
-
-  protected
-
-  def all_users_for(proposal)
-    users_to_notify = proposal.currently_awaiting_approvers
-    if proposal.requester
-      users_to_notify << proposal.requester
-    end
-    users_to_notify + proposal.observers
   end
 
   private

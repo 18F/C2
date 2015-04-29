@@ -50,11 +50,11 @@ describe "National Capital Region proposals" do
     end
 
     it "defaults to the approver from the last request" do
-      cart = FactoryGirl.create(:cart_with_approvals)
-      cart.set_requester(requester)
-
+      proposal = FactoryGirl.create(:proposal, :with_cart, :with_approvers,
+                                    requester: requester)
       visit '/ncr/work_orders/new'
-      expect(find_field("Approving Official's Email Address").value).to eq('approver1@some-dot-gov.gov')
+      expect(find_field("Approving Official's Email Address").value).to eq(
+        proposal.approvers.first.email_address)
     end
 
     it "doesn't save when the amount is too high" do

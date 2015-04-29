@@ -40,9 +40,9 @@ module Ncr
     # that dependence
     def init_and_save_cart(approver_email, requester)
       cart = Cart.create(
-        proposal_attributes: {flow: 'linear', client_data: self}
+        proposal_attributes: {flow: 'linear', client_data: self,
+                              requester: requester}
       )
-      cart.set_requester(requester)
       self.add_approvals(approver_email)
       Dispatcher.deliver_new_cart_emails(cart)
       cart
