@@ -21,7 +21,7 @@ class AttachmentsController < ApplicationController
   end
 
   def attachments_params
-    params.require(:attachment).permit(:file)
+    params.permit(attachment: [:file])[:attachment]
   end
 
   def auth_errors(exception)

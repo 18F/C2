@@ -2,19 +2,25 @@ class Filter
   constructor: ($root, @key) ->
     @$ = (selector) -> $root.find(selector)
 
-  addRadio: ($el) ->
-    $el.click () => @filter($el.val())
+  addInput: ($el) ->
+    $el.click () => @filter($el)
     # Initial state
     if $el.is(":checked")
-      @filter($el.val())
+      @filter($el)
 
   addRadios: () ->
     @$("input:radio[data-filter-control=#{ @key }]").each (idx, control) =>
-      @addRadio($(control))
+      @addInput($(control))
 
-  filter: (value) ->
+  addChkBoxes: () ->
+    @$("input:checkbox[data-filter-control=#{ @key }]").each (idx, control) =>
+      @addInput($(control))
+
+  filter: ($el) ->
+    value = $el.val()
+    checked = $el.is(":checked")
     @$("[data-filter-key=#{ @key }]").each (idx, el) ->
-      hidden = el.getAttribute("data-filter-value") != value
+      hidden = el.getAttribute("data-filter-value") != value || !checked
       el.setAttribute("aria-hidden", hidden.toString())
 
   hideAll: () ->
@@ -35,3 +41,4 @@ $ ->
   for key, filter of filters
     filter.hideAll()
     filter.addRadios()
+    filter.addChkBoxes()

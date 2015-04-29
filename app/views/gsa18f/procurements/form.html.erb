@@ -2,12 +2,12 @@
   <h3>GSA 18f</h3>
   <h4>Purchase Request - Supplies</h4>
   <p>Eg; ergonomic keyboards, foamcore boards, ergonomic mice, monitor stands, post-its, sharpies, etc. </p>
-  <%= form_for @proposal_form, url: @form_url, method: @form_method do |f| %>
+  <%= form_for @procurement do |f| %>
     <!-- Office Location -->
     <div class="form-group">
       <%= f.label :office %>
       <%= f.collection_select(
-            :office, Gsa18f::ProposalForm::OFFICES, :to_s, :to_s,
+            :office, Gsa18f::Procurement::OFFICES, :to_s, :to_s,
             {include_blank: true}, {class: 'form-control'}) %>
     </div>
     <!-- Product Name and Description -Text Area- -->
@@ -41,6 +41,33 @@
         <%= f.number_field :quantity, class: 'form-control', step: 1 %>
       </div>
     </div>
+    <div class="form-group">
+      <%= f.label :recurring do %>
+            <%= f.check_box :recurring, :"data-filter-control" => "recurring" %>
+            Recurring Charge
+          <% end %>
+    </div>
+    <!-- Recurring Frequency -->
+    <div data-filter-key="recurring"
+                                data-filter-value="1">
+      <div class="form-group">
+        <%= f.label :recurring_interval %>
+        <div class="input-group">
+          <%= f.collection_select(
+              :recurring_interval, Gsa18f::Procurement::RECURRENCE, :to_s, :to_s,
+              {include_blank: false}, {class: 'form-control'}) %>
+        </div>
+      </div>
+      <div class="form-group">
+        <%= f.label :recurring_length %>
+        <div class="input-group">
+          <%= f.number_field :recurring_length, class: 'form-control', step: 1, 'aria-describedby'=>'description-add-info' %>
+        </div>
+        <span class="form-instructions" id='description-add-info'>
+        e.g. Number of Days, Months, Years
+        </span>
+      </div>
+    </div>
     <!-- Date Requested -->
     <div class="form-group">
       <%= f.label :date_requested %>
@@ -52,7 +79,7 @@
      <div class="form-group">
       <%= f.label :urgency %>
       <%= f.collection_select(
-            :urgency, Gsa18f::ProposalForm::URGENCY, :to_s, :to_s,
+            :urgency, Gsa18f::Procurement::URGENCY, :to_s, :to_s,
             {include_blank: true}, {class: 'form-control'}) %>
     </div>
     <!-- Additional Info -->

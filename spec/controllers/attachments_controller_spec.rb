@@ -43,4 +43,16 @@ describe AttachmentsController do
       expect(proposal.attachments.count).to eq(0)
     end
   end
+
+  describe 'error handling' do
+    it "gives an error when a file was not selected" do
+      proposal = FactoryGirl.create(:proposal)
+      login_as(proposal.requester)
+      post :create, { proposal_id: proposal.id }
+      expect(flash[:success]).not_to be_present
+      expect(flash[:error]).to be_present
+      expect(response).to redirect_to(proposal_path(proposal))
+      expect(proposal.attachments.count).to eq(0)
+    end
+  end
 end

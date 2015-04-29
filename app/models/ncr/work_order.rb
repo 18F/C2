@@ -12,6 +12,7 @@ module Ncr
   OFFICES = DATA['OFFICES']
 
   class WorkOrder < ActiveRecord::Base
+    include ObservableModel
     # TODO include ProposalDelegate
 
     has_one :proposal, as: :client_data
@@ -47,21 +48,25 @@ module Ncr
       cart
     end
 
-    def update_cart(approver_email, cart)
-      cart.proposal.approvals.destroy_all
-      self.add_approvals(approver_email)
-      cart.restart!
-      cart
+    # A requester can change his/her approving official
+    def update_approver(approver_email)
+      first_approval = self.proposal.approvals.first
+      if first_approval.user_email_address != approver_email
+        first_approval.destroy
+        replacement = self.proposal.add_approver(approver_email)
+        replacement.move_to_top
+        Dispatcher.email_approver(replacement)
+      end
     end
 
     def add_approvals(approver_email)
       emails = [approver_email] + self.system_approvers
       if self.emergency
-        emails.each {|email| self.cart.add_observer(email) }
+        emails.each {|email| self.proposal.add_observer(email) }
         # skip state machine
         self.proposal.update_attribute(:status, 'approved')
       else
-        emails.each {|email| self.cart.add_approver(email) }
+        emails.each {|email| self.proposal.add_approver(email) }
       end
     end
 
