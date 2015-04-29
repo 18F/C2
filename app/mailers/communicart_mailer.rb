@@ -7,9 +7,10 @@ class CommunicartMailer < ActionMailer::Base
   add_template_helper ClientHelper
 
 
-  def cart_notification_email(to_email, approval)
+  def cart_notification_email(to_email, approval, show_approval_actions=true)
     @approval = approval
-    from_email = user_email(approval.cart.requester)
+    @show_approval_actions = show_approval_actions
+    from_email = user_email(approval.proposal.requester)
     send_cart_email(from_email, to_email, approval.cart)
   end
 
@@ -32,18 +33,17 @@ class CommunicartMailer < ActionMailer::Base
   end
 
   def approval_reply_received_email(approval)
-    cart = approval.cart
     @approval = approval
-    @cart = cart
-    @proposal = cart.proposal.decorate
-    to_address = cart.requester.email_address
+    @proposal = approval.proposal.decorate
+    @cart = @proposal.cart
+    to_address = @proposal.requester.email_address
     #TODO: Add a specific 'rejection' text block for the requester
 
-    set_attachments(cart)
+    set_attachments(@proposal)
 
     mail(
          to: to_address,
-         subject: "User #{approval.user.email_address} has #{approval.status} cart ##{cart.proposal.public_identifier}",
+         subject: "User #{approval.user.email_address} has #{approval.status} cart ##{@proposal.public_identifier}",
          from: user_email(approval.user)
          )
   end
@@ -58,13 +58,12 @@ class CommunicartMailer < ActionMailer::Base
          )
   end
 
-
   private
 
-  def set_attachments(cart)
-    if cart.all_approvals_received?
-      attachments['Communicart' + cart.proposal.public_identifier.to_s + '.comments.csv'] = Exporter::Comments.new(cart).to_csv
-      attachments['Communicart' + cart.proposal.public_identifier.to_s + '.approvals.csv'] = Exporter::Approvals.new(cart).to_csv
+  def set_attachments(proposal)
+    if proposal.approved?
+      attachments['Communicart' + proposal.public_identifier.to_s + '.comments.csv'] = Exporter::Comments.new(proposal.cart).to_csv
+      attachments['Communicart' + proposal.public_identifier.to_s + '.approvals.csv'] = Exporter::Approvals.new(proposal.cart).to_csv
     end
   end
 
@@ -88,7 +87,7 @@ class CommunicartMailer < ActionMailer::Base
     @cart = cart
     @proposal = cart.proposal.decorate
 
-    set_attachments(cart)
+    set_attachments(@proposal)
 
     mail(
       to: to_email,
