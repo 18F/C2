@@ -93,6 +93,7 @@ describe Ncr::WorkOrder do
       ))
     end
   end
+
   describe '#total_price' do
     let (:work_order) { FactoryGirl.create(:ncr_work_order, amount: 45.36)}
     it 'gets price from amount field' do
@@ -102,7 +103,7 @@ describe Ncr::WorkOrder do
 
   describe '#public_identifier' do
     it 'includes the fiscal year' do
-      work_order = FactoryGirl.create(:ncr_work_order,
+      work_order = FactoryGirl.create(:ncr_work_order, :with_proposal,
                                       created_at: Date.new(2007, 1, 15))
       expect(work_order.public_identifier).to eq(
         "FY07-#{work_order.id}")
@@ -110,6 +111,43 @@ describe Ncr::WorkOrder do
       work_order.update_attribute(:created_at, Date.new(2007, 10, 1))
       expect(work_order.public_identifier).to eq(
         "FY08-#{work_order.id}")
+    end
+  end
+
+  describe '#update_approver' do
+    let (:work_order) { FactoryGirl.create(:ncr_work_order, :full) }
+    it 'sends an email when the approver changes' do
+      expect {
+        work_order.update_approver("bob@example.com")
+      }.to change {deliveries.count}
+      expect(deliveries.last.to).to eq(["bob@example.com"])
+    end
+
+    it "doesn't send an email when the approver hasn't changed" do
+      approver = work_order.proposal.approvers.first
+      approver.update(email_address: 'bill@example.com')
+      expect {
+        work_order.update_approver("bill@example.com")
+      }.not_to change {deliveries.count}
+    end
+  end
+
+  describe 'updates' do
+    let (:work_order) { FactoryGirl.create(:ncr_work_order, :full) }
+    it 'notifies no one when edited if no one has already approved' do
+      expect {
+        work_order.update(name: 'New Name')
+      }.not_to change {deliveries.count}
+    end
+
+    it 'notifies previous approvers when something changes' do
+      first_approval = work_order.proposal.approvals.first
+      first_approval.user.update(email_address: 'bob@example.com')
+      first_approval.approve!
+      expect {
+        work_order.update(name: 'New Name')
+      }.to change { deliveries.count }.by(1)
+      expect(deliveries.last.to).to eq(['bob@example.com'])
     end
   end
 end

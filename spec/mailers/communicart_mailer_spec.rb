@@ -72,7 +72,7 @@ describe CommunicartMailer do
 
     context 'attaching a csv of the cart activity' do
       it 'generates csv attachments for an approved cart' do
-        expect(approval.cart).to receive(:all_approvals_received?).and_return(true)
+        approval.proposal.update(status: 'approved')
         expect_csvs_to_be_exported
         mail
       end
@@ -132,7 +132,7 @@ describe CommunicartMailer do
 
     context 'attaching a csv of the cart activity' do
       it 'generates csv attachments for an approved cart' do
-        expect(approval.cart).to receive(:all_approvals_received?).and_return(true).at_least(:once)
+        approval.proposal.update(status: 'approved')
         expect_csvs_to_be_exported
         mail
       end
@@ -192,13 +192,12 @@ describe CommunicartMailer do
 
     context 'attaching a csv of the cart activity' do
       it 'generates csv attachments for an approved cart' do
-        expect(cart).to receive(:all_approvals_received?).and_return(true)
+        cart.proposal.update(status: 'approved')
         expect_csvs_to_be_exported
         mail
       end
 
       it 'does not generate csv attachments for an unapproved cart' do
-        expect(cart).to receive(:all_approvals_received?).and_return(false)
         expect_any_instance_of(Exporter::Base).not_to receive(:to_csv)
         mail
       end

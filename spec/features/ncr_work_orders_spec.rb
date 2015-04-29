@@ -114,7 +114,7 @@ describe "National Capital Region proposals" do
     let(:ncr_proposal) {
       work_order.proposal
     }
-    it "can be restarted if pending" do
+    it "can be edited if pending" do
       visit "/ncr/work_orders/#{work_order.id}/edit"
       expect(find_field("ncr_work_order_building_number").value).to eq(
         Ncr::BUILDING_NUMBERS[0])
@@ -128,14 +128,29 @@ describe "National Capital Region proposals" do
       expect(work_order.vendor).to eq("New ACME")
     end
 
-    it "can be restarted if rejected" do
+    it "has a disabled field if first approval is done" do
+      visit "/ncr/work_orders/#{work_order.id}/edit"
+      expect(find("[name=approver_email]")["disabled"]).to be_nil
+      work_order.proposal.approvals.first.approve!
+      visit "/ncr/work_orders/#{work_order.id}/edit"
+      expect(find("[name=approver_email]")["disabled"]).to eq("disabled")
+      # And we can still submit
+      fill_in 'Vendor', with: 'New ACME'
+      click_on 'Submit for approval'
+      expect(current_path).to eq("/proposals/#{ncr_proposal.id}")
+      # Verify it is actually saved
+      work_order.reload
+      expect(work_order.vendor).to eq("New ACME")
+    end
+
+    it "can be edited if rejected" do
       ncr_proposal.update_attributes(status: 'rejected')  # avoid workflow
 
       visit "/ncr/work_orders/#{work_order.id}/edit"
       expect(current_path).to eq("/ncr/work_orders/#{work_order.id}/edit")
     end
 
-    it "cannot be restarted if approved" do
+    it "cannot be edited if approved" do
       ncr_proposal.update_attributes(status: 'approved')  # avoid workflow
 
       visit "/ncr/work_orders/#{work_order.id}/edit"
@@ -151,35 +166,35 @@ describe "National Capital Region proposals" do
       expect(page).to have_content('not the requester')
     end
 
-    it "shows a restart link from a pending cart" do
+    it "shows a edit link from a pending cart" do
       visit "/proposals/#{ncr_proposal.id}"
       expect(page).to have_content('Modify Request')
       click_on('Modify Request')
       expect(current_path).to eq("/ncr/work_orders/#{work_order.id}/edit")
     end
 
-    it "shows a restart link from a rejected cart" do
+    it "shows a edit link from a rejected cart" do
       ncr_proposal.update_attribute(:status, 'rejected') # avoid state machine
 
       visit "/proposals/#{ncr_proposal.id}"
       expect(page).to have_content('Modify Request')
     end
 
-    it "does not show a restart link for an approved cart" do
+    it "does not show a edit link for an approved cart" do
       ncr_proposal.update_attribute(:status, 'approved') # avoid state machine
 
       visit "/proposals/#{ncr_proposal.id}"
       expect(page).not_to have_content('Modify Request')
     end
 
-    it "does not show a restart link for another client" do
+    it "does not show a edit link for another client" do
       ncr_proposal.client_data = nil
       ncr_proposal.save()
       visit "/proposals/#{ncr_proposal.id}"
       expect(page).not_to have_content('Modify Request')
     end
 
-    it "does not show a restart link for non requester" do
+    it "does not show a edit link for non requester" do
       ncr_proposal.set_requester(FactoryGirl.create(:user))
       visit "/proposals/#{ncr_proposal.id}"
       expect(page).not_to have_content('Modify Request')

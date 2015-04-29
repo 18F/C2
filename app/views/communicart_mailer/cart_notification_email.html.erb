@@ -1,5 +1,14 @@
 <body class="communicart-notification">
   <table class='reply-section'>
+    <% unless @show_approval_actions %>
+      <tr>
+        <td>
+          <h3 class="email-alert-header">
+            You have been notified because this request has changed. Please see the updated request below. Since you have already responded, no further action is required at this time.
+          </h3>
+        </td>
+      </tr>
+    <% end %>
     <tr>
       <td class="w-container html-email-message">
         <%= client_partial(
@@ -15,7 +24,7 @@
   <%= client_partial(@cart.proposal.client, 'cart_mail',
                      locals: {cart: @cart, title: "Purchase Request"}) %>
 
-  <%= render partial: 'email_reply', locals: { cart: @cart, approval: @approval, show_approval_actions: true } %>
+  <%= render partial: 'email_reply', locals: { cart: @cart, approval: @approval, show_approval_actions: @show_approval_actions } %>
 
 </div>
 </body>
