@@ -83,6 +83,23 @@ ActiveRecord::Schema.define(version: 20150415165247) do
 
   add_index "comments", ["proposal_id"], name: "index_comments_on_proposal_id", using: :btree
 
+  create_table "gsa18f_procurements", force: true do |t|
+    t.string   "office"
+    t.text     "justification"
+    t.string   "link_to_product"
+    t.integer  "quantity"
+    t.datetime "date_requested"
+    t.string   "additional_info"
+    t.decimal  "cost_per_unit"
+    t.text     "product_name_and_description"
+    t.boolean  "recurring"
+    t.string   "recurring_interval"
+    t.integer  "recurring_length"
+    t.string   "urgency"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "ncr_work_orders", force: true do |t|
     t.decimal  "amount"
     t.string   "expense_type"

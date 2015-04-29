@@ -42,7 +42,7 @@ C2::Application.routes.draw do
   end
 
   namespace :gsa18f do
-    resources :proposals, except: [:index, :destroy]
+    resources :procurements, except: [:index, :destroy]
   end
 
   if Rails.env.development?
