@@ -154,14 +154,21 @@
       <% @proposal.attachments.each do |attachment| %>
         <div class="line-item">
           <div class="row">
-            <p class="col-sm-6 col-xs-12">
+            <p class="col-sm-5 col-xs-12">
               <a href="<%= attachment.url %>"><%= attachment.file_file_name %></a>
             </p>
             <p class="col-sm-3 col-xs-6">
               <strong><%= attachment.user.full_name %></strong>
             </p>
-            <p class="col-sm-3 col-xs-6 date righted">
+            <p class="col-sm-3 col-xs-5 date righted">
               <%= date_with_tooltip(attachment.created_at) %>
+            </p>
+            <p class="col-sm-1 col-xs-1 righted">
+              <%- if policy(attachment).can_destroy? %>
+                <%= link_to "Delete",
+                    proposal_attachment_path(@proposal, attachment),
+                    method: :delete, data: {confirm: "Are you sure?"} %>
+              <%- end %>
             </p>
           </div>
         </div>

@@ -1,6 +1,7 @@
 class AttachmentsController < ApplicationController
   before_filter :authenticate_user!
-  before_filter ->{authorize self.proposal, :can_show!}
+  before_filter ->{authorize self.proposal, :can_show!}, only: [:create]
+  before_filter ->{authorize self.attachment}, only: [:destroy]
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
 
   def create
@@ -15,9 +16,19 @@ class AttachmentsController < ApplicationController
     redirect_to proposal
   end
 
+  def destroy
+    self.attachment.destroy
+    flash[:success] = "Deleted attachment"
+    redirect_to proposal_path(self.attachment.proposal_id)
+  end
+
   protected
   def proposal
     @cached_proposal ||= Proposal.find(params[:proposal_id])
+  end
+
+  def attachment
+    @cached_attachment ||= Attachment.find(params[:id])
   end
 
   def attachments_params
