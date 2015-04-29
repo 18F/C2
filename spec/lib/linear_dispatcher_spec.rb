@@ -46,7 +46,7 @@ describe LinearDispatcher do
     end
   end
 
-  describe '#deliver_new_cart_emails' do
+  describe '#deliver_new_proposal_emails' do
     before do
       proposal.update_attributes!(requester_id: requester.id)
     end
@@ -56,14 +56,14 @@ describe LinearDispatcher do
       approval = proposal.approvals.create!(user_id: approver.id)
       expect(dispatcher).to receive(:email_approver).with(approval)
 
-      dispatcher.deliver_new_cart_emails(cart)
+      dispatcher.deliver_new_proposal_emails(proposal)
     end
 
     it "sends a cart notification email to observers" do
       proposal.observations.create!
       expect(dispatcher).to receive(:email_observers).with(cart)
 
-      dispatcher.deliver_new_cart_emails(cart)
+      dispatcher.deliver_new_proposal_emails(proposal)
     end
   end
 

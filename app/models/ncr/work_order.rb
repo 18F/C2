@@ -44,7 +44,7 @@ module Ncr
                               requester: requester}
       )
       self.add_approvals(approver_email)
-      Dispatcher.deliver_new_cart_emails(cart)
+      Dispatcher.deliver_new_proposal_emails(proposal)
       cart
     end
 

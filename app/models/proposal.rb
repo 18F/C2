@@ -133,8 +133,7 @@ class Proposal < ActiveRecord::Base
     self.approvals.each do |approval|
       approval.restart!
     end
-    # TODO remove dependence on Cart
-    Dispatcher.deliver_new_cart_emails(self.cart)
+    Dispatcher.deliver_new_proposal_emails(self)
   end
 
   ###############################

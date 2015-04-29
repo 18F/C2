@@ -5,8 +5,8 @@ class ParallelDispatcher < Dispatcher
     end
   end
 
-  def deliver_new_cart_emails(cart)
-    self.email_all_approvers(cart)
+  def deliver_new_proposal_emails(proposal)
+    self.email_all_approvers(proposal.cart)
     super
   end
 end

@@ -14,8 +14,8 @@ class LinearDispatcher < Dispatcher
     end
   end
 
-  def deliver_new_cart_emails(cart)
-    self.email_next_pending_approver(cart)
+  def deliver_new_proposal_emails(proposal)
+    self.email_next_pending_approver(proposal.cart)
     super
   end
 

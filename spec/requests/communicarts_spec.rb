@@ -1,7 +1,7 @@
 describe 'CommunicartsController' do
   describe "POST /communicarts/send_cart" do
     before do
-      expect(Dispatcher).to receive(:deliver_new_cart_emails)
+      expect(Dispatcher).to receive(:deliver_new_proposal_emails)
 
       approval_group = FactoryGirl.create(:approval_group_with_approvers_and_requester, name: 'MyApprovalGroup')
       expect(ApprovalGroup).to receive(:find_by).and_return(approval_group)

@@ -7,7 +7,7 @@ describe CommunicartsController do
 
     context 'approval group is indicated' do
       before do
-        expect(Dispatcher).to receive(:deliver_new_cart_emails)
+        expect(Dispatcher).to receive(:deliver_new_proposal_emails)
         approval_group # create
         json_params['approvalGroup'] = "anotherApprovalGroupName"
       end

@@ -25,7 +25,7 @@ describe Commands::Approval::InitiateCartApproval do
     before do
       expect(Cart).to receive(:initialize_cart).and_return(cart)
       expect(command).to receive(:import_details)
-      expect_any_instance_of(ParallelDispatcher).to receive(:deliver_new_cart_emails)
+      expect_any_instance_of(ParallelDispatcher).to receive(:deliver_new_proposal_emails)
     end
 
     context 'handling absence of approvalGroup' do

@@ -14,7 +14,8 @@ class Dispatcher
     CommunicartMailer.proposal_created_confirmation(cart).deliver
   end
 
-  def deliver_new_cart_emails(cart)
+  def deliver_new_proposal_emails(proposal)
+    cart = proposal.cart
     self.email_observers(cart)
     self.email_sent_confirmation(cart)
   end
@@ -63,9 +64,9 @@ class Dispatcher
     end
   end
 
-  def self.deliver_new_cart_emails(cart)
-    dispatcher = self.initialize_dispatcher(cart.proposal)
-    dispatcher.deliver_new_cart_emails(cart)
+  def self.deliver_new_proposal_emails(proposal)
+    dispatcher = self.initialize_dispatcher(proposal)
+    dispatcher.deliver_new_proposal_emails(proposal)
   end
 
   def self.on_proposal_rejected(proposal)
