@@ -1,6 +1,6 @@
 describe NcrDispatcher do
-  let!(:cart) { FactoryGirl.create(:cart_with_approvals) }
-  let(:approvals) { cart.approvals }
+  let!(:proposal) { FactoryGirl.create(:proposal, :with_approvers, :with_cart) }
+  let(:approvals) { proposal.approvals }
   let(:approval_1) { approvals.first }
   let(:approval_2) { approvals.second }
   let(:ncr_dispatcher) { NcrDispatcher.new }
@@ -11,7 +11,7 @@ describe NcrDispatcher do
       deliveries.clear
 
       ncr_dispatcher.on_approval_approved(approval_2)
-      expect(email_recipients).to include('requester@some-dot-gov.gov')
+      expect(email_recipients).to include(proposal.requester.email_address)
     end
 
     it "doesn't send to the requester for the not-last approval" do
@@ -20,11 +20,11 @@ describe NcrDispatcher do
     end
   end
 
-  describe '#on_cart_rejected' do
+  describe '#on_proposal_rejected' do
     it "notifies the requester" do
       approval_1.update_attribute(:status, 'rejected') # avoid workflow
-      ncr_dispatcher.on_cart_rejected(cart)
-      expect(email_recipients).to include('requester@some-dot-gov.gov')
+      ncr_dispatcher.on_proposal_rejected(proposal)
+      expect(email_recipients).to include(proposal.requester.email_address)
     end
   end
 

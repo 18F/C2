@@ -23,7 +23,8 @@ class Dispatcher
     true
   end
 
-  def on_cart_rejected(cart)
+  def on_proposal_rejected(proposal)
+    cart = proposal.cart
     rejection = cart.rejections.first
     # @todo rewrite this email so a "rejection approval" isn't needed
     CommunicartMailer.approval_reply_received_email(rejection).deliver
@@ -67,9 +68,9 @@ class Dispatcher
     dispatcher.deliver_new_cart_emails(cart)
   end
 
-  def self.on_cart_rejected(cart)
-    dispatcher = self.initialize_dispatcher(cart.proposal)
-    dispatcher.on_cart_rejected(cart)
+  def self.on_proposal_rejected(proposal)
+    dispatcher = self.initialize_dispatcher(proposal)
+    dispatcher.on_proposal_rejected(proposal)
   end
 
   def self.on_approval_approved(approval)
