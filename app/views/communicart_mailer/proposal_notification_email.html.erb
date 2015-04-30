@@ -24,7 +24,7 @@
   <%= client_partial(@proposal.client, 'cart_mail',
                      locals: {cart: @proposal.cart, title: "Purchase Request"}) %>
 
-  <%= render partial: 'email_reply', locals: { cart: @proposal.cart, approval: @approval, show_approval_actions: @show_approval_actions } %>
+  <%= render partial: 'email_reply', locals: { approval: @approval, show_approval_actions: @show_approval_actions } %>
 
 </div>
 </body>

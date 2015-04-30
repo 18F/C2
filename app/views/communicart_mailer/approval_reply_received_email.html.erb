@@ -18,7 +18,7 @@
         <%= client_partial(@proposal.client, 'cart_mail',
                            locals: {cart: @proposal.cart, title: "Purchase Request"}) %>
 
-        <%= render partial: 'email_reply', locals: { cart: @proposal.cart, show_approval_actions: false } %>
+        <%= render partial: 'email_reply', locals: { approval: @approval, show_approval_actions: false } %>
       </td>
     </tr>
 </table>
