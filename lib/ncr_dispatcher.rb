@@ -5,11 +5,11 @@
 class NcrDispatcher < LinearDispatcher
 
   def requires_approval_notice?(approval)
-    final_approval(approval.cart) == approval
+    final_approval(approval.proposal) == approval
   end
 
-  def final_approval(cart)
-    cart.approvals.last
+  def final_approval(proposal)
+    proposal.approvals.last
   end
 
   # Notify approvers who have already approved that this proposal has been

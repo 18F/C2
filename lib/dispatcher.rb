@@ -10,14 +10,13 @@ class Dispatcher
     end
   end
 
-  def email_sent_confirmation(cart)
-    CommunicartMailer.proposal_created_confirmation(cart).deliver
+  def email_sent_confirmation(proposal)
+    CommunicartMailer.proposal_created_confirmation(proposal.cart).deliver
   end
 
   def deliver_new_proposal_emails(proposal)
-    cart = proposal.cart
     self.email_observers(proposal)
-    self.email_sent_confirmation(cart)
+    self.email_sent_confirmation(proposal)
   end
 
   def requires_approval_notice?(approval)
@@ -25,8 +24,7 @@ class Dispatcher
   end
 
   def on_proposal_rejected(proposal)
-    cart = proposal.cart
-    rejection = cart.rejections.first
+    rejection = proposal.approvals.rejected.first
     # @todo rewrite this email so a "rejection approval" isn't needed
     CommunicartMailer.approval_reply_received_email(rejection).deliver
     self.email_observers(proposal)
