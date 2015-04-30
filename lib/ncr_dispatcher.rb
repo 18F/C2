@@ -16,7 +16,7 @@ class NcrDispatcher < LinearDispatcher
   # modified
   def on_proposal_update(proposal)
     proposal.approvals.approved.each{|approval|
-      CommunicartMailer.cart_notification_email(
+      CommunicartMailer.proposal_notification_email(
         approval.user_email_address, approval, false).deliver
     }
   end

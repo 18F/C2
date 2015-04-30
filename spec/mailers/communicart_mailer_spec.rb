@@ -30,7 +30,7 @@ describe CommunicartMailer do
 
   describe 'cart notification email' do
     let!(:token) { approval.create_api_token! }
-    let(:mail) { CommunicartMailer.cart_notification_email('email.to.email@testing.com', approval) }
+    let(:mail) { CommunicartMailer.proposal_notification_email('email.to.email@testing.com', approval) }
     let(:body) { mail.body.encoded }
     let(:approval_uri) do
       doc = Capybara.string(body)

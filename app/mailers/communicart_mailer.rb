@@ -7,7 +7,7 @@ class CommunicartMailer < ActionMailer::Base
   add_template_helper ClientHelper
 
 
-  def cart_notification_email(to_email, approval, show_approval_actions=true)
+  def proposal_notification_email(to_email, approval, show_approval_actions=true)
     @approval = approval
     @show_approval_actions = show_approval_actions
     from_email = user_email(approval.proposal.requester)

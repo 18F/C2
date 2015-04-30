@@ -21,7 +21,7 @@ describe Dispatcher do
 
     it 'creates a new token for the approver' do
       approval = proposal.add_approver('approver1@some-dot-gov.gov')
-      expect(CommunicartMailer).to receive_message_chain(:cart_notification_email, :deliver)
+      expect(CommunicartMailer).to receive_message_chain(:proposal_notification_email, :deliver)
       expect(approval).to receive(:create_api_token!).once
 
       dispatcher.email_approver(approval)
