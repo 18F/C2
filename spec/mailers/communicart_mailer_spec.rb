@@ -28,7 +28,7 @@ describe CommunicartMailer do
     expect_any_instance_of(Exporter::Approvals).to receive(:to_csv)
   end
 
-  describe 'cart notification email' do
+  describe 'proposal_notification_email' do
     let!(:token) { approval.create_api_token! }
     let(:mail) { CommunicartMailer.proposal_notification_email('email.to.email@testing.com', approval) }
     let(:body) { mail.body.encoded }
@@ -98,14 +98,16 @@ describe CommunicartMailer do
 
       it 'renders a custom template for ncr carts' do
         work_order = FactoryGirl.create(:ncr_work_order)
-        approval.cart.proposal.client_data = work_order
-        approval.cart.proposal.save
+        proposal = approval.proposal
+        proposal.client_data = work_order
+        proposal.save!
+        expect(proposal.client).to eq('ncr')
         expect(body).to include('ncr-layout')
       end
     end
   end
 
-  describe 'approval reply received email' do
+  describe 'approval_reply_received_email' do
     let(:mail) { CommunicartMailer.approval_reply_received_email(approval) }
 
     before do
@@ -172,7 +174,7 @@ describe CommunicartMailer do
     end
   end
 
-  describe 'cart observer received email' do
+  describe 'proposal_observer_email' do
     let(:observation) { proposal.add_observer('observer1@some-dot-gov.gov') }
     let(:observer) { observation.user }
     let(:mail) { CommunicartMailer.proposal_observer_email(observer.email_address, proposal) }
@@ -204,7 +206,7 @@ describe CommunicartMailer do
     end
   end
 
-  describe 'sent confirmation email' do
+  describe 'proposal_created_confirmation' do
     let(:mail) { CommunicartMailer.proposal_created_confirmation(proposal) }
 
     it 'renders the subject' do

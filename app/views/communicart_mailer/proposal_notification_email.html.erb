@@ -19,12 +19,12 @@
   </table>
 
 <div style="width:800px">
-  <%= render partial: 'comments', locals: { comments: @cart.comments } %>
+  <%= render partial: 'comments', locals: { comments: @proposal.comments } %>
 
-  <%= client_partial(@cart.proposal.client, 'cart_mail',
-                     locals: {cart: @cart, title: "Purchase Request"}) %>
+  <%= client_partial(@proposal.client, 'cart_mail',
+                     locals: {cart: @proposal.cart, title: "Purchase Request"}) %>
 
-  <%= render partial: 'email_reply', locals: { cart: @cart, approval: @approval, show_approval_actions: @show_approval_actions } %>
+  <%= render partial: 'email_reply', locals: { cart: @proposal.cart, approval: @approval, show_approval_actions: @show_approval_actions } %>
 
 </div>
 </body>

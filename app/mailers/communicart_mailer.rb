@@ -10,13 +10,14 @@ class CommunicartMailer < ActionMailer::Base
   def proposal_notification_email(to_email, approval, show_approval_actions=true)
     @approval = approval
     @show_approval_actions = show_approval_actions
-    from_email = user_email(approval.proposal.requester)
-    send_cart_email(from_email, to_email, approval.cart)
+    proposal = approval.proposal
+    from_email = user_email(proposal.requester)
+    send_proposal_email(from_email, to_email, proposal)
   end
 
   def proposal_observer_email(to_email, proposal)
     # TODO have the from_email be whomever triggered this notification
-    send_cart_email(sender, to_email, proposal.cart)
+    send_proposal_email(sender, to_email, proposal)
   end
 
   def proposal_created_confirmation(proposal)
@@ -78,15 +79,13 @@ class CommunicartMailer < ActionMailer::Base
     address.format
   end
 
-  def send_cart_email(from_email, to_email, cart)
-    @cart = cart
-    @proposal = cart.proposal.decorate
-
+  def send_proposal_email(from_email, to_email, proposal)
+    @proposal = proposal.decorate
     set_attachments(@proposal)
 
     mail(
       to: to_email,
-      subject: "Communicart Approval Request from #{@proposal.requester.full_name}: Please review #{@proposal.public_identifier}",
+      subject: "Communicart Approval Request from #{proposal.requester.full_name}: Please review #{proposal.public_identifier}",
       from: from_email
     )
   end
