@@ -6,7 +6,7 @@ class MailPreview < MailView
   end
 
   def proposal_observer_email
-    mail = CommunicartMailer.proposal_observer_email(email, cart.proposal)
+    mail = CommunicartMailer.proposal_observer_email(email, proposal)
     inline_styles(mail)
   end
 
@@ -35,8 +35,8 @@ class MailPreview < MailView
     Approval.received.last
   end
 
-  def cart
-    Cart.last
+  def proposal
+    Proposal.last
   end
 
   def comment
