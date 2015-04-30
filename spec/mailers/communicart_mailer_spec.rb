@@ -13,11 +13,7 @@ describe CommunicartMailer do
     ENV['NOTIFICATION_FROM_EMAIL'] = old_val
   end
 
-  let(:proposal) {
-    proposal = FactoryGirl.create(:proposal, :with_approvers, :with_cart)
-    proposal.cart.update_attribute(:external_id, 13579)
-    proposal
-  }
+  let(:proposal) { FactoryGirl.create(:proposal, :with_approvers, :with_cart) }
   let(:cart) { proposal.cart }
   let(:approval) { proposal.approvals.first }
   let(:approver) { approval.user }
@@ -26,6 +22,10 @@ describe CommunicartMailer do
   def expect_csvs_to_be_exported
     expect_any_instance_of(Exporter::Comments).to receive(:to_csv)
     expect_any_instance_of(Exporter::Approvals).to receive(:to_csv)
+  end
+
+  before do
+    cart.update_attribute(:external_id, 13579)
   end
 
   describe 'proposal_notification_email' do
@@ -78,14 +78,14 @@ describe CommunicartMailer do
     end
 
 
-    context 'attaching a csv of the cart activity' do
-      it 'generates csv attachments for an approved cart' do
+    context 'attaching a csv of the proposal activity' do
+      it 'generates csv attachments for an approved proposal' do
         approval.proposal.update(status: 'approved')
         expect_csvs_to_be_exported
         mail
       end
 
-      it 'does not generate csv attachments for an unapproved cart' do
+      it 'does not generate csv attachments for an unapproved proposal' do
         expect_any_instance_of(Exporter::Base).not_to receive(:to_csv)
         mail
       end
@@ -96,7 +96,7 @@ describe CommunicartMailer do
         expect(body).to include('Purchase Request')
       end
 
-      it 'renders a custom template for ncr carts' do
+      it 'renders a custom template for ncr work orders' do
         work_order = FactoryGirl.create(:ncr_work_order)
         proposal = approval.proposal
         proposal.client_data = work_order
@@ -140,14 +140,14 @@ describe CommunicartMailer do
 
     end
 
-    context 'attaching a csv of the cart activity' do
-      it 'generates csv attachments for an approved cart' do
+    context 'attaching a csv of the proposal activity' do
+      it 'generates csv attachments for an approved proposal' do
         approval.proposal.update(status: 'approved')
         expect_csvs_to_be_exported
         mail
       end
 
-      it 'does not generate csv attachments for an unapproved cart' do
+      it 'does not generate csv attachments for an unapproved proposal' do
         expect_any_instance_of(Exporter::Base).not_to receive(:to_csv)
         mail
       end
@@ -155,13 +155,13 @@ describe CommunicartMailer do
   end
 
   describe 'comment_added_email' do
-    let(:cart) { FactoryGirl.create(:cart) }
-    let(:comment) { FactoryGirl.create(:comment, proposal: cart.proposal) }
+    let(:proposal) { FactoryGirl.create(:proposal, :with_cart) }
+    let(:comment) { FactoryGirl.create(:comment, proposal: proposal) }
     let(:email) { "commenter@some-dot-gov.gov" }
     let(:mail) { CommunicartMailer.comment_added_email(comment, email) }
 
     it 'renders the subject' do
-      expect(mail.subject).to eq("A comment has been added to Cart ##{cart.id}")
+      expect(mail.subject).to eq("A comment has been added to Cart #13579")
     end
 
     it 'renders the receiver email' do
@@ -192,14 +192,14 @@ describe CommunicartMailer do
       expect(sender_names(mail)).to eq([nil])
     end
 
-    context 'attaching a csv of the cart activity' do
-      it 'generates csv attachments for an approved cart' do
-        cart.proposal.update(status: 'approved')
+    context 'attaching a csv of the proposal activity' do
+      it 'generates csv attachments for an approved proposal' do
+        proposal.update(status: 'approved')
         expect_csvs_to_be_exported
         mail
       end
 
-      it 'does not generate csv attachments for an unapproved cart' do
+      it 'does not generate csv attachments for an unapproved proposal' do
         expect_any_instance_of(Exporter::Base).not_to receive(:to_csv)
         mail
       end
