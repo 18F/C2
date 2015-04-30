@@ -11,7 +11,7 @@ class Dispatcher
   end
 
   def email_sent_confirmation(proposal)
-    CommunicartMailer.proposal_created_confirmation(proposal.cart).deliver
+    CommunicartMailer.proposal_created_confirmation(proposal).deliver
   end
 
   def deliver_new_proposal_emails(proposal)

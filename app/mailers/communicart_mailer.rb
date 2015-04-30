@@ -19,15 +19,14 @@ class CommunicartMailer < ActionMailer::Base
     send_cart_email(sender, to_email, proposal.cart)
   end
 
-  def proposal_created_confirmation(cart)
-    @cart = cart
-    @proposal = cart.proposal.decorate
-    to_address = cart.requester.email_address
-    from_email = user_email(cart.requester)
+  def proposal_created_confirmation(proposal)
+    @proposal = proposal.decorate
+    to_address = proposal.requester.email_address
+    from_email = user_email(proposal.requester)
 
     mail(
          to: to_address,
-         subject: "Your request for #{@proposal.public_identifier} has been sent successfully.",
+         subject: "Your request for #{proposal.public_identifier} has been sent successfully.",
          from: from_email
          )
   end

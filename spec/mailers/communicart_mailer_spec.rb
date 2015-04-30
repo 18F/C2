@@ -205,7 +205,7 @@ describe CommunicartMailer do
   end
 
   describe 'sent confirmation email' do
-    let(:mail) { CommunicartMailer.proposal_created_confirmation(cart) }
+    let(:mail) { CommunicartMailer.proposal_created_confirmation(proposal) }
 
     it 'renders the subject' do
       expect(mail.subject).to eq "Your request for Cart #13579 has been sent successfully."
