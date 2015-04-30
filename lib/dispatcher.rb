@@ -6,7 +6,7 @@ class Dispatcher
 
   def email_observers(proposal)
     proposal.observations.each do |observation|
-      CommunicartMailer.cart_observer_email(observation.user_email_address, proposal.cart).deliver
+      CommunicartMailer.proposal_observer_email(observation.user_email_address, proposal).deliver
     end
   end
 

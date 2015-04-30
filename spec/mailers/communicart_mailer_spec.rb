@@ -13,7 +13,7 @@ describe CommunicartMailer do
     ENV['NOTIFICATION_FROM_EMAIL'] = old_val
   end
 
-  let(:proposal) { 
+  let(:proposal) {
     proposal = FactoryGirl.create(:proposal, :with_approvers, :with_cart)
     proposal.cart.update_attribute(:external_id, 13579)
     proposal
@@ -173,9 +173,9 @@ describe CommunicartMailer do
   end
 
   describe 'cart observer received email' do
-    let(:observation) { cart.add_observer('observer1@some-dot-gov.gov') }
+    let(:observation) { proposal.add_observer('observer1@some-dot-gov.gov') }
     let(:observer) { observation.user }
-    let(:mail) { CommunicartMailer.cart_observer_email(observer.email_address, cart) }
+    let(:mail) { CommunicartMailer.proposal_observer_email(observer.email_address, proposal) }
 
     it 'renders the subject' do
       expect(mail.subject).to eq("Communicart Approval Request from #{proposal.requester.full_name}: Please review Cart #13579")

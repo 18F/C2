@@ -14,9 +14,9 @@ class CommunicartMailer < ActionMailer::Base
     send_cart_email(from_email, to_email, approval.cart)
   end
 
-  def cart_observer_email(to_email, cart)
+  def proposal_observer_email(to_email, proposal)
     # TODO have the from_email be whomever triggered this notification
-    send_cart_email(sender, to_email, cart)
+    send_cart_email(sender, to_email, proposal.cart)
   end
 
   def proposal_created_confirmation(cart)

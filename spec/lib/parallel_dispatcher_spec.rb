@@ -26,7 +26,7 @@ describe ParallelDispatcher do
 
     it 'sends a proposal notification email to observers' do
       proposal.add_observer('observer1@some-dot-gov.gov')
-      expect(CommunicartMailer).to receive_message_chain(:cart_observer_email, :deliver)
+      expect(CommunicartMailer).to receive_message_chain(:proposal_observer_email, :deliver)
       dispatcher.deliver_new_proposal_emails(proposal)
     end
   end

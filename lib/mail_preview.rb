@@ -5,8 +5,8 @@ class MailPreview < MailView
     inline_styles(mail)
   end
 
-  def cart_observer_email
-    mail = CommunicartMailer.cart_observer_email(email, cart)
+  def proposal_observer_email
+    mail = CommunicartMailer.proposal_observer_email(email, cart.proposal)
     inline_styles(mail)
   end
 
