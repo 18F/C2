@@ -15,7 +15,7 @@
       <td>
         <%= render partial: 'comments', locals: { comments: @proposal.comments } %>
 
-        <%= client_partial(@proposal.client, 'cart_mail',
+        <%= client_partial(@proposal.client, 'proposal_mail',
                            locals: {cart: @proposal.cart, title: "Purchase Request"}) %>
 
         <%= render partial: 'email_reply', locals: { approval: @approval, show_approval_actions: false } %>

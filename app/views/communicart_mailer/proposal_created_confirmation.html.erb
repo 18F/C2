@@ -3,6 +3,6 @@
     Hi <%= @proposal.requester.full_name %>,<br/>
     You just submitted a request for approval. Here is are details about your request:
   </div>
-  <%= client_partial(@proposal.client, 'cart_mail',
+  <%= client_partial(@proposal.client, 'proposal_mail',
                      locals: {cart: @proposal.cart, title: "Purchase Request"}) %>
 </body>
