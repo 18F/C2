@@ -5,7 +5,7 @@ module Exporter
     end
 
     def comments
-      self.cart.comments
+      self.proposal.comments
     end
 
     def sorted_comments

@@ -1,9 +1,9 @@
 module Exporter
   class Base
-    attr_reader :cart
+    attr_reader :proposal
 
-    def initialize(cart_model)
-      @cart = cart_model
+    def initialize(proposal_model)
+      @proposal = proposal_model
     end
 
     def to_csv

@@ -5,7 +5,7 @@ module Exporter
     end
 
     def approvals
-      self.cart.approvals
+      self.proposal.approvals
     end
 
     def rows

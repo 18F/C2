@@ -61,8 +61,8 @@ class CommunicartMailer < ActionMailer::Base
 
   def set_attachments(proposal)
     if proposal.approved?
-      attachments['Communicart' + proposal.public_identifier.to_s + '.comments.csv'] = Exporter::Comments.new(proposal.cart).to_csv
-      attachments['Communicart' + proposal.public_identifier.to_s + '.approvals.csv'] = Exporter::Approvals.new(proposal.cart).to_csv
+      attachments['Communicart' + proposal.public_identifier.to_s + '.comments.csv'] = Exporter::Comments.new(proposal).to_csv
+      attachments['Communicart' + proposal.public_identifier.to_s + '.approvals.csv'] = Exporter::Approvals.new(proposal).to_csv
     end
   end
 
