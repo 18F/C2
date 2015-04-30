@@ -88,8 +88,8 @@
 
 
 <%- if @include_comments_files %>
-  <div class="cart-comments-container proposal-submodel-container">
-    <div id="cart-comments">
+  <div class="comments-container proposal-submodel-container">
+    <div id="comments">
       <h3>Comments on this purchase request</h3>
       <%= form_for [@proposal, Comment.new] do |f| %>
         <%= f.text_area :comment_text, rows: 5 %>
