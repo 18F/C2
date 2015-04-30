@@ -4,5 +4,5 @@
     You just submitted a request for approval. Here is are details about your request:
   </div>
   <%= client_partial(@proposal.client, 'proposal_mail',
-                     locals: {cart: @proposal.cart, title: "Purchase Request"}) %>
+                     locals: {proposal: @proposal, title: "Purchase Request"}) %>
 </body>

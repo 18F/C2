@@ -1,5 +1,6 @@
-<!-- "cart" is the critical local variable for using this partial -->
+<!-- "proposal" is the critical local variable for using this partial -->
 <!-- "title" is used to customize the tile in the h1 below -->
+<% cart = proposal.cart %>
 <div id="navigator-layout">
  <table class="w-container main-container" width='800'>
     <tr>
@@ -9,7 +10,7 @@
         <div class="communicart_description">
           <p>
             Requested by:
-            <strong><%= cart.requester.full_name %></strong>
+            <strong><%= proposal.requester.full_name %></strong>
           </p>
         </div>
       </td>
@@ -38,7 +39,7 @@
           <tr class="cart_item_information">
             <!-- Product -->
             <td class="first" valign="top">
-              <%= cart.proposal.try(:name) || "" %>
+              <%= proposal.try(:name) %>
             </td>
             <td class="first" valign="top">
               <%= (cart.properties.detect{|p| p.property == 'contractingVehicle'}.try(:value) || "") %>
@@ -63,7 +64,7 @@
               <h5>Specs</h5>
             </td>
           </tr>
-          <%- cart.fields_for_display.each do |name, value| %>
+          <%- proposal.fields_for_display.each do |name, value| %>
             <tr class="cart_item_information">
               <td class="w-container results-list" align="left" colspan="2">
                 <strong><%= name %></strong>: <%= value %>
