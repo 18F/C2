@@ -4,9 +4,9 @@ class Dispatcher
     send_notification_email(approval)
   end
 
-  def email_observers(cart)
-    cart.observations.each do |observation|
-      CommunicartMailer.cart_observer_email(observation.user_email_address, cart).deliver
+  def email_observers(proposal)
+    proposal.observations.each do |observation|
+      CommunicartMailer.cart_observer_email(observation.user_email_address, proposal.cart).deliver
     end
   end
 
@@ -16,7 +16,7 @@ class Dispatcher
 
   def deliver_new_proposal_emails(proposal)
     cart = proposal.cart
-    self.email_observers(cart)
+    self.email_observers(proposal)
     self.email_sent_confirmation(cart)
   end
 
@@ -29,7 +29,7 @@ class Dispatcher
     rejection = cart.rejections.first
     # @todo rewrite this email so a "rejection approval" isn't needed
     CommunicartMailer.approval_reply_received_email(rejection).deliver
-    self.email_observers(cart)
+    self.email_observers(proposal)
   end
 
   def on_approval_approved(approval)
@@ -37,7 +37,7 @@ class Dispatcher
       CommunicartMailer.approval_reply_received_email(approval).deliver
     end
 
-    self.email_observers(approval.cart)
+    self.email_observers(approval.proposal)
   end
 
   def on_comment_created(comment)

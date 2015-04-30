@@ -61,7 +61,7 @@ describe LinearDispatcher do
 
     it "sends a cart notification email to observers" do
       proposal.observations.create!
-      expect(dispatcher).to receive(:email_observers).with(cart)
+      expect(dispatcher).to receive(:email_observers).with(proposal)
 
       dispatcher.deliver_new_proposal_emails(proposal)
     end
