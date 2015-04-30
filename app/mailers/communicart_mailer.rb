@@ -35,7 +35,6 @@ class CommunicartMailer < ActionMailer::Base
   def approval_reply_received_email(approval)
     @approval = approval
     @proposal = approval.proposal.decorate
-    @cart = @proposal.cart
     to_address = @proposal.requester.email_address
     #TODO: Add a specific 'rejection' text block for the requester
 

@@ -4,7 +4,7 @@
       <td class="w-container html-email-message">
         <p>
           Hello,<br/>
-          The approver, <%= @approval.user_email_address %>, <%= @approval.status %>  Cart #<%= @cart.proposal.public_identifier %>.<br/>
+          The approver, <%= @approval.user_email_address %>, <%= @approval.status %>  Cart #<%= @proposal.public_identifier %>.<br/>
           Please see below for more details.
         </p>
 
@@ -13,12 +13,12 @@
 
     <tr>
       <td>
-        <%= render partial: 'comments', locals: { comments: @cart.comments } %>
+        <%= render partial: 'comments', locals: { comments: @proposal.comments } %>
 
-        <%= client_partial(@cart.proposal.client, 'cart_mail',
-                           locals: {cart: @cart, title: "Purchase Request"}) %>
+        <%= client_partial(@proposal.client, 'cart_mail',
+                           locals: {cart: @proposal.cart, title: "Purchase Request"}) %>
 
-        <%= render partial: 'email_reply', locals: { cart: @cart, show_approval_actions: false } %>
+        <%= render partial: 'email_reply', locals: { cart: @proposal.cart, show_approval_actions: false } %>
       </td>
     </tr>
 </table>
