@@ -214,7 +214,7 @@ describe "National Capital Region proposals" do
 
       it "approves emergencies" do
         choose 'BA61'
-        check "I received a verbal NTP to address this emergency"
+        check "This request was an emergency and I received a verbal Notice to Proceed (NTP)"
         expect {
           click_on 'Submit for approval'
         }.to change { Proposal.count }.from(0).to(1)
@@ -230,7 +230,7 @@ describe "National Capital Region proposals" do
 
       it "does not set emergencies if form type changes" do
         choose 'BA61'
-        check "I received a verbal NTP to address this emergency"
+        check "This request was an emergency and I received a verbal Notice to Proceed (NTP)"
         choose 'BA80'
         fill_in 'RWA Number', with: "a 'number'"
         expect {
