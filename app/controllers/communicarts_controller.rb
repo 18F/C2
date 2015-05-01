@@ -1,4 +1,3 @@
-require ::File.expand_path('authentication_error.rb',  'lib/errors')
 require ::File.expand_path('approval_group_error.rb',  'lib/errors')
 
 
