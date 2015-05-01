@@ -134,19 +134,4 @@ describe Cart do
       expect(cart.api_tokens.unexpired.length).to eq(2)
     end
   end
-
-  describe '#total_price' do
-    context 'the client origin is 18f' do
-      it 'gets price from two fields' do
-        cart.setProp('origin', 'gsa18f')
-        cart.setProp('cost_per_unit', '18.50')
-        cart.setProp('quantity', '20')
-        expect(cart.total_price).to eq(18.50*20)
-      end
-    end
-
-    it 'returns 0 otherwise' do
-      expect(cart.total_price).to eq(0.0)
-    end
-  end
 end
