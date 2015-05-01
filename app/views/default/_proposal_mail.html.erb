@@ -26,29 +26,5 @@
     </tr>
 
     <%= render partial: "shared/email_status" %>
-    <tr>
-      <td class="w-container results-list" colspan="2">
-        <table width="100%">
-          <tr class='header'>
-            <td class="first" width="50%" scope="col">
-              <h5>Product</h5>
-            </td>
-            <td width="25%" scope="col">
-              <h5>Price</h5>
-            </td>
-
-            <td width="25%" scope="col">
-              <h5>Vendor</h5>
-            </td>
-
-          </tr>
-          <tr>
-            <td class='cart-total' colspan='3'>
-              <span class="total-label">Total: <strong><%= number_to_currency(proposal.total_price) %></strong></span>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
   </table>
 </div>

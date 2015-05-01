@@ -17,8 +17,8 @@ class Proposal < ActiveRecord::Base
 
   # The following list also servers as an interface spec for client_datas
   # Note: clients should also implement :version
-  delegate :fields_for_display, :client, :public_identifier, :total_price,
-           :name, to: :client_data_legacy
+  delegate :fields_for_display, :client, :public_identifier, :name,
+           to: :client_data_legacy
 
   validates :flow, presence: true, inclusion: {in: ApprovalGroup::FLOWS}
   # TODO validates :requester_id, presence: true

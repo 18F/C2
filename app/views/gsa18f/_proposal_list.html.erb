@@ -19,20 +19,13 @@
     <tr>
       <td class="sixth"><a href="<%= proposal_url(proposal) %>"><%= proposal.public_identifier %></a></td>
       <td class="first"><a href="<%= proposal_url(proposal) %>"><%= proposal.name %></a></td>
-      <td class="sixth"><%= number_to_currency(proposal.total_price) %></td>
+      <td class="sixth"><%= number_to_currency(proposal.client_data.total_price) %></td>
       <td class="sixth">
-        <% approvers = proposal.currently_awaiting_approvers %>
-        <% if proposal.pending? && approvers.include?(current_user) %>
-          <%# This isn't used anywhere %>
-          <p><strong>Please review</strong></p>
-        <% elsif proposal.pending? %>
-          <p><em>Waiting for review from:
-            <%= approvers.map(&:full_name).join(', ') %></em></p>
-        <% else %>
-          <%= proposal.status.titlecase %>
-        <% end %>
+        <%= render partial: 'proposals/review_status',
+            locals: {proposal: proposal} %>
       </td>
       <td class="sixth"><%= date_with_tooltip(proposal.created_at) %></td>
     </tr>
   <%- end %>
 </table>
+

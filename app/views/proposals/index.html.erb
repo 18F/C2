@@ -3,7 +3,8 @@
     <div class="col-md-12">
       <h3>Pending Purchase Requests</h3>
       <%- if @proposals.pending.any? %>
-        <%= render partial: "proposal_list", locals: { proposals: @proposals.pending, role: @role, closed: false} %>
+        <%= client_partial current_user.client_slug, "proposal_list",
+            locals: { proposals: @proposals.pending, role: @role, closed: false} %>
       <%- else %>
         <p class="empty-list-label">No pending purchase requests</p>
       <%- end %>
@@ -20,8 +21,9 @@
   <%- if @proposals.closed.any? %>
     <div class="row">
       <div class="col-sm-12">
-        <%= render partial: "proposal_list", locals: { 
-          proposals: @proposals.closed, limit: @CLOSED_PROPOSAL_LIMIT} %>
+        <%= client_partial current_user.client_slug, "proposal_list",
+            locals: {proposals: @proposals.closed,
+                     limit: @CLOSED_PROPOSAL_LIMIT} %>
       </div>
     </div>
 

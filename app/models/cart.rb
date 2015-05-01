@@ -159,14 +159,6 @@ class Cart < ActiveRecord::Base
     "Cart ##{self.external_id || self.id}"
   end
 
-  def total_price
-    if self.client == 'gsa18f'
-      self.getProp('cost_per_unit').to_f * self.getProp('quantity').to_f
-    else
-      0.0
-    end
-  end
-
   # may be replaced with paper-trail or similar at some point
   def version
     self.updated_at.to_i
