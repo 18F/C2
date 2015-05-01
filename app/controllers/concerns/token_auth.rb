@@ -1,12 +1,15 @@
 # Usage:
 #
-# class CommunicartsController < ApplicationController
+# class MyController < ApplicationController
 #   include TokenAuth
-#   before_filter :validate_access, only: :approval_response
+#   before_filter :validate_access
 #   ...
+#
+#   def proposal
+#     # return a Proposal
+#   end
 # end
 
-# TODO remove references to `cart`
 module TokenAuth
   extend ActiveSupport::Concern
 
@@ -22,11 +25,11 @@ module TokenAuth
     end
     # expire tokens regardless of how user logged in
     tokens = ApiToken.joins(:approval).where(approvals: {
-      user_id: current_user, proposal_id: self.cart.proposal})
+      user_id: current_user, proposal_id: self.proposal})
     tokens.where(used_at: nil).update_all(used_at: Time.now)
 
-    authorize(self.cart.proposal, :can_approve_or_reject!)
-    if params[:version] && params[:version] != self.cart.proposal.version.to_s
+    authorize(self.proposal, :can_approve_or_reject!)
+    if params[:version] && params[:version] != self.proposal.version.to_s
       raise Pundit::NotAuthorizedError.new(
         "This request has recently changed. Please review the modified request before approving.")
     end
@@ -43,7 +46,7 @@ module TokenAuth
       end
     else
       flash[:error] = exception.message
-      redirect_to proposal_path(self.cart.proposal)
+      redirect_to self.proposal
     end
   end
 end

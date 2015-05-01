@@ -14,8 +14,7 @@ class CommunicartsController < ApplicationController
   end
 
   def approval_response
-    proposal = self.cart.proposal
-    approval = proposal.approval_for(current_user)
+    approval = self.proposal.approval_for(current_user)
     if approval.user.delegates_to?(current_user)
       # assign them to the approval
       approval.update_attributes!(user: current_user)
@@ -24,13 +23,13 @@ class CommunicartsController < ApplicationController
     case params[:approver_action]
       when 'approve'
         approval.approve!
-        flash[:success] = "You have approved #{proposal.public_identifier}."
+        flash[:success] = "You have approved #{self.proposal.public_identifier}."
       when 'reject'
         approval.reject!
-        flash[:success] = "You have rejected #{proposal.public_identifier}."
+        flash[:success] = "You have rejected #{self.proposal.public_identifier}."
     end
 
-    redirect_to proposal_path(proposal)
+    redirect_to proposal_path(self.proposal)
   end
 
 
@@ -41,6 +40,10 @@ class CommunicartsController < ApplicationController
   end
 
   def cart
-    @cached_cart ||= Cart.find(params[:cart_id])
+    @cart ||= Cart.find(params[:cart_id])
+  end
+
+  def proposal
+    self.cart.proposal
   end
 end
