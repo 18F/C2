@@ -110,6 +110,9 @@ module Ncr
       self.updated_at.to_i
     end
 
+    def name
+      self.project_title
+    end
 
     protected
 
