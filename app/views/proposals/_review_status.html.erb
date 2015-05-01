@@ -1,6 +1,5 @@
 <%#-- This snippet describes who needs to review a proposal.
       It needs access to both "proposal" and "current_user" --%>
-"proposal" is the critical local variable
 <% approvers = proposal.currently_awaiting_approvers %>
 <% if proposal.pending? && approvers.include?(current_user) %>
   <p><strong>Please review</strong></p>
