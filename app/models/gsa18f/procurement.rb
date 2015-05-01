@@ -33,7 +33,7 @@ module Gsa18f
       )
       cart.set_requester(requester)
       self.add_approvals
-      Dispatcher.deliver_new_cart_emails(cart)
+      Dispatcher.deliver_new_proposal_emails(proposal)
       cart
     end
     

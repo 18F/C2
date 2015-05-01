@@ -33,7 +33,7 @@ module Commands
 
       def perform(params)
         cart = self.setup_cart(params)
-        Dispatcher.deliver_new_cart_emails(cart)
+        Dispatcher.deliver_new_proposal_emails(cart.proposal)
 
         cart
       end

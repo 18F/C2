@@ -13,11 +13,7 @@ describe CommunicartMailer do
     ENV['NOTIFICATION_FROM_EMAIL'] = old_val
   end
 
-  let(:proposal) { 
-    proposal = FactoryGirl.create(:proposal, :with_approvers, :with_cart)
-    proposal.cart.update_attribute(:external_id, 13579)
-    proposal
-  }
+  let(:proposal) { FactoryGirl.create(:proposal, :with_approvers, :with_cart) }
   let(:cart) { proposal.cart }
   let(:approval) { proposal.approvals.first }
   let(:approver) { approval.user }
@@ -28,9 +24,13 @@ describe CommunicartMailer do
     expect_any_instance_of(Exporter::Approvals).to receive(:to_csv)
   end
 
-  describe 'cart notification email' do
+  before do
+    cart.update_attribute(:external_id, 13579)
+  end
+
+  describe 'proposal_notification_email' do
     let!(:token) { approval.create_api_token! }
-    let(:mail) { CommunicartMailer.cart_notification_email('email.to.email@testing.com', approval) }
+    let(:mail) { CommunicartMailer.proposal_notification_email('email.to.email@testing.com', approval) }
     let(:body) { mail.body.encoded }
     let(:approval_uri) do
       doc = Capybara.string(body)
@@ -78,14 +78,14 @@ describe CommunicartMailer do
     end
 
 
-    context 'attaching a csv of the cart activity' do
-      it 'generates csv attachments for an approved cart' do
+    context 'attaching a csv of the proposal activity' do
+      it 'generates csv attachments for an approved proposal' do
         approval.proposal.update(status: 'approved')
         expect_csvs_to_be_exported
         mail
       end
 
-      it 'does not generate csv attachments for an unapproved cart' do
+      it 'does not generate csv attachments for an unapproved proposal' do
         expect_any_instance_of(Exporter::Base).not_to receive(:to_csv)
         mail
       end
@@ -96,16 +96,18 @@ describe CommunicartMailer do
         expect(body).to include('Purchase Request')
       end
 
-      it 'renders a custom template for ncr carts' do
+      it 'renders a custom template for ncr work orders' do
         work_order = FactoryGirl.create(:ncr_work_order)
-        approval.cart.proposal.client_data = work_order
-        approval.cart.proposal.save
+        proposal = approval.proposal
+        proposal.client_data = work_order
+        proposal.save!
+        expect(proposal.client).to eq('ncr')
         expect(body).to include('ncr-layout')
       end
     end
   end
 
-  describe 'approval reply received email' do
+  describe 'approval_reply_received_email' do
     let(:mail) { CommunicartMailer.approval_reply_received_email(approval) }
 
     before do
@@ -138,14 +140,14 @@ describe CommunicartMailer do
 
     end
 
-    context 'attaching a csv of the cart activity' do
-      it 'generates csv attachments for an approved cart' do
+    context 'attaching a csv of the proposal activity' do
+      it 'generates csv attachments for an approved proposal' do
         approval.proposal.update(status: 'approved')
         expect_csvs_to_be_exported
         mail
       end
 
-      it 'does not generate csv attachments for an unapproved cart' do
+      it 'does not generate csv attachments for an unapproved proposal' do
         expect_any_instance_of(Exporter::Base).not_to receive(:to_csv)
         mail
       end
@@ -153,13 +155,13 @@ describe CommunicartMailer do
   end
 
   describe 'comment_added_email' do
-    let(:cart) { FactoryGirl.create(:cart) }
-    let(:comment) { FactoryGirl.create(:comment, proposal: cart.proposal) }
+    let(:proposal) { FactoryGirl.create(:proposal, :with_cart) }
+    let(:comment) { FactoryGirl.create(:comment, proposal: proposal) }
     let(:email) { "commenter@some-dot-gov.gov" }
     let(:mail) { CommunicartMailer.comment_added_email(comment, email) }
 
     it 'renders the subject' do
-      expect(mail.subject).to eq("A comment has been added to Cart ##{cart.id}")
+      expect(mail.subject).to eq("A comment has been added to Cart #13579")
     end
 
     it 'renders the receiver email' do
@@ -172,10 +174,10 @@ describe CommunicartMailer do
     end
   end
 
-  describe 'cart observer received email' do
-    let(:observation) { cart.add_observer('observer1@some-dot-gov.gov') }
+  describe 'proposal_observer_email' do
+    let(:observation) { proposal.add_observer('observer1@some-dot-gov.gov') }
     let(:observer) { observation.user }
-    let(:mail) { CommunicartMailer.cart_observer_email(observer.email_address, cart) }
+    let(:mail) { CommunicartMailer.proposal_observer_email(observer.email_address, proposal) }
 
     it 'renders the subject' do
       expect(mail.subject).to eq("Communicart Approval Request from #{proposal.requester.full_name}: Please review Cart #13579")
@@ -190,22 +192,22 @@ describe CommunicartMailer do
       expect(sender_names(mail)).to eq([nil])
     end
 
-    context 'attaching a csv of the cart activity' do
-      it 'generates csv attachments for an approved cart' do
-        cart.proposal.update(status: 'approved')
+    context 'attaching a csv of the proposal activity' do
+      it 'generates csv attachments for an approved proposal' do
+        proposal.update(status: 'approved')
         expect_csvs_to_be_exported
         mail
       end
 
-      it 'does not generate csv attachments for an unapproved cart' do
+      it 'does not generate csv attachments for an unapproved proposal' do
         expect_any_instance_of(Exporter::Base).not_to receive(:to_csv)
         mail
       end
     end
   end
 
-  describe 'sent confirmation email' do
-    let(:mail) { CommunicartMailer.proposal_created_confirmation(cart) }
+  describe 'proposal_created_confirmation' do
+    let(:mail) { CommunicartMailer.proposal_created_confirmation(proposal) }
 
     it 'renders the subject' do
       expect(mail.subject).to eq "Your request for Cart #13579 has been sent successfully."

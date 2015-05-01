@@ -21,7 +21,7 @@ describe "GSA 18f Purchase Request Form" do
     end
 
     it "saves a Cart with the attributes" do
-      expect(Dispatcher).to receive(:deliver_new_cart_emails)
+      expect(Dispatcher).to receive(:deliver_new_proposal_emails)
 
       visit '/gsa18f/procurements/new'
       fill_in "Product Name and Description", with: "buying stuff"

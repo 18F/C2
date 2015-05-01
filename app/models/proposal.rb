@@ -6,6 +6,7 @@ class Proposal < ActiveRecord::Base
   has_one :cart
   has_many :approvals
   has_many :approvers, through: :approvals, source: :user
+  has_many :api_tokens, through: :approvals
   has_many :attachments
   has_many :approval_delegates, through: :approvers, source: :outgoing_delegates
   has_many :comments
@@ -111,8 +112,8 @@ class Proposal < ActiveRecord::Base
     [self.updated_at.to_i, self.client_data_legacy.version].max
   end
 
+
   #### state machine methods ####
-  # TODO remove dependence on Cart
 
   def on_pending_entry(prev_state, event)
     if self.approvals.where.not(status: 'approved').empty?
@@ -122,18 +123,17 @@ class Proposal < ActiveRecord::Base
 
   def on_rejected_entry(prev_state, event)
     if prev_state.name != :rejected
-      Dispatcher.on_cart_rejected(self.cart)
+      Dispatcher.on_proposal_rejected(self)
     end
   end
 
-  # @Todo: this is not used anymore. Delete?
   def restart
     # Note that none of the state machine's history is stored
-    self.cart.api_tokens.update_all(expires_at: Time.now)
-    self.cart.approvals.each do |approval|
+    self.api_tokens.update_all(expires_at: Time.now)
+    self.approvals.each do |approval|
       approval.restart!
     end
-    Dispatcher.deliver_new_cart_emails(self.cart)
+    Dispatcher.deliver_new_proposal_emails(self)
   end
 
   ###############################

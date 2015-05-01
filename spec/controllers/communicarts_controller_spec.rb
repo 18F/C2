@@ -7,7 +7,7 @@ describe CommunicartsController do
 
     context 'approval group is indicated' do
       before do
-        expect(Dispatcher).to receive(:deliver_new_cart_emails)
+        expect(Dispatcher).to receive(:deliver_new_proposal_emails)
         approval_group # create
         json_params['approvalGroup'] = "anotherApprovalGroupName"
       end
@@ -38,13 +38,13 @@ describe CommunicartsController do
 
       it 'renders a navigation template' do
         post 'send_cart', json_params
-        expect(response).to render_template(partial: 'navigator/_cart_mail')
+        expect(response).to render_template(partial: 'navigator/_proposal_mail')
       end
 
       it 'renders the default template' do
         json_params['properties'] = {}
         post 'send_cart', json_params
-        expect(response).to render_template(partial: '_cart_mail')
+        expect(response).to render_template(partial: '_proposal_mail')
       end
     end
 

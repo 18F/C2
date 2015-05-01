@@ -1,6 +1,5 @@
-<%#-- "cart" is the critical local variable for using this partial --%>
+<%#-- "proposal" is the critical local variable for using this partial --%>
 <%#-- "title" is used to customize the tile in the h1 below --%>
-<%- proposal = cart.proposal %>
 <div class="row">
   <table class="w-container main-container xs-col-12" border='0' width='100%'>
     <tr>
@@ -12,12 +11,12 @@
         <div class="communicart_description">
           <p>
             Requested by:
-            <strong><%= cart.requester.full_name %></strong>
+            <strong><%= proposal.requester.full_name %></strong>
           </p>
           <p>
             GSA Advantage:
             GSA Advantage:
-            <strong>[Some description] - Cart #<%= cart.proposal.public_identifier %></strong>
+            <strong>[Some description] - Cart #<%= proposal.public_identifier %></strong>
           </p>
         </div>
       </td>

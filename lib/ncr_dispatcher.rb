@@ -5,18 +5,18 @@
 class NcrDispatcher < LinearDispatcher
 
   def requires_approval_notice?(approval)
-    final_approval(approval.cart) == approval
+    final_approval(approval.proposal) == approval
   end
 
-  def final_approval(cart)
-    cart.approvals.last
+  def final_approval(proposal)
+    proposal.approvals.last
   end
 
   # Notify approvers who have already approved that this proposal has been
   # modified
   def on_proposal_update(proposal)
     proposal.approvals.approved.each{|approval|
-      CommunicartMailer.cart_notification_email(
+      CommunicartMailer.proposal_notification_email(
         approval.user_email_address, approval, false).deliver
     }
   end

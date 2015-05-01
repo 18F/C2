@@ -1,17 +1,18 @@
 describe Dispatcher do
-  let(:cart) { FactoryGirl.create(:cart) }
+  let(:proposal) { FactoryGirl.create(:proposal) }
 
-  describe '.deliver_new_cart_emails' do
+  describe '.deliver_new_proposal_emails' do
     it "uses the ParallelDispatcher for parallel approvals" do
-      cart.proposal.flow = 'parallel'
-      expect_any_instance_of(ParallelDispatcher).to receive(:deliver_new_cart_emails).with(cart)
-      Dispatcher.deliver_new_cart_emails(cart)
+      proposal.flow = 'parallel'
+      expect_any_instance_of(ParallelDispatcher).to receive(:deliver_new_proposal_emails).with(proposal)
+      Dispatcher.deliver_new_proposal_emails(proposal)
     end
 
     it "uses the LinearDispatcher for linear approvals" do
-      cart.proposal.flow = 'linear'
-      expect_any_instance_of(LinearDispatcher).to receive(:deliver_new_cart_emails).with(cart)
-      Dispatcher.deliver_new_cart_emails(cart)
+      proposal.flow = 'linear'
+      expect(proposal).to receive(:client_data).and_return(double(client: 'ncr'))
+      expect_any_instance_of(LinearDispatcher).to receive(:deliver_new_proposal_emails).with(proposal)
+      Dispatcher.deliver_new_proposal_emails(proposal)
     end
   end
 
@@ -19,8 +20,8 @@ describe Dispatcher do
     let(:dispatcher) { Dispatcher.new }
 
     it 'creates a new token for the approver' do
-      approval = cart.add_approver('approver1@some-dot-gov.gov')
-      expect(CommunicartMailer).to receive_message_chain(:cart_notification_email, :deliver)
+      approval = proposal.add_approver('approver1@some-dot-gov.gov')
+      expect(CommunicartMailer).to receive_message_chain(:proposal_notification_email, :deliver)
       expect(approval).to receive(:create_api_token!).once
 
       dispatcher.email_approver(approval)

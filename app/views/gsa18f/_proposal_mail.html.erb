@@ -1,12 +1,12 @@
-<div id="ncr-layout">
+<div id="gsa18f-layout">
   <table class="w-container main-container" width='800'>
     <tr>
       <td>
-        <h1 class="communicart_header"><%= title %>: <%= cart.proposal.name %></h1>
+        <h1 class="communicart_header"><%= title %>: <%= proposal.name %></h1>
         <div class="communicart_description">
           <p>
             Requested by:
-            <strong><%= cart.requester.full_name %></strong>
+            <strong><%= proposal.requester.full_name %></strong>
           </p>
         </div>
       </td>
@@ -16,8 +16,8 @@
 
     <tr>
       <td>
-        <%= client_partial(cart.proposal.client, 'proposal_properties',
-                           locals: {proposal: cart.proposal}) %>
+        <%= client_partial(proposal.client, 'proposal_properties',
+                           locals: {proposal: proposal}) %>
       </td>
     </tr>
   </table>

@@ -13,7 +13,7 @@ describe "National Capital Region proposals" do
     end
 
     it "saves a Proposal with the attributes" do
-      expect(Dispatcher).to receive(:deliver_new_cart_emails)
+      expect(Dispatcher).to receive(:deliver_new_proposal_emails)
 
       visit '/ncr/work_orders/new'
       fill_in 'Name', with: "buying stuff"

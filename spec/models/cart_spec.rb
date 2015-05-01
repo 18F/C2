@@ -125,7 +125,7 @@ describe Cart do
 
     it "creates new API tokens" do
       cart = FactoryGirl.create(:cart_with_approvals)
-      Dispatcher.deliver_new_cart_emails(cart)
+      cart.approvals.each(&:create_api_token!)
       expect(cart.api_tokens.length).to eq(2)
 
       cart.restart!
