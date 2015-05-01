@@ -13,5 +13,39 @@ describe 'proposals' do
       expect(response.status).to eq(200)
     end
   end
-end
 
+  describe 'POST /proposals/:id/approve' do
+    it "updates the status of the Proposal" do
+      proposal = FactoryGirl.create(:proposal, :with_approver)
+      approver = proposal.approvers.first
+      login_as(approver)
+
+      post "/proposals/#{proposal.id}/approve"
+
+      expect(response).to redirect_to("/proposals/#{proposal.id}")
+      proposal.reload
+      expect(proposal.status).to eq('approved')
+    end
+
+    it "fails if not signed in" do
+      proposal = FactoryGirl.create(:proposal, :with_approver)
+      post "/proposals/#{proposal.id}/approve"
+
+      expect(response.status).to redirect_to('/')
+      proposal.reload
+      expect(proposal.status).to eq('pending')
+    end
+
+    it "fails if user is not involved with the request" do
+      proposal = FactoryGirl.create(:proposal, :with_approver)
+      stranger = FactoryGirl.create(:user)
+      login_as(stranger)
+
+      post "/proposals/#{proposal.id}/approve"
+
+      expect(response.status).to redirect_to('/proposals')
+      proposal.reload
+      expect(proposal.status).to eq('pending')
+    end
+  end
+end

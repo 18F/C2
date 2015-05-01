@@ -1,6 +1,6 @@
 class ProposalsController < ApplicationController
   before_filter :authenticate_user!
-  before_filter ->{authorize self.proposal}, only: [:show]
+  before_filter ->{authorize self.proposal}, only: [:show, :approve]
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
   helper_method :display_status
 
@@ -17,6 +17,11 @@ class ProposalsController < ApplicationController
 
   def archive
     @proposals = policy_scope(Proposal).closed.order('created_at DESC')
+  end
+
+  def approve
+    proposal.approve!
+    redirect_to proposal
   end
 
   protected

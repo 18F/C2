@@ -56,11 +56,11 @@ class ProposalPolicy
   def can_approve_or_reject!
     approver! && pending_approval!
   end
+  alias_method :can_approve!, :can_approve_or_reject!
 
   def can_edit!
     author! && not_approved!
   end
-
   alias_method :can_update!, :can_edit!
 
   def can_show!

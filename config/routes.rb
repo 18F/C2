@@ -25,6 +25,10 @@ C2::Application.routes.draw do
   }
 
   resources :proposals, only: [:index, :show] do
+    member do
+      post 'approve'
+    end
+
     collection do
       get 'archive'
     end
