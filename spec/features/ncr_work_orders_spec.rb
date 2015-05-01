@@ -16,7 +16,7 @@ describe "National Capital Region proposals" do
       expect(Dispatcher).to receive(:deliver_new_proposal_emails)
 
       visit '/ncr/work_orders/new'
-      fill_in 'Name', with: "buying stuff"
+      fill_in 'Project title', with: "buying stuff"
       fill_in 'Description', with: "desc content"
       choose 'BA80'
       fill_in 'Vendor', with: 'ACME'
@@ -59,7 +59,7 @@ describe "National Capital Region proposals" do
 
     it "doesn't save when the amount is too high" do
       visit '/ncr/work_orders/new'
-      fill_in 'Name', with: "buying stuff"
+      fill_in 'Project title', with: "buying stuff"
       choose 'BA80'
       fill_in 'Vendor', with: 'ACME'
       fill_in 'Amount', with: 10_000
@@ -76,7 +76,7 @@ describe "National Capital Region proposals" do
 
     it "includes has overwritten field names" do
       visit '/ncr/work_orders/new'
-      fill_in 'Name', with: "buying stuff"
+      fill_in 'Project title', with: "buying stuff"
       choose 'BA80'
       fill_in 'RWA Number', with: 'NumNum'
       fill_in 'Vendor', with: 'ACME'
@@ -204,7 +204,7 @@ describe "National Capital Region proposals" do
       before do
         visit '/ncr/work_orders/new'
 
-        fill_in 'Name', with: "buying stuff"
+        fill_in 'Project title', with: "buying stuff"
         fill_in 'Vendor', with: 'ACME'
         fill_in 'Amount', with: 123.45
         fill_in "Approving Official's Email Address", with: 'approver@example.com'
