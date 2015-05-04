@@ -7,6 +7,3 @@
       = @start_date.year.to_s + ")"
 
   = render partial: "ncr/proposal_list", locals: {proposals: @proposals}
-
-  - if @back_to
-    = link_to ("Back to " + @back_to[:name]), @back_to[:path]

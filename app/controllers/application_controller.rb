@@ -1,11 +1,12 @@
 class ApplicationController < ActionController::Base
   include Pundit    # For authorization checks
+  include ReturnToHelper
 
   helper ValueHelper
   add_template_helper ClientHelper
 
   protect_from_forgery with: :exception
-  helper_method :current_user, :signed_in?
+  helper_method :current_user, :signed_in?, :return_to
 
   protected
   # We are overriding this method to account for permission trees. See
@@ -28,9 +29,20 @@ class ApplicationController < ActionController::Base
 
   def param_date(sym)
     begin
-      Date.strptime(params[sym])
+      Date.strptime(params[sym].to_s)
     rescue
       nil
+    end
+  end
+
+  def return_to
+    if params[:return_to]
+      return_to = params.require(:return_to)
+      proper_sig = self.make_return_to(return_to.require(:name),
+                                       return_to.require(:path))[:sig]
+      if return_to.require(:sig) == proper_sig
+        return_to.permit([:path, :name])
+      end
     end
   end
 

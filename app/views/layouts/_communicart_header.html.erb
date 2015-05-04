@@ -35,6 +35,10 @@
 
 <%- unless excluded_portal_link %>
   <ul id='breadcrumb-nav'>
-    <li><%= link_to "Back to main portal", proposals_path %></li>
+    <%- if return_to %>
+      <li><%= link_to "Back to " + return_to[:name], return_to[:path] %></li>
+    <%- else -%>
+      <li><%= link_to "Back to main portal", proposals_path %></li>
+    <%- end %>
   </ul>
 <%- end %>

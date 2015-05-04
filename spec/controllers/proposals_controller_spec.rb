@@ -48,11 +48,36 @@ describe ProposalsController do
     end
 
     it 'should redirect random users' do
-      proposal = FactoryGirl.create(:proposal, :with_cart,
-                                    requester: FactoryGirl.create(:user))
+      proposal = FactoryGirl.create(:proposal)
       get :show, id: proposal.id
       expect(response).to redirect_to(proposals_path)
       expect(flash[:alert]).to be_present
+    end
+  end
+
+  describe '#query' do
+    it 'should only include proposals user is a part of' do
+      FactoryGirl.create(:proposal)
+      get :query
+      expect(assigns(:proposals)).to eq([@cart1.proposal])
+    end
+
+    it 'should filter results by date range' do
+      past_proposal = FactoryGirl.create(
+        :proposal, created_at: Date.new(2012, 5, 6), requester: user)
+      get :query
+      expect(assigns(:proposals)).to eq([@cart1.proposal, past_proposal])
+
+      get :query, start_date: '2012-05-04', end_date: '2012-05-07'
+      expect(assigns(:proposals)).to eq([past_proposal])
+
+      get :query, start_date: '2012-05-04', end_date: '2012-05-06'
+      expect(assigns(:proposals)).to eq([])
+    end
+
+    it 'ignores bad input' do
+      get :query, start_date: 'dasdas'
+      expect(assigns(:proposals)).to eq([@cart1.proposal])
     end
   end
 end

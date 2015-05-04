@@ -31,11 +31,6 @@ class ProposalsController < ApplicationController
     if @end_date
       @proposals = @proposals.where('created_at < ?', @end_date)
     end
-    if params[:back_to]
-      @back_to = params.require(:back_to).permit([:path, :name])
-      @back_to.require(:path)
-      @back_to.require(:name)
-    end
   end
 
   protected
