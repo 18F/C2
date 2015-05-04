@@ -36,7 +36,8 @@ module TokenAuth
   end
 
   def auth_errors(exception)
-    if exception.record == :api_token
+    case exception.record
+    when :api_token
       session[:return_to] = request.fullpath
       if signed_in?
         flash[:error] = exception.message
@@ -44,6 +45,8 @@ module TokenAuth
       else
         redirect_to root_path, alert: "Please sign in to complete this action."
       end
+    when Proposal
+      redirect_to proposals_path, alert: "You are not allowed to see that proposal"
     else
       flash[:error] = exception.message
       redirect_to self.proposal

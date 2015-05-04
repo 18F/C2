@@ -1,7 +1,9 @@
 class ProposalsController < ApplicationController
-  before_filter :authenticate_user!
-  before_filter ->{authorize self.proposal}, only: [:show, :approve]
-  rescue_from Pundit::NotAuthorizedError, with: :auth_errors
+  include TokenAuth
+
+  before_filter :authenticate_user!, except: :approve
+  before_filter ->{authorize self.proposal}, only: :show
+  before_filter :validate_access, only: :approve
   helper_method :display_status
 
   def show
@@ -27,10 +29,5 @@ class ProposalsController < ApplicationController
   protected
   def proposal
     @cached_proposal ||= Proposal.find params[:id]
-  end
-
-  def auth_errors(exception)
-    redirect_to proposals_path,
-      alert: "You are not allowed to see that proposal"
   end
 end

@@ -26,12 +26,21 @@ class ApiTokenPolicy
                      "Something went wrong with the token (already used)")
   end
 
+  def cart?
+    !!@params[:cart_id]
+  end
+
   def correct_cart!
     exists! && check(@api_token.cart_id == @params[:cart_id].to_i,
                      "Something went wrong with the token (wrong cart)")
   end
 
+  def correct_proposal!
+    exists! && check(@api_token.proposal.id == @params[:id].to_i,
+                     "Something went wrong with the token (wrong proposal)")
+  end
+
   def valid!
-    exists! && not_expired! && not_used! && correct_cart!
+    exists! && not_expired! && not_used! && (cart? ? correct_cart! : correct_proposal!)
   end
 end

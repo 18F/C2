@@ -37,7 +37,7 @@ describe 'proposals' do
     end
 
     it "fails if user is not involved with the request" do
-      proposal = FactoryGirl.create(:proposal, :with_approver)
+      proposal = FactoryGirl.create(:proposal)
       stranger = FactoryGirl.create(:user)
       login_as(stranger)
 
@@ -46,6 +46,18 @@ describe 'proposals' do
       expect(response.status).to redirect_to('/proposals')
       proposal.reload
       expect(proposal.status).to eq('pending')
+    end
+
+    it "supports token auth" do
+      proposal = FactoryGirl.create(:proposal, :with_approver)
+      approval = proposal.approvals.first
+      token = approval.create_api_token!
+
+      post "/proposals/#{proposal.id}/approve", cch: token.access_token
+
+      expect(response).to redirect_to("/proposals/#{proposal.id}")
+      proposal.reload
+      expect(proposal.status).to eq('approved')
     end
   end
 end
