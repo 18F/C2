@@ -19,17 +19,14 @@ module CommunicartMailerHelper
     user.outgoing_delegates.empty?
   end
 
-  def approval_action_url(approval, action = 'approve')
-    opts = {
-      approver_action: action,
-      cart_id: approval.cart_id,
-      version: approval.proposal.version
-
-    }
+  # approve-only at the moment
+  def approval_action_url(approval)
+    proposal = approval.proposal
+    opts = { version: proposal.version }
     if auto_login?(approval.user)
       opts[:cch] = approval.api_token.access_token
     end
 
-    approval_response_url(opts)
+    approve_proposal_url(proposal, opts)
   end
 end

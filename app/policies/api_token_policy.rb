@@ -30,6 +30,7 @@ class ApiTokenPolicy
     !!@params[:cart_id]
   end
 
+  # deprecated
   def correct_cart!
     exists! && check(@api_token.cart_id == @params[:cart_id].to_i,
                      "Something went wrong with the token (wrong cart)")

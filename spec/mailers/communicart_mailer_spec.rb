@@ -56,10 +56,8 @@ describe CommunicartMailer do
     end
 
     it "uses the approval URL" do
-      expect(approval_uri.path).to eq('/approval_response')
+      expect(approval_uri.path).to eq("/proposals/#{proposal.id}/approve")
       expect(approval_uri.query_values).to eq(
-        'approver_action' => 'approve',
-        'cart_id' => cart.id.to_s,
         'cch' => token.access_token,
         'version' => cart.version.to_s
       )

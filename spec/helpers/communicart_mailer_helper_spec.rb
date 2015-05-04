@@ -1,32 +1,34 @@
 describe CommunicartMailerHelper do
   describe '#approval_action_url' do
     it "returns a URL" do
-      approval = FactoryGirl.create(:approval, :with_cart, :with_user)
+      approval = FactoryGirl.create(:approval, :with_proposal, :with_user)
       token = approval.create_api_token!
+      proposal = approval.proposal
+
+      expect(proposal).to receive(:version).and_return(123)
 
       url = helper.approval_action_url(approval)
       uri = Addressable::URI.parse(url)
+      expect(uri.path).to eq("/proposals/#{proposal.id}/approve")
       expect(uri.query_values).to eq(
-        'approver_action' => 'approve',
-        'cart_id' => approval.cart_id.to_s,
         'cch' => token.access_token,
-        'version' => approval.proposal.version.to_s
+        'version' => '123'
       )
     end
 
-    it "links to the cart if the approver has delegates" do
+    it "leaves out the token if the approver has delegates" do
       approver = FactoryGirl.create(:user, :with_delegate)
-      approval = FactoryGirl.create(:approval, :with_cart, user: approver)
+      approval = FactoryGirl.create(:approval, :with_proposal, user: approver)
       approval.create_api_token!
+      proposal = approval.proposal
+
+      expect(proposal).to receive(:version).and_return(123)
 
       url = helper.approval_action_url(approval)
       uri = Addressable::URI.parse(url)
-      expect(uri.path).to eq('/approval_response')
-      cart = approval.cart
+      expect(uri.path).to eq("/proposals/#{proposal.id}/approve")
       expect(uri.query_values).to eq(
-        'approver_action' => 'approve',
-        'cart_id' => cart.id.to_s,
-        'version' => cart.version.to_s
+        'version' => '123'
       )
     end
 
