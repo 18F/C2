@@ -37,6 +37,6 @@ describe Ncr::DashboardController do
       expect(jan[:cost]).to eq(1 + 2)
     end
 
-    it 'includes months with no proposls'   # @todo
+    it 'includes months with no proposals'   # @todo
   end
 end
