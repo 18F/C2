@@ -77,7 +77,7 @@ module Ncr
     def permitted_params
       fields = Ncr::WorkOrder.relevant_fields(
         params[:ncr_work_order][:expense_type])
-      params.require(:ncr_work_order).permit(:name, *fields)
+      params.require(:ncr_work_order).permit(:project_title, *fields)
     end
 
     def errors

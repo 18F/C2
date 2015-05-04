@@ -136,7 +136,7 @@ describe Ncr::WorkOrder do
     let (:work_order) { FactoryGirl.create(:ncr_work_order, :full) }
     it 'notifies no one when edited if no one has already approved' do
       expect {
-        work_order.update(name: 'New Name')
+        work_order.update(project_title: 'New Name')
       }.not_to change {deliveries.count}
     end
 
@@ -145,7 +145,7 @@ describe Ncr::WorkOrder do
       first_approval.user.update(email_address: 'bob@example.com')
       first_approval.approve!
       expect {
-        work_order.update(name: 'New Name')
+        work_order.update(project_title: 'New Name')
       }.to change { deliveries.count }.by(1)
       expect(deliveries.last.to).to eq(['bob@example.com'])
     end
