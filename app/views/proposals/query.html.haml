@@ -6,4 +6,4 @@
       = "(" + I18n.t("date.abbr_month_names")[@start_date.month]
       = @start_date.year.to_s + ")"
 
-  = render partial: "ncr/proposal_list", locals: {proposals: @proposals}
+  = client_partial (current_user.client_slug || 'ncr'), "proposal_list", locals: {proposals: @proposals}
