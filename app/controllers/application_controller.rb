@@ -26,6 +26,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def param_date(sym)
+    begin
+      Date.strptime(params[sym])
+    rescue
+      nil
+    end
+  end
+
   private
 
   def current_user
@@ -53,5 +61,4 @@ class ApplicationController < ActionController::Base
       redirect_to root_url, :alert => 'You need to sign in for access to this page.'
     end
   end
-
 end

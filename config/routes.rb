@@ -27,6 +27,7 @@ C2::Application.routes.draw do
   resources :proposals, only: [:index, :show] do
     collection do
       get 'archive'
+      get 'query'
     end
 
     resources :comments, only: [:index, :create]
@@ -35,6 +36,7 @@ C2::Application.routes.draw do
 
   namespace :ncr do
     resources :work_orders, except: [:index, :destroy]
+    get '/dashboard' => 'dashboard#index'
   end
 
   namespace :gsa18f do

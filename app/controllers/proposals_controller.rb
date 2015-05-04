@@ -19,6 +19,25 @@ class ProposalsController < ApplicationController
     @proposals = policy_scope(Proposal).closed.order('created_at DESC')
   end
 
+  # @todo - this is acting more like an index; rename existing #index to #mine
+  # or similar, then rename #query to #index
+  def query
+    @proposals = policy_scope(Proposal).order('created_at DESC')
+    @start_date = self.param_date(:start_date)
+    @end_date = self.param_date(:end_date)
+    if @start_date
+      @proposals = @proposals.where('created_at >= ?', @start_date)
+    end
+    if @end_date
+      @proposals = @proposals.where('created_at < ?', @end_date)
+    end
+    if params[:back_to]
+      @back_to = params.require(:back_to).permit([:path, :name])
+      @back_to.require(:path)
+      @back_to.require(:name)
+    end
+  end
+
   protected
   def proposal
     @cached_proposal ||= Proposal.find params[:id]
