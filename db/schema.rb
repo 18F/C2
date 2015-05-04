@@ -65,28 +65,6 @@ ActiveRecord::Schema.define(version: 20150501212215) do
     t.datetime "updated_at"
   end
 
-  create_table "cart_item_traits", force: true do |t|
-    t.text     "name"
-    t.text     "value"
-    t.integer  "cart_item_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "cart_items", force: true do |t|
-    t.string   "vendor"
-    t.text     "description"
-    t.string   "url"
-    t.text     "notes"
-    t.integer  "quantity"
-    t.text     "details"
-    t.string   "part_number"
-    t.float    "price"
-    t.integer  "cart_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "carts", force: true do |t|
     t.string   "name"
     t.datetime "created_at"
