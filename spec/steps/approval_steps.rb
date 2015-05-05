@@ -1,7 +1,7 @@
 module ApprovalSteps
 
   step 'I go to the approval_response page with token' do
-    visit "/approval_response?cart_id=#{@cart.id}&approver_action=approve&cch=#{@token.access_token}"
+    visit "/proposals/#{@cart.proposal_id}/approve?cch=#{@token.access_token}"
   end
 
   step 'I go to the approval_response page without a token' do
@@ -9,7 +9,7 @@ module ApprovalSteps
   end
 
   step 'I go to the approval_response page with invalid token :token' do |token|
-    visit "/approval_response?cart_id=#{@cart.id}&approver_action=approve&cch=#{token}"
+    visit "/proposals/#{@cart.proposal_id}/approve?cch=#{token}"
   end
 
   step "a valid token" do
