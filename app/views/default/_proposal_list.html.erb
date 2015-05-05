@@ -16,8 +16,8 @@
   <%- end %>
   <%- proposals_list.each do |proposal| %>
     <tr>
-      <td class="sixth"><a href="<%= proposal_url(proposal) %>"><%= proposal.public_identifier %></a></td>
-      <td class="first"><a href="<%= proposal_url(proposal) %>"><%= proposal.name %></a></td>
+      <td class="sixth"><a href="<%= proposal_url(proposal) %>" aria-label="<%= proposal.name %>"><%= proposal.public_identifier %></a></td>
+      <td class="first"><a href="<%= proposal_url(proposal) %>" aria-label="<%= proposal.public_identifier %>"><%= proposal.name %></a></td>
       <td class="sixth">
         <%= render partial: 'proposals/review_status',
             locals: {proposal: proposal} %>
