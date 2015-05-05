@@ -13,22 +13,29 @@ class ProposalsController < ApplicationController
   end
 
   def index
-    @proposals = policy_scope(Proposal).order('created_at DESC')
+    @proposals = self.proposals
     @CLOSED_PROPOSAL_LIMIT = 10
   end
 
   def archive
-    @proposals = policy_scope(Proposal).closed.order('created_at DESC')
+    @proposals = self.proposals.closed
   end
 
   def approve
+    # TODO handle delegates
     approval = self.proposal.approval_for(current_user)
     approval.approve!
     redirect_to proposal
   end
 
+
   protected
+
   def proposal
     @cached_proposal ||= Proposal.find params[:id]
+  end
+
+  def proposals
+    policy_scope(Proposal).order('created_at DESC')
   end
 end
