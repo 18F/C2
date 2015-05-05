@@ -24,6 +24,7 @@ describe 'proposals' do
 
       expect(response).to redirect_to("/proposals/#{proposal.id}")
       proposal.reload
+      expect(proposal.approvals.first.status).to eq('approved')
       expect(proposal.status).to eq('approved')
     end
 
@@ -33,6 +34,7 @@ describe 'proposals' do
 
       expect(response.status).to redirect_to('/')
       proposal.reload
+      expect(proposal.approvals.first.status).to eq('pending')
       expect(proposal.status).to eq('pending')
     end
 
@@ -57,6 +59,7 @@ describe 'proposals' do
 
       expect(response).to redirect_to("/proposals/#{proposal.id}")
       proposal.reload
+      expect(proposal.approvals.first.status).to eq('approved')
       expect(proposal.status).to eq('approved')
     end
   end

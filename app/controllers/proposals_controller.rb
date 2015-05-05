@@ -22,7 +22,8 @@ class ProposalsController < ApplicationController
   end
 
   def approve
-    proposal.approve!
+    approval = self.proposal.approval_for(current_user)
+    approval.approve!
     redirect_to proposal
   end
 
