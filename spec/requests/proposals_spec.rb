@@ -15,6 +15,11 @@ describe 'proposals' do
   end
 
   describe 'POST /proposals/:id/approve' do
+    before do
+      allow_any_instance_of(Proposal).to receive(:client).and_return('ACME')
+      allow_any_instance_of(Proposal).to receive(:public_identifier).and_return('123')
+    end
+
     it "updates the status of the Proposal" do
       proposal = FactoryGirl.create(:proposal, :with_approver)
       approver = proposal.approvers.first
