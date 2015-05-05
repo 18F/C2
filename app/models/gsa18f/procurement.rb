@@ -76,7 +76,7 @@ module Gsa18f
 
     # @todo - this is pretty ugly
     def public_identifier
-      self.cart.id
+      "##{self.cart.id}"
     end
 
     def total_price
