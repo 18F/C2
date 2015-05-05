@@ -7,9 +7,11 @@ class CommunicartMailer < ActionMailer::Base
   add_template_helper ClientHelper
 
 
-  def proposal_notification_email(to_email, approval, show_approval_actions=true)
+  def proposal_notification_email(to_email, approval,
+                                  show_approval_actions=true, alert_partial=nil)
     @approval = approval
     @show_approval_actions = show_approval_actions
+    @alert_partial = alert_partial
     proposal = approval.proposal
     from_email = user_email(proposal.requester)
     send_proposal_email(from_email, to_email, proposal)

@@ -55,7 +55,6 @@ module Ncr
         first_approval.destroy
         replacement = self.proposal.add_approver(approver_email)
         replacement.move_to_top
-        Dispatcher.email_approver(replacement)
       end
     end
 

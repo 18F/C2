@@ -113,41 +113,4 @@ describe Ncr::WorkOrder do
         "FY08-#{work_order.id}")
     end
   end
-
-  describe '#update_approver' do
-    let (:work_order) { FactoryGirl.create(:ncr_work_order, :full) }
-    it 'sends an email when the approver changes' do
-      expect {
-        work_order.update_approver("bob@example.com")
-      }.to change {deliveries.count}
-      expect(deliveries.last.to).to eq(["bob@example.com"])
-    end
-
-    it "doesn't send an email when the approver hasn't changed" do
-      approver = work_order.proposal.approvers.first
-      approver.update(email_address: 'bill@example.com')
-      expect {
-        work_order.update_approver("bill@example.com")
-      }.not_to change {deliveries.count}
-    end
-  end
-
-  describe 'updates' do
-    let (:work_order) { FactoryGirl.create(:ncr_work_order, :full) }
-    it 'notifies no one when edited if no one has already approved' do
-      expect {
-        work_order.update(project_title: 'New Name')
-      }.not_to change {deliveries.count}
-    end
-
-    it 'notifies previous approvers when something changes' do
-      first_approval = work_order.proposal.approvals.first
-      first_approval.user.update(email_address: 'bob@example.com')
-      first_approval.approve!
-      expect {
-        work_order.update(project_title: 'New Name')
-      }.to change { deliveries.count }.by(1)
-      expect(deliveries.last.to).to eq(['bob@example.com'])
-    end
-  end
 end
