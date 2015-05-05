@@ -22,9 +22,14 @@ class ProposalsController < ApplicationController
   end
 
   def approve
-    # TODO handle delegates
     approval = self.proposal.approval_for(current_user)
+    if approval.user.delegates_to?(current_user)
+      # assign them to the approval
+      approval.update_attributes!(user: current_user)
+    end
+
     approval.approve!
+    flash[:success] = "You have approved #{proposal.public_identifier}."
     redirect_to proposal
   end
 
