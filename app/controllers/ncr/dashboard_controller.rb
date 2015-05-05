@@ -3,7 +3,12 @@ module Ncr
     before_filter :authenticate_user!
     
     def index
-      queryset = Ncr::WorkOrder.
+      @rows = self.format_results(self.queryset)
+    end
+
+    protected
+    def queryset
+      orm_query = Ncr::WorkOrder.
         joins(:proposal).
         merge(policy_scope(Proposal)).
         select('EXTRACT(YEAR FROM proposals.created_at) as year',
@@ -12,8 +17,13 @@ module Ncr
                'SUM(amount) as cost').
         group('year', 'month').
         order('year DESC', 'month DESC')
+      # Convert the ORM into an array of hashes
+      Ncr::WorkOrder.connection.select_all(orm_query)
+    end
+
+    def format_results(results)
       return_params = self.make_return_to("Dashboard", ncr_dashboard_path)
-      @rows = Ncr::WorkOrder.connection.select_all(queryset).map{|row|
+      results.map{|row|
         start_date = Date.new(row["year"].to_i, row["month"].to_i, 1)
         end_date = start_date + 1.month
         {path: query_proposals_path(start_date: start_date.strftime(),

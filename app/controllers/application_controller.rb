@@ -30,7 +30,7 @@ class ApplicationController < ActionController::Base
   def param_date(sym)
     begin
       Date.strptime(params[sym].to_s)
-    rescue
+    rescue ArgumentError
       nil
     end
   end

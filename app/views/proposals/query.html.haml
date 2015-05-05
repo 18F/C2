@@ -1,9 +1,6 @@
 .inset
   %h1
     Proposals participated in
-    -# A month of time. This can be expanded to include other intervals later
-    - if @start_date && @end_date && @end_date == @start_date + 1.month
-      = "(" + I18n.t("date.abbr_month_names")[@start_date.month]
-      = @start_date.year.to_s + ")"
+    = datespan_header
 
   = client_partial (current_user.client_slug || 'ncr'), "proposal_list", locals: {proposals: @proposals}

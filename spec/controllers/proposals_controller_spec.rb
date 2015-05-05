@@ -79,5 +79,19 @@ describe ProposalsController do
       get :query, start_date: 'dasdas'
       expect(assigns(:proposals)).to eq([@cart1.proposal])
     end
+
+    context "#datespan_header" do
+      render_views
+
+      it 'has a nice header for month spans' do
+        get :query, start_date: '2012-05-01', end_date: '2012-06-01'
+        expect(response.body).to include("May 2012")
+      end
+
+      it 'has a generic header for other dates' do
+        get :query, start_date: '2012-05-02', end_date: '2012-06-02'
+        expect(response.body).to include("2012-05-02 - 2012-06-02")
+      end
+    end
   end
 end
