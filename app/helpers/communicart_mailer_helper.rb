@@ -19,8 +19,7 @@ module CommunicartMailerHelper
     user.outgoing_delegates.empty?
   end
 
-  # approve-only at the moment
-  def approval_action_url(approval)
+  def generate_approve_url(approval)
     proposal = approval.proposal
     opts = { version: proposal.version }
     if auto_login?(approval.user)
