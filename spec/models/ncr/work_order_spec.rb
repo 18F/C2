@@ -35,7 +35,7 @@ describe Ncr::WorkOrder do
         ["Office", Ncr::OFFICES[0]],
         ["RWA Number", "RWWAAA #"],
         ["Vendor", "Some Vend"],
-        ["Work Order", "Some WO#"]
+        ["Work Order / Maximo Ticket Number", "Some WO#"]
       ])
     end
   end
