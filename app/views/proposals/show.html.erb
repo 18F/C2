@@ -185,7 +185,7 @@
 <% if policy(@proposal).can_approve_or_reject? %>
   <div class="centered">
     <p>
-      <%= link_to "Approve", approve_proposal_url(@proposal, version: @proposal.version), class: 'form-button' %>
+      <%= link_to "Approve", approve_proposal_path(@proposal, version: @proposal.version), class: 'form-button' %>
     </p>
   </div>
 <% end %>
