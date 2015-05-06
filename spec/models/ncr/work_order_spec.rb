@@ -150,4 +150,29 @@ describe Ncr::WorkOrder do
       expect(deliveries.last.to).to eq(['bob@example.com'])
     end
   end
+
+  describe 'rwa validations' do
+    let (:work_order) { FactoryGirl.create(:ncr_work_order) }
+    it 'works with one letter followed by 7 numbers' do
+      work_order.rwa_number = 'A1234567'
+      expect(work_order).to be_valid
+    end
+
+    it 'must be 8 chars' do
+      work_order.rwa_number = 'A123456'
+      expect(work_order).not_to be_valid
+    end
+
+    it 'must have a letter at the beginning' do
+      work_order.rwa_number = '12345678'
+      expect(work_order).not_to be_valid
+    end
+
+    it 'is not required' do
+      work_order.rwa_number = nil
+      expect(work_order).to be_valid
+      work_order.rwa_number = ''
+      expect(work_order).to be_valid
+    end
+  end
 end

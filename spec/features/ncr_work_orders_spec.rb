@@ -78,7 +78,7 @@ describe "National Capital Region proposals" do
       visit '/ncr/work_orders/new'
       fill_in 'Project title', with: "buying stuff"
       choose 'BA80'
-      fill_in 'RWA Number', with: 'NumNum'
+      fill_in 'RWA Number', with: 'B9876543'
       fill_in 'Vendor', with: 'ACME'
       fill_in 'Amount', with: 123.45
       fill_in "Approving Official's Email Address", with: 'approver@example.com'
@@ -232,7 +232,7 @@ describe "National Capital Region proposals" do
         choose 'BA61'
         check "This request was an emergency and I received a verbal Notice to Proceed (NTP)"
         choose 'BA80'
-        fill_in 'RWA Number', with: "a 'number'"
+        fill_in 'RWA Number', with: 'R9876543'
         expect {
           click_on 'Submit for approval'
         }.to change { Proposal.count }.from(0).to(1)
