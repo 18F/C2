@@ -11,8 +11,8 @@
 		<meta name="description" content="" />
 		<meta name="keywords" content="" />
 		<!--[if lte IE 8]><%= javascript_include_tag "photon/ie/html5shiv.js" %><![endif]-->
+                <%= stylesheet_link_tag "home" %>
                 <%= javascript_include_tag "photon/photon" %>
-                <%= stylesheet_link_tag "common/header" %>
 		<noscript>
                   <%= stylesheet_link_tag "photon/skel" %>
                   <%= stylesheet_link_tag "photon/style" %>
@@ -25,6 +25,9 @@
 
 		<!-- Header -->
 			<section id="header" style="background">
+                          <% flash_list.each do |key, value| %>
+                            <div class="alert alert-<%= key %> <%= bootstrap_alert_class(key) %>"><%= value %></div>
+                          <% end %>
                           <div class="photon-header-nav-container">
                             <%= render 'layouts/header_nav' %>
                           </div>

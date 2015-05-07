@@ -64,14 +64,3 @@ ul#breadcrumb-nav {
     }
   }
 }
-
-.photon-header-nav-container {
-  position: absolute;
-  right: 0;
-  top: 40px;
-  @media (max-width: 800px) {
-    position: inherit;
-    display: block;
-    top: 0;
-  }
-}
