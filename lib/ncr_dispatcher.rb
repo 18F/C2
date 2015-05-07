@@ -19,7 +19,7 @@ class NcrDispatcher < LinearDispatcher
       CommunicartMailer.notification_for_approver(approval.user_email_address, approval, "already_approved").deliver
     }
     proposal.currently_awaiting_approvals.each{|approval|
-      if approval.api_token
+      if approval.api_token   # Approver's been notified through some other means
         CommunicartMailer.actions_for_approver(approval.user_email_address, approval, "updated").deliver
       else
         approval.create_api_token!
