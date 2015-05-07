@@ -1,24 +1,18 @@
 describe ProposalsController do
   let(:user) { FactoryGirl.create(:user) }
 
-  before do
-    proposal = FactoryGirl.create(:proposal, :with_cart, requester: user)
-    @cart1 = proposal.cart
-  end
-
   describe '#index' do
     before do
       login_as(user)
     end
 
     it 'sets @proposals' do
-      proposal2 = FactoryGirl.create(:proposal, requester: user)
-      proposal3 = FactoryGirl.create(:proposal)
-      proposal3.approvals.create!(user: user)
+      proposal1 = FactoryGirl.create(:proposal, requester: user)
+      proposal2 = FactoryGirl.create(:proposal)
+      proposal2.approvals.create!(user: user)
 
       get :index
-      expect(assigns(:proposals).sort).to eq [
-        @cart1.proposal, proposal2, proposal3]
+      expect(assigns(:proposals).sort).to eq [proposal1, proposal2]
     end
   end
 
@@ -28,15 +22,14 @@ describe ProposalsController do
     end
 
     it 'should show all the closed proposals' do
-      carts = Array.new
-      (1..4).each do |i|
-        proposal = FactoryGirl.create(:proposal, :with_cart, requester: user)
-        temp_cart = proposal.cart
-        temp_cart.approve! unless i==3
-        carts.push(temp_cart)
+      open_proposals = 2.times.map do |i|
+        FactoryGirl.create(:proposal, requester: user, status: 'approved')
       end
+      FactoryGirl.create(:proposal, requester: user)
+
       get :archive
-      expect(assigns(:proposals).size).to eq(3)
+
+      expect(assigns(:proposals).size).to eq(2)
     end
   end
 
@@ -46,15 +39,14 @@ describe ProposalsController do
     end
 
     it 'should allow the requester to see it' do
-      proposal = FactoryGirl.create(:proposal, :with_cart, requester: user)
+      proposal = FactoryGirl.create(:proposal, requester: user)
       get :show, id: proposal.id
       expect(response).not_to redirect_to("/proposals/")
       expect(flash[:alert]).not_to be_present
     end
 
     it 'should redirect random users' do
-      proposal = FactoryGirl.create(:proposal, :with_cart,
-                                    requester: FactoryGirl.create(:user))
+      proposal = FactoryGirl.create(:proposal, requester: FactoryGirl.create(:user))
       get :show, id: proposal.id
       expect(response).to redirect_to(proposals_path)
       expect(flash[:alert]).to be_present
