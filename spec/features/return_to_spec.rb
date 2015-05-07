@@ -21,7 +21,7 @@ describe "the return_to url option" do
     expect(find_link(return_to[:name])[:href]).to eq(return_to[:path])
   end
 
-  it 'validates sig (name)' do
+  it 'send back to main if not a validat sig (name)' do
     different_name = return_to.merge(name: 'other')
     visit query_proposals_path(return_to: different_name)
     expect(page).to have_content('Back to main portal')
@@ -29,7 +29,7 @@ describe "the return_to url option" do
     expect(page).not_to have_content('other')
   end
 
-  it 'validates sig (path)' do
+  it 'send back to main if not a validat sig (name)' do
     different_path = return_to.merge(path: 'other')
     visit query_proposals_path(return_to: different_path)
     expect(page).to have_content('Back to main portal')
