@@ -3,4 +3,4 @@
     Proposals participated in
     = datespan_header(@start_date, @end_date)
 
-  = client_partial (current_user.client_slug), "proposal_list", locals: {proposals: @proposals}
+  = client_partial (current_user.client_slug || 'ncr'), "proposal_list", locals: {proposals: @proposals}
