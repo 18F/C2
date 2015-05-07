@@ -1,2 +1,0 @@
-class ApprovalGroupError < StandardError
-end
