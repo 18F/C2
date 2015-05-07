@@ -35,17 +35,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def return_to
-    if params[:return_to]
-      return_to = params.require(:return_to)
-      proper_sig = self.make_return_to(return_to.require(:name),
-                                       return_to.require(:path))[:sig]
-      if return_to.require(:sig) == proper_sig
-        return_to.permit([:path, :name])
-      end
-    end
-  end
-
   private
 
   def current_user
@@ -69,8 +58,7 @@ class ApplicationController < ActionController::Base
 
   def authenticate_user!
     unless signed_in?
-      session[:return_to] = request.fullpath
-      redirect_to root_url, :alert => 'You need to sign in for access to this page.'
+      redirect_to root_url(return_to: self.make_return_to("Previous", request.fullpath)), :alert => 'You need to sign in for access to this page.'
     end
   end
 end

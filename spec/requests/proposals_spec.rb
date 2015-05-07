@@ -1,4 +1,6 @@
 describe 'proposals' do
+  include ReturnToHelper
+
   describe 'GET /proposals/:id' do
     it "can be viewed by a delegate" do
       proposal = FactoryGirl.create(:proposal, :with_cart)
@@ -32,7 +34,7 @@ describe 'proposals' do
       proposal = FactoryGirl.create(:proposal, :with_approver)
       post "/proposals/#{proposal.id}/approve"
 
-      expect(response.status).to redirect_to('/')
+      expect(response.status).to redirect_to(root_path(return_to: self.make_return_to("Previous", request.fullpath)))
       expect_status(proposal, 'pending')
     end
 
