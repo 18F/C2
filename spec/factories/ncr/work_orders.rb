@@ -6,7 +6,7 @@ FactoryGirl.define do
     not_to_exceed false
     building_number Ncr::BUILDING_NUMBERS[0]
     emergency false
-    rwa_number "RWWAAA #"
+    rwa_number "R1234567"
     office Ncr::OFFICES[0]
     project_title "NCR Name"
 
