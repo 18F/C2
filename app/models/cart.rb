@@ -1,5 +1,3 @@
-require 'csv'
-
 class Cart < ActiveRecord::Base
   include PropMixin
   include ProposalDelegate

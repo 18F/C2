@@ -35,7 +35,7 @@ describe Ncr::WorkOrder do
         ["Office", Ncr::OFFICES[0]],
         ["RWA Number", "RWWAAA #"],
         ["Vendor", "Some Vend"],
-        ["Work Order", "Some WO#"]
+        ["Work Order / Maximo Ticket Number", "Some WO#"]
       ])
     end
   end
@@ -111,6 +111,31 @@ describe Ncr::WorkOrder do
       work_order.update_attribute(:created_at, Date.new(2007, 10, 1))
       expect(work_order.public_identifier).to eq(
         "FY08-#{work_order.id}")
+    end
+  end
+
+  describe 'rwa validations' do
+    let (:work_order) { FactoryGirl.create(:ncr_work_order) }
+    it 'works with one letter followed by 7 numbers' do
+      work_order.rwa_number = 'A1234567'
+      expect(work_order).to be_valid
+    end
+
+    it 'must be 8 chars' do
+      work_order.rwa_number = 'A123456'
+      expect(work_order).not_to be_valid
+    end
+
+    it 'must have a letter at the beginning' do
+      work_order.rwa_number = '12345678'
+      expect(work_order).not_to be_valid
+    end
+
+    it 'is not required' do
+      work_order.rwa_number = nil
+      expect(work_order).to be_valid
+      work_order.rwa_number = ''
+      expect(work_order).to be_valid
     end
   end
 end

@@ -29,6 +29,10 @@ module Ncr
     validates :expense_type, inclusion: {in: EXPENSE_TYPES}, presence: true
     validates :vendor, presence: true
     validates :building_number, presence: true
+    validates :rwa_number, format: {
+      with: /[a-zA-Z][0-9]{7}/,
+      message: "one letter followed by 7 numbers"
+    }, allow_blank: true
     # TODO validates :proposal, presence: true
 
     def set_defaults

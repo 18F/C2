@@ -44,7 +44,7 @@ class CommunicartMailer < ActionMailer::Base
 
     mail(
          to: to_address,
-         subject: "User #{approval.user.email_address} has #{approval.status} #{@proposal.public_identifier}",
+         subject: "User #{approval.user.email_address} has #{approval.status} request #{@proposal.public_identifier}",
          from: user_email(approval.user)
          )
   end
@@ -54,7 +54,7 @@ class CommunicartMailer < ActionMailer::Base
 
     mail(
          to: to_email,
-         subject: "A comment has been added to #{comment.proposal.public_identifier}",
+         subject: "A comment has been added to request #{comment.proposal.public_identifier}",
          from: user_email(comment.user)
          )
   end
@@ -86,7 +86,7 @@ class CommunicartMailer < ActionMailer::Base
 
     mail(
       to: to_email,
-      subject: "Communicart Approval Request from #{proposal.requester.full_name}: Please review #{proposal.public_identifier}",
+      subject: "Communicart Approval Request from #{proposal.requester.full_name}: Please review request #{proposal.public_identifier}",
       from: from_email
     )
   end

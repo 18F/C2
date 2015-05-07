@@ -8,9 +8,16 @@ FactoryGirl.define do
       cart
     end
 
-    trait :with_approvers do
+    trait :with_approver do
       after :create do |proposal|
         proposal.add_approver('approver1@some-dot-gov.gov')
+      end
+    end
+
+    trait :with_approvers do
+      with_approver
+
+      after :create do |proposal|
         proposal.add_approver('approver2@some-dot-gov.gov')
       end
     end
