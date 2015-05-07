@@ -1,12 +1,9 @@
 describe ProposalsController do
-  # TODO clean up this setup
   let(:user) { FactoryGirl.create(:user) }
-  let(:approval_group1) { FactoryGirl.create(:approval_group, name: 'test-approval-group1') }
 
   before do
-    UserRole.create!(user_id: user.id, approval_group_id: approval_group1.id, role: 'requester')
-    params = {'approvalGroup' => 'test-approval-group1', 'cartName' => 'cart1' }
-    @cart1 = Commands::Approval::InitiateCartApproval.new.perform(params)
+    proposal = FactoryGirl.create(:proposal, :with_cart, requester: user)
+    @cart1 = proposal.cart
   end
 
   describe '#index' do
@@ -15,8 +12,6 @@ describe ProposalsController do
     end
 
     it 'sets @proposals' do
-      approval_group1
-
       proposal2 = FactoryGirl.create(:proposal, requester: user)
       proposal3 = FactoryGirl.create(:proposal)
       proposal3.approvals.create!(user: user)
@@ -35,10 +30,8 @@ describe ProposalsController do
     it 'should show all the closed proposals' do
       carts = Array.new
       (1..4).each do |i|
-        params = {}
-        params['approvalGroup'] =  'test-approval-group1'
-        params['cartName'] = "cart#{i}"
-        temp_cart = Commands::Approval::InitiateCartApproval.new.perform(params)
+        proposal = FactoryGirl.create(:proposal, :with_cart, requester: user)
+        temp_cart = proposal.cart
         temp_cart.approve! unless i==3
         carts.push(temp_cart)
       end
