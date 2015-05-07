@@ -12,6 +12,7 @@
 		<meta name="keywords" content="" />
 		<!--[if lte IE 8]><%= javascript_include_tag "photon/ie/html5shiv.js" %><![endif]-->
                 <%= javascript_include_tag "photon/photon" %>
+                <%= stylesheet_link_tag "common/header" %>
 		<noscript>
                   <%= stylesheet_link_tag "photon/skel" %>
                   <%= stylesheet_link_tag "photon/style" %>
@@ -24,6 +25,9 @@
 
 		<!-- Header -->
 			<section id="header" style="background">
+                          <div class="photon-header-nav-container">
+                            <%= render 'layouts/header_nav' %>
+                          </div>
 				<div class="inner">
                                   <span class="icon major"><%= image_tag "img-logo-communicart-portal.png", alt: "Communicart Logo" %></span>
 					<h1>Approvals Without the Hassle</h1>
