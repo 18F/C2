@@ -73,7 +73,7 @@ The NCR use case was built around GSA service centers (paint shops, landscapers,
 
 ### [Navigator](https://github.com/GSA/CAP-ACQUISITION_NAVIGATOR)
 
-Their application initiates requests through the `/send_cart` API. They use the parallel flow, and specify approval groups rather than individual approvers.
+This is an old use case, which is no longer active.
 
 ## Production
 
