@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <title>
-    <%= yield(:title) != '' ? "#{yield(:title)} - " : ''%>
+    <%= "#{yield(:title)} - " if content_for(:title).present? %>
     C2
   </title>
   <%= stylesheet_link_tag "application", media: "all" %>
