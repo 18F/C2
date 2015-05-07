@@ -105,12 +105,14 @@ describe Ncr::WorkOrder do
     it 'includes the fiscal year' do
       work_order = FactoryGirl.create(:ncr_work_order, :with_proposal,
                                       created_at: Date.new(2007, 1, 15))
+      proposal_id = work_order.proposal.id
+
       expect(work_order.public_identifier).to eq(
-        "FY07-#{work_order.id}")
+        "FY07-#{proposal_id}")
 
       work_order.update_attribute(:created_at, Date.new(2007, 10, 1))
       expect(work_order.public_identifier).to eq(
-        "FY08-#{work_order.id}")
+        "FY08-#{proposal_id}")
     end
   end
 

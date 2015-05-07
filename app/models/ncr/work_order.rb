@@ -102,7 +102,7 @@ module Ncr
     end
 
     def public_identifier
-      "FY" + self.fiscal_year.to_s.rjust(2, "0") + "-#{self.id}"
+      "FY" + self.fiscal_year.to_s.rjust(2, "0") + "-#{self.proposal.id}"
     end
 
     def total_price
