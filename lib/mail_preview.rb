@@ -1,7 +1,7 @@
 class MailPreview < MailView
-  def proposal_notification_email
+  def actions_for_approver
     # TODO mock access token, if one isn't present
-    mail = CommunicartMailer.proposal_notification_email(email, pending_approval)
+    mail = CommunicartMailer.actions_for_approver(email, pending_approval)
     inline_styles(mail)
   end
 
