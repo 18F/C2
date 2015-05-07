@@ -28,10 +28,10 @@ describe CommunicartMailer do
     cart.update_attribute(:external_id, 13579)
   end
 
-  describe 'proposal_notification_email' do
+  describe 'notification_for_approver' do
     let!(:token) { approval.create_api_token! }
-    let(:mail) { CommunicartMailer.proposal_notification_email('email.to.email@testing.com', approval) }
-    let(:body) { mail.body.encoded }
+    let(:action_mail) { CommunicartMailer.actions_for_approver('email.to.email@testing.com', approval) }
+    let(:body) { action_mail.body.encoded }
     let(:approval_uri) do
       doc = Capybara.string(body)
       link = doc.find_link('Approve')
@@ -42,17 +42,17 @@ describe CommunicartMailer do
 
     it 'renders the subject' do
       requester.update_attributes(first_name: 'Liono', last_name: 'Requester')
-      expect(mail.subject).to eq('Communicart Approval Request from Liono Requester: Please review request Cart #13579')
+      expect(action_mail.subject).to eq('Communicart Approval Request from Liono Requester: Please review request Cart #13579')
     end
 
     it 'renders the receiver email' do
-      expect(mail.to).to eq(["email.to.email@testing.com"])
+      expect(action_mail.to).to eq(["email.to.email@testing.com"])
     end
 
     it 'renders the sender email' do
       requester.update_attributes(first_name: 'Liono', last_name: 'Requester')
-      expect(mail.from).to eq(['reply@stub.gov'])
-      expect(sender_names(mail)).to eq(['Liono Requester'])
+      expect(action_mail.from).to eq(['reply@stub.gov'])
+      expect(sender_names(action_mail)).to eq(['Liono Requester'])
     end
 
     it "uses the approval URL" do
@@ -80,12 +80,12 @@ describe CommunicartMailer do
       it 'generates csv attachments for an approved proposal' do
         approval.proposal.update(status: 'approved')
         expect_csvs_to_be_exported
-        mail
+        action_mail
       end
 
       it 'does not generate csv attachments for an unapproved proposal' do
         expect_any_instance_of(Exporter::Base).not_to receive(:to_csv)
-        mail
+        action_mail
       end
     end
 
@@ -102,6 +102,36 @@ describe CommunicartMailer do
         expect(proposal.client).to eq('ncr')
         expect(body).to include('ncr-layout')
       end
+    end
+
+    context 'alert templates' do
+      it 'defaults to no specific header' do
+        mail = CommunicartMailer.actions_for_approver('abc@example.com', approval)
+        expect(mail.body.encoded).not_to include('updated')
+        expect(mail.body.encoded).not_to include('already approved')
+      end
+
+      it 'uses already_approved as a particular template' do
+        mail = CommunicartMailer.actions_for_approver('abc@example.com', approval, 'already_approved')
+        expect(mail.body.encoded).to include('updated')
+        expect(mail.body.encoded).to include('already approved')
+      end
+
+      it 'uses updated as a particular template' do
+        mail = CommunicartMailer.actions_for_approver('abc@example.com', approval, 'updated')
+        expect(mail.body.encoded).to include('updated')
+        expect(mail.body.encoded).not_to include('already approved')
+      end
+    end
+
+    it "doesn't include action buttons unless actions_for_approver is used" do
+        mail = CommunicartMailer.notification_for_approver('abc@example.com', approval)
+        expect(mail.body.encoded).not_to include('Approve')
+    end
+
+    it "does include action buttons when actions_for_approver is used" do
+        mail = CommunicartMailer.actions_for_approver('abc@example.com', approval)
+        expect(mail.body.encoded).to include('Approve')
     end
   end
 

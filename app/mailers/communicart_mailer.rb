@@ -7,12 +7,18 @@ class CommunicartMailer < ActionMailer::Base
   add_template_helper ClientHelper
 
 
-  def proposal_notification_email(to_email, approval, show_approval_actions=true)
+  # Approver can approve/reject/take other action
+  def actions_for_approver(to_email, approval, alert_partial=nil)
+    @show_approval_actions = true
+    self.notification_for_approver(to_email, approval, alert_partial)
+  end
+
+  def notification_for_approver(to_email, approval, alert_partial=nil)
     @approval = approval
-    @show_approval_actions = show_approval_actions
+    @alert_partial = alert_partial
     proposal = approval.proposal
     from_email = user_email(proposal.requester)
-    send_proposal_email(from_email, to_email, proposal)
+    send_proposal_email(from_email, to_email, proposal, 'proposal_notification_email')
   end
 
   def proposal_observer_email(to_email, proposal)
@@ -78,14 +84,15 @@ class CommunicartMailer < ActionMailer::Base
     address.format
   end
 
-  def send_proposal_email(from_email, to_email, proposal)
+  def send_proposal_email(from_email, to_email, proposal, template_name=nil)
     @proposal = proposal.decorate
     set_attachments(@proposal)
 
     mail(
       to: to_email,
       subject: "Communicart Approval Request from #{proposal.requester.full_name}: Please review request #{proposal.public_identifier}",
-      from: from_email
+      from: from_email,
+      template_name: template_name
     )
   end
 end

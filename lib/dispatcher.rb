@@ -96,6 +96,6 @@ class Dispatcher
 
   def send_notification_email(approval)
     email = approval.user_email_address
-    CommunicartMailer.proposal_notification_email(email, approval).deliver
+    CommunicartMailer.actions_for_approver(email, approval).deliver
   end
 end
