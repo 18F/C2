@@ -1,6 +1,4 @@
 C2::Application.routes.draw do
-  post 'send_cart' => 'communicarts#send_cart'
-  match 'approval_response', to: 'communicarts#approval_response', via: [:get, :put]
   root :to => 'home#index'
   match "/auth/:provider/callback" => "home#oauth_callback", via: [:get]
   get '/error' => 'home#error'
@@ -25,6 +23,11 @@ C2::Application.routes.draw do
   }
 
   resources :proposals, only: [:index, :show] do
+    member do
+      get 'approve'
+      post 'approve'
+    end
+
     collection do
       get 'archive'
       get 'query'

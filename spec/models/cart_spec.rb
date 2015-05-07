@@ -25,40 +25,6 @@ describe Cart do
     end
   end
 
-  describe '#process_approvals_from_approval_group' do
-    it "copies positions from the user_roles" do
-      cart.user_roles.each do |role|
-        role.position += 1
-        role.save!
-      end
-
-      cart.process_approvals_from_approval_group
-      expect(cart.approvals.order('user_id ASC').map(&:position)).to eq(cart.user_roles.approvers.order('user_id ASC').map(&:position))
-    end
-  end
-
-  describe '#process_approvals_without_approval_group' do
-    it 'excludes blank email addresses' do
-      expect(User).to receive(:find_or_create_by).with(email_address: 'requester1@some-dot-gov.gov').and_call_original
-      expect(User).to receive(:find_or_create_by).with(email_address: 'email1@some-dot-gov.gov').and_call_original
-      # was leaving off the '.gov' a typo? -AF
-      expect(User).to receive(:find_or_create_by).with(email_address: 'email2@some-dot-gov').and_call_original
-
-      params = { 'toAddress' => ["email1@some-dot-gov.gov", "email2@some-dot-gov", ""] }
-      cart.process_approvals_without_approval_group params
-    end
-  end
-
-  describe '#find_cart_without_name' do
-    let(:cart) { FactoryGirl.create(:cart_with_approval_group, name: '30003') }
-    let(:cart_id) { 1357910 }
-    let(:cart_name) {'30003'}
-    it 'finds cart' do
-      c = Cart.existing_or_new_cart({'cartNumber' => 30003})
-      expect(c.name).to eq('30003');
-    end
-  end
-
   context 'scopes' do
     let(:approved_cart1) { FactoryGirl.create(:cart, status: 'approved') }
     let(:approved_cart2) { FactoryGirl.create(:cart, status: 'approved') }

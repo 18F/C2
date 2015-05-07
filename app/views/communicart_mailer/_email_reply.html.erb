@@ -4,7 +4,7 @@
     <td colspan=2 align="center">
       <% if show_approval_actions %>
         <p>
-          <%= link_to "Approve", approval_action_url(approval), class: 'form-button' %>
+          <%= link_to "Approve", generate_approve_url(approval), class: 'form-button' %>
         </p>
       <% end %>
       <p>

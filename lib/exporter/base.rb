@@ -1,3 +1,5 @@
+require 'csv'
+
 module Exporter
   class Base
     attr_reader :proposal

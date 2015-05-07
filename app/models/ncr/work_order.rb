@@ -29,6 +29,10 @@ module Ncr
     validates :expense_type, inclusion: {in: EXPENSE_TYPES}, presence: true
     validates :vendor, presence: true
     validates :building_number, presence: true
+    validates :rwa_number, format: {
+      with: /[a-zA-Z][0-9]{7}/,
+      message: "one letter followed by 7 numbers"
+    }, allow_blank: true
     # TODO validates :proposal, presence: true
 
     def set_defaults
@@ -55,7 +59,6 @@ module Ncr
         first_approval.destroy
         replacement = self.proposal.add_approver(approver_email)
         replacement.move_to_top
-        Dispatcher.email_approver(replacement)
       end
     end
 
@@ -98,7 +101,7 @@ module Ncr
     end
 
     def public_identifier
-      "FY" + self.fiscal_year.to_s.rjust(2, "0") + "-#{self.id}"
+      "FY" + self.fiscal_year.to_s.rjust(2, "0") + "-#{self.proposal.id}"
     end
 
     def total_price
@@ -110,6 +113,9 @@ module Ncr
       self.updated_at.to_i
     end
 
+    def name
+      self.project_title
+    end
 
     protected
 

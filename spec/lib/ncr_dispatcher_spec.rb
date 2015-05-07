@@ -1,5 +1,6 @@
 describe NcrDispatcher do
-  let!(:proposal) { FactoryGirl.create(:proposal, :with_approvers, :with_cart) }
+  let!(:work_order) { FactoryGirl.create(:ncr_work_order, :full) }
+  let(:proposal) { work_order.proposal }
   let(:approvals) { proposal.approvals }
   let(:approval_1) { approvals.first }
   let(:approval_2) { approvals.second }
@@ -7,7 +8,7 @@ describe NcrDispatcher do
 
   describe '#on_approval_approved' do
     it "sends to the requester for the last approval" do
-      approval_1.approve!
+      approval_1.update_attribute(:status, 'accepted')  # skip workflow
       deliveries.clear
 
       ncr_dispatcher.on_approval_approved(approval_2)
@@ -35,6 +36,35 @@ describe NcrDispatcher do
 
     it 'return false when the approval is not last in the approver list' do
       expect(ncr_dispatcher.requires_approval_notice? approval_1).to eq false
+    end
+  end
+
+  describe '#on_proposal_update' do
+    it 'notifies approvers who have already approved' do
+      approval_1.approve!
+      deliveries.clear
+      ncr_dispatcher.on_proposal_update(proposal)
+      email = deliveries[0]
+      expect(email.to).to eq([approval_1.user.email_address])
+      expect(email.html_part.body.to_s).to include("already approved")
+      expect(email.html_part.body.to_s).to include("updated")
+    end
+
+    it 'current approver if they have not be notified before' do
+      ncr_dispatcher.on_proposal_update(proposal)
+      email = deliveries[0]
+      expect(email.to).to eq([approval_1.user.email_address])
+      expect(email.html_part.body.to_s).not_to include("already approved")
+      expect(email.html_part.body.to_s).not_to include("updated")
+    end
+
+    it 'current approver if they have be notified before' do
+      approval_1.create_api_token!
+      ncr_dispatcher.on_proposal_update(proposal)
+      email = deliveries[0]
+      expect(email.to).to eq([approval_1.user.email_address])
+      expect(email.html_part.body.to_s).not_to include("already approved")
+      expect(email.html_part.body.to_s).to include("updated")
     end
   end
 end

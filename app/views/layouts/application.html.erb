@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>C2</title>
+  <title>
+    <%= "#{yield(:title)} - " if content_for(:title).present? %>
+    C2
+  </title>
   <%= stylesheet_link_tag "application", media: "all" %>
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">

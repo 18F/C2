@@ -1,3 +1,4 @@
+<% content_for :title, "#{@proposal.name}" %>
 <div class="inset">
   <div class="row">
 
@@ -185,11 +186,7 @@
 <% if policy(@proposal).can_approve_or_reject? %>
   <div class="centered">
     <p>
-      <%= link_to "Approve",
-          approval_response_path(approver_action: 'approve',
-                                 # @todo: get rid of cart
-                                 cart_id: @proposal.cart.id, version: @proposal.version
-                                 ), class: 'form-button' %>
+      <%= link_to "Approve", approve_proposal_path(@proposal, version: @proposal.version), class: 'form-button' %>
     </p>
   </div>
 <% end %>

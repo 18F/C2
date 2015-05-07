@@ -1,3 +1,4 @@
+<% content_for :title, "My Requests" %> 
 <div class="inset">
   <div class="row pending-pr">
     <div class="col-md-12">
@@ -12,7 +13,7 @@
   </div>
   <div class="row past-pr">
     <div class="col-sm-10">
-      <h3>Recently Closed Purchase Requests</h3>
+      <h3>Recently Completed Purchase Requests</h3>
     </div>
 
     <%= render partial: 'archive_link' %>
@@ -32,6 +33,6 @@
     </div>
 
   <%- else %>
-    <p class="empty-list-label">No recently closed purchase requests</p>
+    <p class="empty-list-label">No recently completed purchase requests</p>
   <%- end %>
 </div>
