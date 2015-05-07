@@ -1,35 +1,89 @@
-<div class="home-main">
-  <div class="home-hdr">
-    <h1>
-      <%= icon('shopping-cart') %><span class="communi"> COMMUNI</span><span class="cart">CART</span>
-    </h1>
-    <h1 id="project_title">Communicart for the Common Acquisition Platform</h1>
-  </div>
-  <div class="home-main-body">
+<!DOCTYPE HTML>
+<!--
+	Photon by HTML5 UP
+	html5up.net | @n33co
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Communicart</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<!--[if lte IE 8]><%= javascript_include_tag "photon/ie/html5shiv.js" %><![endif]-->
+                <%= javascript_include_tag "photon/photon" %>
+		<noscript>
+                  <%= stylesheet_link_tag "photon/skel" %>
+                  <%= stylesheet_link_tag "photon/style" %>
+                  <%= stylesheet_link_tag "photon/style-xlarge" %>
+		</noscript>
+                <!--[if lte IE 9]><%= stylesheet_link_tag "photon/ie/v9.css" %><![endif]-->
+                <!--[if lte IE 8]><%= stylesheet_link_tag "photon/ie/v8.css" %><![endif]-->
+	</head>
+	<body>
 
-      <div class="row">
-        <div class="col-sm-12">
-          <h2 id="project_tagline">&quot;P-Card holders deserve easy, modern, automated management of their shopping carts.&quot;</h2>
-          <p>
-            Welcome to Communicart, an early-stage project to save taxpayer money by making government acquisition more efficient by empowering P-Card holders and GSA Advantage users to purchase as
-            efficiently and effectively as possible.</p>
-          <h3>
-            The Communicart Product (so far...)
-          </h3>
-          <p>We want to ease the communication around shopping carts by building a new object---a <em>Communicart</em>.
-            The Communicart combines the features of a shopping cart with the ease of an informal email conversation to create a permanent, searchable, archived record of why a
-            a particular group of objects was purchased, and who approved the purchase.</p>
-          <p>In the future, we hope to make the Communicart the center of price research and other Market Intelligence.</p>
-          <p>To see what we have working today, you may wish to view this 10-minute video which walks through the features that we currently have implemented.</p>
-          <iframe width="420" height="315" src="https://www.youtube.com/embed/Y4SoAdFMOPA?rel=0" frameborder="0" allowfullscreen></iframe>
-          <p>Our previous functionality, from our initial iteration, was described in <a href="https://www.youtube.com/embed/p8mvNfCLJQI">this video.</a></p>
-          <h3>Our Plans</h3>
-          <p>We've been working on this project since February, 2014.  Our goal is to have a very minimal, but usable product, released by the end of April,
-            and then to churn and burn---to produce improvements as rapidly as we possible.</p>
-          <h3><a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
-          <p>Communicart is being developed by the <a href="https://github.com/18f" >18F Team</a> and you, the users who give us feedback.</p>
+		<!-- Header -->
+			<section id="header" style="background">
+				<div class="inner">
+                                  <span class="icon major"><%= image_tag "img-logo-communicart-portal.png", alt: "Communicart Logo" %></span>
+					<h1>Approvals Without the Hassle</h1>
+					<p>Communicart automates the approval process, eliminating spreadsheets and decluttering your inbox</p>
+				</div>
+			</section>
 
-        </div>
-      </div>
-    </div>
-</div>
+		<!-- One -->
+			<section id="one" class="main style1">
+				<div class="container">
+					<div class="row 150%">
+						<div class="6u 12u$(medium)">
+							<p>Communicart makes government acquisition more efficient by allowing P-Card holders to purchase as quickly and accurately as possible. The results? More time for your staff, better policy adherence, and the knowledge you need to spend more effectively.</p>
+						</div>
+						<div class="6u$ 12u$(medium) important(medium)">
+                                                  <span class="image fit"><%= image_tag "screenshots/Communicart_Screenshot_Combination.png", alt: "Screenshot on Laptop and Mobile Device" %></span>
+						</div>
+					</div>
+				</div>
+			</section>
+
+		<!-- Three -->
+			<section id="three" class="main style2 special">
+				<div class="container">
+					<div class="row 150%">
+						<div class="4u 12u$(medium)">
+                                                  <span class="image fit"><%= image_tag 'screenshots/reporting.png', alt: 'Screenshot: Reporting Dashboard' %></span>
+							<p><strong>Spending Insights</strong> &nbsp; make the most of your budget</p>
+						</div>
+						<div class="4u 12u$(medium)">
+                                                  <span class="image fit"><%= image_tag 'screenshots/intake.png', alt: 'Screenshot: Intake Screen' %></span>
+							<p><strong>Custom Intake</strong> &nbsp; capture the data you care about</p>
+						</div>
+						<div class="4u$ 12u$(medium)">
+							<span class="image fit"><%= image_tag 'screenshots/Communicart_Screenshot_Approvals.png', alt: "Screenshot: Approval Listing" %></span>
+							<p><strong>Centralized Approval Flow</strong> &nbsp; securely manages all your records</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+		<!-- Four -->
+			<section id="four" class="main style1 special">
+	  			<div class="container">
+	  			<div class="row 150%">
+				<div class="6u 12u$(medium)">
+					<p>Join agencies like the <a href="http://www.capitalregionupdates.gov/go/doc/4063/1130963/About-the-National-Capital-Region-NCR-">National Capital Region</a> and <a href="https://18f.gsa.gov/">18F</a> in reclaiming time from your inbox and simplifying your approvals.</p>
+					<ul class="actions uniform">
+						<li><a href="mailto:18F@gsa.gov" class="button special">Contact us to get started</a></li>
+					</ul>
+				</div>
+				<div class="6u 12u$(medium)">
+					<p>Developers, help us refine our product.</p>
+					<ul class="actions uniform">
+						<li><a href="https://github.com/18F/C2" class="button special">Fork us on GitHub</a></li>
+					</ul>
+				</div>
+				</div>
+				</div>
+			</section>
+
+	</body>
+</html>
