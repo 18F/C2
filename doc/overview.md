@@ -71,10 +71,6 @@ The NCR use case was built around GSA service centers (paint shops, landscapers,
 1. If the AO approves, it goes to one or two other budget office approvers, depending on the type of request.
 1. Once all approvers have approved (or any one of them reject) the Proposal, the requester gets a notification.
 
-### [Navigator](https://github.com/GSA/CAP-ACQUISITION_NAVIGATOR)
-
-Their application initiates requests through the `/send_cart` API. They use the parallel flow, and specify approval groups rather than individual approvers.
-
 ## Production
 
 18F's production and staging [deployments](http://12factor.net/codebase) of C2 live in AWS, and are deployed via [Cloud Foundry](http://www.cloudfoundry.org). See [our Cloud Foundry documentation](https://docs.cf.18f.us) for more details.
