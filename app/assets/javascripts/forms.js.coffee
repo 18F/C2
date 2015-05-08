@@ -36,8 +36,6 @@ class Selectizer
 
   enable: ->
     opts = @selectizeOpts()
-    @$el.form_label
-    @form_label()
     @$el.selectize(opts)
 
   selectizeObj: ->
