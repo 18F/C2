@@ -1,6 +1,7 @@
 module ValueHelper
   def date_with_tooltip(time)
-    content_tag('span', l(time.to_date), title: l(time))
+    adjusted_time = time.in_time_zone("Eastern Time (US & Canada)").strftime("%b %-d, %Y at %l:%M%P")
+    content_tag('span', adjusted_time, title: adjusted_time)
   end
 
   def decimal?(val)
