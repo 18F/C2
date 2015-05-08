@@ -10,6 +10,13 @@ class Selectizer
 
   isRemote: ->
     !!@src()
+  
+  form_label: ->
+    label = $('label[for="'+@$el.attr('id')+'"]').text();
+    label
+
+  add_label: ->
+    @selectizeObj().$control_input.attr('aria-label',@form_label())
 
   selectizeOpts: ->
     opts = {}
@@ -29,6 +36,8 @@ class Selectizer
 
   enable: ->
     opts = @selectizeOpts()
+    @$el.form_label
+    @form_label()
     @$el.selectize(opts)
 
   selectizeObj: ->
@@ -58,3 +67,6 @@ $ ->
     selectizer = new Selectizer(el)
     selectizer.enable()
     selectizer.loadOptionsIfRemote()
+    selectizer.add_label()
+    
+    
