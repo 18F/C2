@@ -12,8 +12,7 @@ class Selectizer
     !!@src()
   
   form_label: ->
-    label = $('label[for="'+@$el.attr('id')+'"]').text();
-    label
+    $('label[for="'+@$el.attr('id')+'"]').text();
 
   add_label: ->
     @selectizeObj().$control_input.attr('aria-label',@form_label())
