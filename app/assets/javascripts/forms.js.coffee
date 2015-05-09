@@ -53,8 +53,18 @@ class Selectizer
       @loadRemoteOptions()
 
 
+
 $ ->
   $('.js-selectize').each (i, el) ->
     selectizer = new Selectizer(el)
     selectizer.enable()
     selectizer.loadOptionsIfRemote()
+
+  #Disable/Enable button if textbox is empty
+  $('#add_a_comment').attr 'disabled', true
+  $('#comment_comment_text').keyup ->
+    disable = false
+    if $(this).val() == ''
+      disable = true
+    $('#add_a_comment').prop 'disabled', disable
+    return
