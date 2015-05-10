@@ -28,17 +28,12 @@ module Populator
       requested_at = rand(3.months.ago..1.day.ago)
 
       # TODO all of these things should have the same created_at/updated_at... use Timecop
-      proposal = FactoryGirl.create(:proposal,
-        :with_cart,
+      work_order = FactoryGirl.create(:ncr_work_order,
         :with_approvers,
         :with_observers,
         created_at: requested_at,
-        updated_at: requested_at
-      )
-
-      work_order = FactoryGirl.create(:ncr_work_order,
         emergency: random_bool(0.1),
-        proposal: proposal,
+        updated_at: requested_at,
         vendor: Faker::Company.name
       )
 
@@ -46,15 +41,14 @@ module Populator
         # TODO randomly approve approvals and proposals at different times
       end
 
-      cart = proposal.cart
-      users = proposal.users
+      users = work_order.users
 
       # add comments
       num_comments = rand(5)
       num_comments.times do |j|
         commented_at = rand(requested_at..Time.now)
 
-        cart.proposal.comments.create!(
+        work_order.comments.create!(
           comment_text: Faker::Hacker.say_something_smart,
           created_at: commented_at,
           updated_at: commented_at,

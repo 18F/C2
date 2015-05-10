@@ -1,9 +1,4 @@
 module Ncr
-  # Make sure all table names use 'ncr_XXX'
-  def self.table_name_prefix
-    'ncr_'
-  end
-
   DATA = YAML.load_file("#{Rails.root}/config/data/ncr.yaml")
 
   EXPENSE_TYPES = %w(BA61 BA80)
@@ -11,15 +6,10 @@ module Ncr
   BUILDING_NUMBERS = DATA['BUILDING_NUMBERS']
   OFFICES = DATA['OFFICES']
 
-  class WorkOrder < ActiveRecord::Base
+  class WorkOrder < Proposal
     include ObservableModel
-    # TODO include ProposalDelegate
 
-    has_one :proposal, as: :client_data
-    # TODO remove the dependence
-    has_one :cart, through: :proposal
-
-    after_initialize :set_defaults
+    store_accessor :client_fields, :amount, :expense_type, :vendor, :not_to_exceed, :building_number, :emergency, :rwa_number, :office, :code, :project_title, :description
 
     # @TODO: use integer number of cents to avoid floating point issues
     validates :amount, numericality: {
@@ -33,31 +23,31 @@ module Ncr
       with: /[a-zA-Z][0-9]{7}/,
       message: "one letter followed by 7 numbers"
     }, allow_blank: true
-    # TODO validates :proposal, presence: true
+
+    # @todo: move this logic into a base validator
+    def emergency=(em)
+      super(ActiveRecord::ConnectionAdapters::Column.value_to_boolean(em))
+    end
+    # rails defaults to encoding decimals as strings in json; convert back
+    # @todo: make hide this better
+    def amount
+      super.to_f
+    end
 
     def set_defaults
       self.not_to_exceed ||= false
       self.emergency ||= false
-    end
-
-    # @todo - this is an awkward dance due to the lingering Cart model. Remove
-    # that dependence
-    def init_and_save_cart(approver_email, requester)
-      cart = Cart.create(
-        proposal_attributes: {flow: 'linear', client_data: self,
-                              requester: requester}
-      )
-      self.add_approvals(approver_email)
-      Dispatcher.deliver_new_proposal_emails(proposal)
-      cart
+      self.flow ||= 'linear'
+      self.subclass ||= 'Ncr::WorkOrder'
+      super
     end
 
     # A requester can change his/her approving official
     def update_approver(approver_email)
-      first_approval = self.proposal.approvals.first
+      first_approval = self.approvals.first
       if first_approval.user_email_address != approver_email
         first_approval.destroy
-        replacement = self.proposal.add_approver(approver_email)
+        replacement = self.add_approver(approver_email)
         replacement.move_to_top
       end
     end
@@ -65,11 +55,11 @@ module Ncr
     def add_approvals(approver_email)
       emails = [approver_email] + self.system_approvers
       if self.emergency
-        emails.each {|email| self.proposal.add_observer(email) }
+        emails.each {|email| self.add_observer(email) }
         # skip state machine
-        self.proposal.update_attribute(:status, 'approved')
+        self.update_attribute(:status, 'approved')
       else
-        emails.each {|email| self.proposal.add_approver(email) }
+        emails.each {|email| self.add_approver(email) }
       end
     end
 
@@ -93,7 +83,7 @@ module Ncr
     # Methods for Client Data interface
     def fields_for_display
       attributes = self.relevant_fields
-      attributes.map{|key| [WorkOrder.human_attribute_name(key), self[key]]}
+      attributes.map{|key| [WorkOrder.human_attribute_name(key), self.client_fields[key.to_s]]}
     end
 
     def client
@@ -101,20 +91,19 @@ module Ncr
     end
 
     def public_identifier
-      "FY" + self.fiscal_year.to_s.rjust(2, "0") + "-#{self.proposal.id}"
+      "FY" + self.fiscal_year.to_s.rjust(2, "0") + "-#{self.id}"
     end
 
     def total_price
       self.amount || 0.0
     end
 
-    # may be replaced with paper-trail or similar at some point
-    def version
-      self.updated_at.to_i
-    end
-
     def name
       self.project_title
+    end
+
+    def self.policy_class
+      ProposalPolicy
     end
 
     protected

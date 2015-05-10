@@ -1,7 +1,7 @@
 module Ncr
   class WorkOrdersController < ApplicationController
     before_filter :authenticate_user!
-    before_filter ->{authorize self.work_order.proposal}, only: [:edit, :update]
+    before_filter ->{authorize self.work_order}, only: [:edit, :update]
     rescue_from Pundit::NotAuthorizedError, with: :auth_errors
     helper_method :approver_email_frozen?
 
@@ -16,11 +16,12 @@ module Ncr
       @work_order = Ncr::WorkOrder.new(permitted_params)
 
       if self.errors.empty?
+        @work_order.requester = current_user
         @work_order.save
-        @work_order.init_and_save_cart(
-          @approver_email, current_user)
+        @work_order.add_approvals(@approver_email)
+        Dispatcher.deliver_new_proposal_emails(@work_order)
         flash[:success] = "Proposal submitted!"
-        redirect_to proposal_path(@work_order.proposal)
+        redirect_to proposal_path(@work_order)
       else
         flash[:error] = errors
         render 'form'
@@ -29,7 +30,7 @@ module Ncr
 
     def edit
       @work_order = self.work_order
-      @approver_email = @work_order.proposal.approvals.first.user_email_address
+      @approver_email = @work_order.approvals.first.user_email_address
       render 'form'
     end
 
@@ -44,7 +45,7 @@ module Ncr
           @work_order.update_approver(@approver_email)
         end
         flash[:success] = "Proposal resubmitted!"
-        redirect_to proposal_path(@work_order.proposal)
+        redirect_to proposal_path(@work_order)
       else
         flash[:error] = errors
         render 'form'
@@ -61,14 +62,10 @@ module Ncr
     def work_order
       @work_order ||= Ncr::WorkOrder.find(params[:id])
     end
-    def cart
-      self.work_order.proposal.cart
-    end
 
     def approver_email_frozen?
-      proposal = self.work_order.try(:proposal)
-      if proposal && proposal.approvals.first
-        !proposal.approvals.first.pending?
+      if self.work_order && self.work_order.approvals.first
+        !self.work_order.approvals.first.pending?
       else
         false
       end

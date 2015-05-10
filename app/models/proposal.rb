@@ -12,13 +12,7 @@ class Proposal < ActiveRecord::Base
   has_many :comments
   has_many :observations
   has_many :observers, through: :observations, source: :user
-  belongs_to :client_data, polymorphic: true
   belongs_to :requester, class_name: 'User'
-
-  # The following list also servers as an interface spec for client_datas
-  # Note: clients should also implement :version
-  delegate :fields_for_display, :client, :public_identifier, :name,
-           to: :client_data_legacy
 
   validates :flow, presence: true, inclusion: {in: ApprovalGroup::FLOWS}
   # TODO validates :requester_id, presence: true
@@ -53,12 +47,6 @@ class Proposal < ActiveRecord::Base
       approver = approval.user
       approver == user || approver.outgoing_delegates.exists?(assignee_id: user.id)
     end
-  end
-
-  # Use this until all clients are migrated to models (and we no longer have a
-  # dependence on "Cart"
-  def client_data_legacy
-    self.client_data || self.cart
   end
 
   # TODO convert to an association
@@ -109,7 +97,31 @@ class Proposal < ActiveRecord::Base
   # Be careful if altering the identifier. You run the risk of "expiring" all
   # pending approval emails
   def version
-    [self.updated_at.to_i, self.client_data_legacy.version].max
+    self.updated_at.to_i
+  end
+
+  def as_subclass
+    if self.subclass
+      self.subclass.constantize.find self.id
+    else
+      self
+    end
+  end
+
+  def client
+    ''
+  end
+
+  def name
+    ''
+  end
+
+  def public_identifier
+    "##{self.id}"
+  end
+
+  def fields_for_display
+    []
   end
 
 

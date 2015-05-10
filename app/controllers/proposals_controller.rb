@@ -7,7 +7,7 @@ class ProposalsController < ApplicationController
   helper_method :display_status
 
   def show
-    @proposal = self.proposal.decorate
+    @proposal = self.proposal.as_subclass.decorate
     @show_comments = true
     @include_comments_files = true
   end

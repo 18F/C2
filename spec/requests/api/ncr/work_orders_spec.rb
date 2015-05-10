@@ -12,38 +12,34 @@ describe 'NCR Work Orders API' do
 
     with_feature 'PUBLIC_API_ENABLED' do
       it "responds with the list of work orders" do
-        work_order = FactoryGirl.create(:ncr_work_order, :with_proposal)
-        proposal = work_order.proposal
+        work_order = FactoryGirl.create(:ncr_work_order)
 
         json = get_json('/api/v1/ncr/work_orders.json')
 
         expect(response.status).to eq(200)
         expect(json).to eq([
           {
-            'amount' => work_order.amount.to_s,
+            'amount' => work_order.amount,
+            'approvals' => [],
             'building_number' => work_order.building_number,
             'code' => work_order.code,
+            'created_at' => time_to_json(work_order.created_at),
             'description' => work_order.description,
             'emergency' => work_order.emergency,
             'expense_type' => work_order.expense_type,
+            'flow' => work_order.flow,
             'id' => work_order.id,
             'name' => work_order.name,
             'not_to_exceed' => work_order.not_to_exceed,
             'office' => work_order.office,
-            'proposal' => {
-              'approvals' => [],
-              'created_at' => time_to_json(proposal.created_at),
-              'flow' => proposal.flow,
-              'id' => proposal.id,
-              'requester' => {
-                'created_at' => time_to_json(proposal.requester.created_at),
-                'id' => proposal.requester_id,
-                'updated_at' => time_to_json(proposal.requester.updated_at)
-              },
-              'status' => 'pending',
-              'updated_at' => time_to_json(proposal.updated_at)
+            'requester' => {
+              'created_at' => time_to_json(work_order.requester.created_at),
+              'id' => work_order.requester_id,
+              'updated_at' => time_to_json(work_order.requester.updated_at)
             },
             'rwa_number' => work_order.rwa_number,
+            'status' => 'pending',
+            'updated_at' => time_to_json(work_order.updated_at),
             'vendor' => work_order.vendor
           }
         ])
@@ -60,24 +56,24 @@ describe 'NCR Work Orders API' do
           # create WorkOrders one minute apart
           2.times do |i|
             Timecop.freeze(i.minutes.ago) do
-              FactoryGirl.create(:ncr_work_order, :with_proposal)
+              FactoryGirl.create(:ncr_work_order)
             end
           end
         end
 
         json = get_json('/api/v1/ncr/work_orders.json')
 
-        times = json.map {|order| DateTime.parse(order['proposal']['created_at']) }
+        times = json.map {|order| DateTime.parse(order['created_at']) }
         expect(times[1]).to eq(times[0] - 1.minute)
       end
 
       it "includes the requester" do
-        work_order = FactoryGirl.create(:ncr_work_order, :with_proposal)
-        requester = work_order.proposal.requester
+        work_order = FactoryGirl.create(:ncr_work_order)
+        requester = work_order.requester
 
         json = get_json('/api/v1/ncr/work_orders.json')
 
-        expect(json[0]['proposal']['requester']).to eq(
+        expect(json[0]['requester']).to eq(
           'created_at' => time_to_json(requester.created_at),
           'id' => requester.id,
           'updated_at' => time_to_json(requester.updated_at)
@@ -89,14 +85,13 @@ describe 'NCR Work Orders API' do
 
         json = get_json('/api/v1/ncr/work_orders.json')
 
-        proposal = work_order.proposal
-        approvals = proposal.approvals
+        approvals = work_order.approvals
         expect(approvals.size).to eq(2)
 
-        approval = proposal.approvals[0]
+        approval = work_order.approvals[0]
         approver = approval.user
 
-        expect(json[0]['proposal']['approvals'][0]).to eq(
+        expect(json[0]['approvals'][0]).to eq(
           'id' => approval.id,
           'status' => 'pending',
           'user' => {
