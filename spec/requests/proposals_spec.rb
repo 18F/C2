@@ -25,11 +25,6 @@ describe 'proposals' do
       expect(proposal.status).to eq(status)
     end
 
-    before do
-      allow_any_instance_of(Proposal).to receive(:client).and_return('ACME')
-      allow_any_instance_of(Proposal).to receive(:public_identifier).and_return('123')
-    end
-
     it "fails if not signed in" do
       proposal = FactoryGirl.create(:proposal, :with_approver)
       post "/proposals/#{proposal.id}/approve"
@@ -81,13 +76,13 @@ describe 'proposals' do
 
       describe "version number" do
         it "works if the version matches" do
-          allow_any_instance_of(Proposal).to receive(:version).and_return(123)
+          expect_any_instance_of(Proposal).to receive(:version).and_return(123)
           post "/proposals/#{proposal.id}/approve", version: 123
           expect_status(proposal, 'approved')
         end
 
         it "fails if the versions don't match" do
-          allow_any_instance_of(Proposal).to receive(:version).and_return(456)
+          expect_any_instance_of(Proposal).to receive(:version).and_return(456)
           post "/proposals/#{proposal.id}/approve", version: 123
           expect_status(proposal, 'pending')
           # TODO check for message on the page

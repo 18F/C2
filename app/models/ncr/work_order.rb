@@ -13,11 +13,9 @@ module Ncr
 
   class WorkOrder < ActiveRecord::Base
     include ObservableModel
-    # TODO include ProposalDelegate
 
     has_one :proposal, as: :client_data
-    # TODO remove the dependence
-    has_one :cart, through: :proposal
+    include ProposalDelegate
 
     after_initialize :set_defaults
 
@@ -33,31 +31,18 @@ module Ncr
       with: /[a-zA-Z][0-9]{7}/,
       message: "one letter followed by 7 numbers"
     }, allow_blank: true
-    # TODO validates :proposal, presence: true
 
     def set_defaults
       self.not_to_exceed ||= false
       self.emergency ||= false
     end
 
-    # @todo - this is an awkward dance due to the lingering Cart model. Remove
-    # that dependence
-    def init_and_save_cart(approver_email, requester)
-      cart = Cart.create(
-        proposal_attributes: {flow: 'linear', client_data: self,
-                              requester: requester}
-      )
-      self.add_approvals(approver_email)
-      Dispatcher.deliver_new_proposal_emails(proposal)
-      cart
-    end
-
     # A requester can change his/her approving official
     def update_approver(approver_email)
-      first_approval = self.proposal.approvals.first
+      first_approval = self.approvals.first
       if first_approval.user_email_address != approver_email
         first_approval.destroy
-        replacement = self.proposal.add_approver(approver_email)
+        replacement = self.add_approver(approver_email)
         replacement.move_to_top
       end
     end
@@ -65,11 +50,11 @@ module Ncr
     def add_approvals(approver_email)
       emails = [approver_email] + self.system_approvers
       if self.emergency
-        emails.each {|email| self.proposal.add_observer(email) }
+        emails.each {|email| self.add_observer(email) }
         # skip state machine
         self.proposal.update_attribute(:status, 'approved')
       else
-        emails.each {|email| self.proposal.add_approver(email) }
+        emails.each {|email| self.add_approver(email) }
       end
     end
 

@@ -9,22 +9,15 @@ FactoryGirl.define do
     rwa_number "R1234567"
     office Ncr::OFFICES[0]
     project_title "NCR Name"
+    association :proposal, flow: 'linear'
 
+    # TODO remove
     trait :with_proposal do
-      association :proposal, flow: 'linear'
-    end
-
-    trait :with_cart do
-      association :proposal, :with_cart, flow: 'linear'
+      # no-op
     end
 
     trait :with_approvers do
       association :proposal, :with_approvers, flow: 'linear'
-    end
-
-    trait :full do
-      association :proposal, :with_cart, :with_approvers,
-        flow: 'linear'
     end
   end
 end

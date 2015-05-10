@@ -12,9 +12,9 @@ module Gsa18f
     OFFICES = DATA['OFFICES']
     RECURRENCE = DATA['RECURRENCE']
 
-    # TODO include ProposalDelegate
-
     has_one :proposal, as: :client_data
+    include ProposalDelegate
+
     # TODO remove the dependence
     has_one :cart, through: :proposal
 
@@ -27,25 +27,9 @@ module Gsa18f
     }
     validates :product_name_and_description, presence: true
 
-    def init_and_save_cart(requester)
-      cart = Cart.create(
-        proposal_attributes: {flow: 'linear', client_data: self}
-      )
-      cart.set_requester(requester)
-      self.add_approvals
-      Dispatcher.deliver_new_proposal_emails(proposal)
-      cart
-    end
-
-    def update_cart(cart)
-      cart.proposal.approvals.destroy_all
-      self.add_approvals
-      cart.restart!
-      cart
-    end
 
     def add_approvals
-      self.cart.add_approver(Gsa18f::Procurement.approver_email)
+      self.add_approver(Gsa18f::Procurement.approver_email)
     end
 
     # Ignore values in certain fields if they aren't relevant. May want to

@@ -7,20 +7,18 @@ describe "GSA 18f Purchase Request Form" do
 
   context "when signed in" do
     let(:requester) { FactoryGirl.create(:user) }
-    let(:gsa18f) {
-      pr = FactoryGirl.create(:gsa18f_procurement)
-      pr.init_and_save_cart(requester)
+    let(:procurement) {
+      pr = FactoryGirl.create(:gsa18f_procurement, requester: requester)
+      pr.add_approvals
       pr
     }
-    let(:gsa18f_cart) {
-      gsa18f.proposal.cart
-    }
+    let(:proposal) { procurement.proposal }
 
     before do
       login_as(requester)
     end
 
-    it "saves a Cart with the attributes" do
+    it "saves a Proposal with the attributes" do
       expect(Dispatcher).to receive(:deliver_new_proposal_emails)
 
       visit '/gsa18f/procurements/new'
@@ -35,28 +33,26 @@ describe "GSA 18f Purchase Request Form" do
       select Gsa18f::Procurement::OFFICES[0], :from => 'gsa18f_procurement_office'
       expect {
         click_on 'Submit for approval'
-      }.to change { Cart.count }.from(0).to(1)
+      }.to change { Proposal.count }.from(0).to(1)
 
       expect(page).to have_content("Procurement submitted")
       expect(current_path).to eq("/proposals/#{Proposal.last.id}")
 
-      cart = Cart.last
-      expect(cart.proposal.name).to eq("buying stuff")
-      expect(cart.flow).to eq('linear')
-      client_data = cart.proposal.client_data
-      expect(client_data.client).to eq('gsa18f')
-      expect(client_data.link_to_product).to eq('http://www.amazon.com')
-      expect(client_data.date_requested).to eq('12/12/2999')
-      expect(client_data.additional_info).to eq('none')
-      # TODO should this persist as a number?
-      expect(client_data.cost_per_unit).to eq(123.45)
-      expect(client_data.quantity).to eq(6)
-      expect(client_data.office).to eq(Gsa18f::Procurement::OFFICES[0])
-      expect(client_data.urgency).to eq(Gsa18f::Procurement::URGENCY[0])
-      expect(cart.requester).to eq(requester)
-      expect(cart.approvers.map(&:email_address)).to eq(%w(
-        18fapprover@gsa.gov
-      ))
+      proposal = Proposal.last
+      expect(proposal.name).to eq("buying stuff")
+      expect(proposal.flow).to eq('linear')
+      expect(proposal.client).to eq('gsa18f')
+      expect(proposal.requester).to eq(requester)
+      expect(proposal.approvers.map(&:email_address)).to eq(%w(18fapprover@gsa.gov))
+
+      procurement = proposal.client_data
+      expect(procurement.link_to_product).to eq('http://www.amazon.com')
+      expect(procurement.date_requested).to eq('12/12/2999')
+      expect(procurement.additional_info).to eq('none')
+      expect(procurement.cost_per_unit).to eq(123.45)
+      expect(procurement.quantity).to eq(6)
+      expect(procurement.office).to eq(Gsa18f::Procurement::OFFICES[0])
+      expect(procurement.urgency).to eq(Gsa18f::Procurement::URGENCY[0])
     end
 
     it "doesn't save when the amount is too high" do
@@ -67,7 +63,7 @@ describe "GSA 18f Purchase Request Form" do
 
       expect {
         click_on 'Submit for approval'
-      }.to_not change { Cart.count }
+      }.to_not change { Proposal.count }
 
       expect(current_path).to eq('/gsa18f/procurements')
       expect(page).to have_content("Cost per unit must be less than or equal to 3000")
@@ -83,7 +79,7 @@ describe "GSA 18f Purchase Request Form" do
 
       expect {
         click_on "Submit for approval"
-      }.to_not change { Cart.count }
+      }.to_not change { Proposal.count }
 
       expect(current_path).to eq('/gsa18f/procurements')
       expect(page).to have_content("Quantity must be greater than or equal to 1")
@@ -91,48 +87,48 @@ describe "GSA 18f Purchase Request Form" do
     end
 
     it "can be restarted if pending" do
-      visit "/gsa18f/procurements/#{gsa18f.id}/edit"
+      visit "/gsa18f/procurements/#{procurement.id}/edit"
       fill_in "Link to product", with: "http://www.submitted.com"
       fill_in 'Cost per unit', with: 123.45
       fill_in 'Quantity', with: 1
       fill_in "Product Name and Description", with: 'resubmitted'
       click_on 'Submit for approval'
-      expect(current_path).to eq("/proposals/#{gsa18f.proposal.id}")
+      expect(current_path).to eq("/proposals/#{proposal.id}")
       expect(page).to have_content("http://www.submitted.com")
       expect(page).to have_content("resubmitted")
       # Verify it is actually saved
-      gsa18f.reload
-      expect(gsa18f.link_to_product).to eq('http://www.submitted.com')
+      procurement.reload
+      expect(procurement.link_to_product).to eq('http://www.submitted.com')
     end
 
     it "can be restarted if rejected" do
-      gsa18f.proposal.update_attributes(status: 'rejected')  # avoid workflow
+      proposal.update_attributes(status: 'rejected')  # avoid workflow
 
-      visit "/gsa18f/procurements/#{gsa18f.id}/edit"
-      expect(current_path).to eq("/gsa18f/procurements/#{gsa18f.id}/edit")
+      visit "/gsa18f/procurements/#{procurement.id}/edit"
+      expect(current_path).to eq("/gsa18f/procurements/#{procurement.id}/edit")
     end
 
     it "cannot be restarted if approved" do
-      gsa18f_cart.proposal.update_attributes(status: 'approved')  # avoid workflow
+      proposal.update_attributes(status: 'approved')  # avoid workflow
 
-      visit "/gsa18f/procurements/#{gsa18f.id}/edit"
+      visit "/gsa18f/procurements/#{procurement.id}/edit"
       expect(current_path).to eq("/gsa18f/procurements/new")
       expect(page).to have_content('already approved')
     end
 
     it "cannot be edited by someone other than the requester" do
-      gsa18f_cart.set_requester(FactoryGirl.create(:user))
+      procurement.set_requester(FactoryGirl.create(:user))
 
-      visit "/gsa18f/procurements/#{gsa18f.id}/edit"
+      visit "/gsa18f/procurements/#{procurement.id}/edit"
       expect(current_path).to eq("/gsa18f/procurements/new")
       expect(page).to have_content('cannot restart')
     end
 
-    it "shows a restart link from a pending cart" do
-      visit "/proposals/#{gsa18f.proposal.id}"
+    it "shows a restart link from a pending proposal" do
+      visit "/proposals/#{proposal.id}"
       expect(page).to have_content('Modify Request')
       click_on('Modify Request')
-      expect(current_path).to eq("/gsa18f/procurements/#{gsa18f.id}/edit")
+      expect(current_path).to eq("/gsa18f/procurements/#{procurement.id}/edit")
     end
 
     it "saves all attributes when editing" do
@@ -158,56 +154,56 @@ describe "GSA 18f Purchase Request Form" do
 
       click_on 'Submit for approval'
 
-      cart = Cart.last
-      client_data = cart.proposal.client_data
+      proposal = Proposal.last
 
-      expect(cart.proposal.name).to eq("buying stuff")
-      expect(cart.flow).to eq('linear')
+      expect(proposal.name).to eq("buying stuff")
+      expect(proposal.flow).to eq('linear')
+      client_data = proposal.client_data
+
       expect(client_data.link_to_product).to eq('http://www.amazon.com')
       expect(client_data.date_requested).to eq('12/12/2999')
       expect(client_data.additional_info).to eq('none')
-      # TODO should this persist as a number?
       expect(client_data.cost_per_unit).to eq(123.45)
       expect(client_data.quantity).to eq(6)
       expect(client_data.office).to eq(Gsa18f::Procurement::OFFICES[0])
       expect(client_data.urgency).to eq(Gsa18f::Procurement::URGENCY[0])
-      expect(cart.requester).to eq(requester)
-      expect(cart.approvers.map(&:email_address)).to eq(%w(
+
+      expect(proposal.requester).to eq(requester)
+      expect(proposal.approvers.map(&:email_address)).to eq(%w(
         18fapprover@gsa.gov
       ))
     end
 
     it "has 'Discard Changes' link" do
-      visit "/gsa18f/procurements/#{gsa18f.id}/edit"
+      visit "/gsa18f/procurements/#{procurement.id}/edit"
       expect(page).to have_content("Discard Changes")
       click_on "Discard Changes"
-      expect(current_path).to eq("/proposals/#{gsa18f.proposal.id}")
+      expect(current_path).to eq("/proposals/#{proposal.id}")
     end
 
-    it "shows a restart link from a rejected cart" do
-      gsa18f_cart.proposal.update_attribute(:status, 'rejected') # avoid state machine
-
-      visit "/proposals/#{gsa18f.proposal.id}"
+    it "shows a restart link from a rejected proposal" do
+      proposal.update_attribute(:status, 'rejected') # avoid state machine
+      visit "/proposals/#{proposal.id}"
       expect(page).to have_content('Modify Request')
     end
 
-    it "does not show a restart link for an approved cart" do
-      gsa18f_cart.proposal.update_attribute(:status, 'approved') # avoid state machine
+    it "does not show a restart link for an approved proposal" do
+      proposal.update_attribute(:status, 'approved') # avoid state machine
 
-      visit "/proposals/#{gsa18f.proposal.id}"
+      visit "/proposals/#{proposal.id}"
       expect(page).not_to have_content('Modify Request')
     end
 
     it "does not show a restart link for another client" do
-      gsa18f_cart.proposal.client_data = nil
-      gsa18f_cart.proposal.save()
-      visit "/proposals/#{gsa18f.proposal.id}"
+      proposal.client_data = nil
+      proposal.save()
+      visit "/proposals/#{proposal.id}"
       expect(page).not_to have_content('Modify Request')
     end
 
     it "does not show a restart link for non requester" do
-      gsa18f_cart.set_requester(FactoryGirl.create(:user))
-      visit "/proposals/#{gsa18f.proposal.id}"
+      procurement.set_requester(FactoryGirl.create(:user))
+      visit "/proposals/#{proposal.id}"
       expect(page).not_to have_content('Modify Request')
     end
   end

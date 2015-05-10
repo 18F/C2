@@ -6,12 +6,11 @@ FactoryGirl.define do
     sequence(:product_name_and_description) {|n| "Proposal #{n}" }
     office Gsa18f::Procurement::OFFICES[0]
     urgency Gsa18f::Procurement::URGENCY[0]
-    trait :with_proposal do
-      proposal
-    end
+    proposal
 
-    trait :with_cart do
-      association :proposal, :with_cart
+    # TODO remove
+    trait :with_proposal do
+      # no-op
     end
 
     trait :with_approvers do

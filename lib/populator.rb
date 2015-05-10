@@ -46,7 +46,6 @@ module Populator
         # TODO randomly approve approvals and proposals at different times
       end
 
-      cart = proposal.cart
       users = proposal.users
 
       # add comments
@@ -54,7 +53,7 @@ module Populator
       num_comments.times do |j|
         commented_at = rand(requested_at..Time.now)
 
-        cart.proposal.comments.create!(
+        proposal.comments.create!(
           comment_text: Faker::Hacker.say_something_smart,
           created_at: commented_at,
           updated_at: commented_at,
