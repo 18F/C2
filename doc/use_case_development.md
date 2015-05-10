@@ -1,6 +1,4 @@
-***This is a proposal for how the use cases can be built.***
-
-See the current use case descriptions in the [Overview](overview.md).
+See the descriptions of the current use cases in the [Overview](overview.md#use-cases).
 
 ## Differences from one use case to another
 
@@ -34,3 +32,7 @@ See the current use case descriptions in the [Overview](overview.md).
     * User role (e.g. service center worker vs. budget analyst)
     * User relationships (e.g. supervisor)
     * Access control (e.g. service center directors can see _all_ requests in their region)
+
+## Proposal for use case specification
+
+TODO
