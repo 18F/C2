@@ -1,0 +1,41 @@
+/*
+ * This is a manifest file that'll be compiled into home.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require_self
+ *= require common/header
+ */
+
+@import "bootstrap-sprockets";
+@import "bootstrap";
+
+.photon-header-nav-container {
+  position: absolute;
+  right: 0;
+  top: 40px;
+  z-index: 2;
+  @media (max-width: 800px) {
+    position: inherit;
+    display: block;
+    top: 0;
+  }
+}
+
+.alert {
+  margin-top: -1em;
+  margin-bottom: 1em;
+
+  &.bg-danger {
+    color: #000;
+  }
+}
+
+section#footer {
+  padding: 1em 0;
+}

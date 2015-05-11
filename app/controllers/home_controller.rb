@@ -18,6 +18,7 @@ class HomeController < ApplicationController
   end
 
   def index
+    render(layout: false)
   end
 
   def error

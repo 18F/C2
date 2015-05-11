@@ -58,7 +58,8 @@ class ApplicationController < ActionController::Base
 
   def authenticate_user!
     unless signed_in?
-      redirect_to root_url(return_to: self.make_return_to("Previous", request.fullpath)), :alert => 'You need to sign in for access to this page.'
+      flash[:error] = 'You need to sign in for access to this page.'
+      redirect_to root_url(return_to: self.make_return_to("Previous", request.fullpath))
     end
   end
 end
