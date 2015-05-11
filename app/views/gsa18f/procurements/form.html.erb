@@ -89,5 +89,8 @@
       <%= f.text_area :additional_info, class: 'form-control' %>
     </div>
     <%= f.submit "Submit for approval", class: 'btn btn-default' %>
+    <% if !@procurement.id.nil? %>
+      <%= link_to 'Discard Changes', proposal_url(@procurement) %>
+    <% end %>
   <% end %>
 </div>
