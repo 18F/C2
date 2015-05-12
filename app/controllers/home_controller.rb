@@ -6,7 +6,7 @@ class HomeController < ApplicationController
 
   def oauth_callback
     auth = request.env["omniauth.auth"]
-    return_to = session[:return_to]
+    return_to = self.return_to.try(:path)
 
     sign_out
     user = User.from_oauth_hash(auth)
