@@ -117,7 +117,11 @@ class Proposal < ActiveRecord::Base
   end
 
   def public_identifier
-    "##{self.id}"
+    if self.cart
+      self.cart.public_identifier
+    else
+      "##{self.id}"
+    end
   end
 
   def fields_for_display
