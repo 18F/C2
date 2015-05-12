@@ -38,12 +38,11 @@ module TokenAuth
   def auth_errors(exception)
     case exception.record
     when :api_token
-      session[:return_to] = request.fullpath
       if signed_in?
         flash[:error] = exception.message
         render 'authentication_error', status: 403
       else
-        redirect_to root_path, alert: "Please sign in to complete this action."
+        redirect_to root_path(return_to: self.make_return_to("Previous", request.fullpath)), alert: "Please sign in to complete this action."
       end
     when Proposal
       redirect_to proposals_path, alert: "You are not allowed to see that proposal"

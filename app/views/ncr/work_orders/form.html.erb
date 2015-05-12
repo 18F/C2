@@ -99,5 +99,8 @@
                           data: {attr: 'email_address', src: '/api/v1/users.json'} %>
     </div>
     <%= f.submit "Submit for approval", class: 'btn btn-default' %>
+    <% if @work_order.persisted? %>
+      <%= link_to 'Discard Changes', proposal_url(@work_order) %>
+    <% end %>
   <% end %>
 </div>
