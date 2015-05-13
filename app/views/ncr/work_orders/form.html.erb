@@ -1,4 +1,4 @@
-<% content_for :title, "NCR Request" %> 
+<% content_for :title, "NCR Request" %>
 <div class="container content">
   <h2 class='request_form'>National Capital Region</h2>
   <h3>Purchase Card Approval Request</h3>
@@ -55,19 +55,19 @@
       <%= f.label :building_number %>
       <%= f.collection_select(
             :building_number, Ncr::BUILDING_NUMBERS, :to_s, :to_s,
-            {include_blank: true, prompt: "Type here..."}, {class: 'form-control js-selectize'}) %>
+            {include_blank: true, prompt: "Type here to search"}, {class: 'form-control js-selectize'}) %>
     </div>
     <div class="form-group">
       <%= f.label :office %>
       <%= f.collection_select(
             :office, Ncr::OFFICES, :to_s, :to_s,
-            {include_blank: true, prompt: "Type here..."}, {class: 'form-control js-selectize'}) %>
+            {include_blank: true, prompt: "Type here to search"}, {class: 'form-control js-selectize'}) %>
     </div>
     <div class="form-group">
       <%= f.label :vendor %>
       <%= f.text_field :vendor,
             class: 'form-control js-selectize',
-            placeholder: "Type here...",
+            placeholder: "Type here to search or add",
             data: {attr: 'vendor', src: '/api/v1/ncr/work_orders.json'} %>
     </div>
     <div class="form-group">
