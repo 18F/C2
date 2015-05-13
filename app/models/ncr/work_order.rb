@@ -9,7 +9,19 @@ module Ncr
   class WorkOrder < Proposal
     include ObservableModel
 
-    store_accessor :client_fields, :amount, :expense_type, :vendor, :not_to_exceed, :building_number, :emergency, :rwa_number, :office, :code, :project_title, :description
+    typed_store :client_fields, coder: ClientFieldsCoder do |f|
+      f.decimal :amount
+      f.string :expense_type
+      f.string :vendor
+      f.boolean :not_to_exceed, default: false
+      f.string :building_number
+      f.boolean :emergency, default: false
+      f.string :rwa_number
+      f.string :office
+      f.string :code
+      f.string :project_title
+      f.string :description
+    end
 
     # @TODO: use integer number of cents to avoid floating point issues
     validates :amount, numericality: {
@@ -24,15 +36,6 @@ module Ncr
       message: "one letter followed by 7 numbers"
     }, allow_blank: true
 
-    # @todo: move this logic into a base validator
-    def emergency=(em)
-      super(ActiveRecord::ConnectionAdapters::Column.value_to_boolean(em))
-    end
-    # rails defaults to encoding decimals as strings in json; convert back
-    # @todo: make hide this better
-    def amount
-      super.to_f
-    end
 
     def set_defaults
       self.not_to_exceed ||= false

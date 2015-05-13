@@ -41,6 +41,8 @@ GEM
       activemodel (= 4.1.9)
       activesupport (= 4.1.9)
       arel (~> 5.0.0)
+    activerecord-typedstore (0.5.2)
+      activerecord (>= 3.2, < 5)
     activesupport (4.1.9)
       i18n (~> 0.6, >= 0.6.9)
       json (~> 1.7, >= 1.7.7)
@@ -332,6 +334,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers
+  activerecord-typedstore
   acts_as_list
   addressable
   ar_outer_joins

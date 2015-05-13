@@ -19,7 +19,7 @@ describe 'NCR Work Orders API' do
         expect(response.status).to eq(200)
         expect(json).to eq([
           {
-            'amount' => work_order.amount,
+            'amount' => work_order.amount.to_s,
             'approvals' => [],
             'building_number' => work_order.building_number,
             'code' => work_order.code,

@@ -7,7 +7,20 @@ module Gsa18f
     OFFICES = DATA['OFFICES']
     RECURRENCE = DATA['RECURRENCE']
 
-    store_accessor :client_fields, :office, :justification, :link_to_product, :quantity, :date_requested, :additional_info, :cost_per_unit, :product_name_and_description, :recurring, :recurring_interval, :recurring_length, :urgency
+    typed_store :client_fields, coder: ClientFieldsCoder do |f|
+      f.string :office
+      f.text :justification
+      f.string :link_to_product
+      f.integer :quantity
+      f.datetime :date_requested
+      f.string :additional_info
+      f.decimal :cost_per_unit
+      f.text :product_name_and_description
+      f.boolean :recurring
+      f.string :recurring_interval
+      f.integer :recurring_length
+      f.string :urgency
+    end
 
     validates :cost_per_unit, numericality: {
       greater_than_or_equal_to: 0,
@@ -17,18 +30,6 @@ module Gsa18f
       greater_than_or_equal_to: 1
     }
     validates :product_name_and_description, presence: true
-
-    # rails defaults to encoding decimals as strings in json; convert back
-    # @todo: make hide this better
-    def cost_per_unit
-      super.to_f
-    end
-    def quantity
-      super.to_i
-    end
-    def recurring_length
-      super.to_i
-    end
 
     def set_defaults
       self.flow ||= 'linear'
