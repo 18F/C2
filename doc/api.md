@@ -118,39 +118,34 @@ Returns an array of [Work Orders](#ncr-work-order), in descending order of creat
 [
   {
     "amount": "1000.00",
+    "approvals": [
+      {
+        "id": 92,
+        "status": "pending",
+        "user": {
+          "created_at": "2015-01-10T07:05:42.445Z",
+          "id": 43,
+          "updated_at": "2015-01-10T07:05:42.445Z"
+        }
+      }
+    ],
     "building_number": "DC0017ZZ ,WHITE HOUSE-WEST WING1600 PA AVE. NW",
     "code": "ABC",
     "description": "Existing paint is starting to crack.",
     "emergency": false,
     "expense_type": "BA80",
+    "flow": "parallel",
     "id": 16,
     "name": "Blue paint for the Blue Room",
     "not_to_exceed": false,
     "office": "P1121209 Security Management",
-    "proposal": {
-      "approvals": [
-        {
-          "id": 92,
-          "status": "pending",
-          "user": {
-            "created_at": "2015-01-10T07:05:42.445Z",
-            "id": 43,
-            "updated_at": "2015-01-10T07:05:42.445Z"
-          }
-        }
-      ],
-      "created_at": "2015-02-21T07:05:42.445Z",
-      "flow": "parallel",
-      "id": 12,
-      "requester": {
-        "created_at": "2015-02-10T07:05:42.445Z",
-        "id": 71,
-        "updated_at": "2015-02-10T07:05:42.445Z"
-      },
-      "status": "pending",
-      "updated_at": "2015-03-28T01:13:33.564Z"
+    "requester": {
+      "created_at": "2015-02-10T07:05:42.445Z",
+      "id": 71,
+      "updated_at": "2015-02-10T07:05:42.445Z"
     },
     "rwa_number": "123456A",
+    "status": "pending",
     "vendor": "ACME Corp"
   },
   // ...
