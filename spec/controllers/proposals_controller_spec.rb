@@ -107,5 +107,23 @@ describe ProposalsController do
 
       expect(controller.send(:current_user)).to eq(approval.user)
     end
+
+    it "won't allow a missing token when using GET" do
+      proposal = FactoryGirl.create(:proposal, :with_approver, :with_cart)
+      login_as(proposal.approvers.first)
+      get :approve, id: proposal.id
+
+      expect(response).to have_http_status(403)
+    end
+
+    it "will allow action if the token is valid" do
+      proposal = FactoryGirl.create(:proposal, :with_approver, :with_cart)
+      approval = proposal.approvals.first
+      token = approval.create_api_token!
+
+      get :approve, id: proposal.id, cch: token.access_token
+      approval.reload
+      expect(approval.approved?).to be(true)
+    end
   end
 end

@@ -24,7 +24,8 @@ C2::Application.routes.draw do
 
   resources :proposals, only: [:index, :show] do
     member do
-      get 'approve'
+      get 'approve'   # this route has special protection to prevent the confused deputy problem
+                      # if you are adding a new controller which performs an action, use post instead
       post 'approve'
     end
 
