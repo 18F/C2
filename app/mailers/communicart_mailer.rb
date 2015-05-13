@@ -7,27 +7,33 @@ class CommunicartMailer < ActionMailer::Base
   add_template_helper ClientHelper
 
 
-  def cart_notification_email(to_email, approval, show_approval_actions=true)
+  # Approver can approve/reject/take other action
+  def actions_for_approver(to_email, approval, alert_partial=nil)
+    @show_approval_actions = true
+    self.notification_for_approver(to_email, approval, alert_partial)
+  end
+
+  def notification_for_approver(to_email, approval, alert_partial=nil)
     @approval = approval
-    @show_approval_actions = show_approval_actions
-    from_email = user_email(approval.proposal.requester)
-    send_cart_email(from_email, to_email, approval.cart)
+    @alert_partial = alert_partial
+    proposal = approval.proposal
+    from_email = user_email(proposal.requester)
+    send_proposal_email(from_email, to_email, proposal, 'proposal_notification_email')
   end
 
-  def cart_observer_email(to_email, cart)
+  def proposal_observer_email(to_email, proposal)
     # TODO have the from_email be whomever triggered this notification
-    send_cart_email(sender, to_email, cart)
+    send_proposal_email(sender, to_email, proposal)
   end
 
-  def proposal_created_confirmation(cart)
-    @cart = cart
-    @proposal = cart.proposal.decorate
-    to_address = cart.requester.email_address
-    from_email = user_email(cart.requester)
+  def proposal_created_confirmation(proposal)
+    @proposal = proposal.decorate
+    to_address = proposal.requester.email_address
+    from_email = user_email(proposal.requester)
 
     mail(
          to: to_address,
-         subject: "Your request for #{@proposal.public_identifier} has been sent successfully.",
+         subject: "Your request for #{proposal.public_identifier} has been sent successfully.",
          from: from_email
          )
   end
@@ -35,7 +41,6 @@ class CommunicartMailer < ActionMailer::Base
   def approval_reply_received_email(approval)
     @approval = approval
     @proposal = approval.proposal.decorate
-    @cart = @proposal.cart
     to_address = @proposal.requester.email_address
     #TODO: Add a specific 'rejection' text block for the requester
 
@@ -43,7 +48,7 @@ class CommunicartMailer < ActionMailer::Base
 
     mail(
          to: to_address,
-         subject: "User #{approval.user.email_address} has #{approval.status} #{@proposal.public_identifier}",
+         subject: "User #{approval.user.email_address} has #{approval.status} request #{@proposal.public_identifier}",
          from: user_email(approval.user)
          )
   end
@@ -53,7 +58,7 @@ class CommunicartMailer < ActionMailer::Base
 
     mail(
          to: to_email,
-         subject: "A comment has been added to #{comment.proposal.public_identifier}",
+         subject: "A comment has been added to request #{comment.proposal.public_identifier}",
          from: user_email(comment.user)
          )
   end
@@ -62,8 +67,8 @@ class CommunicartMailer < ActionMailer::Base
 
   def set_attachments(proposal)
     if proposal.approved?
-      attachments['Communicart' + proposal.public_identifier.to_s + '.comments.csv'] = Exporter::Comments.new(proposal.cart).to_csv
-      attachments['Communicart' + proposal.public_identifier.to_s + '.approvals.csv'] = Exporter::Approvals.new(proposal.cart).to_csv
+      attachments['Communicart' + proposal.public_identifier.to_s + '.comments.csv'] = Exporter::Comments.new(proposal).to_csv
+      attachments['Communicart' + proposal.public_identifier.to_s + '.approvals.csv'] = Exporter::Approvals.new(proposal).to_csv
     end
   end
 
@@ -79,16 +84,15 @@ class CommunicartMailer < ActionMailer::Base
     address.format
   end
 
-  def send_cart_email(from_email, to_email, cart)
-    @cart = cart
-    @proposal = cart.proposal.decorate
-
+  def send_proposal_email(from_email, to_email, proposal, template_name=nil)
+    @proposal = proposal.decorate
     set_attachments(@proposal)
 
     mail(
       to: to_email,
-      subject: "Communicart Approval Request from #{@proposal.requester.full_name}: Please review #{@proposal.public_identifier}",
-      from: from_email
+      subject: "Communicart Approval Request from #{proposal.requester.full_name}: Please review request #{proposal.public_identifier}",
+      from: from_email,
+      template_name: template_name
     )
   end
 end

@@ -35,7 +35,7 @@ describe Ncr::WorkOrder do
         ["Office", Ncr::OFFICES[0]],
         ["RWA Number", "RWWAAA #"],
         ["Vendor", "Some Vend"],
-        ["Work Order", "Some WO#"]
+        ["Work Order / Maximo Ticket Number", "Some WO#"]
       ])
     end
   end
@@ -105,49 +105,39 @@ describe Ncr::WorkOrder do
     it 'includes the fiscal year' do
       work_order = FactoryGirl.create(:ncr_work_order, :with_proposal,
                                       created_at: Date.new(2007, 1, 15))
+      proposal_id = work_order.proposal.id
+
       expect(work_order.public_identifier).to eq(
-        "FY07-#{work_order.id}")
+        "FY07-#{proposal_id}")
 
       work_order.update_attribute(:created_at, Date.new(2007, 10, 1))
       expect(work_order.public_identifier).to eq(
-        "FY08-#{work_order.id}")
+        "FY08-#{proposal_id}")
     end
   end
 
-  describe '#update_approver' do
-    let (:work_order) { FactoryGirl.create(:ncr_work_order, :full) }
-    it 'sends an email when the approver changes' do
-      expect {
-        work_order.update_approver("bob@example.com")
-      }.to change {deliveries.count}
-      expect(deliveries.last.to).to eq(["bob@example.com"])
+  describe 'rwa validations' do
+    let (:work_order) { FactoryGirl.create(:ncr_work_order) }
+    it 'works with one letter followed by 7 numbers' do
+      work_order.rwa_number = 'A1234567'
+      expect(work_order).to be_valid
     end
 
-    it "doesn't send an email when the approver hasn't changed" do
-      approver = work_order.proposal.approvers.first
-      approver.update(email_address: 'bill@example.com')
-      expect {
-        work_order.update_approver("bill@example.com")
-      }.not_to change {deliveries.count}
-    end
-  end
-
-  describe 'updates' do
-    let (:work_order) { FactoryGirl.create(:ncr_work_order, :full) }
-    it 'notifies no one when edited if no one has already approved' do
-      expect {
-        work_order.update(name: 'New Name')
-      }.not_to change {deliveries.count}
+    it 'must be 8 chars' do
+      work_order.rwa_number = 'A123456'
+      expect(work_order).not_to be_valid
     end
 
-    it 'notifies previous approvers when something changes' do
-      first_approval = work_order.proposal.approvals.first
-      first_approval.user.update(email_address: 'bob@example.com')
-      first_approval.approve!
-      expect {
-        work_order.update(name: 'New Name')
-      }.to change { deliveries.count }.by(1)
-      expect(deliveries.last.to).to eq(['bob@example.com'])
+    it 'must have a letter at the beginning' do
+      work_order.rwa_number = '12345678'
+      expect(work_order).not_to be_valid
+    end
+
+    it 'is not required' do
+      work_order.rwa_number = nil
+      expect(work_order).to be_valid
+      work_order.rwa_number = ''
+      expect(work_order).to be_valid
     end
   end
 end

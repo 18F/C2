@@ -1,12 +1,12 @@
 class MailPreview < MailView
-  def cart_notification_email
+  def actions_for_approver
     # TODO mock access token, if one isn't present
-    mail = CommunicartMailer.cart_notification_email(email, pending_approval)
+    mail = CommunicartMailer.actions_for_approver(email, pending_approval)
     inline_styles(mail)
   end
 
-  def cart_observer_email
-    mail = CommunicartMailer.cart_observer_email(email, cart)
+  def proposal_observer_email
+    mail = CommunicartMailer.proposal_observer_email(email, proposal)
     inline_styles(mail)
   end
 
@@ -35,8 +35,8 @@ class MailPreview < MailView
     Approval.received.last
   end
 
-  def cart
-    Cart.last
+  def proposal
+    Proposal.last
   end
 
   def comment

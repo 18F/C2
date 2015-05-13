@@ -4,12 +4,12 @@
     <td colspan=2 align="center">
       <% if show_approval_actions %>
         <p>
-          <%= link_to "Approve", approval_action_url(approval), class: 'form-button' %>
+          <%= link_to "Approve", generate_approve_url(approval), class: 'form-button' %>
         </p>
       <% end %>
       <p>
         <strong>
-          <%= link_to "Or Send a Comment", proposal_url(cart.proposal, anchor: 'cart-comments') %>
+          <%= link_to "Or Send a Comment", proposal_url(approval.proposal, anchor: 'comments'), {target: 'C2'} %>
         </strong>
       </p>
     </td>

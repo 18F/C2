@@ -1,8 +1,11 @@
 class ProposalsController < ApplicationController
-  before_filter :authenticate_user!
-  before_filter ->{authorize self.proposal}, only: [:show]
-  rescue_from Pundit::NotAuthorizedError, with: :auth_errors
+  include TokenAuth
+
+  before_filter :authenticate_user!, except: :approve
+  before_filter ->{authorize self.proposal}, only: :show
+  before_filter :validate_access, only: :approve
   helper_method :display_status
+  add_template_helper ProposalsHelper
 
   def show
     @proposal = self.proposal.decorate
@@ -11,21 +14,47 @@ class ProposalsController < ApplicationController
   end
 
   def index
-    @proposals = policy_scope(Proposal).order('created_at DESC')
+    @proposals = self.proposals
     @CLOSED_PROPOSAL_LIMIT = 10
   end
 
   def archive
-    @proposals = policy_scope(Proposal).closed.order('created_at DESC')
+    @proposals = self.proposals.closed
+  end
+
+  def approve
+    approval = self.proposal.approval_for(current_user)
+    if approval.user.delegates_to?(current_user)
+      # assign them to the approval
+      approval.update_attributes!(user: current_user)
+    end
+
+    approval.approve!
+    flash[:success] = "You have approved #{proposal.public_identifier}."
+    redirect_to proposal
+  end
+
+  # @todo - this is acting more like an index; rename existing #index to #mine
+  # or similar, then rename #query to #index
+  def query
+    @proposals = policy_scope(Proposal).order('created_at DESC')
+    @start_date = self.param_date(:start_date)
+    @end_date = self.param_date(:end_date)
+    if @start_date
+      @proposals = @proposals.where('created_at >= ?', @start_date)
+    end
+    if @end_date
+      @proposals = @proposals.where('created_at < ?', @end_date)
+    end
   end
 
   protected
+
   def proposal
     @cached_proposal ||= Proposal.find params[:id]
   end
 
-  def auth_errors(exception)
-    redirect_to proposals_path,
-      alert: "You are not allowed to see that proposal"
+  def proposals
+    policy_scope(Proposal).order('created_at DESC')
   end
 end

@@ -13,10 +13,10 @@ describe "National Capital Region proposals" do
     end
 
     it "saves a Proposal with the attributes" do
-      expect(Dispatcher).to receive(:deliver_new_cart_emails)
+      expect(Dispatcher).to receive(:deliver_new_proposal_emails)
 
       visit '/ncr/work_orders/new'
-      fill_in 'Name', with: "buying stuff"
+      fill_in 'Project title', with: "buying stuff"
       fill_in 'Description', with: "desc content"
       choose 'BA80'
       fill_in 'Vendor', with: 'ACME'
@@ -59,7 +59,7 @@ describe "National Capital Region proposals" do
 
     it "doesn't save when the amount is too high" do
       visit '/ncr/work_orders/new'
-      fill_in 'Name', with: "buying stuff"
+      fill_in 'Project title', with: "buying stuff"
       choose 'BA80'
       fill_in 'Vendor', with: 'ACME'
       fill_in 'Amount', with: 10_000
@@ -76,9 +76,9 @@ describe "National Capital Region proposals" do
 
     it "includes has overwritten field names" do
       visit '/ncr/work_orders/new'
-      fill_in 'Name', with: "buying stuff"
+      fill_in 'Project title', with: "buying stuff"
       choose 'BA80'
-      fill_in 'RWA Number', with: 'NumNum'
+      fill_in 'RWA Number', with: 'B9876543'
       fill_in 'Vendor', with: 'ACME'
       fill_in 'Amount', with: 123.45
       fill_in "Approving Official's Email Address", with: 'approver@example.com'
@@ -204,7 +204,7 @@ describe "National Capital Region proposals" do
       before do
         visit '/ncr/work_orders/new'
 
-        fill_in 'Name', with: "buying stuff"
+        fill_in 'Project title', with: "buying stuff"
         fill_in 'Vendor', with: 'ACME'
         fill_in 'Amount', with: 123.45
         fill_in "Approving Official's Email Address", with: 'approver@example.com'
@@ -214,7 +214,7 @@ describe "National Capital Region proposals" do
 
       it "approves emergencies" do
         choose 'BA61'
-        check "I received a verbal NTP to address this emergency"
+        check "This request was an emergency and I received a verbal Notice to Proceed (NTP)"
         expect {
           click_on 'Submit for approval'
         }.to change { Proposal.count }.from(0).to(1)
@@ -230,9 +230,9 @@ describe "National Capital Region proposals" do
 
       it "does not set emergencies if form type changes" do
         choose 'BA61'
-        check "I received a verbal NTP to address this emergency"
+        check "This request was an emergency and I received a verbal Notice to Proceed (NTP)"
         choose 'BA80'
-        fill_in 'RWA Number', with: "a 'number'"
+        fill_in 'RWA Number', with: 'R9876543'
         expect {
           click_on 'Submit for approval'
         }.to change { Proposal.count }.from(0).to(1)

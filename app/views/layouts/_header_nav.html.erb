@@ -1,0 +1,24 @@
+<ul class='header-nav'>
+  <%- if signed_in? %>
+    <li>
+      <%= session['user']['email'] %>
+      <%= image_tag 'icon-user.png', alt: ' ' %>
+    </li>
+    <li>
+      <%= link_to 'Logout', "/logout", method: :post, class: 'login-link' %>
+      <%= image_tag 'icon-logout.png', alt: 'Logout' %>
+    </li>
+  <%- else %>
+    <li>
+      <%= link_to 'Sign in with MyUSA', auth_path %>
+    </li>
+  <%- end %>
+</ul>
+<%- if signed_in? %>
+  <div class="mycart-link">
+    <ul class="header-nav">
+      <li><%= link_to "My Requests", proposals_path %> <%= image_tag "img-cart.png", width: '18px', height:'16px' %></li>
+      <%= client_partial(current_user.client_slug || 'ncr', "header_links") %>
+    </ul>
+  </div>
+<%- end %>

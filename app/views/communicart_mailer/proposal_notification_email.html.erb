@@ -1,0 +1,22 @@
+<body class="communicart-notification">
+  <table class='reply-section'>
+    <%= client_partial(@proposal.client, 'email_header/' + @alert_partial.to_s) %>
+    <tr>
+      <td class="w-container html-email-message">
+        <%= client_partial(
+          @proposal.client, "mail_prefix",
+          locals: {proposal: @proposal, title: "Purchase Request"}) %>
+      </td>
+    </tr>
+  </table>
+
+<div style="width:800px">
+  <%= render partial: 'comments', locals: { comments: @proposal.comments } %>
+
+  <%= client_partial(@proposal.client, 'proposal_mail',
+                     locals: {proposal: @proposal, title: "Purchase Request"}) %>
+
+  <%= render partial: 'email_reply', locals: { approval: @approval, show_approval_actions: @show_approval_actions } %>
+
+</div>
+</body>

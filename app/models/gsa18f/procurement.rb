@@ -5,7 +5,7 @@ module Gsa18f
   end
 
   DATA = YAML.load_file("#{Rails.root}/config/data/18f.yaml")
-  
+
 
   class Procurement < ActiveRecord::Base
     URGENCY = DATA['URGENCY']
@@ -17,7 +17,7 @@ module Gsa18f
     has_one :proposal, as: :client_data
     # TODO remove the dependence
     has_one :cart, through: :proposal
-    
+
     validates :cost_per_unit, numericality: {
       greater_than_or_equal_to: 0,
       less_than_or_equal_to: 3000
@@ -33,10 +33,10 @@ module Gsa18f
       )
       cart.set_requester(requester)
       self.add_approvals
-      Dispatcher.deliver_new_cart_emails(cart)
+      Dispatcher.deliver_new_proposal_emails(proposal)
       cart
     end
-    
+
     def update_cart(cart)
       cart.proposal.approvals.destroy_all
       self.add_approvals
@@ -52,11 +52,11 @@ module Gsa18f
     # split these into different models
     def self.relevant_fields(recurring)
       fields = [:office, :justification, :link_to_product, :quantity,
-        :date_requested, :urgency, :additional_info, :cost_per_unit, 
+        :date_requested, :urgency, :additional_info, :cost_per_unit,
         :product_name_and_description, :recurring]
       if recurring
         fields += [:recurring_interval, :recurring_length]
-      end 
+      end
       fields
     end
 
@@ -76,7 +76,7 @@ module Gsa18f
 
     # @todo - this is pretty ugly
     def public_identifier
-      self.cart.id
+      "##{self.proposal.id}"
     end
 
     def total_price

@@ -10,6 +10,12 @@ class Selectizer
 
   isRemote: ->
     !!@src()
+  
+  form_label: ->
+    $('label[for="'+@$el.attr('id')+'"]').text();
+
+  add_label: ->
+    @selectizeObj().$control_input.attr('aria-label',@form_label())
 
   selectizeOpts: ->
     opts = {}
@@ -59,6 +65,7 @@ $ ->
     selectizer = new Selectizer(el)
     selectizer.enable()
     selectizer.loadOptionsIfRemote()
+    selectizer.add_label()
 
   #Disable/Enable button if textbox is empty
   $('#add_a_comment').prop 'disabled', true

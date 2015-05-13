@@ -4,30 +4,30 @@ class Dispatcher
     send_notification_email(approval)
   end
 
-  def email_observers(cart)
-    cart.observations.each do |observation|
-      CommunicartMailer.cart_observer_email(observation.user_email_address, cart).deliver
+  def email_observers(proposal)
+    proposal.observations.each do |observation|
+      CommunicartMailer.proposal_observer_email(observation.user_email_address, proposal).deliver
     end
   end
 
-  def email_sent_confirmation(cart)
-    CommunicartMailer.proposal_created_confirmation(cart).deliver
+  def email_sent_confirmation(proposal)
+    CommunicartMailer.proposal_created_confirmation(proposal).deliver
   end
 
-  def deliver_new_cart_emails(cart)
-    self.email_observers(cart)
-    self.email_sent_confirmation(cart)
+  def deliver_new_proposal_emails(proposal)
+    self.email_observers(proposal)
+    self.email_sent_confirmation(proposal)
   end
 
   def requires_approval_notice?(approval)
     true
   end
 
-  def on_cart_rejected(cart)
-    rejection = cart.rejections.first
+  def on_proposal_rejected(proposal)
+    rejection = proposal.approvals.rejected.first
     # @todo rewrite this email so a "rejection approval" isn't needed
     CommunicartMailer.approval_reply_received_email(rejection).deliver
-    self.email_observers(cart)
+    self.email_observers(proposal)
   end
 
   def on_approval_approved(approval)
@@ -35,7 +35,7 @@ class Dispatcher
       CommunicartMailer.approval_reply_received_email(approval).deliver
     end
 
-    self.email_observers(approval.cart)
+    self.email_observers(approval.proposal)
   end
 
   def on_comment_created(comment)
@@ -62,14 +62,14 @@ class Dispatcher
     end
   end
 
-  def self.deliver_new_cart_emails(cart)
-    dispatcher = self.initialize_dispatcher(cart.proposal)
-    dispatcher.deliver_new_cart_emails(cart)
+  def self.deliver_new_proposal_emails(proposal)
+    dispatcher = self.initialize_dispatcher(proposal)
+    dispatcher.deliver_new_proposal_emails(proposal)
   end
 
-  def self.on_cart_rejected(cart)
-    dispatcher = self.initialize_dispatcher(cart.proposal)
-    dispatcher.on_cart_rejected(cart)
+  def self.on_proposal_rejected(proposal)
+    dispatcher = self.initialize_dispatcher(proposal)
+    dispatcher.on_proposal_rejected(proposal)
   end
 
   def self.on_approval_approved(approval)
@@ -96,6 +96,6 @@ class Dispatcher
 
   def send_notification_email(approval)
     email = approval.user_email_address
-    CommunicartMailer.cart_notification_email(email, approval).deliver
+    CommunicartMailer.actions_for_approver(email, approval).deliver
   end
 end

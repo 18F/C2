@@ -4,37 +4,16 @@
       <div id="communicart_logo">Communicart</div>
       <h1>Approval Portal</h1>
     </div>
-
-    <ul class='header-nav'>
-      <%- unless signed_in? %>
-
-        <li>
-          <%= link_to 'Sign in with MyUSA', auth_path %>
-        </li>
-      <%- else %>
-        <li>
-          <%= session['user']['email'] %>
-          <%= image_tag 'icon-user.png', alt: ' ' %>
-        </li>
-        <li>
-          <%= link_to 'Logout', "/logout", method: :post, class: 'login-link' %>
-          <%= image_tag 'icon-logout.png', alt: 'Logout' %>
-        </li>
-      <%- end %>
-    </ul>
-    <%- if signed_in? %>
-      <div class="mycart-link">
-        <ul class="header-nav">
-          <li><%= link_to "My Requests", proposals_path %> <%= image_tag "img-cart.png", width: '18px', height:'16px' %></li>
-          <%= client_partial(current_user.client_slug || 'ncr', "header_links") %>
-        </ul>
-      </div>
-    <%- end %>
+    <%= render 'layouts/header_nav' %>
   </div>
 </div>
 
 <%- unless excluded_portal_link %>
   <ul id='breadcrumb-nav'>
-    <li><%= link_to "Back to main portal", proposals_path %></li>
+    <%- if return_to %>
+      <li><%= link_to "Back to " + return_to[:name], return_to[:path] %></li>
+    <%- else -%>
+      <li><%= link_to "Back to main portal", proposals_path %></li>
+    <%- end %>
   </ul>
 <%- end %>

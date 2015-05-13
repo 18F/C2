@@ -1,9 +1,11 @@
+<% content_for :title, "My Requests" %> 
 <div class="inset">
   <div class="row pending-pr">
     <div class="col-md-12">
       <h3>Pending Purchase Requests</h3>
       <%- if @proposals.pending.any? %>
-        <%= render partial: "proposal_list", locals: { proposals: @proposals.pending, role: @role, closed: false} %>
+        <%= client_partial current_user.client_slug, "proposal_list",
+            locals: { proposals: @proposals.pending, role: @role, closed: false} %>
       <%- else %>
         <p class="empty-list-label">No pending purchase requests</p>
       <%- end %>
@@ -11,7 +13,7 @@
   </div>
   <div class="row past-pr">
     <div class="col-sm-10">
-      <h3>Recently Closed Purchase Requests</h3>
+      <h3>Recently Completed Purchase Requests</h3>
     </div>
 
     <%= render partial: 'archive_link' %>
@@ -20,8 +22,9 @@
   <%- if @proposals.closed.any? %>
     <div class="row">
       <div class="col-sm-12">
-        <%= render partial: "proposal_list", locals: { 
-          proposals: @proposals.closed, limit: @CLOSED_PROPOSAL_LIMIT} %>
+        <%= client_partial current_user.client_slug, "proposal_list",
+            locals: {proposals: @proposals.closed,
+                     limit: @CLOSED_PROPOSAL_LIMIT} %>
       </div>
     </div>
 
@@ -30,6 +33,6 @@
     </div>
 
   <%- else %>
-    <p class="empty-list-label">No recently closed purchase requests</p>
+    <p class="empty-list-label">No recently completed purchase requests</p>
   <%- end %>
 </div>
