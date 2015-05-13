@@ -33,7 +33,6 @@ module Gsa18f
 
     def set_defaults
       self.flow ||= 'linear'
-      self.subclass ||= 'Gsa18f::Procurement'
       super
     end
 

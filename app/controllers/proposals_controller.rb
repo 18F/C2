@@ -8,7 +8,7 @@ class ProposalsController < ApplicationController
   add_template_helper ProposalsHelper
 
   def show
-    @proposal = self.proposal.as_subclass.decorate
+    @proposal = self.proposal.decorate
     @show_comments = true
     @include_comments_files = true
   end

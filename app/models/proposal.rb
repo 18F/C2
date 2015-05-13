@@ -100,12 +100,8 @@ class Proposal < ActiveRecord::Base
     self.updated_at.to_i
   end
 
-  def as_subclass
-    if self.subclass
-      self.subclass.constantize.find self.id
-    else
-      self
-    end
+  def self.policy_class
+    ProposalPolicy
   end
 
   def client

@@ -37,7 +37,7 @@ describe "GSA 18f Purchase Request Form" do
       expect(page).to have_content("Procurement submitted")
       expect(current_path).to eq("/proposals/#{Proposal.last.id}")
 
-      proposal = Proposal.last.as_subclass
+      proposal = Proposal.last
       expect(proposal.name).to eq("buying stuff")
       expect(proposal.flow).to eq('linear')
       expect(proposal.client).to eq('gsa18f')
@@ -153,7 +153,7 @@ describe "GSA 18f Purchase Request Form" do
 
       click_on 'Submit for approval'
 
-      proposal = Proposal.last.as_subclass
+      proposal = Proposal.last
 
       expect(proposal.name).to eq("buying stuff")
       expect(proposal.flow).to eq('linear')
@@ -185,7 +185,7 @@ describe "GSA 18f Purchase Request Form" do
     end
 
     it "does not show a restart link for another client" do
-      gsa18f.update_attribute(:subclass, nil)
+      gsa18f.update_attribute(:type, nil)
       visit "/proposals/#{gsa18f.id}"
       expect(page).not_to have_content('Modify Request')
     end

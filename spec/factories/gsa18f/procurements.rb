@@ -7,6 +7,5 @@ FactoryGirl.define do
     office Gsa18f::Procurement::OFFICES[0]
     urgency Gsa18f::Procurement::URGENCY[0]
     flow 'linear'
-    subclass 'Gsa18f::Procurement'
   end
 end

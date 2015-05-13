@@ -10,6 +10,5 @@ FactoryGirl.define do
     office Ncr::OFFICES[0]
     project_title "NCR Name"
     flow 'linear'
-    subclass 'Ncr::WorkOrder'
   end
 end

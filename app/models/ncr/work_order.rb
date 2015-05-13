@@ -38,10 +38,7 @@ module Ncr
 
 
     def set_defaults
-      self.not_to_exceed ||= false
-      self.emergency ||= false
       self.flow ||= 'linear'
-      self.subclass ||= 'Ncr::WorkOrder'
       super
     end
 
@@ -103,10 +100,6 @@ module Ncr
 
     def name
       self.project_title
-    end
-
-    def self.policy_class
-      ProposalPolicy
     end
 
     protected

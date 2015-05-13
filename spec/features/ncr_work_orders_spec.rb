@@ -28,7 +28,7 @@ describe "National Capital Region proposals" do
         click_on 'Submit for approval'
       }.to change { Proposal.count }.from(0).to(1)
 
-      proposal = Proposal.last.as_subclass
+      proposal = Proposal.last
       expect(page).to have_content("Proposal submitted")
       expect(current_path).to eq("/proposals/#{proposal.id}")
 
@@ -184,7 +184,7 @@ describe "National Capital Region proposals" do
     end
 
     it "does not show a edit link for another client" do
-      work_order.update_attribute(:subclass, nil)
+      work_order.update_attribute(:type, nil)
       visit "/proposals/#{work_order.id}"
       expect(page).not_to have_content('Modify Request')
     end
@@ -214,7 +214,7 @@ describe "National Capital Region proposals" do
           click_on 'Submit for approval'
         }.to change { Proposal.count }.from(0).to(1)
 
-        proposal = Proposal.last.as_subclass
+        proposal = Proposal.last
         expect(page).to have_content("Proposal submitted")
         expect(current_path).to eq("/proposals/#{proposal.id}")
         expect(page).to have_content("0 of 0 approved")
@@ -232,7 +232,7 @@ describe "National Capital Region proposals" do
           click_on 'Submit for approval'
         }.to change { Proposal.count }.from(0).to(1)
 
-        proposal = Proposal.last.as_subclass
+        proposal = Proposal.last
         expect(page).to have_content("Proposal submitted")
         expect(current_path).to eq("/proposals/#{proposal.id}")
 
