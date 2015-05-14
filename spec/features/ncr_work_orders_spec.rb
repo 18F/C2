@@ -124,6 +124,13 @@ describe "National Capital Region proposals" do
       expect(work_order.vendor).to eq("New ACME")
     end
 
+    it "has 'Discard Changes' link" do
+      visit "/ncr/work_orders/#{work_order.id}/edit"
+      expect(page).to have_content("Discard Changes")
+      click_on "Discard Changes"
+      expect(current_path).to eq("/proposals/#{work_order.id}")
+    end
+
     it "has a disabled field if first approval is done" do
       visit "/ncr/work_orders/#{work_order.id}/edit"
       expect(find("[name=approver_email]")["disabled"]).to be_nil

@@ -172,9 +172,15 @@ describe "GSA 18f Purchase Request Form" do
 
     it "shows a restart link from a rejected proposal" do
       gsa18f.update_attribute(:status, 'rejected') # avoid state machine
-
       visit "/proposals/#{gsa18f.id}"
       expect(page).to have_content('Modify Request')
+    end
+
+    it "has 'Discard Changes' link" do
+      visit "/gsa18f/procurements/#{gsa18f.id}/edit"
+      expect(page).to have_content("Discard Changes")
+      click_on "Discard Changes"
+      expect(current_path).to eq("/proposals/#{gsa18f.id}")
     end
 
     it "does not show a restart link for an approved proposal" do
