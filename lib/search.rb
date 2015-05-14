@@ -5,7 +5,7 @@ module Search
     #   http://blog.lostpropertyhq.com/postgres-full-text-search-is-good-enough/#ranking
     #
     # Note that all search computation is done at runtime, so may need to use one or more VIEWs or INDEXes down the road to make it more performant.
-    query = <<-SQL
+    result_set = <<-SQL
       SELECT pid
       FROM (
         -- TODO handle other use case models
@@ -22,12 +22,11 @@ module Search
           proposals.client_data_type = 'Ncr::WorkOrder'
         GROUP BY proposals.id, ncr_work_orders.id
       ) p_search
-      -- TODO sanitize
-      WHERE p_search.document @@ plainto_tsquery('#{query}')
-      ORDER BY ts_rank(p_search.document, plainto_tsquery('#{query}')) DESC
+      WHERE p_search.document @@ plainto_tsquery(:query)
+      ORDER BY ts_rank(p_search.document, plainto_tsquery(:query)) DESC
     SQL
 
     # feels a bit janky
-    Proposal.where("id IN (#{query})")
+    Proposal.where("id IN (#{result_set})", query: query)
   end
 end
