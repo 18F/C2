@@ -19,8 +19,8 @@ module Search
         GROUP BY proposals.id, ncr_work_orders.id
       ) p_search
       -- TODO sanitize
-      WHERE p_search.document @@ plainto_tsquery('english', '#{query}')
-      ORDER BY ts_rank(p_search.document, plainto_tsquery('english', '#{query}')) DESC
+      WHERE p_search.document @@ plainto_tsquery('#{query}')
+      ORDER BY ts_rank(p_search.document, plainto_tsquery('#{query}')) DESC
     SQL
 
     # feels a bit janky
