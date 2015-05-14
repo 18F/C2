@@ -1,6 +1,10 @@
 module Search
   def self.find_proposals(query)
-    # modified from http://blog.lostpropertyhq.com/postgres-full-text-search-is-good-enough/#ranking
+    # Modified from
+    #
+    #   http://blog.lostpropertyhq.com/postgres-full-text-search-is-good-enough/#ranking
+    #
+    # Note that all search computation is done at runtime, so may need to use one or more VIEWs or INDEXes down the road to make it more performant.
     query = <<-SQL
       SELECT pid
       FROM (
