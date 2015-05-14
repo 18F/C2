@@ -38,4 +38,15 @@ describe ApiTokenPolicy do
       expect(subject).not_to permit(approval_params_with_token, :api_token)
     end
   end
+
+  permissions :not_delegate? do
+    it "allows non-delegates to use" do
+      expect(subject).to permit(approval_params_with_token, :api_token)
+    end
+
+    it "does not allow delegates to use" do
+      token.user.add_delegate(FactoryGirl.create(:user))
+      expect(subject).not_to permit(approval_params_with_token, :api_token)
+    end
+  end
 end

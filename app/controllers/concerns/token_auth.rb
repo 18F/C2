@@ -27,6 +27,7 @@ module TokenAuth
   def validate_access
     if !signed_in?
       authorize(:api_token, :valid!, params)
+      authorize(:api_token, :not_delegate!, params)
       # validated above
       sign_in(ApiToken.find_by(access_token: params[:cch]).user)
     end
