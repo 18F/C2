@@ -8,8 +8,10 @@ module Search
         -- TODO handle associations and their properties in a more automated way
         SELECT
           proposals.id AS pid,
-          setweight(to_tsvector(to_char(proposals.id, '999')), 'A') ||
-          setweight(to_tsvector(coalesce(ncr_work_orders.project_title, '')), 'B') AS document
+          (
+            setweight(to_tsvector(to_char(proposals.id, '999')), 'A') ||
+            setweight(to_tsvector(coalesce(ncr_work_orders.project_title, '')), 'B')
+          ) AS document
         FROM proposals
         LEFT OUTER JOIN ncr_work_orders ON
           ncr_work_orders.id = proposals.client_data_id AND
