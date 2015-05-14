@@ -102,7 +102,7 @@
             </p>
           </div>
           <p class='col-xs-5 col-sm-6 text-area-button'>
-            <%= submit_tag "Send a Comment", id: :add_a_comment %>
+          <%= submit_tag "Send a Comment", id: :add_a_comment, data: {'disable-if-empty' => 'comment_comment_text'} %>
           </p>
         </div>
       <%- end %>
@@ -148,7 +148,7 @@
             <p>Attach a file (e.g. receipts, contract documents, etc.)</p>
           </div>
           <p class='col-xs-5 col-sm-6 text-area-button'>
-            <%= submit_tag "Attach a File", id: :add_a_file %>
+          <%= submit_tag "Attach a File", id: :add_a_file, data: {'disable-if-empty' => 'attachment_file'} %>
           </p>
         </div>
       <%- end %>

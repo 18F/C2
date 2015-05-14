@@ -232,6 +232,11 @@ tr.cart_item_information p {
     border: 0;
     padding: 15px;
 
+    &[disabled] {
+      color: $medgray;
+      background-color: $lightgray;
+    }
+
     @media(max-width: $break-small) {
       padding: 10px;
     }
