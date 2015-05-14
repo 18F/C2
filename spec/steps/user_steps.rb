@@ -1,5 +1,10 @@
 module UserSteps
 
+  # include body text and button text
+  def page_text
+    page.find('body').text + ' ' + page.all("input[type=submit]").map(&:value).join(" ")
+  end
+
   step 'a valid user' do
     @user = User.find_or_create_by(email_address: 'test.user@some-dot-gov.gov')
     @user.update_attributes(first_name: "George", last_name: "Jetson")
@@ -23,11 +28,11 @@ module UserSteps
   end
 
   step "I should see :text" do |text|
-    expect(page.find('body')).to have_content(text)
+    expect(page_text).to include(text)
   end
 
   step "I should not see :text" do |text|
-    expect(page.find('body')).to_not have_content(text)
+    expect(page_text).not_to include(text)
   end
 
   step 'I should see a header :text' do |text|
