@@ -82,6 +82,15 @@ describe ProposalsController do
       expect(assigns(:proposals)).to eq([proposal])
     end
 
+    it "supports text searching by NCR vendor" do
+      work_order = FactoryGirl.create(:ncr_work_order, :with_proposal)
+      proposal2 = work_order.proposal
+      proposal2.update_attributes!(requester: user)
+
+      get :query, text: work_order.vendor
+      expect(assigns(:proposals)).to eq([proposal2])
+    end
+
     context "#datespan_header" do
       render_views
 

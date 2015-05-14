@@ -37,7 +37,7 @@ class ProposalsController < ApplicationController
   # @todo - this is acting more like an index; rename existing #index to #mine
   # or similar, then rename #query to #index
   def query
-    @proposals = policy_scope(Proposal).order('created_at DESC')
+    @proposals = self.proposals
     @start_date = self.param_date(:start_date)
     @end_date = self.param_date(:end_date)
     if @start_date
