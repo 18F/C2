@@ -24,6 +24,13 @@ describe "commenting" do
       expect(page).to have_content("can't be blank")
     end
 
+    it "disables attachments if none is selected", js: true do
+      visit proposal_path(cart.proposal)
+      expect(find("#add_a_comment").disabled?).to be(true)
+      fill_in 'comment[comment_text]', with: 'foo'
+      expect(find("#add_a_comment").disabled?).to be(false)
+    end
+
     it "sends an email" do
       fill_in 'comment[comment_text]', with: 'foo'
       click_on 'Send a Comment'
