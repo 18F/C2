@@ -1,5 +1,12 @@
-module Search
-  def self.find_proposals(query)
+# http://blog.codeclimate.com/blog/2012/10/17/7-ways-to-decompose-fat-activerecord-models/
+class Search
+  attr_reader :relation
+
+  def initialize(proposals=Proposal.all)
+    @relation = proposals
+  end
+
+  def execute(query)
     # Modified from
     #
     #   http://blog.lostpropertyhq.com/postgres-full-text-search-is-good-enough/#ranking
@@ -27,6 +34,6 @@ module Search
     SQL
 
     # feels a bit janky
-    Proposal.where("id IN (#{result_set})", query: query)
+    self.relation.where("id IN (#{result_set})", query: query)
   end
 end

@@ -47,8 +47,7 @@ class ProposalsController < ApplicationController
       @proposals = @proposals.where('created_at < ?', @end_date)
     end
     if params[:text]
-      search_results = Search.find_proposals(params[:text])
-      @proposals = @proposals.merge(search_results)
+      @proposals = Search.new(@proposals).execute(params[:text])
     end
   end
 
