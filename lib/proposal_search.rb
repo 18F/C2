@@ -16,6 +16,7 @@ class ProposalSearch
       SELECT pid
       FROM (
         -- TODO handle other use case models
+        -- TODO handle additional properties
         -- TODO handle associations and their properties in a more automated way
         SELECT
           proposals.id AS pid,
