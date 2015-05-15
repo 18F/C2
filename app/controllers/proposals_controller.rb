@@ -51,6 +51,7 @@ class ProposalsController < ApplicationController
     else
       @proposals = @proposals.order('created_at DESC')
     end
+    # TODO limit/paginate results
   end
 
   protected
