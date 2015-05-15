@@ -15,6 +15,13 @@ describe "Add attachments" do
     expect(page).to have_content(attachment.file_file_name)
   end
 
+  it "disables attachments if none is selected", js: true do
+    visit proposal_path(proposal)
+    expect(find("#add_a_file").disabled?).to be(true)
+    page.attach_file('attachment[file]', "#{Rails.root}/app/assets/images/bg_approved_status.gif")
+    expect(find("#add_a_file").disabled?).to be(false)
+  end
+
   it "uploader can delete" do
     visit proposal_path(proposal)
     expect(page).to have_content("Delete")
