@@ -16,22 +16,6 @@ describe CommunicartMailerHelper do
       )
     end
 
-    it "leaves out the token if the approver has delegates" do
-      approver = FactoryGirl.create(:user, :with_delegate)
-      approval = FactoryGirl.create(:approval, :with_proposal, user: approver)
-      approval.create_api_token!
-      proposal = approval.proposal
-
-      expect(proposal).to receive(:version).and_return(123)
-
-      url = helper.generate_approve_url(approval)
-      uri = Addressable::URI.parse(url)
-      expect(uri.path).to eq("/proposals/#{proposal.id}/approve")
-      expect(uri.query_values).to eq(
-        'version' => '123'
-      )
-    end
-
     it "throws an error if there's no token" do
       approval = FactoryGirl.build(:approval)
       expect(approval.api_token).to eq(nil)

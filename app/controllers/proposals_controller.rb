@@ -3,6 +3,7 @@ class ProposalsController < ApplicationController
 
   before_filter :authenticate_user!, except: :approve
   before_filter ->{authorize self.proposal}, only: :show
+  before_filter :needs_token_on_get, only: :approve
   before_filter :validate_access, only: :approve
   helper_method :display_status
   add_template_helper ProposalsHelper
@@ -21,6 +22,7 @@ class ProposalsController < ApplicationController
   def archive
     @proposals = self.proposals.closed
   end
+
 
   def approve
     approval = self.proposal.approval_for(current_user)
