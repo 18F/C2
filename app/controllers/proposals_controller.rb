@@ -14,12 +14,12 @@ class ProposalsController < ApplicationController
   end
 
   def index
-    @proposals = self.proposals
+    @proposals = self.chronological_proposals
     @CLOSED_PROPOSAL_LIMIT = 10
   end
 
   def archive
-    @proposals = self.proposals.closed
+    @proposals = self.chronological_proposals.closed
   end
 
   def approve
@@ -48,6 +48,8 @@ class ProposalsController < ApplicationController
     end
     if params[:text]
       @proposals = ProposalSearch.new(@proposals).execute(params[:text])
+    else
+      @proposals = @proposals.order('created_at DESC')
     end
   end
 
@@ -58,6 +60,10 @@ class ProposalsController < ApplicationController
   end
 
   def proposals
-    policy_scope(Proposal).order('created_at DESC')
+    policy_scope(Proposal)
+  end
+
+  def chronological_proposals
+    self.proposals.order('created_at DESC')
   end
 end
