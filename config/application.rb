@@ -20,7 +20,7 @@ module C2
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    # http://git.io/ETVYsQ
+    # https://git.io/ETVYsQ
     config.middleware.insert_before 0, Rack::Cors, logger: Rails.logger do
       allow do
         origins '*'

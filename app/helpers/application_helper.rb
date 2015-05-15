@@ -1,5 +1,5 @@
 module ApplicationHelper
-  # Variation of http://git.io/ugBzaQ
+  # Variation of https://git.io/ugBzaQ
   def humanized_options_for_select(options)
     options = options.map do |val|
       [val.humanize, val]
