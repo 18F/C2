@@ -47,7 +47,7 @@ class ProposalsController < ApplicationController
       @proposals = @proposals.where('created_at < ?', @end_date)
     end
     if params[:text]
-      @proposals = Search.new(@proposals).execute(params[:text])
+      @proposals = ProposalSearch.new(@proposals).execute(params[:text])
     end
   end
 
