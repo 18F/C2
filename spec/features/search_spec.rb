@@ -20,4 +20,14 @@ describe "searching" do
     expect(page).to have_content(proposals.first.public_identifier)
     expect(page).not_to have_content(proposals.last.name)
   end
+
+  it "populates the search box on the results page" do
+    visit '/proposals'
+    fill_in 'text', with: 'foo'
+    click_button 'Search'
+
+    expect(current_path).to eq('/proposals/query')
+    field = find_field('text')
+    expect(field.value).to eq('foo')
+  end
 end

@@ -40,14 +40,16 @@ class ProposalsController < ApplicationController
     @proposals = self.proposals
     @start_date = self.param_date(:start_date)
     @end_date = self.param_date(:end_date)
+    @text = params[:text]
+
     if @start_date
       @proposals = @proposals.where('created_at >= ?', @start_date)
     end
     if @end_date
       @proposals = @proposals.where('created_at < ?', @end_date)
     end
-    if params[:text]
-      @proposals = ProposalSearch.new(@proposals).execute(params[:text])
+    if @text
+      @proposals = ProposalSearch.new(@proposals).execute(@text)
     else
       @proposals = @proposals.order('created_at DESC')
     end
