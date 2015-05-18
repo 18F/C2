@@ -24,10 +24,14 @@ describe ProposalSearch do
       expect(results).to eq([])
     end
 
-    it "returns the Proposal when searching by the WorkOrder#project_title" do
-      work_order = FactoryGirl.create(:ncr_work_order, :with_proposal)
-      results = ProposalSearch.new.execute(work_order.project_title)
-      expect(results).to eq([work_order.proposal])
+    context "Ncr::WorkOrders" do
+      [:project_title, :description, :vendor].each do |attr_name|
+        it "returns the Proposal when searching by the ##{attr_name}" do
+          work_order = FactoryGirl.create(:ncr_work_order, :with_proposal, attr_name => 'foo')
+          results = ProposalSearch.new.execute('foo')
+          expect(results).to eq([work_order.proposal])
+        end
+      end
     end
 
     it "returns the Proposals by rank" do

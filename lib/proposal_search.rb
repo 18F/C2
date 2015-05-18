@@ -23,7 +23,10 @@ class ProposalSearch
           proposals.id AS pid,
           (
             setweight(to_tsvector(proposals.id::text), 'A') ||
-            setweight(to_tsvector(coalesce(ncr_work_orders.project_title, '')), 'B')
+            -- need to set empty string as a default for values that can be null, either within the column or by the association not being present
+            setweight(to_tsvector(coalesce(ncr_work_orders.project_title, '')), 'B') ||
+            setweight(to_tsvector(coalesce(ncr_work_orders.description, '')), 'C') ||
+            setweight(to_tsvector(coalesce(ncr_work_orders.vendor, '')), 'C')
             -- TODO handle additional properties
           ) AS document
         FROM proposals
