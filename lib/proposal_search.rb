@@ -1,4 +1,12 @@
-# http://blog.codeclimate.com/blog/2012/10/17/7-ways-to-decompose-fat-activerecord-models/
+# Query logic modified from
+#
+#   http://blog.lostpropertyhq.com/postgres-full-text-search-is-good-enough/#ranking
+#
+# Note that all search computation is done at runtime, so may need to use one or more VIEWs or INDEXes down the road to make it more performant. Query object based on
+#
+#   http://blog.codeclimate.com/blog/2012/10/17/7-ways-to-decompose-fat-activerecord-models/
+#
+# TODO sanitize query
 class ProposalSearch
   attr_reader :relation
 
@@ -6,15 +14,7 @@ class ProposalSearch
     @relation = proposals
   end
 
-  def execute(query)
-    # Modified from
-    #
-    #   http://blog.lostpropertyhq.com/postgres-full-text-search-is-good-enough/#ranking
-    #
-    # Note that all search computation is done at runtime, so may need to use one or more VIEWs or INDEXes down the road to make it more performant.
-
-    # TODO sanitize query
-
+  def joined
     join = <<-SQL
       INNER JOIN (
         -- TODO handle other use case models
@@ -35,14 +35,26 @@ class ProposalSearch
       ON proposals.id = p_search.pid
     SQL
 
+    self.relation.joins(join)
+  end
+
+  def filtered(query)
     filter = <<-SQL
       p_search.document @@ plainto_tsquery('#{query}')
     SQL
 
+    self.joined.where(filter)
+  end
+
+  def ordered(query)
     ordering = <<-SQL
       ts_rank(p_search.document, plainto_tsquery('#{query}')) DESC
     SQL
 
-    self.relation.joins(join).where(filter).order(ordering)
+    self.filtered(query).order(ordering)
+  end
+
+  def execute(query)
+    self.ordered(query)
   end
 end
