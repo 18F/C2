@@ -7,9 +7,7 @@ describe "searching" do
 
   it "displays relevant results" do
     proposals = 2.times.map do |i|
-      proposal = FactoryGirl.create(:proposal, requester: user)
-      FactoryGirl.create(:ncr_work_order, project_title: "Work Order #{i}", proposal: proposal)
-      proposal
+      FactoryGirl.create(:ncr_work_order, project_title: "Work Order #{i}", requester: user)
     end
 
     visit '/proposals'
