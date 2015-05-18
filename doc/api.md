@@ -7,7 +7,7 @@ This API is currently in a very limited alpha, and may not be enabled in 18F's p
 ## Schemas
 
 * All decimals are strings ([more info](https://github.com/rails-api/active_model_serializers/issues/202))
-* All times are in [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) format
+* All times are in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format
 
 ### Approval
 
@@ -75,7 +75,7 @@ Name | Values
 
 ##### Example
 
-http://c2-dev.cf.18f.us/api/v1/users.json?limit=5&offset=10
+https://c2-dev.cf.18f.us/api/v1/users.json?limit=5&offset=10
 
 #### Response
 
@@ -108,7 +108,7 @@ Name | Values
 
 ##### Example
 
-http://c2-dev.cf.18f.us/api/v1/ncr/work_orders.json?limit=5&offset=10
+https://c2-dev.cf.18f.us/api/v1/ncr/work_orders.json?limit=5&offset=10
 
 #### Response
 
