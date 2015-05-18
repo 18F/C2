@@ -30,4 +30,27 @@ namespace :import_users do
       Dir.glob(dir + "private" + File::SEPARATOR + "*.yml").each(&method(:gsa18f_yaml_file))
     end
   end
+
+  task one: :environment do
+    email = ENV['EMAIL']
+    if !email
+      puts 'EMAIL must be specified. e.g. rake import_users:one EMAIL=anna.smith@some.gov FIRST=Anna LAST=Smith CLIENT=gsa18f'
+    else
+      user = User.for_email(email)
+      update = {}
+      if !ENV['FIRST'].nil?
+        update[:first_name] = ENV['FIRST']
+      end
+      if !ENV['LAST'].nil?
+        update[:last_name] = ENV['LAST']
+      end
+      if !ENV['CLIENT'].nil?
+        update[:client_slug] = ENV['CLIENT']
+      end
+
+      if update
+        user.update(update)
+      end
+    end
+  end
 end
