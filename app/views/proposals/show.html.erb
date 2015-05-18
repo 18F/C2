@@ -164,13 +164,11 @@
             <p class="col-sm-3 col-xs-5 date righted">
               <%= date_with_tooltip(attachment.created_at) %>
             </p>
-            <p class="col-sm-1 col-xs-1 righted">
-              <%- if policy(attachment).can_destroy? %>
-                <%= link_to "Delete",
-                    proposal_attachment_path(@proposal, attachment),
-                    method: :delete, data: {confirm: "Are you sure?"} %>
-              <%- end %>
-            </p>
+            <%- if policy(attachment).can_destroy? %>
+              <%= button_to "Delete", proposal_attachment_path(@proposal, attachment), method: :delete, data: {confirm: "Are you sure?"}, class: "col-sm-1 col-xs-1 righted" %>
+            <%- else %>
+              <p class="col-sm-1 col-xs-1 righted"></p>
+            <%- end %>
           </div>
         </div>
       <% end %>

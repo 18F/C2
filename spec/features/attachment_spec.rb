@@ -17,7 +17,7 @@ describe "Add attachments" do
 
   it "uploader can delete" do
     visit proposal_path(proposal)
-    expect(page).to have_content("Delete")
+    expect(page).to have_button("Delete")
     click_on("Delete")
     expect(current_path).to eq("/proposals/#{proposal.id}")
     expect(page).to have_content("Deleted attachment")
@@ -27,7 +27,7 @@ describe "Add attachments" do
   it "does not have a delete link for another" do
     login_as(proposal.approvers.first)
     visit proposal_path(proposal)
-    expect(page).not_to have_content("Delete")
+    expect(page).not_to have_button("Delete")
   end
 
   context "aws" do

@@ -306,11 +306,11 @@ body.webapp {
     color: black;
   }
 
-  a {
+  a, .button_to input {
     text-decoration: underline;
     color: #0C75E1;
   }
-  p {
+  p, .button_to input {
     font-size: 14px;
   }
 }
