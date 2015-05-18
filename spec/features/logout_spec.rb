@@ -5,24 +5,14 @@ describe "Logging out" do
       login_as(FactoryGirl.create(:user))
     end
 
-    it 'allows logout via the header link' do
+    it 'allows logout via the header button' do
       visit '/'
       expect(page).not_to have_content('Sign in')
-      expect(page).to have_content('Logout')
+      expect(page).to have_button('Logout')
       click_on 'Logout'
       expect(current_path).to eq('/')
       expect(page).to have_content('Sign in')
-      expect(page).not_to have_content('Logout')
-    end
-
-    it 'allows logout via a url' do
-      visit '/'
-      expect(page).not_to have_content('Sign in')
-      expect(page).to have_content('Logout')
-      visit '/logout'   # hard page refresh
-      expect(current_path).to eq('/')
-      expect(page).to have_content('Sign in')
-      expect(page).not_to have_content('Logout')
+      expect(page).not_to have_button('Logout')
     end
   end
 end

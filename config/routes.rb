@@ -2,7 +2,7 @@ C2::Application.routes.draw do
   root :to => 'home#index'
   match "/auth/:provider/callback" => "home#oauth_callback", via: [:get]
   get '/error' => 'home#error'
-  get "/logout" => "home#logout"
+  post "/logout" => "home#logout"
 
   namespace :api do
     scope :v1 do
