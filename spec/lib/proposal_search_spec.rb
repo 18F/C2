@@ -24,12 +24,22 @@ describe ProposalSearch do
       expect(results).to eq([])
     end
 
-    context "Ncr::WorkOrders" do
+    context Ncr::WorkOrder do
       [:project_title, :description, :vendor].each do |attr_name|
         it "returns the Proposal when searching by the ##{attr_name}" do
           work_order = FactoryGirl.create(:ncr_work_order, :with_proposal, attr_name => 'foo')
           results = ProposalSearch.new.execute('foo')
           expect(results).to eq([work_order.proposal])
+        end
+      end
+    end
+
+    context Gsa18f::Procurement do
+      [:product_name_and_description, :justification, :additional_info].each do |attr_name|
+        it "returns the Proposal when searching by the ##{attr_name}" do
+          procurement = FactoryGirl.create(:gsa18f_procurement, :with_proposal, attr_name => 'foo')
+          results = ProposalSearch.new.execute('foo')
+          expect(results).to eq([procurement.proposal])
         end
       end
     end

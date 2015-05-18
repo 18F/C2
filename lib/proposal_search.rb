@@ -17,23 +17,29 @@ class ProposalSearch
   def joined
     join = <<-SQL
       INNER JOIN (
-        -- TODO handle other use case models
         -- TODO handle associations and their properties in a more automated way
         SELECT
           proposals.id AS pid,
           (
-            setweight(to_tsvector(proposals.id::text), 'A') ||
             -- need to set empty string as a default for values that can be null, either within the column or by the association not being present
+            setweight(to_tsvector(proposals.id::text), 'A') ||
+            ---
             setweight(to_tsvector(coalesce(ncr_work_orders.project_title, '')), 'B') ||
             setweight(to_tsvector(coalesce(ncr_work_orders.description, '')), 'C') ||
-            setweight(to_tsvector(coalesce(ncr_work_orders.vendor, '')), 'C')
-            -- TODO handle additional properties
+            setweight(to_tsvector(coalesce(ncr_work_orders.vendor, '')), 'C') ||
+            ---
+            setweight(to_tsvector(coalesce(gsa18f_procurements.product_name_and_description, '')), 'B') ||
+            setweight(to_tsvector(coalesce(gsa18f_procurements.justification, '')), 'C') ||
+            setweight(to_tsvector(coalesce(gsa18f_procurements.additional_info, '')), 'C')
           ) AS document
         FROM proposals
+        LEFT OUTER JOIN gsa18f_procurements ON
+          gsa18f_procurements.id = proposals.client_data_id AND
+          proposals.client_data_type = 'Gsa18f::Procurement'
         LEFT OUTER JOIN ncr_work_orders ON
           ncr_work_orders.id = proposals.client_data_id AND
           proposals.client_data_type = 'Ncr::WorkOrder'
-        GROUP BY proposals.id, ncr_work_orders.id
+        GROUP BY proposals.id, ncr_work_orders.id, gsa18f_procurements.id
       ) p_search
       ON proposals.id = p_search.pid
     SQL
