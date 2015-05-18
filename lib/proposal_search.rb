@@ -6,7 +6,6 @@
 #
 #   http://blog.codeclimate.com/blog/2012/10/17/7-ways-to-decompose-fat-activerecord-models/
 #
-# TODO sanitize query
 class ProposalSearch
   attr_reader :relation
 
@@ -48,16 +47,13 @@ class ProposalSearch
   end
 
   def filtered(query)
-    filter = <<-SQL
-      p_search.document @@ plainto_tsquery('#{query}')
-    SQL
-
-    self.joined.where(filter)
+    self.joined.where('p_search.document @@ plainto_tsquery(?)', query)
   end
 
   def ordered(query)
+    sanitized_query = ActiveRecord::Base::sanitize(query)
     ordering = <<-SQL
-      ts_rank(p_search.document, plainto_tsquery('#{query}')) DESC
+      ts_rank(p_search.document, plainto_tsquery(#{sanitized_query})) DESC
     SQL
 
     self.filtered(query).order(ordering)
