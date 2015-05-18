@@ -22,7 +22,7 @@ class ProposalSearch
         SELECT
           proposals.id AS pid,
           (
-            setweight(to_tsvector(to_char(proposals.id, '999')), 'A') ||
+            setweight(to_tsvector(proposals.id::text), 'A') ||
             setweight(to_tsvector(coalesce(ncr_work_orders.project_title, '')), 'B')
             -- TODO handle additional properties
           ) AS document
