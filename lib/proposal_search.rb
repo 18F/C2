@@ -38,7 +38,6 @@ class ProposalSearch
         LEFT OUTER JOIN ncr_work_orders ON
           ncr_work_orders.id = proposals.client_data_id AND
           proposals.client_data_type = 'Ncr::WorkOrder'
-        GROUP BY proposals.id, ncr_work_orders.id, gsa18f_procurements.id
       ) p_search
       ON proposals.id = p_search.pid
     SQL
