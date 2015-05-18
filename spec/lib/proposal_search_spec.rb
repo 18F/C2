@@ -29,5 +29,17 @@ describe ProposalSearch do
       results = ProposalSearch.new.execute(work_order.project_title)
       expect(results).to eq([work_order.proposal])
     end
+
+    it "returns the Proposals by rank" do
+      prop1 = FactoryGirl.create(:proposal, id: 12)
+      work_order = FactoryGirl.create(:ncr_work_order, :with_proposal, project_title: "12 rolly chairs for 1600 Penn Ave")
+      prop2 = work_order.proposal
+      prop3 = FactoryGirl.create(:proposal, id: 1600)
+
+      searcher = ProposalSearch.new
+      expect(searcher.execute('12')).to eq([prop1, prop2])
+      expect(searcher.execute('1600')).to eq([prop3, prop2])
+      expect(searcher.execute('12 rolly')).to eq([prop2])
+    end
   end
 end
