@@ -83,6 +83,13 @@ describe ProposalPolicy do
 
     it "allows an approver to see it" do
       expect(subject).to permit(proposal.approvers[0], proposal)
+      expect(subject).to permit(proposal.approvers[1], proposal)
+    end
+
+    it "does not allow a pending approver to see it" do
+      proposal.approvals[0].update_attribute(:status, 'pending')
+      expect(subject).not_to permit(proposal.approvers[0], proposal)
+      expect(subject).to permit(proposal.approvers[1], proposal)
     end
 
     it "allows an observer to see it" do
@@ -114,6 +121,14 @@ describe ProposalPolicy do
       user = proposal.approvers.first
       proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
       expect(proposals).to eq([proposal])
+    end
+
+    it "does not allow a pending approver to see" do
+      approval = proposal.approvals.first
+      user = approval.user
+      approval.update_attribute(:status, 'pending')
+      proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
+      expect(proposals).to eq([])
     end
 
     it "allows a delegate to see" do

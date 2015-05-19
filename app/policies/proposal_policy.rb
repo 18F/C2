@@ -33,19 +33,12 @@ class ProposalPolicy
           "Sorry, you're not an observer on this proposal")
   end
 
-  def actionable_approvers
-    @proposal.currently_awaiting_approvers
-  end
-
   def pending_approver?
-    self.actionable_approvers.include?(@user)
+    @proposal.currently_awaiting_approvers.include?(@user)
   end
 
   def pending_delegate?
-    # TODO convert to SQL
-    self.actionable_approvers.any? do |approver|
-      approver.outgoing_delegates.exists?(assignee_id: @user.id)
-    end
+    ApprovalDelegate.where(assigner_id: @proposal.currently_awaiting_approvers, assignee: @user).exists?
   end
 
   def pending_approval!
@@ -64,8 +57,8 @@ class ProposalPolicy
   alias_method :can_update!, :can_edit!
 
   def can_show!
-    check(@proposal.users.include?(@user),
-          "You are not allowed to see this cart")
+    visible = ProposalPolicy::Scope.new(@user, Proposal).resolve
+    check(visible.include?(@proposal), "You are not allowed to see this cart")
   end
 
   # equivalent of can_show?
@@ -81,19 +74,13 @@ class ProposalPolicy
       where_clause = <<-SQL
         -- requester
         requester_id = :user_id
-        -- approver
-        OR EXISTS (SELECT id FROM approvals
-                   WHERE proposal_id = proposals.id AND user_id = :user_id)
-        -- delegate
+        -- approver / delegate
         OR EXISTS (
-          SELECT approvals.id FROM approvals
-          LEFT OUTER JOIN approval_delegates
-          -- the approver...
-          ON approval_delegates.assigner_id = approvals.user_id
-          -- ...on the proposal...
-          WHERE approvals.proposal_id = proposals.id
-          -- ...who has the specifified user as a delegate
-          AND approval_delegates.assignee_id = :user_id
+          SELECT * FROM approvals
+          LEFT JOIN approval_delegates ON (assigner_id = user_id)
+          WHERE proposal_id = proposals.id
+            AND status <> 'pending'
+            AND (user_id = :user_id OR assignee_id = :user_id)
         )
         -- observer
         OR EXISTS (SELECT id FROM observations
