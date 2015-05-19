@@ -14,7 +14,7 @@ This API is currently in a very limited alpha, and may not be enabled in 18F's p
 Attribute | Type | Note
 --- | --- | ---
 `id` | integer |
-`status` | string | Can be `pending`, `approved`, or `rejected`
+`status` | string | Can be `pending`, `actionable`, `approved`, or `rejected`
 `user` | [User](#user) | a.k.a. "the approver"
 
 ### [NCR](overview.md#national-capitol-region-ncr-service-centers) Work Order

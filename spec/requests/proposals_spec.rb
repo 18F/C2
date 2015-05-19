@@ -17,10 +17,10 @@ describe 'proposals' do
   end
 
   describe 'POST /proposals/:id/approve' do
-    def expect_status(proposal, status)
+    def expect_status(proposal, status, app_status)
       proposal.reload
       proposal.approvals.each do |approval|
-        expect(approval.status).to eq(status)
+        expect(approval.status).to eq(app_status)
       end
       expect(proposal.status).to eq(status)
     end
@@ -35,7 +35,7 @@ describe 'proposals' do
       post "/proposals/#{proposal.id}/approve"
 
       expect(response.status).to redirect_to(root_path(return_to: self.make_return_to("Previous", request.fullpath)))
-      expect_status(proposal, 'pending')
+      expect_status(proposal, 'pending', 'actionable')
     end
 
     it "fails if user is not involved with the request" do
@@ -46,7 +46,7 @@ describe 'proposals' do
       post "/proposals/#{proposal.id}/approve"
 
       expect(response.status).to redirect_to('/proposals')
-      expect_status(proposal, 'pending')
+      expect_status(proposal, 'pending', 'actionable')
     end
 
     it "succeeds as a delegate" do
@@ -61,7 +61,7 @@ describe 'proposals' do
 
       post "/proposals/#{proposal.id}/approve"
 
-      expect_status(proposal, 'approved')
+      expect_status(proposal, 'approved', 'approved')
     end
 
     context "signed in as the approver" do
@@ -76,20 +76,20 @@ describe 'proposals' do
         post "/proposals/#{proposal.id}/approve"
 
         expect(response).to redirect_to("/proposals/#{proposal.id}")
-        expect_status(proposal, 'approved')
+        expect_status(proposal, 'approved', 'approved')
       end
 
       describe "version number" do
         it "works if the version matches" do
           allow_any_instance_of(Proposal).to receive(:version).and_return(123)
           post "/proposals/#{proposal.id}/approve", version: 123
-          expect_status(proposal, 'approved')
+          expect_status(proposal, 'approved', 'approved')
         end
 
         it "fails if the versions don't match" do
           allow_any_instance_of(Proposal).to receive(:version).and_return(456)
           post "/proposals/#{proposal.id}/approve", version: 123
-          expect_status(proposal, 'pending')
+          expect_status(proposal, 'pending', 'actionable')
           # TODO check for message on the page
         end
       end
@@ -104,7 +104,7 @@ describe 'proposals' do
         post "/proposals/#{proposal.id}/approve", cch: token.access_token
 
         expect(response).to redirect_to("/proposals/#{proposal.id}")
-        expect_status(proposal, 'approved')
+        expect_status(proposal, 'approved', 'approved')
       end
 
       it "marks the token as used" do

@@ -1,7 +1,16 @@
 class Approval < ActiveRecord::Base
-  include ThreeStateWorkflow
-
-  workflow_column :status
+  include WorkflowModel
+  workflow do
+    state :pending do
+      event :make_actionable, transitions_to: :actionable
+    end
+    state :actionable do
+      event :approve, transitions_to: :approved
+      event :reject, transitions_to: :rejected
+    end
+    state :approved
+    state :rejected
+  end
 
   belongs_to :proposal
   has_one :cart, through: :proposal
@@ -20,7 +29,7 @@ class Approval < ActiveRecord::Base
   self.statuses.each do |status|
     scope status, -> { where(status: status) }
   end
-  scope :received, -> { approvable.where.not(status: 'pending') }
+  scope :received, -> { approvable.where(status: ['approved', 'rejected']) }
   default_scope { order('position ASC') }
 
 

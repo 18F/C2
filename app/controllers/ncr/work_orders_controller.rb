@@ -68,7 +68,7 @@ module Ncr
     def approver_email_frozen?
       proposal = self.work_order.try(:proposal)
       if proposal && proposal.approvals.first
-        !proposal.approvals.first.pending?
+        !proposal.approvals.first.actionable?
       else
         false
       end

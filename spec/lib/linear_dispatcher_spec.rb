@@ -1,5 +1,5 @@
 describe LinearDispatcher do
-  let(:proposal) { FactoryGirl.create(:proposal, :with_cart) }
+  let(:proposal) { FactoryGirl.create(:proposal, :with_cart, flow: 'linear') }
   let(:dispatcher) { LinearDispatcher.new }
   let(:requester) { FactoryGirl.create(:user, email_address: 'requester@some-dot-gov-domain.gov') }
   let(:approver) { FactoryGirl.create(:user, email_address: 'approver@some-dot-gov-domain.gov') }
@@ -17,21 +17,21 @@ describe LinearDispatcher do
     end
 
     it "returns the first pending approval by position" do
-      proposal.approvals.create!(position: 6)
-      last_approval = proposal.approvals.create!(position: 5)
+      proposal.approvals.create!(position: 6, status: 'actionable')
+      last_approval = proposal.approvals.create!(position: 5, status: 'actionable')
 
       expect(dispatcher.next_pending_approval(proposal)).to eq(last_approval)
     end
 
     it "returns nil if the proposal is rejected" do
-      next_app = proposal.approvals.create!(position: 5)
+      next_app = proposal.approvals.create!(position: 5, status: 'actionable')
       expect(dispatcher.next_pending_approval(proposal)).to eq(next_app)
       next_app.update_attribute(:status, 'rejected')  # skip state machine
       expect(dispatcher.next_pending_approval(proposal)).to eq(nil)
     end
 
     it "skips approved approvals" do
-      first_approval = proposal.approvals.create!(position: 6)
+      first_approval = proposal.approvals.create!(position: 6, status: 'actionable')
       proposal.approvals.create!(position: 5, status: 'approved')
 
       expect(dispatcher.next_pending_approval(proposal)).to eq(first_approval)
@@ -39,7 +39,7 @@ describe LinearDispatcher do
 
     it "skips non-approvers" do
       proposal.observations.create!
-      approval = proposal.approvals.create!
+      approval = proposal.approvals.create!(status: 'actionable')
 
       expect(dispatcher.next_pending_approval(proposal)).to eq(approval)
     end
@@ -52,7 +52,7 @@ describe LinearDispatcher do
 
     it "sends emails to the first approver" do
       approver
-      approval = proposal.approvals.create!(user_id: approver.id)
+      approval = proposal.approvals.create!(user_id: approver.id, status: 'actionable')
       expect(dispatcher).to receive(:email_approver).with(approval)
 
       dispatcher.deliver_new_proposal_emails(proposal)

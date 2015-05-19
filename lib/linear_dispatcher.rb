@@ -8,19 +8,10 @@ class LinearDispatcher < Dispatcher
     end
   end
 
-  def email_next_pending_approver(proposal)
-    if approval = self.next_pending_approval(proposal)
-      self.email_approver(approval)
-    end
-  end
-
-  def deliver_new_proposal_emails(proposal)
-    self.email_next_pending_approver(proposal)
-    super
-  end
-
   def on_approval_approved(approval)
-    self.email_next_pending_approver(approval.proposal)
+    if next_approval = self.next_pending_approval(approval.proposal)
+      self.email_approver(next_approval)
+    end
     super
   end
 end

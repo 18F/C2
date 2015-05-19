@@ -98,7 +98,7 @@ describe 'NCR Work Orders API' do
 
         expect(json[0]['proposal']['approvals'][0]).to eq(
           'id' => approval.id,
-          'status' => 'pending',
+          'status' => 'actionable',
           'user' => {
             'created_at' => time_to_json(approver.created_at),
             'id' => approver.id,
