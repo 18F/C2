@@ -18,9 +18,9 @@ namespace :import_users do
   task team_yaml: :environment do
     dir = ENV['DIR']
     if !dir
-      puts "DIR must be specified. e.g. rake import_users:team_yaml DIR=/path/to/data-private/team/"
+      raise "DIR must be specified. e.g. rake import_users:team_yaml DIR=/path/to/data-private/team/"
     elsif !Dir.exists?(dir)
-      puts "DIR (#{dir}) is not a directory"
+      raise "DIR (#{dir}) is not a directory"
     else
       if !dir.end_with?(File::SEPARATOR)
         dir = dir + File::SEPARATOR
@@ -34,23 +34,22 @@ namespace :import_users do
   task one: :environment do
     email = ENV['EMAIL']
     if !email
-      puts 'EMAIL must be specified. e.g. rake import_users:one EMAIL=anna.smith@some.gov FIRST=Anna LAST=Smith CLIENT=gsa18f'
-    else
-      user = User.for_email(email)
-      update = {}
-      if !ENV['FIRST'].nil?
-        update[:first_name] = ENV['FIRST']
-      end
-      if !ENV['LAST'].nil?
-        update[:last_name] = ENV['LAST']
-      end
-      if !ENV['CLIENT'].nil?
-        update[:client_slug] = ENV['CLIENT']
-      end
+      raise 'EMAIL must be specified. e.g. rake import_users:one EMAIL=anna.smith@some.gov FIRST=Anna LAST=Smith CLIENT=gsa18f'
+    end
+    user = User.for_email(email)
+    update = {}
+    if !ENV['FIRST'].nil?
+      update[:first_name] = ENV['FIRST']
+    end
+    if !ENV['LAST'].nil?
+      update[:last_name] = ENV['LAST']
+    end
+    if !ENV['CLIENT'].nil?
+      update[:client_slug] = ENV['CLIENT']
+    end
 
-      if update
-        user.update(update)
-      end
+    if update
+      user.update(update)
     end
   end
 end
