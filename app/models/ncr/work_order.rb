@@ -13,6 +13,9 @@ module Ncr
 
   class WorkOrder < ActiveRecord::Base
     include ObservableModel
+    include ActiveModel::Dirty
+    include ActionView::Helpers::NumberHelper
+    # TODO include ProposalDelegate
 
     has_one :proposal, as: :client_data
     include ProposalDelegate
@@ -100,6 +103,30 @@ module Ncr
 
     def name
       self.project_title
+    end
+
+    def update_comment
+      keys = self.changed_attributes.keys
+      changed_attr = self.changed_attributes
+      comment = []
+      bullet = keys.length > 1 ? '- ' : ''
+      keys.each do |key|
+        comment << "#{bullet}*#{WorkOrder.human_attribute_name(key)}* was changed to #{property_to_s(self[key])}"
+      end
+      comment.join("\n")
+    end
+
+    def decimal?(val)
+    val.is_a?(Numeric) && !val.is_a?(Integer)
+    end
+
+    def property_to_s(val)
+      # assume all decimals are currency
+      if decimal?(val)
+        number_to_currency(val)
+      else
+        val.to_s
+      end
     end
 
     protected
