@@ -1,6 +1,6 @@
 describe Ncr::WorkOrdersController do
   describe 'editing' do
-    let (:work_order) { FactoryGirl.create(:ncr_work_order, :with_proposal) }
+    let (:work_order) { FactoryGirl.create(:ncr_work_order) }
     before do
       login_as(work_order.proposal.requester)
     end

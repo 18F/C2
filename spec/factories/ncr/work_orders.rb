@@ -11,11 +11,6 @@ FactoryGirl.define do
     project_title "NCR Name"
     association :proposal, flow: 'linear'
 
-    # TODO remove
-    trait :with_proposal do
-      # no-op
-    end
-
     trait :with_approvers do
       association :proposal, :with_approvers, flow: 'linear'
     end

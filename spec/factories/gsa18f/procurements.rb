@@ -8,11 +8,6 @@ FactoryGirl.define do
     urgency Gsa18f::Procurement::URGENCY[0]
     proposal
 
-    # TODO remove
-    trait :with_proposal do
-      # no-op
-    end
-
     trait :with_approvers do
       association :proposal, :with_approvers
     end

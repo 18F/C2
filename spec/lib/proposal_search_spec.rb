@@ -27,7 +27,7 @@ describe ProposalSearch do
     context Ncr::WorkOrder do
       [:project_title, :description, :vendor].each do |attr_name|
         it "returns the Proposal when searching by the ##{attr_name}" do
-          work_order = FactoryGirl.create(:ncr_work_order, :with_proposal, attr_name => 'foo')
+          work_order = FactoryGirl.create(:ncr_work_order, attr_name => 'foo')
           results = ProposalSearch.new.execute('foo')
           expect(results).to eq([work_order.proposal])
         end
@@ -37,7 +37,7 @@ describe ProposalSearch do
     context Gsa18f::Procurement do
       [:product_name_and_description, :justification, :additional_info].each do |attr_name|
         it "returns the Proposal when searching by the ##{attr_name}" do
-          procurement = FactoryGirl.create(:gsa18f_procurement, :with_proposal, attr_name => 'foo')
+          procurement = FactoryGirl.create(:gsa18f_procurement, attr_name => 'foo')
           results = ProposalSearch.new.execute('foo')
           expect(results).to eq([procurement.proposal])
         end
@@ -46,7 +46,7 @@ describe ProposalSearch do
 
     it "returns the Proposals by rank" do
       prop1 = FactoryGirl.create(:proposal, id: 12)
-      work_order = FactoryGirl.create(:ncr_work_order, :with_proposal, project_title: "12 rolly chairs for 1600 Penn Ave")
+      work_order = FactoryGirl.create(:ncr_work_order, project_title: "12 rolly chairs for 1600 Penn Ave")
       prop2 = work_order.proposal
       prop3 = FactoryGirl.create(:proposal, id: 1600)
 
