@@ -22,7 +22,7 @@ describe Dispatcher do
     end
   end
 
-  let(:proposal) { FactoryGirl.create(:proposal, :with_cart, :with_approvers) }
+  let(:proposal) { FactoryGirl.create(:proposal, :with_approvers) }
   let(:dispatcher) { Dispatcher.new }
 
   describe '#deliver_new_proposal_emails' do

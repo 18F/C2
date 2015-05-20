@@ -12,7 +12,7 @@ describe Proposal do
     end
 
     it "gives only the first approver when linear" do
-      proposal = FactoryGirl.create(:proposal, :with_approvers, :with_cart, flow: 'linear')
+      proposal = FactoryGirl.create(:proposal, :with_approvers, flow: 'linear')
       emails = proposal.currently_awaiting_approvers.map(&:email_address)
       expect(emails).to eq(%w(approver1@some-dot-gov.gov))
 

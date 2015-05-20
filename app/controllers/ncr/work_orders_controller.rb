@@ -67,7 +67,7 @@ module Ncr
     def approver_email_frozen?
       if self.work_order
         approval = self.work_order.approvals.first
-        approval && !approval.acionable?
+        approval && !approval.actionable?
       else
         false
       end

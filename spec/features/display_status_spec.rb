@@ -35,7 +35,7 @@ describe "Display status text" do
   end
 
   context "linear" do
-    let(:proposal) { FactoryGirl.create(:proposal, :with_approvers, :with_cart, flow: 'linear') }
+    let(:proposal) { FactoryGirl.create(:proposal, :with_approvers, flow: 'linear') }
 
     it "displays the first approver" do
       visit proposals_path
