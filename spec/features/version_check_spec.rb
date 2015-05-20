@@ -2,7 +2,7 @@ describe "Version check" do
   let(:proposal) { FactoryGirl.create(:proposal, :with_approvers) }
 
   it "occurs if the cart is modified in after seeing the profile page" do
-    login_as(proposal.approvals.first.user)
+    login_as(proposal.approvers.first)
     visit "/proposals/#{proposal.id}"
 
     sleep 1.second  # wait to get a new update time

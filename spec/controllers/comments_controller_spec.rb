@@ -29,7 +29,7 @@ describe CommentsController do
     end
 
     it "allows a delegate to comment" do
-      approver = proposal.approvals.first.user
+      approver = proposal.approvers.first
       delegate = FactoryGirl.create(:user)
       approver.add_delegate(delegate)
 

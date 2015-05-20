@@ -31,7 +31,7 @@ module Ncr
 
     def edit
       @work_order = self.work_order
-      @approver_email = @work_order.approvals.first.user_email_address
+      @approver_email = @work_order.approvers.first.email_address
       render 'form'
     end
 
@@ -65,8 +65,9 @@ module Ncr
     end
 
     def approver_email_frozen?
-      if self.work_order && self.work_order.approvals.first
-        !self.work_order.approvals.first.pending?
+      if self.work_order
+        approval = self.work_order.approvals.first
+        approval && !approval.pending?
       else
         false
       end

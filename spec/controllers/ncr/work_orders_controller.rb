@@ -27,7 +27,7 @@ describe Ncr::WorkOrdersController do
       post :update, {id: work_order.proposal.id, approver_email: 'a@b.com',
                      ncr_work_order: {expense_type: 'BA61'}}
       work_order.reload
-      expect(work_order.approvers.first.user_email_address).to eq('a@b.com')
+      expect(work_order.approvers.first.email_address).to eq('a@b.com')
     end
 
     it 'does not modify the approver if already approved' do
