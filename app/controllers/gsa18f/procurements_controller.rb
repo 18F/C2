@@ -10,11 +10,15 @@ module Gsa18f
 
     def create
       @procurement = Gsa18f::Procurement.new(permitted_params)
+      # TODO unify with how the factories create model instances
+      @procurement.build_proposal(flow: 'linear', requester: current_user)
       if self.errors.empty?
         @procurement.save
-        cart = @procurement.init_and_save_cart(current_user)
+        @procurement.add_approvals
+        proposal = @procurement.proposal
+        Dispatcher.deliver_new_proposal_emails(proposal)
         flash[:success] = "Procurement submitted!"
-        redirect_to proposal_path(cart.proposal)
+        redirect_to proposal
       else
         flash[:error] = errors
         render 'form'
@@ -30,10 +34,9 @@ module Gsa18f
       @procurement = self.procurement
       @procurement.update(permitted_params)
       if self.errors.empty?
-        cart = self.cart
-        @procurement.update_cart(cart)
+        @procurement.restart!
         flash[:success] = "Procurement resubmitted!"
-        redirect_to proposal_path(cart.proposal)
+        redirect_to @procurement.proposal
       else
         flash[:error] = errors
         render 'form'
@@ -47,7 +50,7 @@ module Gsa18f
         params[:gsa18f_procurement][:recurring])
       params.require(:gsa18f_procurement).permit(:name, *fields)
     end
-    
+
     def procurement
       @procurement ||= Gsa18f::Procurement.find(params[:id])
     end
@@ -57,14 +60,10 @@ module Gsa18f
       @procurement.errors.full_messages
     end
 
-    def cart
-      self.procurement.proposal.cart
-    end
-
     def redirect_if_cart_cant_be_edited
-      if self.cart.approved?
+      if self.procurement.approved?
         redirect_to new_gsa18f_procurement_path, :alert => "That proposal's already approved. New proposal?"
-      elsif self.cart.requester != current_user
+      elsif self.procurement.requester != current_user
         redirect_to new_gsa18f_procurement_path, :alert => 'You cannot restart that proposal'
       end
     end

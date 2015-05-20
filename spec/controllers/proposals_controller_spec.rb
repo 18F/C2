@@ -100,7 +100,7 @@ describe ProposalsController do
 
   describe '#approve' do
     it "signs the user in via the token" do
-      proposal = FactoryGirl.create(:proposal, :with_approver, :with_cart)
+      proposal = FactoryGirl.create(:proposal, :with_approver)
       approval = proposal.approvals.first
       token = approval.create_api_token!
 
@@ -110,7 +110,7 @@ describe ProposalsController do
     end
 
     it "won't sign the user in via the token if delegated" do
-      proposal = FactoryGirl.create(:proposal, :with_approver, :with_cart)
+      proposal = FactoryGirl.create(:proposal, :with_approver)
       approval = proposal.approvals.first
       token = approval.create_api_token!
       approval.user.add_delegate(FactoryGirl.create(:user))
@@ -121,7 +121,7 @@ describe ProposalsController do
     end
 
     it "won't allow a missing token when using GET" do
-      proposal = FactoryGirl.create(:proposal, :with_approver, :with_cart)
+      proposal = FactoryGirl.create(:proposal, :with_approver)
       login_as(proposal.approvers.first)
       get :approve, id: proposal.id
 
@@ -129,7 +129,7 @@ describe ProposalsController do
     end
 
     it "will allow action if the token is valid" do
-      proposal = FactoryGirl.create(:proposal, :with_approver, :with_cart)
+      proposal = FactoryGirl.create(:proposal, :with_approver)
       approval = proposal.approvals.first
       token = approval.create_api_token!
 

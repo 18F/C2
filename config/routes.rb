@@ -19,7 +19,7 @@ C2::Application.routes.draw do
   get "/carts/archive", to: redirect("/proposals/archive")
   get "/carts/:id", to: redirect { |path_params, req|
     cart = Cart.find(path_params[:id])
-    "/proposals/" + cart.proposal.id.to_s
+    "/proposals/#{cart.proposal_id}"
   }
 
   resources :proposals, only: [:index, :show] do

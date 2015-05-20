@@ -14,7 +14,7 @@ describe ProposalPolicy do
     end
 
     context "parallel cart" do
-      let(:proposal) {FactoryGirl.create(:proposal, :with_cart, :with_approvers,
+      let(:proposal) {FactoryGirl.create(:proposal, :with_approvers,
                                          flow: 'parallel')}
       let(:approval) {proposal.approvals.first}
 
@@ -41,10 +41,10 @@ describe ProposalPolicy do
     end
 
     context "linear cart" do
-      let(:proposal) {FactoryGirl.create(:proposal, :with_cart, :with_approvers,
+      let(:proposal) {FactoryGirl.create(:proposal, :with_approvers,
                                          flow: 'linear')}
-      let(:first_approval) {proposal.approvals.first}
-      let(:second_approval) {proposal.approvals[1]}
+      let(:first_approval) { proposal.approvals.first }
+      let(:second_approval) { proposal.approvals.last }
 
       it "allows when there's a pending approval" do
         expect(subject).to permit(first_approval.user, proposal)
@@ -74,7 +74,7 @@ describe ProposalPolicy do
   end
 
   permissions :can_show? do
-    let(:proposal) {FactoryGirl.create(:proposal, :with_cart, :with_approvers,
+    let(:proposal) {FactoryGirl.create(:proposal, :with_approvers,
                                        :with_observers)}
 
     it "allows the requester to see it" do

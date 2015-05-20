@@ -1,0 +1,22 @@
+/* Whenever we use button_to, we're using it like a link. Style accordingly: a lot of resets.*/
+
+form.button_to {
+  display: inline;
+  div {
+    display: inline;
+  }
+  input[type="submit"] {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    box-shadow: none;
+    transition: none;
+    text-transform: none;
+    font-weight: inherit;
+
+    &:hover, &:active,  {
+      background: transparent;
+    }
+  }
+}
+

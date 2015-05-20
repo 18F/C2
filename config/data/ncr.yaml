@@ -476,7 +476,8 @@ BUILDING_NUMBERS:
   - 'VA1628ZZ - EISENHOWER INDS BDG'
   - 'VA1631ZZ - POTOMAC IND. CENTER'
   - 'VA1644ZZ - FRANCONIA SHOP CTR'
-OFFICES:
+ORG_CODES:
+  - 'Administrative Expense'
   - 'P1100000 Prior Year Activities'
   - 'P1110001 Asst Regional Admin & Staff'
   - 'P1110003 Planning Staff'

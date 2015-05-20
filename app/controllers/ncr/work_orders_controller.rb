@@ -14,13 +14,15 @@ module Ncr
     def create
       @approver_email = params[:approver_email]
       @work_order = Ncr::WorkOrder.new(permitted_params)
-
+      # TODO unify with how the factories create model instances
+      @work_order.build_proposal(flow: 'linear', requester: current_user)
       if self.errors.empty?
         @work_order.save
-        @work_order.init_and_save_cart(
-          @approver_email, current_user)
+        @work_order.add_approvals(@approver_email)
+        proposal = @work_order.proposal
+        Dispatcher.deliver_new_proposal_emails(proposal)
         flash[:success] = "Proposal submitted!"
-        redirect_to proposal_path(@work_order.proposal)
+        redirect_to proposal
       else
         flash[:error] = errors
         render 'form'
@@ -29,7 +31,7 @@ module Ncr
 
     def edit
       @work_order = self.work_order
-      @approver_email = @work_order.proposal.approvals.first.user_email_address
+      @approver_email = @work_order.approvers.first.email_address
       render 'form'
     end
 
@@ -54,21 +56,18 @@ module Ncr
     protected
 
     def suggested_approver_email
-      last_cart = current_user.last_requested_cart
-      last_cart.try(:approvers).try(:first).try(:email_address) || ""
+      last_proposal = current_user.last_requested_proposal
+      last_proposal.try(:approvers).try(:first).try(:email_address) || ""
     end
 
     def work_order
       @work_order ||= Ncr::WorkOrder.find(params[:id])
     end
-    def cart
-      self.work_order.proposal.cart
-    end
 
     def approver_email_frozen?
-      proposal = self.work_order.try(:proposal)
-      if proposal && proposal.approvals.first
-        !proposal.approvals.first.actionable?
+      if self.work_order
+        approval = self.work_order.approvals.first
+        approval && !approval.acionable?
       else
         false
       end

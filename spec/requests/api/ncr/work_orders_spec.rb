@@ -12,7 +12,7 @@ describe 'NCR Work Orders API' do
 
     with_feature 'PUBLIC_API_ENABLED' do
       it "responds with the list of work orders" do
-        work_order = FactoryGirl.create(:ncr_work_order, :with_proposal)
+        work_order = FactoryGirl.create(:ncr_work_order)
         proposal = work_order.proposal
 
         json = get_json('/api/v1/ncr/work_orders.json')
@@ -29,7 +29,7 @@ describe 'NCR Work Orders API' do
             'id' => work_order.id,
             'name' => work_order.name,
             'not_to_exceed' => work_order.not_to_exceed,
-            'office' => work_order.office,
+            'org_code' => work_order.org_code,
             'proposal' => {
               'approvals' => [],
               'created_at' => time_to_json(proposal.created_at),
@@ -50,7 +50,7 @@ describe 'NCR Work Orders API' do
       end
 
       it "displays the name from the cart" do
-        work_order = FactoryGirl.create(:ncr_work_order, :with_cart)
+        work_order = FactoryGirl.create(:ncr_work_order)
         json = get_json('/api/v1/ncr/work_orders.json')
         expect(json[0]['name']).to eq(work_order.name)
       end
@@ -60,7 +60,7 @@ describe 'NCR Work Orders API' do
           # create WorkOrders one minute apart
           2.times do |i|
             Timecop.freeze(i.minutes.ago) do
-              FactoryGirl.create(:ncr_work_order, :with_proposal)
+              FactoryGirl.create(:ncr_work_order)
             end
           end
         end
@@ -72,7 +72,7 @@ describe 'NCR Work Orders API' do
       end
 
       it "includes the requester" do
-        work_order = FactoryGirl.create(:ncr_work_order, :with_proposal)
+        work_order = FactoryGirl.create(:ncr_work_order)
         requester = work_order.proposal.requester
 
         json = get_json('/api/v1/ncr/work_orders.json')

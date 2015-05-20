@@ -23,7 +23,7 @@ describe "National Capital Region proposals" do
       fill_in 'Amount', with: 123.45
       fill_in "Approving Official's Email Address", with: 'approver@example.com'
       select Ncr::BUILDING_NUMBERS[0], :from => 'ncr_work_order_building_number'
-      select Ncr::OFFICES[0], :from => 'ncr_work_order_office'
+      select Ncr::ORG_CODES[0], :from => 'ncr_work_order_org_code'
       expect {
         click_on 'Submit for approval'
       }.to change { Proposal.count }.from(0).to(1)
@@ -40,7 +40,7 @@ describe "National Capital Region proposals" do
       expect(client_data.vendor).to eq('ACME')
       expect(client_data.amount).to eq(123.45)
       expect(client_data.building_number).to eq(Ncr::BUILDING_NUMBERS[0])
-      expect(client_data.office).to eq(Ncr::OFFICES[0])
+      expect(client_data.org_code).to eq(Ncr::ORG_CODES[0])
       expect(client_data.description).to eq('desc content')
       expect(proposal.requester).to eq(requester)
       expect(proposal.approvers.map(&:email_address)).to eq(%w(
@@ -50,7 +50,7 @@ describe "National Capital Region proposals" do
     end
 
     it "defaults to the approver from the last request" do
-      proposal = FactoryGirl.create(:proposal, :with_cart, :with_approvers,
+      proposal = FactoryGirl.create(:proposal, :with_approvers,
                                     requester: requester)
       visit '/ncr/work_orders/new'
       expect(find_field("Approving Official's Email Address").value).to eq(
@@ -83,7 +83,7 @@ describe "National Capital Region proposals" do
       fill_in 'Amount', with: 123.45
       fill_in "Approving Official's Email Address", with: 'approver@example.com'
       select Ncr::BUILDING_NUMBERS[0], :from => 'ncr_work_order_building_number'
-      select Ncr::OFFICES[0], :from => 'ncr_work_order_office'
+      select Ncr::ORG_CODES[0], :from => 'ncr_work_order_org_code'
       click_on 'Submit for approval'
       expect(current_path).to eq("/proposals/#{Proposal.last.id}")
       expect(page).to have_content("RWA Number")
@@ -107,8 +107,8 @@ describe "National Capital Region proposals" do
     end
 
     let (:work_order) {
-      wo = FactoryGirl.create(:ncr_work_order)
-      wo.init_and_save_cart('approver@email.com', requester)
+      wo = FactoryGirl.create(:ncr_work_order, requester: requester)
+      wo.add_approvals('approver@example.com')
       wo
     }
     let(:ncr_proposal) {
@@ -138,7 +138,7 @@ describe "National Capital Region proposals" do
     it "has a disabled field if first approval is done" do
       visit "/ncr/work_orders/#{work_order.id}/edit"
       expect(find("[name=approver_email]")["disabled"]).to be_nil
-      work_order.proposal.approvals.first.approve!
+      work_order.approvals.first.approve!
       visit "/ncr/work_orders/#{work_order.id}/edit"
       expect(find("[name=approver_email]")["disabled"]).to eq("disabled")
       # And we can still submit
@@ -216,7 +216,7 @@ describe "National Capital Region proposals" do
         fill_in 'Amount', with: 123.45
         fill_in "Approving Official's Email Address", with: 'approver@example.com'
         select Ncr::BUILDING_NUMBERS[0], :from => 'ncr_work_order_building_number'
-        select Ncr::OFFICES[0], :from => 'ncr_work_order_office'
+        select Ncr::ORG_CODES[0], :from => 'ncr_work_order_org_code'
       end
 
       it "approves emergencies" do

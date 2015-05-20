@@ -6,7 +6,6 @@ a.k.a. Communicart, part of GSA's suite of Common Acquisition Platform (CAP) too
 
 ## Links
 
-* [Homepage](http://18f.github.io/C2/) (overview)
 * [Issue tracker](https://www.pivotaltracker.com/n/projects/1149728)
 * Documentation
     * [Setup](doc/setup.md)

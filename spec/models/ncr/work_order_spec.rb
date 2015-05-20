@@ -5,7 +5,7 @@ describe Ncr::WorkOrder do
         amount: 1000, expense_type: "BA61", vendor: "Some Vend",
         not_to_exceed: false, emergency: true, rwa_number: "RWWAAA #",
         building_number: Ncr::BUILDING_NUMBERS[0],
-        office: Ncr::OFFICES[0], description: "Ddddd")
+        org_code: Ncr::ORG_CODES[0], description: "Ddddd")
       expect(wo.fields_for_display.sort).to eq([
         ["Amount", 1000],
         ["Building number", Ncr::BUILDING_NUMBERS[0]],
@@ -13,7 +13,7 @@ describe Ncr::WorkOrder do
         ["Emergency", true],
         ["Expense type", "BA61"],
         ["Not to exceed", false],
-        ["Office", Ncr::OFFICES[0]],
+        ["Org code", Ncr::ORG_CODES[0]],
         # No RWA Number
         ["Vendor", "Some Vend"]
         # No Work Order
@@ -24,7 +24,7 @@ describe Ncr::WorkOrder do
         amount: 1000, expense_type: "BA80", vendor: "Some Vend",
         not_to_exceed: false, emergency: true, rwa_number: "RWWAAA #",
         building_number: Ncr::BUILDING_NUMBERS[0], code: "Some WO#",
-        office: Ncr::OFFICES[0], description: "Ddddd")
+        org_code: Ncr::ORG_CODES[0], description: "Ddddd")
       expect(wo.fields_for_display.sort).to eq([
         ["Amount", 1000],
         ["Building number", Ncr::BUILDING_NUMBERS[0]],
@@ -32,7 +32,7 @@ describe Ncr::WorkOrder do
         # No Emergency
         ["Expense type", "BA80"],
         ["Not to exceed", false],
-        ["Office", Ncr::OFFICES[0]],
+        ["Org code", Ncr::ORG_CODES[0]],
         ["RWA Number", "RWWAAA #"],
         ["Vendor", "Some Vend"],
         ["Work Order / Maximo Ticket Number", "Some WO#"]
@@ -41,56 +41,22 @@ describe Ncr::WorkOrder do
   end
 
   describe '#add_approvals' do
-    let (:cart) { FactoryGirl.create(:cart) }
     it "creates approvers when not an emergency" do
       form = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61')
-      cart.proposal.client_data = form
-      cart.proposal.save
       form.add_approvals('bob@example.com')
-      expect(cart.observations.length).to eq(0)
-      expect(cart.approvals.length).to eq(3)
-      cart.reload
-      expect(cart.approved?).to eq(false)
+      expect(form.observations.length).to eq(0)
+      expect(form.approvals.length).to eq(3)
+      form.reload
+      expect(form.approved?).to eq(false)
     end
     it "creates observers when in an emergency" do
       form = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61',
                                emergency: true)
-      cart.proposal.client_data = form
-      cart.proposal.save
       form.add_approvals('bob@example.com')
-      expect(cart.observations.length).to eq(3)
-      expect(cart.approvals.length).to eq(0)
-      cart.clear_association_cache
-      expect(cart.approved?).to eq(true)
-    end
-  end
-  describe '#init_and_save_cart' do
-    let(:requester) { FactoryGirl.create(:user) }
-    def approver_emails(cart)
-      cart.approvals.map {|a| a.user.email_address }
-    end
-
-    it "adds the budget approver for a BA80 request" do
-      form = FactoryGirl.create(:ncr_work_order, expense_type: 'BA80')
-      cart = form.init_and_save_cart('aaa@example.com', requester)
-
-      expect(cart.requester).to eq(requester)
-      expect(approver_emails(cart)).to eq(%w(
-        aaa@example.com
-        communicart.budget.approver@gmail.com
-      ))
-    end
-
-    it "adds the two approvers for a BA61 request" do
-      form = FactoryGirl.build(:ncr_work_order, expense_type: 'BA61')
-      cart = form.init_and_save_cart('bbb@example.com', requester)
-
-      expect(cart.requester).to eq(requester)
-      expect(approver_emails(cart)).to eq(%w(
-        bbb@example.com
-        communicart.budget.approver@gmail.com
-        communicart.ofm.approver@gmail.com
-      ))
+      expect(form.observations.length).to eq(3)
+      expect(form.approvals.length).to eq(0)
+      form.clear_association_cache
+      expect(form.approved?).to eq(true)
     end
   end
 
@@ -103,8 +69,7 @@ describe Ncr::WorkOrder do
 
   describe '#public_identifier' do
     it 'includes the fiscal year' do
-      work_order = FactoryGirl.create(:ncr_work_order, :with_proposal,
-                                      created_at: Date.new(2007, 1, 15))
+      work_order = FactoryGirl.create(:ncr_work_order, created_at: Date.new(2007, 1, 15))
       proposal_id = work_order.proposal.id
 
       expect(work_order.public_identifier).to eq(
