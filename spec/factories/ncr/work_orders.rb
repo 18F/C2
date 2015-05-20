@@ -7,7 +7,7 @@ FactoryGirl.define do
     building_number Ncr::BUILDING_NUMBERS[0]
     emergency false
     rwa_number "R1234567"
-    office Ncr::OFFICES[0]
+    org_code Ncr::ORG_CODES[0]
     project_title "NCR Name"
     association :proposal, flow: 'linear'
 
