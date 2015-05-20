@@ -19,11 +19,6 @@ describe CommunicartMailer do
   let(:approver) { approval.user }
   let(:requester) { proposal.requester }
 
-  def expect_csvs_to_be_exported
-    expect_any_instance_of(Exporter::Comments).to receive(:to_csv)
-    expect_any_instance_of(Exporter::Approvals).to receive(:to_csv)
-  end
-
   before do
     cart.update_attribute(:external_id, 13579)
   end
@@ -72,20 +67,6 @@ describe CommunicartMailer do
       it 'renders comments when present' do
         FactoryGirl.create(:comment, proposal: proposal)
         expect(body).to include('Comments')
-      end
-    end
-
-
-    context 'attaching a csv of the proposal activity' do
-      it 'generates csv attachments for an approved proposal' do
-        approval.proposal.update(status: 'approved')
-        expect_csvs_to_be_exported
-        action_mail
-      end
-
-      it 'does not generate csv attachments for an unapproved proposal' do
-        expect_any_instance_of(Exporter::Base).not_to receive(:to_csv)
-        action_mail
       end
     end
 
@@ -167,19 +148,6 @@ describe CommunicartMailer do
       end
 
     end
-
-    context 'attaching a csv of the proposal activity' do
-      it 'generates csv attachments for an approved proposal' do
-        approval.proposal.update(status: 'approved')
-        expect_csvs_to_be_exported
-        mail
-      end
-
-      it 'does not generate csv attachments for an unapproved proposal' do
-        expect_any_instance_of(Exporter::Base).not_to receive(:to_csv)
-        mail
-      end
-    end
   end
 
   describe 'comment_added_email' do
@@ -218,19 +186,6 @@ describe CommunicartMailer do
     it 'renders the sender email' do
       expect(mail.from).to eq(['reply@stub.gov'])
       expect(sender_names(mail)).to eq([nil])
-    end
-
-    context 'attaching a csv of the proposal activity' do
-      it 'generates csv attachments for an approved proposal' do
-        proposal.update(status: 'approved')
-        expect_csvs_to_be_exported
-        mail
-      end
-
-      it 'does not generate csv attachments for an unapproved proposal' do
-        expect_any_instance_of(Exporter::Base).not_to receive(:to_csv)
-        mail
-      end
     end
   end
 

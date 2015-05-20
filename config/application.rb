@@ -46,19 +46,5 @@ module C2
     config.autoload_paths << Rails.root.join('lib')
 
     config.assets.precompile << 'common/communicarts.css'
-
-    # Paperclip's attachment settings are determined by S3 env vars
-    # If not set, we'll use the default, which is filesystem-baseed storage
-    if ENV['S3_BUCKET_NAME'] && ENV['S3_ACCESS_KEY_ID'] && ENV['S3_SECRET_ACCESS_KEY']
-      Paperclip::Attachment.default_options.merge!(
-        bucket: ENV['S3_BUCKET_NAME'],
-        s3_credentials: {
-          access_key_id: ENV['S3_ACCESS_KEY_ID'],
-          secret_access_key: ENV['S3_SECRET_ACCESS_KEY']
-        },
-        s3_permissions: :private,
-        storage: :s3,
-      )
-    end
   end
 end
