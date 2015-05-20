@@ -53,9 +53,8 @@ describe "Add attachments" do
       Paperclip::Attachment.default_options[:storage] = :filesystem
     end
 
+    # This test may be flaky... -AF 5/20/15
     it "uses an expiring url with aws" do
-      pending "flaky"
-
       visit proposal_path(proposal)
       url = find("#files a")[:href]
       # TODO parse with Addressable
