@@ -56,7 +56,7 @@ module Ncr
     end
 
     def create_comment text
-      comment =Comment.new
+      comment = Comment.new
       comment.comment_text = text.to_s
       comment.proposal_id = self.work_order.proposal.id
       comment.user_id = self.work_order.proposal.requester_id

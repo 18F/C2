@@ -6,22 +6,41 @@
       </td>
     </tr>
     <% comments.each do |c| %>
-    <tr>
-      <td valign='top' class='comment-detail first'>
-        <p>
-          <%= l(c.created_at.to_date) %>
-        </p>
-      </td>
+      <% if c.update_comment %>
+        <tr>
+          <td valign='top' class='comment-detail first comment-update'>
+            <p>
+              <%= l(c.created_at.to_date) %>
+            </p>
+          </td>
 
-      <td valign='top' class='comment-detail'>
-        <p>
-          <% unless c.user.nil? %>
-            <strong><%= c.user_full_name %></strong><br/>
-          <% end %>
-          <%= c.comment_text %>
-        </p>
-      </td>
-    </tr>
+          <td valign='top' class='comment-detail comment-update'>
+            <p>
+              <% unless c.user.nil? %>
+                <strong>Request modified by <%= c.user_full_name %></strong><br/>
+              <% end %>
+              <%= markdown(c.comment_text) %>
+            </p>
+          </td>
+        </tr>
+      <% else %>
+        <tr>
+          <td valign='top' class='comment-detail first'>
+            <p>
+              <%= l(c.created_at.to_date) %>
+            </p>
+          </td>
+
+          <td valign='top' class='comment-detail'>
+            <p>
+              <% unless c.user.nil? %>
+                <strong><%= c.user_full_name %></strong><br/>
+              <% end %>
+              <%= c.comment_text %>
+            </p>
+          </td>
+        </tr>
+      <% end %>
     <% end %>
   </table>
 <% end %>

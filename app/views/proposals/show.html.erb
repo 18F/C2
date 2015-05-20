@@ -111,7 +111,7 @@
       <% if @proposal.comments.any? %>
         <% @proposal.comments.reverse_each do |c| %>
           <% if c.update_comment %>
-            <div class='line-item' style='background-color:#fafafa;'>
+            <div class='line-item comment-update'>
               <div class='row'>
                 <% unless c.user.nil? %>
                   <p class='comment-sender col-sm-6 col-xs-12'>
