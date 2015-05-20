@@ -15,9 +15,6 @@ module Gsa18f
     has_one :proposal, as: :client_data
     include ProposalDelegate
 
-    # TODO remove the dependence
-    has_one :cart, through: :proposal
-
     validates :cost_per_unit, numericality: {
       greater_than_or_equal_to: 0,
       less_than_or_equal_to: 3000
