@@ -1,5 +1,5 @@
 describe LinearDispatcher do
-  let(:proposal) { FactoryGirl.create(:proposal, :with_cart) }
+  let(:proposal) { FactoryGirl.create(:proposal) }
   let(:dispatcher) { LinearDispatcher.new }
   let(:requester) { FactoryGirl.create(:user, email_address: 'requester@some-dot-gov-domain.gov') }
   let(:approver) { FactoryGirl.create(:user, email_address: 'approver@some-dot-gov-domain.gov') }
@@ -68,7 +68,7 @@ describe LinearDispatcher do
 
   describe '#on_approval_approved' do
     it "sends to the requester and the next approver" do
-      proposal = FactoryGirl.create(:proposal, :with_approvers, :with_cart)
+      proposal = FactoryGirl.create(:proposal, :with_approvers)
       approval = proposal.approvals.first
       approval.update_attribute(:status, 'approved')  # avoiding state machine
       dispatcher.on_approval_approved(approval)

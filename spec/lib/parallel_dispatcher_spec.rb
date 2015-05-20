@@ -1,5 +1,5 @@
 describe ParallelDispatcher do
-  let(:proposal) { FactoryGirl.create(:proposal, :with_cart, :with_approvers) }
+  let(:proposal) { FactoryGirl.create(:proposal, :with_approvers) }
   let(:dispatcher) { ParallelDispatcher.new }
 
   describe '#deliver_new_proposal_emails' do

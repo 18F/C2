@@ -1,7 +1,7 @@
 describe "Listing Page" do
   let!(:user){ FactoryGirl.create(:user) }
-  let!(:default){ FactoryGirl.create(:proposal, :with_cart, requester: user) }
-  let!(:ncr){ 
+  let!(:default){ FactoryGirl.create(:proposal, requester: user) }
+  let!(:ncr){
     ncr = FactoryGirl.create(:ncr_work_order, :with_proposal)
     ncr.proposal.update_attribute(:requester, user)
     ncr

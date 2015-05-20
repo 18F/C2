@@ -1,5 +1,7 @@
 describe "redirecting from carts" do
-  let(:proposal) { FactoryGirl.create(:proposal, :with_approvers, :with_cart)}
+  let!(:cart) { FactoryGirl.create(:cart) }
+  let(:proposal) { cart.proposal }
+
   before do
     login_as(proposal.requester)
   end
@@ -20,8 +22,8 @@ describe "redirecting from carts" do
 
   describe '#show' do
     it 'forwards' do
-      proposal.cart.update_attribute(:id, -11)  # distinct id from proposal
-      visit "/carts/" + proposal.cart.id.to_s
+      cart.update_attribute(:id, proposal.id + 1)  # distinct id from proposal
+      visit "/carts/#{cart.id}"
       expect(current_path).to eq(proposal_path(proposal))
     end
   end

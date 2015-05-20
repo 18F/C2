@@ -56,8 +56,8 @@ module Ncr
     protected
 
     def suggested_approver_email
-      last_cart = current_user.last_requested_cart
-      last_cart.try(:approvers).try(:first).try(:email_address) || ""
+      last_proposal = current_user.last_requested_proposal
+      last_proposal.try(:approvers).try(:first).try(:email_address) || ""
     end
 
     def work_order
