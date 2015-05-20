@@ -1,8 +1,7 @@
 describe CommentsController do
   describe 'permission checking' do
-    let (:proposal) { FactoryGirl.create(:proposal, :with_approvers,
-                                         :with_observers, :with_cart) }
-    let (:params) { {proposal_id: proposal.id, 
+    let (:proposal) { FactoryGirl.create(:proposal, :with_approvers, :with_observers) }
+    let (:params) { {proposal_id: proposal.id,
                      comment: {comment_text: 'Some comment'}} }
 
     it "allows the requester to comment" do
@@ -30,7 +29,7 @@ describe CommentsController do
     end
 
     it "allows a delegate to comment" do
-      approver = proposal.approvals.first.user
+      approver = proposal.approvers.first
       delegate = FactoryGirl.create(:user)
       approver.add_delegate(delegate)
 

@@ -6,7 +6,7 @@ describe Ncr::DashboardController do
     end
 
     it 'does not include proposals user did not participate in' do
-      FactoryGirl.create(:ncr_work_order, :with_proposal)
+      FactoryGirl.create(:ncr_work_order)
       get :index
       expect(assigns(:rows)).to be_empty
     end

@@ -13,15 +13,10 @@ describe CommunicartMailer do
     ENV['NOTIFICATION_FROM_EMAIL'] = old_val
   end
 
-  let(:proposal) { FactoryGirl.create(:proposal, :with_approvers, :with_cart) }
-  let(:cart) { proposal.cart }
+  let(:proposal) { FactoryGirl.create(:proposal, :with_approvers) }
   let(:approval) { proposal.approvals.first }
   let(:approver) { approval.user }
   let(:requester) { proposal.requester }
-
-  before do
-    cart.update_attribute(:external_id, 13579)
-  end
 
   describe 'notification_for_approver' do
     let!(:token) { approval.create_api_token! }
@@ -37,7 +32,7 @@ describe CommunicartMailer do
 
     it 'renders the subject' do
       requester.update_attributes(first_name: 'Liono', last_name: 'Requester')
-      expect(action_mail.subject).to eq('Communicart Approval Request from Liono Requester: Please review request Cart #13579')
+      expect(action_mail.subject).to eq("Communicart Approval Request from Liono Requester: Please review request #{proposal.public_identifier}")
     end
 
     it 'renders the receiver email' do
@@ -54,7 +49,7 @@ describe CommunicartMailer do
       expect(approval_uri.path).to eq("/proposals/#{proposal.id}/approve")
       expect(approval_uri.query_values).to eq(
         'cch' => token.access_token,
-        'version' => cart.version.to_s
+        'version' => proposal.version.to_s
       )
     end
 
@@ -76,11 +71,7 @@ describe CommunicartMailer do
       end
 
       it 'renders a custom template for ncr work orders' do
-        work_order = FactoryGirl.create(:ncr_work_order)
-        proposal = approval.proposal
-        proposal.client_data = work_order
-        proposal.save!
-        expect(proposal.client).to eq('ncr')
+        allow(proposal).to receive(:client).and_return('ncr')
         expect(body).to include('ncr-layout')
       end
     end
@@ -124,7 +115,7 @@ describe CommunicartMailer do
     end
 
     it 'renders the subject' do
-      expect(mail.subject).to eq('User approver1@some-dot-gov.gov has approved request Cart #13579')
+      expect(mail.subject).to eq("User approver1@some-dot-gov.gov has approved request #{proposal.public_identifier}")
     end
 
     it 'renders the receiver email' do
@@ -151,13 +142,13 @@ describe CommunicartMailer do
   end
 
   describe 'comment_added_email' do
-    let(:proposal) { FactoryGirl.create(:proposal, :with_cart) }
+    let(:proposal) { FactoryGirl.create(:proposal) }
     let(:comment) { FactoryGirl.create(:comment, proposal: proposal) }
     let(:email) { "commenter@some-dot-gov.gov" }
     let(:mail) { CommunicartMailer.comment_added_email(comment, email) }
 
     it 'renders the subject' do
-      expect(mail.subject).to eq("A comment has been added to request Cart #13579")
+      expect(mail.subject).to eq("A comment has been added to request #{proposal.public_identifier}")
     end
 
     it 'renders the receiver email' do
@@ -176,7 +167,7 @@ describe CommunicartMailer do
     let(:mail) { CommunicartMailer.proposal_observer_email(observer.email_address, proposal) }
 
     it 'renders the subject' do
-      expect(mail.subject).to eq("Communicart Approval Request from #{proposal.requester.full_name}: Please review request Cart #13579")
+      expect(mail.subject).to eq("Communicart Approval Request from #{proposal.requester.full_name}: Please review request #{proposal.public_identifier}")
     end
 
     it 'renders the receiver email' do
@@ -193,7 +184,7 @@ describe CommunicartMailer do
     let(:mail) { CommunicartMailer.proposal_created_confirmation(proposal) }
 
     it 'renders the subject' do
-      expect(mail.subject).to eq "Your request for Cart #13579 has been sent successfully."
+      expect(mail.subject).to eq "Your request for #{proposal.public_identifier} has been sent successfully."
     end
 
     it 'renders the receiver email' do

@@ -1,6 +1,6 @@
 describe "Display status text" do
   let(:proposal) { 
-    FactoryGirl.create(:proposal, :with_approvers, :with_cart) }
+    FactoryGirl.create(:proposal, :with_approvers) }
   before do
     login_as(proposal.requester)
   end

@@ -50,7 +50,7 @@ describe "National Capital Region proposals" do
     end
 
     it "defaults to the approver from the last request" do
-      proposal = FactoryGirl.create(:proposal, :with_cart, :with_approvers,
+      proposal = FactoryGirl.create(:proposal, :with_approvers,
                                     requester: requester)
       visit '/ncr/work_orders/new'
       expect(find_field("Approving Official's Email Address").value).to eq(
@@ -107,8 +107,8 @@ describe "National Capital Region proposals" do
     end
 
     let (:work_order) {
-      wo = FactoryGirl.create(:ncr_work_order)
-      wo.init_and_save_cart('approver@email.com', requester)
+      wo = FactoryGirl.create(:ncr_work_order, requester: requester)
+      wo.add_approvals('approver@example.com')
       wo
     }
     let(:ncr_proposal) {
@@ -138,7 +138,7 @@ describe "National Capital Region proposals" do
     it "has a disabled field if first approval is done" do
       visit "/ncr/work_orders/#{work_order.id}/edit"
       expect(find("[name=approver_email]")["disabled"]).to be_nil
-      work_order.proposal.approvals.first.approve!
+      work_order.approvals.first.approve!
       visit "/ncr/work_orders/#{work_order.id}/edit"
       expect(find("[name=approver_email]")["disabled"]).to eq("disabled")
       # And we can still submit
