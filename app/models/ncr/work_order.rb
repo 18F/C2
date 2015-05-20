@@ -9,7 +9,7 @@ module Ncr
   EXPENSE_TYPES = %w(BA61 BA80)
 
   BUILDING_NUMBERS = DATA['BUILDING_NUMBERS']
-  OFFICES = DATA['OFFICES']
+  ORG_CODES = DATA['ORG_CODES']
 
   class WorkOrder < ActiveRecord::Base
     include ObservableModel
@@ -77,7 +77,7 @@ module Ncr
     # split these into different models
     def self.relevant_fields(expense_type)
       fields = [:description, :amount, :expense_type, :vendor, :not_to_exceed,
-                :building_number, :office]
+                :building_number, :org_code]
       case expense_type
       when "BA61"
         fields + [:emergency]

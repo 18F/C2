@@ -58,9 +58,9 @@
             {include_blank: true, prompt: "Type here to search"}, {class: 'form-control js-selectize'}) %>
     </div>
     <div class="form-group">
-      <%= f.label :office %>
+      <%= f.label :org_code %>
       <%= f.collection_select(
-            :office, Ncr::OFFICES, :to_s, :to_s,
+            :org_code, Ncr::ORG_CODES, :to_s, :to_s,
             {include_blank: true, prompt: "Type here to search"}, {class: 'form-control js-selectize'}) %>
     </div>
     <div class="form-group">

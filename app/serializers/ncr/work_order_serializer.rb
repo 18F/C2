@@ -12,7 +12,7 @@ module Ncr
       :id,
       :name,
       :not_to_exceed,
-      :office,
+      :org_code,
       :rwa_number,
       :vendor
     )
