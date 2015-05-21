@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   include Pundit    # For authorization checks
   include ReturnToHelper
+  include MarkdownHelper
 
   helper ValueHelper
   add_template_helper ClientHelper

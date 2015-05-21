@@ -19,26 +19,4 @@ module CommunicartMailerHelper
     opts = { version: proposal.version, cch: approval.api_token.access_token }
     approve_proposal_url(proposal, opts)
   end
-  
-  def markdown text
-    text = text ? text : ''
-    options = {
-      filter_html:     true,
-      hard_wrap:       true, 
-      link_attributes: { rel: 'nofollow', target: "_blank" },
-      space_after_headers: true, 
-      fenced_code_blocks: true
-    }
-
-    extensions = {
-      autolink:           true,
-      superscript:        true,
-      disable_indented_code_blocks: true
-    }
-
-    renderer = Redcarpet::Render::HTML.new(options)
-    markdown = Redcarpet::Markdown.new(renderer, extensions)
-
-    markdown.render(text).html_safe
-  end
 end

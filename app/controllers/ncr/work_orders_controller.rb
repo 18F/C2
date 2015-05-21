@@ -41,9 +41,11 @@ module Ncr
       @approver_email = params[:approver_email]
       if self.errors.empty?
         if @work_order.changed?
-          create_comment @work_order.update_comment
+          changed_attributes = @work_order.changed_attributes
+          @work_order.save
+          @work_order.proposal.changed_fields(changed_attributes)
         end
-        @work_order.save
+        
         if !self.approver_email_frozen?
           @work_order.update_approver(@approver_email)
         end
@@ -53,15 +55,6 @@ module Ncr
         flash[:error] = errors
         render 'form'
       end
-    end
-
-    def create_comment text
-      comment = Comment.new
-      comment.comment_text = text.to_s
-      comment.proposal_id = self.work_order.proposal.id
-      comment.user_id = self.work_order.proposal.requester_id
-      comment.update_comment = true
-      comment.save
     end
 
     protected

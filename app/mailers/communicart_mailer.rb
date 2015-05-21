@@ -5,6 +5,7 @@ class CommunicartMailer < ActionMailer::Base
   add_template_helper CommunicartMailerHelper
   add_template_helper ValueHelper
   add_template_helper ClientHelper
+  add_template_helper MarkdownHelper
 
 
   # Approver can approve/reject/take other action
