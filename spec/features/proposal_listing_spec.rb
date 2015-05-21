@@ -1,6 +1,6 @@
 describe "Listing Page" do
   let!(:user){ FactoryGirl.create(:user) }
-  let!(:default){ FactoryGirl.create(:proposal, :with_cart, requester: user) }
+  let!(:default){ FactoryGirl.create(:proposal, requester: user) }
   let!(:ncr){ FactoryGirl.create(:ncr_work_order, requester: user) }
   let!(:gsa18f){ FactoryGirl.create(:gsa18f_procurement, requester: user) }
   before do

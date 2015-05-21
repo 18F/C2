@@ -23,7 +23,7 @@ describe "National Capital Region proposals" do
       fill_in 'Amount', with: 123.45
       fill_in "Approving Official's Email Address", with: 'approver@example.com'
       select Ncr::BUILDING_NUMBERS[0], :from => 'ncr_work_order_building_number'
-      select Ncr::OFFICES[0], :from => 'ncr_work_order_office'
+      select Ncr::ORG_CODES[0], :from => 'ncr_work_order_org_code'
       expect {
         click_on 'Submit for approval'
       }.to change { Proposal.count }.from(0).to(1)
@@ -49,11 +49,36 @@ describe "National Capital Region proposals" do
     end
 
     it "defaults to the approver from the last request" do
-      proposal = FactoryGirl.create(:proposal, :with_cart, :with_approvers,
+      proposal = FactoryGirl.create(:proposal, :with_approvers,
                                     requester: requester)
       visit '/ncr/work_orders/new'
       expect(find_field("Approving Official's Email Address").value).to eq(
         proposal.approvers.first.email_address)
+    end
+
+    with_feature 'HIDE_BA61_OPTION' do
+      it "removes the radio button" do
+        visit '/ncr/work_orders/new'
+        expect(page).to_not have_content('BA61')
+      end
+
+      it "defaults to BA80" do
+        visit '/ncr/work_orders/new'
+        fill_in 'Project title', with: "buying stuff"
+        fill_in 'Description', with: "desc content"
+        # no need to select BA80
+        fill_in 'Vendor', with: 'ACME'
+        fill_in 'Amount', with: 123.45
+        fill_in "Approving Official's Email Address", with: 'approver@example.com'
+        select Ncr::BUILDING_NUMBERS[0], :from => 'ncr_work_order_building_number'
+        select Ncr::ORG_CODES[0], :from => 'ncr_work_order_org_code'
+        expect {
+          click_on 'Submit for approval'
+        }.to change { Proposal.count }.from(0).to(1)
+
+        proposal = Proposal.last
+        expect(proposal.client_data.expense_type).to eq('BA80')
+      end
     end
 
     it "doesn't save when the amount is too high" do
@@ -82,7 +107,7 @@ describe "National Capital Region proposals" do
       fill_in 'Amount', with: 123.45
       fill_in "Approving Official's Email Address", with: 'approver@example.com'
       select Ncr::BUILDING_NUMBERS[0], :from => 'ncr_work_order_building_number'
-      select Ncr::OFFICES[0], :from => 'ncr_work_order_office'
+      select Ncr::ORG_CODES[0], :from => 'ncr_work_order_org_code'
       click_on 'Submit for approval'
       expect(current_path).to eq("/proposals/#{Proposal.last.id}")
       expect(page).to have_content("RWA Number")
@@ -105,7 +130,7 @@ describe "National Capital Region proposals" do
       expect(find_field("RWA Number")).to be_visible
     end
 
-    let (:work_order) { 
+    let (:work_order) {
       wo = FactoryGirl.create(:ncr_work_order, requester: requester)
       wo.add_approvals('approver@example.com')
       wo
@@ -211,7 +236,7 @@ describe "National Capital Region proposals" do
         fill_in 'Amount', with: 123.45
         fill_in "Approving Official's Email Address", with: 'approver@example.com'
         select Ncr::BUILDING_NUMBERS[0], :from => 'ncr_work_order_building_number'
-        select Ncr::OFFICES[0], :from => 'ncr_work_order_office'
+        select Ncr::ORG_CODES[0], :from => 'ncr_work_order_org_code'
       end
 
       it "approves emergencies" do

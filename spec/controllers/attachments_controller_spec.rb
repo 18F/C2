@@ -1,12 +1,11 @@
 describe AttachmentsController do
   describe 'permission checking' do
-    let (:proposal) { FactoryGirl.create(:proposal, :with_approvers,
-                                         :with_observers, :with_cart) }
+    let (:proposal) { FactoryGirl.create(:proposal, :with_approvers, :with_observers) }
     let (:params) {{
-      proposal_id: proposal.id, 
+      proposal_id: proposal.id,
       attachment: { file: fixture_file_upload('icon-user.png', 'image/png') }
     }}
-                     
+
     it "allows the requester to add an attachment" do
       login_as(proposal.requester)
       post :create, params

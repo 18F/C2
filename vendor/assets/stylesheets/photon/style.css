@@ -1,4 +1,6 @@
-/* modifications: changed Google Font URL to HTTPS */
+/* modifications: changed Google Font URL to HTTPS 
+ *                removed header button box-shadow, hover/active states
+ **/
 
 @import url(font-awesome.min.css);
 @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300italic,400,400italic");
@@ -1061,25 +1063,9 @@
 		#header input[type="button"],
 		#header button,
 		#header .button {
-			box-shadow: inset 0 0 0 1px #ffffff;
 			color: #ffffff !important;
 		}
 
-			#header input[type="submit"]:hover,
-			#header input[type="reset"]:hover,
-			#header input[type="button"]:hover,
-			#header button:hover,
-			#header .button:hover {
-				background-color: rgba(255, 255, 255, 0.125);
-			}
-
-			#header input[type="submit"]:active,
-			#header input[type="reset"]:active,
-			#header input[type="button"]:active,
-			#header button:active,
-			#header .button:active {
-				background-color: rgba(255, 255, 255, 0.25);
-			}
 
 			#header input[type="submit"].special,
 			#header input[type="reset"].special,

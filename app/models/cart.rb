@@ -1,5 +1,7 @@
 class Cart < ActiveRecord::Base
   include PropMixin
+
+  belongs_to :proposal
   include ProposalDelegate
 
   has_one :approval_group

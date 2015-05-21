@@ -14,7 +14,7 @@ module Ncr
       :id,
       :name,
       :not_to_exceed,
-      :office,
+      :org_code,
       :rwa_number,
       :status,
       :updated_at,

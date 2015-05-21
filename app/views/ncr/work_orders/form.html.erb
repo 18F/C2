@@ -15,42 +15,45 @@
         Include request details (e.g. Room Number, Estimated number of hours)
       </span>
     </div>
-    <div class="form-group">
-      <%= field_set_tag "Expense type" do %>
-        <div class="radio">
-          <%= f.label :expense_type, value: "BA61" do %>
-            <%= f.radio_button :expense_type, "BA61",
-                               :"data-filter-control" => "expense-type" %>
-            BA61
-          <% end %>
-        </div>
-        <div class="form-group" data-filter-key="expense-type"
-                                data-filter-value="BA61">
-          <%= f.label :emergency do %>
-            <%= f.check_box :emergency %>
-            This request was an emergency and I received a verbal Notice to Proceed (NTP)
-          <% end %>
-        </div>
-        <!-- Work order will go here -->
-        <div class="radio">
-          <%= f.label :expense_type, value: "BA80" do %>
-            <%= f.radio_button :expense_type, "BA80",
-                               :"data-filter-control" => "expense-type" %>
-            BA80
-          <% end %>
-        </div>
-        <div class="form-group" data-filter-key="expense-type"
-                                data-filter-value="BA80">
-          <%= f.label :rwa_number %>
-          <%= f.text_field :rwa_number, class: 'form-control' %>
-        </div>
-        <div class="form-group" data-filter-key="expense-type"
-                                data-filter-value="BA80">
-          <%= f.label :code %>
-          <%= f.text_field :code, class: 'form-control' %>
-        </div>
-      <% end %>
-    </div>
+    <% if ENV['HIDE_BA61_OPTION'] == 'true' %>
+      <%= f.hidden_field :expense_type, value: 'BA80' %>
+    <% else %>
+      <div class="form-group">
+        <%= field_set_tag "Expense type" do %>
+          <div class="radio">
+            <%= f.label :expense_type, value: "BA61" do %>
+              <%= f.radio_button :expense_type, "BA61",
+                                 :"data-filter-control" => "expense-type" %>
+              BA61
+            <% end %>
+          </div>
+          <div class="form-group" data-filter-key="expense-type"
+                                  data-filter-value="BA61">
+            <%= f.label :emergency do %>
+              <%= f.check_box :emergency %>
+              This request was an emergency and I received a verbal Notice to Proceed (NTP)
+            <% end %>
+          </div>
+          <div class="radio">
+            <%= f.label :expense_type, value: "BA80" do %>
+              <%= f.radio_button :expense_type, "BA80",
+                                 :"data-filter-control" => "expense-type" %>
+              BA80
+            <% end %>
+          </div>
+          <div class="form-group" data-filter-key="expense-type"
+                                  data-filter-value="BA80">
+            <%= f.label :rwa_number %>
+            <%= f.text_field :rwa_number, class: 'form-control' %>
+          </div>
+          <div class="form-group" data-filter-key="expense-type"
+                                  data-filter-value="BA80">
+            <%= f.label :code %>
+            <%= f.text_field :code, class: 'form-control' %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
     <div class="form-group">
       <%= f.label :building_number %>
       <%= f.collection_select(
@@ -58,9 +61,9 @@
             {include_blank: true, prompt: "Type here to search"}, {class: 'form-control js-selectize'}) %>
     </div>
     <div class="form-group">
-      <%= f.label :office %>
+      <%= f.label :org_code %>
       <%= f.collection_select(
-            :office, Ncr::OFFICES, :to_s, :to_s,
+            :org_code, Ncr::ORG_CODES, :to_s, :to_s,
             {include_blank: true, prompt: "Type here to search"}, {class: 'form-control js-selectize'}) %>
     </div>
     <div class="form-group">

@@ -75,19 +75,5 @@ describe 'Testing User Ownership of Comments' do
 
     expect(cart.comments[0].user_id).to eq user.id
     expect(cart.comments[1].user_id).to eq user2.id
-
-    # We want the code int he cart model to only put comments for the correct cart into the CSV.
-
-    # First, we'll build the second cart....
-
-     cart2.comments << Comment.new(user_id: user.id,comment_text: "Lincoln")
-     cart2.comments << Comment.new(user_id: user2.id,comment_text: "Washington")
-
-    # Invoke Create_comments_csv and check...
-
-    csv = Exporter::Comments.new(cart2).to_csv
-
-    expect(csv.lines.count).to eq 3
-
   end
 end

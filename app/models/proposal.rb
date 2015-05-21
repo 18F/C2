@@ -94,6 +94,30 @@ class Proposal < ActiveRecord::Base
     self.approvers.merge(self.currently_awaiting_approvals)
   end
 
+  # delegated, with a fallback
+  # TODO refactor to class method in a module
+  def delegate_with_default(method)
+    data = self.client_data_legacy
+    if data && data.respond_to?(method)
+      data.public_send(method)
+    else
+      if block_given?
+        yield
+      else
+        nil
+      end
+    end
+  end
+
+  def public_identifier
+    self.delegate_with_default(:public_identifier) { "##{self.id}" }
+  end
+
+  def fields_for_display
+    # TODO better default
+    self.delegate_with_default(:fields_for_display) { [] }
+  end
+
   # Be careful if altering the identifier. You run the risk of "expiring" all
   # pending approval emails
   def version

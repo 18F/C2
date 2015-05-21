@@ -2,6 +2,7 @@ module Api
   module Ncr
     class WorkOrdersController < BaseController
       def index
+        # TODO use a scope for ordering
         orders = ::Ncr::WorkOrder.order('created_at DESC')
 
         if params[:limit]

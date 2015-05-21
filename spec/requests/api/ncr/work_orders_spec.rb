@@ -32,6 +32,7 @@ describe 'NCR Work Orders API' do
             'name' => work_order.name,
             'not_to_exceed' => work_order.not_to_exceed,
             'office' => work_order.office,
+            'org_code' => work_order.org_code,
             'requester' => {
               'created_at' => time_to_json(work_order.requester.created_at),
               'id' => work_order.requester_id,
@@ -46,7 +47,7 @@ describe 'NCR Work Orders API' do
       end
 
       it "displays the name from the cart" do
-        work_order = FactoryGirl.create(:ncr_work_order, :with_cart)
+        work_order = FactoryGirl.create(:ncr_work_order)
         json = get_json('/api/v1/ncr/work_orders.json')
         expect(json[0]['name']).to eq(work_order.name)
       end

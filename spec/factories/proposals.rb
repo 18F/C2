@@ -4,10 +4,6 @@ FactoryGirl.define do
     status 'pending'
     association :requester, factory: :user
 
-    trait :with_cart do
-      cart
-    end
-
     trait :with_approver do
       after :create do |proposal|
         proposal.add_approver('approver1@some-dot-gov.gov')

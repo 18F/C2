@@ -1,10 +1,12 @@
-module Ncr
-  DATA = YAML.load_file("#{Rails.root}/config/data/ncr.yaml")
+require 'csv'
 
+module Ncr
   EXPENSE_TYPES = %w(BA61 BA80)
 
-  BUILDING_NUMBERS = DATA['BUILDING_NUMBERS']
-  OFFICES = DATA['OFFICES']
+  BUILDING_NUMBERS = YAML.load_file("#{Rails.root}/config/data/ncr/building_numbers.yml")
+  org_code_rows = CSV.read("#{Rails.root}/config/data/ncr/org_codes_2015-05-18.csv", headers: true)
+  # TODO reference by `organization_cd` rather than storing the whole thing
+  ORG_CODES = org_code_rows.map{|r| "#{r['organization_cd']} #{r['organization_nm']}" }
 
   class WorkOrder < Proposal
     include ObservableModel
@@ -67,7 +69,7 @@ module Ncr
     # split these into different models
     def self.relevant_fields(expense_type)
       fields = [:description, :amount, :expense_type, :vendor, :not_to_exceed,
-                :building_number, :office]
+                :building_number, :org_code]
       case expense_type
       when "BA61"
         fields + [:emergency]
