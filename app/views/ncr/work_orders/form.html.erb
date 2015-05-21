@@ -34,25 +34,24 @@
               This request was an emergency and I received a verbal Notice to Proceed (NTP)
             <% end %>
           </div>
+          <div class="radio">
+            <%= f.label :expense_type, value: "BA80" do %>
+              <%= f.radio_button :expense_type, "BA80",
+                                 :"data-filter-control" => "expense-type" %>
+              BA80
+            <% end %>
+          </div>
+          <div class="form-group" data-filter-key="expense-type"
+                                  data-filter-value="BA80">
+            <%= f.label :rwa_number %>
+            <%= f.text_field :rwa_number, class: 'form-control' %>
+          </div>
+          <div class="form-group" data-filter-key="expense-type"
+                                  data-filter-value="BA80">
+            <%= f.label :code %>
+            <%= f.text_field :code, class: 'form-control' %>
+          </div>
         <% end %>
-        <!-- Work order will go here -->
-        <div class="radio">
-          <%= f.label :expense_type, value: "BA80" do %>
-            <%= f.radio_button :expense_type, "BA80",
-                               :"data-filter-control" => "expense-type" %>
-            BA80
-          <% end %>
-        </div>
-        <div class="form-group" data-filter-key="expense-type"
-                                data-filter-value="BA80">
-          <%= f.label :rwa_number %>
-          <%= f.text_field :rwa_number, class: 'form-control' %>
-        </div>
-        <div class="form-group" data-filter-key="expense-type"
-                                data-filter-value="BA80">
-          <%= f.label :code %>
-          <%= f.text_field :code, class: 'form-control' %>
-        </div>
       </div>
     <% end %>
     <div class="form-group">
