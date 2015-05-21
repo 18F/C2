@@ -84,7 +84,7 @@ describe "GSA 18f Purchase Request Form" do
     end
 
     it "can be restarted if pending" do
-      visit "/gsa18f/procurements/#{procurement.id}/edit"
+      visit "/gsa18f/procurements/#{gsa18f.id}/edit"
       fill_in "Link to product", with: "http://www.submitted.com"
       fill_in 'Cost per unit', with: 123.45
       fill_in 'Quantity', with: 1
@@ -94,21 +94,21 @@ describe "GSA 18f Purchase Request Form" do
       expect(page).to have_content("http://www.submitted.com")
       expect(page).to have_content("resubmitted")
       # Verify it is actually saved
-      procurement.reload
-      expect(procurement.link_to_product).to eq('http://www.submitted.com')
+      gsa18f.reload
+      expect(gsa18f.link_to_product).to eq('http://www.submitted.com')
     end
 
     it "can be restarted if rejected" do
       gsa18f.update_attributes(status: 'rejected')  # avoid workflow
 
-      visit "/gsa18f/procurements/#{procurement.id}/edit"
-      expect(current_path).to eq("/gsa18f/procurements/#{procurement.id}/edit")
+      visit "/gsa18f/procurements/#{gsa18f.id}/edit"
+      expect(current_path).to eq("/gsa18f/procurements/#{gsa18f.id}/edit")
     end
 
     it "cannot be restarted if approved" do
       gsa18f.update_attributes(status: 'approved')  # avoid workflow
 
-      visit "/gsa18f/procurements/#{procurement.id}/edit"
+      visit "/gsa18f/procurements/#{gsa18f.id}/edit"
       expect(current_path).to eq("/gsa18f/procurements/new")
       expect(page).to have_content('already approved')
     end
@@ -116,7 +116,7 @@ describe "GSA 18f Purchase Request Form" do
     it "cannot be edited by someone other than the requester" do
       gsa18f.set_requester(FactoryGirl.create(:user))
 
-      visit "/gsa18f/procurements/#{procurement.id}/edit"
+      visit "/gsa18f/procurements/#{gsa18f.id}/edit"
       expect(current_path).to eq("/gsa18f/procurements/new")
       expect(page).to have_content('cannot restart')
     end
@@ -125,7 +125,7 @@ describe "GSA 18f Purchase Request Form" do
       visit "/proposals/#{gsa18f.id}"
       expect(page).to have_content('Modify Request')
       click_on('Modify Request')
-      expect(current_path).to eq("/gsa18f/procurements/#{procurement.id}/edit")
+      expect(current_path).to eq("/gsa18f/procurements/#{gsa18f.id}/edit")
     end
 
     it "saves all attributes when editing" do
@@ -181,7 +181,7 @@ describe "GSA 18f Purchase Request Form" do
 
     it "shows a restart link from a rejected proposal" do
       gsa18f.update_attribute(:status, 'rejected') # avoid state machine
-      visit "/proposals/#{proposal.id}"
+      visit "/proposals/#{gsa18f.id}"
       expect(page).to have_content('Modify Request')
     end
 

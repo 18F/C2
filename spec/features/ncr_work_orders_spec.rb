@@ -39,7 +39,7 @@ describe "National Capital Region proposals" do
       expect(proposal.vendor).to eq('ACME')
       expect(proposal.amount).to eq(123.45)
       expect(proposal.building_number).to eq(Ncr::BUILDING_NUMBERS[0])
-      expect(proposal.office).to eq(Ncr::OFFICES[0])
+      expect(proposal.org_code).to eq(Ncr::ORG_CODES[0])
       expect(proposal.description).to eq('desc content')
       expect(proposal.requester).to eq(requester)
       expect(proposal.approvers.map(&:email_address)).to eq(%w(
@@ -77,7 +77,7 @@ describe "National Capital Region proposals" do
         }.to change { Proposal.count }.from(0).to(1)
 
         proposal = Proposal.last
-        expect(proposal.client_data.expense_type).to eq('BA80')
+        expect(proposal.expense_type).to eq('BA80')
       end
     end
 

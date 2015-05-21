@@ -19,7 +19,7 @@ module Ncr
       f.string :building_number
       f.boolean :emergency, default: false
       f.string :rwa_number
-      f.string :office
+      f.string :org_code
       f.string :code
       f.string :project_title
       f.string :description

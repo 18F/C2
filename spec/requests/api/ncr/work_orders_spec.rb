@@ -31,7 +31,6 @@ describe 'NCR Work Orders API' do
             'id' => work_order.id,
             'name' => work_order.name,
             'not_to_exceed' => work_order.not_to_exceed,
-            'office' => work_order.office,
             'org_code' => work_order.org_code,
             'requester' => {
               'created_at' => time_to_json(work_order.requester.created_at),
