@@ -97,10 +97,16 @@ class Proposal < ActiveRecord::Base
   # returns the Approval
   def add_approver(email)
     user = User.for_email(email)
-    if self.parallel? || self.approvals.empty?
-      self.approvals.create!(user_id: user.id, status: 'actionable')
-    else
-      self.approvals.create!(user_id: user.id)
+    approval = self.approvals.create!(user_id: user.id)
+    approval
+  end
+
+  def initialize_approvals()
+    if self.linear? && self.approvals
+      self.approvals.update_all(status: 'pending')
+      self.approvals.first.make_actionable!
+    elsif self.parallel?
+      self.approvals.update_all(status: 'actionable')
     end
   end
 
@@ -171,14 +177,7 @@ class Proposal < ActiveRecord::Base
     # Note that none of the state machine's history is stored
     # Further note: this isn't used anywhere
     self.api_tokens.update_all(expires_at: Time.now)
-    if self.parallel?
-      self.approvals.update_all(status: 'actionable')
-    else  # linear
-      self.approvals.update_all(status: 'pending')
-      if first_approval = self.approvals.first
-        first_approval.make_actionable!
-      end
-    end
+    self.initialize_approvals()
     Dispatcher.deliver_new_proposal_emails(self)
   end
 

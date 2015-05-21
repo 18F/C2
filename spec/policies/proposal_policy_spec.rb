@@ -87,9 +87,10 @@ describe ProposalPolicy do
     end
 
     it "does not allow a pending approver to see it" do
-      proposal.approvals[0].update_attribute(:status, 'pending')
-      expect(subject).not_to permit(proposal.approvers[0], proposal)
-      expect(subject).to permit(proposal.approvers[1], proposal)
+      first_approval = proposal.approvals.first
+      first_approval.update_attribute(:status, 'pending')
+      expect(subject).not_to permit(first_approval.user, proposal)
+      expect(subject).to permit(proposal.approvers.last, proposal)
     end
 
     it "allows an observer to see it" do
