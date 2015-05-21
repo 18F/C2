@@ -1,15 +1,17 @@
+require 'csv'
+
 module Ncr
   # Make sure all table names use 'ncr_XXX'
   def self.table_name_prefix
     'ncr_'
   end
 
-  DATA = YAML.load_file("#{Rails.root}/config/data/ncr.yaml")
-
   EXPENSE_TYPES = %w(BA61 BA80)
 
-  BUILDING_NUMBERS = DATA['BUILDING_NUMBERS']
-  ORG_CODES = DATA['ORG_CODES']
+  BUILDING_NUMBERS = YAML.load_file("#{Rails.root}/config/data/ncr/building_numbers.yml")
+  org_code_rows = CSV.read("#{Rails.root}/config/data/ncr/org_codes_2015-05-18.csv", headers: true)
+  # TODO reference by `organization_cd` rather than storing the whole thing
+  ORG_CODES = org_code_rows.map{|r| "#{r['organization_cd']} #{r['organization_nm']}" }
 
   class WorkOrder < ActiveRecord::Base
     include ObservableModel
