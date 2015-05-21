@@ -17,6 +17,14 @@
     </div>
     <% if ENV['HIDE_BA61_OPTION'] == 'true' %>
       <%= f.hidden_field :expense_type, value: 'BA80' %>
+      <div class="form-group">
+        <%= f.label :rwa_number %>
+        <%= f.text_field :rwa_number, class: 'form-control' %>
+      </div>
+      <div class="form-group">
+        <%= f.label :code %>
+        <%= f.text_field :code, class: 'form-control' %>
+      </div>
     <% else %>
       <div class="form-group">
         <%= field_set_tag "Expense type" do %>
