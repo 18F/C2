@@ -16,7 +16,7 @@
           <table class="approval_details data_container">
             <%- last_status = nil %>
             <%- @proposal.approvals_in_list_order.each_with_index do |approval,index| %>
-              <%- display_status = approval.actionable? ? 'pending' : approval.status %>
+              <%- display_status = approval.decorate.display_status %>
               <tr class="approval-row">
                 <td>
                   <%- if display_status != last_status %>

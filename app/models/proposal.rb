@@ -175,7 +175,6 @@ class Proposal < ActiveRecord::Base
 
   def restart
     # Note that none of the state machine's history is stored
-    # Further note: this isn't used anywhere
     self.api_tokens.update_all(expires_at: Time.now)
     self.initialize_approvals()
     Dispatcher.deliver_new_proposal_emails(self)
