@@ -167,23 +167,11 @@ class Proposal < ActiveRecord::Base
     Dispatcher.deliver_new_proposal_emails(self)
   end
 
-  def changed_fields changed_attributes
-    changed_attributes.delete('updated_at')
-    comment_text = []
-    bullet = changed_attributes.length > 1 ? '- ' : ''
-    changed_attributes.each do |key, value|
-      value = property_to_s(self.client_data[key])
-      property_name = Ncr::WorkOrder.human_attribute_name(key)
-      
-      comment_text << Proposal.update_comment_format(property_name, value, bullet)
-    end
-    comment_text = comment_text.join("\n")
-    self.comments.create!(comment_text: comment_text, update_comment: true, user_id: self.requester_id)
-  end
-
-  private
-  def self.update_comment_format key, value, bullet
-    "#{bullet}*#{key}* was changed to #{value}"
+  def changed_fields comment_text
+    Comment.new({comment_text: comment_text, 
+                 update_comment: true, 
+                 user_id: self.requester_id, 
+                 proposal_id: self.id}).save
   end
   ###############################
 end

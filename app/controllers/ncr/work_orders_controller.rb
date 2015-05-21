@@ -41,11 +41,10 @@ module Ncr
       @approver_email = params[:approver_email]
       if self.errors.empty?
         if @work_order.changed?
-          changed_attributes = @work_order.changed_attributes
+          comment_text = @work_order.changed_attributes_comment
+          @work_order.proposal.changed_fields(comment_text)
           @work_order.save
-          @work_order.proposal.changed_fields(changed_attributes)
         end
-        
         if !self.approver_email_frozen?
           @work_order.update_approver(@approver_email)
         end

@@ -105,7 +105,23 @@ module Ncr
       self.project_title
     end
 
+    def changed_attributes_comment
+      changed_attributes = self.changed_attributes
+      comment_text = []
+      bullet = changed_attributes.length > 1 ? '- ' : ''
+      changed_attributes.each do |key, value|
+        value = property_to_s(self[key])
+        property_name = WorkOrder.human_attribute_name(key)
+
+        comment_text << WorkOrder.update_comment_format(property_name, value, bullet)
+      end
+      comment_text = comment_text.join("\n")
+    end
+
     protected
+    def self.update_comment_format key, value, bullet
+      "#{bullet}*#{key}* was changed to #{value}"
+    end
 
     def fiscal_year
       year = self.created_at.year

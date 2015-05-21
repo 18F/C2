@@ -54,12 +54,14 @@ class CommunicartMailer < ActionMailer::Base
 
   def comment_added_email(comment, to_email)
     @comment = comment
-
-    mail(
-         to: to_email,
-         subject: "A comment has been added to request #{comment.proposal.public_identifier}",
-         from: user_email(comment.user)
-         )
+    # Don't send if special comment
+    if !@comment.update_comment
+      mail(
+           to: to_email,
+           subject: "A comment has been added to request #{comment.proposal.public_identifier}",
+           from: user_email(comment.user)
+           )
+    end
   end
 
   private
