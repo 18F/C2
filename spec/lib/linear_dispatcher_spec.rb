@@ -16,7 +16,7 @@ describe LinearDispatcher do
       expect(dispatcher.next_pending_approval(proposal)).to eq(nil)
     end
 
-    it "returns the first pending approval by position" do
+    it "sorts by position if there are more than one actionable approvals" do
       proposal.approvals.create!(position: 6, status: 'actionable')
       last_approval = proposal.approvals.create!(position: 5, status: 'actionable')
 
