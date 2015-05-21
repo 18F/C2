@@ -62,6 +62,24 @@ describe "National Capital Region proposals" do
         visit '/ncr/work_orders/new'
         expect(page).to_not have_content('BA61')
       end
+
+      it "defaults to BA80" do
+        visit '/ncr/work_orders/new'
+        fill_in 'Project title', with: "buying stuff"
+        fill_in 'Description', with: "desc content"
+        # no need to select BA80
+        fill_in 'Vendor', with: 'ACME'
+        fill_in 'Amount', with: 123.45
+        fill_in "Approving Official's Email Address", with: 'approver@example.com'
+        select Ncr::BUILDING_NUMBERS[0], :from => 'ncr_work_order_building_number'
+        select Ncr::ORG_CODES[0], :from => 'ncr_work_order_org_code'
+        expect {
+          click_on 'Submit for approval'
+        }.to change { Proposal.count }.from(0).to(1)
+
+        proposal = Proposal.last
+        expect(proposal.client_data.expense_type).to eq('BA80')
+      end
     end
 
     it "doesn't save when the amount is too high" do
