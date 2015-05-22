@@ -28,8 +28,8 @@ class Filter
 
   this.generateIn = ($scope) ->
     filters = {}
-    $scope.find("[data-filter-key]").each (idx, el) ->
-      key = el.getAttribute("data-filter-key")
+    $scope.find("[data-filter-control]").each (idx, el) ->
+      key = el.getAttribute('data-filter-control')
       if !filters.hasOwnProperty(key)
         filters[key] = new Filter($scope, key)
     filters
