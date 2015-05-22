@@ -1,6 +1,11 @@
 <tr class="m-shared-email_status">
   <td colspan="2" padding="10">
     <table id="status-container-detail" width="770" class="col-md-12">
+      <%- if @proposal.status == "approved" %>
+        <tr class="success">
+          <td colspan="2">All of your approvals are complete. Please move forward with your purchase.</td>
+        </tr>
+      <%- end %>
       <tr class="status-header-container">
         <td>
           <strong>Approval Status</strong>

@@ -20,9 +20,8 @@ class Approval < ActiveRecord::Base
   self.statuses.each do |status|
     scope status, -> { where(status: status) }
   end
-  scope :received, -> { approvable.where.not(status: 'pending') }
-  default_scope { order('position ASC') }
 
+  default_scope { order('position ASC') }
 
   # TODO remove
   def cart_id
