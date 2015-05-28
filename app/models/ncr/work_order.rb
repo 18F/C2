@@ -13,7 +13,6 @@ module Ncr
 
   class WorkOrder < ActiveRecord::Base
     include ObservableModel
-    include ActiveModel::Dirty
     include ValueHelper
     # TODO include ProposalDelegate
 
@@ -109,13 +108,13 @@ module Ncr
 
     protected
     def changed_attributes_comment
-      changed_attributes = self.changed_attributes
+      changed_attributes = self.changed_attributes.clone
+      changed_attributes.delete(:updated_at)
       comment_text = []
       bullet = changed_attributes.length > 1 ? '- ' : ''
       changed_attributes.each do |key, value|
         value = property_to_s(self[key])
         property_name = WorkOrder.human_attribute_name(key)
-
         comment_text << WorkOrder.update_comment_format(property_name, value, bullet)
       end
       comment_text = comment_text.join("\n")
