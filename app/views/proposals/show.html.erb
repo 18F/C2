@@ -110,45 +110,25 @@
 
       <% if @proposal.comments.any? %>
         <% @proposal.comments.reverse_each do |c| %>
-          <% if c.update_comment %>
-            <div class='line-item comment-update'>
-              <div class='row'>
-                <% unless c.user.nil? %>
-                  <p class='comment-sender col-sm-6 col-xs-12'>
-                    <strong>Request modified by <%= c.user_full_name %></strong>
-                  </p>
-                <% end %>
-                <p class='date col-sm-6 col-xs-12'>
-                  <%= date_with_tooltip(c.created_at) %>
-                </p>
-              </div>
+          <div class='line-item <%= c.update_comment ? "comment-update" : "" %>'>
+            <div class='row'>
+              <p class='comment-sender col-sm-6 col-xs-12'>
+                <strong>
+                  <% if c.update_comment %>Request modified by <% end %>
+                  <%= c.user_full_name %>
+                </strong>
+              </p>
+              <p class='date col-sm-6 col-xs-12'>
+                <%= date_with_tooltip(c.created_at) %>
+              </p>
+            </div>
 
-              <div class='row'>
-                <div class='comment-text col-sm-6 col-xs-12'>
-                  <%= markdown(c.comment_text) %>
-                </div>
+            <div class='row'>
+              <div class='comment-text col-sm-6 col-xs-12'>
+                <%= c.update_comment ? markdown(c.comment_text) : c.comment_text %>
               </div>
             </div>
-          <% else %>
-            <div class='line-item'>
-              <div class='row'>
-                <% unless c.user.nil? %>
-                  <p class='comment-sender col-sm-6 col-xs-12'>
-                    <strong><%= c.user_full_name %></strong>
-                  </p>
-                <% end %>
-                <p class='date col-sm-6 col-xs-12'>
-                  <%= date_with_tooltip(c.created_at) %>
-                </p>
-              </div>
-
-              <div class='row'>
-                <p class='comment-text col-sm-6 col-xs-12'>
-                  <%= c.comment_text %>
-                </p>
-              </div>
-            </div>
-          <% end %>
+          </div>
         <% end %>
       <% else %>
       <p class='empty-list-label'>
