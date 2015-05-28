@@ -1,7 +1,7 @@
 module Ncr
   class WorkOrdersController < ApplicationController
     before_filter :authenticate_user!
-    before_filter ->{authorize self.work_order.proposal}, only: [:edit, :update]
+    before_filter ->{authorize self.work_order}, only: [:edit, :update]
     rescue_from Pundit::NotAuthorizedError, with: :auth_errors
     helper_method :approver_email_frozen?
 
@@ -14,15 +14,13 @@ module Ncr
     def create
       @approver_email = params[:approver_email]
       @work_order = Ncr::WorkOrder.new(permitted_params)
-      # TODO unify with how the factories create model instances
-      @work_order.build_proposal(flow: 'linear', requester: current_user)
       if self.errors.empty?
+        @work_order.requester = current_user
         @work_order.save
         @work_order.add_approvals(@approver_email)
-        proposal = @work_order.proposal
-        Dispatcher.deliver_new_proposal_emails(proposal)
+        Dispatcher.deliver_new_proposal_emails(@work_order)
         flash[:success] = "Proposal submitted!"
-        redirect_to proposal
+        redirect_to proposal_path(@work_order)
       else
         flash[:error] = errors
         render 'form'
@@ -46,7 +44,7 @@ module Ncr
           @work_order.update_approver(@approver_email)
         end
         flash[:success] = "Proposal resubmitted!"
-        redirect_to proposal_path(@work_order.proposal)
+        redirect_to proposal_path(@work_order)
       else
         flash[:error] = errors
         render 'form'

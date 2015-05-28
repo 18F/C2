@@ -29,7 +29,7 @@ describe ProposalSearch do
         it "returns the Proposal when searching by the ##{attr_name}" do
           work_order = FactoryGirl.create(:ncr_work_order, attr_name => 'foo')
           results = ProposalSearch.new.execute('foo')
-          expect(results).to eq([work_order.proposal])
+          expect(results).to eq([work_order])
         end
       end
     end
@@ -39,7 +39,7 @@ describe ProposalSearch do
         it "returns the Proposal when searching by the ##{attr_name}" do
           procurement = FactoryGirl.create(:gsa18f_procurement, attr_name => 'foo')
           results = ProposalSearch.new.execute('foo')
-          expect(results).to eq([procurement.proposal])
+          expect(results).to eq([procurement])
         end
       end
     end
@@ -47,7 +47,7 @@ describe ProposalSearch do
     it "returns the Proposals by rank" do
       prop1 = FactoryGirl.create(:proposal, id: 12)
       work_order = FactoryGirl.create(:ncr_work_order, project_title: "12 rolly chairs for 1600 Penn Ave")
-      prop2 = work_order.proposal
+      prop2 = work_order
       prop3 = FactoryGirl.create(:proposal, id: 1600)
 
       searcher = ProposalSearch.new

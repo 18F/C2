@@ -1,11 +1,6 @@
 require 'csv'
 
 module Ncr
-  # Make sure all table names use 'ncr_XXX'
-  def self.table_name_prefix
-    'ncr_'
-  end
-
   EXPENSE_TYPES = %w(BA61 BA80)
 
   BUILDING_NUMBERS = YAML.load_file("#{Rails.root}/config/data/ncr/building_numbers.yml")
@@ -13,13 +8,22 @@ module Ncr
   # TODO reference by `organization_cd` rather than storing the whole thing
   ORG_CODES = org_code_rows.map{|r| "#{r['organization_cd']} #{r['organization_nm']}" }
 
-  class WorkOrder < ActiveRecord::Base
+  class WorkOrder < Proposal
     include ObservableModel
 
-    has_one :proposal, as: :client_data
-    include ProposalDelegate
-
-    after_initialize :set_defaults
+    typed_store :client_fields, coder: ClientFieldsCoder do |f|
+      f.decimal :amount
+      f.string :expense_type
+      f.string :vendor
+      f.boolean :not_to_exceed, default: false
+      f.string :building_number
+      f.boolean :emergency, default: false
+      f.string :rwa_number
+      f.string :org_code
+      f.string :code
+      f.string :project_title
+      f.string :description
+    end
 
     # @TODO: use integer number of cents to avoid floating point issues
     validates :amount, numericality: {
@@ -34,9 +38,10 @@ module Ncr
       message: "one letter followed by 7 numbers"
     }, allow_blank: true
 
+
     def set_defaults
-      self.not_to_exceed ||= false
-      self.emergency ||= false
+      self.flow ||= 'linear'
+      super
     end
 
     # A requester can change his/her approving official
@@ -54,7 +59,7 @@ module Ncr
       if self.emergency
         emails.each {|email| self.add_observer(email) }
         # skip state machine
-        self.proposal.update_attribute(:status, 'approved')
+        self.update_attribute(:status, 'approved')
       else
         emails.each {|email| self.add_approver(email) }
       end
@@ -80,7 +85,7 @@ module Ncr
     # Methods for Client Data interface
     def fields_for_display
       attributes = self.relevant_fields
-      attributes.map{|key| [WorkOrder.human_attribute_name(key), self[key]]}
+      attributes.map{|key| [WorkOrder.human_attribute_name(key), self.client_fields[key.to_s]]}
     end
 
     def client
@@ -88,16 +93,11 @@ module Ncr
     end
 
     def public_identifier
-      "FY" + self.fiscal_year.to_s.rjust(2, "0") + "-#{self.proposal.id}"
+      "FY" + self.fiscal_year.to_s.rjust(2, "0") + "-#{self.id}"
     end
 
     def total_price
       self.amount || 0.0
-    end
-
-    # may be replaced with paper-trail or similar at some point
-    def version
-      self.updated_at.to_i
     end
 
     def name

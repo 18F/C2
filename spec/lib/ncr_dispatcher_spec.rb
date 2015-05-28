@@ -1,6 +1,5 @@
 describe NcrDispatcher do
   let!(:work_order) { FactoryGirl.create(:ncr_work_order, :with_approvers) }
-  let(:proposal) { work_order.proposal }
   let(:approvals) { work_order.approvals }
   let(:approval_1) { approvals.first }
   let(:approval_2) { approvals.second }
@@ -43,7 +42,7 @@ describe NcrDispatcher do
     it 'notifies approvers who have already approved' do
       approval_1.approve!
       deliveries.clear
-      ncr_dispatcher.on_proposal_update(proposal)
+      ncr_dispatcher.on_proposal_update(work_order)
       email = deliveries[0]
       expect(email.to).to eq([approval_1.user.email_address])
       expect(email.html_part.body.to_s).to include("already approved")
@@ -51,7 +50,7 @@ describe NcrDispatcher do
     end
 
     it 'current approver if they have not be notified before' do
-      ncr_dispatcher.on_proposal_update(proposal)
+      ncr_dispatcher.on_proposal_update(work_order)
       email = deliveries[0]
       expect(email.to).to eq([approval_1.user.email_address])
       expect(email.html_part.body.to_s).not_to include("already approved")
@@ -60,7 +59,7 @@ describe NcrDispatcher do
 
     it 'current approver if they have be notified before' do
       approval_1.create_api_token!
-      ncr_dispatcher.on_proposal_update(proposal)
+      ncr_dispatcher.on_proposal_update(work_order)
       email = deliveries[0]
       expect(email.to).to eq([approval_1.user.email_address])
       expect(email.html_part.body.to_s).not_to include("already approved")

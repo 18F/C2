@@ -13,6 +13,7 @@ class ProposalSearch
     @relation = proposals
   end
 
+  # @todo: this should be a select rather than a join
   def joined
     join = <<-SQL
       INNER JOIN (
@@ -23,21 +24,17 @@ class ProposalSearch
             -- need to set empty string as a default for values that can be null, either within the column or by the association not being present
             setweight(to_tsvector(proposals.id::text), 'A') ||
             ---
-            setweight(to_tsvector(coalesce(ncr_work_orders.project_title, '')), 'B') ||
-            setweight(to_tsvector(coalesce(ncr_work_orders.description, '')), 'C') ||
-            setweight(to_tsvector(coalesce(ncr_work_orders.vendor, '')), 'C') ||
+            -- it's possible to look at all values of a field, but for now, just mimic master
+            --    e.g. select string_agg(value, ' ') from json_each_text('{"a":"foo","b":"bar","c":"baz"}'::json)
+            setweight(to_tsvector(coalesce(proposals.client_fields->>'project_title', '')), 'B') ||
+            setweight(to_tsvector(coalesce(proposals.client_fields->>'description', '')), 'C') ||
+            setweight(to_tsvector(coalesce(proposals.client_fields->>'vendor', '')), 'C') ||
             ---
-            setweight(to_tsvector(coalesce(gsa18f_procurements.product_name_and_description, '')), 'B') ||
-            setweight(to_tsvector(coalesce(gsa18f_procurements.justification, '')), 'C') ||
-            setweight(to_tsvector(coalesce(gsa18f_procurements.additional_info, '')), 'C')
+            setweight(to_tsvector(coalesce(proposals.client_fields->>'product_name_and_description', '')), 'B') ||
+            setweight(to_tsvector(coalesce(proposals.client_fields->>'justification', '')), 'C') ||
+            setweight(to_tsvector(coalesce(proposals.client_fields->>'additional_info', '')), 'C')
           ) AS document
         FROM proposals
-        LEFT OUTER JOIN gsa18f_procurements ON
-          gsa18f_procurements.id = proposals.client_data_id AND
-          proposals.client_data_type = 'Gsa18f::Procurement'
-        LEFT OUTER JOIN ncr_work_orders ON
-          ncr_work_orders.id = proposals.client_data_id AND
-          proposals.client_data_type = 'Ncr::WorkOrder'
       ) p_search
       ON proposals.id = p_search.pid
     SQL

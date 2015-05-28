@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :ncr_work_order, class: Ncr::WorkOrder do
+  factory :ncr_work_order, class: Ncr::WorkOrder, parent: :proposal do
     amount 1000
     expense_type "BA61"
     vendor "Some Vend"
@@ -9,10 +9,6 @@ FactoryGirl.define do
     rwa_number "R1234567"
     org_code Ncr::ORG_CODES[0]
     project_title "NCR Name"
-    association :proposal, flow: 'linear'
-
-    trait :with_approvers do
-      association :proposal, :with_approvers, flow: 'linear'
-    end
+    flow 'linear'
   end
 end

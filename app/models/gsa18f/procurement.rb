@@ -1,19 +1,26 @@
 module Gsa18f
-  # Make sure all table names use 'gsa18f_XXX'
-  def self.table_name_prefix
-    'gsa18f_'
-  end
-
   DATA = YAML.load_file("#{Rails.root}/config/data/18f.yaml")
 
 
-  class Procurement < ActiveRecord::Base
+  class Procurement < Proposal
     URGENCY = DATA['URGENCY']
     OFFICES = DATA['OFFICES']
     RECURRENCE = DATA['RECURRENCE']
 
-    has_one :proposal, as: :client_data
-    include ProposalDelegate
+    typed_store :client_fields, coder: ClientFieldsCoder do |f|
+      f.string :office
+      f.text :justification
+      f.string :link_to_product
+      f.integer :quantity
+      f.datetime :date_requested
+      f.string :additional_info
+      f.decimal :cost_per_unit
+      f.text :product_name_and_description
+      f.boolean :recurring
+      f.string :recurring_interval
+      f.integer :recurring_length
+      f.string :urgency
+    end
 
     validates :cost_per_unit, numericality: {
       greater_than_or_equal_to: 0,
@@ -24,6 +31,10 @@ module Gsa18f
     }
     validates :product_name_and_description, presence: true
 
+    def set_defaults
+      self.flow ||= 'linear'
+      super
+    end
 
     def add_approvals
       self.add_approver(Gsa18f::Procurement.approver_email)
@@ -47,7 +58,7 @@ module Gsa18f
 
     def fields_for_display
       attributes = self.relevant_fields
-      attributes.map! {|key| [Procurement.human_attribute_name(key), self[key]]}
+      attributes.map! {|key| [Procurement.human_attribute_name(key), self.client_fields[key.to_s]]}
       attributes.push(["Total Price", total_price])
     end
 
@@ -55,18 +66,8 @@ module Gsa18f
       "gsa18f"
     end
 
-    # @todo - this is pretty ugly
-    def public_identifier
-      "##{self.proposal.id}"
-    end
-
     def total_price
       (self.cost_per_unit * self.quantity) || 0.0
-    end
-
-    # may be replaced with paper-trail or similar at some point
-    def version
-      self.updated_at.to_i
     end
 
     def name

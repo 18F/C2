@@ -1,16 +1,8 @@
 describe "Listing Page" do
   let!(:user){ FactoryGirl.create(:user) }
   let!(:default){ FactoryGirl.create(:proposal, requester: user) }
-  let!(:ncr){
-    ncr = FactoryGirl.create(:ncr_work_order)
-    ncr.proposal.update_attribute(:requester, user)
-    ncr
-  }
-  let!(:gsa18f){
-    gsa18f = FactoryGirl.create(:gsa18f_procurement)
-    gsa18f.proposal.update_attribute(:requester, user)
-    gsa18f
-  }
+  let!(:ncr){ FactoryGirl.create(:ncr_work_order, requester: user) }
+  let!(:gsa18f){ FactoryGirl.create(:gsa18f_procurement, requester: user) }
   before do
     login_as(user)
   end

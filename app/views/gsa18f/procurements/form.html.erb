@@ -90,7 +90,7 @@
     </div>
     <%= f.submit "Submit for approval", class: 'btn btn-default' %>
     <% if @procurement.persisted? %>
-      <%= link_to 'Discard Changes', proposal_url(@procurement.proposal) %>
+      <%= link_to 'Discard Changes', proposal_url(@procurement) %>
     <% end %>
   <% end %>
 </div>

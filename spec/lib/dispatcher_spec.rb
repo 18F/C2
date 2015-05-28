@@ -10,7 +10,7 @@ describe Dispatcher do
 
     it "uses the LinearDispatcher for linear approvals" do
       proposal.flow = 'linear'
-      expect(proposal).to receive(:client_data).and_return(double(client: 'ncr'))
+      expect(proposal).to receive(:client).and_return('ncr')
       expect_any_instance_of(LinearDispatcher).to receive(:deliver_new_proposal_emails).with(proposal)
       Dispatcher.deliver_new_proposal_emails(proposal)
     end

@@ -10,15 +10,13 @@ module Gsa18f
 
     def create
       @procurement = Gsa18f::Procurement.new(permitted_params)
-      # TODO unify with how the factories create model instances
-      @procurement.build_proposal(flow: 'linear', requester: current_user)
       if self.errors.empty?
+        @procurement.requester = current_user
         @procurement.save
         @procurement.add_approvals
-        proposal = @procurement.proposal
-        Dispatcher.deliver_new_proposal_emails(proposal)
+        Dispatcher.deliver_new_proposal_emails(@procurement)
         flash[:success] = "Procurement submitted!"
-        redirect_to proposal
+        redirect_to proposal_path(@procurement)
       else
         flash[:error] = errors
         render 'form'
@@ -36,7 +34,7 @@ module Gsa18f
       if self.errors.empty?
         @procurement.restart!
         flash[:success] = "Procurement resubmitted!"
-        redirect_to @procurement.proposal
+        redirect_to proposal_path(@procurement)
       else
         flash[:error] = errors
         render 'form'

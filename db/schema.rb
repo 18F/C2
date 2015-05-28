@@ -138,6 +138,8 @@ ActiveRecord::Schema.define(version: 20150514220454) do
     t.integer  "client_data_id"
     t.string   "client_data_type"
     t.integer  "requester_id"
+    t.json     "client_fields"
+    t.string   "type"
   end
 
   add_index "proposals", ["client_data_id", "client_data_type"], name: "index_proposals_on_client_data_id_and_client_data_type", using: :btree

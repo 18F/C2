@@ -8,13 +8,11 @@ module Ncr
 
     protected
     def queryset
-      orm_query = Ncr::WorkOrder.
-        joins(:proposal).
-        merge(policy_scope(Proposal)).
-        select('EXTRACT(YEAR FROM proposals.created_at) as year',
-               'EXTRACT(MONTH FROM proposals.created_at) as month',
+      orm_query = policy_scope(Ncr::WorkOrder).
+        select('EXTRACT(YEAR FROM created_at) as year',
+               'EXTRACT(MONTH FROM created_at) as month',
                'COUNT(*) as count',
-               'SUM(amount) as cost').
+               "SUM((client_fields->>'amount')::float) as cost").
         group('year', 'month').
         order('year DESC', 'month DESC')
       # Convert the ORM into an array of hashes
