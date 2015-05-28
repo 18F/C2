@@ -21,6 +21,8 @@ module Ncr
     include ProposalDelegate
 
     after_initialize :set_defaults
+    #creates a comment containing the changes
+    before_update :changed_attributes_comment
 
     # @TODO: use integer number of cents to avoid floating point issues
     validates :amount, numericality: {
@@ -105,6 +107,7 @@ module Ncr
       self.project_title
     end
 
+    protected
     def changed_attributes_comment
       changed_attributes = self.changed_attributes
       comment_text = []
@@ -116,9 +119,9 @@ module Ncr
         comment_text << WorkOrder.update_comment_format(property_name, value, bullet)
       end
       comment_text = comment_text.join("\n")
+      self.proposal.changed_fields(comment_text)
     end
 
-    protected
     def self.update_comment_format key, value, bullet
       "#{bullet}*#{key}* was changed to #{value}"
     end
