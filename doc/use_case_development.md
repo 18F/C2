@@ -1,6 +1,6 @@
-See the descriptions of the current use cases in the [Overview](overview.md#use-cases).
+# Use Case development
 
-## Differences from one use case to another
+Our codebase is (largely) split up into two sections: that which is core C2 code, and that which is specific to the use cases. See the descriptions of the current use cases in the [Overview](overview.md#use-cases). Differences from one use case to another include:
 
 * Model
     * Fields
@@ -32,7 +32,3 @@ See the descriptions of the current use cases in the [Overview](overview.md#use-
     * User role (e.g. service center worker vs. budget analyst)
     * User relationships (e.g. supervisor)
     * Access control (e.g. service center directors can see _all_ requests in their region)
-
-## Proposal for use case specification
-
-TODO
