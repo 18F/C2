@@ -109,23 +109,24 @@
       <%- end %>
 
       <% if @proposal.comments.any? %>
-        <% @proposal.comments.each do |c| %>
-          <div class='line-item'>
+        <% @proposal.comments.reverse_each do |c| %>
+          <div class='line-item <%= c.update_comment ? "comment-update" : "" %>'>
             <div class='row'>
-              <% unless c.user.nil? %>
-                <p class='comment-sender col-sm-6 col-xs-12'>
-                  <strong><%= c.user_full_name %></strong>
-                </p>
-              <% end %>
+              <p class='comment-sender col-sm-6 col-xs-12'>
+                <strong>
+                  <% if c.update_comment %>Request modified by <% end %>
+                  <%= c.user_full_name %>
+                </strong>
+              </p>
               <p class='date col-sm-6 col-xs-12'>
                 <%= date_with_tooltip(c.created_at) %>
               </p>
             </div>
 
             <div class='row'>
-              <p class='comment-text col-sm-6 col-xs-12'>
-                <%= c.comment_text %>
-              </p>
+              <div class='comment-text col-sm-6 col-xs-12'>
+                <%= c.update_comment ? markdown(c.comment_text) : c.comment_text %>
+              </div>
             </div>
           </div>
         <% end %>

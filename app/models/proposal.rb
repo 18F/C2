@@ -1,6 +1,6 @@
 class Proposal < ActiveRecord::Base
   include ThreeStateWorkflow
-
+  include ValueHelper
   workflow_column :status
 
   has_one :cart
@@ -167,5 +167,12 @@ class Proposal < ActiveRecord::Base
     Dispatcher.deliver_new_proposal_emails(self)
   end
 
+  def changed_fields comment_text
+    self.comments.create(
+      comment_text: comment_text, 
+      update_comment: true, 
+      user_id: self.requester_id
+    )
+  end
   ###############################
 end
