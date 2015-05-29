@@ -121,7 +121,7 @@ describe "GSA 18f Purchase Request Form" do
 
       visit "/gsa18f/procurements/#{procurement.id}/edit"
       expect(current_path).to eq("/gsa18f/procurements/new")
-      expect(page).to have_content('cannot restart')
+      expect(page).to have_content('You are not the requester')
     end
 
     it "shows a restart link from a pending proposal" do

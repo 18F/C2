@@ -4,6 +4,8 @@
 # * errors
 class UseCaseController < ApplicationController
   before_filter :authenticate_user!
+  before_filter ->{authorize self.proposal}, only: [:edit, :update]
+  rescue_from Pundit::NotAuthorizedError, with: :auth_errors
 
 
   def new
@@ -21,10 +23,10 @@ class UseCaseController < ApplicationController
 
     if self.errors.empty?
       model_instance.save
-      # TODO after_save
 
       proposal = model_instance.proposal
       Dispatcher.deliver_new_proposal_emails(proposal)
+
       flash[:success] = "Proposal submitted!"
       redirect_to proposal
     else
@@ -73,5 +75,10 @@ class UseCaseController < ApplicationController
   def assign_model_instance_variable(val)
     var_name = "@#{self.model_instance_variable_name}".to_sym
     instance_variable_set(var_name, val)
+  end
+
+  def auth_errors(exception)
+    url = polymorphic_url(self.model_class, action: :new, routing_type: :path)
+    redirect_to url, alert: exception.message
   end
 end

@@ -1,8 +1,5 @@
 module Gsa18f
   class ProcurementsController < UseCaseController
-    before_filter :redirect_if_cart_cant_be_edited, only: [:edit, :update]
-
-
     def create
       super
 
@@ -33,14 +30,6 @@ module Gsa18f
     def errors
       self.procurement.valid? # force validation
       self.procurement.errors.full_messages
-    end
-
-    def redirect_if_cart_cant_be_edited
-      if self.procurement.approved?
-        redirect_to new_gsa18f_procurement_path, :alert => "That proposal's already approved. New proposal?"
-      elsif self.procurement.requester != current_user
-        redirect_to new_gsa18f_procurement_path, :alert => 'You cannot restart that proposal'
-      end
     end
   end
 end

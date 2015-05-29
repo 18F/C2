@@ -1,9 +1,5 @@
 module Ncr
   class WorkOrdersController < UseCaseController
-    # TODO move to UseCaseController
-    before_filter ->{authorize self.work_order.proposal}, only: [:edit, :update]
-    rescue_from Pundit::NotAuthorizedError, with: :auth_errors
-
     helper_method :approver_email_frozen?
 
 
@@ -79,10 +75,6 @@ module Ncr
         errors = errors + self.work_order.errors.full_messages
       end
       errors
-    end
-
-    def auth_errors(exception)
-      redirect_to new_ncr_work_order_path, :alert => exception.message
     end
   end
 end
