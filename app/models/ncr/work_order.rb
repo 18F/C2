@@ -14,14 +14,13 @@ module Ncr
   class WorkOrder < ActiveRecord::Base
     include ObservableModel
     include ValueHelper
-    # TODO include ProposalDelegate
 
     has_one :proposal, as: :client_data
     include ProposalDelegate
 
     after_initialize :set_defaults
-    #creates a comment containing the changes
-    before_update :changed_attributes_comment
+
+    before_update :record_changes
 
     # @TODO: use integer number of cents to avoid floating point issues
     validates :amount, numericality: {
@@ -107,7 +106,7 @@ module Ncr
     end
 
     protected
-    def changed_attributes_comment
+    def record_changes
       changed_attributes = self.changed_attributes.clone
       changed_attributes.delete(:updated_at)
       comment_text = []
