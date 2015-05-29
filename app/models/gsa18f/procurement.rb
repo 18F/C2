@@ -24,6 +24,8 @@ module Gsa18f
     }
     validates :product_name_and_description, presence: true
 
+    after_create :add_approvals
+
 
     def add_approvals
       self.add_approver(Gsa18f::Procurement.approver_email)

@@ -1,15 +1,5 @@
 module Gsa18f
   class ProcurementsController < UseCaseController
-    def create
-      super
-
-      # TODO move to after_create
-      if self.errors.empty?
-        @procurement.add_approvals
-      end
-    end
-
-
     protected
 
     def model_class
