@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150522151809) do
+ActiveRecord::Schema.define(version: 20150519184949) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,13 +84,6 @@ ActiveRecord::Schema.define(version: 20150522151809) do
 
   add_index "comments", ["proposal_id"], name: "index_comments_on_proposal_id", using: :btree
 
-  create_table "field_options", force: true do |t|
-    t.integer "schema_field_id"
-    t.string  "value"
-    t.string  "label"
-    t.integer "position"
-  end
-
   create_table "gsa18f_procurements", force: true do |t|
     t.string   "office"
     t.text     "justification"
@@ -146,31 +139,9 @@ ActiveRecord::Schema.define(version: 20150522151809) do
     t.integer  "client_data_id"
     t.string   "client_data_type"
     t.integer  "requester_id"
-    t.json     "client_fields"
-    t.string   "type"
-    t.integer  "schema_id"
   end
 
   add_index "proposals", ["client_data_id", "client_data_type"], name: "index_proposals_on_client_data_id_and_client_data_type", using: :btree
-
-  create_table "schema_fields", force: true do |t|
-    t.integer  "schema_id"
-    t.string   "name"
-    t.string   "label"
-    t.string   "type"
-    t.string   "long_description"
-    t.json     "extra_attributes"
-    t.json     "validation_configs"
-    t.integer  "position"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "schemas", force: true do |t|
-    t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "user_roles", force: true do |t|
     t.integer "approval_group_id"
