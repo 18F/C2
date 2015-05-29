@@ -44,7 +44,7 @@ module Ncr
 
     def suggested_approver_email
       last_proposal = current_user.last_requested_proposal
-      last_proposal.try(:approvers).try(:first).try(:email_address) || ""
+      last_proposal.try(:approvers).try(:first).try(:email_address) || ''
     end
 
     def work_order
@@ -67,14 +67,11 @@ module Ncr
     end
 
     def errors
-      errors = []
+      results = super
       if @approver_email.blank? && !self.approver_email_frozen?
-        errors = errors << "Approver email is required"
+        results += ["Approver email is required"]
       end
-      if !self.work_order.valid?
-        errors = errors + self.work_order.errors.full_messages
-      end
-      errors
+      results
     end
   end
 end

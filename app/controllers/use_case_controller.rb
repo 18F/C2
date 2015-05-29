@@ -1,7 +1,6 @@
 # Abstract controller – requires the following methods on the subclass:
 # * model_class
 # * permitted_params
-# * errors
 class UseCaseController < ApplicationController
   before_filter :authenticate_user!
   before_filter ->{authorize self.proposal}, only: [:edit, :update]
@@ -10,13 +9,13 @@ class UseCaseController < ApplicationController
 
   def new
     model_instance = self.model_class.new
-    self.assign_model_instance_variable(model_instance)
+    self.assign_model_instance_variables(model_instance)
     render 'form'
   end
 
   def create
     model_instance = self.model_class.new(self.permitted_params)
-    self.assign_model_instance_variable(model_instance)
+    self.assign_model_instance_variables(model_instance)
 
     # TODO unify with how the factories create model instances
     model_instance.build_proposal(flow: 'linear', requester: current_user)
@@ -36,13 +35,13 @@ class UseCaseController < ApplicationController
   end
 
   def edit
-    self.assign_model_instance_variable(self.find_model_instance)
+    self.assign_model_instance_variables(self.find_model_instance)
     render 'form'
   end
 
   def update
     model_instance = self.find_model_instance
-    self.assign_model_instance_variable(model_instance)
+    self.assign_model_instance_variables(model_instance)
 
     model_instance.assign_attributes(self.permitted_params)   # don't hit db yet
 
@@ -52,7 +51,7 @@ class UseCaseController < ApplicationController
       redirect_to proposal_path(model_instance.proposal)
     else
       flash[:error] = self.errors
-      self.assign_model_instance_variable(model_instance)
+      self.assign_model_instance_variables(model_instance)
       render 'form'
     end
   end
@@ -72,9 +71,16 @@ class UseCaseController < ApplicationController
     self.model_class.name.demodulize.underscore
   end
 
-  def assign_model_instance_variable(val)
+  def assign_model_instance_variables(val)
+    @model_instance ||= val
+
     var_name = "@#{self.model_instance_variable_name}".to_sym
     instance_variable_set(var_name, val)
+  end
+
+  def errors
+    @model_instance.valid? # force validation
+    @model_instance.errors.full_messages
   end
 
   def auth_errors(exception)
