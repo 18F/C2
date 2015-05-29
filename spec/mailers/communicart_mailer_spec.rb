@@ -137,8 +137,22 @@ describe CommunicartMailer do
       it 'does not render empty comments' do
         expect(mail.body.encoded).to_not include('Comments')
       end
-
     end
+
+    context 'completed_message' do
+      it 'displays when all requests have been approved' do
+        final_approval = proposal.approvals.last
+        final_approval.approve!
+        mail = CommunicartMailer.approval_reply_received_email(final_approval)
+        expect(mail.body.encoded).to include('All of your approvals are complete. Please move forward with your purchase')
+      end
+
+      it 'does not display when requests are still pending' do
+        mail = CommunicartMailer.approval_reply_received_email(approval)
+        expect(mail.body.encoded).to_not include('All of your approvals are complete. Please move forward with your purchase')
+      end
+    end
+
   end
 
   describe 'comment_added_email' do
