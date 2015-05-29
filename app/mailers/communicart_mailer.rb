@@ -43,6 +43,11 @@ class CommunicartMailer < ActionMailer::Base
     @approval = approval
     @proposal = approval.proposal.decorate
     to_address = @proposal.requester.email_address
+
+    if @proposal.approved?
+      @completed_message = "All of your approvals are complete. Please move forward with your purchase"
+    end
+
     #TODO: Add a specific 'rejection' text block for the requester
 
     mail(
