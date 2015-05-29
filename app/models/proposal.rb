@@ -1,5 +1,6 @@
 class Proposal < ActiveRecord::Base
   include WorkflowModel
+  include ValueHelper
   workflow do
     state :pending do
       # partial *may* trigger a full approval
@@ -192,5 +193,11 @@ class Proposal < ActiveRecord::Base
     end
   end
 
-  ###############################
+  def changed_fields comment_text
+    self.comments.create(
+      comment_text: comment_text, 
+      update_comment: true, 
+      user_id: self.requester_id
+    )
+  end
 end

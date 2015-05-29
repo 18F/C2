@@ -1,5 +1,7 @@
 # NCR data
 
+## Building numbers
+
 Instructions to get an up-to-date(?) list of federal buildings:
 
 1. Visit https://euas.gsa.gov/.
@@ -14,3 +16,7 @@ Instructions to get an up-to-date(?) list of federal buildings:
 1. Grab the list from the 'Select Building' dropdown.
 
 Note that these are federal buildings only, not leased buildings.
+
+## Org codes
+
+This list came from Carol Remsberg, Building Operations Branch Manager at NCR, who exported it from Pegasys.

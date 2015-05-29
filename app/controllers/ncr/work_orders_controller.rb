@@ -39,7 +39,6 @@ module Ncr
       @work_order = self.work_order
       @work_order.assign_attributes(permitted_params)   # don't hit db yet
       @approver_email = params[:approver_email]
-
       if self.errors.empty?
         @work_order.save
         if !self.approver_email_frozen?

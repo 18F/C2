@@ -57,6 +57,31 @@ describe "National Capital Region proposals" do
         proposal.approvers.first.email_address)
     end
 
+    with_feature 'HIDE_BA61_OPTION' do
+      it "removes the radio button" do
+        visit '/ncr/work_orders/new'
+        expect(page).to_not have_content('BA61')
+      end
+
+      it "defaults to BA80" do
+        visit '/ncr/work_orders/new'
+        fill_in 'Project title', with: "buying stuff"
+        fill_in 'Description', with: "desc content"
+        # no need to select BA80
+        fill_in 'Vendor', with: 'ACME'
+        fill_in 'Amount', with: 123.45
+        fill_in "Approving Official's Email Address", with: 'approver@example.com'
+        select Ncr::BUILDING_NUMBERS[0], :from => 'ncr_work_order_building_number'
+        select Ncr::ORG_CODES[0], :from => 'ncr_work_order_org_code'
+        expect {
+          click_on 'Submit for approval'
+        }.to change { Proposal.count }.from(0).to(1)
+
+        proposal = Proposal.last
+        expect(proposal.client_data.expense_type).to eq('BA80')
+      end
+    end
+
     it "doesn't save when the amount is too high" do
       visit '/ncr/work_orders/new'
       fill_in 'Project title', with: "buying stuff"
@@ -126,6 +151,17 @@ describe "National Capital Region proposals" do
       # Verify it is actually saved
       work_order.reload
       expect(work_order.vendor).to eq("New ACME")
+    end
+
+    it "creates a special comment when editing" do
+      visit "/ncr/work_orders/#{work_order.id}/edit"
+      fill_in 'Vendor', with: "New Test Vendor"
+      fill_in 'Description', with: "New Description"
+      click_on 'Submit for approval'
+
+      expect(page).to have_content("Request modified by")
+      expect(page).to have_content("Description was changed to New Description")
+      expect(page).to have_content("Vendor was changed to New Test Vendor")
     end
 
     it "has 'Discard Changes' link" do

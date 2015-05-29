@@ -1,23 +1,28 @@
+require 'csv'
+
 module Ncr
   # Make sure all table names use 'ncr_XXX'
   def self.table_name_prefix
     'ncr_'
   end
 
-  DATA = YAML.load_file("#{Rails.root}/config/data/ncr.yaml")
-
   EXPENSE_TYPES = %w(BA61 BA80)
 
-  BUILDING_NUMBERS = DATA['BUILDING_NUMBERS']
-  ORG_CODES = DATA['ORG_CODES']
+  BUILDING_NUMBERS = YAML.load_file("#{Rails.root}/config/data/ncr/building_numbers.yml")
+  org_code_rows = CSV.read("#{Rails.root}/config/data/ncr/org_codes_2015-05-18.csv", headers: true)
+  # TODO reference by `organization_cd` rather than storing the whole thing
+  ORG_CODES = org_code_rows.map{|r| "#{r['organization_cd']} #{r['organization_nm']}" }
 
   class WorkOrder < ActiveRecord::Base
     include ObservableModel
+    include ValueHelper
 
     has_one :proposal, as: :client_data
     include ProposalDelegate
 
     after_initialize :set_defaults
+
+    before_update :record_changes
 
     # @TODO: use integer number of cents to avoid floating point issues
     validates :amount, numericality: {
@@ -105,6 +110,23 @@ module Ncr
     end
 
     protected
+    def record_changes
+      changed_attributes = self.changed_attributes.clone
+      changed_attributes.delete(:updated_at)
+      comment_text = []
+      bullet = changed_attributes.length > 1 ? '- ' : ''
+      changed_attributes.each do |key, value|
+        value = property_to_s(self[key])
+        property_name = WorkOrder.human_attribute_name(key)
+        comment_text << WorkOrder.update_comment_format(property_name, value, bullet)
+      end
+      comment_text = comment_text.join("\n")
+      self.proposal.changed_fields(comment_text)
+    end
+
+    def self.update_comment_format key, value, bullet
+      "#{bullet}*#{key}* was changed to #{value}"
+    end
 
     def fiscal_year
       year = self.created_at.year
