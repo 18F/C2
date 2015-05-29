@@ -35,14 +35,12 @@ class UseCaseController < ApplicationController
   end
 
   def edit
-    self.assign_model_instance_variables(self.find_model_instance)
+    self.find_model_instance
     render 'form'
   end
 
   def update
     model_instance = self.find_model_instance
-    self.assign_model_instance_variables(model_instance)
-
     model_instance.assign_attributes(self.permitted_params)   # don't hit db yet
 
     if self.errors.empty?
@@ -51,7 +49,6 @@ class UseCaseController < ApplicationController
       redirect_to proposal_path(model_instance.proposal)
     else
       flash[:error] = self.errors
-      self.assign_model_instance_variables(model_instance)
       render 'form'
     end
   end
@@ -60,7 +57,12 @@ class UseCaseController < ApplicationController
   protected
 
   def find_model_instance
-    @model_instance ||= self.model_class.find(params[:id])
+    unless @model_instance
+      @model_instance = self.model_class.find(params[:id])
+      self.assign_model_instance_variables(@model_instance)
+    end
+
+    @model_instance
   end
 
   def proposal
