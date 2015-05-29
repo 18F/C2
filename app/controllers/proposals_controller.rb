@@ -3,8 +3,10 @@ class ProposalsController < ApplicationController
 
   before_filter :authenticate_user!, except: :approve
   before_filter ->{authorize self.proposal}, only: :show
+  before_filter :needs_token_on_get, only: :approve
   before_filter :validate_access, only: :approve
   helper_method :display_status
+  add_template_helper ProposalsHelper
 
   def show
     @proposal = self.proposal.decorate
@@ -13,13 +15,14 @@ class ProposalsController < ApplicationController
   end
 
   def index
-    @proposals = self.proposals
+    @proposals = self.chronological_proposals
     @CLOSED_PROPOSAL_LIMIT = 10
   end
 
   def archive
-    @proposals = self.proposals.closed
+    @proposals = self.chronological_proposals.closed
   end
+
 
   def approve
     approval = self.proposal.approval_for(current_user)
@@ -33,6 +36,27 @@ class ProposalsController < ApplicationController
     redirect_to proposal
   end
 
+  # @todo - this is acting more like an index; rename existing #index to #mine
+  # or similar, then rename #query to #index
+  def query
+    @proposals = self.proposals
+    @start_date = self.param_date(:start_date)
+    @end_date = self.param_date(:end_date)
+    @text = params[:text]
+
+    if @start_date
+      @proposals = @proposals.where('created_at >= ?', @start_date)
+    end
+    if @end_date
+      @proposals = @proposals.where('created_at < ?', @end_date)
+    end
+    if @text
+      @proposals = ProposalSearch.new(@proposals).execute(@text)
+    else
+      @proposals = @proposals.order('created_at DESC')
+    end
+    # TODO limit/paginate results
+  end
 
   protected
 
@@ -41,6 +65,10 @@ class ProposalsController < ApplicationController
   end
 
   def proposals
-    policy_scope(Proposal).order('created_at DESC')
+    policy_scope(Proposal)
+  end
+
+  def chronological_proposals
+    self.proposals.order('created_at DESC')
   end
 end

@@ -19,7 +19,7 @@
   }
 }
 
-.cart-table {
+.cart-table, .dashboard {
   width: 100%;
 
   margin: 20px auto;
@@ -232,6 +232,11 @@ tr.cart_item_information p {
     border: 0;
     padding: 15px;
 
+    &[disabled] {
+      color: $medgray;
+      background-color: $lightgray;
+    }
+
     @media(max-width: $break-small) {
       padding: 10px;
     }
@@ -306,11 +311,11 @@ body.webapp {
     color: black;
   }
 
-  a {
+  a, .button_to input {
     text-decoration: underline;
     color: #0C75E1;
   }
-  p {
+  p, .button_to input {
     font-size: 14px;
   }
 }
@@ -359,7 +364,7 @@ body.webapp {
 
     &.pending {
       min-width: 155px;
-      background-image: image-url('icon-pending.gif');
+      background-image: image-url('icon-pending.png');
       background-repeat: no-repeat;
       background-position: center -0.2em;
       padding-top: 20px;

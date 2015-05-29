@@ -22,12 +22,12 @@ class User < ActiveRecord::Base
     end
   end
 
-  def requested_carts
-    Cart.joins(:proposal).where(proposals: {requester_id: self.id})
+  def requested_proposals
+    Proposal.where(requester_id: self.id)
   end
 
-  def last_requested_cart
-    self.requested_carts.order('created_at DESC').first
+  def last_requested_proposal
+    self.requested_proposals.order('created_at DESC').first
   end
 
   def add_delegate(other)

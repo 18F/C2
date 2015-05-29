@@ -1,11 +1,12 @@
 class ApplicationController < ActionController::Base
   include Pundit    # For authorization checks
+  include ReturnToHelper
 
   helper ValueHelper
   add_template_helper ClientHelper
 
   protect_from_forgery with: :exception
-  helper_method :current_user, :signed_in?
+  helper_method :current_user, :signed_in?, :return_to
 
   protected
   # We are overriding this method to account for permission trees. See
@@ -23,6 +24,14 @@ class ApplicationController < ActionController::Base
       ex = NotAuthorizedError.new("not allowed to #{q} this #{record}")
       ex.query, ex.record, ex.policy = q, record, pol
       raise ex
+    end
+  end
+
+  def param_date(sym)
+    begin
+      Date.strptime(params[sym].to_s)
+    rescue ArgumentError
+      nil
     end
   end
 
@@ -49,10 +58,8 @@ class ApplicationController < ActionController::Base
 
   def authenticate_user!
     unless signed_in?
-      session[:return_to] = request.fullpath
       flash[:error] = 'You need to sign in for access to this page.'
-      redirect_to root_url
+      redirect_to root_url(return_to: self.make_return_to("Previous", request.fullpath))
     end
   end
-
 end

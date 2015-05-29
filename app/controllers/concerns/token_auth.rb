@@ -17,9 +17,17 @@ module TokenAuth
     rescue_from Pundit::NotAuthorizedError, with: :auth_errors
   end
 
+  # As a security precaution, certain actions must be POSTed to.
+  def needs_token_on_get
+    if request.get?
+      authorize(:api_token, :valid!, params)
+    end
+  end
+
   def validate_access
     if !signed_in?
       authorize(:api_token, :valid!, params)
+      authorize(:api_token, :not_delegate!, params)
       # validated above
       sign_in(ApiToken.find_by(access_token: params[:cch]).user)
     end
@@ -38,12 +46,11 @@ module TokenAuth
   def auth_errors(exception)
     case exception.record
     when :api_token
-      session[:return_to] = request.fullpath
       if signed_in?
         flash[:error] = exception.message
-        render 'authentication_error', status: 403
+        render 'communicarts/authentication_error', status: 403
       else
-        redirect_to root_path, alert: "Please sign in to complete this action."
+        redirect_to root_path(return_to: self.make_return_to("Previous", request.fullpath)), alert: "Please sign in to complete this action."
       end
     when Proposal
       redirect_to proposals_path, alert: "You are not allowed to see that proposal"

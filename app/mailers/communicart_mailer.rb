@@ -44,8 +44,6 @@ class CommunicartMailer < ActionMailer::Base
     to_address = @proposal.requester.email_address
     #TODO: Add a specific 'rejection' text block for the requester
 
-    set_attachments(@proposal)
-
     mail(
          to: to_address,
          subject: "User #{approval.user.email_address} has #{approval.status} request #{@proposal.public_identifier}",
@@ -65,13 +63,6 @@ class CommunicartMailer < ActionMailer::Base
 
   private
 
-  def set_attachments(proposal)
-    if proposal.approved?
-      attachments['Communicart' + proposal.public_identifier.to_s + '.comments.csv'] = Exporter::Comments.new(proposal).to_csv
-      attachments['Communicart' + proposal.public_identifier.to_s + '.approvals.csv'] = Exporter::Approvals.new(proposal).to_csv
-    end
-  end
-
   # for easier stubbing in tests
   def sender
     ENV['NOTIFICATION_FROM_EMAIL'] || 'noreply@some.gov'
@@ -86,8 +77,6 @@ class CommunicartMailer < ActionMailer::Base
 
   def send_proposal_email(from_email, to_email, proposal, template_name=nil)
     @proposal = proposal.decorate
-    set_attachments(@proposal)
-
     mail(
       to: to_email,
       subject: "Communicart Approval Request from #{proposal.requester.full_name}: Please review request #{proposal.public_identifier}",

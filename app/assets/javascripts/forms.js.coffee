@@ -65,5 +65,3 @@ $ ->
     selectizer.enable()
     selectizer.loadOptionsIfRemote()
     selectizer.add_label()
-    
-    

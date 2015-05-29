@@ -1,0 +1,21 @@
+.inset
+  %h1 Dashboard
+
+  %p
+    Summary of requests which you have participated in, grouped by month of creation.
+  %table.dashboard
+    %thead
+      %th Time Period
+      %th Number of Requests
+      %th Total Cost
+    %tbody
+      - @rows.each do |row|
+        %tr
+          %td
+            %a{href: row[:path]}
+              = row[:month]
+              = row[:year]
+          %td
+            = row[:count]
+          %td
+            = number_to_currency(row[:cost])

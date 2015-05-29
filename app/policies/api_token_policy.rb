@@ -26,6 +26,11 @@ class ApiTokenPolicy
                      "Something went wrong with the token (already used)")
   end
 
+  def not_delegate!
+    exists! && check(@api_token.user.outgoing_delegates.empty?,
+                     "You must first sign in")
+  end
+
   def cart?
     !!@params[:cart_id]
   end

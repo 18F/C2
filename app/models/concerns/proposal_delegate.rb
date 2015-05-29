@@ -1,8 +1,8 @@
+# Requires a :proposal association to be set up before the module is included. TODO change the Cart relationship so that this can be set up within this module in a uniform way.
 module ProposalDelegate
   extend ActiveSupport::Concern
 
   included do
-    belongs_to :proposal
     has_many :approvals, through: :proposal
     has_many :approvers, through: :approvals, source: :user
     has_many :observations, through: :proposal

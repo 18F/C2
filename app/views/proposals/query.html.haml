@@ -1,0 +1,7 @@
+.inset
+  = render partial: 'search_ui'
+  %h1
+    Proposals participated in
+    = datespan_header(@start_date, @end_date)
+
+  = client_partial (current_user.client_slug || 'ncr'), "proposal_list", locals: {proposals: @proposals}

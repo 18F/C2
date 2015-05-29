@@ -158,7 +158,7 @@ h1 {
 
     &.pending {
       min-width: 155px;
-      background-image: image-url('icon-pending.gif');
+      background-image: image-url('icon-pending.png');
       background-repeat: no-repeat;
       background-position: center -0.2em;
       padding-top: 20px;
@@ -281,7 +281,7 @@ p {
   display: inline-block;
   margin-top: 15px;
   padding: 15px 25px;
-  border-bottom: 2px solid #095ba7;
+  border: 2px solid #095ba7;
   border-radius: 5px;
   background-color: #0d66bf;
   color: black;

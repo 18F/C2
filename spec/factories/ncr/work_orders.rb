@@ -7,24 +7,12 @@ FactoryGirl.define do
     building_number Ncr::BUILDING_NUMBERS[0]
     emergency false
     rwa_number "R1234567"
-    office Ncr::OFFICES[0]
+    org_code Ncr::ORG_CODES[0]
     project_title "NCR Name"
-
-    trait :with_proposal do
-      association :proposal, flow: 'linear'
-    end
-
-    trait :with_cart do
-      association :proposal, :with_cart, flow: 'linear'
-    end
+    association :proposal, flow: 'linear'
 
     trait :with_approvers do
       association :proposal, :with_approvers, flow: 'linear'
-    end
-
-    trait :full do
-      association :proposal, :with_cart, :with_approvers,
-        flow: 'linear'
     end
   end
 end

@@ -1,6 +1,7 @@
 <% content_for :title, "#{@proposal.name}" %>
 <div class="inset">
   <div class="row">
+    <%= render partial: 'search_ui' %>
 
     <div class="col-md-12 col-xs-12">
       <h1 class="communicart_header">
@@ -102,7 +103,7 @@
             </p>
           </div>
           <p class='col-xs-5 col-sm-6 text-area-button'>
-            <%= submit_tag "Send a Comment", id: :add_a_comment %>
+          <%= submit_tag "Send a Comment", id: :add_a_comment, data: {'disable-if-empty' => 'comment_comment_text'} %>
           </p>
         </div>
       <%- end %>
@@ -148,7 +149,7 @@
             <p>Attach a file (e.g. receipts, contract documents, etc.)</p>
           </div>
           <p class='col-xs-5 col-sm-6 text-area-button'>
-            <%= submit_tag "Attach a File", id: :add_a_file %>
+          <%= submit_tag "Attach a File", id: :add_a_file, data: {'disable-if-empty' => 'attachment_file'} %>
           </p>
         </div>
       <%- end %>
@@ -164,13 +165,11 @@
             <p class="col-sm-3 col-xs-5 date righted">
               <%= date_with_tooltip(attachment.created_at) %>
             </p>
-            <p class="col-sm-1 col-xs-1 righted">
-              <%- if policy(attachment).can_destroy? %>
-                <%= link_to "Delete",
-                    proposal_attachment_path(@proposal, attachment),
-                    method: :delete, data: {confirm: "Are you sure?"} %>
-              <%- end %>
-            </p>
+            <%- if policy(attachment).can_destroy? %>
+              <%= button_to "Delete", proposal_attachment_path(@proposal, attachment), method: :delete, data: {confirm: "Are you sure?"}, class: "col-sm-1 col-xs-1 righted" %>
+            <%- else %>
+              <p class="col-sm-1 col-xs-1 righted"></p>
+            <%- end %>
           </div>
         </div>
       <% end %>
@@ -185,8 +184,9 @@
 
 <% if policy(@proposal).can_approve_or_reject? %>
   <div class="centered">
-    <p>
-      <%= link_to "Approve", approve_proposal_path(@proposal, version: @proposal.version), class: 'form-button' %>
-    </p>
+    <%= form_tag(approve_proposal_path(@proposal, method: "POST")) do %>
+      <%= hidden_field_tag(:version, @proposal.version) %>
+      <%= submit_tag("Approve", class: 'form-button') %>
+    <% end %>
   </div>
 <% end %>

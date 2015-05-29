@@ -1,23 +1,23 @@
+require 'csv'
+
 module Ncr
   # Make sure all table names use 'ncr_XXX'
   def self.table_name_prefix
     'ncr_'
   end
 
-  DATA = YAML.load_file("#{Rails.root}/config/data/ncr.yaml")
-
   EXPENSE_TYPES = %w(BA61 BA80)
 
-  BUILDING_NUMBERS = DATA['BUILDING_NUMBERS']
-  OFFICES = DATA['OFFICES']
+  BUILDING_NUMBERS = YAML.load_file("#{Rails.root}/config/data/ncr/building_numbers.yml")
+  org_code_rows = CSV.read("#{Rails.root}/config/data/ncr/org_codes_2015-05-18.csv", headers: true)
+  # TODO reference by `organization_cd` rather than storing the whole thing
+  ORG_CODES = org_code_rows.map{|r| "#{r['organization_cd']} #{r['organization_nm']}" }
 
   class WorkOrder < ActiveRecord::Base
     include ObservableModel
-    # TODO include ProposalDelegate
 
     has_one :proposal, as: :client_data
-    # TODO remove the dependence
-    has_one :cart, through: :proposal
+    include ProposalDelegate
 
     after_initialize :set_defaults
 
@@ -33,31 +33,18 @@ module Ncr
       with: /[a-zA-Z][0-9]{7}/,
       message: "one letter followed by 7 numbers"
     }, allow_blank: true
-    # TODO validates :proposal, presence: true
 
     def set_defaults
       self.not_to_exceed ||= false
       self.emergency ||= false
     end
 
-    # @todo - this is an awkward dance due to the lingering Cart model. Remove
-    # that dependence
-    def init_and_save_cart(approver_email, requester)
-      cart = Cart.create(
-        proposal_attributes: {flow: 'linear', client_data: self,
-                              requester: requester}
-      )
-      self.add_approvals(approver_email)
-      Dispatcher.deliver_new_proposal_emails(proposal)
-      cart
-    end
-
     # A requester can change his/her approving official
     def update_approver(approver_email)
-      first_approval = self.proposal.approvals.first
+      first_approval = self.approvals.first
       if first_approval.user_email_address != approver_email
         first_approval.destroy
-        replacement = self.proposal.add_approver(approver_email)
+        replacement = self.add_approver(approver_email)
         replacement.move_to_top
       end
     end
@@ -65,11 +52,11 @@ module Ncr
     def add_approvals(approver_email)
       emails = [approver_email] + self.system_approvers
       if self.emergency
-        emails.each {|email| self.proposal.add_observer(email) }
+        emails.each {|email| self.add_observer(email) }
         # skip state machine
         self.proposal.update_attribute(:status, 'approved')
       else
-        emails.each {|email| self.proposal.add_approver(email) }
+        emails.each {|email| self.add_approver(email) }
       end
     end
 
@@ -77,7 +64,7 @@ module Ncr
     # split these into different models
     def self.relevant_fields(expense_type)
       fields = [:description, :amount, :expense_type, :vendor, :not_to_exceed,
-                :building_number, :office]
+                :building_number, :org_code]
       case expense_type
       when "BA61"
         fields + [:emergency]

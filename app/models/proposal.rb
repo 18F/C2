@@ -16,9 +16,13 @@ class Proposal < ActiveRecord::Base
   belongs_to :requester, class_name: 'User'
 
   # The following list also servers as an interface spec for client_datas
+  # Note: clients may implement:
+  # :fields_for_display
+  # :public_identifier
+  # :version
   # Note: clients should also implement :version
-  delegate :fields_for_display, :client, :public_identifier, :name,
-           to: :client_data_legacy
+  delegate :client, :name,
+           to: :client_data_legacy, allow_nil: true
 
   validates :flow, presence: true, inclusion: {in: ApprovalGroup::FLOWS}
   # TODO validates :requester_id, presence: true
@@ -106,10 +110,37 @@ class Proposal < ActiveRecord::Base
     self.approvers.merge(self.currently_awaiting_approvals)
   end
 
+  # delegated, with a fallback
+  # TODO refactor to class method in a module
+  def delegate_with_default(method)
+    data = self.client_data_legacy
+    if data && data.respond_to?(method)
+      data.public_send(method)
+    else
+      if block_given?
+        yield
+      else
+        nil
+      end
+    end
+  end
+
+  def public_identifier
+    self.delegate_with_default(:public_identifier) { "##{self.id}" }
+  end
+
+  def fields_for_display
+    # TODO better default
+    self.delegate_with_default(:fields_for_display) { [] }
+  end
+
   # Be careful if altering the identifier. You run the risk of "expiring" all
   # pending approval emails
   def version
-    [self.updated_at.to_i, self.client_data_legacy.version].max
+    [
+      self.updated_at.to_i,
+      self.client_data_legacy.try(:version)
+    ].compact.max
   end
 
 

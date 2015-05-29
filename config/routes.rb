@@ -19,17 +19,19 @@ C2::Application.routes.draw do
   get "/carts/archive", to: redirect("/proposals/archive")
   get "/carts/:id", to: redirect { |path_params, req|
     cart = Cart.find(path_params[:id])
-    "/proposals/" + cart.proposal.id.to_s
+    "/proposals/#{cart.proposal_id}"
   }
 
   resources :proposals, only: [:index, :show] do
     member do
-      get 'approve'
+      get 'approve'   # this route has special protection to prevent the confused deputy problem
+                      # if you are adding a new controller which performs an action, use post instead
       post 'approve'
     end
 
     collection do
       get 'archive'
+      get 'query'
     end
 
     resources :comments, only: [:index, :create]
@@ -38,6 +40,7 @@ C2::Application.routes.draw do
 
   namespace :ncr do
     resources :work_orders, except: [:index, :destroy]
+    get '/dashboard' => 'dashboard#index'
   end
 
   namespace :gsa18f do

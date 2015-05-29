@@ -14,18 +14,9 @@ module CommunicartMailerHelper
     end
   end
 
-  # If the user has delegates, returns `false` so that the email can be safely forwarded.
-  def auto_login?(user)
-    user.outgoing_delegates.empty?
-  end
-
   def generate_approve_url(approval)
     proposal = approval.proposal
-    opts = { version: proposal.version }
-    if auto_login?(approval.user)
-      opts[:cch] = approval.api_token.access_token
-    end
-
+    opts = { version: proposal.version, cch: approval.api_token.access_token }
     approve_proposal_url(proposal, opts)
   end
 end

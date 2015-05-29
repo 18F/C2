@@ -1,8 +1,15 @@
 @import "constants";
 
-#communicart_header a {
-  color: #fff;
-}
+#communicart_header {
+  a {
+    color: #fff;
+  }
+  .button_to input.login-link {
+    color: $white;
+    text-decoration: underline;
+    font-size: 14px; 
+  }
+} 
 
 #header-identity {
   display: inline-block;
