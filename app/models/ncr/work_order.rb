@@ -15,11 +15,14 @@ module Ncr
 
   class WorkOrder < ActiveRecord::Base
     include ObservableModel
+    include ValueHelper
 
     has_one :proposal, as: :client_data
     include ProposalDelegate
 
     after_initialize :set_defaults
+
+    before_update :record_changes
 
     # @TODO: use integer number of cents to avoid floating point issues
     validates :amount, numericality: {
@@ -105,6 +108,23 @@ module Ncr
     end
 
     protected
+    def record_changes
+      changed_attributes = self.changed_attributes.clone
+      changed_attributes.delete(:updated_at)
+      comment_text = []
+      bullet = changed_attributes.length > 1 ? '- ' : ''
+      changed_attributes.each do |key, value|
+        value = property_to_s(self[key])
+        property_name = WorkOrder.human_attribute_name(key)
+        comment_text << WorkOrder.update_comment_format(property_name, value, bullet)
+      end
+      comment_text = comment_text.join("\n")
+      self.proposal.changed_fields(comment_text)
+    end
+
+    def self.update_comment_format key, value, bullet
+      "#{bullet}*#{key}* was changed to #{value}"
+    end
 
     def fiscal_year
       year = self.created_at.year

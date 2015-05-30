@@ -153,6 +153,17 @@ describe "National Capital Region proposals" do
       expect(work_order.vendor).to eq("New ACME")
     end
 
+    it "creates a special comment when editing" do
+      visit "/ncr/work_orders/#{work_order.id}/edit"
+      fill_in 'Vendor', with: "New Test Vendor"
+      fill_in 'Description', with: "New Description"
+      click_on 'Submit for approval'
+
+      expect(page).to have_content("Request modified by")
+      expect(page).to have_content("Description was changed to New Description")
+      expect(page).to have_content("Vendor was changed to New Test Vendor")
+    end
+
     it "has 'Discard Changes' link" do
       visit "/ncr/work_orders/#{work_order.id}/edit"
       expect(page).to have_content("Discard Changes")
