@@ -14,7 +14,7 @@ module Ncr
       super
 
       if self.errors.empty?
-        self.work_order.add_approvals(@approver_email)
+        @model_instance.add_approvals(@approver_email)
       end
     end
 
@@ -30,7 +30,7 @@ module Ncr
 
       if self.errors.empty?
         if !self.approver_email_frozen?
-          self.work_order.update_approver(@approver_email)
+          @model_instance.update_approver(@approver_email)
         end
       end
     end
@@ -47,13 +47,9 @@ module Ncr
       last_proposal.try(:approvers).try(:first).try(:email_address) || ''
     end
 
-    def work_order
-      @work_order ||= self.find_model_instance
-    end
-
     def approver_email_frozen?
-      if self.work_order
-        approval = self.work_order.approvals.first
+      if @model_instance
+        approval = @model_instance.approvals.first
         approval && !approval.pending?
       else
         false
