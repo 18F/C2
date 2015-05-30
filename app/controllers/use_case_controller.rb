@@ -62,6 +62,7 @@ class UseCaseController < ApplicationController
   end
 
   def errors
+    # TODO use #validate after upgrading to Rails 4.2.1+
     @model_instance.valid? # force validation
     @model_instance.errors.full_messages
   end
