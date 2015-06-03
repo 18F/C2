@@ -60,11 +60,16 @@ namespace :import_users do
     elsif !client
       raise 'CLIENT must be specified. e.g. rake import_users:csv FILE=/path/to.csv CLIENT=gsa18f'
     end
+
     data = CSV.read(ENV['FILE'], headers: true)
     headers = data.headers()
     first_col = ENV['FIRST_NAME_COL'] || headers.find {|header| header.downcase.include? "first"}
     last_col = ENV['LAST_NAME_COL'] || headers.find {|header| header.downcase.include? "last"}
     email_col = ENV['EMAIL_COL'] || headers.find {|header| header.downcase.include? "email"}
+    if !first_col || !last_col || !email_col
+      raise "Couldn't determine one or more of first name, last name, email: #{headers}"
+    end
+
     data.each do |row|
       email = row[email_col]
       if !email
