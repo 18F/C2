@@ -8,7 +8,7 @@
     Purchase Card Approval Request
   </h3>
 
-  <%= form_for @work_order do |f| %>
+  <%= form_for @model_instance do |f| %>
     <div class="form-group">
       <%= f.label :project_title%>
       <%= f.text_field :project_title, class: 'form-control', placeholder: 'e.g. "Blue paint for the Blue Room"' %>
@@ -99,8 +99,8 @@
                           data: {attr: 'email_address', src: '/api/v1/users.json'} %>
     </div>
     <%= f.submit "Submit for approval", class: 'btn btn-default' %>
-    <% if @work_order.persisted? %>
-      <%= link_to 'Discard Changes', proposal_url(@work_order.proposal) %>
+    <% if @model_instance.persisted? %>
+      <%= link_to 'Discard Changes', proposal_url(@model_instance.proposal) %>
     <% end %>
   <% end %>
 </div>
