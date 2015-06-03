@@ -52,4 +52,30 @@ namespace :import_users do
       user.update(update)
     end
   end
+
+  task csv: :environment do
+    file, client = ENV['FILE'], ENV['CLIENT']
+    if !file
+      raise 'FILE must be specified. e.g. rake import_users:csv FILE=/path/to.csv CLIENT=gsa18f'
+    elsif !client
+      raise 'CLIENT must be specified. e.g. rake import_users:csv FILE=/path/to.csv CLIENT=gsa18f'
+    end
+    data = CSV.read(ENV['FILE'], headers: true)
+    headers = data.headers()
+    first_col = ENV['FIRST_NAME_COL'] || headers.find {|header| header.downcase.include? "first"}
+    last_col = ENV['LAST_NAME_COL'] || headers.find {|header| header.downcase.include? "last"}
+    email_col = ENV['EMAIL_COL'] || headers.find {|header| header.downcase.include? "email"}
+    data.each do |row|
+      email = row[email_col]
+      if !email
+        warn "Email is empty: " + row.inspect
+      else
+        User.for_email(email.strip).update(
+          first_name: (row[first_col] || "").titleize,
+          last_name: (row[last_col] || "").titleize,
+          client_slug: ENV['CLIENT']
+        )
+      end
+    end
+  end
 end
