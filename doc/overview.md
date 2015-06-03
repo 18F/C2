@@ -55,7 +55,7 @@ You can see the up-to-date database schema in [`db/schema.rb`](../db/schema.rb).
 
 ## Use cases
 
-This application contains code for several independent but similar use cases. Users will generally be segmented into one use case or another in terms of how the Proposals are initiated, though the approval workflow is (largely) the same.
+This application contains code for several independent but similar use cases. Users will generally be segmented into one use case or another in terms of how the Proposals are initiated, though the approval workflow is (largely) the same. Learn about how they are structured code-wise (and how to add new ones) in our [developer guide](use_case_development.md).
 
 ### 18F Equipment
 

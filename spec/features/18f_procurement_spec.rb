@@ -35,7 +35,7 @@ describe "GSA 18f Purchase Request Form" do
         click_on 'Submit for approval'
       }.to change { Proposal.count }.from(0).to(1)
 
-      expect(page).to have_content("Procurement submitted")
+      expect(page).to have_content("Proposal submitted")
       expect(current_path).to eq("/proposals/#{Proposal.last.id}")
 
       proposal = Proposal.last
@@ -121,7 +121,7 @@ describe "GSA 18f Purchase Request Form" do
 
       visit "/gsa18f/procurements/#{procurement.id}/edit"
       expect(current_path).to eq("/gsa18f/procurements/new")
-      expect(page).to have_content('cannot restart')
+      expect(page).to have_content('You are not the requester')
     end
 
     it "shows a restart link from a pending proposal" do
@@ -145,7 +145,7 @@ describe "GSA 18f Purchase Request Form" do
 
       click_on 'Submit for approval'
 
-      expect(page).to have_content("Procurement submitted")
+      expect(page).to have_content("Proposal submitted")
       expect(current_path).to eq("/proposals/#{Proposal.last.id}")
       expect(page).to have_content('Modify Request')
 
