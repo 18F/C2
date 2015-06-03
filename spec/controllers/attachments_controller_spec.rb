@@ -54,4 +54,17 @@ describe AttachmentsController do
       expect(proposal.attachments.count).to eq(0)
     end
   end
+
+  describe '#show' do
+    let (:proposal) { FactoryGirl.create(:proposal, :with_approvers) }
+    let (:attachment) { FactoryGirl.create(:attachment, proposal: proposal, user: proposal.requester) }
+    before do
+      login_as(proposal.requester)
+    end
+
+    it "redirects to the url" do
+      get :show, proposal_id: proposal.id, id: attachment.id
+      expect(response).to redirect_to(attachment.url)
+    end
+  end
 end

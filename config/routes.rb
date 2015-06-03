@@ -35,7 +35,7 @@ C2::Application.routes.draw do
     end
 
     resources :comments, only: [:index, :create]
-    resources :attachments, only: [:create, :destroy]
+    resources :attachments, only: [:create, :destroy, :show]
   end
 
   namespace :ncr do
