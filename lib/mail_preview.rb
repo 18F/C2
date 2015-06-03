@@ -32,7 +32,7 @@ class MailPreview < MailView
   end
 
   def received_approval
-    Approval.received.last
+    Approval.where.not(status: 'pending').last
   end
 
   def proposal

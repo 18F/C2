@@ -1,7 +1,12 @@
 <% content_for :title, "NCR Request" %>
 <div class="container content">
   <h2 class='request_form'>National Capital Region</h2>
-  <h3>Purchase Card Approval Request</h3>
+  <h3>
+    <% if ENV['HIDE_BA61_OPTION'] == 'true' %>
+    BA80
+    <% end %>
+    Purchase Card Approval Request
+  </h3>
 
   <%= form_for @model_instance do |f| %>
     <div class="form-group">
