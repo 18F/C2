@@ -1,4 +1,13 @@
 describe Gsa18f::Procurement do
+  around(:each) do |example|
+    ENV['GSA18F_APPROVER_EMAIL'] = 'test_approver@some-dot-gov.gov'
+    ENV['GSA18F_PURCHASER_EMAIL'] = 'test_purchaser@some-dot-gov.gov'
+    example.run
+
+    ENV['GSA18F_APPROVER_EMAIL'] = nil
+    ENV['GSA18F_PURCHASER_EMAIL'] = nil
+  end
+
   describe '#create_cart' do
     def approver_emails(procurement)
       procurement.approvals.map {|a| a.user.email_address }

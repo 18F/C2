@@ -1,4 +1,13 @@
 describe "GSA 18f Purchase Request Form" do
+  around(:each) do |example|
+    ENV['GSA18F_APPROVER_EMAIL'] = 'test_approver@some-dot-gov.gov'
+    ENV['GSA18F_PURCHASER_EMAIL'] = 'test_purchaser@some-dot-gov.gov'
+    example.run
+
+    ENV['GSA18F_APPROVER_EMAIL'] = nil
+    ENV['GSA18F_PURCHASER_EMAIL'] = nil
+  end
+
   it "requires sign-in" do
     visit '/gsa18f/procurements/new'
     expect(current_path).to eq('/')
@@ -6,6 +15,7 @@ describe "GSA 18f Purchase Request Form" do
   end
 
   context "when signed in" do
+
     let(:requester) { FactoryGirl.create(:user) }
     let(:procurement) {
       pr = FactoryGirl.create(:gsa18f_procurement, requester: requester)
@@ -43,7 +53,7 @@ describe "GSA 18f Purchase Request Form" do
       expect(proposal.flow).to eq('linear')
       expect(proposal.client).to eq('gsa18f')
       expect(proposal.requester).to eq(requester)
-      expect(proposal.approvers.map(&:email_address)).to eq(%w(18fapprover@gsa.gov))
+      expect(proposal.approvers.map(&:email_address)).to eq(%w(test_approver@some-dot-gov.gov))
 
       procurement = proposal.client_data
       expect(procurement.link_to_product).to eq('http://www.amazon.com')
@@ -169,9 +179,7 @@ describe "GSA 18f Purchase Request Form" do
       expect(client_data.urgency).to eq(Gsa18f::Procurement::URGENCY[0])
 
       expect(proposal.requester).to eq(requester)
-      expect(proposal.approvers.map(&:email_address)).to eq(%w(
-        18fapprover@gsa.gov
-      ))
+      expect(proposal.approvers.map(&:email_address)).to eq(%w(test_approver@some-dot-gov.gov))
     end
 
     it "has 'Discard Changes' link" do

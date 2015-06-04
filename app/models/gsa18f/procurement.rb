@@ -76,7 +76,13 @@ module Gsa18f
     end
 
     def self.approver_email
-      ENV['GSA18F_APPROVER_EMAIL'] || '18fapprover@gsa.gov'
+      raise 'No 18F approver was set' unless ENV['GSA18F_APPROVER_EMAIL']
+      ENV['GSA18F_APPROVER_EMAIL']
+    end
+
+    def self.purchaser_email
+      raise 'No 18F purchaser was set' unless ENV['GSA18F_PURCHASER_EMAIL']
+      ENV['GSA18F_PURCHASER_EMAIL']
     end
   end
 end

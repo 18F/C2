@@ -1,4 +1,13 @@
 describe "Listing Page" do
+  around(:each) do |example|
+    ENV['GSA18F_APPROVER_EMAIL'] = 'test_approver@some-dot-gov.gov'
+    ENV['GSA18F_PURCHASER_EMAIL'] = 'test_purchaser@some-dot-gov.gov'
+    example.run
+
+    ENV['GSA18F_APPROVER_EMAIL'] = nil
+    ENV['GSA18F_PURCHASER_EMAIL'] = nil
+  end
+
   let!(:user){ FactoryGirl.create(:user) }
   let!(:default){ FactoryGirl.create(:proposal, requester: user) }
   let!(:ncr){
