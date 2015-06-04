@@ -1,7 +1,25 @@
 class Proposal < ActiveRecord::Base
-  include ThreeStateWorkflow
+  include WorkflowModel
   include ValueHelper
-  workflow_column :status
+  workflow do
+    state :pending do
+      # partial *may* trigger a full approval
+      event :partial_approve, transitions_to: :approved, if: lambda { |p| p.all_approved? }
+      event :partial_approve, transitions_to: :pending
+      event :approve, :transitions_to => :approved
+      event :reject, :transitions_to => :rejected
+      event :restart, :transitions_to => :pending
+    end
+    state :approved do
+      event :restart, :transitions_to => :pending
+    end
+    state :rejected do
+      # partial approvals and rejections can't break out of this state
+      event :partial_approve, :transitions_to => :rejected
+      event :reject, :transitions_to => :rejected
+      event :restart, :transitions_to => :pending
+    end
+  end
 
   has_one :cart
   has_many :approvals
@@ -80,7 +98,17 @@ class Proposal < ActiveRecord::Base
   # returns the Approval
   def add_approver(email)
     user = User.for_email(email)
-    self.approvals.create!(user_id: user.id)
+    approval = self.approvals.create!(user_id: user.id)
+    approval
+  end
+
+  def initialize_approvals()
+    if self.linear? && self.approvals.any?
+      self.approvals.update_all(status: 'pending')
+      self.approvals.first.make_actionable!
+    elsif self.parallel?
+      self.approvals.update_all(status: 'actionable')
+    end
   end
 
   def add_observer(email)
@@ -98,12 +126,7 @@ class Proposal < ActiveRecord::Base
   end
 
   def currently_awaiting_approvals
-    approvals = self.approvals.pending
-    if self.parallel?
-      approvals
-    else  # linear
-      approvals.limit(1)
-    end
+    self.approvals.actionable
   end
 
   def currently_awaiting_approvers
@@ -145,13 +168,6 @@ class Proposal < ActiveRecord::Base
 
 
   #### state machine methods ####
-
-  def on_pending_entry(prev_state, event)
-    if self.approvals.where.not(status: 'approved').empty?
-      self.approve!
-    end
-  end
-
   def on_rejected_entry(prev_state, event)
     if prev_state.name != :rejected
       Dispatcher.on_proposal_rejected(self)
@@ -161,10 +177,20 @@ class Proposal < ActiveRecord::Base
   def restart
     # Note that none of the state machine's history is stored
     self.api_tokens.update_all(expires_at: Time.now)
-    self.approvals.each do |approval|
-      approval.restart!
-    end
+    self.initialize_approvals()
     Dispatcher.deliver_new_proposal_emails(self)
+  end
+
+  def all_approved?
+    self.approvals.where.not(status: 'approved').empty?
+  end
+
+  # An approval has been approved. Mark the next as actionable
+  # Note: this won't affect a parallel flow (as approvals start actionable)
+  def partial_approve
+    if next_approval = self.approvals.pending.first
+      next_approval.make_actionable!
+    end
   end
 
   def changed_fields comment_text
@@ -174,5 +200,4 @@ class Proposal < ActiveRecord::Base
       user_id: self.requester_id
     )
   end
-  ###############################
 end

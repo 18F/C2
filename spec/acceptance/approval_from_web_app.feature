@@ -27,8 +27,8 @@ Feature: Approving a cart from the web application
   Scenario: An approver visits the page to approve in turn
     Given a linear cart '11223344'
     And the cart has an approval for 'supervisor1@test.gov' in position 1
-    And the cart has been approved by 'supervisor1@test.gov'
     And the cart has an approval for 'supervisor2@test.gov' in position 2
+    And the cart has been approved by 'supervisor1@test.gov'
     And the logged in user is 'supervisor2@test.gov'
     When I go to the approval_response page without a token
     Then I should see 'Approve'
