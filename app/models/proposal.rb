@@ -194,10 +194,12 @@ class Proposal < ActiveRecord::Base
   end
 
   def changed_fields comment_text
-    self.comments.create(
-      comment_text: comment_text, 
-      update_comment: true, 
-      user_id: self.requester_id
-    )
+    if comment_text.present?
+      self.comments.create(
+        comment_text: comment_text, 
+        update_comment: true, 
+        user_id: self.requester_id
+      )
+    end
   end
 end

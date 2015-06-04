@@ -23,6 +23,7 @@ class UseCaseController < ApplicationController
       @model_instance.save
 
       proposal = @model_instance.proposal
+      self.add_approvals()
       Dispatcher.deliver_new_proposal_emails(proposal)
 
       flash[:success] = "Proposal submitted!"
@@ -70,5 +71,9 @@ class UseCaseController < ApplicationController
   def auth_errors(exception)
     url = polymorphic_url(self.model_class, action: :new, routing_type: :path)
     redirect_to url, alert: exception.message
+  end
+
+  # Hook for adding additional approvers
+  def add_approvals
   end
 end
