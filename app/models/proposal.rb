@@ -169,8 +169,8 @@ class Proposal < ActiveRecord::Base
 
   def changed_fields comment_text
     self.comments.create(
-      comment_text: comment_text, 
-      update_comment: true, 
+      comment_text: comment_text,
+      update_comment: true,
       user_id: self.requester_id
     )
   end

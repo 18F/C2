@@ -65,6 +65,10 @@ describe "GSA 18f Purchase Request Form" do
       expect(procurement.urgency).to eq(Gsa18f::Procurement::URGENCY[0])
     end
 
+    it "sets an observer" do
+      expect(procurement.observers.map(&:email_address)).to eq(['test_purchaser@some-dot-gov.gov'])
+    end
+
     it "doesn't save when the amount is too high" do
       visit '/gsa18f/procurements/new'
       fill_in "Product Name and Description", with: "buying stuff"

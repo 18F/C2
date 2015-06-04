@@ -24,11 +24,15 @@ module Gsa18f
     }
     validates :product_name_and_description, presence: true
 
-    after_create :add_approvals
+    after_create :add_approvals, :add_observers
 
 
     def add_approvals
       self.add_approver(Gsa18f::Procurement.approver_email)
+    end
+
+    def add_observers
+      self.add_observer(Gsa18f::Procurement.purchaser_email)
     end
 
     # Ignore values in certain fields if they aren't relevant. May want to
