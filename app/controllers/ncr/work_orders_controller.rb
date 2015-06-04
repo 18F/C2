@@ -10,12 +10,7 @@ module Ncr
 
     def create
       @approver_email = params[:approver_email]
-
       super
-
-      if self.errors.empty?
-        @model_instance.add_approvals(@approver_email)
-      end
     end
 
     def edit
@@ -68,6 +63,14 @@ module Ncr
         results += ["Approver email is required"]
       end
       results
+    end
+
+    # @pre: @approver_email is set
+    def add_approvals
+      super
+      if self.errors.empty?
+        @model_instance.add_approvals(@approver_email)
+      end
     end
   end
 end
