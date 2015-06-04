@@ -1,13 +1,4 @@
 describe ProposalSearch do
-  around(:each) do |example|
-    ENV['GSA18F_APPROVER_EMAIL'] = 'test_approver@some-dot-gov.gov'
-    ENV['GSA18F_PURCHASER_EMAIL'] = 'test_purchaser@some-dot-gov.gov'
-    example.run
-
-    ENV['GSA18F_APPROVER_EMAIL'] = nil
-    ENV['GSA18F_PURCHASER_EMAIL'] = nil
-  end
-
   describe '#execute' do
     it "returns an empty list for no Proposals" do
       results = ProposalSearch.new.execute('')
@@ -44,6 +35,16 @@ describe ProposalSearch do
     end
 
     context Gsa18f::Procurement do
+      around(:each) do |example|
+        ENV['GSA18F_APPROVER_EMAIL'] = 'test_approver@some-dot-gov.gov'
+        ENV['GSA18F_PURCHASER_EMAIL'] = 'test_purchaser@some-dot-gov.gov'
+        example.run
+
+        ENV['GSA18F_APPROVER_EMAIL'] = nil
+        ENV['GSA18F_PURCHASER_EMAIL'] = nil
+      end
+
+
       [:product_name_and_description, :justification, :additional_info].each do |attr_name|
         it "returns the Proposal when searching by the ##{attr_name}" do
           procurement = FactoryGirl.create(:gsa18f_procurement, attr_name => 'foo')
