@@ -392,6 +392,18 @@ body.webapp {
   color: #666;
 }
 
+.attachments[data-add-minus] {
+  padding-left: 0;
+  list-style: none;
+
+  input[type=file] {
+    display: inline-block;
+  }
+  input[disabled] {
+    color: $lightgray;
+  }
+}
+
 @media (max-width: $break-small) {
   tr.cart_item_information p {
     font-size: 67%;
