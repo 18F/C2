@@ -56,15 +56,14 @@ describe ProposalPolicy do
       end
 
       it "does not allow when the user's already approved" do
-        first_approval.update_attribute(:status, 'approved')  # skip state machine
+        first_approval.approve!
         expect(subject).not_to permit(first_approval.user, proposal)
         expect(subject).to permit(second_approval.user, proposal)
       end
 
       it "does not allow when the user's already rejected" do
-        first_approval.update_attribute(:status, 'rejected')  # skip state machine
+        first_approval.reject!
         expect(subject).not_to permit(first_approval.user, proposal)
-        expect(subject).to permit(second_approval.user, proposal)
       end
 
       it "does not allow with a non-existent approval" do
@@ -84,6 +83,14 @@ describe ProposalPolicy do
 
     it "allows an approver to see it" do
       expect(subject).to permit(proposal.approvers[0], proposal)
+      expect(subject).to permit(proposal.approvers[1], proposal)
+    end
+
+    it "does not allow a pending approver to see it" do
+      first_approval = proposal.approvals.first
+      first_approval.update_attribute(:status, 'pending')
+      expect(subject).not_to permit(first_approval.user, proposal)
+      expect(subject).to permit(proposal.approvers.last, proposal)
     end
 
     it "allows an observer to see it" do
@@ -115,6 +122,14 @@ describe ProposalPolicy do
       user = proposal.approvers.first
       proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
       expect(proposals).to eq([proposal])
+    end
+
+    it "does not allow a pending approver to see" do
+      approval = proposal.approvals.first
+      user = approval.user
+      approval.update_attribute(:status, 'pending')
+      proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
+      expect(proposals).to eq([])
     end
 
     it "allows a delegate to see" do

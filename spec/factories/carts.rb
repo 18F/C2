@@ -39,6 +39,7 @@ FactoryGirl.define do
       after :create do |cart|
         cart.add_approver('approver1@some-dot-gov.gov')
         cart.add_approver('approver2@some-dot-gov.gov')
+        cart.proposal.initialize_approvals()
       end
 
       factory :cart_with_all_approvals_approved do

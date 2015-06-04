@@ -14,6 +14,7 @@ module Populator
       cart.add_observer("observer#{i}a@example.com")
       cart.add_observer("observer#{i}b@example.com")
       cart.add_requester("requester#{i}@example.com")
+      cart.proposal.initialize_approvals()
     end
   end
 

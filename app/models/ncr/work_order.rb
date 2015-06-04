@@ -50,6 +50,7 @@ module Ncr
         replacement = self.add_approver(approver_email)
         replacement.move_to_top
       end
+      # no need to call initialize_approvals as they have already been set up
     end
 
     def add_approvals(approver_email)
@@ -60,6 +61,7 @@ module Ncr
         self.proposal.update_attribute(:status, 'approved')
       else
         emails.each {|email| self.add_approver(email) }
+        self.proposal.initialize_approvals()
       end
     end
 
