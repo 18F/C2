@@ -1,0 +1,17 @@
+- if attachments.any?
+  %table.submodel-section
+    %tr
+      %td.w-container{colspan: '2'}
+        %strong Attachments
+    - attachments.each do |attachment|
+      %tr
+        %td.submodel-detail.first{valign: 'top'}
+          %p
+            = l(attachment.created_at.to_date)
+        %td.submodel-detail{valign: 'top'}
+          %p
+            %strong
+              = attachment.user.full_name
+            %br
+            %a{href: proposal_attachment_url(proposal, attachment)}
+              = attachment.file_file_name

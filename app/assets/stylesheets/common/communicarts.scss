@@ -11,7 +11,7 @@ table {
     margin-top: 15px;
   }
 
-  &.reply-section, &.comments-section {
+  &.reply-section, &.submodel-section {
     width: 800px;
     background-color: #fff;
 
@@ -22,7 +22,7 @@ table {
         width: 155px;
       }
 
-      &.comment-detail {
+      &.submodel-detail {
         border-top: 1px solid #ccc;
       }
     }

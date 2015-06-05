@@ -1,6 +1,6 @@
 class AttachmentsController < ApplicationController
   before_filter :authenticate_user!
-  before_filter ->{authorize self.proposal, :can_show!}, only: [:create]
+  before_filter ->{authorize self.proposal, :can_show!}, only: [:create, :show]
   before_filter ->{authorize self.attachment}, only: [:destroy]
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
 
@@ -20,6 +20,10 @@ class AttachmentsController < ApplicationController
     self.attachment.destroy
     flash[:success] = "Deleted attachment"
     redirect_to proposal_path(self.attachment.proposal_id)
+  end
+
+  def show
+    redirect_to self.attachment.url
   end
 
   protected

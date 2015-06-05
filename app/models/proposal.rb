@@ -194,7 +194,7 @@ class Proposal < ActiveRecord::Base
   end
 
   def changed_fields comment_text
-    if !comment_text.blank?
+    if comment_text.present?
       self.comments.create(
         comment_text: comment_text, 
         update_comment: true, 
