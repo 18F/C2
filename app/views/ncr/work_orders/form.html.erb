@@ -98,7 +98,7 @@
                           disabled: approver_email_frozen?,
                           data: {attr: 'email_address', src: '/api/v1/users.json'} %>
     </div>
-    <% if !@model_instance.persisted? %>
+    <% if @model_instance.new_record? %>
       <div class="form-group">
         <%= field_set_tag 'Attachments' do %>
           <ul data-add-minus="true" class="attachments">
