@@ -21,8 +21,8 @@ class UseCaseController < ApplicationController
 
     if self.errors.empty?
       @model_instance.save
-
       proposal = @model_instance.proposal
+      self.initial_attachments(proposal)
       self.add_approvals()
       Dispatcher.deliver_new_proposal_emails(proposal)
 
@@ -73,6 +73,13 @@ class UseCaseController < ApplicationController
     redirect_to url, alert: exception.message
   end
 
+  def initial_attachments(proposal)
+    files = params.permit(attachments: [])[:attachments] || []
+    files.each do |file|
+      Attachment.create(proposal: proposal, user: current_user, file: file)
+    end
+  end
+  
   # Hook for adding additional approvers
   def add_approvals
   end

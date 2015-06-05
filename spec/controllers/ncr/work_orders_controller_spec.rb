@@ -3,21 +3,51 @@ describe Ncr::WorkOrdersController do
     before do
       login_as(FactoryGirl.create(:user))
     end
+    let (:params) {{
+      ncr_work_order: {
+        amount: '111.22', expense_type: 'BA80', vendor: 'Vendor',
+        not_to_exceed: '0', building_number: Ncr::BUILDING_NUMBERS[0],
+        emergency: '0', rwa_number: 'A12345678', org_code: Ncr::ORG_CODES[0],
+        code: 'Work Order', project_title: 'Title', description: 'Desc'},
+      approver_email: 'bob@example.gov'
+    }}
 
     it 'sends an email to the first approver' do
-      params = {
-        ncr_work_order: {
-          amount: '111.22', expense_type: 'BA80', vendor: 'Vendor',
-          not_to_exceed: '0', building_number: Ncr::BUILDING_NUMBERS[0],
-          emergency: '0', rwa_number: 'A12345678', org_code: Ncr::ORG_CODES[0],
-          code: 'Work Order', project_title: 'Title', description: 'Desc'},
-        approver_email: 'bob@example.gov'
-      }
       post :create, params
       ncr = Ncr::WorkOrder.order(:id).last
       expect(ncr.code).to eq 'Work Order'
       expect(ncr.approvers.first.email_address).to eq 'bob@example.gov'
       expect(email_recipients).to eq(['bob@example.gov', ncr.requester.email_address].sort)
+    end
+
+    it 'does not error on missing attachments' do
+      params[:ncr_work_order][:amount] = '111.33'
+      params[:attachments] = []
+      post :create, params
+      ncr = Ncr::WorkOrder.order(:id).last
+      expect(ncr.amount).to eq 111.33
+      expect(ncr.proposal.attachments.count).to eq 0
+    end
+
+    it 'does not error on malformed attachments' do
+      params[:ncr_work_order][:amount] = '111.34'
+      params[:attachments] = 'abcd'
+      post :create, params
+      ncr = Ncr::WorkOrder.order(:id).last
+      expect(ncr.amount).to eq 111.34
+      expect(ncr.proposal.attachments.count).to eq 0
+    end
+
+    it 'adds attachments if present' do
+      params[:ncr_work_order][:amount] = '111.35'
+      params[:attachments] = [
+        fixture_file_upload('icon-user.png', 'image/png'),
+        fixture_file_upload('icon-user.png', 'image/png'),
+      ]
+      post :create, params
+      ncr = Ncr::WorkOrder.order(:id).last
+      expect(ncr.amount).to eq 111.35
+      expect(ncr.proposal.attachments.count).to eq 2
     end
   end
 

@@ -131,6 +131,29 @@ describe "National Capital Region proposals" do
       expect(find_field("RWA Number")).to be_visible
     end
 
+    it "allows attachments to be added during intake without JS" do
+      visit '/ncr/work_orders/new'
+      expect(page).to have_content("Attachments")
+      expect(page).not_to have_selector(".js-am-minus")
+      expect(page).not_to have_selector(".js-am-plus")
+      expect(page).to have_selector("input[type=file]", count: 10)
+    end
+
+    it "allows attachments to be added during intake with JS", :js => true do
+      visit '/ncr/work_orders/new'
+      expect(page).to have_content("Attachments")
+      first_minus = find(".js-am-minus")
+      first_plus = find(".js-am-plus")
+      expect(first_minus).to be_visible
+      expect(first_plus).to be_visible
+      expect(first_minus).to be_disabled
+      expect(find("input[type=file]")[:name]).to eq("attachments[]")
+      first_plus.click    # Adds one row
+      expect(page).to have_selector(".js-am-minus", count: 2)
+      expect(page).to have_selector(".js-am-plus", count: 2)
+      expect(page).to have_selector("input[type=file]", count: 2)
+    end
+
     let (:work_order) {
       wo = FactoryGirl.create(:ncr_work_order, requester: requester)
       wo.add_approvals('approver@example.com')
