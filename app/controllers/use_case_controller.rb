@@ -74,7 +74,7 @@ class UseCaseController < ApplicationController
   end
 
   def initial_attachments(proposal)
-    files = params.permit(attachments: [])[:attachments] or []
+    files = params.permit(attachments: [])[:attachments] || []
     files.each do |file|
       Attachment.create(proposal: proposal, user: current_user, file: file)
     end
