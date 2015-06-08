@@ -61,7 +61,7 @@ namespace :import_users do
       raise 'CLIENT must be specified. e.g. rake import_users:csv FILE=/path/to.csv CLIENT=gsa18f'
     end
 
-    importer = CsvUserImporter(ENV['FILE'], ENV['CLIENT'])
+    importer = CsvUserImporter.new(ENV['FILE'], ENV['CLIENT'])
     ['FIRST_NAME_COL', 'LAST_NAME_COL', 'EMAIL_COL'].each do |key|
       if ENV[key]
         assignment = key.downcase + "="
