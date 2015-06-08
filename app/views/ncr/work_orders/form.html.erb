@@ -8,7 +8,7 @@
     Purchase Card Approval Request
   </h3>
 
-  <%= form_for @model_instance do |f| %>
+  <%= form_for @model_instance, html: {multipart: true} do |f| %>
     <div class="form-group">
       <%= f.label :project_title%>
       <%= f.text_field :project_title, class: 'form-control', placeholder: 'e.g. "Blue paint for the Blue Room"' %>
@@ -98,6 +98,17 @@
                           disabled: approver_email_frozen?,
                           data: {attr: 'email_address', src: '/api/v1/users.json'} %>
     </div>
+    <% if @model_instance.new_record? %>
+      <div class="form-group">
+        <%= field_set_tag 'Attachments' do %>
+          <ul data-add-minus="true" class="attachments">
+          <%- 10.times do %>
+            <li><%= file_field_tag "attachments[]" %></li>
+          <%- end %>
+          </ul>
+        <%- end %>
+      </div>
+    <% end %>
     <%= f.submit "Submit for approval", class: 'btn btn-default' %>
     <% if @model_instance.persisted? %>
       <%= link_to 'Discard Changes', proposal_url(@model_instance.proposal) %>

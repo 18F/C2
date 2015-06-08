@@ -16,7 +16,7 @@ describe Proposal do
       emails = proposal.currently_awaiting_approvers.map(&:email_address)
       expect(emails).to eq(%w(approver1@some-dot-gov.gov))
 
-      proposal.approvals.first.update_attribute(:position, 5)
+      proposal.approvals.first.approve!
       emails = proposal.currently_awaiting_approvers.map(&:email_address)
       expect(emails).to eq(%w(approver2@some-dot-gov.gov))
     end

@@ -15,6 +15,8 @@ describe ProposalDecorator do
         approved
         rejected
         rejected
+        actionable
+        actionable
         pending
         pending
       ))

@@ -65,6 +65,18 @@ describe CommunicartMailer do
       end
     end
 
+    context 'attachments' do
+      it 'does not render attachments when empty' do
+        expect(proposal.attachments.count).to eq 0
+        expect(body).not_to include('Attachments')
+      end
+
+      it 'renders attachments when present' do
+        FactoryGirl.create(:attachment, proposal: proposal)
+        expect(body).to include('Attachments')
+      end
+    end
+
     context 'custom templates' do
       it 'renders a default template when an origin is not indicated' do
         expect(body).to include('Purchase Request')

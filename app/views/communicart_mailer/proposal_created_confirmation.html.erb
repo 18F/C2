@@ -3,6 +3,8 @@
     Hi <%= @proposal.requester.full_name %>,<br/>
     You just submitted a request for approval. Here is are details about your request:
   </div>
+  <%= render partial: 'comments', locals: { comments: @proposal.comments } %>
+  <%= render partial: 'attachments', locals: { proposal: @proposal, attachments: @proposal.attachments } %>
   <%= client_partial(@proposal.client, 'proposal_mail',
                      locals: {proposal: @proposal, title: "Purchase Request"}) %>
 </body>

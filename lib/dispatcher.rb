@@ -15,6 +15,9 @@ class Dispatcher
   end
 
   def deliver_new_proposal_emails(proposal)
+    proposal.currently_awaiting_approvals.each do |approval|
+      self.email_approver(approval)
+    end
     self.email_observers(proposal)
     self.email_sent_confirmation(proposal)
   end
@@ -51,7 +54,7 @@ class Dispatcher
   def self.initialize_dispatcher(proposal)
     case proposal.flow
     when 'parallel'
-      ParallelDispatcher.new
+      self.new
     when 'linear'
       # @todo: dynamic dispatch for selection
       if proposal.client == "ncr"

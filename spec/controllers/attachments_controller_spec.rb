@@ -54,4 +54,34 @@ describe AttachmentsController do
       expect(proposal.attachments.count).to eq(0)
     end
   end
+
+  describe '#show' do
+    let (:proposal) { FactoryGirl.create(:proposal, :with_approvers, :with_observers) }
+    let (:attachment) { FactoryGirl.create(:attachment, proposal: proposal, user: proposal.requester) }
+
+    it "allows the requester to view attachment" do
+      login_as(proposal.requester)
+      get :show, proposal_id: proposal.id, id: attachment.id
+      expect(response).to redirect_to(attachment.url)
+    end
+
+    it "allows the approver to view attachment" do
+      login_as(proposal.approvers[0])
+      get :show, proposal_id: proposal.id, id: attachment.id
+      expect(response).to redirect_to(attachment.url)
+    end
+
+    it "allows the observer to view attachment" do
+      login_as(proposal.observers[0])
+      get :show, proposal_id: proposal.id, id: attachment.id
+      expect(response).to redirect_to(attachment.url)
+    end
+
+    it "does not allow others to view attachment" do
+      login_as(FactoryGirl.create(:user))
+      get :show, proposal_id: proposal.id, id: attachment.id
+      expect(flash[:alert]).to be_present
+      expect(response).to redirect_to(proposals_path)
+    end
+  end
 end

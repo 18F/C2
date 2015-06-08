@@ -7,6 +7,7 @@ FactoryGirl.define do
     trait :with_approver do
       after :create do |proposal|
         proposal.add_approver('approver1@some-dot-gov.gov')
+        proposal.initialize_approvals()
       end
     end
 
@@ -15,6 +16,7 @@ FactoryGirl.define do
 
       after :create do |proposal|
         proposal.add_approver('approver2@some-dot-gov.gov')
+        proposal.initialize_approvals()
       end
     end
 
