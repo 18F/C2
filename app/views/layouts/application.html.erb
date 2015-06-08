@@ -12,7 +12,7 @@
 </head>
 <body class="bodyclass webapp controller-<%= controller_name %> action-<%= params[:action] %>">
 
-<%= render 'layouts/communicart_header' unless @hide_header %>
+<%= render 'layouts/communicart_header' %>
 
 <div class="inset">
   <% flash_list.each do |key, value| %>
