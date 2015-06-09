@@ -1,7 +1,7 @@
 class CommunicartMailer < ActionMailer::Base
   include Roadie::Rails::Automatic
 
-  layout 'communicart_base'
+  layout 'communicart_mailer'
   add_template_helper CommunicartMailerHelper
   add_template_helper ValueHelper
   add_template_helper ClientHelper
