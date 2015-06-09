@@ -130,5 +130,16 @@ describe Ncr::WorkOrder do
       comment_text += "_Modified post-approval_"
       expect(comment.comment_text).to eq(comment_text)
     end
+
+    it 'does not add a change comment when nothing has changed' do
+      work_order.touch
+      expect(Comment.count).to be 0
+    end
+
+    it 'does not add a comment when nothing has changed and it is approved' do
+      work_order.approve!
+      work_order.touch
+      expect(Comment.count).to be 0
+    end
   end
 end
