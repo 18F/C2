@@ -216,12 +216,11 @@ describe "National Capital Region proposals" do
       expect(current_path).to eq("/ncr/work_orders/#{work_order.id}/edit")
     end
 
-    it "cannot be edited if approved" do
+    it "can be edited if approved" do
       ncr_proposal.update_attributes(status: 'approved')  # avoid workflow
 
       visit "/ncr/work_orders/#{work_order.id}/edit"
-      expect(current_path).to eq("/ncr/work_orders/new")
-      expect(page).to have_content('already approved')
+      expect(current_path).to eq("/ncr/work_orders/#{work_order.id}/edit")
     end
 
     it "cannot be edited by someone other than the requester" do
@@ -246,11 +245,11 @@ describe "National Capital Region proposals" do
       expect(page).to have_content('Modify Request')
     end
 
-    it "does not show a edit link for an approved cart" do
+    it "shows a edit link for an approved cart" do
       ncr_proposal.update_attribute(:status, 'approved') # avoid state machine
 
       visit "/proposals/#{ncr_proposal.id}"
-      expect(page).not_to have_content('Modify Request')
+      expect(page).to have_content('Modify Request')
     end
 
     it "does not show a edit link for another client" do
