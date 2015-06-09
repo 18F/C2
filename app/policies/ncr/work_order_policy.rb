@@ -8,5 +8,6 @@ module Ncr
     def can_edit!
       author!
     end
+    alias_method :can_update!, :can_edit!
   end
 end

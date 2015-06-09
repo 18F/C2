@@ -113,15 +113,24 @@ module Ncr
     def record_changes
       changed_attributes = self.changed_attributes.clone
       changed_attributes.delete(:updated_at)
-      comment_text = []
+      comment_texts = []
       bullet = changed_attributes.length > 1 ? '- ' : ''
       changed_attributes.each do |key, value|
         value = property_to_s(self[key])
         property_name = WorkOrder.human_attribute_name(key)
-        comment_text << WorkOrder.update_comment_format(property_name, value, bullet)
+        comment_texts << WorkOrder.update_comment_format(property_name, value, bullet)
       end
-      comment_text = comment_text.join("\n")
-      self.proposal.changed_fields(comment_text)
+
+      if !comment_texts.empty?
+        if self.approved?
+          comment_texts << "_Modified post-approval_"
+        end
+        self.proposal.comments.create(
+          comment_text: comment_texts.join("\n"),
+          update_comment: true,
+          user_id: self.proposal.requester_id
+        )
+      end
     end
 
     def self.update_comment_format key, value, bullet

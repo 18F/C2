@@ -170,7 +170,7 @@ describe "National Capital Region proposals" do
       click_on 'Submit for approval'
       expect(current_path).to eq("/proposals/#{ncr_proposal.id}")
       expect(page).to have_content("New ACME")
-      expect(page).to have_content("resubmitted")
+      expect(page).to have_content("modified")
       # Verify it is actually saved
       work_order.reload
       expect(work_order.vendor).to eq("New ACME")
