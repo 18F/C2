@@ -34,7 +34,7 @@ class CommunicartMailer < ActionMailer::Base
 
     mail(
          to: to_address,
-         subject: "Your request for #{proposal.public_identifier} has been sent successfully.",
+         subject: @proposal.email_subject,
          from: from_email
          )
   end
@@ -47,7 +47,7 @@ class CommunicartMailer < ActionMailer::Base
 
     mail(
          to: to_address,
-         subject: "User #{approval.user.email_address} has #{approval.status} request #{@proposal.public_identifier}",
+         subject: @proposal.email_subject,
          from: user_email(approval.user)
          )
   end
@@ -56,13 +56,15 @@ class CommunicartMailer < ActionMailer::Base
     @comment = comment
     # Don't send if special comment
     if !@comment.update_comment
+      proposal = comment.proposal.decorate
       mail(
            to: to_email,
-           subject: "A comment has been added to request #{comment.proposal.public_identifier}",
+           subject: proposal.email_subject,
            from: user_email(comment.user)
            )
     end
   end
+
 
   private
 
@@ -82,7 +84,7 @@ class CommunicartMailer < ActionMailer::Base
     @proposal = proposal.decorate
     mail(
       to: to_email,
-      subject: "Communicart Approval Request from #{proposal.requester.full_name}: Please review request #{proposal.public_identifier}",
+      subject: @proposal.email_subject,
       from: from_email,
       template_name: template_name
     )

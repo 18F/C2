@@ -20,8 +20,8 @@ describe CommunicartMailer do
 
   describe 'notification_for_approver' do
     let!(:token) { approval.create_api_token! }
-    let(:action_mail) { CommunicartMailer.actions_for_approver('email.to.email@testing.com', approval) }
-    let(:body) { action_mail.body.encoded }
+    let(:mail) { CommunicartMailer.actions_for_approver('email.to.email@testing.com', approval) }
+    let(:body) { mail.body.encoded }
     let(:approval_uri) do
       doc = Capybara.string(body)
       link = doc.find_link('Approve')
@@ -32,17 +32,17 @@ describe CommunicartMailer do
 
     it 'renders the subject' do
       requester.update_attributes(first_name: 'Liono', last_name: 'Requester')
-      expect(action_mail.subject).to eq("Communicart Approval Request from Liono Requester: Please review request #{proposal.public_identifier}")
+      expect(mail.subject).to eq("Request ##{proposal.id}")
     end
 
     it 'renders the receiver email' do
-      expect(action_mail.to).to eq(["email.to.email@testing.com"])
+      expect(mail.to).to eq(["email.to.email@testing.com"])
     end
 
     it 'renders the sender email' do
       requester.update_attributes(first_name: 'Liono', last_name: 'Requester')
-      expect(action_mail.from).to eq(['reply@stub.gov'])
-      expect(sender_names(action_mail)).to eq(['Liono Requester'])
+      expect(mail.from).to eq(['reply@stub.gov'])
+      expect(sender_names(mail)).to eq(['Liono Requester'])
     end
 
     it "uses the approval URL" do
@@ -127,7 +127,7 @@ describe CommunicartMailer do
     end
 
     it 'renders the subject' do
-      expect(mail.subject).to eq("User approver1@some-dot-gov.gov has approved request #{proposal.public_identifier}")
+      expect(mail.subject).to eq("Request ##{proposal.id}")
     end
 
     it 'renders the receiver email' do
@@ -174,7 +174,7 @@ describe CommunicartMailer do
     let(:mail) { CommunicartMailer.comment_added_email(comment, email) }
 
     it 'renders the subject' do
-      expect(mail.subject).to eq("A comment has been added to request #{proposal.public_identifier}")
+      expect(mail.subject).to eq("Request ##{proposal.id}")
     end
 
     it 'renders the receiver email' do
@@ -193,7 +193,7 @@ describe CommunicartMailer do
     let(:mail) { CommunicartMailer.proposal_observer_email(observer.email_address, proposal) }
 
     it 'renders the subject' do
-      expect(mail.subject).to eq("Communicart Approval Request from #{proposal.requester.full_name}: Please review request #{proposal.public_identifier}")
+      expect(mail.subject).to eq("Request ##{proposal.id}")
     end
 
     it 'renders the receiver email' do
@@ -210,7 +210,7 @@ describe CommunicartMailer do
     let(:mail) { CommunicartMailer.proposal_created_confirmation(proposal) }
 
     it 'renders the subject' do
-      expect(mail.subject).to eq "Your request for #{proposal.public_identifier} has been sent successfully."
+      expect(mail.subject).to eq("Request ##{proposal.id}")
     end
 
     it 'renders the receiver email' do
