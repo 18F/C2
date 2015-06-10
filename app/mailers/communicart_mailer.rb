@@ -28,40 +28,27 @@ class CommunicartMailer < ActionMailer::Base
   end
 
   def proposal_created_confirmation(proposal)
-    @proposal = proposal.decorate
-    to_address = proposal.requester.email_address
     from_email = user_email(proposal.requester)
-
-    mail(
-         to: to_address,
-         subject: @proposal.email_subject,
-         from: from_email
-         )
+    to_email = proposal.requester.email_address
+    send_proposal_email(from_email, to_email, proposal)
   end
 
   def approval_reply_received_email(approval)
+    proposal = approval.proposal
     @approval = approval
-    @proposal = approval.proposal.decorate
-    @alert_partial = 'approvals_complete' if @proposal.approved?
-    to_address = @proposal.requester.email_address
+    @alert_partial = 'approvals_complete' if proposal.approved?
 
-    mail(
-         to: to_address,
-         subject: @proposal.email_subject,
-         from: user_email(approval.user)
-         )
+    from_email = user_email(approval.user)
+    to_email = proposal.requester.email_address
+    send_proposal_email(from_email, to_email, proposal)
   end
 
   def comment_added_email(comment, to_email)
     @comment = comment
     # Don't send if special comment
     if !@comment.update_comment
-      proposal = comment.proposal.decorate
-      mail(
-           to: to_email,
-           subject: proposal.email_subject,
-           from: user_email(comment.user)
-           )
+      from_email = user_email(comment.user)
+      send_proposal_email(from_email, to_email, comment.proposal)
     end
   end
 
