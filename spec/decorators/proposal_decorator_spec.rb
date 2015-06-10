@@ -22,11 +22,4 @@ describe ProposalDecorator do
       ))
     end
   end
-
-  describe '#email_subject' do
-    it "includes the public_identifier" do
-      proposal.save!
-      expect(proposal.email_subject).to eq("Request ##{proposal.id}")
-    end
-  end
 end
