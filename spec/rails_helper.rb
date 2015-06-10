@@ -71,6 +71,8 @@ RSpec.configure do |config|
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation)
+
+    Bullet.raise = true
   end
 
   config.before(:each) do
@@ -80,9 +82,14 @@ RSpec.configure do |config|
       DatabaseCleaner.strategy = :truncation
     end
     DatabaseCleaner.start
+
+    Bullet.start_request
   end
 
   config.after(:each) do
+    Bullet.perform_out_of_channel_notifications if Bullet.notification?
+    Bullet.end_request
+
     DatabaseCleaner.clean
     ActionMailer::Base.deliveries.clear
     OmniAuth.config.mock_auth[:myusa] = nil
