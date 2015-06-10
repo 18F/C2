@@ -18,6 +18,7 @@ class CommunicartMailer < ActionMailer::Base
     @approval = approval
     @alert_partial = alert_partial
     proposal = approval.proposal
+
     from_email = user_email(proposal.requester)
     send_proposal_email(from_email, to_email, proposal, 'proposal_notification_email')
   end
@@ -28,9 +29,8 @@ class CommunicartMailer < ActionMailer::Base
   end
 
   def proposal_created_confirmation(proposal)
-    from_email = user_email(proposal.requester)
     to_email = proposal.requester.email_address
-    send_proposal_email(from_email, to_email, proposal)
+    send_proposal_email(sender, to_email, proposal)
   end
 
   def approval_reply_received_email(approval)

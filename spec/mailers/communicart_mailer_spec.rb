@@ -220,5 +220,9 @@ describe CommunicartMailer do
     it 'renders the receiver email' do
       expect(mail.to).to eq([proposal.requester.email_address])
     end
+
+    it "sets the sender name" do
+      expect(sender_names(mail)).to eq([nil])
+    end
   end
 end
