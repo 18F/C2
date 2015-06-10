@@ -1,27 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <title>
-    <%= "#{yield(:title)} - " if content_for(:title).present? %>
-    C2
-  </title>
-  <%= stylesheet_link_tag "application", media: "all" %>
-  <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
-  <%= render 'layouts/analytics' %>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-  <%= csrf_meta_tags %>
-</head>
-<body class="bodyclass webapp controller-<%= controller_name %> action-<%= params[:action] %>">
+  <head>
+    <title>
+      <%= "#{yield(:title)} - " if content_for(:title).present? %>
+      C2
+    </title>
+    <%= stylesheet_link_tag "application", media: "all" %>
+    <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+    <%= render 'layouts/analytics' %>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <%= csrf_meta_tags %>
+  </head>
+  <body class="bodyclass webapp controller-<%= controller_name %> action-<%= params[:action] %>">
 
-<%= render 'layouts/communicart_header' %>
+    <%= render 'peek/bar' %>
+    <%= render 'layouts/communicart_header' %>
 
-<div class="inset">
-  <% flash_list.each do |key, value| %>
-    <div class="row alert alert-<%= key %> <%= bootstrap_alert_class(key) %>"><%= value %></div>
-  <% end %>
-</div>
+    <div class="inset">
+      <% flash_list.each do |key, value| %>
+        <div class="row alert alert-<%= key %> <%= bootstrap_alert_class(key) %>"><%= value %></div>
+      <% end %>
+    </div>
 
-<%= yield %>
+    <%= yield %>
 
-</body>
+  </body>
 </html>

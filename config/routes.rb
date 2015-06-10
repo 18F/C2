@@ -47,6 +47,7 @@ C2::Application.routes.draw do
     resources :procurements, except: [:index, :destroy]
   end
 
+  mount Peek::Railtie => '/peek'
   if Rails.env.development?
     mount MailPreview => 'mail_view'
     mount LetterOpenerWeb::Engine => 'letter_opener'
