@@ -207,8 +207,8 @@ describe CommunicartMailer do
       expect(mail.to).to eq(["observer1@some-dot-gov.gov"])
     end
 
-    it "sets the sender name" do
-      expect(sender_names(mail)).to eq([nil])
+    it "uses the default sender name" do
+      expect(sender_names(mail)).to eq(["Communicart"])
     end
   end
 
@@ -221,8 +221,8 @@ describe CommunicartMailer do
       expect(mail.to).to eq([proposal.requester.email_address])
     end
 
-    it "sets the sender name" do
-      expect(sender_names(mail)).to eq([nil])
+    it "uses the default sender name" do
+      expect(sender_names(mail)).to eq(["Communicart"])
     end
   end
 end

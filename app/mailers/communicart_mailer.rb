@@ -20,7 +20,7 @@ class CommunicartMailer < ActionMailer::Base
     proposal = approval.proposal
 
     send_proposal_email(
-      from_email: user_email(proposal.requester),
+      from_email: user_email_with_name(proposal.requester),
       to_email: to_email,
       proposal: proposal,
       template_name: 'proposal_notification_email'
@@ -48,7 +48,7 @@ class CommunicartMailer < ActionMailer::Base
     @alert_partial = 'approvals_complete' if proposal.approved?
 
     send_proposal_email(
-      from_email: user_email(approval.user),
+      from_email: user_email_with_name(approval.user),
       to_email: proposal.requester.email_address,
       proposal: proposal
     )
@@ -59,7 +59,7 @@ class CommunicartMailer < ActionMailer::Base
     # Don't send if special comment
     if !@comment.update_comment
       send_proposal_email(
-        from_email: user_email(comment.user),
+        from_email: user_email_with_name(comment.user),
         to_email: to_email,
         proposal: comment.proposal
       )
@@ -69,16 +69,23 @@ class CommunicartMailer < ActionMailer::Base
 
   private
 
-  # for easier stubbing in tests
-  def sender
+  def email_with_name(email, name)
+    # http://stackoverflow.com/a/8106387/358804
+    address = Mail::Address.new(email)
+    address.display_name = name
+    address.format
+  end
+
+  def sender_email
     ENV['NOTIFICATION_FROM_EMAIL'] || 'noreply@some.gov'
   end
 
-  def user_email(user)
-    # http://stackoverflow.com/a/8106387/358804
-    address = Mail::Address.new(sender)
-    address.display_name = user.full_name
-    address.format
+  def default_sender_email
+    email_with_name(sender_email, "Communicart")
+  end
+
+  def user_email_with_name(user)
+    email_with_name(sender_email, user.full_name)
   end
 
   # `proposal` and `to_email` are required
@@ -92,7 +99,7 @@ class CommunicartMailer < ActionMailer::Base
     mail(
       to: to_email,
       subject: @proposal.email_subject,
-      from: from_email || sender,
+      from: from_email || default_sender_email,
       template_name: template_name
     )
   end
