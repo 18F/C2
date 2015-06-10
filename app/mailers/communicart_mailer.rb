@@ -19,18 +19,27 @@ class CommunicartMailer < ActionMailer::Base
     @alert_partial = alert_partial
     proposal = approval.proposal
 
-    from_email = user_email(proposal.requester)
-    send_proposal_email(from_email, to_email, proposal, 'proposal_notification_email')
+    send_proposal_email(
+      from_email: user_email(proposal.requester),
+      to_email: to_email,
+      proposal: proposal,
+      template_name: 'proposal_notification_email'
+    )
   end
 
   def proposal_observer_email(to_email, proposal)
     # TODO have the from_email be whomever triggered this notification
-    send_proposal_email(sender, to_email, proposal)
+    send_proposal_email(
+      to_email: to_email,
+      proposal: proposal
+    )
   end
 
   def proposal_created_confirmation(proposal)
-    to_email = proposal.requester.email_address
-    send_proposal_email(sender, to_email, proposal)
+    send_proposal_email(
+      to_email: proposal.requester.email_address,
+      proposal: proposal
+    )
   end
 
   def approval_reply_received_email(approval)
@@ -38,17 +47,22 @@ class CommunicartMailer < ActionMailer::Base
     @approval = approval
     @alert_partial = 'approvals_complete' if proposal.approved?
 
-    from_email = user_email(approval.user)
-    to_email = proposal.requester.email_address
-    send_proposal_email(from_email, to_email, proposal)
+    send_proposal_email(
+      from_email: user_email(approval.user),
+      to_email: proposal.requester.email_address,
+      proposal: proposal
+    )
   end
 
   def comment_added_email(comment, to_email)
     @comment = comment
     # Don't send if special comment
     if !@comment.update_comment
-      from_email = user_email(comment.user)
-      send_proposal_email(from_email, to_email, comment.proposal)
+      send_proposal_email(
+        from_email: user_email(comment.user),
+        to_email: to_email,
+        proposal: comment.proposal
+      )
     end
   end
 
@@ -67,7 +81,7 @@ class CommunicartMailer < ActionMailer::Base
     address.format
   end
 
-  def send_proposal_email(from_email, to_email, proposal, template_name=nil)
+  def send_proposal_email(proposal:, to_email:, from_email: nil, template_name: nil)
     @proposal = proposal.decorate
 
     # http://www.jwz.org/doc/threading.html
@@ -77,7 +91,7 @@ class CommunicartMailer < ActionMailer::Base
     mail(
       to: to_email,
       subject: @proposal.email_subject,
-      from: from_email,
+      from: from_email || sender,
       template_name: template_name
     )
   end
