@@ -2,10 +2,10 @@
 
 if Rails.env.production?
   default_scheme = 'https'
-  default_port = 3000
+  default_port = nil
 else
   default_scheme = 'http'
-  default_port = nil
+  default_port = 3000
 end
 
 C2::Application.config.action_mailer.default_url_options ||= {
