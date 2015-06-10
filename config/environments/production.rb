@@ -21,11 +21,6 @@ C2::Application.configure do
     enable_starttls_auto: true
   }
 
-  config.action_mailer.default_url_options = {
-    scheme: ENV['DEFAULT_URL_SCHEME'] || 'https',
-    host: ENV['HOST_URL'] || ENV.fetch('DEFAULT_URL_HOST'),
-    port: ENV['DEFAULT_URL_PORT']
-  }
   config.roadie.url_options = config.action_mailer.default_url_options
 
   config.i18n.fallbacks = true
