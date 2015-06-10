@@ -4,6 +4,7 @@ module Api
       def index
         # TODO use a scope for ordering
         orders = ::Ncr::WorkOrder.
+          joins(:proposal).
           includes(proposal: [:requester, approvals: [:user]]).
           order('proposals.created_at DESC')
 
