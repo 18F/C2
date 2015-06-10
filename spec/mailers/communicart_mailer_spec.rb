@@ -18,6 +18,16 @@ describe CommunicartMailer do
   let(:approver) { approval.user }
   let(:requester) { proposal.requester }
 
+  shared_examples "a Proposal email" do
+    it "renders the subject" do
+      expect(mail.subject).to eq("Request ##{proposal.id}")
+    end
+
+    it "uses the configured sender email" do
+      expect(mail.from).to eq(['reply@stub.gov'])
+    end
+  end
+
   describe 'notification_for_approver' do
     let!(:token) { approval.create_api_token! }
     let(:mail) { CommunicartMailer.actions_for_approver('email.to.email@testing.com', approval) }
@@ -30,18 +40,14 @@ describe CommunicartMailer do
       Addressable::URI.parse(url)
     end
 
-    it 'renders the subject' do
-      requester.update_attributes(first_name: 'Liono', last_name: 'Requester')
-      expect(mail.subject).to eq("Request ##{proposal.id}")
-    end
+    it_behaves_like "a Proposal email"
 
     it 'renders the receiver email' do
       expect(mail.to).to eq(["email.to.email@testing.com"])
     end
 
-    it 'renders the sender email' do
+    it "sets the sender name" do
       requester.update_attributes(first_name: 'Liono', last_name: 'Requester')
-      expect(mail.from).to eq(['reply@stub.gov'])
       expect(sender_names(mail)).to eq(['Liono Requester'])
     end
 
@@ -126,16 +132,13 @@ describe CommunicartMailer do
       approval.approve!
     end
 
-    it 'renders the subject' do
-      expect(mail.subject).to eq("Request ##{proposal.id}")
-    end
+    it_behaves_like "a Proposal email"
 
     it 'renders the receiver email' do
       expect(mail.to).to eq([proposal.requester.email_address])
     end
 
-    it 'renders the sender email' do
-      expect(mail.from).to eq(['reply@stub.gov'])
+    it "sets the sender name" do
       expect(sender_names(mail)).to eq([approver.full_name])
     end
 
@@ -173,16 +176,13 @@ describe CommunicartMailer do
     let(:email) { "commenter@some-dot-gov.gov" }
     let(:mail) { CommunicartMailer.comment_added_email(comment, email) }
 
-    it 'renders the subject' do
-      expect(mail.subject).to eq("Request ##{proposal.id}")
-    end
+    it_behaves_like "a Proposal email"
 
     it 'renders the receiver email' do
       expect(mail.to).to eq(["commenter@some-dot-gov.gov"])
     end
 
-    it 'renders the sender email' do
-      expect(mail.from).to eq(['reply@stub.gov'])
+    it "sets the sender name" do
       expect(sender_names(mail)).to eq([comment.user.full_name])
     end
   end
@@ -192,16 +192,13 @@ describe CommunicartMailer do
     let(:observer) { observation.user }
     let(:mail) { CommunicartMailer.proposal_observer_email(observer.email_address, proposal) }
 
-    it 'renders the subject' do
-      expect(mail.subject).to eq("Request ##{proposal.id}")
-    end
+    it_behaves_like "a Proposal email"
 
     it 'renders the receiver email' do
       expect(mail.to).to eq(["observer1@some-dot-gov.gov"])
     end
 
-    it 'renders the sender email' do
-      expect(mail.from).to eq(['reply@stub.gov'])
+    it "sets the sender name" do
       expect(sender_names(mail)).to eq([nil])
     end
   end
@@ -209,16 +206,10 @@ describe CommunicartMailer do
   describe 'proposal_created_confirmation' do
     let(:mail) { CommunicartMailer.proposal_created_confirmation(proposal) }
 
-    it 'renders the subject' do
-      expect(mail.subject).to eq("Request ##{proposal.id}")
-    end
+    it_behaves_like "a Proposal email"
 
     it 'renders the receiver email' do
       expect(mail.to).to eq([proposal.requester.email_address])
-    end
-
-    it 'renders the sender email' do
-      expect(mail.from).to eq(["reply@stub.gov"])
     end
   end
 end
