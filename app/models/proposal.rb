@@ -192,14 +192,4 @@ class Proposal < ActiveRecord::Base
       next_approval.make_actionable!
     end
   end
-
-  def changed_fields comment_text
-    if comment_text.present?
-      self.comments.create(
-        comment_text: comment_text, 
-        update_comment: true, 
-        user_id: self.requester_id
-      )
-    end
-  end
 end

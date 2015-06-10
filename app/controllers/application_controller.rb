@@ -10,10 +10,10 @@ class ApplicationController < ActionController::Base
   helper_method :current_user, :signed_in?, :return_to
 
   protected
-  # We are overriding this method to account for permission trees. See
-  # TreePolicy
+  # We are overriding this method to account for ExceptionPolicies
   def authorize(record, query=nil, user=nil)
     user ||= @current_user
+    record = self.authorizing_object(record)
     policy = Pundit.policy(user, record)
 
     # use the action as a default permission
@@ -26,6 +26,20 @@ class ApplicationController < ActionController::Base
       ex.query, ex.record, ex.policy = q, record, pol
       raise ex
     end
+  end
+
+  # Proposals can have special authorization parameters in their client_data
+  def authorizing_object(record)
+    if record.instance_of?(Proposal) && Pundit::PolicyFinder.new(record.client_data).policy
+      record.client_data
+    else
+      record
+    end
+  end
+  
+  # Override Pundit to account for proposal gymnastics
+  def policy(record)
+    super(self.authorizing_object(record))
   end
 
   def param_date(sym)

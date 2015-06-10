@@ -105,4 +105,41 @@ describe Ncr::WorkOrder do
       expect(work_order).to be_valid
     end
   end
+
+  describe '#record_changes' do
+    let (:work_order) { FactoryGirl.create(:ncr_work_order) }
+
+    it 'adds a change comment' do
+      work_order.update(vendor: 'VenVenVen', amount: 123.45)
+      expect(work_order.proposal.comments.count).to be 1
+      comment = Comment.last
+      expect(comment.update_comment).to be(true)
+      comment_text = "- *Vendor* was changed to VenVenVen\n"
+      comment_text += "- *Amount* was changed to $123.45"
+      expect(comment.comment_text).to eq(comment_text)
+    end
+
+    it 'includes extra information if modified post approval' do
+      work_order.approve!
+      work_order.update(vendor: 'VenVenVen', amount: 123.45)
+      expect(work_order.proposal.comments.count).to be 1
+      comment = Comment.last
+      expect(comment.update_comment).to be(true)
+      comment_text = "- *Vendor* was changed to VenVenVen\n"
+      comment_text += "- *Amount* was changed to $123.45\n"
+      comment_text += "_Modified post-approval_"
+      expect(comment.comment_text).to eq(comment_text)
+    end
+
+    it 'does not add a change comment when nothing has changed' do
+      work_order.touch
+      expect(Comment.count).to be 0
+    end
+
+    it 'does not add a comment when nothing has changed and it is approved' do
+      work_order.approve!
+      work_order.touch
+      expect(Comment.count).to be 0
+    end
+  end
 end
