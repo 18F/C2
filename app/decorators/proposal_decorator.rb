@@ -59,4 +59,8 @@ class ProposalDecorator < Draper::Decorator
   def email_subject
     "Request #{proposal.public_identifier}"
   end
+
+  def email_msg_id
+    "<proposal-#{self.id}@#{DEFAULT_URL_HOST}>"
+  end
 end

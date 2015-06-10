@@ -26,6 +26,15 @@ describe CommunicartMailer do
     it "uses the configured sender email" do
       expect(mail.from).to eq(['reply@stub.gov'])
     end
+
+    it "includes the appropriate headers for threading" do
+      # headers only get added when the Mail is #deliver-ed
+      mail.deliver
+
+      %w(In-Reply-To References).each do |header|
+        expect(mail[header].value).to eq("<proposal-#{proposal.id}@#{DEFAULT_URL_HOST}>")
+      end
+    end
   end
 
   describe 'notification_for_approver' do

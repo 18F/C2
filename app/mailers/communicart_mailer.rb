@@ -69,6 +69,10 @@ class CommunicartMailer < ActionMailer::Base
 
   def send_proposal_email(from_email, to_email, proposal, template_name=nil)
     @proposal = proposal.decorate
+
+    headers['In-Reply-To'] = @proposal.email_msg_id
+    headers['References'] = @proposal.email_msg_id
+
     mail(
       to: to_email,
       subject: @proposal.email_subject,
