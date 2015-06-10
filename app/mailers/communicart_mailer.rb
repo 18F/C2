@@ -81,7 +81,8 @@ class CommunicartMailer < ActionMailer::Base
     address.format
   end
 
-  def send_proposal_email(proposal:, to_email:, from_email: nil, template_name: nil)
+  # `proposal` and `to_email` are required
+  def send_proposal_email(proposal: nil, to_email: nil, from_email: nil, template_name: nil)
     @proposal = proposal.decorate
 
     # http://www.jwz.org/doc/threading.html

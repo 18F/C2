@@ -2,7 +2,7 @@
 
 ## Dependencies
 
-* Ruby 2.1+
+* Ruby 2.0+
 * PostgreSQL
 * A [MyUSA](https://alpha.my.usa.gov/) account
 * An SMTP server (`production` mode only)
