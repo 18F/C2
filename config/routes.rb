@@ -3,6 +3,8 @@ C2::Application.routes.draw do
   match "/auth/:provider/callback" => "home#oauth_callback", via: [:get]
   get '/error' => 'home#error'
   post "/logout" => "home#logout"
+  get '/feedback' => 'feedback#index'
+  post '/feedback' => 'feedback#create'
 
   namespace :api do
     scope :v1 do

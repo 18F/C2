@@ -66,6 +66,18 @@ class CommunicartMailer < ActionMailer::Base
     end
   end
 
+  def feedback(message)
+    mail(
+      to: CommunicartMailer.support_email,
+      subject: 'Feedback submission',
+      from: default_sender_email,
+      body: message
+    )
+  end
+
+  def self.support_email
+    ENV['SUPPORT_EMAIL'] || 'capdevs@gsa.gov'   # not sensitive, so hard coding
+  end
 
   private
 
