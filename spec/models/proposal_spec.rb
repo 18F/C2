@@ -22,6 +22,23 @@ describe Proposal do
     end
   end
 
+  describe '#name' do
+    it "gives the delegated #name from the client_data" do
+      proposal = Proposal.new
+      client = double(name: 'foo')
+      expect(proposal).to receive(:client_data).and_return(client)
+
+      expect(proposal.name).to eq('foo')
+    end
+
+    it "gives the #public_identifier by default" do
+      proposal = Proposal.new
+      expect(proposal).to receive(:id).and_return(6)
+
+      expect(proposal.name).to eq('Request #6')
+    end
+  end
+
   describe '#users' do
     it "returns all approvers, observers, and the requester" do
       requester = FactoryGirl.create(

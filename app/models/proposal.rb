@@ -39,8 +39,7 @@ class Proposal < ActiveRecord::Base
   # :public_identifier
   # :version
   # Note: clients should also implement :version
-  delegate :client, :name,
-           to: :client_data_legacy, allow_nil: true
+  delegate :client, to: :client_data_legacy, allow_nil: true
 
   validates :flow, presence: true, inclusion: {in: ApprovalGroup::FLOWS}
   # TODO validates :requester_id, presence: true
@@ -148,8 +147,17 @@ class Proposal < ActiveRecord::Base
     end
   end
 
+
+  ## delegated methods ##
+
   def public_identifier
     self.delegate_with_default(:public_identifier) { "##{self.id}" }
+  end
+
+  def name
+    self.delegate_with_default(:name) {
+      "Request #{self.public_identifier}"
+    }
   end
 
   def fields_for_display
@@ -165,6 +173,8 @@ class Proposal < ActiveRecord::Base
       self.client_data_legacy.try(:version)
     ].compact.max
   end
+
+  #######################
 
 
   #### state machine methods ####
