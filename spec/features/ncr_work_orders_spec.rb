@@ -57,6 +57,14 @@ describe "National Capital Region proposals" do
         proposal.approvers.first.email_address)
     end
 
+    it "requires a project_title" do
+      visit '/ncr/work_orders/new'
+      expect {
+        click_on 'Submit for approval'
+      }.to_not change { Proposal.count }
+      expect(page).to have_content("Project title can't be blank")
+    end
+
     with_feature 'HIDE_BA61_OPTION' do
       it "removes the radio button" do
         visit '/ncr/work_orders/new'
