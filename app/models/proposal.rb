@@ -136,14 +136,18 @@ class Proposal < ActiveRecord::Base
   # TODO refactor to class method in a module
   def delegate_with_default(method)
     data = self.client_data_legacy
+
+    result = nil
     if data && data.respond_to?(method)
-      data.public_send(method)
+      result = data.public_send(method)
+    end
+
+    if result.present?
+      result
+    elsif block_given?
+      yield
     else
-      if block_given?
-        yield
-      else
-        nil
-      end
+      result
     end
   end
 
