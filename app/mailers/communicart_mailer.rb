@@ -66,12 +66,15 @@ class CommunicartMailer < ActionMailer::Base
     end
   end
 
-  def feedback(message)
+  def feedback(sending_user, form_values)
+    form_strings = form_values.map { |pair| "#{pair[0]}: #{pair[1]}" }
+    message = form_strings.join("\n")
     mail(
       to: CommunicartMailer.support_email,
       subject: 'Feedback submission',
       from: default_sender_email,
-      body: message
+      body: message,
+      cc: sending_user.try(:email_address)
     )
   end
 

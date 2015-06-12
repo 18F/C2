@@ -15,6 +15,7 @@ describe FeedbackController do
         ["bug: Yes", "context: Some context here", "expected: it to work",
          "actually: it did not", "comments: Comments here", "satisfaction: 4",
          "referral: /somewhere/else"].join("\n"))
+      expect(deliveries[0].cc).to eq([])
     end
 
     it "doesn't include extra fields" do
@@ -31,7 +32,8 @@ describe FeedbackController do
       user = FactoryGirl.create(:user, email_address: "actor@example.com")
       login_as(user)
       post :create, {bug: "Yes"}
-      expect(deliveries[0].body.to_s).to eq("bug: Yes\nuser: actor@example.com")
+      expect(deliveries[0].body.to_s).to eq("bug: Yes")
+      expect(deliveries[0].cc).to eq(["actor@example.com"])
     end
   end
 end
