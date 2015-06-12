@@ -58,11 +58,6 @@ module Gsa18f
       "gsa18f"
     end
 
-    # @todo - this is pretty ugly
-    def public_identifier
-      "##{self.proposal.id}"
-    end
-
     def total_price
       (self.cost_per_unit * self.quantity) || 0.0
     end
