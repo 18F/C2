@@ -30,6 +30,7 @@ module Ncr
       less_than_or_equal_to: 3000
     }
     validates :expense_type, inclusion: {in: EXPENSE_TYPES}, presence: true
+    validates :project_title, presence: true
     validates :vendor, presence: true
     validates :building_number, presence: true
     validates :rwa_number, format: {

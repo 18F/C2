@@ -39,7 +39,7 @@
           <tr class="cart_item_information">
             <!-- Product -->
             <td class="first" valign="top">
-              <%= proposal.try(:name) %>
+              <%= proposal.name %>
             </td>
             <td class="first" valign="top">
               <%= (cart.properties.detect{|p| p.property == 'contractingVehicle'}.try(:value) || "") %>
