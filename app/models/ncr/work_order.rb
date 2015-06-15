@@ -59,7 +59,7 @@ module Ncr
     end
 
     def add_approvals(approver_email)
-      emails = [approver_email] + self.system_approvers
+      emails = [approver_email, self.system_approver]
       if self.emergency
         emails.each {|email| self.add_observer(email) }
         # skip state machine
@@ -150,16 +150,14 @@ module Ncr
       year % 100   # convert to two-digit
     end
 
-    def system_approvers
+    def system_approver
       if self.expense_type == 'BA61'
-        [
-          ENV["NCR_BA61_TIER1_BUDGET_MAILBOX"] || 'communicart.budget.approver@gmail.com',
-          ENV["NCR_BA61_TIER2_BUDGET_MAILBOX"] || 'communicart.ofm.approver@gmail.com'
-        ]
+        ENV['NCR_BA61_BUDGET_MAILBOX'] ||
+          ENV['NCR_BA61_TIER2_BUDGET_MAILBOX'] || # deprecated
+          'communicart.ofm.approver@gmail.com'
       else
-        [ENV["NCR_BA80_BUDGET_MAILBOX"] || 'communicart.budget.approver@gmail.com']
+        ENV['NCR_BA80_BUDGET_MAILBOX'] || 'communicart.budget.approver@gmail.com'
       end
     end
-
   end
 end

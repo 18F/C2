@@ -45,7 +45,7 @@ describe Ncr::WorkOrder do
       form = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61')
       form.add_approvals('bob@example.com')
       expect(form.observations.length).to eq(0)
-      expect(form.approvals.length).to eq(3)
+      expect(form.approvals.length).to eq(2)
       form.reload
       expect(form.approved?).to eq(false)
     end
@@ -53,7 +53,7 @@ describe Ncr::WorkOrder do
       form = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61',
                                emergency: true)
       form.add_approvals('bob@example.com')
-      expect(form.observations.length).to eq(3)
+      expect(form.observations.length).to eq(2)
       expect(form.approvals.length).to eq(0)
       form.clear_association_cache
       expect(form.approved?).to eq(true)
