@@ -1,5 +1,7 @@
 class FeedbackController < ApplicationController
-  # note that index is rendered implicitly as it's just a template
+  def index
+    @skip_footer = true
+  end
 
   def create
     fields = [:bug, :context, :expected, :actually, :comments, :satisfaction, :referral]
