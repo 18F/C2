@@ -1,6 +1,8 @@
 C2::Application.routes.draw do
   root :to => 'home#index'
   get '/error' => 'home#error'
+  get '/feedback' => 'feedback#index'
+  post '/feedback' => 'feedback#create'
 
   match '/auth/:provider/callback' => 'auth#oauth_callback', via: [:get]
   post '/logout' => 'auth#logout'

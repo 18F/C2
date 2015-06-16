@@ -404,6 +404,11 @@ body.webapp {
   }
 }
 
+#footer {
+  margin-top: 4em;
+  text-align: center;
+}
+
 @media (max-width: $break-small) {
   tr.cart_item_information p {
     font-size: 67%;
