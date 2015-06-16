@@ -13,6 +13,11 @@ required_keys.each do |key|
 end
 
 
+if ENV['NCR_BA61_TIER2_BUDGET_MAILBOX']
+  Rails.logger.warn("NCR_BA61_TIER2_BUDGET_MAILBOX is deprecated. Please use NCR_BA61_BUDGET_MAILBOX instead.")
+end
+
+
 if ENV['HOST_URL']
   Rails.logger.warn("HOST_URL is deprecated – use DEFAULT_URL_HOST instead.")
 end
