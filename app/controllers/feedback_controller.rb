@@ -10,5 +10,6 @@ class FeedbackController < ApplicationController
     unless form_values.empty?
       CommunicartMailer.feedback(current_user, form_values).deliver
     end
+    # @todo - redirect somewhere to avoid back/refresh button issues
   end
 end
