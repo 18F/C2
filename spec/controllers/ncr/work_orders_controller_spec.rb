@@ -7,7 +7,7 @@ describe Ncr::WorkOrdersController do
       ncr_work_order: {
         amount: '111.22', expense_type: 'BA80', vendor: 'Vendor',
         not_to_exceed: '0', building_number: Ncr::BUILDING_NUMBERS[0],
-        emergency: '0', rwa_number: 'A12345678', org_code: Ncr::ORG_CODES[0],
+        emergency: '0', rwa_number: 'A12345678', org_code: Ncr::OrgCode.all[0],
         code: 'Work Order', project_title: 'Title', description: 'Desc'},
       approver_email: 'bob@example.gov'
     }}

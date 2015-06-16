@@ -7,11 +7,7 @@ module Ncr
   end
 
   EXPENSE_TYPES = %w(BA61 BA80)
-
   BUILDING_NUMBERS = YAML.load_file("#{Rails.root}/config/data/ncr/building_numbers.yml")
-  org_code_rows = CSV.read("#{Rails.root}/config/data/ncr/org_codes_2015-05-18.csv", headers: true)
-  # TODO reference by `organization_cd` rather than storing the whole thing
-  ORG_CODES = org_code_rows.map{|r| "#{r['organization_cd']} #{r['organization_nm']}" }
 
   class WorkOrder < ActiveRecord::Base
     include ObservableModel
