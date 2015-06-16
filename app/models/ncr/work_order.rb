@@ -114,7 +114,32 @@ module Ncr
       self.project_title
     end
 
+    def system_approvers
+      if self.expense_type == 'BA61'
+        [
+          self.class.ba61_tier1_budget_mailbox,
+          self.class.ba61_tier2_budget_mailbox
+        ]
+      else
+        [self.class.ba80_budget_mailbox]
+      end
+    end
+
+    def self.ba61_tier1_budget_mailbox
+      ENV['NCR_BA61_TIER1_BUDGET_MAILBOX'] || 'communicart.budget.approver@gmail.com'
+    end
+
+    def self.ba61_tier2_budget_mailbox
+      ENV['NCR_BA61_TIER2_BUDGET_MAILBOX'] || 'communicart.ofm.approver@gmail.com'
+    end
+
+    def self.ba80_budget_mailbox
+      ENV['NCR_BA80_BUDGET_MAILBOX'] || 'communicart.budget.approver@gmail.com'
+    end
+
+
     protected
+
     def record_changes
       changed_attributes = self.changed_attributes.clone
       changed_attributes.delete(:updated_at)
@@ -149,17 +174,5 @@ module Ncr
       end
       year % 100   # convert to two-digit
     end
-
-    def system_approvers
-      if self.expense_type == 'BA61'
-        [
-          ENV["NCR_BA61_TIER1_BUDGET_MAILBOX"] || 'communicart.budget.approver@gmail.com',
-          ENV["NCR_BA61_TIER2_BUDGET_MAILBOX"] || 'communicart.ofm.approver@gmail.com'
-        ]
-      else
-        [ENV["NCR_BA80_BUDGET_MAILBOX"] || 'communicart.budget.approver@gmail.com']
-      end
-    end
-
   end
 end
