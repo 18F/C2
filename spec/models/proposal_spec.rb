@@ -22,6 +22,43 @@ describe Proposal do
     end
   end
 
+  describe '#delegate_with_default' do
+    it "returns the delegated value" do
+      proposal = Proposal.new
+      client_data = double(some_prop: 'foo')
+      expect(proposal).to receive(:client_data).and_return(client_data)
+
+      result = proposal.delegate_with_default(:some_prop)
+      expect(result).to eq('foo')
+    end
+
+    it "returns the default when the delegated value is #blank?" do
+      proposal = Proposal.new
+      client_data = double(some_prop: '')
+      expect(proposal).to receive(:client_data).and_return(client_data)
+
+      result = proposal.delegate_with_default(:some_prop) { 'foo' }
+      expect(result).to eq('foo')
+    end
+
+    it "returns the default when there is no method on the delegate" do
+      proposal = Proposal.new
+      expect(proposal).to receive(:client_data).and_return(double)
+
+      result = proposal.delegate_with_default(:some_prop) { 'foo' }
+      expect(result).to eq('foo')
+    end
+  end
+
+  describe '#name' do
+    it "returns the #public_identifier by default" do
+      proposal = Proposal.new
+      expect(proposal).to receive(:id).and_return(6)
+
+      expect(proposal.name).to eq('Request #6')
+    end
+  end
+
   describe '#users' do
     it "returns all approvers, observers, and the requester" do
       requester = FactoryGirl.create(

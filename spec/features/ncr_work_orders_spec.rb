@@ -57,6 +57,14 @@ describe "National Capital Region proposals" do
         proposal.approvers.first.email_address)
     end
 
+    it "requires a project_title" do
+      visit '/ncr/work_orders/new'
+      expect {
+        click_on 'Submit for approval'
+      }.to_not change { Proposal.count }
+      expect(page).to have_content("Project title can't be blank")
+    end
+
     with_feature 'HIDE_BA61_OPTION' do
       it "removes the radio button" do
         visit '/ncr/work_orders/new'
@@ -94,7 +102,7 @@ describe "National Capital Region proposals" do
       }.to_not change { Proposal.count }
 
       expect(current_path).to eq('/ncr/work_orders')
-      expect(page).to have_content("Amount must be less than or equal to 3000")
+      expect(page).to have_content("Amount must be less than or equal to $3,000")
       # keeps the form values
       expect(find_field('Amount').value).to eq('10000')
     end

@@ -26,10 +26,15 @@ module Ncr
 
     # @TODO: use integer number of cents to avoid floating point issues
     validates :amount, numericality: {
+      less_than_or_equal_to: 3000,
+      message: "must be less than or equal to $3,000"
+    }
+    validates :amount, numericality: {
       greater_than_or_equal_to: 0,
-      less_than_or_equal_to: 3000
+      message: "must be greater than or equal to $0"
     }
     validates :expense_type, inclusion: {in: EXPENSE_TYPES}, presence: true
+    validates :project_title, presence: true
     validates :vendor, presence: true
     validates :building_number, presence: true
     validates :rwa_number, format: {
