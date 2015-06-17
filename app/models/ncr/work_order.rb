@@ -17,7 +17,6 @@ module Ncr
     include ProposalDelegate
 
     after_initialize :set_defaults
-
     before_update :record_changes
 
     # @TODO: use integer number of cents to avoid floating point issues
@@ -93,6 +92,12 @@ module Ncr
       "ncr"
     end
 
+    def org_code_instance
+      # TODO reference by `code` rather than storing the whole thing
+      code = self.org_code.split(' ', 2)[0]
+      Ncr::OrgCode.find(code)
+    end
+
     def public_identifier
       "FY" + self.fiscal_year.to_s.rjust(2, "0") + "-#{self.proposal.id}"
     end
@@ -111,14 +116,17 @@ module Ncr
     end
 
     def system_approvers
+      results = []
       if self.expense_type == 'BA61'
-        [
-          self.class.ba61_tier1_budget_mailbox,
-          self.class.ba61_tier2_budget_mailbox
-        ]
+        unless self.org_code_instance.whsc?
+          results << self.class.ba61_tier1_budget_mailbox
+        end
+        results << self.class.ba61_tier2_budget_mailbox
       else
-        [self.class.ba80_budget_mailbox]
+        results << self.class.ba80_budget_mailbox
       end
+
+      results
     end
 
     def self.ba61_tier1_budget_mailbox

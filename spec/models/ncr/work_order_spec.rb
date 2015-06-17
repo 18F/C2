@@ -61,6 +61,15 @@ describe Ncr::WorkOrder do
     end
   end
 
+  describe '#system_approvers' do
+    it "skips the Tier 1 budget approver for WHSC" do
+      work_order = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61', org_code: Ncr::OrgCode::WHSC_CODE)
+      expect(work_order.system_approvers).to eq([
+        Ncr::WorkOrder.ba61_tier2_budget_mailbox
+      ])
+    end
+  end
+
   describe '#total_price' do
     let (:work_order) { FactoryGirl.create(:ncr_work_order, amount: 45.36)}
     it 'gets price from amount field' do
