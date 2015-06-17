@@ -45,7 +45,11 @@ describe Ncr::WorkOrder do
       form = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61')
       form.add_approvals('bob@example.com')
       expect(form.observations.length).to eq(0)
-      expect(form.approvals.length).to eq(3)
+      expect(form.approvers.map(&:email_address)).to eq([
+        'bob@example.com',
+        Ncr::WorkOrder.ba61_tier1_budget_mailbox,
+        Ncr::WorkOrder.ba61_tier2_budget_mailbox
+      ])
       form.reload
       expect(form.approved?).to eq(false)
     end
@@ -54,7 +58,11 @@ describe Ncr::WorkOrder do
       form = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61',
                                emergency: true)
       form.add_approvals('bob@example.com')
-      expect(form.observations.length).to eq(3)
+      expect(form.observers.map(&:email_address)).to eq([
+        'bob@example.com',
+        Ncr::WorkOrder.ba61_tier1_budget_mailbox,
+        Ncr::WorkOrder.ba61_tier2_budget_mailbox
+      ])
       expect(form.approvals.length).to eq(0)
       form.clear_association_cache
       expect(form.approved?).to eq(true)
