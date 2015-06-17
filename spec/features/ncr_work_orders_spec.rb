@@ -34,14 +34,14 @@ describe "National Capital Region proposals" do
 
       expect(proposal.name).to eq("buying stuff")
       expect(proposal.flow).to eq('linear')
-      client_data = proposal.client_data
-      expect(client_data.client).to eq('ncr')
-      expect(client_data.expense_type).to eq('BA80')
-      expect(client_data.vendor).to eq('ACME')
-      expect(client_data.amount).to eq(123.45)
-      expect(client_data.building_number).to eq(Ncr::BUILDING_NUMBERS[0])
-      expect(client_data.org_code).to eq(Ncr::Organization.all[0])
-      expect(client_data.description).to eq('desc content')
+      work_order = proposal.client_data
+      expect(work_order.client).to eq('ncr')
+      expect(work_order.expense_type).to eq('BA80')
+      expect(work_order.vendor).to eq('ACME')
+      expect(work_order.amount).to eq(123.45)
+      expect(work_order.building_number).to eq(Ncr::BUILDING_NUMBERS[0])
+      expect(work_order.org_code).to eq(Ncr::Organization.all[0].to_s)
+      expect(work_order.description).to eq('desc content')
       expect(proposal.requester).to eq(requester)
       expect(proposal.approvers.map(&:email_address)).to eq(%w(
         approver@example.com
