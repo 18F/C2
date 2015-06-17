@@ -1,5 +1,5 @@
 module Ncr
-  class OrgCode
+  class Organization
     WHSC_CODE = 'P1122021'
 
     attr_accessor :code, :name
@@ -34,8 +34,8 @@ end
 
 rows = CSV.read("#{Rails.root}/config/data/ncr/org_codes_2015-05-18.csv", headers: true)
 
-Ncr::OrgCode::BY_CODE = {}
+Ncr::Organization::BY_CODE = {}
 rows.each do |row|
-  instance = Ncr::OrgCode.new(row)
-  Ncr::OrgCode::BY_CODE[instance.code] = instance
+  org = Ncr::Organization.new(row)
+  Ncr::Organization::BY_CODE[org.code] = org
 end

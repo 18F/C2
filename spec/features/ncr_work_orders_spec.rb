@@ -23,7 +23,7 @@ describe "National Capital Region proposals" do
       fill_in 'Amount', with: 123.45
       fill_in "Approving Official's Email Address", with: 'approver@example.com'
       select Ncr::BUILDING_NUMBERS[0], :from => 'ncr_work_order_building_number'
-      select Ncr::OrgCode.all[0], :from => 'ncr_work_order_org_code'
+      select Ncr::Organization.all[0], :from => 'ncr_work_order_org_code'
       expect {
         click_on 'Submit for approval'
       }.to change { Proposal.count }.from(0).to(1)
@@ -40,7 +40,7 @@ describe "National Capital Region proposals" do
       expect(client_data.vendor).to eq('ACME')
       expect(client_data.amount).to eq(123.45)
       expect(client_data.building_number).to eq(Ncr::BUILDING_NUMBERS[0])
-      expect(client_data.org_code).to eq(Ncr::OrgCode.all[0])
+      expect(client_data.org_code).to eq(Ncr::Organization.all[0])
       expect(client_data.description).to eq('desc content')
       expect(proposal.requester).to eq(requester)
       expect(proposal.approvers.map(&:email_address)).to eq(%w(
@@ -80,7 +80,7 @@ describe "National Capital Region proposals" do
         fill_in 'Amount', with: 123.45
         fill_in "Approving Official's Email Address", with: 'approver@example.com'
         select Ncr::BUILDING_NUMBERS[0], :from => 'ncr_work_order_building_number'
-        select Ncr::OrgCode.all[0], :from => 'ncr_work_order_org_code'
+        select Ncr::Organization.all[0], :from => 'ncr_work_order_org_code'
         expect {
           click_on 'Submit for approval'
         }.to change { Proposal.count }.from(0).to(1)
@@ -116,7 +116,7 @@ describe "National Capital Region proposals" do
       fill_in 'Amount', with: 123.45
       fill_in "Approving Official's Email Address", with: 'approver@example.com'
       select Ncr::BUILDING_NUMBERS[0], :from => 'ncr_work_order_building_number'
-      select Ncr::OrgCode.all[0], :from => 'ncr_work_order_org_code'
+      select Ncr::Organization.all[0], :from => 'ncr_work_order_org_code'
       click_on 'Submit for approval'
       expect(current_path).to eq("/proposals/#{Proposal.last.id}")
       expect(page).to have_content("RWA Number")
@@ -282,7 +282,7 @@ describe "National Capital Region proposals" do
         fill_in 'Amount', with: 123.45
         fill_in "Approving Official's Email Address", with: 'approver@example.com'
         select Ncr::BUILDING_NUMBERS[0], :from => 'ncr_work_order_building_number'
-        select Ncr::OrgCode.all[0], :from => 'ncr_work_order_org_code'
+        select Ncr::Organization.all[0], :from => 'ncr_work_order_org_code'
       end
 
       it "approves emergencies" do

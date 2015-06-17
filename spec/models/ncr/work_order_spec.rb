@@ -5,7 +5,7 @@ describe Ncr::WorkOrder do
         amount: 1000, expense_type: "BA61", vendor: "Some Vend",
         not_to_exceed: false, emergency: true, rwa_number: "RWWAAA #",
         building_number: Ncr::BUILDING_NUMBERS[0],
-        org_code: Ncr::OrgCode.all[0], description: "Ddddd")
+        org_code: Ncr::Organization.all[0], description: "Ddddd")
       expect(wo.fields_for_display.sort).to eq([
         ["Amount", 1000],
         ["Building number", Ncr::BUILDING_NUMBERS[0]],
@@ -13,7 +13,7 @@ describe Ncr::WorkOrder do
         ["Emergency", true],
         ["Expense type", "BA61"],
         ["Not to exceed", false],
-        ["Org code", Ncr::OrgCode.all[0]],
+        ["Org code", Ncr::Organization.all[0]],
         # No RWA Number
         ["Vendor", "Some Vend"]
         # No Work Order
@@ -24,7 +24,7 @@ describe Ncr::WorkOrder do
         amount: 1000, expense_type: "BA80", vendor: "Some Vend",
         not_to_exceed: false, emergency: true, rwa_number: "RWWAAA #",
         building_number: Ncr::BUILDING_NUMBERS[0], code: "Some WO#",
-        org_code: Ncr::OrgCode.all[0], description: "Ddddd")
+        org_code: Ncr::Organization.all[0], description: "Ddddd")
       expect(wo.fields_for_display.sort).to eq([
         ["Amount", 1000],
         ["Building number", Ncr::BUILDING_NUMBERS[0]],
@@ -32,7 +32,7 @@ describe Ncr::WorkOrder do
         # No Emergency
         ["Expense type", "BA80"],
         ["Not to exceed", false],
-        ["Org code", Ncr::OrgCode.all[0]],
+        ["Org code", Ncr::Organization.all[0]],
         ["RWA Number", "RWWAAA #"],
         ["Vendor", "Some Vend"],
         ["Work Order / Maximo Ticket Number", "Some WO#"]
@@ -63,7 +63,7 @@ describe Ncr::WorkOrder do
 
   describe '#system_approvers' do
     it "skips the Tier 1 budget approver for WHSC" do
-      work_order = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61', org_code: Ncr::OrgCode::WHSC_CODE)
+      work_order = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61', org_code: Ncr::Organization::WHSC_CODE)
       expect(work_order.system_approvers).to eq([
         Ncr::WorkOrder.ba61_tier2_budget_mailbox
       ])

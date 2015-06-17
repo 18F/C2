@@ -92,10 +92,10 @@ module Ncr
       "ncr"
     end
 
-    def org_code_instance
+    def organization
       # TODO reference by `code` rather than storing the whole thing
       code = self.org_code.split(' ', 2)[0]
-      Ncr::OrgCode.find(code)
+      Ncr::Organization.find(code)
     end
 
     def public_identifier
@@ -118,7 +118,7 @@ module Ncr
     def system_approvers
       results = []
       if self.expense_type == 'BA61'
-        unless self.org_code_instance.whsc?
+        unless self.organization.whsc?
           results << self.class.ba61_tier1_budget_mailbox
         end
         results << self.class.ba61_tier2_budget_mailbox
