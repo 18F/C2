@@ -1,11 +1,25 @@
 module Ncr
   class OrgCode
-    org_code_rows = CSV.read("#{Rails.root}/config/data/ncr/org_codes_2015-05-18.csv", headers: true)
+    ROWS = CSV.read("#{Rails.root}/config/data/ncr/org_codes_2015-05-18.csv", headers: true)
     # TODO reference by `organization_cd` rather than storing the whole thing
-    ALL = org_code_rows.map{|r| "#{r['organization_cd']} #{r['organization_nm']}" }
+
+    attr_accessor :code, :name
+
+    def initialize(row)
+      self.code = row['organization_cd']
+      self.name = row['organization_nm']
+    end
+
+    def ==(other)
+      other.code == self.code
+    end
+
+    def to_s
+      "#{self.code} #{self.name}"
+    end
 
     def self.all
-      ALL
+      ROWS.map{|row| self.new(row) }
     end
   end
 end
