@@ -1,7 +1,6 @@
 module Ncr
   class OrgCode
-    ROWS = CSV.read("#{Rails.root}/config/data/ncr/org_codes_2015-05-18.csv", headers: true)
-    # TODO reference by `organization_cd` rather than storing the whole thing
+    # TODO reference by `code` rather than storing the whole thing
 
     attr_accessor :code, :name
 
@@ -19,7 +18,10 @@ module Ncr
     end
 
     def self.all
-      ROWS.map{|row| self.new(row) }
+      ALL
     end
   end
 end
+
+rows = CSV.read("#{Rails.root}/config/data/ncr/org_codes_2015-05-18.csv", headers: true)
+Ncr::OrgCode::ALL = rows.map{|row| Ncr::OrgCode.new(row) }
