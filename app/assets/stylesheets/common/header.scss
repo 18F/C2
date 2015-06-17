@@ -1,7 +1,8 @@
 @import "constants";
 
-#communicart_header {
-  a {
+header {
+  a,
+  a:hover {
     color: #fff;
   }
   .button_to input.login-link {
