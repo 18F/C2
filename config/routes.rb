@@ -37,7 +37,7 @@ C2::Application.routes.draw do
       get 'query'
     end
 
-    resources :comments, only: [:index, :create]
+    resources :comments, only: :create
     resources :attachments, only: [:create, :destroy, :show]
   end
 
