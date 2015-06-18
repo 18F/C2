@@ -1,11 +1,11 @@
 describe Ncr::WorkOrder do
-  describe 'fields_for_display' do
+  describe '#fields_for_display' do
     it "shows BA61 fields" do
       wo = Ncr::WorkOrder.new(
         amount: 1000, expense_type: "BA61", vendor: "Some Vend",
         not_to_exceed: false, emergency: true, rwa_number: "RWWAAA #",
         building_number: Ncr::BUILDING_NUMBERS[0],
-        org_code: Ncr::ORG_CODES[0], description: "Ddddd", direct_pay: true)
+        org_code: Ncr::Organization.all[0], description: "Ddddd", direct_pay: true)
       expect(wo.fields_for_display.sort).to eq([
         ["Amount", 1000],
         ["Building number", Ncr::BUILDING_NUMBERS[0]],
@@ -14,7 +14,7 @@ describe Ncr::WorkOrder do
         ["Emergency", true],
         ["Expense type", "BA61"],
         ["Not to exceed", false],
-        ["Org code", Ncr::ORG_CODES[0]],
+        ["Org code", Ncr::Organization.all[0]],
         # No RWA Number
         ["Vendor", "Some Vend"]
         # No Work Order
@@ -25,7 +25,7 @@ describe Ncr::WorkOrder do
         amount: 1000, expense_type: "BA80", vendor: "Some Vend",
         not_to_exceed: false, emergency: true, rwa_number: "RWWAAA #",
         building_number: Ncr::BUILDING_NUMBERS[0], code: "Some WO#",
-        org_code: Ncr::ORG_CODES[0], description: "Ddddd", direct_pay: true)
+        org_code: Ncr::Organization.all[0], description: "Ddddd", direct_pay: true)
       expect(wo.fields_for_display.sort).to eq([
         ["Amount", 1000],
         ["Building number", Ncr::BUILDING_NUMBERS[0]],
@@ -34,7 +34,7 @@ describe Ncr::WorkOrder do
         # No Emergency
         ["Expense type", "BA80"],
         ["Not to exceed", false],
-        ["Org code", Ncr::ORG_CODES[0]],
+        ["Org code", Ncr::Organization.all[0]],
         ["RWA Number", "RWWAAA #"],
         ["Vendor", "Some Vend"],
         ["Work Order / Maximo Ticket Number", "Some WO#"]
@@ -47,18 +47,57 @@ describe Ncr::WorkOrder do
       form = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61')
       form.add_approvals('bob@example.com')
       expect(form.observations.length).to eq(0)
-      expect(form.approvals.length).to eq(3)
+      expect(form.approvers.map(&:email_address)).to eq([
+        'bob@example.com',
+        Ncr::WorkOrder.ba61_tier1_budget_mailbox,
+        Ncr::WorkOrder.ba61_tier2_budget_mailbox
+      ])
       form.reload
       expect(form.approved?).to eq(false)
     end
+
     it "creates observers when in an emergency" do
       form = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61',
                                emergency: true)
       form.add_approvals('bob@example.com')
-      expect(form.observations.length).to eq(3)
+      expect(form.observers.map(&:email_address)).to eq([
+        'bob@example.com',
+        Ncr::WorkOrder.ba61_tier1_budget_mailbox,
+        Ncr::WorkOrder.ba61_tier2_budget_mailbox
+      ])
       expect(form.approvals.length).to eq(0)
       form.clear_association_cache
       expect(form.approved?).to eq(true)
+    end
+  end
+
+  describe '#organization' do
+    it "returns the corresponding Organization instance" do
+      org = Ncr::Organization.all.last
+      work_order = Ncr::WorkOrder.new(org_code: org.code)
+      expect(work_order.organization).to eq(org)
+    end
+
+    it "returns nil for no #org_code" do
+      work_order = Ncr::WorkOrder.new
+      expect(work_order.organization).to eq(nil)
+    end
+  end
+
+  describe '#system_approvers' do
+    it "skips the Tier 1 budget approver for WHSC" do
+      work_order = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61', org_code: Ncr::Organization::WHSC_CODE)
+      expect(work_order.system_approvers).to eq([
+        Ncr::WorkOrder.ba61_tier2_budget_mailbox
+      ])
+    end
+
+    it "includes the Tier 1 budget approver for an unknown organization" do
+      work_order = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61', org_code: nil)
+      expect(work_order.system_approvers).to eq([
+        Ncr::WorkOrder.ba61_tier1_budget_mailbox,
+        Ncr::WorkOrder.ba61_tier2_budget_mailbox
+      ])
     end
   end
 

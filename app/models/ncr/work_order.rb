@@ -7,11 +7,7 @@ module Ncr
   end
 
   EXPENSE_TYPES = %w(BA61 BA80)
-
   BUILDING_NUMBERS = YAML.load_file("#{Rails.root}/config/data/ncr/building_numbers.yml")
-  org_code_rows = CSV.read("#{Rails.root}/config/data/ncr/org_codes_2015-05-18.csv", headers: true)
-  # TODO reference by `organization_cd` rather than storing the whole thing
-  ORG_CODES = org_code_rows.map{|r| "#{r['organization_cd']} #{r['organization_nm']}" }
 
   class WorkOrder < ActiveRecord::Base
     include ObservableModel
@@ -21,7 +17,6 @@ module Ncr
     include ProposalDelegate
 
     after_initialize :set_defaults
-
     before_update :record_changes
 
     # @TODO: use integer number of cents to avoid floating point issues
@@ -97,6 +92,13 @@ module Ncr
       "ncr"
     end
 
+    # will return nil if the `org_code` is blank or not present in Organization list
+    def organization
+      # TODO reference by `code` rather than storing the whole thing
+      code = (self.org_code || '').split(' ', 2)[0]
+      Ncr::Organization.find(code)
+    end
+
     def public_identifier
       "FY" + self.fiscal_year.to_s.rjust(2, "0") + "-#{self.proposal.id}"
     end
@@ -114,7 +116,35 @@ module Ncr
       self.project_title
     end
 
+    def system_approvers
+      results = []
+      if self.expense_type == 'BA61'
+        unless self.organization.try(:whsc?)
+          results << self.class.ba61_tier1_budget_mailbox
+        end
+        results << self.class.ba61_tier2_budget_mailbox
+      else
+        results << self.class.ba80_budget_mailbox
+      end
+
+      results
+    end
+
+    def self.ba61_tier1_budget_mailbox
+      ENV['NCR_BA61_TIER1_BUDGET_MAILBOX'] || 'communicart.budget.approver@gmail.com'
+    end
+
+    def self.ba61_tier2_budget_mailbox
+      ENV['NCR_BA61_TIER2_BUDGET_MAILBOX'] || 'communicart.ofm.approver@gmail.com'
+    end
+
+    def self.ba80_budget_mailbox
+      ENV['NCR_BA80_BUDGET_MAILBOX'] || 'communicart.budget.approver@gmail.com'
+    end
+
+
     protected
+
     def record_changes
       changed_attributes = self.changed_attributes.clone
       changed_attributes.delete(:updated_at)
@@ -149,17 +179,5 @@ module Ncr
       end
       year % 100   # convert to two-digit
     end
-
-    def system_approvers
-      if self.expense_type == 'BA61'
-        [
-          ENV["NCR_BA61_TIER1_BUDGET_MAILBOX"] || 'communicart.budget.approver@gmail.com',
-          ENV["NCR_BA61_TIER2_BUDGET_MAILBOX"] || 'communicart.ofm.approver@gmail.com'
-        ]
-      else
-        [ENV["NCR_BA80_BUDGET_MAILBOX"] || 'communicart.budget.approver@gmail.com']
-      end
-    end
-
   end
 end
