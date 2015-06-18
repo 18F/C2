@@ -54,7 +54,7 @@
     <div class="form-group">
       <%= f.label :building_number %>
       <%= f.collection_select(
-            :building_number, Ncr::Building.all, :to_s, :to_s,
+            :building_number, Ncr::Building.all, :id, :to_s,
             {include_blank: true, prompt: "Type here to search"}, {class: 'form-control js-selectize'}) %>
     </div>
     <div class="form-group">

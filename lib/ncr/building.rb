@@ -1,23 +1,23 @@
 module Ncr
   class Building
     # each is guaranteed to have a `name` property present, but not necessarily a `number`
-    attr_reader :name, :number, :original
+    attr_accessor :name, :number
 
-    def initialize(row)
-      @original = row
+    def initialize(attrs)
+      self.name = attrs['name']
+      self.number = attrs['number']
+    end
 
-      match = row.match(/^(.{8}) (-|,)\s*(\w.*)$/)
-      if match
-        @number = match[1]
-        @name = match[3]
-      else
-        # no number
-        @name = row
-      end
+    def id
+      self.number || self.name
     end
 
     def to_s
-      self.original
+      if self.number
+        "#{self.number} - #{self.name}"
+      else
+        self.name
+      end
     end
 
     def self.all
@@ -26,5 +26,5 @@ module Ncr
   end
 end
 
-rows = YAML.load_file("#{Dir.pwd}/config/data/ncr/building_numbers.yml")
-Ncr::Building::ALL = rows.map{|row| Ncr::Building.new(row) }
+data = YAML.load_file(Rails.root.join('config', 'data', 'ncr', 'building_numbers.yml'))
+Ncr::Building::ALL = data.map{|d| Ncr::Building.new(d) }
