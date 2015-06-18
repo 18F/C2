@@ -75,6 +75,11 @@ describe Ncr::WorkOrder do
       work_order = Ncr::WorkOrder.new(org_code: org.code)
       expect(work_order.organization).to eq(org)
     end
+
+    it "returns nil for no #org_code" do
+      work_order = Ncr::WorkOrder.new
+      expect(work_order.organization).to eq(nil)
+    end
   end
 
   describe '#system_approvers' do

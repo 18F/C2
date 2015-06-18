@@ -94,7 +94,7 @@ module Ncr
 
     def organization
       # TODO reference by `code` rather than storing the whole thing
-      code = self.org_code.split(' ', 2)[0]
+      code = (self.org_code || '').split(' ', 2)[0]
       Ncr::Organization.find(code)
     end
 
