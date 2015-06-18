@@ -92,6 +92,7 @@ module Ncr
       "ncr"
     end
 
+    # will return nil if the `org_code` is blank or not present in Organization list
     def organization
       # TODO reference by `code` rather than storing the whole thing
       code = (self.org_code || '').split(' ', 2)[0]
@@ -118,7 +119,7 @@ module Ncr
     def system_approvers
       results = []
       if self.expense_type == 'BA61'
-        unless self.organization.whsc?
+        unless self.organization.try(:whsc?)
           results << self.class.ba61_tier1_budget_mailbox
         end
         results << self.class.ba61_tier2_budget_mailbox
