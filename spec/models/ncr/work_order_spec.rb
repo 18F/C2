@@ -123,7 +123,8 @@ describe Ncr::WorkOrder do
   end
 
   describe 'rwa validations' do
-    let (:work_order) { FactoryGirl.create(:ncr_work_order) }
+    let (:work_order) { FactoryGirl.build(:ncr_work_order, expense_type: 'BA80') }
+
     it 'works with one letter followed by 7 numbers' do
       work_order.rwa_number = 'A1234567'
       expect(work_order).to be_valid
@@ -139,7 +140,16 @@ describe Ncr::WorkOrder do
       expect(work_order).not_to be_valid
     end
 
-    it 'is not required' do
+    it "is required for BA80" do
+      work_order.rwa_number = nil
+
+      expect(work_order).to_not be_valid
+      expect(work_order.errors.keys).to eq([:rwa_number])
+    end
+
+    it "is not required for BA61" do
+      work_order.expense_type = 'BA61'
+
       work_order.rwa_number = nil
       expect(work_order).to be_valid
       work_order.rwa_number = ''

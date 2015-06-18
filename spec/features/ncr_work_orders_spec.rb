@@ -19,6 +19,7 @@ describe "National Capital Region proposals" do
       fill_in 'Project title', with: "buying stuff"
       fill_in 'Description', with: "desc content"
       choose 'BA80'
+      fill_in 'RWA Number', with: 'F1234567'
       fill_in 'Vendor', with: 'ACME'
       fill_in 'Amount', with: 123.45
       check "I am going to be using direct pay for this transaction"
@@ -78,6 +79,7 @@ describe "National Capital Region proposals" do
         fill_in 'Project title', with: "buying stuff"
         fill_in 'Description', with: "desc content"
         # no need to select BA80
+        fill_in 'RWA Number', with: 'F1234567'
         fill_in 'Vendor', with: 'ACME'
         fill_in 'Amount', with: 123.45
         fill_in "Approving Official's Email Address", with: 'approver@example.com'
@@ -124,7 +126,7 @@ describe "National Capital Region proposals" do
       expect(page).to have_content("RWA Number")
     end
 
-    it "hides fields based on expense", :js => true do
+    it "hides fields based on expense", js: true do
       visit '/ncr/work_orders/new'
       expect(page).to have_no_field("RWA Number")
       expect(page).to have_no_field("Work Order")
