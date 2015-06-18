@@ -1,5 +1,5 @@
 describe Ncr::WorkOrder do
-  describe 'fields_for_display' do
+  describe '#fields_for_display' do
     it "shows BA61 fields" do
       wo = Ncr::WorkOrder.new(
         amount: 1000, expense_type: "BA61", vendor: "Some Vend",
@@ -66,6 +66,14 @@ describe Ncr::WorkOrder do
       expect(form.approvals.length).to eq(0)
       form.clear_association_cache
       expect(form.approved?).to eq(true)
+    end
+  end
+
+  describe '#organization' do
+    it "returns the corresponding Organization instance" do
+      org = Ncr::Organization.all.last
+      work_order = Ncr::WorkOrder.new(org_code: org.code)
+      expect(work_order.organization).to eq(org)
     end
   end
 
