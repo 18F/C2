@@ -51,15 +51,7 @@ class ProposalsController < ApplicationController
       @proposals = @proposals.where('created_at < ?', @end_date)
     end
     if @text
-      if ProposalSearch.contains_fiscal_year?(@text)
-        date_range = ProposalSearch.fiscal_year_range(@text)
-        prop_id = ProposalSearch.strip_proposal_id(@text)
-        @proposals = @proposals.where('created_at >= :start_date AND created_at <= :end_date',
-                          {start_date: date_range[0], end_date: date_range[1]})
-        @proposals = ProposalSearch.new(@proposals).execute(prop_id)
-      else
-        @proposals = ProposalSearch.new(@proposals).execute(@text)
-      end
+      @proposals = ProposalSearch.new(@proposals).execute(@text)
     else
       @proposals = @proposals.order('created_at DESC')
     end
