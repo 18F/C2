@@ -11,9 +11,9 @@ describe Ncr::Organization do
     end
 
     it "populates the attributes for each" do
-      Ncr::Organization.all.each do |org_code|
-        expect(org_code.code).to be_present
-        expect(org_code.name).to be_present
+      Ncr::Organization.all.each do |org|
+        expect(org.code).to be_present
+        expect(org.name).to be_present
       end
     end
   end
