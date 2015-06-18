@@ -1,23 +1,25 @@
 @import "constants";
 
-#communicart_header {
-  a {
+header {
+  a,
+  a:hover {
     color: #fff;
   }
   .button_to input.login-link {
     color: $white;
     text-decoration: underline;
-    font-size: 14px; 
+    font-size: 14px;
   }
-} 
+}
 
 #header-identity {
   display: inline-block;
-}
 
-#header-identity h1 {
-  margin: 0;
-  color: #fff;
+  h1 {
+    line-height: 44px;
+    margin: 0;
+    color: #fff;
+  }
 }
 
 .header-nav {

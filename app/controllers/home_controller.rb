@@ -7,6 +7,9 @@ class HomeController < ApplicationController
     render(layout: false)
   end
 
+  def help
+  end
+
   def error
     raise "test exception"
   end
