@@ -7,8 +7,11 @@
     margin-bottom: 20px;
   }
 
-  .form-group .form-group {
-    padding-left: 10%;
+  .form-group {
+    .checkbox,
+    .form-group {
+      padding-left: 10%;
+    }
   }
   .form-instructions {
       font-size: .75em;

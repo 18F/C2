@@ -21,6 +21,7 @@ describe "National Capital Region proposals" do
       choose 'BA80'
       fill_in 'Vendor', with: 'ACME'
       fill_in 'Amount', with: 123.45
+      check "I am going to be using direct pay for this transaction"
       fill_in "Approving Official's Email Address", with: 'approver@example.com'
       select Ncr::BUILDING_NUMBERS[0], :from => 'ncr_work_order_building_number'
       select Ncr::ORG_CODES[0], :from => 'ncr_work_order_org_code'
@@ -39,6 +40,7 @@ describe "National Capital Region proposals" do
       expect(client_data.expense_type).to eq('BA80')
       expect(client_data.vendor).to eq('ACME')
       expect(client_data.amount).to eq(123.45)
+      expect(client_data.direct_pay).to eq(true)
       expect(client_data.building_number).to eq(Ncr::BUILDING_NUMBERS[0])
       expect(client_data.org_code).to eq(Ncr::ORG_CODES[0])
       expect(client_data.description).to eq('desc content')
