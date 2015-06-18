@@ -32,6 +32,7 @@ module Ncr
     validates :project_title, presence: true
     validates :vendor, presence: true
     validates :building_number, presence: true
+    validates :rwa_number, presence: true, if: :ba80?
     validates :rwa_number, format: {
       with: /[a-zA-Z][0-9]{7}/,
       message: "one letter followed by 7 numbers"
@@ -71,11 +72,13 @@ module Ncr
       fields = [:description, :amount, :expense_type, :vendor, :not_to_exceed,
                 :building_number, :org_code, :direct_pay]
       case expense_type
-      when "BA61"
-        fields + [:emergency]
-      when "BA80"
-        fields + [:rwa_number, :code]
+      when 'BA61'
+        fields << :emergency
+      when 'BA80'
+        fields.concat([:rwa_number, :code])
       end
+
+      fields
     end
 
     def relevant_fields
@@ -97,6 +100,10 @@ module Ncr
       # TODO reference by `code` rather than storing the whole thing
       code = (self.org_code || '').split(' ', 2)[0]
       Ncr::Organization.find(code)
+    end
+
+    def ba80?
+      self.expense_type == 'BA80'
     end
 
     def public_identifier
