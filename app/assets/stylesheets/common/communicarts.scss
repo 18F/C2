@@ -112,12 +112,7 @@ body.communicart-notification p, p.empty-list-label {
 }
 
 h1 {
-  margin-top: 20px;
-  margin-bottom: 10px;
-  color: 000;
   font-size: 38px;
-  line-height: 44px;
-  font-style: normal;
   font-weight: 300;
 }
 
@@ -168,40 +163,13 @@ h1 {
 }
 
 h1.communicart_header {
+  line-height: 44px;
   margin-top: 10px;
   margin-bottom: 0;
 }
 
 h4.communicart_description {
   margin-bottom: 10px;
-}
-
-h2 {
-  margin-top: 20px;
-  margin-bottom: 0px;
-  padding-left: 15px;
-  color: white;
-  font-size: 18px;
-  line-height: 36px;
-  font-weight: 300;
-}
-h3.cart-header {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  color: white;
-  font-size: 18px;
-  line-height: 30px;
-  font-style: normal;
-  font-weight: 100;
-}
-h2.request_form {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  padding-left: 0px;
-  color: #767676;
-  font-size: 20px;
-  line-height: 24px;
-  font-weight: 400;
 }
 
 h4 {
@@ -518,7 +486,7 @@ body.webapp {
   margin-top: 20px;
 }
 
-#communicart_header {
+header {
   width: 100%;
   padding: 40px 10px 40px 35px;
   background-color: #07519b;

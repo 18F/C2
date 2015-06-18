@@ -6,7 +6,7 @@ gem 'ar_outer_joins'
 gem 'autoprefixer-rails'
 gem 'awesome_print'
 gem 'aws-sdk-v1'    # remaining on v1 due to https://github.com/thoughtbot/paperclip/issues/1764
-gem 'bootstrap-sass', '~> 3.3.0'
+gem 'bootstrap-sass'
 gem 'dotenv-rails', require: 'dotenv/rails-now'
 gem 'draper'
 gem 'factory_girl_rails'

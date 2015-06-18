@@ -1,5 +1,6 @@
 C2::Application.routes.draw do
   root :to => 'home#index'
+  get '/help' => 'home#help'
   get '/error' => 'home#error'
   get '/feedback' => 'feedback#index'
   post '/feedback' => 'feedback#create'
@@ -37,7 +38,7 @@ C2::Application.routes.draw do
       get 'query'
     end
 
-    resources :comments, only: [:index, :create]
+    resources :comments, only: :create
     resources :attachments, only: [:create, :destroy, :show]
   end
 
