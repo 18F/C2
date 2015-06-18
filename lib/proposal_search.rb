@@ -65,4 +65,25 @@ class ProposalSearch
   def execute(query)
     self.ordered(query)
   end
+
+  def self.fiscal_to_normal_year(fiscal)
+     fiscal = fiscal.scan(/^fy\d\d/i).first
+     fiscal.sub!(/^fy/i,'')
+     "20#{fiscal}".to_i
+  end
+
+  def self.strip_proposal_id(text)
+    text.sub(/^fy\d\d-|^fy\d\d/i,'')
+  end
+
+  def self.contains_fiscal_year?(text)
+    text =~ /^fy\d\d/i
+  end
+
+  def self.fiscal_year_range(text)
+    year = self.fiscal_to_normal_year(text)
+    start_date = Date.new(year-1,10,1)
+    end_date = Date.new(year,9,30)
+    [start_date, end_date]
+  end
 end
