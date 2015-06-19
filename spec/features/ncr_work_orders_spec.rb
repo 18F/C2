@@ -31,6 +31,7 @@ describe "National Capital Region proposals" do
       }.to change { Proposal.count }.from(0).to(1)
 
       proposal = Proposal.last
+      expect(proposal.public_id).to have_content("FY")
       expect(page).to have_content("Proposal submitted")
       expect(current_path).to eq("/proposals/#{proposal.id}")
 
