@@ -1,11 +1,6 @@
 describe Gsa18f::Procurement do
   around(:each) do |example|
-    ENV['GSA18F_APPROVER_EMAIL'] = 'test_approver@some-dot-gov.gov'
-    ENV['GSA18F_PURCHASER_EMAIL'] = 'test_purchaser@some-dot-gov.gov'
-    example.run
-
-    ENV['GSA18F_APPROVER_EMAIL'] = nil
-    ENV['GSA18F_PURCHASER_EMAIL'] = nil
+    with_18f_procurement_env_variables(&example)
   end
 
   describe '#create_cart' do

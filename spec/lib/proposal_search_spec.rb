@@ -36,14 +36,8 @@ describe ProposalSearch do
 
     context Gsa18f::Procurement do
       around(:each) do |example|
-        ENV['GSA18F_APPROVER_EMAIL'] = 'test_approver@some-dot-gov.gov'
-        ENV['GSA18F_PURCHASER_EMAIL'] = 'test_purchaser@some-dot-gov.gov'
-        example.run
-
-        ENV['GSA18F_APPROVER_EMAIL'] = nil
-        ENV['GSA18F_PURCHASER_EMAIL'] = nil
+        with_18f_procurement_env_variables(&example)
       end
-
 
       [:product_name_and_description, :justification, :additional_info].each do |attr_name|
         it "returns the Proposal when searching by the ##{attr_name}" do
