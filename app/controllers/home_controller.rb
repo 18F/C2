@@ -8,6 +8,7 @@ class HomeController < ApplicationController
   end
 
   def help
+    render 'home/help', layout: 'help'
   end
 
   def error
