@@ -1,4 +1,6 @@
 - content_for :content do
   .inset.markdown
+    %h1
+      = yield(:title)
     = yield
 = render template: 'layouts/application'
