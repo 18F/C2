@@ -6,13 +6,15 @@
     C2
   </title>
   <%= stylesheet_link_tag "application", media: "all" %>
+  <!--[if lt IE 9]><%= javascript_include_tag "es5-shim.min.js", "data-turbolinks-track" => true %><![endif]-->
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+  <%= render 'layouts/analytics' %>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
   <%= csrf_meta_tags %>
 </head>
 <body class="bodyclass webapp controller-<%= controller_name %> action-<%= params[:action] %>">
 
-<%= render 'layouts/communicart_header' unless @hide_header %>
+<%= render 'layouts/communicart_header' %>
 
 <div class="inset">
   <% flash_list.each do |key, value| %>
@@ -21,6 +23,12 @@
 </div>
 
 <%= yield %>
+
+<%- unless @skip_footer %>
+  <div id="footer" class="inset">
+    <p>Find a bug, have a recommendation, or want to provide other feedback? We'd love to <a target="_blank" href="<%= feedback_path %>">hear from you!</a></p>
+  </div>
+<%- end %>
 
 </body>
 </html>

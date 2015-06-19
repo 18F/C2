@@ -18,10 +18,29 @@ describe CommunicartMailer do
   let(:approver) { approval.user }
   let(:requester) { proposal.requester }
 
+  shared_examples "a Proposal email" do
+    it "renders the subject" do
+      expect(mail.subject).to eq("Request ##{proposal.id}")
+    end
+
+    it "uses the configured sender email" do
+      expect(mail.from).to eq(['reply@stub.gov'])
+    end
+
+    it "includes the appropriate headers for threading" do
+      # headers only get added when the Mail is #deliver-ed
+      mail.deliver
+
+      %w(In-Reply-To References).each do |header|
+        expect(mail[header].value).to eq("<proposal-#{proposal.id}@#{DEFAULT_URL_HOST}>")
+      end
+    end
+  end
+
   describe 'notification_for_approver' do
     let!(:token) { approval.create_api_token! }
-    let(:action_mail) { CommunicartMailer.actions_for_approver('email.to.email@testing.com', approval) }
-    let(:body) { action_mail.body.encoded }
+    let(:mail) { CommunicartMailer.actions_for_approver('email.to.email@testing.com', approval) }
+    let(:body) { mail.body.encoded }
     let(:approval_uri) do
       doc = Capybara.string(body)
       link = doc.find_link('Approve')
@@ -30,19 +49,15 @@ describe CommunicartMailer do
       Addressable::URI.parse(url)
     end
 
-    it 'renders the subject' do
-      requester.update_attributes(first_name: 'Liono', last_name: 'Requester')
-      expect(action_mail.subject).to eq("Communicart Approval Request from Liono Requester: Please review request #{proposal.public_identifier}")
-    end
+    it_behaves_like "a Proposal email"
 
     it 'renders the receiver email' do
-      expect(action_mail.to).to eq(["email.to.email@testing.com"])
+      expect(mail.to).to eq(["email.to.email@testing.com"])
     end
 
-    it 'renders the sender email' do
+    it "sets the sender name" do
       requester.update_attributes(first_name: 'Liono', last_name: 'Requester')
-      expect(action_mail.from).to eq(['reply@stub.gov'])
-      expect(sender_names(action_mail)).to eq(['Liono Requester'])
+      expect(sender_names(mail)).to eq(['Liono Requester'])
     end
 
     it "uses the approval URL" do
@@ -62,6 +77,18 @@ describe CommunicartMailer do
       it 'renders comments when present' do
         FactoryGirl.create(:comment, proposal: proposal)
         expect(body).to include('Comments')
+      end
+    end
+
+    context 'attachments' do
+      it 'does not render attachments when empty' do
+        expect(proposal.attachments.count).to eq 0
+        expect(body).not_to include('Attachments')
+      end
+
+      it 'renders attachments when present' do
+        FactoryGirl.create(:attachment, proposal: proposal)
+        expect(body).to include('Attachments')
       end
     end
 
@@ -114,16 +141,13 @@ describe CommunicartMailer do
       approval.approve!
     end
 
-    it 'renders the subject' do
-      expect(mail.subject).to eq("User approver1@some-dot-gov.gov has approved request #{proposal.public_identifier}")
-    end
+    it_behaves_like "a Proposal email"
 
     it 'renders the receiver email' do
       expect(mail.to).to eq([proposal.requester.email_address])
     end
 
-    it 'renders the sender email' do
-      expect(mail.from).to eq(['reply@stub.gov'])
+    it "sets the sender name" do
       expect(sender_names(mail)).to eq([approver.full_name])
     end
 
@@ -161,16 +185,13 @@ describe CommunicartMailer do
     let(:email) { "commenter@some-dot-gov.gov" }
     let(:mail) { CommunicartMailer.comment_added_email(comment, email) }
 
-    it 'renders the subject' do
-      expect(mail.subject).to eq("A comment has been added to request #{proposal.public_identifier}")
-    end
+    it_behaves_like "a Proposal email"
 
     it 'renders the receiver email' do
       expect(mail.to).to eq(["commenter@some-dot-gov.gov"])
     end
 
-    it 'renders the sender email' do
-      expect(mail.from).to eq(['reply@stub.gov'])
+    it "sets the sender name" do
       expect(sender_names(mail)).to eq([comment.user.full_name])
     end
   end
@@ -180,33 +201,28 @@ describe CommunicartMailer do
     let(:observer) { observation.user }
     let(:mail) { CommunicartMailer.proposal_observer_email(observer.email_address, proposal) }
 
-    it 'renders the subject' do
-      expect(mail.subject).to eq("Communicart Approval Request from #{proposal.requester.full_name}: Please review request #{proposal.public_identifier}")
-    end
+    it_behaves_like "a Proposal email"
 
     it 'renders the receiver email' do
       expect(mail.to).to eq(["observer1@some-dot-gov.gov"])
     end
 
-    it 'renders the sender email' do
-      expect(mail.from).to eq(['reply@stub.gov'])
-      expect(sender_names(mail)).to eq([nil])
+    it "uses the default sender name" do
+      expect(sender_names(mail)).to eq(["Communicart"])
     end
   end
 
   describe 'proposal_created_confirmation' do
     let(:mail) { CommunicartMailer.proposal_created_confirmation(proposal) }
 
-    it 'renders the subject' do
-      expect(mail.subject).to eq "Your request for #{proposal.public_identifier} has been sent successfully."
-    end
+    it_behaves_like "a Proposal email"
 
     it 'renders the receiver email' do
       expect(mail.to).to eq([proposal.requester.email_address])
     end
 
-    it 'renders the sender email' do
-      expect(mail.from).to eq(["reply@stub.gov"])
+    it "uses the default sender name" do
+      expect(sender_names(mail)).to eq(["Communicart"])
     end
   end
 end

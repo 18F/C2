@@ -18,6 +18,7 @@
       <tr>
         <td>
           <%= render partial: 'comments', locals: { comments: @proposal.comments } %>
+          <%= render partial: 'attachments', locals: { proposal: @proposal, attachments: @proposal.attachments } %>
           <%= client_partial(@proposal.client, 'proposal_mail',
                              locals: {proposal: @proposal, title: "Purchase Request"}) %>
           <%= render partial: 'email_reply', locals: { approval: @approval, show_approval_actions: false } %>

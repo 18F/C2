@@ -1,6 +1,6 @@
 <% content_for :title, "NCR Request" %>
-<div class="container content">
-  <h2 class='request_form'>National Capital Region</h2>
+<div class="container content m-request-form">
+  <h2>National Capital Region</h2>
   <h3>
     <% if ENV['HIDE_BA61_OPTION'] == 'true' %>
     BA80
@@ -8,7 +8,7 @@
     Purchase Card Approval Request
   </h3>
 
-  <%= form_for @model_instance do |f| %>
+  <%= form_for @model_instance, html: {multipart: true} do |f| %>
     <div class="form-group">
       <%= f.label :project_title%>
       <%= f.text_field :project_title, class: 'form-control', placeholder: 'e.g. "Blue paint for the Blue Room"' %>
@@ -33,7 +33,7 @@
               BA61
             <% end %>
           </div>
-          <div class="form-group" data-filter-key="expense-type"
+          <div class="checkbox" data-filter-key="expense-type"
                                   data-filter-value="BA61">
             <%= f.label :emergency do %>
               <%= f.check_box :emergency %>
@@ -60,7 +60,7 @@
     <div class="form-group">
       <%= f.label :org_code %>
       <%= f.collection_select(
-            :org_code, Ncr::ORG_CODES, :to_s, :to_s,
+            :org_code, Ncr::Organization.all, :to_s, :to_s,
             {include_blank: true, prompt: "Type here to search"}, {class: 'form-control js-selectize'}) %>
     </div>
     <div class="form-group">
@@ -91,6 +91,12 @@
         </div>
       <% end %>
     </div>
+    <div class="checkbox">
+      <%= f.label :direct_pay do %>
+        <%= f.check_box :direct_pay %>
+        I am going to be using direct pay for this transaction
+      <% end %>
+    </div>
     <div class="form-group">
       <%= label_tag :approver_email, "Approving Official's Email Address" %>
       <%= email_field_tag :approver_email, @approver_email,
@@ -98,6 +104,17 @@
                           disabled: approver_email_frozen?,
                           data: {attr: 'email_address', src: '/api/v1/users.json'} %>
     </div>
+    <% if @model_instance.new_record? %>
+      <div class="form-group">
+        <%= field_set_tag 'Attachments' do %>
+          <ul data-add-minus="true" class="attachments">
+          <%- 10.times do %>
+            <li><%= file_field_tag "attachments[]" %></li>
+          <%- end %>
+          </ul>
+        <%- end %>
+      </div>
+    <% end %>
     <%= f.submit "Submit for approval", class: 'btn btn-default' %>
     <% if @model_instance.persisted? %>
       <%= link_to 'Discard Changes', proposal_url(@model_instance.proposal) %>

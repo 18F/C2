@@ -16,16 +16,17 @@
           <table class="approval_details data_container">
             <%- last_status = nil %>
             <%- @proposal.approvals_in_list_order.each_with_index do |approval,index| %>
+              <%- display_status = approval.decorate.display_status %>
               <tr class="approval-row">
                 <td>
-                  <%- if approval.status != last_status %>
-                    <strong><%= approval.status %></strong>
+                  <%- if display_status != last_status %>
+                    <strong><%= display_status %></strong>
                   <%- end %>
                 </td>
                 <td
                   <%= generate_bookend_class(index, @proposal.approvals_in_list_order.count) %>
                 >
-                  <%= status_icon_tag(approval.status, @proposal.linear?) %>
+                  <%= status_icon_tag(display_status, @proposal.linear?) %>
                   <span class="approver">
                     <%= mail_to approval.user_email_address, approval.user_full_name %>
                   </span>
@@ -34,7 +35,7 @@
                   <% end %>
                 </td>
               </tr>
-              <%- last_status = approval.status %>
+              <%- last_status = display_status %>
             <%- end %>
           </table>
         </td>

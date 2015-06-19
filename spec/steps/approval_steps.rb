@@ -17,9 +17,9 @@ module ApprovalSteps
   end
 
   step "the cart has an approval for :email in position :position" do |email, position|
-    approver = User.find_or_create_by(email_address: email)
-    @approval = FactoryGirl.create(:approval, user_id: approver.id, position: position)
-    @cart.proposal.approvals << @approval
+    @approval = @cart.proposal.add_approver(email)
+    @approval.update_attribute(:position, position)
+    @cart.proposal.initialize_approvals()
   end
 
   step "feature flag :flag_name is :value" do |flag, value|
@@ -28,13 +28,13 @@ module ApprovalSteps
 
   step 'the cart has been approved by the logged in user' do
     approval = @cart.approvals.where(user_id: @current_user.id).first
-    approval.update_attributes(status: 'approved')
+    approval.approve!
   end
 
   step 'the cart has been approved by :email' do |email|
     user = User.find_by(email_address: email)
     approval = @cart.approvals.where(user_id: user.id).first
-    approval.update_attributes(status: 'approved')
+    approval.approve!
   end
 
 end

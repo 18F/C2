@@ -10,7 +10,7 @@ describe ProposalsController do
     it 'sets @proposals' do
       proposal1 = FactoryGirl.create(:proposal, requester: user)
       proposal2 = FactoryGirl.create(:proposal)
-      proposal2.approvals.create!(user: user)
+      proposal2.approvals.create!(user: user, status: 'actionable')
 
       get :index
       expect(assigns(:proposals).sort).to eq [proposal1, proposal2]

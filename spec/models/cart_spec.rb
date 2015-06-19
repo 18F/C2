@@ -73,7 +73,7 @@ describe Cart do
   end
 
   describe '#restart' do
-    it 'resets approval states when rejected' do
+    it 'resets parallel approval states when rejected' do
       cart = FactoryGirl.create(:cart_with_approvals)
 
       cart.approvals.first.approve!
@@ -85,7 +85,24 @@ describe Cart do
 
       expect(cart.pending?).to eq(true)
       expect(cart.approvals.length).to eq(2)
-      expect(cart.approvals[0].pending?).to eq(true)
+      expect(cart.approvals[0].actionable?).to eq(true)
+      expect(cart.approvals[1].actionable?).to eq(true)
+    end
+
+    it 'resets linear approval states when rejected' do
+      cart = FactoryGirl.create(:cart_with_approvals)
+      cart.proposal.update_attribute(:flow, 'linear')
+
+      cart.approvals.first.approve!
+      cart.approvals.last.reject!
+      cart.reload
+      expect(cart.rejected?).to eq(true)
+
+      cart.restart!
+
+      expect(cart.pending?).to eq(true)
+      expect(cart.approvals.length).to eq(2)
+      expect(cart.approvals[0].actionable?).to eq(true)
       expect(cart.approvals[1].pending?).to eq(true)
     end
 

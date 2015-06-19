@@ -303,7 +303,6 @@ body.webapp {
     font-family: Raleway, 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-weight: 300;
     font-size: 34px;
-    color: black;
     padding-left: 0;
   }
 
@@ -314,11 +313,13 @@ body.webapp {
     color: black;
   }
 
-  a, .button_to input {
+  .inset a,
+  .button_to input {
     text-decoration: underline;
     color: #0C75E1;
   }
-  p, .button_to input {
+  p,
+  .button_to input {
     font-size: 14px;
   }
 }
@@ -392,6 +393,23 @@ body.webapp {
   color: #666;
 }
 
+.attachments[data-add-minus] {
+  padding-left: 0;
+  list-style: none;
+
+  input[type=file] {
+    display: inline-block;
+  }
+  input[disabled] {
+    color: $lightgray;
+  }
+}
+
+#footer {
+  margin-top: 4em;
+  text-align: center;
+}
+
 @media (max-width: $break-small) {
   tr.cart_item_information p {
     font-size: 67%;
@@ -423,7 +441,7 @@ body.webapp {
     line-height: initial;
   }
 
-  #communicart_header {
+  header {
     padding: 10px;
   }
 }

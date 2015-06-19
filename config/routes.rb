@@ -1,8 +1,12 @@
 C2::Application.routes.draw do
   root :to => 'home#index'
-  match "/auth/:provider/callback" => "home#oauth_callback", via: [:get]
+  get '/help' => 'home#help'
   get '/error' => 'home#error'
-  post "/logout" => "home#logout"
+  get '/feedback' => 'feedback#index'
+  post '/feedback' => 'feedback#create'
+
+  match '/auth/:provider/callback' => 'auth#oauth_callback', via: [:get]
+  post '/logout' => 'auth#logout'
 
   namespace :api do
     scope :v1 do
@@ -34,8 +38,8 @@ C2::Application.routes.draw do
       get 'query'
     end
 
-    resources :comments, only: [:index, :create]
-    resources :attachments, only: [:create, :destroy]
+    resources :comments, only: :create
+    resources :attachments, only: [:create, :destroy, :show]
   end
 
   namespace :ncr do

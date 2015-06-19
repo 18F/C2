@@ -1,0 +1,46 @@
+- content_for :title, "Feedback"
+.container.content
+  %h3 Feedback
+  = form_tag do
+    %p
+      Thank you for helping us improve Communicart! All of the following
+      fields are optional, but the more information you provide, the better we
+      will be able to address it.
+    %p
+      Your feedback will be sent to our developers and project managers via
+      e-mail. Do not include any sensitive or private information.
+
+    %hr
+
+    .form-group
+      = label_tag :bug do
+        = check_box_tag(:bug, "yes", false, "data-filter-control" => 'is-bug')
+        I found a bug
+
+    %div{'data-filter-key' => 'is-bug', 'data-filter-value' => 'yes'}
+      %p We're very sorry to hear that. Please tell us a bit more so we can fix it.
+      .form-group
+        = label_tag :context, "What you were doing when you found the bug?"
+        = text_area_tag :context, nil, class: 'form-control'
+
+      .form-group
+        = label_tag :expected, "What did you expect to happen?"
+        = text_area_tag :expected, nil, class: 'form-control'
+
+      .form-group
+        = label_tag :actually, "What actually happened?"
+        = text_area_tag :actually, nil, class: 'form-control'
+
+    .form-group
+      = label_tag :comments, "General comments"
+      = text_area_tag :comments, nil, class: 'form-control'
+
+    %p Please rate your overall satisfaction with this tool
+    .form-group
+      = label_tag :satisfaction, "Satisfaction Rating (1 low, 5 high)"
+      = select_tag :satisfaction, options_for_select([""] + (1..5).map(&:to_s)), class: 'form-control'
+
+    = hidden_field_tag(:referral, request.referrer)
+
+    .form-group
+      = submit_tag("Submit", class: 'form-control')

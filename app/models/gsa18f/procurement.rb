@@ -29,6 +29,7 @@ module Gsa18f
 
     def add_approvals
       self.add_approver(Gsa18f::Procurement.approver_email)
+      self.proposal.initialize_approvals()
     end
 
     def add_observers
@@ -59,11 +60,6 @@ module Gsa18f
 
     def client
       "gsa18f"
-    end
-
-    # @todo - this is pretty ugly
-    def public_identifier
-      "##{self.proposal.id}"
     end
 
     def total_price

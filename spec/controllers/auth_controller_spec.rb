@@ -1,4 +1,4 @@
-describe HomeController do
+describe AuthController do
   describe '#logout' do
     it "it signs a user out" do
       login_as(FactoryGirl.create(:user))

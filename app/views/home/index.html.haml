@@ -1,4 +1,4 @@
-!!! 
+!!!
 /
   Photon by HTML5 UP
   html5up.net | @n33co
@@ -11,6 +11,7 @@
       = javascript_include_tag "photon/ie/html5shiv.js"
     = stylesheet_link_tag "home"
     = javascript_include_tag "photon/photon"
+    = render 'layouts/analytics'
     %noscript
       = stylesheet_link_tag "photon/skel"
       = stylesheet_link_tag "photon/style"
@@ -94,3 +95,6 @@
         %li
           Design:
           %a{href: "http://html5up.net"} HTML5 UP
+      %p
+        Find a bug, have a recommendation, or want to provide other feedback? We'd love to
+        %a{href: feedback_path, target: "_blank"} hear from you!

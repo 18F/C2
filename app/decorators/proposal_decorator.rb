@@ -17,7 +17,7 @@ class ProposalDecorator < Draper::Decorator
         CASE approvals.status
         WHEN 'approved' THEN 1
         WHEN 'rejected' THEN 2
-        WHEN 'pending' THEN 3
+        WHEN 'actionable' THEN 3
         ELSE 4
         END
       SQL
@@ -54,5 +54,13 @@ class ProposalDecorator < Draper::Decorator
 
   def progress_status_message
     "#{number_approved} of #{total_approvers} approved."
+  end
+
+  def email_subject
+    "Request #{proposal.public_identifier}"
+  end
+
+  def email_msg_id
+    "<proposal-#{self.id}@#{DEFAULT_URL_HOST}>"
   end
 end

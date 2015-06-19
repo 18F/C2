@@ -10,15 +10,13 @@ module Ncr
 
     def create
       @approver_email = params[:approver_email]
-
       super
-
-      if self.errors.empty?
-        @model_instance.add_approvals(@approver_email)
-      end
     end
 
     def edit
+      if self.proposal.approved?
+        flash[:warning] = "You are about to modify a fully approved request. Changes will be logged and sent to approvers but this request will not require re-approval."
+      end
       @approver_email = self.proposal.approvers.first.email_address
       super
     end
@@ -50,7 +48,7 @@ module Ncr
     def approver_email_frozen?
       if @model_instance
         approval = @model_instance.approvals.first
-        approval && !approval.pending?
+        approval && !approval.actionable?
       else
         false
       end
@@ -68,6 +66,14 @@ module Ncr
         results += ["Approver email is required"]
       end
       results
+    end
+
+    # @pre: @approver_email is set
+    def add_approvals
+      super
+      if self.errors.empty?
+        @model_instance.add_approvals(@approver_email)
+      end
     end
   end
 end

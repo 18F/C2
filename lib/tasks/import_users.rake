@@ -52,4 +52,22 @@ namespace :import_users do
       user.update(update)
     end
   end
+
+  task csv: :environment do
+    file, client = ENV['FILE'], ENV['CLIENT']
+    if !file
+      raise 'FILE must be specified. e.g. rake import_users:csv FILE=/path/to.csv CLIENT=gsa18f'
+    elsif !client
+      raise 'CLIENT must be specified. e.g. rake import_users:csv FILE=/path/to.csv CLIENT=gsa18f'
+    end
+
+    importer = CsvUserImporter.new(ENV['FILE'], ENV['CLIENT'])
+    ['FIRST_NAME_COL', 'LAST_NAME_COL', 'EMAIL_COL'].each do |key|
+      if ENV[key]
+        assignment = key.downcase + "="
+        importer.send(assignment, ENV[key])
+      end
+    end
+    importer.process_rows()
+  end
 end
