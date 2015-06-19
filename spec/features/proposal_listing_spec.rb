@@ -1,6 +1,6 @@
 describe "Listing Page" do
   around(:each) do |example|
-    with_18f_env_variables(&example)
+    with_18f_procurement_env_variables(&example)
   end
 
   let!(:user){ FactoryGirl.create(:user) }

@@ -1,6 +1,6 @@
 describe "GSA 18f Purchase Request Form" do
   around(:each) do |example|
-    with_18f_env_variables(&example)
+    with_18f_procurement_env_variables(&example)
   end
 
   it "requires sign-in" do
