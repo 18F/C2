@@ -40,7 +40,8 @@ module ApplicationHelper
 
   def excluded_portal_link
     controller_name == 'home' ||
-    current_page?(proposals_path)
+      controller_name == 'help' ||
+      current_page?(proposals_path)
   end
 
   def auth_path
