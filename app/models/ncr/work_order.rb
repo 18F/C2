@@ -180,8 +180,9 @@ module Ncr
     end
 
     def fiscal_year
-      year = self.created_at.year
-      if self.created_at.month >= 10
+      year = self.created_at.nil? ? Time.now.year : self.created_at.year
+      month = self.created_at.nil? ? Time.now.month : self.created_at.month
+      if month >= 10
         year += 1
       end
       year % 100   # convert to two-digit
