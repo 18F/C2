@@ -92,7 +92,7 @@ describe "GSA 18f Purchase Request Form" do
       fill_in 'Cost per unit', with: 123.45
       fill_in 'Quantity', with: 1
       fill_in "Product Name and Description", with: 'resubmitted'
-      click_on 'Submit for approval'
+      click_on 'Update'
       expect(current_path).to eq("/proposals/#{proposal.id}")
       expect(page).to have_content("http://www.submitted.com")
       expect(page).to have_content("resubmitted")
@@ -152,21 +152,20 @@ describe "GSA 18f Purchase Request Form" do
       click_on('Modify Request')
       expect(current_path).to eq("/gsa18f/procurements/#{Gsa18f::Procurement.last.id}/edit")
 
-      click_on 'Submit for approval'
+      click_on 'Update'
 
       proposal = Proposal.last
-
       expect(proposal.name).to eq("buying stuff")
       expect(proposal.flow).to eq('linear')
-      client_data = proposal.client_data
 
-      expect(client_data.link_to_product).to eq('http://www.amazon.com')
-      expect(client_data.date_requested).to eq('12/12/2999')
-      expect(client_data.additional_info).to eq('none')
-      expect(client_data.cost_per_unit).to eq(123.45)
-      expect(client_data.quantity).to eq(6)
-      expect(client_data.office).to eq(Gsa18f::Procurement::OFFICES[0])
-      expect(client_data.urgency).to eq(Gsa18f::Procurement::URGENCY[0])
+      procurement = proposal.client_data
+      expect(procurement.link_to_product).to eq('http://www.amazon.com')
+      expect(procurement.date_requested).to eq('12/12/2999')
+      expect(procurement.additional_info).to eq('none')
+      expect(procurement.cost_per_unit).to eq(123.45)
+      expect(procurement.quantity).to eq(6)
+      expect(procurement.office).to eq(Gsa18f::Procurement::OFFICES[0])
+      expect(procurement.urgency).to eq(Gsa18f::Procurement::URGENCY[0])
 
       expect(proposal.requester).to eq(requester)
       expect(proposal.approvers.map(&:email_address)).to eq(%w(
