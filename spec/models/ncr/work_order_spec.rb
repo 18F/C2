@@ -9,13 +9,16 @@ describe Ncr::WorkOrder do
       expect(wo.fields_for_display.sort).to eq([
         ["Amount", 1000],
         ["Building number", Ncr::BUILDING_NUMBERS[0]],
+        ["Cl number", nil],
         ["Description", "Ddddd"],
         ["Direct pay", true],
         ["Emergency", true],
         ["Expense type", "BA61"],
+        ["Function code", nil],
         ["Not to exceed", false],
         ["Org code", Ncr::Organization.all[0]],
         # No RWA Number
+        ["Soc code", nil],
         ["Vendor", "Some Vend"]
         # No Work Order
       ])
@@ -29,13 +32,16 @@ describe Ncr::WorkOrder do
       expect(wo.fields_for_display.sort).to eq([
         ["Amount", 1000],
         ["Building number", Ncr::BUILDING_NUMBERS[0]],
+        ["Cl number", nil],
         ["Description", "Ddddd"],
         ["Direct pay", true],
         # No Emergency
         ["Expense type", "BA80"],
+        ["Function code", nil],
         ["Not to exceed", false],
         ["Org code", Ncr::Organization.all[0]],
         ["RWA Number", "RWWAAA #"],
+        ["Soc code", nil],
         ["Vendor", "Some Vend"],
         ["Work Order / Maximo Ticket Number", "Some WO#"]
       ])

@@ -39,7 +39,7 @@ describe "searching" do
     fill_in 'Vendor', with: 'ACME'
     fill_in 'Amount', with: 123.45
     check "I am going to be using direct pay for this transaction"
-    fill_in "Approving Official's Email Address", with: 'approver@example.com'
+    fill_in "Approving official's email address", with: 'approver@example.com'
     select Ncr::BUILDING_NUMBERS[0], :from => 'ncr_work_order_building_number'
     select Ncr::Organization.all[0], :from => 'ncr_work_order_org_code'
     click_on 'Submit for approval'
