@@ -43,7 +43,7 @@ class UseCaseController < ApplicationController
 
     if self.errors.empty?
       @model_instance.save
-      flash[:success] = "Proposal resubmitted!"
+      flash[:success] = "Successfully modified!"
       redirect_to proposal_path(@model_instance.proposal)
     else
       flash[:error] = self.errors
