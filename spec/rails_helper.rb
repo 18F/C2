@@ -62,6 +62,7 @@ RSpec.configure do |config|
   config.include RequestSpecHelper, type: :request
   [:feature, :request, :model].each do |type|
     config.include IntegrationSpecHelper, type: type
+    config.include EnvironmentSpecHelper, type: type
   end
   config.include FeatureSpecHelper, type: :feature
 

@@ -1,4 +1,4 @@
-include IntegrationSpecHelper
+include EnvironmentSpecHelper
 
 describe ProposalSearch do
   describe '#execute' do
