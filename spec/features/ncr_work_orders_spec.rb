@@ -188,7 +188,7 @@ describe "National Capital Region proposals" do
         expect(find_field("ncr_work_order_building_number").value).to eq(
           Ncr::BUILDING_NUMBERS[0])
         fill_in 'Vendor', with: 'New ACME'
-        click_on 'Submit for approval'
+      click_on 'Update'
         expect(current_path).to eq("/proposals/#{ncr_proposal.id}")
         expect(page).to have_content("New ACME")
         expect(page).to have_content("modified")
@@ -201,7 +201,7 @@ describe "National Capital Region proposals" do
         visit "/ncr/work_orders/#{work_order.id}/edit"
         fill_in 'Vendor', with: "New Test Vendor"
         fill_in 'Description', with: "New Description"
-        click_on 'Submit for approval'
+      click_on 'Update'
 
         expect(page).to have_content("Request modified by")
         expect(page).to have_content("Description was changed to New Description")
@@ -223,7 +223,7 @@ describe "National Capital Region proposals" do
         expect(find("[name=approver_email]")["disabled"]).to eq("disabled")
         # And we can still submit
         fill_in 'Vendor', with: 'New ACME'
-        click_on 'Submit for approval'
+      click_on 'Update'
         expect(current_path).to eq("/proposals/#{ncr_proposal.id}")
         # Verify it is actually saved
         work_order.reload
@@ -344,7 +344,7 @@ describe "National Capital Region proposals" do
       fill_in 'CL number', with: '123'
       fill_in 'Function code', with: '456'
       fill_in 'SOC code', with: '789'
-      click_on 'Submit for approval'
+      click_on 'Update'
 
       work_order.reload
       expect(work_order.cl_number).to eq('123')
