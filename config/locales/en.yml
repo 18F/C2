@@ -26,14 +26,10 @@ en:
   time:
     formats:
       default: "%b %-d, %Y at %I:%M%p %Z"
-  helpers:
-    label:
-      ncr/proposal:
-        rwa_number: "RWA Number"
-      cart:
-        rwa_number: "RWA Number"
   activerecord:
     attributes:
       ncr/work_order:
-        rwa_number: "RWA Number"
+        cl_number: "CL number"
         code: "Work Order / Maximo Ticket Number"
+        rwa_number: "RWA Number"
+        soc_code: "SOC code"
