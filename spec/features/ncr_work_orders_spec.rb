@@ -19,29 +19,33 @@ describe "National Capital Region proposals" do
       fill_in 'Project title', with: "buying stuff"
       fill_in 'Description', with: "desc content"
       choose 'BA80'
+      fill_in 'RWA Number', with: 'F1234567'
       fill_in 'Vendor', with: 'ACME'
       fill_in 'Amount', with: 123.45
+      check "I am going to be using direct pay for this transaction"
       fill_in "Approving Official's Email Address", with: 'approver@example.com'
       select Ncr::BUILDING_NUMBERS[0], :from => 'ncr_work_order_building_number'
-      select Ncr::ORG_CODES[0], :from => 'ncr_work_order_org_code'
+      select Ncr::Organization.all[0], :from => 'ncr_work_order_org_code'
       expect {
         click_on 'Submit for approval'
       }.to change { Proposal.count }.from(0).to(1)
 
       proposal = Proposal.last
+      expect(proposal.public_id).to have_content("FY")
       expect(page).to have_content("Proposal submitted")
       expect(current_path).to eq("/proposals/#{proposal.id}")
 
       expect(proposal.name).to eq("buying stuff")
       expect(proposal.flow).to eq('linear')
-      client_data = proposal.client_data
-      expect(client_data.client).to eq('ncr')
-      expect(client_data.expense_type).to eq('BA80')
-      expect(client_data.vendor).to eq('ACME')
-      expect(client_data.amount).to eq(123.45)
-      expect(client_data.building_number).to eq(Ncr::BUILDING_NUMBERS[0])
-      expect(client_data.org_code).to eq(Ncr::ORG_CODES[0])
-      expect(client_data.description).to eq('desc content')
+      work_order = proposal.client_data
+      expect(work_order.client).to eq('ncr')
+      expect(work_order.expense_type).to eq('BA80')
+      expect(work_order.vendor).to eq('ACME')
+      expect(work_order.amount).to eq(123.45)
+      expect(work_order.direct_pay).to eq(true)
+      expect(work_order.building_number).to eq(Ncr::BUILDING_NUMBERS[0])
+      expect(work_order.org_code).to eq(Ncr::Organization.all[0].to_s)
+      expect(work_order.description).to eq('desc content')
       expect(proposal.requester).to eq(requester)
       expect(proposal.approvers.map(&:email_address)).to eq(%w(
         approver@example.com
@@ -76,11 +80,12 @@ describe "National Capital Region proposals" do
         fill_in 'Project title', with: "buying stuff"
         fill_in 'Description', with: "desc content"
         # no need to select BA80
+        fill_in 'RWA Number', with: 'F1234567'
         fill_in 'Vendor', with: 'ACME'
         fill_in 'Amount', with: 123.45
         fill_in "Approving Official's Email Address", with: 'approver@example.com'
         select Ncr::BUILDING_NUMBERS[0], :from => 'ncr_work_order_building_number'
-        select Ncr::ORG_CODES[0], :from => 'ncr_work_order_org_code'
+        select Ncr::Organization.all[0], :from => 'ncr_work_order_org_code'
         expect {
           click_on 'Submit for approval'
         }.to change { Proposal.count }.from(0).to(1)
@@ -116,13 +121,13 @@ describe "National Capital Region proposals" do
       fill_in 'Amount', with: 123.45
       fill_in "Approving Official's Email Address", with: 'approver@example.com'
       select Ncr::BUILDING_NUMBERS[0], :from => 'ncr_work_order_building_number'
-      select Ncr::ORG_CODES[0], :from => 'ncr_work_order_org_code'
+      select Ncr::Organization.all[0], :from => 'ncr_work_order_org_code'
       click_on 'Submit for approval'
       expect(current_path).to eq("/proposals/#{Proposal.last.id}")
       expect(page).to have_content("RWA Number")
     end
 
-    it "hides fields based on expense", :js => true do
+    it "hides fields based on expense", js: true do
       visit '/ncr/work_orders/new'
       expect(page).to have_no_field("RWA Number")
       expect(page).to have_no_field("Work Order")
@@ -175,7 +180,7 @@ describe "National Capital Region proposals" do
       expect(find_field("ncr_work_order_building_number").value).to eq(
         Ncr::BUILDING_NUMBERS[0])
       fill_in 'Vendor', with: 'New ACME'
-      click_on 'Submit for approval'
+      click_on 'Update'
       expect(current_path).to eq("/proposals/#{ncr_proposal.id}")
       expect(page).to have_content("New ACME")
       expect(page).to have_content("modified")
@@ -188,7 +193,7 @@ describe "National Capital Region proposals" do
       visit "/ncr/work_orders/#{work_order.id}/edit"
       fill_in 'Vendor', with: "New Test Vendor"
       fill_in 'Description', with: "New Description"
-      click_on 'Submit for approval'
+      click_on 'Update'
 
       expect(page).to have_content("Request modified by")
       expect(page).to have_content("Description was changed to New Description")
@@ -210,7 +215,7 @@ describe "National Capital Region proposals" do
       expect(find("[name=approver_email]")["disabled"]).to eq("disabled")
       # And we can still submit
       fill_in 'Vendor', with: 'New ACME'
-      click_on 'Submit for approval'
+      click_on 'Update'
       expect(current_path).to eq("/proposals/#{ncr_proposal.id}")
       # Verify it is actually saved
       work_order.reload
@@ -282,7 +287,7 @@ describe "National Capital Region proposals" do
         fill_in 'Amount', with: 123.45
         fill_in "Approving Official's Email Address", with: 'approver@example.com'
         select Ncr::BUILDING_NUMBERS[0], :from => 'ncr_work_order_building_number'
-        select Ncr::ORG_CODES[0], :from => 'ncr_work_order_org_code'
+        select Ncr::Organization.all[0], :from => 'ncr_work_order_org_code'
       end
 
       it "approves emergencies" do

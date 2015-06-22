@@ -1,4 +1,3 @@
-<body class="communicart-notification">
   <table class='reply-section'>
     <%= client_partial(@proposal.client, 'email_header/' + @alert_partial.to_s) %>
     <tr>
@@ -20,4 +19,3 @@
   <%= render partial: 'email_reply', locals: { approval: @approval, show_approval_actions: @show_approval_actions } %>
 
 </div>
-</body>

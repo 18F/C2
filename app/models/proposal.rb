@@ -50,6 +50,7 @@ class Proposal < ActiveRecord::Base
   scope :closed, -> { where(status: ['approved', 'rejected']) }
 
   after_initialize :set_defaults
+  after_create :update_public_id
 
 
   def set_defaults
@@ -205,5 +206,10 @@ class Proposal < ActiveRecord::Base
     if next_approval = self.approvals.pending.first
       next_approval.make_actionable!
     end
+  end
+
+  protected
+  def update_public_id
+    self.update_attribute(:public_id, self.public_identifier)
   end
 end

@@ -32,6 +32,9 @@ en:
         rwa_number: "RWA Number"
       cart:
         rwa_number: "RWA Number"
+    submit:
+      create: "Submit for approval"
+      update: "Update"
   activerecord:
     attributes:
       ncr/work_order:
