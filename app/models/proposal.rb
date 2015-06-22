@@ -202,6 +202,7 @@ class Proposal < ActiveRecord::Base
       update_comment: true,
       user_id: self.requester_id
     )
+  end
 
   def all_approved?
     self.approvals.where.not(status: 'approved').empty?
