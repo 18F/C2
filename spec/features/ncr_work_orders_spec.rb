@@ -207,6 +207,16 @@ describe "National Capital Region proposals" do
       expect(current_path).to eq("/proposals/#{work_order.proposal.id}")
     end
 
+    it "does not resave unchanged requests" do 
+      visit "/ncr/work_orders/#{work_order.id}/edit"
+      click_on 'Submit for approval'
+      visit "/ncr/work_orders/#{work_order.id}/edit"
+      click_on 'Submit for approval'
+
+      expect(current_path).to eq("/proposals/#{work_order.proposal.id}")
+      expect(page).not_to have_content("Successfully modified!")
+    end
+
     it "has a disabled field if first approval is done" do
       visit "/ncr/work_orders/#{work_order.id}/edit"
       expect(find("[name=approver_email]")["disabled"]).to be_nil
