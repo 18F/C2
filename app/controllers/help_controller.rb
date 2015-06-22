@@ -2,14 +2,24 @@ class HelpController < ApplicationController
   layout 'help'
 
   def index
-    dir = Rails.root.join('app', 'views', 'help', '*.md')
-    files = Dir.glob(dir)
-    @pages = files.map{|file| File.basename(file, '.md') }.sort
+    @pages = self.page_names.sort
   end
 
   def show
     page = params[:id]
-    # TODO make sure this isn't a security hole
-    render "help/#{page}"
+    if self.page_names.include?(page)
+      render "help/#{page}"
+    else
+      raise ActionController::RoutingError.new('Not Found')
+    end
+  end
+
+
+  protected
+
+  def page_names
+    dir = Rails.root.join('app', 'views', 'help', '*.md')
+    files = Dir.glob(dir)
+    files.map{|file| File.basename(file, '.md') }
   end
 end

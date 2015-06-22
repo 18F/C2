@@ -19,5 +19,11 @@ describe 'help pages' do
       expect(doc).to_not have_content('<%')
       expect(doc).to_not have_content('1. ')
     end
+
+    it "gives a 404 for an unknown page" do
+      expect {
+        get '/help/unknown'
+      }.to raise_error(ActionController::RoutingError)
+    end
   end
 end
