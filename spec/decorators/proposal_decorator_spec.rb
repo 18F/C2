@@ -6,11 +6,14 @@ describe ProposalDecorator do
       # make two approvals for each status, in random order
       statuses = Approval.statuses.map(&:to_s)
       statuses = statuses.dup + statuses.clone
-      statuses.shuffle.each do |status|
-        FactoryGirl.create(:approval, proposal: proposal, status: status)
+      users = statuses.shuffle.map do |status|
+        user = FactoryGirl.create(:user)
+        FactoryGirl.create(:approval, proposal: proposal, status: status, user: user)
+        user
       end
 
-      expect(proposal.approvals_by_status.map(&:status)).to eq(%w(
+      approvals = proposal.approvals_by_status
+      expect(approvals.map(&:status)).to eq(%w(
         approved
         approved
         rejected
@@ -20,6 +23,9 @@ describe ProposalDecorator do
         pending
         pending
       ))
+      approvers = approvals.map(&:user)
+      expect(approvers).not_to eq(users)
+      expect(approvers.sort).to eq(users.sort)
     end
   end
 end
