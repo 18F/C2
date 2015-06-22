@@ -115,7 +115,7 @@
         <%- end %>
       </div>
     <% end %>
-    <%= f.submit "Submit for approval", class: 'btn btn-default' %>
+    <%= f.submit class: 'form-button' %>
     <% if @model_instance.persisted? %>
       <%= link_to 'Discard Changes', proposal_url(@model_instance.proposal) %>
     <% end %>
