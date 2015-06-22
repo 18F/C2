@@ -54,7 +54,7 @@ describe Ncr::WorkOrdersController do
   describe '#edit' do
     let (:work_order) { FactoryGirl.create(:ncr_work_order, :with_approvers) }
     before do
-      login_as(work_order.proposal.requester)
+      login_as(work_order.requester)
     end
 
     it 'does not display a message when the proposal is not fully approved' do
@@ -72,7 +72,7 @@ describe Ncr::WorkOrdersController do
   describe '#update' do
     let (:work_order) { FactoryGirl.create(:ncr_work_order, :with_approvers) }
     before do
-      login_as(work_order.proposal.requester)
+      login_as(work_order.requester)
     end
 
     it 'does not modify the work order when there is a blank approver' do

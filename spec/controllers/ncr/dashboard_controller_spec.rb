@@ -14,9 +14,8 @@ describe Ncr::DashboardController do
     it 'groups by month and aggregates' do
       # 2 in January, 3 in February, 3 in March
       (1..8).each {|i|
-        FactoryGirl.create(
-          :proposal, requester: user, created_at: Date.new(2015, i / 3 + 1, i),
-          client_data: FactoryGirl.create(:ncr_work_order, amount: i))
+        proposal = FactoryGirl.create(:proposal, requester: user, created_at: Date.new(2015, i / 3 + 1, i))
+        FactoryGirl.create(:ncr_work_order, amount: i, proposal: proposal)
       }
       get :index
       rows = assigns(:rows)
