@@ -60,11 +60,11 @@ RSpec.configure do |config|
   # Add modules for helpers
   config.include ControllerSpecHelper, type: :controller
   config.include RequestSpecHelper, type: :request
-  [:feature, :request, :model].each do |type|
+  [:feature, :request].each do |type|
     config.include IntegrationSpecHelper, type: type
-    config.include EnvironmentSpecHelper, type: type
   end
   config.include FeatureSpecHelper, type: :feature
+  config.include EnvironmentSpecHelper, type: :model
 
   # Much of the config here pieced together from
   # http://stackoverflow.com/questions/8178120/capybara-with-js-true-causes-test-to-fail/28083267
