@@ -64,7 +64,10 @@ RSpec.configure do |config|
     config.include IntegrationSpecHelper, type: type
   end
   config.include FeatureSpecHelper, type: :feature
-  config.include EnvironmentSpecHelper, type: :model
+
+  [:controller, :model].each do |type|
+    config.include EnvironmentSpecHelper, type: type
+  end
 
   # Much of the config here pieced together from
   # http://stackoverflow.com/questions/8178120/capybara-with-js-true-causes-test-to-fail/28083267
