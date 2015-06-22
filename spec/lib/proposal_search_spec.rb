@@ -1,3 +1,5 @@
+include IntegrationSpecHelper
+
 describe ProposalSearch do
   describe '#execute' do
     it "returns an empty list for no Proposals" do
