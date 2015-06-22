@@ -1,43 +1,35 @@
 describe Ncr::WorkOrder do
-  describe '#fields_for_display' do
+  describe '#relevant_fields' do
     it "shows BA61 fields" do
-      wo = Ncr::WorkOrder.new(
-        amount: 1000, expense_type: "BA61", vendor: "Some Vend",
-        not_to_exceed: false, emergency: true, rwa_number: "RWWAAA #",
-        building_number: Ncr::BUILDING_NUMBERS[0],
-        org_code: Ncr::Organization.all[0], description: "Ddddd", direct_pay: true)
-      expect(wo.fields_for_display.sort).to eq([
-        ["Amount", 1000],
-        ["Building number", Ncr::BUILDING_NUMBERS[0]],
-        ["Description", "Ddddd"],
-        ["Direct pay", true],
-        ["Emergency", true],
-        ["Expense type", "BA61"],
-        ["Not to exceed", false],
-        ["Org code", Ncr::Organization.all[0]],
-        # No RWA Number
-        ["Vendor", "Some Vend"]
-        # No Work Order
+      wo = Ncr::WorkOrder.new
+      expect(wo.relevant_fields.sort).to eq([
+        :amount,
+        :building_number,
+        # No :code
+        :description,
+        :direct_pay,
+        :expense_type,
+        :not_to_exceed,
+        :org_code,
+        # No :rwa_number
+        :vendor
       ])
     end
+
     it "shows BA80 fields" do
-      wo = Ncr::WorkOrder.new(
-        amount: 1000, expense_type: "BA80", vendor: "Some Vend",
-        not_to_exceed: false, emergency: true, rwa_number: "RWWAAA #",
-        building_number: Ncr::BUILDING_NUMBERS[0], code: "Some WO#",
-        org_code: Ncr::Organization.all[0], description: "Ddddd", direct_pay: true)
-      expect(wo.fields_for_display.sort).to eq([
-        ["Amount", 1000],
-        ["Building number", Ncr::BUILDING_NUMBERS[0]],
-        ["Description", "Ddddd"],
-        ["Direct pay", true],
+      wo = Ncr::WorkOrder.new(expense_type: 'BA80')
+      expect(wo.relevant_fields.sort).to eq([
+        :amount,
+        :building_number,
+        :code,
+        :description,
+        :direct_pay,
         # No Emergency
-        ["Expense type", "BA80"],
-        ["Not to exceed", false],
-        ["Org code", Ncr::Organization.all[0]],
-        ["RWA Number", "RWWAAA #"],
-        ["Vendor", "Some Vend"],
-        ["Work Order / Maximo Ticket Number", "Some WO#"]
+        :expense_type,
+        :not_to_exceed,
+        :org_code,
+        :rwa_number,
+        :vendor
       ])
     end
   end
