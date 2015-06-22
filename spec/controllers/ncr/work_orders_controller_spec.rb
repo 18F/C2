@@ -7,7 +7,7 @@ describe Ncr::WorkOrdersController do
       ncr_work_order: {
         amount: '111.22', expense_type: 'BA80', vendor: 'Vendor',
         not_to_exceed: '0', building_number: Ncr::BUILDING_NUMBERS[0],
-        emergency: '0', rwa_number: 'A12345678', org_code: Ncr::ORG_CODES[0],
+        emergency: '0', rwa_number: 'A12345678', org_code: Ncr::Organization.all[0],
         code: 'Work Order', project_title: 'Title', description: 'Desc'},
       approver_email: 'bob@example.gov'
     }}
@@ -51,7 +51,25 @@ describe Ncr::WorkOrdersController do
     end
   end
 
-  describe 'editing' do
+  describe '#edit' do
+    let (:work_order) { FactoryGirl.create(:ncr_work_order, :with_approvers) }
+    before do
+      login_as(work_order.proposal.requester)
+    end
+
+    it 'does not display a message when the proposal is not fully approved' do
+      get :edit, {id: work_order.id}
+      expect(flash[:warning]).not_to be_present
+    end
+
+    it 'displays a warning message when editing a fully-approved proposal' do
+      work_order.approve!
+      get :edit, {id: work_order.id}
+      expect(flash[:warning]).to be_present
+    end
+  end
+
+  describe '#update' do
     let (:work_order) { FactoryGirl.create(:ncr_work_order, :with_approvers) }
     before do
       login_as(work_order.proposal.requester)
