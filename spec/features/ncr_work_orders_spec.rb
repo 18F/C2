@@ -337,9 +337,7 @@ describe "National Capital Region proposals" do
   describe "editing a work order" do
     let(:work_order) { FactoryGirl.create(:ncr_work_order, :with_approvers) }
 
-    it "allows the user to edit the budget-related fields when fully approved" do
-      work_order.proposal.update_attribute(:status, 'approved') # avoid workflow
-
+    it "allows the user to edit the budget-related fields" do
       login_as(work_order.requester)
       visit "/ncr/work_orders/#{work_order.id}/edit"
 

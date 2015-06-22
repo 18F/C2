@@ -143,7 +143,7 @@ ActiveRecord::Schema.define(version: 20150620004844) do
     t.integer  "client_data_id"
     t.string   "client_data_type"
     t.integer  "requester_id"
-    t.string   "public_id"
+    t.string   "public_id",        limit: nil
   end
 
   add_index "proposals", ["client_data_id", "client_data_type"], name: "index_proposals_on_client_data_id_and_client_data_type", using: :btree

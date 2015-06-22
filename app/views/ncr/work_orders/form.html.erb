@@ -114,7 +114,7 @@
           </ul>
         <%- end %>
       </div>
-    <% elsif @model_instance.approved? %>
+    <% else %>
       <div class="form-group">
         <%= f.label :cl_number, 'CL number' %>
         <%= f.text_field :cl_number, class: 'form-control' %>
