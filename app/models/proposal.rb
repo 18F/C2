@@ -196,14 +196,6 @@ class Proposal < ActiveRecord::Base
     Dispatcher.deliver_new_proposal_emails(self)
   end
 
-  def changed_fields comment_text
-    self.comments.create(
-      comment_text: comment_text,
-      update_comment: true,
-      user_id: self.requester_id
-    )
-  end
-
   def all_approved?
     self.approvals.where.not(status: 'approved').empty?
   end
