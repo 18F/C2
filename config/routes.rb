@@ -50,6 +50,7 @@ C2::Application.routes.draw do
 
   namespace :gsa18f do
     resources :procurements, except: [:index, :destroy]
+    get '/dashboard' => 'dashboard#index' 
   end
 
   if Rails.env.development?
