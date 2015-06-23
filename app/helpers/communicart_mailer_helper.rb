@@ -1,6 +1,6 @@
 module CommunicartMailerHelper
   def status_icon_tag(status, linear=false)
-    image_tag("icon-#{status}.png", class: "status-icon #{status} #{'linear' if linear}")
+    image_tag( image_url("icon-#{status}.png"), class: "status-icon #{status} #{'linear' if linear}")
   end
 
   def generate_bookend_class(index, count)
