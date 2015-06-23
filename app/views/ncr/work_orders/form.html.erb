@@ -53,9 +53,11 @@
     <% end %>
     <div class="form-group">
       <%= f.label :building_number %>
-      <%= f.collection_select(
-            :building_number, Ncr::BUILDING_NUMBERS, :to_s, :to_s,
-            {include_blank: true, prompt: "Type here to search"}, {class: 'form-control js-selectize'}) %>
+      <%= f.text_field :building_number,
+            class: 'form-control js-selectize',
+            placeholder: "Type here to search or add",
+            data: {attr: 'building_number', src: '/api/v1/ncr/work_orders.json',
+                   initial: JSON.generate(Ncr::BUILDING_NUMBERS)} %>
     </div>
     <div class="form-group">
       <%= f.label :org_code %>
