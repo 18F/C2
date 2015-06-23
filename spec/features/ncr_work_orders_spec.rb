@@ -175,6 +175,29 @@ describe "National Capital Region proposals" do
         expect(page).to have_selector("input[type=file]", count: 2)
       end
 
+      it "includes an initial list of buildings", :js => true do
+        visit '/ncr/work_orders/new'
+        option = Ncr::BUILDING_NUMBERS.shuffle[0]
+
+        expect(page).not_to have_selector(".option[data-value='#{option}']")
+
+        find("input[aria-label='Building number']").native.send_keys(option)
+        expect(page).to have_selector("div.option[data-value='#{option}']")
+      end
+
+      it "does not include custom buildings initially", :js => true do
+        visit '/ncr/work_orders/new'
+        find("input[aria-label='Building number']").native.send_keys("BillDing")
+        expect(page).not_to have_selector("div.option[data-value='BillDing']")
+      end
+
+      it "includes previously entered buildings, too", :js => true do
+        FactoryGirl.create(:ncr_work_order, building_number: "BillDing")
+        visit '/ncr/work_orders/new'
+        find("input[aria-label='Building number']").native.send_keys("BillDing")
+        expect(page).to have_selector("div.option[data-value='BillDing']")
+      end
+
       let (:work_order) {
         wo = FactoryGirl.create(:ncr_work_order, requester: requester)
         wo.add_approvals('approver@example.com')
