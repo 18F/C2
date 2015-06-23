@@ -102,6 +102,27 @@ describe ProposalPolicy do
     end
   end
 
+  permissions :can_edit? do
+    let(:proposal) { FactoryGirl.create(:proposal, :with_approvers, :with_observers) }
+
+    it "allows the requester to edit it" do
+      expect(subject).to permit(proposal.requester, proposal)
+    end
+
+    it "doesn't allow an approver to edit it" do
+      expect(subject).not_to permit(proposal.approvers[0], proposal)
+      expect(subject).not_to permit(proposal.approvers[1], proposal)
+    end
+
+    it "doesn't allow an observer to edit it" do
+      expect(subject).not_to permit(proposal.observers[0], proposal)
+    end
+
+    it "does not allow anyone else to edit it" do
+      expect(subject).not_to permit(FactoryGirl.create(:user), proposal)
+    end
+  end
+
   context "testing scope" do
     let(:proposal) {
       FactoryGirl.create(:proposal, :with_approvers, :with_observers)}
