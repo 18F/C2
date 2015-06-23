@@ -58,13 +58,13 @@ class UseCaseController < ApplicationController
   protected
 
   def attribute_changes?
-    !@model_instance.changed_attributes.blank? || self.approver_email_changed?
+    !@model_instance.changed_attributes.blank?
   end
 
   def approver_email_changed?
     email = params[:approver_email]
     if !email.nil?
-      @model_instance.approval_changed?(email)
+      @model_instance.approver_changed?(email)
     else
       false
     end
