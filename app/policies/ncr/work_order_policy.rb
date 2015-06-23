@@ -6,7 +6,7 @@ module Ncr
     end
 
     def can_edit!
-      author!
+      requester!
     end
     alias_method :can_update!, :can_edit!
   end
