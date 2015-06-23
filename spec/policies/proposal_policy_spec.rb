@@ -121,6 +121,11 @@ describe ProposalPolicy do
     it "does not allow anyone else to edit it" do
       expect(subject).not_to permit(FactoryGirl.create(:user), proposal)
     end
+
+    it "does not allow an approved request to be edited" do
+      proposal.update_attribute(:status, 'approved')  # skip state machine
+      expect(subject).not_to permit(proposal.requester, proposal)
+    end
   end
 
   context "testing scope" do
