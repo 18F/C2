@@ -214,7 +214,7 @@ describe "National Capital Region proposals" do
       click_on 'Submit for approval'
 
       expect(current_path).to eq("/proposals/#{work_order.proposal.id}")
-      expect(page).not_to have_content("Successfully modified!")
+      expect(page).to have_content("No changes were made to the request")
     end
 
     it "has a disabled field if first approval is done" do
