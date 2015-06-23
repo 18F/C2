@@ -6,7 +6,7 @@ module Ncr
     end
 
     def can_edit!
-      requester!
+      check(self.requester? || self.approver?, "You must be the requester or an approver to edit")
     end
     alias_method :can_update!, :can_edit!
   end

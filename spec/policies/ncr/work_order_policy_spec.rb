@@ -8,9 +8,9 @@ describe Ncr::WorkOrderPolicy do
       expect(subject).to permit(work_order.requester, work_order)
     end
 
-    it "doesn't allow an approver to edit it" do
-      expect(subject).not_to permit(work_order.approvers[0], work_order)
-      expect(subject).not_to permit(work_order.approvers[1], work_order)
+    it "allows an approver to edit it" do
+      expect(subject).to permit(work_order.approvers[0], work_order)
+      expect(subject).to permit(work_order.approvers[1], work_order)
     end
 
     it "doesn't allow an observer to edit it"
