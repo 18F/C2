@@ -38,10 +38,9 @@ module ApplicationHelper
     end
   end
 
-  def excluded_portal_link
-    controller_name == 'home' ||
-      controller_name == 'help' ||
-      current_page?(proposals_path)
+  def display_return_to_proposals
+    controller.is_a?(UseCaseController) ||
+      (controller.is_a?(ProposalsController) && params[:action] != 'index')
   end
 
   def auth_path
