@@ -177,7 +177,7 @@ describe "National Capital Region proposals" do
 
       it "includes an initial list of buildings", :js => true do
         visit '/ncr/work_orders/new'
-        option = Ncr::Building.all.shuffle[0]
+        option = Ncr::Building.all.shuffle[0].to_s
 
         expect(page).not_to have_selector(".option[data-value='#{option}']")
 
