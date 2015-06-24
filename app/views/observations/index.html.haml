@@ -1,9 +1,9 @@
 .inset
   %h1 Observers
   %ul
-    - @proposal.observers.each do |proposal|
+    - @proposal.observers.each do |observer|
       %li
-        = proposal.email_address
+        = observer.full_name
     %li
       = form_for [@proposal, @observation] do |f|
         = f.fields_for :user do |user_form|
