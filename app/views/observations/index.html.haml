@@ -1,0 +1,11 @@
+.inset
+  %h1 Observers
+  %ul
+    - @proposal.observers.each do |proposal|
+      %li
+        = proposal.email_address
+    %li
+      = form_for [@proposal, @observation] do |f|
+        = f.fields_for :user do |user_form|
+          = user_form.text_field :email_address
+        = f.submit 'Add'
