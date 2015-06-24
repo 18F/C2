@@ -10,7 +10,7 @@ class Selectizer
 
   isRemote: ->
     !!@src()
-  
+
   form_label: ->
     $('label[for="'+@$el.attr('id')+'"]').text()
 
@@ -20,17 +20,22 @@ class Selectizer
   selectizeOpts: ->
     opts = {}
     attr = @$el.attr('data-attr')
-    if @$el.attr('data-initial') && attr
-      opts.options = $.map @$el.data('initial'), (val) ->
+    initialData = @$el.data('initial')
+    if initialData
+      opts.options = $.map initialData, (val) ->
         result = {}
-        result[attr] = val
+        if attr
+          result[attr] = val
+        else
+          result.text = val.text
+          result.value = val.value
         result
 
     if @isFreeForm()
       opts.create = true
       opts.maxItems = 1
 
-    if @isRemote()
+    if attr
       opts.labelField = attr
       opts.searchField = [attr]
       opts.valueField = attr

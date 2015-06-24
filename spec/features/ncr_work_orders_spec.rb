@@ -177,7 +177,8 @@ describe "National Capital Region proposals" do
 
       it "includes an initial list of buildings", :js => true do
         visit '/ncr/work_orders/new'
-        option = Ncr::Building.all.shuffle[0].to_s
+        building = Ncr::Building.all.shuffle.first
+        option = building.number
 
         expect(page).not_to have_selector(".option[data-value='#{option}']")
 
@@ -357,10 +358,10 @@ describe "National Capital Region proposals" do
   end
 
   describe "editing a work order" do
-    let(:work_order) { FactoryGirl.create(:ncr_work_order, :with_approvers) }
-
     it "allows the user to edit the budget-related fields" do
+      work_order = FactoryGirl.create(:ncr_work_order, :with_approvers)
       login_as(work_order.requester)
+
       visit "/ncr/work_orders/#{work_order.id}/edit"
 
       fill_in 'CL number', with: '123'
@@ -372,6 +373,15 @@ describe "National Capital Region proposals" do
       expect(work_order.cl_number).to eq('123')
       expect(work_order.function_code).to eq('456')
       expect(work_order.soc_code).to eq('789')
+    end
+
+    it "uses the full name of a stored building code", js: true do
+      building = Ncr::Building.first
+      work_order = FactoryGirl.create(:ncr_work_order, :with_approvers, building_number: building.number)
+
+      visit "/ncr/work_orders/#{work_order.id}/edit"
+
+      expect(page).to have_selector("div.option[data-value='#{building}']")
     end
   end
 end

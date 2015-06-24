@@ -3,9 +3,9 @@ module Ncr
     # each is guaranteed to have a `name` property present, but not necessarily a `number`
     attr_accessor :name, :number
 
-    def initialize(attrs)
-      self.name = attrs['name']
-      self.number = attrs['number']
+    def initialize(name, number)
+      self.name = name
+      self.number = number
     end
 
     def id
@@ -31,4 +31,4 @@ module Ncr
 end
 
 data = YAML.load_file(Rails.root.join('config', 'data', 'ncr', 'building_numbers.yml'))
-Ncr::Building::ALL = data.map{|d| Ncr::Building.new(d) }
+Ncr::Building::ALL = data.map{|d| Ncr::Building.new(d['name'], d['number']) }
