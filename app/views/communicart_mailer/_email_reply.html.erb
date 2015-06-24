@@ -7,12 +7,18 @@
         <p>
           <%= link_to "Approve", generate_approve_url(approval), class: 'form-button' %>
         </p>
+        <p>
+          <strong>
+            <%= link_to "Or Send a Comment", proposal_url(approval.proposal, anchor: 'comments'), {target: 'C2'} %>
+          </strong>
+        </p>
+      <% else %>
+        <p>
+          <strong>
+            <%= link_to "View This Request", proposal_url(approval.proposal), {target: 'C2'} %>
+          </strong>
+        </p>
       <% end %>
-      <p>
-        <strong>
-          <%= link_to "Or Send a Comment", proposal_url(approval.proposal, anchor: 'comments'), {target: 'C2'} %>
-        </strong>
-      </p>
     </td>
   </tr>
 </table>

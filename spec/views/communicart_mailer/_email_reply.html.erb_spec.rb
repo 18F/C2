@@ -14,7 +14,7 @@ describe "communicart_mailer/_email_reply.html.erb" do
     render partial: "communicart_mailer/email_reply", locals: {show_approval_actions: false, approval: approval}
 
     expect(rendered).to_not include "Approve"
-    expect(rendered).to include "Or Send a Comment"
-    expect(rendered).to_not include "View This Request"
+    expect(rendered).to_not include "Or Send a Comment"
+    expect(rendered).to include "View This Request"
   end
 end
