@@ -12,20 +12,25 @@ class Selectizer
     !!@src()
   
   form_label: ->
-    $('label[for="'+@$el.attr('id')+'"]').text();
+    $('label[for="'+@$el.attr('id')+'"]').text()
 
   add_label: ->
     @selectizeObj().$control_input.attr('aria-label',@form_label())
 
   selectizeOpts: ->
     opts = {}
+    attr = @$el.attr('data-attr')
+    if @$el.attr('data-initial') && attr
+      opts.options = $.map @$el.data('initial'), (val) ->
+        result = {}
+        result[attr] = val
+        result
 
     if @isFreeForm()
       opts.create = true
       opts.maxItems = 1
 
     if @isRemote()
-      attr = @$el.attr('data-attr')
       opts.labelField = attr
       opts.searchField = [attr]
       opts.valueField = attr

@@ -1,0 +1,12 @@
+%ul
+  - @pages.each do |page|
+    - # this is a hack to capture the :title from each page: render the template, without actually outputting it
+    - render template: "help/#{page}"
+    %li
+      = link_to help_path(page) do
+        - if content_for?(:title)
+          = yield(:title)
+        - else
+          = page
+- # this needs to be at the bottom of the template
+- title "FAQ"

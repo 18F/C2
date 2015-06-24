@@ -7,11 +7,7 @@ module Ncr
   end
 
   EXPENSE_TYPES = %w(BA61 BA80)
-
   BUILDING_NUMBERS = YAML.load_file("#{Rails.root}/config/data/ncr/building_numbers.yml")
-  org_code_rows = CSV.read("#{Rails.root}/config/data/ncr/org_codes_2015-05-18.csv", headers: true)
-  # TODO reference by `organization_cd` rather than storing the whole thing
-  ORG_CODES = org_code_rows.map{|r| "#{r['organization_cd']} #{r['organization_nm']}" }
 
   class WorkOrder < ActiveRecord::Base
     include ObservableModel
@@ -21,17 +17,22 @@ module Ncr
     include ProposalDelegate
 
     after_initialize :set_defaults
-
     before_update :record_changes
 
     # @TODO: use integer number of cents to avoid floating point issues
     validates :amount, numericality: {
+      less_than_or_equal_to: 3000,
+      message: "must be less than or equal to $3,000"
+    }
+    validates :amount, numericality: {
       greater_than_or_equal_to: 0,
-      less_than_or_equal_to: 3000
+      message: "must be greater than or equal to $0"
     }
     validates :expense_type, inclusion: {in: EXPENSE_TYPES}, presence: true
+    validates :project_title, presence: true
     validates :vendor, presence: true
     validates :building_number, presence: true
+    validates :rwa_number, presence: true, if: :ba80?
     validates :rwa_number, format: {
       with: /[a-zA-Z][0-9]{7}/,
       message: "one letter followed by 7 numbers"
@@ -69,13 +70,15 @@ module Ncr
     # split these into different models
     def self.relevant_fields(expense_type)
       fields = [:description, :amount, :expense_type, :vendor, :not_to_exceed,
-                :building_number, :org_code]
+                :building_number, :org_code, :direct_pay, :cl_number, :function_code, :soc_code]
       case expense_type
-      when "BA61"
-        fields + [:emergency]
-      when "BA80"
-        fields + [:rwa_number, :code]
+      when 'BA61'
+        fields << :emergency
+      when 'BA80'
+        fields.concat([:rwa_number, :code])
       end
+
+      fields
     end
 
     def relevant_fields
@@ -90,6 +93,17 @@ module Ncr
 
     def client
       "ncr"
+    end
+
+    # will return nil if the `org_code` is blank or not present in Organization list
+    def organization
+      # TODO reference by `code` rather than storing the whole thing
+      code = (self.org_code || '').split(' ', 2)[0]
+      Ncr::Organization.find(code)
+    end
+
+    def ba80?
+      self.expense_type == 'BA80'
     end
 
     def public_identifier
@@ -109,19 +123,56 @@ module Ncr
       self.project_title
     end
 
+    def system_approvers
+      results = []
+      if self.expense_type == 'BA61'
+        unless self.organization.try(:whsc?)
+          results << self.class.ba61_tier1_budget_mailbox
+        end
+        results << self.class.ba61_tier2_budget_mailbox
+      else
+        results << self.class.ba80_budget_mailbox
+      end
+
+      results
+    end
+
+    def self.ba61_tier1_budget_mailbox
+      ENV['NCR_BA61_TIER1_BUDGET_MAILBOX'] || 'communicart.budget.approver@gmail.com'
+    end
+
+    def self.ba61_tier2_budget_mailbox
+      ENV['NCR_BA61_TIER2_BUDGET_MAILBOX'] || 'communicart.ofm.approver@gmail.com'
+    end
+
+    def self.ba80_budget_mailbox
+      ENV['NCR_BA80_BUDGET_MAILBOX'] || 'communicart.budget.approver@gmail.com'
+    end
+
+
     protected
+
     def record_changes
       changed_attributes = self.changed_attributes.clone
       changed_attributes.delete(:updated_at)
-      comment_text = []
+      comment_texts = []
       bullet = changed_attributes.length > 1 ? '- ' : ''
       changed_attributes.each do |key, value|
         value = property_to_s(self[key])
         property_name = WorkOrder.human_attribute_name(key)
-        comment_text << WorkOrder.update_comment_format(property_name, value, bullet)
+        comment_texts << WorkOrder.update_comment_format(property_name, value, bullet)
       end
-      comment_text = comment_text.join("\n")
-      self.proposal.changed_fields(comment_text)
+
+      if !comment_texts.empty?
+        if self.approved?
+          comment_texts << "_Modified post-approval_"
+        end
+        self.proposal.comments.create(
+          comment_text: comment_texts.join("\n"),
+          update_comment: true,
+          user_id: self.proposal.requester_id
+        )
+      end
     end
 
     def self.update_comment_format key, value, bullet
@@ -129,23 +180,12 @@ module Ncr
     end
 
     def fiscal_year
-      year = self.created_at.year
-      if self.created_at.month >= 10
+      year = self.created_at.nil? ? Time.now.year : self.created_at.year
+      month = self.created_at.nil? ? Time.now.month : self.created_at.month
+      if month >= 10
         year += 1
       end
       year % 100   # convert to two-digit
     end
-
-    def system_approvers
-      if self.expense_type == 'BA61'
-        [
-          ENV["NCR_BA61_TIER1_BUDGET_MAILBOX"] || 'communicart.budget.approver@gmail.com',
-          ENV["NCR_BA61_TIER2_BUDGET_MAILBOX"] || 'communicart.ofm.approver@gmail.com'
-        ]
-      else
-        [ENV["NCR_BA80_BUDGET_MAILBOX"] || 'communicart.budget.approver@gmail.com']
-      end
-    end
-
   end
 end

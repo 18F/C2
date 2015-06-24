@@ -18,72 +18,103 @@ class CommunicartMailer < ActionMailer::Base
     @approval = approval
     @alert_partial = alert_partial
     proposal = approval.proposal
-    from_email = user_email(proposal.requester)
-    send_proposal_email(from_email, to_email, proposal, 'proposal_notification_email')
+
+    send_proposal_email(
+      from_email: user_email_with_name(proposal.requester),
+      to_email: to_email,
+      proposal: proposal,
+      template_name: 'proposal_notification_email'
+    )
   end
 
   def proposal_observer_email(to_email, proposal)
     # TODO have the from_email be whomever triggered this notification
-    send_proposal_email(sender, to_email, proposal)
+    send_proposal_email(
+      to_email: to_email,
+      proposal: proposal
+    )
   end
 
   def proposal_created_confirmation(proposal)
-    @proposal = proposal.decorate
-    to_address = proposal.requester.email_address
-    from_email = user_email(proposal.requester)
-
-    mail(
-         to: to_address,
-         subject: "Your request for #{proposal.public_identifier} has been sent successfully.",
-         from: from_email
-         )
+    send_proposal_email(
+      to_email: proposal.requester.email_address,
+      proposal: proposal
+    )
   end
 
   def approval_reply_received_email(approval)
+    proposal = approval.proposal
     @approval = approval
-    @proposal = approval.proposal.decorate
-    @alert_partial = 'approvals_complete' if @proposal.approved?
-    to_address = @proposal.requester.email_address
+    @alert_partial = 'approvals_complete' if proposal.approved?
 
-    mail(
-         to: to_address,
-         subject: "User #{approval.user.email_address} has #{approval.status} request #{@proposal.public_identifier}",
-         from: user_email(approval.user)
-         )
+    send_proposal_email(
+      from_email: user_email_with_name(approval.user),
+      to_email: proposal.requester.email_address,
+      proposal: proposal
+    )
   end
 
   def comment_added_email(comment, to_email)
     @comment = comment
     # Don't send if special comment
     if !@comment.update_comment
-      mail(
-           to: to_email,
-           subject: "A comment has been added to request #{comment.proposal.public_identifier}",
-           from: user_email(comment.user)
-           )
+      send_proposal_email(
+        from_email: user_email_with_name(comment.user),
+        to_email: to_email,
+        proposal: comment.proposal
+      )
     end
+  end
+
+  def feedback(sending_user, form_values)
+    form_strings = form_values.map { |pair| "#{pair[0]}: #{pair[1]}" }
+    message = form_strings.join("\n")
+    mail(
+      to: CommunicartMailer.support_email,
+      subject: 'Feedback submission',
+      from: default_sender_email,
+      body: message,
+      cc: sending_user.try(:email_address)
+    )
+  end
+
+  def self.support_email
+    ENV['SUPPORT_EMAIL'] || 'capdevs@gsa.gov'   # not sensitive, so hard coding
   end
 
   private
 
-  # for easier stubbing in tests
-  def sender
-    ENV['NOTIFICATION_FROM_EMAIL'] || 'noreply@some.gov'
-  end
-
-  def user_email(user)
+  def email_with_name(email, name)
     # http://stackoverflow.com/a/8106387/358804
-    address = Mail::Address.new(sender)
-    address.display_name = user.full_name
+    address = Mail::Address.new(email)
+    address.display_name = name
     address.format
   end
 
-  def send_proposal_email(from_email, to_email, proposal, template_name=nil)
+  def sender_email
+    ENV['NOTIFICATION_FROM_EMAIL'] || 'noreply@some.gov'
+  end
+
+  def default_sender_email
+    email_with_name(sender_email, "Communicart")
+  end
+
+  def user_email_with_name(user)
+    email_with_name(sender_email, user.full_name)
+  end
+
+  # `proposal` and `to_email` are required
+  def send_proposal_email(proposal: nil, to_email: nil, from_email: nil, template_name: nil)
     @proposal = proposal.decorate
+
+    # http://www.jwz.org/doc/threading.html
+    headers['In-Reply-To'] = @proposal.email_msg_id
+    headers['References'] = @proposal.email_msg_id
+
     mail(
       to: to_email,
-      subject: "Communicart Approval Request from #{proposal.requester.full_name}: Please review request #{proposal.public_identifier}",
-      from: from_email,
+      subject: @proposal.email_subject,
+      from: from_email || default_sender_email,
       template_name: template_name
     )
   end

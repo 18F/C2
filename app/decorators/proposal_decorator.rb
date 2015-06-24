@@ -55,4 +55,12 @@ class ProposalDecorator < Draper::Decorator
   def progress_status_message
     "#{number_approved} of #{total_approvers} approved."
   end
+
+  def email_subject
+    "Request #{proposal.public_identifier}"
+  end
+
+  def email_msg_id
+    "<proposal-#{self.id}@#{DEFAULT_URL_HOST}>"
+  end
 end

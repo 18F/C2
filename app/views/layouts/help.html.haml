@@ -1,0 +1,10 @@
+- content_for :content do
+  - unless params[:action] == 'index'
+    %ul#breadcrumb-nav
+      %li
+        = link_to "Back to FAQ", help_index_path
+  .inset.markdown
+    %h1
+      = yield(:title)
+    = yield
+= render template: 'layouts/application'

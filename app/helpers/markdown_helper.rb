@@ -1,11 +1,10 @@
 module MarkdownHelper
-  def markdown text
+  def markdown(text)
     text = text ? text : ''
     options = {
       filter_html:     true,
-      hard_wrap:       true, 
-      link_attributes: { rel: 'nofollow', target: "_blank" },
-      space_after_headers: true, 
+      hard_wrap:       true,
+      space_after_headers: true,
       fenced_code_blocks: true
     }
 
@@ -15,6 +14,7 @@ module MarkdownHelper
       disable_indented_code_blocks: true
     }
 
+    # TODO use github-markdown so we don't need to load the extra gem
     renderer = Redcarpet::Render::HTML.new(options)
     markdown = Redcarpet::Markdown.new(renderer, extensions)
 

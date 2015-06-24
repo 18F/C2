@@ -1,4 +1,8 @@
 describe "Listing Page" do
+  around(:each) do |example|
+    with_18f_procurement_env_variables(&example)
+  end
+
   let!(:user){ FactoryGirl.create(:user) }
   let!(:default){ FactoryGirl.create(:proposal, requester: user) }
   let!(:ncr){
@@ -19,7 +23,7 @@ describe "Listing Page" do
     visit '/proposals'
     expect(page).to have_content(default.public_identifier)
     expect(page).to have_content(ncr.public_identifier)
-    expect(page).to have_content(gsa18f.public_identifier)
+    expect(page).to have_content(gsa18f.proposal.public_identifier)
   end
 
   it "should not explode if client is ncr" do
@@ -27,7 +31,7 @@ describe "Listing Page" do
     visit '/proposals'
     expect(page).to have_content(default.public_identifier)
     expect(page).to have_content(ncr.public_identifier)
-    expect(page).to have_content(gsa18f.public_identifier)
+    expect(page).to have_content(gsa18f.proposal.public_identifier)
   end
 
   it "should not explode if client is gsa18f" do
@@ -35,6 +39,6 @@ describe "Listing Page" do
     visit '/proposals'
     expect(page).to have_content(default.public_identifier)
     expect(page).to have_content(ncr.public_identifier)
-    expect(page).to have_content(gsa18f.public_identifier)
+    expect(page).to have_content(gsa18f.proposal.public_identifier)
   end
 end

@@ -13,11 +13,17 @@
       <%= link_to 'Sign in with MyUSA', auth_path %>
     </li>
   <%- end %>
+  <li>
+    <%= link_to 'Help', help_index_path %>
+  </li>
 </ul>
 <%- if signed_in? %>
   <div class="mycart-link">
     <ul class="header-nav">
-      <li><%= link_to "My Requests", proposals_path %> <%= image_tag "img-cart.png", width: '18px', height:'16px' %></li>
+      <li>
+        <%= link_to "My Requests", proposals_path %>
+        <%= image_tag "img-cart.png", width: '18px', height:'16px' %>
+      </li>
       <%= client_partial(current_user.client_slug || 'ncr', "header_links") %>
     </ul>
   </div>

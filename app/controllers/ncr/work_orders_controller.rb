@@ -14,6 +14,9 @@ module Ncr
     end
 
     def edit
+      if self.proposal.approved?
+        flash[:warning] = "You are about to modify a fully approved request. Changes will be logged and sent to approvers but this request will not require re-approval."
+      end
       @approver_email = self.proposal.approvers.first.email_address
       super
     end

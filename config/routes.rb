@@ -1,8 +1,13 @@
 C2::Application.routes.draw do
   root :to => 'home#index'
-  match "/auth/:provider/callback" => "home#oauth_callback", via: [:get]
   get '/error' => 'home#error'
-  post "/logout" => "home#logout"
+  get '/feedback' => 'feedback#index'
+  post '/feedback' => 'feedback#create'
+
+  match '/auth/:provider/callback' => 'auth#oauth_callback', via: [:get]
+  post '/logout' => 'auth#logout'
+
+  resources :help, only: [:index, :show]
 
   namespace :api do
     scope :v1 do
@@ -34,7 +39,7 @@ C2::Application.routes.draw do
       get 'query'
     end
 
-    resources :comments, only: [:index, :create]
+    resources :comments, only: :create
     resources :attachments, only: [:create, :destroy, :show]
   end
 
@@ -45,6 +50,7 @@ C2::Application.routes.draw do
 
   namespace :gsa18f do
     resources :procurements, except: [:index, :destroy]
+    get '/dashboard' => 'dashboard#index' 
   end
 
   mount Peek::Railtie => '/peek'
