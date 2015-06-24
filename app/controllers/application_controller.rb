@@ -54,8 +54,13 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def admin?
+    emails = ENV['ADMIN_EMAILS'] || []
+    signed_in? && emails.include?(current_user.email_address)
+  end
+
   def peek_enabled?
-    true
+    Rails.env.development? || self.admin?
   end
 
   private
