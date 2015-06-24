@@ -25,7 +25,7 @@ describe "National Capital Region proposals" do
         fill_in 'Amount', with: 123.45
         check "I am going to be using direct pay for this transaction"
         fill_in "Approving official's email address", with: 'approver@example.com'
-        fill_in 'Building number', with: Ncr::Building.all[0]
+        fill_in 'Building number', with: Ncr::Building.first
         select Ncr::Organization.all[0], :from => 'ncr_work_order_org_code'
         expect {
           click_on 'Submit for approval'
@@ -44,7 +44,7 @@ describe "National Capital Region proposals" do
         expect(work_order.vendor).to eq('ACME')
         expect(work_order.amount).to eq(123.45)
         expect(work_order.direct_pay).to eq(true)
-        expect(work_order.building_number).to eq(Ncr::Building.all[0].to_s)
+        expect(work_order.building_number).to eq(Ncr::Building.first.to_s)
         expect(work_order.org_code).to eq(Ncr::Organization.all[0].to_s)
         expect(work_order.description).to eq('desc content')
         expect(proposal.requester).to eq(requester)
@@ -92,7 +92,7 @@ describe "National Capital Region proposals" do
           fill_in 'Vendor', with: 'ACME'
           fill_in 'Amount', with: 123.45
           fill_in "Approving official's email address", with: 'approver@example.com'
-          fill_in 'Building number', with: Ncr::Building.all[0]
+          fill_in 'Building number', with: Ncr::Building.first
           select Ncr::Organization.all[0], :from => 'ncr_work_order_org_code'
           expect {
             click_on 'Submit for approval'
@@ -128,7 +128,7 @@ describe "National Capital Region proposals" do
         fill_in 'Vendor', with: 'ACME'
         fill_in 'Amount', with: 123.45
         fill_in "Approving official's email address", with: 'approver@example.com'
-        fill_in 'Building number', with: Ncr::Building.all[0]
+        fill_in 'Building number', with: Ncr::Building.first
         select Ncr::Organization.all[0], :from => 'ncr_work_order_org_code'
         click_on 'Submit for approval'
         expect(current_path).to eq("/proposals/#{Proposal.last.id}")
@@ -208,7 +208,7 @@ describe "National Capital Region proposals" do
       }
       it "can be edited if pending" do
         visit "/ncr/work_orders/#{work_order.id}/edit"
-        expect(find_field("ncr_work_order_building_number").value).to eq(Ncr::Building.all[0].to_s)
+        expect(find_field("ncr_work_order_building_number").value).to eq(Ncr::Building.first.to_s)
         fill_in 'Vendor', with: 'New ACME'
       click_on 'Update'
         expect(current_path).to eq("/proposals/#{ncr_proposal.id}")
@@ -316,7 +316,7 @@ describe "National Capital Region proposals" do
           fill_in 'Vendor', with: 'ACME'
           fill_in 'Amount', with: 123.45
           fill_in "Approving official's email address", with: 'approver@example.com'
-          fill_in 'Building number', with: Ncr::Building.all[0]
+          fill_in 'Building number', with: Ncr::Building.first
           select Ncr::Organization.all[0], :from => 'ncr_work_order_org_code'
         end
 

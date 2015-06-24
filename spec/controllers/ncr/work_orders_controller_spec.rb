@@ -6,7 +6,7 @@ describe Ncr::WorkOrdersController do
     let (:params) {{
       ncr_work_order: {
         amount: '111.22', expense_type: 'BA80', vendor: 'Vendor',
-        not_to_exceed: '0', building_number: Ncr::Building.all[0],
+        not_to_exceed: '0', building_number: Ncr::Building.first,
         emergency: '0', rwa_number: 'A12345678', org_code: Ncr::Organization.all[0],
         code: 'Work Order', project_title: 'Title', description: 'Desc'},
       approver_email: 'bob@example.gov'

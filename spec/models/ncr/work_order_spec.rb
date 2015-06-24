@@ -4,11 +4,11 @@ describe Ncr::WorkOrder do
       wo = Ncr::WorkOrder.new(
         amount: 1000, expense_type: "BA61", vendor: "Some Vend",
         not_to_exceed: false, emergency: true, rwa_number: "RWWAAA #",
-        building_number: Ncr::Building.all[0],
+        building_number: Ncr::Building.first,
         org_code: Ncr::Organization.all[0], description: "Ddddd", direct_pay: true)
       expect(wo.fields_for_display.sort).to eq([
         ["Amount", 1000],
-        ["Building number", Ncr::Building.all[0]],
+        ["Building number", Ncr::Building.first],
         ["CL number", nil],
         ["Description", "Ddddd"],
         ["Direct pay", true],
@@ -27,11 +27,11 @@ describe Ncr::WorkOrder do
       wo = Ncr::WorkOrder.new(
         amount: 1000, expense_type: "BA80", vendor: "Some Vend",
         not_to_exceed: false, emergency: true, rwa_number: "RWWAAA #",
-        building_number: Ncr::Building.all[0], code: "Some WO#",
+        building_number: Ncr::Building.first, code: "Some WO#",
         org_code: Ncr::Organization.all[0], description: "Ddddd", direct_pay: true)
       expect(wo.fields_for_display.sort).to eq([
         ["Amount", 1000],
-        ["Building number", Ncr::Building.all[0]],
+        ["Building number", Ncr::Building.first],
         ["CL number", nil],
         ["Description", "Ddddd"],
         ["Direct pay", true],

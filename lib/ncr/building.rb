@@ -23,6 +23,10 @@ module Ncr
     def self.all
       ALL.dup
     end
+
+    def self.first
+      ALL.first
+    end
   end
 end
 
