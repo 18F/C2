@@ -14,8 +14,11 @@ class ObservationsController < ApplicationController
 
     observer = observation.user
     flash[:success] = "#{observer.full_name} has been added as an observer"
+    # TODO store an activity comment
     redirect_to proposal_observations_path(proposal)
   end
+
+  # TODO allow them to be removed
 
 
   protected

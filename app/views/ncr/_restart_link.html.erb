@@ -3,5 +3,6 @@
     <%= link_to "Modify Request",
         edit_ncr_work_order_path(proposal.client_data_id),
         class: 'form-button modify' %>
+    <%= link_to "Add observers", proposal_observations_path(proposal) %>
   </p>
 </div>
