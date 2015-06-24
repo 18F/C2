@@ -29,7 +29,7 @@ describe CommunicartMailer do
 
     it "includes the appropriate headers for threading" do
       # headers only get added when the Mail is #deliver-ed
-      mail.deliver
+      mail.deliver_now
 
       %w(In-Reply-To References).each do |header|
         expect(mail[header].value).to eq("<proposal-#{proposal.id}@#{DEFAULT_URL_HOST}>")

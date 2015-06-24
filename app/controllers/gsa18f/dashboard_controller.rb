@@ -1,7 +1,7 @@
 module Gsa18f
   class DashboardController < ApplicationController
     before_filter :authenticate_user!
-    
+
     def index
       @rows = self.format_results(self.queryset)
     end
@@ -18,7 +18,7 @@ module Gsa18f
         group('year', 'month').
         order('year DESC', 'month DESC')
       # Convert the ORM into an array of hashes
-      Gsa18f::Procurement.connection.select_all(orm_query)
+      Gsa18f::Procurement.connection.select_all(orm_query.to_sql)
     end
 
     def format_results(results)
