@@ -5,13 +5,16 @@ describe Ncr::WorkOrder do
       expect(wo.relevant_fields.sort).to eq([
         :amount,
         :building_number,
+        :cl_number,
         # No :code
         :description,
         :direct_pay,
         :expense_type,
+        :function_code,
         :not_to_exceed,
         :org_code,
         # No :rwa_number
+        :soc_code,
         :vendor
       ])
     end
@@ -21,14 +24,17 @@ describe Ncr::WorkOrder do
       expect(wo.relevant_fields.sort).to eq([
         :amount,
         :building_number,
+        :cl_number,
         :code,
         :description,
         :direct_pay,
         # No Emergency
         :expense_type,
+        :function_code,
         :not_to_exceed,
         :org_code,
         :rwa_number,
+        :soc_code,
         :vendor
       ])
     end

@@ -1,15 +1,29 @@
-describe 'GET /help' do
-  it "displays successfully" do
-    get '/help'
+describe 'help pages' do
+  let(:doc) { Capybara.string(body) }
 
-    expect(response.status).to eq(200)
+  describe 'GET /help' do
+    it "renders Markdown successfully" do
+      get '/help'
 
-    doc = Capybara.string(body)
-    expect(doc).to have_content('FAQ')
+      expect(response.status).to eq(200)
+      expect(doc).to have_content('credit card')
+    end
+  end
 
-    inset = doc.find('.markdown')
-    link = inset.find_link('the homepage')
-    expect(link).to_not be_nil
-    expect(link[:href]).to eq('/')
+  describe 'GET /help/:page' do
+    it "renders Markdown successfully" do
+      get '/help/new_work_order'
+
+      expect(response.status).to eq(200)
+      expect(doc).to have_content('credit card')
+      expect(doc).to_not have_content('<%')
+      expect(doc).to_not have_content('1. ')
+    end
+
+    it "gives a 404 for an unknown page" do
+      expect {
+        get '/help/unknown'
+      }.to raise_error(ActionController::RoutingError)
+    end
   end
 end
