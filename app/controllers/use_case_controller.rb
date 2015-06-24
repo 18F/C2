@@ -63,8 +63,7 @@ class UseCaseController < ApplicationController
   end
 
   def errors
-    # TODO use #validate after upgrading to Rails 4.2.1+
-    @model_instance.valid? # force validation
+    @model_instance.validate
     @model_instance.errors.full_messages
   end
 
@@ -79,7 +78,7 @@ class UseCaseController < ApplicationController
       Attachment.create(proposal: proposal, user: current_user, file: file)
     end
   end
-  
+
   # Hook for adding additional approvers
   def add_approvals
   end

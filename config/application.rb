@@ -41,7 +41,7 @@ module C2
 
     config.assets.precompile << 'common/communicarts.css'
 
-    # remove for Rails 4.2.2+(?)
+    # remove for Rails 4.3+(?)
     config.active_record.raise_in_transactional_callbacks = true
   end
 end
