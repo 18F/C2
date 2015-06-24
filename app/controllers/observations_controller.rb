@@ -10,7 +10,10 @@ class ObservationsController < ApplicationController
 
   def create
     proposal = self.find_proposal
-    proposal.add_observer(params[:observation][:user][:email_address])
+    observation = proposal.add_observer(params[:observation][:user][:email_address])
+
+    observer = observation.user
+    flash[:success] = "#{observer.full_name} has been added as an observer"
     redirect_to proposal_observations_path(proposal)
   end
 
