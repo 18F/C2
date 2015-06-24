@@ -14,6 +14,7 @@ module MarkdownHelper
       disable_indented_code_blocks: true
     }
 
+    # TODO use github-markdown so we don't need to load the extra gem
     renderer = Redcarpet::Render::HTML.new(options)
     markdown = Redcarpet::Markdown.new(renderer, extensions)
 

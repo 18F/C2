@@ -1,12 +1,13 @@
 C2::Application.routes.draw do
   root :to => 'home#index'
-  get '/help' => 'home#help'
   get '/error' => 'home#error'
   get '/feedback' => 'feedback#index'
   post '/feedback' => 'feedback#create'
 
   match '/auth/:provider/callback' => 'auth#oauth_callback', via: [:get]
   post '/logout' => 'auth#logout'
+
+  resources :help, only: [:index, :show]
 
   namespace :api do
     scope :v1 do
@@ -49,6 +50,7 @@ C2::Application.routes.draw do
 
   namespace :gsa18f do
     resources :procurements, except: [:index, :destroy]
+    get '/dashboard' => 'dashboard#index' 
   end
 
   if Rails.env.development?

@@ -1,3 +1,5 @@
+include EnvironmentSpecHelper
+
 describe ProposalSearch do
   describe '#execute' do
     it "returns an empty list for no Proposals" do
@@ -35,6 +37,10 @@ describe ProposalSearch do
     end
 
     context Gsa18f::Procurement do
+      around(:each) do |example|
+        with_18f_procurement_env_variables(&example)
+      end
+
       [:product_name_and_description, :justification, :additional_info].each do |attr_name|
         it "returns the Proposal when searching by the ##{attr_name}" do
           procurement = FactoryGirl.create(:gsa18f_procurement, attr_name => 'foo')
