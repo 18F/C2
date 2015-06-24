@@ -168,7 +168,8 @@ describe "National Capital Region proposals" do
     end
 
     let (:work_order) {
-      wo = FactoryGirl.create(:ncr_work_order, requester: requester)
+      wo = FactoryGirl.create(:ncr_work_order, requester: requester,
+                              description: "test", direct_pay: true)
       wo.add_approvals('approver@example.com')
       wo
     }
@@ -207,14 +208,14 @@ describe "National Capital Region proposals" do
       expect(current_path).to eq("/proposals/#{work_order.proposal.id}")
     end
 
-    it "does not resave unchanged requests" do 
+    it "does not resave unchanged requests" do
       visit "/ncr/work_orders/#{work_order.id}/edit"
       click_on 'Submit for approval'
-      visit "/ncr/work_orders/#{work_order.id}/edit"
-      click_on 'Submit for approval'
+      
 
       expect(current_path).to eq("/proposals/#{work_order.proposal.id}")
       expect(page).to have_content("No changes were made to the request")
+      expect(deliveries.length).to eq(0)
     end
 
     it "has a disabled field if first approval is done" do
