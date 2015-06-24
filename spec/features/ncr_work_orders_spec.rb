@@ -200,7 +200,9 @@ describe "National Capital Region proposals" do
 
       let (:work_order) {
         wo = FactoryGirl.create(:ncr_work_order, requester: requester,
-                                description: "test", direct_pay: false)
+                                description: "test", direct_pay: false,
+                                cl_number: '12345', function_code: '12345',
+                                soc_code: '12345')
         wo.add_approvals('approver@example.com')
         wo
       }
@@ -234,7 +236,7 @@ describe "National Capital Region proposals" do
 
       it "does not resave unchanged requests" do
         visit "/ncr/work_orders/#{work_order.id}/edit"
-        click_on 'Submit for approval'
+        click_on 'Update'
         
         expect(current_path).to eq("/proposals/#{work_order.proposal.id}")
         expect(page).to have_content("No changes were made to the request")
