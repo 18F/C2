@@ -46,12 +46,17 @@ module Ncr
     # A requester can change his/her approving official
     def update_approver(approver_email)
       first_approval = self.approvals.first
-      if first_approval.user_email_address != approver_email
+      if self.approver_changed?(approver_email)
         first_approval.destroy
         replacement = self.add_approver(approver_email)
         replacement.move_to_top
       end
       # no need to call initialize_approvals as they have already been set up
+    end
+
+    def approver_changed?(approval_email)
+      first_approval = self.approvals.first.user_email_address
+      first_approval != approval_email
     end
 
     def add_approvals(approver_email)
