@@ -5,9 +5,12 @@ class ProposalPolicy
     @proposal = record
   end
 
-  def author!
-    check(@proposal.requester_id == @user.id,
-          "You are not the requester")
+  def requester?
+    @proposal.requester_id == @user.id
+  end
+
+  def requester!
+    check(self.requester?, "You are not the requester")
   end
 
   def not_approved!
@@ -52,7 +55,7 @@ class ProposalPolicy
   alias_method :can_approve!, :can_approve_or_reject!
 
   def can_edit!
-    author! && not_approved!
+    requester! && not_approved!
   end
   alias_method :can_update!, :can_edit!
 

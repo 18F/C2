@@ -40,8 +40,10 @@ class UseCaseController < ApplicationController
 
   def update
     @model_instance.assign_attributes(self.permitted_params)   # don't hit db yet
-
-    if self.errors.empty?
+    if !self.attribute_changes? && self.errors.empty?
+      flash[:success] = "No changes were made to the request"
+      redirect_to proposal_path(@model_instance.proposal)
+    elsif self.errors.empty?
       @model_instance.save
       flash[:success] = "Successfully modified!"
       redirect_to proposal_path(@model_instance.proposal)
@@ -54,6 +56,10 @@ class UseCaseController < ApplicationController
 
   protected
 
+  def attribute_changes?
+    !@model_instance.changed_attributes.blank?
+  end
+
   def find_model_instance
     @model_instance ||= self.model_class.find(params[:id])
   end
@@ -63,8 +69,7 @@ class UseCaseController < ApplicationController
   end
 
   def errors
-    # TODO use #validate after upgrading to Rails 4.2.1+
-    @model_instance.valid? # force validation
+    @model_instance.validate
     @model_instance.errors.full_messages
   end
 
@@ -79,7 +84,7 @@ class UseCaseController < ApplicationController
       Attachment.create(proposal: proposal, user: current_user, file: file)
     end
   end
-  
+
   # Hook for adding additional approvers
   def add_approvals
   end

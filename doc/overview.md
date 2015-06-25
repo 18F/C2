@@ -71,6 +71,10 @@ The NCR use case was built around GSA service centers (paint shops, landscapers,
 1. If the AO approves, it goes to one or two other budget office approvers, depending on the type of request.
 1. Once all approvers have approved (or any one of them reject) the Proposal, the requester gets a notification.
 
+## Performance
+
+C2 has the [Peek](https://github.com/peek/peek) performance bar loaded in all environments, though it's hidden by default. Press the backtick (`` ` ``) key to display it.
+
 ## Production
 
-18F's production and staging [deployments](http://12factor.net/codebase) of C2 live in AWS, and are deployed via [Cloud Foundry](http://www.cloudfoundry.org). See [our Cloud Foundry documentation](https://docs.cf.18f.us) for more details.
+18F's production and staging [deployments](http://12factor.net/codebase) of C2 live in AWS, and are deployed via [Cloud Foundry](http://www.cloudfoundry.org). See [our Cloud Foundry documentation](https://docs.18f.gov) for more details.

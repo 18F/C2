@@ -25,7 +25,7 @@ describe "National Capital Region proposals" do
         fill_in 'Amount', with: 123.45
         check "I am going to be using direct pay for this transaction"
         fill_in "Approving official's email address", with: 'approver@example.com'
-        select Ncr::BUILDING_NUMBERS[0], :from => 'ncr_work_order_building_number'
+        fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
         select Ncr::Organization.all[0], :from => 'ncr_work_order_org_code'
         expect {
           click_on 'Submit for approval'
@@ -92,7 +92,7 @@ describe "National Capital Region proposals" do
           fill_in 'Vendor', with: 'ACME'
           fill_in 'Amount', with: 123.45
           fill_in "Approving official's email address", with: 'approver@example.com'
-          select Ncr::BUILDING_NUMBERS[0], :from => 'ncr_work_order_building_number'
+          fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
           select Ncr::Organization.all[0], :from => 'ncr_work_order_org_code'
           expect {
             click_on 'Submit for approval'
@@ -128,7 +128,7 @@ describe "National Capital Region proposals" do
         fill_in 'Vendor', with: 'ACME'
         fill_in 'Amount', with: 123.45
         fill_in "Approving official's email address", with: 'approver@example.com'
-        select Ncr::BUILDING_NUMBERS[0], :from => 'ncr_work_order_building_number'
+        fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
         select Ncr::Organization.all[0], :from => 'ncr_work_order_org_code'
         click_on 'Submit for approval'
         expect(current_path).to eq("/proposals/#{Proposal.last.id}")
@@ -175,8 +175,34 @@ describe "National Capital Region proposals" do
         expect(page).to have_selector("input[type=file]", count: 2)
       end
 
+      it "includes an initial list of buildings", :js => true do
+        visit '/ncr/work_orders/new'
+        option = Ncr::BUILDING_NUMBERS.shuffle[0]
+
+        expect(page).not_to have_selector(".option[data-value='#{option}']")
+
+        find("input[aria-label='Building number']").native.send_keys(option)
+        expect(page).to have_selector("div.option[data-value='#{option}']")
+      end
+
+      it "does not include custom buildings initially", :js => true do
+        visit '/ncr/work_orders/new'
+        find("input[aria-label='Building number']").native.send_keys("BillDing")
+        expect(page).not_to have_selector("div.option[data-value='BillDing']")
+      end
+
+      it "includes previously entered buildings, too", :js => true do
+        FactoryGirl.create(:ncr_work_order, building_number: "BillDing")
+        visit '/ncr/work_orders/new'
+        find("input[aria-label='Building number']").native.send_keys("BillDing")
+        expect(page).to have_selector("div.option[data-value='BillDing']")
+      end
+
       let (:work_order) {
-        wo = FactoryGirl.create(:ncr_work_order, requester: requester)
+        wo = FactoryGirl.create(:ncr_work_order, requester: requester,
+                                description: "test", direct_pay: false,
+                                cl_number: '12345', function_code: '12345',
+                                soc_code: '12345')
         wo.add_approvals('approver@example.com')
         wo
       }
@@ -206,6 +232,15 @@ describe "National Capital Region proposals" do
         expect(page).to have_content("Request modified by")
         expect(page).to have_content("Description was changed to New Description")
         expect(page).to have_content("Vendor was changed to New Test Vendor")
+      end
+
+      it "does not resave unchanged requests" do
+        visit "/ncr/work_orders/#{work_order.id}/edit"
+        click_on 'Update'
+        
+        expect(current_path).to eq("/proposals/#{work_order.proposal.id}")
+        expect(page).to have_content("No changes were made to the request")
+        expect(deliveries.length).to eq(0)
       end
 
       it "has 'Discard Changes' link" do
@@ -249,7 +284,7 @@ describe "National Capital Region proposals" do
 
         visit "/ncr/work_orders/#{work_order.id}/edit"
         expect(current_path).to eq("/ncr/work_orders/new")
-        expect(page).to have_content('not the requester')
+        expect(page).to have_content("You must be the requester or an approver")
       end
 
       it "shows a edit link from a pending cart" do
@@ -294,7 +329,7 @@ describe "National Capital Region proposals" do
           fill_in 'Vendor', with: 'ACME'
           fill_in 'Amount', with: 123.45
           fill_in "Approving official's email address", with: 'approver@example.com'
-          select Ncr::BUILDING_NUMBERS[0], :from => 'ncr_work_order_building_number'
+          fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
           select Ncr::Organization.all[0], :from => 'ncr_work_order_org_code'
         end
 
