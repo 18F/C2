@@ -1,8 +1,9 @@
 module CommunicartMailerHelper
   def status_icon_tag(status, linear=false)
-    bg_linear_image = root_url.gsub(/\?.*$/,'').chomp("/")+image_path("bg_#{status}_status.gif")
+    base_url = root_url.gsub(/\?.*$/,'').chomp("/")
+    bg_linear_image = base_url + image_path("bg_#{status}_status.gif")
 
-    image_tag(root_url.gsub(/\?.*$/,'').chomp("/")+image_path("icon-#{status}.png"),
+    image_tag(base_url + image_path("icon-#{status}.png"),
               class: "status-icon #{status} #{'linear' if linear}",
               style: "background-image: url('#{bg_linear_image}');"
     )
