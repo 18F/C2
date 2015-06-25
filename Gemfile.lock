@@ -404,7 +404,7 @@ DEPENDENCIES
   poltergeist
   pry-byebug
   pry-rails
-  pundit
+  pundit (>= 1.0.0)
   rack-cors
   rack-ssl-enforcer
   rack_session_access
