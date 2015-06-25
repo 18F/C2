@@ -158,8 +158,7 @@ module Ncr
     protected
 
     def record_changes
-      changed_attributes = self.changed_attributes.clone
-      changed_attributes.delete(:updated_at)
+      changed_attributes = self.changed_attributes.except(:updated_at)
       comment_texts = []
       bullet = changed_attributes.length > 1 ? '- ' : ''
       changed_attributes.each do |key, value|
