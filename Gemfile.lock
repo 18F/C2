@@ -62,6 +62,7 @@ GEM
     ar_outer_joins (0.2.0)
       activerecord (>= 3.2)
     arel (6.0.0)
+    atomic (1.1.99)
     autoprefixer-rails (4.0.2.2)
       execjs
     awesome_print (1.6.1)
@@ -218,6 +219,15 @@ GEM
       activesupport (>= 3.0.0)
       cocaine (~> 0.5.3)
       mime-types
+    peek (0.1.10)
+      atomic (>= 1.0.0)
+      railties (>= 3.0.0)
+    peek-performance_bar (1.1.6)
+      peek (>= 0.1.0)
+    peek-pg (1.1.0)
+      atomic (>= 1.0.0)
+      peek
+      pg
     pg (0.18.2)
     poltergeist (1.6.0)
       capybara (~> 2.1)
@@ -385,6 +395,9 @@ DEPENDENCIES
   newrelic_rpm
   omniauth-myusa!
   paperclip
+  peek
+  peek-performance_bar
+  peek-pg
   pg
   poltergeist
   pry-byebug

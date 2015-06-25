@@ -14,21 +14,22 @@
   </head>
   <body class="bodyclass webapp controller-<%= controller_name %> action-<%= params[:action] %>">
 
-  <%= render 'layouts/communicart_header' %>
+    <%= render 'peek/bar' %>
+    <%= render 'layouts/communicart_header' %>
 
-  <div class="inset">
-    <% flash_list.each do |key, value| %>
-      <div class="row alert alert-<%= key %> <%= bootstrap_alert_class(key) %>"><%= value %></div>
-    <% end %>
-  </div>
-
-  <%= content_for?(:content) ? yield(:content) : yield %>
-
-  <%- unless @skip_footer %>
-    <div id="footer" class="inset">
-      <p>Find a bug, have a recommendation, or want to provide other feedback? We'd love to <a target="_blank" href="<%= feedback_path %>">hear from you!</a></p>
+    <div class="inset">
+      <% flash_list.each do |key, value| %>
+        <div class="row alert alert-<%= key %> <%= bootstrap_alert_class(key) %>"><%= value %></div>
+      <% end %>
     </div>
-  <%- end %>
+
+    <%= content_for?(:content) ? yield(:content) : yield %>
+
+    <%- unless @skip_footer %>
+      <div id="footer" class="inset">
+        <p>Find a bug, have a recommendation, or want to provide other feedback? We'd love to <a target="_blank" href="<%= feedback_path %>">hear from you!</a></p>
+      </div>
+    <%- end %>
 
   </body>
 </html>
