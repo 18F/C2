@@ -36,7 +36,7 @@
 
     &.last {
       img.approved.linear, img.pending.linear, img.rejected.linear {
-        background-image: none;
+        background-image: none !important;
       }
 
       img {
