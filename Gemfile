@@ -23,7 +23,7 @@ gem 'peek'
 gem 'peek-performance_bar'
 gem 'peek-pg'
 gem 'pg'
-gem 'pundit', '>= 1.0.0'
+gem 'pundit', '>= 1.0.0'  # Interface for Pundit::NotAuthorizedError changed in this version
 gem 'rack-cors', require: 'rack/cors'
 gem 'rack-ssl-enforcer'
 gem 'rails'
