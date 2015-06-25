@@ -1,7 +1,7 @@
 module Ncr
   class DashboardController < ApplicationController
     before_filter :authenticate_user!
-    
+
     def index
       @rows = self.format_results(self.queryset)
     end
@@ -18,7 +18,7 @@ module Ncr
         group('year', 'month').
         order('year DESC', 'month DESC')
       # Convert the ORM into an array of hashes
-      Ncr::WorkOrder.connection.select_all(orm_query)
+      Ncr::WorkOrder.connection.select_all(orm_query.to_sql)
     end
 
     def format_results(results)
