@@ -7,10 +7,6 @@ module Ncr
       @work_order = record
     end
 
-    def restricted?
-      ENV['RESTRICT_ACCESS'] == 'true'
-    end
-
     def can_edit!
       check(self.requester? || self.approver?, "You must be the requester or an approver to edit")
     end
