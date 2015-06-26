@@ -5,7 +5,7 @@
         <td>
           <strong>Approval Status</strong>
         </td>
-        <td>
+        <td class="status-header">
           <%= status_icon_tag(@proposal.status) %>
           <strong><%= @proposal.status %></strong>
           (<%= @proposal.number_approved %> of <%= @proposal.total_approvers %> approved)

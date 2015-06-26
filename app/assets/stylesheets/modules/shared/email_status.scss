@@ -23,6 +23,12 @@
     .status-icon {
       padding-bottom: 5px;
     }
+
+    &.status-header {
+      strong {
+        padding: 0 3px;
+      }
+    }
   }
 
   .status-icon {
