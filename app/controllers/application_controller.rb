@@ -19,7 +19,6 @@ class ApplicationController < ActionController::Base
     user ||= @current_user
     record = self.authorizing_object(record)
     policy = Pundit.policy(user, record)
-    # TODO fall back to ProposalPolicy if there isn't a use-case-specific one
 
     # use the action as a default permission
     query ||= ("can_" + params[:action].to_s + "!").to_sym
