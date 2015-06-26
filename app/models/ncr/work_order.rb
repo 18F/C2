@@ -29,6 +29,10 @@ module Ncr
       greater_than_or_equal_to: 0,
       message: "must be greater than or equal to $0"
     }
+    validates :cl_number, format: {
+      with: /\ACL\d{7}\z/,
+      message: "start with 'CL', followed by seven numbers"
+    }, allow_blank: true
     validates :expense_type, inclusion: {in: EXPENSE_TYPES}, presence: true
     validates :function_code, format: {
       with: /\APG[A-Z0-9]+\z/,
@@ -53,8 +57,13 @@ module Ncr
     end
 
     def normalize_values
-      self.function_code = self.function_code.upcase unless self.function_code.nil?
-      self.soc_code = self.soc_code.upcase unless self.soc_code.nil?
+      if self.cl_number
+        self.cl_number = self.cl_number.upcase
+        self.cl_number.prepend('CL') unless self.cl_number.start_with?('CL')
+      end
+
+      self.function_code = self.function_code.upcase if self.function_code
+      self.soc_code = self.soc_code.upcase if self.soc_code
     end
 
     # A requester can change his/her approving official

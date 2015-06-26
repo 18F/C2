@@ -121,6 +121,33 @@ describe Ncr::WorkOrder do
   end
 
   describe 'validations' do
+    describe 'cl_number' do
+      let (:work_order) { FactoryGirl.build(:ncr_work_order) }
+
+      it "works with a 'CL' prefix" do
+        work_order.cl_number = 'CL1234567'
+        expect(work_order).to be_valid
+      end
+
+      it "automatically adds a 'CL' prefix" do
+        work_order.cl_number = '1234567'
+        expect(work_order).to be_valid
+        expect(work_order.cl_number).to eq('CL1234567')
+      end
+
+      it "requires seven numbers" do
+        work_order.cl_number = '123'
+        expect(work_order).to_not be_valid
+        expect(work_order.errors.keys).to eq([:cl_number])
+      end
+
+      it "is converted to uppercase" do
+        work_order.cl_number = 'cl1234567'
+        expect(work_order).to be_valid
+        expect(work_order.cl_number).to eq('CL1234567')
+      end
+    end
+
     describe 'function_code' do
       let (:work_order) { FactoryGirl.build(:ncr_work_order) }
 
