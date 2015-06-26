@@ -68,6 +68,7 @@ module Ncr
 
       if self.function_code.present?
         self.function_code.upcase!
+        self.function_code.prepend('PG') unless self.function_code.start_with?('PG')
       else
         self.function_code = nil
       end

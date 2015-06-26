@@ -168,10 +168,10 @@ describe Ncr::WorkOrder do
         expect(work_order.errors.keys).to eq([:function_code])
       end
 
-      it "must start with 'PG'" do
-        work_order.function_code = 'ABC'
-        expect(work_order).to_not be_valid
-        expect(work_order.errors.keys).to eq([:function_code])
+      it "automatically adds a 'PG' prefix" do
+        work_order.function_code = '123'
+        expect(work_order).to be_valid
+        expect(work_order.function_code).to eq('PG123')
       end
 
       it "is converted to uppercase" do
