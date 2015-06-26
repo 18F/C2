@@ -36,7 +36,7 @@ module Ncr
     validates :expense_type, inclusion: {in: EXPENSE_TYPES}, presence: true
     validates :function_code, format: {
       with: /\APG[A-Z0-9]{3}\z/,
-      message: "must start with 'PG', followed by letters or numbers"
+      message: "must start with 'PG', followed by three letters or numbers"
     }, allow_blank: true
     validates :project_title, presence: true
     validates :vendor, presence: true
@@ -48,7 +48,7 @@ module Ncr
     }, allow_blank: true
     validates :soc_code, format: {
       with: /\A[A-Z0-9]{3}\z/,
-      message: "must be three characters"
+      message: "must be three letters or numbers"
     }, allow_blank: true
 
     def set_defaults
