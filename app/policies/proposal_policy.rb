@@ -64,6 +64,11 @@ class ProposalPolicy
     check(visible.include?(@proposal), "You are not allowed to see this cart")
   end
 
+  def can_create!
+    true
+  end
+  alias_method :can_new!, :can_create!
+
   # equivalent of can_show?
   class Scope
     def initialize(user, scope)
