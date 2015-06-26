@@ -31,12 +31,12 @@ module Ncr
     }
     validates :cl_number, format: {
       with: /\ACL\d{7}\z/,
-      message: "start with 'CL', followed by seven numbers"
+      message: "must start with 'CL', followed by seven numbers"
     }, allow_blank: true
     validates :expense_type, inclusion: {in: EXPENSE_TYPES}, presence: true
     validates :function_code, format: {
       with: /\APG[A-Z0-9]{3}\z/,
-      message: "start with 'PG', followed by letters or numbers"
+      message: "must start with 'PG', followed by letters or numbers"
     }, allow_blank: true
     validates :project_title, presence: true
     validates :vendor, presence: true
@@ -44,7 +44,7 @@ module Ncr
     validates :rwa_number, presence: true, if: :ba80?
     validates :rwa_number, format: {
       with: /[a-zA-Z][0-9]{7}/,
-      message: "one letter followed by 7 numbers"
+      message: "must be one letter followed by 7 numbers"
     }, allow_blank: true
     validates :soc_code, format: {
       with: /\A[A-Z0-9]{3}\z/,
