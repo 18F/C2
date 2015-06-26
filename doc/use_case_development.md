@@ -14,8 +14,9 @@ Our codebase is (largely) split up into two sections: that which is core C2 code
     * Name
     * Public identifier
     * Displayed properties (`relevant_fields`)
-* Dashboard (`/proposals`)
+* Dashboard (`/proposals`) – optional
     * Displayed properties
+* Policy – optional
 * Form
     * Ordering of fields
     * Possible/suggested options for various fields
