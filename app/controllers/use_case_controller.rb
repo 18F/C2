@@ -75,8 +75,13 @@ class UseCaseController < ApplicationController
   end
 
   def auth_errors(exception)
-    url = polymorphic_url(self.model_class, action: :new, routing_type: :path)
-    redirect_to url, alert: exception.message
+    path = polymorphic_path(self.model_class, action: :new)
+    # prevent redirect loop
+    if path == request.path
+      redirect_to proposals_path, alert: exception.message
+    else
+      redirect_to path, alert: exception.message
+    end
   end
 
   def initial_attachments(proposal)

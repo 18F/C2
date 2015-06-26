@@ -6,6 +6,18 @@ describe "National Capital Region proposals" do
       expect(page).to have_content("You need to sign in")
     end
 
+    with_feature 'RESTRICT_ACCESS' do
+      it "requires a GSA email address" do
+        user = FactoryGirl.create(:user, email_address: 'intruder@some.com')
+        login_as(user)
+
+        visit '/ncr/work_orders/new'
+
+        expect(current_path).to eq('/proposals')
+        expect(page).to have_content("You must be logged in with a GSA email address")
+      end
+    end
+
     context "when signed in as the requester" do
       let(:requester) { FactoryGirl.create(:user) }
 
@@ -237,7 +249,7 @@ describe "National Capital Region proposals" do
       it "does not resave unchanged requests" do
         visit "/ncr/work_orders/#{work_order.id}/edit"
         click_on 'Update'
-        
+
         expect(current_path).to eq("/proposals/#{work_order.proposal.id}")
         expect(page).to have_content("No changes were made to the request")
         expect(deliveries.length).to eq(0)
