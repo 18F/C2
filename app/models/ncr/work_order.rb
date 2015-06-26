@@ -17,6 +17,7 @@ module Ncr
     include ProposalDelegate
 
     after_initialize :set_defaults
+    before_validation :normalize_values
     before_update :record_changes
 
     # @TODO: use integer number of cents to avoid floating point issues
@@ -28,6 +29,10 @@ module Ncr
       greater_than_or_equal_to: 0,
       message: "must be greater than or equal to $0"
     }
+    validates :cl_number, format: {
+      with: /\APG[A-Z0-9]+\z/,
+      message: "start with 'PG', followed by letters or numbers"
+    }, allow_blank: true
     validates :expense_type, inclusion: {in: EXPENSE_TYPES}, presence: true
     validates :project_title, presence: true
     validates :vendor, presence: true
@@ -41,6 +46,10 @@ module Ncr
     def set_defaults
       self.not_to_exceed ||= false
       self.emergency ||= false
+    end
+
+    def normalize_values
+      self.cl_number = self.cl_number.upcase unless self.cl_number.nil?
     end
 
     # A requester can change his/her approving official
