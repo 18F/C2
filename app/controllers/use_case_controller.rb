@@ -3,7 +3,7 @@
 # * permitted_params
 class UseCaseController < ApplicationController
   before_filter :authenticate_user!
-  before_filter ->{authorize Proposal.new}, only: [:new, :create]
+  before_filter ->{authorize self.model_class.new}, only: [:new, :create]
   before_filter ->{authorize self.proposal}, only: [:edit, :update]
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
   before_filter :find_model_instance, only: [:edit, :update]
