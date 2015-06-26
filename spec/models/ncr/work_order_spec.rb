@@ -146,6 +146,12 @@ describe Ncr::WorkOrder do
         expect(work_order).to be_valid
         expect(work_order.cl_number).to eq('CL1234567')
       end
+
+      it "clears empty strings" do
+        work_order.cl_number = ''
+        expect(work_order).to be_valid
+        expect(work_order.cl_number).to eq(nil)
+      end
     end
 
     describe 'function_code' do
@@ -172,6 +178,12 @@ describe Ncr::WorkOrder do
         work_order.function_code = 'pg1c3'
         expect(work_order).to be_valid
         expect(work_order.function_code).to eq('PG1C3')
+      end
+
+      it "clears empty strings" do
+        work_order.function_code = ''
+        expect(work_order).to be_valid
+        expect(work_order.function_code).to eq(nil)
       end
     end
 
@@ -228,6 +240,12 @@ describe Ncr::WorkOrder do
         work_order.soc_code = 'ab2'
         expect(work_order).to be_valid
         expect(work_order.soc_code).to eq('AB2')
+      end
+
+      it "clears empty strings" do
+        work_order.soc_code = ''
+        expect(work_order).to be_valid
+        expect(work_order.soc_code).to eq(nil)
       end
     end
   end

@@ -52,18 +52,31 @@ module Ncr
     }, allow_blank: true
 
     def set_defaults
+      self.direct_pay ||= false
       self.not_to_exceed ||= false
       self.emergency ||= false
     end
 
+    # For budget attributes, converts empty strings to `nil`, so that the request isn't shown as being modified when the fields appear in the edit form.
     def normalize_values
-      if self.cl_number
+      if self.cl_number.present?
         self.cl_number = self.cl_number.upcase
         self.cl_number.prepend('CL') unless self.cl_number.start_with?('CL')
+      else
+        self.cl_number = nil
       end
 
-      self.function_code = self.function_code.upcase if self.function_code
-      self.soc_code = self.soc_code.upcase if self.soc_code
+      if self.function_code.present?
+        self.function_code.upcase!
+      else
+        self.function_code = nil
+      end
+
+      if self.soc_code.present?
+        self.soc_code.upcase!
+      else
+        self.soc_code = nil
+      end
     end
 
     # A requester can change his/her approving official
