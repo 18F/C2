@@ -41,6 +41,13 @@
             <% end %>
           </div>
           <div class="radio">
+            <%= f.label :expense_type, value: "BA60" do %>
+              <%= f.radio_button :expense_type, "BA60",
+                                 :"data-filter-control" => "expense-type" %>
+              BA60
+            <% end %>
+          </div>
+          <div class="radio">
             <%= f.label :expense_type, value: "BA80" do %>
               <%= f.radio_button :expense_type, "BA80",
                                  :"data-filter-control" => "expense-type" %>
