@@ -1,0 +1,21 @@
+
+<div class="inset">
+  <div class="row centered">
+
+    <h1>
+      Cancellation: <%= @proposal.name %>
+    </h1>
+
+    <%= form_tag({controller: "proposals", action: "cancel"}, method: "post") do %>
+      <%= text_area_tag(:message, "", size: "50x10") %>
+      <p>
+        <%= submit_tag("Yes, cancel this request", class: 'form-button') %>
+      </p>
+      <p>
+        <%= link_to 'I made a mistake. Take me back', "#" %>
+      </p>
+    <% end %>
+
+
+  </div>
+</div>

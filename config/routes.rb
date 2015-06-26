@@ -32,6 +32,8 @@ C2::Application.routes.draw do
       get 'approve'   # this route has special protection to prevent the confused deputy problem
                       # if you are adding a new controller which performs an action, use post instead
       post 'approve'
+      get 'cancel_form'
+      post 'cancel'
     end
 
     collection do

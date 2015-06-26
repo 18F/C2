@@ -18,6 +18,8 @@ describe "Canceling a request" do
   end
 
   it "prompts the requester for a reason" do
+    visit proposal_path(proposal)
+    click_on('Cancel my request')
   end
 
   it "successfully sends and notifies the user" do

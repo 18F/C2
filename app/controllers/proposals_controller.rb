@@ -2,7 +2,7 @@ class ProposalsController < ApplicationController
   include TokenAuth
 
   before_filter :authenticate_user!, except: :approve
-  before_filter ->{authorize self.proposal}, only: :show
+  before_filter ->{authorize self.proposal}, only: [:show, :cancel]
   before_filter :needs_token_on_get, only: :approve
   before_filter :validate_access, only: :approve
   helper_method :display_status
@@ -21,6 +21,14 @@ class ProposalsController < ApplicationController
 
   def archive
     @proposals = self.chronological_proposals.closed
+  end
+
+  def cancel_form
+    @proposal = self.proposal.decorate
+  end
+
+  def cancel
+    raise 'Do something inside the cancel action'
   end
 
 
