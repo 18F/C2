@@ -19,6 +19,9 @@ class Proposal < ActiveRecord::Base
       event :reject, :transitions_to => :rejected
       event :restart, :transitions_to => :pending
     end
+    state :cancelled do
+      event :cancel, :transitions_to => :cancelled
+    end
   end
 
   has_one :cart
