@@ -52,7 +52,7 @@
 
 <% if policy(@proposal).can_cancel? %>
   <p>
-    <%= link_to("Cancel my request", "#") %>
+    <%= link_to("Cancel my request", cancel_form_proposal_path) %>
   </p>
 <% end %>
 

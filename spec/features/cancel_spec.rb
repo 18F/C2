@@ -20,6 +20,7 @@ describe "Canceling a request" do
   it "prompts the requester for a reason" do
     visit proposal_path(proposal)
     click_on('Cancel my request')
+    expect(current_path).to eq("/proposals/#{proposal.id}/cancel_form")
   end
 
   it "successfully sends and notifies the user" do

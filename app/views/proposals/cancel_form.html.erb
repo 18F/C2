@@ -6,7 +6,7 @@
       Cancellation: <%= @proposal.name %>
     </h1>
 
-    <%= form_tag({controller: "proposals", action: "cancel"}, method: "post") do %>
+    <%= form_tag({controller: "proposals", action: "cancel", id: @proposal.id}, method: "post") do %>
       <%= text_area_tag(:message, "", size: "50x10") %>
       <p>
         <%= submit_tag("Yes, cancel this request", class: 'form-button') %>
