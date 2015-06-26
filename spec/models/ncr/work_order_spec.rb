@@ -142,6 +142,27 @@ describe Ncr::WorkOrder do
       end
     end
 
+    describe 'function_code' do
+      let (:work_order) { FactoryGirl.build(:ncr_work_order) }
+
+      it "works with three characters" do
+        work_order.function_code = '123'
+        expect(work_order).to be_valid
+      end
+
+      it "must be three characters" do
+        work_order.function_code = '12'
+        expect(work_order).to_not be_valid
+        expect(work_order.errors.keys).to eq([:function_code])
+      end
+
+      it "is converted to uppercase" do
+        work_order.function_code = 'ab2'
+        expect(work_order).to be_valid
+        expect(work_order.function_code).to eq('AB2')
+      end
+    end
+
     describe 'RWA' do
       let (:work_order) { FactoryGirl.build(:ncr_work_order, expense_type: 'BA80') }
 

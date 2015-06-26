@@ -34,6 +34,10 @@ module Ncr
       message: "start with 'PG', followed by letters or numbers"
     }, allow_blank: true
     validates :expense_type, inclusion: {in: EXPENSE_TYPES}, presence: true
+    validates :function_code, format: {
+      with: /\A[A-Z0-9]{3}\z/,
+      message: "must be three characters"
+    }, allow_blank: true
     validates :project_title, presence: true
     validates :vendor, presence: true
     validates :building_number, presence: true
@@ -50,6 +54,7 @@ module Ncr
 
     def normalize_values
       self.cl_number = self.cl_number.upcase unless self.cl_number.nil?
+      self.function_code = self.function_code.upcase unless self.function_code.nil?
     end
 
     # A requester can change his/her approving official
