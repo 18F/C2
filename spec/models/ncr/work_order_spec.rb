@@ -151,9 +151,15 @@ describe Ncr::WorkOrder do
     describe 'function_code' do
       let (:work_order) { FactoryGirl.build(:ncr_work_order) }
 
-      it "works with 'PG' followed by some numbers" do
+      it "works with 'PG' followed by three characters" do
         work_order.function_code = 'PG123'
         expect(work_order).to be_valid
+      end
+
+      it "must have five characters" do
+        work_order.function_code = 'PG12'
+        expect(work_order).to_not be_valid
+        expect(work_order.errors.keys).to eq([:function_code])
       end
 
       it "must start with 'PG'" do

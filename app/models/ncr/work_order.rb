@@ -35,7 +35,7 @@ module Ncr
     }, allow_blank: true
     validates :expense_type, inclusion: {in: EXPENSE_TYPES}, presence: true
     validates :function_code, format: {
-      with: /\APG[A-Z0-9]+\z/,
+      with: /\APG[A-Z0-9]{3}\z/,
       message: "start with 'PG', followed by letters or numbers"
     }, allow_blank: true
     validates :project_title, presence: true
