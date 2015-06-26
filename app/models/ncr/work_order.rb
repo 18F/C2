@@ -29,14 +29,10 @@ module Ncr
       greater_than_or_equal_to: 0,
       message: "must be greater than or equal to $0"
     }
-    validates :cl_number, format: {
-      with: /\APG[A-Z0-9]+\z/,
-      message: "start with 'PG', followed by letters or numbers"
-    }, allow_blank: true
     validates :expense_type, inclusion: {in: EXPENSE_TYPES}, presence: true
     validates :function_code, format: {
-      with: /\A[A-Z0-9]{3}\z/,
-      message: "must be three characters"
+      with: /\APG[A-Z0-9]+\z/,
+      message: "start with 'PG', followed by letters or numbers"
     }, allow_blank: true
     validates :project_title, presence: true
     validates :vendor, presence: true
@@ -46,6 +42,10 @@ module Ncr
       with: /[a-zA-Z][0-9]{7}/,
       message: "one letter followed by 7 numbers"
     }, allow_blank: true
+    validates :soc_code, format: {
+      with: /\A[A-Z0-9]{3}\z/,
+      message: "must be three characters"
+    }, allow_blank: true
 
     def set_defaults
       self.not_to_exceed ||= false
@@ -53,8 +53,8 @@ module Ncr
     end
 
     def normalize_values
-      self.cl_number = self.cl_number.upcase unless self.cl_number.nil?
       self.function_code = self.function_code.upcase unless self.function_code.nil?
+      self.soc_code = self.soc_code.upcase unless self.soc_code.nil?
     end
 
     # A requester can change his/her approving official

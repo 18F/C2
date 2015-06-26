@@ -121,45 +121,24 @@ describe Ncr::WorkOrder do
   end
 
   describe 'validations' do
-    describe 'cl_number' do
+    describe 'function_code' do
       let (:work_order) { FactoryGirl.build(:ncr_work_order) }
 
       it "works with 'PG' followed by some numbers" do
-        work_order.cl_number = 'PG123'
+        work_order.function_code = 'PG123'
         expect(work_order).to be_valid
       end
 
       it "must start with 'PG'" do
-        work_order.cl_number = 'ABC'
-        expect(work_order).to_not be_valid
-        expect(work_order.errors.keys).to eq([:cl_number])
-      end
-
-      it "is converted to uppercase" do
-        work_order.cl_number = 'pg1c3'
-        expect(work_order).to be_valid
-        expect(work_order.cl_number).to eq('PG1C3')
-      end
-    end
-
-    describe 'function_code' do
-      let (:work_order) { FactoryGirl.build(:ncr_work_order) }
-
-      it "works with three characters" do
-        work_order.function_code = '123'
-        expect(work_order).to be_valid
-      end
-
-      it "must be three characters" do
-        work_order.function_code = '12'
+        work_order.function_code = 'ABC'
         expect(work_order).to_not be_valid
         expect(work_order.errors.keys).to eq([:function_code])
       end
 
       it "is converted to uppercase" do
-        work_order.function_code = 'ab2'
+        work_order.function_code = 'pg1c3'
         expect(work_order).to be_valid
-        expect(work_order.function_code).to eq('AB2')
+        expect(work_order.function_code).to eq('PG1C3')
       end
     end
 
@@ -195,6 +174,27 @@ describe Ncr::WorkOrder do
         expect(work_order).to be_valid
         work_order.rwa_number = ''
         expect(work_order).to be_valid
+      end
+    end
+
+    describe 'soc_code' do
+      let (:work_order) { FactoryGirl.build(:ncr_work_order) }
+
+      it "works with three characters" do
+        work_order.soc_code = '123'
+        expect(work_order).to be_valid
+      end
+
+      it "must be three characters" do
+        work_order.soc_code = '12'
+        expect(work_order).to_not be_valid
+        expect(work_order.errors.keys).to eq([:soc_code])
+      end
+
+      it "is converted to uppercase" do
+        work_order.soc_code = 'ab2'
+        expect(work_order).to be_valid
+        expect(work_order.soc_code).to eq('AB2')
       end
     end
   end
