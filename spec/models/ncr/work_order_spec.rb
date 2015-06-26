@@ -120,38 +120,133 @@ describe Ncr::WorkOrder do
     end
   end
 
-  describe 'rwa validations' do
-    let (:work_order) { FactoryGirl.build(:ncr_work_order, expense_type: 'BA80') }
+  describe 'validations' do
+    describe 'cl_number' do
+      let (:work_order) { FactoryGirl.build(:ncr_work_order) }
 
-    it 'works with one letter followed by 7 numbers' do
-      work_order.rwa_number = 'A1234567'
-      expect(work_order).to be_valid
+      it "works with a 'CL' prefix" do
+        work_order.cl_number = 'CL1234567'
+        expect(work_order).to be_valid
+      end
+
+      it "automatically adds a 'CL' prefix" do
+        work_order.cl_number = '1234567'
+        expect(work_order).to be_valid
+        expect(work_order.cl_number).to eq('CL1234567')
+      end
+
+      it "requires seven numbers" do
+        work_order.cl_number = '123'
+        expect(work_order).to_not be_valid
+        expect(work_order.errors.keys).to eq([:cl_number])
+      end
+
+      it "is converted to uppercase" do
+        work_order.cl_number = 'cl1234567'
+        expect(work_order).to be_valid
+        expect(work_order.cl_number).to eq('CL1234567')
+      end
+
+      it "clears empty strings" do
+        work_order.cl_number = ''
+        expect(work_order).to be_valid
+        expect(work_order.cl_number).to eq(nil)
+      end
     end
 
-    it 'must be 8 chars' do
-      work_order.rwa_number = 'A123456'
-      expect(work_order).not_to be_valid
+    describe 'function_code' do
+      let (:work_order) { FactoryGirl.build(:ncr_work_order) }
+
+      it "works with 'PG' followed by three characters" do
+        work_order.function_code = 'PG123'
+        expect(work_order).to be_valid
+      end
+
+      it "must have five characters" do
+        work_order.function_code = 'PG12'
+        expect(work_order).to_not be_valid
+        expect(work_order.errors.keys).to eq([:function_code])
+      end
+
+      it "automatically adds a 'PG' prefix" do
+        work_order.function_code = '123'
+        expect(work_order).to be_valid
+        expect(work_order.function_code).to eq('PG123')
+      end
+
+      it "is converted to uppercase" do
+        work_order.function_code = 'pg1c3'
+        expect(work_order).to be_valid
+        expect(work_order.function_code).to eq('PG1C3')
+      end
+
+      it "clears empty strings" do
+        work_order.function_code = ''
+        expect(work_order).to be_valid
+        expect(work_order.function_code).to eq(nil)
+      end
     end
 
-    it 'must have a letter at the beginning' do
-      work_order.rwa_number = '12345678'
-      expect(work_order).not_to be_valid
+    describe 'RWA' do
+      let (:work_order) { FactoryGirl.build(:ncr_work_order, expense_type: 'BA80') }
+
+      it 'works with one letter followed by 7 numbers' do
+        work_order.rwa_number = 'A1234567'
+        expect(work_order).to be_valid
+      end
+
+      it 'must be 8 chars' do
+        work_order.rwa_number = 'A123456'
+        expect(work_order).not_to be_valid
+      end
+
+      it 'must have a letter at the beginning' do
+        work_order.rwa_number = '12345678'
+        expect(work_order).not_to be_valid
+      end
+
+      it "is required for BA80" do
+        work_order.rwa_number = nil
+
+        expect(work_order).to_not be_valid
+        expect(work_order.errors.keys).to eq([:rwa_number])
+      end
+
+      it "is not required for BA61" do
+        work_order.expense_type = 'BA61'
+
+        work_order.rwa_number = nil
+        expect(work_order).to be_valid
+        work_order.rwa_number = ''
+        expect(work_order).to be_valid
+      end
     end
 
-    it "is required for BA80" do
-      work_order.rwa_number = nil
+    describe 'soc_code' do
+      let (:work_order) { FactoryGirl.build(:ncr_work_order) }
 
-      expect(work_order).to_not be_valid
-      expect(work_order.errors.keys).to eq([:rwa_number])
-    end
+      it "works with three characters" do
+        work_order.soc_code = '123'
+        expect(work_order).to be_valid
+      end
 
-    it "is not required for BA61" do
-      work_order.expense_type = 'BA61'
+      it "must be three characters" do
+        work_order.soc_code = '12'
+        expect(work_order).to_not be_valid
+        expect(work_order.errors.keys).to eq([:soc_code])
+      end
 
-      work_order.rwa_number = nil
-      expect(work_order).to be_valid
-      work_order.rwa_number = ''
-      expect(work_order).to be_valid
+      it "is converted to uppercase" do
+        work_order.soc_code = 'ab2'
+        expect(work_order).to be_valid
+        expect(work_order.soc_code).to eq('AB2')
+      end
+
+      it "clears empty strings" do
+        work_order.soc_code = ''
+        expect(work_order).to be_valid
+        expect(work_order.soc_code).to eq(nil)
+      end
     end
   end
 

@@ -40,7 +40,7 @@ class UseCaseController < ApplicationController
 
   def update
     @model_instance.assign_attributes(self.permitted_params)   # don't hit db yet
-    if !self.attribute_changes? && self.errors.empty?
+    if @model_instance.valid? && !self.attribute_changes?
       flash[:success] = "No changes were made to the request"
       redirect_to proposal_path(@model_instance.proposal)
     elsif self.errors.empty?

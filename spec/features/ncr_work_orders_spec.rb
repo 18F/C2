@@ -198,11 +198,9 @@ describe "National Capital Region proposals" do
         expect(page).to have_selector("div.option[data-value='BillDing']")
       end
 
+      # TODO move editing specs to different `describe` block
       let (:work_order) {
-        wo = FactoryGirl.create(:ncr_work_order, requester: requester,
-                                description: "test", direct_pay: false,
-                                cl_number: '12345', function_code: '12345',
-                                soc_code: '12345')
+        wo = FactoryGirl.create(:ncr_work_order, requester: requester, description: "test")
         wo.add_approvals('approver@example.com')
         wo
       }
@@ -237,7 +235,7 @@ describe "National Capital Region proposals" do
       it "does not resave unchanged requests" do
         visit "/ncr/work_orders/#{work_order.id}/edit"
         click_on 'Update'
-        
+
         expect(current_path).to eq("/proposals/#{work_order.proposal.id}")
         expect(page).to have_content("No changes were made to the request")
         expect(deliveries.length).to eq(0)
@@ -376,14 +374,14 @@ describe "National Capital Region proposals" do
       login_as(work_order.requester)
       visit "/ncr/work_orders/#{work_order.id}/edit"
 
-      fill_in 'CL number', with: '123'
-      fill_in 'Function code', with: '456'
+      fill_in 'CL number', with: 'CL1234567'
+      fill_in 'Function code', with: 'PG123'
       fill_in 'SOC code', with: '789'
       click_on 'Update'
 
       work_order.reload
-      expect(work_order.cl_number).to eq('123')
-      expect(work_order.function_code).to eq('456')
+      expect(work_order.cl_number).to eq('CL1234567')
+      expect(work_order.function_code).to eq('PG123')
       expect(work_order.soc_code).to eq('789')
     end
   end

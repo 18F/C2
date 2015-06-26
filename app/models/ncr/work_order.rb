@@ -17,6 +17,7 @@ module Ncr
     include ProposalDelegate
 
     after_initialize :set_defaults
+    before_validation :normalize_values
     before_update :record_changes
 
     # @TODO: use integer number of cents to avoid floating point issues
@@ -28,19 +29,55 @@ module Ncr
       greater_than_or_equal_to: 0,
       message: "must be greater than or equal to $0"
     }
+    validates :cl_number, format: {
+      with: /\ACL\d{7}\z/,
+      message: "must start with 'CL', followed by seven numbers"
+    }, allow_blank: true
     validates :expense_type, inclusion: {in: EXPENSE_TYPES}, presence: true
+    validates :function_code, format: {
+      with: /\APG[A-Z0-9]{3}\z/,
+      message: "must start with 'PG', followed by three letters or numbers"
+    }, allow_blank: true
     validates :project_title, presence: true
     validates :vendor, presence: true
     validates :building_number, presence: true
     validates :rwa_number, presence: true, if: :ba80?
     validates :rwa_number, format: {
       with: /[a-zA-Z][0-9]{7}/,
-      message: "one letter followed by 7 numbers"
+      message: "must be one letter followed by 7 numbers"
+    }, allow_blank: true
+    validates :soc_code, format: {
+      with: /\A[A-Z0-9]{3}\z/,
+      message: "must be three letters or numbers"
     }, allow_blank: true
 
     def set_defaults
+      self.direct_pay ||= false
       self.not_to_exceed ||= false
       self.emergency ||= false
+    end
+
+    # For budget attributes, converts empty strings to `nil`, so that the request isn't shown as being modified when the fields appear in the edit form.
+    def normalize_values
+      if self.cl_number.present?
+        self.cl_number = self.cl_number.upcase
+        self.cl_number.prepend('CL') unless self.cl_number.start_with?('CL')
+      else
+        self.cl_number = nil
+      end
+
+      if self.function_code.present?
+        self.function_code.upcase!
+        self.function_code.prepend('PG') unless self.function_code.start_with?('PG')
+      else
+        self.function_code = nil
+      end
+
+      if self.soc_code.present?
+        self.soc_code.upcase!
+      else
+        self.soc_code = nil
+      end
     end
 
     # A requester can change his/her approving official
