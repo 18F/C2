@@ -44,7 +44,7 @@ group :test, :development do
 end
 
 group :development do
-  gem 'guard-rspec', require: false
+  gem 'guard-rspec', require: false, git: 'https://github.com/guard/guard-rspec.git', ref: '0e345935e0' # https://github.com/guard/guard-rspec/pull/328
   gem 'mail_view'
   gem 'railroady'
   gem 'letter_opener'
