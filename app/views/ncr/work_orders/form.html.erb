@@ -20,13 +20,13 @@
         Include request details (e.g. Room Number, Estimated number of hours)
       </span>
     </div>
-    <% if ENV['HIDE_BA61_OPTION'] == 'true' && ENV['HIDE_BA60_OPTION'] == 'true'%>
+    <% if ENV['HIDE_BA61_OPTION'] == 'true' && ENV['SHOW_BA60_OPTION'] != 'true'%>
       <%= f.hidden_field :expense_type, value: 'BA80' %>
       <%= render partial: 'ba_80_fields', locals: {f: f} %>
     <% else %>
       <div class="form-group">
         <%= field_set_tag "Expense type" do %>
-          <% unless ENV['HIDE_BA60_OPTION'] == 'true' %>
+          <% if ENV['SHOW_BA60_OPTION'] == 'true' %>
             <div class="radio">
               <%= f.label :expense_type, value: "BA60" do %>
                 <%= f.radio_button :expense_type, "BA60",
