@@ -81,6 +81,15 @@ describe "National Capital Region proposals" do
         ))
       end
 
+      with_feature 'HIDE_BA60_OPTION' do
+        it "removes the radio button" do
+          visit '/ncr/work_orders/new'
+          expect(page).to_not have_content('BA60')
+          expect(page).to have_content('BA61')
+          expect(page).to have_content('BA80')
+        end
+      end
+
       it "defaults to the approver from the last request" do
         proposal = FactoryGirl.create(:proposal, :with_approvers,
                                       requester: requester)
@@ -108,25 +117,29 @@ describe "National Capital Region proposals" do
         it "removes the radio button" do
           visit '/ncr/work_orders/new'
           expect(page).to_not have_content('BA61')
+          expect(page).to have_content('BA60')
+          expect(page).to have_content('BA80')
         end
 
-        it "defaults to BA80" do
-          visit '/ncr/work_orders/new'
-          fill_in 'Project title', with: "buying stuff"
-          fill_in 'Description', with: "desc content"
-          # no need to select BA80
-          fill_in 'RWA Number', with: 'F1234567'
-          fill_in 'Vendor', with: 'ACME'
-          fill_in 'Amount', with: 123.45
-          fill_in "Approving official's email address", with: 'approver@example.com'
-          fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
-          select Ncr::Organization.all[0], :from => 'ncr_work_order_org_code'
-          expect {
-            click_on 'Submit for approval'
-          }.to change { Proposal.count }.from(0).to(1)
+        with_feature 'HIDE_BA60_OPTION' do
+          it "defaults to BA80" do
+            visit '/ncr/work_orders/new'
+            fill_in 'Project title', with: "buying stuff"
+            fill_in 'Description', with: "desc content"
+            # no need to select BA80
+            fill_in 'RWA Number', with: 'F1234567'
+            fill_in 'Vendor', with: 'ACME'
+            fill_in 'Amount', with: 123.45
+            fill_in "Approving official's email address", with: 'approver@example.com'
+            fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
+            select Ncr::Organization.all[0], :from => 'ncr_work_order_org_code'
+            expect {
+              click_on 'Submit for approval'
+            }.to change { Proposal.count }.from(0).to(1)
 
-          proposal = Proposal.last
-          expect(proposal.client_data.expense_type).to eq('BA80')
+            proposal = Proposal.last
+            expect(proposal.client_data.expense_type).to eq('BA80')
+          end
         end
       end
 

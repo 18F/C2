@@ -20,33 +20,37 @@
         Include request details (e.g. Room Number, Estimated number of hours)
       </span>
     </div>
-    <% if ENV['HIDE_BA61_OPTION'] == 'true' %>
+    <% if ENV['HIDE_BA61_OPTION'] == 'true' && ENV['HIDE_BA60_OPTION'] == 'true'%>
       <%= f.hidden_field :expense_type, value: 'BA80' %>
       <%= render partial: 'ba_80_fields', locals: {f: f} %>
     <% else %>
       <div class="form-group">
         <%= field_set_tag "Expense type" do %>
-          <div class="radio">
-            <%= f.label :expense_type, value: "BA61" do %>
-              <%= f.radio_button :expense_type, "BA61",
-                                 :"data-filter-control" => "expense-type" %>
-              BA61
-            <% end %>
-          </div>
-          <div class="checkbox" data-filter-key="expense-type"
-                                  data-filter-value="BA61">
-            <%= f.label :emergency do %>
-              <%= f.check_box :emergency %>
-              This request was an emergency and I received a verbal Notice to Proceed (NTP)
-            <% end %>
-          </div>
-          <div class="radio">
-            <%= f.label :expense_type, value: "BA60" do %>
-              <%= f.radio_button :expense_type, "BA60",
-                                 :"data-filter-control" => "expense-type" %>
-              BA60
-            <% end %>
-          </div>
+          <% unless ENV['HIDE_BA60_OPTION'] == 'true' %>
+            <div class="radio">
+              <%= f.label :expense_type, value: "BA60" do %>
+                <%= f.radio_button :expense_type, "BA60",
+                                   :"data-filter-control" => "expense-type" %>
+                BA60
+              <% end %>
+            </div>
+          <% end %>
+          <% unless ENV['HIDE_BA61_OPTION'] == 'true' %>
+            <div class="radio">
+              <%= f.label :expense_type, value: "BA61" do %>
+                <%= f.radio_button :expense_type, "BA61",
+                                   :"data-filter-control" => "expense-type" %>
+                BA61
+              <% end %>
+            </div>
+            <div class="checkbox" data-filter-key="expense-type"
+                                    data-filter-value="BA61">
+              <%= f.label :emergency do %>
+                <%= f.check_box :emergency %>
+                This request was an emergency and I received a verbal Notice to Proceed (NTP)
+              <% end %>
+            </div>
+          <% end %>
           <div class="radio">
             <%= f.label :expense_type, value: "BA80" do %>
               <%= f.radio_button :expense_type, "BA80",
