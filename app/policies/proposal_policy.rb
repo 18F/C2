@@ -5,6 +5,10 @@ class ProposalPolicy
     @proposal = record
   end
 
+  def restricted?
+    ENV['RESTRICT_ACCESS'] == 'true'
+  end
+
   def requester?
     @proposal.requester_id == @user.id
   end
@@ -65,6 +69,7 @@ class ProposalPolicy
   end
 
   def can_create!
+    # TODO restrict by client_slug
     true
   end
   alias_method :can_new!, :can_create!
