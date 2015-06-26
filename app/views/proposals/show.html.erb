@@ -50,6 +50,12 @@
   </div>
 <% end %>
 
+<% if policy(@proposal).can_cancel? %>
+  <p>
+    Cancel my request
+  </p>
+<% end %>
+
 <%- if @proposal.flow == 'parallel'  %>
   <%- if @proposal.approvals.approved.any?  %>
     <div class="approval-status-container">

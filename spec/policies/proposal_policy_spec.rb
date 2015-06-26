@@ -128,6 +128,18 @@ describe ProposalPolicy do
     end
   end
 
+  permissions :can_cancel? do
+    let(:proposal) { FactoryGirl.create(:proposal, :with_approvers) }
+
+    it "allows the requester to edit it" do
+      expect(subject).to permit(proposal.requester, proposal)
+    end
+
+    it "doesn't allow an approver to cancel it" do
+      expect(subject).not_to permit(proposal.approvers[0], proposal)
+    end
+  end
+
   context "testing scope" do
     let(:proposal) { FactoryGirl.create(:proposal, :with_approvers, :with_observers) }
 

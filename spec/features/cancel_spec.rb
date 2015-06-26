@@ -1,7 +1,6 @@
-describe "Cancelling a request" do
-  let (:proposal) {
-    FactoryGirl.create(:proposal, :with_approvers)
-  }
+describe "Canceling a request" do
+  let (:client_data) { FactoryGirl.create(:ncr_work_order) }
+  let (:proposal) { FactoryGirl.create(:proposal, :with_approver, client_data_type: "Ncr::WorkOrder", client_data_id: client_data.id) }
 
   before do
     login_as(proposal.requester)
@@ -13,6 +12,9 @@ describe "Cancelling a request" do
   end
 
   it "does not show a cancel link for non-requesters" do
+    login_as(proposal.approvers.first)
+    visit proposal_path(proposal)
+    expect(page).to_not have_content("Cancel my request")
   end
 
   it "prompts the requester for a reason" do

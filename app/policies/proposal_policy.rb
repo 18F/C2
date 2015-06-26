@@ -75,6 +75,10 @@ class ProposalPolicy
   end
   alias_method :can_new!, :can_create!
 
+  def can_cancel!
+    requester!
+  end
+
   # equivalent of can_show?
   class Scope
     def initialize(user, scope)
