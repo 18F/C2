@@ -25,9 +25,12 @@ class ProposalsController < ApplicationController
 
   def cancel_form
     @proposal = self.proposal.decorate
-  end
+    unless policy(@proposal).can_cancel?
+     redirect_to proposals_path, :alert => "You are not allowed to perform that action"
+   end
+ end
 
-  def cancel
+ def cancel
     raise 'Do something inside the cancel action'
   end
 
