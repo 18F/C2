@@ -134,6 +134,13 @@ describe ProposalsController do
     end
   end
 
+  describe "cancel" do
+    it 'sends a cancellation email to everyone that is aware of the request' do
+      post :cancel, id: 12344, comment_text:'My test cancellation text'
+      expect(Dispatcher).to receive(:deliver_cancellation_emails).with(proposal)
+    end
+  end
+
   describe '#approve' do
     it "signs the user in via the token" do
       proposal = FactoryGirl.create(:proposal, :with_approver)

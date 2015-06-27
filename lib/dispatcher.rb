@@ -27,6 +27,12 @@ class Dispatcher
     self.email_sent_confirmation(proposal)
   end
 
+  def deliver_cancellation_emails(proposal)
+    #CURRENT: send out cancellation emais
+    # Loop through all people and send an email
+    # CommunicartMailer.proposal_observer_email(observation.user_email_address, proposal).deliver_now
+  end
+
   def requires_approval_notice?(approval)
     true
   end
@@ -75,6 +81,11 @@ class Dispatcher
   def self.deliver_new_proposal_emails(proposal)
     dispatcher = self.initialize_dispatcher(proposal)
     dispatcher.deliver_new_proposal_emails(proposal)
+  end
+
+  def self.deliver_cancellation_emails(proposal)
+    dispatcher = self.initialize_dispatcher(proposal)
+    dispatcher.deliver_cancellation_emails(proposal)
   end
 
   def self.on_proposal_rejected(proposal)

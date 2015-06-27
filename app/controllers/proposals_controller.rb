@@ -42,7 +42,9 @@ class ProposalsController < ApplicationController
       proposal.cancel!
       proposal.comments.create!(comment_text: comments, user_id: current_user.id)
 
-      redirect_to proposal_path, id: proposal.id, alert: "Your request has been cancelled"
+      flash[:success] = "Your request has been cancelled"
+      redirect_to proposal_path, id: proposal.id
+      Dispatcher.deliver_cancellation_emails(proposal)
     else
       redirect_to cancel_form_proposal_path, id: params[:id],
                                              alert: "A reason for cancellation is required.
