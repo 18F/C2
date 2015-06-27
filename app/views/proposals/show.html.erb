@@ -41,7 +41,10 @@
   </div>
 </div>
 
-<% if policy(@proposal).can_edit? %>
+<% if policy(@proposal).can_edit? && !@proposal.cancelled? %>
+  <%= client_partial(@proposal.client, 'restart_link',
+                     locals: {proposal: @proposal})
+  %>
   <div class="centered">
     <p>
       <%= modify_client_button(@proposal) %>
@@ -50,7 +53,7 @@
   </div>
 <% end %>
 
-<% if policy(@proposal).can_cancel? %>
+<% if policy(@proposal).can_cancel? && !@proposal.cancelled? %>
   <p>
     <%= link_to("Cancel my request", cancel_form_proposal_path) %>
   </p>
@@ -192,7 +195,7 @@
   </div>
 <%- end %>
 
-<% if policy(@proposal).can_approve_or_reject? %>
+<% if policy(@proposal).can_approve_or_reject? && !@proposal.cancelled? %>
   <div class="centered">
     <%= form_tag(approve_proposal_path(@proposal, method: "POST")) do %>
       <%= hidden_field_tag(:version, @proposal.version) %>
