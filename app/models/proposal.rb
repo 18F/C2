@@ -9,19 +9,20 @@ class Proposal < ActiveRecord::Base
       event :approve, :transitions_to => :approved
       event :reject, :transitions_to => :rejected
       event :restart, :transitions_to => :pending
+      event :cancel, :transitions_to => :cancelled
     end
     state :approved do
       event :restart, :transitions_to => :pending
+      event :cancel, :transitions_to => :cancelled
     end
     state :rejected do
       # partial approvals and rejections can't break out of this state
       event :partial_approve, :transitions_to => :rejected
       event :reject, :transitions_to => :rejected
       event :restart, :transitions_to => :pending
-    end
-    state :cancelled do
       event :cancel, :transitions_to => :cancelled
     end
+    state :cancelled
   end
 
   has_one :cart

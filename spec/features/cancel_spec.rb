@@ -25,6 +25,14 @@ describe "Canceling a request" do
 
   context "entering in a reason cancellation" do
     it "successfully sends and notifies the user" do
+      visit proposal_path(proposal)
+      click_on('Cancel my request')
+      fill_in "reason_input", with: "This is a good reason for the cancellation."
+      click_on('Yes, cancel this request')
+      expect(current_path).to eq("/proposals")
+      expect(page).to have_content("Your request has been cancelled")
+      expect(proposal.reload.status).to eq("cancelled")
+      expect(proposal.reload.comments.last.comment_text).to eq("This is a good reason for the cancellation.")
     end
 
     it "displays an error if the reason is blank" do
