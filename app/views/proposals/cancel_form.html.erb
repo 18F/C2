@@ -13,7 +13,7 @@
         <%= submit_tag("Yes, cancel this request", class: 'form-button') %>
       </p>
       <p>
-        <%= link_to 'I made a mistake. Take me back', "#" %>
+        <%= link_to 'I made a mistake. Take me back', proposal_path, id: @proposal.id %>
       </p>
     <% end %>
 
