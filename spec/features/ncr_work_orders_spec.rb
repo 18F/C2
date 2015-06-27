@@ -286,6 +286,14 @@ describe "National Capital Region proposals" do
         expect(page).to have_content("You must be the requester or an approver")
       end
 
+      it "provides the previous building when editing", :js => true do
+        work_order.update(building_number: "BillDing")
+        visit "/ncr/work_orders/#{work_order.id}/edit"
+        click_on "Update"
+        expect(current_path).to eq("/proposals/#{ncr_proposal.id}")
+        expect(work_order.reload.building_number).to eq("BillDing")
+      end
+
       it "shows a edit link from a pending cart" do
         visit "/proposals/#{ncr_proposal.id}"
         expect(page).to have_content('Modify Request')
