@@ -24,7 +24,7 @@ describe "Canceling a request" do
   end
 
   context "entering in a reason cancellation" do
-    it "successfully sends and notifies the user" do
+    it "successfully saves comments, changes the request status" do
       visit proposal_path(proposal)
       click_on('Cancel my request')
       fill_in "reason_input", with: "This is a good reason for the cancellation."
