@@ -26,14 +26,18 @@ class ProposalsController < ApplicationController
   def cancel_form
     @proposal = self.proposal.decorate
     unless policy(@proposal).can_cancel?
-     redirect_to proposals_path, :alert => "You are not allowed to perform that action"
-   end
- end
-
- def cancel
-    raise 'Do something inside the cancel action'
+     redirect_to proposals_path, alert: "You are not allowed to perform that action"
+    end
   end
 
+  def cancel
+    unless params[:reason_input].present?
+      redirect_to cancel_form_proposal_path, id: params[:id],
+                                             alert: 'A reason for cancellation is required.
+                                                     Please indicate why this request needs
+                                                     to be cancelled.'
+    end
+  end
 
   def approve
     approval = self.proposal.approval_for(current_user)

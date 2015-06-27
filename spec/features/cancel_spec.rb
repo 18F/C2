@@ -23,15 +23,25 @@ describe "Canceling a request" do
     expect(current_path).to eq("/proposals/#{proposal.id}/cancel_form")
   end
 
+  context "entering in a reason cancellation" do
+    it "successfully sends and notifies the user" do
+    end
+
+    it "displays an error if the reason is blank" do
+      visit proposal_path(proposal)
+      click_on('Cancel my request')
+      fill_in "reason_input", with: ""
+      click_on('Yes, cancel this request')
+      expect(current_path).to eq("/proposals/#{proposal.id}/cancel_form")
+      expect(page).to have_content("A reason for cancellation is required. Please indicate why this request needs to be cancelled.")
+    end
+  end
+
   it "redirects if trying to see the cancellation page on proposals you have not rquested" do
     login_as(proposal.approvers.first)
     visit cancel_form_proposal_path(proposal)
     expect(page).to have_content("You are not allowed to perform that action")
     expect(current_path).to eq("/proposals")
   end
-
-  it "successfully sends and notifies the user" do
-  end
-
 
 end
