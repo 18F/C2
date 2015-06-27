@@ -28,6 +28,11 @@ class ProposalsController < ApplicationController
     unless policy(@proposal).can_cancel?
      redirect_to proposals_path, alert: "You are not allowed to perform that action"
     end
+
+    if @proposal.cancelled?
+     redirect_to proposal_path, id:@proposal.id, alert: "This request that has already been cancelled."
+    end
+
   end
 
   def cancel
