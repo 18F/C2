@@ -2,7 +2,7 @@
 <div class="container content m-request-form">
   <h2>National Capital Region</h2>
   <h3>
-    <% if ENV['HIDE_BA61_OPTION'] == 'true' %>
+    <% if ENV['HIDE_BA61_OPTION'] == 'true' && ENV['SHOW_BA60_OPTION'] != 'true'%>
     BA80
     <% end %>
     Purchase Card Approval Request
