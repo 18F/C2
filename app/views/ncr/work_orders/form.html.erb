@@ -101,10 +101,8 @@
     </div>
     <div class="form-group">
       <%= label_tag :approver_email, "Approving official's email address" %>
-      <%= email_field_tag :approver_email, @approver_email,
-                          class: 'form-control js-selectize',
-                          disabled: approver_email_frozen?,
-                          data: {attr: 'email_address', src: '/api/v1/users.json'} %>
+      <%= select_tag :approver_email, options_from_collection_for_select(approver_options, :to_s, :to_s, @approver_email),
+                     class: 'form-control js-selectize', disabled: approver_email_frozen? %>
     </div>
     <% if @model_instance.new_record? %>
       <div class="form-group">
