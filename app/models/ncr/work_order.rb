@@ -6,7 +6,7 @@ module Ncr
     'ncr_'
   end
 
-  EXPENSE_TYPES = %w(BA61 BA80)
+  EXPENSE_TYPES = %w(BA60 BA61 BA80)
   BUILDING_NUMBERS = YAML.load_file("#{Rails.root}/config/data/ncr/building_numbers.yml")
 
   class WorkOrder < ActiveRecord::Base
@@ -167,7 +167,7 @@ module Ncr
 
     def system_approvers
       results = []
-      if self.expense_type == 'BA61'
+      if %w(BA60 BA61).include?(self.expense_type)
         unless self.organization.try(:whsc?)
           results << self.class.ba61_tier1_budget_mailbox
         end
