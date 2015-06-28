@@ -28,9 +28,7 @@ class Dispatcher
   end
 
   def deliver_cancellation_emails(proposal)
-    #CURRENT: send out cancellation emais
-    # Loop through all people and send an email
-    # CommunicartMailer.proposal_observer_email(observation.user_email_address, proposal).deliver_now
+    #do something
   end
 
   def requires_approval_notice?(approval)

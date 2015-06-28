@@ -22,7 +22,9 @@ class Proposal < ActiveRecord::Base
       event :restart, :transitions_to => :pending
       event :cancel, :transitions_to => :cancelled
     end
-    state :cancelled
+    state :cancelled do
+      event :partial_approve, :transitions_to => :cancelled
+    end
   end
 
   has_one :cart
