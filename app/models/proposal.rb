@@ -52,6 +52,7 @@ class Proposal < ActiveRecord::Base
     scope status, -> { where(status: status) }
   end
   scope :closed, -> { where(status: ['approved', 'rejected']) }
+  scope :cancelled, -> { where(status: 'cancelled') }
 
   after_initialize :set_defaults
   after_create :update_public_id
