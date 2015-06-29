@@ -10,7 +10,6 @@ module Ncr
   BUILDING_NUMBERS = YAML.load_file("#{Rails.root}/config/data/ncr/building_numbers.yml")
 
   class WorkOrder < ActiveRecord::Base
-    include ObservableModel
     include ValueHelper
 
     has_one :proposal, as: :client_data
@@ -19,6 +18,7 @@ module Ncr
     after_initialize :set_defaults
     before_validation :normalize_values
     before_update :record_changes
+    after_update ->{ Dispatcher.on_proposal_update(self.proposal) }
 
     # @TODO: use integer number of cents to avoid floating point issues
     validates :amount, numericality: {
