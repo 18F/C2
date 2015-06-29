@@ -42,7 +42,7 @@
 
     &.last {
       img.approved.linear, img.pending.linear, img.rejected.linear {
-        background-image: none !important;
+        background-image: none;
       }
 
       img {
@@ -60,22 +60,12 @@
 
     img {
       float: left;
-      padding-top: 2px;
-      &.approved.linear {
-        background-image: image-url('bg_approved_status.gif');
-      }
-
-      &.pending.linear {
-        background-image: image-url('bg_pending_status.gif');
-      }
-
-      &.rejected.linear {
-        background-image: image-url('bg_rejected_status.gif');
-      }
     }
 
     .approver {
       padding-left: 7px;
+      position: relative;
+      top: -5px;
     }
   }
 }
