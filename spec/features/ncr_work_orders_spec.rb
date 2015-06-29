@@ -1,4 +1,5 @@
 describe "National Capital Region proposals" do
+  let!(:approver) { FactoryGirl.create(:user) }
   describe "creating a work order" do
     it "requires sign-in" do
       visit '/ncr/work_orders/new'
@@ -36,9 +37,9 @@ describe "National Capital Region proposals" do
         fill_in 'Vendor', with: 'ACME'
         fill_in 'Amount', with: 123.45
         check "I am going to be using direct pay for this transaction"
-        fill_in "Approving official's email address", with: 'approver@example.com'
+        select approver.email_address, from: 'approver_email'
         fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
-        select Ncr::Organization.all[0], :from => 'ncr_work_order_org_code'
+        select Ncr::Organization.all[0], from: 'ncr_work_order_org_code'
         expect {
           click_on 'Submit for approval'
         }.to change { Proposal.count }.from(0).to(1)
@@ -60,10 +61,8 @@ describe "National Capital Region proposals" do
         expect(work_order.org_code).to eq(Ncr::Organization.all[0].to_s)
         expect(work_order.description).to eq('desc content')
         expect(proposal.requester).to eq(requester)
-        expect(proposal.approvers.map(&:email_address)).to eq(%w(
-          approver@example.com
-          communicart.budget.approver@gmail.com
-        ))
+        expect(proposal.approvers.map(&:email_address)).to eq(
+          [approver.email_address, 'communicart.budget.approver@gmail.com'])
       end
 
       with_feature 'SHOW_BA60_OPTION' do 
@@ -140,9 +139,9 @@ describe "National Capital Region proposals" do
           fill_in 'RWA Number', with: 'F1234567'
           fill_in 'Vendor', with: 'ACME'
           fill_in 'Amount', with: 123.45
-          fill_in "Approving official's email address", with: 'approver@example.com'
+          select approver.email_address, from: 'approver_email'
           fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
-          select Ncr::Organization.all[0], :from => 'ncr_work_order_org_code'
+          select Ncr::Organization.all[0], from: 'ncr_work_order_org_code'
           expect {
             click_on 'Submit for approval'
           }.to change { Proposal.count }.from(0).to(1)
@@ -176,9 +175,9 @@ describe "National Capital Region proposals" do
         fill_in 'RWA Number', with: 'B9876543'
         fill_in 'Vendor', with: 'ACME'
         fill_in 'Amount', with: 123.45
-        fill_in "Approving official's email address", with: 'approver@example.com'
+        select approver.email_address, from: 'approver_email'
         fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
-        select Ncr::Organization.all[0], :from => 'ncr_work_order_org_code'
+        select Ncr::Organization.all[0], from: 'ncr_work_order_org_code'
         click_on 'Submit for approval'
         expect(current_path).to eq("/proposals/#{Proposal.last.id}")
         expect(page).to have_content("RWA Number")
@@ -334,6 +333,14 @@ describe "National Capital Region proposals" do
         expect(page).to have_content("You must be the requester or an approver")
       end
 
+      it "provides the previous building when editing", :js => true do
+        work_order.update(building_number: "BillDing")
+        visit "/ncr/work_orders/#{work_order.id}/edit"
+        click_on "Update"
+        expect(current_path).to eq("/proposals/#{ncr_proposal.id}")
+        expect(work_order.reload.building_number).to eq("BillDing")
+      end
+
       it "shows a edit link from a pending cart" do
         visit "/proposals/#{ncr_proposal.id}"
         expect(page).to have_content('Modify Request')
@@ -375,9 +382,9 @@ describe "National Capital Region proposals" do
           fill_in 'Project title', with: "buying stuff"
           fill_in 'Vendor', with: 'ACME'
           fill_in 'Amount', with: 123.45
-          fill_in "Approving official's email address", with: 'approver@example.com'
+          select approver.email_address, from: 'approver_email'
           fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
-          select Ncr::Organization.all[0], :from => 'ncr_work_order_org_code'
+          select Ncr::Organization.all[0], from: 'ncr_work_order_org_code'
         end
 
         it "approves emergencies" do
