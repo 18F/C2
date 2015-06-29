@@ -84,11 +84,6 @@ class Dispatcher
     dispatcher.deliver_new_proposal_emails(proposal)
   end
 
-  def self.deliver_cancellation_emails(proposal)
-    dispatcher = self.initialize_dispatcher(proposal)
-    dispatcher.deliver_cancellation_emails(proposal)
-  end
-
   def self.on_proposal_rejected(proposal)
     dispatcher = self.initialize_dispatcher(proposal)
     dispatcher.on_proposal_rejected(proposal)

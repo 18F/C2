@@ -44,7 +44,7 @@ class ProposalsController < ApplicationController
 
       flash[:success] = "Your request has been cancelled"
       redirect_to proposal_path, id: proposal.id
-      Dispatcher.deliver_cancellation_emails(proposal)
+      Dispatcher.new.deliver_cancellation_emails(proposal)
     else
       redirect_to cancel_form_proposal_path, id: params[:id],
                                              alert: "A reason for cancellation is required.
