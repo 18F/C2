@@ -90,6 +90,13 @@ describe Ncr::WorkOrder do
       ])
     end
 
+    it "skips the Tier 1 budget approver for BA60" do
+      work_order = FactoryGirl.create(:ncr_work_order, expense_type: 'BA60')
+      expect(work_order.system_approvers).to eq([
+        Ncr::WorkOrder.ba61_tier2_budget_mailbox
+      ])
+    end
+
     it "includes the Tier 1 budget approver for an unknown organization" do
       work_order = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61', org_code: nil)
       expect(work_order.system_approvers).to eq([

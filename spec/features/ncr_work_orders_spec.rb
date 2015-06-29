@@ -89,7 +89,6 @@ describe "National Capital Region proposals" do
           expect(work_order.expense_type).to eq('BA60')
           expect(proposal.approvers.map(&:email_address)).to eq(%w(
             approver@example.com
-            communicart.budget.approver@gmail.com
             communicart.ofm.approver@gmail.com
           ))
         end
