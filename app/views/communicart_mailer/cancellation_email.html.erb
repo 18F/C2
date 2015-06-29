@@ -1,0 +1,15 @@
+<div>
+  <p>
+    Hello,<br/>
+    The request, <%= @proposal.client_data.project_title %> (<%= @proposal.public_id %>), has been cancelled.
+  </p>
+  <p>
+    <%= @proposal.comments.last.comment_text %>
+  </p>
+</div>
+
+<p>
+  <strong>
+    <%= link_to "View This Request", proposal_url(@proposal), {target: 'C2'} %>
+  </strong>
+</p>

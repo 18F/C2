@@ -42,6 +42,20 @@ class CommunicartMailer < ActionMailer::Base
     )
   end
 
+  def cancellation_confirmation(proposal)
+    send_proposal_email(
+      to_email: proposal.requester.email_address,
+      proposal: proposal
+    )
+  end
+
+  def cancellation_email(proposal, to_email)
+    send_proposal_email(
+      to_email: to_email,
+      proposal: proposal
+    )
+  end
+
   def approval_reply_received_email(approval)
     proposal = approval.proposal
     @approval = approval

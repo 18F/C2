@@ -141,7 +141,7 @@ describe ProposalsController do
       login_as(user)
     end
 
-    it 'sends a cancellation email to everyone that is aware of the request' do
+    it 'sends a cancellation email' do
       expect(Dispatcher).to receive(:deliver_cancellation_emails)
 
       post :cancel, id: proposal.id, reason_input:'My test cancellation text'
