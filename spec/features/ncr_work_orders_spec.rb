@@ -246,135 +246,6 @@ describe "National Capital Region proposals" do
         expect(page).to have_selector("div.option[data-value='BillDing']")
       end
 
-      # TODO move editing specs to different `describe` block
-      let (:work_order) {
-        wo = FactoryGirl.create(:ncr_work_order, requester: requester, description: "test")
-        wo.add_approvals('approver@example.com')
-        wo
-      }
-      let(:ncr_proposal) {
-        work_order.proposal
-      }
-      it "can be edited if pending" do
-        visit "/ncr/work_orders/#{work_order.id}/edit"
-        expect(find_field("ncr_work_order_building_number").value).to eq(
-          Ncr::BUILDING_NUMBERS[0])
-        fill_in 'Vendor', with: 'New ACME'
-      click_on 'Update'
-        expect(current_path).to eq("/proposals/#{ncr_proposal.id}")
-        expect(page).to have_content("New ACME")
-        expect(page).to have_content("modified")
-        # Verify it is actually saved
-        work_order.reload
-        expect(work_order.vendor).to eq("New ACME")
-      end
-
-      it "creates a special comment when editing" do
-        visit "/ncr/work_orders/#{work_order.id}/edit"
-        fill_in 'Vendor', with: "New Test Vendor"
-        fill_in 'Description', with: "New Description"
-      click_on 'Update'
-
-        expect(page).to have_content("Request modified by")
-        expect(page).to have_content("Description was changed to New Description")
-        expect(page).to have_content("Vendor was changed to New Test Vendor")
-      end
-
-      it "does not resave unchanged requests" do
-        visit "/ncr/work_orders/#{work_order.id}/edit"
-        click_on 'Update'
-
-        expect(current_path).to eq("/proposals/#{work_order.proposal.id}")
-        expect(page).to have_content("No changes were made to the request")
-        expect(deliveries.length).to eq(0)
-      end
-
-      it "has 'Discard Changes' link" do
-        visit "/ncr/work_orders/#{work_order.id}/edit"
-        expect(page).to have_content("Discard Changes")
-        click_on "Discard Changes"
-        expect(current_path).to eq("/proposals/#{work_order.proposal.id}")
-      end
-
-      it "has a disabled field if first approval is done" do
-        visit "/ncr/work_orders/#{work_order.id}/edit"
-        expect(find("[name=approver_email]")["disabled"]).to be_nil
-        work_order.approvals.first.approve!
-        visit "/ncr/work_orders/#{work_order.id}/edit"
-        expect(find("[name=approver_email]")["disabled"]).to eq("disabled")
-        # And we can still submit
-        fill_in 'Vendor', with: 'New ACME'
-      click_on 'Update'
-        expect(current_path).to eq("/proposals/#{ncr_proposal.id}")
-        # Verify it is actually saved
-        work_order.reload
-        expect(work_order.vendor).to eq("New ACME")
-      end
-
-      it "can be edited if rejected" do
-        ncr_proposal.update_attributes(status: 'rejected')  # avoid workflow
-
-        visit "/ncr/work_orders/#{work_order.id}/edit"
-        expect(current_path).to eq("/ncr/work_orders/#{work_order.id}/edit")
-      end
-
-      it "can be edited if approved" do
-        ncr_proposal.update_attributes(status: 'approved')  # avoid workflow
-
-        visit "/ncr/work_orders/#{work_order.id}/edit"
-        expect(current_path).to eq("/ncr/work_orders/#{work_order.id}/edit")
-      end
-
-      it "cannot be edited by someone other than the requester" do
-        ncr_proposal.set_requester(FactoryGirl.create(:user))
-
-        visit "/ncr/work_orders/#{work_order.id}/edit"
-        expect(current_path).to eq("/ncr/work_orders/new")
-        expect(page).to have_content("You must be the requester or an approver")
-      end
-
-      it "provides the previous building when editing", :js => true do
-        work_order.update(building_number: "BillDing")
-        visit "/ncr/work_orders/#{work_order.id}/edit"
-        click_on "Update"
-        expect(current_path).to eq("/proposals/#{ncr_proposal.id}")
-        expect(work_order.reload.building_number).to eq("BillDing")
-      end
-
-      it "shows a edit link from a pending cart" do
-        visit "/proposals/#{ncr_proposal.id}"
-        expect(page).to have_content('Modify Request')
-        click_on('Modify Request')
-        expect(current_path).to eq("/ncr/work_orders/#{work_order.id}/edit")
-      end
-
-      it "shows a edit link from a rejected cart" do
-        ncr_proposal.update_attribute(:status, 'rejected') # avoid state machine
-
-        visit "/proposals/#{ncr_proposal.id}"
-        expect(page).to have_content('Modify Request')
-      end
-
-      it "shows a edit link for an approved cart" do
-        ncr_proposal.update_attribute(:status, 'approved') # avoid state machine
-
-        visit "/proposals/#{ncr_proposal.id}"
-        expect(page).to have_content('Modify Request')
-      end
-
-      it "does not show a edit link for another client" do
-        ncr_proposal.client_data = nil
-        ncr_proposal.save()
-        visit "/proposals/#{ncr_proposal.id}"
-        expect(page).not_to have_content('Modify Request')
-      end
-
-      it "does not show a edit link for non requester" do
-        ncr_proposal.set_requester(FactoryGirl.create(:user))
-        visit "/proposals/#{ncr_proposal.id}"
-        expect(page).not_to have_content('Modify Request')
-      end
-
       context "selected common values on proposal page" do
         before do
           visit '/ncr/work_orders/new'
@@ -423,11 +294,146 @@ describe "National Capital Region proposals" do
     end
   end
 
+  describe "viewing a work order" do
+    let (:work_order) { FactoryGirl.create(:ncr_work_order) }
+    let(:ncr_proposal) { work_order.proposal }
+
+    before do
+      work_order.add_approvals('approver@example.com')
+      login_as(work_order.requester)
+    end
+
+    it "shows a edit link from a pending cart" do
+      visit "/proposals/#{ncr_proposal.id}"
+      expect(page).to have_content('Modify Request')
+      click_on('Modify Request')
+      expect(current_path).to eq("/ncr/work_orders/#{work_order.id}/edit")
+    end
+
+    it "shows a edit link from a rejected cart" do
+      ncr_proposal.update_attribute(:status, 'rejected') # avoid state machine
+
+      visit "/proposals/#{ncr_proposal.id}"
+      expect(page).to have_content('Modify Request')
+    end
+
+    it "shows a edit link for an approved cart" do
+      ncr_proposal.update_attribute(:status, 'approved') # avoid state machine
+
+      visit "/proposals/#{ncr_proposal.id}"
+      expect(page).to have_content('Modify Request')
+    end
+
+    it "does not show a edit link for another client" do
+      ncr_proposal.client_data = nil
+      ncr_proposal.save()
+      visit "/proposals/#{ncr_proposal.id}"
+      expect(page).not_to have_content('Modify Request')
+    end
+
+    it "does not show a edit link for non requester" do
+      ncr_proposal.set_requester(FactoryGirl.create(:user))
+      visit "/proposals/#{ncr_proposal.id}"
+      expect(page).not_to have_content('Modify Request')
+    end
+  end
+
   describe "editing a work order" do
-    let(:work_order) { FactoryGirl.create(:ncr_work_order, :with_approvers) }
+    let (:work_order) { FactoryGirl.create(:ncr_work_order, description: 'test') }
+    let(:ncr_proposal) { work_order.proposal }
+
+    before do
+      work_order.add_approvals('approver@example.com')
+      login_as(work_order.requester)
+    end
+
+    it "can be edited if pending" do
+      visit "/ncr/work_orders/#{work_order.id}/edit"
+      expect(find_field("ncr_work_order_building_number").value).to eq(
+        Ncr::BUILDING_NUMBERS[0])
+      fill_in 'Vendor', with: 'New ACME'
+      click_on 'Update'
+      expect(current_path).to eq("/proposals/#{ncr_proposal.id}")
+      expect(page).to have_content("New ACME")
+      expect(page).to have_content("modified")
+      # Verify it is actually saved
+      work_order.reload
+      expect(work_order.vendor).to eq("New ACME")
+    end
+
+    it "creates a special comment when editing" do
+      visit "/ncr/work_orders/#{work_order.id}/edit"
+      fill_in 'Vendor', with: "New Test Vendor"
+      fill_in 'Description', with: "New Description"
+      click_on 'Update'
+
+      expect(page).to have_content("Request modified by")
+      expect(page).to have_content("Description was changed to New Description")
+      expect(page).to have_content("Vendor was changed to New Test Vendor")
+    end
+
+    it "does not resave unchanged requests" do
+      visit "/ncr/work_orders/#{work_order.id}/edit"
+      click_on 'Update'
+
+      expect(current_path).to eq("/proposals/#{work_order.proposal.id}")
+      expect(page).to have_content("No changes were made to the request")
+      expect(deliveries.length).to eq(0)
+    end
+
+    it "has 'Discard Changes' link" do
+      visit "/ncr/work_orders/#{work_order.id}/edit"
+      expect(page).to have_content("Discard Changes")
+      click_on "Discard Changes"
+      expect(current_path).to eq("/proposals/#{work_order.proposal.id}")
+    end
+
+    it "has a disabled field if first approval is done" do
+      visit "/ncr/work_orders/#{work_order.id}/edit"
+      expect(find("[name=approver_email]")["disabled"]).to be_nil
+      work_order.approvals.first.approve!
+      visit "/ncr/work_orders/#{work_order.id}/edit"
+      expect(find("[name=approver_email]")["disabled"]).to eq("disabled")
+      # And we can still submit
+      fill_in 'Vendor', with: 'New ACME'
+      click_on 'Update'
+      expect(current_path).to eq("/proposals/#{ncr_proposal.id}")
+      # Verify it is actually saved
+      work_order.reload
+      expect(work_order.vendor).to eq("New ACME")
+    end
+
+    it "can be edited if rejected" do
+      ncr_proposal.update_attributes(status: 'rejected')  # avoid workflow
+
+      visit "/ncr/work_orders/#{work_order.id}/edit"
+      expect(current_path).to eq("/ncr/work_orders/#{work_order.id}/edit")
+    end
+
+    it "can be edited if approved" do
+      ncr_proposal.update_attributes(status: 'approved')  # avoid workflow
+
+      visit "/ncr/work_orders/#{work_order.id}/edit"
+      expect(current_path).to eq("/ncr/work_orders/#{work_order.id}/edit")
+    end
+
+    it "cannot be edited by someone other than the requester" do
+      ncr_proposal.set_requester(FactoryGirl.create(:user))
+
+      visit "/ncr/work_orders/#{work_order.id}/edit"
+      expect(current_path).to eq("/ncr/work_orders/new")
+      expect(page).to have_content("You must be the requester or an approver")
+    end
+
+    it "provides the previous building when editing", :js => true do
+      work_order.update(building_number: "BillDing")
+      visit "/ncr/work_orders/#{work_order.id}/edit"
+      click_on "Update"
+      expect(current_path).to eq("/proposals/#{ncr_proposal.id}")
+      expect(work_order.reload.building_number).to eq("BillDing")
+    end
 
     it "allows the user to edit the budget-related fields" do
-      login_as(work_order.requester)
       visit "/ncr/work_orders/#{work_order.id}/edit"
 
       fill_in 'CL number', with: 'CL1234567'
