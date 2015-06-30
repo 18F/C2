@@ -410,6 +410,11 @@ body.webapp {
   text-align: center;
 }
 
+label.required::after,
+fieldset.required legend::after {
+  content: "*";
+}
+
 @media (max-width: $break-small) {
   tr.cart_item_information p {
     font-size: 67%;

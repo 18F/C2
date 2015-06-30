@@ -10,7 +10,7 @@
 
   <%= form_for @model_instance, html: {multipart: true} do |f| %>
     <div class="form-group">
-      <%= f.label :project_title%>
+      <%= f.label :project_title, class: "required" %>
       <%= f.text_field :project_title, class: 'form-control', placeholder: 'e.g. "Blue paint for the Blue Room"' %>
     </div>
     <div class="form-group">
@@ -25,7 +25,7 @@
       <%= render partial: 'ba_80_fields', locals: {f: f} %>
     <% else %>
       <div class="form-group">
-        <%= field_set_tag "Expense type" do %>
+        <%= field_set_tag "Expense type", class: "required" do %>
           <% if ENV['SHOW_BA60_OPTION'] == 'true' %>
             <div class="radio">
               <%= f.label :expense_type, value: "BA60" do %>
@@ -63,7 +63,7 @@
       </div>
     <% end %>
     <div class="form-group">
-      <%= f.label :building_number %>
+      <%= f.label :building_number, class: "required" %>
       <%= f.text_field :building_number,
             class: 'form-control js-selectize',
             placeholder: "Type here to search or add",
@@ -76,14 +76,14 @@
             {include_blank: true, prompt: "Type here to search"}, {class: 'form-control js-selectize'}) %>
     </div>
     <div class="form-group">
-      <%= f.label :vendor %>
+      <%= f.label :vendor, class: "required"  %>
       <%= f.text_field :vendor,
             class: 'form-control js-selectize',
             placeholder: "Type here to search or add",
             data: {attr: 'vendor', src: '/api/v1/ncr/work_orders.json'} %>
     </div>
     <div class="form-group">
-      <%= field_set_tag "Amount" do %>
+      <%= field_set_tag "Amount", class: "required" do %>
         <%= f.label :amount, "Dollar Amount", :class => 'sr-only'  %>
         <div class="input-group">
           <div class="input-group-addon">$</div>
@@ -110,7 +110,7 @@
       <% end %>
     </div>
     <div class="form-group">
-      <%= label_tag :approver_email, "Approving official's email address" %>
+      <%= label_tag :approver_email, "Approving official's email address", class: "required" %>
       <%= select_tag :approver_email, options_from_collection_for_select(approver_options, :to_s, :to_s, @approver_email),
                      class: 'form-control js-selectize', disabled: approver_email_frozen? %>
     </div>
