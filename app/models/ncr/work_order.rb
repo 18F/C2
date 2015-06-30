@@ -166,20 +166,17 @@ module Ncr
     end
 
     def system_approvers
-      case self.expense_type
-      when 'BA60'
-        [self.class.ba61_tier2_budget_mailbox]
-      when 'BA61'
-        if self.organization.try(:whsc?)
-          [self.class.ba61_tier2_budget_mailbox]
-        else
-          [self.class.ba61_tier1_budget_mailbox, self.class.ba61_tier2_budget_mailbox]
+      results = []
+      if %w(BA60 BA61).include?(self.expense_type)
+        unless self.organization.try(:whsc?)
+          results << self.class.ba61_tier1_budget_mailbox
         end
-      when 'BA80'
-        [self.class.ba80_budget_mailbox]
+        results << self.class.ba61_tier2_budget_mailbox
       else
-        raise "Unknown expense type"
+        results << self.class.ba80_budget_mailbox
       end
+
+      results
     end
 
     def self.ba61_tier1_budget_mailbox
