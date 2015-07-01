@@ -2,8 +2,8 @@
 
 ## Dependencies
 
-* Ruby 2.0+
-* PostgreSQL
+* Ruby 2.0+ (see the exact version we run in [`.ruby-version`](../.ruby-version))
+* PostgreSQL 9.x
 * A [MyUSA](https://alpha.my.usa.gov/) account
 * An SMTP server (`production` mode only)
 
