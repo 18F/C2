@@ -1,1 +1,1 @@
-web: bundle exec puma
+web: bin/rails server
