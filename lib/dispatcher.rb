@@ -4,9 +4,14 @@ class Dispatcher
     send_notification_email(approval)
   end
 
+  def email_observer(observation)
+    proposal = observation.proposal
+    CommunicartMailer.proposal_observer_email(observation.user_email_address, proposal).deliver_now
+  end
+
   def email_observers(proposal)
     proposal.observations.each do |observation|
-      CommunicartMailer.proposal_observer_email(observation.user_email_address, proposal).deliver_now
+      self.email_observer(observation)
     end
   end
 
@@ -65,6 +70,8 @@ class Dispatcher
     end
   end
 
+  # TODO DRY the following up
+
   def self.deliver_new_proposal_emails(proposal)
     dispatcher = self.initialize_dispatcher(proposal)
     dispatcher.deliver_new_proposal_emails(proposal)
@@ -93,6 +100,11 @@ class Dispatcher
   def self.on_proposal_update(proposal)
     dispatcher = self.initialize_dispatcher(proposal)
     dispatcher.on_proposal_update(proposal)
+  end
+
+  def self.on_observer_added(observation)
+    dispatcher = self.initialize_dispatcher(observation.proposal)
+    dispatcher.email_observer(observation)
   end
 
   private
