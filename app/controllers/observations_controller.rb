@@ -2,6 +2,7 @@ class ObservationsController < ApplicationController
   before_action :authenticate_user!
   before_action :find_proposal
   before_action ->{authorize @proposal, :can_edit!}
+  rescue_from Pundit::NotAuthorizedError, with: :auth_errors
 
 
   def index
@@ -26,5 +27,9 @@ class ObservationsController < ApplicationController
 
   def find_proposal
     @proposal ||= Proposal.find(params[:proposal_id])
+  end
+
+  def auth_errors(exception)
+    redirect_to proposals_path, alert: "You are not allowed to add observers to that proposal"
   end
 end

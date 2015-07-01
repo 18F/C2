@@ -27,8 +27,9 @@ describe "observers" do
     user = FactoryGirl.create(:user)
     login_as(user)
 
-    expect {
-      visit "/proposals/#{proposal.id}/observations"
-    }.to raise_error(Pundit::NotAuthorizedError)
+    visit "/proposals/#{proposal.id}/observations"
+
+    expect(current_path).to eq('/proposals')
+    expect(page).to have_content("not allowed")
   end
 end
