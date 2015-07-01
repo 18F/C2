@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.2.2'
+ruby '2.2.2' # this should match `.ruby-version` and docs/setup.md
 
 gem 'active_model_serializers'
 gem 'acts_as_list'
