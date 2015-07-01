@@ -5,12 +5,14 @@ describe "observers" do
     login_as(proposal.requester)
 
     visit "/proposals/#{proposal.id}/observations"
-    fill_in 'observation[user][email_address]', with: 'observer@some-dot-gov.gov'
+    fill_in 'Email address', with: 'observer@some-dot-gov.gov'
     click_on 'Add'
 
     expect(page).to have_content("observer@some-dot-gov.gov has been added as an observer")
 
     proposal.reload
     expect(proposal.observers.map(&:email_address)).to eq(['observer@some-dot-gov.gov'])
+
+    expect(email_recipients).to eq(['observer@some-dot-gov.gov'])
   end
 end

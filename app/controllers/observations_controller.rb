@@ -11,6 +11,7 @@ class ObservationsController < ApplicationController
   def create
     proposal = self.find_proposal
     observation = proposal.add_observer(params[:observation][:user][:email_address])
+    Dispatcher.on_observer_added(observation)
 
     observer = observation.user
     flash[:success] = "#{observer.full_name} has been added as an observer"
