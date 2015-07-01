@@ -1,5 +1,12 @@
 source 'https://rubygems.org'
 
+# we are only going to be strict about it in production
+if ENV['RAILS_ENV'] == 'production'
+  path = File.expand_path(File.join('..', '.ruby-version'), __FILE__)
+  version = File.read(path).strip
+  ruby version
+end
+
 gem 'active_model_serializers'
 gem 'acts_as_list'
 gem 'ar_outer_joins'
