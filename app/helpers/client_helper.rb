@@ -14,4 +14,16 @@ module ClientHelper
       ""
     end
   end
+
+  def modify_client_button(proposal)
+    client_data = proposal.client_data_legacy
+    # TODO find a better way to check if there's a corresponding edit path
+    begin
+      url = polymorphic_path(client_data, action: :edit)
+    rescue NoMethodError
+      ''
+    else
+      link_to "Modify Request", url, class: 'form-button modify'
+    end
+  end
 end
