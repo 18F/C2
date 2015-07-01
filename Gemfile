@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+ruby '2.2.2' # this should match `.ruby-version` and docs/setup.md
 
 gem 'active_model_serializers'
 gem 'acts_as_list'
@@ -16,13 +17,14 @@ gem 'haml'
 gem 'html_pipeline_rails'
 gem 'jquery-rails'
 gem 'jquery-turbolinks'
-gem 'newrelic_rpm'
+gem 'newrelic_rpm', require: false # https://github.com/Tomohiro/plate/commit/0a5a072c8d882f32a48d8bdbfa325e83719f58f8
 gem 'omniauth-myusa', git: 'https://github.com/18F/omniauth-myusa.git'
 gem 'paperclip'
 gem 'peek'
 gem 'peek-performance_bar'
 gem 'peek-pg'
 gem 'pg'
+gem 'puma'
 gem 'pundit', '>= 1.0.0'  # Interface for Pundit::NotAuthorizedError changed in this version
 gem 'rack-cors', require: 'rack/cors'
 gem 'rack-ssl-enforcer'
