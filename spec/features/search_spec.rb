@@ -1,5 +1,6 @@
 describe "searching" do
   let(:user){ FactoryGirl.create(:user) }
+  let!(:approver){ FactoryGirl.create(:user) }
 
   before do
     login_as(user)
@@ -39,9 +40,9 @@ describe "searching" do
     fill_in 'Vendor', with: 'ACME'
     fill_in 'Amount', with: 123.45
     check "I am going to be using direct pay for this transaction"
-    fill_in "Approving official's email address", with: 'approver@example.com'
+    select approver.email_address, from: 'approver_email'
     fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
-    select Ncr::Organization.all[0], :from => 'ncr_work_order_org_code'
+    select Ncr::Organization.all[0], from: 'ncr_work_order_org_code'
     click_on 'Submit for approval'
 
     proposal = Proposal.last

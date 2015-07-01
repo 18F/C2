@@ -34,6 +34,11 @@ class ApplicationController < ActionController::Base
 
   # Proposals can have special authorization parameters in their client_data
   def authorizing_object(record)
+    if record.is_a?(Class)
+      # use an instance
+      record = record.new
+    end
+
     if record.instance_of?(Proposal) && Pundit::PolicyFinder.new(record.client_data).policy
       record.client_data
     else
