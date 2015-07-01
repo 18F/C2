@@ -18,6 +18,7 @@ module Ncr
 
     after_initialize :set_defaults
     before_update :record_changes
+    after_update :check_approvers
 
     # @TODO: use integer number of cents to avoid floating point issues
     validates :amount, numericality: {
@@ -50,6 +51,7 @@ module Ncr
         first_approval.destroy
         replacement = self.add_approver(approver_email)
         replacement.move_to_top
+        self.approvals.first.make_actionable!
       end
       # no need to call initialize_approvals as they have already been set up
     end
@@ -152,6 +154,24 @@ module Ncr
 
     def self.ba80_budget_mailbox
       ENV['NCR_BA80_BUDGET_MAILBOX'] || 'communicart.budget.approver@gmail.com'
+    end
+
+    def check_approvers
+      current_approvers = self.approvers.map {|a| a[:email_address]}
+      #remove approving official
+      approving_official = current_approvers.shift
+      if (current_approvers != system_approvers)
+        current_approvers.each do |email|
+          self.remove_approver(email)
+        end
+        system_approvers.each do |email|
+          self.add_approver(email)
+        end
+        approvals = self.approvals
+        if(approvals.first.approved?)
+          approvals.second.make_actionable!
+        end
+      end
     end
 
 

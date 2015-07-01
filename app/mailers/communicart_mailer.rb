@@ -27,6 +27,18 @@ class CommunicartMailer < ActionMailer::Base
     )
   end
 
+  def notification_for_approver_removed(to_email, approval, alert_partial=nil)
+    @approval = approval
+    @alert_partial = alert_partial
+    proposal = approval.proposal
+    send_proposal_email(
+      from_email: user_email_with_name(proposal.requester),
+      to_email: to_email,
+      proposal: proposal,
+      template_name: 'proposal_notification_email'
+    )
+  end
+
   def proposal_observer_email(to_email, proposal)
     # TODO have the from_email be whomever triggered this notification
     send_proposal_email(

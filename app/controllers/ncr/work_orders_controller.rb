@@ -23,9 +23,7 @@ module Ncr
 
     def update
       @approver_email = params[:approver_email]
-
       super
-
       if self.errors.empty?
         if !self.approver_email_frozen?
           @model_instance.update_approver(@approver_email)
