@@ -15,4 +15,20 @@ describe "observers" do
 
     expect(email_recipients).to eq(['observer@some-dot-gov.gov'])
   end
+
+  it "doesn't allow observers to be added if not signed in" do
+    visit '/proposals/1/observations'
+    expect(current_path).to eq('/')
+    expect(page).to have_content("You need to sign in")
+  end
+
+  it "doesn't allow observers to be added if not involved in the Proposal" do
+    proposal = FactoryGirl.create(:proposal)
+    user = FactoryGirl.create(:user)
+    login_as(user)
+
+    expect {
+      visit "/proposals/#{proposal.id}/observations"
+    }.to raise_error(Pundit::NotAuthorizedError)
+  end
 end
