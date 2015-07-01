@@ -23,6 +23,12 @@
     .status-icon {
       padding-bottom: 5px;
     }
+
+    &.status-header {
+      strong {
+        padding: 0 3px;
+      }
+    }
   }
 
   .status-icon {
@@ -54,22 +60,12 @@
 
     img {
       float: left;
-      padding-top: 2px;
-      &.approved.linear {
-        background-image: image-url('bg_approved_status.gif');
-      }
-
-      &.pending.linear {
-        background-image: image-url('bg_pending_status.gif');
-      }
-
-      &.rejected.linear {
-        background-image: image-url('bg_rejected_status.gif');
-      }
     }
 
     .approver {
       padding-left: 7px;
+      position: relative;
+      top: -5px;
     }
   }
 }

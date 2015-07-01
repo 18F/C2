@@ -33,6 +33,10 @@ module Ncr
       end
     end
 
+    def attribute_changes?
+      super || @model_instance.approver_changed?(@approver_email)
+    end
+
 
     protected
 

@@ -5,6 +5,10 @@ class ProposalPolicy
     @proposal = record
   end
 
+  def restricted?
+    ENV['RESTRICT_ACCESS'] == 'true'
+  end
+
   def requester?
     @proposal.requester_id == @user.id
   end
@@ -63,6 +67,12 @@ class ProposalPolicy
     visible = ProposalPolicy::Scope.new(@user, Proposal).resolve
     check(visible.include?(@proposal), "You are not allowed to see this cart")
   end
+
+  def can_create!
+    # TODO restrict by client_slug
+    true
+  end
+  alias_method :can_new!, :can_create!
 
   # equivalent of can_show?
   class Scope

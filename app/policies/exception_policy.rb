@@ -25,10 +25,8 @@ module ExceptionPolicy
   def check(guard, message)
     if !guard
       # will need to replace this when a new version of pundit arrives
-      ex = Pundit::NotAuthorizedError.new(message)
       caller_name = caller_locations(1, 1)[0].label
-      ex.query, ex.record, ex.policy = caller_name.to_sym, @record, self
-      raise ex
+      raise Pundit::NotAuthorizedError.new(query: caller_name.to_sym, record: @record, policy: self, message: message)
     end
     guard
   end

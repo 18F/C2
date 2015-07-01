@@ -18,7 +18,7 @@ module Ncr
         group('year', 'month').
         order('year DESC', 'month DESC')
       # Convert the ORM into an array of hashes
-      Ncr::WorkOrder.connection.select_all(orm_query)
+      Ncr::WorkOrder.connection.select_all(orm_query.to_sql)
     end
 
     def format_results(results)

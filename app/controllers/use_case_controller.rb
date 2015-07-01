@@ -3,6 +3,7 @@
 # * permitted_params
 class UseCaseController < ApplicationController
   before_filter :authenticate_user!
+  before_filter ->{authorize self.model_class}, only: [:new, :create]
   before_filter ->{authorize self.proposal}, only: [:edit, :update]
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
   before_filter :find_model_instance, only: [:edit, :update]
@@ -40,8 +41,10 @@ class UseCaseController < ApplicationController
 
   def update
     @model_instance.assign_attributes(self.permitted_params)   # don't hit db yet
-
-    if self.errors.empty?
+    if @model_instance.valid? && !self.attribute_changes?
+      flash[:success] = "No changes were made to the request"
+      redirect_to proposal_path(@model_instance.proposal)
+    elsif self.errors.empty?
       @model_instance.save
       flash[:success] = "Successfully modified!"
       redirect_to proposal_path(@model_instance.proposal)
@@ -54,6 +57,10 @@ class UseCaseController < ApplicationController
 
   protected
 
+  def attribute_changes?
+    !@model_instance.changed_attributes.blank?
+  end
+
   def find_model_instance
     @model_instance ||= self.model_class.find(params[:id])
   end
@@ -63,14 +70,18 @@ class UseCaseController < ApplicationController
   end
 
   def errors
-    # TODO use #validate after upgrading to Rails 4.2.1+
-    @model_instance.valid? # force validation
+    @model_instance.validate
     @model_instance.errors.full_messages
   end
 
   def auth_errors(exception)
-    url = polymorphic_url(self.model_class, action: :new, routing_type: :path)
-    redirect_to url, alert: exception.message
+    path = polymorphic_path(self.model_class, action: :new)
+    # prevent redirect loop
+    if path == request.path
+      redirect_to proposals_path, alert: exception.message
+    else
+      redirect_to path, alert: exception.message
+    end
   end
 
   def initial_attachments(proposal)
@@ -79,7 +90,7 @@ class UseCaseController < ApplicationController
       Attachment.create(proposal: proposal, user: current_user, file: file)
     end
   end
-  
+
   # Hook for adding additional approvers
   def add_approvals
   end

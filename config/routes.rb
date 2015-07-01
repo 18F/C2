@@ -54,6 +54,7 @@ C2::Application.routes.draw do
     get '/dashboard' => 'dashboard#index'
   end
 
+  mount Peek::Railtie => '/peek'
   if Rails.env.development?
     mount MailPreview => 'mail_view'
     mount LetterOpenerWeb::Engine => 'letter_opener'

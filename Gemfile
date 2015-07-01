@@ -18,12 +18,15 @@ gem 'jquery-rails'
 gem 'jquery-turbolinks'
 gem 'newrelic_rpm'
 gem 'omniauth-myusa', git: 'https://github.com/18F/omniauth-myusa.git'
-gem "paperclip"
+gem 'paperclip'
+gem 'peek'
+gem 'peek-performance_bar'
+gem 'peek-pg'
 gem 'pg'
-gem 'pundit'
+gem 'pundit', '>= 1.0.0'  # Interface for Pundit::NotAuthorizedError changed in this version
 gem 'rack-cors', require: 'rack/cors'
 gem 'rack-ssl-enforcer'
-gem 'rails', '~> 4.1.11'
+gem 'rails'
 gem 'redcarpet'
 gem 'roadie-rails'
 gem 'sass-rails', '>= 3.2'
@@ -41,7 +44,7 @@ group :test, :development do
 end
 
 group :development do
-  gem 'guard-rspec', require: false
+  gem 'guard-rspec', require: false, git: 'https://github.com/guard/guard-rspec.git', ref: '0e345935e0' # https://github.com/guard/guard-rspec/pull/328
   gem 'mail_view'
   gem 'railroady'
   gem 'letter_opener'
@@ -61,9 +64,7 @@ group :test do
 
   # For better test reporting in CircleCI
   # http://blog.circleci.com/announcing-detailed-test-failure-reporting/
-  # with a fix from
-  # https://github.com/circleci/rspec_junit_formatter/pull/4
-  gem 'rspec_junit_formatter', git: 'https://github.com/amitree/rspec_junit_formatter.git', ref: '33a0fdd'
+  gem 'rspec_junit_formatter'
 end
 
 group :production do

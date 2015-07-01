@@ -13,7 +13,7 @@
     </div>
     <!-- Product Name and Description -Text Area- -->
     <div class="form-group">
-      <%= f.label :product_name_and_description, 'Product Name and Description' %>
+      <%= f.label :product_name_and_description, 'Product Name and Description', class: "required" %>
       <%= f.text_area :product_name_and_description, class: 'form-control' %>
     </div>
     <!-- Justification -Text Area- -->
@@ -29,7 +29,7 @@
     </div>
     <!-- Amount  -->
     <div class="form-group">
-      <%= f.label :cost_per_unit %>
+      <%= f.label :cost_per_unit, class: "required" %>
       <div class="input-group">
         <div class="input-group-addon">$</div>
         <%= f.number_field :cost_per_unit, class: 'form-control', step: 0.01 %>
@@ -37,7 +37,7 @@
     </div>
     <!-- Quantity of Product -->
     <div class="form-group">
-      <%= f.label :quantity %>
+      <%= f.label :quantity, class: "required" %>
       <div class="input-group">
         <%= f.number_field :quantity, class: 'form-control', step: 1 %>
       </div>
