@@ -225,7 +225,8 @@ describe "National Capital Region proposals" do
 
       it "includes an initial list of buildings", :js => true do
         visit '/ncr/work_orders/new'
-        option = Ncr::Building.all.shuffle.first
+        building = Ncr::Building.all.shuffle.first
+        option = building.number
 
         expect(page).not_to have_selector(".option[data-value='#{option}']")
 
@@ -240,7 +241,7 @@ describe "National Capital Region proposals" do
       end
 
       it "includes previously entered buildings, too", :js => true do
-        FactoryGirl.create(:ncr_work_order, building_number: "BillDing")
+        FactoryGirl.create(:ncr_work_order, requester: requester, building_number: "BillDing")
         visit '/ncr/work_orders/new'
         find("input[aria-label='Building number']").native.send_keys("BillDing")
         expect(page).to have_selector("div.option[data-value='BillDing']")
@@ -426,8 +427,11 @@ describe "National Capital Region proposals" do
 
     it "provides the previous building when editing", :js => true do
       work_order.update(building_number: "BillDing")
+
       visit "/ncr/work_orders/#{work_order.id}/edit"
+      # don't change the building value
       click_on "Update"
+
       expect(current_path).to eq("/proposals/#{ncr_proposal.id}")
       expect(work_order.reload.building_number).to eq("BillDing")
     end
@@ -452,7 +456,8 @@ describe "National Capital Region proposals" do
 
       visit "/ncr/work_orders/#{work_order.id}/edit"
 
-      expect(page).to have_selector("div.option[data-value='#{building}']")
+      element = find(".item[data-value='#{building.number}']")
+      expect(element.text).to eq(building.to_s)
     end
   end
 end
