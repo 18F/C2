@@ -76,7 +76,7 @@ class ProposalPolicy
   alias_method :can_new!, :can_create!
 
   def can_cancel!
-    requester!
+    requester! && !self.cancelled?
   end
 
   # equivalent of can_show?
