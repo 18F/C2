@@ -438,7 +438,7 @@ describe "National Capital Region proposals" do
 
       fill_in 'CL number', with: 'CL1234567'
       fill_in 'Function code', with: 'PG123'
-      fill_in 'SOC code', with: '789'
+      fill_in 'Object field / SOC code', with: '789'
       click_on 'Update'
 
       work_order.reload
