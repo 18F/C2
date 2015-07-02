@@ -22,7 +22,7 @@ describe CommunicartMailerHelper do
 
       expect {
         helper.generate_approve_url(approval)
-      }.to raise_error
+      }.to raise_error(NoMethodError) # TODO create a more specific error
     end
   end
 end

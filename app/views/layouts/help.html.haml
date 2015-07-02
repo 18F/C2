@@ -1,8 +1,6 @@
 - content_for :content do
   - unless params[:action] == 'index'
-    %ul#breadcrumb-nav
-      %li
-        = link_to "Back to FAQ", help_index_path
+    = render partial: 'shared/breadcrumb_nav', locals: {text: "Back to FAQ", href: help_index_path}
   .inset.markdown
     %h1
       = yield(:title)

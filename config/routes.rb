@@ -41,6 +41,7 @@ C2::Application.routes.draw do
 
     resources :comments, only: :create
     resources :attachments, only: [:create, :destroy, :show]
+    resources :observations, only: [:index, :create]
   end
 
   namespace :ncr do
@@ -50,9 +51,10 @@ C2::Application.routes.draw do
 
   namespace :gsa18f do
     resources :procurements, except: [:index, :destroy]
-    get '/dashboard' => 'dashboard#index' 
+    get '/dashboard' => 'dashboard#index'
   end
 
+  mount Peek::Railtie => '/peek'
   if Rails.env.development?
     mount MailPreview => 'mail_view'
     mount LetterOpenerWeb::Engine => 'letter_opener'

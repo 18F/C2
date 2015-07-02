@@ -4,14 +4,19 @@ class Dispatcher
     send_notification_email(approval)
   end
 
+  def email_observer(observation)
+    proposal = observation.proposal
+    CommunicartMailer.proposal_observer_email(observation.user_email_address, proposal).deliver_now
+  end
+
   def email_observers(proposal)
     proposal.observations.each do |observation|
-      CommunicartMailer.proposal_observer_email(observation.user_email_address, proposal).deliver
+      self.email_observer(observation)
     end
   end
 
   def email_sent_confirmation(proposal)
-    CommunicartMailer.proposal_created_confirmation(proposal).deliver
+    CommunicartMailer.proposal_created_confirmation(proposal).deliver_now
   end
 
   def deliver_new_proposal_emails(proposal)
@@ -29,13 +34,13 @@ class Dispatcher
   def on_proposal_rejected(proposal)
     rejection = proposal.approvals.rejected.first
     # @todo rewrite this email so a "rejection approval" isn't needed
-    CommunicartMailer.approval_reply_received_email(rejection).deliver
+    CommunicartMailer.approval_reply_received_email(rejection).deliver_now
     self.email_observers(proposal)
   end
 
   def on_approval_approved(approval)
     if self.requires_approval_notice?(approval)
-      CommunicartMailer.approval_reply_received_email(approval).deliver
+      CommunicartMailer.approval_reply_received_email(approval).deliver_now
     end
 
     self.email_observers(approval.proposal)
@@ -43,7 +48,7 @@ class Dispatcher
 
   def on_comment_created(comment)
     comment.listeners.each{|user|
-      CommunicartMailer.comment_added_email(comment, user.email_address).deliver
+      CommunicartMailer.comment_added_email(comment, user.email_address).deliver_now
     }
   end
 
@@ -64,6 +69,8 @@ class Dispatcher
       end
     end
   end
+
+  # TODO DRY the following up
 
   def self.deliver_new_proposal_emails(proposal)
     dispatcher = self.initialize_dispatcher(proposal)
@@ -95,10 +102,15 @@ class Dispatcher
     dispatcher.on_proposal_update(proposal)
   end
 
+  def self.on_observer_added(observation)
+    dispatcher = self.initialize_dispatcher(observation.proposal)
+    dispatcher.email_observer(observation)
+  end
+
   private
 
   def send_notification_email(approval)
     email = approval.user_email_address
-    CommunicartMailer.actions_for_approver(email, approval).deliver
+    CommunicartMailer.actions_for_approver(email, approval).deliver_now
   end
 end

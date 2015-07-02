@@ -1,15 +1,14 @@
 class Selectizer
   constructor: (el) ->
     @$el = $(el)
+    @dataAttr = @$el.attr('data-attr')
+    @dataSrc = @$el.attr('data-src')
 
   isFreeForm: ->
     @$el.is('input')
 
-  src: ->
-    @$el.attr('data-src')
-
   isRemote: ->
-    !!@src()
+    !!@dataSrc
 
   form_label: ->
     $('label[for="'+@$el.attr('id')+'"]').text()
@@ -17,29 +16,30 @@ class Selectizer
   add_label: ->
     @selectizeObj().$control_input.attr('aria-label',@form_label())
 
+  initialChoices: ->
+    initial = @$el.data('initial') || []
+    $.map initial, (val) =>   # must be an object with the appropriate attribute
+      result = {}
+      if @dataAttr
+        result[@dataAttr] = val
+      else
+        result.text = val.text
+        result.value = val.value
+      result
+
   selectizeOpts: ->
     opts = {}
-    attr = @$el.attr('data-attr')
-    initialData = @$el.data('initial')
-    if initialData
-      opts.options = $.map initialData, (val) ->
-        result = {}
-        if attr
-          result[attr] = val
-        else
-          result.text = val.text
-          result.value = val.value
-        result
+    opts.options = @initialChoices()
 
     if @isFreeForm()
       opts.create = true
       opts.maxItems = 1
 
-    if attr
-      opts.labelField = attr
-      opts.searchField = [attr]
-      opts.valueField = attr
-      opts.sortField = [{field: '$score'}, {field: attr}]
+    if @dataAttr
+      opts.labelField = @dataAttr
+      opts.searchField = [@dataAttr]
+      opts.valueField = @dataAttr
+      opts.sortField = [{field: '$score'}, {field: @dataAttr}]
 
     opts
 
@@ -57,7 +57,7 @@ class Selectizer
   loadRemoteOptions: ->
     # TODO make sorting smarter, e.g. approvers/vendors they have used before
     $.ajax(
-      url: @src()
+      url: @dataSrc
       dataType: 'json'
       cache: true
       context: @

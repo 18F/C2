@@ -65,7 +65,7 @@ RSpec.configure do |config|
   end
   config.include FeatureSpecHelper, type: :feature
 
-  config.include EnvironmentSpecHelper, type: :controller
+  config.include EnvironmentSpecHelper
   config.include AuthenticationHelper, type: :helper
 
   # Much of the config here pieced together from

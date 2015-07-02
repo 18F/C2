@@ -1,49 +1,41 @@
 describe Ncr::WorkOrder do
-  describe '#fields_for_display' do
+  describe '#relevant_fields' do
     it "shows BA61 fields" do
-      wo = Ncr::WorkOrder.new(
-        amount: 1000, expense_type: "BA61", vendor: "Some Vend",
-        not_to_exceed: false, emergency: true, rwa_number: "RWWAAA #",
-        building_number: Ncr::Building.first,
-        org_code: Ncr::Organization.all[0], description: "Ddddd", direct_pay: true)
-      expect(wo.fields_for_display.sort).to eq([
-        ["Amount", 1000],
-        ["Building number", Ncr::Building.first],
-        ["CL number", nil],
-        ["Description", "Ddddd"],
-        ["Direct pay", true],
-        ["Emergency", true],
-        ["Expense type", "BA61"],
-        ["Function code", nil],
-        ["Not to exceed", false],
-        ["Org code", Ncr::Organization.all[0]],
-        # No RWA Number
-        ["SOC code", nil],
-        ["Vendor", "Some Vend"]
-        # No Work Order
+      wo = Ncr::WorkOrder.new
+      expect(wo.relevant_fields.sort).to eq([
+        :amount,
+        :building_number,
+        :cl_number,
+        # No :code
+        :description,
+        :direct_pay,
+        :expense_type,
+        :function_code,
+        :not_to_exceed,
+        :org_code,
+        # No :rwa_number
+        :soc_code,
+        :vendor
       ])
     end
+
     it "shows BA80 fields" do
-      wo = Ncr::WorkOrder.new(
-        amount: 1000, expense_type: "BA80", vendor: "Some Vend",
-        not_to_exceed: false, emergency: true, rwa_number: "RWWAAA #",
-        building_number: Ncr::Building.first, code: "Some WO#",
-        org_code: Ncr::Organization.all[0], description: "Ddddd", direct_pay: true)
-      expect(wo.fields_for_display.sort).to eq([
-        ["Amount", 1000],
-        ["Building number", Ncr::Building.first],
-        ["CL number", nil],
-        ["Description", "Ddddd"],
-        ["Direct pay", true],
+      wo = Ncr::WorkOrder.new(expense_type: 'BA80')
+      expect(wo.relevant_fields.sort).to eq([
+        :amount,
+        :building_number,
+        :cl_number,
+        :code,
+        :description,
+        :direct_pay,
         # No Emergency
-        ["Expense type", "BA80"],
-        ["Function code", nil],
-        ["Not to exceed", false],
-        ["Org code", Ncr::Organization.all[0]],
-        ["RWA Number", "RWWAAA #"],
-        ["SOC code", nil],
-        ["Vendor", "Some Vend"],
-        ["Work Order / Maximo Ticket Number", "Some WO#"]
+        :expense_type,
+        :function_code,
+        :not_to_exceed,
+        :org_code,
+        :rwa_number,
+        :soc_code,
+        :vendor
       ])
     end
   end
@@ -128,7 +120,74 @@ describe Ncr::WorkOrder do
     end
   end
 
-  describe 'rwa validations' do
+  describe 'validations' do
+    describe 'cl_number' do
+      let (:work_order) { FactoryGirl.build(:ncr_work_order) }
+
+      it "works with a 'CL' prefix" do
+        work_order.cl_number = 'CL1234567'
+        expect(work_order).to be_valid
+      end
+
+      it "automatically adds a 'CL' prefix" do
+        work_order.cl_number = '1234567'
+        expect(work_order).to be_valid
+        expect(work_order.cl_number).to eq('CL1234567')
+      end
+
+      it "requires seven numbers" do
+        work_order.cl_number = '123'
+        expect(work_order).to_not be_valid
+        expect(work_order.errors.keys).to eq([:cl_number])
+      end
+
+      it "is converted to uppercase" do
+        work_order.cl_number = 'cl1234567'
+        expect(work_order).to be_valid
+        expect(work_order.cl_number).to eq('CL1234567')
+      end
+
+      it "clears empty strings" do
+        work_order.cl_number = ''
+        expect(work_order).to be_valid
+        expect(work_order.cl_number).to eq(nil)
+      end
+    end
+
+    describe 'function_code' do
+      let (:work_order) { FactoryGirl.build(:ncr_work_order) }
+
+      it "works with 'PG' followed by three characters" do
+        work_order.function_code = 'PG123'
+        expect(work_order).to be_valid
+      end
+
+      it "must have five characters" do
+        work_order.function_code = 'PG12'
+        expect(work_order).to_not be_valid
+        expect(work_order.errors.keys).to eq([:function_code])
+      end
+
+      it "automatically adds a 'PG' prefix" do
+        work_order.function_code = '123'
+        expect(work_order).to be_valid
+        expect(work_order.function_code).to eq('PG123')
+      end
+
+      it "is converted to uppercase" do
+        work_order.function_code = 'pg1c3'
+        expect(work_order).to be_valid
+        expect(work_order.function_code).to eq('PG1C3')
+      end
+
+      it "clears empty strings" do
+        work_order.function_code = ''
+        expect(work_order).to be_valid
+        expect(work_order.function_code).to eq(nil)
+      end
+    end
+
+    describe 'RWA' do
     let (:work_order) { FactoryGirl.build(:ncr_work_order, expense_type: 'BA80') }
 
     it 'works with one letter followed by 7 numbers' do
@@ -160,6 +219,34 @@ describe Ncr::WorkOrder do
       expect(work_order).to be_valid
       work_order.rwa_number = ''
       expect(work_order).to be_valid
+    end
+  end
+
+    describe 'soc_code' do
+      let (:work_order) { FactoryGirl.build(:ncr_work_order) }
+
+      it "works with three characters" do
+        work_order.soc_code = '123'
+        expect(work_order).to be_valid
+      end
+
+      it "must be three characters" do
+        work_order.soc_code = '12'
+        expect(work_order).to_not be_valid
+        expect(work_order.errors.keys).to eq([:soc_code])
+      end
+
+      it "is converted to uppercase" do
+        work_order.soc_code = 'ab2'
+        expect(work_order).to be_valid
+        expect(work_order.soc_code).to eq('AB2')
+      end
+
+      it "clears empty strings" do
+        work_order.soc_code = ''
+        expect(work_order).to be_valid
+        expect(work_order.soc_code).to eq(nil)
+      end
     end
   end
 

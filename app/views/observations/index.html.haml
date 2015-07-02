@@ -1,0 +1,14 @@
+= render partial: 'shared/breadcrumb_nav', locals: {text: "Back to request", href: proposal_path(@proposal)}
+.inset
+  %h1 Observers
+  %ul
+    - @proposal.observers.each do |observer|
+      %li
+        = observer.full_name
+    %li
+      = form_for [@proposal, @observation], html: {class: 'form-inline'} do |f|
+        = f.fields_for :user do |user_form|
+          .form-group
+            = user_form.label :email_address
+            = user_form.text_field :email_address, class: 'form-control'
+        = f.submit class: 'btn btn-primary'
