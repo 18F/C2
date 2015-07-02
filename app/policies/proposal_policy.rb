@@ -64,7 +64,7 @@ class ProposalPolicy
   alias_method :can_update!, :can_edit!
 
   def can_show!
-    visible = ProposalPolicy::Scope.new(@user, Proposal).resolve
+    visible = ProposalPolicy::Scope.new(@user).resolve
     check(visible.include?(@proposal), "You are not allowed to see this cart")
   end
 
@@ -76,7 +76,7 @@ class ProposalPolicy
 
   # equivalent of can_show?
   class Scope
-    def initialize(user, scope)
+    def initialize(user, scope=Proposal)
       @user = user
       @scope = scope
     end

@@ -133,20 +133,20 @@ describe ProposalPolicy do
       FactoryGirl.create(:proposal, :with_approvers, :with_observers)}
     it "allows the requester to see" do
       user = proposal.requester
-      proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
+      proposals = ProposalPolicy::Scope.new(user).resolve
       expect(proposals).to eq([proposal])
     end
 
     it "allows an requester to see, when there are no observers/approvers" do
       proposal = FactoryGirl.create(:proposal)
       user = proposal.requester
-      proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
+      proposals = ProposalPolicy::Scope.new(user).resolve
       expect(proposals).to eq([proposal])
     end
 
     it "allows an approver to see" do
       user = proposal.approvers.first
-      proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
+      proposals = ProposalPolicy::Scope.new(user).resolve
       expect(proposals).to eq([proposal])
     end
 
@@ -154,7 +154,7 @@ describe ProposalPolicy do
       approval = proposal.approvals.first
       user = approval.user
       approval.update_attribute(:status, 'pending')
-      proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
+      proposals = ProposalPolicy::Scope.new(user).resolve
       expect(proposals).to eq([])
     end
 
@@ -163,19 +163,19 @@ describe ProposalPolicy do
       approver = proposal.approvers.first
       approver.add_delegate(delegate)
 
-      proposals = ProposalPolicy::Scope.new(delegate, Proposal).resolve
+      proposals = ProposalPolicy::Scope.new(delegate).resolve
       expect(proposals).to eq([proposal])
     end
 
     it "allows an observer to see" do
       user = proposal.approvers.first
-      proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
+      proposals = ProposalPolicy::Scope.new(user).resolve
       expect(proposals).to eq([proposal])
     end
 
     it "does not allow anyone else to see" do
       user = FactoryGirl.create(:user)
-      proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
+      proposals = ProposalPolicy::Scope.new(user).resolve
       expect(proposals).to be_empty
     end
   end

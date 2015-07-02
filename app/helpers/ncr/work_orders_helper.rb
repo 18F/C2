@@ -7,7 +7,7 @@ module Ncr
     end
 
     def user_building_options
-      proposals = ProposalPolicy::Scope.new(current_user, Proposal).resolve
+      proposals = Ncr::WorkOrderPolicy::Scope.new(current_user).resolve
       work_orders = Ncr::WorkOrder.joins(:proposal).merge(proposals)
       building_numbers = work_orders.pluck('DISTINCT building_number')
 
