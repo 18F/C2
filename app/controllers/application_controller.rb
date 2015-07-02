@@ -64,7 +64,7 @@ class ApplicationController < ActionController::Base
   end
 
   def admin?
-    signed_in? && self.admin_emails.include?(current_user.email_address)
+    signed_in? && current_user.admin?
   end
 
   def peek_enabled?
