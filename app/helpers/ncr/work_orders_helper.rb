@@ -8,11 +8,10 @@ module Ncr
 
     def user_building_options
       proposals = ProposalPolicy::Scope.new(current_user, Proposal).resolve
-      proposals = proposals.where(client_data_type: 'Ncr::WorkOrder')
+      work_orders = Ncr::WorkOrder.joins(:proposal).merge(proposals)
+      building_numbers = work_orders.pluck('DISTINCT building_number')
 
-      # TODO make more efficient
-      proposals.map do |proposal|
-        building_number = proposal.client_data.building_number
+      building_numbers.map do |building_number|
         {
           text: building_number,
           value: building_number
