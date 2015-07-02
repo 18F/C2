@@ -6,27 +6,31 @@ module Ncr
       User.order(:email_address).pluck(:email_address)
     end
 
-    # TODO split to multiple methods
-    def building_options
+    def user_building_options
       proposals = ProposalPolicy::Scope.new(current_user, Proposal).resolve
       proposals = proposals.where(client_data_type: 'Ncr::WorkOrder')
+
       # TODO make more efficient
-      custom_buildings = proposals.map do |proposal|
+      proposals.map do |proposal|
         building_number = proposal.client_data.building_number
         {
           text: building_number,
           value: building_number
         }
       end
+    end
 
-      known_buildings = Ncr::Building.all.map do |building|
+    def predefined_building_options
+      Ncr::Building.all.map do |building|
         {
           text: building.to_s,
           value: building.number
         }
       end
+    end
 
-      results = custom_buildings + known_buildings
+    def building_options
+      results = user_building_options + predefined_building_options
       results.uniq!{|b| b[:value] }
       results.sort_by!{|b| b[:text] }
     end
