@@ -59,10 +59,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def admin_emails
-    ENV['ADMIN_EMAILS'].to_s.split(',')
-  end
-
   def admin?
     signed_in? && current_user.admin?
   end
