@@ -59,9 +59,12 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def admin_emails
+    ENV['ADMIN_EMAILS'].to_s.split(',')
+  end
+
   def admin?
-    emails = ENV['ADMIN_EMAILS'] || []
-    signed_in? && emails.include?(current_user.email_address)
+    signed_in? && self.admin_emails.include?(current_user.email_address)
   end
 
   def peek_enabled?
