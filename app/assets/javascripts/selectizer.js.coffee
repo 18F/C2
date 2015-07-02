@@ -2,14 +2,10 @@ class Selectizer
   constructor: (el) ->
     @$el = $(el)
     @dataAttr = @$el.attr('data-attr') || 'default_field'
-    @dataSrc = @$el.attr('data-src')
 
   isFreeForm: ->
     @$el.is('input')
 
-  isRemote: ->
-    !!@dataSrc
-  
   form_label: ->
     $('label[for="'+@$el.attr('id')+'"]').text()
 
@@ -45,28 +41,9 @@ class Selectizer
   selectizeObj: ->
     @$el[0].selectize
 
-  onOptionsLoaded: (data) ->
-    selectize = @selectizeObj()
-    selectize.addOption(data)
-
-  loadRemoteOptions: ->
-    # TODO make sorting smarter, e.g. approvers/vendors they have used before
-    $.ajax(
-      url: @dataSrc
-      dataType: 'json'
-      cache: true
-      context: @
-      success: @onOptionsLoaded
-    )
-
-  loadOptionsIfRemote: ->
-    if @isRemote()
-      @loadRemoteOptions()
-
 
 $ ->
   $('.js-selectize').each (i, el) ->
     selectizer = new Selectizer(el)
     selectizer.enable()
-    selectizer.loadOptionsIfRemote()
     selectizer.add_label()
