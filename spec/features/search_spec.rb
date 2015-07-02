@@ -31,7 +31,7 @@ describe "searching" do
     expect(field.value).to eq('foo')
   end
 
-  it "finds results based on public id" do 
+  it "finds results based on public id" do
     visit '/ncr/work_orders/new'
     fill_in 'Project title', with: "buying stuff"
     fill_in 'Description', with: "desc content"
@@ -41,7 +41,7 @@ describe "searching" do
     fill_in 'Amount', with: 123.45
     check "I am going to be using direct pay for this transaction"
     select approver.email_address, from: 'approver_email'
-    fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
+    fill_in 'Building number', with: Ncr::Building.first
     select Ncr::Organization.all[0], from: 'ncr_work_order_org_code'
     click_on 'Submit for approval'
 

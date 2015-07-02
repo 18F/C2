@@ -1,7 +1,7 @@
 class Selectizer
   constructor: (el) ->
     @$el = $(el)
-    @dataAttr = @$el.attr('data-attr') || 'default_field'
+    @dataAttr = @$el.attr('data-attr')
     @dataSrc = @$el.attr('data-src')
 
   isFreeForm: ->
@@ -9,7 +9,7 @@ class Selectizer
 
   isRemote: ->
     !!@dataSrc
-  
+
   form_label: ->
     $('label[for="'+@$el.attr('id')+'"]').text()
 
@@ -20,7 +20,11 @@ class Selectizer
     initial = @$el.data('initial') || []
     $.map initial, (val) =>   # must be an object with the appropriate attribute
       result = {}
-      result[@dataAttr] = val
+      if @dataAttr
+        result[@dataAttr] = val
+      else
+        result.text = val.text
+        result.value = val.value
       result
 
   selectizeOpts: ->
@@ -31,10 +35,11 @@ class Selectizer
       opts.create = true
       opts.maxItems = 1
 
-    opts.labelField = @dataAttr
-    opts.searchField = [@dataAttr]
-    opts.valueField = @dataAttr
-    opts.sortField = [{field: '$score'}, {field: @dataAttr}]
+    if @dataAttr
+      opts.labelField = @dataAttr
+      opts.searchField = [@dataAttr]
+      opts.valueField = @dataAttr
+      opts.sortField = [{field: '$score'}, {field: @dataAttr}]
 
     opts
 

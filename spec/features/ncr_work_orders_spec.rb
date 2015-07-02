@@ -38,8 +38,8 @@ describe "National Capital Region proposals" do
         fill_in 'Amount', with: 123.45
         check "I am going to be using direct pay for this transaction"
         select approver.email_address, from: 'approver_email'
-        fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
-        select Ncr::Organization.all[0], from: 'ncr_work_order_org_code'
+        fill_in 'Building number', with: Ncr::Building.first
+        select Ncr::Organization.all.first, from: 'ncr_work_order_org_code'
         expect {
           click_on 'Submit for approval'
         }.to change { Proposal.count }.from(0).to(1)
@@ -57,8 +57,8 @@ describe "National Capital Region proposals" do
         expect(work_order.vendor).to eq('ACME')
         expect(work_order.amount).to eq(123.45)
         expect(work_order.direct_pay).to eq(true)
-        expect(work_order.building_number).to eq(Ncr::BUILDING_NUMBERS[0])
-        expect(work_order.org_code).to eq(Ncr::Organization.all[0].to_s)
+        expect(work_order.building_number).to eq(Ncr::Building.first.to_s)
+        expect(work_order.org_code).to eq(Ncr::Organization.all.first.to_s)
         expect(work_order.description).to eq('desc content')
         expect(proposal.requester).to eq(requester)
         expect(proposal.approvers.map(&:email_address)).to eq(
@@ -76,8 +76,8 @@ describe "National Capital Region proposals" do
           fill_in 'Vendor', with: 'Yoshi'
           fill_in 'Amount', with: 123.45
           select 'liono0@some-cartoon-show.com', from: "Approving official's email address"
-          fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
-          select Ncr::Organization.all[0], :from => 'ncr_work_order_org_code'
+          fill_in 'Building number', with: Ncr::Building.first
+          select Ncr::Organization.all.first, :from => 'ncr_work_order_org_code'
           expect {
             click_on 'Submit for approval'
           }.to change { Proposal.count }.from(0).to(1)
@@ -140,8 +140,8 @@ describe "National Capital Region proposals" do
           fill_in 'Vendor', with: 'ACME'
           fill_in 'Amount', with: 123.45
           select approver.email_address, from: 'approver_email'
-          fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
-          select Ncr::Organization.all[0], from: 'ncr_work_order_org_code'
+          fill_in 'Building number', with: Ncr::Building.first
+          select Ncr::Organization.all.first, from: 'ncr_work_order_org_code'
           expect {
             click_on 'Submit for approval'
           }.to change { Proposal.count }.from(0).to(1)
@@ -176,8 +176,8 @@ describe "National Capital Region proposals" do
         fill_in 'Vendor', with: 'ACME'
         fill_in 'Amount', with: 123.45
         select approver.email_address, from: 'approver_email'
-        fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
-        select Ncr::Organization.all[0], from: 'ncr_work_order_org_code'
+        fill_in 'Building number', with: Ncr::Building.first
+        select Ncr::Organization.all.first, from: 'ncr_work_order_org_code'
         click_on 'Submit for approval'
         expect(current_path).to eq("/proposals/#{Proposal.last.id}")
         expect(page).to have_content("RWA Number")
@@ -225,7 +225,8 @@ describe "National Capital Region proposals" do
 
       it "includes an initial list of buildings", :js => true do
         visit '/ncr/work_orders/new'
-        option = Ncr::BUILDING_NUMBERS.shuffle[0]
+        building = Ncr::Building.all.shuffle.first
+        option = building.number
 
         expect(page).not_to have_selector(".option[data-value='#{option}']")
 
@@ -240,7 +241,7 @@ describe "National Capital Region proposals" do
       end
 
       it "includes previously entered buildings, too", :js => true do
-        FactoryGirl.create(:ncr_work_order, building_number: "BillDing")
+        FactoryGirl.create(:ncr_work_order, requester: requester, building_number: "BillDing")
         visit '/ncr/work_orders/new'
         find("input[aria-label='Building number']").native.send_keys("BillDing")
         expect(page).to have_selector("div.option[data-value='BillDing']")
@@ -254,8 +255,8 @@ describe "National Capital Region proposals" do
           fill_in 'Vendor', with: 'ACME'
           fill_in 'Amount', with: 123.45
           select approver.email_address, from: 'approver_email'
-          fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
-          select Ncr::Organization.all[0], from: 'ncr_work_order_org_code'
+          fill_in 'Building number', with: Ncr::Building.first
+          select Ncr::Organization.all.first, from: 'ncr_work_order_org_code'
         end
 
         it "approves emergencies" do
@@ -339,7 +340,7 @@ describe "National Capital Region proposals" do
   end
 
   describe "editing a work order" do
-    let (:work_order) { FactoryGirl.create(:ncr_work_order, description: 'test') }
+    let(:work_order) { FactoryGirl.create(:ncr_work_order, description: 'test') }
     let(:ncr_proposal) { work_order.proposal }
 
     before do
@@ -349,8 +350,7 @@ describe "National Capital Region proposals" do
 
     it "can be edited if pending" do
       visit "/ncr/work_orders/#{work_order.id}/edit"
-      expect(find_field("ncr_work_order_building_number").value).to eq(
-        Ncr::BUILDING_NUMBERS[0])
+      expect(find_field("ncr_work_order_building_number").value).to eq(Ncr::Building.first.to_s)
       fill_in 'Vendor', with: 'New ACME'
       click_on 'Update'
       expect(current_path).to eq("/proposals/#{ncr_proposal.id}")
@@ -427,8 +427,11 @@ describe "National Capital Region proposals" do
 
     it "provides the previous building when editing", :js => true do
       work_order.update(building_number: "BillDing")
+
       visit "/ncr/work_orders/#{work_order.id}/edit"
+      # don't change the building value
       click_on "Update"
+
       expect(current_path).to eq("/proposals/#{ncr_proposal.id}")
       expect(work_order.reload.building_number).to eq("BillDing")
     end
@@ -445,6 +448,16 @@ describe "National Capital Region proposals" do
       expect(work_order.cl_number).to eq('CL1234567')
       expect(work_order.function_code).to eq('PG123')
       expect(work_order.soc_code).to eq('789')
+    end
+
+    it "uses the full name of a stored building code", js: true do
+      building = Ncr::Building.first
+      work_order.update_attributes(building_number: building.number)
+
+      visit "/ncr/work_orders/#{work_order.id}/edit"
+
+      element = find(".item[data-value='#{building.number}']")
+      expect(element.text).to eq(building.to_s)
     end
   end
 end

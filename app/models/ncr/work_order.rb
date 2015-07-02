@@ -7,7 +7,6 @@ module Ncr
   end
 
   EXPENSE_TYPES = %w(BA60 BA61 BA80)
-  BUILDING_NUMBERS = YAML.load_file("#{Rails.root}/config/data/ncr/building_numbers.yml")
 
   class WorkOrder < ActiveRecord::Base
     include ValueHelper
