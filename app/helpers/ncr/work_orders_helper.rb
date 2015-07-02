@@ -7,10 +7,11 @@ module Ncr
     end
 
     def user_building_options
+      # TODO move to a scope on ProposalDelegate
       proposals = Ncr::WorkOrderPolicy::Scope.new(current_user).resolve
       work_orders = Ncr::WorkOrder.joins(:proposal).merge(proposals)
-      building_numbers = work_orders.pluck('DISTINCT building_number')
 
+      building_numbers = work_orders.pluck('DISTINCT building_number')
       building_numbers.map do |building_number|
         {
           text: building_number,
