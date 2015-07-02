@@ -40,4 +40,4 @@ en:
         cl_number: "CL number"
         code: "Work Order / Maximo Ticket Number"
         rwa_number: "RWA Number"
-        soc_code: "SOC code"
+        soc_code: "Object field / SOC code"
