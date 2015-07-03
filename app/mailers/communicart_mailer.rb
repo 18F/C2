@@ -113,9 +113,24 @@ class CommunicartMailer < ActionMailer::Base
 
     mail(
       to: to_email,
-      subject: @proposal.email_subject,
+      subject: proposal_subject(@proposal),
       from: from_email || default_sender_email,
       template_name: template_name
     )
+  end
+
+  def proposal_subject(proposal)
+    params = proposal.as_json
+    #todo: replace with public_id once #98376564 is fixed
+    params[:public_identifier] = proposal.public_identifier
+    proposal.requester.as_json.each { |k, v| params["requester_" + k] = v }
+    key = :proposal
+    if proposal.client_data
+      key = proposal.client_data.class.name.underscore
+      params.merge!(proposal.client_data.as_json)
+    end
+    params[:scope] = [:mail, :subject]
+    params[:default] = :proposal
+    I18n.t key, params.symbolize_keys
   end
 end

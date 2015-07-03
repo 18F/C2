@@ -41,3 +41,7 @@ en:
         code: "Work Order / Maximo Ticket Number"
         rwa_number: "RWA Number"
         soc_code: "SOC code"
+  mail:
+    subject:
+      proposal: "Request %{public_identifier}"
+      ncr/work_order: "Request %{public_identifier}, %{org_code}, %{building_number}, from %{requester_email_address}"
