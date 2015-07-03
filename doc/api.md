@@ -1,8 +1,8 @@
 # API
 
-***If you are running the server and want to enable the API, set the environment variable `PUBLIC_API_ENABLED=true`. Otherwise, it's only accessible when logged in.***
+***If you are running the server and want to enable the API, set the environment variable `API_ENABLED=true`.***
 
-This API is currently in a very limited alpha, and may not be enabled in 18F's production deployment. Note that this API may change or access may be restricted at any time, without warning.
+This API is currently in a very limited alpha, and is not enabled in any of our deployments. Note that this API may change at any time, without warning.
 
 ## Schemas
 

@@ -1,6 +1,5 @@
 describe User do
-
-  let(:user) { FactoryGirl.create(:user, first_name: "George", last_name: "Jetson") }
+  let(:user) { FactoryGirl.build(:user) }
 
   context 'valid attributes' do
     it 'should be valid' do
@@ -15,8 +14,27 @@ describe User do
     end
   end
 
+  describe '#admin?' do
+    it "returns false by default" do
+      expect(user).to_not be_an_admin
+    end
+
+    with_env_var 'ADMIN_EMAILS', 'admin1@some-dot-gov.gov,admin2@some-dot-gov.gov' do
+      it "returns false" do
+        expect(user).to_not be_an_admin
+      end
+
+      it "returns true when the email is listed" do
+        user.email_address = 'admin2@some-dot-gov.gov'
+        expect(user).to be_an_admin
+      end
+    end
+  end
+
   describe '#full_name' do
     it 'return first name and last name' do
+      user.first_name = 'George'
+      user.last_name = 'Jetson'
       expect(user.full_name).to eq 'George Jetson'
     end
 

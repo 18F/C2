@@ -7,6 +7,7 @@ a.k.a. Communicart, part of GSA's suite of Common Acquisition Platform (CAP) too
 ## Links
 
 * [Issue tracker](https://www.pivotaltracker.com/n/projects/1149728)
+* [Chat with us](https://chat.18f.gov/) (select "cap-public" from the dropdown)
 * Documentation
     * [Setup](doc/setup.md)
     * [Importing Users](doc/import_users.md)
