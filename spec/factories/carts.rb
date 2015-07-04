@@ -23,16 +23,6 @@ FactoryGirl.define do
       end
     end
 
-
-    factory :cart_with_approval_group do
-      after :create do |cart|
-        approval_group = FactoryGirl.create(:approval_group_with_approvers_and_requester)
-        cart.approval_group = approval_group
-        cart.add_requester('requester1@some-dot-gov.gov')
-        cart.save!
-      end
-    end
-
     factory :cart_with_approvals do
       with_requester
 

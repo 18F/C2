@@ -1,5 +1,5 @@
 describe Cart do
-  let(:cart) { FactoryGirl.create(:cart_with_approval_group) }
+  let(:cart) { FactoryGirl.create(:cart_with_approvals) }
 
   describe 'partial approvals' do
     let (:cart) { FactoryGirl.create(:cart_with_approvals) }

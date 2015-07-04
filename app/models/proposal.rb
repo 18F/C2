@@ -1,6 +1,9 @@
 class Proposal < ActiveRecord::Base
   include WorkflowModel
   include ValueHelper
+
+  FLOWS = %w(parallel linear).freeze
+
   workflow do
     state :pending do
       # partial *may* trigger a full approval
@@ -41,7 +44,7 @@ class Proposal < ActiveRecord::Base
   # Note: clients should also implement :version
   delegate :client, to: :client_data_legacy, allow_nil: true
 
-  validates :flow, presence: true, inclusion: {in: ApprovalGroup::FLOWS}
+  validates :flow, presence: true, inclusion: {in: FLOWS}
   # TODO validates :requester_id, presence: true
 
   self.statuses.each do |status|

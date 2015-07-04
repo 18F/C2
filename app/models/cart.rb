@@ -4,8 +4,6 @@ class Cart < ActiveRecord::Base
   belongs_to :proposal
   include ProposalDelegate
 
-  has_one :approval_group
-  has_many :user_roles, through: :approval_group
   has_many :api_tokens, through: :approvals
   has_many :properties, as: :hasproperties
 
