@@ -3,6 +3,8 @@
     - # this is a hack to capture the :title from each page: render the template, without actually outputting it
     - render template: "help/#{page}"
     %li
+      - # @todo: approvers: As an approver, how do I manage requests?
+      - # @todo: out_of_office: What if my approver is out of office?
       = link_to help_path(page) do
         - if content_for?(:title)
           = yield(:title)
