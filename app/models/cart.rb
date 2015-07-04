@@ -1,6 +1,4 @@
 class Cart < ActiveRecord::Base
-  include PropMixin
-
   belongs_to :proposal
   include ProposalDelegate
 
@@ -12,18 +10,12 @@ class Cart < ActiveRecord::Base
   ORIGINS = %w(navigator ncr gsa18f)
 
 
-  # Some fields aren't meant for the clients' eyes
-  EXCLUDE_FIELDS_FROM_DISPLAY = ['origin', 'contractingVehicle', 'location', 'configType']
-  # The following methods are an interface which should be matched by client
-  # models
   def fields_for_display
-    self.properties_with_names.reject{ |key,value,label|
-      EXCLUDE_FIELDS_FROM_DISPLAY.include? key}.map{ |key,value,label|
-      [label, value] }
+    []
   end
 
   def client
-    self.getProp('origin') || 'gsa_advantage'
+    'gsa_advantage'
   end
 
   def public_identifier
