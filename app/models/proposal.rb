@@ -24,7 +24,6 @@ class Proposal < ActiveRecord::Base
     end
   end
 
-  has_one :cart
   has_many :approvals
   has_many :approvers, through: :approvals, source: :user
   has_many :api_tokens, through: :approvals
@@ -80,10 +79,9 @@ class Proposal < ActiveRecord::Base
     end
   end
 
-  # Use this until all clients are migrated to models (and we no longer have a
-  # dependence on "Cart"
+  # TODO remove
   def client_data_legacy
-    self.client_data || self.cart
+    self.client_data
   end
 
   # TODO convert to an association

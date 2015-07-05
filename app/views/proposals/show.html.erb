@@ -16,8 +16,6 @@
           Requested by:
           <strong><%= @proposal.requester.full_name %></strong>
         </p>
-        <%= client_partial(@proposal.client, 'external_id',
-                           locals: {proposal: @proposal}) %>
       </div>
     </div>
 

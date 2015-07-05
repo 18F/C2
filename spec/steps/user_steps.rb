@@ -45,7 +45,7 @@ module UserSteps
   end
 
   step "I go to the cart view page" do
-    visit "/proposals/#{@cart.proposal.id}"
+    visit "/proposals/#{@proposal.id}"
   end
 
   step "I login" do
@@ -61,26 +61,26 @@ module UserSteps
   end
 
   step 'a cart :external_id' do |external_id|
-    @cart = FactoryGirl.create(:cart, :with_requester, external_id: external_id)
+    @proposal = FactoryGirl.create(:proposal)
   end
 
   step 'a :cart_type cart :external_id' do |cart_type, external_id|
-    @cart = FactoryGirl.create(:cart, :with_requester, external_id: external_id, flow: cart_type)
+    @proposal = FactoryGirl.create(:proposal, flow: cart_type)
   end
 
   step 'a cart :external_id with approver :approver_email' do |external_id, approver_email|
-    @cart = FactoryGirl.create(:cart, :with_requester, external_id: external_id)
-    @cart.add_approver(approver_email)
-    @cart.proposal.initialize_approvals()
-    @approval = @cart.approvals.first
+    @proposal = FactoryGirl.create(:proposal)
+    @proposal.add_approver(approver_email)
+    @proposal.initialize_approvals()
+    @approval = @proposal.approvals.first
   end
 
   step 'a cart and approvals' do
-    @cart = FactoryGirl.create(:cart_with_approvals_and_items)
+    @proposal = FactoryGirl.create(:proposal, :with_approvers)
   end
 
   step 'a cart :external_id and approvals' do |external_id|
-    @cart = FactoryGirl.create(:cart_with_approvals_and_items, external_id: external_id)
+    @proposal = FactoryGirl.create(:proposal, :with_approvers)
   end
 
   step 'I fill out :field with :text' do |field,text|

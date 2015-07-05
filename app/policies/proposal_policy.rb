@@ -65,7 +65,7 @@ class ProposalPolicy
 
   def can_show!
     visible = ProposalPolicy::Scope.new(@user, Proposal).resolve
-    check(visible.include?(@proposal), "You are not allowed to see this cart")
+    check(visible.include?(@proposal), "You are not allowed to see this proposal")
   end
 
   def can_create!

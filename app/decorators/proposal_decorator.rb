@@ -49,7 +49,7 @@ class ProposalDecorator < Draper::Decorator
   end
 
   def completed_status_message
-    "All #{number_approved} of #{total_approvers} approvals have been received. Please move forward with the purchase  of Cart ##{object.public_identifier}."
+    "All #{number_approved} of #{total_approvers} approvals have been received. Please move forward with the purchase of ##{object.public_identifier}."
   end
 
   def progress_status_message

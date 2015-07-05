@@ -13,16 +13,14 @@ class Approval < ActiveRecord::Base
   end
 
   belongs_to :proposal
-  has_one :cart, through: :proposal
   belongs_to :user
   has_one :api_token, -> { fresh }
 
   delegate :full_name, :email_address, :to => :user, :prefix => true
-  delegate :approvals, :to => :cart, :prefix => true
 
   acts_as_list scope: :proposal
 
-  # TODO validates_uniqueness_of :user_id, scope: cart_id
+  # TODO validates_uniqueness_of :user_id, scope: proposal_id
 
   self.statuses.each do |status|
     scope status, -> { where(status: status) }
@@ -30,10 +28,6 @@ class Approval < ActiveRecord::Base
 
   default_scope { order('position ASC') }
 
-  # TODO remove
-  def cart_id
-    self.proposal.cart.id
-  end
 
   # TODO we should probably store this value
   def approved_at

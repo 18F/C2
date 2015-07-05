@@ -19,14 +19,6 @@ C2::Application.routes.draw do
     end
   end
 
-  # Redirects for carts. @todo Eventually, delete
-  get "/carts", to: redirect("/proposals")
-  get "/carts/archive", to: redirect("/proposals/archive")
-  get "/carts/:id", to: redirect { |path_params, req|
-    cart = Cart.find(path_params[:id])
-    "/proposals/#{cart.proposal_id}"
-  }
-
   resources :proposals, only: [:index, :show] do
     member do
       get 'approve'   # this route has special protection to prevent the confused deputy problem
