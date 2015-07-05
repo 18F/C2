@@ -29,7 +29,7 @@ describe Cart do
     let(:approved_cart1) { FactoryGirl.create(:cart, status: 'approved') }
     let(:approved_cart2) { FactoryGirl.create(:cart, status: 'approved') }
     let(:pending_cart)  { FactoryGirl.create(:cart, status: 'pending') }
-    let(:rejected_cart)   { FactoryGirl.create(:cart, status: 'rejected') }
+    let(:cancelled)   { FactoryGirl.create(:cart, status: 'cancelled') }
 
     describe 'approved' do
       it "returns approved carts" do
@@ -52,60 +52,14 @@ describe Cart do
       it 'returns closed carts' do
         approved_cart1
         pending_cart
-        rejected_cart
-        expect(Cart.closed).to eq [approved_cart1, rejected_cart]
+        cancelled_cart
+        expect(Cart.closed).to eq [approved_cart1, cancelled_cart]
       end
     end
 
   end
 
-  describe '#on_rejected_entry' do
-    it 'sends only one rejection email' do
-      cart = FactoryGirl.create(:cart_with_approvals)
-      # skip workflow
-      cart.approvals.first.update_attribute(:status, 'rejected')
-      cart.reject!
-      expect(email_recipients).to eq(['requester@some-dot-gov.gov'])
-
-      cart.reject!
-      expect(email_recipients).to eq(['requester@some-dot-gov.gov'])
-    end
-  end
-
   describe '#restart' do
-    it 'resets parallel approval states when rejected' do
-      cart = FactoryGirl.create(:cart_with_approvals)
-
-      cart.approvals.first.approve!
-      cart.approvals.last.reject!
-      cart.reload
-      expect(cart.rejected?).to eq(true)
-
-      cart.restart!
-
-      expect(cart.pending?).to eq(true)
-      expect(cart.approvals.length).to eq(2)
-      expect(cart.approvals[0].actionable?).to eq(true)
-      expect(cart.approvals[1].actionable?).to eq(true)
-    end
-
-    it 'resets linear approval states when rejected' do
-      cart = FactoryGirl.create(:cart_with_approvals)
-      cart.proposal.update_attribute(:flow, 'linear')
-
-      cart.approvals.first.approve!
-      cart.approvals.last.reject!
-      cart.reload
-      expect(cart.rejected?).to eq(true)
-
-      cart.restart!
-
-      expect(cart.pending?).to eq(true)
-      expect(cart.approvals.length).to eq(2)
-      expect(cart.approvals[0].actionable?).to eq(true)
-      expect(cart.approvals[1].pending?).to eq(true)
-    end
-
     it "creates new API tokens" do
       cart = FactoryGirl.create(:cart_with_approvals)
       cart.approvals.each(&:create_api_token!)
