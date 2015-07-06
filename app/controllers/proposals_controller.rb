@@ -60,7 +60,7 @@ class ProposalsController < ApplicationController
       approval.update_attributes!(user: current_user)
     end
 
-    if approval.proposal.status == "cancelled"
+    if approval.proposal.cancelled?
       flash[:error] = "You are unable to approve this request because it has been cancelled."
       return redirect_to proposal
     end
