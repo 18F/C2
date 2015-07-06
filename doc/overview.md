@@ -71,6 +71,10 @@ The NCR use case was built around GSA service centers (paint shops, landscapers,
 1. If the AO approves, it goes to one or two other budget office approvers, depending on the type of request.
 1. Once all approvers have approved (or any one of them reject) the Proposal, the requester gets a notification.
 
+#### Additional resources
+
+* [GSA CFO Financial Systems & Resources Glossary](https://insite.gsa.gov/portal/content/537294) (only visible on GSA network)
+
 ## Performance
 
 C2 has the [Peek](https://github.com/peek/peek) performance bar loaded in all environments, though it's hidden by default. Press the backtick (`` ` ``) key to display it.
