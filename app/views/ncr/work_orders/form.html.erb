@@ -73,7 +73,10 @@
       <%= f.label :org_code %>
       <%= f.collection_select(
             :org_code, Ncr::Organization.all, :to_s, :to_s,
-            {include_blank: true, prompt: "Type here to search"}, {class: 'form-control js-selectize'}) %>
+            {include_blank: true, prompt: "Type here to search"}, {id: 'org-code-hint', class: 'form-control js-selectize'}) %>
+      <div class="help-block" id="org-code-hint">
+        Select your Service Center.
+      </div>
     </div>
     <div class="form-group">
       <%= f.label :vendor, class: "required"  %>
