@@ -22,7 +22,7 @@ class Selectizer
   selectizeOpts: ->
     opts = {}
     opts.options = @initialChoices()
-
+      
     if @isFreeForm()
       opts.create = true
       opts.maxItems = 1
@@ -47,3 +47,26 @@ $ ->
     selectizer = new Selectizer(el)
     selectizer.enable()
     selectizer.add_label()
+  
+  $('#new_ncr_work_order').parsley 
+    classHandler: (ParsleyField) ->
+      if ParsleyField.$element.hasClass('js-selectize')
+        return $($(ParsleyField.$element.siblings('.selectize-control')[0]).children('.selectize-input')[0])  
+      if ParsleyField.$element.parents('.radio-container').length > 0 && $(ParsleyField.$element).is(":radio")
+        return $(ParsleyField.$element.parents('.radio-container')[0])
+      return ParsleyField.$element
+    
+    errorsContainer: (ParsleyField) ->
+      if ParsleyField.$element.hasClass('js-selectize')
+        return $(ParsleyField.$element.siblings('.selectize-control')[0])  
+      if ParsleyField.$element.parents('.radio-container').length > 0
+        return $(ParsleyField.$element.parents('.radio-container')[0])
+      
+      return $(ParsleyField.$element.parent())
+  
+  
+  window.ParsleyValidator.addValidator('myvalidator', ((value, requirement) ->
+    alert 'myvalidator'
+    false
+  ), 64).addMessage 'en', 'myvalidator', 'my validator failed'
+  
