@@ -78,6 +78,7 @@ class ProposalPolicy
   def can_cancel!
     requester! && !self.cancelled?
   end
+  alias_method :can_cancel!, :can_cancel_form!
 
   # equivalent of can_show?
   class Scope

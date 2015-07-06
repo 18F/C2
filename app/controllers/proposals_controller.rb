@@ -7,6 +7,7 @@ class ProposalsController < ApplicationController
   before_filter :validate_access, only: :approve
   helper_method :display_status
   add_template_helper ProposalsHelper
+  rescue_from Pundit::NotAuthorizedError, with: :auth_errors
 
   def show
     @proposal = self.proposal.decorate
@@ -25,12 +26,9 @@ class ProposalsController < ApplicationController
 
   def cancel_form
     @proposal = self.proposal.decorate
-    unless policy(@proposal).can_cancel?
-     redirect_to proposals_path, alert: "You are not allowed to perform that action"
-    end
 
     if @proposal.cancelled?
-     redirect_to proposal_path, id:@proposal.id, alert: "This request that has already been cancelled."
+     redirect_to proposal_path, id:@proposal.id, alert: "This request has already been cancelled."
     end
 
   end
@@ -106,4 +104,7 @@ class ProposalsController < ApplicationController
     self.proposals.order('created_at DESC')
   end
 
+  def auth_errors(exception)
+    redirect_to proposals_path, :alert => "Your do not have permissions or this request has already been cancelled."
+  end
 end
