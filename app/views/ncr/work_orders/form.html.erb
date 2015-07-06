@@ -1,3 +1,4 @@
+
 <% content_for :title, "NCR Request" %>
 <div class="container content m-request-form">
   <h2>National Capital Region</h2>
@@ -10,12 +11,18 @@
 
   <%= form_for @model_instance, html: {multipart: true} do |f| %>
     <div class="form-group">
-      <%= f.label :project_title, class: "required" %>
-      <%= f.text_field :project_title, class: 'form-control', placeholder: 'e.g. "Blue paint for the Blue Room"' %>
+      <%= f.label :project_title, class: "required"%>
+      <%= f.text_field :project_title, class: 'form-control', 
+        placeholder: 'e.g. "Blue paint for the Blue Room"',
+        'data-parsley-required'=>'true',
+        "data-parsley-maxlength"=>"100",
+        "data-parsley-trigger"=>"change" %>
     </div>
     <div class="form-group">
       <%= f.label :description %>
-      <%= f.text_area :description, class: 'form-control', 'aria-describedby'=>'description-add-info' %>
+      <%= f.text_area :description, class: 'form-control', 'aria-describedby'=>'description-add-info',
+      "data-parsley-maxlength"=>"1000",
+      "data-parsley-trigger"=>"change" %>
       <span class="form-instructions" id='description-add-info'>
         Include request details (e.g. Room Number, Estimated number of hours)
       </span>
@@ -26,22 +33,23 @@
     <% else %>
       <div class="form-group">
         <%= field_set_tag "Expense type", class: "required" do %>
-          <% if ENV['SHOW_BA60_OPTION'] == 'true' %>
-            <div class="radio">
-              <%= f.label :expense_type, value: "BA60" do %>
-                <%= f.radio_button :expense_type, "BA60",
-                                   :"data-filter-control" => "expense-type" %>
-                BA60
-              <% end %>
-            </div>
-          <% end %>
-          <% unless ENV['HIDE_BA61_OPTION'] == 'true' %>
-            <div class="radio">
-              <%= f.label :expense_type, value: "BA61" do %>
-                <%= f.radio_button :expense_type, "BA61",
-                                   :"data-filter-control" => "expense-type" %>
-                BA61
-              <% end %>
+          <div class="radio-container">
+            <% if ENV['SHOW_BA60_OPTION'] == 'true' %>
+              <div class="radio">
+                <%= f.label :expense_type, value: "BA60" do %>
+                  <%= f.radio_button :expense_type, "BA60",
+                                     :"data-filter-control" => "expense-type"%>
+                  BA60
+                <% end %>
+              </div>
+            <% end %>
+            <% unless ENV['HIDE_BA61_OPTION'] == 'true' %>
+              <div class="radio">
+                <%= f.label :expense_type, value: "BA61" do %>
+                  <%= f.radio_button :expense_type, "BA61",
+                                     :"data-filter-control" => "expense-type"%>
+                  BA61
+            <% end %>
             </div>
             <div class="checkbox" data-filter-key="expense-type"
                                     data-filter-value="BA61">
@@ -54,20 +62,22 @@
           <div class="radio">
             <%= f.label :expense_type, value: "BA80" do %>
               <%= f.radio_button :expense_type, "BA80",
-                                 :"data-filter-control" => "expense-type" %>
+                                 :"data-filter-control" => "expense-type",
+                                 'data-parsley-required'=>'true' %>
               BA80
             <% end %>
           </div>
           <%= render partial: 'ba_80_fields', locals: {f: f} %>
         <% end %>
-      </div>
+        </div>
     <% end %>
     <div class="form-group">
       <%= f.label :building_number, class: "required" %>
       <%= f.text_field :building_number,
             class: 'form-control js-selectize',
             placeholder: "Type here to search or add",
-            data: { initial: JSON.generate(building_options) } %>
+            data: { initial: JSON.generate(building_options) }, 
+            'data-parsley-required'=>'true'%>
     </div>
     <div class="form-group">
       <%= f.label :org_code %>
@@ -80,15 +90,20 @@
       <%= f.text_field :vendor,
             class: 'form-control js-selectize',
             placeholder: "Type here to search or add",
-            data: {initial: JSON.generate(vendor_options)} %>
+            data: {initial: JSON.generate(vendor_options)},
+            'data-parsley-required'=>'true' %>
     </div>
     <div class="form-group">
       <%= field_set_tag "Amount", class: "required" do %>
         <%= f.label :amount, "Dollar Amount", :class => 'sr-only'  %>
         <div class="input-group">
           <div class="input-group-addon">$</div>
-          <%= f.number_field :amount, class: 'form-control', step: 0.01 %>
+          <%= f.number_field :amount, class: 'form-control', step: 0.01, 
+          "data-parsley-min" => "0", "data-parsley-max" => "3000",
+          "data-parsley-trigger"=>"change", 'data-parsley-required'=>'true',
+          "data-parsley-errors-container"=>"#amount-errors"%>
         </div>
+        <div id="amount-errors"></div>
         <div class="radio">
           <%= f.label :not_to_exceed, value: false do %>
             <%= f.radio_button :not_to_exceed, false %>
@@ -112,7 +127,8 @@
     <div class="form-group">
       <%= label_tag :approver_email, "Approving official's email address", class: "required" %>
       <%= select_tag :approver_email, options_from_collection_for_select(approver_options, :to_s, :to_s, @approver_email),
-                     class: 'form-control js-selectize', disabled: approver_email_frozen? %>
+                     class: 'form-control js-selectize', disabled: approver_email_frozen?,
+                     'data-parsley-required'=>'true' %>
     </div>
     <% if @model_instance.new_record? %>
       <div class="form-group">

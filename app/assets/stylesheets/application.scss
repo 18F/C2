@@ -11,6 +11,7 @@
  *= require_self
  *= require normalize
  *= require selectize.bootstrap3
+ *= require parsley
  *= require peek
  *= require peek/views/performance_bar
  *= require_tree ./common
