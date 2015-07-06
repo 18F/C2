@@ -16,9 +16,9 @@
     <div class="form-group">
       <%= f.label :description %>
       <%= f.text_area :description, class: 'form-control', 'aria-describedby'=>'description-add-info' %>
-      <span class="form-instructions" id='description-add-info'>
+      <div class="help-block" id='description-add-info'>
         Include request details (e.g. Room Number, Estimated number of hours)
-      </span>
+      </div>
     </div>
     <% if ENV['HIDE_BA61_OPTION'] == 'true' && ENV['SHOW_BA60_OPTION'] != 'true'%>
       <%= f.hidden_field :expense_type, value: 'BA80' %>
