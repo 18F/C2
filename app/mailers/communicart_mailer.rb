@@ -123,14 +123,19 @@ class CommunicartMailer < ActionMailer::Base
     params = proposal.as_json
     #todo: replace with public_id once #98376564 is fixed
     params[:public_identifier] = proposal.public_identifier
+    # Add in requester params
     proposal.requester.as_json.each { |k, v| params["requester_" + k] = v }
-    key = :proposal
     if proposal.client_data
-      key = proposal.client_data.class.name.underscore
+      # We'll look up by the client_data's class name
+      i18n_key = proposal.client_data.class.name.underscore
+      # Add in client_data params
       params.merge!(proposal.client_data.as_json)
+    else
+      # Default (no client_data): look up by "proposal"
+      i18n_key = :proposal
     end
-    params[:scope] = [:mail, :subject]
-    params[:default] = :proposal
-    I18n.t key, params.symbolize_keys
+    # Add search path, and default lookup key for I18n
+    params.merge!(scope: [:mail, :subject], default: :proposal)
+    I18n.t i18n_key, params.symbolize_keys
   end
 end
