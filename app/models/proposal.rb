@@ -3,9 +3,6 @@ class Proposal < ActiveRecord::Base
   include ValueHelper
   workflow do
     state :pending do
-      # partial *may* trigger a full approval
-      event :partial_approve, transitions_to: :approved, if: lambda { |p| p.all_approved? }
-      event :partial_approve, transitions_to: :pending
       event :approve, :transitions_to => :approved
       event :reject, :transitions_to => :rejected
       event :restart, :transitions_to => :pending
@@ -195,18 +192,6 @@ class Proposal < ActiveRecord::Base
     self.api_tokens.update_all(expires_at: Time.now)
     self.initialize_approvals()
     Dispatcher.deliver_new_proposal_emails(self)
-  end
-
-  def all_approved?
-    self.approvals.where.not(status: 'approved').empty?
-  end
-
-  # An approval has been approved. Mark the next as actionable
-  # Note: this won't affect a parallel flow (as approvals start actionable)
-  def partial_approve
-    if next_approval = self.approvals.pending.first
-      next_approval.make_actionable!
-    end
   end
 
   protected

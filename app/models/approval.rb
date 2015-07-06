@@ -6,18 +6,18 @@ class Approval < ActiveRecord::Base
     end
     state :actionable do
       event :approve, transitions_to: :approved
-      event :reject, transitions_to: :rejected
     end
     state :approved
-    state :rejected
   end
 
   belongs_to :proposal
-  has_one :cart, through: :proposal
   belongs_to :user
+  belongs_to :parent, class_name: 'Approval'
+  has_one :cart, through: :proposal
   has_one :api_token, -> { fresh }
   has_one :approval_group, through: :cart
   has_one :user_role, -> { where(approval_group_id: cart.approval_group.id, user_id: self.user_id) }
+  has_many :child_approvals, class_name: 'Approval', foreign_key: 'parent_id'
 
   delegate :full_name, :email_address, :to => :user, :prefix => true
   delegate :approvals, :to => :cart, :prefix => true
@@ -26,6 +26,7 @@ class Approval < ActiveRecord::Base
 
   # TODO validates_uniqueness_of :user_id, scope: cart_id
 
+  # @todo: remove and replace calls with "with_xxx_state"
   self.statuses.each do |status|
     scope status, -> { where(status: status) }
   end
@@ -46,14 +47,9 @@ class Approval < ActiveRecord::Base
     end
   end
 
-  # Used by the state machine
-  def on_rejected_entry(new_state, event)
-    self.proposal.reject!
-  end
-
-  # Used by the state machine
-  def on_approved_entry(new_state, event)
-    self.proposal.partial_approve!
-    Dispatcher.on_approval_approved(self)
+  # notify parents if we've been approved. Notified as a callback so that it
+  # will be present even if subclasses override workflow
+  def on_approved_entry(old_state, event)
+    self.parent.child_approved! if self.parent
   end
 end

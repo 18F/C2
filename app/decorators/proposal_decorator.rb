@@ -26,7 +26,7 @@ class ProposalDecorator < Draper::Decorator
 
   def approvals_in_list_order
     if object.flow == 'linear'
-      object.approvals
+      object.approvals.where(type: 'Approvals::Individual')
     else
       self.approvals_by_status
     end
