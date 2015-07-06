@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150620004844) do
+ActiveRecord::Schema.define(version: 20150706133614) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,11 +47,14 @@ ActiveRecord::Schema.define(version: 20150620004844) do
 
   create_table "approvals", force: :cascade do |t|
     t.integer  "user_id"
-    t.string   "status",      limit: 255
+    t.string   "status",       limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "position"
     t.integer  "proposal_id"
+    t.string   "type"
+    t.integer  "parent_id"
+    t.integer  "min_required"
   end
 
   create_table "attachments", force: :cascade do |t|
@@ -143,7 +146,7 @@ ActiveRecord::Schema.define(version: 20150620004844) do
     t.integer  "client_data_id"
     t.string   "client_data_type", limit: 255
     t.integer  "requester_id"
-    t.string   "public_id"
+    t.string   "public_id",        limit: 255
   end
 
   add_index "proposals", ["client_data_id", "client_data_type"], name: "index_proposals_on_client_data_id_and_client_data_type", using: :btree

@@ -98,7 +98,8 @@ class Proposal < ActiveRecord::Base
   # returns the Approval
   def add_approver(email)
     user = User.for_email(email)
-    approval = self.approvals.create!(user_id: user.id)
+    approval = Approvals::Individual.new(user: user)
+    self.approvals << approval
     approval
   end
 
