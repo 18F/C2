@@ -4,7 +4,6 @@ class User < ActiveRecord::Base
 
   has_many :approvals
   has_many :observations
-  has_many :properties, as: :hasproperties
   has_many :comments
 
   has_many :outgoing_delegates, class_name: 'ApprovalDelegate', foreign_key: 'assigner_id'
