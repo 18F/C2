@@ -68,11 +68,12 @@ class Proposal < ActiveRecord::Base
   end
 
   def approval_for(user)
-    # TODO convert to SQL
-    self.approvals.find do |approval|
-      approver = approval.user
-      approver == user || approver.outgoing_delegates.exists?(assignee_id: user.id)
-    end
+    where_clause = <<-SQL
+      user_id = :user_id
+      OR
+      user_id IN (SELECT assigner_id FROM approval_delegates WHERE assignee_id = :user_id)
+    SQL
+    self.approvals.where(where_clause, user_id: user.id).first
   end
 
   # Use this until all clients are migrated to models (and we no longer have a

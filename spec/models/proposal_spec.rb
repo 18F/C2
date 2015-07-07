@@ -103,4 +103,35 @@ describe Proposal do
       expect(Proposal.approved).to eq [approved1, approved2]
     end
   end
+
+  describe "#approval_for" do
+    it 'returns the approval associated with this user' do
+      proposal = FactoryGirl.create(:proposal)
+      approval1 = proposal.add_approver('user1@example.gov')
+      approval2 = proposal.add_approver('user2@example.gov')
+      approval3 = proposal.add_approver('user3@example.gov')
+      expect(proposal.approval_for(approval1.user)).to eq approval1
+      expect(proposal.approval_for(approval2.user)).to eq approval2
+      expect(proposal.approval_for(approval3.user)).to eq approval3
+    end
+
+    it 'returns the approval associated with a delegated user' do
+      proposal = FactoryGirl.create(:proposal)
+      proposal.add_approver('user1@example.gov')
+      approval2 = proposal.add_approver('user2@example.gov')
+      proposal.add_approver('user3@example.gov')
+      delegate = FactoryGirl.create(:user)
+      approval2.user.add_delegate(delegate)
+      expect(proposal.approval_for(delegate)).to eq approval2
+    end
+
+    it 'only looks at user approvals' do
+      proposal = FactoryGirl.create(:proposal)
+      proposal.root_approval = Approvals::Serial.new
+      approval1 = proposal.add_approver("user1@example.com")
+      approval2 = proposal.add_approver("user2@example.com")
+      expect(proposal.approval_for(approval1.user)).to eq approval1
+      expect(proposal.approval_for(approval2.user)).to eq approval2
+    end
+  end
 end
