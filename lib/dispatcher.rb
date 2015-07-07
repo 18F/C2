@@ -20,7 +20,7 @@ class Dispatcher
   end
 
   def deliver_new_proposal_emails(proposal)
-    proposal.currently_awaiting_approvals.each do |approval|
+    proposal.user_approvals.actionable.each do |approval|
       self.email_approver(approval)
     end
     self.email_observers(proposal)

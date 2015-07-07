@@ -51,7 +51,7 @@ module Ncr
 
     def approver_email_frozen?
       if @model_instance
-        approval = @model_instance.approvals.first
+        approval = @model_instance.user_approvals.first
         approval && !approval.actionable?
       else
         false

@@ -50,6 +50,10 @@ class Approval < ActiveRecord::Base
   # notify parents if we've been approved. Notified as a callback so that it
   # will be present even if subclasses override workflow
   def on_approved_entry(old_state, event)
-    self.parent.child_approved! if self.parent
+    if self.parent
+      self.parent.child_approved!
+    else
+      self.proposal.approve!
+    end
   end
 end

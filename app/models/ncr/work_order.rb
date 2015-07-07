@@ -82,7 +82,7 @@ module Ncr
 
     # A requester can change his/her approving official
     def update_approver(approver_email)
-      first_approval = self.approvals.first
+      first_approval = self.user_approvals.first
       if self.approver_changed?(approver_email)
         first_approval.destroy
         replacement = self.add_approver(approver_email)
@@ -92,7 +92,7 @@ module Ncr
     end
 
     def approver_changed?(approval_email)
-      first_approval = self.approvals.first.user_email_address
+      first_approval = self.user_approvals.first.user_email_address
       first_approval != approval_email
     end
 
@@ -103,8 +103,9 @@ module Ncr
         # skip state machine
         self.proposal.update_attribute(:status, 'approved')
       else
+        self.proposal.root_approval = Approvals::Serial.new
         emails.each {|email| self.add_approver(email) }
-        self.proposal.initialize_approvals()
+        self.proposal.root_approval.make_actionable!
       end
     end
 

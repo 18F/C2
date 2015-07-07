@@ -11,17 +11,17 @@ class Proposal < ActiveRecord::Base
       event :restart, :transitions_to => :pending
     end
     state :rejected do
-      # partial approvals and rejections can't break out of this state
-      event :partial_approve, :transitions_to => :rejected
       event :reject, :transitions_to => :rejected
       event :restart, :transitions_to => :pending
     end
   end
 
   has_one :cart
+  has_one :root_approval, ->{ where(parent_id: nil) }, class_name: 'Approval'
   has_many :approvals
-  has_many :approvers, through: :approvals, source: :user
-  has_many :api_tokens, through: :approvals
+  has_many :user_approvals, ->{ where.not(user_id: nil) }, class_name: 'Approval'
+  has_many :approvers, through: :user_approvals, source: :user
+  has_many :api_tokens, through: :user_approvals
   has_many :attachments
   has_many :approval_delegates, through: :approvers, source: :outgoing_delegates
   has_many :comments
@@ -38,6 +38,7 @@ class Proposal < ActiveRecord::Base
   # Note: clients should also implement :version
   delegate :client, to: :client_data_legacy, allow_nil: true
 
+  # @todo: remove flow
   validates :flow, presence: true, inclusion: {in: ApprovalGroup::FLOWS}
   # TODO validates :requester_id, presence: true
 
@@ -95,18 +96,10 @@ class Proposal < ActiveRecord::Base
   # returns the Approval
   def add_approver(email)
     user = User.for_email(email)
-    approval = Approvals::Individual.new(user: user)
+    # note that self.root_approval may be nil
+    approval = Approvals::Individual.new(user: user, parent: self.root_approval)
     self.approvals << approval
     approval
-  end
-
-  def initialize_approvals()
-    if self.linear? && self.approvals.any?
-      self.approvals.update_all(status: 'pending')
-      self.approvals.first.make_actionable!
-    elsif self.parallel?
-      self.approvals.update_all(status: 'actionable')
-    end
   end
 
   def add_observer(email)

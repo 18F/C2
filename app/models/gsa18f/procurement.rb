@@ -28,8 +28,7 @@ module Gsa18f
 
 
     def add_approvals
-      self.add_approver(Gsa18f::Procurement.approver_email)
-      self.proposal.initialize_approvals()
+      self.add_approver(Gsa18f::Procurement.approver_email).make_actionable!
     end
 
     def add_observers

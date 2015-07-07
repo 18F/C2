@@ -2,7 +2,7 @@ class LinearDispatcher < Dispatcher
   def next_pending_approval(proposal)
     # we don't care how the proposal was approved/rejected
     if proposal.pending?
-      proposal.currently_awaiting_approvals.first
+      proposal.user_approvals.actionable.first
     else
       nil
     end
