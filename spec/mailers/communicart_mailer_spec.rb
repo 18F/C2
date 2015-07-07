@@ -13,8 +13,8 @@ describe CommunicartMailer do
     ENV['NOTIFICATION_FROM_EMAIL'] = old_val
   end
 
-  let(:proposal) { FactoryGirl.create(:proposal, :with_approvers) }
-  let(:approval) { proposal.approvals.first }
+  let(:proposal) { FactoryGirl.create(:proposal, :with_parallel_approvers) }
+  let(:approval) { proposal.user_approvals.first }
   let(:approver) { approval.user }
   let(:requester) { proposal.requester }
 
@@ -98,7 +98,8 @@ describe CommunicartMailer do
       end
 
       it 'renders a custom template for ncr work orders' do
-        allow(proposal).to receive(:client).and_return('ncr')
+        FactoryGirl.create(:ncr_work_order, proposal: proposal)
+        proposal.reload
         expect(body).to include('ncr-layout')
       end
     end
@@ -165,7 +166,7 @@ describe CommunicartMailer do
 
     context 'completed message' do
       it 'displays when all requests have been approved' do
-        final_approval = proposal.approvals.last
+        final_approval = proposal.user_approvals.last
         final_approval.approve!
         mail = CommunicartMailer.approval_reply_received_email(final_approval)
         expect(mail.body.encoded).to include('Your request has been fully approved. See details below.')

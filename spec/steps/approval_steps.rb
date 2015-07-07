@@ -17,9 +17,20 @@ module ApprovalSteps
   end
 
   step "the cart has an approval for :email in position :position" do |email, position|
+    # @todo: this is ugly. replace once we remove the associated acceptance tests
+    root = @cart.proposal.root_approval
+    if root.nil? && @cart.proposal.linear?
+      @cart.proposal.root_approval = Approvals::Serial.new(status: :actionable)
+    elsif root.nil?
+      @cart.proposal.root_approval = Approvals::Parallel.new(status: :actionable)
+    end
+
     @approval = @cart.proposal.add_approver(email)
-    @approval.update_attribute(:position, position)
-    @cart.proposal.initialize_approvals()
+    if @cart.proposal.parallel? || @cart.proposal.approvals.count == 2
+      @approval.update(position: position, status: :actionable)
+    else
+      @approval.update(position: position)
+    end
   end
 
   step "feature flag :flag_name is :value" do |flag, value|

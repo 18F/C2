@@ -1,19 +1,13 @@
 describe "Display status text" do
-  let(:proposal) { FactoryGirl.create(:proposal, :with_approvers) }
+  let(:proposal) { FactoryGirl.create(:proposal, :with_parallel_approvers) }
   before do
     login_as(proposal.requester)
   end
 
   it "displays approved status" do
-    proposal.approvals.each{|approval| approval.approve!}
+    proposal.user_approvals.each{|approval| approval.approve!}
     visit proposals_path
     expect(page).to have_content('Approved')
-  end
-
-  it "displays rejected status" do
-    proposal.approvals.first.reject!
-    visit proposals_path
-    expect(page).to have_content('Rejected')
   end
 
   it "displays outstanding approvers" do
@@ -25,7 +19,7 @@ describe "Display status text" do
   end
 
   it "excludes approved approvals" do
-    proposal.approvals.first.approve!
+    proposal.user_approvals.first.approve!
     visit proposals_path
     expect(page).not_to have_content('Please review')
     expect(page).to have_content('Waiting for review from:')
@@ -35,7 +29,7 @@ describe "Display status text" do
   end
 
   context "linear" do
-    let(:proposal) { FactoryGirl.create(:proposal, :with_approvers, flow: 'linear') }
+    let(:proposal) { FactoryGirl.create(:proposal, :with_serial_approvers, flow: 'linear') }
 
     it "displays the first approver" do
       visit proposals_path
@@ -46,7 +40,7 @@ describe "Display status text" do
     end
 
     it "excludes approved approvals" do
-      proposal.approvals.first.approve!
+      proposal.user_approvals.first.approve!
       visit proposals_path
       expect(page).to have_content('Waiting for review from:')
       expect(page).not_to have_content(proposal.approvers.first.full_name)

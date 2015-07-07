@@ -9,7 +9,7 @@ FactoryGirl.define do
     association :proposal, flow: 'linear'
 
     trait :with_approvers do
-      association :proposal, :with_approvers
+      association :proposal, :with_serial_approvers
     end
   end
 end

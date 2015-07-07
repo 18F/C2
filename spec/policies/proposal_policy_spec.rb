@@ -3,9 +3,9 @@ describe ProposalPolicy do
 
   permissions :can_approve_or_reject? do
     it "allows pending delegates" do
-      proposal = FactoryGirl.create(:proposal, :with_approvers)
+      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
 
-      approval = proposal.approvals.first
+      approval = proposal.user_approvals.first
       delegate = FactoryGirl.create(:user)
       approver = approval.user
       approver.add_delegate(delegate)
@@ -14,9 +14,8 @@ describe ProposalPolicy do
     end
 
     context "parallel cart" do
-      let(:proposal) {FactoryGirl.create(:proposal, :with_approvers,
-                                         flow: 'parallel')}
-      let(:approval) {proposal.approvals.first}
+      let(:proposal) {FactoryGirl.create(:proposal, :with_parallel_approvers, flow: 'parallel')}
+      let(:approval) {proposal.user_approvals.first}
 
       it "allows when there's a pending approval" do
         proposal.approvers.each{ |approver|
@@ -41,10 +40,9 @@ describe ProposalPolicy do
     end
 
     context "linear cart" do
-      let(:proposal) {FactoryGirl.create(:proposal, :with_approvers,
-                                         flow: 'linear')}
-      let(:first_approval) { proposal.approvals.first }
-      let(:second_approval) { proposal.approvals.last }
+      let(:proposal) {FactoryGirl.create(:proposal, :with_serial_approvers, flow: 'linear')}
+      let(:first_approval) { proposal.user_approvals.first }
+      let(:second_approval) { proposal.user_approvals.last }
 
       it "allows when there's a pending approval" do
         expect(subject).to permit(first_approval.user, proposal)
@@ -61,11 +59,6 @@ describe ProposalPolicy do
         expect(subject).to permit(second_approval.user, proposal)
       end
 
-      it "does not allow when the user's already rejected" do
-        first_approval.reject!
-        expect(subject).not_to permit(first_approval.user, proposal)
-      end
-
       it "does not allow with a non-existent approval" do
         user = FactoryGirl.create(:user)
         expect(subject).not_to permit(user, proposal)
@@ -74,8 +67,7 @@ describe ProposalPolicy do
   end
 
   permissions :can_show? do
-    let(:proposal) {FactoryGirl.create(:proposal, :with_approvers,
-                                       :with_observers)}
+    let(:proposal) {FactoryGirl.create(:proposal, :with_parallel_approvers, :with_observers)}
 
     it "allows the requester to see it" do
       expect(subject).to permit(proposal.requester, proposal)
@@ -87,7 +79,7 @@ describe ProposalPolicy do
     end
 
     it "does not allow a pending approver to see it" do
-      first_approval = proposal.approvals.first
+      first_approval = proposal.user_approvals.first
       first_approval.update_attribute(:status, 'pending')
       expect(subject).not_to permit(first_approval.user, proposal)
       expect(subject).to permit(proposal.approvers.last, proposal)
@@ -103,7 +95,7 @@ describe ProposalPolicy do
   end
 
   permissions :can_edit? do
-    let(:proposal) { FactoryGirl.create(:proposal, :with_approvers, :with_observers) }
+    let(:proposal) { FactoryGirl.create(:proposal, :with_parallel_approvers, :with_observers) }
 
     it "allows the requester to edit it" do
       expect(subject).to permit(proposal.requester, proposal)
@@ -130,7 +122,7 @@ describe ProposalPolicy do
 
   context "testing scope" do
     let(:proposal) {
-      FactoryGirl.create(:proposal, :with_approvers, :with_observers)}
+      FactoryGirl.create(:proposal, :with_parallel_approvers, :with_observers)}
     it "allows the requester to see" do
       user = proposal.requester
       proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
@@ -151,7 +143,7 @@ describe ProposalPolicy do
     end
 
     it "does not allow a pending approver to see" do
-      approval = proposal.approvals.first
+      approval = proposal.user_approvals.first
       user = approval.user
       approval.update_attribute(:status, 'pending')
       proposals = ProposalPolicy::Scope.new(user, Proposal).resolve

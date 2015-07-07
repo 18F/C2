@@ -1,22 +1,21 @@
 describe Proposal do
   describe '#currently_awaiting_approvers' do
     it "gives a consistently ordered list when in parallel" do
-      proposal = FactoryGirl.create(:proposal, :with_approvers,
-                                    flow: 'parallel')
+      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers, flow: 'parallel')
       emails = proposal.currently_awaiting_approvers.map(&:email_address)
       expect(emails).to eq(%w(approver1@some-dot-gov.gov approver2@some-dot-gov.gov))
 
-      proposal.approvals.first.update_attribute(:position, 5)
+      proposal.user_approvals.first.update_attribute(:position, 5)
       emails = proposal.currently_awaiting_approvers.map(&:email_address).sort
       expect(emails).to eq(%w(approver1@some-dot-gov.gov approver2@some-dot-gov.gov))
     end
 
     it "gives only the first approver when linear" do
-      proposal = FactoryGirl.create(:proposal, :with_approvers, flow: 'linear')
+      proposal = FactoryGirl.create(:proposal, :with_serial_approvers, flow: 'linear')
       emails = proposal.currently_awaiting_approvers.map(&:email_address)
       expect(emails).to eq(%w(approver1@some-dot-gov.gov))
 
-      proposal.approvals.first.approve!
+      proposal.user_approvals.first.approve!
       emails = proposal.currently_awaiting_approvers.map(&:email_address)
       expect(emails).to eq(%w(approver2@some-dot-gov.gov))
     end
@@ -63,8 +62,7 @@ describe Proposal do
     it "returns all approvers, observers, and the requester" do
       requester = FactoryGirl.create(
         :user, email_address: 'requester@some-dot-gov.gov')
-      proposal = FactoryGirl.create(
-        :proposal, :with_approvers, :with_observers, requester: requester)
+      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers, :with_observers, requester: requester)
 
       emails = proposal.users.map(&:email_address).sort
       expect(emails).to eq(%w(

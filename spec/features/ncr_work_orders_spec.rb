@@ -101,8 +101,7 @@ describe "National Capital Region proposals" do
       end
 
       it "defaults to the approver from the last request" do
-        proposal = FactoryGirl.create(:proposal, :with_approvers,
-                                      requester: requester)
+        proposal = FactoryGirl.create(:proposal, :with_serial_approvers, requester: requester)
         visit '/ncr/work_orders/new'
         expect(find_field("Approving official's email address").value).to eq(
           proposal.approvers.first.email_address)
@@ -391,7 +390,7 @@ describe "National Capital Region proposals" do
     it "has a disabled field if first approval is done" do
       visit "/ncr/work_orders/#{work_order.id}/edit"
       expect(find("[name=approver_email]")["disabled"]).to be_nil
-      work_order.approvals.first.approve!
+      work_order.user_approvals.first.approve!
       visit "/ncr/work_orders/#{work_order.id}/edit"
       expect(find("[name=approver_email]")["disabled"]).to eq("disabled")
       # And we can still submit
