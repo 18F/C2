@@ -184,6 +184,8 @@ class Proposal < ActiveRecord::Base
   def restart
     # Note that none of the state machine's history is stored
     self.api_tokens.update_all(expires_at: Time.now)
+    self.approvals.update_all(status: 'pending')
+    self.root_approval.make_actionable!
     Dispatcher.deliver_new_proposal_emails(self)
   end
 

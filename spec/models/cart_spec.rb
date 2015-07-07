@@ -3,8 +3,7 @@ describe Cart do
   describe '#restart' do
     it "creates new API tokens" do
       cart = FactoryGirl.create(:cart_with_approvals)
-      cart.user_approvals.each(&:create_api_token!)
-      expect(cart.api_tokens.length).to eq(2)
+      expect(cart.reload.api_tokens.length).to eq(2)
 
       cart.restart!
 

@@ -38,7 +38,7 @@ describe CommunicartMailer do
   end
 
   describe 'notification_for_approver' do
-    let!(:token) { approval.create_api_token! }
+    let!(:token) { approval.api_token }
     let(:mail) { CommunicartMailer.actions_for_approver('email.to.email@testing.com', approval) }
     let(:body) { mail.body.encoded }
     let(:approval_uri) do

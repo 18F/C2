@@ -101,19 +101,17 @@ describe ProposalsController do
   describe '#approve' do
     it "signs the user in via the token" do
       proposal = FactoryGirl.create(:proposal, :with_approver)
-      approval = proposal.approvals.first
-      token = approval.create_api_token!
+      token = proposal.reload.root_approval.api_token
 
       post :approve, id: proposal.id, cch: token.access_token
 
-      expect(controller.send(:current_user)).to eq(approval.user)
+      expect(controller.send(:current_user)).to eq(token.user)
     end
 
     it "won't sign the user in via the token if delegated" do
       proposal = FactoryGirl.create(:proposal, :with_approver)
-      approval = proposal.approvals.first
-      token = approval.create_api_token!
-      approval.user.add_delegate(FactoryGirl.create(:user))
+      token = proposal.reload.root_approval.api_token
+      token.user.add_delegate(FactoryGirl.create(:user))
 
       post :approve, id: proposal.id, cch: token.access_token
 
@@ -130,8 +128,8 @@ describe ProposalsController do
 
     it "will allow action if the token is valid" do
       proposal = FactoryGirl.create(:proposal, :with_approver)
-      approval = proposal.approvals.first
-      token = approval.create_api_token!
+      approval = proposal.reload.root_approval
+      token = approval.api_token
 
       get :approve, id: proposal.id, cch: token.access_token
       approval.reload

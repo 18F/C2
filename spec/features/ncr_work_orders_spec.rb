@@ -344,6 +344,7 @@ describe "National Capital Region proposals" do
     before do
       work_order.add_approvals('approver@example.com')
       login_as(work_order.requester)
+      deliveries.clear
     end
 
     it "can be edited if pending" do

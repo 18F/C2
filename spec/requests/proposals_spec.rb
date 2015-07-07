@@ -93,7 +93,7 @@ describe 'proposals' do
     context "using a token" do
       let(:proposal) { FactoryGirl.create(:proposal, :with_approver) }
       let(:approval) { proposal.approvals.first }
-      let(:token) { approval.create_api_token! }
+      let(:token) { approval.api_token }
 
       it "supports token auth" do
         post "/proposals/#{proposal.id}/approve", cch: token.access_token

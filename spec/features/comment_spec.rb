@@ -5,6 +5,7 @@ describe "commenting" do
     before do
       login_as(cart.requester)
       visit "/proposals/#{cart.proposal.id}"
+      deliveries.clear
     end
 
     it "saves the comment" do
