@@ -7,6 +7,7 @@ module Populator
     n.times do |i|
       cart = FactoryGirl.create(:cart)
 
+      cart.proposal.root_approval = Approvals::Parallel.new
       approval1 = cart.add_approver("approver#{i}a@example.com")
       approval1.create_api_token!
 
@@ -14,7 +15,7 @@ module Populator
       cart.add_observer("observer#{i}a@example.com")
       cart.add_observer("observer#{i}b@example.com")
       cart.add_requester("requester#{i}@example.com")
-      cart.proposal.initialize_approvals()
+      cart.proposal.root_approval.make_actionable!
     end
   end
 
@@ -30,7 +31,7 @@ module Populator
 
       # TODO all of these things should have the same created_at/updated_at... use Timecop
       proposal = FactoryGirl.create(:proposal,
-        :with_approvers,
+        :with_parallel_approvers,
         :with_observers,
         created_at: requested_at,
         updated_at: requested_at

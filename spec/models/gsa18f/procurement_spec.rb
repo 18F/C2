@@ -5,7 +5,7 @@ describe Gsa18f::Procurement do
 
   describe '#create_cart' do
     def approver_emails(procurement)
-      procurement.approvals.map {|a| a.user.email_address }
+      procurement.user_approvals.map {|a| a.user.email_address }
     end
 
     it "adds 18fapprover@gsa.gov as approver email" do

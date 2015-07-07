@@ -1,7 +1,7 @@
 describe NcrDispatcher do
   let!(:work_order) { FactoryGirl.create(:ncr_work_order, :with_approvers) }
   let(:proposal) { work_order.proposal }
-  let(:approvals) { work_order.approvals }
+  let(:approvals) { work_order.user_approvals }
   let(:approval_1) { approvals.first }
   let(:approval_2) { approvals.second }
   let(:ncr_dispatcher) { NcrDispatcher.new }
@@ -18,14 +18,6 @@ describe NcrDispatcher do
     it "doesn't send to the requester for the not-last approval" do
       ncr_dispatcher.on_approval_approved(approval_1)
       expect(email_recipients).to_not include('requester@some-dot-gov.gov')
-    end
-  end
-
-  describe '#on_proposal_rejected' do
-    it "notifies the requester" do
-      approval_1.update_attribute(:status, 'rejected') # avoid workflow
-      ncr_dispatcher.on_proposal_rejected(work_order)
-      expect(email_recipients).to include(work_order.requester.email_address)
     end
   end
 

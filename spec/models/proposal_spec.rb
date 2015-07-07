@@ -79,4 +79,28 @@ describe Proposal do
       expect(proposal.users).to eq([proposal.requester])
     end
   end
+
+  describe "default values" do
+    it 'sets status to pending' do
+      expect(Proposal.new.pending?).to eq true
+    end
+  end
+
+  describe "scopes" do
+    let!(:approved1) { FactoryGirl.create(:proposal, status: 'approved') }
+    let!(:approved2) { FactoryGirl.create(:proposal, status: 'approved') }
+    let!(:pending) { FactoryGirl.create(:proposal, status: 'pending') }
+
+    it 'returns approved proposals' do
+      expect(Proposal.approved).to eq [approved1, approved2]
+    end
+
+    it 'returns pending proposals' do
+      expect(Proposal.pending).to eq [pending]
+    end
+
+    it 'returns closed proposals' do
+      expect(Proposal.approved).to eq [approved1, approved2]
+    end
+  end
 end
