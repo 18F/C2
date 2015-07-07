@@ -60,4 +60,14 @@ describe NcrDispatcher do
       expect(email.html_part.body.to_s).to include("updated")
     end
   end
+
+  describe 'requester notifications' do
+    it 'only notifies the requester on final approval' do
+      deliveries.clear
+      approval_1.reload.approve!
+      expect(email_recipients).not_to include(proposal.requester.email_address)
+      approval_2.reload.approve!
+      expect(email_recipients).to include(proposal.requester.email_address)
+    end
+  end
 end
