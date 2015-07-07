@@ -12,39 +12,33 @@ describe LinearDispatcher do
     end
 
     it "returns nil if all are non-pending" do
-      proposal.approvals << Approvals::Individual.new(user: FactoryGirl.create(:user), status: 'approved')
+      FactoryGirl.create(:approval, proposal: proposal, status: 'approved')
       expect(dispatcher.next_pending_approval(proposal)).to eq(nil)
     end
 
     it "sorts by position if there are more than one actionable approvals" do
-      proposal.approvals << Approvals::Individual.new(user: FactoryGirl.create(:user), status: 'approved', position: 6)
-      last_approval = Approvals::Individual.new(user: FactoryGirl.create(:user), status: 'actionable', position: 5)
-      proposal.approvals << last_approval
+      FactoryGirl.create(:approval, proposal: proposal, status: 'approved', position: 6)
+      last_approval = FactoryGirl.create(:approval, proposal: proposal, status: 'actionable', position: 5)
 
       expect(dispatcher.next_pending_approval(proposal)).to eq(last_approval)
     end
 
     it "returns nil if the proposal is rejected" do
-      next_app = Approvals::Individual.new(user: FactoryGirl.create(:user), status: 'actionable', position: 5)
-      proposal.approvals << next_app
+      next_app = FactoryGirl.create(:approval, proposal: proposal, status: 'actionable', position: 5)
       expect(dispatcher.next_pending_approval(proposal)).to eq(next_app)
       next_app.update_attribute(:status, 'rejected')  # skip state machine
       expect(dispatcher.next_pending_approval(proposal)).to eq(nil)
     end
 
     it "skips approved approvals" do
-      first_approval = Approvals::Individual.new(user: FactoryGirl.create(:user), status: 'actionable', position: 6)
-      proposal.approvals << first_approval
-      proposal.approvals << Approvals::Individual.new(user: FactoryGirl.create(:user), status: 'approved', position: 5)
-
+      first_approval = FactoryGirl.create(:approval, status: 'actionable', position: 6, proposal: proposal)
+      FactoryGirl.create(:approval, status: 'approved', position: 5, proposal: proposal)
       expect(dispatcher.next_pending_approval(proposal)).to eq(first_approval)
     end
 
     it "skips non-approvers" do
       proposal.observations.create!
-      approval = Approvals::Individual.new(user: FactoryGirl.create(:user), status: 'actionable')
-      proposal.approvals << approval
-
+      approval = FactoryGirl.create(:approval, status: 'actionable', proposal: proposal)
       expect(dispatcher.next_pending_approval(proposal)).to eq(approval)
     end
   end
@@ -56,10 +50,8 @@ describe LinearDispatcher do
 
     it "sends emails to the first approver" do
       approver
-      approval = Approvals::Individual.new(user: approver, status: 'actionable')
-      proposal.approvals << approval
+      approval = FactoryGirl.create(:approval, proposal: proposal, status: 'actionable')
       expect(dispatcher).to receive(:email_approver).with(approval)
-
       dispatcher.deliver_new_proposal_emails(proposal)
     end
 

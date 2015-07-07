@@ -20,4 +20,20 @@ describe ProposalDecorator do
       ))
     end
   end
+
+  describe '#number_approved' do
+    it "only counts user approvals" do
+      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
+      expect(proposal.decorate.number_approved).to be 0
+      proposal.approvals.update_all(status: 'approved')
+      expect(proposal.decorate.number_approved).to be 2
+    end
+  end
+
+  describe '#total_approvers' do
+    it "only counts user approvals" do
+      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
+      expect(proposal.decorate.total_approvers).to be 2
+    end
+  end
 end

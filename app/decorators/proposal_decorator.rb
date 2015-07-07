@@ -2,11 +2,11 @@ class ProposalDecorator < Draper::Decorator
   delegate_all
 
   def number_approved
-    object.approvals.approved.count
+    object.user_approvals.approved.count
   end
 
   def total_approvers
-    object.approvals.count
+    object.user_approvals.count
   end
 
   def approvals_by_status
