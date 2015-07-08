@@ -39,15 +39,6 @@ table.center {
   text-transform: uppercase;
 }
 
-p.cart_item_description {
-  padding-bottom: 30px;
-}
-
-p.cart_item_description strong {
-  font-size: 130%;
-  font-weight: 300;
-}
-
 table tr.total-price, tr#approval-actions {
   padding-top: 10px;
   padding-bottom: 10px;
@@ -268,17 +259,6 @@ p {
   padding-bottom: 10px;
   border-bottom: 1px solid #ccc;
 }
-.cart-summary-row {
-  margin-top: 10px;
-  margin-bottom: 5px;
-  padding-top: 0px;
-  padding-bottom: 5px;
-  border-bottom: 1px solid #ccc;
-}
-.cart-summary-row.last {
-  padding-bottom: 0px;
-  border-bottom-style: none;
-}
 td p.result-item-price {
   padding: 5px 10px 30px 10px;
   color: #000;
@@ -310,17 +290,6 @@ p.vendor-information .info-title {
 }
 
 
-td.cart-total {
-  background-color: $bgdetails;
-  text-align: center;
-  padding: 40px 0;
-
-  .total-label {
-    text-transform: uppercase;
-    font-size: 1.5em;
-  }
-}
-
 span.result-tag {
   font-size: 80%;
   display: inline-block;
@@ -340,21 +309,6 @@ span.green {
   height: 15px;
   color: #54a133;
   padding-left: 7px;
-}
-
-.c2bullet {
-  padding-left: 7px;
-  height: 15px;
-  display: inline-block;
-  font-size: 250%;
-  line-height: .6em;
-  color: #f2c33e;
-  vertical-align: top;
-}
-
-.bullet-label {
-  vertical-align: top;
-  line-height: 1.6em;
 }
 
 ul.result-tag li.fssi-compliant {
