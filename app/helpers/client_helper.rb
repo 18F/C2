@@ -16,7 +16,7 @@ module ClientHelper
   end
 
   def modify_client_button(proposal)
-    client_data = proposal.client_data_legacy
+    client_data = proposal.client_data
     if client_data
       # TODO find a better way to check if there's a corresponding edit path
       begin

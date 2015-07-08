@@ -41,7 +41,7 @@ class Proposal < ActiveRecord::Base
   # :public_identifier
   # :version
   # Note: clients should also implement :version
-  delegate :client, to: :client_data_legacy, allow_nil: true
+  delegate :client, to: :client_data, allow_nil: true
 
   validates :flow, presence: true, inclusion: {in: FLOWS}
   # TODO validates :requester_id, presence: true
@@ -77,11 +77,6 @@ class Proposal < ActiveRecord::Base
       approver = approval.user
       approver == user || approver.outgoing_delegates.exists?(assignee_id: user.id)
     end
-  end
-
-  # TODO remove
-  def client_data_legacy
-    self.client_data
   end
 
   # TODO convert to an association
@@ -137,7 +132,7 @@ class Proposal < ActiveRecord::Base
   # delegated, with a fallback
   # TODO refactor to class method in a module
   def delegate_with_default(method)
-    data = self.client_data_legacy
+    data = self.client_data
 
     result = nil
     if data && data.respond_to?(method)
@@ -176,7 +171,7 @@ class Proposal < ActiveRecord::Base
   def version
     [
       self.updated_at.to_i,
-      self.client_data_legacy.try(:version)
+      self.client_data.try(:version)
     ].compact.max
   end
 
