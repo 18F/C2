@@ -303,21 +303,21 @@ describe "National Capital Region proposals" do
       login_as(work_order.requester)
     end
 
-    it "shows a edit link from a pending cart" do
+    it "shows a edit link from a pending proposal" do
       visit "/proposals/#{ncr_proposal.id}"
       expect(page).to have_content('Modify Request')
       click_on('Modify Request')
       expect(current_path).to eq("/ncr/work_orders/#{work_order.id}/edit")
     end
 
-    it "shows a edit link from a rejected cart" do
+    it "shows a edit link from a rejected proposal" do
       ncr_proposal.update_attribute(:status, 'rejected') # avoid state machine
 
       visit "/proposals/#{ncr_proposal.id}"
       expect(page).to have_content('Modify Request')
     end
 
-    it "shows a edit link for an approved cart" do
+    it "shows a edit link for an approved proposal" do
       ncr_proposal.update_attribute(:status, 'approved') # avoid state machine
 
       visit "/proposals/#{ncr_proposal.id}"

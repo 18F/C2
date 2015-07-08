@@ -13,7 +13,7 @@ describe ProposalPolicy do
       expect(subject).to permit(delegate, proposal)
     end
 
-    context "parallel cart" do
+    context "parallel proposal" do
       let(:proposal) {FactoryGirl.create(:proposal, :with_approvers,
                                          flow: 'parallel')}
       let(:approval) {proposal.approvals.first}
@@ -40,7 +40,7 @@ describe ProposalPolicy do
       end
     end
 
-    context "linear cart" do
+    context "linear proposal" do
       let(:proposal) {FactoryGirl.create(:proposal, :with_approvers,
                                          flow: 'linear')}
       let(:first_approval) { proposal.approvals.first }

@@ -49,7 +49,7 @@ describe 'NCR Work Orders API' do
         ])
       end
 
-      it "displays the name from the cart" do
+      it "displays the name from the proposal" do
         work_order = FactoryGirl.create(:ncr_work_order)
         json = get_json('/api/v1/ncr/work_orders.json')
         expect(json[0]['name']).to eq(work_order.name)
