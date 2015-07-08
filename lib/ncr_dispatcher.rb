@@ -5,11 +5,7 @@
 class NcrDispatcher < Dispatcher
 
   def requires_approval_notice?(approval)
-    final_approval(approval.proposal) == approval
-  end
-
-  def final_approval(proposal)
-    proposal.approvals.last
+    approval.proposal.approved?
   end
 
   # Notify approvers who have already approved that this proposal has been

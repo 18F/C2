@@ -55,5 +55,6 @@ class Approval < ActiveRecord::Base
     else
       self.proposal.approve!
     end
+    self.reload   # Account for proposal changes
   end
 end
