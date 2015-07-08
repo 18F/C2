@@ -7,6 +7,8 @@ class Comment < ActiveRecord::Base
   validates :user, presence: true
   validates :proposal, presence: true
 
+  scope :update_comments, ->{ where(update_comment: true) }
+
   after_create ->{ Dispatcher.on_comment_created(self) }
 
   # match .attributes
