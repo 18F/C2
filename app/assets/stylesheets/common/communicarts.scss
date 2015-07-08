@@ -2,7 +2,7 @@
 @import "webflow";
 @import "../modules/shared/email_status";
 @import "../modules/shared/email_alert";
-@import "cart_item_information";
+@import "proposal_property";
 @import "cart_properties";
 
 table {
@@ -35,7 +35,7 @@ table.center {
   margin-left: 15px;
 }
 
-#navigator-layout tr.cart_item_information strong {
+#navigator-layout tr.proposal-property strong {
   text-transform: uppercase;
 }
 

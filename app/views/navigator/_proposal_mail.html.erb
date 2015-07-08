@@ -36,7 +36,7 @@
               <h5>Product Configuration</h5>
             </td>
           </tr>
-          <tr class="cart_item_information">
+          <tr class="proposal-property">
             <!-- Product -->
             <td class="first" valign="top">
               <%= proposal.name %>
@@ -65,7 +65,7 @@
             </td>
           </tr>
           <%- proposal.fields_for_display.each do |name, value| %>
-            <tr class="cart_item_information">
+            <tr class="proposal-property">
               <td class="w-container results-list" align="left" colspan="2">
                 <strong><%= name %></strong>: <%= value %>
               </td>
@@ -82,7 +82,7 @@
             </td>
           </tr>
 
-          <tr class="cart_item_information">
+          <tr class="proposal-property">
             <td class="w-container results-list" align="left">
               <p>
                 <strong>Socio-Economic:</strong><br/>
