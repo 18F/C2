@@ -23,6 +23,7 @@ module Ncr
 
     def update
       @approver_email = params[:approver_email]
+      @model_instance.modifier = current_user
 
       super
 
