@@ -15,6 +15,9 @@ module Ncr
     has_one :proposal, as: :client_data
     include ProposalDelegate
 
+    # This is a hack to be able to attribute changes to the correct user. This attribute needs to be set explicitly, then the update comment will use them as the "commenter". Defaults to the requester.
+    attr_accessor :modifier
+
     after_initialize :set_defaults
     before_validation :normalize_values
     before_update :record_changes
@@ -219,6 +222,7 @@ module Ncr
 
     protected
 
+    # TODO move to Proposal model
     def record_changes
       changed_attributes = self.changed_attributes.except(:updated_at)
       comment_texts = []
@@ -236,7 +240,7 @@ module Ncr
         self.proposal.comments.create(
           comment_text: comment_texts.join("\n"),
           update_comment: true,
-          user_id: self.proposal.requester_id
+          user: self.modifier || self.requester
         )
       end
     end

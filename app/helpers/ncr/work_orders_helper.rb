@@ -12,5 +12,9 @@ module Ncr
       # @todo is there a better order? maybe by current_user's use?
       all.uniq.sort
     end
+
+    def vendor_options
+      Ncr::WorkOrder.where.not(vendor: nil).pluck('DISTINCT vendor').sort
+    end
   end
 end
