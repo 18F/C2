@@ -1,3 +1,4 @@
+# TODO remove unused steps
 module UserSteps
 
   # include body text and button text
@@ -44,7 +45,7 @@ module UserSteps
     visit "/#{page_name}"
   end
 
-  step "I go to the cart view page" do
+  step "I go to the proposal view page" do
     visit "/proposals/#{@proposal.id}"
   end
 
@@ -60,27 +61,19 @@ module UserSteps
     save_and_open_page
   end
 
-  step 'a cart :external_id' do |external_id|
+  step 'a proposal' do
     @proposal = FactoryGirl.create(:proposal)
   end
 
-  step 'a :cart_type cart :external_id' do |cart_type, external_id|
-    @proposal = FactoryGirl.create(:proposal, flow: cart_type)
+  step 'a :flow proposal' do |flow|
+    @proposal = FactoryGirl.create(:proposal, flow: flow)
   end
 
-  step 'a cart :external_id with approver :approver_email' do |external_id, approver_email|
+  step 'a proposal with approver :approver_email' do |approver_email|
     @proposal = FactoryGirl.create(:proposal)
     @proposal.add_approver(approver_email)
     @proposal.initialize_approvals()
     @approval = @proposal.approvals.first
-  end
-
-  step 'a cart and approvals' do
-    @proposal = FactoryGirl.create(:proposal, :with_approvers)
-  end
-
-  step 'a cart :external_id and approvals' do |external_id|
-    @proposal = FactoryGirl.create(:proposal, :with_approvers)
   end
 
   step 'I fill out :field with :text' do |field,text|

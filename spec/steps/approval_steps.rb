@@ -1,3 +1,4 @@
+# TODO remove unused steps
 module ApprovalSteps
 
   step 'I go to the approval_response page with token' do
@@ -16,7 +17,7 @@ module ApprovalSteps
     @token = ApiToken.create!(approval_id: @approval.id)
   end
 
-  step "the cart has an approval for :email in position :position" do |email, position|
+  step "the proposal has an approval for :email in position :position" do |email, position|
     @approval = @proposal.add_approver(email)
     @approval.update_attribute(:position, position)
     @proposal.initialize_approvals()
@@ -26,12 +27,12 @@ module ApprovalSteps
     ENV[flag] = value
   end
 
-  step 'the cart has been approved by the logged in user' do
+  step 'the proposal has been approved by the logged in user' do
     approval = @proposal.approvals.where(user_id: @current_user.id).first
     approval.approve!
   end
 
-  step 'the cart has been approved by :email' do |email|
+  step 'the proposal has been approved by :email' do |email|
     user = User.find_by(email_address: email)
     approval = @proposal.approvals.where(user_id: user.id).first
     approval.approve!
