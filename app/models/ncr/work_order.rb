@@ -20,7 +20,7 @@ module Ncr
     before_update :record_changes
 
     after_update :check_approvers
-    after_update ->{ Dispatcher.on_proposal_update(self.proposal) }
+    # after_update :email_approvers
 
     # @TODO: use integer number of cents to avoid floating point issues
     validates :amount, numericality: {
@@ -95,7 +95,7 @@ module Ncr
     end
 
     def approver_changed?(approval_email)
-      first_approval = self.approvals.first.user_email_address
+      first_approval = self.proposal.approvals.first.user_email_address
       first_approval != approval_email
     end
 
@@ -109,6 +109,10 @@ module Ncr
         emails.each {|email| self.add_approver(email) }
         self.proposal.initialize_approvals()
       end
+    end
+
+    def email_approvers
+      Dispatcher.on_proposal_update(self.proposal)
     end
 
     # Ignore values in certain fields if they aren't relevant. May want to

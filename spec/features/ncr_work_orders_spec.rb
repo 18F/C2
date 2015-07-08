@@ -381,6 +381,25 @@ describe "National Capital Region proposals" do
       expect(deliveries.length).to eq(0)
     end
 
+    it "allows you to change the approving official" do 
+      visit "/ncr/work_orders/#{work_order.id}/edit"
+      select "liono0@some-cartoon-show.com", from: "Approving official's email address"
+      click_on 'Update'
+      proposal = Proposal.last
+      expect(proposal.approvers.first.email_address).to eq ("liono0@some-cartoon-show.com")
+      expect(proposal.approvals.first.actionable?).to eq (true)
+    end
+
+    it "allows you to change the expense type" do
+      visit "/ncr/work_orders/#{work_order.id}/edit"
+      choose 'BA80'
+      fill_in 'RWA Number', with:'a1234567'
+      click_on 'Update'
+      proposal = Proposal.last
+      expect(proposal.approvers.length).to eq(2)
+      expect(proposal.approvers.second.email_address).to eq('communicart.budget.approver@gmail.com')
+    end
+
     it "has 'Discard Changes' link" do
       visit "/ncr/work_orders/#{work_order.id}/edit"
       expect(page).to have_content("Discard Changes")
