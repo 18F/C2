@@ -441,6 +441,25 @@ describe "National Capital Region proposals" do
       end
     end
 
+    it "keeps track of the modification when edited by an approver" do
+      approval = work_order.add_approvals('approver@example.com')
+      approver = ncr_proposal.approvers.last
+      login_as(approver)
+
+      visit "/ncr/work_orders/#{work_order.id}/edit"
+      fill_in 'CL number', with: 'CL1234567'
+      click_on 'Update'
+
+      ncr_proposal.reload
+      update_comments = ncr_proposal.comments.update_comments
+      expect(update_comments.count).to eq(1)
+      # properly attributed
+      update_comment = update_comments.first
+      expect(update_comment.user).to eq(approver)
+      # properly tracked
+      expect(update_comment.comment_text).to include("CL number")
+    end
+
     it "cannot be edited by someone other than the requester" do
       stranger = FactoryGirl.create(:user)
       login_as(stranger)
