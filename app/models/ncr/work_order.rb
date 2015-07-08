@@ -211,6 +211,7 @@ module Ncr
         self.proposal.comments.create(
           comment_text: comment_texts.join("\n"),
           update_comment: true,
+          # TODO not always done by the requester
           user_id: self.proposal.requester_id
         )
       end
