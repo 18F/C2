@@ -12,7 +12,6 @@ module Gsa18f
     OFFICES = DATA['OFFICES']
     RECURRENCE = DATA['RECURRENCE']
 
-    has_one :proposal, as: :client_data
     include ProposalDelegate
 
     validates :cost_per_unit, numericality: {

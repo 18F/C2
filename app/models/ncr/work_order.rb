@@ -11,8 +11,6 @@ module Ncr
 
   class WorkOrder < ActiveRecord::Base
     include ValueHelper
-
-    has_one :proposal, as: :client_data
     include ProposalDelegate
 
     after_initialize :set_defaults
