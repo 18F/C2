@@ -15,10 +15,15 @@ module Ncr
     has_one :proposal, as: :client_data
     include ProposalDelegate
 
+    # This is a hack to be able to attribute changes to the correct user. This attribute needs to be set explicitly, then the update comment will use them as the "commenter". Defaults to the requester.
+    attr_accessor :modifier
+
     after_initialize :set_defaults
     before_validation :normalize_values
     before_update :record_changes
-    after_update ->{ Dispatcher.on_proposal_update(self.proposal) }
+
+    # after_update :update_approver
+    # after_update :email_approvers
 
     # @TODO: use integer number of cents to avoid floating point issues
     validates :amount, numericality: {
@@ -81,18 +86,36 @@ module Ncr
     end
 
     # A requester can change his/her approving official
-    def update_approver(approver_email)
+    def update_approvers(approver_email=nil)
+      # binding.pry
       first_approval = self.approvals.first
-      if self.approver_changed?(approver_email)
+      if approver_email && self.approver_changed?(approver_email)
         first_approval.destroy
         replacement = self.add_approver(approver_email)
         replacement.move_to_top
+        self.approvals.first.make_actionable!
       end
       # no need to call initialize_approvals as they have already been set up
+      
+      current_approvers = self.approvers.map {|a| a[:email_address]}
+      #remove approving official
+      approving_official = current_approvers.shift
+      if (current_approvers != system_approvers)
+        current_approvers.each do |email|
+          self.remove_approver(email)
+        end
+        system_approvers.each do |email|
+          self.add_approver(email)
+        end
+        approvals = self.approvals
+        if(approvals.first.approved?)
+          approvals.second.make_actionable!
+        end
+      end
     end
 
     def approver_changed?(approval_email)
-      first_approval = self.approvals.first.user_email_address
+      first_approval = self.proposal.approvals.first.user_email_address
       first_approval != approval_email
     end
 
@@ -106,6 +129,10 @@ module Ncr
         emails.each {|email| self.add_approver(email) }
         self.proposal.initialize_approvals()
       end
+    end
+
+    def email_approvers
+      Dispatcher.on_proposal_update(self.proposal)
     end
 
     # Ignore values in certain fields if they aren't relevant. May want to
@@ -191,9 +218,9 @@ module Ncr
       ENV['NCR_BA80_BUDGET_MAILBOX'] || 'communicart.budget.approver@gmail.com'
     end
 
-
     protected
 
+    # TODO move to Proposal model
     def record_changes
       changed_attributes = self.changed_attributes.except(:updated_at)
       comment_texts = []
@@ -211,7 +238,7 @@ module Ncr
         self.proposal.comments.create(
           comment_text: comment_texts.join("\n"),
           update_comment: true,
-          user_id: self.proposal.requester_id
+          user: self.modifier || self.requester
         )
       end
     end

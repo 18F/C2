@@ -65,6 +65,7 @@ class ProposalPolicy
 
   def can_show!
     visible = ProposalPolicy::Scope.new(@user, Proposal).resolve
+    # TODO check via SQL
     check(visible.include?(@proposal), "You are not allowed to see this cart")
   end
 
@@ -92,6 +93,7 @@ class ProposalPolicy
           SELECT * FROM approvals
           LEFT JOIN approval_delegates ON (assigner_id = user_id)
           WHERE proposal_id = proposals.id
+            -- TODO make visible to everyone involved
             AND status <> 'pending'
             AND (user_id = :user_id OR assignee_id = :user_id)
         )

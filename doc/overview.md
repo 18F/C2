@@ -61,7 +61,7 @@ This application contains code for several independent but similar use cases. Us
 
 In the "old days", 18F staff would make requests for software and equipment via a spreadsheet that our Operations team lead would check periodically. The team is growing quickly and we now ask that employees get sign-off on their equipment/software requests from their manager before it goes to the Ops team, so are moving this process to C2. You will see references to `Gsa18f` throughout the code.
 
-### [National Capitol Region (NCR) service centers](http://www.gsa.gov/portal/category/21528)
+### [National Capital Region (NCR) service centers](http://www.gsa.gov/portal/content/104717)
 
 The NCR use case was built around GSA service centers (paint shops, landscapers, etc.) needing approvals for their superiors and various budget officials for credit card purchases. They use the "linear" workflow described [above](#proposal-flows):
 
@@ -70,6 +70,10 @@ The NCR use case was built around GSA service centers (paint shops, landscapers,
 1. Their "approving officer" (the "AO" – their supervisor) receives an email notification with the request.
 1. If the AO approves, it goes to one or two other budget office approvers, depending on the type of request.
 1. Once all approvers have approved (or any one of them reject) the Proposal, the requester gets a notification.
+
+#### Additional resources
+
+* [GSA CFO Financial Systems & Resources Glossary](https://insite.gsa.gov/portal/content/537294) (only visible on GSA network)
 
 ## Performance
 
