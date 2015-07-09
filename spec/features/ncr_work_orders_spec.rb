@@ -419,11 +419,11 @@ describe "National Capital Region proposals" do
       end
 
       it "provides the previous building when editing", :js => true do
-        work_order.update(building_number: "BillDing")
+        work_order.update(building_number: "BillDing, street")
         visit "/ncr/work_orders/#{work_order.id}/edit"
         click_on "Update"
         expect(current_path).to eq("/proposals/#{ncr_proposal.id}")
-        expect(work_order.reload.building_number).to eq("BillDing")
+        expect(work_order.reload.building_number).to eq("BillDing, street")
       end
 
       it "allows the user to edit the budget-related fields" do
