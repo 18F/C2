@@ -104,8 +104,7 @@ class Proposal < ActiveRecord::Base
 
   def remove_approver(email)
     user = User.for_email(email)
-    approval = self.approvals.find_by(user_id: user.id)
-    CommunicartMailer.notification_for_approver_removed(email,approval)
+    approval = self.approval_for(user)
     approval.destroy
   end
 
