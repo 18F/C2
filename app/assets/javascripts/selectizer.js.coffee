@@ -20,7 +20,7 @@ class Selectizer
       result
 
   selectizeOpts: ->
-    opts = {}
+    opts = {delimiter: "XxxxxXXxxxxX"}  # "do not split"
     opts.options = @initialChoices()
 
     if @isFreeForm()
