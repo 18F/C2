@@ -102,6 +102,12 @@ class Proposal < ActiveRecord::Base
     approval
   end
 
+  def remove_approver(email)
+    user = User.for_email(email)
+    approval = self.approval_for(user)
+    approval.destroy
+  end
+
   def initialize_approvals()
     if self.linear? && self.approvals.any?
       self.approvals.update_all(status: 'pending')

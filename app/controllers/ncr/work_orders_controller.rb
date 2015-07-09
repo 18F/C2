@@ -24,12 +24,14 @@ module Ncr
     def update
       @approver_email = params[:approver_email]
       @model_instance.modifier = current_user
-
       super
-
       if self.errors.empty?
-        if !self.approver_email_frozen?
-          @model_instance.update_approver(@approver_email)
+        if !self.approver_email_frozen? && !@model_not_changing
+          @model_instance.update_approvers(@approver_email)
+          @model_instance.email_approvers
+        elsif !@model_not_changing
+          @model_instance.update_approvers
+          @model_instance.email_approvers
         end
       end
     end
