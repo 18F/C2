@@ -53,8 +53,9 @@ describe Ncr::WorkOrdersController do
 
   describe '#edit' do
     let (:work_order) { FactoryGirl.create(:ncr_work_order, :with_approvers) }
+    let (:requester) { work_order.proposal.requester }
     before do
-      login_as(work_order.proposal.requester)
+      login_as(requester)
     end
 
     it 'does not display a message when the proposal is not fully approved' do
@@ -66,6 +67,12 @@ describe Ncr::WorkOrdersController do
       work_order.approve!
       get :edit, {id: work_order.id}
       expect(flash[:warning]).to be_present
+    end
+
+    it 'does not explode if editing an emergency' do
+      work_order = FactoryGirl.create(:ncr_work_order, :is_emergency,
+                                      requester: requester)
+      get :edit, {id: work_order.id}
     end
   end
 
