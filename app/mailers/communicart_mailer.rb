@@ -79,7 +79,7 @@ class CommunicartMailer < ActionMailer::Base
   end
 
   def self.support_email
-    ENV['SUPPORT_EMAIL'] || 'capdevs@gsa.gov'   # not sensitive, so hard coding
+    ENV['SUPPORT_EMAIL'] || 'gatewaycommunicator@gsa.gov'   # not sensitive, so hard coding
   end
 
   private

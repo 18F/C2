@@ -26,10 +26,12 @@ module TokenAuth
 
   def validate_access
     if !signed_in?
+      # TODO avoid needing to retrieve the token multiple times
       authorize(:api_token, :valid!, params)
       authorize(:api_token, :not_delegate!, params)
       # validated above
-      sign_in(ApiToken.find_by(access_token: params[:cch]).user)
+      token = ApiToken.find_by(access_token: params[:cch])
+      sign_in(token.user)
     end
     # expire tokens regardless of how user logged in
     tokens = ApiToken.joins(:approval).where(approvals: {
