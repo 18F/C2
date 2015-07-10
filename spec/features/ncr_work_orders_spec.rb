@@ -304,7 +304,7 @@ describe "National Capital Region proposals" do
       login_as(work_order.approvers.first)
     end
     it "allows an approver to approve work order" do
-      Timecop.freeze do
+      Timecop.freeze() do
         visit "/proposals/#{ncr_proposal.id}"
         click_on("Approve")
         expect(current_path).to eq("/proposals/#{ncr_proposal.id}")
@@ -312,7 +312,7 @@ describe "National Capital Region proposals" do
         
         approval = Proposal.last.approvals.first
         expect(approval.status).to eq('approved')
-        expect(approval.approved_at).to eq(Time.now)
+        expect(approval.approved_at.utc.to_s).to eq(Time.now.utc.to_s)
       end
     end
   end
