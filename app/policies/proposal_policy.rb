@@ -66,7 +66,7 @@ class ProposalPolicy
   def can_show!
     visible = ProposalPolicy::Scope.new(@user, Proposal).resolve
     # TODO check via SQL
-    @user.admin? || check(visible.include?(@proposal), "You are not allowed to see this cart")
+    check(visible.include?(@proposal), "You are not allowed to see this cart")
   end
 
   def can_create!
@@ -83,25 +83,30 @@ class ProposalPolicy
     end
 
     def resolve
-      # use subselects instead of left joins to avoid an explicit
-      # duplication-removal step
-      where_clause = <<-SQL
-        -- requester
-        requester_id = :user_id
-        -- approver / delegate
-        OR EXISTS (
-          SELECT * FROM approvals
-          LEFT JOIN approval_delegates ON (assigner_id = user_id)
-          WHERE proposal_id = proposals.id
-            -- TODO make visible to everyone involved
-            AND status <> 'pending'
-            AND (user_id = :user_id OR assignee_id = :user_id)
-        )
-        -- observer
-        OR EXISTS (SELECT id FROM observations
-                   WHERE proposal_id = proposals.id AND user_id = :user_id)
-        SQL
-      @scope.where(where_clause, user_id: @user.id)
+      # TODO: if @user.superadmin?
+      if @user.admin?
+        @scope.where("client_data_type ilike ?", "#{@user.client_slug}%")
+      else
+        # use subselects instead of left joins to avoid an explicit
+        # duplication-removal step
+        where_clause = <<-SQL
+          -- requester
+          requester_id = :user_id
+          -- approver / delegate
+          OR EXISTS (
+            SELECT * FROM approvals
+            LEFT JOIN approval_delegates ON (assigner_id = user_id)
+            WHERE proposal_id = proposals.id
+              -- TODO make visible to everyone involved
+              AND status <> 'pending'
+              AND (user_id = :user_id OR assignee_id = :user_id)
+          )
+          -- observer
+          OR EXISTS (SELECT id FROM observations
+                     WHERE proposal_id = proposals.id AND user_id = :user_id)
+          SQL
+        @scope.where(where_clause, user_id: @user.id)
+      end
     end
   end
 end
