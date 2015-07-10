@@ -83,8 +83,9 @@ class ProposalPolicy
     end
 
     def resolve
-      # TODO: if @user.superadmin?
-      if @user.admin?
+      if @user.app_admin?
+        @scope.all
+      elsif @user.admin?
         @scope.where("client_data_type ilike ?", "#{@user.client_slug}%")
       else
         # use subselects instead of left joins to avoid an explicit
