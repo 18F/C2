@@ -64,6 +64,15 @@ have it in your PATH. This is used for javascript and interface testing.
 bundle exec guard
 ```
 
+### Checking for security vulnerabilities
+
+```bash
+gem install brakeman
+brakeman
+```
+
+or just [visit the project on Gemnasium](https://gemnasium.com/18F/C2).
+
 ## Deploying
 
 Note that you need `write` access to the repository.
