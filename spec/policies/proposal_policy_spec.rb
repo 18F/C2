@@ -129,8 +129,8 @@ describe ProposalPolicy do
   end
 
   context "testing scope" do
-    let(:proposal) {
-      FactoryGirl.create(:proposal, :with_approvers, :with_observers)}
+    let(:proposal) { FactoryGirl.create(:proposal, :with_approvers, :with_observers) }
+
     it "allows the requester to see" do
       user = proposal.requester
       proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
@@ -177,6 +177,70 @@ describe ProposalPolicy do
       user = FactoryGirl.create(:user)
       proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
       expect(proposals).to be_empty
+    end
+
+    context "ADMIN privileges" do
+      after do
+        ENV['ADMIN_EMAILS'] = ""
+      end
+
+      let(:proposal1) { FactoryGirl.create(:proposal, :with_approvers, :with_observers, requester_id: 555) }
+
+      it "allows an admin to see requests inside its client scope" do
+        proposal1.approvals.each {|a| a.update_attributes(user_id: 556)}
+        proposal1.update_attributes(client_data_type:'AbcCompany::SomethingApprovable')
+        proposal.update_attributes(client_data_type:'AbcCompany::SomethingApprovable')
+        user = proposal.approvers.first
+        user.client_slug = "abccompany"
+        ENV['ADMIN_EMAILS'] = user.email_address
+
+        proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
+        expect(proposals).to match_array([proposal, proposal1])
+      end
+
+      it "prevents an admin from seeing requests inside and outside its client scope" do
+        proposal1.approvals.each {|a| a.update_attributes(user_id: 556)}
+        proposal1.update_attributes(client_data_type:'CdfCompany::SomethingApprovable')
+        proposal.update_attributes(client_data_type:'AbcCompany::SomethingApprovable')
+
+        user = proposal.approvers.first
+        user.client_slug = "abccompany"
+        ENV['ADMIN_EMAILS'] = user.email_address
+
+        proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
+        expect(proposals).to match_array([proposal])
+      end
+
+      it "prevents a non-admin from seeing unrelated requests" do
+        proposal1.approvals.each {|a| a.update_attributes(user_id: 556)}
+        proposal1.update_attributes(client_data_type:'CdfCompany::SomethingApprovable')
+        proposal.update_attributes(client_data_type:'AbcCompany::SomethingApprovable')
+        user = proposal.approvers.first
+        user.client_slug = "abccompany"
+        proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
+        expect(proposals).to match_array([proposal])
+      end
+    end
+
+    context "APP_ADMIN privileges" do
+      let(:proposal1) { FactoryGirl.create(:proposal, :with_approvers, :with_observers, requester_id: 555) }
+
+      after do
+        ENV['APP_ADMIN_EMAILS'] = ""
+      end
+
+      it "allows an app admin to see requests inside and outside its client scope" do
+        proposal1.approvals.each {|a| a.update_attributes(user_id: 556)}
+        proposal1.update_attributes(client_data_type:'CdfCompany::SomethingApprovable')
+        proposal.update_attributes(client_data_type:'AbcCompany::SomethingApprovable')
+
+        user = proposal.approvers.first
+        user.client_slug = "abccompany"
+        ENV['APP_ADMIN_EMAILS'] = user.email_address
+
+        proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
+        expect(proposals).to match_array([proposal,proposal1])
+      end
     end
   end
 end
