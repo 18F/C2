@@ -294,6 +294,29 @@ describe "National Capital Region proposals" do
     end
   end
 
+  describe "approving a work order" do 
+    let(:work_order){FactoryGirl.create(:ncr_work_order)}
+    let(:ncr_proposal){work_order.proposal}
+    before do
+      Timecop.freeze(10.hours.ago) do
+        work_order.add_approvals('approver@example.com')
+      end
+      login_as(work_order.approvers.first)
+    end
+    it "allows an approver to approve work order" do
+      Timecop.freeze do
+        visit "/proposals/#{ncr_proposal.id}"
+        click_on("Approve")
+        expect(current_path).to eq("/proposals/#{ncr_proposal.id}")
+        expect(page).to have_content("You have approved #{work_order.public_identifier}")
+        
+        approval = Proposal.last.approvals.first
+        expect(approval.status).to eq('approved')
+        expect(approval.approved_at).to eq(Time.now)
+      end
+    end
+  end
+
   describe "viewing a work order" do
     let (:work_order) { FactoryGirl.create(:ncr_work_order) }
     let(:ncr_proposal) { work_order.proposal }
