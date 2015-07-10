@@ -10,6 +10,13 @@ class Approval < ActiveRecord::Base
     end
     state :approved
     state :rejected
+    
+    # workflow doesn't touch active record
+    # manually updating 'updated_at'
+    # https://github.com/geekq/workflow/issues/96
+    on_transition do |from, to, triggering_event, *event_args|
+      self.touch
+    end
   end
 
   belongs_to :proposal
