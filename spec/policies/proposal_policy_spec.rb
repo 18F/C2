@@ -186,22 +186,19 @@ describe ProposalPolicy do
 
       let(:proposal1) { FactoryGirl.create(:proposal, :with_approvers, :with_observers, requester_id: 555) }
 
-      it "allows an admin to see requests inside its client scope" do
-        proposal1.approvals.each {|a| a.update_attributes(user_id: 556)}
-        proposal1.update_attributes(client_data_type:'AbcCompany::SomethingApprovable')
+      it "allows an admin to see unassociated requests that are inside its client scope" do
         proposal.update_attributes(client_data_type:'AbcCompany::SomethingApprovable')
         user = proposal.approvers.first
         user.client_slug = "abccompany"
         ENV['ADMIN_EMAILS'] = user.email_address
 
         proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
-        expect(proposals).to match_array([proposal, proposal1])
+        expect(proposals).to match_array([proposal])
       end
 
-      it "prevents an admin from seeing requests inside and outside its client scope" do
-        proposal1.approvals.each {|a| a.update_attributes(user_id: 556)}
-        proposal1.update_attributes(client_data_type:'CdfCompany::SomethingApprovable')
+      it "prevents an admin from seeing requests outside its client scope" do
         proposal.update_attributes(client_data_type:'AbcCompany::SomethingApprovable')
+        proposal1.update_attributes(client_data_type:'CdfCompany::SomethingApprovable')
 
         user = proposal.approvers.first
         user.client_slug = "abccompany"
@@ -214,7 +211,8 @@ describe ProposalPolicy do
       it "prevents a non-admin from seeing unrelated requests" do
         proposal1.approvals.each {|a| a.update_attributes(user_id: 556)}
         proposal1.update_attributes(client_data_type:'CdfCompany::SomethingApprovable')
-        proposal.update_attributes(client_data_type:'AbcCompany::SomethingApprovable')
+
+        proposal.update_attributes(client_data_type:'AbcCompany::SomethingApprovable', requester_id: 9876)
         user = proposal.approvers.first
         user.client_slug = "abccompany"
         proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
