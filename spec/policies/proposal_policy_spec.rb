@@ -61,11 +61,6 @@ describe ProposalPolicy do
         expect(subject).to permit(second_approval.user, proposal)
       end
 
-      it "does not allow when the user's already rejected" do
-        first_approval.reject!
-        expect(subject).not_to permit(first_approval.user, proposal)
-      end
-
       it "does not allow with a non-existent approval" do
         user = FactoryGirl.create(:user)
         expect(subject).not_to permit(user, proposal)
@@ -133,6 +128,11 @@ describe ProposalPolicy do
 
     it "allows the requester to edit it" do
       expect(subject).to permit(proposal.requester, proposal)
+    end
+
+    it "does not allow a requester to edit a cancelled one" do
+      proposal.cancel!
+      expect(subject).not_to permit(proposal.requester, proposal)
     end
 
     it "doesn't allow an approver to cancel it" do

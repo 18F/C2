@@ -10,12 +10,6 @@ describe "Display status text" do
     expect(page).to have_content('Approved')
   end
 
-  it "displays rejected status" do
-    proposal.approvals.first.reject!
-    visit proposals_path
-    expect(page).to have_content('Rejected')
-  end
-
   it "displays outstanding approvers" do
     visit proposals_path
     expect(page).not_to have_content('Please review')
