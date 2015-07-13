@@ -206,6 +206,7 @@ describe ProposalPolicy do
 
       it "prevents an admin from seeing requests outside its client scope" do
         proposal.update_attributes(client_data_type:'AbcCompany::SomethingApprovable')
+        proposal1.approvals.each {|a| a.update_attributes(user_id: 556)}
         proposal1.update_attributes(client_data_type:'CdfCompany::SomethingApprovable')
 
         user = proposal.approvers.first
