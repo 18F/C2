@@ -235,9 +235,9 @@ describe CommunicartMailer do
 
     it 'includes custom text for ncr work orders' do
       requester = FactoryGirl.create(:user, email_address: 'someone@somewhere.gov')
-      wo = FactoryGirl.create(:ncr_work_order, org_code: 'some org', building_number: 'some build', requester: requester)
+      wo = FactoryGirl.create(:ncr_work_order, org_code: 'P0000000 (192X,192M) PRIOR YEAR ACTIVITIES', building_number: 'DC0000ZZ - Building', requester: requester)
       mail = CommunicartMailer.proposal_created_confirmation(wo.proposal)
-      expect(mail.subject).to eq("Request #{wo.public_identifier}, some org, some build, from someone@somewhere.gov")
+      expect(mail.subject).to eq("Request #{wo.public_identifier}, P0000000, DC0000ZZ from someone@somewhere.gov")
     end
   end
 end

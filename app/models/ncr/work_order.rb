@@ -227,6 +227,10 @@ module Ncr
       end
     end
 
+    def as_json
+      super.merge(org_id: self.org_id, building_id: self.building_id)
+    end
+
     protected
 
     # TODO move to Proposal model
