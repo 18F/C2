@@ -26,7 +26,7 @@ module Ncr
       @approver_email = params[:approver_email]
       @model_instance.modifier = current_user
       super
-      if self.errors.empty?
+      if self.errors.empty? && !@model_instance.emergency  # skip approvals if emergency
         if !self.approver_email_frozen? && !@model_not_changing
           @model_instance.update_approvers(@approver_email)
           @model_instance.email_approvers
@@ -65,6 +65,9 @@ module Ncr
     def permitted_params
       fields = Ncr::WorkOrder.relevant_fields(
         params[:ncr_work_order][:expense_type])
+      if @model_instance
+        fields.delete(:emergency)   # emergency field cannot be edited
+      end
       params.require(:ncr_work_order).permit(:project_title, *fields)
     end
 

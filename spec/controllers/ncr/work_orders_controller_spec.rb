@@ -116,37 +116,28 @@ describe Ncr::WorkOrdersController do
       expect(work_order.approvers.map(&:email_address)).not_to include('a@b.com')
     end
 
-    it 'removes approvals and adds observers when switching to an emergency' do
-      pending   # https://www.pivotaltracker.com/story/show/98775964
+    it 'will not modify emergency status on non-emergencies' do
       expect(work_order.approvals.empty?).to be false
       expect(work_order.observers.empty?).to be true
       post :update, {id: work_order.id, approver_email: work_order.approvers.first.email_address,
                      ncr_work_order: {expense_type: 'BA61', emergency: '1'}}
       work_order.reload
-      expect(work_order.approvals.empty?).to be true
-      expect(work_order.observers.empty?).to be false
-    end
-
-    it 'removes observers and adds approvers when switching to an emergency' do
-      pending   # https://www.pivotaltracker.com/story/show/98775964
-      work_order = FactoryGirl.create(:ncr_work_order, :is_emergency, requester: requester)
-      expect(work_order.approvals.empty?).to be true
-      expect(work_order.observers.empty?).to be false
-      post :update, {id: work_order.id, approver_email: work_order.observers.first.email_address,
-                     ncr_work_order: {expense_type: 'BA61', emergency: '0'}}
-      work_order.reload
+      expect(work_order.emergency).to be false
       expect(work_order.approvals.empty?).to be false
       expect(work_order.observers.empty?).to be true
     end
 
-    it 'allows editing an emergency' do
-      pending   # https://www.pivotaltracker.com/story/show/98775964
-      expect(work_order.amount).not_to eq(55.22)
+    it 'will not modify emergency status on emergencies' do
       work_order = FactoryGirl.create(:ncr_work_order, :is_emergency, requester: requester)
+      expect(work_order.approvals.empty?).to be true
+      expect(work_order.observers.empty?).to be false
       post :update, {id: work_order.id, approver_email: work_order.observers.first.email_address,
-                     ncr_work_order: {expense_type: 'BA61', emergency: '1', amount: '55.22'}}
+                     ncr_work_order: {expense_type: 'BA61', building_number: 'BillDing', emergency: '0'}}
       work_order.reload
-      expect(work_order.amount).to eq(55.22)
+      expect(work_order.emergency).to be true
+      expect(work_order.building_number).to eq "BillDing"
+      expect(work_order.approvals.empty?).to be true
+      expect(work_order.observers.empty?).to be false
     end
   end
 end

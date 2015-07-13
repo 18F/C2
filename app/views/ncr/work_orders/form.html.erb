@@ -46,7 +46,7 @@
             <div class="checkbox" data-filter-key="expense-type"
                                     data-filter-value="BA61">
               <%= f.label :emergency do %>
-                <%= f.check_box :emergency %>
+                <%= f.check_box :emergency, disabled: @model_instance.persisted? %>
                 This request was an emergency and I received a verbal Notice to Proceed (NTP)
               <% end %>
             </div>
