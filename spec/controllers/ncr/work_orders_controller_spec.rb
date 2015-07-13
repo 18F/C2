@@ -53,8 +53,9 @@ describe Ncr::WorkOrdersController do
 
   describe '#edit' do
     let (:work_order) { FactoryGirl.create(:ncr_work_order, :with_approvers) }
+    let (:requester) { work_order.proposal.requester }
     before do
-      login_as(work_order.proposal.requester)
+      login_as(requester)
     end
 
     it 'does not display a message when the proposal is not fully approved' do
@@ -67,12 +68,19 @@ describe Ncr::WorkOrdersController do
       get :edit, {id: work_order.id}
       expect(flash[:warning]).to be_present
     end
+
+    it 'does not explode if editing an emergency' do
+      work_order = FactoryGirl.create(:ncr_work_order, :is_emergency,
+                                      requester: requester)
+      get :edit, {id: work_order.id}
+    end
   end
 
   describe '#update' do
     let (:work_order) { FactoryGirl.create(:ncr_work_order, :with_approvers) }
+    let (:requester) { work_order.proposal.requester }
     before do
-      login_as(work_order.proposal.requester)
+      login_as(requester)
     end
 
     it 'does not modify the work order when there is a blank approver' do
@@ -106,6 +114,39 @@ describe Ncr::WorkOrdersController do
                      ncr_work_order: {expense_type: 'BA61'}}
       work_order.reload
       expect(work_order.approvers.map(&:email_address)).not_to include('a@b.com')
+    end
+
+    it 'removes approvals and adds observers when switching to an emergency' do
+      pending   # https://www.pivotaltracker.com/story/show/98775964
+      expect(work_order.approvals.empty?).to be false
+      expect(work_order.observers.empty?).to be true
+      post :update, {id: work_order.id, approver_email: work_order.approvers.first.email_address,
+                     ncr_work_order: {expense_type: 'BA61', emergency: '1'}}
+      work_order.reload
+      expect(work_order.approvals.empty?).to be true
+      expect(work_order.observers.empty?).to be false
+    end
+
+    it 'removes observers and adds approvers when switching to an emergency' do
+      pending   # https://www.pivotaltracker.com/story/show/98775964
+      work_order = FactoryGirl.create(:ncr_work_order, :is_emergency, requester: requester)
+      expect(work_order.approvals.empty?).to be true
+      expect(work_order.observers.empty?).to be false
+      post :update, {id: work_order.id, approver_email: work_order.observers.first.email_address,
+                     ncr_work_order: {expense_type: 'BA61', emergency: '0'}}
+      work_order.reload
+      expect(work_order.approvals.empty?).to be false
+      expect(work_order.observers.empty?).to be true
+    end
+
+    it 'allows editing an emergency' do
+      pending   # https://www.pivotaltracker.com/story/show/98775964
+      expect(work_order.amount).not_to eq(55.22)
+      work_order = FactoryGirl.create(:ncr_work_order, :is_emergency, requester: requester)
+      post :update, {id: work_order.id, approver_email: work_order.observers.first.email_address,
+                     ncr_work_order: {expense_type: 'BA61', emergency: '1', amount: '55.22'}}
+      work_order.reload
+      expect(work_order.amount).to eq(55.22)
     end
   end
 end

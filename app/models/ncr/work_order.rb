@@ -22,9 +22,6 @@ module Ncr
     before_validation :normalize_values
     before_update :record_changes
 
-    # after_update :update_approver
-    # after_update :email_approvers
-
     # @TODO: use integer number of cents to avoid floating point issues
     validates :amount, numericality: {
       less_than_or_equal_to: 3000,
@@ -87,7 +84,6 @@ module Ncr
 
     # A requester can change his/her approving official
     def update_approvers(approver_email=nil)
-      # binding.pry
       first_approval = self.approvals.first
       if approver_email && self.approver_changed?(approver_email)
         first_approval.destroy
@@ -99,7 +95,7 @@ module Ncr
       
       current_approvers = self.approvers.map {|a| a[:email_address]}
       #remove approving official
-      approving_official = current_approvers.shift
+      current_approvers.shift
       if (current_approvers != system_approvers)
         current_approvers.each do |email|
           self.remove_approver(email)
