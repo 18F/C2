@@ -225,4 +225,19 @@ describe CommunicartMailer do
       expect(sender_names(mail)).to eq(["Communicart"])
     end
   end
+
+  describe '#proposal_subject' do
+    it 'defaults when no client_data is present' do
+      proposal = FactoryGirl.create(:proposal)
+      mail = CommunicartMailer.proposal_created_confirmation(proposal)
+      expect(mail.subject).to eq("Request ##{proposal.id}")
+    end
+
+    it 'includes custom text for ncr work orders' do
+      requester = FactoryGirl.create(:user, email_address: 'someone@somewhere.gov')
+      wo = FactoryGirl.create(:ncr_work_order, org_code: 'some org', building_number: 'some build', requester: requester)
+      mail = CommunicartMailer.proposal_created_confirmation(wo.proposal)
+      expect(mail.subject).to eq("Request #{wo.public_identifier}, some org, some build, from someone@somewhere.gov")
+    end
+  end
 end
