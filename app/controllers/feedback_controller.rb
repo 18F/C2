@@ -4,7 +4,7 @@ class FeedbackController < ApplicationController
   end
 
   def create
-    fields = [:bug, :context, :expected, :actually, :comments, :satisfaction, :referral]
+    fields = [:email, :bug, :context, :expected, :actually, :comments, :satisfaction, :referral]
     fields = fields.select {|key| !params[key].blank?}
     form_values = fields.map {|key| [key, params[key]]}
     unless form_values.empty?
