@@ -104,6 +104,11 @@ describe "National Capital Region proposals" do
         end
       end
 
+      it "defaults to no approver if there was no previous request" do
+        visit '/ncr/work_orders/new'
+        expect(find_field("Approving official's email address").value).to eq('')
+      end
+
       it "defaults to the approver from the last request" do
         proposal = FactoryGirl.create(:proposal, :with_approvers,
                                       requester: requester)
