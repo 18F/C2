@@ -515,7 +515,7 @@ describe "National Capital Region proposals" do
 
       visit "/ncr/work_orders/#{work_order.id}/edit"
       expect(current_path).to eq("/ncr/work_orders/new")
-      expect(page).to have_content("You must be the requester or an approver")
+      expect(page).to have_content("You must be the requester, approver, or observer")
     end
   end
 end
