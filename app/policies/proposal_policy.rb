@@ -59,7 +59,7 @@ class ProposalPolicy
   alias_method :can_approve!, :can_approve_or_reject!
 
   def can_edit!
-    requester! && not_approved!
+    requester! && not_approved! && !self.cancelled?
   end
   alias_method :can_update!, :can_edit!
 

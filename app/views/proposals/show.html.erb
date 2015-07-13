@@ -41,7 +41,7 @@
   </div>
 </div>
 
-<% if policy(@proposal).can_edit? && !@proposal.cancelled? %>
+<% if policy(@proposal).can_edit? %>
   <%= client_partial(@proposal.client, 'restart_link',
                      locals: {proposal: @proposal})
   %>
