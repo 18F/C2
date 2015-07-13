@@ -304,4 +304,33 @@ describe Ncr::WorkOrder do
       expect(comment.user).to eq(modifier)
     end
   end
+
+  describe "#org_id" do
+    it "pulls out the organization id when present" do
+      wo = FactoryGirl.create(:ncr_work_order, org_code: 'P0000000 (192X,192M) PRIOR YEAR ACTIVITIES')
+      expect(wo.org_id).to eq("P0000000")
+    end
+
+    it "returns nil when no organization is present" do
+      wo = FactoryGirl.create(:ncr_work_order, org_code: nil)
+      expect(wo.org_id).to be_nil
+    end
+  end
+
+  describe "#building_id" do
+    it "pulls out the building id when an identifier is present" do
+      wo = FactoryGirl.build(:ncr_work_order, building_number: "AB1234CD then some more")
+      expect(wo.building_id).to eq("AB1234CD")
+    end
+
+    it "defaults to the whole building number" do
+      wo = FactoryGirl.build(:ncr_work_order, building_number: "Another String")
+      expect(wo.building_id).to eq("Another String")
+    end
+
+    it "allows nil" do
+      wo = FactoryGirl.build(:ncr_work_order, building_number: nil)
+      expect(wo.building_id).to be_nil
+    end
+  end
 end

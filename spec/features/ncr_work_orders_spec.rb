@@ -26,46 +26,50 @@ describe "National Capital Region proposals" do
         login_as(requester)
       end
 
-      it "saves a Proposal with the attributes" do
-        expect(Dispatcher).to receive(:deliver_new_proposal_emails)
+      with_env_var('NCR_BA80_BUDGET_MAILBOX', 'ba80budget@example.gov') do
+        it "saves a Proposal with the attributes" do
+          expect(Dispatcher).to receive(:deliver_new_proposal_emails)
 
-        visit '/ncr/work_orders/new'
-        fill_in 'Project title', with: "buying stuff"
-        fill_in 'Description', with: "desc content"
-        choose 'BA80'
-        fill_in 'RWA Number', with: 'F1234567'
-        fill_in 'Vendor', with: 'ACME'
-        fill_in 'Amount', with: 123.45
-        check "I am going to be using direct pay for this transaction"
-        select approver.email_address, from: 'approver_email'
-        fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
-        select Ncr::Organization.all[0], from: 'ncr_work_order_org_code'
-        expect {
-          click_on 'Submit for approval'
-        }.to change { Proposal.count }.from(0).to(1)
+          visit '/ncr/work_orders/new'
+          fill_in 'Project title', with: "buying stuff"
+          fill_in 'Description', with: "desc content"
+          choose 'BA80'
+          fill_in 'RWA Number', with: 'F1234567'
+          fill_in 'Vendor', with: 'ACME'
+          fill_in 'Amount', with: 123.45
+          check "I am going to be using direct pay for this transaction"
+          select approver.email_address, from: 'approver_email'
+          fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
+          select Ncr::Organization.all[0], from: 'ncr_work_order_org_code'
+          expect {
+            click_on 'Submit for approval'
+          }.to change { Proposal.count }.from(0).to(1)
 
-        proposal = Proposal.last
-        expect(proposal.public_id).to have_content("FY")
-        expect(page).to have_content("Proposal submitted")
-        expect(current_path).to eq("/proposals/#{proposal.id}")
+          proposal = Proposal.last
+          expect(proposal.public_id).to have_content("FY")
+          expect(page).to have_content("Proposal submitted")
+          expect(current_path).to eq("/proposals/#{proposal.id}")
 
-        expect(proposal.name).to eq("buying stuff")
-        expect(proposal.flow).to eq('linear')
-        work_order = proposal.client_data
-        expect(work_order.client).to eq('ncr')
-        expect(work_order.expense_type).to eq('BA80')
-        expect(work_order.vendor).to eq('ACME')
-        expect(work_order.amount).to eq(123.45)
-        expect(work_order.direct_pay).to eq(true)
-        expect(work_order.building_number).to eq(Ncr::BUILDING_NUMBERS[0])
-        expect(work_order.org_code).to eq(Ncr::Organization.all[0].to_s)
-        expect(work_order.description).to eq('desc content')
-        expect(proposal.requester).to eq(requester)
-        expect(proposal.approvers.map(&:email_address)).to eq(
-          [approver.email_address, 'communicart.budget.approver@gmail.com'])
+          expect(proposal.name).to eq("buying stuff")
+          expect(proposal.flow).to eq('linear')
+          work_order = proposal.client_data
+          expect(work_order.client).to eq('ncr')
+          expect(work_order.expense_type).to eq('BA80')
+          expect(work_order.vendor).to eq('ACME')
+          expect(work_order.amount).to eq(123.45)
+          expect(work_order.direct_pay).to eq(true)
+          expect(work_order.building_number).to eq(Ncr::BUILDING_NUMBERS[0])
+          expect(work_order.org_code).to eq(Ncr::Organization.all[0].to_s)
+          expect(work_order.description).to eq('desc content')
+          expect(proposal.requester).to eq(requester)
+          expect(proposal.approvers.map(&:email_address)).to eq(
+            [approver.email_address, 'ba80budget@example.gov'])
+        end
       end
 
-      with_feature 'SHOW_BA60_OPTION' do
+      with_env_vars(SHOW_BA60_OPTION: 'true',
+                    NCR_BA61_TIER1_BUDGET_MAILBOX: 'ba61one@example.gov',
+                    NCR_BA61_TIER2_BUDGET_MAILBOX: 'ba61two@example.gov') do
         it "saves a BA60 Proposal with the attributes" do
           expect(Dispatcher).to receive(:deliver_new_proposal_emails)
 
@@ -87,8 +91,8 @@ describe "National Capital Region proposals" do
           expect(work_order.expense_type).to eq('BA60')
           expect(proposal.approvers.map(&:email_address)).to eq(%w(
             liono0@some-cartoon-show.com
-            communicart.budget.approver@gmail.com
-            communicart.ofm.approver@gmail.com
+            ba61one@example.gov
+            ba61two@example.gov
           ))
         end
 
@@ -415,14 +419,16 @@ describe "National Capital Region proposals" do
         expect(proposal.approvals.first.actionable?).to eq (true)
       end
 
-      it "allows you to change the expense type" do
-        visit "/ncr/work_orders/#{work_order.id}/edit"
-        choose 'BA80'
-        fill_in 'RWA Number', with:'a1234567'
-        click_on 'Update'
-        proposal = Proposal.last
-        expect(proposal.approvers.length).to eq(2)
-        expect(proposal.approvers.second.email_address).to eq('communicart.budget.approver@gmail.com')
+      with_env_var('NCR_BA80_BUDGET_MAILBOX', 'ba80@example.gov') do
+        it "allows you to change the expense type" do
+          visit "/ncr/work_orders/#{work_order.id}/edit"
+          choose 'BA80'
+          fill_in 'RWA Number', with:'a1234567'
+          click_on 'Update'
+          proposal = Proposal.last
+          expect(proposal.approvers.length).to eq(2)
+          expect(proposal.approvers.second.email_address).to eq('ba80@example.gov')
+        end
       end
 
       it "has 'Discard Changes' link" do
@@ -485,7 +491,7 @@ describe "National Capital Region proposals" do
     end
 
     it "keeps track of the modification when edited by an approver" do
-      approval = work_order.add_approvals('approver@example.com')
+      work_order.add_approvals('approver@example.com')
       approver = ncr_proposal.approvers.last
       login_as(approver)
 
