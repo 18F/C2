@@ -59,7 +59,7 @@ class ProposalPolicy
   alias_method :can_approve!, :can_approve_or_reject!
 
   def can_edit!
-    requester! && not_approved! && !self.cancelled?
+    requester! && not_approved! && !@proposal.cancelled?
   end
   alias_method :can_update!, :can_edit!
 
@@ -76,9 +76,9 @@ class ProposalPolicy
   alias_method :can_new!, :can_create!
 
   def can_cancel!
-    requester! && !self.cancelled?
+    requester! && !@proposal.cancelled?
   end
-  alias_method :can_cancel!, :can_cancel_form!
+  alias_method :can_cancel_form!, :can_cancel!
 
   # equivalent of can_show?
   class Scope
