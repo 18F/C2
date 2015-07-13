@@ -127,7 +127,7 @@ describe Ncr::WorkOrdersController do
       expect(work_order.observers.empty?).to be false
     end
 
-    it 'removes removes observers and adds approvers when switching to an emergency' do
+    it 'removes observers and adds approvers when switching to an emergency' do
       pending   # https://www.pivotaltracker.com/story/show/98775964
       work_order = FactoryGirl.create(:ncr_work_order, :is_emergency, requester: requester)
       expect(work_order.approvals.empty?).to be true
