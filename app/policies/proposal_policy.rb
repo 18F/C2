@@ -86,7 +86,7 @@ class ProposalPolicy
       if @user.app_admin?
         @scope.all
       elsif @user.admin?
-        @scope.where("client_data_type ilike ?", "#{@user.client_slug}%")
+        @scope.where("client_data_type like ?", "#{@user.client_slug.classify.constantize}::%")
       else
         # use subselects instead of left joins to avoid an explicit
         # duplication-removal step

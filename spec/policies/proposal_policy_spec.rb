@@ -180,6 +180,14 @@ describe ProposalPolicy do
     end
 
     context "ADMIN privileges" do
+      before do
+        #Set up a temporary class
+        module AbcCompany
+          class SomethingApprovable
+          end
+        end
+      end
+
       after do
         ENV['ADMIN_EMAILS'] = ""
       end
@@ -189,7 +197,7 @@ describe ProposalPolicy do
       it "allows an admin to see unassociated requests that are inside its client scope" do
         proposal.update_attributes(client_data_type:'AbcCompany::SomethingApprovable')
         user = proposal.approvers.first
-        user.client_slug = "abccompany"
+        user.client_slug = "abc_company"
         ENV['ADMIN_EMAILS'] = user.email_address
 
         proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
@@ -201,7 +209,7 @@ describe ProposalPolicy do
         proposal1.update_attributes(client_data_type:'CdfCompany::SomethingApprovable')
 
         user = proposal.approvers.first
-        user.client_slug = "abccompany"
+        user.client_slug = "abc_company"
         ENV['ADMIN_EMAILS'] = user.email_address
 
         proposals = ProposalPolicy::Scope.new(user, Proposal).resolve

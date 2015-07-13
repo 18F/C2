@@ -62,9 +62,15 @@ describe ProposalsController do
       end
 
       it "allows admins to view requests of same client" do
+        #Set up a temporary class
+        module SomeCompany
+          class SomethingApprovable
+          end
+        end
+
         ENV['ADMIN_EMAILS'] = "#{user.email_address}"
         proposal = FactoryGirl.create(:proposal, requester_id: 5555, client_data_type:"SomeCompany::SomethingApprovable")
-        user.update_attributes(client_slug: 'somecompany')
+        user.update_attributes(client_slug: 'some_company')
 
         get :show, id: proposal.id
         expect(response).not_to redirect_to(proposals_path)
@@ -73,7 +79,7 @@ describe ProposalsController do
 
       it "allows app admins to view requests outside of related client" do
         proposal = FactoryGirl.create(:proposal, requester_id: 5555, client_data_type:"SomeCompany::SomethingApprovable")
-        user.update_attributes(client_slug: 'someothercompany')
+        user.update_attributes(client_slug: 'some_other_company')
         ENV['APP_ADMIN_EMAILS'] = "#{user.email_address}"
 
         get :show, id: proposal.id
