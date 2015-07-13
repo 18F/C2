@@ -45,7 +45,7 @@ class Proposal < ActiveRecord::Base
   self.statuses.each do |status|
     scope status, -> { where(status: status) }
   end
-  scope :closed, -> { where(status: ['approved']) } #TODO: Backfill to change approvals in 'reject' status to 'cancelled' status
+  scope :closed, -> { where(status: ['approved', 'cancelled']) } #TODO: Backfill to change approvals in 'reject' status to 'cancelled' status
   scope :cancelled, -> { where(status: 'cancelled') }
 
   after_initialize :set_defaults
