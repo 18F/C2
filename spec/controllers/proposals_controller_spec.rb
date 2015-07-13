@@ -57,8 +57,8 @@ describe ProposalsController do
 
     context 'admins' do
       after do
-        ENV['APP_ADMIN_EMAILS'] = ""
         ENV['ADMIN_EMAILS'] = ""
+        ENV['CLIENT_ADMIN_EMAILS'] = ""
       end
 
       it "allows admins to view requests of same client" do
@@ -68,7 +68,7 @@ describe ProposalsController do
           end
         end
 
-        ENV['ADMIN_EMAILS'] = "#{user.email_address}"
+        ENV['CLIENT_ADMIN_EMAILS'] = "#{user.email_address}"
         proposal = FactoryGirl.create(:proposal, requester_id: 5555, client_data_type:"SomeCompany::SomethingApprovable")
         user.update_attributes(client_slug: 'some_company')
 
@@ -80,7 +80,7 @@ describe ProposalsController do
       it "allows app admins to view requests outside of related client" do
         proposal = FactoryGirl.create(:proposal, requester_id: 5555, client_data_type:"SomeCompany::SomethingApprovable")
         user.update_attributes(client_slug: 'some_other_company')
-        ENV['APP_ADMIN_EMAILS'] = "#{user.email_address}"
+        ENV['ADMIN_EMAILS'] = "#{user.email_address}"
 
         get :show, id: proposal.id
         expect(response).not_to redirect_to(proposals_path)

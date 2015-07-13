@@ -38,12 +38,12 @@ class User < ActiveRecord::Base
     self.outgoing_delegates.exists?(assignee_id: other.id)
   end
 
-  def admin?
-    self.class.admin_emails.include?(self.email_address)
+  def client_admin?
+    self.class.client_admin_emails.include?(self.email_address)
   end
 
-  def app_admin?
-    self.class.app_admin_emails.include?(self.email_address)
+  def admin?
+    self.class.admin_emails.include?(self.email_address)
   end
 
   def self.for_email(email)
@@ -55,11 +55,11 @@ class User < ActiveRecord::Base
     self.find_or_create_by(email_address: user_data['email'])
   end
 
-  def self.admin_emails
-    ENV['ADMIN_EMAILS'].to_s.split(',')
+  def self.client_admin_emails
+    ENV['CLIENT_ADMIN_EMAILS'].to_s.split(',')
   end
 
-  def self.app_admin_emails
-    ENV['APP_ADMIN_EMAILS'].to_s.split(',')
+  def self.admin_emails
+    ENV['ADMIN_EMAILS'].to_s.split(',')
   end
 end

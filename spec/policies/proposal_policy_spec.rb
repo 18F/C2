@@ -179,7 +179,7 @@ describe ProposalPolicy do
       expect(proposals).to be_empty
     end
 
-    context "ADMIN privileges" do
+    context "CLIENT_ADMIN privileges" do
       before do
         #Set up a temporary class
         module AbcCompany
@@ -189,29 +189,29 @@ describe ProposalPolicy do
       end
 
       after do
-        ENV['ADMIN_EMAILS'] = ""
+        ENV['CLIENT_ADMIN_EMAILS'] = ""
       end
 
       let(:proposal1) { FactoryGirl.create(:proposal, :with_approvers, :with_observers, requester_id: 555) }
 
-      it "allows an admin to see unassociated requests that are inside its client scope" do
+      it "allows a client admin to see unassociated requests that are inside its client scope" do
         proposal.update_attributes(client_data_type:'AbcCompany::SomethingApprovable')
         user = proposal.approvers.first
         user.client_slug = "abc_company"
-        ENV['ADMIN_EMAILS'] = user.email_address
+        ENV['CLIENT_ADMIN_EMAILS'] = user.email_address
 
         proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
         expect(proposals).to match_array([proposal])
       end
 
-      it "prevents an admin from seeing requests outside its client scope" do
+      it "prevents a client admin from seeing requests outside its client scope" do
         proposal.update_attributes(client_data_type:'AbcCompany::SomethingApprovable')
         proposal1.approvals.each {|a| a.update_attributes(user_id: 556)}
         proposal1.update_attributes(client_data_type:'CdfCompany::SomethingApprovable')
 
         user = proposal.approvers.first
         user.client_slug = "abc_company"
-        ENV['ADMIN_EMAILS'] = user.email_address
+        ENV['CLIENT_ADMIN_EMAILS'] = user.email_address
 
         proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
         expect(proposals).to match_array([proposal])
@@ -229,11 +229,11 @@ describe ProposalPolicy do
       end
     end
 
-    context "APP_ADMIN privileges" do
+    context "ADMIN privileges" do
       let(:proposal1) { FactoryGirl.create(:proposal, :with_approvers, :with_observers, requester_id: 555) }
 
       after do
-        ENV['APP_ADMIN_EMAILS'] = ""
+        ENV['ADMIN_EMAILS'] = ""
       end
 
       it "allows an app admin to see requests inside and outside its client scope" do
@@ -243,7 +243,7 @@ describe ProposalPolicy do
 
         user = proposal.approvers.first
         user.client_slug = "abccompany"
-        ENV['APP_ADMIN_EMAILS'] = user.email_address
+        ENV['ADMIN_EMAILS'] = user.email_address
 
         proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
         expect(proposals).to match_array([proposal,proposal1])
