@@ -59,12 +59,12 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def admin?
-    signed_in? && current_user.admin?
+  def app_admin?
+    signed_in? && current_user.app_admin?
   end
 
   def peek_enabled?
-    Rails.env.development? || self.admin?
+    Rails.env.development? || self.app_admin?
   end
 
   private
