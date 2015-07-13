@@ -214,6 +214,19 @@ module Ncr
       ENV['NCR_BA80_BUDGET_MAILBOX'] || 'communicart.budget.approver@gmail.com'
     end
 
+    def org_id
+      self.organization.try(:code)
+    end
+
+    def building_id
+      regex = /\A(\w{8}) .*\z/
+      if self.building_number && regex.match(self.building_number)
+        regex.match(self.building_number)[1]
+      else
+        self.building_number
+      end
+    end
+
     protected
 
     # TODO move to Proposal model
