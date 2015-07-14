@@ -440,6 +440,7 @@ describe "National Capital Region proposals" do
         click_on 'Update'
         second_approver = proposal.approvals.second.user.email_address
         expect(second_approver).to eq('delegate@example.com')
+        expect(proposal.approvals.length).to eq(3)
       end
 
       it "has 'Discard Changes' link" do
