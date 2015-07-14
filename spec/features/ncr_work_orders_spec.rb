@@ -406,8 +406,8 @@ describe "National Capital Region proposals" do
         click_on 'Update'
 
         expect(page).to have_content("Request modified by")
-        expect(page).to have_content("Description was changed to New Description")
-        expect(page).to have_content("Vendor was changed to New Test Vendor")
+        expect(page).to have_content("Description was changed from test to New Description")
+        expect(page).to have_content("Vendor was changed from Some Vend to New Test Vendor")
       end
 
       it "does not resave unchanged requests" do
