@@ -8,13 +8,19 @@ describe FeedbackController do
         actually: 'it did not',
         comments: 'Comments here',
         satisfaction: '4',
+        email: 'someone@example.com',
         referral: '/somewhere/else'
       }
       expect(deliveries.count).to be(1)
-      expect(deliveries[0].body.to_s).to eq(
-        ["bug: Yes", "context: Some context here", "expected: it to work",
-         "actually: it did not", "comments: Comments here", "satisfaction: 4",
-         "referral: /somewhere/else"].join("\n"))
+      expect(deliveries[0].body.to_s).to eq([
+        "email: someone@example.com",
+        "bug: Yes",
+        "context: Some context here",
+        "expected: it to work",
+        "actually: it did not",
+        "comments: Comments here",
+        "satisfaction: 4",
+        "referral: /somewhere/else"].join("\n"))
       expect(deliveries[0].cc).to eq([])
     end
 

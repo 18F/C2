@@ -193,7 +193,6 @@ development:
   <<: *default_settings
   # Turn on communication to New Relic service in development mode
   monitor_mode: true
-  app_name: C2 (Development)
 
   # Rails Only - when running in Developer Mode, the New Relic Agent will
   # present performance information on the last 100 transactions you have
