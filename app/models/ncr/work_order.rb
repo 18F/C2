@@ -110,22 +110,14 @@ module Ncr
     end
 
     def approvers_match?
-      current_approvers = self.approvers.map {|a| a[:email_address]}
-      if current_approvers.length != system_approvers.length
-        return false
+      if self.approvers.length == system_approvers.length + 1
+        approvers = self.approvers.to_a
+        approvers.shift 
+        paired = approvers.zip(system_approvers.map { |e| User.for_email(e) })
+        paired.all? { |cur, sys| cur == sys || sys.delegates_to?(cur) }
+      else
+        false
       end
-      match = true
-      system_approvers.each_with_index do |approver, i|
-          if approver != current_approvers[i]
-            system_approver = User.for_email(approver)
-            current_approver = User.for_email(current_approvers[i])
-            if !system_approver.delegates_to?(current_approver)
-              match = false
-              break
-            end
-          end
-      end
-      match
     end
 
     def approver_changed?(approval_email)

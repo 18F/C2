@@ -454,6 +454,8 @@ describe "National Capital Region proposals" do
         visit "/ncr/work_orders/#{work_order.id}/edit"
         fill_in 'Description', with:"New Description that shouldn't change the approver list"
         click_on 'Update'
+
+        proposal.reload
         second_approver = proposal.approvals.second.user.email_address
         expect(second_approver).to eq('delegate@example.com')
         expect(proposal.approvals.length).to eq(3)
