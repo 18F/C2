@@ -1,6 +1,7 @@
 describe "Canceling a request" do
   let (:client_data) { FactoryGirl.create(:ncr_work_order) }
   let (:proposal) { FactoryGirl.create(:proposal, :with_approver, client_data_type: "Ncr::WorkOrder", client_data_id: client_data.id) }
+  let (:user) { FactoryGirl.create(:user, id: 123456) }
 
   before do
     login_as(proposal.requester)
@@ -36,7 +37,7 @@ describe "Canceling a request" do
     end
 
     it "sends and notifies the user" do
-
+      # CURRENT
     end
 
     it "displays an error if the reason is blank" do
@@ -49,10 +50,10 @@ describe "Canceling a request" do
     end
   end
 
-  it "redirects if trying to see the cancellation page on proposals you have not rquested" do
-    login_as(proposal.approvers.first)
+  it "redirects if trying to see the cancellation page on proposals you have not requested" do
+    login_as(user)
     visit cancel_form_proposal_path(proposal)
-    expect(page).to have_content("You are not allowed to perform that action")
+    expect(page).to have_content("You are not allowed to see that proposal")
     expect(current_path).to eq("/proposals")
   end
 

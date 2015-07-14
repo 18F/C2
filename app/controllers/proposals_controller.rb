@@ -2,7 +2,7 @@ class ProposalsController < ApplicationController
   include TokenAuth
 
   before_filter :authenticate_user!, except: :approve
-  before_filter ->{authorize self.proposal}, only: [:show, :cancel]
+  before_filter ->{authorize self.proposal}, only: [:show, :cancel, :cancel_form]
   before_filter :needs_token_on_get, only: :approve
   before_filter :validate_access, only: :approve
   helper_method :display_status
@@ -104,7 +104,7 @@ class ProposalsController < ApplicationController
     self.proposals.order('created_at DESC')
   end
 
-  def auth_errors(exception)
-    redirect_to proposals_path, :alert => "Your do not have permissions or this request has already been cancelled."
-  end
+  # def auth_errors(exception)
+  #   redirect_to proposals_path, :alert => "You do not have permissions or this request has already been cancelled."
+  # end
 end

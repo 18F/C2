@@ -29,7 +29,7 @@ describe Cart do
     let(:approved_cart1) { FactoryGirl.create(:cart, status: 'approved') }
     let(:approved_cart2) { FactoryGirl.create(:cart, status: 'approved') }
     let(:pending_cart)  { FactoryGirl.create(:cart, status: 'pending') }
-    let(:cancelled)   { FactoryGirl.create(:cart, status: 'cancelled') }
+    let(:cancelled_cart)   { FactoryGirl.create(:cart, status: 'cancelled') }
 
     describe 'approved' do
       it "returns approved carts" do
