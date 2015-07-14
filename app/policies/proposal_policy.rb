@@ -101,6 +101,10 @@ class ProposalPolicy
         OR EXISTS (SELECT id FROM observations
                    WHERE proposal_id = proposals.id AND user_id = :user_id)
         SQL
+
+      where_clause += " OR true" if @user.admin?
+      where_clause += " OR client_data_type LIKE '#{@user.client_slug.classify.constantize}::%'" if @user.client_admin?
+
       @scope.where(where_clause, user_id: @user.id)
     end
   end

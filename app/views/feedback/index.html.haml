@@ -12,6 +12,12 @@
 
     %hr
 
+    - if current_user.nil?
+      %p Please provide an email address with which we can reach you.
+      .form-group
+        = label_tag :email, "E-mail"
+        = email_field_tag :email, nil, class: 'form-control'
+
     .form-group
       = label_tag :bug do
         = check_box_tag(:bug, "yes", false, "data-filter-control" => 'is-bug')

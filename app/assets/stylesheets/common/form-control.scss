@@ -13,9 +13,13 @@
   }
   &:-ms-input-placeholder { /* Internet Explorer 10+ */
      color: #777677;
-  }  
+  }
 }
 
 .alert {
   outline: none;
+}
+
+.help-block {
+  font-size: .75em;
 }

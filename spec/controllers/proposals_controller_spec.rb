@@ -39,19 +39,55 @@ describe ProposalsController do
       login_as(user)
     end
 
-    it 'should allow the requester to see it' do
-      proposal = FactoryGirl.create(:proposal, requester: user)
-      get :show, id: proposal.id
-      expect(response).not_to redirect_to("/proposals/")
-      expect(flash[:alert]).not_to be_present
+    context 'visitors' do
+      it 'should allow the requester to see it' do
+        proposal = FactoryGirl.create(:proposal, requester: user)
+        get :show, id: proposal.id
+        expect(response).not_to redirect_to("/proposals/")
+        expect(flash[:alert]).not_to be_present
+      end
+
+      it 'should redirect random users' do
+        proposal = FactoryGirl.create(:proposal)
+        get :show, id: proposal.id
+        expect(response).to redirect_to(proposals_path)
+        expect(flash[:alert]).to be_present
+      end
     end
 
-    it 'should redirect random users' do
-      proposal = FactoryGirl.create(:proposal)
-      get :show, id: proposal.id
-      expect(response).to redirect_to(proposals_path)
-      expect(flash[:alert]).to be_present
+    context 'admins' do
+      after do
+        ENV['ADMIN_EMAILS'] = ""
+        ENV['CLIENT_ADMIN_EMAILS'] = ""
+      end
+
+      it "allows admins to view requests of same client" do
+        #Set up a temporary class
+        module SomeCompany
+          class SomethingApprovable
+          end
+        end
+
+        ENV['CLIENT_ADMIN_EMAILS'] = "#{user.email_address}"
+        proposal = FactoryGirl.create(:proposal, requester_id: 5555, client_data_type:"SomeCompany::SomethingApprovable")
+        user.update_attributes(client_slug: 'some_company')
+
+        get :show, id: proposal.id
+        expect(response).not_to redirect_to(proposals_path)
+        expect(response.request.fullpath).to eq(proposal_path proposal.id)
+      end
+
+      it "allows app admins to view requests outside of related client" do
+        proposal = FactoryGirl.create(:proposal, requester_id: 5555, client_data_type:"SomeCompany::SomethingApprovable")
+        user.update_attributes(client_slug: 'some_other_company')
+        ENV['ADMIN_EMAILS'] = "#{user.email_address}"
+
+        get :show, id: proposal.id
+        expect(response).not_to redirect_to(proposals_path)
+        expect(response.request.fullpath).to eq(proposal_path proposal.id)
+      end
     end
+
   end
 
   describe '#query' do

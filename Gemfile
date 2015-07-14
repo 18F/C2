@@ -17,7 +17,7 @@ gem 'haml'
 gem 'html_pipeline_rails'
 gem 'jquery-rails'
 gem 'jquery-turbolinks'
-gem 'newrelic_rpm', require: false # https://github.com/Tomohiro/plate/commit/0a5a072c8d882f32a48d8bdbfa325e83719f58f8
+gem 'newrelic_rpm'
 gem 'omniauth-myusa', git: 'https://github.com/18F/omniauth-myusa.git'
 gem 'paperclip'
 gem 'peek'

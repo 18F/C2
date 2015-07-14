@@ -103,6 +103,12 @@ class Proposal < ActiveRecord::Base
     approval
   end
 
+  def remove_approver(email)
+    user = User.for_email(email)
+    approval = self.approval_for(user)
+    approval.destroy
+  end
+
   def add_observer(email)
     user = User.for_email(email)
     self.observations.create!(user_id: user.id)

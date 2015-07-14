@@ -77,8 +77,4 @@ The NCR use case was built around GSA service centers (paint shops, landscapers,
 
 ## Performance
 
-C2 has the [Peek](https://github.com/peek/peek) performance bar loaded in all environments, though it's hidden by default. Press the backtick (`` ` ``) key to display it.
-
-## Production
-
-18F's production and staging [deployments](http://12factor.net/codebase) of C2 live in AWS, and are deployed via [Cloud Foundry](http://www.cloudfoundry.org). See [our Cloud Foundry documentation](https://docs.18f.gov) for more details.
+C2 has the [Peek](https://github.com/peek/peek) performance bar loaded in development, and in production for admins. It's hidden by default – press the backtick (`` ` ``) key to display it.

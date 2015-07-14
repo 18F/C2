@@ -1,0 +1,10 @@
+#!/bin/sh
+
+set -e
+set -x
+
+TAG=$(date -u +"%Y-%m-%dT%H%M%S")
+
+git tag $TAG
+cf push c2-prod
+git push origin $TAG
