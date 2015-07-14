@@ -323,7 +323,7 @@ describe "National Capital Region proposals" do
         expect(current_path).to eq("/proposals/#{ncr_proposal.id}")
         expect(page).to have_content("You have approved #{work_order.public_identifier}")
         
-        approval = Proposal.last.approvals.first
+        approval = Proposal.last.user_approvals.first
         expect(approval.status).to eq('approved')
         expect(approval.approved_at.utc.to_s).to eq(Time.now.utc.to_s)
       end

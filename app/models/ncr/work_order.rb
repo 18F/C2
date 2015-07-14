@@ -83,7 +83,7 @@ module Ncr
     end
 
     # A requester can change his/her approving official
-    def update_approver(approver_email=nil)
+    def update_approvers(approver_email=nil)
       first_approval = self.user_approvals.first
       if approver_email && self.approver_changed?(approver_email)
         first_approval.destroy

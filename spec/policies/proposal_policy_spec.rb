@@ -184,7 +184,7 @@ describe ProposalPolicy do
         ENV['CLIENT_ADMIN_EMAILS'] = ""
       end
 
-      let(:proposal1) { FactoryGirl.create(:proposal, :with_approvers, :with_observers, requester_id: 555) }
+      let(:proposal1) { FactoryGirl.create(:proposal, :with_parallel_approvers, :with_observers) }
 
       it "allows a client admin to see unassociated requests that are inside its client scope" do
         proposal.update_attributes(client_data_type:'AbcCompany::SomethingApprovable')
@@ -215,7 +215,7 @@ describe ProposalPolicy do
     end
 
     context "ADMIN privileges" do
-      let(:proposal1) { FactoryGirl.create(:proposal, :with_approvers, :with_observers, requester_id: 555) }
+      let(:proposal1) { FactoryGirl.create(:proposal, :with_parallel_approvers, :with_observers) }
 
       after do
         ENV['ADMIN_EMAILS'] = ""
