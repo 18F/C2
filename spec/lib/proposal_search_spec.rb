@@ -13,6 +13,13 @@ describe ProposalSearch do
       expect(results).to eq([proposal])
     end
 
+    it "returns the Proposal when searching by public_id" do
+      proposal = FactoryGirl.create(:proposal)
+      proposal.update_attribute(:public_id, 'foobar') # skip callback, which would overwrite this
+      results = ProposalSearch.new.execute('foobar')
+      expect(results).to eq([proposal])
+    end
+
     it "can operate on an a relation" do
       proposal = FactoryGirl.create(:proposal)
       relation = Proposal.where(id: proposal.id + 1)
