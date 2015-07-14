@@ -239,9 +239,10 @@ module Ncr
       comment_texts = []
       bullet = changed_attributes.length > 1 ? '- ' : ''
       changed_attributes.each do |key, value|
+        former = property_to_s(self.send(key + "_was"))
         value = property_to_s(self[key])
         property_name = WorkOrder.human_attribute_name(key)
-        comment_texts << WorkOrder.update_comment_format(property_name, value, bullet)
+        comment_texts << WorkOrder.update_comment_format(property_name, value, bullet, former)
       end
 
       if !comment_texts.empty?
@@ -256,8 +257,9 @@ module Ncr
       end
     end
 
-    def self.update_comment_format key, value, bullet
-      "#{bullet}*#{key}* was changed to #{value}"
+    def self.update_comment_format key, value, bullet, former=nil
+      from = former ? "from #{former} " : ''
+      "#{bullet}*#{key}* was changed " + from + "to #{value}"
     end
 
     def fiscal_year
