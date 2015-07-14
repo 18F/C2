@@ -441,6 +441,26 @@ describe "National Capital Region proposals" do
         end
       end
 
+      it "doesn't change approving list when delegated" do
+        proposal = Proposal.last
+        approval = proposal.approvals.first
+        approval.approve!
+        approval = proposal.approvals.second
+        user = approval.user
+        delegate = User.new(email_address:'delegate@example.com')
+        delegate.save
+        user.add_delegate(delegate)
+        approval.update_attributes!(user: delegate)
+        visit "/ncr/work_orders/#{work_order.id}/edit"
+        fill_in 'Description', with:"New Description that shouldn't change the approver list"
+        click_on 'Update'
+
+        proposal.reload
+        second_approver = proposal.approvals.second.user.email_address
+        expect(second_approver).to eq('delegate@example.com')
+        expect(proposal.approvals.length).to eq(3)
+      end
+
       it "has 'Discard Changes' link" do
         visit "/ncr/work_orders/#{work_order.id}/edit"
         expect(page).to have_content("Discard Changes")

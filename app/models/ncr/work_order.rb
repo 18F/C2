@@ -92,11 +92,10 @@ module Ncr
         self.approvals.first.make_actionable!
       end
       # no need to call initialize_approvals as they have already been set up
-      
       current_approvers = self.approvers.map {|a| a[:email_address]}
       #remove approving official
       current_approvers.shift
-      if (current_approvers != system_approvers)
+      if (!self.approvers_match?)
         current_approvers.each do |email|
           self.remove_approver(email)
         end
@@ -107,6 +106,17 @@ module Ncr
         if(approvals.first.approved?)
           approvals.second.make_actionable!
         end
+      end
+    end
+
+    def approvers_match?
+      if self.approvers.length == system_approvers.length + 1
+        approvers = self.approvers.to_a
+        approvers.shift 
+        paired = approvers.zip(system_approvers.map { |e| User.for_email(e) })
+        paired.all? { |cur, sys| cur == sys || sys.delegates_to?(cur) }
+      else
+        false
       end
     end
 
