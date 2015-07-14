@@ -300,6 +300,11 @@ describe "National Capital Region proposals" do
           expect(proposal.approved?).to eq(false)
         end
       end
+
+      it "does not disable the emergency field" do
+        visit '/ncr/work_orders/new'
+        expect(find_field('emergency')).not_to be_disabled
+      end
     end
   end
 
@@ -492,6 +497,11 @@ describe "National Capital Region proposals" do
         expect(work_order.cl_number).to eq('CL1234567')
         expect(work_order.function_code).to eq('PG123')
         expect(work_order.soc_code).to eq('789')
+      end
+
+      it "disables the emergency field" do
+        visit "/ncr/work_orders/#{work_order.id}/edit"
+        expect(find_field('emergency', disabled: true)).to be_disabled
       end
     end
 

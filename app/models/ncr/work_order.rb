@@ -111,8 +111,8 @@ module Ncr
     end
 
     def approver_changed?(approval_email)
-      first_approval = self.proposal.approvals.first.user_email_address
-      first_approval != approval_email
+      first_approver = self.proposal.approvers.first
+      first_approver && first_approver.email_address != approval_email
     end
 
     def add_approvals(approver_email)
