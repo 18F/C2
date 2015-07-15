@@ -133,7 +133,7 @@ module Ncr
         self.proposal.update_attribute(:status, 'approved')
       else
         emails.each {|email| self.add_approver(email) }
-        self.proposal.initialize_approvals()
+        self.proposal.kickstart_approvals()
       end
     end
 

@@ -51,8 +51,7 @@ describe ProposalPolicy do
       end
 
       it "does not allow when it's not the user's turn" do
-        user = proposal.approvers.last
-        expect(subject).not_to permit(user, proposal)
+        expect(subject).not_to permit(second_approval.user, proposal)
       end
 
       it "does not allow when the user's already approved" do

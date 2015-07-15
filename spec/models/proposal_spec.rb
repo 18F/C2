@@ -81,4 +81,104 @@ describe Proposal do
       expect(proposal.users).to eq([proposal.requester])
     end
   end
+
+  describe '#approvers=' do
+    it 'sets initial approvers' do
+      proposal = FactoryGirl.create(:proposal)
+      approvers = [FactoryGirl.create(:user), FactoryGirl.create(:user), FactoryGirl.create(:user)]
+      proposal.approvers = approvers
+      expect(proposal.approvals.count).to be 3
+      expect(proposal.approvers).to eq approvers
+    end
+
+    it 'does not modify existing approvers if correct' do
+      proposal = FactoryGirl.create(:proposal, :with_approvers)
+      old_approval1 = proposal.approvals.first
+      old_approval2 = proposal.approvals.second
+      approvers = [FactoryGirl.create(:user), FactoryGirl.create(:user), old_approval2.user]
+      proposal.approvers = approvers
+      expect(proposal.approvals.count).to be 3
+      expect(proposal.approvers).to eq approvers
+      approval_ids = proposal.approvals.map(&:id)
+      expect(approval_ids).not_to include(old_approval1.id)
+      expect(approval_ids).to include(old_approval2.id)
+    end
+  end
+
+  describe '#kickstart_approvals' do
+    it 'initates parallel' do
+      proposal = FactoryGirl.create(:proposal, flow: 'parallel')
+      proposal.add_approver('1@example.com')
+      proposal.add_approver('2@example.com')
+      proposal.add_approver('3@example.com')
+      proposal.kickstart_approvals()
+
+      expect(proposal.approvals.count).to be 3
+      expect(proposal.approvals.actionable.count).to be 3
+    end
+
+    it 'initates linear' do
+      proposal = FactoryGirl.create(:proposal, flow: 'linear')
+      proposal.add_approver('1@example.com')
+      proposal.add_approver('2@example.com')
+      proposal.add_approver('3@example.com')
+      proposal.kickstart_approvals()
+
+      expect(proposal.approvals.count).to be 3
+      expect(proposal.approvals.actionable.count).to be 1
+      expect(proposal.approvals.actionable.first.user.email_address).to eq '1@example.com'
+    end
+
+    it 'fixes modified parallel proposal approvals' do
+      proposal = FactoryGirl.create(:proposal, flow: 'parallel')
+      proposal.add_approver('1@example.com')
+      proposal.kickstart_approvals()
+      expect(proposal.approvals.actionable.count).to be 1
+
+      proposal.add_approver('2@example.com')
+      proposal.add_approver('3@example.com')
+      expect(proposal.approvals.count).to be 3
+      expect(proposal.approvals.actionable.count).to be 1
+      proposal.kickstart_approvals()
+      expect(proposal.approvals.actionable.count).to be 3
+    end
+
+    it 'fixes modified linear proposal approvals' do
+      proposal = FactoryGirl.create(:proposal, flow: 'linear')
+      proposal.add_approver('1@example.com')
+      proposal.add_approver('2@example.com')
+      proposal.kickstart_approvals()
+      expect(proposal.approvals.count).to be 2
+      proposal.approvals.first.approve!
+
+      proposal.remove_approver('2@example.com')
+      proposal.add_approver('3@example.com')
+      proposal.kickstart_approvals()
+      expect(proposal.approvals.approved.count).to be 1
+      expect(proposal.approvals.actionable.count).to be 1
+      expect(proposal.approvals.actionable.first.user.email_address).to eq '3@example.com'
+    end
+
+    it 'does not modify a full approved parallel proposal' do
+      proposal = FactoryGirl.create(:proposal, flow: 'parallel')
+      proposal.add_approver('1@example.com')
+      proposal.add_approver('2@example.com')
+      proposal.kickstart_approvals()
+      proposal.approvals.first.approve!
+      proposal.approvals.second.approve!
+
+      expect(proposal.approvals.actionable).to be_empty
+    end
+
+    it 'does not modify a full approved linear proposal' do
+      proposal = FactoryGirl.create(:proposal, flow: 'linear')
+      proposal.add_approver('1@example.com')
+      proposal.add_approver('2@example.com')
+      proposal.kickstart_approvals()
+      proposal.approvals.first.approve!
+      proposal.approvals.second.approve!
+
+      expect(proposal.approvals.actionable).to be_empty
+    end
+  end
 end

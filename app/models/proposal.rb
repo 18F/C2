@@ -108,12 +108,38 @@ class Proposal < ActiveRecord::Base
     approval.destroy
   end
 
-  def initialize_approvals()
-    if self.linear? && self.approvals.any?
-      self.approvals.update_all(status: 'pending')
-      self.approvals.first.make_actionable!
-    elsif self.parallel?
-      self.approvals.update_all(status: 'actionable')
+  # Set the approver list, from any start state
+  def approvers=(approver_list)
+    approvals = approver_list.each_with_index.map do |approver, idx|
+      approval = self.approval_for(approver)
+      approval ||= Approval.new(user: approver, proposal: self)
+      approval.position = idx + 1   # start with 1
+      approval
+    end
+    self.approvals = approvals
+    self.kickstart_approvals()
+    # self.reset_status()
+  end
+
+  # Trigger the appropriate approval, from any start state
+  def kickstart_approvals()
+    actionable = self.approvals.actionable
+    pending = self.approvals.pending
+    if self.parallel?
+      pending.update_all(status: 'actionable')
+    elsif self.linear? && actionable.empty? && pending.any?
+      pending.first.make_actionable!
+    end
+    # otherwise, approvals are correct
+  end
+
+  def reset_status()
+    if self.all_approved?
+      self.update(status: 'approved')
+    elsif self.approvals.rejected.any?
+      self.update(status: 'rejected')
+    else
+      self.update(status: 'pending')
     end
   end
 
@@ -198,7 +224,8 @@ class Proposal < ActiveRecord::Base
   def restart
     # Note that none of the state machine's history is stored
     self.api_tokens.update_all(expires_at: Time.now)
-    self.initialize_approvals()
+    self.approvals.update_all(status: 'pending')
+    self.kickstart_approvals()
     Dispatcher.deliver_new_proposal_emails(self)
   end
 
