@@ -29,13 +29,8 @@ module Ncr
 
       super
 
-      # TODO move this logic to #update_approvers
       if @model_changing && !@model_instance.emergency  # skip approvals if emergency
-        if self.approver_email_frozen?
-          @model_instance.update_approvers
-        else
-          @model_instance.update_approvers(@approver_email)
-        end
+        @model_instance.update_approvers(@approver_email)
         @model_instance.email_approvers
       end
     end
@@ -57,12 +52,7 @@ module Ncr
     end
 
     def approver_email_frozen?
-      if @model_instance
-        approval = @model_instance.approvals.first
-        approval && !approval.actionable?
-      else
-        false
-      end
+      @model_instance.try(:approver_email_frozen?)
     end
 
     def permitted_params

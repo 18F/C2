@@ -82,6 +82,11 @@ module Ncr
       end
     end
 
+    def approver_email_frozen?
+      approval = self.approvals.first
+      approval && !approval.actionable?
+    end
+
     def update_approving_official(email)
       self.approvals.first.destroy
       replacement = self.add_approver(email)
@@ -113,7 +118,7 @@ module Ncr
 
     # A requester can change his/her approving official
     def update_approvers(approver_email=nil)
-      if approver_email && self.approver_changed?(approver_email)
+      if !self.approver_email_frozen? && approver_email && self.approver_changed?(approver_email)
         self.update_approving_official(approver_email)
       end
 
