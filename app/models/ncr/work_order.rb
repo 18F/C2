@@ -82,40 +82,50 @@ module Ncr
       end
     end
 
-    # A requester can change his/her approving official
-    def update_approvers(approver_email=nil)
-      first_approval = self.approvals.first
-      if approver_email && self.approver_changed?(approver_email)
-        first_approval.destroy
-        replacement = self.add_approver(approver_email)
-        replacement.move_to_top
-        self.approvals.first.make_actionable!
-      end
+    def update_approving_official(email)
+      self.approvals.first.destroy
+      replacement = self.add_approver(email)
+      replacement.move_to_top
+      replacement.make_actionable!
+    end
+
+    def reset_system_approvers
       # no need to call initialize_approvals as they have already been set up
-      current_approvers = self.approvers.map {|a| a[:email_address]}
-      #remove approving official
+      current_approvers = self.approvers.map(&:email_address)
+      # remove approving official
       current_approvers.shift
-      if (!self.approvers_match?)
+      unless self.approvers_match?
         current_approvers.each do |email|
           self.remove_approver(email)
         end
-        system_approvers.each do |email|
+        self.system_approvers.each do |email|
           self.add_approver(email)
         end
         approvals = self.approvals
-        if(approvals.first.approved?)
+        if approvals.first.approved?
           approvals.second.make_actionable!
         end
       end
     end
 
+    # A requester can change his/her approving official
+    def update_approvers(approver_email=nil)
+      if approver_email && self.approver_changed?(approver_email)
+        self.update_approving_official(approver_email)
+      end
+
+      self.reset_system_approvers
+    end
+
     def approvers_match?
-      if self.approvers.length == system_approvers.length + 1
-        approvers = self.approvers.to_a
-        approvers.shift 
-        paired = approvers.zip(system_approvers.map { |e| User.for_email(e) })
+      old_system_approvers = self.approvers.offset(1)
+      new_system_approver_emails = self.system_approvers
+      if old_system_approvers.size == new_system_approver_emails.size
+        new_system_approvers = new_system_approver_emails.map { |e| User.for_email(e) }
+        paired = old_system_approvers.zip(new_system_approvers)
         paired.all? { |cur, sys| cur == sys || sys.delegates_to?(cur) }
       else
+        # the number of system_approvers changed
         false
       end
     end
