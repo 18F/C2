@@ -157,6 +157,24 @@ module Ncr
       end
     end
 
+    def setup_approvals_and_observers(approving_official_email)
+      emails = self.system_approver_emails
+      if self.approver_email_frozen?
+        emails.unshift(self.approvers.first.email_address)
+      else
+        emails.unshift(approving_official_email)
+      end
+
+      if self.emergency
+        emails.each{|e| self.add_observer(e)}
+        # skip state machine
+        self.proposal.update(status: 'approved')
+      else
+        approvers = emails.map{|e| User.for_email(e)}
+        self.proposal.approvers = approvers
+      end
+    end
+
     def email_approvers
       Dispatcher.on_proposal_update(self.proposal)
     end
