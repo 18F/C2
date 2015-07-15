@@ -40,10 +40,10 @@ describe Ncr::WorkOrder do
     end
   end
 
-  describe '#add_approvals' do
+  describe '#setup_approvals_and_observers' do
     it "creates approvers when not an emergency" do
       form = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61')
-      form.add_approvals('bob@example.com')
+      form.setup_approvals_and_observers('bob@example.com')
       expect(form.observations.length).to eq(0)
       expect(form.approvers.map(&:email_address)).to eq([
         'bob@example.com',
@@ -57,7 +57,7 @@ describe Ncr::WorkOrder do
     it "creates observers when in an emergency" do
       form = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61',
                                emergency: true)
-      form.add_approvals('bob@example.com')
+      form.setup_approvals_and_observers('bob@example.com')
       expect(form.observers.map(&:email_address)).to eq([
         'bob@example.com',
         Ncr::WorkOrder.ba61_tier1_budget_mailbox,
