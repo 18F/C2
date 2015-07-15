@@ -101,7 +101,7 @@ module Ncr
         self.remove_approver(email)
       end
 
-      self.system_approvers.each do |email|
+      self.system_approver_emails.each do |email|
         self.add_approver(email)
       end
 
@@ -124,13 +124,13 @@ module Ncr
 
     def approvers_match?
       old_system_approvers = self.existing_system_approvers
-      new_system_approver_emails = self.system_approvers
+      new_system_approver_emails = self.system_approver_emails
       if old_system_approvers.size == new_system_approver_emails.size
         new_system_approvers = new_system_approver_emails.map { |e| User.for_email(e) }
         paired = old_system_approvers.zip(new_system_approvers)
         paired.all? { |cur, sys| cur == sys || sys.delegates_to?(cur) }
       else
-        # the number of system_approvers changed
+        # the number of system_approver_emails changed
         false
       end
     end
@@ -141,7 +141,7 @@ module Ncr
     end
 
     def add_approvals(approver_email)
-      emails = [approver_email] + self.system_approvers
+      emails = [approver_email] + self.system_approver_emails
       if self.emergency
         emails.each {|email| self.add_observer(email) }
         # skip state machine
@@ -213,7 +213,7 @@ module Ncr
       self.project_title
     end
 
-    def system_approvers
+    def system_approver_emails
       results = []
       if %w(BA60 BA61).include?(self.expense_type)
         unless self.organization.try(:whsc?)
