@@ -443,9 +443,9 @@ describe "National Capital Region proposals" do
 
       it "doesn't change approving list when delegated" do
         proposal = Proposal.last
-        approval = proposal.approvals.first
+        approval = proposal.user_approvals.first
         approval.approve!
-        approval = proposal.approvals.second
+        approval = proposal.user_approvals.second
         user = approval.user
         delegate = User.new(email_address:'delegate@example.com')
         delegate.save
@@ -456,9 +456,10 @@ describe "National Capital Region proposals" do
         click_on 'Update'
 
         proposal.reload
-        second_approver = proposal.approvals.second.user.email_address
+        second_approver = proposal.approvers.second.email_address
         expect(second_approver).to eq('delegate@example.com')
-        expect(proposal.approvals.length).to eq(3)
+        expect(proposal.approvers.length).to eq(3)
+        expect(proposal.approvals.length).to eq(4)  # 3 + Serial
       end
 
       it "has 'Discard Changes' link" do
