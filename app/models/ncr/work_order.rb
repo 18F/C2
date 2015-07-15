@@ -89,22 +89,25 @@ module Ncr
       replacement.make_actionable!
     end
 
+    def existing_system_approvers
+      # skip approving official
+      self.approvers.offset(1)
+    end
+
     def reset_system_approvers
       # no need to call initialize_approvals as they have already been set up
-      current_approvers = self.approvers.map(&:email_address)
-      # remove approving official
-      current_approvers.shift
-      unless self.approvers_match?
-        current_approvers.each do |email|
-          self.remove_approver(email)
-        end
-        self.system_approvers.each do |email|
-          self.add_approver(email)
-        end
-        approvals = self.approvals
-        if approvals.first.approved?
-          approvals.second.make_actionable!
-        end
+      current_approvers = self.existing_system_approvers.pluck(:email_address)
+      current_approvers.each do |email|
+        self.remove_approver(email)
+      end
+
+      self.system_approvers.each do |email|
+        self.add_approver(email)
+      end
+
+      approvals = self.approvals
+      if approvals.first.approved?
+        approvals.second.make_actionable!
       end
     end
 
@@ -114,11 +117,13 @@ module Ncr
         self.update_approving_official(approver_email)
       end
 
-      self.reset_system_approvers
+      unless self.approvers_match?
+        self.reset_system_approvers
+      end
     end
 
     def approvers_match?
-      old_system_approvers = self.approvers.offset(1)
+      old_system_approvers = self.existing_system_approvers
       new_system_approver_emails = self.system_approvers
       if old_system_approvers.size == new_system_approver_emails.size
         new_system_approvers = new_system_approver_emails.map { |e| User.for_email(e) }
