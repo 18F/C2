@@ -92,11 +92,10 @@ module Ncr
         self.approvals.first.make_actionable!
       end
       # no need to call initialize_approvals as they have already been set up
-      
       current_approvers = self.approvers.map {|a| a[:email_address]}
       #remove approving official
       current_approvers.shift
-      if (current_approvers != system_approvers)
+      if (!self.approvers_match?)
         current_approvers.each do |email|
           self.remove_approver(email)
         end
@@ -107,6 +106,17 @@ module Ncr
         if(approvals.first.approved?)
           approvals.second.make_actionable!
         end
+      end
+    end
+
+    def approvers_match?
+      if self.approvers.length == system_approvers.length + 1
+        approvers = self.approvers.to_a
+        approvers.shift 
+        paired = approvers.zip(system_approvers.map { |e| User.for_email(e) })
+        paired.all? { |cur, sys| cur == sys || sys.delegates_to?(cur) }
+      else
+        false
       end
     end
 
@@ -240,9 +250,10 @@ module Ncr
       comment_texts = []
       bullet = changed_attributes.length > 1 ? '- ' : ''
       changed_attributes.each do |key, value|
+        former = property_to_s(self.send(key + "_was"))
         value = property_to_s(self[key])
         property_name = WorkOrder.human_attribute_name(key)
-        comment_texts << WorkOrder.update_comment_format(property_name, value, bullet)
+        comment_texts << WorkOrder.update_comment_format(property_name, value, bullet, former)
       end
 
       if !comment_texts.empty?
@@ -257,8 +268,9 @@ module Ncr
       end
     end
 
-    def self.update_comment_format key, value, bullet
-      "#{bullet}*#{key}* was changed to #{value}"
+    def self.update_comment_format key, value, bullet, former=nil
+      from = former ? "from #{former} " : ''
+      "#{bullet}*#{key}* was changed " + from + "to #{value}"
     end
 
     def fiscal_year

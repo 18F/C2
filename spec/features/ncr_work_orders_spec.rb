@@ -406,8 +406,8 @@ describe "National Capital Region proposals" do
         click_on 'Update'
 
         expect(page).to have_content("Request modified by")
-        expect(page).to have_content("Description was changed to New Description")
-        expect(page).to have_content("Vendor was changed to New Test Vendor")
+        expect(page).to have_content("Description was changed from test to New Description")
+        expect(page).to have_content("Vendor was changed from Some Vend to New Test Vendor")
       end
 
       it "does not resave unchanged requests" do
@@ -439,6 +439,26 @@ describe "National Capital Region proposals" do
           expect(proposal.approvers.length).to eq(2)
           expect(proposal.approvers.second.email_address).to eq('ba80@example.gov')
         end
+      end
+
+      it "doesn't change approving list when delegated" do
+        proposal = Proposal.last
+        approval = proposal.approvals.first
+        approval.approve!
+        approval = proposal.approvals.second
+        user = approval.user
+        delegate = User.new(email_address:'delegate@example.com')
+        delegate.save
+        user.add_delegate(delegate)
+        approval.update_attributes!(user: delegate)
+        visit "/ncr/work_orders/#{work_order.id}/edit"
+        fill_in 'Description', with:"New Description that shouldn't change the approver list"
+        click_on 'Update'
+
+        proposal.reload
+        second_approver = proposal.approvals.second.user.email_address
+        expect(second_approver).to eq('delegate@example.com')
+        expect(proposal.approvals.length).to eq(3)
       end
 
       it "has 'Discard Changes' link" do
