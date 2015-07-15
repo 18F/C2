@@ -24,6 +24,19 @@ describe "Canceling a request" do
     expect(current_path).to eq("/proposals/#{proposal.id}/cancel_form")
   end
 
+  context 'email' do
+    around(:each) { ActionMailer::Base.deliveries.clear }
+
+    it "send emails when cancellation is complete" do
+        expect(deliveries.length).to eq(0)
+        visit proposal_path(proposal)
+        click_on('Cancel my request')
+        fill_in "reason_input", with: "This is a good reason for the cancellation."
+        click_on('Yes, cancel this request')
+        expect(deliveries.length).to eq(2)
+    end
+  end
+
   context "entering in a reason cancellation" do
     it "successfully saves comments, changes the request status" do
       visit proposal_path(proposal)
@@ -36,25 +49,29 @@ describe "Canceling a request" do
       expect(proposal.reload.comments.last.comment_text).to eq("Request cancelled with comments: This is a good reason for the cancellation.")
     end
 
-    it "sends and notifies the user" do
-      # CURRENT
-    end
-
     it "displays an error if the reason is blank" do
       visit proposal_path(proposal)
       click_on('Cancel my request')
       fill_in "reason_input", with: ""
       click_on('Yes, cancel this request')
-      expect(current_path).to eq("/proposals/#{proposal.id}/cancel_form")
       expect(page).to have_content("A reason for cancellation is required. Please indicate why this request needs to be cancelled.")
     end
   end
 
-  it "redirects if trying to see the cancellation page on proposals you have not requested" do
-    login_as(user)
-    visit cancel_form_proposal_path(proposal)
-    expect(page).to have_content("You are not allowed to see that proposal")
-    expect(current_path).to eq("/proposals")
+  context "Cancel landing page" do
+    it "succesfully opens the page for a requester" do
+      login_as(proposal.requester)
+      visit cancel_form_proposal_path(proposal)
+      expect(page).to have_content("Cancellation: #{proposal.name}")
+      expect(current_path).to eq("/proposals/#{proposal.id}/cancel_form")
+    end
+
+    it "redirects for non-requesters" do
+      login_as(proposal.approvers.first)
+      visit cancel_form_proposal_path(proposal)
+      expect(page).to have_content("You are not allowed to see that proposal")
+      expect(current_path).to eq("/proposals")
+    end
   end
 
 end
