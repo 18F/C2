@@ -18,22 +18,25 @@ module Ncr
         flash[:warning] = "You are about to modify a fully approved request. Changes will be logged and sent to approvers but this request will not require re-approval."
       end
       first_approver = self.proposal.approvers.first
-      @approver_email = first_approver.email_address if first_approver
+      @approver_email = first_approver.try(:email_address)
+
       super
     end
 
     def update
       @approver_email = params[:approver_email]
       @model_instance.modifier = current_user
+
       super
-      if self.errors.empty? && !@model_instance.emergency  # skip approvals if emergency
-        if !self.approver_email_frozen? && !@model_not_changing
-          @model_instance.update_approvers(@approver_email)
-          @model_instance.email_approvers
-        elsif !@model_not_changing
+
+      # TODO move this logic to #update_approvers
+      if @model_changing && !@model_instance.emergency  # skip approvals if emergency
+        if self.approver_email_frozen?
           @model_instance.update_approvers
-          @model_instance.email_approvers
+        else
+          @model_instance.update_approvers(@approver_email)
         end
+        @model_instance.email_approvers
       end
     end
 
