@@ -41,7 +41,7 @@ class ProposalDecorator < Draper::Decorator
   end
 
   def generate_status_message
-    if object.approvals.where.not(status: 'pending').empty?
+    if object.pending?
       progress_status_message
     else
       completed_status_message

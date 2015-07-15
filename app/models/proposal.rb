@@ -181,12 +181,6 @@ class Proposal < ActiveRecord::Base
 
 
   #### state machine methods ####
-  def on_rejected_entry(prev_state, event)
-    if prev_state.name != :rejected
-      Dispatcher.on_proposal_rejected(self)
-    end
-  end
-
   def restart
     # Note that none of the state machine's history is stored
     self.api_tokens.update_all(expires_at: Time.now)

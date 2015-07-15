@@ -89,7 +89,7 @@ module Ncr
         first_approval.destroy
         replacement = self.add_approver(approver_email)
         replacement.move_to_top
-        self.approvals.first.make_actionable!
+        self.user_approvals.first.make_actionable!
       end
       # no need to call initialize_approvals as they have already been set up
       current_approvers = self.approvers.map {|a| a[:email_address]}
@@ -102,7 +102,7 @@ module Ncr
         system_approvers.each do |email|
           self.add_approver(email)
         end
-        approvals = self.approvals
+        approvals = self.user_approvals
         if(approvals.first.approved?)
           approvals.second.make_actionable!
         end
