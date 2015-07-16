@@ -190,13 +190,13 @@ describe Proposal do
       expect(proposal.approved?).to be true
     end
 
-    it 'sets status as rejected if any approval is rejected' do
+    it 'sets status as cancelled if the proposal has been cancelled' do
       proposal = FactoryGirl.create(:proposal, :with_approvers)
-      proposal.approvals.first.update(status: 'approved')
-      proposal.approvals.second.update(status: 'rejected')
-      expect(proposal.pending?).to be true  # as we skipped the state machine
+      proposal.approvals.first.approve!
+      expect(proposal.pending?).to be true
+      proposal.cancel!
       proposal.reset_status()
-      expect(proposal.rejected?).to be true
+      expect(proposal.cancelled?).to be true
     end
 
     it 'reverts to pending if an approval is added' do

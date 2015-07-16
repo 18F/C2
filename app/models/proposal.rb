@@ -134,12 +134,12 @@ class Proposal < ActiveRecord::Base
   end
 
   def reset_status()
-    if self.all_approved?
-      self.update(status: 'approved')
-    elsif self.approvals.rejected.any?
-      self.update(status: 'rejected')
-    else
-      self.update(status: 'pending')
+    unless self.cancelled?   # no escape from cancelled
+      if self.all_approved?
+        self.update(status: 'approved')
+      else
+        self.update(status: 'pending')
+      end
     end
   end
 
