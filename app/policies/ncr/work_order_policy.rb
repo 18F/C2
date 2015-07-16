@@ -7,10 +7,6 @@ module Ncr
       @work_order = record
     end
 
-    def not_cancelled!
-      check(!@work_order.cancelled?, "The proposal is cancelled.")
-    end
-
     def can_edit!
       check(self.requester? || self.approver? || self.observer?, "You must be the requester, approver, or observer to edit")
     end

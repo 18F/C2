@@ -188,7 +188,7 @@
   </div>
 <%- end %>
 
-<% if policy(@proposal).can_approve_or_reject? && !@proposal.cancelled? %>
+<% if policy(@proposal).can_approve_or_reject? %>
   <div class="centered">
     <%= form_tag(approve_proposal_path(@proposal, method: "POST")) do %>
       <%= hidden_field_tag(:version, @proposal.version) %>

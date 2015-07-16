@@ -2,7 +2,7 @@ describe ProposalDecorator do
   let(:proposal) { FactoryGirl.build(:proposal).decorate }
 
   describe '#approvals_by_status' do
-    it "orders by approved, actionable, pending, then cancelled" do
+    it "orders by approved, actionable, pending" do
       # make two approvals for each status, in random order
       statuses = Approval.statuses.map(&:to_s)
       statuses = statuses.dup + statuses.clone
