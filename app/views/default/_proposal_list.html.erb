@@ -5,7 +5,7 @@
 <table class="proposal-list">
   <tr class="header">
     <th class="sixth" scope="col"><h5>ID</h5></th>
-    <th class="first" scope="col"><h5>Request</h5></th>
+    <th class="next" scope="col"><h5>Request</h5></th>
     <th class="sixth" scope="col"><h5>Requester</h5></th>
     <th class="sixth" scope="col"><h5>Status</h5></th>
     <th class="sixth" scope="col"><h5>Submitted</h5></th>
@@ -18,7 +18,7 @@
   <%- proposals_list.each do |proposal| %>
     <tr>
       <td class="sixth"><a href="<%= proposal_url(proposal) %>" aria-label="Proposal <%= proposal.public_identifier %> <%= proposal.name %>"><%= proposal.public_identifier %></a></td>
-      <td class="first"><a href="<%= proposal_url(proposal) %>" aria-label="Proposal <%= proposal.public_identifier %> <%= proposal.name %>"><%= proposal.name %></a></td>
+      <td class="next"><a href="<%= proposal_url(proposal) %>" aria-label="Proposal <%= proposal.public_identifier %> <%= proposal.name %>"><%= proposal.name %></a></td>
       <td class="sixth"><%= proposal.requester.email_address %></td>
       <td class="sixth">
         <%= render partial: 'proposals/review_status',
