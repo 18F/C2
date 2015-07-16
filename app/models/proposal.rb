@@ -68,7 +68,7 @@ class Proposal < ActiveRecord::Base
     self.approval_delegates.exists?(assignee_id: user.id)
   end
 
-  def approval_for(user)
+  def existing_approval_for(user)
     where_clause = <<-SQL
       user_id = :user_id
       OR user_id IN (SELECT assigner_id FROM approval_delegates WHERE assignee_id = :user_id)
@@ -104,14 +104,15 @@ class Proposal < ActiveRecord::Base
 
   def remove_approver(email)
     user = User.for_email(email)
-    approval = self.approval_for(user)
+    approval = self.existing_approval_for(user)
     approval.destroy
   end
 
   # Set the approver list, from any start state
+  # This overrides the `through` relation but provides parity to the accessor
   def approvers=(approver_list)
     approvals = approver_list.each_with_index.map do |approver, idx|
-      approval = self.approval_for(approver)
+      approval = self.existing_approval_for(approver)
       approval ||= Approval.new(user: approver, proposal: self)
       approval.position = idx + 1   # start with 1
       approval
@@ -145,9 +146,7 @@ class Proposal < ActiveRecord::Base
 
   def add_observer(email)
     user = User.for_email(email)
-    if self.observations.where(user: user).empty?
-      self.observations.create!(user_id: user.id)
-    end
+    self.observations.find_or_create_by!(user: user)
   end
 
   def add_requester(email)

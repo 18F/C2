@@ -47,7 +47,7 @@ class ProposalsController < ApplicationController
   end
 
   def approve
-    approval = self.proposal.approval_for(current_user)
+    approval = self.proposal.existing_approval_for(current_user)
     if approval.user.delegates_to?(current_user)
       # assign them to the approval
       approval.update_attributes!(user: current_user)

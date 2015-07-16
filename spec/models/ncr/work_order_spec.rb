@@ -68,7 +68,6 @@ describe Ncr::WorkOrder do
       expect(form.approved?).to eq(true)
     end
 
-
     with_env_vars(NCR_BA61_TIER1_BUDGET_MAILBOX: 'ba61one@example.gov',
                   NCR_BA61_TIER2_BUDGET_MAILBOX: 'ba61two@example.gov',
                   NCR_BA80_BUDGET_MAILBOX: 'ba80@example.gov') do

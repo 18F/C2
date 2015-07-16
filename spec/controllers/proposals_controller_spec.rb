@@ -222,13 +222,16 @@ describe ProposalsController do
     it "won't allow the approval to be approved twice through the web ui" do
       proposal = FactoryGirl.create(:proposal, :with_approver)
       login_as(proposal.approvers.first)
+
       post :approve, id: proposal.id
+
       expect(proposal.reload.approved?).to be true
       expect(flash[:success]).not_to be_nil
       expect(flash[:alert]).to be_nil
 
       flash.clear
       post :approve, id: proposal.id
+
       expect(flash[:success]).to be_nil
       expect(flash[:alert]).not_to be_nil
     end
@@ -239,15 +242,17 @@ describe ProposalsController do
       mailbox = proposal.approvers.first
       mailbox.add_delegate(delegate1)
       mailbox.add_delegate(delegate2)
-
       login_as(delegate1)
+
       post :approve, id: proposal.id
+
       expect(flash[:success]).not_to be_nil
       expect(flash[:alert]).to be_nil
 
       flash.clear
       login_as(delegate2)
       post :approve, id: proposal.id
+
       expect(flash[:success]).to be_nil
       expect(flash[:alert]).not_to be_nil
     end
@@ -257,14 +262,13 @@ describe ProposalsController do
       mailbox = proposal.approvers.second
       delegate = FactoryGirl.create(:user)
       mailbox.add_delegate(delegate)
-
       proposal.approvals.first.approve!
-
       login_as(delegate)
+
       post :approve, id: proposal.id
+
       expect(flash[:success]).not_to be_nil
       expect(flash[:alert]).to be_nil
-
       expect(proposal.reload.approved?).to be true
     end
   end

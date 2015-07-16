@@ -85,8 +85,10 @@ describe Proposal do
   describe '#approvers=' do
     it 'sets initial approvers' do
       proposal = FactoryGirl.create(:proposal)
-      approvers = [FactoryGirl.create(:user), FactoryGirl.create(:user), FactoryGirl.create(:user)]
+      approvers = 3.times.map{ FactoryGirl.create(:user) }
+
       proposal.approvers = approvers
+
       expect(proposal.approvals.count).to be 3
       expect(proposal.approvers).to eq approvers
     end
@@ -96,7 +98,9 @@ describe Proposal do
       old_approval1 = proposal.approvals.first
       old_approval2 = proposal.approvals.second
       approvers = [FactoryGirl.create(:user), FactoryGirl.create(:user), old_approval2.user]
+
       proposal.approvers = approvers
+
       expect(proposal.approvals.count).to be 3
       expect(proposal.approvers).to eq approvers
       approval_ids = proposal.approvals.map(&:id)
@@ -111,6 +115,7 @@ describe Proposal do
       proposal.add_approver('1@example.com')
       proposal.add_approver('2@example.com')
       proposal.add_approver('3@example.com')
+
       proposal.kickstart_approvals()
 
       expect(proposal.approvals.count).to be 3
@@ -122,6 +127,7 @@ describe Proposal do
       proposal.add_approver('1@example.com')
       proposal.add_approver('2@example.com')
       proposal.add_approver('3@example.com')
+
       proposal.kickstart_approvals()
 
       expect(proposal.approvals.count).to be 3
@@ -132,14 +138,18 @@ describe Proposal do
     it 'fixes modified parallel proposal approvals' do
       proposal = FactoryGirl.create(:proposal, flow: 'parallel')
       proposal.add_approver('1@example.com')
+
       proposal.kickstart_approvals()
+
       expect(proposal.approvals.actionable.count).to be 1
 
       proposal.add_approver('2@example.com')
       proposal.add_approver('3@example.com')
       expect(proposal.approvals.count).to be 3
       expect(proposal.approvals.actionable.count).to be 1
+
       proposal.kickstart_approvals()
+
       expect(proposal.approvals.actionable.count).to be 3
     end
 
@@ -147,13 +157,17 @@ describe Proposal do
       proposal = FactoryGirl.create(:proposal, flow: 'linear')
       proposal.add_approver('1@example.com')
       proposal.add_approver('2@example.com')
-      proposal.kickstart_approvals()
-      expect(proposal.approvals.count).to be 2
-      proposal.approvals.first.approve!
 
+      proposal.kickstart_approvals()
+
+      expect(proposal.approvals.count).to be 2
+
+      proposal.approvals.first.approve!
       proposal.remove_approver('2@example.com')
       proposal.add_approver('3@example.com')
+
       proposal.kickstart_approvals()
+
       expect(proposal.approvals.approved.count).to be 1
       expect(proposal.approvals.actionable.count).to be 1
       expect(proposal.approvals.actionable.first.user.email_address).to eq '3@example.com'
@@ -163,6 +177,7 @@ describe Proposal do
       proposal = FactoryGirl.create(:proposal, flow: 'parallel')
       proposal.add_approver('1@example.com')
       proposal.add_approver('2@example.com')
+
       proposal.kickstart_approvals()
       proposal.approvals.first.approve!
       proposal.approvals.second.approve!
@@ -174,6 +189,7 @@ describe Proposal do
       proposal = FactoryGirl.create(:proposal, flow: 'linear')
       proposal.add_approver('1@example.com')
       proposal.add_approver('2@example.com')
+
       proposal.kickstart_approvals()
       proposal.approvals.first.approve!
       proposal.approvals.second.approve!
@@ -195,6 +211,7 @@ describe Proposal do
       proposal.approvals.first.approve!
       expect(proposal.pending?).to be true
       proposal.cancel!
+
       proposal.reset_status()
       expect(proposal.cancelled?).to be true
     end
@@ -205,6 +222,7 @@ describe Proposal do
       proposal.approvals.second.approve!
       expect(proposal.approved?).to be true
       proposal.add_approver('new_approver@example.gov')
+
       proposal.reset_status()
       expect(proposal.pending?).to be true
     end
@@ -214,9 +232,11 @@ describe Proposal do
       proposal.reset_status()
       expect(proposal.pending?).to be true
       proposal.approvals.first.approve!
+
       proposal.reset_status()
       expect(proposal.pending?).to be true
       proposal.approvals.second.approve!
+
       proposal.reset_status()
       expect(proposal.approved?).to be true
     end
