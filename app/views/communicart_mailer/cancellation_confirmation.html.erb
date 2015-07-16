@@ -1,0 +1,12 @@
+<div>
+  <p>
+    Hi <%= @proposal.requester.full_name %>,<br/>
+    This confirms your cancellation of this request: <%= @proposal.name %> (<%= @proposal.public_id %>)
+  </p>
+</div>
+
+<p>
+  <strong>
+    <%= link_to "View This Request", proposal_url(@proposal), {target: 'C2'} %>
+  </strong>
+</p>

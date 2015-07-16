@@ -308,7 +308,7 @@ describe "National Capital Region proposals" do
     end
   end
 
-  describe "approving a work order" do 
+  describe "approving a work order" do
     let(:work_order){FactoryGirl.create(:ncr_work_order)}
     let(:ncr_proposal){work_order.proposal}
     before do
@@ -323,7 +323,6 @@ describe "National Capital Region proposals" do
         click_on("Approve")
         expect(current_path).to eq("/proposals/#{ncr_proposal.id}")
         expect(page).to have_content("You have approved #{work_order.public_identifier}")
-        
         approval = Proposal.last.approvals.first
         expect(approval.status).to eq('approved')
         expect(approval.approved_at.utc.to_s).to eq(Time.now.utc.to_s)
@@ -420,7 +419,7 @@ describe "National Capital Region proposals" do
       end
 
 
-      it "allows you to change the approving official" do 
+      it "allows you to change the approving official" do
         visit "/ncr/work_orders/#{work_order.id}/edit"
         select "liono0@some-cartoon-show.com", from: "Approving official's email address"
         click_on 'Update'

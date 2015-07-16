@@ -7,17 +7,15 @@ class Proposal < ActiveRecord::Base
       event :partial_approve, transitions_to: :approved, if: lambda { |p| p.all_approved? }
       event :partial_approve, transitions_to: :pending
       event :approve, :transitions_to => :approved
-      event :reject, :transitions_to => :rejected
       event :restart, :transitions_to => :pending
+      event :cancel, :transitions_to => :cancelled
     end
     state :approved do
       event :restart, :transitions_to => :pending
+      event :cancel, :transitions_to => :cancelled
     end
-    state :rejected do
-      # partial approvals and rejections can't break out of this state
-      event :partial_approve, :transitions_to => :rejected
-      event :reject, :transitions_to => :rejected
-      event :restart, :transitions_to => :pending
+    state :cancelled do
+      event :partial_approve, :transitions_to => :cancelled
     end
   end
 
@@ -47,7 +45,8 @@ class Proposal < ActiveRecord::Base
   self.statuses.each do |status|
     scope status, -> { where(status: status) }
   end
-  scope :closed, -> { where(status: ['approved', 'rejected']) }
+  scope :closed, -> { where(status: ['approved', 'cancelled']) } #TODO: Backfill to change approvals in 'reject' status to 'cancelled' status
+  scope :cancelled, -> { where(status: 'cancelled') }
 
   after_initialize :set_defaults
   after_create :update_public_id
@@ -216,13 +215,6 @@ class Proposal < ActiveRecord::Base
 
   #######################
 
-
-  #### state machine methods ####
-  def on_rejected_entry(prev_state, event)
-    if prev_state.name != :rejected
-      Dispatcher.on_proposal_rejected(self)
-    end
-  end
 
   def restart
     # Note that none of the state machine's history is stored

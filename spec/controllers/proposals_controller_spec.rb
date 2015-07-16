@@ -134,6 +134,51 @@ describe ProposalsController do
     end
   end
 
+  describe '#cancel_form' do
+    let(:proposal) { FactoryGirl.create(:proposal) }
+
+    it 'should allow the requester to see it' do
+      login_as(user)
+      proposal.update_attributes(requester_id: user.id)
+
+      get :show, id: proposal.id
+      expect(response).not_to redirect_to("/proposals/")
+      expect(flash[:alert]).not_to be_present
+    end
+
+    it 'should redirect random users' do
+      login_as(user)
+      get :cancel_form, id: proposal.id
+      expect(response).to redirect_to(proposal_path)
+      expect(flash[:alert]).to eq 'You are not the requester'
+    end
+
+    it 'should redirect for cancelled requests' do
+      proposal.update_attributes(status:'cancelled')
+      login_as(proposal.requester)
+
+      get :cancel_form, id: proposal.id
+      expect(response).to redirect_to(proposal_path proposal.id)
+      expect(flash[:alert]).to eq 'Sorry, this proposal has been cancelled.'
+    end
+  end
+
+  describe "#cancel" do
+    let!(:proposal) { FactoryGirl.create(:proposal, requester: user) }
+
+    before do
+      login_as(user)
+    end
+
+    it 'sends a cancellation email' do
+      mock_dispatcher = double('dispatcher').as_null_object
+      allow(Dispatcher).to receive(:new).and_return(mock_dispatcher)
+      expect(mock_dispatcher).to receive(:deliver_cancellation_emails)
+
+      post :cancel, id: proposal.id, reason_input:'My test cancellation text'
+    end
+  end
+
   describe '#approve' do
     it "signs the user in via the token" do
       proposal = FactoryGirl.create(:proposal, :with_approver)

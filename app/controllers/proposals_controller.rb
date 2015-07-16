@@ -2,11 +2,12 @@ class ProposalsController < ApplicationController
   include TokenAuth
 
   before_filter :authenticate_user!, except: :approve
-  before_filter ->{authorize self.proposal}, only: :show
+  before_filter ->{authorize self.proposal}, only: [:show, :cancel, :cancel_form]
   before_filter :needs_token_on_get, only: :approve
   before_filter :validate_access, only: :approve
   helper_method :display_status
   add_template_helper ProposalsHelper
+  rescue_from Pundit::NotAuthorizedError, with: :auth_errors
 
   def show
     @proposal = self.proposal.decorate
@@ -23,6 +24,27 @@ class ProposalsController < ApplicationController
     @proposals = self.chronological_proposals.closed
   end
 
+  def cancel_form
+    @proposal = self.proposal.decorate
+  end
+
+  def cancel
+    if params[:reason_input].present?
+      proposal = Proposal.find params[:id]
+      comments = "Request cancelled with comments: " + params[:reason_input]
+      proposal.cancel!
+      proposal.comments.create!(comment_text: comments, user_id: current_user.id)
+
+      flash[:success] = "Your request has been cancelled"
+      redirect_to proposal_path, id: proposal.id
+      Dispatcher.new.deliver_cancellation_emails(proposal)
+    else
+      redirect_to cancel_form_proposal_path, id: params[:id],
+                                             alert: "A reason for cancellation is required.
+                                                     Please indicate why this request needs
+                                                     to be cancelled."
+    end
+  end
 
   def approve
     approval = self.proposal.approval_for(current_user)
@@ -70,5 +92,13 @@ class ProposalsController < ApplicationController
 
   def chronological_proposals
     self.proposals.order('created_at DESC')
+  end
+
+  def auth_errors(exception)
+    if ['cancel','cancel_form'].include? params[:action]
+      redirect_to proposal_path, :alert => exception.message
+    else
+      super
+    end
   end
 end
