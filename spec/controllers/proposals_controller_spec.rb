@@ -86,12 +86,6 @@ describe ProposalsController do
         expect(response).not_to redirect_to(proposals_path)
         expect(response.request.fullpath).to eq(proposal_path proposal.id)
       end
-
-    it 'should redirect random users' do
-      proposal = FactoryGirl.create(:proposal, requester_id: 10987235)
-      get :show, id: proposal.id
-      expect(response).to redirect_to(proposals_path)
-      expect(flash[:alert]).to be_present
     end
 
   end
