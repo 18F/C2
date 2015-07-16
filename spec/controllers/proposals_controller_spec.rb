@@ -39,19 +39,55 @@ describe ProposalsController do
       login_as(user)
     end
 
-    it 'should allow the requester to see it' do
-      proposal = FactoryGirl.create(:proposal, requester: user)
-      get :show, id: proposal.id
-      expect(response).not_to redirect_to("/proposals/")
-      expect(flash[:alert]).not_to be_present
+    context 'visitors' do
+      it 'should allow the requester to see it' do
+        proposal = FactoryGirl.create(:proposal, requester: user)
+        get :show, id: proposal.id
+        expect(response).not_to redirect_to("/proposals/")
+        expect(flash[:alert]).not_to be_present
+      end
+
+      it 'should redirect random users' do
+        proposal = FactoryGirl.create(:proposal)
+        get :show, id: proposal.id
+        expect(response).to redirect_to(proposals_path)
+        expect(flash[:alert]).to be_present
+      end
     end
 
-    it 'should redirect random users' do
-      proposal = FactoryGirl.create(:proposal)
-      get :show, id: proposal.id
-      expect(response).to redirect_to(proposals_path)
-      expect(flash[:alert]).to be_present
+    context 'admins' do
+      after do
+        ENV['ADMIN_EMAILS'] = ""
+        ENV['CLIENT_ADMIN_EMAILS'] = ""
+      end
+
+      it "allows admins to view requests of same client" do
+        #Set up a temporary class
+        module SomeCompany
+          class SomethingApprovable
+          end
+        end
+
+        ENV['CLIENT_ADMIN_EMAILS'] = "#{user.email_address}"
+        proposal = FactoryGirl.create(:proposal, requester_id: 5555, client_data_type:"SomeCompany::SomethingApprovable")
+        user.update_attributes(client_slug: 'some_company')
+
+        get :show, id: proposal.id
+        expect(response).not_to redirect_to(proposals_path)
+        expect(response.request.fullpath).to eq(proposal_path proposal.id)
+      end
+
+      it "allows app admins to view requests outside of related client" do
+        proposal = FactoryGirl.create(:proposal, requester_id: 5555, client_data_type:"SomeCompany::SomethingApprovable")
+        user.update_attributes(client_slug: 'some_other_company')
+        ENV['ADMIN_EMAILS'] = "#{user.email_address}"
+
+        get :show, id: proposal.id
+        expect(response).not_to redirect_to(proposals_path)
+        expect(response.request.fullpath).to eq(proposal_path proposal.id)
+      end
     end
+
   end
 
   describe '#query' do
@@ -95,6 +131,51 @@ describe ProposalsController do
         get :query, start_date: '2012-05-02', end_date: '2012-06-02'
         expect(response.body).to include("2012-05-02 - 2012-06-02")
       end
+    end
+  end
+
+  describe '#cancel_form' do
+    let(:proposal) { FactoryGirl.create(:proposal) }
+
+    it 'should allow the requester to see it' do
+      login_as(user)
+      proposal.update_attributes(requester_id: user.id)
+
+      get :show, id: proposal.id
+      expect(response).not_to redirect_to("/proposals/")
+      expect(flash[:alert]).not_to be_present
+    end
+
+    it 'should redirect random users' do
+      login_as(user)
+      get :cancel_form, id: proposal.id
+      expect(response).to redirect_to(proposal_path)
+      expect(flash[:alert]).to eq 'You are not the requester'
+    end
+
+    it 'should redirect for cancelled requests' do
+      proposal.update_attributes(status:'cancelled')
+      login_as(proposal.requester)
+
+      get :cancel_form, id: proposal.id
+      expect(response).to redirect_to(proposal_path proposal.id)
+      expect(flash[:alert]).to eq 'Sorry, this proposal has been cancelled.'
+    end
+  end
+
+  describe "#cancel" do
+    let!(:proposal) { FactoryGirl.create(:proposal, requester: user) }
+
+    before do
+      login_as(user)
+    end
+
+    it 'sends a cancellation email' do
+      mock_dispatcher = double('dispatcher').as_null_object
+      allow(Dispatcher).to receive(:new).and_return(mock_dispatcher)
+      expect(mock_dispatcher).to receive(:deliver_cancellation_emails)
+
+      post :cancel, id: proposal.id, reason_input:'My test cancellation text'
     end
   end
 

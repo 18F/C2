@@ -26,46 +26,50 @@ describe "National Capital Region proposals" do
         login_as(requester)
       end
 
-      it "saves a Proposal with the attributes" do
-        expect(Dispatcher).to receive(:deliver_new_proposal_emails)
+      with_env_var('NCR_BA80_BUDGET_MAILBOX', 'ba80budget@example.gov') do
+        it "saves a Proposal with the attributes" do
+          expect(Dispatcher).to receive(:deliver_new_proposal_emails)
 
-        visit '/ncr/work_orders/new'
-        fill_in 'Project title', with: "buying stuff"
-        fill_in 'Description', with: "desc content"
-        choose 'BA80'
-        fill_in 'RWA Number', with: 'F1234567'
-        fill_in 'Vendor', with: 'ACME'
-        fill_in 'Amount', with: 123.45
-        check "I am going to be using direct pay for this transaction"
-        select approver.email_address, from: 'approver_email'
-        fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
-        select Ncr::Organization.all[0], from: 'ncr_work_order_org_code'
-        expect {
-          click_on 'Submit for approval'
-        }.to change { Proposal.count }.from(0).to(1)
+          visit '/ncr/work_orders/new'
+          fill_in 'Project title', with: "buying stuff"
+          fill_in 'Description', with: "desc content"
+          choose 'BA80'
+          fill_in 'RWA Number', with: 'F1234567'
+          fill_in 'Vendor', with: 'ACME'
+          fill_in 'Amount', with: 123.45
+          check "I am going to be using direct pay for this transaction"
+          select approver.email_address, from: 'approver_email'
+          fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
+          select Ncr::Organization.all[0], from: 'ncr_work_order_org_code'
+          expect {
+            click_on 'Submit for approval'
+          }.to change { Proposal.count }.from(0).to(1)
 
-        proposal = Proposal.last
-        expect(proposal.public_id).to have_content("FY")
-        expect(page).to have_content("Proposal submitted")
-        expect(current_path).to eq("/proposals/#{proposal.id}")
+          proposal = Proposal.last
+          expect(proposal.public_id).to have_content("FY")
+          expect(page).to have_content("Proposal submitted")
+          expect(current_path).to eq("/proposals/#{proposal.id}")
 
-        expect(proposal.name).to eq("buying stuff")
-        expect(proposal.flow).to eq('linear')
-        work_order = proposal.client_data
-        expect(work_order.client).to eq('ncr')
-        expect(work_order.expense_type).to eq('BA80')
-        expect(work_order.vendor).to eq('ACME')
-        expect(work_order.amount).to eq(123.45)
-        expect(work_order.direct_pay).to eq(true)
-        expect(work_order.building_number).to eq(Ncr::BUILDING_NUMBERS[0])
-        expect(work_order.org_code).to eq(Ncr::Organization.all[0].to_s)
-        expect(work_order.description).to eq('desc content')
-        expect(proposal.requester).to eq(requester)
-        expect(proposal.approvers.map(&:email_address)).to eq(
-          [approver.email_address, 'communicart.budget.approver@gmail.com'])
+          expect(proposal.name).to eq("buying stuff")
+          expect(proposal.flow).to eq('linear')
+          work_order = proposal.client_data
+          expect(work_order.client).to eq('ncr')
+          expect(work_order.expense_type).to eq('BA80')
+          expect(work_order.vendor).to eq('ACME')
+          expect(work_order.amount).to eq(123.45)
+          expect(work_order.direct_pay).to eq(true)
+          expect(work_order.building_number).to eq(Ncr::BUILDING_NUMBERS[0])
+          expect(work_order.org_code).to eq(Ncr::Organization.all[0].to_s)
+          expect(work_order.description).to eq('desc content')
+          expect(proposal.requester).to eq(requester)
+          expect(proposal.approvers.map(&:email_address)).to eq(
+            [approver.email_address, 'ba80budget@example.gov'])
+        end
       end
 
-      with_feature 'SHOW_BA60_OPTION' do
+      with_env_vars(SHOW_BA60_OPTION: 'true',
+                    NCR_BA61_TIER1_BUDGET_MAILBOX: 'ba61one@example.gov',
+                    NCR_BA61_TIER2_BUDGET_MAILBOX: 'ba61two@example.gov') do
         it "saves a BA60 Proposal with the attributes" do
           expect(Dispatcher).to receive(:deliver_new_proposal_emails)
 
@@ -87,8 +91,8 @@ describe "National Capital Region proposals" do
           expect(work_order.expense_type).to eq('BA60')
           expect(proposal.approvers.map(&:email_address)).to eq(%w(
             liono0@some-cartoon-show.com
-            communicart.budget.approver@gmail.com
-            communicart.ofm.approver@gmail.com
+            ba61one@example.gov
+            ba61two@example.gov
           ))
         end
 
@@ -98,6 +102,11 @@ describe "National Capital Region proposals" do
           expect(page).to have_content('BA61')
           expect(page).to have_content('BA80')
         end
+      end
+
+      it "defaults to no approver if there was no previous request" do
+        visit '/ncr/work_orders/new'
+        expect(find_field("Approving official's email address").value).to eq('')
       end
 
       it "defaults to the approver from the last request" do
@@ -291,6 +300,33 @@ describe "National Capital Region proposals" do
           expect(proposal.approved?).to eq(false)
         end
       end
+
+      it "does not disable the emergency field" do
+        visit '/ncr/work_orders/new'
+        expect(find_field('emergency')).not_to be_disabled
+      end
+    end
+  end
+
+  describe "approving a work order" do
+    let(:work_order){FactoryGirl.create(:ncr_work_order)}
+    let(:ncr_proposal){work_order.proposal}
+    before do
+      Timecop.freeze(10.hours.ago) do
+        work_order.add_approvals('approver@example.com')
+      end
+      login_as(work_order.approvers.first)
+    end
+    it "allows an approver to approve work order" do
+      Timecop.freeze() do
+        visit "/proposals/#{ncr_proposal.id}"
+        click_on("Approve")
+        expect(current_path).to eq("/proposals/#{ncr_proposal.id}")
+        expect(page).to have_content("You have approved #{work_order.public_identifier}")
+        approval = Proposal.last.approvals.first
+        expect(approval.status).to eq('approved')
+        expect(approval.approved_at.utc.to_s).to eq(Time.now.utc.to_s)
+      end
     end
   end
 
@@ -369,8 +405,8 @@ describe "National Capital Region proposals" do
         click_on 'Update'
 
         expect(page).to have_content("Request modified by")
-        expect(page).to have_content("Description was changed to New Description")
-        expect(page).to have_content("Vendor was changed to New Test Vendor")
+        expect(page).to have_content("Description was changed from test to New Description")
+        expect(page).to have_content("Vendor was changed from Some Vend to New Test Vendor")
       end
 
       it "does not resave unchanged requests" do
@@ -383,7 +419,7 @@ describe "National Capital Region proposals" do
       end
 
 
-      it "allows you to change the approving official" do 
+      it "allows you to change the approving official" do
         visit "/ncr/work_orders/#{work_order.id}/edit"
         select "liono0@some-cartoon-show.com", from: "Approving official's email address"
         click_on 'Update'
@@ -392,14 +428,36 @@ describe "National Capital Region proposals" do
         expect(proposal.approvals.first.actionable?).to eq (true)
       end
 
-      it "allows you to change the expense type" do
-        visit "/ncr/work_orders/#{work_order.id}/edit"
-        choose 'BA80'
-        fill_in 'RWA Number', with:'a1234567'
-        click_on 'Update'
+      with_env_var('NCR_BA80_BUDGET_MAILBOX', 'ba80@example.gov') do
+        it "allows you to change the expense type" do
+          visit "/ncr/work_orders/#{work_order.id}/edit"
+          choose 'BA80'
+          fill_in 'RWA Number', with:'a1234567'
+          click_on 'Update'
+          proposal = Proposal.last
+          expect(proposal.approvers.length).to eq(2)
+          expect(proposal.approvers.second.email_address).to eq('ba80@example.gov')
+        end
+      end
+
+      it "doesn't change approving list when delegated" do
         proposal = Proposal.last
-        expect(proposal.approvers.length).to eq(2)
-        expect(proposal.approvers.second.email_address).to eq('communicart.budget.approver@gmail.com')
+        approval = proposal.approvals.first
+        approval.approve!
+        approval = proposal.approvals.second
+        user = approval.user
+        delegate = User.new(email_address:'delegate@example.com')
+        delegate.save
+        user.add_delegate(delegate)
+        approval.update_attributes!(user: delegate)
+        visit "/ncr/work_orders/#{work_order.id}/edit"
+        fill_in 'Description', with:"New Description that shouldn't change the approver list"
+        click_on 'Update'
+
+        proposal.reload
+        second_approver = proposal.approvals.second.user.email_address
+        expect(second_approver).to eq('delegate@example.com')
+        expect(proposal.approvals.length).to eq(3)
       end
 
       it "has 'Discard Changes' link" do
@@ -459,10 +517,15 @@ describe "National Capital Region proposals" do
         expect(work_order.function_code).to eq('PG123')
         expect(work_order.soc_code).to eq('789')
       end
+
+      it "disables the emergency field" do
+        visit "/ncr/work_orders/#{work_order.id}/edit"
+        expect(find_field('emergency', disabled: true)).to be_disabled
+      end
     end
 
     it "keeps track of the modification when edited by an approver" do
-      approval = work_order.add_approvals('approver@example.com')
+      work_order.add_approvals('approver@example.com')
       approver = ncr_proposal.approvers.last
       login_as(approver)
 
@@ -486,7 +549,7 @@ describe "National Capital Region proposals" do
 
       visit "/ncr/work_orders/#{work_order.id}/edit"
       expect(current_path).to eq("/ncr/work_orders/new")
-      expect(page).to have_content("You must be the requester or an approver")
+      expect(page).to have_content("You must be the requester, approver, or observer")
     end
   end
 end

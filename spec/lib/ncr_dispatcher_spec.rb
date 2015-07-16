@@ -21,14 +21,6 @@ describe NcrDispatcher do
     end
   end
 
-  describe '#on_proposal_rejected' do
-    it "notifies the requester" do
-      approval_1.update_attribute(:status, 'rejected') # avoid workflow
-      ncr_dispatcher.on_proposal_rejected(work_order)
-      expect(email_recipients).to include(work_order.requester.email_address)
-    end
-  end
-
   describe '#requires_approval_notice?' do
     it 'returns true when the approval is last in the approver list' do
       expect(ncr_dispatcher.requires_approval_notice? approval_2).to eq true

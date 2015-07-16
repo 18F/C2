@@ -55,6 +55,25 @@ describe Dispatcher do
     end
   end
 
+  describe "#deliver_cancellation_emails" do
+    let (:mock_deliverer) { double('deliverer') }
+
+    it "sends an email to each approver" do
+      allow(CommunicartMailer).to receive(:cancellation_email).and_return(mock_deliverer)
+      expect(proposal.approvers.count).to eq 2
+      expect(mock_deliverer).to receive(:deliver_now).twice
+
+      dispatcher.deliver_cancellation_emails(proposal)
+    end
+
+    it "sends a confirmation email to the requester" do
+      allow(CommunicartMailer).to receive(:cancellation_confirmation).and_return(mock_deliverer)
+      expect(mock_deliverer).to receive(:deliver_now).once
+
+      dispatcher.deliver_cancellation_emails(proposal)
+    end
+  end
+
   describe '#on_approval_approved' do
     it "sends to the requester" do
       dispatcher.on_approval_approved(proposal.approvals.first)
