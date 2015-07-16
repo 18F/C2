@@ -131,6 +131,22 @@ describe Ncr::WorkOrder do
         expect(wo.approvals).to be_empty
         expect(wo.observers.count).to be 3
       end
+
+      it "handles the delegate then update scenario" do
+        wo = FactoryGirl.create(:ncr_work_order, expense_type: 'BA80')
+        wo.setup_approvals_and_observers('ao@example.gov')
+        delegate = FactoryGirl.create(:user)
+        wo.approvers.second.add_delegate(delegate)
+        wo.approvals.second.update(user: delegate)
+
+        wo.approvals.first.approve!
+        wo.approvals.second.approve!
+
+        wo.setup_approvals_and_observers('ao@example.gov')
+        wo.reload
+        expect(wo.approved?).to be true
+        expect(wo.approvers.second).to eq delegate
+      end
     end
   end
 
