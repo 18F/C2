@@ -69,8 +69,8 @@ describe "Canceling a request" do
     it "redirects for non-requesters" do
       login_as(proposal.approvers.first)
       visit cancel_form_proposal_path(proposal)
-      expect(page).to have_content("You are not allowed to see that proposal")
-      expect(current_path).to eq("/proposals")
+      expect(page).to have_content("You are not the requester")
+      expect(current_path).to eq("/proposals/#{proposal.id}")
     end
   end
 

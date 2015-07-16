@@ -26,11 +26,6 @@ class ProposalsController < ApplicationController
 
   def cancel_form
     @proposal = self.proposal.decorate
-
-    if @proposal.cancelled?
-     redirect_to proposal_path, id:@proposal.id, alert: "This request has already been cancelled."
-    end
-
   end
 
   def cancel
@@ -56,11 +51,6 @@ class ProposalsController < ApplicationController
     if approval.user.delegates_to?(current_user)
       # assign them to the approval
       approval.update_attributes!(user: current_user)
-    end
-
-    if approval.proposal.cancelled?
-      flash[:error] = "You are unable to approve this request because it has been cancelled."
-      return redirect_to proposal
     end
 
     approval.approve!
@@ -104,7 +94,11 @@ class ProposalsController < ApplicationController
     self.proposals.order('created_at DESC')
   end
 
-  # def auth_errors(exception)
-  #   redirect_to proposals_path, :alert => "You do not have permissions or this request has already been cancelled."
-  # end
+  def auth_errors(exception)
+    if ['cancel','cancel_form'].include? params[:action]
+      redirect_to proposal_path, :alert => exception.message
+    else
+      super
+    end
+  end
 end

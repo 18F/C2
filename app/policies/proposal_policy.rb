@@ -22,6 +22,10 @@ class ProposalPolicy
           "That proposal's already approved. New proposal?")
   end
 
+  def not_cancelled!
+    check(!@proposal.cancelled?, "Sorry, this proposal has been cancelled.")
+  end
+
   def approver?
     @proposal.approvals.exists?(user: @user)
   end
@@ -76,7 +80,7 @@ class ProposalPolicy
   alias_method :can_new!, :can_create!
 
   def can_cancel!
-    requester! && !@proposal.cancelled?
+    requester! && not_cancelled!
   end
   alias_method :can_cancel_form!, :can_cancel!
 

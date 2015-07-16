@@ -86,6 +86,12 @@ describe ProposalsController do
         expect(response).not_to redirect_to(proposals_path)
         expect(response.request.fullpath).to eq(proposal_path proposal.id)
       end
+
+    it 'should redirect random users' do
+      proposal = FactoryGirl.create(:proposal, requester_id: 10987235)
+      get :show, id: proposal.id
+      expect(response).to redirect_to(proposals_path)
+      expect(flash[:alert]).to be_present
     end
 
   end
@@ -131,6 +137,35 @@ describe ProposalsController do
         get :query, start_date: '2012-05-02', end_date: '2012-06-02'
         expect(response.body).to include("2012-05-02 - 2012-06-02")
       end
+    end
+  end
+
+  describe '#cancel_form' do
+    let(:proposal) { FactoryGirl.create(:proposal) }
+
+    it 'should allow the requester to see it' do
+      login_as(user)
+      proposal.update_attributes(requester_id: user.id)
+
+      get :show, id: proposal.id
+      expect(response).not_to redirect_to("/proposals/")
+      expect(flash[:alert]).not_to be_present
+    end
+
+    it 'should redirect random users' do
+      login_as(user)
+      get :cancel_form, id: proposal.id
+      expect(response).to redirect_to(proposal_path)
+      expect(flash[:alert]).to eq 'You are not the requester'
+    end
+
+    it 'should redirect for cancelled requests' do
+      proposal.update_attributes(status:'cancelled')
+      login_as(proposal.requester)
+
+      get :cancel_form, id: proposal.id
+      expect(response).to redirect_to(proposal_path proposal.id)
+      expect(flash[:alert]).to eq 'Sorry, this proposal has been cancelled.'
     end
   end
 
