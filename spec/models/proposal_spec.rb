@@ -181,4 +181,44 @@ describe Proposal do
       expect(proposal.approvals.actionable).to be_empty
     end
   end
+
+  describe '#reset_status' do
+    it 'sets status as approved if there are no approvals' do
+      proposal = FactoryGirl.create(:proposal)
+      expect(proposal.pending?).to be true
+      proposal.reset_status()
+      expect(proposal.approved?).to be true
+    end
+
+    it 'sets status as rejected if any approval is rejected' do
+      proposal = FactoryGirl.create(:proposal, :with_approvers)
+      proposal.approvals.first.update(status: 'approved')
+      proposal.approvals.second.update(status: 'rejected')
+      expect(proposal.pending?).to be true  # as we skipped the state machine
+      proposal.reset_status()
+      expect(proposal.rejected?).to be true
+    end
+
+    it 'reverts to pending if an approval is added' do
+      proposal = FactoryGirl.create(:proposal, :with_approvers)
+      proposal.approvals.first.approve!
+      proposal.approvals.second.approve!
+      expect(proposal.approved?).to be true
+      proposal.add_approver('new_approver@example.gov')
+      proposal.reset_status()
+      expect(proposal.pending?).to be true
+    end
+
+    it 'does not move out of the pending state unless all are approved' do
+      proposal = FactoryGirl.create(:proposal, :with_approvers)
+      proposal.reset_status()
+      expect(proposal.pending?).to be true
+      proposal.approvals.first.approve!
+      proposal.reset_status()
+      expect(proposal.pending?).to be true
+      proposal.approvals.second.approve!
+      proposal.reset_status()
+      expect(proposal.approved?).to be true
+    end
+  end
 end

@@ -119,7 +119,7 @@ class Proposal < ActiveRecord::Base
     end
     self.approvals = approvals
     self.kickstart_approvals()
-    # self.reset_status()
+    self.reset_status()
   end
 
   # Trigger the appropriate approval, from any start state
@@ -146,7 +146,9 @@ class Proposal < ActiveRecord::Base
 
   def add_observer(email)
     user = User.for_email(email)
-    self.observations.create!(user_id: user.id)
+    if self.observations.where(user: user).empty?
+      self.observations.create!(user_id: user.id)
+    end
   end
 
   def add_requester(email)
