@@ -42,12 +42,14 @@
 </div>
 
 <% if policy(@proposal).can_edit? %>
-  <div class="centered">
-    <p>
-      <%= modify_client_button(@proposal) %>
-      <%= link_to "Add observers", proposal_observations_path(@proposal) %>
-    </p>
-  </div>
+  <%= client_partial(@proposal.client, 'restart_link',
+                     locals: {proposal: @proposal})
+  %>
+  <ul id="request-actions" class="centered">
+    <li><%= modify_client_button(@proposal) %></li>
+    <li><%= link_to "Add observers", proposal_observations_path(@proposal) %></li>
+    <li><%= link_to("Cancel my request", cancel_form_proposal_path) if policy(@proposal).can_cancel? %></li>
+  </ul>
 <% end %>
 
 <%- if @proposal.flow == 'parallel'  %>

@@ -6,11 +6,9 @@ class Approval < ActiveRecord::Base
     end
     state :actionable do
       event :approve, transitions_to: :approved
-      event :reject, transitions_to: :rejected
     end
     state :approved
-    state :rejected
-    
+
     # workflow doesn't touch active record
     # manually updating 'updated_at'
     # https://github.com/geekq/workflow/issues/96
@@ -51,11 +49,6 @@ class Approval < ActiveRecord::Base
     else
       nil
     end
-  end
-
-  # Used by the state machine
-  def on_rejected_entry(new_state, event)
-    self.proposal.reject!
   end
 
   # Used by the state machine

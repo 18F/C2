@@ -16,9 +16,8 @@ class ProposalDecorator < Draper::Decorator
       <<-SQL
         CASE approvals.status
         WHEN 'approved' THEN 1
-        WHEN 'rejected' THEN 2
-        WHEN 'actionable' THEN 3
-        ELSE 4
+        WHEN 'actionable' THEN 2
+        ELSE 3
         END
       SQL
     )
