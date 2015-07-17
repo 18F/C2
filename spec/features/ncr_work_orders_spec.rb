@@ -67,8 +67,7 @@ describe "National Capital Region proposals" do
         end
       end
 
-      with_env_vars(SHOW_BA60_OPTION: 'true',
-                    NCR_BA61_TIER1_BUDGET_MAILBOX: 'ba61one@example.gov',
+      with_env_vars(NCR_BA61_TIER1_BUDGET_MAILBOX: 'ba61one@example.gov',
                     NCR_BA61_TIER2_BUDGET_MAILBOX: 'ba61two@example.gov') do
         it "saves a BA60 Proposal with the attributes" do
           expect(Dispatcher).to receive(:deliver_new_proposal_emails)
@@ -130,34 +129,6 @@ describe "National Capital Region proposals" do
         expect(page).to_not have_field('CL number')
         expect(page).to_not have_field('Function code')
         expect(page).to_not have_field('SOC code')
-      end
-
-      with_feature 'HIDE_BA61_OPTION' do
-        it "removes the radio button" do
-          visit '/ncr/work_orders/new'
-          expect(page).to_not have_content('BA61')
-          expect(page).to have_content('BA80')
-        end
-
-
-        it "defaults to BA80" do
-          visit '/ncr/work_orders/new'
-          fill_in 'Project title', with: "buying stuff"
-          fill_in 'Description', with: "desc content"
-          # no need to select BA80
-          fill_in 'RWA Number', with: 'F1234567'
-          fill_in 'Vendor', with: 'ACME'
-          fill_in 'Amount', with: 123.45
-          select approver.email_address, from: 'approver_email'
-          fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
-          select Ncr::Organization.all[0], from: 'ncr_work_order_org_code'
-          expect {
-            click_on 'Submit for approval'
-          }.to change { Proposal.count }.from(0).to(1)
-
-          proposal = Proposal.last
-          expect(proposal.client_data.expense_type).to eq('BA80')
-        end
       end
 
       it "doesn't save when the amount is too high" do
