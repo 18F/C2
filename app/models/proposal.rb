@@ -69,9 +69,12 @@ class Proposal < ActiveRecord::Base
   end
 
   def existing_approval_for(user)
-    joined = self.approvals.joins(:user, "LEFT JOIN approval_delegates ON (assigner_id = user_id)")
-    filtered = joined.where("user_id = :user_id OR assignee_id = :user_id", user_id: user.id)
-    filtered.first
+    where_clause = <<-SQL
+      user_id = :user_id
+      OR user_id IN (SELECT assigner_id FROM approval_delegates WHERE assignee_id = :user_id)
+      OR user_id IN (SELECT assignee_id FROM approval_delegates WHERE assigner_id = :user_id)
+    SQL
+    self.approvals.where(where_clause, user_id: user.id).first
   end
 
   # Use this until all clients are migrated to models (and we no longer have a
