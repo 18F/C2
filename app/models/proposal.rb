@@ -226,8 +226,11 @@ class Proposal < ActiveRecord::Base
   # An approval has been approved. Mark the next as actionable
   # Note: this won't affect a parallel flow (as approvals start actionable)
   def partial_approve
-    if next_approval = self.approvals.pending.first
-      next_approval.make_actionable!
+    unless self.cancelled?
+      next_approval = self.approvals.pending.first
+      if next_approval
+        next_approval.make_actionable!
+      end
     end
   end
 

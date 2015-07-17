@@ -241,4 +241,36 @@ describe Proposal do
       expect(proposal.approved?).to be true
     end
   end
+
+  describe '#partial_approve!' do
+    it "marks the next Approval as actionable" do
+      proposal = FactoryGirl.create(:proposal, :with_approvers)
+      proposal.approvals.first.update(status: 'approved')
+
+      proposal.partial_approve!
+
+      expect(proposal.approvals.pluck(:status)).to eq(%w(approved actionable))
+      expect(proposal.status).to eq('pending')
+    end
+
+    it "transitions to 'approved' when there are no remaining pending approvals" do
+      proposal = FactoryGirl.create(:proposal, :with_approver)
+      proposal.approvals.update_all(status: 'approved')
+
+      proposal.partial_approve!
+
+      expect(proposal.approvals.first.status).to eq('approved')
+      expect(proposal.status).to eq('approved')
+    end
+
+    it "is a no-op for a cancelled request" do
+      proposal = FactoryGirl.create(:proposal, :with_approvers, flow: 'linear', status: 'cancelled')
+      expect(proposal.approvals.pluck(:status)).to eq(%w(actionable pending))
+
+      proposal.partial_approve!
+
+      expect(proposal.approvals.pluck(:status)).to eq(%w(actionable pending))
+      expect(proposal.status).to eq('cancelled')
+    end
+  end
 end
