@@ -273,4 +273,21 @@ describe Proposal do
       expect(proposal.status).to eq('cancelled')
     end
   end
+
+  describe "scopes" do
+    let(:statuses) { %w(pending approved cancelled) }
+    let!(:proposals) { statuses.map{|status| FactoryGirl.create(:proposal, status: status) } }
+
+    it "returns the appropriate proposals by status" do
+      statuses.each do |status|
+        expect(Proposal.send(status).pluck(:status)).to eq([status])
+      end
+    end
+
+    describe '#closed' do
+      it "returns approved and and cancelled proposals" do
+        expect(Proposal.closed.pluck(:status).sort).to eq(%w(approved cancelled))
+      end
+    end
+  end
 end
