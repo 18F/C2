@@ -29,7 +29,7 @@ describe CommunicartMailer do
 
     it "includes the appropriate headers for threading" do
       # headers only get added when the Mail is #deliver-ed
-      mail.deliver
+      mail.deliver_now
 
       %w(In-Reply-To References).each do |header|
         expect(mail[header].value).to eq("<proposal-#{proposal.id}@#{DEFAULT_URL_HOST}>")
@@ -223,6 +223,21 @@ describe CommunicartMailer do
 
     it "uses the default sender name" do
       expect(sender_names(mail)).to eq(["Communicart"])
+    end
+  end
+
+  describe '#proposal_subject' do
+    it 'defaults when no client_data is present' do
+      proposal = FactoryGirl.create(:proposal)
+      mail = CommunicartMailer.proposal_created_confirmation(proposal)
+      expect(mail.subject).to eq("Request ##{proposal.id}")
+    end
+
+    it 'includes custom text for ncr work orders' do
+      requester = FactoryGirl.create(:user, email_address: 'someone@somewhere.gov')
+      wo = FactoryGirl.create(:ncr_work_order, org_code: 'P0000000 (192X,192M) PRIOR YEAR ACTIVITIES', building_number: 'DC0000ZZ - Building', requester: requester)
+      mail = CommunicartMailer.proposal_created_confirmation(wo.proposal)
+      expect(mail.subject).to eq("Request #{wo.public_identifier}, P0000000, DC0000ZZ from someone@somewhere.gov")
     end
   end
 end

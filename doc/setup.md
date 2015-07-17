@@ -2,8 +2,8 @@
 
 ## Dependencies
 
-* Ruby 2.0+
-* PostgreSQL
+* Ruby 2.2.2
+* PostgreSQL 9.x
 * A [MyUSA](https://alpha.my.usa.gov/) account
 * An SMTP server (`production` mode only)
 
@@ -63,6 +63,15 @@ have it in your PATH. This is used for javascript and interface testing.
 ```bash
 bundle exec guard
 ```
+
+### Checking for security vulnerabilities
+
+```bash
+gem install brakeman
+brakeman
+```
+
+or just [visit the project on Gemnasium](https://gemnasium.com/18F/C2).
 
 ## Deploying
 

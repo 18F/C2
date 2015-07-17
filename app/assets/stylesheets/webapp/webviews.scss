@@ -55,6 +55,7 @@ th.next {
 th.sixth {
   width:17%;
   padding-left: 15px;
+  padding-right: 15px;
 }
 
 th h5 {
@@ -408,6 +409,11 @@ body.webapp {
 #footer {
   margin-top: 4em;
   text-align: center;
+}
+
+label.required::after,
+fieldset.required legend::after {
+  content: "*";
 }
 
 @media (max-width: $break-small) {

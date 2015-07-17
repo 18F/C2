@@ -71,7 +71,7 @@ module UserSteps
   step 'a cart :external_id with approver :approver_email' do |external_id, approver_email|
     @cart = FactoryGirl.create(:cart, :with_requester, external_id: external_id)
     @cart.add_approver(approver_email)
-    @cart.proposal.initialize_approvals()
+    @cart.proposal.kickstart_approvals()
     @approval = @cart.approvals.first
   end
 

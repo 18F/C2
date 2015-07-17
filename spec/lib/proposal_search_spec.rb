@@ -1,3 +1,5 @@
+include EnvironmentSpecHelper
+
 describe ProposalSearch do
   describe '#execute' do
     it "returns an empty list for no Proposals" do
@@ -8,6 +10,13 @@ describe ProposalSearch do
     it "returns the Proposal when searching by ID" do
       proposal = FactoryGirl.create(:proposal)
       results = ProposalSearch.new.execute(proposal.id.to_s)
+      expect(results).to eq([proposal])
+    end
+
+    it "returns the Proposal when searching by public_id" do
+      proposal = FactoryGirl.create(:proposal)
+      proposal.update_attribute(:public_id, 'foobar') # skip callback, which would overwrite this
+      results = ProposalSearch.new.execute('foobar')
       expect(results).to eq([proposal])
     end
 
@@ -35,6 +44,10 @@ describe ProposalSearch do
     end
 
     context Gsa18f::Procurement do
+      around(:each) do |example|
+        with_18f_procurement_env_variables(&example)
+      end
+
       [:product_name_and_description, :justification, :additional_info].each do |attr_name|
         it "returns the Proposal when searching by the ##{attr_name}" do
           procurement = FactoryGirl.create(:gsa18f_procurement, attr_name => 'foo')

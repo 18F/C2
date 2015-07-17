@@ -1,12 +1,13 @@
 C2::Application.routes.draw do
   root :to => 'home#index'
-  get '/help' => 'home#help'
   get '/error' => 'home#error'
   get '/feedback' => 'feedback#index'
   post '/feedback' => 'feedback#create'
 
   match '/auth/:provider/callback' => 'auth#oauth_callback', via: [:get]
   post '/logout' => 'auth#logout'
+
+  resources :help, only: [:index, :show]
 
   namespace :api do
     scope :v1 do
@@ -31,6 +32,8 @@ C2::Application.routes.draw do
       get 'approve'   # this route has special protection to prevent the confused deputy problem
                       # if you are adding a new controller which performs an action, use post instead
       post 'approve'
+      get 'cancel_form'
+      post 'cancel'
     end
 
     collection do
@@ -40,6 +43,7 @@ C2::Application.routes.draw do
 
     resources :comments, only: :create
     resources :attachments, only: [:create, :destroy, :show]
+    resources :observations, only: [:index, :create]
   end
 
   namespace :ncr do
@@ -49,8 +53,10 @@ C2::Application.routes.draw do
 
   namespace :gsa18f do
     resources :procurements, except: [:index, :destroy]
+    get '/dashboard' => 'dashboard#index'
   end
 
+  mount Peek::Railtie => '/peek'
   if Rails.env.development?
     mount MailPreview => 'mail_view'
     mount LetterOpenerWeb::Engine => 'letter_opener'

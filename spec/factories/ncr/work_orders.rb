@@ -6,13 +6,18 @@ FactoryGirl.define do
     not_to_exceed false
     building_number Ncr::BUILDING_NUMBERS[0]
     emergency false
-    rwa_number "R1234567"
+    rwa_number "R1234567" # TODO remove, since it's not applicable for BA61
     org_code Ncr::Organization.all[0].to_s
     project_title "NCR Name"
     association :proposal, flow: 'linear'
 
     trait :with_approvers do
       association :proposal, :with_approvers, flow: 'linear'
+    end
+
+    trait :is_emergency do
+      emergency true
+      association :proposal, :with_observers, flow: 'linear'
     end
   end
 end

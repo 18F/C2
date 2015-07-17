@@ -7,17 +7,15 @@ class Proposal < ActiveRecord::Base
       event :partial_approve, transitions_to: :approved, if: lambda { |p| p.all_approved? }
       event :partial_approve, transitions_to: :pending
       event :approve, :transitions_to => :approved
-      event :reject, :transitions_to => :rejected
       event :restart, :transitions_to => :pending
+      event :cancel, :transitions_to => :cancelled
     end
     state :approved do
       event :restart, :transitions_to => :pending
+      event :cancel, :transitions_to => :cancelled
     end
-    state :rejected do
-      # partial approvals and rejections can't break out of this state
-      event :partial_approve, :transitions_to => :rejected
-      event :reject, :transitions_to => :rejected
-      event :restart, :transitions_to => :pending
+    state :cancelled do
+      event :partial_approve, :transitions_to => :cancelled
     end
   end
 
@@ -47,7 +45,8 @@ class Proposal < ActiveRecord::Base
   self.statuses.each do |status|
     scope status, -> { where(status: status) }
   end
-  scope :closed, -> { where(status: ['approved', 'rejected']) }
+  scope :closed, -> { where(status: ['approved', 'cancelled']) } #TODO: Backfill to change approvals in 'reject' status to 'cancelled' status
+  scope :cancelled, -> { where(status: 'cancelled') }
 
   after_initialize :set_defaults
   after_create :update_public_id
@@ -69,7 +68,7 @@ class Proposal < ActiveRecord::Base
     self.approval_delegates.exists?(assignee_id: user.id)
   end
 
-  def approval_for(user)
+  def existing_approval_for(user)
     joined = self.approvals.joins(:user, "LEFT JOIN approval_delegates ON (assigner_id = user_id)")
     filtered = joined.where("user_id = :user_id OR assignee_id = :user_id", user_id: user.id)
     filtered.first
@@ -100,18 +99,51 @@ class Proposal < ActiveRecord::Base
     approval
   end
 
-  def initialize_approvals()
-    if self.linear? && self.approvals.any?
-      self.approvals.update_all(status: 'pending')
-      self.approvals.first.make_actionable!
-    elsif self.parallel?
-      self.approvals.update_all(status: 'actionable')
+  def remove_approver(email)
+    user = User.for_email(email)
+    approval = self.existing_approval_for(user)
+    approval.destroy
+  end
+
+  # Set the approver list, from any start state
+  # This overrides the `through` relation but provides parity to the accessor
+  def approvers=(approver_list)
+    approvals = approver_list.each_with_index.map do |approver, idx|
+      approval = self.existing_approval_for(approver)
+      approval ||= Approval.new(user: approver, proposal: self)
+      approval.position = idx + 1   # start with 1
+      approval
+    end
+    self.approvals = approvals
+    self.kickstart_approvals()
+    self.reset_status()
+  end
+
+  # Trigger the appropriate approval, from any start state
+  def kickstart_approvals()
+    actionable = self.approvals.actionable
+    pending = self.approvals.pending
+    if self.parallel?
+      pending.update_all(status: 'actionable')
+    elsif self.linear? && actionable.empty? && pending.any?
+      pending.first.make_actionable!
+    end
+    # otherwise, approvals are correct
+  end
+
+  def reset_status()
+    unless self.cancelled?   # no escape from cancelled
+      if self.all_approved?
+        self.update(status: 'approved')
+      else
+        self.update(status: 'pending')
+      end
     end
   end
 
   def add_observer(email)
     user = User.for_email(email)
-    self.observations.create!(user_id: user.id)
+    self.observations.find_or_create_by!(user: user)
   end
 
   def add_requester(email)
@@ -180,17 +212,11 @@ class Proposal < ActiveRecord::Base
   #######################
 
 
-  #### state machine methods ####
-  def on_rejected_entry(prev_state, event)
-    if prev_state.name != :rejected
-      Dispatcher.on_proposal_rejected(self)
-    end
-  end
-
   def restart
     # Note that none of the state machine's history is stored
     self.api_tokens.update_all(expires_at: Time.now)
-    self.initialize_approvals()
+    self.approvals.update_all(status: 'pending')
+    self.kickstart_approvals()
     Dispatcher.deliver_new_proposal_emails(self)
   end
 

@@ -1,5 +1,6 @@
 describe "searching" do
   let(:user){ FactoryGirl.create(:user) }
+  let!(:approver){ FactoryGirl.create(:user) }
 
   before do
     login_as(user)
@@ -28,24 +29,5 @@ describe "searching" do
     expect(current_path).to eq('/proposals/query')
     field = find_field('text')
     expect(field.value).to eq('foo')
-  end
-
-  it "finds results based on public id" do 
-    visit '/ncr/work_orders/new'
-    fill_in 'Project title', with: "buying stuff"
-    fill_in 'Description', with: "desc content"
-    choose 'BA80'
-    fill_in 'RWA Number', with: 'F1234567'
-    fill_in 'Vendor', with: 'ACME'
-    fill_in 'Amount', with: 123.45
-    check "I am going to be using direct pay for this transaction"
-    fill_in "Approving Official's Email Address", with: 'approver@example.com'
-    select Ncr::BUILDING_NUMBERS[0], :from => 'ncr_work_order_building_number'
-    select Ncr::Organization.all[0], :from => 'ncr_work_order_org_code'
-    click_on 'Submit for approval'
-
-    proposal = Proposal.last
-    visit "/proposals/query?text=#{proposal.public_id}"
-    expect(page).to have_content(proposal.public_id)
   end
 end

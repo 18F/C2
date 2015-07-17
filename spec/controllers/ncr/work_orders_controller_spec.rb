@@ -7,7 +7,7 @@ describe Ncr::WorkOrdersController do
       ncr_work_order: {
         amount: '111.22', expense_type: 'BA80', vendor: 'Vendor',
         not_to_exceed: '0', building_number: Ncr::BUILDING_NUMBERS[0],
-        emergency: '0', rwa_number: 'A12345678', org_code: Ncr::Organization.all[0],
+        emergency: '0', rwa_number: 'A1234567', org_code: Ncr::Organization.all[0],
         code: 'Work Order', project_title: 'Title', description: 'Desc'},
       approver_email: 'bob@example.gov'
     }}
@@ -53,8 +53,9 @@ describe Ncr::WorkOrdersController do
 
   describe '#edit' do
     let (:work_order) { FactoryGirl.create(:ncr_work_order, :with_approvers) }
+    let (:requester) { work_order.proposal.requester }
     before do
-      login_as(work_order.requester)
+      login_as(requester)
     end
 
     it 'does not display a message when the proposal is not fully approved' do
@@ -67,12 +68,19 @@ describe Ncr::WorkOrdersController do
       get :edit, {id: work_order.id}
       expect(flash[:warning]).to be_present
     end
+
+    it 'does not explode if editing an emergency' do
+      work_order = FactoryGirl.create(:ncr_work_order, :is_emergency,
+                                      requester: requester)
+      get :edit, {id: work_order.id}
+    end
   end
 
   describe '#update' do
     let (:work_order) { FactoryGirl.create(:ncr_work_order, :with_approvers) }
+    let (:requester) { work_order.proposal.requester }
     before do
-      login_as(work_order.requester)
+      login_as(requester)
     end
 
     it 'does not modify the work order when there is a blank approver' do
@@ -106,6 +114,30 @@ describe Ncr::WorkOrdersController do
                      ncr_work_order: {expense_type: 'BA61'}}
       work_order.reload
       expect(work_order.approvers.map(&:email_address)).not_to include('a@b.com')
+    end
+
+    it 'will not modify emergency status on non-emergencies' do
+      expect(work_order.approvals.empty?).to be false
+      expect(work_order.observers.empty?).to be true
+      post :update, {id: work_order.id, approver_email: work_order.approvers.first.email_address,
+                     ncr_work_order: {expense_type: 'BA61', emergency: '1'}}
+      work_order.reload
+      expect(work_order.emergency).to be false
+      expect(work_order.approvals.empty?).to be false
+      expect(work_order.observers.empty?).to be true
+    end
+
+    it 'will not modify emergency status on emergencies' do
+      work_order = FactoryGirl.create(:ncr_work_order, :is_emergency, requester: requester)
+      expect(work_order.approvals.empty?).to be true
+      expect(work_order.observers.empty?).to be false
+      post :update, {id: work_order.id, approver_email: work_order.observers.first.email_address,
+                     ncr_work_order: {expense_type: 'BA61', building_number: 'BillDing', emergency: '0'}}
+      work_order.reload
+      expect(work_order.emergency).to be true
+      expect(work_order.building_number).to eq "BillDing"
+      expect(work_order.approvals.empty?).to be true
+      expect(work_order.observers.empty?).to be false
     end
   end
 end

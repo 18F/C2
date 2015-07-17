@@ -12,13 +12,14 @@
       <%- end %>
     </div>
   </div>
+
+
   <div class="row past-pr">
     <div class="col-sm-10">
       <h3>Recently Completed Purchase Requests</h3>
     </div>
 
     <%= render partial: 'archive_link' %>
-
   </div>
   <%- if @proposals.closed.any? %>
     <div class="row">
@@ -35,5 +36,20 @@
 
   <%- else %>
     <p class="empty-list-label">No recently completed purchase requests</p>
+  <%- end %>
+
+
+  <%- if @proposals.cancelled.any? %>
+    <div class="row past-pr">
+      <div class="col-sm-10">
+        <h3>Cancelled Purchase Requests</h3>
+      </div>
+    </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <%= client_partial current_user.client_slug, "proposal_list",
+              locals: {proposals: @proposals.cancelled} %>
+        </div>
+      </div>
   <%- end %>
 </div>

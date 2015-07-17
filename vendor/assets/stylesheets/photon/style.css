@@ -50,8 +50,10 @@
 	}
 
 		a:hover {
-			border-bottom-color: transparent !important;
+			border-bottom-style: solid; 
+			border-bottom-width: 3px;
 			color: #6bd4c8;
+			text-decoration: none;
 		}
 
 	strong, b {

@@ -13,7 +13,7 @@
     </div>
     <!-- Product Name and Description -Text Area- -->
     <div class="form-group">
-      <%= f.label :product_name_and_description, 'Product Name and Description' %>
+      <%= f.label :product_name_and_description, 'Product Name and Description', class: "required" %>
       <%= f.text_area :product_name_and_description, class: 'form-control' %>
     </div>
     <!-- Justification -Text Area- -->
@@ -29,7 +29,7 @@
     </div>
     <!-- Amount  -->
     <div class="form-group">
-      <%= f.label :cost_per_unit %>
+      <%= f.label :cost_per_unit, class: "required" %>
       <div class="input-group">
         <div class="input-group-addon">$</div>
         <%= f.number_field :cost_per_unit, class: 'form-control', step: 0.01 %>
@@ -37,7 +37,7 @@
     </div>
     <!-- Quantity of Product -->
     <div class="form-group">
-      <%= f.label :quantity %>
+      <%= f.label :quantity, class: "required" %>
       <div class="input-group">
         <%= f.number_field :quantity, class: 'form-control', step: 1 %>
       </div>
@@ -64,9 +64,9 @@
         <div class="input-group">
           <%= f.number_field :recurring_length, class: 'form-control', step: 1, 'aria-describedby'=>'description-add-info' %>
         </div>
-        <span class="form-instructions" id='description-add-info'>
-        e.g. Number of Days, Months, Years
-        </span>
+        <div class="help-block" id="description-add-info">
+          e.g. Number of Days, Months, Years
+        </div>
       </div>
     </div>
     <!-- Date Requested -->
@@ -88,7 +88,7 @@
       <%= f.label :additional_info, 'Please include any additional information you feel we need to correctly execute the purchase' %>
       <%= f.text_area :additional_info, class: 'form-control' %>
     </div>
-    <%= f.submit "Submit for approval", class: 'btn btn-default' %>
+    <%= f.submit class: 'form-button' %>
     <% if @model_instance.persisted? %>
       <%= link_to 'Discard Changes', proposal_url(@model_instance.proposal) %>
     <% end %>

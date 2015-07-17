@@ -1,13 +1,17 @@
+# configuration can be overridden via a DATABASE_URL environment variable
+# http://edgeguides.rubyonrails.org/configuring.html#connection-preference
 default: &default
   adapter: postgresql
   encoding: unicode
-  database: <%= ENV['DB_NAME'] || "c2_#{Rails.env}" %>
-  username: <%= ENV['DB_USERNAME'] %>
-  password: <%= ENV['DB_PASSWORD'] %>
-  host: <%= ENV['DB_HOST'] %>
-  port: <%= ENV['DB_PORT'] %>
-  pool: 5
 
-development: *default
-test: *default
+  # should match puma.rb
+  # https://devcenter.heroku.com/articles/concurrency-and-database-connections#threaded-servers
+  pool: <%= ENV["MAX_THREADS"] || 5 %>
+
+development:
+  <<: *default
+  database: c2_development
+test:
+  <<: *default
+  database: c2_test
 production: *default

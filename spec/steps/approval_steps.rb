@@ -19,7 +19,7 @@ module ApprovalSteps
   step "the cart has an approval for :email in position :position" do |email, position|
     @approval = @cart.proposal.add_approver(email)
     @approval.update_attribute(:position, position)
-    @cart.proposal.initialize_approvals()
+    @cart.proposal.kickstart_approvals()
   end
 
   step "feature flag :flag_name is :value" do |flag, value|

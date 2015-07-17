@@ -1,0 +1,8 @@
+- content_for :content do
+  - unless params[:action] == 'index'
+    = render partial: 'shared/breadcrumb_nav', locals: {text: "Back to FAQ", href: help_index_path}
+  .inset.markdown
+    %h1
+      = yield(:title)
+    = yield
+= render template: 'layouts/application'

@@ -1,5 +1,4 @@
 class Comment < ActiveRecord::Base
-  include ObservableModel
   belongs_to :proposal
   belongs_to :user
   delegate :full_name, :email_address, :to => :user, :prefix => true
@@ -7,6 +6,10 @@ class Comment < ActiveRecord::Base
   validates :comment_text, presence: true
   validates :user, presence: true
   validates :proposal, presence: true
+
+  scope :update_comments, ->{ where(update_comment: true) }
+
+  after_create ->{ Dispatcher.on_comment_created(self) }
 
   # match .attributes
   def to_a

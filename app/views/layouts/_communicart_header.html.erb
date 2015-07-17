@@ -8,12 +8,8 @@
   </div>
 </header>
 
-<%- unless excluded_portal_link %>
-  <ul id='breadcrumb-nav'>
-    <%- if return_to %>
-      <li><%= link_to "Back to " + return_to[:name], return_to[:path] %></li>
-    <%- else -%>
-      <li><%= link_to "Back to main portal", proposals_path %></li>
-    <%- end %>
-  </ul>
-<%- end %>
+<%- if return_to %>
+  <%= render partial: 'shared/breadcrumb_nav', locals: {text: "Back to #{return_to[:name]}", href: return_to[:path]} %>
+<%- elsif display_return_to_proposals %>
+  <%= render partial: 'shared/breadcrumb_nav', locals: {text: "Back to main portal", href: proposals_path} %>
+<% end %>

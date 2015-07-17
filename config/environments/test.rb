@@ -13,7 +13,7 @@ C2::Application.configure do
   config.eager_load = false
 
   # Configure static asset server for tests with Cache-Control for performance.
-  config.serve_static_assets  = true
+  config.serve_static_files  = true
   config.static_cache_control = "public, max-age=3600"
 
   # Show full error reports and disable caching.
@@ -33,8 +33,4 @@ C2::Application.configure do
   config.active_support.deprecation = :stderr
   config.action_mailer.default_url_options = { :host => 'localhost' }
   config.middleware.use RackSessionAccess::Middleware
-
-  # https://robots.thoughtbot.com/how-to-fix-circular-dependency-errors-in-rails-integration-tests
-  # Can be removed after upgrading to rails 4.2
-  config.allow_concurrency = false
 end

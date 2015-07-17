@@ -15,8 +15,8 @@ describe Dispatcher do
 
     it 'creates a new token for the approver' do
       approval = proposal.add_approver('approver1@some-dot-gov.gov')
-      proposal.initialize_approvals()
-      expect(CommunicartMailer).to receive_message_chain(:actions_for_approver, :deliver)
+      proposal.kickstart_approvals()
+      expect(CommunicartMailer).to receive_message_chain(:actions_for_approver, :deliver_now)
       expect(approval).to receive(:create_api_token!).once
 
       dispatcher.email_approver(approval)
@@ -50,8 +50,27 @@ describe Dispatcher do
 
     it 'sends a proposal notification email to observers' do
       proposal.add_observer('observer1@some-dot-gov.gov')
-      expect(CommunicartMailer).to receive_message_chain(:proposal_observer_email, :deliver)
+      expect(CommunicartMailer).to receive_message_chain(:proposal_observer_email, :deliver_now)
       dispatcher.deliver_new_proposal_emails(proposal)
+    end
+  end
+
+  describe "#deliver_cancellation_emails" do
+    let (:mock_deliverer) { double('deliverer') }
+
+    it "sends an email to each approver" do
+      allow(CommunicartMailer).to receive(:cancellation_email).and_return(mock_deliverer)
+      expect(proposal.approvers.count).to eq 2
+      expect(mock_deliverer).to receive(:deliver_now).twice
+
+      dispatcher.deliver_cancellation_emails(proposal)
+    end
+
+    it "sends a confirmation email to the requester" do
+      allow(CommunicartMailer).to receive(:cancellation_confirmation).and_return(mock_deliverer)
+      expect(mock_deliverer).to receive(:deliver_now).once
+
+      dispatcher.deliver_cancellation_emails(proposal)
     end
   end
 

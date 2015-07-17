@@ -5,14 +5,25 @@ class ProposalPolicy
     @proposal = record
   end
 
-  def author!
-    check(@proposal.requester_id == @user.id,
-          "You are not the requester")
+  def restricted?
+    ENV['RESTRICT_ACCESS'] == 'true'
+  end
+
+  def requester?
+    @proposal.requester_id == @user.id
+  end
+
+  def requester!
+    check(self.requester?, "You are not the requester")
   end
 
   def not_approved!
     check(!@proposal.approved?,
           "That proposal's already approved. New proposal?")
+  end
+
+  def not_cancelled!
+    check(!@proposal.cancelled?, "Sorry, this proposal has been cancelled.")
   end
 
   def approver?
@@ -47,19 +58,31 @@ class ProposalPolicy
   end
 
   def can_approve_or_reject!
-    approver! && pending_approval!
+    approver! && pending_approval! && not_cancelled!
   end
   alias_method :can_approve!, :can_approve_or_reject!
 
   def can_edit!
-    author! && not_approved!
+    requester! && not_approved! && not_cancelled!
   end
   alias_method :can_update!, :can_edit!
 
   def can_show!
     visible = ProposalPolicy::Scope.new(@user, Proposal).resolve
+    # TODO check via SQL
     check(visible.include?(@proposal), "You are not allowed to see this cart")
   end
+
+  def can_create!
+    # TODO restrict by client_slug
+    true
+  end
+  alias_method :can_new!, :can_create!
+
+  def can_cancel!
+    requester! && not_cancelled!
+  end
+  alias_method :can_cancel_form!, :can_cancel!
 
   # equivalent of can_show?
   class Scope
@@ -79,6 +102,7 @@ class ProposalPolicy
           SELECT * FROM approvals
           LEFT JOIN approval_delegates ON (assigner_id = user_id)
           WHERE proposal_id = proposals.id
+            -- TODO make visible to everyone involved
             AND status <> 'pending'
             AND (user_id = :user_id OR assignee_id = :user_id)
         )
@@ -86,6 +110,10 @@ class ProposalPolicy
         OR EXISTS (SELECT id FROM observations
                    WHERE proposal_id = proposals.id AND user_id = :user_id)
         SQL
+
+      where_clause += " OR true" if @user.admin?
+      where_clause += " OR client_data_type LIKE '#{@user.client_slug.classify.constantize}::%'" if @user.client_admin?
+
       @scope.where(where_clause, user_id: @user.id)
     end
   end

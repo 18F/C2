@@ -12,16 +12,27 @@
     }
   }
 
-  .status-header-container td {
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 20px;
+  .status-header-container {
+    &.cancelled td {
+      border: 0px;
+    }
+    td {
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 20px;
 
-    &:last-child {
-      text-align: right;
+      &:last-child {
+        text-align: right;
+      }
+
+      .status-icon {
+        padding-bottom: 5px;
+      }
     }
 
-    .status-icon {
-      padding-bottom: 5px;
+    &.status-header {
+      strong {
+        padding: 0 3px;
+      }
     }
   }
 
@@ -54,22 +65,12 @@
 
     img {
       float: left;
-      padding-top: 2px;
-      &.approved.linear {
-        background-image: image-url('bg_approved_status.gif');
-      }
-
-      &.pending.linear {
-        background-image: image-url('bg_pending_status.gif');
-      }
-
-      &.rejected.linear {
-        background-image: image-url('bg_rejected_status.gif');
-      }
     }
 
     .approver {
       padding-left: 7px;
+      position: relative;
+      top: -5px;
     }
   }
 }

@@ -1,4 +1,6 @@
-- [:rwa_number, :code].each do |attr_name|
-  .form-group{data: {filter_key: 'expense-type', filter_value: 'BA80'}}
-    = f.label attr_name
-    = f.text_field attr_name, class: 'form-control'
+.form-group{data: {filter_key: 'expense-type', filter_value: 'BA80'}}
+  = f.label :rwa_number, class: "required"
+  = f.text_field :rwa_number, class: 'form-control'
+.form-group{data: {filter_key: 'expense-type', filter_value: 'BA80'}}
+  = f.label :code
+  = f.text_field :code, class: 'form-control'
