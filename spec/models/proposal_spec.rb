@@ -290,4 +290,17 @@ describe Proposal do
       end
     end
   end
+
+  describe '#restart' do
+    it "creates new API tokens" do
+      proposal = FactoryGirl.create(:proposal, :with_approvers)
+      proposal.approvals.each(&:create_api_token!)
+      expect(proposal.api_tokens.size).to eq(2)
+
+      proposal.restart!
+
+      expect(proposal.api_tokens.unscoped.expired.size).to eq(2)
+      expect(proposal.api_tokens.unexpired.size).to eq(2)
+    end
+  end
 end
