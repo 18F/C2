@@ -22,9 +22,6 @@ module Ncr
     before_validation :normalize_values
     before_update :record_changes
 
-    # after_update :update_approver
-    # after_update :email_approvers
-
     # @TODO: use integer number of cents to avoid floating point issues
     validates :amount, numericality: {
       less_than_or_equal_to: 3000,
@@ -85,42 +82,71 @@ module Ncr
       end
     end
 
+    def approver_email_frozen?
+      approval = self.approvals.first
+      approval && !approval.actionable?
+    end
+
+    def update_approving_official(email)
+      self.approvals.first.destroy
+      replacement = self.add_approver(email)
+      replacement.move_to_top
+      replacement.make_actionable!
+    end
+
+    def existing_system_approvers
+      # skip approving official
+      self.approvers.offset(1)
+    end
+
+    def reset_system_approvers
+      # no need to call initialize_approvals as they have already been set up
+      current_approvers = self.existing_system_approvers.pluck(:email_address)
+      current_approvers.each do |email|
+        self.remove_approver(email)
+      end
+
+      self.system_approver_emails.each do |email|
+        self.add_approver(email)
+      end
+
+      approvals = self.approvals
+      if approvals.first.approved?
+        approvals.second.make_actionable!
+      end
+    end
+
     # A requester can change his/her approving official
     def update_approvers(approver_email=nil)
-      # binding.pry
-      first_approval = self.approvals.first
-      if approver_email && self.approver_changed?(approver_email)
-        first_approval.destroy
-        replacement = self.add_approver(approver_email)
-        replacement.move_to_top
-        self.approvals.first.make_actionable!
+      if !self.approver_email_frozen? && approver_email && self.approver_changed?(approver_email)
+        self.update_approving_official(approver_email)
       end
-      # no need to call initialize_approvals as they have already been set up
 
-      current_approvers = self.approvers.map {|a| a[:email_address]}
-      #remove approving official
-      approving_official = current_approvers.shift
-      if (current_approvers != system_approvers)
-        current_approvers.each do |email|
-          self.remove_approver(email)
-        end
-        system_approvers.each do |email|
-          self.add_approver(email)
-        end
-        approvals = self.approvals
-        if(approvals.first.approved?)
-          approvals.second.make_actionable!
-        end
+      unless self.approvers_match?
+        self.reset_system_approvers
+      end
+    end
+
+    def approvers_match?
+      old_system_approvers = self.existing_system_approvers
+      new_system_approver_emails = self.system_approver_emails
+      if old_system_approvers.size == new_system_approver_emails.size
+        new_system_approvers = new_system_approver_emails.map { |e| User.for_email(e) }
+        paired = old_system_approvers.zip(new_system_approvers)
+        paired.all? { |cur, sys| cur == sys || sys.delegates_to?(cur) }
+      else
+        # the number of system_approver_emails changed
+        false
       end
     end
 
     def approver_changed?(approval_email)
-      first_approval = self.proposal.approvals.first.user_email_address
-      first_approval != approval_email
+      first_approver = self.proposal.approvers.first
+      first_approver && first_approver.email_address != approval_email
     end
 
     def add_approvals(approver_email)
-      emails = [approver_email] + self.system_approvers
+      emails = [approver_email] + self.system_approver_emails
       if self.emergency
         emails.each {|email| self.add_observer(email) }
         # skip state machine
@@ -192,7 +218,7 @@ module Ncr
       self.project_title
     end
 
-    def system_approvers
+    def system_approver_emails
       results = []
       if %w(BA60 BA61).include?(self.expense_type)
         unless self.organization.try(:whsc?)
@@ -218,6 +244,23 @@ module Ncr
       ENV['NCR_BA80_BUDGET_MAILBOX'] || 'communicart.budget.approver@gmail.com'
     end
 
+    def org_id
+      self.organization.try(:code)
+    end
+
+    def building_id
+      regex = /\A(\w{8}) .*\z/
+      if self.building_number && regex.match(self.building_number)
+        regex.match(self.building_number)[1]
+      else
+        self.building_number
+      end
+    end
+
+    def as_json
+      super.merge(org_id: self.org_id, building_id: self.building_id)
+    end
+
     protected
 
     # TODO move to Proposal model
@@ -226,9 +269,10 @@ module Ncr
       comment_texts = []
       bullet = changed_attributes.length > 1 ? '- ' : ''
       changed_attributes.each do |key, value|
+        former = property_to_s(self.send(key + "_was"))
         value = property_to_s(self[key])
         property_name = WorkOrder.human_attribute_name(key)
-        comment_texts << WorkOrder.update_comment_format(property_name, value, bullet)
+        comment_texts << WorkOrder.update_comment_format(property_name, value, bullet, former)
       end
 
       if !comment_texts.empty?
@@ -243,8 +287,9 @@ module Ncr
       end
     end
 
-    def self.update_comment_format key, value, bullet
-      "#{bullet}*#{key}* was changed to #{value}"
+    def self.update_comment_format key, value, bullet, former=nil
+      from = former ? "from #{former} " : ''
+      "#{bullet}*#{key}* was changed " + from + "to #{value}"
     end
 
     def fiscal_year

@@ -14,10 +14,10 @@ describe Ncr::WorkOrderPolicy do
       expect(subject).to permit(work_order.approvers[1], work_order)
     end
 
-    it "doesn't allow an observer to edit it" do
+    it "allows an observer to edit it" do
       observer = FactoryGirl.create(:user)
       proposal.observations.create!(user: observer)
-      expect(subject).not_to permit(observer, work_order)
+      expect(subject).to permit(observer, work_order)
     end
 
     it "does not allow anyone else to edit it" do

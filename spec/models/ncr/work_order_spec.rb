@@ -82,17 +82,17 @@ describe Ncr::WorkOrder do
     end
   end
 
-  describe '#system_approvers' do
+  describe '#system_approver_emails' do
     it "skips the Tier 1 budget approver for WHSC" do
       work_order = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61', org_code: Ncr::Organization::WHSC_CODE)
-      expect(work_order.system_approvers).to eq([
+      expect(work_order.system_approver_emails).to eq([
         Ncr::WorkOrder.ba61_tier2_budget_mailbox
       ])
     end
 
     it "includes the Tier 1 budget approver for an unknown organization" do
       work_order = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61', org_code: nil)
-      expect(work_order.system_approvers).to eq([
+      expect(work_order.system_approver_emails).to eq([
         Ncr::WorkOrder.ba61_tier1_budget_mailbox,
         Ncr::WorkOrder.ba61_tier2_budget_mailbox
       ])
@@ -254,25 +254,25 @@ describe Ncr::WorkOrder do
     let (:work_order) { FactoryGirl.create(:ncr_work_order) }
 
     it 'adds a change comment' do
-      work_order.update(vendor: 'VenVenVen', amount: 123.45)
+      work_order.update(vendor: 'Mario Brothers', amount: 123.45)
 
       expect(work_order.proposal.comments.count).to be 1
       comment = Comment.last
       expect(comment.update_comment).to be(true)
-      comment_text = "- *Vendor* was changed to VenVenVen\n"
-      comment_text += "- *Amount* was changed to $123.45"
+      comment_text = "- *Vendor* was changed from Some Vend to Mario Brothers\n"
+      comment_text += "- *Amount* was changed from $1,000.00 to $123.45"
       expect(comment.comment_text).to eq(comment_text)
     end
 
     it 'includes extra information if modified post approval' do
       work_order.approve!
-      work_order.update(vendor: 'VenVenVen', amount: 123.45)
+      work_order.update(vendor: 'Mario Brothers', amount: 123.45)
 
       expect(work_order.proposal.comments.count).to be 1
       comment = Comment.last
       expect(comment.update_comment).to be(true)
-      comment_text = "- *Vendor* was changed to VenVenVen\n"
-      comment_text += "- *Amount* was changed to $123.45\n"
+      comment_text = "- *Vendor* was changed from Some Vend to Mario Brothers\n"
+      comment_text += "- *Amount* was changed from $1,000.00 to $123.45\n"
       comment_text += "_Modified post-approval_"
       expect(comment.comment_text).to eq(comment_text)
     end
@@ -302,6 +302,35 @@ describe Ncr::WorkOrder do
 
       comment = work_order.comments.update_comments.last
       expect(comment.user).to eq(modifier)
+    end
+  end
+
+  describe "#org_id" do
+    it "pulls out the organization id when present" do
+      wo = FactoryGirl.create(:ncr_work_order, org_code: 'P0000000 (192X,192M) PRIOR YEAR ACTIVITIES')
+      expect(wo.org_id).to eq("P0000000")
+    end
+
+    it "returns nil when no organization is present" do
+      wo = FactoryGirl.create(:ncr_work_order, org_code: nil)
+      expect(wo.org_id).to be_nil
+    end
+  end
+
+  describe "#building_id" do
+    it "pulls out the building id when an identifier is present" do
+      wo = FactoryGirl.build(:ncr_work_order, building_number: "AB1234CD then some more")
+      expect(wo.building_id).to eq("AB1234CD")
+    end
+
+    it "defaults to the whole building number" do
+      wo = FactoryGirl.build(:ncr_work_order, building_number: "Another String")
+      expect(wo.building_id).to eq("Another String")
+    end
+
+    it "allows nil" do
+      wo = FactoryGirl.build(:ncr_work_order, building_number: nil)
+      expect(wo.building_id).to be_nil
     end
   end
 end

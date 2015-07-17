@@ -14,5 +14,10 @@ FactoryGirl.define do
     trait :with_approvers do
       association :proposal, :with_approvers, flow: 'linear'
     end
+
+    trait :is_emergency do
+      emergency true
+      association :proposal, :with_observers, flow: 'linear'
+    end
   end
 end

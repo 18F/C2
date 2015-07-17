@@ -1,6 +1,6 @@
   <div>
     Hi <%= @proposal.requester.full_name %>,<br/>
-    You just submitted a request for approval. Here is are details about your request:
+    You just submitted a request for approval. Here are the details:
   </div>
   <%= render partial: 'comments', locals: { comments: @proposal.comments } %>
   <%= render partial: 'attachments', locals: { proposal: @proposal, attachments: @proposal.attachments } %>
