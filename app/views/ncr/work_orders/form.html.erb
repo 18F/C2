@@ -115,7 +115,7 @@
     <div class="form-group">
       <%= label_tag :approver_email, "Approving official's email address", class: "required" %>
       <%= select_tag :approver_email, options_from_collection_for_select(approver_options, :to_s, :to_s, @approver_email),
-                     class: 'form-control js-selectize', disabled: approver_email_frozen?, include_blank: true, prompt: 'Type here to search' %>
+                     class: 'form-control js-selectize', disabled: @model_instance.approver_email_frozen?, include_blank: true, prompt: 'Type here to search' %>
     </div>
     <% if @model_instance.new_record? %>
       <div class="form-group">

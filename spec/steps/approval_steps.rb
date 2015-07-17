@@ -20,7 +20,7 @@ module ApprovalSteps
   step "the proposal has an approval for :email in position :position" do |email, position|
     @approval = @proposal.add_approver(email)
     @approval.update_attribute(:position, position)
-    @proposal.initialize_approvals()
+    @proposal.kickstart_approvals
   end
 
   step "feature flag :flag_name is :value" do |flag, value|
