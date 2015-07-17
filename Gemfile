@@ -38,6 +38,7 @@ gem 'uglifier'
 gem 'workflow'
 
 group :test, :development do
+  gem 'bullet', require: false # use BULLET_ENABLED=true
   gem 'database_cleaner'
   gem 'pry-byebug'
   gem 'pry-rails'

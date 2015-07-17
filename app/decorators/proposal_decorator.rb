@@ -11,7 +11,7 @@ class ProposalDecorator < Draper::Decorator
 
   def approvals_by_status
     # Override default scope
-    object.approvals.reorder(
+    object.approvals.with_users.reorder(
       # http://stackoverflow.com/a/6332081/358804
       <<-SQL
         CASE approvals.status
@@ -25,7 +25,7 @@ class ProposalDecorator < Draper::Decorator
 
   def approvals_in_list_order
     if object.flow == 'linear'
-      object.approvals
+      object.approvals.with_users
     else
       self.approvals_by_status
     end

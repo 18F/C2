@@ -32,6 +32,7 @@ class Approval < ActiveRecord::Base
   end
 
   default_scope { order('position ASC') }
+  scope :with_users, -> { includes :user }
 
 
   # TODO we should probably store this value
