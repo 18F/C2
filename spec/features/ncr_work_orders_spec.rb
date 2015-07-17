@@ -131,14 +131,6 @@ describe "National Capital Region proposals" do
         expect(page).to_not have_field('SOC code')
       end
 
-      with_feature 'HIDE_BA61_OPTION' do
-        it "removes the radio button" do
-          visit '/ncr/work_orders/new'
-          expect(page).to_not have_content('BA61')
-          expect(page).to have_content('BA80')
-        end
-      end
-
       it "doesn't save when the amount is too high" do
         visit '/ncr/work_orders/new'
         fill_in 'Project title', with: "buying stuff"
