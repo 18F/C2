@@ -313,7 +313,7 @@ describe "National Capital Region proposals" do
     let(:ncr_proposal){work_order.proposal}
     before do
       Timecop.freeze(10.hours.ago) do
-        work_order.add_approvals('approver@example.com')
+        work_order.setup_approvals_and_observers('approver@example.com')
       end
       login_as(work_order.approvers.first)
     end
@@ -335,7 +335,7 @@ describe "National Capital Region proposals" do
     let(:ncr_proposal) { work_order.proposal }
 
     before do
-      work_order.add_approvals('approver@example.com')
+      work_order.setup_approvals_and_observers('approver@example.com')
       login_as(work_order.requester)
     end
 
@@ -380,7 +380,7 @@ describe "National Capital Region proposals" do
 
     describe "when logged in as the requester" do
       before do
-        work_order.add_approvals('approver@example.com')
+        work_order.setup_approvals_and_observers('approver@example.com')
         login_as(work_order.requester)
       end
 
@@ -525,7 +525,7 @@ describe "National Capital Region proposals" do
     end
 
     it "keeps track of the modification when edited by an approver" do
-      work_order.add_approvals('approver@example.com')
+      work_order.setup_approvals_and_observers('approver@example.com')
       approver = ncr_proposal.approvers.last
       login_as(approver)
 
