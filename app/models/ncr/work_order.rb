@@ -45,7 +45,7 @@ module Ncr
     validates :building_number, presence: true
     validates :rwa_number, presence: true, if: :ba80?
     validates :rwa_number, format: {
-      with: /[a-zA-Z][0-9]{7}/,
+      with: /\A[a-zA-Z][0-9]{7}\z/,
       message: "must be one letter followed by 7 numbers"
     }, allow_blank: true
     validates :soc_code, format: {

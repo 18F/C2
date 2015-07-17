@@ -7,6 +7,7 @@ class HelpController < ApplicationController
 
   def show
     page = params[:id]
+    # prevent rendering of any non-help template
     if self.page_names.include?(page)
       render "help/#{page}"
     else
