@@ -1,4 +1,8 @@
-if defined?(Bullet)
+BULLET_ENABLED = ENV['BULLET_ENABLED'] == 'true'
+
+if BULLET_ENABLED
+  require 'bullet'
+
   # https://github.com/flyerhzm/bullet#configuration
   Bullet.enable = true
   Bullet.console = true
