@@ -5,7 +5,8 @@ class ApiToken < ActiveRecord::Base
   has_one :proposal, through: :approval
   has_one :user, through: :approval
 
-  validates_presence_of :approval_id
+  # TODO validates :access_token, presence: true
+  validates :approval_id, presence: true
 
   scope :unexpired, -> { where('expires_at >= ?', Time.now) }
   scope :expired, -> { where('expires_at < ?', Time.now) }

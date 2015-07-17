@@ -14,19 +14,19 @@ describe User do
     end
   end
 
-  describe '#admin?' do
+  describe '#client_admin?' do
     it "returns false by default" do
-      expect(user).to_not be_an_admin
+      expect(user).to_not be_a_client_admin
     end
 
-    with_env_var 'ADMIN_EMAILS', 'admin1@some-dot-gov.gov,admin2@some-dot-gov.gov' do
+    with_env_var 'CLIENT_ADMIN_EMAILS', 'admin1@some-dot-gov.gov,admin2@some-dot-gov.gov' do
       it "returns false" do
-        expect(user).to_not be_an_admin
+        expect(user).to_not be_a_client_admin
       end
 
       it "returns true when the email is listed" do
         user.email_address = 'admin2@some-dot-gov.gov'
-        expect(user).to be_an_admin
+        expect(user).to be_a_client_admin
       end
     end
   end

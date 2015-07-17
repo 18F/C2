@@ -61,11 +61,6 @@ describe ProposalPolicy do
         expect(subject).to permit(second_approval.user, proposal)
       end
 
-      it "does not allow when the user's already rejected" do
-        first_approval.reject!
-        expect(subject).not_to permit(first_approval.user, proposal)
-      end
-
       it "does not allow with a non-existent approval" do
         user = FactoryGirl.create(:user)
         expect(subject).not_to permit(user, proposal)
@@ -128,9 +123,26 @@ describe ProposalPolicy do
     end
   end
 
+  permissions :can_cancel? do
+    let(:proposal) { FactoryGirl.create(:proposal, :with_approvers) }
+
+    it "allows the requester to edit it" do
+      expect(subject).to permit(proposal.requester, proposal)
+    end
+
+    it "does not allow a requester to edit a cancelled one" do
+      proposal.cancel!
+      expect(subject).not_to permit(proposal.requester, proposal)
+    end
+
+    it "doesn't allow an approver to cancel it" do
+      expect(subject).not_to permit(proposal.approvers[0], proposal)
+    end
+  end
+
   context "testing scope" do
-    let(:proposal) {
-      FactoryGirl.create(:proposal, :with_approvers, :with_observers)}
+    let(:proposal) { FactoryGirl.create(:proposal, :with_approvers, :with_observers) }
+
     it "allows the requester to see" do
       user = proposal.requester
       proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
@@ -177,6 +189,68 @@ describe ProposalPolicy do
       user = FactoryGirl.create(:user)
       proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
       expect(proposals).to be_empty
+    end
+
+    context "CLIENT_ADMIN privileges" do
+      before do
+        #Set up a temporary class
+        module AbcCompany
+          class SomethingApprovable
+          end
+        end
+      end
+
+      after do
+        ENV['CLIENT_ADMIN_EMAILS'] = ""
+      end
+
+      let(:proposal1) { FactoryGirl.create(:proposal, :with_approvers, :with_observers, requester_id: 555) }
+
+      it "allows a client admin to see unassociated requests that are inside its client scope" do
+        proposal.update_attributes(client_data_type:'AbcCompany::SomethingApprovable')
+        user = FactoryGirl.create(:user, client_slug: "abc_company")
+        ENV['CLIENT_ADMIN_EMAILS'] = user.email_address
+
+        proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
+        expect(proposals).to match_array([proposal])
+      end
+
+      it "prevents a client admin from seeing requests outside its client scope" do
+        proposal.update_attributes(client_data_type:'CdfCompany::SomethingApprovable')
+        user = FactoryGirl.create(:user, client_slug: "abc_company")
+        ENV['CLIENT_ADMIN_EMAILS'] = user.email_address
+
+        proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
+        expect(proposals).to be_empty
+      end
+
+      it "prevents a non-admin from seeing unrelated requests" do
+        proposal.update_attributes(client_data_type:'AbcCompany::SomethingApprovable')
+        user = FactoryGirl.create(:user, client_slug: "abc_company")
+        ENV['CLIENT_ADMIN_EMAILS'] = ''
+
+        proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
+        expect(proposals).to be_empty
+      end
+    end
+
+    context "ADMIN privileges" do
+      let(:proposal1) { FactoryGirl.create(:proposal, :with_approvers, :with_observers, requester_id: 555) }
+
+      after do
+        ENV['ADMIN_EMAILS'] = ""
+      end
+
+      it "allows an app admin to see requests inside and outside its client scope" do
+        proposal1.update_attributes(client_data_type:'CdfCompany::SomethingApprovable')
+        proposal.update_attributes(client_data_type:'AbcCompany::SomethingApprovable')
+
+        user = FactoryGirl.create(:user, client_slug: 'abc_company')
+        ENV['ADMIN_EMAILS'] = user.email_address
+
+        proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
+        expect(proposals).to match_array([proposal,proposal1])
+      end
     end
   end
 end

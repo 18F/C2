@@ -17,19 +17,21 @@ module Ncr
       if self.proposal.approved?
         flash[:warning] = "You are about to modify a fully approved request. Changes will be logged and sent to approvers but this request will not require re-approval."
       end
-      @approver_email = self.proposal.approvers.first.email_address
+      first_approver = self.proposal.approvers.first
+      @approver_email = first_approver.try(:email_address)
+
       super
     end
 
     def update
       @approver_email = params[:approver_email]
+      @model_instance.modifier = current_user
 
       super
 
-      if self.errors.empty?
-        if !self.approver_email_frozen?
-          @model_instance.update_approver(@approver_email)
-        end
+      if @model_changing && !@model_instance.emergency  # skip approvals if emergency
+        @model_instance.update_approvers(@approver_email)
+        @model_instance.email_approvers
       end
     end
 
@@ -50,17 +52,15 @@ module Ncr
     end
 
     def approver_email_frozen?
-      if @model_instance
-        approval = @model_instance.approvals.first
-        approval && !approval.actionable?
-      else
-        false
-      end
+      @model_instance.try(:approver_email_frozen?)
     end
 
     def permitted_params
       fields = Ncr::WorkOrder.relevant_fields(
         params[:ncr_work_order][:expense_type])
+      if @model_instance
+        fields.delete(:emergency)   # emergency field cannot be edited
+      end
       params.require(:ncr_work_order).permit(:project_title, *fields)
     end
 

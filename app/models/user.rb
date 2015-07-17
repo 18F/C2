@@ -33,6 +33,10 @@ class User < ActiveRecord::Base
     self.outgoing_delegates.exists?(assignee_id: other.id)
   end
 
+  def client_admin?
+    self.class.client_admin_emails.include?(self.email_address)
+  end
+
   def admin?
     self.class.admin_emails.include?(self.email_address)
   end
@@ -44,6 +48,10 @@ class User < ActiveRecord::Base
   def self.from_oauth_hash(auth_hash)
     user_data = auth_hash.extra.raw_info.to_hash
     self.find_or_create_by(email_address: user_data['email'])
+  end
+
+  def self.client_admin_emails
+    ENV['CLIENT_ADMIN_EMAILS'].to_s.split(',')
   end
 
   def self.admin_emails

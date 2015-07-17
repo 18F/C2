@@ -27,6 +27,13 @@ class Dispatcher
     self.email_sent_confirmation(proposal)
   end
 
+  def deliver_cancellation_emails(proposal)
+    proposal.approvers.each do |approver|
+      CommunicartMailer.cancellation_email(proposal,approver.email_address).deliver_now
+    end
+    CommunicartMailer.cancellation_confirmation(proposal).deliver_now
+  end
+
   def requires_approval_notice?(approval)
     true
   end

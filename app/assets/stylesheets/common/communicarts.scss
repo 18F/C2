@@ -513,3 +513,13 @@ header {
 .reject-link {
   margin-left: 15px;
 }
+
+ul#request-actions {
+  list-style: none;
+  padding: 0;
+
+  li {
+    display: inline-block;
+    margin: 0 20px;
+  }
+}
