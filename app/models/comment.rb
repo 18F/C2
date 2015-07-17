@@ -22,10 +22,11 @@ class Comment < ActiveRecord::Base
   end
 
   # match #to_a
+  # TODO use i18n
   def self.attributes
     [
       'commenter',
-      'cart comment',
+      'comment text',
       'created_at',
       'updated_at'
     ]

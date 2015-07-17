@@ -1,11 +1,13 @@
 namespace :populate do
-  desc "Populate the database with identical Carts"
-  task uniform: :environment do
-    Populator.create_carts_with_approvals
-  end
+  namespace :ncr do
+    desc "Populate the database with identical NCR data"
+    task uniform: :environment do
+      Populator.uniform_ncr_data
+    end
 
-  desc "Populate the database with random NCR data"
-  task random_ncr: :environment do
-    Populator.random_ncr_data
+    desc "Populate the database with random NCR data"
+    task random: :environment do
+      Populator.random_ncr_data
+    end
   end
 end

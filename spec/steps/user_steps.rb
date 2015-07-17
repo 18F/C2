@@ -1,3 +1,4 @@
+# TODO remove unused steps
 module UserSteps
 
   # include body text and button text
@@ -44,8 +45,8 @@ module UserSteps
     visit "/#{page_name}"
   end
 
-  step "I go to the cart view page" do
-    visit "/proposals/#{@cart.proposal.id}"
+  step "I go to the proposal view page" do
+    visit "/proposals/#{@proposal.id}"
   end
 
   step "I login" do
@@ -60,27 +61,19 @@ module UserSteps
     save_and_open_page
   end
 
-  step 'a cart :external_id' do |external_id|
-    @cart = FactoryGirl.create(:cart, :with_requester, external_id: external_id)
+  step 'a proposal' do
+    @proposal = FactoryGirl.create(:proposal)
   end
 
-  step 'a :cart_type cart :external_id' do |cart_type, external_id|
-    @cart = FactoryGirl.create(:cart, :with_requester, external_id: external_id, flow: cart_type)
+  step 'a :flow proposal' do |flow|
+    @proposal = FactoryGirl.create(:proposal, flow: flow)
   end
 
-  step 'a cart :external_id with approver :approver_email' do |external_id, approver_email|
-    @cart = FactoryGirl.create(:cart, :with_requester, external_id: external_id)
-    @cart.add_approver(approver_email)
-    @cart.proposal.kickstart_approvals()
-    @approval = @cart.approvals.first
-  end
-
-  step 'a cart and approvals' do
-    @cart = FactoryGirl.create(:cart_with_approvals_and_items)
-  end
-
-  step 'a cart :external_id and approvals' do |external_id|
-    @cart = FactoryGirl.create(:cart_with_approvals_and_items, external_id: external_id)
+  step 'a proposal with approver :approver_email' do |approver_email|
+    @proposal = FactoryGirl.create(:proposal)
+    @proposal.add_approver(approver_email)
+    @proposal.kickstart_approvals
+    @approval = @proposal.approvals.first
   end
 
   step 'I fill out :field with :text' do |field,text|

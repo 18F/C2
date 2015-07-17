@@ -1,6 +1,6 @@
 @import "bootstrap/variables";
 
-.cart_properties {
+.proposal-properties {
   $sideMargin: $grid-gutter-width / 2;
 
   td:first-child {
@@ -12,7 +12,7 @@
   }
 
   // force specificity
-  body.webapp & .cart_item_information td {
+  body.webapp & .proposal-property td {
     padding: 12px $sideMargin;
   }
 }

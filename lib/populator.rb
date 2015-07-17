@@ -3,18 +3,9 @@ module Populator
   # https://practicingruby.com/articles/ruby-and-the-singleton-pattern-dont-get-along
   extend self
 
-  def create_carts_with_approvals(n=10)
+  def uniform_ncr_data(n=10)
     n.times do |i|
-      cart = FactoryGirl.create(:cart)
-
-      approval1 = cart.add_approver("approver#{i}a@example.com")
-      approval1.create_api_token!
-
-      cart.add_approver("approver#{i}b@example.com")
-      cart.add_observer("observer#{i}a@example.com")
-      cart.add_observer("observer#{i}b@example.com")
-      cart.add_requester("requester#{i}@example.com")
-      cart.proposal.kickstart_approvals()
+      FactoryGirl.create(:ncr_work_order, :with_approvers)
     end
   end
 

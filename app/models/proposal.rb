@@ -1,6 +1,9 @@
 class Proposal < ActiveRecord::Base
   include WorkflowModel
   include ValueHelper
+
+  FLOWS = %w(parallel linear).freeze
+
   workflow do
     state :pending do
       # partial *may* trigger a full approval
@@ -19,7 +22,6 @@ class Proposal < ActiveRecord::Base
     end
   end
 
-  has_one :cart
   has_many :approvals
   has_many :approvers, through: :approvals, source: :user
   has_many :api_tokens, through: :approvals
@@ -37,9 +39,9 @@ class Proposal < ActiveRecord::Base
   # :public_identifier
   # :version
   # Note: clients should also implement :version
-  delegate :client, to: :client_data_legacy, allow_nil: true
+  delegate :client, to: :client_data, allow_nil: true
 
-  validates :flow, presence: true, inclusion: {in: ApprovalGroup::FLOWS}
+  validates :flow, presence: true, inclusion: {in: FLOWS}
   # TODO validates :requester_id, presence: true
 
   self.statuses.each do |status|
@@ -75,12 +77,6 @@ class Proposal < ActiveRecord::Base
       OR user_id IN (SELECT assignee_id FROM approval_delegates WHERE assigner_id = :user_id)
     SQL
     self.approvals.where(where_clause, user_id: user.id).first
-  end
-
-  # Use this until all clients are migrated to models (and we no longer have a
-  # dependence on "Cart"
-  def client_data_legacy
-    self.client_data || self.cart
   end
 
   # TODO convert to an association
@@ -169,7 +165,7 @@ class Proposal < ActiveRecord::Base
   # delegated, with a fallback
   # TODO refactor to class method in a module
   def delegate_with_default(method)
-    data = self.client_data_legacy
+    data = self.client_data
 
     result = nil
     if data && data.respond_to?(method)
@@ -208,7 +204,7 @@ class Proposal < ActiveRecord::Base
   def version
     [
       self.updated_at.to_i,
-      self.client_data_legacy.try(:version)
+      self.client_data.try(:version)
     ].compact.max
   end
 
@@ -230,8 +226,11 @@ class Proposal < ActiveRecord::Base
   # An approval has been approved. Mark the next as actionable
   # Note: this won't affect a parallel flow (as approvals start actionable)
   def partial_approve
-    if next_approval = self.approvals.pending.first
-      next_approval.make_actionable!
+    unless self.cancelled?
+      next_approval = self.approvals.pending.first
+      if next_approval
+        next_approval.make_actionable!
+      end
     end
   end
 

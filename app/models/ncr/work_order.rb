@@ -11,8 +11,6 @@ module Ncr
 
   class WorkOrder < ActiveRecord::Base
     include ValueHelper
-
-    has_one :proposal, as: :client_data
     include ProposalDelegate
 
     # This is a hack to be able to attribute changes to the correct user. This attribute needs to be set explicitly, then the update comment will use them as the "commenter". Defaults to the requester.

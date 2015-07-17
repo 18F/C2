@@ -1,14 +1,9 @@
 class User < ActiveRecord::Base
-  include PropMixin
   validates_presence_of :email_address
   validates_uniqueness_of :email_address
 
-  has_many :user_roles
-  has_many :approval_groups, through: :user_roles
-
   has_many :approvals
   has_many :observations
-  has_many :properties, as: :hasproperties
   has_many :comments
 
   has_many :outgoing_delegates, class_name: 'ApprovalDelegate', foreign_key: 'assigner_id'

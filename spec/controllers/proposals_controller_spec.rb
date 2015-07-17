@@ -198,12 +198,14 @@ describe ProposalsController do
 
       post :approve, id: proposal.id, cch: token.access_token
 
+      # TODO simplify this check
       expect(response).to redirect_to(root_path(return_to: self.make_return_to("Previous", request.fullpath)))
     end
 
     it "won't allow a missing token when using GET" do
       proposal = FactoryGirl.create(:proposal, :with_approver)
       login_as(proposal.approvers.first)
+
       get :approve, id: proposal.id
 
       expect(response).to have_http_status(403)
@@ -215,8 +217,20 @@ describe ProposalsController do
       token = approval.create_api_token!
 
       get :approve, id: proposal.id, cch: token.access_token
+
       approval.reload
       expect(approval.approved?).to be(true)
+    end
+
+    it "doesn't allow a token to be reused" do
+      proposal = FactoryGirl.create(:proposal, :with_approver)
+      approval = proposal.approvals.first
+      token = approval.create_api_token!
+      token.use!
+
+      get :approve, id: proposal.id, cch: token.access_token
+
+      expect(flash[:alert]).to include("Please sign in")
     end
 
     it "won't allow the approval to be approved twice through the web ui" do

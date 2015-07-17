@@ -19,7 +19,7 @@
   }
 }
 
-.cart-table, .dashboard {
+.dashboard {
   width: 100%;
 
   margin: 20px auto;
@@ -67,7 +67,7 @@ th h5 {
   font-size: 80%;
 }
 
-tr.cart_item_information td {
+tr.proposal-property td {
   border-bottom: 1px solid #ccc;
   padding-top: 30px;
   padding-bottom: 10px;
@@ -115,40 +115,6 @@ td p.result-item-units {
   font-weight: 400;
 }
 
-td.cart-total {
-  background-color: $bgdetails;
-  text-align: center;
-  padding: 40px 0;
-
-  .total-label {
-    text-transform: uppercase;
-  }
-}
-
-.c2bullet {
-  padding-left: 7px;
-  height: 15px;
-  display: inline-block;
-  font-size: 250%;
-  line-height: .6em;
-  color: #f2c33e;
-  vertical-align: top;
-}
-
-.bullet-label {
-  vertical-align: top;
-  line-height: 1.6em;
-}
-
-p.cart_item_description {
-  padding-bottom: 30px;
-}
-
-p.cart_item_description strong {
-  font-size: 130%;
-  font-weight: 300;
-}
-
 td p.vendor-information strong {
   font-weight: normal;
   color: #000;
@@ -165,11 +131,7 @@ table tr.total-price, tr#approval-actions {
   background-color: #f5f5f5;
 }
 
-#navigator-layout tr.cart_item_information strong {
-  text-transform: uppercase;
-}
-
-tr.cart_item_information p {
+tr.proposal-property p {
   color: #666;
   font-size: 80%;
 }
@@ -417,7 +379,7 @@ fieldset.required legend::after {
 }
 
 @media (max-width: $break-small) {
-  tr.cart_item_information p {
+  tr.proposal-property p {
     font-size: 67%;
   }
 
