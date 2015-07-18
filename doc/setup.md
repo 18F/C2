@@ -32,7 +32,7 @@ Per [the Twelve-Factor guidelines](http://12factor.net/config), all necessary co
 #### Can't create or connect to database
 
 * Check that PostgreSQL is running
-* Set the `DB_*` variables in [`.env`](../.env.example) to match your setup
+* Set the `DATABASE_URL` variable in [`.env`](../.env.example) to match your setup
 
 ## Starting the application
 
