@@ -44,6 +44,7 @@ group :test, :development do
   gem 'pry-rails'
   gem 'rspec-rails'
   gem 'rack_session_access'
+  gem 'erb2haml'
 end
 
 group :development do

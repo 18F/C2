@@ -1,0 +1,15 @@
+#ncr-layout
+  %table.w-container.main-container{:width => "800"}
+    %tr
+      %td
+        %h1.communicart_header
+          = link_to proposal.name, proposal_url(proposal),  {target: 'C2'}
+        .communicart_description
+          %p
+            Requested by:
+            %strong= proposal.requester.full_name
+    = render partial: "shared/email_status"
+    %tr
+      %td
+        = client_partial(proposal.client, 'proposal_properties', |
+          locals: {proposal: proposal})                          |

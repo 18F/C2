@@ -1,0 +1,15 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %meta{:charset => "utf-8"}/
+    %title Communicart
+    %meta{:content => "width=device-width, initial-scale=1", :name => "viewport"}/
+    %link{:href => "#{stylesheet_url('common/communicarts.css')}", :rel => "stylesheet", :type => "text/css"}/
+  %body.communicart-notification
+    = yield
+    %hr/
+    #footer.inset
+      %p
+        Find a bug, have a recommendation, or want to provide other feedback? We'd love to
+        %a{:href => feedback_url, :target => "_blank"} hear from you!

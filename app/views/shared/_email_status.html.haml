@@ -1,0 +1,31 @@
+%tr.m-shared-email_status
+  %td{:colspan => "2", :padding => "10"}
+    %table#status-container-detail.col-md-12{:width => "770"}
+      %tr{:class => "status-header-container #{'cancelled' if @proposal.cancelled?}"}
+        %td
+          %strong Approval Status
+        %td.status-header
+          = status_icon_tag(@proposal.status)
+          %strong= @proposal.status
+          - unless @proposal.cancelled?
+            (#{@proposal.number_approved} of #{@proposal.total_approvers} approved)
+      - unless @proposal.cancelled?
+        %tr.status-header-container-detail
+          %td{:colspan => "2"}
+            %table.approval_details.data_container
+              - last_status = nil
+              - @proposal.approvals_in_list_order.each_with_index do |approval,index|
+                - display_status = approval.decorate.display_status
+                %tr.approval-row
+                  %td
+                    - if display_status != last_status
+                      %strong= display_status
+                  %td
+                    - last_approver = index == @proposal.approvals_in_list_order.count - 1
+                    = status_icon_tag(display_status, @proposal.linear?, last_approver)
+                    %span.approver
+                      = mail_to approval.user_email_address, approval.user_full_name
+                    - if approval.approved?
+                      %span.timestamp
+                        on #{date_with_tooltip(approval.approved_at)}
+                - last_status = display_status

@@ -1,0 +1,11 @@
+- approvers = proposal.currently_awaiting_approvers
+- if proposal.pending? && approvers.include?(current_user)
+  %p
+    %strong Please review
+- elsif proposal.pending?
+  %p
+    %em
+      Waiting for review from:
+      \#{approvers.map(&:full_name).join(', ')}
+- else
+  = proposal.status.titlecase

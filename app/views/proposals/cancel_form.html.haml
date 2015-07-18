@@ -1,0 +1,12 @@
+.inset
+  .row.centered
+    %h1
+      Cancellation: #{@proposal.name}
+    = form_tag({controller: "proposals", action: "cancel", id: @proposal.id}, method: "post") do
+      = label_tag(:reason_input, "Reason for cancellation")
+      %br/
+      = text_area_tag 'reason_input', nil, size: "50x10"
+      %p
+        = submit_tag("Yes, cancel this request", class: 'form-button')
+      %p
+        = link_to 'I made a mistake. Take me back', proposal_path, id: @proposal.id

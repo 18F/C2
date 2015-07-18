@@ -1,0 +1,97 @@
+- content_for :title, "NCR Request"
+.container.content.m-request-form
+  %h2 National Capital Region
+  %h3
+    Purchase Card Approval Request
+  = form_for @model_instance, html: {multipart: true} do |f|
+    .form-group
+      = f.label :project_title, class: "required"
+      = f.text_field :project_title, class: 'form-control', placeholder: 'e.g. "Blue paint for the Blue Room"'
+    .form-group
+      = f.label :description
+      = f.text_area :description, class: 'form-control', 'aria-describedby'=>'description-add-info'
+      #description-add-info.help-block
+        Include request details (e.g. Room Number, Estimated number of hours)
+    .form-group
+      = field_set_tag "Expense type", class: "required" do
+        .radio
+          = f.label :expense_type, value: "BA60" do
+            = f.radio_button :expense_type, "BA60",    |
+              :"data-filter-control" => "expense-type" |
+            BA60
+        .radio
+          = f.label :expense_type, value: "BA61" do
+            = f.radio_button :expense_type, "BA61",    |
+              :"data-filter-control" => "expense-type" |
+            BA61
+        .checkbox{"data-filter-key" => "expense-type", "data-filter-value" => "BA61"}
+          = f.label :emergency do
+            = f.check_box :emergency, disabled: @model_instance.persisted?
+            This request was an emergency and I received a verbal Notice to Proceed (NTP)
+        .radio
+          = f.label :expense_type, value: "BA80" do
+            = f.radio_button :expense_type, "BA80",    |
+              :"data-filter-control" => "expense-type" |
+            BA80
+        = render partial: 'ba_80_fields', locals: {f: f}
+    .form-group
+      = f.label :building_number, class: "required"
+      = f.text_field :building_number,                     |
+        class: 'form-control js-selectize',                |
+        placeholder: "Type here to search or add",         |
+        data: { initial: JSON.generate(building_options) } |
+    .form-group
+      = f.label :org_code
+      = f.collection_select(                                                                        |
+        :org_code, Ncr::Organization.all, :to_s, :to_s,                                             |
+        {include_blank: true, prompt: "Type here to search"}, {class: 'form-control js-selectize'}) |
+      #org-code-hint.help-block
+        Select your Service Center.
+    .form-group
+      = f.label :vendor, class: "required"
+      = f.text_field :vendor,                          |
+        class: 'form-control js-selectize',            |
+        placeholder: "Type here to search or add",     |
+        data: {initial: JSON.generate(vendor_options)} |
+    .form-group
+      = field_set_tag "Amount", class: "required" do
+        = f.label :amount, "Dollar Amount", :class => 'sr-only'
+        .input-group
+          .input-group-addon $
+          = f.number_field :amount, class: 'form-control', step: 0.01
+        .radio
+          = f.label :not_to_exceed, value: false do
+            = f.radio_button :not_to_exceed, false
+            Exact
+        .radio
+          = f.label :not_to_exceed, value: true do
+            = f.radio_button :not_to_exceed, true
+            Not to exceed
+    .checkbox
+      = f.label :direct_pay do
+        = f.check_box :direct_pay
+        I am going to be using direct pay for this transaction
+    .form-group
+      = label_tag :approver_email, "Approving official's email address", class: "required"
+      = select_tag :approver_email, options_from_collection_for_select(approver_options, :to_s, :to_s, @approver_email),                         |
+        class: 'form-control js-selectize', disabled: @model_instance.approver_email_frozen?, include_blank: true, prompt: 'Type here to search' |
+    - if @model_instance.new_record?
+      .form-group
+        = field_set_tag 'Attachments' do
+          %ul.attachments{"data-add-minus" => "true"}
+            - 10.times do
+              %li= file_field_tag "attachments[]"
+    - else
+      = field_set_tag "Budget codes" do
+        .form-group
+          = f.label :cl_number
+          = f.text_field :cl_number, class: 'form-control'
+        .form-group
+          = f.label :function_code
+          = f.text_field :function_code, class: 'form-control'
+        .form-group
+          = f.label :soc_code
+          = f.text_field :soc_code, class: 'form-control'
+    = f.submit class: 'form-button'
+    - if @model_instance.persisted?
+      = link_to 'Discard Changes', proposal_url(@model_instance.proposal)

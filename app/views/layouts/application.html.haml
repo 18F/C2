@@ -1,0 +1,25 @@
+!!!
+%html{:lang => "en"}
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title
+      = "#{yield(:title)} - " if content_for(:title).present?
+      C2
+    = stylesheet_link_tag "application", media: "all"
+    /[if lt IE 9] <haml_loud> javascript_include_tag &quot;es5-shim.min.js&quot;, &quot;data-turbolinks-track&quot; =&gt; true </haml_loud>
+    = javascript_include_tag "application", "data-turbolinks-track" => true
+    = render 'layouts/analytics'
+    %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1", :name => "viewport"}/
+    = csrf_meta_tags
+  %body{:class => "bodyclass webapp controller-#{controller_name} action-#{params[:action]}"}
+    = render 'peek/bar'
+    = render 'layouts/communicart_header'
+    .inset
+      - flash_list.each do |key, value|
+        %div{:class => "row alert alert-#{key} #{bootstrap_alert_class(key)}"}= value
+    = content_for?(:content) ? yield(:content) : yield
+    - unless @skip_footer
+      #footer.inset
+        %p
+          Find a bug, have a recommendation, or want to provide other feedback? We'd love to
+          %a{:href => feedback_path, :target => "_blank"} hear from you!

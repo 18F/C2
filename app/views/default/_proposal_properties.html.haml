@@ -1,0 +1,11 @@
+%table.data_container.proposal-properties.table{:width => "100%"}
+  %tr.header
+    %td.first{:colspan => "2", :scope => "col", :width => "33%"}
+      %h5 FY15 Credit Card Purchase Request
+  - proposal.fields_for_display.each do |name, value|
+    %tr.proposal-property
+      %td.results-list{:align => "left", :scope => "row"}
+        %strong
+          = name
+      %td
+        = property_to_s(value)

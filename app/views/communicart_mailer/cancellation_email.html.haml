@@ -1,0 +1,8 @@
+%div
+  %p
+    Hello,
+    %br/
+    The request, #{@proposal.name} (#{@proposal.public_id}), has been cancelled.
+%p
+  %strong
+    = link_to "View This Request", proposal_url(@proposal), {target: 'C2'}

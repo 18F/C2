@@ -1,0 +1,11 @@
+%body
+  %header
+    .container
+      #header-identity
+        #communicart_logo Communicart
+        %h1 Approval Portal
+      = render 'layouts/header_nav'
+  - if return_to
+    = render partial: 'shared/breadcrumb_nav', locals: {text: "Back to #{return_to[:name]}", href: return_to[:path]}
+  - elsif display_return_to_proposals
+    = render partial: 'shared/breadcrumb_nav', locals: {text: "Back to main portal", href: proposals_path}
