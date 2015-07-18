@@ -21,7 +21,7 @@ C2 is a fairly typical Rails application, so the setup is straightforward:
     ./script/bootstrap
     ```
 
-1. [Register an application on MyUSA](https://alpha.my.usa.gov/applications/new) that provides the `email` scope.
+1. [Register an application on MyUSA](https://alpha.my.usa.gov/applications/new) that provides the `email` scope. You will also need to set the 'Redirect uri' field to [your_domain]/auth/myusa/callback. For example, http://localhost:3000/auth/myusa/callback.
     * Note that the MyUSA app will need to be whitelisted on their end if you need other people to log into it. This matters for staging servers more than local development, so you may not need to worry about it.
 1. Add the required `MYUSA_*` values in your [`.env`](../.env.example).
 
@@ -32,7 +32,7 @@ Per [the Twelve-Factor guidelines](http://12factor.net/config), all necessary co
 #### Can't create or connect to database
 
 * Check that PostgreSQL is running
-* Set the `DB_*` variables in [`.env`](../.env.example) to match your setup
+* Set the `DATABASE_URL` variable in [`.env`](../.env.example) to match your setup
 
 ## Starting the application
 
