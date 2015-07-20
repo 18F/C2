@@ -1,20 +1,9 @@
 class Approval < ActiveRecord::Base
   include WorkflowModel
-  workflow do
-    state :pending do
-      event :make_actionable, transitions_to: :actionable
-    end
-    state :actionable do
-      event :approve, transitions_to: :approved
-    end
+  workflow do   # overwritten in child classes
+    state :pending
+    state :actionable
     state :approved
-
-    # workflow doesn't touch active record
-    # manually updating 'updated_at'
-    # https://github.com/geekq/workflow/issues/96
-    on_transition do |from, to, triggering_event, *event_args|
-      self.touch
-    end
   end
 
   belongs_to :proposal
@@ -48,14 +37,18 @@ class Approval < ActiveRecord::Base
     end
   end
 
-  # notify parents if we've been approved. Notified as a callback so that it
-  # will be present even if subclasses override workflow
-  def on_approved_entry(old_state, event)
+  def notify_parent_approved
     if self.parent
-      self.parent.child_approved!
+      self.parent.child_approved!(self)
     else
       self.proposal.approve!
     end
     self.reload   # Account for proposal changes
+  end
+  
+  # By using a min_required, we can create a disjunction
+  def min_required_met?
+    min_required = self.min_required || self.child_approvals.count
+    self.child_approvals.approved.count >= min_required
   end
 end

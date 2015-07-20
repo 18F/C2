@@ -15,7 +15,7 @@ class Proposal < ActiveRecord::Base
       event :cancel, :transitions_to => :cancelled
     end
     state :cancelled do
-      event :partial_approve, :transitions_to => :cancelled
+      event :approve, :transitions_to => :cancelled
     end
   end
 
@@ -91,45 +91,35 @@ class Proposal < ActiveRecord::Base
     results.compact
   end
 
-  # returns the Approval
-  def add_approver(email)
-    user = User.for_email(email)
-    # note that self.root_approval may be nil
-    approval = Approvals::Individual.new(user: user, parent: self.root_approval)
-    self.approvals << approval
-    approval
-  end
-
   def remove_approver(email)
     user = User.for_email(email)
     approval = self.existing_approval_for(user)
     approval.destroy
   end
 
-  # Set the approver list, from any start state
-  # This overrides the `through` relation but provides parity to the accessor
-  def approvers=(approver_list)
-    approvals = approver_list.each_with_index.map do |approver, idx|
-      approval = self.existing_approval_for(approver)
-      approval ||= Approval.new(user: approver, proposal: self)
-      approval.position = idx + 1   # start with 1
-      approval
+  # Sets the approval list from any start state, reusing any user approvals
+  def create_or_update_approvals(new_approvals)
+    new_approvals = new_approvals.each_with_index.map do |new_approval, idx|
+      user = new_approval.user
+      if user && existing = self.existing_approval_for(user)
+        existing.position = idx + 1   # start with 1
+        existing.parent = new_approval.parent   # this assumes the parent hasn't been replaced
+        existing
+      else
+        new_approval.position = idx + 1 # start with 1
+        new_approval
+      end
     end
-    self.approvals = approvals
+    self.approvals = new_approvals
     self.kickstart_approvals()
     self.reset_status()
   end
 
   # Trigger the appropriate approval, from any start state
   def kickstart_approvals()
-    actionable = self.approvals.actionable
-    pending = self.approvals.pending
-    if self.parallel?
-      pending.update_all(status: 'actionable')
-    elsif self.linear? && actionable.empty? && pending.any?
-      pending.first.make_actionable!
+    if self.root_approval
+      self.root_approval.initialize!
     end
-    # otherwise, approvals are correct
   end
 
   def reset_status()
@@ -224,17 +214,6 @@ class Proposal < ActiveRecord::Base
 
   def all_approved?
     self.approvals.where.not(status: 'approved').empty?
-  end
-
-  # An approval has been approved. Mark the next as actionable
-  # Note: this won't affect a parallel flow (as approvals start actionable)
-  def partial_approve
-    unless self.cancelled?
-      next_approval = self.approvals.pending.first
-      if next_approval
-        next_approval.make_actionable!
-      end
-    end
   end
 
   protected

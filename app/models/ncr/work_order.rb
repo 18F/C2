@@ -103,9 +103,11 @@ module Ncr
         # skip state machine
         self.proposal.update(status: 'approved')
       else
-        self.proposal.root_approval = Approvals::Serial.new
-        approvers = emails.map{|e| User.for_email(e)}
-        self.proposal.approvers = approvers
+        root = Approvals::Serial.new
+        individuals = emails.map do |email| 
+          Approals::Individual.new(user: User.for_email(email), parent: root)
+        end
+        self.proposal.create_or_update_approvals([root] + individuals)
       end
     end
 
