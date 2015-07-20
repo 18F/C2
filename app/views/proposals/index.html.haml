@@ -1,0 +1,33 @@
+- content_for :title, "My Requests"
+.inset
+  = render partial: 'search_ui'
+  .row.pending-pr
+    .col-md-12
+      %h3 Pending Purchase Requests
+      - if @proposals.pending.any?
+        = client_partial current_user.client_slug, "proposal_list",            |
+          locals: { proposals: @proposals.pending, role: @role, closed: false} |
+      - else
+        %p.empty-list-label No pending purchase requests
+  .row.past-pr
+    .col-sm-10
+      %h3 Recently Completed Purchase Requests
+    = render partial: 'archive_link'
+  - if @proposals.closed.any?
+    .row
+      .col-sm-12
+        = client_partial current_user.client_slug, "proposal_list", |
+          locals: {proposals: @proposals.closed,                    |
+          limit: @CLOSED_PROPOSAL_LIMIT}                            |
+    .row
+      = render partial: "archive_link"
+  - else
+    %p.empty-list-label No recently completed purchase requests
+  - if @proposals.cancelled.any?
+    .row.past-pr
+      .col-sm-10
+        %h3 Cancelled Purchase Requests
+    .row
+      .col-sm-12
+        = client_partial current_user.client_slug, "proposal_list", |
+          locals: {proposals: @proposals.cancelled}                 |

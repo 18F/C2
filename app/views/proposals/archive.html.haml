@@ -1,0 +1,8 @@
+.row.past-pr
+  .col-sm-12
+    %h3 All Past Purchase Requests
+.row
+  .col-sm-12
+    = client_partial current_user.client_slug, "proposal_list", |
+      locals: {proposals: @proposals, role: @role,              |
+      closed: true}                                             |

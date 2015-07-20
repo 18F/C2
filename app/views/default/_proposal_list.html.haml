@@ -1,0 +1,27 @@
+%table.proposal-list
+  %tr.header
+    %th.sixth{:scope => "col"}
+      %h5 ID
+    %th.next{:scope => "col"}
+      %h5 Request
+    %th.sixth{:scope => "col"}
+      %h5 Requester
+    %th.sixth{:scope => "col"}
+      %h5 Status
+    %th.sixth{:scope => "col"}
+      %h5 Submitted
+  - if defined? limit
+    - proposals_list = proposals.limit(limit)
+  - else
+    - proposals_list = proposals
+  - proposals_list.each do |proposal|
+    %tr
+      %td.sixth
+        %a{"aria-label" => "Proposal #{proposal.public_identifier} #{proposal.name}", :href => "#{proposal_url(proposal)}"}= proposal.public_identifier
+      %td.next
+        %a{"aria-label" => "Proposal #{proposal.public_identifier} #{proposal.name}", :href => "#{proposal_url(proposal)}"}= proposal.name
+      %td.sixth= proposal.requester.email_address
+      %td.sixth
+        = render partial: 'proposals/review_status', |
+          locals: {proposal: proposal}               |
+      %td.sixth= date_with_tooltip(proposal.created_at)

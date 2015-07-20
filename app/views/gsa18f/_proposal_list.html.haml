@@ -1,0 +1,27 @@
+%table.proposal-list
+  %tr.header
+    %th.sixth{:scope => "col"}
+      %h5 ID
+    %th.first{:scope => "col"}
+      %h5 Request
+    %th.sixth{:scope => "col"}
+      %h5 Total Price
+    %th.sixth{:scope => "col"}
+      %h5 Status
+    %th.sixth{:scope => "col"}
+      %h5 Submitted
+  - if defined? limit
+    - proposals_list = proposals.limit(limit)
+  - else
+    - proposals_list = proposals
+  - proposals_list.each do |proposal|
+    %tr
+      %td.sixth
+        %a{:href => "#{proposal_url(proposal)}"}= proposal.public_identifier
+      %td.first
+        %a{:href => "#{proposal_url(proposal)}"}= proposal.name
+      %td.sixth= number_to_currency(proposal.client_data.try(:total_price))
+      %td.sixth
+        = render partial: 'proposals/review_status', |
+          locals: {proposal: proposal}               |
+      %td.sixth= date_with_tooltip(proposal.created_at)

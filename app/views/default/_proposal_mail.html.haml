@@ -1,0 +1,19 @@
+.row
+  %table.w-container.main-container.xs-col-12{:border => "0", :width => "100%"}
+    %tr
+      %td
+        %h1.communicart_header
+          = title
+        .communicart_description
+          %p
+            Requested by:
+            %strong= proposal.requester.full_name
+          - # TODO remove GSA Advantage references
+          %p
+            GSA Advantage:
+            GSA Advantage:
+            %strong
+              [Some description] - Cart ##{proposal.public_identifier}
+      %td.communicart_description
+        %img{:alt => "Communicart logo", :height => "43", :src => "#{image_url('img_logo_communicart.gif')}", :width => "229"}/
+    = render partial: "shared/email_status"

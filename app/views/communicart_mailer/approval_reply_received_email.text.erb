@@ -1,7 +1,0 @@
-
-Current status: <%=  @proposal.generate_status_message %>
-
-At time <%= @approval.created_at %>, approver <%= @approval.user_email_address %> <%= @approval.status %> request <%= @proposal.public_identifier %>. <%= @approval.approved? ?
-"This approval has been logged for future information" :
-"You may wish to contact the approver for more explanation."
- %>

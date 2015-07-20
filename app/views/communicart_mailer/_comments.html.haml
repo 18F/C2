@@ -1,0 +1,21 @@
+- if comments.any?
+  %table.submodel-section
+    %tr
+      %td.w-container{:colspan => "2"}
+        %strong Comments
+    - comments.each do |c|
+      %tr
+      - if c.update_comment
+        class="comment-update"
+      \&gt;
+      %td.comment-detail.first{:valign => "top"}
+        %p
+          = l(c.created_at.to_date)
+      %td.comment-detail{:valign => "top"}
+        %p
+          %strong
+            - if c.update_comment
+              Request modified by
+            = c.user_full_name
+          %br/
+          = c.update_comment ? markdown(c.comment_text) : c.comment_text

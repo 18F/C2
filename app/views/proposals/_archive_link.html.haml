@@ -1,0 +1,3 @@
+.col-sm-2
+  - if @proposals.closed.size > @CLOSED_PROPOSAL_LIMIT
+    = link_to "View the archive", url_for(:controller => 'proposals', :action => 'archive', :role => @role)
