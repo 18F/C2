@@ -1,7 +1,5 @@
 <% unless ENV["DISABLE_SANDBOX_WARNING"] %>
-<div class="sandbox-banner">
-  <span>This sandbox site is for testing and training purposes only. To view and make live requests, <a href="https://cap.18f.gov">go to the live site</a>.</span>
-</div>
+  <%= render partial: 'shared/sandbox_warning' %>
 <% end %>
 <header>
   <div class='container'>

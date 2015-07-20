@@ -5,10 +5,7 @@
   Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 %html{lang: 'en'}
   - unless ENV["DISABLE_SANDBOX_WARNING"]
-    %div{class: "sandbox-banner"}
-      %span
-        This sandbox site is for testing and training purposes only. To view and make live requests,
-        %a{href: "https://cap.18f.gov"} go to the live site.
+    = render 'shared/sandbox_warning'
   %head
     %title Communicart
     %meta{'http-equiv' => "content-type", content: "text/html; charset=utf-8"}
