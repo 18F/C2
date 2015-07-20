@@ -11,6 +11,10 @@ FactoryGirl.define do
     project_title "NCR Name"
     association :proposal, flow: 'linear'
 
+    trait :with_approver do
+      association :proposal, :with_approver, flow: 'linear'
+    end
+
     trait :with_approvers do
       association :proposal, :with_approvers, flow: 'linear'
     end
