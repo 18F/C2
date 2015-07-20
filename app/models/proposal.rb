@@ -1,22 +1,24 @@
 class Proposal < ActiveRecord::Base
   include WorkflowModel
   include ValueHelper
+
+  FLOWS = %w(parallel linear).freeze
+
   workflow do
     state :pending do
       event :approve, :transitions_to => :approved
-      event :reject, :transitions_to => :rejected
       event :restart, :transitions_to => :pending
+      event :cancel, :transitions_to => :cancelled
     end
     state :approved do
       event :restart, :transitions_to => :pending
+      event :cancel, :transitions_to => :cancelled
     end
-    state :rejected do
-      event :reject, :transitions_to => :rejected
-      event :restart, :transitions_to => :pending
+    state :cancelled do
+      event :partial_approve, :transitions_to => :cancelled
     end
   end
 
-  has_one :cart
   has_one :root_approval, ->{ where(parent_id: nil) }, class_name: 'Approval'
   has_many :approvals
   has_many :user_approvals, ->{ where.not(user_id: nil) }, class_name: 'Approval'
@@ -36,16 +38,17 @@ class Proposal < ActiveRecord::Base
   # :public_identifier
   # :version
   # Note: clients should also implement :version
-  delegate :client, to: :client_data_legacy, allow_nil: true
+  delegate :client, to: :client_data, allow_nil: true
 
   # @todo: remove flow
-  validates :flow, presence: true, inclusion: {in: ApprovalGroup::FLOWS}
+  validates :flow, presence: true, inclusion: {in: FLOWS}
   # TODO validates :requester_id, presence: true
 
   self.statuses.each do |status|
     scope status, -> { where(status: status) }
   end
-  scope :closed, -> { where(status: ['approved', 'rejected']) }
+  scope :closed, -> { where(status: ['approved', 'cancelled']) } #TODO: Backfill to change approvals in 'reject' status to 'cancelled' status
+  scope :cancelled, -> { where(status: 'cancelled') }
 
   after_initialize :set_defaults
   after_create :update_public_id
@@ -67,19 +70,13 @@ class Proposal < ActiveRecord::Base
     self.approval_delegates.exists?(assignee_id: user.id)
   end
 
-  def approval_for(user)
+  def existing_approval_for(user)
     where_clause = <<-SQL
       user_id = :user_id
-      OR
-      user_id IN (SELECT assigner_id FROM approval_delegates WHERE assignee_id = :user_id)
+      OR user_id IN (SELECT assigner_id FROM approval_delegates WHERE assignee_id = :user_id)
+      OR user_id IN (SELECT assignee_id FROM approval_delegates WHERE assigner_id = :user_id)
     SQL
     self.approvals.where(where_clause, user_id: user.id).first
-  end
-
-  # Use this until all clients are migrated to models (and we no longer have a
-  # dependence on "Cart"
-  def client_data_legacy
-    self.client_data || self.cart
   end
 
   # TODO convert to an association
@@ -105,13 +102,49 @@ class Proposal < ActiveRecord::Base
 
   def remove_approver(email)
     user = User.for_email(email)
-    approval = self.approval_for(user)
+    approval = self.existing_approval_for(user)
     approval.destroy
+  end
+
+  # Set the approver list, from any start state
+  # This overrides the `through` relation but provides parity to the accessor
+  def approvers=(approver_list)
+    approvals = approver_list.each_with_index.map do |approver, idx|
+      approval = self.existing_approval_for(approver)
+      approval ||= Approval.new(user: approver, proposal: self)
+      approval.position = idx + 1   # start with 1
+      approval
+    end
+    self.approvals = approvals
+    self.kickstart_approvals()
+    self.reset_status()
+  end
+
+  # Trigger the appropriate approval, from any start state
+  def kickstart_approvals()
+    actionable = self.approvals.actionable
+    pending = self.approvals.pending
+    if self.parallel?
+      pending.update_all(status: 'actionable')
+    elsif self.linear? && actionable.empty? && pending.any?
+      pending.first.make_actionable!
+    end
+    # otherwise, approvals are correct
+  end
+
+  def reset_status()
+    unless self.cancelled?   # no escape from cancelled
+      if self.all_approved?
+        self.update(status: 'approved')
+      else
+        self.update(status: 'pending')
+      end
+    end
   end
 
   def add_observer(email)
     user = User.for_email(email)
-    self.observations.create!(user_id: user.id)
+    self.observations.find_or_create_by!(user: user)
   end
 
   def add_requester(email)
@@ -134,7 +167,7 @@ class Proposal < ActiveRecord::Base
   # delegated, with a fallback
   # TODO refactor to class method in a module
   def delegate_with_default(method)
-    data = self.client_data_legacy
+    data = self.client_data
 
     result = nil
     if data && data.respond_to?(method)
@@ -173,7 +206,7 @@ class Proposal < ActiveRecord::Base
   def version
     [
       self.updated_at.to_i,
-      self.client_data_legacy.try(:version)
+      self.client_data.try(:version)
     ].compact.max
   end
 
@@ -185,8 +218,23 @@ class Proposal < ActiveRecord::Base
     # Note that none of the state machine's history is stored
     self.api_tokens.update_all(expires_at: Time.now)
     self.approvals.update_all(status: 'pending')
-    self.root_approval.make_actionable!
+    self.kickstart_approvals()
     Dispatcher.deliver_new_proposal_emails(self)
+  end
+
+  def all_approved?
+    self.approvals.where.not(status: 'approved').empty?
+  end
+
+  # An approval has been approved. Mark the next as actionable
+  # Note: this won't affect a parallel flow (as approvals start actionable)
+  def partial_approve
+    unless self.cancelled?
+      next_approval = self.approvals.pending.first
+      if next_approval
+        next_approval.make_actionable!
+      end
+    end
   end
 
   protected

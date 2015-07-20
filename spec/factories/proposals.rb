@@ -6,7 +6,8 @@ FactoryGirl.define do
 
     trait :with_approver do
       after :create do |proposal|
-        proposal.add_approver('approver1@some-dot-gov.gov').make_actionable!
+        proposal.add_approver('approver1@some-dot-gov.gov')
+        proposal.kickstart_approvals()
       end
     end
 
@@ -24,7 +25,7 @@ FactoryGirl.define do
         proposal.root_approval = Approvals::Parallel.new
         proposal.add_approver('approver1@some-dot-gov.gov')
         proposal.add_approver('approver2@some-dot-gov.gov')
-        proposal.root_approval.make_actionable!
+        proposal.kickstart_approvals()
       end
     end
 

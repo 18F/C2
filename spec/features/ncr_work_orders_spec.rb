@@ -67,8 +67,7 @@ describe "National Capital Region proposals" do
         end
       end
 
-      with_env_vars(SHOW_BA60_OPTION: 'true',
-                    NCR_BA61_TIER1_BUDGET_MAILBOX: 'ba61one@example.gov',
+      with_env_vars(NCR_BA61_TIER1_BUDGET_MAILBOX: 'ba61one@example.gov',
                     NCR_BA61_TIER2_BUDGET_MAILBOX: 'ba61two@example.gov') do
         it "saves a BA60 Proposal with the attributes" do
           expect(Dispatcher).to receive(:deliver_new_proposal_emails)
@@ -129,34 +128,6 @@ describe "National Capital Region proposals" do
         expect(page).to_not have_field('CL number')
         expect(page).to_not have_field('Function code')
         expect(page).to_not have_field('SOC code')
-      end
-
-      with_feature 'HIDE_BA61_OPTION' do
-        it "removes the radio button" do
-          visit '/ncr/work_orders/new'
-          expect(page).to_not have_content('BA61')
-          expect(page).to have_content('BA80')
-        end
-
-
-        it "defaults to BA80" do
-          visit '/ncr/work_orders/new'
-          fill_in 'Project title', with: "buying stuff"
-          fill_in 'Description', with: "desc content"
-          # no need to select BA80
-          fill_in 'RWA Number', with: 'F1234567'
-          fill_in 'Vendor', with: 'ACME'
-          fill_in 'Amount', with: 123.45
-          select approver.email_address, from: 'approver_email'
-          fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
-          select Ncr::Organization.all[0], from: 'ncr_work_order_org_code'
-          expect {
-            click_on 'Submit for approval'
-          }.to change { Proposal.count }.from(0).to(1)
-
-          proposal = Proposal.last
-          expect(proposal.client_data.expense_type).to eq('BA80')
-        end
       end
 
       it "doesn't save when the amount is too high" do
@@ -307,12 +278,12 @@ describe "National Capital Region proposals" do
     end
   end
 
-  describe "approving a work order" do 
+  describe "approving a work order" do
     let(:work_order){FactoryGirl.create(:ncr_work_order)}
     let(:ncr_proposal){work_order.proposal}
     before do
       Timecop.freeze(10.hours.ago) do
-        work_order.add_approvals('approver@example.com')
+        work_order.setup_approvals_and_observers('approver@example.com')
       end
       login_as(work_order.approvers.first)
     end
@@ -322,7 +293,7 @@ describe "National Capital Region proposals" do
         click_on("Approve")
         expect(current_path).to eq("/proposals/#{ncr_proposal.id}")
         expect(page).to have_content("You have approved #{work_order.public_identifier}")
-        
+
         approval = Proposal.last.user_approvals.first
         expect(approval.status).to eq('approved')
         expect(approval.approved_at.utc.to_s).to eq(Time.now.utc.to_s)
@@ -335,25 +306,25 @@ describe "National Capital Region proposals" do
     let(:ncr_proposal) { work_order.proposal }
 
     before do
-      work_order.add_approvals('approver@example.com')
+      work_order.setup_approvals_and_observers('approver@example.com')
       login_as(work_order.requester)
     end
 
-    it "shows a edit link from a pending cart" do
+    it "shows a edit link from a pending proposal" do
       visit "/proposals/#{ncr_proposal.id}"
       expect(page).to have_content('Modify Request')
       click_on('Modify Request')
       expect(current_path).to eq("/ncr/work_orders/#{work_order.id}/edit")
     end
 
-    it "shows a edit link from a rejected cart" do
+    it "shows a edit link from a rejected proposal" do
       ncr_proposal.update_attribute(:status, 'rejected') # avoid state machine
 
       visit "/proposals/#{ncr_proposal.id}"
       expect(page).to have_content('Modify Request')
     end
 
-    it "shows a edit link for an approved cart" do
+    it "shows a edit link for an approved proposal" do
       ncr_proposal.update_attribute(:status, 'approved') # avoid state machine
 
       visit "/proposals/#{ncr_proposal.id}"
@@ -380,7 +351,7 @@ describe "National Capital Region proposals" do
 
     describe "when logged in as the requester" do
       before do
-        work_order.add_approvals('approver@example.com')
+        work_order.setup_approvals_and_observers('approver@example.com')
         login_as(work_order.requester)
         deliveries.clear
       end
@@ -420,7 +391,7 @@ describe "National Capital Region proposals" do
       end
 
 
-      it "allows you to change the approving official" do 
+      it "allows you to change the approving official" do
         visit "/ncr/work_orders/#{work_order.id}/edit"
         select "liono0@some-cartoon-show.com", from: "Approving official's email address"
         click_on 'Update'
@@ -527,7 +498,7 @@ describe "National Capital Region proposals" do
     end
 
     it "keeps track of the modification when edited by an approver" do
-      work_order.add_approvals('approver@example.com')
+      work_order.setup_approvals_and_observers('approver@example.com')
       approver = ncr_proposal.approvers.last
       login_as(approver)
 

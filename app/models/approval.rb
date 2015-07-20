@@ -8,7 +8,7 @@ class Approval < ActiveRecord::Base
       event :approve, transitions_to: :approved
     end
     state :approved
-    
+
     # workflow doesn't touch active record
     # manually updating 'updated_at'
     # https://github.com/geekq/workflow/issues/96
@@ -22,16 +22,13 @@ class Approval < ActiveRecord::Base
   belongs_to :parent, class_name: 'Approval'
   has_one :cart, through: :proposal
   has_one :api_token, -> { fresh }
-  has_one :approval_group, through: :cart
-  has_one :user_role, -> { where(approval_group_id: cart.approval_group.id, user_id: self.user_id) }
   has_many :child_approvals, class_name: 'Approval', foreign_key: 'parent_id'
 
   delegate :full_name, :email_address, :to => :user, :prefix => true
-  delegate :approvals, :to => :cart, :prefix => true
 
   acts_as_list scope: :proposal
 
-  # TODO validates_uniqueness_of :user_id, scope: cart_id
+  # TODO validates_uniqueness_of :user_id, scope: proposal_id
 
   # @todo: remove and replace calls with "with_xxx_state"
   self.statuses.each do |status|
@@ -39,11 +36,8 @@ class Approval < ActiveRecord::Base
   end
 
   default_scope { order('position ASC') }
+  scope :with_users, -> { includes :user }
 
-  # TODO remove
-  def cart_id
-    self.proposal.cart.id
-  end
 
   # TODO we should probably store this value
   def approved_at

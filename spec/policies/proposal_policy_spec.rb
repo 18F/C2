@@ -13,7 +13,7 @@ describe ProposalPolicy do
       expect(subject).to permit(delegate, proposal)
     end
 
-    context "parallel cart" do
+    context "parallel proposal" do
       let(:proposal) {FactoryGirl.create(:proposal, :with_parallel_approvers, flow: 'parallel')}
       let(:approval) {proposal.user_approvals.first}
 
@@ -39,7 +39,7 @@ describe ProposalPolicy do
       end
     end
 
-    context "linear cart" do
+    context "linear proposal" do
       let(:proposal) {FactoryGirl.create(:proposal, :with_serial_approvers, flow: 'linear')}
       let(:first_approval) { proposal.user_approvals.first }
       let(:second_approval) { proposal.user_approvals.last }
@@ -49,8 +49,7 @@ describe ProposalPolicy do
       end
 
       it "does not allow when it's not the user's turn" do
-        user = proposal.approvers.last
-        expect(subject).not_to permit(user, proposal)
+        expect(subject).not_to permit(second_approval.user, proposal)
       end
 
       it "does not allow when the user's already approved" do
@@ -117,6 +116,23 @@ describe ProposalPolicy do
     it "does not allow an approved request to be edited" do
       proposal.update_attribute(:status, 'approved')  # skip state machine
       expect(subject).not_to permit(proposal.requester, proposal)
+    end
+  end
+
+  permissions :can_cancel? do
+    let(:proposal) { FactoryGirl.create(:proposal, :with_approvers) }
+
+    it "allows the requester to edit it" do
+      expect(subject).to permit(proposal.requester, proposal)
+    end
+
+    it "does not allow a requester to edit a cancelled one" do
+      proposal.cancel!
+      expect(subject).not_to permit(proposal.requester, proposal)
+    end
+
+    it "doesn't allow an approver to cancel it" do
+      expect(subject).not_to permit(proposal.approvers[0], proposal)
     end
   end
 

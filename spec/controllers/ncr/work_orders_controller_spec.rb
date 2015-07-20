@@ -7,7 +7,7 @@ describe Ncr::WorkOrdersController do
       ncr_work_order: {
         amount: '111.22', expense_type: 'BA80', vendor: 'Vendor',
         not_to_exceed: '0', building_number: Ncr::BUILDING_NUMBERS[0],
-        emergency: '0', rwa_number: 'A12345678', org_code: Ncr::Organization.all[0],
+        emergency: '0', rwa_number: 'A1234567', org_code: Ncr::Organization.all[0],
         code: 'Work Order', project_title: 'Title', description: 'Desc'},
       approver_email: 'bob@example.gov'
     }}
@@ -109,7 +109,7 @@ describe Ncr::WorkOrdersController do
     end
 
     it 'does not modify the approver if already approved' do
-      work_order.proposal.user_approvals.first.approve!
+      work_order.user_approvals.first.approve!
       post :update, {id: work_order.id, approver_email: 'a@b.com',
                      ncr_work_order: {expense_type: 'BA61'}}
       work_order.reload
