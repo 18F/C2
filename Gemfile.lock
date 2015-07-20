@@ -393,7 +393,7 @@ DEPENDENCIES
   mail_view
   newrelic_rpm
   omniauth-myusa!
-  paper_trail (~> 4.0.0.rc)
+  paper_trail
   paperclip
   peek
   peek-performance_bar
