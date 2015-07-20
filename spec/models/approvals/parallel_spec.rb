@@ -3,20 +3,10 @@ describe Approvals::Parallel do
 
   it 'allows approvals in any order' do
     root = Approvals::Parallel.new
-    proposal.approvals << root
-    first = Approvals::Individual.new(user: FactoryGirl.create(:user), parent: root)
-    proposal.approvals << first
-    second = Approvals::Individual.new(user: FactoryGirl.create(:user), parent: root)
-    proposal.approvals << second
-    third = Approvals::Individual.new(user: FactoryGirl.create(:user), parent: root)
-    proposal.approvals << third
-
-    expect(root.reload.status).to eq('pending')
-    expect(first.reload.status).to eq('pending')
-    expect(second.reload.status).to eq('pending')
-    expect(third.reload.status).to eq('pending')
-
-    root.make_actionable!
+    first = FactoryGirl.build(:approval, parent: root, proposal: nil)
+    second = FactoryGirl.build(:approval, parent: root, proposal: nil)
+    third = FactoryGirl.build(:approval, parent: root, proposal: nil)
+    proposal.create_or_update_approvals([root, first, second, third])
 
     expect(root.reload.status).to eq('actionable')
     expect(first.reload.status).to eq('actionable')
@@ -44,14 +34,10 @@ describe Approvals::Parallel do
 
   it 'can be used for disjunctions' do
     root = Approvals::Parallel.new(min_required: 2)
-    proposal.approvals << root
-    first = Approvals::Individual.new(user: FactoryGirl.create(:user), parent: root)
-    proposal.approvals << first
-    second = Approvals::Individual.new(user: FactoryGirl.create(:user), parent: root)
-    proposal.approvals << second
-    third = Approvals::Individual.new(user: FactoryGirl.create(:user), parent: root)
-    proposal.approvals << third
-    root.make_actionable!
+    first = FactoryGirl.build(:approval, parent: root, proposal: nil)
+    second = FactoryGirl.build(:approval, parent: root, proposal: nil)
+    third = FactoryGirl.build(:approval, parent: root, proposal: nil)
+    proposal.create_or_update_approvals([root, first, second, third])
 
     first.reload.approve!
     expect(root.reload.status).to eq('actionable')

@@ -12,7 +12,7 @@ describe Comment do
     end
 
     it "includes approved approvers" do
-      proposal.add_approver("someone@example.com")
+      FactoryGirl.create(:approval, proposal: proposal, parent: proposal.root_approval)
       proposal.kickstart_approvals()
       expect(proposal.approvers.length).to eq(3)
       proposal.user_approvals.first.approve!

@@ -2,17 +2,9 @@ describe Approvals::Serial do
   it 'cascades to the next approver' do
     proposal = FactoryGirl.create(:proposal)
     root = Approvals::Serial.new
-    proposal.approvals << root
-    first = Approvals::Individual.new(user: FactoryGirl.create(:user), parent: root)
-    proposal.approvals << first
-    second = Approvals::Individual.new(user: FactoryGirl.create(:user), parent: root)
-    proposal.approvals << second
-
-    expect(root.reload.status).to eq('pending')
-    expect(first.reload.status).to eq('pending')
-    expect(second.reload.status).to eq('pending')
-
-    root.make_actionable!
+    first = FactoryGirl.build(:approval, parent: root, proposal: nil)
+    second = FactoryGirl.build(:approval, parent: root, proposal: nil)
+    proposal.create_or_update_approvals([root, first, second])
 
     expect(root.reload.status).to eq('actionable')
     expect(first.reload.status).to eq('actionable')

@@ -1,22 +1,11 @@
 describe Gsa18f::Procurement do
-  around(:each) do |example|
-    with_18f_procurement_env_variables(&example)
-  end
+  with_env_vars(GSA18F_APPROVER_EMAIL: 'gsa.approver@example.gov',
+                GSA18F_PURCHASER_EMAIL: 'gsa.purchaser@example.gov') do
+    it 'sets up initial approvers and observers' do
+      procurement = FactoryGirl.create(:gsa18f_procurement)
 
-  describe '#create_cart' do
-    def approver_emails(procurement)
-      procurement.user_approvals.map {|a| a.user.email_address }
-    end
-
-    it "adds 18fapprover@gsa.gov as approver email" do
-      procurement = FactoryGirl.create(:gsa18f_procurement, :with_approvers)
-      expect(procurement).to be_valid
-
-      expect(approver_emails(procurement)).to eq([
-        'approver1@some-dot-gov.gov',
-        'approver2@some-dot-gov.gov',
-        Gsa18f::Procurement.approver_email
-      ])
+      expect(procurement.approvers.map(&:email_address)).to eq(['gsa.approver@example.gov'])
+      expect(procurement.observers.map(&:email_address)).to eq(['gsa.purchaser@example.gov'])
     end
   end
 

@@ -24,17 +24,17 @@ describe Approval do
   describe '#on_approved_entry' do
     it "notified the proposal if the root gets approved" do
       expect(approval.proposal.approved?).to eq false
-      approval.make_actionable!
+      approval.initialize!
       approval.approve!
       expect(approval.proposal.approved?).to eq true
     end
 
     it "does not notify the proposal if a child gets approved" do
       proposal = FactoryGirl.create(:proposal)
-      proposal.root_approval = Approvals::Parallel.new
-      child1 = proposal.add_approver("child1@agency.gov")
-      proposal.add_approver("child2@agency.gov")
-      proposal.root_approval.make_actionable!
+      root = Approvals::Parallel.new
+      child1 = Approvals::Individual.new(user: User.for_email("child1@agency.gov"), parent: root)
+      child2 = Approvals::Individual.new(user: User.for_email("child2@agency.gov"), parent: root)
+      proposal.create_or_update_approvals([root, child1, child2])
 
       expect(approval.proposal.approved?).to eq false
       child1.reload.approve!
@@ -55,50 +55,50 @@ describe Approval do
     let!(:erin) { FactoryGirl.create(:user) }
     let!(:proposal) {
       proposal = FactoryGirl.create(:proposal)
-      proposal.root_approval = Approvals::Parallel.create(min_required: 2)
-      and_clause = Approvals::Parallel.create(parent: proposal.root_approval, proposal: proposal)
-      then_clause = Approvals::Serial.create(parent: proposal.root_approval, proposal: proposal)
-
-      FactoryGirl.create(:approval, user: amy, proposal: proposal, parent: and_clause)
-      FactoryGirl.create(:approval, user: bob, proposal: proposal, parent: and_clause)
-      FactoryGirl.create(:approval, user: carrie, proposal: proposal, parent: proposal.root_approval)
-      FactoryGirl.create(:approval, user: dan, proposal: proposal, parent: then_clause)
-      FactoryGirl.create(:approval, user: erin, proposal: proposal, parent: then_clause)
-      proposal.root_approval.make_actionable!
+      root = Approvals::Parallel.new(min_required: 2)
+      and_clause = Approvals::Parallel.new(parent: root)
+      then_clause = Approvals::Serial.new(parent: root)
+      approvals = [root, and_clause, then_clause,
+                   Approvals::Individual.new(parent: and_clause, user: amy),
+                   Approvals::Individual.new(parent: and_clause, user: bob),
+                   Approvals::Individual.new(parent: root, user: carrie),
+                   Approvals::Individual.new(parent: then_clause, user: dan),
+                   Approvals::Individual.new(parent: then_clause, user: erin)]
+      proposal.create_or_update_approvals(approvals)
       proposal
     }
 
     it "approves via Amy, Bob, Carrie" do
       expect(proposal.reload.approved?).to be false
-      proposal.approval_for(amy).approve!
+      proposal.existing_approval_for(amy).approve!
       expect(proposal.reload.approved?).to be false
-      proposal.approval_for(bob).approve!
+      proposal.existing_approval_for(bob).approve!
       expect(proposal.reload.approved?).to be false
-      proposal.approval_for(carrie).approve!
+      proposal.existing_approval_for(carrie).approve!
       expect(proposal.reload.approved?).to be true
     end
 
     it "approved via Amy, Bob, Dan, Erin" do
       expect(proposal.reload.approved?).to be false
-      proposal.approval_for(amy).approve!
+      proposal.existing_approval_for(amy).approve!
       expect(proposal.reload.approved?).to be false
-      proposal.approval_for(bob).approve!
+      proposal.existing_approval_for(bob).approve!
       expect(proposal.reload.approved?).to be false
-      proposal.approval_for(dan).approve!
+      proposal.existing_approval_for(dan).approve!
       expect(proposal.reload.approved?).to be false
-      proposal.approval_for(erin).approve!
+      proposal.existing_approval_for(erin).approve!
       expect(proposal.reload.approved?).to be true
     end
 
     it "approves via Amy, Bob, Dan, Carrie" do
       expect(proposal.reload.approved?).to be false
-      proposal.approval_for(amy).approve!
+      proposal.existing_approval_for(amy).approve!
       expect(proposal.reload.approved?).to be false
-      proposal.approval_for(bob).approve!
+      proposal.existing_approval_for(bob).approve!
       expect(proposal.reload.approved?).to be false
-      proposal.approval_for(dan).approve!
+      proposal.existing_approval_for(dan).approve!
       expect(proposal.reload.approved?).to be false
-      proposal.approval_for(carrie).approve!
+      proposal.existing_approval_for(carrie).approve!
       expect(proposal.reload.approved?).to be true
     end
   end

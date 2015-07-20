@@ -7,9 +7,5 @@ FactoryGirl.define do
     office Gsa18f::Procurement::OFFICES[0]
     urgency Gsa18f::Procurement::URGENCY[0]
     association :proposal, flow: 'linear'
-
-    trait :with_approvers do
-      association :proposal, :with_serial_approvers
-    end
   end
 end

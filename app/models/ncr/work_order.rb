@@ -81,7 +81,7 @@ module Ncr
     end
 
     def approver_email_frozen?
-      approval = self.approvals.first
+      approval = self.user_approvals.first
       approval && !approval.actionable?
     end
 
@@ -105,7 +105,7 @@ module Ncr
       else
         root = Approvals::Serial.new
         individuals = emails.map do |email| 
-          Approals::Individual.new(user: User.for_email(email), parent: root)
+          Approvals::Individual.new(user: User.for_email(email), parent: root)
         end
         self.proposal.create_or_update_approvals([root] + individuals)
       end
