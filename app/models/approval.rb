@@ -1,5 +1,7 @@
 class Approval < ActiveRecord::Base
   include WorkflowModel
+  has_paper_trail
+
   workflow do
     state :pending do
       event :make_actionable, transitions_to: :actionable

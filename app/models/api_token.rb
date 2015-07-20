@@ -1,4 +1,6 @@
 class ApiToken < ActiveRecord::Base
+  has_paper_trail
+
   before_create :generate_token
 
   belongs_to :approval
