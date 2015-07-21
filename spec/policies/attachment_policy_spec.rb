@@ -1,8 +1,6 @@
 describe AttachmentPolicy do
   subject { described_class }
-  let(:proposal) {
-    FactoryGirl.create(:proposal, :with_approvers, :with_observers)
-  }
+  let(:proposal) { FactoryGirl.create(:proposal, :with_parallel_approvers, :with_observers) }
   let(:attachment) { FactoryGirl.create(:attachment, proposal: proposal) } 
 
   permissions :can_destroy? do

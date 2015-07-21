@@ -13,7 +13,7 @@ describe CommunicartMailer do
     ENV['NOTIFICATION_FROM_EMAIL'] = old_val
   end
 
-  let(:proposal) { FactoryGirl.create(:proposal, :with_approvers) }
+  let(:proposal) { FactoryGirl.create(:proposal, :with_parallel_approvers) }
   let(:approval) { proposal.approvals.first }
   let(:approver) { approval.user }
   let(:requester) { proposal.requester }

@@ -1,5 +1,5 @@
 describe "Display status text" do
-  let(:proposal) { FactoryGirl.create(:proposal, :with_approvers) }
+  let(:proposal) { FactoryGirl.create(:proposal, :with_parallel_approvers) }
   before do
     login_as(proposal.requester)
   end
@@ -29,7 +29,7 @@ describe "Display status text" do
   end
 
   context "linear" do
-    let(:proposal) { FactoryGirl.create(:proposal, :with_approvers, flow: 'linear') }
+    let(:proposal) { FactoryGirl.create(:proposal, :with_serial_approvers) }
 
     it "displays the first approver" do
       visit proposals_path
