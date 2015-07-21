@@ -1,6 +1,7 @@
 class Proposal < ActiveRecord::Base
   include WorkflowModel
   include ValueHelper
+  has_paper_trail
 
   FLOWS = %w(parallel linear).freeze
 
