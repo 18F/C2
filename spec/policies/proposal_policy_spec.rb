@@ -120,7 +120,7 @@ describe ProposalPolicy do
   end
 
   permissions :can_cancel? do
-    let(:proposal) { FactoryGirl.create(:proposal, :with_approvers) }
+    let(:proposal) { FactoryGirl.create(:proposal, :with_parallel_approvers) }
 
     it "allows the requester to edit it" do
       expect(subject).to permit(proposal.requester, proposal)

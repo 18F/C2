@@ -18,9 +18,8 @@ module ApprovalSteps
   end
 
   step "the proposal has an approval for :email in position :position" do |email, position|
-    @approval = @proposal.add_approver(email)
-    @approval.update_attribute(:position, position)
-    @proposal.kickstart_approvals
+    FactoryGirl.create(:approval, proposal: @proposal, user: User.for_email(email), position: position, parent: @proposal.root_approval)
+    @proposal.create_or_update_approvals(@proposal.reload.approvals)
   end
 
   step "feature flag :flag_name is :value" do |flag, value|

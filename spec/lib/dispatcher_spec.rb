@@ -5,8 +5,7 @@ describe Dispatcher do
     let(:dispatcher) { Dispatcher.new }
 
     it 'creates a new token for the approver' do
-      approval = proposal.add_approver('approver1@some-dot-gov.gov')
-      proposal.kickstart_approvals()
+      approval = FactoryGirl.build(:approval)
       expect(CommunicartMailer).to receive_message_chain(:actions_for_approver, :deliver_now)
       expect(approval).to receive(:create_api_token!).once
 

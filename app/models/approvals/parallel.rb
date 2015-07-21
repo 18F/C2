@@ -21,7 +21,7 @@ module Approvals
         on_entry { self.notify_parent_approved }
 
         event :initialize, transitions_to: :approved do
-          self.approved_notification
+          self.notify_parent_approved
           halt  # no need to trigger a transition
         end
 

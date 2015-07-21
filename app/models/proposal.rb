@@ -91,26 +91,22 @@ class Proposal < ActiveRecord::Base
     results.compact
   end
 
-  def remove_approver(email)
-    user = User.for_email(email)
-    approval = self.existing_approval_for(user)
-    approval.destroy
-  end
-
   # Sets the approval list from any start state, reusing any user approvals
   def create_or_update_approvals(new_approvals)
     new_approvals = new_approvals.each_with_index.map do |new_approval, idx|
       user = new_approval.user
       if user && existing = self.existing_approval_for(user)
-        existing.position = idx + 1   # start with 1
         existing.parent = new_approval.parent   # this assumes the parent hasn't been replaced
         existing
       else
-        new_approval.position = idx + 1 # start with 1
         new_approval
       end
     end
     self.approvals = new_approvals
+    # position might be out of whack, so we reset it
+    new_approvals.each_with_index do |approval, idx|
+      approval.set_list_position(idx + 1)   # start with 1
+    end
     self.kickstart_approvals()
     self.reset_status()
   end
