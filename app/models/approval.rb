@@ -37,17 +37,9 @@ class Approval < ActiveRecord::Base
   scope :with_users, -> { includes :user }
 
 
-  # TODO we should probably store this value
-  def approved_at
-    if self.approved?
-      self.updated_at
-    else
-      nil
-    end
-  end
-
   # Used by the state machine
   def on_approved_entry(new_state, event)
+    self.update(approved_at: Time.now)
     self.proposal.partial_approve!
     Dispatcher.on_approval_approved(self)
   end
