@@ -1,6 +1,6 @@
 # Technical overview
 
-C2 is, at its core, a state machine wrapped in email notifications. The system centers around Proposals, which are submitted by a "requester" and sent out to the "approvers" via email. Approvers can either ask questions or leave comments, then approve" or reject the request. The requester (and any "observers") get notifications about the overall progress. Aside from receiving email notifications for updates, users can log in at any time and see the details for outstanding and past Proposals they were involved with.
+C2 is, at its core, a state machine wrapped in email notifications. The system centers around Proposals, which are submitted by a "requester" and sent out to the "approvers" via email. Approvers can either ask questions or leave comments, then approve" the request. The requester (and any "observers") get notifications about the overall progress. Aside from receiving email notifications for updates, users can log in at any time and see the details for outstanding and past Proposals they were involved with.
 
 Note: You will see references to "Carts" throughout the interface and the code...this is a legacy term, which is in the middle of being split into Proposals and their associated domain-(a.k.a. "use case")-specific models. The name "Communicart" is a reference to this initial use case as well.
 
@@ -69,7 +69,7 @@ The NCR use case was built around GSA service centers (paint shops, landscapers,
 1. The requester submits a new purchase request via the form at `/ncr/work_orders/new`.
 1. Their "approving officer" (the "AO" – their supervisor) receives an email notification with the request.
 1. If the AO approves, it goes to one or two other budget office approvers, depending on the type of request.
-1. Once all approvers have approved (or any one of them reject) the Proposal, the requester gets a notification.
+1. Once all approvers have approved the Proposal, the requester gets a notification.
 
 #### Additional resources
 
