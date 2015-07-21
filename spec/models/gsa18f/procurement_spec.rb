@@ -9,12 +9,10 @@ describe Gsa18f::Procurement do
     end
 
     it "adds 18fapprover@gsa.gov as approver email" do
-      procurement = FactoryGirl.create(:gsa18f_procurement, :with_approvers)
+      procurement = FactoryGirl.create(:gsa18f_procurement)
       expect(procurement).to be_valid
 
       expect(approver_emails(procurement)).to eq([
-        'approver1@some-dot-gov.gov',
-        'approver2@some-dot-gov.gov',
         Gsa18f::Procurement.approver_email
       ])
     end
