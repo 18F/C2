@@ -38,7 +38,7 @@ module TokenAuth
       user_id: current_user, proposal_id: self.proposal})
     tokens.where(used_at: nil).update_all(used_at: Time.now)
 
-    authorize(self.proposal, :can_approve_or_reject!)
+    authorize(self.proposal, :can_approve!)
     if params[:version] && params[:version] != self.proposal.version.to_s
       raise Pundit::NotAuthorizedError.new(
         "This request has recently changed. Please review the modified request before approving.")

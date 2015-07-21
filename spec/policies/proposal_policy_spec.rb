@@ -1,7 +1,7 @@
 describe ProposalPolicy do
   subject { described_class }
 
-  permissions :can_approve_or_reject? do
+  permissions :can_approve? do
     it "allows pending delegates" do
       proposal = FactoryGirl.create(:proposal, :with_approvers)
 
@@ -26,11 +26,6 @@ describe ProposalPolicy do
 
       it "does not allow when the user's already approved" do
         approval.update_attribute(:status, 'approved')  # skip state machine
-        expect(subject).not_to permit(approval.user, proposal)
-      end
-
-      it "does not allow when the user's already rejected" do
-        approval.update_attribute(:status, 'rejected')  # skip state machine
         expect(subject).not_to permit(approval.user, proposal)
       end
 

@@ -110,13 +110,6 @@ describe "GSA 18f Purchase Request Form" do
       expect(procurement.link_to_product).to eq('http://www.submitted.com')
     end
 
-    it "can be restarted if rejected" do
-      proposal.update_attributes(status: 'rejected')  # avoid workflow
-
-      visit "/gsa18f/procurements/#{procurement.id}/edit"
-      expect(current_path).to eq("/gsa18f/procurements/#{procurement.id}/edit")
-    end
-
     it "cannot be restarted if approved" do
       proposal.update_attributes(status: 'approved')  # avoid workflow
 
@@ -185,12 +178,6 @@ describe "GSA 18f Purchase Request Form" do
       expect(page).to have_content("Discard Changes")
       click_on "Discard Changes"
       expect(current_path).to eq("/proposals/#{proposal.id}")
-    end
-
-    it "shows a restart link from a rejected proposal" do
-      proposal.update_attribute(:status, 'rejected') # avoid state machine
-      visit "/proposals/#{proposal.id}"
-      expect(page).to have_content('Modify Request')
     end
 
     it "does not show a restart link for an approved proposal" do
