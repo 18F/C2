@@ -14,12 +14,14 @@ module ApprovalSteps
   end
 
   step "a valid token" do
-    @token = ApiToken.create!(approval_id: @approval.id)
+    @token = @proposal.user_approvals.first.api_token
   end
 
-  step "the proposal has an approval for :email in position :position" do |email, position|
-    FactoryGirl.create(:approval, proposal: @proposal, user: User.for_email(email), position: position, parent: @proposal.root_approval)
-    @proposal.create_or_update_approvals(@proposal.reload.approvals)
+  step "the proposal has the following approvers:" do |table|
+    approvals = table.transpose.headers.map do |email|
+      FactoryGirl.build(:approval, user: User.for_email(email), parent: @proposal.root_approval)
+    end
+    @proposal.create_or_update_approvals(@proposal.approvals + approvals)
   end
 
   step "feature flag :flag_name is :value" do |flag, value|
