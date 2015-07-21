@@ -213,6 +213,12 @@ class Proposal < ActiveRecord::Base
     users.include? user
   end
 
+  def subscribe user
+    if !self.is_user_tracking? user
+      self.add_observer(user.email_address)
+    end
+  end
+
 
   protected
   def update_public_id

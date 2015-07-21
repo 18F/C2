@@ -33,12 +33,7 @@ class Comment < ActiveRecord::Base
   end
 
   def add_user_as_observer
-    proposal = self.proposal
-    user = self.user
-    if !proposal.is_user_tracking? user
-      observer = Observation.new(user: user, proposal: proposal)
-      observer.save
-    end
+    self.proposal.subscribe(self.user)
   end
 
   # All of the users who should be notified when a comment is created
