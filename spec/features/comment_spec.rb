@@ -1,9 +1,10 @@
 describe "commenting" do
-  let(:proposal) { FactoryGirl.create(:proposal, :with_approvers) }
+  let(:proposal) { FactoryGirl.create(:proposal, :with_parallel_approvers) }
 
   before do
     login_as(proposal.requester)
     visit "/proposals/#{proposal.id}"
+    deliveries.clear
   end
 
   it "saves the comment" do

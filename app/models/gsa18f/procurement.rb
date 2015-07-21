@@ -27,8 +27,8 @@ module Gsa18f
 
 
     def add_approvals
-      self.add_approver(Gsa18f::Procurement.approver_email)
-      self.proposal.kickstart_approvals()
+      approver = User.for_email(Gsa18f::Procurement.approver_email)
+      self.proposal.create_or_update_approvals([Approvals::Individual.new(user: approver)])
     end
 
     def add_observers

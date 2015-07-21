@@ -21,7 +21,7 @@ module Populator
 
       # TODO all of these things should have the same created_at/updated_at... use Timecop
       proposal = FactoryGirl.create(:proposal,
-        :with_approvers,
+        :with_parallel_approvers,
         :with_observers,
         created_at: requested_at,
         updated_at: requested_at

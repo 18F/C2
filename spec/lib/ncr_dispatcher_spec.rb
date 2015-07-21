@@ -1,33 +1,32 @@
 describe NcrDispatcher do
   let!(:work_order) { FactoryGirl.create(:ncr_work_order, :with_approvers) }
   let(:proposal) { work_order.proposal }
-  let(:approvals) { work_order.approvals }
+  let(:approvals) { work_order.user_approvals }
   let(:approval_1) { approvals.first }
   let(:approval_2) { approvals.second }
   let(:ncr_dispatcher) { NcrDispatcher.new }
 
+  it "sends to the requester for the last approval only" do
+    email = work_order.requester.email_address
+    approval_1.approve!
+    expect(email_recipients).not_to include(email)
+    expect(approval_2.proposal.approved?).to be false
+    approval_2.approve!
+    expect(email_recipients).to include(email)
+    expect(approval_2.proposal.approved?).to be true
+  end
+
   describe '#on_approval_approved' do
     it "sends to the requester for the last approval" do
-      approval_1.update_attribute(:status, 'accepted')  # skip workflow
       deliveries.clear
-
-      ncr_dispatcher.on_approval_approved(approval_2)
+      approval_1.approve!
+      approval_2.approve!
       expect(email_recipients).to include(work_order.requester.email_address)
     end
 
     it "doesn't send to the requester for the not-last approval" do
       ncr_dispatcher.on_approval_approved(approval_1)
       expect(email_recipients).to_not include('requester@some-dot-gov.gov')
-    end
-  end
-
-  describe '#requires_approval_notice?' do
-    it 'returns true when the approval is last in the approver list' do
-      expect(ncr_dispatcher.requires_approval_notice? approval_2).to eq true
-    end
-
-    it 'return false when the approval is not last in the approver list' do
-      expect(ncr_dispatcher.requires_approval_notice? approval_1).to eq false
     end
   end
 
@@ -51,12 +50,23 @@ describe NcrDispatcher do
     end
 
     it 'current approver if they have be notified before' do
-      approval_1.create_api_token!
+      proposal
+      deliveries.clear
       ncr_dispatcher.on_proposal_update(proposal)
       email = deliveries[0]
       expect(email.to).to eq([approval_1.user.email_address])
       expect(email.html_part.body.to_s).not_to include("already approved")
       expect(email.html_part.body.to_s).to include("updated")
+    end
+  end
+
+  describe 'requester notifications' do
+    it 'only notifies the requester on final approval' do
+      deliveries.clear
+      approval_1.reload.approve!
+      expect(email_recipients).not_to include(proposal.requester.email_address)
+      approval_2.reload.approve!
+      expect(email_recipients).to include(proposal.requester.email_address)
     end
   end
 end

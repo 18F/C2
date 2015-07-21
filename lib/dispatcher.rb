@@ -20,9 +20,6 @@ class Dispatcher
   end
 
   def deliver_new_proposal_emails(proposal)
-    proposal.currently_awaiting_approvals.each do |approval|
-      self.email_approver(approval)
-    end
     self.email_observers(proposal)
     self.email_sent_confirmation(proposal)
   end
@@ -36,13 +33,6 @@ class Dispatcher
 
   def requires_approval_notice?(approval)
     true
-  end
-
-  def on_proposal_rejected(proposal)
-    rejection = proposal.approvals.rejected.first
-    # @todo rewrite this email so a "rejection approval" isn't needed
-    CommunicartMailer.approval_reply_received_email(rejection).deliver_now
-    self.email_observers(proposal)
   end
 
   def on_approval_approved(approval)
@@ -64,16 +54,10 @@ class Dispatcher
 
   # todo: replace with dynamic dispatch
   def self.initialize_dispatcher(proposal)
-    case proposal.flow
-    when 'parallel'
+    if proposal.client == "ncr"
+      NcrDispatcher.new
+    else
       self.new
-    when 'linear'
-      # @todo: dynamic dispatch for selection
-      if proposal.client == "ncr"
-        NcrDispatcher.new
-      else
-        LinearDispatcher.new
-      end
     end
   end
 
@@ -82,11 +66,6 @@ class Dispatcher
   def self.deliver_new_proposal_emails(proposal)
     dispatcher = self.initialize_dispatcher(proposal)
     dispatcher.deliver_new_proposal_emails(proposal)
-  end
-
-  def self.on_proposal_rejected(proposal)
-    dispatcher = self.initialize_dispatcher(proposal)
-    dispatcher.on_proposal_rejected(proposal)
   end
 
   def self.on_approval_approved(approval)

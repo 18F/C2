@@ -63,17 +63,17 @@ module UserSteps
 
   step 'a proposal' do
     @proposal = FactoryGirl.create(:proposal)
+    @proposal.root_approval = Approvals::Parallel.new
   end
 
-  step 'a :flow proposal' do |flow|
-    @proposal = FactoryGirl.create(:proposal, flow: flow)
-  end
-
-  step 'a proposal with approver :approver_email' do |approver_email|
+  step 'a parallel proposal' do
     @proposal = FactoryGirl.create(:proposal)
-    @proposal.add_approver(approver_email)
-    @proposal.kickstart_approvals
-    @approval = @proposal.approvals.first
+    @proposal.root_approval = Approvals::Parallel.new
+  end
+
+  step 'a linear proposal' do
+    @proposal = FactoryGirl.create(:proposal, flow: 'linear')
+    @proposal.root_approval = Approvals::Serial.new
   end
 
   step 'I fill out :field with :text' do |field,text|

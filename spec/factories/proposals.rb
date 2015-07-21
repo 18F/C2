@@ -6,17 +6,31 @@ FactoryGirl.define do
 
     trait :with_approver do
       after :create do |proposal|
-        proposal.add_approver('approver1@some-dot-gov.gov')
-        proposal.kickstart_approvals()
+        proposal.create_or_update_approvals([
+          Approvals::Individual.new(user: User.for_email('approver1@some-dot-gov.gov'))
+        ])
       end
     end
 
-    trait :with_approvers do
-      with_approver
-
+    trait :with_serial_approvers do
       after :create do |proposal|
-        proposal.add_approver('approver2@some-dot-gov.gov')
-        proposal.kickstart_approvals()
+        root = Approvals::Serial.new
+        proposal.create_or_update_approvals([
+          root,
+          Approvals::Individual.new(user: User.for_email('approver1@some-dot-gov.gov'), parent: root),
+          Approvals::Individual.new(user: User.for_email('approver2@some-dot-gov.gov'), parent: root),
+        ])
+      end
+    end
+
+    trait :with_parallel_approvers do
+      after :create do |proposal|
+        root = Approvals::Parallel.new
+        proposal.create_or_update_approvals([
+          root,
+          Approvals::Individual.new(user: User.for_email('approver1@some-dot-gov.gov'), parent: root),
+          Approvals::Individual.new(user: User.for_email('approver2@some-dot-gov.gov'), parent: root),
+        ])
       end
     end
 

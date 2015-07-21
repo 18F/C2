@@ -7,9 +7,6 @@ class Proposal < ActiveRecord::Base
 
   workflow do
     state :pending do
-      # partial *may* trigger a full approval
-      event :partial_approve, transitions_to: :approved, if: lambda { |p| p.all_approved? }
-      event :partial_approve, transitions_to: :pending
       event :approve, :transitions_to => :approved
       event :restart, :transitions_to => :pending
       event :cancel, :transitions_to => :cancelled
@@ -19,13 +16,15 @@ class Proposal < ActiveRecord::Base
       event :cancel, :transitions_to => :cancelled
     end
     state :cancelled do
-      event :partial_approve, :transitions_to => :cancelled
+      event :approve, :transitions_to => :cancelled
     end
   end
 
+  has_one :root_approval, ->{ where(parent_id: nil) }, class_name: 'Approval'
   has_many :approvals
-  has_many :approvers, through: :approvals, source: :user
-  has_many :api_tokens, through: :approvals
+  has_many :user_approvals, ->{ where.not(user_id: nil) }, class_name: 'Approval'
+  has_many :approvers, through: :user_approvals, source: :user
+  has_many :api_tokens, through: :user_approvals
   has_many :attachments
   has_many :approval_delegates, through: :approvers, source: :outgoing_delegates
   has_many :comments
@@ -42,6 +41,7 @@ class Proposal < ActiveRecord::Base
   # Note: clients should also implement :version
   delegate :client, to: :client_data, allow_nil: true
 
+  # @todo: remove flow
   validates :flow, presence: true, inclusion: {in: FLOWS}
   # TODO validates :requester_id, presence: true
 
@@ -92,43 +92,31 @@ class Proposal < ActiveRecord::Base
     results.compact
   end
 
-  # returns the Approval
-  def add_approver(email)
-    user = User.for_email(email)
-    approval = self.approvals.create!(user_id: user.id)
-    approval
-  end
-
-  def remove_approver(email)
-    user = User.for_email(email)
-    approval = self.existing_approval_for(user)
-    approval.destroy
-  end
-
-  # Set the approver list, from any start state
-  # This overrides the `through` relation but provides parity to the accessor
-  def approvers=(approver_list)
-    approvals = approver_list.each_with_index.map do |approver, idx|
-      approval = self.existing_approval_for(approver)
-      approval ||= Approval.new(user: approver, proposal: self)
-      approval.position = idx + 1   # start with 1
-      approval
+  # Sets the approval list from any start state, reusing any user approvals
+  def create_or_update_approvals(new_approvals)
+    new_approvals = new_approvals.each_with_index.map do |new_approval, idx|
+      user = new_approval.user
+      if user && existing = self.existing_approval_for(user)
+        existing.parent = new_approval.parent   # this assumes the parent hasn't been replaced
+        existing
+      else
+        new_approval
+      end
     end
-    self.approvals = approvals
+    self.approvals = new_approvals
+    # position might be out of whack, so we reset it
+    new_approvals.each_with_index do |approval, idx|
+      approval.set_list_position(idx + 1)   # start with 1
+    end
     self.kickstart_approvals()
     self.reset_status()
   end
 
   # Trigger the appropriate approval, from any start state
   def kickstart_approvals()
-    actionable = self.approvals.actionable
-    pending = self.approvals.pending
-    if self.parallel?
-      pending.update_all(status: 'actionable')
-    elsif self.linear? && actionable.empty? && pending.any?
-      pending.first.make_actionable!
+    if self.root_approval
+      self.root_approval.initialize!
     end
-    # otherwise, approvals are correct
   end
 
   def reset_status()
@@ -212,27 +200,18 @@ class Proposal < ActiveRecord::Base
   #######################
 
 
+  #### state machine methods ####
   def restart
     # Note that none of the state machine's history is stored
     self.api_tokens.update_all(expires_at: Time.now)
     self.approvals.update_all(status: 'pending')
+    self.reload   # let all associations catch up
     self.kickstart_approvals()
     Dispatcher.deliver_new_proposal_emails(self)
   end
 
   def all_approved?
     self.approvals.where.not(status: 'approved').empty?
-  end
-
-  # An approval has been approved. Mark the next as actionable
-  # Note: this won't affect a parallel flow (as approvals start actionable)
-  def partial_approve
-    unless self.cancelled?
-      next_approval = self.approvals.pending.first
-      if next_approval
-        next_approval.make_actionable!
-      end
-    end
   end
 
   protected

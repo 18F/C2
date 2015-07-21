@@ -47,11 +47,14 @@ ActiveRecord::Schema.define(version: 20150718164818) do
 
   create_table "approvals", force: :cascade do |t|
     t.integer  "user_id"
-    t.string   "status",      limit: 255
+    t.string   "status",       limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "position"
     t.integer  "proposal_id"
+    t.string   "type"
+    t.integer  "parent_id"
+    t.integer  "min_required"
   end
 
   create_table "attachments", force: :cascade do |t|
