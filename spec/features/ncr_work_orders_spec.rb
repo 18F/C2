@@ -552,4 +552,28 @@ describe "National Capital Region proposals" do
       expect(page).to have_content("You must be the requester, approver, or observer")
     end
   end
+  describe "delegate on a work order" do
+    let (:work_order) { FactoryGirl.create(:ncr_work_order, description: 'test') }
+    let(:ncr_proposal) { work_order.proposal }
+    
+    before do
+      work_order.add_approvals('approver@example.com')
+      user = Proposal.last.approvals.first.user
+      delegate = User.new(email_address:'delegate@example.com')
+      delegate.save
+      user.add_delegate(delegate)
+      login_as(delegate)
+    end
+
+    it "adds current user to the observers list when commenting" do
+      visit "/proposals/#{work_order.id}"
+      fill_in "comment_comment_text", with: "comment text"
+      click_on "Send a Comment"
+      proposal = Proposal.last
+      delegate = User.last
+      observers = proposal.observations.map{|o| o.user}
+      expect(page).to have_content("comment text")
+      expect(observers.include? delegate).to eq(true)
+    end
+  end
 end

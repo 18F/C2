@@ -10,6 +10,7 @@ class Comment < ActiveRecord::Base
   scope :update_comments, ->{ where(update_comment: true) }
 
   after_create ->{ Dispatcher.on_comment_created(self) }
+  after_create :add_user_as_observer
 
   # match .attributes
   def to_a
@@ -29,6 +30,15 @@ class Comment < ActiveRecord::Base
       'created_at',
       'updated_at'
     ]
+  end
+
+  def add_user_as_observer
+    proposal = self.proposal
+    user = self.user
+    if !proposal.is_user_tracking? user
+      observer = Observation.new(user: user, proposal: proposal)
+      observer.save
+    end
   end
 
   # All of the users who should be notified when a comment is created

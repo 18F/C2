@@ -206,6 +206,14 @@ class Proposal < ActiveRecord::Base
     end
   end
 
+  # Is the user getting emails for this proposal
+  def is_user_tracking? user
+    observers = self.observations.map {|o| o.user}
+    users = self.users - self.delegates + observers
+    users.include? user
+  end
+
+
   protected
   def update_public_id
     self.update_attribute(:public_id, self.public_identifier)
