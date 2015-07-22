@@ -1,7 +1,7 @@
 describe CommunicartMailerHelper do
   describe '#generate_approve_url' do
     it "returns a URL" do
-      approval = FactoryGirl.create(:approval, :with_proposal, :with_user)
+      approval = FactoryGirl.create(:approval)
       token = approval.create_api_token!
       proposal = approval.proposal
 
