@@ -208,8 +208,8 @@ class Proposal < ActiveRecord::Base
 
   # Is the user getting emails for this proposal
   def is_user_tracking? user
-    observers = self.observations.map {|o| o.user}
-    users = self.users - self.delegates + observers
+    users = [self.requester]
+    users += self.approvers + self.observers
     users.include? user
   end
 
