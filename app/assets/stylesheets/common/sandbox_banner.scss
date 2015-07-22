@@ -1,4 +1,6 @@
 .sandbox-banner {
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: normal;
   width: 100%;
   display: block;
   background: #fff2bb;
@@ -8,4 +10,8 @@
   padding: 10px 10px;
   font-size: 14px;
   color: #333;
+
+  a, a:hover {
+    color: #006be6;
+  }
 }
