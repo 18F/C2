@@ -109,8 +109,7 @@ describe "National Capital Region proposals" do
       end
 
       it "defaults to the approver from the last request" do
-        proposal = FactoryGirl.create(:proposal, :with_approvers,
-                                      requester: requester)
+        proposal = FactoryGirl.create(:proposal, :with_serial_approvers, requester: requester)
         visit '/ncr/work_orders/new'
         expect(find_field("Approving official's email address").value).to eq(
           proposal.approvers.first.email_address)
@@ -317,13 +316,6 @@ describe "National Capital Region proposals" do
       expect(current_path).to eq("/ncr/work_orders/#{work_order.id}/edit")
     end
 
-    it "shows a edit link from a rejected proposal" do
-      ncr_proposal.update_attribute(:status, 'rejected') # avoid state machine
-
-      visit "/proposals/#{ncr_proposal.id}"
-      expect(page).to have_content('Modify Request')
-    end
-
     it "shows a edit link for an approved proposal" do
       ncr_proposal.update_attribute(:status, 'approved') # avoid state machine
 
@@ -451,13 +443,6 @@ describe "National Capital Region proposals" do
         # Verify it is actually saved
         work_order.reload
         expect(work_order.vendor).to eq("New ACME")
-      end
-
-      it "can be edited if rejected" do
-        ncr_proposal.update_attributes(status: 'rejected')  # avoid workflow
-
-        visit "/ncr/work_orders/#{work_order.id}/edit"
-        expect(current_path).to eq("/ncr/work_orders/#{work_order.id}/edit")
       end
 
       it "can be edited if approved" do

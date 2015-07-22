@@ -1,8 +1,7 @@
 describe Proposal do
   describe '#currently_awaiting_approvers' do
     it "gives a consistently ordered list when in parallel" do
-      proposal = FactoryGirl.create(:proposal, :with_approvers,
-                                    flow: 'parallel')
+      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
       emails = proposal.currently_awaiting_approvers.map(&:email_address)
       expect(emails).to eq(%w(approver1@some-dot-gov.gov approver2@some-dot-gov.gov))
 
@@ -12,7 +11,7 @@ describe Proposal do
     end
 
     it "gives only the first approver when linear" do
-      proposal = FactoryGirl.create(:proposal, :with_approvers, flow: 'linear')
+      proposal = FactoryGirl.create(:proposal, :with_serial_approvers)
       emails = proposal.currently_awaiting_approvers.map(&:email_address)
       expect(emails).to eq(%w(approver1@some-dot-gov.gov))
 
@@ -63,8 +62,7 @@ describe Proposal do
     it "returns all approvers, observers, and the requester" do
       requester = FactoryGirl.create(
         :user, email_address: 'requester@some-dot-gov.gov')
-      proposal = FactoryGirl.create(
-        :proposal, :with_approvers, :with_observers, requester: requester)
+      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers, :with_observers, requester: requester)
 
       emails = proposal.users.map(&:email_address).sort
       expect(emails).to eq(%w(
@@ -94,7 +92,7 @@ describe Proposal do
     end
 
     it 'does not modify existing approvers if correct' do
-      proposal = FactoryGirl.create(:proposal, :with_approvers)
+      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
       old_approval1 = proposal.approvals.first
       old_approval2 = proposal.approvals.second
       approvers = [FactoryGirl.create(:user), FactoryGirl.create(:user), old_approval2.user]
@@ -207,7 +205,7 @@ describe Proposal do
     end
 
     it 'sets status as cancelled if the proposal has been cancelled' do
-      proposal = FactoryGirl.create(:proposal, :with_approvers)
+      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
       proposal.approvals.first.approve!
       expect(proposal.pending?).to be true
       proposal.cancel!
@@ -217,7 +215,7 @@ describe Proposal do
     end
 
     it 'reverts to pending if an approval is added' do
-      proposal = FactoryGirl.create(:proposal, :with_approvers)
+      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
       proposal.approvals.first.approve!
       proposal.approvals.second.approve!
       expect(proposal.approved?).to be true
@@ -228,7 +226,7 @@ describe Proposal do
     end
 
     it 'does not move out of the pending state unless all are approved' do
-      proposal = FactoryGirl.create(:proposal, :with_approvers)
+      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
       proposal.reset_status()
       expect(proposal.pending?).to be true
       proposal.approvals.first.approve!
@@ -244,7 +242,7 @@ describe Proposal do
 
   describe '#partial_approve!' do
     it "marks the next Approval as actionable" do
-      proposal = FactoryGirl.create(:proposal, :with_approvers)
+      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
       proposal.approvals.first.update(status: 'approved')
 
       proposal.partial_approve!
@@ -254,7 +252,7 @@ describe Proposal do
     end
 
     it "transitions to 'approved' when there are no remaining pending approvals" do
-      proposal = FactoryGirl.create(:proposal, :with_approver)
+      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
       proposal.approvals.update_all(status: 'approved')
 
       proposal.partial_approve!
@@ -264,7 +262,7 @@ describe Proposal do
     end
 
     it "is a no-op for a cancelled request" do
-      proposal = FactoryGirl.create(:proposal, :with_approvers, flow: 'linear', status: 'cancelled')
+      proposal = FactoryGirl.create(:proposal, :with_serial_approvers, status: 'cancelled')
       expect(proposal.approvals.pluck(:status)).to eq(%w(actionable pending))
 
       proposal.partial_approve!
@@ -293,7 +291,7 @@ describe Proposal do
 
   describe '#restart' do
     it "creates new API tokens" do
-      proposal = FactoryGirl.create(:proposal, :with_approvers)
+      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
       proposal.approvals.each(&:create_api_token!)
       expect(proposal.api_tokens.size).to eq(2)
 

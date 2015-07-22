@@ -57,10 +57,9 @@ class ProposalPolicy
           "A response has already been logged a response for this proposal")
   end
 
-  def can_approve_or_reject!
+  def can_approve!
     approver! && pending_approval! && not_cancelled!
   end
-  alias_method :can_approve!, :can_approve_or_reject!
 
   def can_edit!
     requester! && not_approved! && not_cancelled!

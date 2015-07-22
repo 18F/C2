@@ -8,7 +8,7 @@ class CommunicartMailer < ActionMailer::Base
   add_template_helper MarkdownHelper
 
 
-  # Approver can approve/reject/take other action
+  # Approver can approve/take other action
   def actions_for_approver(to_email, approval, alert_partial=nil)
     @show_approval_actions = true
     self.notification_for_approver(to_email, approval, alert_partial)
