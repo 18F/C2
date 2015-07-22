@@ -35,6 +35,8 @@ describe Approval do
       approval.make_actionable!
       approval.approve!
       expect(approval.approved_at).not_to be_nil
+      approval.reload
+      expect(approval.approved_at).not_to be_nil
     end
   end
 end
