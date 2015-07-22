@@ -1,0 +1,38 @@
+#!/bin/sh
+
+# Blue-green deployment script. Usage:
+#
+#   ./script/deploy <appname>
+#
+# Based on
+#   http://www.cloudfoundry.rocks/blue-green-deployment-with-cloudfoundry/
+#   http://docs.pivotal.io/pivotalcf/devguide/deploy-apps/blue-green.html
+
+set -e
+set -x
+
+PRIMARY=$1
+SECONDARY="${PRIMARY}-B"
+
+# pull the up-to-date manifest from the "blue" application
+MANIFEST=$(mktemp -t "${PRIMARY}_manifest")
+cf create-app-manifest $PRIMARY -p $MANIFEST
+
+DOMAIN=$(cat $MANIFEST | grep domain: | awk '{print $2}')
+
+# create the "green" application
+cf push $SECONDARY -f $MANIFEST -n $SECONDARY
+# ensure it starts
+curl -I "https://${SECONDARY}.${DOMAIN}"
+
+# TODO test the rest of this script
+
+# add the "green" application to the "blue" load balancer
+cf map-route $SECONDARY $DOMAIN -n $PRIMARY
+
+# cleanup
+cf delete $PRIMARY -f
+cf rename $SECONDARY $PRIMARY
+cf delete-route $DOMAIN -n $SECONDARY -f
+
+echo "DONE"
