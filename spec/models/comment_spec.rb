@@ -1,7 +1,6 @@
 describe Comment do
   describe "#listeners" do
-    let (:proposal) { FactoryGirl.create(
-      :proposal, :with_approvers, :with_observers, flow: "linear") }
+    let (:proposal) { FactoryGirl.create(:proposal, :with_serial_approvers, :with_observers) }
     let (:comment) { FactoryGirl.create(:comment, proposal: proposal) }
 
     it "includes the requester" do

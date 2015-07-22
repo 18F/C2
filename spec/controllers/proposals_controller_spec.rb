@@ -272,7 +272,7 @@ describe ProposalsController do
     end
 
     it "allows a delegate to approve via the web UI" do
-      proposal = FactoryGirl.create(:proposal, :with_approvers, flow: "linear")
+      proposal = FactoryGirl.create(:proposal, :with_serial_approvers)
       mailbox = proposal.approvers.second
       delegate = FactoryGirl.create(:user)
       mailbox.add_delegate(delegate)

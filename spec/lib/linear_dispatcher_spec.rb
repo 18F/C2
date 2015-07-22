@@ -61,7 +61,7 @@ describe LinearDispatcher do
 
   describe '#on_approval_approved' do
     it "sends to the requester and the next approver" do
-      proposal = FactoryGirl.create(:proposal, :with_approvers)
+      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
       approval = proposal.approvals.first
       approval.update_attribute(:status, 'approved')  # avoiding state machine
       dispatcher.on_approval_approved(approval)

@@ -109,8 +109,7 @@ describe "National Capital Region proposals" do
       end
 
       it "defaults to the approver from the last request" do
-        proposal = FactoryGirl.create(:proposal, :with_approvers,
-                                      requester: requester)
+        proposal = FactoryGirl.create(:proposal, :with_serial_approvers, requester: requester)
         visit '/ncr/work_orders/new'
         expect(find_field("Approving official's email address").value).to eq(
           proposal.approvers.first.email_address)
