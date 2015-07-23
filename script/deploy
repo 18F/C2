@@ -12,27 +12,27 @@
 set -e
 set -x
 
-PRIMARY=$1
-SECONDARY="${PRIMARY}-B"
+BLUE=$1
+GREEN="${BLUE}-B"
 
-# pull the up-to-date manifest from the "blue" application
-MANIFEST=$(mktemp -t "${PRIMARY}_manifest")
-cf create-app-manifest $PRIMARY -p $MANIFEST
+# pull the up-to-date manifest from the BLUE (existing) application
+MANIFEST=$(mktemp -t "${BLUE}_manifest")
+cf create-app-manifest $BLUE -p $MANIFEST
 
 DOMAIN=$(cat $MANIFEST | grep domain: | awk '{print $2}')
 
-# create the "green" application
-cf push $SECONDARY -f $MANIFEST -n $SECONDARY
+# create the GREEN application
+cf push $GREEN -f $MANIFEST -n $GREEN
 # ensure it starts
-curl --fail -I "https://${SECONDARY}.${DOMAIN}"
+curl --fail -I "https://${GREEN}.${DOMAIN}"
 
 # add the "green" application to the "blue" load balancer
-cf map-route $SECONDARY $DOMAIN -n $PRIMARY
+cf map-route $GREEN $DOMAIN -n $BLUE
 
 # cleanup
-# TODO consider 'stop'-ing the PRIMARY instead so that depedencies are cached for next time
-cf delete $PRIMARY -f
-cf rename $SECONDARY $PRIMARY
-cf delete-route $DOMAIN -n $SECONDARY -f
+# TODO consider 'stop'-ing the BLUE instead of deleting it, so that depedencies are cached for next time
+cf delete $BLUE -f
+cf rename $GREEN $BLUE
+cf delete-route $DOMAIN -n $GREEN -f
 
 echo "DONE"
