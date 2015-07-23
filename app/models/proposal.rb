@@ -219,6 +219,12 @@ class Proposal < ActiveRecord::Base
     end
   end
 
+  # Returns True if the user is an approver and has acted on the proposal
+  def is_active_approver? user
+    current_approver = self.approvals.find_by user_id: user.id
+    current_approver && current_approver.status != "pending"
+  end
+
 
   protected
   def update_public_id

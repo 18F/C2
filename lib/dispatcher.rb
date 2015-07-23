@@ -11,7 +11,10 @@ class Dispatcher
 
   def email_observers(proposal)
     proposal.observations.each do |observation|
-      self.email_observer(observation)
+      user = observation.user
+      if !proposal.is_active_approver?(user) && proposal.requester != user
+        self.email_observer(observation)
+      end
     end
   end
 
