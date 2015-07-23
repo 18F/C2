@@ -25,12 +25,11 @@ cf push $SECONDARY -f $MANIFEST -n $SECONDARY
 # ensure it starts
 curl -I "https://${SECONDARY}.${DOMAIN}"
 
-# TODO test the rest of this script
-
 # add the "green" application to the "blue" load balancer
 cf map-route $SECONDARY $DOMAIN -n $PRIMARY
 
 # cleanup
+# TODO consider 'stop'-ing the PRIMARY instead so that depedencies are cached for next time
 cf delete $PRIMARY -f
 cf rename $SECONDARY $PRIMARY
 cf delete-route $DOMAIN -n $SECONDARY -f
