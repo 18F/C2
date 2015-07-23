@@ -24,7 +24,7 @@ DOMAIN=$(cat $MANIFEST | grep domain: | awk '{print $2}')
 # create the "green" application
 cf push $SECONDARY -f $MANIFEST -n $SECONDARY
 # ensure it starts
-curl -I "https://${SECONDARY}.${DOMAIN}"
+curl --fail -I "https://${SECONDARY}.${DOMAIN}"
 
 # add the "green" application to the "blue" load balancer
 cf map-route $SECONDARY $DOMAIN -n $PRIMARY
