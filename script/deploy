@@ -7,6 +7,7 @@
 # Based on
 #   http://www.cloudfoundry.rocks/blue-green-deployment-with-cloudfoundry/
 #   http://docs.pivotal.io/pivotalcf/devguide/deploy-apps/blue-green.html
+#   https://github.com/dlapiduz/step-cloud-foundry-deploy/blob/master/run.sh
 
 set -e
 set -x
