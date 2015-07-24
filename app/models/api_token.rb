@@ -1,8 +1,9 @@
 class ApiToken < ActiveRecord::Base
+  has_paper_trail
+
   before_create :generate_token
 
   belongs_to :approval
-  has_one :cart, through: :approval
   has_one :proposal, through: :approval
   has_one :user, through: :approval
 
@@ -14,7 +15,6 @@ class ApiToken < ActiveRecord::Base
   scope :unused, -> { where(used_at: nil) }
   scope :fresh, -> { unused.unexpired }
 
-  delegate :cart_id, to: :approval
 
   def used?
     !!self.used_at

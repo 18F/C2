@@ -11,7 +11,7 @@ class ProposalDecorator < Draper::Decorator
 
   def approvals_by_status
     # Override default scope
-    object.approvals.reorder(
+    object.approvals.with_users.reorder(
       # http://stackoverflow.com/a/6332081/358804
       <<-SQL
         CASE approvals.status
@@ -25,7 +25,7 @@ class ProposalDecorator < Draper::Decorator
 
   def approvals_in_list_order
     if object.flow == 'linear'
-      object.approvals
+      object.approvals.with_users
     else
       self.approvals_by_status
     end
@@ -48,7 +48,7 @@ class ProposalDecorator < Draper::Decorator
   end
 
   def completed_status_message
-    "All #{number_approved} of #{total_approvers} approvals have been received. Please move forward with the purchase  of Cart ##{object.public_identifier}."
+    "All #{number_approved} of #{total_approvers} approvals have been received. Please move forward with the purchase of ##{object.public_identifier}."
   end
 
   def progress_status_message

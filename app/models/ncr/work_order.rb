@@ -11,8 +11,6 @@ module Ncr
 
   class WorkOrder < ActiveRecord::Base
     include ValueHelper
-
-    has_one :proposal, as: :client_data
     include ProposalDelegate
 
     # This is a hack to be able to attribute changes to the correct user. This attribute needs to be set explicitly, then the update comment will use them as the "commenter". Defaults to the requester.
@@ -45,7 +43,7 @@ module Ncr
     validates :building_number, presence: true
     validates :rwa_number, presence: true, if: :ba80?
     validates :rwa_number, format: {
-      with: /[a-zA-Z][0-9]{7}/,
+      with: /\A[a-zA-Z][0-9]{7}\z/,
       message: "must be one letter followed by 7 numbers"
     }, allow_blank: true
     validates :soc_code, format: {
@@ -87,73 +85,26 @@ module Ncr
       approval && !approval.actionable?
     end
 
-    def update_approving_official(email)
-      self.approvals.first.destroy
-      replacement = self.add_approver(email)
-      replacement.move_to_top
-      replacement.make_actionable!
-    end
-
-    def existing_system_approvers
-      # skip approving official
-      self.approvers.offset(1)
-    end
-
-    def reset_system_approvers
-      # no need to call initialize_approvals as they have already been set up
-      current_approvers = self.existing_system_approvers.pluck(:email_address)
-      current_approvers.each do |email|
-        self.remove_approver(email)
-      end
-
-      self.system_approver_emails.each do |email|
-        self.add_approver(email)
-      end
-
-      approvals = self.approvals
-      if approvals.first.approved?
-        approvals.second.make_actionable!
-      end
-    end
-
-    # A requester can change his/her approving official
-    def update_approvers(approver_email=nil)
-      if !self.approver_email_frozen? && approver_email && self.approver_changed?(approver_email)
-        self.update_approving_official(approver_email)
-      end
-
-      unless self.approvers_match?
-        self.reset_system_approvers
-      end
-    end
-
-    def approvers_match?
-      old_system_approvers = self.existing_system_approvers
-      new_system_approver_emails = self.system_approver_emails
-      if old_system_approvers.size == new_system_approver_emails.size
-        new_system_approvers = new_system_approver_emails.map { |e| User.for_email(e) }
-        paired = old_system_approvers.zip(new_system_approvers)
-        paired.all? { |cur, sys| cur == sys || sys.delegates_to?(cur) }
-      else
-        # the number of system_approver_emails changed
-        false
-      end
-    end
-
     def approver_changed?(approval_email)
       first_approver = self.proposal.approvers.first
       first_approver && first_approver.email_address != approval_email
     end
 
-    def add_approvals(approver_email)
-      emails = [approver_email] + self.system_approver_emails
-      if self.emergency
-        emails.each {|email| self.add_observer(email) }
-        # skip state machine
-        self.proposal.update_attribute(:status, 'approved')
+    def setup_approvals_and_observers(approving_official_email)
+      emails = self.system_approver_emails
+      if self.approver_email_frozen?
+        emails.unshift(self.approvers.first.email_address)
       else
-        emails.each {|email| self.add_approver(email) }
-        self.proposal.initialize_approvals()
+        emails.unshift(approving_official_email)
+      end
+
+      if self.emergency
+        emails.each{|e| self.add_observer(e)}
+        # skip state machine
+        self.proposal.update(status: 'approved')
+      else
+        approvers = emails.map{|e| User.for_email(e)}
+        self.proposal.approvers = approvers
       end
     end
 

@@ -1,4 +1,6 @@
 class Comment < ActiveRecord::Base
+  has_paper_trail
+
   belongs_to :proposal
   belongs_to :user
   delegate :full_name, :email_address, :to => :user, :prefix => true
@@ -23,10 +25,11 @@ class Comment < ActiveRecord::Base
   end
 
   # match #to_a
+  # TODO use i18n
   def self.attributes
     [
       'commenter',
-      'cart comment',
+      'comment text',
       'created_at',
       'updated_at'
     ]

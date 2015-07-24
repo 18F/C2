@@ -22,12 +22,6 @@ header {
   }
 }
 
-.header-nav {
-  display: inline-block;
-  float: right;
-  color: #fff;
-}
-
 ul#breadcrumb-nav {
   width: 800px;
   margin: 0 auto;
@@ -52,24 +46,4 @@ ul#breadcrumb-nav {
   width: 200px;
   height: 30px;
   text-indent: -2000px;
-}
-
-.header-nav li {
-  display: inline-block;
-  padding-right: 12px;
-}
-
-.mycart-link {
-  clear: all;
-  margin-top: -20px;
-}
-
-@media (max-width: 480px) {
-  .header-nav {
-    padding-start: 0px;
-    text-align: right;
-    li {
-      padding-right: 0;
-    }
-  }
 }

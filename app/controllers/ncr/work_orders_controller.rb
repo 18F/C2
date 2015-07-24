@@ -1,8 +1,5 @@
 module Ncr
   class WorkOrdersController < UseCaseController
-    helper_method :approver_email_frozen?
-
-
     def new
       @approver_email = self.suggested_approver_email
       super
@@ -30,7 +27,7 @@ module Ncr
       super
 
       if @model_changing && !@model_instance.emergency  # skip approvals if emergency
-        @model_instance.update_approvers(@approver_email)
+        @model_instance.setup_approvals_and_observers(@approver_email)
         @model_instance.email_approvers
       end
     end
@@ -51,10 +48,6 @@ module Ncr
       last_proposal.try(:approvers).try(:first).try(:email_address) || ''
     end
 
-    def approver_email_frozen?
-      @model_instance.try(:approver_email_frozen?)
-    end
-
     def permitted_params
       fields = Ncr::WorkOrder.relevant_fields(
         params[:ncr_work_order][:expense_type])
@@ -66,7 +59,7 @@ module Ncr
 
     def errors
       results = super
-      if @approver_email.blank? && !self.approver_email_frozen?
+      if @approver_email.blank? && !@model_instance.approver_email_frozen?
         results += ["Approver email is required"]
       end
       results
@@ -76,7 +69,7 @@ module Ncr
     def add_approvals
       super
       if self.errors.empty?
-        @model_instance.add_approvals(@approver_email)
+        @model_instance.setup_approvals_and_observers(@approver_email)
       end
     end
   end

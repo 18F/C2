@@ -22,6 +22,8 @@
       = stylesheet_link_tag "photon/ie/v8.css"
 
   %body
+    - unless ENV["DISABLE_SANDBOX_WARNING"]
+      = render 'shared/sandbox_warning'
     / Header
     %section#header
       - flash_list.each do |key, value|

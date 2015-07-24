@@ -16,8 +16,6 @@
           Requested by:
           <strong><%= @proposal.requester.full_name %></strong>
         </p>
-        <%= client_partial(@proposal.client, 'external_id',
-                           locals: {proposal: @proposal}) %>
       </div>
     </div>
 
@@ -45,11 +43,13 @@
   <%= client_partial(@proposal.client, 'restart_link',
                      locals: {proposal: @proposal})
   %>
-  <ul id="request-actions" class="centered">
-    <li><%= modify_client_button(@proposal) %></li>
-    <li><%= link_to "Add observers", proposal_observations_path(@proposal) %></li>
-    <li><%= link_to("Cancel my request", cancel_form_proposal_path) if policy(@proposal).can_cancel? %></li>
-  </ul>
+  <% if !@proposal.cancelled? %>
+    <ul id="request-actions" class="centered">
+      <li><%= modify_client_button(@proposal) %></li>
+      <li><%= link_to "Add observers", proposal_observations_path(@proposal) %></li>
+      <li><%= link_to("Cancel my request", cancel_form_proposal_path) if policy(@proposal).can_cancel? %></li>
+    </ul>
+  <% end %>
 <% end %>
 
 <%- if @proposal.flow == 'parallel'  %>
@@ -188,7 +188,7 @@
   </div>
 <%- end %>
 
-<% if policy(@proposal).can_approve_or_reject? %>
+<% if policy(@proposal).can_approve? %>
   <div class="centered">
     <%= form_tag(approve_proposal_path(@proposal, method: "POST")) do %>
       <%= hidden_field_tag(:version, @proposal.version) %>

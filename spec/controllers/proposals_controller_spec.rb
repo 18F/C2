@@ -198,12 +198,14 @@ describe ProposalsController do
 
       post :approve, id: proposal.id, cch: token.access_token
 
+      # TODO simplify this check
       expect(response).to redirect_to(root_path(return_to: self.make_return_to("Previous", request.fullpath)))
     end
 
     it "won't allow a missing token when using GET" do
       proposal = FactoryGirl.create(:proposal, :with_approver)
       login_as(proposal.approvers.first)
+
       get :approve, id: proposal.id
 
       expect(response).to have_http_status(403)
@@ -215,8 +217,73 @@ describe ProposalsController do
       token = approval.create_api_token!
 
       get :approve, id: proposal.id, cch: token.access_token
+
       approval.reload
       expect(approval.approved?).to be(true)
+    end
+
+    it "doesn't allow a token to be reused" do
+      proposal = FactoryGirl.create(:proposal, :with_approver)
+      approval = proposal.approvals.first
+      token = approval.create_api_token!
+      token.use!
+
+      get :approve, id: proposal.id, cch: token.access_token
+
+      expect(flash[:alert]).to include("Please sign in")
+    end
+
+    it "won't allow the approval to be approved twice through the web ui" do
+      proposal = FactoryGirl.create(:proposal, :with_approver)
+      login_as(proposal.approvers.first)
+
+      post :approve, id: proposal.id
+
+      expect(proposal.reload.approved?).to be true
+      expect(flash[:success]).not_to be_nil
+      expect(flash[:alert]).to be_nil
+
+      flash.clear
+      post :approve, id: proposal.id
+
+      expect(flash[:success]).to be_nil
+      expect(flash[:alert]).not_to be_nil
+    end
+
+    it "won't allow different delegates to approve" do
+      proposal = FactoryGirl.create(:proposal, :with_approver)
+      delegate1, delegate2 = FactoryGirl.create(:user), FactoryGirl.create(:user)
+      mailbox = proposal.approvers.first
+      mailbox.add_delegate(delegate1)
+      mailbox.add_delegate(delegate2)
+      login_as(delegate1)
+
+      post :approve, id: proposal.id
+
+      expect(flash[:success]).not_to be_nil
+      expect(flash[:alert]).to be_nil
+
+      flash.clear
+      login_as(delegate2)
+      post :approve, id: proposal.id
+
+      expect(flash[:success]).to be_nil
+      expect(flash[:alert]).not_to be_nil
+    end
+
+    it "allows a delegate to approve via the web UI" do
+      proposal = FactoryGirl.create(:proposal, :with_serial_approvers)
+      mailbox = proposal.approvers.second
+      delegate = FactoryGirl.create(:user)
+      mailbox.add_delegate(delegate)
+      proposal.approvals.first.approve!
+      login_as(delegate)
+
+      post :approve, id: proposal.id
+
+      expect(flash[:success]).not_to be_nil
+      expect(flash[:alert]).to be_nil
+      expect(proposal.reload.approved?).to be true
     end
   end
 end

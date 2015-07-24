@@ -40,10 +40,10 @@ describe Ncr::WorkOrder do
     end
   end
 
-  describe '#add_approvals' do
+  describe '#setup_approvals_and_observers' do
     it "creates approvers when not an emergency" do
       form = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61')
-      form.add_approvals('bob@example.com')
+      form.setup_approvals_and_observers('bob@example.com')
       expect(form.observations.length).to eq(0)
       expect(form.approvers.map(&:email_address)).to eq([
         'bob@example.com',
@@ -57,7 +57,7 @@ describe Ncr::WorkOrder do
     it "creates observers when in an emergency" do
       form = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61',
                                emergency: true)
-      form.add_approvals('bob@example.com')
+      form.setup_approvals_and_observers('bob@example.com')
       expect(form.observers.map(&:email_address)).to eq([
         'bob@example.com',
         Ncr::WorkOrder.ba61_tier1_budget_mailbox,
@@ -66,6 +66,86 @@ describe Ncr::WorkOrder do
       expect(form.approvals.length).to eq(0)
       form.clear_association_cache
       expect(form.approved?).to eq(true)
+    end
+
+    with_env_vars(NCR_BA61_TIER1_BUDGET_MAILBOX: 'ba61one@example.gov',
+                  NCR_BA61_TIER2_BUDGET_MAILBOX: 'ba61two@example.gov',
+                  NCR_BA80_BUDGET_MAILBOX: 'ba80@example.gov') do
+      it "accounts for approver transitions when nothing's approved" do
+        wo = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61')
+        wo.setup_approvals_and_observers('ao@example.gov')
+        expect(wo.approvers.map(&:email_address)).to eq %w(
+          ao@example.gov
+          ba61one@example.gov
+          ba61two@example.gov
+        )
+
+        wo.update(org_code: 'P1122021 (192X,192M) WHITE HOUSE DISTRICT')
+        wo.setup_approvals_and_observers('ao@example.gov')
+        expect(wo.reload.approvers.map(&:email_address)).to eq %w(
+          ao@example.gov
+          ba61two@example.gov
+        )
+
+        wo.setup_approvals_and_observers('ao2@example.gov')
+        expect(wo.reload.approvers.map(&:email_address)).to eq %w(
+          ao2@example.gov
+          ba61two@example.gov
+        )
+
+        wo.update(expense_type: 'BA80')
+        wo.setup_approvals_and_observers('ao@example.gov')
+        expect(wo.reload.approvers.map(&:email_address)).to eq %w(
+          ao@example.gov
+          ba80@example.gov
+        )
+      end
+
+      it "unsets the approval status" do
+        wo = FactoryGirl.create(:ncr_work_order, expense_type: 'BA80')
+        wo.setup_approvals_and_observers('ao@example.gov')
+        expect(wo.approvers.map(&:email_address)).to eq %w(
+          ao@example.gov
+          ba80@example.gov
+        )
+
+        wo.approvals.first.approve!
+        wo.approvals.second.approve!
+        expect(wo.reload.approved?).to be true
+
+        wo.update(expense_type: 'BA61')
+        wo.setup_approvals_and_observers('ao@example.gov')
+        expect(wo.reload.pending?).to be true
+      end
+
+      it "does not re-add observers on emergencies" do
+        wo = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61', emergency: true)
+        wo.setup_approvals_and_observers('ao@example.gov')
+
+        expect(wo.approvals).to be_empty
+        expect(wo.observers.count).to be 3
+
+        wo.setup_approvals_and_observers('ao@example.gov')
+        wo.reload
+        expect(wo.approvals).to be_empty
+        expect(wo.observers.count).to be 3
+      end
+
+      it "handles the delegate then update scenario" do
+        wo = FactoryGirl.create(:ncr_work_order, expense_type: 'BA80')
+        wo.setup_approvals_and_observers('ao@example.gov')
+        delegate = FactoryGirl.create(:user)
+        wo.approvers.second.add_delegate(delegate)
+        wo.approvals.second.update(user: delegate)
+
+        wo.approvals.first.approve!
+        wo.approvals.second.approve!
+
+        wo.setup_approvals_and_observers('ao@example.gov')
+        wo.reload
+        expect(wo.approved?).to be true
+        expect(wo.approvers.second).to eq delegate
+      end
     end
   end
 

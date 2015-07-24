@@ -1,14 +1,13 @@
 describe ApiTokenPolicy do
   subject { described_class }
-  let(:cart) { FactoryGirl.create(:cart_with_approvals) }
-  let(:approval) { cart.approvals.first }
+  let(:proposal) { FactoryGirl.create(:proposal, :with_approver) }
+  let(:approval) { proposal.approvals.first }
   let(:approver) { approval.user }
   let(:token) { approval.create_api_token! }
-  let(:proposal) { cart.proposal }
   let(:approval_params_with_token) {
     {
       cch: token.access_token,
-      cart_id: cart.id.to_s,
+      id: proposal.id.to_s,
       approver_action: 'approve'
     }.with_indifferent_access
   }

@@ -23,13 +23,6 @@ describe LinearDispatcher do
       expect(dispatcher.next_pending_approval(proposal)).to eq(last_approval)
     end
 
-    it "returns nil if the proposal is rejected" do
-      next_app = proposal.approvals.create!(position: 5, status: 'actionable')
-      expect(dispatcher.next_pending_approval(proposal)).to eq(next_app)
-      next_app.update_attribute(:status, 'rejected')  # skip state machine
-      expect(dispatcher.next_pending_approval(proposal)).to eq(nil)
-    end
-
     it "skips approved approvals" do
       first_approval = proposal.approvals.create!(position: 6, status: 'actionable')
       proposal.approvals.create!(position: 5, status: 'approved')
@@ -68,10 +61,9 @@ describe LinearDispatcher do
 
   describe '#on_approval_approved' do
     it "sends to the requester and the next approver" do
-      proposal = FactoryGirl.create(:proposal, :with_approvers)
+      proposal = FactoryGirl.create(:proposal, :with_serial_approvers)
       approval = proposal.approvals.first
-      approval.update_attribute(:status, 'approved')  # avoiding state machine
-      dispatcher.on_approval_approved(approval)
+      approval.approve!   # calls on_approval_approved
       expect(email_recipients).to eq([
         'approver2@some-dot-gov.gov',
         proposal.requester.email_address

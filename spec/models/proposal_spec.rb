@@ -1,8 +1,7 @@
 describe Proposal do
   describe '#currently_awaiting_approvers' do
     it "gives a consistently ordered list when in parallel" do
-      proposal = FactoryGirl.create(:proposal, :with_approvers,
-                                    flow: 'parallel')
+      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
       emails = proposal.currently_awaiting_approvers.map(&:email_address)
       expect(emails).to eq(%w(approver1@some-dot-gov.gov approver2@some-dot-gov.gov))
 
@@ -12,7 +11,7 @@ describe Proposal do
     end
 
     it "gives only the first approver when linear" do
-      proposal = FactoryGirl.create(:proposal, :with_approvers, flow: 'linear')
+      proposal = FactoryGirl.create(:proposal, :with_serial_approvers)
       emails = proposal.currently_awaiting_approvers.map(&:email_address)
       expect(emails).to eq(%w(approver1@some-dot-gov.gov))
 
@@ -63,8 +62,7 @@ describe Proposal do
     it "returns all approvers, observers, and the requester" do
       requester = FactoryGirl.create(
         :user, email_address: 'requester@some-dot-gov.gov')
-      proposal = FactoryGirl.create(
-        :proposal, :with_approvers, :with_observers, requester: requester)
+      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers, :with_observers, requester: requester)
 
       emails = proposal.users.map(&:email_address).sort
       expect(emails).to eq(%w(
@@ -79,6 +77,228 @@ describe Proposal do
     it "returns only the rquester when it has no other users" do
       proposal = FactoryGirl.create(:proposal)
       expect(proposal.users).to eq([proposal.requester])
+    end
+  end
+
+  describe '#approvers=' do
+    it 'sets initial approvers' do
+      proposal = FactoryGirl.create(:proposal)
+      approvers = 3.times.map{ FactoryGirl.create(:user) }
+
+      proposal.approvers = approvers
+
+      expect(proposal.approvals.count).to be 3
+      expect(proposal.approvers).to eq approvers
+    end
+
+    it 'does not modify existing approvers if correct' do
+      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
+      old_approval1 = proposal.approvals.first
+      old_approval2 = proposal.approvals.second
+      approvers = [FactoryGirl.create(:user), FactoryGirl.create(:user), old_approval2.user]
+
+      proposal.approvers = approvers
+
+      expect(proposal.approvals.count).to be 3
+      expect(proposal.approvers).to eq approvers
+      approval_ids = proposal.approvals.map(&:id)
+      expect(approval_ids).not_to include(old_approval1.id)
+      expect(approval_ids).to include(old_approval2.id)
+    end
+  end
+
+  describe '#kickstart_approvals' do
+    it 'initates parallel' do
+      proposal = FactoryGirl.create(:proposal, flow: 'parallel')
+      proposal.add_approver('1@example.com')
+      proposal.add_approver('2@example.com')
+      proposal.add_approver('3@example.com')
+
+      proposal.kickstart_approvals()
+
+      expect(proposal.approvals.count).to be 3
+      expect(proposal.approvals.actionable.count).to be 3
+    end
+
+    it 'initates linear' do
+      proposal = FactoryGirl.create(:proposal, flow: 'linear')
+      proposal.add_approver('1@example.com')
+      proposal.add_approver('2@example.com')
+      proposal.add_approver('3@example.com')
+
+      proposal.kickstart_approvals()
+
+      expect(proposal.approvals.count).to be 3
+      expect(proposal.approvals.actionable.count).to be 1
+      expect(proposal.approvals.actionable.first.user.email_address).to eq '1@example.com'
+    end
+
+    it 'fixes modified parallel proposal approvals' do
+      proposal = FactoryGirl.create(:proposal, flow: 'parallel')
+      proposal.add_approver('1@example.com')
+
+      proposal.kickstart_approvals()
+
+      expect(proposal.approvals.actionable.count).to be 1
+
+      proposal.add_approver('2@example.com')
+      proposal.add_approver('3@example.com')
+      expect(proposal.approvals.count).to be 3
+      expect(proposal.approvals.actionable.count).to be 1
+
+      proposal.kickstart_approvals()
+
+      expect(proposal.approvals.actionable.count).to be 3
+    end
+
+    it 'fixes modified linear proposal approvals' do
+      proposal = FactoryGirl.create(:proposal, flow: 'linear')
+      proposal.add_approver('1@example.com')
+      proposal.add_approver('2@example.com')
+
+      proposal.kickstart_approvals()
+
+      expect(proposal.approvals.count).to be 2
+
+      proposal.approvals.first.approve!
+      proposal.remove_approver('2@example.com')
+      proposal.add_approver('3@example.com')
+
+      proposal.kickstart_approvals()
+
+      expect(proposal.approvals.approved.count).to be 1
+      expect(proposal.approvals.actionable.count).to be 1
+      expect(proposal.approvals.actionable.first.user.email_address).to eq '3@example.com'
+    end
+
+    it 'does not modify a full approved parallel proposal' do
+      proposal = FactoryGirl.create(:proposal, flow: 'parallel')
+      proposal.add_approver('1@example.com')
+      proposal.add_approver('2@example.com')
+
+      proposal.kickstart_approvals()
+      proposal.approvals.first.approve!
+      proposal.approvals.second.approve!
+
+      expect(proposal.approvals.actionable).to be_empty
+    end
+
+    it 'does not modify a full approved linear proposal' do
+      proposal = FactoryGirl.create(:proposal, flow: 'linear')
+      proposal.add_approver('1@example.com')
+      proposal.add_approver('2@example.com')
+
+      proposal.kickstart_approvals()
+      proposal.approvals.first.approve!
+      proposal.approvals.second.approve!
+
+      expect(proposal.approvals.actionable).to be_empty
+    end
+  end
+
+  describe '#reset_status' do
+    it 'sets status as approved if there are no approvals' do
+      proposal = FactoryGirl.create(:proposal)
+      expect(proposal.pending?).to be true
+      proposal.reset_status()
+      expect(proposal.approved?).to be true
+    end
+
+    it 'sets status as cancelled if the proposal has been cancelled' do
+      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
+      proposal.approvals.first.approve!
+      expect(proposal.pending?).to be true
+      proposal.cancel!
+
+      proposal.reset_status()
+      expect(proposal.cancelled?).to be true
+    end
+
+    it 'reverts to pending if an approval is added' do
+      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
+      proposal.approvals.first.approve!
+      proposal.approvals.second.approve!
+      expect(proposal.approved?).to be true
+      proposal.add_approver('new_approver@example.gov')
+
+      proposal.reset_status()
+      expect(proposal.pending?).to be true
+    end
+
+    it 'does not move out of the pending state unless all are approved' do
+      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
+      proposal.reset_status()
+      expect(proposal.pending?).to be true
+      proposal.approvals.first.approve!
+
+      proposal.reset_status()
+      expect(proposal.pending?).to be true
+      proposal.approvals.second.approve!
+
+      proposal.reset_status()
+      expect(proposal.approved?).to be true
+    end
+  end
+
+  describe '#partial_approve!' do
+    it "marks the next Approval as actionable" do
+      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
+      proposal.approvals.first.update(status: 'approved')
+
+      proposal.partial_approve!
+
+      expect(proposal.approvals.pluck(:status)).to eq(%w(approved actionable))
+      expect(proposal.status).to eq('pending')
+    end
+
+    it "transitions to 'approved' when there are no remaining pending approvals" do
+      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
+      proposal.approvals.update_all(status: 'approved')
+
+      proposal.partial_approve!
+
+      expect(proposal.approvals.first.status).to eq('approved')
+      expect(proposal.status).to eq('approved')
+    end
+
+    it "is a no-op for a cancelled request" do
+      proposal = FactoryGirl.create(:proposal, :with_serial_approvers, status: 'cancelled')
+      expect(proposal.approvals.pluck(:status)).to eq(%w(actionable pending))
+
+      proposal.partial_approve!
+
+      expect(proposal.approvals.pluck(:status)).to eq(%w(actionable pending))
+      expect(proposal.status).to eq('cancelled')
+    end
+  end
+
+  describe "scopes" do
+    let(:statuses) { %w(pending approved cancelled) }
+    let!(:proposals) { statuses.map{|status| FactoryGirl.create(:proposal, status: status) } }
+
+    it "returns the appropriate proposals by status" do
+      statuses.each do |status|
+        expect(Proposal.send(status).pluck(:status)).to eq([status])
+      end
+    end
+
+    describe '#closed' do
+      it "returns approved and and cancelled proposals" do
+        expect(Proposal.closed.pluck(:status).sort).to eq(%w(approved cancelled))
+      end
+    end
+  end
+
+  describe '#restart' do
+    it "creates new API tokens" do
+      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
+      proposal.approvals.each(&:create_api_token!)
+      expect(proposal.api_tokens.size).to eq(2)
+
+      proposal.restart!
+
+      expect(proposal.api_tokens.unscoped.expired.size).to eq(2)
+      expect(proposal.api_tokens.unexpired.size).to eq(2)
     end
   end
 end

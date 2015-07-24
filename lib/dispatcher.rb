@@ -41,13 +41,6 @@ class Dispatcher
     true
   end
 
-  def on_proposal_rejected(proposal)
-    rejection = proposal.approvals.rejected.first
-    # @todo rewrite this email so a "rejection approval" isn't needed
-    CommunicartMailer.approval_reply_received_email(rejection).deliver_now
-    self.email_observers(proposal)
-  end
-
   def on_approval_approved(approval)
     if self.requires_approval_notice?(approval)
       CommunicartMailer.approval_reply_received_email(approval).deliver_now
@@ -85,11 +78,6 @@ class Dispatcher
   def self.deliver_new_proposal_emails(proposal)
     dispatcher = self.initialize_dispatcher(proposal)
     dispatcher.deliver_new_proposal_emails(proposal)
-  end
-
-  def self.on_proposal_rejected(proposal)
-    dispatcher = self.initialize_dispatcher(proposal)
-    dispatcher.on_proposal_rejected(proposal)
   end
 
   def self.on_approval_approved(approval)

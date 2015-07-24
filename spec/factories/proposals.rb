@@ -7,16 +7,26 @@ FactoryGirl.define do
     trait :with_approver do
       after :create do |proposal|
         proposal.add_approver('approver1@some-dot-gov.gov')
-        proposal.initialize_approvals()
+        proposal.kickstart_approvals()
       end
     end
 
-    trait :with_approvers do
-      with_approver
 
+    trait :with_serial_approvers do
+      flow 'linear'
       after :create do |proposal|
+        proposal.add_approver('approver1@some-dot-gov.gov')
         proposal.add_approver('approver2@some-dot-gov.gov')
-        proposal.initialize_approvals()
+        proposal.kickstart_approvals()
+      end
+    end
+
+    trait :with_parallel_approvers do
+      flow 'parallel'
+      after :create do |proposal|
+        proposal.add_approver('approver1@some-dot-gov.gov')
+        proposal.add_approver('approver2@some-dot-gov.gov')
+        proposal.kickstart_approvals()
       end
     end
 

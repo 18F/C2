@@ -1,7 +1,6 @@
 describe Comment do
   describe "#listeners" do
-    let (:proposal) { FactoryGirl.create(
-      :proposal, :with_approvers, :with_observers, flow: "linear") }
+    let (:proposal) { FactoryGirl.create(:proposal, :with_serial_approvers, :with_observers) }
     let (:comment) { FactoryGirl.create(:comment, proposal: proposal) }
 
     it "includes the requester" do
@@ -14,7 +13,7 @@ describe Comment do
 
     it "includes approved approvers" do
       proposal.add_approver("someone@example.com")
-      proposal.initialize_approvals()
+      proposal.kickstart_approvals()
       expect(proposal.approvers.length).to eq(3)
       proposal.approvals.first.approve!
       expect(comment.listeners).to include(proposal.approvers[0])
