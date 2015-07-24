@@ -298,6 +298,14 @@ describe "National Capital Region proposals" do
         expect(approval.approved_at.utc.to_s).to eq(Time.now.utc.to_s)
       end
     end
+    it "doesn't send multiple emails to approvers who are also observers" do
+      work_order.add_observer(work_order.approvers.first.email_address)
+      visit "/proposals/#{ncr_proposal.id}"
+      click_on("Approve")
+      expect(work_order.proposal.observers.length).to eq(1)
+      expect(deliveries.length).to eq(1)
+    end
+
   end
 
   describe "viewing a work order" do
@@ -522,7 +530,7 @@ describe "National Capital Region proposals" do
     let(:ncr_proposal) { work_order.proposal }
     
     before do
-      work_order.add_approvals('approver@example.com')
+      work_order.setup_approvals_and_observers('approver@example.com')
       user = Proposal.last.approvals.first.user
       delegate = User.new(email_address:'delegate@example.com')
       delegate.save

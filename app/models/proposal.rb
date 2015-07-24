@@ -235,17 +235,8 @@ class Proposal < ActiveRecord::Base
     end
   end
 
-  # Is the user getting emails for this proposal
-  def is_user_tracking? user
-    users = [self.requester]
-    users += self.approvers + self.observers
-    users.include? user
-  end
-
   def subscribe user
-    if !self.is_user_tracking? user
-      self.add_observer(user.email_address)
-    end
+    self.add_observer(user.email_address)
   end
 
   # Returns True if the user is an approver and has acted on the proposal
