@@ -1,5 +1,0 @@
----
-jobs:
-  - name: budget-report-daily
-    schedule: "*/3 * * * *"
-    command: "rake quick_report:budget"
