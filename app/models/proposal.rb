@@ -92,13 +92,6 @@ class Proposal < ActiveRecord::Base
     results.compact
   end
 
-  # returns the Approval
-  def add_approver(email)
-    approval = Approvals::Individual.for_email(email)
-    self.approvals << approval
-    approval
-  end
-
   # Set the approver list, from any start state
   # This overrides the `through` relation but provides parity to the accessor
   def approvers=(approver_list)
@@ -110,7 +103,7 @@ class Proposal < ActiveRecord::Base
     end
     self.approvals = approvals
     self.kickstart_approvals()
-    self.approvals.reload   # include the changes in kickstart_approvals
+    self.reload   # include the changes in kickstart_approvals
     self.reset_status()
   end
 
