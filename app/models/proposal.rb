@@ -99,12 +99,6 @@ class Proposal < ActiveRecord::Base
     approval
   end
 
-  def remove_approver(email)
-    user = User.for_email(email)
-    approval = self.existing_approval_for(user)
-    approval.destroy
-  end
-
   # Set the approver list, from any start state
   # This overrides the `through` relation but provides parity to the accessor
   def approvers=(approver_list)

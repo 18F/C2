@@ -153,22 +153,21 @@ describe Proposal do
 
     it 'fixes modified linear proposal approvals' do
       proposal = FactoryGirl.create(:proposal, flow: 'linear')
-      proposal.add_approver('1@example.com')
-      proposal.add_approver('2@example.com')
+      approver1, approver2, approver3 = 3.times.map{ FactoryGirl.create(:user) }
+      proposal.approvers = [approver1, approver2]
 
       proposal.kickstart_approvals()
 
       expect(proposal.approvals.count).to be 2
 
       proposal.approvals.first.approve!
-      proposal.remove_approver('2@example.com')
-      proposal.add_approver('3@example.com')
+      proposal.approvers = [approver1, approver3]
 
       proposal.kickstart_approvals()
 
       expect(proposal.approvals.approved.count).to be 1
       expect(proposal.approvals.actionable.count).to be 1
-      expect(proposal.approvals.actionable.first.user.email_address).to eq '3@example.com'
+      expect(proposal.approvals.actionable.first.user).to eq approver3
     end
 
     it 'does not modify a full approved parallel proposal' do
