@@ -19,20 +19,28 @@ GREEN="${BLUE}-B"
 MANIFEST=$(mktemp -t "${BLUE}_manifest")
 cf create-app-manifest $BLUE -p $MANIFEST
 
-DOMAIN=$(cat $MANIFEST | grep domain: | awk '{print $2}')
+# try/catch
+# http://stackoverflow.com/a/22010339/358804
+{
+  DOMAIN=$(cat $MANIFEST | grep domain: | awk '{print $2}')
 
-# create the GREEN application
-cf push $GREEN -f $MANIFEST -n $GREEN
-# ensure it starts
-curl --fail -I "https://${GREEN}.${DOMAIN}"
+  # create the GREEN application
+  cf push $GREEN -f $MANIFEST -n $GREEN
+  # ensure it starts
+  curl --fail -I "https://${GREEN}.${DOMAIN}"
 
-# add the "green" application to the "blue" load balancer
-cf map-route $GREEN $DOMAIN -n $BLUE
+  # add the "green" application to the "blue" load balancer
+  cf map-route $GREEN $DOMAIN -n $BLUE
 
-# cleanup
-# TODO consider 'stop'-ing the BLUE instead of deleting it, so that depedencies are cached for next time
-cf delete $BLUE -f
-cf rename $GREEN $BLUE
-cf delete-route $DOMAIN -n $GREEN -f
+  # cleanup
+  # TODO consider 'stop'-ing the BLUE instead of deleting it, so that depedencies are cached for next time
+  cf delete $BLUE -f
+  cf rename $GREEN $BLUE
+  cf delete-route $DOMAIN -n $GREEN -f
 
-echo "DONE"
+  echo "DONE"
+} || {
+  # we don't want to keep the sensitive information around
+  rm $MANIFEST
+  exit 1
+}
