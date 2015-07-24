@@ -1,6 +1,8 @@
 # Represents a single user's ability to approve, the "leaves" in an approval chain
 module Approvals
   class Individual < Approval
+    validates :user, presence: true
+
     workflow do
       on_transition { self.touch } # https://github.com/geekq/workflow/issues/96
 
