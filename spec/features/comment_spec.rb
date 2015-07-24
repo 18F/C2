@@ -34,7 +34,9 @@ describe "commenting" do
     fill_in 'comment[comment_text]', with: 'foo'
     click_on 'Send a Comment'
 
-    expect(email_recipients).to eq(['approver1@some-dot-gov.gov',
-                                    'approver2@some-dot-gov.gov'])
+    expect(email_recipients).to eq([
+      proposal.approvers.first.email_address,
+      proposal.approvers.second.email_address
+    ].sort)
   end
 end

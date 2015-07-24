@@ -1,6 +1,8 @@
 describe "Display status text" do
   let(:proposal) { FactoryGirl.create(:proposal, :with_parallel_approvers) }
   before do
+    proposal.approvers.first.update(first_name: "Uniquely", last_name: "Named")
+    proposal.approvers.second.update(first_name: "Onlyof", last_name: "Itskind")
     login_as(proposal.requester)
   end
 

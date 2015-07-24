@@ -2,22 +2,20 @@ describe Proposal do
   describe '#currently_awaiting_approvers' do
     it "gives a consistently ordered list when in parallel" do
       proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
-      emails = proposal.currently_awaiting_approvers.map(&:email_address)
-      expect(emails).to eq(%w(approver1@some-dot-gov.gov approver2@some-dot-gov.gov))
+      approver1, approver2 = proposal.approvers
+      expect(proposal.currently_awaiting_approvers).to eq([approver1, approver2])
 
       proposal.approvals.first.update_attribute(:position, 5)
-      emails = proposal.currently_awaiting_approvers.map(&:email_address).sort
-      expect(emails).to eq(%w(approver1@some-dot-gov.gov approver2@some-dot-gov.gov))
+      expect(proposal.currently_awaiting_approvers).to eq([approver2, approver1])
     end
 
     it "gives only the first approver when linear" do
       proposal = FactoryGirl.create(:proposal, :with_serial_approvers)
-      emails = proposal.currently_awaiting_approvers.map(&:email_address)
-      expect(emails).to eq(%w(approver1@some-dot-gov.gov))
+      approver1, approver2 = proposal.approvers
+      expect(proposal.currently_awaiting_approvers).to eq([approver1])
 
       proposal.approvals.first.approve!
-      emails = proposal.currently_awaiting_approvers.map(&:email_address)
-      expect(emails).to eq(%w(approver2@some-dot-gov.gov))
+      expect(proposal.currently_awaiting_approvers).to eq([approver2])
     end
   end
 
@@ -60,18 +58,14 @@ describe Proposal do
 
   describe '#users' do
     it "returns all approvers, observers, and the requester" do
-      requester = FactoryGirl.create(
-        :user, email_address: 'requester@some-dot-gov.gov')
+      requester = FactoryGirl.create(:user)
       proposal = FactoryGirl.create(:proposal, :with_parallel_approvers, :with_observers, requester: requester)
 
-      emails = proposal.users.map(&:email_address).sort
-      expect(emails).to eq(%w(
-        approver1@some-dot-gov.gov
-        approver2@some-dot-gov.gov
-        observer1@some-dot-gov.gov
-        observer2@some-dot-gov.gov
-        requester@some-dot-gov.gov
-      ))
+      expect(proposal.users.map(&:id).sort).to eq([
+        requester.id,
+        proposal.approvers.first.id, proposal.approvers.second.id,
+        proposal.observers.first.id, proposal.observers.second.id
+      ].sort)
     end
 
     it "returns only the rquester when it has no other users" do
@@ -201,7 +195,7 @@ describe Proposal do
       proposal.approvals.first.approve!
       proposal.approvals.second.approve!
       expect(proposal.approved?).to be true
-      proposal.add_approver('new_approver@example.gov')
+      proposal.approvers = proposal.approvers + [FactoryGirl.create(:user)]
 
       proposal.reset_status()
       expect(proposal.pending?).to be true

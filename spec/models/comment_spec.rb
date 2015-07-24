@@ -12,8 +12,7 @@ describe Comment do
     end
 
     it "includes approved approvers" do
-      proposal.add_approver("someone@example.com")
-      proposal.kickstart_approvals()
+      proposal.approvers = proposal.approvers + [FactoryGirl.create(:user)]
       expect(proposal.approvers.length).to eq(3)
       proposal.approvals.first.approve!
       expect(comment.listeners).to include(proposal.approvers[0])
