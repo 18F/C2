@@ -1,39 +1,49 @@
-C2 Daily Budget Report
+C2 Budget Report on <%= pretty_date Time.now %>
 
-LAST WEEK
-Number of requests: <%= @total_proposals_last_week %>
+=====
+TOTAL REQUESTS LAST WEEK: <%= @total_last_week %>
+=====
 BA60 approved: <%= @ba60_proposals.count %>
 BA61 approved: <%= @ba61_proposals.count %>
 BA80 approved: <%= @ba80_proposals.count %>
 
-TOTALS
-Total Requests pending: <%= @total_unapproved %>
 
-=====
+-----
 Approved BA60 requests last week
-=====
-<%- @ba60_proposals.each do |wo| %>
-  "#{wo.proposal.public_id} | Requester: #{wo.proposal.requester.email_address} | Budget Approver: #{wo.proposal.approvals.last.user_email_address} | Function code: #{wo.proposal.client_data.function_code} | Soc code: #{wo.proposal.client_data.soc_code}"
-<%- end %>
+-----
+<% @ba60_proposals.each do |p| %>
+  <%= "#{p.proposal.public_id} | Requester: #{p.proposal.requester.email_address} | Budget Approver: #{p.proposal.approvals.last.user_email_address} | Function code: #{p.proposal.client_data.function_code} | Soc code: #{p.proposal.client_data.soc_code}" %>
+<% end %>
 
-=====
-Approved BA60 requests
-=====
-<%- @ba61_proposals.each do |a| %>
-  "#{a.proposal.public_id} | Requester: #{a.proposal.requester.email_address} | Budget Approver: #{a.proposal.approvals.last.user_email_address} | Function code: #{a.proposal.client_data.function_code} | Soc code: #{a.proposal.client_data.soc_code}"
-<%- end %>
+-----
+Approved BA61 requests last week
+-----
+<% @ba61_proposals.each do |p| %>
+  <%= "#{p.proposal.public_id} | Requester: #{p.proposal.requester.email_address} | Budget Approver: #{p.proposal.approvals.last.user_email_address} | Function code: #{p.proposal.client_data.function_code} | Soc code: #{p.proposal.client_data.soc_code}" %>
+<% end %>
 
-=====
+-----
 Approved BA80 requests last week
-=====
-<%- #    @ba80_proposals.each{|wo| puts "#{wo.proposal.public_id} | Requester: #{wo.proposal.requester.email_address} | Approver: #{wo.proposal.approvals.first.user_email_address} | Function code: #{wo.proposal.client_data.function_code} | Soc code: #{wo.proposal.client_data.soc_code}"};nil %>
+-----
+<% @ba80_proposals.each do |p| %>
+  <%= "#{p.proposal.public_id} | Requester: #{p.proposal.requester.email_address} | Approver: #{p.proposal.approvals.first.user_email_address} | Function code: #{p.proposal.client_data.function_code} | Soc code: #{p.proposal.client_data.soc_code}" %>
+<% end %>
+
 
 =====
+TOTAL PENDING REQUESTS: <%= @total_unapproved %>
+=====
+
+-----
 Total Pending at Approving Official: <%= @proposals_pending_approving_official.count %>
-=====
-<%-#    @proposals_pending_approving_official.each{|p| puts "#{p.public_id} | Requester: #{p.requester.email_address} | Approver: #{p.approvals.first.user_email_address} | Created: #{p.created_at.in_time_zone('Eastern Time (US & Canada)')}"};nil %>
+-----
+<% @proposals_pending_approving_official.each do |p| %>
+  <%= "#{p.public_id} | Requester: #{p.requester.email_address} | Approver: #{p.approvals.first.user_email_address} | Created: #{pretty_date(p.created_at)}" %>
+<% end %>
 
-=====
+-----
 Total Pending at Budget: <%= @proposals_pending_budget.count %>
-=====
-<%-#    @proposals_pending_budget.each{|p| puts "#{p.public_id} | Requester: #{p.requester.email_address} | Approver: #{p.approvals.last.user_email_address} | Created: #{p.created_at.in_time_zone('Eastern Time (US & Canada)')}"};nil %>
+-----
+<% @proposals_pending_budget.each do |p| %>
+  <%= "#{p.public_id} | Requester: #{p.requester.email_address} | Approver: #{p.approvals.last.user_email_address} | Created: #{pretty_date(p.created_at)}" %>
+<% end %>
