@@ -21,11 +21,11 @@
 
     <%= render partial: 'archive_link' %>
   </div>
-  <%- if @proposals.closed.any? %>
+  <%- if @proposals.approved.any? %>
     <div class="row">
       <div class="col-sm-12">
         <%= client_partial current_user.client_slug, "proposal_list",
-            locals: {proposals: @proposals.closed,
+            locals: {proposals: @proposals.approved,
                      limit: @CLOSED_PROPOSAL_LIMIT} %>
       </div>
     </div>
