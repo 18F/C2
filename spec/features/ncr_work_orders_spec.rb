@@ -298,6 +298,14 @@ describe "National Capital Region proposals" do
         expect(approval.approved_at.utc.to_s).to eq(Time.now.utc.to_s)
       end
     end
+    it "doesn't send multiple emails to approvers who are also observers" do
+      work_order.add_observer(work_order.approvers.first.email_address)
+      visit "/proposals/#{ncr_proposal.id}"
+      click_on("Approve")
+      expect(work_order.proposal.observers.length).to eq(1)
+      expect(deliveries.length).to eq(1)
+    end
+
   end
 
   describe "viewing a work order" do
@@ -515,6 +523,30 @@ describe "National Capital Region proposals" do
       visit "/ncr/work_orders/#{work_order.id}/edit"
       expect(current_path).to eq("/ncr/work_orders/new")
       expect(page).to have_content("You must be the requester, approver, or observer")
+    end
+  end
+  describe "delegate on a work order" do
+    let (:work_order) { FactoryGirl.create(:ncr_work_order, description: 'test') }
+    let(:ncr_proposal) { work_order.proposal }
+    
+    before do
+      work_order.setup_approvals_and_observers('approver@example.com')
+      user = Proposal.last.approvals.first.user
+      delegate = User.new(email_address:'delegate@example.com')
+      delegate.save
+      user.add_delegate(delegate)
+      login_as(delegate)
+    end
+
+    it "adds current user to the observers list when commenting" do
+      visit "/proposals/#{work_order.id}"
+      fill_in "comment_comment_text", with: "comment text"
+      click_on "Send a Comment"
+      proposal = Proposal.last
+      delegate = User.last
+      observers = proposal.observations.map{|o| o.user}
+      expect(page).to have_content("comment text")
+      expect(observers.include? delegate).to eq(true)
     end
   end
 end
