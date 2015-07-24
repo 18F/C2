@@ -110,6 +110,7 @@ class Proposal < ActiveRecord::Base
     end
     self.approvals = approvals
     self.kickstart_approvals()
+    self.approvals.reload   # include the changes in kickstart_approvals
     self.reset_status()
   end
 
