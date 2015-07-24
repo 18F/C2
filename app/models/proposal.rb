@@ -94,8 +94,8 @@ class Proposal < ActiveRecord::Base
 
   # returns the Approval
   def add_approver(email)
-    user = User.for_email(email)
-    approval = self.approvals.create!(user_id: user.id)
+    approval = Approvals::Individual.for_email(email)
+    self.approvals << approval
     approval
   end
 
@@ -104,7 +104,7 @@ class Proposal < ActiveRecord::Base
   def approvers=(approver_list)
     approvals = approver_list.each_with_index.map do |approver, idx|
       approval = self.existing_approval_for(approver)
-      approval ||= Approval.new(user: approver, proposal: self)
+      approval ||= Approvals::Individual.new(user: approver, proposal: self)
       approval.position = idx + 1   # start with 1
       approval
     end
