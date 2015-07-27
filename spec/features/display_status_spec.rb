@@ -1,6 +1,7 @@
 describe "Display status text" do
   let(:proposal) { FactoryGirl.create(:proposal, :with_parallel_approvers) }
   before do
+    # ensure unique names as we'll be testing them later
     proposal.approvers.first.update(first_name: "Uniquely", last_name: "Named")
     proposal.approvers.second.update(first_name: "Onlyof", last_name: "Itskind")
     login_as(proposal.requester)
@@ -16,8 +17,9 @@ describe "Display status text" do
     visit proposals_path
     expect(page).not_to have_content('Please review')
     expect(page).to have_content('Waiting for review from:')
-    proposal.approvers.each{|approver|
-      expect(page).to have_content(approver.full_name)}
+    proposal.approvers.each do |approver|
+      expect(page).to have_content(approver.full_name)
+    end
   end
 
   it "excludes approved approvals" do
@@ -25,9 +27,10 @@ describe "Display status text" do
     visit proposals_path
     expect(page).not_to have_content('Please review')
     expect(page).to have_content('Waiting for review from:')
-    proposal.approvers[1..-1].each{|approver|
-      expect(page).to have_content(approver.full_name)}
-    expect(page).not_to have_content(proposal.approvers.first.full_name)
+    proposal.approvers[1..-1].each do |approver|
+      expect(page).to have_content(approver.full_name)
+    end
+    expect(page).not_to have_content("Uniquely Named")
   end
 
   context "linear" do
@@ -36,16 +39,17 @@ describe "Display status text" do
     it "displays the first approver" do
       visit proposals_path
       expect(page).to have_content('Waiting for review from:')
-      proposal.approvers[1..-1].each{|approver|
-        expect(page).not_to have_content(approver.full_name)}
-      expect(page).to have_content(proposal.approvers.first.full_name)
+      proposal.approvers[1..-1].each do |approver|
+        expect(page).not_to have_content(approver.full_name)
+      end
+      expect(page).to have_content("Uniquely Named")
     end
 
     it "excludes approved approvals" do
       proposal.approvals.first.approve!
       visit proposals_path
       expect(page).to have_content('Waiting for review from:')
-      expect(page).not_to have_content(proposal.approvers.first.full_name)
+      expect(page).not_to have_content("Uniquely Named")
     end
   end
 end

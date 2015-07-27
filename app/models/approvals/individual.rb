@@ -14,9 +14,5 @@ module Approvals
       end
       state :approved
     end
-
-    def self.for_email(email)
-      Approvals::Individual.new(user: User.for_email(email))
-    end
   end
 end
