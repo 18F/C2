@@ -18,13 +18,13 @@ class ProposalsController < ApplicationController
   def index
     proposals = self.chronological_proposals
     @CLOSED_PROPOSAL_LIMIT = 10
-    @pending_listing = self.proposal_listing(proposals.pending)
-    @approved_listing = self.proposal_listing(proposals.approved.limit(@CLOSED_PROPOSAL_LIMIT))
-    @cancelled_listing = self.proposal_listing(proposals.cancelled)
+    @pending_data = self.proposals_container(proposals.pending)
+    @approved_data = self.proposals_container(proposals.approved.limit(@CLOSED_PROPOSAL_LIMIT))
+    @cancelled_data = self.proposals_container(proposals.cancelled)
   end
 
   def archive
-    @listing = self.proposal_listing(self.chronological_proposals.closed)
+    @proposals_data = self.proposals_container(self.chronological_proposals.closed)
   end
 
   def cancel_form
@@ -65,7 +65,7 @@ class ProposalsController < ApplicationController
   # or similar, then rename #query to #index
   def query
     proposal_list = self.proposals
-    # @todo - move all of this filtering into the Listing object
+    # @todo - move all of this filtering into the TabularData::Container object
     @start_date = self.param_date(:start_date)
     @end_date = self.param_date(:end_date)
     @text = params[:text]
@@ -81,7 +81,7 @@ class ProposalsController < ApplicationController
     else
       proposal_list = proposal_list.order('created_at DESC')
     end
-    @listing = self.proposal_listing(proposal_list)
+    @proposals_data = self.proposals_container(proposal_list)
     # TODO limit/paginate results
   end
 
@@ -108,8 +108,8 @@ class ProposalsController < ApplicationController
   end
 
   protected
-  def proposal_listing(queryset)
-    config = Listing.config_for_client("proposals", current_user.client_slug)
-    Listing.new(queryset, config)
+  def proposals_container(queryset)
+    config = TabularData::Container.config_for_client("proposals", current_user.client_slug)
+    TabularData::Container.new(queryset, config)
   end
 end

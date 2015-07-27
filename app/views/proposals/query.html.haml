@@ -3,4 +3,4 @@
   %h1
     Proposals participated in
     = datespan_header(@start_date, @end_date)
-  = render partial: 'shared/listing', locals: {listing: @listing}
+  = render partial: 'shared/table', locals: {container: @proposals_data}

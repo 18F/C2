@@ -1,17 +1,17 @@
-- # Requires the "listing" variable
-%table.listing
+- # Requires the "container" variable
+%table.tabular-data
   %thead
     - # @todo: "header" class shouldn't be required (we're in thead)
     %tr.header
-      - listing.columns.each do |column|
+      - container.columns.each do |column|
         %th
           - # @todo: why are there h5s in our table headers?
           %h5
             = column.header
   %tbody
-    - listing.rows.each do |row|
+    - container.rows.each do |row|
       %tr
-        - listing.columns.each do |column|
+        - container.columns.each do |column|
           %td
             - formatter_tpl = "shared/formatter/" + column.formatter.to_s
             - value = column.value_in(row)

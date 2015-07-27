@@ -4,8 +4,8 @@
   <div class="row pending-pr">
     <div class="col-md-12">
       <h3>Pending Purchase Requests</h3>
-      <%- if @pending_listing.rows.any? %>
-        <%= render partial: "shared/listing", locals: {listing: @pending_listing} %>
+      <%- if @pending_data.rows.any? %>
+        <%= render partial: "shared/table", locals: {container: @pending_data} %>
       <%- else %>
         <p class="empty-list-label">No pending purchase requests</p>
       <%- end %>
@@ -20,10 +20,10 @@
 
     <%= render partial: 'archive_link' %>
   </div>
-  <%- if @approved_listing.rows.any? %>
+  <%- if @approved_data.rows.any? %>
     <div class="row">
       <div class="col-sm-12">
-        <%= render partial: "shared/listing", locals: {listing: @approved_listing} %>
+        <%= render partial: "shared/table", locals: {container: @approved_data} %>
       </div>
     </div>
 
@@ -36,7 +36,7 @@
   <%- end %>
 
 
-  <%- if @cancelled_listing.rows.any? %>
+  <%- if @cancelled_data.rows.any? %>
     <div class="row past-pr">
       <div class="col-sm-10">
         <h3>Cancelled Purchase Requests</h3>
@@ -44,7 +44,7 @@
     </div>
       <div class="row">
         <div class="col-sm-12">
-          <%= render partial: "shared/listing", locals: {listing: @cancelled_listing} %>
+          <%= render partial: "shared/table", locals: {container: @cancelled_data} %>
         </div>
       </div>
   <%- end %>
