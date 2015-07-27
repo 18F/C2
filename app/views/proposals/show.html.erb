@@ -16,6 +16,10 @@
           Requested by:
           <strong><%= @proposal.requester.full_name %></strong>
         </p>
+        <p>
+          Submitted:
+          <strong><%= date_with_tooltip(@proposal.created_at) %></strong>
+        </p>
       </div>
     </div>
 
