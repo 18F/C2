@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150721205524) do
+ActiveRecord::Schema.define(version: 20150724144605) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,6 +53,7 @@ ActiveRecord::Schema.define(version: 20150721205524) do
     t.integer  "position"
     t.integer  "proposal_id"
     t.datetime "approved_at"
+    t.string   "type"
   end
 
   create_table "attachments", force: :cascade do |t|

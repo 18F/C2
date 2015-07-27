@@ -2,22 +2,20 @@ describe Proposal do
   describe '#currently_awaiting_approvers' do
     it "gives a consistently ordered list when in parallel" do
       proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
-      emails = proposal.currently_awaiting_approvers.map(&:email_address)
-      expect(emails).to eq(%w(approver1@some-dot-gov.gov approver2@some-dot-gov.gov))
+      approver1, approver2 = proposal.approvers
+      expect(proposal.currently_awaiting_approvers).to eq([approver1, approver2])
 
       proposal.approvals.first.update_attribute(:position, 5)
-      emails = proposal.currently_awaiting_approvers.map(&:email_address).sort
-      expect(emails).to eq(%w(approver1@some-dot-gov.gov approver2@some-dot-gov.gov))
+      expect(proposal.currently_awaiting_approvers).to eq([approver2, approver1])
     end
 
     it "gives only the first approver when linear" do
       proposal = FactoryGirl.create(:proposal, :with_serial_approvers)
-      emails = proposal.currently_awaiting_approvers.map(&:email_address)
-      expect(emails).to eq(%w(approver1@some-dot-gov.gov))
+      approver1, approver2 = proposal.approvers
+      expect(proposal.currently_awaiting_approvers).to eq([approver1])
 
       proposal.approvals.first.approve!
-      emails = proposal.currently_awaiting_approvers.map(&:email_address)
-      expect(emails).to eq(%w(approver2@some-dot-gov.gov))
+      expect(proposal.currently_awaiting_approvers).to eq([approver2])
     end
   end
 
@@ -60,18 +58,14 @@ describe Proposal do
 
   describe '#users' do
     it "returns all approvers, observers, and the requester" do
-      requester = FactoryGirl.create(
-        :user, email_address: 'requester@some-dot-gov.gov')
+      requester = FactoryGirl.create(:user)
       proposal = FactoryGirl.create(:proposal, :with_parallel_approvers, :with_observers, requester: requester)
 
-      emails = proposal.users.map(&:email_address).sort
-      expect(emails).to eq(%w(
-        approver1@some-dot-gov.gov
-        approver2@some-dot-gov.gov
-        observer1@some-dot-gov.gov
-        observer2@some-dot-gov.gov
-        requester@some-dot-gov.gov
-      ))
+      expect(proposal.users.map(&:id).sort).to eq([
+        requester.id,
+        proposal.approvers.first.id, proposal.approvers.second.id,
+        proposal.observers.first.id, proposal.observers.second.id
+      ].sort)
     end
 
     it "returns only the rquester when it has no other users" do
@@ -81,6 +75,10 @@ describe Proposal do
   end
 
   describe '#approvers=' do
+    let(:approver1) { FactoryGirl.create(:user) }
+    let(:approver2) { FactoryGirl.create(:user) }
+    let(:approver3) { FactoryGirl.create(:user) }
+
     it 'sets initial approvers' do
       proposal = FactoryGirl.create(:proposal)
       approvers = 3.times.map{ FactoryGirl.create(:user) }
@@ -105,16 +103,11 @@ describe Proposal do
       expect(approval_ids).not_to include(old_approval1.id)
       expect(approval_ids).to include(old_approval2.id)
     end
-  end
 
-  describe '#kickstart_approvals' do
     it 'initates parallel' do
       proposal = FactoryGirl.create(:proposal, flow: 'parallel')
-      proposal.add_approver('1@example.com')
-      proposal.add_approver('2@example.com')
-      proposal.add_approver('3@example.com')
 
-      proposal.kickstart_approvals()
+      proposal.approvers = [approver1, approver2, approver3]
 
       expect(proposal.approvals.count).to be 3
       expect(proposal.approvals.actionable.count).to be 3
@@ -122,61 +115,46 @@ describe Proposal do
 
     it 'initates linear' do
       proposal = FactoryGirl.create(:proposal, flow: 'linear')
-      proposal.add_approver('1@example.com')
-      proposal.add_approver('2@example.com')
-      proposal.add_approver('3@example.com')
 
-      proposal.kickstart_approvals()
+      proposal.approvers = [approver1, approver2, approver3]
 
       expect(proposal.approvals.count).to be 3
       expect(proposal.approvals.actionable.count).to be 1
-      expect(proposal.approvals.actionable.first.user.email_address).to eq '1@example.com'
+      expect(proposal.approvals.actionable.first.user).to eq approver1
     end
 
     it 'fixes modified parallel proposal approvals' do
       proposal = FactoryGirl.create(:proposal, flow: 'parallel')
-      proposal.add_approver('1@example.com')
 
-      proposal.kickstart_approvals()
+      proposal.approvers = [approver1]
 
       expect(proposal.approvals.actionable.count).to be 1
 
-      proposal.add_approver('2@example.com')
-      proposal.add_approver('3@example.com')
+      proposal.approvers = [approver1, approver2, approver3]
       expect(proposal.approvals.count).to be 3
-      expect(proposal.approvals.actionable.count).to be 1
-
-      proposal.kickstart_approvals()
-
       expect(proposal.approvals.actionable.count).to be 3
     end
 
     it 'fixes modified linear proposal approvals' do
       proposal = FactoryGirl.create(:proposal, flow: 'linear')
-      proposal.add_approver('1@example.com')
-      proposal.add_approver('2@example.com')
-
-      proposal.kickstart_approvals()
+      approver1, approver2, approver3 = 3.times.map{ FactoryGirl.create(:user) }
+      proposal.approvers = [approver1, approver2]
 
       expect(proposal.approvals.count).to be 2
 
       proposal.approvals.first.approve!
-      proposal.remove_approver('2@example.com')
-      proposal.add_approver('3@example.com')
-
-      proposal.kickstart_approvals()
+      proposal.approvers = [approver1, approver3]
 
       expect(proposal.approvals.approved.count).to be 1
       expect(proposal.approvals.actionable.count).to be 1
-      expect(proposal.approvals.actionable.first.user.email_address).to eq '3@example.com'
+      expect(proposal.approvals.actionable.first.user).to eq approver3
     end
 
     it 'does not modify a full approved parallel proposal' do
       proposal = FactoryGirl.create(:proposal, flow: 'parallel')
-      proposal.add_approver('1@example.com')
-      proposal.add_approver('2@example.com')
 
-      proposal.kickstart_approvals()
+      proposal.approvers = [approver1, approver2]
+
       proposal.approvals.first.approve!
       proposal.approvals.second.approve!
 
@@ -185,12 +163,10 @@ describe Proposal do
 
     it 'does not modify a full approved linear proposal' do
       proposal = FactoryGirl.create(:proposal, flow: 'linear')
-      proposal.add_approver('1@example.com')
-      proposal.add_approver('2@example.com')
 
-      proposal.kickstart_approvals()
+      proposal.approvers = [approver1, approver2]
       proposal.approvals.first.approve!
-      proposal.approvals.second.approve!
+      proposal.approvals.second.reload.approve!
 
       expect(proposal.approvals.actionable).to be_empty
     end
@@ -219,7 +195,7 @@ describe Proposal do
       proposal.approvals.first.approve!
       proposal.approvals.second.approve!
       expect(proposal.approved?).to be true
-      proposal.add_approver('new_approver@example.gov')
+      proposal.approvers = proposal.approvers + [FactoryGirl.create(:user)]
 
       proposal.reset_status()
       expect(proposal.pending?).to be true

@@ -92,30 +92,18 @@ class Proposal < ActiveRecord::Base
     results.compact
   end
 
-  # returns the Approval
-  def add_approver(email)
-    user = User.for_email(email)
-    approval = self.approvals.create!(user_id: user.id)
-    approval
-  end
-
-  def remove_approver(email)
-    user = User.for_email(email)
-    approval = self.existing_approval_for(user)
-    approval.destroy
-  end
-
   # Set the approver list, from any start state
   # This overrides the `through` relation but provides parity to the accessor
   def approvers=(approver_list)
     approvals = approver_list.each_with_index.map do |approver, idx|
       approval = self.existing_approval_for(approver)
-      approval ||= Approval.new(user: approver, proposal: self)
+      approval ||= Approvals::Individual.new(user: approver, proposal: self)
       approval.position = idx + 1   # start with 1
       approval
     end
     self.approvals = approvals
     self.kickstart_approvals()
+    self.reload   # include the changes in kickstart_approvals
     self.reset_status()
   end
 
