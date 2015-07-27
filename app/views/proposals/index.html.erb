@@ -4,9 +4,8 @@
   <div class="row pending-pr">
     <div class="col-md-12">
       <h3>Pending Purchase Requests</h3>
-      <%- if @proposals.pending.any? %>
-        <%= client_partial current_user.client_slug, "proposal_list",
-            locals: { proposals: @proposals.pending, role: @role, closed: false} %>
+      <%- if @pending_listing.rows.any? %>
+        <%= render partial: "shared/listing", locals: {listing: @pending_listing} %>
       <%- else %>
         <p class="empty-list-label">No pending purchase requests</p>
       <%- end %>
@@ -21,12 +20,10 @@
 
     <%= render partial: 'archive_link' %>
   </div>
-  <%- if @proposals.approved.any? %>
+  <%- if @approved_listing.rows.any? %>
     <div class="row">
       <div class="col-sm-12">
-        <%= client_partial current_user.client_slug, "proposal_list",
-            locals: {proposals: @proposals.approved,
-                     limit: @CLOSED_PROPOSAL_LIMIT} %>
+        <%= render partial: "shared/listing", locals: {listing: @approved_listing} %>
       </div>
     </div>
 
@@ -39,7 +36,7 @@
   <%- end %>
 
 
-  <%- if @proposals.cancelled.any? %>
+  <%- if @cancelled_listing.rows.any? %>
     <div class="row past-pr">
       <div class="col-sm-10">
         <h3>Cancelled Purchase Requests</h3>
@@ -47,8 +44,7 @@
     </div>
       <div class="row">
         <div class="col-sm-12">
-          <%= client_partial current_user.client_slug, "proposal_list",
-              locals: {proposals: @proposals.cancelled} %>
+          <%= render partial: "shared/listing", locals: {listing: @cancelled_listing} %>
         </div>
       </div>
   <%- end %>

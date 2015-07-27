@@ -12,5 +12,6 @@
   th {
     padding-left: 15px;
     padding-right: 15px;
+    width: 15%;   /* @todo: be more flexible; should be calculated from cols */
   }
 }

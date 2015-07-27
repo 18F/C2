@@ -16,13 +16,15 @@ class ProposalsController < ApplicationController
   end
 
   def index
-    @proposals = self.chronological_proposals
+    proposals = self.chronological_proposals
     @CLOSED_PROPOSAL_LIMIT = 10
+    @pending_listing = self.proposal_listing(proposals.pending)
+    @approved_listing = self.proposal_listing(proposals.approved.limit(@CLOSED_PROPOSAL_LIMIT))
+    @cancelled_listing = self.proposal_listing(proposals.cancelled)
   end
 
   def archive
-    config = Listing.config_for_client("proposals", current_user.client_slug)
-    @listing = Listing.new(self.chronological_proposals.closed, config)
+    @listing = self.proposal_listing(self.chronological_proposals.closed)
   end
 
   def cancel_form
@@ -62,22 +64,24 @@ class ProposalsController < ApplicationController
   # @todo - this is acting more like an index; rename existing #index to #mine
   # or similar, then rename #query to #index
   def query
-    @proposals = self.proposals
+    proposal_list = self.proposals
+    # @todo - move all of this filtering into the Listing object
     @start_date = self.param_date(:start_date)
     @end_date = self.param_date(:end_date)
     @text = params[:text]
 
     if @start_date
-      @proposals = @proposals.where('created_at >= ?', @start_date)
+      proposal_list = proposal_list.where('created_at >= ?', @start_date)
     end
     if @end_date
-      @proposals = @proposals.where('created_at < ?', @end_date)
+      proposal_list = proposal_list.where('created_at < ?', @end_date)
     end
     if @text
-      @proposals = ProposalSearch.new(@proposals).execute(@text)
+      proposal_list = ProposalSearch.new(proposal_list).execute(@text)
     else
-      @proposals = @proposals.order('created_at DESC')
+      proposal_list = proposal_list.order('created_at DESC')
     end
+    @listing = self.proposal_listing(proposal_list)
     # TODO limit/paginate results
   end
 
@@ -101,5 +105,11 @@ class ProposalsController < ApplicationController
     else
       super
     end
+  end
+
+  protected
+  def proposal_listing(queryset)
+    config = Listing.config_for_client("proposals", current_user.client_slug)
+    Listing.new(queryset, config)
   end
 end
