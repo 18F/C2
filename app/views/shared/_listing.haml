@@ -1,0 +1,15 @@
+- # Requires the "listing" variable
+%table.listing
+  %tr.header
+    - listing.columns.each do |column|
+      %th
+        - # @todo: why are there h5s in our table headers?
+        %h5
+          = column.header
+  - listing.rows.each do |row|
+    %tr
+      - listing.columns.each do |column|
+        %td
+          - formatter = "shared/formatter/" + column.formatter.to_s
+          - value = column.value_in(row)
+          = render partial: formatter, locals: {object: row, value: value}

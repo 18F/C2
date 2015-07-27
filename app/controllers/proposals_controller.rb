@@ -21,7 +21,8 @@ class ProposalsController < ApplicationController
   end
 
   def archive
-    @proposals = self.chronological_proposals.closed
+    config = Listing.config_for_client("proposals", current_user.client_slug)
+    @listing = Listing.new(self.chronological_proposals.closed, config)
   end
 
   def cancel_form

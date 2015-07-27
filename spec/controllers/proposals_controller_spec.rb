@@ -30,7 +30,7 @@ describe ProposalsController do
 
       get :archive
 
-      expect(assigns(:proposals).size).to eq(2)
+      expect(assigns(:listing).rows.size).to eq(2)
     end
   end
 

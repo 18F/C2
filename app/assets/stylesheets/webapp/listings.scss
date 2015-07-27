@@ -1,0 +1,16 @@
+.listing {
+  width: 100%;
+  background: #fff;
+  margin: 20px auto;
+  td {
+    padding: 15px;
+    vertical-align: top;
+  }
+  tr {
+    border-bottom: 1px solid #ccc;
+  }
+  th {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
