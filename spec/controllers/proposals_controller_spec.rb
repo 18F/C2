@@ -7,13 +7,15 @@ describe ProposalsController do
       login_as(user)
     end
 
-    it 'sets @proposals' do
+    it 'sets data fields' do
       proposal1 = FactoryGirl.create(:proposal, requester: user)
       proposal2 = FactoryGirl.create(:proposal)
       proposal2.approvals.create!(user: user, status: 'actionable')
 
       get :index
-      expect(assigns(:proposals).sort).to eq [proposal1, proposal2]
+      expect(assigns(:pending_data).rows.sort).to eq [proposal1, proposal2]
+      expect(assigns(:approved_data).rows.sort).to be_empty
+      expect(assigns(:cancelled_data).rows.sort).to be_empty
     end
   end
 
@@ -30,7 +32,7 @@ describe ProposalsController do
 
       get :archive
 
-      expect(assigns(:proposals).size).to eq(2)
+      expect(assigns(:proposals_data).rows.size).to eq(2)
     end
   end
 
@@ -98,25 +100,25 @@ describe ProposalsController do
 
     it 'should only include proposals user is a part of' do
       get :query
-      expect(assigns(:proposals)).to eq([proposal])
+      expect(assigns(:proposals_data).rows).to eq([proposal])
     end
 
     it 'should filter results by date range' do
       past_proposal = FactoryGirl.create(
         :proposal, created_at: Date.new(2012, 5, 6), requester: user)
       get :query
-      expect(assigns(:proposals)).to eq([proposal, past_proposal])
+      expect(assigns(:proposals_data).rows).to eq([proposal, past_proposal])
 
       get :query, start_date: '2012-05-04', end_date: '2012-05-07'
-      expect(assigns(:proposals)).to eq([past_proposal])
+      expect(assigns(:proposals_data).rows).to eq([past_proposal])
 
       get :query, start_date: '2012-05-04', end_date: '2012-05-06'
-      expect(assigns(:proposals)).to eq([])
+      expect(assigns(:proposals_data).rows).to eq([])
     end
 
     it 'ignores bad input' do
       get :query, start_date: 'dasdas'
-      expect(assigns(:proposals)).to eq([proposal])
+      expect(assigns(:proposals_data).rows).to eq([proposal])
     end
 
     context "#datespan_header" do
