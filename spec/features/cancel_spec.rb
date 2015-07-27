@@ -1,5 +1,5 @@
 describe "Canceling a request" do
-  let!(:client_data) { FactoryGirl.create(:ncr_work_order, :with_approver) }
+  let!(:client_data) { FactoryGirl.create(:ncr_work_order, :with_approvers) }
   let!(:proposal) { client_data.proposal }
 
   it "shows a cancel link for the requester" do
