@@ -1,13 +1,9 @@
 describe "Canceling a request" do
-  let (:client_data) { FactoryGirl.create(:ncr_work_order) }
-  let (:proposal) { FactoryGirl.create(:proposal, :with_approver, client_data_type: "Ncr::WorkOrder", client_data_id: client_data.id) }
-  let (:user) { FactoryGirl.create(:user, id: 123456) }
-
-  before do
-    login_as(proposal.requester)
-  end
+  let!(:client_data) { FactoryGirl.create(:ncr_work_order, :with_approvers) }
+  let!(:proposal) { client_data.proposal }
 
   it "shows a cancel link for the requester" do
+    login_as(proposal.requester)
     visit proposal_path(proposal)
     expect(page).to have_content("Cancel my request")
   end
@@ -19,30 +15,38 @@ describe "Canceling a request" do
   end
 
   it "prompts the requester for a reason" do
+    login_as(proposal.requester)
     visit proposal_path(proposal)
     click_on('Cancel my request')
     expect(current_path).to eq("/proposals/#{proposal.id}/cancel_form")
   end
 
   context 'email' do
+    # TODO this shouldn't actually be needed
     around(:each) { ActionMailer::Base.deliveries.clear }
 
     it "send emails when cancellation is complete" do
-        expect(deliveries.length).to eq(0)
-        visit proposal_path(proposal)
-        click_on('Cancel my request')
-        fill_in "reason_input", with: "This is a good reason for the cancellation."
-        click_on('Yes, cancel this request')
-        expect(deliveries.length).to eq(2)
+      expect(deliveries.length).to eq(0)
+
+      login_as(proposal.requester)
+      visit proposal_path(proposal)
+      click_on('Cancel my request')
+      fill_in "reason_input", with: "This is a good reason for the cancellation."
+      click_on('Yes, cancel this request')
+
+      expect(deliveries.length).to eq(2)
     end
   end
 
   context "entering in a reason cancellation" do
     it "successfully saves comments, changes the request status" do
+      login_as(proposal.requester)
+
       visit proposal_path(proposal)
       click_on('Cancel my request')
       fill_in "reason_input", with: "This is a good reason for the cancellation."
       click_on('Yes, cancel this request')
+
       expect(current_path).to eq("/proposals/#{proposal.id}")
       expect(page).to have_content("Your request has been cancelled")
       expect(proposal.reload.status).to eq("cancelled")
@@ -50,6 +54,7 @@ describe "Canceling a request" do
     end
 
     it "displays an error if the reason is blank" do
+      login_as(proposal.requester)
       visit proposal_path(proposal)
       click_on('Cancel my request')
       fill_in "reason_input", with: ""
@@ -73,5 +78,4 @@ describe "Canceling a request" do
       expect(current_path).to eq("/proposals/#{proposal.id}")
     end
   end
-
 end

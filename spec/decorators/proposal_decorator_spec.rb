@@ -1,12 +1,26 @@
 describe ProposalDecorator do
   let(:proposal) { FactoryGirl.build(:proposal).decorate }
 
+  # if there is more than one element, return an array with a different order than the original
+  def randomize(array)
+    if array.size > 1
+      loop do
+        new_array = array.shuffle
+        return new_array if new_array != array
+      end
+    else
+      array
+    end
+  end
+
   describe '#approvals_by_status' do
     it "orders by approved, actionable, pending" do
       # make two approvals for each status, in random order
       statuses = Approval.statuses.map(&:to_s)
       statuses = statuses.dup + statuses.clone
-      users = statuses.shuffle.map do |status|
+      statuses = randomize(statuses)
+
+      users = statuses.map do |status|
         user = FactoryGirl.create(:user)
         FactoryGirl.create(:approval, proposal: proposal, status: status, user: user)
         user
