@@ -6,7 +6,7 @@ describe ProposalDecorator do
     if array.size > 1
       loop do
         new_array = array.shuffle
-        return new_array if new_array == array
+        return new_array if new_array != array
       end
     else
       array
