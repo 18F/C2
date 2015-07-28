@@ -408,6 +408,10 @@ describe "National Capital Region proposals" do
       end
 
       describe "switching to WHSC" do
+        before do
+          work_order.approvals.first.approve!
+        end
+
         context "as a BA61" do
           it "reassigns the approvers properly" do
             expect(work_order.organization).to_not be_whsc
@@ -424,6 +428,7 @@ describe "National Capital Region proposals" do
               approving_official.email_address,
               Ncr::WorkOrder.ba61_tier2_budget_mailbox
             ])
+            expect(work_order.approvals.first).to be_approved
           end
         end
 
@@ -446,6 +451,7 @@ describe "National Capital Region proposals" do
               approving_official.email_address,
               Ncr::WorkOrder.ba61_tier2_budget_mailbox
             ])
+            expect(work_order.approvals.first).to be_approved
           end
         end
       end
