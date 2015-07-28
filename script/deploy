@@ -44,8 +44,9 @@ cf push $GREEN -f $MANIFEST -n $GREEN
 # ensure it starts
 curl --fail -I "https://${GREEN}.${DOMAIN}"
 
-# add the "green" application to the "blue" load balancer
-cf map-route $GREEN $DOMAIN -n $BLUE
+# add the GREEN application to each BLUE route to be load-balanced
+# TODO this output parsing seems a bit fragile...find a way to use more structured output
+cf routes | grep $BLUE | awk '{print $3" -n "$2}' | xargs -n 3 cf map-route $GREEN
 
 # cleanup
 # TODO consider 'stop'-ing the BLUE instead of deleting it, so that depedencies are cached for next time
