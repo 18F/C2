@@ -108,6 +108,10 @@ module Ncr
       end
     end
 
+    def approving_official
+      self.approvers.first
+    end
+
     def email_approvers
       Dispatcher.on_proposal_update(self.proposal)
     end

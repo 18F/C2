@@ -355,7 +355,7 @@ describe "National Capital Region proposals" do
   end
 
   describe "editing a work order" do
-    let (:work_order) { FactoryGirl.create(:ncr_work_order, description: 'test') }
+    let(:work_order) { FactoryGirl.create(:ncr_work_order, description: 'test') }
     let(:ncr_proposal) { work_order.proposal }
 
     describe "when logged in as the requester" do
@@ -398,7 +398,6 @@ describe "National Capital Region proposals" do
         expect(deliveries.length).to eq(0)
       end
 
-
       it "allows you to change the approving official" do
         visit "/ncr/work_orders/#{work_order.id}/edit"
         select "liono0@some-cartoon-show.com", from: "Approving official's email address"
@@ -406,6 +405,55 @@ describe "National Capital Region proposals" do
         proposal = Proposal.last
         expect(proposal.approvers.first.email_address).to eq ("liono0@some-cartoon-show.com")
         expect(proposal.approvals.first.actionable?).to eq (true)
+      end
+
+      describe "switching to WHSC" do
+        before do
+          work_order.approvals.first.approve!
+        end
+
+        context "as a BA61" do
+          it "reassigns the approvers properly" do
+            expect(work_order.organization).to_not be_whsc
+            approving_official = work_order.approving_official
+
+            visit "/ncr/work_orders/#{work_order.id}/edit"
+            select Ncr::Organization::WHSC_CODE, from: "Org code"
+            click_on 'Update'
+
+            ncr_proposal.reload
+            work_order.reload
+
+            expect(ncr_proposal.approvers.map(&:email_address)).to eq([
+              approving_official.email_address,
+              Ncr::WorkOrder.ba61_tier2_budget_mailbox
+            ])
+            expect(work_order.approvals.first).to be_approved
+          end
+        end
+
+        context "as a BA80" do
+          let(:work_order) { FactoryGirl.create(:ncr_work_order, expense_type: 'BA80') }
+
+          it "reassigns the approvers properly" do
+            expect(work_order.organization).to_not be_whsc
+            approving_official = work_order.approving_official
+
+            visit "/ncr/work_orders/#{work_order.id}/edit"
+            choose 'BA61'
+            select Ncr::Organization::WHSC_CODE, from: "Org code"
+            click_on 'Update'
+
+            ncr_proposal.reload
+            work_order.reload
+
+            expect(ncr_proposal.approvers.map(&:email_address)).to eq([
+              approving_official.email_address,
+              Ncr::WorkOrder.ba61_tier2_budget_mailbox
+            ])
+            expect(work_order.approvals.first).to be_approved
+          end
+        end
       end
 
       with_env_var('NCR_BA80_BUDGET_MAILBOX', 'ba80@example.gov') do
@@ -528,7 +576,7 @@ describe "National Capital Region proposals" do
   describe "delegate on a work order" do
     let (:work_order) { FactoryGirl.create(:ncr_work_order, description: 'test') }
     let(:ncr_proposal) { work_order.proposal }
-    
+
     before do
       work_order.setup_approvals_and_observers('approver@example.com')
       user = Proposal.last.approvals.first.user
