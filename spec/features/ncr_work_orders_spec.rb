@@ -407,26 +407,46 @@ describe "National Capital Region proposals" do
         expect(proposal.approvals.first.actionable?).to eq (true)
       end
 
-      context "as a BA80" do
-        let(:work_order) { FactoryGirl.create(:ncr_work_order, expense_type: 'BA80') }
+      describe "switching to WHSC" do
+        context "as a BA61" do
+          it "reassigns the approvers properly" do
+            expect(work_order.organization).to_not be_whsc
+            approving_official = work_order.approving_official
 
-        it "handles a change to WHSC properly" do
-          expect(work_order.organization).to_not be_whsc
-          approving_official = work_order.approving_official
+            visit "/ncr/work_orders/#{work_order.id}/edit"
+            select Ncr::Organization::WHSC_CODE, from: "Org code"
+            click_on 'Update'
 
-          visit "/ncr/work_orders/#{work_order.id}/edit"
-          choose 'BA61'
-          select Ncr::Organization::WHSC_CODE, from: "Org code"
-          click_on 'Update'
+            ncr_proposal.reload
+            work_order.reload
 
-          ncr_proposal.reload
-          work_order.reload
+            expect(ncr_proposal.approvers.map(&:email_address)).to eq([
+              approving_official.email_address,
+              Ncr::WorkOrder.ba61_tier2_budget_mailbox
+            ])
+          end
+        end
 
-          expect(work_order.organization).to be_whsc
-          expect(ncr_proposal.approvers.map(&:email_address)).to eq([
-            approving_official.email_address,
-            Ncr::WorkOrder.ba61_tier2_budget_mailbox
-          ])
+        context "as a BA80" do
+          let(:work_order) { FactoryGirl.create(:ncr_work_order, expense_type: 'BA80') }
+
+          it "reassigns the approvers properly" do
+            expect(work_order.organization).to_not be_whsc
+            approving_official = work_order.approving_official
+
+            visit "/ncr/work_orders/#{work_order.id}/edit"
+            choose 'BA61'
+            select Ncr::Organization::WHSC_CODE, from: "Org code"
+            click_on 'Update'
+
+            ncr_proposal.reload
+            work_order.reload
+
+            expect(ncr_proposal.approvers.map(&:email_address)).to eq([
+              approving_official.email_address,
+              Ncr::WorkOrder.ba61_tier2_budget_mailbox
+            ])
+          end
         end
       end
 
