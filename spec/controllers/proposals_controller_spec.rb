@@ -10,7 +10,7 @@ describe ProposalsController do
     it 'sets data fields' do
       proposal1 = FactoryGirl.create(:proposal, requester: user)
       proposal2 = FactoryGirl.create(:proposal)
-      proposal2.approvals.create!(user: user, status: 'actionable')
+      proposal2.approvals_individual.create!(user: user, status: 'actionable')
 
       get :index
       expect(assigns(:pending_data).rows.sort).to eq [proposal1, proposal2]

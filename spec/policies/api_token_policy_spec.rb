@@ -1,7 +1,7 @@
 describe ApiTokenPolicy do
   subject { described_class }
   let(:proposal) { FactoryGirl.create(:proposal, :with_approver) }
-  let(:approval) { proposal.approvals.first }
+  let(:approval) { proposal.approvals_individual.first }
   let(:approver) { approval.user }
   let(:token) { approval.create_api_token! }
   let(:approval_params_with_token) {

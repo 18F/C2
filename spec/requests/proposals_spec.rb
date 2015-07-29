@@ -5,7 +5,7 @@ describe 'proposals' do
     it "can be viewed by a delegate" do
       proposal = FactoryGirl.create(:proposal)
       approver = FactoryGirl.create(:user, :with_delegate)
-      proposal.approvals.create!(user: approver, status: 'actionable')
+      proposal.approvals_individual.create!(user: approver, status: 'actionable')
 
       delegate = approver.outgoing_delegates.first.assignee
       login_as(delegate)

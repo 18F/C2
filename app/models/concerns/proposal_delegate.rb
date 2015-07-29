@@ -4,7 +4,8 @@ module ProposalDelegate
   included do
     has_one :proposal, as: :client_data
     has_many :approvals, through: :proposal
-    has_many :approvers, through: :approvals, source: :user
+    has_many :approvals_individual, ->{ individual }, class_name: 'Approvals::Individual', through: :proposal
+    has_many :approvers, through: :approvals_individual, source: :user
     has_many :observations, through: :proposal
     has_many :observers, through: :observations, source: :user
     has_many :comments, through: :proposal

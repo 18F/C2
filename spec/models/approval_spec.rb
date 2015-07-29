@@ -27,12 +27,12 @@ describe Approval do
     end
 
     it 'is nil when actionable' do
-      approval.make_actionable!
+      approval.initialize!
       expect(approval.approved_at).to be_nil
     end
 
     it 'is set when approved' do
-      approval.make_actionable!
+      approval.initialize!
       approval.approve!
       expect(approval.approved_at).not_to be_nil
       approval.reload
