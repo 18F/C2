@@ -1,4 +1,5 @@
-# Represents a single user's ability to approve, the "leaves" in an approval chain
+# Represents a single user's ability to approve, the "leaves" of an approval
+# chain
 module Approvals
   class Individual < Approval
     belongs_to :user

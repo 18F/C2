@@ -11,6 +11,9 @@ class Approval < ActiveRecord::Base
   belongs_to :proposal
   acts_as_list scope: :proposal
 
+  belongs_to :parent, class_name: 'Approval'
+  has_many :child_approvals, class_name: 'Approval', foreign_key: 'parent_id'
+
   scope :individual, -> { where(type: 'Approvals::Individual') }
 
 
@@ -21,6 +24,14 @@ class Approval < ActiveRecord::Base
   default_scope { order('position ASC') }
 
   def notify_parent_approved
-    self.proposal.partial_approve!
+    if self.parent
+      self.parent.child_approved!(self)
+    else
+      self.proposal.partial_approve!
+    end
+  end
+
+  def children_approved?
+    self.child_approvals.where.not(status: "approved").empty?
   end
 end
