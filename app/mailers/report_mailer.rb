@@ -2,7 +2,11 @@ class ReportMailer < ActionMailer::Base
 
   add_template_helper ReportHelper
 
-  def budget_status(to_email)
+  def budget_status
+    to_email = ENV.fetch('BUDGET_REPORT_RECIPIENT')
+
+    # TODO move all of this logic to a class
+
     @total_last_week  = Proposal.where(client_data_type: "Ncr::WorkOrder")
                                 .where("created_at > ?",1.week.ago).count
     @total_unapproved = Proposal.pending.where(client_data_type: "Ncr::WorkOrder").count
@@ -26,7 +30,6 @@ class ReportMailer < ActionMailer::Base
       from: 'communicart.sender@gsa.gov',
       template_name: 'budget_report_email'
     )
-
   end
 
 private
