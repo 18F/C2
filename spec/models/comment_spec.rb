@@ -14,7 +14,7 @@ describe Comment do
     it "includes approved approvers" do
       proposal.approvers = proposal.approvers + [FactoryGirl.create(:user)]
       expect(proposal.approvers.length).to eq(3)
-      proposal.approvals.first.approve!
+      proposal.approvals_individual.first.approve!
       expect(comment.listeners).to include(proposal.approvers[0])
       expect(comment.listeners).to include(proposal.approvers[1])
       expect(comment.listeners).not_to include(proposal.approvers[2])

@@ -184,7 +184,7 @@ describe ProposalsController do
   describe '#approve' do
     it "signs the user in via the token" do
       proposal = FactoryGirl.create(:proposal, :with_approver)
-      approval = proposal.approvals.first
+      approval = proposal.approvals_individual.first
       token = approval.create_api_token!
 
       post :approve, id: proposal.id, cch: token.access_token
@@ -194,7 +194,7 @@ describe ProposalsController do
 
     it "won't sign the user in via the token if delegated" do
       proposal = FactoryGirl.create(:proposal, :with_approver)
-      approval = proposal.approvals.first
+      approval = proposal.approvals_individual.first
       token = approval.create_api_token!
       approval.user.add_delegate(FactoryGirl.create(:user))
 
@@ -215,7 +215,7 @@ describe ProposalsController do
 
     it "will allow action if the token is valid" do
       proposal = FactoryGirl.create(:proposal, :with_approver)
-      approval = proposal.approvals.first
+      approval = proposal.approvals_individual.first
       token = approval.create_api_token!
 
       get :approve, id: proposal.id, cch: token.access_token
@@ -226,7 +226,7 @@ describe ProposalsController do
 
     it "doesn't allow a token to be reused" do
       proposal = FactoryGirl.create(:proposal, :with_approver)
-      approval = proposal.approvals.first
+      approval = proposal.approvals_individual.first
       token = approval.create_api_token!
       token.use!
 
@@ -278,7 +278,7 @@ describe ProposalsController do
       mailbox = proposal.approvers.second
       delegate = FactoryGirl.create(:user)
       mailbox.add_delegate(delegate)
-      proposal.approvals.first.approve!
+      proposal.approvals_individual.first.approve!
       login_as(delegate)
 
       post :approve, id: proposal.id
