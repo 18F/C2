@@ -36,6 +36,16 @@ describe "Listing Page" do
       expect(page).to have_content("Requester")
       expect(page).to have_content(default.name+' '+default.requester.email_address)
     end
+    it "should list the proposal in the proper section" do 
+      proposal = Proposal.last
+      proposal.update_attribute(:status, 'approved')
+      visit '/proposals'
+      expect(page).not_to have_content("Cancelled Purchase Requests")
+
+      proposal.update_attribute(:status, 'cancelled')
+      visit '/proposals'
+      expect(page).to have_content("No recently completed purchase requests")
+    end
   end
 
   context "client is ncr" do

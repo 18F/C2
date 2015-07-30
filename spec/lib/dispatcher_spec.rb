@@ -14,8 +14,8 @@ describe Dispatcher do
     let(:dispatcher) { Dispatcher.new }
 
     it 'creates a new token for the approver' do
-      approval = proposal.add_approver('approver1@some-dot-gov.gov')
-      proposal.kickstart_approvals()
+      proposal.approvers = [FactoryGirl.create(:user)]
+      approval = proposal.approvals.first
       expect(CommunicartMailer).to receive_message_chain(:actions_for_approver, :deliver_now)
       expect(approval).to receive(:create_api_token!).once
 
@@ -30,10 +30,10 @@ describe Dispatcher do
     it "sends emails to the requester and all approvers" do
       dispatcher.deliver_new_proposal_emails(proposal)
       expect(email_recipients).to eq([
-        'approver1@some-dot-gov.gov',
-        'approver2@some-dot-gov.gov',
+        proposal.approvers.first.email_address,
+        proposal.approvers.second.email_address,
         proposal.requester.email_address
-      ])
+      ].sort)
     end
 
     it 'creates a new token for each approver' do

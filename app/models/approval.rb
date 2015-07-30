@@ -2,21 +2,10 @@ class Approval < ActiveRecord::Base
   include WorkflowModel
   has_paper_trail
 
-  workflow do
-    state :pending do
-      event :make_actionable, transitions_to: :actionable
-    end
-    state :actionable do
-      event :approve, transitions_to: :approved
-    end
+  workflow do   # overwritten in child classes
+    state :pending
+    state :actionable
     state :approved
-
-    # workflow doesn't touch active record
-    # manually updating 'updated_at'
-    # https://github.com/geekq/workflow/issues/96
-    on_transition do |from, to, triggering_event, *event_args|
-      self.touch
-    end
   end
 
   belongs_to :proposal

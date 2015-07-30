@@ -16,12 +16,15 @@ class ProposalsController < ApplicationController
   end
 
   def index
-    @proposals = self.chronological_proposals
+    proposals = self.chronological_proposals
     @CLOSED_PROPOSAL_LIMIT = 10
+    @pending_data = self.proposals_container(proposals.pending)
+    @approved_data = self.proposals_container(proposals.approved.limit(@CLOSED_PROPOSAL_LIMIT))
+    @cancelled_data = self.proposals_container(proposals.cancelled)
   end
 
   def archive
-    @proposals = self.chronological_proposals.closed
+    @proposals_data = self.proposals_container(self.chronological_proposals.closed)
   end
 
   def cancel_form
@@ -61,22 +64,24 @@ class ProposalsController < ApplicationController
   # @todo - this is acting more like an index; rename existing #index to #mine
   # or similar, then rename #query to #index
   def query
-    @proposals = self.proposals
+    proposal_list = self.proposals
+    # @todo - move all of this filtering into the TabularData::Container object
     @start_date = self.param_date(:start_date)
     @end_date = self.param_date(:end_date)
     @text = params[:text]
 
     if @start_date
-      @proposals = @proposals.where('created_at >= ?', @start_date)
+      proposal_list = proposal_list.where('created_at >= ?', @start_date)
     end
     if @end_date
-      @proposals = @proposals.where('created_at < ?', @end_date)
+      proposal_list = proposal_list.where('created_at < ?', @end_date)
     end
     if @text
-      @proposals = ProposalSearch.new(@proposals).execute(@text)
+      proposal_list = ProposalSearch.new(proposal_list).execute(@text)
     else
-      @proposals = @proposals.order('created_at DESC')
+      proposal_list = proposal_list.order('created_at DESC')
     end
+    @proposals_data = self.proposals_container(proposal_list)
     # TODO limit/paginate results
   end
 
@@ -100,5 +105,11 @@ class ProposalsController < ApplicationController
     else
       super
     end
+  end
+
+  protected
+  def proposals_container(queryset)
+    config = TabularData::Container.config_for_client("proposals", current_user.client_slug)
+    TabularData::Container.new(queryset, config)
   end
 end

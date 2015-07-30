@@ -18,9 +18,9 @@ module ApprovalSteps
   end
 
   step "the proposal has an approval for :email in position :position" do |email, position|
-    @approval = @proposal.add_approver(email)
-    @approval.update_attribute(:position, position)
-    @proposal.kickstart_approvals
+    @proposal.approvers = @proposal.approvers + [User.for_email(email)]
+    @approval = @proposal.approvals.last
+    @approval.set_list_position(position)
   end
 
   step "feature flag :flag_name is :value" do |flag, value|

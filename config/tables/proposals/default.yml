@@ -1,0 +1,17 @@
+columns:
+  - field: public_identifier
+    header: ID
+    formatter: link
+  - field: name
+    header: Request
+    formatter: link
+  - field: requester.email_address
+    header: Requester
+  - field: status
+    header: Status
+    formatter: review_status
+  - field: created_at
+    header: Submitted
+    formatter: date
+
+

@@ -71,8 +71,7 @@ module UserSteps
 
   step 'a proposal with approver :approver_email' do |approver_email|
     @proposal = FactoryGirl.create(:proposal)
-    @proposal.add_approver(approver_email)
-    @proposal.kickstart_approvals
+    @proposal.approvers = [User.for_email(approver_email)]
     @approval = @proposal.approvals.first
   end
 

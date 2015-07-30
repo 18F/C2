@@ -65,9 +65,9 @@ describe LinearDispatcher do
       approval = proposal.approvals.first
       approval.approve!   # calls on_approval_approved
       expect(email_recipients).to eq([
-        'approver2@some-dot-gov.gov',
+        proposal.approvers.second.email_address,
         proposal.requester.email_address
-      ])
+      ].sort)
     end
   end
 end

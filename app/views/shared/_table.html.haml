@@ -1,0 +1,18 @@
+- # Requires the "container" variable
+%table.tabular-data
+  %thead
+    - # @todo: "header" class shouldn't be required (we're in thead)
+    %tr.header
+      - container.columns.each do |column|
+        %th
+          - # @todo: why are there h5s in our table headers?
+          %h5
+            = column.header
+  %tbody
+    - container.rows.each do |row|
+      %tr
+        - container.columns.each do |column|
+          %td
+            - formatter_tpl = "shared/formatter/" + column.formatter.to_s
+            - value = column.value_in(row)
+            = render partial: formatter_tpl, locals: {object: row, value: value}
