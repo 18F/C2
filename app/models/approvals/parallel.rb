@@ -2,7 +2,7 @@
 # any order
 module Approvals
   class Parallel < Approval
-    validates :min_children_needed, numericality: true
+    validates :min_children_needed, numericality: {allow_blank: true}
 
     workflow do
       on_transition { self.touch } # https://github.com/geekq/workflow/issues/96
@@ -49,7 +49,7 @@ module Approvals
     # approvals, and min_children_needed is set to 2, only 2 of the 3 must
     # approve. When min_children_needed is 1, we create an "OR" situation
     def children_approved?
-      needed = self.min_childen_needed || self.child_approvals.count
+      needed = self.min_children_needed || self.child_approvals.count
       self.child_approvals.approved.count >= needed
     end
   end
