@@ -1,3 +1,6 @@
+# Contains all of the arel table references used in a query, with a lookup
+# function (`#col()`) for converting the reference found in a configuration
+# file into a reference to an arel object
 module TabularData
   class ArelTables
     def initialize(engine)

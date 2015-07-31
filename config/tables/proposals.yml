@@ -31,7 +31,7 @@ ncr:
     - <<: *name
     - <<: *requester
     - display_field: client_data.total_price
-      header: total Price
+      header: Total Price
       formatter: currency
     - <<: *status
     - <<: *created_at
@@ -43,7 +43,7 @@ gsa18f:
     - <<: *name
     - <<: *requester
     - display_field: client_data.total_price
-      header: total Price
+      header: Total Price
       formatter: currency
     - <<: *status
     - <<: *created_at
