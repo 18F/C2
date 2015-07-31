@@ -573,9 +573,10 @@ describe "National Capital Region proposals" do
       expect(page).to have_content("You must be the requester, approver, or observer")
     end
   end
+
   describe "delegate on a work order" do
     let (:work_order) { FactoryGirl.create(:ncr_work_order, description: 'test') }
-    let(:ncr_proposal) { work_order.proposal }
+    let(:proposal) { work_order.proposal }
 
     before do
       work_order.setup_approvals_and_observers('approver@example.com')
@@ -587,10 +588,9 @@ describe "National Capital Region proposals" do
     end
 
     it "adds current user to the observers list when commenting" do
-      visit "/proposals/#{work_order.id}"
+      visit "/proposals/#{proposal.id}"
       fill_in "comment_comment_text", with: "comment text"
       click_on "Send a Comment"
-      proposal = Proposal.last
       delegate = User.last
       observers = proposal.observations.map{|o| o.user}
       expect(page).to have_content("comment text")
