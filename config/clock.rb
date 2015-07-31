@@ -16,8 +16,7 @@ if ServerEnv.instance_index == 0
 
   module Clockwork
     # TODO feature-flag this (more important when we have multiple tasks that we want run in all environments)
-    # TODO do at a certain time
-    every(30.seconds, 'report_mailer.budget', thread: true) do
+    every(1.week, 'report_mailer.budget', at: 'Monday 03:30', thread: true) do
       puts "SENDING TEST REPORT..."
       ReportMailer.budget_status.deliver_now
       puts "...DONE"
