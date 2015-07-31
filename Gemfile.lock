@@ -247,7 +247,6 @@ GEM
       activesupport (>= 3.0.0)
     rack (1.6.4)
     rack-cors (0.4.0)
-    rack-ssl-enforcer (0.2.8)
     rack-test (0.6.3)
       rack (>= 1.0)
     rack_session_access (0.1.1)
@@ -412,7 +411,6 @@ DEPENDENCIES
   puma
   pundit (>= 1.0.0)
   rack-cors
-  rack-ssl-enforcer
   rack_session_access
   railroady
   rails

@@ -30,7 +30,6 @@ gem 'pg'
 gem 'puma'
 gem 'pundit', '>= 1.0.0'  # Interface for Pundit::NotAuthorizedError changed in this version
 gem 'rack-cors', require: 'rack/cors'
-gem 'rack-ssl-enforcer'
 gem 'rails'
 gem 'redcarpet'
 gem 'roadie-rails'
