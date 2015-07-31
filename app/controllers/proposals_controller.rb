@@ -17,13 +17,13 @@ class ProposalsController < ApplicationController
 
   def index
     @CLOSED_PROPOSAL_LIMIT = 10
-    @pending_data = self.proposals_container { |p| p.pending }
-    @approved_data = self.proposals_container { |p| p.approved.limit(@CLOSED_PROPOSAL_LIMIT) }
-    @cancelled_data = self.proposals_container { |p| p.cancelled }
+    @pending_data = self.proposals_container(:pending) { |p| p.pending }
+    @approved_data = self.proposals_container(:approved) { |p| p.approved.limit(@CLOSED_PROPOSAL_LIMIT) }
+    @cancelled_data = self.proposals_container(:cancelled) { |p| p.cancelled }
   end
 
   def archive
-    @proposals_data = self.proposals_container { |p| p.closed }
+    @proposals_data = self.proposals_container(:closed) { |p| p.closed }
   end
 
   def cancel_form
@@ -63,7 +63,7 @@ class ProposalsController < ApplicationController
   # @todo - this is acting more like an index; rename existing #index to #mine
   # or similar, then rename #query to #index
   def query
-    @proposals_data = self.proposals_container
+    @proposals_data = self.proposals_container(:query)
 
     # @todo - move all of this filtering into the TabularData::Container object
     @start_date = self.param_date(:start_date)
@@ -99,13 +99,13 @@ class ProposalsController < ApplicationController
   end
 
   protected
-  def proposals_container(&block)
+  def proposals_container(name, &block)
     config = TabularData::Container.config_for_client("proposals", current_user.client_slug)
-    container = TabularData::Container.new(config)
+    container = TabularData::Container.new(name, config)
     container.alter_query { |p| policy_scope(p) }
     if block
       container.alter_query(&block)
     end
-    container
+    container.set_state_from_params(params)
   end
 end

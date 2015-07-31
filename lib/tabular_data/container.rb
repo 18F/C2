@@ -2,7 +2,8 @@ module TabularData
   class Container
     attr_reader :columns
 
-    def initialize(config)
+    def initialize(name, config)
+      @name = name
       engine = config[:engine].constantize
       @arel = ArelTables.new(engine)
       @query = @arel.add_joins(engine, config.fetch(:joins, []))
@@ -24,18 +25,23 @@ module TabularData
 
     def set_sort(field)
       @sort = nil
-
-      direction = :asc
-      if field.start_with?('-')
-        direction = :desc
-        field = field[1..-1]
-      end
+      dir = field.start_with?('-') ? :desc : :asc
+      field = field.gsub(/\A-/, '')
 
       @columns.each do |column|
         if column.name == field && column.arel_col
-          @sort = column.arel_col.send(direction)
+          @sort = column.arel_col.send(dir)
         end
       end
+    end
+
+    def set_state_from_params(params)
+      params = params.permit(tables: {@name => [:sort]})
+      config = params.fetch(:tables, {}).fetch(@name, {})
+      if config.has_key? :sort
+        self.set_sort(config[:sort])
+      end
+      self
     end
 
     def self.config_for_client(container_name, client_name)
