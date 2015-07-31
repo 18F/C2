@@ -14,5 +14,5 @@
         - container.columns.each do |column|
           %td
             - formatter_tpl = "shared/formatter/" + column.formatter.to_s
-            - value = column.value_in(row)
+            - value = column.display_value(row)
             = render partial: formatter_tpl, locals: {object: row, value: value}
