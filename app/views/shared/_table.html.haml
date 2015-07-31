@@ -4,7 +4,7 @@
     - # @todo: "header" class shouldn't be required (we're in thead)
     %tr.header
       - container.columns.each do |column|
-        %th
+        %th{class: container.sort_dir_for(column)}
           - # @todo: why are there h5s in our table headers?
           %h5
             - if column.arel_col

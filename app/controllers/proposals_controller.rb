@@ -102,7 +102,7 @@ class ProposalsController < ApplicationController
   def proposals_container(name, &block)
     config = TabularData::Container.config_for_client("proposals", current_user.client_slug)
     container = TabularData::Container.new(name, config)
-    container.alter_query { |p| policy_scope(p) }
+    container.alter_query { |p| policy_scope(p).includes(:client_data) }
     if block
       container.alter_query(&block)
     end

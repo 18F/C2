@@ -8,7 +8,7 @@ module TabularData
       joins.each do |join_field, config|
         if config == true
           joined_tables = query.joins(join_field).join_sources
-          query = query.joins(joined_tables)
+          query = query.joins(joined_tables).includes(join_field)
           @tables[join_field] = joined_tables[-1].left
         end
       end

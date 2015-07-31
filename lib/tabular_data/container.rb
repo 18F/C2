@@ -24,16 +24,22 @@ module TabularData
     end
 
     def set_state_from_params(params)
-      config = self.param_config(params)
+      relevant = params.permit(tables: {@name => [:sort]})
+      config = relevant.fetch(:tables, {}).fetch(@name, {})
       if config.has_key? :sort
         self.set_sort(config[:sort])
       end
       self
     end
 
+    def sort_dir_for(col)
+      if @sort && @sort.expr == col.arel_col
+        @sort.direction
+      end
+    end
+
     def query_params_for_sort(params, col)
-      config = self.param_config(params)
-      if config[:sort] == col.name   # flip to descending
+      if sort_dir_for(col) == :asc  # flip to descending
         params.deep_merge(tables: {@name => {sort: '-' + col.name}})
       else
         params.deep_merge(tables: {@name => {sort: col.name}})
@@ -60,11 +66,6 @@ module TabularData
           @sort = column.arel_col.send(dir)
         end
       end
-    end
-
-    def param_config(params)
-      relevant = ActionController::Parameters.new(params).permit(tables: {@name => [:sort]})
-      relevant.fetch(:tables, {}).fetch(@name, {})
     end
   end
 end
