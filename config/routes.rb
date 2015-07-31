@@ -41,7 +41,6 @@ C2::Application.routes.draw do
   namespace :ncr do
     resources :work_orders, except: [:index, :destroy]
     get '/dashboard' => 'dashboard#index'
-    match '/reports/send' => 'reports#send_report', via: [:get, :post]
   end
 
   namespace :gsa18f do
