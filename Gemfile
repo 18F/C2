@@ -8,11 +8,13 @@ gem 'autoprefixer-rails'
 gem 'awesome_print'
 gem 'aws-sdk-v1'    # remaining on v1 due to https://github.com/thoughtbot/paperclip/issues/1764
 gem 'bootstrap-sass'
+gem 'clockwork', require: false
 gem 'dotenv-rails', require: 'dotenv/rails-now'
 gem 'draper'
 gem 'factory_girl_rails'
 gem 'faker'
 gem 'font-awesome-sass'
+gem 'foreman', require: false
 gem 'haml'
 gem 'html_pipeline_rails'
 gem 'jquery-rails'
