@@ -12,8 +12,6 @@ if ServerEnv.instance_index == 0
   require_relative 'boot'
   require_relative 'environment'
 
-  puts NewRelic::Agent.config[:dispatcher]
-
   module Clockwork
     # TODO feature-flag this (more important when we have multiple tasks that we want run in all environments)
     every(1.week, 'report_mailer.budget', at: 'Monday 03:30', thread: true) do
