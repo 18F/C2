@@ -6,6 +6,12 @@ GIT
       omniauth (~> 1.0)
       omniauth-oauth2 (~> 1.0)
 
+GIT
+  remote: https://github.com/tolsen/email-validator.git
+  revision: 9f571290d1a7c2d3db35b5da86b8a310f245f48f
+  specs:
+    email-validator (0.0.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -379,6 +385,7 @@ DEPENDENCIES
   database_cleaner
   dotenv-rails
   draper
+  email-validator!
   factory_girl_rails
   faker
   font-awesome-sass

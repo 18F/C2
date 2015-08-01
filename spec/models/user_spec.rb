@@ -8,8 +8,13 @@ describe User do
   end
 
   context 'non-valid attributes' do
-    it 'should not be valid' do
+    it 'missing email should not be valid' do
       user.email_address = nil
+      expect(user).to_not be_valid
+    end
+
+    it 'poorly formatted email should not be valid' do
+      user.email_address = 'foo@bar'
       expect(user).to_not be_valid
     end
   end
