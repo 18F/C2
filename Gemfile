@@ -10,7 +10,6 @@ gem 'aws-sdk-v1'    # remaining on v1 due to https://github.com/thoughtbot/paper
 gem 'bootstrap-sass'
 gem 'dotenv-rails', require: 'dotenv/rails-now'
 gem 'draper'
-gem 'email-validator', require: 'email_validator', git: 'https://github.com/tolsen/email-validator.git'
 gem 'factory_girl_rails'
 gem 'faker'
 gem 'font-awesome-sass'
@@ -36,6 +35,7 @@ gem 'sass-rails', '>= 3.2'
 gem 'simple_form_object'
 gem 'turbolinks'
 gem 'uglifier'
+gem 'validates_email_format_of'
 gem 'workflow'
 
 group :test, :development do

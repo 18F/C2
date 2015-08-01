@@ -1,8 +1,8 @@
 class User < ActiveRecord::Base
   has_paper_trail
 
-  EMAIL_RX = /\A#{EmailValidator::EMAIL_RX}\z/
-  validates :email_address, format: {with: EMAIL_RX}, presence: true, uniqueness: true
+  validates :email_address, presence: true, uniqueness: true
+  validates_email_format_of :email_address
 
   has_many :approvals
   has_many :observations
