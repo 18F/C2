@@ -13,6 +13,12 @@ module TabularData
           joined_tables = query.joins(join_field).join_sources
           query = query.joins(joined_tables).includes(join_field)
           @tables[join_field] = joined_tables[-1].left
+        else
+          join_table = config[:engine].constantize.arel_table.alias(join_field)
+          join_type = config[:outer] ? Arel::Nodes::OuterJoin : Arel::Nodes::InnerJoin
+          join_command = @tables[:base].join(join_table, join_type).on("(#{config[:on_clause]})")
+          query = query.joins(join_command.join_sources)
+          @tables[join_field] = join_table
         end
       end
       query

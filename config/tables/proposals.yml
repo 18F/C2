@@ -2,6 +2,14 @@ default: &DEFAULT
   engine: Proposal
   joins:
     requester: true
+    gsa18f_procurements:
+      engine: Gsa18f::Procurement
+      on_clause: gsa18f_procurements.id = proposals.client_data_id AND proposals.client_data_type = 'Gsa18f::Procurement'
+      outer: true
+    ncr_work_orders:
+      engine: Ncr::WorkOrder
+      on_clause: ncr_work_orders.id = proposals.client_data_id AND proposals.client_data_type = 'Ncr::WorkOrder'
+      outer: true
   sort: -created_at
   columns:
     - &public_id
@@ -30,7 +38,8 @@ ncr:
     - <<: *public_id
     - <<: *name
     - <<: *requester
-    - display_field: client_data.total_price
+    - db_field: ncr_work_orders.amount
+      display_field: client_data.total_price
       header: Total Price
       formatter: currency
     - <<: *status

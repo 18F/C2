@@ -18,11 +18,11 @@
       display: inline-block;
     }
 
-    &.asc::after {
+    &.asc h5::after {
       content: ' \25b2';
     }
 
-    &.desc::after {
+    &.desc h5::after {
       content: ' \25bc';
     }
   }
