@@ -242,7 +242,6 @@ GEM
       activesupport (>= 3.0.0)
     rack (1.6.4)
     rack-cors (0.4.0)
-    rack-ssl-enforcer (0.2.8)
     rack-test (0.6.3)
       rack (>= 1.0)
     rack_session_access (0.1.1)
@@ -355,6 +354,8 @@ GEM
       execjs (>= 0.3.0)
       json (>= 1.8.0)
     uniform_notifier (1.9.0)
+    validates_email_format_of (1.6.2)
+      i18n
     websocket-driver (0.6.1)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
@@ -405,7 +406,6 @@ DEPENDENCIES
   puma
   pundit (>= 1.0.0)
   rack-cors
-  rack-ssl-enforcer
   rack_session_access
   railroady
   rails
@@ -423,6 +423,7 @@ DEPENDENCIES
   turbolinks
   turnip
   uglifier
+  validates_email_format_of
   workflow
 
 BUNDLED WITH

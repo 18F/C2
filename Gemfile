@@ -28,7 +28,6 @@ gem 'pg'
 gem 'puma'
 gem 'pundit', '>= 1.0.0'  # Interface for Pundit::NotAuthorizedError changed in this version
 gem 'rack-cors', require: 'rack/cors'
-gem 'rack-ssl-enforcer'
 gem 'rails'
 gem 'redcarpet'
 gem 'roadie-rails'
@@ -36,6 +35,7 @@ gem 'sass-rails', '>= 3.2'
 gem 'simple_form_object'
 gem 'turbolinks'
 gem 'uglifier'
+gem 'validates_email_format_of'
 gem 'workflow'
 
 group :test, :development do
