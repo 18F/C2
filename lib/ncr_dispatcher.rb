@@ -29,7 +29,7 @@ class NcrDispatcher < LinearDispatcher
     }
 
     proposal.observers.each{|observer|
-      if !proposal.is_active_approver?(observer) && proposal.requester != observer
+      if observer.role_on(proposal).observer?
         CommunicartMailer.notification_for_subscriber(observer.email_address, proposal, "updated").deliver_now
       end
     }
