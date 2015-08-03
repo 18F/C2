@@ -19,7 +19,7 @@ module ApprovalSteps
 
   step "the proposal has an approval for :email in position :position" do |email, position|
     @proposal.approvers = @proposal.approvers + [User.for_email(email)]
-    @approval = @proposal.approvals_individual.last
+    @approval = @proposal.individual_approvals.last
     @approval.set_list_position(position)
   end
 
@@ -28,13 +28,13 @@ module ApprovalSteps
   end
 
   step 'the proposal has been approved by the logged in user' do
-    approval = @proposal.approvals_individual.where(user_id: @current_user.id).first
+    approval = @proposal.individual_approvals.where(user_id: @current_user.id).first
     approval.approve!
   end
 
   step 'the proposal has been approved by :email' do |email|
     user = User.find_by(email_address: email)
-    approval = @proposal.approvals_individual.where(user_id: user.id).first
+    approval = @proposal.individual_approvals.where(user_id: user.id).first
     approval.approve!
   end
 

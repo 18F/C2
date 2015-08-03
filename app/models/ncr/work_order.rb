@@ -81,7 +81,7 @@ module Ncr
     end
 
     def approver_email_frozen?
-      approval = self.approvals_individual.first
+      approval = self.individual_approvals.first
       approval && !approval.actionable?
     end
 

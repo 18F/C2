@@ -8,7 +8,7 @@ describe "Display status text" do
   end
 
   it "displays approved status" do
-    proposal.approvals_individual.each{|approval| approval.approve!}
+    proposal.individual_approvals.each{|approval| approval.approve!}
     visit proposals_path
     expect(page).to have_content('Approved')
   end
@@ -23,7 +23,7 @@ describe "Display status text" do
   end
 
   it "excludes approved approvals" do
-    proposal.approvals_individual.first.approve!
+    proposal.individual_approvals.first.approve!
     visit proposals_path
     expect(page).not_to have_content('Please review')
     expect(page).to have_content('Waiting for review from:')
@@ -46,7 +46,7 @@ describe "Display status text" do
     end
 
     it "excludes approved approvals" do
-      proposal.approvals_individual.first.approve!
+      proposal.individual_approvals.first.approve!
       visit proposals_path
       expect(page).to have_content('Waiting for review from:')
       expect(page).not_to have_content("Uniquely Named")

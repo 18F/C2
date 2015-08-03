@@ -5,7 +5,7 @@ describe ProposalPolicy do
     it "allows pending delegates" do
       proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
 
-      approval = proposal.approvals_individual.first
+      approval = proposal.individual_approvals.first
       delegate = FactoryGirl.create(:user)
       approver = approval.user
       approver.add_delegate(delegate)
@@ -15,7 +15,7 @@ describe ProposalPolicy do
 
     context "parallel proposal" do
       let(:proposal) {FactoryGirl.create(:proposal, :with_parallel_approvers)}
-      let(:approval) {proposal.approvals_individual.first}
+      let(:approval) {proposal.individual_approvals.first}
 
       it "allows when there's a pending approval" do
         proposal.approvers.each{ |approver|
@@ -36,8 +36,8 @@ describe ProposalPolicy do
 
     context "linear proposal" do
       let(:proposal) {FactoryGirl.create(:proposal, :with_serial_approvers)}
-      let(:first_approval) { proposal.approvals_individual.first }
-      let(:second_approval) { proposal.approvals_individual.last }
+      let(:first_approval) { proposal.individual_approvals.first }
+      let(:second_approval) { proposal.individual_approvals.last }
 
       it "allows when there's a pending approval" do
         expect(subject).to permit(first_approval.user, proposal)
@@ -73,7 +73,7 @@ describe ProposalPolicy do
     end
 
     it "does not allow a pending approver to see it" do
-      first_approval = proposal.approvals_individual.first
+      first_approval = proposal.individual_approvals.first
       first_approval.update_attribute(:status, 'pending')
       expect(subject).not_to permit(first_approval.user, proposal)
       expect(subject).to permit(proposal.approvers.last, proposal)
@@ -154,7 +154,7 @@ describe ProposalPolicy do
     end
 
     it "does not allow a pending approver to see" do
-      approval = proposal.approvals_individual.first
+      approval = proposal.individual_approvals.first
       user = approval.user
       approval.update_attribute(:status, 'pending')
       proposals = ProposalPolicy::Scope.new(user, Proposal).resolve

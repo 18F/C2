@@ -2,16 +2,16 @@ class ProposalDecorator < Draper::Decorator
   delegate_all
 
   def number_approved
-    object.approvals_individual.approved.count
+    object.individual_approvals.approved.count
   end
 
   def total_approvers
-    object.approvals_individual.count
+    object.individual_approvals.count
   end
 
   def approvals_by_status
     # Override default scope
-    object.approvals_individual.with_users.reorder(
+    object.individual_approvals.with_users.reorder(
       # http://stackoverflow.com/a/6332081/358804
       <<-SQL
         CASE approvals.status
@@ -25,7 +25,7 @@ class ProposalDecorator < Draper::Decorator
 
   def approvals_in_list_order
     if object.flow == 'linear'
-      object.approvals_individual.with_users
+      object.individual_approvals.with_users
     else
       self.approvals_by_status
     end

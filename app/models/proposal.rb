@@ -24,9 +24,9 @@ class Proposal < ActiveRecord::Base
   end
 
   has_many :approvals
-  has_many :approvals_individual, ->{ individual }, class_name: 'Approvals::Individual'
-  has_many :approvers, through: :approvals_individual, source: :user
-  has_many :api_tokens, through: :approvals_individual
+  has_many :individual_approvals, ->{ individual }, class_name: 'Approvals::Individual'
+  has_many :approvers, through: :individual_approvals, source: :user
+  has_many :api_tokens, through: :individual_approvals
   has_many :attachments
   has_many :approval_delegates, through: :approvers, source: :outgoing_delegates
   has_many :comments

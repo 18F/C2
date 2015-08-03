@@ -14,7 +14,7 @@ describe CommunicartMailer do
   end
 
   let(:proposal) { FactoryGirl.create(:proposal, :with_parallel_approvers) }
-  let(:approval) { proposal.approvals_individual.first }
+  let(:approval) { proposal.individual_approvals.first }
   let(:approver) { approval.user }
   let(:requester) { proposal.requester }
 
@@ -166,7 +166,7 @@ describe CommunicartMailer do
 
     context 'completed message' do
       it 'displays when all requests have been approved' do
-        final_approval = proposal.approvals_individual.last
+        final_approval = proposal.individual_approvals.last
         final_approval.approve!
         mail = CommunicartMailer.approval_reply_received_email(final_approval)
         expect(mail.body.encoded).to include('Your request has been fully approved. See details below.')
