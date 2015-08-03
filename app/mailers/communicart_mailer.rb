@@ -11,13 +11,14 @@ class CommunicartMailer < ActionMailer::Base
   # Approver can approve/take other action
   def actions_for_approver(to_email, approval, alert_partial=nil)
     @show_approval_actions = true
-    self.notification_for_approver(to_email, approval, alert_partial)
+    proposal = approval.proposal
+    
+    self.notification_for_subscriber(to_email, proposal, alert_partial, approval)
   end
 
-  def notification_for_approver(to_email, approval, alert_partial=nil)
+  def notification_for_subscriber(to_email, proposal, alert_partial=nil, approval=nil)
     @approval = approval
     @alert_partial = alert_partial
-    proposal = approval.proposal
 
     send_proposal_email(
       from_email: user_email_with_name(proposal.requester),
