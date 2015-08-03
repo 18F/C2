@@ -1,0 +1,49 @@
+default: &DEFAULT
+  engine: Proposal
+  joins:
+    requester: true
+  sort: -created_at
+  columns:
+    - &public_id
+      db_field: public_id
+      header: ID
+      formatter: link
+    - &name
+      display_field: name
+      header: Request
+      formatter: link
+    - &requester
+      db_field: requester.email_address
+      header: Requester
+    - &status
+      db_field: status
+      header: Status
+      formatter: review_status
+    - &created_at
+      db_field: created_at
+      header: Submitted
+      formatter: date
+
+ncr:
+  <<: *DEFAULT
+  columns:
+    - <<: *public_id
+    - <<: *name
+    - <<: *requester
+    - display_field: client_data.total_price
+      header: Total Price
+      formatter: currency
+    - <<: *status
+    - <<: *created_at
+
+gsa18f:
+  <<: *DEFAULT
+  columns:
+    - <<: *public_id
+    - <<: *name
+    - <<: *requester
+    - display_field: client_data.total_price
+      header: Total Price
+      formatter: currency
+    - <<: *status
+    - <<: *created_at

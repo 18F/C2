@@ -4,15 +4,18 @@
     - # @todo: "header" class shouldn't be required (we're in thead)
     %tr.header
       - container.columns.each do |column|
-        %th
+        %th{class: container.sort_dir_for(column)}
           - # @todo: why are there h5s in our table headers?
           %h5
-            = column.header
+            - if column.arel_col
+              = link_to(column.header, container.query_params_for_sort(request.query_parameters, column))
+            - else
+              = column.header
   %tbody
     - container.rows.each do |row|
       %tr
         - container.columns.each do |column|
           %td
             - formatter_tpl = "shared/formatter/" + column.formatter.to_s
-            - value = column.value_in(row)
+            - value = column.display_value(row)
             = render partial: formatter_tpl, locals: {object: row, value: value}
