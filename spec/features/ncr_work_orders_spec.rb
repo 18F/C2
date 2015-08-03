@@ -389,6 +389,16 @@ describe "National Capital Region proposals" do
         expect(page).to have_content("Vendor was changed from Some Vend to New Test Vendor")
       end
 
+      it "notifies observers of changes" do
+        observer = work_order.add_observer("observer@observers.com")
+        visit "/ncr/work_orders/#{work_order.id}/edit"
+        fill_in 'Description', with: "Observer changes"
+        click_on 'Update'
+
+        expect(deliveries.length).to eq(2)
+        expect(deliveries.last).to have_content('observer@observers.com')
+      end
+
       it "does not resave unchanged requests" do
         visit "/ncr/work_orders/#{work_order.id}/edit"
         click_on 'Update'
