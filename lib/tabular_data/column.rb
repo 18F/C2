@@ -1,6 +1,6 @@
 module TabularData
   class Column
-    attr_accessor :name, :header, :formatter, :arel_col
+    attr_accessor :name, :header, :formatter, :sort
 
     def initialize(arel_tables, config)
       @name = config[:db_field] || config[:display_field]
@@ -8,8 +8,10 @@ module TabularData
       @header = config[:header] || @name  # @todo: use I18n as default
       @formatter = config[:formatter] || :none    # @todo: allow a pipeline
                                                   # @todo: config from activerecord
-      if config.has_key? :db_field
-        @arel_col = arel_tables.col(config[:db_field])
+      if config.has_key? :sort_expr
+        @sort = Arel.sql("(#{config[:sort_expr]})")
+      elsif config.has_key? :db_field
+        @sort = arel_tables.col(config[:db_field])
       end
     end
 

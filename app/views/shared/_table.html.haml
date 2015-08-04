@@ -7,7 +7,7 @@
         %th{class: container.sort_dir_for(column)}
           - # @todo: why are there h5s in our table headers?
           %h5
-            - if column.arel_col
+            - if column.sort
               = link_to(column.header, container.query_params_for_sort(request.query_parameters, column))
             - else
               = column.header

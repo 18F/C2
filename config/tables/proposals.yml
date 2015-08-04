@@ -27,6 +27,12 @@ default: &DEFAULT
       db_field: status
       header: Status
       formatter: review_status
+      sort_expr: >
+        CASE proposals.status
+        WHEN 'pending' THEN 1
+        WHEN 'approved' THEN 2
+        ELSE 3
+        END
     - &created_at
       db_field: created_at
       header: Submitted
@@ -54,5 +60,6 @@ gsa18f:
     - display_field: client_data.total_price
       header: Total Price
       formatter: currency
+      sort_expr: gsa18f_procurements.cost_per_unit * gsa_procurements.quantity
     - <<: *status
     - <<: *created_at

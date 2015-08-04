@@ -33,7 +33,7 @@ module TabularData
     end
 
     def sort_dir_for(col)
-      if @sort && @sort.expr == col.arel_col
+      if @sort && @sort.expr == col.sort
         @sort.direction
       end
     end
@@ -63,8 +63,8 @@ module TabularData
       field = field.gsub(/\A-/, '')
 
       @columns.each do |column|
-        if column.name == field && column.arel_col
-          @sort = column.arel_col.send(dir)
+        if column.name == field && column.sort
+          @sort = column.sort.send(dir)
         end
       end
     end
