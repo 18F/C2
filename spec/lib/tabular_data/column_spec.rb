@@ -54,6 +54,12 @@ describe TabularData::Column do
       expect(result.to_sql).to eq("(proposals.aaa) DESC")
       expect(col.sort_dir).to be :desc
     end
+
+    it 'allows sort to be unset' do
+      col.sort(:asc)
+      col.sort(nil)
+      expect(col.sort_dir).to be_nil
+    end
   end
 
   describe '#display' do

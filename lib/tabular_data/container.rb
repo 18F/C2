@@ -51,9 +51,15 @@ module TabularData
     def set_sort(field)
       field = field || ''
       dir = field.start_with?('-') ? :desc : :asc
-      field = field.gsub(/\A-/, '').to_sym
+      field = field.gsub(/\A-/, '')
 
-      @sort = @column_hash[field].try(:sort, dir)
+      @columns.each do |column|
+        if column.name == field
+          @sort = column.sort(dir)
+        else
+          column.sort(nil)
+        end
+      end
     end
 
     def init_query(engine, joins)
@@ -70,15 +76,15 @@ module TabularData
     end
 
     def init_columns(config, order)
-      @column_hash = {}
+      column_hash = {}
       config.map do |name, col_config|
         if col_config == true   # short hand for "no configuration"
           col_config = {}
         end
         qualified_name = "#{@query.table_name}.#{name}"
-        @column_hash[name] = Column.new(name, qualified_name, col_config)
+        column_hash[name] = Column.new(name, qualified_name, col_config)
       end
-      @columns = order.map{|name| @column_hash[name.to_sym]}
+      @columns = order.map{|name| column_hash[name.to_sym]}
     end
   end
 end

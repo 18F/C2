@@ -20,7 +20,9 @@ module TabularData
     def sort(dir)
       if self.can_sort?
         @sort_dir = dir
-        @db_expr.send(dir)
+        if dir
+          @db_expr.send(dir)
+        end
       end
     end
 
