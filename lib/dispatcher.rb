@@ -12,7 +12,7 @@ class Dispatcher
   def email_observers(proposal)
     proposal.observations.each do |observation|
       user = observation.user
-      if user.role_on(proposal).observer?
+      if user.role_on(proposal).active_observer?
         self.email_observer(observation)
       end
     end
