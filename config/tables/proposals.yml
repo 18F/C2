@@ -2,64 +2,72 @@ default: &DEFAULT
   engine: Proposal
   joins:
     requester: true
-    gsa18f_procurements:
-      engine: Gsa18f::Procurement
-      on_clause: gsa18f_procurements.id = proposals.client_data_id AND proposals.client_data_type = 'Gsa18f::Procurement'
-      outer: true
-    ncr_work_orders:
-      engine: Ncr::WorkOrder
-      on_clause: ncr_work_orders.id = proposals.client_data_id AND proposals.client_data_type = 'Ncr::WorkOrder'
-      outer: true
+    gsa18f_procurements: >
+      LEFT JOIN gsa18f_procurements
+      ON (gsa18f_procurements.id = proposals.client_data_id
+      AND proposals.client_data_type = 'GSA18f::Procurement')
+    ncr_work_orders: >
+      LEFT JOIN ncr_work_orders
+      ON (ncr_work_orders.id = proposals.client_data_id
+      AND proposals.client_data_type = 'Ncr::WorkOrder')
   sort: -created_at
-  columns:
-    - &public_id
-      db_field: public_id
+  column_configs: &COLUMN_CONFIGS
+    public_id:
       header: ID
       formatter: link
-    - &name
-      display_field: name
+    name:
+      virtual: true
       header: Request
       formatter: link
-    - &requester
-      db_field: requester.email_address
-      header: Requester
-    - &status
-      db_field: status
-      header: Status
-      formatter: review_status
-      sort_expr: >
+    requester:
+      db: requester.email_address
+      display: requester.email_address
+    status:
+      db: >
         CASE proposals.status
         WHEN 'pending' THEN 1
         WHEN 'approved' THEN 2
         ELSE 3
         END
-    - &created_at
-      db_field: created_at
-      header: Submitted
+      formatter: review_status
+    created_at:
       formatter: date
+      header: Submitted
+  columns:
+    - public_id
+    - name
+    - requester
+    - status
+    - created_at
 
 ncr:
   <<: *DEFAULT
-  columns:
-    - <<: *public_id
-    - <<: *name
-    - <<: *requester
-    - db_field: ncr_work_orders.amount
-      display_field: client_data.total_price
-      header: Total Price
+  column_configs:
+    <<: *COLUMN_CONFIGS
+    total_price:
+      db: ncr_work_orders.amount
+      display: client_data.total_price
       formatter: currency
-    - <<: *status
-    - <<: *created_at
+  columns:
+    - public_id
+    - name
+    - requester
+    - total_price
+    - status
+    - created_at
 
 gsa18f:
   <<: *DEFAULT
-  columns:
-    - <<: *public_id
-    - <<: *name
-    - <<: *requester
-    - display_field: client_data.total_price
-      header: Total Price
+  column_configs:
+    <<: *COLUMN_CONFIGS
+    total_price:
+      db: gsa18f_procurements.cost_per_unit * gsa_procurements.quantity
+      display: client_data.total_price
       formatter: currency
-      sort_expr: gsa18f_procurements.cost_per_unit * gsa_procurements.quantity
-    - <<: *status
-    - <<: *created_at
+  columns:
+    - public_id
+    - name
+    - requester
+    - total_price
+    - status
+    - created_at

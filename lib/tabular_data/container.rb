@@ -4,13 +4,9 @@ module TabularData
 
     def initialize(name, config)
       @name = name
-      engine = config[:engine].constantize
-      @arel = ArelTables.new(engine)
-      @query = @arel.add_joins(engine, config.fetch(:joins, []))
-      @columns = config.fetch(:columns, []).map { |c| Column.new(@arel, c) }
-      if config[:sort]
-        self.set_sort(config[:sort])
-      end
+      self.init_query(config[:engine].constantize, config.fetch(:joins, []))
+      self.init_columns(config.fetch(:column_configs, {}), config.fetch(:columns, {}))
+      self.set_sort(config[:sort])
     end
 
     def alter_query
@@ -32,17 +28,11 @@ module TabularData
       self
     end
 
-    def sort_dir_for(col)
-      if @sort && @sort.expr == col.sort
-        @sort.direction
-      end
-    end
-
-    def query_params_for_sort(params, col)
-      if sort_dir_for(col) == :asc  # flip to descending
-        params.deep_merge(tables: {@name => {sort: '-' + col.name}})
+    def sort_params(original_params, col)
+      if col.sort_dir == :asc   # flip to descending
+        original_params.deep_merge(tables: {@name => {sort: '-' + col.name}})
       else
-        params.deep_merge(tables: {@name => {sort: col.name}})
+        original_params.deep_merge(tables: {@name => {sort: col.name}})
       end
     end
 
@@ -57,16 +47,35 @@ module TabularData
     end
 
     protected
-    def set_sort(field)
-      @sort = nil
-      dir = field.start_with?('-') ? :desc : :asc
-      field = field.gsub(/\A-/, '')
 
-      @columns.each do |column|
-        if column.name == field && column.sort
-          @sort = column.sort.send(dir)
+    def set_sort(field)
+      field = field || ''
+      dir = field.start_with?('-') ? :desc : :asc
+      field = field.gsub(/\A-/, '').to_sym
+
+      @sort = @column_hash[field].try(:sort, dir)
+    end
+
+    def init_query(engine, joins)
+      @query = engine
+      joins.each do |name, config|
+        if config == true
+          join_tables = engine.joins(name).join_sources
+          join_tables[-1].left.table_alias = name   # alias the table
+          @query = @query.joins(join_tables).includes(name)
+        else  # String config
+          @query = @query.joins(config)
         end
       end
+    end
+
+    def init_columns(config, order)
+      @column_hash = {}
+      config.map do |name, col_config|
+        qualified_name = "#{@query.table_name}.#{name}"
+        @column_hash[name] = Column.new(col_config, name, qualified_name)
+      end
+      @columns = order.map{|name| @column_hash[name.to_sym]}
     end
   end
 end
