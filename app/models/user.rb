@@ -1,8 +1,8 @@
 class User < ActiveRecord::Base
   has_paper_trail
 
-  validates_presence_of :email_address
-  validates_uniqueness_of :email_address
+  validates :email_address, presence: true, uniqueness: true
+  validates_email_format_of :email_address
 
   has_many :approvals
   has_many :observations

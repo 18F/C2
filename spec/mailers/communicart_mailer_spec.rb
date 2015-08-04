@@ -124,7 +124,7 @@ describe CommunicartMailer do
     end
 
     it "doesn't include action buttons unless actions_for_approver is used" do
-        mail = CommunicartMailer.notification_for_approver('abc@example.com', approval)
+        mail = CommunicartMailer.notification_for_subscriber('abc@example.com', proposal, nil , approval)
         expect(mail.body.encoded).not_to include('Approve')
     end
 

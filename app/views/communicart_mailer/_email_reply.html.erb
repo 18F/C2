@@ -9,13 +9,13 @@
         </p>
         <p>
           <strong>
-            <%= link_to "Or Send a Comment", proposal_url(approval.proposal, anchor: 'comments'), {target: 'C2'} %>
+            <%= link_to "Or Send a Comment", proposal_url(proposal, anchor: 'comments'), {target: 'C2'} %>
           </strong>
         </p>
       <% else %>
         <p>
           <strong>
-            <%= link_to "View This Request", proposal_url(approval.proposal), {target: 'C2'} %>
+            <%= link_to "View This Request", proposal_url(proposal), {target: 'C2'} %>
           </strong>
         </p>
       <% end %>
