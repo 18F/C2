@@ -5,7 +5,7 @@ default: &DEFAULT
     gsa18f_procurements: >
       LEFT JOIN gsa18f_procurements
       ON (gsa18f_procurements.id = proposals.client_data_id
-      AND proposals.client_data_type = 'GSA18f::Procurement')
+      AND proposals.client_data_type = 'Gsa18f::Procurement')
     ncr_work_orders: >
       LEFT JOIN ncr_work_orders
       ON (ncr_work_orders.id = proposals.client_data_id
@@ -33,6 +33,10 @@ default: &DEFAULT
     created_at:
       formatter: date
       header: Submitted
+    total_price:
+      db: COALESCE(ncr_work_orders.amount, gsa18f_procurements.cost_per_unit * gsa18f_procurements.quantity, 0)
+      display: client_data.total_price
+      formatter: currency
   columns:
     - public_id
     - name
@@ -42,12 +46,6 @@ default: &DEFAULT
 
 ncr:
   <<: *DEFAULT
-  column_configs:
-    <<: *COLUMN_CONFIGS
-    total_price:
-      db: ncr_work_orders.amount
-      display: client_data.total_price
-      formatter: currency
   columns:
     - public_id
     - name
@@ -58,12 +56,6 @@ ncr:
 
 gsa18f:
   <<: *DEFAULT
-  column_configs:
-    <<: *COLUMN_CONFIGS
-    total_price:
-      db: gsa18f_procurements.cost_per_unit * gsa_procurements.quantity
-      display: client_data.total_price
-      formatter: currency
   columns:
     - public_id
     - name
