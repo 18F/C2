@@ -57,7 +57,7 @@ module TabularData
     end
 
     def init_query(engine, joins)
-      @query = engine
+      @query = engine.all()     # convert into a query
       joins.each do |name, config|
         if config == true
           join_tables = engine.joins(name).join_sources
@@ -72,8 +72,11 @@ module TabularData
     def init_columns(config, order)
       @column_hash = {}
       config.map do |name, col_config|
+        if col_config == true   # short hand for "no configuration"
+          col_config = {}
+        end
         qualified_name = "#{@query.table_name}.#{name}"
-        @column_hash[name] = Column.new(col_config, name, qualified_name)
+        @column_hash[name] = Column.new(name, qualified_name, col_config)
       end
       @columns = order.map{|name| @column_hash[name.to_sym]}
     end

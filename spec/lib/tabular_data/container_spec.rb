@@ -1,9 +1,30 @@
 describe TabularData::Container do
   describe '#initialize' do
     it 'sets the columns' do
-      container = TabularData::Container.new(:a_name, engine: 'Proposal', columns: [{db_field: 'a'}, {db_field: 'b'}, {db_field: 'c'}])
+      config = {engine: 'Proposal',
+                column_configs: {a: true, b: true, c: true},
+                columns: ['a', 'b', 'c']}
+      container = TabularData::Container.new(:a_name, config)
       expect(container.columns.length).to eq(3)
       expect(container.columns.map(&:name)).to eq(['a', 'b', 'c'])
+    end
+
+    it 'does not modify the query if there are no joins' do
+      container = TabularData::Container.new(:a_name, engine: 'Proposal')
+      expect(container.rows.to_sql).to eq(Proposal.all().to_sql)
+    end
+
+    it 'aliases direct joins' do
+      container = TabularData::Container.new(:a_name, engine: 'Proposal', joins: {requester: true})
+      expect(container.rows.to_sql).to include('ON "requester"."id" = "proposals"."requester_id"')
+      container.rows.count  # smoke test
+    end
+
+    it 'aliases indirect joins' do
+      container = TabularData::Container.new(:a_name, engine: 'ApiToken', joins: {approval: true, user: true})
+      expect(container.rows.to_sql).to include('ON "user"."id" = "approvals"."user_id"')
+
+      container.rows.count  # smoke test
     end
   end
 
@@ -24,7 +45,12 @@ describe TabularData::Container do
   end
 
   describe '#set_state_from_params' do
-    let(:container) { TabularData::Container.new(:abc, engine: 'Proposal', columns: [{db_field: 'id'}, {display_field: 'client'}]) }
+    let(:container) { 
+      config = {engine: 'Proposal',
+                column_configs: {id: true, client: {virtual: true}},
+                columns: ['id', 'client']}
+      TabularData::Container.new(:abc, config)
+    }
     let!(:ncr) { FactoryGirl.create(:ncr_work_order).proposal }
     let!(:gsa18f) { FactoryGirl.create(:gsa18f_procurement).proposal }
     let!(:default) { FactoryGirl.create(:proposal) }
