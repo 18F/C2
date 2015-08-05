@@ -1,8 +1,14 @@
 module ValueHelper
   include ActionView::Helpers::NumberHelper
+
   def date_with_tooltip(time)
     adjusted_time = time.in_time_zone("Eastern Time (US & Canada)").strftime("%b %-d, %Y at %l:%M%P")
-    content_tag('span', adjusted_time, title: adjusted_time)
+
+    if controller.class.name.start_with?('ProposalsController')
+      content_tag('span', time_ago_in_words(adjusted_time) + " ago", title: adjusted_time)
+    elsif
+      content_tag('span', adjusted_time, title: adjusted_time)
+    end
   end
 
   def decimal?(val)
