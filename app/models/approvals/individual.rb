@@ -10,7 +10,7 @@ module Approvals
     has_one :api_token, -> { fresh }, foreign_key: "approval_id"
 
     workflow do
-      on_transition { self.touch } # https://github.com/geekq/workflow/issues/96
+      on_transition { self.touch } # sets updated_at; https://github.com/geekq/workflow/issues/96
 
       state :pending do
         event :initialize, transitions_to: :actionable

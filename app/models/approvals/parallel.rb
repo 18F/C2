@@ -5,7 +5,7 @@ module Approvals
     validates :min_children_needed, numericality: {allow_blank: true}
 
     workflow do
-      on_transition { self.touch } # https://github.com/geekq/workflow/issues/96
+      on_transition { self.touch } # sets updated_at; https://github.com/geekq/workflow/issues/96
 
       state :pending do
         event :initialize, transitions_to: :actionable
@@ -38,7 +38,7 @@ module Approvals
     end
 
     def on_actionable_entry(old_state, event)
-      if self.child_approvals.exists?
+      if self.child_approvals.any?
         self.child_approvals.each(&:initialize!)
       else
         self.force_approve!
