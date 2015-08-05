@@ -9,27 +9,29 @@ class Approval < ActiveRecord::Base
   end
 
   belongs_to :proposal
-  belongs_to :user
-  has_one :api_token, -> { fresh }
-
-  delegate :full_name, :email_address, :to => :user, :prefix => true
-
   acts_as_list scope: :proposal
 
-  # TODO validates_uniqueness_of :user_id, scope: proposal_id
+  belongs_to :parent, class_name: 'Approval'
+  has_many :child_approvals, class_name: 'Approval', foreign_key: 'parent_id'
+
+  scope :individual, -> { where(type: 'Approvals::Individual') }
+
 
   self.statuses.each do |status|
     scope status, -> { where(status: status) }
   end
 
   default_scope { order('position ASC') }
-  scope :with_users, -> { includes :user }
 
+  def notify_parent_approved
+    if self.parent
+      self.parent.child_approved!(self)
+    else
+      self.proposal.partial_approve!
+    end
+  end
 
-  # Used by the state machine
-  def on_approved_entry(new_state, event)
-    self.update(approved_at: Time.now)
-    self.proposal.partial_approve!
-    Dispatcher.on_approval_approved(self)
+  def children_approved?
+    self.child_approvals.where.not(status: "approved").empty?
   end
 end

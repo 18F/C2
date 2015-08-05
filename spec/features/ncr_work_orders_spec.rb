@@ -293,7 +293,7 @@ describe "National Capital Region proposals" do
         click_on("Approve")
         expect(current_path).to eq("/proposals/#{ncr_proposal.id}")
         expect(page).to have_content("You have approved #{work_order.public_identifier}")
-        approval = Proposal.last.approvals.first
+        approval = Proposal.last.individual_approvals.first
         expect(approval.status).to eq('approved')
         expect(approval.approved_at.utc.to_s).to eq(Time.now.utc.to_s)
       end
@@ -414,12 +414,12 @@ describe "National Capital Region proposals" do
         click_on 'Update'
         proposal = Proposal.last
         expect(proposal.approvers.first.email_address).to eq ("liono0@some-cartoon-show.com")
-        expect(proposal.approvals.first.actionable?).to eq (true)
+        expect(proposal.individual_approvals.first.actionable?).to eq (true)
       end
 
       describe "switching to WHSC" do
         before do
-          work_order.approvals.first.approve!
+          work_order.individual_approvals.first.approve!
         end
 
         context "as a BA61" do
@@ -438,7 +438,7 @@ describe "National Capital Region proposals" do
               approving_official.email_address,
               Ncr::WorkOrder.ba61_tier2_budget_mailbox
             ])
-            expect(work_order.approvals.first).to be_approved
+            expect(work_order.individual_approvals.first).to be_approved
           end
         end
 
@@ -461,7 +461,7 @@ describe "National Capital Region proposals" do
               approving_official.email_address,
               Ncr::WorkOrder.ba61_tier2_budget_mailbox
             ])
-            expect(work_order.approvals.first).to be_approved
+            expect(work_order.individual_approvals.first).to be_approved
           end
         end
       end
@@ -480,9 +480,9 @@ describe "National Capital Region proposals" do
 
       it "doesn't change approving list when delegated" do
         proposal = Proposal.last
-        approval = proposal.approvals.first
+        approval = proposal.individual_approvals.first
         approval.approve!
-        approval = proposal.approvals.second
+        approval = proposal.individual_approvals.second
         user = approval.user
         delegate = User.new(email_address:'delegate@example.com')
         delegate.save
@@ -493,9 +493,9 @@ describe "National Capital Region proposals" do
         click_on 'Update'
 
         proposal.reload
-        second_approver = proposal.approvals.second.user.email_address
+        second_approver = proposal.approvers.second.email_address
         expect(second_approver).to eq('delegate@example.com')
-        expect(proposal.approvals.length).to eq(3)
+        expect(proposal.individual_approvals.length).to eq(3)
       end
 
       it "has 'Discard Changes' link" do
@@ -508,7 +508,7 @@ describe "National Capital Region proposals" do
       it "has a disabled field if first approval is done" do
         visit "/ncr/work_orders/#{work_order.id}/edit"
         expect(find("[name=approver_email]")["disabled"]).to be_nil
-        work_order.approvals.first.approve!
+        work_order.individual_approvals.first.approve!
         visit "/ncr/work_orders/#{work_order.id}/edit"
         expect(find("[name=approver_email]")["disabled"]).to eq("disabled")
         # And we can still submit

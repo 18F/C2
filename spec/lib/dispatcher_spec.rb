@@ -15,7 +15,7 @@ describe Dispatcher do
 
     it 'creates a new token for the approver' do
       proposal.approvers = [FactoryGirl.create(:user)]
-      approval = proposal.approvals.first
+      approval = proposal.individual_approvals.first
       expect(CommunicartMailer).to receive_message_chain(:actions_for_approver, :deliver_now)
       expect(approval).to receive(:create_api_token!).once
 
@@ -41,7 +41,7 @@ describe Dispatcher do
         expect(dispatcher).to receive(:send_notification_email).twice
         dispatcher.deliver_new_proposal_emails(proposal)
 
-        proposal.approvals.each do |approval|
+        proposal.individual_approvals.each do |approval|
           # handle float comparison
           expect(approval.api_token.expires_at).to be_within(1.second).of(7.days.from_now)
         end
@@ -76,7 +76,7 @@ describe Dispatcher do
 
   describe '#on_approval_approved' do
     it "sends to the requester" do
-      dispatcher.on_approval_approved(proposal.approvals.first)
+      dispatcher.on_approval_approved(proposal.individual_approvals.first)
       expect(email_recipients).to eq([proposal.requester.email_address])
     end
   end

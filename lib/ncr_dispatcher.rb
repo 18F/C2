@@ -9,13 +9,13 @@ class NcrDispatcher < LinearDispatcher
   end
 
   def final_approval(proposal)
-    proposal.approvals.last
+    proposal.individual_approvals.last
   end
 
   # Notify approvers who have already approved that this proposal has been
   # modified. Also notify current approvers that the proposal has been updated
   def on_proposal_update(proposal)
-    proposal.approvals.approved.each{|approval|
+    proposal.individual_approvals.approved.each{|approval|
       CommunicartMailer.notification_for_subscriber(approval.user_email_address, proposal, "already_approved", approval).deliver_now
     }
 

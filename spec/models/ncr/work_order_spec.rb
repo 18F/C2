@@ -109,8 +109,8 @@ describe Ncr::WorkOrder do
           ba80@example.gov
         )
 
-        wo.approvals.first.approve!
-        wo.approvals.second.approve!
+        wo.individual_approvals.first.approve!
+        wo.individual_approvals.second.approve!
         expect(wo.reload.approved?).to be true
 
         wo.update(expense_type: 'BA61')
@@ -136,10 +136,10 @@ describe Ncr::WorkOrder do
         wo.setup_approvals_and_observers('ao@example.gov')
         delegate = FactoryGirl.create(:user)
         wo.approvers.second.add_delegate(delegate)
-        wo.approvals.second.update(user: delegate)
+        wo.individual_approvals.second.update(user: delegate)
 
-        wo.approvals.first.approve!
-        wo.approvals.second.approve!
+        wo.individual_approvals.first.approve!
+        wo.individual_approvals.second.approve!
 
         wo.setup_approvals_and_observers('ao@example.gov')
         wo.reload
