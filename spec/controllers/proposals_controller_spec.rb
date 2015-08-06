@@ -10,7 +10,7 @@ describe ProposalsController do
     it 'sets data fields' do
       proposal1 = FactoryGirl.create(:proposal, requester: user)
       proposal2 = FactoryGirl.create(:proposal)
-      proposal2.approvals.create!(user: user, status: 'actionable')
+      proposal2.individual_approvals.create!(user: user, status: 'actionable')
 
       get :index
       expect(assigns(:pending_data).rows.sort).to eq [proposal1, proposal2]
@@ -33,6 +33,14 @@ describe ProposalsController do
       get :archive
 
       expect(assigns(:proposals_data).rows.size).to eq(2)
+    end
+
+    context 'smoke test' do
+      render_views
+
+      it 'does not explode' do
+        get :archive
+      end
     end
   end
 
@@ -184,7 +192,7 @@ describe ProposalsController do
   describe '#approve' do
     it "signs the user in via the token" do
       proposal = FactoryGirl.create(:proposal, :with_approver)
-      approval = proposal.approvals.first
+      approval = proposal.individual_approvals.first
       token = approval.create_api_token!
 
       post :approve, id: proposal.id, cch: token.access_token
@@ -194,7 +202,7 @@ describe ProposalsController do
 
     it "won't sign the user in via the token if delegated" do
       proposal = FactoryGirl.create(:proposal, :with_approver)
-      approval = proposal.approvals.first
+      approval = proposal.individual_approvals.first
       token = approval.create_api_token!
       approval.user.add_delegate(FactoryGirl.create(:user))
 
@@ -215,7 +223,7 @@ describe ProposalsController do
 
     it "will allow action if the token is valid" do
       proposal = FactoryGirl.create(:proposal, :with_approver)
-      approval = proposal.approvals.first
+      approval = proposal.individual_approvals.first
       token = approval.create_api_token!
 
       get :approve, id: proposal.id, cch: token.access_token
@@ -226,7 +234,7 @@ describe ProposalsController do
 
     it "doesn't allow a token to be reused" do
       proposal = FactoryGirl.create(:proposal, :with_approver)
-      approval = proposal.approvals.first
+      approval = proposal.individual_approvals.first
       token = approval.create_api_token!
       token.use!
 
@@ -278,7 +286,7 @@ describe ProposalsController do
       mailbox = proposal.approvers.second
       delegate = FactoryGirl.create(:user)
       mailbox.add_delegate(delegate)
-      proposal.approvals.first.approve!
+      proposal.individual_approvals.first.approve!
       login_as(delegate)
 
       post :approve, id: proposal.id

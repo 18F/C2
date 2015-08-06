@@ -109,7 +109,7 @@ describe Ncr::WorkOrdersController do
     end
 
     it 'does not modify the approver if already approved' do
-      work_order.approvals.first.approve!
+      work_order.individual_approvals.first.approve!
       post :update, {id: work_order.id, approver_email: 'a@b.com',
                      ncr_work_order: {expense_type: 'BA61'}}
       work_order.reload

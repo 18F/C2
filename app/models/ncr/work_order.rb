@@ -81,19 +81,18 @@ module Ncr
     end
 
     def approver_email_frozen?
-      approval = self.approvals.first
+      approval = self.individual_approvals.first
       approval && !approval.actionable?
     end
 
     def approver_changed?(approval_email)
-      first_approver = self.proposal.approvers.first
-      first_approver && first_approver.email_address != approval_email
+      self.approving_official && self.approving_official.email_address != approval_email
     end
 
     def setup_approvals_and_observers(approving_official_email)
       emails = self.system_approver_emails
       if self.approver_email_frozen?
-        emails.unshift(self.approvers.first.email_address)
+        emails.unshift(self.approving_official.email_address)
       else
         emails.unshift(approving_official_email)
       end

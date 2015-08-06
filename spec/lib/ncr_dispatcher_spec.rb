@@ -1,7 +1,7 @@
 describe NcrDispatcher do
   let!(:work_order) { FactoryGirl.create(:ncr_work_order, :with_approvers) }
   let(:proposal) { work_order.proposal }
-  let(:approvals) { work_order.approvals }
+  let(:approvals) { work_order.individual_approvals }
   let(:approval_1) { approvals.first }
   let(:approval_2) { approvals.second }
   let(:ncr_dispatcher) { NcrDispatcher.new }

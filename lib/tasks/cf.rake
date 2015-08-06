@@ -1,3 +1,5 @@
+require File.expand_path('../../server_env', __FILE__)
+
 # From http://docs.cloudfoundry.org/buildpacks/ruby/ruby-tips.html#rake
 namespace :cf do
   desc "Only run on the first application instance"

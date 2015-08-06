@@ -5,7 +5,7 @@ describe Proposal do
       approver1, approver2 = proposal.approvers
       expect(proposal.currently_awaiting_approvers).to eq([approver1, approver2])
 
-      proposal.approvals.first.update_attribute(:position, 5)
+      proposal.individual_approvals.first.update_attribute(:position, 5)
       expect(proposal.currently_awaiting_approvers).to eq([approver2, approver1])
     end
 
@@ -14,7 +14,7 @@ describe Proposal do
       approver1, approver2 = proposal.approvers
       expect(proposal.currently_awaiting_approvers).to eq([approver1])
 
-      proposal.approvals.first.approve!
+      proposal.individual_approvals.first.approve!
       expect(proposal.currently_awaiting_approvers).to eq([approver2])
     end
   end
@@ -91,13 +91,12 @@ describe Proposal do
 
     it 'does not modify existing approvers if correct' do
       proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
-      old_approval1 = proposal.approvals.first
-      old_approval2 = proposal.approvals.second
+      old_approval1 = proposal.individual_approvals.first
+      old_approval2 = proposal.individual_approvals.second
       approvers = [FactoryGirl.create(:user), FactoryGirl.create(:user), old_approval2.user]
 
       proposal.approvers = approvers
 
-      expect(proposal.approvals.count).to be 3
       expect(proposal.approvers).to eq approvers
       approval_ids = proposal.approvals.map(&:id)
       expect(approval_ids).not_to include(old_approval1.id)
@@ -182,7 +181,7 @@ describe Proposal do
 
     it 'sets status as cancelled if the proposal has been cancelled' do
       proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
-      proposal.approvals.first.approve!
+      proposal.individual_approvals.first.approve!
       expect(proposal.pending?).to be true
       proposal.cancel!
 
@@ -192,9 +191,9 @@ describe Proposal do
 
     it 'reverts to pending if an approval is added' do
       proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
-      proposal.approvals.first.approve!
-      proposal.approvals.second.approve!
-      expect(proposal.approved?).to be true
+      proposal.individual_approvals.first.approve!
+      proposal.individual_approvals.second.approve!
+      expect(proposal.reload.approved?).to be true
       proposal.approvers = proposal.approvers + [FactoryGirl.create(:user)]
 
       proposal.reset_status()
@@ -205,11 +204,11 @@ describe Proposal do
       proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
       proposal.reset_status()
       expect(proposal.pending?).to be true
-      proposal.approvals.first.approve!
+      proposal.individual_approvals.first.approve!
 
       proposal.reset_status()
       expect(proposal.pending?).to be true
-      proposal.approvals.second.approve!
+      proposal.individual_approvals.second.approve!
 
       proposal.reset_status()
       expect(proposal.approved?).to be true
@@ -219,31 +218,31 @@ describe Proposal do
   describe '#partial_approve!' do
     it "marks the next Approval as actionable" do
       proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
-      proposal.approvals.first.update(status: 'approved')
+      proposal.individual_approvals.first.update(status: 'approved')
 
       proposal.partial_approve!
 
-      expect(proposal.approvals.pluck(:status)).to eq(%w(approved actionable))
+      expect(proposal.individual_approvals.pluck(:status)).to eq(%w(approved actionable))
       expect(proposal.status).to eq('pending')
     end
 
     it "transitions to 'approved' when there are no remaining pending approvals" do
       proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
-      proposal.approvals.update_all(status: 'approved')
+      proposal.individual_approvals.update_all(status: 'approved')
 
       proposal.partial_approve!
 
-      expect(proposal.approvals.first.status).to eq('approved')
+      expect(proposal.individual_approvals.first.status).to eq('approved')
       expect(proposal.status).to eq('approved')
     end
 
     it "is a no-op for a cancelled request" do
       proposal = FactoryGirl.create(:proposal, :with_serial_approvers, status: 'cancelled')
-      expect(proposal.approvals.pluck(:status)).to eq(%w(actionable pending))
+      expect(proposal.individual_approvals.pluck(:status)).to eq(%w(actionable pending))
 
       proposal.partial_approve!
 
-      expect(proposal.approvals.pluck(:status)).to eq(%w(actionable pending))
+      expect(proposal.individual_approvals.pluck(:status)).to eq(%w(actionable pending))
       expect(proposal.status).to eq('cancelled')
     end
   end
@@ -268,7 +267,7 @@ describe Proposal do
   describe '#restart' do
     it "creates new API tokens" do
       proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
-      proposal.approvals.each(&:create_api_token!)
+      proposal.individual_approvals.each(&:create_api_token!)
       expect(proposal.api_tokens.size).to eq(2)
 
       proposal.restart!

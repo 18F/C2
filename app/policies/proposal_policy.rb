@@ -27,7 +27,7 @@ class ProposalPolicy
   end
 
   def approver?
-    @proposal.approvals.exists?(user: @user)
+    @proposal.approvers.exists?(@user.id)
   end
 
   def delegate?

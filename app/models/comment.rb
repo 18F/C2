@@ -44,7 +44,7 @@ class Comment < ActiveRecord::Base
   def listeners
     users_to_notify = Set.new
     users_to_notify += self.proposal.currently_awaiting_approvers
-    users_to_notify += self.proposal.approvals.approved.map(&:user)
+    users_to_notify += self.proposal.individual_approvals.approved.map(&:user)
     users_to_notify += self.proposal.observers
     users_to_notify << self.proposal.requester
     # Creator of comment doesn't need to be notified

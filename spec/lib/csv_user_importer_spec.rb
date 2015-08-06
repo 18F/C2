@@ -31,7 +31,7 @@ describe CsvUserImporter do
   describe '#process_rows' do
     it 'creates the appropriate users' do
       @temp_file.write("First,Last,Email,Other\n")
-      @temp_file.write("F1,L1,  E1  ,O1\n")
+      @temp_file.write("F1,L1,  EMAIL@GOV.GOV  ,O1\n")
       @temp_file.write("SOME,Guy,some.guy@gov.gov,True")
       @temp_file.close
       importer = CsvUserImporter.new(@temp_file.path, "my_client")
@@ -41,7 +41,7 @@ describe CsvUserImporter do
       user1, user2 = users
       expect(user1.first_name).to eq('F1')
       expect(user1.last_name).to eq('L1')
-      expect(user1.email_address).to eq('e1')
+      expect(user1.email_address).to eq('email@gov.gov')
       expect(user1.client_slug).to eq('my_client')
       expect(user2.first_name).to eq('Some')
       expect(user2.last_name).to eq('Guy')

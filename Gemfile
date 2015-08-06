@@ -37,6 +37,7 @@ gem 'sass-rails', '>= 3.2'
 gem 'simple_form_object'
 gem 'turbolinks'
 gem 'uglifier'
+gem 'validates_email_format_of'
 gem 'workflow'
 
 group :test, :development do

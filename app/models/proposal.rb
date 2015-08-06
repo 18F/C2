@@ -24,8 +24,9 @@ class Proposal < ActiveRecord::Base
   end
 
   has_many :approvals
-  has_many :approvers, through: :approvals, source: :user
-  has_many :api_tokens, through: :approvals
+  has_many :individual_approvals, ->{ individual }, class_name: 'Approvals::Individual'
+  has_many :approvers, through: :individual_approvals, source: :user
+  has_many :api_tokens, through: :individual_approvals
   has_many :attachments
   has_many :approval_delegates, through: :approvers, source: :outgoing_delegates
   has_many :comments
@@ -114,7 +115,7 @@ class Proposal < ActiveRecord::Base
     if self.parallel?
       pending.update_all(status: 'actionable')
     elsif self.linear? && actionable.empty? && pending.any?
-      pending.first.make_actionable!
+      pending.first.initialize!
     end
     # otherwise, approvals are correct
   end
@@ -218,7 +219,7 @@ class Proposal < ActiveRecord::Base
     unless self.cancelled?
       next_approval = self.approvals.pending.first
       if next_approval
-        next_approval.make_actionable!
+        next_approval.initialize!
       end
     end
   end
