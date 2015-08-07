@@ -1,4 +1,4 @@
-<% unless ENV["DISABLE_SANDBOX_WARNING"] %>
+<% unless ENV['DISABLE_SANDBOX_WARNING'] == 'true' %>
   <%= render partial: 'shared/sandbox_warning' %>
 <% end %>
 <header>

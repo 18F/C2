@@ -13,5 +13,20 @@
     padding-left: 15px;
     padding-right: 15px;
     width: 15%;   /* @todo: be more flexible; should be calculated from cols */
+
+    h5 {
+      display: inline-block;
+    }
+
+    &.asc h5::after {
+      content: ' \25b2';
+    }
+
+    &.desc h5::after {
+      content: ' \25bc';
+    }
+  }
+  tr.header th h5 a { /* @todo: ideally we wouldn't need to be so specific */
+    color: #e8e8e8;
   }
 }

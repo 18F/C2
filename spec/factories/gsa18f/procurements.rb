@@ -7,5 +7,10 @@ FactoryGirl.define do
     office Gsa18f::Procurement::OFFICES[0]
     urgency Gsa18f::Procurement::URGENCY[0]
     association :proposal, flow: 'linear'
+
+    #todo: Probably shouldn't be required, remove once #98376564 is fixed
+    after :create do |p|
+      p.proposal.update(public_id: p.proposal.public_identifier)
+    end
   end
 end
