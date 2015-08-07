@@ -27,6 +27,7 @@ module Ncr
       super
 
       if @model_changing && !@model_instance.emergency  # skip approvals if emergency
+        
         @model_instance.setup_approvals_and_observers(@approver_email)
         @model_instance.email_approvers
       end

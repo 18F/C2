@@ -103,7 +103,11 @@ module Ncr
         self.proposal.update(status: 'approved')
       else
         approvers = emails.map{|e| User.for_email(e)}
+        original_approver_groups = self.proposal.approvers.each.map{|approver| 
+          {user: approver, active: self.proposal.is_active_approver?(approver)}
+        }
         self.proposal.approvers = approvers
+        email_removed_approvers(original_approver_groups)
       end
     end
 
@@ -113,6 +117,16 @@ module Ncr
 
     def email_approvers
       Dispatcher.on_proposal_update(self.proposal)
+    end
+
+    def email_removed_approvers original_approver_groups
+      # original_approver_groups = [{user: user, active: t/f},{}]
+      current_approvers = self.proposal.approvers
+      removed_approvers = original_approver_groups.inject([]) do |result, approver_group|
+        result << approver_group[:user] if !current_approvers.include?(approver_group[:user]) && approver_group[:active]
+        result
+      end
+      Dispatcher.on_approver_removal(self.proposal, removed_approvers)  
     end
 
     # Ignore values in certain fields if they aren't relevant. May want to
@@ -254,5 +268,20 @@ module Ncr
       end
       year % 100   # convert to two-digit
     end
+
+    # def approvers_outdated?(new_approvers)
+    #   current_approvers = self.proposal.approvers
+
+    #   # flagged as outdated if their lengths don't match
+    #   outdated = current_approvers.length != new_approvers.length
+    #   new_approvers.each_with_index{|current, i|
+    #     # skips check once flagged as outdated
+    #     if !outdated
+    #       outdated = (current == new_approvers[i] ||  new_approvers[i].delegates_to?(current) )
+    #     end
+    #   }
+    #   outdated
+    # end
+
   end
 end
