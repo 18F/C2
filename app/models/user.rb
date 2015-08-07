@@ -59,4 +59,8 @@ class User < ActiveRecord::Base
   def self.admin_emails
     ENV['ADMIN_EMAILS'].to_s.split(',')
   end
+
+  def role_on(proposal)
+    Role.new(self,proposal)
+  end
 end
