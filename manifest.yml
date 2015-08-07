@@ -7,7 +7,7 @@
 command: foreman start -p $PORT
 domain: 18f.gov
 instances: 1
-memory: 512M
+memory: 1G
 
 # environment-specific configuration
 applications:
