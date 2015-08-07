@@ -1,5 +1,3 @@
-require 'ostruct'
-
 describe CommunicartMailer do
   def sender_names(mail)
     # http://stackoverflow.com/a/7213323/358804

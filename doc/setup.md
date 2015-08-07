@@ -41,6 +41,8 @@ Per [the Twelve-Factor guidelines](http://12factor.net/config), all necessary co
 open http://localhost:3000
 ```
 
+To include the [clock process](../config/clock.rb) (which is used for background jobs), run using `foreman start -p 3000`.
+
 ### Viewing the mailers
 
 As emails are sent, they will be visible at http://localhost:3000/letter_opener. If you are working on an email mailer/template, you can view all of them at http://localhost:3000/mail_view/.
