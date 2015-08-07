@@ -100,12 +100,21 @@ class Proposal < ActiveRecord::Base
   end
 
   def root_approval=(root)
+    old_approvals = self.approvals.to_a
+
     approval_list = root.preorder_list
     self.approvals = approval_list
     # position may be out of whack, so we reset it
     approval_list.each_with_index do |approval, idx|
       approval.set_list_position(idx + 1)   # start with 1
     end
+
+    old_approvals.each do |old|
+      unless approval_list.include?(old)
+        old.destroy()
+      end
+    end
+
     root.initialize!
     self.reset_status()
   end

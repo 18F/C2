@@ -169,6 +169,14 @@ describe Proposal do
 
       expect(proposal.approvals.actionable).to be_empty
     end
+
+    it 'deletes approvals' do
+      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
+      approval1, approval2 = proposal.individual_approvals
+      proposal.root_approval = Approvals::Serial.new(child_approvals: [approval2])
+
+      expect(Approval.exists?(approval1.id)).to be false
+    end
   end
 
   describe '#reset_status' do
