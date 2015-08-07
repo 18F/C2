@@ -424,6 +424,7 @@ describe "National Capital Region proposals" do
 
         context "as a BA61" do
           it "reassigns the approvers properly" do
+            expect(Dispatcher).to receive(:on_approver_removal)
             expect(work_order.organization).to_not be_whsc
             approving_official = work_order.approving_official
 
