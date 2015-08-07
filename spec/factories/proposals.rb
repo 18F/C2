@@ -6,7 +6,7 @@ FactoryGirl.define do
 
     trait :with_approver do
       after :create do |proposal|
-        proposal.approvers = [FactoryGirl.create(:user)]
+        proposal.set_approver_to(FactoryGirl.create(:user))
       end
     end
 
@@ -14,14 +14,18 @@ FactoryGirl.define do
     trait :with_serial_approvers do
       flow 'linear'
       after :create do |proposal|
-        proposal.approvers = 2.times.map{ FactoryGirl.create(:user) }
+        ind = 2.times.map{ Approvals::Individual.new(user: FactoryGirl.create(:user)) }
+        root = Approvals::Serial.new(child_approvals: ind)
+        proposal.set_approvals_to([root] + ind)
       end
     end
 
     trait :with_parallel_approvers do
       flow 'parallel'
       after :create do |proposal|
-        proposal.approvers = 2.times.map{ FactoryGirl.create(:user) }
+        ind = 2.times.map{ Approvals::Individual.new(user: FactoryGirl.create(:user)) }
+        root = Approvals::Parallel.new(child_approvals: ind)
+        proposal.set_approvals_to([root] + ind)
       end
     end
 

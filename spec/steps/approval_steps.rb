@@ -18,9 +18,15 @@ module ApprovalSteps
   end
 
   step "the proposal has an approval for :email in position :position" do |email, position|
-    @proposal.approvers = @proposal.approvers + [User.for_email(email)]
-    @approval = @proposal.individual_approvals.last
-    @approval.set_list_position(position)
+    @approval = Approvals::Individual.new(user: User.for_email(email))
+    individuals = @proposal.reload.individual_approvals + [@approval]
+    if @proposal.parallel?
+      root = Approvals::Parallel.new(child_approvals: individuals)
+    else
+      root = Approvals::Serial.new(child_approvals: individuals)
+    end
+    @proposal.set_approvals_to([root] + individuals)
+    @approval.set_list_position(position.to_i + 1)   # to account for the root
   end
 
   step "feature flag :flag_name is :value" do |flag, value|
@@ -28,14 +34,11 @@ module ApprovalSteps
   end
 
   step 'the proposal has been approved by the logged in user' do
-    approval = @proposal.individual_approvals.where(user_id: @current_user.id).first
-    approval.approve!
+    @proposal.existing_approval_for(@current_user).approve!
   end
 
   step 'the proposal has been approved by :email' do |email|
-    user = User.find_by(email_address: email)
-    approval = @proposal.individual_approvals.where(user_id: user.id).first
-    approval.approve!
+    @proposal.existing_approval_for(User.for_email(email)).approve!
   end
 
 end

@@ -25,12 +25,8 @@ module Gsa18f
 
     after_create :add_approvals, :add_observers
 
-
     def add_approvals
-      self.proposal.approvers = [
-        User.for_email(Gsa18f::Procurement.approver_email)
-      ]
-      self.proposal.kickstart_approvals()
+      self.proposal.set_approver_to(Gsa18f::Procurement.approver_email)
     end
 
     def add_observers

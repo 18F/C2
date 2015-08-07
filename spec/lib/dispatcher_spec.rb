@@ -14,7 +14,7 @@ describe Dispatcher do
     let(:dispatcher) { Dispatcher.new }
 
     it 'creates a new token for the approver' do
-      proposal.approvers = [FactoryGirl.create(:user)]
+      proposal.set_approver_to(FactoryGirl.create(:user))
       approval = proposal.individual_approvals.first
       expect(CommunicartMailer).to receive_message_chain(:actions_for_approver, :deliver_now)
       expect(approval).to receive(:create_api_token!).once

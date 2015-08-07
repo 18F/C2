@@ -7,9 +7,6 @@ class Proposal < ActiveRecord::Base
 
   workflow do
     state :pending do
-      # partial *may* trigger a full approval
-      event :partial_approve, transitions_to: :approved, if: lambda { |p| p.all_approved? }
-      event :partial_approve, transitions_to: :pending
       event :approve, :transitions_to => :approved
       event :restart, :transitions_to => :pending
       event :cancel, :transitions_to => :cancelled
@@ -17,9 +14,14 @@ class Proposal < ActiveRecord::Base
     state :approved do
       event :restart, :transitions_to => :pending
       event :cancel, :transitions_to => :cancelled
+      event :approve, :transitions_to => :approved do
+        halt  # no need to trigger a state transition
+      end
     end
     state :cancelled do
-      event :partial_approve, :transitions_to => :cancelled
+      event :approve, :transitions_to => :cancelled do
+        halt  # can't escape
+      end
     end
   end
 
@@ -55,6 +57,12 @@ class Proposal < ActiveRecord::Base
   after_initialize :set_defaults
   after_create :update_public_id
 
+  # use this instead of a relation so that cache updates to approvals will
+  # be reflected here
+  def root_approval
+    self.approvals.where(parent_id: nil).first
+  end
+  # @todo - does it make sense to do the same for individual_approvals?
 
   def set_defaults
     self.flow ||= 'parallel'
@@ -93,36 +101,36 @@ class Proposal < ActiveRecord::Base
     results.compact
   end
 
-  # Set the approver list, from any start state
-  # This overrides the `through` relation but provides parity to the accessor
-  def approvers=(approver_list)
-    approvals = approver_list.each_with_index.map do |approver, idx|
-      approval = self.existing_approval_for(approver)
-      approval ||= Approvals::Individual.new(user: approver, proposal: self)
-      approval.position = idx + 1   # start with 1
-      approval
+  # Sets the approval list from any start state, reusing any user approvals
+  def set_approvals_to(approval_list)
+    approval_list = approval_list.map do |new_approval|
+      if new_approval.is_a?(Approvals::Individual) && existing = self.existing_approval_for(new_approval.user)
+        existing.parent = new_approval.parent   # assumes parent hasn't been replaced (safe for now)
+        existing
+      else
+        new_approval
+      end
     end
-    self.approvals = approvals
-    self.kickstart_approvals()
-    self.reload   # include the changes in kickstart_approvals
+    self.approvals = approval_list
+    # position may be out of whack, so we reset it
+    approval_list.each_with_index do |approval, idx|
+      approval.set_list_position(idx + 1)   # start with 1
+    end
+    self.root_approval.initialize! if approval_list.any?
     self.reset_status()
   end
 
-  # Trigger the appropriate approval, from any start state
-  def kickstart_approvals()
-    actionable = self.approvals.actionable
-    pending = self.approvals.pending
-    if self.parallel?
-      pending.update_all(status: 'actionable')
-    elsif self.linear? && actionable.empty? && pending.any?
-      pending.first.initialize!
+  # convenience wrapper for setting a single approver
+  def set_approver_to(approver)
+    if !approver.is_a?(User)
+      approver = User.for_email(approver)
     end
-    # otherwise, approvals are correct
+    self.set_approvals_to([Approvals::Individual.new(user: approver)])
   end
 
   def reset_status()
     unless self.cancelled?   # no escape from cancelled
-      if self.all_approved?
+      if self.root_approval.nil? || self.root_approval.approved?
         self.update(status: 'approved')
       else
         self.update(status: 'pending')
@@ -144,8 +152,9 @@ class Proposal < ActiveRecord::Base
     self.update_attributes!(requester_id: user.id)
   end
 
+  # Approvals in which someone can take action
   def currently_awaiting_approvals
-    self.approvals.actionable
+    self.individual_approvals.actionable
   end
 
   def currently_awaiting_approvers
@@ -205,23 +214,8 @@ class Proposal < ActiveRecord::Base
     # Note that none of the state machine's history is stored
     self.api_tokens.update_all(expires_at: Time.now)
     self.approvals.update_all(status: 'pending')
-    self.kickstart_approvals()
+    self.root_approval.initialize! if self.root_approval
     Dispatcher.deliver_new_proposal_emails(self)
-  end
-
-  def all_approved?
-    self.approvals.where.not(status: 'approved').empty?
-  end
-
-  # An approval has been approved. Mark the next as actionable
-  # Note: this won't affect a parallel flow (as approvals start actionable)
-  def partial_approve
-    unless self.cancelled?
-      next_approval = self.approvals.pending.first
-      if next_approval
-        next_approval.initialize!
-      end
-    end
   end
 
   # Returns True if the user is an approver and has acted on the proposal

@@ -12,7 +12,12 @@ describe Comment do
     end
 
     it "includes approved approvers" do
-      proposal.approvers = proposal.approvers + [FactoryGirl.create(:user)]
+      individuals = proposal.individual_approvals
+      individuals += [Approvals::Individual.new(user: FactoryGirl.create(:user))]
+      root = Approvals::Serial.new(child_approvals: individuals)
+
+      proposal.set_approvals_to([root] + individuals)
+
       expect(proposal.approvers.length).to eq(3)
       proposal.individual_approvals.first.approve!
       expect(comment.listeners).to include(proposal.approvers[0])

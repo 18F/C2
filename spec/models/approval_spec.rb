@@ -42,7 +42,7 @@ describe Approval do
 
   describe '#on_approved_entry' do
     it "notified the proposal if the root gets approved" do
-      expect(approval.proposal).to receive(:partial_approve!).once
+      expect(approval.proposal).to receive(:approve!).once
       approval.initialize!
       approval.approve!
     end
@@ -54,7 +54,7 @@ describe Approval do
       child2 = Approvals::Individual.new(user: User.for_email("child2@agency.gov"), parent: root)
       proposal.approvals = [root, child1, child2]
 
-      expect(proposal).not_to receive(:partial_approve!)
+      expect(proposal).not_to receive(:approve!)
       root.initialize!
       child1.reload.approve!
     end
@@ -91,27 +91,27 @@ describe Approval do
     end
 
     it "won't approve Amy and Bob -- needs two branches of the OR" do
-      expect_any_instance_of(Proposal).not_to receive(:partial_approve!)
+      expect_any_instance_of(Proposal).not_to receive(:approve!)
       proposal.existing_approval_for(amy).approve!
       proposal.existing_approval_for(bob).approve!
     end
 
     it "will approve if Amy, Bob, and Carrie approve -- two branches of the OR" do
-      expect_any_instance_of(Proposal).to receive(:partial_approve!)
+      expect_any_instance_of(Proposal).to receive(:approve!)
       proposal.existing_approval_for(amy).approve!
       proposal.existing_approval_for(bob).approve!
       proposal.existing_approval_for(carrie).approve!
     end
 
     it "won't approve Amy, Bob, Dan as Erin is also required (to complete the THEN)" do
-      expect_any_instance_of(Proposal).not_to receive(:partial_approve!)
+      expect_any_instance_of(Proposal).not_to receive(:approve!)
       proposal.existing_approval_for(amy).approve!
       proposal.existing_approval_for(bob).approve!
       proposal.existing_approval_for(dan).approve!
     end
 
     it "will approve Amy, Bob, Dan, Erin -- two branches of the OR" do
-      expect_any_instance_of(Proposal).to receive(:partial_approve!)
+      expect_any_instance_of(Proposal).to receive(:approve!)
       proposal.existing_approval_for(amy).approve!
       proposal.existing_approval_for(bob).approve!
       proposal.existing_approval_for(dan).approve!
@@ -119,7 +119,7 @@ describe Approval do
     end
 
     it "will approve Amy, Bob, Dan, Carrie -- two branches of the OR as Dan is irrelevant" do
-      expect_any_instance_of(Proposal).to receive(:partial_approve!)
+      expect_any_instance_of(Proposal).to receive(:approve!)
       proposal.existing_approval_for(amy).approve!
       proposal.existing_approval_for(bob).approve!
       proposal.existing_approval_for(dan).approve!

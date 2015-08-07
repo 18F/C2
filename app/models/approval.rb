@@ -27,7 +27,7 @@ class Approval < ActiveRecord::Base
     if self.parent
       self.parent.child_approved!(self)
     else
-      self.proposal.partial_approve!
+      self.proposal.approve!
     end
   end
 

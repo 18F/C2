@@ -74,7 +74,7 @@ describe Proposal do
     end
   end
 
-  describe '#approvers=' do
+  describe '#create_and_update_approvals' do
     let(:approver1) { FactoryGirl.create(:user) }
     let(:approver2) { FactoryGirl.create(:user) }
     let(:approver3) { FactoryGirl.create(:user) }
@@ -82,10 +82,12 @@ describe Proposal do
     it 'sets initial approvers' do
       proposal = FactoryGirl.create(:proposal)
       approvers = 3.times.map{ FactoryGirl.create(:user) }
+      individuals = approvers.map{ |u| Approvals::Individual.new(user: u) }
+      root = Approvals::Parallel.new(child_approvals: individuals)
 
-      proposal.approvers = approvers
+      proposal.set_approvals_to([root] + individuals)
 
-      expect(proposal.approvals.count).to be 3
+      expect(proposal.approvals.count).to be 4
       expect(proposal.approvers).to eq approvers
     end
 
@@ -94,8 +96,10 @@ describe Proposal do
       old_approval1 = proposal.individual_approvals.first
       old_approval2 = proposal.individual_approvals.second
       approvers = [FactoryGirl.create(:user), FactoryGirl.create(:user), old_approval2.user]
+      individuals = approvers.map{ |u| Approvals::Individual.new(user: u) }
+      root = Approvals::Parallel.new(child_approvals: individuals)
 
-      proposal.approvers = approvers
+      proposal.set_approvals_to([root] + individuals)
 
       expect(proposal.approvers).to eq approvers
       approval_ids = proposal.approvals.map(&:id)
@@ -105,67 +109,88 @@ describe Proposal do
 
     it 'initates parallel' do
       proposal = FactoryGirl.create(:proposal, flow: 'parallel')
+      individuals = [approver1, approver2, approver3].map{ |u| Approvals::Individual.new(user: u)}
+      root = Approvals::Parallel.new(child_approvals: individuals)
 
-      proposal.approvers = [approver1, approver2, approver3]
+      proposal.set_approvals_to([root] + individuals)
 
-      expect(proposal.approvals.count).to be 3
-      expect(proposal.approvals.actionable.count).to be 3
+      expect(proposal.approvers.count).to be 3
+      expect(proposal.approvals.count).to be 4
+      expect(proposal.individual_approvals.actionable.count).to be 3
+      expect(proposal.approvals.actionable.count).to be 4
     end
 
     it 'initates linear' do
       proposal = FactoryGirl.create(:proposal, flow: 'linear')
+      individuals = [approver1, approver2, approver3].map{ |u| Approvals::Individual.new(user: u)}
+      root = Approvals::Serial.new(child_approvals: individuals)
 
-      proposal.approvers = [approver1, approver2, approver3]
+      proposal.set_approvals_to([root] + individuals)
 
-      expect(proposal.approvals.count).to be 3
-      expect(proposal.approvals.actionable.count).to be 1
-      expect(proposal.approvals.actionable.first.user).to eq approver1
+      expect(proposal.approvers.count).to be 3
+      expect(proposal.approvals.count).to be 4
+      expect(proposal.individual_approvals.actionable.count).to be 1
+      expect(proposal.approvals.actionable.count).to be 2
     end
 
     it 'fixes modified parallel proposal approvals' do
       proposal = FactoryGirl.create(:proposal, flow: 'parallel')
+      individuals = [Approvals::Individual.new(user: approver1)]
+      root = Approvals::Parallel.new(child_approvals: individuals)
 
-      proposal.approvers = [approver1]
+      proposal.set_approvals_to([root] + individuals)
 
-      expect(proposal.approvals.actionable.count).to be 1
+      expect(proposal.approvals.actionable.count).to be 2
+      expect(proposal.individual_approvals.actionable.count).to be 1
 
-      proposal.approvers = [approver1, approver2, approver3]
-      expect(proposal.approvals.count).to be 3
-      expect(proposal.approvals.actionable.count).to be 3
+      individuals = [approver1, approver2, approver3].map{ |u| Approvals::Individual.new(user: u)}
+      root = Approvals::Parallel.new(child_approvals: individuals)
+
+      proposal.set_approvals_to([root] + individuals)
+
+      expect(proposal.approvals.actionable.count).to be 4
+      expect(proposal.individual_approvals.actionable.count).to be 3
     end
 
     it 'fixes modified linear proposal approvals' do
       proposal = FactoryGirl.create(:proposal, flow: 'linear')
-      approver1, approver2, approver3 = 3.times.map{ FactoryGirl.create(:user) }
-      proposal.approvers = [approver1, approver2]
+      individuals = [approver1, approver2].map{ |u| Approvals::Individual.new(user: u)}
+      root = Approvals::Serial.new(child_approvals: individuals)
+      proposal.set_approvals_to([root] + individuals)
 
-      expect(proposal.approvals.count).to be 2
+      expect(proposal.approvals.count).to be 3
 
-      proposal.approvals.first.approve!
-      proposal.approvers = [approver1, approver3]
+      proposal.individual_approvals.first.approve!
+      individuals = [approver1, approver3].map{ |u| Approvals::Individual.new(user: u)}
+      root = Approvals::Serial.new(child_approvals: individuals)
+      proposal.set_approvals_to([root] + individuals)
 
       expect(proposal.approvals.approved.count).to be 1
-      expect(proposal.approvals.actionable.count).to be 1
-      expect(proposal.approvals.actionable.first.user).to eq approver3
+      expect(proposal.approvals.actionable.count).to be 2
+      expect(proposal.individual_approvals.actionable.count).to be 1
+      expect(proposal.individual_approvals.actionable.first.user).to eq approver3
     end
 
     it 'does not modify a full approved parallel proposal' do
       proposal = FactoryGirl.create(:proposal, flow: 'parallel')
+      individuals = [approver1, approver2].map{ |u| Approvals::Individual.new(user: u)}
+      root = Approvals::Parallel.new(child_approvals: individuals)
+      proposal.set_approvals_to([root] + individuals)
 
-      proposal.approvers = [approver1, approver2]
-
-      proposal.approvals.first.approve!
-      proposal.approvals.second.approve!
+      proposal.individual_approvals.first.approve!
+      proposal.individual_approvals.second.approve!
 
       expect(proposal.approvals.actionable).to be_empty
     end
 
     it 'does not modify a full approved linear proposal' do
       proposal = FactoryGirl.create(:proposal, flow: 'linear')
+      individuals = [approver1, approver2].map{ |u| Approvals::Individual.new(user: u)}
+      root = Approvals::Serial.new(child_approvals: individuals)
+      proposal.set_approvals_to([root] + individuals)
 
-      proposal.approvers = [approver1, approver2]
-      proposal.approvals.first.approve!
-      proposal.approvals.second.reload.approve!
+      proposal.individual_approvals.first.approve!
+      proposal.individual_approvals.second.approve!
 
       expect(proposal.approvals.actionable).to be_empty
     end
@@ -194,7 +219,9 @@ describe Proposal do
       proposal.individual_approvals.first.approve!
       proposal.individual_approvals.second.approve!
       expect(proposal.reload.approved?).to be true
-      proposal.approvers = proposal.approvers + [FactoryGirl.create(:user)]
+      individuals = proposal.root_approval.child_approvals + [Approvals::Individual.new(user: FactoryGirl.create(:user))]
+      root = Approvals::Parallel.new(child_approvals: individuals)
+      proposal.set_approvals_to([root] + individuals)
 
       proposal.reset_status()
       expect(proposal.pending?).to be true
@@ -212,38 +239,6 @@ describe Proposal do
 
       proposal.reset_status()
       expect(proposal.approved?).to be true
-    end
-  end
-
-  describe '#partial_approve!' do
-    it "marks the next Approval as actionable" do
-      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
-      proposal.individual_approvals.first.update(status: 'approved')
-
-      proposal.partial_approve!
-
-      expect(proposal.individual_approvals.pluck(:status)).to eq(%w(approved actionable))
-      expect(proposal.status).to eq('pending')
-    end
-
-    it "transitions to 'approved' when there are no remaining pending approvals" do
-      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
-      proposal.individual_approvals.update_all(status: 'approved')
-
-      proposal.partial_approve!
-
-      expect(proposal.individual_approvals.first.status).to eq('approved')
-      expect(proposal.status).to eq('approved')
-    end
-
-    it "is a no-op for a cancelled request" do
-      proposal = FactoryGirl.create(:proposal, :with_serial_approvers, status: 'cancelled')
-      expect(proposal.individual_approvals.pluck(:status)).to eq(%w(actionable pending))
-
-      proposal.partial_approve!
-
-      expect(proposal.individual_approvals.pluck(:status)).to eq(%w(actionable pending))
-      expect(proposal.status).to eq('cancelled')
     end
   end
 
