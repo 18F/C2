@@ -58,7 +58,7 @@ class CommunicartMailer < ActionMailer::Base
   end
 
   def approval_reply_received_email(approval)
-    proposal = approval.proposal
+    proposal = approval.proposal.reload
     @approval = approval
     @alert_partial = 'approvals_complete' if proposal.approved?
 

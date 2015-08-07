@@ -165,6 +165,7 @@ describe CommunicartMailer do
     context 'completed message' do
       it 'displays when all requests have been approved' do
         final_approval = proposal.individual_approvals.last
+        final_approval.proposal   # create a dirty cache
         final_approval.approve!
         mail = CommunicartMailer.approval_reply_received_email(final_approval)
         expect(mail.body.encoded).to include('Your request has been fully approved. See details below.')
