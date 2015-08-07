@@ -2,6 +2,7 @@
 # https://docs.cloudfoundry.org/devguide/deploy-apps/manifest.html
 
 # general configuration
+command: foreman start -p $PORT
 domain: 18f.gov
 instances: 1
 memory: 512M
@@ -17,7 +18,6 @@ applications:
   env:
     DEFAULT_URL_HOST: c2-staging.18f.gov
 - name: c2-prod
-  command: foreman start -p $PORT
   host: cap
   env:
     DEFAULT_URL_HOST: cap.18f.gov
