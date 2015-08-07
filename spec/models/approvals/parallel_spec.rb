@@ -5,30 +5,27 @@ describe Approvals::Parallel do
     first = FactoryGirl.build(:approval, proposal: nil)
     second = FactoryGirl.build(:approval, proposal: nil)
     third = FactoryGirl.build(:approval, proposal: nil)
-    root = Approvals::Parallel.new
-    root.child_approvals = [first, second, third]
+    proposal.root_approval = Approvals::Parallel.new(child_approvals: [first, second, third])
 
-    proposal.set_approvals_to([root, first, second, third])
-
-    expect(root.reload.status).to eq('actionable')
+    expect(proposal.root_approval.reload.status).to eq('actionable')
     expect(first.reload.status).to eq('actionable')
     expect(second.reload.status).to eq('actionable')
     expect(third.reload.status).to eq('actionable')
 
     first.approve!
-    expect(root.reload.status).to eq('actionable')
+    expect(proposal.root_approval.reload.status).to eq('actionable')
     expect(first.reload.status).to eq('approved')
     expect(second.reload.status).to eq('actionable')
     expect(third.reload.status).to eq('actionable')
 
     third.approve!
-    expect(root.reload.status).to eq('actionable')
+    expect(proposal.root_approval.reload.status).to eq('actionable')
     expect(first.reload.status).to eq('approved')
     expect(second.reload.status).to eq('actionable')
     expect(third.reload.status).to eq('approved')
 
     second.approve!
-    expect(root.reload.status).to eq('approved')
+    expect(proposal.root_approval.reload.status).to eq('approved')
     expect(first.reload.status).to eq('approved')
     expect(second.reload.status).to eq('approved')
     expect(third.reload.status).to eq('approved')
@@ -38,25 +35,22 @@ describe Approvals::Parallel do
     first = FactoryGirl.build(:approval, proposal: nil)
     second = FactoryGirl.build(:approval, proposal: nil)
     third = FactoryGirl.build(:approval, proposal: nil)
-    root = Approvals::Parallel.new(min_children_needed: 2)
-    root.child_approvals = [first, second, third]
+    proposal.root_approval = Approvals::Parallel.new(min_children_needed: 2, child_approvals: [first, second, third])
 
-    proposal.set_approvals_to([root, first, second, third])
-
-    first.approve!
-    expect(root.reload.status).to eq('actionable')
+    first.reload.approve!
+    expect(proposal.root_approval.reload.status).to eq('actionable')
     expect(first.reload.status).to eq('approved')
     expect(second.reload.status).to eq('actionable')
     expect(third.reload.status).to eq('actionable')
 
     third.approve!
-    expect(root.reload.status).to eq('approved')
+    expect(proposal.root_approval.reload.status).to eq('approved')
     expect(first.reload.status).to eq('approved')
     expect(second.reload.status).to eq('actionable')
     expect(third.reload.status).to eq('approved')
 
     second.approve!
-    expect(root.reload.status).to eq('approved')
+    expect(proposal.root_approval.reload.status).to eq('approved')
     expect(first.reload.status).to eq('approved')
     expect(second.reload.status).to eq('approved')
     expect(third.reload.status).to eq('approved')

@@ -21,11 +21,10 @@ module ApprovalSteps
     @approval = Approvals::Individual.new(user: User.for_email(email))
     individuals = @proposal.reload.individual_approvals + [@approval]
     if @proposal.parallel?
-      root = Approvals::Parallel.new(child_approvals: individuals)
+      @proposal.root_approval = Approvals::Parallel.new(child_approvals: individuals)
     else
-      root = Approvals::Serial.new(child_approvals: individuals)
+      @proposal.root_approval = Approvals::Serial.new(child_approvals: individuals)
     end
-    @proposal.set_approvals_to([root] + individuals)
     @approval.set_list_position(position.to_i + 1)   # to account for the root
   end
 

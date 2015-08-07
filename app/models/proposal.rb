@@ -57,12 +57,10 @@ class Proposal < ActiveRecord::Base
   after_initialize :set_defaults
   after_create :update_public_id
 
-  # use this instead of a relation so that cache updates to approvals will
-  # be reflected here
+  # @todo - this should probably be the only entry into the approval system
   def root_approval
-    self.approvals.select{ |a| a.parent_id.nil? }.first
+    self.approvals.where(parent: nil).first
   end
-  # @todo - does it make sense to do the same for individual_approvals?
 
   def set_defaults
     self.flow ||= 'parallel'
@@ -81,6 +79,7 @@ class Proposal < ActiveRecord::Base
   end
 
   def existing_approval_for(user)
+    user = User.coerce_email(user)
     where_clause = <<-SQL
       user_id = :user_id
       OR user_id IN (SELECT assigner_id FROM approval_delegates WHERE assignee_id = :user_id)
@@ -101,31 +100,25 @@ class Proposal < ActiveRecord::Base
     results.compact
   end
 
-  # Sets the approval list from any start state, reusing any user approvals
-  def set_approvals_to(approval_list)
-    approval_list = approval_list.map do |new_approval|
-      if new_approval.is_a?(Approvals::Individual) && existing = self.existing_approval_for(new_approval.user)
-        existing.parent = new_approval.parent   # assumes parent hasn't been replaced (safe for now)
-        existing
-      else
-        new_approval
-      end
+  def root_approval=(root)
+    approval_list = []
+    todo = [root]
+    while todo.any? do
+      approval_list << todo[0]
+      todo = todo[1..-1].concat(todo[0].child_approvals)
     end
     self.approvals = approval_list
     # position may be out of whack, so we reset it
     approval_list.each_with_index do |approval, idx|
       approval.set_list_position(idx + 1)   # start with 1
     end
-    self.root_approval.initialize! if approval_list.any?
+    root.initialize!
     self.reset_status()
   end
 
   # convenience wrapper for setting a single approver
-  def set_approver_to(approver)
-    if !approver.is_a?(User)
-      approver = User.for_email(approver)
-    end
-    self.set_approvals_to([Approvals::Individual.new(user: approver)])
+  def approver=(approver)
+    self.root_approval = Approvals::Individual.new(user: User.coerce_email(approver))
   end
 
   def reset_status()

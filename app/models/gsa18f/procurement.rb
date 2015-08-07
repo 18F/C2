@@ -26,7 +26,13 @@ module Gsa18f
     after_create :add_approvals, :add_observers
 
     def add_approvals
-      self.proposal.set_approver_to(Gsa18f::Procurement.approver_email)
+      approver = User.for_email(Gsa18f::Procurement.approver_email)
+      # Reuse existing approval, if present
+      if existing = self.proposal.existing_approval_for(approver)
+        self.proposal.root_approval = existing
+      else
+        self.proposal.approver = approver
+      end
     end
 
     def add_observers

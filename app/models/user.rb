@@ -47,6 +47,14 @@ class User < ActiveRecord::Base
     User.find_or_create_by(email_address: email.strip.downcase)
   end
 
+  def self.coerce_email(email_or_user)
+    if email_or_user.is_a?(User)
+      email_or_user
+    else
+      User.for_email(email_or_user)
+    end
+  end
+
   def self.from_oauth_hash(auth_hash)
     user_data = auth_hash.extra.raw_info.to_hash
     self.find_or_create_by(email_address: user_data['email'])

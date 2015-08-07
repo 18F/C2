@@ -71,7 +71,7 @@ module UserSteps
 
   step 'a proposal with approver :approver_email' do |approver_email|
     @proposal = FactoryGirl.create(:proposal)
-    @proposal.set_approver_to(approver_email)
+    @proposal.approver = approver_email
     @approval = @proposal.approvals.first
   end
 
