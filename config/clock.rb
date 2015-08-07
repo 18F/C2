@@ -12,7 +12,7 @@ puts "Clockwork loaded."
 module Clockwork
   if ENV['BUDGET_REPORT_RECIPIENT'] && ServerEnv.instance_index == 0
     every(1.day, 'report_mailer.budget_status', at: '03:30', thread: true) do
-      puts "SENDING TEST REPORT..."
+      puts "SENDING BUDGET REPORT..."
       ReportMailer.budget_status.deliver_now
       puts "...DONE"
     end
