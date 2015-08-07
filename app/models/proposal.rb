@@ -79,7 +79,6 @@ class Proposal < ActiveRecord::Base
   end
 
   def existing_approval_for(user)
-    user = User.coerce_email(user)
     where_clause = <<-SQL
       user_id = :user_id
       OR user_id IN (SELECT assigner_id FROM approval_delegates WHERE assignee_id = :user_id)
@@ -101,12 +100,7 @@ class Proposal < ActiveRecord::Base
   end
 
   def root_approval=(root)
-    approval_list = []
-    todo = [root]
-    while todo.any? do
-      approval_list << todo[0]
-      todo = todo[1..-1].concat(todo[0].child_approvals)
-    end
+    approval_list = root.preorder_list
     self.approvals = approval_list
     # position may be out of whack, so we reset it
     approval_list.each_with_index do |approval, idx|
@@ -118,7 +112,11 @@ class Proposal < ActiveRecord::Base
 
   # convenience wrapper for setting a single approver
   def approver=(approver)
-    self.root_approval = Approvals::Individual.new(user: User.coerce_email(approver))
+    # Don't recreate the approval
+    existing = self.existing_approval_for(approver)
+    if existing.nil?
+      self.root_approval = Approvals::Individual.new(user: approver)
+    end
   end
 
   def reset_status()

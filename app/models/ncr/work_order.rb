@@ -103,14 +103,15 @@ module Ncr
         self.proposal.update(status: 'approved')
       else
         individuals = emails.map do |email|
+          user = User.for_email(email)
           # Reuse existing approvals, if present
-          if existing = self.proposal.existing_approval_for(email)
+          if existing = self.proposal.existing_approval_for(user)
             existing
           else
-            Approvals::Individual.new(user: User.for_email(email))
+            Approvals::Individual.new(user: user)
           end
-
         end
+
         self.proposal.root_approval = Approvals::Serial.new(child_approvals: individuals)
       end
     end

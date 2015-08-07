@@ -34,4 +34,8 @@ class Approval < ActiveRecord::Base
   def children_approved?
     self.child_approvals.where.not(status: "approved").empty?
   end
+
+  def preorder_list
+    [self] + self.child_approvals.flat_map(&:preorder_list)
+  end
 end

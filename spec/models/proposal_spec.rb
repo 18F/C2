@@ -122,11 +122,30 @@ describe Proposal do
       expect(proposal.approvals.actionable.count).to be 2
       expect(proposal.individual_approvals.actionable.count).to be 1
 
-      individuals = [approver1, approver2, approver3].map{ |u| Approvals::Individual.new(user: u)}
+      individuals = individuals + [approver2, approver3].map{ |u| Approvals::Individual.new(user: u)}
       proposal.root_approval = Approvals::Parallel.new(child_approvals: individuals)
 
       expect(proposal.approvals.actionable.count).to be 4
       expect(proposal.individual_approvals.actionable.count).to be 3
+    end
+
+    it 'fixes modified linear proposal approvals' do
+      proposal = FactoryGirl.create(:proposal, flow: 'linear')
+      approver1, approver2, approver3 = 3.times.map{ FactoryGirl.create(:user) }
+      individuals = [approver1, approver2].map{ |u| Approvals::Individual.new(user: u) }
+      proposal.root_approval = Approvals::Serial.new(child_approvals: individuals)
+
+      expect(proposal.approvals.actionable.count).to be 2
+      expect(proposal.individual_approvals.actionable.count).to be 1
+
+      individuals.first.approve!
+      individuals[1] = Approvals::Individual.new(user: approver3)
+      proposal.root_approval = Approvals::Serial.new(child_approvals: individuals)
+
+      expect(proposal.approvals.approved.count).to be 1
+      expect(proposal.approvals.actionable.count).to be 2
+      expect(proposal.individual_approvals.actionable.count).to be 1
+      expect(proposal.individual_approvals.actionable.first.user).to eq approver3
     end
 
     it 'does not modify a full approved parallel proposal' do
