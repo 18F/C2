@@ -269,19 +269,5 @@ module Ncr
       year % 100   # convert to two-digit
     end
 
-    # def approvers_outdated?(new_approvers)
-    #   current_approvers = self.proposal.approvers
-
-    #   # flagged as outdated if their lengths don't match
-    #   outdated = current_approvers.length != new_approvers.length
-    #   new_approvers.each_with_index{|current, i|
-    #     # skips check once flagged as outdated
-    #     if !outdated
-    #       outdated = (current == new_approvers[i] ||  new_approvers[i].delegates_to?(current) )
-    #     end
-    #   }
-    #   outdated
-    # end
-
   end
 end

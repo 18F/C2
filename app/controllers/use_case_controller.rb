@@ -43,7 +43,6 @@ class UseCaseController < ApplicationController
     @model_instance.assign_attributes(self.permitted_params)  # don't hit db yet
 
     @model_changing = false
-    @approvers_changing = false
     @model_instance.validate
     if self.errors.empty?
       if self.attribute_changes?
