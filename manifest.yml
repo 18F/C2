@@ -21,4 +21,5 @@ applications:
   host: cap
   env:
     DEFAULT_URL_HOST: cap.18f.gov
+    DISABLE_SANDBOX_WARNING: true
     RESTRICT_ACCESS: true
