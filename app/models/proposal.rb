@@ -60,7 +60,7 @@ class Proposal < ActiveRecord::Base
   # use this instead of a relation so that cache updates to approvals will
   # be reflected here
   def root_approval
-    self.approvals.where(parent_id: nil).first
+    self.approvals.select{ |a| a.parent_id.nil? }.first
   end
   # @todo - does it make sense to do the same for individual_approvals?
 

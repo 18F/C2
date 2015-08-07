@@ -8,8 +8,7 @@ describe Approvals::Parallel do
     root = Approvals::Parallel.new
     root.child_approvals = [first, second, third]
 
-    proposal.approvals = [root] + root.child_approvals
-    root.initialize!
+    proposal.set_approvals_to([root, first, second, third])
 
     expect(root.reload.status).to eq('actionable')
     expect(first.reload.status).to eq('actionable')
@@ -42,8 +41,7 @@ describe Approvals::Parallel do
     root = Approvals::Parallel.new(min_children_needed: 2)
     root.child_approvals = [first, second, third]
 
-    proposal.approvals = [root] + root.child_approvals
-    root.initialize!
+    proposal.set_approvals_to([root, first, second, third])
 
     first.approve!
     expect(root.reload.status).to eq('actionable')

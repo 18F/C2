@@ -52,7 +52,7 @@ describe Approval do
       root = Approvals::Parallel.new
       child1 = Approvals::Individual.new(user: User.for_email("child1@agency.gov"), parent: root)
       child2 = Approvals::Individual.new(user: User.for_email("child2@agency.gov"), parent: root)
-      proposal.approvals = [root, child1, child2]
+      proposal.set_approvals_to([root, child1, child2])
 
       expect(proposal).not_to receive(:approve!)
       root.initialize!
@@ -86,8 +86,7 @@ describe Approval do
                               Approvals::Individual.new(user: carrie),
                               then_clause]
       
-      proposal.approvals = [root] + root.child_approvals + and_clause.child_approvals + then_clause.child_approvals
-      root.initialize!
+      proposal.set_approvals_to([root] + root.child_approvals + and_clause.child_approvals + then_clause.child_approvals)
     end
 
     it "won't approve Amy and Bob -- needs two branches of the OR" do

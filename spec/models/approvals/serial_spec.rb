@@ -5,8 +5,7 @@ describe Approvals::Serial do
     second = FactoryGirl.build(:approval, proposal: proposal)
     root = Approvals::Serial.new
     root.child_approvals = [first, second]
-    proposal.approvals = [root, first, second]
-    root.initialize!
+    proposal.set_approvals_to([root, first, second])
 
     expect(root.reload.status).to eq('actionable')
     expect(first.reload.status).to eq('actionable')

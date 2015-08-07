@@ -390,7 +390,7 @@ describe "National Capital Region proposals" do
       end
 
       it "notifies observers of changes" do
-        observer = work_order.add_observer("observer@observers.com")
+        work_order.add_observer("observer@observers.com")
         visit "/ncr/work_orders/#{work_order.id}/edit"
         fill_in 'Description', with: "Observer changes"
         click_on 'Update'
@@ -439,6 +439,18 @@ describe "National Capital Region proposals" do
               Ncr::WorkOrder.ba61_tier2_budget_mailbox
             ])
             expect(work_order.individual_approvals.first).to be_approved
+            expect(work_order.individual_approvals.second).to be_actionable
+          end
+
+          it "notifies the next approver if it has changed" do
+            expect(work_order.organization).to_not be_whsc
+            deliveries.clear
+
+            visit "/ncr/work_orders/#{work_order.id}/edit"
+            select Ncr::Organization::WHSC_CODE, from: "Org code"
+            click_on 'Update'
+
+            expect(email_recipients).to eq(ncr_proposal.approvers.map(&:email_address))
           end
         end
 
