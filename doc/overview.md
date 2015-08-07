@@ -4,14 +4,17 @@ C2 is, at its core, a state machine wrapped in email notifications. The system c
 
 Note: You will see references to "Carts" throughout the interface and the code...this is a legacy term, which is in the middle of being split into Proposals and their associated domain-(a.k.a. "use case")-specific models. The name "Communicart" is a reference to this initial use case as well.
 
-## Proposal "flows"
+## Approval Chains
 
-Proposals have two types of workflows:
+The order and requirements for a proposal to be "approved" are defined by an "approval chain". This is a hierarchical tree of `Approval` objects, with currently fall into three types:
 
-* Parallel
-    * Once the request is submitted, all approvers receive a notification.
-* Linear (a.k.a serial)
-    * Once the request is submitted, it goes to the first approver. Iff they approve, it goes to the next, and so forth.
+* `Individual` - representing a single user's approving decision
+* `Parallel` - whose children can approve in any order
+* `Serial` - whose children must approve in sequence
+
+The `Parallel` node has an additional configuration (`min_children_needed`), which allows it to require X out of Y approvals, for example requiring only a majority or only one of its children to approve.
+
+The approval chains are designed so that the `Proposal` needs to only communicate with the _root_ of the chain. See the approval specs for examples.
 
 ## User accounts
 
