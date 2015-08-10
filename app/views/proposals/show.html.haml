@@ -32,6 +32,29 @@
   
   .row
     = client_partial(@proposal.client, 'proposal_properties', locals: {proposal: @proposal })
+  .row
+    %table.tabular-data
+      %thead
+        %tr.header
+          %th{colspan: "2"}
+            - # todo: shouldn't need the h5
+            %h5 Subscribers
+      %tbody
+        - @proposal.subscribers_list.each do |user, role_str, observation|
+          %tr
+            %td
+              = user.full_name
+              = "(#{role_str})" if role_str
+            %td.righted
+              - if observation && policy(observation).can_destroy?
+                = button_to "Delete", proposal_observation_path(@proposal, observation), method: :delete, data: {confirm: "Are you sure?"}
+        - if policy(@proposal).can_edit?
+          %tr
+            %td{colspan: 2}
+              - #todo: probably want to in-line this
+              = link_to "Add subscriber", proposal_observations_path(@proposal)
+
+
 
 - if policy(@proposal).can_edit?
   = client_partial(@proposal.client, 'restart_link', locals: {proposal: @proposal})
@@ -39,8 +62,6 @@
     %ul#request-actions.centered
       %li
         = modify_client_button(@proposal)
-      %li
-        = link_to "Add observers", proposal_observations_path(@proposal)
       - if policy(@proposal).can_cancel?
         %li
           = link_to "Cancel my request", cancel_form_proposal_path

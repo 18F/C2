@@ -90,7 +90,7 @@ class Proposal < ActiveRecord::Base
   def users
     # TODO use SQL
     results = self.approvers + self.observers + self.delegates + [self.requester]
-    results.compact
+    results.compact.uniq
   end
 
   # Set the approver list, from any start state

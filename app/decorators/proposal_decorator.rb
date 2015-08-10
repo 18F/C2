@@ -31,6 +31,20 @@ class ProposalDecorator < Draper::Decorator
     end
   end
 
+  def subscribers_list
+    userXrole = object.users.map {|u| [u, Role.new(u, object)] }
+    schwartzian_uXrXo = userXrole.map do |user, role|
+      if role.requester?
+        ["0#{user.full_name}", user, "Requester", nil]
+      elsif role.approver?
+        ["1#{user.full_name}", user, "Approver", nil]
+      else
+        ["2#{user.full_name}", user, nil, object.observations.find_by(user: user)]
+      end
+    end
+    schwartzian_uXrXo.sort_by!(&:first).map{|tuple| tuple[1..-1]}
+  end
+
   def display_status
     if object.pending?
       'pending approval'
