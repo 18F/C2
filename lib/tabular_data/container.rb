@@ -53,6 +53,7 @@ module TabularData
 
     def freeze_sort!
       @frozen_sort = true
+      @columns.each{|c| c.sort(nil)}
     end
 
     protected
