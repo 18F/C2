@@ -77,12 +77,13 @@ class ProposalsController < ApplicationController
       @proposals_data.alter_query{ |p| p.where('proposals.created_at < ?', @end_date) }
     end
     if @text
-      @proposals_data.alter_query do |p| 
+      @proposals_data.alter_query do |p|
         ProposalSearch.new(p).execute(@text)
       end
     end
     # TODO limit/paginate results
   end
+
 
   protected
 
@@ -98,7 +99,6 @@ class ProposalsController < ApplicationController
     end
   end
 
-  protected
   def proposals_container(name, &block)
     config = TabularData::Container.config_for_client("proposals", current_user.client_slug)
     container = TabularData::Container.new(name, config)

@@ -191,56 +191,42 @@ describe ProposalPolicy do
         end
       end
 
-      after do
-        ENV['CLIENT_ADMIN_EMAILS'] = ""
-      end
-
       let(:proposal1) { FactoryGirl.create(:proposal, :with_parallel_approvers, :with_observers, requester_id: 555) }
+      let(:user) { FactoryGirl.create(:user, client_slug: 'abc_company', email_address: 'admin@some-dot-gov.gov') }
+      let(:proposals) { ProposalPolicy::Scope.new(user, Proposal).resolve }
 
-      it "allows a client admin to see unassociated requests that are inside its client scope" do
-        proposal.update_attributes(client_data_type:'AbcCompany::SomethingApprovable')
-        user = FactoryGirl.create(:user, client_slug: "abc_company")
-        ENV['CLIENT_ADMIN_EMAILS'] = user.email_address
+      with_env_var('CLIENT_ADMIN_EMAILS', 'admin@some-dot-gov.gov') do
+        it "allows a client admin to see unassociated requests that are inside its client scope" do
+          proposal.update_attributes(client_data_type:'AbcCompany::SomethingApprovable')
+          expect(proposals).to match_array([proposal])
+        end
 
-        proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
-        expect(proposals).to match_array([proposal])
+        it "prevents a client admin from seeing requests outside its client scope" do
+          proposal.update_attributes(client_data_type:'CdfCompany::SomethingApprovable')
+          expect(proposals).to be_empty
+        end
       end
 
-      it "prevents a client admin from seeing requests outside its client scope" do
-        proposal.update_attributes(client_data_type:'CdfCompany::SomethingApprovable')
-        user = FactoryGirl.create(:user, client_slug: "abc_company")
-        ENV['CLIENT_ADMIN_EMAILS'] = user.email_address
-
-        proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
-        expect(proposals).to be_empty
-      end
-
-      it "prevents a non-admin from seeing unrelated requests" do
-        proposal.update_attributes(client_data_type:'AbcCompany::SomethingApprovable')
-        user = FactoryGirl.create(:user, client_slug: "abc_company")
-        ENV['CLIENT_ADMIN_EMAILS'] = ''
-
-        proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
-        expect(proposals).to be_empty
+      with_env_var('CLIENT_ADMIN_EMAILS', '') do
+        it "prevents a non-admin from seeing unrelated requests" do
+          proposal.update_attributes(client_data_type:'AbcCompany::SomethingApprovable')
+          expect(proposals).to be_empty
+        end
       end
     end
 
     context "ADMIN privileges" do
       let(:proposal1) { FactoryGirl.create(:proposal, :with_parallel_approvers, :with_observers, requester_id: 555) }
+      let(:user) { FactoryGirl.create(:user, client_slug: 'abc_company', email_address: 'admin@some-dot-gov.gov') }
+      let(:proposals) { ProposalPolicy::Scope.new(user, Proposal).resolve }
 
-      after do
-        ENV['ADMIN_EMAILS'] = ""
-      end
+      with_env_var('ADMIN_EMAILS', 'admin@some-dot-gov.gov') do
+        it "allows an app admin to see requests inside and outside its client scope" do
+          proposal1.update_attributes(client_data_type:'CdfCompany::SomethingApprovable')
+          proposal.update_attributes(client_data_type:'AbcCompany::SomethingApprovable')
 
-      it "allows an app admin to see requests inside and outside its client scope" do
-        proposal1.update_attributes(client_data_type:'CdfCompany::SomethingApprovable')
-        proposal.update_attributes(client_data_type:'AbcCompany::SomethingApprovable')
-
-        user = FactoryGirl.create(:user, client_slug: 'abc_company')
-        ENV['ADMIN_EMAILS'] = user.email_address
-
-        proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
-        expect(proposals).to match_array([proposal,proposal1])
+          expect(proposals).to match_array([proposal,proposal1])
+        end
       end
     end
   end
