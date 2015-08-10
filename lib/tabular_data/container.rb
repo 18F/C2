@@ -1,9 +1,10 @@
 module TabularData
   class Container
-    attr_reader :columns
+    attr_reader :columns, :frozen_sort
 
     def initialize(name, config)
       @name = name
+      @frozen_sort = false
       self.init_query(config[:engine].constantize, config.fetch(:joins, []))
       self.init_columns(config.fetch(:column_configs, {}), config.fetch(:columns, {}))
       self.set_sort(config[:sort])
@@ -16,7 +17,11 @@ module TabularData
 
     # @todo filtering, paging, etc.
     def rows
-      @query.order(@sort)
+      results = @query
+      if @sort && !@frozen_sort
+        results = results.order(@sort)
+      end
+      results
     end
 
     def set_state_from_params(params)
@@ -44,6 +49,10 @@ module TabularData
         key = client_name
       end
       container_yaml[key].deep_symbolize_keys
+    end
+
+    def freeze_sort!
+      @frozen_sort = true
     end
 
     protected

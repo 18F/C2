@@ -77,6 +77,7 @@ class ProposalsController < ApplicationController
       @proposals_data.alter_query{ |p| p.where('proposals.created_at < ?', @end_date) }
     end
     if @text
+      @proposals_data.freeze_sort!  # we will always sort by search
       @proposals_data.alter_query do |p|
         ProposalSearch.new(p).execute(@text)
       end
