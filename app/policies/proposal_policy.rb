@@ -68,7 +68,7 @@ class ProposalPolicy
 
   def can_show!
     visible = ProposalPolicy::Scope.new(@user, Proposal).resolve
-    check(visible.exists?(@proposal), "You are not allowed to see this proposal")
+    check(visible.exists?(@proposal.id), "You are not allowed to see this proposal")
   end
 
   def can_create!
