@@ -72,6 +72,13 @@ describe Proposal do
       proposal = FactoryGirl.create(:proposal)
       expect(proposal.users).to eq([proposal.requester])
     end
+
+    it "removes duplicates" do
+      requester = FactoryGirl.create(:user)
+      proposal = FactoryGirl.create(:proposal, requester: requester)
+      proposal.add_observer(requester.email_address)
+      expect(proposal.users).to eq [requester]
+    end
   end
 
   describe '#approvers=' do

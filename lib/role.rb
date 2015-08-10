@@ -13,6 +13,9 @@ class Role
     if proposal.approvers.include?(user)
       @role_types << :approver
     end
+    if user.client_admin? && proposal.client == user.client_slug
+      @role_types << :client_admin
+    end
   end
 
   # Active Observer means, their main role is an observer
