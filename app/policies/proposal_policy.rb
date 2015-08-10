@@ -67,8 +67,12 @@ class ProposalPolicy
   alias_method :can_update!, :can_edit!
 
   def can_show!
-    visible = ProposalPolicy::Scope.new(@user, Proposal).resolve
-    check(visible.exists?(@proposal.id), "You are not allowed to see this proposal")
+    if @user.admin?
+      true
+    else
+      visible = ProposalPolicy::Scope.new(@user, Proposal).resolve
+      check(visible.exists?(@proposal.id), "You are not allowed to see this proposal")
+    end
   end
 
   def can_create!
@@ -107,9 +111,8 @@ class ProposalPolicy
         -- observer
         OR EXISTS (SELECT id FROM observations
                    WHERE proposal_id = proposals.id AND user_id = :user_id)
-        SQL
+      SQL
 
-      where_clause += " OR true" if @user.admin?
       where_clause += " OR client_data_type LIKE '#{@user.client_slug.classify.constantize}::%'" if @user.client_admin?
 
       @scope.where(where_clause, user_id: @user.id)

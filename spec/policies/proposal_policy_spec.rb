@@ -86,6 +86,13 @@ describe ProposalPolicy do
     it "does not allow anyone else to see it" do
       expect(subject).not_to permit(FactoryGirl.create(:user), proposal)
     end
+
+    with_env_var('ADMIN_EMAILS', 'admin@some-dot-gov.gov') do
+      it "is visible to an admin" do
+        user = FactoryGirl.create(:user, email_address: 'admin@some-dot-gov.gov')
+        expect(subject).to permit(user, proposal)
+      end
+    end
   end
 
   permissions :can_edit? do
@@ -211,21 +218,6 @@ describe ProposalPolicy do
         it "prevents a non-admin from seeing unrelated requests" do
           proposal.update_attributes(client_data_type:'AbcCompany::SomethingApprovable')
           expect(proposals).to be_empty
-        end
-      end
-    end
-
-    context "ADMIN privileges" do
-      let(:proposal1) { FactoryGirl.create(:proposal, :with_parallel_approvers, :with_observers, requester_id: 555) }
-      let(:user) { FactoryGirl.create(:user, client_slug: 'abc_company', email_address: 'admin@some-dot-gov.gov') }
-      let(:proposals) { ProposalPolicy::Scope.new(user, Proposal).resolve }
-
-      with_env_var('ADMIN_EMAILS', 'admin@some-dot-gov.gov') do
-        it "allows an app admin to see requests inside and outside its client scope" do
-          proposal1.update_attributes(client_data_type:'CdfCompany::SomethingApprovable')
-          proposal.update_attributes(client_data_type:'AbcCompany::SomethingApprovable')
-
-          expect(proposals).to match_array([proposal,proposal1])
         end
       end
     end
