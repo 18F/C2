@@ -46,24 +46,10 @@ class ProposalSearch
     self.relation.joins(join)
   end
 
-  def with_rank(query)
-    sanitized_query = ActiveRecord::Base::sanitize(query)
-    rank = <<-SQL
-      ts_rank(p_search.document, plainto_tsquery(#{sanitized_query})) AS rank
-    SQL
-
-    self.joined.select('*', rank)
-  end
-
-  def filtered(query)
-    self.with_rank(query).where('p_search.document @@ plainto_tsquery(?)', query)
-  end
-
-  def ordered(query)
-    self.filtered(query).order('rank DESC')
-  end
-
   def execute(query)
-    self.ordered(query)
+    sanitized = ActiveRecord::Base::sanitize(query)
+    self.joined.
+      where('p_search.document @@ plainto_tsquery(?)', query).
+      order("ts_rank(p_search.document, plainto_tsquery(#{sanitized})) DESC")
   end
 end
