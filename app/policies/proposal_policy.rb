@@ -13,6 +13,10 @@ class ProposalPolicy
     @proposal.requester_id == @user.id
   end
 
+  def in_client_admin_scope?
+    @user.client_admin? && @proposal.client_data_type.start_with?("#{@user.client_slug.classify.constantize}::")
+  end
+
   def requester!
     check(self.requester?, "You are not the requester")
   end
@@ -67,7 +71,7 @@ class ProposalPolicy
   alias_method :can_update!, :can_edit!
 
   def can_show!
-    if @user.admin?
+    if @user.admin? || self.in_client_admin_scope?
       true
     else
       visible = ProposalPolicy::Scope.new(@user, Proposal).resolve
@@ -112,8 +116,6 @@ class ProposalPolicy
         OR EXISTS (SELECT id FROM observations
                    WHERE proposal_id = proposals.id AND user_id = :user_id)
       SQL
-
-      where_clause += " OR client_data_type LIKE '#{@user.client_slug.classify.constantize}::%'" if @user.client_admin?
 
       @scope.where(where_clause, user_id: @user.id)
     end
