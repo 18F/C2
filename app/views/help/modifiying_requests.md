@@ -11,7 +11,8 @@ Approvers cannot modify requests, but they can ask the requester to do so. If yo
 
 1. Go to the detail page for the request.
 1. Scroll down to the comment area.
-1. Leave a comment that explains what needs to change. Click “Submit.”
+1. Leave a comment that explains what needs to change.
+1. Click “Submit.”
 
 Everyone involved in the request will receive a notification email with the comment.
 
