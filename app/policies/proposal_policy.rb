@@ -31,7 +31,7 @@ class ProposalPolicy
 
 
   protected
-  
+
   def restricted?
     ENV['RESTRICT_ACCESS'] == 'true'
   end
