@@ -142,6 +142,23 @@ describe ProposalsController do
         expect(response.body).to include("2012-05-02 - 2012-06-02")
       end
     end
+
+    context 'search' do
+      it 'plays nicely with TabularData' do
+        double, single, triple = 3.times.map { FactoryGirl.create(:proposal, requester: user) }
+        double.update(public_id: 'AAA AAA')
+        single.update(public_id: 'AAA')
+        triple.update(public_id: 'AAA AAA AAA')
+
+        get :query, text: "AAA"
+        query = assigns(:proposals_data).rows
+
+        expect(query.length).to be(3)
+        expect(query[0].id).to be(triple.id)
+        expect(query[1].id).to be(double.id)
+        expect(query[2].id).to be(single.id)
+      end
+    end
   end
 
   describe '#cancel_form' do

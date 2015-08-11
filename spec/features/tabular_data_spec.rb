@@ -73,4 +73,13 @@ describe "Tabular data sorting" do
       expect_order(tables[1], cancelled.reverse)
     end
   end
+
+  context 'search' do
+    it 'does not allows titles to be clicked to re-sort' do
+      visit '/proposals/query?text=1'
+      within(tables[0]) do
+        expect(page).not_to have_selector("th a")
+      end
+    end
+  end
 end
