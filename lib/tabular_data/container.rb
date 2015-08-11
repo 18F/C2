@@ -4,6 +4,7 @@ module TabularData
 
     def initialize(name, config)
       @name = name
+      # useful if the sort is set via alter_query
       @frozen_sort = config.fetch(:frozen_sort, false)
       self.init_query(config[:engine].constantize, config.fetch(:joins, []))
       self.init_columns(config.fetch(:column_configs, {}), config.fetch(:columns, {}))
