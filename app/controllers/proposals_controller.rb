@@ -63,12 +63,17 @@ class ProposalsController < ApplicationController
   # @todo - this is acting more like an index; rename existing #index to #mine
   # or similar, then rename #query to #index
   def query
-    @proposals_data = self.proposals_container(:query)
+    @text = params[:text]
+    if @text
+      # only sort by the match priority if searching
+      @proposals_data = self.proposals_container(:query, frozen_sort: true)
+    else
+      @proposals_data = self.proposals_container(:query)
+    end
 
     # @todo - move all of this filtering into the TabularData::Container object
     @start_date = self.param_date(:start_date)
     @end_date = self.param_date(:end_date)
-    @text = params[:text]
 
     if @start_date
       @proposals_data.alter_query{ |p| p.where('proposals.created_at >= ?', @start_date) }
@@ -99,8 +104,9 @@ class ProposalsController < ApplicationController
     end
   end
 
-  def proposals_container(name, &block)
+  def proposals_container(name, extra_config={}, &block)
     config = TabularData::Container.config_for_client("proposals", current_user.client_slug)
+    config = config.merge(extra_config)
     container = TabularData::Container.new(name, config)
     container.alter_query { |p| policy_scope(p).includes(:client_data) }
     if block
