@@ -5,6 +5,33 @@ class ProposalPolicy
     @proposal = record
   end
 
+  def can_approve!
+    approver! && pending_approval! && not_cancelled!
+  end
+
+  def can_edit!
+    requester! && not_approved! && not_cancelled!
+  end
+  alias_method :can_update!, :can_edit!
+
+  def can_show!
+    check(self.visible_proposals.exists?(@proposal.id), "You are not allowed to see this proposal")
+  end
+
+  def can_create!
+    # TODO restrict by client_slug
+    true
+  end
+  alias_method :can_new!, :can_create!
+
+  def can_cancel!
+    requester! && not_cancelled!
+  end
+  alias_method :can_cancel_form!, :can_cancel!
+
+
+  protected
+  
   def restricted?
     ENV['RESTRICT_ACCESS'] == 'true'
   end
@@ -57,31 +84,7 @@ class ProposalPolicy
           "A response has already been logged a response for this proposal")
   end
 
-  def can_approve!
-    approver! && pending_approval! && not_cancelled!
-  end
-
-  def can_edit!
-    requester! && not_approved! && not_cancelled!
-  end
-  alias_method :can_update!, :can_edit!
-
   def visible_proposals
     ProposalPolicy::Scope.new(@user, Proposal).resolve
   end
-
-  def can_show!
-    check(self.visible_proposals.exists?(@proposal.id), "You are not allowed to see this proposal")
-  end
-
-  def can_create!
-    # TODO restrict by client_slug
-    true
-  end
-  alias_method :can_new!, :can_create!
-
-  def can_cancel!
-    requester! && not_cancelled!
-  end
-  alias_method :can_cancel_form!, :can_cancel!
 end
