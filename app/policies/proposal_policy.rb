@@ -66,9 +66,12 @@ class ProposalPolicy
   end
   alias_method :can_update!, :can_edit!
 
+  def visible_proposals
+    ProposalPolicy::Scope.new(@user, Proposal).resolve
+  end
+
   def can_show!
-    visible = ProposalPolicy::Scope.new(@user, Proposal).resolve
-    check(visible.exists?(@proposal.id), "You are not allowed to see this proposal")
+    check(self.visible_proposals.exists?(@proposal.id), "You are not allowed to see this proposal")
   end
 
   def can_create!

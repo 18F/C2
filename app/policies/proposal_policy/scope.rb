@@ -1,11 +1,11 @@
 class ProposalPolicy
-  # equivalent of can_show?
   class Scope
     def initialize(user, scope)
       @user = user
       @scope = scope
     end
 
+    # returns the entire list of Proposals that are visible to the user
     def resolve
       if @user.admin?
         @scope.all
