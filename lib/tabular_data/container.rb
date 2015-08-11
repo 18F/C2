@@ -4,7 +4,7 @@ module TabularData
 
     def initialize(name, config)
       @name = name
-      @frozen_sort = false
+      @frozen_sort = config.fetch(:frozen_sort, false)
       self.init_query(config[:engine].constantize, config.fetch(:joins, []))
       self.init_columns(config.fetch(:column_configs, {}), config.fetch(:columns, {}))
       self.set_sort(config[:sort])
@@ -51,11 +51,6 @@ module TabularData
       container_yaml[key].deep_symbolize_keys
     end
 
-    def freeze_sort!
-      @frozen_sort = true
-      @columns.each{|c| c.sort(nil)}
-    end
-
     protected
 
     def set_sort(field)
@@ -64,7 +59,7 @@ module TabularData
       field = field.gsub(/\A-/, '')
 
       @columns.each do |column|
-        if column.name == field
+        if column.name == field && !@frozen_sort
           @sort = column.sort(dir)
         else
           column.sort(nil)

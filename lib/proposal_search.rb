@@ -1,3 +1,5 @@
+# @todo - materialize the tsvector and remove this in favor of a simpler
+# `where` + `order`
 # Query logic modified from
 #
 #   http://blog.lostpropertyhq.com/postgres-full-text-search-is-good-enough/#ranking
