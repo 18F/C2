@@ -90,29 +90,13 @@ class ProposalPolicy
     end
 
     def resolve
-      # use subselects instead of left joins to avoid an explicit
-      # duplication-removal step
-      where_clause = <<-SQL
-        -- requester
-        requester_id = :user_id
-        -- approver / delegate
-        OR EXISTS (
-          SELECT * FROM approvals
-          LEFT JOIN approval_delegates ON (assigner_id = user_id)
-          WHERE proposal_id = proposals.id
-            -- TODO make visible to everyone involved
-            AND status <> 'pending'
-            AND (user_id = :user_id OR assignee_id = :user_id)
-        )
-        -- observer
-        OR EXISTS (SELECT id FROM observations
-                   WHERE proposal_id = proposals.id AND user_id = :user_id)
-        SQL
-
-      where_clause += " OR true" if @user.admin?
-      where_clause += " OR client_data_type LIKE '#{@user.client_slug.classify.constantize}::%'" if @user.client_admin?
-
-      @scope.where(where_clause, user_id: @user.id)
+      if @user.admin?
+        @scope.all
+      elsif @user.client_admin?
+        Query::Proposals.new(@scope).for_client_slug(@user.client_slug)
+      else
+        Query::Proposals.new(@scope).which_involve(@user)
+      end
     end
   end
 end
