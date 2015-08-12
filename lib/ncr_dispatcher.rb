@@ -35,9 +35,9 @@ class NcrDispatcher < LinearDispatcher
     }
   end
 
-  def on_approver_removal(proposal, approvers)
-    approvers.each{|approver|
-      CommunicartMailer.notification_for_subscriber(approver.email_address,proposal,"removed").deliver_now
-    }
-  end
+  # def on_approver_removal(proposal, approvers)
+  #   approvers.each{|approver|
+  #     CommunicartMailer.notification_for_subscriber(approver.email_address,proposal,"removed").deliver_now
+  #   }
+  # end
 end

@@ -58,7 +58,10 @@ class Dispatcher
   def on_proposal_update(proposal)
   end
 
-  def on_approver_removal(proposal,approvers)
+  def on_approver_removal(proposal,removed_approvers)
+    removed_approvers.each{|approver|
+      CommunicartMailer.notification_for_subscriber(approver.email_address,proposal,"removed").deliver_now
+    }
   end
 
   # todo: replace with dynamic dispatch

@@ -66,6 +66,11 @@ describe CommunicartMailer do
       )
     end
 
+    it 'alerts subscribers that they have been removed' do
+      mail = CommunicartMailer.actions_for_approver('abc@example.com', approval, 'removed')
+      expect(mail.body.encoded).to include('You have been removed from this request.')
+    end
+
     context 'comments' do
       it 'does not render comments when empty' do
         expect(proposal.comments.count).to eq 0

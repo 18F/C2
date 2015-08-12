@@ -409,10 +409,13 @@ describe "National Capital Region proposals" do
       end
 
       it "allows you to change the approving official" do
+        old_approver = ncr_proposal.approvers.first
+        expect(Dispatcher).to receive(:on_approver_removal).with(ncr_proposal, [old_approver])
         visit "/ncr/work_orders/#{work_order.id}/edit"
         select "liono0@some-cartoon-show.com", from: "Approving official's email address"
         click_on 'Update'
         proposal = Proposal.last
+        
         expect(proposal.approvers.first.email_address).to eq ("liono0@some-cartoon-show.com")
         expect(proposal.individual_approvals.first.actionable?).to eq (true)
       end
@@ -424,7 +427,6 @@ describe "National Capital Region proposals" do
 
         context "as a BA61" do
           it "reassigns the approvers properly" do
-            expect(Dispatcher).to receive(:on_approver_removal)
             expect(work_order.organization).to_not be_whsc
             approving_official = work_order.approving_official
 
@@ -434,7 +436,7 @@ describe "National Capital Region proposals" do
 
             ncr_proposal.reload
             work_order.reload
-
+            
             expect(ncr_proposal.approvers.map(&:email_address)).to eq([
               approving_official.email_address,
               Ncr::WorkOrder.ba61_tier2_budget_mailbox
