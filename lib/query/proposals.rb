@@ -27,7 +27,8 @@ module Query
 
     # note that this will leave out requests that the user is involved with *outside* of their specified client_slug
     def for_client_slug(client_slug)
-      self.relation.where("client_data_type LIKE '#{client_slug.classify.constantize}::%'")
+      namespace = client_slug.classify.constantize
+      self.relation.where("client_data_type LIKE '#{namespace}::%'")
     end
 
     def which_involve(user)
