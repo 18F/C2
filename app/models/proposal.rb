@@ -45,7 +45,7 @@ class Proposal < ActiveRecord::Base
   delegate :client, to: :client_data, allow_nil: true
 
   validates :client_data_type, inclusion: {
-    in: ->(_) { CLIENT_MODELS.map(&:to_s) },
+    in: ->(_) { self.client_model_names },
     allow_blank: true
   }
   validates :flow, presence: true, inclusion: {in: FLOWS}
@@ -235,6 +235,9 @@ class Proposal < ActiveRecord::Base
     current_approver && current_approver.status != "pending"
   end
 
+  def self.client_model_names
+    CLIENT_MODELS.map(&:to_s)
+  end
 
   protected
   def update_public_id
