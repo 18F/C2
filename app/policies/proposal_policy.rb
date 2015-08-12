@@ -29,7 +29,6 @@ class ProposalPolicy
   end
   alias_method :can_cancel_form!, :can_cancel!
 
-
   protected
 
   def restricted?
