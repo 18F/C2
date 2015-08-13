@@ -10,14 +10,20 @@ class ProposalPolicy
       if @user.admin?
         @scope.all
       elsif @user.client_admin?
-        @scope.where(
-          Query::Proposals.for_client_slug(@user.client_slug).or(
-            Query::Proposals.which_involve(@user)
-          )
-        )
+        self.for_client_admin
       else
         @scope.where(Query::Proposals.which_involve(@user))
       end
+    end
+
+    protected
+
+    def for_client_admin
+      @scope.where(
+        Query::Proposals.for_client_slug(@user.client_slug).or(
+          Query::Proposals.which_involve(@user)
+        )
+      )
     end
   end
 end

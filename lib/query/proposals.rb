@@ -3,11 +3,11 @@ module Query
   module Proposals
     def self.for_client_slug(client_slug)
       namespace = client_slug.classify.constantize
-      Proposal.arel_table[:client_data_type].matches("#{namespace}::%")
+      proposals[:client_data_type].matches("#{namespace}::%")
     end
 
     def self.with_requester(user)
-      Proposal.arel_table[:requester_id].eq(user.id)
+      proposals[:requester_id].eq(user.id)
     end
 
     def self.with_approver_or_delegate(user)
@@ -32,14 +32,26 @@ module Query
 
     protected
 
+    def self.approvals
+      Approval.arel_table
+    end
+
+    def self.delegates
+      ApprovalDelegate.arel_table
+    end
+
+    def self.observations
+      Observation.arel_table
+    end
+
+    def self.proposals
+      Proposal.arel_table
+    end
+
     ## subselects to be used alongside the proposals table ##
     # Subselects are used instead of left joins to avoid an explicit duplication-removal step.
 
     def self.approvals_for(user)
-      approvals = Approval.arel_table
-      delegates = ApprovalDelegate.arel_table
-      proposals = Proposal.arel_table
-
       approvals.project(Arel.star).join(delegates, Arel::Nodes::OuterJoin).on(
         delegates[:assigner_id].eq(approvals[:user_id])
       ).where(
@@ -52,10 +64,8 @@ module Query
     end
 
     def self.observations_for(user)
-      observations = Observation.arel_table
-
-      Observation.select(Arel.star).where(
-        observations[:proposal_id].eq(Proposal.arel_table[:id]).and(
+      observations.project(Arel.star).where(
+        observations[:proposal_id].eq(proposals[:id]).and(
           observations[:user_id].eq(user.id)
         )
       ).ast
