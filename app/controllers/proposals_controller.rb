@@ -83,7 +83,7 @@ class ProposalsController < ApplicationController
     end
     if @text
       @proposals_data.alter_query do |p|
-        ProposalSearch.new(p).execute(@text)
+        Query::ProposalSearch.new(p).execute(@text)
       end
     end
     # TODO limit/paginate results

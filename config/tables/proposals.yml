@@ -11,7 +11,7 @@ default: &DEFAULT
       ON (ncr_work_orders.id = proposals.client_data_id
       AND proposals.client_data_type = 'Ncr::WorkOrder')
   sort: -created_at
-  column_configs: &COLUMN_CONFIGS
+  column_configs:
     public_id:
       header: ID
       formatter: link

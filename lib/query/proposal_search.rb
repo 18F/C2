@@ -8,15 +8,11 @@
 #
 #   http://blog.codeclimate.com/blog/2012/10/17/7-ways-to-decompose-fat-activerecord-models/
 #
-class ProposalSearch
-  attr_reader :relation
+module Query
+  class ProposalSearch
+    attr_reader :relation
 
-  def initialize(proposals=Proposal.all)
-    @relation = proposals
-  end
-
-  def joined
-    join = <<-SQL
+    JOIN = <<-SQL
       INNER JOIN (
         -- TODO handle associations and their properties in a more automated way
         SELECT
@@ -45,13 +41,19 @@ class ProposalSearch
       ON proposals.id = p_search.pid
     SQL
 
-    self.relation.joins(join)
-  end
+    def initialize(proposals = Proposal.all)
+      @relation = proposals
+    end
 
-  def execute(query)
-    sanitized = ActiveRecord::Base::sanitize(query)
-    self.joined.
-      where('p_search.document @@ plainto_tsquery(?)', query).
-      order("ts_rank(p_search.document, plainto_tsquery(#{sanitized})) DESC")
+    def joined
+      self.relation.joins(JOIN)
+    end
+
+    def execute(query)
+      sanitized = ActiveRecord::Base.sanitize(query)
+      self.joined.
+        where('p_search.document @@ plainto_tsquery(?)', query).
+        order("ts_rank(p_search.document, plainto_tsquery(#{sanitized})) DESC")
+    end
   end
 end

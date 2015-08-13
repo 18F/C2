@@ -43,6 +43,7 @@ module TabularData
     end
 
     def self.config_for_client(container_name, client_name)
+      # TODO load once
       filename = "#{Rails.root}/config/tables/#{container_name}.yml"
       container_yaml = YAML.load_file(filename)
       key = "default"

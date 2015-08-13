@@ -5,6 +5,32 @@ class ProposalPolicy
     @proposal = record
   end
 
+  def can_approve!
+    approver! && pending_approval! && not_cancelled!
+  end
+
+  def can_edit!
+    requester! && not_approved! && not_cancelled!
+  end
+  alias_method :can_update!, :can_edit!
+
+  def can_show!
+    check(self.visible_proposals.exists?(@proposal.id), "You are not allowed to see this proposal")
+  end
+
+  def can_create!
+    # TODO restrict by client_slug
+    true
+  end
+  alias_method :can_new!, :can_create!
+
+  def can_cancel!
+    requester! && not_cancelled!
+  end
+  alias_method :can_cancel_form!, :can_cancel!
+
+  protected
+
   def restricted?
     ENV['RESTRICT_ACCESS'] == 'true'
   end
@@ -57,62 +83,7 @@ class ProposalPolicy
           "A response has already been logged a response for this proposal")
   end
 
-  def can_approve!
-    approver! && pending_approval! && not_cancelled!
-  end
-
-  def can_edit!
-    requester! && not_approved! && not_cancelled!
-  end
-  alias_method :can_update!, :can_edit!
-
-  def can_show!
-    visible = ProposalPolicy::Scope.new(@user, Proposal).resolve
-    check(visible.exists?(@proposal.id), "You are not allowed to see this proposal")
-  end
-
-  def can_create!
-    # TODO restrict by client_slug
-    true
-  end
-  alias_method :can_new!, :can_create!
-
-  def can_cancel!
-    requester! && not_cancelled!
-  end
-  alias_method :can_cancel_form!, :can_cancel!
-
-  # equivalent of can_show?
-  class Scope
-    def initialize(user, scope)
-      @user = user
-      @scope = scope
-    end
-
-    def resolve
-      # use subselects instead of left joins to avoid an explicit
-      # duplication-removal step
-      where_clause = <<-SQL
-        -- requester
-        requester_id = :user_id
-        -- approver / delegate
-        OR EXISTS (
-          SELECT * FROM approvals
-          LEFT JOIN approval_delegates ON (assigner_id = user_id)
-          WHERE proposal_id = proposals.id
-            -- TODO make visible to everyone involved
-            AND status <> 'pending'
-            AND (user_id = :user_id OR assignee_id = :user_id)
-        )
-        -- observer
-        OR EXISTS (SELECT id FROM observations
-                   WHERE proposal_id = proposals.id AND user_id = :user_id)
-        SQL
-
-      where_clause += " OR true" if @user.admin?
-      where_clause += " OR client_data_type LIKE '#{@user.client_slug.classify.constantize}::%'" if @user.client_admin?
-
-      @scope.where(where_clause, user_id: @user.id)
-    end
+  def visible_proposals
+    ProposalPolicy::Scope.new(@user, Proposal).resolve
   end
 end
