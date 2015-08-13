@@ -231,8 +231,7 @@ class Proposal < ActiveRecord::Base
 
   # Returns True if the user is an approver and has acted on the proposal
   def is_active_approver? user
-    current_approver = self.approvals.find_by user_id: user.id
-    current_approver && current_approver.status != "pending"
+    self.approvals.non_pending.exists?(user_id: user.id)
   end
 
   def self.client_model_names
