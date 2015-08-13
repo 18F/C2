@@ -9,9 +9,6 @@ class Approval < ActiveRecord::Base
   end
 
   belongs_to :proposal
-  belongs_to :user
-  has_many :delegations, through: :user, source: :outgoing_delegates
-  has_many :delegates, through: :delegations, source: :assignee
   acts_as_list scope: :proposal
 
   belongs_to :parent, class_name: 'Approval'

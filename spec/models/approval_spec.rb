@@ -40,16 +40,6 @@ describe Approval do
     end
   end
 
-  describe '#delegates' do
-    it "returns a list of users" do
-      approver = approval.user
-      delegate = FactoryGirl.create(:user)
-      approver.add_delegate(delegate)
-
-      expect(approval.delegates).to eq([delegate])
-    end
-  end
-
   describe '#on_approved_entry' do
     it "notified the proposal if the root gets approved" do
       expect(approval.proposal).to receive(:partial_approve!).once
