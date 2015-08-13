@@ -63,12 +63,12 @@ describe ProposalPolicy::Scope do
     let(:proposals) { ProposalPolicy::Scope.new(user, Proposal).resolve }
 
     with_env_var('CLIENT_ADMIN_EMAILS', 'admin@some-dot-gov.gov') do
-      it "allows a client admin to see unassociated requests that are inside its client scope" do
+      it "allows them to see unassociated requests that are inside its client scope" do
         proposal.update_attributes(client_data_type:'AbcCompany::SomethingApprovable')
-        expect(proposals).to match_array([proposal])
+        expect(proposals).to eq([proposal])
       end
 
-      it "prevents a client admin from seeing requests outside its client scope" do
+      it "prevents them from seeing requests outside its client scope" do
         proposal.update_attributes(client_data_type:'CdfCompany::SomethingApprovable')
         expect(proposals).to be_empty
       end
