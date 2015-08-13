@@ -50,25 +50,19 @@ describe ProposalPolicy::Scope do
   end
 
   context "CLIENT_ADMIN privileges" do
-    before do
-      #Set up a temporary class
-      module AbcCompany
-        class SomethingApprovable
-        end
-      end
-    end
-
     let(:proposal1) { FactoryGirl.create(:proposal, :with_parallel_approvers, :with_observers, requester_id: 555) }
     let(:user) { FactoryGirl.create(:user, client_slug: 'abc_company', email_address: 'admin@some-dot-gov.gov') }
     let(:proposals) { ProposalPolicy::Scope.new(user, Proposal).resolve }
 
     with_env_var('CLIENT_ADMIN_EMAILS', 'admin@some-dot-gov.gov') do
       it "allows them to see unassociated requests that are inside its client scope" do
-        proposal.update_attributes(client_data_type:'AbcCompany::SomethingApprovable')
+        expect(Proposal).to receive(:client_model_names).and_return(['AbcCompany::SomethingApprovable'])
+        proposal.update_attributes(client_data_type: 'AbcCompany::SomethingApprovable')
         expect(proposals).to eq([proposal])
       end
 
       it "prevents them from seeing requests outside its client scope" do
+        expect(Proposal).to receive(:client_model_names).and_return(['CdfCompany::SomethingApprovable'])
         proposal.update_attributes(client_data_type:'CdfCompany::SomethingApprovable')
         expect(proposals).to be_empty
       end
@@ -76,6 +70,7 @@ describe ProposalPolicy::Scope do
 
     with_env_var('CLIENT_ADMIN_EMAILS', '') do
       it "prevents a non-admin from seeing unrelated requests" do
+        expect(Proposal).to receive(:client_model_names).and_return(['AbcCompany::SomethingApprovable'])
         proposal.update_attributes(client_data_type:'AbcCompany::SomethingApprovable')
         expect(proposals).to be_empty
       end
