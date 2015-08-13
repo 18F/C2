@@ -8,6 +8,7 @@ class User < ActiveRecord::Base
   has_many :observations
   has_many :comments
 
+  # TODO rename to _delegations, and add relations for the Users
   has_many :outgoing_delegates, class_name: 'ApprovalDelegate', foreign_key: 'assigner_id'
   has_many :incoming_delegates, class_name: 'ApprovalDelegate', foreign_key: 'assignee_id'
 
