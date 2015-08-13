@@ -23,8 +23,6 @@ module Query
     end
 
     def self.which_involve(user)
-      # use subselects instead of left joins to avoid an explicit
-      # duplication-removal step
       self.with_requester(user).or(
         self.with_approver_or_delegate(user).or(
           self.with_observer(user)
@@ -34,7 +32,9 @@ module Query
 
     protected
 
-    # subselect to be used alongside the proposals table
+    ## subselects to be used alongside the proposals table ##
+    # Subselects are used instead of left joins to avoid an explicit duplication-removal step.
+
     def self.approvals_for(user)
       approvals = Approval.arel_table
       delegates = ApprovalDelegate.arel_table
@@ -51,7 +51,6 @@ module Query
       ).ast
     end
 
-    # subselect to be used alongside the proposals table
     def self.observations_for(user)
       observations = Observation.arel_table
 
@@ -61,5 +60,7 @@ module Query
         )
       ).ast
     end
+
+    #########################################################
   end
 end
