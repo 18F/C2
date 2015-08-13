@@ -61,10 +61,20 @@ describe ProposalPolicy::Scope do
         expect(proposals).to eq([proposal])
       end
 
-      it "prevents them from seeing requests outside its client scope" do
-        expect(Proposal).to receive(:client_model_names).and_return(['CdfCompany::SomethingApprovable'])
-        proposal.update_attributes(client_data_type:'CdfCompany::SomethingApprovable')
-        expect(proposals).to be_empty
+      context "outside of their client scope" do
+        before do
+          expect(Proposal).to receive(:client_model_names).and_return(['CdfCompany::SomethingApprovable'])
+        end
+
+        it "allows them to see Proposals they are involved with" do
+          proposal.update_attributes(client_data_type: 'CdfCompany::SomethingApprovable', requester: user)
+          expect(proposals).to eq([proposal])
+        end
+
+        it "prevents them from seeing outside requests" do
+          proposal.update_attributes(client_data_type: 'CdfCompany::SomethingApprovable')
+          expect(proposals).to be_empty
+        end
       end
     end
 
