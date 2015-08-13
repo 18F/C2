@@ -11,9 +11,9 @@ class ProposalPolicy
         @scope.all
       elsif @user.client_admin?
         # TODO include all Proposals that the user is involved in
-        Query::Proposals.new(@scope).for_client_slug(@user.client_slug)
+        @scope.where(Query::Proposals.for_client_slug(@user.client_slug))
       else
-        Query::Proposals.new(@scope).which_involve(@user)
+        @scope.where(Query::Proposals.which_involve(@user))
       end
     end
   end

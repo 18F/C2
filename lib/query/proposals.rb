@@ -1,38 +1,65 @@
+# returns Arel nodes for composing in ActiveRecord queries
 module Query
-  class Proposals
-    attr_reader :relation
-
-    # use subselects instead of left joins to avoid an explicit
-    # duplication-removal step
-    INVOLVES_WHERE_CLAUSE = <<-SQL
-      -- requester
-      requester_id = :user_id
-      -- approver / delegate
-      OR EXISTS (
-        SELECT * FROM approvals
-        LEFT JOIN approval_delegates ON (assigner_id = user_id)
-        WHERE proposal_id = proposals.id
-          -- TODO make visible to everyone involved
-          AND status <> 'pending'
-          AND (user_id = :user_id OR assignee_id = :user_id)
-      )
-      -- observer
-      OR EXISTS (SELECT id FROM observations
-                 WHERE proposal_id = proposals.id AND user_id = :user_id)
-    SQL
-
-    def initialize(relation = Proposal.all)
-      @relation = relation
-    end
-
-    # note that this will leave out requests that the user is involved with *outside* of their specified client_slug
-    def for_client_slug(client_slug)
+  module Proposals
+    def self.for_client_slug(client_slug)
       namespace = client_slug.classify.constantize
-      self.relation.where("client_data_type LIKE '#{namespace}::%'")
+      Proposal.arel_table[:client_data_type].matches("#{namespace}::%")
     end
 
-    def which_involve(user)
-      self.relation.where(INVOLVES_WHERE_CLAUSE, user_id: user.id)
+    def self.with_requester(user)
+      Proposal.arel_table[:requester_id].eq(user.id)
+    end
+
+    def self.with_approver_or_delegate(user)
+      Arel::Nodes::Exists.new(
+        self.approvals_for(user)
+      )
+    end
+
+    def self.with_observer(user)
+      Arel::Nodes::Exists.new(
+        self.observations_for(user)
+      )
+    end
+
+    def self.which_involve(user)
+      # use subselects instead of left joins to avoid an explicit
+      # duplication-removal step
+      self.with_requester(user).or(
+        self.with_approver_or_delegate(user).or(
+          self.with_observer(user)
+        )
+      )
+    end
+
+    protected
+
+    # subselect to be used alongside the proposals table
+    def self.approvals_for(user)
+      approvals = Approval.arel_table
+      delegates = ApprovalDelegate.arel_table
+      proposals = Proposal.arel_table
+
+      approvals.project(Arel.star).join(delegates, Arel::Nodes::OuterJoin).on(
+        delegates[:assigner_id].eq(approvals[:user_id])
+      ).where(
+        approvals[:proposal_id].eq(proposals[:id]).and(
+          approvals[:status].not_eq('pending').and(
+            approvals[:user_id].eq(user.id).or(delegates[:assignee_id].eq(user.id))
+          )
+        )
+      ).ast
+    end
+
+    # subselect to be used alongside the proposals table
+    def self.observations_for(user)
+      observations = Observation.arel_table
+
+      Observation.select(Arel.star).where(
+        observations[:proposal_id].eq(Proposal.arel_table[:id]).and(
+          observations[:user_id].eq(user.id)
+        )
+      ).ast
     end
   end
 end
