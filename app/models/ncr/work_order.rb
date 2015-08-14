@@ -256,6 +256,5 @@ module Ncr
       end
       year % 100   # convert to two-digit
     end
-
   end
 end
