@@ -103,9 +103,6 @@ module Ncr
         self.proposal.update(status: 'approved')
       else
         approvers = emails.map{|e| User.for_email(e)}
-        # original_approver_groups = self.proposal.approvers.each.map{|approver| 
-        #   {user: approver, active: self.proposal.is_active_approver?(approver)}
-        # }
         removed_approvers_to_notify = self.proposal.approvals.non_pending.map(&:user) - approvers
         self.proposal.approvers = approvers
         Dispatcher.on_approver_removal(self.proposal, removed_approvers_to_notify)
@@ -118,16 +115,6 @@ module Ncr
 
     def email_approvers
       Dispatcher.on_proposal_update(self.proposal)
-    end
-
-    def email_removed_approvers original_approver_groups
-      # original_approver_groups = [{user: user, active: t/f},{}]
-      current_approvers = self.proposal.approvers
-      removed_approvers = original_approver_groups.inject([]) do |result, approver_group|
-        result << approver_group[:user] if !current_approvers.include?(approver_group[:user]) && approver_group[:active]
-        result
-      end
-      Dispatcher.on_approver_removal(self.proposal, removed_approvers)  
     end
 
     # Ignore values in certain fields if they aren't relevant. May want to
