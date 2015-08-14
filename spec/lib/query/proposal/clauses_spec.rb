@@ -1,10 +1,10 @@
-describe Query::Proposals do
+describe Query::Proposal::Clauses do
   describe '.with_requester' do
     it "returns matches" do
       FactoryGirl.create(:proposal)
       proposal = FactoryGirl.create(:proposal)
 
-      condition = Query::Proposals.with_requester(proposal.requester)
+      condition = Query::Proposal::Clauses.with_requester(proposal.requester)
       expect(Proposal.where(condition)).to eq([proposal])
     end
   end
@@ -15,7 +15,7 @@ describe Query::Proposals do
       proposal = FactoryGirl.create(:proposal, :with_approver)
       approver = proposal.approvers.first
 
-      condition = Query::Proposals.with_approver_or_delegate(approver)
+      condition = Query::Proposal::Clauses.with_approver_or_delegate(approver)
       expect(Proposal.where(condition)).to eq([proposal])
     end
 
@@ -30,7 +30,7 @@ describe Query::Proposals do
       delegate2 = FactoryGirl.create(:user)
       approver2.add_delegate(delegate2)
 
-      condition = Query::Proposals.with_approver_or_delegate(delegate2)
+      condition = Query::Proposal::Clauses.with_approver_or_delegate(delegate2)
       expect(Proposal.where(condition)).to eq([proposal2])
     end
   end
@@ -42,7 +42,7 @@ describe Query::Proposals do
       proposal = FactoryGirl.create(:proposal, :with_observer)
       observer = proposal.observers.first
 
-      condition = Query::Proposals.with_observer(observer)
+      condition = Query::Proposal::Clauses.with_observer(observer)
       expect(Proposal.where(condition)).to eq([proposal])
     end
   end
