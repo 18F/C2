@@ -46,7 +46,7 @@
               = user.full_name
               = "(#{role_str})" if role_str
             %td.righted
-              - if observation && policy(observation).can_destroy?
+              - if observation && policy(@proposal).can_edit?
                 = button_to "Delete", proposal_observation_path(@proposal, observation), method: :delete, data: {confirm: "Are you sure?"}
         - if policy(@proposal).can_edit?
           %tr

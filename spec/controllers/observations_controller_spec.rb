@@ -3,7 +3,7 @@ describe ObservationsController do
   let (:observation) { proposal.observations.first }
   describe "#destroy" do
     it "redirect with a notice when successful" do
-      login_as(observation.user)
+      login_as(proposal.requester)
       post :destroy, proposal_id: proposal.id, id: observation.id
       expect(response).to redirect_to(proposal_path(proposal))
       expect(flash[:success]).not_to be_empty
@@ -11,7 +11,7 @@ describe ObservationsController do
     end
 
     it "redirects with a warning if unsuccessful" do
-      login_as(proposal.observers.second)
+      login_as(FactoryGirl.create(:user))
       post :destroy, proposal_id: proposal.id, id: observation.id
       expect(response).to redirect_to(proposals_path)
       expect(flash[:success]).to be_nil

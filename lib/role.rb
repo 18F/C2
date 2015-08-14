@@ -1,5 +1,8 @@
 class Role 
+  attr_accessor :user
+
   def initialize(user,proposal)
+    @user = user
     @role_types = []
     if user == proposal.requester
       @role_types << :requester
