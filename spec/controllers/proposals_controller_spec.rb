@@ -58,7 +58,7 @@ describe ProposalsController do
       end
 
       it 'should redirect random users' do
-        pending "flaky spec"
+        skip "flaky spec"
 
         proposal = FactoryGirl.create(:proposal)
         get :show, id: proposal.id
