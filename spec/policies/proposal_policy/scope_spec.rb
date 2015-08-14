@@ -93,15 +93,15 @@ describe ProposalPolicy::Scope do
 
   context "ADMIN privileges" do
     let(:proposal1) { FactoryGirl.create(:proposal, :with_parallel_approvers, :with_observers, requester_id: 555) }
-    let(:user) { FactoryGirl.create(:user, client_slug: 'abc_company', email_address: 'admin@some-dot-gov.gov') }
+    let(:user) { FactoryGirl.create(:user, client_slug: 'abc_company') }
     let(:proposals) { ProposalPolicy::Scope.new(user, Proposal).resolve }
 
     before do
       expect(Proposal).to receive(:client_slugs).and_return(%w(abc_company))
     end
 
-    with_env_var('ADMIN_EMAILS', 'admin@some-dot-gov.gov') do
-      it "allows an app admin to see requests inside and outside its client scope" do
+    it "allows an app admin to see requests inside and outside its client scope" do
+      with_env_var('ADMIN_EMAILS', user.email_address) do
         proposal1.update_attributes(client_data_type:'CdfCompany::SomethingApprovable')
         proposal.update_attributes(client_data_type:'AbcCompany::SomethingApprovable')
 
