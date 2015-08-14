@@ -63,12 +63,12 @@ class ProposalsController < ApplicationController
   # @todo - this is acting more like an index; rename existing #index to #mine
   # or similar, then rename #query to #index
   def query
-    # TODO DRY this up between here and the Listing class
-    @text = params[:text]
-    @start_date = self.param_date(:start_date)
-    @end_date = self.param_date(:end_date)
+    query_listing = self.listing
+    @proposals_data = query_listing.query
 
-    @proposals_data = self.listing.query
+    @text = params[:text]
+    @start_date = query_listing.start_date
+    @end_date = query_listing.end_date
   end
 
 
@@ -88,13 +88,5 @@ class ProposalsController < ApplicationController
 
   def listing
     Query::Proposal::Listing.new(current_user, params)
-  end
-
-  def param_date(sym)
-    begin
-      Date.strptime(params[sym].to_s)
-    rescue ArgumentError
-      nil
-    end
   end
 end
