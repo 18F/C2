@@ -49,10 +49,12 @@
               - if observation && policy(@proposal).can_edit?
                 = button_to "Delete", proposal_observation_path(@proposal, observation), method: :delete, data: {confirm: "Are you sure?"}
         - if policy(@proposal).can_edit?
-          %tr
+          %tr.add-more-row
             %td{colspan: 2}
-              - #todo: probably want to in-line this
-              = link_to "Add subscriber", proposal_observations_path(@proposal)
+              = form_for [@proposal, Observation.new] do |f|
+                = f.fields_for :user do |user_form|
+                  = user_form.collection_select :email_address, User.all.order(:email_address), :email_address, :email_address, {include_blank: true}
+                  = user_form.submit "Add a Subscriber", id: :add_subscriber, data: {'disable-if-empty' => 'observation_user_email_address'}
 
 
 
