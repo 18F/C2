@@ -114,4 +114,12 @@ class ProposalsController < ApplicationController
     end
     container.set_state_from_params(params)
   end
+
+  def param_date(sym)
+    begin
+      Date.strptime(params[sym].to_s)
+    rescue ArgumentError
+      nil
+    end
+  end
 end
