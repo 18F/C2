@@ -1,9 +1,11 @@
 module TabularData
   class Container
-    attr_reader :columns
+    attr_reader :columns, :frozen_sort
 
     def initialize(name, config)
       @name = name
+      # useful if the sort is set via alter_query
+      @frozen_sort = config.fetch(:frozen_sort, false)
       self.init_query(config[:engine].constantize, config.fetch(:joins, []))
       self.init_columns(config.fetch(:column_configs, {}), config.fetch(:columns, {}))
       self.set_sort(config[:sort])
@@ -16,7 +18,11 @@ module TabularData
 
     # @todo filtering, paging, etc.
     def rows
-      @query.order(@sort)
+      results = @query
+      if @sort && !@frozen_sort
+        results = results.order(@sort)
+      end
+      results
     end
 
     def set_state_from_params(params)
@@ -37,6 +43,7 @@ module TabularData
     end
 
     def self.config_for_client(container_name, client_name)
+      # TODO load once
       filename = "#{Rails.root}/config/tables/#{container_name}.yml"
       container_yaml = YAML.load_file(filename)
       key = "default"
@@ -54,7 +61,7 @@ module TabularData
       field = field.gsub(/\A-/, '')
 
       @columns.each do |column|
-        if column.name == field
+        if column.name == field && !@frozen_sort
           @sort = column.sort(dir)
         else
           column.sort(nil)

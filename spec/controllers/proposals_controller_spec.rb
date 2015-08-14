@@ -66,20 +66,19 @@ describe ProposalsController do
     end
 
     context 'admins' do
+      let(:proposal) { FactoryGirl.create(:proposal, requester_id: 5555, client_data_type: 'SomeCompany::SomethingApprovable') }
+
+      before do
+        expect(Proposal).to receive(:client_model_names).and_return(['SomeCompany::SomethingApprovable'])
+      end
+
       after do
-        ENV['ADMIN_EMAILS'] = ""
-        ENV['CLIENT_ADMIN_EMAILS'] = ""
+        ENV['ADMIN_EMAILS'] = ''
+        ENV['CLIENT_ADMIN_EMAILS'] = ''
       end
 
       it "allows admins to view requests of same client" do
-        #Set up a temporary class
-        module SomeCompany
-          class SomethingApprovable
-          end
-        end
-
-        ENV['CLIENT_ADMIN_EMAILS'] = "#{user.email_address}"
-        proposal = FactoryGirl.create(:proposal, requester_id: 5555, client_data_type:"SomeCompany::SomethingApprovable")
+        ENV['CLIENT_ADMIN_EMAILS'] = user.email_address
         user.update_attributes(client_slug: 'some_company')
 
         get :show, id: proposal.id
@@ -88,7 +87,6 @@ describe ProposalsController do
       end
 
       it "allows app admins to view requests outside of related client" do
-        proposal = FactoryGirl.create(:proposal, requester_id: 5555, client_data_type:"SomeCompany::SomethingApprovable")
         user.update_attributes(client_slug: 'some_other_company')
         ENV['ADMIN_EMAILS'] = "#{user.email_address}"
 
@@ -140,6 +138,23 @@ describe ProposalsController do
       it 'has a generic header for other dates' do
         get :query, start_date: '2012-05-02', end_date: '2012-06-02'
         expect(response.body).to include("2012-05-02 - 2012-06-02")
+      end
+    end
+
+    context 'search' do
+      it 'plays nicely with TabularData' do
+        double, single, triple = 3.times.map { FactoryGirl.create(:proposal, requester: user) }
+        double.update(public_id: 'AAA AAA')
+        single.update(public_id: 'AAA')
+        triple.update(public_id: 'AAA AAA AAA')
+
+        get :query, text: "AAA"
+        query = assigns(:proposals_data).rows
+
+        expect(query.length).to be(3)
+        expect(query[0].id).to be(triple.id)
+        expect(query[1].id).to be(double.id)
+        expect(query[2].id).to be(single.id)
       end
     end
   end

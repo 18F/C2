@@ -3,6 +3,7 @@ class Proposal < ActiveRecord::Base
   include ValueHelper
   has_paper_trail
 
+  CLIENT_MODELS = []  # this gets populated later
   FLOWS = %w(parallel linear).freeze
 
   workflow do
@@ -43,6 +44,10 @@ class Proposal < ActiveRecord::Base
   # Note: clients should also implement :version
   delegate :client, to: :client_data, allow_nil: true
 
+  validates :client_data_type, inclusion: {
+    in: ->(_) { self.client_model_names },
+    allow_blank: true
+  }
   validates :flow, presence: true, inclusion: {in: FLOWS}
   # TODO validates :requester_id, presence: true
 
@@ -224,12 +229,14 @@ class Proposal < ActiveRecord::Base
     end
   end
 
-  # Returns True if the user is an approver or has acted on the proposal
+  # Returns True if the user is an "active" approver or has acted on the proposal
   def is_active_approver?(user)
-    existing_approval = self.existing_approval_for(user)
-    existing_approval && !existing_approval.pending?
+    self.approvals.non_pending.exists?(user_id: user.id)
   end
 
+  def self.client_model_names
+    CLIENT_MODELS.map(&:to_s)
+  end
 
   protected
   def update_public_id

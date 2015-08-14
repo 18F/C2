@@ -3,11 +3,13 @@
 module Approvals
   class Individual < Approval
     belongs_to :user
+    has_one :api_token, -> { fresh }, foreign_key: 'approval_id'
+    has_many :delegations, through: :user, source: :outgoing_delegates
+    has_many :delegates, through: :delegations, source: :assignee
+
     validates :user, presence: true
     delegate :full_name, :email_address, :to => :user, :prefix => true
     scope :with_users, -> { includes :user }
-
-    has_one :api_token, -> { fresh }, foreign_key: "approval_id"
 
     workflow do
       on_transition { self.touch } # sets updated_at; https://github.com/geekq/workflow/issues/96

@@ -2,6 +2,8 @@ module ProposalDelegate
   extend ActiveSupport::Concern
 
   included do
+    Proposal::CLIENT_MODELS << self
+
     has_one :proposal, as: :client_data
     has_many :approvals, through: :proposal
     has_many :individual_approvals, ->{ individual }, class_name: 'Approvals::Individual', through: :proposal

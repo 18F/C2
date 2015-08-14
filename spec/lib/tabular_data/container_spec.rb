@@ -26,6 +26,31 @@ describe TabularData::Container do
 
       container.rows.count  # smoke test
     end
+
+    it 'sets sort' do
+      config = {engine: 'Proposal',
+                column_configs: {a: true, b: true},
+                columns: ['a', 'b'],
+                sort: '-a'}
+      container = TabularData::Container.new(:a_name, config)
+      expect(container.rows.to_sql).to include('ORDER BY (proposals.a) DESC')
+      expect(container.frozen_sort).to be(false)
+      expect(container.columns[0].sort_dir).to be(:desc)
+      expect(container.columns[1].sort_dir).to be_nil
+    end
+
+    it 'allows the sort to be frozen' do
+      config = {engine: 'Proposal',
+                column_configs: {a: true, b: true},
+                columns: ['a', 'b'],
+                sort: '-a',
+                frozen_sort: true}
+      container = TabularData::Container.new(:a_name, config)
+      expect(container.rows.to_sql).not_to include('ORDER BY (proposals.a) DESC')
+      expect(container.frozen_sort).to be(true)
+      expect(container.columns[0].sort_dir).to be_nil
+      expect(container.columns[1].sort_dir).to be_nil
+    end
   end
 
   describe '#alter_query' do

@@ -85,7 +85,7 @@ describe Approval do
       root.child_approvals = [and_clause,
                               Approvals::Individual.new(user: carrie),
                               then_clause]
-      
+
       proposal.approvals = [root] + root.child_approvals + and_clause.child_approvals + then_clause.child_approvals
       root.initialize!
     end
