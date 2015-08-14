@@ -1,5 +1,6 @@
 module Ncr
   class Organization
+    BY_CODE = {} # populated later
     WHSC_CODE = 'P1122021'
 
     attr_accessor :code, :name
@@ -32,10 +33,13 @@ module Ncr
   end
 end
 
-rows = CSV.read("#{Rails.root}/config/data/ncr/org_codes_2015-05-18.csv", headers: true)
-
-Ncr::Organization::BY_CODE = {}
-rows.each do |row|
+csv_rows = CSV.read("#{Rails.root}/config/data/ncr/org_codes_2015-05-18.csv", headers: true)
+csv_rows.each do |row|
   org = Ncr::Organization.new(row)
   Ncr::Organization::BY_CODE[org.code] = org
+end
+
+yaml_data = YAML.load_file(Rails.root.join(*%w(config data ncr ool_org_codes.yml)))
+yaml_data.each do |code, name|
+  Ncr::Organization::BY_CODE[code] = name
 end
