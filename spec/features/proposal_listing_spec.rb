@@ -53,31 +53,21 @@ describe "Listing Page" do
     end
   end
 
-  context "client is ncr" do
-    before do
-      user.update_attribute(:client_slug, 'ncr')
-    end
+  Proposal.client_slugs.each do |client_slug|
+    context "client is #{client_slug}" do
+      let(:client_model) { send(client_slug) }
 
-    it_behaves_like "listing page"
+      before do
+        user.update_attribute(:client_slug, client_slug)
+      end
 
-    it "should show requester" do
-      visit '/proposals'
-      expect(page).to have_content("Requester")
-      expect(page).to have_content(ncr.name+' '+ncr.requester.email_address)
-    end
-  end
+      it_behaves_like "listing page"
 
-  context "client is gsa18f" do
-    before do
-      user.update_attribute(:client_slug, 'gsa18f')
-    end
-
-    it_behaves_like "listing page"
-
-    it "should show requester" do
-      visit '/proposals'
-      expect(page).to have_content("Requester")
-      expect(page).to have_content(gsa18f.name+' '+gsa18f.requester.email_address)
+      it "should show requester" do
+        visit '/proposals'
+        expect(page).to have_content("Requester")
+        expect(page).to have_content("#{client_model.name} #{client_model.requester.email_address}")
+      end
     end
   end
 end
