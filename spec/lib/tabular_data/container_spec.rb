@@ -70,7 +70,7 @@ describe TabularData::Container do
   end
 
   describe '#set_state_from_params' do
-    let(:container) { 
+    let(:container) {
       config = {engine: 'Proposal',
                 column_configs: {id: true, client: {virtual: true}},
                 columns: ['id', 'client']}

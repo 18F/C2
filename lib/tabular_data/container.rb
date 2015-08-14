@@ -71,14 +71,21 @@ module TabularData
 
     def init_query(engine, joins)
       @query = engine.all()     # convert into a query
-      joins.each do |name, config|
-        if config == true
-          join_tables = engine.joins(name).join_sources
-          join_tables[-1].left.table_alias = name   # alias the table
-          @query = @query.joins(join_tables).includes(name)
-        else  # String config
-          @query = @query.joins(config)
-        end
+
+      joins.each do |name|
+        join_tables = engine.joins(name).join_sources
+        join_tables[-1].left.table_alias = name   # alias the table
+        @query = @query.joins(join_tables).includes(name)
+      end
+
+      Proposal::CLIENT_MODELS.each do |client_model|
+        table_name = client_model.table_name
+        join = <<-SQL
+          LEFT JOIN #{table_name}
+          ON (#{table_name}.id = proposals.client_data_id
+          AND proposals.client_data_type = '#{client_model}')
+        SQL
+        @query = @query.joins(join)
       end
     end
 
