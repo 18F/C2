@@ -239,7 +239,7 @@ class Proposal < ActiveRecord::Base
   end
 
   def self.client_slugs
-    self.client_model_names.map{|name| name.deconstantize.downcase }
+    CLIENT_MODELS.map(&:client)
   end
 
   protected
