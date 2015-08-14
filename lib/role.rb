@@ -1,23 +1,20 @@
 class Role 
   attr_accessor :user
+  GUARDS = {
+    requester: ->(u, p) { u == p.requester },
+    active_approver: ->(u, p) { p.is_active_approver? u },
+    observer: ->(u, p) { p.observers.include? u },
+    approver: ->(u, p) { p.approvers.include? u },
+    client_admin: ->(u, p) { u.client_admin? && p.client == u.client_slug },
+  }
 
-  def initialize(user,proposal)
+  def initialize(user, proposal)
     @user = user
     @role_types = []
-    if user == proposal.requester
-      @role_types << :requester
-    end
-    if proposal.is_active_approver?(user)
-      @role_types << :active_approver
-    end
-    if proposal.observers.include?(user)
-      @role_types << :observer
-    end
-    if proposal.approvers.include?(user)
-      @role_types << :approver
-    end
-    if user.client_admin? && proposal.client == user.client_slug
-      @role_types << :client_admin
+    GUARDS.each do |role, guard|
+      if guard[user, proposal]
+        @role_types << role
+      end
     end
   end
 

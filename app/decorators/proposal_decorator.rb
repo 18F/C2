@@ -33,15 +33,14 @@ class ProposalDecorator < Draper::Decorator
 
   # Returns triplets of (user, role name, observation)
   def subscribers_list
-    roles = object.users.map{|u| Role.new(u, object)}
-    roles.sort_by!{|r| r.user.full_name}
-    requesters, roles = roles.partition{|r| r.requester?}
-    approvers, others = roles.partition{|r| r.approver?}
+    roles = object.users.map { |u| Role.new(u, object) }
+    roles.sort_by! { |r| r.user.full_name }
+    requesters, roles = roles.partition(&:requester?)
+    approvers, others = roles.partition(&:approver?)
 
-    requesters = requesters.map{|r| [r.user, "Requester", nil]}
-    approvers = approvers.map{|r| [r.user, "Approver", nil]}
-    others = others.map{|r| [r.user, nil, object.observations.find_by(user: r.user)]}
-    requesters + approvers + others
+    requesters.map { |r| [r.user, "Requester", nil] } +
+    approvers.map { |r| [r.user, "Approver", nil] } +
+    others.map { |r| [r.user, nil, object.observations.find_by(user: r.user)] }
   end
 
   def display_status
