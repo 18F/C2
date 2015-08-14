@@ -6,7 +6,8 @@ class ObservationsController < ApplicationController
 
 
   def create
-    email = params.require(:observation).require(:user).require(:email_address)
+    cleaned = params.permit(observation: {user: [:email_address]})
+    email = cleaned.require(:observation).require(:user).require(:email_address)
     observation = @proposal.add_observer(email)
     Dispatcher.on_observer_added(observation)
 
