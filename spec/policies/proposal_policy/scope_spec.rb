@@ -54,6 +54,10 @@ describe ProposalPolicy::Scope do
     let(:user) { FactoryGirl.create(:user, client_slug: 'abc_company', email_address: 'admin@some-dot-gov.gov') }
     let(:proposals) { ProposalPolicy::Scope.new(user, Proposal).resolve }
 
+    before do
+      expect(Proposal).to receive(:client_slugs).and_return(%w(abc_company))
+    end
+
     with_env_var('CLIENT_ADMIN_EMAILS', 'admin@some-dot-gov.gov') do
       it "allows them to see unassociated requests that are inside its client scope" do
         expect(Proposal).to receive(:client_model_names).and_return(['AbcCompany::SomethingApprovable'])
@@ -91,6 +95,10 @@ describe ProposalPolicy::Scope do
     let(:proposal1) { FactoryGirl.create(:proposal, :with_parallel_approvers, :with_observers, requester_id: 555) }
     let(:user) { FactoryGirl.create(:user, client_slug: 'abc_company', email_address: 'admin@some-dot-gov.gov') }
     let(:proposals) { ProposalPolicy::Scope.new(user, Proposal).resolve }
+
+    before do
+      expect(Proposal).to receive(:client_slugs).and_return(%w(abc_company))
+    end
 
     with_env_var('ADMIN_EMAILS', 'admin@some-dot-gov.gov') do
       it "allows an app admin to see requests inside and outside its client scope" do

@@ -238,6 +238,10 @@ class Proposal < ActiveRecord::Base
     CLIENT_MODELS.map(&:to_s)
   end
 
+  def self.client_slugs
+    self.client_model_names.map{|name| name.deconstantize.downcase }
+  end
+
   protected
   def update_public_id
     self.update_attribute(:public_id, self.public_identifier)
