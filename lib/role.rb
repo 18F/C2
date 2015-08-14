@@ -1,11 +1,11 @@
-class Role 
+class Role
   attr_accessor :user
   GUARDS = {
     requester: ->(u, p) { u == p.requester },
     active_approver: ->(u, p) { p.is_active_approver? u },
     observer: ->(u, p) { p.observers.include? u },
     approver: ->(u, p) { p.approvers.include? u },
-    client_admin: ->(u, p) { u.client_admin? && p.client == u.client_slug },
+    client_admin: ->(u, p) { u.client_admin? && p.client == u.client_slug }
   }
 
   def initialize(user, proposal)

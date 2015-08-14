@@ -33,14 +33,12 @@ class ProposalDecorator < Draper::Decorator
 
   # Returns triplets of (user, role name, observation)
   def subscribers_list
-    roles = object.users.map { |u| Role.new(u, object) }
-    roles.sort_by! { |r| r.user.full_name }
-    requesters, roles = roles.partition(&:requester?)
-    approvers, others = roles.partition(&:approver?)
+    roles = object.users.map { |u| Role.new(u, object) }.sort_by { |r| r.user.full_name }
+    requesters, approvers, others = self.partition_by_role(roles)
 
     requesters.map { |r| [r.user, "Requester", nil] } +
-    approvers.map { |r| [r.user, "Approver", nil] } +
-    others.map { |r| [r.user, nil, object.observations.find_by(user: r.user)] }
+      approvers.map { |r| [r.user, "Approver", nil] } +
+      others.map { |r| [r.user, nil, object.observations.find_by(user: r.user)] }
   end
 
   def display_status
@@ -69,5 +67,13 @@ class ProposalDecorator < Draper::Decorator
 
   def email_msg_id
     "<proposal-#{self.id}@#{DEFAULT_URL_HOST}>"
+  end
+
+  protected
+
+  def partition_by_role(roles)
+    requesters, roles = roles.partition(&:requester?)
+    approvers, others = roles.partition(&:approver?)
+    [requesters, approvers, others]
   end
 end
