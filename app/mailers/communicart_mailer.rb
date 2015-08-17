@@ -12,7 +12,7 @@ class CommunicartMailer < ActionMailer::Base
   def actions_for_approver(to_email, approval, alert_partial=nil)
     @show_approval_actions = true
     proposal = approval.proposal
-    
+
     self.notification_for_subscriber(to_email, proposal, alert_partial, approval)
   end
 
@@ -118,8 +118,7 @@ class CommunicartMailer < ActionMailer::Base
     email_with_name(sender_email, user.full_name)
   end
 
-  # `proposal` and `to_email` are required
-  def send_proposal_email(proposal: nil, to_email: nil, from_email: nil, template_name: nil)
+  def send_proposal_email(proposal:, to_email:, from_email: nil, template_name: nil)
     @proposal = proposal.decorate
 
     # http://www.jwz.org/doc/threading.html
