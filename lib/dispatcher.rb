@@ -18,6 +18,10 @@ class Dispatcher
     end
   end
 
+  def on_observer_added(observation)
+    CommunicartMailer.on_observer_added(observation).deliver_now
+  end
+
   def email_sent_confirmation(proposal)
     CommunicartMailer.proposal_created_confirmation(proposal).deliver_now
   end
@@ -113,7 +117,7 @@ class Dispatcher
 
   def self.on_observer_added(observation)
     dispatcher = self.initialize_dispatcher(observation.proposal)
-    dispatcher.email_observer(observation)
+    dispatcher.on_observer_added(observation)
   end
 
   private

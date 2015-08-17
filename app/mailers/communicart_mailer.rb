@@ -28,6 +28,24 @@ class CommunicartMailer < ActionMailer::Base
     )
   end
 
+  def on_observer_added(observation)
+    @observation = observation
+    adder = observation.created_by
+    from_email = if adder
+      user_email_with_name(adder)
+    else
+      nil
+    end
+
+    observer = observation.user
+
+    send_proposal_email(
+      from_email: from_email,
+      to_email: observer.email_address,
+      proposal: observation.proposal
+    )
+  end
+
   def proposal_observer_email(to_email, proposal)
     # TODO have the from_email be whomever triggered this notification
     send_proposal_email(
