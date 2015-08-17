@@ -1,0 +1,12 @@
+%table.w-container.main-container{width: '800'}
+  - proposal = @comment.proposal
+  %tr
+    %td.w-container.html-email-message
+      %p
+        Action need on Request \##{proposal.public_identifier} (#{proposal.name}):
+  %tr
+    %td.w-container.html-email-message
+      = @comment.comment_text
+  %tr
+    %td.w-container.html-email-message
+      = link_to "View / Update Request", proposal_url(proposal, anchor: 'comments'), {class: 'form-button', target: 'C2'}

@@ -1,0 +1,10 @@
+%table.reply-section
+  = client_partial(@proposal.client, 'email_header/' + @alert_partial.to_s)
+  %tr
+    %td.w-container.html-email-message
+      = client_partial(@proposal.client, "mail_prefix", locals: {proposal: @proposal, title: "Purchase Request"})
+%div{style: 'width:800px'}
+  = render partial: 'comments', locals: { comments: @proposal.comments }
+  = render partial: 'attachments', locals: { proposal: @proposal }
+  = client_partial(@proposal.client, 'proposal_mail', locals: {proposal: @proposal, title: "Purchase Request"})
+  = render partial: 'email_reply', locals: { approval: @approval, show_approval_actions: @show_approval_actions, proposal: @proposal }
