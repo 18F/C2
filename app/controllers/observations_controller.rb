@@ -1,7 +1,7 @@
 class ObservationsController < ApplicationController
   before_action :authenticate_user!
   before_action :find_proposal
-  before_action ->{authorize @proposal, :can_edit!}
+  before_action ->{authorize @proposal, :can_show!}
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
 
 
