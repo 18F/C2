@@ -51,14 +51,6 @@ class ApplicationController < ActionController::Base
     super(self.authorizing_object(record))
   end
 
-  def param_date(sym)
-    begin
-      Date.strptime(params[sym].to_s)
-    rescue ArgumentError
-      nil
-    end
-  end
-
   def admin?
     signed_in? && current_user.admin?
   end

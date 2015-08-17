@@ -83,7 +83,7 @@ class ProposalsController < ApplicationController
     end
     if @text
       @proposals_data.alter_query do |p|
-        Query::ProposalSearch.new(p).execute(@text)
+        Query::Proposal::Search.new(p).execute(@text)
       end
     end
     # TODO limit/paginate results
@@ -113,5 +113,13 @@ class ProposalsController < ApplicationController
       container.alter_query(&block)
     end
     container.set_state_from_params(params)
+  end
+
+  def param_date(sym)
+    begin
+      Date.strptime(params[sym].to_s)
+    rescue ArgumentError
+      nil
+    end
   end
 end

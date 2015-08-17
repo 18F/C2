@@ -6,6 +6,7 @@ describe "Link to New Proposal" do
   end
 
   it "is not visible if the user has a random client" do
+    expect(Proposal).to receive(:client_slugs).and_return(['something else'])
     login_as(FactoryGirl.create(:user, client_slug: "something else"))
     visit '/'
     expect(page).not_to have_content('New NCR Request')

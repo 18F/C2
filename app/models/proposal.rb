@@ -238,6 +238,10 @@ class Proposal < ActiveRecord::Base
     CLIENT_MODELS.map(&:to_s)
   end
 
+  def self.client_slugs
+    CLIENT_MODELS.map(&:client)
+  end
+
   protected
   def update_public_id
     self.update_attribute(:public_id, self.public_identifier)

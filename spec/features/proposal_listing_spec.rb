@@ -19,24 +19,29 @@ describe "Listing Page" do
     login_as(user)
   end
 
-  context "client is not set" do
-    before do
-      user.update_attribute(:client_slug, '')
-    end
-
-    it "should not explode" do
+  shared_examples "listing page" do
+    it "shows user's Proposals from all clients" do
       visit '/proposals'
       expect(page).to have_content(default.public_identifier)
       expect(page).to have_content(ncr.public_identifier)
       expect(page).to have_content(gsa18f.proposal.public_identifier)
     end
+  end
+
+  context "client is not set" do
+    before do
+      user.update_attribute(:client_slug, '')
+    end
+
+    it_behaves_like "listing page"
 
     it "should show requester" do
       visit '/proposals'
       expect(page).to have_content("Requester")
       expect(page).to have_content(default.name+' '+default.requester.email_address)
     end
-    it "should list the proposal in the proper section" do 
+
+    it "should list the proposal in the proper section" do
       proposal = Proposal.last
       proposal.update_attribute(:status, 'approved')
       visit '/proposals'
@@ -48,41 +53,21 @@ describe "Listing Page" do
     end
   end
 
-  context "client is ncr" do
-    before do
-      user.update_attribute(:client_slug, 'ncr')
-    end
+  Proposal.client_slugs.each do |client_slug|
+    context "client is #{client_slug}" do
+      let(:client_model) { send(client_slug) }
 
-    it "should not explode" do
-      visit '/proposals'
-      expect(page).to have_content(default.public_identifier)
-      expect(page).to have_content(ncr.public_identifier)
-      expect(page).to have_content(gsa18f.proposal.public_identifier)
-    end
+      before do
+        user.update_attribute(:client_slug, client_slug)
+      end
 
-    it "should show requester" do
-      visit '/proposals'
-      expect(page).to have_content("Requester")
-      expect(page).to have_content(ncr.name+' '+ncr.requester.email_address)
-    end
-  end
+      it_behaves_like "listing page"
 
-  context "client is gsa18f" do
-    before do
-      user.update_attribute(:client_slug, 'gsa18f')
-    end
-
-    it "should not explode" do
-      visit '/proposals'
-      expect(page).to have_content(default.public_identifier)
-      expect(page).to have_content(ncr.public_identifier)
-      expect(page).to have_content(gsa18f.proposal.public_identifier)
-    end
-
-    it "should show requester" do
-      visit '/proposals'
-      expect(page).to have_content("Requester")
-      expect(page).to have_content(gsa18f.name+' '+gsa18f.requester.email_address)
+      it "should show requester" do
+        visit '/proposals'
+        expect(page).to have_content("Requester")
+        expect(page).to have_content("#{client_model.name} #{client_model.requester.email_address}")
+      end
     end
   end
 end

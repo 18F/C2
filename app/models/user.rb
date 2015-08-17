@@ -1,6 +1,10 @@
 class User < ActiveRecord::Base
   has_paper_trail
 
+  validates :client_slug, inclusion: {
+    in: ->(_) { Proposal.client_slugs },
+    allow_blank: true
+  }
   validates :email_address, presence: true, uniqueness: true
   validates_email_format_of :email_address
 

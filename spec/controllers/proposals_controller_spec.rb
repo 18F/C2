@@ -70,6 +70,7 @@ describe ProposalsController do
 
       before do
         expect(Proposal).to receive(:client_model_names).and_return(['SomeCompany::SomethingApprovable'])
+        expect(Proposal).to receive(:client_slugs).and_return(%w(some_company some_other_company))
       end
 
       after do
@@ -79,7 +80,7 @@ describe ProposalsController do
 
       it "allows admins to view requests of same client" do
         ENV['CLIENT_ADMIN_EMAILS'] = user.email_address
-        user.update_attributes(client_slug: 'some_company')
+        user.update_attributes!(client_slug: 'some_company')
 
         get :show, id: proposal.id
         expect(response).not_to redirect_to(proposals_path)
@@ -87,7 +88,7 @@ describe ProposalsController do
       end
 
       it "allows app admins to view requests outside of related client" do
-        user.update_attributes(client_slug: 'some_other_company')
+        user.update_attributes!(client_slug: 'some_other_company')
         ENV['ADMIN_EMAILS'] = "#{user.email_address}"
 
         get :show, id: proposal.id

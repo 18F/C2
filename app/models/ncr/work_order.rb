@@ -140,10 +140,6 @@ module Ncr
       attributes.map{|key| [WorkOrder.human_attribute_name(key), self[key]]}
     end
 
-    def client
-      "ncr"
-    end
-
     # will return nil if the `org_code` is blank or not present in Organization list
     def organization
       # TODO reference by `code` rather than storing the whole thing
