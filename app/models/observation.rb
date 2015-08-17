@@ -7,7 +7,7 @@ class Observation < ActiveRecord::Base
   delegate :full_name, :email_address, to: :user, prefix: true
 
   def created_by_id
-    creation = self.versions.where(event: 'create').first
+    creation = self.versions.find_by(event: 'create')
     creation.try(:whodunnit)
   end
 
