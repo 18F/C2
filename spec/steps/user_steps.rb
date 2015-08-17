@@ -29,11 +29,13 @@ module UserSteps
   end
 
   step "I should see :text" do |text|
-    expect(page_text).to include(text)
+    regex = Regexp.new('\b' + Regexp.escape(text) + '\b')
+    expect(page_text).to match(regex)
   end
 
   step "I should not see :text" do |text|
-    expect(page_text).not_to include(text)
+    regex = Regexp.new('\b' + Regexp.escape(text) + '\b')
+    expect(page_text).not_to match(regex)
   end
 
   step 'I should see a header :text' do |text|

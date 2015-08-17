@@ -237,6 +237,20 @@ tr.proposal-property p {
   }
 }
 
+tr.add-more-row {
+  input[type=submit] {
+    color: $white;
+    background-color: $c2blue;
+    border: 0;
+    padding: 10px;
+
+    &[disabled] {
+      color: $medgray;
+      background-color: $lightgray;
+    }
+  }
+}
+
 body.webapp {
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 16px;
