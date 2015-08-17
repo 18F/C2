@@ -2,6 +2,7 @@ class ProposalsController < ApplicationController
   include TokenAuth
 
   before_filter :authenticate_user!, except: :approve
+  # TODO use Policy for all actions
   before_filter ->{authorize self.proposal}, only: [:show, :cancel, :cancel_form]
   before_filter :needs_token_on_get, only: :approve
   before_filter :validate_access, only: :approve

@@ -16,4 +16,23 @@ describe "observers" do
 
     expect(email_recipients).to eq([observer.email_address])
   end
+
+  it "allows observers to be added by other observers" do
+    proposal = FactoryGirl.create(:proposal, :with_observer)
+    observer1 = proposal.observers.first
+    login_as(observer1)
+
+    observer2 = FactoryGirl.create(:user)
+
+    visit "/proposals/#{proposal.id}"
+    select observer2.email_address, from: 'observation_user_email_address'
+    click_on 'Add a Subscriber'
+
+    expect(page).to have_content("#{observer2.full_name} has been added as an observer")
+
+    proposal.reload
+    expect(proposal.observers.map(&:email_address)).to include(observer2.email_address)
+
+    expect(email_recipients).to eq([observer2.email_address])
+  end
 end
