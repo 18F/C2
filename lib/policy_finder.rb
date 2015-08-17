@@ -15,6 +15,6 @@ module PolicyFinder
 
   def self.policy_for(user, record)
     record = self.authorizing_object(record)
-    policy = Pundit.policy(user, record)
+    Pundit.policy(user, record)
   end
 end

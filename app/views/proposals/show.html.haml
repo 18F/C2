@@ -46,9 +46,9 @@
               = user.full_name
               = "(#{role_str})" if role_str
             %td.righted
-              - if observation && policy(@proposal).can_show?
+              - if observation && policy(observation).can_destroy?
                 = button_to "Delete", proposal_observation_path(@proposal, observation), method: :delete, data: {confirm: "Are you sure?"}
-        - if policy(@proposal).can_show?
+        - if policy(Observation.new(proposal: @proposal)).can_create?
           %tr.add-more-row
             %td{colspan: 2}
               = form_for [@proposal, Observation.new] do |f|
