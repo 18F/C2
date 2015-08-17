@@ -58,6 +58,12 @@ class Dispatcher
   def on_proposal_update(proposal)
   end
 
+  def on_approver_removal(proposal,removed_approvers)
+    removed_approvers.each{|approver|
+      CommunicartMailer.notification_for_subscriber(approver.email_address,proposal,"removed").deliver_now
+    }
+  end
+
   # todo: replace with dynamic dispatch
   def self.initialize_dispatcher(proposal)
     case proposal.flow
@@ -98,6 +104,11 @@ class Dispatcher
   def self.on_proposal_update(proposal)
     dispatcher = self.initialize_dispatcher(proposal)
     dispatcher.on_proposal_update(proposal)
+  end
+
+  def self.on_approver_removal(proposal, approvers)
+    dispatcher = self.initialize_dispatcher(proposal)
+    dispatcher.on_approver_removal(proposal, approvers)
   end
 
   def self.on_observer_added(observation)

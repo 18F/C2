@@ -103,7 +103,9 @@ module Ncr
         self.proposal.update(status: 'approved')
       else
         approvers = emails.map{|e| User.for_email(e)}
+        removed_approvers_to_notify = self.proposal.approvals.non_pending.map(&:user) - approvers
         self.proposal.approvers = approvers
+        Dispatcher.on_approver_removal(self.proposal, removed_approvers_to_notify)
       end
     end
 
