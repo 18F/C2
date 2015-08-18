@@ -89,22 +89,6 @@ class CommunicartMailer < ApplicationMailer
     end
   end
 
-  def feedback(sending_user, form_values)
-    form_strings = form_values.map { |pair| "#{pair[0]}: #{pair[1]}" }
-    message = form_strings.join("\n")
-    mail(
-      to: CommunicartMailer.support_email,
-      subject: 'Feedback submission',
-      from: default_sender_email,
-      body: message,
-      cc: sending_user.try(:email_address)
-    )
-  end
-
-  def self.support_email
-    ENV['SUPPORT_EMAIL'] || 'gatewaycommunicator@gsa.gov' # not sensitive, so hard coding
-  end
-
   private
 
   def send_proposal_email(proposal:, to_email:, from_email: nil, template_name: nil)

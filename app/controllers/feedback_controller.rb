@@ -8,7 +8,7 @@ class FeedbackController < ApplicationController
     fields = fields.select {|key| !params[key].blank?}
     form_values = fields.map {|key| [key, params[key]]}
     unless form_values.empty?
-      CommunicartMailer.feedback(current_user, form_values).deliver_now
+      FeedbackMailer.feedback(current_user, form_values).deliver_now
     end
     # @todo - redirect somewhere to avoid back/refresh button issues
   end
