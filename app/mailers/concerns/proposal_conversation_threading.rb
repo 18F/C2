@@ -1,22 +1,7 @@
 module ProposalConversationThreading
-  protected
+  ## helper methods ##
 
-  def send_proposal_email(proposal:, to_email:, from_email: nil, template_name: nil)
-    @proposal = proposal.decorate
-
-    # http://www.jwz.org/doc/threading.html
-    headers['In-Reply-To'] = @proposal.email_msg_id
-    headers['References'] = @proposal.email_msg_id
-
-    mail(
-      to: to_email,
-      subject: proposal_subject(@proposal),
-      from: from_email || default_sender_email,
-      template_name: template_name
-    )
-  end
-
-  def proposal_subject_i18n_key(proposal)
+  def self.subject_i18n_key(proposal)
     if proposal.client_data
       # We'll look up by the client_data's class name
       proposal.client_data.class.name.underscore
@@ -26,7 +11,7 @@ module ProposalConversationThreading
     end
   end
 
-  def proposal_subject_params(proposal)
+  def self.subject_params(proposal)
     params = proposal.as_json
     # todo: replace with public_id once #98376564 is fixed
     params[:public_identifier] = proposal.public_identifier
@@ -42,9 +27,34 @@ module ProposalConversationThreading
     params
   end
 
-  def proposal_subject(proposal)
-    i18n_key = proposal_subject_i18n_key(proposal)
-    params = proposal_subject_params(proposal)
+  def self.subject(proposal)
+    i18n_key = self.subject_i18n_key(proposal)
+    params = self.subject_params(proposal)
     I18n.t(i18n_key, params.symbolize_keys)
   end
+
+  ###################
+
+  ## mixin methods ##
+
+  protected
+
+  def send_proposal_email(proposal:, to_email:, from_email: nil, template_name: nil)
+    @proposal = proposal.decorate
+
+    # http://www.jwz.org/doc/threading.html
+    headers['In-Reply-To'] = @proposal.email_msg_id
+    headers['References'] = @proposal.email_msg_id
+
+    subject = ProposalConversationThreading.subject(@proposal)
+
+    mail(
+      to: to_email,
+      subject: subject,
+      from: from_email || default_sender_email,
+      template_name: template_name
+    )
+  end
+
+  ###################
 end
