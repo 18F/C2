@@ -5,9 +5,9 @@ You may need to modify a request after it is submitted for a number of reasons:
   - To update a Not-To-Exceed amount to a final purchase price
   - To change approval information or provide a new RWA number
 
-## Approver
+## To ask for a modification
 
-Approvers cannot modify requests, but they can ask the requester to do so. If you are one of the approvers and notice an issue:
+Who is eligible to modify a request depends on the rules of your region or organization. But anyone involved in a request can ask for a modification:
 
 1. Go to the detail page for the request.
 1. Scroll down to the comment area.
@@ -16,9 +16,7 @@ Approvers cannot modify requests, but they can ask the requester to do so. If yo
 
 Everyone involved in the request will receive a notification email with the comment.
 
-## Requester
-
-If you are a requester, follow these steps to modify the request:
+## To modify a request directly
 
 1. Go to the detail page for the request.
 1. Scroll down to click the “Modify Request” button.
