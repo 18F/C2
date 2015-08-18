@@ -37,5 +37,13 @@ module ProposalDelegate
     delegate :flow, :status, to: :proposal
 
     ###################################################
+
+    def self.client
+      self.to_s.deconstantize.downcase
+    end
+  end
+
+  def client
+    self.class.client
   end
 end

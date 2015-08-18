@@ -17,8 +17,7 @@ class ApplicationController < ActionController::Base
   # We are overriding this method to account for ExceptionPolicies
   def authorize(record, query=nil, user=nil)
     user ||= @current_user
-    record = self.authorizing_object(record)
-    policy = Pundit.policy(user, record)
+    policy = ::PolicyFinder.policy_for(user, record)
 
     # use the action as a default permission
     query ||= ("can_" + params[:action].to_s + "!").to_sym
@@ -32,31 +31,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  # Proposals can have special authorization parameters in their client_data
-  def authorizing_object(record)
-    if record.is_a?(Class)
-      # use an instance
-      record = record.new
-    end
-
-    if record.instance_of?(Proposal) && Pundit::PolicyFinder.new(record.client_data).policy
-      record.client_data
-    else
-      record
-    end
-  end
-
   # Override Pundit to account for proposal gymnastics
   def policy(record)
-    super(self.authorizing_object(record))
-  end
-
-  def param_date(sym)
-    begin
-      Date.strptime(params[sym].to_s)
-    rescue ArgumentError
-      nil
-    end
+    obj = ::PolicyFinder.authorizing_object(record)
+    super(obj)
   end
 
   def admin?

@@ -2,6 +2,7 @@ class ProposalsController < ApplicationController
   include TokenAuth
 
   before_filter :authenticate_user!, except: :approve
+  # TODO use Policy for all actions
   before_filter ->{authorize self.proposal}, only: [:show, :cancel, :cancel_form]
   before_filter :needs_token_on_get, only: :approve
   before_filter :validate_access, only: :approve
@@ -17,13 +18,13 @@ class ProposalsController < ApplicationController
 
   def index
     @CLOSED_PROPOSAL_LIMIT = 10
-    @pending_data = self.proposals_container(:pending) { |p| p.pending }
-    @approved_data = self.proposals_container(:approved) { |p| p.approved.limit(@CLOSED_PROPOSAL_LIMIT) }
-    @cancelled_data = self.proposals_container(:cancelled) { |p| p.cancelled }
+    @pending_data = self.listing.pending
+    @approved_data = self.listing.approved(@CLOSED_PROPOSAL_LIMIT)
+    @cancelled_data = self.listing.cancelled
   end
 
   def archive
-    @proposals_data = self.proposals_container(:closed) { |p| p.closed }
+    @proposals_data = self.listing.closed
   end
 
   def cancel_form
@@ -63,30 +64,12 @@ class ProposalsController < ApplicationController
   # @todo - this is acting more like an index; rename existing #index to #mine
   # or similar, then rename #query to #index
   def query
+    query_listing = self.listing
+    @proposals_data = query_listing.query
+
     @text = params[:text]
-    if @text
-      # only sort by the match priority if searching
-      @proposals_data = self.proposals_container(:query, frozen_sort: true)
-    else
-      @proposals_data = self.proposals_container(:query)
-    end
-
-    # @todo - move all of this filtering into the TabularData::Container object
-    @start_date = self.param_date(:start_date)
-    @end_date = self.param_date(:end_date)
-
-    if @start_date
-      @proposals_data.alter_query{ |p| p.where('proposals.created_at >= ?', @start_date) }
-    end
-    if @end_date
-      @proposals_data.alter_query{ |p| p.where('proposals.created_at < ?', @end_date) }
-    end
-    if @text
-      @proposals_data.alter_query do |p|
-        Query::ProposalSearch.new(p).execute(@text)
-      end
-    end
-    # TODO limit/paginate results
+    @start_date = query_listing.start_date
+    @end_date = query_listing.end_date
   end
 
 
@@ -104,14 +87,7 @@ class ProposalsController < ApplicationController
     end
   end
 
-  def proposals_container(name, extra_config={}, &block)
-    config = TabularData::Container.config_for_client("proposals", current_user.client_slug)
-    config = config.merge(extra_config)
-    container = TabularData::Container.new(name, config)
-    container.alter_query { |p| policy_scope(p).includes(:client_data) }
-    if block
-      container.alter_query(&block)
-    end
-    container.set_state_from_params(params)
+  def listing
+    Query::Proposal::Listing.new(current_user, params)
   end
 end

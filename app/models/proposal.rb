@@ -95,7 +95,7 @@ class Proposal < ActiveRecord::Base
   def users
     # TODO use SQL
     results = self.approvers + self.observers + self.delegates + [self.requester]
-    results.compact
+    results.compact.uniq
   end
 
   # Set the approver list, from any start state
@@ -229,13 +229,17 @@ class Proposal < ActiveRecord::Base
     end
   end
 
-  # Returns True if the user is an approver and has acted on the proposal
-  def is_active_approver? user
+  # Returns True if the user is an "active" approver or has acted on the proposal
+  def is_active_approver?(user)
     self.approvals.non_pending.exists?(user_id: user.id)
   end
 
   def self.client_model_names
     CLIENT_MODELS.map(&:to_s)
+  end
+
+  def self.client_slugs
+    CLIENT_MODELS.map(&:client)
   end
 
   protected
