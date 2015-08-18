@@ -1,5 +1,5 @@
 class Dispatcher
-  include ClassMethods
+  include ClassMethodsMixin
 
   def email_approver(approval)
     approval.create_api_token!
