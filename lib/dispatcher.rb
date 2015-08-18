@@ -38,12 +38,12 @@ class Dispatcher
 
   def deliver_cancellation_emails(proposal)
     proposal.approvers.each do |approver|
-      CommunicartMailer.cancellation_email(proposal,approver.email_address).deliver_now
+      CommunicartMailer.cancellation_email(proposal, approver.email_address).deliver_now
     end
     CommunicartMailer.cancellation_confirmation(proposal).deliver_now
   end
 
-  def requires_approval_notice?(approval)
+  def requires_approval_notice?(_approval)
     true
   end
 
@@ -56,18 +56,18 @@ class Dispatcher
   end
 
   def on_comment_created(comment)
-    comment.listeners.each{|user|
+    comment.listeners.each do |user|
       CommunicartMailer.comment_added_email(comment, user.email_address).deliver_now
-    }
+    end
   end
 
-  def on_proposal_update(proposal)
+  def on_proposal_update(_proposal)
   end
 
-  def on_approver_removal(proposal,removed_approvers)
-    removed_approvers.each{|approver|
-      CommunicartMailer.notification_for_subscriber(approver.email_address,proposal,"removed").deliver_now
-    }
+  def on_approver_removal(proposal, removed_approvers)
+    removed_approvers.each do|approver|
+      CommunicartMailer.notification_for_subscriber(approver.email_address, proposal, "removed").deliver_now
+    end
   end
 
   private
