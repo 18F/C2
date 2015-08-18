@@ -1,6 +1,4 @@
-class CommunicartMailer < ActionMailer::Base
-  include Roadie::Rails::Automatic
-
+class CommunicartMailer < ApplicationMailer
   layout 'communicart_mailer'
   add_template_helper CommunicartMailerHelper
   add_template_helper ValueHelper
@@ -108,25 +106,6 @@ class CommunicartMailer < ActionMailer::Base
   end
 
   private
-
-  def email_with_name(email, name)
-    # http://stackoverflow.com/a/8106387/358804
-    address = Mail::Address.new(email)
-    address.display_name = name
-    address.format
-  end
-
-  def sender_email
-    ENV['NOTIFICATION_FROM_EMAIL'] || 'noreply@some.gov'
-  end
-
-  def default_sender_email
-    email_with_name(sender_email, "Communicart")
-  end
-
-  def user_email_with_name(user)
-    email_with_name(sender_email, user.full_name)
-  end
 
   def send_proposal_email(proposal:, to_email:, from_email: nil, template_name: nil)
     @proposal = proposal.decorate
