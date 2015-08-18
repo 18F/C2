@@ -43,6 +43,7 @@ class CommunicartMailer < ApplicationMailer
       proposal: proposal
     )
   end
+  alias_method :cancellation_email, :proposal_observer_email
 
   def proposal_created_confirmation(proposal)
     send_proposal_email(
@@ -50,20 +51,7 @@ class CommunicartMailer < ApplicationMailer
       proposal: proposal
     )
   end
-
-  def cancellation_confirmation(proposal)
-    send_proposal_email(
-      to_email: proposal.requester.email_address,
-      proposal: proposal
-    )
-  end
-
-  def cancellation_email(proposal, to_email)
-    send_proposal_email(
-      to_email: to_email,
-      proposal: proposal
-    )
-  end
+  alias_method :cancellation_confirmation, :proposal_created_confirmation
 
   def approval_reply_received_email(approval)
     proposal = approval.proposal
