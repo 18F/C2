@@ -1,4 +1,6 @@
 class Dispatcher
+  include ClassMethods
+
   def email_approver(approval)
     approval.create_api_token!
     send_notification_email(approval)
@@ -36,12 +38,12 @@ class Dispatcher
 
   def deliver_cancellation_emails(proposal)
     proposal.approvers.each do |approver|
-      CommunicartMailer.cancellation_email(proposal,approver.email_address).deliver_now
+      CommunicartMailer.cancellation_email(proposal, approver.email_address).deliver_now
     end
     CommunicartMailer.cancellation_confirmation(proposal).deliver_now
   end
 
-  def requires_approval_notice?(approval)
+  def requires_approval_notice?(_approval)
     true
   end
 
@@ -54,70 +56,18 @@ class Dispatcher
   end
 
   def on_comment_created(comment)
-    comment.listeners.each{|user|
+    comment.listeners.each do |user|
       CommunicartMailer.comment_added_email(comment, user.email_address).deliver_now
-    }
-  end
-
-  def on_proposal_update(proposal)
-  end
-
-  def on_approver_removal(proposal,removed_approvers)
-    removed_approvers.each{|approver|
-      CommunicartMailer.notification_for_subscriber(approver.email_address,proposal,"removed").deliver_now
-    }
-  end
-
-  # todo: replace with dynamic dispatch
-  def self.initialize_dispatcher(proposal)
-    case proposal.flow
-    when 'parallel'
-      self.new
-    when 'linear'
-      # @todo: dynamic dispatch for selection
-      if proposal.client == "ncr"
-        NcrDispatcher.new
-      else
-        LinearDispatcher.new
-      end
     end
   end
 
-  # TODO DRY the following up
-
-  def self.deliver_new_proposal_emails(proposal)
-    dispatcher = self.initialize_dispatcher(proposal)
-    dispatcher.deliver_new_proposal_emails(proposal)
+  def on_proposal_update(_proposal)
   end
 
-  def self.on_approval_approved(approval)
-    dispatcher = self.initialize_dispatcher(approval.proposal)
-    dispatcher.on_approval_approved(approval)
-  end
-
-  def self.on_comment_created(comment)
-    dispatcher = self.initialize_dispatcher(comment.proposal)
-    dispatcher.on_comment_created(comment)
-  end
-
-  def self.email_approver(approval)
-    dispatcher = self.initialize_dispatcher(approval.proposal)
-    dispatcher.email_approver(approval)
-  end
-
-  def self.on_proposal_update(proposal)
-    dispatcher = self.initialize_dispatcher(proposal)
-    dispatcher.on_proposal_update(proposal)
-  end
-
-  def self.on_approver_removal(proposal, approvers)
-    dispatcher = self.initialize_dispatcher(proposal)
-    dispatcher.on_approver_removal(proposal, approvers)
-  end
-
-  def self.on_observer_added(observation)
-    dispatcher = self.initialize_dispatcher(observation.proposal)
-    dispatcher.on_observer_added(observation)
+  def on_approver_removal(proposal, removed_approvers)
+    removed_approvers.each do|approver|
+      CommunicartMailer.notification_for_subscriber(approver.email_address, proposal, "removed").deliver_now
+    end
   end
 
   private

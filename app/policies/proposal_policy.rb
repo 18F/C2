@@ -1,5 +1,6 @@
 class ProposalPolicy
   include ExceptionPolicy
+
   def initialize(user, record)
     super(user, record)
     @proposal = record

@@ -1,9 +1,8 @@
 class ObservationsController < ApplicationController
   before_action :authenticate_user!
   before_action :find_proposal
-  before_action ->{authorize @proposal, :can_show!}
+  before_action -> { authorize self.observation_for_auth }
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
-
 
   def create
     cleaned = params.permit(observation: { user: [:email_address] })
@@ -29,11 +28,19 @@ class ObservationsController < ApplicationController
     @proposal ||= Proposal.find(params[:proposal_id])
   end
 
+  def observation_for_auth
+    if params[:action] == 'create'
+      Observation.new(proposal: @proposal)
+    else
+      self.observation
+    end
+  end
+
   def observation
     @cached_observation ||= Observation.find(params[:id])
   end
 
-  def auth_errors(exception)
+  def auth_errors(_exception)
     redirect_to proposals_path, alert: "You are not allowed to add observers to that proposal"
   end
 end

@@ -57,6 +57,7 @@ describe ProposalsController do
         expect(flash[:alert]).not_to be_present
       end
 
+      # might be flaky? -Aidan, 8/14/15
       it 'should redirect random users' do
         proposal = FactoryGirl.create(:proposal)
         get :show, id: proposal.id

@@ -1,0 +1,7 @@
+%div
+  Hi #{@proposal.requester.full_name},
+  %br
+  You just submitted a request for approval. Here are the details:
+= render partial: 'comments', locals: { comments: @proposal.comments }
+= render partial: 'attachments', locals: { proposal: @proposal }
+= client_partial(@proposal.client, 'proposal_mail', locals: {proposal: @proposal, title: "Purchase Request"})
