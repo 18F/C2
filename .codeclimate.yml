@@ -26,15 +26,17 @@ engines:
 
 ratings:
   paths:
-  - app/**
-  - lib/**
+  - "app/**"
+  - "lib/**"
   - "**.rb"
 
 # You can globally exclude files from being analyzed by any engine using the
 # exclude_paths key.
 
 exclude_paths:
-- db/migrate/*
-- db/schema.rb
-- spec/**/*
-- vendor/**/*
+# https://github.com/codeclimate/codeclimate-csslint/pull/7
+- "**/*.scss"
+- "db/migrate/*"
+- "db/schema.rb"
+- "spec/**/*"
+- "vendor/**/*"

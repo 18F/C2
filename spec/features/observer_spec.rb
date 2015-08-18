@@ -1,5 +1,7 @@
 describe "observers" do
   it "allows observers to be added" do
+    expect(CommunicartMailer).to receive(:on_observer_added).and_call_original
+
     work_order = FactoryGirl.create(:ncr_work_order)
     observer = FactoryGirl.create(:user)
     proposal = work_order.proposal
@@ -13,8 +15,6 @@ describe "observers" do
 
     proposal.reload
     expect(proposal.observers).to eq [observer]
-
-    expect(email_recipients).to eq([observer.email_address])
   end
 
   it "allows observers to be added by other observers" do

@@ -200,6 +200,38 @@ describe CommunicartMailer do
     end
   end
 
+  describe 'on_observer_added' do
+    it "sends to the observer" do
+      proposal = FactoryGirl.create(:proposal, :with_observer)
+      observation = proposal.observations.first
+
+      mail = CommunicartMailer.on_observer_added(observation)
+
+      observer = observation.user
+      expect(mail.to).to eq([observer.email_address])
+    end
+
+    it "includes who they were added by" do
+      adder = FactoryGirl.create(:user)
+      PaperTrail.whodunnit = adder.id
+
+      proposal = FactoryGirl.create(:proposal, :with_observer)
+      observation = proposal.observations.first
+      expect(observation.created_by).to eq(adder)
+
+      mail = CommunicartMailer.on_observer_added(observation)
+      expect(mail.body.encoded).to include("to this request by #{adder.full_name}")
+    end
+
+    it "excludes who they were added by, if not available" do
+      proposal = FactoryGirl.create(:proposal, :with_observer)
+      observation = proposal.observations.first
+
+      mail = CommunicartMailer.on_observer_added(observation)
+      expect(mail.body.encoded).to_not include("to this request by ")
+    end
+  end
+
   describe 'proposal_observer_email' do
     let(:observation) { proposal.add_observer('observer1@some-dot-gov.gov') }
     let(:observer) { observation.user }

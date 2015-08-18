@@ -7,16 +7,15 @@ class CommunicartMailer < ActionMailer::Base
   add_template_helper ClientHelper
   add_template_helper MarkdownHelper
 
-
   # Approver can approve/take other action
-  def actions_for_approver(to_email, approval, alert_partial=nil)
+  def actions_for_approver(to_email, approval, alert_partial = nil)
     @show_approval_actions = true
     proposal = approval.proposal
-    
+
     self.notification_for_subscriber(to_email, proposal, alert_partial, approval)
   end
 
-  def notification_for_subscriber(to_email, proposal, alert_partial=nil, approval=nil)
+  def notification_for_subscriber(to_email, proposal, alert_partial = nil, approval = nil)
     @approval = approval
     @alert_partial = alert_partial
 
@@ -25,6 +24,17 @@ class CommunicartMailer < ActionMailer::Base
       to_email: to_email,
       proposal: proposal,
       template_name: 'proposal_notification_email'
+    )
+  end
+
+  def on_observer_added(observation)
+    @observation = observation
+    observer = observation.user
+
+    send_proposal_email(
+      from_email: observation_added_from(observation),
+      to_email: observer.email_address,
+      proposal: observation.proposal
     )
   end
 
@@ -72,7 +82,7 @@ class CommunicartMailer < ActionMailer::Base
   def comment_added_email(comment, to_email)
     @comment = comment
     # Don't send if special comment
-    if !@comment.update_comment
+    unless @comment.update_comment
       send_proposal_email(
         from_email: user_email_with_name(comment.user),
         to_email: to_email,
@@ -94,7 +104,7 @@ class CommunicartMailer < ActionMailer::Base
   end
 
   def self.support_email
-    ENV['SUPPORT_EMAIL'] || 'gatewaycommunicator@gsa.gov'   # not sensitive, so hard coding
+    ENV['SUPPORT_EMAIL'] || 'gatewaycommunicator@gsa.gov' # not sensitive, so hard coding
   end
 
   private
@@ -118,8 +128,7 @@ class CommunicartMailer < ActionMailer::Base
     email_with_name(sender_email, user.full_name)
   end
 
-  # `proposal` and `to_email` are required
-  def send_proposal_email(proposal: nil, to_email: nil, from_email: nil, template_name: nil)
+  def send_proposal_email(proposal:, to_email:, from_email: nil, template_name: nil)
     @proposal = proposal.decorate
 
     # http://www.jwz.org/doc/threading.html
@@ -136,7 +145,7 @@ class CommunicartMailer < ActionMailer::Base
 
   def proposal_subject(proposal)
     params = proposal.as_json
-    #todo: replace with public_id once #98376564 is fixed
+    # todo: replace with public_id once #98376564 is fixed
     params[:public_identifier] = proposal.public_identifier
     # Add in requester params
     proposal.requester.as_json.each { |k, v| params["requester_" + k] = v }
@@ -152,5 +161,14 @@ class CommunicartMailer < ActionMailer::Base
     # Add search path, and default lookup key for I18n
     params.merge!(scope: [:mail, :subject], default: :proposal)
     I18n.t i18n_key, params.symbolize_keys
+  end
+
+  def observation_added_from(observation)
+    adder = observation.created_by
+    if adder
+      user_email_with_name(adder)
+    else
+      nil
+    end
   end
 end
