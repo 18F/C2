@@ -1,6 +1,10 @@
 module ProposalConversationThreading
   ## helper methods ##
 
+  def self.msg_id(proposal)
+    "<proposal-#{proposal.id}@#{DEFAULT_URL_HOST}>"
+  end
+
   def self.subject_i18n_key(proposal)
     if proposal.client_data
       # We'll look up by the client_data's class name
@@ -39,14 +43,19 @@ module ProposalConversationThreading
 
   protected
 
+  def assign_threading_headers(proposal)
+    msg_id = ProposalConversationThreading.msg_id(proposal)
+
+    # http://www.jwz.org/doc/threading.html
+    headers['In-Reply-To'] = msg_id
+    headers['References'] = msg_id
+  end
+
   def send_proposal_email(proposal:, to_email:, from_email: nil, template_name: nil)
     @proposal = proposal.decorate
 
-    # http://www.jwz.org/doc/threading.html
-    headers['In-Reply-To'] = @proposal.email_msg_id
-    headers['References'] = @proposal.email_msg_id
-
-    subject = ProposalConversationThreading.subject(@proposal)
+    self.assign_threading_headers(proposal)
+    subject = ProposalConversationThreading.subject(proposal)
 
     mail(
       to: to_email,
