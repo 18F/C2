@@ -1,6 +1,6 @@
 describe "observers" do
   it "allows observers to be added" do
-    expect(CommunicartMailer).to receive(:on_observer_added).and_call_original
+    expect(CommunicartMailer).to receive_message_chain(:on_observer_added, :deliver_later)
 
     work_order = FactoryGirl.create(:ncr_work_order)
     observer = FactoryGirl.create(:user)
