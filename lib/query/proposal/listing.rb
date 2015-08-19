@@ -13,8 +13,8 @@ module Query
         self.proposals_container(:pending).alter_query(&:pending)
       end
 
-      def approved(limit)
-        self.proposals_container(:approved).alter_query { |p| p.approved.limit(limit) }
+      def approved
+        self.proposals_container(:approved).alter_query(&:approved)
       end
 
       def cancelled
