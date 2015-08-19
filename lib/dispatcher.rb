@@ -1,5 +1,5 @@
 class Dispatcher
-  include ClassMethods
+  include ClassMethodsMixin
 
   def email_approver(approval)
     approval.create_api_token!
@@ -8,7 +8,7 @@ class Dispatcher
 
   def email_observer(observation)
     proposal = observation.proposal
-    CommunicartMailer.proposal_observer_email(observation.user_email_address, proposal).deliver_now
+    CommunicartMailer.proposal_observer_email(observation.user_email_address, proposal).deliver_later
   end
 
   def email_observers(proposal)
@@ -21,11 +21,11 @@ class Dispatcher
   end
 
   def on_observer_added(observation)
-    CommunicartMailer.on_observer_added(observation).deliver_now
+    CommunicartMailer.on_observer_added(observation).deliver_later
   end
 
   def email_sent_confirmation(proposal)
-    CommunicartMailer.proposal_created_confirmation(proposal).deliver_now
+    CommunicartMailer.proposal_created_confirmation(proposal).deliver_later
   end
 
   def deliver_new_proposal_emails(proposal)
@@ -38,9 +38,9 @@ class Dispatcher
 
   def deliver_cancellation_emails(proposal)
     proposal.approvers.each do |approver|
-      CommunicartMailer.cancellation_email(proposal, approver.email_address).deliver_now
+      CommunicartMailer.cancellation_email(proposal, approver.email_address).deliver_later
     end
-    CommunicartMailer.cancellation_confirmation(proposal).deliver_now
+    CommunicartMailer.cancellation_confirmation(proposal).deliver_later
   end
 
   def requires_approval_notice?(_approval)
@@ -49,7 +49,7 @@ class Dispatcher
 
   def on_approval_approved(approval)
     if self.requires_approval_notice?(approval)
-      CommunicartMailer.approval_reply_received_email(approval).deliver_now
+      CommunicartMailer.approval_reply_received_email(approval).deliver_later
     end
 
     self.email_observers(approval.proposal)
@@ -57,7 +57,7 @@ class Dispatcher
 
   def on_comment_created(comment)
     comment.listeners.each do |user|
-      CommunicartMailer.comment_added_email(comment, user.email_address).deliver_now
+      CommunicartMailer.comment_added_email(comment, user.email_address).deliver_later
     end
   end
 
@@ -66,7 +66,7 @@ class Dispatcher
 
   def on_approver_removal(proposal, removed_approvers)
     removed_approvers.each do|approver|
-      CommunicartMailer.notification_for_subscriber(approver.email_address, proposal, "removed").deliver_now
+      CommunicartMailer.notification_for_subscriber(approver.email_address, proposal, "removed").deliver_later
     end
   end
 
@@ -74,6 +74,6 @@ class Dispatcher
 
   def send_notification_email(approval)
     email = approval.user_email_address
-    CommunicartMailer.actions_for_approver(email, approval).deliver_now
+    CommunicartMailer.actions_for_approver(email, approval).deliver_later
   end
 end

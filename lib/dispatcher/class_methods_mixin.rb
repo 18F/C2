@@ -1,5 +1,5 @@
 class Dispatcher
-  module ClassMethods
+  module ClassMethodsMixin
     extend ActiveSupport::Concern
 
     class_methods do

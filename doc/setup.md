@@ -41,7 +41,7 @@ Per [the Twelve-Factor guidelines](http://12factor.net/config), all necessary co
 open http://localhost:3000
 ```
 
-To include the [clock process](../config/clock.rb) (which is used for background jobs), run using `foreman start -p 3000`.
+To include the background jobs (which include sending emails), run using `foreman start -p 3000`.
 
 ### Viewing the mailers
 
