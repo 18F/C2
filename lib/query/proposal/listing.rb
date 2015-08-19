@@ -59,7 +59,7 @@ module Query
         container
       end
 
-      # returns a Container that is limited to what the user should see on /proposals
+      # returns a Container that is limited to what the user should see on /proposals, even if the ProposalPolicy::Scope allows them to see more
       def index_visible_container(name)
         container = self.proposals_container(name)
         container.alter_query do |rel|
