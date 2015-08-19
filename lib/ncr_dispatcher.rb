@@ -16,21 +16,21 @@ class NcrDispatcher < LinearDispatcher
   # modified. Also notify current approvers that the proposal has been updated
   def on_proposal_update(proposal)
     proposal.individual_approvals.approved.each{|approval|
-      CommunicartMailer.notification_for_subscriber(approval.user_email_address, proposal, "already_approved", approval).deliver_now
+      CommunicartMailer.notification_for_subscriber(approval.user_email_address, proposal, "already_approved", approval).deliver_later
     }
 
     proposal.currently_awaiting_approvals.each{|approval|
       if approval.api_token   # Approver's been notified through some other means
-        CommunicartMailer.actions_for_approver(approval.user_email_address, approval, "updated").deliver_now
+        CommunicartMailer.actions_for_approver(approval.user_email_address, approval, "updated").deliver_later
       else
         approval.create_api_token!
-        CommunicartMailer.actions_for_approver(approval.user_email_address, approval).deliver_now
+        CommunicartMailer.actions_for_approver(approval.user_email_address, approval).deliver_later
       end
     }
 
     proposal.observers.each{|observer|
       if observer.role_on(proposal).active_observer?
-        CommunicartMailer.notification_for_subscriber(observer.email_address, proposal, "updated").deliver_now
+        CommunicartMailer.notification_for_subscriber(observer.email_address, proposal, "updated").deliver_later
       end
     }
   end
