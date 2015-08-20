@@ -262,6 +262,22 @@ describe CommunicartMailer do
     end
   end
 
+  describe 'actions_for_approver' do
+    let(:mail) { CommunicartMailer.actions_for_approver(approval) }
+
+    it_behaves_like "a Proposal email"
+
+    it "creates a new token" do
+      expect(proposal.api_tokens).to eq([])
+
+      Timecop.freeze do
+        mail.deliver_now
+        approval.reload
+        expect(approval.api_token.expires_at).to be_within(1.second).of(7.days.from_now)
+      end
+    end
+  end
+
   describe '#proposal_subject' do
     it 'defaults when no client_data is present' do
       proposal = FactoryGirl.create(:proposal)

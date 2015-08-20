@@ -13,6 +13,10 @@ class CommunicartMailer < ActionMailer::Base
     to_email = approval.user_email_address
     proposal = approval.proposal
 
+    unless approval.api_token
+      approval.create_api_token!
+    end
+
     self.notification_for_subscriber(to_email, proposal, alert_partial, approval)
   end
 

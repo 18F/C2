@@ -1,6 +1,5 @@
 class MailPreview < MailView
   def actions_for_approver
-    # TODO mock access token, if one isn't present
     mail = CommunicartMailer.actions_for_approver(pending_approval)
     inline_styles(mail)
   end

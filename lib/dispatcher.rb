@@ -2,7 +2,6 @@ class Dispatcher
   include ClassMethodsMixin
 
   def email_approver(approval)
-    approval.create_api_token!
     send_notification_email(approval)
   end
 
