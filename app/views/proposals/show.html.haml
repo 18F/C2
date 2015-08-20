@@ -38,7 +38,7 @@
         %tr.header
           %th{colspan: "2"}
             - # todo: shouldn't need the h5
-            %h5 Subscribers
+            %h5 Observers
       %tbody
         - @proposal.subscribers_list.each do |user, role_str, observation|
           %tr
@@ -56,7 +56,7 @@
                   .col-md-8.col-xs-12
                     = user_form.collection_select :email_address, User.all.order(:email_address), :email_address, :email_address, {include_blank: true}, class: 'js-selectize'
                   .col-md-4.col-xs-12.righted
-                    = user_form.submit "Add a Subscriber", id: :add_subscriber, data: {'disable-if-empty' => 'observation_user_email_address'}
+                    = user_form.submit "Add an Observer", id: :add_subscriber, data: {'disable-if-empty' => 'observation_user_email_address'}
 
 
 

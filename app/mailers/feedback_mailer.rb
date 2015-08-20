@@ -1,6 +1,6 @@
 class FeedbackMailer < ApplicationMailer
   def feedback(sending_user, form_values)
-    form_strings = form_values.map { |pair| "#{pair[0]}: #{pair[1]}" }
+    form_strings = form_values.map { |key, val| "#{key}: #{val}" }
     message = form_strings.join("\n")
     mail(
       to: self.class.support_email,

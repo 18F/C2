@@ -1,28 +1,26 @@
-<% title "What if there's something wrong with the request?" %>
+<% title "What if I need to modify a request?" %>
 
-A request may need to be modified after it is submitted. These situations include:
+You may need to modify a request after it is submitted for a number of reasons:
+  - To correct a typo or other error
+  - To update a Not-To-Exceed amount to a final purchase price
+  - To change approval information or provide a new RWA number
 
-* There was a typo.
-* A different RWA number needs to be used. (BA80)
-* The original request had a Not-To-Exceed amount, which needs to be changed to Exact once it's complete.
+## To ask for a modification
 
-## Approver
+Who is eligible to modify a request depends on the rules of your region or organization. But anyone involved in a request can ask for a modification:
 
-If you are one of the approvers and notice an issue:
-
-1. Go to the detail page for a request.
+1. Go to the detail page for the request.
 1. Scroll down to the comment area.
-1. Leave a comment, saying what needs to be changed.
+1. Leave a comment that explains what needs to change.
+1. Click “Submit.”
 
-Everyone involved in the request will get a notification with the comment.
+Everyone involved in the request will receive a notification email with the comment.
 
-## Requester
+## To modify a request directly
 
-If you are a requester, follow these steps to modify the request:
+1. Go to the detail page for the request.
+1. Scroll down to click the “Modify Request” button.
+1. Modify the information in the form.
+1. Submit the changes by clicking the “Update” button at the bottom.
 
-1. Go to the detail page for a request.
-1. Scroll down to click the "Modify Request" button.
-1. Modify the values in the form.
-1. Submit the changes but clicking the button at the bottom.
-
-At this point, everyone involved will be notified, so you don't need to send any additional message.
+Everyone involved will receive a notification email, so you don't need to send an additional message.

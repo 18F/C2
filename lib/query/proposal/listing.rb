@@ -10,15 +10,15 @@ module Query
       end
 
       def pending
-        self.proposals_container(:pending).alter_query(&:pending)
+        self.index_visible_container(:pending).alter_query(&:pending)
       end
 
-      def approved(limit)
-        self.proposals_container(:approved).alter_query { |p| p.approved.limit(limit) }
+      def approved
+        self.index_visible_container(:approved).alter_query(&:approved)
       end
 
       def cancelled
-        self.proposals_container(:cancelled).alter_query(&:cancelled)
+        self.index_visible_container(:cancelled).alter_query(&:cancelled)
       end
 
       def closed
@@ -57,6 +57,15 @@ module Query
         container.set_state_from_params(self.params)
 
         container
+      end
+
+      # returns a Container that is limited to what the user should see on /proposals, even if the ProposalPolicy::Scope allows them to see more
+      def index_visible_container(name)
+        container = self.proposals_container(name)
+        container.alter_query do |rel|
+          condition = Query::Proposal::Clauses.which_involve(self.user)
+          rel.where(condition)
+        end
       end
 
       def param_date(sym)

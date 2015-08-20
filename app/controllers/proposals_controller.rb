@@ -18,8 +18,9 @@ class ProposalsController < ApplicationController
 
   def index
     @CLOSED_PROPOSAL_LIMIT = 10
+
     @pending_data = self.listing.pending
-    @approved_data = self.listing.approved(@CLOSED_PROPOSAL_LIMIT)
+    @approved_data = self.listing.approved.alter_query{ |rel| rel.limit(@CLOSED_PROPOSAL_LIMIT) }
     @cancelled_data = self.listing.cancelled
   end
 

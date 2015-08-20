@@ -1,6 +1,6 @@
 describe "observers" do
   it "allows observers to be added" do
-    expect(CommunicartMailer).to receive(:on_observer_added).and_call_original
+    expect(CommunicartMailer).to receive_message_chain(:on_observer_added, :deliver_later)
 
     work_order = FactoryGirl.create(:ncr_work_order)
     observer = FactoryGirl.create(:user)
@@ -9,7 +9,7 @@ describe "observers" do
 
     visit "/proposals/#{proposal.id}"
     select observer.email_address, from: 'observation_user_email_address'
-    click_on 'Add a Subscriber'
+    click_on 'Add an Observer'
 
     expect(page).to have_content("#{observer.full_name} has been added as an observer")
 
@@ -26,7 +26,7 @@ describe "observers" do
 
     visit "/proposals/#{proposal.id}"
     select observer2.email_address, from: 'observation_user_email_address'
-    click_on 'Add a Subscriber'
+    click_on 'Add an Observer'
 
     expect(page).to have_content("#{observer2.full_name} has been added as an observer")
 

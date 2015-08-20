@@ -3,7 +3,7 @@ describe ReportMailer do
     with_env_var('BUDGET_REPORT_RECIPIENT', 'budget@gsa.gov') do
       it "works with no data" do
         expect {
-          ReportMailer.budget_status.deliver_now
+          ReportMailer.budget_status.deliver_later
         }.to_not raise_error
       end
     end
