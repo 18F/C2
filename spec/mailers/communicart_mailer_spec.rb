@@ -37,7 +37,7 @@ describe CommunicartMailer do
 
   describe 'notification_for_approver' do
     let!(:token) { approval.create_api_token! }
-    let(:mail) { CommunicartMailer.actions_for_approver('email.to.email@testing.com', approval) }
+    let(:mail) { CommunicartMailer.actions_for_approver(approval) }
     let(:body) { mail.body.encoded }
     let(:approval_uri) do
       doc = Capybara.string(body)
@@ -50,7 +50,7 @@ describe CommunicartMailer do
     it_behaves_like "a Proposal email"
 
     it 'renders the receiver email' do
-      expect(mail.to).to eq(["email.to.email@testing.com"])
+      expect(mail.to).to eq([approver.email_address])
     end
 
     it "sets the sender name" do
@@ -67,7 +67,7 @@ describe CommunicartMailer do
     end
 
     it 'alerts subscribers that they have been removed' do
-      mail = CommunicartMailer.actions_for_approver('abc@example.com', approval, 'removed')
+      mail = CommunicartMailer.actions_for_approver(approval, 'removed')
       expect(mail.body.encoded).to include('You have been removed from this request.')
     end
 
@@ -109,19 +109,19 @@ describe CommunicartMailer do
 
     context 'alert templates' do
       it 'defaults to no specific header' do
-        mail = CommunicartMailer.actions_for_approver('abc@example.com', approval)
+        mail = CommunicartMailer.actions_for_approver(approval)
         expect(mail.body.encoded).not_to include('updated')
         expect(mail.body.encoded).not_to include('already approved')
       end
 
       it 'uses already_approved as a particular template' do
-        mail = CommunicartMailer.actions_for_approver('abc@example.com', approval, 'already_approved')
+        mail = CommunicartMailer.actions_for_approver(approval, 'already_approved')
         expect(mail.body.encoded).to include('updated')
         expect(mail.body.encoded).to include('already approved')
       end
 
       it 'uses updated as a particular template' do
-        mail = CommunicartMailer.actions_for_approver('abc@example.com', approval, 'updated')
+        mail = CommunicartMailer.actions_for_approver(approval, 'updated')
         expect(mail.body.encoded).to include('updated')
         expect(mail.body.encoded).not_to include('already approved')
       end
@@ -133,7 +133,7 @@ describe CommunicartMailer do
     end
 
     it "does include action buttons when actions_for_approver is used" do
-        mail = CommunicartMailer.actions_for_approver('abc@example.com', approval)
+        mail = CommunicartMailer.actions_for_approver(approval)
         expect(mail.body.encoded).to include('Approve')
     end
   end

@@ -21,10 +21,10 @@ class NcrDispatcher < LinearDispatcher
 
     proposal.currently_awaiting_approvals.each{|approval|
       if approval.api_token   # Approver's been notified through some other means
-        CommunicartMailer.actions_for_approver(approval.user_email_address, approval, "updated").deliver_later
+        CommunicartMailer.actions_for_approver(approval, "updated").deliver_later
       else
         approval.create_api_token!
-        CommunicartMailer.actions_for_approver(approval.user_email_address, approval).deliver_later
+        CommunicartMailer.actions_for_approver(approval).deliver_later
       end
     }
 
