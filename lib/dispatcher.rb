@@ -38,7 +38,7 @@ class Dispatcher
 
   def deliver_cancellation_emails(proposal)
     proposal.approvers.each do |approver|
-      CommunicartMailer.cancellation_email(proposal, approver.email_address).deliver_later
+      CommunicartMailer.cancellation_email(approver.email_address, proposal).deliver_later
     end
     CommunicartMailer.cancellation_confirmation(proposal).deliver_later
   end
