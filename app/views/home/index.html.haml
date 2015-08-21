@@ -22,7 +22,7 @@
       = stylesheet_link_tag "photon/ie/v8.css"
 
   %body
-    - unless ENV["DISABLE_SANDBOX_WARNING"]
+    - unless ENV['DISABLE_SANDBOX_WARNING'] == 'true'
       = render 'shared/sandbox_warning'
     / Header
     %section#header

@@ -1,7 +1,7 @@
 module Api
   class UsersController < BaseController
     def index
-      users = User.all
+      users = User.order('id ASC')
 
       if params[:limit]
         users = users.limit(params[:limit].to_i)

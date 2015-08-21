@@ -1,4 +1,13 @@
 describe Proposal do
+  describe 'CLIENT_MODELS' do
+    it "contains multiple models" do
+      expect(Proposal::CLIENT_MODELS.size).to_not eq(0)
+      Proposal::CLIENT_MODELS.each do |model|
+        expect(model.ancestors).to include(ActiveRecord::Base)
+      end
+    end
+  end
+
   describe '#currently_awaiting_approvers' do
     it "gives a consistently ordered list when in parallel" do
       proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
@@ -71,6 +80,13 @@ describe Proposal do
     it "returns only the rquester when it has no other users" do
       proposal = FactoryGirl.create(:proposal)
       expect(proposal.users).to eq([proposal.requester])
+    end
+
+    it "removes duplicates" do
+      requester = FactoryGirl.create(:user)
+      proposal = FactoryGirl.create(:proposal, requester: requester)
+      proposal.add_observer(requester.email_address)
+      expect(proposal.users).to eq [requester]
     end
   end
 
@@ -247,7 +263,7 @@ describe Proposal do
     end
   end
 
-  describe "scopes" do
+  describe 'scopes' do
     let(:statuses) { %w(pending approved cancelled) }
     let!(:proposals) { statuses.map{|status| FactoryGirl.create(:proposal, status: status) } }
 
@@ -257,7 +273,7 @@ describe Proposal do
       end
     end
 
-    describe '#closed' do
+    describe '.closed' do
       it "returns approved and and cancelled proposals" do
         expect(Proposal.closed.pluck(:status).sort).to eq(%w(approved cancelled))
       end

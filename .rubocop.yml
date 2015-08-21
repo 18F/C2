@@ -1,0 +1,26 @@
+AllCops:
+  Exclude:
+    - 'bin/**/*'
+    - 'db/**/*'
+  RunRailsCops: true
+Metrics/LineLength:
+  Enabled: false
+Style/CommentAnnotation:
+  Enabled: false
+Style/Documentation:
+  Enabled: false
+Style/DotPosition:
+  Enabled: false
+Style/EmptyElse:
+  Enabled: false
+Style/GuardClause:
+  Enabled: false
+Style/IfUnlessModifier:
+  # inline conditionals don't get picked up by simplecov, so preferable to avoid them
+  Enabled: false
+Style/RedundantBegin:
+  Enabled: false
+Style/RedundantSelf:
+  Enabled: false
+Style/StringLiterals:
+  Enabled: false

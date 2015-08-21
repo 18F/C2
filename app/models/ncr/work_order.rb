@@ -103,7 +103,9 @@ module Ncr
         self.proposal.update(status: 'approved')
       else
         approvers = emails.map{|e| User.for_email(e)}
+        removed_approvers_to_notify = self.proposal.approvals.non_pending.map(&:user) - approvers
         self.proposal.approvers = approvers
+        Dispatcher.on_approver_removal(self.proposal, removed_approvers_to_notify)
       end
     end
 
@@ -138,10 +140,6 @@ module Ncr
     def fields_for_display
       attributes = self.relevant_fields
       attributes.map{|key| [WorkOrder.human_attribute_name(key), self[key]]}
-    end
-
-    def client
-      "ncr"
     end
 
     # will return nil if the `org_code` is blank or not present in Organization list

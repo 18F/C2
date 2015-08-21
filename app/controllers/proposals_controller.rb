@@ -2,6 +2,7 @@ class ProposalsController < ApplicationController
   include TokenAuth
 
   before_filter :authenticate_user!, except: :approve
+  # TODO use Policy for all actions
   before_filter ->{authorize self.proposal}, only: [:show, :cancel, :cancel_form]
   before_filter :needs_token_on_get, only: :approve
   before_filter :validate_access, only: :approve
@@ -16,15 +17,15 @@ class ProposalsController < ApplicationController
   end
 
   def index
-    proposals = self.chronological_proposals
     @CLOSED_PROPOSAL_LIMIT = 10
-    @pending_data = self.proposals_container(proposals.pending)
-    @approved_data = self.proposals_container(proposals.approved.limit(@CLOSED_PROPOSAL_LIMIT))
-    @cancelled_data = self.proposals_container(proposals.cancelled)
+
+    @pending_data = self.listing.pending
+    @approved_data = self.listing.approved.alter_query{ |rel| rel.limit(@CLOSED_PROPOSAL_LIMIT) }
+    @cancelled_data = self.listing.cancelled
   end
 
   def archive
-    @proposals_data = self.proposals_container(self.chronological_proposals.closed)
+    @proposals_data = self.listing.closed
   end
 
   def cancel_form
@@ -64,39 +65,19 @@ class ProposalsController < ApplicationController
   # @todo - this is acting more like an index; rename existing #index to #mine
   # or similar, then rename #query to #index
   def query
-    proposal_list = self.proposals
-    # @todo - move all of this filtering into the TabularData::Container object
-    @start_date = self.param_date(:start_date)
-    @end_date = self.param_date(:end_date)
-    @text = params[:text]
+    query_listing = self.listing
+    @proposals_data = query_listing.query
 
-    if @start_date
-      proposal_list = proposal_list.where('created_at >= ?', @start_date)
-    end
-    if @end_date
-      proposal_list = proposal_list.where('created_at < ?', @end_date)
-    end
-    if @text
-      proposal_list = ProposalSearch.new(proposal_list).execute(@text)
-    else
-      proposal_list = proposal_list.order('created_at DESC')
-    end
-    @proposals_data = self.proposals_container(proposal_list)
-    # TODO limit/paginate results
+    @text = params[:text]
+    @start_date = query_listing.start_date
+    @end_date = query_listing.end_date
   end
+
 
   protected
 
   def proposal
     @cached_proposal ||= Proposal.find params[:id]
-  end
-
-  def proposals
-    policy_scope(Proposal)
-  end
-
-  def chronological_proposals
-    self.proposals.order('created_at DESC')
   end
 
   def auth_errors(exception)
@@ -107,9 +88,7 @@ class ProposalsController < ApplicationController
     end
   end
 
-  protected
-  def proposals_container(queryset)
-    config = TabularData::Container.config_for_client("proposals", current_user.client_slug)
-    TabularData::Container.new(queryset, config)
+  def listing
+    Query::Proposal::Listing.new(current_user, params)
   end
 end

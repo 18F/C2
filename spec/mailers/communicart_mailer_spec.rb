@@ -1,5 +1,3 @@
-require 'ostruct'
-
 describe CommunicartMailer do
   def sender_names(mail)
     # http://stackoverflow.com/a/7213323/358804
@@ -29,7 +27,7 @@ describe CommunicartMailer do
 
     it "includes the appropriate headers for threading" do
       # headers only get added when the Mail is #deliver-ed
-      mail.deliver_now
+      mail.deliver_later
 
       %w(In-Reply-To References).each do |header|
         expect(mail[header].value).to eq("<proposal-#{proposal.id}@#{DEFAULT_URL_HOST}>")
@@ -66,6 +64,11 @@ describe CommunicartMailer do
         'cch' => token.access_token,
         'version' => proposal.version.to_s
       )
+    end
+
+    it 'alerts subscribers that they have been removed' do
+      mail = CommunicartMailer.actions_for_approver('abc@example.com', approval, 'removed')
+      expect(mail.body.encoded).to include('You have been removed from this request.')
     end
 
     context 'comments' do
@@ -194,6 +197,38 @@ describe CommunicartMailer do
 
     it "sets the sender name" do
       expect(sender_names(mail)).to eq([comment.user.full_name])
+    end
+  end
+
+  describe 'on_observer_added' do
+    it "sends to the observer" do
+      proposal = FactoryGirl.create(:proposal, :with_observer)
+      observation = proposal.observations.first
+
+      mail = CommunicartMailer.on_observer_added(observation)
+
+      observer = observation.user
+      expect(mail.to).to eq([observer.email_address])
+    end
+
+    it "includes who they were added by" do
+      adder = FactoryGirl.create(:user)
+      PaperTrail.whodunnit = adder.id
+
+      proposal = FactoryGirl.create(:proposal, :with_observer)
+      observation = proposal.observations.first
+      expect(observation.created_by).to eq(adder)
+
+      mail = CommunicartMailer.on_observer_added(observation)
+      expect(mail.body.encoded).to include("to this request by #{adder.full_name}")
+    end
+
+    it "excludes who they were added by, if not available" do
+      proposal = FactoryGirl.create(:proposal, :with_observer)
+      observation = proposal.observations.first
+
+      mail = CommunicartMailer.on_observer_added(observation)
+      expect(mail.body.encoded).to_not include("to this request by ")
     end
   end
 

@@ -40,4 +40,31 @@ describe ProposalDecorator do
       expect(approvers.sort).to eq(users.sort)
     end
   end
+
+  describe '#subscriber_list' do
+    let(:proposal) { FactoryGirl.create(:proposal, :with_observers, :with_parallel_approvers) }
+
+    it 'include request, observers, approvers' do
+      results = proposal.decorate.subscribers_list
+      user_ids = results.map {|result| result[0].id}
+      roles = results.map(&:second)
+      observation_ids = results.map {|result| result[2].try(:id)}
+
+      expect(results.length).to be 5  # requester + 2 approver + 2 observers
+      # convert to ids
+      expected_users = [proposal.requester] + proposal.approvers + proposal.observers
+      expect(user_ids).to eq(expected_users.map(&:id))
+      expect(roles).to eq ["Requester", "Approver", "Approver", nil, nil]
+      expect(observation_ids).to eq([nil, nil, nil] + proposal.observations.map(&:id))
+    end
+
+    it 'sorts by name within each group' do
+      proposal.observers.first.update(first_name: 'Bob', last_name: 'Bobson');
+      proposal.observers.second.update(first_name: 'Ann', last_name: 'Annson');
+      results = proposal.decorate.subscribers_list
+
+      expect(results[3][0].id).to be proposal.observers.second.id
+      expect(results[4][0].id).to be proposal.observers.first.id
+    end
+  end
 end

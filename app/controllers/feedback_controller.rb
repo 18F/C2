@@ -4,12 +4,25 @@ class FeedbackController < ApplicationController
   end
 
   def create
-    fields = [:email, :bug, :context, :expected, :actually, :comments, :satisfaction, :referral]
-    fields = fields.select {|key| !params[key].blank?}
-    form_values = fields.map {|key| [key, params[key]]}
+    form_values = self.feedback_params
     unless form_values.empty?
-      CommunicartMailer.feedback(current_user, form_values).deliver_now
+      CommunicartMailer.feedback(current_user, form_values).deliver_later
     end
     # @todo - redirect somewhere to avoid back/refresh button issues
+  end
+
+  protected
+
+  def feedback_params
+    params.permit(
+      :email,
+      :bug,
+      :context,
+      :expected,
+      :actually,
+      :comments,
+      :satisfaction,
+      :referral
+    ).reject { |_key, val| val.blank? }
   end
 end

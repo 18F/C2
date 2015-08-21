@@ -1,16 +1,38 @@
+# TODO move to a gem
+
+## private methods ##
+
+def in_spec?
+  !respond_to?(:describe)
+end
+
+def with_env_vars_runner(env={})
+  env = env.stringify_keys
+  old_values = {}
+  env.each_key{ |k| old_values[k] = ENV[k] }
+  env.each{ |k, v| ENV[k] = v }
+  yield
+  old_values.each{ |k, v| ENV[k] = v}
+end
+
+#####################
+
+## public methods, that can be used in or around specs ##
+
 # https://github.com/rspec/rspec-core/issues/1378#issuecomment-37248037
 def with_env_vars(env={}, &block)
-  context "with ENV vars #{env}" do
-    env = env.stringify_keys
-    around(:each) do |example|
-      old_values = {}
-      env.each_key{ |k| old_values[k] = ENV[k] }
-      env.each{ |k, v| ENV[k] = v }
-      example.run
-      old_values.each{ |k, v| ENV[k] = v}
-    end
+  if in_spec?
+    with_env_vars_runner(env, &block)
+  else
+    context "with ENV vars #{env}" do
+      around(:each) do |example|
+        with_env_vars_runner(env) do
+          example.run
+        end
+      end
 
-    class_exec(&block)
+      class_exec(&block)
+    end
   end
 end
 
@@ -25,3 +47,5 @@ end
 def without_feature(name, &block)
   with_env_var(name, nil, &block)
 end
+
+#########################################################
