@@ -35,8 +35,8 @@ describe CommunicartMailer do
     end
   end
 
-  describe 'notification_for_approver' do
-    let!(:token) { approval.create_api_token! }
+  describe 'actions_for_approver' do
+    let(:token) { approval.api_token }
     let(:mail) { CommunicartMailer.actions_for_approver(approval) }
     let(:body) { mail.body.encoded }
     let(:approval_uri) do
@@ -69,6 +69,16 @@ describe CommunicartMailer do
     it 'alerts subscribers that they have been removed' do
       mail = CommunicartMailer.actions_for_approver(approval, 'removed')
       expect(mail.body.encoded).to include('You have been removed from this request.')
+    end
+
+    it "creates a new token" do
+      expect(proposal.api_tokens).to eq([])
+
+      Timecop.freeze do
+        mail.deliver_now
+        approval.reload
+        expect(approval.api_token.expires_at).to be_within(1.second).of(7.days.from_now)
+      end
     end
 
     context 'comments' do
@@ -127,14 +137,16 @@ describe CommunicartMailer do
       end
     end
 
-    it "doesn't include action buttons unless actions_for_approver is used" do
-        mail = CommunicartMailer.notification_for_subscriber('abc@example.com', proposal, nil , approval)
-        expect(mail.body.encoded).not_to include('Approve')
+    it "includes action buttons" do
+      mail = CommunicartMailer.actions_for_approver(approval)
+      expect(mail.body.encoded).to include('Approve')
     end
+  end
 
-    it "does include action buttons when actions_for_approver is used" do
-        mail = CommunicartMailer.actions_for_approver(approval)
-        expect(mail.body.encoded).to include('Approve')
+  describe 'notification_for_subscriber' do
+    it "doesn't include action buttons" do
+      mail = CommunicartMailer.notification_for_subscriber('abc@example.com', proposal, nil, approval)
+      expect(mail.body.encoded).not_to include('Approve')
     end
   end
 
@@ -157,8 +169,7 @@ describe CommunicartMailer do
 
     context 'comments' do
       it 'renders comments when present' do
-        FactoryGirl.create(:comment, comment_text: 'My added comment',
-                           proposal: proposal)
+        FactoryGirl.create(:comment, comment_text: 'My added comment', proposal: proposal)
         expect(mail.body.encoded).to include('Comments')
       end
 
@@ -180,7 +191,6 @@ describe CommunicartMailer do
         expect(mail.body.encoded).to_not include('Your request has been fully approved. See details below.')
       end
     end
-
   end
 
   describe 'comment_added_email' do
@@ -259,22 +269,6 @@ describe CommunicartMailer do
 
     it "uses the default sender name" do
       expect(sender_names(mail)).to eq(["Communicart"])
-    end
-  end
-
-  describe 'actions_for_approver' do
-    let(:mail) { CommunicartMailer.actions_for_approver(approval) }
-
-    it_behaves_like "a Proposal email"
-
-    it "creates a new token" do
-      expect(proposal.api_tokens).to eq([])
-
-      Timecop.freeze do
-        mail.deliver_now
-        approval.reload
-        expect(approval.api_token.expires_at).to be_within(1.second).of(7.days.from_now)
-      end
     end
   end
 
