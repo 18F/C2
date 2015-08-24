@@ -177,8 +177,12 @@ module Ncr
           results << self.class.ba61_tier1_budget_mailbox
         end
         results << self.class.ba61_tier2_budget_mailbox
-      else
-        results << self.class.ba80_budget_mailbox
+      else # BA80
+        if self.organization.try(:ool?)
+          results << self.class.ool_ba80_budget_mailbox
+        else
+          results << self.class.ba80_budget_mailbox
+        end
       end
 
       results
@@ -194,6 +198,10 @@ module Ncr
 
     def self.ba80_budget_mailbox
       ENV['NCR_BA80_BUDGET_MAILBOX'] || 'communicart.budget.approver@gmail.com'
+    end
+
+    def self.ool_ba80_budget_mailbox
+      ENV['NCR_OOL_BA80_BUDGET_MAILBOX'] || 'communicart.budget.approver@gmail.com'
     end
 
     def org_id
