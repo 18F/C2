@@ -5,6 +5,18 @@ describe Ncr::Organization do
     end
   end
 
+  describe '#whsc?' do
+    it "returns true for a White House Service Center org code" do
+      org = Ncr::Organization.find(Ncr::Organization::WHSC_CODE)
+      expect(org.whsc?).to eq(true)
+    end
+
+    it "returns false for other org codes" do
+      org = Ncr::Organization.new(code: '12', name: 'foo')
+      expect(org.whsc?).to eq(false)
+    end
+  end
+
   describe '.all' do
     it "returns all records" do
       expect(Ncr::Organization.all.size).to be > 10
