@@ -41,10 +41,10 @@ module Ncr
     protected
 
     def self.load_csv
-      rows = CSV.read("#{Rails.root}/config/data/ncr/org_codes_2015-05-18.csv", headers: true)
+      rows = CSV.read(Rails.root.join(*%w(config data ncr org_codes_2015-05-18.csv)), headers: true)
       rows.each do |row|
         org = Ncr::Organization.from_csv_row(row)
-        Ncr::Organization::BY_CODE[org.code] = org
+        BY_CODE[org.code] = org
       end
     end
 
@@ -52,7 +52,7 @@ module Ncr
       data = YAML.load_file(Rails.root.join(*%w(config data ncr ool_org_codes.yml)))
       data.each do |code, name|
         org = Ncr::Organization.new(code: code, name: name)
-        Ncr::Organization::BY_CODE[code] = org
+        BY_CODE[code] = org
       end
     end
 
