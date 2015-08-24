@@ -1,6 +1,7 @@
 module Ncr
   class Organization
     BY_CODE = {} # populated later
+    OOL_CODES = Set.new # populated later
     WHSC_CODE = 'P1122021'
 
     attr_accessor :code, :name
@@ -16,6 +17,11 @@ module Ncr
 
     def to_s
       "#{self.code} #{self.name}"
+    end
+
+    # Office of Leasing
+    def ool?
+      OOL_CODES.include?(self.code)
     end
 
     # White House Service Center
@@ -48,15 +54,16 @@ module Ncr
       end
     end
 
-    def self.load_yaml
+    def self.load_ool_yaml
       data = YAML.load_file(Rails.root.join(*%w(config data ncr ool_org_codes.yml)))
       data.each do |code, name|
         org = Ncr::Organization.new(code: code, name: name)
         BY_CODE[code] = org
+        OOL_CODES << code
       end
     end
 
     self.load_csv
-    self.load_yaml
+    self.load_ool_yaml
   end
 end
