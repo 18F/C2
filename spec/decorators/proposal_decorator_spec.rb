@@ -41,8 +41,14 @@ describe ProposalDecorator do
     end
   end
 
-  describe '#subscriber_list' do
+  describe '#subscribers_list' do
     let(:proposal) { FactoryGirl.create(:proposal, :with_observers, :with_parallel_approvers) }
+
+    def subscribers
+      proposal.reload
+      subscribers_list = proposal.decorate.subscribers_list
+      subscribers_list.map(&:first)
+    end
 
     it 'include request, observers, approvers' do
       results = proposal.decorate.subscribers_list
@@ -65,6 +71,13 @@ describe ProposalDecorator do
 
       expect(results[3][0].id).to be proposal.observers.second.id
       expect(results[4][0].id).to be proposal.observers.first.id
+    end
+
+    it "removes duplicates" do
+      user = proposal.approvers.first
+      expect {
+        proposal.add_observer(user.email_address)
+      }.to_not change { subscribers.size }
     end
   end
 end

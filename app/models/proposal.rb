@@ -135,6 +135,7 @@ class Proposal < ActiveRecord::Base
     end
   end
 
+  # TODO accept users or emails
   def add_observer(email)
     user = User.for_email(email)
     self.observations.find_or_create_by!(user: user)
