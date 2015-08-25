@@ -20,8 +20,8 @@ Create a [new issue](https://github.com/18F/C2/issues/new), and copy the raw Mar
 ## Tasks for @oldmember
 
 * [ ] Add to Slack channels
-* [ ] Add to Pivotal Tracker
-* [ ] Add to [Github team](https://github.com/orgs/18F/teams/cap)
+* [ ] [Add to Pivotal Tracker](https://www.pivotaltracker.com/projects/1149728/memberships)
+* [ ] Add to [@18F/cap](https://github.com/orgs/18F/teams/cap) team on GitHub
 * [ ] Add to calendar items: standups, IPM, and story grooming sessions
 * [ ] Schedule a code walkthrough
 * [ ] Set up pairing session
@@ -30,5 +30,5 @@ Create a [new issue](https://github.com/18F/C2/issues/new), and copy the raw Mar
 
 ### Later
 
-* [ ] Add them to `cap` organization on Cloud Foundry
-* [ ] Admin access to C2 production
+* [ ] [Add them to `cap` organization on Cloud Foundry](https://docs.cloudfoundry.org/adminguide/cli-user-management.html#org-roles) (`cf set-org-role USERNAME cap OrgManager`)
+* [ ] Admin access to C2 production (add to `ADMIN_EMAILS`)
