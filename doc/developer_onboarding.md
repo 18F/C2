@@ -8,8 +8,8 @@ Create a [new issue](https://github.com/18F/C2/issues/new), and copy the raw Mar
 
 ## Tasks for @newmember
 
-* [ ] [Set up your development environment](setup.md)
-* [ ] Go through the rest of the [general documentation](../README.md#general)
+* [ ] [Set up your development environment](https://github.com/18F/C2/blob/master/doc/setup.md)
+* [ ] Go through the rest of the [general documentation](https://github.com/18F/C2#general)
 
 ### Later
 
