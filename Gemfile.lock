@@ -227,6 +227,9 @@ GEM
     peek (0.1.10)
       atomic (>= 1.0.0)
       railties (>= 3.0.0)
+    peek-delayed_job (0.1.0)
+      delayed_job_active_record
+      peek (>= 0.1.0)
     peek-performance_bar (1.1.6)
       peek (>= 0.1.0)
     peek-pg (1.1.0)
@@ -412,6 +415,7 @@ DEPENDENCIES
   paper_trail
   paperclip
   peek
+  peek-delayed_job
   peek-performance_bar
   peek-pg
   pg
