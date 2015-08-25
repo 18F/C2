@@ -11,6 +11,7 @@ Each section has tasks listed in order of importance.
 ### Tasks for @newmember
 
 * [ ] [Set up development environment](setup.md)
+* [ ] Go through the rest of the [general documentation](../README.md#general)
 * [ ] [Set up Cloud Foundry CLI for deployment](https://docs.18f.gov/apps/deployment/)
 
 ### Tasks for @oldmember
