@@ -79,5 +79,13 @@ describe ProposalDecorator do
         proposal.add_observer(user.email_address)
       }.to_not change { subscribers.size }
     end
+
+    it "doesn't include delegates" do
+      approver = proposal.approvers.first
+      delegate = FactoryGirl.create(:user)
+      approver.add_delegate(delegate)
+
+      expect(subscribers).to_not include(delegate)
+    end
   end
 end
