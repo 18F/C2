@@ -31,16 +31,6 @@ class ProposalDecorator < Draper::Decorator
     end
   end
 
-  # Returns triplets of (user, role name, observation)
-  def subscribers_list
-    requesters, approvers, others = self.partitioned_roles
-    requesters = requesters.map { |r| [r.user, "Requester", nil] }
-    approvers = approvers.map { |r| [r.user, "Approver", nil] }
-    others = others.map { |r| [r.user, nil, object.observations.find_by(user: r.user)] }
-
-    requesters + approvers + others
-  end
-
   def display_status
     if object.pending?
       'pending approval'
@@ -63,18 +53,5 @@ class ProposalDecorator < Draper::Decorator
 
   def progress_status_message
     "#{number_approved} of #{total_approvers} approved."
-  end
-
-  protected
-
-  def partitioned_roles
-    users = object.users.sort_by(&:full_name)
-    roles = users.map { |u| Role.new(u, object) }
-
-    requesters, roles = roles.partition(&:requester?)
-    approvers, roles = roles.partition(&:approver?)
-    observers = roles.select(&:observer?)
-
-    [requesters, approvers, observers]
   end
 end
