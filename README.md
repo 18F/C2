@@ -8,10 +8,20 @@ a.k.a. Communicart, part of GSA's suite of Common Acquisition Platform (CAP) too
 
 * [Issue tracker](https://www.pivotaltracker.com/n/projects/1149728)
 * [Chat with us](https://chat.18f.gov/) (select "cap-public" from the dropdown)
-* Documentation
-    * [Setup](doc/setup.md)
-    * [Importing Users](doc/import_users.md)
-    * [Technical overview](doc/overview.md)
-    * [Use case developer guide](doc/use_case_development.md)
-    * [API](doc/api.md)
-    * [Production information](doc/production.md)
+
+## Documentation
+
+### General
+
+* [Setup](doc/setup.md)
+* [Technical overview](doc/overview.md)
+* [Use case developer guide](doc/use_case_development.md)
+
+### 18F-specific
+
+* [Production information](doc/production.md)
+
+### Extras
+
+* [API](doc/api.md)
+* [Importing Users](doc/import_users.md)
