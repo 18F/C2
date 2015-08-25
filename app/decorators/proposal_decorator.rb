@@ -68,10 +68,13 @@ class ProposalDecorator < Draper::Decorator
   protected
 
   def partitioned_roles
-    roles = object.users.map { |u| Role.new(u, object) }.sort_by { |r| r.user.full_name }
+    users = object.users.sort_by(&:full_name)
+    roles = users.map { |u| Role.new(u, object) }
+
     requesters, roles = roles.partition(&:requester?)
     approvers, roles = roles.partition(&:approver?)
     observers = roles.select(&:observer?)
+
     [requesters, approvers, observers]
   end
 end
