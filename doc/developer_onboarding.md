@@ -1,4 +1,4 @@
-# Developer Onboarding Checklist
+# 18F Developer Onboarding Checklist
 
 * [Set up](https://github.com/18F/C2/blob/master/doc/setup.md) development environment
 * [Deployment and SSH](https://docs.18f.gov/apps/deployment/) setup using CloudFoundry

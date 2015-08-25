@@ -19,6 +19,7 @@ a.k.a. Communicart, part of GSA's suite of Common Acquisition Platform (CAP) too
 
 ### 18F-specific
 
+* [Developer onboarding](doc/developer_onboarding.md)
 * [Production information](doc/production.md)
 
 ### Extras
