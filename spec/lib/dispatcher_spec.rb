@@ -10,19 +10,6 @@ describe Dispatcher do
     end
   end
 
-  describe '#email_approver' do
-    let(:dispatcher) { Dispatcher.new }
-
-    it 'creates a new token for the approver' do
-      proposal.approvers = [FactoryGirl.create(:user)]
-      approval = proposal.individual_approvals.first
-      expect(CommunicartMailer).to receive_message_chain(:actions_for_approver, :deliver_later)
-      expect(approval).to receive(:create_api_token!).once
-
-      dispatcher.email_approver(approval)
-    end
-  end
-
   let(:proposal) { FactoryGirl.create(:proposal, :with_parallel_approvers) }
   let(:dispatcher) { Dispatcher.new }
 
@@ -34,18 +21,6 @@ describe Dispatcher do
         proposal.approvers.second.email_address,
         proposal.requester.email_address
       ].sort)
-    end
-
-    it 'creates a new token for each approver' do
-      Timecop.freeze do
-        expect(dispatcher).to receive(:send_notification_email).twice
-        dispatcher.deliver_new_proposal_emails(proposal)
-
-        proposal.individual_approvals.each do |approval|
-          # handle float comparison
-          expect(approval.api_token.expires_at).to be_within(1.second).of(7.days.from_now)
-        end
-      end
     end
 
     it 'sends a proposal notification email to observers' do

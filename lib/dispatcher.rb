@@ -2,7 +2,6 @@ class Dispatcher
   include ClassMethodsMixin
 
   def email_approver(approval)
-    approval.create_api_token!
     send_notification_email(approval)
   end
 
@@ -73,7 +72,6 @@ class Dispatcher
   private
 
   def send_notification_email(approval)
-    email = approval.user_email_address
-    CommunicartMailer.actions_for_approver(email, approval).deliver_later
+    CommunicartMailer.actions_for_approver(approval).deliver_later
   end
 end
