@@ -2,7 +2,6 @@ class Dispatcher
   include ClassMethodsMixin
 
   def email_approver(approval)
-    approval.create_api_token!
     send_notification_email(approval)
   end
 
@@ -38,7 +37,7 @@ class Dispatcher
 
   def deliver_cancellation_emails(proposal)
     proposal.approvers.each do |approver|
-      CommunicartMailer.cancellation_email(proposal, approver.email_address).deliver_later
+      CommunicartMailer.cancellation_email(approver.email_address, proposal).deliver_later
     end
     CommunicartMailer.cancellation_confirmation(proposal).deliver_later
   end
@@ -73,7 +72,6 @@ class Dispatcher
   private
 
   def send_notification_email(approval)
-    email = approval.user_email_address
-    CommunicartMailer.actions_for_approver(email, approval).deliver_later
+    CommunicartMailer.actions_for_approver(approval).deliver_later
   end
 end

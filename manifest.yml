@@ -4,7 +4,7 @@
 # NOTE: any changes to this file require running `cf push <appname>` directly, rather than `cf-blue-green <appname>`.
 
 # general configuration
-command: foreman start -p $PORT
+command: bin/rake cf:on_first_instance db:migrate && foreman start -p $PORT
 domain: 18f.gov
 instances: 1
 memory: 1G

@@ -35,6 +35,7 @@ module C2
     config.action_mailer.raise_delivery_errors = true
     config.roadie.url_options = config.action_mailer.default_url_options
 
+    config.autoload_paths << Rails.root.join('app', 'mailers', 'concerns')
     config.autoload_paths << Rails.root.join('app', 'policies', 'concerns')
     config.autoload_paths << Rails.root.join('lib')
 

@@ -20,4 +20,4 @@ Note that these are federal buildings only, not leased buildings.
 ## Org codes
 
 * The CSV (previously in Excel) came from Carol Remsberg, Building Operations Branch Manager at NCR, who exported it from Pegasys.
-* The YAML file came from a list in [this story](https://www.pivotaltracker.com/story/show/100956358).
+* The Office of Leasing YAML file came from a list in [this story](https://www.pivotaltracker.com/story/show/100956358).

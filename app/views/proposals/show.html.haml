@@ -18,7 +18,7 @@
         %p
           Submitted:
           %strong
-            = date_with_tooltip(@proposal.created_at)
+            = date_with_tooltip(@proposal.created_at, true)
 
     - if @proposal.linear?
       .col-md-12
@@ -40,7 +40,7 @@
             - # todo: shouldn't need the h5
             %h5 Observers
       %tbody
-        - @proposal.subscribers_list.each do |user, role_str, observation|
+        - SubscriberList.new(@proposal).triples.each do |user, role_str, observation|
           %tr
             %td
               = user.full_name
@@ -117,7 +117,7 @@
                     Request modified by
                   = c.user_full_name
               %p.date.col-sm-6.col-xs-12
-                = date_with_tooltip(c.created_at)
+                = date_with_tooltip(c.created_at, true)
             .row
               .comment-text.col-sm-6.col-xs-12
                 = c.update_comment ? markdown(c.comment_text) : c.comment_text
@@ -143,7 +143,7 @@
             %p.col-sm-3.col-xs-6
               %strong= attachment.user.full_name
             %p.col-sm-3.col-xs-5.date.righted
-              = date_with_tooltip(attachment.created_at)
+              = date_with_tooltip(attachment.created_at, true)
             - if policy(attachment).can_destroy?
               = button_to "Delete", proposal_attachment_path(@proposal, attachment), method: :delete, data: {confirm: "Are you sure?"}, class: "col-sm-1 col-xs-1 righted"
       - if @proposal.attachments.empty?
