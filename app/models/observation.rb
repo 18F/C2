@@ -6,13 +6,11 @@ class Observation < ActiveRecord::Base
 
   delegate :full_name, :email_address, to: :user, prefix: true
 
-  def created_by_id
-    creation = self.versions.find_by(event: 'create')
-    creation.try(:whodunnit)
+  def creation_version
+    self.versions.find_by(event: 'create')
   end
 
   def created_by
-    # don't throw an exception if the ID is nil
-    User.find_by(id: self.created_by_id)
+    self.creation_version.try(:user)
   end
 end

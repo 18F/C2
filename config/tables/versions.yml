@@ -1,9 +1,6 @@
 default:
   engine: PaperTrail::Version
   joins:
-    user: >
-      INNER JOIN users
-      ON users.id = CAST(versions.whodunnit AS integer)
     proposals: >
       LEFT JOIN proposals
       ON (versions.item_id = proposals.id
@@ -12,11 +9,11 @@ default:
   sort: -created_at
   column_configs:
     event: true
-    # TODO not displaying
     user:
-      db: users.email_address
-      display: users.email_address
+      virtual: true
+      display: user.full_name
     object:
+      virtual: true
       header: Modification
       formatter: yaml
     created_at:
