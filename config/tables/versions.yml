@@ -1,0 +1,28 @@
+default:
+  engine: PaperTrail::Version
+  joins:
+    user: >
+      INNER JOIN users
+      ON users.id = CAST(versions.whodunnit AS integer)
+    proposals: >
+      LEFT JOIN proposals
+      ON (versions.item_id = proposals.id
+      AND versions.item_type = 'Proposal')
+    # TODO include versions from the related models
+  sort: -created_at
+  column_configs:
+    event: true
+    # TODO not displaying
+    user:
+      db: users.email_address
+      display: users.email_address
+    object:
+      header: Modification
+      formatter: yaml
+    created_at:
+      formatter: date
+  columns:
+    - event
+    - user
+    - object
+    - created_at
