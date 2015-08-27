@@ -4,7 +4,7 @@ module ProposalDelegate
   included do
     Proposal::CLIENT_MODELS << self
 
-    has_paper_trail
+    has_paper_trail class_name: 'C2Version'
 
     has_one :proposal, as: :client_data
     has_many :approvals, through: :proposal

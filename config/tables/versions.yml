@@ -1,5 +1,5 @@
 default:
-  engine: PaperTrail::Version
+  engine: C2Version
   joins:
     proposals: >
       LEFT JOIN proposals

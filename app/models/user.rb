@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  has_paper_trail
+  has_paper_trail class_name: 'C2Version'
 
   validates :client_slug, inclusion: {
     in: ->(_) { Proposal.client_slugs },
