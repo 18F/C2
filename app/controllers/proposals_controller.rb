@@ -76,6 +76,7 @@ class ProposalsController < ApplicationController
   def paper_trail
     config = TabularData::Container.config_for_client('versions', 'default')
     @container = TabularData::Container.new(:versions, config)
+    # TODO include versions from the related models
     @container.alter_query { |rel| rel.where(item_id: self.proposal.id, item_type: 'Proposal') }
     @container.set_state_from_params(params)
   end
