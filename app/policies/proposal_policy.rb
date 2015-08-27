@@ -18,6 +18,7 @@ class ProposalPolicy
   def can_show!
     check(self.visible_proposals.exists?(@proposal.id), "You are not allowed to see this proposal")
   end
+  alias_method :can_paper_trail!, :can_show!
 
   def can_create!
     # TODO restrict by client_slug

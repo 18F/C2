@@ -26,6 +26,7 @@ C2::Application.routes.draw do
       post 'approve'
       get 'cancel_form'
       post 'cancel'
+      get 'paper_trail'
     end
 
     collection do

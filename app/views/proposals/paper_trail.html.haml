@@ -1,0 +1,23 @@
+.inset
+  .row
+    %table.table
+      %tr
+        %th
+          Event
+        %th
+          User
+        %th
+          Modification
+        %th
+          Time
+      - @versions.each do |version|
+        %tr
+          %td
+            = version.event
+          %td
+            = User.find(version.whodunnit).full_name
+          %td
+            - if version.object
+              = YAML.load(version.object)
+          %td
+            = date_with_tooltip(version.created_at, true)
