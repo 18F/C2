@@ -1,9 +1,24 @@
 module Query
   module Proposal
     module Versions
+      def self.models(proposal)
+        [
+          proposal,
+          proposal.client_data,
+          proposal.approvals,
+          proposal.observations,
+          proposal.comments,
+          proposal.attachments
+        ].flatten.compact
+      end
+
       def self.relation(proposal)
-        # TODO include versions from the related models
-        C2Version.where(item_id: proposal.id, item_type: 'Proposal')
+        # TODO make query more efficient
+        version_ids = self.models(proposal).map do |model|
+          model.versions.pluck(:id)
+        end
+        version_ids.flatten!
+        C2Version.where(id: version_ids)
       end
 
       def self.container(proposal)
