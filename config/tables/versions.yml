@@ -3,6 +3,7 @@ default:
   sort: -created_at
   column_configs:
     event: true
+    item_type: true
     user:
       virtual: true
       display: user.full_name
@@ -14,6 +15,7 @@ default:
       formatter: date
   columns:
     - event
+    - item_type
     - user
     - object
     - created_at
