@@ -33,5 +33,5 @@ organization: cap
         1. Tag the release.
         1. Do a zero-downtime deployment to the `c2-prod` application in Cloud Foundry.
         1. Push the tag to the repository on GitHub.
-    * If you want to do a zero-downtime deployment to another environment, run `cf-blue-green <appname>`.
+    * If you want to do a zero-downtime deployment to another environment, run `./script/deploy <appname>`.
     * If you want to do a simple deployment, you can use `cf push <appname>`.

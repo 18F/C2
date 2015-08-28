@@ -11,5 +11,5 @@ fi
 TAG=$(date -u +"%Y-%m-%dT%H%M%S")
 
 git tag $TAG
-cf-blue-green c2-prod
+./script/deploy c2-prod
 git push origin $TAG
