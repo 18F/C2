@@ -1,4 +1,4 @@
-class Role
+class RolePicker
   attr_accessor :user
   GUARDS = {
     requester: ->(u, p) { u == p.requester },

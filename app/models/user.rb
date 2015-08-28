@@ -66,6 +66,6 @@ class User < ActiveRecord::Base
   end
 
   def role_on(proposal)
-    Role.new(self,proposal)
+    RolePicker.new(self,proposal)
   end
 end
