@@ -31,7 +31,8 @@ class Proposal < ActiveRecord::Base
   has_many :attachments
   has_many :approval_delegates, through: :approvers, source: :outgoing_delegates
   has_many :comments
-  has_many :observations
+  # TODO FIX THIS definition
+  has_many :observations, -> { where("role_id in (select id from roles where name='observer')") }, class_name: ProposalRole
   has_many :observers, through: :observations, source: :user
   belongs_to :client_data, polymorphic: true
   belongs_to :requester, class_name: 'User'
@@ -138,7 +139,19 @@ class Proposal < ActiveRecord::Base
   # TODO accept users or emails
   def add_observer(email)
     user = User.for_email(email)
-    self.observations.find_or_create_by!(user: user)
+    observer_role = Role.find_by_name 'observer'
+    observer = nil
+    observers.each do |obs|
+      if obs.user_id == user.id
+        observer = obs
+        break
+      end
+    end
+    if !observer
+      observer = ProposalRole.new(user: user, role: observer_role, proposal: self)
+      observer.save!
+    end
+    observer
   end
 
   def add_requester(email)

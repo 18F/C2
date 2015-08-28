@@ -67,6 +67,7 @@ describe Proposal do
 
   describe '#users' do
     it "returns all approvers, observers, and the requester" do
+      observer_role = FactoryGirl.create(:role, :observer)
       requester = FactoryGirl.create(:user)
       proposal = FactoryGirl.create(:proposal, :with_parallel_approvers, :with_observers, requester: requester)
 
