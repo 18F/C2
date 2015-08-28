@@ -12,9 +12,18 @@ class User < ActiveRecord::Base
   has_many :observations
   has_many :comments
 
+  # we do not use rolify gem (e.g.) but declare relationship like any other.
+  has_many :roles
+
   # TODO rename to _delegations, and add relations for the Users
   has_many :outgoing_delegates, class_name: 'ApprovalDelegate', foreign_key: 'assigner_id'
   has_many :incoming_delegates, class_name: 'ApprovalDelegate', foreign_key: 'assignee_id'
+
+  # this is for user_roles specifically, not proposals or any other objects for which
+  # this user might have roles.
+  def has_role?(name)
+    roles.any? { |role| role.name == name }
+  end
 
   def full_name
     if first_name && last_name

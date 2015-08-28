@@ -58,4 +58,13 @@ describe User do
       expect(user.email_address).to eq('mixedcase@some-dot-gov.gov')
     end
   end
+
+  describe 'roles' do
+    it "can be assigned a role" do
+      role = FactoryGirl.build(:role)
+      user.roles << role
+      expect(user.has_role?( role.name )).to be_truthy
+    end
+  end
+
 end
