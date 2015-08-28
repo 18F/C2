@@ -3,4 +3,4 @@
 set -e
 set -x
 
-cf-blue-green $1
+cf push $1
