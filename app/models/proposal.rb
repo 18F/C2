@@ -108,6 +108,7 @@ class Proposal < ActiveRecord::Base
     old_approvals = self.approvals.to_a
 
     approval_list = root.pre_order_tree_traversal
+    approval_list.each { |a| a.proposal = self }
     self.approvals = approval_list
     # position may be out of whack, so we reset it
     approval_list.each_with_index do |approval, idx|
