@@ -3,6 +3,7 @@ class Proposal < ActiveRecord::Base
   include ValueHelper
   has_paper_trail
 
+  CLIENT_MODELS = []  # this gets populated later
   FLOWS = %w(parallel linear).freeze
 
   workflow do
@@ -45,6 +46,10 @@ class Proposal < ActiveRecord::Base
   # Note: clients should also implement :version
   delegate :client, to: :client_data, allow_nil: true
 
+  validates :client_data_type, inclusion: {
+    in: ->(_) { self.client_model_names },
+    allow_blank: true
+  }
   validates :flow, presence: true, inclusion: {in: FLOWS}
   # TODO validates :requester_id, presence: true
 
@@ -96,7 +101,7 @@ class Proposal < ActiveRecord::Base
   def users
     # TODO use SQL
     results = self.approvers + self.observers + self.delegates + [self.requester]
-    results.compact
+    results.compact.uniq
   end
 
   def root_approval=(root)
@@ -138,6 +143,7 @@ class Proposal < ActiveRecord::Base
     end
   end
 
+  # TODO accept users or emails
   def add_observer(email)
     user = User.for_email(email)
     self.observations.find_or_create_by!(user: user)
@@ -218,12 +224,18 @@ class Proposal < ActiveRecord::Base
     Dispatcher.deliver_new_proposal_emails(self)
   end
 
-  # Returns True if the user is an approver and has acted on the proposal
-  def is_active_approver? user
-    current_approver = self.approvals.find_by user_id: user.id
-    current_approver && current_approver.status != "pending"
+  # Returns True if the user is an "active" approver and has acted on the proposal
+  def is_active_approver?(user)
+    self.individual_approvals.non_pending.exists?(user_id: user.id)
   end
 
+  def self.client_model_names
+    CLIENT_MODELS.map(&:to_s)
+  end
+
+  def self.client_slugs
+    CLIENT_MODELS.map(&:client)
+  end
 
   protected
   def update_public_id

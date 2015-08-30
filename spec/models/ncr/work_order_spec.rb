@@ -172,19 +172,40 @@ describe Ncr::WorkOrder do
   end
 
   describe '#system_approver_emails' do
-    it "skips the Tier 1 budget approver for WHSC" do
-      work_order = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61', org_code: Ncr::Organization::WHSC_CODE)
-      expect(work_order.system_approver_emails).to eq([
-        Ncr::WorkOrder.ba61_tier2_budget_mailbox
-      ])
+    context "for a BA61 request" do
+      it "skips the Tier 1 budget approver for WHSC" do
+        work_order = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61', org_code: Ncr::Organization::WHSC_CODE)
+        expect(work_order.system_approver_emails).to eq([
+          Ncr::WorkOrder.ba61_tier2_budget_mailbox
+        ])
+      end
+
+      it "includes the Tier 1 budget approver for an unknown organization" do
+        work_order = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61', org_code: nil)
+        expect(work_order.system_approver_emails).to eq([
+          Ncr::WorkOrder.ba61_tier1_budget_mailbox,
+          Ncr::WorkOrder.ba61_tier2_budget_mailbox
+        ])
+      end
     end
 
-    it "includes the Tier 1 budget approver for an unknown organization" do
-      work_order = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61', org_code: nil)
-      expect(work_order.system_approver_emails).to eq([
-        Ncr::WorkOrder.ba61_tier1_budget_mailbox,
-        Ncr::WorkOrder.ba61_tier2_budget_mailbox
-      ])
+    context "for a BA80 request" do
+      it "uses the general budget email" do
+        budget_email = 'ba80.budget@gsa.gov'
+        with_env_var('NCR_BA80_BUDGET_MAILBOX', budget_email) do
+          work_order = FactoryGirl.create(:ncr_work_order, expense_type: 'BA80')
+          expect(work_order.system_approver_emails).to eq([budget_email])
+        end
+      end
+
+      it "uses the OOL budget email for their org code" do
+        budget_email = 'ool.budget@gsa.gov'
+        with_env_var('NCR_OOL_BA80_BUDGET_MAILBOX', budget_email) do
+          org_code = Ncr::Organization::OOL_CODES.first
+          work_order = FactoryGirl.create(:ncr_work_order, expense_type: 'BA80', org_code: org_code)
+          expect(work_order.system_approver_emails).to eq([budget_email])
+        end
+      end
     end
   end
 

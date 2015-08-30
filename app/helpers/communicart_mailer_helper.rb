@@ -25,4 +25,14 @@ module CommunicartMailerHelper
     opts = { version: proposal.version, cch: approval.api_token.access_token }
     approve_proposal_url(proposal, opts)
   end
+
+  def observer_text
+    text = "You have been added as a subscriber to this request"
+    adder = @observation.created_by
+    if adder
+      text << " by #{adder.full_name}"
+    end
+
+    text + '.'
+  end
 end

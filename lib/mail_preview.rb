@@ -1,7 +1,6 @@
 class MailPreview < MailView
   def actions_for_approver
-    # TODO mock access token, if one isn't present
-    mail = CommunicartMailer.actions_for_approver(email, pending_approval)
+    mail = CommunicartMailer.actions_for_approver(pending_approval)
     inline_styles(mail)
   end
 
@@ -20,6 +19,10 @@ class MailPreview < MailView
     inline_styles(mail)
   end
 
+  def on_observer_added
+    mail = CommunicartMailer.on_observer_added(observation)
+    inline_styles(mail)
+  end
 
   private
 
@@ -43,8 +46,11 @@ class MailPreview < MailView
     Comment.last
   end
 
+  def observation
+    Observation.last
+  end
 
-  # https://github.com/Mange/roadie-rails/blob/v1.0.3/lib/roadie/rails/mailer.rb#L6
+  ## https://github.com/Mange/roadie-rails/blob/v1.0.3/lib/roadie/rails/mailer.rb#L6 ##
 
   def inline_styles(mail)
     Roadie::Rails::MailInliner.new(mail, roadie_options).execute
@@ -53,4 +59,6 @@ class MailPreview < MailView
   def roadie_options
     ::Rails.application.config.roadie
   end
+
+  #####################################################################################
 end

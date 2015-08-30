@@ -1,25 +1,30 @@
 class Dispatcher
+  include ClassMethodsMixin
+
   def email_approver(approval)
-    approval.create_api_token!
     send_notification_email(approval)
   end
 
   def email_observer(observation)
     proposal = observation.proposal
-    CommunicartMailer.proposal_observer_email(observation.user_email_address, proposal).deliver_now
+    CommunicartMailer.proposal_observer_email(observation.user_email_address, proposal).deliver_later
   end
 
   def email_observers(proposal)
     proposal.observations.each do |observation|
       user = observation.user
-      if !proposal.is_active_approver?(user) && proposal.requester != user
+      if user.role_on(proposal).active_observer?
         self.email_observer(observation)
       end
     end
   end
 
+  def on_observer_added(observation)
+    CommunicartMailer.on_observer_added(observation).deliver_later
+  end
+
   def email_sent_confirmation(proposal)
-    CommunicartMailer.proposal_created_confirmation(proposal).deliver_now
+    CommunicartMailer.proposal_created_confirmation(proposal).deliver_later
   end
 
   def deliver_new_proposal_emails(proposal)
@@ -32,83 +37,41 @@ class Dispatcher
 
   def deliver_cancellation_emails(proposal)
     proposal.approvers.each do |approver|
-      CommunicartMailer.cancellation_email(proposal,approver.email_address).deliver_now
+      CommunicartMailer.cancellation_email(approver.email_address, proposal).deliver_later
     end
-    CommunicartMailer.cancellation_confirmation(proposal).deliver_now
+    CommunicartMailer.cancellation_confirmation(proposal).deliver_later
   end
 
-  def requires_approval_notice?(approval)
+  def requires_approval_notice?(_approval)
     true
   end
 
   def on_approval_approved(approval)
     if self.requires_approval_notice?(approval)
-      CommunicartMailer.approval_reply_received_email(approval).deliver_now
+      CommunicartMailer.approval_reply_received_email(approval).deliver_later
     end
 
     self.email_observers(approval.proposal)
   end
 
   def on_comment_created(comment)
-    comment.listeners.each{|user|
-      CommunicartMailer.comment_added_email(comment, user.email_address).deliver_now
-    }
-  end
-
-  def on_proposal_update(proposal)
-  end
-
-  # todo: replace with dynamic dispatch
-  def self.initialize_dispatcher(proposal)
-    case proposal.flow
-    when 'parallel'
-      self.new
-    when 'linear'
-      # @todo: dynamic dispatch for selection
-      if proposal.client == "ncr"
-        NcrDispatcher.new
-      else
-        LinearDispatcher.new
-      end
+    comment.listeners.each do |user|
+      CommunicartMailer.comment_added_email(comment, user.email_address).deliver_later
     end
   end
 
-  # TODO DRY the following up
-
-  def self.deliver_new_proposal_emails(proposal)
-    dispatcher = self.initialize_dispatcher(proposal)
-    dispatcher.deliver_new_proposal_emails(proposal)
+  def on_proposal_update(_proposal)
   end
 
-  def self.on_approval_approved(approval)
-    dispatcher = self.initialize_dispatcher(approval.proposal)
-    dispatcher.on_approval_approved(approval)
-  end
-
-  def self.on_comment_created(comment)
-    dispatcher = self.initialize_dispatcher(comment.proposal)
-    dispatcher.on_comment_created(comment)
-  end
-
-  def self.email_approver(approval)
-    dispatcher = self.initialize_dispatcher(approval.proposal)
-    dispatcher.email_approver(approval)
-  end
-
-  def self.on_proposal_update(proposal)
-    dispatcher = self.initialize_dispatcher(proposal)
-    dispatcher.on_proposal_update(proposal)
-  end
-
-  def self.on_observer_added(observation)
-    dispatcher = self.initialize_dispatcher(observation.proposal)
-    dispatcher.email_observer(observation)
+  def on_approver_removal(proposal, removed_approvers)
+    removed_approvers.each do|approver|
+      CommunicartMailer.notification_for_subscriber(approver.email_address, proposal, "removed").deliver_later
+    end
   end
 
   private
 
   def send_notification_email(approval)
-    email = approval.user_email_address
-    CommunicartMailer.actions_for_approver(email, approval).deliver_now
+    CommunicartMailer.actions_for_approver(approval).deliver_later
   end
 end

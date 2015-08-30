@@ -20,6 +20,7 @@ class Approval < ActiveRecord::Base
   self.statuses.each do |status|
     scope status, -> { where(status: status) }
   end
+  scope :non_pending, -> { where.not(status: 'pending') }
 
   default_scope { order('position ASC') }
 

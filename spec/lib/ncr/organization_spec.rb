@@ -1,7 +1,31 @@
 describe Ncr::Organization do
   describe '#==' do
     it "considers two objects with the same #code identical" do
-      expect(Ncr::Organization.new('organization_cd' => '12')).to eq(Ncr::Organization.new('organization_cd' => '12'))
+      expect(Ncr::Organization.new(code: '12', name: 'foo')).to eq(Ncr::Organization.new(code: '12', name: 'foo'))
+    end
+  end
+
+  describe '#ool?' do
+    it "returns true for an Office of Leasing org code" do
+      org = Ncr::Organization.find(Ncr::Organization::OOL_CODES.first)
+      expect(org.ool?).to eq(true)
+    end
+
+    it "returns false for other org codes" do
+      org = Ncr::Organization.new(code: '12', name: 'foo')
+      expect(org.ool?).to eq(false)
+    end
+  end
+
+  describe '#whsc?' do
+    it "returns true for a White House Service Center org code" do
+      org = Ncr::Organization.find(Ncr::Organization::WHSC_CODE)
+      expect(org.whsc?).to eq(true)
+    end
+
+    it "returns false for other org codes" do
+      org = Ncr::Organization.new(code: '12', name: 'foo')
+      expect(org.whsc?).to eq(false)
     end
   end
 

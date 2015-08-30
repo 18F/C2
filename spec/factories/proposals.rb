@@ -27,10 +27,19 @@ FactoryGirl.define do
       end
     end
 
+    trait :with_observer do
+      after :create do |proposal|
+        observer = FactoryGirl.create(:user)
+        proposal.add_observer(observer.email_address)
+      end
+    end
+
     trait :with_observers do
       after :create do |proposal|
-        proposal.add_observer('observer1@some-dot-gov.gov')
-        proposal.add_observer('observer2@some-dot-gov.gov')
+        2.times do
+          observer = FactoryGirl.create(:user)
+          proposal.add_observer(observer.email_address)
+        end
       end
     end
   end

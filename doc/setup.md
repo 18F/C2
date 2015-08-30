@@ -41,7 +41,7 @@ Per [the Twelve-Factor guidelines](http://12factor.net/config), all necessary co
 open http://localhost:3000
 ```
 
-To include the [clock process](../config/clock.rb) (which is used for background jobs), run using `foreman start -p 3000`.
+To include the background jobs (which include sending emails), run using `foreman start -p 3000`.
 
 ### Viewing the mailers
 
@@ -74,16 +74,3 @@ brakeman
 ```
 
 or just [visit the project on Gemnasium](https://gemnasium.com/18F/C2).
-
-## Deploying
-
-Note that you need `write` access to the repository.
-
-1. [Create a token](https://github.com/settings/tokens/new?description=C2%20deploy&scopes=repo_deployment) with [`repo_deployment`](https://developer.github.com/v3/oauth/#scopes) scope.
-1. Run
-
-    ```bash
-    GH_KEY=... ./deploy.sh <branch> <environment>
-    ```
-
-1. View the status at https://shipme.github.io/#/envs?repo=18f%2Fc2.

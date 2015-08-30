@@ -1,6 +1,10 @@
 class User < ActiveRecord::Base
   has_paper_trail
 
+  validates :client_slug, inclusion: {
+    in: ->(_) { Proposal.client_slugs },
+    allow_blank: true
+  }
   validates :email_address, presence: true, uniqueness: true
   validates_email_format_of :email_address
 
@@ -8,6 +12,7 @@ class User < ActiveRecord::Base
   has_many :observations
   has_many :comments
 
+  # TODO rename to _delegations, and add relations for the Users
   has_many :outgoing_delegates, class_name: 'ApprovalDelegate', foreign_key: 'assigner_id'
   has_many :incoming_delegates, class_name: 'ApprovalDelegate', foreign_key: 'assignee_id'
 
@@ -58,5 +63,9 @@ class User < ActiveRecord::Base
 
   def self.admin_emails
     ENV['ADMIN_EMAILS'].to_s.split(',')
+  end
+
+  def role_on(proposal)
+    Role.new(self,proposal)
   end
 end

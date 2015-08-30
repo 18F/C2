@@ -3,7 +3,7 @@
 class ClockTasks
   def self.send_ncr_budget_report
     puts "SENDING BUDGET REPORT..."
-    ReportMailer.budget_status.deliver_now
+    ReportMailer.budget_status.deliver_later
     puts "...DONE"
   end
 

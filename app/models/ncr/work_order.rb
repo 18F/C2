@@ -102,6 +102,7 @@ module Ncr
         # skip state machine
         self.proposal.update(status: 'approved')
       else
+        original_approvers = self.proposal.individual_approvals.non_pending.map(&:users)
         individuals = emails.map do |email|
           user = User.for_email(email)
           # Reuse existing approvals, if present
@@ -111,8 +112,8 @@ module Ncr
             Approvals::Individual.new(user: user)
           end
         end
-
         self.proposal.root_approval = Approvals::Serial.new(child_approvals: individuals)
+        self.notify_removed_approvers(original_approvers)
       end
     end
 
@@ -147,10 +148,6 @@ module Ncr
     def fields_for_display
       attributes = self.relevant_fields
       attributes.map{|key| [WorkOrder.human_attribute_name(key), self[key]]}
-    end
-
-    def client
-      "ncr"
     end
 
     # will return nil if the `org_code` is blank or not present in Organization list
@@ -188,8 +185,12 @@ module Ncr
           results << self.class.ba61_tier1_budget_mailbox
         end
         results << self.class.ba61_tier2_budget_mailbox
-      else
-        results << self.class.ba80_budget_mailbox
+      else # BA80
+        if self.organization.try(:ool?)
+          results << self.class.ool_ba80_budget_mailbox
+        else
+          results << self.class.ba80_budget_mailbox
+        end
       end
 
       results
@@ -205,6 +206,10 @@ module Ncr
 
     def self.ba80_budget_mailbox
       ENV['NCR_BA80_BUDGET_MAILBOX'] || 'communicart.budget.approver@gmail.com'
+    end
+
+    def self.ool_ba80_budget_mailbox
+      ENV['NCR_OOL_BA80_BUDGET_MAILBOX'] || 'communicart.budget.approver@gmail.com'
     end
 
     def org_id
@@ -262,6 +267,12 @@ module Ncr
         year += 1
       end
       year % 100   # convert to two-digit
+    end
+
+    def notify_removed_approvers(original_approvers)
+      current_approvers = self.proposal.individual_approvals.non_pending.map(&:user)
+      removed_approvers_to_notify = original_approvers - current_approvers
+      Dispatcher.on_approver_removal(self.proposal, removed_approvers_to_notify)
     end
   end
 end

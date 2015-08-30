@@ -55,10 +55,6 @@ module Gsa18f
       attributes.push(["Total Price", total_price])
     end
 
-    def client
-      "gsa18f"
-    end
-
     def total_price
       (self.cost_per_unit * self.quantity) || 0.0
     end

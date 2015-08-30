@@ -40,7 +40,7 @@ class ProposalDecorator < Draper::Decorator
   end
 
   def generate_status_message
-    if object.approvals.where.not(status: 'pending').empty?
+    if object.approvals.non_pending.empty?
       progress_status_message
     else
       completed_status_message
@@ -53,9 +53,5 @@ class ProposalDecorator < Draper::Decorator
 
   def progress_status_message
     "#{number_approved} of #{total_approvers} approved."
-  end
-
-  def email_msg_id
-    "<proposal-#{self.id}@#{DEFAULT_URL_HOST}>"
   end
 end
