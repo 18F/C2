@@ -107,7 +107,7 @@ class Proposal < ActiveRecord::Base
   def root_approval=(root)
     old_approvals = self.approvals.to_a
 
-    approval_list = root.preorder_list
+    approval_list = root.pre_order_tree_traversal
     self.approvals = approval_list
     # position may be out of whack, so we reset it
     approval_list.each_with_index do |approval, idx|
@@ -220,7 +220,9 @@ class Proposal < ActiveRecord::Base
     # Note that none of the state machine's history is stored
     self.api_tokens.update_all(expires_at: Time.now)
     self.approvals.update_all(status: 'pending')
-    self.root_approval.initialize! if self.root_approval
+    if self.root_approval
+      self.root_approval.initialize!
+    end
     Dispatcher.deliver_new_proposal_emails(self)
   end
 
