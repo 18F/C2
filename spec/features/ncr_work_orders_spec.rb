@@ -445,7 +445,7 @@ describe "National Capital Region proposals" do
             expect(work_order.individual_approvals.second).to be_actionable
           end
 
-          it "notifies the next approver if it has changed" do
+          it "notifies the removed approver" do
             expect(work_order.organization).to_not be_whsc
             deliveries.clear
 
@@ -453,7 +453,15 @@ describe "National Capital Region proposals" do
             select Ncr::Organization::WHSC_CODE, from: "Org code"
             click_on 'Update'
 
-            expect(email_recipients).to eq(ncr_proposal.approvers.map(&:email_address))
+            expect(deliveries.length).to be 3
+            removed, approver1, approver2 = deliveries
+            expect(removed.to).to eq([Ncr::WorkOrder.ba61_tier1_budget_mailbox])
+            expect(removed.html_part.body).to include "removed"
+
+            expect(approver1.to).to eq([work_order.approvers.first.email_address])
+            expect(approver1.html_part.body).not_to include "removed"
+            expect(approver2.to).to eq([Ncr::WorkOrder.ba61_tier2_budget_mailbox])
+            expect(approver2.html_part.body).not_to include "removed"
           end
         end
 

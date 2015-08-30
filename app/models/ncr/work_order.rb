@@ -102,7 +102,7 @@ module Ncr
         # skip state machine
         self.proposal.update(status: 'approved')
       else
-        original_approvers = self.proposal.individual_approvals.non_pending.map(&:users)
+        original_approvers = self.proposal.individual_approvals.non_pending.map(&:user)
         individuals = emails.map do |email|
           user = User.for_email(email)
           # Reuse existing approvals, if present
