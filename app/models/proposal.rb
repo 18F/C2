@@ -31,7 +31,7 @@ class Proposal < ActiveRecord::Base
   has_many :attachments
   has_many :approval_delegates, through: :approvers, source: :outgoing_delegates
   has_many :comments
-  has_many :observations, -> { where("proposal_roles.role_id in (select roles.id from roles where roles.name='observer')") }, class_name: ProposalRole
+  has_many :observations, -> { where("proposal_roles.role_id in (select roles.id from roles where roles.name='observer')") }
   has_many :observers, through: :observations, source: :user
   belongs_to :client_data, polymorphic: true
   belongs_to :requester, class_name: 'User'
@@ -148,8 +148,8 @@ class Proposal < ActiveRecord::Base
 
     if !observer
       observer_role = Role.find_or_create_by(name: 'observer')
-      observer = ProposalRole.new(user_id: user.id, role_id: observer_role.id, proposal_id: self.id)
-      # because we build the ProposalRole ourselves, we add to the direct m2m relation directly.
+      observer = Observation.new(user_id: user.id, role_id: observer_role.id, proposal_id: self.id)
+      # because we build the Observation ourselves, we add to the direct m2m relation directly.
       self.observations << observer
       # invalidate relation cache so we reload on next access
       self.observers(true)
