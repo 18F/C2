@@ -2,7 +2,7 @@ class C2Version < PaperTrail::Version
   self.table_name = :versions
 
   def user
-    User.find(self.whodunnit)
+    User.find_by(id: self.whodunnit.to_i)
   end
 
   def attributes

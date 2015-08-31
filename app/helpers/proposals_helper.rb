@@ -14,7 +14,7 @@ module ProposalsHelper
 
   def diff_val(val)
     if val.is_a?(Numeric)
-      sprintf('%.2f', val)
+      format('%.2f', val)
     else
       val.inspect
     end
