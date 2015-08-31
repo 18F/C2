@@ -60,15 +60,17 @@
 
 
 
-- if policy(@proposal).can_edit?
-  = client_partial(@proposal.client, 'restart_link', locals: {proposal: @proposal})
-  - unless @proposal.cancelled?
-    %ul#request-actions.centered
+%ul#request-actions.centered
+  - if policy(@proposal).can_edit?
+    = client_partial(@proposal.client, 'restart_link', locals: {proposal: @proposal})
+    - unless @proposal.cancelled?
       %li
         = modify_client_button(@proposal)
       - if policy(@proposal).can_cancel?
         %li
           = link_to "Cancel my request", cancel_form_proposal_path
+  %li
+    = link_to "View history", history_proposal_path(@proposal)
 
 - # @todo: there are multiple approval-status ids
 - if @proposal.parallel?
