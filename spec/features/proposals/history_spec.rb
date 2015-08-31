@@ -1,4 +1,4 @@
-describe '/proposals/:id/paper_trail' do
+describe '/proposals/:id/history' do
   let(:user) { FactoryGirl.create(:user) }
 
   before do
@@ -9,7 +9,7 @@ describe '/proposals/:id/paper_trail' do
     proposal = FactoryGirl.create(:proposal, requester: user)
     login_as(user)
 
-    visit "/proposals/#{proposal.id}/paper_trail"
+    visit "/proposals/#{proposal.id}/history"
 
     expect(page).to have_content('Proposal')
   end

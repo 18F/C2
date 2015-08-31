@@ -3,7 +3,7 @@ class ProposalsController < ApplicationController
 
   before_filter :authenticate_user!, except: :approve
   # TODO use Policy for all actions
-  before_filter ->{authorize self.proposal}, only: [:show, :cancel, :cancel_form, :paper_trail]
+  before_filter ->{authorize self.proposal}, only: [:show, :cancel, :cancel_form, :history]
   before_filter :needs_token_on_get, only: :approve
   before_filter :validate_access, only: :approve
   helper_method :display_status
@@ -73,7 +73,7 @@ class ProposalsController < ApplicationController
     @end_date = query_listing.end_date
   end
 
-  def paper_trail
+  def history
     @container = Query::Proposal::Versions.container(self.proposal)
     @container.set_state_from_params(params)
   end

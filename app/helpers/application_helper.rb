@@ -39,7 +39,7 @@ module ApplicationHelper
   end
 
   def display_return_to_proposal
-    controller.is_a?(ProposalsController) && params[:action] == 'paper_trail'
+    controller.is_a?(ProposalsController) && params[:action] == 'history'
   end
 
   def display_return_to_proposals
