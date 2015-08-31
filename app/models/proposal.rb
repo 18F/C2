@@ -151,8 +151,8 @@ class Proposal < ActiveRecord::Base
       observer = ProposalRole.new(user_id: user.id, role_id: observer_role.id, proposal_id: self.id)
       # because we build the ProposalRole ourselves, we add to the direct m2m relation directly.
       self.observations << observer
-      # reload to reflect what we just added
-      self.observers.reload
+      # invalidate relation cache so we reload on next access
+      self.observers(true)
     end
     observer
   end
