@@ -4,7 +4,7 @@ describe FeedbackController do
       post :create, {
         bug: 'Yes',
         context: 'Some context here',
-        expected: 'it to work', 
+        expected: 'it to work',
         actually: 'it did not',
         comments: 'Comments here',
         satisfaction: '4',
@@ -21,7 +21,7 @@ describe FeedbackController do
         "comments: Comments here",
         "satisfaction: 4",
         "referral: /somewhere/else"].join("\n"))
-      expect(deliveries[0].cc).to eq([])
+      expect(deliveries[0].from).to eq(['someone@example.com'])
     end
 
     it "doesn't include extra fields" do
@@ -39,7 +39,7 @@ describe FeedbackController do
       login_as(user)
       post :create, {bug: "Yes"}
       expect(deliveries[0].body.to_s).to eq("bug: Yes")
-      expect(deliveries[0].cc).to eq(["actor@example.com"])
+      expect(deliveries[0].from).to eq(['actor@example.com'])
     end
   end
 end

@@ -2,7 +2,7 @@ class FeedbackMailer < ApplicationMailer
   def feedback(sending_user, form_values)
     form_strings = form_values.map { |key, val| "#{key}: #{val}" }
     message = form_strings.join("\n")
-    from = sending_user.try(:email_address) || self.default_sender_email
+    from = sending_user.try(:email_address) || form_values[:email] || self.default_sender_email
     mail(
       to: self.class.support_email,
       subject: 'Feedback submission',
