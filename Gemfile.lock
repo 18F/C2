@@ -152,6 +152,7 @@ GEM
       rspec (>= 2.99.0, < 4.0)
     haml (4.0.7)
       tilt
+    hashdiff (0.2.2)
     hashie (3.4.2)
     html-pipeline (2.0)
       activesupport (>= 2, < 5)
@@ -404,6 +405,7 @@ DEPENDENCIES
   foreman
   guard-rspec
   haml
+  hashdiff
   html_pipeline_rails
   jquery-rails
   jquery-turbolinks

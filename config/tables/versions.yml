@@ -7,15 +7,15 @@ default:
     user:
       virtual: true
       display: user.full_name
-    object:
+    diff:
       virtual: true
       header: Modification
-      formatter: yaml
+      formatter: version_diff
     created_at:
       formatter: date
   columns:
     - event
     - item_type
     - user
-    - object
+    - diff
     - created_at

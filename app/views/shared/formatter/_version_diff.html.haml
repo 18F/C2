@@ -1,0 +1,27 @@
+%ul
+  - value.each do |change|
+    %li
+      - case change[0]
+      - when '+'
+        %code
+          = change[1]
+        was set to
+        = succeed '.' do
+          %code
+            = change[2].inspect
+      - when '~'
+        %code
+          = change[1]
+        was changed from
+        %code
+          = change[2].inspect
+        to
+        = succeed '.' do
+          %code
+            = change[3].inspect
+      - when '-'
+        %code
+          = change[1]
+        was removed.
+      - else
+        = change.inspect

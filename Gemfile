@@ -18,6 +18,7 @@ gem 'faker'
 gem 'font-awesome-sass'
 gem 'foreman', require: false
 gem 'haml'
+gem 'hashdiff'
 gem 'html_pipeline_rails'
 gem 'jquery-rails'
 gem 'jquery-turbolinks'
