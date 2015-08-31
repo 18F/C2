@@ -11,4 +11,12 @@ module ProposalsHelper
       end
     end
   end
+
+  def diff_val(val)
+    if val.is_a?(Numeric)
+      sprintf('%.2f', val)
+    else
+      val.inspect
+    end
+  end
 end
