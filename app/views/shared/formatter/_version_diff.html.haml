@@ -1,5 +1,23 @@
-%ul
-  - if object.event == 'update'
+- case object.event
+- when 'create'
+  - case object.item
+  - when Approval
+    = object.item.user.full_name
+    was added as an approver.
+  - when Attachment
+    Uploaded
+    = succeed '.' do
+      %code
+        = object.item.file_file_name
+  - when Comment
+    Commented:
+    = surround '"', '"' do
+      = object.item.comment_text
+  - when Observation
+    = object.item.user.full_name
+    was added as an observer.
+- when 'update'
+  %ul
     - value.each do |change|
       %li
         - case change[0]
