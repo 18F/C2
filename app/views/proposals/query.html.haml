@@ -2,10 +2,9 @@
   = render partial: 'search_ui'
   %h1
     Proposals participated in
-    %h2
-    %strong Currently displaying results for: 
-    = property_to_s(@text)
-    %br
-    %a{ :href => "/proposals" } Clear search terms
-    = datespan_header(@start_date, @end_date)
+  %strong Currently displaying results for: 
+  = property_to_s(@text)
+  %br
+  %a{ :href => proposals_path } Clear search terms
+  = datespan_header(@start_date, @end_date)
   = render partial: 'shared/table', locals: {container: @proposals_data}
