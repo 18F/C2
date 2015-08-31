@@ -19,16 +19,17 @@
 - when 'update'
   %ul
     - value.each do |change|
+      - next if %w(created_at updated_at).include?(change[1])
       %li
         - case change[0]
-        - when '+'
+        - when '+' # added
           %code
             = change[1]
           was set to
           = succeed '.' do
             %code
               = diff_val(change[2])
-        - when '~'
+        - when '~' # modified
           %code
             = change[1]
           was changed from
@@ -38,7 +39,7 @@
           = succeed '.' do
             %code
               = diff_val(change[3])
-        - when '-'
+        - when '-' # removed
           %code
             = change[1]
           was removed.
