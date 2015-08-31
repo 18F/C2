@@ -31,8 +31,7 @@ class Proposal < ActiveRecord::Base
   has_many :attachments
   has_many :approval_delegates, through: :approvers, source: :outgoing_delegates
   has_many :comments
-  # TODO FIX THIS definition
-  has_many :observations, -> { where("role_id in (select id from roles where name='observer')") }, class_name: ProposalRole
+  has_many :observations, -> { where("proposal_roles.role_id in (select roles.id from roles where roles.name='observer')") }, class_name: ProposalRole
   has_many :observers, through: :observations, source: :user
   belongs_to :client_data, polymorphic: true
   belongs_to :requester, class_name: 'User'
@@ -136,20 +135,24 @@ class Proposal < ActiveRecord::Base
     end
   end
 
-  # TODO accept users or emails
-  def add_observer(email)
-    user = User.for_email(email)
-    observer_role = Role.find_by_name 'observer'
-    observer = nil
-    observers.each do |obs|
-      if obs.user_id == user.id
-        observer = obs
-        break
-      end
+  def add_observer(email_or_user)
+    # polymorphic
+    if email_or_user.is_a?(User)
+      user = email_or_user
+    else
+      user = User.for_email(email_or_user)
     end
+
+    # no duplicates
+    observer = self.observers.select{|o| o.id == user.id}.first
+
     if !observer
-      observer = ProposalRole.new(user: user, role: observer_role, proposal: self)
-      observer.save!
+      observer_role = Role.find_or_create_by(name: 'observer')
+      observer = ProposalRole.new(user_id: user.id, role_id: observer_role.id, proposal_id: self.id)
+      # because we build the ProposalRole ourselves, we add to the direct m2m relation directly.
+      self.observations << observer
+      # reload to reflect what we just added
+      self.observers.reload
     end
     observer
   end
