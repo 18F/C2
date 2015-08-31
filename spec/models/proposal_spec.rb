@@ -88,6 +88,13 @@ describe Proposal do
       proposal.add_observer(requester.email_address)
       expect(proposal.users).to eq [requester]
     end
+
+    it "adds observer from user object" do
+      observer = FactoryGirl.create(:user)
+      proposal = FactoryGirl.create(:proposal, requester: observer)
+      proposal.add_observer(observer)
+      expect(proposal.users).to eq [observer]      
+    end
   end
 
   describe '#approvers=' do
