@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150828152928) do
+ActiveRecord::Schema.define(version: 20150831193037) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -123,16 +123,9 @@ ActiveRecord::Schema.define(version: 20150828152928) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "direct_pay"
-    t.string   "cl_number",       limit: 255
-    t.string   "function_code",   limit: 255
-    t.string   "soc_code",        limit: 255
-  end
-
-  create_table "observations", force: :cascade do |t|
-    t.integer  "proposal_id"
-    t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string   "cl_number"
+    t.string   "function_code"
+    t.string   "soc_code"
   end
 
   create_table "properties", force: :cascade do |t|
