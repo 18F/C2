@@ -7,7 +7,7 @@ module Query
           proposal.client_data,
           proposal.approvals,
           proposal.observations,
-          proposal.comments.where.not(update_comment: true),
+          proposal.comments.normal_comments,
           proposal.attachments
         ].flatten.compact
       end
