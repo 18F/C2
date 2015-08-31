@@ -7,7 +7,7 @@ class FeedbackMailer < ApplicationMailer
       to: self.class.support_email,
       subject: 'Feedback submission',
       from: from,
-      body: message,
+      body: message
     )
   end
 
