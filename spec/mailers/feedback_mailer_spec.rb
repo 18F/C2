@@ -1,9 +1,9 @@
 describe FeedbackMailer do
   describe 'feedback' do
-    it "CCs the submitter" do
+    it "sends from the submitter" do
       user = FactoryGirl.create(:user)
       mail = FeedbackMailer.feedback(user, {})
-      expect(mail.cc).to eq([user.email_address])
+      expect(mail.from).to eq([user.email_address])
     end
 
     it "doesn't require a user to be passed in" do
