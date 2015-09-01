@@ -24,15 +24,9 @@ describe User do
       expect(user).to_not be_a_client_admin
     end
 
-    with_env_var 'CLIENT_ADMIN_EMAILS', 'admin1@some-dot-gov.gov,admin2@some-dot-gov.gov' do
-      it "returns false" do
-        expect(user).to_not be_a_client_admin
-      end
-
-      it "returns true when the email is listed" do
-        user.email_address = 'admin2@some-dot-gov.gov'
-        expect(user).to be_a_client_admin
-      end
+    it "returns true when the user is a client admin" do
+      user.add_role('client_admin')
+      expect(user).to be_a_client_admin
     end
   end
 
@@ -62,9 +56,14 @@ describe User do
   describe 'roles' do
     it "can be assigned a role" do
       role = FactoryGirl.build(:role)
-      user.roles << role
+      user.add_role(role)
       expect(user.has_role?( role.name )).to be_truthy
     end
-  end
 
+    it "can be assigned a role by role name" do
+      role = FactoryGirl.build(:role)
+      user.add_role(role.name)
+      expect(user.has_role?( role )).to be_truthy 
+    end
+  end
 end
