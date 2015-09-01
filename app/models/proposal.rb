@@ -135,9 +135,19 @@ class Proposal < ActiveRecord::Base
     end
   end
 
-  def add_observer(email)
-    user = User.for_email(email)
-    self.observations.find_or_create_by!(user: user)
+  def add_observer(email, user=nil, reason=nil)
+    observer = User.for_email(email)
+    observation = self.observations.find_or_create_by!(user: observer)
+    unless reason.blank?
+      self.comments.create(
+        comment_text: I18n.t('activerecord.attributes.observer.user_reason_comment',
+                             user: user.full_name,
+                             observer: observer.full_name,
+                             reason: reason),
+        user: user)
+      observation.reason = reason
+    end
+    observation
   end
 
   def add_requester(email)

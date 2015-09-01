@@ -29,10 +29,13 @@ module CommunicartMailerHelper
   def observer_text
     text = "You have been added as a subscriber to this request"
     adder = @observation.created_by
+    reason = @observation.reason
     if adder
       text << " by #{adder.full_name}"
     end
-
+    if reason && !reason.blank?
+      text << " with given reason '#{reason}'"
+    end
     text + '.'
   end
 end
