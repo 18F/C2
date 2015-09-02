@@ -13,13 +13,13 @@ module Ncr
       all.uniq.sort
     end
 
-    def vendor_options(vendor=nil)
+    def vendor_options(vendor = nil)
       all_vendors = Ncr::WorkOrder.where.not(vendor: nil).pluck('DISTINCT vendor')
       # merge in any passed
       if vendor
         all_vendors.push(vendor)
       end
-      all_vendors.uniq.sort_by {|v| v.downcase}
+      all_vendors.uniq.sort_by(&:downcase)
     end
   end
 end
