@@ -32,7 +32,9 @@ module CommunicartMailerHelper
     if adder
       text << " by #{adder.full_name}"
     end
-
+    if @reason && !@reason.blank?
+      text << " with given reason '#{@reason}'"
+    end
     text + '.'
   end
 end

@@ -135,7 +135,7 @@ class Proposal < ActiveRecord::Base
     end
   end
 
-  def add_observer(email_or_user)
+  def add_observer(email_or_user, adder = nil, reason = nil)
     # polymorphic
     if email_or_user.is_a?(User)
       user = email_or_user
@@ -144,17 +144,25 @@ class Proposal < ActiveRecord::Base
     end
 
     # no duplicates
-    observer = self.observers.select{|o| o.id == user.id}.first
+    observation = self.observers.select{|o| o.id == user.id}.first
 
-    if !observer
+    unless observation
       observer_role = Role.find_or_create_by(name: 'observer')
-      observer = Observation.new(user_id: user.id, role_id: observer_role.id, proposal_id: self.id)
+      observation = Observation.new(user_id: user.id, role_id: observer_role.id, proposal_id: self.id)
       # because we build the Observation ourselves, we add to the direct m2m relation directly.
-      self.observations << observer
+      self.observations << observation
       # invalidate relation cache so we reload on next access
       self.observers(true)
+      unless reason.blank?
+        self.comments.create(
+            comment_text: I18n.t('activerecord.attributes.observation.user_reason_comment',
+                                 user: adder.full_name,
+                                 observer: observation.user.full_name,
+                                 reason: reason),
+            user: adder)
+      end
     end
-    observer
+    observation
   end
 
   def add_requester(email)
