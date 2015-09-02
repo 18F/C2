@@ -135,7 +135,7 @@ class Proposal < ActiveRecord::Base
     end
   end
 
-  def add_observer(email, user=nil, reason=nil)
+  def add_observer(email, user = nil, reason = nil)
     observer = User.for_email(email)
     observation = self.observations.find_or_create_by!(user: observer)
     unless reason.blank?
