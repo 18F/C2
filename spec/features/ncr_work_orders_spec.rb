@@ -481,24 +481,26 @@ describe "National Capital Region proposals" do
         end
       end
 
-      it "doesn't change approving list when delegated" do
-        proposal = Proposal.last
-        approval = proposal.individual_approvals.first
-        approval.approve!
-        approval = proposal.individual_approvals.second
-        user = approval.user
-        delegate = User.new(email_address:'delegate@example.com')
-        delegate.save
-        user.add_delegate(delegate)
-        approval.update_attributes!(user: delegate)
-        visit "/ncr/work_orders/#{work_order.id}/edit"
-        fill_in 'Description', with:"New Description that shouldn't change the approver list"
-        click_on 'Update'
-
-        proposal.reload
-        second_approver = proposal.approvers.second.email_address
-        expect(second_approver).to eq('delegate@example.com')
-        expect(proposal.individual_approvals.length).to eq(3)
+      with_env_vars(NCR_BA61_TIER1_BUDGET_MAILBOX: 'foo@example.gov', NCR_BA61_TIER2_BUDGET_MAILBOX: 'bar@example.gov') do
+        it "doesn't change approving list when delegated" do
+          proposal = Proposal.last
+          approval = proposal.individual_approvals.first
+          approval.approve!
+          approval = proposal.individual_approvals.second
+          user = approval.user
+          delegate = User.new(email_address:'delegate@example.com')
+          delegate.save
+          user.add_delegate(delegate)
+          approval.update_attributes!(user: delegate)
+          visit "/ncr/work_orders/#{work_order.id}/edit"
+          fill_in 'Description', with:"New Description that shouldn't change the approver list"
+          click_on 'Update'
+  
+          proposal.reload
+          second_approver = proposal.approvers.second.email_address
+          expect(second_approver).to eq('delegate@example.com')
+          expect(proposal.individual_approvals.length).to eq(3)
+        end
       end
 
       it "has 'Discard Changes' link" do
