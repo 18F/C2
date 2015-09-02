@@ -71,7 +71,7 @@ class User < ActiveRecord::Base
   end
 
   def admin?
-    self.class.admin_emails.include?(self.email_address)
+    self.has_role?('admin')
   end
 
   def self.for_email(email)
