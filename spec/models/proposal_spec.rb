@@ -305,21 +305,28 @@ describe Proposal do
     let(:observer) { FactoryGirl.create(:user) }
     let(:observer_email) { observer.email_address }
     let(:user) { FactoryGirl.create(:user) }
-    context 'without a supplied reason' do
-      it 'adds an observer to the proposal' do
-        expect(proposal.observers).to be_empty
-        proposal.add_observer(observer_email)
-        expect(proposal.observers).to eq [observer]
-      end
+    it 'adds an observer to the proposal' do
+      expect(proposal.observers).to be_empty
+      proposal.add_observer(observer_email)
+      expect(proposal.observers).to eq [observer]
     end
-
-    context 'with a supplied user & reason' do
-      let(:reason) { "my mate, innit" }
-      it 'adds an optional reason comment if supplied' do
-        expect(proposal.comments).to be_empty
-        proposal.add_observer(observer_email, user, reason)
-        expect(proposal.comments.length).to eq 1
-        expect(proposal.comments.first.comment_text).to include reason
+    context "with an adding user" do
+      context 'without a reason' do
+        it 'adds a comment mentioning the user' do
+          expect(proposal.comments).to be_empty
+          proposal.add_observer(observer_email, user)
+          expect(proposal.comments.length).to eq 1
+          expect(proposal.comments.first.comment_text).to include observer.full_name
+        end
+      end
+      context 'with a reason' do
+        let(:reason) { "my mate, innit" }
+        it 'adds a comment mentioning the reason' do
+          expect(proposal.comments).to be_empty
+          proposal.add_observer(observer_email, user, reason)
+          expect(proposal.comments.length).to eq 1
+          expect(proposal.comments.first.comment_text).to include reason
+        end
       end
     end
   end

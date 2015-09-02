@@ -42,6 +42,7 @@ en:
         rwa_number: "RWA Number"
         soc_code: "Object field / SOC code"
       observation:
+        user_comment: "_%{user} added %{observer} as an observer."
         user_reason_comment: "_%{user} added %{observer} as an observer, giving reason:_ `%{reason}`."
   mail:
     subject:

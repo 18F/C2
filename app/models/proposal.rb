@@ -261,14 +261,24 @@ class Proposal < ActiveRecord::Base
     self.observations << observation
     # invalidate relation cache so we reload on next access
     self.observers(true)
-    unless reason.blank?
-      self.comments.create(
-        comment_text: I18n.t('activerecord.attributes.observation.user_reason_comment',
-                             user: adder.full_name,
-                             observer: user.full_name,
-                             reason: reason),
-        user: adder)
-    end
+    add_observation_comment(user, adder, reason) if adder
     observation
+  end
+
+  def add_observation_comment(user, adder, reason)
+    if reason.blank?
+      self.comments.create(
+          comment_text: I18n.t('activerecord.attributes.observation.user_comment',
+                               user: adder.full_name,
+                               observer: user.full_name),
+          user: adder)
+    else
+      self.comments.create(
+          comment_text: I18n.t('activerecord.attributes.observation.user_reason_comment',
+                               user: adder.full_name,
+                               observer: user.full_name,
+                               reason: reason),
+          user: adder)
+    end
   end
 end
