@@ -240,6 +240,17 @@ describe CommunicartMailer do
       mail = CommunicartMailer.on_observer_added(observation)
       expect(mail.body.encoded).to_not include("to this request by ")
     end
+
+    it "includes the reason, if there is one" do
+      proposal = FactoryGirl.create(:proposal)
+      observer = FactoryGirl.create(:user)
+      adder = FactoryGirl.create(:user)
+      reason = "is an absolute ledge"
+      proposal.add_observer(observer, adder, reason)
+      observation = proposal.observations.first
+      mail = CommunicartMailer.on_observer_added(observation, reason)
+      expect(mail.body.encoded).to include("with given reason '#{observation.reason}'")
+    end
   end
 
   describe 'proposal_observer_email' do
