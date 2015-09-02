@@ -3,8 +3,8 @@ module ValueHelper
 
   def date_with_tooltip(time, ago = false)
     # make sure we are dealing with a Time object
-    if !time.is_a?(Time)
-      time = Time.parse(time)
+    unless time.is_a?(Time)
+      time = Time.zone.parse(time)
     end
 
     # timezone adjustment is handled via browser-timezone-rails gem
