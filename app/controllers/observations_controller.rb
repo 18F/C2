@@ -5,14 +5,10 @@ class ObservationsController < ApplicationController
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
 
   def create
-    cleaned = params.permit(observation: { user: [:email_address] })
-    email = cleaned.require(:observation).require(:user).require(:email_address)
-    observation = @proposal.add_observer(email, current_user, params[:observation][:reason])
+    observation = @proposal.add_observer(observer_email, current_user, params[:observation][:reason])
     Dispatcher.on_observer_added(observation, params[:observation][:reason])
-
     observer = observation.user
     flash[:success] = "#{observer.full_name} has been added as an observer"
-    # TODO store an activity comment
     redirect_to proposal_path(@proposal)
   end
 
@@ -38,6 +34,11 @@ class ObservationsController < ApplicationController
 
   def observation
     @cached_observation ||= Observation.find(params[:id])
+  end
+
+  def observer_email
+    params.permit(observation: { user: [:email_address] })
+      .require(:observation).require(:user).require(:email_address)
   end
 
   def auth_errors(_exception)
