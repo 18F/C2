@@ -143,26 +143,8 @@ class Proposal < ActiveRecord::Base
       user = User.for_email(email_or_user)
     end
 
-    # no duplicates
-    observation = self.observers.select{|o| o.id == user.id}.first
-
-    unless observation
-      observer_role = Role.find_or_create_by(name: 'observer')
-      observation = Observation.new(user_id: user.id, role_id: observer_role.id, proposal_id: self.id)
-      # because we build the Observation ourselves, we add to the direct m2m relation directly.
-      self.observations << observation
-      # invalidate relation cache so we reload on next access
-      self.observers(true)
-      unless reason.blank?
-        self.comments.create(
-            comment_text: I18n.t('activerecord.attributes.observation.user_reason_comment',
-                                 user: adder.full_name,
-                                 observer: observation.user.full_name,
-                                 reason: reason),
-            user: adder)
-      end
-    end
-    observation
+    # check if the user is already observing, to avoid duplicates
+    self.observers.find{ |o| o.id == user.id } || create_new_observation(user, adder, reason)
   end
 
   def add_requester(email)
@@ -270,5 +252,23 @@ class Proposal < ActiveRecord::Base
   protected
   def update_public_id
     self.update_attribute(:public_id, self.public_identifier)
+  end
+
+  def create_new_observation(user, adder, reason)
+    observer_role = Role.find_or_create_by(name: 'observer')
+    observation = Observation.new(user_id: user.id, role_id: observer_role.id, proposal_id: self.id)
+    # because we build the Observation ourselves, we add to the direct m2m relation directly.
+    self.observations << observation
+    # invalidate relation cache so we reload on next access
+    self.observers(true)
+    unless reason.blank?
+      self.comments.create(
+        comment_text: I18n.t('activerecord.attributes.observation.user_reason_comment',
+                             user: adder.full_name,
+                             observer: user.full_name,
+                             reason: reason),
+        user: adder)
+    end
+    observation
   end
 end
