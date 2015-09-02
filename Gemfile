@@ -28,6 +28,7 @@ gem 'paper_trail'
 gem 'peek'
 gem 'peek-performance_bar'
 gem 'peek-pg'
+gem 'peek-delayed_job'
 gem 'pg'
 gem 'puma'
 gem 'pundit', '>= 1.0.0'  # Interface for Pundit::NotAuthorizedError changed in this version

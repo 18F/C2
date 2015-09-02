@@ -9,7 +9,7 @@ Proposals have two types of workflows:
 * Parallel
     * Once the request is submitted, all approvers receive a notification.
 * Linear (a.k.a serial)
-    * Once the request is submitted, it goes to the first approver. Iff they approve, it goes to the next, and so forth.
+    * Once the request is submitted, it goes to the first approver. If they approve, it goes to the next, and so forth.
 
 ## User accounts
 

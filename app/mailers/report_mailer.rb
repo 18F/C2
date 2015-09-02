@@ -1,4 +1,4 @@
-class ReportMailer < ActionMailer::Base
+class ReportMailer < ApplicationMailer
   add_template_helper ReportHelper
 
   def budget_status
@@ -8,14 +8,7 @@ class ReportMailer < ActionMailer::Base
     mail(
       to: to_email,
       subject: "C2: Daily Budget report for #{date}",
-      from: sender_email
+      from: self.sender_email
     )
-  end
-
-
-  private
-
-  def sender_email
-    ENV['NOTIFICATION_FROM_EMAIL'] || 'noreply@some.gov'
   end
 end

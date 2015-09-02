@@ -317,10 +317,6 @@ describe Proposal do
         observation = proposal.add_observer(observer_email, user, reason)
         expect(observation.reason).to eql reason
       end
-      it 'includes the reason in the dispatched mails' do
-        proposal.add_observer(observer_email, user, reason)
-        expect(deliveries[0].body.to_s).to include reason
-      end
     end
   end
 end

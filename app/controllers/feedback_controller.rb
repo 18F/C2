@@ -6,7 +6,7 @@ class FeedbackController < ApplicationController
   def create
     form_values = self.feedback_params
     unless form_values.empty?
-      CommunicartMailer.feedback(current_user, form_values).deliver_later
+      FeedbackMailer.feedback(current_user, form_values).deliver_later
     end
     # @todo - redirect somewhere to avoid back/refresh button issues
   end

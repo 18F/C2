@@ -1,5 +1,5 @@
-class CommunicartMailer < ActionMailer::Base
-  include Roadie::Rails::Automatic
+class CommunicartMailer < ApplicationMailer
+  include ProposalConversationThreading
 
   layout 'communicart_mailer'
   add_template_helper CommunicartMailerHelper
@@ -8,9 +8,14 @@ class CommunicartMailer < ActionMailer::Base
   add_template_helper MarkdownHelper
 
   # Approver can approve/take other action
-  def actions_for_approver(to_email, approval, alert_partial = nil)
+  def actions_for_approver(approval, alert_partial = nil)
     @show_approval_actions = true
+    to_email = approval.user_email_address
     proposal = approval.proposal
+
+    unless approval.api_token
+      approval.create_api_token!
+    end
 
     self.notification_for_subscriber(to_email, proposal, alert_partial, approval)
   end
@@ -45,6 +50,7 @@ class CommunicartMailer < ActionMailer::Base
       proposal: proposal
     )
   end
+  alias_method :cancellation_email, :proposal_observer_email
 
   def proposal_created_confirmation(proposal)
     send_proposal_email(
@@ -52,20 +58,7 @@ class CommunicartMailer < ActionMailer::Base
       proposal: proposal
     )
   end
-
-  def cancellation_confirmation(proposal)
-    send_proposal_email(
-      to_email: proposal.requester.email_address,
-      proposal: proposal
-    )
-  end
-
-  def cancellation_email(proposal, to_email)
-    send_proposal_email(
-      to_email: to_email,
-      proposal: proposal
-    )
-  end
+  alias_method :cancellation_confirmation, :proposal_created_confirmation
 
   def approval_reply_received_email(approval)
     proposal = approval.proposal
@@ -91,77 +84,7 @@ class CommunicartMailer < ActionMailer::Base
     end
   end
 
-  def feedback(sending_user, form_values)
-    form_strings = form_values.map { |key, val| "#{key}: #{val}" }
-    message = form_strings.join("\n")
-    mail(
-      to: CommunicartMailer.support_email,
-      subject: 'Feedback submission',
-      from: default_sender_email,
-      body: message,
-      cc: sending_user.try(:email_address)
-    )
-  end
-
-  def self.support_email
-    ENV['SUPPORT_EMAIL'] || 'gatewaycommunicator@gsa.gov' # not sensitive, so hard coding
-  end
-
   private
-
-  def email_with_name(email, name)
-    # http://stackoverflow.com/a/8106387/358804
-    address = Mail::Address.new(email)
-    address.display_name = name
-    address.format
-  end
-
-  def sender_email
-    ENV['NOTIFICATION_FROM_EMAIL'] || 'noreply@some.gov'
-  end
-
-  def default_sender_email
-    email_with_name(sender_email, "Communicart")
-  end
-
-  def user_email_with_name(user)
-    email_with_name(sender_email, user.full_name)
-  end
-
-  def send_proposal_email(proposal:, to_email:, from_email: nil, template_name: nil)
-    @proposal = proposal.decorate
-
-    # http://www.jwz.org/doc/threading.html
-    headers['In-Reply-To'] = @proposal.email_msg_id
-    headers['References'] = @proposal.email_msg_id
-
-    mail(
-      to: to_email,
-      subject: proposal_subject(@proposal),
-      from: from_email || default_sender_email,
-      template_name: template_name
-    )
-  end
-
-  def proposal_subject(proposal)
-    params = proposal.as_json
-    # todo: replace with public_id once #98376564 is fixed
-    params[:public_identifier] = proposal.public_identifier
-    # Add in requester params
-    proposal.requester.as_json.each { |k, v| params["requester_" + k] = v }
-    if proposal.client_data
-      # We'll look up by the client_data's class name
-      i18n_key = proposal.client_data.class.name.underscore
-      # Add in client_data params
-      params.merge!(proposal.client_data.as_json)
-    else
-      # Default (no client_data): look up by "proposal"
-      i18n_key = :proposal
-    end
-    # Add search path, and default lookup key for I18n
-    params.merge!(scope: [:mail, :subject], default: :proposal)
-    I18n.t i18n_key, params.symbolize_keys
-  end
 
   def observation_added_from(observation)
     adder = observation.created_by
