@@ -1,6 +1,6 @@
 module ReportHelper
   def pretty_date(date)
-    date.strftime("%a %m/%d/%y (%Z)")
+    date.utc.strftime("%a %m/%d/%y (%Z)")
   end
 
   def budget_proposals(type, timespan)
