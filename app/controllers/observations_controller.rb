@@ -7,8 +7,7 @@ class ObservationsController < ApplicationController
   def create
     observation = @proposal.add_observer(observer_email, current_user, params[:observation][:reason])
     Dispatcher.on_observer_added(observation, params[:observation][:reason])
-    observer = observation.user
-    flash[:success] = "#{observer.full_name} has been added as an observer"
+    flash[:success] = "#{observation.user.full_name} has been added as an observer"
     redirect_to proposal_path(@proposal)
   end
 
