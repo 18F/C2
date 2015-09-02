@@ -40,5 +40,14 @@ FactoryGirl.define do
         end
       end
     end
+
+    trait :with_observer_and_reason do
+      after :create do |proposal|
+        observer = FactoryGirl.create(:user)
+        adder = FactoryGirl.create(:user)
+        reason = "is an absolute ledge"
+        proposal.add_observer(observer.email_address, adder, reason)
+      end
+    end
   end
 end

@@ -35,4 +35,22 @@ describe "observers" do
 
     expect(email_recipients).to eq([observer2.email_address])
   end
+
+  it "allows a user to add a reason when adding an observer" do
+    reason = "is the archbishop of banterbury"
+    proposal = FactoryGirl.create(:proposal)
+    observer = FactoryGirl.create(:user)
+    login_as(proposal.requester)
+
+    visit "/proposals/#{proposal.id}"
+    select observer.email_address, from: 'observation_user_email_address'
+    fill_in "observation_reason", with: reason
+    click_on 'Add an Observer'
+
+    expect(page).to have_content("#{observer.full_name} has been added as an observer")
+    proposal.reload
+
+    expect(deliveries.first.body.encoded).to include reason   # comment notification
+    expect(deliveries.second.body.encoded).to include reason  # subscription notification
+  end
 end

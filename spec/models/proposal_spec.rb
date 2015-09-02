@@ -292,4 +292,31 @@ describe Proposal do
       expect(proposal.api_tokens.unexpired.size).to eq(2)
     end
   end
+
+  describe "#add_observer" do
+    let(:proposal) { FactoryGirl.create(:proposal) }
+    let(:observer) { FactoryGirl.create(:user) }
+    let(:observer_email) { observer.email_address }
+    let(:user) { FactoryGirl.create(:user) }
+    context 'without a supplied reason' do
+      it 'adds an observer to the proposal' do
+        expect(proposal.observers).to be_empty
+        proposal.add_observer(observer_email)
+        expect(proposal.observers).to eq [observer]
+      end
+    end
+    context 'with a supplied user & reason' do
+      let(:reason) { "my mate, innit" }
+      it 'adds an optional reason comment if supplied' do
+        expect(proposal.comments).to be_empty
+        proposal.add_observer(observer_email, user, reason)
+        expect(proposal.comments.length).to eq 1
+        expect(proposal.comments.first.comment_text).to include reason
+      end
+      it 'adds an optional reason to the returned observation' do
+        observation = proposal.add_observer(observer_email, user, reason)
+        expect(observation.reason).to eql reason
+      end
+    end
+  end
 end
