@@ -26,7 +26,6 @@ describe LinearDispatcher do
     it "skips non-approvers" do
       proposal = FactoryGirl.create(:proposal, :with_approver, :with_observers)
       approval = proposal.approvals.first
-
       expect(dispatcher.next_pending_approval(proposal)).to eq(approval)
     end
   end

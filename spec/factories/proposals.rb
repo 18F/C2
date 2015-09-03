@@ -36,6 +36,7 @@ FactoryGirl.define do
 
     trait :with_observers do
       after :create do |proposal|
+        observer_role = FactoryGirl.create(:role, :observer)
         2.times do
           observer = FactoryGirl.create(:user)
           proposal.add_observer(observer.email_address)

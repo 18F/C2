@@ -69,7 +69,7 @@ describe Proposal do
     it "returns all approvers, observers, and the requester" do
       requester = FactoryGirl.create(:user)
       proposal = FactoryGirl.create(:proposal, :with_parallel_approvers, :with_observers, requester: requester)
-
+      
       expect(proposal.users.map(&:id).sort).to eq([
         requester.id,
         proposal.approvers.first.id, proposal.approvers.second.id,
@@ -87,6 +87,13 @@ describe Proposal do
       proposal = FactoryGirl.create(:proposal, requester: requester)
       proposal.add_observer(requester.email_address)
       expect(proposal.users).to eq [requester]
+    end
+
+    it "adds observer from user object" do
+      observer = FactoryGirl.create(:user)
+      proposal = FactoryGirl.create(:proposal, requester: observer)
+      proposal.add_observer(observer)
+      expect(proposal.users).to eq [observer]      
     end
   end
 

@@ -24,7 +24,7 @@ class SubscriberList
 
   def partitioned_roles
     users = self.proposal.users.sort_by(&:full_name)
-    roles = users.map { |u| Role.new(u, self.proposal) }
+    roles = users.map { |u| RolePicker.new(u, self.proposal) }
 
     requesters, roles = roles.partition(&:requester?)
     approvers, roles = roles.partition(&:approver?)

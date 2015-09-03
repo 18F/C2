@@ -4,31 +4,28 @@ describe Query::Proposal::Listing do
 
   [:pending, :approved, :cancelled].each do |status|
     describe "##{status}" do
-      it "only returns that user's Proposals when they are an app admin" do
+      it "ignores app admin role and only returns the user's Proposals" do
         FactoryGirl.create(:proposal, status: status)
         proposal = FactoryGirl.create(:proposal, requester: user, status: status)
-
-        with_env_var('ADMIN_EMAILS', user.email_address) do
-          listing = Query::Proposal::Listing.new(user, params)
-          expect(listing.send(status).rows).to eq([proposal])
-        end
+        user.add_role('admin')
+        listing = Query::Proposal::Listing.new(user, params)
+        expect(listing.send(status).rows).to eq([proposal])
       end
 
       context "with an arbitrary client" do
         before do
           user.update_attribute(:client_slug, 'ncr')
+          user.add_role('client_admin')
         end
 
-        it "only displays that user's Proposals when they are a client admin" do
+        it "ignores client_admin role and only displays the user's Proposals" do
           proposal = FactoryGirl.create(:proposal, requester: user, status: status)
 
           other_proposal = FactoryGirl.create(:proposal, status: status)
           FactoryGirl.create(:ncr_work_order, proposal: other_proposal)
 
-          with_env_var('CLIENT_ADMIN_EMAILS', user.email_address) do
-            listing = Query::Proposal::Listing.new(user, params)
-            expect(listing.send(status).rows).to eq([proposal])
-          end
+          listing = Query::Proposal::Listing.new(user, params)
+          expect(listing.send(status).rows).to eq([proposal])
         end
       end
     end
