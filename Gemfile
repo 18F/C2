@@ -8,6 +8,7 @@ gem 'autoprefixer-rails'
 gem 'awesome_print'
 gem 'aws-sdk-v1'    # remaining on v1 due to https://github.com/thoughtbot/paperclip/issues/1764
 gem 'bootstrap-sass'
+gem 'browser-timezone-rails'
 gem 'clockwork', require: false
 gem 'daemons' # for delayed_job
 gem 'delayed_job_active_record'

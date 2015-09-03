@@ -1,6 +1,6 @@
 module ReportHelper
   def pretty_date(date)
-    date.in_time_zone('Eastern Time (US & Canada)').strftime("%a %m/%d/%y")
+    date.utc.strftime("%a %m/%d/%y (%Z)")
   end
 
   def budget_proposals(type, timespan)
