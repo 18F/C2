@@ -1,60 +1,48 @@
 describe LinearDispatcher do
-  let(:proposal) { FactoryGirl.create(:proposal, flow: 'linear') }
   let(:dispatcher) { LinearDispatcher.new }
-  let(:requester) { FactoryGirl.create(:user, email_address: 'requester@some-dot-gov-domain.gov') }
-  let(:approver) { FactoryGirl.create(:user, email_address: 'approver@some-dot-gov-domain.gov') }
 
   describe '#next_pending_approval' do
     context "no approvals" do
       it "returns nil" do
+        proposal = FactoryGirl.create(:proposal, flow: 'linear')
         expect(dispatcher.next_pending_approval(proposal)).to eq(nil)
       end
     end
 
     it "returns nil if all are non-pending" do
-      proposal.approvals.create!(status: 'approved')
+      proposal = FactoryGirl.create(:proposal, :with_approver, flow: 'linear')
+      proposal.root_approval.approve!
       expect(dispatcher.next_pending_approval(proposal)).to eq(nil)
     end
 
-    it "sorts by position if there are more than one actionable approvals" do
-      proposal.approvals.create!(position: 6, status: 'actionable')
-      last_approval = proposal.approvals.create!(position: 5, status: 'actionable')
+    it "skips approved approvals" do
+      proposal = FactoryGirl.create(:proposal, :with_serial_approvers)
+      last_approval = proposal.individual_approvals.last
+      proposal.individual_approvals.first.approve!
 
       expect(dispatcher.next_pending_approval(proposal)).to eq(last_approval)
     end
 
-    it "skips approved approvals" do
-      first_approval = proposal.approvals.create!(position: 6, status: 'actionable')
-      proposal.approvals.create!(position: 5, status: 'approved')
-
-      expect(dispatcher.next_pending_approval(proposal)).to eq(first_approval)
-    end
-
     it "skips non-approvers" do
-      observer = FactoryGirl.create(:user)
-      proposal.add_observer(observer)
-      approval = proposal.approvals.create!(status: 'actionable')
-
+      proposal = FactoryGirl.create(:proposal, :with_approver, :with_observers)
+      approval = proposal.approvals.first
       expect(dispatcher.next_pending_approval(proposal)).to eq(approval)
     end
   end
 
   describe '#deliver_new_proposal_emails' do
-    before do
-      proposal.update_attributes!(requester_id: requester.id)
-    end
-
     it "sends emails to the first approver" do
-      approver
-      approval = proposal.approvals.create!(user_id: approver.id, status: 'actionable')
+      proposal = FactoryGirl.create(:proposal, :with_approver)
+      approval = proposal.approvals.first
+
       expect(dispatcher).to receive(:email_approver).with(approval)
 
       dispatcher.deliver_new_proposal_emails(proposal)
     end
 
     it "sends a proposal notification email to observers" do
-      observer = FactoryGirl.create(:user)
-      proposal.add_observer(observer)
+      proposal = FactoryGirl.create(:proposal, :with_observers)
+
       expect(dispatcher).to receive(:email_observers).with(proposal)
 
       dispatcher.deliver_new_proposal_emails(proposal)
@@ -64,7 +52,7 @@ describe LinearDispatcher do
   describe '#on_approval_approved' do
     it "sends to the requester and the next approver" do
       proposal = FactoryGirl.create(:proposal, :with_serial_approvers)
-      approval = proposal.approvals.first
+      approval = proposal.individual_approvals.first
       approval.approve!   # calls on_approval_approved
       expect(email_recipients).to eq([
         proposal.approvers.second.email_address,

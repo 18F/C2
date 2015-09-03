@@ -25,14 +25,14 @@ module Ncr
       # TODO convert to SQL
       Proposal.where(client_data_type: "Ncr::WorkOrder")
               .where(status: "pending")
-              .select{ |p| p.approvals.pluck(:status)[0] == 'actionable' }
+              .select{ |p| p.individual_approvals.pluck(:status)[0] == 'actionable' }
     end
 
     def self.proposals_pending_budget
       # TODO convert to SQL
       Proposal.where(client_data_type: "Ncr::WorkOrder")
               .where(status: "pending")
-              .select{ |p| p.approvals.pluck(:status).last == 'actionable' }
+              .select{ |p| p.individual_approvals.pluck(:status).last == 'actionable' }
               .sort{ |a,b|a.client_data.expense_type <=> b.client_data.expense_type }
     end
 
