@@ -31,7 +31,7 @@ class Proposal < ActiveRecord::Base
   has_many :attachments
   has_many :approval_delegates, through: :approvers, source: :outgoing_delegates
   has_many :comments
-  has_many :observations
+  has_many :observations, -> { where("proposal_roles.role_id in (select roles.id from roles where roles.name='observer')") }
   has_many :observers, through: :observations, source: :user
   belongs_to :client_data, polymorphic: true
   belongs_to :requester, class_name: 'User'
@@ -135,10 +135,32 @@ class Proposal < ActiveRecord::Base
     end
   end
 
-  # TODO accept users or emails
-  def add_observer(email)
-    user = User.for_email(email)
-    self.observations.find_or_create_by!(user: user)
+  def existing_observation_for(user)
+    self.observations.find_by(user: user)
+  end
+
+  def add_observer(email_or_user)
+    # polymorphic
+    if email_or_user.is_a?(User)
+      user = email_or_user
+    else
+      user = User.for_email(email_or_user)
+    end
+
+    # no duplicates
+    observation = existing_observation_for(user)
+
+    unless observation
+      observer_role = Role.find_or_create_by(name: 'observer')
+      observation   = Observation.new(user_id: user.id, role_id: observer_role.id, proposal_id: self.id)
+
+      # because we build the Observation ourselves, we add to the direct m2m relation directly.
+      self.observations << observation
+
+      # invalidate relation cache so we reload on next access
+      self.observers(true)
+    end
+    observation
   end
 
   def add_requester(email)

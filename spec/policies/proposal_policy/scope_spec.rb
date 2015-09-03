@@ -49,7 +49,7 @@ describe ProposalPolicy::Scope do
     expect(proposals).to be_empty
   end
 
-  context "CLIENT_ADMIN privileges" do
+  context "client_admin role privileges" do
     let(:proposal1) { FactoryGirl.create(:proposal, :with_parallel_approvers, :with_observers, requester_id: 555) }
     let(:user) { FactoryGirl.create(:user, client_slug: 'abc_company', email_address: 'admin@some-dot-gov.gov') }
     let(:proposals) { ProposalPolicy::Scope.new(user, Proposal).resolve }
@@ -58,40 +58,38 @@ describe ProposalPolicy::Scope do
       expect(Proposal).to receive(:client_slugs).and_return(%w(abc_company))
     end
 
-    with_env_var('CLIENT_ADMIN_EMAILS', 'admin@some-dot-gov.gov') do
-      it "allows them to see unassociated requests that are inside its client scope" do
-        expect(Proposal).to receive(:client_model_names).and_return(['AbcCompany::SomethingApprovable'])
-        proposal.update_attributes(client_data_type: 'AbcCompany::SomethingApprovable')
+    it "allows them to see unassociated requests that are inside its client scope" do
+      user.add_role('client_admin')
+      expect(Proposal).to receive(:client_model_names).and_return(['AbcCompany::SomethingApprovable'])
+      proposal.update_attributes(client_data_type: 'AbcCompany::SomethingApprovable')
+      expect(proposals).to eq([proposal])
+    end
+
+    context "outside of their client scope" do
+      before do
+        expect(Proposal).to receive(:client_model_names).and_return(['CdfCompany::SomethingApprovable'])
+      end
+
+      it "allows them to see Proposals they are involved with" do
+        user.add_role('client_admin')
+        proposal.update_attributes(client_data_type: 'CdfCompany::SomethingApprovable', requester: user)
         expect(proposals).to eq([proposal])
       end
 
-      context "outside of their client scope" do
-        before do
-          expect(Proposal).to receive(:client_model_names).and_return(['CdfCompany::SomethingApprovable'])
-        end
-
-        it "allows them to see Proposals they are involved with" do
-          proposal.update_attributes(client_data_type: 'CdfCompany::SomethingApprovable', requester: user)
-          expect(proposals).to eq([proposal])
-        end
-
-        it "prevents them from seeing outside requests" do
-          proposal.update_attributes(client_data_type: 'CdfCompany::SomethingApprovable')
-          expect(proposals).to be_empty
-        end
-      end
-    end
-
-    with_env_var('CLIENT_ADMIN_EMAILS', '') do
-      it "prevents a non-admin from seeing unrelated requests" do
-        expect(Proposal).to receive(:client_model_names).and_return(['AbcCompany::SomethingApprovable'])
-        proposal.update_attributes(client_data_type:'AbcCompany::SomethingApprovable')
+      it "prevents them from seeing outside requests" do
+        proposal.update_attributes(client_data_type: 'CdfCompany::SomethingApprovable')
         expect(proposals).to be_empty
       end
     end
+
+    it "prevents a non-admin from seeing unrelated requests" do
+      expect(Proposal).to receive(:client_model_names).and_return(['AbcCompany::SomethingApprovable'])
+      proposal.update_attributes(client_data_type:'AbcCompany::SomethingApprovable')
+      expect(proposals).to be_empty
+    end
   end
 
-  context "ADMIN privileges" do
+  context "admin role privileges" do
     let(:proposal1) { FactoryGirl.create(:proposal, :with_parallel_approvers, :with_observers, requester_id: 555) }
     let(:user) { FactoryGirl.create(:user, client_slug: 'abc_company') }
     let(:proposals) { ProposalPolicy::Scope.new(user, Proposal).resolve }
@@ -101,12 +99,11 @@ describe ProposalPolicy::Scope do
     end
 
     it "allows an app admin to see requests inside and outside its client scope" do
-      with_env_var('ADMIN_EMAILS', user.email_address) do
-        proposal1.update_attributes(client_data_type:'CdfCompany::SomethingApprovable')
-        proposal.update_attributes(client_data_type:'AbcCompany::SomethingApprovable')
+      user.add_role('admin')
+      proposal1.update_attributes(client_data_type:'CdfCompany::SomethingApprovable')
+      proposal.update_attributes(client_data_type:'AbcCompany::SomethingApprovable')
 
-        expect(proposals).to match_array([proposal,proposal1])
-      end
+      expect(proposals).to match_array([proposal,proposal1])
     end
   end
 end

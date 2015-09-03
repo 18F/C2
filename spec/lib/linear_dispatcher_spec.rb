@@ -31,7 +31,8 @@ describe LinearDispatcher do
     end
 
     it "skips non-approvers" do
-      proposal.observations.create!
+      observer = FactoryGirl.create(:user)
+      proposal.add_observer(observer)
       approval = proposal.approvals.create!(status: 'actionable')
 
       expect(dispatcher.next_pending_approval(proposal)).to eq(approval)
@@ -52,7 +53,8 @@ describe LinearDispatcher do
     end
 
     it "sends a proposal notification email to observers" do
-      proposal.observations.create!
+      observer = FactoryGirl.create(:user)
+      proposal.add_observer(observer)
       expect(dispatcher).to receive(:email_observers).with(proposal)
 
       dispatcher.deliver_new_proposal_emails(proposal)

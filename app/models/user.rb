@@ -12,9 +12,37 @@ class User < ActiveRecord::Base
   has_many :observations
   has_many :comments
 
+  # we do not use rolify gem (e.g.) but declare relationship like any other.
+  has_many :roles, class_name: 'UserRole'
+
   # TODO rename to _delegations, and add relations for the Users
   has_many :outgoing_delegates, class_name: 'ApprovalDelegate', foreign_key: 'assigner_id'
   has_many :incoming_delegates, class_name: 'ApprovalDelegate', foreign_key: 'assignee_id'
+
+  # this is for user_roles specifically, not proposals or any other objects for which
+  # this user might have roles.
+  # rubocop:disable all
+  def has_role?(name_or_role)
+    if name_or_role.is_a?(Role)
+      roles.any? { |user_role| user_role.role.name == name_or_role.name }
+    else
+      roles.any? { |user_role| user_role.role.name == name_or_role }
+    end
+  end
+  # rubocop:enable all
+
+  def add_role(name_or_role)
+    return if has_role?(name_or_role)
+
+    role = nil
+    if name_or_role.is_a?(Role)
+      role = name_or_role
+    else
+      role = Role.find_or_create_by(name: name_or_role)
+    end
+    user_role = UserRole.new(role: role)
+    roles << user_role
+  end
 
   def full_name
     if first_name && last_name
@@ -41,11 +69,11 @@ class User < ActiveRecord::Base
   end
 
   def client_admin?
-    self.class.client_admin_emails.include?(self.email_address)
+    self.has_role?('client_admin')
   end
 
   def admin?
-    self.class.admin_emails.include?(self.email_address)
+    self.has_role?('admin')
   end
 
   def self.for_email(email)
@@ -57,15 +85,7 @@ class User < ActiveRecord::Base
     self.find_or_create_by(email_address: user_data['email'])
   end
 
-  def self.client_admin_emails
-    ENV['CLIENT_ADMIN_EMAILS'].to_s.split(',')
-  end
-
-  def self.admin_emails
-    ENV['ADMIN_EMAILS'].to_s.split(',')
-  end
-
   def role_on(proposal)
-    Role.new(self,proposal)
+    RolePicker.new(self, proposal)
   end
 end
