@@ -21,6 +21,7 @@ describe "National Capital Region proposals" do
 
     context "when signed in as the requester" do
       let(:requester) { FactoryGirl.create(:user) }
+      let(:ncr_helper_class) { Class.new { extend Ncr::WorkOrdersHelper } }
 
       before do
         login_as(requester)
@@ -145,6 +146,34 @@ describe "National Capital Region proposals" do
         expect(page).to have_content("Amount must be less than or equal to $3,000")
         # keeps the form values
         expect(find_field('Amount').value).to eq('10000')
+      end
+
+      it "preserve form values on submission error" do
+        # make sure we have an existing work order so vendor dropdown is populated.
+        work_order = FactoryGirl.create(:ncr_work_order, :with_approvers)
+
+        expect(Proposal.count).to eq(1)
+        expect(ncr_helper_class.vendor_options).to eq([work_order.vendor])
+
+        visit '/ncr/work_orders/new'
+        fill_in 'Project title', with: "buying stuff"
+        choose 'BA80'
+        fill_in 'Vendor', with: 'ACME'
+        fill_in 'Amount', with: 10_000
+
+        expect {
+          click_on 'Submit for approval'
+        }.to_not change { Proposal.count }
+
+        # options do not change unless we pass in new explicitly, which the form should.
+        expect(ncr_helper_class.vendor_options('zzbar')).to eq([work_order.vendor, 'zzbar'])
+
+        # keeps the form values
+        expect(find_field('Amount').value).to eq('10000')
+        expect(find_field('Vendor').value).to eq('ACME')
+        # since vendor is populated from local json array, make sure the array contains the submitted string,
+        # even though db does not yet contain it.
+        expect(JSON.parse(find_field('Vendor')['data-initial'])).to eq(['ACME', work_order.vendor])
       end
 
       it "includes has overwritten field names" do
@@ -481,24 +510,26 @@ describe "National Capital Region proposals" do
         end
       end
 
-      it "doesn't change approving list when delegated" do
-        proposal = Proposal.last
-        approval = proposal.individual_approvals.first
-        approval.approve!
-        approval = proposal.individual_approvals.second
-        user = approval.user
-        delegate = User.new(email_address:'delegate@example.com')
-        delegate.save
-        user.add_delegate(delegate)
-        approval.update_attributes!(user: delegate)
-        visit "/ncr/work_orders/#{work_order.id}/edit"
-        fill_in 'Description', with:"New Description that shouldn't change the approver list"
-        click_on 'Update'
-
-        proposal.reload
-        second_approver = proposal.approvers.second.email_address
-        expect(second_approver).to eq('delegate@example.com')
-        expect(proposal.individual_approvals.length).to eq(3)
+      with_env_vars(NCR_BA61_TIER1_BUDGET_MAILBOX: 'foo@example.gov', NCR_BA61_TIER2_BUDGET_MAILBOX: 'bar@example.gov') do
+        it "doesn't change approving list when delegated" do
+          proposal = Proposal.last
+          approval = proposal.individual_approvals.first
+          approval.approve!
+          approval = proposal.individual_approvals.second
+          user = approval.user
+          delegate = User.new(email_address:'delegate@example.com')
+          delegate.save
+          user.add_delegate(delegate)
+          approval.update_attributes!(user: delegate)
+          visit "/ncr/work_orders/#{work_order.id}/edit"
+          fill_in 'Description', with:"New Description that shouldn't change the approver list"
+          click_on 'Update'
+  
+          proposal.reload
+          second_approver = proposal.approvers.second.email_address
+          expect(second_approver).to eq('delegate@example.com')
+          expect(proposal.individual_approvals.length).to eq(3)
+        end
       end
 
       it "has 'Discard Changes' link" do
