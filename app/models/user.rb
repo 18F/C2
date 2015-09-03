@@ -37,10 +37,10 @@ class User < ActiveRecord::Base
       role = name_or_role
     else
       role = Role.find_or_create_by(name: name_or_role)
-    end 
+    end
     user_role = UserRole.new(role: role)
     roles << user_role
-  end  
+  end
 
   def full_name
     if first_name && last_name

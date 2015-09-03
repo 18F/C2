@@ -136,7 +136,7 @@ class Proposal < ActiveRecord::Base
   end
 
   def existing_observation_for(user)
-    self.observers.select{|o| o.id == user.id}.first
+    self.observations.find_by(user: user)
   end
 
   def add_observer(email_or_user)
