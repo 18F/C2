@@ -83,14 +83,6 @@ class User < ActiveRecord::Base
     self.find_or_create_by(email_address: user_data['email'])
   end
 
-  def self.client_admin_emails
-    ENV['CLIENT_ADMIN_EMAILS'].to_s.split(',')
-  end
-
-  def self.admin_emails
-    ENV['ADMIN_EMAILS'].to_s.split(',')
-  end
-
   def role_on(proposal)
     RolePicker.new(self,proposal)
   end
