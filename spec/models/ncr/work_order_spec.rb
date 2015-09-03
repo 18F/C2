@@ -62,7 +62,7 @@ describe Ncr::WorkOrder do
         'bob@example.com',
         Ncr::WorkOrder.ba61_tier1_budget_mailbox,
         Ncr::WorkOrder.ba61_tier2_budget_mailbox
-      ])
+      ].uniq)
       expect(form.approvals.length).to eq(0)
       form.clear_association_cache
       expect(form.approved?).to eq(true)

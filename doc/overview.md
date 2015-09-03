@@ -9,7 +9,7 @@ Proposals have two types of workflows:
 * Parallel
     * Once the request is submitted, all approvers receive a notification.
 * Linear (a.k.a serial)
-    * Once the request is submitted, it goes to the first approver. Iff they approve, it goes to the next, and so forth.
+    * Once the request is submitted, it goes to the first approver. If they approve, it goes to the next, and so forth.
 
 ## User accounts
 
@@ -78,3 +78,11 @@ The NCR use case was built around GSA service centers (paint shops, landscapers,
 ## Performance
 
 C2 has the [Peek](https://github.com/peek/peek) performance bar loaded in development, and in production for admins. It's hidden by default – press the backtick (`` ` ``) key to display it.
+
+## Supported Browsers
+
+Support Level         |   Browsers In Level       | Bugs Will Be... |
+----------------------|-------------------|-------------|
+Level 1 | Internet Explorer 9, Chrome  | resolved with high priority |
+Level 2 | Firefox, Opera, Safari, Internet Explorer 10, Internet Explorer 11 | resolved with low priority |
+Level 3 | Internet Explorer 6, 7, 8, and all mobile and tablet browsers | not resolved |
