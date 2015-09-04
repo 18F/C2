@@ -123,9 +123,9 @@ ActiveRecord::Schema.define(version: 20150901190853) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "direct_pay"
-    t.string   "cl_number"
-    t.string   "function_code"
-    t.string   "soc_code"
+    t.string   "cl_number",       limit: 255
+    t.string   "function_code",   limit: 255
+    t.string   "soc_code",        limit: 255
   end
 
   create_table "properties", force: :cascade do |t|
