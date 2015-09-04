@@ -6,7 +6,8 @@ class MoveObservationsToRoles < ActiveRecord::Migration
     # We have to use raw sql because we've subclassed the observation class
     pgres = ProposalRole.connection.execute("SELECT DISTINCT(proposal_id, user_id) FROM observations WHERE user_id IN (SELECT id FROM users)")
     pgres.each_row do |row|
-      prole = ProposalRole.create(proposal_id: row.first, user_id: row.second, role_id: role.id)
+      matches = row.first.match(/\A\((\d+),(\d+)\)\z/)
+      ProposalRole.create(proposal_id: matches[1], user_id: matches[2], role_id: role.id)
     end
 
     drop_table :observations
