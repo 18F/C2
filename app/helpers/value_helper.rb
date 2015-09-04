@@ -9,12 +9,13 @@ module ValueHelper
 
     # timezone adjustment is handled via browser-timezone-rails gem
     # so coerce into Time.zone explicitly
-    adjusted_time = time.in_time_zone.strftime("%b %-d, %Y at %l:%M%P")
+    adjusted_time     = time.in_time_zone
+    adjusted_time_str = adjusted_time.strftime("%b %-d, %Y at %l:%M%P")
 
     if ago
-      content_tag('span', time_ago_in_words(adjusted_time) + " ago", title: adjusted_time)
+      content_tag('span', time_ago_in_words(adjusted_time) + " ago", title: adjusted_time_str)
     else
-      content_tag('span', adjusted_time, title: adjusted_time)
+      content_tag('span', adjusted_time_str, title: adjusted_time_str)
     end
   end
 
