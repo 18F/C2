@@ -4,6 +4,9 @@ class Observation < ProposalRole
   belongs_to :user
   belongs_to :proposal
 
+  validates :proposal, presence: true 
+  validates :user, presence: true, allow_blank: true
+
   delegate :full_name, :email_address, to: :user, prefix: true
 
   after_initialize :init

@@ -17,6 +17,7 @@ class Approval < ActiveRecord::Base
 
   scope :individual, -> { where(type: 'Approvals::Individual') }
 
+  validates :proposal, presence: true, allow_blank: true
 
   self.statuses.each do |status|
     scope status, -> { where(status: status) }
