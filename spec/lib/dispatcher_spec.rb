@@ -44,11 +44,7 @@ describe Dispatcher do
 
     it "sends an email to each actionable approver" do
       allow(CommunicartMailer).to receive(:cancellation_email).and_return(mock_deliverer)
-      #serial_proposal.approvals.each do |approval|
-      #  next unless approval.user
-      #  puts "approval=#{approval.user.email_address} #{approval.status}"
-      #end 
-      expect(serial_proposal.approvers.count).to eq 1
+      expect(serial_proposal.approvers.count).to eq 2
       expect(mock_deliverer).to receive(:deliver_later).once
 
       dispatcher.deliver_cancellation_emails(serial_proposal)

@@ -36,8 +36,10 @@ class Dispatcher
   end
 
   def deliver_cancellation_emails(proposal)
-    proposal.approvers.each do |approver|
-      CommunicartMailer.cancellation_email(approver.email_address, proposal).deliver_later
+    proposal.approvals.each do |approval|
+      next if approval.pending?  # https://www.pivotaltracker.com/story/show/100733040
+      next unless approval.user
+      CommunicartMailer.cancellation_email(approval.user_email_address, proposal).deliver_later
     end
     CommunicartMailer.cancellation_confirmation(proposal).deliver_later
   end
