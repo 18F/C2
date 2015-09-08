@@ -12,7 +12,7 @@ describe 'help pages' do
 
   describe 'GET /help/:page' do
     it "renders Markdown successfully" do
-      get '/help/new_work_order'
+      get '/help/new_purchase_request'
 
       expect(response.status).to eq(200)
       expect(doc).to have_content('credit card')
