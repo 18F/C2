@@ -37,8 +37,14 @@ class Dispatcher
 
   def deliver_cancellation_emails(proposal)
     proposal.approvals.each do |approval|
-      next if approval.pending?  # https://www.pivotaltracker.com/story/show/100733040
+      # do not send email to approvers who have not yet heard about the proposal
+      # https://www.pivotaltracker.com/story/show/100733040
+      next if approval.pending?
+
+      # since we operate on 'approvals' rather than 'approvers',
+      # must do explicit check on related User
       next unless approval.user
+
       CommunicartMailer.cancellation_email(approval.user_email_address, proposal).deliver_later
     end
     CommunicartMailer.cancellation_confirmation(proposal).deliver_later
