@@ -40,7 +40,7 @@ class Dispatcher
         dispatcher.email_approver(approval)
       end
 
-      def on_proposal_update(proposal, modifier=nil)
+      def on_proposal_update(proposal, modifier = nil)
         dispatcher = self.initialize_dispatcher(proposal)
         dispatcher.on_proposal_update(proposal, modifier)
       end
