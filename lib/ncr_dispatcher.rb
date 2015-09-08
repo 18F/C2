@@ -28,7 +28,10 @@ class NcrDispatcher < LinearDispatcher
     }
 
     proposal.observers.each{|observer|
-      next if modifier and observer.id == modifier.id # https://www.pivotaltracker.com/story/show/100957216
+      # don't notify the person who triggered the notification
+      # https://www.pivotaltracker.com/story/show/100957216
+      next if modifier and observer.id == modifier.id
+
       if observer.role_on(proposal).active_observer?
         CommunicartMailer.notification_for_subscriber(observer.email_address, proposal, "updated").deliver_later
       end
