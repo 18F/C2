@@ -15,8 +15,6 @@ class Approval < ActiveRecord::Base
   belongs_to :parent, class_name: 'Approval'
   has_many :child_approvals, class_name: 'Approval', foreign_key: 'parent_id'
 
-  belongs_to :user
-
   scope :individual, -> { where(type: 'Approvals::Individual') }
 
 
