@@ -71,6 +71,7 @@ group :test do
   gem 'simplecov'
   gem 'timecop'
   gem 'turnip'
+  gem 'zonebie'
 
   # For better test reporting in CircleCI
   # http://blog.circleci.com/announcing-detailed-test-failure-reporting/
