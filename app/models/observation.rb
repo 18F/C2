@@ -1,10 +1,14 @@
-class Observation < ActiveRecord::Base
-  has_paper_trail class_name: 'C2Version'
-
-  belongs_to :proposal
+class Observation < ProposalRole
   belongs_to :user
+  belongs_to :proposal
 
   delegate :full_name, :email_address, to: :user, prefix: true
+
+  after_initialize :init
+
+  def init
+    self.role_id ||= Role.find_or_create_by(name: 'observer').id
+  end
 
   def creation_version
     self.versions.find_by(event: 'create')

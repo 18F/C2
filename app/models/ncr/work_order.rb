@@ -89,23 +89,27 @@ module Ncr
       self.approving_official && self.approving_official.email_address != approval_email
     end
 
-    def setup_approvals_and_observers(approving_official_email)
+    # Check the approvers, accounting for frozen approving official
+    def approvers_emails(selected_approving_official_email)
       emails = self.system_approver_emails
       if self.approver_email_frozen?
         emails.unshift(self.approving_official.email_address)
       else
-        emails.unshift(approving_official_email)
+        emails.unshift(selected_approving_official_email)
       end
+      emails
+    end
 
+    def setup_approvals_and_observers(selected_approving_official_email)
+      emails = self.approvers_emails(selected_approving_official_email)
       if self.emergency
         emails.each{|e| self.add_observer(e)}
         # skip state machine
         self.proposal.update(status: 'approved')
       else
-        approvers = emails.map{|e| User.for_email(e)}
-        removed_approvers_to_notify = self.proposal.approvals.non_pending.map(&:user) - approvers
-        self.proposal.approvers = approvers
-        Dispatcher.on_approver_removal(self.proposal, removed_approvers_to_notify)
+        original_approvers = self.proposal.individual_approvals.non_pending.map(&:user)
+        self.force_approvers(emails)
+        self.notify_removed_approvers(original_approvers)
       end
     end
 
@@ -114,7 +118,7 @@ module Ncr
     end
 
     def email_approvers
-      Dispatcher.on_proposal_update(self.proposal)
+      Dispatcher.on_proposal_update(self.proposal, self.modifier)
     end
 
     # Ignore values in certain fields if they aren't relevant. May want to
@@ -221,6 +225,15 @@ module Ncr
       super.merge(org_id: self.org_id, building_id: self.building_id)
     end
 
+    def fiscal_year
+      year = self.created_at.nil? ? Time.now.year : self.created_at.year
+      month = self.created_at.nil? ? Time.now.month : self.created_at.month
+      if month >= 10
+        year += 1
+      end
+      year % 100   # convert to two-digit
+    end
+
     protected
 
     # TODO move to Proposal model
@@ -252,13 +265,21 @@ module Ncr
       "#{bullet}*#{key}* was changed " + from + "to #{value}"
     end
 
-    def fiscal_year
-      year = self.created_at.nil? ? Time.now.year : self.created_at.year
-      month = self.created_at.nil? ? Time.now.month : self.created_at.month
-      if month >= 10
-        year += 1
+    # Generally shouldn't be called directly as it doesn't account for
+    # emergencies, or notify removed approvers
+    def force_approvers(emails)
+      individuals = emails.map do |email|
+        user = User.for_email(email)
+        # Reuse existing approvals, if present
+        self.proposal.existing_approval_for(user) || Approvals::Individual.new(user: user)
       end
-      year % 100   # convert to two-digit
+      self.proposal.root_approval = Approvals::Serial.new(child_approvals: individuals)
+    end
+
+    def notify_removed_approvers(original_approvers)
+      current_approvers = self.proposal.individual_approvals.non_pending.map(&:user)
+      removed_approvers_to_notify = original_approvers - current_approvers
+      Dispatcher.on_approver_removal(self.proposal, removed_approvers_to_notify)
     end
   end
 end

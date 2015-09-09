@@ -54,15 +54,24 @@ describe Ncr::WorkOrder do
       expect(form.approved?).to eq(false)
     end
 
+    it "reuses existing approvals" do
+      form = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61')
+      form.setup_approvals_and_observers('bob@example.com')
+      first_approval = form.individual_approvals.first
+
+      form.reload.setup_approvals_and_observers('bob@example.com')
+      expect(form.individual_approvals.first).to eq(first_approval)
+    end
+
     it "creates observers when in an emergency" do
       form = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61',
                                emergency: true)
       form.setup_approvals_and_observers('bob@example.com')
-      expect(form.observers.map(&:email_address)).to eq([
+      expect(form.observers.map(&:email_address)).to match_array([
         'bob@example.com',
         Ncr::WorkOrder.ba61_tier1_budget_mailbox,
         Ncr::WorkOrder.ba61_tier2_budget_mailbox
-      ])
+      ].uniq)
       expect(form.approvals.length).to eq(0)
       form.clear_association_cache
       expect(form.approved?).to eq(true)
@@ -218,6 +227,18 @@ describe Ncr::WorkOrder do
       work_order.update_attribute(:created_at, Date.new(2007, 10, 1))
       expect(work_order.public_identifier).to eq(
         "FY08-#{proposal_id}")
+    end
+  end
+
+  describe '#fiscal_year' do
+    it 'ends the fiscal year on September 30th' do
+      work_order = FactoryGirl.create(:ncr_work_order, created_at: Date.new(2014, 9, 30))
+      expect(work_order.fiscal_year).to eq 14
+    end
+
+    it 'starts a new fiscal year on October first' do
+      work_order = FactoryGirl.create(:ncr_work_order, created_at: Date.new(2014, 10, 1))
+      expect(work_order.fiscal_year).to eq 15
     end
   end
 

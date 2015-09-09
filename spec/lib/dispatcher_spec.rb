@@ -11,6 +11,7 @@ describe Dispatcher do
   end
 
   let(:proposal) { FactoryGirl.create(:proposal, :with_parallel_approvers) }
+  let(:serial_proposal) { FactoryGirl.create(:proposal, :with_serial_approvers) }
   let(:dispatcher) { Dispatcher.new }
 
   describe '#deliver_new_proposal_emails' do
@@ -40,6 +41,14 @@ describe Dispatcher do
 
       dispatcher.deliver_cancellation_emails(proposal)
     end
+
+    it "sends an email to each actionable approver" do
+      allow(CommunicartMailer).to receive(:cancellation_email).and_return(mock_deliverer)
+      expect(serial_proposal.approvers.count).to eq 2
+      expect(mock_deliverer).to receive(:deliver_later).once
+
+      dispatcher.deliver_cancellation_emails(serial_proposal)
+    end 
 
     it "sends a confirmation email to the requester" do
       allow(CommunicartMailer).to receive(:cancellation_confirmation).and_return(mock_deliverer)

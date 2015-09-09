@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150819172749) do
+ActiveRecord::Schema.define(version: 20150901190853) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,19 +30,6 @@ ActiveRecord::Schema.define(version: 20150819172749) do
     t.integer  "assignee_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "approval_groups", force: :cascade do |t|
-    t.string   "name",       limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "cart_id"
-    t.string   "flow",       limit: 255
-  end
-
-  create_table "approval_groups_users", id: false, force: :cascade do |t|
-    t.integer "approval_group_id"
-    t.integer "user_id"
   end
 
   create_table "approvals", force: :cascade do |t|
@@ -141,19 +128,20 @@ ActiveRecord::Schema.define(version: 20150819172749) do
     t.string   "soc_code",        limit: 255
   end
 
-  create_table "observations", force: :cascade do |t|
-    t.integer  "proposal_id"
-    t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "properties", force: :cascade do |t|
     t.text    "property"
     t.text    "value"
     t.integer "hasproperties_id"
     t.string  "hasproperties_type", limit: 255
   end
+
+  create_table "proposal_roles", force: :cascade do |t|
+    t.integer "role_id",     null: false
+    t.integer "user_id",     null: false
+    t.integer "proposal_id", null: false
+  end
+
+  add_index "proposal_roles", ["role_id", "user_id", "proposal_id"], name: "index_proposal_roles_on_role_id_and_user_id_and_proposal_id", unique: true, using: :btree
 
   create_table "proposals", force: :cascade do |t|
     t.string   "status",           limit: 255
@@ -168,12 +156,18 @@ ActiveRecord::Schema.define(version: 20150819172749) do
 
   add_index "proposals", ["client_data_id", "client_data_type"], name: "index_proposals_on_client_data_id_and_client_data_type", using: :btree
 
-  create_table "user_roles", force: :cascade do |t|
-    t.integer "approval_group_id"
-    t.integer "user_id"
-    t.string  "role",              limit: 255
-    t.integer "position"
+  create_table "roles", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
+
+  create_table "user_roles", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "role_id", null: false
+  end
+
+  add_index "user_roles", ["user_id", "role_id"], name: "index_user_roles_on_user_id_and_role_id", unique: true, using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email_address", limit: 255

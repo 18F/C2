@@ -16,7 +16,7 @@ describe Ncr::WorkOrderPolicy do
 
     it "allows an observer to edit it" do
       observer = FactoryGirl.create(:user)
-      proposal.observations.create!(user: observer)
+      proposal.add_observer(observer)
       expect(subject).to permit(observer, work_order)
     end
 
