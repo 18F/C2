@@ -11,7 +11,7 @@ Create a [new issue](https://github.com/18F/C2/issues/new), and copy the raw Mar
 * [ ] [Set up your development environment](https://github.com/18F/C2/blob/master/doc/setup.md)
 * [ ] Go through the rest of the [general documentation](https://github.com/18F/C2#general)
 * [ ] Subscribe to the project on CircleCI
-    1. [Sign in with GitHub](https://circleci.com/signup)
+    1. [Authorize With GitHub](https://circleci.com/signup)
     1. Go to [the project page](https://circleci.com/gh/18F/C2) and "follow the C2 project"
 
 ### Later
