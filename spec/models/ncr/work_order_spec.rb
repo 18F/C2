@@ -67,7 +67,7 @@ describe Ncr::WorkOrder do
       form = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61',
                                emergency: true)
       form.setup_approvals_and_observers('bob@example.com')
-      expect(form.observers.map(&:email_address)).to eq([
+      expect(form.observers.map(&:email_address)).to match_array([
         'bob@example.com',
         Ncr::WorkOrder.ba61_tier1_budget_mailbox,
         Ncr::WorkOrder.ba61_tier2_budget_mailbox

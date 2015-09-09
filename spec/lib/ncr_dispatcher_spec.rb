@@ -58,5 +58,13 @@ describe NcrDispatcher do
       expect(email.html_part.body.to_s).not_to include("already approved")
       expect(email.html_part.body.to_s).to include("updated")
     end
+
+    it 'does not notify observer if they are the one making the update' do
+      deliveries.clear
+      email = 'requester@some-dot-gov.gov'
+      proposal.add_observer(email)
+      ncr_dispatcher.on_proposal_update(proposal, proposal.observers.first)
+      expect(email_recipients).to_not include(email)
+    end
   end
 end

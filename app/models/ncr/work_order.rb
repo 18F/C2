@@ -118,7 +118,7 @@ module Ncr
     end
 
     def email_approvers
-      Dispatcher.on_proposal_update(self.proposal)
+      Dispatcher.on_proposal_update(self.proposal, self.modifier)
     end
 
     # Ignore values in certain fields if they aren't relevant. May want to
