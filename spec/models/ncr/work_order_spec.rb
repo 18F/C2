@@ -230,6 +230,18 @@ describe Ncr::WorkOrder do
     end
   end
 
+  describe '#fiscal_year' do
+    it 'ends the fiscal year on September 30th' do
+      work_order = FactoryGirl.create(:ncr_work_order, created_at: Date.new(2014, 9, 30))
+      expect(work_order.fiscal_year).to eq 14
+    end
+
+    it 'starts a new fiscal year on October first' do
+      work_order = FactoryGirl.create(:ncr_work_order, created_at: Date.new(2014, 10, 1))
+      expect(work_order.fiscal_year).to eq 15
+    end
+  end
+
   describe 'validations' do
     describe 'cl_number' do
       let (:work_order) { FactoryGirl.build(:ncr_work_order) }

@@ -225,6 +225,15 @@ module Ncr
       super.merge(org_id: self.org_id, building_id: self.building_id)
     end
 
+    def fiscal_year
+      year = self.created_at.nil? ? Time.now.year : self.created_at.year
+      month = self.created_at.nil? ? Time.now.month : self.created_at.month
+      if month >= 10
+        year += 1
+      end
+      year % 100   # convert to two-digit
+    end
+
     protected
 
     # TODO move to Proposal model
@@ -254,15 +263,6 @@ module Ncr
     def self.update_comment_format key, value, bullet, former=nil
       from = former ? "from #{former} " : ''
       "#{bullet}*#{key}* was changed " + from + "to #{value}"
-    end
-
-    def fiscal_year
-      year = self.created_at.nil? ? Time.now.year : self.created_at.year
-      month = self.created_at.nil? ? Time.now.month : self.created_at.month
-      if month >= 10
-        year += 1
-      end
-      year % 100   # convert to two-digit
     end
 
     # Generally shouldn't be called directly as it doesn't account for
