@@ -40,7 +40,7 @@ class C2VersionDecorator < Draper::Decorator
 
   def hashdiff_to_html(change)
     h.content_tag :li do
-      HashDiffDecorator.new(change).to_html
+      HashDiffDecorator.html_for(change)
     end
   end
 end
