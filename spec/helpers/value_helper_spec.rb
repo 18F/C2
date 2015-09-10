@@ -23,7 +23,6 @@ describe ValueHelper do
     it "converts time to relative time when specified" do
       date = DateTime.new(2015,8,15,4,5,6).in_time_zone
       date_str = date.strftime("%b %-d, %Y at %l:%M%P")
-      puts "Time.zone==#{Time.zone}"
       relative_date = time_ago_in_words(date)
       expect(helper.date_with_tooltip(date,true)).to eq('<span title="' + date_str + '">' + relative_date + ' ago</span>')
     end
