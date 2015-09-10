@@ -39,6 +39,8 @@ class C2VersionDecorator < Draper::Decorator
   protected
 
   def hashdiff_to_html(change)
-    HashDiffDecorator.new(change)
+    h.content_tag :li do
+      HashDiffDecorator.new(change).to_html
+    end
   end
 end
