@@ -297,6 +297,5 @@ describe CommunicartMailer do
     let(:mail) { CommunicartMailer.new_attachment_email(requester.email_address, proposal) }
 
     it_behaves_like "a Proposal email"
-    
   end
 end

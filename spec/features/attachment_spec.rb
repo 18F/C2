@@ -45,10 +45,10 @@ describe "Add attachments" do
   end
 
   it "emails everyone involved in the proposal" do
+    expect(Dispatcher).to receive(:deliver_attachment_emails)
     proposal.add_observer("wiley-cat@some-cartoon-show.com")
     visit proposal_path(proposal)
     page.attach_file('attachment[file]', "#{Rails.root}/app/assets/images/bg_approved_status.gif")
     click_on "Attach a File"
-    expect(email_recipients).to match_array(proposal.users.map(&:email_address))
   end
 end

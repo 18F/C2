@@ -31,6 +31,19 @@ describe Dispatcher do
     end
   end
 
+  describe '#deliver_attachment_emails' do
+    it "emails everyone currently involved in the proposal" do
+      proposal.add_observer("wiley-cat@some-cartoon-show.com")
+      dispatcher.deliver_attachment_emails(self.proposal)
+      expect(email_recipients).to match_array(proposal.users.map(&:email_address))
+    end
+
+    it "does not email pending approvers" do
+      dispatcher.deliver_attachment_emails(serial_proposal)
+      expect(email_recipients).to_not include(serial_proposal.approvers.last.email_address)
+    end
+  end
+
   describe "#deliver_cancellation_emails" do
     let (:mock_deliverer) { double('deliverer') }
 
