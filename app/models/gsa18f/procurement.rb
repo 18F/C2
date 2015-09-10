@@ -5,7 +5,7 @@ module Gsa18f
   end
 
   DATA = YAML.load_file("#{Rails.root}/config/data/18f.yaml")
-
+  MAX_AMOUNT = (ENV['GSA18F_MAX_AMOUNT'] || 3000).to_f
 
   class Procurement < ActiveRecord::Base
     URGENCY = DATA['URGENCY']
@@ -16,7 +16,7 @@ module Gsa18f
 
     validates :cost_per_unit, numericality: {
       greater_than_or_equal_to: 0,
-      less_than_or_equal_to: 3000
+      less_than_or_equal_to: MAX_AMOUNT
     }
     validates :quantity, numericality: {
       greater_than_or_equal_to: 1
