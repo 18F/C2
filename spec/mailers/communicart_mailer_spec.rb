@@ -292,4 +292,11 @@ describe CommunicartMailer do
       expect(mail.subject).to eq("Request #{wo.public_identifier}, P0000000, DC0000ZZ from someone@somewhere.gov")
     end
   end
+
+  describe 'new_attachment_email' do
+    let(:mail) { CommunicartMailer.new_attachment_email(requester.email_address, proposal) }
+
+    it_behaves_like "a Proposal email"
+    
+  end
 end
