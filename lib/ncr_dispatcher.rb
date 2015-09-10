@@ -16,10 +16,20 @@ class NcrDispatcher < LinearDispatcher
   # modified. Also notify current approvers that the proposal has been updated
   def on_proposal_update(proposal, modifier = nil)
     proposal.individual_approvals.approved.each{|approval|
+
+      # don't notify the person who triggered the notification
+      # https://www.pivotaltracker.com/story/show/100957216
+      next if modifier and approval.user.id == modifier.id
+
       CommunicartMailer.notification_for_subscriber(approval.user_email_address, proposal, "already_approved", approval).deliver_later
     }
 
     proposal.currently_awaiting_approvals.each{|approval|
+
+      # don't notify the person who triggered the notification
+      # https://www.pivotaltracker.com/story/show/100957216
+      next if modifier and approval.user.id == modifier.id
+
       if approval.api_token # Approver's been notified through some other means
         CommunicartMailer.actions_for_approver(approval, "updated").deliver_later
       else
