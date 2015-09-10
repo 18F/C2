@@ -15,11 +15,4 @@ describe C2VersionDecorator do
       expect(escape(output)).to eq("&lt;script&gt;alert()&lt;/script&gt; Thunder was added as an approver.")
     end
   end
-
-  describe '.combine_html' do
-    it "escapes content" do
-      output = C2VersionDecorator.combine_html(["<script>alert()</script>"])
-      expect(escape(output)).to eq("&lt;script&gt;alert()&lt;/script&gt;")
-    end
-  end
 end

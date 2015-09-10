@@ -7,7 +7,7 @@ class C2VersionDecorator < BaseDecorator
         approver_name = object.item.user.full_name
         "#{approver_name} was added as an approver."
       when Attachment
-        self.class.combine_html([
+        combine_html([
           "Uploaded ",
           content_tag(:code, object.item.file_file_name),
           '.'
@@ -25,15 +25,9 @@ class C2VersionDecorator < BaseDecorator
           next if %w(created_at updated_at).include?(field)
           hashdiff_to_html(change)
         end
-        self.class.combine_html(changes.compact)
+        combine_html(changes.compact)
       end
     end
-  end
-
-  def self.combine_html(strings)
-    buffer = ActiveSupport::SafeBuffer.new
-    strings.each { |str| buffer << str }
-    buffer
   end
 
   protected

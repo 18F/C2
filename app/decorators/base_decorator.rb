@@ -9,4 +9,14 @@ class BaseDecorator < SimpleDelegator
   def content_tag(*args, &block)
     helpers.content_tag(*args, &block)
   end
+
+  def combine_html(strings)
+    self.class.combine_html(strings)
+  end
+
+  def self.combine_html(strings)
+    buffer = ActiveSupport::SafeBuffer.new
+    strings.each { |str| buffer << str }
+    buffer
+  end
 end
