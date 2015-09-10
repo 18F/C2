@@ -2,22 +2,7 @@ class C2VersionDecorator < BaseDecorator
   def to_html
     case object.event
     when 'create'
-      case object.item
-      when Approval
-        approver_name = object.item.user.full_name
-        "#{approver_name} was added as an approver."
-      when Attachment
-        combine_html([
-          "Uploaded ",
-          content_tag(:code, object.item.file_file_name),
-          '.'
-        ])
-      when Comment
-        "Commented: \"#{object.item.comment_text}\""
-      when Observation
-        observer_name = object.item.user.full_name
-        "#{observer_name} was added as an observer."
-      end
+      self.creation_html
     when 'update'
       content_tag :ul do
         changes = object.diff.map do |change|
@@ -31,6 +16,27 @@ class C2VersionDecorator < BaseDecorator
   end
 
   protected
+
+  def user_name
+    object.item.user.full_name
+  end
+
+  def creation_html
+    case object.item
+    when Approval
+      "#{user_name} was added as an approver."
+    when Attachment
+      combine_html([
+        "Uploaded ",
+        content_tag(:code, object.item.file_file_name),
+        '.'
+      ])
+    when Comment
+      "Commented: \"#{object.item.comment_text}\""
+    when Observation
+      "#{user_name} was added as an observer."
+    end
+  end
 
   def hashdiff_to_html(change)
     content_tag :li do
