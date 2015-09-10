@@ -66,7 +66,7 @@ https://hub.18f.gov/private/request-supplies/
 
 ### [National Capital Region (NCR) service centers](http://www.gsa.gov/portal/content/104717)
 
-The NCR use case was built around GSA service centers (paint shops, landscapers, etc.) needing approvals for their superiors and various budget officials for credit card purchases. They use the "linear" workflow described [above](#proposal-flows):
+The NCR use case was built around GSA service centers (paint shops, landscapers, etc.) needing approvals for their superiors and various budget officials for credit card purchases. They use the ["Serial" workflow](#approval-chains) where the steps include:
 
 1. The requester logs in via MyUSA.
 1. The requester submits a new purchase request via the form at `/ncr/work_orders/new`.
