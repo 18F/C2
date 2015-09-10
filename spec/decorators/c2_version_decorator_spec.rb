@@ -16,12 +16,9 @@ describe C2VersionDecorator do
     end
   end
 
-  describe '#combine_html' do
+  describe '.combine_html' do
     it "escapes content" do
-      version = double(C2Version)
-      decorated = C2VersionDecorator.new(version)
-
-      output = decorated.send(:combine_html, ["<script>alert()</script>"])
+      output = C2VersionDecorator.combine_html(["<script>alert()</script>"])
       expect(escape(output)).to eq("&lt;script&gt;alert()&lt;/script&gt;")
     end
   end

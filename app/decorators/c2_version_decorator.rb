@@ -7,7 +7,7 @@ class C2VersionDecorator < Draper::Decorator
         approver_name = object.item.user.full_name
         "#{approver_name} was added as an approver."
       when Attachment
-        combine_html([
+        self.class.combine_html([
           "Uploaded ",
           h.content_tag(:code, object.item.file_file_name),
           '.'
@@ -25,51 +25,20 @@ class C2VersionDecorator < Draper::Decorator
           next if %w(created_at updated_at).include?(field)
           hashdiff_to_html(change)
         end
-        combine_html(changes.compact)
+        self.class.combine_html(changes.compact)
       end
     end
   end
 
-  protected
-
-  def combine_html(strings)
+  def self.combine_html(strings)
     buffer = ActiveSupport::SafeBuffer.new
     strings.each { |str| buffer << str }
     buffer
   end
 
-  def hashdiff_to_html(change)
-    h.content_tag :li do
-      change_type = change[0]
-      field = change[1]
+  protected
 
-      case change_type
-      when '+' # added
-        val = change[2]
-        combine_html([
-          h.content_tag(:code, field),
-          " was set to ",
-          h.content_tag(:code, val),
-          '.'
-        ])
-      when '~' # modified
-        prev_val = h.diff_val(change[2])
-        current_val = h.diff_val(change[3])
-        combine_html([
-          h.content_tag(:code, field),
-          " was changed from ",
-          h.content_tag(:code, prev_val),
-          " to ",
-          h.content_tag(:code, current_val)
-        ])
-      when '-' # removed
-        combine_html([
-          h.content_tag(:code, field),
-          " was removed."
-        ])
-      else
-        change.inspect
-      end
-    end
+  def hashdiff_to_html(change)
+    HashDiffDecorator.new(change)
   end
 end
