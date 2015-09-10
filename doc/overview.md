@@ -72,6 +72,11 @@ The NCR use case was built around GSA service centers (paint shops, landscapers,
 1. The requester submits a new purchase request via the form at `/ncr/work_orders/new`.
 1. Their "approving officer" (the "AO" – their supervisor) receives an email notification with the request.
 1. If the AO approves, it goes to one or two other budget office approvers, depending on the type of request.
+  1. BA60 and BA61 requests go through two tiers of budget approvals. Tier One verifies the budget coding for a request
+     and adds the codes (Soc/Func) into the request. Tier Two budget approvers do final approval, which includes
+     verifying that there are funds available.
+  1. Any BA60 or BA61 request from the White House Service Center, indicated with the appropriate org code,
+     bypasses the Tier One approval.
 1. Once all approvers have approved the Proposal, the requester gets a notification.
 
 #### Additional resources
