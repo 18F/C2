@@ -43,4 +43,12 @@ describe "Add attachments" do
     expect(proposal.attachments.length).to eq 2
     expect(proposal.attachments.last.file_file_name).to eq "bg_approved_status.gif"
   end
+
+  it "emails everyone involved in the proposal" do
+    proposal.add_observer("wiley-cat@some-cartoon-show.com")
+    visit proposal_path(proposal)
+    page.attach_file('attachment[file]', "#{Rails.root}/app/assets/images/bg_approved_status.gif")
+    click_on "Attach a File"
+    expect(email_recipients).to match_array(proposal.users.map(&:email_address))
+  end
 end
