@@ -13,6 +13,8 @@ Style/DotPosition:
   Enabled: false
 Style/EmptyElse:
   Enabled: false
+Style/EmptyLinesAroundBody:
+  Enabled: false
 Style/GuardClause:
   Enabled: false
 Style/IfUnlessModifier:
