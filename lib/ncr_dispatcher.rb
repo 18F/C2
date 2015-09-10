@@ -20,6 +20,8 @@ class NcrDispatcher < LinearDispatcher
     notify_observers(proposal, modifier)
   end
 
+  private
+
   def notify_approvers(proposal, modifier)
     proposal.individual_approvals.approved.each do |approval|
       if modifier and approval.user.id == modifier.id
