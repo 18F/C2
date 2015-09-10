@@ -1,14 +1,6 @@
 module HashDiffDecorator
-  class Base < SimpleDelegator
+  class Base < BaseDecorator
     alias_method :change, :__getobj__
-
-    def helpers
-      ActionView::Base.new
-    end
-
-    def content_tag(*args, &block)
-      helpers.content_tag(*args, &block)
-    end
 
     def change_type
       change[0]

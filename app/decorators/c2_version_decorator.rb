@@ -1,4 +1,4 @@
-class C2VersionDecorator < Draper::Decorator
+class C2VersionDecorator < BaseDecorator
   def to_html
     case object.event
     when 'create'
@@ -9,7 +9,7 @@ class C2VersionDecorator < Draper::Decorator
       when Attachment
         self.class.combine_html([
           "Uploaded ",
-          h.content_tag(:code, object.item.file_file_name),
+          content_tag(:code, object.item.file_file_name),
           '.'
         ])
       when Comment
@@ -19,7 +19,7 @@ class C2VersionDecorator < Draper::Decorator
         "#{observer_name} was added as an observer."
       end
     when 'update'
-      h.content_tag :ul do
+      content_tag :ul do
         changes = object.diff.map do |change|
           field = change[1]
           next if %w(created_at updated_at).include?(field)
@@ -39,7 +39,7 @@ class C2VersionDecorator < Draper::Decorator
   protected
 
   def hashdiff_to_html(change)
-    h.content_tag :li do
+    content_tag :li do
       HashDiffDecorator.html_for(change)
     end
   end
