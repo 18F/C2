@@ -13,7 +13,8 @@ class User < ActiveRecord::Base
   has_many :comments
 
   # we do not use rolify gem (e.g.) but declare relationship like any other.
-  has_many :roles, class_name: 'UserRole'
+  has_many :user_roles
+  has_many :roles, through: :user_roles
 
   # TODO rename to _delegations, and add relations for the Users
   has_many :outgoing_delegates, class_name: 'ApprovalDelegate', foreign_key: 'assigner_id'
@@ -21,27 +22,27 @@ class User < ActiveRecord::Base
 
   # this is for user_roles specifically, not proposals or any other objects for which
   # this user might have roles.
-  # rubocop:disable all
+  # rubocop:disable Style/PredicateName
   def has_role?(name_or_role)
     if name_or_role.is_a?(Role)
-      roles.any? { |user_role| user_role.role.name == name_or_role.name }
+      name = name_or_role.name
     else
-      roles.any? { |user_role| user_role.role.name == name_or_role }
+      name = name_or_role
     end
+    self.roles.exists?(name: name)
   end
-  # rubocop:enable all
+  # rubocop:enable Style/PredicateName
 
   def add_role(name_or_role)
     return if has_role?(name_or_role)
 
-    role = nil
     if name_or_role.is_a?(Role)
       role = name_or_role
     else
       role = Role.find_or_create_by(name: name_or_role)
     end
-    user_role = UserRole.new(role: role)
-    roles << user_role
+    role.save!
+    self.user_roles.create!(role: role)
   end
 
   def self.with_role(name_or_role)
