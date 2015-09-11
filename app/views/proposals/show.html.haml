@@ -68,8 +68,9 @@
       - if policy(@proposal).can_cancel?
         %li
           = link_to "Cancel my request", cancel_form_proposal_path
-  %li
-    = link_to "View history", history_proposal_path(@proposal)
+  - if current_user.admin?
+    %li
+      = link_to "View history", history_proposal_path(@proposal)
 
 - # @todo: there are multiple approval-status ids
 - if @proposal.parallel?
