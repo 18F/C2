@@ -12,18 +12,19 @@ module Query
         ].flatten.compact
       end
 
-      def self.relation(proposal)
+      def self.version_ids_for(proposal)
         # TODO make query more efficient
-        version_ids = self.models(proposal).map do |model|
+        self.models(proposal).flat_map do |model|
           model.versions.pluck(:id)
         end
-        version_ids.flatten!
-        C2Version.where(id: version_ids)
       end
 
       def self.container(proposal)
         result = self.base_container
-        result.alter_query { |rel| rel.merge(self.relation(proposal)) }
+
+        version_ids = self.version_ids_for(proposal)
+        result.alter_query { |rel| rel.where(id: version_ids) }
+
         result
       end
 
