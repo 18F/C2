@@ -21,18 +21,18 @@ module Ncr
       budget_proposals("BA80", 1.week.ago)
     end
 
-    def self.proposals_pending_approving_official
+    def self.proposals_pending_approving_official(approval_status = 'actionable')
       # TODO convert to SQL
       Proposal.pending
               .where(client_data_type: 'Ncr::WorkOrder')
-              .select{ |p| p.individual_approvals.pluck(:status)[0] == 'actionable' }
+              .select{ |p| p.individual_approvals.pluck(:status)[0] == approval_status }
     end
 
-    def self.proposals_pending_budget
+    def self.proposals_pending_budget(approval_status='actionable')
       # TODO convert to SQL
       Proposal.pending
               .where(client_data_type: 'Ncr::WorkOrder')
-              .select{ |p| p.individual_approvals.pluck(:status).last == 'actionable' }
+              .select{ |p| p.individual_approvals.pluck(:status).last == approval_status }
               .sort_by { |pr| pr.client_data.expense_type }
     end
 
