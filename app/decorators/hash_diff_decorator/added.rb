@@ -1,7 +1,7 @@
 module HashDiffDecorator
   class Added < HashDiffDecorator::Base
     def val
-      change[2]
+      diff_val(change[2])
     end
 
     def to_html

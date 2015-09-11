@@ -17,15 +17,5 @@ module HashDiffDecorator
         content_tag(:code, current_val)
       ])
     end
-
-    protected
-
-    def diff_val(val)
-      if val.is_a?(Numeric)
-        format('%.2f', val)
-      else
-        val.inspect
-      end
-    end
   end
 end

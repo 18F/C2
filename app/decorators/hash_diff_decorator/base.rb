@@ -13,5 +13,15 @@ module HashDiffDecorator
     def to_html
       raise "Needs to be implemented by the subclass."
     end
+
+    protected
+
+    def diff_val(val)
+      if val.is_a?(Numeric)
+        format('%.2f', val)
+      else
+        val.inspect
+      end
+    end
   end
 end
