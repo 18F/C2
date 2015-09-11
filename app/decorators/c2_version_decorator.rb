@@ -4,14 +4,7 @@ class C2VersionDecorator < BaseDecorator
     when 'create'
       self.creation_html
     when 'update'
-      content_tag :ul do
-        changes = object.diff.map do |change|
-          field = change[1]
-          next if %w(created_at updated_at).include?(field)
-          hashdiff_to_html(change)
-        end
-        combine_html(changes.compact)
-      end
+      self.update_html
     end
   end
 
@@ -35,6 +28,17 @@ class C2VersionDecorator < BaseDecorator
       "Commented: \"#{object.item.comment_text}\""
     when Observation
       "#{user_name} was added as an observer."
+    end
+  end
+
+  def update_html
+    content_tag :ul do
+      changes = object.diff.map do |change|
+        field = change[1]
+        next if %w(created_at updated_at).include?(field)
+        hashdiff_to_html(change)
+      end
+      combine_html(changes.compact)
     end
   end
 
