@@ -45,12 +45,11 @@ module Ncr
     end
 
     def self.proposals_tier_one_pending
-      # TODO convert to SQL ??
-      Proposal.pending
-              .where(client_data_type: 'Ncr::WorkOrder')
+      sql = "SELECT * FROM proposals AS p "
+      sql += "WHERE p.status='pending' AND p.client_data_type='Ncr::WorkOrder' AND p.client_data_id IN "
+      sql += "(SELECT id FROM ncr_work_orders AS nwo WHERE nwo.org_code!=? AND nwo.expense_type IN (?))"
+      Proposal.find_by_sql([ sql, Ncr::Organization::WHSC_CODE, %w(BA60 BA61) ])
               .select{ |p| p.individual_approvals.pluck(:status)[1] == 'actionable' }
-              .select{ |p| p.client_data.org_code != Ncr::Organization::WHSC_CODE }
-              .select{ |p| %w(BA60 BA61).include?(p.client_data.expense_type) }
     end
   end
 end
