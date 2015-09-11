@@ -47,3 +47,10 @@ Total Pending at Budget: <%= Ncr::Reporter.proposals_pending_budget.count %>
 <% Ncr::Reporter.proposals_pending_budget.each do |p| %>
   <%= "*** " if Time.now - p.created_at > 5.days %><%= "#{p.public_id} | Requester: #{p.requester.email_address} | Approver: #{p.approvers.last.email_address} | Created: #{pretty_date(p.created_at)}" %>
 <% end %>
+
+-----
+Total Pending at Tier One Budget: <%= Ncr::Reporter.proposals_tier_one_pending.count %>
+-----
+<% Ncr::Reporter.proposals_tier_one_pending.each do |p| %>
+  <%= "*** " if Time.now - p.created_at > 5.days %><%= "#{p.public_id} | Requester: #{p.requester.email_address} | Approver: #{p.approvers.second.email_address} | Created: #{pretty_date(p.created_at)}" %>
+<% end %>
