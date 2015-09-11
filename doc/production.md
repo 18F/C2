@@ -49,7 +49,7 @@ We will be moving to Mandrill for sending transactional emails.
 
 1. [Log in to MailChimp.](https://login.mailchimp.com)
     * If you have multiple options, select the "General Services Administration | 18F" account.
-1. Go to [Mandrill Reports](https://us9.admin.mailchimp.com/reports/mandrill).
-    * Shortcut for going to the [Reports](https://us9.admin.mailchimp.com/reports/) page and clicking "View Mandrill Reports"
+1. Click "Reports".
+1. Click "View Mandrill Reports".
 
 You should now be signed in to Mandrill with the shared account.
