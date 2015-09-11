@@ -43,5 +43,14 @@ module Ncr
               .where('created_at > ?', timespan)
               .select { |pr| pr.client_data.expense_type == type }
     end
+
+    def self.proposals_tier_one_pending
+      # TODO convert to SQL ??
+      Proposal.pending
+              .where(client_data_type: 'Ncr::WorkOrder')
+              .select{ |p| p.individual_approvals.pluck(:status)[1] == 'actionable' }
+              .select{ |p| p.client_data.org_code != Ncr::Organization::WHSC_CODE }
+              .select{ |p| %w(BA60 BA61).include?(p.client_data.expense_type) }
+    end
   end
 end
