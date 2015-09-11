@@ -33,3 +33,23 @@ organization: cap
         1. Do a deployment to the `c2-prod` application in Cloud Foundry.
         1. Push the tag to the repository on GitHub.
     * If you want to do a deployment to another environment, run `./script/deploy <appname>`.
+
+## [Mandrill](https://mandrillapp.com)
+
+We will be moving to Mandrill for sending transactional emails.
+
+### Getting access
+
+1. Create a MailChimp account.
+1. Ask to be [added to the MailChimp account](http://kb.mailchimp.com/accounts/multi-user/manage-user-levels-in-your-account).
+    1. Open an issue in the devops repo.
+    1. Assign the issue to @noahkunin.
+
+### Signing in
+
+1. [Log in to MailChimp.](https://login.mailchimp.com)
+    * If you have multiple options, select the "General Services Administration | 18F" account.
+1. Click "Reports".
+1. Click "View Mandrill Reports".
+
+You should now be signed in to Mandrill with the shared account.

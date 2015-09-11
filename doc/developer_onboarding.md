@@ -19,6 +19,7 @@ Create a [new issue](https://github.com/18F/C2/issues/new), and copy the raw Mar
 * [ ] [Set up the Cloud Foundry CLI](https://docs.18f.gov/getting-started/setup/) (which you will need to deploy)
 * [ ] [Learn more about Cloud Foundry](https://docs.18f.gov)
 * [ ] Deploy C2 to `c2-dev` (or `c2-staging`)
+* [ ] [Get added to the MailChimp account](production.md#getting-access)
 
 ## Tasks for @oldmember
 
