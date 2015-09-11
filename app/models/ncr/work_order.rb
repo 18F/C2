@@ -196,8 +196,8 @@ module Ncr
       users = User.with_role('BA61_tier1_budget_approver').where(client_slug: 'ncr')
       if !users or users.length == 0
         user = User.with_email_role_slug!(
-          ENV['NCR_BA61_TIER1_BUDGET_MAILBOX'] || 'communicart.budget.approver@gmail.com', 
-          'BA61_tier1_budget_approver', 
+          ENV['NCR_BA61_TIER1_BUDGET_MAILBOX'] || 'communicart.budget.approver@gmail.com',
+          'BA61_tier1_budget_approver',
           'ncr'
         )
         users = [user]
@@ -210,7 +210,7 @@ module Ncr
       if !users or users.length == 0
         user = User.with_email_role_slug!(
           ENV['NCR_BA61_TIER2_BUDGET_MAILBOX'] || 'communicart.ofm.approver@gmail.com',
-          'BA61_tier2_budget_approver', 
+          'BA61_tier2_budget_approver',
           'ncr'
         )
         users = [user]
@@ -238,9 +238,9 @@ module Ncr
           ENV['NCR_OOL_BA80_BUDGET_MAILBOX'] || 'communicart.budget.approver@gmail.com',
           'OOL_BA80_budget_approver',
           'ncr'
-        )   
+        )
         users = [user]
-      end 
+      end
       users.first.email_address
     end
 
