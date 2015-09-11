@@ -20,7 +20,7 @@ describe Gsa18f::DashboardController do
       # 2 in January, 3 in February, 3 in March
       (1..8).each {|i|
         FactoryGirl.create(
-          :proposal, requester: user, created_at: Date.new(2015, i / 3 + 1, i),
+          :proposal, requester: user, created_at: Time.zone.local(2015, i / 3 + 1, i),
           client_data: FactoryGirl.create(:gsa18f_procurement, cost_per_unit: i,
           quantity: 1))
       }

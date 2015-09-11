@@ -108,7 +108,7 @@ describe ProposalsController do
 
     it 'should filter results by date range' do
       past_proposal = FactoryGirl.create(
-        :proposal, created_at: Date.new(2012, 5, 6), requester: user)
+        :proposal, created_at: Time.zone.local(2012, 5, 6), requester: user)
       get :query
       expect(assigns(:proposals_data).rows).to eq([proposal, past_proposal])
 
