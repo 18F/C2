@@ -44,6 +44,22 @@ class User < ActiveRecord::Base
     roles << user_role
   end
 
+  def self.with_role(name_or_role)
+    role = nil
+    if name_or_role.is_a?(Role)
+      role = name_or_role
+    else
+      role = Role.find_or_create_by(name: name_or_role)
+    end
+    role.users
+  end
+
+  def self.sql_for_role_slug(role, slug)
+    sql = "SELECT u.id FROM users AS u INNER JOIN user_roles AS ur ON u.id=ur.user_id INNER JOIN roles AS r ON r.id=ur.role_id "
+    sql += "WHERE r.name=#{self.sanitize(role)} and u.client_slug=#{self.sanitize(slug)}"
+    sql
+  end
+
   def full_name
     if first_name && last_name
       "#{first_name} #{last_name}"
@@ -78,6 +94,14 @@ class User < ActiveRecord::Base
 
   def self.for_email(email)
     User.find_or_create_by(email_address: email.strip.downcase)
+  end
+
+  def self.with_email_role_slug!(email, role, slug)
+    user = User.for_email(email)
+    user.client_slug = slug
+    user.add_role(role)
+    user.save!
+    user
   end
 
   def self.from_oauth_hash(auth_hash)

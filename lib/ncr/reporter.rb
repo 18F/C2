@@ -44,12 +44,22 @@ module Ncr
               .select { |pr| pr.client_data.expense_type == type }
     end
 
-    def self.proposals_tier_one_pending
+    def self.proposals_tier_one_pending_sql
+      tier_one_sql = User.sql_for_role_slug('BA61_tier1_budget_approver', 'ncr')
+
+      approver_sql = "SELECT a.proposal_id FROM approvals AS a WHERE a.status='actionable' AND a.user_id IN (#{tier_one_sql})"
+
+      work_order_sql = "SELECT id FROM ncr_work_orders AS nwo "
+      work_order_sql += "WHERE nwo.org_code!='#{Ncr::Organization::WHSC_CODE}' AND nwo.expense_type IN ('BA60','BA61')"
+
       sql = "SELECT * FROM proposals AS p "
-      sql += "WHERE p.status='pending' AND p.client_data_type='Ncr::WorkOrder' AND p.client_data_id IN "
-      sql += "(SELECT id FROM ncr_work_orders AS nwo WHERE nwo.org_code!=? AND nwo.expense_type IN (?))"
-      Proposal.find_by_sql([ sql, Ncr::Organization::WHSC_CODE, %w(BA60 BA61) ])
-              .select{ |p| p.individual_approvals.pluck(:status)[1] == 'actionable' }
+      sql += "WHERE p.status='pending' AND p.client_data_type='Ncr::WorkOrder' "
+      sql += "AND p.client_data_id IN (#{work_order_sql}) AND p.id IN (#{approver_sql})"
+      sql
+    end
+
+    def self.proposals_tier_one_pending
+      Proposal.find_by_sql([ self.proposals_tier_one_pending_sql ])
     end
   end
 end

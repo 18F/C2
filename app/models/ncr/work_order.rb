@@ -193,19 +193,55 @@ module Ncr
     end
 
     def self.ba61_tier1_budget_mailbox
-      ENV['NCR_BA61_TIER1_BUDGET_MAILBOX'] || 'communicart.budget.approver@gmail.com'
+      users = User.with_role('BA61_tier1_budget_approver').where(client_slug: 'ncr')
+      if !users or users.length == 0
+        user = User.with_email_role_slug!(
+          ENV['NCR_BA61_TIER1_BUDGET_MAILBOX'] || 'communicart.budget.approver@gmail.com', 
+          'BA61_tier1_budget_approver', 
+          'ncr'
+        )
+        users = [user]
+      end
+      users.first.email_address
     end
 
     def self.ba61_tier2_budget_mailbox
-      ENV['NCR_BA61_TIER2_BUDGET_MAILBOX'] || 'communicart.ofm.approver@gmail.com'
+      users = User.with_role('BA61_tier2_budget_approver').where(client_slug: 'ncr')
+      if !users or users.length == 0
+        user = User.with_email_role_slug!(
+          ENV['NCR_BA61_TIER2_BUDGET_MAILBOX'] || 'communicart.ofm.approver@gmail.com',
+          'BA61_tier2_budget_approver', 
+          'ncr'
+        )
+        users = [user]
+      end
+      users.first.email_address
     end
 
     def self.ba80_budget_mailbox
-      ENV['NCR_BA80_BUDGET_MAILBOX'] || 'communicart.budget.approver@gmail.com'
+      users = User.with_role('BA80_budget_approver').where(client_slug: 'ncr')
+      if !users or users.length == 0
+        user = User.with_email_role_slug!(
+          ENV['NCR_BA80_BUDGET_MAILBOX'] || 'communicart.budget.approver@gmail.com',
+          'BA80_budget_approver',
+          'ncr'
+        )
+        users = [user]
+      end
+      users.first.email_address
     end
 
     def self.ool_ba80_budget_mailbox
-      ENV['NCR_OOL_BA80_BUDGET_MAILBOX'] || 'communicart.budget.approver@gmail.com'
+      users = User.with_role('OOL_BA80_budget_approver').where(client_slug: 'ncr')
+      if !users or users.length == 0
+        user = User.with_email_role_slug!(
+          ENV['NCR_OOL_BA80_BUDGET_MAILBOX'] || 'communicart.budget.approver@gmail.com',
+          'OOL_BA80_budget_approver',
+          'ncr'
+        )   
+        users = [user]
+      end 
+      users.first.email_address
     end
 
     def org_id
