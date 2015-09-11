@@ -30,6 +30,10 @@ SimpleCov.start 'rails' do
   end
 end
 
+# try our best to avoid timezone bugs
+require 'zonebie'
+Zonebie.set_random_timezone
+
 require 'rack_session_access/capybara'
 
 require 'capybara/poltergeist'
