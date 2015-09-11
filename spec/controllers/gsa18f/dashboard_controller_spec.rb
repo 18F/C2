@@ -17,6 +17,9 @@ describe Gsa18f::DashboardController do
     end
 
     it 'groups by month and aggregates' do
+      # control time zone to make sure we limit to a single year
+      prev_zone = Time.zone
+      Time.zone = 'UTC'
       # 2 in January, 3 in February, 3 in March
       (1..8).each {|i|
         FactoryGirl.create(
@@ -41,6 +44,9 @@ describe Gsa18f::DashboardController do
       expect(jan[:month]).to eq("Jan")
       expect(jan[:count]).to eq(2)
       expect(jan[:cost]).to eq(1 + 2)
+
+      # restore zone
+      Time.zone = prev_zone
     end
 
     it 'includes months with no proposals'   # @todo
