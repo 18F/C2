@@ -1,4 +1,4 @@
-describe C2VersionDecorator do
+describe BaseDecorator do
   def escape(str)
     # equivalent to what's used in templates
     ERB::Util.html_escape(str)

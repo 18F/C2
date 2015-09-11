@@ -5,7 +5,7 @@ module HashDiffDecorator
     end
 
     def to_html
-      C2VersionDecorator.combine_html([
+      combine_html([
         content_tag(:code, field),
         " was set to ",
         content_tag(:code, val),

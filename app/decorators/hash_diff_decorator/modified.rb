@@ -9,7 +9,7 @@ module HashDiffDecorator
     end
 
     def to_html
-      C2VersionDecorator.combine_html([
+      combine_html([
         content_tag(:code, field),
         " was changed from ",
         content_tag(:code, prev_val),
