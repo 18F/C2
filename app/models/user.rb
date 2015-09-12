@@ -23,15 +23,11 @@ class User < ActiveRecord::Base
   # this is for user_roles specifically, not proposals or any other objects for which
   # this user might have roles.
   def has_role?(name_or_role)
-    role_id = nil
     if name_or_role.is_a?(Role)
-      role_id = name_or_role.id
+      user_roles.any? { |ur| ur.role.name == name_or_role.name }
     else
-      role = Role.find_by_name(name_or_role)
-      return false unless role
-      role_id = role.id
+      user_roles.any? { |ur| ur.role.name == name_or_role }
     end
-    user_roles.any? { |ur| ur.role_id == role_id }
   end
 
   def add_role(name_or_role)
