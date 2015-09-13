@@ -35,6 +35,15 @@ class Dispatcher
     self.email_sent_confirmation(proposal)
   end
 
+  def deliver_attachment_emails(proposal)
+    proposal.users.each do |user|
+      # do not send email to approvers who have not yet heard about the proposal
+      approval = proposal.approvals.find_by(user_id: user.id)
+      next if approval && approval.pending?
+      CommunicartMailer.new_attachment_email(user.email_address, proposal).deliver_later
+    end
+  end
+
   def deliver_cancellation_emails(proposal)
     proposal.individual_approvals.each do |approval|
       # do not send email to approvers who have not yet heard about the proposal

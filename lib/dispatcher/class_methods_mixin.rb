@@ -54,6 +54,11 @@ class Dispatcher
         dispatcher = self.initialize_dispatcher(observation.proposal)
         dispatcher.on_observer_added(observation)
       end
+
+      def deliver_attachment_emails(proposal)
+        dispatcher = self.initialize_dispatcher(proposal)
+        dispatcher.deliver_attachment_emails(proposal)
+      end
     end
   end
 end

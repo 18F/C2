@@ -43,14 +43,16 @@ class CommunicartMailer < ApplicationMailer
     )
   end
 
-  def proposal_observer_email(to_email, proposal)
+  def general_proposal_email(to_email, proposal)
     # TODO have the from_email be whomever triggered this notification
     send_proposal_email(
       to_email: to_email,
       proposal: proposal
     )
   end
-  alias_method :cancellation_email, :proposal_observer_email
+  alias_method :cancellation_email, :general_proposal_email
+  alias_method :proposal_observer_email, :general_proposal_email
+  alias_method :new_attachment_email, :general_proposal_email
 
   def proposal_created_confirmation(proposal)
     send_proposal_email(
