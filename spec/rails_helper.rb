@@ -85,6 +85,7 @@ RSpec.configure do |config|
       DatabaseCleaner.strategy = :truncation
     end
     DatabaseCleaner.start
+    Rails.application.load_seed
   end
 
   config.after(:each) do
