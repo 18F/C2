@@ -16,6 +16,7 @@ a.k.a. Communicart, part of GSA's suite of Common Acquisition Platform (CAP) too
 * [Setup](doc/setup.md)
 * [Technical overview](doc/overview.md)
 * [Use case developer guide](doc/use_case_development.md)
+* [Team practices](doc/team-practices.md)
 
 ### 18F-specific
 
