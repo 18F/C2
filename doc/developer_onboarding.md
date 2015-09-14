@@ -13,10 +13,6 @@ Create a [new issue](https://github.com/18F/C2/issues/new), and copy the raw Mar
 * [ ] Subscribe to the project on CircleCI
     1. [Authorize With GitHub](https://circleci.com/signup)
     1. Go to [the project page](https://circleci.com/gh/18F/C2) and "follow the C2 project"
-* [ ] Access support emails `capdevs@gsa.gov`, `communicart.sender@gsa.gov`, and `gatewaycommunicator`
-    1. Make sure someone has requested/completed access for you (See tasks for @oldmember)
-    1. Go to Gmail and click 'Add Account'. Enter in each of these email addresses. If you are asked for a password, leave it blank. As long as you are already logged into your GSA email, the email addresses should be loaded.
-    1. One would expect the newly added email to load automatically, but it doesn't. To load the new email, simply click on your email address at the top right of the page to show all of your loaded email accounts. Click on the newly added email address (capdevs or communicart.sender) to load it.
 
 ### Later
 
@@ -24,6 +20,10 @@ Create a [new issue](https://github.com/18F/C2/issues/new), and copy the raw Mar
 * [ ] [Learn more about Cloud Foundry](https://docs.18f.gov)
 * [ ] Deploy C2 to `c2-dev` (or `c2-staging`)
 * [ ] [Get added to the MailChimp account](production.md#getting-access)
+* [ ] Access support emails `capdevs@gsa.gov`, `communicart.sender@gsa.gov`, and `gatewaycommunicator`
+    1. Make sure someone has requested/completed access for you (See tasks for @oldmember)
+    1. Go to Gmail and click 'Add Account'. Enter in each of these email addresses. If you are asked for a password, leave it blank. As long as you are already logged into your GSA email, the email addresses should be loaded.
+    1. One would expect the newly added email to load automatically, but it doesn't. To load the new email, simply click on your email address at the top right of the page to show all of your loaded email accounts. Click on the newly added email address (capdevs or communicart.sender) to load it.
 
 ## Tasks for @oldmember
 
