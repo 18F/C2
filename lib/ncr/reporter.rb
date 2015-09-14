@@ -22,7 +22,7 @@ module Ncr
     end
 
     def self.proposals_pending_approving_official
-      approver_sql = <<-SQL.gsub(/^ {8}/, '') 
+      approver_sql = <<-SQL.gsub(/^ {8}/, '')
         SELECT a.proposal_id FROM approvals AS a 
         WHERE a.status='actionable'
         AND a.type='Approvals::Individual'
@@ -30,7 +30,7 @@ module Ncr
         LIMIT 1
       SQL
 
-      sql = <<-SQL.gsub(/^ {8}/, '') 
+      sql = <<-SQL.gsub(/^ {8}/, '')
         SELECT * FROM proposals AS p
         WHERE p.status='pending'
         AND p.client_data_type='Ncr::WorkOrder'
@@ -48,8 +48,8 @@ module Ncr
         LIMIT 1
       SQL
 
-      sql = <<-SQL.gsub(/^ {8}/, '')      
-        SELECT * FROM proposals AS p 
+      sql = <<-SQL.gsub(/^ {8}/, '')
+        SELECT * FROM proposals AS p
         INNER JOIN ncr_work_orders AS nwo ON p.client_data_id=nwo.id
         WHERE p.status='pending'
         AND p.client_data_type='Ncr::WorkOrder'
@@ -61,7 +61,7 @@ module Ncr
 
     def self.budget_proposals(type, timespan)
       sql = <<-SQL.gsub(/^ {8}/, '')
-        SELECT * FROM proposals AS p 
+        SELECT * FROM proposals AS p
         INNER JOIN ncr_work_orders AS nwo ON p.client_data_id=nwo.id
         WHERE p.status='pending'
         AND p.client_data_type='Ncr::WorkOrder'

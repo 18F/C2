@@ -53,7 +53,7 @@ class User < ActiveRecord::Base
   end
 
   def self.sql_for_role_slug(role, slug)
-    User.select(:id).joins(:roles).where(client_slug: slug, roles: {name: role}).to_sql
+    User.select(:id).joins(:roles).where(client_slug: slug, roles: { name: role }).to_sql
   end
 
   def full_name
