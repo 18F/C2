@@ -7,7 +7,7 @@ This document outlines best practices for the C2 team, and anyone wanting to con
 All code changes should originate in a story on the [story tracker](https://pivotaltracker.com/n/projects/1149728).
 
 Stories are clarified and prioritized in weekly iteration planning meetings (IPM). Team members self-select story ownership.
-Production deployments happen multiple times a week, so keep master in production-ready shape.
+Production deployments may happen one to several times a week, so keep master in production-ready shape.
 
 Here is an example workflow:
 
