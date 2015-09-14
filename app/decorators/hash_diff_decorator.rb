@@ -1,7 +1,6 @@
 module HashDiffDecorator
   def self.html_for(change)
-    change_type = change[0]
-    case change_type
+    case change[0] # change type
     when '+'
       HashDiffDecorator::Added.new(change).to_html
     when '~'

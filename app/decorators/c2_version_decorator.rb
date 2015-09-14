@@ -14,16 +14,20 @@ class C2VersionDecorator < BaseDecorator
     object.item.user.full_name
   end
 
+  def new_attachment_html
+    combine_html([
+      "Uploaded ",
+      content_tag(:code, object.item.file_file_name),
+      '.'
+    ])
+  end
+
   def creation_html
     case object.item
     when Approval
       "#{user_name} was added as an approver."
     when Attachment
-      combine_html([
-        "Uploaded ",
-        content_tag(:code, object.item.file_file_name),
-        '.'
-      ])
+      self.new_attachment_html
     when Comment
       "Commented: \"#{object.item.comment_text}\""
     when Observation
