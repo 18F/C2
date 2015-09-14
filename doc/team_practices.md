@@ -10,28 +10,26 @@ Stories are clarified and prioritized in weekly iteration planning meetings (IPM
 
 Here is an example workflow:
 
-* Click **Start** on the story in the story tracker.
+1. Click **Start** on the story in the story tracker.
 
-* Create a new Git branch from master. The naming convention is *storyId*-*short-description*. Example:
-```
-% git checkout master
-% git checkout -b 123456-fix-timezones
-```
+1. Create a new Git branch from master. If you are authorized to commit on the 18F repo, branch directly on that repo. Otherwise, fork the 18F repo. The branch naming convention is *storyId*-*short-description*. Example: `git checkout -b 123456-fix-timezones`
 
-* Write your code and tests and documentation.
+1. Write your code and tests and documentation. You can [read about running tests](https://github.com/18F/C2/blob/master/doc/setup.md#running-tests) and [view the doc folder](https://github.com/18F/C2/tree/master/doc).
 
-* Push your branch to Github.
+1. Push your branch to Github.
 
-* Create a Pull Request. The PR should reference the story URL and include a brief description
-of the changes, including any rationale for how/why the story is addressed in the way it is.
+1. Create a Pull Request. The PR should reference the story URL and include a brief description
+of the changes, including any rationale for how/why the story is addressed in the way it is. Use the format
+`[#STORYID]` or `[Delivers #STORYID]` or `[Fixes #STORYID]` in the PR title. See the [story tracker documentation](https://www.pivotaltracker.com/help/api?version=v5#Tracker_Updates_in_SCM_Post_Commit_Hooks).
 
-* Click **Finish** on the story in the story tracker.
+1. Click **Finish** on the story in the story tracker.
 
-* TODO: assign PR to another team member? ping Slack channel?
+1. Someone from the team should review the PR. If you do not get feedback within 24 hours, assign the PR to a team member. (TODO??)
 
-* TODO: Reviewer will click **Deliver** on story tracker.
+1. If the PR title follows the conventions above, the story tracker status will change to **Accept or Reject** when the PR is merged.
 
-* TODO: Reviewer will test branch in dev or staging environment(s).
+1. Reviewer will test branch in dev or staging environment(s).
 
-* TODO: Reviewer will click **Accept** or **Reject** on story tracker.
+1. Reviewer will click **Accept** or **Reject** on story tracker.
+
 
