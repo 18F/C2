@@ -21,67 +21,40 @@ module Ncr
       budget_proposals("BA80", 1.week.ago)
     end
 
-    def self.proposals_pending_approving_official
-      approver_sql = <<-SQL.gsub(/^ {8}/, '')
-        SELECT a.proposal_id FROM approvals AS a
-        WHERE a.status='actionable'
-        AND a.type='Approvals::Individual'
-        ORDER BY a.position ASC
-        LIMIT 1
-      SQL
-
-      sql = <<-SQL.gsub(/^ {8}/, '')
-        SELECT * FROM proposals AS p
-        WHERE p.status='pending'
-        AND p.client_data_type='Ncr::WorkOrder'
-        AND p.id IN (#{approver_sql})
-      SQL
-      Proposal.find_by_sql(sql)
+    def self.proposals_pending_approving_official(approval_status = 'actionable')
+      # TODO convert to SQL
+      Proposal.pending
+              .where(client_data_type: 'Ncr::WorkOrder')
+              .select{ |p| p.individual_approvals.pluck(:status)[0] == approval_status }
     end
 
-    def self.proposals_pending_budget
-      approver_sql = <<-SQL.gsub(/^ {8}/, '')
-        SELECT a.proposal_id FROM approvals AS a
-        WHERE a.status='actionable'
-        AND a.type='Approvals::Individual'
-        ORDER BY a.position DESC
-        LIMIT 1
-      SQL
-
-      sql = <<-SQL.gsub(/^ {8}/, '')
-        SELECT * FROM proposals AS p
-        INNER JOIN ncr_work_orders AS nwo ON p.client_data_id=nwo.id
-        WHERE p.status='pending'
-        AND p.client_data_type='Ncr::WorkOrder'
-        AND p.id IN (#{approver_sql})
-        ORDER BY nwo.expense_type
-      SQL
-      Proposal.find_by_sql(sql)
+    def self.proposals_pending_budget(approval_status = 'actionable')
+      # TODO convert to SQL
+      Proposal.pending
+              .where(client_data_type: 'Ncr::WorkOrder')
+              .select{ |p| p.individual_approvals.pluck(:status).last == approval_status }
+              .sort_by { |pr| pr.client_data.expense_type }
     end
 
     def self.budget_proposals(type, timespan)
-      sql = <<-SQL.gsub(/^ {8}/, '')
-        SELECT * FROM proposals AS p
-        INNER JOIN ncr_work_orders AS nwo ON p.client_data_id=nwo.id
-        WHERE p.status='pending'
-        AND p.client_data_type='Ncr::WorkOrder'
-        AND p.created_at > ?
-        AND nwo.expense_type = ?
-      SQL
-      Proposal.find_by_sql([sql, timespan, type])
+      # TODO convert to SQL
+      Proposal.approved
+              .where(client_data_type: 'Ncr::WorkOrder')
+              .where('created_at > ?', timespan)
+              .select { |pr| pr.client_data.expense_type == type }
     end
 
     def self.proposals_tier_one_pending_sql
       tier_one_sql = User.sql_for_role_slug('BA61_tier1_budget_approver', 'ncr')
 
       approver_sql = <<-SQL.gsub(/^ {8}/, '')
-        SELECT a.proposal_id FROM approvals AS a
+        SELECT a.proposal_id FROM approvals AS a 
         WHERE a.status='actionable' AND a.user_id IN (#{tier_one_sql})
       SQL
 
       work_order_sql = <<-SQL.gsub(/^ {8}/, '')
         SELECT id FROM ncr_work_orders AS nwo
-        WHERE nwo.org_code!='#{Ncr::Organization::WHSC_CODE}'
+        WHERE nwo.org_code!='#{Ncr::Organization::WHSC_CODE}' 
         AND nwo.expense_type IN ('BA60','BA61')
       SQL
 
