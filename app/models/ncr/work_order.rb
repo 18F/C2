@@ -202,7 +202,7 @@ module Ncr
 
     def self.approver_with_role(role_name)
       users = User.with_role(role_name).where(client_slug: 'ncr')
-      if users.length == 0
+      if users.empty?
         raise "Missing User with role #{role_name} -- did you run rake db:migrate and rake db:seed?"
       end
       users.first.email_address

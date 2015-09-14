@@ -53,9 +53,7 @@ class User < ActiveRecord::Base
   end
 
   def self.sql_for_role_slug(role, slug)
-    sql = "SELECT u.id FROM users AS u INNER JOIN user_roles AS ur ON u.id=ur.user_id INNER JOIN roles AS r ON r.id=ur.role_id "
-    sql += "WHERE r.name=#{self.sanitize(role)} and u.client_slug=#{self.sanitize(slug)}"
-    sql
+    User.select(:id).joins(:roles).where(client_slug: slug, roles: {name: role}).to_sql
   end
 
   def full_name
