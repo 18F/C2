@@ -22,6 +22,7 @@ class User < ActiveRecord::Base
 
   # this is for user_roles specifically, not proposals or any other objects for which
   # this user might have roles.
+  # rubocop:disable all
   def has_role?(name_or_role)
     if name_or_role.is_a?(Role)
       user_roles.any? { |ur| ur.role.name == name_or_role.name }
@@ -29,6 +30,7 @@ class User < ActiveRecord::Base
       user_roles.any? { |ur| ur.role.name == name_or_role }
     end
   end
+  # rubocop:enable all
 
   def add_role(name_or_role)
     return if has_role?(name_or_role)
