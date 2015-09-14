@@ -13,6 +13,10 @@ Create a [new issue](https://github.com/18F/C2/issues/new), and copy the raw Mar
 * [ ] Subscribe to the project on CircleCI
     1. [Authorize With GitHub](https://circleci.com/signup)
     1. Go to [the project page](https://circleci.com/gh/18F/C2) and "follow the C2 project"
+* [ ] Access support emails `capdevs@gsa.gov` and `communicart.sender@gsa.gov`
+    1. Make sure someone has requested/completed access for you (See tasks for @oldmember)
+    1. Go to Gmail and click 'Add Account'. Enter in each of these email addresses. If you are asked for a password, leave it blank. As long as you are already logged into your GSA email, the email addresses should be loaded.
+    1. One would expect the newly added email to load automatically, but it doesn't. To load the new email, simply click on your email address at the top right of the page to show all of your loaded email accounts. Click on the newly added email address (capdevs or communicart.sender) to load it.
 
 ### Later
 
@@ -26,6 +30,7 @@ Create a [new issue](https://github.com/18F/C2/issues/new), and copy the raw Mar
 * [ ] Add to Slack channels
 * [ ] [Add to Pivotal Tracker](https://www.pivotaltracker.com/projects/1149728/memberships)
 * [ ] Add to [@18F/cap](https://github.com/orgs/18F/teams/cap) team on GitHub
+* [ ] Add to support emails: `capdevs` and `communicart.sender` through [IT Service Desk](https://gsa.service-now.com)
 * [ ] Add to calendar items: standups, IPM, and story grooming sessions
 * [ ] Schedule a code walkthrough
 * [ ] Set up pairing session
