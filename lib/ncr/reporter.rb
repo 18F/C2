@@ -23,7 +23,7 @@ module Ncr
 
     def self.proposals_pending_approving_official
       approver_sql = <<-SQL.gsub(/^ {8}/, '')
-        SELECT a.proposal_id FROM approvals AS a 
+        SELECT a.proposal_id FROM approvals AS a
         WHERE a.status='actionable'
         AND a.type='Approvals::Individual'
         ORDER BY a.position ASC
@@ -41,7 +41,7 @@ module Ncr
 
     def self.proposals_pending_budget
       approver_sql = <<-SQL.gsub(/^ {8}/, '')
-        SELECT a.proposal_id FROM approvals AS a 
+        SELECT a.proposal_id FROM approvals AS a
         WHERE a.status='actionable'
         AND a.type='Approvals::Individual'
         ORDER BY a.position DESC
@@ -75,13 +75,13 @@ module Ncr
       tier_one_sql = User.sql_for_role_slug('BA61_tier1_budget_approver', 'ncr')
 
       approver_sql = <<-SQL.gsub(/^ {8}/, '')
-        SELECT a.proposal_id FROM approvals AS a 
+        SELECT a.proposal_id FROM approvals AS a
         WHERE a.status='actionable' AND a.user_id IN (#{tier_one_sql})
       SQL
 
       work_order_sql = <<-SQL.gsub(/^ {8}/, '')
         SELECT id FROM ncr_work_orders AS nwo
-        WHERE nwo.org_code!='#{Ncr::Organization::WHSC_CODE}' 
+        WHERE nwo.org_code!='#{Ncr::Organization::WHSC_CODE}'
         AND nwo.expense_type IN ('BA60','BA61')
       SQL
 
