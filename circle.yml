@@ -2,8 +2,6 @@
 # https://github.com/testdouble/feedback/issues/7
 database:
   override:
-    - export RAILS_ENV="test"
-    - export RACK_ENV="test"
     - bundle exec rake db:create db:migrate --trace
 dependencies:
   pre:
