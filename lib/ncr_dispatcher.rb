@@ -18,9 +18,15 @@ class NcrDispatcher < LinearDispatcher
     notify_approvers(proposal, modifier)
     notify_pending_approvers(proposal, modifier)
     notify_observers(proposal, modifier)
+    notify_requester(proposal, modifier)
   end
 
   private
+
+  def notify_requester(proposal, modifier)
+    return if proposal.requester == modifier
+    CommunicartMailer.notification_for_subscriber(proposal.requester.email_address, proposal, "updated").deliver_later
+  end
 
   def notify_approvers(proposal, modifier)
     proposal.individual_approvals.approved.each do |approval|
