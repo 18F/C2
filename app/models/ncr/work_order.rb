@@ -8,8 +8,13 @@ module Ncr
 
   EXPENSE_TYPES = %w(BA60 BA61 BA80)
   BUILDING_NUMBERS = YAML.load_file("#{Rails.root}/config/data/ncr/building_numbers.yml")
-  MAX_AMOUNT = (ENV['NCR_MAX_AMOUNT'] || 3000).to_f
-  MIN_AMOUNT = (ENV['NCR_MIN_AMOUNT'] || 0).to_f
+  FY16 = Time.zone.parse('2015-10-01')
+  if Time.zone.now > FY16
+    MAX_AMOUNT = 3500.0
+  else
+    MAX_AMOUNT = 3000.0
+  end
+  MIN_AMOUNT = 0.0
 
   class WorkOrder < ActiveRecord::Base
     include ValueHelper

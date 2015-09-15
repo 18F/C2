@@ -5,7 +5,12 @@ module Gsa18f
   end
 
   DATA = YAML.load_file("#{Rails.root}/config/data/18f.yaml")
-  MAX_AMOUNT = (ENV['GSA18F_MAX_AMOUNT'] || 3000).to_f
+  FY16 = Time.zone.parse('2015-10-01')
+  if Time.zone.now > FY16
+    MAX_AMOUNT = 3500.0
+  else
+    MAX_AMOUNT = 3000.0
+  end
 
   class Procurement < ActiveRecord::Base
     URGENCY = DATA['URGENCY']

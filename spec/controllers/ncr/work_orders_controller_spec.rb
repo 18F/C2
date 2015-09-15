@@ -101,19 +101,19 @@ describe Ncr::WorkOrdersController do
       expect(work_order.amount).not_to eq(999999)
     end
 
-    with_env_var('NCR_MAX_AMOUNT', '1000') do
-      it 'uses env var to override default max amount' do
+    it 'respects FY start date for setting default max amount' do
+      Timecop.freeze(Time.zone.parse('2015-10-02')) do
 
-        # must reload class for env var to affect validations
+        # must reload class for time travel to affect validations
         ['EXPENSE_TYPES', 'BUILDING_NUMBERS', 'MAX_AMOUNT', 'MIN_AMOUNT', 'WorkOrder'].each do |const|
           Ncr.send(:remove_const, const)
         end
         load 'app/models/ncr/work_order.rb'
 
         post :update, {id: work_order.id, approver_email: 'a@b.com',
-                       ncr_work_order: {expense_type: 'BA61', amount: 2000}}
+                       ncr_work_order: {expense_type: 'BA61', amount: 99999}}
         expect(flash[:success]).not_to be_present
-        expect(flash[:error]).to eq(["Amount must be less than or equal to $1,000.00"])
+        expect(flash[:error]).to eq(["Amount must be less than or equal to $3,500.00"])
       end
     end
 
