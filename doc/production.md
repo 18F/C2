@@ -53,3 +53,23 @@ We will be moving to Mandrill for sending transactional emails.
 1. Click "View Mandrill Reports".
 
 You should now be signed in to Mandrill with the shared account.
+
+## Admin accounts
+
+18F developers can give admin access to users in the system. Here is an example:
+
+```
+# on localhost
+% cd /tmp
+% git checkout git@github.com:18F/C2.git
+% cd C2
+% cf create-app-manifest c2-prod
+% cf-ssh -f c2-prod_manifest.yml --verbose
+vcap@someinstance:~$ rails console
+Loading production environment (Rails 4.2.4)
+irb(main):001:0> u = User.find_by_email_address 'user@example.gov'
+irb(main):002:0> u.add_role('admin')
+irb(main):003:0> u.save!
+^D
+vcap@someinstance:~$ exit
+```
