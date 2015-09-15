@@ -62,6 +62,7 @@ You should now be signed in to Mandrill with the shared account.
 # on localhost
 % cd /tmp
 % git checkout git@github.com:18F/C2.git
+% cd C2
 % cf create-app-manifest c2-prod
 % cf-ssh -f c2-prod_manifest.yml --verbose
 vcap@someinstance:~$ rails console
