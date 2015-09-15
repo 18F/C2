@@ -39,14 +39,15 @@ class UseCaseController < ApplicationController
     render 'form'
   end
 
-  def update
+  # accepts an optional block to be called before save
+  def update(&block)
     @model_instance.assign_attributes(self.permitted_params)  # don't hit db yet
 
-    @model_changing = false
     @model_instance.validate
     if self.errors.empty?
       if self.attribute_changes?
-        @model_changing = true
+        block.call if block
+
         @model_instance.save
         flash[:success] = "Successfully modified!"
       else

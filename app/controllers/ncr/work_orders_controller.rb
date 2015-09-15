@@ -24,11 +24,11 @@ module Ncr
       @approver_email = params[:approver_email]
       @model_instance.modifier = current_user
 
-      super
-
-      if @model_changing && !@model_instance.emergency  # skip approvals if emergency
-        @model_instance.setup_approvals_and_observers(@approver_email)
-        @model_instance.email_approvers
+      super do
+        unless @model_instance.emergency  # skip approvals if emergency
+          @model_instance.setup_approvals_and_observers(@approver_email)
+          @model_instance.email_approvers
+        end
       end
     end
 
