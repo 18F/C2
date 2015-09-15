@@ -117,6 +117,10 @@ module Ncr
       self.approvers.first
     end
 
+    def approving_official_email_address
+      approving_official ? approving_official.email_address : self.system_approver_emails.first
+    end
+
     def email_approvers
       Dispatcher.on_proposal_update(self.proposal, self.modifier)
     end
