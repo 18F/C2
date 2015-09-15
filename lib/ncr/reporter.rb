@@ -21,6 +21,7 @@ module Ncr
       budget_proposals("BA80", 1.week.ago)
     end
 
+    # rubocop:disable all
     def self.as_csv(proposals)
       CSV.generate do |csv|
         csv << ['URL', 'Requester', 'Approver', 'CL', 'Function Code', 'Soc Code', 'Created']
@@ -37,6 +38,7 @@ module Ncr
         end
       end
     end
+    # rubocop:enable all
 
     def self.proposals_pending_approving_official
       # TODO convert to SQL

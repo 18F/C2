@@ -14,6 +14,7 @@ class ReportMailer < ApplicationMailer
     )
   end
 
+  # rubocop:disable all
   def build_attachments
     date = Time.now.utc.strftime('%Y-%m-%d')
     { 'approved-ba60-week' => Ncr::Reporter.as_csv(Ncr::Reporter.ba60_proposals),
@@ -26,4 +27,5 @@ class ReportMailer < ApplicationMailer
       attachments[name + '-' + date + '.csv'] = csv
     end
   end
+  # rubocop:enable all
 end
