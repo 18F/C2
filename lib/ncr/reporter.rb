@@ -22,12 +22,12 @@ module Ncr
     end
 
     def self.as_csv(proposals)
-      csv_buffer = CSV.generate do |csv|
+      CSV.generate do |csv|
         csv << ['URL', 'Requester', 'Approver', 'CL', 'Function Code', 'Soc Code', 'Created']
         proposals.each do |p|
           csv << [
             Rails.application.routes.url_helpers.url_for(controller: 'proposals', action: 'show', id: p.id, host: DEFAULT_URL_HOST),
-            p.requester.email_address, 
+            p.requester.email_address,
             p.client_data.approving_official_email_address,
             p.client_data.cl_number,
             p.client_data.function_code,
@@ -36,7 +36,6 @@ module Ncr
           ]
         end
       end
-      csv_buffer
     end
 
     def self.proposals_pending_approving_official
