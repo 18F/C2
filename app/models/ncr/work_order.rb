@@ -8,6 +8,8 @@ module Ncr
 
   EXPENSE_TYPES = %w(BA60 BA61 BA80)
   BUILDING_NUMBERS = YAML.load_file("#{Rails.root}/config/data/ncr/building_numbers.yml")
+  MAX_AMOUNT = (ENV['NCR_MAX_AMOUNT'] || 3000).to_f
+  MIN_AMOUNT = (ENV['NCR_MIN_AMOUNT'] || 0).to_f
 
   class WorkOrder < ActiveRecord::Base
     include ValueHelper
@@ -22,12 +24,12 @@ module Ncr
 
     # @TODO: use integer number of cents to avoid floating point issues
     validates :amount, numericality: {
-      less_than_or_equal_to: 3000,
-      message: "must be less than or equal to $3,000"
+      less_than_or_equal_to: MAX_AMOUNT,
+      message: "must be less than or equal to #{ActiveSupport::NumberHelper.number_to_currency(MAX_AMOUNT)}"
     }
     validates :amount, numericality: {
-      greater_than_or_equal_to: 0,
-      message: "must be greater than or equal to $0"
+      greater_than_or_equal_to: MIN_AMOUNT,
+      message: "must be greater than or equal to #{ActiveSupport::NumberHelper.number_to_currency(MIN_AMOUNT)}"
     }
     validates :cl_number, format: {
       with: /\ACL\d{7}\z/,

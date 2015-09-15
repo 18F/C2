@@ -75,7 +75,7 @@ describe "GSA 18f Purchase Request Form" do
       }.to_not change { Proposal.count }
 
       expect(current_path).to eq('/gsa18f/procurements')
-      expect(page).to have_content("Cost per unit must be less than or equal to 3000")
+      expect(page).to have_content("Cost per unit must be less than or equal to #{Gsa18f::MAX_AMOUNT}")
       # keeps the form values
       expect(find_field('Cost per unit').value).to eq('10000')
     end
