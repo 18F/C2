@@ -16,8 +16,7 @@ class ReportMailer < ApplicationMailer
 
   def build_attachments
     date = Time.now.utc.strftime('%Y-%m-%d')
-    {
-      'approved-ba60-week' => Ncr::Reporter.as_csv(Ncr::Reporter.ba60_proposals),
+    { 'approved-ba60-week' => Ncr::Reporter.as_csv(Ncr::Reporter.ba60_proposals),
       'approved-ba61-week' => Ncr::Reporter.as_csv(Ncr::Reporter.ba61_proposals),
       'approved-ba80-week' => Ncr::Reporter.as_csv(Ncr::Reporter.ba80_proposals),
       'pending-at-approving-official' => Ncr::Reporter.as_csv(Ncr::Reporter.proposals_pending_approving_official),
@@ -25,7 +24,6 @@ class ReportMailer < ApplicationMailer
       'pending-at-tier-one-approval' => Ncr::Reporter.as_csv(Ncr::Reporter.proposals_tier_one_pending),
     }.each do |name, csv|
       attachments[name + '-' + date + '.csv'] = csv
-    end 
+    end
   end
-
 end
