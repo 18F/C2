@@ -58,8 +58,6 @@ module TabularData
       container_yaml[key].deep_symbolize_keys
     end
 
-    protected
-
     def set_sort(field)
       field = field || ''
       dir = field.start_with?('-') ? :desc : :asc
@@ -73,6 +71,8 @@ module TabularData
         end
       end
     end
+
+    protected
 
     def init_query(engine, joins)
       @query = engine.all()     # convert into a query

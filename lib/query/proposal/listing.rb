@@ -12,13 +12,24 @@ module Query
       def pending
         container = self.index_visible_container(:pending).alter_query(&:pending)
 
-        # this complex default sort requires extra SQL per proposal.
-        # TODO incorporate into the TabularData::Container itself.
-        if !params[:tables] && !container.frozen_sort
-          container.rows = container.rows.sort { |a,b|
-            ((b.awaiting_approver?(self.user) ? 1 : 0) <=> (a.awaiting_approver?(self.user) ? 1 : 0)).nonzero? ||
-            (a.created_at <=> b.created_at)
-          }
+        # this complex default sort requires extra SQL per proposal so currently performed post-query.
+        # TODO incorporate into the TabularData::Container itself as the definition of "status".
+        if !container.frozen_sort
+          if !params[:tables] || (params[:tables][:pending] && params[:tables][:pending][:sort].match(/status/))
+            if params[:tables] && params[:tables][:pending] && params[:tables][:pending][:sort] == 'status'
+              container.rows = container.rows.sort { |a, b|
+                ((a.awaiting_approver?(self.user) ? 1 : 0) <=> (b.awaiting_approver?(self.user) ? 1 : 0)).nonzero? ||
+                (a.created_at <=> b.created_at) # always oldest to newest
+              }
+              container.set_sort('status')
+            else
+              container.rows = container.rows.sort { |a, b|
+                ((b.awaiting_approver?(self.user) ? 1 : 0) <=> (a.awaiting_approver?(self.user) ? 1 : 0)).nonzero? ||
+                (a.created_at <=> b.created_at) # always oldest to newest
+              }
+              container.set_sort('-status')
+            end
+          end
         end
         container
       end
