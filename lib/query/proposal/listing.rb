@@ -34,10 +34,10 @@ module Query
               end 
               container.set_sort('status')
             else
-              container.rows = container.rows.sort { |a, b|
+              container.rows = container.rows.sort do |a, b|
                 ((b.awaiting_approver?(self.user) ? 1 : 0) <=> (a.awaiting_approver?(self.user) ? 1 : 0)).nonzero? ||
                 (b.created_at <=> a.created_at)
-              }
+              end
               container.set_sort('-status')
             end
           end
