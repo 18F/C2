@@ -13,5 +13,5 @@ development:
   database: c2_development
 test:
   <<: *default
-  database: c2_test
+  url: postgresql://localhost/c2_test
 production: *default
