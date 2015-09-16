@@ -26,9 +26,11 @@ module TabularData
       results
     end
 
-    def rows=r
-      @rows = r
+    # rubocop:disable all
+    def rows=(new_rows)
+      @rows = new_rows
     end
+    # rubocop:enable all
 
     def set_state_from_params(params)
       relevant = params.permit(tables: {@name => [:sort]})
