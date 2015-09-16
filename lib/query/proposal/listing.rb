@@ -10,7 +10,17 @@ module Query
       end
 
       def pending
-        self.index_visible_container(:pending).alter_query(&:pending)
+        container = self.index_visible_container(:pending).alter_query(&:pending)
+
+        # this complex default sort requires extra SQL per proposal.
+        # TODO incorporate into the TabularData::Container itself.
+        if !params[:tables] && !container.frozen_sort
+          container.rows = container.rows.sort { |a,b|
+            ((b.awaiting_approver?(self.user) ? 1 : 0) <=> (a.awaiting_approver?(self.user) ? 1 : 0)).nonzero? ||
+            (a.created_at <=> b.created_at)
+          }
+        end
+        container
       end
 
       def approved

@@ -190,6 +190,11 @@ class Proposal < ActiveRecord::Base
     self.approvers.merge(self.currently_awaiting_approvals)
   end
 
+  # convenience method only, to make sorting more legible.
+  def awaiting_approver?(user)
+    self.currently_awaiting_approvers.include?(user)
+  end
+
   # delegated, with a fallback
   # TODO refactor to class method in a module
   def delegate_with_default(method)

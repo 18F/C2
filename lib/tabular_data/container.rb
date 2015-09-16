@@ -18,11 +18,16 @@ module TabularData
 
     # @todo filtering, paging, etc.
     def rows
+      return @rows if @rows
       results = @query
       if @sort && !@frozen_sort
         results = results.order(@sort)
       end
       results
+    end
+
+    def rows=r
+      @rows = r
     end
 
     def set_state_from_params(params)
