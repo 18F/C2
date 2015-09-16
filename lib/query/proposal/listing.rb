@@ -9,14 +9,22 @@ module Query
         @user = user
       end
 
+      def has_table_param?(name)
+        params[:tables] && params[:tables][name]
+      end
+
+      def table_param_value(tbl, name)
+        params[:tables][tbl][name]
+      end
+
       def pending
         container = self.index_visible_container(:pending).alter_query(&:pending)
 
         # this complex default sort requires extra SQL per proposal so currently performed post-query.
         # TODO incorporate into the TabularData::Container itself as the definition of "status".
         if !container.frozen_sort
-          if !params[:tables] || (params[:tables][:pending] && params[:tables][:pending][:sort].match(/status/))
-            if params[:tables] && params[:tables][:pending] && params[:tables][:pending][:sort] == 'status'
+          if !has_table_param?(:pending) || (has_table_param?(:pending) && table_param_value(:pending, :sort).match(/status/))
+            if has_table_param?(:pending) && table_param_value(:pending, :sort) == 'status'
               container.rows = container.rows.sort { |a, b|
                 ((a.awaiting_approver?(self.user) ? 1 : 0) <=> (b.awaiting_approver?(self.user) ? 1 : 0)).nonzero? ||
                 (b.created_at <=> a.created_at)
