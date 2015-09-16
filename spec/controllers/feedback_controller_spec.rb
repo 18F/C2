@@ -22,6 +22,7 @@ describe FeedbackController do
         "satisfaction: 4",
         "referral: /somewhere/else"].join("\n"))
       expect(deliveries[0].from).to eq(['someone@example.com'])
+      expect(deliveries[0].cc).to eq(['someone@example.com'])
     end
 
     it "doesn't include extra fields" do
@@ -40,6 +41,7 @@ describe FeedbackController do
       post :create, {bug: "Yes"}
       expect(deliveries[0].body.to_s).to eq("bug: Yes")
       expect(deliveries[0].from).to eq(['actor@example.com'])
+      expect(deliveries[0].cc).to eq(['actor@example.com'])
     end
   end
 end
