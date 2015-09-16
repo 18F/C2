@@ -13,3 +13,12 @@ C2::Application.config.action_mailer.default_url_options ||= {
   host: DEFAULT_URL_HOST,
   port: ENV['DEFAULT_URL_PORT'] || default_port
 }
+
+unless ENV['DISABLE_SANDBOX_WARNING']
+  class PrefixEmailSubject
+    def self.delivering_email(mail)
+      mail.subject = "[TEST] " + mail.subject
+    end
+  end
+  ActionMailer::Base.register_interceptor(PrefixEmailSubject)
+end
