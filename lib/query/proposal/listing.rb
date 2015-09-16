@@ -19,13 +19,13 @@ module Query
             if params[:tables] && params[:tables][:pending] && params[:tables][:pending][:sort] == 'status'
               container.rows = container.rows.sort { |a, b|
                 ((a.awaiting_approver?(self.user) ? 1 : 0) <=> (b.awaiting_approver?(self.user) ? 1 : 0)).nonzero? ||
-                (a.created_at <=> b.created_at) # always oldest to newest
+                (b.created_at <=> a.created_at)
               }
               container.set_sort('status')
             else
               container.rows = container.rows.sort { |a, b|
                 ((b.awaiting_approver?(self.user) ? 1 : 0) <=> (a.awaiting_approver?(self.user) ? 1 : 0)).nonzero? ||
-                (a.created_at <=> b.created_at) # always oldest to newest
+                (b.created_at <=> a.created_at)
               }
               container.set_sort('-status')
             end
