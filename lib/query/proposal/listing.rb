@@ -9,7 +9,7 @@ module Query
         @user = user
       end
 
-      def has_table_param?(name)
+      def table_param?(name)
         params[:tables] && params[:tables][name]
       end
 
@@ -18,17 +18,20 @@ module Query
       end
 
       def pending
-        container = self.index_visible_container(:pending).alter_query(&:pending)
+        self.sort_pending_container(self.index_visible_container(:pending).alter_query(&:pending))
+      end
 
-        # this complex default sort requires extra SQL per proposal so currently performed post-query.
-        # TODO incorporate into the TabularData::Container itself as the definition of "status".
-        if !container.frozen_sort
-          if !has_table_param?(:pending) || (has_table_param?(:pending) && table_param_value(:pending, :sort).match(/status/))
-            if has_table_param?(:pending) && table_param_value(:pending, :sort) == 'status'
-              container.rows = container.rows.sort { |a, b|
+      # this complex default sort requires extra SQL per proposal so currently performed post-query.
+      # TODO incorporate into the TabularData::Container itself as the definition of "status".
+      # rubocop:disable all
+      def sort_pending_container(container)
+        unless container.frozen_sort
+          if !table_param?(:pending) || (table_param?(:pending) && table_param_value(:pending, :sort).match(/status/))
+            if table_param?(:pending) && table_param_value(:pending, :sort) == 'status'
+              container.rows = container.rows.sort do |a, b|
                 ((a.awaiting_approver?(self.user) ? 1 : 0) <=> (b.awaiting_approver?(self.user) ? 1 : 0)).nonzero? ||
                 (b.created_at <=> a.created_at)
-              }
+              end 
               container.set_sort('status')
             else
               container.rows = container.rows.sort { |a, b|
@@ -41,6 +44,7 @@ module Query
         end
         container
       end
+      # rubocop:enable all
 
       def approved
         self.index_visible_container(:approved).alter_query(&:approved)
