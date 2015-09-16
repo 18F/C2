@@ -131,7 +131,11 @@
         </div>
       <% end %>
     <% end %>
-    <%= f.submit class: 'form-button' %>
+    <% unless ENV['DISABLE_SANDBOX_WARNING'] == 'true' %>
+      <%= f.submit value: 'Submit test request for approval', class: 'form-button' %>
+    <% else %>
+      <%= f.submit class: 'form-button' %>
+    <% end %>
     <% if @model_instance.persisted? %>
       <%= link_to 'Discard Changes', proposal_url(@model_instance.proposal) %>
     <% end %>
