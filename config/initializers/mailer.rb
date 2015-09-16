@@ -14,7 +14,7 @@ C2::Application.config.action_mailer.default_url_options ||= {
   port: ENV['DEFAULT_URL_PORT'] || default_port
 }
 
-unless ENV['DISABLE_SANDBOX_WARNING']
+unless ENV['DISABLE_SANDBOX_WARNING'] == 'true'
   class PrefixEmailSubject
     def self.delivering_email(mail)
       mail.subject = "[TEST] " + mail.subject
