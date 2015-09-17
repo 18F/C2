@@ -9,8 +9,6 @@ class ApiToken < ActiveRecord::Base
 
   # TODO validates :access_token, presence: true
   validates :approval_id, presence: true
-  validates :access_token, presence: true, allow_blank: true, length: { minimum: 0, maximum: 255 }
-  validates :user, presence: true, allow_blank: true
 
   scope :unexpired, -> { where('expires_at >= ?', Time.now) }
   scope :expired, -> { where('expires_at < ?', Time.now) }
