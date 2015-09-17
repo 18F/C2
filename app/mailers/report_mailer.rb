@@ -3,7 +3,7 @@ class ReportMailer < ApplicationMailer
 
   def budget_status
     to_email = ENV.fetch('BUDGET_REPORT_RECIPIENT')
-    date = Time.now.in_time_zone('Eastern Time (US & Canada)').strftime("%a %m/%d/%y")
+    date = Time.now.utc.strftime("%a %m/%d/%y (%Z)")
 
     mail(
       to: to_email,

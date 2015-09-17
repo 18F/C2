@@ -21,6 +21,7 @@ class User < ActiveRecord::Base
 
   # this is for user_roles specifically, not proposals or any other objects for which
   # this user might have roles.
+  # rubocop:disable all
   def has_role?(name_or_role)
     if name_or_role.is_a?(Role)
       roles.any? { |user_role| user_role.role.name == name_or_role.name }
@@ -28,6 +29,7 @@ class User < ActiveRecord::Base
       roles.any? { |user_role| user_role.role.name == name_or_role }
     end
   end
+  # rubocop:enable all
 
   def add_role(name_or_role)
     return if has_role?(name_or_role)
@@ -37,10 +39,10 @@ class User < ActiveRecord::Base
       role = name_or_role
     else
       role = Role.find_or_create_by(name: name_or_role)
-    end 
+    end
     user_role = UserRole.new(role: role)
     roles << user_role
-  end  
+  end
 
   def full_name
     if first_name && last_name
@@ -83,15 +85,7 @@ class User < ActiveRecord::Base
     self.find_or_create_by(email_address: user_data['email'])
   end
 
-  def self.client_admin_emails
-    ENV['CLIENT_ADMIN_EMAILS'].to_s.split(',')
-  end
-
-  def self.admin_emails
-    ENV['ADMIN_EMAILS'].to_s.split(',')
-  end
-
   def role_on(proposal)
-    RolePicker.new(self,proposal)
+    RolePicker.new(self, proposal)
   end
 end

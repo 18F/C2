@@ -8,9 +8,6 @@ class Proposal < ActiveRecord::Base
 
   workflow do
     state :pending do
-      # partial *may* trigger a full approval
-      event :partial_approve, transitions_to: :approved, if: lambda { |p| p.all_approved? }
-      event :partial_approve, transitions_to: :pending
       event :approve, :transitions_to => :approved
       event :restart, :transitions_to => :pending
       event :cancel, :transitions_to => :cancelled
@@ -18,9 +15,14 @@ class Proposal < ActiveRecord::Base
     state :approved do
       event :restart, :transitions_to => :pending
       event :cancel, :transitions_to => :cancelled
+      event :approve, :transitions_to => :approved do
+        halt  # no need to trigger a state transition
+      end
     end
     state :cancelled do
-      event :partial_approve, :transitions_to => :cancelled
+      event :approve, :transitions_to => :cancelled do
+        halt  # can't escape
+      end
     end
   end
 
@@ -60,6 +62,10 @@ class Proposal < ActiveRecord::Base
   after_initialize :set_defaults
   after_create :update_public_id
 
+  # @todo - this should probably be the only entry into the approval system
+  def root_approval
+    self.approvals.where(parent: nil).first
+  end
 
   def set_defaults
     self.flow ||= 'parallel'
@@ -98,36 +104,39 @@ class Proposal < ActiveRecord::Base
     results.compact.uniq
   end
 
-  # Set the approver list, from any start state
-  # This overrides the `through` relation but provides parity to the accessor
-  def approvers=(approver_list)
-    approvals = approver_list.each_with_index.map do |approver, idx|
-      approval = self.existing_approval_for(approver)
-      approval ||= Approvals::Individual.new(user: approver, proposal: self)
-      approval.position = idx + 1   # start with 1
-      approval
+  def root_approval=(root)
+    old_approvals = self.approvals.to_a
+
+    approval_list = root.pre_order_tree_traversal
+    approval_list.each { |a| a.proposal = self }
+    self.approvals = approval_list
+    # position may be out of whack, so we reset it
+    approval_list.each_with_index do |approval, idx|
+      approval.set_list_position(idx + 1)   # start with 1
     end
-    self.approvals = approvals
-    self.kickstart_approvals()
-    self.reload   # include the changes in kickstart_approvals
+
+    old_approvals.each do |old|
+      unless approval_list.include?(old)
+        old.destroy()
+      end
+    end
+
+    root.initialize!
     self.reset_status()
   end
 
-  # Trigger the appropriate approval, from any start state
-  def kickstart_approvals()
-    actionable = self.approvals.actionable
-    pending = self.approvals.pending
-    if self.parallel?
-      pending.update_all(status: 'actionable')
-    elsif self.linear? && actionable.empty? && pending.any?
-      pending.first.initialize!
+  # convenience wrapper for setting a single approver
+  def approver=(approver)
+    # Don't recreate the approval
+    existing = self.existing_approval_for(approver)
+    if existing.nil?
+      self.root_approval = Approvals::Individual.new(user: approver)
     end
-    # otherwise, approvals are correct
   end
 
   def reset_status()
     unless self.cancelled?   # no escape from cancelled
-      if self.all_approved?
+      if self.root_approval.nil? || self.root_approval.approved?
         self.update(status: 'approved')
       else
         self.update(status: 'pending')
@@ -135,7 +144,11 @@ class Proposal < ActiveRecord::Base
     end
   end
 
-  def add_observer(email_or_user, adder = nil, reason = nil)
+  def existing_observation_for(user)
+    self.observations.find_by(user: user)
+  end
+
+  def add_observer(email_or_user, adder=nil, reason=nil)
     # polymorphic
     if email_or_user.is_a?(User)
       user = email_or_user
@@ -143,8 +156,7 @@ class Proposal < ActiveRecord::Base
       user = User.for_email(email_or_user)
     end
 
-    # check if the user is already observing, to avoid duplicates
-    self.observers.find{ |o| o.id == user.id } || create_new_observation(user, adder, reason)
+    create_new_observation(user, adder, reason) unless existing_observation_for(user)
   end
 
   def add_requester(email)
@@ -156,8 +168,9 @@ class Proposal < ActiveRecord::Base
     self.update_attributes!(requester_id: user.id)
   end
 
+  # Approvals in which someone can take action
   def currently_awaiting_approvals
-    self.approvals.actionable
+    self.individual_approvals.actionable
   end
 
   def currently_awaiting_approvers
@@ -217,28 +230,15 @@ class Proposal < ActiveRecord::Base
     # Note that none of the state machine's history is stored
     self.api_tokens.update_all(expires_at: Time.now)
     self.approvals.update_all(status: 'pending')
-    self.kickstart_approvals()
+    if self.root_approval
+      self.root_approval.initialize!
+    end
     Dispatcher.deliver_new_proposal_emails(self)
   end
 
-  def all_approved?
-    self.approvals.where.not(status: 'approved').empty?
-  end
-
-  # An approval has been approved. Mark the next as actionable
-  # Note: this won't affect a parallel flow (as approvals start actionable)
-  def partial_approve
-    unless self.cancelled?
-      next_approval = self.approvals.pending.first
-      if next_approval
-        next_approval.initialize!
-      end
-    end
-  end
-
-  # Returns True if the user is an "active" approver or has acted on the proposal
+  # Returns True if the user is an "active" approver and has acted on the proposal
   def is_active_approver?(user)
-    self.approvals.non_pending.exists?(user_id: user.id)
+    self.individual_approvals.non_pending.exists?(user_id: user.id)
   end
 
   def self.client_model_names
@@ -250,6 +250,7 @@ class Proposal < ActiveRecord::Base
   end
 
   protected
+
   def update_public_id
     self.update_attribute(:public_id, self.public_identifier)
   end
@@ -261,24 +262,16 @@ class Proposal < ActiveRecord::Base
     self.observations << observation
     # invalidate relation cache so we reload on next access
     self.observers(true)
-    add_observation_comment(user, adder, reason) if adder
+    add_observation_comment(user, adder, reason) if adder && !reason.blank?
     observation
   end
 
   def add_observation_comment(user, adder, reason)
-    if reason.blank?
-      self.comments.create(
-          comment_text: I18n.t('activerecord.attributes.observation.user_comment',
-                               user: adder.full_name,
-                               observer: user.full_name),
-          user: adder)
-    else
-      self.comments.create(
-          comment_text: I18n.t('activerecord.attributes.observation.user_reason_comment',
-                               user: adder.full_name,
-                               observer: user.full_name,
-                               reason: reason),
-          user: adder)
-    end
+    self.comments.create(
+      comment_text: I18n.t('activerecord.attributes.observation.user_reason_comment',
+                           user: adder.full_name,
+                           observer: user.full_name,
+                           reason: reason),
+      user: adder)
   end
 end

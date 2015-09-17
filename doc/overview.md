@@ -2,14 +2,17 @@
 
 C2 is, at its core, a state machine wrapped in email notifications. The system centers around Proposals, which are submitted by a "requester" and sent out to the "approvers" via email. Approvers can either ask questions or leave comments, then approve" the request. The requester (and any "observers") get notifications about the overall progress. Aside from receiving email notifications for updates, users can log in at any time and see the details for outstanding and past Proposals they were involved with.
 
-## Proposal "flows"
+## Approval Chains
 
-Proposals have two types of workflows:
+The order and requirements for a proposal to be "approved" are defined by an "approval chain". This is a hierarchical tree of `Approval` objects, with currently fall into three types:
 
-* Parallel
-    * Once the request is submitted, all approvers receive a notification.
-* Linear (a.k.a serial)
-    * Once the request is submitted, it goes to the first approver. If they approve, it goes to the next, and so forth.
+* `Individual` - representing a single user's approving decision
+* `Parallel` - whose children can approve in any order
+* `Serial` - whose children must approve in sequence
+
+The `Parallel` node has an additional configuration (`min_children_needed`), which allows it to require X out of Y approvals, for example requiring only a majority or only one of its children to approve.
+
+The approval chains are designed so that the `Proposal` needs to only communicate with the _root_ of the chain. See the approval specs for examples.
 
 ## User accounts
 
@@ -78,3 +81,11 @@ The NCR use case was built around GSA service centers (paint shops, landscapers,
 ## Performance
 
 C2 has the [Peek](https://github.com/peek/peek) performance bar loaded in development, and in production for admins. It's hidden by default – press the backtick (`` ` ``) key to display it.
+
+## Supported Browsers
+
+Support Level         |   Browsers In Level       | Bugs Will Be... |
+----------------------|-------------------|-------------|
+Level 1 | Internet Explorer 9, Chrome  | resolved with high priority |
+Level 2 | Firefox, Opera, Safari, Internet Explorer 10, Internet Explorer 11 | resolved with low priority |
+Level 3 | Internet Explorer 6, 7, 8, and all mobile and tablet browsers | not resolved |

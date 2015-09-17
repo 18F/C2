@@ -54,6 +54,15 @@ describe Ncr::WorkOrder do
       expect(form.approved?).to eq(false)
     end
 
+    it "reuses existing approvals" do
+      form = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61')
+      form.setup_approvals_and_observers('bob@example.com')
+      first_approval = form.individual_approvals.first
+
+      form.reload.setup_approvals_and_observers('bob@example.com')
+      expect(form.individual_approvals.first).to eq(first_approval)
+    end
+
     it "creates observers when in an emergency" do
       form = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61',
                                emergency: true)
@@ -62,7 +71,7 @@ describe Ncr::WorkOrder do
         'bob@example.com',
         Ncr::WorkOrder.ba61_tier1_budget_mailbox,
         Ncr::WorkOrder.ba61_tier2_budget_mailbox
-      ])
+      ].uniq)
       expect(form.approvals.length).to eq(0)
       form.clear_association_cache
       expect(form.approved?).to eq(true)

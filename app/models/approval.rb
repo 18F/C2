@@ -10,6 +10,7 @@ class Approval < ActiveRecord::Base
 
   belongs_to :proposal
   acts_as_list scope: :proposal
+  validates :proposal, presence: true
 
   belongs_to :parent, class_name: 'Approval'
   has_many :child_approvals, class_name: 'Approval', foreign_key: 'parent_id'
@@ -28,11 +29,15 @@ class Approval < ActiveRecord::Base
     if self.parent
       self.parent.child_approved!(self)
     else
-      self.proposal.partial_approve!
+      self.proposal.approve!
     end
   end
 
   def children_approved?
     self.child_approvals.where.not(status: "approved").empty?
+  end
+
+  def pre_order_tree_traversal
+    [self] + self.child_approvals.flat_map(&:pre_order_tree_traversal)
   end
 end
