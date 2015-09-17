@@ -9,12 +9,12 @@ describe "National Capital Region proposals" do
 
     with_feature 'RESTRICT_ACCESS' do
       it "requires a GSA email address" do
-        user = FactoryGirl.create(:user, email_address: 'intruder@some.com')
+        user = FactoryGirl.create(:user, email_address: 'intruder@some.com', client_slug: 'ncr')
         login_as(user)
 
         visit '/ncr/work_orders/new'
 
-        expect(current_path).to eq('/proposals')
+        expect(page.status_code).to eq(403)
         expect(page).to have_content("You must be logged in with a GSA email address")
       end
     end
