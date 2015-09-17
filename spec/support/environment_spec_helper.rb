@@ -1,6 +1,8 @@
 module EnvironmentSpecHelper
   # @todo rewrite using with_env_vars
   def with_18f_procurement_env_variables
+    ENV['DISABLE_SANDBOX_WARNING'] = 'true'
+
     old_approver_email = ENV['GSA18F_APPROVER_EMAIL']
     old_purchaser_email = ENV['GSA18F_PURCHASER_EMAIL']
 

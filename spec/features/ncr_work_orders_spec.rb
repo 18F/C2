@@ -1,4 +1,9 @@
 describe "National Capital Region proposals" do
+  around(:each) do |example|
+    with_env_var('DISABLE_SANDBOX_WARNING', 'true') do
+      example.run
+    end
+  end
   let!(:approver) { FactoryGirl.create(:user) }
   describe "creating a work order" do
     it "requires sign-in" do
