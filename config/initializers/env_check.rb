@@ -22,8 +22,4 @@ if default_url_host.nil? && Rails.env.production?
   raise "Please set DEFAULT_URL_HOST"
 end
 
-if ENV['FORCE_USER_ID'] && Rails.env.production?
-  raise "FORCE_USER_ID not allowed in production environment"
-end
-
 DEFAULT_URL_HOST = default_url_host || ENV['HOST_URL'] || 'localhost'
