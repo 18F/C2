@@ -1,5 +1,5 @@
 describe "National Capital Region proposals" do
-  let!(:approver) { FactoryGirl.create(:user) }
+  let!(:approver) { FactoryGirl.create(:user, client_slug: 'ncr') }
   describe "creating a work order" do
     it "requires sign-in" do
       visit '/ncr/work_orders/new'
