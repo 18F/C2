@@ -25,6 +25,7 @@ describe User do
     end
 
     it "returns true when the user is a client admin" do
+      user.save!
       user.add_role('client_admin')
       expect(user).to be_a_client_admin
     end
@@ -54,6 +55,10 @@ describe User do
   end
 
   describe 'roles' do
+    before do
+      user.save!
+    end
+
     it "can be assigned a role" do
       role = FactoryGirl.build(:role)
       user.add_role(role)
@@ -61,9 +66,9 @@ describe User do
     end
 
     it "can be assigned a role by role name" do
-      role = FactoryGirl.build(:role)
+      role = FactoryGirl.create(:role)
       user.add_role(role.name)
-      expect(user.has_role?( role )).to be_truthy 
+      expect(user.has_role?( role )).to be_truthy
     end
   end
 end
