@@ -57,7 +57,6 @@ class ApplicationController < ActionController::Base
     else
       User.find_or_create_by(email_address: session[:user]['email']) if session[:user] && session[:user]['email']
     end
-    @current_user ||= User.find_or_create_by(email_address: session[:user]['email']) if session[:user] && session[:user]['email']
   end
 
   def sign_in(user)

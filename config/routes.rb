@@ -1,6 +1,7 @@
 C2::Application.routes.draw do
   root :to => 'home#index'
   get '/error' => 'home#error'
+  get '/me'    => 'home#me'
   get '/feedback' => 'feedback#index'
   post '/feedback' => 'feedback#create'
 
