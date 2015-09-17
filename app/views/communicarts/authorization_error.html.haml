@@ -1,0 +1,8 @@
+%div.inset
+  %h1
+    Authorization error
+  %h4
+    - if flash[:notice]
+      = flash[:notice]
+    - else
+      You do not have access to this page

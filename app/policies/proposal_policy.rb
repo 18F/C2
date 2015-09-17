@@ -20,8 +20,7 @@ class ProposalPolicy
   end
 
   def can_create!
-    # TODO restrict by client_slug
-    true
+    slug_matches? || @user.admin?
   end
   alias_method :can_new!, :can_create!
 
@@ -31,6 +30,17 @@ class ProposalPolicy
   alias_method :can_cancel_form!, :can_cancel!
 
   protected
+
+  def use_case_namespace
+    cls = self.class.to_s
+    cls.gsub("::#{cls.demodulize}", '')
+  end
+
+  def slug_matches?
+    Rails.logger.debug("use_case_namespace.downcase: #{use_case_namespace.downcase}")
+    Rails.logger.debug("@user.client_slug: #{@user.client_slug}")
+    use_case_namespace.downcase == @user.client_slug
+  end
 
   def restricted?
     ENV['RESTRICT_ACCESS'] == 'true'
