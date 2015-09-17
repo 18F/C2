@@ -10,7 +10,6 @@ module Ncr
   BUILDING_NUMBERS = YAML.load_file("#{Rails.root}/config/data/ncr/building_numbers.yml")
 
   class WorkOrder < ActiveRecord::Base
-
     # must define before include PurchaseCardMixin
     def self.purchase_amount_column_name
       :amount
