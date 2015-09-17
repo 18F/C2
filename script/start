@@ -1,7 +1,5 @@
 #!/bin/sh
 
-# Script for starting the application in a server environment (rather than local development).
-
 set -e
 set -x
 
