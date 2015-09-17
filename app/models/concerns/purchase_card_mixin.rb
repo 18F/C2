@@ -1,3 +1,5 @@
+# NOTE must define class method 'purchase_amount_column_name'
+# before 'include'-ing this concern
 module PurchaseCardMixin
   extend ActiveSupport::Concern
 
