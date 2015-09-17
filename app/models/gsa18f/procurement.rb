@@ -5,24 +5,20 @@ module Gsa18f
   end
 
   DATA = YAML.load_file("#{Rails.root}/config/data/18f.yaml")
-  FY16 = Time.zone.parse('2015-10-01')
-  if Time.zone.now > FY16
-    MAX_AMOUNT = 3500.0
-  else
-    MAX_AMOUNT = 3000.0
-  end
 
   class Procurement < ActiveRecord::Base
     URGENCY = DATA['URGENCY']
     OFFICES = DATA['OFFICES']
     RECURRENCE = DATA['RECURRENCE']
 
-    include ProposalDelegate
+    # must define before include PurchaseCardMixin
+    def self.purchase_amount_column_name
+      :cost_per_unit
+    end
 
-    validates :cost_per_unit, numericality: {
-      greater_than_or_equal_to: 0,
-      less_than_or_equal_to: MAX_AMOUNT
-    }
+    include ProposalDelegate
+    include PurchaseCardMixin
+
     validates :quantity, numericality: {
       greater_than_or_equal_to: 1
     }

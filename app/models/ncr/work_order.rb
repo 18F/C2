@@ -8,17 +8,17 @@ module Ncr
 
   EXPENSE_TYPES = %w(BA60 BA61 BA80)
   BUILDING_NUMBERS = YAML.load_file("#{Rails.root}/config/data/ncr/building_numbers.yml")
-  FY16 = Time.zone.parse('2015-10-01')
-  if Time.zone.now > FY16
-    MAX_AMOUNT = 3500.0
-  else
-    MAX_AMOUNT = 3000.0
-  end
-  MIN_AMOUNT = 0.0
 
   class WorkOrder < ActiveRecord::Base
+
+    # must define before include PurchaseCardMixin
+    def self.purchase_amount_column_name
+      :amount
+    end
+
     include ValueHelper
     include ProposalDelegate
+    include PurchaseCardMixin
 
     # This is a hack to be able to attribute changes to the correct user. This attribute needs to be set explicitly, then the update comment will use them as the "commenter". Defaults to the requester.
     attr_accessor :modifier
@@ -27,15 +27,6 @@ module Ncr
     before_validation :normalize_values
     before_update :record_changes
 
-    # @TODO: use integer number of cents to avoid floating point issues
-    validates :amount, numericality: {
-      less_than_or_equal_to: MAX_AMOUNT,
-      message: "must be less than or equal to #{ActiveSupport::NumberHelper.number_to_currency(MAX_AMOUNT)}"
-    }
-    validates :amount, numericality: {
-      greater_than_or_equal_to: MIN_AMOUNT,
-      message: "must be greater than or equal to #{ActiveSupport::NumberHelper.number_to_currency(MIN_AMOUNT)}"
-    }
     validates :cl_number, format: {
       with: /\ACL\d{7}\z/,
       message: "must start with 'CL', followed by seven numbers"

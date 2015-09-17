@@ -105,7 +105,7 @@ describe Ncr::WorkOrdersController do
       Timecop.freeze(Time.zone.parse('2015-10-02')) do
 
         # must reload class for time travel to affect validations
-        ['EXPENSE_TYPES', 'BUILDING_NUMBERS', 'MAX_AMOUNT', 'MIN_AMOUNT', 'FY16', 'WorkOrder'].each do |const|
+        ['EXPENSE_TYPES', 'BUILDING_NUMBERS', 'WorkOrder'].each do |const|
           Ncr.send(:remove_const, const)
         end
         load 'app/models/ncr/work_order.rb'
