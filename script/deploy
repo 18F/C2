@@ -1,5 +1,8 @@
 #!/bin/sh
 
+USAGE="$0: appname"
+if [ $# -lt 1 ]; then echo "Error: appname is required.\n$USAGE" >&2; exit 1; fi
+
 set -e
 set -x
 
