@@ -5,5 +5,5 @@
 set -e
 set -x
 
-bin/rake cf:on_first_instance db:migrate
+bin/rake cf:on_first_instance db:migrate db:seed
 foreman start -p $PORT
