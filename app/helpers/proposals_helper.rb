@@ -7,7 +7,7 @@ module ProposalsHelper
         month_name = I18n.t('date.abbr_month_names')[start_date.month]
         "(#{month_name} #{start_date.year})"
       else
-        "(#{start_date.iso8601} - #{end_date.iso8601})"
+        "(#{start_date.strftime('%Y-%m-%d')} - #{end_date.strftime('%Y-%m-%d')})"
       end
     end
   end
