@@ -13,5 +13,7 @@ development:
   database: c2_development
 test:
   <<: *default
-  url: postgresql://localhost/c2_test
+# use 'url' rather than 'database' so that DATABASE_URL env var is not merged in.
+# see URL at top of this file for docs.
+  url: <% ENV['TEST_DATABASE_URL'] || 'postgresql://localhost/c2_test' %>
 production: *default
