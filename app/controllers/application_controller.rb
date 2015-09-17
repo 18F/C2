@@ -25,8 +25,12 @@ class ApplicationController < ActionController::Base
       # the method might raise its own exception, or it might return a
       # boolean. Both systems are accommodated
       # will need to replace this when a new version of pundit arrives
-      ex = NotAuthorizedError.new("not allowed to #{q} this #{record}")
-      ex.query, ex.record, ex.policy = q, record, pol
+      ex = NotAuthorizedError.new(
+        query: query,
+        record: record,
+        policy: policy,
+        message: "not allowed to #{query} this #{record}"
+      )
       raise ex
     end
   end
