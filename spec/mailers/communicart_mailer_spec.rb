@@ -33,6 +33,11 @@ describe CommunicartMailer do
         expect(mail[header].value).to eq("<proposal-#{proposal.id}@#{DEFAULT_URL_HOST}>")
       end
     end
+
+    it "generates a multipart message (plain text and html)" do
+      # http://stackoverflow.com/a/6934231
+      expect(mail.body.parts.collect(&:content_type)).to match_array ["text/plain; charset=UTF-8", "text/html; charset=UTF-8"]
+    end
   end
 
   describe 'actions_for_approver' do
@@ -286,5 +291,11 @@ describe CommunicartMailer do
       mail = CommunicartMailer.proposal_created_confirmation(wo.proposal)
       expect(mail.subject).to eq("Request #{wo.public_identifier}, P0000000, DC0000ZZ from someone@somewhere.gov")
     end
+  end
+
+  describe 'new_attachment_email' do
+    let(:mail) { CommunicartMailer.new_attachment_email(requester.email_address, proposal) }
+
+    it_behaves_like "a Proposal email"
   end
 end
