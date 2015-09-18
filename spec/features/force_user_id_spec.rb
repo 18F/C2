@@ -8,15 +8,13 @@ describe "Acts as a different User in request" do
     expect(page.find('h2')).to have_content(wo.proposal.requester.email_address)
   end
 
-  # can't use with_env() here because we need to use factory User object as env var value
   it "respects FORCE_USER_ID to override current_user" do
-    ENV['FORCE_USER_ID'] = user.id.to_s
-    wo = FactoryGirl.create(:ncr_work_order, :with_approvers)
-    login_as(wo.proposal.requester)
-    visit '/me'
-    expect(page.find('h2')).to have_content(user.email_address)
-    # IMPORTANT to undo when we are done
-    ENV.delete('FORCE_USER_ID')
+    with_env_var('FORCE_USER_ID', user.id.to_s) do
+      wo = FactoryGirl.create(:ncr_work_order, :with_approvers)
+      login_as(wo.proposal.requester)
+      visit '/me'
+      expect(page.find('h2')).to have_content(user.email_address)
+    end
   end
 
 end
