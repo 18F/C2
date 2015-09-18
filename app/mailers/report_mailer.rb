@@ -16,18 +16,20 @@ class ReportMailer < ApplicationMailer
 
   private
 
-  # rubocop:disable AbcSize, TrailingComma
-  def build_attachments
-    date = Time.now.utc.strftime('%Y-%m-%d')
+  def csv_resports
     { 'approved-ba60-week' => Ncr::Reporter.as_csv(Ncr::Reporter.ba60_proposals),
       'approved-ba61-week' => Ncr::Reporter.as_csv(Ncr::Reporter.ba61_proposals),
       'approved-ba80-week' => Ncr::Reporter.as_csv(Ncr::Reporter.ba80_proposals),
       'pending-at-approving-official' => Ncr::Reporter.as_csv(Ncr::Reporter.proposals_pending_approving_official),
       'pending-at-budget' => Ncr::Reporter.as_csv(Ncr::Reporter.proposals_pending_budget),
       'pending-at-tier-one-approval' => Ncr::Reporter.as_csv(Ncr::Reporter.proposals_tier_one_pending),
-    }.each do |name, csv|
+    }
+  end
+
+  def build_attachments
+    date = Time.now.utc.strftime('%Y-%m-%d')
+    csv_reports.each do |name, csv|
       attachments[name + '-' + date + '.csv'] = csv
     end
   end
-  # rubocop:enable all
 end
