@@ -38,7 +38,7 @@ and [view the doc folder](https://github.com/18F/C2/tree/master/doc).
 1. Create a Pull Request. The PR should reference the story URL and include a brief description
 of the changes, including any rationale for how/why the story is addressed in the way it is. Use the format
 `[#STORYID]` or `[Delivers #STORYID]` or `[Fixes #STORYID]` in the PR title. 
-See the [story tracker documentation](https://www.pivotaltracker.com/help/api?version=v5#Tracker_Updates_in_SCM_Post_Commit_Hooks).
+See the [story tracker documentation](https://www.pivotaltracker.com/help/api?version=v5#Tracker_Updates_in_SCM_Post_Commit_Hooks). Consider adding any notes relevant to testing the change, especially for live QA testing.
 
 1. Click **Finish** on the story in the story tracker.
 
@@ -53,15 +53,16 @@ of work-in-progress.
 Check with your teammates to see which environment might already be in use.
 Example flow:
 
-  1. `% cd /tmp && mkdir deploy-qa && cd deploy-qa`
-  1. `% git clone git@github.com:18F/C2.git`
-  1. `% cd C2`
-  1. `% git checkout -b qa-123456-fix-timezones`
-  1. `% git merge -m 'temp qa branch' origin/123456-fix-timezones`
-  1. `% script/deploy c2-dev`
+  ```
+  % cd /tmp && mkdir deploy-qa && cd deploy-qa
+  % git clone git@github.com:18F/C2.git
+  % cd C2
+  % git checkout -b qa-123456-fix-timezones
+  % git merge -m 'temp qa branch' origin/123456-fix-timezones
+  % script/deploy c2-dev
+  ```
 
-1. The Reviewer should test out the bugfix or new functionality. The Owner might provide testing
-advice as part of the PR description.
+1. The Reviewer should test out the bugfix or new functionality.
 
 1. If there are any problems, the Reviewer should comment on the PR and assign it to the Owner for follow-up.
 The Owner should fix the problems and assign back to the Reviewer, who can then repeat the testing steps above.
