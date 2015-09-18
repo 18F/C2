@@ -220,7 +220,7 @@ describe CommunicartMailer do
       proposal = FactoryGirl.create(:proposal, :with_observer)
       observation = proposal.observations.first
 
-      mail = CommunicartMailer.on_observer_added(observation)
+      mail = CommunicartMailer.on_observer_added(observation, nil)
 
       observer = observation.user
       expect(mail.to).to eq([observer.email_address])
@@ -234,7 +234,7 @@ describe CommunicartMailer do
       observation = proposal.observations.first
       expect(observation.created_by).to eq(adder)
 
-      mail = CommunicartMailer.on_observer_added(observation)
+      mail = CommunicartMailer.on_observer_added(observation, nil)
       expect(mail.body.encoded).to include("to this request by #{adder.full_name}")
     end
 
@@ -242,8 +242,20 @@ describe CommunicartMailer do
       proposal = FactoryGirl.create(:proposal, :with_observer)
       observation = proposal.observations.first
 
-      mail = CommunicartMailer.on_observer_added(observation)
+      mail = CommunicartMailer.on_observer_added(observation, nil)
       expect(mail.body.encoded).to_not include("to this request by ")
+    end
+
+    it "includes the reason, if there is one" do
+      proposal = FactoryGirl.create(:proposal)
+      observer = FactoryGirl.create(:user)
+      adder = FactoryGirl.create(:user)
+      reason = 'is an absolute ledge'
+      proposal.add_observer(observer, adder, reason)
+      observation = proposal.observations.first
+
+      mail = CommunicartMailer.on_observer_added(observation, reason)
+      expect(mail.body.encoded).to include("with given reason '#{reason}'")
     end
   end
 
