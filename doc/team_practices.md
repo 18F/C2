@@ -42,20 +42,40 @@ See the [story tracker documentation](https://www.pivotaltracker.com/help/api?ve
 
 1. Click **Finish** on the story in the story tracker.
 
-1. Someone from the team should review the PR. If you do not get feedback within 24 hours, assign the PR to a team member.
-The Reviewer is encouraged to indicate a "Ship it" (or your favorite Ship It emoticon) before merging the pull request. 
-Consider pointing out the awesomeness of your teammate's code, too.
+1. Someone from the team should review the PR. If you do not get feedback within 24 hours, 
+assign the PR to a team member for review. The Reviewer should consider the automated
+testing status and Code Climate reports, in addition to checking the code for architectural
+consistency, style and legibility. Code reviews are encouraged early in the development process;
+you can always create a PR with a `[WIP]` prefix before you are ready to deliver, and ask for review
+of work-in-progress.
 
-1. The Reviewer merges the PR. Pro tip: If the PR title follows the conventions above, 
+1. The Reviewer should also test the code. This can be done on the `c2-dev` or `c2-staging` environment.
+Check with your teammates to see which environment might already be in use.
+Example flow:
+
+  1. `% cd /tmp && mkdir deploy-qa && cd deploy-qa`
+  1. `% git clone git@github.com:18F/C2.git`
+  1. `% cd C2`
+  1. `% git checkout -b qa-123456-fix-timezones`
+  1. `% git merge -m 'temp qa branch' origin/123456-fix-timezones`
+  1. `% script/deploy c2-dev`
+
+1. The Reviewer should test out the bugfix or new functionality. The Owner might provide testing
+advice as part of the PR description.
+
+1. If there are any problems, the Reviewer should comment on the PR and assign it to the Owner for follow-up.
+The Owner should fix the problems and assign back to the Reviewer, who can then repeat the testing steps above.
+
+1. When the Reviewer is satisfied, s/he merges the PR to `master`. 
+The Reviewer is encouraged to indicate a "Ship it" (or your favorite Ship It emoticon) before merging the pull request. Consider pointing out the awesomeness of the code, too.
+Pro tip: If the PR title follows the conventions mentioned above, 
 the story tracker status will change to **Accept or Reject** when the PR is merged. 
 Otherwise, the Reviewer should click **Deliver** in the story tracker.
 
-1. The Reviewer will test branch in dev or staging environment(s).
-
-1. The Reviewer will click **Accept** or **Reject** on story tracker. If the story is rejected, 
-and the change has introduced an error, the code must be rolled back as well. 
-For this reason, you may prefer to merge into a copy of the master branch (e.g. `master-rc1`) and
-perform QA on the copy.
+1. The Reviewer will click **Accept** or **Reject** on story tracker. An **Accept** means the code is merged
+to master and ready for production deploy at any time. Typically **Reject** indicates
+that the testing passed but for some reason the solution is not sufficient, and needs work at the
+story level. 
 
 1. If the change was rejected, the Owner can click **Restart** in the story tracker and take another pass at fixing
 whatever was wrong. This cycle then repeats with the **Finish** step.
