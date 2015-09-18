@@ -22,34 +22,30 @@ class User < ActiveRecord::Base
 
   # this is for user_roles specifically, not proposals or any other objects for which
   # this user might have roles.
-  # rubocop:disable all
+  # rubocop:disable Style/PredicateName
   def has_role?(name_or_role)
     if name_or_role.is_a?(Role)
-      user_roles.any? { |ur| ur.role.name == name_or_role.name }
+      self.roles.include?(name_or_role)
     else
-      user_roles.any? { |ur| ur.role.name == name_or_role }
+      self.roles.exists?(name: name_or_role)
     end
   end
-  # rubocop:enable all
+  # rubocop:enable Style/PredicateName
 
   def add_role(name_or_role)
-    return if has_role?(name_or_role)
-
     if name_or_role.is_a?(Role)
       role = name_or_role
     else
-      role = Role.find_or_create_by(name: name_or_role)
+      role = Role.find_or_create_by!(name: name_or_role)
     end
-    user_role = UserRole.new(role: role)
-    user_roles << user_role
+    self.user_roles.find_or_create_by!(role: role)
   end
 
   def self.with_role(name_or_role)
-    role = nil
     if name_or_role.is_a?(Role)
       role = name_or_role
     else
-      role = Role.find_or_create_by(name: name_or_role)
+      role = Role.find_or_create_by!(name: name_or_role)
     end
     role.users
   end
