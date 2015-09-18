@@ -5,10 +5,9 @@ class ObservationsController < ApplicationController
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
 
   def create
-    Dispatcher.on_observer_added(
-      @proposal.add_observer(observer_email, current_user, params[:observation][:reason]),
-      params[:observation][:reason])
-    flash[:success] = "#{observation.user.full_name} has been added as an observer"
+    obs = @proposal.add_observer(observer_email, current_user, params[:observation][:reason])
+    Dispatcher.on_observer_added(obs, params[:observation][:reason])
+    flash[:success] = "#{obs.user.full_name} has been added as an observer"
     redirect_to proposal_path(@proposal)
   end
 
