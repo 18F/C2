@@ -37,8 +37,6 @@ class ProposalPolicy
   end
 
   def slug_matches?
-    #Rails.logger.debug("use_case_namespace.downcase: #{use_case_namespace.downcase}")
-    #Rails.logger.debug("@user.client_slug: #{@user.client_slug}")
     use_case_namespace.downcase == @user.client_slug
   end
 
