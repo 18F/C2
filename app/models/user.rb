@@ -92,6 +92,10 @@ class User < ActiveRecord::Base
 
   def self.with_email_role_slug!(email, role, slug)
     user = User.for_email(email)
+    # if no change necessary, return early (idempotent)
+    if user.client_slug == slug && user.has_role?(role)
+      return user
+    end
     user.client_slug = slug
     user.add_role(role)
     user.save!
