@@ -13,3 +13,15 @@ C2::Application.config.action_mailer.default_url_options ||= {
   host: DEFAULT_URL_HOST,
   port: ENV['DEFAULT_URL_PORT'] || default_port
 }
+
+# indicate that this is not a real request in the email subjects,
+# if we are running in non-production env.
+# NOTE that staging uses Rails.env.production, so cannot rely on that config.
+unless ENV['DISABLE_SANDBOX_WARNING'] == 'true'
+  class PrefixEmailSubject
+    def self.delivering_email(mail)
+      mail.subject = "[TEST] " + mail.subject
+    end
+  end
+  ActionMailer::Base.register_interceptor(PrefixEmailSubject)
+end
