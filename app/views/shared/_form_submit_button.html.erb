@@ -1,0 +1,5 @@
+<% if ENV['DISABLE_SANDBOX_WARNING'] == 'true' %>
+  <%= form.submit class: 'form-button' %>
+<% else %>
+  <%= form.submit value: 'Submit test request for approval', class: 'form-button' %>
+<% end %>
