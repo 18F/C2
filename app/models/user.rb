@@ -45,7 +45,7 @@ class User < ActiveRecord::Base
     if name_or_role.is_a?(Role)
       name_or_role.users
     else
-      User.joins(:roles).where(roles: {name: name_or_role})
+      User.joins(:roles).where(roles: { name: name_or_role })
     end
   end
 
