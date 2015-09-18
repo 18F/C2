@@ -54,6 +54,26 @@ describe User do
     end
   end
 
+  describe '.with_role' do
+    it "returns all users with a particular Role" do
+      user1 = FactoryGirl.create(:user)
+      user1.add_role('foo')
+      user2 = FactoryGirl.create(:user)
+      user2.add_role('bar')
+
+      expect(User.with_role('bar')).to eq([user2])
+    end
+
+    it "returns all users with a particular role name" do
+      user1 = FactoryGirl.create(:user)
+      user1.add_role('foo')
+      user2 = FactoryGirl.create(:user)
+      user_role = user2.add_role('bar')
+
+      expect(User.with_role(user_role.role)).to eq([user2])
+    end
+  end
+
   describe 'roles' do
     before do
       user.save!
