@@ -12,6 +12,7 @@ module PurchaseCardMixin
       end
     end
 
+    # rubocop:disable TrailingComma
     def self.max_amount
       fiscals = {
         2015      => 3000,
@@ -22,6 +23,8 @@ module PurchaseCardMixin
       this_fiscal = self.which_fiscal_year(now.year, now.month)
       fiscals[this_fiscal] || fiscals['default']
     end
+    # rubocop:enable all
+
     validates name.constantize.purchase_amount_column_name, numericality: {
       less_than_or_equal_to: name.constantize.max_amount,
       message: "must be less than or equal to #{ActiveSupport::NumberHelper.number_to_currency(name.constantize.max_amount)}"
