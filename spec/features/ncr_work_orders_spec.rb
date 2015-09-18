@@ -20,7 +20,7 @@ describe "National Capital Region proposals" do
     end
 
     context "when signed in as the requester" do
-      let(:requester) { FactoryGirl.create(:user) }
+      let(:requester) { FactoryGirl.create(:user, client_slug: 'ncr') }
       let(:ncr_helper_class) { Class.new { extend Ncr::WorkOrdersHelper } }
 
       before do
@@ -368,7 +368,7 @@ describe "National Capital Region proposals" do
     end
 
     it "does not show a edit link for non requester" do
-      ncr_proposal.set_requester(FactoryGirl.create(:user))
+      ncr_proposal.set_requester(FactoryGirl.create(:user, client_slug: 'ncr'))
       visit "/proposals/#{ncr_proposal.id}"
       expect(page).not_to have_content('Modify Request')
     end
@@ -629,7 +629,7 @@ describe "National Capital Region proposals" do
     end
 
     it "cannot be edited by someone other than the requester" do
-      stranger = FactoryGirl.create(:user)
+      stranger = FactoryGirl.create(:user, client_slug: 'ncr')
       login_as(stranger)
 
       visit "/ncr/work_orders/#{work_order.id}/edit"
@@ -641,7 +641,7 @@ describe "National Capital Region proposals" do
   describe "delegate on a work order" do
     let(:work_order) { FactoryGirl.create(:ncr_work_order, description: 'test') }
     let(:proposal) { work_order.proposal }
-    let(:delegate) { FactoryGirl.create(:user) }
+    let(:delegate) { FactoryGirl.create(:user, client_slug: 'ncr') }
 
     before do
       work_order.setup_approvals_and_observers('approver@example.com')
