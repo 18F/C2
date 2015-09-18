@@ -10,7 +10,7 @@ def with_env_vars_runner(env)
   env = env.stringify_keys
   old_values = {}
   env.each_key { |k| old_values[k] = ENV[k] }
-  env.each { |k, v| ENV[k] = v }
+  env.each { |k, v| ENV[k] = v.to_s }
   yield
   old_values.each { |k, v| ENV[k] = v }
 end
