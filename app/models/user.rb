@@ -43,15 +43,14 @@ class User < ActiveRecord::Base
 
   def self.with_role(name_or_role)
     if name_or_role.is_a?(Role)
-      role = name_or_role
+      name_or_role.users
     else
-      role = Role.find_or_create_by!(name: name_or_role)
+      User.joins(:roles).where(roles: {name: name_or_role})
     end
-    role.users
   end
 
   def self.sql_for_role_slug(role, slug)
-    User.select(:id).joins(:roles).where(client_slug: slug, roles: { name: role }).to_sql
+    self.with_role(role).select(:id).where(client_slug: slug).to_sql
   end
 
   def full_name
