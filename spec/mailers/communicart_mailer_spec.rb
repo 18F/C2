@@ -78,7 +78,7 @@ describe CommunicartMailer do
     it "creates a new token" do
       expect(proposal.api_tokens).to eq([])
 
-      Timecop.freeze do
+      Timecop.freeze(Time.zone.now) do
         mail.deliver_now
         approval.reload
         expect(approval.api_token.expires_at).to be_within(1.second).of(7.days.from_now)
