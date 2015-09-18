@@ -22,11 +22,11 @@ describe "Tabular data sorting" do
   end
 
   context 'home page' do
-    it 'begins sorted by -created_at' do
+    it 'pending begins sorted by -status, others by -created-at' do
       visit '/proposals'
 
       within(tables[0]) do
-        expect(find("th.desc")).to have_content "Submitted"
+        expect(find("th.desc")).to have_content "Status"
       end
       expect_order(tables[0], proposals.reverse)
 

@@ -18,12 +18,19 @@ module TabularData
 
     # @todo filtering, paging, etc.
     def rows
+      return @rows if @rows
       results = @query
       if @sort && !@frozen_sort
         results = results.order(@sort)
       end
       results
     end
+
+    # rubocop:disable all
+    def rows=(new_rows)
+      @rows = new_rows
+    end
+    # rubocop:enable all
 
     def set_state_from_params(params)
       relevant = params.permit(tables: {@name => [:sort]})
@@ -53,8 +60,6 @@ module TabularData
       container_yaml[key].deep_symbolize_keys
     end
 
-    protected
-
     def set_sort(field)
       field = field || ''
       dir = field.start_with?('-') ? :desc : :asc
@@ -68,6 +73,8 @@ module TabularData
         end
       end
     end
+
+    protected
 
     def init_query(engine, joins)
       @query = engine.all()     # convert into a query

@@ -5,6 +5,8 @@ AllCops:
   RunRailsCops: true
 Metrics/LineLength:
   Enabled: false
+Metrics/ClassLength:
+  Enabled: false
 Style/CommentAnnotation:
   Enabled: false
 Style/Documentation:
