@@ -131,7 +131,7 @@
         </div>
       <% end %>
     <% end %>
-    <%= f.submit class: 'form-button' %>
+    <%= render partial: "shared/form_submit_button", locals: { form: f } %>
     <% if @model_instance.persisted? %>
       <%= link_to 'Discard Changes', proposal_url(@model_instance.proposal) %>
     <% end %>
