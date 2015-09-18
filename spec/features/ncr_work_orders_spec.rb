@@ -4,7 +4,9 @@ describe "National Capital Region proposals" do
       example.run
     end
   end
+
   let!(:approver) { FactoryGirl.create(:user) }
+
   describe "creating a work order" do
     it "requires sign-in" do
       visit '/ncr/work_orders/new'
@@ -449,7 +451,7 @@ describe "National Capital Region proposals" do
         select "liono0@some-cartoon-show.com", from: "Approving official's email address"
         click_on 'Update'
         proposal = Proposal.last
-        
+
         expect(proposal.approvers.first.email_address).to eq ("liono0@some-cartoon-show.com")
         expect(proposal.individual_approvals.first.actionable?).to eq (true)
       end
@@ -470,7 +472,7 @@ describe "National Capital Region proposals" do
 
             ncr_proposal.reload
             work_order.reload
-            
+
             expect(ncr_proposal.approvers.map(&:email_address)).to eq([
               approving_official.email_address,
               Ncr::WorkOrder.ba61_tier2_budget_mailbox
@@ -549,7 +551,7 @@ describe "National Capital Region proposals" do
           visit "/ncr/work_orders/#{work_order.id}/edit"
           fill_in 'Description', with:"New Description that shouldn't change the approver list"
           click_on 'Update'
-  
+
           proposal.reload
           second_approver = proposal.approvers.second.email_address
           expect(second_approver).to eq('delegate@example.com')
