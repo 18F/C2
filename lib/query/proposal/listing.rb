@@ -51,11 +51,11 @@ module Query
       protected
 
       def pending_filter
-        Proc.new { |proposals| proposals.select { |p| !p.awaiting_approver?(self.user) } }
+        proc { |proposals| proposals.select { |p| !p.awaiting_approver?(self.user) } }
       end
 
       def pending_review_filter
-        Proc.new { |proposals| proposals.select { |p| p.awaiting_approver?(self.user) } } 
+        proc { |proposals| proposals.select { |p| p.awaiting_approver?(self.user) } }
       end
 
       def proposals_container(name, extra_config = {})
