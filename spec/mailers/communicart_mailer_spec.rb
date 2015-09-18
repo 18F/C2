@@ -5,10 +5,9 @@ describe CommunicartMailer do
   end
 
   around(:each) do |example|
-    old_val = ENV['NOTIFICATION_FROM_EMAIL']
-    ENV['NOTIFICATION_FROM_EMAIL'] = 'reply@stub.gov'
-    example.run
-    ENV['NOTIFICATION_FROM_EMAIL'] = old_val
+    with_env_var('NOTIFICATION_FROM_EMAIL', 'reply@stub.gov') do
+      example.run
+    end
   end
 
   let(:proposal) { FactoryGirl.create(:proposal, :with_parallel_approvers) }

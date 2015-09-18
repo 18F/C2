@@ -29,6 +29,7 @@ module ApprovalSteps
   end
 
   step "feature flag :flag_name is :value" do |flag, value|
+    # TODO make sure this is reset after the run
     ENV[flag] = value
   end
 
