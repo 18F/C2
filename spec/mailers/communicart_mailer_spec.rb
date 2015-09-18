@@ -5,10 +5,9 @@ describe CommunicartMailer do
   end
 
   around(:each) do |example|
-    old_val = ENV['NOTIFICATION_FROM_EMAIL']
-    ENV['NOTIFICATION_FROM_EMAIL'] = 'reply@stub.gov'
-    example.run
-    ENV['NOTIFICATION_FROM_EMAIL'] = old_val
+    with_env_var('NOTIFICATION_FROM_EMAIL', 'reply@stub.gov') do
+      example.run
+    end
   end
 
   let(:proposal) { FactoryGirl.create(:proposal, :with_parallel_approvers) }
@@ -79,7 +78,7 @@ describe CommunicartMailer do
     it "creates a new token" do
       expect(proposal.api_tokens).to eq([])
 
-      Timecop.freeze do
+      Timecop.freeze(Time.zone.now) do
         mail.deliver_now
         approval.reload
         expect(approval.api_token.expires_at).to be_within(1.second).of(7.days.from_now)

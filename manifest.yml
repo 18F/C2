@@ -4,7 +4,7 @@
 # NOTE: any changes to this file require running `cf push <appname>` directly, rather than `cf-blue-green <appname>`.
 
 # general configuration
-command: script/server_start
+command: script/start
 domain: 18f.gov
 instances: 1
 memory: 1G
