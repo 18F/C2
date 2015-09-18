@@ -1,11 +1,12 @@
 module TabularData
   class Container
-    attr_reader :columns, :frozen_sort
+    attr_reader :columns, :frozen_sort, :filter
 
     def initialize(name, config)
       @name = name
       # useful if the sort is set via alter_query
       @frozen_sort = config.fetch(:frozen_sort, false)
+      @filter = config.fetch(:filter, false)
       self.init_query(config[:engine].constantize, config.fetch(:joins, []))
       self.init_columns(config.fetch(:column_configs, {}), config.fetch(:columns, {}))
       self.set_sort(config[:sort])
@@ -22,7 +23,15 @@ module TabularData
       if @sort && !@frozen_sort
         results = results.order(@sort)
       end
-      results
+      apply_filter results
+    end
+
+    def apply_filter(results)
+      if @filter
+        @filter.call results
+      else
+        results
+      end
     end
 
     def set_state_from_params(params)

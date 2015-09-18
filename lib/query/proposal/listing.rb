@@ -10,7 +10,11 @@ module Query
       end
 
       def pending
-        self.index_visible_container(:pending).alter_query(&:pending)
+        self.index_visible_container(:pending, filter: self.pending_filter).alter_query(&:pending)
+      end
+
+      def pending_review
+        self.index_visible_container(:pending_review, filter: self.pending_review_filter).alter_query(&:pending)
       end
 
       def approved
@@ -46,6 +50,14 @@ module Query
 
       protected
 
+      def pending_filter
+        Proc.new { |proposals| proposals.select { |p| !p.awaiting_approver?(self.user) } }
+      end
+
+      def pending_review_filter
+        Proc.new { |proposals| proposals.select { |p| p.awaiting_approver?(self.user) } } 
+      end
+
       def proposals_container(name, extra_config = {})
         config = TabularData::Container.config_for_client("proposals", self.user.client_slug)
         config = config.merge(extra_config)
@@ -60,8 +72,8 @@ module Query
       end
 
       # returns a Container that is limited to what the user should see on /proposals, even if the ProposalPolicy::Scope allows them to see more
-      def index_visible_container(name)
-        container = self.proposals_container(name)
+      def index_visible_container(name, config = {})
+        container = self.proposals_container(name, config)
         container.alter_query do |rel|
           condition = Query::Proposal::Clauses.which_involve(self.user)
           rel.where(condition)
