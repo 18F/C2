@@ -91,6 +91,7 @@ class User < ActiveRecord::Base
 
   def self.exists_with_role_slug?(role, slug)
     the_role = role.is_a?(Role) ? role : Role.find_by_name(role)
+    return false unless the_role
     triple_exists = false
     the_role.users.each do |u|
       if u.client_slug == slug
