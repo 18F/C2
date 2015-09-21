@@ -28,7 +28,7 @@ describe ApiTokenPolicy do
     end
 
     it "fails when the token has expired" do
-      token.update_attributes(expires_at: 8.days.ago)
+      token.expire!
       expect(subject).not_to permit(approval_params_with_token, :api_token)
     end
 

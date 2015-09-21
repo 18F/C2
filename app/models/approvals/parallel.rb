@@ -9,6 +9,7 @@ module Approvals
 
       state :pending do
         event :initialize, transitions_to: :actionable
+        event :restart, transitions_to: :pending
       end
 
       state :actionable do
@@ -21,6 +22,7 @@ module Approvals
           halt unless self.children_approved?
         end
         event :force_approve, transitions_to: :approved
+        event :restart, transitions_to: :pending
       end
 
       state :approved do
@@ -34,6 +36,8 @@ module Approvals
         event :child_approved, transitions_to: :approved do |_|
           halt  # additional approvals do nothing
         end
+
+        event :restart, transitions_to: :pending
       end
     end
 

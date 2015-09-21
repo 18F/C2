@@ -29,6 +29,9 @@ class ApiToken < ActiveRecord::Base
     self.update_attributes!(used_at: Time.zone.now)
   end
 
+  def expire!
+    self.update(expires_at: Time.zone.now)
+  end
 
   private
 

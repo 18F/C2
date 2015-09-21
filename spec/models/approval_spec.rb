@@ -15,7 +15,7 @@ describe Approval do
     end
 
     it "returns nil if the token's expired" do
-      token.update_attribute(:expires_at, 1.day.ago)
+      token.expire!
       approval.reload
       expect(approval.api_token).to eq(nil)
     end
@@ -81,7 +81,7 @@ describe Approval do
         Approvals::Individual.new(user: erin)
       ])
       proposal.root_approval = Approvals::Parallel.new(min_children_needed: 2, child_approvals: [
-        and_clause, 
+        and_clause,
         Approvals::Individual.new(user: carrie),
         then_clause
       ])
