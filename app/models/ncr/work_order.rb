@@ -114,6 +114,10 @@ module Ncr
       self.approvers.first
     end
 
+    def approving_official_email_address
+      approving_official ? approving_official.email_address : self.system_approver_emails.first
+    end
+
     def email_approvers
       Dispatcher.on_proposal_update(self.proposal, self.modifier)
     end
@@ -190,19 +194,27 @@ module Ncr
     end
 
     def self.ba61_tier1_budget_mailbox
-      ENV['NCR_BA61_TIER1_BUDGET_MAILBOX'] || 'communicart.budget.approver@gmail.com'
+      self.approver_with_role('BA61_tier1_budget_approver')
     end
 
     def self.ba61_tier2_budget_mailbox
-      ENV['NCR_BA61_TIER2_BUDGET_MAILBOX'] || 'communicart.ofm.approver@gmail.com'
+      self.approver_with_role('BA61_tier2_budget_approver')
+    end
+
+    def self.approver_with_role(role_name)
+      users = User.with_role(role_name).where(client_slug: 'ncr')
+      if users.empty?
+        fail "Missing User with role #{role_name} -- did you run rake db:migrate and rake db:seed?"
+      end
+      users.first.email_address
     end
 
     def self.ba80_budget_mailbox
-      ENV['NCR_BA80_BUDGET_MAILBOX'] || 'communicart.budget.approver@gmail.com'
+      self.approver_with_role('BA80_budget_approver')
     end
 
     def self.ool_ba80_budget_mailbox
-      ENV['NCR_OOL_BA80_BUDGET_MAILBOX'] || 'communicart.budget.approver@gmail.com'
+      self.approver_with_role('OOL_BA80_budget_approver')
     end
 
     def org_id
