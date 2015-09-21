@@ -3,7 +3,7 @@ class RolesConversion
     the_role = role.is_a?(Role) ? role : Role.find_by_name(role)
     return false unless the_role
     the_role.users.exists?(client_slug: slug)
-  end 
+  end
 
   # find_or_create a User with particular email, role and slug
   # NOTE the triple is considered unique, so if a user with the role+slug
@@ -13,7 +13,7 @@ class RolesConversion
     # if no change necessary, return early (idempotent)
     if user.client_slug == slug && user.has_role?(role)
       return user
-    end 
+    end
 
     # unique triple -- check if any other user with role+slug already exists
     return if self.exists_with_role_slug?(role, slug)
@@ -22,7 +22,7 @@ class RolesConversion
     user.add_role(role)
     user.save!
     user
-  end 
+  end
 
   def self.ncr_budget_approvers
     self.ba61_tier1_budget_approver
