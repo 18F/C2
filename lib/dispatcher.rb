@@ -19,8 +19,8 @@ class Dispatcher
     end
   end
 
-  def on_observer_added(observation)
-    CommunicartMailer.on_observer_added(observation).deliver_later
+  def on_observer_added(observation, reason)
+    CommunicartMailer.on_observer_added(observation, reason).deliver_later
   end
 
   def email_sent_confirmation(proposal)

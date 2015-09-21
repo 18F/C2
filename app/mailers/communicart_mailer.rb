@@ -32,8 +32,9 @@ class CommunicartMailer < ApplicationMailer
     )
   end
 
-  def on_observer_added(observation)
+  def on_observer_added(observation, reason)
     @observation = observation
+    @reason = reason
     observer = observation.user
 
     send_proposal_email(

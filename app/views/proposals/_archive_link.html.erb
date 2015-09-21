@@ -1,5 +1,5 @@
 <div class="col-sm-2">
-  <%- if @approved_data.rows.size > @CLOSED_PROPOSAL_LIMIT %>
+  <%- unless @approved_data.rows.size < @CLOSED_PROPOSAL_LIMIT %>
     <%= link_to "View the archive", url_for(:controller => 'proposals', :action => 'archive') %>
   <%- end %>
 </div>
