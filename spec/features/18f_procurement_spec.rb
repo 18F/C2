@@ -52,7 +52,7 @@ describe "GSA 18f Purchase Request Form" do
 
       procurement = proposal.client_data
       expect(procurement.link_to_product).to eq('http://www.amazon.com')
-      expect(procurement.date_requested).to eq('12/12/2999')
+      expect(procurement.date_requested.strftime('%m/%d/%Y')).to eq('12/12/2999')
       expect(procurement.additional_info).to eq('none')
       expect(procurement.cost_per_unit).to eq(123.45)
       expect(procurement.quantity).to eq(6)
@@ -162,7 +162,7 @@ describe "GSA 18f Purchase Request Form" do
 
       procurement = proposal.client_data
       expect(procurement.link_to_product).to eq('http://www.amazon.com')
-      expect(procurement.date_requested).to eq('12/12/2999')
+      expect(procurement.date_requested.strftime('%m/%d/%Y')).to eq('12/12/2999')
       expect(procurement.additional_info).to eq('none')
       expect(procurement.cost_per_unit).to eq(123.45)
       expect(procurement.quantity).to eq(6)

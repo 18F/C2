@@ -88,7 +88,7 @@
       <%= f.label :additional_info, 'Please include any additional information you feel we need to correctly execute the purchase' %>
       <%= f.text_area :additional_info, class: 'form-control' %>
     </div>
-    <%= f.submit class: 'form-button' %>
+    <%= render partial: "shared/form_submit_button", locals: { form: f } %>
     <% if @model_instance.persisted? %>
       <%= link_to 'Discard Changes', proposal_url(@model_instance.proposal) %>
     <% end %>

@@ -35,4 +35,20 @@ describe "Add attachments" do
     visit proposal_path(proposal)
     expect(page).not_to have_button("Delete")
   end
+
+  it "saves attachments submitted via the webform" do
+    visit proposal_path(proposal)
+    page.attach_file('attachment[file]', "#{Rails.root}/app/assets/images/bg_approved_status.gif")
+    click_on "Attach a File"
+    expect(proposal.attachments.length).to eq 2
+    expect(proposal.attachments.last.file_file_name).to eq "bg_approved_status.gif"
+  end
+
+  it "emails everyone involved in the proposal" do
+    expect(Dispatcher).to receive(:deliver_attachment_emails)
+    proposal.add_observer("wiley-cat@some-cartoon-show.com")
+    visit proposal_path(proposal)
+    page.attach_file('attachment[file]', "#{Rails.root}/app/assets/images/bg_approved_status.gif")
+    click_on "Attach a File"
+  end
 end

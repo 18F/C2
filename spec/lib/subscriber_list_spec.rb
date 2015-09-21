@@ -15,7 +15,7 @@ describe SubscriberList do
       expected_users = [proposal.requester] + proposal.approvers + proposal.observers
       expect(user_ids).to eq(expected_users.map(&:id))
       expect(roles).to eq ["Requester", "Approver", "Approver", nil, nil]
-      expect(observation_ids).to eq([nil, nil, nil] + proposal.observations.map(&:id))
+      expect(observation_ids).to eq([nil, nil, nil] + proposal.observations.map(&:id).sort)
     end
 
     it 'sorts by name within each group' do

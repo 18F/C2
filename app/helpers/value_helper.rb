@@ -4,7 +4,7 @@ module ValueHelper
   def date_with_tooltip(time, ago = false)
     # make sure we are dealing with a Time object
     unless time.is_a?(Time)
-      time = Time.zone.parse(time)
+      time = Time.zone.parse(time.to_s)
     end
 
     # timezone adjustment is handled via browser-timezone-rails gem

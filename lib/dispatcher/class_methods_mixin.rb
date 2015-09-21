@@ -40,9 +40,9 @@ class Dispatcher
         dispatcher.email_approver(approval)
       end
 
-      def on_proposal_update(proposal)
+      def on_proposal_update(proposal, modifier = nil)
         dispatcher = self.initialize_dispatcher(proposal)
-        dispatcher.on_proposal_update(proposal)
+        dispatcher.on_proposal_update(proposal, modifier)
       end
 
       def on_approver_removal(proposal, approvers)
@@ -50,9 +50,14 @@ class Dispatcher
         dispatcher.on_approver_removal(proposal, approvers)
       end
 
-      def on_observer_added(observation)
+      def on_observer_added(observation, reason)
         dispatcher = self.initialize_dispatcher(observation.proposal)
-        dispatcher.on_observer_added(observation)
+        dispatcher.on_observer_added(observation, reason)
+      end
+
+      def deliver_attachment_emails(proposal)
+        dispatcher = self.initialize_dispatcher(proposal)
+        dispatcher.deliver_attachment_emails(proposal)
       end
     end
   end
