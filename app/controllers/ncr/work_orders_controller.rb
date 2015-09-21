@@ -28,7 +28,7 @@ module Ncr
         unless @model_instance.emergency  # skip approvals if emergency
           @model_instance.setup_approvals_and_observers(@approver_email)
 
-          if @model_instance.changed.include?('amount')
+          if @model_instance.approved? && self.amount_increased?
             @model_instance.restart_budget_approvals
           end
 
@@ -76,6 +76,10 @@ module Ncr
       if self.errors.empty?
         @model_instance.setup_approvals_and_observers(@approver_email)
       end
+    end
+
+    def amount_increased?
+      @model_instance.amount_changed? && (@model_instance.amount > @model_instance.amount_was)
     end
   end
 end

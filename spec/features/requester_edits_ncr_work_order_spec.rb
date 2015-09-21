@@ -172,6 +172,15 @@ feature 'Requester edits their NCR work order' do
       fully_approve(ncr_proposal)
     end
 
+    it "doesn't require re-approval for the amount being decreased" do
+      visit "/ncr/work_orders/#{work_order.id}/edit"
+      fill_in 'Amount', with: work_order.amount - 1
+      click_on 'Update'
+
+      work_order.reload
+      expect(work_order.status).to eq('approved')
+    end
+
     it "requires re-approval for the amount being increased" do
       visit "/ncr/work_orders/#{work_order.id}/edit"
       fill_in 'Amount', with: work_order.amount + 1
