@@ -22,6 +22,7 @@ class Approval < ActiveRecord::Base
     scope status, -> { where(status: status) }
   end
   scope :non_pending, -> { where.not(status: 'pending') }
+  scope :outstanding, -> { where.not(status: 'approved') }
 
   default_scope { order('position ASC') }
 
@@ -34,7 +35,7 @@ class Approval < ActiveRecord::Base
   end
 
   def children_approved?
-    self.child_approvals.where.not(status: "approved").empty?
+    self.child_approvals.outstanding.empty?
   end
 
   def pre_order_tree_traversal
