@@ -226,8 +226,8 @@ module Ncr
     end
 
     def fiscal_year
-      year = self.created_at.nil? ? Time.now.year : self.created_at.year
-      month = self.created_at.nil? ? Time.now.month : self.created_at.month
+      year = self.created_at.nil? ? Time.zone.now.year : self.created_at.year
+      month = self.created_at.nil? ? Time.zone.now.month : self.created_at.month
       if month >= 10
         year += 1
       end
