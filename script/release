@@ -3,6 +3,10 @@
 set -e
 set -x
 
+# http://stackoverflow.com/a/677212/358804
+if ! hash cf-blue-green 2>/dev/null; then
+  npm install -g cf-blue-green
+fi
 
 TAG=$(date -u +"%Y-%m-%dT%H%M%S")
 
