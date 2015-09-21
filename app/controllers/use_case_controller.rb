@@ -60,7 +60,6 @@ class UseCaseController < ApplicationController
     end
   end
 
-
   protected
 
   def attribute_changes?

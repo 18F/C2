@@ -144,10 +144,6 @@ module Ncr
       self.individual_approvals.offset(1)
     end
 
-    def email_approvers
-      Dispatcher.on_proposal_update(self.proposal, self.modifier)
-    end
-
     # Ignore values in certain fields if they aren't relevant. May want to
     # split these into different models
     def self.relevant_fields(expense_type)
