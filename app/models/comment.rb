@@ -40,7 +40,7 @@ class Comment < ActiveRecord::Base
   end
 
   # All of the users who should be notified when a comment is created
-  # This is basically Proposal.users _minus_ future approvers
+  # This is basically Proposal.users _minus_ past approvers
   def listeners
     users_to_notify = Set.new
     users_to_notify += self.proposal.currently_awaiting_approvers
