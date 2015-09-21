@@ -1,4 +1,6 @@
 class Role < ActiveRecord::Base
-  has_many :proposals, class_name: ProposalRole
-  has_many :users, class_name: UserRole
+  has_many :proposal_roles
+  has_many :proposals, through: :proposal_roles
+  has_many :user_roles
+  has_many :users, through: :user_roles
 end

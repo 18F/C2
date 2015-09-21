@@ -10,8 +10,14 @@ module Ncr
   BUILDING_NUMBERS = YAML.load_file("#{Rails.root}/config/data/ncr/building_numbers.yml")
 
   class WorkOrder < ActiveRecord::Base
+    # must define before include PurchaseCardMixin
+    def self.purchase_amount_column_name
+      :amount
+    end
+
     include ValueHelper
     include ProposalDelegate
+    include PurchaseCardMixin
 
     # This is a hack to be able to attribute changes to the correct user. This attribute needs to be set explicitly, then the update comment will use them as the "commenter". Defaults to the requester.
     attr_accessor :modifier
@@ -20,15 +26,6 @@ module Ncr
     before_validation :normalize_values
     before_update :record_changes
 
-    # @TODO: use integer number of cents to avoid floating point issues
-    validates :amount, numericality: {
-      less_than_or_equal_to: 3000,
-      message: "must be less than or equal to $3,000"
-    }
-    validates :amount, numericality: {
-      greater_than_or_equal_to: 0,
-      message: "must be greater than or equal to $0"
-    }
     validates :cl_number, format: {
       with: /\ACL\d{7}\z/,
       message: "must start with 'CL', followed by seven numbers"
@@ -117,6 +114,10 @@ module Ncr
       self.approvers.first
     end
 
+    def approving_official_email_address
+      approving_official ? approving_official.email_address : self.system_approver_emails.first
+    end
+
     def email_approvers
       Dispatcher.on_proposal_update(self.proposal, self.modifier)
     end
@@ -193,19 +194,27 @@ module Ncr
     end
 
     def self.ba61_tier1_budget_mailbox
-      ENV['NCR_BA61_TIER1_BUDGET_MAILBOX'] || 'communicart.budget.approver@gmail.com'
+      self.approver_with_role('BA61_tier1_budget_approver')
     end
 
     def self.ba61_tier2_budget_mailbox
-      ENV['NCR_BA61_TIER2_BUDGET_MAILBOX'] || 'communicart.ofm.approver@gmail.com'
+      self.approver_with_role('BA61_tier2_budget_approver')
+    end
+
+    def self.approver_with_role(role_name)
+      users = User.with_role(role_name).where(client_slug: 'ncr')
+      if users.empty?
+        fail "Missing User with role #{role_name} -- did you run rake db:migrate and rake db:seed?"
+      end
+      users.first.email_address
     end
 
     def self.ba80_budget_mailbox
-      ENV['NCR_BA80_BUDGET_MAILBOX'] || 'communicart.budget.approver@gmail.com'
+      self.approver_with_role('BA80_budget_approver')
     end
 
     def self.ool_ba80_budget_mailbox
-      ENV['NCR_OOL_BA80_BUDGET_MAILBOX'] || 'communicart.budget.approver@gmail.com'
+      self.approver_with_role('OOL_BA80_budget_approver')
     end
 
     def org_id

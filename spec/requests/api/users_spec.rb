@@ -16,13 +16,13 @@ describe 'Users API' do
         json = get_json('/api/v1/users.json')
 
         expect(response.status).to eq(200)
-        expect(json).to eq([
+        expect(json).to include(
           {
             'created_at' => time_to_json(user.created_at),
             'id' => user.id,
             'updated_at' => time_to_json(user.updated_at)
           }
-        ])
+        )
       end
 
       it "includes the personal details when signed in" do
@@ -30,7 +30,7 @@ describe 'Users API' do
         login_as(user)
 
         json = get_json('/api/v1/users.json')
-        expect(json).to eq([
+        expect(json).to include(
           {
             'created_at' => time_to_json(user.created_at),
             'email_address' => user.email_address,
@@ -39,12 +39,12 @@ describe 'Users API' do
             'last_name' => user.last_name,
             'updated_at' => time_to_json(user.updated_at)
           }
-        ])
+        )
       end
 
-      it "responds with an empty list for no users" do
+      it "default includes seed Users" do
         json = get_json('/api/v1/users.json')
-        expect(json).to eq([])
+        expect(json.size).to eq 2
       end
 
       it "can be `limit`ed" do
@@ -64,7 +64,7 @@ describe 'Users API' do
         json = get_json('/api/v1/users.json?offset=1')
 
         ids = json.map {|user| user['id'] }
-        expect(ids).to eq(users.map(&:id)[1..-1])
+        expect(ids).to include(*users.map(&:id)[1..-1])
       end
 
       it "matches the format in the API documentation"
