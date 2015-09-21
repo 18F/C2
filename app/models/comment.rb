@@ -39,8 +39,7 @@ class Comment < ActiveRecord::Base
     self.proposal.add_observer(self.user.email_address)
   end
 
-  # All of the users who should be notified when a comment is created
-  # This is basically Proposal.users _minus_ past approvers
+  # All of the users who should be notified when a comment is created. This is basically Proposal.users _minus_ past and future approvers.
   def listeners
     users_to_notify = Set.new
     users_to_notify += self.proposal.currently_awaiting_approvers
