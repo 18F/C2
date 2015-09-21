@@ -89,38 +89,6 @@ class User < ActiveRecord::Base
     User.find_or_create_by(email_address: email.strip.downcase)
   end
 
-  def self.exists_with_role_slug?(role, slug)
-    the_role = role.is_a?(Role) ? role : Role.find_by_name(role)
-    return false unless the_role
-    triple_exists = false
-    the_role.users.each do |u|
-      if u.client_slug == slug
-        triple_exists = true
-        break
-      end
-    end
-    triple_exists
-  end
-
-  # find_or_create a User with particular email, role and slug
-  # NOTE the triple is considered unique, so if a user with the role+slug
-  # is found with another email address, no change is made and nil is returned.
-  def self.with_email_role_slug!(email, role, slug)
-    user = User.for_email(email)
-    # if no change necessary, return early (idempotent)
-    if user.client_slug == slug && user.has_role?(role)
-      return user
-    end
-
-    # unique triple -- check if any other user with role+slug already exists
-    return if self.exists_with_role_slug?(role, slug)
-
-    user.client_slug = slug
-    user.add_role(role)
-    user.save!
-    user
-  end
-
   def self.from_oauth_hash(auth_hash)
     user_data = auth_hash.extra.raw_info.to_hash
     self.find_or_create_by(email_address: user_data['email'])
