@@ -1,4 +1,13 @@
 feature 'Requester edits their NCR work order' do
+  def fully_approve(proposal)
+    proposal.individual_approvals.each do |approval|
+      approval.reload
+      approval.approve!
+    end
+    expect(proposal.reload).to be_approved # sanity check
+    deliveries.clear
+  end
+
   around(:each) do |example|
     with_env_var('DISABLE_SANDBOX_WARNING', 'true') do
       example.run
@@ -7,11 +16,11 @@ feature 'Requester edits their NCR work order' do
 
   let(:work_order) { create(:ncr_work_order, description: 'test') }
   let(:ncr_proposal) { work_order.proposal }
-  let!(:approver) { create(:user) }
+  let(:requester) { work_order.requester }
 
   before do
     work_order.setup_approvals_and_observers('approver@example.com')
-    login_as(work_order.requester)
+    login_as(requester)
   end
 
   scenario 'can be edited if pending' do
@@ -124,7 +133,7 @@ feature 'Requester edits their NCR work order' do
   end
 
   scenario 'can be edited if approved' do
-    ncr_proposal.update_attributes(status: 'approved') # avoid workflow
+    fully_approve(ncr_proposal)
 
     visit "/ncr/work_orders/#{work_order.id}/edit"
     expect(current_path).to eq("/ncr/work_orders/#{work_order.id}/edit")
@@ -155,5 +164,28 @@ feature 'Requester edits their NCR work order' do
   scenario 'disables the emergency field' do
     visit "/ncr/work_orders/#{work_order.id}/edit"
     expect(find_field('emergency', disabled: true)).to be_disabled
+  end
+
+  describe "post-approval modifications" do
+    before do
+      work_order.setup_approvals_and_observers('approver@example.com')
+      fully_approve(ncr_proposal)
+    end
+
+    it "requires re-approval for the amount being increased" do
+      visit "/ncr/work_orders/#{work_order.id}/edit"
+      fill_in 'Amount', with: work_order.amount + 1
+      click_on 'Update'
+
+      work_order.reload
+      expect(work_order.status).to eq('pending')
+      approval_statuses = work_order.individual_approvals.pluck(:status)
+      expect(approval_statuses).to eq(%w(
+        approved
+        actionable
+        pending
+      ))
+      # TODO check who gets notified
+    end
   end
 end

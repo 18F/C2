@@ -113,7 +113,7 @@ class Proposal < ActiveRecord::Base
     self.clean_up_old_approvals(old_approvals, approval_list)
 
     root.initialize!
-    self.reset_status()
+    self.reset_status
   end
 
   def clean_up_old_approvals(old_approvals, approval_list)
@@ -132,7 +132,7 @@ class Proposal < ActiveRecord::Base
     end
   end
 
-  def reset_status()
+  def reset_status
     unless self.cancelled?   # no escape from cancelled
       if self.root_approval.nil? || self.root_approval.approved?
         self.update(status: 'approved')

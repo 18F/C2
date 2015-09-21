@@ -26,6 +26,7 @@ class Approval < ActiveRecord::Base
 
   default_scope { order('position ASC') }
 
+  # TODO make a protected method
   def notify_parent_approved
     if self.parent
       self.parent.child_approved!(self)
@@ -40,5 +41,13 @@ class Approval < ActiveRecord::Base
 
   def pre_order_tree_traversal
     [self] + self.child_approvals.flat_map(&:pre_order_tree_traversal)
+  end
+
+  protected
+
+  def restart
+    if self.parent
+      self.parent.restart!
+    end
   end
 end

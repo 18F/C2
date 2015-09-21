@@ -27,6 +27,11 @@ module Ncr
       super do
         unless @model_instance.emergency  # skip approvals if emergency
           @model_instance.setup_approvals_and_observers(@approver_email)
+
+          if @model_instance.changed.include?('amount')
+            @model_instance.restart_budget_approvals
+          end
+
           @model_instance.email_approvers
         end
       end

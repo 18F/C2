@@ -140,6 +140,10 @@ module Ncr
       end
     end
 
+    def budget_approvals
+      self.individual_approvals.offset(1)
+    end
+
     def email_approvers
       Dispatcher.on_proposal_update(self.proposal, self.modifier)
     end
@@ -263,6 +267,13 @@ module Ncr
         year += 1
       end
       year % 100   # convert to two-digit
+    end
+
+    def restart_budget_approvals
+      # Note that none of the state machine's history is stored
+      self.budget_approvals.each(&:restart!)
+      self.proposal.reset_status
+      self.budget_approvals.first.initialize!
     end
 
     protected

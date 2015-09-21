@@ -47,7 +47,7 @@ module Approvals
 
     def restart
       self.api_token.expire!
-      super if defined?(super)
+      super
     end
   end
 end
