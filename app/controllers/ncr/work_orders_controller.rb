@@ -24,16 +24,16 @@ module Ncr
       @approver_email = params[:approver_email]
       @model_instance.modifier = current_user
 
-      super do
-        unless @model_instance.emergency  # skip approvals if emergency
-          @model_instance.setup_approvals_and_observers(@approver_email)
+      super
 
-          if self.requires_budget_reapproval?
-            @model_instance.restart_budget_approvals
-          end
+      if @model_changing && !@model_instance.emergency  # skip approvals if emergency
+        @model_instance.setup_approvals_and_observers(@approver_email)
 
-          Dispatcher.on_proposal_update(self.proposal, @model_instance.modifier)
+        if self.requires_budget_reapproval?
+          @model_instance.restart_budget_approvals
         end
+
+        Dispatcher.on_proposal_update(self.proposal, @model_instance.modifier)
       end
     end
 
@@ -81,12 +81,14 @@ module Ncr
     # TODO move into a standalone class
 
     def amount_increased?
-      @model_instance.amount_changed? && (@model_instance.amount > @model_instance.amount_was)
+      changes = @model_instance.previous_changes
+      changes.has_key?('amount') && (@model_instance.amount > changes['amount'].first)
     end
 
     def budget_codes_changed?
+      changes = @model_instance.previous_changes
       Ncr::WorkOrder.budget_code_fields.any? do |field|
-        @model_instance.send("#{field}_changed?")
+        changes.has_key?(field.to_s)
       end
     end
 
