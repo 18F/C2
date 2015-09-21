@@ -150,7 +150,7 @@ describe "National Capital Region proposals" do
         }.to_not change { Proposal.count }
 
         expect(current_path).to eq('/ncr/work_orders')
-        expect(page).to have_content("Amount must be less than or equal to $3,000")
+        expect(page).to have_content("Amount must be less than or equal to $")
         # keeps the form values
         expect(find_field('Amount').value).to eq('10000')
       end

@@ -10,8 +10,14 @@ module Ncr
   BUILDING_NUMBERS = YAML.load_file("#{Rails.root}/config/data/ncr/building_numbers.yml")
 
   class WorkOrder < ActiveRecord::Base
+    # must define before include PurchaseCardMixin
+    def self.purchase_amount_column_name
+      :amount
+    end
+
     include ValueHelper
     include ProposalDelegate
+    include PurchaseCardMixin
 
     # This is a hack to be able to attribute changes to the correct user. This attribute needs to be set explicitly, then the update comment will use them as the "commenter". Defaults to the requester.
     attr_accessor :modifier
@@ -20,15 +26,6 @@ module Ncr
     before_validation :normalize_values
     before_update :record_changes
 
-    # @TODO: use integer number of cents to avoid floating point issues
-    validates :amount, numericality: {
-      less_than_or_equal_to: 3000,
-      message: "must be less than or equal to $3,000"
-    }
-    validates :amount, numericality: {
-      greater_than_or_equal_to: 0,
-      message: "must be greater than or equal to $0"
-    }
     validates :cl_number, format: {
       with: /\ACL\d{7}\z/,
       message: "must start with 'CL', followed by seven numbers"
