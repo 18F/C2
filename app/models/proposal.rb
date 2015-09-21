@@ -177,6 +177,10 @@ class Proposal < ActiveRecord::Base
     self.approvers.merge(self.currently_awaiting_approvals)
   end
 
+  def awaiting_approver?(user)
+    self.currently_awaiting_approvers.include?(user)
+  end
+
   # delegated, with a fallback
   # TODO refactor to class method in a module
   def delegate_with_default(method)
