@@ -28,7 +28,7 @@ module Ncr
         unless @model_instance.emergency  # skip approvals if emergency
           @model_instance.setup_approvals_and_observers(@approver_email)
 
-          if @model_instance.approved? && self.amount_increased?
+          if self.requires_budget_reapproval?
             @model_instance.restart_budget_approvals
           end
 
@@ -77,8 +77,32 @@ module Ncr
       end
     end
 
+    ## update helpers ##
+    # TODO move into a standalone class
+
     def amount_increased?
       @model_instance.amount_changed? && (@model_instance.amount > @model_instance.amount_was)
     end
+
+    def budget_codes_changed?
+      Ncr::WorkOrder.budget_code_fields.any? do |field|
+        @model_instance.send("#{field}_changed?")
+      end
+    end
+
+    def budget_approver?
+      @model_instance.budget_approvers.include?(current_user)
+    end
+
+    def requires_budget_reapproval?
+      @model_instance.approved? && (
+        self.amount_increased? || (
+          self.budget_codes_changed? &&
+          !self.budget_approver?
+        )
+      )
+    end
+
+    ####################
   end
 end

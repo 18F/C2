@@ -1,12 +1,5 @@
 feature 'Requester edits their NCR work order' do
-  def fully_approve(proposal)
-    proposal.individual_approvals.each do |approval|
-      approval.reload
-      approval.approve!
-    end
-    expect(proposal.reload).to be_approved # sanity check
-    deliveries.clear
-  end
+  include ProposalSpecHelper
 
   around(:each) do |example|
     with_env_var('DISABLE_SANDBOX_WARNING', 'true') do
@@ -167,6 +160,18 @@ feature 'Requester edits their NCR work order' do
   end
 
   describe "post-approval modifications" do
+    def expect_budget_approvals_restarted
+      work_order.reload
+      expect(work_order.status).to eq('pending')
+      approval_statuses = work_order.individual_approvals.pluck(:status)
+      expect(approval_statuses).to eq(%w(
+        approved
+        actionable
+        pending
+      ))
+      # TODO check who gets notified
+    end
+
     before do
       work_order.setup_approvals_and_observers('approver@example.com')
       fully_approve(ncr_proposal)
@@ -186,15 +191,15 @@ feature 'Requester edits their NCR work order' do
       fill_in 'Amount', with: work_order.amount + 1
       click_on 'Update'
 
-      work_order.reload
-      expect(work_order.status).to eq('pending')
-      approval_statuses = work_order.individual_approvals.pluck(:status)
-      expect(approval_statuses).to eq(%w(
-        approved
-        actionable
-        pending
-      ))
-      # TODO check who gets notified
+      expect_budget_approvals_restarted
+    end
+
+    it "requires re-approval when adding a Function code" do
+      visit "/ncr/work_orders/#{work_order.id}/edit"
+      fill_in 'Function code', with: 'foo'
+      click_on 'Update'
+
+      expect_budget_approvals_restarted
     end
   end
 end

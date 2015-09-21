@@ -141,14 +141,24 @@ module Ncr
     end
 
     def budget_approvals
+      # should match #budget_approvers
       self.individual_approvals.offset(1)
+    end
+
+    def budget_approvers
+      # should match #budget_approvals
+      self.approvers.offset(1)
+    end
+
+    def self.budget_code_fields
+      [:cl_number, :function_code, :soc_code]
     end
 
     # Ignore values in certain fields if they aren't relevant. May want to
     # split these into different models
     def self.relevant_fields(expense_type)
       fields = [:description, :amount, :expense_type, :vendor, :not_to_exceed,
-                :building_number, :org_code, :direct_pay, :cl_number, :function_code, :soc_code]
+                :building_number, :org_code, :direct_pay] + self.budget_code_fields
       case expense_type
       when 'BA61'
         fields << :emergency
