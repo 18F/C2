@@ -20,6 +20,10 @@ In the workflow below, there are two roles: Owner and Reviewer. The assumption i
 require at least one review by someone (the Reviewer) other than the person making the change (the Owner), and that the Owner
 does not merge her/his own pull request. The Reviewer does the merge.
 
+*NOTE* that if you are [pairing on code changes](https://en.wikipedia.org/wiki/Pair_programming) then
+you can consider one of you the Owner and the other the Reviewer for the purposes of this workflow. That
+means that your PR can immediately be merged since it was reviewed-while-coded.
+
 Here is an example workflow. Unless explicitly noted, actions are assumed to be taken by the Owner.
 
 1. Click **Start** on the story in the story tracker.
