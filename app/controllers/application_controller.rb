@@ -73,6 +73,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def authenticate_admin_user!
+    authenticate_user!
+    unless current_user.admin?
+      flash[:error] = 'You need to sign in for access to this page.'
+      render 'communicarts/authorization_error', status: 403
+    end
+  end
+
   def disable_peek_by_default
     if cookies[:peek].nil?
       cookies[:peek] = false
