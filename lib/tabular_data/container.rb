@@ -37,7 +37,7 @@ module TabularData
     def set_state_from_params(params)
       relevant = params.permit(tables: {@name => [:sort]})
       config = relevant.fetch(:tables, {}).fetch(@name, {}) || {}
-      if config.has_key? :sort
+      if config.key? :sort
         self.set_sort(config[:sort])
       end
       self
@@ -56,7 +56,7 @@ module TabularData
       filename = "#{Rails.root}/config/tables/#{container_name}.yml"
       container_yaml = YAML.load_file(filename)
       key = "default"
-      if container_yaml.has_key?(client_name)
+      if container_yaml.key?(client_name)
         key = client_name
       end
       container_yaml[key].deep_symbolize_keys

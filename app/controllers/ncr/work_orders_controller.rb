@@ -82,13 +82,13 @@ module Ncr
 
     def amount_increased?
       changes = @model_instance.previous_changes
-      changes.has_key?('amount') && (@model_instance.amount > changes['amount'].first)
+      changes.key?('amount') && (@model_instance.amount > changes['amount'].first)
     end
 
     def budget_codes_changed?
       changes = @model_instance.previous_changes
       Ncr::WorkOrder.budget_code_fields.any? do |field|
-        changes.has_key?(field.to_s)
+        changes.key?(field.to_s)
       end
     end
 
