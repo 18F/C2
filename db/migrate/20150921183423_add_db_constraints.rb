@@ -6,7 +6,7 @@ class AddDbConstraints < ActiveRecord::Migration
 
     execute "ALTER TABLE approval_delegates ADD CONSTRAINT assigner_id_fkey FOREIGN KEY (assigner_id) REFERENCES users (id)"
     execute "ALTER TABLE approval_delegates ADD CONSTRAINT assignee_id_fkey FOREIGN KEY (assignee_id) REFERENCES users (id)"
-    execute "ALTER TABLE approvals ADD CONSTRAINT parent_id_fkey FOREIGN KEY (parent_id) REFERENCES approvals (id)"
+    execute "ALTER TABLE approvals ADD CONSTRAINT parent_id_fkey FOREIGN KEY (parent_id) REFERENCES approvals (id) ON DELETE CASCADE"
     execute "ALTER TABLE approvals ADD CONSTRAINT user_id_fkey FOREIGN KEY (user_id) REFERENCES users (id)"
     execute "ALTER TABLE approvals ADD CONSTRAINT proposal_id_fkey FOREIGN KEY (proposal_id) REFERENCES proposals (id)"
     execute "CREATE UNIQUE INDEX approvals_user_proposal_idx ON approvals USING btree (user_id, proposal_id)"

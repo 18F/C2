@@ -187,7 +187,7 @@ ActiveRecord::Schema.define(version: 20150922151452) do
 
   add_foreign_key "approval_delegates", "users", column: "assignee_id", name: "assignee_id_fkey"
   add_foreign_key "approval_delegates", "users", column: "assigner_id", name: "assigner_id_fkey"
-  add_foreign_key "approvals", "approvals", column: "parent_id", name: "parent_id_fkey"
+  add_foreign_key "approvals", "approvals", column: "parent_id", name: "parent_id_fkey", on_delete: :cascade
   add_foreign_key "approvals", "proposals", name: "proposal_id_fkey"
   add_foreign_key "approvals", "users", name: "user_id_fkey"
   add_foreign_key "attachments", "proposals", name: "proposal_id_fkey"

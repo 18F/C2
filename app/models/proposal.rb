@@ -117,7 +117,7 @@ class Proposal < ActiveRecord::Base
 
     old_approvals.each do |old|
       unless approval_list.include?(old)
-        old.destroy()
+        old.destroy() if Approval.exists?(old.id)
       end
     end
 
