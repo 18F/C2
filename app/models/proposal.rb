@@ -51,7 +51,7 @@ class Proposal < ActiveRecord::Base
     allow_blank: true
   }
   validates :flow, presence: true, inclusion: {in: FLOWS}
-  # TODO validates :requester_id, presence: true
+  validates :requester_id, presence: true
 
   self.statuses.each do |status|
     scope status, -> { where(status: status) }
