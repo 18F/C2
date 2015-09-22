@@ -8,7 +8,7 @@ class FeedbackController < ApplicationController
     unless form_values.empty?
       FeedbackMailer.feedback(current_user, form_values).deliver_later
     end
-    redirect_to :thanks
+    redirect_to '/feedback/thanks'
   end
 
   def thanks
