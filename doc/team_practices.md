@@ -57,7 +57,7 @@ of work-in-progress.
 Check with your teammates to see which environment might already be in use.
 Example flow:
 
-    ```
+    ```bash
     cd /tmp && mkdir deploy-qa && cd deploy-qa
     git clone git@github.com:18F/C2.git
     cd C2
