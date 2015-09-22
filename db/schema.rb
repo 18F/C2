@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150901190853) do
+ActiveRecord::Schema.define(version: 20150922151452) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,6 +45,8 @@ ActiveRecord::Schema.define(version: 20150901190853) do
     t.integer  "min_children_needed"
   end
 
+  add_index "approvals", ["user_id", "proposal_id"], name: "approvals_user_proposal_idx", unique: true, using: :btree
+
   create_table "attachments", force: :cascade do |t|
     t.string   "file_file_name",    limit: 255
     t.string   "file_content_type", limit: 255
@@ -54,14 +56,6 @@ ActiveRecord::Schema.define(version: 20150901190853) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "carts", force: :cascade do |t|
-    t.string   "name",        limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "external_id"
-    t.integer  "proposal_id"
   end
 
   create_table "comments", force: :cascade do |t|
@@ -151,7 +145,7 @@ ActiveRecord::Schema.define(version: 20150901190853) do
     t.integer  "client_data_id"
     t.string   "client_data_type", limit: 255
     t.integer  "requester_id"
-    t.string   "public_id"
+    t.string   "public_id",        limit: 255
   end
 
   add_index "proposals", ["client_data_id", "client_data_type"], name: "index_proposals_on_client_data_id_and_client_data_type", using: :btree
@@ -161,6 +155,8 @@ ActiveRecord::Schema.define(version: 20150901190853) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "roles", ["name"], name: "roles_name_idx", unique: true, using: :btree
 
   create_table "user_roles", force: :cascade do |t|
     t.integer "user_id", null: false
@@ -189,4 +185,19 @@ ActiveRecord::Schema.define(version: 20150901190853) do
 
   add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
 
+  add_foreign_key "approval_delegates", "users", column: "assignee_id", name: "assignee_id_fkey"
+  add_foreign_key "approval_delegates", "users", column: "assigner_id", name: "assigner_id_fkey"
+  add_foreign_key "approvals", "approvals", column: "parent_id", name: "parent_id_fkey"
+  add_foreign_key "approvals", "proposals", name: "proposal_id_fkey"
+  add_foreign_key "approvals", "users", name: "user_id_fkey"
+  add_foreign_key "attachments", "proposals", name: "proposal_id_fkey"
+  add_foreign_key "attachments", "users", name: "user_id_fkey"
+  add_foreign_key "comments", "proposals", name: "proposal_id_fkey"
+  add_foreign_key "comments", "users", name: "user_id_fkey"
+  add_foreign_key "proposal_roles", "proposals", name: "proposal_id_fkey"
+  add_foreign_key "proposal_roles", "roles", name: "role_id_fkey"
+  add_foreign_key "proposal_roles", "users", name: "user_id_fkey"
+  add_foreign_key "proposals", "users", column: "requester_id", name: "requester_id_fkey"
+  add_foreign_key "user_roles", "roles", name: "role_id_fkey"
+  add_foreign_key "user_roles", "users", name: "user_id_fkey"
 end
