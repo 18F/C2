@@ -3,6 +3,7 @@ C2::Application.routes.draw do
   get '/error' => 'home#error'
   get '/me'    => 'home#me'
   get '/feedback' => 'feedback#index'
+  get '/feedback/thanks' => 'feedback#thanks'
   post '/feedback' => 'feedback#create'
 
   match '/auth/:provider/callback' => 'auth#oauth_callback', via: [:get]
