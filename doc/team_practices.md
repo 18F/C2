@@ -57,14 +57,14 @@ of work-in-progress.
 Check with your teammates to see which environment might already be in use.
 Example flow:
 
-  ```
-  % cd /tmp && mkdir deploy-qa && cd deploy-qa
-  % git clone git@github.com:18F/C2.git
-  % cd C2
-  % git checkout -b qa-123456-fix-timezones
-  % git merge -m 'temp qa branch' origin/123456-fix-timezones
-  % script/deploy c2-dev
-  ```
+    ```
+    cd /tmp && mkdir deploy-qa && cd deploy-qa
+    git clone git@github.com:18F/C2.git
+    cd C2
+    git checkout -b qa-123456-fix-timezones
+    git merge -m 'temp qa branch' origin/123456-fix-timezones
+    script/deploy c2-dev
+    ```
 
 1. The Reviewer should test out the bugfix or new functionality.
 
