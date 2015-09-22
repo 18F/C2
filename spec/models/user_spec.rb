@@ -80,7 +80,7 @@ describe User do
     end
 
     it "can be assigned a role" do
-      role = FactoryGirl.build(:role)
+      role = FactoryGirl.create(:role)
       user.add_role(role)
       expect(user.has_role?( role.name )).to be_truthy
     end
