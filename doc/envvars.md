@@ -21,10 +21,8 @@ and how they affect app behavior.
 
 ## FORCE_USER_ID
 
-This variable should only be used in development. It is most useful when mimicing a user
-for whom you cannot authenticate, as when working on a production db snapshot in a local sandbox.
-In this example, the current_user for every request would be User `123` regardless of how 
-the request was authenticated.
+This variable should only be used in development. It is most useful when mimicking a user for whom you cannot authenticate, as when working on a production db snapshot in a local sandbox.
+In this example, the current_user for every request would be User `123` regardless of how the request was authenticated.
 
 ```
 % FORCE_USER_ID=123 rails server
