@@ -10,8 +10,8 @@ class ApiToken < ActiveRecord::Base
   # TODO validates :access_token, presence: true
   validates :approval_id, presence: true
 
-  scope :unexpired, -> { where('expires_at >= ?', Time.now) }
-  scope :expired, -> { where('expires_at < ?', Time.now) }
+  scope :unexpired, -> { where('expires_at >= ?', Time.zone.now) }
+  scope :expired, -> { where('expires_at < ?', Time.zone.now) }
   scope :unused, -> { where(used_at: nil) }
   scope :fresh, -> { unused.unexpired }
 
@@ -22,11 +22,11 @@ class ApiToken < ActiveRecord::Base
 
   # @todo: validate presence of expires_at
   def expired?
-    self.expires_at && self.expires_at < Time.now
+    self.expires_at && self.expires_at < Time.zone.now
   end
 
   def use!
-    self.update_attributes!(used_at: Time.now)
+    self.update_attributes!(used_at: Time.zone.now)
   end
 
 
@@ -37,6 +37,6 @@ class ApiToken < ActiveRecord::Base
       self.access_token = SecureRandom.hex
     end while self.class.exists?(access_token: access_token)
 
-    self.expires_at ||= Time.now + 7.days
+    self.expires_at ||= Time.zone.now + 7.days
   end
 end
