@@ -5,7 +5,7 @@ class FeedbackMailer < ApplicationMailer
     from = sending_user.try(:email_address) || form_values[:email] || self.default_sender_email
     mail(
       to: self.class.support_email,
-      subject: 'Feedback submission',
+      subject: '[C2] Feedback submission',
       from: from,
       cc: from,
       body: message
@@ -13,6 +13,6 @@ class FeedbackMailer < ApplicationMailer
   end
 
   def self.support_email
-    ENV['SUPPORT_EMAIL'] || 'gatewaycommunicator@gsa.gov' # not sensitive, so hard coding
+    ENV['SUPPORT_EMAIL'] || 'tickets@18f.uservoice.com' # not sensitive, so hard coding
   end
 end

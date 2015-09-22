@@ -40,6 +40,11 @@ In this example, the current_user for every request would be User `123` regardle
 ## NOTIFICATION_FROM_EMAIL
 ## PORT
 ## RESTRICT_ACCESS=true
+
+## SUPPORT_EMAIL
+
+The email address where all feedback and user support questions are sent.
+
 ## WEB_CONCURRENCY
 
 ## SECRET_TOKEN
