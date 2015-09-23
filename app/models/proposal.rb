@@ -122,10 +122,9 @@ class Proposal < ActiveRecord::Base
   end
 
   def clean_up_old_approvals(old_approvals, approval_list)
-    old_approvals.each do |old|
-      unless approval_list.include?(old)
-        old.destroy() if Approval.exists?(old.id)
-      end
+    # destroy any old approvals that are not a part of approval_list
+    (old_approvals - approval_list).each do |appr|
+      appr.destroy() if Approval.exists?(appr.id)
     end
   end
 
