@@ -16,11 +16,15 @@ Team members self-select story ownership.
 
 Production deployments may happen one to several times a week, so keep master in production-ready shape.
 
-In the workflow below, there are two roles: Owner and Reviewer. The assumption is that all changes to the codebase
-require at least one review by someone (the Reviewer) other than the person making the change (the Owner), and that the Owner
-does not merge her/his own pull request. The Reviewer does the merge.
+In the workflow below, there are multiple roles to be played:
 
-*NOTE* that if you are [pairing on code changes](https://en.wikipedia.org/wiki/Pair_programming) then
+* Owner (owns the Story, creates the Pull Request)
+* Reviewer (reads, comments on, approves the Pull Request)
+* Tester (deploys the Pull Request code to a testing environment, does quality assurance testing)
+
+The assumption is that all changes to the codebase require multiple sets of eyes. The Reviewer and Tester
+role might be played by the same person, but the Owner should not also be the Reviewer or the Tester.
+If you are [pairing on code changes](https://en.wikipedia.org/wiki/Pair_programming) then
 you can consider one of you the Owner and the other the Reviewer for the purposes of this workflow. That
 means that your PR can immediately be merged since it was reviewed-while-coded.
 
@@ -51,9 +55,10 @@ assign the PR to a team member for review. The Reviewer should consider the auto
 testing status and Code Climate reports, in addition to checking the code for architectural
 consistency, style and legibility. Code reviews are encouraged early in the development process;
 you can always create a PR with a `[WIP]` prefix before you are ready to deliver, and ask for review
-of work-in-progress.
+of work-in-progress. The Reviewer is encouraged to indicate a "Ship it" (or your favorite Ship It emoticon)
+Consider pointing out the awesomeness of the code, too.
 
-1. The Reviewer should also test the code. This can be done on the `c2-dev` or `c2-staging` environment.
+1. The Tester tests the code. This can be done on the `c2-dev` or `c2-staging` environment.
 Check with your teammates to see which environment might already be in use.
 Example flow:
 
@@ -66,18 +71,17 @@ Example flow:
     script/deploy c2-dev
     ```
 
-1. The Reviewer should test out the bugfix or new functionality.
+1. The Tester should test out the bugfix or new functionality.
 
-1. If there are any problems, the Reviewer should comment on the PR and assign it to the Owner for follow-up.
-The Owner should fix the problems and assign back to the Reviewer, who can then repeat the testing steps above.
+1. If there are any problems, the Tester should comment on the PR and assign it to the Owner for follow-up.
+The Owner should fix the problems and assign back to the Tester, who can then repeat the testing steps above.
 
-1. When the Reviewer is satisfied, s/he merges the PR to `master`. 
-The Reviewer is encouraged to indicate a "Ship it" (or your favorite Ship It emoticon) before merging the pull request. Consider pointing out the awesomeness of the code, too.
+1. When the Tester is satisfied, s/he merges the PR to `master`. 
 Pro tip: If the PR title follows the conventions mentioned above, 
 the story tracker status will change to **Accept or Reject** when the PR is merged. 
 Otherwise, the Reviewer should click **Deliver** in the story tracker.
 
-1. The Reviewer will click **Accept** or **Reject** on story tracker. An **Accept** means the code is merged
+1. The Tester will click **Accept** or **Reject** on story tracker. An **Accept** means the code is merged
 to master and ready for production deploy at any time. Typically **Reject** indicates
 that the testing passed but for some reason the solution is not sufficient, and needs work at the
 story level. 
