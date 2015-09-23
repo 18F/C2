@@ -1,7 +1,7 @@
 class Proposal < ActiveRecord::Base
   include WorkflowModel
   include ValueHelper
-  has_paper_trail
+  has_paper_trail class_name: 'C2Version'
 
   CLIENT_MODELS = []  # this gets populated later
   FLOWS = %w(parallel linear).freeze
