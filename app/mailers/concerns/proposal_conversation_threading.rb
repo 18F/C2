@@ -51,7 +51,7 @@ module ProposalConversationThreading
 
   def assign_threading_headers(proposal)
     msg_id = ProposalConversationThreading.msg_id(proposal)
-    self.set_thread_id(msg_id)
+    self.thread_id = msg_id
   end
 
   def send_proposal_email(proposal:, to_email:, from_email: nil, template_name: nil)
