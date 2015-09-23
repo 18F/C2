@@ -3,7 +3,8 @@ default:
   sort: -created_at
   column_configs:
     event: true
-    item_type: true
+    item_type:
+      display: item.class.name
     user:
       virtual: true
       display: user.full_name
