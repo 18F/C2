@@ -24,7 +24,7 @@ class C2VersionDecorator < BaseDecorator
 
   def creation_html
     case object.item
-    when Approval
+    when Approvals::Individual
       "#{user_name} was added as an approver."
     when Attachment
       self.new_attachment_html
@@ -32,6 +32,8 @@ class C2VersionDecorator < BaseDecorator
       "Commented: \"#{object.item.comment_text}\""
     when Observation
       "#{user_name} was added as an observer."
+    else
+      # don't display anything in the Modification column
     end
   end
 
