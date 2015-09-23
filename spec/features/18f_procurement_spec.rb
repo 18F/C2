@@ -11,7 +11,7 @@ describe "GSA 18f Purchase Request Form" do
 
   context "when signed in" do
 
-    let(:requester) { FactoryGirl.create(:user) }
+    let(:requester) { FactoryGirl.create(:user, client_slug: 'gsa18f') }
     let(:procurement) {
       pr = FactoryGirl.create(:gsa18f_procurement, requester: requester)
       pr.add_approvals

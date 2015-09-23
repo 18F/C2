@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  include Pundit    # For authorization checks
+  include Pundit
   include ReturnToHelper
   include MarkdownHelper
 
@@ -11,11 +11,10 @@ class ApplicationController < ActionController::Base
 
   before_action :disable_peek_by_default
 
-
   protected
 
   # We are overriding this method to account for ExceptionPolicies
-  def authorize(record, query=nil, user=nil)
+  def authorize(record, query = nil, user = nil)
     user ||= @current_user
     policy = ::PolicyFinder.policy_for(user, record)
 
@@ -25,9 +24,9 @@ class ApplicationController < ActionController::Base
       # the method might raise its own exception, or it might return a
       # boolean. Both systems are accommodated
       # will need to replace this when a new version of pundit arrives
-      ex = NotAuthorizedError.new("not allowed to #{q} this #{record}")
-      ex.query, ex.record, ex.policy = q, record, pol
-      raise ex
+      msg = "not allowed to #{query} this #{record}"
+      ex = NotAuthorizedError.new(query: query, record: record, policy: policy, message: msg)
+      fail ex
     end
   end
 
@@ -71,7 +70,7 @@ class ApplicationController < ActionController::Base
   end
 
   def signed_in?
-    !!current_user
+    current_user ? true : false
   end
 
   def authenticate_user!

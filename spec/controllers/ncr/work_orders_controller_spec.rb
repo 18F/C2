@@ -1,7 +1,7 @@
 describe Ncr::WorkOrdersController do
   describe 'creating' do
     before do
-      login_as(FactoryGirl.create(:user))
+      login_as(FactoryGirl.create(:user, client_slug: 'ncr'))
     end
     let (:params) {{
       ncr_work_order: {

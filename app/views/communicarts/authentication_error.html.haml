@@ -1,8 +1,8 @@
-%h1
-  Authentication Error
-%h4
-  - if flash[:notice]
-    = flash[:notice]
-  - else
-    We were unable to authorize your request. Please check with the administrator.
-  =# TODO: Update with support email
+%div.inset
+  %h1
+    Authentication Error
+  %h4
+    - if flash[:notice]
+      = flash[:notice]
+    - else
+      We were unable to authorize your request. Please check with the administrator.

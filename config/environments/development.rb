@@ -25,7 +25,7 @@ C2::Application.configure do
   # Debug mode disables concatenation and preprocessing of assets.
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
-  config.assets.debug = true
+  config.assets.debug = ENV['ASSETS_DEBUG'] ? true : false
 
   # Use letter opener to avoid sending real emails. The "web" version makes
   # the emails visible at /letter_opener
