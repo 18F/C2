@@ -6,7 +6,7 @@ gem 'acts_as_list'
 gem 'ar_outer_joins'
 gem 'autoprefixer-rails'
 gem 'awesome_print'
-gem 'aws-sdk-v1'    # remaining on v1 due to https://github.com/thoughtbot/paperclip/issues/1764
+gem 'aws-sdk', '~> 1.6' # version restriction can be lifted once https://github.com/thoughtbot/paperclip/commit/523bd46c768226893f23889079a7aa9c73b57d68 is released
 gem 'bootstrap-sass'
 gem 'browser-timezone-rails'
 gem 'clockwork', require: false
