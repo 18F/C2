@@ -13,7 +13,7 @@ class Approval < ActiveRecord::Base
   validates :proposal, presence: true
 
   belongs_to :parent, class_name: 'Approval'
-  has_many :child_approvals, class_name: 'Approval', foreign_key: 'parent_id', dependent: :delete_all
+  has_many :child_approvals, class_name: 'Approval', foreign_key: 'parent_id', dependent: :destroy_all
 
   scope :individual, -> { where(type: 'Approvals::Individual') }
 
