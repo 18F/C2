@@ -5,7 +5,7 @@ describe CommunicartMailer do
   end
 
   around(:each) do |example|
-    with_env_var('NOTIFICATION_FROM_EMAIL', 'reply@stub.gov') do
+    with_env_vars('NOTIFICATION_FROM_EMAIL' => 'reply@stub.gov', 'NOTIFICATION_REPLY_TO' => 'replyto@stub.gov') do
       example.run
     end
   end
@@ -22,6 +22,10 @@ describe CommunicartMailer do
 
     it "uses the configured sender email" do
       expect(mail.from).to eq(['reply@stub.gov'])
+    end
+
+    it "uses the configured replyto email" do
+      expect(mail.reply_to).to eq(['replyto@stub.gov'])
     end
 
     it "includes the appropriate headers for threading" do
