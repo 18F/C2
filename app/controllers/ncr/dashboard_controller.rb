@@ -24,10 +24,10 @@ module Ncr
     def format_results(results)
       return_params = self.make_return_to("Dashboard", ncr_dashboard_path)
       results.map{|row|
-        start_date = Date.new(row["year"].to_i, row["month"].to_i, 1)
+        start_date = Time.zone.local(row["year"].to_i, row["month"].to_i, 1)
         end_date = start_date + 1.month
-        {path: query_proposals_path(start_date: start_date.strftime(),
-                                    end_date: end_date.strftime(),
+        {path: query_proposals_path(start_date: start_date.strftime('%Y-%m-%d'),
+                                    end_date: end_date.strftime('%Y-%m-%d'),
                                     return_to: return_params),
          month: I18n.t("date.abbr_month_names")[start_date.month],
          year: start_date.year,

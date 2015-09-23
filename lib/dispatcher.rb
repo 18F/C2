@@ -19,8 +19,8 @@ class Dispatcher
     end
   end
 
-  def on_observer_added(observation)
-    CommunicartMailer.on_observer_added(observation).deliver_later
+  def on_observer_added(observation, reason)
+    CommunicartMailer.on_observer_added(observation, reason).deliver_later
   end
 
   def email_sent_confirmation(proposal)
@@ -33,6 +33,15 @@ class Dispatcher
     end
     self.email_observers(proposal)
     self.email_sent_confirmation(proposal)
+  end
+
+  def deliver_attachment_emails(proposal)
+    proposal.users.each do |user|
+      # do not send email to approvers who have not yet heard about the proposal
+      approval = proposal.approvals.find_by(user_id: user.id)
+      next if approval && approval.pending?
+      CommunicartMailer.new_attachment_email(user.email_address, proposal).deliver_later
+    end
   end
 
   def deliver_cancellation_emails(proposal)

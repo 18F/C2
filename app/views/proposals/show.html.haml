@@ -54,6 +54,8 @@
                 = f.fields_for :user do |user_form|
                   .col-md-8.col-xs-12
                     = user_form.collection_select :email_address, User.all.order(:email_address), :email_address, :email_address, {include_blank: true}, class: 'js-selectize'
+                    = f.label :reason, "Reason for adding observer (optional): "
+                    = text_field :observation, :reason, class: 'form-control'
                   .col-md-4.col-xs-12.righted
                     = user_form.submit "Add an Observer", id: :add_subscriber, data: {'disable-if-empty' => 'observation_user_email_address'}
 

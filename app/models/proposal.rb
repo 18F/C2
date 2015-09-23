@@ -51,7 +51,7 @@ class Proposal < ActiveRecord::Base
     allow_blank: true
   }
   validates :flow, presence: true, inclusion: {in: FLOWS}
-  # TODO validates :requester_id, presence: true
+  validates :requester_id, presence: true
 
   self.statuses.each do |status|
     scope status, -> { where(status: status) }
@@ -148,7 +148,7 @@ class Proposal < ActiveRecord::Base
     self.observations.find_by(user: user)
   end
 
-  def add_observer(email_or_user)
+  def add_observer(email_or_user, adder=nil, reason=nil)
     # polymorphic
     if email_or_user.is_a?(User)
       user = email_or_user
@@ -156,20 +156,7 @@ class Proposal < ActiveRecord::Base
       user = User.for_email(email_or_user)
     end
 
-    # no duplicates
-    observation = existing_observation_for(user)
-
-    unless observation
-      observer_role = Role.find_or_create_by(name: 'observer')
-      observation   = Observation.new(user_id: user.id, role_id: observer_role.id, proposal_id: self.id)
-
-      # because we build the Observation ourselves, we add to the direct m2m relation directly.
-      self.observations << observation
-
-      # invalidate relation cache so we reload on next access
-      self.observers(true)
-    end
-    observation
+    create_new_observation(user, adder, reason) unless existing_observation_for(user)
   end
 
   def add_requester(email)
@@ -188,6 +175,10 @@ class Proposal < ActiveRecord::Base
 
   def currently_awaiting_approvers
     self.approvers.merge(self.currently_awaiting_approvals)
+  end
+
+  def awaiting_approver?(user)
+    self.currently_awaiting_approvers.include?(user)
   end
 
   # delegated, with a fallback
@@ -241,7 +232,7 @@ class Proposal < ActiveRecord::Base
 
   def restart
     # Note that none of the state machine's history is stored
-    self.api_tokens.update_all(expires_at: Time.now)
+    self.api_tokens.update_all(expires_at: Time.zone.now)
     self.approvals.update_all(status: 'pending')
     if self.root_approval
       self.root_approval.initialize!
@@ -263,7 +254,32 @@ class Proposal < ActiveRecord::Base
   end
 
   protected
+
   def update_public_id
     self.update_attribute(:public_id, self.public_identifier)
+  end
+
+  def create_new_observation(user, adder, reason)
+    observer_role = Role.find_or_create_by(name: 'observer')
+    observation = Observation.new(user_id: user.id, role_id: observer_role.id, proposal_id: self.id)
+    # because we build the Observation ourselves, we add to the direct m2m relation directly.
+    self.observations << observation
+    # invalidate relation cache so we reload on next access
+    self.observers(true)
+    # when explicitly adding an observer using the form in the Proposal page...
+    if adder
+      add_observation_comment(user, adder, reason) unless reason.blank?
+      Dispatcher.on_observer_added(observation, reason)
+    end
+    observation
+  end
+
+  def add_observation_comment(user, adder, reason)
+    self.comments.create(
+      comment_text: I18n.t('activerecord.attributes.observation.user_reason_comment',
+                           user: adder.full_name,
+                           observer: user.full_name,
+                           reason: reason),
+      user: adder)
   end
 end

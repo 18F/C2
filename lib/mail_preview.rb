@@ -24,6 +24,11 @@ class MailPreview < MailView
     inline_styles(mail)
   end
 
+  def budget_status
+    mail = ReportMailer.budget_status
+    inline_styles(mail)
+  end
+
   private
 
   def email

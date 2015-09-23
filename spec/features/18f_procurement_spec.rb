@@ -52,7 +52,7 @@ describe "GSA 18f Purchase Request Form" do
 
       procurement = proposal.client_data
       expect(procurement.link_to_product).to eq('http://www.amazon.com')
-      expect(procurement.date_requested).to eq('12/12/2999')
+      expect(procurement.date_requested.strftime('%m/%d/%Y')).to eq('12/12/2999')
       expect(procurement.additional_info).to eq('none')
       expect(procurement.cost_per_unit).to eq(123.45)
       expect(procurement.quantity).to eq(6)
@@ -75,7 +75,7 @@ describe "GSA 18f Purchase Request Form" do
       }.to_not change { Proposal.count }
 
       expect(current_path).to eq('/gsa18f/procurements')
-      expect(page).to have_content("Cost per unit must be less than or equal to 3000")
+      expect(page).to have_content("Cost per unit must be less than or equal to $")
       # keeps the form values
       expect(find_field('Cost per unit').value).to eq('10000')
     end
@@ -162,7 +162,7 @@ describe "GSA 18f Purchase Request Form" do
 
       procurement = proposal.client_data
       expect(procurement.link_to_product).to eq('http://www.amazon.com')
-      expect(procurement.date_requested).to eq('12/12/2999')
+      expect(procurement.date_requested.strftime('%m/%d/%Y')).to eq('12/12/2999')
       expect(procurement.additional_info).to eq('none')
       expect(procurement.cost_per_unit).to eq(123.45)
       expect(procurement.quantity).to eq(6)

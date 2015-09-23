@@ -48,7 +48,15 @@ class ApplicationController < ActionController::Base
   private
 
   def current_user
-    @current_user ||= User.find_or_create_by(email_address: session[:user]['email']) if session[:user] && session[:user]['email']
+    @current_user ||= find_current_user
+  end
+
+  def find_current_user
+    if ENV['FORCE_USER_ID'] && !Rails.env.production?
+      User.find ENV['FORCE_USER_ID']
+    elsif session[:user] && session[:user]['email']
+      User.find_or_create_by(email_address: session[:user]['email'])
+    end
   end
 
   def sign_in(user)

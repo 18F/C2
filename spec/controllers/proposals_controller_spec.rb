@@ -13,7 +13,8 @@ describe ProposalsController do
       proposal2.individual_approvals.create!(user: user, status: 'actionable')
 
       get :index
-      expect(assigns(:pending_data).rows.sort).to eq [proposal1, proposal2]
+      expect(assigns(:pending_review_data).rows.sort).to eq [proposal2]
+      expect(assigns(:pending_data).rows.sort).to eq [proposal1]
       expect(assigns(:approved_data).rows.sort).to be_empty
       expect(assigns(:cancelled_data).rows.sort).to be_empty
     end
@@ -107,8 +108,10 @@ describe ProposalsController do
     end
 
     it 'should filter results by date range' do
+      prev_zone = Time.zone
+      Time.zone = 'UTC'
       past_proposal = FactoryGirl.create(
-        :proposal, created_at: Date.new(2012, 5, 6), requester: user)
+        :proposal, created_at: Time.zone.local(2012, 5, 6), requester: user)
       get :query
       expect(assigns(:proposals_data).rows).to eq([proposal, past_proposal])
 
@@ -117,6 +120,7 @@ describe ProposalsController do
 
       get :query, start_date: '2012-05-04', end_date: '2012-05-06'
       expect(assigns(:proposals_data).rows).to eq([])
+      Time.zone = prev_zone
     end
 
     it 'ignores bad input' do

@@ -1,5 +1,12 @@
 describe "National Capital Region proposals" do
+  around(:each) do |example|
+    with_env_var('DISABLE_SANDBOX_WARNING', 'true') do
+      example.run
+    end
+  end
+
   let!(:approver) { FactoryGirl.create(:user) }
+
   describe "creating a work order" do
     it "requires sign-in" do
       visit '/ncr/work_orders/new'
@@ -27,7 +34,7 @@ describe "National Capital Region proposals" do
         login_as(requester)
       end
 
-      with_env_var('NCR_BA80_BUDGET_MAILBOX', 'ba80budget@example.gov') do
+      describe "tiered approval uses Role-based Users" do
         it "saves a Proposal with the attributes" do
           expect(Dispatcher).to receive(:deliver_new_proposal_emails)
 
@@ -64,12 +71,9 @@ describe "National Capital Region proposals" do
           expect(work_order.description).to eq('desc content')
           expect(proposal.requester).to eq(requester)
           expect(proposal.approvers.map(&:email_address)).to eq(
-            [approver.email_address, 'ba80budget@example.gov'])
+            [approver.email_address, Ncr::WorkOrder.ba61_tier1_budget_mailbox])
         end
-      end
 
-      with_env_vars(NCR_BA61_TIER1_BUDGET_MAILBOX: 'ba61one@example.gov',
-                    NCR_BA61_TIER2_BUDGET_MAILBOX: 'ba61two@example.gov') do
         it "saves a BA60 Proposal with the attributes" do
           expect(Dispatcher).to receive(:deliver_new_proposal_emails)
 
@@ -79,7 +83,7 @@ describe "National Capital Region proposals" do
           choose 'BA60'
           fill_in 'Vendor', with: 'Yoshi'
           fill_in 'Amount', with: 123.45
-          select 'liono0@some-cartoon-show.com', from: "Approving official's email address"
+          select approver.email_address, from: "Approving official's email address"
           fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
           select Ncr::Organization.all[0], :from => 'ncr_work_order_org_code'
           expect {
@@ -89,11 +93,11 @@ describe "National Capital Region proposals" do
           proposal = Proposal.last
           work_order = proposal.client_data
           expect(work_order.expense_type).to eq('BA60')
-          expect(proposal.approvers.map(&:email_address)).to eq(%w(
-            liono0@some-cartoon-show.com
-            ba61one@example.gov
-            ba61two@example.gov
-          ))
+          expect(proposal.approvers.map(&:email_address)).to eq [
+            approver.email_address,
+            Ncr::WorkOrder.ba61_tier1_budget_mailbox,
+            Ncr::WorkOrder.ba61_tier2_budget_mailbox
+          ]
         end
 
         it "shows the radio button" do
@@ -143,7 +147,7 @@ describe "National Capital Region proposals" do
         }.to_not change { Proposal.count }
 
         expect(current_path).to eq('/ncr/work_orders')
-        expect(page).to have_content("Amount must be less than or equal to $3,000")
+        expect(page).to have_content("Amount must be less than or equal to $")
         # keeps the form values
         expect(find_field('Amount').value).to eq('10000')
       end
@@ -177,6 +181,7 @@ describe "National Capital Region proposals" do
       end
 
       it "includes has overwritten field names" do
+        tier1_approver = Ncr::WorkOrder.ba80_budget_mailbox
         visit '/ncr/work_orders/new'
         fill_in 'Project title', with: "buying stuff"
         choose 'BA80'
@@ -441,11 +446,11 @@ describe "National Capital Region proposals" do
         old_approver = ncr_proposal.approvers.first
         expect(Dispatcher).to receive(:on_approver_removal).with(ncr_proposal, [old_approver])
         visit "/ncr/work_orders/#{work_order.id}/edit"
-        select "liono0@some-cartoon-show.com", from: "Approving official's email address"
+        select approver.email_address, from: "Approving official's email address"
         click_on 'Update'
         proposal = Proposal.last
         
-        expect(proposal.approvers.first.email_address).to eq ("liono0@some-cartoon-show.com")
+        expect(proposal.approvers.first.email_address).to eq (approver.email_address)
         expect(proposal.individual_approvals.first.actionable?).to eq (true)
       end
 
@@ -465,7 +470,7 @@ describe "National Capital Region proposals" do
 
             ncr_proposal.reload
             work_order.reload
-            
+
             expect(ncr_proposal.approvers.map(&:email_address)).to eq([
               approving_official.email_address,
               Ncr::WorkOrder.ba61_tier2_budget_mailbox
@@ -518,7 +523,7 @@ describe "National Capital Region proposals" do
         end
       end
 
-      with_env_var('NCR_BA80_BUDGET_MAILBOX', 'ba80@example.gov') do
+      describe "tiered approval uses Role-based Users" do
         it "allows you to change the expense type" do
           visit "/ncr/work_orders/#{work_order.id}/edit"
           choose 'BA80'
@@ -526,11 +531,8 @@ describe "National Capital Region proposals" do
           click_on 'Update'
           proposal = Proposal.last
           expect(proposal.approvers.length).to eq(2)
-          expect(proposal.approvers.second.email_address).to eq('ba80@example.gov')
+          expect(proposal.approvers.second.email_address).to eq(Ncr::WorkOrder.ba61_tier1_budget_mailbox)
         end
-      end
-
-      with_env_vars(NCR_BA61_TIER1_BUDGET_MAILBOX: 'foo@example.gov', NCR_BA61_TIER2_BUDGET_MAILBOX: 'bar@example.gov') do
         it "doesn't change approving list when delegated" do
           proposal = Proposal.last
           approval = proposal.individual_approvals.first
@@ -544,7 +546,7 @@ describe "National Capital Region proposals" do
           visit "/ncr/work_orders/#{work_order.id}/edit"
           fill_in 'Description', with:"New Description that shouldn't change the approver list"
           click_on 'Update'
-  
+
           proposal.reload
           second_approver = proposal.approvers.second.email_address
           expect(second_approver).to eq('delegate@example.com')

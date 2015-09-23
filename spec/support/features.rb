@@ -6,38 +6,42 @@ def in_spec?
   !respond_to?(:describe)
 end
 
-def with_env_vars_runner(env={})
+def with_env_vars_runner(env)
   env = env.stringify_keys
   old_values = {}
-  env.each_key{ |k| old_values[k] = ENV[k] }
-  env.each{ |k, v| ENV[k] = v }
+  env.each_key { |k| old_values[k] = ENV[k] }
+  env.each { |k, v| ENV[k] = v.to_s }
   yield
-  old_values.each{ |k, v| ENV[k] = v}
+  old_values.each { |k, v| ENV[k] = v }
+end
+
+# https://github.com/rspec/rspec-core/issues/1378#issuecomment-37248037
+def with_env_vars_around(env, &block)
+  context "with ENV vars #{env}" do
+    around(:each) do |example|
+      with_env_vars_runner(env) do
+        example.run
+      end
+    end
+
+    class_exec(&block)
+  end
 end
 
 #####################
 
 ## public methods, that can be used in or around specs ##
 
-# https://github.com/rspec/rspec-core/issues/1378#issuecomment-37248037
-def with_env_vars(env={}, &block)
+def with_env_vars(env, &block)
   if in_spec?
     with_env_vars_runner(env, &block)
   else
-    context "with ENV vars #{env}" do
-      around(:each) do |example|
-        with_env_vars_runner(env) do
-          example.run
-        end
-      end
-
-      class_exec(&block)
-    end
+    with_env_vars_around(env, &block)
   end
 end
 
 def with_env_var(name, val, &block)
-  with_env_vars({name => val}, &block)
+  with_env_vars({ name => val }, &block)
 end
 
 def with_feature(name, &block)
