@@ -41,8 +41,8 @@ module IncomingMail
       proposal = (Proposal.find_by_public_id(public_id) || Proposal.find(public_id)) or return
       comment_text = find_comment_text(msg)
       comment_user = find_comment_user(msg)
-      if proposal.existing_observation_for(comment_user)
-        # already observing, just add comment.
+      if proposal.existing_observation_for(comment_user) || proposal.requester_id == comment_user.id
+        # already in the loop, just add comment.
         proposal.comments.create(comment_text: comment_text, user: comment_user)
       else
         # yes, user adds self as observer, which also generates comment
@@ -84,7 +84,7 @@ module IncomingMail
       params.each do |key, value|
         instance_variable_set("@#{key}", value)
       end
-      @type ||= ERROR # default
+      @type ||= ERROR # default is pessimistic (realistic?)
     end
   end
 end
