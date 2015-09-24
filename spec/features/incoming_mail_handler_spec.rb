@@ -98,7 +98,7 @@ describe "Handles incoming email" do
 
   it "should create comment and add sender as an observer if not already" do
     my_approval = approval
-    mail = CommunicartMailer.actions_for_approver(approval)
+    mail = CommunicartMailer.actions_for_approver(my_approval)
     mandrill_event = mandrill_payload_from_message(mail)
     mandrill_event[0]['msg']['from_email'] = my_approval.user.email_address
     handler = IncomingMail::Handler.new
