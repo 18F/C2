@@ -20,7 +20,7 @@ describe "Handles incoming email" do
                "email" : "tester@c2.18f.gov",
                "sender" : null,
                "text" : "hello world",
-               "raw_msg" : "Received: from example.com (unknown [93.184.216.34])\n\tby ip-xx-xx-xx (Postfix) with ESMTPS id 3EB7C2C06B9\n\tfor <tester@c2.18f.gov>; Wed, 23 Sep 2015 21:22:46 +0000 (UTC)\nReceived: by example.com (Postfix, from userid 500)\n\tid 67DDF3E841; Wed, 23 Sep 2015 16:22:45 -0500 (CDT)\nTo: tester@c2.18f.gov\nSubject: test via example server\nMessage-Id: <20150923212245.67DDF3E841@example.com>\nDate: Wed, 23 Sep 2015 16:22:45 -0500 (CDT)\nFrom: someone@example.com\n\nhello world",
+               "raw_msg" : "Received: from example.com (unknown [93.184.216.34])\\n\\tby ip-xx-xx-xx (Postfix) with ESMTPS id 3EB7C2C06B9\\n\\tfor <tester@c2.18f.gov>; Wed, 23 Sep 2015 21:22:46 +0000 (UTC)\\nReceived: by example.com (Postfix, from userid 500)\\n\\tid 67DDF3E841; Wed, 23 Sep 2015 16:22:45 -0500 (CDT)\\nTo: tester@c2.18f.gov\\nSubject: test via example server\\nMessage-Id: <20150923212245.67DDF3E841@example.com>\\nDate: Wed, 23 Sep 2015 16:22:45 -0500 (CDT)\\nFrom: someone@example.com\\n\\nhello world",
                "headers" : {
                   "Received" : [
                      "from example.com (unknown [93.184.216.34]) by ip-xx-xx-xx (Postfix) with ESMTPS id 3EB7C2C06B9 for <tester@c2.18f.gov>; Wed, 23 Sep 2015 21:22:46 +0000 (UTC)",
@@ -53,8 +53,8 @@ describe "Handles incoming email" do
          }
       ]
     END
-    handler = IncomingEmailHandler.new
+    handler = IncomingMail::Handler.new
     resp = handler.handle(JSON.parse(mandrill_event))
-    expect(resp.action).to eq(IncomingEmailHandler::DROPPED)
+    expect(resp.action).to eq(IncomingMail::Response::DROPPED)
   end
 end
