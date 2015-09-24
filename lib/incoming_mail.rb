@@ -13,16 +13,22 @@ module IncomingMail
     end
 
     def handle(payload)
+      if !payload[0] or !payload[0]['event'] or payload[0]['event'] != 'incoming'
+        fail "Invalid Mandrill event payload. Must be event==incoming."
+      end
+      create_response(payload)
+    end
+
+    private
+
+    def create_response(payload)
       resp = Response.new(type: identify_mail_type(payload))
       case resp.type
       when REQUEST
         resp.comment = create_comment(payload[0]['msg'])
         resp.action = resp.comment ? Response::COMMENT : Response::ERROR
-      when UNKNOWN
-        resp.action = Response::DROPPED
-        # nothing else to do
       else
-        # failed to identify the type
+        resp.action = Response::DROPPED
       end
       resp
     end
@@ -37,8 +43,7 @@ module IncomingMail
     end
 
     def create_comment(msg)
-      public_id = find_public_id(msg)
-      proposal = (Proposal.find_by_public_id(public_id) || Proposal.find(public_id)) or return
+      proposal     = find_proposal(find_public_id(msg)) or return
       comment_text = find_comment_text(msg)
       comment_user = find_comment_user(msg)
       if proposal.existing_observation_for(comment_user) || proposal.requester_id == comment_user.id
@@ -50,6 +55,10 @@ module IncomingMail
         # return most recent comment (TODO race condition here?)
         proposal.comments.last
       end
+    end
+
+    def find_proposal(public_id)
+      Proposal.find_by_public_id(public_id) || Proposal.find(public_id)
     end
 
     def find_public_id(msg)
