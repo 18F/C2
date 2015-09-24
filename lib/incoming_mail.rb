@@ -13,8 +13,8 @@ module IncomingMail
     end
 
     def handle(payload)
-      if !payload[0] or !payload[0]['event'] or payload[0]['event'] != 'incoming'
-        fail "Invalid Mandrill event payload. Must be event==incoming."
+      if !payload[0] or !payload[0]['event'] or payload[0]['event'] != 'inbound'
+        fail "Invalid Mandrill event payload. Must be event==inbound"
       end
       create_response(payload)
     end
