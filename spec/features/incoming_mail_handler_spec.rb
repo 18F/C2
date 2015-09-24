@@ -1,11 +1,7 @@
 describe "Handles incoming email" do
   let(:proposal) { FactoryGirl.create(:proposal, :with_parallel_approvers) }
   let(:approval) { proposal.individual_approvals.first }
-  let(:approver) { approval.user }
-  let(:requester) { proposal.requester }
-  let(:token) { approval.api_token }
   let(:mail) { CommunicartMailer.actions_for_approver(approval) }
-  let(:body) { mail.body.encoded }
 
   def mandrill_payload_from_message(mail_msg)
     headers = {}
