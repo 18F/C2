@@ -14,6 +14,7 @@ gem 'daemons' # for delayed_job
 gem 'delayed_job_active_record'
 gem 'dotenv-rails', require: 'dotenv/rails-now'
 gem 'draper'
+gem 'email_reply_parser'
 gem 'factory_girl_rails'
 gem 'faker'
 gem 'font-awesome-sass'

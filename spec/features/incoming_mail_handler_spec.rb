@@ -1,5 +1,34 @@
 describe "Handles incoming email" do
+  let(:proposal) { FactoryGirl.create(:proposal, :with_parallel_approvers) }
+  let(:approval) { proposal.individual_approvals.first }
+  let(:approver) { approval.user }
+  let(:requester) { proposal.requester }
+  let(:token) { approval.api_token }
+  let(:mail) { CommunicartMailer.actions_for_approver(approval) }
+  let(:body) { mail.body.encoded }
+
+  def mandrill_payload_from_message(mail_msg)
+    headers = {}
+    mail_msg.header.fields.each do |header|
+      headers[header.name] = header.value
+    end
+    msg = {
+      'subject'  => mail_msg.subject,
+      'template' => nil,
+      'tags'     => [],
+      'from_email' => mail_msg.to[0], # NOTE this is switched with 'email' because mail_msg is what we are *sending*
+      'email'      => mail_msg.from[0],
+      'sender'     => nil,
+      'text'       => mail_msg.text_part.body.encoded,
+      'html'       => mail_msg.html_part.body.encoded,
+      'raw_msg'    => mail_msg.to_s,
+      'headers'    => headers,
+    }
+    [ { 'event' => 'inbound', 'msg' => msg } ]
+  end
+
   it "should drop non-app email on the floor" do
+    # this raw json string here as much for example documentation as for test.
     mandrill_event = <<-END.gsub(/^ {6}/, '')
       [
          {
@@ -56,5 +85,14 @@ describe "Handles incoming email" do
     handler = IncomingMail::Handler.new
     resp = handler.handle(JSON.parse(mandrill_event))
     expect(resp.action).to eq(IncomingMail::Response::DROPPED)
+  end
+
+  it "should create comment for request-related reply" do
+    mandrill_event = mandrill_payload_from_message(mail)
+    handler = IncomingMail::Handler.new
+    resp = handler.handle(mandrill_event)
+    expect(resp.action).to eq(IncomingMail::Response::COMMENT)
+    expect(resp.comment).to be_a(Comment)
+    expect(resp.comment.proposal.id).to eq(proposal.id)
   end
 end

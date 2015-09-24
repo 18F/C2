@@ -119,6 +119,7 @@ GEM
       activemodel (>= 3.0)
       activesupport (>= 3.0)
       request_store (~> 1.0)
+    email_reply_parser (0.5.8)
     erubis (2.7.0)
     execjs (2.6.0)
     factory_girl (4.5.0)
@@ -406,6 +407,7 @@ DEPENDENCIES
   delayed_job_active_record
   dotenv-rails
   draper
+  email_reply_parser
   factory_girl_rails
   faker
   font-awesome-sass
