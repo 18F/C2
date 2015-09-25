@@ -13,10 +13,13 @@ module IncomingMail
     end
 
     def handle(payload)
-      if !payload[0] or !payload[0]['event'] or payload[0]['event'] != 'inbound'
+      if payload.is_a?(Array) and payload[0]['event'] and payload[0]['event'] == 'inbound'
+        create_response(payload[0])
+      elsif payload.is_a?(Mandrill::WebHook::EventDecorator)
+        create_response(payload)
+      else
         fail "Invalid Mandrill event payload. Must be event==inbound"
       end
-      create_response(payload)
     end
 
     private
@@ -25,7 +28,7 @@ module IncomingMail
       resp = Response.new(type: identify_mail_type(payload))
       case resp.type
       when REQUEST
-        resp.comment = create_comment(payload[0]['msg'])
+        resp.comment = create_comment(payload['msg'])
         resp.action = resp.comment ? Response::COMMENT : Response::ERROR
       else
         resp.action = Response::DROPPED
@@ -34,8 +37,8 @@ module IncomingMail
     end
 
     def identify_mail_type(payload)
-      subject = payload[0]['msg']['subject']
-      references = payload[0]['msg']['headers']['References']
+      subject = payload['msg']['subject']
+      references = payload['msg']['headers']['References']
       if subject.match(/Request (#|FY)\d+/)
         return IncomingMail::REQUEST
       elsif references and references.match(/<proposal-\d+/)
