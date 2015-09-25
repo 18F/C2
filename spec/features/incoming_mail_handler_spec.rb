@@ -50,4 +50,14 @@ describe "Handles incoming email" do
     expect(resp.action).to eq(IncomingMail::Response::COMMENT)
     expect(resp.comment.proposal.existing_observation_for(my_approval.user)).to be_truthy
   end
+
+  it "should parse proposal public_id from email headers" do
+    mandrill_event = mandrill_payload_from_message(mail)
+    mandrill_event[0]['msg']['subject'] = 'something vague'
+    handler = IncomingMail::Handler.new
+    resp = handler.handle(mandrill_event)
+    expect(resp.action).to eq(IncomingMail::Response::COMMENT)
+    expect(resp.comment).to be_a(Comment)
+    expect(resp.comment.proposal.id).to eq(proposal.id)
+  end
 end

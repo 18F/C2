@@ -35,7 +35,10 @@ module IncomingMail
 
     def identify_mail_type(payload)
       subject = payload[0]['msg']['subject']
+      references = payload[0]['msg']['headers']['References']
       if subject.match(/Request (#|FY)\d+/)
+        return IncomingMail::REQUEST
+      elsif references and references.match(/<proposal-\d+/)
         return IncomingMail::REQUEST
       else
         return IncomingMail::UNKNOWN
@@ -62,12 +65,17 @@ module IncomingMail
     end
 
     def find_public_id(msg)
-      # TODO search headers
+      references = msg['headers']['References']
+      ref_re = /<proposal-(\d+)\@.+?>/
+      if references.match(ref_re)
+        return references.match(ref_re)[1]
+      end
 
       sbj_re = /Request\ #?([\w\-]+)/
       if msg['subject'].match(sbj_re)
         return msg['subject'].match(sbj_re)[1]
       end
+
       fail "Failed to find public_id in msg #{msg.inspect}"
     end
 
@@ -93,7 +101,7 @@ module IncomingMail
       params.each do |key, value|
         instance_variable_set("@#{key}", value)
       end
-      @type ||= ERROR # default is pessimistic (realistic?)
+      @action ||= ERROR # default is pessimistic (realistic?)
     end
   end
 end
