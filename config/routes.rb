@@ -12,7 +12,7 @@ C2::Application.routes.draw do
   resources :help, only: [:index, :show]
 
   # mandrill-rails
-  resource :inbox, :controller => 'inbox', :only => [:show,:create]
+  resource :inbox, :controller => 'inbox', :only => [:show, :create]
 
   namespace :api do
     scope :v1 do
