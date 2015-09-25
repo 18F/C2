@@ -28,7 +28,7 @@ module Approvals
 
       state :approved do
         on_entry do
-          self.update(approved_at: Time.now)
+          self.update(approved_at: Time.zone.now)
           self.notify_parent_approved
           Dispatcher.on_approval_approved(self)
         end

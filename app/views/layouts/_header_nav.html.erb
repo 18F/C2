@@ -1,7 +1,7 @@
 <ul class='header-nav'>
   <%- if signed_in? %>
     <li>
-      <%= session['user']['email'] %>
+      <%= current_user.email_address %>
       <%= image_tag 'icon-user.png', alt: ' ' %>
     </li>
     <li>

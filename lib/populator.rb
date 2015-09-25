@@ -42,7 +42,7 @@ module Populator
       # add comments
       num_comments = rand(5)
       num_comments.times do |j|
-        commented_at = rand(requested_at..Time.now)
+        commented_at = rand(requested_at..Time.zone.now)
 
         proposal.comments.create!(
           comment_text: Faker::Hacker.say_something_smart,

@@ -15,7 +15,7 @@ describe Ncr::WorkOrderPolicy do
     end
 
     it "allows an observer to edit it" do
-      observer = FactoryGirl.create(:user)
+      observer = FactoryGirl.create(:user, client_slug: 'ncr')
       proposal.add_observer(observer)
       expect(subject).to permit(observer, work_order)
     end
@@ -32,20 +32,20 @@ describe Ncr::WorkOrderPolicy do
 
   permissions :can_create? do
     it "allows a user with an arbitrary email to create" do
-      user = User.new(email_address: 'user@some.com')
+      user = User.new(email_address: 'user@some.com', client_slug: 'ncr')
       work_order = Ncr::WorkOrder.new
       expect(subject).to permit(user, work_order)
     end
 
     with_feature 'RESTRICT_ACCESS' do
       it "allows someone with a GSA email to create" do
-        user = User.new(email_address: 'user@gsa.gov')
+        user = User.new(email_address: 'user@gsa.gov', client_slug: 'ncr')
         work_order = Ncr::WorkOrder.new
         expect(subject).to permit(user, work_order)
       end
 
       it "doesn't allow someone with a non-GSA email to create" do
-        user = User.new(email_address: 'intruder@some.com')
+        user = User.new(email_address: 'intruder@some.com', client_slug: 'ncr')
         work_order = Ncr::WorkOrder.new
         expect(subject).not_to permit(user, work_order)
       end
