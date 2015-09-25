@@ -50,8 +50,7 @@ describe "observers" do
     expect(page).to have_content("#{observer.full_name} has been added as an observer")
     proposal.reload
 
-    expect(deliveries.first.body.encoded).to include reason   # comment notification
-    expect(deliveries.second.body.encoded).to include reason  # subscription notification
+    expect(deliveries.first.body.encoded).to include reason  # subscription notification
   end
 
   it "hides the reason field until a new observer is selected", js: true do

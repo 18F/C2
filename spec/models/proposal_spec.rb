@@ -289,9 +289,9 @@ describe Proposal do
     end
     context "with a reason" do
       let(:reason) { "my mate, innit" }
-      it 'adds a comment mentioning the reason' do
+      it 'adds an observation comment mentioning the reason' do
         observation = proposal.add_observer(observer_email, user, reason)
-        expect(observation.reason).to eq reason
+        expect(observation.comment).to eq reason
       end
     end
   end

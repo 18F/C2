@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150901190853) do
+ActiveRecord::Schema.define(version: 20150922234702) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -136,9 +136,12 @@ ActiveRecord::Schema.define(version: 20150901190853) do
   end
 
   create_table "proposal_roles", force: :cascade do |t|
-    t.integer "role_id",     null: false
-    t.integer "user_id",     null: false
-    t.integer "proposal_id", null: false
+    t.integer  "role_id",                 null: false
+    t.integer  "user_id",                 null: false
+    t.integer  "proposal_id",             null: false
+    t.string   "comment",     limit: 255
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "proposal_roles", ["role_id", "user_id", "proposal_id"], name: "index_proposal_roles_on_role_id_and_user_id_and_proposal_id", unique: true, using: :btree
