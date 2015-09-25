@@ -114,8 +114,9 @@ module Ncr
       self.approvers.first
     end
 
-    def approving_official_email_address
-      approving_official ? approving_official.email_address : self.system_approver_emails.first
+    # the highest pending approver on the stack
+    def current_approver_email_address
+      self.individual_approvals.pending.first.user.email_address
     end
 
     def email_approvers
