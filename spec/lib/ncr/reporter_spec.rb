@@ -21,4 +21,23 @@ describe Ncr::Reporter do
       expect(Ncr::Reporter.proposals_pending_budget).to eq([actionable.proposal])
     end
   end
+
+  describe '.proposals_tier_one_pending' do
+    it "only returns Proposals where Tier One approval is actionable" do
+      approver_email = 'i-approve@example.gov'
+
+      whs_work_order = FactoryGirl.create(:ncr_work_order, :with_approvers)
+      whs_work_order.update_attribute(:org_code, Ncr::Organization::WHSC_CODE)
+      whs_work_order.setup_approvals_and_observers(approver_email)
+
+      approved_work_order = FactoryGirl.create(:ncr_work_order, :with_approvers)
+      approved_work_order.setup_approvals_and_observers(approver_email)
+      approved_work_order.individual_approvals.first.approve!
+
+      alt_work_order = FactoryGirl.create(:ncr_work_order, :with_approvers)
+      alt_work_order.setup_approvals_and_observers(approver_email)
+
+      expect(Ncr::Reporter.proposals_tier_one_pending).to eq([approved_work_order.proposal])
+    end
+  end
 end

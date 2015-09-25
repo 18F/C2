@@ -41,14 +41,17 @@ describe Ncr::WorkOrder do
   end
 
   describe '#setup_approvals_and_observers' do
+    let (:ba61_tier_one_email) { Ncr::WorkOrder.ba61_tier1_budget_mailbox }
+    let (:ba61_tier_two_email) { Ncr::WorkOrder.ba61_tier2_budget_mailbox }
+
     it "creates approvers when not an emergency" do
       form = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61')
       form.setup_approvals_and_observers('bob@example.com')
       expect(form.observations.length).to eq(0)
       expect(form.approvers.map(&:email_address)).to eq([
         'bob@example.com',
-        Ncr::WorkOrder.ba61_tier1_budget_mailbox,
-        Ncr::WorkOrder.ba61_tier2_budget_mailbox
+        ba61_tier_one_email,
+        ba61_tier_two_email
       ])
       form.reload
       expect(form.approved?).to eq(false)
@@ -69,92 +72,88 @@ describe Ncr::WorkOrder do
       form.setup_approvals_and_observers('bob@example.com')
       expect(form.observers.map(&:email_address)).to match_array([
         'bob@example.com',
-        Ncr::WorkOrder.ba61_tier1_budget_mailbox,
-        Ncr::WorkOrder.ba61_tier2_budget_mailbox
+        ba61_tier_one_email,
+        ba61_tier_two_email
       ].uniq)
       expect(form.approvals.length).to eq(0)
       form.clear_association_cache
       expect(form.approved?).to eq(true)
     end
 
-    with_env_vars(NCR_BA61_TIER1_BUDGET_MAILBOX: 'ba61one@example.gov',
-                  NCR_BA61_TIER2_BUDGET_MAILBOX: 'ba61two@example.gov',
-                  NCR_BA80_BUDGET_MAILBOX: 'ba80@example.gov') do
-      it "accounts for approver transitions when nothing's approved" do
-        wo = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61')
-        wo.setup_approvals_and_observers('ao@example.gov')
-        expect(wo.approvers.map(&:email_address)).to eq %w(
-          ao@example.gov
-          ba61one@example.gov
-          ba61two@example.gov
-        )
+    it "accounts for approver transitions when nothing's approved" do
+      wo = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61')
+      wo.setup_approvals_and_observers('ao@example.gov')
+      expect(wo.approvers.map(&:email_address)).to eq [
+        'ao@example.gov',
+        ba61_tier_one_email,
+        ba61_tier_two_email
+      ]
 
-        wo.update(org_code: 'P1122021 (192X,192M) WHITE HOUSE DISTRICT')
-        wo.setup_approvals_and_observers('ao@example.gov')
-        expect(wo.reload.approvers.map(&:email_address)).to eq %w(
-          ao@example.gov
-          ba61two@example.gov
-        )
+      wo.update(org_code: 'P1122021 (192X,192M) WHITE HOUSE DISTRICT')
+      wo.setup_approvals_and_observers('ao@example.gov')
+      expect(wo.reload.approvers.map(&:email_address)).to eq [
+        'ao@example.gov',
+        ba61_tier_two_email
+      ]
 
-        wo.setup_approvals_and_observers('ao2@example.gov')
-        expect(wo.reload.approvers.map(&:email_address)).to eq %w(
-          ao2@example.gov
-          ba61two@example.gov
-        )
+      wo.setup_approvals_and_observers('ao2@example.gov')
+      expect(wo.reload.approvers.map(&:email_address)).to eq [
+        'ao2@example.gov',
+        ba61_tier_two_email
+      ]
 
-        wo.update(expense_type: 'BA80')
-        wo.setup_approvals_and_observers('ao@example.gov')
-        expect(wo.reload.approvers.map(&:email_address)).to eq %w(
-          ao@example.gov
-          ba80@example.gov
-        )
-      end
+      wo.update(expense_type: 'BA80')
+      wo.setup_approvals_and_observers('ao@example.gov')
+      expect(wo.reload.approvers.map(&:email_address)).to eq [
+        'ao@example.gov',
+        ba61_tier_one_email
+      ]
+    end
 
-      it "unsets the approval status" do
-        wo = FactoryGirl.create(:ncr_work_order, expense_type: 'BA80')
-        wo.setup_approvals_and_observers('ao@example.gov')
-        expect(wo.approvers.map(&:email_address)).to eq %w(
-          ao@example.gov
-          ba80@example.gov
-        )
+    it "unsets the approval status" do
+      wo = FactoryGirl.create(:ncr_work_order, expense_type: 'BA80')
+      wo.setup_approvals_and_observers('ao@example.gov')
+      expect(wo.approvers.map(&:email_address)).to eq [
+        'ao@example.gov',
+        ba61_tier_one_email
+      ]
 
-        wo.individual_approvals.first.approve!
-        wo.individual_approvals.second.approve!
-        expect(wo.reload.approved?).to be true
+      wo.individual_approvals.first.approve!
+      wo.individual_approvals.second.approve!
+      expect(wo.reload.approved?).to be true
 
-        wo.update(expense_type: 'BA61')
-        wo.setup_approvals_and_observers('ao@example.gov')
-        expect(wo.reload.pending?).to be true
-      end
+      wo.update(expense_type: 'BA61')
+      wo.setup_approvals_and_observers('ao@example.gov')
+      expect(wo.reload.pending?).to be true
+    end
 
-      it "does not re-add observers on emergencies" do
-        wo = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61', emergency: true)
-        wo.setup_approvals_and_observers('ao@example.gov')
+    it "does not re-add observers on emergencies" do
+      wo = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61', emergency: true)
+      wo.setup_approvals_and_observers('ao@example.gov')
 
-        expect(wo.approvals).to be_empty
-        expect(wo.observers.count).to be 3
+      expect(wo.approvals).to be_empty
+      expect(wo.observers.count).to be 3
 
-        wo.setup_approvals_and_observers('ao@example.gov')
-        wo.reload
-        expect(wo.approvals).to be_empty
-        expect(wo.observers.count).to be 3
-      end
+      wo.setup_approvals_and_observers('ao@example.gov')
+      wo.reload
+      expect(wo.approvals).to be_empty
+      expect(wo.observers.count).to be 3
+    end
 
-      it "handles the delegate then update scenario" do
-        wo = FactoryGirl.create(:ncr_work_order, expense_type: 'BA80')
-        wo.setup_approvals_and_observers('ao@example.gov')
-        delegate = FactoryGirl.create(:user)
-        wo.approvers.second.add_delegate(delegate)
-        wo.individual_approvals.second.update(user: delegate)
+    it "handles the delegate then update scenario" do
+      wo = FactoryGirl.create(:ncr_work_order, expense_type: 'BA80')
+      wo.setup_approvals_and_observers('ao@example.gov')
+      delegate = FactoryGirl.create(:user)
+      wo.approvers.second.add_delegate(delegate)
+      wo.individual_approvals.second.update(user: delegate)
 
-        wo.individual_approvals.first.approve!
-        wo.individual_approvals.second.approve!
+      wo.individual_approvals.first.approve!
+      wo.individual_approvals.second.approve!
 
-        wo.setup_approvals_and_observers('ao@example.gov')
-        wo.reload
-        expect(wo.approved?).to be true
-        expect(wo.approvers.second).to eq delegate
-      end
+      wo.setup_approvals_and_observers('ao@example.gov')
+      wo.reload
+      expect(wo.approved?).to be true
+      expect(wo.approvers.second).to eq delegate
     end
   end
 
@@ -172,39 +171,38 @@ describe Ncr::WorkOrder do
   end
 
   describe '#system_approver_emails' do
+    let (:ba61_tier_one_email) { Ncr::WorkOrder.ba61_tier1_budget_mailbox }
+    let (:ba61_tier_two_email) { Ncr::WorkOrder.ba61_tier2_budget_mailbox }
+
     context "for a BA61 request" do
       it "skips the Tier 1 budget approver for WHSC" do
         work_order = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61', org_code: Ncr::Organization::WHSC_CODE)
         expect(work_order.system_approver_emails).to eq([
-          Ncr::WorkOrder.ba61_tier2_budget_mailbox
+          ba61_tier_two_email
         ])
       end
 
       it "includes the Tier 1 budget approver for an unknown organization" do
         work_order = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61', org_code: nil)
         expect(work_order.system_approver_emails).to eq([
-          Ncr::WorkOrder.ba61_tier1_budget_mailbox,
-          Ncr::WorkOrder.ba61_tier2_budget_mailbox
+          ba61_tier_one_email,
+          ba61_tier_two_email
         ])
       end
     end
 
     context "for a BA80 request" do
       it "uses the general budget email" do
-        budget_email = 'ba80.budget@gsa.gov'
-        with_env_var('NCR_BA80_BUDGET_MAILBOX', budget_email) do
-          work_order = FactoryGirl.create(:ncr_work_order, expense_type: 'BA80')
-          expect(work_order.system_approver_emails).to eq([budget_email])
-        end
+        budget_email = Ncr::WorkOrder.ba80_budget_mailbox
+        work_order = FactoryGirl.create(:ncr_work_order, expense_type: 'BA80')
+        expect(work_order.system_approver_emails).to eq([budget_email])
       end
 
       it "uses the OOL budget email for their org code" do
-        budget_email = 'ool.budget@gsa.gov'
-        with_env_var('NCR_OOL_BA80_BUDGET_MAILBOX', budget_email) do
-          org_code = Ncr::Organization::OOL_CODES.first
-          work_order = FactoryGirl.create(:ncr_work_order, expense_type: 'BA80', org_code: org_code)
-          expect(work_order.system_approver_emails).to eq([budget_email])
-        end
+        budget_email = Ncr::WorkOrder.ool_ba80_budget_mailbox
+        org_code = Ncr::Organization::OOL_CODES.first
+        work_order = FactoryGirl.create(:ncr_work_order, expense_type: 'BA80', org_code: org_code)
+        expect(work_order.system_approver_emails).to eq([budget_email])
       end
     end
   end

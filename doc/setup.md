@@ -37,7 +37,7 @@ Per [the Twelve-Factor guidelines](http://12factor.net/config), all necessary co
 ## Starting the application
 
 ```bash
-PORT=3000 ./script/start
+PORT=3000 ASSETS_DEBUG=true ./script/start
 open http://localhost:3000
 ```
 

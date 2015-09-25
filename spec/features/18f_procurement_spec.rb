@@ -11,7 +11,7 @@ describe "GSA 18f Purchase Request Form" do
 
   context "when signed in" do
 
-    let(:requester) { FactoryGirl.create(:user) }
+    let(:requester) { FactoryGirl.create(:user, client_slug: 'gsa18f') }
     let(:procurement) {
       pr = FactoryGirl.create(:gsa18f_procurement, requester: requester)
       pr.add_approvals
@@ -75,7 +75,7 @@ describe "GSA 18f Purchase Request Form" do
       }.to_not change { Proposal.count }
 
       expect(current_path).to eq('/gsa18f/procurements')
-      expect(page).to have_content("Cost per unit must be less than or equal to 3000")
+      expect(page).to have_content("Cost per unit must be less than or equal to $")
       # keeps the form values
       expect(find_field('Cost per unit').value).to eq('10000')
     end

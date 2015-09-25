@@ -1,7 +1,7 @@
 class Proposal < ActiveRecord::Base
   include WorkflowModel
   include ValueHelper
-  has_paper_trail
+  has_paper_trail class_name: 'C2Version'
 
   CLIENT_MODELS = []  # this gets populated later
   FLOWS = %w(parallel linear).freeze
@@ -51,7 +51,7 @@ class Proposal < ActiveRecord::Base
     allow_blank: true
   }
   validates :flow, presence: true, inclusion: {in: FLOWS}
-  # TODO validates :requester_id, presence: true
+  validates :requester_id, presence: true
 
   self.statuses.each do |status|
     scope status, -> { where(status: status) }
@@ -177,6 +177,10 @@ class Proposal < ActiveRecord::Base
     self.approvers.merge(self.currently_awaiting_approvals)
   end
 
+  def awaiting_approver?(user)
+    self.currently_awaiting_approvers.include?(user)
+  end
+
   # delegated, with a fallback
   # TODO refactor to class method in a module
   def delegate_with_default(method)
@@ -228,7 +232,7 @@ class Proposal < ActiveRecord::Base
 
   def restart
     # Note that none of the state machine's history is stored
-    self.api_tokens.update_all(expires_at: Time.now)
+    self.api_tokens.update_all(expires_at: Time.zone.now)
     self.approvals.update_all(status: 'pending')
     if self.root_approval
       self.root_approval.initialize!

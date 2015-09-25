@@ -1,2 +1,0 @@
-describe ErrorsDecorator do
-end
