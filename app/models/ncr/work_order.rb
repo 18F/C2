@@ -114,9 +114,13 @@ module Ncr
       self.approvers.first
     end
 
-    # the highest pending approver on the stack
+    # the highest approver on the stack, pending preferred if status indicates
     def current_approver_email_address
-      self.individual_approvals.pending.first.user.email_address
+      if self.individual_approvals.pending.first
+        self.individual_approvals.pending.first.user.email_address
+      else
+        self.approving_official.email_address
+      end
     end
 
     def email_approvers
