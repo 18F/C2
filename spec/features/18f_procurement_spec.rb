@@ -34,7 +34,7 @@ describe "GSA 18f Purchase Request Form" do
       fill_in 'Quantity', with: 6
       fill_in 'gsa18f_procurement_date_requested', with: '12/12/2999'
       fill_in 'gsa18f_procurement_additional_info', with: 'none'
-      select Gsa18f::Procurement::URGENCY[0], :from => 'gsa18f_procurement_urgency'
+      select Gsa18f::Procurement::URGENCY[10], :from => 'gsa18f_procurement_urgency'
       select Gsa18f::Procurement::OFFICES[0], :from => 'gsa18f_procurement_office'
       expect {
         click_on 'Submit for approval'
@@ -57,7 +57,7 @@ describe "GSA 18f Purchase Request Form" do
       expect(procurement.cost_per_unit).to eq(123.45)
       expect(procurement.quantity).to eq(6)
       expect(procurement.office).to eq(Gsa18f::Procurement::OFFICES[0])
-      expect(procurement.urgency).to eq(Gsa18f::Procurement::URGENCY[0])
+      expect(procurement.urgency).to eq(10)
     end
 
     it "sets an observer" do
@@ -142,7 +142,7 @@ describe "GSA 18f Purchase Request Form" do
       fill_in 'Quantity', with: 6
       fill_in 'gsa18f_procurement_date_requested', with: '12/12/2999'
       fill_in 'gsa18f_procurement_additional_info', with: 'none'
-      select Gsa18f::Procurement::URGENCY[0], :from => 'gsa18f_procurement_urgency'
+      select Gsa18f::Procurement::URGENCY[10], :from => 'gsa18f_procurement_urgency'
       select Gsa18f::Procurement::OFFICES[0], :from => 'gsa18f_procurement_office'
 
       click_on 'Submit for approval'
@@ -167,7 +167,7 @@ describe "GSA 18f Purchase Request Form" do
       expect(procurement.cost_per_unit).to eq(123.45)
       expect(procurement.quantity).to eq(6)
       expect(procurement.office).to eq(Gsa18f::Procurement::OFFICES[0])
-      expect(procurement.urgency).to eq(Gsa18f::Procurement::URGENCY[0])
+      expect(procurement.urgency).to eq(10)
 
       expect(proposal.requester).to eq(requester)
       expect(proposal.approvers.map(&:email_address)).to eq(%w(test_approver@some-dot-gov.gov))

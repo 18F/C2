@@ -69,6 +69,10 @@ module Gsa18f
       self.product_name_and_description
     end
 
+    def urgency_string
+      URGENCY[urgency]
+    end
+
     def self.approver_email
       ENV.fetch('GSA18F_APPROVER_EMAIL')
     end
