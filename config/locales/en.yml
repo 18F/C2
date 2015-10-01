@@ -36,6 +36,8 @@ en:
         create: "Add"
   activerecord:
     attributes:
+      gsa18f/procurement:
+        recurring: "Recurring charge"
       ncr/work_order:
         cl_number: "CL number"
         code: "Work Order / Maximo Ticket Number"

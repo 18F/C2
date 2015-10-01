@@ -96,8 +96,8 @@ SimpleForm.setup do |config|
   # You can define a class to use in all item wrappers. Defaulting to none.
   # config.item_wrapper_class = nil
 
-  # How the label text should be generated altogether with the required text.
-  # config.label_text = lambda { |label, required, explicit_label| "#{required} #{label}" }
+  # How the label text should be generated altogether with the required text. The asterisk for required fields is added by CSS.
+  config.label_text = lambda { |label, required, explicit_label| label }
 
   # You can define the class to use on all labels. Default is nil.
   # config.label_class = nil

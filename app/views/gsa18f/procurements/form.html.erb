@@ -3,25 +3,10 @@
   <h2>GSA 18f</h2>
   <h3>Purchase Request - Supplies</h3>
   <p>Eg; ergonomic keyboards, foamcore boards, ergonomic mice, monitor stands, post-its, sharpies, etc. </p>
-  <%= form_for @model_instance do |f| %>
-    <!-- Office Location -->
-    <div class="form-group">
-      <%= f.label :office %>
-      <%= f.collection_select(
-            :office, Gsa18f::Procurement::OFFICES, :to_s, :to_s,
-            {include_blank: true}, {class: 'form-control'}) %>
-    </div>
-    <!-- Product Name and Description -Text Area- -->
-    <div class="form-group">
-      <%= f.label :product_name_and_description, 'Product Name and Description', class: "required" %>
-      <%= f.text_area :product_name_and_description, class: 'form-control' %>
-    </div>
-    <!-- Justification -Text Area- -->
-    <div class="form-group">
-      <%= f.label :justification %>
-      <%= f.text_area :justification, class: 'form-control' %>
-    </div>
-    <!-- Link to Product -->
+  <%= simple_form_for @model_instance do |f| %>
+    <%= f.input :office, collection: Gsa18f::Procurement::OFFICES %>
+    <%= f.input :product_name_and_description %>
+    <%= f.input :justification %>
     <div class="form-group">
       <%= f.label :link_to_product %>
       <p> Search <a href='https://www.gsaadvantage.gov/advantage/main/start_page.do' target='_blank'>GSA Advantage</a> first; then <a href='http://www.amazon.com' target='_blank'>Amazon;</a> then other vendor. Paste link here.</p>
@@ -35,59 +20,22 @@
         <%= f.number_field :cost_per_unit, class: 'form-control', step: 0.01 %>
       </div>
     </div>
-    <!-- Quantity of Product -->
-    <div class="form-group">
-      <%= f.label :quantity, class: "required" %>
-      <div class="input-group">
-        <%= f.number_field :quantity, class: 'form-control', step: 1 %>
-      </div>
-    </div>
-    <div class="form-group">
-      <%= f.label :recurring do %>
-            <%= f.check_box :recurring, :"data-filter-control" => "recurring" %>
-            Recurring Charge
-          <% end %>
-    </div>
+    <%= f.input :quantity, input_html: { step: 1 } %>
+    <%= f.input :recurring, input_html: { 'data-filter-control' => 'recurring' } %>
     <!-- Recurring Frequency -->
-    <div data-filter-key="recurring"
-                                data-filter-value="1">
-      <div class="form-group">
-        <%= f.label :recurring_interval %>
-        <div class="input-group">
-          <%= f.collection_select(
-              :recurring_interval, Gsa18f::Procurement::RECURRENCE, :to_s, :to_s,
-              {include_blank: false}, {class: 'form-control'}) %>
-        </div>
-      </div>
+    <div data-filter-key="recurring" data-filter-value="1">
+      <%= f.input :recurring_interval, collection: Gsa18f::Procurement::RECURRENCE, include_blank: false %>
       <div class="form-group">
         <%= f.label :recurring_length %>
-        <div class="input-group">
-          <%= f.number_field :recurring_length, class: 'form-control', step: 1, 'aria-describedby'=>'description-add-info' %>
-        </div>
+        <%= f.number_field :recurring_length, class: 'form-control', step: 1, 'aria-describedby'=>'description-add-info' %>
         <div class="help-block" id="description-add-info">
           e.g. Number of Days, Months, Years
         </div>
       </div>
     </div>
-    <!-- Date Requested -->
-    <div class="form-group">
-      <%= f.label :date_requested %>
-      <div class="input-group">
-          <%= f.date_field :date_requested, as: :date, value: f.object.date_requested %>
-      </div>
-    </div>
-    <!-- Urgency -->
-     <div class="form-group">
-      <%= f.label :urgency %>
-      <%= f.collection_select(
-            :urgency, Gsa18f::Procurement::URGENCY, :first, :last,
-            {include_blank: true}, {class: 'form-control'}) %>
-    </div>
-    <!-- Additional Info -->
-    <div class="form-group">
-      <%= f.label :additional_info, 'Please include any additional information you feel we need to correctly execute the purchase' %>
-      <%= f.text_area :additional_info, class: 'form-control' %>
-    </div>
+    <%= f.input :date_requested, as: :date, html5: true %>
+    <%= f.input :urgency, collection: Gsa18f::Procurement::URGENCY, label_method: :last, value_method: :first %>
+    <%= f.input :additional_info, as: :text, label: "Please include any additional information you feel we need to correctly execute the purchase" %>
     <%= render partial: "shared/form_submit_button", locals: { form: f } %>
     <% if @model_instance.persisted? %>
       <%= link_to 'Discard Changes', proposal_url(@model_instance.proposal) %>

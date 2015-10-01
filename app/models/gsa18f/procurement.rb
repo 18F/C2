@@ -21,8 +21,9 @@ module Gsa18f
 
     validates :quantity, numericality: {
       greater_than_or_equal_to: 1
-    }
+    }, presence: true
     validates :product_name_and_description, presence: true
+    # TODO add conditional validations for recurring charges
 
     after_create :add_approvals, :add_observers
 
