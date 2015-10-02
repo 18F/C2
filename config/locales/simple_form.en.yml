@@ -10,19 +10,24 @@ en:
       # html: '<abbr title="required">*</abbr>'
     error_notification:
       default_message: "Please review the problems below:"
-    # Examples
-    # labels:
-    #   defaults:
-    #     password: 'Password'
-    #   user:
-    #     new:
-    #       email: 'E-mail to sign in.'
-    #     edit:
-    #       email: 'E-mail.'
-    # hints:
-    #   defaults:
-    #     username: 'User name to sign in.'
-    #     password: 'No special characters, please.'
+    labels:
+      # defaults:
+      #   password: 'Password'
+      # user:
+      #   new:
+      #     email: 'E-mail to sign in.'
+      #   edit:
+      #     email: 'E-mail.'
+      gsa18f_procurement:
+        additional_info: "Please include any additional information you feel we need to correctly execute the purchase"
+    # TODO have simple_form set up the aria-describedby
+    hints:
+      # defaults:
+      #   username: 'User name to sign in.'
+      #   password: 'No special characters, please.'
+      gsa18f_procurement:
+        link_to_product: "Search <a href='https://www.gsaadvantage.gov/advantage/main/start_page.do' target='_blank'>GSA Advantage</a> first; then <a href='http://www.amazon.com' target='_blank'>Amazon;</a> then other vendor. Paste link here."
+        recurring_length: "e.g. Number of Days, Months, Years"
     # include_blanks:
     #   defaults:
     #     age: 'Rather not say'
