@@ -12,14 +12,7 @@
       <p> Search <a href='https://www.gsaadvantage.gov/advantage/main/start_page.do' target='_blank'>GSA Advantage</a> first; then <a href='http://www.amazon.com' target='_blank'>Amazon;</a> then other vendor. Paste link here.</p>
       <%= f.text_field :link_to_product, class: 'form-control' %>
     </div>
-    <!-- Amount  -->
-    <div class="form-group">
-      <%= f.label :cost_per_unit, class: "required" %>
-      <div class="input-group">
-        <div class="input-group-addon">$</div>
-        <%= f.number_field :cost_per_unit, class: 'form-control', step: 0.01 %>
-      </div>
-    </div>
+    <%= f.input :cost_per_unit, as: :currency %>
     <%= f.input :quantity, input_html: { step: 1 } %>
     <%= f.input :recurring, input_html: { 'data-filter-control' => 'recurring' } %>
     <!-- Recurring Frequency -->

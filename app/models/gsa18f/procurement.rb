@@ -19,6 +19,7 @@ module Gsa18f
     include ProposalDelegate
     include PurchaseCardMixin
 
+    validates :cost_per_unit, presence: true
     validates :quantity, numericality: {
       greater_than_or_equal_to: 1
     }, presence: true
