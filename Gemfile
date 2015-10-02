@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 ruby '2.2.2' # this should match `.ruby-version` and docs/setup.md
 
+gem 'about_yml'
 gem 'active_model_serializers'
 gem 'acts_as_list'
 gem 'ar_outer_joins'
