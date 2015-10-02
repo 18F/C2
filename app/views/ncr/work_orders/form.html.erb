@@ -10,20 +10,8 @@
     <%= f.input :description %>
     <div class="form-group">
       <%= field_set_tag "Expense type", class: "required" do %>
-        <div class="radio">
-          <%= f.label :expense_type, value: "BA60" do %>
-            <%= f.radio_button :expense_type, "BA60",
-                               :"data-filter-control" => "expense-type" %>
-            BA60
-          <% end %>
-        </div>
-        <div class="radio">
-          <%= f.label :expense_type, value: "BA61" do %>
-            <%= f.radio_button :expense_type, "BA61",
-                               :"data-filter-control" => "expense-type" %>
-            BA61
-          <% end %>
-        </div>
+        <%= expense_type_radio_button(f, 'BA60') %>
+        <%= expense_type_radio_button(f, 'BA61') %>
         <div class="checkbox" data-filter-key="expense-type"
                                 data-filter-value="BA61">
           <%= f.label :emergency do %>
@@ -31,13 +19,7 @@
             This request was an emergency and I received a verbal Notice to Proceed (NTP)
           <% end %>
         </div>
-        <div class="radio">
-          <%= f.label :expense_type, value: "BA80" do %>
-            <%= f.radio_button :expense_type, "BA80",
-                               :"data-filter-control" => "expense-type" %>
-            BA80
-          <% end %>
-        </div>
+        <%= expense_type_radio_button(f, 'BA80') %>
         <%= render partial: 'ba_80_fields', locals: {f: f} %>
       <% end %>
     </div>
