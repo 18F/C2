@@ -1,5 +1,5 @@
 class Comment < ActiveRecord::Base
-  has_paper_trail
+  has_paper_trail class_name: 'C2Version'
 
   belongs_to :proposal
   belongs_to :user
@@ -9,6 +9,7 @@ class Comment < ActiveRecord::Base
   validates :user, presence: true
   validates :proposal, presence: true
 
+  scope :normal_comments, ->{ where(update_comment: nil) } # we probably want `.where.not(update_comment: true)`, but that query isn't working as of 5bb8b4d385
   scope :update_comments, ->{ where(update_comment: true) }
 
   after_create ->{ Dispatcher.on_comment_created(self) }

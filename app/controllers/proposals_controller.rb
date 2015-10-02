@@ -3,7 +3,7 @@ class ProposalsController < ApplicationController
 
   before_filter :authenticate_user!, except: :approve
   # TODO use Policy for all actions
-  before_filter ->{authorize self.proposal}, only: [:show, :cancel, :cancel_form]
+  before_filter ->{authorize self.proposal}, only: [:show, :cancel, :cancel_form, :history]
   before_filter :needs_token_on_get, only: :approve
   before_filter :validate_access, only: :approve
   helper_method :display_status
@@ -20,6 +20,7 @@ class ProposalsController < ApplicationController
     @CLOSED_PROPOSAL_LIMIT = 10
 
     @pending_data = self.listing.pending
+    @pending_review_data = self.listing.pending_review
     @approved_data = self.listing.approved.alter_query{ |rel| rel.limit(@CLOSED_PROPOSAL_LIMIT) }
     @cancelled_data = self.listing.cancelled
   end
@@ -73,6 +74,10 @@ class ProposalsController < ApplicationController
     @end_date = query_listing.end_date
   end
 
+  def history
+    @container = Query::Proposal::Versions.container(self.proposal)
+    @container.set_state_from_params(params)
+  end
 
   protected
 

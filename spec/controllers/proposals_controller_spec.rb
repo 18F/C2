@@ -13,7 +13,8 @@ describe ProposalsController do
       proposal2.individual_approvals.create!(user: user, status: 'actionable')
 
       get :index
-      expect(assigns(:pending_data).rows.sort).to eq [proposal1, proposal2]
+      expect(assigns(:pending_review_data).rows.sort).to eq [proposal2]
+      expect(assigns(:pending_data).rows.sort).to eq [proposal1]
       expect(assigns(:approved_data).rows.sort).to be_empty
       expect(assigns(:cancelled_data).rows.sort).to be_empty
     end

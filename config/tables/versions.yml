@@ -1,0 +1,22 @@
+default:
+  engine: C2Version
+  sort: -created_at
+  column_configs:
+    event: true
+    item_type:
+      display: item.class.name
+    user:
+      virtual: true
+      display: user.full_name
+    diff:
+      virtual: true
+      header: Modification
+      formatter: version_diff
+    created_at:
+      formatter: date
+  columns:
+    - event
+    - item_type
+    - user
+    - diff
+    - created_at

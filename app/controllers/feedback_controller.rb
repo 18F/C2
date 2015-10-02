@@ -8,7 +8,10 @@ class FeedbackController < ApplicationController
     unless form_values.empty?
       FeedbackMailer.feedback(current_user, form_values).deliver_later
     end
-    # @todo - redirect somewhere to avoid back/refresh button issues
+    redirect_to '/feedback/thanks'
+  end
+
+  def thanks
   end
 
   protected

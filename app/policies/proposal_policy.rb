@@ -18,10 +18,10 @@ class ProposalPolicy
   def can_show!
     check(self.visible_proposals.exists?(@proposal.id), "You are not allowed to see this proposal")
   end
+  alias_method :can_history!, :can_show!
 
   def can_create!
-    # TODO restrict by client_slug
-    true
+    slug_matches? || @user.admin?
   end
   alias_method :can_new!, :can_create!
 
@@ -31,6 +31,15 @@ class ProposalPolicy
   alias_method :can_cancel_form!, :can_cancel!
 
   protected
+
+  def use_case_namespace
+    cls = self.class.to_s
+    cls.gsub("::#{cls.demodulize}", '')
+  end
+
+  def slug_matches?
+    use_case_namespace.downcase == @user.client_slug
+  end
 
   def restricted?
     ENV['RESTRICT_ACCESS'] == 'true'

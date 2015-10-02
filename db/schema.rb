@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150922151452) do
+ActiveRecord::Schema.define(version: 20150924162801) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -97,9 +97,9 @@ ActiveRecord::Schema.define(version: 20150922151452) do
     t.boolean  "recurring"
     t.string   "recurring_interval",           limit: 255
     t.integer  "recurring_length"
-    t.string   "urgency",                      limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "urgency"
   end
 
   create_table "ncr_work_orders", force: :cascade do |t|

@@ -1,6 +1,6 @@
 class Approval < ActiveRecord::Base
   include WorkflowModel
-  has_paper_trail
+  has_paper_trail class_name: 'C2Version'
 
   workflow do   # overwritten in child classes
     state :pending

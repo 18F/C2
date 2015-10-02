@@ -1,7 +1,18 @@
 <% content_for :title, "My Requests" %>
 <div class="inset">
   <%= render partial: 'search_ui' %>
-  <div class="row pending-pr">
+  <div id="proposals-pending-review" class="row pending-pr">
+    <div class="col-md-12">
+      <h3>Purchase Requests Needing Review</h3>
+      <%- if @pending_review_data.rows.any? %>
+        <%= render partial: "shared/table", locals: {container: @pending_review_data} %>
+      <%- else %>
+        <p class="empty-list-label">No purchase requests needing review</p>
+      <%- end %>
+    </div>
+  </div>
+
+  <div id="proposals-pending" class="row pending-pr">
     <div class="col-md-12">
       <h3>Pending Purchase Requests</h3>
       <%- if @pending_data.rows.any? %>

@@ -1,7 +1,7 @@
 URGENCY:
-  - 'I need it yesterday'
-  - "I'm patient but would like w/in a week"
-  - 'Whenever'
+  10: 'I need it yesterday'
+  20: "I'm patient but would like w/in a week"
+  30: 'Whenever'
 OFFICES:
   - 'DC'
   - 'Chicago'
