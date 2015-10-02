@@ -1,0 +1,12 @@
+#!/bin/sh
+
+set -e
+set -x
+
+
+# record the deployment in New Relic
+# https://docs.newrelic.com/docs/agents/ruby-agent/features/recording-deployments-ruby-agent#Manual
+# TODO track who deployed, and what revision
+bundle exec newrelic deployments
+
+./script/start

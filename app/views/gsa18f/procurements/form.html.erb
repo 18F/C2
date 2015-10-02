@@ -80,7 +80,7 @@
      <div class="form-group">
       <%= f.label :urgency %>
       <%= f.collection_select(
-            :urgency, Gsa18f::Procurement::URGENCY, :to_s, :to_s,
+            :urgency, Gsa18f::Procurement::URGENCY, :first, :last,
             {include_blank: true}, {class: 'form-control'}) %>
     </div>
     <!-- Additional Info -->

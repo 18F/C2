@@ -22,6 +22,10 @@ describe "Tabular data sorting" do
   end
 
   context 'home page' do
+    before do
+      user.update(client_slug: nil)
+    end
+
     it 'begins sorted by -created_at' do
       visit '/proposals'
 
@@ -71,6 +75,29 @@ describe "Tabular data sorting" do
       end
 
       expect_order(tables[1], cancelled.reverse)
+    end
+  end
+
+  context '18F home page' do
+    let!(:proposals) { 3.times.map { FactoryGirl.create(:gsa18f_procurement) } }
+
+    before do
+      user.update(client_slug: "gsa18f")
+      proposals[0].update(urgency: 20)
+      proposals[1].update(urgency: 30)
+      proposals[2].update(urgency: 10)
+    end
+
+    it 'can be sorted by urgency' do
+      visit '/proposals'
+      expect_order(tables[0], proposals.reverse.map { |p| p.proposal })
+
+      within(tables[0]) do
+        click_on 'Urgency'
+      end
+
+      expect_order(tables[0], [proposals[2], proposals[0], proposals[1]]
+        .map { |p| p.proposal })
     end
   end
 
