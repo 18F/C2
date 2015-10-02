@@ -19,14 +19,13 @@ namespace :financial_year_report do
 			end
 		end
 		mail = Mail.new do
-		  from     'anthony.garvan@gmail.com'
+		  from     'c2admin@gmail.com'
 		  to       ENV['MAILTO']
 		  subject  'Annual Report of Approved Requests- 20' + ENV['FY']
 		  body     'Report is attached to this email.'
 		  add_file :filename => 'FY' + ENV['FY'] + '_Report.csv', :content => csv_string
 		end
 	
-		mail.delivery_method :sendmail
 		mail.deliver
 		puts "Report has been sent!"
 	end
