@@ -26,6 +26,7 @@ module Ncr
     before_validation :normalize_values
     before_update :record_changes
 
+    validates :amount, presence: true
     validates :cl_number, format: {
       with: /\ACL\d{7}\z/,
       message: "must start with 'CL', followed by seven numbers"

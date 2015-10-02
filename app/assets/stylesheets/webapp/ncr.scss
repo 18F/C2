@@ -8,11 +8,9 @@
     margin-bottom: 20px;
   }
 
-  fieldset {
-    .checkbox,
-    .form-group {
-      padding-left: 10%;
-    }
+  // fields that only appear when a certain value is selected
+  [data-filter-key] {
+    padding-left: 10%;
   }
 }
 

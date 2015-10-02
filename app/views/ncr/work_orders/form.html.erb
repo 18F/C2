@@ -44,27 +44,10 @@
     <%= f.input :building_number, input_html: { class: 'js-selectize', data: { initial: JSON.generate(building_options) } } %>
     <%= f.input :org_code, collection: Ncr::Organization.all, label_method: :to_s, prompt: :translate, input_html: { class: 'js-selectize' } %>
     <%= f.input :vendor, input_html: { class: 'js-selectize', data: { initial: JSON.generate(vendor_options(@model_instance.vendor)) } } %>
-    <div class="form-group">
-      <%= field_set_tag "Amount", class: "required" do %>
-        <%= f.label :amount, "Dollar Amount", :class => 'sr-only'  %>
-        <div class="input-group">
-          <div class="input-group-addon">$</div>
-          <%= f.number_field :amount, class: 'form-control', step: 0.01 %>
-        </div>
-        <div class="radio">
-          <%= f.label :not_to_exceed, value: false do %>
-            <%= f.radio_button :not_to_exceed, false %>
-            Exact
-          <% end %>
-        </div>
-        <div class="radio">
-          <%= f.label :not_to_exceed, value: true do %>
-            <%= f.radio_button :not_to_exceed, true %>
-            Not to exceed
-          <% end %>
-        </div>
-      <% end %>
-    </div>
+    <%= field_set_tag "Amount", class: "required" do %>
+      <%= f.input :amount, as: :currency, label_html: { class: 'sr-only' } %>
+      <%= f.input :not_to_exceed, as: :radio_buttons, collection: [['Exact', false], ['Not to exceed', true]], label: false %>
+    <% end %>
     <%= f.input :direct_pay %>
     <div class="form-group">
       <%= label_tag :approver_email, "Approving official's email address", class: "required" %>
