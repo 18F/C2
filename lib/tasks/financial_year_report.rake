@@ -12,10 +12,11 @@ namespace :financial_year_report do
 				"Budget Activity", "SOC", "Function Code", "Building #", 
 				"Vendor", "Description", "Requestor", "Approver"]
 			for p in proposals
+				approver_name = p.client_data.approving_official ? p.client_data.approving_official.full_name : "no approver listed"
 				csv << [p.client_data.amount, p.root_approval.approved_at, p.client_data.org_code, 
 					p.client_data.cl_number, p.client_data.expense_type, p.client_data.soc_code, 
 					p.client_data.function_code, p.client_data.building_number, p.client_data.vendor, 
-					p.client_data.description, p.requester.full_name, p.client_data.approving_official.full_name]
+					p.client_data.description, p.requester.full_name, approver_name]
 			end
 		end
 		mail = Mail.new do
