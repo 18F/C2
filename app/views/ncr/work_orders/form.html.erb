@@ -5,18 +5,9 @@
     Purchase Card Approval Request
   </h3>
 
-  <%= form_for @model_instance, html: {multipart: true} do |f| %>
-    <div class="form-group">
-      <%= f.label :project_title, class: "required" %>
-      <%= f.text_field :project_title, class: 'form-control', placeholder: 'e.g. "Blue paint for the Blue Room"' %>
-    </div>
-    <div class="form-group">
-      <%= f.label :description %>
-      <%= f.text_area :description, class: 'form-control', 'aria-describedby'=>'description-add-info' %>
-      <div class="help-block" id='description-add-info'>
-        Include request details (e.g. Room Number, Estimated number of hours)
-      </div>
-    </div>
+  <%= simple_form_for @model_instance, html: { multipart: true } do |f| %>
+    <%= f.input :project_title %>
+    <%= f.input :description %>
     <div class="form-group">
       <%= field_set_tag "Expense type", class: "required" do %>
         <div class="radio">
@@ -50,29 +41,9 @@
         <%= render partial: 'ba_80_fields', locals: {f: f} %>
       <% end %>
     </div>
-    <div class="form-group">
-      <%= f.label :building_number, class: "required" %>
-      <%= f.text_field :building_number,
-            class: 'form-control js-selectize',
-            placeholder: "Type here to search or add",
-            data: { initial: JSON.generate(building_options) } %>
-    </div>
-    <div class="form-group">
-      <%= f.label :org_code %>
-      <%= f.collection_select(
-            :org_code, Ncr::Organization.all, :to_s, :to_s,
-            {include_blank: true, prompt: "Type here to search"}, {class: 'form-control js-selectize'}) %>
-      <div class="help-block" id="org-code-hint">
-        Select your Service Center.
-      </div>
-    </div>
-    <div class="form-group">
-      <%= f.label :vendor, class: "required"  %>
-      <%= f.text_field :vendor,
-            class: 'form-control js-selectize',
-            placeholder: "Type here to search or add",
-            data: {initial: JSON.generate(vendor_options(@model_instance.vendor))} %>
-    </div>
+    <%= f.input :building_number, input_html: { class: 'js-selectize', data: { initial: JSON.generate(building_options) } } %>
+    <%= f.input :org_code, collection: Ncr::Organization.all, label_method: :to_s, prompt: :translate, input_html: { class: 'js-selectize' } %>
+    <%= f.input :vendor, input_html: { class: 'js-selectize', data: { initial: JSON.generate(vendor_options(@model_instance.vendor)) } } %>
     <div class="form-group">
       <%= field_set_tag "Amount", class: "required" do %>
         <%= f.label :amount, "Dollar Amount", :class => 'sr-only'  %>
@@ -94,12 +65,7 @@
         </div>
       <% end %>
     </div>
-    <div class="checkbox">
-      <%= f.label :direct_pay do %>
-        <%= f.check_box :direct_pay %>
-        I am going to be using direct pay for this transaction
-      <% end %>
-    </div>
+    <%= f.input :direct_pay %>
     <div class="form-group">
       <%= label_tag :approver_email, "Approving official's email address", class: "required" %>
       <%= select_tag :approver_email, options_from_collection_for_select(approver_options, :to_s, :to_s, @approver_email),
@@ -117,18 +83,9 @@
       </div>
     <% else %>
       <%= field_set_tag "Budget codes" do %>
-        <div class="form-group">
-          <%= f.label :cl_number %>
-          <%= f.text_field :cl_number, class: 'form-control' %>
-        </div>
-        <div class="form-group">
-          <%= f.label :function_code %>
-          <%= f.text_field :function_code, class: 'form-control' %>
-        </div>
-        <div class="form-group">
-          <%= f.label :soc_code %>
-          <%= f.text_field :soc_code, class: 'form-control' %>
-        </div>
+        <%= f.input :cl_number %>
+        <%= f.input :function_code %>
+        <%= f.input :soc_code %>
       <% end %>
     <% end %>
     <%= render partial: "shared/form_submit_button", locals: { form: f } %>
