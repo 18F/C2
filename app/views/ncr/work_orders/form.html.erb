@@ -58,12 +58,11 @@
             data: { initial: JSON.generate(building_options) } %>
     </div>
     <div class="form-group">
-      <%= f.label :org_code %>
+      <%= f.label :org_code, "Org Code / Service Center" %>
       <%= f.collection_select(
             :org_code, Ncr::Organization.all, :to_s, :to_s,
             {include_blank: true, prompt: "Type here to search"}, {class: 'form-control js-selectize'}) %>
       <div class="help-block" id="org-code-hint">
-        Select your Service Center.
       </div>
     </div>
     <div class="form-group">
