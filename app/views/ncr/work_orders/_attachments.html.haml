@@ -1,0 +1,6 @@
+.form-group
+  = field_set_tag 'Attachments' do
+    %ul.attachments{ data: { add_minus: true } }
+      - 10.times do
+        %li
+          = file_field_tag "attachments[]"

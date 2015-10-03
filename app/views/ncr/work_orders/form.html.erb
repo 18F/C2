@@ -29,15 +29,7 @@
                      class: 'form-control js-selectize', disabled: @model_instance.approver_email_frozen?, include_blank: true, prompt: 'Type here to search' %>
     </div>
     <% if @model_instance.new_record? %>
-      <div class="form-group">
-        <%= field_set_tag 'Attachments' do %>
-          <ul data-add-minus="true" class="attachments">
-          <%- 10.times do %>
-            <li><%= file_field_tag "attachments[]" %></li>
-          <%- end %>
-          </ul>
-        <%- end %>
-      </div>
+      <%= render partial: 'attachments' %>
     <% else %>
       <%= field_set_tag "Budget codes" do %>
         <%= f.input :cl_number %>
