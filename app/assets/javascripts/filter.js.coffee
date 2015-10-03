@@ -1,3 +1,4 @@
+# TODO add tests
 class Filter
   constructor: (@$root, @$control) ->
     @key = @$control.data('filter-control')
@@ -15,12 +16,21 @@ class Filter
   isSelected: ->
     @$control.is(':checked')
 
+  showChildren: ->
+    Filter.toggle(@children(), true)
+
+  hideAdjacentChildren: ->
+    Filter.toggle(@adjacentChildren(), false)
+
+  hideChildren: ->
+    Filter.toggle(@children(), false)
+
   filter: ->
     if @isSelected()
-      @children().attr('aria-hidden', false)
-      @adjacentChildren().attr('aria-hidden', true)
+      @showChildren()
+      @hideAdjacentChildren()
     else
-      @children().attr('aria-hidden', true)
+      @hideChildren()
 
   enable: ->
     @filter()
@@ -29,6 +39,12 @@ class Filter
   @generateIn = ($scope) ->
     $scope.find('[data-filter-control]').map (idx, control) ->
       new Filter($scope, $(control))
+
+  @toggle = ($inputWrappers, showOrHide) ->
+    # https://www.paciellogroup.com/blog/2012/05/html5-accessibility-chops-hidden-and-aria-hidden/
+    $inputWrappers.attr('aria-hidden', !showOrHide)
+    # disable inputs so they aren't submitted with the form
+    $inputWrappers.find(':input').attr('disabled', !showOrHide)
 
 $ ->
   #  @todo - better scope
