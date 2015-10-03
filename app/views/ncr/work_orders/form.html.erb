@@ -8,21 +8,13 @@
   <%= simple_form_for @model_instance, html: { multipart: true } do |f| %>
     <%= f.input :project_title %>
     <%= f.input :description %>
-    <div class="form-group">
-      <%= field_set_tag "Expense type", class: "required" do %>
-        <%= expense_type_radio_button(f, 'BA60') %>
-        <%= expense_type_radio_button(f, 'BA61') %>
-        <div class="checkbox" data-filter-key="expense-type"
-                                data-filter-value="BA61">
-          <%= f.label :emergency do %>
-            <%= f.check_box :emergency, disabled: @model_instance.persisted? %>
-            This request was an emergency and I received a verbal Notice to Proceed (NTP)
-          <% end %>
-        </div>
-        <%= expense_type_radio_button(f, 'BA80') %>
-        <%= render partial: 'ba_80_fields', locals: {f: f} %>
-      <% end %>
-    </div>
+    <%= field_set_tag "Expense type", class: "required" do %>
+      <%= expense_type_radio_button(f, 'BA60') %>
+      <%= expense_type_radio_button(f, 'BA61') %>
+      <%= f.input :emergency, disabled: @model_instance.persisted?, wrapper_html: { data: { filter_key: 'expense-type', filter_value: 'BA61' } } %>
+      <%= expense_type_radio_button(f, 'BA80') %>
+      <%= render partial: 'ba_80_fields', locals: {f: f} %>
+    <% end %>
     <%= f.input :building_number, input_html: { class: 'js-selectize', data: { initial: JSON.generate(building_options) } } %>
     <%= f.input :org_code, collection: Ncr::Organization.all, label_method: :to_s, prompt: :translate, input_html: { class: 'js-selectize' } %>
     <%= f.input :vendor, input_html: { class: 'js-selectize', data: { initial: JSON.generate(vendor_options(@model_instance.vendor)) } } %>

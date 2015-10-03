@@ -15,6 +15,7 @@ en:
         additional_info: "Please include any additional information you feel we need to correctly execute the purchase"
       ncr_work_order:
         direct_pay: "I am going to be using direct pay for this transaction"
+        emergency: "This request was an emergency and I received a verbal Notice to Proceed (NTP)"
     placeholders:
       ncr_work_order:
         building_number: "Type here to search or add"

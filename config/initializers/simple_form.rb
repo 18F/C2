@@ -117,6 +117,7 @@ SimpleForm.setup do |config|
   # in this configuration, which is recommended due to some quirks from different browsers.
   # To stop SimpleForm from generating the novalidate option, enabling the HTML5 validations,
   # change this configuration to true.
+  # TODO enable, but make sure the filtered fields are only required when visible
   config.browser_validations = false
 
   # Collection of methods to detect if a file type was given.
