@@ -1,44 +1,38 @@
 class Filter
-  constructor: ($root, @key) ->
-    @$ = (selector) -> $root.find(selector)
+  constructor: (@$root, @$control) ->
+    @key = @$control.data('filter-control')
+    @val = @$control.val()
 
-  addInput: ($el) ->
-    $el.click () => @filter($el)
-    # Initial state
-    if $el.is(':checked')
-      @filter($el)
+  $: (selector) ->
+    @$root.find(selector)
 
-  addRadios: () ->
-    @$("input:radio[data-filter-control=#{ @key }]").each (idx, control) =>
-      @addInput($(control))
+  children: ->
+    @$("[data-filter-key=#{ @key }][data-filter-value=#{ @val }]")
 
-  addChkBoxes: () ->
-    @$("input:checkbox[data-filter-control=#{ @key }]").each (idx, control) =>
-      @addInput($(control))
+  adjacentChildren: ->
+    @$("[data-filter-key=#{ @key }][data-filter-value!=#{ @val }]")
 
-  filter: ($el) ->
-    value = $el.val()
-    if !$el.is(':checked')
-      value = "!" + value
-    @$("[data-filter-key=#{ @key }]").each (idx, el) ->
-      hidden = el.getAttribute('data-filter-value') != value
-      el.setAttribute("aria-hidden", hidden.toString())
+  isSelected: ->
+    @$control.is(':checked')
 
-  hideAll: () ->
-    @$("[data-filter-key=#{ @key }]").attr("aria-hidden", true)
+  filter: ->
+    if @isSelected()
+      @children().attr('aria-hidden', false)
+      @adjacentChildren().attr('aria-hidden', true)
+    else
+      @children().attr('aria-hidden', true)
+
+  enable: ->
+    @filter()
+    @$control.change => @filter()
 
   @generateIn = ($scope) ->
-    filters = {}
-    $scope.find('[data-filter-control]').each (idx, el) ->
-      key = el.getAttribute('data-filter-control')
-      filters[key] ||= new Filter($scope, key)
-    filters
+    $scope.find('[data-filter-control]').map (idx, control) ->
+      new Filter($scope, $(control))
 
 $ ->
   #  @todo - better scope
   $scope = $(document.body)
   filters = Filter.generateIn($scope)
-  for key, filter of filters
-    filter.hideAll()
-    filter.addRadios()
-    filter.addChkBoxes()
+  for filter in filters
+    filter.enable()
