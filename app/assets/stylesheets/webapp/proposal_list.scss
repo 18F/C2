@@ -11,11 +11,12 @@
   }
 }
 
-.pending-pr {
+.pending-pr, .past-pr {
+  margin-top: 20px;
   background: #F5F5F5;
   border-bottom: 1px solid #BDBDBD;
-}
 
-.past-pr {
-  padding-top: 40px;
+  &.first {
+    margin-top: 0;
+  }
 }

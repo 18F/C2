@@ -1,7 +1,7 @@
 <% content_for :title, "My Requests" %>
 <div class="inset">
   <%= render partial: 'search_ui' %>
-  <div id="proposals-pending-review" class="row pending-pr">
+  <div id="proposals-pending-review" class="row pending-pr first">
     <div class="col-md-12">
       <h3>Purchase Requests Needing Review</h3>
       <%- if @pending_review_data.rows.any? %>
@@ -25,36 +25,31 @@
 
 
   <div class="row past-pr">
-    <div class="col-sm-10">
+    <div class="col-md-12">
       <h3>Recently Completed Purchase Requests</h3>
     </div>
-  </div>
-  <%- if @approved_data.rows.any? %>
-    <div class="row">
+    <%- if @approved_data.rows.any? %>
       <div class="col-sm-12">
         <%= render partial: "shared/table", locals: {container: @approved_data} %>
       </div>
-    </div>
 
-    <div class="row">
-      <%= render partial: "archive_link" %>
-    </div>
+      <div class="row">
+        <%= render partial: "archive_link" %>
+      </div>
 
-  <%- else %>
-    <p class="empty-list-label">No recently completed purchase requests</p>
-  <%- end %>
-
+    <%- else %>
+      <p class="empty-list-label">No recently completed purchase requests</p>
+    <%- end %>
+  </div>
 
   <%- if @cancelled_data.rows.any? %>
     <div class="row past-pr">
-      <div class="col-sm-10">
+      <div class="col-md-12">
         <h3>Cancelled Purchase Requests</h3>
       </div>
-    </div>
-      <div class="row">
-        <div class="col-sm-12">
-          <%= render partial: "shared/table", locals: {container: @cancelled_data} %>
-        </div>
+      <div class="col-sm-12">
+        <%= render partial: "shared/table", locals: {container: @cancelled_data} %>
       </div>
+    </div>
   <%- end %>
 </div>
