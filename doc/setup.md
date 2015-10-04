@@ -56,6 +56,7 @@ have it in your PATH. This is used for javascript and interface testing.
 
 ```bash
 ./bin/rspec
+bin/rake konacha:run
 ```
 
 ### Running tests as corresponding files are changed

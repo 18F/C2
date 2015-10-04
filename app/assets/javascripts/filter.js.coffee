@@ -1,5 +1,5 @@
 # TODO add tests
-class Filter
+class @Filter
   constructor: (@$root, @$control) ->
     @key = @$control.data('filter-control')
     @val = @$control.val()

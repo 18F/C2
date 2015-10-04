@@ -49,6 +49,7 @@ gem 'workflow'
 group :test, :development do
   gem 'bullet', require: false # use BULLET_ENABLED=true
   gem 'database_cleaner'
+  gem 'konacha'
   gem 'pry-byebug'
   gem 'pry-rails'
   gem 'rspec-rails'
