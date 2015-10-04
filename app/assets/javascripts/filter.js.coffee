@@ -39,11 +39,15 @@ class @Filter
     $scope.find('[data-filter-control]').map (idx, control) ->
       new Filter($scope, $(control))
 
-  @toggle = ($inputWrappers, showOrHide) ->
+  @toggle = ($inputOrWrappers, showOrHide) ->
     # https://www.paciellogroup.com/blog/2012/05/html5-accessibility-chops-hidden-and-aria-hidden/
-    $inputWrappers.attr('aria-hidden', !showOrHide)
+    $inputOrWrappers.attr('aria-hidden', !showOrHide)
     # disable inputs so they aren't submitted with the form
-    $inputWrappers.find(':input').attr('disabled', !showOrHide)
+    if $inputOrWrappers.is(':input')
+      $inputOrWrappers.attr('disabled', !showOrHide)
+    else
+      $inputs = $inputOrWrappers.find(':input')
+      @toggle($inputs, showOrHide)
 
 $ ->
   #  @todo - better scope
