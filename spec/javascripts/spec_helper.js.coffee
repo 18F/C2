@@ -1,4 +1,4 @@
-#= require jquery
-#= require field_filter
-#= require filter_set
-#= require filter
+@inputDisabledStates = ($content) ->
+  states = $content.find('input').map (i, input) ->
+    $(input).is(':disabled')
+  states.get()

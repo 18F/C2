@@ -1,4 +1,5 @@
-#= require spec_helper
+#= require jquery
+#= require field_filter
 
 describe 'FieldFilter', ->
   describe '#show()', ->

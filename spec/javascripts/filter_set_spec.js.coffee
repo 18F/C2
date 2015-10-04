@@ -1,3 +1,6 @@
+#= require jquery
+#= require field_filter
+#= require filter_set
 #= require spec_helper
 
 describe 'FilterSet', ->
@@ -13,8 +16,8 @@ describe 'FilterSet', ->
 
   describe '#children()', ->
     it "returns elements with the same key and value", ->
-      filter = new FilterSet(getContent(), 'foo', 2)
-      $children = filter.children()
+      set = new FilterSet(getContent(), 'foo', 2)
+      $children = set.children()
 
       expect($children.length).to.eql(1)
       expect($children.data('filter-key')).to.eql('foo')
@@ -22,8 +25,8 @@ describe 'FilterSet', ->
 
   describe '#adjacentChildren()', ->
     it "returns elements with the same key but a different value", ->
-      filter = new FilterSet(getContent(), 'foo', 2)
-      $adjacentChildren = filter.adjacentChildren()
+      set = new FilterSet(getContent(), 'foo', 2)
+      $adjacentChildren = set.adjacentChildren()
 
       expect($adjacentChildren.length).to.eql(1)
       expect($adjacentChildren.data('filter-key')).to.eql('foo')
@@ -35,9 +38,8 @@ describe 'FilterSet', ->
       set = new FilterSet($content, 'bar', 1)
       set.show()
 
-      disabled = $content.find('input').map (i, input) ->
-        $(input).is(':disabled')
-      expect(disabled.get()).to.eql([false, false, false, true])
+      states = inputDisabledStates($content)
+      expect(states).to.eql([false, false, false, true])
 
   describe '#hide()', ->
     it "disables all inputs with matching keys and values", ->
@@ -45,6 +47,5 @@ describe 'FilterSet', ->
       set = new FilterSet($content, 'bar', 1)
       set.hide()
 
-      disabled = $content.find('input').map (i, input) ->
-        $(input).is(':disabled')
-      expect(disabled.get()).to.eql([false, false, true, false])
+      states = inputDisabledStates($content)
+      expect(states).to.eql([false, false, true, false])

@@ -1,4 +1,4 @@
-class Filter
+class @Filter
   constructor: (@$root, @$control) ->
     key = @$control.data('filter-control')
     val = @$control.val()
@@ -7,15 +7,15 @@ class Filter
   isSelected: ->
     @$control.is(':checked')
 
-  filter: ->
+  update: ->
     if @isSelected()
       @set.show()
     else
       @set.hide()
 
   enable: ->
-    @filter()
-    @$control.change => @filter()
+    @update()
+    @$control.change => @update()
 
   @generateIn = ($scope) ->
     $scope.find('[data-filter-control]').map (idx, control) ->
