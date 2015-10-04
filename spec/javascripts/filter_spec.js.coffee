@@ -56,3 +56,25 @@ describe 'Filter', ->
       Filter.toggle($content, false)
       $textarea = $content.find('textarea')
       expect($textarea.is(':disabled')).to.be.true
+
+    it "enables the inputs", ->
+      $content = $('
+        <div>
+          <label for="foo">Foo</label>
+          <input name="foo" disabled="disabled">
+        </div>
+      ')
+      Filter.toggle($content, true)
+      $input = $content.find('input')
+      expect($input.is(':disabled')).to.be.false
+
+    it "disables the text areas", ->
+      $content = $('
+        <div>
+          <label for="foo">Foo</label>
+          <textarea name="foo" disabled="disabled">
+        </div>
+      ')
+      Filter.toggle($content, true)
+      $textarea = $content.find('textarea')
+      expect($textarea.is(':disabled')).to.be.false
