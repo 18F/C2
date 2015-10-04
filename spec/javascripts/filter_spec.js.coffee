@@ -33,3 +33,26 @@ describe 'Filter', ->
       expect($adjacentChildren.length).to.equal(1)
       expect($adjacentChildren.data('filter-key')).to.equal('foo')
       expect($adjacentChildren.data('filter-value')).to.equal(1)
+
+  describe '.toggle()', ->
+    it "disables the inputs", ->
+      $content = $('
+        <div>
+          <label for="foo">Foo</label>
+          <input name="foo">
+        </div>
+      ')
+      Filter.toggle($content, false)
+      $input = $content.find('input')
+      expect($input.is(':disabled')).to.be.true
+
+    it "disables the text areas", ->
+      $content = $('
+        <div>
+          <label for="foo">Foo</label>
+          <textarea name="foo">
+        </div>
+      ')
+      Filter.toggle($content, false)
+      $textarea = $content.find('textarea')
+      expect($textarea.is(':disabled')).to.be.true
