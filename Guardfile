@@ -19,3 +19,8 @@ guard :rspec, cmd: 'bin/rspec' do
   watch(%r{^spec/acceptance/(.+)\.feature$})
   watch(%r{^spec/acceptance/steps/(.+)_steps\.rb$})   { |m| Dir[File.join("**/#{m[1]}.feature")][0] || 'spec/acceptance' }
 end
+
+guard :shell do
+  watch(%r{^app/assets/javascripts/(.+)\.js(\.coffee)?$}) { |m| `bin/rake konacha:run SPEC=#{m[1]}_spec` }
+  watch(%r{^spec/javascripts/(.+)\.js(\.coffee)?$}) { |m| `bin/rake konacha:run SPEC=#{m[1]}` }
+end

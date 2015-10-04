@@ -58,6 +58,7 @@ end
 
 group :development do
   gem 'guard-rspec', require: false
+  gem 'guard-shell', require: false
   gem 'mail_view'
   gem 'railroady'
   gem 'letter_opener'

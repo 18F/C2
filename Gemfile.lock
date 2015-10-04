@@ -156,6 +156,9 @@ GEM
       guard (~> 2.1)
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
+    guard-shell (0.7.1)
+      guard (>= 2.0.0)
+      guard-compat (~> 1.0)
     haml (4.0.7)
       tilt
     hashdiff (0.2.2)
@@ -422,6 +425,7 @@ DEPENDENCIES
   font-awesome-sass
   foreman
   guard-rspec
+  guard-shell
   haml
   hashdiff
   html_pipeline_rails
