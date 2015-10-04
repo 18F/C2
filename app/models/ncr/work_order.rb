@@ -116,8 +116,8 @@ module Ncr
 
     # the highest approver on the stack, pending preferred if status indicates
     def current_approver_email_address
-      if self.individual_approvals.pending.first
-        self.individual_approvals.pending.first.user.email_address
+      if self.pending?
+        self.individual_approvals.where(status: 'actionable').first.user.email_address
       else
         self.approving_official.email_address
       end

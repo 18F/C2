@@ -453,4 +453,19 @@ describe Ncr::WorkOrder do
       expect(wo.building_id).to be_nil
     end
   end
+
+  describe "#current_approver_email_address" do
+    it "returns the first pending approval's email address" do
+      wo = FactoryGirl.create(:ncr_work_order, :with_approvers)
+      expect(wo.current_approver_email_address).to eq(wo.individual_approvals.first.user.email_address)
+      wo.individual_approvals.first.approve!
+      expect(wo.current_approver_email_address).to eq(wo.individual_approvals.last.user.email_address)
+    end
+    it "returns the first approver when fully approved" do
+      wo = FactoryGirl.create(:ncr_work_order, :with_approvers)
+      wo.individual_approvals.first.approve!
+      wo.reload.individual_approvals.last.approve!
+      expect(wo.current_approver_email_address).to eq(wo.individual_approvals.first.user.email_address)
+    end
+  end
 end
