@@ -4,12 +4,12 @@ module Ncr
     MAX_UPLOADS_ON_NEW = 10
 
     def new
-      @approver_email = self.suggested_approver_email
+      @model_instance.approving_official_email = self.suggested_approver_email
       super
     end
 
     def create
-      @approver_email = params[:approver_email]
+      @model_instance.approving_official_email = params[:approver_email]
       super
     end
 
@@ -17,29 +17,30 @@ module Ncr
       if self.proposal.approved?
         flash[:warning] = "You are about to modify a fully approved request. Changes will be logged and sent to approvers but this request will not require re-approval."
       end
-      first_approver = self.proposal.approvers.first
-      @approver_email = first_approver.try(:email_address)
 
       super
     end
 
     def update
-      @approver_email = params[:approver_email]
+      # TODO remove need for this
+      @model_instance.approving_official_email = params[:approver_email]
       @model_instance.modifier = current_user
 
       super
 
       if @model_changing
-        @model_instance.setup_approvals_and_observers(@approver_email)
+        # TODO remove need for this
+        @model_instance.setup_approvals_and_observers(@model_instance.approving_official_email)
         @model_instance.email_approvers
       end
     end
 
-    def attribute_changes?
-      super || @model_instance.approver_changed?(@approver_email)
-    end
-
     protected
+
+    def attribute_changes?
+      # TODO remove need for passing in the approver_email
+      super || @model_instance.approver_changed?(@model_instance.approving_official_email)
+    end
 
     def model_class
       Ncr::WorkOrder
@@ -61,17 +62,18 @@ module Ncr
 
     def errors
       results = super
-      if @approver_email.blank? && !@model_instance.approver_email_frozen?
+      if @model_instance.approving_official_email.blank? && !@model_instance.approver_email_frozen?
         results += ["Approver email is required"]
       end
       results
     end
 
-    # @pre: @approver_email is set
+    # @pre: @model_instance.approving_official_email is set
     def add_approvals
       super
       if self.errors.empty?
-        @model_instance.setup_approvals_and_observers(@approver_email)
+        # TODO remove need for passing in the approver_email
+        @model_instance.setup_approvals_and_observers(@model_instance.approving_official_email)
       end
     end
   end

@@ -23,7 +23,7 @@
     = f.input :direct_pay
     .form-group
       = label_tag :approver_email, "Approving official's email address", class: 'required'
-      = select_tag :approver_email, options_from_collection_for_select(approver_options, :to_s, :to_s, @approver_email), class: 'form-control js-selectize', disabled: @model_instance.approver_email_frozen?, include_blank: true, prompt: 'Type here to search'
+      = select_tag :approver_email, options_from_collection_for_select(approver_options, :to_s, :to_s, @model_instance.approving_official_email), class: 'form-control js-selectize', disabled: @model_instance.approver_email_frozen?, include_blank: true, prompt: 'Type here to search'
     - if @model_instance.new_record?
       = render partial: 'attachments'
     - else

@@ -19,6 +19,7 @@ module Ncr
     include ProposalDelegate
     include PurchaseCardMixin
 
+    attr_accessor :approving_official_email
     # This is a hack to be able to attribute changes to the correct user. This attribute needs to be set explicitly, then the update comment will use them as the "commenter". Defaults to the requester.
     attr_accessor :modifier
 
@@ -57,6 +58,10 @@ module Ncr
     }
 
     def set_defaults
+      # not sure why the latter condition is necessary...was getting some weird errors from the tests without it. -AF 10/5/2015
+      if !self.approving_official_email && self.approvers.any?
+        self.approving_official_email = self.approvers.first.try(:email_address)
+      end
       self.direct_pay ||= false
       self.not_to_exceed ||= false
       self.emergency ||= false
