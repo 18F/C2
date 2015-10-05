@@ -27,7 +27,8 @@ module Ncr
     before_validation :normalize_values
     before_update :record_changes
 
-    # TODO validates :approving_official_email, presence: true
+    validates :approving_official_email, presence: true
+    validates_email_format_of :approving_official_email
     validates :amount, presence: true
     validates :cl_number, format: {
       with: /\ACL\d{7}\z/,

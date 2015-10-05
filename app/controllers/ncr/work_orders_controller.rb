@@ -56,14 +56,6 @@ module Ncr
       params.require(:ncr_work_order).permit(:project_title, :approving_official_email, *fields)
     end
 
-    def errors
-      results = super
-      if @model_instance.approving_official_email.blank? && !@model_instance.approver_email_frozen?
-        results += ["Approver email is required"]
-      end
-      results
-    end
-
     # @pre: @model_instance.approving_official_email is set
     def add_approvals
       super
