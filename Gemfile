@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 ruby '2.2.2' # this should match `.ruby-version` and docs/setup.md
 
 gem 'active_model_serializers'
+gem 'activeadmin', github: 'activeadmin'
 gem 'acts_as_list'
 gem 'ar_outer_joins'
 gem 'autoprefixer-rails'
