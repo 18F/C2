@@ -16,7 +16,7 @@ change something. We appreciate any sort of contribution, and don't want a wall
 of rules to get in the way of that.
 
 Before contributing, we encourage you to read our CONTRIBUTING policy (you are
-here), our [LICENSE](LICENSE.md), and our [README](REAMDE.md).  If you have any
+here), our [LICENSE](LICENSE.md), and our [README](README.md).  If you have any
 questions, or want to read more about our underlying policies, you can consult
 the 18F Open Source Policy GitHub repository at
 https://github.com/18f/open-source-policy, or just shoot us an email/official
@@ -25,7 +25,7 @@ government letterhead note to [18f@gsa.gov](mailto:18f@gsa.gov).
 ### Getting started
 
 To get started with contributing to this project, check out the [setup
-documentation](https://github.com/18F/C2/blob/master/doc/setup.md).
+documentation](doc/setup.md), and learn more about [our team practices](doc/team_practices.md).
 
 ## Public domain
 
