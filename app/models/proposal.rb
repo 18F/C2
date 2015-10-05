@@ -115,14 +115,17 @@ class Proposal < ActiveRecord::Base
       approval.set_list_position(idx + 1)   # start with 1
     end
 
-    old_approvals.each do |old|
-      unless approval_list.include?(old)
-        old.destroy()
-      end
-    end
+    self.clean_up_old_approvals(old_approvals, approval_list)
 
     root.initialize!
     self.reset_status()
+  end
+
+  def clean_up_old_approvals(old_approvals, approval_list)
+    # destroy any old approvals that are not a part of approval_list
+    (old_approvals - approval_list).each do |appr|
+      appr.destroy() if Approval.exists?(appr.id)
+    end
   end
 
   # convenience wrapper for setting a single approver
