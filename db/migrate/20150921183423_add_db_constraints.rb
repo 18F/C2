@@ -4,6 +4,7 @@ class AddDbConstraints < ActiveRecord::Migration
     execute "DELETE FROM approvals WHERE proposal_id NOT IN (SELECT id FROM proposals)"
     execute "DELETE FROM comments WHERE proposal_id NOT IN (SELECT id FROM proposals)"
     execute "DELETE FROM proposal_roles WHERE user_id NOT IN (SELECT id FROM users)"
+    execute "DELETE FROM roles WHERE name = 'admin' AND id NOT IN (SELECT role_id FROM user_roles)"
 
     execute "ALTER TABLE approval_delegates ADD CONSTRAINT assigner_id_fkey FOREIGN KEY (assigner_id) REFERENCES users (id)"
     execute "ALTER TABLE approval_delegates ADD CONSTRAINT assignee_id_fkey FOREIGN KEY (assignee_id) REFERENCES users (id)"
