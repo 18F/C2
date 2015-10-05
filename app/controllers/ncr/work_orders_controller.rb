@@ -1,5 +1,8 @@
 module Ncr
   class WorkOrdersController < UseCaseController
+   # arbitrary number...number of upload fields that "ought to be enough for anybody"
+    MAX_UPLOADS_ON_NEW = 10
+
     def new
       @approver_email = self.suggested_approver_email
       super

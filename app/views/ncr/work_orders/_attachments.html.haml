@@ -1,6 +1,6 @@
 .form-group
   = field_set_tag 'Attachments' do
     %ul.attachments{ data: { add_minus: true } }
-      - 10.times do
+      - Ncr::WorkOrdersController::MAX_UPLOADS_ON_NEW.times do
         %li
           = file_field_tag "attachments[]"
