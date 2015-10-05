@@ -29,7 +29,7 @@ module Ncr
       [
         self.proposal_public_url(proposal),
         proposal.requester.email_address,
-        proposal.client_data.approving_official_email_address,
+        proposal.client_data.current_approver_email_address,
         proposal.client_data.cl_number,
         proposal.client_data.function_code,
         proposal.client_data.soc_code,
