@@ -130,10 +130,10 @@ feature 'Requester edits their NCR work order' do
 
   scenario 'has a disabled field if first approval is done' do
     visit "/ncr/work_orders/#{work_order.id}/edit"
-    expect(find("[name=approver_email]")["disabled"]).to be_nil
+    expect(find('#ncr_work_order_approving_official_email')['disabled']).to be_nil
     work_order.individual_approvals.first.approve!
     visit "/ncr/work_orders/#{work_order.id}/edit"
-    expect(find("[name=approver_email]")["disabled"]).to eq("disabled")
+    expect(find('#ncr_work_order_approving_official_email')['disabled']).to eq('disabled')
     # And we can still submit
     fill_in 'Vendor', with: 'New ACME'
     click_on 'Update'

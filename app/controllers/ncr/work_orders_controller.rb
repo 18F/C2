@@ -9,7 +9,6 @@ module Ncr
     end
 
     def create
-      @model_instance.approving_official_email = params[:approver_email]
       super
     end
 
@@ -22,8 +21,6 @@ module Ncr
     end
 
     def update
-      # TODO remove need for this
-      @model_instance.approving_official_email = params[:approver_email]
       @model_instance.modifier = current_user
 
       super
@@ -38,7 +35,7 @@ module Ncr
     protected
 
     def attribute_changes?
-      # TODO remove need for passing in the approver_email
+      # TODO remove need for passing in the approving_official_email
       super || @model_instance.approver_changed?(@model_instance.approving_official_email)
     end
 
@@ -57,7 +54,7 @@ module Ncr
       if @model_instance
         fields.delete(:emergency) # emergency field cannot be edited
       end
-      params.require(:ncr_work_order).permit(:project_title, *fields)
+      params.require(:ncr_work_order).permit(:project_title, :approving_official_email, *fields)
     end
 
     def errors
@@ -72,7 +69,7 @@ module Ncr
     def add_approvals
       super
       if self.errors.empty?
-        # TODO remove need for passing in the approver_email
+        # TODO remove need for passing in the approving_official_email
         @model_instance.setup_approvals_and_observers(@model_instance.approving_official_email)
       end
     end
