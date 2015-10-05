@@ -27,6 +27,7 @@ module Ncr
     before_validation :normalize_values
     before_update :record_changes
 
+    # TODO validates :approving_official_email, presence: true
     validates :amount, presence: true
     validates :cl_number, format: {
       with: /\ACL\d{7}\z/,
@@ -100,18 +101,18 @@ module Ncr
     end
 
     # Check the approvers, accounting for frozen approving official
-    def approvers_emails(selected_approving_official_email)
+    def approvers_emails
       emails = self.system_approver_emails
       if self.approver_email_frozen?
         emails.unshift(self.approving_official.email_address)
       else
-        emails.unshift(selected_approving_official_email)
+        emails.unshift(self.approving_official_email)
       end
       emails
     end
 
-    def setup_approvals_and_observers(selected_approving_official_email)
-      emails = self.approvers_emails(selected_approving_official_email)
+    def setup_approvals_and_observers
+      emails = self.approvers_emails
       if self.emergency
         emails.each{|e| self.add_observer(e)}
         # skip state machine

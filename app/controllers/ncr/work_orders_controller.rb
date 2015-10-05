@@ -26,8 +26,7 @@ module Ncr
       super
 
       if @model_changing
-        # TODO remove need for this
-        @model_instance.setup_approvals_and_observers(@model_instance.approving_official_email)
+        @model_instance.setup_approvals_and_observers
         @model_instance.email_approvers
       end
     end
@@ -69,8 +68,7 @@ module Ncr
     def add_approvals
       super
       if self.errors.empty?
-        # TODO remove need for passing in the approving_official_email
-        @model_instance.setup_approvals_and_observers(@model_instance.approving_official_email)
+        @model_instance.setup_approvals_and_observers
       end
     end
   end
