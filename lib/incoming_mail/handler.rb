@@ -8,12 +8,14 @@ module IncomingMail
     end
 
     def handle(payload)
+      # raw JSON
       if payload.is_a?(Array) and payload[0]['event'] and payload[0]['event'] == 'inbound'
         create_response(payload[0])
+      # mandrill-rails object wrapper
       elsif payload.is_a?(Mandrill::WebHook::EventDecorator)
         create_response(payload)
       else
-        fail "Invalid Mandrill event payload. Must be event==inbound"
+        fail "Invalid Mandrill event payload. Must be event==inbound or Mandrill::WebHook::EventDecorator instance"
       end
     end
 
@@ -34,17 +36,25 @@ module IncomingMail
     def identify_mail_type(payload)
       subject = payload['msg']['subject']
       references = payload['msg']['headers']['References']
-      if subject.match(/Request (#|FY)\d+/)
+      if subject_line_matches(subject)
         return IncomingMail::REQUEST
-      elsif references and references.match(/<proposal-\d+/)
+      elsif references and reference_header_matches(references)
         return IncomingMail::REQUEST
       else
         return IncomingMail::UNKNOWN
       end
     end
 
+    def subject_line_matches(subject)
+      subject.match(/Request (#|FY)\d+/)
+    end
+
+    def reference_header_matches(header)
+      header.match(/<proposal-\d+/)
+    end
+
     def create_comment(msg)
-      proposal     = find_proposal(find_public_id(msg)) or return
+      proposal = find_proposal(find_public_id(msg)) or return
       comment_text = find_comment_text(msg)
       comment_user = find_comment_user(msg)
       if proposal.existing_observation_for(comment_user) || proposal.requester_id == comment_user.id
@@ -65,16 +75,15 @@ module IncomingMail
     def find_public_id(msg)
       references = msg['headers']['References']
       ref_re = /<proposal-(\d+)\@.+?>/
-      if references.match(ref_re)
-        return references.match(ref_re)[1]
-      end
-
       sbj_re = /Request\ #?([\w\-]+)/
-      if msg['subject'].match(sbj_re)
-        return msg['subject'].match(sbj_re)[1]
-      end
 
-      fail "Failed to find public_id in msg #{msg.inspect}"
+      if references.match(ref_re)
+        references.match(ref_re)[1]
+      elsif msg['subject'].match(sbj_re)
+        msg['subject'].match(sbj_re)[1]
+      else
+        fail "Failed to find public_id in msg #{msg.inspect}"
+      end
     end
 
     def find_comment_text(msg)
