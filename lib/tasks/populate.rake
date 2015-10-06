@@ -11,7 +11,7 @@ namespace :populate do
     end
 
     desc "Populate database for a user based on email passed in"
-    task :for_user, [:email] => [:environment] do |t, args|
+    task :for_user, [:email] => [:environment] do |_t, args|
       Populator.new.ncr_data_for_user(email: args[:email])
     end
   end
