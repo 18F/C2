@@ -119,7 +119,7 @@ module Ncr
       if self.pending?
         self.currently_awaiting_approvers.first.email_address
       else
-        self.approving_official.email_address
+        self.approving_official ? self.approving_official.email_address : self.system_approver_emails.first
       end
     end
 
