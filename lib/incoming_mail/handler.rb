@@ -1,6 +1,5 @@
 module IncomingMail
   class Handler
-    # parses a Mandrill callback object and Does The Right Thing
 
     def initialize(params = {})
       params.each do |key, value|

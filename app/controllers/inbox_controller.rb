@@ -4,9 +4,8 @@ class InboxController < ApplicationController
   def handle_inbound(event_payload)
     handler = IncomingMail::Handler.new
     resp = handler.handle(event_payload)
-    Rails.logger.warn(resp.inspect)
     if resp.action == IncomingMail::Response::ERROR
-      # TODO do we want mandrill to keep trying on our error?
+      # a non-200 response means Mandrill will keep trying up to 100x.
       head 500
     elsif resp.action == IncomingMail::Response::DROPPED
       head 204 # TODO does mandrill treat this like 200?
