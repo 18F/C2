@@ -24,7 +24,9 @@ applications:
     NEW_RELIC_APP_NAME: C2 (Staging)
     S3_BUCKET_NAME: c2-demo
 - name: c2-prod
-  host: cap
+  hosts:
+  - cap
+  - c2
   env:
     DEFAULT_URL_HOST: cap.18f.gov
     DISABLE_SANDBOX_WARNING: true
