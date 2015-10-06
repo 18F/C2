@@ -40,7 +40,7 @@ testable: true
 #   role: Team member's role; leads should be designated as 'lead'
 team:
 - github: afeld
-  id: aidenfeldman
+  id: afeld
   role: developer
 - github: annalee
   id: annalee
@@ -60,8 +60,9 @@ team:
 
 # Partners for whom the project is developed
 partners:
-- NCR
+- GSA National Capital Region
 - 18F
+- GSA Common Acquisition Platform
 
 # Brief descriptions of significant project developments
 milestones:
@@ -105,4 +106,4 @@ links:
 
 # Email addresses of points-of-contact
 contact:
-- 
+- gatewaycommunicator@gsa.gov
