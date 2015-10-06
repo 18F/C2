@@ -60,4 +60,12 @@ describe "Handles incoming email" do
     expect(resp.comment).to be_a(Comment)
     expect(resp.comment.proposal.id).to eq(proposal.id)
   end
+
+  it "should handle Mandrill::WebHook::EventDecorator like raw JSON" do
+    mandrill_event = mandrill_payload_from_message(mail)
+    event_decorator = Mandrill::WebHook::EventDecorator[mandrill_event[0]]
+    handler = IncomingMail::Handler.new
+    resp = handler.handle(event_decorator)
+    expect(resp.action).to eq(IncomingMail::Response::COMMENT)
+  end
 end
