@@ -1,4 +1,5 @@
 C2::Application.routes.draw do
+  ActiveAdmin.routes(self)
   root :to => 'home#index'
   get '/error' => 'home#error'
   get '/me'    => 'home#me'

@@ -14,6 +14,7 @@ en:
       ncr_work_order:
         direct_pay: "I am going to be using direct pay for this transaction"
         emergency: "This request was an emergency and I received a verbal Notice to Proceed (NTP)"
+        org_code: "Org Code / Service Center"
     placeholders:
       ncr_work_order:
         building_number: "Type here to search or add"
@@ -26,7 +27,6 @@ en:
         recurring_length: "e.g. Number of Days, Months, Years"
       ncr_work_order:
         description: "Include request details (e.g. Room Number, Estimated number of hours)"
-        org_code: "Select your Service Center."
     # requires `prompt: :translate`
     prompts:
       ncr_work_order:

@@ -68,7 +68,8 @@ describe ProposalsController do
     end
 
     context 'admins' do
-      let(:proposal) { FactoryGirl.create(:proposal, requester_id: 5555, client_data_type: 'SomeCompany::SomethingApprovable') }
+      let(:requester) { FactoryGirl.create(:user) }
+      let(:proposal) { FactoryGirl.create(:proposal, requester_id: requester.id, client_data_type: 'SomeCompany::SomethingApprovable') }
 
       before do
         expect(Proposal).to receive(:client_model_names).and_return(['SomeCompany::SomethingApprovable'])
