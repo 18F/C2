@@ -118,8 +118,10 @@ module Ncr
     def current_approver_email_address
       if self.pending?
         self.currently_awaiting_approvers.first.email_address
-      else
+      elsif self.approving_official
         self.approving_official.email_address
+      else
+        self.system_approver_emails.first
       end
     end
 
