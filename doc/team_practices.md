@@ -58,7 +58,7 @@ you can always create a PR with a `[WIP]` prefix before you are ready to deliver
 of work-in-progress. The Reviewer is encouraged to indicate a "Ship it" (or your favorite Ship It emoticon)
 Consider pointing out the awesomeness of the code, too.
 
-If the committer paired with someone on the story, the teammate can certainly give a Ship It. That said, the pair is welcome to solicit additional PR feedback from the rest of the team. If verbal approval is given by a teammate, the committer may comment `@TEAMMATE ship it` before merging the PR.
+    If the committer paired with someone on the story, the teammate can certainly give a Ship It. That said, the pair is welcome to solicit additional PR feedback from the rest of the team. If verbal approval is given by a teammate, the committer may comment `@TEAMMATE ship it` before merging the PR.
 
 1. The Tester tests the code. This can be done on the `c2-dev` or `c2-staging` environment.
 Check with your teammates to see which environment might already be in use.
