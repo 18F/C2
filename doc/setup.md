@@ -41,14 +41,14 @@ PORT=3000 ASSETS_DEBUG=true ./script/start
 open http://localhost:3000
 ```
 
-## Seeding your dashboard with data
+## Populating with data
 
 Once you've authed locally, there will be a `user` record associated with your
 email address. There won't be much for you to see until your client slug is set,
 so find your user record and set it to `ncr`:
 
 ```bash
-rails c
+bin/rails c
 user = User.find_by(email_address: 'example@gsa.gov')
 user.update(client_slug: 'ncr')
 ```
@@ -59,7 +59,7 @@ If you'd like to seed your dashboard with work orders, you can run this rake
 task:
 
 ```bash
-rake populate:ncr:for_user[example@gsa.gov]
+bin/rake populate:ncr:for_user[example@gsa.gov]
 ```
 
 Now you should see 25 pending purchase requests at
