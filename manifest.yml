@@ -20,7 +20,9 @@ applications:
   env:
     DEFAULT_URL_HOST: c2-staging.18f.gov
 - name: c2-prod
-  host: cap
+  hosts:
+  - cap
+  - c2
   env:
     DEFAULT_URL_HOST: cap.18f.gov
     DISABLE_SANDBOX_WARNING: true
