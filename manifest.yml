@@ -15,13 +15,20 @@ applications:
   host: c2-dev
   env:
     DEFAULT_URL_HOST: c2-dev.18f.gov
+    NEW_RELIC_APP_NAME: C2 (Development)
+    S3_BUCKET_NAME: c2-demo
 - name: c2-staging
   host: c2-staging
   env:
     DEFAULT_URL_HOST: c2-staging.18f.gov
+    NEW_RELIC_APP_NAME: C2 (Staging)
+    S3_BUCKET_NAME: c2-demo
 - name: c2-prod
   host: cap
   env:
     DEFAULT_URL_HOST: cap.18f.gov
     DISABLE_SANDBOX_WARNING: true
+    GA_TRACKING_ID: UA-48605964-27
+    NEW_RELIC_APP_NAME: C2 (Production)
     RESTRICT_ACCESS: true
+    S3_BUCKET_NAME: c2-prod
