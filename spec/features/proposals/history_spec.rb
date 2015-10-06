@@ -1,15 +1,12 @@
-describe '/proposals/:id/history' do
+describe 'View history for a proposal' do
   let(:user) { FactoryGirl.create(:user) }
 
-  before do
-    PaperTrail.whodunnit = user.id.to_s
-  end
-
   it "displays the model information" do
+    PaperTrail.whodunnit = user.id.to_s
     proposal = FactoryGirl.create(:proposal, requester: user)
     login_as(user)
 
-    visit "/proposals/#{proposal.id}/history"
+    visit history_proposal_path(proposal)
 
     expect(page).to have_content('Proposal')
   end
