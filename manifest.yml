@@ -16,13 +16,11 @@ applications:
 - name: c2-dev
   host: c2-dev
   env:
-    DEFAULT_URL_HOST: c2-dev.18f.gov
     NEW_RELIC_APP_NAME: C2 (Development)
     S3_BUCKET_NAME: c2-demo
 - name: c2-staging
   host: c2-staging
   env:
-    DEFAULT_URL_HOST: c2-staging.18f.gov
     NEW_RELIC_APP_NAME: C2 (Staging)
     S3_BUCKET_NAME: c2-demo
 - name: c2-prod

@@ -7,11 +7,23 @@ def in_spec?
 end
 
 def with_env_vars_runner(env)
+  # hold on to old values
   env = env.stringify_keys
   old_values = {}
   env.each_key { |k| old_values[k] = ENV[k] }
-  env.each { |k, v| ENV[k] = v.to_s }
+
+  # assign new values
+  env.each do |k, v|
+    unless v.nil?
+      v = v.to_s
+    end
+
+    ENV[k] = v
+  end
+
   yield
+
+  # restore old values
   old_values.each { |k, v| ENV[k] = v }
 end
 
