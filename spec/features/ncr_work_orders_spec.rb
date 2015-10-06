@@ -449,7 +449,7 @@ describe "National Capital Region proposals" do
         select approver.email_address, from: "Approving official's email address"
         click_on 'Update'
         proposal = Proposal.last
-        
+
         expect(proposal.approvers.first.email_address).to eq (approver.email_address)
         expect(proposal.individual_approvals.first.actionable?).to eq (true)
       end
@@ -465,7 +465,7 @@ describe "National Capital Region proposals" do
             approving_official = work_order.approving_official
 
             visit "/ncr/work_orders/#{work_order.id}/edit"
-            select Ncr::Organization::WHSC_CODE, from: "Org code"
+            select Ncr::Organization::WHSC_CODE, from: "Org Code / Service Center"
             click_on 'Update'
 
             ncr_proposal.reload
@@ -484,7 +484,7 @@ describe "National Capital Region proposals" do
             deliveries.clear
 
             visit "/ncr/work_orders/#{work_order.id}/edit"
-            select Ncr::Organization::WHSC_CODE, from: "Org code"
+            select Ncr::Organization::WHSC_CODE, from: "Org Code / Service Center"
             click_on 'Update'
 
             expect(deliveries.length).to be 3
@@ -508,7 +508,7 @@ describe "National Capital Region proposals" do
 
             visit "/ncr/work_orders/#{work_order.id}/edit"
             choose 'BA61'
-            select Ncr::Organization::WHSC_CODE, from: "Org code"
+            select Ncr::Organization::WHSC_CODE, from: "Org Code / Service Center"
             click_on 'Update'
 
             ncr_proposal.reload
