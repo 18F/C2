@@ -7,10 +7,8 @@ module IncomingMail
     end
 
     def handle(payload)
-      # raw JSON
-      if payload.is_a?(Array) and payload[0]['event'] and payload[0]['event'] == 'inbound'
+      if payload_is_raw?(payload)
         create_response(payload[0])
-      # mandrill-rails object wrapper
       elsif payload.is_a?(Mandrill::WebHook::EventDecorator)
         create_response(payload)
       else
@@ -19,6 +17,10 @@ module IncomingMail
     end
 
     private
+
+    def payload_is_raw?(payload)
+      payload.is_a?(Array) and payload[0]['event'] and payload[0]['event'] == 'inbound'
+    end
 
     def create_response(payload)
       resp = Response.new(type: identify_mail_type(payload))
@@ -62,7 +64,6 @@ module IncomingMail
       else
         # yes, user adds self as observer, which also generates comment
         proposal.add_observer(comment_user, comment_user, comment_text)
-        # return most recent comment (TODO race condition here?)
         proposal.comments.last
       end
     end
