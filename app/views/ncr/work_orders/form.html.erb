@@ -72,10 +72,13 @@
     </div>
     <div class="form-group">
       <%= field_set_tag "Amount", class: "required" do %>
-        <%= f.label :amount, "Dollar Amount", :class => 'sr-only'  %>
+        <%= f.label :amount, "Dollar Amount", class: 'sr-only' %>
         <div class="input-group">
           <div class="input-group-addon">$</div>
-          <%= f.number_field :amount, class: 'form-control', step: 0.01 %>
+          <%= f.number_field :amount, class: 'form-control', step: 0.01,
+                data: { toggle: 'popover', trigger: 'focus', html: true,
+                  title: 'Transaction Amount Thresholds', placement: 'top',
+                  content: "$3,000 for supplies<br>$2,500 for services<br>$2,000 for construction" } %>
         </div>
         <div class="radio">
           <%= f.label :not_to_exceed, value: false do %>

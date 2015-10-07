@@ -108,6 +108,15 @@ describe "National Capital Region proposals" do
         end
       end
 
+      it "shows hint text for amount field", js: true do
+        visit '/ncr/work_orders/new'
+        page.execute_script "document.getElementById('ncr_work_order_amount').scrollIntoView()"
+        page.execute_script "$('#ncr_work_order_amount').focus()"
+        expect(page).to have_content('$3,000 for supplies')
+        expect(page).to have_content('$2,500 for services')
+        expect(page).to have_content('$2,000 for construction')
+      end
+
       it "defaults to no approver if there was no previous request" do
         visit '/ncr/work_orders/new'
         expect(find_field("Approving official's email address").value).to eq('')
