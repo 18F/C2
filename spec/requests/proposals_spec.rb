@@ -3,13 +3,10 @@ describe 'proposals' do
 
   describe 'GET /proposals/:id' do
     it "can be viewed by a delegate" do
-      proposal = FactoryGirl.create(:proposal)
-      approver = FactoryGirl.create(:user, :with_delegate)
-      proposal.individual_approvals.create!(user: approver, status: 'actionable')
+      delegate = FactoryGirl.create(:user)
+      proposal = FactoryGirl.create(:proposal, delegate: delegate)
 
-      delegate = approver.outgoing_delegates.first.assignee
       login_as(delegate)
-
       get "/proposals/#{proposal.id}"
 
       expect(response.status).to eq(200)
@@ -45,15 +42,10 @@ describe 'proposals' do
     end
 
     it "succeeds as a delegate" do
-      proposal = FactoryGirl.create(:proposal, :with_approver)
-      approver = proposal.approvers.first
-
-      # TODO move to factory trait
       delegate = FactoryGirl.create(:user)
-      approver.add_delegate(delegate)
+      proposal = FactoryGirl.create(:proposal, delegate: delegate)
 
       login_as(delegate)
-
       post "/proposals/#{proposal.id}/approve"
 
       expect_status(proposal, 'approved', 'approved')
