@@ -285,6 +285,9 @@ describe "National Capital Region proposals" do
 
           expect(proposal.client_data.emergency).to eq(true)
           expect(proposal.approved?).to eq(true)
+          expect(proposal.approvers).to be_empty
+          expect(proposal.client_data.current_approver_email_address).to eq(Ncr::WorkOrder::EMERGENCY_APPROVER_EMAIL)
+          expect(proposal.client_data.final_approver_email_address).to eq(Ncr::WorkOrder::EMERGENCY_APPROVER_EMAIL)
         end
 
         it "does not set emergencies if form type changes" do
