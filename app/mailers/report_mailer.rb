@@ -14,30 +14,30 @@ class ReportMailer < ApplicationMailer
     )
   end
 
-  def annual_report(year, to_email)
+  def annual_ncr_report(year, to_email)
     proposals = Proposal.approved.where(client_data_type: "Ncr::WorkOrder")
-        proposals = proposals.select {|p| p.client_data.fiscal_year == year}
-        csv_string = CSV.generate do |csv|
-          csv << ["Amount", "Date Approved", "Org Code", "CL#", 
-            "Budget Activity", "SOC", "Function Code", "Building #", 
-            "Vendor", "Description", "Requestor", "Approver"]
-          for p in proposals
-            approver_name = p.client_data.approving_official ? p.client_data.approving_official.full_name : "no approver listed"
-            csv << [p.client_data.amount, p.root_approval.approved_at, p.client_data.org_code, 
-              p.client_data.cl_number, p.client_data.expense_type, p.client_data.soc_code, 
-              p.client_data.function_code, p.client_data.building_number, p.client_data.vendor, 
-              p.client_data.description, p.requester.full_name, approver_name]
-          end
-        end
+    proposals_for_fiscal_year = proposals.select {|p| p.client_data.fiscal_year == year}
+    csv_string = CSV.generate do |csv|
+      csv << ["Amount", "Date Approved", "Org Code", "CL#", 
+        "Budget Activity", "SOC", "Function Code", "Building #", 
+        "Vendor", "Description", "Requestor", "Approver"]
+      proposals_for_fiscal_year.each do |p|
+        approver_name = p.client_data.approving_official ? p.client_data.approving_official.full_name : "no approver listed"
+        csv << [p.client_data.amount, p.root_approval.approved_at, p.client_data.org_code, 
+          p.client_data.cl_number, p.client_data.expense_type, p.client_data.soc_code, 
+          p.client_data.function_code, p.client_data.building_number, p.client_data.vendor, 
+          p.client_data.description, p.requester.full_name, approver_name]
+      end
+    end
 
-      attachments['FY' + year.to_s + '_Report.csv'] = csv_string
+    attachments['NCR_Work_Order_Report_FY' + year.to_s + '.csv'] = csv_string
 
-      mail(
-        to: to_email,
-        subject: 'FY' + year.to_s + ' Report',
-        body: 'The annual report is attached to this email.',
-        from: self.sender_email
-      )
+    mail(
+      to: to_email,
+      subject: 'FY' + year.to_s + ' NCR Budget Report',
+      body: 'The annual report is attached to this email.',
+      from: self.sender_email
+    )
   end
 
   private
