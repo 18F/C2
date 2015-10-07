@@ -12,7 +12,7 @@ describe C2VersionDecorator do
       decorated = C2VersionDecorator.new(version)
 
       output = decorated.to_html
-      expect(escape(output)).to eq("&lt;script&gt;alert()&lt;/script&gt; Thunder was added as an approver.")
+      expect(escape(output)).to eq("&lt;script&gt;alert()&lt;/script&gt; #{user.last_name} was added as an approver.")
     end
 
     it "includes a message for individual approvals" do
