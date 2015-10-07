@@ -13,7 +13,7 @@ C2::Application.configure do
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     address:              'smtp.mandrillapp.com',
-    port:                 25,
+    port:                 587,
     domain:               ENV['SMTP_DOMAIN'] || '18f.gsa.gov',
     user_name:            ENV.fetch('SMTP_USERNAME'),
     password:             ENV.fetch('SMTP_PASSWORD'),
