@@ -1,6 +1,6 @@
 describe AttachmentsController do
   describe 'permission checking' do
-    let (:proposal) { FactoryGirl.create(:proposal, :with_parallel_approvers, :with_observers) }
+    let (:proposal) { create(:proposal, :with_parallel_approvers, :with_observers) }
     let (:params) {{
       proposal_id: proposal.id,
       attachment: { file: fixture_file_upload('icon-user.png', 'image/png') }
@@ -34,7 +34,7 @@ describe AttachmentsController do
     end
 
     it "does not allow others to add an attachment" do
-      login_as(FactoryGirl.create(:user))
+      login_as(create(:user))
       post :create, params
       expect(flash[:success]).not_to be_present
       expect(flash[:alert]).to be_present
@@ -45,7 +45,7 @@ describe AttachmentsController do
 
   describe 'error handling' do
     it "gives an error when a file was not selected" do
-      proposal = FactoryGirl.create(:proposal)
+      proposal = create(:proposal)
       login_as(proposal.requester)
       post :create, { proposal_id: proposal.id }
       expect(flash[:success]).not_to be_present
@@ -56,8 +56,8 @@ describe AttachmentsController do
   end
 
   describe '#show' do
-    let (:proposal) { FactoryGirl.create(:proposal, :with_parallel_approvers, :with_observers) }
-    let (:attachment) { FactoryGirl.create(:attachment, proposal: proposal, user: proposal.requester) }
+    let (:proposal) { create(:proposal, :with_parallel_approvers, :with_observers) }
+    let (:attachment) { create(:attachment, proposal: proposal, user: proposal.requester) }
 
     it "allows the requester to view attachment" do
       login_as(proposal.requester)
@@ -78,7 +78,7 @@ describe AttachmentsController do
     end
 
     it "does not allow others to view attachment" do
-      login_as(FactoryGirl.create(:user))
+      login_as(create(:user))
       get :show, proposal_id: proposal.id, id: attachment.id
       expect(flash[:alert]).to be_present
       expect(response).to redirect_to(proposals_path)

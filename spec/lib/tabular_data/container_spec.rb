@@ -55,8 +55,8 @@ describe TabularData::Container do
 
   describe '#alter_query' do
     it 'allows the query to be modified' do
-      pending = FactoryGirl.create(:proposal)
-      approved = FactoryGirl.create(:proposal, status: 'approved')
+      pending = create(:proposal)
+      approved = create(:proposal, status: 'approved')
       container = TabularData::Container.new(:name, engine: 'Proposal')
 
       expect(container.rows).to include(pending)
@@ -76,9 +76,9 @@ describe TabularData::Container do
                 columns: ['id', 'client']}
       TabularData::Container.new(:abc, config)
     }
-    let!(:ncr) { FactoryGirl.create(:ncr_work_order).proposal }
-    let!(:gsa18f) { FactoryGirl.create(:gsa18f_procurement).proposal }
-    let!(:default) { FactoryGirl.create(:proposal) }
+    let!(:ncr) { create(:ncr_work_order).proposal }
+    let!(:gsa18f) { create(:gsa18f_procurement).proposal }
+    let!(:default) { create(:proposal) }
 
     it 'sets sort state if the field is valid' do
       container.set_state_from_params(ActionController::Parameters.new(tables: {abc: {sort: "id"}}))

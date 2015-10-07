@@ -1,5 +1,5 @@
 describe User do
-  let(:user) { FactoryGirl.build(:user) }
+  let(:user) { build(:user) }
 
   context 'valid attributes' do
     it 'should be valid' do
@@ -56,18 +56,18 @@ describe User do
 
   describe '.with_role' do
     it "returns all users with a particular Role" do
-      user1 = FactoryGirl.create(:user)
+      user1 = create(:user)
       user1.add_role('foo')
-      user2 = FactoryGirl.create(:user)
+      user2 = create(:user)
       user2.add_role('bar')
 
       expect(User.with_role('bar')).to eq([user2])
     end
 
     it "returns all users with a particular role name" do
-      user1 = FactoryGirl.create(:user)
+      user1 = create(:user)
       user1.add_role('foo')
-      user2 = FactoryGirl.create(:user)
+      user2 = create(:user)
       user_role = user2.add_role('bar')
 
       expect(User.with_role(user_role.role)).to eq([user2])
@@ -80,13 +80,13 @@ describe User do
     end
 
     it "can be assigned a role" do
-      role = FactoryGirl.create(:role)
+      role = create(:role)
       user.add_role(role)
       expect(user.has_role?( role.name )).to be_truthy
     end
 
     it "can be assigned a role by role name" do
-      role = FactoryGirl.create(:role)
+      role = create(:role)
       user.add_role(role.name)
       expect(user.has_role?( role )).to be_truthy
     end

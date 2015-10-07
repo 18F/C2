@@ -1,7 +1,7 @@
 describe AttachmentPolicy do
   subject { described_class }
-  let(:proposal) { FactoryGirl.create(:proposal, :with_parallel_approvers, :with_observers) }
-  let(:attachment) { FactoryGirl.create(:attachment, proposal: proposal) } 
+  let(:proposal) { create(:proposal, :with_parallel_approvers, :with_observers) }
+  let(:attachment) { create(:attachment, proposal: proposal) } 
 
   permissions :can_destroy? do
     it "allows the original uploader to delete" do
@@ -9,7 +9,7 @@ describe AttachmentPolicy do
     end
 
     it "does not allow anyone else to delete" do
-      expect(subject).not_to permit(FactoryGirl.create(:user), attachment)
+      expect(subject).not_to permit(create(:user), attachment)
       expect(subject).not_to permit(proposal.requester, attachment)
       expect(subject).not_to permit(proposal.approvers.first, attachment)
       expect(subject).not_to permit(proposal.observers.first, attachment)

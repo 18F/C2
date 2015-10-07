@@ -1,5 +1,5 @@
 describe Dispatcher do
-  let(:proposal) { FactoryGirl.create(:proposal) }
+  let(:proposal) { create(:proposal) }
 
   describe '.deliver_new_proposal_emails' do
     it "uses the LinearDispatcher for linear approvals" do
@@ -10,8 +10,8 @@ describe Dispatcher do
     end
   end
 
-  let(:proposal) { FactoryGirl.create(:proposal, :with_parallel_approvers) }
-  let(:serial_proposal) { FactoryGirl.create(:proposal, :with_serial_approvers) }
+  let(:proposal) { create(:proposal, :with_parallel_approvers) }
+  let(:serial_proposal) { create(:proposal, :with_serial_approvers) }
   let(:dispatcher) { Dispatcher.new }
 
   describe '#deliver_new_proposal_emails' do

@@ -16,7 +16,7 @@ describe 'User creation when logging in with Oauth to view a protected page' do
   end
 
   it 'does not create a user if the current user already exists' do
-    FactoryGirl.create(:user, email_address: 'george-test@some-dot-gov.gov')
+    create(:user, email_address: 'george-test@some-dot-gov.gov')
     expect(User.count).to eq 3 # 1 + 2 seeds
 
     get '/auth/myusa/callback'
@@ -25,7 +25,7 @@ describe 'User creation when logging in with Oauth to view a protected page' do
   end
 
   it 'redirects a newly logged in user to the carts screen' do
-    FactoryGirl.create(:user, email_address: 'george-test@some-dot-gov.gov')
+    create(:user, email_address: 'george-test@some-dot-gov.gov')
     expect(User.count).to eq 3 # 1 + 2 seeds
 
     get '/auth/myusa/callback'

@@ -45,7 +45,7 @@ describe Ncr::WorkOrder do
     let (:ba61_tier_two_email) { Ncr::WorkOrder.ba61_tier2_budget_mailbox }
 
     it "creates approvers when not an emergency" do
-      form = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61')
+      form = create(:ncr_work_order, expense_type: 'BA61')
       form.setup_approvals_and_observers('bob@example.com')
       expect(form.observations.length).to eq(0)
       expect(form.approvers.map(&:email_address)).to eq([
@@ -58,7 +58,7 @@ describe Ncr::WorkOrder do
     end
 
     it "reuses existing approvals" do
-      form = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61')
+      form = create(:ncr_work_order, expense_type: 'BA61')
       form.setup_approvals_and_observers('bob@example.com')
       first_approval = form.individual_approvals.first
 
@@ -67,7 +67,7 @@ describe Ncr::WorkOrder do
     end
 
     it "creates observers when in an emergency" do
-      form = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61',
+      form = create(:ncr_work_order, expense_type: 'BA61',
                                emergency: true)
       form.setup_approvals_and_observers('bob@example.com')
       expect(form.observers.map(&:email_address)).to match_array([
@@ -81,7 +81,7 @@ describe Ncr::WorkOrder do
     end
 
     it "accounts for approver transitions when nothing's approved" do
-      wo = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61')
+      wo = create(:ncr_work_order, expense_type: 'BA61')
       wo.setup_approvals_and_observers('ao@example.gov')
       expect(wo.approvers.map(&:email_address)).to eq [
         'ao@example.gov',
@@ -111,7 +111,7 @@ describe Ncr::WorkOrder do
     end
 
     it "unsets the approval status" do
-      wo = FactoryGirl.create(:ncr_work_order, expense_type: 'BA80')
+      wo = create(:ncr_work_order, expense_type: 'BA80')
       wo.setup_approvals_and_observers('ao@example.gov')
       expect(wo.approvers.map(&:email_address)).to eq [
         'ao@example.gov',
@@ -128,7 +128,7 @@ describe Ncr::WorkOrder do
     end
 
     it "does not re-add observers on emergencies" do
-      wo = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61', emergency: true)
+      wo = create(:ncr_work_order, expense_type: 'BA61', emergency: true)
       wo.setup_approvals_and_observers('ao@example.gov')
 
       expect(wo.approvals).to be_empty
@@ -141,9 +141,9 @@ describe Ncr::WorkOrder do
     end
 
     it "handles the delegate then update scenario" do
-      wo = FactoryGirl.create(:ncr_work_order, expense_type: 'BA80')
+      wo = create(:ncr_work_order, expense_type: 'BA80')
       wo.setup_approvals_and_observers('ao@example.gov')
-      delegate = FactoryGirl.create(:user)
+      delegate = create(:user)
       wo.approvers.second.add_delegate(delegate)
       wo.individual_approvals.second.update(user: delegate)
 
@@ -176,14 +176,14 @@ describe Ncr::WorkOrder do
 
     context "for a BA61 request" do
       it "skips the Tier 1 budget approver for WHSC" do
-        work_order = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61', org_code: Ncr::Organization::WHSC_CODE)
+        work_order = create(:ncr_work_order, expense_type: 'BA61', org_code: Ncr::Organization::WHSC_CODE)
         expect(work_order.system_approver_emails).to eq([
           ba61_tier_two_email
         ])
       end
 
       it "includes the Tier 1 budget approver for an unknown organization" do
-        work_order = FactoryGirl.create(:ncr_work_order, expense_type: 'BA61', org_code: nil)
+        work_order = create(:ncr_work_order, expense_type: 'BA61', org_code: nil)
         expect(work_order.system_approver_emails).to eq([
           ba61_tier_one_email,
           ba61_tier_two_email
@@ -194,21 +194,21 @@ describe Ncr::WorkOrder do
     context "for a BA80 request" do
       it "uses the general budget email" do
         budget_email = Ncr::WorkOrder.ba80_budget_mailbox
-        work_order = FactoryGirl.create(:ncr_work_order, expense_type: 'BA80')
+        work_order = create(:ncr_work_order, expense_type: 'BA80')
         expect(work_order.system_approver_emails).to eq([budget_email])
       end
 
       it "uses the OOL budget email for their org code" do
         budget_email = Ncr::WorkOrder.ool_ba80_budget_mailbox
         org_code = Ncr::Organization::OOL_CODES.first
-        work_order = FactoryGirl.create(:ncr_work_order, expense_type: 'BA80', org_code: org_code)
+        work_order = create(:ncr_work_order, expense_type: 'BA80', org_code: org_code)
         expect(work_order.system_approver_emails).to eq([budget_email])
       end
     end
   end
 
   describe '#total_price' do
-    let (:work_order) { FactoryGirl.create(:ncr_work_order, amount: 45.36)}
+    let (:work_order) { create(:ncr_work_order, amount: 45.36)}
     it 'gets price from amount field' do
       expect(work_order.total_price).to eq(45.36)
     end
@@ -216,7 +216,7 @@ describe Ncr::WorkOrder do
 
   describe '#public_identifier' do
     it 'includes the fiscal year' do
-      work_order = FactoryGirl.create(:ncr_work_order, created_at: Date.new(2007, 1, 15))
+      work_order = create(:ncr_work_order, created_at: Date.new(2007, 1, 15))
       proposal_id = work_order.proposal.id
 
       expect(work_order.public_identifier).to eq(
@@ -230,19 +230,19 @@ describe Ncr::WorkOrder do
 
   describe '#fiscal_year' do
     it 'ends the fiscal year on September 30th' do
-      work_order = FactoryGirl.create(:ncr_work_order, created_at: Date.new(2014, 9, 30))
+      work_order = create(:ncr_work_order, created_at: Date.new(2014, 9, 30))
       expect(work_order.fiscal_year).to eq 14
     end
 
     it 'starts a new fiscal year on October first' do
-      work_order = FactoryGirl.create(:ncr_work_order, created_at: Date.new(2014, 10, 1))
+      work_order = create(:ncr_work_order, created_at: Date.new(2014, 10, 1))
       expect(work_order.fiscal_year).to eq 15
     end
   end
 
   describe 'validations' do
     describe 'cl_number' do
-      let (:work_order) { FactoryGirl.build(:ncr_work_order) }
+      let (:work_order) { build(:ncr_work_order) }
 
       it "works with a 'CL' prefix" do
         work_order.cl_number = 'CL1234567'
@@ -275,7 +275,7 @@ describe Ncr::WorkOrder do
     end
 
     describe 'function_code' do
-      let (:work_order) { FactoryGirl.build(:ncr_work_order) }
+      let (:work_order) { build(:ncr_work_order) }
 
       it "works with 'PG' followed by three characters" do
         work_order.function_code = 'PG123'
@@ -308,7 +308,7 @@ describe Ncr::WorkOrder do
     end
 
     describe 'RWA' do
-      let (:work_order) { FactoryGirl.build(:ncr_work_order, expense_type: 'BA80') }
+      let (:work_order) { build(:ncr_work_order, expense_type: 'BA80') }
 
       it 'works with one letter followed by 7 numbers' do
         work_order.rwa_number = 'A1234567'
@@ -343,7 +343,7 @@ describe Ncr::WorkOrder do
     end
 
     describe 'soc_code' do
-      let (:work_order) { FactoryGirl.build(:ncr_work_order) }
+      let (:work_order) { build(:ncr_work_order) }
 
       it "works with three characters" do
         work_order.soc_code = '123'
@@ -371,7 +371,7 @@ describe Ncr::WorkOrder do
   end
 
   describe '#record_changes' do
-    let (:work_order) { FactoryGirl.create(:ncr_work_order) }
+    let (:work_order) { create(:ncr_work_order) }
 
     it 'adds a change comment' do
       work_order.update(vendor: 'Mario Brothers', amount: 123.45)
@@ -416,7 +416,7 @@ describe Ncr::WorkOrder do
     end
 
     it "attributes the update comment to someone set explicitly" do
-      modifier = FactoryGirl.create(:user)
+      modifier = create(:user)
       work_order.modifier = modifier
       work_order.update(vendor: 'VenVenVen')
 
@@ -427,43 +427,43 @@ describe Ncr::WorkOrder do
 
   describe "#org_id" do
     it "pulls out the organization id when present" do
-      wo = FactoryGirl.create(:ncr_work_order, org_code: 'P0000000 (192X,192M) PRIOR YEAR ACTIVITIES')
+      wo = create(:ncr_work_order, org_code: 'P0000000 (192X,192M) PRIOR YEAR ACTIVITIES')
       expect(wo.org_id).to eq("P0000000")
     end
 
     it "returns nil when no organization is present" do
-      wo = FactoryGirl.create(:ncr_work_order, org_code: nil)
+      wo = create(:ncr_work_order, org_code: nil)
       expect(wo.org_id).to be_nil
     end
   end
 
   describe "#building_id" do
     it "pulls out the building id when an identifier is present" do
-      wo = FactoryGirl.build(:ncr_work_order, building_number: "AB1234CD then some more")
+      wo = build(:ncr_work_order, building_number: "AB1234CD then some more")
       expect(wo.building_id).to eq("AB1234CD")
     end
 
     it "defaults to the whole building number" do
-      wo = FactoryGirl.build(:ncr_work_order, building_number: "Another String")
+      wo = build(:ncr_work_order, building_number: "Another String")
       expect(wo.building_id).to eq("Another String")
     end
 
     it "allows nil" do
-      wo = FactoryGirl.build(:ncr_work_order, building_number: nil)
+      wo = build(:ncr_work_order, building_number: nil)
       expect(wo.building_id).to be_nil
     end
   end
 
   describe "#current_approver_email_address" do
     it "returns the first (sorted by 'position') pending approval's email address" do
-      wo = FactoryGirl.create(:ncr_work_order, :with_approvers)
+      wo = create(:ncr_work_order, :with_approvers)
       expect(wo.current_approver_email_address).to eq(wo.individual_approvals.first.user.email_address)
       wo.individual_approvals.first.approve!
       expect(wo.current_approver_email_address).to eq(wo.individual_approvals.last.user.email_address)
     end
 
     it "returns the first approver when fully approved" do
-      wo = FactoryGirl.create(:ncr_work_order, :with_approvers)
+      wo = create(:ncr_work_order, :with_approvers)
       wo.individual_approvals.first.approve!
       wo.reload.individual_approvals.last.approve!
       expect(wo.current_approver_email_address).to eq(wo.individual_approvals.first.user.email_address)

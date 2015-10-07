@@ -1,6 +1,6 @@
 describe "searching" do
-  let(:user){ FactoryGirl.create(:user) }
-  let!(:approver){ FactoryGirl.create(:user) }
+  let(:user){ create(:user) }
+  let!(:approver){ create(:user) }
 
   before do
     login_as(user)
@@ -8,7 +8,7 @@ describe "searching" do
 
   it "displays relevant results" do
     proposals = 2.times.map do |i|
-      wo = FactoryGirl.create(:ncr_work_order, project_title: "Work Order #{i}")
+      wo = create(:ncr_work_order, project_title: "Work Order #{i}")
       wo.proposal.update(requester: user)
       wo.proposal
     end

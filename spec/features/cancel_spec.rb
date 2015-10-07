@@ -1,6 +1,6 @@
 describe 'Canceling a request' do
   it 'shows a cancel link for the requester' do
-    proposal = FactoryGirl.create(:proposal)
+    proposal = create(:proposal)
     login_as(proposal.requester)
 
     visit proposal_path(proposal)

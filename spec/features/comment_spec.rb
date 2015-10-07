@@ -1,5 +1,5 @@
 describe "commenting" do
-  let(:proposal) { FactoryGirl.create(:proposal, :with_parallel_approvers) }
+  let(:proposal) { create(:proposal, :with_parallel_approvers) }
 
   before do
     login_as(proposal.requester)

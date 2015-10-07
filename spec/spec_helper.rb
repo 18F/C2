@@ -20,6 +20,7 @@ require 'capybara/poltergeist'
 Capybara.javascript_driver = :poltergeist
 
 require 'pundit/rspec'
+require 'factory_girl_rails'
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
@@ -30,6 +31,7 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
 
+  config.include FactoryGirl::Syntax::Methods
   config.raise_errors_for_deprecations!
   config.backtrace_exclusion_patterns << %r{/gems/}
   config.order = :random

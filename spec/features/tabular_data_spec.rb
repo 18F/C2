@@ -1,7 +1,7 @@
 describe "Tabular data sorting" do
-  let(:user) { FactoryGirl.create(:user) }
-  let!(:proposals) { 4.times.map { FactoryGirl.create(:proposal) } }
-  let!(:cancelled) { 2.times.map { FactoryGirl.create(:proposal, status: 'cancelled') } }
+  let(:user) { create(:user) }
+  let!(:proposals) { 4.times.map { create(:proposal) } }
+  let!(:cancelled) { 2.times.map { create(:proposal, status: 'cancelled') } }
   before :each do
     Proposal.all().each { |p| p.add_observer(user.email_address) }
     login_as(user)
@@ -79,7 +79,7 @@ describe "Tabular data sorting" do
   end
 
   context '18F home page' do
-    let!(:proposals) { 3.times.map { FactoryGirl.create(:gsa18f_procurement) } }
+    let!(:proposals) { 3.times.map { create(:gsa18f_procurement) } }
 
     before do
       user.update(client_slug: "gsa18f")

@@ -1,6 +1,6 @@
 describe "archive link" do
-  let(:user){ FactoryGirl.create(:user) }
-  let!(:approver){ FactoryGirl.create(:user) }
+  let(:user){ create(:user) }
+  let!(:approver){ create(:user) }
 
   before do
     login_as(user)
@@ -8,7 +8,7 @@ describe "archive link" do
 
   it "displays archive link when more than 10 results" do
     proposals = 20.times.map do |i|
-      wo = FactoryGirl.create(:ncr_work_order, project_title: "Work Order #{i}")
+      wo = create(:ncr_work_order, project_title: "Work Order #{i}")
       wo.proposal.update(requester: user)
       wo.proposal.individual_approvals.create!(user: approver, status: 'actionable')
       approval = wo.proposal.existing_approval_for(approver)
@@ -21,7 +21,7 @@ describe "archive link" do
 
   it "hides archive link when < 10 results" do
     proposals = 9.times.map do |i| 
-      wo = FactoryGirl.create(:ncr_work_order, project_title: "Work Order #{i}")
+      wo = create(:ncr_work_order, project_title: "Work Order #{i}")
       wo.proposal.update(requester: user)
       wo.proposal.individual_approvals.create!(user: approver, status: 'actionable')
       approval = wo.proposal.existing_approval_for(approver)

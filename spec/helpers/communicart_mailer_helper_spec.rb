@@ -1,7 +1,7 @@
 describe CommunicartMailerHelper do
   describe '#generate_approve_url' do
     it "returns a URL" do
-      approval = FactoryGirl.create(:approval)
+      approval = create(:approval)
       token = approval.create_api_token!
       proposal = approval.proposal
 
@@ -17,7 +17,7 @@ describe CommunicartMailerHelper do
     end
 
     it "throws an error if there's no token" do
-      approval = FactoryGirl.build(:approval)
+      approval = build(:approval)
       expect(approval.api_token).to eq(nil)
 
       expect {

@@ -1,6 +1,6 @@
 describe 'Version check' do
   it 'occurs if the proposal is modified in after seeing the profile page' do
-    proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
+    proposal = create(:proposal, :with_parallel_approvers)
     login_as(proposal.approvers.first)
     time = Time.current
 

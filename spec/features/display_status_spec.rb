@@ -1,7 +1,7 @@
 describe 'Display status text' do
   it 'displays approved status' do
     proposal = create_proposal_with_parallel_approvers
-    proposal.individual_approvals.each{|approval| approval.approve!}
+    proposal.individual_approvals.each{ |approval| approval.approve! }
 
     login_as(proposal.requester)
     visit proposals_path
@@ -72,11 +72,11 @@ describe 'Display status text' do
   end
 
   def create_proposal_with_parallel_approvers
-    @proposal ||= FactoryGirl.create(:proposal, :with_parallel_approvers)
+    @proposal ||= create(:proposal, :with_parallel_approvers)
   end
 
   def create_proposal_with_serial_approvers
-    @proposal ||= FactoryGirl.create(:proposal, :with_serial_approvers)
+    @proposal ||= create(:proposal, :with_serial_approvers)
   end
 end
 
