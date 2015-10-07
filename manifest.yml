@@ -8,6 +8,7 @@ command: script/server_start
 domain: 18f.gov
 instances: 1
 memory: 1G
+buildpack: https://github.com/cloudfoundry/ruby-buildpack.git
 
 # environment-specific configuration
 applications:
