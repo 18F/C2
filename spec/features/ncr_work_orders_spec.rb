@@ -110,8 +110,7 @@ describe "National Capital Region proposals" do
 
       it "shows hint text for amount field", js: true do
         visit '/ncr/work_orders/new'
-        page.execute_script "document.getElementById('ncr_work_order_amount').scrollIntoView()"
-        page.execute_script "$('#ncr_work_order_amount').focus()"
+        focus_field 'ncr_work_order_amount'
         expect(page).to have_content('$3,000 for supplies')
         expect(page).to have_content('$2,500 for services')
         expect(page).to have_content('$2,000 for construction')

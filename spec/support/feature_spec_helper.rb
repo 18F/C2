@@ -10,4 +10,9 @@ module FeatureSpecHelper
     setup_mock_auth(:myusa, user)
     visit '/auth/myusa'
   end
+
+  def focus_field(field_id)
+    execute_script "document.getElementById('#{field_id}').scrollIntoView()"
+    execute_script "$('##{field_id}').focus()"
+  end
 end
