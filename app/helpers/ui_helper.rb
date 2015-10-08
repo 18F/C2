@@ -9,13 +9,13 @@ module UiHelper
 
   def bootstrap_alert_class(key)
     suffix = case key.to_sym
-      when :notice
-        'info'
-      when :error
-        'danger'
-      else
-        key
-      end
+             when :notice
+               'info'
+             when :error
+               'danger'
+             else
+               key
+             end
 
     "bg-#{suffix}"
   end
