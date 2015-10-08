@@ -49,11 +49,9 @@ module Ncr
     }, allow_blank: true
 
     FISCAL_YEAR_START_MONTH = 10 # 1-based
-    scope :for_fiscal_year, ->(year) {
-      start_time = Time.zone.local(year-1, FISCAL_YEAR_START_MONTH, 1)
+    scope :for_fiscal_year, lambda { |year|
+      start_time = Time.zone.local(year - 1, FISCAL_YEAR_START_MONTH, 1)
       end_time = start_time + 1.year
-      puts start_time
-      puts end_time
       where(created_at: start_time...end_time)
     }
 
