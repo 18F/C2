@@ -28,17 +28,23 @@ module Ncr
     def self.build_ncr_annual_report_string(year)
       work_orders = Ncr::WorkOrder.approved.for_fiscal_year(year)
       CSV.generate do |csv|
-        csv << ["Amount", "Date Approved", "Org Code", "CL#",
-                "Budget Activity", "SOC", "Function Code", "Building #",
+        csv << ["Amount", "Date Approved", "Org Code", "CL#", "Budget Activity", "SOC", "Function Code", "Building #",
                 "Vendor", "Description", "Requestor", "Approver"]
-        work_orders.each do |w|
-          approver_name = w.approving_official ? w.approving_official.full_name : "no approver listed"
-          csv << [w.amount, w.proposal.root_approval.approved_at, w.org_code,
-                  w.cl_number, w.expense_type, w.soc_code,
-                  w.function_code, w.building_number, w.vendor,
-                  w.description, w.proposal.requester.full_name, approver_name]
-        end
+        self.get_ncr_annual_report_body(csv, work_orders)
       end
+    end
+
+    # rubocop:disable Metrics/AbcSize
+    def self.get_ncr_annual_report_body(csv, work_orders)
+      work_orders.each do |w|
+        csv << [w.amount, w.proposal.root_approval.approved_at, w.org_code, w.cl_number, w.expense_type, w.soc_code,
+                w.function_code, w.building_number, w.vendor, w.description, w.proposal.requester.full_name, self.get_approver_name(w)]
+      end
+    end
+    # rubocop:enable Metrics/AbcSize
+
+    def self.get_approver_name(work_order)
+      work_order.approving_official ? work_order.approving_official.full_name : "no approver listed"
     end
 
     def self.make_csv_row(proposal)
