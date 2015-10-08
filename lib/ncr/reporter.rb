@@ -25,6 +25,23 @@ module Ncr
       Rails.application.routes.url_helpers.url_for(controller: 'proposals', action: 'show', id: proposal.id, host: DEFAULT_URL_HOST)
     end
 
+    def self.build_ncr_annual_report_string(year)
+      work_orders = Ncr::WorkOrder.approved.for_fiscal_year(year)
+      csv_string = CSV.generate do |csv|
+        csv << ["Amount", "Date Approved", "Org Code", "CL#",
+                "Budget Activity", "SOC", "Function Code", "Building #",
+                "Vendor", "Description", "Requestor", "Approver"]
+        work_orders.each do |w|
+          approver_name = w.approving_official ? w.approving_official.full_name : "no approver listed"
+          csv << [w.amount, w.proposal.root_approval.approved_at, w.org_code,
+                  w.cl_number, w.expense_type, w.soc_code,
+                  w.function_code, w.building_number, w.vendor,
+                  w.description, w.proposal.requester.full_name, approver_name]
+        end
+      end      
+     end 
+
+
     def self.make_csv_row(proposal)
       [
         self.proposal_public_url(proposal),
