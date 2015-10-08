@@ -90,7 +90,10 @@ class CommunicartMailer < ApplicationMailer
   def redirect(msg)
     resent_to_addr = ENV['NOTIFICATION_FALLBACK_EMAIL'] || 'communicart.sender@gsa.gov'
     mail_msg = Mail.new msg
-    mail_msg.header['Resent-To'] = resent_to_addr
+    mail_msg.resent_to = resent_to_addr
+    mail_msg.resent_from = sender_email
+    mail_msg.resent_date = Time.current
+    mail_msg.resent_message_id = mail_msg.message_id + '-fallback'
     @_message = mail_msg
     mail do |_fmt|
       # no-op block just to get a MessageDelivery object that wraps @_message.
