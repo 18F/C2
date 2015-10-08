@@ -76,9 +76,7 @@
         <div class="input-group">
           <div class="input-group-addon">$</div>
           <%= f.number_field :amount, class: 'form-control', step: 0.01,
-                data: { toggle: 'popover', trigger: 'focus', html: true,
-                  title: 'Transaction Amount Thresholds', placement: 'top',
-                  content: "$3,000 for supplies<br>$2,500 for services<br>$2,000 for construction" } %>
+                data: popover_data_attrs("ncr_amount") %>
         </div>
         <div class="radio">
           <%= f.label :not_to_exceed, value: false do %>
