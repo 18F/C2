@@ -15,9 +15,6 @@ type: app
 # values: guild, working-group, project
 owner_type: project
 
-# Name of the main project repo if this is a sub-repo; name of the working group/guild repo if this is a working group/guild subproject
-parent: C2
-
 # Maturity stage of the project (required)
 # values: discovery, alpha, beta, live
 stage: live
@@ -70,6 +67,7 @@ milestones:
 
 # Technologies used to build the project
 stack:
+- Ruby
 - Rails
 
 # Brief description of the project's outcomes
@@ -82,7 +80,18 @@ impact:
 #   url: URL for detailed information
 #   badge: URL for the status badge
 services:
-- 
+- name: CircleCI
+  category: testing
+  url: https://circleci.com/gh/18F/C2
+  badge: https://circleci.com/gh/18F/C2.svg?style=svg
+- name: Code Climate
+  category: testing
+  url: https://codeclimate.com/github/18F/C2
+  badge: https://codeclimate.com/github/18F/C2/badges/gpa.svg
+- name: Gemnasium
+  category: dependency status
+  url: https://gemnasium.com/18F/C2
+  badge: https://gemnasium.com/18F/C2.svg
 
 # Licenses that apply to the project and/or its components (required)
 # Items by property name pattern:
@@ -90,8 +99,9 @@ services:
 #     name: Name of the license from the Software Package Data Exchange (SPDX): https://spdx.org/licenses/
 #     url: URL for the text of the license
 licenses: 
-- name: "CC0-1.0"
-  url: https://github.com/18F/C2/blob/master/LICENSE.md
+  C2:
+    name: "CC0-1.0"
+    url: https://github.com/18F/C2/blob/master/LICENSE.md
 
 # Blogs or websites associated with project development
 blog:
@@ -102,8 +112,12 @@ blog:
 # - url: URL for the link
 #   text: Anchor text for the link
 links:
-- "https://c2.18f.gov/"
+- url: https://c2.18f.gov/
+- text: C2 website
 
 # Email addresses of points-of-contact
 contact:
-- gatewaycommunicator@gsa.gov
+- url: mailto:gatewaycommunicator@gsa.gov
+  text: C2 support
+- url: https://github.com/18F/C2/issues
+  text: C2 GitHub issues
