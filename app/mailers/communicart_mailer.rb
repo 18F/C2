@@ -92,7 +92,7 @@ class CommunicartMailer < ApplicationMailer
     mail_msg = Mail.new msg
     mail_msg.header['Resent-To'] = resent_to_addr
     @_message = mail_msg
-    mail() do |fmt|
+    mail do |_fmt|
       # no-op block just to get a MessageDelivery object that wraps @_message.
       # we pass zero args to mail() since we have already constructed our Mail::Message.
     end
