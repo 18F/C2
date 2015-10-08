@@ -5,7 +5,7 @@ module IncomingMail
     # named action constants
     ERROR   = 0
     COMMENT = 1
-    DROPPED = 2
+    FORWARDED = 2
 
     def initialize(params = {})
       params.each do |key, value|

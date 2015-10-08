@@ -24,10 +24,14 @@ describe "Handles incoming email" do
     [ { 'event' => 'inbound', 'msg' => msg } ]
   end
 
-  it "should drop non-app email on the floor" do
-    handler = IncomingMail::Handler.new
-    resp = handler.handle(JSON.parse(mandrill_inbound_noapp))
-    expect(resp.action).to eq(IncomingMail::Response::DROPPED)
+  with_env_var('NOTIFICATION_FALLBACK_EMAIL', 'nowhere@some.gov') do
+    it "should forward non-app email to NOTIFICATION_FALLBACK_EMAIL" do
+      expect(deliveries.length).to eq(0)
+      handler = IncomingMail::Handler.new
+      resp = handler.handle(JSON.parse(mandrill_inbound_noapp))
+      expect(resp.action).to eq(IncomingMail::Response::FORWARDED)
+      expect(deliveries.length).to eq(1)
+    end
   end
 
   it "should create comment for request-related reply" do

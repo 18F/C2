@@ -29,7 +29,8 @@ module IncomingMail
         resp.comment = create_comment(payload['msg'])
         resp.action = resp.comment ? Response::COMMENT : Response::ERROR
       else
-        resp.action = Response::DROPPED
+        forward_msg(payload['msg']['raw_msg'])
+        resp.action = Response::FORWARDED
       end
       resp
     end
@@ -52,6 +53,10 @@ module IncomingMail
 
     def reference_header_matches(header)
       header.match(/<proposal-\d+/)
+    end
+
+    def forward_msg(msg)
+      CommunicartMailer.redirect(msg).deliver_later
     end
 
     def create_comment(msg)
