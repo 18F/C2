@@ -1,20 +1,20 @@
-describe "Display status text" do
-  let(:proposal) { FactoryGirl.create(:proposal, :with_parallel_approvers) }
-  before do
-    # ensure unique names as we'll be testing them later
-    proposal.approvers.first.update(first_name: "Uniquely", last_name: "Named")
-    proposal.approvers.second.update(first_name: "Onlyof", last_name: "Itskind")
-    login_as(proposal.requester)
-  end
-
-  it "displays approved status" do
+describe 'Display status text' do
+  it 'displays approved status' do
+    proposal = create_proposal_with_parallel_approvers
     proposal.individual_approvals.each{|approval| approval.approve!}
+
+    login_as(proposal.requester)
     visit proposals_path
+
     expect(page).to have_content('Approved')
   end
 
-  it "displays outstanding approvers" do
+  it 'displays outstanding approvers' do
+    proposal = create_proposal_with_parallel_approvers
+
+    login_as(proposal.requester)
     visit proposals_path
+
     expect(page).not_to have_content('Please review')
     expect(page).to have_content('Waiting for review from:')
     proposal.approvers.each do |approver|
@@ -22,35 +22,61 @@ describe "Display status text" do
     end
   end
 
-  it "excludes approved approvals" do
-    proposal.individual_approvals.first.approve!
+  it 'excludes approved approvals' do
+    proposal = create_proposal_with_parallel_approvers
+    first_approval = proposal.individual_approvals.first
+    first_approval.approve!
+    first_approver = first_approval.user
+    all_approvers_except_first = proposal.approvers.offset(1)
+
+    login_as(proposal.requester)
     visit proposals_path
+
     expect(page).not_to have_content('Please review')
     expect(page).to have_content('Waiting for review from:')
-    proposal.approvers[1..-1].each do |approver|
+    expect(page).not_to have_content(first_approver.full_name)
+    all_approvers_except_first.each do |approver|
       expect(page).to have_content(approver.full_name)
     end
-    expect(page).not_to have_content("Uniquely Named")
   end
 
-  context "linear" do
-    let(:proposal) { FactoryGirl.create(:proposal, :with_serial_approvers) }
+  context 'linear' do
+    it 'displays the first approver' do
+      proposal = create_proposal_with_serial_approvers
+      first_approval = proposal.individual_approvals.first
+      first_approver = first_approval.user
+      all_approvers_except_first = proposal.approvers.offset(1)
 
-    it "displays the first approver" do
+      login_as(proposal.requester)
       visit proposals_path
+
       expect(page).to have_content('Waiting for review from:')
-      proposal.approvers[1..-1].each do |approver|
+      expect(page).to have_content(first_approver.full_name)
+      all_approvers_except_first.each do |approver|
         expect(page).not_to have_content(approver.full_name)
       end
-      expect(page).to have_content("Uniquely Named")
     end
 
-    it "excludes approved approvals" do
-      proposal.individual_approvals.first.approve!
+    it 'excludes approved approvals' do
+      proposal = create_proposal_with_serial_approvers
+      first_approval = proposal.individual_approvals.first
+      first_approval.approve!
+      first_approver = first_approval.user
+
+      login_as(proposal.requester)
       visit proposals_path
+
       expect(page).to have_content('Waiting for review from:')
-      expect(page).not_to have_content("Uniquely Named")
+      expect(page).not_to have_content(first_approver.full_name)
     end
+  end
+
+  def create_proposal_with_parallel_approvers
+    @proposal ||= FactoryGirl.create(:proposal, :with_parallel_approvers)
+  end
+
+  def create_proposal_with_serial_approvers
+    @proposal ||= FactoryGirl.create(:proposal, :with_serial_approvers)
   end
 end
 

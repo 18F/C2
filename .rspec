@@ -1,4 +1,3 @@
--r turnip/rspec
 --color
 --require rails_helper
 --order rand
