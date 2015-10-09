@@ -16,7 +16,7 @@ class ApplicationMailer < ActionMailer::Base
 
   def resend_to_email
     ENV['NOTIFICATION_FALLBACK_EMAIL'] || 'communicart.sender@gsa.gov'
-  end 
+  end
 
   def default_sender_email
     email_with_name(sender_email, "Communicart")
