@@ -18,7 +18,7 @@ module Ncr
     def approver_email_address(approver)
       if approver
         approver.email_address
-      elsif !approver and self.emergency
+      elsif emergency
         EMERGENCY_APPROVER_EMAIL
       else
         NO_APPROVER_FOUND
