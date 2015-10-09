@@ -17,13 +17,13 @@
          "email" : "tester@c2.18f.gov",
          "sender" : null,
          "text" : "hello world",
-         "raw_msg" : "Received: from example.com (unknown [93.184.216.34])\n\tby ip-xx-xx-xx (Postfix) with ESMTPS id 3EB7C2C06B9\n\tfor <tester@c2.18f.gov>; Wed, 23 Sep 2015 21:22:46 +0000 (UTC)\nReceived: by example.com (Postfix, from userid 500)\n\tid 67DDF3E841; Wed, 23 Sep 2015 16:22:45 -0500 (CDT)\nTo: tester@c2.18f.gov\nSubject: test via example server\nMessage-Id: <20150923212245.67DDF3E841@example.com>\nDate: Wed, 23 Sep 2015 16:22:45 -0500 (CDT)\nFrom: someone@example.com\n\nhello world",
+         "raw_msg" : "Received: from example.com (unknown [93.184.216.34])\n\tby ip-xx-xx-xx (Postfix) with ESMTPS id 3EB7C2C06B9\n\tfor <tester@c2.18f.gov>; Wed, 23 Sep 2015 21:22:46 +0000 (UTC)\nReceived: by example.com (Postfix, from userid 500)\n\tid 67DDF3E841; Wed, 23 Sep 2015 16:22:45 -0500 (CDT)\nTo: tester@c2.18f.gov\nSubject: test via example server\nMessage-Id: <20150923212245.67DDF3E841@example.com>\nDate: Wed, 23 Sep 2015 16:22:45 -0500 (CDT)\nFrom: Some One <someone@example.com>\n\nhello world",
          "headers" : {
             "Received" : [
                "from example.com (unknown [93.184.216.34]) by ip-xx-xx-xx (Postfix) with ESMTPS id 3EB7C2C06B9 for <tester@c2.18f.gov>; Wed, 23 Sep 2015 21:22:46 +0000 (UTC)",
                "by example.com (Postfix, from userid 500) id 67DDF3E841; Wed, 23 Sep 2015 16:22:45 -0500 (CDT)"
             ],
-            "From" : "someone@example.com",
+            "From" : "Some One <someone@example.com>",
             "Message-Id" : "<20150923212245.67DDF3E841@peknet.com>",
             "To" : "tester@c2.18f.gov",
             "Subject" : "test via example server",

@@ -24,7 +24,7 @@ describe "Handles incoming email" do
     [ { 'event' => 'inbound', 'msg' => msg } ]
   end
 
-  with_env_var('NOTIFICATION_FALLBACK_EMAIL', 'nowhere@some.gov') do
+  with_env_vars(NOTIFICATION_FALLBACK_EMAIL: 'nowhere@some.gov', NOTIFICATION_FROM_EMAIL: 'noreply@some.gov') do
     it "should forward non-app email to NOTIFICATION_FALLBACK_EMAIL" do
       expect(deliveries.length).to eq(0)
       handler = IncomingMail::Handler.new
@@ -33,6 +33,8 @@ describe "Handles incoming email" do
       expect(deliveries.length).to eq(1)
       msg = deliveries.first
       expect(msg.to).to eq(['nowhere@some.gov'])
+      expect(msg.header['From'].value).to eq('Some One <noreply@some.gov>')
+      expect(msg.header['Reply-To'].value).to eq('Some One <someone@example.com>')
     end
   end
 

@@ -90,13 +90,19 @@ class CommunicartMailer < ApplicationMailer
   def resend(msg)
     resent_to_addr = ENV['NOTIFICATION_FALLBACK_EMAIL'] || 'communicart.sender@gsa.gov'
     mail_msg = Mail.new msg
-    mail_msg.header['X-C2-Original-To'] = mail_msg.to
+    from_raw = mail_msg.header['From'].value
+    mail_msg.header['X-C2-Original-To'] = mail_msg.header['To'].value
+    mail_msg.header['X-C2-Original-From'] = from_raw
     @_message = mail_msg
     # we want to preserve the From name but not the email address, since gsa.gov
     # will block any @gsa.gov From address. We still use it intact in reply-to.
-    from_addr = Mail::Address.new(mail_msg.from)
-    from_addr.address = sender_email
-    mail(subject: mail_msg.subject, to: resent_to_addr, from: from_addr.format, reply_to: mail_msg.from) do |_fmt|
+    from_addr = Mail::Address.new(from_raw)
+    mail(
+      subject: mail_msg.subject, 
+      to: resent_to_addr, 
+      from: email_with_name(sender_email, from_addr.display_name),
+      reply_to: from_raw
+    ) do |_fmt|
       # no-op block since our body is already set in @_message
     end
   end
