@@ -28,7 +28,7 @@ describe 'Canceling a request' do
   end
 
   context 'email' do
-    context 'proposal without cancelled' do
+    context 'proposal without approver' do
       it 'sends cancellation email to requester' do
         ActionMailer::Base.deliveries.clear
         proposal = FactoryGirl.create(:proposal)
