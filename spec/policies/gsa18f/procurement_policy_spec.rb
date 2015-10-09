@@ -3,7 +3,7 @@ describe Gsa18f::ProcurementPolicy do
 
   permissions :can_create? do
     it "allows a user with an arbitrary email to create" do
-      user = User.new(email_address: 'user@some.com', client_slug: 'gsa18f')
+      user = User.new(email_address: 'user@example.com', client_slug: 'gsa18f')
       procurement = Gsa18f::Procurement.new
       expect(subject).to permit(user, procurement)
     end
@@ -16,7 +16,7 @@ describe Gsa18f::ProcurementPolicy do
       end
 
       it "doesn't allow someone with a non-GSA email to create" do
-        user = User.new(email_address: 'intruder@some.com', client_slug: 'gsa18f')
+        user = User.new(email_address: 'intruder@example.com', client_slug: 'gsa18f')
         procurement = Gsa18f::Procurement.new
         expect(subject).not_to permit(user, procurement)
       end

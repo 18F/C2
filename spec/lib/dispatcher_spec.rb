@@ -33,7 +33,7 @@ describe Dispatcher do
 
   describe '#deliver_attachment_emails' do
     it "emails everyone currently involved in the proposal" do
-      proposal.add_observer("wiley-cat@some-cartoon-show.com")
+      proposal.add_observer("wiley-cat@example.com")
       dispatcher.deliver_attachment_emails(self.proposal)
       expect(email_recipients).to match_array(proposal.users.map(&:email_address))
     end
