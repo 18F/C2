@@ -28,19 +28,35 @@ describe 'Canceling a request' do
   end
 
   context 'email' do
-    it 'send emails when cancellation is complete' do
-      ActionMailer::Base.deliveries.clear
-      proposal = FactoryGirl.create(:proposal)
-      expect(deliveries.length).to eq(0)
+    context 'proposal without cancelled' do
+      it 'sends cancellation email to requester' do
+        ActionMailer::Base.deliveries.clear
+        proposal = FactoryGirl.create(:proposal)
 
-      login_as(proposal.requester)
-      visit proposal_path(proposal)
-      click_on('Cancel my request')
-      fill_in 'reason_input', with: 'This is a good reason for the cancellation.'
-      click_on('Yes, cancel this request')
+        login_as(proposal.requester)
+        visit proposal_path(proposal)
+        click_on('Cancel my request')
+        fill_in 'reason_input', with: 'This is a good reason for the cancellation.'
+        click_on('Yes, cancel this request')
 
-      expect(deliveries.length).to eq(1)
+        expect(deliveries.length).to eq(1)
+      end
     end
+
+   context 'proposal with approver cancelled with reason' do
+      it 'sends comment email in addition to cancellation emails' do
+        ActionMailer::Base.deliveries.clear
+        proposal = FactoryGirl.create(:proposal, :with_approver)
+
+        login_as(proposal.requester)
+        visit proposal_path(proposal)
+        click_on('Cancel my request')
+        fill_in 'reason_input', with: 'This is a good reason for the cancellation.'
+        click_on('Yes, cancel this request')
+
+        expect(deliveries.length).to eq(3)
+      end
+   end
   end
 
   context 'entering in a reason cancellation' do
