@@ -1,6 +1,4 @@
 module FeatureSpecHelper
-  # requires IntegrationSpecHelper
-
   def login_with_oauth
     user = FactoryGirl.create(:user)
     login_as(user)

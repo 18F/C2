@@ -26,8 +26,12 @@ describe Ncr::Reporter do
     it "only returns Proposals where Tier One approval is actionable" do
       approver_email = 'i-approve@example.gov'
 
-      whs_work_order = FactoryGirl.create(:ncr_work_order, :with_approvers)
-      whs_work_order.update_attribute(:org_code, Ncr::Organization::WHSC_CODE)
+      whs_work_order = FactoryGirl.create(
+        :ncr_work_order,
+        :with_approvers,
+        org_code: Ncr::Organization::WHSC_CODE
+      )
+
       whs_work_order.setup_approvals_and_observers(approver_email)
 
       approved_work_order = FactoryGirl.create(:ncr_work_order, :with_approvers)
