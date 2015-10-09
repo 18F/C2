@@ -29,7 +29,7 @@ module Ncr
       [
         self.proposal_public_url(proposal),
         proposal.requester.email_address,
-        proposal.client_data.current_approver_email_address,
+        proposal.client_data.decorate.current_approver_email_address,
         proposal.client_data.cl_number,
         proposal.client_data.function_code,
         proposal.client_data.soc_code,
@@ -41,7 +41,6 @@ module Ncr
       CSV.generate do |csv|
         csv << ['URL', 'Requester', 'Approver', 'CL', 'Function Code', 'Soc Code', 'Created']
         proposals.each do |p|
-          p.client_data.decorate
           csv << self.make_csv_row(p)
         end
       end
