@@ -12,21 +12,21 @@ BA80 approved: <%= Ncr::Reporter.ba80_proposals.count %>
 Approved BA60 requests last week
 -----
 <% Ncr::Reporter.ba60_proposals.each do |p| %>
-  <%= "#{p.public_id} | Requester: #{p.requester.email_address} | Budget Approver: #{p.client_data.final_approver_email_address} | CL: #{p.client_data.cl_number} | Function code: #{p.client_data.function_code} | Soc code: #{p.client_data.soc_code}" %>
+  <%= "#{p.public_id} | Requester: #{p.requester.email_address} | Budget Approver: #{p.client_data.decorate.final_approver_email_address} | CL: #{p.client_data.cl_number} | Function code: #{p.client_data.function_code} | Soc code: #{p.client_data.soc_code}" %>
 <% end %>
 
 -----
 Approved BA61 requests last week
 -----
 <% Ncr::Reporter.ba61_proposals.each do |p| %>
-  <%= "#{p.public_id} | Requester: #{p.requester.email_address} | Budget Approver: #{p.client_data.final_approver_email_address} | CL: #{p.client_data.cl_number} | Function code: #{p.client_data.function_code} | Soc code: #{p.client_data.soc_code}" %>
+  <%= "#{p.public_id} | Requester: #{p.requester.email_address} | Budget Approver: #{p.client_data.decorate.final_approver_email_address} | CL: #{p.client_data.cl_number} | Function code: #{p.client_data.function_code} | Soc code: #{p.client_data.soc_code}" %>
 <% end %>
 
 -----
 Approved BA80 requests last week
 -----
 <% Ncr::Reporter.ba80_proposals.each do |p| %>
-  <%= "#{p.public_id} | Requester: #{p.requester.email_address} | Approver: #{p.client_data.final_approver_email_address} | CL: #{p.client_data.cl_number} | Function code: #{p.client_data.function_code} | Soc code: #{p.client_data.soc_code}" %>
+  <%= "#{p.public_id} | Requester: #{p.requester.email_address} | Approver: #{p.client_data.decorate.final_approver_email_address} | CL: #{p.client_data.cl_number} | Function code: #{p.client_data.function_code} | Soc code: #{p.client_data.soc_code}" %>
 <% end %>
 
 
@@ -38,19 +38,19 @@ TOTAL PENDING REQUESTS: <%= Ncr::Reporter.total_unapproved %>
 Total Pending at Approving Official: <%= Ncr::Reporter.proposals_pending_approving_official.count %>
 -----
 <% Ncr::Reporter.proposals_pending_approving_official.each do |p| %>
-  <%= "*** " if Time.zone.now - p.created_at > 5.days %><%= "#{p.public_id} | Requester: #{p.requester.email_address} | Approver: #{p.client_data.current_approver_email_address} | Created: #{pretty_date(p.created_at)}" %>
+  <%= "*** " if Time.zone.now - p.created_at > 5.days %><%= "#{p.public_id} | Requester: #{p.requester.email_address} | Approver: #{p.client_data.decorate.current_approver_email_address} | Created: #{pretty_date(p.created_at)}" %>
 <% end %>
 
 -----
 Total Pending at Budget: <%= Ncr::Reporter.proposals_pending_budget.count %>
 -----
 <% Ncr::Reporter.proposals_pending_budget.each do |p| %>
-  <%= "*** " if Time.zone.now - p.created_at > 5.days %><%= "#{p.public_id} | Requester: #{p.requester.email_address} | Approver: #{p.client_data.current_approver_email_address} | Created: #{pretty_date(p.created_at)}" %>
+  <%= "*** " if Time.zone.now - p.created_at > 5.days %><%= "#{p.public_id} | Requester: #{p.requester.email_address} | Approver: #{p.client_data.decorate.current_approver_email_address} | Created: #{pretty_date(p.created_at)}" %>
 <% end %>
 
 -----
 Total Pending at Tier One Budget: <%= Ncr::Reporter.proposals_tier_one_pending.count %>
 -----
 <% Ncr::Reporter.proposals_tier_one_pending.each do |p| %>
-  <%= "*** " if Time.now - p.created_at > 5.days %><%= "#{p.public_id} | Requester: #{p.requester.email_address} | Approver: #{p.client_data.current_approver_email_address} | Created: #{pretty_date(p.created_at)}" %>
+  <%= "*** " if Time.now - p.created_at > 5.days %><%= "#{p.public_id} | Requester: #{p.requester.email_address} | Approver: #{p.client_data.decorate.current_approver_email_address} | Created: #{pretty_date(p.created_at)}" %>
 <% end %>

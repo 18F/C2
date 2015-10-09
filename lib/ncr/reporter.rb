@@ -41,6 +41,7 @@ module Ncr
       CSV.generate do |csv|
         csv << ['URL', 'Requester', 'Approver', 'CL', 'Function Code', 'Soc Code', 'Created']
         proposals.each do |p|
+          p.client_data.decorate
           csv << self.make_csv_row(p)
         end
       end

@@ -19,8 +19,6 @@ module Ncr
     include ProposalDelegate
     include PurchaseCardMixin
 
-    EMERGENCY_APPROVER_EMAIL = 'Emergency - Verbal Approval'
-
     # This is a hack to be able to attribute changes to the correct user. This attribute needs to be set explicitly, then the update comment will use them as the "commenter". Defaults to the requester.
     attr_accessor :modifier
 
@@ -117,23 +115,23 @@ module Ncr
     end
 
     # the highest approver on the stack, pending preferred if status indicates
-    def current_approver_email_address
+    def current_approver
       if self.pending?
-        self.currently_awaiting_approvers.first.email_address
+        self.currently_awaiting_approvers.first
       elsif self.approving_official
-        self.approving_official.email_address
+        self.approving_official
       elsif self.emergency and self.approvers.empty?
-        EMERGENCY_APPROVER_EMAIL
+        nil
       else
-        self.system_approver_emails.first
+        User.for_email(self.system_approver_emails.first)
       end
     end
 
-    def final_approver_email_address
+    def final_approver
       if self.emergency and self.approvers.empty?
-        EMERGENCY_APPROVER_EMAIL
+        nil
       else
-        self.approvers.last.email_address
+        self.approvers.last
       end
     end
 
