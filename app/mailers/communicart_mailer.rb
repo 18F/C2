@@ -92,7 +92,11 @@ class CommunicartMailer < ApplicationMailer
     mail_msg = Mail.new msg
     mail_msg.header['X-C2-Original-To'] = mail_msg.to
     @_message = mail_msg
-    mail(subject: mail_msg.subject, to: resent_to_addr, reply_to: mail_msg.from) do |_fmt|
+    # we want to preserve the From name but not the email address, since gsa.gov
+    # will block any @gsa.gov From address. We still use it intact in reply-to.
+    from_addr = Mail::Address.new(mail_msg.from)
+    from_addr.address = sender_email
+    mail(subject: mail_msg.subject, to: resent_to_addr, from: from_addr.format, reply_to: mail_msg.from) do |_fmt|
       # no-op block since our body is already set in @_message
     end
   end
