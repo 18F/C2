@@ -4,26 +4,6 @@ describe "Handles incoming email" do
   let(:mail) { CommunicartMailer.actions_for_approver(approval) }
   let(:mandrill_inbound_noapp) { File.read(RSpec.configuration.fixture_path + '/mandrill_inbound_noapp.json') }
 
-  def mandrill_payload_from_message(mail_msg)
-    headers = {}
-    mail_msg.header.fields.each do |header|
-      headers[header.name] = header.value
-    end
-    msg = {
-      'subject'  => mail_msg.subject,
-      'template' => nil,
-      'tags'     => [],
-      'from_email' => mail_msg.to[0], # NOTE this is switched with 'email' because mail_msg is what we are *sending*
-      'email'      => mail_msg.from[0],
-      'sender'     => nil,
-      'text'       => mail_msg.text_part.body.encoded,
-      'html'       => mail_msg.html_part.body.encoded,
-      'raw_msg'    => mail_msg.to_s,
-      'headers'    => headers,
-    }
-    [ { 'event' => 'inbound', 'msg' => msg } ]
-  end
-
   with_env_vars(NOTIFICATION_FALLBACK_EMAIL: 'nowhere@some.gov', NOTIFICATION_FROM_EMAIL: 'noreply@some.gov') do
     it "should forward non-app email to NOTIFICATION_FALLBACK_EMAIL" do
       expect(deliveries.length).to eq(0)
@@ -76,4 +56,26 @@ describe "Handles incoming email" do
     resp = handler.handle(event_decorator)
     expect(resp.action).to eq(IncomingMail::Response::COMMENT)
   end
+
+  private
+
+  def mandrill_payload_from_message(mail_msg)
+    headers = {}
+    mail_msg.header.fields.each do |header|
+      headers[header.name] = header.value
+    end 
+    msg = { 
+      'subject'  => mail_msg.subject,
+      'template' => nil,
+      'tags'     => [], 
+      'from_email' => mail_msg.to[0], # NOTE this is switched with 'email' because mail_msg is what we are *sending*
+      'email'      => mail_msg.from[0],
+      'sender'     => nil,
+      'text'       => mail_msg.text_part.body.encoded,
+      'html'       => mail_msg.html_part.body.encoded,
+      'raw_msg'    => mail_msg.to_s,
+      'headers'    => headers,
+    }   
+    [ { 'event' => 'inbound', 'msg' => msg } ] 
+  end 
 end
