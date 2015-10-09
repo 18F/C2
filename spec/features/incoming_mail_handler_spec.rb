@@ -32,11 +32,7 @@ describe "Handles incoming email" do
       expect(resp.action).to eq(IncomingMail::Response::FORWARDED)
       expect(deliveries.length).to eq(1)
       msg = deliveries.first
-      expect(msg.resent_to).to eq(['nowhere@some.gov'])
-      expect(msg.resent_from).to be_truthy
-      expect(msg.resent_date).to be_truthy
-      expect(msg.resent_message_id).to be_truthy
-      expect(msg.message_id).to be_truthy
+      expect(msg.to).to eq(['nowhere@some.gov'])
     end
   end
 

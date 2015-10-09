@@ -87,19 +87,13 @@ class CommunicartMailer < ApplicationMailer
     end
   end
 
-  def redirect(msg)
+  def resend(msg)
     resent_to_addr = ENV['NOTIFICATION_FALLBACK_EMAIL'] || 'communicart.sender@gsa.gov'
     mail_msg = Mail.new msg
-    mail_msg.header['X-Original-To'] = mail_msg.to
-    mail_msg.resent_to = resent_to_addr
-    mail_msg.resent_from = sender_email
-    mail_msg.resent_date = Time.current
-    mail_msg.resent_message_id = mail_msg.message_id
-    mail_msg.message_id = nil
+    mail_msg.header['X-C2-Original-To'] = mail_msg.to
     @_message = mail_msg
-    mail do |_fmt|
-      # no-op block just to get a MessageDelivery object that wraps @_message.
-      # we pass zero args to mail() since we have already constructed our Mail::Message.
+    mail(subject: mail_msg.subject, to: resent_to_addr, reply_to: mail_msg.from) do |_fmt|
+      # no-op block since our body is already set in @_message
     end
   end
 
