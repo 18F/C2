@@ -5,7 +5,7 @@ require "mail"
 namespace :annual_ncr_report do
   desc "Emails FY approvals"
   task annual_ncr_report: :environment do
-    ReportMailer.annual_ncr_report(ENV['FY'].to_i, ENV['MAILTO']).deliver_later
+    ReportMailer.annual_ncr_report(ENV['FY'].to_i, ENV['MAILTO']).deliver_now
     puts "Report has been sent!"
   end
 end
