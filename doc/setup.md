@@ -41,6 +41,30 @@ PORT=3000 ./script/start
 open http://localhost:3000
 ```
 
+## Populating with data
+
+Once you've authed locally, there will be a `user` record associated with your
+email address. There won't be much for you to see until your client slug is set,
+so find your user record and set it to `ncr`:
+
+```bash
+bin/rails c
+user = User.find_by(email_address: 'example@gsa.gov')
+user.update(client_slug: 'ncr')
+```
+
+Now you will see the link to create a new work order locally.
+
+If you'd like to seed your dashboard with work orders, you can run this rake
+task:
+
+```bash
+bin/rake populate:ncr:for_user[example@gsa.gov]
+```
+
+Now you should see 25 pending purchase requests at
+http://localhost:3000/proposals.
+
 ### Viewing the mailers
 
 As emails are sent, they will be visible at http://localhost:3000/letter_opener. If you are working on an email mailer/template, you can view all of them at http://localhost:3000/mail_view/.
