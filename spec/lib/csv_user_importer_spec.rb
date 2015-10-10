@@ -34,7 +34,7 @@ describe CsvUserImporter do
 
       @temp_file.write("First,Last,Email,Other\n")
       @temp_file.write("F1,L1,  EMAIL@GOV.GOV  ,O1\n")
-      @temp_file.write("SOME,Guy,some.guy@gov.gov,True")
+      @temp_file.write("SOME,Guy,some.guy@example.com,True")
       @temp_file.close
       importer = CsvUserImporter.new(@temp_file.path, "my_client")
       importer.process_rows
@@ -43,11 +43,11 @@ describe CsvUserImporter do
       seed_user1, seed_user2, user1, user2 = users
       expect(user1.first_name).to eq('F1')
       expect(user1.last_name).to eq('L1')
-      expect(user1.email_address).to eq('email@gov.gov')
+      expect(user1.email_address).to eq('email@example.com')
       expect(user1.client_slug).to eq('my_client')
       expect(user2.first_name).to eq('Some')
       expect(user2.last_name).to eq('Guy')
-      expect(user2.email_address).to eq('some.guy@gov.gov')
+      expect(user2.email_address).to eq('some.guy@example.com')
       expect(user2.client_slug).to eq('my_client')
     end
 

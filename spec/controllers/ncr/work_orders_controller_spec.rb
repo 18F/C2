@@ -9,15 +9,15 @@ describe Ncr::WorkOrdersController do
         not_to_exceed: '0', building_number: Ncr::BUILDING_NUMBERS[0],
         emergency: '0', rwa_number: 'A1234567', org_code: Ncr::Organization.all[0],
         code: 'Work Order', project_title: 'Title', description: 'Desc'},
-      approver_email: 'bob@example.gov'
+      approver_email: 'bob@example.com'
     }}
 
     it 'sends an email to the first approver' do
       post :create, params
       ncr = Ncr::WorkOrder.order(:id).last
       expect(ncr.code).to eq 'Work Order'
-      expect(ncr.approvers.first.email_address).to eq 'bob@example.gov'
-      expect(email_recipients).to eq(['bob@example.gov', ncr.requester.email_address].sort)
+      expect(ncr.approvers.first.email_address).to eq 'bob@example.com'
+      expect(email_recipients).to eq(['bob@example.com', ncr.requester.email_address].sort)
     end
 
     it 'does not error on missing attachments' do

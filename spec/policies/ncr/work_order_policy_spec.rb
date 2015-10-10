@@ -39,7 +39,9 @@ describe Ncr::WorkOrderPolicy do
 
     with_feature 'RESTRICT_ACCESS' do
       it "allows someone with a GSA email to create" do
-        user = User.new(email_address: 'user@gsa.gov', client_slug: 'ncr')
+        gsa_domain = "@example.net"
+        stub_const("GsaPolicy::GSA_DOMAIN", gsa_domain)
+        user = User.new(email_address: "user#{gsa_domain}", client_slug: 'ncr')
         work_order = Ncr::WorkOrder.new
         expect(subject).to permit(user, work_order)
       end

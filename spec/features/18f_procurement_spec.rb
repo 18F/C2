@@ -48,7 +48,7 @@ describe "GSA 18f Purchase Request Form" do
       expect(proposal.flow).to eq('linear')
       expect(proposal.client).to eq('gsa18f')
       expect(proposal.requester).to eq(requester)
-      expect(proposal.approvers.map(&:email_address)).to eq(%w(test_approver@some-dot-gov.gov))
+      expect(proposal.approvers.map(&:email_address)).to eq(%w(test_approver@example.com))
 
       procurement = proposal.client_data
       expect(procurement.link_to_product).to eq('http://www.amazon.com')
@@ -61,7 +61,7 @@ describe "GSA 18f Purchase Request Form" do
     end
 
     it "sets an observer" do
-      expect(procurement.observers.map(&:email_address)).to eq(['test_purchaser@some-dot-gov.gov'])
+      expect(procurement.observers.map(&:email_address)).to eq(['test_purchaser@example.com'])
     end
 
     it "doesn't save when the amount is too high" do
@@ -170,7 +170,7 @@ describe "GSA 18f Purchase Request Form" do
       expect(procurement.urgency).to eq(10)
 
       expect(proposal.requester).to eq(requester)
-      expect(proposal.approvers.map(&:email_address)).to eq(%w(test_approver@some-dot-gov.gov))
+      expect(proposal.approvers.map(&:email_address)).to eq(%w(test_approver@example.com))
     end
 
     it "has 'Discard Changes' link" do

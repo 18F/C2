@@ -25,7 +25,7 @@ describe Dispatcher do
     end
 
     it 'sends a proposal notification email to observers' do
-      proposal.add_observer('observer1@some-dot-gov.gov')
+      proposal.add_observer('observer1@example.com')
       expect(CommunicartMailer).to receive_message_chain(:proposal_observer_email, :deliver_later)
       dispatcher.deliver_new_proposal_emails(proposal)
     end
