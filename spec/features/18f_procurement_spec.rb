@@ -11,9 +11,9 @@ describe "GSA 18f Purchase Request Form" do
 
   context "when signed in" do
 
-    let(:requester) { FactoryGirl.create(:user, client_slug: 'gsa18f') }
+    let(:requester) { create(:user, client_slug: 'gsa18f') }
     let(:procurement) {
-      pr = FactoryGirl.create(:gsa18f_procurement, requester: requester)
+      pr = create(:gsa18f_procurement, requester: requester)
       pr.add_approvals
       pr
     }
@@ -119,7 +119,7 @@ describe "GSA 18f Purchase Request Form" do
     end
 
     it "cannot be edited by someone other than the requester" do
-      procurement.set_requester(FactoryGirl.create(:user))
+      procurement.set_requester(create(:user))
 
       visit "/gsa18f/procurements/#{procurement.id}/edit"
       expect(current_path).to eq("/gsa18f/procurements/new")
@@ -195,7 +195,7 @@ describe "GSA 18f Purchase Request Form" do
     end
 
     it "does not show a restart link for non requester" do
-      procurement.set_requester(FactoryGirl.create(:user))
+      procurement.set_requester(create(:user))
       visit "/proposals/#{proposal.id}"
       expect(page).not_to have_content('Modify Request')
     end

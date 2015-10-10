@@ -1,6 +1,6 @@
 describe 'View a proposal' do
-  let(:user) { FactoryGirl.create(:user) }
-  let(:proposal) { FactoryGirl.create(:proposal, requester: user) }
+  let(:user) { create(:user) }
+  let(:proposal) { create(:proposal, requester: user) }
 
   it "shows the link to the history for admins" do
     user.add_role('admin')

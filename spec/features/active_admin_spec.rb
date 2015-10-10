@@ -1,5 +1,7 @@
 describe '/admin endpoint' do
-  it 'user is not an admin' do
+  let(:user) { create(:user) }
+
+  it 'requires admin role to access' do
     login_as(user)
 
     visit '/admin'

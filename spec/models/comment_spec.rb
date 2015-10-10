@@ -1,7 +1,7 @@
 describe Comment do
   describe "#listeners" do
-    let (:proposal) { FactoryGirl.create(:proposal, :with_serial_approvers, :with_observers) }
-    let (:comment) { FactoryGirl.create(:comment, proposal: proposal) }
+    let (:proposal) { create(:proposal, :with_serial_approvers, :with_observers) }
+    let (:comment) { create(:comment, proposal: proposal) }
 
     it "includes the requester" do
       expect(comment.listeners).to include(proposal.requester)
@@ -13,7 +13,7 @@ describe Comment do
 
     it "includes approved approvers" do
       individuals = proposal.individual_approvals
-      individuals += [Approvals::Individual.new(user: FactoryGirl.create(:user))]
+      individuals += [Approvals::Individual.new(user: create(:user))]
       proposal.root_approval = Approvals::Serial.new(child_approvals: individuals)
 
       expect(proposal.approvers.length).to eq(3)

@@ -1,6 +1,6 @@
 module FeatureSpecHelper
   def login_with_oauth
-    user = FactoryGirl.create(:user)
+    user = create(:user)
     login_as(user)
   end
 

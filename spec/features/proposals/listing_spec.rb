@@ -3,15 +3,15 @@ describe "Listing Page" do
     with_18f_procurement_env_variables(&example)
   end
 
-  let!(:user){ FactoryGirl.create(:user) }
-  let!(:default){ FactoryGirl.create(:proposal, requester: user) }
+  let!(:user){ create(:user) }
+  let!(:default){ create(:proposal, requester: user) }
   let!(:ncr){
-    ncr = FactoryGirl.create(:ncr_work_order)
+    ncr = create(:ncr_work_order)
     ncr.proposal.update_attribute(:requester, user)
     ncr
   }
   let!(:gsa18f){
-    gsa18f = FactoryGirl.create(:gsa18f_procurement)
+    gsa18f = create(:gsa18f_procurement)
     gsa18f.proposal.update_attribute(:requester, user)
     gsa18f
   }

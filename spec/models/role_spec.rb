@@ -1,6 +1,6 @@
 describe Role do
 
-  let(:role) { FactoryGirl.build(:role) }
+  let(:role) { build(:role) }
 
   context 'valid attributes' do
     it "is valid" do

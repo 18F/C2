@@ -6,8 +6,8 @@ describe C2VersionDecorator do
 
   describe '#to_html' do
     it "keeps output marked as unsafe" do
-      user = FactoryGirl.build(:user, first_name: "<script>alert()</script>")
-      approval = FactoryGirl.build(:approval, user: user)
+      user = build(:user, first_name: "<script>alert()</script>")
+      approval = build(:approval, user: user)
       version = double(C2Version, event: 'create', item: approval)
       decorated = C2VersionDecorator.new(version)
 
@@ -16,7 +16,7 @@ describe C2VersionDecorator do
     end
 
     it "includes a message for individual approvals" do
-      approval = FactoryGirl.build(:approval)
+      approval = build(:approval)
       version = double(C2Version, event: 'create', item: approval)
       decorated = C2VersionDecorator.new(version)
 
