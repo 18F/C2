@@ -1,8 +1,11 @@
 describe "RolesConversion" do
   it "should create only one User-per-role-per-slug" do
     user = RolesConversion.with_email_role_slug!('someone@example.com', 'foo', 'ncr')
-    expect(user.email_address).to eq('someone@example.gov')
+
+    expect(user.email_address).to eq('someone@example.com')
+
     user2 = RolesConversion.with_email_role_slug!('someoneelse@example.com', 'foo', 'ncr')
+
     expect(user2).to be_nil
   end
 

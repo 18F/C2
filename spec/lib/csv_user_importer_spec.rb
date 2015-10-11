@@ -33,7 +33,7 @@ describe CsvUserImporter do
       expect(Proposal).to receive(:client_slugs).and_return(['my_client']).twice
 
       @temp_file.write("First,Last,Email,Other\n")
-      @temp_file.write("F1,L1,  EMAIL@GOV.GOV  ,O1\n")
+      @temp_file.write("F1,L1,  EMAIL@EXAMPLE.COM  ,O1\n")
       @temp_file.write("SOME,Guy,some.guy@example.com,True")
       @temp_file.close
       importer = CsvUserImporter.new(@temp_file.path, "my_client")
