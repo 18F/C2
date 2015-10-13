@@ -456,7 +456,7 @@ describe Ncr::WorkOrder do
 
   describe "#current_approver" do
     it "returns the first pending approver" do
-      wo = FactoryGirl.create(:ncr_work_order, :with_approvers)
+      wo = create(:ncr_work_order, :with_approvers)
       expect(wo.current_approver).to eq(wo.individual_approvals.first.user)
       wo.individual_approvals.first.approve!
       expect(wo.current_approver).to eq(wo.individual_approvals.last.user)
@@ -472,14 +472,14 @@ describe Ncr::WorkOrder do
 
   describe "#final_approver" do
     it "returns the final approver" do
-      wo = FactoryGirl.create(:ncr_work_order, :with_approvers)
+      wo = create(:ncr_work_order, :with_approvers)
       expect(wo.final_approver).to eq(wo.individual_approvals.last.user)
       wo.individual_approvals.first.approve!
       expect(wo.final_approver).to eq(wo.individual_approvals.last.user)
     end
  
     it "returns the last approver when fully approved" do
-      wo = FactoryGirl.create(:ncr_work_order, :with_approvers)
+      wo = create(:ncr_work_order, :with_approvers)
       wo.individual_approvals.first.approve!
       wo.reload.individual_approvals.last.approve!
       expect(wo.final_approver).to eq(wo.individual_approvals.last.user)
