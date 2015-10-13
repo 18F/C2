@@ -1,6 +1,6 @@
 describe Attachment do
-  let (:proposal) { FactoryGirl.create(:proposal, :with_parallel_approvers) }
-  let (:attachment) { FactoryGirl.create(:attachment, proposal: proposal, user: proposal.requester) }
+  let (:proposal) { create(:proposal, :with_parallel_approvers) }
+  let (:attachment) { create(:attachment, proposal: proposal, user: proposal.requester) }
 
   context "aws" do
     before do

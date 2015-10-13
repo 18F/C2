@@ -1,6 +1,6 @@
 describe ApiTokenPolicy do
   subject { described_class }
-  let(:proposal) { FactoryGirl.create(:proposal, :with_approver) }
+  let(:proposal) { create(:proposal, :with_approver) }
   let(:approval) { proposal.individual_approvals.first }
   let(:approver) { approval.user }
   let(:token) { approval.create_api_token! }
@@ -44,7 +44,7 @@ describe ApiTokenPolicy do
     end
 
     it "does not allow delegates to use" do
-      token.user.add_delegate(FactoryGirl.create(:user))
+      token.user.add_delegate(create(:user))
       expect(subject).not_to permit(approval_params_with_token, :api_token)
     end
   end

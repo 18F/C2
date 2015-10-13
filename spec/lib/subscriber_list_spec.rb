@@ -1,5 +1,5 @@
 describe SubscriberList do
-  let(:proposal) { FactoryGirl.create(:proposal, :with_observers, :with_parallel_approvers) }
+  let(:proposal) { create(:proposal, :with_observers, :with_parallel_approvers) }
   let(:subscriber_list) { SubscriberList.new(proposal) }
 
   describe '#triples' do
@@ -39,7 +39,7 @@ describe SubscriberList do
   describe '#users' do
     it "doesn't include delegates" do
       approver = proposal.approvers.first
-      delegate = FactoryGirl.create(:user)
+      delegate = create(:user)
       approver.add_delegate(delegate)
 
       expect(subscriber_list.users).to_not include(delegate)

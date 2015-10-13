@@ -73,7 +73,6 @@ group :test do
   gem 'poltergeist'
   gem 'simplecov'
   gem 'timecop'
-  gem 'turnip'
   gem 'zonebie'
 
   # For better test reporting in CircleCI

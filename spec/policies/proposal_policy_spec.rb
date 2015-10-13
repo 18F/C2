@@ -3,10 +3,10 @@ describe ProposalPolicy do
 
   permissions :can_approve? do
     it "allows pending delegates" do
-      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
+      proposal = create(:proposal, :with_parallel_approvers)
 
       approval = proposal.individual_approvals.first
-      delegate = FactoryGirl.create(:user)
+      delegate = create(:user)
       approver = approval.user
       approver.add_delegate(delegate)
 
@@ -14,7 +14,7 @@ describe ProposalPolicy do
     end
 
     context "parallel proposal" do
-      let(:proposal) {FactoryGirl.create(:proposal, :with_parallel_approvers)}
+      let(:proposal) {create(:proposal, :with_parallel_approvers)}
       let(:approval) {proposal.individual_approvals.first}
 
       it "allows when there's a pending approval" do
@@ -29,13 +29,13 @@ describe ProposalPolicy do
       end
 
       it "does not allow with a non-existent approval" do
-        user = FactoryGirl.create(:user)
+        user = create(:user)
         expect(subject).not_to permit(user, proposal)
       end
     end
 
     context "linear proposal" do
-      let(:proposal) {FactoryGirl.create(:proposal, :with_serial_approvers)}
+      let(:proposal) {create(:proposal, :with_serial_approvers)}
       let(:first_approval) { proposal.individual_approvals.first }
       let(:second_approval) { proposal.individual_approvals.last }
 
@@ -54,14 +54,14 @@ describe ProposalPolicy do
       end
 
       it "does not allow with a non-existent approval" do
-        user = FactoryGirl.create(:user)
+        user = create(:user)
         expect(subject).not_to permit(user, proposal)
       end
     end
   end
 
   permissions :can_show? do
-    let(:proposal) {FactoryGirl.create(:proposal, :with_parallel_approvers, :with_observers)}
+    let(:proposal) {create(:proposal, :with_parallel_approvers, :with_observers)}
 
     it "allows the requester to see it" do
       expect(subject).to permit(proposal.requester, proposal)
@@ -84,12 +84,12 @@ describe ProposalPolicy do
     end
 
     it "does not allow anyone else to see it" do
-      expect(subject).not_to permit(FactoryGirl.create(:user), proposal)
+      expect(subject).not_to permit(create(:user), proposal)
     end
   end
 
   permissions :can_edit? do
-    let(:proposal) { FactoryGirl.create(:proposal, :with_parallel_approvers, :with_observers) }
+    let(:proposal) { create(:proposal, :with_parallel_approvers, :with_observers) }
 
     it "allows the requester to edit it" do
       expect(subject).to permit(proposal.requester, proposal)
@@ -105,7 +105,7 @@ describe ProposalPolicy do
     end
 
     it "does not allow anyone else to edit it" do
-      expect(subject).not_to permit(FactoryGirl.create(:user), proposal)
+      expect(subject).not_to permit(create(:user), proposal)
     end
 
     it "does not allow an approved request to be edited" do
@@ -115,7 +115,7 @@ describe ProposalPolicy do
   end
 
   permissions :can_cancel? do
-    let(:proposal) { FactoryGirl.create(:proposal, :with_parallel_approvers) }
+    let(:proposal) { create(:proposal, :with_parallel_approvers) }
 
     it "allows the requester to edit it" do
       expect(subject).to permit(proposal.requester, proposal)
