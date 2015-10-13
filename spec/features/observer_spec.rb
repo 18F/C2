@@ -77,4 +77,11 @@ describe "observers" do
     fill_in_selectized('observation_user_email_address', observer.email_address)
     expect(submit_button).to_not be_disabled
   end
+
+  # adapted from http://stackoverflow.com/a/25047358
+  def fill_in_selectized(key, *values)
+    values.flatten.each do |value|
+      page.execute_script("$('##{key}').selectize()[0].selectize.setValue('#{value}')")
+    end
+  end
 end

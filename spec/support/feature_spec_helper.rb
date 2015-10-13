@@ -10,11 +10,4 @@ module FeatureSpecHelper
     setup_mock_auth(:myusa, user)
     visit '/auth/myusa'
   end
-
-  # adapted from http://stackoverflow.com/a/25047358
-  def fill_in_selectized(key, *values)
-    values.flatten.each do |value|
-      page.execute_script("$('##{key}').selectize()[0].selectize.setValue('#{value}')")
-    end
-  end
 end
