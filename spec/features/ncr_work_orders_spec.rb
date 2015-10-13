@@ -5,7 +5,7 @@ describe "National Capital Region proposals" do
     end
   end
 
-  let!(:approver) { FactoryGirl.create(:user) }
+  let!(:approver) { create(:user) }
 
   describe "creating a work order" do
     it "requires sign-in" do
@@ -16,7 +16,7 @@ describe "National Capital Region proposals" do
 
     with_feature 'RESTRICT_ACCESS' do
       it "requires a GSA email address" do
-        user = FactoryGirl.create(:user, email_address: 'intruder@some.com', client_slug: 'ncr')
+        user = create(:user, email_address: 'intruder@example.com', client_slug: 'ncr')
         login_as(user)
 
         visit '/ncr/work_orders/new'
@@ -27,7 +27,7 @@ describe "National Capital Region proposals" do
     end
 
     context "when signed in as the requester" do
-      let(:requester) { FactoryGirl.create(:user, client_slug: 'ncr') }
+      let(:requester) { create(:user, client_slug: 'ncr') }
       let(:ncr_helper_class) { Class.new { extend Ncr::WorkOrdersHelper } }
 
       before do
@@ -118,7 +118,7 @@ describe "National Capital Region proposals" do
       end
 
       it "defaults to the approver from the last request" do
-        proposal = FactoryGirl.create(:proposal, :with_serial_approvers, requester: requester)
+        proposal = create(:proposal, :with_serial_approvers, requester: requester)
         visit '/ncr/work_orders/new'
         expect(find_field("Approving official's email address").value).to eq(
           proposal.approvers.first.email_address)
@@ -153,7 +153,7 @@ describe "National Capital Region proposals" do
 
       it "preserve form values on submission error" do
         # make sure we have an existing work order so vendor dropdown is populated.
-        work_order = FactoryGirl.create(:ncr_work_order, :with_approvers)
+        work_order = create(:ncr_work_order, :with_approvers)
 
         expect(Proposal.count).to eq(1)
         expect(ncr_helper_class.vendor_options).to eq([work_order.vendor])
@@ -249,7 +249,7 @@ describe "National Capital Region proposals" do
       end
 
       it "includes previously entered buildings, too", js: true do
-        FactoryGirl.create(:ncr_work_order, building_number: "BillDing")
+        create(:ncr_work_order, building_number: "BillDing")
         visit '/ncr/work_orders/new'
         find("input[aria-label='Building number']").native.send_keys("BillDing")
         expect(page).to have_selector("div.option[data-value='BillDing']")
@@ -279,6 +279,9 @@ describe "National Capital Region proposals" do
 
           expect(proposal.client_data.emergency).to eq(true)
           expect(proposal.approved?).to eq(true)
+          expect(proposal.approvers).to be_empty
+          expect(proposal.client_data.decorate.current_approver_email_address).to eq(Ncr::WorkOrderDecorator::EMERGENCY_APPROVER_EMAIL)
+          expect(proposal.client_data.decorate.final_approver_email_address).to eq(Ncr::WorkOrderDecorator::EMERGENCY_APPROVER_EMAIL)
         end
 
         it "does not set emergencies if form type changes" do
@@ -305,7 +308,7 @@ describe "National Capital Region proposals" do
   end
 
   describe "approving a work order" do
-    let(:work_order)   { FactoryGirl.create(:ncr_work_order) }
+    let(:work_order)   { create(:ncr_work_order) }
     let(:ncr_proposal) { work_order.proposal }
     before do
       Timecop.freeze(10.hours.ago) do
@@ -334,7 +337,7 @@ describe "National Capital Region proposals" do
   end
 
   describe "viewing a work order" do
-    let(:work_order)   { FactoryGirl.create(:ncr_work_order) }
+    let(:work_order)   { create(:ncr_work_order) }
     let(:ncr_proposal) { work_order.proposal }
 
     before do
@@ -364,7 +367,7 @@ describe "National Capital Region proposals" do
     end
 
     it "does not show a edit link for non requester" do
-      ncr_proposal.set_requester(FactoryGirl.create(:user, client_slug: 'ncr'))
+      ncr_proposal.set_requester(create(:user, client_slug: 'ncr'))
       visit "/proposals/#{ncr_proposal.id}"
       expect(page).not_to have_content('Modify Request')
     end
@@ -379,7 +382,7 @@ describe "National Capital Region proposals" do
   end
 
   describe "editing a work order" do
-    let(:work_order) { FactoryGirl.create(:ncr_work_order, description: 'test') }
+    let(:work_order) { create(:ncr_work_order, description: 'test') }
     let(:ncr_proposal) { work_order.proposal }
 
     describe "when logged in as the requester" do
@@ -414,13 +417,13 @@ describe "National Capital Region proposals" do
       end
 
       it "notifies observers of changes" do
-        work_order.add_observer("observer@observers.com")
+        work_order.add_observer("observer@example.com")
         visit "/ncr/work_orders/#{work_order.id}/edit"
         fill_in 'Description', with: "Observer changes"
         click_on 'Update'
 
         expect(deliveries.length).to eq(2)
-        expect(deliveries.last).to have_content('observer@observers.com')
+        expect(deliveries.last).to have_content('observer@example.com')
       end
 
       it "does not resave unchanged requests" do
@@ -490,7 +493,7 @@ describe "National Capital Region proposals" do
         end
 
         context "as a BA80" do
-          let(:work_order) { FactoryGirl.create(:ncr_work_order, expense_type: 'BA80') }
+          let(:work_order) { create(:ncr_work_order, expense_type: 'BA80') }
 
           it "reassigns the approvers properly" do
             expect(work_order.organization).to_not be_whsc
@@ -621,7 +624,7 @@ describe "National Capital Region proposals" do
     end
 
     it "cannot be edited by someone other than the requester" do
-      stranger = FactoryGirl.create(:user, client_slug: 'ncr')
+      stranger = create(:user, client_slug: 'ncr')
       login_as(stranger)
 
       visit "/ncr/work_orders/#{work_order.id}/edit"
@@ -631,9 +634,9 @@ describe "National Capital Region proposals" do
   end
 
   describe "delegate on a work order" do
-    let(:work_order) { FactoryGirl.create(:ncr_work_order, description: 'test') }
+    let(:work_order) { create(:ncr_work_order, description: 'test') }
     let(:proposal) { work_order.proposal }
-    let(:delegate) { FactoryGirl.create(:user, client_slug: 'ncr') }
+    let(:delegate) { create(:user, client_slug: 'ncr') }
 
     before do
       work_order.setup_approvals_and_observers('approver@example.com')

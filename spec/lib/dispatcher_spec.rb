@@ -1,5 +1,5 @@
 describe Dispatcher do
-  let(:proposal) { FactoryGirl.create(:proposal) }
+  let(:proposal) { create(:proposal) }
 
   describe '.deliver_new_proposal_emails' do
     it "uses the LinearDispatcher for linear approvals" do
@@ -10,8 +10,8 @@ describe Dispatcher do
     end
   end
 
-  let(:proposal) { FactoryGirl.create(:proposal, :with_parallel_approvers) }
-  let(:serial_proposal) { FactoryGirl.create(:proposal, :with_serial_approvers) }
+  let(:proposal) { create(:proposal, :with_parallel_approvers) }
+  let(:serial_proposal) { create(:proposal, :with_serial_approvers) }
   let(:dispatcher) { Dispatcher.new }
 
   describe '#deliver_new_proposal_emails' do
@@ -25,7 +25,7 @@ describe Dispatcher do
     end
 
     it 'sends a proposal notification email to observers' do
-      proposal.add_observer('observer1@some-dot-gov.gov')
+      proposal.add_observer('observer1@example.com')
       expect(CommunicartMailer).to receive_message_chain(:proposal_observer_email, :deliver_later)
       dispatcher.deliver_new_proposal_emails(proposal)
     end
@@ -33,7 +33,7 @@ describe Dispatcher do
 
   describe '#deliver_attachment_emails' do
     it "emails everyone currently involved in the proposal" do
-      proposal.add_observer("wiley-cat@some-cartoon-show.com")
+      proposal.add_observer("wiley-cat@example.com")
       dispatcher.deliver_attachment_emails(self.proposal)
       expect(email_recipients).to match_array(proposal.users.map(&:email_address))
     end

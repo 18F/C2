@@ -1,6 +1,6 @@
 describe ProposalsController do
   include ReturnToHelper
-  let(:user) { FactoryGirl.create(:user) }
+  let(:user) { create(:user) }
 
   describe '#index' do
     before do
@@ -8,8 +8,8 @@ describe ProposalsController do
     end
 
     it 'sets data fields' do
-      proposal1 = FactoryGirl.create(:proposal, requester: user)
-      proposal2 = FactoryGirl.create(:proposal)
+      proposal1 = create(:proposal, requester: user)
+      proposal2 = create(:proposal)
       proposal2.individual_approvals.create!(user: user, status: 'actionable')
 
       get :index
@@ -27,9 +27,9 @@ describe ProposalsController do
 
     it 'should show all the closed proposals' do
       2.times.map do |i|
-        FactoryGirl.create(:proposal, requester: user, status: 'approved')
+        create(:proposal, requester: user, status: 'approved')
       end
-      FactoryGirl.create(:proposal, requester: user)
+      create(:proposal, requester: user)
 
       get :archive
 
@@ -52,7 +52,7 @@ describe ProposalsController do
 
     context 'visitors' do
       it 'should allow the requester to see it' do
-        proposal = FactoryGirl.create(:proposal, requester: user)
+        proposal = create(:proposal, requester: user)
         get :show, id: proposal.id
         expect(response).not_to redirect_to("/proposals/")
         expect(flash[:alert]).not_to be_present
@@ -60,7 +60,7 @@ describe ProposalsController do
 
       # might be flaky? -Aidan, 8/14/15
       it 'should redirect random users' do
-        proposal = FactoryGirl.create(:proposal)
+        proposal = create(:proposal)
         get :show, id: proposal.id
         expect(response).to redirect_to(proposals_path)
         expect(flash[:alert]).to be_present
@@ -68,8 +68,8 @@ describe ProposalsController do
     end
 
     context 'admins' do
-      let(:requester) { FactoryGirl.create(:user) }
-      let(:proposal) { FactoryGirl.create(:proposal, requester_id: requester.id, client_data_type: 'SomeCompany::SomethingApprovable') }
+      let(:requester) { create(:user) }
+      let(:proposal) { create(:proposal, requester_id: requester.id, client_data_type: 'SomeCompany::SomethingApprovable') }
 
       before do
         expect(Proposal).to receive(:client_model_names).and_return(['SomeCompany::SomethingApprovable'])
@@ -98,7 +98,7 @@ describe ProposalsController do
   end
 
   describe '#query' do
-    let!(:proposal) { FactoryGirl.create(:proposal, requester: user) }
+    let!(:proposal) { create(:proposal, requester: user) }
     before do
       login_as(user)
     end
@@ -111,7 +111,7 @@ describe ProposalsController do
     it 'should filter results by date range' do
       prev_zone = Time.zone
       Time.zone = 'UTC'
-      past_proposal = FactoryGirl.create(
+      past_proposal = create(
         :proposal, created_at: Time.zone.local(2012, 5, 6), requester: user)
       get :query
       expect(assigns(:proposals_data).rows).to eq([proposal, past_proposal])
@@ -145,7 +145,7 @@ describe ProposalsController do
 
     context 'search' do
       it 'plays nicely with TabularData' do
-        double, single, triple = 3.times.map { FactoryGirl.create(:proposal, requester: user) }
+        double, single, triple = 3.times.map { create(:proposal, requester: user) }
         double.update(public_id: 'AAA AAA')
         single.update(public_id: 'AAA')
         triple.update(public_id: 'AAA AAA AAA')
@@ -162,7 +162,7 @@ describe ProposalsController do
   end
 
   describe '#cancel_form' do
-    let(:proposal) { FactoryGirl.create(:proposal) }
+    let(:proposal) { create(:proposal) }
 
     it 'should allow the requester to see it' do
       login_as(user)
@@ -191,7 +191,7 @@ describe ProposalsController do
   end
 
   describe "#cancel" do
-    let!(:proposal) { FactoryGirl.create(:proposal, requester: user) }
+    let!(:proposal) { create(:proposal, requester: user) }
 
     before do
       login_as(user)
@@ -208,7 +208,7 @@ describe ProposalsController do
 
   describe '#approve' do
     it "signs the user in via the token" do
-      proposal = FactoryGirl.create(:proposal, :with_approver)
+      proposal = create(:proposal, :with_approver)
       approval = proposal.individual_approvals.first
       token = approval.create_api_token!
 
@@ -218,10 +218,10 @@ describe ProposalsController do
     end
 
     it "won't sign the user in via the token if delegated" do
-      proposal = FactoryGirl.create(:proposal, :with_approver)
+      proposal = create(:proposal, :with_approver)
       approval = proposal.individual_approvals.first
       token = approval.create_api_token!
-      approval.user.add_delegate(FactoryGirl.create(:user))
+      approval.user.add_delegate(create(:user))
 
       post :approve, id: proposal.id, cch: token.access_token
 
@@ -230,7 +230,7 @@ describe ProposalsController do
     end
 
     it "won't allow a missing token when using GET" do
-      proposal = FactoryGirl.create(:proposal, :with_approver)
+      proposal = create(:proposal, :with_approver)
       login_as(proposal.approvers.first)
 
       get :approve, id: proposal.id
@@ -239,7 +239,7 @@ describe ProposalsController do
     end
 
     it "will allow action if the token is valid" do
-      proposal = FactoryGirl.create(:proposal, :with_approver)
+      proposal = create(:proposal, :with_approver)
       approval = proposal.individual_approvals.first
       token = approval.create_api_token!
 
@@ -250,7 +250,7 @@ describe ProposalsController do
     end
 
     it "doesn't allow a token to be reused" do
-      proposal = FactoryGirl.create(:proposal, :with_approver)
+      proposal = create(:proposal, :with_approver)
       approval = proposal.individual_approvals.first
       token = approval.create_api_token!
       token.use!
@@ -261,7 +261,7 @@ describe ProposalsController do
     end
 
     it "won't allow the approval to be approved twice through the web ui" do
-      proposal = FactoryGirl.create(:proposal, :with_approver)
+      proposal = create(:proposal, :with_approver)
       login_as(proposal.approvers.first)
 
       post :approve, id: proposal.id
@@ -278,8 +278,8 @@ describe ProposalsController do
     end
 
     it "won't allow different delegates to approve" do
-      proposal = FactoryGirl.create(:proposal, :with_approver)
-      delegate1, delegate2 = FactoryGirl.create(:user), FactoryGirl.create(:user)
+      proposal = create(:proposal, :with_approver)
+      delegate1, delegate2 = create(:user), create(:user)
       mailbox = proposal.approvers.first
       mailbox.add_delegate(delegate1)
       mailbox.add_delegate(delegate2)
@@ -299,9 +299,9 @@ describe ProposalsController do
     end
 
     it "allows a delegate to approve via the web UI" do
-      proposal = FactoryGirl.create(:proposal, :with_serial_approvers)
+      proposal = create(:proposal, :with_serial_approvers)
       mailbox = proposal.approvers.second
-      delegate = FactoryGirl.create(:user)
+      delegate = create(:user)
       mailbox.add_delegate(delegate)
       proposal.individual_approvals.first.approve!
       login_as(delegate)

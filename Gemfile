@@ -61,6 +61,7 @@ group :development do
   gem 'railroady'
   gem 'letter_opener'
   gem 'letter_opener_web'
+  gem 'quiet_assets'
   gem 'spring'
   gem 'spring-commands-rspec'
 end
@@ -72,7 +73,6 @@ group :test do
   gem 'poltergeist'
   gem 'simplecov'
   gem 'timecop'
-  gem 'turnip'
   gem 'zonebie'
 
   # For better test reporting in CircleCI

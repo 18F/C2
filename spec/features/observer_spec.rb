@@ -2,8 +2,8 @@ describe "observers" do
   it "allows observers to be added" do
     expect(CommunicartMailer).to receive_message_chain(:on_observer_added, :deliver_later)
 
-    work_order = FactoryGirl.create(:ncr_work_order)
-    observer = FactoryGirl.create(:user)
+    work_order = create(:ncr_work_order)
+    observer = create(:user)
     proposal = work_order.proposal
     login_as(proposal.requester)
 
@@ -18,11 +18,11 @@ describe "observers" do
   end
 
   it "allows observers to be added by other observers" do
-    proposal = FactoryGirl.create(:proposal, :with_observer)
+    proposal = create(:proposal, :with_observer)
     observer1 = proposal.observers.first
     login_as(observer1)
 
-    observer2 = FactoryGirl.create(:user)
+    observer2 = create(:user)
 
     visit "/proposals/#{proposal.id}"
     select observer2.email_address, from: 'observation_user_email_address'
@@ -38,8 +38,8 @@ describe "observers" do
 
   it "allows a user to add a reason when adding an observer" do
     reason = "is the archbishop of banterbury"
-    proposal = FactoryGirl.create(:proposal)
-    observer = FactoryGirl.create(:user)
+    proposal = create(:proposal)
+    observer = create(:user)
     login_as(proposal.requester)
 
     visit "/proposals/#{proposal.id}"

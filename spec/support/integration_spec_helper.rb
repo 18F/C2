@@ -1,5 +1,5 @@
 module IntegrationSpecHelper
-  def setup_mock_auth(service_name=:myusa, user=FactoryGirl.create(:user))
+  def setup_mock_auth(service_name=:myusa, user=create(:user))
     OmniAuth.config.mock_auth[service_name] = OmniAuth::AuthHash.new(
       provider: service_name.to_s,
       raw_info: {

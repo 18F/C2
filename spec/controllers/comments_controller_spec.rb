@@ -1,6 +1,6 @@
 describe CommentsController do
   describe 'permission checking' do
-    let (:proposal) { FactoryGirl.create(:proposal, :with_parallel_approvers, :with_observers) }
+    let (:proposal) { create(:proposal, :with_parallel_approvers, :with_observers) }
     let (:params) { {proposal_id: proposal.id,
                      comment: {comment_text: 'Some comment'}} }
 
@@ -30,7 +30,7 @@ describe CommentsController do
 
     it "allows a delegate to comment" do
       approver = proposal.approvers.first
-      delegate = FactoryGirl.create(:user)
+      delegate = create(:user)
       approver.add_delegate(delegate)
 
       login_as(delegate)
@@ -42,7 +42,7 @@ describe CommentsController do
     end
 
     it "does not allow others to comment" do
-      login_as(FactoryGirl.create(:user))
+      login_as(create(:user))
       post :create, params
       expect(flash[:success]).not_to be_present
       expect(flash[:alert]).to be_present

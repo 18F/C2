@@ -5,12 +5,12 @@ describe CommunicartMailer do
   end
 
   around(:each) do |example|
-    with_env_var('NOTIFICATION_FROM_EMAIL', 'reply@stub.gov') do
+    with_env_var('NOTIFICATION_FROM_EMAIL', 'reply@example.com') do
       example.run
     end
   end
 
-  let(:proposal) { FactoryGirl.create(:proposal, :with_parallel_approvers) }
+  let(:proposal) { create(:proposal, :with_parallel_approvers) }
   let(:approval) { proposal.individual_approvals.first }
   let(:approver) { approval.user }
   let(:requester) { proposal.requester }
@@ -21,7 +21,7 @@ describe CommunicartMailer do
     end
 
     it "uses the configured sender email" do
-      expect(mail.from).to eq(['reply@stub.gov'])
+      expect(mail.from).to eq(['reply@example.com'])
     end
 
     it "includes the appropriate headers for threading" do
@@ -92,7 +92,7 @@ describe CommunicartMailer do
       end
 
       it 'renders comments when present' do
-        FactoryGirl.create(:comment, proposal: proposal)
+        create(:comment, proposal: proposal)
         expect(body).to include('Comments')
       end
     end
@@ -104,7 +104,7 @@ describe CommunicartMailer do
       end
 
       it 'renders attachments when present' do
-        FactoryGirl.create(:attachment, proposal: proposal)
+        create(:attachment, proposal: proposal)
         expect(body).to include('Attachments')
       end
     end
@@ -115,7 +115,7 @@ describe CommunicartMailer do
       end
 
       it 'renders a custom template for ncr work orders' do
-        FactoryGirl.create(:ncr_work_order, proposal: proposal)
+        create(:ncr_work_order, proposal: proposal)
         proposal.reload
         expect(body).to include('ncr-layout')
       end
@@ -173,7 +173,7 @@ describe CommunicartMailer do
 
     context 'comments' do
       it 'renders comments when present' do
-        FactoryGirl.create(:comment, comment_text: 'My added comment', proposal: proposal)
+        create(:comment, comment_text: 'My added comment', proposal: proposal)
         expect(mail.body.encoded).to include('Comments')
       end
 
@@ -199,15 +199,15 @@ describe CommunicartMailer do
   end
 
   describe 'comment_added_email' do
-    let(:proposal) { FactoryGirl.create(:proposal) }
-    let(:comment) { FactoryGirl.create(:comment, proposal: proposal) }
-    let(:email) { "commenter@some-dot-gov.gov" }
+    let(:proposal) { create(:proposal) }
+    let(:comment) { create(:comment, proposal: proposal) }
+    let(:email) { 'commenter@example.com' }
     let(:mail) { CommunicartMailer.comment_added_email(comment, email) }
 
     it_behaves_like "a Proposal email"
 
     it 'renders the receiver email' do
-      expect(mail.to).to eq(["commenter@some-dot-gov.gov"])
+      expect(mail.to).to eq(["commenter@example.com"])
     end
 
     it "sets the sender name" do
@@ -217,7 +217,7 @@ describe CommunicartMailer do
 
   describe 'on_observer_added' do
     it "sends to the observer" do
-      proposal = FactoryGirl.create(:proposal, :with_observer)
+      proposal = create(:proposal, :with_observer)
       observation = proposal.observations.first
 
       mail = CommunicartMailer.on_observer_added(observation, nil)
@@ -227,10 +227,10 @@ describe CommunicartMailer do
     end
 
     it "includes who they were added by" do
-      adder = FactoryGirl.create(:user)
+      adder = create(:user)
       PaperTrail.whodunnit = adder.id
 
-      proposal = FactoryGirl.create(:proposal, :with_observer)
+      proposal = create(:proposal, :with_observer)
       observation = proposal.observations.first
       expect(observation.created_by).to eq(adder)
 
@@ -239,7 +239,7 @@ describe CommunicartMailer do
     end
 
     it "excludes who they were added by, if not available" do
-      proposal = FactoryGirl.create(:proposal, :with_observer)
+      proposal = create(:proposal, :with_observer)
       observation = proposal.observations.first
 
       mail = CommunicartMailer.on_observer_added(observation, nil)
@@ -247,9 +247,9 @@ describe CommunicartMailer do
     end
 
     it "includes the reason, if there is one" do
-      proposal = FactoryGirl.create(:proposal)
-      observer = FactoryGirl.create(:user)
-      adder = FactoryGirl.create(:user)
+      proposal = create(:proposal)
+      observer = create(:user)
+      adder = create(:user)
       reason = 'is an absolute ledge'
       proposal.add_observer(observer, adder, reason)
       observation = proposal.observations.first
@@ -260,14 +260,14 @@ describe CommunicartMailer do
   end
 
   describe 'proposal_observer_email' do
-    let(:observation) { proposal.add_observer('observer1@some-dot-gov.gov') }
+    let(:observation) { proposal.add_observer('observer1@example.com') }
     let(:observer) { observation.user }
     let(:mail) { CommunicartMailer.proposal_observer_email(observer.email_address, proposal) }
 
     it_behaves_like "a Proposal email"
 
     it 'renders the receiver email' do
-      expect(mail.to).to eq(["observer1@some-dot-gov.gov"])
+      expect(mail.to).to eq(["observer1@example.com"])
     end
 
     it "uses the default sender name" do
@@ -291,16 +291,21 @@ describe CommunicartMailer do
 
   describe '#proposal_subject' do
     it 'defaults when no client_data is present' do
-      proposal = FactoryGirl.create(:proposal)
+      proposal = create(:proposal)
       mail = CommunicartMailer.proposal_created_confirmation(proposal)
       expect(mail.subject).to eq("Request ##{proposal.id}")
     end
 
     it 'includes custom text for ncr work orders' do
-      requester = FactoryGirl.create(:user, email_address: 'someone@somewhere.gov')
-      wo = FactoryGirl.create(:ncr_work_order, org_code: 'P0000000 (192X,192M) PRIOR YEAR ACTIVITIES', building_number: 'DC0000ZZ - Building', requester: requester)
+      requester = create(:user, email_address: 'someone@example.com')
+      wo = create(
+        :ncr_work_order,
+        org_code: 'P0000000 (192X,192M) PRIOR YEAR ACTIVITIES',
+        building_number: 'DC0000ZZ - Building',
+        requester: requester
+      )
       mail = CommunicartMailer.proposal_created_confirmation(wo.proposal)
-      expect(mail.subject).to eq("Request #{wo.public_identifier}, P0000000, DC0000ZZ from someone@somewhere.gov")
+      expect(mail.subject).to eq("Request #{wo.public_identifier}, P0000000, DC0000ZZ from someone@example.com")
     end
   end
 
