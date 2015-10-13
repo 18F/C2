@@ -9,7 +9,7 @@ describe 'Canceling a request' do
   end
 
   it 'does not show a cancel link for non-requesters' do
-    proposal = FactoryGirl.create(:proposal, :with_approver)
+    proposal = create(:proposal, :with_approver)
     login_as(proposal.approvers.first)
 
     visit proposal_path(proposal)
@@ -18,7 +18,7 @@ describe 'Canceling a request' do
   end
 
   it 'prompts the requester for a reason' do
-    proposal = FactoryGirl.create(:proposal)
+    proposal = create(:proposal)
     login_as(proposal.requester)
 
     visit proposal_path(proposal)
@@ -31,7 +31,7 @@ describe 'Canceling a request' do
     context 'proposal without approver' do
       it 'sends cancellation email to requester' do
         ActionMailer::Base.deliveries.clear
-        proposal = FactoryGirl.create(:proposal)
+        proposal = create(:proposal)
 
         login_as(proposal.requester)
         visit proposal_path(proposal)
@@ -46,7 +46,7 @@ describe 'Canceling a request' do
    context 'proposal with approver cancelled with reason' do
       it 'sends comment email in addition to cancellation emails' do
         ActionMailer::Base.deliveries.clear
-        proposal = FactoryGirl.create(:proposal, :with_approver)
+        proposal = create(:proposal, :with_approver)
 
         login_as(proposal.requester)
         visit proposal_path(proposal)
@@ -61,7 +61,7 @@ describe 'Canceling a request' do
 
   context 'entering in a reason cancellation' do
     it 'successfully saves comments, changes the request status' do
-      proposal = FactoryGirl.create(:proposal)
+      proposal = create(:proposal)
       login_as(proposal.requester)
 
       visit proposal_path(proposal)
@@ -76,7 +76,7 @@ describe 'Canceling a request' do
     end
 
     it 'displays an error if the reason is blank' do
-      proposal = FactoryGirl.create(:proposal)
+      proposal = create(:proposal)
       login_as(proposal.requester)
 
       visit proposal_path(proposal)
@@ -90,7 +90,7 @@ describe 'Canceling a request' do
 
   context 'Cancel landing page' do
     it 'succesfully opens the page for a requester' do
-      proposal = FactoryGirl.create(:proposal)
+      proposal = create(:proposal)
       login_as(proposal.requester)
 
       visit cancel_form_proposal_path(proposal)
@@ -100,7 +100,7 @@ describe 'Canceling a request' do
     end
 
     it 'redirects for non-requesters' do
-      proposal = FactoryGirl.create(:proposal, :with_approver)
+      proposal = create(:proposal, :with_approver)
       login_as(proposal.approvers.first)
 
       visit cancel_form_proposal_path(proposal)

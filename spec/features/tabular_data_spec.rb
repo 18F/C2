@@ -41,9 +41,9 @@ describe "Tabular data sorting" do
     end
 
     it 'allows other titles to be clicked to resort' do
-      proposals[0].requester.update(email_address: "bbb@bbb.gov")
-      proposals[1].requester.update(email_address: "ccc@ccc.gov")
-      proposals[2].requester.update(email_address: "aaa@aaa.gov")
+      proposals[0].requester.update(email_address: "bbb@example.com")
+      proposals[1].requester.update(email_address: "ccc@example.com")
+      proposals[2].requester.update(email_address: "aaa@example.com")
 
       visit '/proposals'
       expect_order(tables[0], proposals.reverse)

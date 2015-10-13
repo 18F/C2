@@ -82,39 +82,39 @@ describe Ncr::WorkOrder do
 
     it "accounts for approver transitions when nothing's approved" do
       wo = create(:ncr_work_order, expense_type: 'BA61')
-      wo.setup_approvals_and_observers('ao@example.gov')
+      wo.setup_approvals_and_observers('ao@example.com')
       expect(wo.approvers.map(&:email_address)).to eq [
-        'ao@example.gov',
+        'ao@example.com',
         ba61_tier_one_email,
         ba61_tier_two_email
       ]
 
       wo.update(org_code: 'P1122021 (192X,192M) WHITE HOUSE DISTRICT')
-      wo.setup_approvals_and_observers('ao@example.gov')
+      wo.setup_approvals_and_observers('ao@example.com')
       expect(wo.reload.approvers.map(&:email_address)).to eq [
-        'ao@example.gov',
+        'ao@example.com',
         ba61_tier_two_email
       ]
 
-      wo.setup_approvals_and_observers('ao2@example.gov')
+      wo.setup_approvals_and_observers('ao2@example.com')
       expect(wo.reload.approvers.map(&:email_address)).to eq [
-        'ao2@example.gov',
+        'ao2@example.com',
         ba61_tier_two_email
       ]
 
       wo.update(expense_type: 'BA80')
-      wo.setup_approvals_and_observers('ao@example.gov')
+      wo.setup_approvals_and_observers('ao@example.com')
       expect(wo.reload.approvers.map(&:email_address)).to eq [
-        'ao@example.gov',
+        'ao@example.com',
         ba61_tier_one_email
       ]
     end
 
     it "unsets the approval status" do
       wo = create(:ncr_work_order, expense_type: 'BA80')
-      wo.setup_approvals_and_observers('ao@example.gov')
+      wo.setup_approvals_and_observers('ao@example.com')
       expect(wo.approvers.map(&:email_address)).to eq [
-        'ao@example.gov',
+        'ao@example.com',
         ba61_tier_one_email
       ]
 
@@ -123,18 +123,18 @@ describe Ncr::WorkOrder do
       expect(wo.reload.approved?).to be true
 
       wo.update(expense_type: 'BA61')
-      wo.setup_approvals_and_observers('ao@example.gov')
+      wo.setup_approvals_and_observers('ao@example.com')
       expect(wo.reload.pending?).to be true
     end
 
     it "does not re-add observers on emergencies" do
       wo = create(:ncr_work_order, expense_type: 'BA61', emergency: true)
-      wo.setup_approvals_and_observers('ao@example.gov')
+      wo.setup_approvals_and_observers('ao@example.com')
 
       expect(wo.approvals).to be_empty
       expect(wo.observers.count).to be 3
 
-      wo.setup_approvals_and_observers('ao@example.gov')
+      wo.setup_approvals_and_observers('ao@example.com')
       wo.reload
       expect(wo.approvals).to be_empty
       expect(wo.observers.count).to be 3
@@ -142,7 +142,7 @@ describe Ncr::WorkOrder do
 
     it "handles the delegate then update scenario" do
       wo = create(:ncr_work_order, expense_type: 'BA80')
-      wo.setup_approvals_and_observers('ao@example.gov')
+      wo.setup_approvals_and_observers('ao@example.com')
       delegate = create(:user)
       wo.approvers.second.add_delegate(delegate)
       wo.individual_approvals.second.update(user: delegate)
@@ -150,7 +150,7 @@ describe Ncr::WorkOrder do
       wo.individual_approvals.first.approve!
       wo.individual_approvals.second.approve!
 
-      wo.setup_approvals_and_observers('ao@example.gov')
+      wo.setup_approvals_and_observers('ao@example.com')
       wo.reload
       expect(wo.approved?).to be true
       expect(wo.approvers.second).to eq delegate
@@ -454,19 +454,35 @@ describe Ncr::WorkOrder do
     end
   end
 
-  describe "#current_approver_email_address" do
-    it "returns the first (sorted by 'position') pending approval's email address" do
+  describe "#current_approver" do
+    it "returns the first pending approver" do
       wo = create(:ncr_work_order, :with_approvers)
-      expect(wo.current_approver_email_address).to eq(wo.individual_approvals.first.user.email_address)
+      expect(wo.current_approver).to eq(wo.individual_approvals.first.user)
       wo.individual_approvals.first.approve!
-      expect(wo.current_approver_email_address).to eq(wo.individual_approvals.last.user.email_address)
+      expect(wo.current_approver).to eq(wo.individual_approvals.last.user)
     end
 
     it "returns the first approver when fully approved" do
       wo = create(:ncr_work_order, :with_approvers)
       wo.individual_approvals.first.approve!
       wo.reload.individual_approvals.last.approve!
-      expect(wo.current_approver_email_address).to eq(wo.individual_approvals.first.user.email_address)
+      expect(wo.current_approver).to eq(wo.individual_approvals.first.user)
     end
+  end
+
+  describe "#final_approver" do
+    it "returns the final approver" do
+      wo = create(:ncr_work_order, :with_approvers)
+      expect(wo.final_approver).to eq(wo.individual_approvals.last.user)
+      wo.individual_approvals.first.approve!
+      expect(wo.final_approver).to eq(wo.individual_approvals.last.user)
+    end
+ 
+    it "returns the last approver when fully approved" do
+      wo = create(:ncr_work_order, :with_approvers)
+      wo.individual_approvals.first.approve!
+      wo.reload.individual_approvals.last.approve!
+      expect(wo.final_approver).to eq(wo.individual_approvals.last.user)
+    end 
   end
 end

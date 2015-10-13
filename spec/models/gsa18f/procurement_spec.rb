@@ -1,11 +1,11 @@
 describe Gsa18f::Procurement do
-  with_env_vars(GSA18F_APPROVER_EMAIL: 'approver@gsa.gov',
-                GSA18F_PURCHASER_EMAIL: 'purchaser@gsa.gov') do
+  with_env_vars(GSA18F_APPROVER_EMAIL: 'approver@example.com',
+                GSA18F_PURCHASER_EMAIL: 'purchaser@example.com') do
     it 'sets up initial approvers and observers' do
       procurement = create(:gsa18f_procurement)
 
-      expect(procurement.approvers.map(&:email_address)).to eq(['approver@gsa.gov'])
-      expect(procurement.observers.map(&:email_address)).to eq(['purchaser@gsa.gov'])
+      expect(procurement.approvers.map(&:email_address)).to eq(['approver@example.com'])
+      expect(procurement.observers.map(&:email_address)).to eq(['purchaser@example.com'])
     end
   end
 

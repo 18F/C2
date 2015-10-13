@@ -9,15 +9,15 @@ describe Ncr::WorkOrdersController do
         not_to_exceed: '0', building_number: Ncr::BUILDING_NUMBERS[0],
         emergency: '0', rwa_number: 'A1234567', org_code: Ncr::Organization.all[0],
         code: 'Work Order', project_title: 'Title', description: 'Desc'},
-      approver_email: 'bob@example.gov'
+      approver_email: 'bob@example.com'
     }}
 
     it 'sends an email to the first approver' do
       post :create, params
       ncr = Ncr::WorkOrder.order(:id).last
       expect(ncr.code).to eq 'Work Order'
-      expect(ncr.approvers.first.email_address).to eq 'bob@example.gov'
-      expect(email_recipients).to eq(['bob@example.gov', ncr.requester.email_address].sort)
+      expect(ncr.approvers.first.email_address).to eq 'bob@example.com'
+      expect(email_recipients).to eq(['bob@example.com', ncr.requester.email_address].sort)
     end
 
     it 'does not error on missing attachments' do
@@ -93,7 +93,7 @@ describe Ncr::WorkOrdersController do
     end
 
     it 'does not modify the work order when there is a bad edit' do
-      post :update, {id: work_order.id, approver_email: 'a@b.com',
+      post :update, {id: work_order.id, approver_email: 'a@example.com',
                      ncr_work_order: {expense_type: 'BA61', amount: 999999}}
       expect(flash[:success]).not_to be_present
       expect(flash[:error]).to be_present
@@ -110,7 +110,7 @@ describe Ncr::WorkOrdersController do
         end
         load 'app/models/ncr/work_order.rb'
 
-        post :update, {id: work_order.id, approver_email: 'a@b.com',
+        post :update, {id: work_order.id, approver_email: 'a@example.com',
                        ncr_work_order: {expense_type: 'BA61', amount: 99999}}
         expect(flash[:success]).not_to be_present
         expect(flash[:error]).to eq(["Amount must be less than or equal to $3,500.00"])
@@ -118,18 +118,18 @@ describe Ncr::WorkOrdersController do
     end
 
     it 'allows the approver to be edited' do
-      post :update, {id: work_order.id, approver_email: 'a@b.com',
+      post :update, {id: work_order.id, approver_email: 'a@example.com',
                      ncr_work_order: {expense_type: 'BA61'}}
       work_order.reload
-      expect(work_order.approvers.first.email_address).to eq('a@b.com')
+      expect(work_order.approvers.first.email_address).to eq('a@example.com')
     end
 
     it 'does not modify the approver if already approved' do
       work_order.individual_approvals.first.approve!
-      post :update, {id: work_order.id, approver_email: 'a@b.com',
+      post :update, {id: work_order.id, approver_email: 'a@example.com',
                      ncr_work_order: {expense_type: 'BA61'}}
       work_order.reload
-      expect(work_order.approvers.map(&:email_address)).not_to include('a@b.com')
+      expect(work_order.approvers.map(&:email_address)).not_to include('a@example.com')
     end
 
     it 'will not modify emergency status on non-emergencies' do

@@ -16,7 +16,7 @@ describe "National Capital Region proposals" do
 
     with_feature 'RESTRICT_ACCESS' do
       it "requires a GSA email address" do
-        user = create(:user, email_address: 'intruder@some.com', client_slug: 'ncr')
+        user = create(:user, email_address: 'intruder@example.com', client_slug: 'ncr')
         login_as(user)
 
         visit '/ncr/work_orders/new'
@@ -285,6 +285,9 @@ describe "National Capital Region proposals" do
 
           expect(proposal.client_data.emergency).to eq(true)
           expect(proposal.approved?).to eq(true)
+          expect(proposal.approvers).to be_empty
+          expect(proposal.client_data.decorate.current_approver_email_address).to eq(Ncr::WorkOrderDecorator::EMERGENCY_APPROVER_EMAIL)
+          expect(proposal.client_data.decorate.final_approver_email_address).to eq(Ncr::WorkOrderDecorator::EMERGENCY_APPROVER_EMAIL)
         end
 
         it "does not set emergencies if form type changes" do
@@ -424,13 +427,13 @@ describe "National Capital Region proposals" do
       end
 
       it "notifies observers of changes" do
-        work_order.add_observer("observer@observers.com")
+        work_order.add_observer("observer@example.com")
         visit "/ncr/work_orders/#{work_order.id}/edit"
         fill_in 'Description', with: "Observer changes"
         click_on 'Update'
 
         expect(deliveries.length).to eq(2)
-        expect(deliveries.last).to have_content('observer@observers.com')
+        expect(deliveries.last).to have_content('observer@example.com')
       end
 
       it "does not resave unchanged requests" do

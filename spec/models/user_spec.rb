@@ -41,16 +41,16 @@ describe User do
     it "returns the user's email address if no first name and last name" do
       user.first_name = nil
       user.last_name = nil
-      user.email_address = 'george.jetson@spacelysprockets.com'
+      user.email_address = 'george.jetson@example.com'
 
-      expect(user.full_name).to eq 'george.jetson@spacelysprockets.com'
+      expect(user.full_name).to eq 'george.jetson@example.com'
     end
   end
 
   describe '.for_email' do
     it "downcases and strips the email" do
-      user = User.for_email('   miXedCaSe@some-doT-gov.gov')
-      expect(user.email_address).to eq('mixedcase@some-dot-gov.gov')
+      user = User.for_email('   miXedCaSe@eXaMple.com')
+      expect(user.email_address).to eq('mixedcase@example.com')
     end
   end
 

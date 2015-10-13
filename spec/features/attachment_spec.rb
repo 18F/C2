@@ -46,7 +46,7 @@ describe "Add attachments" do
 
   it "emails everyone involved in the proposal" do
     expect(Dispatcher).to receive(:deliver_attachment_emails)
-    proposal.add_observer("wiley-cat@some-cartoon-show.com")
+    proposal.add_observer("wiley-cat@example.com")
     visit proposal_path(proposal)
     page.attach_file('attachment[file]', "#{Rails.root}/app/assets/images/bg_approved_status.gif")
     click_on "Attach a File"
