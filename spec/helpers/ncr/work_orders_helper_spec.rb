@@ -9,7 +9,7 @@ describe Ncr::WorkOrdersHelper do
     it 'sorts the results' do
       create(:user, email_address: 'b@example.com')
       create(:user, email_address: 'c@example.com')
-      create(:user, email_address: 'a@exampele.com')
+      create(:user, email_address: 'a@example.com')
       expect(helper.approver_options).to include(*%w(a@example.com b@example.com c@example.com))
     end
   end
