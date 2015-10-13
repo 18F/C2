@@ -3,7 +3,7 @@ module Ncr
     delegate_all
 
     EMERGENCY_APPROVER_EMAIL = 'Emergency - Verbal Approval'
-    NO_APPROVER_FOUND        = 'No Approver Found'
+    NO_APPROVER_FOUND = 'No Approver Found'
 
     def current_approver_email_address
       approver_email_address(current_approver)
