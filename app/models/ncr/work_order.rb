@@ -282,11 +282,13 @@ module Ncr
         if self.approved?
           comment_texts << "_Modified post-approval_"
         end
-        self.proposal.comments.create(
+
+        comment = proposal.comments.create(
           comment_text: comment_texts.join("\n"),
           update_comment: true,
           user: self.modifier || self.requester
         )
+        Dispatcher.on_comment_created(comment)
       end
     end
 

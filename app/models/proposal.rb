@@ -203,9 +203,6 @@ class Proposal < ActiveRecord::Base
     end
   end
 
-
-  ## delegated methods ##
-
   def public_identifier
     self.delegate_with_default(:public_identifier) { "##{self.id}" }
   end
@@ -229,9 +226,6 @@ class Proposal < ActiveRecord::Base
       self.client_data.try(:version)
     ].compact.max
   end
-
-  #######################
-
 
   def restart
     # Note that none of the state machine's history is stored
@@ -278,11 +272,13 @@ class Proposal < ActiveRecord::Base
   end
 
   def add_observation_comment(user, adder, reason)
-    self.comments.create(
+    comment = comments.create(
       comment_text: I18n.t('activerecord.attributes.observation.user_reason_comment',
                            user: adder.full_name,
                            observer: user.full_name,
                            reason: reason),
-      user: adder)
+      user: adder
+    )
+    Dispatcher.on_comment_created(comment)
   end
 end

@@ -34,27 +34,34 @@ describe 'Canceling a request' do
         proposal = create(:proposal)
 
         login_as(proposal.requester)
-        visit proposal_path(proposal)
-        click_on('Cancel my request')
-        fill_in 'reason_input', with: 'This is a good reason for the cancellation.'
-        click_on('Yes, cancel this request')
+        cancel_proposal(proposal)
+
+        expect(deliveries.length).to eq(1)
+      end
+    end
+
+    context 'proposal with pending status' do
+      it 'does not send cancellation email to approver' do
+        ActionMailer::Base.deliveries.clear
+        proposal = create(:proposal, :with_approver)
+        proposal.individual_approvals.first.update(status: 'pending')
+
+        login_as(proposal.requester)
+        cancel_proposal(proposal)
 
         expect(deliveries.length).to eq(1)
       end
     end
 
    context 'proposal with approver cancelled with reason' do
-      it 'sends comment email in addition to cancellation emails' do
+      it 'sends cancellation emails to requester and approver' do
         ActionMailer::Base.deliveries.clear
         proposal = create(:proposal, :with_approver)
 
         login_as(proposal.requester)
-        visit proposal_path(proposal)
-        click_on('Cancel my request')
-        fill_in 'reason_input', with: 'This is a good reason for the cancellation.'
-        click_on('Yes, cancel this request')
+        cancel_proposal(proposal)
 
-        expect(deliveries.length).to eq(3)
+        expect(deliveries.length).to eq(2)
       end
    end
   end
@@ -64,10 +71,7 @@ describe 'Canceling a request' do
       proposal = create(:proposal)
       login_as(proposal.requester)
 
-      visit proposal_path(proposal)
-      click_on('Cancel my request')
-      fill_in 'reason_input', with: 'This is a good reason for the cancellation.'
-      click_on('Yes, cancel this request')
+      cancel_proposal(proposal)
 
       expect(current_path).to eq("/proposals/#{proposal.id}")
       expect(page).to have_content('Your request has been cancelled')
@@ -81,7 +85,7 @@ describe 'Canceling a request' do
 
       visit proposal_path(proposal)
       click_on('Cancel my request')
-      fill_in "reason_input", with: ''
+      fill_in 'reason_input', with: ''
       click_on('Yes, cancel this request')
 
       expect(page).to have_content('A reason for cancellation is required. Please indicate why this request needs to be cancelled.')
@@ -108,5 +112,12 @@ describe 'Canceling a request' do
       expect(page).to have_content('You are not the requester')
       expect(current_path).to eq("/proposals/#{proposal.id}")
     end
+  end
+
+  def cancel_proposal(proposal)
+    visit proposal_path(proposal)
+    click_on('Cancel my request')
+    fill_in 'reason_input', with: 'This is a good reason for the cancellation.'
+    click_on('Yes, cancel this request')
   end
 end

@@ -14,7 +14,7 @@ class Dispatcher
     proposal.observations.each do |observation|
       user = observation.user
       if user.role_on(proposal).active_observer?
-        self.email_observer(observation)
+       email_observer(observation)
       end
     end
   end
@@ -29,38 +29,35 @@ class Dispatcher
 
   def deliver_new_proposal_emails(proposal)
     proposal.currently_awaiting_approvals.each do |approval|
-      self.email_approver(approval)
+      email_approver(approval)
     end
-    self.email_observers(proposal)
-    self.email_sent_confirmation(proposal)
+
+    email_observers(proposal)
+    email_sent_confirmation(proposal)
   end
 
   def deliver_attachment_emails(proposal)
     proposal.users.each do |user|
-      # do not send email to approvers who have not yet heard about the proposal
-      approval = proposal.approvals.find_by(user_id: user.id)
-      next if approval && approval.pending?
-      CommunicartMailer.new_attachment_email(user.email_address, proposal).deliver_later
+      approval = proposal.approvals.where(user: user)
+
+      if approval_not_pending?(approval)
+        CommunicartMailer.new_attachment_email(user.email_address, proposal).deliver_later
+      end
     end
   end
 
   def deliver_cancellation_emails(proposal)
     proposal.individual_approvals.each do |approval|
-      # do not send email to approvers who have not yet heard about the proposal
-      # https://www.pivotaltracker.com/story/show/100733040
-      next if approval.pending?
-
-      CommunicartMailer.cancellation_email(approval.user_email_address, proposal).deliver_later
+      if approval_not_pending?(approval)
+        CommunicartMailer.cancellation_email(approval.user_email_address, proposal).deliver_later
+      end
     end
+
     CommunicartMailer.cancellation_confirmation(proposal).deliver_later
   end
 
-  def requires_approval_notice?(_approval)
-    true
-  end
-
   def on_approval_approved(approval)
-    if self.requires_approval_notice?(approval)
+    if requires_approval_notice?(approval)
       CommunicartMailer.approval_reply_received_email(approval).deliver_later
     end
 
@@ -84,7 +81,15 @@ class Dispatcher
 
   private
 
+  def requires_approval_notice?(_approval)
+    true
+  end
+
   def send_notification_email(approval)
     CommunicartMailer.actions_for_approver(approval).deliver_later
+  end
+
+  def approval_not_pending?(approval)
+    approval && !approval.pending?
   end
 end

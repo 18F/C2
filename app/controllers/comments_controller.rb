@@ -1,14 +1,15 @@
 class CommentsController < ApplicationController
   before_filter :authenticate_user!
-  before_filter ->{authorize self.proposal, :can_show!}
+  before_filter ->{authorize proposal, :can_show!}
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
 
 
   def create
-    comment = self.proposal.comments.build(self.comment_params)
+    comment = proposal.comments.build(comment_params)
     comment.user = current_user
     if comment.save
       flash[:success] = "You successfully added a comment"
+      Dispatcher.on_comment_created(comment)
     else
       flash[:error] = comment.errors.full_messages
     end
