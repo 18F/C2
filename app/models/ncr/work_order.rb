@@ -115,11 +115,11 @@ module Ncr
     end
 
     def current_approver
-      if self.pending?
-        self.currently_awaiting_approvers.first
-      elsif self.approving_official
-        self.approving_official
-      elsif self.emergency and self.approvers.empty?
+      if pending?
+        currently_awaiting_approvers.first
+      elsif approving_official
+        approving_official
+      elsif emergency and approvers.empty?
         nil
       else
         User.for_email(self.system_approver_emails.first)
@@ -127,10 +127,10 @@ module Ncr
     end
 
     def final_approver
-      if self.emergency and self.approvers.empty?
-        nil
+      if !emergency and approvers.any?
+        approvers.last
       else
-        self.approvers.last
+        nil
       end
     end
 
