@@ -279,7 +279,7 @@ describe ProposalsController do
 
     it "won't allow different delegates to approve" do
       proposal = create(:proposal, :with_approver)
-      delegate1, delegate2 = create(:user), FactoryGirl.create(:user)
+      delegate1, delegate2 = create(:user), create(:user)
       mailbox = proposal.approvers.first
       mailbox.add_delegate(delegate1)
       mailbox.add_delegate(delegate2)

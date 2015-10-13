@@ -2,7 +2,7 @@ describe Ncr::WorkOrdersHelper do
   describe '#approver_options' do
     it 'includes existing users' do
       expect(helper.approver_options.size).to eq(2)  # seed Users
-      users = [create(:user), FactoryGirl.create(:user)]
+      users = [create(:user), create(:user)]
       expect(helper.approver_options).to include(*users.map(&:email_address))
     end
 
