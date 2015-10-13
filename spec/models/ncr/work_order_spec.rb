@@ -454,19 +454,35 @@ describe Ncr::WorkOrder do
     end
   end
 
-  describe "#current_approver_email_address" do
-    it "returns the first (sorted by 'position') pending approval's email address" do
+  describe "#current_approver" do
+    it "returns the first pending approver" do
       wo = create(:ncr_work_order, :with_approvers)
-      expect(wo.current_approver_email_address).to eq(wo.individual_approvals.first.user.email_address)
+      expect(wo.current_approver).to eq(wo.individual_approvals.first.user)
       wo.individual_approvals.first.approve!
-      expect(wo.current_approver_email_address).to eq(wo.individual_approvals.last.user.email_address)
+      expect(wo.current_approver).to eq(wo.individual_approvals.last.user)
     end
 
     it "returns the first approver when fully approved" do
       wo = create(:ncr_work_order, :with_approvers)
       wo.individual_approvals.first.approve!
       wo.reload.individual_approvals.last.approve!
-      expect(wo.current_approver_email_address).to eq(wo.individual_approvals.first.user.email_address)
+      expect(wo.current_approver).to eq(wo.individual_approvals.first.user)
     end
+  end
+
+  describe "#final_approver" do
+    it "returns the final approver" do
+      wo = create(:ncr_work_order, :with_approvers)
+      expect(wo.final_approver).to eq(wo.individual_approvals.last.user)
+      wo.individual_approvals.first.approve!
+      expect(wo.final_approver).to eq(wo.individual_approvals.last.user)
+    end
+ 
+    it "returns the last approver when fully approved" do
+      wo = create(:ncr_work_order, :with_approvers)
+      wo.individual_approvals.first.approve!
+      wo.reload.individual_approvals.last.approve!
+      expect(wo.final_approver).to eq(wo.individual_approvals.last.user)
+    end 
   end
 end

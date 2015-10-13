@@ -121,13 +121,21 @@ module Ncr
       self.approvers.first
     end
 
-    def current_approver_email_address
-      if self.pending?
-        self.currently_awaiting_approvers.first.email_address
-      elsif self.approving_official
-        self.approving_official.email_address
+    def current_approver
+      if pending?
+        currently_awaiting_approvers.first
+      elsif approving_official
+        approving_official
+      elsif emergency and approvers.empty?
+        nil
       else
-        self.system_approver_emails.first
+        User.for_email(self.system_approver_emails.first)
+      end
+    end
+
+    def final_approver
+      if !emergency and approvers.any?
+        approvers.last
       end
     end
 
