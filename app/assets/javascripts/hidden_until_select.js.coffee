@@ -8,7 +8,6 @@ class HiddenUntilSelect
     @$dependent.toggle(@$controller.val())
 
 $ ->
-  # @todo - better scope
   $scope = $(document.body)
   $scope.find("[data-hide-until-select]").each (idx, el) ->
     new HiddenUntilSelect($scope, $(el))
