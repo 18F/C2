@@ -20,6 +20,6 @@ describe '/admin endpoint' do
   end
 
   def user
-    @user ||= FactoryGirl.create(:user)
+    @user ||= create(:user)
   end
 end

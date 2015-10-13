@@ -1,8 +1,8 @@
 describe 'Linear approvals' do
   it 'allows the approver to approve' do
     proposal = create_proposal
-    first_approver = FactoryGirl.create(:user)
-    second_approver = FactoryGirl.create(:user)
+    first_approver = create(:user)
+    second_approver = create(:user)
     approvals = create_approvals_for([first_approver, second_approver])
     create_serial_approval(approvals)
 
@@ -14,8 +14,8 @@ describe 'Linear approvals' do
 
   it 'does not allow the approver to approve twice' do
     proposal = create_proposal
-    first_approver = FactoryGirl.create(:user)
-    second_approver = FactoryGirl.create(:user)
+    first_approver = create(:user)
+    second_approver = create(:user)
     approvals = create_approvals_for([first_approver, second_approver])
     create_serial_approval(approvals)
     approve_approval_for(first_approver)
@@ -27,12 +27,12 @@ describe 'Linear approvals' do
   end
 
   def create_proposal
-    @proposal ||= FactoryGirl.create(:proposal)
+    @proposal ||= create(:proposal)
   end
 
   def create_approvals_for(users)
     users.each_with_index.map do |user, index|
-      FactoryGirl.create(:approval, user: user, position: index + 1)
+      create(:approval, user: user, position: index + 1)
     end
   end
 

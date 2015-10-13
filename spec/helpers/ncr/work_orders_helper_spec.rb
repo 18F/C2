@@ -2,15 +2,15 @@ describe Ncr::WorkOrdersHelper do
   describe '#approver_options' do
     it 'includes existing users' do
       expect(helper.approver_options.size).to eq(2)  # seed Users
-      users = [create(:user), FactoryGirl.create(:user)]
+      users = [create(:user), create(:user)]
       expect(helper.approver_options).to include(*users.map(&:email_address))
     end
 
     it 'sorts the results' do
-      create(:user, email_address: 'b@ex.com')
-      create(:user, email_address: 'c@ex.com')
-      create(:user, email_address: 'a@ex.com')
-      expect(helper.approver_options).to include(*%w(a@ex.com b@ex.com c@ex.com))
+      create(:user, email_address: 'b@example.com')
+      create(:user, email_address: 'c@example.com')
+      create(:user, email_address: 'a@example.com')
+      expect(helper.approver_options).to include(*%w(a@example.com b@example.com c@example.com))
     end
   end
 
@@ -18,7 +18,7 @@ describe Ncr::WorkOrdersHelper do
     it 'includes an initial list' do
       expect(helper.building_options).to include(Ncr::BUILDING_NUMBERS.last)
     end
-    
+
     it 'includes custom results' do
       create(:ncr_work_order, building_number: 'ABABABAB')
       expect(helper.building_options).to include('ABABABAB')

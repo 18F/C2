@@ -32,20 +32,22 @@ describe Ncr::WorkOrderPolicy do
 
   permissions :can_create? do
     it "allows a user with an arbitrary email to create" do
-      user = User.new(email_address: 'user@some.com', client_slug: 'ncr')
+      user = User.new(email_address: 'user@example.com', client_slug: 'ncr')
       work_order = Ncr::WorkOrder.new
       expect(subject).to permit(user, work_order)
     end
 
     with_feature 'RESTRICT_ACCESS' do
       it "allows someone with a GSA email to create" do
-        user = User.new(email_address: 'user@gsa.gov', client_slug: 'ncr')
+        gsa_domain = "@example.net"
+        stub_const("GsaPolicy::GSA_DOMAIN", gsa_domain)
+        user = User.new(email_address: "user#{gsa_domain}", client_slug: 'ncr')
         work_order = Ncr::WorkOrder.new
         expect(subject).to permit(user, work_order)
       end
 
       it "doesn't allow someone with a non-GSA email to create" do
-        user = User.new(email_address: 'intruder@some.com', client_slug: 'ncr')
+        user = User.new(email_address: 'intruder@example.com', client_slug: 'ncr')
         work_order = Ncr::WorkOrder.new
         expect(subject).not_to permit(user, work_order)
       end

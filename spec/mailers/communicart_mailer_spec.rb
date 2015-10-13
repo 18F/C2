@@ -5,7 +5,7 @@ describe CommunicartMailer do
   end
 
   around(:each) do |example|
-    with_env_var('NOTIFICATION_FROM_EMAIL', 'reply@stub.gov') do
+    with_env_var('NOTIFICATION_FROM_EMAIL', 'reply@example.com') do
       example.run
     end
   end
@@ -21,7 +21,7 @@ describe CommunicartMailer do
     end
 
     it "uses the configured sender email" do
-      expect(mail.from).to eq(['reply@stub.gov'])
+      expect(mail.from).to eq(['reply@example.com'])
     end
 
     it "includes the appropriate headers for threading" do
@@ -201,13 +201,13 @@ describe CommunicartMailer do
   describe 'comment_added_email' do
     let(:proposal) { create(:proposal) }
     let(:comment) { create(:comment, proposal: proposal) }
-    let(:email) { "commenter@some-dot-gov.gov" }
+    let(:email) { 'commenter@example.com' }
     let(:mail) { CommunicartMailer.comment_added_email(comment, email) }
 
     it_behaves_like "a Proposal email"
 
     it 'renders the receiver email' do
-      expect(mail.to).to eq(["commenter@some-dot-gov.gov"])
+      expect(mail.to).to eq(["commenter@example.com"])
     end
 
     it "sets the sender name" do
@@ -260,14 +260,14 @@ describe CommunicartMailer do
   end
 
   describe 'proposal_observer_email' do
-    let(:observation) { proposal.add_observer('observer1@some-dot-gov.gov') }
+    let(:observation) { proposal.add_observer('observer1@example.com') }
     let(:observer) { observation.user }
     let(:mail) { CommunicartMailer.proposal_observer_email(observer.email_address, proposal) }
 
     it_behaves_like "a Proposal email"
 
     it 'renders the receiver email' do
-      expect(mail.to).to eq(["observer1@some-dot-gov.gov"])
+      expect(mail.to).to eq(["observer1@example.com"])
     end
 
     it "uses the default sender name" do
@@ -297,10 +297,15 @@ describe CommunicartMailer do
     end
 
     it 'includes custom text for ncr work orders' do
-      requester = create(:user, email_address: 'someone@somewhere.gov')
-      wo = create(:ncr_work_order, org_code: 'P0000000 (192X,192M) PRIOR YEAR ACTIVITIES', building_number: 'DC0000ZZ - Building', requester: requester)
+      requester = create(:user, email_address: 'someone@example.com')
+      wo = create(
+        :ncr_work_order,
+        org_code: 'P0000000 (192X,192M) PRIOR YEAR ACTIVITIES',
+        building_number: 'DC0000ZZ - Building',
+        requester: requester
+      )
       mail = CommunicartMailer.proposal_created_confirmation(wo.proposal)
-      expect(mail.subject).to eq("Request #{wo.public_identifier}, P0000000, DC0000ZZ from someone@somewhere.gov")
+      expect(mail.subject).to eq("Request #{wo.public_identifier}, P0000000, DC0000ZZ from someone@example.com")
     end
   end
 

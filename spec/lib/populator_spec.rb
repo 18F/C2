@@ -21,7 +21,7 @@ describe Populator do
     it 'creates proposals for the user with email address passed in' do
       email = 'test@example.com'
       num_proposals = 2
-      user = FactoryGirl.create(:user, email_address: email)
+      user = create(:user, email_address: email)
 
       expect {
         Populator.new.ncr_data_for_user(email: email, num_proposals: num_proposals)

@@ -24,8 +24,14 @@ describe Ncr::Reporter do
 
   describe '.proposals_tier_one_pending' do
     it "only returns Proposals where Tier One approval is actionable" do
-      approver_email = 'i-approve@example.gov'
-      whs_work_order = create(:ncr_work_order, :with_approvers, org_code: Ncr::Organization::WHSC_CODE)
+      approver_email = 'i-approve@example.com'
+
+      whs_work_order = create(
+        :ncr_work_order,
+        :with_approvers,
+        org_code: Ncr::Organization::WHSC_CODE
+      )
+
       whs_work_order.setup_approvals_and_observers(approver_email)
 
       approved_work_order = create(:ncr_work_order, :with_approvers)

@@ -1,6 +1,8 @@
 module GsaPolicy
+  GSA_DOMAIN = "@gsa.gov"
+
   def gsa_email?
-    @user.email_address.end_with?('@gsa.gov')
+    @user.email_address.end_with?(GSA_DOMAIN)
   end
 
   def gsa!
