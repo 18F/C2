@@ -441,7 +441,7 @@ describe "National Capital Region proposals" do
         proposal = Proposal.last
 
         expect(proposal.approvers.first.email_address).to eq approver.email_address
-        expect(proposal.individual_approvals.first.actionable?).to eq true
+        expect(proposal.individual_approvals.first).to be_actionable
       end
 
       describe "switching to WHSC" do
@@ -650,5 +650,10 @@ describe "National Capital Region proposals" do
       expect(page).to have_content("comment text")
       expect(proposal.observers).to include(delegate)
     end
+  end
+
+  def focus_field(field_id)
+    execute_script "document.getElementById('#{field_id}').scrollIntoView()"
+    execute_script "$('##{field_id}').focus()"
   end
 end

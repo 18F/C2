@@ -1,4 +1,4 @@
-module UiHelper
+module FormHelper
   # Variation of https://git.io/ugBzaQ
   def humanized_options_for_select(options)
     options = options.map do |val|
