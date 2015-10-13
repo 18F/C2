@@ -1,12 +1,13 @@
 source 'https://rubygems.org'
-ruby '2.2.2' # this should match `.ruby-version` and docs/setup.md
+ruby '2.2.3' # this should match `.ruby-version` and docs/setup.md
 
 gem 'active_model_serializers'
+gem 'activeadmin', github: 'activeadmin'
 gem 'acts_as_list'
 gem 'ar_outer_joins'
 gem 'autoprefixer-rails'
 gem 'awesome_print'
-gem 'aws-sdk-v1'    # remaining on v1 due to https://github.com/thoughtbot/paperclip/issues/1764
+gem 'aws-sdk', '~> 1.6' # version restriction can be lifted once https://github.com/thoughtbot/paperclip/commit/523bd46c768226893f23889079a7aa9c73b57d68 is released
 gem 'bootstrap-sass'
 gem 'browser-timezone-rails'
 gem 'clockwork', require: false
@@ -19,6 +20,7 @@ gem 'faker'
 gem 'font-awesome-sass'
 gem 'foreman', require: false
 gem 'haml'
+gem 'hashdiff'
 gem 'html_pipeline_rails'
 gem 'jquery-rails'
 gem 'jquery-turbolinks'
@@ -59,6 +61,7 @@ group :development do
   gem 'railroady'
   gem 'letter_opener'
   gem 'letter_opener_web'
+  gem 'quiet_assets'
   gem 'spring'
   gem 'spring-commands-rspec'
 end
@@ -70,7 +73,6 @@ group :test do
   gem 'poltergeist'
   gem 'simplecov'
   gem 'timecop'
-  gem 'turnip'
   gem 'zonebie'
 
   # For better test reporting in CircleCI

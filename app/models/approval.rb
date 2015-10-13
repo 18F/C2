@@ -1,6 +1,6 @@
 class Approval < ActiveRecord::Base
   include WorkflowModel
-  has_paper_trail
+  has_paper_trail class_name: 'C2Version'
 
   workflow do   # overwritten in child classes
     state :pending
@@ -13,7 +13,7 @@ class Approval < ActiveRecord::Base
   validates :proposal, presence: true
 
   belongs_to :parent, class_name: 'Approval'
-  has_many :child_approvals, class_name: 'Approval', foreign_key: 'parent_id'
+  has_many :child_approvals, class_name: 'Approval', foreign_key: 'parent_id', dependent: :destroy
 
   scope :individual, -> { where(type: 'Approvals::Individual') }
 

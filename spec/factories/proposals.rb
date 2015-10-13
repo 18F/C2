@@ -10,7 +10,6 @@ FactoryGirl.define do
       end
     end
 
-
     trait :with_serial_approvers do
       flow 'linear'
       after :create do |proposal|
@@ -36,11 +35,22 @@ FactoryGirl.define do
 
     trait :with_observers do
       after :create do |proposal|
-        observer_role = FactoryGirl.create(:role, :observer)
         2.times do
           observer = FactoryGirl.create(:user)
           proposal.add_observer(observer.email_address)
         end
+      end
+    end
+
+    transient do
+      delegate nil
+    end
+
+    after(:create) do |proposal, evaluator|
+      if evaluator.delegate
+        user = FactoryGirl.create(:user)
+        proposal.approver = user
+        user.add_delegate(evaluator.delegate)
       end
     end
   end

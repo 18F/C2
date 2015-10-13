@@ -1,7 +1,7 @@
 describe Ncr::WorkOrdersController do
   describe 'creating' do
     before do
-      login_as(FactoryGirl.create(:user))
+      login_as(create(:user, client_slug: 'ncr'))
     end
     let (:params) {{
       ncr_work_order: {
@@ -52,7 +52,7 @@ describe Ncr::WorkOrdersController do
   end
 
   describe '#edit' do
-    let (:work_order) { FactoryGirl.create(:ncr_work_order, :with_approvers) }
+    let (:work_order) { create(:ncr_work_order, :with_approvers) }
     let (:requester) { work_order.proposal.requester }
     before do
       login_as(requester)
@@ -70,14 +70,14 @@ describe Ncr::WorkOrdersController do
     end
 
     it 'does not explode if editing an emergency' do
-      work_order = FactoryGirl.create(:ncr_work_order, :is_emergency,
+      work_order = create(:ncr_work_order, :is_emergency,
                                       requester: requester)
       get :edit, {id: work_order.id}
     end
   end
 
   describe '#update' do
-    let (:work_order) { FactoryGirl.create(:ncr_work_order, :with_approvers) }
+    let (:work_order) { create(:ncr_work_order, :with_approvers) }
     let (:requester) { work_order.proposal.requester }
     before do
       login_as(requester)
@@ -144,7 +144,7 @@ describe Ncr::WorkOrdersController do
     end
 
     it 'will not modify emergency status on emergencies' do
-      work_order = FactoryGirl.create(:ncr_work_order, :is_emergency, requester: requester)
+      work_order = create(:ncr_work_order, :is_emergency, requester: requester)
       expect(work_order.approvals.empty?).to be true
       expect(work_order.observers.empty?).to be false
       post :update, {id: work_order.id, approver_email: work_order.observers.first.email_address,

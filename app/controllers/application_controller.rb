@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  include Pundit    # For authorization checks
+  include Pundit
   include ReturnToHelper
   include MarkdownHelper
 
@@ -11,11 +11,10 @@ class ApplicationController < ActionController::Base
 
   before_action :disable_peek_by_default
 
-
   protected
 
   # We are overriding this method to account for ExceptionPolicies
-  def authorize(record, query=nil, user=nil)
+  def authorize(record, query = nil, user = nil)
     user ||= @current_user
     policy = ::PolicyFinder.policy_for(user, record)
 
@@ -25,9 +24,9 @@ class ApplicationController < ActionController::Base
       # the method might raise its own exception, or it might return a
       # boolean. Both systems are accommodated
       # will need to replace this when a new version of pundit arrives
-      ex = NotAuthorizedError.new("not allowed to #{q} this #{record}")
-      ex.query, ex.record, ex.policy = q, record, pol
-      raise ex
+      msg = "not allowed to #{query} this #{record}"
+      ex = NotAuthorizedError.new(query: query, record: record, policy: policy, message: msg)
+      fail ex
     end
   end
 
@@ -48,7 +47,15 @@ class ApplicationController < ActionController::Base
   private
 
   def current_user
-    @current_user ||= User.find_or_create_by(email_address: session[:user]['email']) if session[:user] && session[:user]['email']
+    @current_user ||= find_current_user
+  end
+
+  def find_current_user
+    if ENV['FORCE_USER_ID'] && !Rails.env.production?
+      User.find ENV['FORCE_USER_ID']
+    elsif session[:user] && session[:user]['email']
+      User.find_or_create_by(email_address: session[:user]['email'])
+    end
   end
 
   def sign_in(user)
@@ -63,13 +70,21 @@ class ApplicationController < ActionController::Base
   end
 
   def signed_in?
-    !!current_user
+    current_user ? true : false
   end
 
   def authenticate_user!
     unless signed_in?
       flash[:error] = 'You need to sign in for access to this page.'
       redirect_to root_url(return_to: self.make_return_to("Previous", request.fullpath))
+    end
+  end
+
+  def authenticate_admin_user!
+    authenticate_user!
+    unless current_user.admin?
+      flash[:error] = 'You need to sign in for access to this page.'
+      render 'communicarts/authorization_error', status: 403
     end
   end
 

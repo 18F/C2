@@ -4,6 +4,8 @@ module ProposalDelegate
   included do
     Proposal::CLIENT_MODELS << self
 
+    has_paper_trail class_name: 'C2Version'
+
     has_one :proposal, as: :client_data
     has_many :approvals, through: :proposal
     has_many :individual_approvals, ->{ individual }, class_name: 'Approvals::Individual', through: :proposal
@@ -18,7 +20,7 @@ module ProposalDelegate
     validates :proposal, presence: true
 
 
-    delegate :add_observer, :add_requester, :set_requester, to: :proposal
+    delegate :add_observer, :add_requester, :set_requester, :currently_awaiting_approvers, to: :proposal
 
     ### delegate the workflow actions/scopes/states ###
 

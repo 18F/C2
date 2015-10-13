@@ -1,5 +1,5 @@
 class ApiToken < ActiveRecord::Base
-  has_paper_trail
+  has_paper_trail class_name: 'C2Version'
 
   before_create :generate_token
 
