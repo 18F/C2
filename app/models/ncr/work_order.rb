@@ -136,8 +136,6 @@ module Ncr
     def final_approver
       if !emergency and approvers.any?
         approvers.last
-      else
-        nil
       end
     end
 
