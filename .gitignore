@@ -31,3 +31,6 @@ cf-ssh.yml
 
 # Ignore file uploads
 /public/system
+
+# Ignore RubyMine files
+.idea
