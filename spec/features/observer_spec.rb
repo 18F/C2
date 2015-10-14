@@ -14,15 +14,15 @@ describe "observers" do
     expect(page).to have_content("#{observer.full_name} has been added as an observer")
 
     proposal.reload
-    expect(proposal.observers).to eq [observer]
+
+    expect(proposal.observers).to include(observer)
   end
 
   it "allows observers to be added by other observers" do
     proposal = create(:proposal, :with_observer)
     observer1 = proposal.observers.first
-    login_as(observer1)
-
     observer2 = create(:user)
+    login_as(observer1)
 
     visit "/proposals/#{proposal.id}"
     select observer2.email_address, from: 'observation_user_email_address'
@@ -50,8 +50,7 @@ describe "observers" do
     expect(page).to have_content("#{observer.full_name} has been added as an observer")
     proposal.reload
 
-    expect(deliveries.first.body.encoded).to include reason   # comment notification
-    expect(deliveries.second.body.encoded).to include reason  # subscription notification
+    expect(deliveries.first.body.encoded).to include reason # subscription notification
   end
 
   it "hides the reason field until a new observer is selected", js: true do

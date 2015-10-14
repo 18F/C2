@@ -282,7 +282,8 @@ module Ncr
         if self.approved?
           comment_texts << "_Modified post-approval_"
         end
-        self.proposal.comments.create(
+
+        proposal.comments.create(
           comment_text: comment_texts.join("\n"),
           update_comment: true,
           user: self.modifier || self.requester
@@ -290,7 +291,7 @@ module Ncr
       end
     end
 
-    def self.update_comment_format key, value, bullet, former=nil
+    def self.update_comment_format(key, value, bullet, former=nil)
       from = former ? "from #{former} " : ''
       "#{bullet}*#{key}* was changed " + from + "to #{value}"
     end

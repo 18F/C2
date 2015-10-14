@@ -202,7 +202,6 @@ class Proposal < ActiveRecord::Base
     end
   end
 
-
   ## delegated methods ##
 
   def public_identifier
@@ -230,7 +229,6 @@ class Proposal < ActiveRecord::Base
   end
 
   #######################
-
 
   def restart
     # Note that none of the state machine's history is stored
@@ -270,18 +268,25 @@ class Proposal < ActiveRecord::Base
     self.observers(true)
     # when explicitly adding an observer using the form in the Proposal page...
     if adder
-      add_observation_comment(user, adder, reason) unless reason.blank?
+      if reason
+        add_observation_comment(user, adder, reason)
+      end
+
       Dispatcher.on_observer_added(observation, reason)
     end
+
     observation
   end
 
   def add_observation_comment(user, adder, reason)
-    self.comments.create(
-      comment_text: I18n.t('activerecord.attributes.observation.user_reason_comment',
-                           user: adder.full_name,
-                           observer: user.full_name,
-                           reason: reason),
-      user: adder)
+    comments.create(
+      comment_text: I18n.t(
+        'activerecord.attributes.observation.user_reason_comment',
+        user: adder.full_name,
+        observer: user.full_name,
+        reason: reason
+      ),
+      user: adder
+    )
   end
 end

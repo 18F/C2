@@ -35,19 +35,19 @@ class ProposalsController < ApplicationController
 
   def cancel
     if params[:reason_input].present?
-      proposal = Proposal.find params[:id]
+      proposal = Proposal.find(params[:id])
       comments = "Request cancelled with comments: " + params[:reason_input]
       proposal.cancel!
-      proposal.comments.create!(comment_text: comments, user_id: current_user.id)
+      proposal.comments.create!(comment_text: comments, user: current_user)
 
       flash[:success] = "Your request has been cancelled"
-      redirect_to proposal_path, id: proposal.id
+      redirect_to proposal_path(proposal)
       Dispatcher.new.deliver_cancellation_emails(proposal)
     else
-      redirect_to cancel_form_proposal_path, id: params[:id],
-                                             alert: "A reason for cancellation is required.
-                                                     Please indicate why this request needs
-                                                     to be cancelled."
+      redirect_to(
+        cancel_form_proposal_path(params[:id]),
+        alert: "A reason for cancellation is required. Please indicate why this request needs to be cancelled."
+      )
     end
   end
 
