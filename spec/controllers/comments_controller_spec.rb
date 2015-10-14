@@ -19,7 +19,7 @@ describe CommentsController do
 
         expect {
           post :create, params
-        }.to chage { deliveries.length }.fromt(0).to(4)
+        }.to change { deliveries.length }.from(0).to(4)
       end
     end
 

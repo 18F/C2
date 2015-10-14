@@ -14,7 +14,7 @@ class Dispatcher
     proposal.observations.each do |observation|
       user = observation.user
       if user.role_on(proposal).active_observer?
-       email_observer(observation)
+        email_observer(observation)
       end
     end
   end
