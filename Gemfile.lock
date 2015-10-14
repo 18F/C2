@@ -142,6 +142,7 @@ GEM
       activemodel (>= 3.0)
       activesupport (>= 3.0)
       request_store (~> 1.0)
+    email_reply_parser (0.5.8)
     erubis (2.7.0)
     execjs (2.6.0)
     factory_girl (4.5.0)
@@ -230,6 +231,8 @@ GEM
       mime-types (>= 1.16, < 3)
     mail_view (2.0.4)
       tilt
+    mandrill-rails (1.3.0)
+      activesupport (>= 3.0.3)
     method_source (0.8.2)
     mime-types (2.6.2)
     mimemagic (0.3.0)
@@ -453,6 +456,7 @@ DEPENDENCIES
   delayed_job_active_record
   dotenv-rails
   draper
+  email_reply_parser
   factory_girl_rails
   faker
   font-awesome-sass
@@ -466,6 +470,7 @@ DEPENDENCIES
   letter_opener
   letter_opener_web
   mail_view
+  mandrill-rails
   newrelic_rpm
   omniauth-myusa!
   paper_trail
