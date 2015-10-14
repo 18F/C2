@@ -294,7 +294,7 @@ describe Proposal do
 
       expect {
         proposal.add_observer(observer_email, user, reason)
-      }.to change { deliveries.length }.from(0).to(3)
+      }.to change { deliveries.length }.from(0).to(1)
 
       expect(proposal.comments.count).to eq 1
     end
