@@ -2,14 +2,6 @@ default: &DEFAULT
   engine: Proposal
   joins:
     requester: true
-    gsa18f_procurements: >
-      LEFT JOIN gsa18f_procurements
-      ON (gsa18f_procurements.id = proposals.client_data_id
-      AND proposals.client_data_type = 'Gsa18f::Procurement')
-    ncr_work_orders: >
-      LEFT JOIN ncr_work_orders
-      ON (ncr_work_orders.id = proposals.client_data_id
-      AND proposals.client_data_type = 'Ncr::WorkOrder')
   sort: -created_at
   column_configs:
     public_id:
