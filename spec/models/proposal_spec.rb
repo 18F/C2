@@ -299,6 +299,12 @@ describe Proposal do
       expect(proposal.comments.count).to eq 1
     end
 
+    it 'sends an observer email when there is an adder but no reason' do
+      expect {
+        proposal.add_observer(observer_email, user, nil)
+      }.to change { deliveries.length }.from(0).to(1)
+    end
+
     context 'with an adding user' do
       context 'without a reason' do
         it 'does not add a comment' do

@@ -268,8 +268,11 @@ class Proposal < ActiveRecord::Base
     # invalidate relation cache so we reload on next access
     self.observers(true)
     # when explicitly adding an observer using the form in the Proposal page...
-    if adder && reason
-      add_observation_comment(user, adder, reason)
+    if adder
+      if reason
+        add_observation_comment(user, adder, reason)
+      end
+
       Dispatcher.on_observer_added(observation, reason)
     end
 
