@@ -27,16 +27,32 @@ describe "Handles incoming email" do
     expect(resp.comment.proposal.id).to eq(proposal.id)
   end
 
-  it "should create comment and add sender as an observer if not already" do
+  it "should create comment by approver" do
     my_approval = approval
     mail = CommunicartMailer.actions_for_approver(my_approval)
     mandrill_event = mandrill_payload_from_message(mail)
     mandrill_event[0]['msg']['from_email'] = my_approval.user.email_address
     handler = IncomingMail::Handler.new
     expect(my_approval.proposal.existing_observation_for(my_approval.user)).to be_falsey
+    expect(my_approval.proposal.existing_approval_for(my_approval.user)).to be_truthy
     resp = handler.handle(mandrill_event)
     expect(resp.action).to eq(IncomingMail::Response::COMMENT)
-    expect(resp.comment.proposal.existing_observation_for(my_approval.user)).to be_truthy
+    expect(my_approval.proposal.existing_observation_for(my_approval.user)).to be_truthy
+    expect(my_approval.proposal.existing_approval_for(my_approval.user)).to be_truthy
+  end
+
+  it "should create comment for non-subscriber and add as observer" do
+    my_approval = approval
+    user = create(:user)
+    mandrill_event = mandrill_payload_from_message(mail)
+    mandrill_event[0]['msg']['from_email'] = user.email_address
+    handler = IncomingMail::Handler.new
+    expect(my_approval.proposal.existing_observation_for(user)).to be_falsey
+    expect(my_approval.proposal.existing_approval_for(user)).to be_falsey
+    resp = handler.handle(mandrill_event)
+    expect(resp.action).to eq(IncomingMail::Response::COMMENT)
+    expect(resp.comment.proposal.existing_observation_for(user)).to be_truthy
+    expect(resp.comment.proposal.existing_approval_for(user)).to be_falsey
   end
 
   it "should parse proposal public_id from email headers" do

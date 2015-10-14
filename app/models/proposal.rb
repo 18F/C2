@@ -146,6 +146,14 @@ class Proposal < ActiveRecord::Base
     self.observations.find_by(user: user)
   end
 
+  def existing_approval_for(user)
+    individual_approvals.find_by(user: user)
+  end
+
+  def has_subscriber?(user)
+    existing_observation_for(user) || existing_approval_for(user) || requester_id == user.id
+  end
+
   def add_observer(email_or_user, adder=nil, reason=nil)
     # polymorphic
     if email_or_user.is_a?(User)

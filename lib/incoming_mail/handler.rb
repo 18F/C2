@@ -63,7 +63,7 @@ module IncomingMail
       proposal = find_proposal(find_public_id(msg)) or return
       comment_text = find_comment_text(msg)
       comment_user = find_comment_user(msg)
-      if proposal.existing_observation_for(comment_user) || proposal.requester_id == comment_user.id
+      if proposal.has_subscriber?(comment_user)
         # already in the loop, just add comment.
         proposal.comments.create(comment_text: comment_text, user: comment_user)
       else
