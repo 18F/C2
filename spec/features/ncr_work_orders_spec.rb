@@ -49,9 +49,7 @@ describe "National Capital Region proposals" do
           select approver.email_address, from: 'approver_email'
           fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
           select Ncr::Organization.all[0], from: 'ncr_work_order_org_code'
-          expect {
-            click_on 'Submit for approval'
-          }.to change { Proposal.count }.from(0).to(1)
+          expect { click_on 'Submit for approval' }.to change { Proposal.count }.from(0).to(1)
 
           proposal = Proposal.last
           expect(proposal.public_id).to have_content("FY")
@@ -85,10 +83,8 @@ describe "National Capital Region proposals" do
           fill_in 'Amount', with: 123.45
           select approver.email_address, from: "Approving official's email address"
           fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
-          select Ncr::Organization.all[0], :from => 'ncr_work_order_org_code'
-          expect {
-            click_on 'Submit for approval'
-          }.to change { Proposal.count }.from(0).to(1)
+          select Ncr::Organization.all[0], from: 'ncr_work_order_org_code'
+          expect { click_on 'Submit for approval' }.to change { Proposal.count }.from(0).to(1)
 
           proposal = Proposal.last
           work_order = proposal.client_data
@@ -108,6 +104,14 @@ describe "National Capital Region proposals" do
         end
       end
 
+      it "shows hint text for amount field", js: true do
+        visit '/ncr/work_orders/new'
+        focus_field 'ncr_work_order_amount'
+        expect(page).to have_content('$3,500 for supplies')
+        expect(page).to have_content('$2,500 for services')
+        expect(page).to have_content('$2,000 for construction')
+      end
+
       it "defaults to no approver if there was no previous request" do
         visit '/ncr/work_orders/new'
         expect(find_field("Approving official's email address").value).to eq('')
@@ -122,9 +126,7 @@ describe "National Capital Region proposals" do
 
       it "requires a project_title" do
         visit '/ncr/work_orders/new'
-        expect {
-          click_on 'Submit for approval'
-        }.to_not change { Proposal.count }
+        expect { click_on 'Submit for approval' }.to_not change { Proposal.count }
         expect(page).to have_content("Project title can't be blank")
       end
 
@@ -142,10 +144,7 @@ describe "National Capital Region proposals" do
         fill_in 'Vendor', with: 'ACME'
         fill_in 'Amount', with: 10_000
 
-        expect {
-          click_on 'Submit for approval'
-        }.to_not change { Proposal.count }
-
+        expect { click_on 'Submit for approval' }.to_not change { Proposal.count }
         expect(current_path).to eq('/ncr/work_orders')
         expect(page).to have_content("Amount must be less than or equal to $")
         # keeps the form values
@@ -165,9 +164,7 @@ describe "National Capital Region proposals" do
         fill_in 'Vendor', with: 'ACME'
         fill_in 'Amount', with: 10_000
 
-        expect {
-          click_on 'Submit for approval'
-        }.to_not change { Proposal.count }
+        expect { click_on 'Submit for approval' }.to_not change { Proposal.count }
 
         # options do not change unless we pass in new explicitly, which the form should.
         expect(ncr_helper_class.vendor_options('zzbar')).to eq([work_order.vendor, 'zzbar'])
@@ -181,7 +178,6 @@ describe "National Capital Region proposals" do
       end
 
       it "includes has overwritten field names" do
-        tier1_approver = Ncr::WorkOrder.ba80_budget_mailbox
         visit '/ncr/work_orders/new'
         fill_in 'Project title', with: "buying stuff"
         choose 'BA80'
@@ -221,7 +217,7 @@ describe "National Capital Region proposals" do
         expect(page).to have_selector("input[type=file]", count: 10)
       end
 
-      it "allows attachments to be added during intake with JS", :js => true do
+      it "allows attachments to be added during intake with JS", js: true do
         visit '/ncr/work_orders/new'
         expect(page).to have_content("Attachments")
         first_minus = find(".js-am-minus")
@@ -230,15 +226,15 @@ describe "National Capital Region proposals" do
         expect(first_plus).to be_visible
         expect(first_minus).to be_disabled
         expect(find("input[type=file]")[:name]).to eq("attachments[]")
-        first_plus.click    # Adds one row
+        first_plus.click # Adds one row
         expect(page).to have_selector(".js-am-minus", count: 2)
         expect(page).to have_selector(".js-am-plus", count: 2)
         expect(page).to have_selector("input[type=file]", count: 2)
       end
 
-      it "includes an initial list of buildings", :js => true do
+      it "includes an initial list of buildings", js: true do
         visit '/ncr/work_orders/new'
-        option = Ncr::BUILDING_NUMBERS.shuffle[0]
+        option = Ncr::BUILDING_NUMBERS.sample
 
         expect(page).not_to have_selector(".option[data-value='#{option}']")
 
@@ -246,13 +242,13 @@ describe "National Capital Region proposals" do
         expect(page).to have_selector("div.option[data-value='#{option}']")
       end
 
-      it "does not include custom buildings initially", :js => true do
+      it "does not include custom buildings initially", js: true do
         visit '/ncr/work_orders/new'
         find("input[aria-label='Building number']").native.send_keys("BillDing")
         expect(page).not_to have_selector("div.option[data-value='BillDing']")
       end
 
-      it "includes previously entered buildings, too", :js => true do
+      it "includes previously entered buildings, too", js: true do
         create(:ncr_work_order, building_number: "BillDing")
         visit '/ncr/work_orders/new'
         find("input[aria-label='Building number']").native.send_keys("BillDing")
@@ -274,9 +270,7 @@ describe "National Capital Region proposals" do
         it "approves emergencies" do
           choose 'BA61'
           check "This request was an emergency and I received a verbal Notice to Proceed (NTP)"
-          expect {
-            click_on 'Submit for approval'
-          }.to change { Proposal.count }.from(0).to(1)
+          expect { click_on 'Submit for approval' }.to change { Proposal.count }.from(0).to(1)
 
           proposal = Proposal.last
           expect(page).to have_content("Proposal submitted")
@@ -295,9 +289,7 @@ describe "National Capital Region proposals" do
           check "This request was an emergency and I received a verbal Notice to Proceed (NTP)"
           choose 'BA80'
           fill_in 'RWA Number', with: 'R9876543'
-          expect {
-            click_on 'Submit for approval'
-          }.to change { Proposal.count }.from(0).to(1)
+          expect { click_on 'Submit for approval' }.to change { Proposal.count }.from(0).to(1)
 
           proposal = Proposal.last
           expect(page).to have_content("Proposal submitted")
@@ -316,8 +308,8 @@ describe "National Capital Region proposals" do
   end
 
   describe "approving a work order" do
-    let(:work_order){create(:ncr_work_order)}
-    let(:ncr_proposal){work_order.proposal}
+    let(:work_order)   { create(:ncr_work_order) }
+    let(:ncr_proposal) { work_order.proposal }
     before do
       Timecop.freeze(10.hours.ago) do
         work_order.setup_approvals_and_observers('approver@example.com')
@@ -325,7 +317,7 @@ describe "National Capital Region proposals" do
       login_as(work_order.approvers.first)
     end
     it "allows an approver to approve work order" do
-      Timecop.freeze() do
+      Timecop.freeze do
         visit "/proposals/#{ncr_proposal.id}"
         click_on("Approve")
         expect(current_path).to eq("/proposals/#{ncr_proposal.id}")
@@ -342,11 +334,10 @@ describe "National Capital Region proposals" do
       expect(work_order.proposal.observers.length).to eq(1)
       expect(deliveries.length).to eq(1)
     end
-
   end
 
   describe "viewing a work order" do
-    let (:work_order) { create(:ncr_work_order) }
+    let(:work_order)   { create(:ncr_work_order) }
     let(:ncr_proposal) { work_order.proposal }
 
     before do
@@ -370,7 +361,7 @@ describe "National Capital Region proposals" do
 
     it "does not show a edit link for another client" do
       ncr_proposal.client_data = nil
-      ncr_proposal.save()
+      ncr_proposal.save
       visit "/proposals/#{ncr_proposal.id}"
       expect(page).not_to have_content('Modify Request')
     end
@@ -388,7 +379,6 @@ describe "National Capital Region proposals" do
       visit "/proposals/#{ncr_proposal.id}"
       expect(page).not_to have_content('Modify Request')
     end
-
   end
 
   describe "editing a work order" do
@@ -453,8 +443,8 @@ describe "National Capital Region proposals" do
         click_on 'Update'
         proposal = Proposal.last
 
-        expect(proposal.approvers.first.email_address).to eq (approver.email_address)
-        expect(proposal.individual_approvals.first.actionable?).to eq (true)
+        expect(proposal.approvers.first.email_address).to eq approver.email_address
+        expect(proposal.individual_approvals.first).to be_actionable
       end
 
       describe "switching to WHSC" do
@@ -530,7 +520,7 @@ describe "National Capital Region proposals" do
         it "allows you to change the expense type" do
           visit "/ncr/work_orders/#{work_order.id}/edit"
           choose 'BA80'
-          fill_in 'RWA Number', with:'a1234567'
+          fill_in 'RWA Number', with: 'a1234567'
           click_on 'Update'
           proposal = Proposal.last
           expect(proposal.approvers.length).to eq(2)
@@ -542,12 +532,12 @@ describe "National Capital Region proposals" do
           approval.approve!
           approval = proposal.individual_approvals.second
           user = approval.user
-          delegate = User.new(email_address:'delegate@example.com')
+          delegate = User.new(email_address: 'delegate@example.com')
           delegate.save
           user.add_delegate(delegate)
           approval.update_attributes!(user: delegate)
           visit "/ncr/work_orders/#{work_order.id}/edit"
-          fill_in 'Description', with:"New Description that shouldn't change the approver list"
+          fill_in 'Description', with: "New Description that shouldn't change the approver list"
           click_on 'Update'
 
           proposal.reload
@@ -580,13 +570,13 @@ describe "National Capital Region proposals" do
       end
 
       it "can be edited if approved" do
-        ncr_proposal.update_attributes(status: 'approved')  # avoid workflow
+        ncr_proposal.update_attributes(status: 'approved') # avoid workflow
 
         visit "/ncr/work_orders/#{work_order.id}/edit"
         expect(current_path).to eq("/ncr/work_orders/#{work_order.id}/edit")
       end
 
-      it "provides the previous building when editing", :js => true do
+      it "provides the previous building when editing", js: true do
         work_order.update(building_number: "BillDing, street")
         visit "/ncr/work_orders/#{work_order.id}/edit"
         click_on "Update"
@@ -663,5 +653,10 @@ describe "National Capital Region proposals" do
       expect(page).to have_content("comment text")
       expect(proposal.observers).to include(delegate)
     end
+  end
+
+  def focus_field(field_id)
+    execute_script "document.getElementById('#{field_id}').scrollIntoView()"
+    execute_script "$('##{field_id}').focus()"
   end
 end

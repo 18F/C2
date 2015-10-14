@@ -1,4 +1,5 @@
 .controller-ncr-work_orders,
+.controller-gsa18f-procurements,
 .controller-feedback {
   .content.container {
     max-width: 400px;
@@ -8,20 +9,14 @@
     margin-bottom: 20px;
   }
 
+  h3.popover-title {
+    margin-bottom: 0px;
+  }
+
   .form-group {
     .checkbox,
     .form-group {
       padding-left: 10%;
     }
-  }
-}
-
-.controller-gsa18f-procurements {
-  .content.container {
-    max-width: 400px;
-  }
-
-  h3 {
-    margin-bottom: 20px;
   }
 }

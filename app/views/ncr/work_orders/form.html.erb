@@ -72,10 +72,11 @@
     </div>
     <div class="form-group">
       <%= field_set_tag "Amount", class: "required" do %>
-        <%= f.label :amount, "Dollar Amount", :class => 'sr-only'  %>
+        <%= f.label :amount, "Dollar Amount", class: 'sr-only' %>
         <div class="input-group">
           <div class="input-group-addon">$</div>
-          <%= f.number_field :amount, class: 'form-control', step: 0.01 %>
+          <%= f.number_field :amount, class: 'form-control', step: 0.01,
+                data: popover_data_attrs("ncr_amount") %>
         </div>
         <div class="radio">
           <%= f.label :not_to_exceed, value: false do %>
