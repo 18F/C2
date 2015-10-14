@@ -26,9 +26,9 @@ module Ncr
     end
 
     def self.build_ncr_annual_report_string(year)
-      work_orders = Ncr::WorkOrder.approved.for_fiscal_year(year)
+      work_orders = Ncr::WorkOrder.cancelled.for_fiscal_year(year)
       CSV.generate do |csv|
-        csv << ["Amount", "Date Approved", "Org Code", "CL#", "Budget Activity", "SOC", "Function Code", "Building #",
+        csv << ["Id", "Amount", "Date Approved", "Org Code", "CL#", "Budget Activity", "SOC", "Function Code", "Building #",
                 "Vendor", "Description", "Requestor", "Approver"]
         self.get_ncr_annual_report_body(csv, work_orders)
       end
@@ -39,7 +39,7 @@ module Ncr
       work_orders.each do |w|
         approver_name = w.approving_official ? w.approving_official.full_name : "no approver listed"
         approved_at = w.proposal.approvals.last ? w.proposal.approvals.last.approved_at : "no approvals"
-        csv << [w.amount, approved_at, w.org_code, w.cl_number, w.expense_type, w.soc_code,
+        csv << [w.proposal.public_id, w.amount, approved_at, w.org_code, w.cl_number, w.expense_type, w.soc_code,
                 w.function_code, w.building_number, w.vendor, w.description, w.proposal.requester.full_name, approver_name]
       end
     end
