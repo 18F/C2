@@ -7,6 +7,7 @@ class CommentsController < ApplicationController
   def create
     comment = proposal.comments.build(comment_params)
     comment.user = current_user
+
     if comment.save
       flash[:success] = "You successfully added a comment"
       Dispatcher.on_comment_created(comment)

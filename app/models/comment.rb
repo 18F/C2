@@ -12,6 +12,7 @@ class Comment < ActiveRecord::Base
   scope :normal_comments, ->{ where(update_comment: nil) } # we probably want `.where.not(update_comment: true)`, but that query isn't working as of 5bb8b4d385
   scope :update_comments, ->{ where(update_comment: true) }
 
+
   after_create :add_user_as_observer
 
   # match .attributes

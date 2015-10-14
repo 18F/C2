@@ -409,19 +409,29 @@ describe Ncr::WorkOrder do
       expect(Comment.count).to be 0
     end
 
-    it "attributes the update comment to the requester by default" do
+    it 'attributes the update comment to the requester by default' do
       work_order.update(vendor: 'VenVenVen')
       comment = work_order.comments.update_comments.last
       expect(comment.user).to eq(work_order.requester)
     end
 
-    it "attributes the update comment to someone set explicitly" do
+    it 'attributes the update comment to someone set explicitly' do
       modifier = create(:user)
       work_order.modifier = modifier
       work_order.update(vendor: 'VenVenVen')
 
       comment = work_order.comments.update_comments.last
       expect(comment.user).to eq(modifier)
+    end
+
+    it 'does not send a comment email for the update comment to proposal listeners' do
+      listener = create(:user)
+      work_order.proposal.add_observer(listener)
+      ActionMailer::Base.deliveries.clear
+
+      work_order.update(vendor: 'TestVendor')
+
+      expect(deliveries.length).to eq(0)
     end
   end
 

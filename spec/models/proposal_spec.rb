@@ -277,17 +277,29 @@ describe Proposal do
     end
   end
 
-  describe "#add_observer" do
+  describe '#add_observer' do
     let(:proposal) { create(:proposal) }
     let(:observer) { create(:user) }
     let(:observer_email) { observer.email_address }
     let(:user) { create(:user) }
+
     it 'adds an observer to the proposal' do
       expect(proposal.observers).to be_empty
       proposal.add_observer(observer_email)
       expect(proposal.observers).to eq [observer]
     end
-    context "with an adding user" do
+
+    it 'adds a comment and sends a comment email when there is an adder and observation reason' do
+      ActionMailer::Base.deliveries.clear
+      reason = "this is required"
+
+      proposal.add_observer(observer_email, user, reason)
+
+      expect(proposal.comments.count).to eq 1
+      expect(deliveries.length).to eq 3
+    end
+
+    context 'with an adding user' do
       context 'without a reason' do
         it 'does not add a comment' do
           expect(proposal.comments).to be_empty
@@ -295,8 +307,10 @@ describe Proposal do
           expect(proposal.comments).to be_empty
         end
       end
+
       context 'with a reason' do
-        let(:reason) { "my mate, innit" }
+        let(:reason) { 'my mate, innit' }
+
         it 'adds a comment mentioning the reason' do
           expect(proposal.comments).to be_empty
           proposal.add_observer(observer_email, user, reason)

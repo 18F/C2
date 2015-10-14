@@ -43,6 +43,10 @@ module ProposalConversationThreading
     I18n.t(i18n_key, params.symbolize_keys)
   end
 
+  ###################
+
+  ## mixin methods ##
+
   protected
 
   def assign_threading_headers(proposal)
@@ -63,4 +67,6 @@ module ProposalConversationThreading
       template_name: template_name
     )
   end
+
+  ###################
 end
