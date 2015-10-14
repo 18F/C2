@@ -1,6 +1,8 @@
 class ApplicationMailer < ActionMailer::Base
   include Roadie::Rails::Automatic
 
+  default reply_to: proc { reply_to_email }
+
   protected
 
   def email_with_name(email, name)
@@ -8,6 +10,10 @@ class ApplicationMailer < ActionMailer::Base
     address = Mail::Address.new(email)
     address.display_name = name
     address.format
+  end
+
+  def reply_to_email
+    ENV['NOTIFICATION_REPLY_TO'] || 'noreplyto@some.gov'
   end
 
   def sender_email

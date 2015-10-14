@@ -5,7 +5,7 @@ FactoryGirl.define do
     additional_info "none"
     sequence(:product_name_and_description) {|n| "Proposal #{n}" }
     office Gsa18f::Procurement::OFFICES[0]
-    urgency Gsa18f::Procurement::URGENCY[0]
+    urgency Gsa18f::Procurement::URGENCY[10]
     association :proposal, flow: 'linear'
 
     #todo: Probably shouldn't be required, remove once #98376564 is fixed

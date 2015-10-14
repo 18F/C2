@@ -4,10 +4,12 @@
 # NOTE: any changes to this file require running `cf push <appname>` directly, rather than `cf-blue-green <appname>`.
 
 # general configuration
-command: script/start
+command: script/server_start
 domain: 18f.gov
 instances: 1
 memory: 1G
+# we point upstream because 18F buildpacks sometimes lag behind newer Ruby versions.
+buildpack: https://github.com/cloudfoundry/ruby-buildpack.git
 
 # environment-specific configuration
 applications:
@@ -15,13 +17,22 @@ applications:
   host: c2-dev
   env:
     DEFAULT_URL_HOST: c2-dev.18f.gov
+    NEW_RELIC_APP_NAME: C2 (Development)
+    S3_BUCKET_NAME: c2-demo
 - name: c2-staging
   host: c2-staging
   env:
     DEFAULT_URL_HOST: c2-staging.18f.gov
+    NEW_RELIC_APP_NAME: C2 (Staging)
+    S3_BUCKET_NAME: c2-demo
 - name: c2-prod
-  host: cap
+  hosts:
+  - cap
+  - c2
   env:
     DEFAULT_URL_HOST: cap.18f.gov
     DISABLE_SANDBOX_WARNING: true
+    GA_TRACKING_ID: UA-48605964-27
+    NEW_RELIC_APP_NAME: C2 (Production)
     RESTRICT_ACCESS: true
+    S3_BUCKET_NAME: c2-prod

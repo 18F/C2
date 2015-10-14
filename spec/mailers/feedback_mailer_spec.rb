@@ -1,7 +1,7 @@
 describe FeedbackMailer do
   describe 'feedback' do
     it "sends from the submitter" do
-      user = FactoryGirl.create(:user)
+      user = create(:user)
       mail = FeedbackMailer.feedback(user, {})
       expect(mail.from).to eq([user.email_address])
     end
@@ -24,10 +24,10 @@ describe FeedbackMailer do
       expect(mail1.header['In-Reply-To'].to_s).to_not eq(mail2.header['In-Reply-To'].to_s)
     end
 
-    with_env_var('SUPPORT_EMAIL', 'support@some-dot-gov.gov') do
+    with_env_var('SUPPORT_EMAIL', 'support@example.com') do
       it "sends to the support email" do
         mail = FeedbackMailer.feedback(nil, {})
-        expect(mail.to).to eq(['support@some-dot-gov.gov'])
+        expect(mail.to).to eq(['support@example.com'])
       end
     end
   end

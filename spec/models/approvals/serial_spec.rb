@@ -1,8 +1,8 @@
 describe Approvals::Serial do
   it 'cascades to the next approver' do
-    proposal = FactoryGirl.create(:proposal)
-    first = FactoryGirl.build(:approval, proposal: proposal)
-    second = FactoryGirl.build(:approval, proposal: proposal)
+    proposal = create(:proposal)
+    first = build(:approval, proposal: proposal)
+    second = build(:approval, proposal: proposal)
     proposal.root_approval = Approvals::Serial.new(child_approvals: [first, second])
 
     expect(proposal.root_approval.reload.status).to eq('actionable')

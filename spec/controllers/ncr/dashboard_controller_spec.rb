@@ -1,12 +1,12 @@
 describe Ncr::DashboardController do
   describe '#index' do
-    let (:user) {FactoryGirl.create(:user)}
+    let (:user) {create(:user)}
     before do
       login_as(user)
     end
 
     it 'does not include proposals user did not participate in' do
-      FactoryGirl.create(:ncr_work_order)
+      create(:ncr_work_order)
       get :index
       expect(assigns(:rows)).to be_empty
     end
@@ -17,8 +17,8 @@ describe Ncr::DashboardController do
       Time.zone = 'UTC'
       # 2 in January, 3 in February, 3 in March
       (1..8).each {|i|
-        proposal = FactoryGirl.create(:proposal, requester: user, created_at: Time.zone.local(2015, i / 3 + 1, i))
-        FactoryGirl.create(:ncr_work_order, amount: i, proposal: proposal)
+        proposal = create(:proposal, requester: user, created_at: Time.zone.local(2015, i / 3 + 1, i))
+        create(:ncr_work_order, amount: i, proposal: proposal)
       }
       get :index
       rows = assigns(:rows)

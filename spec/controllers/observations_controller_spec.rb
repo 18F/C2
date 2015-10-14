@@ -1,6 +1,6 @@
 describe ObservationsController do
   describe "#create" do
-    let (:proposal) { FactoryGirl.create(:proposal) }
+    let (:proposal) { create(:proposal) }
 
     it "requires an email address" do
       login_as(proposal.requester)
@@ -20,7 +20,7 @@ describe ObservationsController do
   end
 
   describe "#destroy" do
-    let (:proposal) { FactoryGirl.create(:proposal, :with_observers) }
+    let (:proposal) { create(:proposal, :with_observers) }
     let (:observation) { proposal.observations.first }
 
     it "redirect with a notice when successful" do
@@ -32,7 +32,7 @@ describe ObservationsController do
     end
 
     it "redirects with a warning if unsuccessful" do
-      login_as(FactoryGirl.create(:user))
+      login_as(create(:user))
       post :destroy, proposal_id: proposal.id, id: observation.id
       expect(response).to redirect_to(proposals_path)
       expect(flash[:success]).to be_nil

@@ -1,5 +1,5 @@
 describe Approval do
-  let(:approval) { FactoryGirl.create(:approval) }
+  let(:approval) { create(:approval) }
 
   describe '#api_token' do
     let!(:token) { approval.create_api_token! }
@@ -48,9 +48,9 @@ describe Approval do
     end
 
     it "does not notify the proposal if a child gets approved" do
-      proposal = FactoryGirl.create(:proposal)
-      child1 = Approvals::Individual.new(user: FactoryGirl.create(:user))
-      child2 = Approvals::Individual.new(user: FactoryGirl.create(:user))
+      proposal = create(:proposal)
+      child1 = Approvals::Individual.new(user: create(:user))
+      child2 = Approvals::Individual.new(user: create(:user))
       proposal.root_approval = Approvals::Parallel.new(child_approvals: [child1, child2])
 
       expect(proposal).not_to receive(:approve!)
@@ -63,12 +63,12 @@ describe Approval do
     # 1) Amy AND Bob
     # 2) Carrie
     # 3) Dan THEN Erin
-    let!(:amy) { FactoryGirl.create(:user) }
-    let!(:bob) { FactoryGirl.create(:user) }
-    let!(:carrie) { FactoryGirl.create(:user) }
-    let!(:dan) { FactoryGirl.create(:user) }
-    let!(:erin) { FactoryGirl.create(:user) }
-    let!(:proposal) { FactoryGirl.create(:proposal) }
+    let!(:amy) { create(:user) }
+    let!(:bob) { create(:user) }
+    let!(:carrie) { create(:user) }
+    let!(:dan) { create(:user) }
+    let!(:erin) { create(:user) }
+    let!(:proposal) { create(:proposal) }
 
     before :each do
       # @todo syntax for this will get cleaned up

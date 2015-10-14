@@ -48,6 +48,13 @@ module Ncr
       message: "must be three letters or numbers"
     }, allow_blank: true
 
+    FISCAL_YEAR_START_MONTH = 10 # 1-based
+    scope :for_fiscal_year, lambda { |year|
+      start_time = Time.zone.local(year - 1, FISCAL_YEAR_START_MONTH, 1)
+      end_time = start_time + 1.year
+      where(created_at: start_time...end_time)
+    }
+
     def set_defaults
       self.direct_pay ||= false
       self.not_to_exceed ||= false
@@ -114,8 +121,22 @@ module Ncr
       self.approvers.first
     end
 
-    def approving_official_email_address
-      approving_official ? approving_official.email_address : self.system_approver_emails.first
+    def current_approver
+      if pending?
+        currently_awaiting_approvers.first
+      elsif approving_official
+        approving_official
+      elsif emergency and approvers.empty?
+        nil
+      else
+        User.for_email(self.system_approver_emails.first)
+      end
+    end
+
+    def final_approver
+      if !emergency and approvers.any?
+        approvers.last
+      end
     end
 
     def email_approvers

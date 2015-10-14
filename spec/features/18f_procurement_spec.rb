@@ -11,9 +11,9 @@ describe "GSA 18f Purchase Request Form" do
 
   context "when signed in" do
 
-    let(:requester) { FactoryGirl.create(:user, client_slug: 'gsa18f') }
+    let(:requester) { create(:user, client_slug: 'gsa18f') }
     let(:procurement) {
-      pr = FactoryGirl.create(:gsa18f_procurement, requester: requester)
+      pr = create(:gsa18f_procurement, requester: requester)
       pr.add_approvals
       pr
     }
@@ -34,7 +34,7 @@ describe "GSA 18f Purchase Request Form" do
       fill_in 'Quantity', with: 6
       fill_in 'gsa18f_procurement_date_requested', with: '12/12/2999'
       fill_in 'gsa18f_procurement_additional_info', with: 'none'
-      select Gsa18f::Procurement::URGENCY[0], :from => 'gsa18f_procurement_urgency'
+      select Gsa18f::Procurement::URGENCY[10], :from => 'gsa18f_procurement_urgency'
       select Gsa18f::Procurement::OFFICES[0], :from => 'gsa18f_procurement_office'
       expect {
         click_on 'Submit for approval'
@@ -48,7 +48,7 @@ describe "GSA 18f Purchase Request Form" do
       expect(proposal.flow).to eq('linear')
       expect(proposal.client).to eq('gsa18f')
       expect(proposal.requester).to eq(requester)
-      expect(proposal.approvers.map(&:email_address)).to eq(%w(test_approver@some-dot-gov.gov))
+      expect(proposal.approvers.map(&:email_address)).to eq(%w(test_approver@example.com))
 
       procurement = proposal.client_data
       expect(procurement.link_to_product).to eq('http://www.amazon.com')
@@ -57,11 +57,11 @@ describe "GSA 18f Purchase Request Form" do
       expect(procurement.cost_per_unit).to eq(123.45)
       expect(procurement.quantity).to eq(6)
       expect(procurement.office).to eq(Gsa18f::Procurement::OFFICES[0])
-      expect(procurement.urgency).to eq(Gsa18f::Procurement::URGENCY[0])
+      expect(procurement.urgency).to eq(10)
     end
 
     it "sets an observer" do
-      expect(procurement.observers.map(&:email_address)).to eq(['test_purchaser@some-dot-gov.gov'])
+      expect(procurement.observers.map(&:email_address)).to eq(['test_purchaser@example.com'])
     end
 
     it "doesn't save when the amount is too high" do
@@ -119,7 +119,7 @@ describe "GSA 18f Purchase Request Form" do
     end
 
     it "cannot be edited by someone other than the requester" do
-      procurement.set_requester(FactoryGirl.create(:user))
+      procurement.set_requester(create(:user))
 
       visit "/gsa18f/procurements/#{procurement.id}/edit"
       expect(current_path).to eq("/gsa18f/procurements/new")
@@ -142,7 +142,7 @@ describe "GSA 18f Purchase Request Form" do
       fill_in 'Quantity', with: 6
       fill_in 'gsa18f_procurement_date_requested', with: '12/12/2999'
       fill_in 'gsa18f_procurement_additional_info', with: 'none'
-      select Gsa18f::Procurement::URGENCY[0], :from => 'gsa18f_procurement_urgency'
+      select Gsa18f::Procurement::URGENCY[10], :from => 'gsa18f_procurement_urgency'
       select Gsa18f::Procurement::OFFICES[0], :from => 'gsa18f_procurement_office'
 
       click_on 'Submit for approval'
@@ -167,10 +167,10 @@ describe "GSA 18f Purchase Request Form" do
       expect(procurement.cost_per_unit).to eq(123.45)
       expect(procurement.quantity).to eq(6)
       expect(procurement.office).to eq(Gsa18f::Procurement::OFFICES[0])
-      expect(procurement.urgency).to eq(Gsa18f::Procurement::URGENCY[0])
+      expect(procurement.urgency).to eq(10)
 
       expect(proposal.requester).to eq(requester)
-      expect(proposal.approvers.map(&:email_address)).to eq(%w(test_approver@some-dot-gov.gov))
+      expect(proposal.approvers.map(&:email_address)).to eq(%w(test_approver@example.com))
     end
 
     it "has 'Discard Changes' link" do
@@ -195,7 +195,7 @@ describe "GSA 18f Purchase Request Form" do
     end
 
     it "does not show a restart link for non requester" do
-      procurement.set_requester(FactoryGirl.create(:user))
+      procurement.set_requester(create(:user))
       visit "/proposals/#{proposal.id}"
       expect(page).not_to have_content('Modify Request')
     end

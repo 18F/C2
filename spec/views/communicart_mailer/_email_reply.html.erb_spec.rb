@@ -1,6 +1,6 @@
 describe "communicart_mailer/_email_reply.html.erb" do
   it "renders 'Send a Comment' link with approve button" do
-    approval = FactoryGirl.create(:approval)
+    approval = create(:approval)
     approval.create_api_token!
     proposal = approval.proposal
     render partial: "communicart_mailer/email_reply", locals: {show_approval_actions: true, approval: approval, proposal: proposal}
@@ -10,7 +10,7 @@ describe "communicart_mailer/_email_reply.html.erb" do
     expect(rendered).to_not include "View this request"
   end
   it "renders 'View This Request' link without approve button" do
-    approval = FactoryGirl.create(:approval)
+    approval = create(:approval)
     approval.create_api_token!
     proposal = approval.proposal
     render partial: "communicart_mailer/email_reply", locals: {show_approval_actions: false, approval: approval, proposal: proposal}
