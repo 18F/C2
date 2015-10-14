@@ -39,8 +39,10 @@ class Dispatcher
   def deliver_attachment_emails(proposal)
     proposal.users.each do |user|
       approval = proposal.approvals.find_by(user_id: user.id)
-      next if approval && approval.pending?
-      CommunicartMailer.new_attachment_email(user.email_address, proposal).deliver_later
+
+      if user_is_not_approver?(approval) || approver_knows_about_proposal?(approval)
+        CommunicartMailer.new_attachment_email(user.email_address, proposal).deliver_later
+      end
     end
   end
 
@@ -84,5 +86,13 @@ class Dispatcher
 
   def send_notification_email(approval)
     CommunicartMailer.actions_for_approver(approval).deliver_later
+  end
+
+  def user_is_not_approver?(approval)
+    approval.blank?
+  end
+
+  def approver_knows_about_proposal?(approval)
+    !approval.pending?
   end
 end
