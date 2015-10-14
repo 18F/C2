@@ -79,7 +79,7 @@ have it in your PATH. This is used for javascript and interface testing.
 ### Running the entire suite once
 
 ```bash
-./bin/rspec
+rake
 ```
 
 ### Running tests as corresponding files are changed
