@@ -280,13 +280,14 @@ class Proposal < ActiveRecord::Base
   end
 
   def add_observation_comment(user, adder, reason)
-    comment = comments.create(
-      comment_text: I18n.t('activerecord.attributes.observation.user_reason_comment',
-                           user: adder.full_name,
-                           observer: user.full_name,
-                           reason: reason),
+    comments.create(
+      comment_text: I18n.t(
+        'activerecord.attributes.observation.user_reason_comment',
+        user: adder.full_name,
+        observer: user.full_name,
+        reason: reason
+      ),
       user: adder
     )
-    Dispatcher.on_comment_created(comment)
   end
 end

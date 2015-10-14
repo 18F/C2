@@ -21,10 +21,8 @@ describe "observers" do
   it "allows observers to be added by other observers" do
     proposal = create(:proposal, :with_observer)
     observer1 = proposal.observers.first
-    login_as(observer1)
-
-    ActionMailer::Base.deliveries.clear
     observer2 = create(:user)
+    login_as(observer1)
 
     visit "/proposals/#{proposal.id}"
     select observer2.email_address, from: 'observation_user_email_address'

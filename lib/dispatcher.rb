@@ -48,8 +48,9 @@ class Dispatcher
 
   def deliver_cancellation_emails(proposal)
     proposal.individual_approvals.each do |approval|
-      next if approval.pending?
-      CommunicartMailer.cancellation_email(approval.user_email_address, proposal).deliver_later
+      if approver_knows_about_proposal?(approval)
+        CommunicartMailer.cancellation_email(approval.user_email_address, proposal).deliver_later
+      end
     end
 
     CommunicartMailer.cancellation_confirmation(proposal).deliver_later
