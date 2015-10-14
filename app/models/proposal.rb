@@ -59,16 +59,11 @@ class Proposal < ActiveRecord::Base
   scope :closed, -> { where(status: ['approved', 'cancelled']) } #TODO: Backfill to change approvals in 'reject' status to 'cancelled' status
   scope :cancelled, -> { where(status: 'cancelled') }
 
-  after_initialize :set_defaults
   after_create :update_public_id
 
   # @todo - this should probably be the only entry into the approval system
   def root_approval
     self.approvals.where(parent: nil).first
-  end
-
-  def set_defaults
-    self.flow ||= 'parallel'
   end
 
   def parallel?
