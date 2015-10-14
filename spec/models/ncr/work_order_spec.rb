@@ -427,11 +427,10 @@ describe Ncr::WorkOrder do
     it 'does not send a comment email for the update comment to proposal listeners' do
       listener = create(:user)
       work_order.proposal.add_observer(listener)
-      ActionMailer::Base.deliveries.clear
 
-      work_order.update(vendor: 'TestVendor')
-
-      expect(deliveries.length).to eq(0)
+      expect {
+       work_order.update(vendor: 'TestVendor')
+      }.to change { deliveries.length }.by(0)
     end
   end
 

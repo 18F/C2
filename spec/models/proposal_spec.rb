@@ -290,13 +290,13 @@ describe Proposal do
     end
 
     it 'adds a comment and sends a comment email when there is an adder and observation reason' do
-      ActionMailer::Base.deliveries.clear
       reason = "this is required"
 
-      proposal.add_observer(observer_email, user, reason)
+      expect {
+        proposal.add_observer(observer_email, user, reason)
+      }.to change { deliveries.length }.from(0).to(3)
 
       expect(proposal.comments.count).to eq 1
-      expect(deliveries.length).to eq 3
     end
 
     context 'with an adding user' do
