@@ -37,7 +37,7 @@ en:
     popover:
       ncr_amount:
         title: "Transaction Amount Thresholds"
-        content: "$3,000 for supplies<br>$2,500 for services<br>$2,000 for construction"
+        content: "$3,500 for supplies<br>$2,500 for services<br>$2,000 for construction"
   activerecord:
     attributes:
       ncr/work_order:
