@@ -53,4 +53,35 @@ describe "observers" do
     expect(deliveries.first.body.encoded).to include reason   # comment notification
     expect(deliveries.second.body.encoded).to include reason  # subscription notification
   end
+
+  it "hides the reason field until a new observer is selected", js: true do
+    proposal = FactoryGirl.create(:proposal)
+    observer = FactoryGirl.create(:user)
+    login_as(proposal.requester)
+
+    visit "/proposals/#{proposal.id}"
+    expect(page).to have_no_field "observation_reason"
+    fill_in_selectized('observation_user_email_address', observer.email_address)
+    expect(page).to have_field "observation_reason"
+    expect(find_field("observation_reason")).to be_visible
+  end
+
+  it "disables the submit button until a new observer is selected", js: true do
+    proposal = FactoryGirl.create(:proposal)
+    observer = FactoryGirl.create(:user)
+    login_as(proposal.requester)
+
+    visit "/proposals/#{proposal.id}"
+    submit_button = find("#add_subscriber")
+    expect(submit_button).to be_disabled
+    fill_in_selectized('observation_user_email_address', observer.email_address)
+    expect(submit_button).to_not be_disabled
+  end
+
+  # adapted from http://stackoverflow.com/a/25047358
+  def fill_in_selectized(key, *values)
+    values.flatten.each do |value|
+      page.execute_script("$('##{key}').selectize()[0].selectize.setValue('#{value}')")
+    end
+  end
 end
