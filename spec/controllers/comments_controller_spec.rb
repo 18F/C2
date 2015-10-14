@@ -15,12 +15,11 @@ describe CommentsController do
       end
 
       it 'sends a comment email to approvers and observers' do
-        ActionMailer::Base.deliveries.clear
         login_as(proposal.requester)
 
-        post :create, params
-
-        expect(deliveries.length).to eq 4
+        expect {
+          post :create, params
+        }.to chage { deliveries.length }.fromt(0).to(4)
       end
     end
 

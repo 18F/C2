@@ -30,26 +30,27 @@ describe 'Canceling a request' do
   context 'email' do
     context 'proposal without approver' do
       it 'sends cancellation email to requester' do
-        ActionMailer::Base.deliveries.clear
         proposal = create(:proposal)
 
         login_as(proposal.requester)
-        cancel_proposal(proposal)
 
-        expect(deliveries.length).to eq(1)
+        expect {
+          cancel_proposal(proposal)
+        }.to change { deliveries.length }.from(0).to(1)
       end
     end
 
     context 'proposal with pending status' do
       it 'does not send cancellation email to approver' do
-        ActionMailer::Base.deliveries.clear
         proposal = create(:proposal, :with_approver)
         proposal.individual_approvals.first.update(status: 'pending')
 
         login_as(proposal.requester)
         cancel_proposal(proposal)
 
-        expect(deliveries.length).to eq(1)
+        expect {
+          cancel_proposal(proposal)
+        }.to change { deliveries.length }.from(0).to(1)
       end
     end
 
@@ -61,7 +62,9 @@ describe 'Canceling a request' do
         login_as(proposal.requester)
         cancel_proposal(proposal)
 
-        expect(deliveries.length).to eq(2)
+        expect {
+          cancel_proposal(proposal)
+        }.to change { deliveries.length }.from(0).to(2)
       end
    end
   end

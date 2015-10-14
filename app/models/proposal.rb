@@ -203,6 +203,8 @@ class Proposal < ActiveRecord::Base
     end
   end
 
+  ## delegated methods ##
+
   def public_identifier
     self.delegate_with_default(:public_identifier) { "##{self.id}" }
   end
@@ -226,6 +228,8 @@ class Proposal < ActiveRecord::Base
       self.client_data.try(:version)
     ].compact.max
   end
+
+  #######################
 
   def restart
     # Note that none of the state machine's history is stored

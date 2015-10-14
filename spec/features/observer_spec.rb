@@ -14,7 +14,8 @@ describe "observers" do
     expect(page).to have_content("#{observer.full_name} has been added as an observer")
 
     proposal.reload
-    expect(proposal.observers).to eq [observer]
+
+    expect(proposal.observers).to include(observer)
   end
 
   it "allows observers to be added by other observers" do
@@ -22,6 +23,7 @@ describe "observers" do
     observer1 = proposal.observers.first
     login_as(observer1)
 
+    ActionMailer::Base.deliveries.clear
     observer2 = create(:user)
 
     visit "/proposals/#{proposal.id}"
