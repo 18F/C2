@@ -42,8 +42,8 @@ team:
 - github: annalee
   id: annalee
   role: developer
-- github: anthonygarvin
-  id: tony
+- github: anthonygarvan
+  id: anthony.garvan
   role: developer
 - github: phirefly
   id: raphy
@@ -62,7 +62,7 @@ partners:
 - GSA Common Acquisition Platform
 
 # Brief descriptions of significant project developments
-milestones:
+#milestones:
 
 # Technologies used to build the project
 stack:
@@ -70,7 +70,7 @@ stack:
 - Rails
 
 # Brief description of the project's outcomes
-impact:
+#impact:
 
 # Services used to supply project status information
 # Items:
@@ -103,7 +103,7 @@ licenses:
     url: https://github.com/18F/C2/blob/master/LICENSE.md
 
 # Blogs or websites associated with project development
-blog:
+#blog:
 
 # Links to project artifacts
 # Items:
