@@ -11,7 +11,7 @@ namespace :reminder do
 
   def send_reminder_email(proposal)
     user = proposal.client_data.current_approver
-    if !user
+    unless user
       return # legit for there to be no user, but then no reminder needed.
     end
     approval = proposal.individual_approvals.find_by(user: user)
