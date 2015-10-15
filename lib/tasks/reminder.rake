@@ -1,8 +1,8 @@
 namespace :reminder do
   desc "Send actionable approver reminder email for pending requests"
   task actionable_approvers: :environment do
-    props = Proposal.pending.where(client_data_type: "Ncr::WorkOrder")
-    props.each do |proposal|
+    proposals = Proposal.pending.where(client_data_type: "Ncr::WorkOrder")
+    proposals.each do |proposal|
       send_reminder_email(proposal)
     end
   end
@@ -10,7 +10,10 @@ namespace :reminder do
   private
 
   def send_reminder_email(proposal)
-    user = proposal.client_data.current_approver or return
+    user = proposal.client_data.current_approver
+    if !user
+      return # legit for there to be no user, but then no reminder needed.
+    end
     approval = proposal.individual_approvals.find_by(user: user)
     if ENV['SEND_OK']
       Dispatcher.on_approval_approved(approval)
