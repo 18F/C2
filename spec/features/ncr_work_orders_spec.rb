@@ -5,7 +5,7 @@ describe "National Capital Region proposals" do
     end
   end
 
-  let!(:approver) { create(:user) }
+  let!(:approver) { create(:user, client_slug: 'ncr') }
 
   describe "creating a work order" do
     it "requires sign-in" do
