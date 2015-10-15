@@ -88,7 +88,7 @@ class ApplicationController < ActionController::Base
     authenticate_user!
 
     if not_signed_in?
-      render nothing: true, status: 403
+      render nothing: true, status: 401
     elsif current_user.not_admin?
       flash[:error] = 'You need to sign in for access to this page.'
       render 'communicarts/authorization_error', status: 403
