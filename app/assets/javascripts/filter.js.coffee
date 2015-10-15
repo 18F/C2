@@ -18,10 +18,10 @@ class Filter
 
   filter: ($el) ->
     value = $el.val()
-    unless $el.is(":checked")
+    if !$el.is(":checked")
       value = "!" + value
     @$("[data-filter-key=#{ @key }]").each (idx, el) ->
-      hidden = el.getAttribute("data-filter-value") isnt value
+      hidden = el.getAttribute("data-filter-value") != value
       el.setAttribute("aria-hidden", hidden.toString())
 
   hideAll: () ->
@@ -31,7 +31,7 @@ class Filter
     filters = {}
     $scope.find("[data-filter-control]").each (idx, el) ->
       key = el.getAttribute('data-filter-control')
-      unless filters.hasOwnProperty(key)
+      if !filters.hasOwnProperty(key)
         filters[key] = new Filter($scope, key)
     filters
 
