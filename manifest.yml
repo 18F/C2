@@ -29,6 +29,7 @@ applications:
   hosts:
   - cap
   - c2
+  instances: 2
   env:
     DEFAULT_URL_HOST: cap.18f.gov
     DISABLE_SANDBOX_WARNING: true
