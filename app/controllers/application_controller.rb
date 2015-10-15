@@ -73,20 +73,14 @@ class ApplicationController < ActionController::Base
     current_user.present?
   end
 
-  def not_signed_in?
-    !signed_in?
-  end
-
   def authenticate_user!
-    unless signed_in?
+    if not_signed_in?
       flash[:error] = 'You need to sign in for access to this page.'
       redirect_to root_url(return_to: self.make_return_to("Previous", request.fullpath))
     end
   end
 
   def authenticate_admin_user!
-    authenticate_user!
-
     if not_signed_in?
       render nothing: true, status: 401
     elsif current_user.not_admin?
@@ -100,4 +94,9 @@ class ApplicationController < ActionController::Base
       cookies[:peek] = false
     end
   end
+
+  def not_signed_in?
+    !signed_in?
+  end
+
 end
