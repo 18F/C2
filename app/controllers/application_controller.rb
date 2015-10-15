@@ -98,5 +98,4 @@ class ApplicationController < ActionController::Base
   def not_signed_in?
     !signed_in?
   end
-
 end
