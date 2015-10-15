@@ -7,7 +7,7 @@
 command: script/server_start
 domain: 18f.gov
 instances: 1
-memory: 1G
+memory: 1.5G
 # we point upstream because 18F buildpacks sometimes lag behind newer Ruby versions.
 buildpack: https://github.com/cloudfoundry/ruby-buildpack.git
 
