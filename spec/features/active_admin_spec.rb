@@ -9,6 +9,12 @@ describe '/admin endpoint' do
     expect(page.status_code).to eq(403)
   end
 
+  it 'sends a 401 if user not logged in' do
+    visit '/admin'
+
+    expect(page.status_code).to eq(401)
+  end
+
   it 'user is an admin' do
     user.add_role('admin')
 

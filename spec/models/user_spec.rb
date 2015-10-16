@@ -19,6 +19,33 @@ describe User do
     end
   end
 
+
+  describe '.for_email' do
+    it 'downcases and strips the email' do
+      user = User.for_email('   miXedCaSe@eXaMple.com')
+      expect(user.email_address).to eq('mixedcase@example.com')
+    end
+  end
+
+  describe '.with_role' do
+    it 'returns all users with a particular Role' do
+      user1 = create(:user)
+      user1.add_role('foo')
+      user2 = create(:user)
+      user2.add_role('bar')
+
+      expect(User.with_role('bar')).to eq([user2])
+    end
+
+    it 'returns all users with a particular role name' do
+      user1 = create(:user)
+      user1.add_role('foo')
+      user2 = create(:user)
+      user_role = user2.add_role('bar')
+
+      expect(User.with_role(user_role.role)).to eq([user2])
+    end
+  end
   describe '#client_admin?' do
     it "returns false by default" do
       expect(user).to_not be_a_client_admin
@@ -28,6 +55,22 @@ describe User do
       user.save!
       user.add_role('client_admin')
       expect(user).to be_a_client_admin
+    end
+  end
+
+  describe '#admin?' do
+    it 'is true of the user has the admin role' do
+      admin = create(:user, :admin)
+
+      expect(admin).to be_admin
+    end
+  end
+
+  describe '#not_admin?' do
+    it 'is true of the user does not have the admin role' do
+      user = create(:user)
+
+      expect(user).to be_not_admin
     end
   end
 
@@ -47,48 +90,21 @@ describe User do
     end
   end
 
-  describe '.for_email' do
-    it "downcases and strips the email" do
-      user = User.for_email('   miXedCaSe@eXaMple.com')
-      expect(user.email_address).to eq('mixedcase@example.com')
-    end
-  end
-
-  describe '.with_role' do
-    it "returns all users with a particular Role" do
-      user1 = create(:user)
-      user1.add_role('foo')
-      user2 = create(:user)
-      user2.add_role('bar')
-
-      expect(User.with_role('bar')).to eq([user2])
-    end
-
-    it "returns all users with a particular role name" do
-      user1 = create(:user)
-      user1.add_role('foo')
-      user2 = create(:user)
-      user_role = user2.add_role('bar')
-
-      expect(User.with_role(user_role.role)).to eq([user2])
-    end
-  end
-
-  describe 'roles' do
+  describe '#has_role?' do
     before do
       user.save!
     end
 
-    it "can be assigned a role" do
+    it 'can be assigned a role' do
       role = create(:role)
       user.add_role(role)
-      expect(user.has_role?( role.name )).to be_truthy
+      expect(user).to have_role(role.name)
     end
 
-    it "can be assigned a role by role name" do
+    it 'can be assigned a role by role name' do
       role = create(:role)
       user.add_role(role.name)
-      expect(user.has_role?( role )).to be_truthy
+      expect(user).to have_role(role)
     end
   end
 end
