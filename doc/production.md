@@ -38,14 +38,15 @@ organization: cap
 
 ## [Mandrill](https://mandrillapp.com)
 
-We will be moving to Mandrill for sending transactional emails.
+We use Mandrill for sending transactional emails.
 
 ### Getting access
 
 1. Create a MailChimp account.
 1. Ask to be [added to the MailChimp account](http://kb.mailchimp.com/accounts/multi-user/manage-user-levels-in-your-account).
-    1. Open an issue in the devops repo.
-    1. Assign the issue to @noahkunin.
+    1. Open an issue in the devops repo. Include the GSA email address you used
+       to sign up for Mailchimp.
+    1. Assign the issue to @afeld.
 
 ### Signing in
 

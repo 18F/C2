@@ -83,7 +83,11 @@ class User < ActiveRecord::Base
   end
 
   def admin?
-    self.has_role?('admin')
+    has_role?('admin')
+  end
+
+  def not_admin?
+    !admin?
   end
 
   def self.for_email(email)
