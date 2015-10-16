@@ -73,7 +73,7 @@ describe ProposalsController do
 
       before do
         expect(Proposal).to receive(:client_model_names).and_return(['SomeCompany::SomethingApprovable'])
-        expect(Proposal).to receive(:client_slugs).and_return(%w(some_company some_other_company))
+        expect(Proposal).to receive(:client_slugs).and_return(%w(some_company some_other_company ncr))
       end
 
       it "allows admins to view requests of same client" do

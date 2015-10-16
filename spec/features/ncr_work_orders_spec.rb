@@ -312,7 +312,8 @@ describe "National Capital Region proposals" do
     let(:ncr_proposal) { work_order.proposal }
     before do
       Timecop.freeze(10.hours.ago) do
-        work_order.setup_approvals_and_observers('approver@example.com')
+        approver = create(:user, email_address: 'approver@example.com', client_slug: 'ncr')
+        work_order.setup_approvals_and_observers(approver.email_address)
       end
       login_as(work_order.approvers.first)
     end
@@ -341,7 +342,8 @@ describe "National Capital Region proposals" do
     let(:ncr_proposal) { work_order.proposal }
 
     before do
-      work_order.setup_approvals_and_observers('approver@example.com')
+      approver = create(:user, email_address: 'approver@example.com', client_slug: 'ncr')
+      work_order.setup_approvals_and_observers(approver.email_address)
       login_as(work_order.requester)
     end
 
@@ -387,7 +389,8 @@ describe "National Capital Region proposals" do
 
     describe "when logged in as the requester" do
       before do
-        work_order.setup_approvals_and_observers('approver@example.com')
+        approver = create(:user, email_address: 'approver@example.com', client_slug: 'ncr')
+        work_order.setup_approvals_and_observers(approver.email_address)
         login_as(work_order.requester)
       end
 
@@ -582,6 +585,7 @@ describe "National Capital Region proposals" do
         click_on "Update"
         expect(current_path).to eq("/proposals/#{ncr_proposal.id}")
         expect(work_order.reload.building_number).to eq("BillDing, street")
+        expect(page).to have_content('No changes were made to the request')
       end
 
       it "allows the user to edit the budget-related fields" do
@@ -605,8 +609,8 @@ describe "National Capital Region proposals" do
     end
 
     it "keeps track of the modification when edited by an approver" do
-      work_order.setup_approvals_and_observers('approver@example.com')
-      approver = ncr_proposal.approvers.last
+      approver = create(:user, email_address: 'approver@example.com', client_slug: 'ncr')
+      work_order.setup_approvals_and_observers(approver.email_address)
       login_as(approver)
 
       visit "/ncr/work_orders/#{work_order.id}/edit"
@@ -639,8 +643,8 @@ describe "National Capital Region proposals" do
     let(:delegate) { create(:user, client_slug: 'ncr') }
 
     before do
-      work_order.setup_approvals_and_observers('approver@example.com')
-      approver = proposal.approvers.first
+      approver = create(:user, email_address: 'approver@example.com', client_slug: 'ncr')
+      work_order.setup_approvals_and_observers(approver.email_address)
       approver.add_delegate(delegate)
       login_as(delegate)
     end
