@@ -52,7 +52,7 @@ describe ProposalPolicy::Scope do
   context "client_admin role privileges" do
     let(:requester) { create(:user) }
     let(:proposal1) { create(:proposal, :with_parallel_approvers, :with_observers, requester_id: requester.id) }
-    let(:user) { create(:user, client_slug: 'abc_company', email_address: 'admin@some-dot-gov.gov') }
+    let(:user) { create(:user, client_slug: 'abc_company', email_address: 'admin@example.com') }
     let(:proposals) { ProposalPolicy::Scope.new(user, Proposal).resolve }
 
     before do
