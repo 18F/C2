@@ -24,7 +24,7 @@ module Gsa18f
       greater_than_or_equal_to: 1
     }, presence: true
     validates :product_name_and_description, presence: true
-    # TODO add conditional validations for recurring charges
+    validates :recurring_interval, presence: true, if: :recurring
 
     after_create :add_approvals, :add_observers
 
