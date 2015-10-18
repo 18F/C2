@@ -12,7 +12,7 @@ module Ncr
 
     def edit
       if self.proposal.approved?
-        flash[:warning] = "You are about to modify a fully approved request. Changes will be logged and sent to approvers but this request will not require re-approval."
+        flash[:warning] = "You are about to modify a fully approved request. Changes will be logged and sent to approvers but this request will not necessarily require re-approval."
       end
       first_approver = self.proposal.approvers.first
       @approver_email = first_approver.try(:email_address)
@@ -31,6 +31,7 @@ module Ncr
 
         if self.requires_budget_reapproval?
           @model_instance.restart_budget_approvals
+          flash[:success] = "Successfully modified! This request now needs to be re-approved by budget."
         end
 
         Dispatcher.on_proposal_update(self.proposal, @model_instance.modifier)
