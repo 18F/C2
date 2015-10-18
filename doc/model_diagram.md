@@ -13,7 +13,7 @@ This image was created with [RailRoady](https://github.com/preston/railroady) an
 1. Do the following cleanup manually:
     * Fix the incorrect namespacing (see https://github.com/preston/railroady/issues/40)
     * Remove the `label`s on the edges
-    * Tweak the graph parameters to be
+    * Tweak the graph parameters (see http://stackoverflow.com/questions/10438895/graphviz-outputs-a-mess for suggestions).
 
         ```
         digraph models_diagram {
