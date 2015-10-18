@@ -20,7 +20,6 @@ en:
         building_number: "Type here to search or add"
         project_title: "e.g. \"Blue paint for the Blue Room\""
         vendor: "Type here to search or add"
-    # TODO have simple_form set up the aria-describedby
     hints:
       gsa18f_procurement:
         link_to_product: "Search <a href='https://www.gsaadvantage.gov/advantage/main/start_page.do' target='_blank'>GSA Advantage</a> first; then <a href='http://www.amazon.com' target='_blank'>Amazon;</a> then other vendor. Paste link here."
