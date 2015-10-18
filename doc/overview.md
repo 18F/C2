@@ -9,7 +9,7 @@ app:
 
 This image was created with [RailRoady](https://github.com/preston/railroady)
 and converted from svg to png with
-[ImageMagick](http://stackoverflow.com/questions/9853325/how-to-convert-a-svg-to-a-png-with-image-magick)
+[ImageMagick](http://stackoverflow.com/questions/9853325/how-to-convert-a-svg-to-a-png-with-image-magick).
 
 ## Approval Chains
 
