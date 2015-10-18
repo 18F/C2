@@ -20,7 +20,7 @@ module ProposalDelegate
     validates :proposal, presence: true
 
 
-    delegate :add_observer, :add_requester, :set_requester, to: :proposal
+    delegate :add_observer, :add_requester, :set_requester, :currently_awaiting_approvers, to: :proposal
 
     ### delegate the workflow actions/scopes/states ###
 

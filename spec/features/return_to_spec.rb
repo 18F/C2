@@ -2,7 +2,7 @@ describe "the return_to url option" do
   include ReturnToHelper
 
   before do
-    login_as(FactoryGirl.create(:user))
+    login_as(create(:user))
   end
 
   it 'defaults to the proposals listing' do

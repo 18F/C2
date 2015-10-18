@@ -1,6 +1,6 @@
 describe ReportMailer do
   describe '.budget_status' do
-    with_env_var('BUDGET_REPORT_RECIPIENT', 'budget@gsa.gov') do
+    with_env_var('BUDGET_REPORT_RECIPIENT', 'budget@example.com') do
       it "works with no data" do
         expect {
           ReportMailer.budget_status.deliver_later
@@ -9,7 +9,7 @@ describe ReportMailer do
 
       it "reports on work orders" do
         work_orders = 2.times.map do
-          FactoryGirl.create(:ncr_work_order, :with_approvers)
+          create(:ncr_work_order, :with_approvers)
         end
 
         ReportMailer.budget_status.deliver_now

@@ -59,16 +59,11 @@ class Proposal < ActiveRecord::Base
   scope :closed, -> { where(status: ['approved', 'cancelled']) } #TODO: Backfill to change approvals in 'reject' status to 'cancelled' status
   scope :cancelled, -> { where(status: 'cancelled') }
 
-  after_initialize :set_defaults
   after_create :update_public_id
 
   # @todo - this should probably be the only entry into the approval system
   def root_approval
     self.approvals.where(parent: nil).first
-  end
-
-  def set_defaults
-    self.flow ||= 'parallel'
   end
 
   def parallel?
@@ -151,6 +146,10 @@ class Proposal < ActiveRecord::Base
     self.observations.find_by(user: user)
   end
 
+  def has_subscriber?(user)
+    existing_observation_for(user) || existing_approval_for(user) || requester_id == user.id
+  end
+
   def add_observer(email_or_user, adder=nil, reason=nil)
     # polymorphic
     if email_or_user.is_a?(User)
@@ -203,7 +202,6 @@ class Proposal < ActiveRecord::Base
     end
   end
 
-
   ## delegated methods ##
 
   def public_identifier
@@ -231,7 +229,6 @@ class Proposal < ActiveRecord::Base
   end
 
   #######################
-
 
   def restart
     # Note that none of the state machine's history is stored
@@ -271,18 +268,25 @@ class Proposal < ActiveRecord::Base
     self.observers(true)
     # when explicitly adding an observer using the form in the Proposal page...
     if adder
-      add_observation_comment(user, adder, reason) unless reason.blank?
+      if reason
+        add_observation_comment(user, adder, reason)
+      end
+
       Dispatcher.on_observer_added(observation, reason)
     end
+
     observation
   end
 
   def add_observation_comment(user, adder, reason)
-    self.comments.create(
-      comment_text: I18n.t('activerecord.attributes.observation.user_reason_comment',
-                           user: adder.full_name,
-                           observer: user.full_name,
-                           reason: reason),
-      user: adder)
+    comments.create(
+      comment_text: I18n.t(
+        'activerecord.attributes.observation.user_reason_comment',
+        user: adder.full_name,
+        observer: user.full_name,
+        reason: reason
+      ),
+      user: adder
+    )
   end
 end

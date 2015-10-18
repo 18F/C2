@@ -2,7 +2,7 @@ describe 'User creation when logging in with Oauth to view a protected page' do
   StructUser = Struct.new(:email_address, :first_name, :last_name)
 
   before do
-    user = StructUser.new('george-test@some-dot-gov.gov', 'Georgie', 'Jetsonian')
+    user = StructUser.new('george-test@example.com', 'Georgie', 'Jetsonian')
     setup_mock_auth(:myusa, user)
   end
 
@@ -12,11 +12,11 @@ describe 'User creation when logging in with Oauth to view a protected page' do
     get '/auth/myusa/callback'
 
     expect(User.count).to eq 3 # 1 + 2 seeds
-    expect(User.last.email_address).to eq('george-test@some-dot-gov.gov')
+    expect(User.last.email_address).to eq('george-test@example.com')
   end
 
   it 'does not create a user if the current user already exists' do
-    FactoryGirl.create(:user, email_address: 'george-test@some-dot-gov.gov')
+    create(:user, email_address: 'george-test@example.com')
     expect(User.count).to eq 3 # 1 + 2 seeds
 
     get '/auth/myusa/callback'
@@ -25,7 +25,7 @@ describe 'User creation when logging in with Oauth to view a protected page' do
   end
 
   it 'redirects a newly logged in user to the carts screen' do
-    FactoryGirl.create(:user, email_address: 'george-test@some-dot-gov.gov')
+    create(:user, email_address: 'george-test@example.com')
     expect(User.count).to eq 3 # 1 + 2 seeds
 
     get '/auth/myusa/callback'

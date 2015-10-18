@@ -1,10 +1,10 @@
 describe Approvals::Parallel do
-  let (:proposal) { FactoryGirl.create(:proposal) }
+  let (:proposal) { create(:proposal) }
 
   it 'allows approvals in any order' do
-    first = FactoryGirl.build(:approval, proposal: nil)
-    second = FactoryGirl.build(:approval, proposal: nil)
-    third = FactoryGirl.build(:approval, proposal: nil)
+    first = build(:approval, proposal: nil)
+    second = build(:approval, proposal: nil)
+    third = build(:approval, proposal: nil)
     proposal.root_approval = Approvals::Parallel.new(child_approvals: [first, second, third])
 
     expect(proposal.root_approval.reload.status).to eq('actionable')
@@ -32,9 +32,9 @@ describe Approvals::Parallel do
   end
 
   it 'can be used for disjunctions (ORs)' do
-    first = FactoryGirl.build(:approval, proposal: nil)
-    second = FactoryGirl.build(:approval, proposal: nil)
-    third = FactoryGirl.build(:approval, proposal: nil)
+    first = build(:approval, proposal: nil)
+    second = build(:approval, proposal: nil)
+    third = build(:approval, proposal: nil)
     proposal.root_approval = Approvals::Parallel.new(min_children_needed: 2, child_approvals: [first, second, third])
 
     first.reload.approve!

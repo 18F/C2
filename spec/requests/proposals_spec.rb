@@ -3,13 +3,10 @@ describe 'proposals' do
 
   describe 'GET /proposals/:id' do
     it "can be viewed by a delegate" do
-      proposal = FactoryGirl.create(:proposal)
-      approver = FactoryGirl.create(:user, :with_delegate)
-      proposal.individual_approvals.create!(user: approver, status: 'actionable')
+      delegate = create(:user)
+      proposal = create(:proposal, delegate: delegate)
 
-      delegate = approver.outgoing_delegates.first.assignee
       login_as(delegate)
-
       get "/proposals/#{proposal.id}"
 
       expect(response.status).to eq(200)
@@ -26,7 +23,7 @@ describe 'proposals' do
     end
 
     it "fails if not signed in" do
-      proposal = FactoryGirl.create(:proposal, :with_approver)
+      proposal = create(:proposal, :with_approver)
       post "/proposals/#{proposal.id}/approve"
 
       expect(response.status).to redirect_to(root_path(return_to: self.make_return_to("Previous", request.fullpath)))
@@ -34,8 +31,8 @@ describe 'proposals' do
     end
 
     it "fails if user is not involved with the request" do
-      proposal = FactoryGirl.create(:proposal)
-      stranger = FactoryGirl.create(:user)
+      proposal = create(:proposal)
+      stranger = create(:user)
       login_as(stranger)
 
       post "/proposals/#{proposal.id}/approve"
@@ -45,22 +42,17 @@ describe 'proposals' do
     end
 
     it "succeeds as a delegate" do
-      proposal = FactoryGirl.create(:proposal, :with_approver)
-      approver = proposal.approvers.first
-
-      # TODO move to factory trait
-      delegate = FactoryGirl.create(:user)
-      approver.add_delegate(delegate)
+      delegate = create(:user)
+      proposal = create(:proposal, delegate: delegate)
 
       login_as(delegate)
-
       post "/proposals/#{proposal.id}/approve"
 
       expect_status(proposal, 'approved', 'approved')
     end
 
     context "signed in as the approver" do
-      let(:proposal) { FactoryGirl.create(:proposal, :with_approver) }
+      let(:proposal) { create(:proposal, :with_approver) }
       let(:approver) { proposal.approvers.first }
 
       before do
@@ -91,7 +83,7 @@ describe 'proposals' do
     end
 
     context "using a token" do
-      let(:proposal) { FactoryGirl.create(:proposal, :with_approver) }
+      let(:proposal) { create(:proposal, :with_approver) }
       let(:approval) { proposal.approvals.first }
       let(:token) { approval.create_api_token! }
 

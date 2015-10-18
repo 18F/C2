@@ -37,9 +37,33 @@ Per [the Twelve-Factor guidelines](http://12factor.net/config), all necessary co
 ## Starting the application
 
 ```bash
-PORT=3000 ASSETS_DEBUG=true ./script/start
+PORT=3000 ./script/start
 open http://localhost:3000
 ```
+
+## Populating with data
+
+Once you've authed locally, there will be a `user` record associated with your
+email address. There won't be much for you to see until your client slug is set,
+so find your user record and set it to `ncr`:
+
+```bash
+bin/rails c
+user = User.find_by(email_address: 'example@gsa.gov')
+user.update(client_slug: 'ncr')
+```
+
+Now you will see the link to create a new work order locally.
+
+If you'd like to seed your dashboard with work orders, you can run this rake
+task:
+
+```bash
+bin/rake populate:ncr:for_user[example@gsa.gov]
+```
+
+Now you should see 25 pending purchase requests at
+http://localhost:3000/proposals.
 
 ### Viewing the mailers
 
@@ -55,7 +79,7 @@ have it in your PATH. This is used for javascript and interface testing.
 ### Running the entire suite once
 
 ```bash
-./bin/rspec
+rake
 ```
 
 ### Running tests as corresponding files are changed

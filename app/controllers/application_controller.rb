@@ -70,21 +70,22 @@ class ApplicationController < ActionController::Base
   end
 
   def signed_in?
-    current_user ? true : false
+    current_user.present?
   end
 
   def authenticate_user!
-    unless signed_in?
+    if not_signed_in?
       flash[:error] = 'You need to sign in for access to this page.'
       redirect_to root_url(return_to: self.make_return_to("Previous", request.fullpath))
     end
   end
 
   def authenticate_admin_user!
-    authenticate_user!
-    unless current_user.admin?
+    if not_signed_in?
+      render "communicarts/authentication_error", status: 401, layout: 'application'
+    elsif current_user.not_admin?
       flash[:error] = 'You need to sign in for access to this page.'
-      render 'communicarts/authorization_error', status: 403
+      render 'communicarts/authorization_error', status: 403, layout: 'application'
     end
   end
 
@@ -92,5 +93,9 @@ class ApplicationController < ActionController::Base
     if cookies[:peek].nil?
       cookies[:peek] = false
     end
+  end
+
+  def not_signed_in?
+    !signed_in?
   end
 end

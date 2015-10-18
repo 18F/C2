@@ -1,5 +1,5 @@
 describe ProposalDecorator do
-  let(:proposal) { FactoryGirl.build(:proposal).decorate }
+  let(:proposal) { build(:proposal).decorate }
 
   # if there is more than one element, return an array with a different order than the original
   def randomize(array)
@@ -21,8 +21,8 @@ describe ProposalDecorator do
       statuses = randomize(statuses)
 
       users = statuses.map do |status|
-        user = FactoryGirl.create(:user)
-        FactoryGirl.create(:approval, proposal: proposal, status: status, user: user)
+        user = create(:user)
+        create(:approval, proposal: proposal, status: status, user: user)
         user
       end
 

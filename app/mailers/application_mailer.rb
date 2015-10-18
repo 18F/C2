@@ -1,6 +1,8 @@
 class ApplicationMailer < ActionMailer::Base
   include Roadie::Rails::Automatic
 
+  default reply_to: proc { reply_to_email }
+
   protected
 
   def email_with_name(email, name)
@@ -10,8 +12,16 @@ class ApplicationMailer < ActionMailer::Base
     address.format
   end
 
+  def reply_to_email
+    ENV['NOTIFICATION_REPLY_TO'] || 'noreplyto@some.gov'
+  end
+
   def sender_email
     ENV['NOTIFICATION_FROM_EMAIL'] || 'noreply@some.gov'
+  end
+
+  def resend_to_email
+    ENV['NOTIFICATION_FALLBACK_EMAIL'] || 'communicart.sender@gsa.gov'
   end
 
   def default_sender_email

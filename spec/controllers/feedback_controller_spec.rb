@@ -36,7 +36,7 @@ describe FeedbackController do
     end
 
     it "includes user if signed in" do
-      user = FactoryGirl.create(:user, email_address: "actor@example.com")
+      user = create(:user, email_address: "actor@example.com")
       login_as(user)
       post :create, {bug: "Yes"}
       expect(deliveries[0].body.to_s).to eq("bug: Yes")

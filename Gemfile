@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.2.2' # this should match `.ruby-version` and docs/setup.md
+ruby '2.2.3' # this should match `.ruby-version` and docs/setup.md
 
 gem 'active_model_serializers'
 gem 'activeadmin', github: 'activeadmin'
@@ -15,6 +15,7 @@ gem 'daemons' # for delayed_job
 gem 'delayed_job_active_record'
 gem 'dotenv-rails', require: 'dotenv/rails-now'
 gem 'draper'
+gem 'email_reply_parser'
 gem 'factory_girl_rails'
 gem 'faker'
 gem 'font-awesome-sass'
@@ -24,6 +25,7 @@ gem 'hashdiff'
 gem 'html_pipeline_rails'
 gem 'jquery-rails'
 gem 'jquery-turbolinks'
+gem 'mandrill-rails'
 gem 'newrelic_rpm'
 gem 'omniauth-myusa', git: 'https://github.com/18F/omniauth-myusa.git'
 gem 'paperclip'
@@ -62,6 +64,7 @@ group :development do
   gem 'railroady'
   gem 'letter_opener'
   gem 'letter_opener_web'
+  gem 'quiet_assets'
   gem 'spring'
   gem 'spring-commands-rspec'
 end
@@ -73,7 +76,6 @@ group :test do
   gem 'poltergeist'
   gem 'simplecov'
   gem 'timecop'
-  gem 'turnip'
   gem 'zonebie'
 
   # For better test reporting in CircleCI

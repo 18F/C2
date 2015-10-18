@@ -14,6 +14,17 @@ class ReportMailer < ApplicationMailer
     )
   end
 
+  def annual_ncr_report(year, to_email)
+    attachments["NCR_Work_Order_Report_FY#{year}.csv"] = Ncr::Reporter.build_ncr_annual_report_string(year)
+
+    mail(
+      to: to_email,
+      subject: "FY#{year} NCR Budget Report",
+      body: 'The annual report is attached to this email.',
+      from: self.sender_email
+    )
+  end
+
   private
 
   def csv_reports

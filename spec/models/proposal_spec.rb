@@ -10,7 +10,7 @@ describe Proposal do
 
   describe '#currently_awaiting_approvers' do
     it "gives a consistently ordered list when in parallel" do
-      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
+      proposal = create(:proposal, :with_parallel_approvers)
       approver1, approver2 = proposal.approvers
       expect(proposal.currently_awaiting_approvers).to eq([approver1, approver2])
 
@@ -19,7 +19,7 @@ describe Proposal do
     end
 
     it "gives only the first approver when linear" do
-      proposal = FactoryGirl.create(:proposal, :with_serial_approvers)
+      proposal = create(:proposal, :with_serial_approvers)
       approver1, approver2 = proposal.approvers
       expect(proposal.currently_awaiting_approvers).to eq([approver1])
 
@@ -67,8 +67,8 @@ describe Proposal do
 
   describe '#users' do
     it "returns all approvers, observers, and the requester" do
-      requester = FactoryGirl.create(:user)
-      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers, :with_observers, requester: requester)
+      requester = create(:user)
+      proposal = create(:proposal, :with_parallel_approvers, :with_observers, requester: requester)
 
       expect(proposal.users.map(&:id).sort).to eq([
         requester.id,
@@ -78,33 +78,33 @@ describe Proposal do
     end
 
     it "returns only the rquester when it has no other users" do
-      proposal = FactoryGirl.create(:proposal)
+      proposal = create(:proposal)
       expect(proposal.users).to eq([proposal.requester])
     end
 
     it "removes duplicates" do
-      requester = FactoryGirl.create(:user)
-      proposal = FactoryGirl.create(:proposal, requester: requester)
+      requester = create(:user)
+      proposal = create(:proposal, requester: requester)
       proposal.add_observer(requester.email_address)
       expect(proposal.users).to eq [requester]
     end
 
     it "adds observer from user object" do
-      observer = FactoryGirl.create(:user)
-      proposal = FactoryGirl.create(:proposal, requester: observer)
+      observer = create(:user)
+      proposal = create(:proposal, requester: observer)
       proposal.add_observer(observer)
       expect(proposal.users).to eq [observer]
     end
   end
 
   describe '#root_approval=' do
-    let(:approver1) { FactoryGirl.create(:user) }
-    let(:approver2) { FactoryGirl.create(:user) }
-    let(:approver3) { FactoryGirl.create(:user) }
+    let(:approver1) { create(:user) }
+    let(:approver2) { create(:user) }
+    let(:approver3) { create(:user) }
 
     it 'sets initial approvers' do
-      proposal = FactoryGirl.create(:proposal)
-      approvers = 3.times.map{ FactoryGirl.create(:user) }
+      proposal = create(:proposal)
+      approvers = 3.times.map{ create(:user) }
       individuals = approvers.map{ |u| Approvals::Individual.new(user: u) }
 
       proposal.root_approval = Approvals::Parallel.new(child_approvals: individuals)
@@ -114,7 +114,7 @@ describe Proposal do
     end
 
     it 'initates parallel' do
-      proposal = FactoryGirl.create(:proposal, flow: 'parallel')
+      proposal = create(:proposal, flow: 'parallel')
       individuals = [approver1, approver2, approver3].map{ |u| Approvals::Individual.new(user: u)}
 
       proposal.root_approval = Approvals::Parallel.new(child_approvals: individuals)
@@ -126,7 +126,7 @@ describe Proposal do
     end
 
     it 'initates linear' do
-      proposal = FactoryGirl.create(:proposal, flow: 'linear')
+      proposal = create(:proposal, flow: 'linear')
       individuals = [approver1, approver2, approver3].map{ |u| Approvals::Individual.new(user: u)}
 
       proposal.root_approval = Approvals::Serial.new(child_approvals: individuals)
@@ -138,7 +138,7 @@ describe Proposal do
     end
 
     it 'fixes modified parallel proposal approvals' do
-      proposal = FactoryGirl.create(:proposal, flow: 'parallel')
+      proposal = create(:proposal, flow: 'parallel')
       individuals = [Approvals::Individual.new(user: approver1)]
       proposal.root_approval = Approvals::Parallel.new(child_approvals: individuals)
 
@@ -153,8 +153,8 @@ describe Proposal do
     end
 
     it 'fixes modified linear proposal approvals' do
-      proposal = FactoryGirl.create(:proposal, flow: 'linear')
-      approver1, approver2, approver3 = 3.times.map{ FactoryGirl.create(:user) }
+      proposal = create(:proposal, flow: 'linear')
+      approver1, approver2, approver3 = 3.times.map{ create(:user) }
       individuals = [approver1, approver2].map{ |u| Approvals::Individual.new(user: u) }
       proposal.root_approval = Approvals::Serial.new(child_approvals: individuals)
 
@@ -172,7 +172,7 @@ describe Proposal do
     end
 
     it 'does not modify a full approved parallel proposal' do
-      proposal = FactoryGirl.create(:proposal, flow: 'parallel')
+      proposal = create(:proposal, flow: 'parallel')
       individuals = [approver1, approver2].map{ |u| Approvals::Individual.new(user: u)}
       proposal.root_approval = Approvals::Parallel.new(child_approvals: individuals)
 
@@ -183,7 +183,7 @@ describe Proposal do
     end
 
     it 'does not modify a full approved linear proposal' do
-      proposal = FactoryGirl.create(:proposal, flow: 'linear')
+      proposal = create(:proposal, flow: 'linear')
       individuals = [approver1, approver2].map{ |u| Approvals::Individual.new(user: u)}
       proposal.root_approval = Approvals::Serial.new(child_approvals: individuals)
 
@@ -194,7 +194,7 @@ describe Proposal do
     end
 
     it 'deletes approvals' do
-      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
+      proposal = create(:proposal, :with_parallel_approvers)
       approval1, approval2 = proposal.individual_approvals
       proposal.root_approval = Approvals::Serial.new(child_approvals: [approval2])
 
@@ -204,14 +204,14 @@ describe Proposal do
 
   describe '#reset_status' do
     it 'sets status as approved if there are no approvals' do
-      proposal = FactoryGirl.create(:proposal)
+      proposal = create(:proposal)
       expect(proposal.pending?).to be true
       proposal.reset_status()
       expect(proposal.approved?).to be true
     end
 
     it 'sets status as cancelled if the proposal has been cancelled' do
-      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
+      proposal = create(:proposal, :with_parallel_approvers)
       proposal.individual_approvals.first.approve!
       expect(proposal.pending?).to be true
       proposal.cancel!
@@ -221,11 +221,11 @@ describe Proposal do
     end
 
     it 'reverts to pending if an approval is added' do
-      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
+      proposal = create(:proposal, :with_parallel_approvers)
       proposal.individual_approvals.first.approve!
       proposal.individual_approvals.second.approve!
       expect(proposal.reload.approved?).to be true
-      individuals = proposal.root_approval.child_approvals + [Approvals::Individual.new(user: FactoryGirl.create(:user))]
+      individuals = proposal.root_approval.child_approvals + [Approvals::Individual.new(user: create(:user))]
       proposal.root_approval = Approvals::Parallel.new(child_approvals: individuals)
 
       proposal.reset_status()
@@ -233,7 +233,7 @@ describe Proposal do
     end
 
     it 'does not move out of the pending state unless all are approved' do
-      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
+      proposal = create(:proposal, :with_parallel_approvers)
       proposal.reset_status()
       expect(proposal.pending?).to be true
       proposal.individual_approvals.first.approve!
@@ -249,7 +249,7 @@ describe Proposal do
 
   describe "scopes" do
     let(:statuses) { %w(pending approved cancelled) }
-    let!(:proposals) { statuses.map{|status| FactoryGirl.create(:proposal, status: status) } }
+    let!(:proposals) { statuses.map{|status| create(:proposal, status: status) } }
 
     it "returns the appropriate proposals by status" do
       statuses.each do |status|
@@ -266,7 +266,7 @@ describe Proposal do
 
   describe '#restart' do
     it "creates new API tokens" do
-      proposal = FactoryGirl.create(:proposal, :with_parallel_approvers)
+      proposal = create(:proposal, :with_parallel_approvers)
       proposal.individual_approvals.each(&:create_api_token!)
       expect(proposal.api_tokens.size).to eq(2)
 
@@ -277,17 +277,35 @@ describe Proposal do
     end
   end
 
-  describe "#add_observer" do
-    let(:proposal) { FactoryGirl.create(:proposal) }
-    let(:observer) { FactoryGirl.create(:user) }
+  describe '#add_observer' do
+    let(:proposal) { create(:proposal) }
+    let(:observer) { create(:user) }
     let(:observer_email) { observer.email_address }
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { create(:user) }
+
     it 'adds an observer to the proposal' do
       expect(proposal.observers).to be_empty
       proposal.add_observer(observer_email)
       expect(proposal.observers).to eq [observer]
     end
-    context "with an adding user" do
+
+    it 'adds a comment and sends a comment email when there is an adder and observation reason' do
+      reason = "this is required"
+
+      expect {
+        proposal.add_observer(observer_email, user, reason)
+      }.to change { deliveries.length }.from(0).to(1)
+
+      expect(proposal.comments.count).to eq 1
+    end
+
+    it 'sends an observer email when there is an adder but no reason' do
+      expect {
+        proposal.add_observer(observer_email, user, nil)
+      }.to change { deliveries.length }.from(0).to(1)
+    end
+
+    context 'with an adding user' do
       context 'without a reason' do
         it 'does not add a comment' do
           expect(proposal.comments).to be_empty
@@ -295,8 +313,10 @@ describe Proposal do
           expect(proposal.comments).to be_empty
         end
       end
+
       context 'with a reason' do
-        let(:reason) { "my mate, innit" }
+        let(:reason) { 'my mate, innit' }
+
         it 'adds a comment mentioning the reason' do
           expect(proposal.comments).to be_empty
           proposal.add_observer(observer_email, user, reason)

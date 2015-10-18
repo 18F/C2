@@ -31,6 +31,7 @@ Create a [new issue](https://github.com/18F/C2/issues/new), and copy the raw Mar
 * [ ] [Add to Pivotal Tracker](https://www.pivotaltracker.com/projects/1149728/memberships)
 * [ ] Add to [@18F/cap](https://github.com/orgs/18F/teams/cap) team on GitHub
 * [ ] Add to support emails: `capdevs`, `communicart.sender`, and `gatewaycommunicator` through [IT Service Desk](https://gsa.service-now.com)
+* [ ] [Add to New Relic](https://rpm.newrelic.com/accounts/921394)
 * [ ] Add to calendar items: standups, IPM, and story grooming sessions
 * [ ] Schedule a code walkthrough
 * [ ] Set up pairing session

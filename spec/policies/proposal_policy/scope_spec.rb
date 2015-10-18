@@ -1,5 +1,5 @@
 describe ProposalPolicy::Scope do
-  let(:proposal) { FactoryGirl.create(:proposal, :with_parallel_approvers, :with_observers) }
+  let(:proposal) { create(:proposal, :with_parallel_approvers, :with_observers) }
 
   it "allows the requester to see" do
     user = proposal.requester
@@ -8,7 +8,7 @@ describe ProposalPolicy::Scope do
   end
 
   it "allows an requester to see, when there are no observers/approvers" do
-    proposal = FactoryGirl.create(:proposal)
+    proposal = create(:proposal)
     user = proposal.requester
     proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
     expect(proposals).to eq([proposal])
@@ -29,7 +29,7 @@ describe ProposalPolicy::Scope do
   end
 
   it "allows a delegate to see" do
-    delegate = FactoryGirl.create(:user)
+    delegate = create(:user)
     approver = proposal.approvers.first
     approver.add_delegate(delegate)
 
@@ -44,15 +44,15 @@ describe ProposalPolicy::Scope do
   end
 
   it "does not allow anyone else to see" do
-    user = FactoryGirl.create(:user)
+    user = create(:user)
     proposals = ProposalPolicy::Scope.new(user, Proposal).resolve
     expect(proposals).to be_empty
   end
 
   context "client_admin role privileges" do
-    let(:requester) { FactoryGirl.create(:user) }
-    let(:proposal1) { FactoryGirl.create(:proposal, :with_parallel_approvers, :with_observers, requester_id: requester.id) }
-    let(:user) { FactoryGirl.create(:user, client_slug: 'abc_company', email_address: 'admin@some-dot-gov.gov') }
+    let(:requester) { create(:user) }
+    let(:proposal1) { create(:proposal, :with_parallel_approvers, :with_observers, requester_id: requester.id) }
+    let(:user) { create(:user, client_slug: 'abc_company', email_address: 'admin@some-dot-gov.gov') }
     let(:proposals) { ProposalPolicy::Scope.new(user, Proposal).resolve }
 
     before do
@@ -91,9 +91,9 @@ describe ProposalPolicy::Scope do
   end
 
   context "admin role privileges" do
-    let(:requester) { FactoryGirl.create(:user) }
-    let(:proposal1) { FactoryGirl.create(:proposal, :with_parallel_approvers, :with_observers, requester_id: requester.id) }
-    let(:user) { FactoryGirl.create(:user, client_slug: 'abc_company') }
+    let(:requester) { create(:user) }
+    let(:proposal1) { create(:proposal, :with_parallel_approvers, :with_observers, requester_id: requester.id) }
+    let(:user) { create(:user, client_slug: 'abc_company') }
     let(:proposals) { ProposalPolicy::Scope.new(user, Proposal).resolve }
 
     before do
