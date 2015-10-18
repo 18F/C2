@@ -1,6 +1,6 @@
 module Ncr
   class WorkOrdersController < UseCaseController
-   # arbitrary number...number of upload fields that "ought to be enough for anybody"
+    # arbitrary number...number of upload fields that "ought to be enough for anybody"
     MAX_UPLOADS_ON_NEW = 10
 
     def new
@@ -29,7 +29,7 @@ module Ncr
 
       super
 
-      if @model_changing && !@model_instance.emergency  # skip approvals if emergency
+      if @model_changing && !@model_instance.emergency # skip approvals if emergency
         @model_instance.setup_approvals_and_observers(@approver_email)
         @model_instance.email_approvers
       end
@@ -38,7 +38,6 @@ module Ncr
     def attribute_changes?
       super || @model_instance.approver_changed?(@approver_email)
     end
-
 
     protected
 
@@ -55,7 +54,7 @@ module Ncr
       fields = Ncr::WorkOrder.relevant_fields(
         params[:ncr_work_order][:expense_type])
       if @model_instance
-        fields.delete(:emergency)   # emergency field cannot be edited
+        fields.delete(:emergency) # emergency field cannot be edited
       end
       params.require(:ncr_work_order).permit(:project_title, *fields)
     end
