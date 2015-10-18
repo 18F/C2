@@ -10,8 +10,24 @@ This image was created with [RailRoady](https://github.com/preston/railroady) an
     bundle exec railroady -o doc/models.dot -M -b
     ```
 
+1. Do the following cleanup manually:
+    * Fix the incorrect namespacing (see https://github.com/preston/railroady/issues/40)
+    * Remove the `label`s on the edges
+    * Tweak the graph parameters to be
+
+        ```
+        digraph models_diagram {
+          splines=true;
+          sep="+35,35";
+          overlap=false;
+          nodesep=0.6;
+
+          ...
+        }
+        ```
+
 1. Generate the image with
 
     ```bash
-    dot -Tpng doc/models.dot > doc/models_brief.png
+    twopi -Tpng doc/models.dot > doc/models_brief.png
     ```
