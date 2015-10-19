@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151013224625) do
+ActiveRecord::Schema.define(version: 20151019045846) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 20151013224625) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "used_at"
-    t.integer  "approval_id"
+    t.integer  "step_id"
   end
 
   create_table "approval_delegates", force: :cascade do |t|
@@ -46,21 +46,6 @@ ActiveRecord::Schema.define(version: 20151013224625) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  create_table "approvals", force: :cascade do |t|
-    t.integer  "user_id"
-    t.string   "status",              limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "position"
-    t.integer  "proposal_id"
-    t.datetime "approved_at"
-    t.string   "type"
-    t.integer  "parent_id"
-    t.integer  "min_children_needed"
-  end
-
-  add_index "approvals", ["user_id", "proposal_id"], name: "approvals_user_proposal_idx", unique: true, using: :btree
 
   create_table "attachments", force: :cascade do |t|
     t.string   "file_file_name",    limit: 255
@@ -173,6 +158,21 @@ ActiveRecord::Schema.define(version: 20151013224625) do
 
   add_index "roles", ["name"], name: "roles_name_idx", unique: true, using: :btree
 
+  create_table "steps", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "status",              limit: 255
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "position"
+    t.integer  "proposal_id"
+    t.datetime "approved_at"
+    t.string   "type"
+    t.integer  "parent_id"
+    t.integer  "min_children_needed"
+  end
+
+  add_index "steps", ["user_id", "proposal_id"], name: "approvals_user_proposal_idx", unique: true, using: :btree
+
   create_table "user_roles", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "role_id", null: false
@@ -202,9 +202,6 @@ ActiveRecord::Schema.define(version: 20151013224625) do
 
   add_foreign_key "approval_delegates", "users", column: "assignee_id", name: "assignee_id_fkey"
   add_foreign_key "approval_delegates", "users", column: "assigner_id", name: "assigner_id_fkey"
-  add_foreign_key "approvals", "approvals", column: "parent_id", name: "parent_id_fkey", on_delete: :cascade
-  add_foreign_key "approvals", "proposals", name: "proposal_id_fkey"
-  add_foreign_key "approvals", "users", name: "user_id_fkey"
   add_foreign_key "attachments", "proposals", name: "proposal_id_fkey"
   add_foreign_key "attachments", "users", name: "user_id_fkey"
   add_foreign_key "comments", "proposals", name: "proposal_id_fkey"
@@ -213,6 +210,9 @@ ActiveRecord::Schema.define(version: 20151013224625) do
   add_foreign_key "proposal_roles", "roles", name: "role_id_fkey"
   add_foreign_key "proposal_roles", "users", name: "user_id_fkey"
   add_foreign_key "proposals", "users", column: "requester_id", name: "requester_id_fkey"
+  add_foreign_key "steps", "proposals", name: "proposal_id_fkey"
+  add_foreign_key "steps", "steps", column: "parent_id", name: "parent_id_fkey", on_delete: :cascade
+  add_foreign_key "steps", "users", name: "user_id_fkey"
   add_foreign_key "user_roles", "roles", name: "role_id_fkey"
   add_foreign_key "user_roles", "users", name: "user_id_fkey"
 end
