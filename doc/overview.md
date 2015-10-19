@@ -7,9 +7,7 @@ app:
 
 ![Image of Models](models_brief.png)
 
-This image was created with [RailRoady](https://github.com/preston/railroady)
-and converted from svg to png with
-[ImageMagick](http://stackoverflow.com/questions/9853325/how-to-convert-a-svg-to-a-png-with-image-magick).
+See [the model diagram page](models_diagram.md) for details about how to generate it.
 
 ## Approval Chains
 
