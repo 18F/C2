@@ -19,10 +19,16 @@ describe Ncr::WorkOrderDecorator do
     expect(wo.current_approver_email_address).to eq(wo.approvers.first.email_address)
   end
 
-  it "returns approver email address based on proposal status" do
+  it "returns current approver email address when status is pending" do
     wo = create(:ncr_work_order, :with_approvers).decorate
+    expect(wo.pending?).to be_truthy
     expect(wo.status_aware_approver_email_address).to eq(wo.current_approver_email_address)
+  end
+
+  it "returns final approver when status is approved" do
+    wo = create(:ncr_work_order, :with_approvers).decorate
     wo.proposal.approve!
+    expect(wo.approved?).to be_truthy
     expect(wo.status_aware_approver_email_address).to eq(wo.final_approver_email_address)
   end
 end
