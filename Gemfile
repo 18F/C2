@@ -10,6 +10,7 @@ gem 'awesome_print'
 gem 'aws-sdk', '~> 1.6' # version restriction can be lifted once https://github.com/thoughtbot/paperclip/commit/523bd46c768226893f23889079a7aa9c73b57d68 is released
 gem 'bootstrap-sass'
 gem 'browser-timezone-rails'
+gem 'climate_control'
 gem 'clockwork', require: false
 gem 'daemons' # for delayed_job
 gem 'delayed_job_active_record'
