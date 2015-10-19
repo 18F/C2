@@ -54,7 +54,7 @@ class User < ActiveRecord::Base
   end
 
   def full_name
-    if first_name && last_name
+    if first_name.present? && last_name.present?
       "#{first_name} #{last_name}"
     else
       email_address
