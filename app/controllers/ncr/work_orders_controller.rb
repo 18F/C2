@@ -29,7 +29,7 @@ module Ncr
 
       super
 
-      if @model_changing && !@model_instance.emergency # skip approvals if emergency
+      unless skip_state_update?
         @model_instance.setup_approvals_and_observers(@approver_email)
         @model_instance.email_approvers
       end
@@ -73,6 +73,10 @@ module Ncr
       if self.errors.empty?
         @model_instance.setup_approvals_and_observers(@approver_email)
       end
+    end
+
+    def skip_state_update?
+      !@model_changing || @model_instance.emergency
     end
   end
 end
