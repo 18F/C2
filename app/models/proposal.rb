@@ -48,7 +48,7 @@ class Proposal < ActiveRecord::Base
 
   validates :client_data_type, inclusion: {
     in: ->(_) { self.client_model_names },
-    message: "%{value} is not in client_model_names #{CLIENT_MODELS.inspect}",
+    message: "%{value} is not a valid client model type. Valid client model types are: #{CLIENT_MODELS.inspect}",
     allow_blank: true
   }
   validates :flow, presence: true, inclusion: {in: FLOWS}
