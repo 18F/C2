@@ -268,7 +268,7 @@ class Proposal < ActiveRecord::Base
     self.observers(true)
     # when explicitly adding an observer using the form in the Proposal page...
     if adder
-      if reason
+      if reason and !reason.blank?
         add_observation_comment(user, adder, reason)
       end
 
@@ -286,6 +286,7 @@ class Proposal < ActiveRecord::Base
         observer: user.full_name,
         reason: reason
       ),
+      update_comment: true,
       user: adder
     )
   end
