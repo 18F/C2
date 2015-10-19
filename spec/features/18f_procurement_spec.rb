@@ -27,7 +27,7 @@ describe "GSA 18f Purchase Request Form" do
       expect(Dispatcher).to receive(:deliver_new_proposal_emails)
 
       visit '/gsa18f/procurements/new'
-      fill_in "Product Name and Description", with: "buying stuff"
+      fill_in "Product name and description", with: "buying stuff"
       fill_in 'Justification', with: "because I need it"
       fill_in "Link to product", with: "http://www.amazon.com"
       fill_in 'Cost per unit', with: 123.45
@@ -66,7 +66,7 @@ describe "GSA 18f Purchase Request Form" do
 
     it "doesn't save when the amount is too high" do
       visit '/gsa18f/procurements/new'
-      fill_in "Product Name and Description", with: "buying stuff"
+      fill_in "Product name and description", with: "buying stuff"
       fill_in 'Quantity', with: 1
       fill_in 'Cost per unit', with: 10_000
 
@@ -82,7 +82,7 @@ describe "GSA 18f Purchase Request Form" do
 
     it "doesn't save when no quantity is requested" do
       visit '/gsa18f/procurements/new'
-      fill_in "Product Name and Description", with: "buying stuff"
+      fill_in "Product name and description", with: "buying stuff"
       fill_in 'Quantity', with: 0
       fill_in 'Cost per unit', with: 100.00
 
@@ -100,7 +100,7 @@ describe "GSA 18f Purchase Request Form" do
       fill_in "Link to product", with: "http://www.submitted.com"
       fill_in 'Cost per unit', with: 123.45
       fill_in 'Quantity', with: 1
-      fill_in "Product Name and Description", with: 'resubmitted'
+      fill_in "Product name and description", with: 'resubmitted'
       click_on 'Update'
       expect(current_path).to eq("/proposals/#{proposal.id}")
       expect(page).to have_content("http://www.submitted.com")
@@ -135,7 +135,7 @@ describe "GSA 18f Purchase Request Form" do
 
     it "saves all attributes when editing" do
       visit '/gsa18f/procurements/new'
-      fill_in "Product Name and Description", with: "buying stuff"
+      fill_in "Product name and description", with: "buying stuff"
       fill_in 'Justification', with: "because I need it"
       fill_in "Link to product", with: "http://www.amazon.com"
       fill_in 'Cost per unit', with: 123.45
