@@ -6,7 +6,7 @@ default: &default
 
   # should match puma.rb
   # https://devcenter.heroku.com/articles/concurrency-and-database-connections#threaded-servers
-  pool: <%= ENV["MAX_THREADS"] || 3 %>
+  pool: 3
 
 development:
   <<: *default
