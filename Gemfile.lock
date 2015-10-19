@@ -449,6 +449,7 @@ DEPENDENCIES
   browser-timezone-rails
   bullet
   capybara
+  climate_control
   clockwork
   codeclimate-test-reporter
   daemons
