@@ -50,5 +50,10 @@
   },
   "eol_last": {
     "level": "error"
+  },
+  "no_trailing_whitespace": {
+    "level": "error",
+    "allowed_in_comments": false,
+    "allowed_in_empty_lines": false
   }
 }
