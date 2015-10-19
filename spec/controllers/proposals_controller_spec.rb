@@ -72,8 +72,8 @@ describe ProposalsController do
       let(:proposal) { create(:proposal, requester_id: requester.id, client_data_type: 'SomeCompany::SomethingApprovable') }
 
       before do
-        expect(Proposal).to receive(:client_model_names).and_return(['SomeCompany::SomethingApprovable'])
-        expect(Proposal).to receive(:client_slugs).at_least(:once).and_return(%w(some_company some_other_company ncr))
+        allow(Proposal).to receive(:client_model_names).and_return(['SomeCompany::SomethingApprovable'])
+        allow(Proposal).to receive(:client_slugs).and_return(%w(some_company some_other_company ncr))
       end
 
       it "allows admins to view requests of same client" do

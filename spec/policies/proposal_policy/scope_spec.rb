@@ -56,7 +56,7 @@ describe ProposalPolicy::Scope do
     let(:proposals) { ProposalPolicy::Scope.new(user, Proposal).resolve }
 
     before do
-      expect(Proposal).to receive(:client_slugs).at_least(:once).and_return(%w(abc_company ncr))
+      allow(Proposal).to receive(:client_slugs).and_return(%w(abc_company ncr))
     end
 
     it "allows them to see unassociated requests that are inside its client scope" do
@@ -97,7 +97,7 @@ describe ProposalPolicy::Scope do
     let(:proposals) { ProposalPolicy::Scope.new(user, Proposal).resolve }
 
     before do
-      expect(Proposal).to receive(:client_slugs).at_least(:once).and_return(%w(abc_company ncr))
+      allow(Proposal).to receive(:client_slugs).and_return(%w(abc_company ncr))
     end
 
     it "allows an app admin to see requests inside and outside its client scope" do
