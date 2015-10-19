@@ -1,4 +1,8 @@
+# run all migrations
+# https://github.com/testdouble/feedback/issues/7
+database:
+  override:
+    - bundle exec rake db:create db:migrate --trace
 dependencies:
   pre:
     - cp .env.example .env
-
