@@ -2,6 +2,15 @@
 
 C2 is, at its core, a state machine wrapped in email notifications. The system centers around Proposals, which are submitted by a "requester" and sent out to the "approvers" via email. Approvers can either ask questions or leave comments, then approve" the request. The requester (and any "observers") get notifications about the overall progress. Aside from receiving email notifications for updates, users can log in at any time and see the details for outstanding and past Proposals they were involved with.
 
+The following diagram details the relationship between database models in the
+app:
+
+![Image of Models](models_brief.png)
+
+This image was created with [RailRoady](https://github.com/preston/railroady)
+and converted from svg to png with
+[ImageMagick](http://stackoverflow.com/questions/9853325/how-to-convert-a-svg-to-a-png-with-image-magick).
+
 ## Approval Chains
 
 The order and requirements for a proposal to be "approved" are defined by an "approval chain". This is a hierarchical tree of `Approval` objects, with currently fall into three types:

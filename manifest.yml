@@ -7,7 +7,7 @@
 command: script/server_start
 domain: 18f.gov
 instances: 1
-memory: 1G
+memory: 1536MB
 # we point upstream because 18F buildpacks sometimes lag behind newer Ruby versions.
 buildpack: https://github.com/cloudfoundry/ruby-buildpack.git
 
@@ -27,6 +27,7 @@ applications:
   hosts:
   - cap
   - c2
+  instances: 2
   env:
     DEFAULT_URL_HOST: cap.18f.gov
     DISABLE_SANDBOX_WARNING: true

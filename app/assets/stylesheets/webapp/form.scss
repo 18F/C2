@@ -13,10 +13,8 @@
     margin-bottom: 0px;
   }
 
-  .form-group {
-    .checkbox,
-    .form-group {
-      padding-left: 10%;
-    }
+  // fields that only appear when a certain value is selected
+  [data-filter-key] {
+    padding-left: 10%;
   }
 }

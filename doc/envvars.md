@@ -29,7 +29,6 @@ In this example, the current_user for every request would be User `123` regardle
 ```
 
 ## GA_TRACKING_ID
-## MAX_THREADS
 ## MYUSA_URL
 ## NCR_BA61_TIER1_BUDGET_MAILBOX
 ## NCR_BA61_TIER2_BUDGET_MAILBOX
@@ -50,8 +49,6 @@ Defaults to communicart.sender@gsa.gov
 ## SUPPORT_EMAIL
 
 The email address where all feedback and user support questions are sent.
-
-## WEB_CONCURRENCY
 
 ## SECRET_TOKEN
 ## SMTP_DOMAIN
