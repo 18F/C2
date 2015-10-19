@@ -321,7 +321,7 @@ describe Proposal do
           expect(proposal.comments).to be_empty
           proposal.add_observer(observer_email, user, reason)
           expect(proposal.comments.length).to eq 1
-          expect(proposal.comments.first.update_comment).to be_truthy
+          expect(proposal.comments.first).to be_update_comment
           expect(proposal.comments.first.comment_text).to include reason
         end
       end
