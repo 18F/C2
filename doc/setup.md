@@ -80,7 +80,6 @@ have it in your PATH. This is used for javascript and interface testing.
 
 ```bash
 ./bin/rake
-./bin/rake konacha:run
 ```
 
 ### Running tests as corresponding files are changed
