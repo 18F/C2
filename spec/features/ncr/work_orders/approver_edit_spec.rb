@@ -9,8 +9,8 @@ feature 'Approver edits NCR work order' do
   let(:ncr_proposal) { work_order.proposal }
 
   scenario 'keeps track of the modification' do
-    work_order.setup_approvals_and_observers('approver@example.com')
-    approver = ncr_proposal.approvers.last
+    approver = create(:user, email_address: 'approver@example.com', client_slug: 'ncr')
+    work_order.setup_approvals_and_observers(approver.email_address)
     login_as(approver)
 
     visit "/ncr/work_orders/#{work_order.id}/edit"

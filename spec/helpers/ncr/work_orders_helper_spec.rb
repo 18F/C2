@@ -2,15 +2,17 @@ describe Ncr::WorkOrdersHelper do
   describe '#approver_options' do
     it 'includes existing users' do
       expect(helper.approver_options.size).to eq(2)  # seed Users
-      users = [create(:user), create(:user)]
+      users = [create(:user, client_slug: 'ncr'), create(:user, client_slug: 'ncr')]
       expect(helper.approver_options).to include(*users.map(&:email_address))
     end
 
     it 'sorts the results' do
-      create(:user, email_address: 'b@example.com')
-      create(:user, email_address: 'c@example.com')
-      create(:user, email_address: 'a@example.com')
+      create(:user, email_address: 'b@example.com', client_slug: 'ncr')
+      create(:user, email_address: 'c@example.com', client_slug: 'ncr')
+      create(:user, email_address: 'a@example.com', client_slug: 'ncr')
+      create(:user, email_address: 'd@example.com', client_slug: 'gsa18f')
       expect(helper.approver_options).to include(*%w(a@example.com b@example.com c@example.com))
+      expect(helper.approver_options).not_to include(*%w(d@example.com))
     end
   end
 
