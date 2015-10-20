@@ -27,7 +27,7 @@ class Filter
   hideAll: () ->
     @$("[data-filter-key=#{ @key }]").attr("aria-hidden", true)
 
-  this.generateIn = ($scope) ->
+  @generateIn = ($scope) ->
     filters = {}
     $scope.find("[data-filter-control]").each (idx, el) ->
       key = el.getAttribute('data-filter-control')
