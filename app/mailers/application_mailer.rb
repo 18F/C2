@@ -13,19 +13,19 @@ class ApplicationMailer < ActionMailer::Base
   end
 
   def reply_to_email
-    ENV['NOTIFICATION_REPLY_TO'] || 'noreplyto@some.gov'
+    email_with_name(ENV['NOTIFICATION_REPLY_TO'] || 'noreplyto@some.gov', 'C2')
   end
 
   def sender_email
-    ENV['NOTIFICATION_FROM_EMAIL'] || 'noreply@some.gov'
+    email_with_name(ENV['NOTIFICATION_FROM_EMAIL'] || 'noreply@some.gov', 'C2')
   end
 
   def resend_to_email
-    ENV['NOTIFICATION_FALLBACK_EMAIL'] || 'communicart.sender@gsa.gov'
+    email_with_name(ENV['NOTIFICATION_FALLBACK_EMAIL'] || 'communicart.sender@gsa.gov', 'C2')
   end
 
   def default_sender_email
-    email_with_name(sender_email, "Communicart")
+    sender_email
   end
 
   def user_email_with_name(user)
