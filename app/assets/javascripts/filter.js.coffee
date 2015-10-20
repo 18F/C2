@@ -22,7 +22,6 @@ class @Filter
       new Filter($scope, $(control))
 
 $ ->
-  #  @todo - better scope
   $scope = $(document.body)
   filters = Filter.generateIn($scope)
   for filter in filters
