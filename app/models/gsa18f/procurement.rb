@@ -19,10 +19,12 @@ module Gsa18f
     include ProposalDelegate
     include PurchaseCardMixin
 
+    validates :cost_per_unit, presence: true
     validates :quantity, numericality: {
       greater_than_or_equal_to: 1
-    }
+    }, presence: true
     validates :product_name_and_description, presence: true
+    validates :recurring_interval, presence: true, if: :recurring
 
     after_create :add_approvals, :add_observers
 

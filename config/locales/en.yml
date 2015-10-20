@@ -40,6 +40,8 @@ en:
         content: "$3,500 for supplies<br>$2,500 for services<br>$2,000 for construction"
   activerecord:
     attributes:
+      gsa18f/procurement:
+        recurring: "Recurring charge"
       ncr/work_order:
         cl_number: "CL number"
         code: "Work Order / Maximo Ticket Number"

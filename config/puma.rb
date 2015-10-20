@@ -1,7 +1,7 @@
 # https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server
 
-workers Integer(ENV['WEB_CONCURRENCY'] || 1)
-threads_count = Integer(ENV['MAX_THREADS'] || 5) # should match database.yml
+workers 1
+threads_count = 3
 threads threads_count, threads_count
 
 preload_app!

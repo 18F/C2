@@ -20,5 +20,14 @@ module Ncr
       end
       all_vendors.uniq.sort_by(&:downcase)
     end
+
+    def expense_type_radio_button(form, expense_type)
+      content_tag :div, class: 'radio' do
+        form.label :expense_type, value: expense_type do
+          radio = form.radio_button(:expense_type, expense_type, 'data-filter-control' => 'expense-type')
+          radio + expense_type
+        end
+      end
+    end
   end
 end
