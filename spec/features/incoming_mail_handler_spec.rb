@@ -39,6 +39,7 @@ describe "Handles incoming email" do
     expect(resp.action).to eq(IncomingMail::Response::COMMENT)
     expect(my_approval.proposal.existing_observation_for(my_approval.user)).to be_truthy
     expect(my_approval.proposal.existing_approval_for(my_approval.user)).to be_truthy
+    expect(deliveries.length).to eq(2) # 1 each to requester and approver
   end
 
   it "should create comment for non-subscriber and add as observer" do
@@ -53,6 +54,7 @@ describe "Handles incoming email" do
     expect(resp.action).to eq(IncomingMail::Response::COMMENT)
     expect(resp.comment.proposal.existing_observation_for(user)).to be_truthy
     expect(resp.comment.proposal.existing_approval_for(user)).to be_falsey
+    expect(deliveries.length).to eq(4) # 2 each to requester and new observer
   end
 
   it "should parse proposal public_id from email headers" do
