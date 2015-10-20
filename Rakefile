@@ -4,3 +4,6 @@
 require File.expand_path('../config/application', __FILE__)
 
 C2::Application.load_tasks
+
+desc 'Run the test suite'
+task default: "./bin/rspec"

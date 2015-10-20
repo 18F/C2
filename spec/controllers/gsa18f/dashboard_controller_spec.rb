@@ -1,6 +1,6 @@
 describe Gsa18f::DashboardController do
   describe '#index' do
-    let (:user) {FactoryGirl.create(:user)}
+    let (:user) {create(:user)}
 
     around(:each) do |example|
       with_18f_procurement_env_variables(&example)
@@ -11,7 +11,7 @@ describe Gsa18f::DashboardController do
     end
 
     it 'does not include proposals user did not participate in' do
-      FactoryGirl.create(:gsa18f_procurement)
+      create(:gsa18f_procurement)
       get :index
       expect(assigns(:rows)).to be_empty
     end
@@ -22,9 +22,9 @@ describe Gsa18f::DashboardController do
       Time.zone = 'UTC'
       # 2 in January, 3 in February, 3 in March
       (1..8).each {|i|
-        FactoryGirl.create(
+        create(
           :proposal, requester: user, created_at: Time.zone.local(2015, i / 3 + 1, i),
-          client_data: FactoryGirl.create(:gsa18f_procurement, cost_per_unit: i,
+          client_data: create(:gsa18f_procurement, cost_per_unit: i,
           quantity: 1))
       }
       get :index

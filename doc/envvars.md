@@ -29,7 +29,6 @@ In this example, the current_user for every request would be User `123` regardle
 ```
 
 ## GA_TRACKING_ID
-## MAX_THREADS
 ## MYUSA_URL
 ## NCR_BA61_TIER1_BUDGET_MAILBOX
 ## NCR_BA61_TIER2_BUDGET_MAILBOX
@@ -38,14 +37,18 @@ In this example, the current_user for every request would be User `123` regardle
 ## NEW_RELIC_APP_NAME
 ## NEW_RELIC_LICENSE_KEY
 ## NOTIFICATION_FROM_EMAIL
+
+## NOTIFICATION_FALLBACK_EMAIL
+
+When IncomingMail::Handler fails to deliver a message as a comment, it will forward the message on to this address.
+Defaults to communicart.sender@gsa.gov
+
 ## PORT
 ## RESTRICT_ACCESS=true
 
 ## SUPPORT_EMAIL
 
 The email address where all feedback and user support questions are sent.
-
-## WEB_CONCURRENCY
 
 ## SECRET_TOKEN
 ## SMTP_DOMAIN

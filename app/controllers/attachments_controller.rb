@@ -9,7 +9,7 @@ class AttachmentsController < ApplicationController
     attachment.user = current_user
     if attachment.save
       flash[:success] = "You successfully added a attachment"
-      Dispatcher.deliver_attachment_emails(self.proposal)
+      Dispatcher.deliver_attachment_emails(proposal)
     else
       flash[:error] = attachment.errors.full_messages
     end
@@ -20,7 +20,7 @@ class AttachmentsController < ApplicationController
   def destroy
     self.attachment.destroy
     flash[:success] = "Deleted attachment"
-    redirect_to proposal_path(self.attachment.proposal_id)
+    redirect_to proposal_path(attachment.proposal)
   end
 
   def show
@@ -41,6 +41,6 @@ class AttachmentsController < ApplicationController
   end
 
   def auth_errors(exception)
-    redirect_to proposals_path, :alert => "You are not allowed to add an attachment to that proposal"
+    redirect_to proposals_path, alert: "You are not allowed to add an attachment to that proposal"
   end
 end

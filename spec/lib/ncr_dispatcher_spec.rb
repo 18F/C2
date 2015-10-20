@@ -1,5 +1,5 @@
 describe NcrDispatcher do
-  let!(:work_order) { FactoryGirl.create(:ncr_work_order, :with_approvers) }
+  let!(:work_order) { create(:ncr_work_order, :with_approvers) }
   let(:proposal) { work_order.proposal }
   let(:approvals) { work_order.individual_approvals }
   let(:approval_1) { approvals.first }
@@ -17,7 +17,7 @@ describe NcrDispatcher do
 
     it "doesn't send to the requester for the not-last approval" do
       ncr_dispatcher.on_approval_approved(approval_1)
-      expect(email_recipients).to_not include('requester@some-dot-gov.gov')
+      expect(email_recipients).to_not include('requester@example.com')
     end
   end
 
@@ -61,7 +61,7 @@ describe NcrDispatcher do
 
     it 'does not notify observer if they are the one making the update' do
       deliveries.clear
-      email = 'requester@some-dot-gov.gov'
+      email = 'requester@example.com'
       proposal.add_observer(email)
       ncr_dispatcher.on_proposal_update(proposal, proposal.observers.first)
       expect(email_recipients).to_not include(email)

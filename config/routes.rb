@@ -1,4 +1,5 @@
 C2::Application.routes.draw do
+  ActiveAdmin.routes(self)
   root :to => 'home#index'
   get '/error' => 'home#error'
   get '/me'    => 'home#me'
@@ -10,6 +11,9 @@ C2::Application.routes.draw do
   post '/logout' => 'auth#logout'
 
   resources :help, only: [:index, :show]
+
+  # mandrill-rails
+  resource :inbox, controller: 'inbox', only: [:show, :create]
 
   namespace :api do
     scope :v1 do

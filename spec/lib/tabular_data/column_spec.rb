@@ -63,7 +63,7 @@ describe TabularData::Column do
   end
 
   describe '#display' do
-    let(:work_order) { FactoryGirl.create(:ncr_work_order) }
+    let(:work_order) { create(:ncr_work_order) }
 
     it 'accesses fields directly (no display field)' do
       col = TabularData::Column.new(:expense_type, 'ncr_work_orders.expense_type')

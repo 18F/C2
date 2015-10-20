@@ -15,7 +15,7 @@
     = f.input :quantity, input_html: { step: 1 }
     = f.input :recurring, input_html: { 'data-filter-control' => 'recurring' }
     %div{ 'data-filter-key' => 'recurring', 'data-filter-value' => 1 }
-      = f.input :recurring_interval, collection: Gsa18f::Procurement::RECURRENCE, include_blank: false
+      = f.input :recurring_interval, collection: Gsa18f::Procurement::RECURRENCE, include_blank: false, required: true
       = f.input :recurring_length, step: 1
     = f.input :date_requested, as: :date, html5: true
     = f.input :urgency, collection: Gsa18f::Procurement::URGENCY, label_method: :last, value_method: :first

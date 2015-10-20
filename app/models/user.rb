@@ -54,7 +54,7 @@ class User < ActiveRecord::Base
   end
 
   def full_name
-    if first_name && last_name
+    if first_name.present? && last_name.present?
       "#{first_name} #{last_name}"
     else
       email_address
@@ -82,7 +82,11 @@ class User < ActiveRecord::Base
   end
 
   def admin?
-    self.has_role?('admin')
+    has_role?('admin')
+  end
+
+  def not_admin?
+    !admin?
   end
 
   def self.for_email(email)

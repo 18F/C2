@@ -18,7 +18,7 @@
     = f.input :org_code, collection: Ncr::Organization.all, label_method: :to_s, prompt: :translate, input_html: { class: 'js-selectize' }
     = f.input :vendor, input_html: { class: 'js-selectize', data: { initial: JSON.generate(vendor_options(@model_instance.vendor)) } }
     = field_set_tag "Amount", class: 'required' do
-      = f.input :amount, as: :currency, label_html: { class: 'sr-only' }
+      = f.input :amount, as: :currency, label_html: { class: 'sr-only' }, input_html: { data: popover_data_attrs('ncr_amount') }
       = f.input :not_to_exceed, as: :radio_buttons, collection: [['Exact', false], ['Not to exceed', true]], label: false
     = f.input :direct_pay
     .form-group

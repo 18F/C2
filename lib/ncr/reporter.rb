@@ -25,11 +25,31 @@ module Ncr
       Rails.application.routes.url_helpers.url_for(controller: 'proposals', action: 'show', id: proposal.id, host: DEFAULT_URL_HOST)
     end
 
+    def self.build_ncr_annual_report_string(year)
+      work_orders = Ncr::WorkOrder.cancelled.for_fiscal_year(year)
+      CSV.generate do |csv|
+        csv << ["Id", "Amount", "Date Approved", "Org Code", "CL#", "Budget Activity", "SOC", "Function Code", "Building #",
+                "Vendor", "Description", "Requestor", "Approver"]
+        self.get_ncr_annual_report_body(csv, work_orders)
+      end
+    end
+
+    # rubocop:disable Metrics/AbcSize
+    def self.get_ncr_annual_report_body(csv, work_orders)
+      work_orders.each do |w|
+        approver_name = w.approving_official ? w.approving_official.full_name : "no approver listed"
+        approved_at = w.proposal.approvals.last ? w.proposal.approvals.last.approved_at : "no approvals"
+        csv << [w.proposal.public_id, w.amount, approved_at, w.org_code, w.cl_number, w.expense_type, w.soc_code,
+                w.function_code, w.building_number, w.vendor, w.description, w.proposal.requester.full_name, approver_name]
+      end
+    end
+    # rubocop:enable Metrics/AbcSize
+
     def self.make_csv_row(proposal)
       [
         self.proposal_public_url(proposal),
         proposal.requester.email_address,
-        proposal.client_data.approving_official_email_address,
+        proposal.client_data.decorate.current_approver_email_address,
         proposal.client_data.cl_number,
         proposal.client_data.function_code,
         proposal.client_data.soc_code,

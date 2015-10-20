@@ -1,12 +1,12 @@
 describe Query::Proposal::Listing do
   let(:params) { ActionController::Parameters.new }
-  let(:user) { FactoryGirl.create(:user) }
+  let(:user) { create(:user) }
 
   [:pending, :approved, :cancelled].each do |status|
     describe "##{status}" do
       it "ignores app admin role and only returns the user's Proposals" do
-        FactoryGirl.create(:proposal, status: status)
-        proposal = FactoryGirl.create(:proposal, requester: user, status: status)
+        create(:proposal, status: status)
+        proposal = create(:proposal, requester: user, status: status)
         user.add_role('admin')
         listing = Query::Proposal::Listing.new(user, params)
         expect(listing.send(status).rows).to eq([proposal])
@@ -19,10 +19,10 @@ describe Query::Proposal::Listing do
         end
 
         it "ignores client_admin role and only displays the user's Proposals" do
-          proposal = FactoryGirl.create(:proposal, requester: user, status: status)
+          proposal = create(:proposal, requester: user, status: status)
 
-          other_proposal = FactoryGirl.create(:proposal, status: status)
-          FactoryGirl.create(:ncr_work_order, proposal: other_proposal)
+          other_proposal = create(:proposal, status: status)
+          create(:ncr_work_order, proposal: other_proposal)
 
           listing = Query::Proposal::Listing.new(user, params)
           expect(listing.send(status).rows).to eq([proposal])

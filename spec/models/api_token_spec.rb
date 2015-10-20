@@ -6,7 +6,7 @@ describe ApiToken do
     end
 
     it "doesn't duplicate an existing access_token" do
-      existing_token = FactoryGirl.create(:api_token)
+      existing_token = create(:api_token)
       expect(SecureRandom).to receive(:hex).and_return(existing_token.access_token, 'newtoken')
 
       token = ApiToken.create!(approval_id: 1)

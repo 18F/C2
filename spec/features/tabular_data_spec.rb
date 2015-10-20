@@ -1,7 +1,7 @@
 describe "Tabular data sorting" do
-  let(:user) { FactoryGirl.create(:user) }
-  let!(:proposals) { 4.times.map { FactoryGirl.create(:proposal) } }
-  let!(:cancelled) { 2.times.map { FactoryGirl.create(:proposal, status: 'cancelled') } }
+  let(:user) { create(:user) }
+  let!(:proposals) { 4.times.map { create(:proposal) } }
+  let!(:cancelled) { 2.times.map { create(:proposal, status: 'cancelled') } }
   before :each do
     Proposal.all().each { |p| p.add_observer(user.email_address) }
     login_as(user)
@@ -41,9 +41,9 @@ describe "Tabular data sorting" do
     end
 
     it 'allows other titles to be clicked to resort' do
-      proposals[0].requester.update(email_address: "bbb@bbb.gov")
-      proposals[1].requester.update(email_address: "ccc@ccc.gov")
-      proposals[2].requester.update(email_address: "aaa@aaa.gov")
+      proposals[0].requester.update(email_address: "bbb@example.com")
+      proposals[1].requester.update(email_address: "ccc@example.com")
+      proposals[2].requester.update(email_address: "aaa@example.com")
 
       visit '/proposals'
       expect_order(tables[0], proposals.reverse)
@@ -79,7 +79,7 @@ describe "Tabular data sorting" do
   end
 
   context '18F home page' do
-    let!(:proposals) { 3.times.map { FactoryGirl.create(:gsa18f_procurement) } }
+    let!(:proposals) { 3.times.map { create(:gsa18f_procurement) } }
 
     before do
       user.update(client_slug: "gsa18f")

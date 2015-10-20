@@ -59,16 +59,11 @@ class Proposal < ActiveRecord::Base
   scope :closed, -> { where(status: ['approved', 'cancelled']) } #TODO: Backfill to change approvals in 'reject' status to 'cancelled' status
   scope :cancelled, -> { where(status: 'cancelled') }
 
-  after_initialize :set_defaults
   after_create :update_public_id
 
   # @todo - this should probably be the only entry into the approval system
   def root_approval
     self.approvals.where(parent: nil).first
-  end
-
-  def set_defaults
-    self.flow ||= 'parallel'
   end
 
   def parallel?
@@ -115,14 +110,17 @@ class Proposal < ActiveRecord::Base
       approval.set_list_position(idx + 1)   # start with 1
     end
 
-    old_approvals.each do |old|
-      unless approval_list.include?(old)
-        old.destroy()
-      end
-    end
+    self.clean_up_old_approvals(old_approvals, approval_list)
 
     root.initialize!
     self.reset_status()
+  end
+
+  def clean_up_old_approvals(old_approvals, approval_list)
+    # destroy any old approvals that are not a part of approval_list
+    (old_approvals - approval_list).each do |appr|
+      appr.destroy() if Approval.exists?(appr.id)
+    end
   end
 
   # convenience wrapper for setting a single approver
@@ -146,6 +144,10 @@ class Proposal < ActiveRecord::Base
 
   def existing_observation_for(user)
     self.observations.find_by(user: user)
+  end
+
+  def has_subscriber?(user)
+    existing_observation_for(user) || existing_approval_for(user) || requester_id == user.id
   end
 
   def add_observer(email_or_user, adder=nil, reason=nil)
@@ -200,7 +202,6 @@ class Proposal < ActiveRecord::Base
     end
   end
 
-
   ## delegated methods ##
 
   def public_identifier
@@ -228,7 +229,6 @@ class Proposal < ActiveRecord::Base
   end
 
   #######################
-
 
   def restart
     # Note that none of the state machine's history is stored
@@ -268,18 +268,25 @@ class Proposal < ActiveRecord::Base
     self.observers(true)
     # when explicitly adding an observer using the form in the Proposal page...
     if adder
-      add_observation_comment(user, adder, reason) unless reason.blank?
+      if reason
+        add_observation_comment(user, adder, reason)
+      end
+
       Dispatcher.on_observer_added(observation, reason)
     end
+
     observation
   end
 
   def add_observation_comment(user, adder, reason)
-    self.comments.create(
-      comment_text: I18n.t('activerecord.attributes.observation.user_reason_comment',
-                           user: adder.full_name,
-                           observer: user.full_name,
-                           reason: reason),
-      user: adder)
+    comments.create(
+      comment_text: I18n.t(
+        'activerecord.attributes.observation.user_reason_comment',
+        user: adder.full_name,
+        observer: user.full_name,
+        reason: reason
+      ),
+      user: adder
+    )
   end
 end

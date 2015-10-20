@@ -12,7 +12,7 @@ describe 'Users API' do
 
     with_feature 'API_ENABLED' do
       it "responds with the list of users" do
-        user = FactoryGirl.create(:user)
+        user = create(:user)
         json = get_json('/api/v1/users.json')
 
         expect(response.status).to eq(200)
@@ -26,7 +26,7 @@ describe 'Users API' do
       end
 
       it "includes the personal details when signed in" do
-        user = FactoryGirl.create(:user)
+        user = create(:user)
         login_as(user)
 
         json = get_json('/api/v1/users.json')
@@ -49,7 +49,7 @@ describe 'Users API' do
 
       it "can be `limit`ed" do
         3.times do
-          FactoryGirl.create(:user)
+          create(:user)
         end
 
         json = get_json('/api/v1/users.json?limit=2')
@@ -58,7 +58,7 @@ describe 'Users API' do
 
       it "can be `offset`" do
         users = 3.times.map do
-          FactoryGirl.create(:user)
+          create(:user)
         end
 
         json = get_json('/api/v1/users.json?offset=1')

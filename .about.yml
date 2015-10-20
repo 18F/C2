@@ -1,0 +1,121 @@
+---
+# .about.yml project metadata
+#
+# Short name that acts as the project identifier (required)
+name: C2
+
+# Full proper name of the project (required)
+full_name: C2
+
+# The type of content in the repo
+# values: app, docs, policy
+type: app
+
+# Describes whether a project team, working group/guild, etc. owns the repo (required)
+# values: guild, working-group, project
+owner_type: project
+
+# Maturity stage of the project (required)
+# values: discovery, alpha, beta, live
+stage: live
+
+# Whether or not the project is actively maintained (required)
+# values: active, deprecated
+status: active
+
+# Description of the project
+description: an approval process automation tool
+
+# Should be 'true' if the project has a continuous build (required)
+# values: true, false
+testable: true
+
+# Team members contributing to the project (required)
+# Items:
+# - github: GitHub user name
+#   id: Internal team identifier/user name
+#   role: Team member's role; leads should be designated as 'lead'
+team:
+- github: afeld
+  id: afeld
+  role: developer
+- github: annalee
+  id: annalee
+  role: developer
+- github: anthonygarvan
+  id: anthony.garvan
+  role: developer
+- github: phirefly
+  id: raphy
+  role: lead
+- github: pkarman
+  id: pkarman
+  role: developer
+- github: yozlet
+  id: yoz
+  role: developer
+
+# Partners for whom the project is developed
+partners:
+- GSA National Capital Region
+- 18F
+- GSA Common Acquisition Platform
+
+# Brief descriptions of significant project developments
+#milestones:
+
+# Technologies used to build the project
+stack:
+- Ruby
+- Rails
+
+# Brief description of the project's outcomes
+#impact:
+
+# Services used to supply project status information
+# Items:
+# - name: Name of the service
+#   category: Type of the service
+#   url: URL for detailed information
+#   badge: URL for the status badge
+services:
+- name: CircleCI
+  category: testing
+  url: https://circleci.com/gh/18F/C2
+  badge: https://circleci.com/gh/18F/C2.svg?style=svg
+- name: Code Climate
+  category: testing
+  url: https://codeclimate.com/github/18F/C2
+  badge: https://codeclimate.com/github/18F/C2/badges/gpa.svg
+- name: Gemnasium
+  category: dependency status
+  url: https://gemnasium.com/18F/C2
+  badge: https://gemnasium.com/18F/C2.svg
+
+# Licenses that apply to the project and/or its components (required)
+# Items by property name pattern:
+#   .*:
+#     name: Name of the license from the Software Package Data Exchange (SPDX): https://spdx.org/licenses/
+#     url: URL for the text of the license
+licenses: 
+  C2:
+    name: "CC0-1.0"
+    url: https://github.com/18F/C2/blob/master/LICENSE.md
+
+# Blogs or websites associated with project development
+#blog:
+
+# Links to project artifacts
+# Items:
+# - url: URL for the link
+#   text: Anchor text for the link
+links:
+- url: https://c2.18f.gov/
+- text: C2 website
+
+# Email addresses of points-of-contact
+contact:
+- url: mailto:gatewaycommunicator@gsa.gov
+  text: C2 support
+- url: https://github.com/18F/C2/issues
+  text: C2 GitHub issues

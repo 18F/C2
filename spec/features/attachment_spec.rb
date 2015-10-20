@@ -1,7 +1,7 @@
 describe "Add attachments" do
-  let (:proposal) { FactoryGirl.create(:proposal, :with_parallel_approvers) }
+  let (:proposal) { create(:proposal, :with_parallel_approvers) }
   let! (:attachment) {
-    FactoryGirl.create(:attachment, proposal: proposal,
+    create(:attachment, proposal: proposal,
                        user: proposal.requester) }
 
   before do
@@ -46,7 +46,7 @@ describe "Add attachments" do
 
   it "emails everyone involved in the proposal" do
     expect(Dispatcher).to receive(:deliver_attachment_emails)
-    proposal.add_observer("wiley-cat@some-cartoon-show.com")
+    proposal.add_observer("wiley-cat@example.com")
     visit proposal_path(proposal)
     page.attach_file('attachment[file]', "#{Rails.root}/app/assets/images/bg_approved_status.gif")
     click_on "Attach a File"

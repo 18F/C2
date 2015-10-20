@@ -34,6 +34,10 @@ en:
       # overrides
       observation:
         create: "Add"
+    popover:
+      ncr_amount:
+        title: "Transaction Amount Thresholds"
+        content: "$3,500 for supplies<br>$2,500 for services<br>$2,000 for construction"
   activerecord:
     attributes:
       gsa18f/procurement:
