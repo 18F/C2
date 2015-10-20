@@ -6,20 +6,13 @@ def in_spec?
   !respond_to?(:describe)
 end
 
-def with_env_vars_runner(env)
-  env = env.stringify_keys
-  old_values = {}
-  env.each_key { |k| old_values[k] = ENV[k] }
-  env.each { |k, v| ENV[k] = v.to_s }
-  yield
-  old_values.each { |k, v| ENV[k] = v }
-end
-
-# https://github.com/rspec/rspec-core/issues/1378#issuecomment-37248037
+# insertion in RSpec not supported by Climate Control directly
+# https://github.com/thoughtbot/climate_control/pull/14
 def with_env_vars_around(env, &block)
+  # https://github.com/rspec/rspec-core/issues/1378#issuecomment-37248037
   context "with ENV vars #{env}" do
     around(:each) do |example|
-      with_env_vars_runner(env) do
+      ClimateControl.modify(env) do
         example.run
       end
     end
@@ -34,7 +27,7 @@ end
 
 def with_env_vars(env, &block)
   if in_spec?
-    with_env_vars_runner(env, &block)
+    ClimateControl.modify(env, &block)
   else
     with_env_vars_around(env, &block)
   end

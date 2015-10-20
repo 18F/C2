@@ -88,6 +88,14 @@ describe User do
 
       expect(user.full_name).to eq 'george.jetson@example.com'
     end
+
+    it "returns the user's email address if the first name and last name are blank" do
+      user.first_name = ''
+      user.last_name = ''
+      user.email_address = 'george.jetson@example.com'
+
+      expect(user.full_name).to eq 'george.jetson@example.com'
+    end
   end
 
   describe '#has_role?' do
