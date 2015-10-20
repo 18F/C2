@@ -133,26 +133,26 @@ describe Ncr::WorkOrdersController do
     end
 
     it 'will not modify emergency status on non-emergencies' do
-      expect(work_order.approvals.empty?).to be false
+      expect(work_order.steps.empty?).to be false
       expect(work_order.observers.empty?).to be true
       post :update, {id: work_order.id, approver_email: work_order.approvers.first.email_address,
                      ncr_work_order: {expense_type: 'BA61', emergency: '1'}}
       work_order.reload
       expect(work_order.emergency).to be false
-      expect(work_order.approvals.empty?).to be false
+      expect(work_order.steps.empty?).to be false
       expect(work_order.observers.empty?).to be true
     end
 
     it 'will not modify emergency status on emergencies' do
       work_order = create(:ncr_work_order, :is_emergency, requester: requester)
-      expect(work_order.approvals.empty?).to be true
+      expect(work_order.steps.empty?).to be true
       expect(work_order.observers.empty?).to be false
       post :update, {id: work_order.id, approver_email: work_order.observers.first.email_address,
                      ncr_work_order: {expense_type: 'BA61', building_number: 'BillDing', emergency: '0'}}
       work_order.reload
       expect(work_order.emergency).to be true
       expect(work_order.building_number).to eq "BillDing"
-      expect(work_order.approvals.empty?).to be true
+      expect(work_order.steps.empty?).to be true
       expect(work_order.observers.empty?).to be false
     end
   end

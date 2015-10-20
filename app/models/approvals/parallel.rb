@@ -1,7 +1,7 @@
 # A node in an approval chain that allows its child approvals to come in in
 # any order
 module Approvals
-  class Parallel < Approval
+  class Parallel < Step
     validates :min_children_needed, numericality: {allow_blank: true}
 
     workflow do

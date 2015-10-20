@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
   validates :email_address, presence: true, uniqueness: true
   validates_email_format_of :email_address
 
-  has_many :approvals
+  has_many :steps
   has_many :observations
   has_many :comments
 

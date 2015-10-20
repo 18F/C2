@@ -16,7 +16,7 @@ describe ProposalDecorator do
   describe '#approvals_by_status' do
     it "orders by approved, actionable, pending" do
       # make two approvals for each status, in random order
-      statuses = Approval.statuses.map(&:to_s)
+      statuses = Step.statuses.map(&:to_s)
       statuses = statuses.dup + statuses.clone
       statuses = randomize(statuses)
 

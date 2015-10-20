@@ -11,7 +11,7 @@ describe LinearDispatcher do
 
     it "returns nil if all are non-pending" do
       proposal = create(:proposal, :with_approver, flow: 'linear')
-      proposal.root_approval.approve!
+      proposal.root_step.approve!
       expect(dispatcher.next_pending_approval(proposal)).to eq(nil)
     end
 
@@ -25,7 +25,7 @@ describe LinearDispatcher do
 
     it "skips non-approvers" do
       proposal = create(:proposal, :with_approver, :with_observers)
-      approval = proposal.approvals.first
+      approval = proposal.steps.first
       expect(dispatcher.next_pending_approval(proposal)).to eq(approval)
     end
   end
@@ -33,7 +33,7 @@ describe LinearDispatcher do
   describe '#deliver_new_proposal_emails' do
     it "sends emails to the first approver" do
       proposal = create(:proposal, :with_approver)
-      approval = proposal.approvals.first
+      approval = proposal.steps.first
 
       expect(dispatcher).to receive(:email_approver).with(approval)
 

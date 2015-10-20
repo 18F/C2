@@ -1,9 +1,9 @@
 # Represents a single user's ability to approve, the "leaves" of an approval
 # chain
 module Approvals
-  class Individual < Approval
+  class Individual < Step
     belongs_to :user
-    has_one :api_token, -> { fresh }, foreign_key: 'approval_id'
+    has_one :api_token, -> { fresh }, foreign_key: 'step_id'
     has_many :delegations, through: :user, source: :outgoing_delegates
     has_many :delegates, through: :delegations, source: :assignee
 

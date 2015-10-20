@@ -1,6 +1,6 @@
 # A node in an approval chain that requires its children be approved in order
 module Approvals
-  class Serial < Approval
+  class Serial < Step
     workflow do
       on_transition { self.touch } # sets updated_at; https://github.com/geekq/workflow/issues/96
 

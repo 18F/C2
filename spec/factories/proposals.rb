@@ -14,7 +14,7 @@ FactoryGirl.define do
       flow 'linear'
       after :create do |proposal|
         ind = 2.times.map{ Approvals::Individual.new(user: create(:user)) }
-        proposal.root_approval = Approvals::Serial.new(child_approvals: ind)
+        proposal.root_step = Approvals::Serial.new(child_approvals: ind)
       end
     end
 
@@ -22,7 +22,7 @@ FactoryGirl.define do
       flow 'parallel'
       after :create do |proposal|
         ind = 2.times.map{ Approvals::Individual.new(user: create(:user)) }
-        proposal.root_approval = Approvals::Parallel.new(child_approvals: ind)
+        proposal.root_step = Approvals::Parallel.new(child_approvals: ind)
       end
     end
 

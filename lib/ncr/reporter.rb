@@ -38,7 +38,7 @@ module Ncr
     def self.get_ncr_annual_report_body(csv, work_orders)
       work_orders.each do |w|
         approver_name = w.approving_official ? w.approving_official.full_name : "no approver listed"
-        approved_at = w.proposal.approvals.last ? w.proposal.approvals.last.approved_at : "no approvals"
+        approved_at = w.proposal.steps.last ? w.proposal.steps.last.approved_at : "no approvals"
         csv << [w.proposal.public_id, w.amount, approved_at, w.org_code, w.cl_number, w.expense_type, w.soc_code,
                 w.function_code, w.building_number, w.vendor, w.description, w.proposal.requester.full_name, approver_name]
       end
@@ -93,7 +93,7 @@ module Ncr
       tier_one_sql = User.sql_for_role_slug('BA61_tier1_budget_approver', 'ncr')
 
       <<-SQL.gsub(/^ {8}/, '')
-        SELECT a.proposal_id FROM approvals AS a
+        SELECT a.proposal_id FROM steps AS a
         WHERE a.status='actionable' AND a.user_id IN (#{tier_one_sql})
       SQL
     end

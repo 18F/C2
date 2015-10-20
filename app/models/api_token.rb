@@ -3,12 +3,12 @@ class ApiToken < ActiveRecord::Base
 
   before_create :generate_token
 
-  belongs_to :approval, class_name: 'Approvals::Individual'
-  has_one :proposal, through: :approval
-  has_one :user, through: :approval
+  belongs_to :step, class_name: 'Approvals::Individual'
+  has_one :proposal, through: :step
+  has_one :user, through: :step
 
   # TODO validates :access_token, presence: true
-  validates :approval_id, presence: true
+  validates :step_id, presence: true
 
   scope :unexpired, -> { where('expires_at >= ?', Time.zone.now) }
   scope :expired, -> { where('expires_at < ?', Time.zone.now) }

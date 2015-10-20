@@ -10,5 +10,5 @@ class ProposalSerializer < ActiveModel::Serializer
   )
 
   has_one :requester
-  has_many :individual_approvals, root: :approvals
+  has_many :individual_approvals, root: :steps
 end

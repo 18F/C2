@@ -14,7 +14,7 @@ describe Comment do
     it "includes approved approvers" do
       individuals = proposal.individual_approvals
       individuals += [Approvals::Individual.new(user: create(:user))]
-      proposal.root_approval = Approvals::Serial.new(child_approvals: individuals)
+      proposal.root_step = Approvals::Serial.new(child_approvals: individuals)
 
       expect(proposal.approvers.length).to eq(3)
       proposal.individual_approvals.first.approve!

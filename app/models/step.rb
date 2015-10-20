@@ -1,4 +1,4 @@
-class Approval < ActiveRecord::Base
+class Step < ActiveRecord::Base
   include WorkflowModel
   has_paper_trail class_name: 'C2Version'
 
@@ -12,8 +12,8 @@ class Approval < ActiveRecord::Base
   acts_as_list scope: :proposal
   validates :proposal, presence: true
 
-  belongs_to :parent, class_name: 'Approval'
-  has_many :child_approvals, class_name: 'Approval', foreign_key: 'parent_id', dependent: :destroy
+  belongs_to :parent, class_name: 'Step'
+  has_many :child_approvals, class_name: 'Step', foreign_key: 'parent_id', dependent: :destroy
 
   scope :individual, -> { where(type: 'Approvals::Individual') }
 

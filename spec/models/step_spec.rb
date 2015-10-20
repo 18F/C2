@@ -1,4 +1,4 @@
-describe Approval do
+describe Step do
   let(:approval) { create(:approval) }
 
   describe '#api_token' do
@@ -51,7 +51,7 @@ describe Approval do
       proposal = create(:proposal)
       child1 = Approvals::Individual.new(user: create(:user))
       child2 = Approvals::Individual.new(user: create(:user))
-      proposal.root_approval = Approvals::Parallel.new(child_approvals: [child1, child2])
+      proposal.root_step = Approvals::Parallel.new(child_approvals: [child1, child2])
 
       expect(proposal).not_to receive(:approve!)
       child1.approve!
@@ -80,7 +80,7 @@ describe Approval do
         Approvals::Individual.new(user: dan),
         Approvals::Individual.new(user: erin)
       ])
-      proposal.root_approval = Approvals::Parallel.new(min_children_needed: 2, child_approvals: [
+      proposal.root_step = Approvals::Parallel.new(min_children_needed: 2, child_approvals: [
         and_clause, 
         Approvals::Individual.new(user: carrie),
         then_clause

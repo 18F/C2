@@ -1,7 +1,7 @@
 describe ApiToken do
   describe '.create' do
     it "sets the access_token" do
-      token = ApiToken.create!(approval_id: 1)
+      token = ApiToken.create!(step_id: 1)
       expect(token.access_token).to_not be_blank
     end
 
@@ -9,13 +9,13 @@ describe ApiToken do
       existing_token = create(:api_token)
       expect(SecureRandom).to receive(:hex).and_return(existing_token.access_token, 'newtoken')
 
-      token = ApiToken.create!(approval_id: 1)
+      token = ApiToken.create!(step_id: 1)
       expect(token.access_token).to eq('newtoken')
     end
 
     it "sets the expiry" do
       Timecop.freeze do
-        token = ApiToken.create!(approval_id: 1)
+        token = ApiToken.create!(step_id: 1)
         expect(token.expires_at).to eq(7.days.from_now)
       end
     end

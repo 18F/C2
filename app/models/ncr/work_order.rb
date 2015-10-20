@@ -305,7 +305,7 @@ module Ncr
         # Reuse existing approvals, if present
         self.proposal.existing_approval_for(user) || Approvals::Individual.new(user: user)
       end
-      self.proposal.root_approval = Approvals::Serial.new(child_approvals: individuals)
+      self.proposal.root_step = Approvals::Serial.new(child_approvals: individuals)
     end
 
     def notify_removed_approvers(original_approvers)

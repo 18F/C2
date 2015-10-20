@@ -26,7 +26,7 @@ class Proposal < ActiveRecord::Base
     end
   end
 
-  has_many :approvals
+  has_many :steps
   has_many :individual_approvals, ->{ individual }, class_name: 'Approvals::Individual'
   has_many :approvers, through: :individual_approvals, source: :user
   has_many :api_tokens, through: :individual_approvals
@@ -62,8 +62,8 @@ class Proposal < ActiveRecord::Base
   after_create :update_public_id
 
   # @todo - this should probably be the only entry into the approval system
-  def root_approval
-    self.approvals.where(parent: nil).first
+  def root_step
+    self.steps.where(parent: nil).first
   end
 
   def parallel?
@@ -84,7 +84,7 @@ class Proposal < ActiveRecord::Base
       OR user_id IN (SELECT assigner_id FROM approval_delegates WHERE assignee_id = :user_id)
       OR user_id IN (SELECT assignee_id FROM approval_delegates WHERE assigner_id = :user_id)
     SQL
-    self.approvals.where(where_clause, user_id: user.id).first
+    self.steps.where(where_clause, user_id: user.id).first
   end
 
   # TODO convert to an association
@@ -99,12 +99,12 @@ class Proposal < ActiveRecord::Base
     results.compact.uniq
   end
 
-  def root_approval=(root)
-    old_approvals = self.approvals.to_a
+  def root_step=(root)
+    old_approvals = self.steps.to_a
 
     approval_list = root.pre_order_tree_traversal
     approval_list.each { |a| a.proposal = self }
-    self.approvals = approval_list
+    self.steps = approval_list
     # position may be out of whack, so we reset it
     approval_list.each_with_index do |approval, idx|
       approval.set_list_position(idx + 1)   # start with 1
@@ -119,7 +119,7 @@ class Proposal < ActiveRecord::Base
   def clean_up_old_approvals(old_approvals, approval_list)
     # destroy any old approvals that are not a part of approval_list
     (old_approvals - approval_list).each do |appr|
-      appr.destroy() if Approval.exists?(appr.id)
+      appr.destroy() if Step.exists?(appr.id)
     end
   end
 
@@ -128,13 +128,13 @@ class Proposal < ActiveRecord::Base
     # Don't recreate the approval
     existing = self.existing_approval_for(approver)
     if existing.nil?
-      self.root_approval = Approvals::Individual.new(user: approver)
+      self.root_step = Approvals::Individual.new(user: approver)
     end
   end
 
   def reset_status()
     unless self.cancelled?   # no escape from cancelled
-      if self.root_approval.nil? || self.root_approval.approved?
+      if self.root_step.nil? || self.root_step.approved?
         self.update(status: 'approved')
       else
         self.update(status: 'pending')
@@ -233,9 +233,9 @@ class Proposal < ActiveRecord::Base
   def restart
     # Note that none of the state machine's history is stored
     self.api_tokens.update_all(expires_at: Time.zone.now)
-    self.approvals.update_all(status: 'pending')
-    if self.root_approval
-      self.root_approval.initialize!
+    self.steps.update_all(status: 'pending')
+    if self.root_step
+      self.root_step.initialize!
     end
     Dispatcher.deliver_new_proposal_emails(self)
   end

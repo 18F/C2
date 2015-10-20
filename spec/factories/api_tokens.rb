@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :api_token do
     access_token "10a9b8c7d6e"
-    approval_id 1
+    step_id 1
     expires_at "2014-07-02 12:42:22"
   end
 end
