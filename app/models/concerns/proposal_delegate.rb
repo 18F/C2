@@ -8,7 +8,7 @@ module ProposalDelegate
 
     has_one :proposal, as: :client_data
     has_many :steps, through: :proposal
-    has_many :individual_approvals, ->{ individual }, class_name: 'Approvals::Individual', through: :proposal
+    has_many :individual_approvals, ->{ individual }, class_name: 'Steps::Individual', through: :proposal
     has_many :approvers, through: :individual_approvals, source: :user
     has_many :observations, through: :proposal
     has_many :observers, through: :observations, source: :user

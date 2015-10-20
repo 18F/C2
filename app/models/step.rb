@@ -15,7 +15,7 @@ class Step < ActiveRecord::Base
   belongs_to :parent, class_name: 'Step'
   has_many :child_approvals, class_name: 'Step', foreign_key: 'parent_id', dependent: :destroy
 
-  scope :individual, -> { where(type: 'Approvals::Individual') }
+  scope :individual, -> { where(type: 'Steps::Individual') }
 
 
   self.statuses.each do |status|

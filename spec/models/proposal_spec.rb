@@ -105,9 +105,9 @@ describe Proposal do
     it 'sets initial approvers' do
       proposal = create(:proposal)
       approvers = 3.times.map{ create(:user) }
-      individuals = approvers.map{ |u| Approvals::Individual.new(user: u) }
+      individuals = approvers.map{ |u| Steps::Individual.new(user: u) }
 
-      proposal.root_step = Approvals::Parallel.new(child_approvals: individuals)
+      proposal.root_step = Steps::Parallel.new(child_approvals: individuals)
 
       expect(proposal.steps.count).to be 4
       expect(proposal.approvers).to eq approvers
@@ -115,9 +115,9 @@ describe Proposal do
 
     it 'initates parallel' do
       proposal = create(:proposal, flow: 'parallel')
-      individuals = [approver1, approver2, approver3].map{ |u| Approvals::Individual.new(user: u)}
+      individuals = [approver1, approver2, approver3].map{ |u| Steps::Individual.new(user: u)}
 
-      proposal.root_step = Approvals::Parallel.new(child_approvals: individuals)
+      proposal.root_step = Steps::Parallel.new(child_approvals: individuals)
 
       expect(proposal.approvers.count).to be 3
       expect(proposal.steps.count).to be 4
@@ -127,9 +127,9 @@ describe Proposal do
 
     it 'initates linear' do
       proposal = create(:proposal, flow: 'linear')
-      individuals = [approver1, approver2, approver3].map{ |u| Approvals::Individual.new(user: u)}
+      individuals = [approver1, approver2, approver3].map{ |u| Steps::Individual.new(user: u)}
 
-      proposal.root_step = Approvals::Serial.new(child_approvals: individuals)
+      proposal.root_step = Steps::Serial.new(child_approvals: individuals)
 
       expect(proposal.approvers.count).to be 3
       expect(proposal.steps.count).to be 4
@@ -139,14 +139,14 @@ describe Proposal do
 
     it 'fixes modified parallel proposal approvals' do
       proposal = create(:proposal, flow: 'parallel')
-      individuals = [Approvals::Individual.new(user: approver1)]
-      proposal.root_step = Approvals::Parallel.new(child_approvals: individuals)
+      individuals = [Steps::Individual.new(user: approver1)]
+      proposal.root_step = Steps::Parallel.new(child_approvals: individuals)
 
       expect(proposal.steps.actionable.count).to be 2
       expect(proposal.individual_approvals.actionable.count).to be 1
 
-      individuals = individuals + [approver2, approver3].map{ |u| Approvals::Individual.new(user: u)}
-      proposal.root_step = Approvals::Parallel.new(child_approvals: individuals)
+      individuals = individuals + [approver2, approver3].map{ |u| Steps::Individual.new(user: u)}
+      proposal.root_step = Steps::Parallel.new(child_approvals: individuals)
 
       expect(proposal.steps.actionable.count).to be 4
       expect(proposal.individual_approvals.actionable.count).to be 3
@@ -155,15 +155,15 @@ describe Proposal do
     it 'fixes modified linear proposal approvals' do
       proposal = create(:proposal, flow: 'linear')
       approver1, approver2, approver3 = 3.times.map{ create(:user) }
-      individuals = [approver1, approver2].map{ |u| Approvals::Individual.new(user: u) }
-      proposal.root_step = Approvals::Serial.new(child_approvals: individuals)
+      individuals = [approver1, approver2].map{ |u| Steps::Individual.new(user: u) }
+      proposal.root_step = Steps::Serial.new(child_approvals: individuals)
 
       expect(proposal.steps.actionable.count).to be 2
       expect(proposal.individual_approvals.actionable.count).to be 1
 
       individuals.first.approve!
-      individuals[1] = Approvals::Individual.new(user: approver3)
-      proposal.root_step = Approvals::Serial.new(child_approvals: individuals)
+      individuals[1] = Steps::Individual.new(user: approver3)
+      proposal.root_step = Steps::Serial.new(child_approvals: individuals)
 
       expect(proposal.steps.approved.count).to be 1
       expect(proposal.steps.actionable.count).to be 2
@@ -173,8 +173,8 @@ describe Proposal do
 
     it 'does not modify a full approved parallel proposal' do
       proposal = create(:proposal, flow: 'parallel')
-      individuals = [approver1, approver2].map{ |u| Approvals::Individual.new(user: u)}
-      proposal.root_step = Approvals::Parallel.new(child_approvals: individuals)
+      individuals = [approver1, approver2].map{ |u| Steps::Individual.new(user: u)}
+      proposal.root_step = Steps::Parallel.new(child_approvals: individuals)
 
       proposal.individual_approvals.first.approve!
       proposal.individual_approvals.second.approve!
@@ -184,8 +184,8 @@ describe Proposal do
 
     it 'does not modify a full approved linear proposal' do
       proposal = create(:proposal, flow: 'linear')
-      individuals = [approver1, approver2].map{ |u| Approvals::Individual.new(user: u)}
-      proposal.root_step = Approvals::Serial.new(child_approvals: individuals)
+      individuals = [approver1, approver2].map{ |u| Steps::Individual.new(user: u)}
+      proposal.root_step = Steps::Serial.new(child_approvals: individuals)
 
       proposal.individual_approvals.first.approve!
       proposal.individual_approvals.second.approve!
@@ -196,7 +196,7 @@ describe Proposal do
     it 'deletes approvals' do
       proposal = create(:proposal, :with_parallel_approvers)
       approval1, approval2 = proposal.individual_approvals
-      proposal.root_step = Approvals::Serial.new(child_approvals: [approval2])
+      proposal.root_step = Steps::Serial.new(child_approvals: [approval2])
 
       expect(Step.exists?(approval1.id)).to be false
     end
@@ -225,8 +225,8 @@ describe Proposal do
       proposal.individual_approvals.first.approve!
       proposal.individual_approvals.second.approve!
       expect(proposal.reload.approved?).to be true
-      individuals = proposal.root_step.child_approvals + [Approvals::Individual.new(user: create(:user))]
-      proposal.root_step = Approvals::Parallel.new(child_approvals: individuals)
+      individuals = proposal.root_step.child_approvals + [Steps::Individual.new(user: create(:user))]
+      proposal.root_step = Steps::Parallel.new(child_approvals: individuals)
 
       proposal.reset_status()
       expect(proposal.pending?).to be true

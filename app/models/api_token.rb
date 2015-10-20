@@ -3,7 +3,7 @@ class ApiToken < ActiveRecord::Base
 
   before_create :generate_token
 
-  belongs_to :step, class_name: 'Approvals::Individual'
+  belongs_to :step, class_name: 'Steps::Individual'
   has_one :proposal, through: :step
   has_one :user, through: :step
 

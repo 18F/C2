@@ -1,6 +1,9 @@
-# A node in an approval chain that requires its children be approved in order
-module Approvals
-  class Serial < Step
+# A node in an approval chain that allows its child approvals to come in in
+# any order
+module Steps
+  class Parallel < Step
+    validates :min_children_needed, numericality: {allow_blank: true}
+
     workflow do
       on_transition { self.touch } # sets updated_at; https://github.com/geekq/workflow/issues/96
 
@@ -14,8 +17,7 @@ module Approvals
         event :initialize, transitions_to: :actionable do
           halt  # prevent state transition
         end
-        event :child_approved, transitions_to: :approved do |child|
-          self.init_child_after(child)
+        event :child_approved, transitions_to: :approved do |_|
           halt unless self.children_approved?
         end
         event :force_approve, transitions_to: :approved
@@ -36,19 +38,19 @@ module Approvals
     end
 
     def on_actionable_entry(old_state, event)
-      if first_approval = self.child_approvals.first
-        first_approval.initialize!
+      if self.child_approvals.any?
+        self.child_approvals.each(&:initialize!)
       else
         self.force_approve!
       end
     end
 
-    # enforce initialization of children in sequence. If we hit one which is
-    # already approved, it will notify us, and then  we'll notify the next
-    def init_child_after(approval)
-      if child_after = self.child_approvals.where('position > ?', approval.position).first
-        child_after.initialize!
-      end
+    # overrides to allow for ratios. For example, if there are three child
+    # approvals, and min_children_needed is set to 2, only 2 of the 3 must
+    # approve. When min_children_needed is 1, we create an "OR" situation
+    def children_approved?
+      needed = self.min_children_needed || self.child_approvals.count
+      self.child_approvals.approved.count >= needed
     end
   end
 end

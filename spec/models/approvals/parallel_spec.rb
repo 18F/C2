@@ -1,11 +1,11 @@
-describe Approvals::Parallel do
+describe Steps::Parallel do
   let (:proposal) { create(:proposal) }
 
   it 'allows approvals in any order' do
     first = build(:approval, proposal: nil)
     second = build(:approval, proposal: nil)
     third = build(:approval, proposal: nil)
-    proposal.root_step = Approvals::Parallel.new(child_approvals: [first, second, third])
+    proposal.root_step = Steps::Parallel.new(child_approvals: [first, second, third])
 
     expect(proposal.root_step.reload.status).to eq('actionable')
     expect(first.reload.status).to eq('actionable')
@@ -35,7 +35,7 @@ describe Approvals::Parallel do
     first = build(:approval, proposal: nil)
     second = build(:approval, proposal: nil)
     third = build(:approval, proposal: nil)
-    proposal.root_step = Approvals::Parallel.new(min_children_needed: 2, child_approvals: [first, second, third])
+    proposal.root_step = Steps::Parallel.new(min_children_needed: 2, child_approvals: [first, second, third])
 
     first.reload.approve!
     expect(proposal.root_step.reload.status).to eq('actionable')

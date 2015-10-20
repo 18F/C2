@@ -13,16 +13,16 @@ FactoryGirl.define do
     trait :with_serial_approvers do
       flow 'linear'
       after :create do |proposal|
-        ind = 2.times.map{ Approvals::Individual.new(user: create(:user)) }
-        proposal.root_step = Approvals::Serial.new(child_approvals: ind)
+        ind = 2.times.map{ Steps::Individual.new(user: create(:user)) }
+        proposal.root_step = Steps::Serial.new(child_approvals: ind)
       end
     end
 
     trait :with_parallel_approvers do
       flow 'parallel'
       after :create do |proposal|
-        ind = 2.times.map{ Approvals::Individual.new(user: create(:user)) }
-        proposal.root_step = Approvals::Parallel.new(child_approvals: ind)
+        ind = 2.times.map{ Steps::Individual.new(user: create(:user)) }
+        proposal.root_step = Steps::Parallel.new(child_approvals: ind)
       end
     end
 

@@ -303,9 +303,9 @@ module Ncr
       individuals = emails.map do |email|
         user = User.for_email(email)
         # Reuse existing approvals, if present
-        self.proposal.existing_approval_for(user) || Approvals::Individual.new(user: user)
+        self.proposal.existing_approval_for(user) || Steps::Individual.new(user: user)
       end
-      self.proposal.root_step = Approvals::Serial.new(child_approvals: individuals)
+      self.proposal.root_step = Steps::Serial.new(child_approvals: individuals)
     end
 
     def notify_removed_approvers(original_approvers)

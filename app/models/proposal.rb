@@ -27,7 +27,7 @@ class Proposal < ActiveRecord::Base
   end
 
   has_many :steps
-  has_many :individual_approvals, ->{ individual }, class_name: 'Approvals::Individual'
+  has_many :individual_approvals, ->{ individual }, class_name: 'Steps::Individual'
   has_many :approvers, through: :individual_approvals, source: :user
   has_many :api_tokens, through: :individual_approvals
   has_many :attachments
@@ -128,7 +128,7 @@ class Proposal < ActiveRecord::Base
     # Don't recreate the approval
     existing = self.existing_approval_for(approver)
     if existing.nil?
-      self.root_step = Approvals::Individual.new(user: approver)
+      self.root_step = Steps::Individual.new(user: approver)
     end
   end
 
