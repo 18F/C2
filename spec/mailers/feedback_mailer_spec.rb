@@ -30,5 +30,11 @@ describe FeedbackMailer do
         expect(mail.to).to eq(['support@example.com'])
       end
     end
+
+    it "uses sender as reply-to address" do
+      user = create(:user)
+      mail = FeedbackMailer.feedback(user, {})
+      expect(mail.reply_to).to eq([user.email_address])
+    end
   end
 end
