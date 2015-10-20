@@ -268,7 +268,7 @@ class Proposal < ActiveRecord::Base
     self.observers(true)
     # when explicitly adding an observer using the form in the Proposal page...
     if adder
-      if reason and reason.present?
+      if reason && reason.present?
         add_observation_comment(user, adder, reason)
       end
 

@@ -315,9 +315,8 @@ describe Proposal do
       end
 
       context "with a blank reason" do
-        let(:reason) { ' ' }
-
         it 'does not add a comment' do
+          reason = " "
           expect(proposal.comments).to be_empty
           proposal.add_observer(observer_email, user, reason)
           expect(proposal.comments).to be_empty
@@ -325,9 +324,8 @@ describe Proposal do
       end
 
       context 'with a reason' do
-        let(:reason) { 'my mate, innit' }
-
         it 'adds an update comment mentioning the reason' do
+          reason = "my mate, innit"
           expect(proposal.comments).to be_empty
           proposal.add_observer(observer_email, user, reason)
           expect(proposal.comments.length).to eq 1
