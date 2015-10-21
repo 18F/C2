@@ -11,6 +11,7 @@ class User < ActiveRecord::Base
 
   has_many :approvals
   has_many :observations
+  has_many :observers, through: :observers, source: :user
   has_many :comments
 
   # we do not use rolify gem (e.g.) but declare relationship like any other.
