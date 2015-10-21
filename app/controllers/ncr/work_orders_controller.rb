@@ -29,16 +29,7 @@ module Ncr
 
       super
 
-      if @model_changing && !@model_instance.emergency # skip approvals if emergency
-        @model_instance.setup_approvals_and_observers(@approver_email)
-
-        if self.requires_budget_reapproval?
-          @model_instance.restart_budget_approvals
-          flash[:success] = "Successfully modified! This request now needs to be re-approved by budget."
-        end
-
-        Dispatcher.on_proposal_update(self.proposal, @model_instance.modifier)
-      end
+      after_update
     end
 
     protected
@@ -107,6 +98,21 @@ module Ncr
           !self.budget_approver?
         )
       )
+    end
+
+    def reapprove_if_necessary
+      if requires_budget_reapproval?
+        @model_instance.restart_budget_approvals
+        flash[:success] = "Successfully modified! This request now needs to be re-approved by budget."
+      end
+    end
+
+    def after_update
+      if @model_changing && !@model_instance.emergency # skip approvals if emergency
+        @model_instance.setup_approvals_and_observers(@approver_email)
+        reapprove_if_necessary
+        Dispatcher.on_proposal_update(proposal, @model_instance.modifier)
+      end
     end
 
     ####################
