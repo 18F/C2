@@ -63,14 +63,17 @@ module IncomingMail
       proposal = find_proposal(find_public_id(msg)) or return
       comment_text = find_comment_text(msg)
       comment_user = find_comment_user(msg)
+      comment = nil
       if proposal.has_subscriber?(comment_user)
         # already in the loop, just add comment.
-        proposal.comments.create(comment_text: comment_text, user: comment_user)
+        comment = proposal.comments.create(comment_text: comment_text, user: comment_user)
       else
         # yes, user adds self as observer, which also generates comment
         proposal.add_observer(comment_user, comment_user, comment_text)
-        proposal.comments.last
+        comment = proposal.comments.last
       end
+      Dispatcher.on_comment_created(comment) # sends email
+      comment
     end
 
     def find_proposal(public_id)
