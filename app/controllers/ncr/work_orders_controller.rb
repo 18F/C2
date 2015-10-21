@@ -34,8 +34,7 @@ module Ncr
     protected
 
     def attribute_changes?
-      # TODO remove need for passing in the approving_official_email
-      super || @model_instance.approver_changed?(@model_instance.approving_official_email)
+      super || @model_instance.approver_changed?
     end
 
     def model_class

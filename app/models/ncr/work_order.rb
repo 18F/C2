@@ -97,8 +97,8 @@ module Ncr
       approval && !approval.actionable?
     end
 
-    def approver_changed?(approval_email)
-      self.approving_official && self.approving_official.email_address != approval_email
+    def approver_changed?
+      self.approving_official && self.approving_official.email_address != approving_official_email
     end
 
     # Check the approvers, accounting for frozen approving official
