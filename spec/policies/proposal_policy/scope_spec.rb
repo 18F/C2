@@ -52,11 +52,11 @@ describe ProposalPolicy::Scope do
   context "client_admin role privileges" do
     let(:requester) { create(:user) }
     let(:proposal1) { create(:proposal, :with_parallel_approvers, :with_observers, requester_id: requester.id) }
-    let(:user) { create(:user, client_slug: 'abc_company', email_address: 'admin@some-dot-gov.gov') }
+    let(:user) { create(:user, client_slug: 'abc_company', email_address: 'admin@example.com') }
     let(:proposals) { ProposalPolicy::Scope.new(user, Proposal).resolve }
 
     before do
-      expect(Proposal).to receive(:client_slugs).and_return(%w(abc_company))
+      allow(Proposal).to receive(:client_slugs).and_return(%w(abc_company ncr))
     end
 
     it "allows them to see unassociated requests that are inside its client scope" do
@@ -97,7 +97,7 @@ describe ProposalPolicy::Scope do
     let(:proposals) { ProposalPolicy::Scope.new(user, Proposal).resolve }
 
     before do
-      expect(Proposal).to receive(:client_slugs).and_return(%w(abc_company))
+      allow(Proposal).to receive(:client_slugs).and_return(%w(abc_company ncr))
     end
 
     it "allows an app admin to see requests inside and outside its client scope" do
