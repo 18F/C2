@@ -13,6 +13,14 @@ module Ncr
       approver_email_address(final_approver)
     end
 
+    def status_aware_approver_email_address
+      if proposal.approved?
+        final_approver_email_address
+      else
+        current_approver_email_address
+      end
+    end
+
     private
 
     def approver_email_address(approver)
