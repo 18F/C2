@@ -1,6 +1,6 @@
 class AddMinus
   constructor: ($root) ->
-    this.ul = $root
+    @ul = $root
     lis = @ul.find("li")
     lis.slice(1).hide()   # default to all but the first hidden
     @setupButtons(lis)
