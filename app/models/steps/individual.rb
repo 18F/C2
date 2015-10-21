@@ -3,12 +3,12 @@
 module Steps
   class Individual < Step
     belongs_to :user
-    has_one :api_token, -> { fresh }, foreign_key: 'step_id'
+    has_one :api_token, -> { fresh }, foreign_key: "step_id"
     has_many :delegations, through: :user, source: :outgoing_delegates
     has_many :delegates, through: :delegations, source: :assignee
 
     validates :user, presence: true
-    delegate :full_name, :email_address, :to => :user, :prefix => true
+    delegate :full_name, :email_address, to: :user, prefix: true
     scope :with_users, -> { includes :user }
 
     workflow do

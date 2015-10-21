@@ -1,8 +1,8 @@
 class Step < ActiveRecord::Base
   include WorkflowModel
-  has_paper_trail class_name: 'C2Version'
+  has_paper_trail class_name: "C2Version"
 
-  workflow do   # overwritten in child classes
+  workflow do # overwritten in child classes
     state :pending
     state :actionable
     state :approved
@@ -12,18 +12,17 @@ class Step < ActiveRecord::Base
   acts_as_list scope: :proposal
   validates :proposal, presence: true
 
-  belongs_to :parent, class_name: 'Step'
-  has_many :child_approvals, class_name: 'Step', foreign_key: 'parent_id', dependent: :destroy
+  belongs_to :parent, class_name: "Step"
+  has_many :child_approvals, class_name: "Step", foreign_key: "parent_id", dependent: :destroy
 
-  scope :individual, -> { where(type: 'Steps::Individual') }
-
+  scope :individual, -> { where(type: "Steps::Individual") }
 
   self.statuses.each do |status|
     scope status, -> { where(status: status) }
   end
-  scope :non_pending, -> { where.not(status: 'pending') }
+  scope :non_pending, -> { where.not(status: "pending") }
 
-  default_scope { order('position ASC') }
+  default_scope { order("position ASC") }
 
   def notify_parent_approved
     if self.parent

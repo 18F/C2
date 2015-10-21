@@ -2,7 +2,7 @@
 # any order
 module Steps
   class Parallel < Step
-    validates :min_children_needed, numericality: {allow_blank: true}
+    validates :min_children_needed, numericality: { allow_blank: true }
 
     workflow do
       on_transition { self.touch } # sets updated_at; https://github.com/geekq/workflow/issues/96
@@ -37,7 +37,7 @@ module Steps
       end
     end
 
-    def on_actionable_entry(old_state, event)
+    def on_actionable_entry(_, _)
       if self.child_approvals.any?
         self.child_approvals.each(&:initialize!)
       else
