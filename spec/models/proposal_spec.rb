@@ -314,13 +314,22 @@ describe Proposal do
         end
       end
 
-      context 'with a reason' do
-        let(:reason) { 'my mate, innit' }
+      context "with a blank reason" do
+        it 'does not add a comment' do
+          reason = " "
+          expect(proposal.comments).to be_empty
+          proposal.add_observer(observer_email, user, reason)
+          expect(proposal.comments).to be_empty
+        end
+      end
 
-        it 'adds a comment mentioning the reason' do
+      context 'with a reason' do
+        it 'adds an update comment mentioning the reason' do
+          reason = "my mate, innit"
           expect(proposal.comments).to be_empty
           proposal.add_observer(observer_email, user, reason)
           expect(proposal.comments.length).to eq 1
+          expect(proposal.comments.first).to be_update_comment
           expect(proposal.comments.first.comment_text).to include reason
         end
       end

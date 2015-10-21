@@ -44,4 +44,20 @@ describe Ncr::Reporter do
       expect(Ncr::Reporter.proposals_tier_one_pending).to eq([approved_work_order.proposal])
     end
   end
+
+  describe '.as_csv' do
+    it "shows status-aware approver for approved work orders" do
+      work_order = create(:ncr_work_order, :with_approvers)
+      proposal = work_order.proposal
+      while proposal.currently_awaiting_approvals.any?
+        proposal.currently_awaiting_approvals.first.approve!
+      end
+      proposal.approve!
+      proposal.reload
+      expect(proposal.approved?).to be_truthy
+      expect(work_order.final_approver).to eq(work_order.approvers.last)
+      csv = Ncr::Reporter.as_csv([proposal])
+      expect(csv).to include(",#{work_order.decorate.final_approver_email_address}")
+    end
+  end
 end

@@ -1,18 +1,7 @@
 .form-control {
-  /*Placeholder text color*/
-  &::-webkit-input-placeholder { /* WebKit browsers */
-      color: #777677;
-  }
-  &:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-     color: #777677;
-     opacity: 1;
-  }
-  &::-moz-placeholder { /* Mozilla Firefox 19+ */
-     color: #777677;
-     opacity: 1;
-  }
-  &:-ms-input-placeholder { /* Internet Explorer 10+ */
-     color: #777677;
+  &::placeholder {
+    color: #777677;
+    opacity: 1;
   }
 }
 

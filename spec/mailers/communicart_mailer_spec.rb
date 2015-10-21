@@ -275,7 +275,7 @@ describe CommunicartMailer do
     end
 
     it "uses the default sender name" do
-      expect(sender_names(mail)).to eq(["Communicart"])
+      expect(sender_names(mail)).to eq(["C2"])
     end
   end
 
@@ -289,7 +289,7 @@ describe CommunicartMailer do
     end
 
     it "uses the default sender name" do
-      expect(sender_names(mail)).to eq(["Communicart"])
+      expect(sender_names(mail)).to eq(["C2"])
     end
   end
 

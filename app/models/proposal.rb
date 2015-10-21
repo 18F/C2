@@ -48,6 +48,7 @@ class Proposal < ActiveRecord::Base
 
   validates :client_data_type, inclusion: {
     in: ->(_) { self.client_model_names },
+    message: "%{value} is not a valid client model type. Valid client model types are: #{CLIENT_MODELS.inspect}",
     allow_blank: true
   }
   validates :flow, presence: true, inclusion: {in: FLOWS}
@@ -268,7 +269,7 @@ class Proposal < ActiveRecord::Base
     self.observers(true)
     # when explicitly adding an observer using the form in the Proposal page...
     if adder
-      if reason
+      if reason && reason.present?
         add_observation_comment(user, adder, reason)
       end
 
@@ -286,6 +287,7 @@ class Proposal < ActiveRecord::Base
         observer: user.full_name,
         reason: reason
       ),
+      update_comment: true,
       user: adder
     )
   end

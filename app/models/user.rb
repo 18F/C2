@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
 
   validates :client_slug, inclusion: {
     in: ->(_) { Proposal.client_slugs },
+    message: "'%{value}' is not in Proposal.client_slugs #{Proposal.client_slugs.inspect}",
     allow_blank: true
   }
   validates :email_address, presence: true, uniqueness: true
