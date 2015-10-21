@@ -13,7 +13,6 @@ FactoryGirl.define do
     association :proposal, flow: 'linear'
 
     trait :with_approvers do
-      # TODO use wo.setup_approvals_and_observers instead
       association :proposal, :with_serial_approvers, flow: 'linear'
       after :create do |wo|
         wo.approving_official_email = wo.approving_official.email_address

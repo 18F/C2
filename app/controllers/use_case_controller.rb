@@ -60,12 +60,15 @@ class UseCaseController < ApplicationController
     !@model_instance.changed_attributes.blank?
   end
 
-  def build_model_instance
+  def filtered_params
     if params[:action] == 'new'
-      filtered_params = {}
+      {}
     else
-      filtered_params = self.permitted_params
+      permitted_params
     end
+  end
+
+  def build_model_instance
     @model_instance = self.model_class.new(filtered_params)
 
     # TODO unify with how the factories create model instances
