@@ -24,25 +24,25 @@ class InboundMailParser
   end
 
   def find_public_id(msg)
-    references = msg['headers']['References']
+    references = msg["headers"]["References"]
     ref_re = /<proposal-(\d+)\@.+?>/
     sbj_re = /Request\ #?([\w\-]+)/
 
     if references.match(ref_re)
       references.match(ref_re)[1]
-    elsif msg['subject'].match(sbj_re)
-      msg['subject'].match(sbj_re)[1]
+    elsif msg["subject"].match(sbj_re)
+      msg["subject"].match(sbj_re)[1]
     else
       fail "Failed to find public_id in msg #{msg.inspect}"
     end
   end
 
   def find_comment_user(msg)
-    email = msg['from_email']
+    email = msg["from_email"]
     User.find_by(email_address: email)
   end
 
   def find_comment_text(msg)
-    EmailReplyParser.parse_reply(msg['text'])
+    EmailReplyParser.parse_reply(msg["text"])
   end
 end
