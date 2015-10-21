@@ -29,7 +29,10 @@ module Ncr
 
       super
 
-      after_update
+      if @model_changing
+        @model_instance.setup_approvals_and_observers(@approver_email)
+        @model_instance.email_approvers
+      end
     end
 
     protected
