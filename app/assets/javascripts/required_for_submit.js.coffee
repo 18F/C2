@@ -7,7 +7,7 @@ class RequiredForSubmit
     @checkDisable()
 
   checkDisable: ->
-    @$submit.prop 'disabled', (@$controller.val() == '')
+    @$submit.prop 'disabled', !@$controller.val()
 
 $ ->
   # @todo - better scope
