@@ -56,11 +56,14 @@ describe "Handles incoming email" do
     expect(resp.comment.proposal.existing_observation_for(user)).to be_truthy
     expect(resp.comment.proposal.existing_approval_for(user)).to be_falsey
     expect(my_approval.user).to_not eq(my_proposal.individual_approvals.last.user)
-    expect(deliveries.length).to eq(4)
-    expect(deliveries.select{|m| m.to.first == user.email_address}.length).to eq(1)
-    expect(deliveries.select{|m| m.to.first == my_proposal.requester.email_address}.length).to eq(1)
-    expect(deliveries.select{|m| m.to.first == my_proposal.individual_approvals.last.user.email_address}.length).to eq(1)
-    expect(deliveries.select{|m| m.to.first == my_approval.user.email_address}.length).to eq(1)
+    recipients = [
+      user.email_address, # observer notification
+      my_proposal.requester.email_address, # comment
+      my_proposal.individual_approvals.last.user.email_address, # comment
+      my_approval.user.email_address, # comment
+    ]
+    expect(deliveries.length).to eq(recipients.size)
+    expect(deliveries.map{|m| m.to.first}.sort).to eq(recipients.sort)
   end
 
   it "should parse proposal public_id from email headers" do
