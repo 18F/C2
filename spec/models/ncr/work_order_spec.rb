@@ -106,7 +106,7 @@ describe Ncr::WorkOrder do
       wo.setup_approvals_and_observers('ao@example.com')
       expect(wo.reload.approvers.map(&:email_address)).to eq [
         'ao@example.com',
-        ba61_tier_one_email
+        ba80_tier_one_email
       ]
     end
 
@@ -115,7 +115,7 @@ describe Ncr::WorkOrder do
       wo.setup_approvals_and_observers('ao@example.com')
       expect(wo.approvers.map(&:email_address)).to eq [
         'ao@example.com',
-        ba61_tier_one_email
+        ba80_tier_one_email
       ]
 
       wo.individual_approvals.first.approve!
