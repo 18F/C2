@@ -5,17 +5,10 @@ class Dispatcher
     send_notification_email(approval)
   end
 
-  def email_observer(observation)
-    proposal = observation.proposal
-    CommunicartMailer.proposal_observer_email(observation.user_email_address, proposal).deliver_later
-  end
-
   def email_observers(proposal)
-    proposal.observations.each do |observation|
-      user = observation.user
-      if user.role_on(proposal).active_observer?
-        email_observer(observation)
-      end
+    active_observers = active_observers(proposal)
+    active_observers.each do |observer|
+      CommunicartMailer.proposal_observer_email(observer.email_address, proposal).deliver_later
     end
   end
 
@@ -47,10 +40,10 @@ class Dispatcher
   end
 
   def deliver_cancellation_emails(proposal)
-    proposal.individual_approvals.each do |approval|
-      if approver_knows_about_proposal?(approval)
-        CommunicartMailer.cancellation_email(approval.user_email_address, proposal).deliver_later
-      end
+    cancellation_notification_recipients = active_approvers(proposal) + active_observers(proposal)
+
+    cancellation_notification_recipients.each do |recipient|
+      CommunicartMailer.cancellation_email(recipient.email_address, proposal).deliver_later
     end
 
     CommunicartMailer.cancellation_confirmation(proposal).deliver_later
@@ -80,6 +73,18 @@ class Dispatcher
   end
 
   private
+
+  def active_approvers(proposal)
+    proposal.approvers.select do |approver|
+      proposal.is_active_approver?(approver)
+    end
+  end
+
+  def active_observers(proposal)
+    proposal.observers.select do |observer|
+      observer.role_on(proposal).active_observer?
+    end
+  end
 
   def requires_approval_notice?(_approval)
     true
