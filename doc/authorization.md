@@ -39,7 +39,8 @@ respective details: required, min/max ranges, etc. A full list of *ClientData* s
 is in the database schema document [`db/schema.rb`](../db/schema.rb) and the related Model
 classes.
 
-**TODO are any ClientData considered sensitive?**
+*ClientData* is not PII and is not considered legally sensitive; however *ClientData* is siloed
+as a UX convenience for Users within the system.
 
 ## Roles
 
@@ -86,26 +87,32 @@ someone with console access (e.g. via `cf-ssh`).
 
 ### Client Admin :anchor:
 
-A User who MAY view any Proposal that involves any other User with the same `client_slug`
-as the *Client Admin*.
-
-**TODO other powers?**
+A User who MAY view all Proposals with the same `client_slug` as part of their dashboard
+aggregation reporting. NOTE this aggregation feature is a UX convenience and does not
+reflect any data sensitivity, since any User MAY view any Proposal with a consisten `client_slug`. 
 
 ## Rules
 
 When these rules refer to a *Proposal* they mean also the ClientData associated with the Proposal.
 
-1. An Admin User MUST be permitted to act upon any object in the system.
+1. An Admin User MAY act upon any object in the system.
 
-1. Any User MUST be permitted to create a new Proposal of a type consistent with their `client_slug`.
+1. Any User MAY create a new Proposal consistent with their `client_slug`. E.g.
+a User with a `client_slug` of **ncr** MAY only create a NCR `WorkOrder` and not any other
+kind of Proposal.
 
-1. Users who are not Subscribers MUST NOT be permitted to view an existing Proposal. **TODO confirm**
+1. Any User MAY view any Proposal consistent with their `client_slug`
+and MAY add themselves as an Observer to that Proposal.
 
-1. Only the Requester of a Proposal MUST be permitted to edit or cancel the Proposal.
+1. Any User MAY add any other User with the same `client_slug` as an Observer
+on any Proposal consistent with their `client_slug`.
 
-1. Any Subscriber MUST be permitted to comment on a Proposal.
+1. Only the Requester of a Proposal MAY edit or cancel the Proposal.
 
-1. Only an Approver or Delegate MUST be permitted to approve a Proposal.
+1. Any Subscriber MAY comment on a Proposal, which will add that User as
+an Observer on the Proposal.
 
-1. A Client Admin MUST be permitted to view all Proposals consistent with their `client_slug`.
+1. Only the Requester and the Observer MAY remove the Observer from a Proposal.
+
+1. Only an Approver or Delegate MAY approve a Proposal.
 
