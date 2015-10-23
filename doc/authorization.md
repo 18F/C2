@@ -44,50 +44,52 @@ classes.
 ## Roles
 
 A User may be assigned one or more roles in relation to the system as a whole (e.g. Admin).
+System roles are marked with an :anchor:.
 
 A User may be assigned one or more roles in relation to a specific Proposal (e.g. Approver).
+Proposal roles are marked with a :clipboard:.
 
 See also discussion in [the Roles section of Overview doc](overview.md#roles).
 
-### Approver (Proposal)
+### Approver :clipboard:
 
 A User who MAY directly approve a Proposal.
 
-### Delegate (Proposal)
+### Client-specific approvers :clipboard:
+
+There are several client-specific approvers, which typically represent mailboxes not tied
+to a particular human being but that instead use Delegates. E.g. `BA61_tier1_budget_approver`
+and `BA61_tier2_budget_approver`.
+
+### Delegate :clipboard:
 
 A User who MAY approve Proposals on behalf of an Approver.
 
-### Observer (Proposal)
+### Observer :clipboard:
 
 A User who MUST receive notifications for and MAY comment on a Proposal.
 
-### Requester (Proposal)
+### Requester :clipboard:
 
 The User who initiated a Proposal.
 
-### Subscriber (Proposal)
+### Subscriber :clipboard:
 
 An umbrella term, referring to an Approver, Delegate, Observer or Requester.
 I.e. a User explicitly associated with a Proposal.
 
-### Admin (System)
+### Admin :anchor:
 
 A User who MAY act on any Proposal or User in the system. Access to the *Admin* role
 may only be granted by another User with the *Admin* role (via the `/admin` UI) or by
 someone with console access (e.g. via `cf-ssh`).
 
-### Client Admin (System)
+### Client Admin :anchor:
 
 A User who MAY view any Proposal that involves any other User with the same `client_slug`
 as the *Client Admin*.
 
 **TODO other powers?**
-
-### Client-specific approvers (System)
-
-There are several client-specific approvers, which typically represent mailboxes not tied
-to a particular human being but that instead use Delegates. E.g. `BA61_tier1_budget_approver`
-and `BA61_tier2_budget_approver`.
 
 ## Rules
 
