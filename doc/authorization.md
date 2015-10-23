@@ -5,8 +5,8 @@ the various roles that users of the C2 application play vis-a-vis
 that data, and the authorization rules in place to 
 ensure the security and integrity of the data.
 
-In this document the key words "MUST", "SHOULD" and "MAY" are used
-as defined in https://www.ietf.org/rfc/rfc2119.txt.
+In this document the key words "MUST", "MUST NOT", "SHOULD", "SHOULD NOT", "MAY", and "MAY NOT"
+are used as defined in https://www.ietf.org/rfc/rfc2119.txt.
 
 ## Terms
 
@@ -43,38 +43,47 @@ classes.
 
 ## Roles
 
+A User may be assigned one or more roles in relation to the system as a whole (e.g. Admin).
+
+A User may be assigned one or more roles in relation to a specific Proposal (e.g. Approver).
+
 See also discussion in [the Roles section of Overview doc](overview.md#roles).
 
-### Approver
+### Approver (Proposal)
 
 A User who MAY directly approve a Proposal.
 
-### Delegate
+### Delegate (Proposal)
 
 A User who MAY approve Proposals on behalf of an Approver.
 
-### Observer
+### Observer (Proposal)
 
-A User who SHOULD receive notifications for and MAY comment on a Proposal.
+A User who MUST receive notifications for and MAY comment on a Proposal.
 
-### Requester
+### Requester (Proposal)
 
 The User who initiated a Proposal.
 
-### Admin
+### Subscriber (Proposal)
+
+An umbrella term, referring to an Approver, Delegate, Observer or Requester.
+I.e. a User explicitly associated with a Proposal.
+
+### Admin (System)
 
 A User who MAY act on any Proposal or User in the system. Access to the *Admin* role
 may only be granted by another User with the *Admin* role (via the `/admin` UI) or by
 someone with console access (e.g. via `cf-ssh`).
 
-### Client Admin
+### Client Admin (System)
 
 A User who MAY view any Proposal that involves any other User with the same `client_slug`
 as the *Client Admin*.
 
 **TODO other powers?**
 
-### Client-specific approvers
+### Client-specific approvers (System)
 
 There are several client-specific approvers, which typically represent mailboxes not tied
 to a particular human being but that instead use Delegates. E.g. `BA61_tier1_budget_approver`
@@ -82,4 +91,19 @@ and `BA61_tier2_budget_approver`.
 
 ## Rules
 
+When these rules refer to a *Proposal* they mean also the ClientData associated with the Proposal.
+
+1. An Admin User MUST be permitted to act upon any object in the system.
+
+1. Any User MUST be permitted to create a new Proposal of a type consistent with their `client_slug`.
+
+1. Users who are not Subscribers MUST NOT be permitted to view an existing Proposal. **TODO confirm**
+
+1. Only the Requester of a Proposal MUST be permitted to edit or cancel the Proposal.
+
+1. Any Subscriber MUST be permitted to comment on a Proposal.
+
+1. Only an Approver or Delegate MUST be permitted to approve a Proposal.
+
+1. A Client Admin MUST be permitted to view all Proposals consistent with their `client_slug`.
 
