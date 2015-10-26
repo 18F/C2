@@ -37,18 +37,24 @@ describe CsvUserImporter do
       @temp_file.write("SOME,Guy,some.guy@example.com,True")
       @temp_file.close
       importer = CsvUserImporter.new(@temp_file.path, "my_client")
-      importer.process_rows
-      users = User.order('id')
-      expect(users.count).to eq 6 # 2 + 4 seeds
-      _seed_user1, _seed_user2, _seed_user3, _seed_user4, user1, user2 = users
-      expect(user1.first_name).to eq('F1')
-      expect(user1.last_name).to eq('L1')
-      expect(user1.email_address).to eq('email@example.com')
-      expect(user1.client_slug).to eq('my_client')
-      expect(user2.first_name).to eq('Some')
-      expect(user2.last_name).to eq('Guy')
-      expect(user2.email_address).to eq('some.guy@example.com')
-      expect(user2.client_slug).to eq('my_client')
+
+      expect {
+        importer.process_rows
+      }.to change { User.count }.by(2)
+
+      expect(User.exists?(
+        first_name: 'F1',
+        last_name: 'L1',
+        email_address: 'email@example.com',
+        client_slug: 'my_client'
+      )).to eq(true)
+
+      expect(User.exists?(
+        first_name: 'Some',
+        last_name: 'Guy',
+        email_address: 'some.guy@example.com',
+        client_slug: 'my_client'
+      )).to eq(true)
     end
 
     it 'does not explode on an empty email field' do
@@ -57,8 +63,10 @@ describe CsvUserImporter do
       @temp_file.close
       importer = CsvUserImporter.new(@temp_file.path, "my_client")
       expect(importer).to receive(:warn)
-      importer.process_rows
-      expect(User.count).to be(4)  # seeds
+
+      expect {
+        importer.process_rows
+      }.to_not change { User.count }
     end
   end
 end
