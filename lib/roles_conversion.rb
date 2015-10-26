@@ -34,7 +34,7 @@ class RolesConversion
 
   def ool_ba80_budget_approver
     with_email_role_slug!(
-      ENV['NCR_OOL_BA80_BUDGET_MAILBOX'] || 'communicart.budget.approver+0ool_ba80@gmail.com',
+      ENV['NCR_OOL_BA80_BUDGET_MAILBOX'] || 'communicart.budget.approver+ool_ba80@gmail.com',
       'OOL_BA80_budget_approver',
       'ncr'
     )
