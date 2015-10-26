@@ -10,7 +10,10 @@ default: &default
 
 development:
   <<: *default
-  database: c2_development
+  database: postgres
+  username: postgres
+  password:
+  host: db
 test:
   <<: *default
 # use 'url' rather than 'database' so that DATABASE_URL env var is not merged in.

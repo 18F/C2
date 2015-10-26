@@ -8,9 +8,9 @@ if [ ! -f .env ]; then
   cp .env.example .env
 fi
 
-bundle
+docker-compose up
 
-bin/rake db:setup
-RAILS_ENV=test bin/rake db:setup
+docker-compose run web bin/rake db:setup
+docker-compose run web RAILS_ENV=test bin/rake db:setup
 
 echo "DONE"
