@@ -44,7 +44,7 @@ describe 'Users API' do
 
       it "default includes seed Users" do
         json = get_json('/api/v1/users.json')
-        expect(json.size).to eq 2
+        expect(json.size).to eq 4
       end
 
       it "can be `limit`ed" do

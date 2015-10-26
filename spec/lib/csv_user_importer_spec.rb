@@ -39,8 +39,8 @@ describe CsvUserImporter do
       importer = CsvUserImporter.new(@temp_file.path, "my_client")
       importer.process_rows
       users = User.order('id')
-      expect(users.count).to eq 4 # 2 + 2 seeds
-      seed_user1, seed_user2, user1, user2 = users
+      expect(users.count).to eq 6 # 2 + 4 seeds
+      _seed_user1, _seed_user2, _seed_user3, _seed_user4, user1, user2 = users
       expect(user1.first_name).to eq('F1')
       expect(user1.last_name).to eq('L1')
       expect(user1.email_address).to eq('email@example.com')
@@ -58,7 +58,7 @@ describe CsvUserImporter do
       importer = CsvUserImporter.new(@temp_file.path, "my_client")
       expect(importer).to receive(:warn)
       importer.process_rows
-      expect(User.count).to be(2)  # seeds
+      expect(User.count).to be(4)  # seeds
     end
   end
 end

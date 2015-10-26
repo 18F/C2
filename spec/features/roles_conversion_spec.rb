@@ -1,17 +1,17 @@
-describe "RolesConversion" do
-  it "should create only one User-per-role-per-slug" do
-    user = RolesConversion.with_email_role_slug!('someone@example.com', 'foo', 'ncr')
+describe RolesConversion do
+  describe "#ncr_budget_approvers" do
+    it "should convert NCR budget approvers" do
+      expect(User.count).to eq(4) # via db/seeds
+      RolesConversion.new.ncr_budget_approvers
+      expect(User.count).to eq(4) # no change (idempotent)
+    end
 
-    expect(user.email_address).to eq('someone@example.com')
-
-    user2 = RolesConversion.with_email_role_slug!('someoneelse@example.com', 'foo', 'ncr')
-
-    expect(user2).to be_nil
-  end
-
-  it "should convert NCR budget approvers" do
-    expect(User.count).to eq(2) # via db/seeds
-    RolesConversion.ncr_budget_approvers
-    expect(User.count).to eq(2) # no change (idempotent)
+    it "should be idempotent based on client_slug+role" do
+      with_env_var('NCR_BA61_TIER1_BUDGET_MAILBOX', 'someoneelse@example.com') do
+        expect(User.count).to eq(4) # via db/seeds
+        RolesConversion.new.ncr_budget_approvers
+        expect(User.count).to eq(4) # no change (idempotent)
+      end
+    end
   end
 end

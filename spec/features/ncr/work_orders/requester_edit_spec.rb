@@ -72,14 +72,33 @@ feature 'Requester edits their NCR work order' do
     expect(proposal.individual_approvals.first).to be_actionable
   end
 
-  scenario 'allows requester to change the expense type' do
+  scenario "allows requester to change the expense type" do
     visit "/ncr/work_orders/#{work_order.id}/edit"
-    choose 'BA80'
-    fill_in 'RWA Number', with: 'a1234567'
-    click_on 'Update'
+    choose "BA80"
+    fill_in "RWA Number", with: "a1234567"
+    click_on "Update"
     proposal = Proposal.last
     expect(proposal.approvers.length).to eq(2)
-    expect(proposal.approvers.second.email_address).to eq(Ncr::WorkOrder.ba61_tier1_budget_mailbox)
+    expect(proposal.approvers.second.email_address).to eq(Ncr::WorkOrder.ba80_budget_mailbox)
+  end
+
+  context "proposal changes from BA80 to BA61" do
+    scenario "removed tier 1 approver is notified if approval is not pending" do
+      work_order.update(expense_type: "BA61")
+      role = "BA61_tier1_budget_approver"
+      tier_one_approver = User.with_role(role).first
+      approval = tier_one_approver.approvals.where(proposal: ncr_proposal).first
+      approval.update(status: "actionable")
+
+      visit "/ncr/work_orders/#{work_order.id}/edit"
+      choose 'BA80'
+      fill_in 'RWA Number', with: 'a1234567'
+      click_on 'Update'
+
+      expect(deliveries.select do |email|
+        email.to.first == tier_one_approver.email_address
+      end.length).to eq (1)
+    end
   end
 
   scenario "doesn't change approving list when delegated" do
