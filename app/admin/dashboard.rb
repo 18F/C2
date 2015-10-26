@@ -4,7 +4,7 @@ ActiveAdmin.register_page "Dashboard" do
   content title: proc { I18n.t("active_admin.dashboard") } do
 
     section "Background Jobs" do
-      now = Time.now.getgm
+      now = Time.zone.now
       ul do
         li do
           jobs = DelayedJob.where('failed_at is not null').count(:id)
