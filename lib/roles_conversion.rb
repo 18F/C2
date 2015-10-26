@@ -44,14 +44,14 @@ class RolesConversion
   # NOTE the triple is considered unique, so if a user with the role+slug
   # is found with another email address, no change is made and nil is returned.
   def with_email_role_slug!(email, role, slug)
+    # unique triple -- check if any other user with role+slug already exists
+    return if exists_with_role_slug?(role, slug)
+
     user = User.for_email(email)
     # if no change necessary, return early (idempotent)
     if user.client_slug == slug && user.has_role?(role)
       return user
     end
-
-    # unique triple -- check if any other user with role+slug already exists
-    return if exists_with_role_slug?(role, slug)
 
     user.client_slug = slug
     user.add_role(role)
