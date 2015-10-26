@@ -37,7 +37,7 @@ describe 'proposals' do
 
       post "/proposals/#{proposal.id}/approve"
 
-      expect(response.status).to redirect_to('/proposals')
+      expect(response.status).to eq(403)
       expect_status(proposal, 'pending', 'actionable')
     end
 
