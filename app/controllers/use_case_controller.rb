@@ -83,8 +83,7 @@ class UseCaseController < ApplicationController
     path = polymorphic_path(self.model_class, action: :new)
     # prevent redirect loop
     if path == request.path
-      flash[:notice] = exception.message
-      render 'communicarts/authorization_error', status: 403
+      render 'communicarts/authorization_error', status: 403, locals: { msg: exception.message }
     else
       redirect_to path, alert: exception.message
     end
