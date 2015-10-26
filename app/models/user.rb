@@ -9,18 +9,21 @@ class User < ActiveRecord::Base
   validates :email_address, presence: true, uniqueness: true
   validates_email_format_of :email_address
 
-  has_many :approvals
-  has_many :observations
-  has_many :observers, through: :observations, source: :user
-  has_many :comments
+  has_many :approvals, dependent: :destroy
+  has_many :comments, dependent: :destroy
+  has_many :observations, dependent: :destroy
 
-  # we do not use rolify gem (e.g.) but declare relationship like any other.
-  has_many :user_roles
+  has_many :user_roles, dependent: :destroy
   has_many :roles, through: :user_roles
+  has_many :proposals, foreign_key: "requester_id", dependent: :destroy
 
   # TODO rename to _delegations, and add relations for the Users
   has_many :outgoing_delegates, class_name: 'ApprovalDelegate', foreign_key: 'assigner_id'
   has_many :incoming_delegates, class_name: 'ApprovalDelegate', foreign_key: 'assignee_id'
+
+  def self.active
+    where(active: true)
+  end
 
   # this is for user_roles specifically, not proposals or any other objects for which
   # this user might have roles.

@@ -37,10 +37,14 @@ describe "Add attachments" do
   end
 
   it "saves attachments submitted via the webform" do
+    proposal = create(:proposal)
+    login_as(proposal.requester)
+
     visit proposal_path(proposal)
     page.attach_file('attachment[file]', "#{Rails.root}/app/assets/images/bg_approved_status.gif")
     click_on "Attach a File"
-    expect(proposal.attachments.length).to eq 2
+
+    expect(proposal.attachments.length).to eq 1
     expect(proposal.attachments.last.file_file_name).to eq "bg_approved_status.gif"
   end
 

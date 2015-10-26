@@ -1,4 +1,12 @@
 describe Proposal do
+  describe "Associatons" do
+    it { should belong_to(:client_data).dependent(:destroy) }
+    it { should have_many(:approvals) }
+    it { should have_many(:individual_approvals) }
+    it { should have_many(:attachments).dependent(:destroy) }
+    it { should have_many(:comments).dependent(:destroy) }
+  end
+
   describe 'CLIENT_MODELS' do
     it "contains multiple models" do
       expect(Proposal::CLIENT_MODELS.size).to_not eq(0)
@@ -98,10 +106,6 @@ describe Proposal do
   end
 
   describe '#root_approval=' do
-    let(:approver1) { create(:user) }
-    let(:approver2) { create(:user) }
-    let(:approver3) { create(:user) }
-
     it 'sets initial approvers' do
       proposal = create(:proposal)
       approvers = 3.times.map{ create(:user) }
@@ -114,6 +118,9 @@ describe Proposal do
     end
 
     it 'initates parallel' do
+      approver1 = create(:user)
+      approver2 = create(:user)
+      approver3 = create(:user)
       proposal = create(:proposal, flow: 'parallel')
       individuals = [approver1, approver2, approver3].map{ |u| Approvals::Individual.new(user: u)}
 
@@ -126,6 +133,9 @@ describe Proposal do
     end
 
     it 'initates linear' do
+      approver1 = create(:user)
+      approver2 = create(:user)
+      approver3 = create(:user)
       proposal = create(:proposal, flow: 'linear')
       individuals = [approver1, approver2, approver3].map{ |u| Approvals::Individual.new(user: u)}
 
@@ -138,6 +148,9 @@ describe Proposal do
     end
 
     it 'fixes modified parallel proposal approvals' do
+      approver1 = create(:user)
+      approver2 = create(:user)
+      approver3 = create(:user)
       proposal = create(:proposal, flow: 'parallel')
       individuals = [Approvals::Individual.new(user: approver1)]
       proposal.root_approval = Approvals::Parallel.new(child_approvals: individuals)
@@ -153,6 +166,9 @@ describe Proposal do
     end
 
     it 'fixes modified linear proposal approvals' do
+      approver1 = create(:user)
+      approver2 = create(:user)
+      approver3 = create(:user)
       proposal = create(:proposal, flow: 'linear')
       approver1, approver2, approver3 = 3.times.map{ create(:user) }
       individuals = [approver1, approver2].map{ |u| Approvals::Individual.new(user: u) }
@@ -172,6 +188,8 @@ describe Proposal do
     end
 
     it 'does not modify a full approved parallel proposal' do
+      approver1 = create(:user)
+      approver2 = create(:user)
       proposal = create(:proposal, flow: 'parallel')
       individuals = [approver1, approver2].map{ |u| Approvals::Individual.new(user: u)}
       proposal.root_approval = Approvals::Parallel.new(child_approvals: individuals)
@@ -183,6 +201,8 @@ describe Proposal do
     end
 
     it 'does not modify a full approved linear proposal' do
+      approver1 = create(:user)
+      approver2 = create(:user)
       proposal = create(:proposal, flow: 'linear')
       individuals = [approver1, approver2].map{ |u| Approvals::Individual.new(user: u)}
       proposal.root_approval = Approvals::Serial.new(child_approvals: individuals)
