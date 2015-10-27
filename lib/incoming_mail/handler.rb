@@ -27,7 +27,12 @@ module IncomingMail
       case resp.type
       when REQUEST
         resp.comment = create_comment(payload['msg'])
-        resp.action = resp.comment ? Response::COMMENT : Response::ERROR
+        if resp.comment
+          resp.action = Response::COMMENT
+        else
+          forward_msg(payload['msg']['raw_msg'])
+          resp.action = Response::FORWARDED
+        end
       else
         forward_msg(payload['msg']['raw_msg'])
         resp.action = Response::FORWARDED
@@ -67,6 +72,7 @@ module IncomingMail
       proposal = parsed_email.proposal
       user = parsed_email.comment_user
 
+      return unless user  # cannot create comment for non-existent user
 
       unless proposal.existing_observation_for(user)
         reason = "Added comment via email reply"
@@ -79,8 +85,8 @@ module IncomingMail
 
       comment = Comment.create(
         comment_text: parsed_email.comment_text,
-        user: parsed_email.comment_user,
-        proposal: parsed_email.proposal
+        user: user,
+        proposal: proposal
       )
 
       Dispatcher.on_comment_created(comment) # sends email
