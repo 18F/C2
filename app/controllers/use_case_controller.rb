@@ -6,20 +6,14 @@ class UseCaseController < ApplicationController
   before_filter ->{authorize self.model_class}, only: [:new, :create]
   before_filter ->{authorize self.proposal}, only: [:edit, :update]
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
+  before_filter :build_model_instance, only: [:new, :create]
   before_filter :find_model_instance, only: [:edit, :update]
 
-
   def new
-    @model_instance = self.model_class.new
     render 'form'
   end
 
   def create
-    @model_instance = self.model_class.new(self.permitted_params)
-
-    # TODO unify with how the factories create model instances
-    @model_instance.build_proposal(flow: 'linear', requester: current_user)
-
     if self.errors.empty?
       @model_instance.save
       proposal = @model_instance.proposal
@@ -64,6 +58,19 @@ class UseCaseController < ApplicationController
 
   def attribute_changes?
     !@model_instance.changed_attributes.blank?
+  end
+
+  def filtered_params
+    if params[:action] == 'new'
+      {}
+    else
+      permitted_params
+    end
+  end
+
+  def build_model_instance
+    @model_instance = self.model_class.new(filtered_params)
+    @model_instance.build_proposal(flow: 'linear', requester: current_user)
   end
 
   def find_model_instance

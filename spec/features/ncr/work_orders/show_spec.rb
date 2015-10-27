@@ -3,7 +3,7 @@ describe "viewing a work order" do
   let(:ncr_proposal) { work_order.proposal }
 
   before do
-    work_order.setup_approvals_and_observers('approver@example.com')
+    work_order.setup_approvals_and_observers
     login_as(work_order.requester)
   end
 

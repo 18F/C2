@@ -10,8 +10,7 @@ feature 'Requester edits their NCR work order' do
   let!(:approver) { create(:user, client_slug: 'ncr') }
 
   before do
-    approver = create(:user, email_address: 'approver@example.com', client_slug: 'ncr')
-    work_order.setup_approvals_and_observers(approver.email_address)
+    work_order.setup_approvals_and_observers
     login_as(work_order.requester)
   end
 
@@ -130,10 +129,10 @@ feature 'Requester edits their NCR work order' do
 
   scenario 'has a disabled field if first approval is done' do
     visit "/ncr/work_orders/#{work_order.id}/edit"
-    expect(find("[name=approver_email]")["disabled"]).to be_nil
+    expect(find('#ncr_work_order_approving_official_email')['disabled']).to be_nil
     work_order.individual_approvals.first.approve!
     visit "/ncr/work_orders/#{work_order.id}/edit"
-    expect(find("[name=approver_email]")["disabled"]).to eq("disabled")
+    expect(find('#ncr_work_order_approving_official_email')['disabled']).to eq('disabled')
     # And we can still submit
     fill_in 'Vendor', with: 'New ACME'
     click_on 'Update'
