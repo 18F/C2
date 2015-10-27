@@ -108,7 +108,7 @@ module Ncr
     end
 
     def after_update
-      if @model_changing && !@model_instance.emergency # skip approvals if emergency
+      if @model_changing
         @model_instance.setup_approvals_and_observers(@approver_email)
         reapprove_if_necessary
         Dispatcher.on_proposal_update(proposal, @model_instance.modifier)
