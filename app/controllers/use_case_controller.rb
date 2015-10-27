@@ -70,8 +70,6 @@ class UseCaseController < ApplicationController
 
   def build_model_instance
     @model_instance = self.model_class.new(filtered_params)
-
-    # TODO unify with how the factories create model instances
     @model_instance.build_proposal(flow: 'linear', requester: current_user)
   end
 
