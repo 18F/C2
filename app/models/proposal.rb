@@ -263,9 +263,9 @@ class Proposal < ActiveRecord::Base
     observer_role = Role.find_or_create_by(name: 'observer')
     observation = Observation.new(user_id: user.id, role_id: observer_role.id, proposal_id: self.id)
     # because we build the Observation ourselves, we add to the direct m2m relation directly.
-    self.observations << observation
+    observations << observation
     # invalidate relation cache so we reload on next access
-    self.observers(true)
+    observers(true)
     # when explicitly adding an observer using the form in the Proposal page...
     if adder
       if reason && reason.present?

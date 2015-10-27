@@ -7,10 +7,11 @@ class Selectizer
     @$el.is('input')
 
   form_label: ->
-    $('label[for="'+@$el.attr('id')+'"]').text()
+    id = @$el.attr('id')
+    $("label[for=\"#{id}\"]").text()
 
   add_label: ->
-    @selectizeObj().$control_input.attr('aria-label',@form_label())
+    @selectizeObj().$control_input.attr('aria-label', @form_label())
 
   initialChoices: ->
     initial = @$el.data('initial') || []

@@ -7,12 +7,11 @@ feature 'Approver edits NCR work order' do
     end
   end
 
-  let(:work_order) { create(:ncr_work_order, description: 'test') }
+  let(:work_order) { create(:ncr_work_order, :with_approvers) }
   let(:ncr_proposal) { work_order.proposal }
 
   scenario 'keeps track of the modification' do
-    approver = create(:user, email_address: 'approver@example.com', client_slug: 'ncr')
-    work_order.setup_approvals_and_observers(approver.email_address)
+    approver = ncr_proposal.approvers.first
     login_as(approver)
 
     visit "/ncr/work_orders/#{work_order.id}/edit"
@@ -30,7 +29,7 @@ feature 'Approver edits NCR work order' do
   end
 
   it "doesn't require re-approval for a budget approver adding a Function code" do
-    work_order.setup_approvals_and_observers('approver@example.com')
+    work_order.setup_approvals_and_observers
     fully_approve(ncr_proposal)
 
     approver = work_order.budget_approvers.first

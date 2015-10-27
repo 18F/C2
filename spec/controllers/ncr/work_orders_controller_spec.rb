@@ -1,4 +1,6 @@
 describe Ncr::WorkOrdersController do
+  include ProposalSpecHelper
+
   describe 'creating' do
     before do
       login_as(create(:user, client_slug: 'ncr'))
@@ -8,8 +10,7 @@ describe Ncr::WorkOrdersController do
         amount: '111.22', expense_type: 'BA80', vendor: 'Vendor',
         not_to_exceed: '0', building_number: Ncr::BUILDING_NUMBERS[0],
         emergency: '0', rwa_number: 'A1234567', org_code: Ncr::Organization.all[0],
-        code: 'Work Order', project_title: 'Title', description: 'Desc'},
-      approver_email: 'bob@example.com'
+        code: 'Work Order', project_title: 'Title', description: 'Desc', approving_official_email: 'bob@example.com' }
     }}
 
     it 'sends an email to the first approver' do
@@ -64,7 +65,7 @@ describe Ncr::WorkOrdersController do
     end
 
     it 'displays a warning message when editing a fully-approved proposal' do
-      work_order.approve!
+      fully_approve(work_order.proposal)
       get :edit, {id: work_order.id}
       expect(flash[:warning]).to be_present
     end
@@ -84,8 +85,14 @@ describe Ncr::WorkOrdersController do
     end
 
     it 'does not modify the work order when there is a blank approver' do
-      post :update, {id: work_order.id, approver_email: '',
-                     ncr_work_order: {expense_type: 'BA61', name: 'new name'}}
+      post :update, {
+        id: work_order.id,
+        ncr_work_order: {
+          approving_official_email: '',
+          expense_type: 'BA61',
+          name: 'new name'
+        }
+      }
       expect(flash[:success]).not_to be_present
       expect(flash[:error]).to be_present
       work_order.reload
@@ -93,8 +100,14 @@ describe Ncr::WorkOrdersController do
     end
 
     it 'does not modify the work order when there is a bad edit' do
-      post :update, {id: work_order.id, approver_email: 'a@example.com',
-                     ncr_work_order: {expense_type: 'BA61', amount: 999999}}
+      post :update, {
+        id: work_order.id,
+        ncr_work_order: {
+          expense_type: 'BA61',
+          amount: 999999,
+          approving_official_email: 'a@example.com'
+        }
+      }
       expect(flash[:success]).not_to be_present
       expect(flash[:error]).to be_present
       work_order.reload
@@ -110,24 +123,40 @@ describe Ncr::WorkOrdersController do
         end
         load 'app/models/ncr/work_order.rb'
 
-        post :update, {id: work_order.id, approver_email: 'a@example.com',
-                       ncr_work_order: {expense_type: 'BA61', amount: 99999}}
+        post :update, {
+          id: work_order.id,
+          ncr_work_order: {
+            expense_type: 'BA61',
+            amount: 99999,
+            approving_official_email: 'a@example.com'
+          }
+        }
         expect(flash[:success]).not_to be_present
         expect(flash[:error]).to eq(["Amount must be less than or equal to $3,500.00"])
       end
     end
 
     it 'allows the approver to be edited' do
-      post :update, {id: work_order.id, approver_email: 'a@example.com',
-                     ncr_work_order: {expense_type: 'BA61'}}
+      post :update, {
+        id: work_order.id,
+        ncr_work_order: {
+         expense_type: 'BA61',
+         approving_official_email: 'a@example.com'
+        }
+      }
       work_order.reload
       expect(work_order.approvers.first.email_address).to eq('a@example.com')
     end
 
     it 'does not modify the approver if already approved' do
       work_order.individual_approvals.first.approve!
-      post :update, {id: work_order.id, approver_email: 'a@example.com',
-                     ncr_work_order: {expense_type: 'BA61'}}
+      post :update, {
+        id: work_order.id,
+        ncr_work_order: {
+         expense_type: 'BA61',
+         approving_official_email: 'a@example.com'
+        }
+      }
       work_order.reload
       expect(work_order.approvers.map(&:email_address)).not_to include('a@example.com')
     end
@@ -135,8 +164,14 @@ describe Ncr::WorkOrdersController do
     it 'will not modify emergency status on non-emergencies' do
       expect(work_order.approvals.empty?).to be false
       expect(work_order.observers.empty?).to be true
-      post :update, {id: work_order.id, approver_email: work_order.approvers.first.email_address,
-                     ncr_work_order: {expense_type: 'BA61', emergency: '1'}}
+      post :update, {
+        id: work_order.id,
+        ncr_work_order: {
+         expense_type: 'BA61',
+         emergency: '1',
+         approving_official_email: work_order.approvers.first.email_address
+        }
+      }
       work_order.reload
       expect(work_order.emergency).to be false
       expect(work_order.approvals.empty?).to be false
@@ -147,8 +182,15 @@ describe Ncr::WorkOrdersController do
       work_order = create(:ncr_work_order, :is_emergency, requester: requester)
       expect(work_order.approvals.empty?).to be true
       expect(work_order.observers.empty?).to be false
-      post :update, {id: work_order.id, approver_email: work_order.observers.first.email_address,
-                     ncr_work_order: {expense_type: 'BA61', building_number: 'BillDing', emergency: '0'}}
+      post :update, {
+        id: work_order.id,
+        ncr_work_order: {
+         expense_type: 'BA61',
+         building_number: 'BillDing',
+         emergency: '0',
+         approving_official_email: work_order.observers.first.email_address
+        }
+      }
       work_order.reload
       expect(work_order.emergency).to be true
       expect(work_order.building_number).to eq "BillDing"

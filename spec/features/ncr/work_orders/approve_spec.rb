@@ -4,7 +4,7 @@ feature 'Approving an NCR work order' do
 
   before do
     Timecop.freeze(10.hours.ago) do
-      work_order.setup_approvals_and_observers('approver@example.com')
+      work_order.setup_approvals_and_observers
     end
     login_as(work_order.approvers.first)
   end

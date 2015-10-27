@@ -10,7 +10,7 @@ feature 'Requester switches work order to WHSC' do
   let!(:approver) { create(:user) }
 
   before do
-    work_order.setup_approvals_and_observers('approver@example.com')
+    work_order.setup_approvals_and_observers
     work_order.individual_approvals.first.approve!
     login_as(work_order.requester)
   end

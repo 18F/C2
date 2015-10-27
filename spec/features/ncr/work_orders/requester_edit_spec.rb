@@ -12,8 +12,7 @@ feature 'Requester edits their NCR work order' do
   let(:requester) { work_order.requester }
 
   before do
-    approver = create(:user, email_address: 'approver@example.com', client_slug: 'ncr')
-    work_order.setup_approvals_and_observers(approver.email_address)
+    work_order.setup_approvals_and_observers
     login_as(requester)
   end
 
@@ -74,14 +73,33 @@ feature 'Requester edits their NCR work order' do
     expect(proposal.individual_approvals.first).to be_actionable
   end
 
-  scenario 'allows requester to change the expense type' do
+  scenario "allows requester to change the expense type" do
     visit "/ncr/work_orders/#{work_order.id}/edit"
-    choose 'BA80'
-    fill_in 'RWA Number', with: 'a1234567'
-    click_on 'Update'
+    choose "BA80"
+    fill_in "RWA Number", with: "a1234567"
+    click_on "Update"
     proposal = Proposal.last
     expect(proposal.approvers.length).to eq(2)
-    expect(proposal.approvers.second.email_address).to eq(Ncr::WorkOrder.ba61_tier1_budget_mailbox)
+    expect(proposal.approvers.second.email_address).to eq(Ncr::WorkOrder.ba80_budget_mailbox)
+  end
+
+  context "proposal changes from BA80 to BA61" do
+    scenario "removed tier 1 approver is notified if approval is not pending" do
+      work_order.update(expense_type: "BA61")
+      role = "BA61_tier1_budget_approver"
+      tier_one_approver = User.with_role(role).first
+      approval = tier_one_approver.approvals.where(proposal: ncr_proposal).first
+      approval.update(status: "actionable")
+
+      visit "/ncr/work_orders/#{work_order.id}/edit"
+      choose 'BA80'
+      fill_in 'RWA Number', with: 'a1234567'
+      click_on 'Update'
+
+      expect(deliveries.select do |email|
+        email.to.first == tier_one_approver.email_address
+      end.length).to eq (1)
+    end
   end
 
   scenario "doesn't change approving list when delegated" do
@@ -113,10 +131,10 @@ feature 'Requester edits their NCR work order' do
 
   scenario 'has a disabled field if first approval is done' do
     visit "/ncr/work_orders/#{work_order.id}/edit"
-    expect(find("[name=approver_email]")["disabled"]).to be_nil
+    expect(find('#ncr_work_order_approving_official_email')['disabled']).to be_nil
     work_order.individual_approvals.first.approve!
     visit "/ncr/work_orders/#{work_order.id}/edit"
-    expect(find("[name=approver_email]")["disabled"]).to eq("disabled")
+    expect(find('#ncr_work_order_approving_official_email')['disabled']).to eq('disabled')
     # And we can still submit
     fill_in 'Vendor', with: 'New ACME'
     click_on 'Update'
@@ -174,7 +192,7 @@ feature 'Requester edits their NCR work order' do
     end
 
     before do
-      work_order.setup_approvals_and_observers('approver@example.com')
+      work_order.setup_approvals_and_observers
       fully_approve(ncr_proposal)
     end
 

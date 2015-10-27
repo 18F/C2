@@ -111,7 +111,7 @@ licenses:
 #   text: Anchor text for the link
 links:
 - url: https://c2.18f.gov/
-- text: C2 website
+  text: C2 website
 
 # Email addresses of points-of-contact
 contact:

@@ -45,7 +45,7 @@ feature 'Creating an NCR work order' do
       fill_in 'Vendor', with: 'ACME'
       fill_in 'Amount', with: 123.45
       check "I am going to be using direct pay for this transaction"
-      select approver.email_address, from: 'approver_email'
+      select approver.email_address, from: 'ncr_work_order[approving_official_email]'
       fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
       select Ncr::Organization.all[0], from: 'ncr_work_order_org_code'
       expect { click_on 'Submit for approval' }.to change { Proposal.count }.from(0).to(1)
@@ -68,7 +68,7 @@ feature 'Creating an NCR work order' do
       expect(work_order.description).to eq('desc content')
       expect(proposal.requester).to eq(requester)
       expect(proposal.approvers.map(&:email_address)).to eq(
-        [approver.email_address, Ncr::WorkOrder.ba61_tier1_budget_mailbox])
+        [approver.email_address, Ncr::WorkOrder.ba80_budget_mailbox])
     end
 
     scenario 'saves a BA60 Proposal with the attributes' do
@@ -184,7 +184,7 @@ feature 'Creating an NCR work order' do
       fill_in 'RWA Number', with: 'B9876543'
       fill_in 'Vendor', with: 'ACME'
       fill_in 'Amount', with: 123.45
-      select approver.email_address, from: 'approver_email'
+      select approver.email_address, from: 'ncr_work_order[approving_official_email]'
       fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
       select Ncr::Organization.all[0], from: 'ncr_work_order_org_code'
       click_on 'Submit for approval'
@@ -269,7 +269,7 @@ feature 'Creating an NCR work order' do
         fill_in 'Project title', with: "buying stuff"
         fill_in 'Vendor', with: 'ACME'
         fill_in 'Amount', with: 123.45
-        select approver.email_address, from: 'approver_email'
+        select approver.email_address, from: 'ncr_work_order[approving_official_email]'
         fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
         select Ncr::Organization.all[0], from: 'ncr_work_order_org_code'
       end
