@@ -277,62 +277,21 @@ describe Proposal do
     end
   end
 
-  describe '#add_observer' do
-    let(:proposal) { create(:proposal) }
-    let(:observer) { create(:user) }
-    let(:observer_email) { observer.email_address }
-    let(:user) { create(:user) }
+  describe "#add_observer" do
+    it "runs the observation creator service class" do
+      proposal = create(:proposal)
+      observer = create(:user)
+      observation_creator_double = double(run: true)
+      allow(ObservationCreator).to receive(:new).with(
+        observer: observer,
+        proposal_id: proposal.id,
+        reason: nil,
+        observer_adder: nil
+      ).and_return(observation_creator_double)
 
-    it 'adds an observer to the proposal' do
-      expect(proposal.observers).to be_empty
-      proposal.add_observer(observer_email)
-      expect(proposal.observers).to eq [observer]
-    end
+      proposal.add_observer(observer)
 
-    it 'adds a comment and sends a comment email when there is an adder and observation reason' do
-      reason = "this is required"
-
-      expect {
-        proposal.add_observer(observer_email, user, reason)
-      }.to change { deliveries.length }.from(0).to(1)
-
-      expect(proposal.comments.count).to eq 1
-    end
-
-    it 'sends an observer email when there is an adder but no reason' do
-      expect {
-        proposal.add_observer(observer_email, user, nil)
-      }.to change { deliveries.length }.from(0).to(1)
-    end
-
-    context 'with an adding user' do
-      context 'without a reason' do
-        it 'does not add a comment' do
-          expect(proposal.comments).to be_empty
-          proposal.add_observer(observer_email, user)
-          expect(proposal.comments).to be_empty
-        end
-      end
-
-      context "with a blank reason" do
-        it 'does not add a comment' do
-          reason = " "
-          expect(proposal.comments).to be_empty
-          proposal.add_observer(observer_email, user, reason)
-          expect(proposal.comments).to be_empty
-        end
-      end
-
-      context 'with a reason' do
-        it 'adds an update comment mentioning the reason' do
-          reason = "my mate, innit"
-          expect(proposal.comments).to be_empty
-          proposal.add_observer(observer_email, user, reason)
-          expect(proposal.comments.length).to eq 1
-          expect(proposal.comments.first).to be_update_comment
-          expect(proposal.comments.first.comment_text).to include reason
-        end
-      end
+      expect(observation_creator_double).to have_received(:run)
     end
   end
 end
