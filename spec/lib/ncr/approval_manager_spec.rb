@@ -1,4 +1,132 @@
 describe Ncr::ApprovalManager do
+  describe '#setup_approvals_and_observers' do
+    let (:ba61_tier_one_email) { Ncr::ApprovalManager.ba61_tier1_budget_mailbox }
+    let (:ba61_tier_two_email) { Ncr::ApprovalManager.ba61_tier2_budget_mailbox }
+
+    it "creates approvers when not an emergency" do
+      wo = create(:ncr_work_order, expense_type: 'BA61')
+      manager = Ncr::ApprovalManager.new(wo)
+      manager.setup_approvals_and_observers
+      expect(wo.observations.length).to eq(0)
+      expect(wo.approvers.map(&:email_address)).to eq([
+        wo.approving_official_email,
+        ba61_tier_one_email,
+        ba61_tier_two_email
+      ])
+      wo.reload
+      expect(wo.approved?).to eq(false)
+    end
+
+    it "reuses existing approvals" do
+      wo = create(:ncr_work_order, expense_type: 'BA61')
+      manager = Ncr::ApprovalManager.new(wo)
+      manager.setup_approvals_and_observers
+      first_approval = wo.individual_approvals.first
+
+      wo.reload.setup_approvals_and_observers
+      expect(wo.individual_approvals.first).to eq(first_approval)
+    end
+
+    it "creates observers when in an emergency" do
+      wo = create(:ncr_work_order, expense_type: 'BA61',
+                               emergency: true)
+      manager = Ncr::ApprovalManager.new(wo)
+      manager.setup_approvals_and_observers
+      expect(wo.observers.map(&:email_address)).to match_array([
+        wo.approving_official_email,
+        ba61_tier_one_email,
+        ba61_tier_two_email
+      ].uniq)
+      expect(wo.approvals.length).to eq(0)
+      wo.clear_association_cache
+      expect(wo.approved?).to eq(true)
+    end
+
+    it "accounts for approver transitions when nothing's approved" do
+      ba80_budget_email = Ncr::ApprovalManager.ba80_budget_mailbox
+      wo = create(:ncr_work_order, approving_official_email: 'ao@example.com', expense_type: 'BA61')
+      manager = Ncr::ApprovalManager.new(wo)
+      manager.setup_approvals_and_observers
+      expect(wo.approvers.map(&:email_address)).to eq [
+        'ao@example.com',
+        ba61_tier_one_email,
+        ba61_tier_two_email
+      ]
+
+      wo.update(org_code: 'P1122021 (192X,192M) WHITE HOUSE DISTRICT')
+      manager.setup_approvals_and_observers
+      expect(wo.reload.approvers.map(&:email_address)).to eq [
+        'ao@example.com',
+        ba61_tier_two_email
+      ]
+
+      wo.approving_official_email = 'ao2@example.com'
+      manager.setup_approvals_and_observers
+      expect(wo.reload.approvers.map(&:email_address)).to eq [
+        'ao2@example.com',
+        ba61_tier_two_email
+      ]
+
+      wo.approving_official_email = 'ao@example.com'
+      wo.update(expense_type: 'BA80')
+      manager.setup_approvals_and_observers
+      expect(wo.reload.approvers.map(&:email_address)).to eq [
+        'ao@example.com',
+        ba80_budget_email
+      ]
+    end
+
+    it "unsets the approval status" do
+      ba80_budget_email = Ncr::ApprovalManager.ba80_budget_mailbox
+      wo = create(:ncr_work_order, expense_type: 'BA80')
+      manager = Ncr::ApprovalManager.new(wo)
+      manager.setup_approvals_and_observers
+      expect(wo.approvers.map(&:email_address)).to eq [
+        wo.approving_official_email,
+        ba80_budget_email
+      ]
+
+      wo.individual_approvals.first.approve!
+      wo.individual_approvals.second.approve!
+      expect(wo.reload.approved?).to be true
+
+      wo.update(expense_type: 'BA61')
+      manager.setup_approvals_and_observers
+      expect(wo.reload.pending?).to be true
+    end
+
+    it "does not re-add observers on emergencies" do
+      wo = create(:ncr_work_order, expense_type: 'BA61', emergency: true)
+      manager = Ncr::ApprovalManager.new(wo)
+      manager.setup_approvals_and_observers
+
+      expect(wo.approvals).to be_empty
+      expect(wo.observers.count).to be 3
+
+      manager.setup_approvals_and_observers
+      wo.reload
+      expect(wo.approvals).to be_empty
+      expect(wo.observers.count).to be 3
+    end
+
+    it "handles the delegate then update scenario" do
+      wo = create(:ncr_work_order, expense_type: 'BA80')
+      manager = Ncr::ApprovalManager.new(wo)
+      manager.setup_approvals_and_observers
+      delegate = create(:user)
+      wo.approvers.second.add_delegate(delegate)
+      wo.individual_approvals.second.update(user: delegate)
+
+      wo.individual_approvals.first.approve!
+      wo.individual_approvals.second.approve!
+
+      manager.setup_approvals_and_observers
+      wo.reload
+      expect(wo.approved?).to be true
+      expect(wo.approvers.second).to eq delegate
+    end
+  end
+
   describe '#system_approver_emails' do
     context "for a BA61 request" do
       let (:ba61_tier_one_email) { Ncr::ApprovalManager.ba61_tier1_budget_mailbox }
