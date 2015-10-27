@@ -1,11 +1,7 @@
 module StepManager
   extend ActiveSupport::Concern
 
-  def add_step(step)
-    if steps.length == 0
-      steps << Steps::Serial.new
-    end
-    steps.first.child_approvals << step
-    steps << step
+  def add_initial_steps(step_array)
+    self.root_step = Steps::Serial.new(child_approvals: step_array)
   end
 end

@@ -26,14 +26,13 @@ module Gsa18f
     validates :product_name_and_description, presence: true
     validates :recurring_interval, presence: true, if: :recurring
 
-    after_create :add_approvals, :add_observers
+    after_create :add_steps
 
-    def add_approvals
-      self.proposal.approver = User.for_email(Gsa18f::Procurement.approver_email)
-    end
-
-    def add_observers
-      self.add_observer(Gsa18f::Procurement.purchaser_email)
+    def add_steps
+      steps = [Gsa18f::Procurement.approver_email, Gsa18f::Procurement.purchaser_email].map do |email|
+        Steps::Individual.new(user: User.for_email(email))
+      end
+      proposal.add_initial_steps(steps)
     end
 
     # Ignore values in certain fields if they aren't relevant. May want to
