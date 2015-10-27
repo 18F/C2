@@ -18,6 +18,19 @@ describe "Handles incoming email" do
     end
   end
 
+  it "should forward email if From and Sender do not match a valid User" do
+    expect(deliveries.length).to eq(0)
+    my_approval = approval
+    handler = IncomingMail::Handler.new
+    mail = CommunicartMailer.actions_for_approver(my_approval)
+    mandrill_event = mandrill_payload_from_message(mail)
+    mandrill_event[0]['msg']['from_email'] = 'not-a-real-user@example.com'
+    mandrill_event[0]['msg']['headers']['Sender'] = 'still-not-a-real-user@example.com'
+    resp = handler.handle(mandrill_event)
+    expect(resp.action).to eq(IncomingMail::Response::FORWARDED)
+    expect(deliveries.length).to eq(1)
+  end
+
   it "should create comment for request-related reply" do
     mandrill_event = mandrill_payload_from_message(mail)
     handler = IncomingMail::Handler.new
@@ -27,32 +40,61 @@ describe "Handles incoming email" do
     expect(resp.comment.proposal.id).to eq(proposal.id)
   end
 
-  it "should create comment by approver" do
+  it "falls back to Sender if From is not valid" do
+    my_approval = approval
+    mail = CommunicartMailer.actions_for_approver(my_approval)
+    mandrill_event = mandrill_payload_from_message(mail)
+    mandrill_event[0]['msg']['from_email'] = 'not-a-valid-user@example.com'
+    mandrill_event[0]['msg']['headers']['Sender'] = my_approval.user.email_address
+    handler = IncomingMail::Handler.new
+    expect(my_approval.proposal.existing_observation_for(my_approval.user)).not_to be_present
+    expect(my_approval.proposal.existing_approval_for(my_approval.user)).to be_present
+    resp = handler.handle(mandrill_event)
+    expect(resp.action).to eq(IncomingMail::Response::COMMENT)
+  end
+
+  it "should create comment and obesrvation for approver" do
     my_approval = approval
     mail = CommunicartMailer.actions_for_approver(my_approval)
     mandrill_event = mandrill_payload_from_message(mail)
     mandrill_event[0]['msg']['from_email'] = my_approval.user.email_address
     handler = IncomingMail::Handler.new
-    expect(my_approval.proposal.existing_observation_for(my_approval.user)).to be_falsey
-    expect(my_approval.proposal.existing_approval_for(my_approval.user)).to be_truthy
+    expect(my_approval.proposal.existing_observation_for(my_approval.user)).not_to be_present
+    expect(my_approval.proposal.existing_approval_for(my_approval.user)).to be_present
     resp = handler.handle(mandrill_event)
     expect(resp.action).to eq(IncomingMail::Response::COMMENT)
-    expect(my_approval.proposal.existing_observation_for(my_approval.user)).to be_truthy
-    expect(my_approval.proposal.existing_approval_for(my_approval.user)).to be_truthy
+
+    expect(my_approval.proposal.existing_observation_for(my_approval.user)).to be_present
+    expect(my_approval.proposal.existing_approval_for(my_approval.user)).to be_present
+    expect(deliveries.length).to eq(2) # 1 each to requester and approver
   end
 
   it "should create comment for non-subscriber and add as observer" do
     my_approval = approval
+    my_proposal = my_approval.proposal
     user = create(:user)
     mandrill_event = mandrill_payload_from_message(mail)
     mandrill_event[0]['msg']['from_email'] = user.email_address
     handler = IncomingMail::Handler.new
-    expect(my_approval.proposal.existing_observation_for(user)).to be_falsey
-    expect(my_approval.proposal.existing_approval_for(user)).to be_falsey
+
+    expect(my_approval.proposal.existing_observation_for(user)).not_to be_present
+    expect(my_approval.proposal.existing_approval_for(user)).not_to be_present
+
     resp = handler.handle(mandrill_event)
+
     expect(resp.action).to eq(IncomingMail::Response::COMMENT)
-    expect(resp.comment.proposal.existing_observation_for(user)).to be_truthy
-    expect(resp.comment.proposal.existing_approval_for(user)).to be_falsey
+    expect(resp.comment.proposal.existing_observation_for(user)).to be_present
+    expect(resp.comment.proposal.existing_approval_for(user)).not_to be_present
+    expect(my_approval.user).to_not eq(my_proposal.individual_approvals.last.user)
+
+    comment_recipients = [
+      my_proposal.requester.email_address, # comment
+      my_proposal.individual_approvals.last.user.email_address, # comment
+      my_approval.user.email_address, # comment
+    ]
+
+    expect(deliveries.length).to eq(comment_recipients.size)
+    expect(deliveries.map{|m| m.to.first}.sort).to eq(comment_recipients.sort)
   end
 
   it "should parse proposal public_id from email headers" do
@@ -79,11 +121,11 @@ describe "Handles incoming email" do
     headers = {}
     mail_msg.header.fields.each do |header|
       headers[header.name] = header.value
-    end 
-    msg = { 
+    end
+    msg = {
       'subject'  => mail_msg.subject,
       'template' => nil,
-      'tags'     => [], 
+      'tags'     => [],
       'from_email' => mail_msg.to[0], # NOTE this is switched with 'email' because mail_msg is what we are *sending*
       'email'      => mail_msg.from[0],
       'sender'     => nil,
@@ -91,7 +133,7 @@ describe "Handles incoming email" do
       'html'       => mail_msg.html_part.body.encoded,
       'raw_msg'    => mail_msg.to_s,
       'headers'    => headers,
-    }   
+    }
     [ { 'event' => 'inbound', 'msg' => msg } ] 
-  end 
+  end
 end

@@ -12,6 +12,7 @@ class FeedbackMailer < ApplicationMailer
       subject: '[C2] Feedback submission',
       from: from,
       cc: from,
+      reply_to: from,
       body: self.body_for(form_values)
     )
   end

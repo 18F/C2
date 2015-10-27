@@ -25,7 +25,7 @@ Style/RedundantSelf:
 Style/SignalException:
   Enabled: false
 Style/StringLiterals:
-  Enabled: false
+  EnforcedStyle: double_quotes
 Style/TrailingComma:
   Enabled: false
 Style/AndOr:

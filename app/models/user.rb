@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
 
   validates :client_slug, inclusion: {
     in: ->(_) { Proposal.client_slugs },
+    message: "'%{value}' is not in Proposal.client_slugs #{Proposal.client_slugs.inspect}",
     allow_blank: true
   }
   validates :email_address, presence: true, uniqueness: true
@@ -10,6 +11,7 @@ class User < ActiveRecord::Base
 
   has_many :approvals
   has_many :observations
+  has_many :observers, through: :observations, source: :user
   has_many :comments
 
   # we do not use rolify gem (e.g.) but declare relationship like any other.

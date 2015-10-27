@@ -46,7 +46,10 @@ and [view the doc folder](https://github.com/18F/C2/tree/master/doc).
 1. Create a Pull Request. The PR should reference the story URL and include a brief description
 of the changes, including any rationale for how/why the story is addressed in the way it is. Use the format
 `[#STORYID]` or `[Delivers #STORYID]` or `[Fixes #STORYID]` in the PR title.
-See the [story tracker documentation](https://www.pivotaltracker.com/help/api?version=v5#Tracker_Updates_in_SCM_Post_Commit_Hooks). Consider adding any notes relevant to testing the change, especially for live QA testing.
+See the [story tracker
+documentation](https://www.pivotaltracker.com/help/api?version=v5#Tracker_Updates_in_SCM_Post_Commit_Hooks).
+Consider adding any notes relevant to testing the change, especially for live QA
+testing.
 
 1. Click **Finish** on the story in the story tracker.
 
@@ -58,10 +61,16 @@ you can always create a PR with a `[WIP]` prefix before you are ready to deliver
 of work-in-progress. The Reviewer is encouraged to indicate a "Ship it" (or your favorite Ship It emoticon)
 Consider pointing out the awesomeness of the code, too.
 
-    If the committer paired with someone on the story, the teammate can certainly give a Ship It. That said, the pair is welcome to solicit additional PR feedback from the rest of the team. If verbal approval is given by a teammate, the committer may comment `@TEAMMATE ship it` before merging the PR.
+    If the committer paired with someone on the story, the teammate can
+certainly give a Ship It. That said, the pair is welcome to solicit additional
+PR feedback from the rest of the team. If verbal approval is given by a
+teammate, the committer may comment `@TEAMMATE ship it` before merging the PR.
 
-1. The Tester tests the code. This can be done on the `c2-dev` or `c2-staging` environment.
-Check with your teammates to see which environment might already be in use.
+1. The Tester tests the code. The Tester indicates that they are QA-ing the
+change by making a comment on the pull request. QA can be done on the
+`c2-dev` or `c2-staging` environment. Check with your teammates (on Slack) to
+see which environment might already be in use.
+
 Example flow:
 
     ```bash
@@ -70,7 +79,7 @@ Example flow:
     cd C2
     git checkout -b qa-123456-fix-timezones
     git merge -m 'temp qa branch' origin/123456-fix-timezones
-    script/deploy c2-dev
+    cf push c2-dev
     ```
 
 1. The Tester should test out the bugfix or new functionality.
@@ -78,7 +87,7 @@ Example flow:
 1. If there are any problems, the Tester should comment on the PR and assign it to the Owner for follow-up.
 The Owner should fix the problems and assign back to the Tester, who can then repeat the testing steps above.
 
-1. When the Tester is satisfied, s/he merges the PR to `master`.
+1. When the Tester is satisfied, they merge the PR to `master`.
 Pro tip: If the PR title follows the conventions mentioned above,
 the story tracker status will change to **Accept or Reject** when the PR is merged.
 Otherwise, the Reviewer should click **Deliver** in the story tracker.

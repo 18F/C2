@@ -48,6 +48,7 @@ class Proposal < ActiveRecord::Base
 
   validates :client_data_type, inclusion: {
     in: ->(_) { self.client_model_names },
+    message: "%{value} is not a valid client model type. Valid client model types are: #{CLIENT_MODELS.inspect}",
     allow_blank: true
   }
   validates :flow, presence: true, inclusion: {in: FLOWS}
@@ -143,22 +144,15 @@ class Proposal < ActiveRecord::Base
   end
 
   def existing_observation_for(user)
-    self.observations.find_by(user: user)
-  end
-
-  def has_subscriber?(user)
-    existing_observation_for(user) || existing_approval_for(user) || requester_id == user.id
+    observations.find_by(user: user)
   end
 
   def add_observer(email_or_user, adder=nil, reason=nil)
-    # polymorphic
-    if email_or_user.is_a?(User)
-      user = email_or_user
-    else
-      user = User.for_email(email_or_user)
-    end
+    user = find_user(email_or_user)
 
-    create_new_observation(user, adder, reason) unless existing_observation_for(user)
+    unless existing_observation_for(user)
+      create_new_observation(user, adder, reason)
+    end
   end
 
   def add_requester(email)
@@ -260,33 +254,21 @@ class Proposal < ActiveRecord::Base
   end
 
   def create_new_observation(user, adder, reason)
-    observer_role = Role.find_or_create_by(name: 'observer')
-    observation = Observation.new(user_id: user.id, role_id: observer_role.id, proposal_id: self.id)
-    # because we build the Observation ourselves, we add to the direct m2m relation directly.
-    self.observations << observation
-    # invalidate relation cache so we reload on next access
-    self.observers(true)
-    # when explicitly adding an observer using the form in the Proposal page...
-    if adder
-      if reason
-        add_observation_comment(user, adder, reason)
-      end
-
-      Dispatcher.on_observer_added(observation, reason)
-    end
-
-    observation
+    ObservationCreator.new(
+      observer: user,
+      proposal_id: id,
+      reason: reason,
+      observer_adder: adder
+    ).run
   end
 
-  def add_observation_comment(user, adder, reason)
-    comments.create(
-      comment_text: I18n.t(
-        'activerecord.attributes.observation.user_reason_comment',
-        user: adder.full_name,
-        observer: user.full_name,
-        reason: reason
-      ),
-      user: adder
-    )
+  private
+
+  def find_user(email_or_user)
+    if email_or_user.is_a?(User)
+      email_or_user
+    else
+      User.for_email(email_or_user)
+    end
   end
 end

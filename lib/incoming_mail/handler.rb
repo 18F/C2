@@ -27,7 +27,12 @@ module IncomingMail
       case resp.type
       when REQUEST
         resp.comment = create_comment(payload['msg'])
-        resp.action = resp.comment ? Response::COMMENT : Response::ERROR
+        if resp.comment
+          resp.action = Response::COMMENT
+        else
+          forward_msg(payload['msg']['raw_msg'])
+          resp.action = Response::FORWARDED
+        end
       else
         forward_msg(payload['msg']['raw_msg'])
         resp.action = Response::FORWARDED
@@ -60,44 +65,32 @@ module IncomingMail
     end
 
     def create_comment(msg)
-      proposal = find_proposal(find_public_id(msg)) or return
-      comment_text = find_comment_text(msg)
-      comment_user = find_comment_user(msg)
-      if proposal.has_subscriber?(comment_user)
-        # already in the loop, just add comment.
-        proposal.comments.create(comment_text: comment_text, user: comment_user)
-      else
-        # yes, user adds self as observer, which also generates comment
-        proposal.add_observer(comment_user, comment_user, comment_text)
-        proposal.comments.last
+      # IMPORTANT that we check/add as observer before we create comment,
+      # since comment will create as a user if not already,
+      # and we want the reason logged.
+      parsed_email = InboundMailParser.new(msg)
+      proposal = parsed_email.proposal
+      user = parsed_email.comment_user
+
+      return unless user  # cannot create comment for non-existent user
+
+      unless proposal.existing_observation_for(user)
+        reason = "Added comment via email reply"
+        ObservationCreator.new(
+          observer: user,
+          proposal_id: proposal.id,
+          reason: reason,
+        ).run
       end
-    end
 
-    def find_proposal(public_id)
-      Proposal.find_by_public_id(public_id) || Proposal.find(public_id)
-    end
+      comment = Comment.create(
+        comment_text: parsed_email.comment_text,
+        user: user,
+        proposal: proposal
+      )
 
-    def find_public_id(msg)
-      references = msg['headers']['References']
-      ref_re = /<proposal-(\d+)\@.+?>/
-      sbj_re = /Request\ #?([\w\-]+)/
-
-      if references.match(ref_re)
-        references.match(ref_re)[1]
-      elsif msg['subject'].match(sbj_re)
-        msg['subject'].match(sbj_re)[1]
-      else
-        fail "Failed to find public_id in msg #{msg.inspect}"
-      end
-    end
-
-    def find_comment_text(msg)
-      EmailReplyParser.parse_reply(msg['text'])
-    end
-
-    def find_comment_user(msg)
-      from = msg['from_email']
-      User.find_by_email_address(from)
+      Dispatcher.on_comment_created(comment) # sends email
+      comment
     end
   end
 end

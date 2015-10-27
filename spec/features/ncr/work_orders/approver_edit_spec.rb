@@ -5,12 +5,11 @@ feature 'Approver edits NCR work order' do
     end
   end
 
-  let(:work_order) { create(:ncr_work_order, description: 'test') }
+  let(:work_order) { create(:ncr_work_order, :with_approvers) }
   let(:ncr_proposal) { work_order.proposal }
 
   scenario 'keeps track of the modification' do
-    work_order.setup_approvals_and_observers('approver@example.com')
-    approver = ncr_proposal.approvers.last
+    approver = ncr_proposal.approvers.first
     login_as(approver)
 
     visit "/ncr/work_orders/#{work_order.id}/edit"

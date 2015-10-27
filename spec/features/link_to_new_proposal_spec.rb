@@ -1,6 +1,6 @@
 describe "Link to New Proposal" do
   it "is not visible if the user has no client" do
-    login_as(create(:user))
+    login_as(create(:user, client_slug: ''))
     visit '/'
     expect(page).not_to have_content('New NCR Request')
   end
