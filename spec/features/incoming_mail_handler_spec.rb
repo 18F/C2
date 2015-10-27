@@ -18,6 +18,19 @@ describe "Handles incoming email" do
     end
   end
 
+  it "should forward email if From and Sender do not match a valid User" do
+    expect(deliveries.length).to eq(0)
+    my_approval = approval
+    handler = IncomingMail::Handler.new
+    mail = CommunicartMailer.actions_for_approver(my_approval)
+    mandrill_event = mandrill_payload_from_message(mail)
+    mandrill_event[0]['msg']['from_email'] = 'not-a-real-user@example.com'
+    mandrill_event[0]['msg']['headers']['Sender'] = 'still-not-a-real-user@example.com'
+    resp = handler.handle(mandrill_event)
+    expect(resp.action).to eq(IncomingMail::Response::FORWARDED)
+    expect(deliveries.length).to eq(1)
+  end
+
   it "should create comment for request-related reply" do
     mandrill_event = mandrill_payload_from_message(mail)
     handler = IncomingMail::Handler.new
@@ -25,6 +38,19 @@ describe "Handles incoming email" do
     expect(resp.action).to eq(IncomingMail::Response::COMMENT)
     expect(resp.comment).to be_a(Comment)
     expect(resp.comment.proposal.id).to eq(proposal.id)
+  end
+
+  it "falls back to Sender if From is not valid" do
+    my_approval = approval
+    mail = CommunicartMailer.actions_for_approver(my_approval)
+    mandrill_event = mandrill_payload_from_message(mail)
+    mandrill_event[0]['msg']['from_email'] = 'not-a-valid-user@example.com'
+    mandrill_event[0]['msg']['headers']['Sender'] = my_approval.user.email_address
+    handler = IncomingMail::Handler.new
+    expect(my_approval.proposal.existing_observation_for(my_approval.user)).not_to be_present
+    expect(my_approval.proposal.existing_approval_for(my_approval.user)).to be_present
+    resp = handler.handle(mandrill_event)
+    expect(resp.action).to eq(IncomingMail::Response::COMMENT)
   end
 
   it "should create comment and obesrvation for approver" do
