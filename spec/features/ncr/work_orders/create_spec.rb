@@ -68,7 +68,7 @@ feature 'Creating an NCR work order' do
       expect(work_order.description).to eq('desc content')
       expect(proposal.requester).to eq(requester)
       expect(proposal.approvers.map(&:email_address)).to eq(
-        [approver.email_address, Ncr::WorkOrder.ba61_tier1_budget_mailbox])
+        [approver.email_address, Ncr::WorkOrder.ba80_budget_mailbox])
     end
 
     scenario 'saves a BA60 Proposal with the attributes' do

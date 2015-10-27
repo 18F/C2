@@ -1,4 +1,6 @@
 describe Ncr::WorkOrdersController do
+  include ProposalSpecHelper
+
   describe 'creating' do
     before do
       login_as(create(:user, client_slug: 'ncr'))
@@ -64,7 +66,7 @@ describe Ncr::WorkOrdersController do
     end
 
     it 'displays a warning message when editing a fully-approved proposal' do
-      work_order.approve!
+      fully_approve(work_order.proposal)
       get :edit, {id: work_order.id}
       expect(flash[:warning]).to be_present
     end
