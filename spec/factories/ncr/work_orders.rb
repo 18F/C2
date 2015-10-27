@@ -15,6 +15,7 @@ FactoryGirl.define do
     trait :with_approvers do
       association :proposal, :with_serial_approvers, flow: 'linear'
       after :create do |wo|
+        wo.reload # since approvers may be cached-as-empty
         wo.approving_official_email = wo.approving_official.email_address
       end
     end
