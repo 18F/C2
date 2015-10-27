@@ -267,7 +267,10 @@ describe Proposal do
   describe '#restart' do
     it "creates new API tokens" do
       proposal = create(:proposal, :with_parallel_approvers)
-      proposal.individual_approvals.each(&:create_api_token!)
+      proposal.individual_approvals.each do |approval|
+        create(:api_token, approval: approval)
+      end
+
       expect(proposal.api_tokens.size).to eq(2)
 
       proposal.restart!
