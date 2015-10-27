@@ -8,7 +8,7 @@
   = simple_form_for @model_instance, html: { multipart: true } do |f|
     = f.input :project_title
     = f.input :description
-    = field_set_tag "Expense type", class: "required" do
+    = field_set_tag "Expense type", class: 'required' do
       = expense_type_radio_button(f, 'BA60')
       = expense_type_radio_button(f, 'BA61')
       = f.input :emergency, disabled: @model_instance.persisted?, wrapper_html: { data: { filter_key: 'expense-type', filter_value: 'BA61' } }
@@ -21,7 +21,7 @@
       = f.input :amount, as: :currency, label_html: { class: 'sr-only' }, input_html: { data: popover_data_attrs('ncr_amount') }
       = f.input :not_to_exceed, as: :radio_buttons, collection: [['Exact', false], ['Not to exceed', true]], label: false
     = f.input :direct_pay
-    = f.input :approving_official_email, collection: approver_options, include_blank: true, disabled: @model_instance.approver_email_frozen?, prompt: :translate, input_html: { class: 'js-selectize' }
+    = f.input :approving_official_email, collection: approver_options, include_blank: true, disabled: @model_instance.approver_email_frozen?, prompt: :translate, input_html: { class: 'js-selectize' }, required: true
     - if @model_instance.new_record?
       = render partial: 'attachments'
     - else

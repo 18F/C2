@@ -53,6 +53,7 @@ gem 'workflow'
 group :test, :development do
   gem 'bullet', require: false # use BULLET_ENABLED=true
   gem 'database_cleaner'
+  gem 'konacha'
   gem 'pry-byebug'
   gem 'pry-rails'
   gem 'rspec-rails'
@@ -61,6 +62,7 @@ end
 
 group :development do
   gem 'guard-rspec', require: false
+  gem 'guard-shell', require: false
   gem 'mail_view'
   gem 'railroady'
   gem 'letter_opener'
