@@ -38,8 +38,7 @@ class InboundMailParser
   end
 
   def find_comment_user(msg)
-    email = msg["from_email"]
-    User.find_by(email_address: email)
+    User.find_by(email_address: msg["from_email"]) || User.find_by(email_address: msg["headers"]["Sender"])
   end
 
   def find_comment_text(msg)
