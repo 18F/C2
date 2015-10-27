@@ -1,5 +1,5 @@
 # based on https://gist.github.com/webmat/1887148
-ActiveAdmin.register DelayedJob, as: 'Job' do
+ActiveAdmin.register Delayed::Job, as: 'Job' do
   actions :index, :show, :edit, :update, :destroy
 
   index do
@@ -39,27 +39,27 @@ ActiveAdmin.register DelayedJob, as: 'Job' do
     f.buttons
   end
 
-  action_item :only => [:edit] do
+  action_item only: [:edit] do
     link_to 'Delete Job', admin_job_path(resource),
             'data-method' => :delete, 'data-confirm' => 'Are you sure?'
   end
 
   action_item :only => [:show, :edit] do
     link_to 'Schedule now', run_now_admin_job_path(resource), 'data-method' => :post,
-      :title => 'Cause a job scheduled in the future to run now.'
+      title: 'Cause a job scheduled in the future to run now.'
   end
 
   action_item :only => [:show, :edit] do
     link_to 'Reset Job', reset_admin_job_path(resource), 'data-method' => :post,
-      :title => 'Resets the state caused by errors. Lets a worker give it another go ASAP.'
+      title: 'Resets the state caused by errors. Lets a worker give it another go ASAP.'
   end
 
-  member_action :run_now, :method => :post do
+  member_action :run_now, method: :post do
     resource.update_attributes run_at: Time.now
     redirect_to action: :index
   end
 
-  member_action :reset, :method => :post do
+  member_action :reset, method: :post do
     resource.update_attributes locked_at: nil, locked_by: nil, attempts: 0, last_error: nil
     resource.update_attribute :attempts, 0
     redirect_to action: :index
