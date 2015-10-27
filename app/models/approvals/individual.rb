@@ -46,7 +46,7 @@ module Approvals
     protected
 
     def restart
-      self.api_token.expire!
+      self.api_token.try(:expire!)
       super
     end
   end
