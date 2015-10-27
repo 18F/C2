@@ -1,5 +1,5 @@
 module Ncr
-  module Reporter
+  class Reporter
     def self.total_last_week
       Proposal.where(client_data_type: "Ncr::WorkOrder")
         .where("created_at > ?", 1.week.ago).count
@@ -24,26 +24,6 @@ module Ncr
     def self.proposal_public_url(proposal)
       Rails.application.routes.url_helpers.url_for(controller: 'proposals', action: 'show', id: proposal.id, host: DEFAULT_URL_HOST)
     end
-
-    def self.build_ncr_annual_report_string(year)
-      work_orders = Ncr::WorkOrder.cancelled.for_fiscal_year(year)
-      CSV.generate do |csv|
-        csv << ["Id", "Amount", "Date Approved", "Org Code", "CL#", "Budget Activity", "SOC", "Function Code", "Building #",
-                "Vendor", "Description", "Requestor", "Approver"]
-        self.get_ncr_annual_report_body(csv, work_orders)
-      end
-    end
-
-    # rubocop:disable Metrics/AbcSize
-    def self.get_ncr_annual_report_body(csv, work_orders)
-      work_orders.each do |w|
-        approver_name = w.approving_official ? w.approving_official.full_name : "no approver listed"
-        approved_at = w.proposal.approvals.last ? w.proposal.approvals.last.approved_at : "no approvals"
-        csv << [w.proposal.public_id, w.amount, approved_at, w.org_code, w.cl_number, w.expense_type, w.soc_code,
-                w.function_code, w.building_number, w.vendor, w.description, w.proposal.requester.full_name, approver_name]
-      end
-    end
-    # rubocop:enable Metrics/AbcSize
 
     def self.make_csv_row(proposal)
       [
@@ -120,6 +100,72 @@ module Ncr
 
     def self.proposals_tier_one_pending
       Proposal.find_by_sql(self.proposals_tier_one_pending_sql)
+    end
+
+    def build_ncr_annual_report_string(year)
+      cancelled_work_orders = Ncr::WorkOrder.cancelled.for_fiscal_year(year)
+
+      CSV.generate do |csv|
+        add_annual_report_headers(csv)
+        add_annual_report_body(csv, cancelled_work_orders)
+      end
+    end
+
+    private
+
+    def add_annual_report_headers(csv)
+        csv << [
+          "Id",
+          "Amount",
+          "Date Approved",
+          "Org Code",
+          "CL#",
+          "Budget Activity",
+          "SOC",
+          "Function Code",
+          "Building #",
+          "Vendor",
+          "Description",
+          "Requestor",
+          "Approver"
+        ]
+    end
+
+    def add_annual_report_body(csv, work_orders)
+      work_orders.each do |work_order|
+        csv << [
+          work_order.proposal.public_id,
+          work_order.amount,
+          find_approved_at(work_order),
+          work_order.org_code,
+          work_order.cl_number,
+          work_order.expense_type,
+          work_order.soc_code,
+          work_order.function_code,
+          work_order.building_number,
+          work_order.vendor,
+          work_order.description,
+          work_order.proposal.requester.full_name,
+          find_approved_at(work_order)
+        ]
+      end
+    end
+
+    def find_approver_name(work_order)
+      if work_order.approving_official.present?
+        work_order.approving_official.full_name
+      else
+        "no approver listed"
+      end
+    end
+
+
+    def find_approved_at(work_order)
+      if work_order.proposal.approvals.last.present?
+        work_order.proposal.approvals.last.approved_a
+      else
+        "no approvals"
+      end
     end
   end
 end

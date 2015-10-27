@@ -60,4 +60,36 @@ describe Ncr::Reporter do
       expect(csv).to include(",#{work_order.decorate.final_approver_email_address}")
     end
   end
+
+  describe "#build_ncr_annual_report_string" do
+    it "includes information about cancelled NCR work orders for fiscal year passed in" do
+      Timecop.freeze do
+        current_year = Time.now.year
+        beginning_of_year = Time.now.beginning_of_year
+        approved_proposal = create(:proposal, status: "approved")
+        cancelled_proposal = create(:proposal, status: "cancelled")
+        approved_work_order = create(
+          :ncr_work_order,
+          amount: 100,
+          description: "an approved work order",
+          created_at: beginning_of_year,
+          proposal: approved_proposal
+        )
+        cancelled_work_order = create(
+          :ncr_work_order,
+          amount: 200,
+          description: "a canclled work order",
+          created_at: beginning_of_year,
+          proposal: cancelled_proposal
+        )
+
+        csv = Ncr::Reporter.new.build_ncr_annual_report_string(current_year)
+
+        expect(csv).to include(cancelled_work_order.amount.to_s)
+        expect(csv).not_to include(approved_work_order.amount.to_s)
+        expect(csv).to include(cancelled_work_order.description)
+        expect(csv).not_to include(approved_work_order.description)
+      end
+    end
+  end
 end
