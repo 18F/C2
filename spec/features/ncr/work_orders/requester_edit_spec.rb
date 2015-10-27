@@ -87,17 +87,17 @@ feature 'Requester edits their NCR work order' do
       work_order.update(expense_type: "BA61")
       role = "BA61_tier1_budget_approver"
       tier_one_approver = User.with_role(role).first
-      approval = tier_one_approver.approvals.where(proposal: ncr_proposal).first
+      approval = tier_one_approver.steps.where(proposal: ncr_proposal).first
       approval.update(status: "actionable")
 
       visit "/ncr/work_orders/#{work_order.id}/edit"
-      choose 'BA80'
-      fill_in 'RWA Number', with: 'a1234567'
-      click_on 'Update'
+      choose "BA80"
+      fill_in "RWA Number", with: "a1234567"
+      click_on "Update"
 
-      expect(deliveries.select do |email|
+      expect(deliveries.count do |email|
         email.to.first == tier_one_approver.email_address
-      end.length).to eq (1)
+      end).to eq 1
     end
   end
 
