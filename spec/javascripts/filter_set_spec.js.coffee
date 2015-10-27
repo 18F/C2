@@ -23,14 +23,14 @@ describe 'FilterSet', ->
       expect($children.data('filter-key')).to.eql('foo')
       expect($children.data('filter-value')).to.eql(2)
 
-  describe '#adjacentChildren()', ->
+  describe '#cousins()', ->
     it "returns elements with the same key but a different value", ->
       set = new FilterSet(getContent(), 'foo', 2)
-      $adjacentChildren = set.adjacentChildren()
+      $cousins = set.cousins()
 
-      expect($adjacentChildren.length).to.eql(1)
-      expect($adjacentChildren.data('filter-key')).to.eql('foo')
-      expect($adjacentChildren.data('filter-value')).to.eql(1)
+      expect($cousins.length).to.eql(1)
+      expect($cousins.data('filter-key')).to.eql('foo')
+      expect($cousins.data('filter-value')).to.eql(1)
 
   describe '#show()', ->
     it "disables all inputs with matching keys but different values", ->

@@ -7,20 +7,20 @@ class @FilterSet
   children: ->
     @$("[data-filter-key=#{ @key }][data-filter-value=#{ @val }]")
 
-  adjacentChildren: ->
+  cousins: ->
     @$("[data-filter-key=#{ @key }][data-filter-value!=#{ @val }]")
 
   showChildren: ->
     filter = new FieldFilter(@children())
     filter.show()
 
-  hideAdjacentChildren: ->
-    filter = new FieldFilter(@adjacentChildren())
+  hideCousins: ->
+    filter = new FieldFilter(@cousins())
     filter.hide()
 
   show: ->
     @showChildren()
-    @hideAdjacentChildren()
+    @hideCousins()
 
   hide: ->
     filter = new FieldFilter(@children())
