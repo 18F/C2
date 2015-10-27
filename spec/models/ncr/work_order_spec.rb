@@ -43,8 +43,8 @@ describe Ncr::WorkOrder do
   end
 
   describe '#setup_approvals_and_observers' do
-    let (:ba61_tier_one_email) { Ncr::WorkOrder.ba61_tier1_budget_mailbox }
-    let (:ba61_tier_two_email) { Ncr::WorkOrder.ba61_tier2_budget_mailbox }
+    let (:ba61_tier_one_email) { Ncr::ApprovalManager.ba61_tier1_budget_mailbox }
+    let (:ba61_tier_two_email) { Ncr::ApprovalManager.ba61_tier2_budget_mailbox }
 
     it "creates approvers when not an emergency" do
       form = create(:ncr_work_order, expense_type: 'BA61')
@@ -83,7 +83,7 @@ describe Ncr::WorkOrder do
     end
 
     it "accounts for approver transitions when nothing's approved" do
-      ba80_budget_email = Ncr::WorkOrder.ba80_budget_mailbox
+      ba80_budget_email = Ncr::ApprovalManager.ba80_budget_mailbox
       wo = create(:ncr_work_order, approving_official_email: 'ao@example.com', expense_type: 'BA61')
       wo.setup_approvals_and_observers
       expect(wo.approvers.map(&:email_address)).to eq [
@@ -116,7 +116,7 @@ describe Ncr::WorkOrder do
     end
 
     it "unsets the approval status" do
-      ba80_budget_email = Ncr::WorkOrder.ba80_budget_mailbox
+      ba80_budget_email = Ncr::ApprovalManager.ba80_budget_mailbox
       wo = create(:ncr_work_order, expense_type: 'BA80')
       wo.setup_approvals_and_observers
       expect(wo.approvers.map(&:email_address)).to eq [
@@ -173,43 +173,6 @@ describe Ncr::WorkOrder do
     it "returns nil for no #org_code" do
       work_order = Ncr::WorkOrder.new
       expect(work_order.organization).to eq(nil)
-    end
-  end
-
-  describe '#system_approver_emails' do
-    let (:ba61_tier_one_email) { Ncr::WorkOrder.ba61_tier1_budget_mailbox }
-    let (:ba61_tier_two_email) { Ncr::WorkOrder.ba61_tier2_budget_mailbox }
-
-    context "for a BA61 request" do
-      it "skips the Tier 1 budget approver for WHSC" do
-        work_order = create(:ncr_work_order, expense_type: 'BA61', org_code: Ncr::Organization::WHSC_CODE)
-        expect(work_order.system_approver_emails).to eq([
-          ba61_tier_two_email
-        ])
-      end
-
-      it "includes the Tier 1 budget approver for an unknown organization" do
-        work_order = create(:ncr_work_order, expense_type: 'BA61', org_code: nil)
-        expect(work_order.system_approver_emails).to eq([
-          ba61_tier_one_email,
-          ba61_tier_two_email
-        ])
-      end
-    end
-
-    context "for a BA80 request" do
-      it "uses the general budget email" do
-       ba80_budget_email = Ncr::WorkOrder.ba80_budget_mailbox
-        work_order = create(:ncr_work_order, expense_type: 'BA80')
-        expect(work_order.system_approver_emails).to eq([ba80_budget_email])
-      end
-
-      it "uses the OOL budget email for their org code" do
-        budget_email = Ncr::WorkOrder.ool_ba80_budget_mailbox
-        org_code = Ncr::Organization::OOL_CODES.first
-        work_order = create(:ncr_work_order, expense_type: 'BA80', org_code: org_code)
-        expect(work_order.system_approver_emails).to eq([budget_email])
-      end
     end
   end
 

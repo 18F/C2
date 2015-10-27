@@ -78,7 +78,7 @@ feature 'Requester edits their NCR work order' do
     click_on "Update"
     proposal = Proposal.last
     expect(proposal.approvers.length).to eq(2)
-    expect(proposal.approvers.second.email_address).to eq(Ncr::WorkOrder.ba80_budget_mailbox)
+    expect(proposal.approvers.second.email_address).to eq(Ncr::ApprovalManager.ba80_budget_mailbox)
   end
 
   context "proposal changes from BA80 to BA61" do

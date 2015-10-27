@@ -186,45 +186,8 @@ module Ncr
     end
 
     def system_approver_emails
-      results = []
-      if %w(BA60 BA61).include?(self.expense_type)
-        unless self.organization.try(:whsc?)
-          results << self.class.ba61_tier1_budget_mailbox
-        end
-        results << self.class.ba61_tier2_budget_mailbox
-      else # BA80
-        if self.organization.try(:ool?)
-          results << self.class.ool_ba80_budget_mailbox
-        else
-          results << self.class.ba80_budget_mailbox
-        end
-      end
-
-      results
-    end
-
-    def self.ba61_tier1_budget_mailbox
-      self.approver_with_role('BA61_tier1_budget_approver')
-    end
-
-    def self.ba61_tier2_budget_mailbox
-      self.approver_with_role('BA61_tier2_budget_approver')
-    end
-
-    def self.approver_with_role(role_name)
-      users = User.with_role(role_name).where(client_slug: 'ncr')
-      if users.empty?
-        fail "Missing User with role #{role_name} -- did you run rake db:migrate and rake db:seed?"
-      end
-      users.first.email_address
-    end
-
-    def self.ba80_budget_mailbox
-      self.approver_with_role('BA80_budget_approver')
-    end
-
-    def self.ool_ba80_budget_mailbox
-      self.approver_with_role('OOL_BA80_budget_approver')
+      manager = ApprovalManager.new(self)
+      manager.system_approver_emails
     end
 
     def org_id

@@ -29,7 +29,7 @@ feature 'Requester switches work order to WHSC' do
 
       expect(ncr_proposal.approvers.map(&:email_address)).to eq([
         approving_official.email_address,
-        Ncr::WorkOrder.ba61_tier2_budget_mailbox
+        Ncr::ApprovalManager.ba61_tier2_budget_mailbox
       ])
       expect(work_order.individual_approvals.first).to be_approved
       expect(work_order.individual_approvals.second).to be_actionable
@@ -45,12 +45,12 @@ feature 'Requester switches work order to WHSC' do
 
       expect(deliveries.length).to be 3
       removed, approver1, approver2 = deliveries
-      expect(removed.to).to eq([Ncr::WorkOrder.ba61_tier1_budget_mailbox])
+      expect(removed.to).to eq([Ncr::ApprovalManager.ba61_tier1_budget_mailbox])
       expect(removed.html_part.body).to include "removed"
 
       expect(approver1.to).to eq([work_order.approvers.first.email_address])
       expect(approver1.html_part.body).not_to include "removed"
-      expect(approver2.to).to eq([Ncr::WorkOrder.ba61_tier2_budget_mailbox])
+      expect(approver2.to).to eq([Ncr::ApprovalManager.ba61_tier2_budget_mailbox])
       expect(approver2.html_part.body).not_to include "removed"
     end
   end
@@ -72,7 +72,7 @@ feature 'Requester switches work order to WHSC' do
 
       expect(ncr_proposal.approvers.map(&:email_address)).to eq([
         approving_official.email_address,
-        Ncr::WorkOrder.ba61_tier2_budget_mailbox
+        Ncr::ApprovalManager.ba61_tier2_budget_mailbox
       ])
       expect(work_order.individual_approvals.first).to be_approved
     end
