@@ -309,6 +309,7 @@ module Ncr
     def force_approvers(emails)
       individuals = emails.map do |email|
         user = User.for_email(email)
+        user.update!(client_slug: 'ncr')
         # Reuse existing approvals, if present
         self.proposal.existing_approval_for(user) || Approvals::Individual.new(user: user)
       end
