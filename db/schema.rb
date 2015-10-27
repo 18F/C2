@@ -60,10 +60,8 @@ ActiveRecord::Schema.define(version: 20151027010707) do
     t.string   "type"
     t.integer  "parent_id"
     t.integer  "min_children_needed"
-    t.datetime "deleted_at"
   end
 
-  add_index "approvals", ["deleted_at"], name: "index_approvals_on_deleted_at", using: :btree
   add_index "approvals", ["user_id", "proposal_id"], name: "approvals_user_proposal_idx", unique: true, using: :btree
 
   create_table "attachments", force: :cascade do |t|
@@ -84,10 +82,8 @@ ActiveRecord::Schema.define(version: 20151027010707) do
     t.integer  "user_id"
     t.integer  "proposal_id"
     t.boolean  "update_comment"
-    t.datetime "deleted_at"
   end
 
-  add_index "comments", ["deleted_at"], name: "index_comments_on_deleted_at", using: :btree
   add_index "comments", ["proposal_id"], name: "index_comments_on_proposal_id", using: :btree
 
   create_table "delayed_jobs", force: :cascade do |t|
@@ -151,13 +147,11 @@ ActiveRecord::Schema.define(version: 20151027010707) do
   end
 
   create_table "proposal_roles", force: :cascade do |t|
-    t.integer  "role_id",     null: false
-    t.integer  "user_id",     null: false
-    t.integer  "proposal_id", null: false
-    t.datetime "deleted_at"
+    t.integer "role_id",     null: false
+    t.integer "user_id",     null: false
+    t.integer "proposal_id", null: false
   end
 
-  add_index "proposal_roles", ["deleted_at"], name: "index_proposal_roles_on_deleted_at", using: :btree
   add_index "proposal_roles", ["role_id", "user_id", "proposal_id"], name: "index_proposal_roles_on_role_id_and_user_id_and_proposal_id", unique: true, using: :btree
 
   create_table "proposals", force: :cascade do |t|
@@ -195,10 +189,7 @@ ActiveRecord::Schema.define(version: 20151027010707) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "client_slug",   limit: 255
-    t.datetime "deleted_at"
   end
-
-  add_index "users", ["deleted_at"], name: "index_users_on_deleted_at", using: :btree
 
   create_table "versions", force: :cascade do |t|
     t.string   "item_type",  null: false
