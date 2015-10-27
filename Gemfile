@@ -21,6 +21,7 @@ gem 'factory_girl_rails'
 gem 'faker'
 gem 'font-awesome-sass'
 gem 'foreman', require: false
+gem "has_secure_token"
 gem 'haml'
 gem 'hashdiff'
 gem 'html_pipeline_rails'
@@ -77,6 +78,7 @@ group :test do
   gem 'capybara'
   gem 'codeclimate-test-reporter'
   gem 'poltergeist'
+  gem "shoulda-matchers"
   gem 'simplecov'
   gem 'timecop'
   gem 'zonebie'

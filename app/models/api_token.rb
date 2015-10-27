@@ -1,14 +1,17 @@
 class ApiToken < ActiveRecord::Base
   has_paper_trail class_name: 'C2Version'
 
-  before_create :generate_token
+  before_create :set_expires_at
+  has_secure_token :access_token
 
   belongs_to :approval, class_name: 'Approvals::Individual'
   has_one :proposal, through: :approval
   has_one :user, through: :approval
 
-  # TODO validates :access_token, presence: true
-  validates :approval_id, presence: true
+  validates :access_token, presence: true, on: :save
+  validates :access_token, uniqueness: true
+  validates :approval, presence: true
+  validates :expires_at, presence: true, on: :save
 
   scope :unexpired, -> { where('expires_at >= ?', Time.zone.now) }
   scope :expired, -> { where('expires_at < ?', Time.zone.now) }
@@ -17,26 +20,22 @@ class ApiToken < ActiveRecord::Base
 
 
   def used?
-    !!self.used_at
+    used_at.present?
   end
 
-  # @todo: validate presence of expires_at
   def expired?
-    self.expires_at && self.expires_at < Time.zone.now
+    expires_at && expires_at < Time.zone.now
   end
 
   def use!
-    self.update_attributes!(used_at: Time.zone.now)
+    update!(used_at: Time.zone.now)
   end
-
 
   private
 
-  def generate_token
-    begin
-      self.access_token = SecureRandom.hex
-    end while self.class.exists?(access_token: access_token)
-
-    self.expires_at ||= Time.zone.now + 7.days
+  def set_expires_at
+    if expires_at.nil?
+      self.expires_at = Time.zone.now + 7.days
+    end
   end
 end
