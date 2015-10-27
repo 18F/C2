@@ -48,7 +48,5 @@ describe Gsa18f::DashboardController do
       # restore zone
       Time.zone = prev_zone
     end
-
-    it 'includes months with no proposals'   # @todo
   end
 end

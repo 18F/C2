@@ -67,8 +67,6 @@ describe 'Users API' do
         expect(ids).to include(*users.map(&:id)[1..-1])
       end
 
-      it "matches the format in the API documentation"
-
       describe "CORS" do
         let(:origin) { 'http://corsexample.com/' }
         let(:headers) {
