@@ -143,6 +143,10 @@ class Proposal < ActiveRecord::Base
     end
   end
 
+  def has_subscriber?(user)
+    users.include?(user)
+  end
+
   def existing_observation_for(user)
     observations.find_by(user: user)
   end

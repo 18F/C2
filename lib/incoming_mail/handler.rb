@@ -72,7 +72,11 @@ module IncomingMail
       proposal = parsed_email.proposal
       user = parsed_email.comment_user
 
-      return unless user  # cannot create comment for non-existent user
+      # cannot create comment for non-existent user, or
+      # for user who is not already a subscriber
+      unless user && proposal.has_subscriber?(user)
+        return
+      end
 
       unless proposal.existing_observation_for(user)
         reason = "Added comment via email reply"
