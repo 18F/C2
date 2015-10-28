@@ -54,4 +54,11 @@ class ProposalDecorator < Draper::Decorator
   def progress_status_message
     "#{number_approved} of #{total_approvers} approved."
   end
+
+  def step_text_for_user(key, user)
+    step = existing_approval_for(user)
+    klass = step.class.name.demodulize.downcase.to_sym
+    scope = [:decorators, :steps, klass]
+    I18n.t(key, scope: scope)
+  end
 end
