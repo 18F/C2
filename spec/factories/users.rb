@@ -5,6 +5,14 @@ FactoryGirl.define do
     sequence(:first_name) {|n| "FirstName#{n}" }
     sequence(:last_name) {|n| "LastName#{n}" }
 
+    trait :active do
+      active true
+    end
+
+    trait :inactive do
+      active false
+    end
+
     trait :admin do
       after(:create) do |user|
         user.roles << Role.find_or_create_by(name: 'admin')

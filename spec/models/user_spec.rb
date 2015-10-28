@@ -1,4 +1,12 @@
 describe User do
+  describe "Associations" do
+     it { should have_many(:steps).dependent(:destroy) }
+     it { should have_many(:comments).dependent(:destroy) }
+     it { should have_many(:observations).dependent(:destroy) }
+     it { should have_many(:user_roles).dependent(:destroy) }
+     it { should have_many(:proposals).dependent(:destroy) }
+  end
+
   let(:user) { build(:user) }
 
   context 'valid attributes' do
@@ -19,6 +27,15 @@ describe User do
     end
   end
 
+  describe ".active" do
+    it "returns users with active set to true" do
+      User.destroy_all
+      active = create(:user, :active)
+      _inactive = create(:user, :inactive)
+
+      expect(User.active).to eq [active]
+    end
+  end
 
   describe '.for_email' do
     it 'downcases and strips the email' do

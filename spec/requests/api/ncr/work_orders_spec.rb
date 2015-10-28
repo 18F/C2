@@ -107,8 +107,6 @@ describe 'NCR Work Orders API' do
         )
       end
 
-      it "includes observers"
-
       it "responds with an empty list for no work orders" do
         json = get_json("/api/v1/ncr/work_orders.json")
         expect(json).to eq([])
@@ -134,8 +132,6 @@ describe 'NCR Work Orders API' do
         ids = json.map {|order| order['id'] }
         expect(ids).to eq(work_orders.map(&:id).reverse[1..-1])
       end
-
-      it "matches the format in the API documentation"
 
       describe "CORS" do
         let(:origin) { 'http://corsexample.com/' }

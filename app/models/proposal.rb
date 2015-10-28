@@ -32,12 +32,12 @@ class Proposal < ActiveRecord::Base
   has_many :individual_approvals, ->{ individual }, class_name: 'Steps::Individual'
   has_many :approvers, through: :individual_approvals, source: :user
   has_many :api_tokens, through: :individual_approvals
-  has_many :attachments
+  has_many :attachments, dependent: :destroy
   has_many :approval_delegates, through: :approvers, source: :outgoing_delegates
-  has_many :comments
+  has_many :comments, dependent: :destroy
   has_many :observations, -> { where("proposal_roles.role_id in (select roles.id from roles where roles.name='observer')") }
   has_many :observers, through: :observations, source: :user
-  belongs_to :client_data, polymorphic: true
+  belongs_to :client_data, polymorphic: true, dependent: :destroy
   belongs_to :requester, class_name: 'User'
 
   # The following list also servers as an interface spec for client_datas
