@@ -6,6 +6,14 @@ describe Ncr::WorkOrdersHelper do
       expect(helper.approver_options).to include(*users.map(&:email_address))
     end
 
+    it "does not include inactive users" do
+      inactive_approving_official = create(:user, :inactive)
+      active_approving_official = create(:user, :active)
+
+      expect(helper.approver_options).to include(active_approving_official.email_address)
+      expect(helper.approver_options).not_to include(inactive_approving_official.email_address)
+    end
+
     it 'sorts the results' do
       create(:user, email_address: 'b@example.com', client_slug: 'ncr')
       create(:user, email_address: 'c@example.com', client_slug: 'ncr')
