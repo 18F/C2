@@ -1,6 +1,6 @@
 describe Gsa18f::DashboardController do
   describe '#index' do
-    let (:user) {create(:user)}
+    let (:user) {create(:user, client_slug: 'gsa18f')}
 
     around(:each) do |example|
       with_18f_procurement_env_variables(&example)
@@ -24,8 +24,9 @@ describe Gsa18f::DashboardController do
       (1..8).each {|i|
         create(
           :proposal, requester: user, created_at: Time.zone.local(2015, i / 3 + 1, i),
-          client_data: create(:gsa18f_procurement, cost_per_unit: i,
-          quantity: 1))
+          client_data: create(:gsa18f_procurement, cost_per_unit: i, quantity: 1), 
+          client_slug: 'gsa18f'
+        )
       }
       get :index
       rows = assigns(:rows)

@@ -91,8 +91,12 @@ class User < ActiveRecord::Base
     !admin?
   end
 
-  def self.for_email(email)
-    User.find_or_create_by(email_address: email.strip.downcase)
+  def self.for_email(email, client_slug = nil)
+    u = User.find_or_create_by(email_address: email.strip.downcase)
+    unless u.client_slug
+      u.client_slug = client_slug
+    end
+    u
   end
 
   def self.from_oauth_hash(auth_hash)
