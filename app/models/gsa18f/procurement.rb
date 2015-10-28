@@ -29,9 +29,10 @@ module Gsa18f
     after_create :add_steps
 
     def add_steps
-      steps = [Gsa18f::Procurement.approver_email, Gsa18f::Procurement.purchaser_email].map do |email|
-        Steps::Individual.new(user: User.for_email(email))
-      end
+      steps = [
+        Steps::Approval.new(user: User.for_email(Gsa18f::Procurement.approver_email)),
+        Steps::Purchase.new(user: User.for_email(Gsa18f::Procurement.purchaser_email)),
+      ]
       proposal.add_initial_steps(steps)
     end
 

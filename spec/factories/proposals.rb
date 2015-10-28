@@ -18,7 +18,7 @@ FactoryGirl.define do
     trait :with_serial_approvers do
       flow 'linear'
       after :create do |proposal, evaluator|
-        ind = 2.times.map{ Steps::Individual.new(user: create(:user, client_slug: evaluator.client_slug)) }
+        ind = 2.times.map{ Steps::Approval.new(user: create(:user, client_slug: evaluator.client_slug)) }
         proposal.root_step = Steps::Serial.new(child_approvals: ind)
       end
     end
@@ -26,7 +26,7 @@ FactoryGirl.define do
     trait :with_parallel_approvers do
       flow 'parallel'
       after :create do |proposal, evaluator|
-        ind = 2.times.map{ Steps::Individual.new(user: create(:user, client_slug: evaluator.client_slug)) }
+        ind = 2.times.map{ Steps::Approval.new(user: create(:user, client_slug: evaluator.client_slug)) }
         proposal.root_step = Steps::Parallel.new(child_approvals: ind)
       end
     end
