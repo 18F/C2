@@ -1,5 +1,5 @@
 describe "Tabular data sorting" do
-  let(:user) { create(:user) }
+  let(:user) { create(:user, client_slug: 'gsa18f') }
   let!(:proposals) { 4.times.map { create(:proposal) } }
   let!(:cancelled) { 2.times.map { create(:proposal, status: 'cancelled') } }
   before :each do
