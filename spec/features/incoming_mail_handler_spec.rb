@@ -84,7 +84,7 @@ describe "Handles incoming email" do
 
     expect(resp.action).to eq(IncomingMail::Response::FORWARDED)
     expect(deliveries.length).to eq(1)
-    expect(my_proposal.has_subscriber?(user)).to be_falsey
+    expect(my_proposal.has_subscriber?(user)).to eq(false)
   end
 
   it "should parse proposal public_id from email headers" do
