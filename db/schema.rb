@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151028205249) do
+ActiveRecord::Schema.define(version: 20151028214000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -173,7 +173,7 @@ ActiveRecord::Schema.define(version: 20151028205249) do
     t.integer  "min_children_needed"
   end
 
-  add_index "steps", ["user_id", "proposal_id"], name: "approvals_user_proposal_idx", unique: true, using: :btree
+  add_index "steps", ["user_id", "proposal_id"], name: "steps_user_proposal_idx", unique: true, using: :btree
 
   create_table "user_roles", force: :cascade do |t|
     t.integer "user_id", null: false
