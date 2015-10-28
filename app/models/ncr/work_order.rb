@@ -10,6 +10,11 @@ module Ncr
   BUILDING_NUMBERS = YAML.load_file("#{Rails.root}/config/data/ncr/building_numbers.yml")
 
   class WorkOrder < ActiveRecord::Base
+      NCR_BA61_TIER1_BUDGET_APPROVER_MAILBOX = ENV['NCR_BA61_TIER1_BUDGET_MAILBOX'] || 'communicart.budget.approver+ba61@gmail.com'
+      NCR_BA61_TIER2_BUDGET_APPROVER_MAILBOX = ENV['NCR_BA61_TIER2_BUDGET_MAILBOX'] || 'communicart.ofm.approver@gmail.com'
+      NCR_BA80_BUDGET_APPROVER_MAILBOX = ENV['NCR_BA80_BUDGET_MAILBOX'] || 'communicart.budget.approver+ba80@gmail.com'
+      OOL_BA80_BUDGET_APPROVER_MAILBOX = ENV['NCR_OOL_BA80_BUDGET_MAILBOX'] || 'communicart.budget.approver+ool_ba80@gmail.com'
+
     # must define before include PurchaseCardMixin
     def self.purchase_amount_column_name
       :amount
@@ -104,6 +109,7 @@ module Ncr
     # Check the approvers, accounting for frozen approving official
     def approvers_emails
       emails = self.system_approver_emails
+
       if self.approver_email_frozen?
         emails.unshift(self.approving_official.email_address)
       else
@@ -223,27 +229,19 @@ module Ncr
     end
 
     def self.ba61_tier1_budget_mailbox
-      self.approver_with_role('BA61_tier1_budget_approver')
+      NCR_BA61_TIER1_BUDGET_APPROVER_MAILBOX
     end
 
     def self.ba61_tier2_budget_mailbox
-      self.approver_with_role('BA61_tier2_budget_approver')
-    end
-
-    def self.approver_with_role(role_name)
-      users = User.with_role(role_name).where(client_slug: 'ncr')
-      if users.empty?
-        fail "Missing User with role #{role_name} -- did you run rake db:migrate and rake db:seed?"
-      end
-      users.first.email_address
+      NCR_BA61_TIER2_BUDGET_APPROVER_MAILBOX
     end
 
     def self.ba80_budget_mailbox
-      self.approver_with_role('BA80_budget_approver')
+      NCR_BA80_BUDGET_APPROVER_MAILBOX
     end
 
     def self.ool_ba80_budget_mailbox
-      self.approver_with_role('OOL_BA80_budget_approver')
+      OOL_BA80_BUDGET_APPROVER_MAILBOX
     end
 
     def org_id
