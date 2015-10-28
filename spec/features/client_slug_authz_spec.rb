@@ -70,7 +70,8 @@ describe "client_slug confers authz rules" do
     visit proposal_path
     expect(page.status_code).to eq(200)
     add_as_observer(gsa_user)
-    expect(page).to_not have_content('has been added as an observer')
+    expect(page.status_code).to eq(403)
+    expect(page).to have_content("You are not allowed to add observers to that proposal.")
   end
 
   private
