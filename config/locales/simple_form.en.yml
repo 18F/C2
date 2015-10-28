@@ -12,6 +12,7 @@ en:
       gsa18f_procurement:
         additional_info: "Please include any additional information you feel we need to correctly execute the purchase"
       ncr_work_order:
+        approving_official_email: "Approving official's email address"
         direct_pay: "I am going to be using direct pay for this transaction"
         emergency: "This request was an emergency and I received a verbal Notice to Proceed (NTP)"
         org_code: "Org Code / Service Center"
@@ -29,4 +30,5 @@ en:
     # requires `prompt: :translate`
     prompts:
       ncr_work_order:
+        approving_official_email: "Type here to search"
         org_code: "Type here to search"

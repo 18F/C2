@@ -40,8 +40,8 @@ describe 'Canceling a request' do
       end
     end
 
-    context 'proposal with pending status' do
-      it 'does not send cancellation email to approver' do
+    context "proposal with pending status" do
+      it "does not send cancellation email to approver" do
         proposal = create(:proposal, :with_approver)
         proposal.individual_approvals.first.update(status: 'pending')
 
@@ -50,19 +50,34 @@ describe 'Canceling a request' do
         expect {
           cancel_proposal(proposal)
         }.to change { deliveries.length }.from(0).to(1)
+       expect_one_email_sent_to(proposal.requester)
       end
     end
 
-   context 'proposal with approver cancelled with reason' do
-      it 'sends cancellation emails to requester and approver' do
-        proposal = create(:proposal, :with_approver)
+   context "proposal with approver" do
+     it "sends cancellation emails to requester and approver" do
+       proposal = create(:proposal, :with_approver)
 
-        login_as(proposal.requester)
+       login_as(proposal.requester)
 
-        expect {
-          cancel_proposal(proposal)
-        }.to change { deliveries.length }.from(0).to(2)
-      end
+       expect {
+         cancel_proposal(proposal)
+       }.to change { deliveries.length }.from(0).to(2)
+       expect_one_email_sent_to(proposal.requester)
+       expect_one_email_sent_to(proposal.individual_approvals.last.user)
+     end
+   end
+
+   context "proposal with observer" do
+     it "sends cancellation email to observer" do
+       proposal = create(:proposal, :with_observer)
+
+       login_as(proposal.requester)
+       cancel_proposal(proposal)
+
+       expect_one_email_sent_to(proposal.requester)
+       expect_one_email_sent_to(proposal.observers.first)
+     end
    end
   end
 
@@ -119,5 +134,11 @@ describe 'Canceling a request' do
     click_on('Cancel my request')
     fill_in 'reason_input', with: 'This is a good reason for the cancellation.'
     click_on('Yes, cancel this request')
+  end
+
+  def expect_one_email_sent_to(user)
+    expect(deliveries.select do |email|
+      email.to.first == user.email_address
+    end.length).to eq (1)
   end
 end

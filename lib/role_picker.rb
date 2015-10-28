@@ -20,7 +20,7 @@ class RolePicker
 
   # Active Observer means, their main role is an observer
   def active_observer?
-    self.observer? && !self.active_approver? && !self.requester?
+    observer? && !active_approver? && !requester?
   end
 
   # observer? approver? etc. get converted into scanning role_types

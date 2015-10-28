@@ -1,7 +1,9 @@
 FactoryGirl.define do
+  sequence(:access_token) { |n| "123ABC#{n}" }
+
   factory :api_token do
-    access_token "10a9b8c7d6e"
-    approval_id 1
-    expires_at "2014-07-02 12:42:22"
+    access_token
+    approval
+    expires_at { Time.current + 7.days }
   end
 end

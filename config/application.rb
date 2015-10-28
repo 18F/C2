@@ -38,6 +38,7 @@ module C2
     config.autoload_paths << Rails.root.join('app', 'mailers', 'concerns')
     config.autoload_paths << Rails.root.join('app', 'policies', 'concerns')
     config.autoload_paths << Rails.root.join('lib')
+    config.autoload_paths << Rails.root.join("lib", "services")
 
     config.assets.precompile << 'communicarts_mailer.css'
 

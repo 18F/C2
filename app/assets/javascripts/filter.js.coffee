@@ -1,45 +1,28 @@
-class Filter
-  constructor: ($root, @key) ->
-    @$ = (selector) -> $root.find(selector)
+class @Filter
+  constructor: (@$root, @$control) ->
+    key = @$control.data('filter-control')
+    val = @$control.val()
+    @set = new FilterSet(@$root, key, val)
 
-  addInput: ($el) ->
-    $el.click () => @filter($el)
-    # Initial state
-    if $el.is(":checked")
-      @filter($el)
+  isSelected: ->
+    @$control.is(':checked')
 
-  addRadios: () ->
-    @$("input:radio[data-filter-control=#{ @key }]").each (idx, control) =>
-      @addInput($(control))
+  update: ->
+    if @isSelected()
+      @set.show()
+    else
+      @set.hide()
 
-  addChkBoxes: () ->
-    @$("input:checkbox[data-filter-control=#{ @key }]").each (idx, control) =>
-      @addInput($(control))
-
-  filter: ($el) ->
-    value = $el.val()
-    if !$el.is(":checked")
-      value = "!" + value
-    @$("[data-filter-key=#{ @key }]").each (idx, el) ->
-      hidden = el.getAttribute("data-filter-value") != value
-      el.setAttribute("aria-hidden", hidden.toString())
-
-  hideAll: () ->
-    @$("[data-filter-key=#{ @key }]").attr("aria-hidden", true)
+  enable: ->
+    @update()
+    @$control.change => @update()
 
   @generateIn = ($scope) ->
-    filters = {}
-    $scope.find("[data-filter-control]").each (idx, el) ->
-      key = el.getAttribute('data-filter-control')
-      if !filters.hasOwnProperty(key)
-        filters[key] = new Filter($scope, key)
-    filters
+    $scope.find('[data-filter-control]').map (idx, control) ->
+      new Filter($scope, $(control))
 
 $ ->
-  #  @todo - better scope
-  $scope = $(document)
+  $scope = $(document.body)
   filters = Filter.generateIn($scope)
-  for key, filter of filters
-    filter.hideAll()
-    filter.addRadios()
-    filter.addChkBoxes()
+  for filter in filters
+    filter.enable()

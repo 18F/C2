@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151013224625) do
+ActiveRecord::Schema.define(version: 20151027010707) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,8 @@ ActiveRecord::Schema.define(version: 20151013224625) do
     t.datetime "used_at"
     t.integer  "approval_id"
   end
+
+  add_index "api_tokens", ["access_token"], name: "index_api_tokens_on_access_token", unique: true, using: :btree
 
   create_table "approval_delegates", force: :cascade do |t|
     t.integer  "assigner_id"
