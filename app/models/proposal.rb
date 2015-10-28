@@ -100,6 +100,8 @@ class Proposal < ActiveRecord::Base
     results.compact.uniq
   end
 
+  alias_method :subscribers, :users
+
   def root_approval=(root)
     old_approvals = self.approvals.to_a
 

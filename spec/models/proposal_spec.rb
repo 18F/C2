@@ -82,6 +82,11 @@ describe Proposal do
       expect(proposal.users).to eq([proposal.requester])
     end
 
+    it "uses 'subscribers' as an aliased method" do
+      proposal = create(:proposal)
+      expect(proposal.users).to eq(proposal.subscribers)
+    end
+
     it "removes duplicates" do
       requester = create(:user)
       proposal = create(:proposal, requester: requester)
