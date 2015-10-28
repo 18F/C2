@@ -27,6 +27,5 @@ SimpleForm.setup do |config|
   # The asterisk for required fields is added by CSS - make it simply be the label text
   config.label_text = ->(label, _required, _explicit_label) { label }
 
-  # TODO enable, but make sure the filtered fields are only required when visible
-  config.browser_validations = false
+  config.browser_validations = true
 end

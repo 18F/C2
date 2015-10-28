@@ -210,7 +210,7 @@ describe ProposalsController do
     it "signs the user in via the token" do
       proposal = create(:proposal, :with_approver)
       approval = proposal.individual_approvals.first
-      token = approval.create_api_token!
+      token = create(:api_token, step: approval)
 
       post :approve, id: proposal.id, cch: token.access_token
 
@@ -220,7 +220,7 @@ describe ProposalsController do
     it "won't sign the user in via the token if delegated" do
       proposal = create(:proposal, :with_approver)
       approval = proposal.individual_approvals.first
-      token = approval.create_api_token!
+      token = create(:api_token, step: approval)
       approval.user.add_delegate(create(:user))
 
       post :approve, id: proposal.id, cch: token.access_token
@@ -241,7 +241,7 @@ describe ProposalsController do
     it "will allow action if the token is valid" do
       proposal = create(:proposal, :with_approver)
       approval = proposal.individual_approvals.first
-      token = approval.create_api_token!
+      token = create(:api_token, step: approval)
 
       get :approve, id: proposal.id, cch: token.access_token
 
@@ -252,7 +252,7 @@ describe ProposalsController do
     it "doesn't allow a token to be reused" do
       proposal = create(:proposal, :with_approver)
       approval = proposal.individual_approvals.first
-      token = approval.create_api_token!
+      token = create(:api_token, step: approval)
       token.use!
 
       get :approve, id: proposal.id, cch: token.access_token

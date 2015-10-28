@@ -6,4 +6,6 @@ require File.expand_path('../config/application', __FILE__)
 C2::Application.load_tasks
 
 desc 'Run the test suite'
-task default: "./bin/rspec"
+# RSpec task gets included automatically
+# http://stackoverflow.com/a/28886514/358804
+task default: 'konacha:run'

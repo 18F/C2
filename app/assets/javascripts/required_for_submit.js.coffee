@@ -10,7 +10,6 @@ class RequiredForSubmit
     @$submit.prop 'disabled', !@$controller.val()
 
 $ ->
-  # @todo - better scope
-  $scope = $(document)
+  $scope = $(document.body)
   $scope.find("[data-disable-if-empty]").each (idx, el) ->
     new RequiredForSubmit($scope, $(el))

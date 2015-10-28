@@ -2,7 +2,7 @@ describe Step do
   let(:approval) { create(:approval) }
 
   describe '#api_token' do
-    let!(:token) { approval.create_api_token! }
+    let!(:token) { create(:api_token, step: approval) }
 
     it "returns the token" do
       expect(approval.api_token).to eq(token)
@@ -81,7 +81,7 @@ describe Step do
         Steps::Individual.new(user: erin)
       ])
       proposal.root_step = Steps::Parallel.new(min_children_needed: 2, child_approvals: [
-        and_clause, 
+        and_clause,
         Steps::Individual.new(user: carrie),
         then_clause
       ])

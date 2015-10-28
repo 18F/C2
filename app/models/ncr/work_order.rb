@@ -19,6 +19,7 @@ module Ncr
     include ProposalDelegate
     include PurchaseCardMixin
 
+    attr_accessor :approving_official_email
     # This is a hack to be able to attribute changes to the correct user. This attribute needs to be set explicitly, then the update comment will use them as the "commenter". Defaults to the requester.
     attr_accessor :modifier
 
@@ -26,6 +27,8 @@ module Ncr
     before_validation :normalize_values
     before_update :record_changes
 
+    validates :approving_official_email, presence: true
+    validates_email_format_of :approving_official_email
     validates :amount, presence: true
     validates :cl_number, format: {
       with: /\ACL\d{7}\z/,
@@ -57,6 +60,10 @@ module Ncr
     }
 
     def set_defaults
+      # not sure why the latter condition is necessary...was getting some weird errors from the tests without it. -AF 10/5/2015
+      if !self.approving_official_email && self.approvers.any?
+        self.approving_official_email = self.approvers.first.try(:email_address)
+      end
       self.direct_pay ||= false
       self.not_to_exceed ||= false
       self.emergency ||= false
@@ -90,23 +97,23 @@ module Ncr
       approval && !approval.actionable?
     end
 
-    def approver_changed?(approval_email)
-      self.approving_official && self.approving_official.email_address != approval_email
+    def approver_changed?
+      self.approving_official && self.approving_official.email_address != approving_official_email
     end
 
     # Check the approvers, accounting for frozen approving official
-    def approvers_emails(selected_approving_official_email)
+    def approvers_emails
       emails = self.system_approver_emails
       if self.approver_email_frozen?
         emails.unshift(self.approving_official.email_address)
       else
-        emails.unshift(selected_approving_official_email)
+        emails.unshift(self.approving_official_email)
       end
       emails
     end
 
-    def setup_approvals_and_observers(selected_approving_official_email)
-      emails = self.approvers_emails(selected_approving_official_email)
+    def setup_approvals_and_observers
+      emails = self.approvers_emails
       if self.emergency
         emails.each{|e| self.add_observer(e)}
         # skip state machine
@@ -302,6 +309,7 @@ module Ncr
     def force_approvers(emails)
       individuals = emails.map do |email|
         user = User.for_email(email)
+        user.update!(client_slug: 'ncr')
         # Reuse existing approvals, if present
         self.proposal.existing_approval_for(user) || Steps::Approval.new(user: user)
       end

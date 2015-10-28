@@ -84,8 +84,8 @@ describe 'proposals' do
 
     context "using a token" do
       let(:proposal) { create(:proposal, :with_approver) }
-      let(:approval) { proposal.steps.first }
-      let(:token) { approval.create_api_token! }
+      let(:step) { proposal.steps.first }
+      let(:token) { create(:api_token, step: step) }
 
       it "supports token auth" do
         post "/proposals/#{proposal.id}/approve", cch: token.access_token

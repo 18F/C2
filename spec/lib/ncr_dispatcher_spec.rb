@@ -51,7 +51,7 @@ describe NcrDispatcher do
     end
 
     it 'current approver if they have be notified before' do
-      step_1.create_api_token!
+      create(:api_token, step: step_1)
       ncr_dispatcher.on_proposal_update(proposal)
       email = deliveries[0]
       expect(email.to).to eq([step_1.user.email_address])

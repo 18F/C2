@@ -1,22 +1,54 @@
 describe ApiToken do
-  describe '.create' do
-    it "sets the access_token" do
-      token = ApiToken.create!(step_id: 1)
-      expect(token.access_token).to_not be_blank
+  describe "Validations" do
+    it { should validate_presence_of(:step) }
+    it { should validate_presence_of(:expires_at).on(:save) }
+    it { should validate_presence_of(:access_token).on(:save) }
+    it { should validate_uniqueness_of(:access_token) }
+  end
+
+  describe "#used?" do
+    it "is true if used_at is set" do
+      token = build(:api_token, used_at: Time.current)
+
+      expect(token).to be_used
     end
 
-    it "doesn't duplicate an existing access_token" do
-      existing_token = create(:api_token)
-      expect(SecureRandom).to receive(:hex).and_return(existing_token.access_token, 'newtoken')
+    it "is false if used_at is nil" do
+      token = build(:api_token, used_at: nil)
 
-      token = ApiToken.create!(step_id: 1)
-      expect(token.access_token).to eq('newtoken')
+      expect(token).not_to be_used
+    end
+  end
+
+  describe "#expired?" do
+    it "is true if expires_at datetime is before now" do
+      token = build(:api_token, expires_at: 1.day.ago)
+
+      expect(token).to be_expired
     end
 
-    it "sets the expiry" do
+    it "is false if expires_at datetime is not set" do
+      token = build(:api_token, expires_at: nil)
+
+      expect(token).not_to be_expired
+    end
+
+    it "is false if expires_at datetime is in future" do
+      token = create(:api_token, expires_at: 1.day.from_now)
+
+      expect(token).not_to be_expired
+    end
+  end
+
+  describe "#use!" do
+    it "updates used_at to equal current time" do
       Timecop.freeze do
-        token = ApiToken.create!(step_id: 1)
-        expect(token.expires_at).to eq(7.days.from_now)
+        time = Time.current
+        token = create(:api_token, used_at: nil)
+
+        token.use!
+
+        expect(token.used_at).to eq time
       end
     end
   end

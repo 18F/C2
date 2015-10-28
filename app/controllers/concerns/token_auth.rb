@@ -25,20 +25,20 @@ module TokenAuth
   end
 
   def validate_access
-    if !signed_in?
-      # TODO avoid needing to retrieve the token multiple times
-      authorize(:api_token, :valid!, params)
-      authorize(:api_token, :not_delegate!, params)
-      # validated above
+    if not_signed_in?
+      authorize(:api_token, :valid_and_not_delegate!, params)
+
       token = ApiToken.find_by(access_token: params[:cch])
       sign_in(token.user)
     end
+
     # expire tokens regardless of how user logged in
     tokens = ApiToken.joins(:step).where(steps: {
       user_id: current_user, proposal_id: self.proposal})
     tokens.where(used_at: nil).update_all(used_at: Time.zone.now)
 
     authorize(self.proposal, :can_approve!)
+
     if params[:version] && params[:version] != self.proposal.version.to_s
       raise Pundit::NotAuthorizedError.new(
         "This request has recently changed. Please review the modified request before approving.")

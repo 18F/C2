@@ -14,10 +14,10 @@ class CommunicartMailer < ApplicationMailer
     proposal = approval.proposal
 
     unless approval.api_token
-      approval.create_api_token!
+      approval.create_api_token
     end
 
-    self.notification_for_subscriber(to_email, proposal, alert_partial, approval)
+    notification_for_subscriber(to_email, proposal, alert_partial, approval)
   end
 
   def notification_for_subscriber(to_email, proposal, alert_partial = nil, approval = nil)

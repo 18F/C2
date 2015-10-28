@@ -24,7 +24,7 @@ module Ncr
     def expense_type_radio_button(form, expense_type)
       content_tag :div, class: 'radio' do
         form.label :expense_type, value: expense_type do
-          radio = form.radio_button(:expense_type, expense_type, 'data-filter-control' => 'expense-type')
+          radio = form.radio_button(:expense_type, expense_type, 'data-filter-control' => 'expense-type', required: true)
           radio + expense_type
         end
       end
