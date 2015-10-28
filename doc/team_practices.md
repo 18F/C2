@@ -14,6 +14,10 @@ and to add more detail into stories before IPM. Team members are encouraged to a
 
 Team members self-select story ownership.
 
+If a story in backlog does not have enough detail to be actionable, add a
+comment asking for the required information, tag the story with the `blocked`
+tag and assign the product manager as the owner to determine next actions.
+
 Production deployments may happen one to several times a week, so keep master in production-ready shape.
 
 In the workflow below, there are multiple roles to be played:
