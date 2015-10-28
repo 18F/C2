@@ -48,6 +48,7 @@ describe Ncr::WorkOrder do
 
     it "creates approvers when not an emergency" do
       form = create(:ncr_work_order, expense_type: 'BA61')
+      form.reload
       form.setup_approvals_and_observers
       expect(form.observations.length).to eq(0)
       expect(form.approvers.map(&:email_address)).to eq([
@@ -85,6 +86,7 @@ describe Ncr::WorkOrder do
     it "accounts for approver transitions when nothing's approved" do
       ba80_budget_email = Ncr::WorkOrder.ba80_budget_mailbox
       wo = create(:ncr_work_order, approving_official_email: 'ao@example.com', expense_type: 'BA61')
+      wo.reload
       wo.setup_approvals_and_observers
       expect(wo.approvers.map(&:email_address)).to eq [
         'ao@example.com',
@@ -118,6 +120,7 @@ describe Ncr::WorkOrder do
     it "unsets the approval status" do
       ba80_budget_email = Ncr::WorkOrder.ba80_budget_mailbox
       wo = create(:ncr_work_order, expense_type: 'BA80')
+      wo.reload
       wo.setup_approvals_and_observers
       expect(wo.approvers.map(&:email_address)).to eq [
         wo.approving_official_email,
@@ -148,6 +151,7 @@ describe Ncr::WorkOrder do
 
     it "handles the delegate then update scenario" do
       wo = create(:ncr_work_order, expense_type: 'BA80')
+      wo.reload
       wo.setup_approvals_and_observers
       delegate = create(:user)
       wo.approvers.second.add_delegate(delegate)

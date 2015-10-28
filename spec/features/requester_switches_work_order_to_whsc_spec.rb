@@ -5,7 +5,7 @@ feature 'Requester switches work order to WHSC' do
     end
   end
 
-  let(:work_order) { create(:ncr_work_order, description: 'test') }
+  let(:work_order) { create(:ncr_work_order, :with_approvers, description: 'test') }
   let(:ncr_proposal) { work_order.proposal }
   let!(:approver) { create(:user) }
 
@@ -56,7 +56,7 @@ feature 'Requester switches work order to WHSC' do
   end
 
   context 'as a BA80' do
-    let(:work_order) { create(:ncr_work_order, expense_type: 'BA80') }
+    let(:work_order) { create(:ncr_work_order, :with_approvers, expense_type: 'BA80') }
 
     scenario 'reassigns the approvers properly' do
       expect(work_order.organization).to_not be_whsc

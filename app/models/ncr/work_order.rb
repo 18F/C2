@@ -60,10 +60,7 @@ module Ncr
     }
 
     def set_defaults
-      # not sure why the latter condition is necessary...was getting some weird errors from the tests without it. -AF 10/5/2015
-      if !self.approving_official_email && self.approvers.any?
-        self.approving_official_email = self.approvers.first.try(:email_address)
-      end
+      self.approving_official_email ||= self.approving_official.try(:email_address)
       self.direct_pay ||= false
       self.not_to_exceed ||= false
       self.emergency ||= false
