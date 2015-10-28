@@ -46,7 +46,7 @@ describe "client_slug confers authz rules" do
     expect(page.status_code).to eq(403)
   end
 
-  it "allows same client_slug to view existing proposal" do
+  it "rejects same client_slug non-subscriber to view existing proposal" do
     ncr_user = create(:user, client_slug: 'ncr')
     ncr_user2 = create(:user, client_slug: 'ncr')
     approver = create(:user, client_slug: 'ncr')
@@ -56,34 +56,17 @@ describe "client_slug confers authz rules" do
     proposal_path = current_path
     login_as(ncr_user2)
     visit proposal_path
-    expect(page.status_code).to eq(200)
+    expect(page.status_code).to eq(403)
   end
 
-  it "allows same client_slug to add themselves as observer" do
+  it "rejects subscriber trying to add user with non-client_slug as observer" do
     ncr_user = create(:user, client_slug: 'ncr')
-    ncr_user2 = create(:user, client_slug: 'ncr')
-    approver = create(:user, client_slug: 'ncr')
-    login_as(ncr_user)
-    visit '/ncr/work_orders/new'
-    submit_ba60_work_order(approver)
-    proposal_path = current_path
-    login_as(ncr_user2)
-    visit proposal_path
-    expect(page.status_code).to eq(200)
-    add_as_observer(ncr_user2)
-    expect(page).to have_content('has been added as an observer')
-  end
-
-  it "rejects same client_slug to add non-client_slug as observer" do
-    ncr_user = create(:user, client_slug: 'ncr')
-    ncr_user2 = create(:user, client_slug: 'ncr')
     gsa_user = create(:user, client_slug: 'gsa18f')
     approver = create(:user, client_slug: 'ncr')
     login_as(ncr_user)
     visit '/ncr/work_orders/new'
     submit_ba60_work_order(approver)
     proposal_path = current_path
-    login_as(ncr_user2)
     visit proposal_path
     expect(page.status_code).to eq(200)
     add_as_observer(gsa_user)

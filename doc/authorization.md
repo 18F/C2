@@ -101,11 +101,8 @@ When these rules refer to a *Proposal* they mean also the ClientData associated 
 a User with a `client_slug` of **ncr** MAY only create a NCR `WorkOrder` and not any other
 kind of Proposal.
 
-1. Any User MAY view any Proposal consistent with their `client_slug`
-and MAY add themselves as an Observer to that Proposal.
-
-1. Any User MAY add any other User with the same `client_slug` as an Observer
-on any Proposal consistent with their `client_slug`.
+1. Any Subscriber MAY add another User with the same `client_slug` as an Observer
+to the subscribed Proposal.
 
 1. Only the Requester of a Proposal MAY edit or cancel the Proposal.
 
