@@ -88,7 +88,9 @@ someone with console access (e.g. via `cf-ssh`).
 ### Client Admin :anchor:
 
 A User who MAY view all Proposals with the same `client_slug` as part of their dashboard
-aggregation reporting. NOTE this aggregation feature is a UX convenience and does not
+aggregation reporting. Examples of users who might be assigned this role
+include regional managers or others responsible for budget reconciliation.
+NOTE this aggregation feature is a UX convenience and does not
 reflect any data sensitivity, since any User MAY view any Proposal with a consistent `client_slug`. 
 
 ## Rules
