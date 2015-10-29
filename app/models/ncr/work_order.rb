@@ -151,13 +151,11 @@ module Ncr
     end
 
     def budget_approvals
-      # should match #budget_approvers
       self.individual_approvals.offset(1)
     end
 
     def budget_approvers
-      # should match #budget_approvals
-      self.approvers.offset(1)
+      self.approvers.merge(self.budget_approvals)
     end
 
     def self.budget_code_fields
