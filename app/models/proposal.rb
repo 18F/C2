@@ -100,6 +100,8 @@ class Proposal < ActiveRecord::Base
     results.compact.uniq
   end
 
+  alias_method :subscribers, :users
+
   def root_approval=(root)
     old_approvals = self.approvals.to_a
 
@@ -141,6 +143,10 @@ class Proposal < ActiveRecord::Base
         self.update(status: 'pending')
       end
     end
+  end
+
+  def has_subscriber?(user)
+    users.include?(user)
   end
 
   def existing_observation_for(user)

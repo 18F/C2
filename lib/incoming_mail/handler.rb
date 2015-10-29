@@ -26,7 +26,7 @@ module IncomingMail
       resp = Response.new(type: identify_mail_type(payload))
       case resp.type
       when REQUEST
-        resp.comment = create_comment(payload['msg'])
+        resp.comment = transform_msg_to_comment(payload['msg'])
         if resp.comment
           resp.action = Response::COMMENT
         else
@@ -64,7 +64,7 @@ module IncomingMail
       CommunicartMailer.resend(msg).deliver_later
     end
 
-    def create_comment(msg)
+    def transform_msg_to_comment(msg)
       # IMPORTANT that we check/add as observer before we create comment,
       # since comment will create as a user if not already,
       # and we want the reason logged.
@@ -72,7 +72,18 @@ module IncomingMail
       proposal = parsed_email.proposal
       user = parsed_email.comment_user
 
-      return unless user  # cannot create comment for non-existent user
+      # cannot create comment for non-existent user, or
+      # for user who is not already a subscriber
+      unless user && proposal.has_subscriber?(user)
+        return
+      end
+
+      create_comment(parsed_email)
+    end
+
+    def create_comment(parsed_email)
+      proposal = parsed_email.proposal
+      user = parsed_email.comment_user
 
       unless proposal.existing_observation_for(user)
         reason = "Added comment via email reply"
