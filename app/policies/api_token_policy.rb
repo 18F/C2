@@ -11,32 +11,39 @@ class ApiTokenPolicy
     @api_token = ApiToken.find_by(access_token: params[:cch])
   end
 
+  def valid!
+    exists! && not_expired! && not_used! && correct_proposal!
+  end
+
+  def valid_and_not_delegate!
+    valid! && not_delegate!
+  end
+
+  private
+
   def exists!
-    check(!@api_token.nil?,
-          "Something went wrong with the token (nonexistent)")
+    check(
+      @api_token.present?,
+      "Something went wrong with the token (nonexistent)"
+    )
   end
 
   def not_expired!
-    exists! && check(!@api_token.expired?,
-                     "Something went wrong with the token (expired)")
+    check(!@api_token.expired?, "Something went wrong with the token (expired)")
   end
 
   def not_used!
-    exists! && check(!@api_token.used?,
-                     "Something went wrong with the token (already used)")
-  end
-
-  def not_delegate!
-    exists! && check(@api_token.user.outgoing_delegates.empty?,
-                     "You must first sign in")
+    check(!@api_token.used?, "Something went wrong with the token (already used)")
   end
 
   def correct_proposal!
-    exists! && check(@api_token.proposal.id == @params[:id].to_i,
-                     "Something went wrong with the token (wrong proposal)")
+    check(
+      @api_token.proposal.id == @params[:id].to_i,
+      "Something went wrong with the token (wrong proposal)"
+    )
   end
 
-  def valid!
-    exists! && not_expired! && not_used! && correct_proposal!
+  def not_delegate!
+    check(@api_token.user.outgoing_delegates.empty?, "You must first sign in")
   end
 end

@@ -2,7 +2,7 @@ describe Approval do
   let(:approval) { create(:approval) }
 
   describe '#api_token' do
-    let!(:token) { approval.create_api_token! }
+    let!(:token) { create(:api_token, approval: approval) }
 
     it "returns the token" do
       expect(approval.api_token).to eq(token)

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151013224625) do
+ActiveRecord::Schema.define(version: 20151028234110) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,8 @@ ActiveRecord::Schema.define(version: 20151013224625) do
     t.datetime "used_at"
     t.integer  "approval_id"
   end
+
+  add_index "api_tokens", ["access_token"], name: "index_api_tokens_on_access_token", unique: true, using: :btree
 
   create_table "approval_delegates", force: :cascade do |t|
     t.integer  "assigner_id"
@@ -121,9 +123,9 @@ ActiveRecord::Schema.define(version: 20151013224625) do
     t.decimal  "amount"
     t.string   "expense_type",    limit: 255
     t.string   "vendor",          limit: 255
-    t.boolean  "not_to_exceed"
+    t.boolean  "not_to_exceed",               default: false, null: false
     t.string   "building_number", limit: 255
-    t.boolean  "emergency"
+    t.boolean  "emergency",                   default: false, null: false
     t.string   "rwa_number",      limit: 255
     t.string   "org_code",        limit: 255
     t.string   "code",            limit: 255
@@ -131,7 +133,7 @@ ActiveRecord::Schema.define(version: 20151013224625) do
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "direct_pay"
+    t.boolean  "direct_pay",                  default: false, null: false
     t.string   "cl_number",       limit: 255
     t.string   "function_code",   limit: 255
     t.string   "soc_code",        limit: 255
@@ -187,6 +189,7 @@ ActiveRecord::Schema.define(version: 20151013224625) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "client_slug",   limit: 255
+    t.boolean  "active",                    default: true
   end
 
   create_table "versions", force: :cascade do |t|

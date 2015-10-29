@@ -21,6 +21,7 @@ gem 'factory_girl_rails'
 gem 'faker'
 gem 'font-awesome-sass'
 gem 'foreman', require: false
+gem "has_secure_token"
 gem 'haml'
 gem 'hashdiff'
 gem 'html_pipeline_rails'
@@ -29,12 +30,12 @@ gem 'jquery-turbolinks'
 gem 'mandrill-rails'
 gem 'newrelic_rpm'
 gem 'omniauth-myusa', git: 'https://github.com/18F/omniauth-myusa.git'
-gem 'paperclip'
 gem 'paper_trail'
+gem 'paperclip'
 gem 'peek'
+gem 'peek-delayed_job'
 gem 'peek-performance_bar'
 gem 'peek-pg'
-gem 'peek-delayed_job'
 gem 'pg'
 gem 'puma'
 gem 'pundit', '>= 1.0.0'  # Interface for Pundit::NotAuthorizedError changed in this version
@@ -53,6 +54,7 @@ gem 'workflow'
 group :test, :development do
   gem 'bullet', require: false # use BULLET_ENABLED=true
   gem 'database_cleaner'
+  gem 'konacha'
   gem 'pry-byebug'
   gem 'pry-rails'
   gem 'rspec-rails'
@@ -61,6 +63,7 @@ end
 
 group :development do
   gem 'guard-rspec', require: false
+  gem 'guard-shell', require: false
   gem 'mail_view'
   gem 'railroady'
   gem 'letter_opener'
@@ -75,6 +78,7 @@ group :test do
   gem 'capybara'
   gem 'codeclimate-test-reporter'
   gem 'poltergeist'
+  gem "shoulda-matchers"
   gem 'simplecov'
   gem 'timecop'
   gem 'zonebie'

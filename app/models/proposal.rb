@@ -30,12 +30,12 @@ class Proposal < ActiveRecord::Base
   has_many :individual_approvals, ->{ individual }, class_name: 'Approvals::Individual'
   has_many :approvers, through: :individual_approvals, source: :user
   has_many :api_tokens, through: :individual_approvals
-  has_many :attachments
+  has_many :attachments, dependent: :destroy
   has_many :approval_delegates, through: :approvers, source: :outgoing_delegates
-  has_many :comments
+  has_many :comments, dependent: :destroy
   has_many :observations, -> { where("proposal_roles.role_id in (select roles.id from roles where roles.name='observer')") }
   has_many :observers, through: :observations, source: :user
-  belongs_to :client_data, polymorphic: true
+  belongs_to :client_data, polymorphic: true, dependent: :destroy
   belongs_to :requester, class_name: 'User'
 
   # The following list also servers as an interface spec for client_datas
@@ -144,22 +144,15 @@ class Proposal < ActiveRecord::Base
   end
 
   def existing_observation_for(user)
-    self.observations.find_by(user: user)
-  end
-
-  def has_subscriber?(user)
-    existing_observation_for(user) || existing_approval_for(user) || requester_id == user.id
+    observations.find_by(user: user)
   end
 
   def add_observer(email_or_user, adder=nil, reason=nil)
-    # polymorphic
-    if email_or_user.is_a?(User)
-      user = email_or_user
-    else
-      user = User.for_email(email_or_user)
-    end
+    user = find_user(email_or_user)
 
-    create_new_observation(user, adder, reason) unless existing_observation_for(user)
+    unless existing_observation_for(user)
+      create_new_observation(user, adder, reason)
+    end
   end
 
   def add_requester(email)
@@ -260,34 +253,21 @@ class Proposal < ActiveRecord::Base
   end
 
   def create_new_observation(user, adder, reason)
-    observer_role = Role.find_or_create_by(name: 'observer')
-    observation = Observation.new(user_id: user.id, role_id: observer_role.id, proposal_id: self.id)
-    # because we build the Observation ourselves, we add to the direct m2m relation directly.
-    observations << observation
-    # invalidate relation cache so we reload on next access
-    observers(true)
-    # when explicitly adding an observer using the form in the Proposal page...
-    if adder
-      if reason && reason.present?
-        add_observation_comment(user, adder, reason)
-      end
-
-      Dispatcher.on_observer_added(observation, reason)
-    end
-
-    observation
+    ObservationCreator.new(
+      observer: user,
+      proposal_id: id,
+      reason: reason,
+      observer_adder: adder
+    ).run
   end
 
-  def add_observation_comment(user, adder, reason)
-    comments.create(
-      comment_text: I18n.t(
-        'activerecord.attributes.observation.user_reason_comment',
-        user: adder.full_name,
-        observer: user.full_name,
-        reason: reason
-      ),
-      update_comment: true,
-      user: adder
-    )
+  private
+
+  def find_user(email_or_user)
+    if email_or_user.is_a?(User)
+      email_or_user
+    else
+      User.for_email(email_or_user)
+    end
   end
 end

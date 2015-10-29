@@ -1,4 +1,12 @@
 describe Proposal do
+  describe "Associatons" do
+    it { should belong_to(:client_data).dependent(:destroy) }
+    it { should have_many(:approvals) }
+    it { should have_many(:individual_approvals) }
+    it { should have_many(:attachments).dependent(:destroy) }
+    it { should have_many(:comments).dependent(:destroy) }
+  end
+
   describe 'CLIENT_MODELS' do
     it "contains multiple models" do
       expect(Proposal::CLIENT_MODELS.size).to_not eq(0)
@@ -98,10 +106,6 @@ describe Proposal do
   end
 
   describe '#root_approval=' do
-    let(:approver1) { create(:user) }
-    let(:approver2) { create(:user) }
-    let(:approver3) { create(:user) }
-
     it 'sets initial approvers' do
       proposal = create(:proposal)
       approvers = 3.times.map{ create(:user) }
@@ -114,6 +118,9 @@ describe Proposal do
     end
 
     it 'initates parallel' do
+      approver1 = create(:user)
+      approver2 = create(:user)
+      approver3 = create(:user)
       proposal = create(:proposal, flow: 'parallel')
       individuals = [approver1, approver2, approver3].map{ |u| Approvals::Individual.new(user: u)}
 
@@ -126,6 +133,9 @@ describe Proposal do
     end
 
     it 'initates linear' do
+      approver1 = create(:user)
+      approver2 = create(:user)
+      approver3 = create(:user)
       proposal = create(:proposal, flow: 'linear')
       individuals = [approver1, approver2, approver3].map{ |u| Approvals::Individual.new(user: u)}
 
@@ -138,6 +148,9 @@ describe Proposal do
     end
 
     it 'fixes modified parallel proposal approvals' do
+      approver1 = create(:user)
+      approver2 = create(:user)
+      approver3 = create(:user)
       proposal = create(:proposal, flow: 'parallel')
       individuals = [Approvals::Individual.new(user: approver1)]
       proposal.root_approval = Approvals::Parallel.new(child_approvals: individuals)
@@ -153,6 +166,9 @@ describe Proposal do
     end
 
     it 'fixes modified linear proposal approvals' do
+      approver1 = create(:user)
+      approver2 = create(:user)
+      approver3 = create(:user)
       proposal = create(:proposal, flow: 'linear')
       approver1, approver2, approver3 = 3.times.map{ create(:user) }
       individuals = [approver1, approver2].map{ |u| Approvals::Individual.new(user: u) }
@@ -172,6 +188,8 @@ describe Proposal do
     end
 
     it 'does not modify a full approved parallel proposal' do
+      approver1 = create(:user)
+      approver2 = create(:user)
       proposal = create(:proposal, flow: 'parallel')
       individuals = [approver1, approver2].map{ |u| Approvals::Individual.new(user: u)}
       proposal.root_approval = Approvals::Parallel.new(child_approvals: individuals)
@@ -183,6 +201,8 @@ describe Proposal do
     end
 
     it 'does not modify a full approved linear proposal' do
+      approver1 = create(:user)
+      approver2 = create(:user)
       proposal = create(:proposal, flow: 'linear')
       individuals = [approver1, approver2].map{ |u| Approvals::Individual.new(user: u)}
       proposal.root_approval = Approvals::Serial.new(child_approvals: individuals)
@@ -267,7 +287,10 @@ describe Proposal do
   describe '#restart' do
     it "creates new API tokens" do
       proposal = create(:proposal, :with_parallel_approvers)
-      proposal.individual_approvals.each(&:create_api_token!)
+      proposal.individual_approvals.each do |approval|
+        create(:api_token, approval: approval)
+      end
+
       expect(proposal.api_tokens.size).to eq(2)
 
       proposal.restart!
@@ -277,62 +300,21 @@ describe Proposal do
     end
   end
 
-  describe '#add_observer' do
-    let(:proposal) { create(:proposal) }
-    let(:observer) { create(:user) }
-    let(:observer_email) { observer.email_address }
-    let(:user) { create(:user) }
+  describe "#add_observer" do
+    it "runs the observation creator service class" do
+      proposal = create(:proposal)
+      observer = create(:user)
+      observation_creator_double = double(run: true)
+      allow(ObservationCreator).to receive(:new).with(
+        observer: observer,
+        proposal_id: proposal.id,
+        reason: nil,
+        observer_adder: nil
+      ).and_return(observation_creator_double)
 
-    it 'adds an observer to the proposal' do
-      expect(proposal.observers).to be_empty
-      proposal.add_observer(observer_email)
-      expect(proposal.observers).to eq [observer]
-    end
+      proposal.add_observer(observer)
 
-    it 'adds a comment and sends a comment email when there is an adder and observation reason' do
-      reason = "this is required"
-
-      expect {
-        proposal.add_observer(observer_email, user, reason)
-      }.to change { deliveries.length }.from(0).to(1)
-
-      expect(proposal.comments.count).to eq 1
-    end
-
-    it 'sends an observer email when there is an adder but no reason' do
-      expect {
-        proposal.add_observer(observer_email, user, nil)
-      }.to change { deliveries.length }.from(0).to(1)
-    end
-
-    context 'with an adding user' do
-      context 'without a reason' do
-        it 'does not add a comment' do
-          expect(proposal.comments).to be_empty
-          proposal.add_observer(observer_email, user)
-          expect(proposal.comments).to be_empty
-        end
-      end
-
-      context "with a blank reason" do
-        it 'does not add a comment' do
-          reason = " "
-          expect(proposal.comments).to be_empty
-          proposal.add_observer(observer_email, user, reason)
-          expect(proposal.comments).to be_empty
-        end
-      end
-
-      context 'with a reason' do
-        it 'adds an update comment mentioning the reason' do
-          reason = "my mate, innit"
-          expect(proposal.comments).to be_empty
-          proposal.add_observer(observer_email, user, reason)
-          expect(proposal.comments.length).to eq 1
-          expect(proposal.comments.first).to be_update_comment
-          expect(proposal.comments.first.comment_text).to include reason
-        end
-      end
+      expect(observation_creator_double).to have_received(:run)
     end
   end
 end

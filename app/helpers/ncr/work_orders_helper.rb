@@ -1,8 +1,7 @@
 module Ncr
   module WorkOrdersHelper
     def approver_options
-      # @todo is there a better order? maybe by current_user's use?
-      User.where(client_slug: 'ncr').order(:email_address).pluck(:email_address)
+      User.active.where(client_slug: 'ncr').order(:email_address).pluck(:email_address)
     end
 
     def building_options
@@ -24,7 +23,7 @@ module Ncr
     def expense_type_radio_button(form, expense_type)
       content_tag :div, class: 'radio' do
         form.label :expense_type, value: expense_type do
-          radio = form.radio_button(:expense_type, expense_type, 'data-filter-control' => 'expense-type')
+          radio = form.radio_button(:expense_type, expense_type, 'data-filter-control' => 'expense-type', required: true)
           radio + expense_type
         end
       end

@@ -5,5 +5,5 @@ class ProposalRole < ActiveRecord::Base
   has_one :proposal
   has_one :role
 
-  validates :user_id, presence: true
+  validates :user, presence: true
 end
