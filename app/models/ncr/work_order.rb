@@ -64,9 +64,6 @@ module Ncr
       if !self.approving_official_email && self.approvers.any?
         self.approving_official_email = self.approvers.first.try(:email_address)
       end
-      self.direct_pay ||= false
-      self.not_to_exceed ||= false
-      self.emergency ||= false
     end
 
     # For budget attributes, converts empty strings to `nil`, so that the request isn't shown as being modified when the fields appear in the edit form.
