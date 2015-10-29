@@ -59,8 +59,7 @@ describe ProposalsController do
         expect(flash[:alert]).not_to be_present
       end
 
-      # might be flaky? -Aidan, 8/14/15
-      it "treats random users as un-authorized" do
+      it "treats non-subscriber users as un-authorized" do
         proposal = create(:proposal)
         get :show, id: proposal.id
         expect(response.status).to eq(403)
