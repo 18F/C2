@@ -39,8 +39,8 @@ respective details: required, min/max ranges, etc. A full list of *ClientData* s
 is in the database schema document [`db/schema.rb`](../db/schema.rb) and the related Model
 classes.
 
-*ClientData* is not PII and is not considered legally sensitive; however *ClientData* is siloed
-as a UX convenience for Users within the system.
+*ClientData* is not PII and is not considered legally sensitive;
+however types of *ClientData* are siloed as a UX convenience for Users within the system.
 
 ## Roles
 
@@ -89,7 +89,7 @@ someone with console access (e.g. via `cf-ssh`).
 
 A User who MAY view all Proposals with the same `client_slug` as part of their dashboard
 aggregation reporting. NOTE this aggregation feature is a UX convenience and does not
-reflect any data sensitivity, since any User MAY view any Proposal with a consisten `client_slug`. 
+reflect any data sensitivity, since any User MAY view any Proposal with a consistent `client_slug`. 
 
 ## Rules
 
@@ -106,10 +106,10 @@ to the subscribed Proposal.
 
 1. Only the Requester of a Proposal MAY edit or cancel the Proposal.
 
-1. Any Subscriber MAY comment on a Proposal, which will add that User as
+1. Any Subscriber for a Proposal MAY comment on that Proposal, which will add that User as
 an Observer on the Proposal.
 
-1. Only the Requester and the Observer MAY remove the Observer from a Proposal.
+1. Only the Requester or the Observer MAY remove the Observer from a Proposal.
 
 1. Only an Approver or Delegate MAY approve a Proposal.
 

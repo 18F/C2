@@ -89,7 +89,6 @@ describe "client_slug confers authz rules" do
   end
 
   def add_as_observer(user)
-    #puts page.body
     select user.email_address, from: 'observation_user_email_address'
     fill_in "observation_reason", with: "observe thy ways"
     click_on 'Add an Observer'
