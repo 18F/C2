@@ -274,7 +274,7 @@ class Proposal < ActiveRecord::Base
     if email_or_user.is_a?(User)
       email_or_user
     else
-      User.for_email(email_or_user, client)
+      User.for_email_with_slug(email_or_user, client)
     end
   end
 end

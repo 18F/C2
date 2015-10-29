@@ -27,6 +27,14 @@ describe User do
     end
   end
 
+  describe ".for_email_with_slug" do
+    it "downcases and strips the email and adds slug" do
+      user = User.for_email_with_slug('   miXedCaSe@eXaMple.com', 'foobar')
+      expect(user.email_address).to eq('mixedcase@example.com')
+      expect(user.client_slug).to eq('foobar')
+    end
+  end
+
   describe '.with_role' do
     it 'returns all users with a particular Role' do
       user1 = create(:user)
