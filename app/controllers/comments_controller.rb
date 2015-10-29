@@ -30,7 +30,6 @@ class CommentsController < ApplicationController
   end
 
   def auth_errors(exception)
-    redirect_to proposals_path,
-                :alert => "You are not allowed to see that proposal"
+    render 'communicarts/authorization_error', status: 403, locals: { msg: "You are not allowed to see that proposal." }
   end
 end

@@ -54,16 +54,15 @@ describe ProposalsController do
       it 'should allow the requester to see it' do
         proposal = create(:proposal, requester: user)
         get :show, id: proposal.id
+        expect(response.status).to eq(200)
         expect(response).not_to redirect_to("/proposals/")
         expect(flash[:alert]).not_to be_present
       end
 
-      # might be flaky? -Aidan, 8/14/15
-      it 'should redirect random users' do
+      it "treats non-subscriber users as un-authorized" do
         proposal = create(:proposal)
         get :show, id: proposal.id
-        expect(response).to redirect_to(proposals_path)
-        expect(flash[:alert]).to be_present
+        expect(response.status).to eq(403)
       end
     end
 
@@ -273,8 +272,7 @@ describe ProposalsController do
       flash.clear
       post :approve, id: proposal.id
 
-      expect(flash[:success]).to be_nil
-      expect(flash[:alert]).not_to be_nil
+      expect(response.status).to eq(403)
     end
 
     it "won't allow different delegates to approve" do
@@ -294,8 +292,7 @@ describe ProposalsController do
       login_as(delegate2)
       post :approve, id: proposal.id
 
-      expect(flash[:success]).to be_nil
-      expect(flash[:alert]).not_to be_nil
+      expect(response.status).to eq(403)
     end
 
     it "allows a delegate to approve via the web UI" do

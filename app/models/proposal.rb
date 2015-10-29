@@ -150,6 +150,12 @@ class Proposal < ActiveRecord::Base
   def add_observer(email_or_user, adder=nil, reason=nil)
     user = find_user(email_or_user)
 
+    # this authz check is here instead of in a Policy because the Policy classes
+    # are applied to the current_user, not (as in this case) the user being acted upon.
+    if client_data && !client_data.slug_matches?(user)
+      fail Pundit::NotAuthorizedError.new("May not add observer belonging to a different organization.")
+    end
+
     unless existing_observation_for(user)
       create_new_observation(user, adder, reason)
     end
@@ -268,7 +274,7 @@ class Proposal < ActiveRecord::Base
     if email_or_user.is_a?(User)
       email_or_user
     else
-      User.for_email(email_or_user)
+      User.for_email_with_slug(email_or_user, client)
     end
   end
 end

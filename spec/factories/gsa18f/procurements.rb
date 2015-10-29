@@ -6,7 +6,7 @@ FactoryGirl.define do
     sequence(:product_name_and_description) {|n| "Proposal #{n}" }
     office Gsa18f::Procurement::OFFICES[0]
     urgency Gsa18f::Procurement::URGENCY[10]
-    association :proposal, flow: 'linear'
+    association :proposal, flow: 'linear', client_slug: 'gsa18f'
 
     #todo: Probably shouldn't be required, remove once #98376564 is fixed
     after :create do |p|
