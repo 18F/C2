@@ -43,13 +43,16 @@ describe "post-approval modification" do
 
   def expect_budget_approvals_restarted
     work_order.reload
+
     expect(work_order.status).to eq('pending')
+    expect(work_order.proposal.root_approval.status).to eq('pending')
     approval_statuses = work_order.individual_approvals.pluck(:status)
     expect(approval_statuses).to eq(%w(
       approved
       actionable
       pending
     ))
+
     # TODO check who gets notified
   end
 end
