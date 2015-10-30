@@ -48,4 +48,8 @@ module ProposalDelegate
   def client
     self.class.client
   end
+
+  def slug_matches?(user)
+    user.client_slug == client
+  end
 end

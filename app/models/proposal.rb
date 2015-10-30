@@ -2,7 +2,7 @@ class Proposal < ActiveRecord::Base
   include WorkflowModel
   include ValueHelper
   include StepManager
-  
+
   has_paper_trail class_name: 'C2Version'
 
   CLIENT_MODELS = []  # this gets populated later
@@ -102,27 +102,28 @@ class Proposal < ActiveRecord::Base
     results.compact.uniq
   end
 
-  def root_step=(root)
-    old_approvals = self.steps.to_a
+  alias_method :subscribers, :users
 
-    approval_list = root.pre_order_tree_traversal
-    approval_list.each { |a| a.proposal = self }
-    self.steps = approval_list
+  def root_step=(root)
+    old_steps = self.steps.to_a
+    step_list = root.pre_order_tree_traversal
+    step_list.each { |a| a.proposal = self }
+    self.steps = step_list
     # position may be out of whack, so we reset it
-    approval_list.each_with_index do |approval, idx|
-      approval.set_list_position(idx + 1)   # start with 1
+    step_list.each_with_index do |step, idx|
+      step.set_list_position(idx + 1) # start with 1
     end
 
-    self.clean_up_old_approvals(old_approvals, approval_list)
+    self.clean_up_old_steps(old_steps, step_list)
 
     root.initialize!
-    self.reset_status()
+    self.reset_status
   end
 
-  def clean_up_old_approvals(old_approvals, approval_list)
-    # destroy any old approvals that are not a part of approval_list
-    (old_approvals - approval_list).each do |appr|
-      appr.destroy() if Step.exists?(appr.id)
+  def clean_up_old_steps(old_steps, step_list)
+    # destroy any old steps that are not a part of step list
+    (old_steps - step_list).each do |appr|
+      appr.destroy if Step.exists?(appr.id)
     end
   end
 
@@ -145,12 +146,22 @@ class Proposal < ActiveRecord::Base
     end
   end
 
+  def has_subscriber?(user)
+    users.include?(user)
+  end
+
   def existing_observation_for(user)
     observations.find_by(user: user)
   end
 
   def add_observer(email_or_user, adder=nil, reason=nil)
     user = find_user(email_or_user)
+
+    # this authz check is here instead of in a Policy because the Policy classes
+    # are applied to the current_user, not (as in this case) the user being acted upon.
+    if client_data && !client_data.slug_matches?(user)
+      fail Pundit::NotAuthorizedError.new("May not add observer belonging to a different organization.")
+    end
 
     unless existing_observation_for(user)
       create_new_observation(user, adder, reason)
@@ -270,7 +281,7 @@ class Proposal < ActiveRecord::Base
     if email_or_user.is_a?(User)
       email_or_user
     else
-      User.for_email(email_or_user)
+      User.for_email_with_slug(email_or_user, client)
     end
   end
 end

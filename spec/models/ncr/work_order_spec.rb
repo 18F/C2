@@ -161,6 +161,12 @@ describe Ncr::WorkOrder do
       expect(wo.approved?).to be true
       expect(wo.approvers.second).to eq delegate
     end
+
+    it "respects user with same client_slug" do
+      wo = create(:ncr_work_order, expense_type: 'BA80')
+      user = create(:user, client_slug: 'ncr')
+      expect(wo.slug_matches?(user)).to eq(true)
+    end
   end
 
   describe '#organization' do

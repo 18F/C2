@@ -39,7 +39,8 @@ class ObservationsController < ApplicationController
       .require(:observation).require(:user).require(:email_address)
   end
 
-  def auth_errors(_exception)
-    redirect_to proposals_path, alert: "You are not allowed to add observers to that proposal"
+  def auth_errors(exception)
+    render 'communicarts/authorization_error', status: 403, 
+           locals: { msg: "You are not allowed to add observers to that proposal. #{exception.message}" }
   end
 end

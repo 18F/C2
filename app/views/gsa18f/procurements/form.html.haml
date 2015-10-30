@@ -6,6 +6,9 @@
     Purchase Request - Supplies
   %p
     Eg; ergonomic keyboards, foamcore boards, ergonomic mice, monitor stands, post-its, sharpies, etc.
+  %p
+    %em
+      * Indicates a required field
   = simple_form_for @model_instance do |f|
     = f.input :office, collection: Gsa18f::Procurement::OFFICES
     = f.input :product_name_and_description

@@ -5,6 +5,10 @@
   %h3
     Purchase Card Approval Request
 
+  %p
+    %em
+      * Indicates a required field
+
   = simple_form_for @model_instance, html: { multipart: true } do |f|
     = f.input :project_title
     = f.input :description

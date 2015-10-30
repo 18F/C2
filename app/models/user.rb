@@ -98,6 +98,14 @@ class User < ActiveRecord::Base
     User.find_or_create_by(email_address: email.strip.downcase)
   end
 
+  def self.for_email_with_slug(email, client_slug)
+    u = self.for_email(email)
+    unless u.client_slug
+      u.client_slug = client_slug
+    end
+    u
+  end
+
   def self.from_oauth_hash(auth_hash)
     user_data = auth_hash.extra.raw_info.to_hash
     self.find_or_create_by(email_address: user_data['email'])
