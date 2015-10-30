@@ -313,6 +313,14 @@ describe CommunicartMailer do
     end
   end
 
+  describe 'proposal_reminder' do
+    it "sends reminder email" do
+      proposal = create(:proposal)
+      mail = CommunicartMailer.proposal_reminder(proposal)
+      expect(mail.to).to eq([proposal.requester.email_address])
+    end
+  end
+
   describe 'new_attachment_email' do
     let(:mail) { CommunicartMailer.new_attachment_email(requester.email_address, proposal) }
 
