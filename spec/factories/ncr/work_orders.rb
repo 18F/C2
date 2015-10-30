@@ -6,11 +6,15 @@ FactoryGirl.define do
     not_to_exceed false
     building_number Ncr::BUILDING_NUMBERS[0]
     emergency false
-    rwa_number "R1234567" # TODO remove, since it's not applicable for BA61
     org_code Ncr::Organization.all[0].to_s
     project_title "NCR Name"
     sequence(:approving_official_email) {|n| "approver#{User.count}@example.com" }
     association :proposal, flow: 'linear'
+
+    factory :ba80_ncr_work_order do
+      expense_type "BA80"
+      rwa_number "R1234567"
+    end
 
     trait :with_approvers do
       association :proposal, :with_serial_approvers, flow: 'linear'

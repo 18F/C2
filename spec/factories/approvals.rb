@@ -4,4 +4,7 @@ FactoryGirl.define do
     user
     status 'pending'
   end
+
+  factory :parallel_approval, class: Approvals::Parallel do
+  end
 end
