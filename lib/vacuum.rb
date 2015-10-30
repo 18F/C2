@@ -14,6 +14,7 @@ class Vacuum
 
   def old_proposals
     proposals = Proposal.pending.where("created_at < '#{@fiscal_year_start}'")
+    ids = []
     proposals.each do |proposal|
       if !proposal.requester
         @verbose and puts "#{proposal.id} <= no Requester defined"
@@ -25,8 +26,10 @@ class Vacuum
         if @ok_to_act
           send_reminder_email(proposal)
         end 
-      end 
+      end
+      ids << proposal.id
     end
+    ids
   end
 
   private
