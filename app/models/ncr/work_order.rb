@@ -295,7 +295,11 @@ module Ncr
     end
 
     def self.update_comment_format(key, value, bullet, former=nil)
-      from = former ? "from #{former} " : ''
+      if !former || former.empty?
+        from = ""
+      else
+        from = "from #{former} "
+      end
       "#{bullet}*#{key}* was changed " + from + "to #{value}"
     end
 

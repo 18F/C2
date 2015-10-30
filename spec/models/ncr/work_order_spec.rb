@@ -386,13 +386,14 @@ describe Ncr::WorkOrder do
     let (:work_order) { create(:ncr_work_order) }
 
     it 'adds a change comment' do
-      work_order.update(vendor: 'Mario Brothers', amount: 123.45)
+      work_order.update(vendor: 'Mario Brothers', amount: 123.45, description: 'some text')
 
       expect(work_order.proposal.comments.count).to be 1
       comment = Comment.last
       expect(comment.update_comment).to be(true)
       comment_text = "- *Vendor* was changed from Some Vend to Mario Brothers\n"
-      comment_text += "- *Amount* was changed from $1,000.00 to $123.45"
+      comment_text += "- *Amount* was changed from $1,000.00 to $123.45\n"
+      comment_text += "- *Description* was changed to some text"
       expect(comment.comment_text).to eq(comment_text)
     end
 
