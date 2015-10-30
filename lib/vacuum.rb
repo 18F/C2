@@ -40,6 +40,6 @@ class Vacuum
   end
 
   def send_reminder_email(proposal)
-
+    CommunicartMailer.proposal_reminder(proposal).deliver_later
   end
 end
