@@ -1,5 +1,5 @@
 namespace :vacuum do
-  desc "Show non-cancelled old fiscal year proposals"
+  desc "Clean up old fiscal year proposals"
   task old_proposals: :environment do
     ok_to_act = ENV['OK_TO_ACT'] ? true : false
     verbose = ENV['VERBOSE']
