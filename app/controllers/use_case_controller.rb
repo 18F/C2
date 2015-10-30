@@ -14,11 +14,9 @@ class UseCaseController < ApplicationController
   end
 
   def create
-    if self.errors.empty?
-      @model_instance.save
-      proposal = @model_instance.proposal
-      self.initial_attachments(proposal)
-      self.add_approvals()
+    if errors.empty?
+      proposal = ClientDataCreator.new(@model_instance, current_user, attachment_params).run
+      add_approvals()
       Dispatcher.deliver_new_proposal_emails(proposal)
 
       flash[:success] = "Proposal submitted!"
@@ -96,11 +94,8 @@ class UseCaseController < ApplicationController
     end
   end
 
-  def initial_attachments(proposal)
-    files = params.permit(attachments: [])[:attachments] || []
-    files.each do |file|
-      Attachment.create(proposal: proposal, user: current_user, file: file)
-    end
+  def attachment_params
+    params.permit(attachments: [])[:attachments] || []
   end
 
   # Hook for adding additional approvers

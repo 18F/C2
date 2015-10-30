@@ -23,10 +23,5 @@ FactoryGirl.define do
       emergency true
       association :proposal, :with_observers, flow: 'linear'
     end
-
-    #todo: Probably shouldn't be required, remove once #98376564 is fixed
-    after :create do |wo|
-      wo.proposal.update(public_id: wo.proposal.public_identifier)
-    end
   end
 end

@@ -14,7 +14,7 @@ feature 'Approving an NCR work order' do
       visit "/proposals/#{ncr_proposal.id}"
       click_on('Approve')
       expect(current_path).to eq("/proposals/#{ncr_proposal.id}")
-      expect(page).to have_content("You have approved #{work_order.public_identifier}")
+      expect(page).to have_content("You have approved #{work_order.proposal.public_id}")
       approval = Proposal.last.individual_approvals.first
       expect(approval.status).to eq('approved')
       expect(approval.approved_at.utc.to_s).to eq(Time.now.utc.to_s)
