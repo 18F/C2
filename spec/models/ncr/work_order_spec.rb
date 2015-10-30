@@ -117,7 +117,7 @@ describe Ncr::WorkOrder do
 
     it "unsets the approval status" do
       ba80_budget_email = Ncr::WorkOrder.ba80_budget_mailbox
-      wo = create(:ncr_work_order, expense_type: 'BA80')
+      wo = create(:ba80_ncr_work_order)
       wo.setup_approvals_and_observers
       expect(wo.approvers.map(&:email_address)).to eq [
         wo.approving_official_email,
@@ -147,7 +147,7 @@ describe Ncr::WorkOrder do
     end
 
     it "handles the delegate then update scenario" do
-      wo = create(:ncr_work_order, expense_type: 'BA80')
+      wo = create(:ba80_ncr_work_order)
       wo.setup_approvals_and_observers
       delegate = create(:user)
       wo.approvers.second.add_delegate(delegate)
@@ -163,7 +163,7 @@ describe Ncr::WorkOrder do
     end
 
     it "respects user with same client_slug" do
-      wo = create(:ncr_work_order, expense_type: 'BA80')
+      wo = create(:ba80_ncr_work_order)
       user = create(:user, client_slug: 'ncr')
       expect(wo.slug_matches?(user)).to eq(true)
     end
@@ -206,14 +206,14 @@ describe Ncr::WorkOrder do
     context "for a BA80 request" do
       it "uses the general budget email" do
        ba80_budget_email = Ncr::WorkOrder.ba80_budget_mailbox
-        work_order = create(:ncr_work_order, expense_type: 'BA80')
+        work_order = create(:ba80_ncr_work_order)
         expect(work_order.system_approver_emails).to eq([ba80_budget_email])
       end
 
       it "uses the OOL budget email for their org code" do
         budget_email = Ncr::WorkOrder.ool_ba80_budget_mailbox
         org_code = Ncr::Organization::OOL_CODES.first
-        work_order = create(:ncr_work_order, expense_type: 'BA80', org_code: org_code)
+        work_order = create(:ba80_ncr_work_order, org_code: org_code)
         expect(work_order.system_approver_emails).to eq([budget_email])
       end
     end

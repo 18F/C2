@@ -55,17 +55,21 @@ feature 'Requester switches work order to WHSC' do
     end
   end
 
-  context 'as a BA80' do
-    let(:work_order) { create(:ncr_work_order, expense_type: 'BA80') }
-
-    scenario 'reassigns the approvers properly' do
+  context "as a BA80" do
+    scenario "reassigns the approvers properly" do
+      work_order = create(:ba80_ncr_work_order)
+      work_order.setup_approvals_and_observers
+      work_order.individual_approvals.first.approve!
       expect(work_order.organization).to_not be_whsc
+      ncr_proposal = work_order.proposal
+
       approving_official = work_order.approving_official
 
+      login_as(work_order.requester)
       visit "/ncr/work_orders/#{work_order.id}/edit"
-      choose 'BA61'
+      choose "BA61"
       select Ncr::Organization::WHSC_CODE, from: "Org Code / Service Center"
-      click_on 'Update'
+      click_on "Update"
 
       ncr_proposal.reload
       work_order.reload

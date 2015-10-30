@@ -70,30 +70,15 @@ describe Approval do
     let!(:erin) { create(:user) }
     let!(:proposal) { create(:proposal) }
 
-    before :each do
-      # @todo syntax for this will get cleaned up
-      and_clause = Approvals::Parallel.new(child_approvals: [
-        Approvals::Individual.new(user: amy),
-        Approvals::Individual.new(user: bob)
-      ])
-      then_clause = Approvals::Serial.new(child_approvals: [
-        Approvals::Individual.new(user: dan),
-        Approvals::Individual.new(user: erin)
-      ])
-      proposal.root_approval = Approvals::Parallel.new(min_children_needed: 2, child_approvals: [
-        and_clause, 
-        Approvals::Individual.new(user: carrie),
-        then_clause
-      ])
-    end
-
     it "won't approve Amy and Bob -- needs two branches of the OR" do
+      build_approvals
       expect_any_instance_of(Proposal).not_to receive(:approve!)
       proposal.existing_approval_for(amy).approve!
       proposal.existing_approval_for(bob).approve!
     end
 
     it "will approve if Amy, Bob, and Carrie approve -- two branches of the OR" do
+      build_approvals
       expect_any_instance_of(Proposal).to receive(:approve!)
       proposal.existing_approval_for(amy).approve!
       proposal.existing_approval_for(bob).approve!
@@ -101,6 +86,7 @@ describe Approval do
     end
 
     it "won't approve Amy, Bob, Dan as Erin is also required (to complete the THEN)" do
+      build_approvals
       expect_any_instance_of(Proposal).not_to receive(:approve!)
       proposal.existing_approval_for(amy).approve!
       proposal.existing_approval_for(bob).approve!
@@ -108,6 +94,7 @@ describe Approval do
     end
 
     it "will approve Amy, Bob, Dan, Erin -- two branches of the OR" do
+      build_approvals
       expect_any_instance_of(Proposal).to receive(:approve!)
       proposal.existing_approval_for(amy).approve!
       proposal.existing_approval_for(bob).approve!
@@ -116,11 +103,38 @@ describe Approval do
     end
 
     it "will approve Amy, Bob, Dan, Carrie -- two branches of the OR as Dan is irrelevant" do
+      build_approvals
       expect_any_instance_of(Proposal).to receive(:approve!)
       proposal.existing_approval_for(amy).approve!
       proposal.existing_approval_for(bob).approve!
       proposal.existing_approval_for(dan).approve!
       proposal.existing_approval_for(carrie).approve!
+    end
+
+    def build_approvals
+      and_clause = build(
+        :parallel_approval,
+        child_approvals: [
+          build(:approval, user: amy),
+          build(:approval, user: bob)
+        ]
+      )
+      then_clause = build(
+        :parallel_approval,
+        child_approvals: [
+          build(:approval, user: dan),
+          build(:approval, user: erin)
+        ]
+      )
+      proposal.root_approval = build(
+        :parallel_approval,
+        min_children_needed: 2,
+        child_approvals: [
+          and_clause,
+          build(:approval, user: carrie),
+          then_clause
+        ]
+      )
     end
   end
 end
