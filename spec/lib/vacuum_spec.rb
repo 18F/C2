@@ -12,8 +12,9 @@ describe Vacuum do
     it "locates old pending proposals" do
       proposal = create(:proposal)
       Timecop.travel(Time.zone.now + 1.year) do
-        vacuum = Vacuum.new(Time.zone.now)
+        vacuum = Vacuum.new(Time.zone.now, true)
         expect(vacuum.old_proposals).to eq([proposal.id])
+        expect(deliveries.length).to eq(1)
       end
     end
   end
