@@ -28,11 +28,7 @@ class ClientDataCreator
   end
 
   def public_id
-    if client_data.respond_to?(:fiscal_year)
-      "FY" + client_data.fiscal_year.to_s.rjust(2, "0") + "-#{proposal.id}"
-    else
-      "##{proposal.id}"
-    end
+    client_data.public_identifier
   end
 
   def proposal

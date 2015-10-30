@@ -226,6 +226,16 @@ describe Ncr::WorkOrder do
     end
   end
 
+  describe "#pubic_identifier" do
+    it "prepends proposal ID with 'FY' and fiscal year" do
+      work_order = build(:ncr_work_order)
+      proposal = work_order.proposal
+      fiscal_year = work_order.fiscal_year.to_s.rjust(2, "0")
+
+      expect(work_order.public_identifier).to eq "FY#{fiscal_year}-#{proposal.id}"
+    end
+  end
+
   describe '#fiscal_year' do
     it 'ends the fiscal year on September 30th' do
       work_order = create(:ncr_work_order, created_at: Date.new(2014, 9, 30))

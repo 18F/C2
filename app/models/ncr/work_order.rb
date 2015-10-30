@@ -254,6 +254,10 @@ module Ncr
       super.merge(org_id: self.org_id, building_id: self.building_id)
     end
 
+    def public_identifier
+      "FY" + fiscal_year.to_s.rjust(2, "0") + "-#{proposal.id}"
+    end
+
     def fiscal_year
       year = self.created_at.nil? ? Time.zone.now.year : self.created_at.year
       month = self.created_at.nil? ? Time.zone.now.month : self.created_at.month
