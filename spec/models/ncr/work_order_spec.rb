@@ -395,6 +395,13 @@ describe Ncr::WorkOrder do
       comment_text += "- *Amount* was changed from $1,000.00 to $123.45\n"
       comment_text += "- *Description* was changed to some text"
       expect(comment.comment_text).to eq(comment_text)
+
+      work_order.update(description: '')
+
+      expect(work_order.proposal.comments.count).to be 2
+      comment = Comment.last
+      expect(comment.update_comment).to be(true)
+      expect(comment.comment_text).to eq("*Description* was changed from some text to *empty*")
     end
 
     it 'includes extra information if modified post approval' do

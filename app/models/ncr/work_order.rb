@@ -300,7 +300,12 @@ module Ncr
       else
         from = "from #{former} "
       end
-      "#{bullet}*#{key}* was changed " + from + "to #{value}"
+      if value.empty?
+        to = "*empty*"
+      else
+        to = value
+      end
+      "#{bullet}*#{key}* was changed " + from + "to #{to}"
     end
 
     # Generally shouldn't be called directly as it doesn't account for
