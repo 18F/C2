@@ -53,7 +53,7 @@ describe "post-approval modification" do
     click_on 'Approve'
 
     work_order.reload
-    expect(work_order.status).to eq('actionable')
+    expect(work_order.status).to eq('pending')
     expect(work_order.proposal.root_approval.status).to eq('pending')
     expect(approval_statuses).to eq(%w(
       approved
