@@ -27,19 +27,4 @@ feature 'Approver edits NCR work order' do
     # properly tracked
     expect(update_comment.comment_text).to include("CL number")
   end
-
-  it "doesn't require re-approval for a budget approver adding a Function code" do
-    work_order.setup_approvals_and_observers
-    fully_approve(ncr_proposal)
-
-    approver = work_order.budget_approvers.first
-    login_as(approver)
-
-    visit "/ncr/work_orders/#{work_order.id}/edit"
-    fill_in 'Function code', with: 'foo'
-    click_on 'Update'
-
-    work_order.reload
-    expect(work_order.status).to eq('approved')
-  end
 end
