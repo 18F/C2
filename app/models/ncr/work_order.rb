@@ -198,10 +198,6 @@ module Ncr
       self.expense_type == 'BA80'
     end
 
-    def public_identifier
-      "FY" + self.fiscal_year.to_s.rjust(2, "0") + "-#{self.proposal.id}"
-    end
-
     def total_price
       self.amount || 0.0
     end
@@ -266,6 +262,10 @@ module Ncr
       super.merge(org_id: self.org_id, building_id: self.building_id)
     end
 
+    def public_identifier
+      "FY" + fiscal_year.to_s.rjust(2, "0") + "-#{proposal.id}"
+    end
+
     def fiscal_year
       year = self.created_at.nil? ? Time.zone.now.year : self.created_at.year
       month = self.created_at.nil? ? Time.zone.now.month : self.created_at.month
@@ -310,8 +310,17 @@ module Ncr
     end
 
     def self.update_comment_format(key, value, bullet, former=nil)
-      from = former ? "from #{former} " : ''
-      "#{bullet}*#{key}* was changed " + from + "to #{value}"
+      if !former || former.empty?
+        from = ""
+      else
+        from = "from #{former} "
+      end
+      if value.empty?
+        to = "*empty*"
+      else
+        to = value
+      end
+      "#{bullet}*#{key}* was changed " + from + "to #{to}"
     end
 
     # Generally shouldn't be called directly as it doesn't account for

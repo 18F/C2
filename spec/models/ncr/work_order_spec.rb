@@ -117,7 +117,7 @@ describe Ncr::WorkOrder do
 
     it "unsets the approval status" do
       ba80_budget_email = Ncr::WorkOrder.ba80_budget_mailbox
-      wo = create(:ncr_work_order, expense_type: 'BA80')
+      wo = create(:ba80_ncr_work_order)
       wo.setup_approvals_and_observers
       expect(wo.approvers.map(&:email_address)).to eq [
         wo.approving_official_email,
@@ -147,7 +147,7 @@ describe Ncr::WorkOrder do
     end
 
     it "handles the delegate then update scenario" do
-      wo = create(:ncr_work_order, expense_type: 'BA80')
+      wo = create(:ba80_ncr_work_order)
       wo.setup_approvals_and_observers
       delegate = create(:user)
       wo.approvers.second.add_delegate(delegate)
@@ -160,6 +160,12 @@ describe Ncr::WorkOrder do
       wo.reload
       expect(wo.approved?).to be true
       expect(wo.approvers.second).to eq delegate
+    end
+
+    it "respects user with same client_slug" do
+      wo = create(:ba80_ncr_work_order)
+      user = create(:user, client_slug: 'ncr')
+      expect(wo.slug_matches?(user)).to eq(true)
     end
   end
 
@@ -200,14 +206,14 @@ describe Ncr::WorkOrder do
     context "for a BA80 request" do
       it "uses the general budget email" do
        ba80_budget_email = Ncr::WorkOrder.ba80_budget_mailbox
-        work_order = create(:ncr_work_order, expense_type: 'BA80')
+        work_order = create(:ba80_ncr_work_order)
         expect(work_order.system_approver_emails).to eq([ba80_budget_email])
       end
 
       it "uses the OOL budget email for their org code" do
         budget_email = Ncr::WorkOrder.ool_ba80_budget_mailbox
         org_code = Ncr::Organization::OOL_CODES.first
-        work_order = create(:ncr_work_order, expense_type: 'BA80', org_code: org_code)
+        work_order = create(:ba80_ncr_work_order, org_code: org_code)
         expect(work_order.system_approver_emails).to eq([budget_email])
       end
     end
@@ -220,17 +226,13 @@ describe Ncr::WorkOrder do
     end
   end
 
-  describe '#public_identifier' do
-    it 'includes the fiscal year' do
-      work_order = create(:ncr_work_order, created_at: Date.new(2007, 1, 15))
-      proposal_id = work_order.proposal.id
+  describe "#pubic_identifier" do
+    it "prepends proposal ID with 'FY' and fiscal year" do
+      work_order = build(:ncr_work_order)
+      proposal = work_order.proposal
+      fiscal_year = work_order.fiscal_year.to_s.rjust(2, "0")
 
-      expect(work_order.public_identifier).to eq(
-        "FY07-#{proposal_id}")
-
-      work_order.update_attribute(:created_at, Date.new(2007, 10, 1))
-      expect(work_order.public_identifier).to eq(
-        "FY08-#{proposal_id}")
+      expect(work_order.public_identifier).to eq "FY#{fiscal_year}-#{proposal.id}"
     end
   end
 
@@ -380,14 +382,22 @@ describe Ncr::WorkOrder do
     let (:work_order) { create(:ncr_work_order) }
 
     it 'adds a change comment' do
-      work_order.update(vendor: 'Mario Brothers', amount: 123.45)
+      work_order.update(vendor: 'Mario Brothers', amount: 123.45, description: 'some text')
 
       expect(work_order.proposal.comments.count).to be 1
       comment = Comment.last
       expect(comment.update_comment).to be(true)
       comment_text = "- *Vendor* was changed from Some Vend to Mario Brothers\n"
-      comment_text += "- *Amount* was changed from $1,000.00 to $123.45"
+      comment_text += "- *Amount* was changed from $1,000.00 to $123.45\n"
+      comment_text += "- *Description* was changed to some text"
       expect(comment.comment_text).to eq(comment_text)
+
+      work_order.update(description: '')
+
+      expect(work_order.proposal.comments.count).to be 2
+      comment = Comment.last
+      expect(comment.update_comment).to be(true)
+      expect(comment.comment_text).to eq("*Description* was changed from some text to *empty*")
     end
 
     it 'includes extra information if modified post approval' do

@@ -10,27 +10,23 @@ class UseCaseController < ApplicationController
   before_filter :find_model_instance, only: [:edit, :update]
 
   def new
-    render 'form'
   end
 
   def create
-    if self.errors.empty?
-      @model_instance.save
-      proposal = @model_instance.proposal
-      self.initial_attachments(proposal)
-      self.add_approvals()
+    if errors.empty?
+      proposal = ClientDataCreator.new(@model_instance, current_user, attachment_params).run
+      add_approvals()
       Dispatcher.deliver_new_proposal_emails(proposal)
 
       flash[:success] = "Proposal submitted!"
       redirect_to proposal
     else
       flash[:error] = errors
-      render 'form'
+      render :new
     end
   end
 
   def edit
-    render 'form'
   end
 
   def update
@@ -49,7 +45,7 @@ class UseCaseController < ApplicationController
       redirect_to proposal_path(@model_instance.proposal)
     else
       flash[:error] = self.errors
-      render 'form'
+      render :edit
     end
   end
 
@@ -89,18 +85,14 @@ class UseCaseController < ApplicationController
     path = polymorphic_path(self.model_class, action: :new)
     # prevent redirect loop
     if path == request.path
-      flash[:notice] = exception.message
-      render 'communicarts/authorization_error', status: 403
+      render 'communicarts/authorization_error', status: 403, locals: { msg: exception.message }
     else
       redirect_to path, alert: exception.message
     end
   end
 
-  def initial_attachments(proposal)
-    files = params.permit(attachments: [])[:attachments] || []
-    files.each do |file|
-      Attachment.create(proposal: proposal, user: current_user, file: file)
-    end
+  def attachment_params
+    params.permit(attachments: [])[:attachments] || []
   end
 
   # Hook for adding additional approvers

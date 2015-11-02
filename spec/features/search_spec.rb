@@ -17,7 +17,7 @@ describe "searching" do
     click_button 'Search'
 
     expect(current_path).to eq('/proposals/query')
-    expect(page).to have_content(proposals.first.public_identifier)
+    expect(page).to have_content(proposals.first.public_id)
     expect(page).not_to have_content(proposals.last.name)
   end
 

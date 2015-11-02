@@ -55,9 +55,7 @@ describe CommentsController do
     it 'does not allow others to comment' do
       login_as(create(:user))
       post :create, params
-      expect(flash[:success]).not_to be_present
-      expect(flash[:alert]).to be_present
-      expect(response).to redirect_to(proposals_path)
+      expect(response.status).to eq(403)
     end
   end
 end
