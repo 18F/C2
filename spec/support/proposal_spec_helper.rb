@@ -13,11 +13,9 @@ module ProposalSpecHelper
     # sanity checks
     expect(proposal.status).to eq('approved')
     expect(proposal.root_approval.status).to eq('approved')
-    expect(linear_approval_statuses(proposal)).to eq(%w(
-      approved
-      approved
-      approved
-    ))
+    linear_approval_statuses(proposal).each do |status|
+      expect(status).to eq('approved')
+    end
 
     deliveries.clear
   end
