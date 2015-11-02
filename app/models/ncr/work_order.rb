@@ -276,7 +276,6 @@ module Ncr
     end
 
     def restart_budget_approvals
-      # Note that none of the state machine's history is stored
       self.budget_approvals.each(&:restart!)
       self.proposal.reset_status
       self.proposal.root_approval.initialize!
