@@ -90,6 +90,8 @@ describe "post-approval modification" do
       pending
     ))
 
-    # TODO check who gets notified
+    approver = work_order.budget_approvers.first
+    reapproval_mail = deliveries.find { |mail| mail.to.include?(approver.email_address) }
+    expect(reapproval_mail.html_part.body).to include('Approve')
   end
 end
