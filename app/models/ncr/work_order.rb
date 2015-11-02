@@ -279,7 +279,7 @@ module Ncr
       # Note that none of the state machine's history is stored
       self.budget_approvals.each(&:restart!)
       self.proposal.reset_status
-      self.budget_approvals.first.initialize!
+      self.proposal.root_approval.initialize!
     end
 
     protected
