@@ -16,4 +16,13 @@ describe Gsa18f::Procurement do
       expect(procurement.total_price).to eq(18.50*20)
     end
   end
+
+  describe "#public_identifier" do
+    it "returns proposal id prenended with pound" do
+      procurement = build(:gsa18f_procurement)
+      proposal = procurement.proposal
+
+      expect(procurement.public_identifier).to eq "##{proposal.id}"
+    end
+  end
 end

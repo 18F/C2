@@ -7,6 +7,10 @@ describe Proposal do
     it { should have_many(:comments).dependent(:destroy) }
   end
 
+  describe "Validations" do
+    it { should validate_uniqueness_of(:public_id).allow_nil }
+  end
+
   describe 'CLIENT_MODELS' do
     it "contains multiple models" do
       expect(Proposal::CLIENT_MODELS.size).to_not eq(0)
@@ -65,9 +69,8 @@ describe Proposal do
   end
 
   describe '#name' do
-    it "returns the #public_identifier by default" do
-      proposal = Proposal.new
-      expect(proposal).to receive(:id).and_return(6)
+    it "returns the #public_id by default" do
+      proposal = build(:proposal, public_id: "#6")
 
       expect(proposal.name).to eq('Request #6')
     end

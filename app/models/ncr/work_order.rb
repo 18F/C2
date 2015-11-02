@@ -190,10 +190,6 @@ module Ncr
       self.expense_type == 'BA80'
     end
 
-    def public_identifier
-      "FY" + self.fiscal_year.to_s.rjust(2, "0") + "-#{self.proposal.id}"
-    end
-
     def total_price
       self.amount || 0.0
     end
@@ -256,6 +252,10 @@ module Ncr
 
     def as_json
       super.merge(org_id: self.org_id, building_id: self.building_id)
+    end
+
+    def public_identifier
+      "FY" + fiscal_year.to_s.rjust(2, "0") + "-#{proposal.id}"
     end
 
     def fiscal_year

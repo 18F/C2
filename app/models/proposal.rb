@@ -41,7 +41,6 @@ class Proposal < ActiveRecord::Base
   # The following list also servers as an interface spec for client_datas
   # Note: clients may implement:
   # :fields_for_display
-  # :public_identifier
   # :version
   # Note: clients should also implement :version
   delegate :client, to: :client_data, allow_nil: true
@@ -53,14 +52,13 @@ class Proposal < ActiveRecord::Base
   }
   validates :flow, presence: true, inclusion: {in: FLOWS}
   validates :requester_id, presence: true
+  validates :public_id, uniqueness: true, allow_nil: true
 
   self.statuses.each do |status|
     scope status, -> { where(status: status) }
   end
   scope :closed, -> { where(status: ['approved', 'cancelled']) } #TODO: Backfill to change approvals in 'reject' status to 'cancelled' status
   scope :cancelled, -> { where(status: 'cancelled') }
-
-  after_create :update_public_id
 
   # @todo - this should probably be the only entry into the approval system
   def root_approval
@@ -210,13 +208,9 @@ class Proposal < ActiveRecord::Base
 
   ## delegated methods ##
 
-  def public_identifier
-    self.delegate_with_default(:public_identifier) { "##{self.id}" }
-  end
-
   def name
     self.delegate_with_default(:name) {
-      "Request #{self.public_identifier}"
+      "Request #{public_id}"
     }
   end
 
@@ -260,10 +254,6 @@ class Proposal < ActiveRecord::Base
   end
 
   protected
-
-  def update_public_id
-    self.update_attribute(:public_id, self.public_identifier)
-  end
 
   def create_new_observation(user, adder, reason)
     ObservationCreator.new(

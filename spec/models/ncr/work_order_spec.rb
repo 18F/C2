@@ -226,17 +226,13 @@ describe Ncr::WorkOrder do
     end
   end
 
-  describe '#public_identifier' do
-    it 'includes the fiscal year' do
-      work_order = create(:ncr_work_order, created_at: Date.new(2007, 1, 15))
-      proposal_id = work_order.proposal.id
+  describe "#pubic_identifier" do
+    it "prepends proposal ID with 'FY' and fiscal year" do
+      work_order = build(:ncr_work_order)
+      proposal = work_order.proposal
+      fiscal_year = work_order.fiscal_year.to_s.rjust(2, "0")
 
-      expect(work_order.public_identifier).to eq(
-        "FY07-#{proposal_id}")
-
-      work_order.update_attribute(:created_at, Date.new(2007, 10, 1))
-      expect(work_order.public_identifier).to eq(
-        "FY08-#{proposal_id}")
+      expect(work_order.public_identifier).to eq "FY#{fiscal_year}-#{proposal.id}"
     end
   end
 
