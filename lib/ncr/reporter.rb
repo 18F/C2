@@ -102,18 +102,18 @@ module Ncr
       Proposal.find_by_sql(self.proposals_tier_one_pending_sql)
     end
 
-    def build_ncr_annual_report_string(year)
+    def build_fiscal_year_report_string(year)
       approved_work_orders = Ncr::WorkOrder.approved.for_fiscal_year(year)
 
       CSV.generate do |csv|
-        add_annual_report_headers(csv)
-        add_annual_report_body(csv, approved_work_orders)
+        add_fiscal_year_report_headers(csv)
+        add_fiscal_year_report_body(csv, approved_work_orders)
       end
     end
 
     private
 
-    def add_annual_report_headers(csv)
+    def add_fiscal_year_report_headers(csv)
         csv << [
           "Id",
           "Amount",
@@ -131,7 +131,7 @@ module Ncr
         ]
     end
 
-    def add_annual_report_body(csv, work_orders)
+    def add_fiscal_year_report_body(csv, work_orders)
       work_orders.each do |work_order|
         csv << [
           work_order.proposal.public_id,

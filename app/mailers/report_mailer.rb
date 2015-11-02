@@ -1,7 +1,7 @@
 class ReportMailer < ApplicationMailer
   add_template_helper ReportHelper
 
-  def budget_status
+  def daily_budget_report
     to_email = ENV.fetch('BUDGET_REPORT_RECIPIENT')
     date = Time.now.utc.strftime("%a %m/%d/%y (%Z)")
 
@@ -14,8 +14,8 @@ class ReportMailer < ApplicationMailer
     )
   end
 
-  def annual_ncr_report(year)
-    attachments["NCR_Work_Order_Report_FY#{year}.csv"] = Ncr::Reporter.new.build_ncr_annual_report_string(year)
+  def weekly_fiscal_year_report(year)
+    attachments["NCR_Work_Order_Report_FY#{year}.csv"] = Ncr::Reporter.new.build_fiscal_year_report_string(year)
     to_email = ENV.fetch('BUDGET_REPORT_RECIPIENT')
 
     mail(
