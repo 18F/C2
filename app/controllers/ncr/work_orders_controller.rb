@@ -25,12 +25,12 @@ module Ncr
 
       super
 
-      manager = Ncr::WorkOrderUpdater.new(
+      updater = Ncr::WorkOrderUpdater.new(
         work_order: @model_instance,
         model_changing: @model_changing,
         flash: flash
       )
-      manager.after_update
+      updater.after_update
     end
 
     protected

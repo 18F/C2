@@ -25,22 +25,6 @@ describe "post-approval modification" do
     expect(work_order.status).to eq('approved')
   end
 
-  it "requires re-approval for the amount being increased" do
-    visit "/ncr/work_orders/#{work_order.id}/edit"
-    fill_in 'Amount', with: work_order.amount + 1
-    click_on 'Update'
-
-    expect_budget_approvals_restarted
-  end
-
-  it "requires re-approval when adding a Function code" do
-    visit "/ncr/work_orders/#{work_order.id}/edit"
-    fill_in 'Function code', with: 'foo'
-    click_on 'Update'
-
-    expect_budget_approvals_restarted
-  end
-
   it "can do end-to-end re-approval" do
     visit "/ncr/work_orders/#{work_order.id}/edit"
     fill_in 'Amount', with: work_order.amount + 1
