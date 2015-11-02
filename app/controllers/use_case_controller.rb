@@ -10,7 +10,6 @@ class UseCaseController < ApplicationController
   before_filter :find_model_instance, only: [:edit, :update]
 
   def new
-    render 'form'
   end
 
   def create
@@ -23,12 +22,11 @@ class UseCaseController < ApplicationController
       redirect_to proposal
     else
       flash[:error] = errors
-      render 'form'
+      render :new
     end
   end
 
   def edit
-    render 'form'
   end
 
   def update
@@ -47,7 +45,7 @@ class UseCaseController < ApplicationController
       redirect_to proposal_path(@model_instance.proposal)
     else
       flash[:error] = self.errors
-      render 'form'
+      render :edit
     end
   end
 
