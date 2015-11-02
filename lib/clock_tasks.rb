@@ -7,6 +7,14 @@ class ClockTasks
     puts "...DONE"
   end
 
+  def self.send_annual_ncr_budget_report
+    puts "SENDING ANNUAL BUDGET REPORT..."
+    now = Time.zone.now
+    fiscal_year = Ncr::WorkOrder.which_fiscal_year(now.year, now.month)
+    ReportMailer.annual_ncr_report(fiscal_year).deliver_later
+    puts "...DONE"
+  end
+
   class << self
      include ::NewRelic::Agent::Instrumentation::ControllerInstrumentation
      add_transaction_tracer :send_ncr_budget_report, category: :task

@@ -103,11 +103,11 @@ module Ncr
     end
 
     def build_ncr_annual_report_string(year)
-      cancelled_work_orders = Ncr::WorkOrder.cancelled.for_fiscal_year(year)
+      approved_work_orders = Ncr::WorkOrder.approved.for_fiscal_year(year)
 
       CSV.generate do |csv|
         add_annual_report_headers(csv)
-        add_annual_report_body(csv, cancelled_work_orders)
+        add_annual_report_body(csv, approved_work_orders)
       end
     end
 

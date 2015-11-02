@@ -14,5 +14,9 @@ module Clockwork
     every(1.day, 'report_mailer.budget_status', at: '03:30') do
       ClockTasks.send_ncr_budget_report
     end
+
+    every(1.week, 'report_mailer.annual_ncr_report', at: 'Monday 03:30') do
+      ClockTasks.send_annual_ncr_budget_report
+    end
   end
 end
