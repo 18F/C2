@@ -18,7 +18,8 @@ module Ncr
     def budget_codes_changed?
       changes = work_order.previous_changes
       Ncr::WorkOrder.budget_code_fields.any? do |field|
-        changes.key?(field.to_s)
+        values = changes[field.to_s]
+        values && values[0].present?
       end
     end
 

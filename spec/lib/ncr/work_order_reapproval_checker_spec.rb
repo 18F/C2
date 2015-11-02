@@ -21,12 +21,21 @@ describe Ncr::WorkOrderReapprovalChecker do
     end
 
     it "returns true if the function code is changed" do
-      work_order = create(:ncr_work_order)
+      work_order = create(:ncr_work_order, function_code: 'foo')
+      work_order.approve!
+      work_order.update!(function_code: 'bar')
+
+      checker = Ncr::WorkOrderReapprovalChecker.new(work_order)
+      expect(checker.requires_budget_reapproval?).to eq(true)
+    end
+
+    it "returns false if the function code is set for the first time" do
+      work_order = create(:ncr_work_order, function_code: nil)
       work_order.approve!
       work_order.update!(function_code: 'foo')
 
       checker = Ncr::WorkOrderReapprovalChecker.new(work_order)
-      expect(checker.requires_budget_reapproval?).to eq(true)
+      expect(checker.requires_budget_reapproval?).to eq(false)
     end
 
     it "returns false if the function code is changed by a budget approver" do
