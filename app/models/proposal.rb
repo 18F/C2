@@ -31,8 +31,10 @@ class Proposal < ActiveRecord::Base
   has_many :approvers, through: :individual_approvals, source: :user
   has_many :api_tokens, through: :individual_approvals
   has_many :attachments, dependent: :destroy
-  has_many :approval_delegates, through: :approvers, source: :outgoing_delegates
+  has_many :approval_delegates, through: :approvers, source: :outgoing_delegations
   has_many :comments, dependent: :destroy
+  has_many :delegates, through: :approval_delegates, source: :assignee
+
   has_many :observations, -> { where("proposal_roles.role_id in (select roles.id from roles where roles.name='observer')") }
   has_many :observers, through: :observations, source: :user
   belongs_to :client_data, polymorphic: true, dependent: :destroy
@@ -84,11 +86,6 @@ class Proposal < ActiveRecord::Base
       OR user_id IN (SELECT assignee_id FROM approval_delegates WHERE assigner_id = :user_id)
     SQL
     self.approvals.where(where_clause, user_id: user.id).first
-  end
-
-  # TODO convert to an association
-  def delegates
-    self.approval_delegates.map(&:assignee)
   end
 
   # Returns a list of all users involved with the Proposal.
