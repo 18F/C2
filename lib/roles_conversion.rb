@@ -10,7 +10,7 @@ class RolesConversion
 
   def ba61_tier1_budget_approver
     with_email_role_slug!(
-      Ncr::WorkOrder::NCR_BA61_TIER1_BUDGET_APPROVER_MAILBOX,
+      ENV['NCR_BA61_TIER1_BUDGET_MAILBOX'] || 'communicart.budget.approver+ba61@gmail.com',
       'BA61_tier1_budget_approver',
       'ncr'
     )
@@ -18,7 +18,7 @@ class RolesConversion
 
   def ba61_tier2_budget_approver
     with_email_role_slug!(
-      Ncr::WorkOrder::NCR_BA61_TIER2_BUDGET_APPROVER_MAILBOX,
+      ENV['NCR_BA61_TIER2_BUDGET_MAILBOX'] || 'communicart.ofm.approver@gmail.com',
       'BA61_tier2_budget_approver',
       'ncr'
     )
@@ -26,7 +26,7 @@ class RolesConversion
 
   def ba80_budget_approver
     with_email_role_slug!(
-      Ncr::WorkOrder::NCR_BA80_BUDGET_APPROVER_MAILBOX,
+      ENV['NCR_BA80_BUDGET_MAILBOX'] || 'communicart.budget.approver+ba80@gmail.com',
       'BA80_budget_approver',
       'ncr'
     )
@@ -34,7 +34,7 @@ class RolesConversion
 
   def ool_ba80_budget_approver
     with_email_role_slug!(
-      Ncr::WorkOrder::NCR_BA80_BUDGET_APPROVER_MAILBOX,
+      ENV['NCR_OOL_BA80_BUDGET_MAILBOX'] || 'communicart.budget.approver+ool_ba80@gmail.com',
       'OOL_BA80_budget_approver',
       'ncr'
     )

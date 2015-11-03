@@ -83,13 +83,9 @@ feature 'Requester edits their NCR work order' do
 
   context "proposal changes from BA80 to BA61" do
     scenario "removed tier 1 approver is notified if approval is not pending" do
-      tier_one_approver = User.find_by(email_address: Ncr::WorkOrder::NCR_BA61_TIER1_BUDGET_APPROVER_MAILBOX)
-      work_order = create(:ncr_work_order, description: 'test')
-      work_order.setup_approvals_and_observers
-      ncr_proposal = work_order.proposal
-
-      login_as(work_order.requester)
       work_order.update(expense_type: "BA61")
+      role = "BA61_tier1_budget_approver"
+      tier_one_approver = User.with_role(role).first
       approval = tier_one_approver.approvals.where(proposal: ncr_proposal).first
       approval.update(status: "actionable")
 
