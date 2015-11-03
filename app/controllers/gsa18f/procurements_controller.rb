@@ -1,4 +1,4 @@
-class Gsa18f::ProcurementsController < ApplicationController
+class Gsa18f::ProcurementsController < UseCasesController
   before_filter :authenticate_user!
   before_filter ->{authorize Gsa18f::Procurement}, only: [:new, :create]
   before_filter ->{authorize find_procurement.proposal}, only: [:edit, :update]
@@ -61,7 +61,7 @@ class Gsa18f::ProcurementsController < ApplicationController
 
     # prevent redirect loop
     if path == request.path
-      render 'communicarts/authorization_error', status: 403, locals: { msg: exception.message }
+      render "communicarts/authorization_error", status: 403, locals: { msg: exception.message }
     else
       redirect_to path, alert: exception.message
     end

@@ -1,4 +1,4 @@
-class Ncr::WorkOrdersController < ApplicationController
+class Ncr::WorkOrdersController < UseCasesController
   # arbitrary number...number of upload fields that "ought to be enough for anybody"
   MAX_UPLOADS_ON_NEW = 10
 
