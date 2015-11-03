@@ -31,11 +31,7 @@ describe Ncr::Reporter do
       )
       whs_work_order.setup_approvals_and_observers
 
-      user = create(:user, email_address: Ncr::WorkOrder::NCR_BA61_TIER1_BUDGET_APPROVER_MAILBOX)
-      role = create(:role, name: "BA61_tier1_budget_approver")
-      user.roles << role
-
-      approved_work_order = create(:ncr_work_order, :with_approvers, expense_type: "BA61")
+      approved_work_order = create(:ncr_work_order, :with_approvers)
       approved_work_order.setup_approvals_and_observers
       approved_work_order.individual_approvals.first.approve!
 
