@@ -4,7 +4,7 @@ module Approvals
   class Individual < Approval
     belongs_to :user
     has_one :api_token, -> { fresh }, foreign_key: 'approval_id'
-    has_many :delegations, through: :user, source: :outgoing_delegates
+    has_many :delegations, through: :user, source: :outgoing_delegations
     has_many :delegates, through: :delegations, source: :assignee
 
     validates :user, presence: true

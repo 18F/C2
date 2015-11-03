@@ -1,7 +1,8 @@
 describe Proposal do
   describe "Associatons" do
-    it { should belong_to(:client_data).dependent(:destroy) }
     it { should have_many(:approvals) }
+    it { should belong_to(:client_data).dependent(:destroy) }
+    it { should have_many(:delegates) }
     it { should have_many(:individual_approvals) }
     it { should have_many(:attachments).dependent(:destroy) }
     it { should have_many(:comments).dependent(:destroy) }
