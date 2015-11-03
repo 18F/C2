@@ -6,7 +6,7 @@ class ClientDataCreator
   end
 
   def run
-    client_data.build_proposal(flow: 'linear', requester: user)
+    client_data.build_proposal(flow: "linear", requester: user)
     client_data.save
     create_attachments
     add_public_id
