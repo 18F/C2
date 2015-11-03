@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151028234110) do
+ActiveRecord::Schema.define(version: 20151103223107) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -137,13 +137,6 @@ ActiveRecord::Schema.define(version: 20151028234110) do
     t.string   "cl_number",       limit: 255
     t.string   "function_code",   limit: 255
     t.string   "soc_code",        limit: 255
-  end
-
-  create_table "properties", force: :cascade do |t|
-    t.text    "property"
-    t.text    "value"
-    t.integer "hasproperties_id"
-    t.string  "hasproperties_type", limit: 255
   end
 
   create_table "proposal_roles", force: :cascade do |t|
