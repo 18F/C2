@@ -162,7 +162,7 @@ module Ncr
 
     def find_approved_at(work_order)
       if work_order.proposal.approvals.last.present?
-        work_order.proposal.approvals.last.approved_a
+        work_order.proposal.approvals.last.approved_at
       else
         "no approvals"
       end
