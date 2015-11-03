@@ -8,7 +8,8 @@ module ApplicationHelper
   end
 
   def display_return_to_proposals
-    controller.is_a?(UseCaseController) ||
+    controller.is_a?(Ncr::WorkOrdersController) ||
+    controller.is_a?(Gsa18f::ProcurementsController) ||
       (controller.is_a?(ProposalsController) && params[:action] != 'index')
   end
 

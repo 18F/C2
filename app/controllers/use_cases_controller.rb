@@ -1,0 +1,3 @@
+class UseCasesController < ApplicationController
+
+end
