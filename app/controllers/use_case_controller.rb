@@ -15,7 +15,7 @@ class UseCaseController < ApplicationController
   def create
     if errors.empty?
       proposal = ClientDataCreator.new(@model_instance, current_user, attachment_params).run
-      add_approvals()
+      add_approvals
       Dispatcher.deliver_new_proposal_emails(proposal)
 
       flash[:success] = "Proposal submitted!"

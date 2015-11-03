@@ -3,8 +3,11 @@ FactoryGirl.define do
     proposal
     user
     status 'pending'
-  end
 
-  factory :parallel_approval, class: Approvals::Parallel do
+    factory :parallel_approval, class: Approvals::Parallel do
+    end
+
+    factory :individual_approval, class: Approvals::Individual do
+    end
   end
 end

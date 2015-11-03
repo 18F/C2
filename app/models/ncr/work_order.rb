@@ -57,6 +57,70 @@ module Ncr
       where(created_at: start_time...end_time)
     }
 
+    def self.all_system_approver_emails
+      [
+        self.ba61_tier1_budget_mailbox,
+        self.ba61_tier2_budget_mailbox,
+        self.ba80_budget_mailbox,
+        self.ool_ba80_budget_mailbox,
+      ]
+    end
+
+    def self.ba61_tier1_budget_mailbox
+      self.approver_with_role("BA61_tier1_budget_approver")
+    end
+
+    def self.ba61_tier2_budget_mailbox
+      self.approver_with_role("BA61_tier2_budget_approver")
+    end
+
+    def self.ba80_budget_mailbox
+      self.approver_with_role("BA80_budget_approver")
+    end
+
+    def self.ool_ba80_budget_mailbox
+      self.approver_with_role("OOL_BA80_budget_approver")
+    end
+
+    def self.approver_with_role(role_name)
+      users = User.with_role(role_name).where(client_slug: "ncr")
+
+      if users.empty?
+        fail "Missing User with role #{role_name} -- did you run rake db:migrate and rake db:seed?"
+      end
+
+      users.first.email_address
+    end
+
+    # Ignore values in certain fields if they aren't relevant. May want to
+    # split these into different models
+    def self.relevant_fields(expense_type)
+      fields = [:description, :amount, :expense_type, :vendor, :not_to_exceed,
+                :building_number, :org_code, :direct_pay, :cl_number, :function_code, :soc_code]
+      case expense_type
+      when "BA61"
+        fields << :emergency
+      when "BA80"
+        fields.concat([:rwa_number, :code])
+      end
+
+      fields
+    end
+
+    def self.update_comment_format(key, value, bullet, former=nil)
+      if !former || former.empty?
+        from = ""
+      else
+        from = "from #{former} "
+      end
+      if value.empty?
+        to = "*empty*"
+      else
+        to = value
+      end
+      "#{bullet}*#{key}* was changed " + from + "to #{to}"
+    end
+
     def set_defaults
       # not sure why the latter condition is necessary...was getting some weird errors from the tests without it. -AF 10/5/2015
       if !self.approving_official_email && self.approvers.any?
@@ -75,30 +139,32 @@ module Ncr
 
     # Check the approvers, accounting for frozen approving official
     def approvers_emails
-      emails = self.system_approver_emails
-      if self.approver_email_frozen?
-        emails.unshift(self.approving_official.email_address)
+      emails = system_approver_emails
+
+      if approver_email_frozen?
+        emails.unshift(approving_official.email_address)
       else
-        emails.unshift(self.approving_official_email)
+        emails.unshift(approving_official_email)
       end
+
       emails
     end
 
     def setup_approvals_and_observers
-      emails = self.approvers_emails
-      if self.emergency
-        emails.each{|e| self.add_observer(e)}
+      emails = approvers_emails
+      if emergency
+        emails.each{|e| add_observer(e)}
         # skip state machine
-        self.proposal.update(status: 'approved')
+        proposal.update(status: 'approved')
       else
-        original_approvers = self.proposal.individual_approvals.non_pending.map(&:user)
-        self.force_approvers(emails)
-        self.notify_removed_approvers(original_approvers)
+        original_approvers = proposal.individual_approvals.non_pending.map(&:user)
+        force_approvers(emails)
+        notify_removed_approvers(original_approvers)
       end
     end
 
     def approving_official
-      self.approvers.first
+      approvers.first
     end
 
     def current_approver
@@ -109,7 +175,7 @@ module Ncr
       elsif emergency and approvers.empty?
         nil
       else
-        User.for_email(self.system_approver_emails.first)
+        User.for_email(system_approver_emails.first)
       end
     end
 
@@ -121,21 +187,6 @@ module Ncr
 
     def email_approvers
       Dispatcher.on_proposal_update(self.proposal, self.modifier)
-    end
-
-    # Ignore values in certain fields if they aren't relevant. May want to
-    # split these into different models
-    def self.relevant_fields(expense_type)
-      fields = [:description, :amount, :expense_type, :vendor, :not_to_exceed,
-                :building_number, :org_code, :direct_pay, :cl_number, :function_code, :soc_code]
-      case expense_type
-      when 'BA61'
-        fields << :emergency
-      when 'BA80'
-        fields.concat([:rwa_number, :code])
-      end
-
-      fields
     end
 
     def relevant_fields
@@ -174,13 +225,13 @@ module Ncr
 
     def system_approver_emails
       results = []
-      if %w(BA60 BA61).include?(self.expense_type)
-        unless self.organization.try(:whsc?)
+      if %w(BA60 BA61).include?(expense_type)
+        unless organization.try(:whsc?)
           results << self.class.ba61_tier1_budget_mailbox
         end
         results << self.class.ba61_tier2_budget_mailbox
       else # BA80
-        if self.organization.try(:ool?)
+        if organization.try(:ool?)
           results << self.class.ool_ba80_budget_mailbox
         else
           results << self.class.ba80_budget_mailbox
@@ -188,30 +239,6 @@ module Ncr
       end
 
       results
-    end
-
-    def self.ba61_tier1_budget_mailbox
-      self.approver_with_role('BA61_tier1_budget_approver')
-    end
-
-    def self.ba61_tier2_budget_mailbox
-      self.approver_with_role('BA61_tier2_budget_approver')
-    end
-
-    def self.approver_with_role(role_name)
-      users = User.with_role(role_name).where(client_slug: 'ncr')
-      if users.empty?
-        fail "Missing User with role #{role_name} -- did you run rake db:migrate and rake db:seed?"
-      end
-      users.first.email_address
-    end
-
-    def self.ba80_budget_mailbox
-      self.approver_with_role('BA80_budget_approver')
-    end
-
-    def self.ool_ba80_budget_mailbox
-      self.approver_with_role('OOL_BA80_budget_approver')
     end
 
     def org_id

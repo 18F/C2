@@ -5,8 +5,6 @@ feature 'Creating an NCR work order' do
     end
   end
 
-  let!(:approver) { create(:user) }
-
   scenario 'requires sign-in' do
     visit '/ncr/work_orders/new'
     expect(current_path).to eq('/')
@@ -29,11 +27,8 @@ feature 'Creating an NCR work order' do
     let(:requester) { create(:user, client_slug: 'ncr') }
     let(:ncr_helper_class) { Class.new { extend Ncr::WorkOrdersHelper } }
 
-    before do
-      login_as(requester)
-    end
-
     scenario 'saves a Proposal with the attributes' do
+      approver = create(:user)
       login_as(requester)
       expect(Dispatcher).to receive(:deliver_new_proposal_emails)
 
@@ -72,6 +67,7 @@ feature 'Creating an NCR work order' do
     end
 
     scenario 'saves a BA60 Proposal with the attributes' do
+      approver = create(:user)
       login_as(requester)
       expect(Dispatcher).to receive(:deliver_new_proposal_emails)
 
@@ -102,6 +98,22 @@ feature 'Creating an NCR work order' do
       expect(page).to have_content('BA60')
       expect(page).to have_content('BA61')
       expect(page).to have_content('BA80')
+    end
+
+    scenario "does not show system approver emails as approver options", :js do
+      expect(Ncr::WorkOrder.all_system_approver_emails.size).to eq 4
+      login_as(requester)
+      approving_official = create(:user)
+      visit "/ncr/work_orders/new"
+      within(".ncr_work_order_approving_official_email") do
+        find(".selectize-control").click
+      end
+
+      expect(page).to have_content(approving_official.email_address)
+      expect(page).not_to have_content(Ncr::WorkOrder.ba61_tier1_budget_mailbox)
+      expect(page).not_to have_content(Ncr::WorkOrder.ba61_tier2_budget_mailbox)
+      expect(page).not_to have_content(Ncr::WorkOrder.ba80_budget_mailbox)
+      expect(page).not_to have_content(Ncr::WorkOrder.ool_ba80_budget_mailbox)
     end
 
     scenario 'shows hint text for amount field', :js do
@@ -177,6 +189,7 @@ feature 'Creating an NCR work order' do
     end
 
     scenario "includes has overwritten field names" do
+      approver = create(:user)
       login_as(requester)
       visit '/ncr/work_orders/new'
       fill_in 'Project title', with: "buying stuff"
@@ -263,6 +276,7 @@ feature 'Creating an NCR work order' do
 
     context "selected common values on proposal page" do
       before do
+        approver = create(:user)
         login_as(requester)
         visit '/ncr/work_orders/new'
 
@@ -308,6 +322,7 @@ feature 'Creating an NCR work order' do
     end
 
     scenario 'does not disable the emergency field' do
+      login_as(requester)
       visit '/ncr/work_orders/new'
       expect(find_field('emergency')).not_to be_disabled
     end
