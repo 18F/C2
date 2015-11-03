@@ -1,9 +1,9 @@
 describe ReportMailer do
-  describe '.budget_status' do
-    with_env_var('BUDGET_REPORT_RECIPIENT', 'budget@example.com') do
+  describe "#daily_budget_report" do
+    with_env_var("BUDGET_REPORT_RECIPIENT", "budget@example.com") do
       it "works with no data" do
         expect {
-          ReportMailer.budget_status.deliver_later
+          ReportMailer.daily_budget_report.deliver_later
         }.to_not raise_error
       end
 
@@ -12,7 +12,7 @@ describe ReportMailer do
           create(:ncr_work_order, :with_approvers)
         end
 
-        ReportMailer.budget_status.deliver_now
+        ReportMailer.daily_budget_report.deliver_now
 
         html = deliveries.last.body.encoded
         work_orders.each do |work_order|
@@ -24,6 +24,21 @@ describe ReportMailer do
         attachments.each do |attachment|
           expect(attachment).to be_a_kind_of(Mail::Part)
           expect(attachment.content_type).to match('text/comma-separated-values')
+        end
+      end
+    end
+  end
+
+  describe "#weekly_fiscal_year_report" do
+    with_env_var("BUDGET_REPORT_RECIPIENT", "budget@example.com") do
+      it "works with no data" do
+        year = 2014
+
+        Timecop.freeze(Time.local(year)) do
+
+          expect {
+            ReportMailer.weekly_fiscal_year_report(year).deliver_now
+          }.to_not raise_error
         end
       end
     end
