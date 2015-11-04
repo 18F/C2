@@ -127,15 +127,6 @@ class Proposal < ActiveRecord::Base
     end
   end
 
-  # convenience wrapper for setting a single approver
-  def approver=(approver)
-    # Don't recreate the approval
-    existing = self.existing_approval_for(approver)
-    if existing.nil?
-      self.root_step = Steps::Individual.new(user: approver)
-    end
-  end
-
   def reset_status()
     unless self.cancelled?   # no escape from cancelled
       if self.root_step.nil? || self.root_step.approved?
