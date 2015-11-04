@@ -1,5 +1,9 @@
 class DropProperties < ActiveRecord::Migration
-  def change
+  def up
     drop_table :properties
+  end
+
+  def down
+    raise ActiveRecord::IrreversibleMigration
   end
 end
