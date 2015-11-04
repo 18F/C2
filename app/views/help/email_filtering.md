@@ -32,7 +32,7 @@ As soon as you finalize your filters, you can see all request emails together by
 1. Check the _Forward it to_ box. Choose the email address where you want requests to go.
 
 #### Stop requests from being marked spam
-1. First, if this is happening, [let us know](../feedback)! We’ll check to see if something on our end is making this happen.
+1. First, if this is happening, [let us know](/feedback)! We’ll check to see if something on our end is making this happen.
 2. In the meantime, check the box for _Never send it to Spam_.
 
 ## Finally, apply the filters you chose.
