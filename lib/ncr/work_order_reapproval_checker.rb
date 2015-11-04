@@ -15,9 +15,9 @@ module Ncr
       changes.key?('amount') && (work_order.amount > changes['amount'].first)
     end
 
-    def budget_codes_changed?
+    def protected_fields_changed?
       changes = work_order.previous_changes
-      Ncr::WorkOrder.budget_code_fields.any? do |field|
+      protected_fields.any? do |field|
         values = changes[field.to_s]
         values && values[0].present?
       end
@@ -30,10 +30,16 @@ module Ncr
     def requires_budget_reapproval?
       work_order.approved? && (
         self.amount_increased? || (
-          self.budget_codes_changed? &&
+          self.protected_fields_changed? &&
           !self.budget_approver?
         )
       )
+    end
+
+    protected
+
+    def protected_fields
+      Ncr::WorkOrder.budget_code_fields
     end
   end
 end
