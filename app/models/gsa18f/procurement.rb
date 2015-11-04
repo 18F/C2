@@ -26,8 +26,6 @@ module Gsa18f
     validates :product_name_and_description, presence: true
     validates :recurring_interval, presence: true, if: :recurring
 
-    after_create :add_steps
-
     def add_steps
       steps = [
         Steps::Approval.new(user: User.for_email(Gsa18f::Procurement.approver_email)),

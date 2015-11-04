@@ -7,5 +7,7 @@ FactoryGirl.define do
     office Gsa18f::Procurement::OFFICES[0]
     urgency Gsa18f::Procurement::URGENCY[10]
     association :proposal, flow: 'linear', client_slug: 'gsa18f'
+
+    after(:create) { |procurement| procurement.add_steps } 
   end
 end

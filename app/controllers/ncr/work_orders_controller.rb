@@ -56,7 +56,7 @@ module Ncr
     end
 
     # @pre: @model_instance.approving_official_email is set
-    def add_approvals
+    def add_steps
       super
       if self.errors.empty?
         @model_instance.setup_approvals_and_observers

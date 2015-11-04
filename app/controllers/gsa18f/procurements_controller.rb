@@ -11,5 +11,12 @@ module Gsa18f
         params[:gsa18f_procurement][:recurring])
       params.require(:gsa18f_procurement).permit(:name, *fields)
     end
+
+    def add_steps
+      super
+      if self.errors.empty?
+        @model_instance.add_steps
+      end
+    end
   end
 end
