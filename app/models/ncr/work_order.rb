@@ -1,7 +1,14 @@
 require 'csv'
-require_relative '../ncr'
 
 module Ncr
+  # Make sure all table names use 'ncr_XXX'
+  def self.table_name_prefix
+    'ncr_'
+  end
+
+  EXPENSE_TYPES = %w(BA60 BA61 BA80)
+  BUILDING_NUMBERS = YAML.load_file("#{Rails.root}/config/data/ncr/building_numbers.yml")
+
   class WorkOrder < ActiveRecord::Base
     # must define before include PurchaseCardMixin
     def self.purchase_amount_column_name
