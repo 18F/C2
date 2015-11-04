@@ -10,13 +10,15 @@ class Approval < ActiveRecord::Base
 
   belongs_to :proposal
   acts_as_list scope: :proposal
-  validates :proposal, presence: true
 
+  belongs_to :user
   belongs_to :parent, class_name: 'Approval'
   has_many :child_approvals, class_name: 'Approval', foreign_key: 'parent_id', dependent: :destroy
 
-  scope :individual, -> { where(type: 'Approvals::Individual') }
+  validates :proposal, presence: true
+  validates :user_id, uniqueness: { scope: :proposal_id }
 
+  scope :individual, -> { where(type: "Approvals::Individual") }
 
   self.statuses.each do |status|
     scope status, -> { where(status: status) }
