@@ -8,6 +8,8 @@ FactoryGirl.define do
     urgency Gsa18f::Procurement::URGENCY[10]
     association :proposal, flow: 'linear', client_slug: 'gsa18f'
 
-    after(:create) { |procurement| procurement.add_steps } 
+    trait :with_steps do
+      after(:create) { |procurement| procurement.add_steps }
+    end
   end
 end
