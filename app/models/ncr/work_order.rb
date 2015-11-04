@@ -107,20 +107,6 @@ module Ncr
       fields
     end
 
-    def self.update_comment_format(key, value, bullet, former=nil)
-      if !former || former.empty?
-        from = ""
-      else
-        from = "from #{former} "
-      end
-      if value.empty?
-        to = "*empty*"
-      else
-        to = value
-      end
-      "#{bullet}*#{key}* was changed " + from + "to #{to}"
-    end
-
     def set_defaults
       # not sure why the latter condition is necessary...was getting some weird errors from the tests without it. -AF 10/5/2015
       if !self.approving_official_email && self.approvers.any?

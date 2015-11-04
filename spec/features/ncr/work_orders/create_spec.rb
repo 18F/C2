@@ -107,13 +107,12 @@ feature 'Creating an NCR work order' do
       visit "/ncr/work_orders/new"
       within(".ncr_work_order_approving_official_email") do
         find(".selectize-control").click
+        expect(page).to have_content(approving_official.email_address)
+        expect(page).not_to have_content(Ncr::WorkOrder.ba61_tier1_budget_mailbox)
+        expect(page).not_to have_content(Ncr::WorkOrder.ba61_tier2_budget_mailbox)
+        expect(page).not_to have_content(Ncr::WorkOrder.ba80_budget_mailbox)
+        expect(page).not_to have_content(Ncr::WorkOrder.ool_ba80_budget_mailbox)
       end
-
-      expect(page).to have_content(approving_official.email_address)
-      expect(page).not_to have_content(Ncr::WorkOrder.ba61_tier1_budget_mailbox)
-      expect(page).not_to have_content(Ncr::WorkOrder.ba61_tier2_budget_mailbox)
-      expect(page).not_to have_content(Ncr::WorkOrder.ba80_budget_mailbox)
-      expect(page).not_to have_content(Ncr::WorkOrder.ool_ba80_budget_mailbox)
     end
 
     scenario 'shows hint text for amount field', :js do
