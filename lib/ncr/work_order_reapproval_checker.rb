@@ -39,7 +39,8 @@ module Ncr
     protected
 
     def protected_fields
-      Ncr::WorkOrder.budget_code_fields
+      results = Ncr::WorkOrder.budget_code_fields + [:building_number, :org_code, :rwa_number]
+      results.uniq
     end
   end
 end
