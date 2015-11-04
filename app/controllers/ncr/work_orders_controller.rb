@@ -9,6 +9,7 @@ module Ncr
     end
 
     def create
+      Ncr::WorkOrderValueNormalizer.new(@model_instance).run
       super
     end
 
@@ -21,6 +22,8 @@ module Ncr
     end
 
     def update
+      @model_instance.assign_attributes(permitted_params)
+      Ncr::WorkOrderValueNormalizer.new(@model_instance).run
       @model_instance.modifier = current_user
 
       super

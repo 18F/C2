@@ -41,7 +41,7 @@ class ObservationCreator
   def add_observation_comment
     proposal.comments.create(
       comment_text: I18n.t(
-        'activerecord.attributes.observation.user_reason_comment',
+        "activerecord.attributes.observation.user_reason_comment",
         user: observer_adder.full_name,
         observer: observer.full_name,
         reason: reason
@@ -60,6 +60,6 @@ class ObservationCreator
   end
 
   def observer_role
-    Role.find_or_create_by(name: 'observer')
+    Role.find_or_create_by(name: "observer")
   end
 end
