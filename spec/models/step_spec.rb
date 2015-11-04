@@ -49,8 +49,8 @@ describe Step do
 
     it "does not notify the proposal if a child gets approved" do
       proposal = create(:proposal)
-      child1 = Steps::Individual.new(user: create(:user))
-      child2 = Steps::Individual.new(user: create(:user))
+      child1 = Steps::Approval.new(user: create(:user))
+      child2 = Steps::Approval.new(user: create(:user))
       proposal.root_step = Steps::Parallel.new(child_approvals: [child1, child2])
 
       expect(proposal).not_to receive(:approve!)
@@ -73,16 +73,16 @@ describe Step do
     before :each do
       # @todo syntax for this will get cleaned up
       and_clause = Steps::Parallel.new(child_approvals: [
-        Steps::Individual.new(user: amy),
-        Steps::Individual.new(user: bob)
+        Steps::Approval.new(user: amy),
+        Steps::Approval.new(user: bob)
       ])
       then_clause = Steps::Serial.new(child_approvals: [
-        Steps::Individual.new(user: dan),
-        Steps::Individual.new(user: erin)
+        Steps::Approval.new(user: dan),
+        Steps::Approval.new(user: erin)
       ])
       proposal.root_step = Steps::Parallel.new(min_children_needed: 2, child_approvals: [
         and_clause,
-        Steps::Individual.new(user: carrie),
+        Steps::Approval.new(user: carrie),
         then_clause
       ])
     end

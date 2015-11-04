@@ -29,10 +29,10 @@ describe Proposal do
     it "gives only the first approver when linear" do
       proposal = create(:proposal, :with_serial_approvers)
       approver1, approver2 = proposal.approvers
-      expect(proposal.currently_awaiting_approvers).to eq([approver1])
+      expect(proposal.currently_awaiting_approvers).to contain_exactly(approver1)
 
       proposal.individual_approvals.first.approve!
-      expect(proposal.currently_awaiting_approvers).to eq([approver2])
+      expect(proposal.currently_awaiting_approvers).to contain_exactly(approver2)
     end
   end
 
@@ -110,11 +110,11 @@ describe Proposal do
     end
   end
 
-  describe '#root_approval=' do
+  describe '#root_step=' do
     it 'sets initial approvers' do
       proposal = create(:proposal)
       approvers = 3.times.map{ create(:user) }
-      individuals = approvers.map{ |u| Steps::Individual.new(user: u) }
+      individuals = approvers.map{ |u| Steps::Approval.new(user: u) }
 
       proposal.root_step = Steps::Parallel.new(child_approvals: individuals)
 
@@ -127,7 +127,7 @@ describe Proposal do
       approver2 = create(:user)
       approver3 = create(:user)
       proposal = create(:proposal, flow: 'parallel')
-      individuals = [approver1, approver2, approver3].map{ |u| Steps::Individual.new(user: u)}
+      individuals = [approver1, approver2, approver3].map{ |u| Steps::Approval.new(user: u)}
 
       proposal.root_step = Steps::Parallel.new(child_approvals: individuals)
 
@@ -142,7 +142,7 @@ describe Proposal do
       approver2 = create(:user)
       approver3 = create(:user)
       proposal = create(:proposal, flow: 'linear')
-      individuals = [approver1, approver2, approver3].map{ |u| Steps::Individual.new(user: u)}
+      individuals = [approver1, approver2, approver3].map{ |u| Steps::Approval.new(user: u)}
 
       proposal.root_step = Steps::Serial.new(child_approvals: individuals)
 
@@ -157,13 +157,13 @@ describe Proposal do
       approver2 = create(:user)
       approver3 = create(:user)
       proposal = create(:proposal, flow: 'parallel')
-      individuals = [Steps::Individual.new(user: approver1)]
+      individuals = [Steps::Approval.new(user: approver1)]
       proposal.root_step = Steps::Parallel.new(child_approvals: individuals)
 
       expect(proposal.steps.actionable.count).to be 2
       expect(proposal.individual_approvals.actionable.count).to be 1
 
-      individuals = individuals + [approver2, approver3].map{ |u| Steps::Individual.new(user: u)}
+      individuals = individuals + [approver2, approver3].map{ |u| Steps::Approval.new(user: u)}
       proposal.root_step = Steps::Parallel.new(child_approvals: individuals)
 
       expect(proposal.steps.actionable.count).to be 4
@@ -176,14 +176,14 @@ describe Proposal do
       approver3 = create(:user)
       proposal = create(:proposal, flow: 'linear')
       approver1, approver2, approver3 = 3.times.map{ create(:user) }
-      individuals = [approver1, approver2].map{ |u| Steps::Individual.new(user: u) }
+      individuals = [approver1, approver2].map{ |u| Steps::Approval.new(user: u) }
       proposal.root_step = Steps::Serial.new(child_approvals: individuals)
 
       expect(proposal.steps.actionable.count).to be 2
       expect(proposal.individual_approvals.actionable.count).to be 1
 
       individuals.first.approve!
-      individuals[1] = Steps::Individual.new(user: approver3)
+      individuals[1] = Steps::Approval.new(user: approver3)
       proposal.root_step = Steps::Serial.new(child_approvals: individuals)
 
       expect(proposal.steps.approved.count).to be 1
@@ -196,7 +196,7 @@ describe Proposal do
       approver1 = create(:user)
       approver2 = create(:user)
       proposal = create(:proposal, flow: 'parallel')
-      individuals = [approver1, approver2].map{ |u| Steps::Individual.new(user: u)}
+      individuals = [approver1, approver2].map{ |u| Steps::Approval.new(user: u)}
       proposal.root_step = Steps::Parallel.new(child_approvals: individuals)
 
       proposal.individual_approvals.first.approve!
@@ -209,7 +209,7 @@ describe Proposal do
       approver1 = create(:user)
       approver2 = create(:user)
       proposal = create(:proposal, flow: 'linear')
-      individuals = [approver1, approver2].map{ |u| Steps::Individual.new(user: u)}
+      individuals = [approver1, approver2].map{ |u| Steps::Approval.new(user: u)}
       proposal.root_step = Steps::Serial.new(child_approvals: individuals)
 
       proposal.individual_approvals.first.approve!
@@ -250,7 +250,7 @@ describe Proposal do
       proposal.individual_approvals.first.approve!
       proposal.individual_approvals.second.approve!
       expect(proposal.reload.approved?).to be true
-      individuals = proposal.root_step.child_approvals + [Steps::Individual.new(user: create(:user))]
+      individuals = proposal.root_step.child_approvals + [Steps::Approval.new(user: create(:user))]
       proposal.root_step = Steps::Parallel.new(child_approvals: individuals)
 
       proposal.reset_status()

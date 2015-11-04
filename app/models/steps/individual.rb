@@ -11,6 +11,8 @@ module Steps
     delegate :full_name, :email_address, to: :user, prefix: true
     scope :with_users, -> { includes :user }
 
+    self.abstract_class = true
+
     workflow do
       on_transition { self.touch } # sets updated_at; https://github.com/geekq/workflow/issues/96
 

@@ -9,8 +9,7 @@ describe ProposalsController do
 
     it 'sets data fields' do
       proposal1 = create(:proposal, requester: user)
-      proposal2 = create(:proposal)
-      proposal2.individual_approvals.create!(user: user, status: 'actionable')
+      proposal2 = create(:proposal, :with_approver, approver_user: user)
 
       get :index
       expect(assigns(:pending_review_data).rows.sort).to eq [proposal2]
