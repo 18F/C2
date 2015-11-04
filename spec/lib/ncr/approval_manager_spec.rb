@@ -1,7 +1,7 @@
 describe Ncr::ApprovalManager do
   describe '#setup_approvals_and_observers' do
-    let (:ba61_tier_one_email) { Ncr::ApprovalManager.ba61_tier1_budget_mailbox }
-    let (:ba61_tier_two_email) { Ncr::ApprovalManager.ba61_tier2_budget_mailbox }
+    let (:ba61_tier_one_email) { Ncr::Mailboxes.ba61_tier1_budget }
+    let (:ba61_tier_two_email) { Ncr::Mailboxes.ba61_tier2_budget }
 
     it "creates approvers when not an emergency" do
       wo = create(:ncr_work_order, expense_type: 'BA61')
@@ -43,7 +43,7 @@ describe Ncr::ApprovalManager do
     end
 
     it "accounts for approver transitions when nothing's approved" do
-      ba80_budget_email = Ncr::ApprovalManager.ba80_budget_mailbox
+      ba80_budget_email = Ncr::Mailboxes.ba80_budget
       wo = create(:ncr_work_order, approving_official_email: 'ao@example.com', expense_type: 'BA61')
       manager = Ncr::ApprovalManager.new(wo)
       manager.setup_approvals_and_observers
@@ -77,7 +77,7 @@ describe Ncr::ApprovalManager do
     end
 
     it "unsets the approval status" do
-      ba80_budget_email = Ncr::ApprovalManager.ba80_budget_mailbox
+      ba80_budget_email = Ncr::Mailboxes.ba80_budget
       wo = create(:ba80_ncr_work_order)
       manager = Ncr::ApprovalManager.new(wo)
       manager.setup_approvals_and_observers
@@ -129,8 +129,8 @@ describe Ncr::ApprovalManager do
 
   describe '#system_approver_emails' do
     context "for a BA61 request" do
-      let (:ba61_tier_one_email) { Ncr::ApprovalManager.ba61_tier1_budget_mailbox }
-      let (:ba61_tier_two_email) { Ncr::ApprovalManager.ba61_tier2_budget_mailbox }
+      let (:ba61_tier_one_email) { Ncr::Mailboxes.ba61_tier1_budget }
+      let (:ba61_tier_two_email) { Ncr::Mailboxes.ba61_tier2_budget }
 
       it "skips the Tier 1 budget approver for WHSC" do
         work_order = create(:ncr_work_order, expense_type: 'BA61', org_code: Ncr::Organization::WHSC_CODE)
@@ -152,14 +152,14 @@ describe Ncr::ApprovalManager do
 
     context "for a BA80 request" do
       it "uses the general budget email" do
-        ba80_budget_email = Ncr::ApprovalManager.ba80_budget_mailbox
+        ba80_budget_email = Ncr::Mailboxes.ba80_budget
         work_order = create(:ba80_ncr_work_order)
         manager = Ncr::ApprovalManager.new(work_order)
         expect(manager.system_approver_emails).to eq([ba80_budget_email])
       end
 
       it "uses the OOL budget email for their org code" do
-        budget_email = Ncr::ApprovalManager.ool_ba80_budget_mailbox
+        budget_email = Ncr::Mailboxes.ool_ba80_budget
         org_code = Ncr::Organization::OOL_CODES.first
 
         work_order = create(:ba80_ncr_work_order, org_code: org_code)

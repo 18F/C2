@@ -12,14 +12,14 @@ module Ncr
       results = []
       if %w(BA60 BA61).include?(self.work_order.expense_type)
         unless self.work_order.organization.try(:whsc?)
-          results << self.class.ba61_tier1_budget_mailbox
+          results << Ncr::Mailboxes.ba61_tier1_budget
         end
-        results << self.class.ba61_tier2_budget_mailbox
+        results << Ncr::Mailboxes.ba61_tier2_budget
       else # BA80
         if self.work_order.organization.try(:ool?)
-          results << self.class.ool_ba80_budget_mailbox
+          results << Ncr::Mailboxes.ool_ba80_budget
         else
-          results << self.class.ba80_budget_mailbox
+          results << Ncr::Mailboxes.ba80_budget
         end
       end
 
@@ -39,30 +39,6 @@ module Ncr
         self.force_approvers(emails)
         self.notify_removed_approvers(original_approvers)
       end
-    end
-
-    def self.ba61_tier1_budget_mailbox
-      self.approver_with_role('BA61_tier1_budget_approver')
-    end
-
-    def self.ba61_tier2_budget_mailbox
-      self.approver_with_role('BA61_tier2_budget_approver')
-    end
-
-    def self.approver_with_role(role_name)
-      users = User.with_role(role_name).where(client_slug: 'ncr')
-      if users.empty?
-        fail "Missing User with role #{role_name} -- did you run rake db:migrate and rake db:seed?"
-      end
-      users.first.email_address
-    end
-
-    def self.ba80_budget_mailbox
-      self.approver_with_role('BA80_budget_approver')
-    end
-
-    def self.ool_ba80_budget_mailbox
-      self.approver_with_role('OOL_BA80_budget_approver')
     end
 
     protected
