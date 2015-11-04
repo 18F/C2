@@ -30,9 +30,8 @@
       = render partial: 'attachments'
     - else
       = field_set_tag "Budget codes" do
-        = f.input :cl_number
-        = f.input :function_code
-        = f.input :soc_code
+        - Ncr::WorkOrder.budget_code_fields.sort.each do |field|
+          = f.input field
     = render partial: 'shared/form_submit_button', locals: { form: f }
     - if @model_instance.persisted?
       = link_to "Discard Changes", proposal_url(@model_instance.proposal)
