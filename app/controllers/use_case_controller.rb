@@ -30,11 +30,10 @@ class UseCaseController < ApplicationController
   end
 
   def update
-    @model_changing = false
-    @model_instance.validate
-    if self.errors.empty?
-      if self.attribute_changes?
-        @model_changing = true
+    @model_instance.assign_attributes(permitted_params)
+
+    if errors.empty?
+      if attribute_changes?
         @model_instance.save
         flash[:success] = "Successfully modified!"
       else
@@ -42,11 +41,10 @@ class UseCaseController < ApplicationController
       end
       redirect_to proposal_path(@model_instance.proposal)
     else
-      flash[:error] = self.errors
+      flash[:error] = errors
       render :edit
     end
   end
-
 
   protected
 
