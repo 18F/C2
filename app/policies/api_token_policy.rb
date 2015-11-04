@@ -44,6 +44,6 @@ class ApiTokenPolicy
   end
 
   def not_delegate!
-    check(@api_token.user.outgoing_delegates.empty?, "You must first sign in")
+    check(@api_token.user.outgoing_delegations.empty?, "You must first sign in")
   end
 end

@@ -30,18 +30,19 @@ class Proposal < ActiveRecord::Base
   has_many :individual_approvals, ->{ individual }, class_name: 'Approvals::Individual'
   has_many :approvers, through: :individual_approvals, source: :user
   has_many :api_tokens, through: :individual_approvals
-  has_many :attachments
-  has_many :approval_delegates, through: :approvers, source: :outgoing_delegates
-  has_many :comments
+  has_many :attachments, dependent: :destroy
+  has_many :approval_delegates, through: :approvers, source: :outgoing_delegations
+  has_many :comments, dependent: :destroy
+  has_many :delegates, through: :approval_delegates, source: :assignee
+
   has_many :observations, -> { where("proposal_roles.role_id in (select roles.id from roles where roles.name='observer')") }
   has_many :observers, through: :observations, source: :user
-  belongs_to :client_data, polymorphic: true
+  belongs_to :client_data, polymorphic: true, dependent: :destroy
   belongs_to :requester, class_name: 'User'
 
   # The following list also servers as an interface spec for client_datas
   # Note: clients may implement:
   # :fields_for_display
-  # :public_identifier
   # :version
   # Note: clients should also implement :version
   delegate :client, to: :client_data, allow_nil: true
@@ -53,14 +54,13 @@ class Proposal < ActiveRecord::Base
   }
   validates :flow, presence: true, inclusion: {in: FLOWS}
   validates :requester_id, presence: true
+  validates :public_id, uniqueness: true, allow_nil: true
 
   self.statuses.each do |status|
     scope status, -> { where(status: status) }
   end
   scope :closed, -> { where(status: ['approved', 'cancelled']) } #TODO: Backfill to change approvals in 'reject' status to 'cancelled' status
   scope :cancelled, -> { where(status: 'cancelled') }
-
-  after_create :update_public_id
 
   # @todo - this should probably be the only entry into the approval system
   def root_approval
@@ -88,17 +88,14 @@ class Proposal < ActiveRecord::Base
     self.approvals.where(where_clause, user_id: user.id).first
   end
 
-  # TODO convert to an association
-  def delegates
-    self.approval_delegates.map(&:assignee)
-  end
-
   # Returns a list of all users involved with the Proposal.
   def users
     # TODO use SQL
     results = self.approvers + self.observers + self.delegates + [self.requester]
     results.compact.uniq
   end
+
+  alias_method :subscribers, :users
 
   def root_approval=(root)
     old_approvals = self.approvals.to_a
@@ -143,12 +140,22 @@ class Proposal < ActiveRecord::Base
     end
   end
 
+  def has_subscriber?(user)
+    users.include?(user)
+  end
+
   def existing_observation_for(user)
     observations.find_by(user: user)
   end
 
   def add_observer(email_or_user, adder=nil, reason=nil)
     user = find_user(email_or_user)
+
+    # this authz check is here instead of in a Policy because the Policy classes
+    # are applied to the current_user, not (as in this case) the user being acted upon.
+    if client_data && !client_data.slug_matches?(user)
+      fail Pundit::NotAuthorizedError.new("May not add observer belonging to a different organization.")
+    end
 
     unless existing_observation_for(user)
       create_new_observation(user, adder, reason)
@@ -198,13 +205,9 @@ class Proposal < ActiveRecord::Base
 
   ## delegated methods ##
 
-  def public_identifier
-    self.delegate_with_default(:public_identifier) { "##{self.id}" }
-  end
-
   def name
     self.delegate_with_default(:name) {
-      "Request #{self.public_identifier}"
+      "Request #{public_id}"
     }
   end
 
@@ -249,10 +252,6 @@ class Proposal < ActiveRecord::Base
 
   protected
 
-  def update_public_id
-    self.update_attribute(:public_id, self.public_identifier)
-  end
-
   def create_new_observation(user, adder, reason)
     ObservationCreator.new(
       observer: user,
@@ -268,7 +267,7 @@ class Proposal < ActiveRecord::Base
     if email_or_user.is_a?(User)
       email_or_user
     else
-      User.for_email(email_or_user)
+      User.for_email_with_slug(email_or_user, client)
     end
   end
 end

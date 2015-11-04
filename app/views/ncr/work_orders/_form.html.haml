@@ -5,10 +5,14 @@
   %h3
     Purchase Card Approval Request
 
+  %p
+    %em
+      * Indicates a required field
+
   = simple_form_for @model_instance, html: { multipart: true } do |f|
     = f.input :project_title
     = f.input :description
-    = field_set_tag "Expense type", class: 'required' do
+    = field_set_tag "Expense type / Program", class: 'required' do
       = expense_type_radio_button(f, 'BA60')
       = expense_type_radio_button(f, 'BA61')
       = f.input :emergency, disabled: @model_instance.persisted?, wrapper_html: { data: { filter_key: 'expense-type', filter_value: 'BA61' } }

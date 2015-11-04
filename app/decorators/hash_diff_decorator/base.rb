@@ -17,7 +17,11 @@ module HashDiffDecorator
     protected
 
     def diff_val(val)
-      if val.is_a?(Numeric)
+      if val.nil?
+        "[nil]"
+      elsif val.empty?
+        "[empty]"
+      elsif val.is_a?(Numeric)
         format('%.2f', val)
       else
         val.inspect

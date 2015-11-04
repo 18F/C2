@@ -31,12 +31,12 @@ describe ObservationsController do
       expect(flash[:warning]).to be_nil
     end
 
-    it "redirects with a warning if unsuccessful" do
+    it "responds with a warning if unsuccessful" do
       login_as(create(:user))
       post :destroy, proposal_id: proposal.id, id: observation.id
-      expect(response).to redirect_to(proposals_path)
+      expect(response.status).to eq(403)
       expect(flash[:success]).to be_nil
-      expect(flash[:alert]).not_to be_empty
+      expect(flash[:alert]).to be_nil
     end
   end
 end

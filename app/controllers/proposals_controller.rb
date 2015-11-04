@@ -59,7 +59,7 @@ class ProposalsController < ApplicationController
     end
 
     approval.approve!
-    flash[:success] = "You have approved #{proposal.public_identifier}."
+    flash[:success] = "You have approved #{proposal.public_id}."
     redirect_to proposal
   end
 

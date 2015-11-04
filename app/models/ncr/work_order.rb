@@ -1,4 +1,5 @@
 require 'csv'
+require_relative '../ncr'
 
 module Ncr
   class WorkOrder < ActiveRecord::Base
@@ -16,8 +17,6 @@ module Ncr
     attr_accessor :modifier
 
     after_initialize :set_defaults
-    before_validation :normalize_values
-    before_update :record_changes
 
     validates :approving_official_email, presence: true
     validates_email_format_of :approving_official_email
@@ -55,32 +54,6 @@ module Ncr
       # not sure why the latter condition is necessary...was getting some weird errors from the tests without it. -AF 10/5/2015
       if !self.approving_official_email && self.approvers.any?
         self.approving_official_email = self.approvers.first.try(:email_address)
-      end
-      self.direct_pay ||= false
-      self.not_to_exceed ||= false
-      self.emergency ||= false
-    end
-
-    # For budget attributes, converts empty strings to `nil`, so that the request isn't shown as being modified when the fields appear in the edit form.
-    def normalize_values
-      if self.cl_number.present?
-        self.cl_number = self.cl_number.upcase
-        self.cl_number.prepend('CL') unless self.cl_number.start_with?('CL')
-      else
-        self.cl_number = nil
-      end
-
-      if self.function_code.present?
-        self.function_code.upcase!
-        self.function_code.prepend('PG') unless self.function_code.start_with?('PG')
-      else
-        self.function_code = nil
-      end
-
-      if self.soc_code.present?
-        self.soc_code.upcase!
-      else
-        self.soc_code = nil
       end
     end
 
@@ -160,10 +133,6 @@ module Ncr
       self.expense_type == 'BA80'
     end
 
-    def public_identifier
-      "FY" + self.fiscal_year.to_s.rjust(2, "0") + "-#{self.proposal.id}"
-    end
-
     def total_price
       self.amount || 0.0
     end
@@ -199,6 +168,10 @@ module Ncr
       super.merge(org_id: self.org_id, building_id: self.building_id)
     end
 
+    def public_identifier
+      "FY" + fiscal_year.to_s.rjust(2, "0") + "-#{proposal.id}"
+    end
+
     def fiscal_year
       year = self.created_at.nil? ? Time.zone.now.year : self.created_at.year
       month = self.created_at.nil? ? Time.zone.now.month : self.created_at.month
@@ -206,38 +179,6 @@ module Ncr
         year += 1
       end
       year % 100   # convert to two-digit
-    end
-
-    protected
-
-    # TODO move to Proposal model
-    def record_changes
-      changed_attributes = self.changed_attributes.except(:updated_at)
-      comment_texts = []
-      bullet = changed_attributes.length > 1 ? '- ' : ''
-      changed_attributes.each do |key, value|
-        former = property_to_s(self.send(key + "_was"))
-        value = property_to_s(self[key])
-        property_name = WorkOrder.human_attribute_name(key)
-        comment_texts << WorkOrder.update_comment_format(property_name, value, bullet, former)
-      end
-
-      if !comment_texts.empty?
-        if self.approved?
-          comment_texts << "_Modified post-approval_"
-        end
-
-        proposal.comments.create(
-          comment_text: comment_texts.join("\n"),
-          update_comment: true,
-          user: self.modifier || self.requester
-        )
-      end
-    end
-
-    def self.update_comment_format(key, value, bullet, former=nil)
-      from = former ? "from #{former} " : ''
-      "#{bullet}*#{key}* was changed " + from + "to #{value}"
     end
   end
 end

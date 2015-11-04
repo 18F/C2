@@ -78,7 +78,7 @@ describe Ncr::ApprovalManager do
 
     it "unsets the approval status" do
       ba80_budget_email = Ncr::ApprovalManager.ba80_budget_mailbox
-      wo = create(:ncr_work_order, expense_type: 'BA80')
+      wo = create(:ba80_ncr_work_order)
       manager = Ncr::ApprovalManager.new(wo)
       manager.setup_approvals_and_observers
       expect(wo.approvers.map(&:email_address)).to eq [
@@ -110,7 +110,7 @@ describe Ncr::ApprovalManager do
     end
 
     it "handles the delegate then update scenario" do
-      wo = create(:ncr_work_order, expense_type: 'BA80')
+      wo = create(:ba80_ncr_work_order)
       manager = Ncr::ApprovalManager.new(wo)
       manager.setup_approvals_and_observers
       delegate = create(:user)
@@ -153,7 +153,7 @@ describe Ncr::ApprovalManager do
     context "for a BA80 request" do
       it "uses the general budget email" do
         ba80_budget_email = Ncr::ApprovalManager.ba80_budget_mailbox
-        work_order = create(:ncr_work_order, expense_type: 'BA80')
+        work_order = create(:ba80_ncr_work_order)
         manager = Ncr::ApprovalManager.new(work_order)
         expect(manager.system_approver_emails).to eq([ba80_budget_email])
       end
@@ -162,7 +162,7 @@ describe Ncr::ApprovalManager do
         budget_email = Ncr::ApprovalManager.ool_ba80_budget_mailbox
         org_code = Ncr::Organization::OOL_CODES.first
 
-        work_order = create(:ncr_work_order, expense_type: 'BA80', org_code: org_code)
+        work_order = create(:ba80_ncr_work_order, org_code: org_code)
         manager = Ncr::ApprovalManager.new(work_order)
         expect(manager.system_approver_emails).to eq([budget_email])
       end

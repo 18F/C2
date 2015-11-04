@@ -1,2 +1,10 @@
-- # @todo: remove the double partial
-= render partial: 'proposals/review_status', locals: {proposal: object}
+-#   This snippet describes who needs to review a proposal. It needs access to both "proposal" and "current_user"
+
+- approvers = object.currently_awaiting_approvers
+
+- if object.pending? && approvers.include?(current_user)
+  %p *Please review*
+- elsif object.pending?
+  %p _Waiting for review from: #{approvers.map(&:full_name).join(', ')}_
+- else
+  = object.status.titlecase

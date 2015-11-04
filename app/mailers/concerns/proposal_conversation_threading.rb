@@ -23,14 +23,13 @@ module ProposalConversationThreading
 
   def self.subject_params(proposal)
     params = proposal.as_json
-    # todo: replace with public_id once #98376564 is fixed
-    params[:public_identifier] = proposal.public_identifier
-    # Add in requester params
+    params[:public_id] = proposal.public_id
     proposal.requester.as_json.each { |k, v| params["requester_" + k] = v }
+
     if proposal.client_data
-      # Add in client_data params
       params.merge!(proposal.client_data.as_json)
     end
+
     # Add search path, and default lookup key for I18n
     params.merge!(scope: [:mail, :subject], default: :proposal)
 
@@ -60,10 +59,13 @@ module ProposalConversationThreading
     self.assign_threading_headers(proposal)
     subject = ProposalConversationThreading.subject(proposal)
 
+    reply_email = reply_to_email().gsub('@', "+#{proposal.public_id}@")
+
     mail(
       to: to_email,
       subject: subject,
       from: from_email || default_sender_email,
+      reply_to: reply_email,
       template_name: template_name
     )
   end

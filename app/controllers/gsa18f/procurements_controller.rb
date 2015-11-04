@@ -1,5 +1,10 @@
 module Gsa18f
   class ProcurementsController < UseCaseController
+    def update
+      @model_instance.assign_attributes(permitted_params)
+      super
+    end
+
     protected
 
     def model_class

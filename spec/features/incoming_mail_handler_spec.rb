@@ -69,7 +69,7 @@ describe "Handles incoming email" do
     expect(deliveries.length).to eq(2) # 1 each to requester and approver
   end
 
-  it "should create comment for non-subscriber and add as observer" do
+  it "should not create comment for non-subscriber and not add as observer" do
     my_approval = approval
     my_proposal = my_approval.proposal
     user = create(:user)
@@ -82,19 +82,9 @@ describe "Handles incoming email" do
 
     resp = handler.handle(mandrill_event)
 
-    expect(resp.action).to eq(IncomingMail::Response::COMMENT)
-    expect(resp.comment.proposal.existing_observation_for(user)).to be_present
-    expect(resp.comment.proposal.existing_approval_for(user)).not_to be_present
-    expect(my_approval.user).to_not eq(my_proposal.individual_approvals.last.user)
-
-    comment_recipients = [
-      my_proposal.requester.email_address, # comment
-      my_proposal.individual_approvals.last.user.email_address, # comment
-      my_approval.user.email_address, # comment
-    ]
-
-    expect(deliveries.length).to eq(comment_recipients.size)
-    expect(deliveries.map{|m| m.to.first}.sort).to eq(comment_recipients.sort)
+    expect(resp.action).to eq(IncomingMail::Response::FORWARDED)
+    expect(deliveries.length).to eq(1)
+    expect(my_proposal.has_subscriber?(user)).to eq(false)
   end
 
   it "should parse proposal public_id from email headers" do

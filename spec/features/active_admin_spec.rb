@@ -23,6 +23,7 @@ describe '/admin endpoint' do
 
     expect(page.status_code).to eq(200)
     expect(page).to have_content('Dashboard')
+    expect(page).to have_content('scheduled jobs')
   end
 
   def user
