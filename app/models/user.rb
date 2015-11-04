@@ -17,9 +17,7 @@ class User < ActiveRecord::Base
   has_many :roles, through: :user_roles
   has_many :proposals, foreign_key: "requester_id", dependent: :destroy
 
-  # TODO rename to _delegations, and add relations for the Users
-  has_many :outgoing_delegates, class_name: 'ApprovalDelegate', foreign_key: 'assigner_id'
-  has_many :incoming_delegates, class_name: 'ApprovalDelegate', foreign_key: 'assignee_id'
+  has_many :outgoing_delegations, class_name: 'ApprovalDelegate', foreign_key: 'assigner_id'
 
   def self.active
     where(active: true)
@@ -75,11 +73,11 @@ class User < ActiveRecord::Base
   end
 
   def add_delegate(other)
-    self.outgoing_delegates.create!(assignee: other)
+    self.outgoing_delegations.create!(assignee: other)
   end
 
   def delegates_to?(other)
-    self.outgoing_delegates.exists?(assignee_id: other.id)
+    self.outgoing_delegations.exists?(assignee_id: other.id)
   end
 
   def client_admin?

@@ -88,12 +88,14 @@ describe Step do
     end
 
     it "won't approve Amy and Bob -- needs two branches of the OR" do
+      build_approvals
       expect_any_instance_of(Proposal).not_to receive(:approve!)
       proposal.existing_approval_for(amy).approve!
       proposal.existing_approval_for(bob).approve!
     end
 
     it "will approve if Amy, Bob, and Carrie approve -- two branches of the OR" do
+      build_approvals
       expect_any_instance_of(Proposal).to receive(:approve!)
       proposal.existing_approval_for(amy).approve!
       proposal.existing_approval_for(bob).approve!
@@ -101,6 +103,7 @@ describe Step do
     end
 
     it "won't approve Amy, Bob, Dan as Erin is also required (to complete the THEN)" do
+      build_approvals
       expect_any_instance_of(Proposal).not_to receive(:approve!)
       proposal.existing_approval_for(amy).approve!
       proposal.existing_approval_for(bob).approve!
@@ -108,6 +111,7 @@ describe Step do
     end
 
     it "will approve Amy, Bob, Dan, Erin -- two branches of the OR" do
+      build_approvals
       expect_any_instance_of(Proposal).to receive(:approve!)
       proposal.existing_approval_for(amy).approve!
       proposal.existing_approval_for(bob).approve!
@@ -116,11 +120,38 @@ describe Step do
     end
 
     it "will approve Amy, Bob, Dan, Carrie -- two branches of the OR as Dan is irrelevant" do
+      build_approvals
       expect_any_instance_of(Proposal).to receive(:approve!)
       proposal.existing_approval_for(amy).approve!
       proposal.existing_approval_for(bob).approve!
       proposal.existing_approval_for(dan).approve!
       proposal.existing_approval_for(carrie).approve!
+    end
+
+    def build_approvals
+      and_clause = build(
+        :parallel_approval,
+        child_approvals: [
+          build(:approval, user: amy),
+          build(:approval, user: bob)
+        ]
+      )
+      then_clause = build(
+        :parallel_approval,
+        child_approvals: [
+          build(:approval, user: dan),
+          build(:approval, user: erin)
+        ]
+      )
+      proposal.root_step = build(
+        :parallel_approval,
+        min_children_needed: 2,
+        child_approvals: [
+          and_clause,
+          build(:approval, user: carrie),
+          then_clause
+        ]
+      )
     end
   end
 end

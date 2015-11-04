@@ -14,5 +14,15 @@ describe HashDiffDecorator do
       output = HashDiffDecorator.html_for(['-', 'foo'])
       expect(output).to eq("<code>foo</code> was removed.")
     end
+
+    it "renders original-was-nil events" do
+      output = HashDiffDecorator.html_for(['~', 'foo', nil, 'bar'])
+      expect(output).to eq("<code>foo</code> was changed from <code>[nil]</code> to <code>&quot;bar&quot;</code>")
+    end
+
+    it "renders original-was-empty-string events" do
+      output = HashDiffDecorator.html_for(['~', 'foo', '', 'bar'])
+      expect(output).to eq("<code>foo</code> was changed from <code>[empty]</code> to <code>&quot;bar&quot;</code>")
+    end
   end
 end

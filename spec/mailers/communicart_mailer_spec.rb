@@ -17,7 +17,7 @@ describe CommunicartMailer do
 
   shared_examples "a Proposal email" do
     it "renders the subject" do
-      expect(mail.subject).to eq("Request ##{proposal.id}")
+      expect(mail.subject).to eq("Request #{proposal.public_id}")
     end
 
     it "uses the configured sender email" do
@@ -297,7 +297,7 @@ describe CommunicartMailer do
     it 'defaults when no client_data is present' do
       proposal = create(:proposal)
       mail = CommunicartMailer.proposal_created_confirmation(proposal)
-      expect(mail.subject).to eq("Request ##{proposal.id}")
+      expect(mail.subject).to eq("Request #{proposal.public_id}")
     end
 
     it 'includes custom text for ncr work orders' do
@@ -309,7 +309,7 @@ describe CommunicartMailer do
         requester: requester
       )
       mail = CommunicartMailer.proposal_created_confirmation(wo.proposal)
-      expect(mail.subject).to eq("Request #{wo.public_identifier}, P0000000, DC0000ZZ from someone@example.com")
+      expect(mail.subject).to eq("Request #{wo.proposal.public_id}, P0000000, DC0000ZZ from someone@example.com")
     end
   end
 

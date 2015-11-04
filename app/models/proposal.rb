@@ -33,8 +33,10 @@ class Proposal < ActiveRecord::Base
   has_many :approvers, through: :individual_approvals, source: :user
   has_many :api_tokens, through: :individual_approvals
   has_many :attachments, dependent: :destroy
-  has_many :approval_delegates, through: :approvers, source: :outgoing_delegates
+  has_many :approval_delegates, through: :approvers, source: :outgoing_delegations
   has_many :comments, dependent: :destroy
+  has_many :delegates, through: :approval_delegates, source: :assignee
+
   has_many :observations, -> { where("proposal_roles.role_id in (select roles.id from roles where roles.name='observer')") }
   has_many :observers, through: :observations, source: :user
   belongs_to :client_data, polymorphic: true, dependent: :destroy
@@ -43,7 +45,6 @@ class Proposal < ActiveRecord::Base
   # The following list also servers as an interface spec for client_datas
   # Note: clients may implement:
   # :fields_for_display
-  # :public_identifier
   # :version
   # Note: clients should also implement :version
   delegate :client, to: :client_data, allow_nil: true
@@ -55,14 +56,13 @@ class Proposal < ActiveRecord::Base
   }
   validates :flow, presence: true, inclusion: {in: FLOWS}
   validates :requester_id, presence: true
+  validates :public_id, uniqueness: true, allow_nil: true
 
   self.statuses.each do |status|
     scope status, -> { where(status: status) }
   end
   scope :closed, -> { where(status: ['approved', 'cancelled']) } #TODO: Backfill to change approvals in 'reject' status to 'cancelled' status
   scope :cancelled, -> { where(status: 'cancelled') }
-
-  after_create :update_public_id
 
   # @todo - this should probably be the only entry into the approval system
   def root_step
@@ -88,11 +88,6 @@ class Proposal < ActiveRecord::Base
       OR user_id IN (SELECT assignee_id FROM approval_delegates WHERE assigner_id = :user_id)
     SQL
     self.steps.where(where_clause, user_id: user.id).first
-  end
-
-  # TODO convert to an association
-  def delegates
-    self.approval_delegates.map(&:assignee)
   end
 
   # Returns a list of all users involved with the Proposal.
@@ -202,13 +197,9 @@ class Proposal < ActiveRecord::Base
 
   ## delegated methods ##
 
-  def public_identifier
-    self.delegate_with_default(:public_identifier) { "##{self.id}" }
-  end
-
   def name
     self.delegate_with_default(:name) {
-      "Request #{self.public_identifier}"
+      "Request #{public_id}"
     }
   end
 
@@ -252,10 +243,6 @@ class Proposal < ActiveRecord::Base
   end
 
   protected
-
-  def update_public_id
-    self.update_attribute(:public_id, self.public_identifier)
-  end
 
   def create_new_observation(user, adder, reason)
     ObservationCreator.new(

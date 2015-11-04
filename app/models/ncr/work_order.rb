@@ -10,11 +10,6 @@ module Ncr
   BUILDING_NUMBERS = YAML.load_file("#{Rails.root}/config/data/ncr/building_numbers.yml")
 
   class WorkOrder < ActiveRecord::Base
-      NCR_BA61_TIER1_BUDGET_APPROVER_MAILBOX = ENV['NCR_BA61_TIER1_BUDGET_MAILBOX'] || 'communicart.budget.approver+ba61@gmail.com'
-      NCR_BA61_TIER2_BUDGET_APPROVER_MAILBOX = ENV['NCR_BA61_TIER2_BUDGET_MAILBOX'] || 'communicart.ofm.approver@gmail.com'
-      NCR_BA80_BUDGET_APPROVER_MAILBOX = ENV['NCR_BA80_BUDGET_MAILBOX'] || 'communicart.budget.approver+ba80@gmail.com'
-      OOL_BA80_BUDGET_APPROVER_MAILBOX = ENV['NCR_OOL_BA80_BUDGET_MAILBOX'] || 'communicart.budget.approver+ool_ba80@gmail.com'
-
     # must define before include PurchaseCardMixin
     def self.purchase_amount_column_name
       :amount
@@ -106,7 +101,6 @@ module Ncr
     # Check the approvers, accounting for frozen approving official
     def approvers_emails
       emails = self.system_approver_emails
-
       if self.approver_email_frozen?
         emails.unshift(self.approving_official.email_address)
       else
@@ -190,10 +184,6 @@ module Ncr
       self.expense_type == 'BA80'
     end
 
-    def public_identifier
-      "FY" + self.fiscal_year.to_s.rjust(2, "0") + "-#{self.proposal.id}"
-    end
-
     def total_price
       self.amount || 0.0
     end
@@ -226,19 +216,27 @@ module Ncr
     end
 
     def self.ba61_tier1_budget_mailbox
-      NCR_BA61_TIER1_BUDGET_APPROVER_MAILBOX
+      self.approver_with_role('BA61_tier1_budget_approver')
     end
 
     def self.ba61_tier2_budget_mailbox
-      NCR_BA61_TIER2_BUDGET_APPROVER_MAILBOX
+      self.approver_with_role('BA61_tier2_budget_approver')
+    end
+
+    def self.approver_with_role(role_name)
+      users = User.with_role(role_name).where(client_slug: 'ncr')
+      if users.empty?
+        fail "Missing User with role #{role_name} -- did you run rake db:migrate and rake db:seed?"
+      end
+      users.first.email_address
     end
 
     def self.ba80_budget_mailbox
-      NCR_BA80_BUDGET_APPROVER_MAILBOX
+      self.approver_with_role('BA80_budget_approver')
     end
 
     def self.ool_ba80_budget_mailbox
-      OOL_BA80_BUDGET_APPROVER_MAILBOX
+      self.approver_with_role('OOL_BA80_budget_approver')
     end
 
     def org_id
@@ -256,6 +254,10 @@ module Ncr
 
     def as_json
       super.merge(org_id: self.org_id, building_id: self.building_id)
+    end
+
+    def public_identifier
+      "FY" + fiscal_year.to_s.rjust(2, "0") + "-#{proposal.id}"
     end
 
     def fiscal_year
@@ -295,8 +297,17 @@ module Ncr
     end
 
     def self.update_comment_format(key, value, bullet, former=nil)
-      from = former ? "from #{former} " : ''
-      "#{bullet}*#{key}* was changed " + from + "to #{value}"
+      if !former || former.empty?
+        from = ""
+      else
+        from = "from #{former} "
+      end
+      if value.empty?
+        to = "*empty*"
+      else
+        to = value
+      end
+      "#{bullet}*#{key}* was changed " + from + "to #{to}"
     end
 
     # Generally shouldn't be called directly as it doesn't account for

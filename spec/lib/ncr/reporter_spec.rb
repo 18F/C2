@@ -31,11 +31,7 @@ describe Ncr::Reporter do
       )
       whs_work_order.setup_approvals_and_observers
 
-      user = create(:user, email_address: Ncr::WorkOrder::NCR_BA61_TIER1_BUDGET_APPROVER_MAILBOX)
-      role = create(:role, name: "BA61_tier1_budget_approver")
-      user.roles << role
-
-      approved_work_order = create(:ncr_work_order, :with_approvers, expense_type: "BA61")
+      approved_work_order = create(:ncr_work_order, :with_approvers)
       approved_work_order.setup_approvals_and_observers
       approved_work_order.individual_approvals.first.approve!
 
@@ -62,8 +58,8 @@ describe Ncr::Reporter do
     end
   end
 
-  describe "#build_ncr_annual_report_string" do
-    it "includes information about cancelled NCR work orders for fiscal year passed in" do
+  describe "#build_fiscal_year_report_string" do
+    it "includes information about approved NCR work orders for fiscal year passed in" do
       Timecop.freeze do
         current_year = Time.now.year
         beginning_of_year = Time.now.beginning_of_year
@@ -84,12 +80,12 @@ describe Ncr::Reporter do
           proposal: cancelled_proposal
         )
 
-        csv = Ncr::Reporter.new.build_ncr_annual_report_string(current_year)
+        csv = Ncr::Reporter.new.build_fiscal_year_report_string(current_year)
 
-        expect(csv).to include(cancelled_work_order.amount.to_s)
-        expect(csv).not_to include(approved_work_order.amount.to_s)
-        expect(csv).to include(cancelled_work_order.description)
-        expect(csv).not_to include(approved_work_order.description)
+        expect(csv).to include(approved_work_order.amount.to_s)
+        expect(csv).not_to include(cancelled_work_order.amount.to_s)
+        expect(csv).to include(approved_work_order.description)
+        expect(csv).not_to include(cancelled_work_order.description)
       end
     end
   end

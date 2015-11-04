@@ -2,9 +2,14 @@ describe Proposal do
   describe "Associatons" do
     it { should belong_to(:client_data).dependent(:destroy) }
     it { should have_many(:steps) }
+    it { should have_many(:delegates) }
     it { should have_many(:individual_approvals) }
     it { should have_many(:attachments).dependent(:destroy) }
     it { should have_many(:comments).dependent(:destroy) }
+  end
+
+  describe "Validations" do
+    it { should validate_uniqueness_of(:public_id).allow_nil }
   end
 
   describe 'CLIENT_MODELS' do
@@ -65,9 +70,8 @@ describe Proposal do
   end
 
   describe '#name' do
-    it "returns the #public_identifier by default" do
-      proposal = Proposal.new
-      expect(proposal).to receive(:id).and_return(6)
+    it "returns the #public_id by default" do
+      proposal = build(:proposal, public_id: "#6")
 
       expect(proposal.name).to eq('Request #6')
     end

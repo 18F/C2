@@ -57,5 +57,5 @@ en:
         user_reason_comment: "_%{user} added %{observer} as an observer, giving reason:_ `%{reason}`"
   mail:
     subject:
-      proposal: "Request %{public_identifier}"
-      ncr/work_order: "Request %{public_identifier}, %{org_id}, %{building_id} from %{requester_email_address}"
+      proposal: "Request %{public_id}"
+      ncr/work_order: "Request %{public_id}, %{org_id}, %{building_id} from %{requester_email_address}"

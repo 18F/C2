@@ -1,5 +1,8 @@
 FactoryGirl.define do
+  sequence(:public_id) { |n| "PUBLIC#{n}" }
+
   factory :proposal do
+    public_id
     flow 'parallel'
     status 'pending'
     association :requester, factory: :user

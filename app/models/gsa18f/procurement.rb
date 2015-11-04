@@ -75,6 +75,10 @@ module Gsa18f
       URGENCY[urgency]
     end
 
+    def public_identifier
+      "##{proposal.id}"
+    end
+
     def self.approver_email
       ENV.fetch('GSA18F_APPROVER_EMAIL')
     end
