@@ -1,6 +1,8 @@
 <% title "Why can’t I find emails about a purchase request I’m involved in?"%>
 
-Gmail can group emails into conversations based on the subject line. If you use this function, all your emails about a single purchase request will be grouped together, with only the most recent one visible in the inbox. If you see a number in parentheses after the list of senders like `(4)`, that is how many messages are in that conversation. Open that email to see all of the earlier ones.
+Gmail’s default setting is to group emails into conversations based on the subject line. We recommend you use this setting as it is easier to follow the progress of a request.
+
+If you use conversation view, all your emails about a single purchase request will be grouped together, with only the most recent one visible in the inbox. If you see a number in parentheses after the list of senders like `(4)`, that is how many messages are in that conversation. Open that email to see all of the earlier ones.
 
 If you have conversation view turned off, you will see each individual email separately. You can always search for older messages, but they will not automatically group together.
 
