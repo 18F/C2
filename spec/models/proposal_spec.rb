@@ -34,10 +34,10 @@ describe Proposal do
     it "gives only the first approver when linear" do
       proposal = create(:proposal, :with_serial_approvers)
       approver1, approver2 = proposal.approvers
-      expect(proposal.currently_awaiting_approvers).to contain_exactly(approver1)
+      expect(proposal.currently_awaiting_approvers).to eq([approver1])
 
       proposal.individual_approvals.first.approve!
-      expect(proposal.currently_awaiting_approvers).to contain_exactly(approver2)
+      expect(proposal.currently_awaiting_approvers).to eq([approver2])
     end
   end
 
