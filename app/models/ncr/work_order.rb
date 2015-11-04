@@ -115,16 +115,22 @@ module Ncr
       emails
     end
 
+    def requires_approval?
+      !self.emergency
+    end
+
     def setup_approvals_and_observers
       emails = self.approvers_emails
-      if self.emergency
-        emails.each{|e| self.add_observer(e)}
-        # skip state machine
-        self.proposal.update(status: 'approved')
-      else
+      if requires_approval?
         original_approvers = self.proposal.individual_approvals.non_pending.map(&:user)
         self.force_approvers(emails)
         self.notify_removed_approvers(original_approvers)
+      else
+        emails.each do |email|
+          self.add_observer(email)
+        end
+        # skip state machine
+        self.proposal.update(status: 'approved')
       end
     end
 

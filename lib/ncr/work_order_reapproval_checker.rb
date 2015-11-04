@@ -29,7 +29,7 @@ module Ncr
 
     def requires_budget_reapproval?
       work_order.approved? &&
-      !work_order.emergency && (
+      work_order.requires_approval? && (
         self.amount_increased? || (
           self.protected_fields_changed? &&
           !self.budget_approver?
