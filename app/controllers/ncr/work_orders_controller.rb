@@ -26,27 +26,18 @@ module Ncr
       Ncr::WorkOrderValueNormalizer.new(@model_instance).run
       @model_instance.modifier = current_user
 
-      if errors.empty?
-        update_or_notify_of_no_changes
-        redirect_to proposal_path(@model_instance.proposal)
-      else
-        flash[:error] = errors
-        render :edit
-      end
+      super
     end
 
     protected
 
-    def update_or_notify_of_no_changes
-      if attribute_changes?
-        ProposalUpdateRecorder.new(@model_instance).run
-        @model_instance.save
-        @model_instance.setup_approvals_and_observers
-        @model_instance.email_approvers
-        flash[:success] = "Successfully modified!"
-      else
-        flash[:error] = "No changes were made to the request"
-      end
+    def record_changes
+      ProposalUpdateRecorder.new(@model_instance).run
+    end
+
+    def setup_and_email_approvers
+      @model_instance.setup_approvals_and_observers
+      @model_instance.email_approvers
     end
 
     def attribute_changes?

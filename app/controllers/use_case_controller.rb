@@ -30,11 +30,11 @@ class UseCaseController < ApplicationController
   end
 
   def update
-    @model_instance.assign_attributes(permitted_params)
-
     if errors.empty?
       if attribute_changes?
+        record_changes
         @model_instance.save
+        setup_and_email_approvers
         flash[:success] = "Successfully modified!"
       else
         flash[:error] = "No changes were made to the request"
@@ -50,6 +50,12 @@ class UseCaseController < ApplicationController
 
   def attribute_changes?
     !@model_instance.changed_attributes.blank?
+  end
+
+  def record_changes
+  end
+
+  def setup_and_email_approvers
   end
 
   def filtered_params
