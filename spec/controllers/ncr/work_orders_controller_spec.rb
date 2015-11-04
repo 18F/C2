@@ -143,6 +143,7 @@ describe Ncr::WorkOrdersController do
     it 'will not modify emergency status on non-emergencies' do
       expect(work_order.approvals.empty?).to be false
       expect(work_order.observers.empty?).to be true
+
       post :update, {
         id: work_order.id,
         ncr_work_order: {
@@ -151,6 +152,7 @@ describe Ncr::WorkOrdersController do
          approving_official_email: work_order.approvers.first.email_address
         }
       }
+
       work_order.reload
       expect(work_order.emergency).to be false
       expect(work_order.approvals.empty?).to be false
@@ -161,6 +163,7 @@ describe Ncr::WorkOrdersController do
       work_order = create(:ncr_work_order, :is_emergency, requester: requester)
       expect(work_order.approvals.empty?).to be true
       expect(work_order.observers.empty?).to be false
+
       post :update, {
         id: work_order.id,
         ncr_work_order: {
@@ -170,6 +173,7 @@ describe Ncr::WorkOrdersController do
          approving_official_email: work_order.observers.first.email_address
         }
       }
+
       work_order.reload
       expect(work_order.emergency).to be true
       expect(work_order.building_number).to eq "BillDing"
