@@ -24,7 +24,6 @@ module Ncr
     attr_accessor :modifier
 
     after_initialize :set_defaults
-    before_update :record_changes
 
     validates :approving_official_email, presence: true
     validates_email_format_of :approving_official_email
@@ -246,45 +245,6 @@ module Ncr
     end
 
     protected
-
-    # TODO move to Proposal model
-    def record_changes
-      changed_attributes = self.changed_attributes.except(:updated_at)
-      comment_texts = []
-      bullet = changed_attributes.length > 1 ? '- ' : ''
-      changed_attributes.each do |key, value|
-        former = property_to_s(self.send(key + "_was"))
-        value = property_to_s(self[key])
-        property_name = WorkOrder.human_attribute_name(key)
-        comment_texts << WorkOrder.update_comment_format(property_name, value, bullet, former)
-      end
-
-      if !comment_texts.empty?
-        if self.approved?
-          comment_texts << "_Modified post-approval_"
-        end
-
-        proposal.comments.create(
-          comment_text: comment_texts.join("\n"),
-          update_comment: true,
-          user: self.modifier || self.requester
-        )
-      end
-    end
-
-    def self.update_comment_format(key, value, bullet, former=nil)
-      if !former || former.empty?
-        from = ""
-      else
-        from = "from #{former} "
-      end
-      if value.empty?
-        to = "*empty*"
-      else
-        to = value
-      end
-      "#{bullet}*#{key}* was changed " + from + "to #{to}"
-    end
 
     # Generally shouldn't be called directly as it doesn't account for
     # emergencies, or notify removed approvers

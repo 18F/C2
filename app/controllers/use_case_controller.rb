@@ -30,28 +30,32 @@ class UseCaseController < ApplicationController
   end
 
   def update
-    @model_changing = false
-    @model_instance.validate
-    if self.errors.empty?
-      if self.attribute_changes?
-        @model_changing = true
+    if errors.empty?
+      if attribute_changes?
+        record_changes
         @model_instance.save
+        setup_and_email_approvers
         flash[:success] = "Successfully modified!"
       else
         flash[:error] = "No changes were made to the request"
       end
       redirect_to proposal_path(@model_instance.proposal)
     else
-      flash[:error] = self.errors
+      flash[:error] = errors
       render :edit
     end
   end
-
 
   protected
 
   def attribute_changes?
     !@model_instance.changed_attributes.blank?
+  end
+
+  def record_changes
+  end
+
+  def setup_and_email_approvers
   end
 
   def filtered_params

@@ -27,14 +27,18 @@ module Ncr
       @model_instance.modifier = current_user
 
       super
-
-      if @model_changing
-        @model_instance.setup_approvals_and_observers
-        @model_instance.email_approvers
-      end
     end
 
     protected
+
+    def record_changes
+      ProposalUpdateRecorder.new(@model_instance).run
+    end
+
+    def setup_and_email_approvers
+      @model_instance.setup_approvals_and_observers
+      @model_instance.email_approvers
+    end
 
     def attribute_changes?
       super || @model_instance.approver_changed?
