@@ -80,8 +80,7 @@ class ApplicationController < ActionController::Base
       session[:return_to] = return_to_param
       redirect_to root_url(return_to: return_to_param)
     elsif session[:return_to]
-      puts "found session[return_to]"
-      redirect_to return_to
+      session.delete(:return_to)
     end
   end
 
