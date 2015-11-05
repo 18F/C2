@@ -10,7 +10,7 @@ class Dispatcher
           self.new
         when 'linear'
           # @todo: dynamic dispatch for selection
-          if proposal.client == "ncr"
+          if proposal.client_data_prefix == "ncr"
             NcrDispatcher.new
           else
             LinearDispatcher.new

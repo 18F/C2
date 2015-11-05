@@ -11,9 +11,7 @@ class ProposalsController < ApplicationController
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
 
   def show
-    @proposal = self.proposal.decorate
-    @show_comments = true
-    @include_comments_files = true
+    @proposal = proposal.decorate
   end
 
   def index
@@ -82,7 +80,7 @@ class ProposalsController < ApplicationController
   protected
 
   def proposal
-    @cached_proposal ||= Proposal.find params[:id]
+    @cached_proposal ||= Proposal.find(params[:id])
   end
 
   def auth_errors(exception)

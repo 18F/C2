@@ -4,7 +4,7 @@ class CommunicartMailer < ApplicationMailer
   layout 'communicart_mailer'
   add_template_helper CommunicartMailerHelper
   add_template_helper ValueHelper
-  add_template_helper ClientHelper
+  add_template_helper ClientDataHelper
   add_template_helper MarkdownHelper
 
   # Approver can approve/take other action

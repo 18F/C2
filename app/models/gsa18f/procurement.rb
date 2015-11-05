@@ -67,6 +67,10 @@ module Gsa18f
       self.updated_at.to_i
     end
 
+    def editable?
+      true
+    end
+
     def name
       self.product_name_and_description
     end
