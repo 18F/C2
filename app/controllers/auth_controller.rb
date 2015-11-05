@@ -1,17 +1,10 @@
 class AuthController < ApplicationController
-  before_filter :setup_mygov_access_token
-
+  before_action :setup_mygov_access_token
 
   def oauth_callback
-    auth = request.env['omniauth.auth']
-    return_to_struct = return_to
-    if return_to_struct && return_to_struct.has_key?('path')
-      return_to_path = return_to_struct[:path]
-    end
+    auth = request.env["omniauth.auth"]
 
-    sign_out
-    user = User.from_oauth_hash(auth)
-    sign_in(user)
+    do_user_authn(auth)
 
     session[:token] = auth.credentials.token
     flash[:success] = "You successfully signed in"
@@ -24,16 +17,28 @@ class AuthController < ApplicationController
     redirect_to root_url
   end
 
-
   protected
 
   def mygov_client
-    @mygov_client ||= OAuth2::Client.new(MYUSA_KEY, MYUSA_SECRET, site: MYUSA_URL, token_url: '/oauth/authorize')
+    @mygov_client ||= OAuth2::Client.new(MYUSA_KEY, MYUSA_SECRET, site: MYUSA_URL, token_url: "/oauth/authorize")
   end
 
   def setup_mygov_access_token
     if session
       @mygov_access_token = OAuth2::AccessToken.new(self.mygov_client, session[:token])
     end
+  end
+
+  def return_to_path
+    return_to_struct = return_to
+    if return_to_struct && return_to_struct.key?("path")
+      return_to_struct[:path]
+    end
+  end
+
+  def do_user_authn(auth)
+    sign_out
+    user = User.from_oauth_hash(auth)
+    sign_in(user)
   end
 end
