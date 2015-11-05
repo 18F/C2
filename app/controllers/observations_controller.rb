@@ -6,11 +6,7 @@ class ObservationsController < ApplicationController
 
   def create
     obs = @proposal.add_observer(observer_email, current_user, params[:observation][:reason])
-    if obs
-      flash[:success] = "#{obs.user.full_name} has been added as an observer"
-    else
-      flash[:alert] = "#{observer_email} is already an observer for this request"
-    end
+    prep_create_response_msg(obs)
     redirect_to proposal_path(@proposal)
   end
 
@@ -41,6 +37,14 @@ class ObservationsController < ApplicationController
   def observer_email
     params.permit(observation: { user: [:email_address] })
       .require(:observation).require(:user).require(:email_address)
+  end
+
+  def prep_create_response_msg(obs)
+    if obs 
+      flash[:success] = "#{obs.user.full_name} has been added as an observer"
+    else
+      flash[:alert] = "#{observer_email} is already an observer for this request"
+    end
   end
 
   def auth_errors(exception)
