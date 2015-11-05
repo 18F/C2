@@ -6,7 +6,11 @@ class ObservationsController < ApplicationController
 
   def create
     obs = @proposal.add_observer(observer_email, current_user, params[:observation][:reason])
-    flash[:success] = "#{obs.user.full_name} has been added as an observer"
+    if obs
+      flash[:success] = "#{obs.user.full_name} has been added as an observer"
+    else
+      flash[:alert] = "#{observer_email} is already an observer for this request"
+    end
     redirect_to proposal_path(@proposal)
   end
 

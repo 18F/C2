@@ -112,6 +112,12 @@ describe Proposal do
       proposal.add_observer(observer)
       expect(proposal.users).to eq [observer]
     end
+
+    it "identifies eligible observers" do
+      observer = create(:user, client_slug: nil)
+      proposal = create(:proposal, requester: observer)
+      expect(proposal.eligible_observers.to_a).to include(observer)
+    end
   end
 
   describe '#root_approval=' do
