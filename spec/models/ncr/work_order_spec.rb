@@ -1,6 +1,13 @@
 describe Ncr::WorkOrder do
   include ProposalSpecHelper
 
+  describe "#editabe?" do
+    it "is true" do
+      work_order = build(:ncr_work_order)
+      expect(work_order).to be_editable
+    end
+  end
+
   describe '#relevant_fields' do
     it "shows BA61 fields" do
       wo = Ncr::WorkOrder.new

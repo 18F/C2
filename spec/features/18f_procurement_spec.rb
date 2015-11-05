@@ -46,7 +46,7 @@ describe "GSA 18f Purchase Request Form" do
       proposal = Proposal.last
       expect(proposal.name).to eq("buying stuff")
       expect(proposal.flow).to eq('linear')
-      expect(proposal.client).to eq('gsa18f')
+      expect(proposal.client_data_prefix).to eq('gsa18f')
       expect(proposal.requester).to eq(requester)
       expect(proposal.approvers.map(&:email_address)).to eq(%w(test_approver@example.com))
 

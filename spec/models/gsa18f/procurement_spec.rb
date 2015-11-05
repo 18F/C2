@@ -9,6 +9,13 @@ describe Gsa18f::Procurement do
     end
   end
 
+  describe "#editabe?" do
+    it "is true" do
+      work_order = build(:gsa18f_procurement)
+      expect(work_order).to be_editable
+    end
+  end
+
   describe '#total_price' do
     it 'gets price from two fields' do
       procurement = build(

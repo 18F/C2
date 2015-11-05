@@ -45,7 +45,7 @@ class Proposal < ActiveRecord::Base
   # :fields_for_display
   # :version
   # Note: clients should also implement :version
-  delegate :client, to: :client_data, allow_nil: true
+  delegate :client_data_prefix, to: :client_data, allow_nil: true
 
   validates :client_data_type, inclusion: {
     in: ->(_) { self.client_model_names },
@@ -247,7 +247,7 @@ class Proposal < ActiveRecord::Base
   end
 
   def self.client_slugs
-    CLIENT_MODELS.map(&:client)
+    CLIENT_MODELS.map(&:client_data_prefix)
   end
 
   protected
@@ -267,7 +267,7 @@ class Proposal < ActiveRecord::Base
     if email_or_user.is_a?(User)
       email_or_user
     else
-      User.for_email_with_slug(email_or_user, client)
+      User.for_email_with_slug(email_or_user, client_data_prefix)
     end
   end
 end

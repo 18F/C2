@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   include MarkdownHelper
 
   helper ValueHelper
-  add_template_helper ClientHelper
+  add_template_helper ClientDataHelper
 
   protect_from_forgery with: :exception
   helper_method :current_user, :signed_in?, :return_to

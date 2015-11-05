@@ -30,14 +30,15 @@
             = @proposal.display_status
 
   .row
-    = client_partial(@proposal.client, 'proposal_properties', locals: {proposal: @proposal })
+    = client_data_partial("default",
+      "proposal_properties",
+      locals: { proposal: @proposal })
   .row
     %table.tabular-data
       %thead
         %tr.header
           %th{colspan: "2"}
-            - # todo: shouldn't need the h5
-            %h5 Observers
+            %p Observers
       %tbody
         - SubscriberList.new(@proposal).triples.each do |user, role_str, observation|
           %tr
@@ -46,27 +47,39 @@
               = "(#{role_str})" if role_str
             %td.righted
               - if observation && policy(observation).can_destroy?
-                = button_to "Delete", proposal_observation_path(@proposal, observation), method: :delete, data: {confirm: "Are you sure?"}
+                = button_to "Delete",
+                  proposal_observation_path(@proposal, observation),
+                  method: :delete,
+                  data: { confirm: "Are you sure?" }
         - if policy(Observation.new(proposal: @proposal)).can_create?
           %tr.add-more-row
             %td{colspan: 2}
               = form_for [@proposal, Observation.new] do |f|
                 = f.fields_for :user do |user_form|
                   .col-md-8.col-xs-12
-                    = user_form.collection_select :email_address, User.all.order(:email_address), :email_address, :email_address, {include_blank: true}, class: 'js-selectize'
-                    = f.label :reason, "Reason for adding observer (optional): ", data: {'hide-until-select' => 'observation_user_email_address'}
-                    = text_field :observation, :reason, class: 'form-control', data: {'hide-until-select' => 'observation_user_email_address'}
+                    = user_form.collection_select :email_address,
+                      User.all.order(:email_address),
+                      :email_address,
+                      :email_address,
+                      { include_blank: true },
+                      class: 'js-selectize'
+                    = f.label :reason,
+                      "Reason for adding observer (optional): ",
+                      data: { 'hide-until-select' => 'observation_user_email_address' }
+                    = text_field :observation,
+                      :reason,
+                      class: 'form-control',
+                      data: { 'hide-until-select' => 'observation_user_email_address' }
                   .col-md-4.col-xs-12.righted
-                    = user_form.submit "Add an Observer", id: :add_subscriber, data: {'disable-if-empty' => 'observation_user_email_address'}
-
-
+                    = user_form.submit "Add an Observer",
+                      id: :add_subscriber,
+                      data: { 'disable-if-empty' => 'observation_user_email_address' }
 
 %ul#request-actions.centered
   - if policy(@proposal).can_edit?
-    = client_partial(@proposal.client, 'restart_link', locals: {proposal: @proposal})
     - unless @proposal.cancelled?
       %li
-        = modify_client_button(@proposal)
+        = modify_client_data_button(@proposal)
       - if policy(@proposal).can_cancel?
         %li
           = link_to "Cancel my request", cancel_form_proposal_path
@@ -99,59 +112,58 @@
             %li.icon-approved
               = approval.user_email_address
 
-- if @include_comments_files
-  .comments-container.proposal-submodel-container
-    #comments
-      %h3 Comments on this purchase request
-      = form_for [@proposal, Comment.new] do |f|
-        = f.text_area :comment_text, rows: 5
-        .row.text-area-info-container
-          .col-xs-7.col-sm-6.text-area-info-web
-            %p These comments will be sent to your requester through email
-          .col-xs-5.col-sm-6.text-area-button
-            = submit_tag "Send a Comment", id: :add_a_comment, data: {'disable-if-empty' => 'comment_comment_text'}
+.comments-container.proposal-submodel-container
+  #comments
+    %h3 Comments on this purchase request
+    = form_for [@proposal, Comment.new] do |f|
+      = f.text_area :comment_text, rows: 5
+      .row.text-area-info-container
+        .col-xs-7.col-sm-6.text-area-info-web
+          %p These comments will be sent to your requester through email
+        .col-xs-5.col-sm-6.text-area-button
+          = submit_tag "Send a Comment", id: :add_a_comment, data: {'disable-if-empty' => 'comment_comment_text'}
 
-      - if @proposal.comments.any?
-        - @proposal.comments.reverse_each do |c|
-          %div{class: "line-item #{c.update_comment ? "comment-update" : ""}"}
-            .row
-              %p.comment-sender.col-sm-6.col-xs-12
-                %strong
-                  - if c.update_comment
-                    Request modified by
-                  = c.user_full_name
-              %p.date.col-sm-6.col-xs-12
-                = date_with_tooltip(c.created_at, true)
-            .row
-              .comment-text.col-sm-6.col-xs-12
-                = c.update_comment ? markdown(c.comment_text) : c.comment_text
-      - else
-        %p.empty-list-label No comments have been added yet
-
-    #files
-      %h3 Attachments to this proposal
-      = form_for [@proposal, Attachment.new] do |f|
-        .line-item
-          .row= f.file_field :file
-        .row.text-area-info-container
-          .col-xs-7.col-sm-6.text-area-info-web
-            %p Attach a file (e.g. receipts, contract documents, etc.)
-          %p.col-xs-5.col-sm-6.text-area-button
-            = submit_tag "Attach a File", id: :add_a_file, data: {'disable-if-empty' => 'attachment_file'}
-      - @proposal.attachments.each do |attachment|
-        .line-item
+    - if @proposal.comments.any?
+      - @proposal.comments.reverse_each do |c|
+        %div{class: "line-item #{c.update_comment ? "comment-update" : ""}"}
           .row
-            %p.col-sm-5.col-xs-12
-              %a{href: proposal_attachment_path(@proposal, attachment)}
-                = attachment.file_file_name
-            %p.col-sm-3.col-xs-6
-              %strong= attachment.user.full_name
-            %p.col-sm-3.col-xs-5.date.righted
-              = date_with_tooltip(attachment.created_at, true)
-            - if policy(attachment).can_destroy?
-              = button_to "Delete", proposal_attachment_path(@proposal, attachment), method: :delete, data: {confirm: "Are you sure?"}, class: "col-sm-1 col-xs-1 righted"
-      - if @proposal.attachments.empty?
-        %p.empty-list-label No attachments have been added yet
+            %p.comment-sender.col-sm-6.col-xs-12
+              %strong
+                - if c.update_comment
+                  Request modified by
+                = c.user_full_name
+            %p.date.col-sm-6.col-xs-12
+              = date_with_tooltip(c.created_at, true)
+          .row
+            .comment-text.col-sm-6.col-xs-12
+              = c.update_comment ? markdown(c.comment_text) : c.comment_text
+    - else
+      %p.empty-list-label No comments have been added yet
+
+  #files
+    %h3 Attachments to this proposal
+    = form_for [@proposal, Attachment.new] do |f|
+      .line-item
+        .row= f.file_field :file
+      .row.text-area-info-container
+        .col-xs-7.col-sm-6.text-area-info-web
+          %p Attach a file (e.g. receipts, contract documents, etc.)
+        %p.col-xs-5.col-sm-6.text-area-button
+          = submit_tag "Attach a File", id: :add_a_file, data: {'disable-if-empty' => 'attachment_file'}
+    - @proposal.attachments.each do |attachment|
+      .line-item
+        .row
+          %p.col-sm-5.col-xs-12
+            %a{href: proposal_attachment_path(@proposal, attachment)}
+              = attachment.file_file_name
+          %p.col-sm-3.col-xs-6
+            %strong= attachment.user.full_name
+          %p.col-sm-3.col-xs-5.date.righted
+            = date_with_tooltip(attachment.created_at, true)
+          - if policy(attachment).can_destroy?
+            = button_to "Delete", proposal_attachment_path(@proposal, attachment), method: :delete, data: {confirm: "Are you sure?"}, class: "col-sm-1 col-xs-1 righted"
+    - if @proposal.attachments.empty?
+      %p.empty-list-label No attachments have been added yet
 
 - if policy(@proposal).can_approve?
   .centered

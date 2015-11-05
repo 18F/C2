@@ -9,6 +9,7 @@
   %p
     %em
       * Indicates a required field
+
   = simple_form_for @model_instance do |f|
     = f.input :office, collection: Gsa18f::Procurement::OFFICES
     = f.input :product_name_and_description

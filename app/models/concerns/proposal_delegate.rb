@@ -40,16 +40,20 @@ module ProposalDelegate
 
     ###################################################
 
-    def self.client
+    def self.client_data_prefix
       self.to_s.deconstantize.downcase
     end
   end
 
-  def client
-    self.class.client
+  def client_data_prefix
+    self.class.client_data_prefix
+  end
+
+  def editable?
+    false
   end
 
   def slug_matches?(user)
-    user.client_slug == client
+    user.client_slug == client_data_prefix
   end
 end
