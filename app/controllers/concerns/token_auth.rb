@@ -52,7 +52,9 @@ module TokenAuth
         flash[:error] = exception.message
         render 'communicarts/authentication_error', status: 403
       else
-        redirect_to root_path(return_to: self.make_return_to("Previous", request.fullpath)), alert: "Please sign in to complete this action."
+        return_to_param = make_return_to("Previous", request.fullpath)
+        session[:return_to] = return_to_param
+        redirect_to root_path(return_to: return_to_param), alert: "Please sign in to complete this action."
       end
     when Proposal
       render 'communicarts/authorization_error', status: 403, locals: { msg: "You are not allowed to see that proposal." }

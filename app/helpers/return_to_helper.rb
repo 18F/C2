@@ -14,11 +14,16 @@ module ReturnToHelper
 
   protected
   def return_to
-    if params[:return_to]
-      return_to = params.require(:return_to)
+    if params[:return_to] || session[:return_to]
+      return_to = session[:return_to] || params.require(:return_to)
+      # if session coerce into a params-like object so .require works
+      if return_to.is_a?(Hash)
+        return_to = ActionController::Parameters.new(return_to)
+      end
       proper_sig = self.make_return_to(return_to.require(:name),
                                        return_to.require(:path))[:sig]
       if return_to.require(:sig) == proper_sig
+        session.delete(:return_to)
         return_to.permit([:path, :name])
       end
     end
