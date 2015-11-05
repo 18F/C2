@@ -3,5 +3,11 @@ FactoryGirl.define do
     proposal
     user
     status 'pending'
+
+    factory :serial_steps, class: Steps::Serial do
+    end
+
+    factory :parallel_steps, class: Steps::Parallel do
+    end
   end
 end

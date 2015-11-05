@@ -8,12 +8,15 @@ class Step < ActiveRecord::Base
     state :approved
   end
 
+  belongs_to :user
   belongs_to :proposal
   acts_as_list scope: :proposal
-  validates :proposal, presence: true
-
   belongs_to :parent, class_name: "Step"
+
   has_many :child_approvals, class_name: "Step", foreign_key: "parent_id", dependent: :destroy
+
+  validates :proposal, presence: true
+  validates :user_id, uniqueness: { scope: :proposal_id }, allow_blank: true
 
   # @TODO: Auto-generate list of subclasses
   scope :individual, -> { where(type: ["Steps::Approval", "Steps::Purchase"]).order("position ASC") }

@@ -59,10 +59,13 @@ module ProposalConversationThreading
     self.assign_threading_headers(proposal)
     subject = ProposalConversationThreading.subject(proposal)
 
+    reply_email = reply_to_email().gsub('@', "+#{proposal.public_id}@")
+
     mail(
       to: to_email,
       subject: subject,
       from: from_email || default_sender_email,
+      reply_to: reply_email,
       template_name: template_name
     )
   end
