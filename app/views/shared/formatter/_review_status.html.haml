@@ -1,10 +1,10 @@
--#   This snippet describes who needs to review a proposal. It needs access to both "proposal" and "current_user"
-
 - approvers = object.currently_awaiting_approvers
 
 - if object.pending? && approvers.include?(current_user)
-  %p *Please review*
+  %p
+    %strong Please review
 - elsif object.pending?
-  %p _Waiting for review from: #{approvers.map(&:full_name).join(', ')}_
+  %p
+    %em Waiting for review from: #{approvers.map(&:full_name).join(', ')}
 - else
   = object.status.titlecase
