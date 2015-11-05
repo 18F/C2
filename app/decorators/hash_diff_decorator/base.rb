@@ -19,14 +19,20 @@ module HashDiffDecorator
     def diff_val(val)
       if val.nil?
         "[nil]"
-      elsif val.is_a?(Fixnum)
-        val.to_s
       elsif val.is_a?(Numeric)
-        format('%.2f', val)
+        diff_numeric(val)
       elsif val.empty?
         "[empty]"
       else
         val.inspect
+      end
+    end
+
+    def diff_numeric(val)
+      if val.is_a?(Fixnum)
+        val.to_s
+      elsif val.is_a?(Numeric)
+        format("%.2f", val)
       end
     end
   end
