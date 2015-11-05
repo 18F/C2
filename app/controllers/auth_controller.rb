@@ -4,6 +4,10 @@ class AuthController < ApplicationController
   def oauth_callback
     auth = request.env["omniauth.auth"]
 
+    # fetch the redirect path (if any) before the authn sign in/out
+    # zaps the existing session
+    return_to_path = fetch_return_to_path
+
     do_user_authn(auth)
 
     session[:token] = auth.credentials.token
@@ -29,7 +33,7 @@ class AuthController < ApplicationController
     end
   end
 
-  def return_to_path
+  def fetch_return_to_path
     return_to_struct = return_to
     if return_to_struct && return_to_struct.key?("path")
       return_to_struct[:path]
