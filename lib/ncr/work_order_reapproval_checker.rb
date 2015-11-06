@@ -17,7 +17,7 @@ module Ncr
 
     def protected_fields_changed?
       changes = work_order.previous_changes
-      protected_fields.any? do |field|
+      self.class.protected_fields.any? do |field|
         values = changes[field.to_s]
         values && values[0].present?
       end
@@ -37,11 +37,14 @@ module Ncr
         )
     end
 
-    protected
-
-    def protected_fields
-      results = Ncr::WorkOrder.budget_code_fields + [:building_number, :org_code, :rwa_number]
-      results.uniq
+    def self.protected_fields
+      [
+        :building_number,
+        :function_code,
+        :org_code,
+        :rwa_number,
+        :soc_code
+      ]
     end
   end
 end

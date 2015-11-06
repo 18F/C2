@@ -92,19 +92,15 @@ module Ncr
       users.first.email_address
     end
 
-    def self.budget_code_fields
-      [:cl_number, :function_code, :soc_code]
-    end
-
     # Ignore values in certain fields if they aren't relevant. May want to
     # split these into different models
     def self.relevant_fields(expense_type)
       fields = [:description, :amount, :expense_type, :vendor, :not_to_exceed,
-                :building_number, :org_code, :direct_pay] + self.budget_code_fields
+                :building_number, :org_code, :direct_pay, :cl_number, :function_code, :soc_code]
       case expense_type
-      when 'BA61'
+      when "BA61"
         fields << :emergency
-      when 'BA80'
+      when "BA80"
         fields.concat([:rwa_number, :code])
       end
 
