@@ -69,7 +69,7 @@ describe "client_slug confers authz rules" do
     proposal_path = current_path
     visit proposal_path
     expect(page.status_code).to eq(200)
-    expect_to_not_select('observation_user_email_address', gsa_user.email_address)
+    expect_to_not_find_amongst_select_tag_options('observation_user_email_address', gsa_user.email_address)
   end
 
   private
@@ -92,7 +92,7 @@ describe "client_slug confers authz rules" do
     click_on 'Add an Observer'
   end
 
-  def expect_to_not_select(field_name, value)
+  def expect_to_not_find_amongst_select_tag_options(field_name, value)
     expect(field_labeled(field_name).first(:xpath, ".//option[text() = '#{value}']")).to_not be_present
   end
 end
