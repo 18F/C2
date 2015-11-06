@@ -9,35 +9,18 @@ module Ncr
     end
 
     def system_approver_emails
-      results = []
       if %w(BA60 BA61).include?(self.work_order.expense_type)
-        unless self.work_order.organization.try(:whsc?)
-          results << Ncr::Mailboxes.ba61_tier1_budget
-        end
-        results << Ncr::Mailboxes.ba61_tier2_budget
-      else # BA80
-        if self.work_order.organization.try(:ool?)
-          results << Ncr::Mailboxes.ool_ba80_budget
-        else
-          results << Ncr::Mailboxes.ba80_budget
-        end
+        ba_6x_approver_emails
+      else
+        [ba_80_approver_email]
       end
-
-      results
     end
 
     def setup_approvals_and_observers
-      emails = self.approvers_emails
       if self.work_order.emergency
-        emails.each do |email|
-          self.work_order.add_observer(email)
-        end
-        # skip state machine
-        self.proposal.update(status: 'approved')
+        setup_emergency
       else
-        original_approvers = self.proposal.individual_approvals.non_pending.map(&:user)
-        self.force_approvers(emails)
-        self.notify_removed_approvers(original_approvers)
+        setup_non_emergency
       end
     end
 
@@ -59,7 +42,7 @@ module Ncr
     def force_approvers(emails)
       individuals = emails.map do |email|
         user = User.for_email(email)
-        user.update!(client_slug: 'ncr')
+        user.update!(client_slug: "ncr")
         # Reuse existing approvals, if present
         self.proposal.existing_approval_for(user) || Steps::Approval.new(user: user)
       end
@@ -70,6 +53,38 @@ module Ncr
       current_approvers = self.proposal.individual_approvals.non_pending.map(&:user)
       removed_approvers_to_notify = original_approvers - current_approvers
       Dispatcher.on_approver_removal(self.proposal, removed_approvers_to_notify)
+    end
+
+    def ba_6x_approver_emails
+      results = []
+      unless self.work_order.organization.try(:whsc?)
+        results << Ncr::Mailboxes.ba61_tier1_budget
+      end
+      results << Ncr::Mailboxes.ba61_tier2_budget
+
+      results
+    end
+
+    def ba_80_approver_email
+      if self.work_order.organization.try(:ool?)
+        Ncr::Mailboxes.ool_ba80_budget
+      else
+        Ncr::Mailboxes.ba80_budget
+      end
+    end
+
+    def setup_emergency
+      approvers_emails.each do |email|
+        self.work_order.add_observer(email)
+      end
+      # skip state machine
+      self.proposal.update(status: "approved")
+    end
+
+    def setup_non_emergency
+      original_approvers = self.proposal.individual_approvals.non_pending.map(&:user)
+      self.force_approvers(approvers_emails)
+      self.notify_removed_approvers(original_approvers)
     end
   end
 end
