@@ -54,8 +54,8 @@ describe "observers" do
   end
 
   it "hides the reason field until a new observer is selected", js: true do
-    proposal = FactoryGirl.create(:proposal)
-    observer = FactoryGirl.create(:user)
+    proposal = create(:proposal)
+    observer = create(:user)
     login_as(proposal.requester)
 
     visit "/proposals/#{proposal.id}"
@@ -66,8 +66,8 @@ describe "observers" do
   end
 
   it "disables the submit button until a new observer is selected", js: true do
-    proposal = FactoryGirl.create(:proposal)
-    observer = FactoryGirl.create(:user)
+    proposal = create(:proposal)
+    observer = create(:user)
     login_as(proposal.requester)
 
     visit "/proposals/#{proposal.id}"
@@ -78,8 +78,8 @@ describe "observers" do
   end
 
   it "observer can delete themselves as observer" do
-    proposal = FactoryGirl.create(:proposal)
-    observer = FactoryGirl.create(:user, client_slug: nil)
+    proposal = create(:proposal)
+    observer = create(:user, client_slug: nil)
 
     login_as(proposal.requester)
     visit "/proposals/#{proposal.id}"
