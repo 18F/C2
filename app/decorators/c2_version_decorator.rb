@@ -24,7 +24,7 @@ class C2VersionDecorator < BaseDecorator
 
   def creation_html
     case object.item
-    when Approvals::Individual
+    when Steps::Individual
       "#{user_name} was added as an approver."
     when Attachment
       self.new_attachment_html

@@ -61,9 +61,9 @@ module Ncr
         user = User.for_email(email)
         user.update!(client_slug: 'ncr')
         # Reuse existing approvals, if present
-        self.proposal.existing_approval_for(user) || Approvals::Individual.new(user: user)
+        self.proposal.existing_approval_for(user) || Steps::Approval.new(user: user)
       end
-      self.proposal.root_approval = Approvals::Serial.new(child_approvals: individuals)
+      self.proposal.root_step = Steps::Serial.new(child_approvals: individuals)
     end
 
     def notify_removed_approvers(original_approvers)

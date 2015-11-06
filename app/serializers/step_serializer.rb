@@ -1,4 +1,4 @@
-class ApprovalSerializer < ActiveModel::Serializer
+class StepSerializer < ActiveModel::Serializer
   # make sure to keep docs/api.md up-to-date
 
   attributes(

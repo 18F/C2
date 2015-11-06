@@ -1,4 +1,4 @@
-# Abstract controller – requires the following methods on the subclass:
+# Abstract controller - requires the following methods on the subclass
 # * model_class
 # * permitted_params
 class UseCaseController < ApplicationController
@@ -15,7 +15,7 @@ class UseCaseController < ApplicationController
   def create
     if errors.empty?
       proposal = ClientDataCreator.new(@model_instance, current_user, attachment_params).run
-      add_approvals()
+      add_steps
       Dispatcher.deliver_new_proposal_emails(proposal)
 
       flash[:success] = "Proposal submitted!"
@@ -99,6 +99,6 @@ class UseCaseController < ApplicationController
   end
 
   # Hook for adding additional approvers
-  def add_approvals
+  def add_steps
   end
 end

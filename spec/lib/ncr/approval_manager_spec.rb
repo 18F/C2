@@ -37,7 +37,7 @@ describe Ncr::ApprovalManager do
         ba61_tier_one_email,
         ba61_tier_two_email
       ].uniq)
-      expect(wo.approvals.length).to eq(0)
+      expect(wo.steps.length).to eq(0)
       wo.clear_association_cache
       expect(wo.approved?).to eq(true)
     end
@@ -100,12 +100,12 @@ describe Ncr::ApprovalManager do
       manager = Ncr::ApprovalManager.new(wo)
       manager.setup_approvals_and_observers
 
-      expect(wo.approvals).to be_empty
+      expect(wo.steps).to be_empty
       expect(wo.observers.count).to be 3
 
       manager.setup_approvals_and_observers
       wo.reload
-      expect(wo.approvals).to be_empty
+      expect(wo.steps).to be_empty
       expect(wo.observers.count).to be 3
     end
 

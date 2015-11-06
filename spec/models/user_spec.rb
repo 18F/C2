@@ -1,6 +1,6 @@
 describe User do
   describe "Associations" do
-     it { should have_many(:approvals).dependent(:destroy) }
+     it { should have_many(:steps).dependent(:destroy) }
      it { should have_many(:comments).dependent(:destroy) }
      it { should have_many(:observations).dependent(:destroy) }
      it { should have_many(:user_roles).dependent(:destroy) }

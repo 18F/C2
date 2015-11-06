@@ -9,8 +9,7 @@ describe ProposalsController do
 
     it 'sets data fields' do
       proposal1 = create(:proposal, requester: user)
-      proposal2 = create(:proposal)
-      proposal2.individual_approvals.create!(user: user, status: 'actionable')
+      proposal2 = create(:proposal, :with_approver, approver_user: user)
 
       get :index
       expect(assigns(:pending_review_data).rows.sort).to eq [proposal2]
@@ -209,7 +208,7 @@ describe ProposalsController do
     it "signs the user in via the token" do
       proposal = create(:proposal, :with_approver)
       approval = proposal.individual_approvals.first
-      token = create(:api_token, approval: approval)
+      token = create(:api_token, step: approval)
 
       post :approve, id: proposal.id, cch: token.access_token
 
@@ -219,7 +218,7 @@ describe ProposalsController do
     it "won't sign the user in via the token if delegated" do
       proposal = create(:proposal, :with_approver)
       approval = proposal.individual_approvals.first
-      token = create(:api_token, approval: approval)
+      token = create(:api_token, step: approval)
       approval.user.add_delegate(create(:user))
 
       post :approve, id: proposal.id, cch: token.access_token
@@ -240,7 +239,7 @@ describe ProposalsController do
     it "will allow action if the token is valid" do
       proposal = create(:proposal, :with_approver)
       approval = proposal.individual_approvals.first
-      token = create(:api_token, approval: approval)
+      token = create(:api_token, step: approval)
 
       get :approve, id: proposal.id, cch: token.access_token
 
@@ -251,7 +250,7 @@ describe ProposalsController do
     it "doesn't allow a token to be reused" do
       proposal = create(:proposal, :with_approver)
       approval = proposal.individual_approvals.first
-      token = create(:api_token, approval: approval)
+      token = create(:api_token, step: approval)
       token.use!
 
       get :approve, id: proposal.id, cch: token.access_token
