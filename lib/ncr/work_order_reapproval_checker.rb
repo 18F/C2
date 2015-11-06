@@ -32,12 +32,10 @@ module Ncr
 
     def requires_budget_reapproval?
       work_order.approved? &&
-        work_order.requires_approval? && (
-        self.amount_increased? || (
-          self.protected_fields_changed? &&
-          !self.budget_approver?
+        work_order.requires_approval? &&
+        !budget_approver? && (
+          amount_increased? || protected_fields_changed?
         )
-      )
     end
 
     def self.protected_fields
