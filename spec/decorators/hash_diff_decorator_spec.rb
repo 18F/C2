@@ -24,5 +24,12 @@ describe HashDiffDecorator do
       output = HashDiffDecorator.html_for(['~', 'foo', '', 'bar'])
       expect(output).to eq("<code>foo</code> was changed from <code>[empty]</code> to <code>&quot;bar&quot;</code>")
     end
+
+    it "renders numeric events" do
+      output = HashDiffDecorator.html_for(['~', 'a_number', 456, 123])
+      expect(output).to eq("<code>a_number</code> was changed from <code>456</code> to <code>123</code>")
+      output = HashDiffDecorator.html_for(['~', 'a_float', 123.0, 456.9])
+      expect(output).to eq("<code>a_float</code> was changed from <code>123.00</code> to <code>456.90</code>")
+    end
   end
 end
