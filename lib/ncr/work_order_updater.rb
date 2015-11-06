@@ -7,9 +7,7 @@ module Ncr
       @work_order = work_order
     end
 
-    def proposal
-      work_order.proposal
-    end
+    delegate :proposal, to: :work_order
 
     def requires_budget_reapproval?
       checker = Ncr::WorkOrderReapprovalChecker.new(work_order)

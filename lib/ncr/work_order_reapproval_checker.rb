@@ -12,7 +12,7 @@ module Ncr
 
     def amount_increased?
       changes = work_order.previous_changes
-      changes.key?('amount') && (work_order.amount > changes['amount'].first)
+      changes.key?("amount") && (work_order.amount > changes["amount"].first)
     end
 
     def protected_fields_changed?
@@ -29,12 +29,12 @@ module Ncr
 
     def requires_budget_reapproval?
       work_order.approved? &&
-      work_order.requires_approval? && (
+        work_order.requires_approval? && (
         self.amount_increased? || (
           self.protected_fields_changed? &&
           !self.budget_approver?
         )
-      )
+        )
     end
 
     protected
