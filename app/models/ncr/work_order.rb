@@ -114,11 +114,6 @@ module Ncr
       end
     end
 
-    def approver_email_frozen?
-      approval = self.individual_steps.first
-      approval && !approval.actionable?
-    end
-
     def approver_changed?
       self.approving_official && self.approving_official.email_address != approving_official_email
     end
@@ -127,7 +122,7 @@ module Ncr
     def approvers_emails
       emails = system_approver_emails
 
-      if approver_email_frozen?
+      if proposal.approver_email_frozen?
         emails.unshift(approving_official.email_address)
       else
         emails.unshift(approving_official_email)

@@ -40,4 +40,10 @@ module StepManager
   def awaiting_approver?(user)
     self.currently_awaiting_approvers.include?(user)
   end
+
+  def approver_email_frozen?
+    approval = self.individual_steps.first
+    approval && !approval.actionable?
+  end
+
 end
