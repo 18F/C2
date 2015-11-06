@@ -21,7 +21,7 @@ module HashDiffDecorator
         "[nil]"
       elsif val.is_a?(Numeric)
         diff_numeric(val)
-      elsif val.empty?
+      elsif val.try(:empty?)
         "[empty]"
       else
         val.inspect
