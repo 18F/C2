@@ -55,7 +55,7 @@ describe Dispatcher do
       dispatcher.deliver_cancellation_emails(proposal)
     end
 
-    it "sends the reason to the cancellation email if there is one" do
+    it "sends the reason to the cancellation email" do
       proposal = create(:proposal, :with_approver)
       approver = proposal.approvers.first
       reason = "reason for cancellation"

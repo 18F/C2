@@ -26,7 +26,7 @@ module CommunicartMailerHelper
     approve_proposal_url(proposal, opts)
   end
 
-  def cancellation_text(proposal, reason = nil)
+  def cancellation_text(proposal, reason)
     text = "The request, #{proposal.name} (#{proposal.public_id}), has been cancelled"
     add_reason(text, reason)
     text + '.'
