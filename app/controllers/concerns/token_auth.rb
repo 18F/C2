@@ -33,7 +33,7 @@ module TokenAuth
     end
 
     # expire tokens regardless of how user logged in
-    tokens = ApiToken.joins(:approval).where(approvals: {
+    tokens = ApiToken.joins(:step).where(steps: {
       user_id: current_user, proposal_id: self.proposal})
     tokens.where(used_at: nil).update_all(used_at: Time.zone.now)
 

@@ -1,8 +1,21 @@
-describe Approval do
+describe Step do
+  describe "Associations" do
+    it { should belong_to(:user) }
+    it { should belong_to(:proposal) }
+  end
+
+  describe "Validations" do
+    it { should validate_presence_of(:proposal) }
+    it do
+      create(:approval) # needed for spec, see https://github.com/thoughtbot/shoulda-matchers/issues/194
+      should validate_uniqueness_of(:user_id).scoped_to(:proposal_id)
+    end
+  end
+
   let(:approval) { create(:approval) }
 
   describe '#api_token' do
-    let!(:token) { create(:api_token, approval: approval) }
+    let!(:token) { create(:api_token, step: approval) }
 
     it "returns the token" do
       expect(approval.api_token).to eq(token)
@@ -49,9 +62,9 @@ describe Approval do
 
     it "does not notify the proposal if a child gets approved" do
       proposal = create(:proposal)
-      child1 = Approvals::Individual.new(user: create(:user))
-      child2 = Approvals::Individual.new(user: create(:user))
-      proposal.root_approval = Approvals::Parallel.new(child_approvals: [child1, child2])
+      child1 = build(:approval, user: create(:user))
+      child2 = build(:approval, user: create(:user))
+      proposal.root_step = build(:parallel_steps, child_approvals: [child1, child2])
 
       expect(proposal).not_to receive(:approve!)
       child1.approve!
@@ -69,6 +82,23 @@ describe Approval do
     let!(:dan) { create(:user) }
     let!(:erin) { create(:user) }
     let!(:proposal) { create(:proposal) }
+
+    before :each do
+      # @todo syntax for this will get cleaned up
+      and_clause = create(:parallel_steps, child_approvals: [
+        create(:approval, user: amy),
+        create(:approval, user: bob)
+      ])
+      then_clause = create(:serial_steps, child_approvals: [
+        create(:approval, user: dan),
+        create(:approval, user: erin)
+      ])
+      proposal.root_step = create(:parallel_steps, min_children_needed: 2, child_approvals: [
+        and_clause,
+        create(:approval, user: carrie),
+        then_clause
+      ])
+    end
 
     it "won't approve Amy and Bob -- needs two branches of the OR" do
       build_approvals
@@ -113,21 +143,21 @@ describe Approval do
 
     def build_approvals
       and_clause = build(
-        :parallel_approval,
+        :parallel_steps,
         child_approvals: [
           build(:approval, user: amy),
           build(:approval, user: bob)
         ]
       )
       then_clause = build(
-        :parallel_approval,
+        :parallel_steps,
         child_approvals: [
           build(:approval, user: dan),
           build(:approval, user: erin)
         ]
       )
-      proposal.root_approval = build(
-        :parallel_approval,
+      proposal.root_step = build(
+        :parallel_steps,
         min_children_needed: 2,
         child_approvals: [
           and_clause,

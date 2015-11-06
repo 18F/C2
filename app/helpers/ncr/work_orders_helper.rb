@@ -1,7 +1,8 @@
 module Ncr
   module WorkOrdersHelper
     def approver_options
-      User.active.where(client_slug: 'ncr').order(:email_address).pluck(:email_address)
+      User.active.where(client_slug: "ncr").order(:email_address).pluck(:email_address) -
+        Ncr::WorkOrder.all_system_approver_emails
     end
 
     def building_options

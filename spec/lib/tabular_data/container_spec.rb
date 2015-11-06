@@ -21,8 +21,8 @@ describe TabularData::Container do
     end
 
     it 'aliases indirect joins' do
-      container = TabularData::Container.new(:a_name, engine: 'ApiToken', joins: {approval: true, user: true})
-      expect(container.rows.to_sql).to include('ON "user"."id" = "approvals"."user_id"')
+      container = TabularData::Container.new(:a_name, engine: 'ApiToken', joins: {step: true, user: true})
+      expect(container.rows.to_sql).to include('ON "user"."id" = "steps"."user_id"')
 
       container.rows.count  # smoke test
     end
@@ -70,7 +70,7 @@ describe TabularData::Container do
   end
 
   describe '#set_state_from_params' do
-    let(:container) { 
+    let(:container) {
       config = {engine: 'Proposal',
                 column_configs: {id: true, client: {virtual: true}},
                 columns: ['id', 'client']}

@@ -50,7 +50,7 @@ describe ApiTokenPolicy do
   end
 
   def token
-    @token ||= create(:api_token, approval: approval)
+    @token ||= create(:api_token, step: approval)
   end
 
   def proposal
