@@ -90,10 +90,10 @@ describe 'NCR Work Orders API' do
         json = get_json('/api/v1/ncr/work_orders.json')
 
         proposal = work_order.proposal
-        approvals = proposal.individual_approvals
+        approvals = proposal.individual_steps
         expect(approvals.size).to eq(2)
 
-        approval = proposal.individual_approvals.first
+        approval = proposal.individual_steps.first
         approver = approval.user
 
         expect(json[0]["proposal"]["steps"][0]).to eq(

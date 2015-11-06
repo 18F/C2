@@ -41,6 +41,6 @@ describe 'Linear approvals' do
   end
 
   def approve_approval_for(user)
-    create_proposal.individual_approvals.where(user: user).first.approve!
+    create_proposal.individual_steps.where(user: user).first.approve!
   end
 end

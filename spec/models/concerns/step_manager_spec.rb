@@ -40,7 +40,7 @@ describe StepManager do
 
       expect(proposal.approvers.count).to be 3
       expect(proposal.steps.count).to be 4
-      expect(proposal.individual_approvals.actionable.count).to be 3
+      expect(proposal.individual_steps.actionable.count).to be 3
       expect(proposal.steps.actionable.count).to be 4
     end
 
@@ -55,7 +55,7 @@ describe StepManager do
 
       expect(proposal.approvers.count).to be 3
       expect(proposal.steps.count).to be 4
-      expect(proposal.individual_approvals.actionable.count).to be 1
+      expect(proposal.individual_steps.actionable.count).to be 1
       expect(proposal.steps.actionable.count).to be 2
     end
 
@@ -68,13 +68,13 @@ describe StepManager do
       proposal.root_step = Steps::Parallel.new(child_approvals: individuals)
 
       expect(proposal.steps.actionable.count).to be 2
-      expect(proposal.individual_approvals.actionable.count).to be 1
+      expect(proposal.individual_steps.actionable.count).to be 1
 
       individuals = individuals + [approver2, approver3].map{ |u| Steps::Approval.new(user: u)}
       proposal.root_step = Steps::Parallel.new(child_approvals: individuals)
 
       expect(proposal.steps.actionable.count).to be 4
-      expect(proposal.individual_approvals.actionable.count).to be 3
+      expect(proposal.individual_steps.actionable.count).to be 3
     end
 
     it 'fixes modified linear proposal approvals' do
@@ -87,7 +87,7 @@ describe StepManager do
       proposal.root_step = Steps::Serial.new(child_approvals: individuals)
 
       expect(proposal.steps.actionable.count).to be 2
-      expect(proposal.individual_approvals.actionable.count).to be 1
+      expect(proposal.individual_steps.actionable.count).to be 1
 
       individuals.first.approve!
       individuals[1] = Steps::Approval.new(user: approver3)
@@ -95,8 +95,8 @@ describe StepManager do
 
       expect(proposal.steps.approved.count).to be 1
       expect(proposal.steps.actionable.count).to be 2
-      expect(proposal.individual_approvals.actionable.count).to be 1
-      expect(proposal.individual_approvals.actionable.first.user).to eq approver3
+      expect(proposal.individual_steps.actionable.count).to be 1
+      expect(proposal.individual_steps.actionable.first.user).to eq approver3
     end
 
     it 'does not modify a full approved parallel proposal' do
@@ -106,8 +106,8 @@ describe StepManager do
       individuals = [approver1, approver2].map{ |u| Steps::Approval.new(user: u)}
       proposal.root_step = Steps::Parallel.new(child_approvals: individuals)
 
-      proposal.individual_approvals.first.approve!
-      proposal.individual_approvals.second.approve!
+      proposal.individual_steps.first.approve!
+      proposal.individual_steps.second.approve!
 
       expect(proposal.steps.actionable).to be_empty
     end
@@ -119,15 +119,15 @@ describe StepManager do
       individuals = [approver1, approver2].map{ |u| Steps::Approval.new(user: u)}
       proposal.root_step = Steps::Serial.new(child_approvals: individuals)
 
-      proposal.individual_approvals.first.approve!
-      proposal.individual_approvals.second.approve!
+      proposal.individual_steps.first.approve!
+      proposal.individual_steps.second.approve!
 
       expect(proposal.steps.actionable).to be_empty
     end
 
     it 'deletes approvals' do
       proposal = create(:proposal, :with_parallel_approvers)
-      approval1, approval2 = proposal.individual_approvals
+      approval1, approval2 = proposal.individual_steps
       proposal.root_step = Steps::Serial.new(child_approvals: [approval2])
 
       expect(Step.exists?(approval1.id)).to be false

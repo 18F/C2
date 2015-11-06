@@ -2,7 +2,7 @@ describe Ncr::Reporter do
   describe '.proposals_pending_approving_official' do
     it "only returns Proposals where the approving official is actionable" do
       partially_approved = create(:ncr_work_order, :with_approvers)
-      partially_approved.individual_approvals.first.approve!
+      partially_approved.individual_steps.first.approve!
 
       actionable = create(:ncr_work_order, :with_approvers)
 
@@ -16,7 +16,7 @@ describe Ncr::Reporter do
 
       actionable = create(:ncr_work_order, :with_approvers)
       # all but the last
-      actionable.individual_approvals[0...-1].each(&:approve!)
+      actionable.individual_steps[0...-1].each(&:approve!)
 
       expect(Ncr::Reporter.proposals_pending_budget).to eq([actionable.proposal])
     end
@@ -33,7 +33,7 @@ describe Ncr::Reporter do
 
       approved_work_order = create(:ncr_work_order, :with_approvers)
       approved_work_order.setup_approvals_and_observers
-      approved_work_order.individual_approvals.first.approve!
+      approved_work_order.individual_steps.first.approve!
 
       alt_work_order = create(:ncr_work_order, :with_approvers)
       alt_work_order.setup_approvals_and_observers

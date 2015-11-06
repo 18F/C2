@@ -68,7 +68,7 @@ feature 'Requester edits their NCR work order' do
     proposal = Proposal.last
 
     expect(proposal.approvers.first.email_address).to eq approver.email_address
-    expect(proposal.individual_approvals.first).to be_actionable
+    expect(proposal.individual_steps.first).to be_actionable
   end
 
   scenario "allows requester to change the expense type" do
@@ -102,9 +102,9 @@ feature 'Requester edits their NCR work order' do
 
   scenario "doesn't change approving list when delegated" do
     proposal = Proposal.last
-    approval = proposal.individual_approvals.first
+    approval = proposal.individual_steps.first
     approval.approve!
-    approval = proposal.individual_approvals.second
+    approval = proposal.individual_steps.second
     user = approval.user
     delegate = User.new(email_address: 'delegate@example.com')
     delegate.save
@@ -117,7 +117,7 @@ feature 'Requester edits their NCR work order' do
     proposal.reload
     second_approver = proposal.approvers.second.email_address
     expect(second_approver).to eq('delegate@example.com')
-    expect(proposal.individual_approvals.length).to eq(3)
+    expect(proposal.individual_steps.length).to eq(3)
   end
 
   scenario "has 'Discard Changes' link" do
@@ -130,7 +130,7 @@ feature 'Requester edits their NCR work order' do
   scenario 'has a disabled field if first approval is done' do
     visit "/ncr/work_orders/#{work_order.id}/edit"
     expect(find('#ncr_work_order_approving_official_email')['disabled']).to be_nil
-    work_order.individual_approvals.first.approve!
+    work_order.individual_steps.first.approve!
     visit "/ncr/work_orders/#{work_order.id}/edit"
     expect(find('#ncr_work_order_approving_official_email')['disabled']).to eq('disabled')
     # And we can still submit

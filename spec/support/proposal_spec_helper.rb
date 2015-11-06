@@ -1,6 +1,6 @@
 module ProposalSpecHelper
   def fully_approve(proposal)
-    proposal.individual_approvals.each do |approval|
+    proposal.individual_steps.each do |approval|
       approval.reload
       approval.approve!
     end

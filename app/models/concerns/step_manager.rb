@@ -30,7 +30,7 @@ module StepManager
 
   # Steps in which someone can take action
   def currently_awaiting_steps
-    self.individual_approvals.actionable
+    self.individual_steps.actionable
   end
 
   def currently_awaiting_approvers

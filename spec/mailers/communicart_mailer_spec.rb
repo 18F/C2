@@ -11,7 +11,7 @@ describe CommunicartMailer do
   end
 
   let(:proposal) { create(:proposal, :with_parallel_approvers) }
-  let(:approval) { proposal.individual_approvals.first }
+  let(:approval) { proposal.individual_steps.first }
   let(:approver) { approval.user }
   let(:requester) { proposal.requester }
 
@@ -188,7 +188,7 @@ describe CommunicartMailer do
 
     context 'completed message' do
       it 'displays when all requests have been approved' do
-        final_approval = proposal.individual_approvals.last
+        final_approval = proposal.individual_steps.last
         final_approval.proposal   # create a dirty cache
         final_approval.approve!
         mail = CommunicartMailer.approval_reply_received_email(final_approval)

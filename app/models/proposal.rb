@@ -29,9 +29,9 @@ class Proposal < ActiveRecord::Base
   end
 
   has_many :steps
-  has_many :individual_approvals, ->{ individual }, class_name: 'Steps::Individual'
-  has_many :approvers, through: :individual_approvals, source: :user
-  has_many :api_tokens, through: :individual_approvals
+  has_many :individual_steps, ->{ individual }, class_name: 'Steps::Individual'
+  has_many :approvers, through: :individual_steps, source: :user
+  has_many :api_tokens, through: :individual_steps
   has_many :attachments, dependent: :destroy
   has_many :approval_delegates, through: :approvers, source: :outgoing_delegations
   has_many :comments, dependent: :destroy
@@ -41,7 +41,7 @@ class Proposal < ActiveRecord::Base
   has_many :observers, through: :observations, source: :user
   belongs_to :client_data, polymorphic: true, dependent: :destroy
   belongs_to :requester, class_name: 'User'
-
+  
   # The following list also servers as an interface spec for client_datas
   # Note: clients may implement:
   # :fields_for_display
@@ -195,7 +195,7 @@ class Proposal < ActiveRecord::Base
 
   # Returns True if the user is an "active" approver and has acted on the proposal
   def is_active_approver?(user)
-    self.individual_approvals.non_pending.exists?(user_id: user.id)
+    self.individual_steps.non_pending.exists?(user_id: user.id)
   end
 
   def self.client_model_names

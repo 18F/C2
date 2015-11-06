@@ -62,10 +62,10 @@ describe Ncr::WorkOrder do
     it "reuses existing approvals" do
       form = create(:ncr_work_order, expense_type: 'BA61')
       form.setup_approvals_and_observers
-      first_approval = form.individual_approvals.first
+      first_approval = form.individual_steps.first
 
       form.reload.setup_approvals_and_observers
-      expect(form.individual_approvals.first).to eq(first_approval)
+      expect(form.individual_steps.first).to eq(first_approval)
     end
 
     it "creates observers when in an emergency" do
@@ -124,8 +124,8 @@ describe Ncr::WorkOrder do
         ba80_budget_email
       ]
 
-      wo.individual_approvals.first.approve!
-      wo.individual_approvals.second.approve!
+      wo.individual_steps.first.approve!
+      wo.individual_steps.second.approve!
       expect(wo.reload.approved?).to be true
 
       wo.update(expense_type: 'BA61')
@@ -151,10 +151,10 @@ describe Ncr::WorkOrder do
       wo.setup_approvals_and_observers
       delegate = create(:user)
       wo.approvers.second.add_delegate(delegate)
-      wo.individual_approvals.second.update(user: delegate)
+      wo.individual_steps.second.update(user: delegate)
 
-      wo.individual_approvals.first.approve!
-      wo.individual_approvals.second.approve!
+      wo.individual_steps.first.approve!
+      wo.individual_steps.second.approve!
 
       wo.setup_approvals_and_observers
       wo.reload
@@ -363,7 +363,7 @@ describe Ncr::WorkOrder do
     it "returns the first pending approver" do
       wo = create(:ncr_work_order, :with_approvers)
       expect(wo.current_approver).to eq(wo.approvers.first)
-      wo.individual_approvals.first.approve!
+      wo.individual_steps.first.approve!
       expect(wo.current_approver).to eq(wo.approvers.second)
     end
 
@@ -378,7 +378,7 @@ describe Ncr::WorkOrder do
     it "returns the final approver" do
       wo = create(:ncr_work_order, :with_approvers)
       expect(wo.final_approver).to eq(wo.approvers.last)
-      wo.individual_approvals.first.approve!
+      wo.individual_steps.first.approve!
       expect(wo.final_approver).to eq(wo.approvers.last)
     end
 

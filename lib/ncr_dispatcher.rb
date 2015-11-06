@@ -7,7 +7,7 @@ class NcrDispatcher < LinearDispatcher
   end
 
   def final_approval(proposal)
-    proposal.individual_approvals.last
+    proposal.individual_steps.last
   end
 
   # Notify approvers who have already approved that this proposal has been
@@ -29,7 +29,7 @@ class NcrDispatcher < LinearDispatcher
   end
 
   def notify_approvers(proposal, modifier)
-    proposal.individual_approvals.approved.each do |approval|
+    proposal.individual_steps.approved.each do |approval|
       if modifier and approval.user.id == modifier.id
         next # no email for modifier
       end

@@ -73,7 +73,7 @@ describe Dispatcher do
 
   describe '#on_approval_approved' do
     it "sends to the requester" do
-      dispatcher.on_approval_approved(proposal.individual_approvals.first)
+      dispatcher.on_approval_approved(proposal.individual_steps.first)
       expect(email_recipients).to eq([proposal.requester.email_address])
     end
   end

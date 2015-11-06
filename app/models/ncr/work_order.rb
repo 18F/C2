@@ -115,7 +115,7 @@ module Ncr
     end
 
     def approver_email_frozen?
-      approval = self.individual_approvals.first
+      approval = self.individual_steps.first
       approval && !approval.actionable?
     end
 
@@ -143,7 +143,7 @@ module Ncr
         # skip state machine
         proposal.update(status: 'approved')
       else
-        original_approvers = proposal.individual_approvals.non_pending.map(&:user)
+        original_approvers = proposal.individual_steps.non_pending.map(&:user)
         force_approvers(emails)
         notify_removed_approvers(original_approvers)
       end
@@ -272,7 +272,7 @@ module Ncr
     end
 
     def notify_removed_approvers(original_approvers)
-      current_approvers = self.proposal.individual_approvals.non_pending.map(&:user)
+      current_approvers = self.proposal.individual_steps.non_pending.map(&:user)
       removed_approvers_to_notify = original_approvers - current_approvers
       Dispatcher.on_approver_removal(self.proposal, removed_approvers_to_notify)
     end

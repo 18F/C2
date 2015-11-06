@@ -5,7 +5,7 @@ module Api
         # TODO use a scope for ordering
         orders = ::Ncr::WorkOrder.
           joins(:proposal).
-          includes(proposal: [:requester, individual_approvals: [:user]]).
+          includes(proposal: [:requester, individual_steps: [:user]]).
           order('proposals.created_at DESC')
 
         if params[:limit]

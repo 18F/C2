@@ -84,7 +84,7 @@ describe 'proposals' do
 
     context "using a token" do
       let(:proposal) { create(:proposal, :with_approver) }
-      let(:step) { proposal.individual_approvals.first }
+      let(:step) { proposal.individual_steps.first }
       let(:token) { create(:api_token, step: step) }
 
       it "supports token auth" do
