@@ -104,8 +104,8 @@ describe 'proposals' do
       it "fails for delegate without login, redirects automatically after login" do
         delegate = create(:user)
         proposal = create(:proposal, delegate: delegate)
-        approval = proposal.approvals.first
-        token = create(:api_token, approval: approval)
+        step = proposal.individual_approvals.first
+        token = create(:api_token, step: step)
 
         get "/proposals/#{proposal.id}/approve", cch: token.access_token
 
