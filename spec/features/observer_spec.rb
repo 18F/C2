@@ -54,8 +54,8 @@ describe "observers" do
   end
 
   it "hides the reason field until a new observer is selected", js: true do
-    proposal = FactoryGirl.create(:proposal)
-    observer = FactoryGirl.create(:user)
+    proposal = create(:proposal)
+    observer = create(:user)
     login_as(proposal.requester)
 
     visit "/proposals/#{proposal.id}"
@@ -66,8 +66,8 @@ describe "observers" do
   end
 
   it "disables the submit button until a new observer is selected", js: true do
-    proposal = FactoryGirl.create(:proposal)
-    observer = FactoryGirl.create(:user)
+    proposal = create(:proposal)
+    observer = create(:user)
     login_as(proposal.requester)
 
     visit "/proposals/#{proposal.id}"
@@ -75,6 +75,22 @@ describe "observers" do
     expect(submit_button).to be_disabled
     fill_in_selectized('observation_user_email_address', observer.email_address)
     expect(submit_button).to_not be_disabled
+  end
+
+  it "observer can delete themselves as observer" do
+    proposal = create(:proposal)
+    observer = create(:user, client_slug: nil)
+
+    login_as(proposal.requester)
+    visit "/proposals/#{proposal.id}"
+    select observer.email_address, from: 'observation_user_email_address'
+    click_on 'Add an Observer'
+
+    login_as(observer)
+    visit "/proposals/#{proposal.id}"
+    delete_button = find('table.observers .button_to input[value="Remove"]')
+    delete_button.click
+    expect(page).to have_content("Removed Observation for ")
   end
 
   # adapted from http://stackoverflow.com/a/25047358
