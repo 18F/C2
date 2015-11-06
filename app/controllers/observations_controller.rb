@@ -18,7 +18,7 @@ class ObservationsController < ApplicationController
       redirect_path = proposal_path(proposal)
     end
     observation.destroy
-    flash[:success] = "Deleted Observation for #{proposal.public_id}"
+    flash[:success] = "Removed Observation for #{proposal.public_id}"
     redirect_to redirect_path
   end
 

@@ -88,9 +88,9 @@ describe "observers" do
 
     login_as(observer)
     visit "/proposals/#{proposal.id}"
-    delete_button = find('table.observers .button_to input[value="Delete"]')
+    delete_button = find('table.observers .button_to input[value="Remove"]')
     delete_button.click
-    expect(page).to have_content("Deleted Observation for ")
+    expect(page).to have_content("Removed Observation for ")
   end
 
   # adapted from http://stackoverflow.com/a/25047358
