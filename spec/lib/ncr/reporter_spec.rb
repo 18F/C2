@@ -46,8 +46,8 @@ describe Ncr::Reporter do
     it "shows status-aware approver for approved work orders" do
       work_order = create(:ncr_work_order, :with_approvers)
       proposal = work_order.proposal
-      while proposal.currently_awaiting_approvals.any?
-        proposal.currently_awaiting_approvals.first.approve!
+      while proposal.currently_awaiting_steps.any?
+        proposal.currently_awaiting_steps.first.approve!
       end
       proposal.approve!
       proposal.reload

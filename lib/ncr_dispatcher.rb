@@ -38,7 +38,7 @@ class NcrDispatcher < LinearDispatcher
   end
 
   def notify_pending_approvers(proposal, modifier)
-    proposal.currently_awaiting_approvals.each do |approval|
+    proposal.currently_awaiting_steps.each do |approval|
       if modifier and approval.user.id == modifier.id
         next # no email for modifier
       end
