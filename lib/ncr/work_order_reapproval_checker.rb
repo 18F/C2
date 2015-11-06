@@ -10,16 +10,19 @@ module Ncr
       work_order.modifier
     end
 
+    def previous_val(key)
+      changes = work_order.previous_changes || {}
+      changes[key.to_s].try(:first)
+    end
+
     def amount_increased?
-      changes = work_order.previous_changes
-      changes.key?("amount") && (work_order.amount > changes["amount"].first)
+      prev_amount = previous_val("amount")
+      prev_amount && (work_order.amount > prev_amount)
     end
 
     def protected_fields_changed?
-      changes = work_order.previous_changes
       self.class.protected_fields.any? do |field|
-        values = changes[field.to_s]
-        values && values[0].present?
+        previous_val(field).present?
       end
     end
 
@@ -34,7 +37,7 @@ module Ncr
           self.protected_fields_changed? &&
           !self.budget_approver?
         )
-        )
+      )
     end
 
     def self.protected_fields
