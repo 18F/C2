@@ -77,6 +77,22 @@ describe "observers" do
     expect(submit_button).to_not be_disabled
   end
 
+  it "observer can delete themselves as observer" do
+    proposal = FactoryGirl.create(:proposal)
+    observer = FactoryGirl.create(:user, client_slug: nil)
+
+    login_as(proposal.requester)
+    visit "/proposals/#{proposal.id}"
+    select observer.email_address, from: 'observation_user_email_address'
+    click_on 'Add an Observer'
+
+    login_as(observer)
+    visit "/proposals/#{proposal.id}"
+    delete_button = find('table.observers .button_to input[value="Delete"]')
+    delete_button.click
+    expect(page).to have_content("Deleted Observation for ")
+  end
+
   # adapted from http://stackoverflow.com/a/25047358
   def fill_in_selectized(key, *values)
     values.flatten.each do |value|

@@ -32,7 +32,7 @@
   .row
     = client_partial(@proposal.client, 'proposal_properties', locals: {proposal: @proposal })
   .row
-    %table.tabular-data
+    %table.tabular-data.observers
       %thead
         %tr.header
           %th{colspan: "2"}
