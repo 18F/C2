@@ -1,4 +1,4 @@
-describe Approvals::Individual do
+describe Steps::Individual do
   describe '#delegates' do
     it "returns a list of users" do
       approval = create(:approval)

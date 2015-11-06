@@ -1,6 +1,8 @@
 class Proposal < ActiveRecord::Base
   include WorkflowModel
   include ValueHelper
+  include StepManager
+
   has_paper_trail class_name: 'C2Version'
 
   CLIENT_MODELS = []  # this gets populated later
@@ -26,13 +28,15 @@ class Proposal < ActiveRecord::Base
     end
   end
 
-  has_many :approvals
-  has_many :individual_approvals, ->{ individual }, class_name: 'Approvals::Individual'
+  has_many :steps
+  has_many :individual_approvals, ->{ individual }, class_name: 'Steps::Individual'
   has_many :approvers, through: :individual_approvals, source: :user
   has_many :api_tokens, through: :individual_approvals
   has_many :attachments, dependent: :destroy
-  has_many :approval_delegates, through: :approvers, source: :outgoing_delegates
+  has_many :approval_delegates, through: :approvers, source: :outgoing_delegations
   has_many :comments, dependent: :destroy
+  has_many :delegates, through: :approval_delegates, source: :assignee
+
   has_many :observations, -> { where("proposal_roles.role_id in (select roles.id from roles where roles.name='observer')") }
   has_many :observers, through: :observations, source: :user
   belongs_to :client_data, polymorphic: true, dependent: :destroy
@@ -61,8 +65,8 @@ class Proposal < ActiveRecord::Base
   scope :cancelled, -> { where(status: 'cancelled') }
 
   # @todo - this should probably be the only entry into the approval system
-  def root_approval
-    self.approvals.where(parent: nil).first
+  def root_step
+    self.steps.where(parent: nil).first
   end
 
   def parallel?
@@ -83,12 +87,7 @@ class Proposal < ActiveRecord::Base
       OR user_id IN (SELECT assigner_id FROM approval_delegates WHERE assignee_id = :user_id)
       OR user_id IN (SELECT assignee_id FROM approval_delegates WHERE assigner_id = :user_id)
     SQL
-    self.approvals.where(where_clause, user_id: user.id).first
-  end
-
-  # TODO convert to an association
-  def delegates
-    self.approval_delegates.map(&:assignee)
+    self.steps.where(where_clause, user_id: user.id).first
   end
 
   # Returns a list of all users involved with the Proposal.
@@ -100,42 +99,32 @@ class Proposal < ActiveRecord::Base
 
   alias_method :subscribers, :users
 
-  def root_approval=(root)
-    old_approvals = self.approvals.to_a
-
-    approval_list = root.pre_order_tree_traversal
-    approval_list.each { |a| a.proposal = self }
-    self.approvals = approval_list
+  def root_step=(root)
+    old_steps = self.steps.to_a
+    step_list = root.pre_order_tree_traversal
+    step_list.each { |a| a.proposal = self }
+    self.steps = step_list
     # position may be out of whack, so we reset it
-    approval_list.each_with_index do |approval, idx|
-      approval.set_list_position(idx + 1)   # start with 1
+    step_list.each_with_index do |step, idx|
+      step.set_list_position(idx + 1) # start with 1
     end
 
-    self.clean_up_old_approvals(old_approvals, approval_list)
+    self.clean_up_old_steps(old_steps, step_list)
 
     root.initialize!
     self.reset_status
   end
 
-  def clean_up_old_approvals(old_approvals, approval_list)
-    # destroy any old approvals that are not a part of approval_list
-    (old_approvals - approval_list).each do |appr|
-      appr.destroy() if Approval.exists?(appr.id)
-    end
-  end
-
-  # convenience wrapper for setting a single approver
-  def approver=(approver)
-    # Don't recreate the approval
-    existing = self.existing_approval_for(approver)
-    if existing.nil?
-      self.root_approval = Approvals::Individual.new(user: approver)
+  def clean_up_old_steps(old_steps, step_list)
+    # destroy any old steps that are not a part of step list
+    (old_steps - step_list).each do |appr|
+      appr.destroy if Step.exists?(appr.id)
     end
   end
 
   def reset_status
     unless self.cancelled?   # no escape from cancelled
-      if self.root_approval.nil? || self.root_approval.approved?
+      if self.root_step.nil? || self.root_step.approved?
         self.update(status: 'approved')
       else
         self.update(status: 'pending')
@@ -231,9 +220,9 @@ class Proposal < ActiveRecord::Base
   #######################
 
   def restart
-    self.approvals.each(&:restart!)
-    if self.root_approval
-      self.root_approval.initialize!
+    self.individual_approvals.each(&:restart!)
+    if self.root_step
+      self.root_step.initialize!
     end
     Dispatcher.deliver_new_proposal_emails(self)
   end

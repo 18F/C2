@@ -16,7 +16,7 @@ describe ProposalDecorator do
   describe '#approvals_by_status' do
     it "orders by approved, actionable, pending" do
       # make two approvals for each status, in random order
-      statuses = Approval.statuses.map(&:to_s)
+      statuses = Step.statuses.map(&:to_s)
       statuses = statuses.dup + statuses.clone
       statuses = randomize(statuses)
 
@@ -38,6 +38,27 @@ describe ProposalDecorator do
       approvers = approvals.map(&:user)
       expect(approvers).not_to eq(users)
       expect(approvers.sort).to eq(users.sort)
+    end
+  end
+
+  describe "#step_text_for_user" do
+    let(:proposal) { create(:proposal).decorate }
+    let(:user)     { create(:user) }
+
+    context "when the active step is an approval" do
+      it "fetches approval text" do
+        step = Steps::Approval.new(user: user)
+        proposal.add_initial_steps([step])
+        expect(proposal.step_text_for_user(:execute_button, user)).to eq "Approve"
+      end
+    end
+
+    context "when the active step is a purchase" do
+      it "fetches purchase text" do
+        step = Steps::Purchase.new(user: user)
+        proposal.add_initial_steps([step])
+        expect(proposal.step_text_for_user(:execute_button, user)).to eq "Mark as Purchased"
+      end
     end
   end
 end

@@ -23,11 +23,9 @@
     </div>
   </div>
 
-
   <div class="row past-pr">
     <div class="col-md-12">
       <h3>Recently Completed Purchase Requests</h3>
-    </div>
     <%- if @approved_data.rows.any? %>
       <div class="col-sm-12">
         <%= render partial: "shared/table", locals: {container: @approved_data} %>
@@ -40,6 +38,7 @@
     <%- else %>
       <p class="empty-list-label">No recently completed purchase requests</p>
     <%- end %>
+    </div>
   </div>
 
   <%- if @cancelled_data.rows.any? %>

@@ -9,7 +9,7 @@ This API is currently in a very limited alpha, and is not enabled in any of our 
 * All decimals are strings ([more info](https://github.com/rails-api/active_model_serializers/issues/202))
 * All times are in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format
 
-### Approval
+### Step
 
 Attribute | Type | Note
 --- | --- | ---
@@ -41,7 +41,7 @@ The central, generic data structure that maintains workflow information.
 
 Attribute | Type | Note
 --- | --- | ---
-`approvals` | [ [Approval](#approval) ] |
+`steps` | [ [Step](#step) ] |
 `created_at` | string (time) |
 `flow` | string | Can be `linear` or `parallel`
 `id` | integer |
@@ -128,7 +128,7 @@ Returns an array of [Work Orders](#ncr-work-order), in descending order of creat
     "not_to_exceed": false,
     "office": "P1121209 Security Management",
     "proposal": {
-      "approvals": [
+      "steps": [
         {
           "id": 92,
           "status": "pending",

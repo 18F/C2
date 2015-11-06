@@ -25,7 +25,7 @@ describe CommunicartMailer do
     end
 
     it "uses the configured replyto email" do
-      expect(mail.reply_to).to eq(['replyto@example.com'])
+      expect(mail.reply_to).to eq(["replyto+#{proposal.public_id}@example.com"])
     end
 
     it "includes the appropriate headers for threading" do

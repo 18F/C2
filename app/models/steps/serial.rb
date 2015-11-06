@@ -1,6 +1,6 @@
 # A node in an approval chain that requires its children be approved in order
-module Approvals
-  class Serial < Approval
+module Steps
+  class Serial < Step
     workflow do
       on_transition { self.touch } # sets updated_at; https://github.com/geekq/workflow/issues/96
 
@@ -39,8 +39,9 @@ module Approvals
       end
     end
 
-    def on_actionable_entry(old_state, event)
-      if first_approval = self.child_approvals.first
+    def on_actionable_entry(_, _)
+      first_approval = self.child_approvals.first
+      if first_approval
         first_approval.initialize!
       else
         self.force_approve!
@@ -50,7 +51,8 @@ module Approvals
     # enforce initialization of children in sequence. If we hit one which is
     # already approved, it will notify us, and then  we'll notify the next
     def init_child_after(approval)
-      if child_after = self.child_approvals.where('position > ?', approval.position).first
+      child_after = self.child_approvals.find_by("position > ?", approval.position)
+      if child_after
         child_after.initialize!
       end
     end

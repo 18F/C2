@@ -12,7 +12,7 @@ module ProposalSpecHelper
 
     # sanity checks
     expect(proposal.status).to eq('approved')
-    expect(proposal.root_approval.status).to eq('approved')
+    expect(proposal.root_step.status).to eq('approved')
     linear_approval_statuses(proposal).each do |status|
       expect(status).to eq('approved')
     end

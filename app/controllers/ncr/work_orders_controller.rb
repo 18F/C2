@@ -9,6 +9,7 @@ module Ncr
     end
 
     def create
+      Ncr::WorkOrderValueNormalizer.new(@model_instance).run
       super
     end
 
@@ -21,19 +22,26 @@ module Ncr
     end
 
     def update
+      @model_instance.assign_attributes(permitted_params)
+      Ncr::WorkOrderValueNormalizer.new(@model_instance).run
       @model_instance.modifier = current_user
 
       super
+    end
 
+    protected
+
+    def record_changes
+      ProposalUpdateRecorder.new(@model_instance).run
+    end
+
+    def setup_and_email_approvers
       updater = Ncr::WorkOrderUpdater.new(
         work_order: @model_instance,
-        model_changing: @model_changing,
         flash: flash
       )
       updater.after_update
     end
-
-    protected
 
     def attribute_changes?
       super || @model_instance.approver_changed?
@@ -58,7 +66,7 @@ module Ncr
     end
 
     # @pre: @model_instance.approving_official_email is set
-    def add_approvals
+    def add_steps
       super
       if self.errors.empty?
         @model_instance.setup_approvals_and_observers

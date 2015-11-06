@@ -1,10 +1,9 @@
 module Ncr
   class WorkOrderUpdater
-    attr_reader :flash, :model_changing, :work_order
+    attr_reader :flash, :work_order
 
-    def initialize(work_order:, flash:, model_changing:)
+    def initialize(work_order:, flash:)
       @flash = flash
-      @model_changing = !!model_changing
       @work_order = work_order
     end
 
@@ -25,11 +24,9 @@ module Ncr
     end
 
     def after_update
-      if model_changing
-        work_order.setup_approvals_and_observers
-        reapprove_if_necessary
-        Dispatcher.on_proposal_update(proposal, work_order.modifier)
-      end
+      work_order.setup_approvals_and_observers
+      reapprove_if_necessary
+      Dispatcher.on_proposal_update(proposal, work_order.modifier)
     end
   end
 end

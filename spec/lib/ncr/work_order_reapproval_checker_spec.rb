@@ -75,7 +75,7 @@ describe Ncr::WorkOrderReapprovalChecker do
       fully_approve(work_order.proposal)
 
       work_order.modifier = work_order.budget_approvers.first
-      work_order.update!(function_code: 'foo')
+      work_order.update!(function_code: "PG789")
 
       checker = Ncr::WorkOrderReapprovalChecker.new(work_order)
       expect(checker.requires_budget_reapproval?).to eq(false)

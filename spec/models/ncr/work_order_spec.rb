@@ -77,7 +77,7 @@ describe Ncr::WorkOrder do
         ba61_tier_one_email,
         ba61_tier_two_email
       ].uniq)
-      expect(form.approvals.length).to eq(0)
+      expect(form.steps.length).to eq(0)
       form.clear_association_cache
       expect(form.approved?).to eq(true)
     end
@@ -137,12 +137,12 @@ describe Ncr::WorkOrder do
       wo = create(:ncr_work_order, expense_type: 'BA61', emergency: true)
       wo.setup_approvals_and_observers
 
-      expect(wo.approvals).to be_empty
+      expect(wo.steps).to be_empty
       expect(wo.observers.count).to be 3
 
       wo.setup_approvals_and_observers
       wo.reload
-      expect(wo.approvals).to be_empty
+      expect(wo.steps).to be_empty
       expect(wo.observers.count).to be 3
     end
 
@@ -257,28 +257,10 @@ describe Ncr::WorkOrder do
         expect(work_order).to be_valid
       end
 
-      it "automatically adds a 'CL' prefix" do
-        work_order.cl_number = '1234567'
-        expect(work_order).to be_valid
-        expect(work_order.cl_number).to eq('CL1234567')
-      end
-
       it "requires seven numbers" do
         work_order.cl_number = '123'
         expect(work_order).to_not be_valid
         expect(work_order.errors.keys).to eq([:cl_number])
-      end
-
-      it "is converted to uppercase" do
-        work_order.cl_number = 'cl1234567'
-        expect(work_order).to be_valid
-        expect(work_order.cl_number).to eq('CL1234567')
-      end
-
-      it "clears empty strings" do
-        work_order.cl_number = ''
-        expect(work_order).to be_valid
-        expect(work_order.cl_number).to eq(nil)
       end
     end
 
@@ -294,24 +276,6 @@ describe Ncr::WorkOrder do
         work_order.function_code = 'PG12'
         expect(work_order).to_not be_valid
         expect(work_order.errors.keys).to eq([:function_code])
-      end
-
-      it "automatically adds a 'PG' prefix" do
-        work_order.function_code = '123'
-        expect(work_order).to be_valid
-        expect(work_order.function_code).to eq('PG123')
-      end
-
-      it "is converted to uppercase" do
-        work_order.function_code = 'pg1c3'
-        expect(work_order).to be_valid
-        expect(work_order.function_code).to eq('PG1C3')
-      end
-
-      it "clears empty strings" do
-        work_order.function_code = ''
-        expect(work_order).to be_valid
-        expect(work_order.function_code).to eq(nil)
       end
     end
 
@@ -350,103 +314,19 @@ describe Ncr::WorkOrder do
       end
     end
 
-    describe 'soc_code' do
+    describe "soc_code" do
       let (:work_order) { build(:ncr_work_order) }
 
       it "works with three characters" do
-        work_order.soc_code = '123'
+        work_order.soc_code = "123"
         expect(work_order).to be_valid
       end
 
       it "must be three characters" do
-        work_order.soc_code = '12'
+        work_order.soc_code = "12"
         expect(work_order).to_not be_valid
         expect(work_order.errors.keys).to eq([:soc_code])
       end
-
-      it "is converted to uppercase" do
-        work_order.soc_code = 'ab2'
-        expect(work_order).to be_valid
-        expect(work_order.soc_code).to eq('AB2')
-      end
-
-      it "clears empty strings" do
-        work_order.soc_code = ''
-        expect(work_order).to be_valid
-        expect(work_order.soc_code).to eq(nil)
-      end
-    end
-  end
-
-  describe '#record_changes' do
-    let (:work_order) { create(:ncr_work_order) }
-
-    it 'adds a change comment' do
-      work_order.update(vendor: 'Mario Brothers', amount: 123.45, description: 'some text')
-
-      expect(work_order.proposal.comments.count).to be 1
-      comment = Comment.last
-      expect(comment.update_comment).to be(true)
-      comment_text = "- *Vendor* was changed from Some Vend to Mario Brothers\n"
-      comment_text += "- *Amount* was changed from $1,000.00 to $123.45\n"
-      comment_text += "- *Description* was changed to some text"
-      expect(comment.comment_text).to eq(comment_text)
-
-      work_order.update(description: '')
-
-      expect(work_order.proposal.comments.count).to be 2
-      comment = Comment.last
-      expect(comment.update_comment).to be(true)
-      expect(comment.comment_text).to eq("*Description* was changed from some text to *empty*")
-    end
-
-    it 'includes extra information if modified post approval' do
-      work_order.approve!
-      work_order.update(vendor: 'Mario Brothers', amount: 123.45)
-
-      expect(work_order.proposal.comments.count).to be 1
-      comment = Comment.last
-      expect(comment.update_comment).to be(true)
-      comment_text = "- *Vendor* was changed from Some Vend to Mario Brothers\n"
-      comment_text += "- *Amount* was changed from $1,000.00 to $123.45\n"
-      comment_text += "_Modified post-approval_"
-      expect(comment.comment_text).to eq(comment_text)
-    end
-
-    it 'does not add a change comment when nothing has changed' do
-      work_order.touch
-      expect(Comment.count).to be 0
-    end
-
-    it 'does not add a comment when nothing has changed and it is approved' do
-      work_order.approve!
-      work_order.touch
-
-      expect(Comment.count).to be 0
-    end
-
-    it 'attributes the update comment to the requester by default' do
-      work_order.update(vendor: 'VenVenVen')
-      comment = work_order.comments.update_comments.last
-      expect(comment.user).to eq(work_order.requester)
-    end
-
-    it 'attributes the update comment to someone set explicitly' do
-      modifier = create(:user)
-      work_order.modifier = modifier
-      work_order.update(vendor: 'VenVenVen')
-
-      comment = work_order.comments.update_comments.last
-      expect(comment.user).to eq(modifier)
-    end
-
-    it 'does not send a comment email for the update comment to proposal listeners' do
-      listener = create(:user)
-      work_order.proposal.add_observer(listener)
-
-      expect {
-       work_order.update(vendor: 'TestVendor')
-      }.to change { deliveries.length }.by(0)
     end
   end
 
@@ -519,7 +399,7 @@ describe Ncr::WorkOrder do
       work_order.restart_budget_approvals
 
       expect(work_order.status).to eq('pending')
-      expect(work_order.proposal.root_approval.status).to eq('actionable')
+      expect(work_order.proposal.root_step.status).to eq('actionable')
       expect(linear_approval_statuses(proposal)).to eq(%w(
         approved
         actionable
