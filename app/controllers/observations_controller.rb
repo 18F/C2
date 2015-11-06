@@ -13,7 +13,7 @@ class ObservationsController < ApplicationController
   def destroy
     proposal = observation.proposal
     if current_user == observation.user
-      redirect_path = "/proposals"
+      redirect_path = proposals_path
     else
       redirect_path = proposal_path(proposal)
     end
