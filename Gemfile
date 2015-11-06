@@ -78,9 +78,10 @@ group :test do
   gem 'capybara'
   gem 'codeclimate-test-reporter'
   gem 'poltergeist'
-  gem "shoulda-matchers"
+  gem 'shoulda-matchers'
   gem 'simplecov'
   gem 'timecop'
+  gem 'webmock'
   gem 'zonebie'
 
   # For better test reporting in CircleCI
