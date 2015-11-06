@@ -36,11 +36,11 @@ class MailPreview < MailView
   end
 
   def pending_approval
-    Approval.pending.last
+    Step.pending.last
   end
 
   def received_approval
-    Approval.approved.last
+    Step.approved.last
   end
 
   def proposal

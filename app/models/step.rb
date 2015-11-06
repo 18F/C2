@@ -1,31 +1,32 @@
-class Approval < ActiveRecord::Base
+class Step < ActiveRecord::Base
   include WorkflowModel
-  has_paper_trail class_name: 'C2Version'
+  has_paper_trail class_name: "C2Version"
 
-  workflow do   # overwritten in child classes
+  workflow do # overwritten in child classes
     state :pending
     state :actionable
     state :approved
   end
 
+  belongs_to :user
   belongs_to :proposal
   acts_as_list scope: :proposal
+  belongs_to :parent, class_name: "Step"
 
-  belongs_to :user
-  belongs_to :parent, class_name: 'Approval'
-  has_many :child_approvals, class_name: 'Approval', foreign_key: 'parent_id', dependent: :destroy
+  has_many :child_approvals, class_name: "Step", foreign_key: "parent_id", dependent: :destroy
 
   validates :proposal, presence: true
-  validates :user_id, uniqueness: { scope: :proposal_id }
+  validates :user_id, uniqueness: { scope: :proposal_id }, allow_blank: true
 
-  scope :individual, -> { where(type: "Approvals::Individual") }
+  # @TODO: Auto-generate list of subclasses
+  scope :individual, -> { where(type: ["Steps::Approval", "Steps::Purchase"]).order("position ASC") }
 
   self.statuses.each do |status|
     scope status, -> { where(status: status) }
   end
-  scope :non_pending, -> { where.not(status: 'pending') }
+  scope :non_pending, -> { where.not(status: "pending") }
 
-  default_scope { order('position ASC') }
+  default_scope { order("position ASC") }
 
   def notify_parent_approved
     if self.parent

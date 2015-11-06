@@ -1,4 +1,4 @@
-class ApprovalDecorator < Draper::Decorator
+class StepDecorator < Draper::Decorator
   delegate_all
 
   def display_status

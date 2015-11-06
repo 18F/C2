@@ -77,7 +77,7 @@ describe Ncr::WorkOrder do
         ba61_tier_one_email,
         ba61_tier_two_email
       ].uniq)
-      expect(form.approvals.length).to eq(0)
+      expect(form.steps.length).to eq(0)
       form.clear_association_cache
       expect(form.approved?).to eq(true)
     end
@@ -137,12 +137,12 @@ describe Ncr::WorkOrder do
       wo = create(:ncr_work_order, expense_type: 'BA61', emergency: true)
       wo.setup_approvals_and_observers
 
-      expect(wo.approvals).to be_empty
+      expect(wo.steps).to be_empty
       expect(wo.observers.count).to be 3
 
       wo.setup_approvals_and_observers
       wo.reload
-      expect(wo.approvals).to be_empty
+      expect(wo.steps).to be_empty
       expect(wo.observers.count).to be 3
     end
 

@@ -13,7 +13,7 @@ describe Query::Proposal::Versions do
       prop2 = create(:proposal, :with_approver)
 
       container = Query::Proposal::Versions.container(prop1)
-      approval = prop1.approvals.first
+      approval = prop1.steps.first
       expect(container.rows).to include(approval.versions.first)
     end
   end

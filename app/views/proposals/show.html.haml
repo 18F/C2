@@ -157,4 +157,4 @@
   .centered
     = form_tag(approve_proposal_path(@proposal, method: "POST")) do
       = hidden_field_tag :version, @proposal.version
-      = submit_tag "Approve", class: 'form-button'
+      = submit_tag @proposal.step_text_for_user(:execute_button, current_user), class: 'form-button'

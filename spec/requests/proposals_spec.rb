@@ -16,7 +16,7 @@ describe 'proposals' do
   describe 'POST /proposals/:id/approve' do
     def expect_status(proposal, status, app_status)
       proposal.reload
-      proposal.approvals.each do |approval|
+      proposal.steps.each do |approval|
         expect(approval.status).to eq(app_status)
       end
       expect(proposal.status).to eq(status)
@@ -84,8 +84,8 @@ describe 'proposals' do
 
     context "using a token" do
       let(:proposal) { create(:proposal, :with_approver) }
-      let(:approval) { proposal.approvals.first }
-      let(:token) { create(:api_token, approval: approval) }
+      let(:step) { proposal.individual_approvals.first }
+      let(:token) { create(:api_token, step: step) }
 
       it "supports token auth" do
         post "/proposals/#{proposal.id}/approve", cch: token.access_token
