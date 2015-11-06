@@ -8,7 +8,7 @@ describe Gsa18f::Procurement do
       expect(procurement.observers.map(&:email_address)).to eq(['purchaser@example.com'])
     end
 
-    it "identifies eligible observers" do
+    it "identifies eligible observers based on client_slug" do
       procurement = create(:gsa18f_procurement)
       user = create(:user, client_slug: 'gsa18f')
       expect(procurement.proposal.eligible_observers.to_a).to include(user)
