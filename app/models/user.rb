@@ -107,7 +107,9 @@ class User < ActiveRecord::Base
   def self.from_oauth_hash(auth_hash)
     user_data = auth_hash.extra.raw_info.to_hash
     user = self.for_email(user_data['email'])
-    user.update_attributes(first_name: user_data['first_name'], last_name: user_data['last_name'])
+    if user_data['first_name'].present? && user_data['last_name'].present?
+      user.update_attributes(first_name: user_data['first_name'], last_name: user_data['last_name'])
+    end
     user
   end
 
