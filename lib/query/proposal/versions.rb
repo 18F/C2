@@ -5,7 +5,7 @@ module Query
         [
           proposal,
           proposal.client_data,
-          proposal.approvals,
+          proposal.steps,
           proposal.observations,
           proposal.comments.normal_comments,
           proposal.attachments

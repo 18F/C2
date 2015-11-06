@@ -1,4 +1,4 @@
-describe Approvals::Individual do
+describe Steps::Individual do
   let(:approval) { create(:approval) }
 
   describe '#delegates' do

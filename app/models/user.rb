@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
   validates :email_address, presence: true, uniqueness: true
   validates_email_format_of :email_address
 
-  has_many :approvals, dependent: :destroy
+  has_many :steps, dependent: :destroy
   has_many :comments, dependent: :destroy
   has_many :observations, dependent: :destroy
 

@@ -40,7 +40,7 @@ module Query
       protected
 
       def self.approvals
-        Approval.arel_table
+        Step.arel_table
       end
 
       def self.delegates

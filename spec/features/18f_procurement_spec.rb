@@ -9,16 +9,17 @@ describe "GSA 18f Purchase Request Form" do
     expect(page).to have_content("You need to sign in")
   end
 
-  context "when signed in" do
+  let(:requester) { create(:user, client_slug: "gsa18f") }
+  let(:approver)  { create(:user, client_slug: "gsa18f", email_address: "test_approver@example.com") }
+  let(:purchaser) { create(:user, client_slug: "gsa18f", email_address: "test_purchaser@example.com") }
+  let(:procurement) do
+    pr = create(:gsa18f_procurement, requester: requester)
+    pr.add_steps
+    pr
+  end
+  let(:proposal) { procurement.proposal }
 
-    let(:requester) { create(:user, client_slug: 'gsa18f') }
-    let(:procurement) {
-      pr = create(:gsa18f_procurement, requester: requester)
-      pr.add_approvals
-      pr
-    }
-    let(:proposal) { procurement.proposal }
-
+  context "when signed in as the requester" do
     before do
       login_as(requester)
     end
@@ -48,7 +49,7 @@ describe "GSA 18f Purchase Request Form" do
       expect(proposal.flow).to eq('linear')
       expect(proposal.client).to eq('gsa18f')
       expect(proposal.requester).to eq(requester)
-      expect(proposal.approvers.map(&:email_address)).to eq(%w(test_approver@example.com))
+      expect(proposal.approvers.map(&:email_address)).to eq(%w(test_approver@example.com test_purchaser@example.com))
 
       procurement = proposal.client_data
       expect(procurement.link_to_product).to eq('http://www.amazon.com')
@@ -60,8 +61,8 @@ describe "GSA 18f Purchase Request Form" do
       expect(procurement.urgency).to eq(10)
     end
 
-    it "sets an observer" do
-      expect(procurement.observers.map(&:email_address)).to eq(['test_purchaser@example.com'])
+    it "does not set an observer" do
+      expect(procurement.observers.map(&:email_address)).to be_empty
     end
 
     it "doesn't save when the amount is too high" do
@@ -170,7 +171,7 @@ describe "GSA 18f Purchase Request Form" do
       expect(procurement.urgency).to eq(10)
 
       expect(proposal.requester).to eq(requester)
-      expect(proposal.approvers.map(&:email_address)).to eq(%w(test_approver@example.com))
+      expect(proposal.approvers.map(&:email_address)).to eq(%w(test_approver@example.com test_purchaser@example.com))
     end
 
     it "has 'Discard Changes' link" do
@@ -198,6 +199,32 @@ describe "GSA 18f Purchase Request Form" do
       procurement.set_requester(create(:user))
       visit "/proposals/#{proposal.id}"
       expect(page).not_to have_content('Modify Request')
+    end
+  end
+
+  context "when signed in as the approver" do
+    before do
+      login_as(approver)
+    end
+
+    it "the step execution button is correctly marked" do
+      visit "/proposals/#{proposal.id}"
+      expect(page).to have_button('Approve')
+    end
+  end
+
+  context "when signed in as the purchaser" do
+    before do
+      login_as(purchaser)
+    end
+
+    it "the step execution button is correctly marked" do
+      login_as(approver)
+      visit "/proposals/#{proposal.id}"
+      click_on 'Approve'
+      login_as(purchaser)
+      visit "/proposals/#{proposal.id}"
+      expect(page).to have_button('Mark as Purchased')
     end
   end
 end

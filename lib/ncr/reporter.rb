@@ -73,7 +73,7 @@ module Ncr
       tier_one_sql = User.sql_for_role_slug('BA61_tier1_budget_approver', 'ncr')
 
       <<-SQL.gsub(/^ {8}/, '')
-        SELECT a.proposal_id FROM approvals AS a
+        SELECT a.proposal_id FROM steps AS a
         WHERE a.status='actionable' AND a.user_id IN (#{tier_one_sql})
       SQL
     end
@@ -161,8 +161,8 @@ module Ncr
 
 
     def find_approved_at(work_order)
-      if work_order.proposal.approvals.last.present?
-        work_order.proposal.approvals.last.approved_at
+      if work_order.proposal.steps.last.present?
+        work_order.proposal.steps.last.approved_at
       else
         "no approvals"
       end

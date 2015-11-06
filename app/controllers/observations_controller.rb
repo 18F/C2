@@ -11,9 +11,15 @@ class ObservationsController < ApplicationController
   end
 
   def destroy
-    self.observation.destroy
-    flash[:success] = "Deleted Observation"
-    redirect_to proposal_path(self.observation.proposal_id)
+    proposal = observation.proposal
+    if current_user == observation.user
+      redirect_path = proposals_path
+    else
+      redirect_path = proposal_path(proposal)
+    end
+    observation.destroy
+    flash[:success] = "Removed Observation for #{proposal.public_id}"
+    redirect_to redirect_path
   end
 
   protected

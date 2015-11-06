@@ -1,4 +1,4 @@
-<% title "How do I submit an verbal notice to proceed (NTP) request in case of emergency?" %>
+<% title "How do I submit a verbal notice to proceed (NTP) request in case of emergency?" %>
 
 If you have an active emergency in your building (for example, a pipe burst causing major flooding), take action immediately. Just as in the past, a purchase card holder can get a verbal NTP from BA61 to take action. As soon as you are able, follow up with the paperwork.
 
