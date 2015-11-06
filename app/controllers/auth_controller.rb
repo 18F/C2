@@ -3,13 +3,8 @@ class AuthController < ApplicationController
 
   def oauth_callback
     auth = request.env["omniauth.auth"]
-
-    # fetch the redirect path (if any) before the authn sign in/out
-    # zaps the existing session
     return_to_path = fetch_return_to_path
-
     do_user_authn(auth)
-
     session[:token] = auth.credentials.token
     flash[:success] = "You successfully signed in"
     redirect_to return_to_path || proposals_path
