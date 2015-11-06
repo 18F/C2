@@ -55,13 +55,26 @@ describe Dispatcher do
       dispatcher.deliver_cancellation_emails(proposal)
     end
 
+    it "sends the reason to the cancellation email if there is one" do
+      proposal = create(:proposal, :with_approver)
+      approver = proposal.approvers.first
+      reason = "reason for cancellation"
+      allow(CommunicartMailer).to receive(:cancellation_email).
+        with(approver.email_address, proposal, reason).
+        and_return(mock_deliverer)
+
+      expect(mock_deliverer).to receive(:deliver_later).once
+
+      dispatcher.deliver_cancellation_emails(proposal, reason)
+    end
+
     it "sends an email to each actionable approver" do
       allow(CommunicartMailer).to receive(:cancellation_email).and_return(mock_deliverer)
       expect(serial_proposal.approvers.count).to eq 2
       expect(mock_deliverer).to receive(:deliver_later).once
 
       dispatcher.deliver_cancellation_emails(serial_proposal)
-    end 
+    end
 
     it "sends a confirmation email to the requester" do
       allow(CommunicartMailer).to receive(:cancellation_confirmation).and_return(mock_deliverer)

@@ -263,6 +263,46 @@ describe CommunicartMailer do
     end
   end
 
+  describe "cancellation_email" do
+    it "includes the cancellation reason, if there is one" do
+      user = create(:user)
+      proposal = create(:proposal, requester: user)
+      reason = "cancellation reason"
+
+      mail = CommunicartMailer.cancellation_email(user.email_address, proposal, reason)
+
+      expect(mail.body.encoded).to include(
+        "has been cancelled with given reason '#{reason}'."
+      )
+    end
+
+    it "does not include the cancellation reason if there is not one" do
+      user = create(:user)
+      proposal = create(:proposal, requester: user)
+
+      mail = CommunicartMailer.cancellation_email(user.email_address, proposal)
+
+      expect(mail.body.encoded).to include(
+        "The request, #{proposal.name} (#{proposal.public_id}), has been cancelled."
+      )
+      expect(mail.body.encoded).not_to include(
+        "has been cancelled with given reason"
+      )
+    end
+
+    it "does not include the cancellation reason if it is an empty string" do
+      user = create(:user)
+      proposal = create(:proposal, requester: user)
+      reason = ""
+
+      mail = CommunicartMailer.cancellation_email(user.email_address, proposal, reason)
+
+      expect(mail.body.encoded).not_to include(
+        "has been cancelled with given reason"
+      )
+    end
+  end
+
   describe 'proposal_observer_email' do
     let(:observation) { proposal.add_observer('observer1@example.com') }
     let(:observer) { observation.user }
