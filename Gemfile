@@ -81,7 +81,7 @@ group :test do
   gem 'shoulda-matchers'
   gem 'simplecov'
   gem 'timecop'
-  gem 'webmock'
+  gem 'webmock', require: false
   gem 'zonebie'
 
   # For better test reporting in CircleCI

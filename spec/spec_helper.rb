@@ -16,7 +16,7 @@ Zonebie.set_random_timezone
 
 require 'webmock/rspec'
 # localhost needed for omniauth
-WebMock.disable_net_connect!(allow_localhost: true)
+WebMock.disable_net_connect!(allow_localhost: true, allow: 'codeclimate.com:443')
 
 require 'rack_session_access/capybara'
 
