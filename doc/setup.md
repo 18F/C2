@@ -3,7 +3,7 @@
 ## Dependencies
 
 * Ruby 2.2.2
-* PostgreSQL 9.x
+* [Docker Toolbox](https://www.docker.com/docker-toolbox)
 * A [MyUSA](https://alpha.my.usa.gov/) account
 * An SMTP server (`production` mode only)
 
@@ -31,7 +31,7 @@ Per [the Twelve-Factor guidelines](http://12factor.net/config), all necessary co
 
 #### Can't create or connect to database
 
-* Check that PostgreSQL is running
+* Check that PostgreSQL Docker container is running
 * Set the `DATABASE_URL` variable in [`.env`](../.env.example) to match your setup
 
 ## Starting the application
