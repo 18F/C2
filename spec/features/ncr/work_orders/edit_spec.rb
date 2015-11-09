@@ -8,7 +8,7 @@ feature 'Editing NCR work orders' do
   let(:work_order) { create(:ncr_work_order, description: 'test') }
 
   scenario 'current user is not the requester, approver, or observer' do
-    stranger = create(:user, client_slug: 'ncr')
+    stranger = create(:user, client_slug: "ncr")
     login_as(stranger)
 
     visit "/ncr/work_orders/#{work_order.id}/edit"

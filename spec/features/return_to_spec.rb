@@ -1,11 +1,8 @@
 describe "the return_to url option" do
   include ReturnToHelper
 
-  before do
-    login_as(create(:user))
-  end
-
   it 'defaults to the proposals listing' do
+    login_as(create(:user))
     visit '/proposals/query'
     expect(page).to have_content('Back to main portal')
     click_on('Back to main portal')
@@ -15,6 +12,7 @@ describe "the return_to url option" do
   let(:return_to) {make_return_to('nnn', '/somewhere_else')}
 
   it 'changes the link when params are correct' do
+    login_as(create(:user))
     visit query_proposals_path(return_to: return_to)
     expect(page).not_to have_content('Back to main portal')
     expect(page).to have_content(return_to[:name])
@@ -22,6 +20,7 @@ describe "the return_to url option" do
   end
 
   it 'send back to main if not a valid sig (name)' do
+    login_as(create(:user))
     different_name = return_to.merge(name: 'other-key-here')
     visit query_proposals_path(return_to: different_name)
     expect(page).to have_content('Back to main portal')
@@ -30,9 +29,22 @@ describe "the return_to url option" do
   end
 
   it 'send back to main if not a valid sig (name)' do
+    login_as(create(:user))
     different_path = return_to.merge(path: 'other-key-here')
     visit query_proposals_path(return_to: different_path)
     expect(page).to have_content('Back to main portal')
     expect(page).not_to have_content(return_to[:name])
+  end
+
+  it "persists the original request URL over login and redirects after" do
+    user = create(:user)
+    proposal = create(:proposal, requester: user)
+
+    visit "/proposals/#{proposal.id}"
+    expect(current_path).to eq("/")
+
+    login_as(user)
+
+    expect(current_path).to eq("/proposals/#{proposal.id}")
   end
 end

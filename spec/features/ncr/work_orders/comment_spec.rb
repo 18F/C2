@@ -1,7 +1,7 @@
 feature 'Delegates for NCR work order' do
   let(:work_order) { create(:ncr_work_order, description: 'test') }
   let(:proposal) { work_order.proposal }
-  let(:delegate) { create(:user, client_slug: 'ncr') }
+  let(:delegate) { create(:user, client_slug: "ncr") }
 
   scenario 'adds current user to the observers list when commenting' do
     work_order.setup_approvals_and_observers

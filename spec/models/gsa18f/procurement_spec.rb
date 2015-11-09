@@ -6,6 +6,13 @@ describe Gsa18f::Procurement do
       expect(procurement.approvers.map(&:email_address)).to eq(["approver@example.com", "purchaser@example.com"])
       expect(procurement.observers.map(&:email_address)).to be_empty
     end
+
+    it "identifies eligible observers based on client_slug" do
+      procurement = create(:gsa18f_procurement)
+      user = create(:user, client_slug: 'gsa18f')
+      expect(procurement.proposal.eligible_observers.to_a).to include(user)
+      expect(procurement.proposal.eligible_observers.to_a).to_not include(procurement.observers)
+    end
   end
 
   describe "#total_price" do

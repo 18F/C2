@@ -140,6 +140,14 @@ class Proposal < ActiveRecord::Base
     observations.find_by(user: user)
   end
 
+  def eligible_observers
+    if observations.count > 0
+      User.where(client_slug: client).where('id not in (?)', observations.pluck('user_id'))
+    else
+      User.where(client_slug: client)
+    end
+  end
+
   def add_observer(email_or_user, adder=nil, reason=nil)
     user = find_user(email_or_user)
 
