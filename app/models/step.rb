@@ -29,15 +29,6 @@ class Step < ActiveRecord::Base
 
   default_scope { order("position ASC") }
 
-  # TODO make a protected method
-  def notify_parent_approved
-    if self.parent
-      self.parent.child_approved!(self)
-    else
-      self.proposal.approve!
-    end
-  end
-
   def children_approved?
     self.child_approvals.outstanding.empty?
   end
@@ -51,6 +42,14 @@ class Step < ActiveRecord::Base
   def restart
     if self.parent
       self.parent.restart!
+    end
+  end
+
+  def notify_parent_approved
+    if self.parent
+      self.parent.child_approved!(self)
+    else
+      self.proposal.approve!
     end
   end
 end
