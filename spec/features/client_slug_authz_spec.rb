@@ -15,7 +15,7 @@ describe "client_slug confers authz rules" do
 
   it "allows Admin role" do
     user = create(:user, :admin, client_slug: '')
-    approver = create(:user, client_slug: 'ncr')
+    approver = create(:user, client_slug: "ncr")
     login_as(user)
     visit '/ncr/work_orders/new'
     expect(page.status_code).to eq(200)
@@ -24,8 +24,8 @@ describe "client_slug confers authz rules" do
   end
 
   it "allows same client_slug to create" do
-    user = create(:user, client_slug: 'ncr')
-    approver = create(:user, client_slug: 'ncr')
+    user = create(:user, client_slug: "ncr")
+    approver = create(:user, client_slug: "ncr")
     login_as(user)
     visit '/ncr/work_orders/new'
     expect(page.status_code).to eq(200)
@@ -34,9 +34,9 @@ describe "client_slug confers authz rules" do
   end
 
   it "rejects different client_slug from viewing existing proposal" do
-    ncr_user = create(:user, client_slug: 'ncr')
+    ncr_user = create(:user, client_slug: "ncr")
     nil_user = create(:user, client_slug: '')
-    approver = create(:user, client_slug: 'ncr')
+    approver = create(:user, client_slug: "ncr")
     login_as(ncr_user)
     visit '/ncr/work_orders/new'
     submit_ba60_work_order(approver)
@@ -47,9 +47,9 @@ describe "client_slug confers authz rules" do
   end
 
   it "rejects same client_slug non-subscriber to view existing proposal" do
-    ncr_user = create(:user, client_slug: 'ncr')
-    ncr_user2 = create(:user, client_slug: 'ncr')
-    approver = create(:user, client_slug: 'ncr')
+    ncr_user = create(:user, client_slug: "ncr")
+    ncr_user2 = create(:user, client_slug: "ncr")
+    approver = create(:user, client_slug: "ncr")
     login_as(ncr_user)
     visit '/ncr/work_orders/new'
     submit_ba60_work_order(approver)
@@ -60,9 +60,9 @@ describe "client_slug confers authz rules" do
   end
 
   it "rejects subscriber trying to add user with non-client_slug as observer" do
-    ncr_user = create(:user, client_slug: 'ncr')
+    ncr_user = create(:user, client_slug: "ncr")
     gsa_user = create(:user, client_slug: 'gsa18f')
-    approver = create(:user, client_slug: 'ncr')
+    approver = create(:user, client_slug: "ncr")
     login_as(ncr_user)
     visit '/ncr/work_orders/new'
     submit_ba60_work_order(approver)

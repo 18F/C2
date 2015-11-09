@@ -20,7 +20,7 @@ describe Ncr::WorkOrdersController do
         }
       }
 
-      login_as(create(:user, client_slug: 'ncr'))
+      login_as(create(:user, client_slug: "ncr"))
 
       post :create, params
       ncr = Ncr::WorkOrder.order(:id).last

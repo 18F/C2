@@ -32,7 +32,7 @@
   .row
     = client_partial(@proposal.client, 'proposal_properties', locals: {proposal: @proposal })
   .row
-    %table.tabular-data
+    %table.tabular-data.observers
       %thead
         %tr.header
           %th{colspan: "2"}
@@ -46,7 +46,7 @@
               = "(#{role_str})" if role_str
             %td.righted
               - if observation && policy(observation).can_destroy?
-                = button_to "Delete", proposal_observation_path(@proposal, observation), method: :delete, data: {confirm: "Are you sure?"}
+                = button_to "Remove", proposal_observation_path(@proposal, observation), method: :delete, data: {confirm: "Are you sure?"}
         - if policy(Observation.new(proposal: @proposal)).can_create?
           %tr.add-more-row
             %td{colspan: 2}

@@ -164,7 +164,7 @@ describe Ncr::WorkOrder do
 
     it "respects user with same client_slug" do
       wo = create(:ba80_ncr_work_order)
-      user = create(:user, client_slug: 'ncr')
+      user = create(:user, client_slug: "ncr")
       expect(wo.slug_matches?(user)).to eq(true)
     end
   end
