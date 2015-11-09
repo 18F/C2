@@ -132,10 +132,9 @@ feature 'Creating an NCR work order' do
 
     scenario 'defaults to the approver from the last request' do
       login_as(requester)
-      proposal = create(:proposal, :with_serial_approvers, requester: requester)
+      proposal = create(:proposal, :with_serial_approvers, requester: requester, client_slug: 'ncr')
       visit '/ncr/work_orders/new'
-      expect(find_field("Approving official's email address").value).to eq(
-        proposal.approvers.first.email_address)
+      expect(find_field("Approving official's email address").value).to eq(proposal.approvers.first.email_address)
     end
 
     scenario 'requires a project_title' do

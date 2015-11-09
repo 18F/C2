@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :user do
-    client_slug { ENV['CLIENT_SLUG_DEFAULT'] || nil }
+    client_slug { nil }
     sequence(:email_address) {|n| "user#{n}@example.com" }
     sequence(:first_name) {|n| "FirstName#{n}" }
     sequence(:last_name) {|n| "LastName#{n}" }
