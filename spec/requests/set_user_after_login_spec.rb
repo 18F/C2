@@ -11,7 +11,18 @@ describe 'User creation when logging in with Oauth to view a protected page' do
       get '/auth/myusa/callback'
     }.to change { User.count }.by(1)
 
-    expect(User.last.email_address).to eq('george-test@example.com')
+    new_user = User.last
+    expect(new_user.email_address).to eq('george-test@example.com')
+    expect(new_user.first_name).to eq("Georgie")
+    expect(new_user.last_name).to eq("Jetsonian")
+  end
+
+  it "absence of first/last name does not throw error" do
+    user = StructUser.new('somebody@example.com', nil, nil)
+    setup_mock_auth(:myusa, user)
+    expect {
+      get '/auth/myusa/callback'
+    }.to change { User.count }.by(1)
   end
 
   it 'does not create a user if the current user already exists' do
