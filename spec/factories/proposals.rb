@@ -8,7 +8,7 @@ FactoryGirl.define do
     association :requester, factory: :user
 
     transient do
-      client_slug { ENV['CLIENT_SLUG_DEFAULT'] || 'ncr' }
+      client_slug { nil }
       delegate nil
       approver_user nil
     end

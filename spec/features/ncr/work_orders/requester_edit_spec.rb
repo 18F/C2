@@ -7,7 +7,7 @@ feature 'Requester edits their NCR work order' do
 
   let(:work_order) { create(:ncr_work_order, description: 'test') }
   let(:ncr_proposal) { work_order.proposal }
-  let!(:approver) { create(:user, client_slug: 'ncr') }
+  let!(:approver) { create(:user, client_slug: "ncr") }
 
   before do
     work_order.setup_approvals_and_observers
@@ -59,7 +59,7 @@ feature 'Requester edits their NCR work order' do
   end
 
   scenario 'allows requester to change the approving official' do
-    approver = create(:user, client_slug: 'ncr')
+    approver = create(:user, client_slug: "ncr")
     old_approver = ncr_proposal.approvers.first
     expect(Dispatcher).to receive(:on_approver_removal).with(ncr_proposal, [old_approver])
     visit "/ncr/work_orders/#{work_order.id}/edit"

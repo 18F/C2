@@ -29,7 +29,7 @@ describe "viewing a work order" do
   end
 
   it "does not show a edit link for non requester" do
-    ncr_proposal.set_requester(create(:user, client_slug: 'ncr'))
+    ncr_proposal.set_requester(create(:user, client_slug: "ncr"))
     visit "/proposals/#{ncr_proposal.id}"
     expect(page).not_to have_content('Modify Request')
   end
