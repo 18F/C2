@@ -29,10 +29,6 @@ class Step < ActiveRecord::Base
 
   default_scope { order("position ASC") }
 
-  def children_approved?
-    self.child_approvals.outstanding.empty?
-  end
-
   def pre_order_tree_traversal
     [self] + self.child_approvals.flat_map(&:pre_order_tree_traversal)
   end
@@ -51,5 +47,9 @@ class Step < ActiveRecord::Base
     else
       self.proposal.approve!
     end
+  end
+
+  def children_approved?
+    self.child_approvals.outstanding.empty?
   end
 end
