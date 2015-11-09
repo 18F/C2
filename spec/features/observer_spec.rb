@@ -3,7 +3,7 @@ describe "observers" do
     expect(CommunicartMailer).to receive_message_chain(:on_observer_added, :deliver_later)
 
     work_order = create(:ncr_work_order)
-    observer = create(:user)
+    observer = create(:user, client_slug: 'ncr')
     proposal = work_order.proposal
     login_as(proposal.requester)
 
@@ -21,7 +21,7 @@ describe "observers" do
   it "allows observers to be added by other observers" do
     proposal = create(:proposal, :with_observer)
     observer1 = proposal.observers.first
-    observer2 = create(:user)
+    observer2 = create(:user, client_slug: nil)
     login_as(observer1)
 
     visit "/proposals/#{proposal.id}"
@@ -39,7 +39,7 @@ describe "observers" do
   it "allows a user to add a reason when adding an observer" do
     reason = "is the archbishop of banterbury"
     proposal = create(:proposal)
-    observer = create(:user)
+    observer = create(:user, client_slug: nil)
     login_as(proposal.requester)
 
     visit "/proposals/#{proposal.id}"
@@ -55,7 +55,7 @@ describe "observers" do
 
   it "hides the reason field until a new observer is selected", js: true do
     proposal = create(:proposal)
-    observer = create(:user)
+    observer = create(:user, client_slug: nil)
     login_as(proposal.requester)
 
     visit "/proposals/#{proposal.id}"
@@ -67,7 +67,7 @@ describe "observers" do
 
   it "disables the submit button until a new observer is selected", js: true do
     proposal = create(:proposal)
-    observer = create(:user)
+    observer = create(:user, client_slug: nil)
     login_as(proposal.requester)
 
     visit "/proposals/#{proposal.id}"

@@ -53,7 +53,7 @@
               = form_for [@proposal, Observation.new] do |f|
                 = f.fields_for :user do |user_form|
                   .col-md-8.col-xs-12
-                    = user_form.collection_select :email_address, User.all.order(:email_address), :email_address, :email_address, {include_blank: true}, class: 'js-selectize'
+                    = user_form.collection_select :email_address, @proposal.eligible_observers, :email_address, :email_address, {include_blank: true}, class: 'js-selectize'
                     = f.label :reason, "Reason for adding observer (optional): ", data: {'hide-until-select' => 'observation_user_email_address'}
                     = text_field :observation, :reason, class: 'form-control', data: {'hide-until-select' => 'observation_user_email_address'}
                   .col-md-4.col-xs-12.righted
