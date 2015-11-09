@@ -1,9 +1,5 @@
 module Ncr
   class ApprovalManager
-    attr_reader :work_order
-
-    delegate :proposal, to: :work_order
-
     def initialize(work_order)
       @work_order = work_order
     end
@@ -25,6 +21,10 @@ module Ncr
     end
 
     private
+
+    attr_reader :work_order
+
+    delegate :proposal, to: :work_order
 
     # Check the approvers, accounting for frozen approving official
     def approvers_emails
