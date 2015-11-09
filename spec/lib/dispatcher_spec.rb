@@ -42,6 +42,18 @@ describe Dispatcher do
       dispatcher.deliver_attachment_emails(serial_proposal)
       expect(email_recipients).to_not include(serial_proposal.approvers.last.email_address)
     end
+
+    it "does not email delegates" do
+      wo = create(:ncr_work_order, :with_approvers)
+      tier_one_approver = wo.proposal.approvers.second
+      delegate_one = create(:user, client_slug: 'ncr')
+      delegate_two = create(:user, client_slug: 'ncr')
+      tier_one_approver.add_delegate(delegate_one)
+      tier_one_approver.add_delegate(delegate_two)
+      wo.proposal.individual_approvals.first.approve!
+      dispatcher.deliver_attachment_emails(wo.proposal)
+      expect(email_recipients).to_not include(delegate_one.email_address)
+    end
   end
 
   describe "#deliver_cancellation_emails" do

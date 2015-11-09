@@ -18,6 +18,7 @@ class User < ActiveRecord::Base
   has_many :proposals, foreign_key: "requester_id", dependent: :destroy
 
   has_many :outgoing_delegations, class_name: 'ApprovalDelegate', foreign_key: 'assigner_id'
+  has_many :outgoing_delegates, through: :outgoing_delegations, source: :assignee
 
   def self.active
     where(active: true)
