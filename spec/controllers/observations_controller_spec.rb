@@ -17,6 +17,17 @@ describe ObservationsController do
         post :create, proposal_id: proposal.id, observation: {user: {email_address: ""}}
       }.to raise_error(ActionController::ParameterMissing)
     end
+
+    it "gracefully warns on duplicates" do
+      login_as(proposal.requester)
+      observer = create(:user, client_slug: nil)
+
+      post :create, proposal_id: proposal.id, observation: {user: {email_address: observer.email_address}}
+      expect(flash[:success]).to eq("#{observer.full_name} has been added as an observer")
+
+      post :create, proposal_id: proposal.id, observation: {user: {email_address: observer.email_address}}
+      expect(flash[:alert]).to eq("#{observer.email_address} is already an observer for this request")
+    end
   end
 
   describe "#destroy" do

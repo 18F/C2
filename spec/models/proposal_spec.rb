@@ -121,6 +121,12 @@ describe Proposal do
       proposal.approvers.first.add_delegate(delegate_two)
       expect(proposal.users).to match_array(proposal.users_except_delegates + [delegate_one, delegate_two])
     end
+
+    it "identifies eligible observers" do
+      observer = create(:user, client_slug: nil)
+      proposal = create(:proposal, requester: observer)
+      expect(proposal.eligible_observers.to_a).to include(observer)
+    end
   end
 
   describe '#root_step=' do
