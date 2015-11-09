@@ -7,8 +7,8 @@ describe Ncr::WorkOrdersHelper do
     end
 
     it "does not include inactive users" do
-      inactive_approving_official = create(:user, :inactive)
-      active_approving_official = create(:user, :active)
+      inactive_approving_official = create(:user, :inactive, client_slug: 'ncr')
+      active_approving_official = create(:user, :active, client_slug: 'ncr')
 
       expect(helper.approver_options).to include(active_approving_official.email_address)
       expect(helper.approver_options).not_to include(inactive_approving_official.email_address)

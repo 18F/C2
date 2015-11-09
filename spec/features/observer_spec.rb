@@ -79,7 +79,7 @@ describe "observers" do
 
   it "observer can delete themselves as observer" do
     proposal = create(:proposal)
-    observer = create(:user, client_slug: nil)
+    observer = create(:user)
 
     login_as(proposal.requester)
     visit "/proposals/#{proposal.id}"

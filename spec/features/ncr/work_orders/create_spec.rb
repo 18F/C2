@@ -28,7 +28,7 @@ feature 'Creating an NCR work order' do
     let(:ncr_helper_class) { Class.new { extend Ncr::WorkOrdersHelper } }
 
     scenario 'saves a Proposal with the attributes' do
-      approver = create(:user)
+      approver = create(:user, client_slug: 'ncr')
       login_as(requester)
       expect(Dispatcher).to receive(:deliver_new_proposal_emails)
 
@@ -67,7 +67,7 @@ feature 'Creating an NCR work order' do
     end
 
     scenario 'saves a BA60 Proposal with the attributes' do
-      approver = create(:user)
+      approver = create(:user, client_slug: 'ncr')
       login_as(requester)
       expect(Dispatcher).to receive(:deliver_new_proposal_emails)
 
@@ -103,7 +103,7 @@ feature 'Creating an NCR work order' do
     scenario "does not show system approver emails as approver options", :js do
       expect(Ncr::WorkOrder.all_system_approver_emails.size).to eq 4
       login_as(requester)
-      approving_official = create(:user)
+      approving_official = create(:user, client_slug: 'ncr')
       visit "/ncr/work_orders/new"
       within(".ncr_work_order_approving_official_email") do
         find(".selectize-control").click
@@ -188,7 +188,7 @@ feature 'Creating an NCR work order' do
     end
 
     scenario "includes has overwritten field names" do
-      approver = create(:user)
+      approver = create(:user, client_slug: 'ncr')
       login_as(requester)
       visit '/ncr/work_orders/new'
       fill_in 'Project title', with: "buying stuff"
@@ -275,7 +275,7 @@ feature 'Creating an NCR work order' do
 
     context "selected common values on proposal page" do
       before do
-        approver = create(:user)
+        approver = create(:user, client_slug: 'ncr')
         login_as(requester)
         visit '/ncr/work_orders/new'
 
