@@ -17,7 +17,7 @@ FactoryGirl.define do
     end
 
     trait :with_approvers do
-      association :proposal, :with_serial_approvers, flow: 'linear', client_slug: 'ncr'
+      association :proposal, :with_serial_approvers, flow: 'linear', client_slug: "ncr"
       after :create do |wo|
         wo.approving_official_email = wo.approving_official.email_address
       end
