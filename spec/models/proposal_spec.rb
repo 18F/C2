@@ -112,6 +112,15 @@ describe Proposal do
       proposal.add_observer(observer)
       expect(proposal.users).to eq [observer]
     end
+
+    it "can exclude delegates" do
+      delegate_one = create(:user)
+      delegate_two = create(:user)
+      proposal = create(:proposal, :with_approver)
+      proposal.approvers.first.add_delegate(delegate_one)
+      proposal.approvers.first.add_delegate(delegate_two)
+      expect(proposal.users).to match_array(proposal.users_except_delegates + [delegate_one, delegate_two])
+    end
   end
 
   describe '#root_step=' do
