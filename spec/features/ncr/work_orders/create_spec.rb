@@ -53,7 +53,7 @@ feature 'Creating an NCR work order' do
       expect(proposal.name).to eq("buying stuff")
       expect(proposal.flow).to eq('linear')
       work_order = proposal.client_data
-      expect(work_order.client).to eq("ncr")
+      expect(work_order.client_slug).to eq("ncr")
       expect(work_order.expense_type).to eq('BA80')
       expect(work_order.vendor).to eq('ACME')
       expect(work_order.amount).to eq(123.45)

@@ -175,6 +175,10 @@ module Ncr
       Dispatcher.on_proposal_update(self.proposal, self.modifier)
     end
 
+    def editable?
+      true
+    end
+
     def relevant_fields
       Ncr::WorkOrder.relevant_fields(self.expense_type)
     end
