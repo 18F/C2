@@ -30,7 +30,9 @@
             = @proposal.display_status
 
   .row
-    = client_partial(@proposal.client, 'proposal_properties', locals: {proposal: @proposal })
+    = client_partial(@proposal.client_slug,
+    "proposal_properties",
+    locals: { proposal: @proposal })
   .row
     %table.tabular-data.observers
       %thead
@@ -63,7 +65,6 @@
 
 %ul#request-actions.centered
   - if policy(@proposal).can_edit?
-    = client_partial(@proposal.client, 'restart_link', locals: {proposal: @proposal})
     - unless @proposal.cancelled?
       %li
         = modify_client_button(@proposal)

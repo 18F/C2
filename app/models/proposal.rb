@@ -42,12 +42,7 @@ class Proposal < ActiveRecord::Base
   belongs_to :client_data, polymorphic: true, dependent: :destroy
   belongs_to :requester, class_name: 'User'
 
-  # The following list also servers as an interface spec for client_datas
-  # Note: clients may implement:
-  # :fields_for_display
-  # :version
-  # Note: clients should also implement :version
-  delegate :client, to: :client_data, allow_nil: true
+  delegate :client_slug, to: :client_data, allow_nil: true
 
   validates :client_data_type, inclusion: {
     in: ->(_) { self.client_model_names },
@@ -142,9 +137,9 @@ class Proposal < ActiveRecord::Base
 
   def eligible_observers
     if observations.count > 0
-      User.where(client_slug: client).where('id not in (?)', observations.pluck('user_id'))
+      User.where(client_slug: client_slug).where('id not in (?)', observations.pluck('user_id'))
     else
-      User.where(client_slug: client)
+      User.where(client_slug: client_slug)
     end
   end
 
@@ -247,7 +242,7 @@ class Proposal < ActiveRecord::Base
   end
 
   def self.client_slugs
-    CLIENT_MODELS.map(&:client)
+    CLIENT_MODELS.map(&:client_slug)
   end
 
   protected
@@ -267,7 +262,7 @@ class Proposal < ActiveRecord::Base
     if email_or_user.is_a?(User)
       email_or_user
     else
-      User.for_email_with_slug(email_or_user, client)
+      User.for_email_with_slug(email_or_user, client_slug)
     end
   end
 end

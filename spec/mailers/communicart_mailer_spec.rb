@@ -5,7 +5,10 @@ describe CommunicartMailer do
   end
 
   around(:each) do |example|
-    with_env_vars('NOTIFICATION_FROM_EMAIL' => 'reply@example.com', 'NOTIFICATION_REPLY_TO' => 'replyto@example.com') do
+    with_env_vars(
+      "NOTIFICATION_FROM_EMAIL" => "reply@example.com",
+      "NOTIFICATION_REPLY_TO" => "replyto@example.com"
+    ) do
       example.run
     end
   end
