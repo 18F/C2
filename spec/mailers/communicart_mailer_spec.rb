@@ -5,7 +5,10 @@ describe CommunicartMailer do
   end
 
   around(:each) do |example|
-    with_env_vars('NOTIFICATION_FROM_EMAIL' => 'reply@example.com', 'NOTIFICATION_REPLY_TO' => 'replyto@example.com') do
+    with_env_vars(
+      "NOTIFICATION_FROM_EMAIL" => "reply@example.com",
+      "NOTIFICATION_REPLY_TO" => "replyto@example.com"
+    ) do
       example.run
     end
   end
@@ -260,6 +263,20 @@ describe CommunicartMailer do
 
       mail = CommunicartMailer.on_observer_added(observation, reason)
       expect(mail.body.encoded).to include("with given reason '#{reason}'")
+    end
+  end
+
+  describe "cancellation_email" do
+    it "includes the cancellation reason" do
+      user = create(:user)
+      proposal = create(:proposal, requester: user)
+      reason = "cancellation reason"
+
+      mail = CommunicartMailer.cancellation_email(user.email_address, proposal, reason)
+
+      expect(mail.body.encoded).to include(
+        "has been cancelled with given reason '#{reason}'."
+      )
     end
   end
 

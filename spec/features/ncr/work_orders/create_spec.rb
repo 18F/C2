@@ -13,7 +13,7 @@ feature 'Creating an NCR work order' do
 
   with_feature 'RESTRICT_ACCESS' do
     scenario 'requires a GSA email address' do
-      user = create(:user, email_address: 'intruder@example.com', client_slug: 'ncr')
+      user = create(:user, email_address: 'intruder@example.com', client_slug: "ncr")
       login_as(user)
 
       visit '/ncr/work_orders/new'
@@ -24,11 +24,11 @@ feature 'Creating an NCR work order' do
   end
 
   context 'when signed in as the requester' do
-    let(:requester) { create(:user, client_slug: 'ncr') }
+    let(:requester) { create(:user, client_slug: "ncr") }
     let(:ncr_helper_class) { Class.new { extend Ncr::WorkOrdersHelper } }
 
     scenario 'saves a Proposal with the attributes' do
-      approver = create(:user)
+      approver = create(:user, client_slug: "ncr")
       login_as(requester)
       expect(Dispatcher).to receive(:deliver_new_proposal_emails)
 
@@ -53,7 +53,7 @@ feature 'Creating an NCR work order' do
       expect(proposal.name).to eq("buying stuff")
       expect(proposal.flow).to eq('linear')
       work_order = proposal.client_data
-      expect(work_order.client).to eq('ncr')
+      expect(work_order.client_slug).to eq("ncr")
       expect(work_order.expense_type).to eq('BA80')
       expect(work_order.vendor).to eq('ACME')
       expect(work_order.amount).to eq(123.45)
@@ -67,7 +67,7 @@ feature 'Creating an NCR work order' do
     end
 
     scenario 'saves a BA60 Proposal with the attributes' do
-      approver = create(:user)
+      approver = create(:user, client_slug: "ncr")
       login_as(requester)
       expect(Dispatcher).to receive(:deliver_new_proposal_emails)
 
@@ -103,7 +103,7 @@ feature 'Creating an NCR work order' do
     scenario "does not show system approver emails as approver options", :js do
       expect(Ncr::WorkOrder.all_system_approver_emails.size).to eq 4
       login_as(requester)
-      approving_official = create(:user)
+      approving_official = create(:user, client_slug: "ncr")
       visit "/ncr/work_orders/new"
       within(".ncr_work_order_approving_official_email") do
         find(".selectize-control").click
@@ -132,10 +132,9 @@ feature 'Creating an NCR work order' do
 
     scenario 'defaults to the approver from the last request' do
       login_as(requester)
-      proposal = create(:proposal, :with_serial_approvers, requester: requester)
+      proposal = create(:proposal, :with_serial_approvers, requester: requester, client_slug: "ncr")
       visit '/ncr/work_orders/new'
-      expect(find_field("Approving official's email address").value).to eq(
-        proposal.approvers.first.email_address)
+      expect(find_field("Approving official's email address").value).to eq(proposal.approvers.first.email_address)
     end
 
     scenario 'requires a project_title' do
@@ -188,7 +187,7 @@ feature 'Creating an NCR work order' do
     end
 
     scenario "includes has overwritten field names" do
-      approver = create(:user)
+      approver = create(:user, client_slug: "ncr")
       login_as(requester)
       visit '/ncr/work_orders/new'
       fill_in 'Project title', with: "buying stuff"
@@ -275,7 +274,7 @@ feature 'Creating an NCR work order' do
 
     context "selected common values on proposal page" do
       before do
-        approver = create(:user)
+        approver = create(:user, client_slug: "ncr")
         login_as(requester)
         visit '/ncr/work_orders/new'
 

@@ -1,17 +1,19 @@
 feature 'Requester edits their NCR work order' do
+  include ProposalSpecHelper
+
   around(:each) do |example|
-    with_env_var('DISABLE_SANDBOX_WARNING', 'true') do
+    with_feature('DISABLE_SANDBOX_WARNING') do
       example.run
     end
   end
 
   let(:work_order) { create(:ncr_work_order, description: 'test') }
   let(:ncr_proposal) { work_order.proposal }
-  let!(:approver) { create(:user, client_slug: 'ncr') }
+  let(:requester) { work_order.requester }
 
   before do
     work_order.setup_approvals_and_observers
-    login_as(work_order.requester)
+    login_as(requester)
   end
 
   scenario 'can be edited if pending' do
@@ -59,7 +61,7 @@ feature 'Requester edits their NCR work order' do
   end
 
   scenario 'allows requester to change the approving official' do
-    approver = create(:user, client_slug: 'ncr')
+    approver = create(:user, client_slug: "ncr")
     old_approver = ncr_proposal.approvers.first
     expect(Dispatcher).to receive(:on_approver_removal).with(ncr_proposal, [old_approver])
     visit "/ncr/work_orders/#{work_order.id}/edit"
@@ -143,7 +145,7 @@ feature 'Requester edits their NCR work order' do
   end
 
   scenario 'can be edited if approved' do
-    ncr_proposal.update_attributes(status: 'approved') # avoid workflow
+    fully_approve(ncr_proposal)
 
     visit "/ncr/work_orders/#{work_order.id}/edit"
     expect(current_path).to eq("/ncr/work_orders/#{work_order.id}/edit")

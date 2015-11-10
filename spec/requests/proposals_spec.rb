@@ -100,6 +100,25 @@ describe 'proposals' do
         token.reload
         expect(token).to be_used
       end
+
+      it "fails for delegate without login, redirects automatically after login" do
+        delegate = create(:user)
+        proposal = create(:proposal, delegate: delegate)
+        step = proposal.individual_steps.first
+        token = create(:api_token, step: step)
+
+        get "/proposals/#{proposal.id}/approve", cch: token.access_token
+
+        expect(response).to redirect_to(root_path(return_to: self.make_return_to("Previous", request.fullpath)))
+
+        login_as(delegate)
+
+        expect(response).to redirect_to("/proposals/#{proposal.id}/approve?cch=#{token.access_token}")
+
+        get response.headers['Location']
+
+        expect_status(proposal, 'approved', 'approved')
+      end
     end
   end
 end

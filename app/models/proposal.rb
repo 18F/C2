@@ -41,13 +41,8 @@ class Proposal < ActiveRecord::Base
   has_many :observers, through: :observations, source: :user
   belongs_to :client_data, polymorphic: true, dependent: :destroy
   belongs_to :requester, class_name: 'User'
-  
-  # The following list also servers as an interface spec for client_datas
-  # Note: clients may implement:
-  # :fields_for_display
-  # :version
-  # Note: clients should also implement :version
-  delegate :client, to: :client_data, allow_nil: true
+
+  delegate :client_slug, to: :client_data, allow_nil: true
 
   validates :client_data_type, inclusion: {
     in: ->(_) { self.client_model_names },
@@ -99,8 +94,12 @@ class Proposal < ActiveRecord::Base
 
   alias_method :subscribers, :users
 
-  def reset_status()
-    unless self.cancelled?   # no escape from cancelled
+  def users_except_delegates
+    users - delegates
+  end
+
+  def reset_status
+    unless self.cancelled?  # no escape from cancelled
       if self.root_step.nil? || self.root_step.approved?
         self.update(status: 'approved')
       else
@@ -115,6 +114,14 @@ class Proposal < ActiveRecord::Base
 
   def existing_observation_for(user)
     observations.find_by(user: user)
+  end
+
+  def eligible_observers
+    if observations.count > 0
+      User.where(client_slug: client_slug).where('id not in (?)', observations.pluck('user_id'))
+    else
+      User.where(client_slug: client_slug)
+    end
   end
 
   def add_observer(email_or_user, adder=nil, reason=nil)
@@ -184,9 +191,7 @@ class Proposal < ActiveRecord::Base
   #######################
 
   def restart
-    # Note that none of the state machine's history is stored
-    self.api_tokens.update_all(expires_at: Time.zone.now)
-    self.steps.update_all(status: 'pending')
+    self.individual_steps.each(&:restart!)
     if self.root_step
       self.root_step.initialize!
     end
@@ -203,7 +208,7 @@ class Proposal < ActiveRecord::Base
   end
 
   def self.client_slugs
-    CLIENT_MODELS.map(&:client)
+    CLIENT_MODELS.map(&:client_slug)
   end
 
   protected
@@ -223,7 +228,7 @@ class Proposal < ActiveRecord::Base
     if email_or_user.is_a?(User)
       email_or_user
     else
-      User.for_email_with_slug(email_or_user, client)
+      User.for_email_with_slug(email_or_user, client_slug)
     end
   end
 end

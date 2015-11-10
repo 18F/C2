@@ -4,7 +4,7 @@ describe Dispatcher do
   describe '.deliver_new_proposal_emails' do
     it "uses the LinearDispatcher for linear approvals" do
       proposal.flow = 'linear'
-      expect(proposal).to receive(:client_data).and_return(double(client: 'ncr'))
+      expect(proposal).to receive(:client_data).and_return(double(client_slug: "ncr"))
       expect_any_instance_of(LinearDispatcher).to receive(:deliver_new_proposal_emails).with(proposal)
       Dispatcher.deliver_new_proposal_emails(proposal)
     end
@@ -42,6 +42,18 @@ describe Dispatcher do
       dispatcher.deliver_attachment_emails(serial_proposal)
       expect(email_recipients).to_not include(serial_proposal.approvers.last.email_address)
     end
+
+    it "does not email delegates" do
+      wo = create(:ncr_work_order, :with_approvers)
+      tier_one_approver = wo.proposal.approvers.second
+      delegate_one = create(:user, client_slug: 'ncr')
+      delegate_two = create(:user, client_slug: 'ncr')
+      tier_one_approver.add_delegate(delegate_one)
+      tier_one_approver.add_delegate(delegate_two)
+      wo.proposal.individual_steps.first.approve!
+      dispatcher.deliver_attachment_emails(wo.proposal)
+      expect(email_recipients).to_not include(delegate_one.email_address)
+    end
   end
 
   describe "#deliver_cancellation_emails" do
@@ -55,13 +67,26 @@ describe Dispatcher do
       dispatcher.deliver_cancellation_emails(proposal)
     end
 
+    it "sends the reason to the cancellation email" do
+      proposal = create(:proposal, :with_approver)
+      approver = proposal.approvers.first
+      reason = "reason for cancellation"
+      allow(CommunicartMailer).to receive(:cancellation_email).
+        with(approver.email_address, proposal, reason).
+        and_return(mock_deliverer)
+
+      expect(mock_deliverer).to receive(:deliver_later).once
+
+      dispatcher.deliver_cancellation_emails(proposal, reason)
+    end
+
     it "sends an email to each actionable approver" do
       allow(CommunicartMailer).to receive(:cancellation_email).and_return(mock_deliverer)
       expect(serial_proposal.approvers.count).to eq 2
       expect(mock_deliverer).to receive(:deliver_later).once
 
       dispatcher.deliver_cancellation_emails(serial_proposal)
-    end 
+    end
 
     it "sends a confirmation email to the requester" do
       allow(CommunicartMailer).to receive(:cancellation_confirmation).and_return(mock_deliverer)

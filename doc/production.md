@@ -73,8 +73,7 @@ You should now be signed in to Mandrill with the shared account.
 % cd /tmp
 % git checkout git@github.com:18F/C2.git
 % cd C2
-% cf create-app-manifest c2-prod
-% cf-ssh -f c2-prod_manifest.yml --verbose
+% script/cssh c2-prod
 vcap@someinstance:~$ rails console
 Loading production environment (Rails 4.2.4)
 irb(main):001:0> u = User.find_by_email_address 'user@example.gov'

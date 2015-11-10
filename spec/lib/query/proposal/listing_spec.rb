@@ -14,7 +14,7 @@ describe Query::Proposal::Listing do
 
       context "with an arbitrary client" do
         before do
-          user.update_attribute(:client_slug, 'ncr')
+          user.update_attribute(:client_slug, "ncr")
           user.add_role('client_admin')
         end
 

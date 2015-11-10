@@ -5,15 +5,21 @@ class ObservationsController < ApplicationController
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
 
   def create
-    obs = @proposal.add_observer(observer_email, current_user, params[:observation][:reason])
-    flash[:success] = "#{obs.user.full_name} has been added as an observer"
+    new_observer = @proposal.add_observer(observer_email, current_user, params[:observation][:reason])
+    prep_create_response_msg(new_observer)
     redirect_to proposal_path(@proposal)
   end
 
   def destroy
-    self.observation.destroy
-    flash[:success] = "Deleted Observation"
-    redirect_to proposal_path(self.observation.proposal_id)
+    proposal = observation.proposal
+    if current_user == observation.user
+      redirect_path = proposals_path
+    else
+      redirect_path = proposal_path(proposal)
+    end
+    observation.destroy
+    flash[:success] = "Removed Observation for #{proposal.public_id}"
+    redirect_to redirect_path
   end
 
   protected
@@ -37,6 +43,14 @@ class ObservationsController < ApplicationController
   def observer_email
     params.permit(observation: { user: [:email_address] })
       .require(:observation).require(:user).require(:email_address)
+  end
+
+  def prep_create_response_msg(observer)
+    if observer
+      flash[:success] = "#{observer.user.full_name} has been added as an observer"
+    else
+      flash[:alert] = "#{observer_email} is already an observer for this request"
+    end
   end
 
   def auth_errors(exception)

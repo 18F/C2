@@ -131,16 +131,22 @@ module Ncr
       emails
     end
 
+    def requires_approval?
+      !self.emergency
+    end
+
     def setup_approvals_and_observers
       emails = approvers_emails
-      if emergency
-        emails.each{|e| add_observer(e)}
-        # skip state machine
-        proposal.update(status: 'approved')
-      else
+      if requires_approval?
         original_approvers = proposal.individual_steps.non_pending.map(&:user)
         force_approvers(emails)
         notify_removed_approvers(original_approvers)
+      else
+        emails.each do |email|
+          add_observer(email)
+        end
+        # skip state machine
+        proposal.update(status: 'approved')
       end
     end
 
@@ -166,8 +172,16 @@ module Ncr
       end
     end
 
-    def email_approvers
-      Dispatcher.on_proposal_update(self.proposal, self.modifier)
+    def budget_approvals
+      self.individual_steps.offset(1)
+    end
+
+    def budget_approvers
+      self.approvers.merge(self.budget_approvals)
+    end
+
+    def editable?
+      true
     end
 
     def relevant_fields
@@ -250,6 +264,12 @@ module Ncr
         year += 1
       end
       year % 100   # convert to two-digit
+    end
+
+    def restart_budget_approvals
+      self.budget_approvals.each(&:restart!)
+      self.proposal.reset_status
+      self.proposal.root_step.initialize!
     end
 
     protected
