@@ -1,6 +1,9 @@
 <% unless ENV['DISABLE_SANDBOX_WARNING'] == 'true' %>
   <%= render partial: 'shared/sandbox_warning' %>
 <% end %>
+<% if !current_page?(controller: "home", action: "me") && current_user && current_user.requires_profile_attention? %>
+  <%= render partial: "shared/user_profile_warning" %>
+<% end %>
 <header>
   <div class='container'>
     <div id='header-identity'>

@@ -116,4 +116,8 @@ class User < ActiveRecord::Base
   def role_on(proposal)
     RolePicker.new(self, proposal)
   end
+
+  def requires_profile_attention?
+    first_name.blank? || last_name.blank?
+  end
 end
