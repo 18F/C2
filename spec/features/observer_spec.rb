@@ -3,7 +3,7 @@ describe "observers" do
     expect(CommunicartMailer).to receive_message_chain(:on_observer_added, :deliver_later)
 
     work_order = create(:ncr_work_order)
-    observer = create(:user)
+    observer = create(:user, client_slug: 'ncr')
     proposal = work_order.proposal
     login_as(proposal.requester)
 
@@ -21,7 +21,7 @@ describe "observers" do
   it "allows observers to be added by other observers" do
     proposal = create(:proposal, :with_observer)
     observer1 = proposal.observers.first
-    observer2 = create(:user)
+    observer2 = create(:user, client_slug: nil)
     login_as(observer1)
 
     visit "/proposals/#{proposal.id}"
@@ -39,7 +39,7 @@ describe "observers" do
   it "allows a user to add a reason when adding an observer" do
     reason = "is the archbishop of banterbury"
     proposal = create(:proposal)
-    observer = create(:user)
+    observer = create(:user, client_slug: nil)
     login_as(proposal.requester)
 
     visit "/proposals/#{proposal.id}"
@@ -54,8 +54,8 @@ describe "observers" do
   end
 
   it "hides the reason field until a new observer is selected", js: true do
-    proposal = FactoryGirl.create(:proposal)
-    observer = FactoryGirl.create(:user)
+    proposal = create(:proposal)
+    observer = create(:user, client_slug: nil)
     login_as(proposal.requester)
 
     visit "/proposals/#{proposal.id}"
@@ -66,8 +66,8 @@ describe "observers" do
   end
 
   it "disables the submit button until a new observer is selected", js: true do
-    proposal = FactoryGirl.create(:proposal)
-    observer = FactoryGirl.create(:user)
+    proposal = create(:proposal)
+    observer = create(:user, client_slug: nil)
     login_as(proposal.requester)
 
     visit "/proposals/#{proposal.id}"
@@ -75,6 +75,22 @@ describe "observers" do
     expect(submit_button).to be_disabled
     fill_in_selectized('observation_user_email_address', observer.email_address)
     expect(submit_button).to_not be_disabled
+  end
+
+  it "observer can delete themselves as observer" do
+    proposal = create(:proposal)
+    observer = create(:user)
+
+    login_as(proposal.requester)
+    visit "/proposals/#{proposal.id}"
+    select observer.email_address, from: 'observation_user_email_address'
+    click_on 'Add an Observer'
+
+    login_as(observer)
+    visit "/proposals/#{proposal.id}"
+    delete_button = find('table.observers .button_to input[value="Remove"]')
+    delete_button.click
+    expect(page).to have_content("Removed Observation for ")
   end
 
   # adapted from http://stackoverflow.com/a/25047358

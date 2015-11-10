@@ -1,7 +1,7 @@
 describe "Pending Proposals filter" do
   let(:user) { create(:user) }
   let!(:proposals) { 4.times.map { create(:proposal) } }
-  let!(:reviewable_proposals) { 4.times.map { create(:proposal, approver: user) } }
+  let!(:reviewable_proposals) { 4.times.map { create(:proposal, :with_approver, approver_user: user) } }
   let!(:cancelled) { 2.times.map { create(:proposal, status: 'cancelled') } }
   before :each do
     Proposal.all().each { |p| p.add_observer(user.email_address) }

@@ -1,6 +1,6 @@
 describe User do
   describe "Associations" do
-     it { should have_many(:approvals).dependent(:destroy) }
+     it { should have_many(:steps).dependent(:destroy) }
      it { should have_many(:comments).dependent(:destroy) }
      it { should have_many(:observations).dependent(:destroy) }
      it { should have_many(:user_roles).dependent(:destroy) }
@@ -41,6 +41,14 @@ describe User do
     it 'downcases and strips the email' do
       user = User.for_email('   miXedCaSe@eXaMple.com')
       expect(user.email_address).to eq('mixedcase@example.com')
+    end
+  end
+
+  describe ".for_email_with_slug" do
+    it "downcases and strips the email and adds slug" do
+      user = User.for_email_with_slug('   miXedCaSe@eXaMple.com', 'foobar')
+      expect(user.email_address).to eq('mixedcase@example.com')
+      expect(user.client_slug).to eq('foobar')
     end
   end
 

@@ -1,17 +1,19 @@
 feature 'Requester edits their NCR work order' do
+  include ProposalSpecHelper
+
   around(:each) do |example|
-    with_env_var('DISABLE_SANDBOX_WARNING', 'true') do
+    with_feature('DISABLE_SANDBOX_WARNING') do
       example.run
     end
   end
 
   let(:work_order) { create(:ncr_work_order, description: 'test') }
   let(:ncr_proposal) { work_order.proposal }
-  let!(:approver) { create(:user, client_slug: 'ncr') }
+  let(:requester) { work_order.requester }
 
   before do
     work_order.setup_approvals_and_observers
-    login_as(work_order.requester)
+    login_as(requester)
   end
 
   scenario 'can be edited if pending' do
@@ -59,7 +61,7 @@ feature 'Requester edits their NCR work order' do
   end
 
   scenario 'allows requester to change the approving official' do
-    approver = create(:user, client_slug: 'ncr')
+    approver = create(:user, client_slug: "ncr")
     old_approver = ncr_proposal.approvers.first
     expect(Dispatcher).to receive(:on_approver_removal).with(ncr_proposal, [old_approver])
     visit "/ncr/work_orders/#{work_order.id}/edit"
@@ -83,24 +85,20 @@ feature 'Requester edits their NCR work order' do
 
   context "proposal changes from BA80 to BA61" do
     scenario "removed tier 1 approver is notified if approval is not pending" do
-      tier_one_approver = User.find_by(email_address: Ncr::WorkOrder::NCR_BA61_TIER1_BUDGET_APPROVER_MAILBOX)
-      work_order = create(:ncr_work_order, description: 'test')
-      work_order.setup_approvals_and_observers
-      ncr_proposal = work_order.proposal
-
-      login_as(work_order.requester)
       work_order.update(expense_type: "BA61")
-      approval = tier_one_approver.approvals.where(proposal: ncr_proposal).first
+      role = "BA61_tier1_budget_approver"
+      tier_one_approver = User.with_role(role).first
+      approval = tier_one_approver.steps.where(proposal: ncr_proposal).first
       approval.update(status: "actionable")
 
       visit "/ncr/work_orders/#{work_order.id}/edit"
-      choose 'BA80'
-      fill_in 'RWA Number', with: 'a1234567'
-      click_on 'Update'
+      choose "BA80"
+      fill_in "RWA Number", with: "a1234567"
+      click_on "Update"
 
-      expect(deliveries.select do |email|
+      expect(deliveries.count do |email|
         email.to.first == tier_one_approver.email_address
-      end.length).to eq (1)
+      end).to eq 1
     end
   end
 
@@ -147,7 +145,7 @@ feature 'Requester edits their NCR work order' do
   end
 
   scenario 'can be edited if approved' do
-    ncr_proposal.update_attributes(status: 'approved') # avoid workflow
+    fully_approve(ncr_proposal)
 
     visit "/ncr/work_orders/#{work_order.id}/edit"
     expect(current_path).to eq("/ncr/work_orders/#{work_order.id}/edit")

@@ -4,13 +4,13 @@ class ApiToken < ActiveRecord::Base
   before_create :set_expires_at
   has_secure_token :access_token
 
-  belongs_to :approval, class_name: 'Approvals::Individual'
-  has_one :proposal, through: :approval
-  has_one :user, through: :approval
+  belongs_to :step, class_name: 'Steps::Individual'
+  has_one :proposal, through: :step
+  has_one :user, through: :step
 
   validates :access_token, presence: true, on: :save
   validates :access_token, uniqueness: true
-  validates :approval, presence: true
+  validates :step, presence: true
   validates :expires_at, presence: true, on: :save
 
   scope :unexpired, -> { where('expires_at >= ?', Time.zone.now) }
@@ -29,6 +29,10 @@ class ApiToken < ActiveRecord::Base
 
   def use!
     update!(used_at: Time.zone.now)
+  end
+
+  def expire!
+    self.update(expires_at: Time.zone.now)
   end
 
   private

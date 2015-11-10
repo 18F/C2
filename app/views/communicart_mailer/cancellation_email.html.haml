@@ -2,7 +2,7 @@
   %p
     Hello,
     %br
-    The request, #{@proposal.name} (#{@proposal.public_id}), has been cancelled.
+    = cancellation_text(@proposal, @reason)
 
 %p
   %strong

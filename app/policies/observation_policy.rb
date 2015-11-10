@@ -11,7 +11,7 @@ class ObservationPolicy
   end
 
   def can_destroy!
-    self.can_show_proposal!
+    self.can_show_proposal! || user_is_observer!
   end
 
   protected
@@ -19,5 +19,9 @@ class ObservationPolicy
   def can_show_proposal!
     policy = PolicyFinder.policy_for(@user, @observation.proposal)
     policy.can_show!
+  end
+
+  def user_is_observer!
+    @user == @observation.user
   end
 end

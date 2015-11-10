@@ -1,4 +1,4 @@
-# Abstract controller – requires the following methods on the subclass:
+# Abstract controller - requires the following methods on the subclass
 # * model_class
 # * permitted_params
 class UseCaseController < ApplicationController
@@ -10,54 +10,52 @@ class UseCaseController < ApplicationController
   before_filter :find_model_instance, only: [:edit, :update]
 
   def new
-    render 'form'
   end
 
   def create
-    if self.errors.empty?
-      @model_instance.save
-      proposal = @model_instance.proposal
-      self.initial_attachments(proposal)
-      self.add_approvals()
+    if errors.empty?
+      proposal = ClientDataCreator.new(@model_instance, current_user, attachment_params).run
+      add_steps
       Dispatcher.deliver_new_proposal_emails(proposal)
 
       flash[:success] = "Proposal submitted!"
       redirect_to proposal
     else
       flash[:error] = errors
-      render 'form'
+      render :new
     end
   end
 
   def edit
-    render 'form'
   end
 
   def update
-    @model_instance.assign_attributes(self.permitted_params)  # don't hit db yet
-
-    @model_changing = false
-    @model_instance.validate
-    if self.errors.empty?
-      if self.attribute_changes?
-        @model_changing = true
+    if errors.empty?
+      if attribute_changes?
+        record_changes
         @model_instance.save
+        setup_and_email_approvers
         flash[:success] = "Successfully modified!"
       else
         flash[:error] = "No changes were made to the request"
       end
       redirect_to proposal_path(@model_instance.proposal)
     else
-      flash[:error] = self.errors
-      render 'form'
+      flash[:error] = errors
+      render :edit
     end
   end
-
 
   protected
 
   def attribute_changes?
     !@model_instance.changed_attributes.blank?
+  end
+
+  def record_changes
+  end
+
+  def setup_and_email_approvers
   end
 
   def filtered_params
@@ -90,21 +88,17 @@ class UseCaseController < ApplicationController
     path = polymorphic_path(self.model_class, action: :new)
     # prevent redirect loop
     if path == request.path
-      flash[:notice] = exception.message
-      render 'communicarts/authorization_error', status: 403
+      render 'communicarts/authorization_error', status: 403, locals: { msg: exception.message }
     else
       redirect_to path, alert: exception.message
     end
   end
 
-  def initial_attachments(proposal)
-    files = params.permit(attachments: [])[:attachments] || []
-    files.each do |file|
-      Attachment.create(proposal: proposal, user: current_user, file: file)
-    end
+  def attachment_params
+    params.permit(attachments: [])[:attachments] || []
   end
 
   # Hook for adding additional approvers
-  def add_approvals
+  def add_steps
   end
 end

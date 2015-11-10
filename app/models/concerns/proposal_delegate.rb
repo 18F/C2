@@ -7,8 +7,8 @@ module ProposalDelegate
     has_paper_trail class_name: 'C2Version'
 
     has_one :proposal, as: :client_data
-    has_many :approvals, through: :proposal
-    has_many :individual_approvals, ->{ individual }, class_name: 'Approvals::Individual', through: :proposal
+    has_many :steps, through: :proposal
+    has_many :individual_approvals, ->{ individual }, class_name: 'Steps::Individual', through: :proposal
     has_many :approvers, through: :individual_approvals, source: :user
     has_many :observations, through: :proposal
     has_many :observers, through: :observations, source: :user
@@ -40,12 +40,16 @@ module ProposalDelegate
 
     ###################################################
 
-    def self.client
+    def self.client_slug
       self.to_s.deconstantize.downcase
     end
   end
 
-  def client
-    self.class.client
+  def client_slug
+    self.class.client_slug
+  end
+
+  def slug_matches?(user)
+    user.client_slug == client_slug
   end
 end

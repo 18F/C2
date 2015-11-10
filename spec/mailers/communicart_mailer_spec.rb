@@ -5,7 +5,10 @@ describe CommunicartMailer do
   end
 
   around(:each) do |example|
-    with_env_vars('NOTIFICATION_FROM_EMAIL' => 'reply@example.com', 'NOTIFICATION_REPLY_TO' => 'replyto@example.com') do
+    with_env_vars(
+      "NOTIFICATION_FROM_EMAIL" => "reply@example.com",
+      "NOTIFICATION_REPLY_TO" => "replyto@example.com"
+    ) do
       example.run
     end
   end
@@ -17,7 +20,7 @@ describe CommunicartMailer do
 
   shared_examples "a Proposal email" do
     it "renders the subject" do
-      expect(mail.subject).to eq("Request ##{proposal.id}")
+      expect(mail.subject).to eq("Request #{proposal.public_id}")
     end
 
     it "uses the configured sender email" do
@@ -25,7 +28,7 @@ describe CommunicartMailer do
     end
 
     it "uses the configured replyto email" do
-      expect(mail.reply_to).to eq(['replyto@example.com'])
+      expect(mail.reply_to).to eq(["replyto+#{proposal.public_id}@example.com"])
     end
 
     it "includes the appropriate headers for threading" do
@@ -263,6 +266,20 @@ describe CommunicartMailer do
     end
   end
 
+  describe "cancellation_email" do
+    it "includes the cancellation reason" do
+      user = create(:user)
+      proposal = create(:proposal, requester: user)
+      reason = "cancellation reason"
+
+      mail = CommunicartMailer.cancellation_email(user.email_address, proposal, reason)
+
+      expect(mail.body.encoded).to include(
+        "has been cancelled with given reason '#{reason}'."
+      )
+    end
+  end
+
   describe 'proposal_observer_email' do
     let(:observation) { proposal.add_observer('observer1@example.com') }
     let(:observer) { observation.user }
@@ -297,7 +314,7 @@ describe CommunicartMailer do
     it 'defaults when no client_data is present' do
       proposal = create(:proposal)
       mail = CommunicartMailer.proposal_created_confirmation(proposal)
-      expect(mail.subject).to eq("Request ##{proposal.id}")
+      expect(mail.subject).to eq("Request #{proposal.public_id}")
     end
 
     it 'includes custom text for ncr work orders' do
@@ -309,7 +326,7 @@ describe CommunicartMailer do
         requester: requester
       )
       mail = CommunicartMailer.proposal_created_confirmation(wo.proposal)
-      expect(mail.subject).to eq("Request #{wo.public_identifier}, P0000000, DC0000ZZ from someone@example.com")
+      expect(mail.subject).to eq("Request #{wo.proposal.public_id}, P0000000, DC0000ZZ from someone@example.com")
     end
   end
 

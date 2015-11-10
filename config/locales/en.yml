@@ -38,6 +38,12 @@ en:
       ncr_amount:
         title: "Transaction Amount Thresholds"
         content: "$3,500 for supplies<br>$2,500 for services<br>$2,000 for construction"
+  decorators:
+    steps:
+      approval:
+        execute_button: "Approve"
+      purchase:
+        execute_button: "Mark as Purchased"
   activerecord:
     attributes:
       gsa18f/procurement:
@@ -51,5 +57,5 @@ en:
         user_reason_comment: "_%{user} added %{observer} as an observer, giving reason:_ `%{reason}`"
   mail:
     subject:
-      proposal: "Request %{public_identifier}"
-      ncr/work_order: "Request %{public_identifier}, %{org_id}, %{building_id} from %{requester_email_address}"
+      proposal: "Request %{public_id}"
+      ncr/work_order: "Request %{public_id}, %{org_id}, %{building_id} from %{requester_email_address}"

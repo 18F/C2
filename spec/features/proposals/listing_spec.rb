@@ -22,9 +22,9 @@ describe "Listing Page" do
   shared_examples "listing page" do
     it "shows user's Proposals from all clients" do
       visit '/proposals'
-      expect(page).to have_content(default.public_identifier)
-      expect(page).to have_content(ncr.public_identifier)
-      expect(page).to have_content(gsa18f.proposal.public_identifier)
+      expect(page).to have_content(default.public_id)
+      expect(page).to have_content(ncr.proposal.public_id)
+      expect(page).to have_content(gsa18f.proposal.public_id)
     end
   end
 

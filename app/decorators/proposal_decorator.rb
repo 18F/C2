@@ -14,7 +14,7 @@ class ProposalDecorator < Draper::Decorator
     object.individual_approvals.with_users.reorder(
       # http://stackoverflow.com/a/6332081/358804
       <<-SQL
-        CASE approvals.status
+        CASE steps.status
         WHEN 'approved' THEN 1
         WHEN 'actionable' THEN 2
         ELSE 3
@@ -40,7 +40,7 @@ class ProposalDecorator < Draper::Decorator
   end
 
   def generate_status_message
-    if object.approvals.non_pending.empty?
+    if object.steps.non_pending.empty?
       progress_status_message
     else
       completed_status_message
@@ -48,10 +48,17 @@ class ProposalDecorator < Draper::Decorator
   end
 
   def completed_status_message
-    "All #{number_approved} of #{total_approvers} approvals have been received. Please move forward with the purchase of ##{object.public_identifier}."
+    "All #{number_approved} of #{total_approvers} approvals have been received. Please move forward with the purchase of ##{object.public_id}."
   end
 
   def progress_status_message
     "#{number_approved} of #{total_approvers} approved."
+  end
+
+  def step_text_for_user(key, user)
+    step = existing_approval_for(user)
+    klass = step.class.name.demodulize.downcase.to_sym
+    scope = [:decorators, :steps, klass]
+    I18n.t(key, scope: scope)
   end
 end

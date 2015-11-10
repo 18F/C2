@@ -1,6 +1,6 @@
 describe ApiToken do
   describe "Validations" do
-    it { should validate_presence_of(:approval) }
+    it { should validate_presence_of(:step) }
     it { should validate_presence_of(:expires_at).on(:save) }
     it { should validate_presence_of(:access_token).on(:save) }
     it { should validate_uniqueness_of(:access_token) }

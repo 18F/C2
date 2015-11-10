@@ -1,54 +1,33 @@
 describe Ncr::WorkOrdersController do
   include ProposalSpecHelper
 
-  describe 'creating' do
-    before do
-      login_as(create(:user, client_slug: 'ncr'))
-    end
-    let (:params) {{
-      ncr_work_order: {
-        amount: '111.22', expense_type: 'BA80', vendor: 'Vendor',
-        not_to_exceed: '0', building_number: Ncr::BUILDING_NUMBERS[0],
-        emergency: '0', rwa_number: 'A1234567', org_code: Ncr::Organization.all[0],
-        code: 'Work Order', project_title: 'Title', description: 'Desc', approving_official_email: 'bob@example.com' }
-    }}
+  describe "#create" do
+    it "sends an email to the first approver" do
+      params = {
+        ncr_work_order: {
+          amount: "111.22",
+          expense_type: "BA80",
+          vendor: "Vendor",
+          not_to_exceed: "0",
+          building_number: Ncr::BUILDING_NUMBERS[0],
+          emergency: "0",
+          rwa_number: "A1234567",
+          org_code: Ncr::Organization.all[0],
+          code: "Work Order",
+          project_title: "Title",
+          description: "Desc",
+          approving_official_email: "bob@example.com"
+        }
+      }
 
-    it 'sends an email to the first approver' do
+      login_as(create(:user, client_slug: "ncr"))
+
       post :create, params
       ncr = Ncr::WorkOrder.order(:id).last
+
       expect(ncr.code).to eq 'Work Order'
       expect(ncr.approvers.first.email_address).to eq 'bob@example.com'
       expect(email_recipients).to eq(['bob@example.com', ncr.requester.email_address].sort)
-    end
-
-    it 'does not error on missing attachments' do
-      params[:ncr_work_order][:amount] = '111.33'
-      params[:attachments] = []
-      post :create, params
-      ncr = Ncr::WorkOrder.order(:id).last
-      expect(ncr.amount).to eq 111.33
-      expect(ncr.proposal.attachments.count).to eq 0
-    end
-
-    it 'does not error on malformed attachments' do
-      params[:ncr_work_order][:amount] = '111.34'
-      params[:attachments] = 'abcd'
-      post :create, params
-      ncr = Ncr::WorkOrder.order(:id).last
-      expect(ncr.amount).to eq 111.34
-      expect(ncr.proposal.attachments.count).to eq 0
-    end
-
-    it 'adds attachments if present' do
-      params[:ncr_work_order][:amount] = '111.35'
-      params[:attachments] = [
-        fixture_file_upload('icon-user.png', 'image/png'),
-        fixture_file_upload('icon-user.png', 'image/png'),
-      ]
-      post :create, params
-      ncr = Ncr::WorkOrder.order(:id).last
-      expect(ncr.amount).to eq 111.35
-      expect(ncr.proposal.attachments.count).to eq 2
     end
   end
 
@@ -162,8 +141,9 @@ describe Ncr::WorkOrdersController do
     end
 
     it 'will not modify emergency status on non-emergencies' do
-      expect(work_order.approvals.empty?).to be false
+      expect(work_order.steps.empty?).to be false
       expect(work_order.observers.empty?).to be true
+
       post :update, {
         id: work_order.id,
         ncr_work_order: {
@@ -172,16 +152,18 @@ describe Ncr::WorkOrdersController do
          approving_official_email: work_order.approvers.first.email_address
         }
       }
+
       work_order.reload
       expect(work_order.emergency).to be false
-      expect(work_order.approvals.empty?).to be false
+      expect(work_order.steps.empty?).to be false
       expect(work_order.observers.empty?).to be true
     end
 
     it 'will not modify emergency status on emergencies' do
       work_order = create(:ncr_work_order, :is_emergency, requester: requester)
-      expect(work_order.approvals.empty?).to be true
+      expect(work_order.steps.empty?).to be true
       expect(work_order.observers.empty?).to be false
+
       post :update, {
         id: work_order.id,
         ncr_work_order: {
@@ -191,10 +173,11 @@ describe Ncr::WorkOrdersController do
          approving_official_email: work_order.observers.first.email_address
         }
       }
+
       work_order.reload
       expect(work_order.emergency).to be true
       expect(work_order.building_number).to eq "BillDing"
-      expect(work_order.approvals.empty?).to be true
+      expect(work_order.steps.empty?).to be true
       expect(work_order.observers.empty?).to be false
     end
   end

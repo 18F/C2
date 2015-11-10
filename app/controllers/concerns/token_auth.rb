@@ -33,7 +33,7 @@ module TokenAuth
     end
 
     # expire tokens regardless of how user logged in
-    tokens = ApiToken.joins(:approval).where(approvals: {
+    tokens = ApiToken.joins(:step).where(steps: {
       user_id: current_user, proposal_id: self.proposal})
     tokens.where(used_at: nil).update_all(used_at: Time.zone.now)
 
@@ -52,10 +52,12 @@ module TokenAuth
         flash[:error] = exception.message
         render 'communicarts/authentication_error', status: 403
       else
-        redirect_to root_path(return_to: self.make_return_to("Previous", request.fullpath)), alert: "Please sign in to complete this action."
+        return_to_param = make_return_to("Previous", request.fullpath)
+        session[:return_to] = return_to_param
+        redirect_to root_path(return_to: return_to_param), alert: "Please sign in to complete this action."
       end
     when Proposal
-      redirect_to proposals_path, alert: "You are not allowed to see that proposal"
+      render 'communicarts/authorization_error', status: 403, locals: { msg: "You are not allowed to see that proposal." }
     else
       flash[:error] = exception.message
       redirect_to self.proposal

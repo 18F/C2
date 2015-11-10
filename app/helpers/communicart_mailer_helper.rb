@@ -26,15 +26,28 @@ module CommunicartMailerHelper
     approve_proposal_url(proposal, opts)
   end
 
-  def observer_text
-    text = "You have been added as a subscriber to this request"
-    adder = @observation.created_by
-    if adder
-      text << " by #{adder.full_name}"
-    end
-    if @reason && !@reason.blank?
-      text << " with given reason '#{@reason}'"
-    end
+  def cancellation_text(proposal, reason)
+    text = "The request, #{proposal.name} (#{proposal.public_id}), has been cancelled"
+    add_reason(text, reason)
     text + '.'
+  end
+
+  def observer_text(observation, reason = nil)
+    text = "You have been added as a subscriber to this request"
+    add_author(text, observation.created_by)
+    add_reason(text, reason)
+    text + '.'
+  end
+
+  def add_author(text, user)
+    if user
+      text << " by #{user.full_name}"
+    end
+  end
+
+  def add_reason(text, reason)
+    if reason.present?
+      text << " with given reason '#{reason}'"
+    end
   end
 end

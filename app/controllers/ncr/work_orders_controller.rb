@@ -9,29 +9,39 @@ module Ncr
     end
 
     def create
+      Ncr::WorkOrderValueNormalizer.new(@model_instance).run
       super
     end
 
     def edit
       if self.proposal.approved?
-        flash[:warning] = "You are about to modify a fully approved request. Changes will be logged and sent to approvers but this request will not require re-approval."
+        flash[:warning] = "You are about to modify a fully approved request. Changes will be logged and sent to approvers, and this request may require re-approval, depending on the change."
       end
 
       super
     end
 
     def update
+      @model_instance.assign_attributes(permitted_params)
+      Ncr::WorkOrderValueNormalizer.new(@model_instance).run
       @model_instance.modifier = current_user
 
       super
-
-      if @model_changing
-        @model_instance.setup_approvals_and_observers
-        @model_instance.email_approvers
-      end
     end
 
     protected
+
+    def record_changes
+      ProposalUpdateRecorder.new(@model_instance).run
+    end
+
+    def setup_and_email_approvers
+      updater = Ncr::WorkOrderUpdater.new(
+        work_order: @model_instance,
+        flash: flash
+      )
+      updater.after_update
+    end
 
     def attribute_changes?
       super || @model_instance.approver_changed?
@@ -56,7 +66,7 @@ module Ncr
     end
 
     # @pre: @model_instance.approving_official_email is set
-    def add_approvals
+    def add_steps
       super
       if self.errors.empty?
         @model_instance.setup_approvals_and_observers

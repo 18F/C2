@@ -17,6 +17,17 @@ describe ObservationsController do
         post :create, proposal_id: proposal.id, observation: {user: {email_address: ""}}
       }.to raise_error(ActionController::ParameterMissing)
     end
+
+    it "gracefully warns on duplicates" do
+      login_as(proposal.requester)
+      observer = create(:user, client_slug: nil)
+
+      post :create, proposal_id: proposal.id, observation: {user: {email_address: observer.email_address}}
+      expect(flash[:success]).to eq("#{observer.full_name} has been added as an observer")
+
+      post :create, proposal_id: proposal.id, observation: {user: {email_address: observer.email_address}}
+      expect(flash[:alert]).to eq("#{observer.email_address} is already an observer for this request")
+    end
   end
 
   describe "#destroy" do
@@ -31,12 +42,12 @@ describe ObservationsController do
       expect(flash[:warning]).to be_nil
     end
 
-    it "redirects with a warning if unsuccessful" do
+    it "responds with a warning if unsuccessful" do
       login_as(create(:user))
       post :destroy, proposal_id: proposal.id, id: observation.id
-      expect(response).to redirect_to(proposals_path)
+      expect(response.status).to eq(403)
       expect(flash[:success]).to be_nil
-      expect(flash[:alert]).not_to be_empty
+      expect(flash[:alert]).to be_nil
     end
   end
 end

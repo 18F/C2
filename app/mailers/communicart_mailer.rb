@@ -51,9 +51,18 @@ class CommunicartMailer < ApplicationMailer
       proposal: proposal
     )
   end
-  alias_method :cancellation_email, :general_proposal_email
+
   alias_method :proposal_observer_email, :general_proposal_email
   alias_method :new_attachment_email, :general_proposal_email
+
+  def cancellation_email(to_email, proposal, reason = nil)
+    @reason = reason
+
+    send_proposal_email(
+      to_email: to_email,
+      proposal: proposal,
+    )
+  end
 
   def proposal_created_confirmation(proposal)
     send_proposal_email(

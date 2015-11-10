@@ -2,7 +2,7 @@ describe CommunicartMailerHelper do
   describe '#generate_approve_url' do
     it "returns a URL" do
       approval = create(:approval)
-      token = create(:api_token, approval: approval)
+      token = create(:api_token, step: approval)
       proposal = approval.proposal
 
       expect(proposal).to receive(:version).and_return(123)

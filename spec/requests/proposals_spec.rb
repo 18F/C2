@@ -16,7 +16,7 @@ describe 'proposals' do
   describe 'POST /proposals/:id/approve' do
     def expect_status(proposal, status, app_status)
       proposal.reload
-      proposal.approvals.each do |approval|
+      proposal.steps.each do |approval|
         expect(approval.status).to eq(app_status)
       end
       expect(proposal.status).to eq(status)
@@ -37,7 +37,7 @@ describe 'proposals' do
 
       post "/proposals/#{proposal.id}/approve"
 
-      expect(response.status).to redirect_to('/proposals')
+      expect(response.status).to eq(403)
       expect_status(proposal, 'pending', 'actionable')
     end
 
@@ -84,8 +84,8 @@ describe 'proposals' do
 
     context "using a token" do
       let(:proposal) { create(:proposal, :with_approver) }
-      let(:approval) { proposal.approvals.first }
-      let(:token) { create(:api_token, approval: approval) }
+      let(:step) { proposal.individual_approvals.first }
+      let(:token) { create(:api_token, step: step) }
 
       it "supports token auth" do
         post "/proposals/#{proposal.id}/approve", cch: token.access_token
@@ -99,6 +99,25 @@ describe 'proposals' do
 
         token.reload
         expect(token).to be_used
+      end
+
+      it "fails for delegate without login, redirects automatically after login" do
+        delegate = create(:user)
+        proposal = create(:proposal, delegate: delegate)
+        step = proposal.individual_approvals.first
+        token = create(:api_token, step: step)
+
+        get "/proposals/#{proposal.id}/approve", cch: token.access_token
+
+        expect(response).to redirect_to(root_path(return_to: self.make_return_to("Previous", request.fullpath)))
+
+        login_as(delegate)
+
+        expect(response).to redirect_to("/proposals/#{proposal.id}/approve?cch=#{token.access_token}")
+
+        get response.headers['Location']
+
+        expect_status(proposal, 'approved', 'approved')
       end
     end
   end

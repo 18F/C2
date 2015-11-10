@@ -4,7 +4,7 @@ MYUSA_URL = ENV['MYUSA_URL'] || 'https://alpha.my.usa.gov'
 
 Rails.application.config.middleware.use OmniAuth::Builder do
   provider :myusa, MYUSA_KEY, MYUSA_SECRET, {
-    scope: 'profile.email',
+    scope: 'profile.email profile.first_name profile.last_name',
     client_options: {
       site: MYUSA_URL,
       token_url: "/oauth/authorize"

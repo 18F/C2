@@ -1,6 +1,8 @@
 class Proposal < ActiveRecord::Base
   include WorkflowModel
   include ValueHelper
+  include StepManager
+
   has_paper_trail class_name: 'C2Version'
 
   CLIENT_MODELS = []  # this gets populated later
@@ -26,25 +28,21 @@ class Proposal < ActiveRecord::Base
     end
   end
 
-  has_many :approvals
-  has_many :individual_approvals, ->{ individual }, class_name: 'Approvals::Individual'
+  has_many :steps
+  has_many :individual_approvals, ->{ individual }, class_name: 'Steps::Individual'
   has_many :approvers, through: :individual_approvals, source: :user
   has_many :api_tokens, through: :individual_approvals
   has_many :attachments, dependent: :destroy
-  has_many :approval_delegates, through: :approvers, source: :outgoing_delegates
+  has_many :approval_delegates, through: :approvers, source: :outgoing_delegations
   has_many :comments, dependent: :destroy
+  has_many :delegates, through: :approval_delegates, source: :assignee
+
   has_many :observations, -> { where("proposal_roles.role_id in (select roles.id from roles where roles.name='observer')") }
   has_many :observers, through: :observations, source: :user
   belongs_to :client_data, polymorphic: true, dependent: :destroy
   belongs_to :requester, class_name: 'User'
 
-  # The following list also servers as an interface spec for client_datas
-  # Note: clients may implement:
-  # :fields_for_display
-  # :public_identifier
-  # :version
-  # Note: clients should also implement :version
-  delegate :client, to: :client_data, allow_nil: true
+  delegate :client_slug, to: :client_data, allow_nil: true
 
   validates :client_data_type, inclusion: {
     in: ->(_) { self.client_model_names },
@@ -53,6 +51,7 @@ class Proposal < ActiveRecord::Base
   }
   validates :flow, presence: true, inclusion: {in: FLOWS}
   validates :requester_id, presence: true
+  validates :public_id, uniqueness: true, allow_nil: true
 
   self.statuses.each do |status|
     scope status, -> { where(status: status) }
@@ -60,11 +59,9 @@ class Proposal < ActiveRecord::Base
   scope :closed, -> { where(status: ['approved', 'cancelled']) } #TODO: Backfill to change approvals in 'reject' status to 'cancelled' status
   scope :cancelled, -> { where(status: 'cancelled') }
 
-  after_create :update_public_id
-
   # @todo - this should probably be the only entry into the approval system
-  def root_approval
-    self.approvals.where(parent: nil).first
+  def root_step
+    self.steps.where(parent: nil).first
   end
 
   def parallel?
@@ -85,12 +82,7 @@ class Proposal < ActiveRecord::Base
       OR user_id IN (SELECT assigner_id FROM approval_delegates WHERE assignee_id = :user_id)
       OR user_id IN (SELECT assignee_id FROM approval_delegates WHERE assigner_id = :user_id)
     SQL
-    self.approvals.where(where_clause, user_id: user.id).first
-  end
-
-  # TODO convert to an association
-  def delegates
-    self.approval_delegates.map(&:assignee)
+    self.steps.where(where_clause, user_id: user.id).first
   end
 
   # Returns a list of all users involved with the Proposal.
@@ -100,42 +92,34 @@ class Proposal < ActiveRecord::Base
     results.compact.uniq
   end
 
-  def root_approval=(root)
-    old_approvals = self.approvals.to_a
+  alias_method :subscribers, :users
 
-    approval_list = root.pre_order_tree_traversal
-    approval_list.each { |a| a.proposal = self }
-    self.approvals = approval_list
+  def root_step=(root)
+    old_steps = self.steps.to_a
+    step_list = root.pre_order_tree_traversal
+    step_list.each { |a| a.proposal = self }
+    self.steps = step_list
     # position may be out of whack, so we reset it
-    approval_list.each_with_index do |approval, idx|
-      approval.set_list_position(idx + 1)   # start with 1
+    step_list.each_with_index do |step, idx|
+      step.set_list_position(idx + 1) # start with 1
     end
 
-    self.clean_up_old_approvals(old_approvals, approval_list)
+    self.clean_up_old_steps(old_steps, step_list)
 
     root.initialize!
-    self.reset_status()
+    self.reset_status
   end
 
-  def clean_up_old_approvals(old_approvals, approval_list)
-    # destroy any old approvals that are not a part of approval_list
-    (old_approvals - approval_list).each do |appr|
-      appr.destroy() if Approval.exists?(appr.id)
+  def clean_up_old_steps(old_steps, step_list)
+    # destroy any old steps that are not a part of step list
+    (old_steps - step_list).each do |appr|
+      appr.destroy if Step.exists?(appr.id)
     end
   end
 
-  # convenience wrapper for setting a single approver
-  def approver=(approver)
-    # Don't recreate the approval
-    existing = self.existing_approval_for(approver)
-    if existing.nil?
-      self.root_approval = Approvals::Individual.new(user: approver)
-    end
-  end
-
-  def reset_status()
+  def reset_status
     unless self.cancelled?   # no escape from cancelled
-      if self.root_approval.nil? || self.root_approval.approved?
+      if self.root_step.nil? || self.root_step.approved?
         self.update(status: 'approved')
       else
         self.update(status: 'pending')
@@ -143,12 +127,30 @@ class Proposal < ActiveRecord::Base
     end
   end
 
+  def has_subscriber?(user)
+    users.include?(user)
+  end
+
   def existing_observation_for(user)
     observations.find_by(user: user)
   end
 
+  def eligible_observers
+    if observations.count > 0
+      User.where(client_slug: client_slug).where('id not in (?)', observations.pluck('user_id'))
+    else
+      User.where(client_slug: client_slug)
+    end
+  end
+
   def add_observer(email_or_user, adder=nil, reason=nil)
     user = find_user(email_or_user)
+
+    # this authz check is here instead of in a Policy because the Policy classes
+    # are applied to the current_user, not (as in this case) the user being acted upon.
+    if client_data && !client_data.slug_matches?(user)
+      fail Pundit::NotAuthorizedError.new("May not add observer belonging to a different organization.")
+    end
 
     unless existing_observation_for(user)
       create_new_observation(user, adder, reason)
@@ -198,13 +200,9 @@ class Proposal < ActiveRecord::Base
 
   ## delegated methods ##
 
-  def public_identifier
-    self.delegate_with_default(:public_identifier) { "##{self.id}" }
-  end
-
   def name
     self.delegate_with_default(:name) {
-      "Request #{self.public_identifier}"
+      "Request #{public_id}"
     }
   end
 
@@ -225,11 +223,9 @@ class Proposal < ActiveRecord::Base
   #######################
 
   def restart
-    # Note that none of the state machine's history is stored
-    self.api_tokens.update_all(expires_at: Time.zone.now)
-    self.approvals.update_all(status: 'pending')
-    if self.root_approval
-      self.root_approval.initialize!
+    self.individual_approvals.each(&:restart!)
+    if self.root_step
+      self.root_step.initialize!
     end
     Dispatcher.deliver_new_proposal_emails(self)
   end
@@ -244,14 +240,10 @@ class Proposal < ActiveRecord::Base
   end
 
   def self.client_slugs
-    CLIENT_MODELS.map(&:client)
+    CLIENT_MODELS.map(&:client_slug)
   end
 
   protected
-
-  def update_public_id
-    self.update_attribute(:public_id, self.public_identifier)
-  end
 
   def create_new_observation(user, adder, reason)
     ObservationCreator.new(
@@ -268,7 +260,7 @@ class Proposal < ActiveRecord::Base
     if email_or_user.is_a?(User)
       email_or_user
     else
-      User.for_email(email_or_user)
+      User.for_email_with_slug(email_or_user, client_slug)
     end
   end
 end

@@ -17,8 +17,7 @@ describe ApiTokenPolicy do
     end
 
     it "fails when the token has expired" do
-      token.update(expires_at: 8.days.ago)
-
+      token.expire!
       expect(ApiTokenPolicy).not_to permit(approval_params_with_token, :api_token)
     end
 
@@ -50,7 +49,7 @@ describe ApiTokenPolicy do
   end
 
   def token
-    @token ||= create(:api_token, approval: approval)
+    @token ||= create(:api_token, step: approval)
   end
 
   def proposal

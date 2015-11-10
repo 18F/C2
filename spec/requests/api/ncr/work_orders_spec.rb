@@ -10,41 +10,41 @@ describe 'NCR Work Orders API' do
       end
     end
 
-    with_feature 'API_ENABLED' do
+    with_feature "API_ENABLED" do
       it "responds with the list of work orders" do
         work_order = create(:ncr_work_order)
         proposal = work_order.proposal
 
-        json = get_json('/api/v1/ncr/work_orders.json')
+        json = get_json("/api/v1/ncr/work_orders.json")
 
         expect(response.status).to eq(200)
         expect(json).to eq([
           {
-            'amount' => work_order.amount.to_s,
-            'building_number' => work_order.building_number,
-            'code' => work_order.code,
-            'description' => work_order.description,
-            'emergency' => work_order.emergency,
-            'expense_type' => work_order.expense_type,
-            'id' => work_order.id,
-            'name' => work_order.name,
-            'not_to_exceed' => work_order.not_to_exceed,
-            'org_code' => work_order.org_code,
-            'proposal' => {
-              'approvals' => [],
-              'created_at' => time_to_json(proposal.created_at),
-              'flow' => proposal.flow,
-              'id' => proposal.id,
-              'requester' => {
-                'created_at' => time_to_json(proposal.requester.created_at),
-                'id' => proposal.requester_id,
-                'updated_at' => time_to_json(proposal.requester.updated_at)
+            "amount" => work_order.amount.to_s,
+            "building_number" => work_order.building_number,
+            "code" => work_order.code,
+            "description" => work_order.description,
+            "emergency" => work_order.emergency,
+            "expense_type" => work_order.expense_type,
+            "id" => work_order.id,
+            "name" => work_order.name,
+            "not_to_exceed" => work_order.not_to_exceed,
+            "org_code" => work_order.org_code,
+            "proposal" => {
+              "steps" => [],
+              "created_at" => time_to_json(proposal.created_at),
+              "flow" => proposal.flow,
+              "id" => proposal.id,
+              "requester" => {
+                "created_at" => time_to_json(proposal.requester.created_at),
+                "id" => proposal.requester_id,
+                "updated_at" => time_to_json(proposal.requester.updated_at)
               },
-              'status' => 'pending',
-              'updated_at' => time_to_json(proposal.updated_at)
+              "status" => "pending",
+              "updated_at" => time_to_json(proposal.updated_at)
             },
-            'rwa_number' => work_order.rwa_number,
-            'vendor' => work_order.vendor
+            "rwa_number" => work_order.rwa_number,
+            "vendor" => work_order.vendor
           }
         ])
       end
@@ -96,19 +96,19 @@ describe 'NCR Work Orders API' do
         approval = proposal.individual_approvals.first
         approver = approval.user
 
-        expect(json[0]['proposal']['approvals'][0]).to eq(
-          'id' => approval.id,
-          'status' => 'actionable',
-          'user' => {
-            'created_at' => time_to_json(approver.created_at),
-            'id' => approver.id,
-            'updated_at' => time_to_json(approver.updated_at)
+        expect(json[0]["proposal"]["steps"][0]).to eq(
+          "id" => approval.id,
+          "status" => "actionable",
+          "user" => {
+            "created_at" => time_to_json(approver.created_at),
+            "id" => approver.id,
+            "updated_at" => time_to_json(approver.updated_at)
           }
         )
       end
 
       it "responds with an empty list for no work orders" do
-        json = get_json('/api/v1/ncr/work_orders.json')
+        json = get_json("/api/v1/ncr/work_orders.json")
         expect(json).to eq([])
       end
 

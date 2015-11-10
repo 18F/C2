@@ -1,5 +1,5 @@
 describe "Tabular data sorting" do
-  let(:user) { create(:user) }
+  let(:user) { create(:user, client_slug: 'gsa18f') }
   let!(:proposals) { 4.times.map { create(:proposal) } }
   let!(:cancelled) { 2.times.map { create(:proposal, status: 'cancelled') } }
   before :each do
@@ -9,9 +9,9 @@ describe "Tabular data sorting" do
 
   def expect_order(element, proposals)
     content = element.text
-    last_idx = content.index(proposals[0].public_identifier)
+    last_idx = content.index(proposals[0].public_id)
     proposals[1..-1].each do |proposal|
-      idx = content.index(proposal.public_identifier)
+      idx = content.index(proposal.public_id)
       expect(idx).to be > last_idx
       last_idx = idx
     end
