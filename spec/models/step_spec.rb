@@ -28,7 +28,7 @@ describe Step do
     end
 
     it "returns nil if the token's expired" do
-      token.update_attribute(:expires_at, 1.day.ago)
+      token.expire!
       approval.reload
       expect(approval.api_token).to eq(nil)
     end

@@ -117,7 +117,7 @@ class Proposal < ActiveRecord::Base
     end
   end
 
-  def reset_status()
+  def reset_status
     unless self.cancelled?   # no escape from cancelled
       if self.root_step.nil? || self.root_step.approved?
         self.update(status: 'approved')
@@ -223,9 +223,7 @@ class Proposal < ActiveRecord::Base
   #######################
 
   def restart
-    # Note that none of the state machine's history is stored
-    self.api_tokens.update_all(expires_at: Time.zone.now)
-    self.steps.update_all(status: 'pending')
+    self.individual_approvals.each(&:restart!)
     if self.root_step
       self.root_step.initialize!
     end

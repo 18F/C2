@@ -26,6 +26,7 @@ module Steps
         end
 
         event :approve, transitions_to: :approved
+        event :restart, transitions_to: :pending
       end
 
       state :approved do
@@ -39,7 +40,16 @@ module Steps
           self.notify_parent_approved
           halt  # prevent state transition
         end
+
+        event :restart, transitions_to: :pending
       end
+    end
+
+    protected
+
+    def restart
+      self.api_token.try(:expire!)
+      super
     end
   end
 end
