@@ -45,5 +45,4 @@ module StepManager
     approval = self.individual_steps.first
     approval && !approval.actionable?
   end
-
 end
