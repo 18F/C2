@@ -1,4 +1,4 @@
-class Vacuum
+class ExpiredRecordCleaner
   attr_reader :verbose, :fiscal_year_start
 
   def initialize(dtim, ok_to_act = false, verbose = false)
@@ -7,17 +7,17 @@ class Vacuum
     @verbose = verbose
   end
 
-  def old_proposals
+  def vacuum_old_proposals
     proposals = Proposal.pending.where("created_at < '#{@fiscal_year_start}'")
     ids = []
     proposals.each do |proposal|
-      proposal(proposal)
+      vacuum_proposal(proposal)
       ids << proposal.id
     end
     ids
   end
 
-  def proposal(proposal)
+  def vacuum_proposal(proposal)
     if !proposal.requester
       handle_no_requester(proposal)
     else
