@@ -338,7 +338,7 @@ describe Proposal do
       proposal = create(:proposal)
       proposal.tag_list = "foo, bar, BAZ"
       proposal.save!
-      expect(proposal.tag_list).to eq(["bar", "baz", "foo"])
+      expect(proposal.tag_list).to eq(["foo", "bar", "baz"])
     end
   end
 end
