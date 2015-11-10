@@ -1,0 +1,7 @@
+.inset
+  %h2= "Welcome, #{current_user.full_name} <#{current_user.email_address}>"
+  = form_tag(me_path(current_user), method: :post) do
+    %input.form-control{type: 'text', name: 'first_name', value: current_user.first_name}
+    %input.form-control{type: 'text', name: 'last_name', value: current_user.last_name}
+    %input.form-button{type: 'submit', name: 'submit', value: 'Update profile'}
+    
