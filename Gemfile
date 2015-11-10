@@ -4,6 +4,7 @@ ruby '2.2.3' # this should match `.ruby-version` and docs/setup.md
 gem 'active_model_serializers'
 gem 'activeadmin', github: 'activeadmin'
 gem 'acts_as_list'
+gem 'acts-as-taggable-on', '~> 3.4'
 gem 'ar_outer_joins'
 gem 'autoprefixer-rails'
 gem 'awesome_print'
