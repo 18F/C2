@@ -18,5 +18,16 @@ describe Vacuum do
       end
     end
   end
+
+  describe ".proposal" do
+    it "cleans up specific proposal" do
+      proposal = create(:proposal)
+      vacuum = Vacuum.new(Time.zone.now, true)
+      vacuum.proposal(proposal)
+      expect(deliveries.length).to eq(1)
+      proposal.reload
+      expect(proposal.status).to eq('cancelled')
+    end
+  end
 end
 
