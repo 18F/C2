@@ -11,15 +11,6 @@ module CloudFoundry
     end
   end
 
-  def self.app_url
-    if self.is_environment?
-      # (arbitrarily) use the shortest assigned route, if there are multiple
-      self.vcap_data['application_uris'].min_by(&:length)
-    else
-      nil
-    end
-  end
-
   # returns `true` if this app is running in Cloud Foundry
   def self.is_environment?
     !!self.raw_vcap_data
