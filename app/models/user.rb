@@ -115,8 +115,8 @@ class User < ActiveRecord::Base
   def update_names_if_present(user_data)
     %w(first_name last_name).each do |field|
       attr = field.to_sym
-      if user_data[field].present? && user.send(attr).blank?
-        user.update_attributes(attr => user_data[field])
+      if user_data[field].present? && self.send(attr).blank?
+        update_attributes(attr => user_data[field])
       end
     end
   end
