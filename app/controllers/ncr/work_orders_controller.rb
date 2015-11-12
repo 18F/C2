@@ -4,12 +4,12 @@ module Ncr
     MAX_UPLOADS_ON_NEW = 10
 
     def new
-      @model_instance.approving_official_email = self.suggested_approver_email
+      work_order.approving_official_email = self.suggested_approver_email
       super
     end
 
     def create
-      Ncr::WorkOrderValueNormalizer.new(@model_instance).run
+      Ncr::WorkOrderValueNormalizer.new(work_order).run
       super
     end
 
@@ -22,29 +22,33 @@ module Ncr
     end
 
     def update
-      @model_instance.assign_attributes(permitted_params)
-      Ncr::WorkOrderValueNormalizer.new(@model_instance).run
-      @model_instance.modifier = current_user
+      work_order.assign_attributes(permitted_params)
+      Ncr::WorkOrderValueNormalizer.new(work_order).run
+      work_order.modifier = current_user
 
       super
     end
 
     protected
 
+    def work_order
+      @model_instance
+    end
+
     def record_changes
-      ProposalUpdateRecorder.new(@model_instance).run
+      ProposalUpdateRecorder.new(work_order).run
     end
 
     def setup_and_email_approvers
       updater = Ncr::WorkOrderUpdater.new(
-        work_order: @model_instance,
+        work_order: work_order,
         flash: flash
       )
       updater.after_update
     end
 
     def attribute_changes?
-      super || @model_instance.approver_changed?
+      super || work_order.approver_changed?
     end
 
     def model_class
@@ -59,17 +63,17 @@ module Ncr
     def permitted_params
       fields = Ncr::WorkOrder.relevant_fields(
         params[:ncr_work_order][:expense_type])
-      if @model_instance
+      if work_order
         fields.delete(:emergency) # emergency field cannot be edited
       end
       params.require(:ncr_work_order).permit(:project_title, :approving_official_email, *fields)
     end
 
-    # @pre: @model_instance.approving_official_email is set
+    # @pre: work_order.approving_official_email is set
     def add_steps
       super
       if self.errors.empty?
-        @model_instance.setup_approvals_and_observers
+        work_order.setup_approvals_and_observers
       end
     end
   end
