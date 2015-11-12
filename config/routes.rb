@@ -2,8 +2,8 @@ C2::Application.routes.draw do
   ActiveAdmin.routes(self)
   root :to => 'home#index'
   get '/error' => 'home#error'
-  get '/me'    => 'home#me'
-  post '/me'   => 'home#edit_me'
+  get '/me'    => 'profile#show'
+  post '/me'   => 'profile#update'
   get '/feedback' => 'feedback#index'
   get '/feedback/thanks' => 'feedback#thanks'
   post '/feedback' => 'feedback#create'
