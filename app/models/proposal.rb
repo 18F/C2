@@ -94,6 +94,10 @@ class Proposal < ActiveRecord::Base
 
   alias_method :subscribers, :users
 
+  def users_except_delegates
+    users - delegates
+  end
+
   def root_step=(root)
     old_steps = self.steps.to_a
     step_list = root.pre_order_tree_traversal

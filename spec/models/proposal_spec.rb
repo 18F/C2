@@ -112,11 +112,24 @@ describe Proposal do
       proposal.add_observer(observer)
       expect(proposal.users).to eq [observer]
     end
+  end
 
+  describe "#eligible_observers" do
     it "identifies eligible observers" do
       observer = create(:user, client_slug: nil)
       proposal = create(:proposal, requester: observer)
       expect(proposal.eligible_observers.to_a).to include(observer)
+    end
+  end
+
+  describe "#users_except_delegates" do
+    it "can exclude delegates" do
+      delegate_one = create(:user)
+      delegate_two = create(:user)
+      proposal = create(:proposal, :with_approver)
+      proposal.approvers.first.add_delegate(delegate_one)
+      proposal.approvers.first.add_delegate(delegate_two)
+      expect(proposal.users).to match_array(proposal.users_except_delegates + [delegate_one, delegate_two])
     end
   end
 
