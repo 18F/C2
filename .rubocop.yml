@@ -30,3 +30,5 @@ Style/TrailingComma:
   Enabled: false
 Style/AndOr:
   Enabled: false
+ClassLength:
+  Max: 250
