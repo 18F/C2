@@ -49,129 +49,10 @@ describe Ncr::WorkOrder do
     end
   end
 
-  describe '#setup_approvals_and_observers' do
-    let (:ba61_tier_one_email) { Ncr::WorkOrder.ba61_tier1_budget_mailbox }
-    let (:ba61_tier_two_email) { Ncr::WorkOrder.ba61_tier2_budget_mailbox }
-
-    it "creates approvers when not an emergency" do
-      form = create(:ncr_work_order, expense_type: 'BA61')
-      form.setup_approvals_and_observers
-      expect(form.observations.length).to eq(0)
-      expect(form.approvers.map(&:email_address)).to eq([
-        form.approving_official_email,
-        ba61_tier_one_email,
-        ba61_tier_two_email
-      ])
-      form.reload
-      expect(form.approved?).to eq(false)
-    end
-
-    it "reuses existing approvals" do
-      form = create(:ncr_work_order, expense_type: 'BA61')
-      form.setup_approvals_and_observers
-      first_approval = form.individual_approvals.first
-
-      form.reload.setup_approvals_and_observers
-      expect(form.individual_approvals.first).to eq(first_approval)
-    end
-
-    it "creates observers when in an emergency" do
-      form = create(:ncr_work_order, expense_type: 'BA61',
-                               emergency: true)
-      form.setup_approvals_and_observers
-      expect(form.observers.map(&:email_address)).to match_array([
-        form.approving_official_email,
-        ba61_tier_one_email,
-        ba61_tier_two_email
-      ].uniq)
-      expect(form.steps.length).to eq(0)
-      form.clear_association_cache
-      expect(form.approved?).to eq(true)
-    end
-
-    it "accounts for approver transitions when nothing's approved" do
-      ba80_budget_email = Ncr::WorkOrder.ba80_budget_mailbox
-      wo = create(:ncr_work_order, approving_official_email: 'ao@example.com', expense_type: 'BA61')
-      wo.setup_approvals_and_observers
-      expect(wo.approvers.map(&:email_address)).to eq [
-        'ao@example.com',
-        ba61_tier_one_email,
-        ba61_tier_two_email
-      ]
-
-      wo.update(org_code: 'P1122021 (192X,192M) WHITE HOUSE DISTRICT')
-      wo.setup_approvals_and_observers
-      expect(wo.reload.approvers.map(&:email_address)).to eq [
-        'ao@example.com',
-        ba61_tier_two_email
-      ]
-
-      wo.approving_official_email = 'ao2@example.com'
-      wo.setup_approvals_and_observers
-      expect(wo.reload.approvers.map(&:email_address)).to eq [
-        'ao2@example.com',
-        ba61_tier_two_email
-      ]
-
-      wo.approving_official_email = 'ao@example.com'
-      wo.update(expense_type: 'BA80')
-      wo.setup_approvals_and_observers
-      expect(wo.reload.approvers.map(&:email_address)).to eq [
-        'ao@example.com',
-        ba80_budget_email
-      ]
-    end
-
-    it "unsets the approval status" do
-      ba80_budget_email = Ncr::WorkOrder.ba80_budget_mailbox
-      wo = create(:ba80_ncr_work_order)
-      wo.setup_approvals_and_observers
-      expect(wo.approvers.map(&:email_address)).to eq [
-        wo.approving_official_email,
-        ba80_budget_email
-      ]
-
-      wo.individual_approvals.first.approve!
-      wo.individual_approvals.second.approve!
-      expect(wo.reload.approved?).to be true
-
-      wo.update(expense_type: 'BA61')
-      wo.setup_approvals_and_observers
-      expect(wo.reload.pending?).to be true
-    end
-
-    it "does not re-add observers on emergencies" do
-      wo = create(:ncr_work_order, expense_type: 'BA61', emergency: true)
-      wo.setup_approvals_and_observers
-
-      expect(wo.steps).to be_empty
-      expect(wo.observers.count).to be 3
-
-      wo.setup_approvals_and_observers
-      wo.reload
-      expect(wo.steps).to be_empty
-      expect(wo.observers.count).to be 3
-    end
-
-    it "handles the delegate then update scenario" do
-      wo = create(:ba80_ncr_work_order)
-      wo.setup_approvals_and_observers
-      delegate = create(:user)
-      wo.approvers.second.add_delegate(delegate)
-      wo.individual_approvals.second.update(user: delegate)
-
-      wo.individual_approvals.first.approve!
-      wo.individual_approvals.second.approve!
-
-      wo.setup_approvals_and_observers
-      wo.reload
-      expect(wo.approved?).to be true
-      expect(wo.approvers.second).to eq delegate
-    end
-
+  describe '#slug_matches?' do
     it "respects user with same client_slug" do
-      wo = create(:ba80_ncr_work_order)
-      user = create(:user, client_slug: "ncr")
+      wo = build(:ba80_ncr_work_order)
+      user = build(:user, client_slug: "ncr")
       expect(wo.slug_matches?(user)).to eq(true)
     end
 
@@ -193,43 +74,6 @@ describe Ncr::WorkOrder do
     it "returns nil for no #org_code" do
       work_order = Ncr::WorkOrder.new
       expect(work_order.organization).to eq(nil)
-    end
-  end
-
-  describe '#system_approver_emails' do
-    let (:ba61_tier_one_email) { Ncr::WorkOrder.ba61_tier1_budget_mailbox }
-    let (:ba61_tier_two_email) { Ncr::WorkOrder.ba61_tier2_budget_mailbox }
-
-    context "for a BA61 request" do
-      it "skips the Tier 1 budget approver for WHSC" do
-        work_order = create(:ncr_work_order, expense_type: 'BA61', org_code: Ncr::Organization::WHSC_CODE)
-        expect(work_order.system_approver_emails).to eq([
-          ba61_tier_two_email
-        ])
-      end
-
-      it "includes the Tier 1 budget approver for an unknown organization" do
-        work_order = create(:ncr_work_order, expense_type: 'BA61', org_code: nil)
-        expect(work_order.system_approver_emails).to eq([
-          ba61_tier_one_email,
-          ba61_tier_two_email
-        ])
-      end
-    end
-
-    context "for a BA80 request" do
-      it "uses the general budget email" do
-       ba80_budget_email = Ncr::WorkOrder.ba80_budget_mailbox
-        work_order = create(:ba80_ncr_work_order)
-        expect(work_order.system_approver_emails).to eq([ba80_budget_email])
-      end
-
-      it "uses the OOL budget email for their org code" do
-        budget_email = Ncr::WorkOrder.ool_ba80_budget_mailbox
-        org_code = Ncr::Organization::OOL_CODES.first
-        work_order = create(:ba80_ncr_work_order, org_code: org_code)
-        expect(work_order.system_approver_emails).to eq([budget_email])
-      end
     end
   end
 
