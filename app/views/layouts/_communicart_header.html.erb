@@ -1,7 +1,7 @@
 <% unless ENV['DISABLE_SANDBOX_WARNING'] == 'true' %>
   <%= render partial: 'shared/sandbox_warning' %>
 <% end %>
-<% if !current_page?(me_path) && current_user && current_user.requires_profile_attention? %>
+<% if display_profile_warning? %>
   <%= render partial: "shared/user_profile_warning" %>
 <% end %>
 <header>
