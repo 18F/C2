@@ -1,6 +1,13 @@
 describe Ncr::WorkOrder do
   include ProposalSpecHelper
 
+  describe "#editabe?" do
+    it "is true" do
+      work_order = build(:ncr_work_order)
+      expect(work_order).to be_editable
+    end
+  end
+
   describe '#relevant_fields' do
     it "shows BA61 fields" do
       wo = Ncr::WorkOrder.new
@@ -237,6 +244,25 @@ describe Ncr::WorkOrder do
       wo = create(:ncr_work_order, :with_approvers)
       fully_approve(wo.proposal)
       expect(wo.final_approver).to eq(wo.approvers.last)
+    end
+  end
+
+  describe '#restart_budget_approvals' do
+    it "sets the approvals to the proper state" do
+      work_order = create(:ncr_work_order)
+      proposal = work_order.proposal
+      work_order.setup_approvals_and_observers
+      fully_approve(proposal)
+
+      work_order.restart_budget_approvals
+
+      expect(work_order.status).to eq('pending')
+      expect(work_order.proposal.root_step.status).to eq('actionable')
+      expect(linear_approval_statuses(proposal)).to eq(%w(
+        approved
+        actionable
+        pending
+      ))
     end
   end
 end

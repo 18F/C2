@@ -15,7 +15,7 @@ module Ncr
 
     def edit
       if self.proposal.approved?
-        flash[:warning] = "You are about to modify a fully approved request. Changes will be logged and sent to approvers but this request will not require re-approval."
+        flash[:warning] = "You are about to modify a fully approved request. Changes will be logged and sent to approvers, and this request may require re-approval, depending on the change."
       end
 
       super
@@ -36,8 +36,11 @@ module Ncr
     end
 
     def setup_and_email_approvers
-      @model_instance.setup_approvals_and_observers
-      @model_instance.email_approvers
+      updater = Ncr::WorkOrderUpdater.new(
+        work_order: @model_instance,
+        flash: flash
+      )
+      updater.after_update
     end
 
     def attribute_changes?

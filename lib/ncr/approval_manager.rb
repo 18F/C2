@@ -13,10 +13,10 @@ module Ncr
     end
 
     def setup_approvals_and_observers
-      if work_order.emergency
-        setup_emergency
+      if work_order.requires_approval?
+        set_up_as_approvers
       else
-        setup_non_emergency
+        set_up_as_observers
       end
     end
 
@@ -73,7 +73,7 @@ module Ncr
       end
     end
 
-    def setup_emergency
+    def set_up_as_observers
       approvers_emails.each do |email|
         work_order.add_observer(email)
       end
@@ -81,7 +81,7 @@ module Ncr
       proposal.update(status: "approved")
     end
 
-    def setup_non_emergency
+    def set_up_as_approvers
       original_approvers = proposal.individual_approvals.non_pending.map(&:user)
       force_approvers(approvers_emails)
       notify_removed_approvers(original_approvers)

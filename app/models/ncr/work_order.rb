@@ -123,6 +123,10 @@ module Ncr
       self.approving_official && self.approving_official.email_address != approving_official_email
     end
 
+    def requires_approval?
+      !self.emergency
+    end
+
     def setup_approvals_and_observers
       manager = ApprovalManager.new(self)
       manager.setup_approvals_and_observers
@@ -150,8 +154,16 @@ module Ncr
       end
     end
 
-    def email_approvers
-      Dispatcher.on_proposal_update(self.proposal, self.modifier)
+    def budget_approvals
+      self.individual_approvals.offset(1)
+    end
+
+    def budget_approvers
+      self.approvers.merge(self.budget_approvals)
+    end
+
+    def editable?
+      true
     end
 
     def relevant_fields
@@ -221,6 +233,12 @@ module Ncr
         year += 1
       end
       year % 100   # convert to two-digit
+    end
+
+    def restart_budget_approvals
+      self.budget_approvals.each(&:restart!)
+      self.proposal.reset_status
+      self.proposal.root_step.initialize!
     end
   end
 end

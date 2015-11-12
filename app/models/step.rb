@@ -25,8 +25,21 @@ class Step < ActiveRecord::Base
     scope status, -> { where(status: status) }
   end
   scope :non_pending, -> { where.not(status: "pending") }
+  scope :outstanding, -> { where.not(status: "approved") }
 
   default_scope { order("position ASC") }
+
+  def pre_order_tree_traversal
+    [self] + self.child_approvals.flat_map(&:pre_order_tree_traversal)
+  end
+
+  protected
+
+  def restart
+    if self.parent
+      self.parent.restart!
+    end
+  end
 
   def notify_parent_approved
     if self.parent
@@ -37,10 +50,6 @@ class Step < ActiveRecord::Base
   end
 
   def children_approved?
-    self.child_approvals.where.not(status: "approved").empty?
-  end
-
-  def pre_order_tree_traversal
-    [self] + self.child_approvals.flat_map(&:pre_order_tree_traversal)
+    self.child_approvals.outstanding.empty?
   end
 end

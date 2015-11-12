@@ -1,4 +1,6 @@
 feature 'Approver edits NCR work order' do
+  include ProposalSpecHelper
+
   around(:each) do |example|
     with_env_var('DISABLE_SANDBOX_WARNING', 'true') do
       example.run
