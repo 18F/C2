@@ -107,14 +107,18 @@ class User < ActiveRecord::Base
 
   def self.from_oauth_hash(auth_hash)
     user_data = auth_hash.extra.raw_info.to_hash
-    user = self.for_email(user_data['email'])
-    if user_data['first_name'].present? && user.first_name.blank?
-      user.update_attributes(first_name: user_data['first_name'])
-    end
-    if user_data['last_name'].present? && user.last_name.blank?
-      user.update_attributes(last_name: user_data['last_name'])
-    end
+    user = self.for_email(user_data["email"])
+    user.update_names_if_present(user_data)
     user
+  end
+
+  def update_names_if_present(user_data)
+    %w(first_name last_name).each do |field|
+      attr = field.to_sym
+      if user_data[field].present? && user.send(attr).blank?
+        user.update_attributes(attr => user_data[field])
+      end
+    end
   end
 
   def role_on(proposal)
