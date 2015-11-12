@@ -8,7 +8,7 @@ describe ExpiredRecordCleaner do
     end
   end
 
-  describe ".old_proposals" do
+  describe ".vaccum_old_proposals" do
     it "locates old pending proposals" do
       proposal = create(:proposal)
       Timecop.travel(Time.zone.now + 1.year) do
@@ -19,7 +19,7 @@ describe ExpiredRecordCleaner do
     end
   end
 
-  describe ".proposal" do
+  describe ".vacuum_proposal" do
     it "cleans up specific proposal" do
       proposal = create(:proposal)
       cleaner = ExpiredRecordCleaner.new(Time.zone.now, true)
