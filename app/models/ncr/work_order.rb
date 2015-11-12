@@ -162,6 +162,10 @@ module Ncr
       self.approvers.merge(self.budget_approvals)
     end
 
+    def ineligible_approvers
+      [proposal.requester]
+    end
+
     def editable?
       true
     end

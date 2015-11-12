@@ -25,7 +25,7 @@
       = f.input :amount, as: :currency, label_html: { class: 'sr-only' }, input_html: { data: popover_data_attrs('ncr_amount') }
       = f.input :not_to_exceed, as: :radio_buttons, collection: [['Exact', false], ['Not to exceed', true]], label: false
     = f.input :direct_pay
-    = f.input :approving_official_email, collection: approver_options([current_user]), include_blank: true, disabled: @model_instance.approver_email_frozen?, prompt: :translate, input_html: { class: 'js-selectize' }, required: true
+    = f.input :approving_official_email, collection: approver_options(@model_instance.ineligible_approvers), include_blank: true, disabled: @model_instance.approver_email_frozen?, prompt: :translate, input_html: { class: 'js-selectize' }, required: true
     - if @model_instance.new_record?
       = render partial: 'attachments'
     - else
