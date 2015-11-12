@@ -1,6 +1,6 @@
 class ProfileController < ApplicationController
   def show
-  end 
+  end
 
   def update
     first_name = params[:first_name]
