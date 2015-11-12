@@ -3,13 +3,13 @@
     <table id="status-container-detail" width="770" class="col-md-12">
       <tr class="status-header-container <%='cancelled' if @proposal.cancelled? %>">
         <td>
-          <strong>Approval Status</strong>
+          <strong>Status</strong>
         </td>
         <td class="status-header">
           <%= status_icon_tag(@proposal.status) %>
           <strong><%= @proposal.status %></strong>
           <%- unless @proposal.cancelled? %>
-            (<%= @proposal.number_approved %> of <%= @proposal.total_approvers %> approved)
+            (<%= @proposal.number_approved %> of <%= @proposal.total_approvers %> steps completed)
           <%- end %>
         </td>
       </tr>
