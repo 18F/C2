@@ -114,21 +114,13 @@ module Ncr
       end
     end
 
-    def approver_changed?
-      self.approving_official && self.approving_official.email_address != approving_official_email
+    def approver_email_frozen?
+      approval = self.individual_steps.first
+      approval && !approval.actionable?
     end
 
-    # Check the approvers, accounting for frozen approving official
-    def approvers_emails
-      emails = system_approver_emails
-
-      if proposal.approver_email_frozen?
-        emails.unshift(approving_official.email_address)
-      else
-        emails.unshift(approving_official_email)
-      end
-
-      emails
+    def approver_changed?
+      self.approving_official && self.approving_official.email_address != approving_official_email
     end
 
     def requires_approval?
@@ -136,18 +128,8 @@ module Ncr
     end
 
     def setup_approvals_and_observers
-      emails = approvers_emails
-      if requires_approval?
-        original_approvers = proposal.individual_steps.non_pending.map(&:user)
-        force_approvers(emails)
-        notify_removed_approvers(original_approvers)
-      else
-        emails.each do |email|
-          add_observer(email)
-        end
-        # skip state machine
-        proposal.update(status: 'approved')
-      end
+      manager = ApprovalManager.new(self)
+      manager.setup_approvals_and_observers
     end
 
     def approving_official
@@ -219,21 +201,8 @@ module Ncr
     end
 
     def system_approver_emails
-      results = []
-      if %w(BA60 BA61).include?(expense_type)
-        unless organization.try(:whsc?)
-          results << self.class.ba61_tier1_budget_mailbox
-        end
-        results << self.class.ba61_tier2_budget_mailbox
-      else # BA80
-        if organization.try(:ool?)
-          results << self.class.ool_ba80_budget_mailbox
-        else
-          results << self.class.ba80_budget_mailbox
-        end
-      end
-
-      results
+      manager = ApprovalManager.new(self)
+      manager.system_approver_emails
     end
 
     def org_id
@@ -270,26 +239,6 @@ module Ncr
       self.budget_approvals.each(&:restart!)
       self.proposal.reset_status
       self.proposal.root_step.initialize!
-    end
-
-    protected
-
-    # Generally shouldn't be called directly as it doesn't account for
-    # emergencies, or notify removed approvers
-    def force_approvers(emails)
-      individuals = emails.map do |email|
-        user = User.for_email(email)
-        user.update!(client_slug: 'ncr')
-        # Reuse existing approvals, if present
-        self.proposal.existing_approval_for(user) || Steps::Approval.new(user: user)
-      end
-      self.proposal.root_step = Steps::Serial.new(child_approvals: individuals)
-    end
-
-    def notify_removed_approvers(original_approvers)
-      current_approvers = self.proposal.individual_steps.non_pending.map(&:user)
-      removed_approvers_to_notify = original_approvers - current_approvers
-      Dispatcher.on_approver_removal(self.proposal, removed_approvers_to_notify)
     end
   end
 end
