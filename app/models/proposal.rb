@@ -163,6 +163,9 @@ class Proposal < ActiveRecord::Base
 
   def add_requester(email)
     user = User.for_email(email)
+    if awaiting_approver?(user)
+      fail "#{email} is an approver on this Proposal -- cannot also be Requester"
+    end
     self.set_requester(user)
   end
 

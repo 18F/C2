@@ -7,6 +7,7 @@ module Steps
     has_many :delegations, through: :user, source: :outgoing_delegations
     has_many :delegates, through: :delegations, source: :assignee
 
+    validate :user_is_not_requester
     validates :user, presence: true
     delegate :full_name, :email_address, to: :user, prefix: true
     scope :with_users, -> { includes :user }
@@ -50,6 +51,12 @@ module Steps
     def restart
       self.api_token.try(:expire!)
       super
+    end
+
+    def user_is_not_requester
+      if user_id && user_id == proposal.requester_id
+        errors.add(:user, "Cannot be Requester")
+      end
     end
   end
 end
