@@ -1,7 +1,7 @@
 describe NcrDispatcher do
   let!(:work_order) { create(:ncr_work_order, :with_approvers) }
   let(:proposal) { work_order.proposal }
-  let(:steps) { work_order.individual_approvals }
+  let(:steps) { work_order.individual_steps }
   let(:step_1) { steps.first }
   let(:step_2) { steps.second }
   let(:ncr_dispatcher) { NcrDispatcher.new }

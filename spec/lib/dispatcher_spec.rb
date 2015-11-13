@@ -50,7 +50,7 @@ describe Dispatcher do
       delegate_two = create(:user, client_slug: 'ncr')
       tier_one_approver.add_delegate(delegate_one)
       tier_one_approver.add_delegate(delegate_two)
-      wo.proposal.individual_approvals.first.approve!
+      wo.proposal.individual_steps.first.approve!
       dispatcher.deliver_attachment_emails(wo.proposal)
       expect(email_recipients).to_not include(delegate_one.email_address)
     end
@@ -98,7 +98,7 @@ describe Dispatcher do
 
   describe '#on_approval_approved' do
     it "sends to the requester" do
-      dispatcher.on_approval_approved(proposal.individual_approvals.first)
+      dispatcher.on_approval_approved(proposal.individual_steps.first)
       expect(email_recipients).to eq([proposal.requester.email_address])
     end
   end

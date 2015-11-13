@@ -43,7 +43,7 @@ describe 'Canceling a request' do
     context "proposal with pending status" do
       it "does not send cancellation email to approver" do
         proposal = create(:proposal, :with_approver)
-        proposal.individual_approvals.first.update(status: 'pending')
+        proposal.individual_steps.first.update(status: 'pending')
 
         login_as(proposal.requester)
 
@@ -64,7 +64,7 @@ describe 'Canceling a request' do
          cancel_proposal(proposal)
        }.to change { deliveries.length }.from(0).to(2)
        expect_one_email_sent_to(proposal.requester)
-       expect_one_email_sent_to(proposal.individual_approvals.last.user)
+       expect_one_email_sent_to(proposal.individual_steps.last.user)
      end
    end
 
