@@ -50,7 +50,7 @@ module Ncr
     end
 
     def notify_removed_approvers(original_approvers)
-      current_approvers = proposal.individual_approvals.non_pending.map(&:user)
+      current_approvers = proposal.individual_steps.non_pending.map(&:user)
       removed_approvers_to_notify = original_approvers - current_approvers
       Dispatcher.on_approver_removal(proposal, removed_approvers_to_notify)
     end
@@ -82,7 +82,7 @@ module Ncr
     end
 
     def set_up_as_approvers
-      original_approvers = proposal.individual_approvals.non_pending.map(&:user)
+      original_approvers = proposal.individual_steps.non_pending.map(&:user)
       force_approvers(approvers_emails)
       notify_removed_approvers(original_approvers)
     end

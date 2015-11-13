@@ -21,7 +21,7 @@ describe ProposalPolicy::Scope do
   end
 
   it "does not allow a pending approver to see" do
-    approval = proposal.individual_approvals.first
+    approval = proposal.individual_steps.first
     user = approval.user
     approval.update_attribute(:status, 'pending')
     proposals = ProposalPolicy::Scope.new(user, Proposal).resolve

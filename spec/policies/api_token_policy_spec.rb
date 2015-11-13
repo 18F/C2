@@ -57,7 +57,7 @@ describe ApiTokenPolicy do
   end
 
   def approval
-    @approval ||= proposal.individual_approvals.first
+    @approval ||= proposal.individual_steps.first
   end
 
   def approver

@@ -84,7 +84,7 @@ describe 'proposals' do
 
     context "using a token" do
       let(:proposal) { create(:proposal, :with_approver) }
-      let(:step) { proposal.individual_approvals.first }
+      let(:step) { proposal.individual_steps.first }
       let(:token) { create(:api_token, step: step) }
 
       it "supports token auth" do
@@ -104,7 +104,7 @@ describe 'proposals' do
       it "fails for delegate without login, redirects automatically after login" do
         delegate = create(:user)
         proposal = create(:proposal, delegate: delegate)
-        step = proposal.individual_approvals.first
+        step = proposal.individual_steps.first
         token = create(:api_token, step: step)
 
         get "/proposals/#{proposal.id}/approve", cch: token.access_token

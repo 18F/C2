@@ -1,6 +1,6 @@
 describe "Handles incoming email" do
   let(:proposal) { FactoryGirl.create(:proposal, :with_parallel_approvers) }
-  let(:approval) { proposal.individual_approvals.first }
+  let(:approval) { proposal.individual_steps.first }
   let(:mail) { CommunicartMailer.actions_for_approver(approval) }
   let(:mandrill_inbound_noapp) { File.read(RSpec.configuration.fixture_path + '/mandrill_inbound_noapp.json') }
 

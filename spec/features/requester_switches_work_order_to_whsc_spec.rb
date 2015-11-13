@@ -11,7 +11,7 @@ feature 'Requester switches work order to WHSC' do
 
   before do
     work_order.setup_approvals_and_observers
-    work_order.individual_approvals.first.approve!
+    work_order.individual_steps.first.approve!
     login_as(work_order.requester)
   end
 
@@ -31,8 +31,8 @@ feature 'Requester switches work order to WHSC' do
         approving_official.email_address,
         Ncr::Mailboxes.ba61_tier2_budget
       ])
-      expect(work_order.individual_approvals.first).to be_approved
-      expect(work_order.individual_approvals.second).to be_actionable
+      expect(work_order.individual_steps.first).to be_approved
+      expect(work_order.individual_steps.second).to be_actionable
     end
 
     scenario 'notifies the removed approver' do
@@ -59,7 +59,7 @@ feature 'Requester switches work order to WHSC' do
     scenario "reassigns the approvers properly" do
       work_order = create(:ba80_ncr_work_order)
       work_order.setup_approvals_and_observers
-      work_order.individual_approvals.first.approve!
+      work_order.individual_steps.first.approve!
       expect(work_order.organization).to_not be_whsc
       ncr_proposal = work_order.proposal
 
@@ -78,7 +78,7 @@ feature 'Requester switches work order to WHSC' do
         approving_official.email_address,
         Ncr::Mailboxes.ba61_tier2_budget
       ])
-      expect(work_order.individual_approvals.first).to be_approved
+      expect(work_order.individual_steps.first).to be_approved
     end
   end
 end

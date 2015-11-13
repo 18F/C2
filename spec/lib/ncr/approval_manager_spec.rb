@@ -21,10 +21,10 @@ describe Ncr::ApprovalManager do
       wo = create(:ncr_work_order, expense_type: 'BA61')
       manager = Ncr::ApprovalManager.new(wo)
       manager.setup_approvals_and_observers
-      first_approval = wo.individual_approvals.first
+      first_approval = wo.individual_steps.first
 
       wo.reload.setup_approvals_and_observers
-      expect(wo.individual_approvals.first).to eq(first_approval)
+      expect(wo.individual_steps.first).to eq(first_approval)
     end
 
     it "creates observers when in an emergency" do
@@ -86,8 +86,8 @@ describe Ncr::ApprovalManager do
         ba80_budget_email
       ]
 
-      wo.individual_approvals.first.approve!
-      wo.individual_approvals.second.approve!
+      wo.individual_steps.first.approve!
+      wo.individual_steps.second.approve!
       expect(wo.reload.approved?).to be true
 
       wo.update(expense_type: 'BA61')
@@ -115,10 +115,10 @@ describe Ncr::ApprovalManager do
       manager.setup_approvals_and_observers
       delegate = create(:user)
       wo.approvers.second.add_delegate(delegate)
-      wo.individual_approvals.second.update(user: delegate)
+      wo.individual_steps.second.update(user: delegate)
 
-      wo.individual_approvals.first.approve!
-      wo.individual_approvals.second.approve!
+      wo.individual_steps.first.approve!
+      wo.individual_steps.second.approve!
 
       manager.setup_approvals_and_observers
       wo.reload

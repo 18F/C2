@@ -1,10 +1,10 @@
 module ProposalSpecHelper
   def linear_approval_statuses(proposal)
-    proposal.individual_approvals.pluck(:status)
+    proposal.individual_steps.pluck(:status)
   end
 
   def fully_approve(proposal)
-    proposal.individual_approvals.each do |approval|
+    proposal.individual_steps.each do |approval|
       approval.reload
       approval.approve!
     end

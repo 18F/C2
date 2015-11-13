@@ -128,7 +128,7 @@ describe Ncr::WorkOrdersController do
     end
 
     it 'does not modify the approver if already approved' do
-      work_order.individual_approvals.first.approve!
+      work_order.individual_steps.first.approve!
       post :update, {
         id: work_order.id,
         ncr_work_order: {

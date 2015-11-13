@@ -77,26 +77,26 @@
 
 - # @todo: there are multiple approval-status ids
 - if @proposal.parallel?
-  - if @proposal.individual_approvals.approved.any?
+  - if @proposal.individual_steps.approved.any?
     .approval-status-container
       #approval-status
         %h3 Request approved by
         %ul
-          - @proposal.individual_approvals.approved.each do |approval|
+          - @proposal.individual_steps.approved.each do |approval|
             %li.icon-approved
               = approval.user_email_address
               %span.timestamp
                 = "on #{l approval.updated_at}"
-  - if @proposal.individual_approvals.pending.any?
+  - if @proposal.individual_steps.pending.any?
     .approval-status-container
       #approval-status
         %h3 Waiting for approval from
         %ul.left
-          - @proposal.individual_approvals.pending.each do |approval|
+          - @proposal.individual_steps.pending.each do |approval|
             %li.icon-pending
               = approval.user_email_address
         %ul.right
-          - @proposal.individual_approvals.approved.each do |approval|
+          - @proposal.individual_steps.approved.each do |approval|
             %li.icon-approved
               = approval.user_email_address
 
