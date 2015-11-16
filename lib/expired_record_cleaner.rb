@@ -33,7 +33,7 @@ class ExpiredRecordCleaner
   end
 
   def send_reminder_email(proposal)
-    CommunicartMailer.proposal_reminder(proposal).deliver_later
+    CommunicartMailer.proposal_cancellation(proposal).deliver_later
   end
 
   def handle_no_requester(proposal)

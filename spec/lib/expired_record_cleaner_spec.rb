@@ -9,13 +9,26 @@ describe ExpiredRecordCleaner do
   end
 
   describe ".vaccum_old_proposals" do
-    it "locates old pending proposals" do
+    it "locates old pending proposals but does not act on them" do
+      proposal = create(:proposal)
+      Timecop.travel(Time.zone.now + 1.year) do
+        cleaner = ExpiredRecordCleaner.new(Time.zone.now)
+        expect(cleaner.vacuum_old_proposals).to eq([proposal.id])
+        expect(deliveries.length).to eq(0)
+        proposal.reload
+        expect(proposal.status).to eq("pending")
+      end
+    end
+
+    it "cancels old pending proposals" do
       proposal = create(:proposal)
       Timecop.travel(Time.zone.now + 1.year) do
         cleaner = ExpiredRecordCleaner.new(Time.zone.now, true)
         expect(cleaner.vacuum_old_proposals).to eq([proposal.id])
         expect(deliveries.length).to eq(1)
-      end
+        proposal.reload
+        expect(proposal.status).to eq("cancelled")
+      end 
     end
   end
 
