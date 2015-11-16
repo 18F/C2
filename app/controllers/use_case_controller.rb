@@ -21,7 +21,7 @@ class UseCaseController < ApplicationController
       flash[:success] = "Proposal submitted!"
       redirect_to proposal
     else
-      flash[:error] = errors
+      flash.now[:error] = errors
       render :new
     end
   end

@@ -92,6 +92,26 @@ feature 'Creating an NCR work order' do
       ]
     end
 
+    scenario "flash message on error does not persist" do
+      approver = create(:user, client_slug: "ncr")
+      login_as(requester)
+
+      visit '/ncr/work_orders/new'
+      fill_in 'Project title', with: "blue shells"
+      fill_in 'Description', with: "desc content"
+      choose 'BA60'
+      fill_in 'Vendor', with: 'Yoshi'
+      fill_in 'Amount', with: 123.45
+      fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
+      select Ncr::Organization.all[0], from: 'ncr_work_order_org_code'
+      click_on 'Submit for approval'
+
+      expect(page).to have_content("Approving official email can't be blank")
+
+      visit "/proposals"
+      expect(page).to_not have_content("Approving official email can't be blank")
+    end
+
     scenario 'shows the radio button' do
       login_as(requester)
       visit '/ncr/work_orders/new'
