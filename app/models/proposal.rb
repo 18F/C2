@@ -29,9 +29,9 @@ class Proposal < ActiveRecord::Base
   end
 
   has_many :steps
-  has_many :individual_approvals, ->{ individual }, class_name: 'Steps::Individual'
-  has_many :approvers, through: :individual_approvals, source: :user
-  has_many :api_tokens, through: :individual_approvals
+  has_many :individual_steps, ->{ individual }, class_name: 'Steps::Individual'
+  has_many :approvers, through: :individual_steps, source: :user
+  has_many :api_tokens, through: :individual_steps
   has_many :attachments, dependent: :destroy
   has_many :approval_delegates, through: :approvers, source: :outgoing_delegations
   has_many :comments, dependent: :destroy
@@ -98,31 +98,8 @@ class Proposal < ActiveRecord::Base
     users - delegates
   end
 
-  def root_step=(root)
-    old_steps = self.steps.to_a
-    step_list = root.pre_order_tree_traversal
-    step_list.each { |a| a.proposal = self }
-    self.steps = step_list
-    # position may be out of whack, so we reset it
-    step_list.each_with_index do |step, idx|
-      step.set_list_position(idx + 1) # start with 1
-    end
-
-    self.clean_up_old_steps(old_steps, step_list)
-
-    root.initialize!
-    self.reset_status
-  end
-
-  def clean_up_old_steps(old_steps, step_list)
-    # destroy any old steps that are not a part of step list
-    (old_steps - step_list).each do |appr|
-      appr.destroy if Step.exists?(appr.id)
-    end
-  end
-
   def reset_status
-    unless self.cancelled?   # no escape from cancelled
+    unless self.cancelled?  # no escape from cancelled
       if self.root_step.nil? || self.root_step.approved?
         self.update(status: 'approved')
       else
@@ -173,19 +150,6 @@ class Proposal < ActiveRecord::Base
     self.update_attributes!(requester_id: user.id)
   end
 
-  # Approvals in which someone can take action
-  def currently_awaiting_approvals
-    self.individual_approvals.actionable
-  end
-
-  def currently_awaiting_approvers
-    self.approvers.merge(self.currently_awaiting_approvals)
-  end
-
-  def awaiting_approver?(user)
-    self.currently_awaiting_approvers.include?(user)
-  end
-
   # delegated, with a fallback
   # TODO refactor to class method in a module
   def delegate_with_default(method)
@@ -230,7 +194,7 @@ class Proposal < ActiveRecord::Base
   #######################
 
   def restart
-    self.individual_approvals.each(&:restart!)
+    self.individual_steps.each(&:restart!)
     if self.root_step
       self.root_step.initialize!
     end
@@ -239,7 +203,7 @@ class Proposal < ActiveRecord::Base
 
   # Returns True if the user is an "active" approver and has acted on the proposal
   def is_active_approver?(user)
-    self.individual_approvals.non_pending.exists?(user_id: user.id)
+    self.individual_steps.non_pending.exists?(user_id: user.id)
   end
 
   def self.client_model_names

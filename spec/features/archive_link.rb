@@ -10,7 +10,7 @@ describe "archive link" do
     proposals = 20.times.map do |i|
       wo = create(:ncr_work_order, project_title: "Work Order #{i}")
       wo.proposal.update(requester: user)
-      wo.proposal.individual_approvals.create!(user: approver, status: 'actionable')
+      wo.proposal.individual_steps.create!(user: approver, status: 'actionable')
       approval = wo.proposal.existing_approval_for(approver)
       approval.approve!
       wo.proposal
@@ -23,7 +23,7 @@ describe "archive link" do
     proposals = 9.times.map do |i| 
       wo = create(:ncr_work_order, project_title: "Work Order #{i}")
       wo.proposal.update(requester: user)
-      wo.proposal.individual_approvals.create!(user: approver, status: 'actionable')
+      wo.proposal.individual_steps.create!(user: approver, status: 'actionable')
       approval = wo.proposal.existing_approval_for(approver)
       approval.approve!
       wo.proposal

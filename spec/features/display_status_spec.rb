@@ -1,7 +1,7 @@
 describe 'Display status text' do
   it 'displays approved status' do
     proposal = create_proposal_with_parallel_approvers
-    proposal.individual_approvals.each{ |approval| approval.approve! }
+    proposal.individual_steps.each{ |approval| approval.approve! }
 
     login_as(proposal.requester)
     visit proposals_path
@@ -24,7 +24,7 @@ describe 'Display status text' do
 
   it 'excludes approved approvals' do
     proposal = create_proposal_with_parallel_approvers
-    first_approval = proposal.individual_approvals.first
+    first_approval = proposal.individual_steps.first
     first_approval.approve!
     first_approver = first_approval.user
     all_approvers_except_first = proposal.approvers.offset(1)
@@ -43,7 +43,7 @@ describe 'Display status text' do
   context 'linear' do
     it 'displays the first approver' do
       proposal = create_proposal_with_serial_approvers
-      first_approval = proposal.individual_approvals.first
+      first_approval = proposal.individual_steps.first
       first_approver = first_approval.user
       all_approvers_except_first = proposal.approvers.offset(1)
 
@@ -59,7 +59,7 @@ describe 'Display status text' do
 
     it 'excludes approved approvals' do
       proposal = create_proposal_with_serial_approvers
-      first_approval = proposal.individual_approvals.first
+      first_approval = proposal.individual_steps.first
       first_approval.approve!
       first_approver = first_approval.user
 

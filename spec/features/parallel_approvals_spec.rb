@@ -2,7 +2,7 @@ describe 'Parallel approvals' do
   it 'allows either approver to approve' do
     proposal = create(:proposal, :with_parallel_approvers)
 
-    proposal.individual_approvals.each do |approval|
+    proposal.individual_steps.each do |approval|
       login_as(approval.user)
       visit proposal_path(proposal)
 

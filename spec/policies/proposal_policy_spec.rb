@@ -5,7 +5,7 @@ describe ProposalPolicy do
     it "allows pending delegates" do
       proposal = create(:proposal, :with_parallel_approvers)
 
-      approval = proposal.individual_approvals.first
+      approval = proposal.individual_steps.first
       delegate = create(:user)
       approver = approval.user
       approver.add_delegate(delegate)
@@ -15,7 +15,7 @@ describe ProposalPolicy do
 
     context "parallel proposal" do
       let(:proposal) {create(:proposal, :with_parallel_approvers)}
-      let(:approval) {proposal.individual_approvals.first}
+      let(:approval) {proposal.individual_steps.first}
 
       it "allows when there's a pending approval" do
         proposal.approvers.each{ |approver|
@@ -36,8 +36,8 @@ describe ProposalPolicy do
 
     context "linear proposal" do
       let(:proposal) {create(:proposal, :with_serial_approvers)}
-      let(:first_approval) { proposal.individual_approvals.first }
-      let(:second_approval) { proposal.individual_approvals.last }
+      let(:first_approval) { proposal.individual_steps.first }
+      let(:second_approval) { proposal.individual_steps.last }
 
       it "allows when there's a pending approval" do
         expect(subject).to permit(first_approval.user, proposal)
@@ -73,7 +73,7 @@ describe ProposalPolicy do
     end
 
     it "does not allow a pending approver to see it" do
-      first_approval = proposal.individual_approvals.first
+      first_approval = proposal.individual_steps.first
       first_approval.update_attribute(:status, 'pending')
       expect(subject).not_to permit(first_approval.user, proposal)
       expect(subject).to permit(proposal.approvers.last, proposal)

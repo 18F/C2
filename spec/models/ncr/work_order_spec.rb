@@ -221,7 +221,7 @@ describe Ncr::WorkOrder do
     it "returns the first pending approver" do
       wo = create(:ncr_work_order, :with_approvers)
       expect(wo.current_approver).to eq(wo.approvers.first)
-      wo.individual_approvals.first.approve!
+      wo.individual_steps.first.approve!
       expect(wo.current_approver).to eq(wo.approvers.second)
     end
 
@@ -236,7 +236,7 @@ describe Ncr::WorkOrder do
     it "returns the final approver" do
       wo = create(:ncr_work_order, :with_approvers)
       expect(wo.final_approver).to eq(wo.approvers.last)
-      wo.individual_approvals.first.approve!
+      wo.individual_steps.first.approve!
       expect(wo.final_approver).to eq(wo.approvers.last)
     end
 

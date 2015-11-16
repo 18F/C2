@@ -11,21 +11,21 @@ describe LinearDispatcher do
 
     it "returns nil if all are non-pending" do
       proposal = create(:proposal, :with_approver, flow: 'linear')
-      proposal.individual_approvals.first.approve!
+      proposal.individual_steps.first.approve!
       expect(dispatcher.next_pending_approval(proposal)).to eq(nil)
     end
 
     it "skips approved approvals" do
       proposal = create(:proposal, :with_serial_approvers)
-      last_approval = proposal.individual_approvals.last
-      proposal.individual_approvals.first.approve!
+      last_approval = proposal.individual_steps.last
+      proposal.individual_steps.first.approve!
 
       expect(dispatcher.next_pending_approval(proposal)).to eq(last_approval)
     end
 
     it "skips non-approvers" do
       proposal = create(:proposal, :with_approver, :with_observers)
-      approval = proposal.individual_approvals.first
+      approval = proposal.individual_steps.first
       expect(dispatcher.next_pending_approval(proposal)).to eq(approval)
     end
   end
@@ -33,7 +33,7 @@ describe LinearDispatcher do
   describe '#deliver_new_proposal_emails' do
     it "sends emails to the first approver" do
       proposal = create(:proposal, :with_approver)
-      approval = proposal.individual_approvals.first
+      approval = proposal.individual_steps.first
 
       expect(dispatcher).to receive(:email_approver).with(approval)
 
@@ -52,7 +52,7 @@ describe LinearDispatcher do
   describe '#on_approval_approved' do
     it "sends to the requester and the next approver" do
       proposal = create(:proposal, :with_serial_approvers)
-      approval = proposal.individual_approvals.first
+      approval = proposal.individual_steps.first
       approval.approve!   # calls on_approval_approved
       expect(email_recipients).to eq([
         proposal.approvers.second.email_address,

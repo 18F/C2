@@ -12,12 +12,12 @@ describe Comment do
     end
 
     it "includes approved approvers" do
-      individuals = proposal.individual_approvals
+      individuals = proposal.individual_steps
       individuals += [Steps::Approval.new(user: create(:user))]
       proposal.root_step = Steps::Serial.new(child_approvals: individuals)
 
       expect(proposal.approvers.length).to eq(3)
-      proposal.individual_approvals.first.approve!
+      proposal.individual_steps.first.approve!
       expect(comment.listeners).to include(proposal.approvers[0])
       expect(comment.listeners).to include(proposal.approvers[1])
       expect(comment.listeners).not_to include(proposal.approvers[2])

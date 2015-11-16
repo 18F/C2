@@ -115,7 +115,7 @@ module Ncr
     end
 
     def approver_email_frozen?
-      approval = self.individual_approvals.first
+      approval = self.individual_steps.first
       approval && !approval.actionable?
     end
 
@@ -155,7 +155,7 @@ module Ncr
     end
 
     def budget_approvals
-      self.individual_approvals.offset(1)
+      self.individual_steps.offset(1)
     end
 
     def budget_approvers
