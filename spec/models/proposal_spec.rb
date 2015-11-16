@@ -28,7 +28,7 @@ describe Proposal do
     it "disallows assigning approver as requester" do
       proposal = create(:proposal, :with_approver)
       expect {
-        proposal.add_requester(proposal.individual_approvals.first.user.email_address)
+        proposal.add_requester(proposal.individual_steps.first.user.email_address)
       }.to raise_error(/cannot also be Requester/)
     end
   end
