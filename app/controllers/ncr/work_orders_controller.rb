@@ -15,7 +15,7 @@ module Ncr
 
     def edit
       if self.proposal.approved?
-        flash[:warning] = "You are about to modify a fully approved request. Changes will be logged and sent to approvers, and this request may require re-approval, depending on the change."
+        flash.now[:warning] = "You are about to modify a fully approved request. Changes will be logged and sent to approvers, and this request may require re-approval, depending on the change."
       end
 
       super
