@@ -345,4 +345,13 @@ describe Proposal do
       expect(observation_creator_double).to have_received(:run)
     end
   end
+
+  describe "#tags" do
+    it "can add case-insensitive tags" do
+      proposal = create(:proposal)
+      proposal.tag_list = "foo, bar, BAZ"
+      proposal.save!
+      expect(proposal.tag_list).to eq(["foo", "bar", "baz"])
+    end
+  end
 end

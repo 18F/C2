@@ -28,6 +28,8 @@ class Proposal < ActiveRecord::Base
     end
   end
 
+  acts_as_taggable
+
   has_many :steps
   has_many :individual_steps, ->{ individual }, class_name: 'Steps::Individual'
   has_many :approvers, through: :individual_steps, source: :user
