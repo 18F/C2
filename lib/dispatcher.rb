@@ -59,7 +59,7 @@ class Dispatcher
 
   def on_comment_created(comment)
     comment.listeners.each do |user|
-      CommunicartMailer.comment_added_email(comment, user.email_address).deliver_later
+      CommentMailer.comment_added_email(comment, user.email_address).deliver_later
     end
   end
 

@@ -15,4 +15,8 @@ module ApplicationHelper
   def auth_path
     '/auth/myusa'
   end
+
+  def display_profile_warning?
+    !current_page?(profile_path) && current_user && current_user.requires_profile_attention?
+  end
 end

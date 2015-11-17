@@ -123,6 +123,16 @@ describe User do
     end
   end
 
+  describe "#requires_profile_attention?" do
+    it "recognizes user needs to update their profile" do
+      user = create(:user)
+      expect(user.requires_profile_attention?).to eq false
+      user.first_name = ""
+      user.save!
+      expect(user.requires_profile_attention?).to eq true
+    end
+  end
+
   describe '#has_role?' do
     before do
       user.save!
