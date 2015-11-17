@@ -107,14 +107,25 @@ class User < ActiveRecord::Base
 
   def self.from_oauth_hash(auth_hash)
     user_data = auth_hash.extra.raw_info.to_hash
-    user = self.for_email(user_data['email'])
-    if user_data['first_name'].present? && user_data['last_name'].present?
-      user.update_attributes(first_name: user_data['first_name'], last_name: user_data['last_name'])
-    end
+    user = self.for_email(user_data["email"])
+    user.update_names_if_present(user_data)
     user
+  end
+
+  def update_names_if_present(user_data)
+    %w(first_name last_name).each do |field|
+      attr = field.to_sym
+      if user_data[field].present? && self.send(attr).blank?
+        update_attributes(attr => user_data[field])
+      end
+    end
   end
 
   def role_on(proposal)
     RolePicker.new(self, proposal)
+  end
+
+  def requires_profile_attention?
+    first_name.blank? || last_name.blank?
   end
 end
