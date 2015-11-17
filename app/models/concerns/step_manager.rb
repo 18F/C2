@@ -48,5 +48,5 @@ module StepManager
 
   def ineligible_approvers
     [requester]
-  end 
+  end
 end
