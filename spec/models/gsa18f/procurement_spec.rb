@@ -1,4 +1,6 @@
 describe Gsa18f::Procurement do
+  it_behaves_like "client data"
+
   with_env_vars(GSA18F_APPROVER_EMAIL: "approver@example.com",
                 GSA18F_PURCHASER_EMAIL: "purchaser@example.com") do
     it "sets up initial approvers and observers" do

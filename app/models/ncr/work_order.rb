@@ -92,8 +92,6 @@ module Ncr
       users.first.email_address
     end
 
-    # Ignore values in certain fields if they aren't relevant. May want to
-    # split these into different models
     def self.relevant_fields(expense_type)
       fields = [:description, :amount, :expense_type, :vendor, :not_to_exceed,
                 :building_number, :org_code, :direct_pay, :cl_number, :function_code, :soc_code]
