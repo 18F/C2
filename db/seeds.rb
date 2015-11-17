@@ -7,3 +7,4 @@ Role.find_or_create_by(name: 'admin')
 # it should be safe to run multiple times in the same environment, and to remove
 # the relevant ENV vars after it has run at least once.
 RolesConversion.new.ncr_budget_approvers
+RolesConversion.new.gsa18f_approvers
