@@ -1,8 +1,8 @@
 class ExpiredRecordCleaner
   attr_reader :verbose, :fiscal_year_start
 
-  def initialize(datetime, args)
-    @fiscal_year_start = fiscal_year_start(datetime)
+  def initialize(datetime, args = {})
+    @fiscal_year_start = calc_fiscal_year_start(datetime)
     @ok_to_act = args[:ok_to_act]
     @verbose = args[:verbose]
   end
@@ -27,7 +27,7 @@ class ExpiredRecordCleaner
 
   private
 
-  def fiscal_year_start(dtim)
+  def calc_fiscal_year_start(dtim)
     year = (dtim.month >= 10) ? dtim.year : dtim.year - 1
     Time.zone.parse("#{year}-10-01")
   end
