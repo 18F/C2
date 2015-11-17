@@ -112,6 +112,17 @@ feature 'Creating an NCR work order' do
       expect(page).to_not have_content("Approving official email can't be blank")
     end
 
+    scenario "inactive users do not appear as potential approvers", :js do
+      approver = create(:user, client_slug: "ncr")
+      inactive_user = create(:user, client_slug: "ncr", active: false)
+      login_as(requester)
+      visit '/ncr/work_orders/new'
+      within(".ncr_work_order_approving_official_email") do
+        find(".selectize-control").click
+        expect(page).not_to have_content(inactive_user.email_address)
+      end
+    end
+
     scenario 'shows the radio button' do
       login_as(requester)
       visit '/ncr/work_orders/new'
