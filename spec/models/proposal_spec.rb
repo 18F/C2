@@ -143,6 +143,13 @@ describe Proposal do
     end
   end
 
+  describe "#ineligible_approvers" do
+    it "identifies ineligible approvers" do
+      proposal = create(:proposal)
+      expect(proposal.ineligible_approvers).to eq([proposal.requester])
+    end
+  end
+
   describe "#users_except_delegates" do
     it "can exclude delegates" do
       delegate_one = create(:user)

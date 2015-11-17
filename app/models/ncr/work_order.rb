@@ -163,7 +163,7 @@ module Ncr
     end
 
     def ineligible_approvers
-      [proposal.requester]
+      proposal.ineligible_approvers
     end
 
     def editable?
