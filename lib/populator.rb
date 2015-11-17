@@ -61,7 +61,7 @@ class Populator
         comment_text: Faker::Hacker.say_something_smart,
         created_at: commented_at,
         updated_at: commented_at,
-        user: proposal.users.sample
+        user: proposal.subscribers.sample
       )
     end
   end

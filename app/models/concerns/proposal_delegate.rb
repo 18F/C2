@@ -19,10 +19,15 @@ module ProposalDelegate
 
     validates :proposal, presence: true
 
-
-    delegate :add_observer, :add_requester, :set_requester, :currently_awaiting_approvers, to: :proposal
-
-    ### delegate the workflow actions/scopes/states ###
+    delegate(
+      :add_observer,
+      :add_requester,
+      :currently_awaiting_approvers,
+      :flow,
+      :set_requester,
+      :status,
+      to: :proposal
+    )
 
     scope :with_proposal_scope, ->(status) { joins(:proposal).merge(Proposal.send(status)) }
     scope :closed, -> { with_proposal_scope(:closed) }
@@ -36,20 +41,16 @@ module ProposalDelegate
       delegate "#{event}!".to_sym, to: :proposal
     end
 
-    delegate :flow, :status, to: :proposal
-
-    ###################################################
-
     def self.client_slug
       self.to_s.deconstantize.downcase
     end
-  end
 
-  def client_slug
-    self.class.client_slug
-  end
+    def client_slug
+      self.class.client_slug
+    end
 
-  def slug_matches?(user)
-    user.client_slug == client_slug
+    def slug_matches?(user)
+      user.client_slug == client_slug
+    end
   end
 end
