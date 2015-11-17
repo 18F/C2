@@ -7,7 +7,7 @@ class MigrateNcrToModels < ActiveRecord::Migration
     self.table_name = 'carts'
     has_many :properties, -> { where hasproperties_type: 'Cart' },
               foreign_key: "hasproperties_id",
-              class_name: 'TempProperty'
+              class_name: "TempProperty"
     belongs_to :proposal
     def props
       Hash[self.properties.collect{|p| [p.property, YAML::load(p.value)]}]
@@ -16,7 +16,7 @@ class MigrateNcrToModels < ActiveRecord::Migration
 
   class TempProposal < ActiveRecord::Base
     self.table_name = 'proposals'
-    has_one :cart, class_name: 'TempCart'
+    has_one :cart, class_name: "TempCart"
   end
 
   class TempNcrWorkOrder < ActiveRecord::Base
