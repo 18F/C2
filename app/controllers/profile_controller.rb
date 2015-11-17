@@ -12,6 +12,6 @@ class ProfileController < ApplicationController
     user.last_name = last_name
     user.save!
     flash[:success] = "Your profile is updated!"
-    redirect_to :me
+    redirect_to :profile
   end
 end

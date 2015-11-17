@@ -4,7 +4,7 @@ describe "Acts as a different User in request" do
   it "respects session for current_user" do
     wo = create(:ncr_work_order, :with_approvers)
     login_as(wo.proposal.requester)
-    visit '/me'
+    visit "/profile"
     expect(page.find('h2')).to have_content(wo.proposal.requester.email_address)
   end
 
@@ -12,7 +12,7 @@ describe "Acts as a different User in request" do
     with_env_var('FORCE_USER_ID', user.id.to_s) do
       wo = create(:ncr_work_order, :with_approvers)
       login_as(wo.proposal.requester)
-      visit '/me'
+      visit "/profile"
       expect(page.find('h2')).to have_content(user.email_address)
     end
   end

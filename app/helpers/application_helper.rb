@@ -17,6 +17,6 @@ module ApplicationHelper
   end
 
   def display_profile_warning?
-    !current_page?(me_path) && current_user && current_user.requires_profile_attention?
+    !current_page?(profile_path) && current_user && current_user.requires_profile_attention?
   end
 end
