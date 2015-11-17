@@ -10,23 +10,25 @@ class Proposal < ActiveRecord::Base
 
   workflow do
     state :pending do
-      event :approve, :transitions_to => :approved
-      event :restart, :transitions_to => :pending
-      event :cancel, :transitions_to => :cancelled
+      event :approve, transitions_to: :approved
+      event :restart, transitions_to: :pending
+      event :cancel, transitions_to: :cancelled
     end
     state :approved do
-      event :restart, :transitions_to => :pending
-      event :cancel, :transitions_to => :cancelled
-      event :approve, :transitions_to => :approved do
+      event :restart, transitions_to: :pending
+      event :cancel, transitions_to: :cancelled
+      event :approve, transitions_to: :approved do
         halt  # no need to trigger a state transition
       end
     end
     state :cancelled do
-      event :approve, :transitions_to => :cancelled do
+      event :approve, transitions_to: :cancelled do
         halt  # can't escape
       end
     end
   end
+
+  acts_as_taggable
 
   has_many :steps
   has_many :individual_steps, ->{ individual }, class_name: 'Steps::Individual'
@@ -61,19 +63,19 @@ class Proposal < ActiveRecord::Base
 
   # @todo - this should probably be the only entry into the approval system
   def root_step
-    self.steps.where(parent: nil).first
+    steps.where(parent: nil).first
   end
 
   def parallel?
-    self.flow == 'parallel'
+    flow == "parallel"
   end
 
   def linear?
-    self.flow == 'linear'
+    flow == "linear"
   end
 
   def delegate?(user)
-    self.approval_delegates.exists?(assignee_id: user.id)
+    approval_delegates.exists?(assignee_id: user.id)
   end
 
   def existing_approval_for(user)
@@ -82,34 +84,30 @@ class Proposal < ActiveRecord::Base
       OR user_id IN (SELECT assigner_id FROM approval_delegates WHERE assignee_id = :user_id)
       OR user_id IN (SELECT assignee_id FROM approval_delegates WHERE assigner_id = :user_id)
     SQL
-    self.steps.where(where_clause, user_id: user.id).first
+    steps.where(where_clause, user_id: user.id).first
   end
 
-  # Returns a list of all users involved with the Proposal.
-  def users
-    # TODO use SQL
-    results = self.approvers + self.observers + self.delegates + [self.requester]
+  def subscribers
+    results = approvers + observers + delegates + [requester]
     results.compact.uniq
   end
 
-  alias_method :subscribers, :users
-
-  def users_except_delegates
-    users - delegates
+  def subscribers_except_delegates
+    subscribers - delegates
   end
 
   def reset_status
-    unless self.cancelled?  # no escape from cancelled
-      if self.root_step.nil? || self.root_step.approved?
-        self.update(status: 'approved')
+    unless cancelled?
+      if root_step.nil? || root_step.approved?
+        update(status: "approved")
       else
-        self.update(status: 'pending')
+        update(status: "pending")
       end
     end
   end
 
   def has_subscriber?(user)
-    users.include?(user)
+    subscribers.include?(user)
   end
 
   def existing_observation_for(user)
@@ -143,67 +141,50 @@ class Proposal < ActiveRecord::Base
     if awaiting_approver?(user)
       fail "#{email} is an approver on this Proposal -- cannot also be Requester"
     end
-    self.set_requester(user)
+    set_requester(user)
   end
 
   def set_requester(user)
-    self.update_attributes!(requester_id: user.id)
+    update(requester: user)
   end
-
-  # delegated, with a fallback
-  # TODO refactor to class method in a module
-  def delegate_with_default(method)
-    data = self.client_data
-
-    result = nil
-    if data && data.respond_to?(method)
-      result = data.public_send(method)
-    end
-
-    if result.present?
-      result
-    elsif block_given?
-      yield
-    else
-      result
-    end
-  end
-
-  ## delegated methods ##
 
   def name
-    self.delegate_with_default(:name) {
+    if client_data
+      client_data.public_send(:name)
+    else
       "Request #{public_id}"
-    }
+    end
   end
 
   def fields_for_display
-    # TODO better default
-    self.delegate_with_default(:fields_for_display) { [] }
+    if client_data
+      client_data.public_send(:fields_for_display)
+    else
+      []
+    end
   end
 
   # Be careful if altering the identifier. You run the risk of "expiring" all
   # pending approval emails
   def version
     [
-      self.updated_at.to_i,
-      self.client_data.try(:version)
+      updated_at.to_i,
+      client_data.try(:version)
     ].compact.max
   end
 
-  #######################
-
   def restart
-    self.individual_steps.each(&:restart!)
-    if self.root_step
-      self.root_step.initialize!
+    individual_steps.each(&:restart!)
+
+    if root_step
+      root_step.initialize!
     end
     Dispatcher.deliver_new_proposal_emails(self)
   end
 
   # Returns True if the user is an "active" approver and has acted on the proposal
   def is_active_approver?(user)
-    self.individual_steps.non_pending.exists?(user_id: user.id)
+    individual_steps.non_pending.exists?(user: user)
   end
 
   def self.client_model_names
@@ -214,7 +195,7 @@ class Proposal < ActiveRecord::Base
     CLIENT_MODELS.map(&:client_slug)
   end
 
-  protected
+  private
 
   def create_new_observation(user, adder, reason)
     ObservationCreator.new(
@@ -224,8 +205,6 @@ class Proposal < ActiveRecord::Base
       observer_adder: adder
     ).run
   end
-
-  private
 
   def find_user(email_or_user)
     if email_or_user.is_a?(User)

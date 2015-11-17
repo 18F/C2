@@ -62,76 +62,51 @@ describe Proposal do
     end
   end
 
-  describe '#delegate_with_default' do
-    it "returns the delegated value" do
-      proposal = Proposal.new
-      client_data = double(some_prop: 'foo')
-      expect(proposal).to receive(:client_data).and_return(client_data)
-
-      result = proposal.delegate_with_default(:some_prop)
-      expect(result).to eq('foo')
-    end
-
-    it "returns the default when the delegated value is #blank?" do
-      proposal = Proposal.new
-      client_data = double(some_prop: '')
-      expect(proposal).to receive(:client_data).and_return(client_data)
-
-      result = proposal.delegate_with_default(:some_prop) { 'foo' }
-      expect(result).to eq('foo')
-    end
-
-    it "returns the default when there is no method on the delegate" do
-      proposal = Proposal.new
-      expect(proposal).to receive(:client_data).and_return(double)
-
-      result = proposal.delegate_with_default(:some_prop) { 'foo' }
-      expect(result).to eq('foo')
-    end
-  end
-
-  describe '#name' do
+  describe "#name" do
     it "returns the #public_id by default" do
       proposal = build(:proposal, public_id: "#6")
 
-      expect(proposal.name).to eq('Request #6')
+      expect(proposal.name).to eq("Request #6")
     end
   end
 
-  describe '#users' do
+  describe "#fields_for_display" do
+    it "returns an empty array by deafult" do
+      proposal = build(:proposal)
+
+      expect(proposal.fields_for_display).to eq []
+    end
+  end
+
+  describe '#subscribers' do
     it "returns all approvers, observers, and the requester" do
       requester = create(:user)
       proposal = create(:proposal, :with_parallel_approvers, :with_observers, requester: requester)
 
-      expect(proposal.users.map(&:id).sort).to eq([
+      expect(proposal.subscribers.map(&:id).sort).to eq([
         requester.id,
         proposal.approvers.first.id, proposal.approvers.second.id,
         proposal.observers.first.id, proposal.observers.second.id
       ].sort)
     end
 
-    it "returns only the rquester when it has no other users" do
+    it "returns only the requester when it has no other users" do
       proposal = create(:proposal)
-      expect(proposal.users).to eq([proposal.requester])
+      expect(proposal.subscribers).to eq([proposal.requester])
     end
 
-    it "uses 'subscribers' as an aliased method" do
-      proposal = create(:proposal)
-      expect(proposal.users).to eq(proposal.subscribers)
+    it "includes observers" do
+      observer = create(:user)
+      proposal = create(:proposal, requester: observer)
+      proposal.add_observer(observer)
+      expect(proposal.subscribers).to eq [observer]
     end
 
     it "removes duplicates" do
       requester = create(:user)
       proposal = create(:proposal, requester: requester)
       proposal.add_observer(requester.email_address)
-      expect(proposal.users).to eq [requester]
-    end
-
-    it "adds observer from user object" do
-      observer = create(:user)
-      proposal = create(:proposal, requester: observer)
-      proposal.add_observer(observer)
-      expect(proposal.users).to eq [observer]
+      expect(proposal.subscribers).to eq [requester]
     end
   end
 
@@ -150,14 +125,14 @@ describe Proposal do
     end
   end
 
-  describe "#users_except_delegates" do
-    it "can exclude delegates" do
-      delegate_one = create(:user)
-      delegate_two = create(:user)
+  describe "#subscribers_except_delegates" do
+    it "excludes delegates" do
+      delegate = create(:user)
       proposal = create(:proposal, :with_approver)
-      proposal.approvers.first.add_delegate(delegate_one)
-      proposal.approvers.first.add_delegate(delegate_two)
-      expect(proposal.users).to match_array(proposal.users_except_delegates + [delegate_one, delegate_two])
+      proposal.approvers.first.add_delegate(delegate)
+      expect(proposal.subscribers_except_delegates).to match_array(
+        proposal.subscribers - [delegate]
+      )
     end
   end
 
@@ -286,7 +261,7 @@ describe Proposal do
       expect(proposal.approved?).to be true
     end
 
-    it 'sets status as cancelled if the proposal has been cancelled' do
+    it "keeps status as cancelled if the proposal has been cancelled" do
       proposal = create(:proposal, :with_parallel_approvers)
       proposal.individual_steps.first.approve!
       expect(proposal.pending?).to be true
@@ -371,6 +346,15 @@ describe Proposal do
       proposal.add_observer(observer)
 
       expect(observation_creator_double).to have_received(:run)
+    end
+  end
+
+  describe "#tags" do
+    it "can add case-insensitive tags" do
+      proposal = create(:proposal)
+      proposal.tag_list = "foo, bar, BAZ"
+      proposal.save!
+      expect(proposal.tag_list).to eq(["foo", "bar", "baz"])
     end
   end
 end

@@ -4,7 +4,7 @@ Live at https://cap.18f.gov.
 
 18F's [deployments](http://12factor.net/codebase) of C2 live in AWS, and are
 deployed via [Cloud Foundry](http://www.cloudfoundry.org). See [the 18F Cloud
-Foundry documentation](https://docs.18f.gov) for more details on how to inspect
+Foundry documentation](https://docs.cloud.gov) for more details on how to inspect
 and configure them.
 
 Once you're set up with Cloud Foundry, open a [new issue in the DevOps

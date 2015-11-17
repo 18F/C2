@@ -26,6 +26,14 @@ describe '/admin endpoint' do
     expect(page).to have_content('scheduled jobs')
   end
 
+  it "does not allow Delete of Users" do
+    user.add_role('admin')
+    login_as(user)
+    visit "/admin/users/#{user.id}"
+    
+    expect(page).to_not have_content("Delete User")
+  end
+
   def user
     @user ||= create(:user)
   end

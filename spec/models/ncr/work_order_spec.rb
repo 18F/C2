@@ -1,6 +1,8 @@
 describe Ncr::WorkOrder do
   include ProposalSpecHelper
 
+  it_behaves_like "client data"
+
   describe "#editabe?" do
     it "is true" do
       work_order = build(:ncr_work_order)
@@ -46,21 +48,6 @@ describe Ncr::WorkOrder do
         :soc_code,
         :vendor
       ])
-    end
-  end
-
-  describe '#slug_matches?' do
-    it "respects user with same client_slug" do
-      wo = build(:ba80_ncr_work_order)
-      user = build(:user, client_slug: "ncr")
-      expect(wo.slug_matches?(user)).to eq(true)
-    end
-
-    it "identifies eligible observers based on client_slug" do
-      wo = create(:ba80_ncr_work_order)
-      user = create(:user, client_slug: 'ncr')
-      expect(wo.proposal.eligible_observers.to_a).to include(user)
-      expect(wo.proposal.eligible_observers.to_a).to_not include(wo.observers)
     end
   end
 

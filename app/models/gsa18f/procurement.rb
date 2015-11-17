@@ -34,8 +34,6 @@ module Gsa18f
       proposal.add_initial_steps(steps)
     end
 
-    # Ignore values in certain fields if they aren't relevant. May want to
-    # split these into different models
     def self.relevant_fields(recurring)
       fields = [:office, :justification, :link_to_product, :quantity,
         :date_requested, :urgency, :additional_info, :cost_per_unit,
@@ -47,7 +45,7 @@ module Gsa18f
     end
 
     def relevant_fields
-      Gsa18f::Procurement.relevant_fields(self.recurring)
+      Gsa18f::Procurement.relevant_fields(recurring)
     end
 
     def fields_for_display

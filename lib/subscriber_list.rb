@@ -22,7 +22,7 @@ class SubscriberList
   protected
 
   def partitioned_roles
-    users = proposal.users.sort_by(&:full_name)
+    users = proposal.subscribers.sort_by(&:full_name)
     roles = users.map { |user| RolePicker.new(user, proposal) }
 
     requesters, roles = roles.partition(&:requester?)
