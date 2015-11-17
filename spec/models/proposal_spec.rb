@@ -10,6 +10,27 @@ describe Proposal do
 
   describe "Validations" do
     it { should validate_uniqueness_of(:public_id).allow_nil }
+
+    it "disallows requester from also being approver" do
+      user = create(:user)
+      expect {
+        create(:proposal, :with_approver, requester: user, approver_user: user) 
+      }.to raise_error(ActiveRecord::RecordNotSaved)
+    end
+
+    it "disallows assigning requester as approver" do
+      proposal = create(:proposal)
+      expect {
+        proposal.add_initial_steps([Steps::Approval.new(user: proposal.requester)])
+      }.to raise_error(ActiveRecord::RecordNotSaved)
+    end
+
+    it "disallows assigning approver as requester" do
+      proposal = create(:proposal, :with_approver)
+      expect {
+        proposal.add_requester(proposal.individual_steps.first.user.email_address)
+      }.to raise_error(/cannot also be Requester/)
+    end
   end
 
   describe 'CLIENT_MODELS' do
@@ -94,6 +115,13 @@ describe Proposal do
       observer = create(:user, client_slug: nil)
       proposal = create(:proposal, requester: observer)
       expect(proposal.eligible_observers.to_a).to include(observer)
+    end
+  end
+
+  describe "#ineligible_approvers" do
+    it "identifies ineligible approvers" do
+      proposal = create(:proposal)
+      expect(proposal.ineligible_approvers).to eq([proposal.requester])
     end
   end
 

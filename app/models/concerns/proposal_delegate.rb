@@ -24,6 +24,7 @@ module ProposalDelegate
       :add_requester,
       :currently_awaiting_approvers,
       :flow,
+      :ineligible_approvers,
       :set_requester,
       :status,
       to: :proposal

@@ -135,6 +135,15 @@ feature 'Creating an NCR work order' do
       end
     end
 
+    scenario "does not show requester as approver option", :js do
+      login_as(requester)
+      visit "/ncr/work_orders/new"
+      within(".ncr_work_order_approving_official_email") do
+        find(".selectize-control").click
+        expect(page).not_to have_content(requester.email_address)
+      end
+    end
+
     scenario 'shows hint text for amount field', :js do
       login_as(requester)
       visit '/ncr/work_orders/new'
