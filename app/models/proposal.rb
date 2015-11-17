@@ -115,7 +115,7 @@ class Proposal < ActiveRecord::Base
   end
 
   def eligible_observers
-    if observations.any?
+    if observations.count > 0
       User.where(client_slug: client_slug).where('id not in (?)', observations.pluck('user_id'))
     else
       User.where(client_slug: client_slug)
