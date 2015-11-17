@@ -15,7 +15,7 @@ class MailPreview < MailView
   end
 
   def comment_added_email
-    mail = CommunicartMailer.comment_added_email(comment, email)
+    mail = CommentMailer.comment_added_email(comment, email)
     inline_styles(mail)
   end
 
