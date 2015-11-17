@@ -21,7 +21,7 @@ namespace :vacuum do
     ok_to_act = false
     if ENV["OK_TO_ACT"] && ENV["OK_TO_ACT"].match(/^[yt]/i)
       ok_to_act = true
-    end 
+    end
     verbose = false
     if ENV["VERBOSE"] && ENV["VERBOSE"].match(/^[yt]/i)
       verbose = true
