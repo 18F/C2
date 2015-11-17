@@ -1,6 +1,5 @@
 class CommentsController < ApplicationController
-  before_filter :authenticate_user!
-  before_filter ->{authorize proposal, :can_show!}
+  before_action ->{authorize proposal, :can_show!}
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
 
 
@@ -30,6 +29,10 @@ class CommentsController < ApplicationController
   end
 
   def auth_errors(exception)
-    render 'communicarts/authorization_error', status: 403, locals: { msg: "You are not allowed to see that proposal." }
+    render(
+      "authorization_error",
+      status: 403,
+      locals: { msg: "You are not allowed to see that proposal." }
+    )
   end
 end

@@ -2,12 +2,11 @@
 # * model_class
 # * permitted_params
 class UseCaseController < ApplicationController
-  before_filter :authenticate_user!
-  before_filter ->{authorize self.model_class}, only: [:new, :create]
-  before_filter ->{authorize self.proposal}, only: [:edit, :update]
+  before_action ->{authorize self.model_class}, only: [:new, :create]
+  before_action ->{authorize self.proposal}, only: [:edit, :update]
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
-  before_filter :build_model_instance, only: [:new, :create]
-  before_filter :find_model_instance, only: [:edit, :update]
+  before_action :build_model_instance, only: [:new, :create]
+  before_action :find_model_instance, only: [:edit, :update]
 
   def new
   end
@@ -88,7 +87,7 @@ class UseCaseController < ApplicationController
     path = polymorphic_path(self.model_class, action: :new)
     # prevent redirect loop
     if path == request.path
-      render 'communicarts/authorization_error', status: 403, locals: { msg: exception.message }
+      render "authorization_error", status: 403, locals: { msg: exception.message }
     else
       redirect_to path, alert: exception.message
     end

@@ -9,6 +9,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   helper_method :current_user, :signed_in?, :return_to
 
+  before_action :authenticate_user!
   before_action :disable_peek_by_default
 
   protected
@@ -85,11 +86,8 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_admin_user!
-    if not_signed_in?
-      render "communicarts/authentication_error", status: 401, layout: 'application'
-    elsif current_user.not_admin?
-      flash[:error] = 'You need to sign in for access to this page.'
-      render 'communicarts/authorization_error', status: 403, layout: 'application'
+    if current_user.not_admin?
+      render "authorization_error", status: 403
     end
   end
 
