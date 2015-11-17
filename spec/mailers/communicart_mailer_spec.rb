@@ -330,6 +330,14 @@ describe CommunicartMailer do
     end
   end
 
+  describe 'proposal_fiscal_cancellation' do
+    it "sends cancellation email for fiscal-year cleanup" do
+      proposal = create(:proposal)
+      mail = CommunicartMailer.proposal_fiscal_cancellation(proposal)
+      expect(mail.to).to eq([proposal.requester.email_address])
+    end
+  end
+
   describe 'new_attachment_email' do
     let(:mail) { CommunicartMailer.new_attachment_email(requester.email_address, proposal) }
 
