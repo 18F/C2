@@ -1,19 +1,5 @@
 {
-    "apache": { "command": "", "version": "" },
-    "apache-tomcat": { "command": "", "version": "" },
-    "java": { "command": "", "version": "" },
-    "jruby": { "command": "", "version": "" },
-    "linux-kernel": { "command": "", "version": "" },
-    "memcached": { "command": "", "version": "" },
-    "mongodb": { "command": "", "version": "" },
-    "mysql": { "command": "", "version": "" },
-    "nginx": { "command": "", "version": "" },
-    "phusion-passenger": { "command": "", "version": "" },
-    "postgres": { "command": "", "version": "" },
-    "redis": { "command": "", "version": "" },
-    "ruby": { "command": "", "version": "" },
-    "ruby-on-rails": { "command": "", "version": "" },
-    "thin": { "command": "", "version": "" },
-    "trinidad": { "command": "", "version": "" },
-    "unicorn": { "command": "", "version": "" }
+  "postgres": { "command": "", "version": "9.3.5" },
+  "ruby": { "command": "", "version": "" },
+  "ruby-on-rails": { "command": "", "version": "" }
 }
