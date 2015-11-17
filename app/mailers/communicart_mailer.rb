@@ -111,7 +111,7 @@ class CommunicartMailer < ApplicationMailer
     ) {} # no-op block so template error is avoided (body already in @_message)
   end
 
-  def proposal_cancellation(proposal)
+  def proposal_fiscal_cancellation(proposal)
     user = proposal.requester
     send_proposal_email(
       to_email: email_with_name(user.email_address, user.full_name),
