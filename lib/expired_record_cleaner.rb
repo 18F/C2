@@ -42,6 +42,8 @@ class ExpiredRecordCleaner
     end
     if @ok_to_act
       proposal.destroy
+    else
+      STDERR.puts "set OK_TO_ACT=true to clean up #{proposal.id}"
     end
   end
 
@@ -52,6 +54,8 @@ class ExpiredRecordCleaner
     if @ok_to_act
       notify_proposal_requester(proposal)
       proposal.cancel!
+    else
+      STDERR.puts "set OK_TO_ACT=true to clean up #{proposal.id}"
     end
   end
 end
