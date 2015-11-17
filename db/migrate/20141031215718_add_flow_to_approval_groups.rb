@@ -1,4 +1,7 @@
 class AddFlowToApprovalGroups < ActiveRecord::Migration
+  class ApprovalGroup < ActiveRecord::Base
+  end
+
   def change
     add_column :approval_groups, :flow, :string
 
