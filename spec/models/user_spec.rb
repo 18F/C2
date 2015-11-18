@@ -68,7 +68,7 @@ describe User do
       user2 = create(:user)
       user_role = user2.add_role('bar')
 
-      expect(User.with_role(user_role.role)).to eq([user2])
+      expect(User.with_role(user_role.role.name)).to eq([user2])
     end
   end
   describe '#client_admin?' do
@@ -133,21 +133,14 @@ describe User do
     end
   end
 
-  describe '#has_role?' do
-    before do
-      user.save!
-    end
-
-    it 'can be assigned a role' do
+  describe "#add_role" do
+    it "adds role by name" do
+      user = create(:user)
       role = create(:role)
-      user.add_role(role)
-      expect(user).to have_role(role.name)
-    end
 
-    it 'can be assigned a role by role name' do
-      role = create(:role)
-      user.add_role(role.name)
-      expect(user).to have_role(role)
+      expect {
+        user.add_role(role.name)
+      }.to change { user.roles.count }.from(0).to(1)
     end
   end
 end
