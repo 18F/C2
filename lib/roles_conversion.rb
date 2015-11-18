@@ -6,6 +6,11 @@ class RolesConversion
     ool_ba80_budget_approver
   end
 
+  def gsa18f_approvers
+    gsa18f_approver
+    gsa18f_purchaser
+  end
+
   private
 
   def ba61_tier1_budget_approver
@@ -37,6 +42,22 @@ class RolesConversion
       'communicart.budget.approver+ool_ba80@gmail.com',
       'OOL_BA80_budget_approver',
       'ncr'
+    )
+  end
+
+  def gsa18f_approver
+    with_email_role_slug!(
+      ENV["GSA18F_APPROVER_EMAIL"] || "some.approver@gsa.gov",
+      'gsa18f_approver',
+      'gsa18f'
+    )
+  end
+
+  def gsa18f_purchaser
+    with_email_role_slug!(
+      ENV["GSA18F_PURCHASER_EMAIL"] || "some.purchaser@gsa.gov",
+      'gsa18f_purchaser',
+      'gsa18f'
     )
   end
 

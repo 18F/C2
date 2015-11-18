@@ -80,11 +80,20 @@ module Gsa18f
     end
 
     def self.approver_email
-      ENV.fetch('GSA18F_APPROVER_EMAIL')
+      self.user_with_role('gsa18f_approver').email_address
     end
 
     def self.purchaser_email
-      ENV.fetch('GSA18F_PURCHASER_EMAIL')
+      self.user_with_role('gsa18f_purchaser').email_address
+    end
+
+    def self.user_with_role(role_name)
+      users = User.active.with_role(role_name).where(client_slug: 'gsa18f')
+      if users.empty?
+        fail "Missing User with role #{role_name} -- did you run rake db:migrate and rake db:seed?"
+      end
+
+      users.first
     end
   end
 end
