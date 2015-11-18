@@ -211,7 +211,7 @@ describe CommunicartMailer do
       observer = create(:user)
       adder = create(:user)
       reason = 'is an absolute ledge'
-      proposal.add_observer(observer, adder, reason)
+      proposal.add_observer(observer.email_address, adder, reason)
       observation = proposal.observations.first
 
       mail = CommunicartMailer.on_observer_added(observation, reason)

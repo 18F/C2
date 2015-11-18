@@ -122,8 +122,8 @@ class Proposal < ActiveRecord::Base
     end
   end
 
-  def add_observer(email_or_user, adder=nil, reason=nil)
-    user = find_user(email_or_user)
+  def add_observer(email_address, adder=nil, reason=nil)
+    user = User.for_email_with_slug(email_address, client_slug)
 
     # this authz check is here instead of in a Policy because the Policy classes
     # are applied to the current_user, not (as in this case) the user being acted upon.
@@ -204,13 +204,5 @@ class Proposal < ActiveRecord::Base
       reason: reason,
       observer_adder: adder
     ).run
-  end
-
-  def find_user(email_or_user)
-    if email_or_user.is_a?(User)
-      email_or_user
-    else
-      User.for_email_with_slug(email_or_user, client_slug)
-    end
   end
 end

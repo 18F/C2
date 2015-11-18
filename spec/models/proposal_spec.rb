@@ -98,7 +98,7 @@ describe Proposal do
     it "includes observers" do
       observer = create(:user)
       proposal = create(:proposal, requester: observer)
-      proposal.add_observer(observer)
+      proposal.add_observer(observer.email_address)
       expect(proposal.subscribers).to eq [observer]
     end
 
@@ -343,7 +343,7 @@ describe Proposal do
         observer_adder: nil
       ).and_return(observation_creator_double)
 
-      proposal.add_observer(observer)
+      proposal.add_observer(observer.email_address)
 
       expect(observation_creator_double).to have_received(:run)
     end
