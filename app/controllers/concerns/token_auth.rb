@@ -1,15 +1,3 @@
-# Usage:
-#
-# class MyController < ApplicationController
-#   include TokenAuth
-#   before_filter :validate_access
-#   ...
-#
-#   def proposal
-#     # return a Proposal
-#   end
-# end
-
 module TokenAuth
   extend ActiveSupport::Concern
 
@@ -50,14 +38,14 @@ module TokenAuth
     when :api_token
       if signed_in?
         flash[:error] = exception.message
-        render 'communicarts/authentication_error', status: 403
+        render "authentication_error", status: 403
       else
         return_to_param = make_return_to("Previous", request.fullpath)
         session[:return_to] = return_to_param
         redirect_to root_path(return_to: return_to_param), alert: "Please sign in to complete this action."
       end
     when Proposal
-      render 'communicarts/authorization_error', status: 403, locals: { msg: "You are not allowed to see that proposal." }
+      render "authorization_error", status: 403, locals: { msg: "You are not allowed to see that proposal." }
     else
       flash[:error] = exception.message
       redirect_to self.proposal

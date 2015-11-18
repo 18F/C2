@@ -1,7 +1,6 @@
 class AttachmentsController < ApplicationController
-  before_filter :authenticate_user!
-  before_filter ->{authorize self.proposal, :can_show!}, only: [:create, :show]
-  before_filter ->{authorize self.attachment}, only: [:destroy]
+  before_action ->{authorize self.proposal, :can_show!}, only: [:create, :show]
+  before_action ->{authorize self.attachment}, only: [:destroy]
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
 
   def create

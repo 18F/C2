@@ -1,4 +1,6 @@
 class AuthController < ApplicationController
+  skip_before_action :authenticate_user!, only: [:oauth_callback]
+
   def oauth_callback
     auth = request.env["omniauth.auth"]
     return_to_path = fetch_return_to_path

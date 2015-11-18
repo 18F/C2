@@ -1,11 +1,11 @@
 class ProposalsController < ApplicationController
   include TokenAuth
 
-  before_filter :authenticate_user!, except: :approve
+  skip_before_action :authenticate_user!, only: [:approve]
   # TODO use Policy for all actions
-  before_filter ->{authorize proposal}, only: [:show, :cancel, :cancel_form, :history]
-  before_filter :needs_token_on_get, only: :approve
-  before_filter :validate_access, only: :approve
+  before_action ->{authorize proposal}, only: [:show, :cancel, :cancel_form, :history]
+  before_action :needs_token_on_get, only: :approve
+  before_action :validate_access, only: :approve
   helper_method :display_status
   add_template_helper ProposalsHelper
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors

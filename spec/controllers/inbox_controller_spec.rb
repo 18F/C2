@@ -20,6 +20,7 @@ describe InboxController do
 
   it "handles mandrill GET to confirm inbound route" do
     get :show
+
     expect(response.status).to eq(200)
   end
 end
