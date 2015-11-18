@@ -25,7 +25,7 @@ describe Populator do
 
       expect {
         Populator.new.ncr_data_for_user(email: email, num_proposals: num_proposals)
-      }.to change { user.requested_proposals.count }.from(0).to(num_proposals)
+      }.to change { user.proposals.count }.from(0).to(num_proposals)
     end
   end
 end
