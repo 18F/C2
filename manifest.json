@@ -1,0 +1,5 @@
+{
+  "postgres": { "command": "", "version": "9.3.10" },
+  "ruby": { "command": "", "version": "" },
+  "ruby-on-rails": { "command": "", "version": "" }
+}
