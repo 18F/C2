@@ -63,10 +63,10 @@ describe Proposal do
   end
 
   describe "#name" do
-    it "returns the #public_id by default" do
-      proposal = build(:proposal, public_id: "#6")
+    it "delegates to client data" do
+      proposal = build(:proposal)
 
-      expect(proposal.name).to eq("Request #6")
+      expect(proposal.name).to be_nil
     end
   end
 

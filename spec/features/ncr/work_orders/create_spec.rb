@@ -29,11 +29,12 @@ feature 'Creating an NCR work order' do
 
     scenario 'saves a Proposal with the attributes' do
       approver = create(:user, client_slug: "ncr")
+      project_title = "buying stuff"
       login_as(requester)
       expect(Dispatcher).to receive(:deliver_new_proposal_emails)
 
       visit '/ncr/work_orders/new'
-      fill_in 'Project title', with: "buying stuff"
+      fill_in 'Project title', with: project_title
       fill_in 'Description', with: "desc content"
       choose 'BA80'
       fill_in 'RWA Number', with: 'F1234567'
@@ -50,7 +51,7 @@ feature 'Creating an NCR work order' do
       expect(page).to have_content("Proposal submitted")
       expect(current_path).to eq("/proposals/#{proposal.id}")
 
-      expect(proposal.name).to eq("buying stuff")
+      expect(proposal.name).to eq(project_title)
       expect(proposal.flow).to eq('linear')
       work_order = proposal.client_data
       expect(work_order.client_slug).to eq("ncr")

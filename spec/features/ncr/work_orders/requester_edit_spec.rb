@@ -7,7 +7,7 @@ feature 'Requester edits their NCR work order' do
     end
   end
 
-  let(:work_order) { create(:ncr_work_order, description: 'test') }
+  let(:work_order) { create(:ncr_work_order, org_code: Ncr::Organization.all[0].to_s,  description: 'test') }
   let(:ncr_proposal) { work_order.proposal }
   let(:requester) { work_order.requester }
 

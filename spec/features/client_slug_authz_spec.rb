@@ -64,10 +64,10 @@ describe "client_slug confers authz rules" do
     gsa_user = create(:user, client_slug: 'gsa18f')
     approver = create(:user, client_slug: "ncr")
     login_as(ncr_user)
-    visit '/ncr/work_orders/new'
+
+    visit new_ncr_work_order_path
     submit_ba60_work_order(approver)
-    proposal_path = current_path
-    visit proposal_path
+
     expect(page.status_code).to eq(200)
     expect_to_not_find_amongst_select_tag_options('observation_user_email_address', gsa_user.email_address)
   end

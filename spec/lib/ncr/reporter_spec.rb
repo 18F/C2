@@ -31,7 +31,7 @@ describe Ncr::Reporter do
       )
       whs_work_order.setup_approvals_and_observers
 
-      approved_work_order = create(:ncr_work_order, :with_approvers)
+      approved_work_order = create(:ncr_work_order, :with_approvers, org_code: Ncr::Organization.all[0].to_s )
       approved_work_order.setup_approvals_and_observers
       approved_work_order.individual_steps.first.approve!
 
