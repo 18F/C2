@@ -2,13 +2,13 @@ module Ncr
   class Organization
     BY_CODE = {} # populated later
     OOL_CODES = Set.new # populated later
-    WHSC_CODE = 'P1122021'
+    WHSC_CODE = "P1122021"
 
-    attr_accessor :code, :project_title
+    attr_accessor :code, :name
 
-    def initialize(code:, project_title:)
+    def initialize(code:, name:)
       self.code = code
-      self.project_title = project_title
+      self.name = name
     end
 
     def ==(other)
@@ -16,7 +16,7 @@ module Ncr
     end
 
     def to_s
-      "#{code} #{project_title}"
+      "#{code} #{name}"
     end
 
     # Office of Leasing
@@ -40,7 +40,7 @@ module Ncr
     def self.from_csv_row(row)
       self.new(
         code: row['organization_cd'],
-        project_title: row['organization_nm']
+        name: row['organization_nm']
       )
     end
 
@@ -57,7 +57,7 @@ module Ncr
     def self.load_ool_yaml
       data = YAML.load_file(Rails.root.join(*%w(config data ncr ool_org_codes.yml)))
       data.each do |code, project_title|
-        org = self.new(code: code, project_title: project_title)
+        org = self.new(code: code, name: name)
         BY_CODE[code] = org
         OOL_CODES << code
       end

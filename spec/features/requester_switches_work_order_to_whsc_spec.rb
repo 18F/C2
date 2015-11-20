@@ -5,7 +5,7 @@ feature 'Requester switches work order to WHSC' do
     end
   end
 
-  let(:work_order) { create(:ncr_work_order, org_code: Ncr::Organization.all[0].to_s, description: 'test') }
+  let(:work_order) { create(:ncr_work_order, org_code: Ncr::Organization.all.first.to_s, description: 'test') }
   let(:ncr_proposal) { work_order.proposal }
   let!(:approver) { create(:user) }
 

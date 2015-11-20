@@ -1,8 +1,8 @@
 describe Ncr::Organization do
   describe '#==' do
     it "considers two objects with the same #code identical" do
-      expect(Ncr::Organization.new(code: '12', project_title: 'foo')).to eq(
-        Ncr::Organization.new(code: '12', project_title: 'foo')
+      expect(Ncr::Organization.new(code: '12', name: 'foo')).to eq(
+        Ncr::Organization.new(code: '12', name: 'foo')
       )
     end
   end
@@ -14,7 +14,7 @@ describe Ncr::Organization do
     end
 
     it "returns false for other org codes" do
-      org = Ncr::Organization.new(code: '12', project_title: 'foo')
+      org = Ncr::Organization.new(code: '12', name: 'foo')
       expect(org.ool?).to eq(false)
     end
   end
@@ -26,7 +26,7 @@ describe Ncr::Organization do
     end
 
     it "returns false for other org codes" do
-      org = Ncr::Organization.new(code: '12', project_title: 'foo')
+      org = Ncr::Organization.new(code: '12', name: 'foo')
       expect(org.whsc?).to eq(false)
     end
   end
@@ -39,7 +39,7 @@ describe Ncr::Organization do
     it "populates the attributes for each" do
       Ncr::Organization.all.each do |org|
         expect(org.code).to be_present
-        expect(org.project_title).to be_present
+        expect(org.name).to be_present
       end
     end
   end

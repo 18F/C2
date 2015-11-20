@@ -87,7 +87,7 @@ module Ncr
     end
 
     def self.proposals_tier_one_pending_sql
-      approver_sql   = self.proposals_tier_one_pending_approver_sql
+      approver_sql = self.proposals_tier_one_pending_approver_sql
       work_order_sql = self.proposals_tier_one_work_order_sql
       <<-SQL.gsub(/^ {8}/, '')
         SELECT * FROM proposals AS p
