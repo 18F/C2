@@ -80,7 +80,9 @@ module Gsa18f
     end
 
     def purchaser
-      purchase_step ? purchase_step.user : nil
+      if purchase_step
+        purchase_step.user
+      end
     end
 
     def self.approver_email
