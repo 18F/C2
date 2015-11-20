@@ -55,7 +55,7 @@ describe Ncr::WorkOrder do
     it "returns the corresponding Organization instance" do
       org = Ncr::Organization.all.last
       work_order = Ncr::WorkOrder.new(org_code: org.code)
-      expect(work_order.organization).to eq(org)
+      expect(work_order.organization.code).to eq(org.code)
     end
 
     it "returns nil for no #org_code" do
