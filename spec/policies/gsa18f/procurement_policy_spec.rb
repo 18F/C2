@@ -36,6 +36,13 @@ describe Gsa18f::ProcurementPolicy do
       expect(subject).to permit(procurement.proposal.approvers.first, procurement)
     end
 
+    it "allows approver delegate to cancel" do
+      procurement = create(:gsa18f_procurement, :with_steps)
+      the_delegate = create(:user, client_slug: "gsa18f")
+      procurement.proposal.approvers.first.add_delegate(the_delegate)
+      expect(subject).to permit(the_delegate, procurement)
+    end
+
     it "does not allow purchaser to cancel" do
       procurement = create(:gsa18f_procurement, :with_steps)
       expect(subject).to_not permit(procurement.purchaser, procurement)
