@@ -174,9 +174,7 @@ module Ncr
       attributes.map{|key| [WorkOrder.human_attribute_name(key), self[key]]}
     end
 
-    # will return nil if the `org_code` is blank or not present in Organization list
     def organization
-      # TODO reference by `code` rather than storing the whole thing
       code = (self.org_code || '').split(' ', 2)[0]
       Ncr::Organization.find(code)
     end
@@ -203,21 +201,21 @@ module Ncr
       manager.system_approver_emails
     end
 
+    def as_json
+      super.merge(org_id: org_id, building_id: building_id)
+    end
+
     def org_id
-      self.organization.try(:code)
+      organization.try(:code)
     end
 
     def building_id
       regex = /\A(\w{8}) .*\z/
-      if self.building_number && regex.match(self.building_number)
+      if building_number && regex.match(building_number)
         regex.match(self.building_number)[1]
       else
-        self.building_number
+        building_number
       end
-    end
-
-    def as_json
-      super.merge(org_id: self.org_id, building_id: self.building_id)
     end
 
     def public_identifier

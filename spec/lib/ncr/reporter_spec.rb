@@ -24,12 +24,15 @@ describe Ncr::Reporter do
 
   describe '.proposals_tier_one_pending' do
     it "only returns Proposals where Tier One approval is actionable" do
+      white_house_org_code = Ncr::OrganizationCollection.new.finder[Ncr::Organization::WHSC_CODE].to_s
+
       whs_work_order = create(
         :ncr_work_order,
         :with_approvers,
-        org_code: Ncr::Organization::WHSC_CODE
+        org_code: white_house_org_code
       )
       whs_work_order.setup_approvals_and_observers
+      whs_work_order.individual_steps.first.approve!
 
       approved_work_order = create(:ncr_work_order, :with_approvers)
       approved_work_order.setup_approvals_and_observers
