@@ -4,7 +4,7 @@ ActiveAdmin.register User do
   filter :last_name
   filter :first_name
   filter :email_address
-  filter :status
+  filter :active
   filter :client_slug
 
   # See permitted parameters documentation:
