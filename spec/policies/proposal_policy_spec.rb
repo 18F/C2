@@ -89,10 +89,14 @@ describe ProposalPolicy do
   end
 
   permissions :can_edit? do
-    let(:proposal) { create(:proposal, :with_parallel_approvers, :with_observers) }
-
-    it "allows the requester to edit it" do
+    it "allows the requester to edit" do
       expect(subject).to permit(proposal.requester, proposal)
+    end
+
+    it "allows an admin to edit" do
+      admin = create(:user)
+      admin.add_role("admin")
+      expect(subject).to permit(admin, proposal)
     end
 
     it "doesn't allow an approver to edit it" do
@@ -115,9 +119,7 @@ describe ProposalPolicy do
   end
 
   permissions :can_cancel? do
-    let(:proposal) { create(:proposal, :with_parallel_approvers) }
-
-    it "allows the requester to edit it" do
+    it "allows the requester to cancel it" do
       expect(subject).to permit(proposal.requester, proposal)
     end
 
@@ -129,5 +131,15 @@ describe ProposalPolicy do
     it "doesn't allow an approver to cancel it" do
       expect(subject).not_to permit(proposal.approvers[0], proposal)
     end
+
+    it "allows admins to cancel" do
+      admin = create(:user)
+      admin.add_role("admin")
+      expect(subject).to permit(admin, proposal)
+    end
+  end
+
+  def proposal
+    @_proposal = create(:proposal, :with_parallel_approvers, :with_observers)
   end
 end
