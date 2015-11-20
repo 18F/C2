@@ -24,4 +24,21 @@ describe Gsa18f::ProcurementPolicy do
       end
     end
   end
+
+  permissions :can_cancel? do
+    it "allows requester to cancel" do
+      procurement = create(:gsa18f_procurement)
+      expect(subject).to permit(procurement.proposal.requester, procurement)
+    end
+
+    it "allows approver to cancel" do
+      procurement = create(:gsa18f_procurement, :with_steps)
+      expect(subject).to permit(procurement.proposal.approvers.first, procurement)
+    end
+
+    it "does not allow purchaser to cancel" do
+      procurement = create(:gsa18f_procurement, :with_steps)
+      expect(subject).to_not permit(procurement.purchaser, procurement)
+    end
+  end
 end

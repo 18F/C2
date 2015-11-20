@@ -9,6 +9,7 @@ describe Gsa18f::Procurement do
       procurement = create(:gsa18f_procurement, :with_steps)
       expect(procurement.approvers.map(&:email_address)).to eq(["approver@example.com", "purchaser@example.com"])
       expect(procurement.observers.map(&:email_address)).to be_empty
+      expect(procurement.purchaser.email_address).to eq("purchaser@example.com")
     end
 
     it "identifies eligible observers based on client_slug" do
