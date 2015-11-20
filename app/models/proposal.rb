@@ -151,8 +151,6 @@ class Proposal < ActiveRecord::Base
   def name
     if client_data
       client_data.public_send(:name)
-    else
-      "Request #{public_id}"
     end
   end
 

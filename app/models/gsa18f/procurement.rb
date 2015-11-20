@@ -26,32 +26,33 @@ module Gsa18f
     validates :product_name_and_description, presence: true
     validates :recurring_interval, presence: true, if: :recurring
 
+    def self.relevant_fields(recurring)
+      fields = self.default_fields
+
+      if recurring
+        fields += [:recurring_interval, :recurring_length]
+      end
+
+      fields
+    end
+
+    def self.default_fields
+      fields = self.column_names.map(&:to_sym) + [:approving_official_email]
+      fields - [:recurring_interval, :recurring_length, :created_at, :updated_at, :id]
+    end
+
+    def fields_for_display
+      attributes = self.class.relevant_fields(recurring)
+      attributes.map! {|key| [Procurement.human_attribute_name(key), self[key]]}
+      attributes.push(["Total Price", total_price])
+    end
+
     def add_steps
       steps = [
         Steps::Approval.new(user: User.for_email(Gsa18f::Procurement.approver_email)),
         Steps::Purchase.new(user: User.for_email(Gsa18f::Procurement.purchaser_email)),
       ]
       proposal.add_initial_steps(steps)
-    end
-
-    def self.relevant_fields(recurring)
-      fields = [:office, :justification, :link_to_product, :quantity,
-        :date_requested, :urgency, :additional_info, :cost_per_unit,
-        :product_name_and_description, :recurring]
-      if recurring
-        fields += [:recurring_interval, :recurring_length]
-      end
-      fields
-    end
-
-    def relevant_fields
-      Gsa18f::Procurement.relevant_fields(recurring)
-    end
-
-    def fields_for_display
-      attributes = self.relevant_fields
-      attributes.map! {|key| [Procurement.human_attribute_name(key), self[key]]}
-      attributes.push(["Total Price", total_price])
     end
 
     def total_price
@@ -64,7 +65,7 @@ module Gsa18f
     end
 
     def name
-      self.product_name_and_description
+      product_name_and_description
     end
 
     def editable?

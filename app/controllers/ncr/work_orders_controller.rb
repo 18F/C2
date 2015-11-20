@@ -61,12 +61,17 @@ module Ncr
     end
 
     def permitted_params
-      fields = Ncr::WorkOrder.relevant_fields(
-        params[:ncr_work_order][:expense_type])
+      fields = work_order_params
+
       if work_order
         fields.delete(:emergency) # emergency field cannot be edited
       end
-      params.require(:ncr_work_order).permit(:project_title, :approving_official_email, *fields)
+
+      params.require(:ncr_work_order).permit(*fields)
+    end
+
+    def work_order_params
+      Ncr::WorkOrder.relevant_fields(params[:ncr_work_order][:expense_type])
     end
 
     # @pre: work_order.approving_official_email is set

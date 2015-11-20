@@ -12,9 +12,11 @@ module Gsa18f
     end
 
     def permitted_params
-      fields = Gsa18f::Procurement.relevant_fields(
-        params[:gsa18f_procurement][:recurring])
-      params.require(:gsa18f_procurement).permit(:name, *fields)
+      params.require(:gsa18f_procurement).permit(*procurement_params)
+    end
+
+    def procurement_params
+      Gsa18f::Procurement.relevant_fields(params[:gsa18f_procurement][:recurring])
     end
 
     def add_steps

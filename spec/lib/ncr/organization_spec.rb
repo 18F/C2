@@ -1,7 +1,9 @@
 describe Ncr::Organization do
   describe '#==' do
     it "considers two objects with the same #code identical" do
-      expect(Ncr::Organization.new(code: '12', name: 'foo')).to eq(Ncr::Organization.new(code: '12', name: 'foo'))
+      expect(Ncr::Organization.new(code: '12', name: 'foo')).to eq(
+        Ncr::Organization.new(code: '12', name: 'foo')
+      )
     end
   end
 

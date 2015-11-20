@@ -38,7 +38,7 @@ describe "Listing Page" do
     it "should show requester" do
       visit '/proposals'
       expect(page).to have_content("Requester")
-      expect(page).to have_content(default.name+' '+default.requester.email_address)
+      expect(page).to have_content("#{default.name} #{default.requester.email_address}")
     end
 
     it "should list the proposal in the proper section" do
@@ -64,9 +64,9 @@ describe "Listing Page" do
       it_behaves_like "listing page"
 
       it "should show requester" do
-        visit '/proposals'
+        visit "/proposals"
         expect(page).to have_content("Requester")
-        expect(page).to have_content("#{client_model.name} #{client_model.requester.email_address}")
+        expect(page).to have_content("#{client_model.proposal.name} #{client_model.requester.email_address}")
       end
     end
   end
