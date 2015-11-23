@@ -5,7 +5,7 @@ describe 'Canceling a request' do
 
     visit proposal_path(proposal)
 
-    expect(page).to have_content('Cancel my request')
+    expect(page).to have_content('Cancel this request')
   end
 
   it 'does not show a cancel link for non-requesters' do
@@ -14,7 +14,7 @@ describe 'Canceling a request' do
 
     visit proposal_path(proposal)
 
-    expect(page).to_not have_content('Cancel my request')
+    expect(page).to_not have_content('Cancel this request')
   end
 
   it 'prompts the requester for a reason' do
@@ -22,7 +22,7 @@ describe 'Canceling a request' do
     login_as(proposal.requester)
 
     visit proposal_path(proposal)
-    click_on('Cancel my request')
+    click_on('Cancel this request')
 
     expect(current_path).to eq("/proposals/#{proposal.id}/cancel_form")
   end
@@ -99,7 +99,7 @@ describe 'Canceling a request' do
       login_as(proposal.requester)
 
       visit proposal_path(proposal)
-      click_on('Cancel my request')
+      click_on('Cancel this request')
       fill_in 'reason_input', with: ''
       click_on('Yes, cancel this request')
 
@@ -131,7 +131,7 @@ describe 'Canceling a request' do
 
   def cancel_proposal(proposal)
     visit proposal_path(proposal)
-    click_on('Cancel my request')
+    click_on('Cancel this request')
     fill_in 'reason_input', with: 'This is a good reason for the cancellation.'
     click_on('Yes, cancel this request')
   end

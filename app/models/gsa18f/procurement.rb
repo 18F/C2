@@ -80,6 +80,12 @@ module Gsa18f
       "##{proposal.id}"
     end
 
+    def purchaser
+      if purchase_step
+        purchase_step.user
+      end
+    end
+
     def self.approver_email
       self.user_with_role('gsa18f_approver').email_address
     end
@@ -95,6 +101,12 @@ module Gsa18f
       end
 
       users.first
+    end
+
+    private
+
+    def purchase_step
+      steps.select{|step| step.is_a?(Steps::Purchase)}.first
     end
   end
 end
