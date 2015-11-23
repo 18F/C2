@@ -20,6 +20,9 @@ class User < ActiveRecord::Base
   has_many :outgoing_delegations, class_name: 'ApprovalDelegate', foreign_key: 'assigner_id'
   has_many :outgoing_delegates, through: :outgoing_delegations, source: :assignee
 
+  has_many :incoming_delegations, class_name: 'ApprovalDelegate', foreign_key: 'assignee_id'
+  has_many :incoming_delegates, through: :incoming_delegations, source: :assigner
+
   def self.active
     where(active: true)
   end
