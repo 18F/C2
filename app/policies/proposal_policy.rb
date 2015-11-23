@@ -11,7 +11,7 @@ class ProposalPolicy
   end
 
   def can_edit!
-    (@user.admin? || requester!) && not_approved! && not_cancelled!
+    (admin? || requester!) && not_approved! && not_cancelled!
   end
   alias_method :can_update!, :can_edit!
 
@@ -26,7 +26,7 @@ class ProposalPolicy
   alias_method :can_new!, :can_create!
 
   def can_cancel!
-    (@user.admin? || requester!) && not_cancelled!
+    (admin? || requester!) && not_cancelled!
   end
   alias_method :can_cancel_form!, :can_cancel!
 
@@ -54,8 +54,10 @@ class ProposalPolicy
   end
 
   def not_approved!
-    check(!@proposal.approved?,
-          "That proposal's already approved. New proposal?")
+    check(
+      !@proposal.approved?,
+      "That proposal's already approved. New proposal?"
+    )
   end
 
   def not_cancelled!
@@ -70,9 +72,15 @@ class ProposalPolicy
     @proposal.delegate?(@user)
   end
 
+  def admin?
+    @user.admin?
+  end
+
   def approver!
-    check(self.approver? || self.delegate?,
-          "Sorry, you're not an approver on this proposal")
+    check(
+      self.approver? || self.delegate?,
+      "Sorry, you're not an approver on this proposal"
+    )
   end
 
   def observer!
