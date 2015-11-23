@@ -4,6 +4,7 @@ module Steps
   class Individual < Step
     belongs_to :user
     has_one :api_token, -> { fresh }, foreign_key: "step_id"
+    belongs_to :completed_by, class_name: "User"
     has_many :delegations, through: :user, source: :outgoing_delegations
     has_many :delegates, through: :delegations, source: :assignee
 
@@ -44,6 +45,10 @@ module Steps
 
         event :restart, transitions_to: :pending
       end
+    end
+
+    def completer
+      completed_by || user
     end
 
     protected
