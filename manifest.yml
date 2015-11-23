@@ -20,7 +20,7 @@ applications:
     NEW_RELIC_APP_NAME: C2 (Development)
     S3_BUCKET_NAME: c2-demo
   services:
-    - c2-dev-elk
+    - c2-elk-dev
 - name: c2-staging
   host: c2-staging
   env:
@@ -28,7 +28,7 @@ applications:
     NEW_RELIC_APP_NAME: C2 (Staging)
     S3_BUCKET_NAME: c2-demo
   services:
-    - c2-staging-elk
+    - c2-elk-staging
 - name: c2-prod
   hosts:
   - cap
@@ -42,4 +42,4 @@ applications:
     RESTRICT_ACCESS: true
     S3_BUCKET_NAME: c2-prod
   services:
-    - c2-prod-elk
+    - c2-elk-prod
