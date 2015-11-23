@@ -1,6 +1,10 @@
 describe Gsa18f::Procurement do
   it_behaves_like "client data"
 
+  describe "Validations" do
+    it { should validate_presence_of(:purchase_type) }
+  end
+
   describe ".relevant_fields" do
     it "returns recurring fields if recurring is true" do
       fields = Gsa18f::Procurement.relevant_fields(true)
