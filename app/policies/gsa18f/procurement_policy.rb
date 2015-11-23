@@ -13,7 +13,7 @@ module Gsa18f
     alias_method :can_new!, :can_create!
 
     def can_cancel!
-      not_cancelled! && check((approver? || delegate? || requester?) && !purchaser?, 
+      not_cancelled! && check((approver? || delegate? || requester?) && !purchaser?,
         "Sorry, you are neither the requester, approver or delegate")
     end
     alias_method :can_cancel_form!, :can_cancel!
