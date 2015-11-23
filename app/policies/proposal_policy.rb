@@ -11,7 +11,7 @@ class ProposalPolicy
   end
 
   def can_edit!
-    @user.admin? || requester! && not_approved! && not_cancelled!
+    (@user.admin? || requester!) && not_approved! && not_cancelled!
   end
   alias_method :can_update!, :can_edit!
 
@@ -26,7 +26,7 @@ class ProposalPolicy
   alias_method :can_new!, :can_create!
 
   def can_cancel!
-    @user.admin? || requester! && not_cancelled!
+    (@user.admin? || requester!) && not_cancelled!
   end
   alias_method :can_cancel_form!, :can_cancel!
 
