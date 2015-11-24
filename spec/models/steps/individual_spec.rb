@@ -13,7 +13,7 @@ describe Steps::Individual do
       approval = create(:approval)
       approver = approval.user
       delegate = create(:user)
-      approval.completed_by = delegate
+      approval.completer = delegate
       approval.save!
       approval_self = create(:approval)
 
