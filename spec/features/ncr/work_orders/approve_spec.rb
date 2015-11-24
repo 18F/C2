@@ -45,11 +45,12 @@ feature 'Approving an NCR work order' do
     login_as(delegate)
     visit proposal_path(ncr_proposal)
     click_on('Approve')
-    expect(current_path).to eq(proposal_path(ncr_proposal))
+    expect(page).to have_content("You have approved #{work_order.proposal.public_id}")
 
     login_as(delegate_two)
     visit proposal_path(ncr_proposal)
     expect(page.status_code).to eq(200)
+    expect(page).to have_content(delegate.full_name)
   end
 
   scenario "doesn't send multiple emails to approvers who are also observers" do
