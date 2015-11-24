@@ -10,7 +10,7 @@ describe Steps::Individual do
     end
   end
 
-  describes "#completed_by" do
+  describe "#completed_by" do
     it "identifies completed_by" do
       approval = create(:approval)
       approver = approval.user
