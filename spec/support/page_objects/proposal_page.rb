@@ -1,11 +1,11 @@
 class ApproverSection < SitePrism::Section
-  element :approver_name, "span.approver"
-  element :approver_role, "span.approver_role"
+  element :name, "span.approver"
+  element :role, "span.approver-role"
   element :timestamp, "span.timestamp"
 end
 
 class StatusSection < SitePrism::Section
-  sections :approvers, ApproverSection, ".approval_details .approval-row"
+  sections :approvers, ApproverSection, ".approval-details .approval-row"
 end
 
 class ProposalPage < SitePrism::Page

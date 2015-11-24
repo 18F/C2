@@ -16,10 +16,10 @@
       <%- unless @proposal.cancelled? %>
         <tr class="status-header-container-detail">
           <td colspan="2">
-            <table class="approval_details data_container">
+            <table class="approval-details data-container">
               <%- last_status = nil %>
-              <%- @proposal.approvals_in_list_order.each_with_index do |approval,index| %>
-                <%- display_status = approval.decorate.display_status %>
+              <%- @proposal.steps_in_list_order.each_with_index do |step,index| %>
+                <%- display_status = step.decorate.display_status %>
                 <tr class="approval-row">
                   <td>
                     <%- if display_status != last_status %>
@@ -27,13 +27,16 @@
                     <%- end %>
                   </td>
                   <td>
-                    <%- last_approver = index == @proposal.approvals_in_list_order.count - 1 %>
+                    <%- last_approver = index == @proposal.steps_in_list_order.count - 1 %>
                     <%= status_icon_tag(display_status, @proposal.linear?, last_approver) %>
                     <span class="approver">
-                      <%= mail_to approval.user_email_address, approval.user_full_name %>
+                      <%= mail_to step.user_email_address, step.user_full_name %>
                     </span>
-                    <% if approval.approved? %>
-                      <span class='timestamp'>on <%= date_with_tooltip(approval.approved_at) %></span>
+                    <span class="approver-role">
+                      (<%= step.decorate.role_name %>)
+                    </span>
+                    <% if step.approved? %>
+                      <span class='timestamp'>on <%= date_with_tooltip(step.approved_at) %></span>
                     <% end %>
                   </td>
                 </tr>

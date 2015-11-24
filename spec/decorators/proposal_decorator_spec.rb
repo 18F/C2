@@ -26,7 +26,7 @@ describe ProposalDecorator do
         user
       end
 
-      approvals = proposal.approvals_by_status
+      approvals = proposal.steps_by_status
       expect(approvals.map(&:status)).to eq(%w(
         approved
         approved

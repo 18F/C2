@@ -40,6 +40,8 @@ describe 'Linear approvals' do
     @proposal_page.load(proposal_id: proposal.id)
     expect(@proposal_page).to be_displayed
     expect(@proposal_page.status).to have_approvers count: 2
+    expect(@proposal_page.status.approvers.first.role.text).to match /Approver/
+    expect(@proposal_page.status.approvers.second.role.text).to match /Purchaser/
   end
 
   def create_proposal

@@ -42,8 +42,10 @@ en:
     steps:
       approval:
         execute_button: "Approve"
+        role_name: "Approver"
       purchase:
         execute_button: "Mark as Purchased"
+        role_name: "Purchaser"
   activerecord:
     attributes:
       gsa18f/procurement:
