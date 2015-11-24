@@ -40,10 +40,30 @@ describe Gsa18f::Procurement do
     end
   end
 
-  describe "#editabe?" do
+  describe "#purchase_type" do
+    it "associates 0 with software" do
+      procurement = build(:gsa18f_procurement, purchase_type: 0)
+
+      expect(procurement.purchase_type).to eq "Software"
+    end
+
+    it "associates 1 with training or event" do
+      procurement = build(:gsa18f_procurement, purchase_type: 1)
+
+      expect(procurement.purchase_type).to eq "Training/Event"
+    end
+
+    it "associates 2 with office supply or miscelleanous" do
+      procurement = build(:gsa18f_procurement, purchase_type: 2)
+
+      expect(procurement.purchase_type).to eq "Office Supply/Miscellaneous"
+    end
+  end
+
+  describe "#editable?" do
     it "is true" do
-      work_order = build(:gsa18f_procurement)
-      expect(work_order).to be_editable
+      procurement = build(:gsa18f_procurement)
+      expect(procurement).to be_editable
     end
   end
 
