@@ -35,13 +35,16 @@ RSpec.configure do |config|
     end
 
     DatabaseCleaner.start
-    Rails.application.load_seed
   end
 
   config.after(:each) do
     DatabaseCleaner.clean
     ActionMailer::Base.deliveries.clear
     OmniAuth.config.mock_auth[:myusa] = nil
+    # only need to re-load seeds if the cleaner used truncation
+    if Capybara.current_driver != :rack_test
+      Rails.application.load_seed
+    end
   end
 
   Capybara.default_host = 'http://localhost:3000'

@@ -30,7 +30,7 @@ class Dispatcher
   end
 
   def deliver_attachment_emails(proposal)
-    proposal.users_except_delegates.each do |user|
+    proposal.subscribers_except_delegates.each do |user|
       approval = proposal.steps.find_by(user_id: user.id)
 
       if user_is_not_approver?(approval) || approver_knows_about_proposal?(approval)
@@ -59,7 +59,7 @@ class Dispatcher
 
   def on_comment_created(comment)
     comment.listeners.each do |user|
-      CommunicartMailer.comment_added_email(comment, user.email_address).deliver_later
+      CommentMailer.comment_added_email(comment, user.email_address).deliver_later
     end
   end
 

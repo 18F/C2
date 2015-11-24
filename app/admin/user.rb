@@ -1,4 +1,12 @@
 ActiveAdmin.register User do
+  actions :index, :show, :new, :create, :edit, :update
+
+  filter :last_name
+  filter :first_name
+  filter :email_address
+  filter :active
+  filter :client_slug
+
   # See permitted parameters documentation:
   # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
   permit_params :active, :first_name, :last_name, :email_address, :client_slug, role_ids: []

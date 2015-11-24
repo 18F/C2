@@ -1,7 +1,5 @@
 module Gsa18f
   class DashboardController < ApplicationController
-    before_filter :authenticate_user!
-
     def index
       @rows = self.format_results(self.queryset)
     end

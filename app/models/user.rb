@@ -24,37 +24,38 @@ class User < ActiveRecord::Base
     where(active: true)
   end
 
-  # this is for user_roles specifically, not proposals or any other objects for which
-  # this user might have roles.
-  # rubocop:disable Style/PredicateName
-  def has_role?(name_or_role)
-    if name_or_role.is_a?(Role)
-      self.roles.include?(name_or_role)
-    else
-      self.roles.exists?(name: name_or_role)
-    end
-  end
-  # rubocop:enable Style/PredicateName
-
-  def add_role(name_or_role)
-    if name_or_role.is_a?(Role)
-      role = name_or_role
-    else
-      role = Role.find_or_create_by!(name: name_or_role)
-    end
-    self.user_roles.find_or_create_by!(role: role)
+  def self.sql_for_role_slug(role_name, slug)
+    self.with_role(role_name).select(:id).where(client_slug: slug).to_sql
   end
 
-  def self.with_role(name_or_role)
-    if name_or_role.is_a?(Role)
-      name_or_role.users
-    else
-      User.joins(:roles).where(roles: { name: name_or_role })
-    end
+  def self.with_role(role_name)
+    User.joins(:roles).where(roles: { name: role_name })
   end
 
-  def self.sql_for_role_slug(role, slug)
-    self.with_role(role).select(:id).where(client_slug: slug).to_sql
+  def self.for_email(email)
+    User.find_or_create_by(email_address: email.strip.downcase)
+  end
+
+  def self.for_email_with_slug(email, client_slug)
+    user = for_email(email)
+
+    unless user.client_slug
+      user.client_slug = client_slug
+    end
+
+    user
+  end
+
+  def self.from_oauth_hash(auth_hash)
+    user_data = auth_hash.extra.raw_info.to_hash
+    user = self.for_email(user_data["email"])
+    user.update_names_if_present(user_data)
+    user
+  end
+
+  def add_role(role_name)
+    role = Role.find_or_create_by!(name: role_name)
+    user_roles.find_or_create_by!(role: role)
   end
 
   def full_name
@@ -65,56 +66,44 @@ class User < ActiveRecord::Base
     end
   end
 
-  def requested_proposals
-    Proposal.where(requester_id: self.id)
-  end
-
   def last_requested_proposal
-    self.requested_proposals.order('created_at DESC').first
+    proposals.order("created_at DESC").first
   end
 
   def add_delegate(other)
-    self.outgoing_delegations.create!(assignee: other)
+    outgoing_delegations.create!(assignee: other)
   end
 
   def delegates_to?(other)
-    self.outgoing_delegations.exists?(assignee_id: other.id)
+    outgoing_delegations.exists?(assignee: other)
   end
 
   def client_admin?
-    self.has_role?('client_admin')
+    roles.exists?(name: "client_admin")
   end
 
   def admin?
-    has_role?('admin')
+    roles.exists?(name: "admin")
   end
 
   def not_admin?
     !admin?
   end
 
-  def self.for_email(email)
-    User.find_or_create_by(email_address: email.strip.downcase)
-  end
-
-  def self.for_email_with_slug(email, client_slug)
-    u = self.for_email(email)
-    unless u.client_slug
-      u.client_slug = client_slug
+  def update_names_if_present(user_data)
+    %w(first_name last_name).each do |field|
+      attr = field.to_sym
+      if user_data[field].present? && self.send(attr).blank?
+        update_attributes(attr => user_data[field])
+      end
     end
-    u
-  end
-
-  def self.from_oauth_hash(auth_hash)
-    user_data = auth_hash.extra.raw_info.to_hash
-    user = self.for_email(user_data['email'])
-    if user_data['first_name'].present? && user_data['last_name'].present?
-      user.update_attributes(first_name: user_data['first_name'], last_name: user_data['last_name'])
-    end
-    user
   end
 
   def role_on(proposal)
     RolePicker.new(self, proposal)
+  end
+
+  def requires_profile_attention?
+    first_name.blank? || last_name.blank?
   end
 end

@@ -29,11 +29,12 @@ feature 'Creating an NCR work order' do
 
     scenario 'saves a Proposal with the attributes' do
       approver = create(:user, client_slug: "ncr")
+      project_title = "buying stuff"
       login_as(requester)
       expect(Dispatcher).to receive(:deliver_new_proposal_emails)
 
       visit '/ncr/work_orders/new'
-      fill_in 'Project title', with: "buying stuff"
+      fill_in 'Project title', with: project_title
       fill_in 'Description', with: "desc content"
       choose 'BA80'
       fill_in 'RWA Number', with: 'F1234567'
@@ -50,7 +51,7 @@ feature 'Creating an NCR work order' do
       expect(page).to have_content("Proposal submitted")
       expect(current_path).to eq("/proposals/#{proposal.id}")
 
-      expect(proposal.name).to eq("buying stuff")
+      expect(proposal.name).to eq(project_title)
       expect(proposal.flow).to eq('linear')
       work_order = proposal.client_data
       expect(work_order.client_slug).to eq("ncr")
@@ -92,6 +93,37 @@ feature 'Creating an NCR work order' do
       ]
     end
 
+    scenario "flash message on error does not persist" do
+      approver = create(:user, client_slug: "ncr")
+      login_as(requester)
+
+      visit '/ncr/work_orders/new'
+      fill_in 'Project title', with: "blue shells"
+      fill_in 'Description', with: "desc content"
+      choose 'BA60'
+      fill_in 'Vendor', with: 'Yoshi'
+      fill_in 'Amount', with: 123.45
+      fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
+      select Ncr::Organization.all[0], from: 'ncr_work_order_org_code'
+      click_on 'Submit for approval'
+
+      expect(page).to have_content("Approving official email can't be blank")
+
+      visit "/proposals"
+      expect(page).to_not have_content("Approving official email can't be blank")
+    end
+
+    scenario "inactive users do not appear as potential approvers", :js do
+      approver = create(:user, client_slug: "ncr")
+      inactive_user = create(:user, client_slug: "ncr", active: false)
+      login_as(requester)
+      visit '/ncr/work_orders/new'
+      within(".ncr_work_order_approving_official_email") do
+        find(".selectize-control").click
+        expect(page).not_to have_content(inactive_user.email_address)
+      end
+    end
+
     scenario 'shows the radio button' do
       login_as(requester)
       visit '/ncr/work_orders/new'
@@ -112,6 +144,15 @@ feature 'Creating an NCR work order' do
         expect(page).not_to have_content(Ncr::WorkOrder.ba61_tier2_budget_mailbox)
         expect(page).not_to have_content(Ncr::WorkOrder.ba80_budget_mailbox)
         expect(page).not_to have_content(Ncr::WorkOrder.ool_ba80_budget_mailbox)
+      end
+    end
+
+    scenario "does not show requester as approver option", :js do
+      login_as(requester)
+      visit "/ncr/work_orders/new"
+      within(".ncr_work_order_approving_official_email") do
+        find(".selectize-control").click
+        expect(page).not_to have_content(requester.email_address)
       end
     end
 

@@ -1,6 +1,0 @@
-<% proposal = @comment.proposal %>
-Action needed on Request #<%= proposal.public_id %> (<%= proposal.name %>):
-
-<%= @comment.comment_text %>
-
-View / Update Request: <%= proposal_url(proposal, anchor: 'comments') %>

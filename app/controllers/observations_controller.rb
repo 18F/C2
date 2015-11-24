@@ -1,5 +1,4 @@
 class ObservationsController < ApplicationController
-  before_action :authenticate_user!
   before_action :find_proposal
   before_action -> { authorize self.observation_for_auth }
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
@@ -54,7 +53,10 @@ class ObservationsController < ApplicationController
   end
 
   def auth_errors(exception)
-    render 'communicarts/authorization_error', status: 403, 
-           locals: { msg: "You are not allowed to add observers to that proposal. #{exception.message}" }
+    render(
+      "authorization_error",
+      status: 403,
+      locals: { msg: "You are not allowed to add observers to that proposal. #{exception.message}" }
+    )
   end
 end

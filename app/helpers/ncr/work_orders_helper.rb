@@ -1,8 +1,9 @@
 module Ncr
   module WorkOrdersHelper
-    def approver_options
+    def approver_options(excluded_users = [])
+      excluded_emails = excluded_users.map(&:email_address)
       User.active.where(client_slug: "ncr").order(:email_address).pluck(:email_address) -
-        Ncr::WorkOrder.all_system_approver_emails
+        Ncr::WorkOrder.all_system_approver_emails - excluded_emails
     end
 
     def building_options

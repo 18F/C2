@@ -69,13 +69,13 @@ describe Ncr::WorkOrdersController do
         ncr_work_order: {
           approving_official_email: '',
           expense_type: 'BA61',
-          name: 'new name'
+          project_title: 'new name'
         }
       }
       expect(flash[:success]).not_to be_present
       expect(flash[:error]).to be_present
       work_order.reload
-      expect(work_order.name).not_to eq('new name')
+      expect(work_order.project_title).not_to eq('new name')
     end
 
     it 'does not modify the work order when there is a bad edit' do
@@ -113,6 +113,19 @@ describe Ncr::WorkOrdersController do
         expect(flash[:success]).not_to be_present
         expect(flash[:error]).to eq(["Amount must be less than or equal to $3,500.00"])
       end
+    end
+
+    it "allows the project title to be edited" do
+      new_title = "new title"
+      post :update, {
+        id: work_order.id,
+        ncr_work_order: {
+         project_title: new_title,
+        }
+      }
+
+      work_order.reload
+      expect(work_order.project_title).to eq(new_title)
     end
 
     it 'allows the approver to be edited' do

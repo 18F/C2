@@ -45,4 +45,8 @@ module StepManager
     approval = self.individual_steps.first
     approval && !approval.actionable?
   end
+
+  def ineligible_approvers
+    [requester]
+  end
 end

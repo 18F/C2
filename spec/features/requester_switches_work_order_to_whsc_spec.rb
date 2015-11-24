@@ -5,7 +5,7 @@ feature 'Requester switches work order to WHSC' do
     end
   end
 
-  let(:work_order) { create(:ncr_work_order, description: 'test') }
+  let(:work_order) { create(:ncr_work_order, org_code: Ncr::Organization.all.first.to_s, description: 'test') }
   let(:ncr_proposal) { work_order.proposal }
   let!(:approver) { create(:user) }
 
@@ -57,7 +57,7 @@ feature 'Requester switches work order to WHSC' do
 
   context "as a BA80" do
     scenario "reassigns the approvers properly" do
-      work_order = create(:ba80_ncr_work_order)
+      work_order = create(:ba80_ncr_work_order, org_code: Ncr::Organization.all[0].to_s)
       work_order.setup_approvals_and_observers
       work_order.individual_steps.first.approve!
       expect(work_order.organization).to_not be_whsc

@@ -10,8 +10,8 @@ describe "GSA 18f Purchase Request Form" do
   end
 
   let(:requester) { create(:user, client_slug: "gsa18f") }
-  let(:approver)  { create(:user, client_slug: "gsa18f", email_address: "test_approver@example.com") }
-  let(:purchaser) { create(:user, client_slug: "gsa18f", email_address: "test_purchaser@example.com") }
+  let(:approver)  { Gsa18f::Procurement.user_with_role("gsa18f_approver") }
+  let(:purchaser) { Gsa18f::Procurement.user_with_role("gsa18f_purchaser") }
   let(:procurement) do
     pr = create(:gsa18f_procurement, requester: requester)
     pr.add_steps
@@ -49,7 +49,7 @@ describe "GSA 18f Purchase Request Form" do
       expect(proposal.flow).to eq('linear')
       expect(proposal.client_slug).to eq('gsa18f')
       expect(proposal.requester).to eq(requester)
-      expect(proposal.approvers.map(&:email_address)).to eq(%w(test_approver@example.com test_purchaser@example.com))
+      expect(proposal.approvers.map(&:email_address)).to eq([approver.email_address, purchaser.email_address])
 
       procurement = proposal.client_data
       expect(procurement.link_to_product).to eq('http://www.amazon.com')
@@ -171,7 +171,7 @@ describe "GSA 18f Purchase Request Form" do
       expect(procurement.urgency).to eq(10)
 
       expect(proposal.requester).to eq(requester)
-      expect(proposal.approvers.map(&:email_address)).to eq(%w(test_approver@example.com test_purchaser@example.com))
+      expect(proposal.approvers.map(&:email_address)).to eq([approver.email_address, purchaser.email_address])
     end
 
     it "has 'Discard Changes' link" do
@@ -208,9 +208,14 @@ describe "GSA 18f Purchase Request Form" do
     end
 
     it "the step execution button is correctly marked" do
-      visit "/proposals/#{proposal.id}"
+      visit proposal_path(proposal)
       expect(page).to have_button('Approve')
     end
+
+    it "shows a cancel link for approver" do
+      visit proposal_path(proposal)
+      expect(page).to have_content('Cancel this request')
+    end 
   end
 
   context "when signed in as the purchaser" do
@@ -225,6 +230,11 @@ describe "GSA 18f Purchase Request Form" do
       login_as(purchaser)
       visit "/proposals/#{proposal.id}"
       expect(page).to have_button('Mark as Purchased')
+    end
+
+    it "does not show a cancel link for purchaser" do
+      visit proposal_path(proposal)
+      expect(page).to_not have_content('Cancel this request')
     end
   end
 end

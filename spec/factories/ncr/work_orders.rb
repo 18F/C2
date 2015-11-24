@@ -6,7 +6,6 @@ FactoryGirl.define do
     not_to_exceed false
     building_number Ncr::BUILDING_NUMBERS[0]
     emergency false
-    org_code Ncr::Organization.all[0].to_s
     project_title "NCR Name"
     sequence(:approving_official_email) {|n| "approver#{User.count}@example.com" }
     association :proposal, flow: 'linear'

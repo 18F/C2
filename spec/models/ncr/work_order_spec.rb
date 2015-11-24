@@ -1,6 +1,8 @@
 describe Ncr::WorkOrder do
   include ProposalSpecHelper
 
+  it_behaves_like "client data"
+
   describe "#editabe?" do
     it "is true" do
       work_order = build(:ncr_work_order)
@@ -8,20 +10,22 @@ describe Ncr::WorkOrder do
     end
   end
 
-  describe '#relevant_fields' do
+  describe ".relevant_fields" do
     it "shows BA61 fields" do
-      wo = Ncr::WorkOrder.new
-      expect(wo.relevant_fields.sort).to eq([
+      expect(Ncr::WorkOrder.relevant_fields("BA61").sort).to eq([
         :amount,
+        :approving_official_email,
         :building_number,
         :cl_number,
         # No :code
         :description,
         :direct_pay,
+        :emergency,
         :expense_type,
         :function_code,
         :not_to_exceed,
         :org_code,
+        :project_title,
         # No :rwa_number
         :soc_code,
         :vendor
@@ -29,9 +33,9 @@ describe Ncr::WorkOrder do
     end
 
     it "shows BA80 fields" do
-      wo = Ncr::WorkOrder.new(expense_type: 'BA80')
-      expect(wo.relevant_fields.sort).to eq([
+      expect(Ncr::WorkOrder.relevant_fields("BA80").sort).to eq([
         :amount,
+        :approving_official_email,
         :building_number,
         :cl_number,
         :code,
@@ -42,6 +46,7 @@ describe Ncr::WorkOrder do
         :function_code,
         :not_to_exceed,
         :org_code,
+        :project_title,
         :rwa_number,
         :soc_code,
         :vendor
@@ -49,37 +54,23 @@ describe Ncr::WorkOrder do
     end
   end
 
-  describe '#slug_matches?' do
-    it "respects user with same client_slug" do
-      wo = build(:ba80_ncr_work_order)
-      user = build(:user, client_slug: "ncr")
-      expect(wo.slug_matches?(user)).to eq(true)
-    end
-
-    it "identifies eligible observers based on client_slug" do
-      wo = create(:ba80_ncr_work_order)
-      user = create(:user, client_slug: 'ncr')
-      expect(wo.proposal.eligible_observers.to_a).to include(user)
-      expect(wo.proposal.eligible_observers.to_a).to_not include(wo.observers)
-    end
-  end
-
-  describe '#organization' do
+  describe "#organization" do
     it "returns the corresponding Organization instance" do
       org = Ncr::Organization.all.last
-      work_order = Ncr::WorkOrder.new(org_code: org.code)
+      work_order = build(:ncr_work_order, org_code: org.code)
       expect(work_order.organization).to eq(org)
     end
 
     it "returns nil for no #org_code" do
-      work_order = Ncr::WorkOrder.new
+      work_order = build(:ncr_work_order)
       expect(work_order.organization).to eq(nil)
     end
   end
 
-  describe '#total_price' do
-    let (:work_order) { create(:ncr_work_order, amount: 45.36)}
-    it 'gets price from amount field' do
+  describe "#total_price" do
+    it "gets price from amount field" do
+      work_order = build(:ncr_work_order, amount: 45.36)
+
       expect(work_order.total_price).to eq(45.36)
     end
   end

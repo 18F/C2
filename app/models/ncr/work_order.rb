@@ -92,19 +92,21 @@ module Ncr
       users.first.email_address
     end
 
-    # Ignore values in certain fields if they aren't relevant. May want to
-    # split these into different models
     def self.relevant_fields(expense_type)
-      fields = [:description, :amount, :expense_type, :vendor, :not_to_exceed,
-                :building_number, :org_code, :direct_pay, :cl_number, :function_code, :soc_code]
-      case expense_type
-      when "BA61"
+      fields = self.default_fields
+
+      if expense_type == "BA61"
         fields << :emergency
-      when "BA80"
-        fields.concat([:rwa_number, :code])
+      elsif expense_type == "BA80"
+        fields += [:rwa_number, :code]
       end
 
       fields
+    end
+
+    def self.default_fields
+      fields = self.column_names.map(&:to_sym) + [:approving_official_email]
+      fields - [:emergency, :rwa_number, :code, :created_at, :updated_at, :id]
     end
 
     def set_defaults
@@ -166,20 +168,16 @@ module Ncr
       true
     end
 
-    def relevant_fields
-      Ncr::WorkOrder.relevant_fields(self.expense_type)
-    end
-
     # Methods for Client Data interface
     def fields_for_display
-      attributes = self.relevant_fields
+      attributes = self.class.relevant_fields(expense_type)
       attributes.map{|key| [WorkOrder.human_attribute_name(key), self[key]]}
     end
 
     # will return nil if the `org_code` is blank or not present in Organization list
     def organization
       # TODO reference by `code` rather than storing the whole thing
-      code = (self.org_code || '').split(' ', 2)[0]
+      code = (org_code || '').split(' ', 2)[0]
       Ncr::Organization.find(code)
     end
 
@@ -194,10 +192,6 @@ module Ncr
     # may be replaced with paper-trail or similar at some point
     def version
       self.updated_at.to_i
-    end
-
-    def name
-      self.project_title
     end
 
     def system_approver_emails
@@ -220,6 +214,10 @@ module Ncr
 
     def as_json
       super.merge(org_id: self.org_id, building_id: self.building_id)
+    end
+
+    def name
+      project_title
     end
 
     def public_identifier

@@ -3,10 +3,6 @@
 This document describes the various environment variables available in the application
 and how they affect app behavior.
 
-## GSA18F_APPROVER_EMAIL
-
-## GSA18F_PURCHASER_EMAIL
-
 ## MYUSA_KEY
 
 ## MYUSA_SECRET

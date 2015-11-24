@@ -68,9 +68,9 @@
     - unless @proposal.cancelled?
       %li
         = modify_client_button(@proposal)
-      - if policy(@proposal).can_cancel?
-        %li
-          = link_to "Cancel my request", cancel_form_proposal_path
+  - if policy(@proposal).can_cancel?
+    %li
+      = link_to "Cancel this request", cancel_form_proposal_path
   - if current_user.admin?
     %li
       = link_to "View history", history_proposal_path(@proposal)

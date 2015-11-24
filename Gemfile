@@ -4,6 +4,7 @@ ruby '2.2.3' # this should match `.ruby-version` and docs/setup.md
 gem 'active_model_serializers'
 gem 'activeadmin', github: 'activeadmin'
 gem 'acts_as_list'
+gem 'acts-as-taggable-on', '~> 3.4'
 gem 'ar_outer_joins'
 gem 'autoprefixer-rails'
 gem 'awesome_print'
@@ -29,6 +30,9 @@ gem 'jquery-rails'
 gem 'jquery-turbolinks'
 gem 'mandrill-rails'
 gem 'newrelic_rpm'
+# oauth2 gem locked hard at pre-1.4.0 because 1.4.0 breaks. 
+# See comments on https://github.com/intridea/omniauth-oauth2/commit/26152673224aca5c3e918bcc83075dbb0659717f
+gem 'omniauth-oauth2', '1.3.1'
 gem 'omniauth-myusa', git: 'https://github.com/18F/omniauth-myusa.git'
 gem 'paper_trail'
 gem 'paperclip'

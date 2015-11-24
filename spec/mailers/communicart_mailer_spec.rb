@@ -1,8 +1,5 @@
 describe CommunicartMailer do
-  def sender_names(mail)
-    # http://stackoverflow.com/a/7213323/358804
-    mail[:from].display_names
-  end
+  include MailerSpecHelper
 
   around(:each) do |example|
     with_env_vars(
@@ -18,33 +15,6 @@ describe CommunicartMailer do
   let(:approver) { approval.user }
   let(:requester) { proposal.requester }
 
-  shared_examples "a Proposal email" do
-    it "renders the subject" do
-      expect(mail.subject).to eq("Request #{proposal.public_id}")
-    end
-
-    it "uses the configured sender email" do
-      expect(mail.from).to eq(['reply@example.com'])
-    end
-
-    it "uses the configured replyto email" do
-      expect(mail.reply_to).to eq(["replyto+#{proposal.public_id}@example.com"])
-    end
-
-    it "includes the appropriate headers for threading" do
-      # headers only get added when the Mail is #deliver-ed
-      mail.deliver_later
-
-      %w(In-Reply-To References).each do |header|
-        expect(mail[header].value).to eq("<proposal-#{proposal.id}@#{DEFAULT_URL_HOST}>")
-      end
-    end
-
-    it "generates a multipart message (plain text and html)" do
-      # http://stackoverflow.com/a/6934231
-      expect(mail.body.parts.collect(&:content_type)).to match_array ["text/plain; charset=UTF-8", "text/html; charset=UTF-8"]
-    end
-  end
 
   describe 'actions_for_approver' do
     let(:token) { approval.api_token }
@@ -58,7 +28,7 @@ describe CommunicartMailer do
       Addressable::URI.parse(url)
     end
 
-    it_behaves_like "a Proposal email"
+    it_behaves_like "a proposal email"
 
     it 'renders the receiver email' do
       expect(mail.to).to eq([approver.email_address])
@@ -168,7 +138,7 @@ describe CommunicartMailer do
       approval.approve!
     end
 
-    it_behaves_like "a Proposal email"
+    it_behaves_like "a proposal email"
 
     it 'renders the receiver email' do
       expect(mail.to).to eq([proposal.requester.email_address])
@@ -202,23 +172,6 @@ describe CommunicartMailer do
         mail = CommunicartMailer.approval_reply_received_email(approval)
         expect(mail.body.encoded).to_not include('Your request has been fully approved. See details below.')
       end
-    end
-  end
-
-  describe 'comment_added_email' do
-    let(:proposal) { create(:proposal) }
-    let(:comment) { create(:comment, proposal: proposal) }
-    let(:email) { 'commenter@example.com' }
-    let(:mail) { CommunicartMailer.comment_added_email(comment, email) }
-
-    it_behaves_like "a Proposal email"
-
-    it 'renders the receiver email' do
-      expect(mail.to).to eq(["commenter@example.com"])
-    end
-
-    it "sets the sender name" do
-      expect(sender_names(mail)).to eq([comment.user.full_name])
     end
   end
 
@@ -258,7 +211,7 @@ describe CommunicartMailer do
       observer = create(:user)
       adder = create(:user)
       reason = 'is an absolute ledge'
-      proposal.add_observer(observer, adder, reason)
+      proposal.add_observer(observer.email_address, adder, reason)
       observation = proposal.observations.first
 
       mail = CommunicartMailer.on_observer_added(observation, reason)
@@ -285,7 +238,7 @@ describe CommunicartMailer do
     let(:observer) { observation.user }
     let(:mail) { CommunicartMailer.proposal_observer_email(observer.email_address, proposal) }
 
-    it_behaves_like "a Proposal email"
+    it_behaves_like "a proposal email"
 
     it 'renders the receiver email' do
       expect(mail.to).to eq(["observer1@example.com"])
@@ -299,7 +252,7 @@ describe CommunicartMailer do
   describe 'proposal_created_confirmation' do
     let(:mail) { CommunicartMailer.proposal_created_confirmation(proposal) }
 
-    it_behaves_like "a Proposal email"
+    it_behaves_like "a proposal email"
 
     it 'renders the receiver email' do
       expect(mail.to).to eq([proposal.requester.email_address])
@@ -330,9 +283,17 @@ describe CommunicartMailer do
     end
   end
 
+  describe 'proposal_fiscal_cancellation' do
+    it "sends cancellation email for fiscal-year cleanup" do
+      proposal = create(:proposal)
+      mail = CommunicartMailer.proposal_fiscal_cancellation(proposal)
+      expect(mail.to).to eq([proposal.requester.email_address])
+    end
+  end
+
   describe 'new_attachment_email' do
     let(:mail) { CommunicartMailer.new_attachment_email(requester.email_address, proposal) }
 
-    it_behaves_like "a Proposal email"
+    it_behaves_like "a proposal email"
   end
 end
