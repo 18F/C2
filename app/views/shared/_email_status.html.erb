@@ -30,7 +30,7 @@
                     <%- last_approver = index == @proposal.approvals_in_list_order.count - 1 %>
                     <%= status_icon_tag(display_status, @proposal.linear?, last_approver) %>
                     <span class="approver">
-                      <%= mail_to approval.user_email_address, approval.user_full_name %>
+                      <%= mail_to approval.completer.email_address, approval.completer.full_name %>
                     </span>
                     <% if approval.approved? %>
                       <span class='timestamp'>on <%= date_with_tooltip(approval.approved_at) %></span>
