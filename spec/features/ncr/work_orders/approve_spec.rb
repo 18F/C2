@@ -22,38 +22,34 @@ feature 'Approving an NCR work order' do
   end
 
   scenario "allows delegate to approve work order" do
-    Timecop.freeze do
-      delegate = create(:user, client_slug: "ncr")
-      approver = work_order.approvers.first
-      approver.add_delegate(delegate)
-      approver.save!
-      login_as(delegate)
-      visit proposal_path(ncr_proposal)
-      click_on('Approve')
-      expect(current_path).to eq(proposal_path(ncr_proposal))
-      expect(page).to have_content("You have approved #{work_order.proposal.public_id}")
-      expect(page).to have_content(delegate.full_name)
-    end 
+    delegate = create(:user, client_slug: "ncr")
+    approver = work_order.approvers.first
+    approver.add_delegate(delegate)
+    approver.save!
+    login_as(delegate)
+    visit proposal_path(ncr_proposal)
+    click_on('Approve')
+    expect(current_path).to eq(proposal_path(ncr_proposal))
+    expect(page).to have_content("You have approved #{work_order.proposal.public_id}")
+    expect(page).to have_content(delegate.full_name)
   end
 
   scenario "delegates can view work order after approval by different delegate" do
-    Timecop.freeze do
-      delegate = create(:user, client_slug: "ncr")
-      delegate_two = create(:user, client_slug: "ncr")
-      approver = work_order.approvers.first
-      approver.add_delegate(delegate)
-      approver.add_delegate(delegate_two)
-      approver.save!
+    delegate = create(:user, client_slug: "ncr")
+    delegate_two = create(:user, client_slug: "ncr")
+    approver = work_order.approvers.first
+    approver.add_delegate(delegate)
+    approver.add_delegate(delegate_two)
+    approver.save!
 
-      login_as(delegate)
-      visit proposal_path(ncr_proposal)
-      click_on('Approve')
-      expect(current_path).to eq(proposal_path(ncr_proposal))
+    login_as(delegate)
+    visit proposal_path(ncr_proposal)
+    click_on('Approve')
+    expect(current_path).to eq(proposal_path(ncr_proposal))
 
-      login_as(delegate_two)
-      visit proposal_path(ncr_proposal)
-      expect(page.status_code).to eq(200)
-    end 
+    login_as(delegate_two)
+    visit proposal_path(ncr_proposal)
+    expect(page.status_code).to eq(200)
   end
 
   scenario "doesn't send multiple emails to approvers who are also observers" do
