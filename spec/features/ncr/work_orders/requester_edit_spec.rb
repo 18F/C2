@@ -1,12 +1,6 @@
 feature 'Requester edits their NCR work order' do
   include ProposalSpecHelper
 
-  around(:each) do |example|
-    with_feature('DISABLE_SANDBOX_WARNING') do
-      example.run
-    end
-  end
-
   let(:work_order) { create(:ncr_work_order, org_code: Ncr::Organization.all.first.to_s,  description: 'test') }
   let(:ncr_proposal) { work_order.proposal }
   let(:requester) { work_order.requester }

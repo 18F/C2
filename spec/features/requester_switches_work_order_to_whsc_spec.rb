@@ -1,10 +1,4 @@
 feature 'Requester switches work order to WHSC' do
-  around(:each) do |example|
-    with_env_var('DISABLE_SANDBOX_WARNING', 'true') do
-      example.run
-    end
-  end
-
   let(:work_order) { create(:ncr_work_order, org_code: Ncr::Organization.all.first.to_s, description: 'test') }
   let(:ncr_proposal) { work_order.proposal }
   let!(:approver) { create(:user) }
