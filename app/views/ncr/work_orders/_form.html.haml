@@ -25,7 +25,7 @@
       input_html: { class: "js-selectize required", data: { initial: JSON.generate(building_options) } }
     = f.input :org_code,
       collection: Ncr::Organization.all,
-      label_method: :to_s,
+      label_method: :code_and_name,
       prompt: :translate,
       input_html: { class: "js-selectize" }
     = f.input :vendor,

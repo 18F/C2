@@ -22,6 +22,8 @@ module Ncr
     # This is a hack to be able to attribute changes to the correct user. This attribute needs to be set explicitly, then the update comment will use them as the "commenter". Defaults to the requester.
     attr_accessor :modifier
 
+    belongs_to :ncr_organization, class_name: Ncr::Organization
+
     validates :approving_official_email, presence: true
     validates_email_format_of :approving_official_email
     validates :amount, presence: true
@@ -160,13 +162,8 @@ module Ncr
 
     # Methods for Client Data interface
     def fields_for_display
-      attributes = self.class.relevant_fields(expense_type)
-      attributes.map{|key| [WorkOrder.human_attribute_name(key), self[key]]}
-    end
-
-    def ncr_organization
-      code = (org_code || '').split(' ', 2)[0]
-      Ncr::Organization.find(code)
+      attributes = self.class.relevant_fields(expense_type) + [:organization_code_and_name] - [:ncr_organization_id]
+      attributes.map { |attribute| [WorkOrder.human_attribute_name(attribute), self.send(attribute)] }
     end
 
     def ba80?
@@ -191,8 +188,8 @@ module Ncr
       manager.system_approver_emails
     end
 
-    def organization_code
-      ncr_organization.try(:code)
+    def organization_code_and_name
+      ncr_organization.try(:code_and_name)
     end
 
     def building_id

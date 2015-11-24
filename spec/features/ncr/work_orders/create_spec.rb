@@ -2,6 +2,7 @@ feature "Creating an NCR work order", :js do
   context "when signed in as an NCR user" do
     scenario "saves a Proposal with the attributes" do
       approver = create(:user, client_slug: "ncr")
+      organization = create(:ncr_organization)
       project_title = "buying stuff"
       login_as(requester)
 
@@ -14,7 +15,7 @@ feature "Creating an NCR work order", :js do
       fill_in_selectized("ncr_work_order_vendor", "ACME")
       fill_in 'Amount', with: 123.45
       fill_in_selectized("ncr_work_order_approving_official_email", approver.email_address)
-      fill_in_selectized("ncr_work_order_org_code", "P0010091 (192X,192M) VISION 2000")
+      fill_in_selectized("ncr_work_order_ncr_organization", organization.code_and_name)
       click_on "Submit for approval"
 
       expect(page).to have_content("Proposal submitted")
@@ -23,7 +24,7 @@ feature "Creating an NCR work order", :js do
       expect(page).to have_content("ACME")
       expect(page).to have_content("$123.45")
       expect(page).to have_content("Test building")
-      expect(page).to have_content("P0010091 (192X,192M) VISION 2000")
+      expect(page).to have_content(organization.code_and_name)
       expect(page).to have_content("desc content")
     end
 
@@ -42,7 +43,7 @@ feature "Creating an NCR work order", :js do
       expect(page).to_not have_content("Approving official email can't be blank")
     end
 
-    scenario "shows hint text for amount field" do
+    scenario "doesn't show the budget fields" do
       login_as(requester)
       visit new_ncr_work_order_path
 

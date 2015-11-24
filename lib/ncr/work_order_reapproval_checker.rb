@@ -39,7 +39,7 @@ module Ncr
       [
         :building_number,
         :function_code,
-        :org_code,
+        :ncr_organization_id,
         :rwa_number,
         :soc_code
       ]
