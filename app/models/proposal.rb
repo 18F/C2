@@ -127,7 +127,7 @@ class Proposal < ActiveRecord::Base
 
     # this authz check is here instead of in a Policy because the Policy classes
     # are applied to the current_user, not (as in this case) the user being acted upon.
-    if client_data && !client_data.slug_matches?(user)
+    if client_data && !client_data.slug_matches?(user) && !user.admin?
       fail Pundit::NotAuthorizedError.new("May not add observer belonging to a different organization.")
     end
 
