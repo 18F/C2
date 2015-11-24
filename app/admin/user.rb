@@ -38,5 +38,14 @@ ActiveAdmin.register User do
       row :updated_at
       row('Roles') { user.roles.map(&:name).join(', ') }
     end
+
+    panel "Proposals" do
+      table_for user.proposals.order('created_at DESC') do |tbl|
+        tbl.column('ID') {|proposal| link_to proposal.public_id, admin_proposal_path(proposal)}
+        tbl.column('Name') {|proposal| proposal.name}
+        tbl.column('Date') {|proposal| proposal.created_at}
+        tbl.column('Status') {|proposal| proposal.status}
+      end
+    end
   end
 end
