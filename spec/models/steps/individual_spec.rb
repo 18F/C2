@@ -8,7 +8,9 @@ describe Steps::Individual do
 
       expect(approval.delegates).to eq([delegate])
     end
+  end
 
+  describes "#completed_by" do
     it "identifies completed_by" do
       approval = create(:approval)
       approver = approval.user
