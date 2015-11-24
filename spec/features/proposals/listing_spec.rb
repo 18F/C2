@@ -1,8 +1,4 @@
 describe "Listing Page" do
-  around(:each) do |example|
-    with_18f_procurement_env_variables(&example)
-  end
-
   let!(:user){ create(:user) }
   let!(:default){ create(:proposal, requester: user) }
   let!(:ncr){

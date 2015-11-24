@@ -1,12 +1,6 @@
 describe "post-approval modification" do
   include ProposalSpecHelper
 
-  around(:each) do |example|
-    with_feature('DISABLE_SANDBOX_WARNING') do
-      example.run
-    end
-  end
-
   let(:work_order) { create(:ncr_work_order) }
 
   before do
