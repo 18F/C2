@@ -50,12 +50,14 @@ describe "client_slug confers authz rules" do
     ncr_user = create(:user, client_slug: "ncr")
     ncr_user2 = create(:user, client_slug: "ncr")
     approver = create(:user, client_slug: "ncr")
+
     login_as(ncr_user)
     visit '/ncr/work_orders/new'
     submit_ba60_work_order(approver)
     proposal_path = current_path
     login_as(ncr_user2)
     visit proposal_path
+
     expect(page.status_code).to eq(403)
   end
 
@@ -82,7 +84,6 @@ describe "client_slug confers authz rules" do
     fill_in 'Amount', with: 123.45
     select approver.email_address, from: "Approving official's email address"
     fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
-    select Ncr::Organization.all[0], from: 'ncr_work_order_org_code'
     find('input[name="commit"]').click
   end
 

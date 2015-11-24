@@ -1,6 +1,4 @@
 describe 'NCR Work Orders API' do
-  # TODO share common functionality w/ other API specs
-
   describe 'GET /api/v1/ncr/work_orders.json' do
     without_feature 'API_ENABLED' do
       it "gives a 403" do

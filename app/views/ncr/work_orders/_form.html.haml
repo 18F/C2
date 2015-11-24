@@ -19,8 +19,13 @@
       = expense_type_radio_button(f, 'BA80')
       = render partial: 'ba_80_fields', locals: {f: f}
     = f.input :building_number, input_html: { class: 'js-selectize required', data: { initial: JSON.generate(building_options) } }
-    = f.input :org_code, collection: Ncr::Organization.all, label_method: :to_s, prompt: :translate, input_html: { class: 'js-selectize' }
-    = f.input :vendor, input_html: { class: 'js-selectize required', data: { initial: JSON.generate(vendor_options(@client_data_instance.vendor)) } }
+    = f.association :ncr_organization,
+      collection: Ncr::Organization.all,
+      input_html: { class: "js-selectize", data: { initial: @model_instance.ncr_organization.code_and_name } },
+      value_method: :id,
+      label_method: :code_and_name,
+      prompt: :translate
+    = f.input :vendor, input_html: { class: 'js-selectize', data: { initial: JSON.generate(vendor_options(@model_instance.vendor)) } }
     = field_set_tag "Amount", class: 'required' do
       = f.input :amount, as: :currency, label_html: { class: 'sr-only' }, input_html: { data: popover_data_attrs('ncr_amount') }
       = f.input :not_to_exceed, as: :radio_buttons, collection: [['Exact', false], ['Not to exceed', true]], label: false

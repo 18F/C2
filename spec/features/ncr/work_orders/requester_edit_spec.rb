@@ -1,7 +1,7 @@
-feature 'Requester edits their NCR work order' do
+feature "Requester edits their NCR work order" do
   include ProposalSpecHelper
 
-  let(:work_order) { create(:ncr_work_order, org_code: Ncr::Organization.all.first.to_s,  description: 'test') }
+  let(:work_order) { create(:ncr_work_order, ncr_organization: create(:ncr_organization), description: "test") }
   let(:ncr_proposal) { work_order.proposal }
   let(:requester) { work_order.requester }
 
@@ -10,12 +10,12 @@ feature 'Requester edits their NCR work order' do
     login_as(requester)
   end
 
-  scenario 'can be edited if pending' do
+  scenario "can be edited if pending" do
     visit "/ncr/work_orders/#{work_order.id}/edit"
     expect(find_field("ncr_work_order_building_number").value).to eq(
       Ncr::BUILDING_NUMBERS[0])
-    fill_in 'Vendor', with: 'New ACME'
-    click_on 'Update'
+    fill_in "Vendor", with: "New ACME"
+    click_on "Update"
     expect(current_path).to eq("/proposals/#{ncr_proposal.id}")
     expect(page).to have_content("New ACME")
     expect(page).to have_content("modified")
@@ -24,43 +24,43 @@ feature 'Requester edits their NCR work order' do
     expect(work_order.vendor).to eq("New ACME")
   end
 
-  scenario 'creates a special comment when editing' do
+  scenario "creates a special comment when editing" do
     visit "/ncr/work_orders/#{work_order.id}/edit"
-    fill_in 'Vendor', with: "New Test Vendor"
-    fill_in 'Description', with: "New Description"
-    click_on 'Update'
+    fill_in "Vendor", with: "New Test Vendor"
+    fill_in "Description", with: "New Description"
+    click_on "Update"
 
     expect(page).to have_content("Request modified by")
     expect(page).to have_content("Description was changed from test to New Description")
     expect(page).to have_content("Vendor was changed from Some Vend to New Test Vendor")
   end
 
-  scenario 'notifies observers of changes' do
-    work_order.add_observer('observer@example.com')
+  scenario "notifies observers of changes" do
+    work_order.add_observer("observer@example.com")
     visit "/ncr/work_orders/#{work_order.id}/edit"
-    fill_in 'Description', with: "Observer changes"
-    click_on 'Update'
+    fill_in "Description", with: "Observer changes"
+    click_on "Update"
 
     expect(deliveries.length).to eq(2)
-    expect(deliveries.last).to have_content('observer@example.com')
+    expect(deliveries.last).to have_content("observer@example.com")
   end
 
-  scenario 'does not resave unchanged requests' do
+  scenario "does not resave unchanged requests" do
     visit "/ncr/work_orders/#{work_order.id}/edit"
-    click_on 'Update'
+    click_on "Update"
 
     expect(current_path).to eq("/proposals/#{work_order.proposal.id}")
     expect(page).to have_content("No changes were made to the request")
     expect(deliveries.length).to eq(0)
   end
 
-  scenario 'allows requester to change the approving official' do
+  scenario "allows requester to change the approving official" do
     approver = create(:user, client_slug: "ncr")
     old_approver = ncr_proposal.approvers.first
     expect(Dispatcher).to receive(:on_approver_removal).with(ncr_proposal, [old_approver])
     visit "/ncr/work_orders/#{work_order.id}/edit"
     select approver.email_address, from: "Approving official's email address"
-    click_on 'Update'
+    click_on "Update"
     proposal = Proposal.last
 
     expect(proposal.approvers.first.email_address).to eq approver.email_address
@@ -102,17 +102,17 @@ feature 'Requester edits their NCR work order' do
     approval.approve!
     approval = proposal.individual_steps.second
     user = approval.user
-    delegate = User.new(email_address: 'delegate@example.com')
+    delegate = User.new(email_address: "delegate@example.com")
     delegate.save
     user.add_delegate(delegate)
     approval.update_attributes!(user: delegate)
     visit "/ncr/work_orders/#{work_order.id}/edit"
-    fill_in 'Description', with: "New Description that shouldn't change the approver list"
-    click_on 'Update'
+    fill_in "Description", with: "New Description that shouldn't change the approver list"
+    click_on "Update"
 
     proposal.reload
     second_approver = proposal.approvers.second.email_address
-    expect(second_approver).to eq('delegate@example.com')
+    expect(second_approver).to eq("delegate@example.com")
     expect(proposal.individual_steps.length).to eq(3)
   end
 
@@ -123,29 +123,29 @@ feature 'Requester edits their NCR work order' do
     expect(current_path).to eq("/proposals/#{work_order.proposal.id}")
   end
 
-  scenario 'has a disabled field if first approval is done' do
+  scenario "has a disabled field if first approval is done" do
     visit "/ncr/work_orders/#{work_order.id}/edit"
-    expect(find('#ncr_work_order_approving_official_email')['disabled']).to be_nil
+    expect(find("#ncr_work_order_approving_official_email")["disabled"]).to be_nil
     work_order.individual_steps.first.approve!
     visit "/ncr/work_orders/#{work_order.id}/edit"
-    expect(find('#ncr_work_order_approving_official_email')['disabled']).to eq('disabled')
+    expect(find("#ncr_work_order_approving_official_email")["disabled"]).to eq("disabled")
     # And we can still submit
-    fill_in 'Vendor', with: 'New ACME'
-    click_on 'Update'
+    fill_in "Vendor", with: "New ACME"
+    click_on "Update"
     expect(current_path).to eq("/proposals/#{ncr_proposal.id}")
     # Verify it is actually saved
     work_order.reload
     expect(work_order.vendor).to eq("New ACME")
   end
 
-  scenario 'can be edited if approved' do
+  scenario "can be edited if approved" do
     fully_approve(ncr_proposal)
 
     visit "/ncr/work_orders/#{work_order.id}/edit"
     expect(current_path).to eq("/ncr/work_orders/#{work_order.id}/edit")
   end
 
-  scenario 'provides the previous building when editing', :js do
+  scenario "provides the previous building when editing", :js do
     work_order.update(building_number: "BillDing, street")
     visit "/ncr/work_orders/#{work_order.id}/edit"
     click_on "Update"
@@ -153,22 +153,22 @@ feature 'Requester edits their NCR work order' do
     expect(work_order.reload.building_number).to eq("BillDing, street")
   end
 
-  scenario 'allows the requester to edit the budget-related fields' do
+  scenario "allows the requester to edit the budget-related fields" do
     visit "/ncr/work_orders/#{work_order.id}/edit"
 
-    fill_in 'CL number', with: 'CL1234567'
-    fill_in 'Function code', with: 'PG123'
-    fill_in 'Object field / SOC code', with: '789'
-    click_on 'Update'
+    fill_in "CL number", with: "CL1234567"
+    fill_in "Function code", with: "PG123"
+    fill_in "Object field / SOC code", with: "789"
+    click_on "Update"
 
     work_order.reload
-    expect(work_order.cl_number).to eq('CL1234567')
-    expect(work_order.function_code).to eq('PG123')
-    expect(work_order.soc_code).to eq('789')
+    expect(work_order.cl_number).to eq("CL1234567")
+    expect(work_order.function_code).to eq("PG123")
+    expect(work_order.soc_code).to eq("789")
   end
 
-  scenario 'disables the emergency field' do
+  scenario "disables the emergency field" do
     visit "/ncr/work_orders/#{work_order.id}/edit"
-    expect(find_field('emergency', disabled: true)).to be_disabled
+    expect(find_field("emergency", disabled: true)).to be_disabled
   end
 end
