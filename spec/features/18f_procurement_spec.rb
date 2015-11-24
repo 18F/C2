@@ -1,8 +1,4 @@
 describe "GSA 18f Purchase Request Form" do
-  around(:each) do |example|
-    with_18f_procurement_env_variables(&example)
-  end
-
   it "requires sign-in" do
     visit '/gsa18f/procurements/new'
     expect(current_path).to eq('/')
@@ -208,9 +204,14 @@ describe "GSA 18f Purchase Request Form" do
     end
 
     it "the step execution button is correctly marked" do
-      visit "/proposals/#{proposal.id}"
+      visit proposal_path(proposal)
       expect(page).to have_button('Approve')
     end
+
+    it "shows a cancel link for approver" do
+      visit proposal_path(proposal)
+      expect(page).to have_content('Cancel this request')
+    end 
   end
 
   context "when signed in as the purchaser" do
@@ -225,6 +226,11 @@ describe "GSA 18f Purchase Request Form" do
       login_as(purchaser)
       visit "/proposals/#{proposal.id}"
       expect(page).to have_button('Mark as Purchased')
+    end
+
+    it "does not show a cancel link for purchaser" do
+      visit proposal_path(proposal)
+      expect(page).to_not have_content('Cancel this request')
     end
   end
 end

@@ -13,7 +13,6 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
 
   config.include ControllerSpecHelper, type: :controller
-  config.include EnvironmentSpecHelper
   config.include FeatureSpecHelper, type: :feature
   config.include RequestSpecHelper, type: :request
 
@@ -49,4 +48,5 @@ RSpec.configure do |config|
 
   Capybara.default_host = 'http://localhost:3000'
   OmniAuth.config.test_mode = true
+  ENV["DISABLE_SANDBOX_WARNING"] = "true"
 end
