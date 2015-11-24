@@ -120,14 +120,14 @@ describe CommunicartMailer do
 
     it "includes action buttons" do
       mail = CommunicartMailer.actions_for_approver(approval)
-      expect(mail.body.encoded).to include('Approve')
+      expect(mail.body.encoded).to have_link('Approve')
     end
   end
 
   describe 'notification_for_subscriber' do
     it "doesn't include action buttons" do
       mail = CommunicartMailer.notification_for_subscriber('abc@example.com', proposal, nil, approval)
-      expect(mail.body.encoded).not_to include('Approve')
+      expect(mail.body.encoded).not_to have_link('Approve')
     end
   end
 
