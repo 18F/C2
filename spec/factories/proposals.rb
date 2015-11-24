@@ -3,7 +3,7 @@ FactoryGirl.define do
 
   factory :proposal do
     public_id
-    flow 'parallel'
+    flow 'linear'
     status 'pending'
     association :requester, factory: :user
 

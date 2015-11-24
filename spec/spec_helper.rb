@@ -25,6 +25,7 @@ Capybara.javascript_driver = :poltergeist
 
 require 'pundit/rspec'
 require 'factory_girl_rails'
+require 'site_prism'
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|

@@ -294,7 +294,7 @@ feature 'Creating an NCR work order' do
         proposal = Proposal.last
         expect(page).to have_content("Proposal submitted")
         expect(current_path).to eq("/proposals/#{proposal.id}")
-        expect(page).to have_content("0 of 0 approved")
+        expect(page).to have_content("0 of 0 steps completed")
 
         expect(proposal.client_data.emergency).to eq(true)
         expect(proposal.approved?).to eq(true)

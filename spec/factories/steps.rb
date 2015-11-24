@@ -9,5 +9,8 @@ FactoryGirl.define do
 
     factory :parallel_steps, class: Steps::Parallel do
     end
+
+    factory :purchase_step, class: Steps::Purchase do
+    end
   end
 end
