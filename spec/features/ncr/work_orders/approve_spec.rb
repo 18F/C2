@@ -36,6 +36,26 @@ feature 'Approving an NCR work order' do
     end 
   end
 
+  scenario "delegates can view work order after approval by different delegate" do
+    Timecop.freeze do
+      delegate = create(:user, client_slug: "ncr")
+      delegate_two = create(:user, client_slug: "ncr")
+      approver = work_order.approvers.first
+      approver.add_delegate(delegate)
+      approver.add_delegate(delegate_two)
+      approver.save!
+
+      login_as(delegate)
+      visit proposal_path(ncr_proposal)
+      click_on('Approve')
+      expect(current_path).to eq(proposal_path(ncr_proposal))
+
+      login_as(delegate_two)
+      visit proposal_path(ncr_proposal)
+      expect(page.status_code).to eq(200)
+    end 
+  end
+
   scenario "doesn't send multiple emails to approvers who are also observers" do
     work_order.add_observer(work_order.approvers.first.email_address)
     visit "/proposals/#{ncr_proposal.id}"
