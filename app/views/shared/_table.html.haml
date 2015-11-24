@@ -3,12 +3,14 @@
   %thead
     - # @todo: "header" class shouldn't be required (we're in thead)
     %tr.header
+      - # untaint user input
+      - req_query_params = request.query_parameters.slice("tables")
       - container.columns.each do |column|
         %th{class: column.sort_dir}
           - # @todo: why are there h5s in our table headers?
           %h5
             - if !container.frozen_sort && column.can_sort?
-              = link_to(column.header, container.sort_params(request.query_parameters, column))
+              = link_to(column.header, container.sort_params(req_query_params, column))
             - else
               = column.header
   %tbody
