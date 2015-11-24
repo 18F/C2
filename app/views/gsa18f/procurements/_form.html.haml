@@ -29,6 +29,6 @@
     = f.input :date_requested, as: :date, html5: true
     = f.input :urgency, collection: Gsa18f::Procurement::URGENCY, label_method: :last, value_method: :first
     = f.input :additional_info, as: :text
-    = render partial: "shared/form_submit_button", locals: { form: f }
+    = f.submit class: "form-button"
     - if @model_instance.persisted?
       = link_to 'Discard Changes', proposal_url(@model_instance.proposal)
