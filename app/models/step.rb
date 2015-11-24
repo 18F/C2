@@ -10,7 +10,7 @@ class Step < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :proposal
-  belongs_to :completed_by, class_name: "User"
+  belongs_to :completer, class_name: "User"
   acts_as_list scope: :proposal
   belongs_to :parent, class_name: "Step"
 
@@ -34,8 +34,8 @@ class Step < ActiveRecord::Base
     [self] + self.child_approvals.flat_map(&:pre_order_tree_traversal)
   end
 
-  def completer
-    completed_by || user
+  def completed_by
+    completer || user
   end
 
   protected

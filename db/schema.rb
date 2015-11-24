@@ -164,10 +164,10 @@ ActiveRecord::Schema.define(version: 20151123211837) do
     t.string   "type"
     t.integer  "parent_id"
     t.integer  "min_children_needed"
-    t.integer  "completed_by_id"
+    t.integer  "completer_id"
   end
 
-  add_index "steps", ["completed_by_id"], name: "index_steps_on_completed_by_id", using: :btree
+  add_index "steps", ["completer_id"], name: "index_steps_on_completer_id", using: :btree
   add_index "steps", ["user_id", "proposal_id"], name: "steps_user_proposal_idx", unique: true, using: :btree
 
   create_table "taggings", force: :cascade do |t|
@@ -230,7 +230,7 @@ ActiveRecord::Schema.define(version: 20151123211837) do
   add_foreign_key "proposals", "users", column: "requester_id", name: "requester_id_fkey"
   add_foreign_key "steps", "proposals", name: "proposal_id_fkey"
   add_foreign_key "steps", "steps", column: "parent_id", name: "parent_id_fkey", on_delete: :cascade
-  add_foreign_key "steps", "users", column: "completed_by_id", name: "completed_by_id_fkey"
+  add_foreign_key "steps", "users", column: "completer_id", name: "completer_id_fkey"
   add_foreign_key "steps", "users", name: "user_id_fkey"
   add_foreign_key "user_roles", "roles", name: "role_id_fkey"
   add_foreign_key "user_roles", "users", name: "user_id_fkey"

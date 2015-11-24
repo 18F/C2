@@ -9,7 +9,7 @@ describe Steps::Individual do
       expect(approval.delegates).to eq([delegate])
     end
 
-    it "identifies the completer" do
+    it "identifies completed_by" do
       approval = create(:approval)
       approver = approval.user
       delegate = create(:user)
@@ -17,8 +17,8 @@ describe Steps::Individual do
       approval.save!
       approval_self = create(:approval)
 
-      expect(approval.completer).to eq delegate
-      expect(approval_self.completer).to eq approval_self.user
+      expect(approval.completed_by).to eq delegate
+      expect(approval_self.completed_by).to eq approval_self.user
     end
   end
 
