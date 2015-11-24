@@ -12,7 +12,7 @@ describe Ncr::WorkOrdersController do
           building_number: Ncr::BUILDING_NUMBERS[0],
           emergency: "0",
           rwa_number: "A1234567",
-          org_code: Ncr::Organization.all[0],
+          ncr_organization: create(:ncr_organization).code_and_name,
           code: "Work Order",
           project_title: "Title",
           description: "Desc",

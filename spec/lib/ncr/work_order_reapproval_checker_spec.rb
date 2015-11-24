@@ -85,7 +85,7 @@ describe Ncr::WorkOrderReapprovalChecker do
     end
   end
 
-  describe '.protected_fields' do
+  describe ".protected_fields" do
     it "is a subset of the WorkOrder attributes" do
       all_fields = Ncr::WorkOrder.attribute_names.map(&:to_sym)
       protected_fields = Ncr::WorkOrderReapprovalChecker.protected_fields

@@ -60,6 +60,7 @@ module Ncr
       unless work_order.ncr_organization.try(:whsc?)
         results << Ncr::Mailboxes.ba61_tier1_budget
       end
+
       results << Ncr::Mailboxes.ba61_tier2_budget
 
       results

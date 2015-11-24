@@ -25,6 +25,8 @@ module Ncr
 
     after_initialize :set_defaults
 
+    belongs_to :ncr_organization, class_name: Ncr::Organization
+
     validates :approving_official_email, presence: true
     validates_email_format_of :approving_official_email
     validates :amount, presence: true
@@ -105,8 +107,8 @@ module Ncr
     end
 
     def self.default_fields
-      fields = self.column_names.map(&:to_sym) + [:approving_official_email]
-      fields - [:emergency, :rwa_number, :code, :created_at, :updated_at, :id]
+      fields = self.column_names.map(&:to_sym) + [:approving_official_email, :organization_code]
+      fields - [:emergency, :rwa_number, :code, :created_at, :updated_at, :id, :ncr_organization_id]
     end
 
     def set_defaults
@@ -172,11 +174,6 @@ module Ncr
     def fields_for_display
       attributes = self.class.relevant_fields(expense_type)
       attributes.map{|key| [WorkOrder.human_attribute_name(key), self[key]]}
-    end
-
-    def ncr_organization
-      code = (org_code || '').split(' ', 2)[0]
-      Ncr::Organization.find(code)
     end
 
     def ba80?

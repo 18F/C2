@@ -1,85 +1,71 @@
-feature 'Creating an NCR work order' do
-  scenario 'requires sign-in' do
-    visit '/ncr/work_orders/new'
-    expect(current_path).to eq('/')
+feature "Creating an NCR work order" do
+  scenario "requires sign-in" do
+    visit "/ncr/work_orders/new"
+    expect(current_path).to eq("/")
     expect(page).to have_content("You need to sign in")
   end
 
-  with_feature 'RESTRICT_ACCESS' do
-    scenario 'requires a GSA email address' do
-      user = create(:user, email_address: 'intruder@example.com', client_slug: "ncr")
+  with_feature "RESTRICT_ACCESS" do
+    scenario "requires a GSA email address" do
+      user = create(:user, email_address: "intruder@example.com", client_slug: "ncr")
       login_as(user)
 
-      visit '/ncr/work_orders/new'
+      visit "/ncr/work_orders/new"
 
       expect(page.status_code).to eq(403)
       expect(page).to have_content("You must be logged in with a GSA email address")
     end
   end
 
-  context 'when signed in as the requester' do
+  context "when signed in as the requester" do
     let(:requester) { create(:user, client_slug: "ncr") }
     let(:ncr_helper_class) { Class.new { extend Ncr::WorkOrdersHelper } }
 
-    scenario 'saves a Proposal with the attributes' do
+    scenario "saves a Proposal with the attributes" do
+      organization = create(:ncr_organization)
       approver = create(:user, client_slug: "ncr")
       project_title = "buying stuff"
       login_as(requester)
       expect(Dispatcher).to receive(:deliver_new_proposal_emails)
 
-      visit '/ncr/work_orders/new'
-      fill_in 'Project title', with: project_title
-      fill_in 'Description', with: "desc content"
-      choose 'BA80'
-      fill_in 'RWA Number', with: 'F1234567'
-      fill_in 'Vendor', with: 'ACME'
-      fill_in 'Amount', with: 123.45
+      visit new_ncr_work_order_path
+      fill_in "Project title", with: project_title
+      fill_in "Description", with: "desc content"
+      choose "BA80"
+      fill_in "RWA Number", with: "F1234567"
+      fill_in "Vendor", with: "ACME"
+      fill_in "Amount", with: 123.45
       check "I am going to be using direct pay for this transaction"
-      select approver.email_address, from: 'ncr_work_order[approving_official_email]'
-      fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
-      select Ncr::Organization.all[0], from: 'ncr_work_order_org_code'
-      expect { click_on 'Submit for approval' }.to change { Proposal.count }.from(0).to(1)
+      select approver.email_address, from: "ncr_work_order[approving_official_email]"
+      fill_in "Building number", with: Ncr::BUILDING_NUMBERS[0]
+      select organization.code_and_name, from: "ncr_work_order[ncr_organization_id]"
+      expect { click_on "Submit for approval" }.to change { Proposal.count }.from(0).to(1)
 
-      proposal = Proposal.last
-      expect(proposal.public_id).to have_content("FY")
-      expect(page).to have_content("Proposal submitted")
-      expect(current_path).to eq("/proposals/#{proposal.id}")
-
-      expect(proposal.name).to eq(project_title)
-      expect(proposal.flow).to eq('linear')
-      work_order = proposal.client_data
-      expect(work_order.client_slug).to eq("ncr")
-      expect(work_order.expense_type).to eq('BA80')
-      expect(work_order.vendor).to eq('ACME')
-      expect(work_order.amount).to eq(123.45)
-      expect(work_order.direct_pay).to eq(true)
-      expect(work_order.building_number).to eq(Ncr::BUILDING_NUMBERS[0])
-      expect(work_order.org_code).to eq(Ncr::Organization.all[0].to_s)
-      expect(work_order.description).to eq('desc content')
-      expect(proposal.requester).to eq(requester)
-      expect(proposal.approvers.map(&:email_address)).to eq(
-        [approver.email_address, Ncr::Mailboxes.ba80_budget])
+      proposal = requester.proposals.last
+      expect(page).to have_content("Proposal submitted!")
+      expect(current_path).to eq proposal_path(proposal)
     end
 
-    scenario 'saves a BA60 Proposal with the attributes' do
+    scenario "saves a BA60 Proposal with the attributes" do
+      organization = create(:ncr_organization)
       approver = create(:user, client_slug: "ncr")
       login_as(requester)
       expect(Dispatcher).to receive(:deliver_new_proposal_emails)
 
-      visit '/ncr/work_orders/new'
-      fill_in 'Project title', with: "blue shells"
-      fill_in 'Description', with: "desc content"
-      choose 'BA60'
-      fill_in 'Vendor', with: 'Yoshi'
-      fill_in 'Amount', with: 123.45
+      visit "/ncr/work_orders/new"
+      fill_in "Project title", with: "blue shells"
+      fill_in "Description", with: "desc content"
+      choose "BA60"
+      fill_in "Vendor", with: "Yoshi"
+      fill_in "Amount", with: 123.45
       select approver.email_address, from: "Approving official's email address"
-      fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
-      select Ncr::Organization.all[0], from: 'ncr_work_order_org_code'
-      expect { click_on 'Submit for approval' }.to change { Proposal.count }.from(0).to(1)
+      fill_in "Building number", with: Ncr::BUILDING_NUMBERS[0]
+      select organization.code_and_name, from: "ncr_work_order[ncr_organization_id]"
+      expect { click_on "Submit for approval" }.to change { Proposal.count }.from(0).to(1)
 
       proposal = Proposal.last
       work_order = proposal.client_data
-      expect(work_order.expense_type).to eq('BA60')
+      expect(work_order.expense_type).to eq("BA60")
       expect(proposal.approvers.map(&:email_address)).to eq [
         approver.email_address,
         Ncr::Mailboxes.ba61_tier1_budget,
@@ -88,7 +74,8 @@ feature 'Creating an NCR work order' do
     end
 
     scenario "flash message on error does not persist" do
-      approver = create(:user, client_slug: "ncr")
+      organization = create(:ncr_organization)
+      _approver = create(:user, client_slug: "ncr")
       login_as(requester)
 
       visit '/ncr/work_orders/new'
@@ -98,7 +85,7 @@ feature 'Creating an NCR work order' do
       fill_in 'Vendor', with: 'Yoshi'
       fill_in 'Amount', with: 123.45
       fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
-      select Ncr::Organization.all[0], from: 'ncr_work_order_org_code'
+      select organization.code_and_name, from: "ncr_work_order[ncr_organization_id]"
       click_on 'Submit for approval'
 
       expect(page).to have_content("Approving official email can't be blank")
@@ -108,7 +95,7 @@ feature 'Creating an NCR work order' do
     end
 
     scenario "inactive users do not appear as potential approvers", :js do
-      approver = create(:user, client_slug: "ncr")
+      _approver = create(:user, client_slug: "ncr")
       inactive_user = create(:user, client_slug: "ncr", active: false)
       login_as(requester)
       visit '/ncr/work_orders/new'
@@ -116,14 +103,6 @@ feature 'Creating an NCR work order' do
         find(".selectize-control").click
         expect(page).not_to have_content(inactive_user.email_address)
       end
-    end
-
-    scenario 'shows the radio button' do
-      login_as(requester)
-      visit '/ncr/work_orders/new'
-      expect(page).to have_content('BA60')
-      expect(page).to have_content('BA61')
-      expect(page).to have_content('BA80')
     end
 
     scenario "does not show system approver emails as approver options", :js do
@@ -152,8 +131,8 @@ feature 'Creating an NCR work order' do
 
     scenario 'shows hint text for amount field', :js do
       login_as(requester)
-      visit '/ncr/work_orders/new'
-      focus_field 'ncr_work_order_amount'
+      visit "/ncr/work_orders/new"
+      focus_field "ncr_work_order_amount"
       expect(page).to have_content('$3,500 for supplies')
       expect(page).to have_content('$2,500 for services')
       expect(page).to have_content('$2,000 for construction')
@@ -253,6 +232,7 @@ feature 'Creating an NCR work order' do
     end
 
     scenario "includes has overwritten field names" do
+      organization = create(:ncr_organization)
       approver = create(:user, client_slug: "ncr")
       login_as(requester)
       visit '/ncr/work_orders/new'
@@ -263,7 +243,7 @@ feature 'Creating an NCR work order' do
       fill_in 'Amount', with: 123.45
       select approver.email_address, from: 'ncr_work_order[approving_official_email]'
       fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
-      select Ncr::Organization.all[0], from: 'ncr_work_order_org_code'
+      select organization.code_and_name, from: "ncr_work_order[ncr_organization_id]"
       click_on 'Submit for approval'
       expect(current_path).to eq("/proposals/#{Proposal.last.id}")
       expect(page).to have_content("RWA Number")
@@ -340,6 +320,7 @@ feature 'Creating an NCR work order' do
 
     context "selected common values on proposal page" do
       before do
+        organization = create(:ncr_organization)
         approver = create(:user, client_slug: "ncr")
         login_as(requester)
         visit '/ncr/work_orders/new'
@@ -349,7 +330,7 @@ feature 'Creating an NCR work order' do
         fill_in 'Amount', with: 123.45
         select approver.email_address, from: 'ncr_work_order[approving_official_email]'
         fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
-        select Ncr::Organization.all[0], from: 'ncr_work_order_org_code'
+        select organization.code_and_name, from: "ncr_work_order[ncr_organization_id]"
       end
 
       scenario 'approves emergencies' do

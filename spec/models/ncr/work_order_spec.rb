@@ -3,7 +3,11 @@ describe Ncr::WorkOrder do
 
   it_behaves_like "client data"
 
-  describe "#editabe?" do
+  describe "Associations" do
+    it { should belong_to(:ncr_organization) }
+  end
+
+  describe "#editable?" do
     it "is true" do
       work_order = build(:ncr_work_order)
       expect(work_order).to be_editable
@@ -24,7 +28,7 @@ describe Ncr::WorkOrder do
         :expense_type,
         :function_code,
         :not_to_exceed,
-        :org_code,
+        :organization_code,
         :project_title,
         # No :rwa_number
         :soc_code,
@@ -45,25 +49,12 @@ describe Ncr::WorkOrder do
         :expense_type,
         :function_code,
         :not_to_exceed,
-        :org_code,
+        :organization_code,
         :project_title,
         :rwa_number,
         :soc_code,
         :vendor
       ])
-    end
-  end
-
-  describe "#ncr_organization" do
-    it "returns the corresponding Organization instance" do
-      org = Ncr::Organization.all.last
-      work_order = build(:ncr_work_order, org_code: org.code)
-      expect(work_order.ncr_organization).to eq(org)
-    end
-
-    it "returns nil for no #org_code" do
-      work_order = build(:ncr_work_order)
-      expect(work_order.ncr_organization).to eq(nil)
     end
   end
 
@@ -182,9 +173,8 @@ describe Ncr::WorkOrder do
   describe "#organization_code" do
     context "work order has an ncr organization" do
       it "returns the ncr organization code" do
-        work_order = build(:ncr_work_order)
-        organization = Ncr::Organization.all.first
-        allow(work_order).to receive(:ncr_organization).and_return(organization)
+        organization = create(:ncr_organization)
+        work_order = build(:ncr_work_order, ncr_organization: organization)
 
         expect(work_order.organization_code).to eq organization.code
       end
@@ -192,7 +182,7 @@ describe Ncr::WorkOrder do
 
     context "work order does not have an ncr organization" do
       it "returns nil" do
-        work_order = build(:ncr_work_order, org_code: nil)
+        work_order = build(:ncr_work_order)
 
         expect(work_order.organization_code).to be_nil
       end
