@@ -12,7 +12,7 @@ describe Ncr::WorkOrdersController do
           building_number: Ncr::BUILDING_NUMBERS[0],
           emergency: "0",
           rwa_number: "A1234567",
-          org_code: Ncr::Organization.all[0],
+          ncr_organization_id: create(:ncr_organization).code_and_name,
           code: "Work Order",
           project_title: "Title",
           description: "Desc",
@@ -133,7 +133,7 @@ describe Ncr::WorkOrdersController do
       expect(work_order.project_title).to eq(new_title)
     end
 
-    it 'allows the approver to be edited' do
+    it "allows the approver to be edited" do
       post :update, {
         id: work_order.id,
         ncr_work_order: {
@@ -145,7 +145,7 @@ describe Ncr::WorkOrdersController do
       expect(work_order.approvers.first.email_address).to eq('a@example.com')
     end
 
-    it 'does not modify the approver if already approved' do
+    it "does not modify the approver if already approved" do
       work_order.individual_steps.first.approve!
       post :update, {
         id: work_order.id,
@@ -158,7 +158,7 @@ describe Ncr::WorkOrdersController do
       expect(work_order.approvers.map(&:email_address)).not_to include('a@example.com')
     end
 
-    it 'will not modify emergency status on non-emergencies' do
+    it "will not modify emergency status on non-emergencies" do
       expect(work_order.steps.empty?).to be false
       expect(work_order.observers.empty?).to be true
 
@@ -177,7 +177,7 @@ describe Ncr::WorkOrdersController do
       expect(work_order.observers.empty?).to be true
     end
 
-    it 'will not modify emergency status on emergencies' do
+    it "will not modify emergency status on emergencies" do
       work_order = create(:ncr_work_order, :is_emergency, requester: requester)
       expect(work_order.steps.empty?).to be true
       expect(work_order.observers.empty?).to be false
@@ -185,9 +185,9 @@ describe Ncr::WorkOrdersController do
       post :update, {
         id: work_order.id,
         ncr_work_order: {
-         expense_type: 'BA61',
-         building_number: 'BillDing',
-         emergency: '0',
+         expense_type: "BA61",
+         building_number: "BillDing",
+         emergency: "0",
          approving_official_email: work_order.observers.first.email_address
         }
       }

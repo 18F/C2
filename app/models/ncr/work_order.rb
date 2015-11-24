@@ -119,6 +119,18 @@ module Ncr
       !self.emergency
     end
 
+    def for_whsc_organization?
+      if org_code.present?
+        ncr_org.try(:whsc?)
+      end
+    end
+
+    def for_ool_organization?
+      if org_code.present?
+        ncr_org.try(:ool?)
+      end
+    end
+
     def setup_approvals_and_observers
       manager = ApprovalManager.new(self)
       manager.setup_approvals_and_observers
@@ -161,12 +173,7 @@ module Ncr
     # Methods for Client Data interface
     def fields_for_display
       attributes = self.class.relevant_fields(expense_type)
-      attributes.map{|key| [WorkOrder.human_attribute_name(key), self[key]]}
-    end
-
-    def ncr_organization
-      code = (org_code || '').split(' ', 2)[0]
-      Ncr::Organization.find(code)
+      attributes.map { |attribute| [WorkOrder.human_attribute_name(attribute), self.send(attribute)] }
     end
 
     def ba80?
@@ -189,10 +196,6 @@ module Ncr
     def system_approver_emails
       manager = ApprovalManager.new(self)
       manager.system_approver_emails
-    end
-
-    def organization_code
-      ncr_organization.try(:code)
     end
 
     def building_id
@@ -225,6 +228,13 @@ module Ncr
       self.budget_approvals.each(&:restart!)
       self.proposal.reset_status
       self.proposal.root_step.initialize!
+    end
+
+    private
+
+    def ncr_org
+      ncr_org_code = org_code.match(/^(\w+)/)[1]
+      Ncr::Organization.find_by(code: ncr_org_code)
     end
   end
 end
