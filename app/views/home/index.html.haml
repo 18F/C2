@@ -29,7 +29,7 @@
     %section#header
       - flash_list.each do |key, value|
         %div{class: "alert alert-#{key} #{bootstrap_alert_class(key)}"}
-          = value
+          = sanitize value
       .photon-header-nav-container
         = render 'layouts/header_nav'
       .inner

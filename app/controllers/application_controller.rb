@@ -76,12 +76,13 @@ class ApplicationController < ActionController::Base
 
   def authenticate_user!
     if not_signed_in?
-      flash[:error] = 'You need to sign in for access to this page.'
+      flash[:error] = "You need to sign in for access to this page."
       return_to_param = make_return_to("Previous", request.fullpath)
       session[:return_to] = return_to_param
       redirect_to root_url(return_to: return_to_param)
-    elsif session[:return_to]
-      session.delete(:return_to)
+    elsif current_user.inactivated?
+      redirect_to root_url
+      flash[:error] = "You are not allowed to login because your account has been inactivated. Please <a href='/feedback'>contact an administrator</a>."
     end
   end
 

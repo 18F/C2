@@ -99,6 +99,20 @@ describe User do
     end
   end
 
+  describe "#inactivated?" do
+    it "is true of user has active set to false" do
+      user = build(:user, active: false)
+
+      expect(user).to be_inactivated
+    end
+
+    it "is false when a user has active set to true" do
+      user = build(:user, active: true)
+
+      expect(user).not_to be_inactivated
+    end
+  end
+
   describe '#full_name' do
     it 'return first name and last name' do
       user.first_name = 'George'
