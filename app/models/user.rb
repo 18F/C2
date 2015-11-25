@@ -90,6 +90,10 @@ class User < ActiveRecord::Base
     !admin?
   end
 
+  def deactivated?
+    !active?
+  end
+
   def update_names_if_present(user_data)
     %w(first_name last_name).each do |field|
       attr = field.to_sym
