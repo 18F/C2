@@ -35,13 +35,8 @@ class FeedbackController < ApplicationController
   def check_for_inactive_user
     if signed_in? && current_user.inactivated?
       reset_session
-      inactive_user_alert
+      flash[:error] = "You are not allowed to login because your account has been
+      inactivated. Please contact an administrator."
     end
   end
-
-  def inactive_user_alert
-    flash[:error] = "You are not allowed to login because your account has been
-    inactivated. Please contact an administrator."
-  end
-
 end
