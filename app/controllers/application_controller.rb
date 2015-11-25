@@ -82,19 +82,7 @@ class ApplicationController < ActionController::Base
       redirect_to root_url(return_to: return_to_param)
     elsif current_user.inactivated?
       redirect_to feedback_path
-      inactive_user_alert
     end
-  end
-
-  def check_for_inactive_user
-    if signed_in? && current_user.inactivated?
-      inactive_user_alert
-    end
-  end
-
-  def inactive_user_alert
-    flash[:error] = "You are not allowed to login because your account has been
-    inactivated. Please contact an administrator."
   end
 
   def authenticate_admin_user!

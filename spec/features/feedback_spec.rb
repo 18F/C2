@@ -27,5 +27,6 @@ feature "Feedback page" do
     expect(page).to have_content(
       "You are not allowed to login because your account has been inactivated. Please contact an administrator."
     )
+    expect(page).not_to have_content(inactive_user.email_address)
   end
 end
