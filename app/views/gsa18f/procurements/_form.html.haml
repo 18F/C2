@@ -11,6 +11,9 @@
       * Indicates a required field
   = simple_form_for @model_instance do |f|
     = f.input :office, collection: Gsa18f::Procurement::OFFICES
+    = f.input :purchase_type,
+      collection: Gsa18f::Procurement::PURCHASE_TYPES.keys,
+      include_blank: true
     = f.input :product_name_and_description
     = f.input :justification
     = f.input :link_to_product
@@ -18,11 +21,14 @@
     = f.input :quantity, input_html: { step: 1 }
     = f.input :recurring, input_html: { 'data-filter-control' => 'recurring' }
     %div{ 'data-filter-key' => 'recurring', 'data-filter-value' => 1 }
-      = f.input :recurring_interval, collection: Gsa18f::Procurement::RECURRENCE, include_blank: false, required: true
+      = f.input :recurring_interval,
+        collection: Gsa18f::Procurement::RECURRENCE,
+        include_blank: false,
+        required: true
       = f.input :recurring_length, step: 1
     = f.input :date_requested, as: :date, html5: true
     = f.input :urgency, collection: Gsa18f::Procurement::URGENCY, label_method: :last, value_method: :first
     = f.input :additional_info, as: :text
-    = render partial: "shared/form_submit_button", locals: { form: f }
+    = f.submit class: "form-button"
     - if @model_instance.persisted?
       = link_to 'Discard Changes', proposal_url(@model_instance.proposal)
