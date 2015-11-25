@@ -41,4 +41,5 @@ Create a [new issue](https://github.com/18F/C2/issues/new), and copy the raw Mar
 ### Later
 
 * [ ] [Add them to `cap` organization on Cloud Foundry](https://docs.cloudfoundry.org/adminguide/cli-user-management.html#org-roles) (`cf set-org-role USERNAME cap OrgManager`)
+* [ ] [Add them to the repository on Hakiri.](https://hakiri.io/projects/ed076f492b8f5a/edit)
 * [ ] Admin access to C2 production (add UserRole `admin` to User record)
