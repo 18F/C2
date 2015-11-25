@@ -3,7 +3,7 @@ feature "Feedback page" do
     visit feedback_path
 
     expect(page).not_to have_content(
-      "You are not allowed to login because your account has been inactivated."
+      "You are not allowed to login because your account has been deactivated."
     )
   end
 
@@ -14,7 +14,7 @@ feature "Feedback page" do
     visit feedback_path
 
     expect(page).not_to have_content(
-      "You are not allowed to login because your account has been inactivated."
+      "You are not allowed to login because your account has been deactivated."
     )
   end
 

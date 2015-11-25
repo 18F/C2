@@ -80,7 +80,7 @@ class ApplicationController < ActionController::Base
       return_to_param = make_return_to("Previous", request.fullpath)
       session[:return_to] = return_to_param
       redirect_to root_url(return_to: return_to_param)
-    elsif current_user.inactivated?
+    elsif current_user.deactivated?
       redirect_to feedback_path
     end
   end

@@ -90,7 +90,7 @@ class User < ActiveRecord::Base
     !admin?
   end
 
-  def inactivated?
+  def deactivated?
     !active?
   end
 

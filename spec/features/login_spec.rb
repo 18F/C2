@@ -6,7 +6,7 @@ feature "Login" do
 
     expect(current_path).to eq feedback_path
     expect(page).to have_content(
-      "You are not allowed to login because your account has been inactivated. Please contact an administrator."
+      "You are not allowed to login because your account has been deactivated. Please contact an administrator."
     )
   end
 end

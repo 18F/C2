@@ -99,17 +99,17 @@ describe User do
     end
   end
 
-  describe "#inactivated?" do
+  describe "#deactivated?" do
     it "is true of user has active set to false" do
       user = build(:user, active: false)
 
-      expect(user).to be_inactivated
+      expect(user).to be_deactivated
     end
 
     it "is false when a user has active set to true" do
       user = build(:user, active: true)
 
-      expect(user).not_to be_inactivated
+      expect(user).not_to be_deactivated
     end
   end
 
