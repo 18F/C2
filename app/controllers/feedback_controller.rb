@@ -1,5 +1,6 @@
 class FeedbackController < ApplicationController
   skip_before_action :authenticate_user!, only: [:index, :create, :thanks]
+  before_action :check_for_inactive_user
 
   def index
     @skip_footer = true
