@@ -70,7 +70,7 @@ class RolesConversion
 
     user = User.for_email(email)
     # if no change necessary, return early (idempotent)
-    if user.client_slug == slug && user.role.exists?(name: role_name)
+    if user.client_slug == slug && user.roles.exists?(name: role_name)
       return user
     end
 
