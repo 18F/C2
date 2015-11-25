@@ -3,7 +3,6 @@ feature "Login" do
     inactive_user = create(:user, active: false)
 
     login_as(inactive_user)
-    visit proposals_path
 
     expect(current_path).to eq feedback_path
     expect(page).to have_content(
