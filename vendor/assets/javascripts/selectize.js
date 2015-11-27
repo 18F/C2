@@ -2652,7 +2652,8 @@
 			var invalid, self = this;
 			if (self.isRequired) {
 				if (self.items.length) self.isInvalid = false;
-				self.$control_input.prop('required', invalid);
+				self.$control_input.prop('required', self.$input.val() == '');
+				self.$input.prop('required', false);
 			}
 			self.refreshClasses();
 		},
