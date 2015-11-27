@@ -12,7 +12,7 @@
   = simple_form_for @model_instance, html: { multipart: true } do |f|
     = f.input :project_title
     = f.input :description
-    = field_set_tag "Expense type / Program", class: 'required' do
+    = field_set_tag "Expense type / Program", class: 'expense-type required' do
       = expense_type_radio_button(f, 'BA60')
       = expense_type_radio_button(f, 'BA61')
       = f.input :emergency, disabled: @model_instance.persisted?, wrapper_html: { data: { filter_key: 'expense-type', filter_value: 'BA61' } }
@@ -36,3 +36,21 @@
     = f.submit class: "form-button"
     - if @model_instance.persisted?
       = link_to "Discard Changes", proposal_url(@model_instance.proposal)
+
+:javascript
+  // toggle "required" flag on Building depending on Expense Type
+  $(document).ready( function() {
+    $('.expense-type .radio input').click(function() {
+      var radio = $(this);
+      var buildingPicker = $('.form-group.ncr_work_order_building_number');
+      if (radio.attr("id").match(/_ba60$/)) {
+        buildingPicker.removeClass("required");
+        buildingPicker.find("*").removeClass("required");
+      }
+      else {
+        buildingPicker.addClass("required");
+        buildingPicker.find("*").addClass("required");
+      }
+    })
+  });
+
