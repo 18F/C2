@@ -10,6 +10,20 @@ describe Steps::Individual do
     end
   end
 
+  describe "#completed_by" do
+    it "identifies completed_by" do
+      approval = create(:approval)
+      approver = approval.user
+      delegate = create(:user)
+      approval.completer = delegate
+      approval.save!
+      approval_self = create(:approval)
+
+      expect(approval.completed_by).to eq delegate
+      expect(approval_self.completed_by).to eq approval_self.user
+    end
+  end
+
   describe '#restart!' do
     it "expires the API token" do
       approval = create(:approval, status: 'actionable')
