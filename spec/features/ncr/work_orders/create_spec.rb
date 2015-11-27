@@ -159,6 +159,19 @@ feature 'Creating an NCR work order' do
       expect(page).to have_content('$2,000 for construction')
     end
 
+    scenario "selecting Expense Type toggles Building required flag", :js do
+      login_as(requester)
+      visit "/ncr/work_orders/new"
+      find("#ncr_work_order_expense_type_ba60").click
+      expect(find('.ncr_work_order_building_number input')['class']).to_not match('required')
+      find("#ncr_work_order_expense_type_ba61").click
+      expect(find('.ncr_work_order_building_number input')['class']).to match('required')
+      find("#ncr_work_order_expense_type_ba80").click
+      expect(find('.ncr_work_order_building_number input')['class']).to match('required')
+      find("#ncr_work_order_expense_type_ba60").click
+      expect(find('.ncr_work_order_building_number input')['class']).to_not match('required')
+    end
+
     scenario 'defaults to no approver if there was no previous request' do
       login_as(requester)
       visit '/ncr/work_orders/new'
