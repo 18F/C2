@@ -27,7 +27,7 @@ module ProposalConversationThreading
   def subject(proposal)
     if proposal.client_data_type == "Ncr::WorkOrder"
       client_data = proposal.client_data
-      %Q(Request #{proposal.public_id}, #{client_data.organization_code}, #{client_data.building_id} from #{proposal.requester.email_address})
+      %(Request #{proposal.public_id}, #{client_data.organization_code}, #{client_data.building_id} from #{proposal.requester.email_address})
     else
       "Request #{proposal.public_id}"
     end
