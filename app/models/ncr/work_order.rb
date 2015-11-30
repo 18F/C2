@@ -39,7 +39,7 @@ module Ncr
     }, allow_blank: true
     validates :project_title, presence: true
     validates :vendor, presence: true
-    validates :building_number, presence: true
+    validates :building_number, presence: true, if: :not_ba60?
     validates :rwa_number, presence: true, if: :ba80?
     validates :rwa_number, format: {
       with: /\A[a-zA-Z][0-9]{7}\z/,
@@ -183,6 +183,10 @@ module Ncr
 
     def ba80?
       self.expense_type == 'BA80'
+    end
+
+    def not_ba60?
+      expense_type != "BA60"
     end
 
     def total_price

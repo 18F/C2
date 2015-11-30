@@ -206,6 +206,16 @@ describe Ncr::WorkOrder do
       wo = build(:ncr_work_order, building_number: nil)
       expect(wo.building_id).to be_nil
     end
+
+    it "does not require if expense_type is BA60" do
+      wo = build(:ncr_work_order, expense_type: "BA60", building_number: nil)
+      expect(wo).to be_valid
+    end
+
+    it "requires if expense_type is not BA60" do
+      wo = build(:ncr_work_order, expense_type: "BA61", building_number: nil)
+      expect(wo).to_not be_valid
+    end
   end
 
   describe "#current_approver" do
