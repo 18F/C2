@@ -159,17 +159,35 @@ feature 'Creating an NCR work order' do
       expect(page).to have_content('$2,000 for construction')
     end
 
-    scenario "selecting Expense Type toggles Building required flag", :js do
-      login_as(requester)
-      visit "/ncr/work_orders/new"
-      find("#ncr_work_order_expense_type_ba60").click
-      expect(find('.ncr_work_order_building_number input')['class']).to_not match('required')
-      find("#ncr_work_order_expense_type_ba61").click
-      expect(find('.ncr_work_order_building_number input')['class']).to match('required')
-      find("#ncr_work_order_expense_type_ba80").click
-      expect(find('.ncr_work_order_building_number input')['class']).to match('required')
-      find("#ncr_work_order_expense_type_ba60").click
-      expect(find('.ncr_work_order_building_number input')['class']).to_not match('required')
+    context "expense type is BA60" do
+      scenario "building id is not required", :js do
+        login_as(requester)
+        visit new_ncr_work_order_path
+        select_expense_type("ba60")
+        find("#ncr_work_order_expense_type_ba60").click
+        expect_building_id_not_to_be_required
+      end
+    end
+
+    context "expense type is not BA60" do
+      scenario "building id is required", :js do
+        login_as(requester)
+        visit new_ncr_work_order_path
+        ["ba61", "ba80"].each do |expense_type|
+          select_expense_type(expense_type)
+          expect_building_id_to_be_required
+        end
+      end
+    end
+
+    context "selects BA60 and then unselects BA60" do
+      scenario "building id is required", :js do
+        login_as(requester)
+        visit new_ncr_work_order_path
+        select_expense_type("ba60")
+        select_expense_type("ba80")
+        expect_building_id_to_be_required
+      end
     end
 
     scenario 'defaults to no approver if there was no previous request' do
@@ -377,5 +395,17 @@ feature 'Creating an NCR work order' do
   def focus_field(field_id)
     execute_script "document.getElementById('#{field_id}').scrollIntoView()"
     execute_script "$('##{field_id}').focus()"
+  end
+
+  def select_expense_type(expense_type)
+    find("#ncr_work_order_expense_type_#{expense_type}").click
+  end
+
+  def expect_building_id_not_to_be_required
+    expect(find('.ncr_work_order_building_number input')['class']).to_not match('required')
+  end
+
+  def expect_building_id_to_be_required
+    expect(find('.ncr_work_order_building_number input')['class']).to match('required')
   end
 end
