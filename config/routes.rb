@@ -4,6 +4,7 @@ C2::Application.routes.draw do
   get "/error" => "home#error"
   get "/profile"  => "profile#show"
   post "/profile" => "profile#update"
+  get "/summary"  => "summary#index"
   get "/feedback" => "feedback#index"
   get "/feedback/thanks" => "feedback#thanks"
   post "/feedback" => "feedback#create"
