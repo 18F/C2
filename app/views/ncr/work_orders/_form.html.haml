@@ -21,10 +21,10 @@
     = f.input :building_number, input_html: { class: 'js-selectize', data: { initial: JSON.generate(building_options) } }
     = f.association :ncr_organization,
       collection: Ncr::Organization.all,
+      input_html: { class: "js-selectize", value: @model_instance.ncr_organization_id },
+      value_method: :id,
       label_method: :code_and_name,
-      value: @model_instance.ncr_organization_id,
-      prompt: :translate,
-      input_html: { class: "js-selectize" }
+      prompt: :translate
     = f.input :vendor, input_html: { class: 'js-selectize', data: { initial: JSON.generate(vendor_options(@model_instance.vendor)) } }
     = field_set_tag "Amount", class: 'required' do
       = f.input :amount, as: :currency, label_html: { class: 'sr-only' }, input_html: { data: popover_data_attrs('ncr_amount') }
