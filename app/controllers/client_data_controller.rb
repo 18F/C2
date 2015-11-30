@@ -2,8 +2,8 @@
 # * model_class
 # * permitted_params
 class ClientDataController < ApplicationController
-  before_action ->{authorize model_class}, only: [:new, :create]
-  before_action ->{authorize proposal}, only: [:edit, :update]
+  before_action -> { authorize model_class }, only: [:new, :create]
+  before_action -> { authorize proposal }, only: [:edit, :update]
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
   before_action :build_client_data_instance, only: [:new, :create]
   before_action :find_client_data_instance, only: [:edit, :update]
@@ -13,10 +13,7 @@ class ClientDataController < ApplicationController
 
   def create
     if errors.empty?
-      proposal = ClientDataCreator.new(@client_data_instance, current_user, attachment_params).run
-      add_steps
-      Dispatcher.deliver_new_proposal_emails(proposal)
-
+      create_client_data
       flash[:success] = "Proposal submitted!"
       redirect_to proposal
     else
@@ -30,15 +27,8 @@ class ClientDataController < ApplicationController
 
   def update
     if errors.empty?
-      if attribute_changes?
-        record_changes
-        @client_data_instance.save
-        setup_and_email_approvers
-        flash[:success] = "Successfully modified!"
-      else
-        flash[:error] = "No changes were made to the request"
-      end
-      redirect_to proposal_path(@client_data_instance.proposal)
+      update_or_notify_of_no_changes
+      redirect_to proposal
     else
       flash[:error] = errors
       render :edit
@@ -46,6 +36,23 @@ class ClientDataController < ApplicationController
   end
 
   protected
+
+  def create_client_data
+    proposal = ClientDataCreator.new(@client_data_instance, current_user, attachment_params).run
+    add_steps
+    Dispatcher.deliver_new_proposal_emails(proposal)
+  end
+
+  def update_or_notify_of_no_changes
+    if attribute_changes?
+      record_changes
+      @client_data_instance.save
+      setup_and_email_approvers
+      flash[:success] = "Successfully modified!"
+    else
+      flash[:error] = "No changes were made to the request"
+    end
+  end
 
   def attribute_changes?
     !@client_data_instance.changed_attributes.blank?
@@ -58,7 +65,7 @@ class ClientDataController < ApplicationController
   end
 
   def filtered_params
-    if params[:action] == 'new'
+    if params[:action] == "new"
       {}
     else
       permitted_params
@@ -67,7 +74,7 @@ class ClientDataController < ApplicationController
 
   def build_client_data_instance
     @client_data_instance = model_class.new(filtered_params)
-    @client_data_instance.build_proposal(flow: 'linear', requester: current_user)
+    @client_data_instance.build_proposal(flow: "linear", requester: current_user)
   end
 
   def find_client_data_instance
