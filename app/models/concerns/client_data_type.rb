@@ -1,4 +1,4 @@
-module ProposalDelegate
+module ClientDataType
   extend ActiveSupport::Concern
 
   included do

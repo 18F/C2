@@ -1,19 +1,19 @@
 # Abstract controller - requires the following methods on the subclass
 # * model_class
 # * permitted_params
-class UseCaseController < ApplicationController
-  before_action ->{authorize self.model_class}, only: [:new, :create]
-  before_action ->{authorize self.proposal}, only: [:edit, :update]
+class ClientDataController < ApplicationController
+  before_action ->{authorize model_class}, only: [:new, :create]
+  before_action ->{authorize proposal}, only: [:edit, :update]
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
-  before_action :build_model_instance, only: [:new, :create]
-  before_action :find_model_instance, only: [:edit, :update]
+  before_action :build_client_data_instance, only: [:new, :create]
+  before_action :find_client_data_instance, only: [:edit, :update]
 
   def new
   end
 
   def create
     if errors.empty?
-      proposal = ClientDataCreator.new(@model_instance, current_user, attachment_params).run
+      proposal = ClientDataCreator.new(@client_data_instance, current_user, attachment_params).run
       add_steps
       Dispatcher.deliver_new_proposal_emails(proposal)
 
@@ -32,13 +32,13 @@ class UseCaseController < ApplicationController
     if errors.empty?
       if attribute_changes?
         record_changes
-        @model_instance.save
+        @client_data_instance.save
         setup_and_email_approvers
         flash[:success] = "Successfully modified!"
       else
         flash[:error] = "No changes were made to the request"
       end
-      redirect_to proposal_path(@model_instance.proposal)
+      redirect_to proposal_path(@client_data_instance.proposal)
     else
       flash[:error] = errors
       render :edit
@@ -48,7 +48,7 @@ class UseCaseController < ApplicationController
   protected
 
   def attribute_changes?
-    !@model_instance.changed_attributes.blank?
+    !@client_data_instance.changed_attributes.blank?
   end
 
   def record_changes
@@ -65,26 +65,26 @@ class UseCaseController < ApplicationController
     end
   end
 
-  def build_model_instance
-    @model_instance = self.model_class.new(filtered_params)
-    @model_instance.build_proposal(flow: 'linear', requester: current_user)
+  def build_client_data_instance
+    @client_data_instance = model_class.new(filtered_params)
+    @client_data_instance.build_proposal(flow: 'linear', requester: current_user)
   end
 
-  def find_model_instance
-    @model_instance ||= self.model_class.find(params[:id])
+  def find_client_data_instance
+    @client_data_instance ||= model_class.find(params[:id])
   end
 
   def proposal
-    self.find_model_instance.proposal
+    find_client_data_instance.proposal
   end
 
   def errors
-    @model_instance.validate
-    @model_instance.errors.full_messages
+    @client_data_instance.validate
+    @client_data_instance.errors.full_messages
   end
 
   def auth_errors(exception)
-    path = polymorphic_path(self.model_class, action: :new)
+    path = polymorphic_path(model_class, action: :new)
     # prevent redirect loop
     if path == request.path
       render "authorization_error", status: 403, locals: { msg: exception.message }

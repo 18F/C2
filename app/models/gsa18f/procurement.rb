@@ -23,7 +23,7 @@ module Gsa18f
       :cost_per_unit
     end
 
-    include ProposalDelegate
+    include ClientDataType
     include PurchaseCardMixin
 
     validates :cost_per_unit, presence: true

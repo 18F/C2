@@ -8,7 +8,7 @@ module ApplicationHelper
   end
 
   def display_return_to_proposals
-    controller.is_a?(UseCaseController) ||
+    controller.is_a?(ClientDataController) ||
       (controller.is_a?(ProposalsController) && params[:action] != 'index')
   end
 
