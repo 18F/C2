@@ -108,7 +108,7 @@ module Ncr
 
     def self.default_fields
       fields = self.column_names.map(&:to_sym) + [:approving_official_email, :organization_code]
-      fields - [:emergency, :rwa_number, :code, :created_at, :updated_at, :id, :ncr_organization_id]
+      fields - [:emergency, :rwa_number, :code, :created_at, :updated_at, :id]
     end
 
     def set_defaults
