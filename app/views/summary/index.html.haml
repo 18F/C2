@@ -1,0 +1,30 @@
+%div.inset
+  %table.table.table-striped.table-bordered.table-responsive
+    %caption
+      %span.namespace= @summary.client_namespace
+      Requests: Fiscal Year
+      = @summary.fiscal_year
+    %tbody
+      %tr
+        %th Pending
+        %td
+          = @summary.status(:pending)
+        %td{class: "amount"}
+          = number_to_currency(@summary.subtotal(:pending))
+      %tr
+        %th Cancelled
+        %td
+          = @summary.status(:cancelled)
+        %td.amount
+          = number_to_currency(@summary.subtotal(:cancelled))
+      %tr 
+        %th Approved
+        %td 
+          = @summary.status(:approved)
+        %td.amount
+          = number_to_currency(@summary.subtotal(:approved))
+      %tr
+        %th Total
+        %td
+        %td.amount
+          = number_to_currency(@summary.total)
