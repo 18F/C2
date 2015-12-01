@@ -1,5 +1,5 @@
 module Ncr
-  class WorkOrdersController < UseCaseController
+  class WorkOrdersController < ClientDataController
     # arbitrary number...number of upload fields that "ought to be enough for anybody"
     MAX_UPLOADS_ON_NEW = 10
 
@@ -32,7 +32,7 @@ module Ncr
     protected
 
     def work_order
-      @model_instance
+      @client_data_instance
     end
 
     def record_changes

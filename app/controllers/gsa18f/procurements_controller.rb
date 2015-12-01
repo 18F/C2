@@ -1,7 +1,7 @@
 module Gsa18f
-  class ProcurementsController < UseCaseController
+  class ProcurementsController < ClientDataController
     def update
-      @model_instance.assign_attributes(permitted_params)
+      @client_data_instance.assign_attributes(permitted_params)
       super
     end
 
@@ -22,7 +22,7 @@ module Gsa18f
     def add_steps
       super
       if self.errors.empty?
-        @model_instance.add_steps
+        @client_data_instance.add_steps
       end
     end
   end

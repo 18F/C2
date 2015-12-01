@@ -15,8 +15,7 @@ module Ncr
       :amount
     end
 
-    include ValueHelper
-    include ProposalDelegate
+    include ClientDataMixin
     include PurchaseCardMixin
 
     attr_accessor :approving_official_email
