@@ -107,7 +107,7 @@ module Ncr
     end
 
     def self.default_fields
-      fields = self.column_names.map(&:to_sym) + [:approving_official_email, :organization_code]
+      fields = self.column_names.map(&:to_sym) + [:approving_official_email]
       fields - [:emergency, :rwa_number, :code, :created_at, :updated_at, :id]
     end
 
@@ -172,8 +172,8 @@ module Ncr
 
     # Methods for Client Data interface
     def fields_for_display
-      attributes = self.class.relevant_fields(expense_type)
-      attributes.map{|key| [WorkOrder.human_attribute_name(key), self[key]]}
+      attributes = self.class.relevant_fields(expense_type) + [:organization_code] - [:ncr_organization_id]
+      attributes.map { |attribute| [WorkOrder.human_attribute_name(attribute), self[attribute]] }
     end
 
     def ba80?

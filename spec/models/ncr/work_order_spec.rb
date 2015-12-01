@@ -27,8 +27,8 @@ describe Ncr::WorkOrder do
         :emergency,
         :expense_type,
         :function_code,
+        :ncr_organization_id,
         :not_to_exceed,
-        :organization_code,
         :project_title,
         # No :rwa_number
         :soc_code,
@@ -48,8 +48,8 @@ describe Ncr::WorkOrder do
         # No Emergency
         :expense_type,
         :function_code,
+        :ncr_organization_id,
         :not_to_exceed,
-        :organization_code,
         :project_title,
         :rwa_number,
         :soc_code,
