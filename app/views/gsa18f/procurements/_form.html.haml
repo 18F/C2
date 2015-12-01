@@ -9,7 +9,7 @@
   %p
     %em
       * Indicates a required field
-  = simple_form_for @model_instance do |f|
+  = simple_form_for @client_data_instance do |f|
     = f.input :office, collection: Gsa18f::Procurement::OFFICES
     = f.input :purchase_type,
       collection: Gsa18f::Procurement::PURCHASE_TYPES.keys,
@@ -30,5 +30,5 @@
     = f.input :urgency, collection: Gsa18f::Procurement::URGENCY, label_method: :last, value_method: :first
     = f.input :additional_info, as: :text
     = f.submit class: "form-button"
-    - if @model_instance.persisted?
-      = link_to 'Discard Changes', proposal_url(@model_instance.proposal)
+    - if @client_data_instance.persisted?
+      = link_to 'Discard Changes', proposal_url(@client_data_instance.proposal)
