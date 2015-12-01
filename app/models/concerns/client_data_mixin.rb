@@ -1,4 +1,4 @@
-module ClientDataType
+module ClientDataMixin
   extend ActiveSupport::Concern
 
   included do

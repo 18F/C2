@@ -23,7 +23,7 @@ module Gsa18f
       :cost_per_unit
     end
 
-    include ClientDataType
+    include ClientDataMixin
     include PurchaseCardMixin
 
     validates :cost_per_unit, presence: true

@@ -15,7 +15,7 @@ module Ncr
       :amount
     end
 
-    include ClientDataType
+    include ClientDataMixin
     include PurchaseCardMixin
 
     attr_accessor :approving_official_email
