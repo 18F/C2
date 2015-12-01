@@ -10,6 +10,13 @@ module Gsa18f
     URGENCY = DATA['URGENCY']
     OFFICES = DATA['OFFICES']
     RECURRENCE = DATA['RECURRENCE']
+    PURCHASE_TYPES = {
+      "Software" => 0,
+      "Training/Event" => 1,
+      "Office Supply/Miscellaneous" => 2
+    }
+
+    enum purchase_type: PURCHASE_TYPES
 
     # must define before include PurchaseCardMixin
     def self.purchase_amount_column_name
@@ -24,6 +31,7 @@ module Gsa18f
       greater_than_or_equal_to: 1
     }, presence: true
     validates :product_name_and_description, presence: true
+    validates :purchase_type, presence: true
     validates :recurring_interval, presence: true, if: :recurring
 
     def self.relevant_fields(recurring)
@@ -37,14 +45,14 @@ module Gsa18f
     end
 
     def self.default_fields
-      fields = self.column_names.map(&:to_sym) + [:approving_official_email]
+      fields = self.column_names.map(&:to_sym)
       fields - [:recurring_interval, :recurring_length, :created_at, :updated_at, :id]
     end
 
     def fields_for_display
       attributes = self.class.relevant_fields(recurring)
-      attributes.map! {|key| [Procurement.human_attribute_name(key), self[key]]}
-      attributes.push(["Total Price", total_price])
+      attributes_for_view = attributes.map { |key| [Procurement.human_attribute_name(key), self.send(key)] }
+      attributes_for_view.push(["Total Price", total_price])
     end
 
     def add_steps

@@ -263,26 +263,6 @@ describe CommunicartMailer do
     end
   end
 
-  describe '#proposal_subject' do
-    it 'defaults when no client_data is present' do
-      proposal = create(:proposal)
-      mail = CommunicartMailer.proposal_created_confirmation(proposal)
-      expect(mail.subject).to eq("Request #{proposal.public_id}")
-    end
-
-    it 'includes custom text for ncr work orders' do
-      requester = create(:user, email_address: 'someone@example.com')
-      wo = create(
-        :ncr_work_order,
-        org_code: 'P0000000 (192X,192M) PRIOR YEAR ACTIVITIES',
-        building_number: 'DC0000ZZ - Building',
-        requester: requester
-      )
-      mail = CommunicartMailer.proposal_created_confirmation(wo.proposal)
-      expect(mail.subject).to eq("Request #{wo.proposal.public_id}, P0000000, DC0000ZZ from someone@example.com")
-    end
-  end
-
   describe 'proposal_fiscal_cancellation' do
     it "sends cancellation email for fiscal-year cleanup" do
       proposal = create(:proposal)

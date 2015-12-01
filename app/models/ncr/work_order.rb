@@ -39,7 +39,7 @@ module Ncr
     }, allow_blank: true
     validates :project_title, presence: true
     validates :vendor, presence: true
-    validates :building_number, presence: true
+    validates :building_number, presence: true, if: :not_ba60?
     validates :rwa_number, presence: true, if: :ba80?
     validates :rwa_number, format: {
       with: /\A[a-zA-Z][0-9]{7}\z/,
@@ -174,15 +174,17 @@ module Ncr
       attributes.map{|key| [WorkOrder.human_attribute_name(key), self[key]]}
     end
 
-    # will return nil if the `org_code` is blank or not present in Organization list
-    def organization
-      # TODO reference by `code` rather than storing the whole thing
+    def ncr_organization
       code = (org_code || '').split(' ', 2)[0]
       Ncr::Organization.find(code)
     end
 
     def ba80?
       self.expense_type == 'BA80'
+    end
+
+    def not_ba60?
+      expense_type != "BA60"
     end
 
     def total_price
@@ -199,21 +201,17 @@ module Ncr
       manager.system_approver_emails
     end
 
-    def org_id
-      self.organization.try(:code)
+    def organization_code
+      ncr_organization.try(:code)
     end
 
     def building_id
       regex = /\A(\w{8}) .*\z/
-      if self.building_number && regex.match(self.building_number)
-        regex.match(self.building_number)[1]
+      if building_number && regex.match(building_number)
+        regex.match(building_number)[1]
       else
-        self.building_number
+        building_number
       end
-    end
-
-    def as_json
-      super.merge(org_id: self.org_id, building_id: self.building_id)
     end
 
     def name

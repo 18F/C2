@@ -8,7 +8,7 @@ class ExpiredRecordCleaner
   end
 
   def vacuum_old_proposals
-    proposals = Proposal.pending.where("created_at < '#{@fiscal_year_start}'")
+    proposals = Proposal.pending.where("created_at < ?", @fiscal_year_start)
     ids = []
     proposals.each do |proposal|
       vacuum_proposal(proposal)

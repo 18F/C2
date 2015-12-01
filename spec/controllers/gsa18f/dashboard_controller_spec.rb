@@ -2,10 +2,6 @@ describe Gsa18f::DashboardController do
   describe '#index' do
     let (:user) {create(:user, client_slug: 'gsa18f')}
 
-    around(:each) do |example|
-      with_18f_procurement_env_variables(&example)
-    end
-
     before do
       login_as(user)
     end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151110181710) do
+ActiveRecord::Schema.define(version: 20151123235600) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -89,19 +89,20 @@ ActiveRecord::Schema.define(version: 20151110181710) do
 
   create_table "gsa18f_procurements", force: :cascade do |t|
     t.string   "office",                       limit: 255
-    t.text     "justification"
-    t.string   "link_to_product",              limit: 255
+    t.text     "justification",                            default: "",      null: false
+    t.string   "link_to_product",              limit: 255, default: "",      null: false
     t.integer  "quantity"
     t.datetime "date_requested"
     t.string   "additional_info",              limit: 255
     t.decimal  "cost_per_unit"
     t.text     "product_name_and_description"
-    t.boolean  "recurring"
-    t.string   "recurring_interval",           limit: 255
+    t.boolean  "recurring",                                default: false,   null: false
+    t.string   "recurring_interval",           limit: 255, default: "Daily"
     t.integer  "recurring_length"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "urgency"
+    t.integer  "purchase_type",                                              null: false
   end
 
   create_table "ncr_work_orders", force: :cascade do |t|
@@ -140,7 +141,7 @@ ActiveRecord::Schema.define(version: 20151110181710) do
     t.integer  "client_data_id"
     t.string   "client_data_type", limit: 255
     t.integer  "requester_id"
-    t.string   "public_id",        limit: 255
+    t.string   "public_id"
   end
 
   add_index "proposals", ["client_data_id", "client_data_type"], name: "index_proposals_on_client_data_id_and_client_data_type", using: :btree
@@ -164,8 +165,10 @@ ActiveRecord::Schema.define(version: 20151110181710) do
     t.string   "type"
     t.integer  "parent_id"
     t.integer  "min_children_needed"
+    t.integer  "completer_id"
   end
 
+  add_index "steps", ["completer_id"], name: "index_steps_on_completer_id", using: :btree
   add_index "steps", ["user_id", "proposal_id"], name: "steps_user_proposal_idx", unique: true, using: :btree
 
   create_table "taggings", force: :cascade do |t|
@@ -228,6 +231,7 @@ ActiveRecord::Schema.define(version: 20151110181710) do
   add_foreign_key "proposals", "users", column: "requester_id", name: "requester_id_fkey"
   add_foreign_key "steps", "proposals", name: "proposal_id_fkey"
   add_foreign_key "steps", "steps", column: "parent_id", name: "parent_id_fkey", on_delete: :cascade
+  add_foreign_key "steps", "users", column: "completer_id", name: "completer_id_fkey"
   add_foreign_key "steps", "users", name: "user_id_fkey"
   add_foreign_key "user_roles", "roles", name: "role_id_fkey"
   add_foreign_key "user_roles", "users", name: "user_id_fkey"

@@ -118,6 +118,8 @@ describe 'proposals' do
         get response.headers['Location']
 
         expect_status(proposal, 'approved', 'approved')
+        expect(session[:return_to]).to be_nil
+        expect(session[:user]).to_not be_nil
       end
     end
   end

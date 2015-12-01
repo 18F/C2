@@ -54,16 +54,16 @@ describe Ncr::WorkOrder do
     end
   end
 
-  describe "#organization" do
+  describe "#ncr_organization" do
     it "returns the corresponding Organization instance" do
       org = Ncr::Organization.all.last
       work_order = build(:ncr_work_order, org_code: org.code)
-      expect(work_order.organization).to eq(org)
+      expect(work_order.ncr_organization).to eq(org)
     end
 
     it "returns nil for no #org_code" do
       work_order = build(:ncr_work_order)
-      expect(work_order.organization).to eq(nil)
+      expect(work_order.ncr_organization).to eq(nil)
     end
   end
 
@@ -179,15 +179,23 @@ describe Ncr::WorkOrder do
     end
   end
 
-  describe "#org_id" do
-    it "pulls out the organization id when present" do
-      wo = create(:ncr_work_order, org_code: 'P0000000 (192X,192M) PRIOR YEAR ACTIVITIES')
-      expect(wo.org_id).to eq("P0000000")
+  describe "#organization_code" do
+    context "work order has an ncr organization" do
+      it "returns the ncr organization code" do
+        work_order = build(:ncr_work_order)
+        organization = Ncr::Organization.all.first
+        allow(work_order).to receive(:ncr_organization).and_return(organization)
+
+        expect(work_order.organization_code).to eq organization.code
+      end
     end
 
-    it "returns nil when no organization is present" do
-      wo = create(:ncr_work_order, org_code: nil)
-      expect(wo.org_id).to be_nil
+    context "work order does not have an ncr organization" do
+      it "returns nil" do
+        work_order = build(:ncr_work_order, org_code: nil)
+
+        expect(work_order.organization_code).to be_nil
+      end
     end
   end
 
@@ -205,6 +213,16 @@ describe Ncr::WorkOrder do
     it "allows nil" do
       wo = build(:ncr_work_order, building_number: nil)
       expect(wo.building_id).to be_nil
+    end
+
+    it "does not require if expense_type is BA60" do
+      wo = build(:ncr_work_order, expense_type: "BA60", building_number: nil)
+      expect(wo).to be_valid
+    end
+
+    it "requires if expense_type is not BA60" do
+      wo = build(:ncr_work_order, expense_type: "BA61", building_number: nil)
+      expect(wo).to_not be_valid
     end
   end
 

@@ -17,6 +17,27 @@ describe 'Canceling a request' do
     expect(page).to_not have_content('Cancel this request')
   end
 
+  it "shows cancel link for admins" do
+    proposal = create(:proposal, :with_approver)
+    admin_user = create(:user, :admin)
+    login_as(admin_user)
+
+    visit proposal_path(proposal)
+
+    expect(page).to have_content("Cancel this request")
+  end
+
+  it "allows admin to cancel a proposal even with different client_slug" do
+    work_order = create(:ncr_work_order)
+    proposal = work_order.proposal
+    admin_user = create(:user, :admin, client_slug: "gsa18f")
+    login_as(admin_user)
+
+    cancel_proposal(proposal)
+
+    expect(page).to_not have_content("May not add observer")
+  end
+
   it 'prompts the requester for a reason' do
     proposal = create(:proposal)
     login_as(proposal.requester)

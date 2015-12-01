@@ -20,6 +20,11 @@ class User < ActiveRecord::Base
   has_many :outgoing_delegations, class_name: 'ApprovalDelegate', foreign_key: 'assigner_id'
   has_many :outgoing_delegates, through: :outgoing_delegations, source: :assignee
 
+  has_many :incoming_delegations, class_name: 'ApprovalDelegate', foreign_key: 'assignee_id'
+  has_many :incoming_delegates, through: :incoming_delegations, source: :assigner
+
+  has_many :completed_steps, class_name: "Step", foreign_key: "completer"
+
   def self.active
     where(active: true)
   end
@@ -88,6 +93,10 @@ class User < ActiveRecord::Base
 
   def not_admin?
     !admin?
+  end
+
+  def deactivated?
+    !active?
   end
 
   def update_names_if_present(user_data)

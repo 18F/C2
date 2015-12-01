@@ -1,12 +1,6 @@
 feature 'Approver edits NCR work order' do
   include ProposalSpecHelper
 
-  around(:each) do |example|
-    with_env_var('DISABLE_SANDBOX_WARNING', 'true') do
-      example.run
-    end
-  end
-
   scenario 'keeps track of the modification' do
     work_order = create(:ncr_work_order, :with_approvers)
     approver = work_order.proposal.approvers.first

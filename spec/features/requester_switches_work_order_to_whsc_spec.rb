@@ -1,10 +1,4 @@
 feature 'Requester switches work order to WHSC' do
-  around(:each) do |example|
-    with_env_var('DISABLE_SANDBOX_WARNING', 'true') do
-      example.run
-    end
-  end
-
   let(:work_order) { create(:ncr_work_order, org_code: Ncr::Organization.all.first.to_s, description: 'test') }
   let(:ncr_proposal) { work_order.proposal }
   let!(:approver) { create(:user) }
@@ -17,7 +11,7 @@ feature 'Requester switches work order to WHSC' do
 
   context 'as a BA61' do
     scenario 'reassigns the approvers properly' do
-      expect(work_order.organization).to_not be_whsc
+      expect(work_order.ncr_organization).to_not be_whsc
       approving_official = work_order.approving_official
 
       visit "/ncr/work_orders/#{work_order.id}/edit"
@@ -36,7 +30,7 @@ feature 'Requester switches work order to WHSC' do
     end
 
     scenario 'notifies the removed approver' do
-      expect(work_order.organization).to_not be_whsc
+      expect(work_order.ncr_organization).to_not be_whsc
       deliveries.clear
 
       visit "/ncr/work_orders/#{work_order.id}/edit"
@@ -60,7 +54,7 @@ feature 'Requester switches work order to WHSC' do
       work_order = create(:ba80_ncr_work_order, org_code: Ncr::Organization.all[0].to_s)
       work_order.setup_approvals_and_observers
       work_order.individual_steps.first.approve!
-      expect(work_order.organization).to_not be_whsc
+      expect(work_order.ncr_organization).to_not be_whsc
       ncr_proposal = work_order.proposal
 
       approving_official = work_order.approving_official

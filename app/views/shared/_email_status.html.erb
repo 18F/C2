@@ -30,7 +30,7 @@
                     <%- last_approver = index == @proposal.steps_in_list_order.count - 1 %>
                     <%= status_icon_tag(display_status, @proposal.linear?, last_approver) %>
                     <span class="approver">
-                      <%= mail_to step.user_email_address, step.user_full_name %>
+                      <%= mail_to step.completed_by.email_address, step.completed_by.full_name %>
                     </span>
                     <span class="approver-role">
                       (<%= step.decorate.role_name %>)
