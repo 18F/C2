@@ -23,8 +23,6 @@ module Ncr
     # This is a hack to be able to attribute changes to the correct user. This attribute needs to be set explicitly, then the update comment will use them as the "commenter". Defaults to the requester.
     attr_accessor :modifier
 
-    after_initialize :set_defaults
-
     validates :approving_official_email, presence: true
     validates_email_format_of :approving_official_email
     validates :amount, presence: true
@@ -107,13 +105,6 @@ module Ncr
     def self.default_fields
       fields = self.column_names.map(&:to_sym) + [:approving_official_email]
       fields - [:emergency, :rwa_number, :code, :created_at, :updated_at, :id]
-    end
-
-    def set_defaults
-      # not sure why the latter condition is necessary...was getting some weird errors from the tests without it. -AF 10/5/2015
-      if !self.approving_official_email && self.approvers.any?
-        self.approving_official_email = self.approvers.first.try(:email_address)
-      end
     end
 
     def approver_email_frozen?
