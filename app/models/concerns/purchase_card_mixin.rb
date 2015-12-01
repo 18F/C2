@@ -2,16 +2,9 @@
 # before 'include'-ing this concern
 module PurchaseCardMixin
   extend ActiveSupport::Concern
+  include FiscalYearMixin
 
   included do
-    def self.which_fiscal_year(year, month)
-      if month >= 10
-        year + 1
-      else
-        year
-      end
-    end
-
     def self.max_amount
       fiscals = {
         2015      => 3000,
