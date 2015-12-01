@@ -3,10 +3,6 @@ class Selectizer
     @$el = $(el)
     @dataAttr = @$el.attr('data-attr') || 'default_field'
 
-    # `required` inputs don't work with Selectize
-    # https://github.com/brianreavis/selectize.js/issues/733
-    @$el.removeAttr('required')
-
   isFreeForm: ->
     @$el.is('input')
 
