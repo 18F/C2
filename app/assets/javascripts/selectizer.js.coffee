@@ -34,6 +34,7 @@ class Selectizer
 
     opts.labelField = @dataAttr
     opts.searchField = [@dataAttr]
+    # opts.valueField = @dataAttr
     opts.sortField = [{field: '$score'}, {field: @dataAttr}]
 
     opts

@@ -47,7 +47,7 @@ describe Ncr::ApprovalManager do
       wo = create(
         :ncr_work_order,
         approving_official_email: "ao@example.com",
-        expense_type: "BA61"
+        expense_type: "BA61",
       )
       manager = Ncr::ApprovalManager.new(wo)
       manager.setup_approvals_and_observers
@@ -56,7 +56,7 @@ describe Ncr::ApprovalManager do
         ba61_tier_one_email,
         ba61_tier_two_email
       ]
-      organization.ncr_work_orders << wo
+      wo.update(ncr_organization: organization)
       manager.setup_approvals_and_observers
       expect(wo.reload.approvers.map(&:email_address)).to eq [
         "ao@example.com",
@@ -169,8 +169,7 @@ describe Ncr::ApprovalManager do
       it "uses the OOL budget email for their org code" do
         budget_email = Ncr::Mailboxes.ool_ba80_budget
         ool_organization = create(:ool_organization)
-        work_order = create(:ba80_ncr_work_order)
-        ool_organization.ncr_work_orders << work_order
+        work_order = create(:ba80_ncr_work_order, ncr_organization: ool_organization)
 
         manager = Ncr::ApprovalManager.new(work_order)
         expect(manager.system_approver_emails).to eq([budget_email])
