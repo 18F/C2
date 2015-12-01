@@ -36,6 +36,19 @@ FactoryGirl.define do
       end
     end
 
+    trait :with_approval_and_purchase do
+      flow "linear"
+      after :create do |proposal, evaluator|
+        first_approver = create(:user, client_slug: evaluator.client_slug)
+        second_approver = create(:user, client_slug: evaluator.client_slug)
+        steps = [
+          create(:approval, user: first_approver),
+          create(:purchase_step, user: second_approver)
+        ]
+        proposal.add_initial_steps(steps)
+      end
+    end
+
     trait :with_observer do
       after :create do |proposal, evaluator|
         observer = create(:user, client_slug: evaluator.client_slug)

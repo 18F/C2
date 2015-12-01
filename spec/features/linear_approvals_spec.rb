@@ -26,16 +26,10 @@ describe 'Linear approvals' do
     expect(page).not_to have_button('Approve')
   end
 
-  it 'shows the approver role next to each approver' do
-    proposal = create(:proposal, client_slug: 'gsa18f', flow: 'linear')
-    first_approver = create(:user, client_slug: 'gsa18f')
-    second_approver = create(:user, client_slug: 'gsa18f')
-    steps = [
-      create(:approval, user: first_approver),
-      create(:purchase_step, user: second_approver)
-    ]
-    proposal.add_initial_steps(steps)
-    login_as(first_approver)
+  it "shows the approver role next to each approver" do
+    proposal = create(:proposal, :with_approval_and_purchase, client_slug: "gsa18f")
+    approver = proposal.individual_steps.first.user
+    login_as(approver)
     @proposal_page = ProposalPage.new
     @proposal_page.load(proposal_id: proposal.id)
     expect(@proposal_page).to be_displayed

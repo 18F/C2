@@ -21,7 +21,7 @@ class CommunicartMailer < ApplicationMailer
   end
 
   def notification_for_subscriber(to_email, proposal, alert_partial = nil, approval = nil)
-    @approval = approval
+    @approval = approval.decorate if approval
     @alert_partial = alert_partial
 
     send_proposal_email(
