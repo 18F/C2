@@ -1,3 +1,7 @@
+// IMPORTANT -- this is modified from upstream to fix 
+// https://github.com/brianreavis/selectize.js/issues/733#issuecomment-148835703
+// UPGRADING this file should include investigation of whether that bug is fixed.
+
 /**
  * sifter.js
  * Copyright (c) 2013 Brian Reavis & contributors
