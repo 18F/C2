@@ -6,7 +6,7 @@
     %td{colspan: 2, align: 'center'}
       - if show_approval_actions
         %p
-          = link_to approval.action_name, generate_approve_url(approval), class: 'form-button'
+          = link_to step.action_name, generate_approve_url(step), class: 'form-button'
         %p
           %strong
             = link_to "Or Send a Comment", proposal_url(proposal, anchor: 'comments'), {target: 'C2'}

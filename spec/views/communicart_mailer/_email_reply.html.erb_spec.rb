@@ -3,7 +3,7 @@ describe "communicart_mailer/_email_reply.html.erb" do
     approval = create(:approval)
     create(:api_token, step: approval)
     proposal = approval.proposal
-    render partial: "communicart_mailer/email_reply", locals: {show_approval_actions: true, approval: approval.decorate, proposal: proposal}
+    render partial: "communicart_mailer/email_reply", locals: {show_approval_actions: true, step: approval.decorate, proposal: proposal}
 
     expect(rendered).to include "Approve"
     expect(rendered).to include "Or Send a Comment"
@@ -13,7 +13,7 @@ describe "communicart_mailer/_email_reply.html.erb" do
     approval = create(:approval)
     create(:api_token, step: approval)
     proposal = approval.proposal
-    render partial: "communicart_mailer/email_reply", locals: {show_approval_actions: false, approval: approval.decorate, proposal: proposal}
+    render partial: "communicart_mailer/email_reply", locals: {show_approval_actions: false, step: approval.decorate, proposal: proposal}
 
     expect(rendered).to_not include "Approve"
     expect(rendered).to_not include "Or Send a Comment"

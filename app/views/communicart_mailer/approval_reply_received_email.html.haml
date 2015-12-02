@@ -7,7 +7,7 @@
         %p
           Hello,
           %br
-          The approver, #{@approval.user_email_address}, #{@approval.status} request #{@proposal.public_id}.
+          The approver, #{@step.user_email_address}, #{@step.status} request #{@proposal.public_id}.
           %br
           Please see below for more details.
   %tr
@@ -18,4 +18,4 @@
         "proposal_mail",
         locals: { proposal: @proposal, title: "Purchase Request" })
       = render( partial: "email_reply",
-        locals: { approval: @approval, show_approval_actions: false, proposal: @proposal })
+        locals: { step: @step, show_approval_actions: false, proposal: @proposal })

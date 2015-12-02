@@ -8,20 +8,20 @@ class CommunicartMailer < ApplicationMailer
   add_template_helper MarkdownHelper
 
   # Approver can approve/take other action
-  def actions_for_approver(approval, alert_partial = nil)
+  def actions_for_approver(step, alert_partial = nil)
     @show_approval_actions = true
-    to_email = approval.user_email_address
-    proposal = approval.proposal
+    to_email = step.user_email_address
+    proposal = step.proposal
 
-    unless approval.api_token
-      approval.create_api_token
+    unless step.api_token
+      step.create_api_token
     end
 
-    notification_for_subscriber(to_email, proposal, alert_partial, approval)
+    notification_for_subscriber(to_email, proposal, alert_partial, step)
   end
 
-  def notification_for_subscriber(to_email, proposal, alert_partial = nil, approval = nil)
-    @approval = approval.decorate if approval
+  def notification_for_subscriber(to_email, proposal, alert_partial = nil, step = nil)
+    @step = step.decorate if step
     @alert_partial = alert_partial
 
     send_proposal_email(
@@ -74,7 +74,7 @@ class CommunicartMailer < ApplicationMailer
 
   def approval_reply_received_email(approval)
     proposal = approval.proposal.reload
-    @approval = approval
+    @step = approval
     @alert_partial = 'approvals_complete' if proposal.approved?
 
     send_proposal_email(
