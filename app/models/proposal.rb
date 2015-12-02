@@ -33,6 +33,7 @@ class Proposal < ActiveRecord::Base
   has_many :steps
   has_many :individual_steps, ->{ individual }, class_name: 'Steps::Individual'
   has_many :approvers, through: :individual_steps, source: :user
+  has_many :completers, through: :individual_steps, source: :completer
   has_many :api_tokens, through: :individual_steps
   has_many :attachments, dependent: :destroy
   has_many :approval_delegates, through: :approvers, source: :outgoing_delegations
