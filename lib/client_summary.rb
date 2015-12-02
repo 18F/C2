@@ -34,8 +34,8 @@ class ClientSummary
   end
 
   def status_sum
-    total = 0 
-    @_statuses.values.each { |i| total += i } 
+    total = 0
+    @_statuses.values.each { |i| total += i }
     total
   end
 
