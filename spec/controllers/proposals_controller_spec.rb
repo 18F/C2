@@ -295,7 +295,7 @@ describe ProposalsController do
     end
 
     it "allows a delegate to approve via the web UI" do
-      proposal = create(:proposal, :with_serial_approvers)
+      proposal = create(:proposal, :with_two_approvers)
       mailbox = proposal.approvers.second
       delegate = create(:user)
       mailbox.add_delegate(delegate)

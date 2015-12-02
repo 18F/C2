@@ -1,5 +1,5 @@
 describe "Add attachments" do
-  let (:proposal) { create(:proposal, :with_parallel_approvers) }
+  let (:proposal) { create(:proposal, :with_approver) }
   let! (:attachment) {
     create(:attachment, proposal: proposal,
                        user: proposal.requester) }

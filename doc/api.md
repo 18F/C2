@@ -43,7 +43,6 @@ Attribute | Type | Note
 --- | --- | ---
 `steps` | [ [Step](#step) ] |
 `created_at` | string (time) |
-`flow` | string | Can be `linear` or `parallel`
 `id` | integer |
 `requester` | [User](#user) |
 `status` | string | Can be `pending`, `approved`, or `cancelled`

@@ -14,10 +14,7 @@ See [the model diagram page](models_diagram.md) for details about how to generat
 The order and requirements for a proposal to be "approved" are defined by an "approval chain". This is a hierarchical tree of `Approval` objects, with currently fall into three types:
 
 * `Individual` - representing a single user's approving decision
-* `Parallel` - whose children can approve in any order
 * `Serial` - whose children must approve in sequence
-
-The `Parallel` node has an additional configuration (`min_children_needed`), which allows it to require X out of Y approvals, for example requiring only a majority or only one of its children to approve.
 
 The approval chains are designed so that the `Proposal` needs to only communicate with the _root_ of the chain. See the approval specs for examples.
 

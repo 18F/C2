@@ -50,6 +50,12 @@ class Dispatcher
   end
 
   def on_approval_approved(approval)
+    next_step = next_pending_approval(approval.proposal)
+
+    if next_step
+      email_approver(next_step)
+    end
+
     if requires_approval_notice?(approval)
       CommunicartMailer.approval_reply_received_email(approval).deliver_later
     end
@@ -100,5 +106,11 @@ class Dispatcher
 
   def approver_knows_about_proposal?(approval)
     !approval.pending?
+  end
+
+  def next_pending_approval(proposal)
+    if proposal.pending?
+      proposal.currently_awaiting_steps.first
+    end
   end
 end

@@ -23,32 +23,17 @@ describe StepManager do
       approvers = 3.times.map{ create(:user) }
       individuals = approvers.map{ |u| Steps::Approval.new(user: u) }
 
-      proposal.root_step = Steps::Parallel.new(child_approvals: individuals)
+      proposal.root_step = Steps::Serial.new(child_approvals: individuals)
 
       expect(proposal.steps.count).to be 4
       expect(proposal.approvers).to eq approvers
     end
 
-    it 'initates parallel' do
+    it 'initiates approval chain' do
       approver1 = create(:user)
       approver2 = create(:user)
       approver3 = create(:user)
-      proposal = create(:proposal, flow: 'parallel')
-      individuals = [approver1, approver2, approver3].map{ |u| Steps::Approval.new(user: u)}
-
-      proposal.root_step = Steps::Parallel.new(child_approvals: individuals)
-
-      expect(proposal.approvers.count).to be 3
-      expect(proposal.steps.count).to be 4
-      expect(proposal.individual_steps.actionable.count).to be 3
-      expect(proposal.steps.actionable.count).to be 4
-    end
-
-    it 'initates linear' do
-      approver1 = create(:user)
-      approver2 = create(:user)
-      approver3 = create(:user)
-      proposal = create(:proposal, flow: 'linear')
+      proposal = create(:proposal)
       individuals = [approver1, approver2, approver3].map{ |u| Steps::Approval.new(user: u)}
 
       proposal.root_step = Steps::Serial.new(child_approvals: individuals)
@@ -59,29 +44,11 @@ describe StepManager do
       expect(proposal.steps.actionable.count).to be 2
     end
 
-    it 'fixes modified parallel proposal approvals' do
-      approver1 = create(:user)
-      approver2 = create(:user)
-      approver3 = create(:user)
-      proposal = create(:proposal, flow: 'parallel')
-      individuals = [Steps::Approval.new(user: approver1)]
-      proposal.root_step = Steps::Parallel.new(child_approvals: individuals)
-
-      expect(proposal.steps.actionable.count).to be 2
-      expect(proposal.individual_steps.actionable.count).to be 1
-
-      individuals = individuals + [approver2, approver3].map{ |u| Steps::Approval.new(user: u)}
-      proposal.root_step = Steps::Parallel.new(child_approvals: individuals)
-
-      expect(proposal.steps.actionable.count).to be 4
-      expect(proposal.individual_steps.actionable.count).to be 3
-    end
-
     it 'fixes modified linear proposal approvals' do
       approver1 = create(:user)
       approver2 = create(:user)
       approver3 = create(:user)
-      proposal = create(:proposal, flow: 'linear')
+      proposal = create(:proposal)
       approver1, approver2, approver3 = 3.times.map{ create(:user) }
       individuals = [approver1, approver2].map{ |u| Steps::Approval.new(user: u) }
       proposal.root_step = Steps::Serial.new(child_approvals: individuals)
@@ -99,23 +66,10 @@ describe StepManager do
       expect(proposal.individual_steps.actionable.first.user).to eq approver3
     end
 
-    it 'does not modify a full approved parallel proposal' do
+    it 'does not modify a full approved proposal' do
       approver1 = create(:user)
       approver2 = create(:user)
-      proposal = create(:proposal, flow: 'parallel')
-      individuals = [approver1, approver2].map{ |u| Steps::Approval.new(user: u)}
-      proposal.root_step = Steps::Parallel.new(child_approvals: individuals)
-
-      proposal.individual_steps.first.approve!
-      proposal.individual_steps.second.approve!
-
-      expect(proposal.steps.actionable).to be_empty
-    end
-
-    it 'does not modify a full approved linear proposal' do
-      approver1 = create(:user)
-      approver2 = create(:user)
-      proposal = create(:proposal, flow: 'linear')
+      proposal = create(:proposal)
       individuals = [approver1, approver2].map{ |u| Steps::Approval.new(user: u)}
       proposal.root_step = Steps::Serial.new(child_approvals: individuals)
 
@@ -126,7 +80,7 @@ describe StepManager do
     end
 
     it 'deletes approvals' do
-      proposal = create(:proposal, :with_parallel_approvers)
+      proposal = create(:proposal, :with_two_approvers)
       approval1, approval2 = proposal.individual_steps
       proposal.root_step = Steps::Serial.new(child_approvals: [approval2])
 

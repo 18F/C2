@@ -28,7 +28,7 @@
                   </td>
                   <td>
                     <%- last_approver = index == @proposal.approvals_in_list_order.count - 1 %>
-                    <%= status_icon_tag(display_status, @proposal.linear?, last_approver) %>
+                    <%= status_icon_tag(display_status, true, last_approver) %>
                     <span class="approver">
                       <%= mail_to approval.completed_by.email_address, approval.completed_by.full_name %>
                     </span>

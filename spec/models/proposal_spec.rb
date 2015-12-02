@@ -43,17 +43,8 @@ describe Proposal do
   end
 
   describe '#currently_awaiting_approvers' do
-    it "gives a consistently ordered list when in parallel" do
-      proposal = create(:proposal, :with_parallel_approvers)
-      approver1, approver2 = proposal.approvers
-      expect(proposal.currently_awaiting_approvers).to eq([approver1, approver2])
-
-      proposal.individual_steps.first.update_attribute(:position, 5)
-      expect(proposal.currently_awaiting_approvers).to eq([approver2, approver1])
-    end
-
-    it "gives only the first approver when linear" do
-      proposal = create(:proposal, :with_serial_approvers)
+    it "gives only the first approver" do
+      proposal = create(:proposal, :with_two_approvers)
       approver1, approver2 = proposal.approvers
       expect(proposal.currently_awaiting_approvers).to eq([approver1])
 
@@ -81,7 +72,7 @@ describe Proposal do
   describe '#subscribers' do
     it "returns all approvers, observers, and the requester" do
       requester = create(:user)
-      proposal = create(:proposal, :with_parallel_approvers, :with_observers, requester: requester)
+      proposal = create(:proposal, :with_two_approvers, :with_observers, requester: requester)
 
       expect(proposal.subscribers.map(&:id).sort).to eq([
         requester.id,
@@ -137,32 +128,6 @@ describe Proposal do
   end
 
   describe '#root_step=' do
-    it 'sets initial approvers' do
-      proposal = create(:proposal)
-      approvers = 3.times.map{ create(:user) }
-      individuals = approvers.map{ |u| Steps::Approval.new(user: u) }
-
-      proposal.root_step = Steps::Parallel.new(child_approvals: individuals)
-
-      expect(proposal.steps.count).to be 4
-      expect(proposal.approvers).to eq approvers
-    end
-
-    it 'initates parallel' do
-      approver1 = create(:user)
-      approver2 = create(:user)
-      approver3 = create(:user)
-      proposal = create(:proposal, flow: 'parallel')
-      individuals = [approver1, approver2, approver3].map{ |u| Steps::Approval.new(user: u)}
-
-      proposal.root_step = Steps::Parallel.new(child_approvals: individuals)
-
-      expect(proposal.approvers.count).to be 3
-      expect(proposal.steps.count).to be 4
-      expect(proposal.individual_steps.actionable.count).to be 3
-      expect(proposal.steps.actionable.count).to be 4
-    end
-
     it 'initates linear' do
       approver1 = create(:user)
       approver2 = create(:user)
@@ -176,24 +141,6 @@ describe Proposal do
       expect(proposal.steps.count).to be 4
       expect(proposal.individual_steps.actionable.count).to be 1
       expect(proposal.steps.actionable.count).to be 2
-    end
-
-    it 'fixes modified parallel proposal approvals' do
-      approver1 = create(:user)
-      approver2 = create(:user)
-      approver3 = create(:user)
-      proposal = create(:proposal, flow: 'parallel')
-      individuals = [Steps::Approval.new(user: approver1)]
-      proposal.root_step = Steps::Parallel.new(child_approvals: individuals)
-
-      expect(proposal.steps.actionable.count).to be 2
-      expect(proposal.individual_steps.actionable.count).to be 1
-
-      individuals = individuals + [approver2, approver3].map{ |u| Steps::Approval.new(user: u)}
-      proposal.root_step = Steps::Parallel.new(child_approvals: individuals)
-
-      expect(proposal.steps.actionable.count).to be 4
-      expect(proposal.individual_steps.actionable.count).to be 3
     end
 
     it 'fixes modified linear proposal approvals' do
@@ -218,19 +165,6 @@ describe Proposal do
       expect(proposal.individual_steps.actionable.first.user).to eq approver3
     end
 
-    it 'does not modify a full approved parallel proposal' do
-      approver1 = create(:user)
-      approver2 = create(:user)
-      proposal = create(:proposal, flow: 'parallel')
-      individuals = [approver1, approver2].map{ |u| Steps::Approval.new(user: u)}
-      proposal.root_step = Steps::Parallel.new(child_approvals: individuals)
-
-      proposal.individual_steps.first.approve!
-      proposal.individual_steps.second.approve!
-
-      expect(proposal.steps.actionable).to be_empty
-    end
-
     it 'does not modify a full approved linear proposal' do
       approver1 = create(:user)
       approver2 = create(:user)
@@ -245,7 +179,7 @@ describe Proposal do
     end
 
     it 'deletes approvals' do
-      proposal = create(:proposal, :with_parallel_approvers)
+      proposal = create(:proposal, :with_two_approvers)
       approval1, approval2 = proposal.individual_steps
       proposal.root_step = Steps::Serial.new(child_approvals: [approval2])
 
@@ -262,7 +196,7 @@ describe Proposal do
     end
 
     it "keeps status as cancelled if the proposal has been cancelled" do
-      proposal = create(:proposal, :with_parallel_approvers)
+      proposal = create(:proposal, :with_approver)
       proposal.individual_steps.first.approve!
       expect(proposal.pending?).to be true
       proposal.cancel!
@@ -272,19 +206,19 @@ describe Proposal do
     end
 
     it 'reverts to pending if an approval is added' do
-      proposal = create(:proposal, :with_parallel_approvers)
+      proposal = create(:proposal, :with_two_approvers)
       proposal.individual_steps.first.approve!
       proposal.individual_steps.second.approve!
       expect(proposal.reload.approved?).to be true
       individuals = proposal.root_step.child_approvals + [Steps::Approval.new(user: create(:user))]
-      proposal.root_step = Steps::Parallel.new(child_approvals: individuals)
+      proposal.root_step = Steps::Serial.new(child_approvals: individuals)
 
       proposal.reset_status()
       expect(proposal.pending?).to be true
     end
 
     it 'does not move out of the pending state unless all are approved' do
-      proposal = create(:proposal, :with_parallel_approvers)
+      proposal = create(:proposal, :with_two_approvers)
       proposal.reset_status()
       expect(proposal.pending?).to be true
       proposal.individual_steps.first.approve!
@@ -315,14 +249,15 @@ describe Proposal do
     end
   end
 
-  describe '#restart' do
+  describe "#restart" do
     it "creates new API tokens" do
-      proposal = create(:proposal, :with_parallel_approvers)
-      proposal.individual_steps.each do |approval|
-        create(:api_token, step: approval)
+      proposal = create(:proposal, :with_two_approvers)
+      proposal.individual_steps.first.approve!
+      proposal.individual_steps.each do |step|
+        create(:api_token, step: step)
       end
 
-      expect(proposal.api_tokens.size).to eq(2)
+      expect(proposal.api_tokens.size).to eq(3)
 
       proposal.restart!
 

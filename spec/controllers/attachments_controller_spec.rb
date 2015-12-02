@@ -1,6 +1,6 @@
 describe AttachmentsController do
   describe 'permission checking' do
-    let (:proposal) { create(:proposal, :with_parallel_approvers, :with_observers) }
+    let (:proposal) { create(:proposal, :with_approver, :with_observers) }
     let (:params) {{
       proposal_id: proposal.id,
       attachment: { file: fixture_file_upload('icon-user.png', 'image/png') }
@@ -56,7 +56,7 @@ describe AttachmentsController do
   end
 
   describe '#show' do
-    let (:proposal) { create(:proposal, :with_parallel_approvers, :with_observers) }
+    let (:proposal) { create(:proposal, :with_approver, :with_observers) }
     let (:attachment) { create(:attachment, proposal: proposal, user: proposal.requester) }
 
     it "allows the requester to view attachment" do

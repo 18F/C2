@@ -24,11 +24,7 @@ class ProposalDecorator < Draper::Decorator
   end
 
   def approvals_in_list_order
-    if object.flow == 'linear'
-      object.individual_steps.with_users
-    else
-      self.approvals_by_status
-    end
+    object.individual_steps.with_users
   end
 
   def display_status

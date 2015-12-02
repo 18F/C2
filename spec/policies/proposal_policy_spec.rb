@@ -1,7 +1,7 @@
 describe ProposalPolicy do
   permissions :can_approve? do
     it "allows pending delegates" do
-      proposal = create(:proposal, :with_parallel_approvers)
+      proposal = create(:proposal, :with_two_approvers)
 
       approval = proposal.individual_steps.first
       delegate = create(:user)
@@ -11,29 +11,8 @@ describe ProposalPolicy do
       expect(ProposalPolicy).to permit(delegate, proposal)
     end
 
-    context "parallel proposal" do
-      let(:proposal) {create(:proposal, :with_parallel_approvers)}
-      let(:approval) {proposal.individual_steps.first}
-
-      it "allows when there's a pending approval" do
-        proposal.approvers.each{ |approver|
-          expect(ProposalPolicy).to permit(approver, proposal)
-        }
-      end
-
-      it "does not allow when the user's already approved" do
-        approval.update_attribute(:status, 'approved')  # skip state machine
-        expect(ProposalPolicy).not_to permit(approval.user, proposal)
-      end
-
-      it "does not allow with a non-existent approval" do
-        user = create(:user)
-        expect(ProposalPolicy).not_to permit(user, proposal)
-      end
-    end
-
     context "linear proposal" do
-      let(:proposal) {create(:proposal, :with_serial_approvers)}
+      let(:proposal) { create(:proposal, :with_two_approvers) }
       let(:first_approval) { proposal.individual_steps.first }
       let(:second_approval) { proposal.individual_steps.last }
 
@@ -59,7 +38,7 @@ describe ProposalPolicy do
   end
 
   permissions :can_show? do
-    let(:proposal) {create(:proposal, :with_parallel_approvers, :with_observers)}
+    let(:proposal) { create(:proposal, :with_two_approvers, :with_observers) }
 
     it "allows the requester to see it" do
       expect(ProposalPolicy).to permit(proposal.requester, proposal)
@@ -67,14 +46,12 @@ describe ProposalPolicy do
 
     it "allows an approver to see it" do
       expect(ProposalPolicy).to permit(proposal.approvers[0], proposal)
-      expect(ProposalPolicy).to permit(proposal.approvers[1], proposal)
     end
 
     it "does not allow a pending approver to see it" do
       first_approval = proposal.individual_steps.first
       first_approval.update_attribute(:status, 'pending')
       expect(ProposalPolicy).not_to permit(first_approval.user, proposal)
-      expect(ProposalPolicy).to permit(proposal.approvers.last, proposal)
     end
 
     it "allows an observer to see it" do
@@ -138,6 +115,6 @@ describe ProposalPolicy do
   end
 
   def proposal
-    @_proposal ||= create(:proposal, :with_parallel_approvers, :with_observers)
+    @_proposal ||= create(:proposal, :with_two_approvers, :with_observers)
   end
 end

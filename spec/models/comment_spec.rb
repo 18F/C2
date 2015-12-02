@@ -1,6 +1,6 @@
 describe Comment do
   describe "#listeners" do
-    let (:proposal) { create(:proposal, :with_serial_approvers, :with_observers) }
+    let (:proposal) { create(:proposal, :with_two_approvers, :with_observers) }
     let (:comment) { create(:comment, proposal: proposal) }
 
     it "includes the requester" do
