@@ -65,12 +65,14 @@
 
     img {
       float: left;
+      position: relative;
+      top: 5px;
     }
 
     .approver {
       padding-left: 7px;
       position: relative;
-      top: -5px;
     }
+
   }
 }
