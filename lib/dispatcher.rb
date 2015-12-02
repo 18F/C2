@@ -50,7 +50,7 @@ class Dispatcher
   end
 
   def on_approval_approved(approval)
-    if next_approval = next_pending_approval(approval.proposal)
+    if next_pending_approval(approval.proposal)
       email_approver(next_approval)
     end
 
