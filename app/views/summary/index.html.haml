@@ -9,22 +9,35 @@
         %th Pending
         %td
           = @summary.status(:pending)
-        %td{class: "amount"}
+          %span.percentage
+            = number_to_percentage(@summary.status_percent(:pending))
+        %td.amount
           = number_to_currency(@summary.subtotal(:pending))
+          %span.percentage
+            = number_to_percentage(@summary.subtotal_percent(:pending))
       %tr
         %th Cancelled
         %td
           = @summary.status(:cancelled)
+          %span.percentage
+            = number_to_percentage(@summary.status_percent(:cancelled))
         %td.amount
           = number_to_currency(@summary.subtotal(:cancelled))
+          %span.percentage
+            = number_to_percentage(@summary.subtotal_percent(:cancelled))
       %tr 
         %th Approved
         %td 
           = @summary.status(:approved)
+          %span.percentage
+            = number_to_percentage(@summary.status_percent(:approved))
         %td.amount
           = number_to_currency(@summary.subtotal(:approved))
+          %span.percentage
+            = number_to_percentage(@summary.subtotal_percent(:approved))
       %tr
         %th Total
         %td
+          = @summary.status_sum
         %td.amount
           = number_to_currency(@summary.total)

@@ -28,4 +28,18 @@ class ClientSummary
     @_subtotals.values.each { |i| total += i }
     total
   end
+
+  def subtotal_percent(status)
+    (subtotal(status).to_f / total) * 100
+  end
+
+  def status_sum
+    total = 0 
+    @_statuses.values.each { |i| total += i } 
+    total
+  end
+
+  def status_percent(status)
+    (self.status(status).to_f / status_sum) * 100
+  end
 end
