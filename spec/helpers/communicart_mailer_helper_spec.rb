@@ -1,4 +1,4 @@
-describe CommunicartMailerHelper do
+describe MailerHelper do
   describe '#generate_approve_url' do
     it "returns a URL" do
       approval = create(:approval)

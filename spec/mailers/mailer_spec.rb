@@ -1,4 +1,4 @@
-describe CommunicartMailer do
+describe Mailer do
   include MailerSpecHelper
 
   around(:each) do |example|
@@ -18,7 +18,7 @@ describe CommunicartMailer do
 
   describe 'actions_for_approver' do
     let(:token) { approval.api_token }
-    let(:mail) { CommunicartMailer.actions_for_approver(approval) }
+    let(:mail) { Mailer.actions_for_approver(approval) }
     let(:body) { mail.body.encoded }
     let(:approval_uri) do
       doc = Capybara.string(body)
@@ -48,7 +48,7 @@ describe CommunicartMailer do
     end
 
     it 'alerts subscribers that they have been removed' do
-      mail = CommunicartMailer.actions_for_approver(approval, 'removed')
+      mail = Mailer.actions_for_approver(approval, 'removed')
       expect(mail.body.encoded).to include('You have been removed from this request.')
     end
 
@@ -100,19 +100,19 @@ describe CommunicartMailer do
 
     context 'alert templates' do
       it 'defaults to no specific header' do
-        mail = CommunicartMailer.actions_for_approver(approval)
+        mail = Mailer.actions_for_approver(approval)
         expect(mail.body.encoded).not_to include('updated')
         expect(mail.body.encoded).not_to include('already approved')
       end
 
       it 'uses already_approved as a particular template' do
-        mail = CommunicartMailer.actions_for_approver(approval, 'already_approved')
+        mail = Mailer.actions_for_approver(approval, 'already_approved')
         expect(mail.body.encoded).to include('updated')
         expect(mail.body.encoded).to include('already approved')
       end
 
       it 'uses updated as a particular template' do
-        mail = CommunicartMailer.actions_for_approver(approval, 'updated')
+        mail = Mailer.actions_for_approver(approval, 'updated')
         expect(mail.body.encoded).to include('updated')
         expect(mail.body.encoded).not_to include('already approved')
       end
@@ -121,33 +121,34 @@ describe CommunicartMailer do
     describe "action buttons" do
       context "when the step requires approval" do
         it "email includes an 'Approve' button" do
-          mail = CommunicartMailer.actions_for_approver(approval)
+          mail = Mailer.actions_for_approver(approval)
+
           expect(mail.body.encoded).to have_link('Approve')
         end
       end
 
       context "when the step requires purchase" do
-        let(:proposal) { create(:proposal, :with_approval_and_purchase, client_slug: "gsa18f") }
-        let(:purchase_step) { proposal.individual_steps.second }
-        let(:purchaser) { approval.user }
-
         it "email includes a 'Mark as Purchased' button" do
-          mail = CommunicartMailer.actions_for_approver(purchase_step)
+          proposal = create(:proposal, :with_approval_and_purchase, client_slug: "gsa18f")
+          purchase_step = proposal.individual_steps.second
+
+          mail = Mailer.actions_for_approver(purchase_step)
+
           expect(mail.body.encoded).to have_link('Mark as Purchased')
         end
       end
     end
   end
 
-  describe 'notification_for_subscriber' do
+  describe "notification_for_subscriber" do
     it "doesn't include action buttons" do
-      mail = CommunicartMailer.notification_for_subscriber('abc@example.com', proposal, nil, approval)
-      expect(mail.body.encoded).not_to have_link('Approve')
+      mail = Mailer.notification_for_subscriber("abc@example.com", proposal, nil, approval)
+      expect(mail.body.encoded).not_to have_link("Approve")
     end
   end
 
   describe 'approval_reply_received_email' do
-    let(:mail) { CommunicartMailer.approval_reply_received_email(approval) }
+    let(:mail) { Mailer.approval_reply_received_email(approval) }
 
     before do
       approval.approve!
@@ -179,12 +180,12 @@ describe CommunicartMailer do
         final_approval = proposal.individual_steps.last
         final_approval.proposal   # create a dirty cache
         final_approval.approve!
-        mail = CommunicartMailer.approval_reply_received_email(final_approval)
+        mail = Mailer.approval_reply_received_email(final_approval)
         expect(mail.body.encoded).to include('Your request has been fully approved. See details below.')
       end
 
       it 'does not display when requests are still pending' do
-        mail = CommunicartMailer.approval_reply_received_email(approval)
+        mail = Mailer.approval_reply_received_email(approval)
         expect(mail.body.encoded).to_not include('Your request has been fully approved. See details below.')
       end
     end
@@ -195,7 +196,7 @@ describe CommunicartMailer do
       proposal = create(:proposal, :with_observer)
       observation = proposal.observations.first
 
-      mail = CommunicartMailer.on_observer_added(observation, nil)
+      mail = Mailer.on_observer_added(observation, nil)
 
       observer = observation.user
       expect(mail.to).to eq([observer.email_address])
@@ -209,7 +210,7 @@ describe CommunicartMailer do
       observation = proposal.observations.first
       expect(observation.created_by).to eq(adder)
 
-      mail = CommunicartMailer.on_observer_added(observation, nil)
+      mail = Mailer.on_observer_added(observation, nil)
       expect(mail.body.encoded).to include("to this request by #{adder.full_name}")
     end
 
@@ -217,7 +218,7 @@ describe CommunicartMailer do
       proposal = create(:proposal, :with_observer)
       observation = proposal.observations.first
 
-      mail = CommunicartMailer.on_observer_added(observation, nil)
+      mail = Mailer.on_observer_added(observation, nil)
       expect(mail.body.encoded).to_not include("to this request by ")
     end
 
@@ -229,29 +230,15 @@ describe CommunicartMailer do
       proposal.add_observer(observer.email_address, adder, reason)
       observation = proposal.observations.first
 
-      mail = CommunicartMailer.on_observer_added(observation, reason)
+      mail = Mailer.on_observer_added(observation, reason)
       expect(mail.body.encoded).to include("with given reason '#{reason}'")
-    end
-  end
-
-  describe "cancellation_email" do
-    it "includes the cancellation reason" do
-      user = create(:user)
-      proposal = create(:proposal, requester: user)
-      reason = "cancellation reason"
-
-      mail = CommunicartMailer.cancellation_email(user.email_address, proposal, reason)
-
-      expect(mail.body.encoded).to include(
-        "has been cancelled with given reason '#{reason}'."
-      )
     end
   end
 
   describe 'proposal_observer_email' do
     let(:observation) { proposal.add_observer('observer1@example.com') }
     let(:observer) { observation.user }
-    let(:mail) { CommunicartMailer.proposal_observer_email(observer.email_address, proposal) }
+    let(:mail) { Mailer.proposal_observer_email(observer.email_address, proposal) }
 
     it_behaves_like "a proposal email"
 
@@ -265,7 +252,7 @@ describe CommunicartMailer do
   end
 
   describe 'proposal_created_confirmation' do
-    let(:mail) { CommunicartMailer.proposal_created_confirmation(proposal) }
+    let(:mail) { Mailer.proposal_created_confirmation(proposal) }
 
     it_behaves_like "a proposal email"
 
@@ -278,16 +265,8 @@ describe CommunicartMailer do
     end
   end
 
-  describe 'proposal_fiscal_cancellation' do
-    it "sends cancellation email for fiscal-year cleanup" do
-      proposal = create(:proposal)
-      mail = CommunicartMailer.proposal_fiscal_cancellation(proposal)
-      expect(mail.to).to eq([proposal.requester.email_address])
-    end
-  end
-
   describe 'new_attachment_email' do
-    let(:mail) { CommunicartMailer.new_attachment_email(requester.email_address, proposal) }
+    let(:mail) { Mailer.new_attachment_email(requester.email_address, proposal) }
 
     it_behaves_like "a proposal email"
   end

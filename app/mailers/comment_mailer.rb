@@ -1,7 +1,7 @@
 class CommentMailer < ApplicationMailer
   include ProposalConversationThreading
 
-  layout "communicart_mailer"
+  layout "mailer"
 
   def comment_added_email(comment, to_email)
     @comment = comment

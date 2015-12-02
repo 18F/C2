@@ -15,49 +15,49 @@ class RolesConversion
 
   def ba61_tier1_budget_approver
     with_email_role_slug!(
-      'communicart.budget.approver+ba61@gmail.com',
-      'BA61_tier1_budget_approver',
-      'ncr'
+      "communicart.budget.approver+ba61@gmail.com",
+      "BA61_tier1_budget_approver",
+      "ncr"
     )
   end
 
   def ba61_tier2_budget_approver
     with_email_role_slug!(
-      'communicart.ofm.approver@gmail.com',
-      'BA61_tier2_budget_approver',
-      'ncr'
+      "communicart.ofm.approver@gmail.com",
+      "BA61_tier2_budget_approver",
+      "ncr"
     )
   end
 
   def ba80_budget_approver
     with_email_role_slug!(
-      'communicart.budget.approver+ba80@gmail.com',
-      'BA80_budget_approver',
-      'ncr'
+      "communicart.budget.approver+ba80@gmail.com",
+      "BA80_budget_approver",
+      "ncr"
     )
   end
 
   def ool_ba80_budget_approver
     with_email_role_slug!(
-      'communicart.budget.approver+ool_ba80@gmail.com',
-      'OOL_BA80_budget_approver',
-      'ncr'
+      "communicart.budget.approver+ool_ba80@gmail.com",
+      "OOL_BA80_budget_approver",
+      "ncr"
     )
   end
 
   def gsa18f_approver
     with_email_role_slug!(
-      ENV["GSA18F_APPROVER_EMAIL"] || "some.approver@gsa.gov",
-      'gsa18f_approver',
-      'gsa18f'
+      "some.approver@example.com",
+      "gsa18f_approver",
+      "gsa18f"
     )
   end
 
   def gsa18f_purchaser
     with_email_role_slug!(
-      ENV["GSA18F_PURCHASER_EMAIL"] || "some.purchaser@gsa.gov",
-      'gsa18f_purchaser',
-      'gsa18f'
+      "some.purchaser@example.com",
+      "gsa18f_purchaser",
+      "gsa18f"
     )
   end
 

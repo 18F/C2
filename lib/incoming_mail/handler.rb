@@ -61,7 +61,7 @@ module IncomingMail
     end
 
     def forward_msg(msg)
-      CommunicartMailer.resend(msg).deliver_later
+      Mailer.resend(msg).deliver_later
     end
 
     def transform_msg_to_comment(msg)
