@@ -1,7 +1,7 @@
 describe SubscriberList do
   describe "#triples" do
     it "include request, observers, approvers" do
-      proposal = create(:proposal, :with_observers, :with_serial_approvers)
+      proposal = create(:proposal, :with_observers, :with_two_approvers)
       subscriber_list = SubscriberList.new(proposal)
       triples = subscriber_list.triples
       user_ids = triples.map {|result| result[0].id}
@@ -17,7 +17,7 @@ describe SubscriberList do
     end
 
     it "sorts by name within each group" do
-      proposal = create(:proposal, :with_observers, :with_serial_approvers)
+      proposal = create(:proposal, :with_observers, :with_two_approvers)
       subscriber_list = SubscriberList.new(proposal)
       first_observer = proposal.observers.first
       second_observer = proposal.observers.second
@@ -31,7 +31,7 @@ describe SubscriberList do
     end
 
     it "removes duplicates" do
-      proposal = create(:proposal, :with_observers, :with_serial_approvers)
+      proposal = create(:proposal, :with_observers, :with_two_approvers)
       subscriber_list = SubscriberList.new(proposal)
       triples = subscriber_list.triples
       user = proposal.approvers.first
@@ -44,7 +44,7 @@ describe SubscriberList do
 
   describe "#users" do
     it "doesn't include delegates" do
-      proposal = create(:proposal, :with_observers, :with_serial_approvers)
+      proposal = create(:proposal, :with_observers, :with_two_approvers)
       subscriber_list = SubscriberList.new(proposal)
       approver = proposal.approvers.first
       delegate = create(:user)

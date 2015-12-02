@@ -1,7 +1,7 @@
 describe ProposalPolicy do
   permissions :can_approve? do
     it "allows pending delegates" do
-      proposal = create(:proposal, :with_serial_approvers)
+      proposal = create(:proposal, :with_two_approvers)
 
       approval = proposal.individual_steps.first
       delegate = create(:user)
@@ -12,7 +12,7 @@ describe ProposalPolicy do
     end
 
     context "linear proposal" do
-      let(:proposal) { create(:proposal, :with_serial_approvers) }
+      let(:proposal) { create(:proposal, :with_two_approvers) }
       let(:first_approval) { proposal.individual_steps.first }
       let(:second_approval) { proposal.individual_steps.last }
 
@@ -38,7 +38,7 @@ describe ProposalPolicy do
   end
 
   permissions :can_show? do
-    let(:proposal) { create(:proposal, :with_serial_approvers, :with_observers) }
+    let(:proposal) { create(:proposal, :with_two_approvers, :with_observers) }
 
     it "allows the requester to see it" do
       expect(ProposalPolicy).to permit(proposal.requester, proposal)
@@ -115,6 +115,6 @@ describe ProposalPolicy do
   end
 
   def proposal
-    @_proposal ||= create(:proposal, :with_serial_approvers, :with_observers)
+    @_proposal ||= create(:proposal, :with_two_approvers, :with_observers)
   end
 end

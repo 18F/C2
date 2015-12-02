@@ -44,7 +44,7 @@ describe Proposal do
 
   describe '#currently_awaiting_approvers' do
     it "gives only the first approver" do
-      proposal = create(:proposal, :with_serial_approvers)
+      proposal = create(:proposal, :with_two_approvers)
       approver1, approver2 = proposal.approvers
       expect(proposal.currently_awaiting_approvers).to eq([approver1])
 
@@ -72,7 +72,7 @@ describe Proposal do
   describe '#subscribers' do
     it "returns all approvers, observers, and the requester" do
       requester = create(:user)
-      proposal = create(:proposal, :with_serial_approvers, :with_observers, requester: requester)
+      proposal = create(:proposal, :with_two_approvers, :with_observers, requester: requester)
 
       expect(proposal.subscribers.map(&:id).sort).to eq([
         requester.id,
@@ -179,7 +179,7 @@ describe Proposal do
     end
 
     it 'deletes approvals' do
-      proposal = create(:proposal, :with_serial_approvers)
+      proposal = create(:proposal, :with_two_approvers)
       approval1, approval2 = proposal.individual_steps
       proposal.root_step = Steps::Serial.new(child_approvals: [approval2])
 
@@ -206,7 +206,7 @@ describe Proposal do
     end
 
     it 'reverts to pending if an approval is added' do
-      proposal = create(:proposal, :with_serial_approvers)
+      proposal = create(:proposal, :with_two_approvers)
       proposal.individual_steps.first.approve!
       proposal.individual_steps.second.approve!
       expect(proposal.reload.approved?).to be true
@@ -218,7 +218,7 @@ describe Proposal do
     end
 
     it 'does not move out of the pending state unless all are approved' do
-      proposal = create(:proposal, :with_serial_approvers)
+      proposal = create(:proposal, :with_two_approvers)
       proposal.reset_status()
       expect(proposal.pending?).to be true
       proposal.individual_steps.first.approve!
@@ -251,7 +251,7 @@ describe Proposal do
 
   describe "#restart" do
     it "creates new API tokens" do
-      proposal = create(:proposal, :with_serial_approvers)
+      proposal = create(:proposal, :with_two_approvers)
       proposal.individual_steps.first.approve!
       proposal.individual_steps.each do |step|
         create(:api_token, step: step)

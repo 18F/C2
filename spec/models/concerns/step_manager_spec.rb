@@ -80,7 +80,7 @@ describe StepManager do
     end
 
     it 'deletes approvals' do
-      proposal = create(:proposal, :with_serial_approvers)
+      proposal = create(:proposal, :with_two_approvers)
       approval1, approval2 = proposal.individual_steps
       proposal.root_step = Steps::Serial.new(child_approvals: [approval2])
 

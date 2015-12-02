@@ -20,7 +20,7 @@ FactoryGirl.define do
       end
     end
 
-    trait :with_serial_approvers do
+    trait :with_two_approvers do
       after :create do |proposal, evaluator|
         ind = 2.times.map { Steps::Approval.new(user: create(:user, client_slug: evaluator.client_slug)) }
         proposal.add_initial_steps(ind)

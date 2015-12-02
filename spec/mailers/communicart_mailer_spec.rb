@@ -10,7 +10,7 @@ describe CommunicartMailer do
     end
   end
 
-  let(:proposal) { create(:proposal, :with_serial_approvers) }
+  let(:proposal) { create(:proposal, :with_two_approvers) }
   let(:approval) { proposal.individual_steps.first }
   let(:approver) { approval.user }
   let(:requester) { proposal.requester }

@@ -40,7 +40,7 @@ describe 'Display status text' do
 
   context 'linear' do
     it 'displays the first approver' do
-      proposal = create_proposal_with_serial_approvers
+      proposal = create_proposal_with_two_approvers
       first_approval = proposal.individual_steps.first
       first_approver = first_approval.user
       all_approvers_except_first = proposal.approvers.offset(1)
@@ -56,7 +56,7 @@ describe 'Display status text' do
     end
 
     it 'excludes approved approvals' do
-      proposal = create_proposal_with_serial_approvers
+      proposal = create_proposal_with_two_approvers
       first_approval = proposal.individual_steps.first
       first_approval.approve!
       first_approver = first_approval.user
@@ -70,11 +70,11 @@ describe 'Display status text' do
   end
 
   def create_proposal_with_approvers
-    @proposal ||= create(:proposal, :with_serial_approvers)
+    @proposal ||= create(:proposal, :with_two_approvers)
   end
 
-  def create_proposal_with_serial_approvers
-    @proposal ||= create(:proposal, :with_serial_approvers)
+  def create_proposal_with_two_approvers
+    @proposal ||= create(:proposal, :with_two_approvers)
   end
 end
 

@@ -10,7 +10,7 @@ describe Dispatcher do
     end
   end
 
-  let(:proposal) { create(:proposal, :with_serial_approvers) }
+  let(:proposal) { create(:proposal, :with_two_approvers) }
   let(:dispatcher) { Dispatcher.new }
 
   describe '#deliver_new_proposal_emails' do
@@ -97,7 +97,7 @@ describe Dispatcher do
 
   describe '#on_approval_approved' do
     it "sends to the requester and the next approver" do
-      proposal = create(:proposal, :with_serial_approvers)
+      proposal = create(:proposal, :with_two_approvers)
       approval = proposal.individual_steps.first
       approval.approve!   # calls on_approval_approved
 
