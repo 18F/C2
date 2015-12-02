@@ -43,7 +43,7 @@ module Ncr
     end
 
     def normalize_approving_official_email
-      if !work_order.approving_official_email && work_order.approvers.any?
+      if !work_order.approving_official_email.present? && work_order.approvers.any?
         work_order.approving_official_email = work_order.approvers.first.try(:email_address)
       end
     end
