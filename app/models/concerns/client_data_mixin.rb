@@ -10,6 +10,7 @@ module ClientDataMixin
     has_many :steps, through: :proposal
     has_many :individual_steps, -> { individual }, class_name: "Steps::Individual", through: :proposal
     has_many :approvers, through: :individual_steps, source: :user
+    has_many :completers, through: :individual_steps, source: :completer
     has_many :observations, through: :proposal
     has_many :observers, through: :observations, source: :user
     has_many :comments, through: :proposal
