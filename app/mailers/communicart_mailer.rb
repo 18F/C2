@@ -9,7 +9,7 @@ class CommunicartMailer < ApplicationMailer
 
   # Approver can approve/take other action
   def actions_for_approver(step, alert_partial = nil)
-    @show_approval_actions = true
+    @show_step_actions = true
     to_email = step.user_email_address
     proposal = step.proposal
 

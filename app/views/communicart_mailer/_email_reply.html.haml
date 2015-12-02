@@ -4,7 +4,7 @@
     %td{colspan: 2, height: 25, bgcolor: '#f5f5f5'}
   %tr#approval-actions
     %td{colspan: 2, align: 'center'}
-      - if show_approval_actions
+      - if show_step_actions
         %p
           = link_to step.action_name, generate_approve_url(step), class: 'form-button'
         %p
