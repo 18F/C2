@@ -123,8 +123,6 @@ describe ProposalsController do
     end
 
     it "filters results by proposal status" do
-      proposal = create(:proposal)
-
       get :query, status: "pending"
       expect(assigns(:proposals_data).rows).to eq([proposal])
 
