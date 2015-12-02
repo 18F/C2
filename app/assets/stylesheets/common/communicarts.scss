@@ -80,7 +80,13 @@ table td span.tag-values {
   font-weight: normal;
 }
 
+td.amount {
+  text-align: right;
+}
 
+.namespace {
+  text-transform: uppercase;
+}
 
 /* COMMUNICART.WEBFLOW.CSS */
 
