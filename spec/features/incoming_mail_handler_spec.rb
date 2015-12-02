@@ -1,5 +1,5 @@
 describe "Handles incoming email" do
-  let(:proposal) { FactoryGirl.create(:proposal, :with_parallel_approvers) }
+  let(:proposal) { create(:proposal, :with_serial_approvers) }
   let(:approval) { proposal.individual_steps.first }
   let(:mail) { CommunicartMailer.actions_for_approver(approval) }
   let(:mandrill_inbound_noapp) { File.read(RSpec.configuration.fixture_path + '/mandrill_inbound_noapp.json') }
@@ -53,7 +53,7 @@ describe "Handles incoming email" do
     expect(resp.action).to eq(IncomingMail::Response::COMMENT)
   end
 
-  it "should create comment and obesrvation for approver" do
+  it "should create comment and observation for approver" do
     my_approval = approval
     mail = CommunicartMailer.actions_for_approver(my_approval)
     mandrill_event = mandrill_payload_from_message(mail)
@@ -66,7 +66,7 @@ describe "Handles incoming email" do
 
     expect(my_approval.proposal.existing_observation_for(my_approval.user)).to be_present
     expect(my_approval.proposal.existing_approval_for(my_approval.user)).to be_present
-    expect(deliveries.length).to eq(2) # 1 each to requester and approver
+    expect(deliveries.length).to eq(1) # 1 each to requester and approver
   end
 
   it "should not create comment for non-subscriber and not add as observer" do

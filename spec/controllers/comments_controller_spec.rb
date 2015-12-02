@@ -1,6 +1,6 @@
 describe CommentsController do
   describe 'permission checking' do
-    let (:proposal) { create(:proposal, :with_parallel_approvers, :with_observers) }
+    let (:proposal) { create(:proposal, :with_approver, :with_observers) }
     let (:params) {
       { proposal_id: proposal.id, comment: { comment_text: 'Some comment' }}
     }
@@ -14,12 +14,12 @@ describe CommentsController do
         expect(response).to redirect_to(proposal)
       end
 
-      it 'sends a comment email to approvers and observers' do
+      it 'sends a comment email to approver and observers' do
         login_as(proposal.requester)
 
         expect {
           post :create, params
-        }.to change { deliveries.length }.from(0).to(4)
+        }.to change { deliveries.length }.from(0).to(3)
       end
     end
 

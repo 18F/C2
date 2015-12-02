@@ -1,7 +1,7 @@
 # This is a temporary way to handle a notification preference
 # that will eventually be managed at the user level
 # https://www.pivotaltracker.com/story/show/87656734
-class NcrDispatcher < LinearDispatcher
+class NcrDispatcher < Dispatcher
   def requires_approval_notice?(approval)
     final_approval(approval.proposal) == approval
   end

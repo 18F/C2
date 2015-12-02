@@ -1,5 +1,5 @@
 describe "commenting" do
-  let(:proposal) { create(:proposal, :with_parallel_approvers) }
+  let(:proposal) { create(:proposal, :with_approver) }
 
   before do
     login_as(proposal.requester)
@@ -36,7 +36,6 @@ describe "commenting" do
 
     expect(email_recipients).to eq([
       proposal.approvers.first.email_address,
-      proposal.approvers.second.email_address
     ].sort)
   end
 end

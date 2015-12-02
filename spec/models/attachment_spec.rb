@@ -1,5 +1,5 @@
 describe Attachment do
-  let (:proposal) { create(:proposal, :with_parallel_approvers) }
+  let (:proposal) { create(:proposal) }
   let (:attachment) { create(:attachment, proposal: proposal, user: proposal.requester) }
 
   context "aws" do

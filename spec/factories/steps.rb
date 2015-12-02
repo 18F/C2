@@ -6,8 +6,5 @@ FactoryGirl.define do
 
     factory :serial_steps, class: Steps::Serial do
     end
-
-    factory :parallel_steps, class: Steps::Parallel do
-    end
   end
 end

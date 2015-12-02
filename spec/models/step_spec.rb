@@ -64,107 +64,10 @@ describe Step do
       proposal = create(:proposal)
       child1 = build(:approval, user: create(:user))
       child2 = build(:approval, user: create(:user))
-      proposal.root_step = build(:parallel_steps, child_approvals: [child1, child2])
+      proposal.root_step = build(:serial_steps, child_approvals: [child1, child2])
 
       expect(proposal).not_to receive(:approve!)
       child1.approve!
-    end
-  end
-
-  describe "complicated approval chains" do
-    # Approval hierarchy version of needing *two* of the following:
-    # 1) Amy AND Bob
-    # 2) Carrie
-    # 3) Dan THEN Erin
-    let!(:amy) { create(:user) }
-    let!(:bob) { create(:user) }
-    let!(:carrie) { create(:user) }
-    let!(:dan) { create(:user) }
-    let!(:erin) { create(:user) }
-    let!(:proposal) { create(:proposal) }
-
-    before :each do
-      # @todo syntax for this will get cleaned up
-      and_clause = create(:parallel_steps, child_approvals: [
-        create(:approval, user: amy),
-        create(:approval, user: bob)
-      ])
-      then_clause = create(:serial_steps, child_approvals: [
-        create(:approval, user: dan),
-        create(:approval, user: erin)
-      ])
-      proposal.root_step = create(:parallel_steps, min_children_needed: 2, child_approvals: [
-        and_clause,
-        create(:approval, user: carrie),
-        then_clause
-      ])
-    end
-
-    it "won't approve Amy and Bob -- needs two branches of the OR" do
-      build_approvals
-      expect_any_instance_of(Proposal).not_to receive(:approve!)
-      proposal.existing_approval_for(amy).approve!
-      proposal.existing_approval_for(bob).approve!
-    end
-
-    it "will approve if Amy, Bob, and Carrie approve -- two branches of the OR" do
-      build_approvals
-      expect_any_instance_of(Proposal).to receive(:approve!)
-      proposal.existing_approval_for(amy).approve!
-      proposal.existing_approval_for(bob).approve!
-      proposal.existing_approval_for(carrie).approve!
-    end
-
-    it "won't approve Amy, Bob, Dan as Erin is also required (to complete the THEN)" do
-      build_approvals
-      expect_any_instance_of(Proposal).not_to receive(:approve!)
-      proposal.existing_approval_for(amy).approve!
-      proposal.existing_approval_for(bob).approve!
-      proposal.existing_approval_for(dan).approve!
-    end
-
-    it "will approve Amy, Bob, Dan, Erin -- two branches of the OR" do
-      build_approvals
-      expect_any_instance_of(Proposal).to receive(:approve!)
-      proposal.existing_approval_for(amy).approve!
-      proposal.existing_approval_for(bob).approve!
-      proposal.existing_approval_for(dan).approve!
-      proposal.existing_approval_for(erin).approve!
-    end
-
-    it "will approve Amy, Bob, Dan, Carrie -- two branches of the OR as Dan is irrelevant" do
-      build_approvals
-      expect_any_instance_of(Proposal).to receive(:approve!)
-      proposal.existing_approval_for(amy).approve!
-      proposal.existing_approval_for(bob).approve!
-      proposal.existing_approval_for(dan).approve!
-      proposal.existing_approval_for(carrie).approve!
-    end
-
-    def build_approvals
-      and_clause = build(
-        :parallel_steps,
-        child_approvals: [
-          build(:approval, user: amy),
-          build(:approval, user: bob)
-        ]
-      )
-      then_clause = build(
-        :parallel_steps,
-        child_approvals: [
-          build(:approval, user: dan),
-          build(:approval, user: erin)
-        ]
-      )
-      proposal.root_step = build(
-        :parallel_steps,
-        min_children_needed: 2,
-        child_approvals: [
-          and_clause,
-          build(:approval, user: carrie),
-          then_clause
-        ]
-      )
     end
   end
 end

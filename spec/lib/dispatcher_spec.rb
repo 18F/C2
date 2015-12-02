@@ -2,16 +2,15 @@ describe Dispatcher do
   let(:proposal) { create(:proposal) }
 
   describe '.deliver_new_proposal_emails' do
-    it "uses the LinearDispatcher for linear approvals" do
+    it "uses the NcrDispatcher for NCR approvals" do
       proposal.flow = 'linear'
       expect(proposal).to receive(:client_data).and_return(double(client_slug: "ncr"))
-      expect_any_instance_of(LinearDispatcher).to receive(:deliver_new_proposal_emails).with(proposal)
+      expect_any_instance_of(NcrDispatcher).to receive(:deliver_new_proposal_emails).with(proposal)
       Dispatcher.deliver_new_proposal_emails(proposal)
     end
   end
 
-  let(:proposal) { create(:proposal, :with_parallel_approvers) }
-  let(:serial_proposal) { create(:proposal, :with_serial_approvers) }
+  let(:proposal) { create(:proposal, :with_serial_approvers) }
   let(:dispatcher) { Dispatcher.new }
 
   describe '#deliver_new_proposal_emails' do
@@ -19,7 +18,6 @@ describe Dispatcher do
       dispatcher.deliver_new_proposal_emails(proposal)
       expect(email_recipients).to eq([
         proposal.approvers.first.email_address,
-        proposal.approvers.second.email_address,
         proposal.requester.email_address
       ].sort)
     end
@@ -34,13 +32,13 @@ describe Dispatcher do
   describe '#deliver_attachment_emails' do
     it "emails everyone currently involved in the proposal" do
       proposal.add_observer("wiley-cat@example.com")
-      dispatcher.deliver_attachment_emails(self.proposal)
-      expect(email_recipients).to match_array(proposal.subscribers.map(&:email_address))
+      dispatcher.deliver_attachment_emails(proposal)
+      expect(email_recipients).to match_array(proposal.subscribers.map(&:email_address) - [proposal.approvers.last.email_address])
     end
 
     it "does not email pending approvers" do
-      dispatcher.deliver_attachment_emails(serial_proposal)
-      expect(email_recipients).to_not include(serial_proposal.approvers.last.email_address)
+      dispatcher.deliver_attachment_emails(proposal)
+      expect(email_recipients).to_not include(proposal.approvers.last.email_address)
     end
 
     it "does not email delegates" do
@@ -59,10 +57,11 @@ describe Dispatcher do
   describe "#deliver_cancellation_emails" do
     let (:mock_deliverer) { double('deliverer') }
 
-    it "sends an email to each approver" do
+    it "sends an email to each approver who is aware of the proposal" do
       allow(CommunicartMailer).to receive(:cancellation_email).and_return(mock_deliverer)
       expect(proposal.approvers.count).to eq 2
-      expect(mock_deliverer).to receive(:deliver_later).twice
+      expect(proposal.individual_steps.where.not(status: "pending").count).to eq 1
+      expect(mock_deliverer).to receive(:deliver_later).once
 
       dispatcher.deliver_cancellation_emails(proposal)
     end
@@ -82,10 +81,10 @@ describe Dispatcher do
 
     it "sends an email to each actionable approver" do
       allow(CommunicartMailer).to receive(:cancellation_email).and_return(mock_deliverer)
-      expect(serial_proposal.approvers.count).to eq 2
+      expect(proposal.approvers.count).to eq 2
       expect(mock_deliverer).to receive(:deliver_later).once
 
-      dispatcher.deliver_cancellation_emails(serial_proposal)
+      dispatcher.deliver_cancellation_emails(proposal)
     end
 
     it "sends a confirmation email to the requester" do
@@ -97,9 +96,15 @@ describe Dispatcher do
   end
 
   describe '#on_approval_approved' do
-    it "sends to the requester" do
-      dispatcher.on_approval_approved(proposal.individual_steps.first)
-      expect(email_recipients).to eq([proposal.requester.email_address])
+    it "sends to the requester and the next approver" do
+      proposal = create(:proposal, :with_serial_approvers)
+      approval = proposal.individual_steps.first
+      approval.approve!   # calls on_approval_approved
+
+      expect(email_recipients).to eq([
+        proposal.approvers.second.email_address,
+        proposal.requester.email_address
+      ].sort)
     end
   end
 end

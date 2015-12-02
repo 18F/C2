@@ -37,7 +37,7 @@ describe 'Linear approvals' do
   end
 
   def create_serial_approval(child_approvals)
-    create_proposal.root_step = Steps::Parallel.new(child_approvals: child_approvals)
+    create_proposal.root_step = Steps::Serial.new(child_approvals: child_approvals)
   end
 
   def approve_approval_for(user)
