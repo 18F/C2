@@ -7,10 +7,10 @@ class ClientSummarizer
     @client_namespace = args[:client_namespace]
     now = Time.zone.now
     @fiscal_year = (args[:fiscal_year] || self.class.which_fiscal_year(now.year, now.month)).to_i
-    @_records = build_records
   end
 
   def run
+    @_records ||= build_records
     @_summary ||= build_summary
   end
 

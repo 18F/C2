@@ -3,29 +3,29 @@ class ClientSummary
   def initialize(fiscal_year, client_namespace)
     @fiscal_year = fiscal_year
     @client_namespace = client_namespace
-    @_statuses = { cancelled: 0, pending: 0, approved: 0 }
-    @_subtotals = { cancelled: 0, pending: 0, approved: 0 }
+    @statuses = { cancelled: 0, pending: 0, approved: 0 }
+    @subtotals = { cancelled: 0, pending: 0, approved: 0 }
   end
 
   def add_status(status)
-    @_statuses[status.to_sym] += 1
+    @statuses[status.to_sym] += 1
   end
 
   def add_subtotal(status, amount)
-    @_subtotals[status.to_sym] += amount
+    @subtotals[status.to_sym] += amount
   end
 
   def status(status)
-    @_statuses[status.to_sym]
+    @statuses[status.to_sym]
   end
 
   def subtotal(status)
-    @_subtotals[status.to_sym]
+    @subtotals[status.to_sym]
   end
 
   def total
     total = 0
-    @_subtotals.values.each { |i| total += i }
+    @subtotals.values.each { |i| total += i }
     total
   end
 
@@ -35,7 +35,7 @@ class ClientSummary
 
   def status_sum
     total = 0
-    @_statuses.values.each { |i| total += i }
+    @statuses.values.each { |i| total += i }
     total
   end
 
