@@ -43,6 +43,7 @@ module Query
         # @todo - move all of this filtering into the TabularData::Container object
         self.apply_date_filters(proposals_data)
         self.apply_text_filter(proposals_data)
+        self.apply_status_filter(proposals_data)
         # TODO limit/paginate results
 
         proposals_data
@@ -112,6 +113,12 @@ module Query
           proposals_data.alter_query do |p|
             Query::Proposal::Search.new(p).execute(text)
           end
+        end
+      end
+
+      def apply_status_filter(proposals_data)
+        if params[:status]
+          proposals_data.alter_query { |p| p.where("proposals.status = ?", params[:status]) }
         end
       end
     end

@@ -19,6 +19,12 @@ FactoryGirl.define do
       end
     end
 
+    trait :client_admin do
+      after(:create) do |user|
+        user.roles << Role.find_or_create_by(name: 'client_admin')
+      end
+    end
+
     trait :with_delegate do
       after(:create) do |user|
         delegate = create(:user, client_slug: user.client_slug)

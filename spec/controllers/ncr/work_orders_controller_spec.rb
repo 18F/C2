@@ -63,7 +63,7 @@ describe Ncr::WorkOrdersController do
       login_as(requester)
     end
 
-    it 'does not modify the work order when there is a blank approver' do
+    it "uses existing first approver when there is a blank approver email" do
       post :update, {
         id: work_order.id,
         ncr_work_order: {
@@ -72,10 +72,11 @@ describe Ncr::WorkOrdersController do
           project_title: 'new name'
         }
       }
-      expect(flash[:success]).not_to be_present
-      expect(flash[:error]).to be_present
+      expect(flash[:success]).to be_present
+      expect(flash[:error]).not_to be_present
       work_order.reload
-      expect(work_order.project_title).not_to eq('new name')
+      expect(work_order.project_title).to eq('new name')
+      expect(work_order.approving_official_email).to eq(work_order.approvers.first.email_address)
     end
 
     it 'does not modify the work order when there is a bad edit' do

@@ -122,6 +122,14 @@ describe ProposalsController do
       Time.zone = prev_zone
     end
 
+    it "filters results by proposal status" do
+      get :query, status: "pending"
+      expect(assigns(:proposals_data).rows).to eq([proposal])
+
+      get :query, status: "cancelled"
+      expect(assigns(:proposals_data).rows).to eq([])
+    end
+
     it 'ignores bad input' do
       get :query, start_date: 'dasdas'
       expect(assigns(:proposals_data).rows).to eq([proposal])
