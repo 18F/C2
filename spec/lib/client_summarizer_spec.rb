@@ -1,4 +1,19 @@
 describe ClientSummarizer do
+  describe "reports initializer params" do
+    it "defaults to current year" do
+      summarizer = ClientSummarizer.new(client_namespace: "test")
+      now = Time.zone.now
+      expect(summarizer.fiscal_year).to eq(ClientSummarizer.which_fiscal_year(now.year, now.month))
+    end
+
+    it "uses namespace exactly as passed" do
+      summarizer = ClientSummarizer.new(client_namespace: "nosuchclient")
+      summary = summarizer.run
+      expect(summary.total).to eq(0)
+      expect(summary.client_namespace).to eq("nosuchclient")
+    end
+  end
+
   describe "Ncr::WorkOrder" do
     it "builds summary" do
       wo = create(:ncr_work_order, amount: 123)
