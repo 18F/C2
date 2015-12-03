@@ -26,7 +26,7 @@ describe Dispatcher do
 
     it 'sends a proposal notification email to observers' do
       proposal.add_observer('observer1@example.com')
-      expect(CommunicartMailer).to receive_message_chain(:proposal_observer_email, :deliver_later)
+      expect(Mailer).to receive_message_chain(:proposal_observer_email, :deliver_later)
       dispatcher.deliver_new_proposal_emails(proposal)
     end
   end
@@ -34,7 +34,7 @@ describe Dispatcher do
   describe '#deliver_attachment_emails' do
     it "emails everyone currently involved in the proposal" do
       proposal.add_observer("wiley-cat@example.com")
-      dispatcher.deliver_attachment_emails(self.proposal)
+      dispatcher.deliver_attachment_emails(proposal)
       expect(email_recipients).to match_array(proposal.subscribers.map(&:email_address))
     end
 
@@ -60,7 +60,7 @@ describe Dispatcher do
     let (:mock_deliverer) { double('deliverer') }
 
     it "sends an email to each approver" do
-      allow(CommunicartMailer).to receive(:cancellation_email).and_return(mock_deliverer)
+      allow(CancellationMailer).to receive(:cancellation_email).and_return(mock_deliverer)
       expect(proposal.approvers.count).to eq 2
       expect(mock_deliverer).to receive(:deliver_later).twice
 
@@ -71,7 +71,7 @@ describe Dispatcher do
       proposal = create(:proposal, :with_approver)
       approver = proposal.approvers.first
       reason = "reason for cancellation"
-      allow(CommunicartMailer).to receive(:cancellation_email).
+      allow(CancellationMailer).to receive(:cancellation_email).
         with(approver.email_address, proposal, reason).
         and_return(mock_deliverer)
 
@@ -81,7 +81,7 @@ describe Dispatcher do
     end
 
     it "sends an email to each actionable approver" do
-      allow(CommunicartMailer).to receive(:cancellation_email).and_return(mock_deliverer)
+      allow(CancellationMailer).to receive(:cancellation_email).and_return(mock_deliverer)
       expect(serial_proposal.approvers.count).to eq 2
       expect(mock_deliverer).to receive(:deliver_later).once
 
@@ -89,7 +89,7 @@ describe Dispatcher do
     end
 
     it "sends a confirmation email to the requester" do
-      allow(CommunicartMailer).to receive(:cancellation_confirmation).and_return(mock_deliverer)
+      allow(CancellationMailer).to receive(:cancellation_confirmation).and_return(mock_deliverer)
       expect(mock_deliverer).to receive(:deliver_later).once
 
       dispatcher.deliver_cancellation_emails(proposal)
@@ -97,7 +97,8 @@ describe Dispatcher do
   end
 
   describe '#on_approval_approved' do
-    it "sends to the requester" do
+    it "sends to the requester and the next approver" do
+      proposal = create(:proposal, :with_serial_approvers)
       dispatcher.on_approval_approved(proposal.individual_steps.first)
       expect(email_recipients).to eq([proposal.requester.email_address])
     end

@@ -25,7 +25,7 @@ class NcrDispatcher < LinearDispatcher
 
   def notify_requester(proposal, modifier)
     return if proposal.requester == modifier
-    CommunicartMailer.notification_for_subscriber(proposal.requester.email_address, proposal, "updated").deliver_later
+    Mailer.notification_for_subscriber(proposal.requester.email_address, proposal, "updated").deliver_later
   end
 
   def notify_approvers(proposal, modifier)
@@ -33,7 +33,7 @@ class NcrDispatcher < LinearDispatcher
       if modifier and approval.user.id == modifier.id
         next # no email for modifier
       end
-      CommunicartMailer.notification_for_subscriber(approval.user_email_address, proposal, "already_approved", approval).deliver_later
+      Mailer.notification_for_subscriber(approval.user_email_address, proposal, "already_approved", approval).deliver_later
     end
   end
 
@@ -43,9 +43,9 @@ class NcrDispatcher < LinearDispatcher
         next # no email for modifier
       end
       if approval.api_token # Approver's been notified through some other means
-        CommunicartMailer.actions_for_approver(approval, "updated").deliver_later
+        Mailer.actions_for_approver(approval, "updated").deliver_later
       else
-        CommunicartMailer.actions_for_approver(approval).deliver_later
+        Mailer.actions_for_approver(approval).deliver_later
       end
     end
   end
@@ -56,7 +56,7 @@ class NcrDispatcher < LinearDispatcher
         next # no email for modifier
       end
       if observer.role_on(proposal).active_observer?
-        CommunicartMailer.notification_for_subscriber(observer.email_address, proposal, "updated").deliver_later
+        Mailer.notification_for_subscriber(observer.email_address, proposal, "updated").deliver_later
       end
     end
   end

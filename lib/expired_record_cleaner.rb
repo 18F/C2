@@ -33,7 +33,7 @@ class ExpiredRecordCleaner
   end
 
   def notify_proposal_requester(proposal)
-    CommunicartMailer.proposal_fiscal_cancellation(proposal).deliver_later
+    CancellationMailer.proposal_fiscal_cancellation(proposal).deliver_later
   end
 
   def handle_no_requester(proposal)

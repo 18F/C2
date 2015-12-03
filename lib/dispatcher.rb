@@ -8,16 +8,16 @@ class Dispatcher
   def email_observers(proposal)
     active_observers = active_observers(proposal)
     active_observers.each do |observer|
-      CommunicartMailer.proposal_observer_email(observer.email_address, proposal).deliver_later
+      Mailer.proposal_observer_email(observer.email_address, proposal).deliver_later
     end
   end
 
   def on_observer_added(observation, reason)
-    CommunicartMailer.on_observer_added(observation, reason).deliver_later
+    Mailer.on_observer_added(observation, reason).deliver_later
   end
 
   def email_sent_confirmation(proposal)
-    CommunicartMailer.proposal_created_confirmation(proposal).deliver_later
+    Mailer.proposal_created_confirmation(proposal).deliver_later
   end
 
   def deliver_new_proposal_emails(proposal)
@@ -34,7 +34,7 @@ class Dispatcher
       approval = proposal.steps.find_by(user_id: user.id)
 
       if user_is_not_approver?(approval) || approver_knows_about_proposal?(approval)
-        CommunicartMailer.new_attachment_email(user.email_address, proposal).deliver_later
+        Mailer.new_attachment_email(user.email_address, proposal).deliver_later
       end
     end
   end
@@ -43,15 +43,15 @@ class Dispatcher
     cancellation_notification_recipients = active_approvers(proposal) + active_observers(proposal)
 
     cancellation_notification_recipients.each do |recipient|
-      CommunicartMailer.cancellation_email(recipient.email_address, proposal, reason).deliver_later
+      CancellationMailer.cancellation_email(recipient.email_address, proposal, reason).deliver_later
     end
 
-    CommunicartMailer.cancellation_confirmation(proposal).deliver_later
+    CancellationMailer.cancellation_confirmation(proposal).deliver_later
   end
 
   def on_approval_approved(approval)
     if requires_approval_notice?(approval)
-      CommunicartMailer.approval_reply_received_email(approval).deliver_later
+      Mailer.approval_reply_received_email(approval).deliver_later
     end
 
     self.email_observers(approval.proposal)
@@ -68,7 +68,7 @@ class Dispatcher
 
   def on_approver_removal(proposal, removed_approvers)
     removed_approvers.each do|approver|
-      CommunicartMailer.notification_for_subscriber(approver.email_address, proposal, "removed").deliver_later
+      Mailer.notification_for_subscriber(approver.email_address, proposal, "removed").deliver_later
     end
   end
 
@@ -91,7 +91,7 @@ class Dispatcher
   end
 
   def send_notification_email(approval)
-    CommunicartMailer.actions_for_approver(approval).deliver_later
+    Mailer.actions_for_approver(approval).deliver_later
   end
 
   def user_is_not_approver?(approval)

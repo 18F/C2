@@ -1,7 +1,7 @@
 describe "Handles incoming email" do
-  let(:proposal) { FactoryGirl.create(:proposal, :with_parallel_approvers) }
+  let(:proposal) { create(:proposal, :with_serial_approvers) }
   let(:approval) { proposal.individual_steps.first }
-  let(:mail) { CommunicartMailer.actions_for_approver(approval) }
+  let(:mail) { Mailer.actions_for_approver(approval) }
   let(:mandrill_inbound_noapp) { File.read(RSpec.configuration.fixture_path + '/mandrill_inbound_noapp.json') }
 
   with_env_vars(NOTIFICATION_FALLBACK_EMAIL: 'nowhere@some.gov', NOTIFICATION_FROM_EMAIL: 'noreply@some.gov') do
@@ -22,7 +22,7 @@ describe "Handles incoming email" do
     expect(deliveries.length).to eq(0)
     my_approval = approval
     handler = IncomingMail::Handler.new
-    mail = CommunicartMailer.actions_for_approver(my_approval)
+    mail = Mailer.actions_for_approver(my_approval)
     mandrill_event = mandrill_payload_from_message(mail)
     mandrill_event[0]['msg']['from_email'] = 'not-a-real-user@example.com'
     mandrill_event[0]['msg']['headers']['Sender'] = 'still-not-a-real-user@example.com'
@@ -42,7 +42,7 @@ describe "Handles incoming email" do
 
   it "falls back to Sender if From is not valid" do
     my_approval = approval
-    mail = CommunicartMailer.actions_for_approver(my_approval)
+    mail = Mailer.actions_for_approver(my_approval)
     mandrill_event = mandrill_payload_from_message(mail)
     mandrill_event[0]['msg']['from_email'] = 'not-a-valid-user@example.com'
     mandrill_event[0]['msg']['headers']['Sender'] = my_approval.user.email_address
@@ -53,9 +53,9 @@ describe "Handles incoming email" do
     expect(resp.action).to eq(IncomingMail::Response::COMMENT)
   end
 
-  it "should create comment and obesrvation for approver" do
+  it "should create comment and observation for approver" do
     my_approval = approval
-    mail = CommunicartMailer.actions_for_approver(my_approval)
+    mail = Mailer.actions_for_approver(my_approval)
     mandrill_event = mandrill_payload_from_message(mail)
     mandrill_event[0]['msg']['from_email'] = my_approval.user.email_address
     handler = IncomingMail::Handler.new
@@ -66,7 +66,7 @@ describe "Handles incoming email" do
 
     expect(my_approval.proposal.existing_observation_for(my_approval.user)).to be_present
     expect(my_approval.proposal.existing_approval_for(my_approval.user)).to be_present
-    expect(deliveries.length).to eq(2) # 1 each to requester and approver
+    expect(deliveries.length).to eq(1) # 1 each to requester and approver
   end
 
   it "should not create comment for non-subscriber and not add as observer" do

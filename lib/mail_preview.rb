@@ -1,16 +1,16 @@
 class MailPreview < MailView
   def actions_for_approver
-    mail = CommunicartMailer.actions_for_approver(pending_approval)
+    mail = Mailer.actions_for_approver(pending_approval)
     inline_styles(mail)
   end
 
   def proposal_observer_email
-    mail = CommunicartMailer.proposal_observer_email(email, proposal)
+    mail = Mailer.proposal_observer_email(email, proposal)
     inline_styles(mail)
   end
 
   def approval_reply_received_email
-    mail = CommunicartMailer.approval_reply_received_email(received_approval)
+    mail = Mailer.approval_reply_received_email(received_approval)
     inline_styles(mail)
   end
 
@@ -20,7 +20,7 @@ class MailPreview < MailView
   end
 
   def on_observer_added
-    mail = CommunicartMailer.on_observer_added(observation)
+    mail = Mailer.on_observer_added(observation)
     inline_styles(mail)
   end
 
@@ -32,7 +32,7 @@ class MailPreview < MailView
   private
 
   def email
-    'recipient@example.com'
+    "recipient@example.com"
   end
 
   def pending_approval
