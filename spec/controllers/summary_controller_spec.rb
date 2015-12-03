@@ -25,5 +25,12 @@ describe SummaryController do
       get :index
       expect(response.status).to eq(200)
     end
+
+    it "takes optional fiscal year" do
+      admin_user = create(:user, :admin, client_slug: "ncr")
+      login_as(admin_user)
+      get :index, fiscal_year: 2015
+      expect(response.status).to eq(200)
+    end
   end
 end
