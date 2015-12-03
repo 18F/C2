@@ -10,8 +10,8 @@ class ClientSummarizer
   end
 
   def run
-    @_records ||= build_records
-    @_summary ||= build_summary
+    @records ||= build_records
+    @summary ||= build_summary
   end
 
   private
@@ -22,7 +22,7 @@ class ClientSummarizer
 
   def build_summary
     summary = ClientSummary.new(fiscal_year, client_namespace)
-    @_records.each do |proposal|
+    @records.each do |proposal|
       summary.add_status(proposal.status)
       summary.add_subtotal(proposal.status, proposal.client_data.total_price)
     end
