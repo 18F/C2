@@ -14,6 +14,14 @@ describe Ncr::WorkOrderPolicy do
       expect(subject).to permit(work_order.approvers[1], work_order)
     end
 
+    it "allows approval.completer to edit it" do
+      approval = work_order.individual_steps.first
+      delegate_user = create(:user, client_slug: "ncr")
+      approval.completer = delegate_user
+      approval.save!
+      expect(subject).to permit(delegate_user, work_order)
+    end
+
     it "allows an observer to edit it" do
       observer = create(:user, client_slug: "ncr")
       proposal.add_observer(observer.email_address)

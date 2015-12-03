@@ -9,24 +9,24 @@
     %em
       * Indicates a required field
 
-  = simple_form_for @model_instance, html: { multipart: true } do |f|
+  = simple_form_for @client_data_instance, html: { multipart: true } do |f|
     = f.input :project_title
     = f.input :description
-    = field_set_tag "Expense type / Program", class: 'required' do
+    = field_set_tag "Expense type / Program", class: 'expense-type required' do
       = expense_type_radio_button(f, 'BA60')
       = expense_type_radio_button(f, 'BA61')
-      = f.input :emergency, disabled: @model_instance.persisted?, wrapper_html: { data: { filter_key: 'expense-type', filter_value: 'BA61' } }
+      = f.input :emergency, disabled: @client_data_instance.persisted?, wrapper_html: { data: { filter_key: 'expense-type', filter_value: 'BA61' } }
       = expense_type_radio_button(f, 'BA80')
       = render partial: 'ba_80_fields', locals: {f: f}
-    = f.input :building_number, input_html: { class: 'js-selectize', data: { initial: JSON.generate(building_options) } }
+    = f.input :building_number, input_html: { class: 'js-selectize required', data: { initial: JSON.generate(building_options) } }
     = f.input :org_code, collection: Ncr::Organization.all, label_method: :to_s, prompt: :translate, input_html: { class: 'js-selectize' }
-    = f.input :vendor, input_html: { class: 'js-selectize', data: { initial: JSON.generate(vendor_options(@model_instance.vendor)) } }
+    = f.input :vendor, input_html: { class: 'js-selectize required', data: { initial: JSON.generate(vendor_options(@client_data_instance.vendor)) } }
     = field_set_tag "Amount", class: 'required' do
       = f.input :amount, as: :currency, label_html: { class: 'sr-only' }, input_html: { data: popover_data_attrs('ncr_amount') }
       = f.input :not_to_exceed, as: :radio_buttons, collection: [['Exact', false], ['Not to exceed', true]], label: false
     = f.input :direct_pay
-    = f.input :approving_official_email, collection: approver_options(@model_instance.ineligible_approvers), include_blank: true, disabled: @model_instance.proposal.approver_email_frozen?, prompt: :translate, input_html: { class: 'js-selectize' }, required: true
-    - if @model_instance.new_record?
+    = f.input :approving_official_email, collection: approver_options(@client_data_instance.ineligible_approvers), include_blank: true, disabled: @client_data_instance.proposal.approver_email_frozen?, prompt: :translate, input_html: { class: 'js-selectize required' }, required: true
+    - if @client_data_instance.new_record?
       = render partial: 'attachments'
     - else
       = field_set_tag "Budget codes" do
@@ -34,5 +34,5 @@
         = f.input :function_code
         = f.input :soc_code
     = f.submit class: "form-button"
-    - if @model_instance.persisted?
-      = link_to "Discard Changes", proposal_url(@model_instance.proposal)
+    - if @client_data_instance.persisted?
+      = link_to "Discard Changes", proposal_url(@client_data_instance.proposal)

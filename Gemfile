@@ -84,6 +84,7 @@ group :test do
   gem 'poltergeist'
   gem 'shoulda-matchers'
   gem 'simplecov'
+  gem 'site_prism'
   gem 'timecop'
   gem 'webmock', require: false
   gem 'zonebie'

@@ -118,16 +118,31 @@ describe CommunicartMailer do
       end
     end
 
-    it "includes action buttons" do
-      mail = CommunicartMailer.actions_for_approver(approval)
-      expect(mail.body.encoded).to include('Approve')
+    describe "action buttons" do
+      context "when the step requires approval" do
+        it "email includes an 'Approve' button" do
+          mail = CommunicartMailer.actions_for_approver(approval)
+          expect(mail.body.encoded).to have_link('Approve')
+        end
+      end
+
+      context "when the step requires purchase" do
+        let(:proposal) { create(:proposal, :with_approval_and_purchase, client_slug: "gsa18f") }
+        let(:purchase_step) { proposal.individual_steps.second }
+        let(:purchaser) { approval.user }
+
+        it "email includes a 'Mark as Purchased' button" do
+          mail = CommunicartMailer.actions_for_approver(purchase_step)
+          expect(mail.body.encoded).to have_link('Mark as Purchased')
+        end
+      end
     end
   end
 
   describe 'notification_for_subscriber' do
     it "doesn't include action buttons" do
       mail = CommunicartMailer.notification_for_subscriber('abc@example.com', proposal, nil, approval)
-      expect(mail.body.encoded).not_to include('Approve')
+      expect(mail.body.encoded).not_to have_link('Approve')
     end
   end
 
@@ -260,26 +275,6 @@ describe CommunicartMailer do
 
     it "uses the default sender name" do
       expect(sender_names(mail)).to eq(["C2"])
-    end
-  end
-
-  describe '#proposal_subject' do
-    it 'defaults when no client_data is present' do
-      proposal = create(:proposal)
-      mail = CommunicartMailer.proposal_created_confirmation(proposal)
-      expect(mail.subject).to eq("Request #{proposal.public_id}")
-    end
-
-    it 'includes custom text for ncr work orders' do
-      requester = create(:user, email_address: 'someone@example.com')
-      wo = create(
-        :ncr_work_order,
-        org_code: 'P0000000 (192X,192M) PRIOR YEAR ACTIVITIES',
-        building_number: 'DC0000ZZ - Building',
-        requester: requester
-      )
-      mail = CommunicartMailer.proposal_created_confirmation(wo.proposal)
-      expect(mail.subject).to eq("Request #{wo.proposal.public_id}, P0000000, DC0000ZZ from someone@example.com")
     end
   end
 
