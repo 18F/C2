@@ -118,16 +118,31 @@ describe CommunicartMailer do
       end
     end
 
-    it "includes action buttons" do
-      mail = CommunicartMailer.actions_for_approver(approval)
-      expect(mail.body.encoded).to include('Approve')
+    describe "action buttons" do
+      context "when the step requires approval" do
+        it "email includes an 'Approve' button" do
+          mail = CommunicartMailer.actions_for_approver(approval)
+          expect(mail.body.encoded).to have_link('Approve')
+        end
+      end
+
+      context "when the step requires purchase" do
+        let(:proposal) { create(:proposal, :with_approval_and_purchase, client_slug: "gsa18f") }
+        let(:purchase_step) { proposal.individual_steps.second }
+        let(:purchaser) { approval.user }
+
+        it "email includes a 'Mark as Purchased' button" do
+          mail = CommunicartMailer.actions_for_approver(purchase_step)
+          expect(mail.body.encoded).to have_link('Mark as Purchased')
+        end
+      end
     end
   end
 
   describe 'notification_for_subscriber' do
     it "doesn't include action buttons" do
       mail = CommunicartMailer.notification_for_subscriber('abc@example.com', proposal, nil, approval)
-      expect(mail.body.encoded).not_to include('Approve')
+      expect(mail.body.encoded).not_to have_link('Approve')
     end
   end
 

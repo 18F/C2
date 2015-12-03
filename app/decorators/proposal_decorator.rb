@@ -9,7 +9,7 @@ class ProposalDecorator < Draper::Decorator
     object.individual_steps.count
   end
 
-  def approvals_by_status
+  def steps_by_status
     # Override default scope
     object.individual_steps.with_users.reorder(
       # http://stackoverflow.com/a/6332081/358804
@@ -23,11 +23,11 @@ class ProposalDecorator < Draper::Decorator
     )
   end
 
-  def approvals_in_list_order
+  def steps_in_list_order
     if object.flow == 'linear'
       object.individual_steps.with_users
     else
-      self.approvals_by_status
+      self.steps_by_status
     end
   end
 
