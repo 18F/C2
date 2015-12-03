@@ -2,31 +2,38 @@
   width: 100%;
   background: #fff;
   margin: 20px auto;
+
   td {
     padding: 15px;
     vertical-align: top;
   }
+
   tr {
     border-bottom: 1px solid #ccc;
   }
-  th {
-    padding-left: 15px;
-    padding-right: 15px;
-    width: 15%;   /* @todo: be more flexible; should be calculated from cols */
 
-    h5 {
+  th {
+    padding: 15px;
+    width: 15%;   /* @todo: be more flexible; should be calculated from cols */
+    background-color: #333;
+
+    .table-header {
       display: inline-block;
+      color: #e8e8e8;
+      text-transform: uppercase;
+      font-weight: 400;
+
+      a {
+        color: #e8e8e8;
+      }
     }
 
-    &.asc h5::after {
+    &.asc .table-header::after {
       content: ' \25b2';
     }
 
-    &.desc h5::after {
+    &.desc .table-header::after {
       content: ' \25bc';
     }
-  }
-  tr.header th h5 a { /* @todo: ideally we wouldn't need to be so specific */
-    color: #e8e8e8;
   }
 }

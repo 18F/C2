@@ -4,12 +4,24 @@ module Gsa18f
     'gsa18f_'
   end
 
-  DATA = YAML.load_file("#{Rails.root}/config/data/18f.yaml")
-
   class Procurement < ActiveRecord::Base
-    URGENCY = DATA['URGENCY']
-    OFFICES = DATA['OFFICES']
-    RECURRENCE = DATA['RECURRENCE']
+    URGENCY = {
+      10 =>"I need it yesterday",
+      20 => "I'm patient but would like w/in a week",
+      30 => "Whenever",
+    }
+
+    OFFICES = [
+      "DC",
+      "Chicago",
+      "Dayton",
+      "New York",
+      "San Francisco",
+      "Me! (Remote Worker)",
+    ]
+
+    RECURRENCE = ["Daily", "Monthy", "Yearly"]
+
     PURCHASE_TYPES = {
       "Software" => 0,
       "Training/Event" => 1,

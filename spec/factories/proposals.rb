@@ -10,6 +10,7 @@ FactoryGirl.define do
     transient do
       client_slug { nil }
       delegate nil
+      observer nil
       approver_user nil
     end
 
@@ -66,6 +67,10 @@ FactoryGirl.define do
     end
 
     after(:create) do |proposal, evaluator|
+      if evaluator.observer
+        proposal.add_observer(evaluator.observer.email_address)
+      end
+
       if evaluator.delegate
         user = evaluator.approver_user || create(:user, client_slug: evaluator.client_slug)
         proposal.add_initial_steps([Steps::Approval.new(user: user)])
