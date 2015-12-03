@@ -6,7 +6,7 @@ module Gsa18f
 
   class Procurement < ActiveRecord::Base
     URGENCY = {
-      10 =>"I need it yesterday",
+      10 => "I need it yesterday",
       20 => "I'm patient but would like w/in a week",
       30 => "Whenever",
     }
