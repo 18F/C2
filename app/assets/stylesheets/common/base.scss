@@ -80,7 +80,19 @@ table td span.tag-values {
   font-weight: normal;
 }
 
+td.amount {
+  text-align: right;
+}
 
+.namespace {
+  text-transform: uppercase;
+}
+
+.percentage {
+  padding-left: 1em;
+  color: $lightgray;
+  font-size: 80%;
+}
 
 /* COMMUNICART.WEBFLOW.CSS */
 
