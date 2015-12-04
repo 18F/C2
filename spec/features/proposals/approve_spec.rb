@@ -5,7 +5,7 @@ describe "Approving a proposal" do
     login_as(proposal.approvers.first)
   end
 
-  it "allows an approver to approve work order" do
+  it "can be done by an approver" do
     Timecop.freeze do
       visit "/proposals/#{proposal.id}"
       click_on("Approve")
