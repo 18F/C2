@@ -71,6 +71,14 @@ class User < ActiveRecord::Base
     end
   end
 
+  def display_name
+    if full_name == email_address
+      email_address
+    else
+      "#{full_name} <#{email_address}>"
+    end
+  end
+
   def last_requested_proposal
     proposals.order("created_at DESC").first
   end

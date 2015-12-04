@@ -137,6 +137,31 @@ describe User do
     end
   end
 
+  describe "#display_name" do
+    it "uses full_name if not equal to email_address" do
+      user.first_name = "George"
+      user.last_name = "Jetson"
+      user.email_address = "george.jetson@example.com"
+      expect(user.display_name).to eq "George Jetson <george.jetson@example.com>"
+    end
+
+    it "returns the user's email address if no first name and last name" do
+      user.first_name = nil
+      user.last_name = nil
+      user.email_address = "george.jetson@example.com"
+
+      expect(user.display_name).to eq "george.jetson@example.com"
+    end
+
+    it "returns the user's email address if the first name and last name are blank" do
+      user.first_name = ""
+      user.last_name = ""
+      user.email_address = "george.jetson@example.com"
+
+      expect(user.display_name).to eq "george.jetson@example.com"
+    end
+  end
+
   describe "#requires_profile_attention?" do
     it "recognizes user needs to update their profile" do
       user = create(:user)
