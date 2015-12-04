@@ -23,7 +23,7 @@
     = f.input :building_number, input_html: { class: 'js-selectize', data: { initial: JSON.generate(building_options) } }
     = f.association :ncr_organization,
       collection: Ncr::Organization.all,
-      input_html: { class: "js-selectize", value: @model_instance.ncr_organization_id },
+      input_html: { class: "js-selectize", data: { initial: @model_instance.ncr_organization.code_and_name } },
       value_method: :id,
       label_method: :code_and_name,
       prompt: :translate
