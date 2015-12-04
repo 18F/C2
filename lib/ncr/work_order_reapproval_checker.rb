@@ -6,13 +6,21 @@ module Ncr
       @work_order = work_order
     end
 
-    def current_user
-      work_order.modifier
+    def requires_budget_reapproval?
+      work_order.approved? &&
+        work_order.requires_approval? &&
+        !budget_approver? &&
+        (amount_increased? || protected_fields_changed?)
     end
 
-    def previous_val(key)
-      changes = work_order.previous_changes || {}
-      changes[key.to_s].try(:first)
+    private
+
+    def budget_approver?
+      work_order.budget_approvers.include?(current_user)
+    end
+
+    def current_user
+      work_order.modifier
     end
 
     def amount_increased?
@@ -21,24 +29,13 @@ module Ncr
     end
 
     def protected_fields_changed?
-      self.class.protected_fields.any? do |field|
-        previous_val(field).present?
+      protected_fields.any? do |field|
+        previous_val(field) &&
+          previous_val(field) != current_val(field)
       end
     end
 
-    def budget_approver?
-      work_order.budget_approvers.include?(current_user)
-    end
-
-    def requires_budget_reapproval?
-      work_order.approved? &&
-        work_order.requires_approval? &&
-        !budget_approver? && (
-          amount_increased? || protected_fields_changed?
-        )
-    end
-
-    def self.protected_fields
+    def protected_fields
       [
         :building_number,
         :function_code,
@@ -46,6 +43,17 @@ module Ncr
         :rwa_number,
         :soc_code
       ]
+    end
+
+    def previous_val(key)
+      changes = work_order.previous_changes
+      if changes[key.to_s]
+        changes[key.to_s][0]
+      end
+    end
+
+    def current_val(key)
+      work_order.public_send(key)
     end
   end
 end
