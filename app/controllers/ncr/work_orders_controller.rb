@@ -67,7 +67,19 @@ module Ncr
         fields.delete(:emergency) # emergency field cannot be edited
       end
 
+      unmangle_org_label
+
       params.require(:ncr_work_order).permit(*fields)
+    end
+
+    def unmangle_org_label
+      # we accept org "code name" but must normalize to id for params compat.
+      ncr_org_label = params[:ncr_work_order][:ncr_organization_id]
+      if ncr_org_label.match(/[a-z]/i)
+        ncr_org_code = ncr_org_label.match(/^(\w+)/)[1]
+        ncr_org = Ncr::Organization.find_by(code: ncr_org_code)
+        params[:ncr_work_order][:ncr_organization_id] = ncr_org.id
+      end
     end
 
     def work_order_params
