@@ -20,7 +20,7 @@ class MailPreview < MailView
   end
 
   def on_observer_added
-    mail = Mailer.on_observer_added(observation)
+    mail = ObserverMailer.on_observer_added(observation)
     inline_styles(mail)
   end
 

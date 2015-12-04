@@ -1,6 +1,4 @@
 class Mailer < ApplicationMailer
-  include ProposalConversationThreading
-
   layout "mailer"
   add_template_helper ValueHelper
 
@@ -26,18 +24,6 @@ class Mailer < ApplicationMailer
       to_email: to_email,
       proposal: proposal,
       template_name: "proposal_notification_email"
-    )
-  end
-
-  def on_observer_added(observation, reason)
-    @observation = observation
-    @reason = reason
-    observer = observation.user
-
-    send_proposal_email(
-      from_email: observation_added_from(observation),
-      to_email: observer.email_address,
-      proposal: observation.proposal
     )
   end
 
@@ -84,16 +70,5 @@ class Mailer < ApplicationMailer
       "X-C2-Original-To" => @_message.header["To"].value,
       "X-C2-Original-From" => from_raw
     ) {} # no-op block so template error is avoided (body already in @_message)
-  end
-
-  private
-
-  def observation_added_from(observation)
-    adder = observation.created_by
-    if adder
-      user_email_with_name(adder)
-    else
-      nil
-    end
   end
 end

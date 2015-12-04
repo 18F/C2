@@ -2,11 +2,6 @@ module ProposalConversationThreading
   extend ActiveSupport::Concern
   include ConversationThreading
 
-  def assign_threading_headers(proposal)
-    msg_id = "<proposal-#{proposal.id}@#{DEFAULT_URL_HOST}>"
-    self.thread_id = msg_id
-  end
-
   def send_proposal_email(proposal:, to_email:, from_email: nil, template_name: nil)
     @proposal = proposal.decorate
 
@@ -22,6 +17,11 @@ module ProposalConversationThreading
       reply_to: reply_email,
       template_name: template_name
     )
+  end
+
+  def assign_threading_headers(proposal)
+    msg_id = "<proposal-#{proposal.id}@#{DEFAULT_URL_HOST}>"
+    self.thread_id = msg_id
   end
 
   def subject(proposal)

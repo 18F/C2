@@ -26,7 +26,7 @@ describe Dispatcher do
 
     it 'sends a proposal notification email to observers' do
       proposal.add_observer('observer1@example.com')
-      expect(Mailer).to receive_message_chain(:proposal_observer_email, :deliver_later)
+      expect(ObserverMailer).to receive_message_chain(:proposal_observer_email, :deliver_later)
       dispatcher.deliver_new_proposal_emails(proposal)
     end
   end

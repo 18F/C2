@@ -1,6 +1,4 @@
 class FeedbackMailer < ApplicationMailer
-  include ConversationThreading
-
   def feedback(sending_user, form_values)
     from = sending_user.try(:email_address) || form_values[:email] || self.default_sender_email
 

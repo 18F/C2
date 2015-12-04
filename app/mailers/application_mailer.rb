@@ -1,6 +1,8 @@
 class ApplicationMailer < ActionMailer::Base
   include Roadie::Rails::Automatic
 
+  include ProposalConversationThreading
+
   add_template_helper MailerHelper
   add_template_helper ClientHelper
   add_template_helper MarkdownHelper
