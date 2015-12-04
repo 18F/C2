@@ -1,5 +1,5 @@
 describe "commenting" do
-  let(:proposal) { create(:proposal, :with_approver) }
+  let(:proposal) { create(:proposal, :with_parallel_approvers) }
   let(:user)     { proposal.requester }
 
   before do
@@ -15,14 +15,14 @@ describe "commenting" do
   end
 
   it "warns if the comment body is empty" do
-    submit_comment
+    submit_comment("")
     expect(current_path).to eq("/proposals/#{proposal.id}")
     expect(page).to have_content("can't be blank")
   end
 
   it "disables attachments if none is selected", js: true do
     expect(find("#add_a_comment").disabled?).to be(true)
-    fill_in 'comment[comment_text]', with: 'foo'
+    fill_in "comment[comment_text]", with: "foo"
     expect(find("#add_a_comment").disabled?).to be(false)
   end
 
@@ -52,7 +52,7 @@ describe "commenting" do
   end
 end
 
-def submit_comment
-  fill_in "comment[comment_text]", with: "foo"
+def submit_comment(text = "foo")
+  fill_in "comment[comment_text]", with: text
   click_on "Send a Comment"
 end
