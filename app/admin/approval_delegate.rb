@@ -12,24 +12,9 @@ ActiveAdmin.register ApprovalDelegate do
     f.actions
   end
 
-  show do
-    attributes_table_for approval_delegate do
-      row("Assigner id") { approval_delegate.assigner.id }
-      row("Assigner email") { approval_delegate.assigner.email_address }
-      row("Assignee id") { approval_delegate.assignee.id }
-      row("Assignee email") { approval_delegate.assignee.email_address }
-    end
-  end
-
   index do
-    column :assigner do |approval_delegate|
-      approval_delegate.assigner.email_address
-    end
-
-    column :assignee do |approval_delegate|
-      approval_delegate.assignee.email_address
-    end
-
+    column :assigner
+    column :assignee
     actions
   end
 end
