@@ -41,6 +41,10 @@ default: &DEFAULT
       header: Urgency
       db: gsa18f_procurements.urgency
       display: client_data.urgency_string
+    purchase_type:
+      header: Purchase Type
+      db: gsa18f_procurements.purchase_type
+      display: client_data.purchase_type
   columns:
     - public_id
     - name
@@ -68,3 +72,4 @@ gsa18f:
     - status
     - created_at
     - urgency
+    - purchase_type

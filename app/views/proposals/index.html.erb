@@ -5,7 +5,7 @@
     <div class="col-md-12">
       <h3>Purchase Requests Needing Review</h3>
       <%- if @pending_review_data.rows.any? %>
-        <%= render partial: "shared/table", locals: {container: @pending_review_data} %>
+        <%= render partial: "shared/table", locals: { container: @pending_review_data } %>
       <%- else %>
         <p class="empty-list-label">No purchase requests needing review</p>
       <%- end %>
@@ -16,7 +16,7 @@
     <div class="col-md-12">
       <h3>Pending Purchase Requests</h3>
       <%- if @pending_data.rows.any? %>
-        <%= render partial: "shared/table", locals: {container: @pending_data} %>
+        <%= render partial: "shared/table", locals: { container: @pending_data } %>
       <%- else %>
         <p class="empty-list-label">No pending purchase requests</p>
       <%- end %>
@@ -28,7 +28,7 @@
       <h3>Recently Completed Purchase Requests</h3>
     <%- if @approved_data.rows.any? %>
       <div class="col-sm-12">
-        <%= render partial: "shared/table", locals: {container: @approved_data} %>
+        <%= render partial: "shared/table", locals: { container: @approved_data } %>
       </div>
 
       <div class="row">
@@ -47,7 +47,7 @@
         <h3>Cancelled Purchase Requests</h3>
       </div>
       <div class="col-sm-12">
-        <%= render partial: "shared/table", locals: {container: @cancelled_data} %>
+        <%= render partial: "shared/table", locals: { container: @cancelled_data } %>
       </div>
     </div>
   <%- end %>
