@@ -43,4 +43,15 @@ describe "admin" do
 
     expect(page).not_to have_content("Edit")
   end
+
+  it "shows user.display_name when viewing User records" do
+    user = create(:user)
+    user.add_role("admin")
+    proposal = create(:proposal, requester: user)
+    login_as(user)
+
+    visit admin_proposals_path
+
+    expect(page).to have_content(user.display_name)
+  end
 end
