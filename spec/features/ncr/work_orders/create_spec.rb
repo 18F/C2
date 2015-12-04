@@ -319,21 +319,14 @@ feature "Creating an NCR work order" do
     end
 
     context "selected common values on proposal page" do
-      before do
+      scenario "assigns organization" do
         organization = create(:ncr_organization)
-        approver = create(:user, client_slug: "ncr")
-        login_as(requester)
-        visit '/ncr/work_orders/new'
-
-        fill_in 'Project title', with: "buying stuff"
-        fill_in 'Vendor', with: 'ACME'
-        fill_in 'Amount', with: 123.45
-        select approver.email_address, from: 'ncr_work_order[approving_official_email]'
-        fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
+        fill_in_ncr_form
         select organization.code_and_name, from: "ncr_work_order[ncr_organization_id]"
       end
 
       scenario 'approves emergencies' do
+        fill_in_ncr_form
         choose 'BA61'
         check "This request was an emergency and I received a verbal Notice to Proceed (NTP)"
         expect { click_on 'Submit for approval' }.to change { Proposal.count }.from(0).to(1)
@@ -351,6 +344,7 @@ feature "Creating an NCR work order" do
       end
 
       scenario 'does not set emergencies if form type changes' do
+        fill_in_ncr_form
         choose 'BA61'
         check 'This request was an emergency and I received a verbal Notice to Proceed (NTP)'
         choose 'BA80'
@@ -371,6 +365,19 @@ feature "Creating an NCR work order" do
       visit '/ncr/work_orders/new'
       expect(find_field('emergency')).not_to be_disabled
     end
+  end
+
+
+  def fill_in_ncr_form
+    approver = create(:user, client_slug: "ncr")
+    login_as(requester)
+    visit '/ncr/work_orders/new'
+
+    fill_in 'Project title', with: "buying stuff"
+    fill_in 'Vendor', with: 'ACME'
+    fill_in 'Amount', with: 123.45
+    select approver.email_address, from: 'ncr_work_order[approving_official_email]'
+    fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
   end
 
   def focus_field(field_id)
