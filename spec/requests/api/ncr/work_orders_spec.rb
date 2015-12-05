@@ -30,8 +30,6 @@ describe 'NCR Work Orders API' do
             "name" => work_order.name,
             "not_to_exceed" => work_order.not_to_exceed,
             "organization_code" => work_order.organization_code,
-            "rwa_number"=>nil,
-            "vendor"=>"Some Vend",
             "proposal" => {
               "created_at" => time_to_json(proposal.created_at),
               "flow" => proposal.flow,
