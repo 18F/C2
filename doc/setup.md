@@ -21,12 +21,13 @@ C2 is a fairly typical Rails application, so the setup is straightforward:
     ./script/bootstrap
     ```
 
-1. [Register an application on MyUSA](https://alpha.my.usa.gov/applications/new) that provides the `email` scope. You will also need to set the 'Redirect uri' field to [your_domain]/auth/myusa/callback. For example, http://localhost:3000/auth/myusa/callback.
-    * In the **Select the API Scopes...** section, select the scopes needed for C2:
-      * Email Address
-      * First Name
-      * Last Name
-    * Note that the MyUSA app will need to be whitelisted on their end if you need other people to log into it. This matters for staging servers more than local development, so you may not need to worry about it.
+1. [Register an application on MyUSA](https://alpha.my.usa.gov/applications/new).
+    * Set the 'Redirect uri' field to `[your_domain]/auth/myusa/callback`. For example, http://localhost:3000/auth/myusa/callback.
+    * In the "Select the API Scopes..." section, select:
+        * Email Address
+        * First Name
+        * Last Name
+    * Note that the MyUSA app will need to be whitelisted on their end if you need other people to log into it. This matters for staging servers more than local development, so you probably don't need to worry about it.
 
 1. Add the required `MYUSA_*` values in your [`.env`](../.env.example).
 
