@@ -27,19 +27,20 @@ describe 'NCR Work Orders API' do
             "id" => work_order.id,
             "name" => work_order.name,
             "not_to_exceed" => work_order.not_to_exceed,
+            "observers" => observers,
             "org_code" => work_order.org_code,
             "proposal" => {
-              "steps" => [],
               "created_at" => time_to_json(proposal.created_at),
               "id" => proposal.id,
+              "status" => "pending",
+              "updated_at" => time_to_json(proposal.updated_at),
               "requester" => {
                 "created_at" => time_to_json(proposal.requester.created_at),
                 "id" => proposal.requester_id,
                 "updated_at" => time_to_json(proposal.requester.updated_at)
+                },
+              "steps" => []
               },
-              "status" => "pending",
-              "updated_at" => time_to_json(proposal.updated_at)
-            },
             "rwa_number" => work_order.rwa_number,
             "vendor" => work_order.vendor
           }
