@@ -15,7 +15,7 @@ en:
         approving_official_email: "Approving official's email address"
         direct_pay: "I am going to be using direct pay for this transaction"
         emergency: "This request was an emergency and I received a verbal Notice to Proceed (NTP)"
-        ncr_organization: "Org Code / Service Center"
+        ncr_organization: "Org code / Service center"
     placeholders:
       ncr_work_order:
         building_number: "Type here to search or add"

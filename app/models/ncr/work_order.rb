@@ -162,7 +162,7 @@ module Ncr
 
     # Methods for Client Data interface
     def fields_for_display
-      attributes = self.class.relevant_fields(expense_type) + [:organization_code] - [:ncr_organization_id]
+      attributes = self.class.relevant_fields(expense_type) + [:organization_code_and_name] - [:ncr_organization_id]
       attributes.map { |attribute| [WorkOrder.human_attribute_name(attribute), self[attribute]] }
     end
 
@@ -188,8 +188,8 @@ module Ncr
       manager.system_approver_emails
     end
 
-    def organization_code
-      ncr_organization.try(:code)
+    def organization_code_and_name
+      ncr_organization.try(:code_and_name)
     end
 
     def building_id

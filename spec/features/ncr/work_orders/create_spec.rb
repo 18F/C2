@@ -47,7 +47,6 @@ feature "Creating an NCR work order" do
     end
 
     scenario "saves a BA60 Proposal with the attributes" do
-      organization = create(:ncr_organization)
       approver = create(:user, client_slug: "ncr")
       login_as(requester)
       expect(Dispatcher).to receive(:deliver_new_proposal_emails)
@@ -60,7 +59,6 @@ feature "Creating an NCR work order" do
       fill_in "Amount", with: 123.45
       select approver.email_address, from: "Approving official's email address"
       fill_in "Building number", with: Ncr::BUILDING_NUMBERS[0]
-      select organization.code_and_name, from: "ncr_work_order[ncr_organization_id]"
       expect { click_on "Submit for approval" }.to change { Proposal.count }.from(0).to(1)
 
       proposal = Proposal.last
@@ -232,7 +230,6 @@ feature "Creating an NCR work order" do
     end
 
     scenario "includes has overwritten field names" do
-      organization = create(:ncr_organization)
       approver = create(:user, client_slug: "ncr")
       login_as(requester)
       visit '/ncr/work_orders/new'
@@ -243,7 +240,6 @@ feature "Creating an NCR work order" do
       fill_in 'Amount', with: 123.45
       select approver.email_address, from: 'ncr_work_order[approving_official_email]'
       fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
-      select organization.code_and_name, from: "ncr_work_order[ncr_organization_id]"
       click_on 'Submit for approval'
       expect(current_path).to eq("/proposals/#{Proposal.last.id}")
       expect(page).to have_content("RWA Number")
@@ -319,10 +315,23 @@ feature "Creating an NCR work order" do
     end
 
     context "selected common values on proposal page" do
-      scenario "assigns organization" do
+      scenario "assigns organization", :js do
+        approver = create(:user, client_slug: "ncr")
         organization = create(:ncr_organization)
-        fill_in_ncr_form
-        select organization.code_and_name, from: "ncr_work_order[ncr_organization_id]"
+        login_as(requester)
+        visit new_ncr_work_order_path
+
+        fill_in "Project title", with: "buying stuff"
+        choose "BA61"
+        find("input[aria-label='Building number']").native.send_keys("BillDing")
+        find("input[aria-label='Org code / Service center']").native.send_keys(organization.code_and_name)
+        find("input[aria-label='Vendor']").native.send_keys("ACME")
+        fill_in 'Amount', with: 123.45
+        find('input[aria-label="Approving official\'s email address"]').native.send_keys(approver.email_address)
+        click_on "Submit for approval"
+
+        expect(page).to have_content("Proposal submitted")
+        expect(page).to have_content(organization.code_and_name)
       end
 
       scenario 'approves emergencies' do

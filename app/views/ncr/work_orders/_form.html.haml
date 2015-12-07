@@ -21,8 +21,7 @@
     = f.input :building_number, input_html: { class: 'js-selectize required', data: { initial: JSON.generate(building_options) } }
     = f.association :ncr_organization,
       collection: Ncr::Organization.all,
-      input_html: { class: "js-selectize", data: { initial: @client_data_instance.ncr_organization.try(:code_and_name) } },
-      value_method: :id,
+      input_html: { class: "js-selectize" },
       label_method: :code_and_name,
       prompt: :translate
     = f.input :vendor,
