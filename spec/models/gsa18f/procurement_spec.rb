@@ -55,6 +55,18 @@ describe Gsa18f::Procurement do
 
       expect(procurement.purchase_type).to eq "Office Supply/Miscellaneous"
     end
+
+    it "associates 3 with hardware" do
+      procurement = build(:gsa18f_procurement, purchase_type: 3)
+
+      expect(procurement.purchase_type).to eq "Hardware"
+    end
+
+    it "associates 4 with other" do
+      procurement = build(:gsa18f_procurement, purchase_type: 4)
+
+      expect(procurement.purchase_type).to eq "Other"
+    end
   end
 
   describe "#editable?" do

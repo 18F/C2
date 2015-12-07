@@ -25,7 +25,9 @@ module Gsa18f
     PURCHASE_TYPES = {
       "Software" => 0,
       "Training/Event" => 1,
-      "Office Supply/Miscellaneous" => 2
+      "Office Supply/Miscellaneous" => 2,
+      "Hardware" => 3,
+      "Other" => 4,
     }
 
     enum purchase_type: PURCHASE_TYPES
