@@ -13,7 +13,7 @@ describe "Add attachments" do
     expect(page).to have_content(attachment.file_file_name)
   end
 
-  it "disables 'add attachment' button if no attachment is selected", js: true do
+  it "disables 'add attachment' button if no attachment is selected", :js do
     proposal = create(:proposal)
     login_as(proposal.requester)
 
