@@ -163,7 +163,7 @@ module Ncr
     # Methods for Client Data interface
     def fields_for_display
       attributes = self.class.relevant_fields(expense_type) + [:organization_code_and_name] - [:ncr_organization_id]
-      attributes.map { |attribute| [WorkOrder.human_attribute_name(attribute), self[attribute]] }
+      attributes.map { |attribute| [WorkOrder.human_attribute_name(attribute), self.send(attribute)] }
     end
 
     def ba80?
