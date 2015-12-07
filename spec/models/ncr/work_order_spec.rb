@@ -274,4 +274,25 @@ describe Ncr::WorkOrder do
       ))
     end
   end
+
+  describe "#budget_approvers" do
+    it "returns users assigned to budget approval steps" do
+      work_order = create(:ncr_work_order)
+      work_order.setup_approvals_and_observers
+      budget_mailbox_step = work_order.steps.last
+      user = budget_mailbox_step.user
+
+      expect(work_order.budget_approvers).to include(user)
+    end
+
+    it "returns users who completed budget approval steps" do
+      work_order = create(:ncr_work_order)
+      work_order.setup_approvals_and_observers
+      completer = create(:user)
+      budget_mailbox_step = work_order.steps.last
+      budget_mailbox_step.update(completer: completer)
+
+      expect(work_order.budget_approvers).to include(completer)
+    end
+  end
 end

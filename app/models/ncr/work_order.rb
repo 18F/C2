@@ -151,7 +151,7 @@ module Ncr
     end
 
     def budget_approvers
-      self.approvers.merge(self.budget_approvals)
+      budget_approvals.map(&:completed_by)
     end
 
     def editable?
