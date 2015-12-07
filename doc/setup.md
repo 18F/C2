@@ -40,6 +40,12 @@ Per [the Twelve-Factor guidelines](http://12factor.net/config), all necessary co
 * Check that PostgreSQL is running
 * Set the `DATABASE_URL` variable in [`.env`](../.env.example) to match your setup
 
+#### If 'foreman' command not found, you may be using rbenv. If so, run the following...
+```bash
+rbenv rehash
+gem install foreman
+```
+
 ## Starting the application
 
 ```bash
