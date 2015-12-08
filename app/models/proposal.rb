@@ -30,8 +30,6 @@ class Proposal < ActiveRecord::Base
 
   acts_as_taggable
 
-  # we do not have "dependent:" declaration on "steps" because there can be circular references
-  # with parent/child steps on root_step assignment.
   has_many :steps
   has_many :individual_steps, ->{ individual }, class_name: 'Steps::Individual'
   has_many :approvers, through: :individual_steps, source: :user
