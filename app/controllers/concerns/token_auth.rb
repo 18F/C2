@@ -45,7 +45,12 @@ module TokenAuth
         redirect_to root_path(return_to: return_to_param), alert: "Please sign in to complete this action."
       end
     when Proposal
-      render "authorization_error", status: 403, locals: { msg: "You are not allowed to see that proposal." }
+      if exception.message == "A response has already been logged for this proposal"
+        flash[:error] = exception.message
+        redirect_to self.proposal
+      else
+        render "authorization_error", status: 403, locals: { msg: "You are not allowed to see that proposal." }
+      end
     else
       flash[:error] = exception.message
       redirect_to self.proposal
