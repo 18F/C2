@@ -1,4 +1,4 @@
-require_relative "../../../db/chores/ncr_organization_importer"
+require "#{Rails.root}/db/chores/ncr_organization_importer"
 
 describe Ncr::OrganizationImporter do
   describe "#run" do

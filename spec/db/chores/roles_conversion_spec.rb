@@ -1,4 +1,4 @@
-require_relative "../../../db/chores/roles_conversion"
+require "#{Rails.root}/db/chores/roles_conversion"
 
 describe RolesConversion do
   describe "#ncr_budget_approvers" do

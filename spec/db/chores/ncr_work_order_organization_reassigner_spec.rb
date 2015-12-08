@@ -1,4 +1,4 @@
-require_relative "../../../db/chores/ncr_work_order_organization_reassigner"
+require "#{Rails.root}/db/chores/ncr_work_order_organization_reassigner"
 
 describe Ncr::WorkOrderOrganizationReassigner do
   describe "#run" do
