@@ -279,7 +279,7 @@ describe ProposalsController do
       post :approve, id: proposal.id
 
       expect(response).to redirect_to(proposal_path(proposal))
-      expect(flash[:error]).not_to be_nil
+      expect(flash[:error]).to eq "A response has already been logged for this proposal"
     end
 
     it "won't allow different delegates to approve" do
