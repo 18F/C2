@@ -116,7 +116,6 @@ module Ncr
         WHERE ncr_work_orders.ncr_organization_id IS NULL
         AND ncr_work_orders.expense_type IN ('BA60','BA61')
       SQL
-
     end
 
     def build_fiscal_year_report_string(year)
@@ -175,7 +174,6 @@ module Ncr
         "no approver listed"
       end
     end
-
 
     def find_approved_at(work_order)
       if work_order.proposal.steps.last.present?
