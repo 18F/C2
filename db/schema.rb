@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151123235600) do
+ActiveRecord::Schema.define(version: 20151208143311) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -141,7 +141,7 @@ ActiveRecord::Schema.define(version: 20151123235600) do
     t.integer  "client_data_id"
     t.string   "client_data_type", limit: 255
     t.integer  "requester_id"
-    t.string   "public_id"
+    t.string   "public_id",        limit: 255
   end
 
   add_index "proposals", ["client_data_id", "client_data_type"], name: "index_proposals_on_client_data_id_and_client_data_type", using: :btree
@@ -229,7 +229,7 @@ ActiveRecord::Schema.define(version: 20151123235600) do
   add_foreign_key "proposal_roles", "roles", name: "role_id_fkey"
   add_foreign_key "proposal_roles", "users", name: "user_id_fkey"
   add_foreign_key "proposals", "users", column: "requester_id", name: "requester_id_fkey"
-  add_foreign_key "steps", "proposals", name: "proposal_id_fkey"
+  add_foreign_key "steps", "proposals", name: "proposal_id_fkey", on_delete: :cascade
   add_foreign_key "steps", "steps", column: "parent_id", name: "parent_id_fkey", on_delete: :cascade
   add_foreign_key "steps", "users", column: "completer_id", name: "completer_id_fkey"
   add_foreign_key "steps", "users", name: "user_id_fkey"
