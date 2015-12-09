@@ -16,6 +16,7 @@ class ApplicationController < ActionController::Base
 
   # We are overriding this method to account for ExceptionPolicies
   def authorize(record, query = nil, user = nil)
+    check_disabled_client
     user ||= @current_user
     policy = ::PolicyFinder.policy_for(user, record)
 
@@ -28,6 +29,20 @@ class ApplicationController < ActionController::Base
       msg = "not allowed to #{query} this #{record}"
       ex = NotAuthorizedError.new(query: query, record: record, policy: policy, message: msg)
       fail ex
+    end
+  end
+
+  def check_disabled_client
+    if client_disabled?
+      fail NotAuthorizedError.new("Client is disabled")
+    end
+  end
+
+  def render_disabled_client_message(message)
+    begin
+      render "#{current_user.client_slug}/_disabled", status: 403
+    rescue
+      render "authorization_error", status: 403, locals: { msg: message }
     end
   end
 
@@ -57,6 +72,10 @@ class ApplicationController < ActionController::Base
     elsif session[:user] && session[:user]['email']
       User.find_or_create_by(email_address: session[:user]['email'])
     end
+  end
+
+  def client_disabled?
+    current_user && (ENV["DISABLE_CLIENT_SLUGS"] || "").split(/,/).include?(current_user.client_slug)
   end
 
   def sign_in(user)

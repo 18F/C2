@@ -94,9 +94,17 @@ class ClientDataController < ApplicationController
     path = polymorphic_path(model_class, action: :new)
     # prevent redirect loop
     if path == request.path
-      render "authorization_error", status: 403, locals: { msg: exception.message }
+      render_auth_errors(exception)
     else
       redirect_to path, alert: exception.message
+    end
+  end
+
+  def render_auth_errors(exception)
+    if exception.message == "Client is disabled"
+      render_disabled_client_message(exception.message)
+    else
+      render "authorization_error", status: 403, locals: { msg: exception.message }
     end
   end
 
