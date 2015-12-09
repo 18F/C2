@@ -218,7 +218,7 @@ describe ProposalsController do
       approval = proposal.individual_steps.first
       token = create(:api_token, step: approval)
 
-      post :approve, id: proposal.id, cch: token.access_token
+      get :approve, id: proposal.id, cch: token.access_token
 
       expect(controller.send(:current_user)).to eq(approval.user)
     end
