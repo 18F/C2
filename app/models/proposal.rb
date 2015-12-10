@@ -2,6 +2,7 @@ class Proposal < ActiveRecord::Base
   include WorkflowModel
   include ValueHelper
   include StepManager
+  include Searchable
 
   has_paper_trail class_name: 'C2Version'
 
@@ -68,6 +69,35 @@ class Proposal < ActiveRecord::Base
     end_time = start_time + 1.year
     where(created_at: start_time...end_time)
   }
+
+  # elasticsearch indexing setup
+  DEFAULT_INDEXED = {include: {client_data: {}, comments: {}, steps: {}}}
+
+  settings index: {
+    number_of_shards: 1, # increase this if we ever get more than N records
+    number_of_replicas: 1
+  } do
+    # with dynamic mapping==true, we only need to explicitly define overrides.
+    # NOTE that because client_data may have fieldname namespace collisions
+    # with different client_data_type values, be aware that ES might guess
+    # client_data.foo is a string for one type, and a number for another.
+    # if that happens, suggestion is to override client_data.as_json in the
+    # affected client models.
+    mappings dynamic: "true" do
+      indexes :public_id, index: :not_analyzed
+      indexes :client_data_type, index: :not_analyzed
+    end
+  end
+
+  def to_indexed_json(params = {})
+    as_indexed_json(params).to_json
+  end
+
+  def as_indexed_json(params = {})
+    as_json(params.reverse_merge(DEFAULT_INDEXED)).tap do |json|
+      json[:subscribers] = subscribers.map(&:id)
+    end
+  end
 
   # @todo - this should probably be the only entry into the approval system
   def root_step

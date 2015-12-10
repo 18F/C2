@@ -4,6 +4,7 @@
 
 * Ruby 2.2.3
 * PostgreSQL 9.x
+* Elasticsearch 1.5+
 * A [MyUSA](https://alpha.my.usa.gov/) account
 * An SMTP server (`production` mode only)
 
@@ -39,6 +40,11 @@ Per [the Twelve-Factor guidelines](http://12factor.net/config), all necessary co
 
 * Check that PostgreSQL is running
 * Set the `DATABASE_URL` variable in [`.env`](../.env.example) to match your setup
+
+#### Can't create or connect to Elasticsearch
+
+* Check that Elasticsearch is running (default is localhost:9200)
+* Set the `ES_URL` variable in [`.env`](../.env.example) to match your setup
 
 #### If 'foreman' command not found, you may be using rbenv. If so, run the following...
 ```bash
@@ -108,3 +114,10 @@ brakeman
 ```
 
 or just [visit the project on Gemnasium](https://gemnasium.com/18F/C2).
+
+### Re-indexing search
+
+```bash
+rake environment elasticsearch:import:model CLASS="Proposal"
+```
+

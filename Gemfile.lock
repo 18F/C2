@@ -145,6 +145,19 @@ GEM
       activemodel (>= 3.0)
       activesupport (>= 3.0)
       request_store (~> 1.0)
+    elasticsearch (1.0.15)
+      elasticsearch-api (= 1.0.15)
+      elasticsearch-transport (= 1.0.15)
+    elasticsearch-api (1.0.15)
+      multi_json
+    elasticsearch-model (0.1.8)
+      activesupport (> 3)
+      elasticsearch (> 0.4)
+      hashie
+    elasticsearch-rails (0.1.8)
+    elasticsearch-transport (1.0.15)
+      faraday
+      multi_json
     email_reply_parser (0.5.8)
     erubis (2.7.0)
     execjs (2.6.0)
@@ -486,6 +499,8 @@ DEPENDENCIES
   delayed_job_active_record
   dotenv-rails
   draper
+  elasticsearch-model
+  elasticsearch-rails
   email_reply_parser
   factory_girl_rails
   faker
