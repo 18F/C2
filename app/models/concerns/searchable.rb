@@ -9,7 +9,7 @@ module Searchable
     end
 
     after_commit on: [:update] do
-      STDERR.puts("UPDATE proposal called from #{caller.join("\n")}")
+      #STDERR.puts("UPDATE proposal called from #{caller.join("\n")}")
       delay.reindex
     end
 
