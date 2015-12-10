@@ -34,7 +34,8 @@ class ApplicationController < ActionController::Base
 
   def check_disabled_client
     if client_disabled?
-      fail NotAuthorizedError.new("Client is disabled")
+      ex = NotAuthorizedError.new("Client is disabled")
+      fail ex
     end
   end
 
@@ -67,10 +68,10 @@ class ApplicationController < ActionController::Base
   end
 
   def find_current_user
-    if ENV['FORCE_USER_ID'] && !Rails.env.production?
-      User.find ENV['FORCE_USER_ID']
-    elsif session[:user] && session[:user]['email']
-      User.find_or_create_by(email_address: session[:user]['email'])
+    if ENV["FORCE_USER_ID"] && !Rails.env.production?
+      User.find ENV["FORCE_USER_ID"]
+    elsif session[:user] && session[:user]["email"]
+      User.find_or_create_by(email_address: session[:user]["email"])
     end
   end
 
@@ -80,7 +81,7 @@ class ApplicationController < ActionController::Base
 
   def sign_in(user)
     session[:user] ||= {}
-    session[:user]['email'] = user.email_address
+    session[:user]["email"] = user.email_address
     @current_user = user
   end
 
