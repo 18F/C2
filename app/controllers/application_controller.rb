@@ -42,7 +42,7 @@ class ApplicationController < ActionController::Base
   def render_disabled_client_message(message)
     begin
       render "#{current_user.client_slug}/_disabled", status: 403
-    rescue ActionView::MissingTemplate => error
+    rescue ActionView::MissingTemplate => _error
       render "authorization_error", status: 403, locals: { msg: message }
     end
   end
