@@ -49,10 +49,14 @@ describe Ncr::WorkOrdersController do
       expect(flash[:warning]).to be_present
     end
 
-    it 'does not explode if editing an emergency' do
-      work_order = create(:ncr_work_order, :is_emergency,
-                                      requester: requester)
-      get :edit, {id: work_order.id}
+    it "does not explode if editing an emergency" do
+      work_order = create(
+        :ncr_work_order,
+        :is_emergency,
+        requester: requester
+      )
+
+      get :edit, { id: work_order.id }
     end
   end
 
