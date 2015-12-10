@@ -9,7 +9,7 @@ class Step < ActiveRecord::Base
   end
 
   belongs_to :user
-  belongs_to :proposal
+  belongs_to :proposal, touch: true
   belongs_to :completer, class_name: "User"
   acts_as_list scope: :proposal
   belongs_to :parent, class_name: "Step"
