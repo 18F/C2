@@ -66,7 +66,7 @@ class ProposalsController < ApplicationController
   end
 
   def history
-    @container = Query::Proposal::Versions.container(proposal)
+    @container = Query::Proposal::Versions.new(proposal).container
     @container.set_state_from_params(params)
   end
 
