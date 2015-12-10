@@ -40,7 +40,7 @@ module TokenAuth
     when Proposal
       render "authorization_error", status: 403, locals: { msg: "You are not allowed to see that proposal." }
     else
-      render_unidentified_exception(exception)
+      render_other_exception(exception)
     end
   end
 
@@ -55,7 +55,7 @@ module TokenAuth
     end
   end
 
-  def render_unidentified_exception(exception)
+  def render_other_exception(exception)
     if exception.message == "Client is disabled"
       render_disabled_client_message(exception.message)
     else

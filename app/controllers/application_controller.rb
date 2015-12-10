@@ -27,22 +27,22 @@ class ApplicationController < ActionController::Base
       # boolean. Both systems are accommodated
       # will need to replace this when a new version of pundit arrives
       msg = "not allowed to #{query} this #{record}"
-      ex = NotAuthorizedError.new(query: query, record: record, policy: policy, message: msg)
-      fail ex
+      exception = NotAuthorizedError.new(query: query, record: record, policy: policy, message: msg)
+      fail exception
     end
   end
 
   def check_disabled_client
     if client_disabled?
-      ex = NotAuthorizedError.new("Client is disabled")
-      fail ex
+      exception = NotAuthorizedError.new("Client is disabled")
+      fail exception
     end
   end
 
   def render_disabled_client_message(message)
     begin
       render "#{current_user.client_slug}/_disabled", status: 403
-    rescue
+    rescue ActionView::MissingTemplate => error
       render "authorization_error", status: 403, locals: { msg: message }
     end
   end
