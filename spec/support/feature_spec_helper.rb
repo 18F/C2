@@ -38,14 +38,17 @@ module FeatureSpecHelper
       within(".dropdown-active") do
         expect(page).to have_content(text)
       end
+      find(".selectize-control").click
     end
   end
+
   def expect_page_not_to_have_selected_selectize_option(field, text)
     within(".#{field}") do
       find(".selectize-control").click
       within(".dropdown-active") do
         expect(page).not_to have_content(text)
       end
+      find(".selectize-control").click
     end
   end
 end
