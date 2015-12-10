@@ -14,7 +14,7 @@ module Ncr
     end
 
     def edit
-      @client_data_instance.approving_official_email = @client_data_instance.approvers.first.email_address
+      @client_data_instance.approving_official_email = @client_data_instance.approvers.first.try(:email_address)
 
       if proposal.approved?
         flash.now[:warning] = "You are about to modify a fully approved request. Changes will be logged and sent to approvers, and this request may require re-approval, depending on the change."
