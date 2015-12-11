@@ -81,6 +81,7 @@ group :test do
   gem 'addressable'
   gem 'capybara'
   gem 'codeclimate-test-reporter'
+  gem 'elasticsearch-extensions'
   gem 'poltergeist'
   gem 'shoulda-matchers'
   gem 'simplecov'
