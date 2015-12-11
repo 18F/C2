@@ -1,5 +1,11 @@
-require 'rails_helper'
+describe Test::ClientRequest do
+  it_behaves_like "client data"
 
-RSpec.describe Test::ClientRequest, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe "#editable?" do
+    it "is true" do
+      client_request = build(:test_client_request)
+      expect(client_request).to be_editable
+    end
+  end
+
 end
