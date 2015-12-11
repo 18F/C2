@@ -21,10 +21,8 @@ if Rails.env.production?
   vcap = ENV["VCAP_SERVICES"]
   es_config = JSON.parse(vcap)["elasticsearch-new"]
   es_client_args["url"] = es_config["url"]
-
 elsif Rails.env.test?
   es_client_args["url"] = "http://localhost:#{(ENV['TEST_CLUSTER_PORT'] || 9250)}"
-
 else
   es_client_args["url"] = ENV["ES_URL"] || "http://localhost:9200"
 end
@@ -40,6 +38,10 @@ if ENV['ES_DEBUG'].to_i > 0
   es_client_args[:tracer] = tracer
   puts "[#{Time.now.utc.iso8601}] Elasticsearch logging set to DEBUG mode"
 end
+
+# despite documentation to the contrary, this env variable actually seems to control
+# what the underlying Faraday transport client uses, so set it belt+suspenders.
+ENV["ELASTICSEARCH_URL"] = es_client_args["url"]
 
 Elasticsearch::Model.client = Elasticsearch::Client.new(es_client_args)
 
