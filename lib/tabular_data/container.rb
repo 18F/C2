@@ -46,7 +46,7 @@ module TabularData
       relevant = params.permit(tables: {@name => [:sort]})
       config = relevant.fetch(:tables, {}).fetch(@name, {}) || {}
       if config.key? :sort
-        self.set_sort(config[:sort])
+        set_sort(config[:sort])
       end
       self
     end
