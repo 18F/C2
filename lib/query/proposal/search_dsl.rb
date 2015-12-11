@@ -45,7 +45,7 @@ module Query
 
       def build_dsl
         searchdsl = self
-        @dsl = Search.new
+        @dsl = Elasticsearch::DSL::Search::Search.new
         @dsl.query = Queries::Filtered.new
         @dsl.query.query do
           match do

@@ -54,5 +54,9 @@ module ClientDataMixin
     def slug_matches?(user)
       user.client_slug == client_slug
     end
+
+    def self.slug_matches?(user)
+      user.client_slug == self.client_slug
+    end
   end
 end

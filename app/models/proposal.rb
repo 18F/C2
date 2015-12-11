@@ -231,6 +231,10 @@ class Proposal < ActiveRecord::Base
     CLIENT_MODELS.map(&:client_slug)
   end
 
+  def self.client_model_for(user)
+    CLIENT_MODELS.select { |cmodel| cmodel.slug_matches?(user) }.first
+  end
+
   private
 
   def create_new_observation(user, adder, reason)
