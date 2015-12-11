@@ -29,9 +29,9 @@ module Query
 
       def composite_query_string
         if client_query && query_str
-          "(#{query_str}) AND (#{client_query.map{|k,v| "#{k}:#{v}"}.join(' ')})"
+          "(#{query_str}) AND (#{client_query.map{|k,v| "#{k}:(#{v})"}.join(' ')})"
         elsif client_query
-          client_query.map{|k,v| "#{k}:#{v}"}.join(' ')
+          client_query.map{|k,v| "#{k}:(#{v})"}.join(' ')
         elsif query_str
           query_str
         end 
@@ -46,17 +46,22 @@ module Query
       def build_dsl
         searchdsl = self
         @dsl = Elasticsearch::DSL::Search::Search.new
-        @dsl.query = Queries::Filtered.new
-        @dsl.query.query do
-          match do
+        @dsl.query = Query.new
+        @dsl.query do
+          query_string do
             query searchdsl.composite_query_string
-            operator searchdsl.default_operator
+            default_operator searchdsl.default_operator
           end
         end
-        @dsl.query.filter do
-          term client_data_type: searchdsl.client_data_type
-          if searchdsl.apply_authz?
-            term subscribers: searchdsl.current_user.id.to_s
+        @dsl.filter = Filter.new
+        @dsl.filter do
+          bool do
+            must do
+              term client_data_type: searchdsl.client_data_type
+              if searchdsl.apply_authz?
+                term subscribers: searchdsl.current_user.id.to_s
+              end
+            end
           end
         end
 

@@ -13,18 +13,16 @@ describe Query::Proposal::SearchDSL do
     )
     expect(dsl.to_hash).to eq({
       query: {
-        filtered: {
-          query: {
-            match: {
-              query: "(foo OR Bar) AND (color:green)", 
-              operator: "and"
-            }
-          },
-          filter: {
-            term: {
-              client_data_type: "Foo::BarBaz"
-            }
-          }
+        query_string: {
+          query: "(foo OR Bar) AND (color:(green))", 
+          default_operator: "and"
+        },
+      },
+      filter: {
+        bool: {
+          must: [
+            { term: { client_data_type: "Foo::BarBaz" } }
+          ]
         }
       },
       size: 5,
