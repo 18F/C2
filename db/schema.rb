@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151123235600) do
+ActiveRecord::Schema.define(version: 20151124192710) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -89,41 +89,50 @@ ActiveRecord::Schema.define(version: 20151123235600) do
 
   create_table "gsa18f_procurements", force: :cascade do |t|
     t.string   "office",                       limit: 255
-    t.text     "justification",                            default: "",      null: false
-    t.string   "link_to_product",              limit: 255, default: "",      null: false
+    t.text     "justification"
+    t.string   "link_to_product",              limit: 255
     t.integer  "quantity"
     t.datetime "date_requested"
     t.string   "additional_info",              limit: 255
     t.decimal  "cost_per_unit"
     t.text     "product_name_and_description"
-    t.boolean  "recurring",                                default: false,   null: false
-    t.string   "recurring_interval",           limit: 255, default: "Daily"
+    t.boolean  "recurring"
+    t.string   "recurring_interval",           limit: 255
     t.integer  "recurring_length"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "urgency"
-    t.integer  "purchase_type",                                              null: false
+    t.integer  "purchase_type",                            null: false
+  end
+
+  create_table "ncr_organizations", force: :cascade do |t|
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.string   "code",                    null: false
+    t.string   "name",       default: "", null: false
   end
 
   create_table "ncr_work_orders", force: :cascade do |t|
     t.decimal  "amount"
-    t.string   "expense_type",    limit: 255
-    t.string   "vendor",          limit: 255
-    t.boolean  "not_to_exceed",               default: false, null: false
-    t.string   "building_number", limit: 255
-    t.boolean  "emergency",                   default: false, null: false
-    t.string   "rwa_number",      limit: 255
-    t.string   "org_code",        limit: 255
-    t.string   "code",            limit: 255
-    t.string   "project_title",   limit: 255
+    t.string   "expense_type",        limit: 255
+    t.string   "vendor",              limit: 255
+    t.boolean  "not_to_exceed",                   default: false, null: false
+    t.string   "building_number",     limit: 255
+    t.boolean  "emergency",                       default: false, null: false
+    t.string   "rwa_number",          limit: 255
+    t.string   "code",                limit: 255
+    t.string   "project_title",       limit: 255
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "direct_pay",                  default: false, null: false
-    t.string   "cl_number",       limit: 255
-    t.string   "function_code",   limit: 255
-    t.string   "soc_code",        limit: 255
+    t.boolean  "direct_pay",                      default: false, null: false
+    t.string   "cl_number",           limit: 255
+    t.string   "function_code",       limit: 255
+    t.string   "soc_code",            limit: 255
+    t.integer  "ncr_organization_id"
   end
+
+  add_index "ncr_work_orders", ["ncr_organization_id"], name: "index_ncr_work_orders_on_ncr_organization_id", using: :btree
 
   create_table "proposal_roles", force: :cascade do |t|
     t.integer "role_id",     null: false
