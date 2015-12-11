@@ -218,7 +218,7 @@ describe ProposalsController do
       approval = proposal.individual_steps.first
       token = create(:api_token, step: approval)
 
-      post :approve, id: proposal.id, cch: token.access_token
+      get :approve, id: proposal.id, cch: token.access_token
 
       expect(controller.send(:current_user)).to eq(approval.user)
     end
@@ -229,9 +229,8 @@ describe ProposalsController do
       token = create(:api_token, step: approval)
       approval.user.add_delegate(create(:user))
 
-      post :approve, id: proposal.id, cch: token.access_token
+      get :approve, id: proposal.id, cch: token.access_token
 
-      # TODO simplify this check
       expect(response).to redirect_to(root_path(return_to: self.make_return_to("Previous", request.fullpath)))
     end
 
@@ -279,7 +278,8 @@ describe ProposalsController do
       flash.clear
       post :approve, id: proposal.id
 
-      expect(response.status).to eq(403)
+      expect(response).to redirect_to(proposal_path(proposal))
+      expect(flash[:error]).to eq "A response has already been logged for this proposal"
     end
 
     it "won't allow different delegates to approve" do
@@ -299,7 +299,8 @@ describe ProposalsController do
       login_as(delegate2)
       post :approve, id: proposal.id
 
-      expect(response.status).to eq(403)
+      expect(response).to redirect_to(proposal_path(proposal))
+      expect(flash[:error]).to eq "A response has already been logged for this proposal"
     end
 
     it "allows a delegate to approve via the web UI" do
