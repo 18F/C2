@@ -1,11 +1,12 @@
 feature "Requester edits their NCR work order", :js do
   include ProposalSpecHelper
 
+  let(:organization) { create(:ncr_organization) }
   let(:work_order) do
     create(
       :ncr_work_order,
       building_number: Ncr::BUILDING_NUMBERS[0],
-      org_code: Ncr::Organization.all.first.to_s,
+      ncr_organization: organization,
       vendor: "test vendor",
       description: "test"
     )
@@ -26,8 +27,8 @@ feature "Requester edits their NCR work order", :js do
       Ncr::BUILDING_NUMBERS[0]
     )
     expect_page_to_have_selected_selectize_option(
-      "ncr_work_order_org_code",
-      Ncr::Organization.all.first.to_s
+      "ncr_work_order_ncr_organization",
+      organization.code_and_name
     )
     expect_page_to_have_selected_selectize_option(
       "ncr_work_order_vendor",
@@ -40,16 +41,22 @@ feature "Requester edits their NCR work order", :js do
   end
 
   scenario "creates a comment when editing" do
+    new_org = create(:ncr_organization, code: "XZP", name: "Test test")
     visit edit_ncr_work_order_path(work_order)
 
-    fill_in_selectized("ncr_work_order_building_number", Ncr::BUILDING_NUMBERS[1])
+    save_and_open_page
     fill_in "Description", with: "New Description"
+    fill_in_selectized("ncr_work_order_building_number", Ncr::BUILDING_NUMBERS[1])
+    fill_in_selectized("ncr_work_order_ncr_organization", new_org.code_and_name)
     click_on "Update"
 
     expect(page).to have_content("Request modified by")
     expect(page).to have_content("Description was changed from test to New Description")
     expect(page).to have_content(
       "Building number was changed from #{Ncr::BUILDING_NUMBERS[0]} to #{Ncr::BUILDING_NUMBERS[1]}"
+    )
+    expect(page).to have_content(
+      "Ncr organization was changed from #{organization.code_and_name} to #{new_org.code_and_name}"
     )
   end
 
@@ -87,10 +94,12 @@ feature "Requester edits their NCR work order", :js do
   end
 
   scenario "allows requester to change the expense type" do
-    visit "/ncr/work_orders/#{work_order.id}/edit"
+    visit edit_ncr_work_order_path(work_order)
+
     choose "BA80"
     fill_in "RWA Number", with: "a1234567"
     click_on "Update"
+
     proposal = Proposal.last
     expect(proposal.approvers.length).to eq(2)
     expect(proposal.approvers.second.email_address).to eq(Ncr::Mailboxes.ba80_budget)

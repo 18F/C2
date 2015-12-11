@@ -22,14 +22,14 @@
       = render partial: "ba_80_fields",
         locals: { f: f }
     = f.input :building_number,
-      input_html: { class: "js-selectize required", data: { initial: JSON.generate(building_options) } }
-    = f.input :org_code,
+      input_html: { class: "js-selectize required", data: { initial: JSON.generate(building_options) }}
+    = f.association :ncr_organization,
       collection: Ncr::Organization.all,
-      label_method: :code_and_name,
       prompt: :translate,
-      input_html: { class: "js-selectize" }
+      label_method: :code_and_name,
+      input_html: { class: "js-selectize", data: { initial: @client_data_instance.ncr_organization.try(:code_and_name) }}
     = f.input :vendor,
-      input_html: { class: "js-selectize required", data: { initial: JSON.generate(vendor_options(@client_data_instance.vendor)) } }
+      input_html: { class: "js-selectize required", data: { initial: JSON.generate(vendor_options(@client_data_instance.vendor)) }}
     = field_set_tag "Amount", class: "required" do
       = f.input :amount,
         as: :currency,

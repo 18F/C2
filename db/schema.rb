@@ -89,20 +89,20 @@ ActiveRecord::Schema.define(version: 20151124192710) do
 
   create_table "gsa18f_procurements", force: :cascade do |t|
     t.string   "office",                       limit: 255
-    t.text     "justification",                            default: "",      null: false
-    t.string   "link_to_product",              limit: 255, default: "",      null: false
+    t.text     "justification"
+    t.string   "link_to_product",              limit: 255
     t.integer  "quantity"
     t.datetime "date_requested"
     t.string   "additional_info",              limit: 255
     t.decimal  "cost_per_unit"
     t.text     "product_name_and_description"
-    t.boolean  "recurring",                                default: false,   null: false
-    t.string   "recurring_interval",           limit: 255, default: "Daily"
+    t.boolean  "recurring"
+    t.string   "recurring_interval",           limit: 255
     t.integer  "recurring_length"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "urgency"
-    t.integer  "purchase_type",                                              null: false
+    t.integer  "purchase_type",                            null: false
   end
 
   create_table "ncr_organizations", force: :cascade do |t|
