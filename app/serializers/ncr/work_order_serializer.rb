@@ -18,5 +18,6 @@ module Ncr
     )
 
     has_one :proposal
+    has_many :observers
   end
 end

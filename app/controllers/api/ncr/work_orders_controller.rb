@@ -6,6 +6,7 @@ module Api
         orders = ::Ncr::WorkOrder.
           joins(:proposal).
           includes(proposal: [:requester, individual_steps: [:user]]).
+          includes(:observers).
           order('proposals.created_at DESC')
 
         if params[:limit]
