@@ -84,8 +84,13 @@ class Proposal < ActiveRecord::Base
     # if that happens, suggestion is to override client_data.as_json in the
     # affected client models.
     mappings dynamic: "true" do
-      indexes :public_id, index: :not_analyzed
-      indexes :client_data_type, index: :not_analyzed
+      indexes :id, boost: 2
+      indexes :public_id, type: "string", index: :not_analyzed, boost: 1.5
+      indexes :client_data_type, type: "string", index: :not_analyzed
+
+      indexes :client_data do
+        indexes :amount, type: "string", index: :not_analyzed
+      end
     end
   end
 

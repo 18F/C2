@@ -79,7 +79,7 @@ FactoryGirl.define do
 
       if evaluator.client_slug
         proposal.requester.client_slug = evaluator.client_slug
-        proposal.save!
+        proposal.requester.save!
       end
     end
   end
