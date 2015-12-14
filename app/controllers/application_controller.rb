@@ -51,14 +51,14 @@ class ApplicationController < ActionController::Base
 
   def auth_errors(exception)
     render_auth_errors(exception)
-  end 
+  end
 
   def render_auth_errors(exception)
     if exception.message == "Client is disabled"
       render_disabled_client_message(exception.message)
     else
       render "authorization_error", status: 403, locals: { msg: exception.message }
-    end 
+    end
   end
 
   # Override Pundit to account for proposal gymnastics
