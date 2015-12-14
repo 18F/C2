@@ -57,16 +57,18 @@ module Ncr
 
     def ba_6x_approver_emails
       results = []
-      unless work_order.ncr_organization.try(:whsc?)
+
+      unless work_order.for_whsc_organization?
         results << Ncr::Mailboxes.ba61_tier1_budget
       end
+
       results << Ncr::Mailboxes.ba61_tier2_budget
 
       results
     end
 
     def ba_80_approver_email
-      if work_order.ncr_organization.try(:ool?)
+      if work_order.for_ool_organization?
         Ncr::Mailboxes.ool_ba80_budget
       else
         Ncr::Mailboxes.ba80_budget

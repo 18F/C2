@@ -47,14 +47,12 @@ module Ncr
     end
 
     def self.proposals_pending_approving_official
-      # TODO convert to SQL
       Proposal.pending
-        .where(client_data_type: 'Ncr::WorkOrder')
-        .select { |p| p.individual_steps.pluck(:status)[0] == 'actionable' }
+        .where(client_data_type: "Ncr::WorkOrder")
+        .select { |p| p.individual_steps.pluck(:status)[0] == "actionable" }
     end
 
     def self.proposals_pending_budget
-      # TODO convert to SQL
       Proposal.pending
         .where(client_data_type: 'Ncr::WorkOrder')
         .select { |p| p.individual_steps.pluck(:status).last == 'actionable' }
@@ -62,11 +60,27 @@ module Ncr
     end
 
     def self.budget_proposals(type, timespan)
-      # TODO convert to SQL
       Proposal.approved
         .where(client_data_type: 'Ncr::WorkOrder')
         .where('created_at > ?', timespan)
         .select { |pr| pr.client_data.expense_type == type }
+    end
+
+    def self.proposals_tier_one_pending
+      Proposal.find_by_sql(proposals_tier_one_pending_sql)
+    end
+
+    def self.proposals_tier_one_pending_sql
+      approver_sql = proposals_tier_one_pending_approver_sql
+      work_order_sql = proposals_tier_one_work_order_sql
+
+      <<-SQL.gsub(/^ {8}/, '')
+        SELECT * FROM proposals
+        WHERE proposals.status='pending'
+        AND proposals.client_data_type='Ncr::WorkOrder'
+        AND proposals.client_data_id IN (#{work_order_sql})
+        AND proposals.id IN (#{approver_sql})
+      SQL
     end
 
     def self.proposals_tier_one_pending_approver_sql
@@ -80,26 +94,26 @@ module Ncr
 
     def self.proposals_tier_one_work_order_sql
       <<-SQL.gsub(/^ {8}/, '')
-        SELECT id FROM ncr_work_orders AS nwo
-        WHERE nwo.org_code!='#{Ncr::Organization::WHSC_CODE}'
-        AND nwo.expense_type IN ('BA60','BA61')
+        #{work_orders_for_non_whsc_orgs} UNION #{work_orders_without_orgs}
       SQL
     end
 
-    def self.proposals_tier_one_pending_sql
-      approver_sql = self.proposals_tier_one_pending_approver_sql
-      work_order_sql = self.proposals_tier_one_work_order_sql
+    def self.work_orders_for_non_whsc_orgs
       <<-SQL.gsub(/^ {8}/, '')
-        SELECT * FROM proposals AS p
-        WHERE p.status='pending'
-        AND p.client_data_type='Ncr::WorkOrder'
-        AND p.client_data_id IN (#{work_order_sql})
-        AND p.id IN (#{approver_sql})
+        SELECT ncr_work_orders.id
+        FROM ncr_work_orders
+        WHERE ncr_work_orders.org_code != '#{Ncr::Organization::WHSC_CODE}'
+        AND ncr_work_orders.expense_type IN ('BA60','BA61')
       SQL
     end
 
-    def self.proposals_tier_one_pending
-      Proposal.find_by_sql(self.proposals_tier_one_pending_sql)
+    def self.work_orders_without_orgs
+      <<-SQL.gsub(/^ {8}/, '')
+        SELECT ncr_work_orders.id
+        FROM ncr_work_orders
+        WHERE ncr_work_orders.org_code IS NULL
+        AND ncr_work_orders.expense_type IN ('BA60','BA61')
+      SQL
     end
 
     def build_fiscal_year_report_string(year)
@@ -158,7 +172,6 @@ module Ncr
         "no approver listed"
       end
     end
-
 
     def find_approved_at(work_order)
       if work_order.proposal.steps.last.present?
