@@ -4,7 +4,6 @@
 class ClientDataController < ApplicationController
   before_action -> { authorize model_class }, only: [:new, :create]
   before_action -> { authorize proposal }, only: [:edit, :update]
-  rescue_from Pundit::NotAuthorizedError, with: :auth_errors
   before_action :build_client_data_instance, only: [:new, :create]
   before_action :find_client_data_instance, only: [:edit, :update]
 
@@ -97,14 +96,6 @@ class ClientDataController < ApplicationController
       render_auth_errors(exception)
     else
       redirect_to path, alert: exception.message
-    end
-  end
-
-  def render_auth_errors(exception)
-    if exception.message == "Client is disabled"
-      render_disabled_client_message(exception.message)
-    else
-      render "authorization_error", status: 403, locals: { msg: exception.message }
     end
   end
 

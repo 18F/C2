@@ -6,7 +6,7 @@ describe 'proposals' do
       it "disallows any request for disabled client_slug" do
         user = create(:user, client_slug: "ncr")
         work_order = create(:ncr_work_order, requester: user)
-        endpoints = [new_ncr_work_order_path, proposal_path(work_order.proposal), proposals_path]
+        endpoints = [new_ncr_work_order_path, proposal_path(work_order.proposal), proposals_path, ncr_dashboard_path]
 
         endpoints.each do |endpoint|
           login_as(user)

@@ -12,6 +12,8 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!
   before_action :disable_peek_by_default
 
+  rescue_from Pundit::NotAuthorizedError, with: :auth_errors
+
   protected
 
   # We are overriding this method to account for ExceptionPolicies
@@ -45,6 +47,18 @@ class ApplicationController < ActionController::Base
     rescue ActionView::MissingTemplate => _error
       render "authorization_error", status: 403, locals: { msg: message }
     end
+  end
+
+  def auth_errors(exception)
+    render_auth_errors(exception)
+  end 
+
+  def render_auth_errors(exception)
+    if exception.message == "Client is disabled"
+      render_disabled_client_message(exception.message)
+    else
+      render "authorization_error", status: 403, locals: { msg: exception.message }
+    end 
   end
 
   # Override Pundit to account for proposal gymnastics
