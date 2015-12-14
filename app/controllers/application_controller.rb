@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
 
   before_action :authenticate_user!
   before_action :disable_peek_by_default
+  before_action :check_disabled_client
 
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
 

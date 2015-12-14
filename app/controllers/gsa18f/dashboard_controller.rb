@@ -1,7 +1,5 @@
 module Gsa18f
   class DashboardController < ApplicationController
-    before_action :check_disabled_client
-
     def index
       @rows = self.format_results(self.queryset)
     end

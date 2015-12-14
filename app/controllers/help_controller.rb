@@ -1,6 +1,7 @@
 class HelpController < ApplicationController
   layout 'help'
   skip_before_action :authenticate_user!, only: [:index, :show]
+  skip_before_action :check_disabled_client
 
   def index
     @pages = self.page_names.sort

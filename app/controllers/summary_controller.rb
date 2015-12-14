@@ -1,6 +1,5 @@
 class SummaryController < ApplicationController
   before_action :authorize
-  before_action :check_disabled_client
 
   def index
     client_namespace = current_user.client_slug.titleize
