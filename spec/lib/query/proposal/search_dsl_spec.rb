@@ -1,15 +1,17 @@
 describe Query::Proposal::SearchDSL do
   it "combines query strings and client-data-specific hash" do
+    user = create(:user, client_slug: "test")
     dsl = Query::Proposal::SearchDSL.new(
       params: { 
         from: 1, 
         size: 5, 
-        foo_bar_baz: { 
+        test_client_request: { 
           color: "green" 
         }
       },
-      query: 'foo OR Bar',
-      client_data_type: 'Foo::BarBaz'
+      query: "foo OR Bar",
+      current_user: user,
+      client_data_type: "Test::ClientRequest"
     )
     expect(dsl.to_hash).to eq({
       query: {
@@ -21,7 +23,8 @@ describe Query::Proposal::SearchDSL do
       filter: {
         bool: {
           must: [
-            { term: { client_data_type: "Foo::BarBaz" } }
+            { term: { client_data_type: "Test::ClientRequest" } },
+            { term: { subscribers: user.id.to_s } }
           ]
         }
       },

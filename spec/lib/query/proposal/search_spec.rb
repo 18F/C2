@@ -3,37 +3,43 @@ describe Query::Proposal::Search do
     it "returns an empty list for no Proposals" do
       user = create(:user, client_slug: "test")
       results = Query::Proposal::Search.new(current_user: user).execute('')
-      expect(results).to eq([])
+      expect(results.to_a).to eq([])
     end
 
     it "returns the Proposal when searching by ID" do
-      proposal = create(:proposal)
-      proposal.requester.client_slug = "test"
+      test_client_request = create(:test_client_request)
+      proposal = test_client_request.proposal
+      proposal.reindex
       results = Query::Proposal::Search.new(current_user: proposal.requester).execute(proposal.id.to_s)
-      expect(results).to eq([proposal])
+      expect(results.to_a).to eq([proposal])
     end
 
     it "returns the Proposal when searching by public_id" do
-      proposal = create(:proposal)
-      proposal.requester.client_slug = "test"
-      # TODO must write to db to trigger reindex
+      test_client_request = create(:test_client_request)
+      proposal = test_client_request.proposal
       proposal.update_attribute(:public_id, 'foobar') # skip callback, which would overwrite this
-      results = Query::Proposal::Search.new(current_user: proposal.requester).execute('foobar')
-      expect(results).to eq([proposal])
+      proposal.reindex
+      dump_index
+      searcher = Query::Proposal::Search.new(current_user: proposal.requester)
+      results = searcher.execute("foobar")
+      expect(results.to_a).to eq([proposal])
     end
 
     it "can operate on an a relation" do
-      proposal = create(:proposal)
-      proposal.requester.client_slug = "test"
+      test_client_request = create(:test_client_request)
+      proposal = test_client_request.proposal
+      proposal.reindex
       relation = Proposal.where(id: proposal.id + 1)
-      results = Query::Proposal::Search.new(relation: relation, current_user: proposal.requester).execute(proposal.id.to_s)
-      expect(results).to eq([])
+      user = proposal.requester
+      results = Query::Proposal::Search.new(relation: relation, current_user: user).execute(proposal.id.to_s)
+      expect(results.to_a).to eq([])
     end
 
     it "returns an empty list for no matches" do
-      create(:proposal)
-      proposal.requester.client_slug = "test"
-      results = Query::Proposal::Search.new(current_user: proposal.requester).execute('asgsfgsfdbsd')
+      test_client_request = create(:test_client_request)
+      test_client_request.proposal.reindex
+      user = test_client_request.proposal.requester
+      results = Query::Proposal::Search.new(current_user: user).execute('asgsfgsfdbsd')
       expect(results).to eq([])
     end
 
@@ -41,9 +47,9 @@ describe Query::Proposal::Search do
       [:project_title, :description, :vendor].each do |attr_name|
         it "returns the Proposal when searching by the ##{attr_name}" do
           work_order = create(:ncr_work_order, attr_name => 'foo')
-          work_order.requester.client_slug = "ncr"
+          work_order.proposal.reindex
           results = Query::Proposal::Search.new(current_user: work_order.requester).execute('foo')
-          expect(results).to eq([work_order.proposal])
+          expect(results.to_a).to eq([work_order.proposal])
         end
       end
     end
@@ -52,23 +58,37 @@ describe Query::Proposal::Search do
       [:product_name_and_description, :justification, :additional_info].each do |attr_name|
         it "returns the Proposal when searching by the ##{attr_name}" do
           procurement = create(:gsa18f_procurement, attr_name => 'foo')
-          procurement.requester.client_slug = "gsa18f"
+          procurement.proposal.reindex
           results = Query::Proposal::Search.new(current_user: procurement.requester).execute('foo')
-          expect(results).to eq([procurement.proposal])
+          expect(results.to_a).to eq([procurement.proposal])
         end
       end
     end
 
     it "returns the Proposals by rank" do
-      prop1 = create(:proposal, id: 12)
-      test_client_data = create(:test_client_data, project_title: "12 rolly chairs for 1600 Penn Ave")
-      prop2 = test_client_data.proposal
-      prop3 = create(:proposal, id: 1600)
+      user = create(:user, client_slug: "test")
 
-      searcher = Query::Proposal::Search.new
-      expect(searcher.execute('12')).to eq([prop1, prop2])
-      expect(searcher.execute('1600')).to eq([prop3, prop2])
-      expect(searcher.execute('12 rolly')).to eq([prop2])
+      proposal1 = create(:proposal, id: 12, requester: user)
+      test_client_request1 = create(:test_client_request, proposal: proposal1)
+      proposal1.reindex
+
+      test_client_request2 = create(:test_client_request, project_title: "12 rolly chairs for 1600 Penn Ave")
+      proposal2 = test_client_request.proposal
+      test_client_request2.add_observer(user)
+      proposal2.reindex
+
+      proposal3 = create(:proposal, id: 1600, requester: user)
+      test_client_request3 = create(:test_client_request, proposal: proposal3)
+      proposal3.reindex
+
+      searcher = Query::Proposal::Search.new(current_user: user)
+      expect(searcher.execute('12').to_a).to eq([proposal1, proposal2])
+      expect(searcher.execute('1600').to_a).to eq([proposal3, proposal2])
+      expect(searcher.execute('12 rolly').to_a).to eq([proposal2])
     end
   end
+end
+
+def dump_index
+  puts Proposal.search( "*" ).results.pretty_inspect
 end

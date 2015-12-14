@@ -58,7 +58,9 @@ module Query
           bool do
             must do
               term client_data_type: searchdsl.client_data_type
-              if searchdsl.apply_authz?
+            end
+            if searchdsl.apply_authz?
+              must do
                 term subscribers: searchdsl.current_user.id.to_s
               end
             end

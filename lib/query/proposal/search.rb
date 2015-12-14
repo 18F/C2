@@ -4,7 +4,6 @@ module Query
       attr_reader :relation, :current_user, :params, :client_data_type, :response
 
       def initialize(args)
-        puts args.pretty_inspect
         @relation = args[:relation]
         @current_user = args[:current_user] or fail ":current_user required"
         @params = args[:params] || {}

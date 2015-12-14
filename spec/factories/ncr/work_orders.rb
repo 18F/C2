@@ -8,7 +8,7 @@ FactoryGirl.define do
     emergency false
     project_title "NCR Name"
     sequence(:approving_official_email) {|n| "approver#{User.count}@example.com" }
-    association :proposal, flow: 'linear'
+    association :proposal, flow: 'linear', client_slug: "ncr"
 
     factory :ba80_ncr_work_order do
       expense_type "BA80"
