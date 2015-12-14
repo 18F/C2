@@ -5,18 +5,24 @@ module Searchable
     include Elasticsearch::Model
 
     after_commit on: [:create] do
-      #STDERR.puts("CREATE proposal called from #{caller.join("\n")}")
-      delay.reindex
+      unless Rails.env.test?
+        #STDERR.puts("CREATE proposal called from #{caller.join("\n")}")
+        delay.reindex
+      end
     end
 
     after_commit on: [:update] do
-      #STDERR.puts("UPDATE proposal called from #{caller.join("\n")}")
-      delay.reindex
+      unless Rails.env.test?
+        #STDERR.puts("UPDATE proposal called from #{caller.join("\n")}")
+        delay.reindex
+      end
     end
 
     after_commit on: [:destroy] do
-      #STDERR.puts("DESTROY proposal called from #{caller.join("\n")}")
-      delay.remove_from_index
+      unless Rails.env.test?
+        #STDERR.puts("DESTROY proposal called from #{caller.join("\n")}")
+        delay.remove_from_index
+      end
     end
 
     def reindex

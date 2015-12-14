@@ -110,7 +110,7 @@ module Query
 
         if text
           proposals_data.alter_query do |p|
-            Query::Proposal::Search.new(p).execute(text)
+            Query::Proposal::Search.new(current_user: user, relation: p).execute(text)
           end
         end
       end

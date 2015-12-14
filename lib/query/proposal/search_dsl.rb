@@ -56,8 +56,10 @@ module Query
         @dsl.filter = Filter.new
         @dsl.filter do
           bool do
-            must do
-              term client_data_type: searchdsl.client_data_type
+            if searchdsl.client_data_type.present?
+              must do
+                term client_data_type: searchdsl.client_data_type
+              end
             end
             if searchdsl.apply_authz?
               must do

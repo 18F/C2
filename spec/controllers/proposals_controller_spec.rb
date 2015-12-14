@@ -156,6 +156,12 @@ describe ProposalsController do
         single.update(public_id: 'AAA')
         triple.update(public_id: 'AAA AAA AAA')
 
+        double.reindex
+        single.reindex
+        triple.reindex
+
+        Proposal.__elasticsearch__.refresh_index!
+
         get :query, text: "AAA"
         query = assigns(:proposals_data).rows
 

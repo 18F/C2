@@ -1,7 +1,7 @@
 module Query
   module Proposal
     class Search
-      attr_reader :relation, :current_user, :params, :client_data_type, :response
+      attr_reader :relation, :current_user, :params, :response
 
       def initialize(args)
         @relation = args[:relation]
