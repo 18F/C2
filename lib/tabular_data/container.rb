@@ -4,12 +4,21 @@ module TabularData
 
     def initialize(name, config)
       @name = name
-      # useful if the sort is set via alter_query
       @frozen_sort = config.fetch(:frozen_sort, false)
       @filter = config.fetch(:filter, false)
-      self.init_query(config[:engine].constantize, config.fetch(:joins, []))
-      self.init_columns(config.fetch(:column_configs, {}), config.fetch(:columns, {}))
-      self.set_sort(config[:sort])
+      init_query(config[:engine].constantize, config.fetch(:joins, []))
+      init_columns(config.fetch(:column_configs, {}), config.fetch(:columns, {}))
+      set_sort(config[:sort])
+    end
+
+    def self.config_for_client(container_name, client_name)
+      filename = "#{Rails.root}/config/tables/#{container_name}.yml"
+      container_yaml = YAML.load_file(filename)
+      key = "default"
+      if container_yaml.key?(client_name)
+        key = client_name
+      end
+      container_yaml[key].deep_symbolize_keys
     end
 
     def alter_query
@@ -17,7 +26,6 @@ module TabularData
       self
     end
 
-    # @todo filtering, paging, etc.
     def rows
       results = @query
       if @sort && !@frozen_sort
@@ -38,7 +46,7 @@ module TabularData
       relevant = params.permit(tables: {@name => [:sort]})
       config = relevant.fetch(:tables, {}).fetch(@name, {}) || {}
       if config.key? :sort
-        self.set_sort(config[:sort])
+        set_sort(config[:sort])
       end
       self
     end
@@ -51,18 +59,7 @@ module TabularData
       end
     end
 
-    def self.config_for_client(container_name, client_name)
-      # TODO load once
-      filename = "#{Rails.root}/config/tables/#{container_name}.yml"
-      container_yaml = YAML.load_file(filename)
-      key = "default"
-      if container_yaml.key?(client_name)
-        key = client_name
-      end
-      container_yaml[key].deep_symbolize_keys
-    end
-
-    protected
+    private
 
     def set_sort(field)
       field = field || ''

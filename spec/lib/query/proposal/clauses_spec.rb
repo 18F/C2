@@ -1,49 +1,54 @@
 describe Query::Proposal::Clauses do
-  describe '.with_requester' do
-    it "returns matches" do
-      create(:proposal)
-      proposal = create(:proposal)
+  describe "#for_client_slug" do
+    it "returns all proposals for the client slug" do
+      _general_proposal = create(:proposal)
+      gsa_proposal = create(:gsa18f_procurement).proposal
 
-      condition = Query::Proposal::Clauses.with_requester(proposal.requester)
-      expect(Proposal.where(condition)).to eq([proposal])
+      query = Query::Proposal::Clauses.new.for_client_slug("gsa_18f")
+
+      expect(Proposal.where(query)).to eq([gsa_proposal])
     end
   end
 
-  describe '.with_approver_or_delegate' do
-    it "returns approver matches" do
+  describe "#which_involve" do
+    it "includes proposals where user is requester" do
+      create(:proposal)
+      proposal = create(:proposal)
+
+      query = Query::Proposal::Clauses.new.which_involve(proposal.requester)
+
+      expect(Proposal.where(query)).to eq([proposal])
+    end
+
+     it "returns proposals where user is approver" do
       create(:proposal, :with_approver)
       proposal = create(:proposal, :with_approver)
       approver = proposal.approvers.first
 
-      condition = Query::Proposal::Clauses.with_approver_or_delegate(approver)
-      expect(Proposal.where(condition)).to eq([proposal])
-    end
+      query = Query::Proposal::Clauses.new.which_involve(approver)
 
-    it "returns delegate matches" do
-      proposal1 = create(:proposal, :with_approver)
-      approver1 = proposal1.approvers.first
-      delegate1 = create(:user)
-      approver1.add_delegate(delegate1)
+      expect(Proposal.where(query)).to eq([proposal])
+     end
 
-      proposal2 = create(:proposal, :with_approver)
-      approver2 = proposal2.approvers.first
-      delegate2 = create(:user)
-      approver2.add_delegate(delegate2)
+     it "returns proposals where user is observer" do
+       observer = create(:user)
+       proposal = create(:proposal, observer: observer)
 
-      condition = Query::Proposal::Clauses.with_approver_or_delegate(delegate2)
-      expect(Proposal.where(condition)).to eq([proposal2])
-    end
-  end
+       query = Query::Proposal::Clauses.new.which_involve(observer)
 
-  describe '.with_observer' do
-    it "returns matches" do
-      create(:proposal, :with_observer)
+       expect(Proposal.where(query)).to eq([proposal])
+     end
 
-      proposal = create(:proposal, :with_observer)
-      observer = proposal.observers.first
+     it "returns proposal where user is delegate" do
+        delegate1 = create(:user)
+        _proposal1 = create(:proposal, delegate: delegate1)
 
-      condition = Query::Proposal::Clauses.with_observer(observer)
-      expect(Proposal.where(condition)).to eq([proposal])
-    end
+        delegate2 = create(:user)
+        proposal2 = create(:proposal, delegate: delegate2)
+
+        query = Query::Proposal::Clauses.new.which_involve(delegate2)
+
+        expect(Proposal.where(query)).to eq([proposal2])
+     end
   end
 end
