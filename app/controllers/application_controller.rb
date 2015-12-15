@@ -11,11 +11,15 @@ class ApplicationController < ActionController::Base
 
   before_action :authenticate_user!
   before_action :disable_peek_by_default
+  before_action :check_disabled_client
+
+  rescue_from Pundit::NotAuthorizedError, with: :auth_errors
 
   protected
 
   # We are overriding this method to account for ExceptionPolicies
   def authorize(record, query = nil, user = nil)
+    check_disabled_client
     user ||= @current_user
     policy = ::PolicyFinder.policy_for(user, record)
 
@@ -26,8 +30,35 @@ class ApplicationController < ActionController::Base
       # boolean. Both systems are accommodated
       # will need to replace this when a new version of pundit arrives
       msg = "not allowed to #{query} this #{record}"
-      ex = NotAuthorizedError.new(query: query, record: record, policy: policy, message: msg)
-      fail ex
+      exception = NotAuthorizedError.new(query: query, record: record, policy: policy, message: msg)
+      fail exception
+    end
+  end
+
+  def check_disabled_client
+    if client_disabled?
+      exception = NotAuthorizedError.new("Client is disabled")
+      fail exception
+    end
+  end
+
+  def render_disabled_client_message(message)
+    begin
+      render "#{current_user.client_slug}/_disabled", status: 403
+    rescue ActionView::MissingTemplate => _error
+      render "authorization_error", status: 403, locals: { msg: message }
+    end
+  end
+
+  def auth_errors(exception)
+    render_auth_errors(exception)
+  end
+
+  def render_auth_errors(exception)
+    if exception.message == "Client is disabled"
+      render_disabled_client_message(exception.message)
+    else
+      render "authorization_error", status: 403, locals: { msg: exception.message }
     end
   end
 
@@ -52,16 +83,20 @@ class ApplicationController < ActionController::Base
   end
 
   def find_current_user
-    if ENV['FORCE_USER_ID'] && !Rails.env.production?
-      User.find ENV['FORCE_USER_ID']
-    elsif session[:user] && session[:user]['email']
-      User.find_or_create_by(email_address: session[:user]['email'])
+    if ENV["FORCE_USER_ID"] && !Rails.env.production?
+      User.find ENV["FORCE_USER_ID"]
+    elsif session[:user] && session[:user]["email"]
+      User.find_or_create_by(email_address: session[:user]["email"])
     end
+  end
+
+  def client_disabled?
+    current_user && (ENV["DISABLE_CLIENT_SLUGS"] || "").split(/,/).include?(current_user.client_slug)
   end
 
   def sign_in(user)
     session[:user] ||= {}
-    session[:user]['email'] = user.email_address
+    session[:user]["email"] = user.email_address
     @current_user = user
   end
 

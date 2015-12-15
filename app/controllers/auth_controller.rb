@@ -1,5 +1,6 @@
 class AuthController < ApplicationController
   skip_before_action :authenticate_user!, only: [:oauth_callback]
+  skip_before_action :check_disabled_client
 
   def oauth_callback
     auth = request.env["omniauth.auth"]

@@ -48,11 +48,15 @@ module Query
       protected
 
       def pending_filter
-        proc { |proposals| proposals.select { |p| !p.awaiting_approver?(user) } }
+        proc do |proposals|
+          proposals.select { |proposal| !proposal.awaiting_approver?(user) }
+        end
       end
 
       def pending_review_filter
-        proc { |proposals| proposals.select { |p| p.awaiting_approver?(user) } }
+        proc do |proposals|
+          proposals.select { |proposal| proposal.awaiting_approver?(user) }
+        end
       end
 
       def proposals_container(name, extra_config = {})
@@ -60,10 +64,10 @@ module Query
         config = config.merge(extra_config)
         container = TabularData::Container.new(name, config)
 
-        container.alter_query do |p|
-          ProposalPolicy::Scope.new(self.user, p).resolve.includes(:client_data)
+        container.alter_query do |proposal|
+          ProposalPolicy::Scope.new(user, proposal).resolve.includes(:client_data)
         end
-        container.set_state_from_params(self.params)
+        container.set_state_from_params(params)
 
         container
       end
@@ -73,7 +77,7 @@ module Query
         container = proposals_container(name, config)
 
         container.alter_query do |rel|
-          condition = Query::Proposal::Clauses.which_involve(self.user)
+          condition = Query::Proposal::Clauses.new.which_involve(user)
           rel.where(condition)
         end
       end
@@ -97,27 +101,29 @@ module Query
 
       def apply_date_filters(proposals_data)
         if start_date
-          proposals_data.alter_query { |p| p.where("proposals.created_at >= ?", start_date) }
+          proposals_data.alter_query { |proposal| proposal.where("proposals.created_at >= ?", start_date) }
         end
 
         if end_date
-          proposals_data.alter_query { |p| p.where("proposals.created_at < ?", end_date) }
+          proposals_data.alter_query { |proposal| proposal.where("proposals.created_at < ?", end_date) }
         end
       end
 
       def apply_text_filter(proposals_data)
-        text = params[:text]
-
-        if text
-          proposals_data.alter_query do |p|
-            Query::Proposal::Search.new(current_user: user, relation: p).execute(text)
+        if params[:text]
+          proposals_data.alter_query do |proposal|
+            Query::Proposal::Search.new(
+              current_user: user,
+              relation: proposal,
+              params: params
+            ).execute(params[:text])
           end
         end
       end
 
       def apply_status_filter(proposals_data)
         if params[:status]
-          proposals_data.alter_query { |p| p.where("proposals.status = ?", params[:status]) }
+          proposals_data.alter_query { |proposal| proposal.where(status: params[:status]) }
         end
       end
     end
