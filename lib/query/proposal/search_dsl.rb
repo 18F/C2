@@ -62,7 +62,7 @@ module Query
         end
       end
 
-      # rubocop:disable Metrics/MethodLength
+      # rubocop:disable Metrics/MethodLength,Metrics/ABC
       def add_filter
         searchdsl = self
         @dsl.filter = Filter.new
