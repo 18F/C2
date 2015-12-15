@@ -1,7 +1,6 @@
 dependencies:
   pre:
     - cp .env.example .env
+    - bash ./build-elasticsearch.sh
   cache_directories:
     - elasticsearch-1.7.4
-  post:
-    - if [[ ! -e elasticsearch-1.7.4 ]]; then wget http://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.7.4.tar.gz && tar -xvf elasticsearch-1.7.4.tar.gz; fi
