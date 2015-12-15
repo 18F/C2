@@ -1,10 +1,12 @@
+require 'pry'
+
 describe "My requests needing action" do
 
   describe "The 'My Requests' page 'needing action' section" do
     let(:approver_user)  { create(:user) }
     let(:purchaser_user) { create(:user) }
-    let(:request_needing_approval) { create_proposal_with_approvers(approver_user, purchaser_user) }
-    let(:request_needing_purchase) do
+    let!(:request_needing_approval) { create_proposal_with_approvers(approver_user, purchaser_user) }
+    let!(:request_needing_purchase) do
       p = create_proposal_with_approvers(approver_user, purchaser_user)
       p.individual_steps.first.approve!
       p
@@ -18,17 +20,17 @@ describe "My requests needing action" do
 
     it "is correctly-named for the user role" do
       expect(@page).to have_needing_review
-      expect(@page.needing_review).to have_section_title "Pending Requests Needing Purchase"
+      expect(@page.needing_review.section_title.text).to eq "Pending Requests Needing Purchase"
     end
 
     it "contains requests that can be acted on by the user" do
       needing_review_section = @page.needing_review
-      expect(needing_review_section.requests.first.public_id_link.text).to eql(request_needing_purchase.public_id)
+      expect(needing_review_section.requests.first.public_id_link.text).to eq request_needing_purchase.public_id
     end
 
     it "does not contain requests that cannot be acted on by the user" do
       needing_review_section = @page.needing_review
-      expect(needing_review_section.requests.first.public_id_link.text).to eql(request_needing_approval.public_id)
+      expect(needing_review_section.requests.first.public_id_link.text).to_not eq request_needing_approval.public_id
     end
   end
 
