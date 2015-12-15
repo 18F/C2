@@ -31,7 +31,7 @@ end
 
 def start_es_server
   # circleci has locally installed version of elasticsearch so alter PATH to find
-  ENV["PATH"] = "./elasticsearch-1.7.4:#{ENV["PATH"]}"
+  ENV["PATH"] = "../elasticsearch-1.7.4/bin:#{ENV["PATH"]}"
 
   Elasticsearch::Extensions::Test::Cluster.start(nodes: 1) unless Elasticsearch::Extensions::Test::Cluster.running?
 
