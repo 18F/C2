@@ -89,16 +89,6 @@ As emails are sent, they will be visible at http://localhost:3000/letter_opener.
 
 ## Running tests
 
-### Elasticsearch
-
-Make sure your log directory is write-able. NOTE this is specific to your operating system and ES configuration.
-For Homebrew on OSX, this should work:
-
-```bash
-sudo mkdir /var/log/elasticsearch/
-sudo chmod 777 /var/log/elasticsearch/
-```
-
 ### PhantomJS
 
 You will need to install [PhantomJS](http://phantomjs.org/download.html) and

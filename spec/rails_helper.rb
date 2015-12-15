@@ -33,14 +33,23 @@ def start_es_server
   # circleci has locally installed version of elasticsearch so alter PATH to find
   ENV["PATH"] = "./elasticsearch-1.7.4/bin:#{ENV["PATH"]}"
 
-  Elasticsearch::Extensions::Test::Cluster.start(nodes: 1) unless Elasticsearch::Extensions::Test::Cluster.running?
+  es_test_cluster_opts = {
+    nodes: 1,
+    path_logs: "tmp/es-logs"
+  }
+
+  unless Elasticsearch::Extensions::Test::Cluster.running?
+    Elasticsearch::Extensions::Test::Cluster.start(es_test_cluster_opts)
+  end
 
   # create index(s) to test against.
   create_es_index(Proposal)
 end
 
 def stop_es_server
-  Elasticsearch::Extensions::Test::Cluster.stop if Elasticsearch::Extensions::Test::Cluster.running?
+  if Elasticsearch::Extensions::Test::Cluster.running?
+    Elasticsearch::Extensions::Test::Cluster.stop
+  end
 end
 
 RSpec.configure do |config|
