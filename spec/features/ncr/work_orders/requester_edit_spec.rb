@@ -136,12 +136,13 @@ feature "Requester edits their NCR work order", :js do
   end
 
   scenario "has 'Discard Changes' link" do
-    visit "/ncr/work_orders/#{work_order.id}/edit"
+    visit proposal_path(work_order.proposal)
+    expect(page).to_not have_content("Discard Changes")
+    visit edit_ncr_work_order_path(work_order)
     expect(page).to have_content("Discard Changes")
     click_on "Discard Changes"
-    expect(current_path).to eq("/proposals/#{work_order.proposal.id}")
+    expect(page).to have_content("Modify Request")
   end
-
 
   scenario "can change approving official email if first approval not done" do
     visit edit_ncr_work_order_path(work_order)
