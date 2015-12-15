@@ -1,7 +1,7 @@
 module Query
   module Proposal
     class Search
-      attr_reader :relation, :current_user, :params, :response
+      attr_reader :relation, :current_user, :params, :response, :dsl
 
       def initialize(args)
         @relation = args[:relation]
@@ -10,7 +10,7 @@ module Query
       end
 
       def execute(query)
-        dsl = build_dsl(query)
+        build_dsl(query)
         @response = ::Proposal.search(dsl)
         if relation
           @response.records.merge(relation)
@@ -22,9 +22,9 @@ module Query
       private
 
       def build_dsl(query)
-        dsl = Query::Proposal::SearchDSL.new(
+        @dsl = Query::Proposal::SearchDSL.new(
           params: params, 
-          current_user: current_user, 
+          current_user: current_user,
           query: query,
           client_data_type: ::Proposal.client_model_for(current_user).to_s
         )

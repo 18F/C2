@@ -62,16 +62,26 @@ module Query
         end
       end
 
+      # rubocop:disable Metrics/MethodLength
       def add_filter
         searchdsl = self
         @dsl.filter = Filter.new
         @dsl.filter do
           bool do
-            must { term client_data_type: searchdsl.client_data_type } if searchdsl.client_data_type.present?
-            must { term subscribers: searchdsl.current_user.id.to_s } if searchdsl.apply_authz?
+            if searchdsl.client_data_type.present?
+              must do
+                term client_data_type: searchdsl.client_data_type
+              end
+            end
+            if searchdsl.apply_authz?
+              must do
+                term subscribers: searchdsl.current_user.id.to_s
+              end
+            end
           end
         end
       end
+      # rubocop:enable
 
       def add_sort
         if params[:sort]

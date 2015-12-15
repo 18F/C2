@@ -4,7 +4,6 @@ module Test
   end
 
   class ClientRequest < ActiveRecord::Base
-
     # must define before include PurchaseCardMixin
     def self.purchase_amount_column_name
       :amount

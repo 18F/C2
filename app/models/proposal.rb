@@ -237,7 +237,7 @@ class Proposal < ActiveRecord::Base
   end
 
   def self.client_model_for(user)
-    CLIENT_MODELS.select { |cmodel| cmodel.slug_matches?(user) }.first
+    CLIENT_MODELS.select { |cmodel| cmodel.slug_matches?(user) }[0]
   end
 
   private
