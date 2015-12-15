@@ -1,6 +1,6 @@
 module Test
   def self.table_name_prefix
-    'test_'
+    "test_"
   end
 
   class ClientRequest < ActiveRecord::Base

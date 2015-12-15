@@ -23,7 +23,7 @@ module Query
 
       def build_dsl(query)
         @dsl = Query::Proposal::SearchDSL.new(
-          params: params, 
+          params: params,
           current_user: current_user,
           query: query,
           client_data_type: ::Proposal.client_model_for(current_user).to_s
