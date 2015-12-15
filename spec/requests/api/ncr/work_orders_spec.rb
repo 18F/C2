@@ -31,7 +31,6 @@ describe 'NCR Work Orders API' do
             "proposal" => {
               "steps" => [],
               "created_at" => time_to_json(proposal.created_at),
-              "flow" => proposal.flow,
               "id" => proposal.id,
               "requester" => {
                 "created_at" => time_to_json(proposal.requester.created_at),

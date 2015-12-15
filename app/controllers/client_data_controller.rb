@@ -73,7 +73,7 @@ class ClientDataController < ApplicationController
 
   def build_client_data_instance
     @client_data_instance = model_class.new(filtered_params)
-    @client_data_instance.build_proposal(flow: "linear", requester: current_user)
+    @client_data_instance.build_proposal(requester: current_user)
   end
 
   def find_client_data_instance

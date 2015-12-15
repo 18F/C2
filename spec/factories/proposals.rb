@@ -3,7 +3,6 @@ FactoryGirl.define do
 
   factory :proposal do
     public_id
-    flow 'linear'
     status 'pending'
     association :requester, factory: :user
 
@@ -22,7 +21,6 @@ FactoryGirl.define do
     end
 
     trait :with_serial_approvers do
-      flow 'linear'
       after :create do |proposal, evaluator|
         ind = 2.times.map{ Steps::Approval.new(user: create(:user, client_slug: evaluator.client_slug)) }
         proposal.add_initial_steps(ind)
@@ -30,7 +28,6 @@ FactoryGirl.define do
     end
 
     trait :with_parallel_approvers do
-      flow 'parallel'
       after :create do |proposal, evaluator|
         ind = 2.times.map{ Steps::Approval.new(user: create(:user, client_slug: evaluator.client_slug)) }
         proposal.root_step = Steps::Parallel.new(child_approvals: ind)
@@ -38,7 +35,6 @@ FactoryGirl.define do
     end
 
     trait :with_approval_and_purchase do
-      flow "linear"
       after :create do |proposal, evaluator|
         first_approver = create(:user, client_slug: evaluator.client_slug)
         second_approver = create(:user, client_slug: evaluator.client_slug)
