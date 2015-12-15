@@ -15,6 +15,12 @@ and how they affect app behavior.
 ## DEFAULT_URL_PORT
 ## DEFAULT_URL_SCHEME
 
+## DISABLE_CLIENT_SLUGS
+
+Comma-delimited list of client slugs who should be denied access to the application. This is a client-wide
+deactivation, and affects every user with the slug, unlike toggling user.active which only affects a single
+user.
+
 ## FORCE_USER_ID
 
 This variable should only be used in development. It is most useful when mimicking a user for whom you cannot authenticate, as when working on a production db snapshot in a local sandbox.

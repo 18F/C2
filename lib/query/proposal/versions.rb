@@ -1,7 +1,31 @@
 module Query
   module Proposal
-    module Versions
-      def self.models(proposal)
+    class Versions
+      def initialize(proposal)
+        @proposal = proposal
+      end
+
+      def container
+        base_container.alter_query do |relation|
+          relation.where(id: version_ids)
+        end
+      end
+
+      private
+
+      attr_reader :proposal
+
+      def base_container
+        @_base_container ||= TabularData::Container.new(:versions, container_config)
+      end
+
+      def version_ids
+        @_version_ids ||= models.flat_map do |model|
+          model.versions.pluck(:id)
+        end
+      end
+
+      def models
         [
           proposal,
           proposal.client_data,
@@ -12,30 +36,8 @@ module Query
         ].flatten.compact
       end
 
-      def self.version_ids_for(proposal)
-        # TODO make query more efficient
-        self.models(proposal).flat_map do |model|
-          model.versions.pluck(:id)
-        end
-      end
-
-      def self.container(proposal)
-        result = self.base_container
-
-        version_ids = self.version_ids_for(proposal)
-        result.alter_query { |rel| rel.where(id: version_ids) }
-
-        result
-      end
-
-      protected
-
-      def self.container_config
-        TabularData::Container.config_for_client('versions', 'default')
-      end
-
-      def self.base_container
-        TabularData::Container.new(:versions, self.container_config)
+      def container_config
+        TabularData::Container.config_for_client("versions", "default")
       end
     end
   end

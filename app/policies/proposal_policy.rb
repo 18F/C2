@@ -98,7 +98,7 @@ class ProposalPolicy
 
   def pending_approval!
     check(self.pending_approver? || self.pending_delegate?,
-          "A response has already been logged a response for this proposal")
+          "A response has already been logged for this proposal")
   end
 
   def visible_proposals

@@ -9,13 +9,21 @@ module Ncr
     def building_options
       custom = Ncr::WorkOrder.where.not(building_number: nil).pluck('DISTINCT building_number')
       all = custom + Ncr::BUILDING_NUMBERS
-      # @todo is there a better order? maybe by current_user's use?
       all.uniq.sort
+    end
+
+    def org_code_options(org_code = nil)
+      all_orgs = Ncr::Organization.all.map(&:code_and_name) - [org_code]
+
+      if org_code
+        all_orgs = all_orgs.push(org_code)
+      end
+
+      all_orgs
     end
 
     def vendor_options(vendor = nil)
       all_vendors = Ncr::WorkOrder.where.not(vendor: nil).pluck('DISTINCT vendor')
-      # merge in any passed
       if vendor
         all_vendors.push(vendor)
       end

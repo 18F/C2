@@ -2,6 +2,7 @@ class InboxController < ApplicationController
   include Mandrill::Rails::WebHookProcessor
 
   skip_before_action :authenticate_user!, only: [:create, :show]
+  skip_before_action :check_disabled_client
 
   def handle_inbound(event_payload)
     handler = IncomingMail::Handler.new

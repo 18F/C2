@@ -2,6 +2,7 @@ class ProposalsController < ApplicationController
   include TokenAuth
 
   skip_before_action :authenticate_user!, only: [:approve]
+  skip_before_action :check_disabled_client, only: [:approve]
   # TODO use Policy for all actions
   before_action ->{authorize proposal}, only: [:show, :cancel, :cancel_form, :history]
   before_action :needs_token_on_get, only: :approve
@@ -66,7 +67,7 @@ class ProposalsController < ApplicationController
   end
 
   def history
-    @container = Query::Proposal::Versions.container(proposal)
+    @container = Query::Proposal::Versions.new(proposal).container
     @container.set_state_from_params(params)
   end
 
