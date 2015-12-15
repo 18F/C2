@@ -1,4 +1,4 @@
-require 'elasticsearch/dsl'
+require "elasticsearch/dsl"
 
 module Query
   module Proposal
@@ -29,23 +29,30 @@ module Query
 
       def composite_query_string
         if client_query && query_str
-          "(#{query_str}) AND (#{client_query.map{|k,v| "#{k}:(#{v})"}.join(' ')})"
+          "(#{query_str}) AND (#{client_query.map { |k, v| "#{k}:(#{v})" }.join(' ')})"
         elsif client_query
-          client_query.map{|k,v| "#{k}:(#{v})"}.join(' ')
+          client_query.map { |k, v| "#{k}:(#{v})" }.join(" ")
         elsif query_str
           query_str
-        end 
+        end
       end
 
       private
 
       def client_query
-        params[client_data_type.underscore.gsub('/', '_').to_sym]
+        params[client_data_type.underscore.tr("/", "_").to_sym]
       end
 
       def build_dsl
-        searchdsl = self
         @dsl = Elasticsearch::DSL::Search::Search.new
+        add_query
+        add_filter
+        add_sort
+        add_pagination
+      end
+
+      def add_query
+        searchdsl = self
         @dsl.query = Query.new
         @dsl.query do
           query_string do
@@ -53,31 +60,32 @@ module Query
             default_operator searchdsl.default_operator
           end
         end
+      end
+
+      def add_filter
+        searchdsl = self
         @dsl.filter = Filter.new
         @dsl.filter do
           bool do
-            if searchdsl.client_data_type.present?
-              must do
-                term client_data_type: searchdsl.client_data_type
-              end
-            end
-            if searchdsl.apply_authz?
-              must do
-                term subscribers: searchdsl.current_user.id.to_s
-              end
-            end
+            must { term client_data_type: searchdsl.client_data_type } if searchdsl.client_data_type.present?
+            must { term subscribers: searchdsl.current_user.id.to_s } if searchdsl.apply_authz?
           end
         end
+      end
 
+      def add_sort
         if params[:sort]
           @dsl.sort = params[:sort]
         end
+      end
+
+      def add_pagination
         if params[:from]
           @dsl.from = params[:from].to_i
         end
         if params[:size]
           @dsl.size = params[:size].to_i
-        end 
+        end
       end
     end
   end

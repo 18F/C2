@@ -1,9 +1,6 @@
-# configuration depends on environment
-require 'elasticsearch/model'
-require 'json'
-
-# log ES stats just like SQL
-require 'elasticsearch/rails/instrumentation'
+require "elasticsearch/model"
+require "json"
+require "elasticsearch/rails/instrumentation"
 
 # defaults
 es_client_args = {
@@ -11,8 +8,8 @@ es_client_args = {
     request: {
       timeout: 1800,
       open_timeout: 1800,
-    }   
-  },  
+    }
+  },
   retry_on_failure: 5,
 }
 
@@ -28,15 +25,15 @@ else
 end
 
 # optional verbose logging based on env var, regardless of environment.
-if ENV['ES_DEBUG'].to_i > 0
+if ENV["ES_DEBUG"].to_i > 0
   logger = Logger.new(STDOUT)
   logger.level = Logger::DEBUG
   tracer = Logger.new(STDERR)
-  tracer.formatter = lambda { |s, d, p, m| "#{m.gsub(/^.*$/) { |n| '   ' + n }}\n" }
+  tracer.formatter = ->(_s, _d, _p, m) { "#{m.gsub(/^.*$/) { |n| '   ' + n }}\n" }
   es_client_args[:log] = true
   es_client_args[:logger] = logger
   es_client_args[:tracer] = tracer
-  puts "[#{Time.now.utc.iso8601}] Elasticsearch logging set to DEBUG mode"
+  logger.debug "[#{Time.now.utc.iso8601}] Elasticsearch logging set to DEBUG mode"
 end
 
 # despite documentation to the contrary, this env variable actually seems to control
@@ -45,5 +42,6 @@ ENV["ELASTICSEARCH_URL"] = es_client_args["url"]
 
 Elasticsearch::Model.client = Elasticsearch::Client.new(es_client_args)
 
-ENV['ES_DEBUG'] and puts "[#{Time.now.utc.iso8601}] Using Elasticsearch server #{es_client_args["url"]}"
-
+if ENV["ES_DEBUG"]
+  es_client_args[:logger].debug "[#{Time.now.utc.iso8601}] Using Elasticsearch server #{es_client_args['url']}"
+end
