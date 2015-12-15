@@ -17,5 +17,8 @@ module Test
       true
     end
 
+    def name
+      project_title
+    end
   end
 end
