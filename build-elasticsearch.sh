@@ -9,6 +9,6 @@ TAR_FILE=elasticsearch-$ES_VERSION.tar.gz
 if [ ! -e elasticsearch/bin/elasticsearch ]; then
   wget http://download.elasticsearch.org/elasticsearch/elasticsearch/$TAR_FILE
   tar xzf $TAR_FILE
-  rm elasticsearch
+  rm -f elasticsearch
   ln -s elasticsearch-$ES_VERSION elasticsearch
 fi
