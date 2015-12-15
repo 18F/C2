@@ -23,8 +23,8 @@ module StepManager
 
   def clean_up_old_steps(old_steps, step_list)
     # destroy any old steps that are not a part of step list
-    (old_steps - step_list).each do |appr|
-      appr.destroy if Step.exists?(appr.id)
+    (old_steps - step_list).each do |step|
+      step.destroy if Step.exists?(step.id)
     end
   end
 
