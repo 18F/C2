@@ -3,4 +3,4 @@ dependencies:
     - cp .env.example .env
     - bash ./build-elasticsearch.sh
   cache_directories:
-    - elasticsearch-1.7.4
+    - elasticsearch
