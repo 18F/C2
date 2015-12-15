@@ -5,12 +5,12 @@ contribute to the project.
 
 ## The Lifecycle of a Story
 
-A story is a definable piece work to be completed, represented in the team
+A story is a definable piece of work to be completed, represented in the team
 tracker as a card. Bug fixes, engineering tasks, and new user features are all
 examples of stories. Stories are represented with a short, 1-2 sentence
 description. Stories that involve user-related changes are written in the
 perspective of the end user. All stories should contain details on how the
-feature can be QA’d for acceptance.
+feature can be evaluated for acceptance.
 
 By the time a story makes it to the [C2 Trello
 Board](https://trello.com/b/kAW72R3m/c2-birthday-cake), it has gone through a
@@ -118,8 +118,7 @@ The PR should link to the Trello card and include a brief description of the
 changes, including any rationale for how/why the story is addressed in the way
 it is.
 
-The author should add any notes relevant to testing the change, especially for live QA
-testing.
+The author should add any notes relevant to testing the change.
 
 The author should link to the pull request in a comment on the Trello card.
 
@@ -138,10 +137,10 @@ give a Ship It. That said, the pair is welcome to solicit additional PR
 feedback from the rest of the team. If verbal approval is given by a teammate,
 the committer may comment `@TEAMMATE ship it` before merging the PR.
 
-If a card is code reviewed and requires more work before it is ready for QA,
-the code reviewer should indicate that updates are needed and assign the author
-to the pull request in Github but does not need to move the Trello card back to
-In Progress.
+If a card is code reviewed and requires more work before it is ready for the QA
+step, the code reviewer should indicate that updates are needed and assign the
+author to the pull request in Github but does not need to move the Trello card
+back to In Progress.
 
 There should be no more than 3 cards in Code Review at a time. If there are,
 developers should prioritize reviewing code over writing new code for features
@@ -169,7 +168,7 @@ Example flow:
     cd /tmp && mkdir deploy-qa && cd deploy-qa
     git clone git@github.com:18F/C2.git
     cd C2
-    git checkout -b qa-123456-fix-timezones
+    git checkout -b qa-fix-timezones
     git merge -m 'temp qa branch' origin/fix-timezones
     cf push c2-dev
     ```
