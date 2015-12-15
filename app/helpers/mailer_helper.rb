@@ -6,7 +6,7 @@ module MailerHelper
     image_tag(
       base_url + image_path("icon-#{status}.png"),
       class: "status-icon #{status} linear",
-      style: ("background-image: url('#{bg_linear_image}');" if !last_approver)
+      style: ("background-image: url('#{bg_linear_image}');" unless last_approver)
     )
   end
 
