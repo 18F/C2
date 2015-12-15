@@ -71,6 +71,23 @@ describe Step do
     end
   end
 
+  describe "database constraints" do
+    it "deletes steps when parent proposal is destroyed" do
+      step = create(:step)
+      step_id = step.id
+      proposal = step.proposal
+      proposal_id = proposal.id
+
+      expect(Step.exists?(step_id)).to eq true
+      expect(Proposal.exists?(proposal_id)).to eq true
+
+      proposal.destroy
+
+      expect(Step.exists?(step_id)).to eq false
+      expect(Proposal.exists?(proposal_id)).to eq false
+    end
+  end
+
   describe "complicated approval chains" do
     # Approval hierarchy version of needing *two* of the following:
     # 1) Amy AND Bob
