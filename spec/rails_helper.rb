@@ -30,6 +30,9 @@ def create_es_index(klass)
 end
 
 def start_es_server
+  # circleci has locally installed version of elasticsearch so alter PATH to find
+  ENV["PATH"] = "./elasticsearch-1.7.4:#{ENV["PATH"]}"
+
   Elasticsearch::Extensions::Test::Cluster.start(nodes: 1) unless Elasticsearch::Extensions::Test::Cluster.running?
 
   # create index(s) to test against.
