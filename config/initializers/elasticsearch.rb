@@ -1,6 +1,5 @@
 require "elasticsearch/model"
 require "json"
-require "elasticsearch/rails/instrumentation"
 
 # defaults
 es_client_args = {
