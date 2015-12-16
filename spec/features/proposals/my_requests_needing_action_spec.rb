@@ -18,11 +18,6 @@ describe "My requests needing action" do
       @page.load
     end
 
-    it "is correctly-named for the user role" do
-      expect(@page).to have_needing_review
-      expect(@page.needing_review.section_title.text).to eq "Pending Requests Needing Purchase"
-    end
-
     it "contains requests that can be acted on by the user" do
       needing_review_section = @page.needing_review
       expect(needing_review_section.requests.first.public_id_link.text).to eq request_needing_purchase.public_id
