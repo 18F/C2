@@ -78,11 +78,12 @@ class Proposal < ActiveRecord::Base
     number_of_replicas: 1
   } do
     # with dynamic mapping==true, we only need to explicitly define overrides.
-    # NOTE that because client_data may have fieldname namespace collisions
-    # with different client_data_type values, be aware that ES might guess
-    # client_data.foo is a string for one type, and a number for another.
-    # if that happens, suggestion is to override client_data.as_json in the
-    # affected client models.
+    # https://www.elastic.co/guide/en/elasticsearch/guide/current/dynamic-mapping.html
+    # e.g., "amount" is explicitly declared to be a string but not analyzed.
+    # otherwise the first "amount" value that convince ES that the field should
+    # be defined as an Integer (100), whereas it really ought to be a Float (100.00).
+    # same thing for public_id: the first value ES sees might be an integer,
+    # but the whole range of values in the db includes strings as well.
     mappings dynamic: "true" do
       indexes :id, boost: 2
       indexes :public_id, type: "string", index: :not_analyzed, boost: 1.5
