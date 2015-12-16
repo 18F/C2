@@ -76,16 +76,16 @@ class Proposal < ActiveRecord::Base
       client_data: {},
       comments: {
         include: {
-          user: { methods: [:full_name], only: [:full_name] }
+          user: { methods: [:display_name], only: [:display_name] }
         }
       },
       steps: {
         include: {
-          completed_by: { methods: [:full_name], only: [:full_name] }
+          completed_by: { methods: [:display_name], only: [:display_name] }
         }
       },
       requester: {
-        methods: [:full_name], only: [:full_name]
+        methods: [:display_name], only: [:display_name]
       }
     }
   }
