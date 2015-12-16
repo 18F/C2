@@ -47,11 +47,6 @@ module Ncr
       message: "must be three letters or numbers"
     }, allow_blank: true
 
-    scope :for_fiscal_year, lambda { |year|
-      range = range_for_fiscal_year(year)
-      where(created_at: range[:start_time]...range[:end_time])
-    }
-
     def self.all_system_approver_emails
       [
         self.ba61_tier1_budget_mailbox,
