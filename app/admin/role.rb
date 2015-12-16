@@ -20,9 +20,9 @@ ActiveAdmin.register Role do
 
     panel "Users" do
       table_for role.users do |tbl|
-        tbl.column('Email') { |user| link_to user.email_address, admin_user_path(user) }
-        tbl.column('Name')  { |user| user.full_name }
-        tbl.column('Client') { |user| user.client_slug }
+        tbl.column("Email") { |user| link_to user.email_address, admin_user_path(user) }
+        tbl.column("Name")  { |user| user.full_name }
+        tbl.column("Client") { |user| user.client_slug }
       end
     end
 
