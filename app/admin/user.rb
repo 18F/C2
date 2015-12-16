@@ -13,14 +13,14 @@ ActiveAdmin.register User do
 
   # /:id/edit page
   form do |f|
-    f.inputs 'Profile' do
+    f.inputs "Profile" do
       f.input :email_address
       f.input :first_name
       f.input :last_name
       f.input :active
       f.input :client_slug, as: :select, include_blank: true, collection: Proposal.client_slugs
     end
-    f.inputs 'Roles' do
+    f.inputs "Roles" do
       f.input :roles, as: :select, collection: Role.all
     end
     f.actions
@@ -36,15 +36,15 @@ ActiveAdmin.register User do
       row :created_at
       row :active
       row :updated_at
-      row('Roles') { user.roles.map(&:name).join(', ') }
+      row("Roles") { user.roles.map(&:name).join(", ") }
     end
 
     panel "Proposals" do
-      table_for user.proposals.order('created_at DESC') do |tbl|
-        tbl.column('ID') { |proposal| link_to proposal.public_id, admin_proposal_path(proposal) }
-        tbl.column('Name') { |proposal| proposal.name }
-        tbl.column('Submitted') { |proposal| proposal.created_at }
-        tbl.column('Status') { |proposal| proposal.status }
+      table_for user.proposals.order("created_at DESC") do |tbl|
+        tbl.column("ID") { |proposal| link_to proposal.public_id, admin_proposal_path(proposal) }
+        tbl.column("Name") { |proposal| proposal.name }
+        tbl.column("Submitted") { |proposal| proposal.created_at }
+        tbl.column("Status") { |proposal| proposal.status }
       end
     end
   end
