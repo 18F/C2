@@ -118,7 +118,7 @@ class Proposal < ActiveRecord::Base
 
   def as_indexed_json(params = {})
     as_json(params.reverse_merge(DEFAULT_INDEXED)).tap do |json|
-      json[:subscribers] = subscribers.map { |user| { id: user.id, name: user.full_name } }
+      json[:subscribers] = subscribers.map { |user| { id: user.id, name: user.display_name } }
     end
   end
 
