@@ -21,10 +21,10 @@ feature "Approver options during create", :js do
 
     expect_page_not_to_have_selectized_options(
       "ncr_work_order_approving_official_email",
-      Ncr::WorkOrder.ba61_tier1_budget_mailbox,
-      Ncr::WorkOrder.ba61_tier2_budget_mailbox,
-      Ncr::WorkOrder.ba80_budget_mailbox,
-      Ncr::WorkOrder.ool_ba80_budget_mailbox
+      Ncr::Mailboxes.ba61_tier1_budget,
+      Ncr::Mailboxes.ba61_tier2_budget,
+      Ncr::Mailboxes.ba80_budget,
+      Ncr::Mailboxes.ool_ba80_budget
     )
   end
 
