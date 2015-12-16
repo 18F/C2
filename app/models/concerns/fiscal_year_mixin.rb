@@ -12,10 +12,10 @@ module FiscalYearMixin
       end
     end
 
-    def self.for_fiscal_year(year)
+    def self.range_for_fiscal_year(year)
       start_time = Time.zone.local(year - 1, FISCAL_YEAR_START_MONTH, 1)
       end_time = start_time + 1.year
-      where(created_at: start_time...end_time)
+      { start_time: start_time, end_time: end_time }
     end
   end
 end
