@@ -24,7 +24,7 @@ describe Query::Proposal::SearchDSL do
         bool: {
           must: [
             { term: { client_data_type: "Test::ClientRequest" } },
-            { term: { subscribers: user.id.to_s } }
+            { term: { "subscribers.id" => user.id.to_s } }
           ]
         }
       },

@@ -75,7 +75,7 @@ module Query
             end
             if searchdsl.apply_authz?
               must do
-                term subscribers: searchdsl.current_user.id.to_s
+                term "subscribers.id" => searchdsl.current_user.id.to_s
               end
             end
           end

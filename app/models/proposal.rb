@@ -71,7 +71,24 @@ class Proposal < ActiveRecord::Base
   }
 
   # elasticsearch indexing setup
-  DEFAULT_INDEXED = {include: {client_data: {}, comments: {}, steps: {}}}
+  DEFAULT_INDEXED = {
+    include: {
+      client_data: {},
+      comments: {
+        include: {
+          user: { methods: [:full_name], only: [:full_name] }
+        }
+      },
+      steps: {
+        include: {
+          completed_by: { methods: [:full_name], only: [:full_name] }
+        }
+      },
+      requester: {
+        methods: [:full_name], only: [:full_name] 
+      }
+    }
+  }
 
   settings index: {
     number_of_shards: 1, # increase this if we ever get more than N records
@@ -101,7 +118,7 @@ class Proposal < ActiveRecord::Base
 
   def as_indexed_json(params = {})
     as_json(params.reverse_merge(DEFAULT_INDEXED)).tap do |json|
-      json[:subscribers] = subscribers.map(&:id)
+      json[:subscribers] = subscribers.map { |user| { id: user.id, name: user.full_name } }
     end
   end
 
