@@ -2,6 +2,8 @@ module ClientDataMixin
   extend ActiveSupport::Concern
 
   included do
+    include FiscalYearMixin
+
     Proposal::CLIENT_MODELS << self
 
     has_paper_trail class_name: "C2Version"
@@ -33,6 +35,10 @@ module ClientDataMixin
 
     scope :with_proposal_scope, ->(status) { joins(:proposal).merge(Proposal.send(status)) }
     scope :closed, -> { with_proposal_scope(:closed) }
+    scope :for_fiscal_year, lambda { |year|
+      range = range_for_fiscal_year(year)
+      where(created_at: range[:start_time]...range[:end_time])
+    }
 
     Proposal.statuses.each do |status|
       scope status, -> { with_proposal_scope(status) }

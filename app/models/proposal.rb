@@ -2,6 +2,7 @@ class Proposal < ActiveRecord::Base
   include WorkflowModel
   include ValueHelper
   include StepManager
+  include FiscalYearMixin
 
   has_paper_trail class_name: 'C2Version'
 
@@ -61,12 +62,9 @@ class Proposal < ActiveRecord::Base
   end
   scope :closed, -> { where(status: ['approved', 'cancelled']) } #TODO: Backfill to change approvals in 'reject' status to 'cancelled' status
   scope :cancelled, -> { where(status: 'cancelled') }
-
-  FISCAL_YEAR_START_MONTH = 10 # 1-based
   scope :for_fiscal_year, lambda { |year|
-    start_time = Time.zone.local(year - 1, FISCAL_YEAR_START_MONTH, 1)
-    end_time = start_time + 1.year
-    where(created_at: start_time...end_time)
+    range = range_for_fiscal_year(year)
+    where(created_at: range[:start_time]...range[:end_time])
   }
 
   def root_step

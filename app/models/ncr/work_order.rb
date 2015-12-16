@@ -47,13 +47,6 @@ module Ncr
       message: "must be three letters or numbers"
     }, allow_blank: true
 
-    FISCAL_YEAR_START_MONTH = 10 # 1-based
-    scope :for_fiscal_year, lambda { |year|
-      start_time = Time.zone.local(year - 1, FISCAL_YEAR_START_MONTH, 1)
-      end_time = start_time + 1.year
-      where(created_at: start_time...end_time)
-    }
-
     def self.all_system_approver_emails
       [
         Ncr::Mailboxes.ba61_tier1_budget,
