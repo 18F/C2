@@ -47,10 +47,10 @@ module Ncr
       message: "must be three letters or numbers"
     }, allow_blank: true
 
-    scope :for_fiscal_year, lambda do |year|
+    scope :for_fiscal_year, lambda { |year|
       range = self.class.range_for_fiscal_year(year)
       where(created_at: range[:start_time]...range[:end_time])
-    end
+    }
 
     def self.all_system_approver_emails
       [
