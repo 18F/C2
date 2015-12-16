@@ -69,9 +69,10 @@ class Proposal < ActiveRecord::Base
     where(created_at: start_time...end_time)
   }
 
-  # @todo - this should probably be the only entry into the approval system
   def root_step
-    steps.where(parent: nil).first
+    if steps.first.parent_id == nil
+      steps.first
+    end
   end
 
   def parallel?
