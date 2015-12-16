@@ -85,7 +85,7 @@ class Proposal < ActiveRecord::Base
         }
       },
       requester: {
-        methods: [:full_name], only: [:full_name] 
+        methods: [:full_name], only: [:full_name]
       }
     }
   }
