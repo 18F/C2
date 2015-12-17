@@ -1,7 +1,7 @@
 # because Test::ClientRequest is not in app/model,
 # Rails load order means that we must check first for the namespace
 # being defined before we can create the factory.
-# This file gest explicitly "required"-ed from within the fixture file.
+# This file is explicitly "required"-ed from within the fixture file.
 FactoryGirl.define do
   begin
     if Module.const_get("Test::ClientRequest")
