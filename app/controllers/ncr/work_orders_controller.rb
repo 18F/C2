@@ -4,7 +4,7 @@ module Ncr
     MAX_UPLOADS_ON_NEW = 10
 
     def new
-      work_order.approving_official_email = self.suggested_approver_email
+      work_order.approving_official_email = suggested_approver_email
       super
     end
 
@@ -79,7 +79,7 @@ module Ncr
     # @pre: work_order.approving_official_email is set
     def add_steps
       super
-      if self.errors.empty?
+      if errors.empty?
         work_order.setup_approvals_and_observers
       end
     end

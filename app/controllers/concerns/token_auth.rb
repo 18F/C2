@@ -22,12 +22,12 @@ module TokenAuth
 
     # expire tokens regardless of how user logged in
     tokens = ApiToken.joins(:step).where(steps: {
-      user_id: current_user, proposal_id: self.proposal})
+      user_id: current_user, proposal_id: proposal})
     tokens.where(used_at: nil).update_all(used_at: Time.zone.now)
 
-    authorize(self.proposal, :can_approve!)
+    authorize(proposal, :can_approve!)
 
-    if params[:version] && params[:version] != self.proposal.version.to_s
+    if params[:version] && params[:version] != proposal.version.to_s
       raise Pundit::NotAuthorizedError.new(
         "This request has recently changed. Please review the modified request before approving.")
     end
@@ -40,7 +40,7 @@ module TokenAuth
     when Proposal
       if exception.message == "A response has already been logged for this proposal"
         flash[:error] = exception.message
-        redirect_to self.proposal
+        redirect_to proposal
       else
         render "authorization_error", status: 403, locals: { msg: "You are not allowed to see that proposal." }
       end
@@ -65,7 +65,7 @@ module TokenAuth
       render_disabled_client_message(exception.message)
     else
       flash[:error] = exception.message
-      redirect_to self.proposal
+      redirect_to proposal
     end
   end
 end

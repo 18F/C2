@@ -1,10 +1,10 @@
 class AttachmentsController < ApplicationController
-  before_action ->{authorize self.proposal, :can_show!}, only: [:create, :show]
-  before_action ->{authorize self.attachment}, only: [:destroy]
+  before_action ->{authorize proposal, :can_show!}, only: [:create, :show]
+  before_action ->{authorize attachment}, only: [:destroy]
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
 
   def create
-    attachment = self.proposal.attachments.build(attachments_params)
+    attachment = proposal.attachments.build(attachments_params)
     attachment.user = current_user
     if attachment.save
       flash[:success] = "You successfully added a attachment"
@@ -17,13 +17,13 @@ class AttachmentsController < ApplicationController
   end
 
   def destroy
-    self.attachment.destroy
+    attachment.destroy
     flash[:success] = "Deleted attachment"
     redirect_to proposal_path(attachment.proposal)
   end
 
   def show
-    redirect_to self.attachment.url
+    redirect_to attachment.url
   end
 
   protected

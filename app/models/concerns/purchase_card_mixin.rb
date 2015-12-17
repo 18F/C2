@@ -12,7 +12,7 @@ module PurchaseCardMixin
         'default' => 3500,
       }
       now = Time.zone.now
-      this_fiscal = self.which_fiscal_year(now.year, now.month)
+      this_fiscal = which_fiscal_year(now.year, now.month)
       fiscals[this_fiscal] || fiscals['default']
     end
 

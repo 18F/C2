@@ -64,7 +64,7 @@ module Ncr
     end
 
     def self.relevant_fields(expense_type)
-      fields = self.default_fields
+      fields = default_fields
 
       if expense_type == "BA61"
         fields << :emergency
@@ -76,21 +76,21 @@ module Ncr
     end
 
     def self.default_fields
-      fields = self.column_names.map(&:to_sym) + [:approving_official_email]
+      fields = column_names.map(&:to_sym) + [:approving_official_email]
       fields - [:emergency, :rwa_number, :code, :created_at, :updated_at, :id]
     end
 
     def approver_email_frozen?
-      approval = self.individual_steps.first
+      approval = individual_steps.first
       approval && !approval.actionable?
     end
 
     def approver_changed?
-      self.approving_official && self.approving_official.email_address != approving_official_email
+      approving_official && approving_official.email_address != approving_official_email
     end
 
     def requires_approval?
-      !self.emergency
+      !emergency
     end
 
     def for_whsc_organization?
@@ -133,7 +133,7 @@ module Ncr
     end
 
     def budget_approvals
-      self.individual_steps.offset(1)
+      individual_steps.offset(1)
     end
 
     def budget_approvers
@@ -147,7 +147,7 @@ module Ncr
     # Methods for Client Data interface
     def fields_for_display
       attributes = self.class.relevant_fields(expense_type)
-      attributes.map { |attribute| [WorkOrder.human_attribute_name(attribute), self.send(attribute)] }
+      attributes.map { |attribute| [WorkOrder.human_attribute_name(attribute), send(attribute)] }
     end
 
     def ba80?
@@ -159,12 +159,12 @@ module Ncr
     end
 
     def total_price
-      self.amount || 0.0
+      amount || 0.0
     end
 
     # may be replaced with paper-trail or similar at some point
     def version
-      self.updated_at.to_i
+      updated_at.to_i
     end
 
     def system_approver_emails
@@ -190,8 +190,8 @@ module Ncr
     end
 
     def fiscal_year
-      year = self.created_at.nil? ? Time.zone.now.year : self.created_at.year
-      month = self.created_at.nil? ? Time.zone.now.month : self.created_at.month
+      year = created_at.nil? ? Time.zone.now.year : created_at.year
+      month = created_at.nil? ? Time.zone.now.month : created_at.month
       if month >= 10
         year += 1
       end
@@ -199,9 +199,9 @@ module Ncr
     end
 
     def restart_budget_approvals
-      self.budget_approvals.each(&:restart!)
-      self.proposal.reset_status
-      self.proposal.root_step.initialize!
+      budget_approvals.each(&:restart!)
+      proposal.reset_status
+      proposal.root_step.initialize!
     end
 
     private

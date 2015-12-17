@@ -40,6 +40,6 @@ class ClientSummary
   end
 
   def status_percent(status)
-    (self.status(status).to_f / status_sum) * 100
+    (status(status).to_f / status_sum) * 100
   end
 end

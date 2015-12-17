@@ -11,14 +11,14 @@ class Observation < ProposalRole
   after_initialize :init
 
   def init
-    self.role_id ||= Role.find_or_create_by(name: 'observer').id
+    role_id ||= Role.find_or_create_by(name: 'observer').id
   end
 
   def creation_version
-    self.versions.find_by(event: 'create')
+    versions.find_by(event: 'create')
   end
 
   def created_by
-    self.creation_version.try(:user)
+    creation_version.try(:user)
   end
 end

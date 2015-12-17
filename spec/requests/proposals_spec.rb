@@ -44,7 +44,7 @@ describe 'proposals' do
       proposal = create(:proposal, :with_approver)
       post "/proposals/#{proposal.id}/approve"
 
-      expect(response.status).to redirect_to(root_path(return_to: self.make_return_to("Previous", request.fullpath)))
+      expect(response.status).to redirect_to(root_path(return_to: make_return_to("Previous", request.fullpath)))
       expect_status(proposal, 'pending', 'actionable')
     end
 
@@ -127,7 +127,7 @@ describe 'proposals' do
 
         get "/proposals/#{proposal.id}/approve", cch: token.access_token
 
-        expect(response).to redirect_to(root_path(return_to: self.make_return_to("Previous", request.fullpath)))
+        expect(response).to redirect_to(root_path(return_to: make_return_to("Previous", request.fullpath)))
 
         login_as(delegate)
 
