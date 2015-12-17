@@ -2,7 +2,6 @@
 # before 'include'-ing this concern
 module PurchaseCardMixin
   extend ActiveSupport::Concern
-  include FiscalYearMixin
 
   included do
     def self.max_amount
@@ -12,7 +11,7 @@ module PurchaseCardMixin
         'default' => 3500,
       }
       now = Time.zone.now
-      this_fiscal = self.which_fiscal_year(now.year, now.month)
+      this_fiscal = FiscalYearFinder.new(now.year, now.month).run
       fiscals[this_fiscal] || fiscals['default']
     end
 
