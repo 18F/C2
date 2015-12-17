@@ -1,12 +1,10 @@
 class ClientSummarizer
-  include FiscalYearMixin
-
   attr_reader :client_namespace, :fiscal_year
 
   def initialize(args)
     @client_namespace = args[:client_namespace]
     now = Time.zone.now
-    @fiscal_year = (args[:fiscal_year] || self.class.which_fiscal_year(now.year, now.month)).to_i
+    @fiscal_year = (args[:fiscal_year] || FiscalYearFinder.new(now.year, now.month).run).to_i
   end
 
   def run

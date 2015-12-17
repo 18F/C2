@@ -2,6 +2,8 @@ module ClientDataMixin
   extend ActiveSupport::Concern
 
   included do
+    include FiscalYearMixin
+
     Proposal::CLIENT_MODELS << self
 
     has_paper_trail class_name: "C2Version"

@@ -42,6 +42,15 @@ describe Proposal do
     end
   end
 
+  describe "#root_step" do
+    it "returns the step without a parent" do
+      step = create(:serial_step, parent_id: nil)
+      proposal = create(:proposal, steps: [step])
+
+      expect(proposal.root_step).to eq step
+    end
+  end
+
   describe '#currently_awaiting_approvers' do
     it "gives a consistently ordered list when in parallel" do
       proposal = create(:proposal, :with_parallel_approvers)

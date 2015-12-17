@@ -19,7 +19,6 @@ class Step < ActiveRecord::Base
   validates :proposal, presence: true
   validates :user_id, uniqueness: { scope: :proposal_id }, allow_blank: true
 
-  # @TODO: Auto-generate list of subclasses
   scope :individual, -> { where(type: ["Steps::Approval", "Steps::Purchase"]).order("position ASC") }
 
   statuses.each do |status|
