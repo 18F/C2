@@ -69,6 +69,7 @@ RSpec.configure do |config|
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation)
     Rails.application.load_seed
+    Test.setup_models
     start_es_server unless ENV['ES_SKIP']
   end
 
@@ -94,6 +95,7 @@ RSpec.configure do |config|
 
   config.after(:suite) do
     stop_es_server unless ENV['ES_SKIP']
+    Test.teardown_models
   end
 
   Capybara.default_host = 'http://localhost:3000'
