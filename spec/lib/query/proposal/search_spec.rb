@@ -104,11 +104,15 @@ describe Query::Proposal::Search do
 end
 
 def refresh_index
-  #puts ANSI.blue{ "----------------------------- REFRESHING INDEX ---------------------------------" }
+  if ENV["ES_DEBUG"]
+    puts ANSI.blue{ "----------------------------- REFRESHING INDEX ---------------------------------" }
+  end
   Proposal.__elasticsearch__.refresh_index!
 end
 
 def dump_index
-  #puts ANSI.blue{ "----------------- DUMP INDEX ---------------------" }
+  if ENV["ES_DEBUG"]
+    puts ANSI.blue{ "----------------- DUMP INDEX ---------------------" }
+  end
   puts Proposal.search( "*" ).results.to_a.pretty_inspect
 end
