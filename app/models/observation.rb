@@ -11,7 +11,7 @@ class Observation < ProposalRole
   after_initialize :init
 
   def init
-    role_id ||= Role.find_or_create_by(name: 'observer').id
+    self.role_id ||= Role.find_or_create_by(name: 'observer').id
   end
 
   def creation_version
