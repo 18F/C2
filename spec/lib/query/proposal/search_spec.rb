@@ -78,7 +78,7 @@ describe Query::Proposal::Search do
       end
     end
 
-    it "returns the Proposals by rank" do
+    it "returns the Proposals by rank, weighting id matches above all else" do
       user = create(:user, client_slug: "test")
 
       proposal1 = create(:proposal, id: 199, requester: user)
