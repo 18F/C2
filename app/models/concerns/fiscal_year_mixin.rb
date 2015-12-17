@@ -4,13 +4,10 @@ module FiscalYearMixin
   FISCAL_YEAR_START_MONTH = 10 # 1-based
 
   included do
-    def self.which_fiscal_year(year, month)
-      if month >= FISCAL_YEAR_START_MONTH
-        year + 1
-      else
-        year
-      end
-    end
+    scope :for_fiscal_year, ->(year) {
+      range = range_for_fiscal_year(year)
+      where(created_at: range[:start_time]...range[:end_time])
+    }
 
     def self.range_for_fiscal_year(year)
       start_time = Time.zone.local(year - 1, FISCAL_YEAR_START_MONTH, 1)
