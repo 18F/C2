@@ -44,8 +44,8 @@ describe Proposal do
 
   describe "#root_step" do
     it "returns the step without a parent" do
-      step = create(:step, parent_id: nil)
-      proposal = build(:proposal, steps: [step])
+      step = create(:serial_step, parent_id: nil)
+      proposal = create(:proposal, steps: [step])
 
       expect(proposal.root_step).to eq step
     end

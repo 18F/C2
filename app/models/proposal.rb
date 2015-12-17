@@ -70,9 +70,7 @@ class Proposal < ActiveRecord::Base
   }
 
   def root_step
-    if steps.first.parent_id == nil
-      steps.first
-    end
+    steps.where(parent_id: nil).first
   end
 
   def parallel?
