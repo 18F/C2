@@ -62,10 +62,6 @@ class Proposal < ActiveRecord::Base
   end
   scope :closed, -> { where(status: ['approved', 'cancelled']) } #TODO: Backfill to change approvals in 'reject' status to 'cancelled' status
   scope :cancelled, -> { where(status: 'cancelled') }
-  scope :for_fiscal_year, lambda { |year|
-    range = range_for_fiscal_year(year)
-    where(created_at: range[:start_time]...range[:end_time])
-  }
 
   def root_step
     steps.where(parent: nil).first
