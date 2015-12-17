@@ -70,7 +70,7 @@ class Proposal < ActiveRecord::Base
   }
 
   def root_step
-    steps.where(parent_id: nil).first
+    steps.where(parent: nil).first
   end
 
   def parallel?
