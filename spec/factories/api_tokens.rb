@@ -3,7 +3,7 @@ FactoryGirl.define do
 
   factory :api_token do
     access_token
-    step
+    step { create(:approval_step) }
     expires_at { Time.current + 7.days }
   end
 end

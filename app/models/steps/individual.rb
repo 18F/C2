@@ -54,7 +54,7 @@ module Steps
     end
 
     def user_is_not_requester
-      if user_id && user_id == proposal.requester_id
+      if user && user == proposal.requester
         errors.add(:user, "Cannot be Requester")
       end
     end

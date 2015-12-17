@@ -19,7 +19,6 @@ class Step < ActiveRecord::Base
   validates :proposal, presence: true
   validates :user_id, uniqueness: { scope: :proposal_id }, allow_blank: true
 
-  # @TODO: Auto-generate list of subclasses
   scope :individual, -> { where(type: ["Steps::Approval", "Steps::Purchase"]).order("position ASC") }
 
   self.statuses.each do |status|
@@ -31,7 +30,7 @@ class Step < ActiveRecord::Base
   default_scope { order("position ASC") }
 
   def pre_order_tree_traversal
-    [self] + self.child_approvals.flat_map(&:pre_order_tree_traversal)
+    [self] + child_approvals.flat_map(&:pre_order_tree_traversal)
   end
 
   def completed_by
@@ -41,20 +40,20 @@ class Step < ActiveRecord::Base
   protected
 
   def restart
-    if self.parent
-      self.parent.restart!
+    if parent
+      parent.restart!
     end
   end
 
   def notify_parent_approved
-    if self.parent
-      self.parent.child_approved!(self)
+    if parent
+      parent.child_approved!(self)
     else
-      self.proposal.approve!
+      proposal.approve!
     end
   end
 
   def children_approved?
-    self.child_approvals.outstanding.empty?
+    child_approvals.outstanding.empty?
   end
 end
