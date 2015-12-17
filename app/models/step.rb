@@ -21,7 +21,7 @@ class Step < ActiveRecord::Base
 
   scope :individual, -> { where(type: ["Steps::Approval", "Steps::Purchase"]).order("position ASC") }
 
-  self.statuses.each do |status|
+  statuses.each do |status|
     scope status, -> { where(status: status) }
   end
   scope :non_pending, -> { where.not(status: "pending") }

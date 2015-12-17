@@ -4,13 +4,13 @@ class HelpController < ApplicationController
   skip_before_action :check_disabled_client
 
   def index
-    @pages = self.page_names.sort
+    @pages = page_names.sort
   end
 
   def show
     page = params[:id]
     # prevent rendering of any non-help template
-    if self.page_names.include?(page)
+    if page_names.include?(page)
       render "help/#{page}"
     else
       raise ActionController::RoutingError.new('Not Found')

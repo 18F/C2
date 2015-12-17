@@ -18,7 +18,7 @@ module TabularData
     end
 
     def sort(dir)
-      if self.can_sort?
+      if can_sort?
         @sort_dir = dir
         if dir
           @db_expr.send(dir)

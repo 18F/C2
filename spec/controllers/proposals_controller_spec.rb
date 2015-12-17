@@ -231,7 +231,7 @@ describe ProposalsController do
 
       get :approve, id: proposal.id, cch: token.access_token
 
-      expect(response).to redirect_to(root_path(return_to: self.make_return_to("Previous", request.fullpath)))
+      expect(response).to redirect_to(root_path(return_to: make_return_to("Previous", request.fullpath)))
     end
 
     it "won't allow a missing token when using GET" do

@@ -27,7 +27,7 @@ class ProposalDecorator < Draper::Decorator
     if object.flow == 'linear'
       object.individual_steps.with_users
     else
-      self.steps_by_status
+      steps_by_status
     end
   end
 

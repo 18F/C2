@@ -1,7 +1,7 @@
 module Ncr
   class DashboardController < ApplicationController
     def index
-      @rows = self.format_results(self.queryset)
+      @rows = format_results(queryset)
     end
 
     protected
@@ -20,7 +20,7 @@ module Ncr
     end
 
     def format_results(results)
-      return_params = self.make_return_to("Dashboard", ncr_dashboard_path)
+      return_params = make_return_to("Dashboard", ncr_dashboard_path)
       results.map{|row|
         start_date = Time.zone.local(row["year"].to_i, row["month"].to_i, 1)
         end_date = start_date + 1.month

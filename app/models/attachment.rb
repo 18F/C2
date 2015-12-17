@@ -15,6 +15,6 @@ class Attachment < ActiveRecord::Base
 
   # Default url for attachments expires after 10 minutes
   def url
-    self.file.expiring_url(10*60)
+    file.expiring_url(10*60)
   end
 end

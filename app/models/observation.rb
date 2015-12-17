@@ -15,10 +15,10 @@ class Observation < ProposalRole
   end
 
   def creation_version
-    self.versions.find_by(event: 'create')
+    versions.find_by(event: 'create')
   end
 
   def created_by
-    self.creation_version.try(:user)
+    creation_version.try(:user)
   end
 end

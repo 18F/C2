@@ -11,18 +11,18 @@ class CsvUserImporter
   end
 
   def process_rows
-    if !self.first_name_col || !self.last_name_col || !self.email_col
+    if !first_name_col || !last_name_col || !email_col
       raise "Couldn't determine one or more of first name, last name, email: #{@csv.headers()}"
     end
 
     @csv.each do |row|
-      email = row[self.email_col]
+      email = row[email_col]
       if email.blank?
         warn "Email is empty: " + row.inspect
       else
         User.for_email(email).update(   # for_email will standardize
-          first_name: row[self.first_name_col].try(:titleize),
-          last_name: row[self.last_name_col].try(:titleize),
+          first_name: row[first_name_col].try(:titleize),
+          last_name: row[last_name_col].try(:titleize),
           client_slug: @client
         )
       end

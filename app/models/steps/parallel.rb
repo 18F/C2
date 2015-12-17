@@ -5,7 +5,7 @@ module Steps
     validates :min_children_needed, numericality: { allow_blank: true }
 
     workflow do
-      on_transition { self.touch } # sets updated_at; https://github.com/geekq/workflow/issues/96
+      on_transition { touch } # sets updated_at; https://github.com/geekq/workflow/issues/96
 
       state :pending do
         event :initialize, transitions_to: :actionable
@@ -19,17 +19,17 @@ module Steps
           halt  # prevent state transition
         end
         event :child_approved, transitions_to: :approved do |_|
-          halt unless self.children_approved?
+          halt unless children_approved?
         end
         event :force_approve, transitions_to: :approved
         event :restart, transitions_to: :pending
       end
 
       state :approved do
-        on_entry { self.notify_parent_approved }
+        on_entry { notify_parent_approved }
 
         event :initialize, transitions_to: :approved do
-          self.notify_parent_approved
+          notify_parent_approved
           halt  # prevent state transition
         end
 
@@ -42,10 +42,10 @@ module Steps
     end
 
     def on_actionable_entry(_, _)
-      if self.child_approvals.any?
-        self.child_approvals.each(&:initialize!)
+      if child_approvals.any?
+        child_approvals.each(&:initialize!)
       else
-        self.force_approve!
+        force_approve!
       end
     end
 
@@ -53,8 +53,8 @@ module Steps
     # approvals, and min_children_needed is set to 2, only 2 of the 3 must
     # approve. When min_children_needed is 1, we create an "OR" situation
     def children_approved?
-      needed = self.min_children_needed || self.child_approvals.count
-      self.child_approvals.approved.count >= needed
+      needed = min_children_needed || child_approvals.count
+      child_approvals.approved.count >= needed
     end
   end
 end

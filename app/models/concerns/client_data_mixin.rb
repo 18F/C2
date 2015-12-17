@@ -46,7 +46,7 @@ module ClientDataMixin
     end
 
     def self.client_slug
-      self.to_s.deconstantize.downcase
+      to_s.deconstantize.downcase
     end
 
     def client_slug
