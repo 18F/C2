@@ -106,7 +106,6 @@ end
 def refresh_index
   #puts ANSI.blue{ "----------------------------- REFRESHING INDEX ---------------------------------" }
   Proposal.__elasticsearch__.refresh_index!
-  sleep(1)
 end
 
 def dump_index
