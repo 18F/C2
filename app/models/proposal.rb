@@ -50,7 +50,7 @@ class Proposal < ActiveRecord::Base
   delegate :client_slug, to: :client_data, allow_nil: true
 
   validates :client_data_type, inclusion: {
-    in: ->(_) { self.client_model_names },
+    in: ->(_) { client_model_names },
     message: "%{value} is not a valid client model type. Valid client model types are: #{CLIENT_MODELS.inspect}",
     allow_blank: true
   }
@@ -58,7 +58,7 @@ class Proposal < ActiveRecord::Base
   validates :requester_id, presence: true
   validates :public_id, uniqueness: true, allow_nil: true
 
-  self.statuses.each do |status|
+  statuses.each do |status|
     scope status, -> { where(status: status) }
   end
   scope :closed, -> { where(status: ['approved', 'cancelled']) } #TODO: Backfill to change approvals in 'reject' status to 'cancelled' status

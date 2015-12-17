@@ -54,7 +54,7 @@ class Dispatcher
       Mailer.approval_reply_received_email(approval).deliver_later
     end
 
-    self.email_observers(approval.proposal)
+    email_observers(approval.proposal)
   end
 
   def on_comment_created(comment)

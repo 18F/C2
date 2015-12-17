@@ -1,6 +1,6 @@
 class ObservationsController < ApplicationController
   before_action :find_proposal
-  before_action -> { authorize self.observation_for_auth }
+  before_action -> { authorize observation_for_auth }
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
 
   def create
@@ -31,7 +31,7 @@ class ObservationsController < ApplicationController
     if params[:action] == 'create'
       Observation.new(proposal: @proposal)
     else
-      self.observation
+      observation
     end
   end
 

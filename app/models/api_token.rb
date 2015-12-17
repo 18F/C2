@@ -32,7 +32,7 @@ class ApiToken < ActiveRecord::Base
   end
 
   def expire!
-    self.update(expires_at: Time.zone.now)
+    update(expires_at: Time.zone.now)
   end
 
   private

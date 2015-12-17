@@ -73,7 +73,7 @@ class ApplicationController < ActionController::Base
   end
 
   def peek_enabled?
-    Rails.env.development? || self.admin?
+    Rails.env.development? || admin?
   end
 
   private

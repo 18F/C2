@@ -8,7 +8,7 @@ module Gsa18f
     end
 
     def can_create!
-      super && self.gsa_if_restricted!
+      super && gsa_if_restricted!
     end
     alias_method :can_new!, :can_create!
 

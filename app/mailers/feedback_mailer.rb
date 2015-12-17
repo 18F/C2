@@ -1,6 +1,6 @@
 class FeedbackMailer < ApplicationMailer
   def feedback(sending_user, form_values)
-    from = sending_user.try(:email_address) || form_values[:email] || self.default_sender_email
+    from = sending_user.try(:email_address) || form_values[:email] || default_sender_email
 
     # ensure each new feedback email is in its own thread
     self.thread_id = SecureRandom.hex
@@ -11,7 +11,7 @@ class FeedbackMailer < ApplicationMailer
       from: from,
       cc: from,
       reply_to: from,
-      body: self.body_for(form_values)
+      body: body_for(form_values)
     )
   end
 

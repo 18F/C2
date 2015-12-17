@@ -49,7 +49,7 @@ module Gsa18f
     validates :recurring_interval, presence: true, if: :recurring
 
     def self.relevant_fields(recurring)
-      fields = self.default_fields
+      fields = default_fields
 
       if recurring
         fields += [:recurring_interval, :recurring_length]
@@ -59,13 +59,13 @@ module Gsa18f
     end
 
     def self.default_fields
-      fields = self.column_names.map(&:to_sym)
+      fields = column_names.map(&:to_sym)
       fields - [:recurring_interval, :recurring_length, :created_at, :updated_at, :id]
     end
 
     def fields_for_display
       attributes = self.class.relevant_fields(recurring)
-      attributes_for_view = attributes.map { |key| [Procurement.human_attribute_name(key), self.send(key)] }
+      attributes_for_view = attributes.map { |key| [Procurement.human_attribute_name(key), send(key)] }
       attributes_for_view.push(["Total Price", total_price])
     end
 
@@ -78,12 +78,12 @@ module Gsa18f
     end
 
     def total_price
-      (self.cost_per_unit * self.quantity) || 0.0
+      (cost_per_unit * quantity) || 0.0
     end
 
     # may be replaced with paper-trail or similar at some point
     def version
-      self.updated_at.to_i
+      updated_at.to_i
     end
 
     def name
@@ -109,11 +109,11 @@ module Gsa18f
     end
 
     def self.approver_email
-      self.user_with_role('gsa18f_approver').email_address
+      user_with_role('gsa18f_approver').email_address
     end
 
     def self.purchaser_email
-      self.user_with_role('gsa18f_purchaser').email_address
+      user_with_role('gsa18f_purchaser').email_address
     end
 
     def self.user_with_role(role_name)
