@@ -3,7 +3,7 @@ describe ClientSummarizer do
     it "defaults to current year" do
       summarizer = ClientSummarizer.new(client_namespace: "test")
       now = Time.zone.now
-      expect(summarizer.fiscal_year).to eq(ClientSummarizer.which_fiscal_year(now.year, now.month))
+      expect(summarizer.fiscal_year).to eq(FiscalYearFinder.new(now.year, now.month).run)
     end
 
     it "uses namespace exactly as passed" do
