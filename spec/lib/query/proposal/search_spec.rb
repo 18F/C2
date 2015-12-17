@@ -3,6 +3,7 @@ require 'ansi/code'
 describe Query::Proposal::Search do
 
   before do
+    # analogous to DatabaseCleaner.start in spec/rails_helper
     refresh_index
   end
 
