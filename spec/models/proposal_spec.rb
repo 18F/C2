@@ -51,6 +51,34 @@ describe Proposal do
     end
   end
 
+  describe "#parallel?" do
+    it "is true if the root step is a parallel step" do
+      proposal = create(:proposal, steps: [create(:parallel_step)])
+
+      expect(proposal).to be_parallel
+    end
+
+    it "is false if the root step is not a parallel step" do
+      proposal = create(:proposal, steps: [create(:serial_step)])
+
+      expect(proposal).not_to be_parallel
+    end
+  end
+
+  describe "#serial?" do
+    it "is true if the root step is a serial step" do
+      proposal = create(:proposal, steps: [create(:serial_step)])
+
+      expect(proposal).to be_serial
+    end
+
+    it "is false if the root step is not a serial step" do
+      proposal = create(:proposal, steps: [create(:parallel_step)])
+
+      expect(proposal).not_to be_serial
+    end
+  end
+
   describe '#currently_awaiting_approvers' do
     it "gives a consistently ordered list when in parallel" do
       proposal = create(:proposal, :with_parallel_approvers)

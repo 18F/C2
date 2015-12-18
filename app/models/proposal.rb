@@ -65,6 +65,14 @@ class Proposal < ActiveRecord::Base
     steps.where(parent: nil).first
   end
 
+  def parallel?
+    root_step.type == "Steps::Parallel"
+  end
+
+  def serial?
+    root_step.type == "Steps::Serial"
+  end
+
   def delegate?(user)
     approval_delegates.exists?(assignee_id: user.id)
   end
