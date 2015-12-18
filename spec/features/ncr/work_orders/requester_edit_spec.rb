@@ -141,6 +141,14 @@ feature "Requester edits their NCR work order", :js do
     expect(page).to have_content("delegate@example.com")
   end
 
+  scenario "has 'Discard Changes' link" do
+    visit edit_ncr_work_order_path(work_order)
+
+    click_link "Discard Changes"
+
+    expect(current_path).to eq(proposal_path(ncr_proposal))
+  end
+
   scenario "can change approving official email if first approval not done" do
     visit edit_ncr_work_order_path(work_order)
 
