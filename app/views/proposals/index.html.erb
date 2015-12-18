@@ -1,54 +1,53 @@
 <% content_for :title, "My Requests" %>
 <div class="inset">
   <%= render partial: 'search_ui' %>
+
   <div id="proposals-pending-review" class="row pending-pr first">
-    <div class="col-md-12">
-      <h3>Purchase Requests Needing Review</h3>
-      <%- if @pending_review_data.rows.any? %>
+    <% if @pending_review_data.rows.any? %>
+      <div class="col-md-12">
+        <h3>Purchase Requests Needing Review</h3>
         <%= render partial: "shared/table", locals: { container: @pending_review_data } %>
-      <%- else %>
-        <p class="empty-list-label">No purchase requests needing review</p>
-      <%- end %>
-    </div>
+      </div>
+    <% end %>
   </div>
 
   <div id="proposals-pending" class="row pending-pr">
     <div class="col-md-12">
       <h3>Pending Purchase Requests</h3>
-      <%- if @pending_data.rows.any? %>
+      <% if @pending_data.rows.any? %>
         <%= render partial: "shared/table", locals: { container: @pending_data } %>
-      <%- else %>
+      <% else %>
         <p class="empty-list-label">No pending purchase requests</p>
+      <% end %>
+    </div>
+  </div>
+
+  <div id="proposals-completed" class="row past-pr">
+    <div class="col-md-12">
+      <h3>Recently Completed Purchase Requests</h3>
+      <%- if @approved_data.rows.any? %>
+        <div class="col-sm-12">
+          <%= render partial: "shared/table", locals: { container: @approved_data } %>
+        </div>
+
+        <div class="row">
+          <%= render partial: "archive_link" %>
+        </div>
+
+      <%- else %>
+        <p class="empty-list-label">No recently completed purchase requests</p>
       <%- end %>
     </div>
   </div>
 
-  <div class="row past-pr">
-    <div class="col-md-12">
-      <h3>Recently Completed Purchase Requests</h3>
-    <%- if @approved_data.rows.any? %>
-      <div class="col-sm-12">
-        <%= render partial: "shared/table", locals: { container: @approved_data } %>
-      </div>
-
-      <div class="row">
-        <%= render partial: "archive_link" %>
-      </div>
-
-    <%- else %>
-      <p class="empty-list-label">No recently completed purchase requests</p>
-    <%- end %>
-    </div>
-  </div>
-
-  <%- if @cancelled_data.rows.any? %>
-    <div class="row past-pr">
+  <div id="proposals-cancelled" class="row past-pr">
+    <% if @cancelled_data.rows.any? %>
       <div class="col-md-12">
         <h3>Cancelled Purchase Requests</h3>
       </div>
       <div class="col-sm-12">
         <%= render partial: "shared/table", locals: { container: @cancelled_data } %>
       </div>
-    </div>
-  <%- end %>
+    <% end %>
+  </div>
 </div>
