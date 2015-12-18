@@ -1,5 +1,3 @@
-require 'pry'
-
 describe "My requests needing action" do
 
   describe "The 'My Requests' page 'needing action' section" do

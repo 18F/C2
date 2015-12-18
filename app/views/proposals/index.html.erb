@@ -23,7 +23,7 @@
     </div>
   </div>
 
-  <div class="row past-pr">
+  <div id="proposals-completed" class="row past-pr">
     <div class="col-md-12">
       <h3>Recently Completed Purchase Requests</h3>
     <%- if @approved_data.rows.any? %>
@@ -42,7 +42,7 @@
   </div>
 
   <%- if @cancelled_data.rows.any? %>
-    <div class="row past-pr">
+    <div id="proposals-cancelled" class="row past-pr">
       <div class="col-md-12">
         <h3>Cancelled Purchase Requests</h3>
       </div>
