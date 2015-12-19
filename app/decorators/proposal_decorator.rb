@@ -55,6 +55,15 @@ class ProposalDecorator < Draper::Decorator
     "#{number_approved} of #{total_approvers} approved."
   end
 
+  def table_waiting_text
+    actionable_step = currently_awaiting_steps.first
+    if actionable_step
+      actionable_step.decorate.waiting_text
+    else
+      I18n.t("decorators.steps.approval.status.waiting")
+    end
+  end
+
   def step_text_for_user(key, user)
     step = existing_approval_for(user)
     klass = step.class.name.demodulize.downcase.to_sym
