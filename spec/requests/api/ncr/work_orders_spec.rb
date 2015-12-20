@@ -10,9 +10,15 @@ describe 'NCR Work Orders API' do
 
     with_feature "API_ENABLED" do
       it "responds with the list of work orders" do
-        work_order = create(:ncr_work_order)
+        work_order = create(:ncr_work_order, :with_observers)
         proposal = work_order.proposal
-
+        observers = proposal.observers.map do |user|
+          {
+            "created_at" => time_to_json(user.created_at),
+            "id"=> user.id,
+            "updated_at"=> time_to_json(user.updated_at)
+          }  
+        end
         json = get_json("/api/v1/ncr/work_orders.json")
 
         expect(response.status).to eq(200)

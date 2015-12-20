@@ -26,5 +26,9 @@ FactoryGirl.define do
       emergency true
       association :proposal, :with_observers
     end
+
+    trait :with_observers do
+      association :proposal, :with_observers, flow: 'linear'
+    end
   end
 end
