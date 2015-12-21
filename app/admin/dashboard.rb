@@ -21,4 +21,15 @@ ActiveAdmin.register_page "Dashboard" do
       end
     end
   end
+
+  action_item :reindex, only: [:index] do
+    link_to "Re-index Proposals", admin_dashboard_reindex_path, "data-method" => :post,
+      title: "Re-index all proposals."
+  end
+
+  page_action :reindex, method: :post do
+    Proposal.delay.rebuild_index
+    flash[:alert] = "Re-index scheduled!"
+    redirect_to admin_dashboard_path
+  end
 end
