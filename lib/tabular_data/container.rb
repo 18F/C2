@@ -69,20 +69,24 @@ module TabularData
       end
     end
 
-    def init_query(engine, joins)
-      query = engine.all
+    def init_query(klass, joins)
+      query = klass.all
 
-      joins.each do |name, config|
+      joins.each do |table_name, config|
         if config == true
-          join_tables = engine.joins(name).join_sources
-          join_tables[-1].left.table_alias = name   # alias the table
-          query = query.joins(join_tables).includes(name)
-        else  # String config
+          query = join_table(query, klass, table_name)
+        else
           query = query.joins(config)
         end
       end
 
       query
+    end
+
+    def join_table(query, klass, table_name)
+      join_tables = klass.joins(table_name).join_sources
+      join_tables[-1].left.table_alias = table_name
+      query.joins(join_tables).includes(table_name)
     end
 
     def init_columns(config, order)
