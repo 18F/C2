@@ -37,7 +37,7 @@ module Query
       end
 
       def container_config
-        TabularData::Container.config_for_client("versions", "default")
+        TabularData::ContainerConfig.new("versions", "default").settings
       end
     end
   end
