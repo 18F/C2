@@ -1,0 +1,31 @@
+.inset
+  .row.m-search-ui
+    .input-group
+      %input.search-terms.form-control{type: 'text', name: 'text', value: @text}
+      .input-group-btn
+        .btn-group{role: "group"}
+          .dropdown.dropdown-lg
+            %button.btn.btn-default.dropdown-toggle{type: "button", "data-toggle" => "dropdown", "aria-expanded" => "false"}
+              %span.caret
+            .dropdown-menu.dropdown-menu-right{role: "menu"}
+              %form.form-horizontal{role: "form", action: query_proposals_path, method: 'get'}
+                .form-group
+                  %label{for: "search-status"}
+                    Search in
+                  %select.form-control{name: "status"}
+                    %option{value: "pending", selected: 1}
+                      In progress Requests
+                    %option{value: "cancelled"}
+                      Cancelled Requests
+                .form-group
+                  %label{for: "requester"}
+                    Card Holder Name
+                  %input.form-control{type: "text", name: "requester", placeholder: current_user.full_name}
+                .form-group
+                  %label{for: "vendor-name"}
+                    Vendor Name
+                  %input.form-control{type: "text", name: "client_data.vendor"}
+                %button.btn.btn-primary
+                  %span.glyphicon.glyphicon-search{"aria-hidden" => "true"}
+          %button.btn.btn-default.search{type: 'submit'}
+            Search
