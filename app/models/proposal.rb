@@ -65,6 +65,7 @@ class Proposal < ActiveRecord::Base
   scope :cancelled, -> { where(status: 'cancelled') }
 
   # elasticsearch indexing setup
+  MAX_SEARCH_RESULTS = 20
   DEFAULT_INDEXED = {
     include: {
       client_data: {},

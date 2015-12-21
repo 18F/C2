@@ -10,21 +10,25 @@
             .dropdown-menu.dropdown-menu-right{role: "menu"}
               %form.form-horizontal{role: "form", action: query_proposals_path, method: 'get'}
                 .form-group
-                  %label{for: "search-status"}
+                  %label{for: "#{current_user.client_model_slug}[status]"}
                     Search in
-                  %select.form-control{name: "status"}
-                    %option{value: "pending", selected: 1}
+                  %select.form-control{name: "#{current_user.client_model_slug}[status]"}
+                    %option{value: "*", selected: 1}
+                      All Requests
+                    %option{value: "approved"}
+                      Approved Requests
+                    %option{value: "pending"}
                       In progress Requests
                     %option{value: "cancelled"}
                       Cancelled Requests
                 .form-group
-                  %label{for: "requester"}
+                  %label{for: "#{current_user.client_model_slug}[requester]"}
                     Card Holder Name
-                  %input.form-control{type: "text", name: "requester", placeholder: current_user.full_name}
+                  %input.form-control{type: "text", name: "#{current_user.client_model_slug}[requester]", placeholder: current_user.full_name}
                 .form-group
-                  %label{for: "vendor-name"}
+                  %label{for: "#{current_user.client_model_slug}[client_data.vendor]"}
                     Vendor Name
-                  %input.form-control{type: "text", name: "client_data.vendor"}
+                  %input.form-control{type: "text", name: "#{current_user.client_model_slug}[client_data.vendor]"}
                 %button.btn.btn-primary
                   %span.glyphicon.glyphicon-search{"aria-hidden" => "true"}
           %button.btn.btn-default.search{type: 'submit'}

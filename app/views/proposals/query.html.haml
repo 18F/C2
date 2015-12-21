@@ -3,6 +3,8 @@
     Proposals participated in
   %strong Currently displaying results for:
   = property_to_s(@text)
+  - if @adv_search.to_s.present?
+    = @adv_search.to_s
   %br
   %a{ :href => proposals_path } Clear search terms
   = datespan_header(@start_date, @end_date)

@@ -62,6 +62,7 @@ class ProposalsController < ApplicationController
     @proposals_data = query_listing.query
 
     @text = params[:text]
+    @adv_search = Query::Proposal::FieldedSearch.new(params[current_user.client_model_slug.to_sym])
     @start_date = query_listing.start_date
     @end_date = query_listing.end_date
   end

@@ -8,7 +8,7 @@ module Query
       attr_reader :params, :current_user, :query_str, :client_data_type
 
       def initialize(args)
-        @query_str = args[:query] or fail ":query required"
+        @query_str = args[:query]
         @client_data_type = args[:client_data_type] or fail ":client_data_type required"
         @current_user = args[:current_user]
         @params = args[:params]
@@ -28,11 +28,11 @@ module Query
       end
 
       def composite_query_string
-        if client_query && query_str
-          "(#{query_str}) AND (#{client_query.map { |k, v| "#{k}:(#{v})" }.join(' ')})"
+        if client_query && query_str.present?
+          "(#{query_str}) AND (#{FieldedSearch.new(client_query).to_s})"
         elsif client_query
-          client_query.map { |k, v| "#{k}:(#{v})" }.join(" ")
-        elsif query_str
+          FieldedSearch.new(client_query).to_s
+        elsif query_str.present?
           query_str
         end
       end
@@ -92,9 +92,13 @@ module Query
       def add_pagination
         if params[:from]
           @dsl.from = params[:from].to_i
+        else
+          @dsl.from = 0
         end
         if params[:size]
           @dsl.size = params[:size].to_i
+        else
+          @dsl.size = ::Proposal::MAX_SEARCH_RESULTS
         end
       end
     end
