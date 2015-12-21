@@ -13,15 +13,33 @@ module ProposalTableSpecHelper
     page.all('.tabular-data')
   end
 
+  def reviewable_proposals_table
+    within(reviewable_proposals_section) do
+      tables[0]
+    end
+  end
+
+  def pending_proposals_table
+    within(pending_proposals_section) do
+      tables[0]
+    end
+  end
+
+  def cancelled_proposals_table
+    within(cancelled_proposals_section) do
+      tables[0]
+    end
+  end
+
   def reviewable_proposals_section
-    tables[0]
+    "#proposals-pending-review"
   end
 
   def pending_proposals_section
-    tables[1]
+    "#proposals-pending"
   end
 
   def cancelled_proposals_section
-    tables[1]
+    "#proposals-cancelled"
   end
 end
