@@ -26,7 +26,7 @@ module Query
           params: params,
           current_user: current_user,
           query: query,
-          client_data_type: ::Proposal.client_model_for(current_user).to_s
+          client_data_type: current_user.client_model.to_s
         )
       end
     end

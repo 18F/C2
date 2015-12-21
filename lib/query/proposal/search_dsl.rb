@@ -40,7 +40,7 @@ module Query
       private
 
       def client_query
-        params[client_data_type.underscore.tr("/", "_").to_sym]
+        params[current_user.client_model_slug.to_sym]
       end
 
       def build_dsl

@@ -58,6 +58,14 @@ class User < ActiveRecord::Base
     user
   end
 
+  def client_model
+    Proposal.client_model_for(self)
+  end
+
+  def client_model_slug
+    client_model.to_s.underscore.tr("/", "_")
+  end
+
   def add_role(role_name)
     role = Role.find_or_create_by!(name: role_name)
     user_roles.find_or_create_by!(role: role)
