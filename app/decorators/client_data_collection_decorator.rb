@@ -7,18 +7,38 @@ class ClientDataCollectionDecorator < Draper::CollectionDecorator
 
   def results
     @client_data_relation.map do |row|
-      start_date = Time.zone.local(row["year"].to_i, row["month"].to_i, 1)
-      end_date = start_date + 1.month
       {
-        path: query_proposals_path(
-          start_date: start_date.strftime("%Y-%m-%d"),
-          end_date: end_date.strftime("%Y-%m-%d"),
-        ),
-        month: I18n.t("date.abbr_month_names")[start_date.month],
-        year: start_date.year,
+        path: query_path(row),
+        month: I18n.t("date.abbr_month_names")[start_date(row).month],
+        year: start_date(row).year,
         count: row["count"].to_i,
         cost: row["cost"].to_f
       }
     end
+  end
+
+  private
+
+  def query_path(row)
+    query_proposals_path(
+      start_date: formatted_start_date(row),
+      end_date: formatted_end_date(row)
+    )
+  end
+
+  def formatted_start_date(row)
+    start_date(row).strftime("%Y-%m-%d")
+  end
+
+  def formatted_end_date(row)
+    end_date(row).strftime("%Y-%m-%d")
+  end
+
+  def start_date(row)
+    Time.zone.local(row["year"].to_i, row["month"].to_i, 1)
+  end
+
+  def end_date(row)
+    start_date(row) + 1.month
   end
 end
