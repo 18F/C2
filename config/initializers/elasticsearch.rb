@@ -15,8 +15,13 @@ es_client_args = {
 # we use "production" env for all things at cloud.gov
 if Rails.env.production?
   vcap = ENV["VCAP_SERVICES"]
-  es_config = JSON.parse(vcap)["elasticsearch-new"]
-  es_client_args[:url] = es_config["url"]
+  vcap_config = JSON.parse(vcap)
+  vcap_config.keys.each do |vcap_key|
+    if vcap_key.match(/elasticsearch/)
+      es_config = vcap_config[vcap_key]
+      es_client_args[:url] = es_config["url"]
+    end
+  end
 elsif Rails.env.test?
   es_client_args[:url] = "http://localhost:#{(ENV['TEST_CLUSTER_PORT'] || 9250)}"
 else
