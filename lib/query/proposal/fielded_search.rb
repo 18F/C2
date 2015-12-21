@@ -7,6 +7,12 @@ module Query
         @field_pairs = field_pairs
       end
 
+      def value_for(key)
+        if field_pairs && field_pairs.has_key?(key)
+          field_pairs[key]
+        end
+      end
+
       def to_s
         if @field_pairs
           @field_pairs.reject { |k, v| v.empty? }.map { |k, v| "#{k}:(#{v})" }.join(" ")

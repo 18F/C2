@@ -13,22 +13,22 @@
                   %label{for: "#{current_user.client_model_slug}[status]"}
                     Search in
                   %select.form-control{name: "#{current_user.client_model_slug}[status]"}
-                    %option{value: "*", selected: 1}
-                      All Requests
-                    %option{value: "approved"}
-                      Approved Requests
-                    %option{value: "pending"}
-                      In progress Requests
-                    %option{value: "cancelled"}
-                      Cancelled Requests
+                    = proposal_status_options(@adv_search.value_for("status"))
                 .form-group
                   %label{for: "#{current_user.client_model_slug}[requester]"}
                     Card Holder Name
-                  %input.form-control{type: "text", name: "#{current_user.client_model_slug}[requester]", placeholder: current_user.full_name}
+                  %input.form-control{ type: "text",
+                    name: "#{current_user.client_model_slug}[requester]",
+                    placeholder: current_user.full_name,
+                    value: @adv_search.value_for("requester"),
+                  }
                 .form-group
                   %label{for: "#{current_user.client_model_slug}[client_data.vendor]"}
                     Vendor Name
-                  %input.form-control{type: "text", name: "#{current_user.client_model_slug}[client_data.vendor]"}
+                  %input.form-control{ type: "text",
+                    name: "#{current_user.client_model_slug}[client_data.vendor]",
+                    value: @adv_search.value_for("client_data.vendor"),
+                  }
                 %button.btn.btn-primary
                   %span.glyphicon.glyphicon-search{"aria-hidden" => "true"}
           %button.btn.btn-default.search{type: 'submit'}
