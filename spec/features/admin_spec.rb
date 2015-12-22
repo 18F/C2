@@ -54,4 +54,13 @@ describe "admin" do
 
     expect(page).to have_content(user.display_name)
   end
+
+  it "contains reindex button link" do
+    user = create(:user, :admin)
+    login_as(user)
+
+    visit admin_dashboard_path
+
+    expect(page).to have_content("Re-index Proposals")
+  end
 end
