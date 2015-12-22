@@ -7,7 +7,7 @@ FactoryGirl.define do
     sequence(:product_name_and_description) {|n| "Proposal #{n}" }
     office Gsa18f::Procurement::OFFICES[0]
     urgency Gsa18f::Procurement::URGENCY[10]
-    association :proposal, flow: 'linear', client_slug: 'gsa18f'
+    association :proposal, client_slug: "gsa18f"
 
     trait :with_steps do
       after(:create) { |procurement| procurement.add_steps }

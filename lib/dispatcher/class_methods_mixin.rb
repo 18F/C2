@@ -3,22 +3,13 @@ class Dispatcher
     extend ActiveSupport::Concern
 
     class_methods do
-      # todo: replace with dynamic dispatch
       def initialize_dispatcher(proposal)
-        case proposal.flow
-        when 'parallel'
-          new
-        when 'linear'
-          # @todo: dynamic dispatch for selection
-          if proposal.client_slug == "ncr"
-            NcrDispatcher.new
-          else
-            LinearDispatcher.new
-          end
+        if proposal.client_slug == "ncr"
+          NcrDispatcher.new
+        else
+          LinearDispatcher.new
         end
       end
-
-      # TODO DRY the following up
 
       def deliver_new_proposal_emails(proposal)
         dispatcher = initialize_dispatcher(proposal)

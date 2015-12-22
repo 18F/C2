@@ -7,7 +7,6 @@ class Proposal < ActiveRecord::Base
   has_paper_trail class_name: 'C2Version'
 
   CLIENT_MODELS = []  # this gets populated later
-  FLOWS = %w(parallel linear).freeze
 
   workflow do
     state :pending do
@@ -53,7 +52,6 @@ class Proposal < ActiveRecord::Base
     message: "%{value} is not a valid client model type. Valid client model types are: #{CLIENT_MODELS.inspect}",
     allow_blank: true
   }
-  validates :flow, presence: true, inclusion: {in: FLOWS}
   validates :requester_id, presence: true
   validates :public_id, uniqueness: true, allow_nil: true
 
@@ -68,11 +66,11 @@ class Proposal < ActiveRecord::Base
   end
 
   def parallel?
-    flow == "parallel"
+    root_step.type == "Steps::Parallel"
   end
 
-  def linear?
-    flow == "linear"
+  def serial?
+    root_step.type == "Steps::Serial"
   end
 
   def delegate?(user)
