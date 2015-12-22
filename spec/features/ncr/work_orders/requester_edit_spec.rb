@@ -146,7 +146,7 @@ feature "Requester edits their NCR work order", :js do
 
     click_link "Discard Changes"
 
-    expect(current_path).to eq(proposal_path(ncr_proposal))
+    expect(page).to have_current_path(proposal_path(ncr_proposal))
   end
 
   scenario "can change approving official email if first approval not done" do
