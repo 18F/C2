@@ -22,6 +22,6 @@
   <%= render partial: 'shared/breadcrumb_nav', locals: {text: "Back to main portal", href: proposals_path} %>
 <% end %>
 
-<% if current_user && current_user.client_model && !client_disabled? %>
+<% if display_search_ui? %>
 <%= render partial: 'shared/search_ui' %>
 <% end %>

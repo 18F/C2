@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
   add_template_helper SearchHelper
 
   protect_from_forgery with: :exception
-  helper_method :current_user, :signed_in?, :return_to
+  helper_method :current_user, :signed_in?, :return_to, :client_disabled?
 
   before_action :authenticate_user!
   before_action :disable_peek_by_default

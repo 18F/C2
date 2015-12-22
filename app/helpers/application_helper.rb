@@ -19,4 +19,8 @@ module ApplicationHelper
   def display_profile_warning?
     !current_page?(profile_path) && current_user && current_user.requires_profile_attention?
   end
+
+  def display_search_ui?
+    current_user && current_user.client_model && !client_disabled?
+  end
 end
