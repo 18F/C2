@@ -3,7 +3,7 @@ feature "Proposals index" do
 
   scenario "filters pending proposals according to current_user" do
     user = create(:user)
-    _reviewable_proposals = create_list(:proposal, 2, observer: user)
+    _reviewable_proposals = create_list(:proposal, 2, :with_approver, observer: user)
     _pending_proposals = create_list(:proposal, 2, :with_approver, approver_user: user)
     _cancelled = create_list(:proposal, 2, status: "cancelled", observer: user)
 
@@ -32,41 +32,62 @@ feature "Proposals index" do
     expect_order(@page.cancelled, cancelled.reverse)
   end
 
-  describe "status field text" do
-    context "when the user is an approver or purchaser" do
-      it "is correct for the user" do
+  feature "status field text" do
+    context "when the user is an approver" do
+      scenario "is correct for the user" do
         user = create(:user)
-        other_user = create(:user)
-        approval_proposal = create_proposal_with_approvers(user, other_user)
-        purchase_proposal = create_proposal_with_approvers(other_user, user)
+        approval_proposal = create_proposal_with_approvers(user, create(:user))
+        @page = ProposalIndexPage.new
+
+        login_as(user)
+        @page.load
+
+        expect(@page.needing_review.requests[0].public_id_link.text).to eq approval_proposal.public_id
+        expect(@page.needing_review.requests[0].status.text).to eq "Please review"
+      end
+    end
+
+    context "when the user is a purchaser" do
+      scenario "is correct for the user" do
+        user = create(:user)
+        purchase_proposal = create_proposal_with_approvers(create(:user), user)
         purchase_proposal.individual_steps.first.approve!
         @page = ProposalIndexPage.new
 
         login_as(user)
         @page.load
 
-        expect(@page.needing_review.requests[1].public_id_link.text).to eq approval_proposal.public_id
-        expect(@page.needing_review.requests[1].status.text).to eq "Please review"
         expect(@page.needing_review.requests[0].public_id_link.text).to eq purchase_proposal.public_id
         expect(@page.needing_review.requests[0].status.text).to eq "Please purchase"
       end
     end
 
-    context "when the user's request is waiting for approval or purchase" do
-      it "is correct for the user" do
+    context "when the user's request is waiting for approval" do
+      scenario "is correct for the user" do
         user = create(:user)
         approver = create(:user)
+        approval_proposal = create_proposal_for_requester_with_approvers(user, approver, create(:user))
+        @page = ProposalIndexPage.new
+
+        login_as(user)
+        @page.load
+
+        expect(@page.pending.requests[0].public_id_link.text).to eq approval_proposal.public_id
+        expect(@page.pending.requests[0].status.text).to eq "Waiting for review from: #{approver.full_name}"
+      end
+    end
+
+    context "when the user's request is waiting for purchase" do
+      scenario "is correct for the user" do
+        user = create(:user)
         purchaser = create(:user)
-        approval_proposal = create_proposal_for_requester_with_approvers(user, approver, purchaser)
-        purchase_proposal = create_proposal_for_requester_with_approvers(user, approver, purchaser)
+        purchase_proposal = create_proposal_for_requester_with_approvers(user, create(:user), purchaser)
         purchase_proposal.individual_steps.first.approve!
         @page = ProposalIndexPage.new
 
         login_as(user)
         @page.load
 
-        expect(@page.pending.requests[1].public_id_link.text).to eq approval_proposal.public_id
-        expect(@page.pending.requests[1].status.text).to eq "Waiting for review from: #{approver.full_name}"
         expect(@page.pending.requests[0].public_id_link.text).to eq purchase_proposal.public_id
         expect(@page.pending.requests[0].status.text).to eq "Waiting for purchase from: #{purchaser.full_name}"
       end

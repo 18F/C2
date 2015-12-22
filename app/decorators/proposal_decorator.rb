@@ -60,7 +60,9 @@ class ProposalDecorator < Draper::Decorator
     if actionable_step
       actionable_step.decorate.waiting_text
     else
-      I18n.t("decorators.steps.approval.status.waiting")
+      # This should only ever happen in specs which create proposals but never
+      # populate them with steps. Unfortunately we still have many of those.
+      "This proposal has no steps"
     end
   end
 
