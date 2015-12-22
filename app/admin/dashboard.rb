@@ -2,7 +2,6 @@ ActiveAdmin.register_page "Dashboard" do
   menu priority: 1, label: proc { I18n.t("active_admin.dashboard") }
 
   content title: proc { I18n.t("active_admin.dashboard") } do
-
     section "Background Jobs" do
       now = Time.zone.now
       ul do
@@ -23,8 +22,7 @@ ActiveAdmin.register_page "Dashboard" do
   end
 
   action_item :reindex, only: [:index] do
-    link_to "Re-index Proposals", admin_dashboard_reindex_path, "data-method" => :post,
-      title: "Re-index all proposals."
+    link_to "Re-index Proposals", admin_dashboard_reindex_path, "data-method" => :post, title: "Re-index all proposals."
   end
 
   page_action :reindex, method: :post do
