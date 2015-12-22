@@ -58,11 +58,10 @@ class ProposalsController < ApplicationController
   end
 
   def query
+    check_search_params
     query_listing = listing
     @proposals_data = query_listing.query
 
-    @text = params[:text]
-    @adv_search = Query::Proposal::FieldedSearch.new(params[current_user.client_model_slug.to_sym])
     @start_date = query_listing.start_date
     @end_date = query_listing.end_date
   end
@@ -88,5 +87,14 @@ class ProposalsController < ApplicationController
 
   def listing
     Query::Proposal::Listing.new(current_user, params)
+  end
+
+  def check_search_params
+    @text = params[:text]
+    @adv_search = Query::Proposal::FieldedSearch.new(params[current_user.client_model_slug.to_sym])
+    unless @text.present? || @adv_search.present?
+      flash[:alert] = "Please enter one or more search criteria"
+      redirect_to proposals_path
+    end
   end
 end
