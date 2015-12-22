@@ -28,7 +28,7 @@ FactoryGirl.define do
     end
 
     trait :with_observers do
-      association :proposal, :with_observers, flow: 'linear'
+      association :proposal, :with_observers
     end
   end
 end

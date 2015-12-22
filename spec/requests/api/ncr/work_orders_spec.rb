@@ -17,7 +17,7 @@ describe 'NCR Work Orders API' do
             "created_at" => time_to_json(user.created_at),
             "id"=> user.id,
             "updated_at"=> time_to_json(user.updated_at)
-          }  
+          }
         end
         json = get_json("/api/v1/ncr/work_orders.json")
 
@@ -34,7 +34,7 @@ describe 'NCR Work Orders API' do
             "name" => work_order.name,
             "not_to_exceed" => work_order.not_to_exceed,
             "observers" => observers,
-            "organization_code" => work_order.organization_code,
+            "org_code" => work_order.org_code,
             "proposal" => {
               "created_at" => time_to_json(proposal.created_at),
               "id" => proposal.id,
