@@ -33,26 +33,29 @@ feature "Proposals index" do
   end
 
   feature "The 'needing review' section" do
-    scenario "contains requests that can be acted on by the user" do
-      purchaser_user = create(:user)
-      request_needing_purchase = create_proposal_with_approvers(create(:user), purchaser_user)
-      request_needing_purchase.individual_steps.first.approve!
+    context "when there are requests that can be acted on by the user" do
+      scenario "contains those requests" do
+        user = create(:user)
+        proposal = create(:proposal, :with_approver, approver_user: user)
 
-      login_as(purchaser_user)
-      @page = ProposalIndexPage.new
-      @page.load
+        login_as(user)
+        @page = ProposalIndexPage.new
+        @page.load
 
-      expect(@page.needing_review).to have_content "Purchase Requests Needing Review"
-      expect(@page.needing_review.requests.first.public_id_link.text).to eq request_needing_purchase.public_id
+        expect(@page.needing_review).to have_content "Purchase Requests Needing Review"
+        expect(@page.needing_review.requests.first.public_id_link.text).to eq proposal.public_id
+      end
     end
 
-    scenario "does not exist when there are no requests that can be acted on by the user" do
-      login_as(create(:user))
-      @page = ProposalIndexPage.new
-      @page.load
+    context "when there are no requests that can be acted on by the user" do
+      scenario "does not exist" do
+        login_as(create(:user))
+        @page = ProposalIndexPage.new
+        @page.load
 
-      expect(@page.needing_review).to_not have_content "Purchase Requests Needing Review"
-      expect(@page.needing_review.requests).to be_empty
+        expect(@page.needing_review).to_not have_content "Purchase Requests Needing Review"
+        expect(@page.needing_review.requests).to be_empty
+      end
     end
   end
 
