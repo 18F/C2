@@ -55,7 +55,7 @@ class ProposalDecorator < Draper::Decorator
     "#{number_approved} of #{total_approvers} approved."
   end
 
-  def table_waiting_text
+  def waiting_text_for_status_in_table
     actionable_step = currently_awaiting_steps.first
     if actionable_step
       actionable_step.decorate.waiting_text

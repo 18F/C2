@@ -41,6 +41,30 @@ describe ProposalDecorator do
     end
   end
 
+  describe "#waiting_text_for_status_in_table" do
+    context "when the proposal has an actionable Approval step" do
+      it "returns the correct text" do
+        proposal = create(:proposal, :with_approval_and_purchase).decorate
+        expect(proposal.waiting_text_for_status_in_table).to eq "Waiting for review from:"
+      end
+    end
+
+    context "when the proposal has an actionable Purchase step" do
+      it "returns the correct text" do
+        proposal = create(:proposal, :with_approval_and_purchase).decorate
+        proposal.individual_steps.first.approve!
+        expect(proposal.waiting_text_for_status_in_table).to eq "Waiting for purchase from:"
+      end
+    end
+
+    context "when the proposal does not have an actionable step" do
+      it "returns the correct default text" do
+        proposal = build_stubbed(:proposal).decorate
+        expect(proposal.waiting_text_for_status_in_table).to eq "Waiting for review from:"
+      end
+    end
+  end
+
   describe "#step_text_for_user" do
     let(:proposal) { create(:proposal).decorate }
     let(:user)     { create(:user) }
