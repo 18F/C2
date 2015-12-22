@@ -7,6 +7,10 @@ module Query
         @field_pairs = field_pairs
       end
 
+      def present?
+        field_pairs && field_pairs.any?
+      end
+
       def value_for(key)
         if field_pairs && field_pairs.has_key?(key)
           field_pairs[key]
@@ -14,11 +18,15 @@ module Query
       end
 
       def to_s
-        if @field_pairs
-          @field_pairs.reject { |k, v| v.empty? }.map { |k, v| "#{k}:(#{v})" }.join(" ")
-        else
-          ""
+        clauses = []
+        if field_pairs
+          field_pairs.each do |k, v|
+            next if v.empty?
+            next if v == "*"
+            clauses << "#{k}:(#{v})"
+          end
         end
+        clauses.join(" ")
       end
     end
   end
