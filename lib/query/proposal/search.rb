@@ -47,12 +47,12 @@ module Query
       end
 
       def joined
-        self.relation.joins(JOIN)
+        relation.joins(JOIN)
       end
 
       def execute(query)
         sanitized = ActiveRecord::Base.sanitize(query)
-        self.joined.
+        joined.
           where('p_search.document @@ plainto_tsquery(?)', query).
           order("ts_rank(p_search.document, plainto_tsquery(#{sanitized})) DESC")
       end

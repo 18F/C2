@@ -2,6 +2,7 @@ module Api
   class BaseController < ApplicationController
     before_action :fail_if_not_enabled
     skip_before_action :authenticate_user!
+    skip_before_action :check_disabled_client
 
     private
 

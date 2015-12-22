@@ -28,8 +28,7 @@ describe Ncr::ApprovalManager do
     end
 
     it "creates observers when in an emergency" do
-      wo = create(:ncr_work_order, expense_type: 'BA61',
-                               emergency: true)
+      wo = create(:ncr_work_order, expense_type: 'BA61', emergency: true)
       manager = Ncr::ApprovalManager.new(wo)
       manager.setup_approvals_and_observers
       expect(wo.observers.map(&:email_address)).to match_array([
@@ -43,35 +42,39 @@ describe Ncr::ApprovalManager do
     end
 
     it "accounts for approver transitions when nothing's approved" do
+      organization = create(:whsc_organization)
       ba80_budget_email = Ncr::Mailboxes.ba80_budget
-      wo = create(:ncr_work_order, approving_official_email: 'ao@example.com', expense_type: 'BA61')
+      wo = create(
+        :ncr_work_order,
+        approving_official_email: "ao@example.com",
+        expense_type: "BA61",
+      )
       manager = Ncr::ApprovalManager.new(wo)
       manager.setup_approvals_and_observers
       expect(wo.approvers.map(&:email_address)).to eq [
-        'ao@example.com',
+        "ao@example.com",
         ba61_tier_one_email,
         ba61_tier_two_email
       ]
-
-      wo.update(org_code: 'P1122021 (192X,192M) WHITE HOUSE DISTRICT')
+      wo.update(org_code: organization.code_and_name)
       manager.setup_approvals_and_observers
       expect(wo.reload.approvers.map(&:email_address)).to eq [
-        'ao@example.com',
+        "ao@example.com",
         ba61_tier_two_email
       ]
 
-      wo.approving_official_email = 'ao2@example.com'
+      wo.approving_official_email = "ao2@example.com"
       manager.setup_approvals_and_observers
       expect(wo.reload.approvers.map(&:email_address)).to eq [
-        'ao2@example.com',
+        "ao2@example.com",
         ba61_tier_two_email
       ]
 
-      wo.approving_official_email = 'ao@example.com'
-      wo.update(expense_type: 'BA80')
+      wo.approving_official_email = "ao@example.com"
+      wo.update(expense_type: "BA80")
       manager.setup_approvals_and_observers
       expect(wo.reload.approvers.map(&:email_address)).to eq [
-        'ao@example.com',
+        "ao@example.com",
         ba80_budget_email
       ]
     end
@@ -133,7 +136,12 @@ describe Ncr::ApprovalManager do
       let (:ba61_tier_two_email) { Ncr::Mailboxes.ba61_tier2_budget }
 
       it "skips the Tier 1 budget approver for WHSC" do
-        work_order = create(:ncr_work_order, expense_type: 'BA61', org_code: Ncr::Organization::WHSC_CODE)
+        ncr_organization =  create(:whsc_organization)
+        work_order = create(
+          :ncr_work_order,
+          expense_type: "BA61",
+          org_code: ncr_organization.code_and_name
+        )
         manager = Ncr::ApprovalManager.new(work_order)
         expect(manager.system_approver_emails).to eq([
           ba61_tier_two_email
@@ -141,8 +149,8 @@ describe Ncr::ApprovalManager do
       end
 
       it "includes the Tier 1 budget approver for an unknown organization" do
-        work_order = create(:ncr_work_order, expense_type: 'BA61', org_code: nil)
-        manager = Ncr::ApprovalManager.new(work_order)
+        work_order = create(:ncr_work_order, expense_type: 'BA61')
+        _manager = Ncr::ApprovalManager.new(work_order)
         expect(work_order.system_approver_emails).to eq([
           ba61_tier_one_email,
           ba61_tier_two_email
@@ -160,9 +168,9 @@ describe Ncr::ApprovalManager do
 
       it "uses the OOL budget email for their org code" do
         budget_email = Ncr::Mailboxes.ool_ba80_budget
-        org_code = Ncr::Organization::OOL_CODES.first
+        ool_organization = create(:ool_organization)
+        work_order = create(:ba80_ncr_work_order, org_code: ool_organization.code_and_name)
 
-        work_order = create(:ba80_ncr_work_order, org_code: org_code)
         manager = Ncr::ApprovalManager.new(work_order)
         expect(manager.system_approver_emails).to eq([budget_email])
       end

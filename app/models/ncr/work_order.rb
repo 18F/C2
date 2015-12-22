@@ -47,50 +47,17 @@ module Ncr
       message: "must be three letters or numbers"
     }, allow_blank: true
 
-    FISCAL_YEAR_START_MONTH = 10 # 1-based
-    scope :for_fiscal_year, lambda { |year|
-      start_time = Time.zone.local(year - 1, FISCAL_YEAR_START_MONTH, 1)
-      end_time = start_time + 1.year
-      where(created_at: start_time...end_time)
-    }
-
     def self.all_system_approver_emails
       [
-        self.ba61_tier1_budget_mailbox,
-        self.ba61_tier2_budget_mailbox,
-        self.ba80_budget_mailbox,
-        self.ool_ba80_budget_mailbox,
+        Ncr::Mailboxes.ba61_tier1_budget,
+        Ncr::Mailboxes.ba61_tier2_budget,
+        Ncr::Mailboxes.ba80_budget,
+        Ncr::Mailboxes.ool_ba80_budget,
       ]
     end
 
-    def self.ba61_tier1_budget_mailbox
-      self.approver_with_role("BA61_tier1_budget_approver")
-    end
-
-    def self.ba61_tier2_budget_mailbox
-      self.approver_with_role("BA61_tier2_budget_approver")
-    end
-
-    def self.ba80_budget_mailbox
-      self.approver_with_role("BA80_budget_approver")
-    end
-
-    def self.ool_ba80_budget_mailbox
-      self.approver_with_role("OOL_BA80_budget_approver")
-    end
-
-    def self.approver_with_role(role_name)
-      users = User.with_role(role_name).where(client_slug: "ncr")
-
-      if users.empty?
-        fail "Missing User with role #{role_name} -- did you run rake db:migrate and rake db:seed?"
-      end
-
-      users.first.email_address
-    end
-
     def self.relevant_fields(expense_type)
-      fields = self.default_fields
+      fields = default_fields
 
       if expense_type == "BA61"
         fields << :emergency
@@ -102,21 +69,33 @@ module Ncr
     end
 
     def self.default_fields
-      fields = self.column_names.map(&:to_sym) + [:approving_official_email]
+      fields = column_names.map(&:to_sym) + [:approving_official_email]
       fields - [:emergency, :rwa_number, :code, :created_at, :updated_at, :id]
     end
 
     def approver_email_frozen?
-      approval = self.individual_steps.first
+      approval = individual_steps.first
       approval && !approval.actionable?
     end
 
     def approver_changed?
-      self.approving_official && self.approving_official.email_address != approving_official_email
+      approving_official && approving_official.email_address != approving_official_email
     end
 
     def requires_approval?
-      !self.emergency
+      !emergency
+    end
+
+    def for_whsc_organization?
+      if org_code.present?
+        ncr_org.try(:whsc?)
+      end
+    end
+
+    def for_ool_organization?
+      if org_code.present?
+        ncr_org.try(:ool?)
+      end
     end
 
     def setup_approvals_and_observers
@@ -147,7 +126,7 @@ module Ncr
     end
 
     def budget_approvals
-      self.individual_steps.offset(1)
+      individual_steps.offset(1)
     end
 
     def budget_approvers
@@ -161,12 +140,7 @@ module Ncr
     # Methods for Client Data interface
     def fields_for_display
       attributes = self.class.relevant_fields(expense_type)
-      attributes.map{|key| [WorkOrder.human_attribute_name(key), self[key]]}
-    end
-
-    def ncr_organization
-      code = (org_code || '').split(' ', 2)[0]
-      Ncr::Organization.find(code)
+      attributes.map { |attribute| [WorkOrder.human_attribute_name(attribute), send(attribute)] }
     end
 
     def ba80?
@@ -178,21 +152,17 @@ module Ncr
     end
 
     def total_price
-      self.amount || 0.0
+      amount || 0.0
     end
 
     # may be replaced with paper-trail or similar at some point
     def version
-      self.updated_at.to_i
+      updated_at.to_i
     end
 
     def system_approver_emails
       manager = ApprovalManager.new(self)
       manager.system_approver_emails
-    end
-
-    def organization_code
-      ncr_organization.try(:code)
     end
 
     def building_id
@@ -213,8 +183,8 @@ module Ncr
     end
 
     def fiscal_year
-      year = self.created_at.nil? ? Time.zone.now.year : self.created_at.year
-      month = self.created_at.nil? ? Time.zone.now.month : self.created_at.month
+      year = created_at.nil? ? Time.zone.now.year : created_at.year
+      month = created_at.nil? ? Time.zone.now.month : created_at.month
       if month >= 10
         year += 1
       end
@@ -222,9 +192,16 @@ module Ncr
     end
 
     def restart_budget_approvals
-      self.budget_approvals.each(&:restart!)
-      self.proposal.reset_status
-      self.proposal.root_step.initialize!
+      budget_approvals.each(&:restart!)
+      proposal.reset_status
+      proposal.root_step.initialize!
+    end
+
+    private
+
+    def ncr_org
+      ncr_org_code = org_code.match(/^(\w+)/)[1]
+      Ncr::Organization.find_by(code: ncr_org_code)
     end
   end
 end

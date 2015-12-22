@@ -1,6 +1,4 @@
 describe 'NCR Work Orders API' do
-  # TODO share common functionality w/ other API specs
-
   describe 'GET /api/v1/ncr/work_orders.json' do
     without_feature 'API_ENABLED' do
       it "gives a 403" do
@@ -29,11 +27,10 @@ describe 'NCR Work Orders API' do
             "id" => work_order.id,
             "name" => work_order.name,
             "not_to_exceed" => work_order.not_to_exceed,
-            "organization_code" => work_order.organization_code,
+            "org_code" => work_order.org_code,
             "proposal" => {
               "steps" => [],
               "created_at" => time_to_json(proposal.created_at),
-              "flow" => proposal.flow,
               "id" => proposal.id,
               "requester" => {
                 "created_at" => time_to_json(proposal.requester.created_at),

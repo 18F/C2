@@ -7,11 +7,11 @@ class ObservationPolicy
   end
 
   def can_create!
-    self.can_show_proposal!
+    can_show_proposal!
   end
 
   def can_destroy!
-    self.can_show_proposal! || user_is_observer!
+    can_show_proposal! || user_is_observer!
   end
 
   protected

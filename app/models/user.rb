@@ -30,7 +30,7 @@ class User < ActiveRecord::Base
   end
 
   def self.sql_for_role_slug(role_name, slug)
-    self.with_role(role_name).select(:id).where(client_slug: slug).to_sql
+    with_role(role_name).select(:id).where(client_slug: slug).to_sql
   end
 
   def self.with_role(role_name)
@@ -53,7 +53,7 @@ class User < ActiveRecord::Base
 
   def self.from_oauth_hash(auth_hash)
     user_data = auth_hash.extra.raw_info.to_hash
-    user = self.for_email(user_data["email"])
+    user = for_email(user_data["email"])
     user.update_names_if_present(user_data)
     user
   end
@@ -110,7 +110,7 @@ class User < ActiveRecord::Base
   def update_names_if_present(user_data)
     %w(first_name last_name).each do |field|
       attr = field.to_sym
-      if user_data[field].present? && self.send(attr).blank?
+      if user_data[field].present? && send(attr).blank?
         update_attributes(attr => user_data[field])
       end
     end

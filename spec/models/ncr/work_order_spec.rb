@@ -3,10 +3,54 @@ describe Ncr::WorkOrder do
 
   it_behaves_like "client data"
 
-  describe "#editabe?" do
+  describe "#editable?" do
     it "is true" do
       work_order = build(:ncr_work_order)
       expect(work_order).to be_editable
+    end
+  end
+
+  describe "#for_whsc_organization?" do
+    it "is true if the org code is for a whsc organization" do
+      organization = create(:whsc_organization)
+      work_order = build(:ncr_work_order, org_code: organization.code_and_name)
+
+      expect(work_order).to be_for_whsc_organization
+    end
+
+    it "is false if org code is nil" do
+      work_order = build(:ncr_work_order, org_code: nil)
+
+      expect(work_order).not_to be_for_whsc_organization
+    end
+
+    it "is false if org code is for a non-whsc org" do
+      organization = build(:ncr_organization)
+      work_order = build(:ncr_work_order, org_code: organization.code_and_name)
+
+      expect(work_order).not_to be_for_whsc_organization
+    end
+  end
+
+  describe "#for_ool_organization?" do
+    it "is true if org code is for an ool org" do
+      organization = create(:ool_organization)
+      work_order = build(:ncr_work_order, org_code: organization.code_and_name)
+
+      expect(work_order).to be_for_ool_organization
+    end
+
+    it "is false if org code is nil" do
+      work_order = build(:ncr_work_order, org_code: nil)
+
+      expect(work_order).not_to be_for_ool_organization
+    end
+
+    it "is false if org code is for non-ool org" do
+      organization = build(:ncr_organization)
+      work_order = build(:ncr_work_order, org_code: organization.code_and_name)
+
+      expect(work_order).not_to be_for_ool_organization
     end
   end
 
@@ -51,19 +95,6 @@ describe Ncr::WorkOrder do
         :soc_code,
         :vendor
       ])
-    end
-  end
-
-  describe "#ncr_organization" do
-    it "returns the corresponding Organization instance" do
-      org = Ncr::Organization.all.last
-      work_order = build(:ncr_work_order, org_code: org.code)
-      expect(work_order.ncr_organization).to eq(org)
-    end
-
-    it "returns nil for no #org_code" do
-      work_order = build(:ncr_work_order)
-      expect(work_order.ncr_organization).to eq(nil)
     end
   end
 
@@ -175,26 +206,6 @@ describe Ncr::WorkOrder do
         work_order.soc_code = "12"
         expect(work_order).to_not be_valid
         expect(work_order.errors.keys).to eq([:soc_code])
-      end
-    end
-  end
-
-  describe "#organization_code" do
-    context "work order has an ncr organization" do
-      it "returns the ncr organization code" do
-        work_order = build(:ncr_work_order)
-        organization = Ncr::Organization.all.first
-        allow(work_order).to receive(:ncr_organization).and_return(organization)
-
-        expect(work_order.organization_code).to eq organization.code
-      end
-    end
-
-    context "work order does not have an ncr organization" do
-      it "returns nil" do
-        work_order = build(:ncr_work_order, org_code: nil)
-
-        expect(work_order.organization_code).to be_nil
       end
     end
   end

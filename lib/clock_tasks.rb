@@ -10,7 +10,7 @@ class ClockTasks
   def self.send_weekly_fiscal_year_ncr_budget_report
     puts "SENDING WEEKLY FISCAL YEAR BUDGET REPORT..."
     now = Time.zone.now
-    fiscal_year = Ncr::WorkOrder.which_fiscal_year(now.year, now.month)
+    fiscal_year = FiscalYearFinder.new(now.year, now.month).run
     ReportMailer.weekly_fiscal_year_report(fiscal_year).deliver_later
     puts "...DONE"
   end

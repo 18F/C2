@@ -84,7 +84,7 @@ module Query
 
       def param_date(sym)
         begin
-          Date.strptime(self.params[sym].to_s)
+          Date.strptime(params[sym].to_s)
         rescue ArgumentError
           nil
         end

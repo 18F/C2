@@ -6,31 +6,56 @@ feature "Proposals index" do
     _reviewable_proposals = create_list(:proposal, 2, :with_approver, observer: user)
     _pending_proposals = create_list(:proposal, 2, :with_approver, approver_user: user)
     _cancelled = create_list(:proposal, 2, status: "cancelled", observer: user)
-
-    login_as(user)
-    visit proposals_path
-    tables = page.all('.tabular-data')
-
-    expect(tables[0].text).to have_content('Please review')
-    expect(tables[1].text).to have_content('Waiting for review')
-    expect(tables[2].text).to have_content('Cancelled')
-  end
-
-  scenario "defaults to sorted by created date" do
-    user = create(:user)
-    proposals = create_list(:proposal, 2, observer: user)
-    cancelled = create_list(:proposal, 2, status: "cancelled", observer: user)
     @page = ProposalIndexPage.new
 
     login_as(user)
     @page.load
 
-    expect(@page.pending.desc_column_header).to have_content "Submitted"
+    expect(@page.needing_review).to have_content('Please review')
+    expect(@page.pending).to have_content('Waiting for review')
+    expect(@page.cancelled).to have_content('Cancelled')
+  end
+
+  scenario "defaults to sorted by created date" do
+    user = create(:user)
+    proposals = create_list(:proposal, 2, :with_approver, approver_user: user)
+    cancelled = create_list(:proposal, 2, :with_approver, status: "cancelled", approver_user: user)
+    @page = ProposalIndexPage.new
+
+    login_as(user)
+    @page.load
+
+    expect(@page.needing_review.desc_column_header).to have_content "Submitted"
     expect(@page.cancelled.desc_column_header).to have_content "Submitted"
 
     expect_order(@page.pending, proposals.reverse)
     expect_order(@page.cancelled, cancelled.reverse)
   end
+
+  feature "The 'needing review' section" do
+    scenario "contains requests that can be acted on by the user" do
+      purchaser_user = create(:user)
+      request_needing_purchase = create_proposal_with_approvers(create(:user), purchaser_user)
+      request_needing_purchase.individual_steps.first.approve!
+
+      login_as(purchaser_user)
+      @page = ProposalIndexPage.new
+      @page.load
+
+      expect(@page.needing_review).to have_content "Purchase Requests Needing Review"
+      expect(@page.needing_review.requests.first.public_id_link.text).to eq request_needing_purchase.public_id
+    end
+
+    scenario "does not exist when there are no requests that can be acted on by the user" do
+      login_as(create(:user))
+      @page = ProposalIndexPage.new
+      @page.load
+
+      expect(@page.needing_review).to_not have_content "Purchase Requests Needing Review"
+      expect(@page.needing_review.requests).to be_empty
+    end
+  end
+
 
   feature "status field text" do
     context "when the user is an approver" do

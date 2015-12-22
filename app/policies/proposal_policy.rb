@@ -16,7 +16,7 @@ class ProposalPolicy
   alias_method :can_update!, :can_edit!
 
   def can_show!
-    check(self.visible_proposals.exists?(@proposal.id), "You are not allowed to see this proposal")
+    check(visible_proposals.exists?(@proposal.id), "You are not allowed to see this proposal")
   end
   alias_method :can_history!, :can_show!
 
@@ -50,7 +50,7 @@ class ProposalPolicy
   end
 
   def requester!
-    check(self.requester?, "You are not the requester")
+    check(requester?, "You are not the requester")
   end
 
   def not_approved!
@@ -78,7 +78,7 @@ class ProposalPolicy
 
   def approver!
     check(
-      self.approver? || self.delegate?,
+      approver? || delegate?,
       "Sorry, you're not an approver on this proposal"
     )
   end
@@ -97,7 +97,7 @@ class ProposalPolicy
   end
 
   def pending_approval!
-    check(self.pending_approver? || self.pending_delegate?,
+    check(pending_approver? || pending_delegate?,
           "A response has already been logged for this proposal")
   end
 

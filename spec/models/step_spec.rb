@@ -64,10 +64,25 @@ describe Step do
       proposal = create(:proposal)
       child1 = build(:approval, user: create(:user))
       child2 = build(:approval, user: create(:user))
-      proposal.root_step = build(:parallel_steps, child_approvals: [child1, child2])
+      proposal.root_step = build(:parallel_step, child_approvals: [child1, child2])
 
       expect(proposal).not_to receive(:approve!)
       child1.approve!
+    end
+  end
+
+  describe "database constraints" do
+    it "deletes steps when parent proposal is destroyed" do
+      proposal = create(:proposal)
+      step = create(:step, proposal: proposal)
+
+      expect(Step.exists?(step.id)).to eq true
+      expect(Proposal.exists?(proposal.id)).to eq true
+
+      proposal.destroy
+
+      expect(Step.exists?(step.id)).to eq false
+      expect(Proposal.exists?(proposal.id)).to eq false
     end
   end
 
@@ -85,15 +100,15 @@ describe Step do
 
     before :each do
       # @todo syntax for this will get cleaned up
-      and_clause = create(:parallel_steps, child_approvals: [
+      and_clause = create(:parallel_step, child_approvals: [
         create(:approval, user: amy),
         create(:approval, user: bob)
       ])
-      then_clause = create(:serial_steps, child_approvals: [
+      then_clause = create(:serial_step, child_approvals: [
         create(:approval, user: dan),
         create(:approval, user: erin)
       ])
-      proposal.root_step = create(:parallel_steps, min_children_needed: 2, child_approvals: [
+      proposal.root_step = create(:parallel_step, min_children_needed: 2, child_approvals: [
         and_clause,
         create(:approval, user: carrie),
         then_clause
@@ -143,21 +158,21 @@ describe Step do
 
     def build_approvals
       and_clause = build(
-        :parallel_steps,
+        :parallel_step,
         child_approvals: [
           build(:approval, user: amy),
           build(:approval, user: bob)
         ]
       )
       then_clause = build(
-        :parallel_steps,
+        :parallel_step,
         child_approvals: [
           build(:approval, user: dan),
           build(:approval, user: erin)
         ]
       )
       proposal.root_step = build(
-        :parallel_steps,
+        :parallel_step,
         min_children_needed: 2,
         child_approvals: [
           and_clause,

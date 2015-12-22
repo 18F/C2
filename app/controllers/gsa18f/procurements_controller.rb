@@ -21,7 +21,7 @@ module Gsa18f
 
     def add_steps
       super
-      if self.errors.empty?
+      if errors.empty?
         @client_data_instance.add_steps
       end
     end

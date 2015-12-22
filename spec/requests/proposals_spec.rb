@@ -1,6 +1,24 @@
 describe 'proposals' do
   include ReturnToHelper
 
+  describe "DISABLE_CLIENT_SLUGS" do
+    with_env_var("DISABLE_CLIENT_SLUGS", "foo") do
+      it "disallows any request for disabled client_slug" do
+        allow(Proposal).to receive(:client_slugs).and_return(%w(foo))
+        proposal = create(:proposal)
+        user = create(:user, client_slug: "foo")
+        endpoints = [proposal_path(proposal), proposals_path]
+
+        endpoints.each do |endpoint|
+          login_as(user)
+          get endpoint
+          expect(response.status).to eq 403
+          expect(response.body).to match "Client is disabled"
+        end
+      end
+    end
+  end
+
   describe 'GET /proposals/:id' do
     it "can be viewed by a delegate" do
       delegate = create(:user)
@@ -26,7 +44,7 @@ describe 'proposals' do
       proposal = create(:proposal, :with_approver)
       post "/proposals/#{proposal.id}/approve"
 
-      expect(response.status).to redirect_to(root_path(return_to: self.make_return_to("Previous", request.fullpath)))
+      expect(response.status).to redirect_to(root_path(return_to: make_return_to("Previous", request.fullpath)))
       expect_status(proposal, 'pending', 'actionable')
     end
 
@@ -109,7 +127,7 @@ describe 'proposals' do
 
         get "/proposals/#{proposal.id}/approve", cch: token.access_token
 
-        expect(response).to redirect_to(root_path(return_to: self.make_return_to("Previous", request.fullpath)))
+        expect(response).to redirect_to(root_path(return_to: make_return_to("Previous", request.fullpath)))
 
         login_as(delegate)
 

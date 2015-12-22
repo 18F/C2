@@ -2,6 +2,8 @@ module ClientDataMixin
   extend ActiveSupport::Concern
 
   included do
+    include FiscalYearMixin
+
     Proposal::CLIENT_MODELS << self
 
     has_paper_trail class_name: "C2Version"
@@ -24,7 +26,6 @@ module ClientDataMixin
       :add_observer,
       :add_requester,
       :currently_awaiting_approvers,
-      :flow,
       :ineligible_approvers,
       :set_requester,
       :status,
@@ -44,7 +45,7 @@ module ClientDataMixin
     end
 
     def self.client_slug
-      self.to_s.deconstantize.downcase
+      to_s.deconstantize.downcase
     end
 
     def client_slug

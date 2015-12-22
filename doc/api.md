@@ -43,7 +43,6 @@ Attribute | Type | Note
 --- | --- | ---
 `steps` | [ [Step](#step) ] |
 `created_at` | string (time) |
-`flow` | string | Can be `linear` or `parallel`
 `id` | integer |
 `requester` | [User](#user) |
 `status` | string | Can be `pending`, `approved`, or `cancelled`
@@ -140,7 +139,6 @@ Returns an array of [Work Orders](#ncr-work-order), in descending order of creat
         }
       ],
       "created_at": "2015-02-21T07:05:42.445Z",
-      "flow": "parallel",
       "id": 12,
       "requester": {
         "created_at": "2015-02-10T07:05:42.445Z",

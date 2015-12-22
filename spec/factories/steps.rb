@@ -1,13 +1,17 @@
 FactoryGirl.define do
-  factory :step, class: Steps::Approval do
+  factory :step do
     proposal
     user
-    status 'pending'
+  end
 
-    factory :serial_steps, class: Steps::Serial do
+  factory :approval_step, class: Steps::Approval do
+    proposal
+    user
+
+    factory :serial_step, class: Steps::Serial do
     end
 
-    factory :parallel_steps, class: Steps::Parallel do
+    factory :parallel_step, class: Steps::Parallel do
     end
 
     factory :purchase_step, class: Steps::Purchase do

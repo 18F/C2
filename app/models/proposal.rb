@@ -2,11 +2,11 @@ class Proposal < ActiveRecord::Base
   include WorkflowModel
   include ValueHelper
   include StepManager
+  include FiscalYearMixin
 
   has_paper_trail class_name: 'C2Version'
 
   CLIENT_MODELS = []  # this gets populated later
-  FLOWS = %w(parallel linear).freeze
 
   workflow do
     state :pending do
@@ -48,38 +48,29 @@ class Proposal < ActiveRecord::Base
   delegate :client_slug, to: :client_data, allow_nil: true
 
   validates :client_data_type, inclusion: {
-    in: ->(_) { self.client_model_names },
+    in: ->(_) { client_model_names },
     message: "%{value} is not a valid client model type. Valid client model types are: #{CLIENT_MODELS.inspect}",
     allow_blank: true
   }
-  validates :flow, presence: true, inclusion: {in: FLOWS}
   validates :requester_id, presence: true
   validates :public_id, uniqueness: true, allow_nil: true
 
-  self.statuses.each do |status|
+  statuses.each do |status|
     scope status, -> { where(status: status) }
   end
   scope :closed, -> { where(status: ['approved', 'cancelled']) } #TODO: Backfill to change approvals in 'reject' status to 'cancelled' status
   scope :cancelled, -> { where(status: 'cancelled') }
 
-  FISCAL_YEAR_START_MONTH = 10 # 1-based
-  scope :for_fiscal_year, lambda { |year|
-    start_time = Time.zone.local(year - 1, FISCAL_YEAR_START_MONTH, 1)
-    end_time = start_time + 1.year
-    where(created_at: start_time...end_time)
-  }
-
-  # @todo - this should probably be the only entry into the approval system
   def root_step
     steps.where(parent: nil).first
   end
 
   def parallel?
-    flow == "parallel"
+    root_step.type == "Steps::Parallel"
   end
 
-  def linear?
-    flow == "linear"
+  def serial?
+    root_step.type == "Steps::Serial"
   end
 
   def delegate?(user)

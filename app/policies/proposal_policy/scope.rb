@@ -10,7 +10,7 @@ class ProposalPolicy
       if @user.admin?
         @scope.all
       elsif @user.client_admin?
-        self.for_client_admin
+        for_client_admin
       else
         @scope.where(Query::Proposal::Clauses.new.which_involve(@user))
       end

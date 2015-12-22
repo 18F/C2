@@ -9,26 +9,8 @@ class ProposalDecorator < Draper::Decorator
     object.individual_steps.count
   end
 
-  def steps_by_status
-    # Override default scope
-    object.individual_steps.with_users.reorder(
-      # http://stackoverflow.com/a/6332081/358804
-      <<-SQL
-        CASE steps.status
-        WHEN 'approved' THEN 1
-        WHEN 'actionable' THEN 2
-        ELSE 3
-        END
-      SQL
-    )
-  end
-
   def steps_in_list_order
-    if object.flow == 'linear'
-      object.individual_steps.with_users
-    else
-      self.steps_by_status
-    end
+    object.individual_steps.with_users
   end
 
   def display_status
