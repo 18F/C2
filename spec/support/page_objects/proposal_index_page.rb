@@ -10,7 +10,7 @@ class RequestTableSection < SitePrism::Section
   sections :requests, RequestListDetailSection, ".tabular-data tbody tr"
 end
 
-class MyRequestsPage < SitePrism::Page
+class ProposalIndexPage < SitePrism::Page
   set_url "/proposals"
   set_url_matcher(%r{\/proposals\/?})
 

@@ -12,7 +12,7 @@ describe "My requests needing action" do
 
     before do
       login_as(purchaser_user)
-      @page = MyRequestsPage.new
+      @page = ProposalIndexPage.new
       @page.load
     end
 

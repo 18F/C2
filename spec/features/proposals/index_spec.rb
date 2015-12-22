@@ -20,7 +20,7 @@ feature "Proposals index" do
     user = create(:user)
     proposals = create_list(:proposal, 2, observer: user)
     cancelled = create_list(:proposal, 2, status: "cancelled", observer: user)
-    @page = MyRequestsPage.new
+    @page = ProposalIndexPage.new
 
     login_as(user)
     @page.load
@@ -40,7 +40,7 @@ feature "Proposals index" do
         approval_proposal = create_proposal_with_approvers(user, other_user)
         purchase_proposal = create_proposal_with_approvers(other_user, user)
         purchase_proposal.individual_steps.first.approve!
-        @page = MyRequestsPage.new
+        @page = ProposalIndexPage.new
 
         login_as(user)
         @page.load
@@ -60,7 +60,7 @@ feature "Proposals index" do
         approval_proposal = create_proposal_for_requester_with_approvers(user, approver, purchaser)
         purchase_proposal = create_proposal_for_requester_with_approvers(user, approver, purchaser)
         purchase_proposal.individual_steps.first.approve!
-        @page = MyRequestsPage.new
+        @page = ProposalIndexPage.new
 
         login_as(user)
         @page.load
