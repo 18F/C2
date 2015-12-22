@@ -31,8 +31,12 @@ class Proposal < ActiveRecord::Base
   acts_as_taggable
 
   has_many :steps
-  has_many :individual_steps, ->{ individual }, class_name: 'Steps::Individual'
-  has_many :approvers, through: :individual_steps, source: :user
+  has_many :individual_steps, ->{ individual }, class_name: "Steps::Individual"
+  has_many :approval_steps, class_name: "Steps::Approval"
+  has_many :purchase_steps, class_name: "Steps::Purchase"
+  has_many :approvers_and_purchasers, through: :individual_steps, source: :user
+  has_many :approvers, through: :approval_steps, source: :user
+  has_many :purchasers, through: :purchase_steps, source: :user
   has_many :completers, through: :individual_steps, source: :completer
   has_many :api_tokens, through: :individual_steps
   has_many :attachments, dependent: :destroy
@@ -77,17 +81,18 @@ class Proposal < ActiveRecord::Base
     approval_delegates.exists?(assignee_id: user.id)
   end
 
-  def existing_approval_for(user)
+  def existing_step_for(user)
     where_clause = <<-SQL
       user_id = :user_id
       OR user_id IN (SELECT assigner_id FROM approval_delegates WHERE assignee_id = :user_id)
       OR user_id IN (SELECT assignee_id FROM approval_delegates WHERE assigner_id = :user_id)
     SQL
+
     steps.where(where_clause, user_id: user.id).first
   end
 
   def subscribers
-    results = approvers + observers + delegates + [requester]
+    results = approvers + purchasers + observers + delegates + [requester]
     results.compact.uniq
   end
 
@@ -137,7 +142,7 @@ class Proposal < ActiveRecord::Base
 
   def add_requester(email)
     user = User.for_email(email)
-    if awaiting_approver?(user)
+    if awaiting_step_user?(user)
       fail "#{email} is an approver on this Proposal -- cannot also be Requester"
     end
     set_requester(user)
@@ -180,7 +185,7 @@ class Proposal < ActiveRecord::Base
   end
 
   # Returns True if the user is an "active" approver and has acted on the proposal
-  def is_active_approver?(user)
+  def is_active_step_user?(user)
     individual_steps.non_pending.exists?(user: user)
   end
 

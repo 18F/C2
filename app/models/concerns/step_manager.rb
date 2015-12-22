@@ -33,17 +33,17 @@ module StepManager
     individual_steps.actionable
   end
 
-  def currently_awaiting_approvers
-    approvers.merge(currently_awaiting_steps)
+  def currently_awaiting_step_users
+    approvers_and_purchasers.merge(currently_awaiting_steps)
   end
 
-  def awaiting_approver?(user)
-    currently_awaiting_approvers.include?(user)
+  def awaiting_step_user?(user)
+    currently_awaiting_step_users.include?(user)
   end
 
   def approver_email_frozen?
-    approval = individual_steps.first
-    approval && !approval.actionable?
+    step = individual_steps.first
+    step && !step.actionable?
   end
 
   def ineligible_approvers

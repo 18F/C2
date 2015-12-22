@@ -33,20 +33,34 @@ describe ProposalPolicy do
     end
 
     context "linear proposal" do
-      let(:proposal) {create(:proposal, :with_serial_approvers)}
-      let(:first_approval) { proposal.individual_steps.first }
-      let(:second_approval) { proposal.individual_steps.last }
-
       it "allows when there's a pending approval" do
+        proposal = create(:proposal)
+        first_approval = create(:approval_step, proposal: proposal, status: "actionable")
+
         expect(ProposalPolicy).to permit(first_approval.user, proposal)
       end
 
+      it "allows when there's a pending purchase" do
+        proposal = create(:proposal)
+        _first_approval = create(:approval_step, proposal: proposal, status: "approved")
+        purchase_step = create(:purchase_step, proposal: proposal, status: "actionable")
+
+        expect(ProposalPolicy).to permit(purchase_step.user, proposal)
+      end
+
       it "does not allow when it's not the user's turn" do
+        proposal = create(:proposal)
+        _first_approval = create(:approval_step, proposal: proposal)
+        second_approval = create(:approval_step, proposal: proposal)
+
         expect(ProposalPolicy).not_to permit(second_approval.user, proposal)
       end
 
       it "does not allow when the user's already approved" do
-        first_approval.approve!
+        proposal = create(:proposal)
+        first_approval = create(:approval_step, proposal: proposal, status: "approved")
+        second_approval = create(:approval_step, proposal: proposal, status: "actionable")
+
         expect(ProposalPolicy).not_to permit(first_approval.user, proposal)
         expect(ProposalPolicy).to permit(second_approval.user, proposal)
       end

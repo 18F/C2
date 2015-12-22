@@ -44,7 +44,7 @@ module Ncr
         user = User.for_email(email)
         user.update!(client_slug: "ncr")
         # Reuse existing approvals, if present
-        proposal.existing_approval_for(user) || Steps::Approval.new(user: user)
+        proposal.existing_step_for(user) || Steps::Approval.new(user: user)
       end
       proposal.root_step = Steps::Serial.new(child_approvals: individuals)
     end

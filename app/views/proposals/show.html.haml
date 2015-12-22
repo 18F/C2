@@ -32,7 +32,6 @@
       %thead
         %tr.header
           %th{colspan: "2"}
-            - # todo: shouldn't need the h5
             %h5 Observers
       %tbody
         - SubscriberList.new(@proposal).triples.each do |user, role_str, observation|
