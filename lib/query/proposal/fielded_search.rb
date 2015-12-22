@@ -8,7 +8,8 @@ module Query
       end
 
       def present?
-        field_pairs && field_pairs.any?
+        return false unless field_pairs
+        field_pairs.any?
       end
 
       def value_for(key)
