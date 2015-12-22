@@ -13,6 +13,7 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!
   before_action :disable_peek_by_default
   before_action :check_disabled_client
+  before_action :set_default_view_variables
 
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
 
@@ -119,6 +120,10 @@ class ApplicationController < ActionController::Base
     elsif current_user.deactivated?
       redirect_to feedback_path
     end
+  end
+
+  def set_default_view_variables
+    @adv_search = Query::Proposal::FieldedSearch.new({})
   end
 
   def authenticate_admin_user!
