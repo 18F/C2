@@ -8,28 +8,42 @@
             %button.btn.btn-default.dropdown-toggle{type: "button", "data-toggle" => "dropdown", "aria-expanded" => "false"}
               %span.caret
             .dropdown-menu.dropdown-menu-right{role: "menu"}
-              %form.form-horizontal{role: "form", action: query_proposals_path, method: 'get'}
-                .form-group
-                  %label{for: "#{current_user.client_model_slug}[status]"}
-                    Search in
-                  %select.form-control{name: "#{current_user.client_model_slug}[status]"}
-                    = proposal_status_options(@adv_search.value_for("status"))
-                .form-group
-                  %label{for: "#{current_user.client_model_slug}[requester]"}
-                    Card Holder Name
-                  %input.form-control{ type: "text",
-                    name: "#{current_user.client_model_slug}[requester]",
-                    placeholder: current_user.full_name,
-                    value: @adv_search.value_for("requester"),
-                  }
-                .form-group
-                  %label{for: "#{current_user.client_model_slug}[client_data.vendor]"}
-                    Vendor Name
-                  %input.form-control{ type: "text",
-                    name: "#{current_user.client_model_slug}[client_data.vendor]",
-                    value: @adv_search.value_for("client_data.vendor"),
-                  }
-                %button.btn.btn-primary
-                  %span.glyphicon.glyphicon-search{"aria-hidden" => "true"}
+              %form.adv-search.form-horizontal{role: "form", action: query_proposals_path, method: 'get'}
+                %fieldset
+                  .form-group
+                    %label{for: "#{current_user.client_model_slug}[status]"}
+                      Search in
+                    %select.form-control{name: "#{current_user.client_model_slug}[status]"}
+                      = proposal_status_options(@adv_search.value_for("status"))
+                  .form-group
+                    %label{for: "#{current_user.client_model_slug}[requester]"}
+                      Card Holder Name
+                    %input.form-control{ type: "text",
+                      name: "#{current_user.client_model_slug}[requester]",
+                      placeholder: current_user.full_name,
+                      value: @adv_search.value_for("requester"),
+                    }
+                  .form-group
+                    %label{for: "#{current_user.client_model_slug}[client_data.vendor]"}
+                      Vendor Name
+                    %input.form-control{ type: "text",
+                      name: "#{current_user.client_model_slug}[client_data.vendor]",
+                      value: @adv_search.value_for("client_data.vendor"),
+                    }
+                  .form-group.row
+                    .col-xs-5
+                      %label{for: "#{current_user.client_model_slug}[client_data.amount]"}
+                        Amount
+                      %input.form-control{ type: "text",
+                        name: "#{current_user.client_model_slug}[client_data.amount]",
+                        value: @adv_search.value_for("client_data.amount"),
+                      }
+                    .col-xs-5
+                      %label{for: "#{current_user.client_model_slug}[client_data.expense_type]"}
+                        Expense Type
+                      %select.form-control{name: "#{current_user.client_model_slug}[client_data.expense_type]"}
+                        = proposal_expense_type_options(current_user.client_model, @adv_search.value_for("client_data.expense_type"))
+                  %button.btn.btn-primary{type: 'submit'}
+                    Search
           %button.btn.btn-default.search{type: 'submit'}
             Search

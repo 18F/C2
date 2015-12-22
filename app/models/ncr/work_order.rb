@@ -197,6 +197,10 @@ module Ncr
       proposal.root_step.initialize!
     end
 
+    def self.expense_type_options
+      EXPENSE_TYPES.map { |et| [et, et] }
+    end
+
     private
 
     def ncr_org

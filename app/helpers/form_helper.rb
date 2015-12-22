@@ -13,6 +13,8 @@ module FormHelper
                'info'
              when :error
                'danger'
+             when :alert
+               'warning'
              else
                key
              end
