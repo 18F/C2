@@ -7,18 +7,16 @@ module FormHelper
     options_for_select(options)
   end
 
-  def bootstrap_alert_class(key)
-    suffix = case key.to_sym
-             when :notice
-               'info'
-             when :error
-               'danger'
-             when :alert
-               'warning'
-             else
-               key
-             end
+  def bootstrap_alert_map
+    {
+      notice: "info",
+      error: "danger",
+      alert: "warning",
+    }
+  end
 
+  def bootstrap_alert_class(key)
+    suffix = bootstrap_alert_map[key.to_sym] || key
     "bg-#{suffix}"
   end
 

@@ -12,7 +12,7 @@ module Query
       end
 
       def value_for(key)
-        if field_pairs && field_pairs.has_key?(key)
+        if field_pairs && field_pairs.key?(key)
           field_pairs[key]
         end
       end

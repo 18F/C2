@@ -29,7 +29,7 @@ module Query
 
       def composite_query_string
         if client_query && query_str.present?
-          "(#{query_str}) AND (#{FieldedSearch.new(client_query).to_s})"
+          "(#{query_str}) AND (#{FieldedSearch.new(client_query)})"
         elsif client_query
           FieldedSearch.new(client_query).to_s
         elsif query_str.present?
