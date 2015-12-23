@@ -4,7 +4,7 @@ Yes. You’ll need to set up a filter in Gmail.
 
 ## First, select the C2 request messages to filter.
 
-1. Enter the following into the search bar at the top of your inbox: `from:communicart.sender@gsa.gov`
+1. Enter the following into the search bar at the top of your inbox: `from:c2.sender@gsa.gov`
 1. Click the _More_ button in the menu above the search results. In the pull-down menu, click _Create filter_.
 1. A box will open with `communicart.sender@gsa.gov` in the _From_ field. Click _Create filter with this search »_.
 1. Now the box will show you some different ways you can choose to filter C2 emails.
