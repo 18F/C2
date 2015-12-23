@@ -75,7 +75,7 @@ class Dispatcher
   private
 
   def active_step_users(proposal)
-    proposal.approvers_and_purchasers.select do |user|
+    proposal.step_users.select do |user|
       proposal.is_active_step_user?(user)
     end
   end

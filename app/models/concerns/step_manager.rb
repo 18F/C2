@@ -34,7 +34,7 @@ module StepManager
   end
 
   def currently_awaiting_step_users
-    approvers_and_purchasers.merge(currently_awaiting_steps)
+    step_users.merge(currently_awaiting_steps)
   end
 
   def awaiting_step_user?(user)

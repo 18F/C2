@@ -67,7 +67,7 @@ class ProposalPolicy
   end
 
   def step_user?
-    @proposal.approvers_and_purchasers.include?(@user) || @proposal.completers.exists?(@user.id)
+    @proposal.step_users.include?(@user) || @proposal.completers.exists?(@user.id)
   end
 
   def delegate?

@@ -10,6 +10,7 @@ describe Proposal do
     it { should have_many(:purchase_steps) }
     it { should have_many(:purchasers) }
     it { should have_many(:approvers) }
+    it { should have_many(:step_users) }
   end
 
   describe "Validations" do
@@ -80,16 +81,6 @@ describe Proposal do
       proposal = create(:proposal, steps: [create(:parallel_step)])
 
       expect(proposal).not_to be_serial
-    end
-  end
-
-  describe "#approvers_and_purchasers" do
-    it "returns approvers and purchasers" do
-      proposal = create(:proposal, :with_approval_and_purchase)
-
-      approvers_and_purchasers = proposal.approvers_and_purchasers
-
-      expect(approvers_and_purchasers).to eq [proposal.approvers.first, proposal.purchasers.first]
     end
   end
 

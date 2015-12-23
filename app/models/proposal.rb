@@ -34,7 +34,7 @@ class Proposal < ActiveRecord::Base
   has_many :individual_steps, ->{ individual }, class_name: "Steps::Individual"
   has_many :approval_steps, class_name: "Steps::Approval"
   has_many :purchase_steps, class_name: "Steps::Purchase"
-  has_many :approvers_and_purchasers, through: :individual_steps, source: :user
+  has_many :step_users, through: :individual_steps, source: :user
   has_many :approvers, through: :approval_steps, source: :user
   has_many :purchasers, through: :purchase_steps, source: :user
   has_many :completers, through: :individual_steps, source: :completer
