@@ -50,9 +50,9 @@ class ProposalsController < ApplicationController
   end
 
   def approve
-    approval = proposal.existing_step_for(current_user)
-    approval.update_attributes!(completer: current_user)
-    approval.approve!
+    step = proposal.existing_step_for(current_user)
+    step.update_attributes!(completer: current_user)
+    step.approve!
     flash[:success] = "You have approved #{proposal.public_id}."
     redirect_to proposal
   end
