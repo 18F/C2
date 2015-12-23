@@ -55,7 +55,7 @@ describe Ncr::Reporter do
       expect(proposal).to be_approved
       expect(work_order.final_approver).to eq(work_order.approvers.last)
       csv = Ncr::Reporter.as_csv([proposal])
-      expect(csv).to include(",#{work_order.decorate.final_approver_email_address}")
+      expect(csv).to include(",#{work_order.decorate.current_approver_email_address}")
     end
 
     it "shows current approver for pending work orders" do

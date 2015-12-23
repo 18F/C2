@@ -237,21 +237,6 @@ describe Ncr::WorkOrder do
     end
   end
 
-  describe "#current_approver" do
-    it "returns the first pending approver" do
-      wo = create(:ncr_work_order, :with_approvers)
-      expect(wo.current_approver).to eq(wo.approvers.first)
-      wo.individual_steps.first.approve!
-      expect(wo.current_approver).to eq(wo.approvers.second)
-    end
-
-    it "returns the first approver when fully approved" do
-      wo = create(:ncr_work_order, :with_approvers)
-      fully_approve(wo.proposal)
-      expect(wo.reload.current_approver).to eq(wo.approvers.first)
-    end
-  end
-
   describe "#final_approver" do
     it "returns the final approver" do
       wo = create(:ncr_work_order, :with_approvers)
