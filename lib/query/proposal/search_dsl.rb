@@ -28,12 +28,12 @@ module Query
       end
 
       def composite_query_string
-        if client_query && query_str.present?
-          "(#{query_str}) AND (#{FieldedSearch.new(client_query)})"
-        elsif client_query
-          FieldedSearch.new(client_query).to_s
+        if client_query.present? && query_str.present?
+          "(#{query_str}) AND (#{client_query})"
+        elsif client_query.present?
+          client_query.to_s
         elsif query_str.present?
-          query_str
+          query_str.to_s
         else
           ""
         end
@@ -42,7 +42,7 @@ module Query
       private
 
       def client_query
-        params[current_user.client_model_slug.to_sym]
+        FieldedSearch.new(params[current_user.client_model_slug.to_sym])
       end
 
       def build_dsl
