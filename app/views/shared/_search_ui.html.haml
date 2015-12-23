@@ -43,7 +43,7 @@
                         Expense Type
                       %select.form-control{name: "#{current_user.client_model_slug}[client_data.expense_type]"}
                         = proposal_expense_type_options(current_user.client_model, @adv_search.value_for("client_data.expense_type"))
-                  %button.btn.btn-primary{type: 'submit'}
+                  %button#adv-search-button.btn.btn-primary{type: 'submit'}
                     Search
-          %button.btn.btn-default.search{type: 'submit'}
+          %button#search-button.btn.btn-default.search{type: 'submit'}
             Search

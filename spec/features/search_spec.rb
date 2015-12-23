@@ -1,14 +1,14 @@
 describe "searching" do
-  let(:user){ create(:user) }
+  let(:user){ create(:user, client_slug: "test") }
   let!(:approver){ create(:user) }
 
   before do
     login_as(user)
   end
 
-  it "displays relevant results" do
+  it "displays relevant results", :js do
     proposals = 2.times.map do |i|
-      wo = create(:ncr_work_order, project_title: "Work Order #{i}")
+      wo = create(:test_client_request, project_title: "Work Order #{i}")
       wo.proposal.update(requester: user)
       wo.proposal.reindex
       wo.proposal
@@ -17,20 +17,28 @@ describe "searching" do
 
     visit '/proposals'
     fill_in 'text', with: proposals.first.name
-    click_button 'Search'
+    click_button "search-button"
 
     expect(current_path).to eq('/proposals/query')
     expect(page).to have_content(proposals.first.public_id)
     expect(page).not_to have_content(proposals.last.name)
   end
 
-  it "populates the search box on the results page" do
+  it "populates the search box on the results page", :js do
     visit '/proposals'
     fill_in 'text', with: 'foo'
-    click_button 'Search'
+    click_button "search-button"
 
     expect(current_path).to eq('/proposals/query')
     field = find_field('text')
     expect(field.value).to eq('foo')
+  end
+
+  it "does not show search UI for user without client_slug" do
+    no_client_user = create(:user)
+    login_as(no_client_user)
+
+    visit proposals_path
+    expect(page).not_to have_button("Search")
   end
 end
