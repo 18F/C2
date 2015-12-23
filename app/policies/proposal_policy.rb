@@ -6,7 +6,7 @@ class ProposalPolicy
     @proposal = record
   end
 
-  def can_approve!
+  def can_complete!
     step_user! && pending_step! && not_cancelled!
   end
 

@@ -1,5 +1,5 @@
 describe ProposalPolicy do
-  permissions :can_approve? do
+  permissions :can_complete? do
     it "allows pending delegates" do
       proposal = create(:proposal, :with_parallel_approvers)
 
