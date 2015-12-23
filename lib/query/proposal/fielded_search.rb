@@ -9,7 +9,7 @@ module Query
 
       def present?
         return false unless field_pairs
-        field_pairs.any?
+        to_s.present?
       end
 
       def value_for(key)
