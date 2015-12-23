@@ -34,6 +34,8 @@ module Query
           FieldedSearch.new(client_query).to_s
         elsif query_str.present?
           query_str
+        else
+          ""
         end
       end
 
