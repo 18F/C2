@@ -212,3 +212,9 @@ If the bug is actionable, a story can be created for it and prioritized in the
 `Needs Grooming` for the next grooming session.
 
 
+## Support
+
+Support tickets for existing users are managed at [18F's User Voice account](https://18f.uservoice.com).
+The delivery team rotates assignment to respond to user issues and bug reports. As support requests are
+received, tickets are immediately actionable. The developer can assign the ticket to her/himself as
+the work begins.
