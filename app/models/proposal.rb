@@ -100,7 +100,7 @@ class Proposal < ActiveRecord::Base
       indexes :client_data_type, type: "string", index: :not_analyzed
 
       indexes :client_data do
-        indexes :amount, type: "float", index: :not_analyzed
+        indexes :amount, type: "float"
       end
     end
   end
