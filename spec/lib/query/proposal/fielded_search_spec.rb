@@ -20,6 +20,6 @@ describe Query::Proposal::FieldedSearch do
     fs = Query::Proposal::FieldedSearch.new({
       amount: ">100"
     })
-    expect(fs.to_s).to eq "foo:>100"
+    expect(fs.to_s).to eq "amount:>100"
   end
 end
