@@ -1,6 +1,3 @@
-# documentation:
-# https://github.com/plataformatec/simple_form
-# https://github.com/plataformatec/simple_form/blob/master/lib/generators/simple_form/templates/config/initializers/simple_form.rb
 SimpleForm.setup do |config|
   config.wrappers :default, class: :input, hint_class: :field_with_hint, error_class: :field_with_errors do |b|
     b.use :html5

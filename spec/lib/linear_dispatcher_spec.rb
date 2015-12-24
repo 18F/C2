@@ -4,13 +4,13 @@ describe LinearDispatcher do
   describe '#next_pending_approval' do
     context "no approvals" do
       it "returns nil" do
-        proposal = create(:proposal, flow: 'linear')
+        proposal = create(:proposal)
         expect(dispatcher.next_pending_approval(proposal)).to eq(nil)
       end
     end
 
     it "returns nil if all are non-pending" do
-      proposal = create(:proposal, :with_approver, flow: 'linear')
+      proposal = create(:proposal, :with_approver)
       proposal.individual_steps.first.approve!
       expect(dispatcher.next_pending_approval(proposal)).to eq(nil)
     end

@@ -8,7 +8,7 @@ FactoryGirl.define do
     emergency false
     project_title "NCR Name"
     sequence(:approving_official_email) {|n| "approver#{User.count}@example.com" }
-    association :proposal, flow: 'linear', client_slug: "ncr"
+    association :proposal, client_slug: "ncr"
 
     factory :ba80_ncr_work_order do
       expense_type "BA80"
@@ -16,7 +16,7 @@ FactoryGirl.define do
     end
 
     trait :with_approvers do
-      association :proposal, :with_serial_approvers, flow: 'linear', client_slug: "ncr"
+      association :proposal, :with_serial_approvers, client_slug: "ncr"
       after :create do |wo|
         wo.approving_official_email = wo.approving_official.email_address
       end
@@ -24,7 +24,11 @@ FactoryGirl.define do
 
     trait :is_emergency do
       emergency true
-      association :proposal, :with_observers, flow: 'linear'
+      association :proposal, :with_observers
+    end
+
+    trait :with_observers do
+      association :proposal, :with_observers
     end
   end
 end

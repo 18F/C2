@@ -1,17 +1,6 @@
 feature "Sort proposals on index page" do
   include ProposalTableSpecHelper
 
-  scenario "does not allows titles to be clicked to sort" do
-    create(:proposal, observer: user)
-
-    login_as(user)
-    visit "/proposals/query?text=1"
-
-    within(reviewable_proposals_section) do
-      expect(page).not_to have_selector("th a")
-    end
-  end
-
   it "allows other table headers to be clicked to sort" do
     proposals = create_list(:proposal, 3, observer: user)
     proposals[0].requester.update(email_address: "bbb@example.com")
@@ -21,9 +10,9 @@ feature "Sort proposals on index page" do
     login_as(user)
     visit proposals_path
 
-    expect_order(reviewable_proposals_section, proposals.reverse)
-    within(reviewable_proposals_section) { click_on "Requester" }
-    expect_order(reviewable_proposals_section, [proposals[2], proposals[0], proposals[1]])
+    expect_order(pending_proposals_table, proposals.reverse)
+    within(pending_proposals_section) { click_on "Requester" }
+    expect_order(pending_proposals_table, [proposals[2], proposals[0], proposals[1]])
   end
 
   it "allows the user to click on a title again to change order" do
@@ -32,9 +21,9 @@ feature "Sort proposals on index page" do
     login_as(user)
     visit proposals_path
 
-    expect_order(reviewable_proposals_section, proposals.reverse)
-    within(reviewable_proposals_section) { click_on "Submitted" }
-    expect_order(reviewable_proposals_section, proposals)
+    expect_order(pending_proposals_table, proposals.reverse)
+    within(pending_proposals_section) { click_on "Submitted" }
+    expect_order(pending_proposals_table, proposals)
   end
 
   it "does not allow clicks in one table to affect the order of the other" do
@@ -44,9 +33,9 @@ feature "Sort proposals on index page" do
     login_as(user)
     visit proposals_path
 
-    expect_order(pending_proposals_section, cancelled.reverse)
-    within(reviewable_proposals_section) { click_on "Submitted" }
-    expect_order(pending_proposals_section, cancelled.reverse)
+    expect_order(cancelled_proposals_table, cancelled.reverse)
+    within(pending_proposals_section) { click_on "Submitted" }
+    expect_order(cancelled_proposals_table, cancelled.reverse)
   end
 
   context "18F procurements" do
@@ -61,11 +50,11 @@ feature "Sort proposals on index page" do
       login_as(user)
       visit proposals_path
 
-      expect_order(reviewable_proposals_section, procurements.reverse.map { |p| p.proposal })
-      within(reviewable_proposals_section) { click_on "Urgency" }
+      expect_order(pending_proposals_table, procurements.reverse.map { |p| p.proposal })
+      within(pending_proposals_section) { click_on "Urgency" }
 
       expect_order(
-        reviewable_proposals_section,
+        pending_proposals_table,
         [procurements[2].proposal, procurements[0].proposal, procurements[1].proposal]
       )
     end
@@ -84,14 +73,14 @@ feature "Sort proposals on index page" do
       visit proposals_path
 
       expect_order(
-        reviewable_proposals_section,
+        pending_proposals_table,
         [office_supply_procurement.proposal, training_procurement.proposal, software_procurement.proposal]
       )
 
-      within(reviewable_proposals_section) { click_on "Purchase Type" }
+      within(pending_proposals_section) { click_on "Purchase Type" }
 
       expect_order(
-        reviewable_proposals_section,
+        pending_proposals_table,
         [software_procurement.proposal, training_procurement.proposal, office_supply_procurement.proposal]
       )
     end

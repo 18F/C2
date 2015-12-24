@@ -2,10 +2,10 @@
 .inset
   .row
     .col-md-12.col-xs-12
-      %h1.communicart_header
+      %h1.c2_header
         = @proposal.name
 
-      .communicart_description
+      .c2_description
         %p
           Purchase Request:
           %strong
@@ -19,15 +19,9 @@
           %strong
             = date_with_tooltip(@proposal.created_at, true)
 
-    - if @proposal.linear?
-      .col-md-12
-        %table.col-md-12.data-container{border: 0}
-          = render partial: "shared/email_status"
-    - else
-      .col-md-4.col-xs-12.communicart_description
-        .purchase-status
-          %h5{class: @proposal.status}
-            = @proposal.display_status
+    .col-md-12
+      %table.col-md-12.data-container{border: 0}
+        = render partial: "shared/email_status"
 
   .row
     = client_partial(@proposal.client_slug,
@@ -74,31 +68,6 @@
   - if current_user.admin?
     %li
       = link_to "View history", history_proposal_path(@proposal)
-
-- # @todo: there are multiple approval-status ids
-- if @proposal.parallel?
-  - if @proposal.individual_steps.approved.any?
-    .approval-status-container
-      #approval-status
-        %h3 Request approved by
-        %ul
-          - @proposal.individual_steps.approved.each do |approval|
-            %li.icon-approved
-              = approval.user_email_address
-              %span.timestamp
-                = "on #{l approval.updated_at}"
-  - if @proposal.individual_steps.pending.any?
-    .approval-status-container
-      #approval-status
-        %h3 Waiting for approval from
-        %ul.left
-          - @proposal.individual_steps.pending.each do |approval|
-            %li.icon-pending
-              = approval.user_email_address
-        %ul.right
-          - @proposal.individual_steps.approved.each do |approval|
-            %li.icon-approved
-              = approval.user_email_address
 
 .comments-container.proposal-submodel-container
   #comments

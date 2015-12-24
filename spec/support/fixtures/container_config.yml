@@ -1,0 +1,14 @@
+default: &DEFAULT
+  engine: Proposal
+ncr:
+  <<: *DEFAULT
+  columns:
+    - ncr_column
+gsa18f:
+  <<: *DEFAULT
+  columns:
+    - gsa18f_column
+generic_client:
+  <<: *DEFAULT
+  columns:
+    - client_column

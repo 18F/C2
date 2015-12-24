@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151208143311) do
+ActiveRecord::Schema.define(version: 20151215230732) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -142,7 +142,6 @@ ActiveRecord::Schema.define(version: 20151208143311) do
 
   create_table "proposals", force: :cascade do |t|
     t.string   "status",           limit: 255
-    t.string   "flow",             limit: 255, default: "parallel"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "client_data_id"

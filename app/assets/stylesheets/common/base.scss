@@ -94,11 +94,7 @@ td.amount {
   font-size: 80%;
 }
 
-/* COMMUNICART.WEBFLOW.CSS */
-
-
-
-body.communicart-notification {
+body.c2-notification {
   background-color: #fff;
   font-family: Helvetica, Arial, sans-serif;
   color: #333;
@@ -106,7 +102,7 @@ body.communicart-notification {
   line-height: 20px;
 }
 
-body.communicart-notification p, p.empty-list-label {
+body.c2-notification p, p.empty-list-label {
   color: #333;
 }
 
@@ -117,12 +113,12 @@ h1 {
 
 
 
-.communicart_header, h4.communicart_description, div.communicart_description p{
+.c2_header, h4.c2_description, div.c2_description p{
   padding-right: 15px;
   padding-left: 15px;
 }
 
-.communicart_description {
+.c2_description {
   img {
     margin-bottom: 7px;
   }
@@ -161,13 +157,13 @@ h1 {
   }
 }
 
-h1.communicart_header {
+h1.c2_header {
   line-height: 44px;
   margin-top: 10px;
   margin-bottom: 0;
 }
 
-h4.communicart_description {
+h4.c2_description {
   margin-bottom: 10px;
 }
 

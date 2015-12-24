@@ -40,8 +40,6 @@ module C2
     config.autoload_paths << Rails.root.join('app', 'policies', 'concerns')
     config.autoload_paths << Rails.root.join('lib')
 
-    config.assets.precompile << 'communicarts_mailer.css'
-
     # remove for Rails 4.3+(?)
     config.active_record.raise_in_transactional_callbacks = true
 

@@ -26,7 +26,6 @@ module ClientDataMixin
       :add_observer,
       :add_requester,
       :currently_awaiting_approvers,
-      :flow,
       :ineligible_approvers,
       :set_requester,
       :status,

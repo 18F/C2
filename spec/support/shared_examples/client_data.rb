@@ -18,7 +18,6 @@ shared_examples "client data" do
     it { should delegate_method(:add_observer).to(:proposal) }
     it { should delegate_method(:add_requester).to(:proposal) }
     it { should delegate_method(:currently_awaiting_approvers).to(:proposal) }
-    it { should delegate_method(:flow).to(:proposal) }
     it { should delegate_method(:set_requester).to(:proposal) }
     it { should delegate_method(:status).to(:proposal) }
   end

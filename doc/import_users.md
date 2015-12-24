@@ -1,6 +1,6 @@
 # Importing Users
 
-We will often need to import a set of users to prime a Communicart instance,
+We will often need to import a set of users to prime a C2 instance,
 so a few rake scripts have been written to accomplish this task. If using
 Cloud Foundry, you will want to include the relevant csv/directory/etc. as
 part of a deployment, then run `cf-ssh` (or use the `script/cssh` tool)

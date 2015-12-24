@@ -15,7 +15,7 @@ class RolesConversion
 
   def ba61_tier1_budget_approver
     with_email_role_slug!(
-      "communicart.budget.approver+ba61@gmail.com",
+      "c2.budget.approver+ba61@gmail.com",
       "BA61_tier1_budget_approver",
       "ncr"
     )
@@ -23,7 +23,7 @@ class RolesConversion
 
   def ba61_tier2_budget_approver
     with_email_role_slug!(
-      "communicart.ofm.approver@gmail.com",
+      "c2.ofm.approver@gmail.com",
       "BA61_tier2_budget_approver",
       "ncr"
     )
@@ -31,7 +31,7 @@ class RolesConversion
 
   def ba80_budget_approver
     with_email_role_slug!(
-      "communicart.budget.approver+ba80@gmail.com",
+      "c2.budget.approver+ba80@gmail.com",
       "BA80_budget_approver",
       "ncr"
     )
@@ -39,7 +39,7 @@ class RolesConversion
 
   def ool_ba80_budget_approver
     with_email_role_slug!(
-      "communicart.budget.approver+ool_ba80@gmail.com",
+      "c2.budget.approver+ool_ba80@gmail.com",
       "OOL_BA80_budget_approver",
       "ncr"
     )

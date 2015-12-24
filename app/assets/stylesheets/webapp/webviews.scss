@@ -12,7 +12,7 @@
   }
 }
 
-.communicart_description {
+.c2_description {
   img {
     margin-bottom: 7px;
   }
@@ -255,7 +255,7 @@ body.webapp {
   font-size: 16px;
   color: black;
 
-  .communicart_header, h4.communicart_description, div.communicart_description p {
+  .c2_header, h4.c2_description, div.c2_description p {
     padding-right: 0;
     padding-left: 0;
     background-color: $white;
@@ -404,7 +404,7 @@ fieldset.required legend::after {
     padding: 0 0 0 15px;
   }
 
-  h1.communicart_header {
+  h1.c2_header {
     margin-bottom: 10px;
   }
 
