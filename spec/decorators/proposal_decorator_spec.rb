@@ -13,34 +13,6 @@ describe ProposalDecorator do
     end
   end
 
-  describe '#approvals_by_status' do
-    it "orders by approved, actionable, pending" do
-      # make two approvals for each status, in random order
-      statuses = Step.statuses.map(&:to_s)
-      statuses = statuses.dup + statuses.clone
-      statuses = randomize(statuses)
-
-      users = statuses.map do |status|
-        user = create(:user)
-        create(:approval, proposal: proposal, status: status, user: user)
-        user
-      end
-
-      approvals = proposal.steps_by_status
-      expect(approvals.map(&:status)).to eq(%w(
-        approved
-        approved
-        actionable
-        actionable
-        pending
-        pending
-      ))
-      approvers = approvals.map(&:user)
-      expect(approvers).not_to eq(users)
-      expect(approvers.sort).to eq(users.sort)
-    end
-  end
-
   describe "#step_text_for_user" do
     let(:proposal) { create(:proposal).decorate }
     let(:user)     { create(:user) }

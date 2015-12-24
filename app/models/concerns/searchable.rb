@@ -30,6 +30,11 @@ module Searchable
       __elasticsearch__.destroy_document
     end
 
+    def self.rebuild_index
+      __elasticsearch__.create_index! force: true
+      __elasticsearch__.refresh_index!
+    end
+
     # ransack/meta_search (for activeadmin) and elasticsearch both try and inject a class search() method,
     # so we declare our own and Try To Do the Right Thing
     def self.search(*args, &block)

@@ -1,9 +1,8 @@
 describe Dispatcher do
   let(:proposal) { create(:proposal) }
 
-  describe '.deliver_new_proposal_emails' do
-    it "uses the LinearDispatcher for linear approvals" do
-      proposal.flow = 'linear'
+  describe ".deliver_new_proposal_emails" do
+    it "uses the LinearDispatcher for non-NCR approvals" do
       expect(proposal).to receive(:client_data).and_return(double(client_slug: "ncr"))
       expect_any_instance_of(LinearDispatcher).to receive(:deliver_new_proposal_emails).with(proposal)
       Dispatcher.deliver_new_proposal_emails(proposal)

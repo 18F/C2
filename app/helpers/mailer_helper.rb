@@ -1,12 +1,12 @@
 module MailerHelper
-  def status_icon_tag(status, linear_display = false, last_approver = false)
+  def status_icon_tag(status, last_approver = false)
     base_url = root_url.gsub(/\?.*$/, "").chomp("/")
     bg_linear_image = base_url + image_path("bg_#{status}_status.gif")
 
     image_tag(
       base_url + image_path("icon-#{status}.png"),
-      class: "status-icon #{status} #{'linear' if linear_display}",
-      style: ("background-image: url('#{bg_linear_image}');" if linear_display && !last_approver)
+      class: "status-icon #{status} linear",
+      style: ("background-image: url('#{bg_linear_image}');" unless last_approver)
     )
   end
 

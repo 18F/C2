@@ -60,7 +60,7 @@ module Query
       end
 
       def proposals_container(name, extra_config = {})
-        config = TabularData::Container.config_for_client("proposals", user.client_slug)
+        config = TabularData::ContainerConfig.new("proposals", user.client_slug).settings
         config = config.merge(extra_config)
         container = TabularData::Container.new(name, config)
 
