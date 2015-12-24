@@ -1,10 +1,10 @@
-- approvers = object.currently_awaiting_approvers
+- users = object.currently_awaiting_step_users
 
-- if object.pending? && approvers.include?(current_user)
+- if object.pending? && users.include?(current_user)
   %p
     %strong Please review
 - elsif object.pending?
   %p
-    %em Waiting for review from: #{approvers.map(&:full_name).join(', ')}
+    %em Waiting for review from: #{users.map(&:full_name).join(', ')}
 - else
   = object.status.titlecase

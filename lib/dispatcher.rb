@@ -31,16 +31,16 @@ class Dispatcher
 
   def deliver_attachment_emails(proposal)
     proposal.subscribers_except_delegates.each do |user|
-      approval = proposal.steps.find_by(user_id: user.id)
+      step = proposal.steps.find_by(user_id: user.id)
 
-      if user_is_not_approver?(approval) || approver_knows_about_proposal?(approval)
+      if user_is_not_step_user?(step) || step_user_knows_about_proposal?(step)
         Mailer.new_attachment_email(user.email_address, proposal).deliver_later
       end
     end
   end
 
   def deliver_cancellation_emails(proposal, reason = nil)
-    cancellation_notification_recipients = active_approvers(proposal) + active_observers(proposal)
+    cancellation_notification_recipients = active_step_users(proposal) + active_observers(proposal)
 
     cancellation_notification_recipients.each do |recipient|
       CancellationMailer.cancellation_email(recipient.email_address, proposal, reason).deliver_later
@@ -74,9 +74,9 @@ class Dispatcher
 
   private
 
-  def active_approvers(proposal)
-    proposal.approvers.select do |approver|
-      proposal.is_active_approver?(approver)
+  def active_step_users(proposal)
+    proposal.step_users.select do |user|
+      proposal.is_active_step_user?(user)
     end
   end
 
@@ -94,11 +94,11 @@ class Dispatcher
     Mailer.actions_for_approver(approval).deliver_later
   end
 
-  def user_is_not_approver?(approval)
-    approval.blank?
+  def user_is_not_step_user?(step)
+    step.blank?
   end
 
-  def approver_knows_about_proposal?(approval)
-    !approval.pending?
+  def step_user_knows_about_proposal?(step)
+    !step.pending?
   end
 end

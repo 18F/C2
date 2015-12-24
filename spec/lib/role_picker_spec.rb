@@ -23,6 +23,18 @@ describe RolePicker do
       end
     end
 
+    describe "#purchaser?" do
+      it "is true when user is connected to proposal through purchase step" do
+        proposal = create(:proposal)
+        purchaser  = create(:user)
+        create(:purchase_step, user: purchaser, proposal: proposal)
+
+        roles = RolePicker.new(purchaser, proposal)
+
+        expect(roles).to be_purchaser
+      end
+    end
+
     describe "#observer?" do
       it "is true if user is proposal observer" do
         observer = create(:user)
@@ -35,7 +47,7 @@ describe RolePicker do
       end
     end
 
-    describe "#active_approver?" do
+    describe "#active_step_user?" do
       it "is true when user is active approver" do
         proposal = create(:proposal)
         approver = create(:user)
@@ -43,7 +55,17 @@ describe RolePicker do
 
         roles = RolePicker.new(approver, proposal)
 
-        expect(roles).to be_active_approver
+        expect(roles).to be_active_step_user
+      end
+
+      it "is true when the user is active purchaser" do
+        proposal = create(:proposal)
+        purchaser = create(:user)
+        create(:purchase_step, user: purchaser, proposal: proposal, status: "actionable")
+
+        roles = RolePicker.new(purchaser, proposal)
+
+        expect(roles).to be_active_step_user
       end
     end
 

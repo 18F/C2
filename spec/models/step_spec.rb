@@ -118,42 +118,42 @@ describe Step do
     it "won't approve Amy and Bob -- needs two branches of the OR" do
       build_approvals
       expect_any_instance_of(Proposal).not_to receive(:approve!)
-      proposal.existing_approval_for(amy).approve!
-      proposal.existing_approval_for(bob).approve!
+      proposal.existing_step_for(amy).approve!
+      proposal.existing_step_for(bob).approve!
     end
 
     it "will approve if Amy, Bob, and Carrie approve -- two branches of the OR" do
       build_approvals
       expect_any_instance_of(Proposal).to receive(:approve!)
-      proposal.existing_approval_for(amy).approve!
-      proposal.existing_approval_for(bob).approve!
-      proposal.existing_approval_for(carrie).approve!
+      proposal.existing_step_for(amy).approve!
+      proposal.existing_step_for(bob).approve!
+      proposal.existing_step_for(carrie).approve!
     end
 
     it "won't approve Amy, Bob, Dan as Erin is also required (to complete the THEN)" do
       build_approvals
       expect_any_instance_of(Proposal).not_to receive(:approve!)
-      proposal.existing_approval_for(amy).approve!
-      proposal.existing_approval_for(bob).approve!
-      proposal.existing_approval_for(dan).approve!
+      proposal.existing_step_for(amy).approve!
+      proposal.existing_step_for(bob).approve!
+      proposal.existing_step_for(dan).approve!
     end
 
     it "will approve Amy, Bob, Dan, Erin -- two branches of the OR" do
       build_approvals
       expect_any_instance_of(Proposal).to receive(:approve!)
-      proposal.existing_approval_for(amy).approve!
-      proposal.existing_approval_for(bob).approve!
-      proposal.existing_approval_for(dan).approve!
-      proposal.existing_approval_for(erin).approve!
+      proposal.existing_step_for(amy).approve!
+      proposal.existing_step_for(bob).approve!
+      proposal.existing_step_for(dan).approve!
+      proposal.existing_step_for(erin).approve!
     end
 
     it "will approve Amy, Bob, Dan, Carrie -- two branches of the OR as Dan is irrelevant" do
       build_approvals
       expect_any_instance_of(Proposal).to receive(:approve!)
-      proposal.existing_approval_for(amy).approve!
-      proposal.existing_approval_for(bob).approve!
-      proposal.existing_approval_for(dan).approve!
-      proposal.existing_approval_for(carrie).approve!
+      proposal.existing_step_for(amy).approve!
+      proposal.existing_step_for(bob).approve!
+      proposal.existing_step_for(dan).approve!
+      proposal.existing_step_for(carrie).approve!
     end
 
     def build_approvals

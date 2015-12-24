@@ -32,7 +32,6 @@
       %thead
         %tr.header
           %th{colspan: "2"}
-            - # todo: shouldn't need the h5
             %h5 Observers
       %tbody
         - SubscriberList.new(@proposal).triples.each do |user, role_str, observation|
@@ -122,7 +121,7 @@
     - if @proposal.attachments.empty?
       %p.empty-list-label No attachments have been added yet
 
-- if policy(@proposal).can_approve?
+- if policy(@proposal).can_complete?
   .centered
     = form_tag(approve_proposal_path(@proposal, method: "POST")) do
       = hidden_field_tag :version, @proposal.version

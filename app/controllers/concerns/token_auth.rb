@@ -25,7 +25,7 @@ module TokenAuth
       user_id: current_user, proposal_id: proposal})
     tokens.where(used_at: nil).update_all(used_at: Time.zone.now)
 
-    authorize(proposal, :can_approve!)
+    authorize(proposal, :can_complete!)
 
     if params[:version] && params[:version] != proposal.version.to_s
       raise Pundit::NotAuthorizedError.new(
