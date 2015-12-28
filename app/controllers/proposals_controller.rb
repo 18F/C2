@@ -91,7 +91,13 @@ class ProposalsController < ApplicationController
 
   def check_search_params
     @text = params[:text]
-    @adv_search = Query::Proposal::FieldedSearch.new(params[current_user.client_model_slug.to_sym])
+    dsl = Query::Proposal::SearchDSL.new(
+      params: params,
+      current_user: current_user,
+      query: @text,
+      client_data_type: current_user.client_model.to_s
+    )
+    @adv_search = dsl.client_query
     unless @text.present? || @adv_search.present? || (params[:start_date].present? && params[:end_date].present?)
       flash[:alert] = "Please enter one or more search criteria"
       redirect_to proposals_path
