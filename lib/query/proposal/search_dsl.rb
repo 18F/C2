@@ -43,22 +43,25 @@ module Query
 
       def client_query
         fielded = params[current_user.client_model_slug.to_sym]
-        munge_fielded_params(fielded)
+        munge_fielded_params(fielded) if fielded
         FieldedSearch.new(fielded)
       end
 
-      # rubocop:disable Metrics/AbcSize
       def munge_fielded_params(fielded)
         if fielded[:created_at].present? && fielded[:created_within].present?
-          high_end_range = Time.zone.parse(fielded[:created_at]).utc
-          within_parsed = fielded[:created_within].match(/^(\d+) (\w+)/)
-          low_end_range = high_end_range - within_parsed[1].to_i.send(within_parsed[2])
-          fielded[:created_at] = "[#{low_end_range} TO #{high_end_range}]"
+          munge_created_at_field(fielded)
         end
+      end
+
+      def munge_created_at_field(fielded)
+        high_end_range = Time.zone.parse(fielded[:created_at])
+        within_parsed = fielded[:created_within].match(/^(\d+) (\w+)/)
+        return unless high_end_range && within_parsed
+        low_end_range = high_end_range.utc - within_parsed[1].to_i.send(within_parsed[2])
+        fielded[:created_at] = "[#{low_end_range} TO #{high_end_range.utc}]"
         # do not calculate more than once, or when created_at is null
         fielded.delete(:created_within)
       end
-      # rubocop:enable
 
       def build_dsl
         @dsl = Elasticsearch::DSL::Search::Search.new
