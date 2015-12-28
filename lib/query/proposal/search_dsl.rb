@@ -42,7 +42,20 @@ module Query
       private
 
       def client_query
-        FieldedSearch.new(params[current_user.client_model_slug.to_sym])
+        fielded = params[current_user.client_model_slug.to_sym]
+        munge_fielded_params(fielded)
+        FieldedSearch.new(fielded)
+      end
+
+      def munge_fielded_params(fielded)
+        if fielded[:created_at] && fielded[:created_within]
+          high_end_range = Time.zone.parse(fielded[:created_at]).utc
+          within_parsed = fielded[:created_within].match(/^(\d+) (\w+)/)
+          low_end_range = high_end_range - within_parsed[1].to_i.send(within_parsed[2])
+          fielded[:created_at] = "[#{low_end_range} TO #{high_end_range}]"
+        end
+        # do not calculate more than once, or when created_at is null
+        fielded.delete(:created_within)
       end
 
       def build_dsl
