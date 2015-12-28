@@ -47,6 +47,7 @@ module Query
         FieldedSearch.new(fielded)
       end
 
+      # rubocop:disable Metrics/AbcSize
       def munge_fielded_params(fielded)
         if fielded[:created_at].present? && fielded[:created_within].present?
           high_end_range = Time.zone.parse(fielded[:created_at]).utc
@@ -57,6 +58,7 @@ module Query
         # do not calculate more than once, or when created_at is null
         fielded.delete(:created_within)
       end
+      # rubocop:enable
 
       def build_dsl
         @dsl = Elasticsearch::DSL::Search::Search.new
