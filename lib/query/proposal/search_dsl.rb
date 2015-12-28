@@ -48,7 +48,7 @@ module Query
       end
 
       def munge_fielded_params(fielded)
-        if fielded[:created_at] && fielded[:created_within]
+        if fielded[:created_at].present? && fielded[:created_within].present?
           high_end_range = Time.zone.parse(fielded[:created_at]).utc
           within_parsed = fielded[:created_within].match(/^(\d+) (\w+)/)
           low_end_range = high_end_range - within_parsed[1].to_i.send(within_parsed[2])
