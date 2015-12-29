@@ -49,6 +49,9 @@ C2::Application.routes.draw do
     resources :observations, only: [:create, :destroy]
   end
 
+  resources :reports, only: [:index, :show, :create, :destroy] do
+  end
+
   namespace :ncr do
     resources :work_orders, except: [:index, :destroy]
     get "/dashboard" => "dashboard#index"

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151215230732) do
+ActiveRecord::Schema.define(version: 20151229222501) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -120,6 +120,7 @@ ActiveRecord::Schema.define(version: 20151215230732) do
     t.string   "building_number", limit: 255
     t.boolean  "emergency",                   default: false, null: false
     t.string   "rwa_number",      limit: 255
+    t.string   "org_code",        limit: 255
     t.string   "code",            limit: 255
     t.string   "project_title",   limit: 255
     t.text     "description"
@@ -129,7 +130,6 @@ ActiveRecord::Schema.define(version: 20151215230732) do
     t.string   "cl_number",       limit: 255
     t.string   "function_code",   limit: 255
     t.string   "soc_code",        limit: 255
-    t.string   "org_code"
   end
 
   create_table "proposal_roles", force: :cascade do |t|
@@ -151,6 +151,15 @@ ActiveRecord::Schema.define(version: 20151215230732) do
   end
 
   add_index "proposals", ["client_data_id", "client_data_type"], name: "index_proposals_on_client_data_id_and_client_data_type", using: :btree
+
+  create_table "reports", force: :cascade do |t|
+    t.string   "name"
+    t.text     "query"
+    t.boolean  "shared"
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "roles", force: :cascade do |t|
     t.string   "name"
