@@ -7,13 +7,7 @@ describe "searching" do
   end
 
   it "displays relevant results", :js do
-    proposals = 2.times.map do |i|
-      wo = create(:test_client_request, project_title: "Work Order #{i}")
-      wo.proposal.update(requester: user)
-      wo.proposal.reindex
-      wo.proposal
-    end
-    Proposal.__elasticsearch__.refresh_index!
+    proposals = populate_proposals
 
     visit '/proposals'
     fill_in 'text', with: proposals.first.name
@@ -40,5 +34,26 @@ describe "searching" do
 
     visit proposals_path
     expect(page).not_to have_button("Search")
+  end
+
+  it "contains Download link to CSV", :js do
+    proposals = populate_proposals
+
+    visit proposals_path
+    fill_in "text", with: proposals.first.name
+    click_button "search-button"
+
+    expect(page).to have_content("Download")
+  end
+
+  def populate_proposals
+    proposals = 2.times.map do |i|
+      wo = create(:test_client_request, project_title: "Work Order #{i}")
+      wo.proposal.update(requester: user)
+      wo.proposal.reindex
+      wo.proposal
+    end
+    Proposal.__elasticsearch__.refresh_index!
+    proposals
   end
 end
