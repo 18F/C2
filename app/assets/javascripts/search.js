@@ -68,8 +68,10 @@ $(document).ready(function() {
       form.append($('<div class="form-alert alert alert-danger">Something went wrong! Please try again or contact your administrator.</div>'));
     })
     .done(function(payload) {
-      console.log("OK: ", payload);
+      var successAlert = $('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">x</button>Saved as report <strong>'+savedSearchName.val()+'</strong>!</div>');
+      $("#query-links").after(successAlert);
       $("#save-search").modal('hide');
+      $(".alert-success").fadeTo(2000, 500).slideUp(500, function() { $(".alert-success").alert('close'); });
     })
     .always(function(payload) {
       form.find('input').prop("disabled", false);
