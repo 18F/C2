@@ -24,3 +24,65 @@ $(document).ready(function() {
     }
   });
 });
+
+if (typeof C2 == "undefined") {
+  C2 = {}
+}
+
+C2.saveSearch = function() {
+  var searchParams = window.location.search.replace("?", "");
+  var searchAsJson = JSON.parse('{"' + decodeURI(searchParams).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+  $("#save-search-query").text(JSON.stringify(searchAsJson, null, 2));
+  $("#save-search form").on("submit", function(e) {
+    e.preventDefault();
+  });
+  $("#save-search form input").keyup(function(e) {
+    if (e.keyCode == 13) {
+      $("#save-search-button").trigger("click");
+    }
+  });
+  $("#save-search-button").click(function() {
+    var btn = $(this);
+    var form = $("#save-search form");
+
+    // clear any errors and start fresh
+    form.find('.form-alert').remove();
+
+    // must have real submit button to trigger HTML5 form validation,
+    // but our visible button is outside the <form>.
+    // So, we use an invisible button to leverage the browser's validation.
+    // See http://stackoverflow.com/questions/16707743/html5-required-validation-not-working
+    $("#save-search-submit").click();
+
+    if (typeof form[0].checkValidity == "function" && !form[0].checkValidity()) {
+      return;
+    }
+
+    var savedSearchName = form.find("[name='saved-search-name']");
+    if (!savedSearchName.val()) {
+      return;
+    }
+
+    // validation ok -- fire the XHR
+    form.find('input').prop("disabled", true);
+    btn.prop("disabled", true);
+    $.post("/reports", {
+      query: searchAsJson,
+      name: savedSearchName.val()
+    })
+    .fail(function(payload) {
+      form.append($('<div class="form-alert alert alert-danger">Something went wrong! Please try again or contact your administrator.</div>'));
+    })
+    .done(function(payload) {
+      console.log("OK: ", payload);
+      $("#save-search").modal('hide');
+    })
+    .always(function(payload) {
+      form.find('input').prop("disabled", false);
+      btn.prop("disabled", false);
+    });
+
+  });
+  $("#save-search").modal();
+
+}

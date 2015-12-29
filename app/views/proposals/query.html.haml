@@ -11,7 +11,7 @@
     %a{ href: "#{download_proposals_path}?#{request.query_parameters.to_query}" }
       Download
       %i.fa.fa-download
-    %a{ href: "#", onclick: "saveSearch" }
+    %a{ href: "#", onclick: "C2.saveSearch()" }
       Save as Report
       %i.fa.fa-save
   = datespan_header(@start_date, @end_date)
@@ -19,3 +19,23 @@
   - if @proposals_data.rows.empty?
     %p.empty-list-label
       No results
+
+#save-search.modal.fade{ tabindex: "-1", role: "dialog", "aria-labelledby" => "save-search-modal-title"}
+  .modal-dialog{ role: "document" }
+    .modal-content
+      .modal-header
+        %button.close{ type: "button", data: { dismiss: "modal" }, "aria-label" => "Close"}
+          %span{"aria-hidden" => "true"} &times;
+        %h4#save-search-modal-title.modal-title Save as Report
+      .modal-body
+        %form{ role: "form" }
+          %input#save-search-submit{ type: "submit", style: "display: none" }
+          .form-group
+            %label.control-label{ for: "saved-search-name" }
+              Name
+            %input.form-control.required{ type: "text", name: "saved-search-name", required: true }
+          .form-group
+            %pre#save-search-query
+      .modal-footer
+        %button.btn.btn-default{ type: "button", data: { dismiss: "modal" } } Cancel
+        %button#save-search-button.btn.btn-primary{ type: "submit" } Save
