@@ -40,6 +40,8 @@ C2::Application.routes.draw do
 
     collection do
       get "archive"
+      get "query" => "proposals#download", constraints: { format: "csv" }
+      get "download"
       get "query"
     end
 

@@ -66,6 +66,15 @@ class ProposalsController < ApplicationController
     @end_date = query_listing.end_date
   end
 
+  def download
+    params[:size] = :all
+    query_listing = listing
+    @proposals_data = query_listing.query
+    timestamp = Time.current.utc.strftime("%Y-%m-%d-%H-%M-%S")
+    headers["Content-Disposition"] = %Q{attachment; filename="C2-Proposals-#{timestamp}.csv"}
+    headers["Content-Type"] = "text/csv"
+  end
+
   def history
     @container = Query::Proposal::Versions.new(proposal).container
     @container.set_state_from_params(params)

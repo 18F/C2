@@ -110,6 +110,7 @@ module Query
       end
 
       def add_pagination
+        return if params[:size] == :all
         if params[:from]
           @dsl.from = params[:from].to_i
         else

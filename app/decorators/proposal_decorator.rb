@@ -43,4 +43,12 @@ class ProposalDecorator < Draper::Decorator
     scope = [:decorators, :steps, klass]
     I18n.t(key, scope: scope)
   end
+
+  def self.csv_headers
+    ["ID", "Created", "Requester", "Status"]
+  end
+
+  def as_csv
+    [public_id, created_at, requester.display_name, display_status, client_data.csv_fields].flatten
+  end
 end
