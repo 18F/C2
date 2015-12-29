@@ -11,7 +11,7 @@
     %a{ href: "#{download_proposals_path}?#{request.query_parameters.to_query}" }
       Download
       %i.fa.fa-download
-    %a{ href: "#", onclick: "C2.saveSearch()" }
+    %a{ href: "#", onclick: '$("#save-search").modal()' }
       Save as Report
       %i.fa.fa-save
   = datespan_header(@start_date, @end_date)

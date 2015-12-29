@@ -23,13 +23,7 @@ $(document).ready(function() {
       $(".m-search-ui button.search").trigger("click");
     }
   });
-});
 
-if (typeof C2 == "undefined") {
-  C2 = {}
-}
-
-C2.saveSearch = function() {
   var searchParams = window.location.search.replace("?", "");
   var searchAsJson = JSON.parse('{"' + decodeURI(searchParams).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
   $("#save-search-query").text(JSON.stringify(searchAsJson, null, 2));
@@ -66,8 +60,8 @@ C2.saveSearch = function() {
     // validation ok -- fire the XHR
     form.find('input').prop("disabled", true);
     btn.prop("disabled", true);
-    $.post("/reports", {
-      query: searchAsJson,
+    $.post("/reports.json", {
+      query: JSON.stringify(searchAsJson),
       name: savedSearchName.val()
     })
     .fail(function(payload) {
@@ -83,6 +77,5 @@ C2.saveSearch = function() {
     });
 
   });
-  $("#save-search").modal();
 
-}
+});
