@@ -56,14 +56,17 @@ describe Dispatcher do
   end
 
   describe "#deliver_cancellation_emails" do
-    let (:mock_deliverer) { double('deliverer') }
+    let (:mock_deliverer) { double("deliverer") }
 
-    it "sends an email to each approver" do
+    it "sends an email to the active step users" do
+      proposal = create(:proposal, :with_approval_and_purchase)
+      proposal.approval_steps.first.approve!
       allow(CancellationMailer).to receive(:cancellation_email).and_return(mock_deliverer)
-      expect(proposal.approvers.count).to eq 2
-      expect(mock_deliverer).to receive(:deliver_later).twice
+      allow(mock_deliverer).to receive(:deliver_later).exactly(2).times
 
       dispatcher.deliver_cancellation_emails(proposal)
+
+      expect(mock_deliverer).to have_received(:deliver_later).exactly(2).times
     end
 
     it "sends the reason to the cancellation email" do

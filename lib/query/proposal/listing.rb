@@ -49,13 +49,13 @@ module Query
 
       def pending_filter
         proc do |proposals|
-          proposals.select { |proposal| !proposal.awaiting_approver?(user) }
+          proposals.select { |proposal| !proposal.awaiting_step_user?(user) }
         end
       end
 
       def pending_review_filter
         proc do |proposals|
-          proposals.select { |proposal| proposal.awaiting_approver?(user) }
+          proposals.select { |proposal| proposal.awaiting_step_user?(user) }
         end
       end
 

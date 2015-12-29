@@ -11,8 +11,9 @@ module ClientDataMixin
     has_one :proposal, as: :client_data
     has_many :steps, through: :proposal
     has_many :individual_steps, -> { individual }, class_name: "Steps::Individual", through: :proposal
-    has_many :approvers, through: :individual_steps, source: :user
-    has_many :completers, through: :individual_steps, source: :completer
+    has_many :approvers, through: :proposal
+    has_many :purchasers, through: :proposal
+    has_many :completers, through: :proposal
     has_many :observations, through: :proposal
     has_many :observers, through: :observations, source: :user
     has_many :comments, through: :proposal
@@ -25,7 +26,7 @@ module ClientDataMixin
     delegate(
       :add_observer,
       :add_requester,
-      :currently_awaiting_approvers,
+      :currently_awaiting_step_users,
       :ineligible_approvers,
       :set_requester,
       :status,

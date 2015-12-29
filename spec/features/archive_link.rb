@@ -11,7 +11,7 @@ describe "archive link" do
       wo = create(:ncr_work_order, project_title: "Work Order #{i}")
       wo.proposal.update(requester: user)
       wo.proposal.individual_steps.create!(user: approver, status: 'actionable')
-      approval = wo.proposal.existing_approval_for(approver)
+      approval = wo.proposal.existing_step_for(approver)
       approval.approve!
       wo.proposal
     end
@@ -24,7 +24,7 @@ describe "archive link" do
       wo = create(:ncr_work_order, project_title: "Work Order #{i}")
       wo.proposal.update(requester: user)
       wo.proposal.individual_steps.create!(user: approver, status: 'actionable')
-      approval = wo.proposal.existing_approval_for(approver)
+      approval = wo.proposal.existing_step_for(approver)
       approval.approve!
       wo.proposal
     end 
