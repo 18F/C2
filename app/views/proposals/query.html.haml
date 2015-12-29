@@ -7,6 +7,13 @@
     = @adv_search.to_s
   %br
   %a{ :href => proposals_path } Clear search terms
+  #query-links
+    %a{ href: request.original_url + "&format=csv" }
+      Download
+      %i.fa.fa-download
+    %a{ href: "#", onclick: "saveSearch" }
+      Save as Report
+      %i.fa.fa-save
   = datespan_header(@start_date, @end_date)
   = render partial: 'shared/table', locals: {container: @proposals_data}
   - if @proposals_data.rows.empty?
