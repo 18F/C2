@@ -1,7 +1,10 @@
 .inset
   - page_title = @report ? @report.name : "Proposals participated in"
   %h1 #{page_title}
-  %strong #{@proposals_data.es_response.results.total} results for:
+  - if @proposals_data.es_response
+    %strong #{@proposals_data.es_response.results.total} results for:
+  - else
+    %strong Currently viewing results for:
   %pre
     = @search_query["humanized"]
   %br
