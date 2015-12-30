@@ -23,4 +23,25 @@ class Report < ActiveRecord::Base
     end
   end
 
+  def url
+    allowed_params = ["text", user.client_model_slug, "from", "size"]
+    "#{Rails.application.routes.url_helpers.query_proposals_path}?#{JSON.parse(query).slice(*allowed_params).to_query}"
+  end
+
+  def self.sql_for_user(user)
+    <<-SQL.gsub(/^ {6}/, '')
+      SELECT * FROM reports
+      WHERE user_id=#{user.id}
+        OR (
+          shared=true AND user_id IN (
+            SELECT id FROM users WHERE client_slug='#{user.client_slug}'
+          )
+        )
+    SQL
+  end
+
+  def self.for_user(user)
+    sql = sql_for_user(user)
+    self.find_by_sql(sql)
+  end
 end

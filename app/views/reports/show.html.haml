@@ -1,0 +1,22 @@
+.inset
+  %h1 Report #{@report.id}
+
+  %h3 #{@report.name}
+
+  .run-link
+    = link_to "Run report", @report.url
+
+  .query
+    %pre
+      = @report.humanized_query
+  .raw-query
+    %pre
+      = JSON.parse(@report.query).pretty_inspect
+
+  - if policy(@report).can_destroy?
+    = button_to "Delete", 
+      report_path(@report), 
+      method: :delete, 
+      data: {confirm: "Are you sure?"}, 
+      class: "btn btn-default", 
+      form_class: "form-inline"

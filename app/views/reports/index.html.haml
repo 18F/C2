@@ -1,0 +1,13 @@
+.inset
+  %h1
+    Manage Reports
+    %i.fa.fa-bar-chart
+
+  %ul.list-unstyled
+    - @reports.each do |report|
+      %li
+        = link_to(report.name, report_path(report))
+        (
+        = link_to("Run", report.url)
+        )
+

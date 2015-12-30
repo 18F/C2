@@ -133,4 +133,8 @@ class User < ActiveRecord::Base
   def requires_profile_attention?
     first_name.blank? || last_name.blank?
   end
+
+  def all_reports
+    Report.for_user(self)
+  end
 end
