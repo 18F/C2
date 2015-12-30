@@ -30,6 +30,19 @@ module Query
         clauses.join(" ")
       end
 
+      def to_h
+        hash = {}
+        if field_pairs
+          field_pairs.each do |k, v|
+            next if v.nil?
+            next if v.blank?
+            next if v == "*"
+            hash[k] = v
+          end
+        end
+        hash
+      end
+
       private
 
       def clause_to_s(key, value)

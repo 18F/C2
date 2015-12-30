@@ -1,5 +1,5 @@
 describe Query::Proposal::FieldedSearch do
-  it "stringifies" do
+  it "#to_s" do
     fs = Query::Proposal::FieldedSearch.new({
       foo: "bar"
     })
@@ -21,5 +21,15 @@ describe Query::Proposal::FieldedSearch do
       amount: ">100"
     })
     expect(fs.to_s).to eq "amount:>100"
+  end
+  it "#to_h" do
+    fs = Query::Proposal::FieldedSearch.new({
+      wild: "*",
+      foo: "",
+      bar: nil,
+      bool: false,
+      color: "green"
+    })
+    expect(fs.to_h).to eq( { color: "green" } )
   end
 end
