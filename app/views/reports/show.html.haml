@@ -11,7 +11,7 @@
       = @report.humanized_query
   .raw-query
     %pre
-      = JSON.parse(@report.query).pretty_inspect
+      = JSON.pretty_generate(JSON.parse(@report.query))
 
   - if policy(@report).can_destroy?
     = button_to "Delete", 
