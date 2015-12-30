@@ -43,6 +43,19 @@ module Query
         hash
       end
 
+      def humanized(client_model)
+        humanized = {}
+        to_h.each do |k, v|
+          if k.match(/^client_data\./)
+            attr = k.match(/^client_data\.(.+)/)[1]
+            humanized[client_model.human_attribute_name(attr)] = v
+          else
+            humanized[::Proposal.human_attribute_name(k)] = v
+          end
+        end
+        self.class.new(humanized)
+      end
+
       private
 
       def clause_to_s(key, value)

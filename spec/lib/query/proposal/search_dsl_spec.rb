@@ -98,4 +98,19 @@ describe Query::Proposal::SearchDSL do
       from: 0
     })
   end
+
+  it "humanizes query clauses" do
+    user = create(:user, client_slug: "test")
+    dsl = Query::Proposal::SearchDSL.new(
+      params: {
+        test_client_request: {
+          amount: "123"
+        }
+      },
+      query: "foo OR Bar",
+      current_user: user,
+      client_data_type: user.client_model.to_s
+    )
+    expect(dsl.humanized_query_string).to eq "(foo OR Bar) AND (Amount:(123))"
+  end
 end

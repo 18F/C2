@@ -107,6 +107,13 @@ class ProposalsController < ApplicationController
       client_data_type: current_user.client_model.to_s
     )
     @adv_search = dsl.client_query
+    @search_query = { "humanized" => dsl.humanized_query_string }
+    if @text.present?
+      @search_query["text"] = @text
+    end
+    if @adv_search.present?
+      @search_query[current_user.client_model_slug] = @adv_search.to_h
+    end
     unless @text.present? || @adv_search.present? || (params[:start_date].present? && params[:end_date].present?)
       flash[:alert] = "Please enter one or more search criteria"
       redirect_to proposals_path

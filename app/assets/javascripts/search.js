@@ -24,11 +24,9 @@ $(document).ready(function() {
     }
   });
 
-  var searchAsJson;
-  var searchParams = window.location.search.replace("?", "");
-  if (searchParams) {
-    searchAsJson = JSON.parse('{"' + decodeURI(searchParams).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
-    $("#save-search-query").text(JSON.stringify(searchAsJson, null, 2));
+  // defined inline on HTML page
+  if (typeof C2searchQuery != "undefined") {
+    $("#save-search-query").text(C2searchQuery.humanized);
   }
   $("#save-search form").on("submit", function(e) {
     e.preventDefault();
@@ -64,7 +62,7 @@ $(document).ready(function() {
     form.find('input').prop("disabled", true);
     btn.prop("disabled", true);
     $.post("/reports.json", {
-      query: JSON.stringify(searchAsJson),
+      query: JSON.stringify(C2searchQuery),
       name: savedSearchName.val()
     })
     .fail(function(payload) {

@@ -39,6 +39,18 @@ module Query
         end
       end
 
+      def humanized_query_string
+        if client_query.present? && query_str.present?
+          "(#{query_str}) AND (#{client_query.humanized(current_user.client_model).to_s})"
+        elsif client_query.present?
+          client_query.humanized(current_user.client_model).to_s
+        elsif query_str.present?
+          query_str.to_s
+        else
+          ""
+        end
+      end
+
       def client_query
         fielded = params[current_user.client_model_slug.to_sym]
         munge_fielded_params(fielded) if fielded

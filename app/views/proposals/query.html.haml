@@ -2,9 +2,8 @@
   %h1
     Proposals participated in
   %strong Currently displaying results for:
-  = property_to_s(@text)
-  - if @adv_search.to_s.present?
-    = @adv_search.to_s
+  %pre
+    = @search_query["humanized"]
   %br
   %a{ :href => proposals_path } Clear search terms
   #query-links
@@ -19,6 +18,10 @@
   - if @proposals_data.rows.empty?
     %p.empty-list-label
       No results
+
+:javascript
+  // global var referenced by search.js
+  var C2searchQuery = #{@search_query.to_json}
 
 #save-search.modal.fade{ tabindex: "-1", role: "dialog", "aria-labelledby" => "save-search-modal-title"}
   .modal-dialog{ role: "document" }

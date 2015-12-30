@@ -1,7 +1,13 @@
 FactoryGirl.define do
   factory :report do
     name "my report"
-    query { { text: "something", test_client_request: { "client_data.amount" => "<123" } }.to_json }
+    query do
+      {
+        text: "something",
+        humanized: "(something) AND (Amount:<123)",
+        test_client_request: { "client_data.amount" => "<123" }
+      }.to_json
+    end
     shared false
     association :user, factory: :user
 

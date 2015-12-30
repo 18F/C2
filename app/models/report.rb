@@ -9,6 +9,10 @@ class Report < ActiveRecord::Base
     JSON.parse(query)["text"]
   end
 
+  def humanized_query
+    JSON.parse(query)["humanized"]
+  end
+
   def query_string
     if text_query.present? && client_query.present?
       "(#{text_query}) AND (#{client_query})"
