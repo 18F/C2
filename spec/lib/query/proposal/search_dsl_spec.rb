@@ -72,7 +72,7 @@ describe Query::Proposal::SearchDSL do
     dsl = Query::Proposal::SearchDSL.new(
       params: {
         page: 3
-      },  
+      },
       query: "foo OR Bar",
       current_user: user,
       client_data_type: "Test::ClientRequest"
@@ -83,16 +83,16 @@ describe Query::Proposal::SearchDSL do
         query_string: {
           query: "foo OR Bar",
           default_operator: "and"
-        },  
-      },  
+        },
+      },
       filter: {
         bool: {
           must: [
             { term: { client_data_type: "Test::ClientRequest" } },
-            { term: { "subscribers.id" => user.id.to_s } } 
-          ]   
-        }   
-      },  
+            { term: { "subscribers.id" => user.id.to_s } }
+          ]
+        }
+      },
       size: ::Proposal::MAX_SEARCH_RESULTS,
       from: 2 * ::Proposal::MAX_SEARCH_RESULTS
     })
