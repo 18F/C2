@@ -24,9 +24,12 @@ $(document).ready(function() {
     }
   });
 
+  var searchAsJson;
   var searchParams = window.location.search.replace("?", "");
-  var searchAsJson = JSON.parse('{"' + decodeURI(searchParams).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
-  $("#save-search-query").text(JSON.stringify(searchAsJson, null, 2));
+  if (searchParams) {
+    searchAsJson = JSON.parse('{"' + decodeURI(searchParams).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+    $("#save-search-query").text(JSON.stringify(searchAsJson, null, 2));
+  }
   $("#save-search form").on("submit", function(e) {
     e.preventDefault();
   });
