@@ -112,11 +112,14 @@ module Query
       def apply_text_filter(proposals_data)
         if params[:text] || params[user.client_model_slug.to_sym]
           proposals_data.alter_query do |proposal|
-            Query::Proposal::Search.new(
+            searcher = Query::Proposal::Search.new(
               current_user: user,
               relation: proposal,
               params: params
-            ).execute(params[:text])
+            )
+            proposals = searcher.execute(params[:text])
+            proposals_data.es_response = searcher.response
+            proposals
           end
         end
       end

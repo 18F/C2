@@ -294,6 +294,14 @@ body.webapp {
     text-decoration: underline;
     color: #0C75E1;
   }
+  #pages {
+    a {
+      text-decoration: none;
+    }
+    .active a {
+      color: #fff;
+    }
+  }
   p,
   .button_to input {
     font-size: 14px;

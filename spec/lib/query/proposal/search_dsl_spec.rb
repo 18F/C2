@@ -14,6 +14,7 @@ describe Query::Proposal::SearchDSL do
       client_data_type: "Test::ClientRequest"
     )
     expect(dsl.to_hash).to eq({
+      _source: ["id"],
       query: {
         query_string: {
           query: "(foo OR Bar) AND (color:(green))",
@@ -46,6 +47,7 @@ describe Query::Proposal::SearchDSL do
       client_data_type: "Test::ClientRequest"
     )
     expect(dsl.to_hash).to eq({
+      _source: ["id"],
       query: {
         query_string: {
           query: "(foo OR Bar) AND (color:(green))",
@@ -65,6 +67,37 @@ describe Query::Proposal::SearchDSL do
     })
   end
 
+  it "determines from/size from page param" do
+    user = create(:user, client_slug: "test")
+    dsl = Query::Proposal::SearchDSL.new(
+      params: {
+        page: 3
+      },  
+      query: "foo OR Bar",
+      current_user: user,
+      client_data_type: "Test::ClientRequest"
+    )
+    expect(dsl.to_hash).to eq({
+      _source: ["id"],
+      query: {
+        query_string: {
+          query: "foo OR Bar",
+          default_operator: "and"
+        },  
+      },  
+      filter: {
+        bool: {
+          must: [
+            { term: { client_data_type: "Test::ClientRequest" } },
+            { term: { "subscribers.id" => user.id.to_s } } 
+          ]   
+        }   
+      },  
+      size: ::Proposal::MAX_SEARCH_RESULTS,
+      from: 2 * ::Proposal::MAX_SEARCH_RESULTS
+    })
+  end
+
   it "parses date ranges" do
     now = Time.zone.now
     user = create(:user, client_slug: "test")
@@ -80,6 +113,7 @@ describe Query::Proposal::SearchDSL do
       client_data_type: "Test::ClientRequest"
     )
     expect(dsl.to_hash).to eq({
+      _source: ["id"],
       query: {
         query_string: {
           query: "(foo OR Bar) AND (created_at:[#{now.utc - 6.months} TO #{now.utc}])",

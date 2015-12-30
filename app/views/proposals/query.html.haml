@@ -1,7 +1,7 @@
 .inset
   - page_title = @report ? @report.name : "Proposals participated in"
   %h1 #{page_title}
-  %strong Currently displaying results for:
+  %strong #{@proposals_data.es_response.results.total} results for:
   %pre
     = @search_query["humanized"]
   %br
@@ -14,9 +14,12 @@
       Save as Report
       %i.fa.fa-save
   = datespan_header(@start_date, @end_date)
-  = render partial: 'shared/table', locals: {container: @proposals_data}
+  - if @proposals_data.rows.any?
+    = render partial: 'shared/table', locals: {container: @proposals_data}
+    #pages
+      = paginate @proposals_data.es_response, current_page: (params[:page]||1).to_i
   - if @proposals_data.rows.empty?
-    %p.empty-list-label
+    .empty-list-label
       No results
 
 :javascript

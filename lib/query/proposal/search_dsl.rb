@@ -77,6 +77,8 @@ module Query
 
       def build_dsl
         @dsl = Elasticsearch::DSL::Search::Search.new
+        # we only need primary key. this cuts down response time by ~70%.
+        @dsl.source(["id"])
         add_query
         add_filter
         add_sort
@@ -123,16 +125,35 @@ module Query
 
       def add_pagination
         return if params[:size] == :all
-        if params[:from]
-          @dsl.from = params[:from].to_i
+        calculate_from_size if params[:page]
+        add_from
+        add_size
+      end
+
+      def add_from
+        if @from
+          @dsl.from = @from
+        elsif params[:from]
+          @dsl.from = params[:from]
         else
           @dsl.from = 0
         end
-        if params[:size]
-          @dsl.size = params[:size].to_i
+      end
+
+      def add_size
+        if @size
+          @dsl.size = @size
+        elsif params[:size]
+          @dsl.size = params[:size]
         else
           @dsl.size = ::Proposal::MAX_SEARCH_RESULTS
         end
+      end
+
+      def calculate_from_size
+        page = params[:page].to_i
+        @size ||= params[:size] || ::Proposal::MAX_SEARCH_RESULTS
+        @from = (page - 1) * @size.to_i
       end
     end
   end
