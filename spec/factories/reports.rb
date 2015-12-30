@@ -6,7 +6,7 @@ FactoryGirl.define do
     association :user, factory: :user
 
     transient do
-      client_slug { nil }
+      client_slug { "test" }
     end
 
     after(:create) do |report, evaluator|
