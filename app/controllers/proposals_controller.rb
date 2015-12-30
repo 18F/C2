@@ -114,6 +114,9 @@ class ProposalsController < ApplicationController
     if @adv_search.present?
       @search_query[current_user.client_model_slug] = @adv_search.to_h
     end
+    if params[:report]
+      @report = Report.find params[:report]
+    end
     unless @text.present? || @adv_search.present? || (params[:start_date].present? && params[:end_date].present?)
       flash[:alert] = "Please enter one or more search criteria"
       redirect_to proposals_path

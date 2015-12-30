@@ -1,6 +1,6 @@
 .inset
-  %h1
-    Proposals participated in
+  - page_title = @report ? @report.name : "Proposals participated in"
+  %h1 #{page_title}
   %strong Currently displaying results for:
   %pre
     = @search_query["humanized"]

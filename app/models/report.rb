@@ -25,7 +25,9 @@ class Report < ActiveRecord::Base
 
   def url
     allowed_params = ["text", user.client_model_slug, "from", "size"]
-    "#{Rails.application.routes.url_helpers.query_proposals_path}?#{JSON.parse(query).slice(*allowed_params).to_query}"
+    params = JSON.parse(query).slice(*allowed_params)
+    params[:report] = id
+    "#{Rails.application.routes.url_helpers.query_proposals_path}?#{params.to_query}"
   end
 
   def self.sql_for_user(user)
