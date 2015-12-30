@@ -1,5 +1,8 @@
-require 'rails_helper'
-
-RSpec.describe Report, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+describe Report do
+  it "parses default factory query" do
+    report = create(:report, client_slug: "test")
+    expect(report.client_query.to_s).to eq "client_data.amount:<123"
+    expect(report.text_query).to eq "something"
+    expect(report.query_string).to eq "(something) AND (client_data.amount:<123)"
+  end
 end
