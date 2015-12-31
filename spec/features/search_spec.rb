@@ -9,17 +9,33 @@ describe "searching" do
   it "displays relevant results", :js do
     proposals = populate_proposals
 
-    visit '/proposals'
+    visit proposals_path
     fill_in 'text', with: proposals.first.name
     click_button "search-button"
 
-    expect(current_path).to eq('/proposals/query')
+    expect(current_path).to eq query_proposals_path
     expect(page).to have_content(proposals.first.public_id)
     expect(page).not_to have_content(proposals.last.name)
   end
 
+  it "provides advanced search", :js do
+    proposals = populate_proposals
+
+    visit proposals_path
+    fill_in "text", with: proposals.first.name
+    dropdown_button = find("button.dropdown-toggle")
+    dropdown_button.trigger("click") # open dropdown
+    fill_in "test_client_request[client_data.amount]", with: proposals.first.client_data.amount
+    dropdown_button.trigger("click") # close dropdown
+    click_button "search-button"
+
+    expect(current_path).to eq query_proposals_path
+    expect(page).to have_content(proposals.first.public_id)
+    expect(page).to have_content("(#{proposals.first.name}) AND (Amount:(#{proposals.first.client_data.amount}))")
+  end
+
   it "populates the search box on the results page", :js do
-    visit '/proposals'
+    visit proposals_path
     fill_in 'text', with: 'foo'
     click_button "search-button"
 
