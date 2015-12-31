@@ -1,9 +1,9 @@
-describe "reports" do
+feature "reports" do
   before do
     login_as(user)
   end
 
-  it "provides Save as Report button on search results page", :js do
+  scenario "provides Save as Report button on search results page", :js do
     proposals = populate_proposals
 
     visit query_proposals_path(text: proposals.first.name)
