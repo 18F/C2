@@ -19,7 +19,10 @@ class ReportsController < ApplicationController
 
   def destroy
     report.destroy!
-    redirect_to :index
+    respond_to do |format|
+      format.json { render json: report.as_json, status: 202 }
+      format.html { redirect_to reports_path }
+    end
   end
 
   private
