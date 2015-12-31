@@ -103,8 +103,8 @@ describe Query::Proposal::SearchDSL do
       params: {
         test_client_request: {
           amount: "123"
-        }   
-      },  
+        }
+      },
       query: "foo OR Bar",
       current_user: user,
       client_data_type: user.client_model.to_s
