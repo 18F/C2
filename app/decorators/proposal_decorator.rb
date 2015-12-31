@@ -15,7 +15,7 @@ class ProposalDecorator < Draper::Decorator
 
   def display_status
     if object.pending?
-      'pending approval'
+      "pending approval"
     else
       object.status
     end
@@ -45,7 +45,7 @@ class ProposalDecorator < Draper::Decorator
   end
 
   def self.csv_headers
-    ["ID", "Created", "Requester", "Status"]
+    ["Public ID", "Created", "Requester", "Status"]
   end
 
   def as_csv
