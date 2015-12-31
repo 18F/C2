@@ -9,13 +9,16 @@
     = @search_query["humanized"]
   %br
   %a{ :href => proposals_path } Clear search terms
-  #query-links
-    %a{ href: "#{download_proposals_path}?#{request.query_parameters.to_query}" }
-      Download
-      %i.fa.fa-download
-    %a{ href: "#", onclick: '$("#save-search").modal()' }
-      Save as Report
-      %i.fa.fa-save
+  #query-links.pull-right
+    %ul.list-inline
+      %li
+        %a{ href: "#{download_proposals_path}?#{request.query_parameters.to_query}" }
+          Download
+          %i.fa.fa-download
+      %li
+        %a{ href: "#", onclick: '$("#save-search").modal()' }
+          Save as Report
+          %i.fa.fa-save
   = datespan_header(@start_date, @end_date)
   - if @proposals_data.rows.any?
     = render partial: 'shared/table', locals: {container: @proposals_data}
