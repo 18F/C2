@@ -32,4 +32,16 @@ describe Query::Proposal::FieldedSearch do
     })
     expect(fs.to_h).to eq( { color: "green" } )
   end
+  it "#valid_for" do
+    fs = Query::Proposal::FieldedSearch.new({
+      amount: 123
+    })
+    expect(fs.value_for(:amount)).to eq 123
+  end
+  it "#humanized" do
+    fs = Query::Proposal::FieldedSearch.new({
+      "client_data.amount" => 123
+    })
+    expect(fs.humanized(Test::ClientRequest).to_s).to eq "Amount:(123)"
+  end
 end

@@ -22,7 +22,8 @@ module Query
         clauses = []
         if field_pairs
           field_pairs.each do |k, v|
-            next if v.empty?
+            next if v.nil?
+            next if v.blank?
             next if v == "*"
             clauses << clause_to_s(k, v)
           end
@@ -59,7 +60,7 @@ module Query
       private
 
       def clause_to_s(key, value)
-        if value.match(/^\w/)
+        if value.to_s.match(/^\w/)
           "#{key}:(#{value})"
         else
           "#{key}:#{value}"
