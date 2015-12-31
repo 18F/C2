@@ -1,5 +1,5 @@
 describe Query::Proposal::SearchDSL do
-  it "combines query strings and client-data-specific hash" do
+  it "#to_hash" do
     user = create(:user, client_slug: "test")
     dsl = Query::Proposal::SearchDSL.new(
       params: {
@@ -46,25 +46,8 @@ describe Query::Proposal::SearchDSL do
       current_user: user,
       client_data_type: "Test::ClientRequest"
     )
-    expect(dsl.to_hash).to eq({
-      _source: ["id"],
-      query: {
-        query_string: {
-          query: "(foo OR Bar) AND (color:(green))",
-          default_operator: "and"
-        },
-      },
-      filter: {
-        bool: {
-          must: [
-            { term: { client_data_type: "Test::ClientRequest" } },
-            { term: { "subscribers.id" => user.id.to_s } }
-          ]
-        }
-      },
-      size: ::Proposal::MAX_SEARCH_RESULTS,
-      from: 0
-    })
+    expect(dsl.to_hash[:size]).to eq ::Proposal::MAX_SEARCH_RESULTS
+    expect(dsl.to_hash[:from]).to eq 0
   end
 
   it "determines from/size from page param" do
@@ -77,25 +60,8 @@ describe Query::Proposal::SearchDSL do
       current_user: user,
       client_data_type: "Test::ClientRequest"
     )
-    expect(dsl.to_hash).to eq({
-      _source: ["id"],
-      query: {
-        query_string: {
-          query: "foo OR Bar",
-          default_operator: "and"
-        },
-      },
-      filter: {
-        bool: {
-          must: [
-            { term: { client_data_type: "Test::ClientRequest" } },
-            { term: { "subscribers.id" => user.id.to_s } }
-          ]
-        }
-      },
-      size: ::Proposal::MAX_SEARCH_RESULTS,
-      from: 2 * ::Proposal::MAX_SEARCH_RESULTS
-    })
+    expect(dsl.to_hash[:size]).to eq ::Proposal::MAX_SEARCH_RESULTS
+    expect(dsl.to_hash[:from]).to eq( 2 * ::Proposal::MAX_SEARCH_RESULTS )
   end
 
   it "parses date ranges" do
@@ -112,28 +78,41 @@ describe Query::Proposal::SearchDSL do
       current_user: user,
       client_data_type: "Test::ClientRequest"
     )
-    expect(dsl.to_hash).to eq({
-      _source: ["id"],
-      query: {
-        query_string: {
-          query: "(foo OR Bar) AND (created_at:[#{now.utc - 6.months} TO #{now.utc}])",
-          default_operator: "and"
-        },
-      },
-      filter: {
-        bool: {
-          must: [
-            { term: { client_data_type: "Test::ClientRequest" } },
-            { term: { "subscribers.id" => user.id.to_s } }
-          ]
-        }
-      },
-      size: ::Proposal::MAX_SEARCH_RESULTS,
-      from: 0
-    })
+    expect(dsl.client_query.to_s).to eq "created_at:[#{now.utc - 6.months} TO #{now.utc}]"
   end
 
-  it "humanizes query clauses" do
+  it "#client_query" do
+    user = create(:user, client_slug: "test")
+    dsl = Query::Proposal::SearchDSL.new(
+      params: {
+        test_client_request: {
+          amount: "123"
+        }
+      },
+      query: "foo OR Bar",
+      current_user: user,
+      client_data_type: user.client_model.to_s
+    )
+    expect(dsl.client_query).to be_a Query::Proposal::FieldedSearch
+    expect(dsl.client_query.to_s).to eq "amount:(123)"
+  end
+
+  it "#composite_query_string" do
+    user = create(:user, client_slug: "test")
+    dsl = Query::Proposal::SearchDSL.new(
+      params: {
+        test_client_request: {
+          amount: "123"
+        }   
+      },  
+      query: "foo OR Bar",
+      current_user: user,
+      client_data_type: user.client_model.to_s
+    )
+    expect(dsl.composite_query_string).to eq "(foo OR Bar) AND (amount:(123))"
+  end
+
+  it "#humanized_query_string" do
     user = create(:user, client_slug: "test")
     dsl = Query::Proposal::SearchDSL.new(
       params: {
