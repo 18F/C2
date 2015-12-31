@@ -28,27 +28,11 @@ module Query
       end
 
       def composite_query_string
-        if client_query.present? && query_str.present?
-          "(#{query_str}) AND (#{client_query})"
-        elsif client_query.present?
-          client_query.to_s
-        elsif query_str.present?
-          query_str.to_s
-        else
-          ""
-        end
+        stringify_clauses [query_str, client_query].select(&:present?)
       end
 
       def humanized_query_string
-        if client_query.present? && query_str.present?
-          "(#{query_str}) AND (#{client_query_humanized})"
-        elsif client_query.present?
-          client_query_humanized.to_s
-        elsif query_str.present?
-          query_str.to_s
-        else
-          ""
-        end
+        stringify_clauses [query_str, client_query_humanized].select(&:present?)
       end
 
       def client_query
@@ -58,6 +42,16 @@ module Query
       end
 
       private
+
+      def stringify_clauses(clauses)
+        if clauses.length == 2
+          clauses.map { |c| "(#{c})" }.join(" AND ")
+        elsif clauses.length == 1
+          clauses[0].to_s
+        else
+          ""
+        end
+      end
 
       def client_query_humanized
         client_query.humanized(current_user.client_model)
