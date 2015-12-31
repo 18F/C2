@@ -41,9 +41,9 @@ module Query
 
       def humanized_query_string
         if client_query.present? && query_str.present?
-          "(#{query_str}) AND (#{client_query.humanized(current_user.client_model).to_s})"
+          "(#{query_str}) AND (#{client_query_humanized})"
         elsif client_query.present?
-          client_query.humanized(current_user.client_model).to_s
+          client_query_humanized.to_s
         elsif query_str.present?
           query_str.to_s
         else
@@ -58,6 +58,10 @@ module Query
       end
 
       private
+
+      def client_query_humanized
+        client_query.humanized(current_user.client_model)
+      end
 
       def munge_fielded_params(fielded)
         if fielded[:created_at].present? && fielded[:created_within].present?

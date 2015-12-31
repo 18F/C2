@@ -31,7 +31,7 @@ class Report < ActiveRecord::Base
   end
 
   def self.sql_for_user(user)
-    <<-SQL.gsub(/^ {6}/, '')
+    <<-SQL.gsub(/^ {6}/, "")
       SELECT * FROM reports
       WHERE user_id=#{user.id}
         OR (

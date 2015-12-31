@@ -1,5 +1,5 @@
 class ReportsController < ApplicationController
-  before_action ->{authorize report}, only: [:show, :destroy]
+  before_action -> { authorize report }, only: [:show, :destroy]
 
   def create
     report = current_user.reports.build(report_params)
@@ -18,7 +18,8 @@ class ReportsController < ApplicationController
   end
 
   def destroy
-
+    report.destroy!
+    redirect_to :index
   end
 
   private

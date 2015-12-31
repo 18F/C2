@@ -1,4 +1,6 @@
 $(document).ready(function() {
+
+  /* *** setup Adv Search UI *** */
   $(".m-search-ui button.search").click(function() {
     var btn = $(this);
     var form = $('form.adv-search');
@@ -18,10 +20,19 @@ $(document).ready(function() {
     termsInput.prop("disabled", true);
     return true;
   });
-  $(".search-terms").keyup(function(e) {
+
+  var clickOnEnter = function(e, cls) {
     if (e.keyCode === 13) {
-      $(".m-search-ui button.search").trigger("click");
+      $(cls).trigger("click");
     }
+  };
+  $(".search-terms").keyup(function(e) {
+    clickOnEnter(e, ".m-search-ui button.search");
+  });
+
+  /* *** setup Save as Report *** */
+  $("#save-search form input").keyup(function(e) {
+    clickOnEnter(e, "#save-search-button");
   });
 
   // defined inline on HTML page
@@ -30,11 +41,6 @@ $(document).ready(function() {
   }
   $("#save-search form").on("submit", function(e) {
     e.preventDefault();
-  });
-  $("#save-search form input").keyup(function(e) {
-    if (e.keyCode == 13) {
-      $("#save-search-button").trigger("click");
-    }
   });
   $("#save-search-button").click(function() {
     var btn = $(this);
