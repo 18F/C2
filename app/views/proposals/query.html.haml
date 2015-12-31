@@ -5,8 +5,9 @@
     %strong #{@proposals_data.es_response.results.total} results for:
   - else
     %strong Currently viewing results for:
-  %pre
-    = @search_query["humanized"]
+  - if @search_query["humanized"].present?
+    %pre
+      = @search_query["humanized"]
   %br
   %a{ :href => proposals_path } Clear search terms
   #query-links.pull-right
@@ -22,8 +23,9 @@
   = datespan_header(@start_date, @end_date)
   - if @proposals_data.rows.any?
     = render partial: 'shared/table', locals: {container: @proposals_data}
-    #pages
-      = paginate @proposals_data.es_response, current_page: (params[:page]||1).to_i
+    - if @proposals_data.es_response
+      #pages
+        = paginate @proposals_data.es_response, current_page: (params[:page]||1).to_i
   - if @proposals_data.rows.empty?
     .empty-list-label
       No results
