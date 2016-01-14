@@ -1,6 +1,6 @@
 # 18F Developer Onboarding Checklist
 
-Create a [new issue](https://github.com/18F/C2/issues/new), and copy the raw Markdown from below into it:
+Create a [new issue](https://github.com/18F/C2/issues/new), and copy the [raw Markdown](https://raw.githubusercontent.com/18F/C2/master/doc/developer_onboarding.md) from below into it:
 
 ---
 
