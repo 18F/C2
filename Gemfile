@@ -1,4 +1,4 @@
-source "http://mirror.ops.rhcloud.com/mirror/ruby/"
+source "https://rubygems.org"
 ruby "2.2.3" # this should match `.ruby-version` and docs/setup.md
 
 gem "active_model_serializers"
