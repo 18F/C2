@@ -33,17 +33,25 @@ stack:
 
 services:
 - name: CircleCI
-  category: testing
+  category: CI
   url: https://circleci.com/gh/18F/C2
   badge: https://circleci.com/gh/18F/C2.svg?style=svg
 - name: Code Climate
-  category: testing
+  category: code quality
   url: https://codeclimate.com/github/18F/C2
   badge: https://codeclimate.com/github/18F/C2/badges/gpa.svg
+- name: Code Climate Coverage
+  category: code coverage
+  url: https://codeclimate.com/github/18F/C2
+  badge: https://codeclimate.com/github/18F/C2/badges/coverage.svg
 - name: Gemnasium
   category: dependency status
   url: https://gemnasium.com/18F/C2
   badge: https://gemnasium.com/18F/C2.svg
+- name: Hakiri
+  category: dependency status
+  url: https://hakiri.io/github/18F/C2/master
+  badge: https://hakiri.io/github/18F/C2/master.svg
 
 licenses:
   C2:
