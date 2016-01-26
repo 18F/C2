@@ -13,7 +13,7 @@ class ApprovalDelegate < ActiveRecord::Base
 
   def assigner_and_assignee_are_different_users
     if assigner == assignee
-      errors.add(:assingee, "cannot be same user as assigner")
+      errors.add(:assignee, "cannot be same user as assigner")
     end
   end
 end
