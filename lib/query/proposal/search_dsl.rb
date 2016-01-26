@@ -132,7 +132,7 @@ module Query
         if @from
           @dsl.from = @from
         elsif params[:from]
-          @dsl.from = params[:from]
+          @dsl.from = params[:from].to_i
         else
           @dsl.from = 0
         end
@@ -142,7 +142,7 @@ module Query
         if @size
           @dsl.size = @size
         elsif params[:size]
-          @dsl.size = params[:size]
+          @dsl.size = params[:size].to_i
         else
           @dsl.size = ::Proposal::MAX_SEARCH_RESULTS
         end
@@ -150,7 +150,7 @@ module Query
 
       def calculate_from_size
         page = params[:page].to_i
-        @size ||= params[:size] || ::Proposal::MAX_SEARCH_RESULTS
+        @size ||= (params[:size] || ::Proposal::MAX_SEARCH_RESULTS).to_i
         @from = (page - 1) * @size.to_i
       end
     end
