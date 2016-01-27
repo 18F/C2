@@ -69,6 +69,18 @@ describe ProposalPolicy do
         user = create(:user)
         expect(ProposalPolicy).not_to permit(user, proposal)
       end
+
+      it "allows pending delegates" do
+        proposal = create(:proposal)
+        approval = create(:approval_step, proposal: proposal, status: "approved")
+        purchase = create(:purchase_step, proposal: proposal, status: "actionable")
+
+        delegate = create(:user)
+        purchaser = purchase.user
+        purchaser.add_delegate(delegate)
+
+        expect(ProposalPolicy).to permit(delegate, proposal)
+      end
     end
   end
 

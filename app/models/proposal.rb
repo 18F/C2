@@ -40,7 +40,7 @@ class Proposal < ActiveRecord::Base
   has_many :completers, through: :individual_steps, source: :completer
   has_many :api_tokens, through: :individual_steps
   has_many :attachments, dependent: :destroy
-  has_many :approval_delegates, through: :approvers, source: :outgoing_delegations
+  has_many :approval_delegates, through: :step_users, source: :outgoing_delegations
   has_many :comments, dependent: :destroy
   has_many :delegates, through: :approval_delegates, source: :assignee
 
