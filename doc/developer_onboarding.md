@@ -28,14 +28,15 @@ Create a [new issue](https://github.com/18F/C2/issues/new), and copy the [raw Ma
 ## Tasks for @oldmember
 
 * [ ] Add to Slack channels
-* [ ] [Add to Pivotal Tracker](https://www.pivotaltracker.com/projects/1149728/memberships)
+* [ ] [Add to the kanban board](https://trello.com/b/kAW72R3m/c2-birthday-cake)
 * [ ] Add to [@18F/cap](https://github.com/orgs/18F/teams/cap) team on GitHub
 * [ ] Add to support emails: `capdevs`, `communicart.sender`, and `gatewaycommunicator` through [IT Service Desk](https://gsa.service-now.com)
+* [ ] Send access information for developer test emails: `gsa.approver`, `communicart.budget.approver`, and `communicart.ofm.approver`)
 * [ ] [Add to New Relic](https://rpm.newrelic.com/accounts/921394)
 * [ ] Add to calendar items: standups, IPM, and story grooming sessions
 * [ ] Schedule a code walkthrough
 * [ ] Set up pairing session
-* [ ] Give intro to [current stories](https://pivotaltracker.com/n/projects/1149728)
+* [ ] Give intro to [current stories](https://trello.com/b/kAW72R3m/c2-birthday-cake)
 * [ ] Give intro to weekly ceremonies and team workflow
 
 ### Later
@@ -43,3 +44,5 @@ Create a [new issue](https://github.com/18F/C2/issues/new), and copy the [raw Ma
 * [ ] [Add them to `cap` organization on Cloud Foundry](https://docs.cloudfoundry.org/adminguide/cli-user-management.html#org-roles) (`cf set-org-role USERNAME cap OrgManager`)
 * [ ] [Add them to the repository on Hakiri.](https://hakiri.io/projects/ed076f492b8f5a/edit)
 * [ ] Admin access to C2 production (add UserRole `admin` to User record)
+* [ ] Access [application logs](https://logs.cloud.gov/app/kibana)
+* [ ] Access to [User Voice](https://www.uservoice.com/)
