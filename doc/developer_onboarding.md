@@ -28,7 +28,7 @@ Create a [new issue](https://github.com/18F/C2/issues/new), and copy the [raw Ma
 ## Tasks for @oldmember
 
 * [ ] Add to Slack channels
-* [ ] [Add to Pivotal Tracker](https://www.pivotaltracker.com/projects/1149728/memberships)
+* [ ] [Add to Trello](https://trello.com/b/kAW72R3m/c2-birthday-cake)
 * [ ] Add to [@18F/cap](https://github.com/orgs/18F/teams/cap) team on GitHub
 * [ ] Add to support emails: `capdevs`, `communicart.sender`, and `gatewaycommunicator` through [IT Service Desk](https://gsa.service-now.com)
 * [ ] [Add to New Relic](https://rpm.newrelic.com/accounts/921394)
