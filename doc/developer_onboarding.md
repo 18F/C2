@@ -46,3 +46,6 @@ Create a [new issue](https://github.com/18F/C2/issues/new), and copy the [raw Ma
 * [ ] Admin access to C2 production (add UserRole `admin` to User record)
 * [ ] Access [application logs](https://logs.cloud.gov/app/kibana)
 * [ ] Access to [User Voice](https://www.uservoice.com/)
+* [ ] Access to [Stories on Board](https://www.storiesonboard.com/)
+* [ ] Link to Google Drive files
+
