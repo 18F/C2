@@ -19,7 +19,7 @@ Create a [new issue](https://github.com/18F/C2/issues/new), and copy the [raw Ma
 * [ ] [Set up the Cloud Foundry CLI](https://docs.cloud.gov/getting-started/setup/) (which you will need to deploy)
 * [ ] [Learn more about Cloud Foundry](https://docs.cloud.gov)
 * [ ] Deploy C2 to `c2-dev` (or `c2-staging`)
-* [ ] [Get added to the MailChimp account](production.md#getting-access)
+* [ ] [Get added to the MailChimp account](production.md#getting-access) (and thus Mandrill)
 * [ ] Access support emails `capdevs@gsa.gov`, `communicart.sender@gsa.gov`, and `gatewaycommunicator`
     1. Make sure someone has requested/completed access for you (See tasks for @oldmember)
     1. Go to Gmail and click 'Add Account'. Enter in each of these email addresses. If you are asked for a password, leave it blank. As long as you are already logged into your GSA email, the email addresses should be loaded.
@@ -29,6 +29,7 @@ Create a [new issue](https://github.com/18F/C2/issues/new), and copy the [raw Ma
 
 * [ ] Add to Slack channels
 * [ ] [Add to the kanban board](https://trello.com/b/kAW72R3m/c2-birthday-cake)
+* [ ] [Add to Trello](https://trello.com/b/kAW72R3m/c2-birthday-cake)
 * [ ] Add to [@18F/cap](https://github.com/orgs/18F/teams/cap) team on GitHub
 * [ ] Add to support emails: `capdevs`, `communicart.sender`, and `gatewaycommunicator` through [IT Service Desk](https://gsa.service-now.com)
 * [ ] Send access information for developer test emails: `gsa.approver`, `communicart.budget.approver`, and `communicart.ofm.approver`)
