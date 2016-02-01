@@ -5,7 +5,8 @@ type: app
 owner_type: project
 stage: live
 status: active
-description: an approval process automation tool
+description: We built a simplified, email-based purchasing approval tool for purchase card holders authorized to buy office supplies for the government. We designed it to be intuitive and convenient so that federal employees could drastically reduce the time they spend on purchase card approvals.
+impact:  As C2 streamlines the purchase card approval process, government employees can spend more time performing their essential work and less time on the paperwork required to buy their micropurchases. The updated process also helps restore public confidence that government employees are only using cards for valid purchases and save the government agencies millions of dollars by creating a more reliable, efficient approval system for micropurchases.
 testable: true
 team:
 - github: afeld
@@ -32,17 +33,25 @@ stack:
 
 services:
 - name: CircleCI
-  category: testing
+  category: CI
   url: https://circleci.com/gh/18F/C2
   badge: https://circleci.com/gh/18F/C2.svg?style=svg
 - name: Code Climate
-  category: testing
+  category: code quality
   url: https://codeclimate.com/github/18F/C2
   badge: https://codeclimate.com/github/18F/C2/badges/gpa.svg
+- name: Code Climate Coverage
+  category: code coverage
+  url: https://codeclimate.com/github/18F/C2
+  badge: https://codeclimate.com/github/18F/C2/badges/coverage.svg
 - name: Gemnasium
   category: dependency status
   url: https://gemnasium.com/18F/C2
   badge: https://gemnasium.com/18F/C2.svg
+- name: Hakiri
+  category: dependency status
+  url: https://hakiri.io/github/18F/C2/master
+  badge: https://hakiri.io/github/18F/C2/master.svg
 
 licenses:
   C2:

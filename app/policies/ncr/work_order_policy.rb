@@ -9,7 +9,7 @@ module Ncr
 
     def can_edit!
       check(
-        requester? || approver? || observer?,
+        requester? || step_user? || observer?,
         "You must be the requester, approver, or observer to edit"
       )
     end

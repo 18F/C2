@@ -7,11 +7,11 @@ class RolePicker
   end
 
   def active_observer?
-    observer? && !active_approver? && !requester?
+    observer? && !active_step_user? && !requester?
   end
 
-  def active_approver?
-    proposal.is_active_approver?(user)
+  def active_step_user?
+    proposal.is_active_step_user?(user)
   end
 
   def requester?
@@ -24,6 +24,10 @@ class RolePicker
 
   def approver?
     proposal.approvers.include?(user)
+  end
+
+  def purchaser?
+    proposal.purchasers.include?(user)
   end
 
   private

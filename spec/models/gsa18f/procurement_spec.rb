@@ -25,7 +25,8 @@ describe Gsa18f::Procurement do
     DatabaseCleaner.clean_with(:truncation)
     Rails.application.load_seed
     procurement = create(:gsa18f_procurement, :with_steps)
-    expect(procurement.approvers.map(&:email_address)).to eq(["some.approver@example.com", "some.purchaser@example.com"])
+    expect(procurement.approvers.map(&:email_address)).to eq(["some.approver@example.com"])
+    expect(procurement.purchasers.map(&:email_address)).to eq(["some.purchaser@example.com"])
     expect(procurement.observers.map(&:email_address)).to be_empty
     expect(procurement.purchaser.email_address).to eq("some.purchaser@example.com")
   end

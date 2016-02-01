@@ -26,36 +26,36 @@ module Query
 
       def with_approver_or_delegate(user)
         Arel::Nodes::Exists.new(
-          approvals_for(user)
+          steps_for(user)
         )
       end
 
-      def approvals_for(user)
+      def steps_for(user)
         approvals_with_delegates.where(
           with_matching_proposal.and(
             non_pending.and(
-              where_approver(user).or(where_delegate(user))
+              where_step_user(user).or(where_delegate(user))
             )
           )
         ).ast
       end
 
       def approvals_with_delegates
-        approvals.project(Arel.star).
+        steps.project(Arel.star).
           join(delegates, Arel::Nodes::OuterJoin).
-          on(delegates[:assigner_id].eq(approvals[:user_id]))
+          on(delegates[:assigner_id].eq(steps[:user_id]))
       end
 
       def with_matching_proposal
-        approvals[:proposal_id].eq(proposals[:id])
+        steps[:proposal_id].eq(proposals[:id])
       end
 
       def non_pending
-        approvals[:status].not_eq('pending')
+        steps[:status].not_eq('pending')
       end
 
-      def where_approver(user)
-        approvals[:user_id].eq(user.id)
+      def where_step_user(user)
+        steps[:user_id].eq(user.id)
       end
 
       def where_delegate(user)
@@ -68,7 +68,7 @@ module Query
         )
       end
 
-      def approvals
+      def steps
         Step.arel_table
       end
 

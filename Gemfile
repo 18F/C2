@@ -51,6 +51,7 @@ gem "roadie-rails"
 gem "sass-rails", ">= 3.2"
 gem "simple_form"
 gem "simple_form_object"
+gem "sprockets-rails", "< 3" # https://github.com/jfirebaugh/konacha/issues/216
 gem "turbolinks"
 gem "uglifier"
 gem "validates_email_format_of"

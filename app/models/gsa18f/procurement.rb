@@ -103,9 +103,7 @@ module Gsa18f
     end
 
     def purchaser
-      if purchase_step
-        purchase_step.user
-      end
+      purchasers.first
     end
 
     def self.approver_email
@@ -123,12 +121,6 @@ module Gsa18f
       end
 
       users.first
-    end
-
-    private
-
-    def purchase_step
-      steps.select{|step| step.is_a?(Steps::Purchase)}.first
     end
   end
 end

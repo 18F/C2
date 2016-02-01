@@ -15,7 +15,7 @@ module Gsa18f
     def can_cancel!
       not_cancelled! && check(
         (approver? || delegate? || requester? || admin?) && !purchaser?,
-        "Sorry, you are neither the requester, approver or delegate"
+        "Sorry, you are neither the requester, approver, or delegate"
       )
     end
     alias_method :can_cancel_form!, :can_cancel!
@@ -24,6 +24,10 @@ module Gsa18f
 
     def purchaser?
       @procurement.purchaser == @user
+    end
+
+    def approver?
+      @procurement.approvers.include?(@user)
     end
   end
 end
