@@ -160,6 +160,10 @@ GEM
       elasticsearch (> 0.4)
       hashie
     elasticsearch-rails (0.1.8)
+    elasticsearch-rails-ha (1.0.2)
+      ansi
+      elasticsearch-model
+      elasticsearch-rails
     elasticsearch-transport (1.0.15)
       faraday
       multi_json
@@ -509,6 +513,7 @@ DEPENDENCIES
   elasticsearch-extensions
   elasticsearch-model
   elasticsearch-rails
+  elasticsearch-rails-ha
   email_reply_parser
   factory_girl_rails
   faker
