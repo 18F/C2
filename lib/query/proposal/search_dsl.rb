@@ -49,13 +49,13 @@ module Query
 
       def munge_fielded_params(fielded)
         if fielded[:created_at].present? && fielded[:created_within].present?
-          munge_created_at_field(fielded)
+          convert_created_at_to_range(fielded)
         end
         # do not calculate more than once, or when created_at is null
         fielded.delete(:created_within)
       end
 
-      def munge_created_at_field(fielded)
+      def convert_created_at_to_range(fielded)
         high_end_range = Time.zone.parse(fielded[:created_at])
         within_parsed = fielded[:created_within].match(/^(\d+) (\w+)/)
         return unless high_end_range && within_parsed
