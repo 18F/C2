@@ -26,33 +26,33 @@ describe Ncr::WorkOrdersHelper do
 
   describe '#building_options' do
     it 'includes an initial list' do
-      expect(helper.building_options).to include(Ncr::BUILDING_NUMBERS.last)
+      expect(helper.building_options).to include({ name: Ncr::BUILDING_NUMBERS.last })
     end
 
     it 'includes custom results' do
       create(:ncr_work_order, building_number: 'ABABABAB')
-      expect(helper.building_options).to include('ABABABAB')
+      expect(helper.building_options).to include({ name: 'ABABABAB' })
     end
 
     it 'removes duplicates from custom' do
       create(:ncr_work_order, building_number: 'ABABABAB')
       create(:ncr_work_order, building_number: 'ABABABAB')
-      expect(helper.building_options.count('ABABABAB')).to be(1)
+      expect(helper.building_options.count({ name: 'ABABABAB' })).to be(1)
     end
 
     it 'removes duplicates when combining custom and initial list' do
       building = Ncr::BUILDING_NUMBERS.last
       create(:ncr_work_order, building_number: building)
-      expect(helper.building_options.count(building)).to be(1)
+      expect(helper.building_options.count({ name: building })).to be(1)
     end
 
     it 'sorts the results' do
       create(:ncr_work_order, building_number: 'BBB')
       create(:ncr_work_order, building_number: 'CCC')
       create(:ncr_work_order, building_number: 'AAA')
-      a_index = helper.building_options.index('AAA')
-      b_index = helper.building_options.index('BBB')
-      c_index = helper.building_options.index('CCC')
+      a_index = helper.building_options.index({ name: 'AAA' })
+      b_index = helper.building_options.index({ name: 'BBB' })
+      c_index = helper.building_options.index({ name: 'CCC' })
       expect(a_index).to be < b_index
       expect(a_index).to be < c_index
       expect(b_index).to be < c_index

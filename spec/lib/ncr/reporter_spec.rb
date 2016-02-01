@@ -27,7 +27,7 @@ describe Ncr::Reporter do
       whs_work_order = create(
         :ncr_work_order,
         :with_approvers,
-        org_code: create(:whsc_organization).code_and_name
+        ncr_organization: create(:whsc_organization)
       )
       whs_work_order.setup_approvals_and_observers
 

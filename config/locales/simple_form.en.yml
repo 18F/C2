@@ -15,13 +15,13 @@ en:
         approving_official_email: "Approving official's email address"
         direct_pay: "I am going to be using direct pay for this transaction"
         emergency: "This request was an emergency and I received a verbal Notice to Proceed (NTP)"
-        org_code: "Org code / Service center"
+        ncr_organization: "Org code / Service center"
     placeholders:
       ncr_work_order:
         building_number: "Type here to search or add"
         project_title: "e.g. \"Blue paint for the Blue Room\""
         vendor: "Type here to search or add"
-        org_code: "Type here to search"
+        ncr_organization: "Type here to search"
     hints:
       gsa18f_procurement:
         link_to_product: "Search <a href='https://www.gsaadvantage.gov/advantage/main/start_page.do' target='_blank'>GSA Advantage</a> first; then <a href='http://www.amazon.com' target='_blank'>Amazon;</a> then other vendor. Paste link here."

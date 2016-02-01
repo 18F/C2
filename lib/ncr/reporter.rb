@@ -102,7 +102,9 @@ module Ncr
       <<-SQL.gsub(/^ {8}/, '')
         SELECT ncr_work_orders.id
         FROM ncr_work_orders
-        WHERE ncr_work_orders.org_code != '#{Ncr::Organization::WHSC_CODE}'
+        JOIN ncr_organizations
+        ON ncr_work_orders.ncr_organization_id = ncr_organizations.id
+        WHERE ncr_organizations.code != '#{Ncr::Organization::WHSC_CODE}'
         AND ncr_work_orders.expense_type IN ('BA60','BA61')
       SQL
     end
@@ -111,7 +113,7 @@ module Ncr
       <<-SQL.gsub(/^ {8}/, '')
         SELECT ncr_work_orders.id
         FROM ncr_work_orders
-        WHERE ncr_work_orders.org_code IS NULL
+        WHERE ncr_work_orders.ncr_organization_id IS NULL
         AND ncr_work_orders.expense_type IN ('BA60','BA61')
       SQL
     end
@@ -151,7 +153,7 @@ module Ncr
           work_order.proposal.public_id,
           work_order.amount,
           find_approved_at(work_order),
-          work_order.org_code,
+          work_order.organization_code_and_name,
           work_order.cl_number,
           work_order.expense_type,
           work_order.soc_code,

@@ -24,7 +24,11 @@ class ProposalUpdateRecorder
   end
 
   def update_comment_format(key)
-    "#{bullet}*#{property_name(key)}* was changed " + former_value(key) + "to #{new_value(key)}"
+    if key !~ /id/
+      "#{bullet}*#{property_name(key)}* was changed " + former_value(key) + "to #{new_value(key)}"
+    else
+      "#{bullet}*#{association_name(key)}* was changed " + former_association_value(key) + "to #{new_association_value(key)}"
+    end
   end
 
   def bullet
@@ -37,6 +41,35 @@ class ProposalUpdateRecorder
 
   def property_name(key)
     client_data.class.human_attribute_name(key)
+  end
+
+  def association_name(key)
+    if key == "ncr_organization_id"
+      "Org code"
+    end
+  end
+
+  def former_association_value(key)
+    if key == "ncr_organization_id"
+      org_id = client_data.send(key + "_was")
+
+      if org_id && org = Ncr::Organization.find(org_id)
+        "from #{org.code_and_name} "
+      else
+        ""
+      end
+    end
+  end
+
+  def new_association_value(key)
+    if key == "ncr_organization_id"
+      organization = client_data.ncr_organization
+      if organization.nil?
+        "*empty*"
+      else
+        organization.code_and_name
+      end
+    end
   end
 
   def former_value(key)
