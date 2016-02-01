@@ -198,7 +198,7 @@ module Ncr
     end
 
     def self.expense_type_options
-      EXPENSE_TYPES.map { |et| [et, et] }
+      EXPENSE_TYPES.map { |expense_type| [expense_type, expense_type] }
     end
 
     private
