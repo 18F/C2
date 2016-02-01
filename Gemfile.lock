@@ -219,7 +219,7 @@ GEM
       activerecord (>= 3.0)
     hashdiff (0.2.3)
     hashie (3.4.3)
-    html-pipeline (2.2.2)
+    html-pipeline (2.3.0)
       activesupport (>= 2, < 5)
       nokogiri (>= 1.4)
     html_pipeline_rails (0.1.0)
