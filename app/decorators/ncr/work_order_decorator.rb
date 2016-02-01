@@ -20,7 +20,7 @@ module Ncr
     end
 
     def pending_approver_email_address
-      approver_email_address(proposal.currently_awaiting_approvers.first)
+      approver_email_address(proposal.currently_awaiting_step_users.first)
     end
 
     def approver_email_address(approver)

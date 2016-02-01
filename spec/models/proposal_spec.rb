@@ -84,7 +84,7 @@ describe Proposal do
     end
   end
 
-  describe '#currently_awaiting_approvers' do
+  describe '#currently_awaiting_step_users' do
     it "gives a consistently ordered list when in parallel" do
       proposal = create(:proposal, :with_parallel_approvers)
       approver1, approver2 = proposal.approvers
