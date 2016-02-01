@@ -68,7 +68,7 @@ GEM
       activerecord (>= 3.2, < 5)
     acts_as_list (0.7.2)
       activerecord (>= 3.0)
-    addressable (2.3.8)
+    addressable (2.4.0)
     ansi (1.5.0)
     ar_outer_joins (0.2.0)
       activerecord (>= 3.2)
