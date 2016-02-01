@@ -2,7 +2,13 @@ source "https://rubygems.org"
 ruby "2.2.3" # this should match `.ruby-version` and docs/setup.md
 
 gem "active_model_serializers"
-gem "activeadmin", github: "activeadmin"
+
+# we use master for activeadmin because they do not release/tag often,
+# and we need some fixes. If you need to bump the 'ref' to a newer version,
+# be sure to manually test the upgrade via UI since our activeadmin tests are
+# for customizations/extensions only.
+gem "activeadmin", github: "activeadmin", ref: "ca94d1cc"
+
 gem "acts_as_list"
 gem "acts-as-taggable-on", "~> 3.4"
 gem "ar_outer_joins"
