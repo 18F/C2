@@ -32,6 +32,7 @@ module Searchable
 
     def self.rebuild_index
       __elasticsearch__.create_index! force: true
+      __elasticsearch__.import
       __elasticsearch__.refresh_index!
     end
 

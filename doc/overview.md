@@ -69,7 +69,7 @@ This application contains code for several independent but similar use cases. Us
 
 In the "old days", 18F staff would make requests for software and equipment via a spreadsheet that our Operations team lead would check periodically. The team is growing quickly and we now ask that employees get sign-off on their equipment/software requests from their manager before it goes to the Ops team, so are moving this process to C2. You will see references to `Gsa18f` throughout the code.
 
-https://hub.18f.gov/private/request-supplies/
+https://hub.18f.gov/request-supplies/
 
 ### [National Capital Region (NCR) service centers](http://www.gsa.gov/portal/content/104717)
 

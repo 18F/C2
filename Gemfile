@@ -1,4 +1,4 @@
-source "http://mirror.ops.rhcloud.com/mirror/ruby/"
+source "https://rubygems.org"
 ruby "2.2.3" # this should match `.ruby-version` and docs/setup.md
 
 gem "active_model_serializers"
@@ -20,6 +20,7 @@ gem "draper"
 gem "elasticsearch-dsl"
 gem "elasticsearch-model"
 gem "elasticsearch-rails"
+gem "elasticsearch-rails-ha"
 gem "email_reply_parser"
 gem "factory_girl_rails"
 gem "faker"
@@ -50,6 +51,7 @@ gem "roadie-rails"
 gem "sass-rails", ">= 3.2"
 gem "simple_form"
 gem "simple_form_object"
+gem "sprockets-rails", "< 3" # https://github.com/jfirebaugh/konacha/issues/216
 gem "turbolinks"
 gem "uglifier"
 gem "validates_email_format_of"

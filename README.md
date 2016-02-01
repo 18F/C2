@@ -6,7 +6,7 @@ C2 is part of GSA's suite of Common Acquisition Platform (CAP) tools.
 
 ## Links
 
-* [Issue tracker](https://www.pivotaltracker.com/n/projects/1149728)
+* [Issue tracker](https://trello.com/b/kAW72R3m/c2-birthday-cake)
 * [Chat with us](https://chat.18f.gov/) (select "cap-public" from the dropdown)
 
 ## Documentation
