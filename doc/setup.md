@@ -118,6 +118,6 @@ or just [visit the project on Gemnasium](https://gemnasium.com/18F/C2).
 ### Re-indexing search
 
 ```bash
-rake environment elasticsearch:ha:import NPROCS=2 CLASS="Proposal"
+rake environment elasticsearch:ha:import NPROCS=2 CLASS="Proposal" FORCE=y
 ```
 
