@@ -162,7 +162,7 @@ GEM
       elasticsearch (> 0.4)
       hashie
     elasticsearch-rails (0.1.8)
-    elasticsearch-rails-ha (1.0.2)
+    elasticsearch-rails-ha (1.0.4)
       ansi
       elasticsearch-model
       elasticsearch-rails
