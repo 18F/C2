@@ -70,7 +70,7 @@ module Query
           @dsl.filter.bool do
             bools.each do |must_filter|
               filter_block = must_filter.instance_variable_get(:@block)
-              must &filter_block
+              must(&filter_block)
             end
           end
         end
