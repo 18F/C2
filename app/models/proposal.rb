@@ -2,6 +2,7 @@ class Proposal < ActiveRecord::Base
   include WorkflowModel
   include ValueHelper
   include StepManager
+  include Searchable
   include FiscalYearMixin
 
   has_paper_trail class_name: 'C2Version'
@@ -64,6 +65,58 @@ class Proposal < ActiveRecord::Base
   end
   scope :closed, -> { where(status: ['approved', 'cancelled']) } #TODO: Backfill to change approvals in 'reject' status to 'cancelled' status
   scope :cancelled, -> { where(status: 'cancelled') }
+
+  # elasticsearch indexing setup
+  DEFAULT_INDEXED = {
+    include: {
+      client_data: {},
+      comments: {
+        include: {
+          user: { methods: [:display_name], only: [:display_name] }
+        }
+      },
+      steps: {
+        include: {
+          completed_by: { methods: [:display_name], only: [:display_name] }
+        }
+      },
+      requester: {
+        methods: [:display_name], only: [:display_name]
+      }
+    }
+  }
+
+  settings index: {
+    number_of_shards: 1, # increase this if we ever get more than N records
+    number_of_replicas: 1
+  } do
+    # with dynamic mapping==true, we only need to explicitly define overrides.
+    # https://www.elastic.co/guide/en/elasticsearch/guide/current/dynamic-mapping.html
+    # e.g., "amount" is explicitly declared to be a string but not analyzed.
+    # otherwise the first "amount" value that convince ES that the field should
+    # be defined as an Integer (100), whereas it really ought to be a Float (100.00).
+    # same thing for public_id: the first value ES sees might be an integer,
+    # but the whole range of values in the db includes strings as well.
+    mappings dynamic: "true" do
+      indexes :id, boost: 2
+      indexes :public_id, type: "string", index: :not_analyzed, boost: 1.5
+      indexes :client_data_type, type: "string", index: :not_analyzed
+
+      indexes :client_data do
+        indexes :amount, type: "string", index: :not_analyzed
+      end
+    end
+  end
+
+  def to_indexed_json(params = {})
+    as_indexed_json(params).to_json
+  end
+
+  def as_indexed_json(params = {})
+    as_json(params.reverse_merge(DEFAULT_INDEXED)).tap do |json|
+      json[:subscribers] = subscribers.map { |user| { id: user.id, name: user.display_name } }
+    end
+  end
 
   def root_step
     steps.where(parent: nil).first
@@ -195,6 +248,10 @@ class Proposal < ActiveRecord::Base
 
   def self.client_slugs
     CLIENT_MODELS.map(&:client_slug)
+  end
+
+  def self.client_model_for(user)
+    CLIENT_MODELS.select { |cmodel| cmodel.slug_matches?(user) }[0]
   end
 
   private

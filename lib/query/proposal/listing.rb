@@ -112,7 +112,11 @@ module Query
       def apply_text_filter(proposals_data)
         if params[:text]
           proposals_data.alter_query do |proposal|
-            Query::Proposal::Search.new(proposal).execute(params[:text])
+            Query::Proposal::Search.new(
+              current_user: user,
+              relation: proposal,
+              params: params
+            ).execute(params[:text])
           end
         end
       end
