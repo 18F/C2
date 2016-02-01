@@ -76,7 +76,7 @@ GEM
       activesupport (>= 3.0.0)
     arel (6.0.3)
     atomic (1.1.99)
-    autoprefixer-rails (6.1.1)
+    autoprefixer-rails (6.3.1)
       execjs
       json
     awesome_print (1.6.1)
