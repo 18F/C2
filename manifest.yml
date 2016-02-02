@@ -28,7 +28,7 @@ applications:
     NEW_RELIC_APP_NAME: C2 (Staging)
     S3_BUCKET_NAME: c2-demo
   services:
-#    - c2-staging-elasticsearch
+    - c2-staging-elasticsearch
 - name: c2-prod
   hosts:
   - cap
@@ -41,5 +41,6 @@ applications:
     NEW_RELIC_APP_NAME: C2 (Production)
     RESTRICT_ACCESS: true
     S3_BUCKET_NAME: c2-prod
-  services:
+# TODO comment this in once provisioned
+#  services:
 #    - c2-prod-elasticsearch
