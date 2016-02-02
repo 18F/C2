@@ -60,7 +60,7 @@ module Query
         within_parsed = fielded[:created_within].match(/^(\d+) (\w+)/)
         return unless high_end_range && within_parsed
         low_end_range = high_end_range.utc - within_parsed[1].to_i.send(within_parsed[2])
-        fielded[:created_at] = %Q([#{low_end_range.iso8601} TO #{high_end_range.utc.iso8601}])
+        fielded[:created_at] = "[#{low_end_range.iso8601} TO #{high_end_range.utc.iso8601}]"
       end
 
       def build_dsl
