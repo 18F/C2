@@ -31,8 +31,7 @@ class AddFooSpendingRequests < ActiveRecord::Migration
     create_table :foo_spending_requests do |t|
       t.decimal  :amount
       t.string   :project_title
-      t.datetime :created_at
-      t.datetime :updated_at
+      t.timestamps null: false
     end
   end
 end
