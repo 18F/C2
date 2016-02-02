@@ -73,7 +73,7 @@ module Ncr
     end
 
     def work_order_params
-      Ncr::WorkOrder.relevant_fields(params[:ncr_work_order][:expense_type])
+      Ncr::WorkOrderFields.new.relevant(params[:ncr_work_order][:expense_type])
     end
 
     # @pre: work_order.approving_official_email is set

@@ -58,50 +58,6 @@ describe Ncr::WorkOrder do
     end
   end
 
-  describe ".relevant_fields" do
-    it "shows BA61 fields" do
-      expect(Ncr::WorkOrder.relevant_fields("BA61").sort).to eq([
-        :amount,
-        :approving_official_email,
-        :building_number,
-        :cl_number,
-        # No :code
-        :description,
-        :direct_pay,
-        :emergency,
-        :expense_type,
-        :function_code,
-        :ncr_organization_id,
-        :not_to_exceed,
-        :project_title,
-        # No :rwa_number
-        :soc_code,
-        :vendor
-      ])
-    end
-
-    it "shows BA80 fields" do
-      expect(Ncr::WorkOrder.relevant_fields("BA80").sort).to eq([
-        :amount,
-        :approving_official_email,
-        :building_number,
-        :cl_number,
-        :code,
-        :description,
-        :direct_pay,
-        # No Emergency
-        :expense_type,
-        :function_code,
-        :ncr_organization_id,
-        :not_to_exceed,
-        :project_title,
-        :rwa_number,
-        :soc_code,
-        :vendor
-      ])
-    end
-  end
-
   describe "#total_price" do
     it "gets price from amount field" do
       work_order = build(:ncr_work_order, amount: 45.36)

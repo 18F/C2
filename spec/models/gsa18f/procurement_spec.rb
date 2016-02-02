@@ -5,22 +5,6 @@ describe Gsa18f::Procurement do
     it { should validate_presence_of(:purchase_type) }
   end
 
-  describe ".relevant_fields" do
-    it "returns recurring fields if recurring is true" do
-      fields = Gsa18f::Procurement.relevant_fields(true)
-
-      expect(fields).to include(:recurring_interval)
-      expect(fields).to include(:recurring_length)
-    end
-
-    it "does not return recurring fields if recurring is false" do
-      fields = Gsa18f::Procurement.relevant_fields(false)
-
-      expect(fields).not_to include(:recurring_interval)
-      expect(fields).not_to include(:recurring_length)
-    end
-  end
-
   it "sets up initial approvers and observers" do
     DatabaseCleaner.clean_with(:truncation)
     Rails.application.load_seed
