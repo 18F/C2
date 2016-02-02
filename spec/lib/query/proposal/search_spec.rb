@@ -1,6 +1,6 @@
 require 'ansi/code'
 
-describe Query::Proposal::Search do
+describe Query::Proposal::Search, elasticsearch: true do
 
   before do
     # analogous to DatabaseCleaner.start in spec/rails_helper
