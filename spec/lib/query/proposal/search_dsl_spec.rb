@@ -82,7 +82,7 @@ describe Query::Proposal::SearchDSL do
     expect(dsl.to_hash).to eq({
       query: {
         query_string: {
-          query: "(foo OR Bar) AND (created_at:[#{now.utc - 6.months} TO #{now.utc}])",
+          query: "(foo OR Bar) AND (created_at:[#{(now.utc - 6.months).iso8601} TO #{now.utc.iso8601}])",
           default_operator: "and"
         },
       },
