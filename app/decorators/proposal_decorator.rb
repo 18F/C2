@@ -37,6 +37,17 @@ class ProposalDecorator < Draper::Decorator
     "#{number_approved} of #{total_approvers} approved."
   end
 
+  def waiting_text_for_status_in_table
+    actionable_step = currently_awaiting_steps.first
+    if actionable_step
+      actionable_step.decorate.waiting_text
+    else
+      # This should only ever happen in specs which create proposals but never
+      # populate them with steps. Unfortunately we still have many of those.
+      "This proposal has no steps"
+    end
+  end
+
   def step_text_for_user(key, user)
     step = existing_step_for(user)
     klass = step.class.name.demodulize.downcase.to_sym
