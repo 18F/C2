@@ -62,7 +62,7 @@ module ClientDataMixin
     end
 
     def self.expense_type_options
-      fail "#{self} does not implement expense_type_options method"
+      []
     end
 
     def self.csv_headers

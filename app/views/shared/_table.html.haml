@@ -15,6 +15,6 @@
     - container.rows.each do |row|
       %tr
         - container.columns.each do |column|
-          %td
+          %td{class: column.name}
             = render(partial: "shared/formatter/" + column.formatter.to_s,
               locals: { object: row, value: column.display(row) })

@@ -20,7 +20,6 @@
                       Card Holder Name
                     %input.form-control{ type: "text",
                       name: "#{current_user.client_model_slug}[requester]",
-                      placeholder: current_user.full_name,
                       value: @adv_search.value_for("requester"),
                     }
                   .form-group
@@ -37,17 +36,20 @@
                       name: "#{current_user.client_model_slug}[client_data.amount]",
                       value: @adv_search.value_for("client_data.amount"),
                     }
-                  .form-group
-                    %label{for: "#{current_user.client_model_slug}[client_data.expense_type]"}
-                      Expense Type
-                    %select.form-control{name: "#{current_user.client_model_slug}[client_data.expense_type]"}
-                      = proposal_expense_type_options(current_user.client_model, @adv_search.value_for("client_data.expense_type"))
+
+                  - if current_user.client_model.expense_type_options.any?
+                    .form-group
+                      %label{for: "#{current_user.client_model_slug}[client_data.expense_type]"}
+                        Expense Type
+                      %select.form-control{name: "#{current_user.client_model_slug}[client_data.expense_type]"}
+                        = proposal_expense_type_options(current_user.client_model, @adv_search.value_for("client_data.expense_type"))
+
                   .form-group.row
                     .col-xs-5
                       %label{for: "#{current_user.client_model_slug}[created_within]"}
                         Date within
                       %select.form-control{name: "#{current_user.client_model_slug}[created_within]"}
-                        = options_for_select([["1 year", "1 year"], ["6 months", "6 months"], ["1 month"], ["1 month"]], "1 year")
+                        = options_for_select([["1 year", "1 year"], ["6 months", "6 months"], ["1 month", "1 month"]], "1 year")
                     .col-xs-5
                       %label{for: "#{current_user.client_model_slug}[created_at]"}
                         of

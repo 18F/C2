@@ -1,4 +1,4 @@
-describe ApprovalDelegate do
+describe UserDelegate do
   describe "Associations" do
     it { should belong_to(:assignee) }
     it { should belong_to(:assigner) }
@@ -12,8 +12,8 @@ describe ApprovalDelegate do
       assignee = create(:user)
       assigner = create(:user)
 
-      create(:approval_delegate, assigner: assigner, assignee: assignee)
-      dupe_delegation = build(:approval_delegate, assigner: assigner, assignee: assignee)
+      create(:user_delegate, assigner: assigner, assignee: assignee)
+      dupe_delegation = build(:user_delegate, assigner: assigner, assignee: assignee)
 
       expect(dupe_delegation).not_to be_valid
     end
@@ -21,7 +21,7 @@ describe ApprovalDelegate do
     it "validates that the assigner and assignee are not the same user" do
       user = create(:user)
 
-      delegation = build(:approval_delegate, assigner: user, assignee: user)
+      delegation = build(:user_delegate, assigner: user, assignee: user)
 
       expect(delegation).not_to be_valid
     end

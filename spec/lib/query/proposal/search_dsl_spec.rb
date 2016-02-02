@@ -78,7 +78,9 @@ describe Query::Proposal::SearchDSL do
       current_user: user,
       client_data_type: "Test::ClientRequest"
     )
-    expect(dsl.client_query.to_s).to eq "created_at:[#{now.utc - 6.months} TO #{now.utc}]"
+    expect(dsl.composite_query_string).to eq(
+      "(foo OR Bar) AND (created_at:[#{(now.utc - 6.months).iso8601} TO #{now.utc.iso8601}])"
+    )
   end
 
   it "#client_query" do

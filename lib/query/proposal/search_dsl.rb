@@ -59,18 +59,18 @@ module Query
 
       def munge_fielded_params(fielded)
         if fielded[:created_at].present? && fielded[:created_within].present?
-          munge_created_at_field(fielded)
+          convert_created_at_to_range(fielded)
         end
         # do not calculate more than once, or when created_at is null
         fielded.delete(:created_within)
       end
 
-      def munge_created_at_field(fielded)
+      def convert_created_at_to_range(fielded)
         high_end_range = Time.zone.parse(fielded[:created_at])
         within_parsed = fielded[:created_within].match(/^(\d+) (\w+)/)
         return unless high_end_range && within_parsed
         low_end_range = high_end_range.utc - within_parsed[1].to_i.send(within_parsed[2])
-        fielded[:created_at] = "[#{low_end_range} TO #{high_end_range.utc}]"
+        fielded[:created_at] = "[#{low_end_range.iso8601} TO #{high_end_range.utc.iso8601}]"
       end
 
       def build_dsl
@@ -94,26 +94,44 @@ module Query
         end
       end
 
-      # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
       def add_filter
-        searchdsl = self
-        @dsl.filter = Filter.new
-        @dsl.filter do
-          bool do
-            if searchdsl.client_data_type.present?
-              must do
-                term client_data_type: searchdsl.client_data_type
-              end
-            end
-            if searchdsl.apply_authz?
-              must do
-                term "subscribers.id" => searchdsl.current_user.id.to_s
-              end
+        bools = build_filters
+
+        if bools.any?
+          @dsl.filter = Filter.new
+          @dsl.filter.bool do
+            bools.each do |must_filter|
+              filter_block = must_filter.instance_variable_get(:@block)
+              must(&filter_block)
             end
           end
         end
       end
-      # rubocop:enable
+
+      def build_filters
+        bools = []
+        if client_data_type.present?
+          bools.push client_data_filter
+        end
+        if apply_authz?
+          bools.push authz_filter
+        end
+        bools
+      end
+
+      def client_data_filter
+        searchdsl = self
+        Filter.new do
+          term client_data_type: searchdsl.client_data_type
+        end
+      end
+
+      def authz_filter
+        searchdsl = self
+        Filter.new do
+          term "subscribers.id" => searchdsl.current_user.id.to_s
+        end
+      end
 
       def add_sort
         if params[:sort]

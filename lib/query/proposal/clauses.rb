@@ -73,7 +73,7 @@ module Query
       end
 
       def delegates
-        ApprovalDelegate.arel_table
+        UserDelegate.arel_table
       end
 
       def observations

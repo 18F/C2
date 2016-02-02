@@ -122,9 +122,5 @@ module Gsa18f
 
       users.first
     end
-
-    def self.expense_type_options
-      []
-    end
   end
 end

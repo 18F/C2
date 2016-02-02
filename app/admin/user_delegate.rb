@@ -1,4 +1,4 @@
-ActiveAdmin.register ApprovalDelegate do
+ActiveAdmin.register UserDelegate do
   actions :index, :new, :show, :create, :destroy
 
   permit_params :assigner_id, :assignee_id

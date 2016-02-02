@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :approval_delegate do
+  factory :user_delegate do
     assignee { create(:user) }
     assigner { create(:user) }
   end
