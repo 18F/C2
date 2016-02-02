@@ -1,0 +1,63 @@
+.inset
+  .row.m-search-ui
+    .input-group
+      %input.search-terms.form-control{type: 'text', name: 'text', value: @text}
+      .input-group-btn
+        .btn-group{role: "group"}
+          .dropdown.dropdown-lg
+            %button.btn.btn-default.dropdown-toggle{type: "button", "data-toggle" => "dropdown", "aria-expanded" => "false"}
+              %span.caret
+            .dropdown-menu.dropdown-menu-right{role: "menu"}
+              %form.adv-search.form-horizontal{role: "form", action: query_proposals_path, method: 'get'}
+                %fieldset
+                  .form-group
+                    %label{for: "#{current_user.client_model_slug}[status]"}
+                      Search in
+                    %select.form-control{name: "#{current_user.client_model_slug}[status]"}
+                      = proposal_status_options(@adv_search.value_for("status"))
+                  .form-group
+                    %label{for: "#{current_user.client_model_slug}[requester]"}
+                      Card Holder Name
+                    %input.form-control{ type: "text",
+                      name: "#{current_user.client_model_slug}[requester]",
+                      value: @adv_search.value_for("requester"),
+                    }
+                  .form-group
+                    %label{for: "#{current_user.client_model_slug}[client_data.vendor]"}
+                      Vendor Name
+                    %input.form-control{ type: "text",
+                      name: "#{current_user.client_model_slug}[client_data.vendor]",
+                      value: @adv_search.value_for("client_data.vendor"),
+                    }
+                  .form-group
+                    %label{for: "#{current_user.client_model_slug}[client_data.amount]"}
+                      Amount
+                    %input.form-control{ type: "text",
+                      name: "#{current_user.client_model_slug}[client_data.amount]",
+                      value: @adv_search.value_for("client_data.amount"),
+                    }
+
+                  - if current_user.client_model.expense_type_options.any?
+                    .form-group
+                      %label{for: "#{current_user.client_model_slug}[client_data.expense_type]"}
+                        Expense Type
+                      %select.form-control{name: "#{current_user.client_model_slug}[client_data.expense_type]"}
+                        = proposal_expense_type_options(current_user.client_model, @adv_search.value_for("client_data.expense_type"))
+
+                  .form-group.row
+                    .col-xs-5
+                      %label{for: "#{current_user.client_model_slug}[created_within]"}
+                        Date within
+                      %select.form-control{name: "#{current_user.client_model_slug}[created_within]"}
+                        = options_for_select([["1 year", "1 year"], ["6 months", "6 months"], ["1 month", "1 month"]], "1 year")
+                    .col-xs-5
+                      %label{for: "#{current_user.client_model_slug}[created_at]"}
+                        of
+                      %input.form-control{ type: "date",
+                        name: "#{current_user.client_model_slug}[created_at]", 
+                        value: @adv_search.value_for("created_at"),
+                      }
+                  %button#adv-search-button.btn.btn-primary{type: 'submit'}
+                    Search
+          %button#search-button.btn.btn-default.search{type: 'submit'}
+            Search

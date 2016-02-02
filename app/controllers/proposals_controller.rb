@@ -58,10 +58,10 @@ class ProposalsController < ApplicationController
   end
 
   def query
+    check_search_params
     query_listing = listing
     @proposals_data = query_listing.query
 
-    @text = params[:text]
     @start_date = query_listing.start_date
     @end_date = query_listing.end_date
   end
@@ -87,5 +87,20 @@ class ProposalsController < ApplicationController
 
   def listing
     Query::Proposal::Listing.new(current_user, params)
+  end
+
+  def check_search_params
+    @text = params[:text]
+    dsl = Query::Proposal::SearchDSL.new(
+      params: params,
+      current_user: current_user,
+      query: @text,
+      client_data_type: current_user.client_model.to_s
+    )
+    @adv_search = dsl.client_query
+    unless @text.present? || @adv_search.present? || (params[:start_date].present? && params[:end_date].present?)
+      flash[:alert] = "Please enter one or more search criteria"
+      redirect_to proposals_path
+    end
   end
 end

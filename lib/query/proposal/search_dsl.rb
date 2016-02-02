@@ -8,7 +8,7 @@ module Query
       attr_reader :params, :current_user, :query_str, :client_data_type
 
       def initialize(args)
-        @query_str = args[:query] or fail ":query required"
+        @query_str = args[:query]
         @client_data_type = args[:client_data_type] or fail ":client_data_type required"
         @current_user = args[:current_user]
         @params = args[:params]
@@ -28,19 +28,39 @@ module Query
       end
 
       def composite_query_string
-        if client_query && query_str
-          "(#{query_str}) AND (#{client_query.map { |k, v| "#{k}:(#{v})" }.join(' ')})"
-        elsif client_query
-          client_query.map { |k, v| "#{k}:(#{v})" }.join(" ")
-        elsif query_str
-          query_str
+        if client_query.present? && query_str.present?
+          "(#{query_str}) AND (#{client_query})"
+        elsif client_query.present?
+          client_query.to_s
+        elsif query_str.present?
+          query_str.to_s
+        else
+          ""
         end
+      end
+
+      def client_query
+        fielded = params[current_user.client_model_slug.to_sym]
+        munge_fielded_params(fielded) if fielded
+        FieldedSearch.new(fielded)
       end
 
       private
 
-      def client_query
-        params[client_data_type.underscore.tr("/", "_").to_sym]
+      def munge_fielded_params(fielded)
+        if fielded[:created_at].present? && fielded[:created_within].present?
+          convert_created_at_to_range(fielded)
+        end
+        # do not calculate more than once, or when created_at is null
+        fielded.delete(:created_within)
+      end
+
+      def convert_created_at_to_range(fielded)
+        high_end_range = Time.zone.parse(fielded[:created_at])
+        within_parsed = fielded[:created_within].match(/^(\d+) (\w+)/)
+        return unless high_end_range && within_parsed
+        low_end_range = high_end_range.utc - within_parsed[1].to_i.send(within_parsed[2])
+        fielded[:created_at] = "[#{low_end_range.iso8601} TO #{high_end_range.utc.iso8601}]"
       end
 
       def build_dsl
@@ -110,9 +130,13 @@ module Query
       def add_pagination
         if params[:from]
           @dsl.from = params[:from].to_i
+        else
+          @dsl.from = 0
         end
         if params[:size]
           @dsl.size = params[:size].to_i
+        else
+          @dsl.size = ::Proposal::MAX_SEARCH_RESULTS
         end
       end
     end

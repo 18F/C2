@@ -67,6 +67,7 @@ class Proposal < ActiveRecord::Base
   scope :cancelled, -> { where(status: 'cancelled') }
 
   # elasticsearch indexing setup
+  MAX_SEARCH_RESULTS = 20
   DEFAULT_INDEXED = {
     include: {
       client_data: {},
@@ -92,7 +93,7 @@ class Proposal < ActiveRecord::Base
   } do
     # with dynamic mapping==true, we only need to explicitly define overrides.
     # https://www.elastic.co/guide/en/elasticsearch/guide/current/dynamic-mapping.html
-    # e.g., "amount" is explicitly declared to be a string but not analyzed.
+    # e.g., "amount" is explicitly declared to be numeric and not analyzed.
     # otherwise the first "amount" value that convince ES that the field should
     # be defined as an Integer (100), whereas it really ought to be a Float (100.00).
     # same thing for public_id: the first value ES sees might be an integer,
@@ -103,7 +104,7 @@ class Proposal < ActiveRecord::Base
       indexes :client_data_type, type: "string", index: :not_analyzed
 
       indexes :client_data do
-        indexes :amount, type: "string", index: :not_analyzed
+        indexes :amount, type: "float"
       end
     end
   end

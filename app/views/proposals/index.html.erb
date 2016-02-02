@@ -1,7 +1,10 @@
 <% content_for :title, "My Requests" %>
-<div class="inset">
-  <%= render partial: 'search_ui' %>
 
+<% if display_search_ui? %>
+<%= render partial: 'shared/search_ui' %>
+<% end %>
+
+<div class="inset">
   <div id="proposals-pending-review" class="row pending-pr first">
     <% if @pending_review_data.rows.any? %>
       <div class="col-md-12">

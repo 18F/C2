@@ -110,7 +110,7 @@ module Query
       end
 
       def apply_text_filter(proposals_data)
-        if params[:text]
+        if params[:text] || params[user.client_model_slug.to_sym]
           proposals_data.alter_query do |proposal|
             Query::Proposal::Search.new(
               current_user: user,

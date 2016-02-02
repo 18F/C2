@@ -60,5 +60,9 @@ module ClientDataMixin
     def self.slug_matches?(user)
       user.client_slug == self.client_slug
     end
+
+    def self.expense_type_options
+      []
+    end
   end
 end

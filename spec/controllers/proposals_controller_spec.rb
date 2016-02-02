@@ -101,9 +101,10 @@ describe ProposalsController do
       login_as(user)
     end
 
-    it 'should only include proposals user is a part of' do
+    it "requires valid search params" do
       get :query
-      expect(assigns(:proposals_data).rows).to eq([proposal])
+      expect(response).to redirect_to(proposals_path)
+      expect(flash[:alert]).to_not be_nil
     end
 
     it 'should filter results by date range' do

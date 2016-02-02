@@ -10,7 +10,8 @@ describe Query::Proposal::Search do
   describe '#execute' do
     it "returns an empty list for no Proposals" do
       user = create(:user, client_slug: "test")
-      results = Query::Proposal::Search.new(current_user: user).execute('')
+      searcher = Query::Proposal::Search.new(current_user: user)
+      results = searcher.execute('')
       expect(results.to_a).to eq([])
     end
 

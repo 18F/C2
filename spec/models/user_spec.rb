@@ -172,6 +172,20 @@ describe User do
     end
   end
 
+  describe "#client_model" do
+    it "matches client_slug with client model name" do
+      user = create(:user, client_slug: "test")
+      expect(user.client_model).to eq Test::ClientRequest
+    end
+  end
+
+  describe "#client_model_slug" do
+    it "turns client_model into a slug" do
+      user = create(:user, client_slug: "test")
+      expect(user.client_model_slug).to eq "test_client_request"
+    end
+  end
+
   describe "#add_role" do
     it "adds role by name" do
       user = create(:user)

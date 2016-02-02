@@ -19,6 +19,9 @@ module Test
       project_title
     end
 
+    def self.expense_type_options
+      []
+    end
   end
 
   def self.setup_models
