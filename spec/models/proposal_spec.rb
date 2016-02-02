@@ -6,6 +6,11 @@ describe Proposal do
     it { should have_many(:individual_steps) }
     it { should have_many(:attachments).dependent(:destroy) }
     it { should have_many(:comments).dependent(:destroy) }
+    it { should have_many(:approval_steps) }
+    it { should have_many(:purchase_steps) }
+    it { should have_many(:purchasers) }
+    it { should have_many(:approvers) }
+    it { should have_many(:step_users) }
   end
 
   describe "Validations" do
@@ -79,23 +84,23 @@ describe Proposal do
     end
   end
 
-  describe '#currently_awaiting_approvers' do
+  describe '#currently_awaiting_step_users' do
     it "gives a consistently ordered list when in parallel" do
       proposal = create(:proposal, :with_parallel_approvers)
       approver1, approver2 = proposal.approvers
-      expect(proposal.currently_awaiting_approvers).to eq([approver1, approver2])
+      expect(proposal.currently_awaiting_step_users).to eq([approver1, approver2])
 
       proposal.individual_steps.first.update_attribute(:position, 5)
-      expect(proposal.currently_awaiting_approvers).to eq([approver2, approver1])
+      expect(proposal.currently_awaiting_step_users).to eq([approver2, approver1])
     end
 
     it "gives only the first approver when linear" do
       proposal = create(:proposal, :with_serial_approvers)
       approver1, approver2 = proposal.approvers
-      expect(proposal.currently_awaiting_approvers).to eq([approver1])
+      expect(proposal.currently_awaiting_step_users).to eq([approver1])
 
       proposal.individual_steps.first.approve!
-      expect(proposal.currently_awaiting_approvers).to eq([approver2])
+      expect(proposal.currently_awaiting_step_users).to eq([approver2])
     end
   end
 
@@ -116,14 +121,16 @@ describe Proposal do
   end
 
   describe '#subscribers' do
-    it "returns all approvers, observers, and the requester" do
+    it "returns all approvers, purchasers, observers, and the requester" do
       requester = create(:user)
-      proposal = create(:proposal, :with_parallel_approvers, :with_observers, requester: requester)
+      proposal = create(:proposal, :with_approval_and_purchase, :with_observers, requester: requester)
 
       expect(proposal.subscribers.map(&:id).sort).to eq([
         requester.id,
-        proposal.approvers.first.id, proposal.approvers.second.id,
-        proposal.observers.first.id, proposal.observers.second.id
+        proposal.approvers.first.id,
+        proposal.purchasers.first.id,
+        proposal.observers.first.id,
+        proposal.observers.second.id
       ].sort)
     end
 

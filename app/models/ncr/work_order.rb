@@ -109,7 +109,7 @@ module Ncr
 
     def current_approver
       if pending?
-        currently_awaiting_approvers.first
+        currently_awaiting_step_users.first
       elsif approving_official
         approving_official
       elsif emergency and approvers.empty?

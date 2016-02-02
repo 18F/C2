@@ -3,11 +3,11 @@
   Photon by HTML5 UP
   html5up.net | @n33co
   Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
-%html{lang: 'en'}
+%html{lang: "en"}
   %head
-    %title Communicart
+    %title C2
     = favicon_link_tag
-    %meta{'http-equiv' => "content-type", content: "text/html; charset=utf-8"}
+    %meta{"http-equiv" => "content-type", content: "text/html; charset=utf-8"}
     /[if lte IE 8]
       = javascript_include_tag "photon/ie/html5shiv.js"
     = stylesheet_link_tag "home"
@@ -23,31 +23,31 @@
       = stylesheet_link_tag "photon/ie/v8.css"
 
   %body
-    - unless ENV['DISABLE_SANDBOX_WARNING'] == 'true'
-      = render 'shared/sandbox_warning'
+    - unless ENV["DISABLE_SANDBOX_WARNING"] == "true"
+      = render "shared/sandbox_warning"
     / Header
     %section#header
       - flash_list.each do |key, value|
         %div{class: "alert alert-#{key} #{bootstrap_alert_class(key)}"}
           = sanitize value
       .photon-header-nav-container
-        = render 'layouts/header_nav'
+        = render "layouts/header_nav"
       .inner
         %span.icon.major
-          = image_tag "img-logo-communicart-portal.png", alt: "Communicart Logo"
+          = image_tag "img-logo-c2-portal.png", alt: "C2 Logo"
       .inner
         %h1 Approvals Without the Hassle
-        %p Communicart automates the approval process, eliminating spreadsheets and decluttering your inbox
+        %p C2 automates the approval process, eliminating spreadsheets and decluttering your inbox
 
     / One
     %section#one.main.style1
       .container
         %div{class: "row 150%"}
           %div{class: "6u 12u$(medium)"}
-            %p Communicart makes government acquisition more efficient by allowing P-Card holders to purchase as quickly and accurately as possible. The results? More time for your staff, better policy adherence, and the knowledge you need to spend more effectively.
+            %p C2 makes government acquisition more efficient by allowing P-Card holders to purchase as quickly and accurately as possible. The results? More time for your staff, better policy adherence, and the knowledge you need to spend more effectively.
           %div{class: "6u 12u$(medium) important(medium)"}
             %span.image.fit
-              = image_tag "screenshots/Communicart_Screenshot_Combination.png", alt: "Screenshot on Laptop and Mobile Device"
+              = image_tag "screenshots/c2_screenshot_combination.png", alt: "Screenshot on Laptop and Mobile Device"
 
     / Three
     %section#three.main.style2.special
@@ -55,19 +55,19 @@
         %div{class: "row 150%"}
           %div{class: "4u 12u$(medium)"}
             %span.image.fit
-              = image_tag 'screenshots/reporting.png', alt: 'Screenshot: Reporting Dashboard'
+              = image_tag "screenshots/reporting.png", alt: "Screenshot: Reporting Dashboard"
             %p
               %strong Spending Insights
               &nbsp; make the most of your budget
           %div{class: "4u 12u$(medium)"}
             %span.image.fit
-              = image_tag 'screenshots/intake.png', alt: 'Screenshot: Intake Screen'
+              = image_tag "screenshots/intake.png", alt: "Screenshot: Intake Screen"
             %p
               %strong Custom Intake
               &nbsp; capture the data you care about
           %div{class: "4u 12u$(medium)"}
             %span.image.fit
-              = image_tag 'screenshots/Communicart_Screenshot_Approvals.png', alt: "Screenshot: Approval Listing"
+              = image_tag "screenshots/c2_screenshot_approvals.png", alt: "Screenshot: Approval Listing"
             %p
               %strong Centralized Approval Flow
               &nbsp; securely manages all your records

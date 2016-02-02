@@ -1,11 +1,11 @@
-BULLET_ENABLED = ENV['BULLET_ENABLED'] == 'true'
+BULLET_ENABLED = ENV["BULLET_ENABLED"] == "true"
 
 if BULLET_ENABLED
-  require 'bullet'
+  require "bullet"
 
   # https://github.com/flyerhzm/bullet#configuration
   Bullet.enable = true
   Bullet.console = true
   Bullet.rails_logger = true
-  Bullet.stacktrace_includes = [ 'omniauth-myusa' ]
+  Bullet.stacktrace_includes = [ "omniauth-myusa" ]
 end

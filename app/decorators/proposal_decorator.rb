@@ -49,7 +49,7 @@ class ProposalDecorator < Draper::Decorator
   end
 
   def step_text_for_user(key, user)
-    step = existing_approval_for(user)
+    step = existing_step_for(user)
     klass = step.class.name.demodulize.downcase.to_sym
     scope = [:decorators, :steps, klass]
     I18n.t(key, scope: scope)

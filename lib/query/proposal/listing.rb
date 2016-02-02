@@ -49,18 +49,18 @@ module Query
 
       def pending_filter
         proc do |proposals|
-          proposals.select { |proposal| !proposal.awaiting_approver?(user) }
+          proposals.select { |proposal| !proposal.awaiting_step_user?(user) }
         end
       end
 
       def pending_review_filter
         proc do |proposals|
-          proposals.select { |proposal| proposal.awaiting_approver?(user) }
+          proposals.select { |proposal| proposal.awaiting_step_user?(user) }
         end
       end
 
       def proposals_container(name, extra_config = {})
-        config = TabularData::Container.config_for_client("proposals", user.client_slug)
+        config = TabularData::ContainerConfig.new("proposals", user.client_slug).settings
         config = config.merge(extra_config)
         container = TabularData::Container.new(name, config)
 
@@ -112,7 +112,11 @@ module Query
       def apply_text_filter(proposals_data)
         if params[:text]
           proposals_data.alter_query do |proposal|
-            Query::Proposal::Search.new(proposal).execute(params[:text])
+            Query::Proposal::Search.new(
+              current_user: user,
+              relation: proposal,
+              params: params
+            ).execute(params[:text])
           end
         end
       end

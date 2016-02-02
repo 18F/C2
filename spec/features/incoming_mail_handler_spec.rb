@@ -48,7 +48,7 @@ describe "Handles incoming email" do
     mandrill_event[0]['msg']['headers']['Sender'] = my_approval.user.email_address
     handler = IncomingMail::Handler.new
     expect(my_approval.proposal.existing_observation_for(my_approval.user)).not_to be_present
-    expect(my_approval.proposal.existing_approval_for(my_approval.user)).to be_present
+    expect(my_approval.proposal.existing_step_for(my_approval.user)).to be_present
     resp = handler.handle(mandrill_event)
     expect(resp.action).to eq(IncomingMail::Response::COMMENT)
   end
@@ -60,12 +60,12 @@ describe "Handles incoming email" do
     mandrill_event[0]['msg']['from_email'] = my_approval.user.email_address
     handler = IncomingMail::Handler.new
     expect(my_approval.proposal.existing_observation_for(my_approval.user)).not_to be_present
-    expect(my_approval.proposal.existing_approval_for(my_approval.user)).to be_present
+    expect(my_approval.proposal.existing_step_for(my_approval.user)).to be_present
     resp = handler.handle(mandrill_event)
     expect(resp.action).to eq(IncomingMail::Response::COMMENT)
 
     expect(my_approval.proposal.existing_observation_for(my_approval.user)).to be_present
-    expect(my_approval.proposal.existing_approval_for(my_approval.user)).to be_present
+    expect(my_approval.proposal.existing_step_for(my_approval.user)).to be_present
     expect(deliveries.length).to eq(1) # 1 each to requester and approver
   end
 
@@ -78,7 +78,7 @@ describe "Handles incoming email" do
     handler = IncomingMail::Handler.new
 
     expect(my_approval.proposal.existing_observation_for(user)).not_to be_present
-    expect(my_approval.proposal.existing_approval_for(user)).not_to be_present
+    expect(my_approval.proposal.existing_step_for(user)).not_to be_present
 
     resp = handler.handle(mandrill_event)
 

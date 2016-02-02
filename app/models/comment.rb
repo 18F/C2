@@ -1,7 +1,7 @@
 class Comment < ActiveRecord::Base
   has_paper_trail class_name: 'C2Version'
 
-  belongs_to :proposal
+  belongs_to :proposal, touch: true
   belongs_to :user
   delegate :full_name, :email_address, :to => :user, :prefix => true
 
@@ -44,7 +44,7 @@ class Comment < ActiveRecord::Base
   # This is basically Proposal.users _minus_ future approvers
   def listeners
     users_to_notify = Set.new
-    users_to_notify += proposal.currently_awaiting_approvers
+    users_to_notify += proposal.currently_awaiting_step_users
     users_to_notify += proposal.individual_steps.approved.map(&:user)
     users_to_notify += proposal.observers
     users_to_notify << proposal.requester

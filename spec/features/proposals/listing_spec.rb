@@ -11,6 +11,11 @@ describe "Listing Page" do
     gsa18f.proposal.update_attribute(:requester, user)
     gsa18f
   }
+  let!(:test){
+    test_client_request = create(:test_client_request)
+    test_client_request.proposal.update_attribute(:requester, user)
+    test_client_request
+  }
   before do
     login_as(user)
   end
@@ -62,7 +67,8 @@ describe "Listing Page" do
       it "should show requester" do
         visit "/proposals"
         expect(page).to have_content("Requester")
-        expect(page).to have_content("#{client_model.proposal.name} #{client_model.requester.email_address}")
+        expect(page).to have_content client_model.requester.email_address
+        expect(page).to have_content client_model.proposal.name
       end
     end
   end

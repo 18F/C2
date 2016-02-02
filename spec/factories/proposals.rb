@@ -72,6 +72,11 @@ FactoryGirl.define do
         proposal.add_initial_steps([Steps::Approval.new(user: user)])
         user.add_delegate(evaluator.delegate)
       end
+
+      if evaluator.client_slug
+        proposal.requester.client_slug = evaluator.client_slug
+        proposal.requester.save!
+      end
     end
   end
 end

@@ -10,8 +10,11 @@ describe "searching" do
     proposals = 2.times.map do |i|
       wo = create(:ncr_work_order, project_title: "Work Order #{i}")
       wo.proposal.update(requester: user)
+      wo.proposal.reindex
       wo.proposal
     end
+    Proposal.__elasticsearch__.refresh_index!
+
     visit '/proposals'
     fill_in 'text', with: proposals.first.name
     click_button 'Search'

@@ -43,18 +43,46 @@ describe Ncr::Reporter do
   end
 
   describe '.as_csv' do
-    it "shows status-aware approver for approved work orders" do
+    it "shows final approver for completed work orders" do
       work_order = create(:ncr_work_order, :with_approvers)
+      work_order.setup_approvals_and_observers
       proposal = work_order.proposal
       while proposal.currently_awaiting_steps.any?
         proposal.currently_awaiting_steps.first.approve!
       end
       proposal.approve!
       proposal.reload
-      expect(proposal.approved?).to be_truthy
+      expect(proposal).to be_approved
       expect(work_order.final_approver).to eq(work_order.approvers.last)
       csv = Ncr::Reporter.as_csv([proposal])
-      expect(csv).to include(",#{work_order.decorate.final_approver_email_address}")
+      expect(csv).to include(",#{work_order.decorate.current_approver_email_address}")
+    end
+
+    it "shows current approver for pending work orders" do
+      work_order = create(:ncr_work_order, :with_approvers)
+      work_order.setup_approvals_and_observers
+      proposal = work_order.proposal
+
+      individual_approval_step = proposal.currently_awaiting_steps.first
+      expect(work_order.current_approver).to eq(individual_approval_step.user)
+      csv = Ncr::Reporter.as_csv([proposal])
+      expect(csv).to include(",#{individual_approval_step.user.email_address}")
+
+      individual_approval_step.approve!
+      official_approval_step = proposal.currently_awaiting_steps.first
+      proposal.reload
+      work_order.reload
+      expect(work_order.current_approver).to eq(official_approval_step.user)
+      csv = Ncr::Reporter.as_csv([proposal])
+      expect(csv).to include(",#{official_approval_step.user.email_address}")
+
+      official_approval_step.approve!
+      budget_approval_step = proposal.currently_awaiting_steps.first
+      proposal.reload
+      work_order.reload
+      expect(work_order.current_approver).to eq(budget_approval_step.user)
+      csv = Ncr::Reporter.as_csv([proposal])
+      expect(csv).to include(",#{budget_approval_step.user.email_address}")
     end
   end
 

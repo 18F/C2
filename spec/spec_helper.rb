@@ -1,10 +1,9 @@
 require 'codeclimate-test-reporter'
+SimpleCov.formatters = [
+  SimpleCov::Formatter::HTMLFormatter,
+  CodeClimate::TestReporter::Formatter
+]
 SimpleCov.start 'rails' do
-  formatter SimpleCov::Formatter::MultiFormatter[
-    SimpleCov::Formatter::HTMLFormatter,
-    CodeClimate::TestReporter::Formatter
-  ]
-
   if ENV['CIRCLE_ARTIFACTS']
     dir = File.join(ENV['CIRCLE_ARTIFACTS'], 'coverage')
     coverage_dir(dir)
