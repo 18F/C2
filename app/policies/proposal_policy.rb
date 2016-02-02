@@ -95,7 +95,7 @@ class ProposalPolicy
   end
 
   def pending_delegate?
-    ApprovalDelegate.where(assigner_id: @proposal.currently_awaiting_step_users, assignee: @user).exists?
+    UserDelegate.where(assigner_id: @proposal.currently_awaiting_step_users, assignee: @user).exists?
   end
 
   def pending_step!

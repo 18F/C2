@@ -9,17 +9,17 @@ describe "admin" do
     expect(page).to_not have_content("Delete")
   end
 
-  it "does not allow editing of approval delegates" do
+  it "does not allow editing of user delegates" do
     user = create(:user)
     user.add_role("admin")
     other_user = create(:user)
-    approval_delegate = create(:approval_delegate, assigner: user, assignee: other_user)
+    user_delegate = create(:user_delegate, assigner: user, assignee: other_user)
 
     login_as(user)
     visit edit_admin_user_path(user)
-    visit admin_approval_delegate_path(approval_delegate)
+    visit admin_user_delegate_path(user_delegate)
 
-    expect(page).not_to have_content("Edit Approval Delegate")
+    expect(page).not_to have_content("Edit User Delegate")
   end
 
   it "does not allow delete of proposals" do

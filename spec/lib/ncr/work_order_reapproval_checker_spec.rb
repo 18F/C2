@@ -69,7 +69,7 @@ describe Ncr::WorkOrderReapprovalChecker do
       work_order.setup_approvals_and_observers
       budget_approver = work_order.steps.last.user
       delegate_user = create(:user)
-      create(:approval_delegate, assigner: budget_approver, assignee: delegate_user)
+      create(:user_delegate, assigner: budget_approver, assignee: delegate_user)
       fully_approve(work_order.proposal, delegate_user)
       work_order.reload
 
