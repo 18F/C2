@@ -24,10 +24,10 @@ class ProposalUpdateRecorder
   end
 
   def update_comment_format(key)
-    if key !~ /id/
-      "#{bullet}*#{property_name(key)}* was changed " + former_value(key) + "to #{new_value(key)}"
-    else
+    if key =~ /id/
       "#{bullet}*#{association_name(key)}* was changed " + former_association_value(key) + "to #{new_association_value(key)}"
+    else
+      "#{bullet}*#{property_name(key)}* was changed " + from(key) + "to #{new_value(key)}"
     end
   end
 
@@ -51,10 +51,10 @@ class ProposalUpdateRecorder
 
   def former_association_value(key)
     if key == "ncr_organization_id"
-      org_id = client_data.send(key + "_was")
+      former_id = former_value(key)
 
-      if org_id && org = Ncr::Organization.find(org_id)
-        "from #{org.code_and_name} "
+      if former_id.present? && Ncr::Organization.find(former_id)
+        "from #{Ncr::Organization.find(former_id).code_and_name} "
       else
         ""
       end
@@ -64,6 +64,7 @@ class ProposalUpdateRecorder
   def new_association_value(key)
     if key == "ncr_organization_id"
       organization = client_data.ncr_organization
+
       if organization.nil?
         "*empty*"
       else
@@ -72,8 +73,8 @@ class ProposalUpdateRecorder
     end
   end
 
-  def former_value(key)
-    value = property_to_s(client_data.send(key + "_was"))
+  def from(key)
+    value = former_value(key)
 
     if value.present?
       "from #{value} "
@@ -106,5 +107,9 @@ class ProposalUpdateRecorder
 
   def proposal
     client_data.proposal
+  end
+
+  def former_value(key)
+    property_to_s(client_data.send(key + "_was"))
   end
 end

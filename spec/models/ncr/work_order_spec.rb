@@ -241,7 +241,7 @@ describe Ncr::WorkOrder do
     end
   end
 
-  escribe "#final_approver" do
+  describe "#final_approver" do
     it "returns the final approver" do
       wo = create(:ncr_work_order, :with_approvers)
       expect(wo.final_approver).to eq(wo.approvers.last)
