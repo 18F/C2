@@ -50,7 +50,7 @@
                       %label{for: "#{current_user.client_model_slug}[created_within]"}
                         Date within
                       %select.form-control{name: "#{current_user.client_model_slug}[created_within]"}
-                        = options_for_select([["1 year", "1 year"], ["6 months", "6 months"], ["1 month"], ["1 month"]], "1 year")
+                        = options_for_select([["1 year", "1 year"], ["6 months", "6 months"], ["1 month", "1 month"]], "1 year")
                     .col-xs-5
                       %label{for: "#{current_user.client_model_slug}[created_at]"}
                         of
