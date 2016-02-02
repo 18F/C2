@@ -183,6 +183,16 @@ describe Mailer do
         expect(mail.body.encoded).to include('Your request has been fully approved. See details below.')
       end
 
+      it 'displays purchase-step-specific language when final step is approved' do
+        proposal = create(:proposal, :with_approval_and_purchase, client_slug: "test")
+        proposal.individual_steps.first.approve!
+        final_step = proposal.individual_steps.last
+        final_step.proposal   # create a dirty cache
+        final_step.approve!
+        mail = Mailer.approval_reply_received_email(final_step)
+        expect(mail.body.encoded).to include('Your request has been purchased. See details below.')
+      end
+
       it 'does not display when requests are still pending' do
         mail = Mailer.approval_reply_received_email(approval)
         expect(mail.body.encoded).to_not include('Your request has been fully approved. See details below.')
