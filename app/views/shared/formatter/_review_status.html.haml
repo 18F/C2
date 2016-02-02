@@ -1,10 +1,8 @@
 - users = object.currently_awaiting_step_users
 
 - if object.pending? && users.include?(current_user)
-  %p
-    %strong Please review
+  %strong #{object.decorate.step_text_for_user("status.please_act", current_user)}
 - elsif object.pending?
-  %p
-    %em Waiting for review from: #{users.map(&:full_name).join(', ')}
+  %em  #{object.decorate.waiting_text_for_status_in_table + " " + users.map(&:full_name).join(', ')}
 - else
   = object.status.titlecase
