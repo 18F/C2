@@ -17,10 +17,10 @@ class User < ActiveRecord::Base
   has_many :roles, through: :user_roles
   has_many :proposals, foreign_key: "requester_id", dependent: :destroy
 
-  has_many :outgoing_delegations, class_name: 'ApprovalDelegate', foreign_key: 'assigner_id'
+  has_many :outgoing_delegations, class_name: 'UserDelegate', foreign_key: 'assigner_id'
   has_many :outgoing_delegates, through: :outgoing_delegations, source: :assignee
 
-  has_many :incoming_delegations, class_name: 'ApprovalDelegate', foreign_key: 'assignee_id'
+  has_many :incoming_delegations, class_name: 'UserDelegate', foreign_key: 'assignee_id'
   has_many :incoming_delegates, through: :incoming_delegations, source: :assigner
 
   has_many :completed_steps, class_name: "Step", foreign_key: "completer"

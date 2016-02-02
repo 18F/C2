@@ -1,4 +1,4 @@
-class ApprovalDelegate < ActiveRecord::Base
+class UserDelegate < ActiveRecord::Base
   has_paper_trail class_name: "C2Version"
 
   belongs_to :assignee, class_name: "User", foreign_key: "assignee_id"

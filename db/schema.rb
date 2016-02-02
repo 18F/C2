@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151215230732) do
+ActiveRecord::Schema.define(version: 20160202210256) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,13 +41,6 @@ ActiveRecord::Schema.define(version: 20151215230732) do
   end
 
   add_index "api_tokens", ["access_token"], name: "index_api_tokens_on_access_token", unique: true, using: :btree
-
-  create_table "approval_delegates", force: :cascade do |t|
-    t.integer  "assigner_id"
-    t.integer  "assignee_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "attachments", force: :cascade do |t|
     t.string   "file_file_name",    limit: 255
@@ -147,7 +140,7 @@ ActiveRecord::Schema.define(version: 20151215230732) do
     t.integer  "client_data_id"
     t.string   "client_data_type", limit: 255
     t.integer  "requester_id"
-    t.string   "public_id",        limit: 255
+    t.string   "public_id"
   end
 
   add_index "proposals", ["client_data_id", "client_data_type"], name: "index_proposals_on_client_data_id_and_client_data_type", using: :btree
@@ -197,6 +190,13 @@ ActiveRecord::Schema.define(version: 20151215230732) do
 
   add_index "tags", ["name"], name: "index_tags_on_name", unique: true, using: :btree
 
+  create_table "user_delegates", force: :cascade do |t|
+    t.integer  "assigner_id"
+    t.integer  "assignee_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "user_roles", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "role_id", null: false
@@ -225,8 +225,6 @@ ActiveRecord::Schema.define(version: 20151215230732) do
 
   add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
 
-  add_foreign_key "approval_delegates", "users", column: "assignee_id", name: "assignee_id_fkey"
-  add_foreign_key "approval_delegates", "users", column: "assigner_id", name: "assigner_id_fkey"
   add_foreign_key "attachments", "proposals", name: "proposal_id_fkey"
   add_foreign_key "attachments", "users", name: "user_id_fkey"
   add_foreign_key "comments", "proposals", name: "proposal_id_fkey"
@@ -239,6 +237,8 @@ ActiveRecord::Schema.define(version: 20151215230732) do
   add_foreign_key "steps", "steps", column: "parent_id", name: "parent_id_fkey", on_delete: :cascade
   add_foreign_key "steps", "users", column: "completer_id", name: "completer_id_fkey"
   add_foreign_key "steps", "users", name: "user_id_fkey"
+  add_foreign_key "user_delegates", "users", column: "assignee_id", name: "assignee_id_fkey"
+  add_foreign_key "user_delegates", "users", column: "assigner_id", name: "assigner_id_fkey"
   add_foreign_key "user_roles", "roles", name: "role_id_fkey"
   add_foreign_key "user_roles", "users", name: "user_id_fkey"
 end

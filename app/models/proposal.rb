@@ -41,9 +41,9 @@ class Proposal < ActiveRecord::Base
   has_many :completers, through: :individual_steps, source: :completer
   has_many :api_tokens, through: :individual_steps
   has_many :attachments, dependent: :destroy
-  has_many :approval_delegates, through: :step_users, source: :outgoing_delegations
+  has_many :user_delegates, through: :step_users, source: :outgoing_delegations
   has_many :comments, dependent: :destroy
-  has_many :delegates, through: :approval_delegates, source: :assignee
+  has_many :delegates, through: :user_delegates, source: :assignee
 
   has_many :observations, -> { where("proposal_roles.role_id in (select roles.id from roles where roles.name='observer')") }
   has_many :observers, through: :observations, source: :user
@@ -131,14 +131,14 @@ class Proposal < ActiveRecord::Base
   end
 
   def delegate?(user)
-    approval_delegates.exists?(assignee_id: user.id)
+    user_delegates.exists?(assignee_id: user.id)
   end
 
   def existing_step_for(user)
     where_clause = <<-SQL
       user_id = :user_id
-      OR user_id IN (SELECT assigner_id FROM approval_delegates WHERE assignee_id = :user_id)
-      OR user_id IN (SELECT assignee_id FROM approval_delegates WHERE assigner_id = :user_id)
+      OR user_id IN (SELECT assigner_id FROM user_delegates WHERE assignee_id = :user_id)
+      OR user_id IN (SELECT assignee_id FROM user_delegates WHERE assigner_id = :user_id)
     SQL
 
     steps.where(where_clause, user_id: user.id).first

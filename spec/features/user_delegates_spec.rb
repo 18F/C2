@@ -1,4 +1,4 @@
-describe "Approval Delegates" do
+describe "User Delegates" do
   it "allows delegate to approve a proposal" do
     proposal = create(:proposal, :with_approver)
     delegate = create(:user)
