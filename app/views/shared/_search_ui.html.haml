@@ -37,11 +37,14 @@
                       name: "#{current_user.client_model_slug}[client_data.amount]",
                       value: @adv_search.value_for("client_data.amount"),
                     }
-                  .form-group
-                    %label{for: "#{current_user.client_model_slug}[client_data.expense_type]"}
-                      Expense Type
-                    %select.form-control{name: "#{current_user.client_model_slug}[client_data.expense_type]"}
-                      = proposal_expense_type_options(current_user.client_model, @adv_search.value_for("client_data.expense_type"))
+
+                  - if current_user.client_model.expense_type_options.any?
+                    .form-group
+                      %label{for: "#{current_user.client_model_slug}[client_data.expense_type]"}
+                        Expense Type
+                      %select.form-control{name: "#{current_user.client_model_slug}[client_data.expense_type]"}
+                        = proposal_expense_type_options(current_user.client_model, @adv_search.value_for("client_data.expense_type"))
+
                   .form-group.row
                     .col-xs-5
                       %label{for: "#{current_user.client_model_slug}[created_within]"}
