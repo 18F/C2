@@ -28,7 +28,6 @@ module EsSpecHelper
   def create_es_index(klass)
     errors = []
     completed = 0
-    #puts "Creating Index for class #{klass}"
     klass.__elasticsearch__.create_index! force: true, index: klass.index_name
     klass.__elasticsearch__.refresh_index!
     klass.__elasticsearch__.import(return: "errors", batch_size: 200) do |resp|
@@ -38,15 +37,16 @@ module EsSpecHelper
       #puts "Finished #{completed} items"
       STDERR.flush
       STDOUT.flush
-      if ENV["ES_DEBUG"].to_i > 0 && errors.size > 0
-        STDOUT.puts "ERRORS in #{$$}:"
-        STDOUT.puts errors.pretty_inspect
+      if ENV["ES_DEBUG"].to_i > 0
+        if errors.size > 0
+          STDOUT.puts "ERRORS in #{$$}:"
+          STDOUT.puts errors.pretty_inspect
+        end
+        puts "Refreshing index for class #{klass}"
       end
+      klass.__elasticsearch__.refresh_index!
     end
-    puts "Refreshing index for class #{klass}"
-    klass.__elasticsearch__.refresh_index!
   end
-
 end
 
 RSpec.configure do |config|
