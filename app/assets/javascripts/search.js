@@ -3,19 +3,19 @@ $(document).ready(function() {
   /* *** setup Adv Search UI *** */
   $(".m-search-ui button.search").click(function() {
     var btn = $(this);
-    var form = $('form.adv-search');
-    form.submit();
+    var searchForm = $('form.adv-search');
+    searchForm.submit();
     // IMPORTANT disable *AFTER* submit
-    form.find('fieldset').prop("disabled", true);
+    searchForm.find('fieldset').prop("disabled", true);
     btn.prop("disabled", true);
   });
   $('form.adv-search').on("submit", function(e) {
-    var form = $(this);
+    var searchForm = $(this);
     var termsInput = $('.search-terms');
     if (termsInput.val().length) {
       var textInput = $('<input type="hidden" name="text">');
       textInput.val(termsInput.val());
-      form.append(textInput);
+      searchForm.append(textInput);
     }
     termsInput.prop("disabled", true);
     return true;
@@ -44,10 +44,10 @@ $(document).ready(function() {
   });
   $("#save-search-button").click(function() {
     var btn = $(this);
-    var form = $("#save-search form");
+    var savedSearchForm = $("#save-search form");
 
     // clear any errors and start fresh
-    form.find('.form-alert').remove();
+    savedSearchForm.find('.form-alert').remove();
 
     // must have real submit button to trigger HTML5 form validation,
     // but our visible button is outside the <form>.
@@ -55,24 +55,24 @@ $(document).ready(function() {
     // See http://stackoverflow.com/questions/16707743/html5-required-validation-not-working
     $("#save-search-submit").click();
 
-    if (typeof form[0].checkValidity == "function" && !form[0].checkValidity()) {
+    if (typeof savedSearchForm[0].checkValidity == "function" && !savedSearchForm[0].checkValidity()) {
       return;
     }
 
-    var savedSearchName = form.find("[name='saved-search-name']");
+    var savedSearchName = savedSearchForm.find("[name='saved-search-name']");
     if (!savedSearchName.val()) {
       return;
     }
 
     // validation ok -- fire the XHR
-    form.find('input').prop("disabled", true);
+    savedSearchForm.find('input').prop("disabled", true);
     btn.prop("disabled", true);
     $.post("/reports.json", {
       query: JSON.stringify(C2searchQuery),
       name: savedSearchName.val()
     })
     .fail(function(payload) {
-      form.append($('<div class="form-alert alert alert-danger">Something went wrong! Please try again or <a href="/feedback">contact your administrator</a>.</div>'));
+      savedSearchForm.append($('<div class="form-alert alert alert-danger">Something went wrong! Please try again or <a href="/feedback">contact your administrator</a>.</div>'));
     })
     .done(function(payload) {
       var successAlert = $('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">x</button>Saved as report <strong>'+savedSearchName.val()+'</strong>!</div>');
@@ -81,7 +81,7 @@ $(document).ready(function() {
       $(".alert-success").fadeTo(2000, 500).slideUp(500, function() { $(".alert-success").alert('close'); });
     })
     .always(function(payload) {
-      form.find('input').prop("disabled", false);
+      savedSearchForm.find('input').prop("disabled", false);
       btn.prop("disabled", false);
     });
 
