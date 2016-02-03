@@ -58,21 +58,8 @@ module Ncr
       ]
     end
 
-    def self.relevant_fields(expense_type)
-      fields = default_fields
-
-      if expense_type == "BA61"
-        fields << :emergency
-      elsif expense_type == "BA80"
-        fields += [:rwa_number, :code]
-      end
-
-      fields
-    end
-
-    def self.default_fields
-      fields = column_names.map(&:to_sym) + [:approving_official_email]
-      fields - [:emergency, :rwa_number, :code, :created_at, :updated_at, :id]
+    def fields_for_display
+      Ncr::WorkOrderFields.new(self).display
     end
 
     def approver_email_frozen?
@@ -137,13 +124,6 @@ module Ncr
 
     def editable?
       true
-    end
-
-    # Methods for Client Data interface
-    def fields_for_display
-      attributes = self.class.relevant_fields(expense_type)
-      attributes = attributes - [:ncr_organization_id] + [:organization_code_and_name]
-      attributes.map { |attribute| [WorkOrder.human_attribute_name(attribute), send(attribute)] }
     end
 
     def ba80?

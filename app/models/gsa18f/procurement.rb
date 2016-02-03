@@ -48,25 +48,8 @@ module Gsa18f
     validates :purchase_type, presence: true
     validates :recurring_interval, presence: true, if: :recurring
 
-    def self.relevant_fields(recurring)
-      fields = default_fields
-
-      if recurring
-        fields += [:recurring_interval, :recurring_length]
-      end
-
-      fields
-    end
-
-    def self.default_fields
-      fields = column_names.map(&:to_sym)
-      fields - [:recurring_interval, :recurring_length, :created_at, :updated_at, :id]
-    end
-
     def fields_for_display
-      attributes = self.class.relevant_fields(recurring)
-      attributes_for_view = attributes.map { |key| [Procurement.human_attribute_name(key), send(key)] }
-      attributes_for_view.push(["Total Price", total_price])
+      Gsa18f::ProcurementFields.new(self).display
     end
 
     def add_steps
