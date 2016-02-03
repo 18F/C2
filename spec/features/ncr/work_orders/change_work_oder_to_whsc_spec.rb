@@ -16,7 +16,7 @@ feature "Requester switches work order to WHSC", :js do
       deliveries.clear
 
       visit edit_ncr_work_order_path(work_order)
-      fill_in_selectized("ncr_work_order_org_code", whsc_org.code_and_name)
+      fill_in_selectized("ncr_work_order_ncr_organization", whsc_org.code_and_name)
       click_on "Update"
 
       expect(deliveries.length).to be 3
@@ -44,7 +44,7 @@ feature "Requester switches work order to WHSC", :js do
       login_as(work_order.requester)
       visit edit_ncr_work_order_path(work_order)
       choose "BA61"
-      fill_in_selectized("ncr_work_order_org_code", whsc_org.code_and_name)
+      fill_in_selectized("ncr_work_order_ncr_organization", whsc_org.code_and_name)
       click_on "Update"
 
       ncr_proposal.reload

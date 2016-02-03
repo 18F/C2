@@ -12,7 +12,7 @@ describe ProposalConversationThreading do
       subject = object.subject(proposal)
 
       expect(subject).to eq(
-        "Request #{proposal.public_id}, #{work_order.org_code}, #{work_order.building_id} from #{proposal.requester.email_address}"
+        "Request #{proposal.public_id}, #{work_order.organization_code_and_name}, #{work_order.building_id} from #{proposal.requester.email_address}"
       )
     end
 

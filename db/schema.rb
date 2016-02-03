@@ -107,23 +107,25 @@ ActiveRecord::Schema.define(version: 20160202210256) do
 
   create_table "ncr_work_orders", force: :cascade do |t|
     t.decimal  "amount"
-    t.string   "expense_type",    limit: 255
-    t.string   "vendor",          limit: 255
-    t.boolean  "not_to_exceed",               default: false, null: false
-    t.string   "building_number", limit: 255
-    t.boolean  "emergency",                   default: false, null: false
-    t.string   "rwa_number",      limit: 255
-    t.string   "org_code",        limit: 255
-    t.string   "code",            limit: 255
-    t.string   "project_title",   limit: 255
+    t.string   "expense_type",        limit: 255
+    t.string   "vendor",              limit: 255
+    t.boolean  "not_to_exceed",                   default: false, null: false
+    t.string   "building_number",     limit: 255
+    t.boolean  "emergency",                       default: false, null: false
+    t.string   "rwa_number",          limit: 255
+    t.string   "code",                limit: 255
+    t.string   "project_title",       limit: 255
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "direct_pay",                  default: false, null: false
-    t.string   "cl_number",       limit: 255
-    t.string   "function_code",   limit: 255
-    t.string   "soc_code",        limit: 255
+    t.boolean  "direct_pay",                      default: false, null: false
+    t.string   "cl_number",           limit: 255
+    t.string   "function_code",       limit: 255
+    t.string   "soc_code",            limit: 255
+    t.integer  "ncr_organization_id"
   end
+
+  add_index "ncr_work_orders", ["ncr_organization_id"], name: "index_ncr_work_orders_on_ncr_organization_id", using: :btree
 
   create_table "proposal_roles", force: :cascade do |t|
     t.integer "role_id",     null: false

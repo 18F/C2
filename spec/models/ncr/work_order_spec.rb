@@ -3,6 +3,10 @@ describe Ncr::WorkOrder do
 
   it_behaves_like "client data"
 
+  describe "Associations" do
+    it { should belong_to(:ncr_organization) }
+  end
+
   describe "#editable?" do
     it "is true" do
       work_order = build(:ncr_work_order)
@@ -13,20 +17,20 @@ describe Ncr::WorkOrder do
   describe "#for_whsc_organization?" do
     it "is true if the org code is for a whsc organization" do
       organization = create(:whsc_organization)
-      work_order = build(:ncr_work_order, org_code: organization.code_and_name)
+      work_order = build(:ncr_work_order, ncr_organization: organization)
 
       expect(work_order).to be_for_whsc_organization
     end
 
     it "is false if org code is nil" do
-      work_order = build(:ncr_work_order, org_code: nil)
+      work_order = build(:ncr_work_order, ncr_organization: nil)
 
       expect(work_order).not_to be_for_whsc_organization
     end
 
     it "is false if org code is for a non-whsc org" do
       organization = build(:ncr_organization)
-      work_order = build(:ncr_work_order, org_code: organization.code_and_name)
+      work_order = build(:ncr_work_order, ncr_organization: organization)
 
       expect(work_order).not_to be_for_whsc_organization
     end
@@ -35,66 +39,22 @@ describe Ncr::WorkOrder do
   describe "#for_ool_organization?" do
     it "is true if org code is for an ool org" do
       organization = create(:ool_organization)
-      work_order = build(:ncr_work_order, org_code: organization.code_and_name)
+      work_order = build(:ncr_work_order, ncr_organization: organization)
 
       expect(work_order).to be_for_ool_organization
     end
 
     it "is false if org code is nil" do
-      work_order = build(:ncr_work_order, org_code: nil)
+      work_order = build(:ncr_work_order, ncr_organization: nil)
 
       expect(work_order).not_to be_for_ool_organization
     end
 
     it "is false if org code is for non-ool org" do
       organization = build(:ncr_organization)
-      work_order = build(:ncr_work_order, org_code: organization.code_and_name)
+      work_order = build(:ncr_work_order, ncr_organization: organization)
 
       expect(work_order).not_to be_for_ool_organization
-    end
-  end
-
-  describe ".relevant_fields" do
-    it "shows BA61 fields" do
-      expect(Ncr::WorkOrder.relevant_fields("BA61").sort).to eq([
-        :amount,
-        :approving_official_email,
-        :building_number,
-        :cl_number,
-        # No :code
-        :description,
-        :direct_pay,
-        :emergency,
-        :expense_type,
-        :function_code,
-        :not_to_exceed,
-        :org_code,
-        :project_title,
-        # No :rwa_number
-        :soc_code,
-        :vendor
-      ])
-    end
-
-    it "shows BA80 fields" do
-      expect(Ncr::WorkOrder.relevant_fields("BA80").sort).to eq([
-        :amount,
-        :approving_official_email,
-        :building_number,
-        :cl_number,
-        :code,
-        :description,
-        :direct_pay,
-        # No Emergency
-        :expense_type,
-        :function_code,
-        :not_to_exceed,
-        :org_code,
-        :project_title,
-        :rwa_number,
-        :soc_code,
-        :vendor
-      ])
     end
   end
 

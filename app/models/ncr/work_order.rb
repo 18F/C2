@@ -22,6 +22,8 @@ module Ncr
     # This is a hack to be able to attribute changes to the correct user. This attribute needs to be set explicitly, then the update comment will use them as the "commenter". Defaults to the requester.
     attr_accessor :modifier
 
+    belongs_to :ncr_organization, class_name: Ncr::Organization
+
     validates :approving_official_email, presence: true
     validates_email_format_of :approving_official_email
     validates :amount, presence: true
@@ -56,21 +58,8 @@ module Ncr
       ]
     end
 
-    def self.relevant_fields(expense_type)
-      fields = default_fields
-
-      if expense_type == "BA61"
-        fields << :emergency
-      elsif expense_type == "BA80"
-        fields += [:rwa_number, :code]
-      end
-
-      fields
-    end
-
-    def self.default_fields
-      fields = column_names.map(&:to_sym) + [:approving_official_email]
-      fields - [:emergency, :rwa_number, :code, :created_at, :updated_at, :id]
+    def fields_for_display
+      Ncr::WorkOrderFields.new(self).display
     end
 
     def approver_email_frozen?
@@ -87,15 +76,15 @@ module Ncr
     end
 
     def for_whsc_organization?
-      if org_code.present?
-        ncr_org.try(:whsc?)
-      end
+      ncr_organization.try(:whsc?)
     end
 
     def for_ool_organization?
-      if org_code.present?
-        ncr_org.try(:ool?)
-      end
+      ncr_organization.try(:ool?)
+    end
+
+    def organization_code_and_name
+      ncr_organization.try(:code_and_name)
     end
 
     def setup_approvals_and_observers
@@ -135,12 +124,6 @@ module Ncr
 
     def editable?
       true
-    end
-
-    # Methods for Client Data interface
-    def fields_for_display
-      attributes = self.class.relevant_fields(expense_type)
-      attributes.map { |attribute| [self.class.human_attribute_name(attribute), send(attribute)] }
     end
 
     def ba80?
@@ -199,13 +182,6 @@ module Ncr
 
     def self.expense_type_options
       EXPENSE_TYPES.map { |expense_type| [expense_type, expense_type] }
-    end
-
-    private
-
-    def ncr_org
-      ncr_org_code = org_code.match(/^(\w+)/)[1]
-      Ncr::Organization.find_by(code: ncr_org_code)
     end
   end
 end

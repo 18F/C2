@@ -23,10 +23,10 @@
         locals: { f: f }
     = f.input :building_number,
       input_html: { class: "js-selectize required", data: { initial: JSON.generate(building_options) }}
-    = f.input :org_code,
-      collection: Ncr::Organization.all.map(&:code_and_name),
+    = f.association :ncr_organization,
+      as: :select,
       prompt: :translate,
-      input_html: { class: "js-selectize" }
+      input_html: { class: "js-selectize", data: { initial: JSON.generate(organization_options) }}
     = f.input :vendor,
       input_html: { class: "js-selectize required", data: { initial: JSON.generate(vendor_options(@client_data_instance.vendor)) }}
     = field_set_tag "Amount", class: "required" do

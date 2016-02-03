@@ -16,7 +16,7 @@ module Gsa18f
     end
 
     def procurement_params
-      Gsa18f::Procurement.relevant_fields(params[:gsa18f_procurement][:recurring])
+      Gsa18f::ProcurementFields.new.relevant(params[:gsa18f_procurement][:recurring])
     end
 
     def add_steps

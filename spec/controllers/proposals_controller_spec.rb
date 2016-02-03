@@ -95,7 +95,7 @@ describe ProposalsController do
 
   end
 
-  describe '#query' do
+  describe '#query', elasticsearch: true do
     let!(:proposal) { create(:proposal, requester: user) }
     before do
       login_as(user)

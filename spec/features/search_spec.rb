@@ -1,4 +1,4 @@
-describe "searching" do
+describe "searching", elasticsearch: true do
   let(:user){ create(:user, client_slug: "test") }
   let!(:approver){ create(:user) }
 
