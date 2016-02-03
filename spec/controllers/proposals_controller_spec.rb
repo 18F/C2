@@ -181,7 +181,7 @@ describe ProposalsController do
 
     it "downloads results as CSV" do
       login_as(user)
-      proposals = 2.times.map do |i|
+      proposals = 30.times.map do |i|
         wo = create(:test_client_request, project_title: "Work Order #{i}")
         wo.proposal.update(requester: user)
         wo.proposal.reindex
@@ -190,8 +190,9 @@ describe ProposalsController do
       Proposal.__elasticsearch__.refresh_index!
 
       get :download, text: "Work Order", format: "csv"
-      expect(response.body).to include "Work Order 1"
+      expect(response.body).to include "Work Order 29"
       expect(response.headers["Content-Type"]).to eq "text/csv"
+      expect(response.body).not_to include("\n\n")
     end
   end
 
