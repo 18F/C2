@@ -72,7 +72,7 @@ $(document).ready(function() {
       name: savedSearchName.val()
     })
     .fail(function(payload) {
-      form.append($('<div class="form-alert alert alert-danger">Something went wrong! Please try again or contact your administrator.</div>'));
+      form.append($('<div class="form-alert alert alert-danger">Something went wrong! Please try again or <a href="/feedback">contact your administrator</a>.</div>'));
     })
     .done(function(payload) {
       var successAlert = $('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">x</button>Saved as report <strong>'+savedSearchName.val()+'</strong>!</div>');
