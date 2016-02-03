@@ -176,7 +176,7 @@ describe ProposalsController do
     end
   end
 
-  describe "#download" do
+  describe "#download", elasticsearch: true do
     render_views
 
     it "downloads results as CSV" do
