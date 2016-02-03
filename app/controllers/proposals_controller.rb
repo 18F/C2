@@ -34,7 +34,7 @@ class ProposalsController < ApplicationController
 
   def cancel
     if params[:reason_input].present?
-      cancel_proposal
+      cancel_proposal_and_send_cancellation_emails
       flash[:success] = "Your request has been cancelled"
       redirect_to proposal_path(proposal)
     else
@@ -78,7 +78,7 @@ class ProposalsController < ApplicationController
 
   protected
 
-  def cancel_proposal
+  def cancel_proposal_and_send_cancellation_emails
     comments = "Request cancelled with comments: " + params[:reason_input]
     proposal.cancel!
     proposal.comments.create!(comment_text: comments, user: current_user)
