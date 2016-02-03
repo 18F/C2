@@ -140,7 +140,6 @@ module Query
       end
 
       def add_pagination
-        return if params[:size] == :all
         calculate_from_size if params[:page]
         add_from
         add_size
@@ -157,7 +156,9 @@ module Query
       end
 
       def add_size
-        if @size
+        if params[:size] == :all
+          @dsl.size = ::Proposal::MAX_DOWNLOAD_ROWS
+        elsif @size
           @dsl.size = @size
         elsif params[:size]
           @dsl.size = params[:size].to_i
