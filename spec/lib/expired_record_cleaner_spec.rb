@@ -28,7 +28,7 @@ describe ExpiredRecordCleaner do
         expect(deliveries.length).to eq(1)
         proposal.reload
         expect(proposal.status).to eq("cancelled")
-      end 
+      end
     end
   end
 
