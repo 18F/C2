@@ -36,8 +36,8 @@ $(document).ready(function() {
   });
 
   // defined inline on HTML page
-  if (typeof C2searchQuery != "undefined") {
-    $("#save-search-query").text(C2searchQuery.humanized);
+  if (typeof C2_SEARCH_QUERY != "undefined") {
+    $("#save-search-query").text(C2_SEARCH_QUERY.humanized);
   }
   $("#save-search form").on("submit", function(e) {
     e.preventDefault();
@@ -68,7 +68,7 @@ $(document).ready(function() {
     savedSearchForm.find('input').prop("disabled", true);
     btn.prop("disabled", true);
     $.post("/reports.json", {
-      query: JSON.stringify(C2searchQuery),
+      query: JSON.stringify(C2_SEARCH_QUERY),
       name: savedSearchName.val()
     })
     .fail(function(payload) {
