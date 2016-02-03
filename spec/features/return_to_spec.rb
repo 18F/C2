@@ -1,9 +1,9 @@
-describe "the return_to url option" do
+describe "the return_to url option", elasticsearch: true do
   include ReturnToHelper
 
   it 'defaults to the proposals listing' do
     login_as(create(:user))
-    visit '/proposals/query?text=test'
+    visit query_proposals_path(text: "test")
     expect(page).to have_content('Back to main portal')
     click_on('Back to main portal')
     expect(current_path).to eq('/proposals')
