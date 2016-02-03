@@ -1,4 +1,4 @@
-= CSV.generate_line [ProposalDecorator.csv_headers, current_user.client_model.csv_headers].flatten
+= CSV.generate_line( [ProposalDecorator.csv_headers, current_user.client_model.csv_headers].flatten ).chomp
 - @proposals_data.rows.each do |proposal|
-  != CSV.generate_line proposal.decorate.as_csv
+  != CSV.generate_line( proposal.decorate.as_csv ).chomp
 
