@@ -5,5 +5,5 @@ require File.expand_path("../application", __FILE__)
 C2::Application.initialize!
 
 C2::Application.configure do
-  config.logger = Logger.new(STDERR)
+  config.logger = Logger.new(STDOUT)
 end

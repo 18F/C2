@@ -31,14 +31,14 @@ module EsSpecHelper
     #puts "Creating Index for class #{klass}"
     klass.__elasticsearch__.create_index! force: true, index: klass.index_name
     klass.__elasticsearch__.refresh_index!
-    klass.__elasticsearch__.import  :return => 'errors', :batch_size => 200    do |resp|
+    klass.__elasticsearch__.import(return: "errors", batch_size: 200) do |resp|
       # show errors immediately (rather than buffering them)
-      errors += resp['items'].select { |k, v| k.values.first['error'] }
-      completed += resp['items'].size
+      errors += resp["items"].select { |k, v| k.values.first["error"] }
+      completed += resp["items"].size
       #puts "Finished #{completed} items"
       STDERR.flush
       STDOUT.flush
-      if errors.size > 0
+      if ENV["ES_DEBUG"].to_i > 0 && errors.size > 0
         STDOUT.puts "ERRORS in #{$$}:"
         STDOUT.puts errors.pretty_inspect
       end

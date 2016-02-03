@@ -36,23 +36,23 @@ class ExpiredRecordCleaner
   end
 
   def handle_no_requester(proposal)
-    Rails.logger.info { puts "#{proposal.id} <= no Requester defined" }
+    Rails.logger.info { "#{proposal.id} <= no Requester defined" }
 
     if @ok_to_act
       proposal.destroy
     else
-      Rails.logger.info { puts "set OK_TO_ACT=true to clean up #{proposal.id}" }
+      Rails.logger.info { "set OK_TO_ACT=true to clean up #{proposal.id}" }
     end
   end
 
   def handle_cancellation(proposal)
-    Rails.logger.info { puts "#{proposal.public_id} -> #{proposal.requester.email_address}" }
+    Rails.logger.info { "#{proposal.public_id} -> #{proposal.requester.email_address}" }
 
     if @ok_to_act
       notify_proposal_requester(proposal)
       proposal.cancel!
     else
-      Rails.logger.info { puts "set OK_TO_ACT=true to clean up #{proposal.id}" }
+      Rails.logger.info { "set OK_TO_ACT=true to clean up #{proposal.id}" }
     end
   end
 end

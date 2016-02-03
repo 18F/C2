@@ -7,7 +7,7 @@ namespace :vacuum do
     end
 
     cleaner = ExpiredRecordCleaner.new(Time.zone.now, ok_to_act: ok_to_act)
-    Rails.logger.info { puts "Pending proposals created before #{cleaner.fiscal_year_start}" }
+    Rails.logger.info { "Pending proposals created before #{cleaner.fiscal_year_start}" }
     cleaner.vacuum_old_proposals
   end
 
