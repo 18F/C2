@@ -2,6 +2,7 @@ class Selectizer
   constructor: (el) ->
     @$el = $(el)
     @dataAttr = @$el.attr('data-attr') || 'default_field'
+    @valueAttr = 'id'
 
   isFreeForm: ->
     @$el.is('input')
@@ -17,7 +18,8 @@ class Selectizer
     initial = @$el.data('initial') || []
     $.map initial, (val) =>   # must be an object with the appropriate attribute
       result = {}
-      result[@dataAttr] = val
+      result[@dataAttr] = val['name']
+      result[@valueAttr] = val['id'] || val['name']
       result
 
   selectizeOpts: ->
@@ -30,9 +32,8 @@ class Selectizer
 
     opts.labelField = @dataAttr
     opts.searchField = [@dataAttr]
-    opts.valueField = @dataAttr
+    opts.valueField = @valueAttr
     opts.sortField = [{field: '$score'}, {field: @dataAttr}]
-
     opts
 
   enable: ->
@@ -41,7 +42,6 @@ class Selectizer
 
   selectizeObj: ->
     @$el[0].selectize
-
 
 $ ->
   $('.js-selectize').each (i, el) ->

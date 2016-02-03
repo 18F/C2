@@ -15,7 +15,7 @@ feature "Creating an NCR work order", :js do
       fill_in_selectized("ncr_work_order_vendor", "ACME")
       fill_in 'Amount', with: 123.45
       fill_in_selectized("ncr_work_order_approving_official_email", approver.email_address)
-      fill_in_selectized("ncr_work_order_org_code", organization.code_and_name)
+      fill_in_selectized("ncr_work_order_ncr_organization", organization.code_and_name)
       click_on "Submit for approval"
 
       expect(page).to have_content("Proposal submitted")

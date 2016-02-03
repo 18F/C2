@@ -9,17 +9,13 @@ module Ncr
     def building_options
       custom = Ncr::WorkOrder.where.not(building_number: nil).pluck('DISTINCT building_number')
       all = custom + Ncr::BUILDING_NUMBERS
-      all.uniq.sort
+      all.uniq.sort.map { |building| { name: building } }
     end
 
-    def org_code_options(org_code = nil)
-      all_orgs = Ncr::Organization.all.map(&:code_and_name) - [org_code]
-
-      if org_code
-        all_orgs = all_orgs.push(org_code)
+    def organization_options
+      Ncr::Organization.all.map do |org|
+        { name: org.code_and_name, id: org.id }
       end
-
-      all_orgs
     end
 
     def vendor_options(vendor = nil)
@@ -27,7 +23,7 @@ module Ncr
       if vendor
         all_vendors.push(vendor)
       end
-      all_vendors.uniq.sort_by(&:downcase)
+      all_vendors.uniq.sort_by(&:downcase).map { |vendor_name| { name: vendor_name } }
     end
 
     def expense_type_radio_button(form, expense_type)

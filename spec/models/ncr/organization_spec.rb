@@ -1,4 +1,8 @@
 describe Ncr::Organization do
+  describe "Assocations" do
+    it { should have_many(:ncr_work_orders) }
+  end
+
   describe "Validations" do
     it { should validate_presence_of(:code) }
     it { should validate_uniqueness_of(:code) }

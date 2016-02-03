@@ -6,7 +6,7 @@ feature "Requester edits their NCR work order", :js do
     create(
       :ncr_work_order,
       building_number: Ncr::BUILDING_NUMBERS[0],
-      org_code: organization.code_and_name,
+      ncr_organization: organization,
       vendor: "test vendor",
       description: "test"
     )
@@ -27,7 +27,7 @@ feature "Requester edits their NCR work order", :js do
       Ncr::BUILDING_NUMBERS[0]
     )
     expect_page_to_have_selected_selectize_option(
-      "ncr_work_order_org_code",
+      "ncr_work_order_ncr_organization",
       organization.code_and_name
     )
     expect_page_to_have_selected_selectize_option(
@@ -46,7 +46,7 @@ feature "Requester edits their NCR work order", :js do
 
     fill_in "Description", with: "New Description"
     fill_in_selectized("ncr_work_order_building_number", Ncr::BUILDING_NUMBERS[1])
-    fill_in_selectized("ncr_work_order_org_code", new_org.code_and_name)
+    fill_in_selectized("ncr_work_order_ncr_organization", new_org.code_and_name)
     click_on "Update"
 
     expect(page).to have_content("Request modified by")
