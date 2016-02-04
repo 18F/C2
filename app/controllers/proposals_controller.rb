@@ -64,6 +64,7 @@ class ProposalsController < ApplicationController
 
   def download
     params[:size] = :all
+    params.delete(:page)
     query_listing = listing
     @proposals_data = query_listing.query
     timestamp = Time.current.utc.strftime("%Y-%m-%d-%H-%M-%S")
