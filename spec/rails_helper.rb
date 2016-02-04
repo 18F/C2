@@ -20,37 +20,6 @@ RSpec.configure do |config|
     config.include IntegrationSpecHelper, type: type
   end
 
-  config.before(:suite) do
-    DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean_with(:truncation)
-    Rails.application.load_seed
-    Test.setup_models
-  end
-
-  config.before(:each) do
-    if Capybara.current_driver == :rack_test
-      DatabaseCleaner.strategy = :transaction
-    else
-      DatabaseCleaner.strategy = :truncation
-    end
-
-    DatabaseCleaner.start
-  end
-
-  config.after(:each) do
-    DatabaseCleaner.clean
-    ActionMailer::Base.deliveries.clear
-    OmniAuth.config.mock_auth[:myusa] = nil
-    # only need to re-load seeds if the cleaner used truncation
-    if Capybara.current_driver != :rack_test
-      Rails.application.load_seed
-    end
-  end
-
-  config.after(:suite) do
-    Test.teardown_models
-  end
-
   Capybara.default_host = 'http://localhost:3000'
   OmniAuth.config.test_mode = true
   ENV["DISABLE_SANDBOX_WARNING"] = "true"
