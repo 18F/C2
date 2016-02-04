@@ -147,6 +147,15 @@ ActiveRecord::Schema.define(version: 20160202210256) do
 
   add_index "proposals", ["client_data_id", "client_data_type"], name: "index_proposals_on_client_data_id_and_client_data_type", using: :btree
 
+  create_table "reports", force: :cascade do |t|
+    t.string   "name",                       null: false
+    t.text     "query",                      null: false
+    t.boolean  "shared",     default: false
+    t.integer  "user_id",                    null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
   create_table "roles", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at"

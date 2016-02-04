@@ -4,7 +4,7 @@ describe Gsa18fDashboardQuery do
       user = create(:user)
       proposal = create(:proposal, requester: user)
       create(:gsa18f_procurement, cost_per_unit: 10, quantity: 10,  proposal: proposal)
-      now = Time.current
+      now = Time.current.utc
 
       query = Gsa18fDashboardQuery.new(user).select_all
 

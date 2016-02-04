@@ -25,6 +25,8 @@ class User < ActiveRecord::Base
 
   has_many :completed_steps, class_name: "Step", foreign_key: "completer"
 
+  has_many :reports
+
   def self.active
     where(active: true)
   end
@@ -130,5 +132,9 @@ class User < ActiveRecord::Base
 
   def requires_profile_attention?
     first_name.blank? || last_name.blank?
+  end
+
+  def all_reports
+    Report.for_user(self)
   end
 end

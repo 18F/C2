@@ -1,6 +1,6 @@
 describe ProposalsController do
   include ReturnToHelper
-  let(:user) { create(:user) }
+  let(:user) { create(:user, client_slug: "test") }
 
   describe '#index' do
     before do
@@ -152,7 +152,9 @@ describe ProposalsController do
 
     context 'search' do
       it 'plays nicely with TabularData' do
-        double, single, triple = 3.times.map { create(:proposal, requester: user) }
+        anon_user = create(:user)
+        login_as(anon_user)
+        double, single, triple = 3.times.map { create(:proposal, requester: anon_user) }
         double.update(public_id: 'AAA AAA')
         single.update(public_id: 'AAA')
         triple.update(public_id: 'AAA AAA AAA')
@@ -171,6 +173,26 @@ describe ProposalsController do
         expect(query[1].id).to be(double.id)
         expect(query[2].id).to be(single.id)
       end
+    end
+  end
+
+  describe "#download", elasticsearch: true do
+    render_views
+
+    it "downloads results as CSV" do
+      login_as(user)
+      proposals = 30.times.map do |i|
+        wo = create(:test_client_request, project_title: "Work Order #{i}")
+        wo.proposal.update(requester: user)
+        wo.proposal.reindex
+        wo.proposal
+      end
+      Proposal.__elasticsearch__.refresh_index!
+
+      get :download, text: "Work Order", format: "csv"
+      expect(response.body).to include "Work Order 29"
+      expect(response.headers["Content-Type"]).to eq "text/csv"
+      expect(response.body).not_to include("\n\n")
     end
   end
 

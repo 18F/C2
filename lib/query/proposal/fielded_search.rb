@@ -22,7 +22,8 @@ module Query
         clauses = []
         if field_pairs
           field_pairs.each do |k, v|
-            next if v.empty?
+            next if v.nil?
+            next if v.blank?
             next if v == "*"
             clauses << clause_to_s(k, v)
           end
@@ -30,10 +31,36 @@ module Query
         clauses.join(" ")
       end
 
+      def to_h
+        hash = {}
+        if field_pairs
+          field_pairs.each do |k, v|
+            next if v.nil?
+            next if v.blank?
+            next if v == "*"
+            hash[k] = v
+          end
+        end
+        hash
+      end
+
+      def humanized(client_model)
+        humanized = {}
+        to_h.each do |k, v|
+          if k.match(/^client_data\./)
+            attr = k.match(/^client_data\.(.+)/)[1]
+            humanized[client_model.human_attribute_name(attr)] = v
+          else
+            humanized[::Proposal.human_attribute_name(k)] = v
+          end
+        end
+        self.class.new(humanized)
+      end
+
       private
 
       def clause_to_s(key, value)
-        if value.match(/^\w/)
+        if value.to_s.match(/^\w/)
           "#{key}:(#{value})"
         else
           "#{key}:#{value}"

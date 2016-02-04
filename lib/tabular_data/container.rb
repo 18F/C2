@@ -1,6 +1,7 @@
 module TabularData
   class Container
     attr_reader :columns, :frozen_sort, :filter
+    attr_accessor :es_response
 
     def initialize(name, config)
       @name = name

@@ -22,6 +22,8 @@
     /[if lte IE 8]
       = stylesheet_link_tag "photon/ie/v8.css"
 
+    %link{rel: "stylesheet", href: "https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"}
+
   %body
     - unless ENV["DISABLE_SANDBOX_WARNING"] == "true"
       = render "shared/sandbox_warning"

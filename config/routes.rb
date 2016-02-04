@@ -40,6 +40,7 @@ C2::Application.routes.draw do
 
     collection do
       get "archive"
+      get "download", defaults: { format: "csv" }
       get "query"
     end
 
@@ -47,6 +48,8 @@ C2::Application.routes.draw do
     resources :attachments, only: [:create, :destroy, :show]
     resources :observations, only: [:create, :destroy]
   end
+
+  resources :reports, only: [:index, :show, :create, :destroy]
 
   namespace :ncr do
     resources :work_orders, except: [:index, :destroy]

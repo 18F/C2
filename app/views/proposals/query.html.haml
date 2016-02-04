@@ -2,16 +2,57 @@
   = render partial: 'shared/search_ui'
 
 .inset
-  %h1
-    Proposals participated in
-  %strong Currently displaying results for:
-  = property_to_s(@text)
-  - if @adv_search.to_s.present?
-    = @adv_search.to_s
+  - page_title = @report ? @report.name : "Proposals participated in"
+  %h1 #{page_title}
+  - if @proposals_data.es_response
+    %strong #{@proposals_data.es_response.results.total} results for:
+  - else
+    %strong Currently viewing results for:
+  - if @search_query["humanized"].present?
+    %pre
+      = @search_query["humanized"]
   %br
   %a{ :href => proposals_path } Clear search terms
+  #query-links.pull-right
+    %ul.list-inline
+      %li
+        %a{ href: "#{download_proposals_path}?#{request.query_parameters.to_query}" }
+          Download
+          %i.fa.fa-download
+      %li
+        %a{ href: "#", onclick: '$("#save-search").modal()' }
+          Save as Report
+          %i.fa.fa-save
   = datespan_header(@start_date, @end_date)
-  = render partial: 'shared/table', locals: {container: @proposals_data}
+  - if @proposals_data.rows.any?
+    = render partial: 'shared/table', locals: {container: @proposals_data}
+    - if @proposals_data.es_response
+      #pages
+        = paginate @proposals_data.es_response, current_page: (params[:page]||1).to_i
   - if @proposals_data.rows.empty?
-    %p.empty-list-label
+    .empty-list-label
       No results
+
+:javascript
+  // global var referenced by search.js
+  var C2_SEARCH_QUERY = #{@search_query.to_json}
+
+#save-search.modal.fade{ tabindex: "-1", role: "dialog", "aria-labelledby" => "save-search-modal-title"}
+  .modal-dialog{ role: "document" }
+    .modal-content
+      .modal-header
+        %button.close{ type: "button", data: { dismiss: "modal" }, "aria-label" => "Close"}
+          %span{"aria-hidden" => "true"} &times;
+        %h4#save-search-modal-title.modal-title Save as Report
+      .modal-body
+        %form{ role: "form" }
+          %input#save-search-submit{ type: "submit", style: "display: none" }
+          .form-group
+            %label.control-label{ for: "saved-search-name" }
+              Name
+            %input.form-control.required{ type: "text", name: "saved-search-name", required: true }
+          .form-group
+            %pre#save-search-query
+      .modal-footer
+        %button.btn.btn-default{ type: "button", data: { dismiss: "modal" } } Cancel
+        %button#save-search-button.btn.btn-primary{ type: "submit" } Save

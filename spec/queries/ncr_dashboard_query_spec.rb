@@ -4,7 +4,7 @@ describe NcrDashboardQuery do
       user = create(:user)
       proposal = create(:proposal, requester: user)
       create(:ncr_work_order, amount: 100, proposal: proposal)
-      now = Time.current
+      now = Time.current.utc
 
       query = NcrDashboardQuery.new(user).select_all
 

@@ -64,5 +64,13 @@ module ClientDataMixin
     def self.expense_type_options
       []
     end
+
+    def self.csv_headers
+      column_names.sort.map { |attribute| human_attribute_name(attribute) }
+    end
+
+    def csv_fields
+      self.class.column_names.sort.map { |attribute| send(attribute) }
+    end
   end
 end

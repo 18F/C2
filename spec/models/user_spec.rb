@@ -5,6 +5,7 @@ describe User do
      it { should have_many(:observations).dependent(:destroy) }
      it { should have_many(:user_roles).dependent(:destroy) }
      it { should have_many(:proposals).dependent(:destroy) }
+     it { should have_many(:reports) }
   end
 
   let(:user) { build(:user) }
@@ -194,6 +195,15 @@ describe User do
       expect {
         user.add_role(role.name)
       }.to change { user.roles.count }.from(0).to(1)
+    end
+  end
+
+  describe "#all_reports" do
+    it "gets all private and shared-by-client_slug" do
+      report = create(:report, shared: true, client_slug: "test")
+      test_user = create(:user, client_slug: "test")
+      report2 = create(:report, user: test_user)
+      expect(test_user.all_reports).to include(report, report2)
     end
   end
 end

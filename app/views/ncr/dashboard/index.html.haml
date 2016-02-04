@@ -2,8 +2,13 @@
   = render partial: 'shared/search_ui'
 
 .inset
-  %h1 Dashboard
+  %h1
+    Reports
+    %i.fa.fa-bar-chart
 
+  = render partial: "shared/reports_list"
+
+  %hr
   %p
     Summary of requests which you have participated in, grouped by month of creation.
   %table.dashboard.table.table-striped.table-bordered

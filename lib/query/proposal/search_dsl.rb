@@ -28,15 +28,11 @@ module Query
       end
 
       def composite_query_string
-        if client_query.present? && query_str.present?
-          "(#{query_str}) AND (#{client_query})"
-        elsif client_query.present?
-          client_query.to_s
-        elsif query_str.present?
-          query_str.to_s
-        else
-          ""
-        end
+        stringify_clauses [query_str, client_query].select(&:present?)
+      end
+
+      def humanized_query_string
+        stringify_clauses [query_str, client_query_humanized].select(&:present?)
       end
 
       def client_query
@@ -46,6 +42,20 @@ module Query
       end
 
       private
+
+      def stringify_clauses(clauses)
+        if clauses.length == 2
+          clauses.map { |c| "(#{c})" }.join(" AND ")
+        elsif clauses.length == 1
+          clauses[0].to_s
+        else
+          ""
+        end
+      end
+
+      def client_query_humanized
+        client_query.humanized(current_user.client_model)
+      end
 
       def munge_fielded_params(fielded)
         if fielded[:created_at].present? && fielded[:created_within].present?
@@ -65,6 +75,8 @@ module Query
 
       def build_dsl
         @dsl = Elasticsearch::DSL::Search::Search.new
+        # we only need primary key. this cuts down response time by ~70%.
+        @dsl.source(["id"])
         add_query
         add_filter
         add_sort
@@ -128,16 +140,37 @@ module Query
       end
 
       def add_pagination
-        if params[:from]
+        calculate_from_size if params[:page]
+        add_from
+        add_size
+      end
+
+      def add_from
+        if @from
+          @dsl.from = @from
+        elsif params[:from]
           @dsl.from = params[:from].to_i
         else
           @dsl.from = 0
         end
-        if params[:size]
+      end
+
+      def add_size
+        if params[:size] == :all
+          @dsl.size = ::Proposal::MAX_DOWNLOAD_ROWS
+        elsif @size
+          @dsl.size = @size
+        elsif params[:size]
           @dsl.size = params[:size].to_i
         else
           @dsl.size = ::Proposal::MAX_SEARCH_RESULTS
         end
+      end
+
+      def calculate_from_size
+        page = params[:page].to_i
+        @size ||= (params[:size] || ::Proposal::MAX_SEARCH_RESULTS).to_i
+        @from = (page - 1) * @size.to_i
       end
     end
   end

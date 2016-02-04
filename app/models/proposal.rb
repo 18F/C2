@@ -68,6 +68,8 @@ class Proposal < ActiveRecord::Base
 
   # elasticsearch indexing setup
   MAX_SEARCH_RESULTS = 20
+  MAX_DOWNLOAD_ROWS = 10_000
+  paginates_per MAX_SEARCH_RESULTS
   DEFAULT_INDEXED = {
     include: {
       client_data: {},

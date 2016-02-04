@@ -1,0 +1,11 @@
+%ul.list-unstyled
+  - current_user.all_reports.each do |report|
+    %li 
+      = link_to(report.name, report.url)
+
+%hr
+
+.links
+  = link_to("Manage Reports", reports_path)
+
+
