@@ -9,6 +9,16 @@ FactoryGirl.define do
     urgency Gsa18f::Procurement::URGENCY[10]
     association :proposal, client_slug: "gsa18f"
 
+    transient do
+      requester nil
+    end
+
+    after(:create) do |procurement, evaluator|
+      if evaluator.requester
+        procurement.proposal.update(requester: evaluator.requester)
+      end
+    end
+
     trait :with_steps do
       after(:create) { |procurement| procurement.add_steps }
     end

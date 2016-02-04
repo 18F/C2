@@ -55,6 +55,7 @@ RSpec.configure do |config|
     start_es_server unless es_server_running?
     create_es_index(Proposal)
   end
+
   config.after :suite do
     stop_es_server
   end

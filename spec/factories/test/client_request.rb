@@ -10,6 +10,16 @@ FactoryGirl.define do
         project_title "I am a test request"
         association :proposal, client_slug: "test"
 
+        transient do
+          requester nil
+        end
+
+        after(:create) do |request, evaluator|
+          if evaluator.requester
+            request.proposal.update(requester: evaluator.requester)
+          end
+        end
+
         trait :with_approvers do
           association :proposal, :with_serial_approvers, client_slug: "test"
         end
