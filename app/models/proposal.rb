@@ -30,6 +30,7 @@ class Proposal < ActiveRecord::Base
   end
 
   acts_as_taggable
+  visitable # Used to track user visit associated with processed proposals
 
   has_many :steps
   has_many :individual_steps, ->{ individual }, class_name: "Steps::Individual"
