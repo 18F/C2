@@ -115,6 +115,6 @@ end
 def dump_index
   if ENV["ES_DEBUG"]
     puts ANSI.blue{ "----------------- DUMP INDEX ---------------------" }
+    puts Proposal.search( "*" ).results.to_a.pretty_inspect
   end
-  puts Proposal.search( "*" ).results.to_a.pretty_inspect
 end

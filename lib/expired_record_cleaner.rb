@@ -1,10 +1,9 @@
 class ExpiredRecordCleaner
-  attr_reader :verbose, :fiscal_year_start
+  attr_reader :fiscal_year_start
 
   def initialize(datetime, args = {})
     @fiscal_year_start = calc_fiscal_year_start(datetime)
     @ok_to_act = args[:ok_to_act]
-    @verbose = args[:verbose]
   end
 
   def vacuum_old_proposals
@@ -37,25 +36,23 @@ class ExpiredRecordCleaner
   end
 
   def handle_no_requester(proposal)
-    if @verbose
-      STDERR.puts "#{proposal.id} <= no Requester defined"
-    end
+    Rails.logger.info { "#{proposal.id} <= no Requester defined" }
+
     if @ok_to_act
       proposal.destroy
     else
-      STDERR.puts "set OK_TO_ACT=true to clean up #{proposal.id}"
+      Rails.logger.info { "set OK_TO_ACT=true to clean up #{proposal.id}" }
     end
   end
 
   def handle_cancellation(proposal)
-    if @verbose
-      STDERR.puts "#{proposal.public_id} -> #{proposal.requester.email_address}"
-    end
+    Rails.logger.info { "#{proposal.public_id} -> #{proposal.requester.email_address}" }
+
     if @ok_to_act
       notify_proposal_requester(proposal)
       proposal.cancel!
     else
-      STDERR.puts "set OK_TO_ACT=true to clean up #{proposal.id}"
+      Rails.logger.info { "set OK_TO_ACT=true to clean up #{proposal.id}" }
     end
   end
 end
