@@ -1,12 +1,6 @@
 require 'ansi/code'
 
-describe Query::Proposal::Search, elasticsearch: true do
-
-  before do
-    # analogous to DatabaseCleaner.start in spec/rails_helper
-    refresh_index
-  end
-
+describe Query::Proposal::Search, elasticsearch: true, test_client_request: true do
   describe '#execute' do
     it "returns an empty list for no Proposals" do
       user = create(:user, client_slug: "test")
@@ -83,7 +77,7 @@ describe Query::Proposal::Search, elasticsearch: true do
       user = create(:user, client_slug: "test")
 
       proposal1 = create(:proposal, id: 199, requester: user)
-      test_client_request1 = create(:test_client_request, proposal: proposal1)
+      create(:test_client_request, proposal: proposal1)
       proposal1.reindex
 
       test_client_request2 = create(:test_client_request, project_title: "199 rolly chairs for 1600 Penn Ave")
@@ -92,7 +86,7 @@ describe Query::Proposal::Search, elasticsearch: true do
       proposal2.reindex
 
       proposal3 = create(:proposal, id: 1600, requester: user)
-      test_client_request3 = create(:test_client_request, proposal: proposal3)
+      create(:test_client_request, proposal: proposal3)
       proposal3.reindex
 
       refresh_index

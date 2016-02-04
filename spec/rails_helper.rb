@@ -24,7 +24,6 @@ RSpec.configure do |config|
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation)
     Rails.application.load_seed
-    Test.setup_models
   end
 
   config.before(:each) do
@@ -45,10 +44,6 @@ RSpec.configure do |config|
     if Capybara.current_driver != :rack_test
       Rails.application.load_seed
     end
-  end
-
-  config.after(:suite) do
-    Test.teardown_models
   end
 
   Capybara.default_host = 'http://localhost:3000'

@@ -1,4 +1,4 @@
-describe Test::ClientRequest do
+describe Test::ClientRequest, test_client_reuest: true do
   it_behaves_like "client data"
 
   describe "#editable?" do
@@ -7,5 +7,4 @@ describe Test::ClientRequest do
       expect(client_request).to be_editable
     end
   end
-
 end

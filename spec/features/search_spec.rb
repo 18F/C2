@@ -1,21 +1,9 @@
-describe "searching", elasticsearch: true do
-  let(:user){ create(:user, client_slug: "test") }
-  let!(:approver){ create(:user) }
-
-  before do
-    login_as(user)
-  end
-
+describe "searching", test_client_request: true, elasticsearch: true do
   it "displays relevant results", :js do
-    proposals = 2.times.map do |i|
-      wo = create(:test_client_request, project_title: "Work Order #{i}")
-      wo.proposal.update(requester: user)
-      wo.proposal.reindex
-      wo.proposal
-    end
-    Proposal.__elasticsearch__.refresh_index!
+    login_as(user)
+    proposals = populate_proposals
 
-    visit '/proposals'
+    visit proposals_path
     fill_in 'text', with: proposals.first.name
     click_button "search-button"
 
@@ -25,6 +13,7 @@ describe "searching", elasticsearch: true do
   end
 
   it "provides advanced search", :js do
+    login_as(user)
     proposals = populate_proposals
 
     visit proposals_path
@@ -41,7 +30,10 @@ describe "searching", elasticsearch: true do
   end
 
   it "populates the search box on the results page", :js do
-    visit '/proposals'
+    login_as(user)
+
+    visit proposals_path
+
     fill_in 'text', with: 'foo'
     click_button "search-button"
 
@@ -56,6 +48,12 @@ describe "searching", elasticsearch: true do
 
     visit proposals_path
     expect(page).not_to have_button("Search")
+  end
+
+  private
+
+  def user
+    @_user ||= create(:user, client_slug: "test")
   end
 
   def populate_proposals
