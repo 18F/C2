@@ -15,6 +15,8 @@ class ApplicationController < ActionController::Base
   before_action :check_disabled_client
   before_action :set_default_view_variables
 
+  after_filter :track_action
+
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
 
   protected
@@ -76,6 +78,10 @@ class ApplicationController < ActionController::Base
 
   def peek_enabled?
     Rails.env.development? || admin?
+  end
+
+  def track_action
+    ahoy.track "Processed #{controller_name}##{action_name}", request.filtered_parameters
   end
 
   private
