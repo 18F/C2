@@ -19,6 +19,7 @@
 //= require turbolinks
 //= require bootstrap-sprockets
 //= require selectize
+//= require ahoy
 //= require peek
 //= require peek/views/performance_bar
 //= require_directory .
