@@ -5,6 +5,7 @@ gem "active_model_serializers"
 gem "activeadmin", git: "https://github.com/activeadmin/activeadmin.git"
 gem "acts_as_list"
 gem "acts-as-taggable-on", "~> 3.4"
+gem 'ahoy_email'
 gem 'ahoy_matey'
 gem "ar_outer_joins"
 gem "autoprefixer-rails"

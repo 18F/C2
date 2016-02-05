@@ -69,6 +69,11 @@ GEM
     acts_as_list (0.7.2)
       activerecord (>= 3.0)
     addressable (2.4.0)
+    ahoy_email (0.3.0)
+      addressable
+      nokogiri
+      rails
+      safely_block
     ahoy_matey (1.2.1)
       addressable
       browser (>= 0.4.0)
@@ -443,6 +448,8 @@ GEM
       rspec-core (>= 2, < 4, != 2.12.0)
     ruby-prof (0.15.9)
     safe_yaml (1.0.4)
+    safely_block (0.1.0)
+      errbase
     sass (3.4.21)
     sass-rails (5.0.4)
       railties (>= 4.0.0, < 5.0)
@@ -515,6 +522,7 @@ DEPENDENCIES
   acts-as-taggable-on (~> 3.4)
   acts_as_list
   addressable
+  ahoy_email
   ahoy_matey
   ar_outer_joins
   autoprefixer-rails
