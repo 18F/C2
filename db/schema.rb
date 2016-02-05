@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160205151740) do
+ActiveRecord::Schema.define(version: 20160205171944) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -77,6 +77,46 @@ ActiveRecord::Schema.define(version: 20160205151740) do
     t.datetime "file_updated_at"
     t.integer  "proposal_id"
     t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "blazer_audits", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "query_id"
+    t.text     "statement"
+    t.string   "data_source"
+    t.datetime "created_at"
+  end
+
+  create_table "blazer_checks", force: :cascade do |t|
+    t.integer  "query_id"
+    t.string   "state"
+    t.text     "emails"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "blazer_dashboard_queries", force: :cascade do |t|
+    t.integer  "dashboard_id"
+    t.integer  "query_id"
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "blazer_dashboards", force: :cascade do |t|
+    t.text     "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "blazer_queries", force: :cascade do |t|
+    t.integer  "creator_id"
+    t.string   "name"
+    t.text     "description"
+    t.text     "statement"
+    t.string   "data_source"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
