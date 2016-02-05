@@ -162,7 +162,7 @@ GEM
       elasticsearch (> 0.4)
       hashie
     elasticsearch-rails (0.1.8)
-    elasticsearch-rails-ha (1.0.4)
+    elasticsearch-rails-ha (1.0.5)
       ansi
       elasticsearch-model
       elasticsearch-rails
@@ -519,7 +519,7 @@ DEPENDENCIES
   elasticsearch-extensions
   elasticsearch-model
   elasticsearch-rails
-  elasticsearch-rails-ha
+  elasticsearch-rails-ha (~> 1.0.5)
   email_reply_parser
   factory_girl_rails
   faker
