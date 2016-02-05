@@ -1,8 +1,6 @@
 class Report < ActiveRecord::Base
   belongs_to :user
-
   visitable
-  
   def client_query
     ::Query::Proposal::FieldedSearch.new(JSON.parse(query)[user.client_model_slug])
   end
