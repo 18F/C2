@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161204205859) do
+ActiveRecord::Schema.define(version: 20160205184644) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,7 +60,7 @@ ActiveRecord::Schema.define(version: 20161204205859) do
   add_index "ahoy_messages", ["user_id", "user_type"], name: "index_ahoy_messages_on_user_id_and_user_type", using: :btree
 
   create_table "api_tokens", force: :cascade do |t|
-    t.string   "access_token", limit: 255
+    t.string   "access_token"
     t.datetime "expires_at"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -71,8 +71,8 @@ ActiveRecord::Schema.define(version: 20161204205859) do
   add_index "api_tokens", ["access_token"], name: "index_api_tokens_on_access_token", unique: true, using: :btree
 
   create_table "attachments", force: :cascade do |t|
-    t.string   "file_file_name",    limit: 255
-    t.string   "file_content_type", limit: 255
+    t.string   "file_file_name"
+    t.string   "file_content_type"
     t.integer  "file_file_size"
     t.datetime "file_updated_at"
     t.integer  "proposal_id"
@@ -150,21 +150,21 @@ ActiveRecord::Schema.define(version: 20161204205859) do
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
   create_table "gsa18f_procurements", force: :cascade do |t|
-    t.string   "office",                       limit: 255
-    t.text     "justification",                            default: "",      null: false
-    t.string   "link_to_product",              limit: 255, default: "",      null: false
+    t.string   "office"
+    t.text     "justification",                default: "",      null: false
+    t.string   "link_to_product",              default: "",      null: false
     t.integer  "quantity"
     t.datetime "date_requested"
-    t.string   "additional_info",              limit: 255
+    t.string   "additional_info"
     t.decimal  "cost_per_unit"
     t.text     "product_name_and_description"
-    t.boolean  "recurring",                                default: false,   null: false
-    t.string   "recurring_interval",           limit: 255, default: "Daily"
+    t.boolean  "recurring",                    default: false,   null: false
+    t.string   "recurring_interval",           default: "Daily"
     t.integer  "recurring_length"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "urgency"
-    t.integer  "purchase_type",                                              null: false
+    t.integer  "purchase_type",                                  null: false
   end
 
   create_table "ncr_organizations", force: :cascade do |t|
@@ -176,21 +176,21 @@ ActiveRecord::Schema.define(version: 20161204205859) do
 
   create_table "ncr_work_orders", force: :cascade do |t|
     t.decimal  "amount"
-    t.string   "expense_type",        limit: 255
-    t.string   "vendor",              limit: 255
-    t.boolean  "not_to_exceed",                   default: false, null: false
-    t.string   "building_number",     limit: 255
-    t.boolean  "emergency",                       default: false, null: false
-    t.string   "rwa_number",          limit: 255
-    t.string   "code",                limit: 255
-    t.string   "project_title",       limit: 255
+    t.string   "expense_type"
+    t.string   "vendor"
+    t.boolean  "not_to_exceed",       default: false, null: false
+    t.string   "building_number"
+    t.boolean  "emergency",           default: false, null: false
+    t.string   "rwa_number"
+    t.string   "code"
+    t.string   "project_title"
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "direct_pay",                      default: false, null: false
-    t.string   "cl_number",           limit: 255
-    t.string   "function_code",       limit: 255
-    t.string   "soc_code",            limit: 255
+    t.boolean  "direct_pay",          default: false, null: false
+    t.string   "cl_number"
+    t.string   "function_code"
+    t.string   "soc_code"
     t.integer  "ncr_organization_id"
   end
 
@@ -205,17 +205,17 @@ ActiveRecord::Schema.define(version: 20161204205859) do
   add_index "proposal_roles", ["role_id", "user_id", "proposal_id"], name: "index_proposal_roles_on_role_id_and_user_id_and_proposal_id", unique: true, using: :btree
 
   create_table "proposals", force: :cascade do |t|
-    t.string   "status",           limit: 255
+    t.string   "status"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "client_data_id"
-    t.string   "client_data_type", limit: 255
+    t.string   "client_data_type"
     t.integer  "requester_id"
-    t.string   "public_id",        limit: 255
+    t.string   "public_id"
     t.uuid     "visit_id"
   end
 
-  add_index "proposals", ["client_data_id", "client_data_type"], name: "index_proposals_on_client_data_id_and_client_data_type", using: :btree
+  add_index "proposals", ["client_data_type", "client_data_id"], name: "index_proposals_on_client_data_type_and_client_data_id", using: :btree
 
   create_table "reports", force: :cascade do |t|
     t.string   "name",                       null: false
@@ -236,7 +236,7 @@ ActiveRecord::Schema.define(version: 20161204205859) do
 
   create_table "steps", force: :cascade do |t|
     t.integer  "user_id"
-    t.string   "status",              limit: 255
+    t.string   "status"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "position"
@@ -286,13 +286,13 @@ ActiveRecord::Schema.define(version: 20161204205859) do
   add_index "user_roles", ["user_id", "role_id"], name: "index_user_roles_on_user_id_and_role_id", unique: true, using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "email_address", limit: 255
-    t.string   "first_name",    limit: 255
-    t.string   "last_name",     limit: 255
+    t.string   "email_address"
+    t.string   "first_name"
+    t.string   "last_name"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "client_slug",   limit: 255
-    t.boolean  "active",                    default: true
+    t.string   "client_slug"
+    t.boolean  "active",        default: true
   end
 
   create_table "versions", force: :cascade do |t|
