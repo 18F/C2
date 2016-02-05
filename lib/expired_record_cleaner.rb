@@ -61,7 +61,7 @@ class ExpiredRecordCleaner
   end
 
   def notify_no_action_taken_if_non_test_env(proposal)
-    if !Rails.env.test?
+    unless Rails.env.test?
       STDERR.puts "set OK_TO_ACT=true to clean up #{proposal.id}"
     end
   end
