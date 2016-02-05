@@ -29,7 +29,7 @@ else
 end
 
 # optional verbose logging based on env var, regardless of environment.
-if ENV["ES_DEBUG"].to_i > 0
+if ENV["ES_DEBUG"]
   logger = Logger.new(STDOUT)
   logger.level = Logger::DEBUG
   tracer = Logger.new(STDERR)
