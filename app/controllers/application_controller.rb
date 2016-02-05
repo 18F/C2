@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
   before_action :check_disabled_client
   before_action :set_default_view_variables
 
-  after_filter :track_action
+  after_action :track_action
 
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
 
