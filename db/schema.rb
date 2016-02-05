@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160205171944) do
+ActiveRecord::Schema.define(version: 20161204205859) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -128,7 +128,7 @@ ActiveRecord::Schema.define(version: 20160205171944) do
     t.integer  "user_id"
     t.integer  "proposal_id"
     t.boolean  "update_comment"
-    t.integer  "visit_id"
+    t.uuid     "visit_id"
   end
 
   add_index "comments", ["proposal_id"], name: "index_comments_on_proposal_id", using: :btree
@@ -212,7 +212,7 @@ ActiveRecord::Schema.define(version: 20160205171944) do
     t.string   "client_data_type", limit: 255
     t.integer  "requester_id"
     t.string   "public_id",        limit: 255
-    t.integer  "visit_id"
+    t.uuid     "visit_id"
   end
 
   add_index "proposals", ["client_data_id", "client_data_type"], name: "index_proposals_on_client_data_id_and_client_data_type", using: :btree
@@ -340,10 +340,12 @@ ActiveRecord::Schema.define(version: 20160205171944) do
   add_foreign_key "attachments", "users", name: "user_id_fkey"
   add_foreign_key "comments", "proposals", name: "proposal_id_fkey"
   add_foreign_key "comments", "users", name: "user_id_fkey"
+  add_foreign_key "comments", "visits"
   add_foreign_key "proposal_roles", "proposals", name: "proposal_id_fkey"
   add_foreign_key "proposal_roles", "roles", name: "role_id_fkey"
   add_foreign_key "proposal_roles", "users", name: "user_id_fkey"
   add_foreign_key "proposals", "users", column: "requester_id", name: "requester_id_fkey"
+  add_foreign_key "proposals", "visits"
   add_foreign_key "steps", "proposals", name: "proposal_id_fkey", on_delete: :cascade
   add_foreign_key "steps", "steps", column: "parent_id", name: "parent_id_fkey", on_delete: :cascade
   add_foreign_key "steps", "users", column: "completer_id", name: "completer_id_fkey"
