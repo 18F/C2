@@ -6,7 +6,7 @@ ActiveAdmin.setup do |config|
   config.localize_format = :long
   config.namespace :admin do |admin|
     admin.build_menu do |menu|
-      menu.add label: 'Tracking', priority: 99
+      menu.add label: "Tracking", priority: 99
     end
   end
 end
