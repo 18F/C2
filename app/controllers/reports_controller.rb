@@ -32,6 +32,6 @@ class ReportsController < ApplicationController
   end
 
   def report_params
-    params.permit(:name, :query)
+    params.permit(:name, :query, :visit_id)
   end
 end

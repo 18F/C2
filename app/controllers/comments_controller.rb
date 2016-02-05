@@ -25,7 +25,7 @@ class CommentsController < ApplicationController
   end
 
   def comment_params
-    params.require(:comment).permit(:comment_text)
+    params.require(:comment).permit(:comment_text, :visit_id)
   end
 
   def auth_errors(exception)
