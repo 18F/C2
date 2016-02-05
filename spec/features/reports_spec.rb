@@ -1,4 +1,4 @@
-feature "reports" do
+feature "reports", elasticsearch: true do
   before do
     login_as(user)
   end
