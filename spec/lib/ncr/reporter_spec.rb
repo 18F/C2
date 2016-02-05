@@ -3,7 +3,6 @@ describe Ncr::Reporter do
     it "only returns Proposals where the approving official is actionable" do
       partially_approved = create(:ncr_work_order, :with_approvers)
       partially_approved.individual_steps.first.approve!
-
       actionable = create(:ncr_work_order, :with_approvers)
 
       expect(Ncr::Reporter.proposals_pending_approving_official).to eq([actionable.proposal])

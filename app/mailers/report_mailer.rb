@@ -2,9 +2,9 @@ class ReportMailer < ApplicationMailer
   add_template_helper ReportHelper
 
   def daily_budget_report
-    to_email = ENV.fetch('BUDGET_REPORT_RECIPIENT')
-    date = Time.now.utc.strftime("%a %m/%d/%y (%Z)")
-
+    @ba60_proposals = proposals_query("BA60")
+    @ba61_proposals = proposals_query("BA61")
+    @ba80_proposals = proposals_query("BA80")
     build_attachments
 
     mail(
@@ -28,10 +28,16 @@ class ReportMailer < ApplicationMailer
 
   private
 
+  def proposals_query(expense_type)
+    Ncr::ExpenseTypeProposalsQuery.new(expense_type: expense_type, time_delimiter: 1.week.ago).find
+  end
+
   def csv_reports
-    { 'approved-ba60-week' => Ncr::Reporter.ba60_proposals,
-      'approved-ba61-week' => Ncr::Reporter.ba61_proposals,
-      'approved-ba80-week' => Ncr::Reporter.ba80_proposals,
+    {
+      'approved-ba60-week' => @ba60_proposals,
+      'approved-ba61-week' => @ba61_proposals,
+      'approved-ba80-week' => @ba80_proposals,
+
       'pending-at-approving-official' => Ncr::Reporter.proposals_pending_approving_official,
       'pending-at-budget' => Ncr::Reporter.proposals_pending_budget,
       'pending-at-tier-one-approval' => Ncr::Reporter.proposals_tier_one_pending,
@@ -43,5 +49,13 @@ class ReportMailer < ApplicationMailer
     csv_reports.each do |name, records|
       attachments[name + '-' + date + '.csv'] = Ncr::Reporter.as_csv(records)
     end
+  end
+
+  def to_email
+    ENV.fetch("BUDGET_REPORT_RECIPIENT")
+  end
+
+  def date
+    Time.now.utc.strftime("%a %m/%d/%y (%Z)")
   end
 end

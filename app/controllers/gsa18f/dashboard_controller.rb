@@ -7,7 +7,7 @@ module Gsa18f
     private
 
     def query
-      Gsa18fDashboardQuery.new(current_user).select_all
+      Gsa18f::DashboardQuery.new(current_user).select_all
     end
   end
 end

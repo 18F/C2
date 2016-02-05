@@ -1,37 +1,35 @@
 C2 Budget Report on <%= pretty_date Time.zone.now %>
 
 =====
-TOTAL REQUESTS LAST WEEK: <%= Ncr::Reporter.total_last_week %>
+TOTAL REQUESTS LAST WEEK: <%= Ncr::LastWeekCountQuery.new.find %>
 =====
-BA60 approved: <%= Ncr::Reporter.ba60_proposals.count %>
-BA61 approved: <%= Ncr::Reporter.ba61_proposals.count %>
-BA80 approved: <%= Ncr::Reporter.ba80_proposals.count %>
-
+BA60 approved: <%= @ba60_proposals.count %>
+BA61 approved: <%= @ba61_proposals.count %>
+BA80 approved: <%= @ba80_proposals.count %>
 
 -----
 Approved BA60 requests last week
 -----
-<% Ncr::Reporter.ba60_proposals.each do |p| %>
+<% @ba60_proposals.each do |p| %>
   <%= "#{p.public_id} | Requester: #{p.requester.email_address} | Budget Approver: #{p.client_data.decorate.current_approver_email_address} | CL: #{p.client_data.cl_number} | Function code: #{p.client_data.function_code} | Soc code: #{p.client_data.soc_code}" %>
 <% end %>
 
 -----
 Approved BA61 requests last week
 -----
-<% Ncr::Reporter.ba61_proposals.each do |p| %>
+<% @ba61_proposals.each do |p| %>
   <%= "#{p.public_id} | Requester: #{p.requester.email_address} | Budget Approver: #{p.client_data.decorate.current_approver_email_address} | CL: #{p.client_data.cl_number} | Function code: #{p.client_data.function_code} | Soc code: #{p.client_data.soc_code}" %>
 <% end %>
 
 -----
 Approved BA80 requests last week
 -----
-<% Ncr::Reporter.ba80_proposals.each do |p| %>
+<% @ba80_proposals.each do |p| %>
   <%= "#{p.public_id} | Requester: #{p.requester.email_address} | Approver: #{p.client_data.decorate.current_approver_email_address} | CL: #{p.client_data.cl_number} | Function code: #{p.client_data.function_code} | Soc code: #{p.client_data.soc_code}" %>
 <% end %>
 
-
 =====
-TOTAL PENDING REQUESTS: <%= Ncr::Reporter.total_unapproved %>
+TOTAL PENDING REQUESTS: <%= Ncr::UnapprovedCountQuery.new.find %>
 =====
 
 -----
