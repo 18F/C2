@@ -1,26 +1,5 @@
 module Ncr
   class Reporter
-    def self.total_last_week
-      Proposal.where(client_data_type: "Ncr::WorkOrder")
-        .where("created_at > ?", 1.week.ago).count
-    end
-
-    def self.total_unapproved
-      Proposal.pending.where(client_data_type: "Ncr::WorkOrder").count
-    end
-
-    def self.ba60_proposals
-      budget_proposals("BA60", 1.week.ago)
-    end
-
-    def self.ba61_proposals
-      budget_proposals("BA61", 1.week.ago)
-    end
-
-    def self.ba80_proposals
-      budget_proposals("BA80", 1.week.ago)
-    end
-
     def self.proposal_public_url(proposal)
       Rails.application.routes.url_helpers.url_for(controller: 'proposals', action: 'show', id: proposal.id, host: DEFAULT_URL_HOST)
     end
@@ -57,13 +36,6 @@ module Ncr
         .where(client_data_type: 'Ncr::WorkOrder')
         .select { |p| p.individual_steps.pluck(:status).last == 'actionable' }
         .sort_by { |pr| pr.client_data.expense_type }
-    end
-
-    def self.budget_proposals(type, timespan)
-      Proposal.approved
-        .where(client_data_type: 'Ncr::WorkOrder')
-        .where('created_at > ?', timespan)
-        .select { |pr| pr.client_data.expense_type == type }
     end
 
     def self.proposals_tier_one_pending

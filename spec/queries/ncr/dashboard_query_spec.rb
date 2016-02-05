@@ -1,12 +1,12 @@
-describe Gsa18fDashboardQuery do
+describe Ncr::DashboardQuery do
   describe "#select_all" do
-    it "returns scope Gsa18F records" do
+    it "returns scoped NCR records" do
       user = create(:user)
       proposal = create(:proposal, requester: user)
-      create(:gsa18f_procurement, cost_per_unit: 10, quantity: 10,  proposal: proposal)
+      create(:ncr_work_order, amount: 100, proposal: proposal)
       now = Time.current.utc
 
-      query = Gsa18fDashboardQuery.new(user).select_all
+      query = Ncr::DashboardQuery.new(user).select_all
 
       expect(query.to_a).to eq([{
         "year" => now.year.to_s,

@@ -7,7 +7,7 @@ module Ncr
     private
 
     def query
-      NcrDashboardQuery.new(current_user).select_all
+      Ncr::DashboardQuery.new(current_user).select_all
     end
   end
 end

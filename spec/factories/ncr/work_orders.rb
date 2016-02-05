@@ -10,6 +10,14 @@ FactoryGirl.define do
     sequence(:approving_official_email) {|n| "approver#{User.count}@example.com" }
     association :proposal, client_slug: "ncr"
 
+    factory :ba60_ncr_work_order do
+      expense_type "BA60"
+    end
+
+    factory :ba61_ncr_work_order do
+      expense_type "BA61"
+    end
+
     factory :ba80_ncr_work_order do
       expense_type "BA80"
       rwa_number "R1234567"
