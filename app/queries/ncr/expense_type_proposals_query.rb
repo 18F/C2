@@ -8,7 +8,6 @@ module Ncr
     def find
       Proposal
         .approved
-        .joins(:client_data)
         .where(client_data_type: "Ncr::WorkOrder")
         .where("created_at > ?", time_delimiter)
         .select { |proposal| proposal.client_data.expense_type == type }
