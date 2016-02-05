@@ -37,7 +37,7 @@ class ExpiredRecordCleaner
   end
 
   def handle_no_requester(proposal)
-    if @verbose && ENV["RAILS_ENV"] != "test"
+    if @verbose && !Rails.env.test?
       STDERR.puts "#{proposal.id} <= no Requester defined"
     end
     if @ok_to_act
@@ -48,9 +48,10 @@ class ExpiredRecordCleaner
   end
 
   def handle_cancellation(proposal)
-    if @verbose && ENV["RAILS_ENV"] != "test"
+    if @verbose && !Rails.env.test?
       STDERR.puts "#{proposal.public_id} -> #{proposal.requester.email_address}"
     end
+
     if @ok_to_act
       notify_proposal_requester(proposal)
       proposal.cancel!
@@ -60,7 +61,7 @@ class ExpiredRecordCleaner
   end
 
   def notify_no_action_taken_if_non_test_env(proposal)
-    if ENV["RAILS_ENV"] != "test"
+    if !Rails.env.test?
       STDERR.puts "set OK_TO_ACT=true to clean up #{proposal.id}"
     end
   end
