@@ -1,5 +1,5 @@
 class AuthController < ApplicationController
-  skip_before_action :authenticate_user!, only: [:oauth_callback]
+  skip_before_action :authenticate_user!, only: [:oauth_callback, :failure]
   skip_before_action :check_disabled_client
 
   def oauth_callback
@@ -9,6 +9,9 @@ class AuthController < ApplicationController
     session[:token] = auth.credentials.token
     flash[:success] = "You successfully signed in"
     redirect_to return_to_path || proposals_path
+  end
+
+  def failure
   end
 
   def logout

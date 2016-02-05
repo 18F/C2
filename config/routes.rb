@@ -11,6 +11,7 @@ C2::Application.routes.draw do
   post "/feedback" => "feedback#create"
 
   match "/auth/:provider/callback" => "auth#oauth_callback", via: [:get]
+  get "/auth/failure" => "auth#failure"
   post "/logout" => "auth#logout"
 
   resources :help, only: [:index, :show]
