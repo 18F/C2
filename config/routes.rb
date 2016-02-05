@@ -67,4 +67,7 @@ C2::Application.routes.draw do
     mount MailPreview => "mail_view"
     mount LetterOpenerWeb::Engine => "letter_opener"
   end
+  authenticate :user, lambda { |u| u.has_role? :admin } do
+    mount Blazer::Engine, at: "blazer"
+  end
 end
