@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160204204024) do
+ActiveRecord::Schema.define(version: 20161204205859) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,6 +43,22 @@ ActiveRecord::Schema.define(version: 20160204204024) do
   add_index "ahoy_events", ["user_id"], name: "index_ahoy_events_on_user_id", using: :btree
   add_index "ahoy_events", ["visit_id"], name: "index_ahoy_events_on_visit_id", using: :btree
 
+  create_table "ahoy_messages", force: :cascade do |t|
+    t.string   "token"
+    t.text     "to"
+    t.integer  "user_id"
+    t.string   "user_type"
+    t.string   "mailer"
+    t.text     "subject"
+    t.text     "content"
+    t.datetime "sent_at"
+    t.datetime "opened_at"
+    t.datetime "clicked_at"
+  end
+
+  add_index "ahoy_messages", ["token"], name: "index_ahoy_messages_on_token", using: :btree
+  add_index "ahoy_messages", ["user_id", "user_type"], name: "index_ahoy_messages_on_user_id_and_user_type", using: :btree
+
   create_table "api_tokens", force: :cascade do |t|
     t.string   "access_token", limit: 255
     t.datetime "expires_at"
@@ -65,6 +81,46 @@ ActiveRecord::Schema.define(version: 20160204204024) do
     t.datetime "updated_at"
   end
 
+  create_table "blazer_audits", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "query_id"
+    t.text     "statement"
+    t.string   "data_source"
+    t.datetime "created_at"
+  end
+
+  create_table "blazer_checks", force: :cascade do |t|
+    t.integer  "query_id"
+    t.string   "state"
+    t.text     "emails"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "blazer_dashboard_queries", force: :cascade do |t|
+    t.integer  "dashboard_id"
+    t.integer  "query_id"
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "blazer_dashboards", force: :cascade do |t|
+    t.text     "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "blazer_queries", force: :cascade do |t|
+    t.integer  "creator_id"
+    t.string   "name"
+    t.text     "description"
+    t.text     "statement"
+    t.string   "data_source"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "comments", force: :cascade do |t|
     t.text     "comment_text"
     t.datetime "created_at"
@@ -72,6 +128,7 @@ ActiveRecord::Schema.define(version: 20160204204024) do
     t.integer  "user_id"
     t.integer  "proposal_id"
     t.boolean  "update_comment"
+    t.uuid     "visit_id"
   end
 
   add_index "comments", ["proposal_id"], name: "index_comments_on_proposal_id", using: :btree
@@ -155,6 +212,7 @@ ActiveRecord::Schema.define(version: 20160204204024) do
     t.string   "client_data_type", limit: 255
     t.integer  "requester_id"
     t.string   "public_id",        limit: 255
+    t.uuid     "visit_id"
   end
 
   add_index "proposals", ["client_data_id", "client_data_type"], name: "index_proposals_on_client_data_id_and_client_data_type", using: :btree
@@ -166,6 +224,7 @@ ActiveRecord::Schema.define(version: 20160204204024) do
     t.integer  "user_id",                    null: false
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
+    t.uuid     "visit_id"
   end
 
   create_table "roles", force: :cascade do |t|
@@ -282,10 +341,13 @@ ActiveRecord::Schema.define(version: 20160204204024) do
   add_foreign_key "attachments", "users", name: "user_id_fkey"
   add_foreign_key "comments", "proposals", name: "proposal_id_fkey"
   add_foreign_key "comments", "users", name: "user_id_fkey"
+  add_foreign_key "comments", "visits"
   add_foreign_key "proposal_roles", "proposals", name: "proposal_id_fkey"
   add_foreign_key "proposal_roles", "roles", name: "role_id_fkey"
   add_foreign_key "proposal_roles", "users", name: "user_id_fkey"
   add_foreign_key "proposals", "users", column: "requester_id", name: "requester_id_fkey"
+  add_foreign_key "proposals", "visits"
+  add_foreign_key "reports", "visits"
   add_foreign_key "steps", "proposals", name: "proposal_id_fkey", on_delete: :cascade
   add_foreign_key "steps", "steps", column: "parent_id", name: "parent_id_fkey", on_delete: :cascade
   add_foreign_key "steps", "users", column: "completer_id", name: "completer_id_fkey"

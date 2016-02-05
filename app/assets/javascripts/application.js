@@ -22,5 +22,6 @@
 //= require ahoy
 //= require peek
 //= require peek/views/performance_bar
-//= require ahoy_tracking
 //= require_directory .
+
+ahoy.trackAll();
