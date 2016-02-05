@@ -10,7 +10,7 @@ module Ncr
         .approved
         .where(client_data_type: "Ncr::WorkOrder")
         .where("created_at > ?", time_delimiter)
-        .select { |proposal| proposal.client_data.expense_type == type }
+        .select { |proposal| proposal.client_data.expense_type == expense_type }
     end
 
     private
