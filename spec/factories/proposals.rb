@@ -49,7 +49,7 @@ FactoryGirl.define do
     trait :with_observer do
       after :create do |proposal, evaluator|
         observer = create(:user, client_slug: evaluator.client_slug)
-        proposal.add_observer(observer.email_address)
+        proposal.add_observer(observer)
       end
     end
 
@@ -57,14 +57,14 @@ FactoryGirl.define do
       after :create do |proposal, evaluator|
         2.times do
           observer = create(:user, client_slug: evaluator.client_slug)
-          proposal.add_observer(observer.email_address)
+          proposal.add_observer(observer)
         end
       end
     end
 
     after(:create) do |proposal, evaluator|
       if evaluator.observer
-        proposal.add_observer(evaluator.observer.email_address)
+        proposal.add_observer(evaluator.observer)
       end
 
       if evaluator.delegate

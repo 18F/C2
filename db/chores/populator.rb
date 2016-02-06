@@ -28,11 +28,12 @@ class Populator
 
   private
 
-  def create_proposal(requester: create(:user), requested_at: Time.zone.now)
+  def create_proposal(requester: create(:user, client_slug: "ncr"), requested_at: Time.zone.now)
     create(
       :proposal,
       :with_serial_approvers,
       :with_observers,
+      client_slug: "ncr",
       requester: requester,
       created_at: requested_at,
       updated_at: requested_at,

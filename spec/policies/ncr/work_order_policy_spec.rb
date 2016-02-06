@@ -24,7 +24,7 @@ describe Ncr::WorkOrderPolicy do
 
     it "allows an observer to edit it" do
       observer = create(:user, client_slug: "ncr")
-      proposal.add_observer(observer.email_address)
+      proposal.add_observer(observer)
       expect(subject).to permit(observer, work_order)
     end
 

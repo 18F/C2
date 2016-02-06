@@ -50,7 +50,7 @@ describe ProposalUpdateRecorder do
 
     it "attributes the update comment to someone set explicitly" do
       work_order = create(:ncr_work_order, vendor: "old")
-      modifier = create(:user)
+      modifier = create(:user, client_slug: "ncr")
       work_order.modifier = modifier
 
       work_order.vendor = "VenVenVen"
@@ -63,7 +63,7 @@ describe ProposalUpdateRecorder do
     it "does not send a comment email for the update comment to proposal listeners" do
       work_order = create(:ncr_work_order, vendor: "old")
       listener = create(:user, client_slug: "ncr")
-      work_order.proposal.add_observer(listener.email_address)
+      work_order.proposal.add_observer(listener)
 
       work_order.vendor = "VenVenVen"
 

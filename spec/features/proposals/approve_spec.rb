@@ -17,7 +17,7 @@ describe "Approving a proposal" do
 
   it "doesn't send multiple emails to approvers who are also observers" do
     proposal = create(:proposal, :with_approver)
-    proposal.add_observer(proposal.approvers.first.email_address)
+    proposal.add_observer(proposal.approvers.first)
 
     login_as(proposal.approvers.first)
     visit "/proposals/#{proposal.id}"

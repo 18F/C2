@@ -6,7 +6,7 @@ feature "Approver options during create", :js do
     login_as(requester)
     visit new_ncr_work_order_path
 
-    within(".ncr_work_order_approving_official_email") do
+    within(".ncr_work_order_approving_official") do
       find(".selectize-control").click
       expect(page).not_to have_content(inactive_user.email_address)
       expect(page).to have_content(approver.email_address)
@@ -20,7 +20,7 @@ feature "Approver options during create", :js do
     visit new_ncr_work_order_path
 
     expect_page_not_to_have_selectized_options(
-      "ncr_work_order_approving_official_email",
+      "ncr_work_order_approving_official",
       Ncr::Mailboxes.ba61_tier1_budget,
       Ncr::Mailboxes.ba61_tier2_budget,
       Ncr::Mailboxes.ba80_budget,
@@ -33,7 +33,7 @@ feature "Approver options during create", :js do
     visit new_ncr_work_order_path
 
     expect_page_not_to_have_selectized_options(
-      "ncr_work_order_approving_official_email",
+      "ncr_work_order_approving_official",
       requester.email_address
     )
   end
@@ -45,20 +45,21 @@ feature "Approver options during create", :js do
     visit new_ncr_work_order_path
 
     expect_page_not_to_have_selected_selectize_option(
-      "ncr_work_order_approving_official_email",
+      "ncr_work_order_approving_official",
       /@example.com/
     )
   end
 
   scenario "defaults to the approver from the last request" do
-    login_as(requester)
-    proposal = create(:proposal, :with_approver, requester: requester, client_slug: "ncr")
+    client_data = create(:ncr_work_order)
+    create(:proposal, client_data: client_data, requester: requester, client_slug: "ncr")
 
+    login_as(requester)
     visit new_ncr_work_order_path
 
     expect_page_to_have_selected_selectize_option(
-      "ncr_work_order_approving_official_email",
-       proposal.approvers.first.email_address
+      "ncr_work_order_approving_official",
+      client_data.approving_official.email_address
     )
   end
 

@@ -62,7 +62,8 @@ describe NcrDispatcher do
     it 'does not notify observer if they are the one making the update' do
       deliveries.clear
       email = 'requester@example.com'
-      proposal.add_observer(email)
+      user = create(:user, client_slug: "ncr", email_address: email)
+      proposal.add_observer(user)
       ncr_dispatcher.on_proposal_update(proposal, proposal.observers.first)
       expect(email_recipients).to_not include(email)
     end

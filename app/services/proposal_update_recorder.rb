@@ -46,19 +46,35 @@ class ProposalUpdateRecorder
   def association_name(key)
     if key == "ncr_organization_id"
       "Org code"
+    elsif key == "approving_official_id"
+      "Approving official"
     end
   end
 
   def former_association_value(key)
     if key == "ncr_organization_id"
-      former_id = former_value(key)
-
-      if former_id.present? && Ncr::Organization.find(former_id)
-        "from #{Ncr::Organization.find(former_id).code_and_name} "
-      else
-        ""
-      end
+      former_ncr_organization(key) || ""
+    elsif key == "approving_official_id"
+      former_approving_official(key) || ""
     end
+  end
+
+  def former_ncr_organization(key)
+    former_id = former_id(key)
+    if former_id.present? && Ncr::Organization.find(former_id)
+      "from #{Ncr::Organization.find(former_id).code_and_name} "
+    end
+  end
+
+  def former_approving_official(key)
+    former_id = former_id(key)
+    if former_id.present? && User.find(former_id)
+      "from #{User.find(former_id).email_address} "
+    end
+  end
+
+  def former_id(key)
+    former_value(key)
   end
 
   def new_association_value(key)

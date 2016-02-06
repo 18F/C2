@@ -14,7 +14,7 @@ feature "Creating an NCR work order", :js do
       fill_in_selectized("ncr_work_order_building_number", "Test building")
       fill_in_selectized("ncr_work_order_vendor", "ACME")
       fill_in 'Amount', with: 123.45
-      fill_in_selectized("ncr_work_order_approving_official_email", approver.email_address)
+      fill_in_selectized("ncr_work_order_approving_official", approver.email_address)
       fill_in_selectized("ncr_work_order_ncr_organization", organization.code_and_name)
       click_on "Submit for approval"
 
@@ -38,9 +38,9 @@ feature "Creating an NCR work order", :js do
       fill_in 'Amount', with: 123.45
       click_on "Submit for approval"
 
-      expect(page).to have_content("Approving official email can't be blank")
+      expect(page).to have_content("Approving official can't be blank")
       visit proposals_path
-      expect(page).to_not have_content("Approving official email can't be blank")
+      expect(page).to_not have_content("Approving official can't be blank")
     end
 
     scenario "doesn't show the budget fields" do

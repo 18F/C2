@@ -34,7 +34,7 @@ describe SubscriberList do
       triples = SubscriberList.new(proposal).triples
 
       expect {
-        proposal.add_observer(user.email_address)
+        proposal.add_observer(user)
       }.to_not change { triples }
     end
   end

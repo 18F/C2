@@ -24,7 +24,8 @@ describe Dispatcher do
     end
 
     it 'sends a proposal notification email to observers' do
-      proposal.add_observer('observer1@example.com')
+      observer = create(:user)
+      proposal.add_observer(observer)
       expect(ObserverMailer).to receive_message_chain(:proposal_observer_email, :deliver_later)
       dispatcher.deliver_new_proposal_emails(proposal)
     end
@@ -32,7 +33,8 @@ describe Dispatcher do
 
   describe '#deliver_attachment_emails' do
     it "emails everyone currently involved in the proposal" do
-      proposal.add_observer("wiley-cat@example.com")
+      observer = create(:user)
+      proposal.add_observer(observer)
       dispatcher.deliver_attachment_emails(proposal)
       expect(email_recipients).to match_array(proposal.subscribers.map(&:email_address))
     end

@@ -3,24 +3,41 @@ describe Ncr::WorkOrdersHelper do
     it 'includes existing users' do
       expect(helper.approver_options.size).to eq(0)
       users = [create(:user, client_slug: "ncr"), create(:user, client_slug: "ncr")]
-      expect(helper.approver_options).to include(*users.map(&:email_address))
+      users.map do |user|
+        expect(helper.approver_options).to include({
+          name: user.email_address,
+          id: user.id
+        })
+      end
     end
 
     it "does not include inactive users" do
       inactive_approving_official = create(:user, :inactive, client_slug: "ncr")
       active_approving_official = create(:user, :active, client_slug: "ncr")
 
-      expect(helper.approver_options).to include(active_approving_official.email_address)
-      expect(helper.approver_options).not_to include(inactive_approving_official.email_address)
+      expect(helper.approver_options).to include({
+        name: active_approving_official.email_address,
+        id: active_approving_official.id
+      })
+      expect(helper.approver_options).not_to include({
+        name: inactive_approving_official.email_address,
+        id: inactive_approving_official.id
+      })
     end
 
     it 'sorts the results' do
-      create(:user, email_address: 'b@example.com', client_slug: "ncr")
-      create(:user, email_address: 'c@example.com', client_slug: "ncr")
-      create(:user, email_address: 'a@example.com', client_slug: "ncr")
-      create(:user, email_address: 'd@example.com', client_slug: 'gsa18f')
-      expect(helper.approver_options).to include(*%w(a@example.com b@example.com c@example.com))
-      expect(helper.approver_options).not_to include(*%w(d@example.com))
+      a_user = create(:user, email_address: 'b@example.com', client_slug: "ncr")
+      b_user = create(:user, email_address: 'c@example.com', client_slug: "ncr")
+      c_user = create(:user, email_address: 'a@example.com', client_slug: "ncr")
+      d_user = create(:user, email_address: 'd@example.com', client_slug: 'gsa18f')
+      expect(helper.approver_options).to include(
+        { name: a_user.email_address, id: a_user.id },
+        { name: b_user.email_address, id: b_user.id },
+        { name: c_user.email_address, id: c_user.id }
+        )
+      expect(helper.approver_options).not_to include(
+        { name: d_user.email_address, id: d_user.id }
+      )
     end
   end
 

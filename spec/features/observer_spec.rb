@@ -6,7 +6,7 @@ feature "Observers" do
     login_as(proposal.requester)
 
     visit proposal_path(proposal)
-    select observer.email_address, from: "observation_user_email_address"
+    select observer.email_address, from: "observation_user_id"
     click_on "Add an Observer"
 
     expect(page).to have_content("#{observer.full_name} has been added as an observer")
@@ -19,7 +19,7 @@ feature "Observers" do
     login_as(observer1)
 
     visit proposal_path(proposal)
-    select observer2.email_address, from: "observation_user_email_address"
+    select observer2.email_address, from: "observation_user_id"
     click_on "Add an Observer"
 
     expect(page).to have_content("#{observer2.full_name} has been added as an observer")
@@ -32,7 +32,7 @@ feature "Observers" do
     login_as(proposal.requester)
 
     visit proposal_path(proposal)
-    select observer.email_address, from: "observation_user_email_address"
+    select observer.email_address, from: "observation_user_id"
     fill_in "observation_reason", with: reason
     click_on "Add an Observer"
 

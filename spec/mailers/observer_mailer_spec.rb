@@ -37,7 +37,7 @@ describe ObserverMailer do
       observer = create(:user)
       adder = create(:user)
       reason = 'is an absolute ledge'
-      proposal.add_observer(observer.email_address, adder, reason)
+      proposal.add_observer(observer, adder, reason)
       observation = proposal.observations.first
 
       mail = ObserverMailer.on_observer_added(observation, reason)
@@ -51,14 +51,14 @@ describe ObserverMailer do
       "NOTIFICATION_REPLY_TO" => "replyto@example.com"
     ) do
       let(:proposal) { create(:proposal) }
-      let(:observation) { proposal.add_observer('observer1@example.com') }
-      let(:observer) { observation.user }
+      let(:observer) { create(:user) }
+      let(:observation) { proposal.add_observer(observer) }
       let(:mail) { ObserverMailer.proposal_observer_email(observer.email_address, proposal) }
 
       it_behaves_like "a proposal email"
 
       it "renders the receiver email" do
-        expect(mail.to).to eq(["observer1@example.com"])
+        expect(mail.to).to eq([observer.email_address])
       end
 
       it "uses the default sender name" do
