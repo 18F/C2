@@ -66,3 +66,7 @@ Turn off logging
 Debug endpoint requests in Ruby
 
 ```Ahoy.quiet = false```
+
+## Admin
+
+```Visit``` and ```Event``` data can be viewed in the ActiveAdmin panel, usnder the ```Tracking``` menu item.
