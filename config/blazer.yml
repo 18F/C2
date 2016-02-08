@@ -1,0 +1,8 @@
+# see https://github.com/ankane/blazer for more info
+data_sources:
+  main:
+    url: <%= ENV["BLAZER_DATABASE_URL"] %>
+    smart_variables:
+    linked_columns:
+    smart_columns:
+audit: true
