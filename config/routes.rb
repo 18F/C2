@@ -66,4 +66,9 @@ C2::Application.routes.draw do
   if Rails.env.development?
     mount LetterOpenerWeb::Engine => "letter_opener"
   end
+
+  constraints lambda {|request| AuthConstraint.admin?(request) } do
+    mount Blazer::Engine, at: "blazer"
+  end
 end
+
