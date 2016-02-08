@@ -57,11 +57,11 @@ Force a new visit
 
 Log messages
 
-```ahoy.debug();```
+```ahoy.debug(); ```
 
 Turn off logging
 
-```ahoy.debug(false);```
+```ahoy.debug(false); ```
 
 Debug endpoint requests in Ruby
 
@@ -70,3 +70,6 @@ Debug endpoint requests in Ruby
 ## Admin
 
 ```Visit``` and ```Event``` data can be viewed in the ActiveAdmin panel, usnder the ```Tracking``` menu item.
+
+![screen shot 2016-02-05 at 1 04 31 pm](https://cloud.githubusercontent.com/assets/1332366/12854594/94244b2c-cc08-11e5-8f4c-22be59ffbadc.png)
+
