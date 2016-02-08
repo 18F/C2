@@ -19,6 +19,12 @@ class ApplicationController < ActionController::Base
 
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
 
+  def authenticate(scope=nil, block=nil)
+    constraints_for(:authenticate!, scope, block) do
+      yield
+    end
+  end
+
   protected
 
   # We are overriding this method to account for ExceptionPolicies
