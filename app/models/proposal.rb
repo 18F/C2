@@ -29,6 +29,7 @@ class Proposal < ActiveRecord::Base
     end
   end
 
+  visitable
   acts_as_taggable
 
   has_many :steps
