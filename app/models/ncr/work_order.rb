@@ -175,7 +175,7 @@ module Ncr
 
     def frozen_approving_official_not_changed
       if persisted? && approving_official_id_changed? && approver_email_frozen?
-       errors.add(:approving_official, "Approving official cannot be changed")
+        errors.add(:approving_official, "Approving official cannot be changed")
       end
     end
   end
