@@ -4,6 +4,18 @@
 
 C2 is part of GSA's suite of Common Acquisition Platform (CAP) tools.
 
+## Interested in using C2?
+
+C2's code is open source, which means you can clone the code in this
+repository, adapt it for your needs, and deploy it yourself.
+
+If you would prefer to use C2 as as hosted software solution for your
+organization, we would be happy to give you a demo.
+
+Please submit a [support ticket](https://cap.18f.gov/feedback) or join our
+[public Slack channel](https://chat.18f.gov/) (select "cap-public" from the
+dropdown) to learn more.
+
 ## Links
 
 * [Issue tracker](https://trello.com/b/kAW72R3m/c2-birthday-cake)
