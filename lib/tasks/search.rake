@@ -3,7 +3,7 @@ require "elasticsearch/rails/ha/tasks"
 namespace :search do
   desc "re-index all records, in parallel"
   task index: :environment do
-    delegate_to_ha_method("index")
+    delegate_to_ha_method("import")
   end
 
   desc "stage an index build"
