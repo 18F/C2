@@ -7,10 +7,12 @@ class AddApprovingOfficialEmailToWorkOrders < ActiveRecord::Migration
     add_column :ncr_work_orders, :approving_official_id, :integer, index: true
 
     Ncr::WorkOrder.all.each do |work_order|
-      step = work_order.proposal.individual_steps.first
-      if step
-        work_order.approving_official = step.user
-        work_order.save(validate: false)
+      if work_order.proposal
+        step = work_order.proposal.individual_steps.first
+        if step
+          work_order.approving_official = step.user
+          work_order.save(validate: false)
+        end
       end
     end
   end
