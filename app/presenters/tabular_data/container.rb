@@ -9,7 +9,7 @@ module TabularData
       @filter = config.fetch(:filter, false)
       @query = init_query(config[:engine].constantize, config.fetch(:joins, []))
       @columns = init_columns(config.fetch(:column_configs, {}), config.fetch(:columns, {}))
-      set_sort(config[:sort])
+      self.sort = config[:sort]
     end
 
     def alter_query
@@ -35,12 +35,12 @@ module TabularData
       end
     end
 
-    def set_state_from_params(params)
+    def state_from_params=(params)
       relevant = params.permit(tables: { @name => [:sort] })
       config = relevant.fetch(:tables, {}).fetch(@name, {}) || {}
 
       if config.key?(:sort)
-        set_sort(config[:sort])
+        self.sort = config[:sort]
       end
 
       self
@@ -48,15 +48,15 @@ module TabularData
 
     def sort_params(original_params, col)
       if col.sort_dir == :asc   # flip to descending
-        original_params.deep_merge(tables: { @name => { sort: '-' + col.name }})
+        original_params.deep_merge(tables: { @name => { sort: "-" + col.name } })
       else
-        original_params.deep_merge(tables: { @name => { sort: col.name }})
+        original_params.deep_merge(tables: { @name => { sort: col.name } })
       end
     end
 
     private
 
-    def set_sort(field)
+    def sort=(field)
       sort_field = field || ""
       direction = sort_field.start_with?("-") ? :desc : :asc
       field_name = sort_field.gsub(/\A-/, "")
@@ -100,7 +100,7 @@ module TabularData
         column_hash[name] = Column.new(name, qualified_name, col_config)
       end
 
-      order.map{|name| column_hash[name.to_sym]}
+      order.map { |name| column_hash[name.to_sym] }
     end
   end
 end

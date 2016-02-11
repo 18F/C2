@@ -49,7 +49,7 @@ class ProposalClausesQuery
   end
 
   def non_pending
-    steps[:status].not_eq('pending')
+    steps[:status].not_eq("pending")
   end
 
   def where_step_user(user)

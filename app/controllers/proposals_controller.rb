@@ -74,7 +74,7 @@ class ProposalsController < ApplicationController
 
   def history
     @container = ProposalVersionsQuery.new(proposal).container
-    @container.set_state_from_params(params)
+    @container.state_from_params = params
   end
 
   protected

@@ -2,17 +2,13 @@
 # https://docs.newrelic.com/docs/agents/ruby-agent/background-jobs/monitoring-ruby-background-processes-daemons#custom_background_jobs
 class ClockTasks
   def self.send_daily_ncr_budget_report
-    puts "SENDING BUDGET REPORT..."
     ReportMailer.daily_budget_report.deliver_later
-    puts "...DONE"
   end
 
   def self.send_weekly_fiscal_year_ncr_budget_report
-    puts "SENDING WEEKLY FISCAL YEAR BUDGET REPORT..."
     now = Time.zone.now
     fiscal_year = FiscalYearFinder.new(now.year, now.month).run
     ReportMailer.weekly_fiscal_year_report(fiscal_year).deliver_later
-    puts "...DONE"
   end
 
   class << self

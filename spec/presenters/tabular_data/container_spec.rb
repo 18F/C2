@@ -81,7 +81,7 @@ describe TabularData::Container do
     end
   end
 
-  describe "#set_state_from_params" do
+  describe "#state_from_params=" do
     let(:container) {
       config = {
         engine: "Proposal",
@@ -96,11 +96,11 @@ describe TabularData::Container do
       second = create(:proposal)
       third = create(:proposal)
 
-      container.set_state_from_params(ActionController::Parameters.new(tables: { abc: { sort: "id" }}))
+      container.state_from_params = ActionController::Parameters.new(tables: { abc: { sort: "id" }})
 
       expect(container.rows.to_a).to eq([first, second, third])
 
-      container.set_state_from_params(ActionController::Parameters.new(tables: { abc: { sort: "-id" }}))
+      container.state_from_params = ActionController::Parameters.new(tables: { abc: { sort: "-id" }})
 
       expect(container.rows.to_a).to eq([third, second, first])
     end
@@ -115,7 +115,7 @@ describe TabularData::Container do
       ]
 
       invalids.each do |invalid|
-        container.set_state_from_params(ActionController::Parameters.new(invalid))
+        container.state_from_params = ActionController::Parameters.new(invalid)
         expect(container.rows.length).to eq(3)
       end
     end

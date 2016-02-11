@@ -1,6 +1,6 @@
 describe TabularData::Column do
   describe '#initialize' do
-    context '@header' do
+    context '#header' do
       it 'uses the specified header, if present' do
         col = TabularData::Column.new('aaa', 'proposals.aaa', header: 'bbb')
         expect(col.header).to eq 'bbb'
@@ -12,7 +12,7 @@ describe TabularData::Column do
       end
     end
 
-    context '@formatter' do
+    context '#formatter' do
       it 'uses the specified formatter, if present' do
         col = TabularData::Column.new('aaa', 'proposals.aaa', formatter: :my_format)
         expect(col.formatter). to eq :my_format

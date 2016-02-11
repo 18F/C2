@@ -1,20 +1,26 @@
 module TabularData
   class Column
-    attr_accessor :name, :header, :formatter, :sort_dir
+    attr_accessor :name, :formatter, :sort_dir
 
     def initialize(name, qualified_name, config={})
+      @config = config
       @name = name.to_s
       @display_field = config[:display] || config[:db] || @name
-      @header = config[:header] || @name.titleize  # @todo: user I18n as default
-      @formatter = config[:formatter] || :none    # @todo: allow a pipeline
-                                                  # @todo: config from activerecord
       unless config[:virtual]
         @db_expr = Arel.sql("(#{config[:db] || qualified_name})")
       end
     end
 
     def can_sort?
-      !!@db_expr
+      @db_expr.present?
+    end
+
+    def header
+      @config[:header] || @name.titleize
+    end
+
+    def formatter
+      @config[:formatter] || :none
     end
 
     def sort(dir)

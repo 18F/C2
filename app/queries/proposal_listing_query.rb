@@ -65,7 +65,7 @@ class ProposalListingQuery
     container.alter_query do |proposal|
       ProposalPolicy::Scope.new(user, proposal).resolve.includes(:client_data)
     end
-    container.set_state_from_params(params)
+    container.state_from_params = params
 
     container
   end

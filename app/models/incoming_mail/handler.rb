@@ -19,30 +19,30 @@ module IncomingMail
     private
 
     def payload_is_raw?(payload)
-      payload.is_a?(Array) and payload[0]['event'] and payload[0]['event'] == 'inbound'
+      payload.is_a?(Array) and payload[0]["event"] and payload[0]["event"] == "inbound"
     end
 
     def create_response(payload)
-      resp = Response.new(type: identify_mail_type(payload))
-      case resp.type
-      when REQUEST
-        resp.comment = transform_msg_to_comment(payload['msg'])
-        if resp.comment
-          resp.action = Response::COMMENT
-        else
-          forward_msg(payload['msg']['raw_msg'])
-          resp.action = Response::FORWARDED
-        end
+      response = Response.new(type: identify_mail_type(payload))
+
+      if response.type == REQUEST && transform_msg_to_comment(payload["msg"]).present?
+        response.comment = transform_msg_to_comment(payload["msg"])
+        response.action = Response::COMMENT
       else
-        forward_msg(payload['msg']['raw_msg'])
-        resp.action = Response::FORWARDED
+        forward_message(response, payload)
       end
-      resp
+
+      response
+    end
+
+    def forward_message(response, payload)
+      forward_msg(payload["msg"]["raw_msg"])
+      response.action = Response::FORWARDED
     end
 
     def identify_mail_type(payload)
-      subject = payload['msg']['subject']
-      references = payload['msg']['headers']['References']
+      subject = payload["msg"]["subject"]
+      references = payload["msg"]["headers"]["References"]
       if subject_line_matches(subject)
         return IncomingMail::REQUEST
       elsif references and reference_header_matches(references)
@@ -65,9 +65,6 @@ module IncomingMail
     end
 
     def transform_msg_to_comment(msg)
-      # IMPORTANT that we check/add as observer before we create comment,
-      # since comment will create as a user if not already,
-      # and we want the reason logged.
       parsed_email = InboundMailParser.new(msg)
       proposal = parsed_email.proposal
       user = parsed_email.comment_user
@@ -78,13 +75,24 @@ module IncomingMail
         return
       end
 
-      create_comment(parsed_email)
+      comment = create_comment(parsed_email)
+      Dispatcher.on_comment_created(comment)
+      comment
     end
 
     def create_comment(parsed_email)
       proposal = parsed_email.proposal
       user = parsed_email.comment_user
+      find_or_create_observation(proposal, user)
 
+      Comment.create(
+        comment_text: parsed_email.comment_text,
+        user: user,
+        proposal: proposal
+      )
+    end
+
+    def find_or_create_observation(proposal, user)
       unless proposal.existing_observation_for(user)
         reason = "Added comment via email reply"
         ObservationCreator.new(
@@ -93,15 +101,6 @@ module IncomingMail
           reason: reason,
         ).run
       end
-
-      comment = Comment.create(
-        comment_text: parsed_email.comment_text,
-        user: user,
-        proposal: proposal
-      )
-
-      Dispatcher.on_comment_created(comment) # sends email
-      comment
     end
   end
 end
