@@ -4,7 +4,7 @@ module Ncr
     MAX_UPLOADS_ON_NEW = 10
 
     def new
-      @client_data_instance.approving_official = suggested_approver_email
+      work_order.approving_official = suggested_approver_email
       super
     end
 
