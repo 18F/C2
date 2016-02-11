@@ -25,9 +25,9 @@ module IncomingMail
     def create_response(payload)
       response = Response.new(type: identify_mail_type(payload))
 
-      if response.type == REQUEST && transform_msg_to_comment(payload["msg"]).present?
-        response.comment = transform_msg_to_comment(payload["msg"])
+      if response.type == REQUEST && response.comment = transform_msg_to_comment(payload["msg"])
         response.action = Response::COMMENT
+        send_comment_email(response.comment)
       else
         forward_message(response, payload)
       end
@@ -36,7 +36,7 @@ module IncomingMail
     end
 
     def forward_message(response, payload)
-      forward_msg(payload["msg"]["raw_msg"])
+      Mailer.resend(payload["msg"]["raw_msg"]).deliver_later
       response.action = Response::FORWARDED
     end
 
@@ -44,11 +44,11 @@ module IncomingMail
       subject = payload["msg"]["subject"]
       references = payload["msg"]["headers"]["References"]
       if subject_line_matches(subject)
-        return IncomingMail::REQUEST
-      elsif references and reference_header_matches(references)
-        return IncomingMail::REQUEST
+        IncomingMail::REQUEST
+      elsif references && reference_header_matches(references)
+        IncomingMail::REQUEST
       else
-        return IncomingMail::UNKNOWN
+        IncomingMail::UNKNOWN
       end
     end
 
@@ -58,10 +58,6 @@ module IncomingMail
 
     def reference_header_matches(header)
       header.match(/<proposal-\d+/)
-    end
-
-    def forward_msg(msg)
-      Mailer.resend(msg).deliver_later
     end
 
     def transform_msg_to_comment(msg)
@@ -75,18 +71,14 @@ module IncomingMail
         return
       end
 
-      comment = create_comment(parsed_email)
-      Dispatcher.on_comment_created(comment)
-      comment
+      create_comment(parsed_email.comment_text, proposal, user)
     end
 
-    def create_comment(parsed_email)
-      proposal = parsed_email.proposal
-      user = parsed_email.comment_user
+    def create_comment(comment_text, proposal, user)
       find_or_create_observation(proposal, user)
 
       Comment.create(
-        comment_text: parsed_email.comment_text,
+        comment_text: comment_text,
         user: user,
         proposal: proposal
       )
@@ -101,6 +93,10 @@ module IncomingMail
           reason: reason,
         ).run
       end
+    end
+
+    def send_comment_email(comment)
+      Dispatcher.on_comment_created(comment)
     end
   end
 end
