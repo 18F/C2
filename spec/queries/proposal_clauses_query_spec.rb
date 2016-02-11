@@ -1,10 +1,10 @@
-describe Query::Proposal::Clauses do
+describe ProposalClausesQuery do
   describe "#for_client_slug" do
     it "returns all proposals for the client slug" do
       _general_proposal = create(:proposal)
       gsa_proposal = create(:gsa18f_procurement).proposal
 
-      query = Query::Proposal::Clauses.new.for_client_slug("gsa_18f")
+      query = ProposalClausesQuery.new.for_client_slug("gsa_18f")
 
       expect(Proposal.where(query)).to eq([gsa_proposal])
     end
@@ -15,7 +15,7 @@ describe Query::Proposal::Clauses do
       create(:proposal)
       proposal = create(:proposal)
 
-      query = Query::Proposal::Clauses.new.which_involve(proposal.requester)
+      query = ProposalClausesQuery.new.which_involve(proposal.requester)
 
       expect(Proposal.where(query)).to eq([proposal])
     end
@@ -25,7 +25,7 @@ describe Query::Proposal::Clauses do
       proposal = create(:proposal, :with_approver)
       approver = proposal.approvers.first
 
-      query = Query::Proposal::Clauses.new.which_involve(approver)
+      query = ProposalClausesQuery.new.which_involve(approver)
 
       expect(Proposal.where(query)).to eq([proposal])
      end
@@ -34,7 +34,7 @@ describe Query::Proposal::Clauses do
        observer = create(:user)
        proposal = create(:proposal, observer: observer)
 
-       query = Query::Proposal::Clauses.new.which_involve(observer)
+       query = ProposalClausesQuery.new.which_involve(observer)
 
        expect(Proposal.where(query)).to eq([proposal])
      end
@@ -46,7 +46,7 @@ describe Query::Proposal::Clauses do
         delegate2 = create(:user)
         proposal2 = create(:proposal, delegate: delegate2)
 
-        query = Query::Proposal::Clauses.new.which_involve(delegate2)
+        query = ProposalClausesQuery.new.which_involve(delegate2)
 
         expect(Proposal.where(query)).to eq([proposal2])
      end

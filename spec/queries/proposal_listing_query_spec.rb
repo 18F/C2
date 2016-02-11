@@ -1,4 +1,4 @@
-describe Query::Proposal::Listing do
+describe ProposalListingQuery do
   let(:params) { ActionController::Parameters.new }
   let(:user) { create(:user) }
 
@@ -9,7 +9,7 @@ describe Query::Proposal::Listing do
           create(:proposal, status: status)
           proposal = create(:proposal, requester: user, status: status)
           user.add_role('admin')
-          listing = Query::Proposal::Listing.new(user, params)
+          listing = ProposalListingQuery.new(user, params)
           expect(listing.send(status).rows).to eq([proposal])
         end
 
@@ -25,7 +25,7 @@ describe Query::Proposal::Listing do
             other_proposal = create(:proposal, status: status)
             create(:ncr_work_order, proposal: other_proposal)
 
-            listing = Query::Proposal::Listing.new(user, params)
+            listing = ProposalListingQuery.new(user, params)
             expect(listing.send(status).rows).to eq([proposal])
           end
         end
@@ -40,7 +40,7 @@ describe Query::Proposal::Listing do
           proposal = create(:proposal, :with_approver)
           user = proposal.individual_steps.first.user
 
-          proposals = Query::Proposal::Listing.new(user, params).pending_review
+          proposals = ProposalListingQuery.new(user, params).pending_review
 
           expect(proposals.rows).to eq([proposal])
         end
@@ -52,7 +52,7 @@ describe Query::Proposal::Listing do
           first_step = proposal.individual_steps.first
           first_step.approve!
 
-          proposals = Query::Proposal::Listing.new(first_step.user, params).pending_review
+          proposals = ProposalListingQuery.new(first_step.user, params).pending_review
 
           expect(proposals.rows).to_not include(proposal)
         end
@@ -63,7 +63,7 @@ describe Query::Proposal::Listing do
           proposal = create(:proposal, :with_serial_approvers)
           user = proposal.individual_steps.second.user
 
-          proposals = Query::Proposal::Listing.new(user, params).pending_review
+          proposals = ProposalListingQuery.new(user, params).pending_review
 
           expect(proposals.rows).to_not include(proposal)
         end
@@ -77,7 +77,7 @@ describe Query::Proposal::Listing do
           proposal.individual_steps.first.approve!
           user = proposal.individual_steps.second.user
 
-          proposals = Query::Proposal::Listing.new(user, params).pending_review
+          proposals = ProposalListingQuery.new(user, params).pending_review
 
           expect(proposals.rows).to eq([proposal])
         end

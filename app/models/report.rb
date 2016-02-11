@@ -2,7 +2,7 @@ class Report < ActiveRecord::Base
   belongs_to :user
 
   def client_query
-    ::Query::Proposal::FieldedSearch.new(JSON.parse(query)[user.client_model_slug])
+    ProposalFieldedSearchQuery.new(JSON.parse(query)[user.client_model_slug])
   end
 
   def text_query

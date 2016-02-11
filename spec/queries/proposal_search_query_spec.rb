@@ -1,7 +1,6 @@
 require 'ansi/code'
 
-describe Query::Proposal::Search, elasticsearch: true do
-
+describe ProposalSearchQuery, elasticsearch: true do
   before do
     # analogous to DatabaseCleaner.start in spec/rails_helper
     refresh_index
@@ -10,7 +9,7 @@ describe Query::Proposal::Search, elasticsearch: true do
   describe '#execute' do
     it "returns an empty list for no Proposals" do
       user = create(:user, client_slug: "test")
-      searcher = Query::Proposal::Search.new(current_user: user)
+      searcher = ProposalSearchQuery.new(current_user: user)
       results = searcher.execute('')
       expect(results.to_a).to eq([])
     end
@@ -20,7 +19,7 @@ describe Query::Proposal::Search, elasticsearch: true do
       proposal = test_client_request.proposal
       proposal.reindex
       refresh_index
-      results = Query::Proposal::Search.new(current_user: proposal.requester).execute(proposal.id.to_s)
+      results = ProposalSearchQuery.new(current_user: proposal.requester).execute(proposal.id.to_s)
       expect(results.to_a).to eq([proposal])
     end
 
@@ -30,7 +29,7 @@ describe Query::Proposal::Search, elasticsearch: true do
       proposal.update_attribute(:public_id, 'foobar') # skip callback, which would overwrite this
       proposal.reindex
       refresh_index
-      searcher = Query::Proposal::Search.new(current_user: proposal.requester)
+      searcher = ProposalSearchQuery.new(current_user: proposal.requester)
       results = searcher.execute("foobar")
       expect(results.to_a).to eq([proposal])
     end
@@ -42,7 +41,7 @@ describe Query::Proposal::Search, elasticsearch: true do
       refresh_index
       relation = Proposal.where(id: proposal.id + 1)
       user = proposal.requester
-      results = Query::Proposal::Search.new(relation: relation, current_user: user).execute(proposal.id.to_s)
+      results = ProposalSearchQuery.new(relation: relation, current_user: user).execute(proposal.id.to_s)
       expect(results.to_a).to eq([])
     end
 
@@ -51,7 +50,7 @@ describe Query::Proposal::Search, elasticsearch: true do
       test_client_request.proposal.reindex
       refresh_index
       user = test_client_request.proposal.requester
-      results = Query::Proposal::Search.new(current_user: user).execute('asgsfgsfdbsd')
+      results = ProposalSearchQuery.new(current_user: user).execute('asgsfgsfdbsd')
       expect(results.to_a).to eq([])
     end
 
@@ -61,7 +60,7 @@ describe Query::Proposal::Search, elasticsearch: true do
           work_order = create(:ncr_work_order, attr_name => 'foo')
           work_order.proposal.reindex
           refresh_index
-          results = Query::Proposal::Search.new(current_user: work_order.requester).execute('foo')
+          results = ProposalSearchQuery.new(current_user: work_order.requester).execute('foo')
           expect(results.to_a).to eq([work_order.proposal])
         end
       end
@@ -73,7 +72,7 @@ describe Query::Proposal::Search, elasticsearch: true do
           procurement = create(:gsa18f_procurement, attr_name => 'foo')
           procurement.proposal.reindex
           refresh_index
-          results = Query::Proposal::Search.new(current_user: procurement.requester).execute('foo')
+          results = ProposalSearchQuery.new(current_user: procurement.requester).execute('foo')
           expect(results.to_a).to eq([procurement.proposal])
         end
       end
@@ -97,7 +96,7 @@ describe Query::Proposal::Search, elasticsearch: true do
 
       refresh_index
 
-      searcher = Query::Proposal::Search.new(current_user: user)
+      searcher = ProposalSearchQuery.new(current_user: user)
       expect(searcher.execute('199').to_a).to eq([proposal1, proposal2])
       expect(searcher.execute('1600').to_a).to eq([proposal3, proposal2])
       expect(searcher.execute('199 rolly').to_a).to eq([proposal2])

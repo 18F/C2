@@ -1,3 +1,5 @@
+require "#{Rails.root}/db/chores/expired_record_cleaner"
+
 describe ExpiredRecordCleaner do
   describe "fiscal year" do
     it "parses fiscal start date" do

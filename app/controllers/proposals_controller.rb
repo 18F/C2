@@ -73,7 +73,7 @@ class ProposalsController < ApplicationController
   end
 
   def history
-    @container = Query::Proposal::Versions.new(proposal).container
+    @container = ProposalVersionsQuery.new(proposal).container
     @container.set_state_from_params(params)
   end
 
@@ -99,7 +99,7 @@ class ProposalsController < ApplicationController
   end
 
   def listing
-    Query::Proposal::Listing.new(current_user, params)
+    ProposalListingQuery.new(current_user, params)
   end
 
   def check_search_params
@@ -125,7 +125,7 @@ class ProposalsController < ApplicationController
   end
 
   def build_search_dsl
-    Query::Proposal::SearchDSL.new(
+    ProposalSearchDsl.new(
       params: params,
       current_user: current_user,
       query: params[:text],

@@ -1,3 +1,5 @@
+require "#{Rails.root}/db/chores/populator"
+
 describe Populator do
   describe '#random_ncr_data' do
     it "creates the specified number of work orders" do

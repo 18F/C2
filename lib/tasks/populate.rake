@@ -1,3 +1,5 @@
+require_relative "../../db/chores/populator"
+
 namespace :populate do
   namespace :ncr do
     desc "Populate the database with identical NCR data"

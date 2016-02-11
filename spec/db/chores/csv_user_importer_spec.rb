@@ -1,3 +1,5 @@
+require "#{Rails.root}/db/chores/csv_user_importer"
+
 describe CsvUserImporter do
   around (:each) do |test|
     @temp_file = Tempfile.new("temp_file.csv")

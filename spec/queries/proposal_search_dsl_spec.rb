@@ -1,7 +1,7 @@
-describe Query::Proposal::SearchDSL do
+describe ProposalSearchDsl do
   it "#to_hash" do
     user = create(:user, client_slug: "test")
-    dsl = Query::Proposal::SearchDSL.new(
+    dsl = ProposalSearchDsl.new(
       params: {
         from: 1,
         size: 5,
@@ -36,7 +36,7 @@ describe Query::Proposal::SearchDSL do
 
   it "defaults to sane pagination" do
     user = create(:user, client_slug: "test")
-    dsl = Query::Proposal::SearchDSL.new(
+    dsl = ProposalSearchDsl.new(
       params: {
         test_client_request: {
           color: "green"
@@ -46,13 +46,13 @@ describe Query::Proposal::SearchDSL do
       current_user: user,
       client_data_type: "Test::ClientRequest"
     )
-    expect(dsl.to_hash[:size]).to eq ::Proposal::MAX_SEARCH_RESULTS
+    expect(dsl.to_hash[:size]).to eq Proposal::MAX_SEARCH_RESULTS
     expect(dsl.to_hash[:from]).to eq 0
   end
 
   it "determines from/size from page param" do
     user = create(:user, client_slug: "test")
-    dsl = Query::Proposal::SearchDSL.new(
+    dsl = ProposalSearchDsl.new(
       params: {
         page: 3
       },
@@ -60,14 +60,14 @@ describe Query::Proposal::SearchDSL do
       current_user: user,
       client_data_type: "Test::ClientRequest"
     )
-    expect(dsl.to_hash[:size]).to eq ::Proposal::MAX_SEARCH_RESULTS
-    expect(dsl.to_hash[:from]).to eq( 2 * ::Proposal::MAX_SEARCH_RESULTS )
+    expect(dsl.to_hash[:size]).to eq Proposal::MAX_SEARCH_RESULTS
+    expect(dsl.to_hash[:from]).to eq( 2 * Proposal::MAX_SEARCH_RESULTS )
   end
 
   it "parses date ranges" do
     now = Time.zone.now
     user = create(:user, client_slug: "test")
-    dsl = Query::Proposal::SearchDSL.new(
+    dsl = ProposalSearchDsl.new(
       params: {
         test_client_request: {
           created_at: now.to_s,
@@ -85,7 +85,7 @@ describe Query::Proposal::SearchDSL do
 
   it "#client_query" do
     user = create(:user, client_slug: "test")
-    dsl = Query::Proposal::SearchDSL.new(
+    dsl = ProposalSearchDsl.new(
       params: {
         test_client_request: {
           amount: "123"
@@ -95,13 +95,13 @@ describe Query::Proposal::SearchDSL do
       current_user: user,
       client_data_type: user.client_model.to_s
     )
-    expect(dsl.client_query).to be_a Query::Proposal::FieldedSearch
+    expect(dsl.client_query).to be_a ProposalFieldedSearchQuery
     expect(dsl.client_query.to_s).to eq "amount:(123)"
   end
 
   it "#composite_query_string" do
     user = create(:user, client_slug: "test")
-    dsl = Query::Proposal::SearchDSL.new(
+    dsl = ProposalSearchDsl.new(
       params: {
         test_client_request: {
           amount: "123"
@@ -116,7 +116,7 @@ describe Query::Proposal::SearchDSL do
 
   it "#humanized_query_string" do
     user = create(:user, client_slug: "test")
-    dsl = Query::Proposal::SearchDSL.new(
+    dsl = ProposalSearchDsl.new(
       params: {
         test_client_request: {
           amount: "123"

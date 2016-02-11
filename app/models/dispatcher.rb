@@ -1,5 +1,5 @@
 class Dispatcher
-  include ClassMethodsMixin
+  include DispatcherMixin
 
   def email_approver(approval)
     send_notification_email(approval)
