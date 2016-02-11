@@ -1,6 +1,8 @@
 FactoryGirl.define do
+  sequence(:code) { |n| "Code #{n}" }
+
   factory :ncr_organization, class: Ncr::Organization do
-    code "ORGCODE"
+    code
     name "Test Organization"
 
     factory :ool_organization do

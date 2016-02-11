@@ -1,15 +1,51 @@
 describe ProposalUpdateRecorder do
   describe "#run" do
-    it "adds a change comment" do
-      description = "some text"
-      work_order = create(:ncr_work_order, description: description)
+    context "attribute changed" do
+      it "adds a change comment" do
+        description = "some text"
+        work_order = create(:ncr_work_order, description: description)
 
-      work_order.description = ""
-      ProposalUpdateRecorder.new(work_order).run
+        work_order.description = ""
+        ProposalUpdateRecorder.new(work_order).run
 
-      comment = work_order.proposal.comments.last
-      expect(comment).to be_update_comment
-      expect(comment.comment_text).to eq("*Description* was changed from #{description} to *empty*")
+        comment = work_order.proposal.comments.last
+        expect(comment).to be_update_comment
+        expect(comment.comment_text).to eq("*Description* was changed from #{description} to *empty*")
+      end
+    end
+
+    context "approving official value changed" do
+      it "adds a change comment" do
+        approver = create(:user)
+        second_approver = create(:user)
+        work_order = create(:ncr_work_order, approving_official: approver)
+        work_order.approving_official = second_approver
+
+        ProposalUpdateRecorder.new(work_order).run
+
+        comment = work_order.proposal.comments.last
+        expect(comment).to be_update_comment
+        expect(comment.comment_text).to eq(
+          "*Approving official* was changed from #{approver.email_address} to #{second_approver.email_address}"
+        )
+      end
+    end
+
+    context "ncr organization changed" do
+      it "adds a change comment" do
+        org = create(:ncr_organization)
+        second_org = create(:ncr_organization)
+        work_order = create(:ncr_work_order, ncr_organization: org)
+        work_order.ncr_organization = second_org
+
+        ProposalUpdateRecorder.new(work_order).run
+
+        comment = work_order.proposal.comments.last
+        expect(comment).to be_update_comment
+        expect(comment.comment_text).to eq(
+          "*Org code* was changed from #{org.code_and_name} to #{second_org.code_and_name}"
+        )
+      end
     end
 
     it "includes extra information if modified post approval" do

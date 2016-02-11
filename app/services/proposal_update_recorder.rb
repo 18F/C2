@@ -78,14 +78,10 @@ class ProposalUpdateRecorder
   end
 
   def new_association_value(key)
-    if key == "ncr_organization_id"
-      organization = client_data.ncr_organization
-
-      if organization.nil?
-        "*empty*"
-      else
-        organization.code_and_name
-      end
+    if key == "approving_official_id"
+      client_data.approving_official.email_address
+    elsif key == "ncr_organization_id"
+      client_data.ncr_organization.try(:code_and_name) || "*empty*"
     end
   end
 
