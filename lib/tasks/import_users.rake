@@ -13,6 +13,8 @@ def gsa18f_yaml_file(file_path)
   )
 end
 
+require_relative "../../db/chores/csv_user_importer"
+
 namespace :import_users do
   desc "Import users from a 18f team"
   task team_yaml: :environment do

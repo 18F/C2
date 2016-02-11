@@ -123,7 +123,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_default_view_variables
-    @adv_search = Query::Proposal::FieldedSearch.new({})
+    @adv_search = ProposalFieldedSearchQuery.new({})
   end
 
   def authenticate_admin_user!
