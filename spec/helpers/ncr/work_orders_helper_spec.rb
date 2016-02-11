@@ -1,28 +1,22 @@
 describe Ncr::WorkOrdersHelper do
-  describe '#approver_options' do
+  describe '#scoped_approver_options' do
     it 'includes existing users' do
-      expect(helper.approver_options.size).to eq(0)
-      users = [create(:user, client_slug: "ncr"), create(:user, client_slug: "ncr")]
-      users.map do |user|
-        expect(helper.approver_options).to include({
-          name: user.email_address,
-          id: user.id
-        })
-      end
+      expect(helper.scoped_approver_options.size).to eq(0)
+      users = create_list(:user, 2, client_slug: "ncr")
+
+      expect(helper.scoped_approver_options).to match_array(users)
     end
 
     it "does not include inactive users" do
       inactive_approving_official = create(:user, :inactive, client_slug: "ncr")
       active_approving_official = create(:user, :active, client_slug: "ncr")
 
-      expect(helper.approver_options).to include({
-        name: active_approving_official.email_address,
-        id: active_approving_official.id
-      })
-      expect(helper.approver_options).not_to include({
-        name: inactive_approving_official.email_address,
-        id: inactive_approving_official.id
-      })
+      expect(helper.scoped_approver_options).to include(
+        active_approving_official
+      )
+      expect(helper.scoped_approver_options).not_to include(
+        inactive_approving_official
+      )
     end
 
     it 'sorts the results' do
@@ -30,13 +24,13 @@ describe Ncr::WorkOrdersHelper do
       b_user = create(:user, email_address: 'c@example.com', client_slug: "ncr")
       c_user = create(:user, email_address: 'a@example.com', client_slug: "ncr")
       d_user = create(:user, email_address: 'd@example.com', client_slug: 'gsa18f')
-      expect(helper.approver_options).to include(
-        { name: a_user.email_address, id: a_user.id },
-        { name: b_user.email_address, id: b_user.id },
-        { name: c_user.email_address, id: c_user.id }
-        )
-      expect(helper.approver_options).not_to include(
-        { name: d_user.email_address, id: d_user.id }
+      expect(helper.scoped_approver_options).to match_array([
+        a_user,
+        b_user,
+        c_user
+      ])
+      expect(helper.scoped_approver_options).not_to include(
+        d_user
       )
     end
   end

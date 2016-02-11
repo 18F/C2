@@ -45,7 +45,7 @@
       label_method: :email_address,
       value_method: :id,
       prompt: :translate,
-      input_html: { class: "js-selectize required", data: { initial: JSON.generate(approver_options(@client_data_instance.ineligible_approvers)) }}
+      input_html: { class: "js-selectize required" }
     - if @client_data_instance.new_record?
       = render partial: 'attachments'
     - else
