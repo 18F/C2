@@ -2,7 +2,7 @@ module TabularData
   class Column
     attr_accessor :name, :formatter, :sort_dir
 
-    def initialize(name, qualified_name, config={})
+    def initialize(name, qualified_name, config = {})
       @config = config
       @name = name.to_s
       @display_field = config[:display] || config[:db] || @name

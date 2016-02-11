@@ -107,21 +107,21 @@ module Ncr
     private
 
     def add_fiscal_year_report_headers(csv)
-        csv << [
-          "Id",
-          "Amount",
-          "Date Approved",
-          "Org Code",
-          "CL#",
-          "Budget Activity",
-          "SOC",
-          "Function Code",
-          "Building #",
-          "Vendor",
-          "Description",
-          "Requestor",
-          "Approver"
-        ]
+      csv << [
+        "Id",
+        "Amount",
+        "Date Approved",
+        "Org Code",
+        "CL#",
+        "Budget Activity",
+        "SOC",
+        "Function Code",
+        "Building #",
+        "Vendor",
+        "Description",
+        "Requestor",
+        "Approver"
+      ]
     end
 
     def add_fiscal_year_report_body(csv, work_orders)
