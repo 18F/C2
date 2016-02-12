@@ -1,4 +1,5 @@
 class ProposalsController < ApplicationController
+  CLOSED_PROPOSAL_LIMIT = 10
   include TokenAuth
 
   skip_before_action :authenticate_user!, only: [:approve]
@@ -16,11 +17,10 @@ class ProposalsController < ApplicationController
   end
 
   def index
-    @CLOSED_PROPOSAL_LIMIT = 10
-
+    @closed_proposal_limit = CLOSED_PROPOSAL_LIMIT
     @pending_data = listing.pending
     @pending_review_data = listing.pending_review
-    @approved_data = listing.approved.alter_query { |rel| rel.limit(@CLOSED_PROPOSAL_LIMIT) }
+    @approved_data = listing.approved.alter_query { |rel| rel.limit(@closed_proposal_limit) }
     @cancelled_data = listing.cancelled
   end
 
