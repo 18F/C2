@@ -1,4 +1,6 @@
 describe FeedbackMailer do
+  include EnvVarSpecHelper
+
   describe 'feedback' do
     it "sends from the submitter" do
       user = create(:user)
@@ -24,8 +26,8 @@ describe FeedbackMailer do
       expect(mail1.header['In-Reply-To'].to_s).to_not eq(mail2.header['In-Reply-To'].to_s)
     end
 
-    with_env_var('SUPPORT_EMAIL', 'support@example.com') do
-      it "sends to the support email" do
+    it "sends to the support email" do
+      with_env_var('SUPPORT_EMAIL', 'support@example.com') do
         mail = FeedbackMailer.feedback(nil, {})
         expect(mail.to).to eq(['support@example.com'])
       end

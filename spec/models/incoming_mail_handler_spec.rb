@@ -1,11 +1,13 @@
 describe "Handles incoming email" do
+  include EnvVarSpecHelper
+
   let(:proposal) { create(:proposal, :with_serial_approvers) }
   let(:approval) { proposal.individual_steps.first }
   let(:mail) { Mailer.actions_for_approver(approval) }
   let(:mandrill_inbound_noapp) { File.read(RSpec.configuration.fixture_path + '/mandrill_inbound_noapp.json') }
 
-  with_env_vars(NOTIFICATION_FALLBACK_EMAIL: 'nowhere@some.gov', NOTIFICATION_FROM_EMAIL: 'noreply@some.gov') do
-    it "should forward non-app email to NOTIFICATION_FALLBACK_EMAIL" do
+  it "should forward non-app email to NOTIFICATION_FALLBACK_EMAIL" do
+    with_env_vars(NOTIFICATION_FALLBACK_EMAIL: 'nowhere@some.gov', NOTIFICATION_FROM_EMAIL: 'noreply@some.gov') do
       expect(deliveries.length).to eq(0)
       handler = IncomingMail::Handler.new
       resp = handler.handle(JSON.parse(mandrill_inbound_noapp))

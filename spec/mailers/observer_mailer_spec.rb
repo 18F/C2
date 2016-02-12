@@ -46,24 +46,19 @@ describe ObserverMailer do
   end
 
   describe ".proposal_observer_email" do
-    with_env_vars(
-      "NOTIFICATION_FROM_EMAIL" => "reply@example.com",
-      "NOTIFICATION_REPLY_TO" => "replyto@example.com"
-    ) do
-      let(:proposal) { create(:proposal) }
-      let(:observer) { create(:user) }
-      let(:observation) { proposal.add_observer(observer) }
-      let(:mail) { ObserverMailer.proposal_observer_email(observer.email_address, proposal) }
+    let(:proposal) { create(:proposal) }
+    let(:observer) { create(:user) }
+    let(:observation) { proposal.add_observer(observer) }
+    let(:mail) { ObserverMailer.proposal_observer_email(observer.email_address, proposal) }
 
-      it_behaves_like "a proposal email"
+    it_behaves_like "a proposal email"
 
-      it "renders the receiver email" do
-        expect(mail.to).to eq([observer.email_address])
-      end
+    it "renders the receiver email" do
+      expect(mail.to).to eq([observer.email_address])
+    end
 
-      it "uses the default sender name" do
-        expect(sender_names(mail)).to eq(["C2"])
-      end
+    it "uses the default sender name" do
+      expect(sender_names(mail)).to eq(["C2"])
     end
   end
 end
