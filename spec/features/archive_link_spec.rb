@@ -1,6 +1,6 @@
-describe "Archive link" do
-  with_env_vars(CLOSED_PROPOSAL_LIMIT: '2') do
-    it "displays archive link when more than limit" do
+feature "Archive link" do
+  scenario "displays archive link when more than limit" do
+    with_env_vars(CLOSED_PROPOSAL_LIMIT: '2') do
       user = create(:user)
       approver = create(:user)
       2.times.map do |i|
@@ -14,8 +14,10 @@ describe "Archive link" do
 
       expect(page).to have_content("View the archive")
     end
+  end
 
-    it "hides archive link when less than or equal to limit" do
+  scenario "hides archive link when less than or equal to limit" do
+    with_env_vars(CLOSED_PROPOSAL_LIMIT: '2') do
       user = create(:user)
       approver = create(:user)
       wo = create(:ncr_work_order, requester: user)
