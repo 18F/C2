@@ -1,5 +1,5 @@
 class ProposalsController < ApplicationController
-  CLOSED_PROPOSAL_LIMIT = 10
+  CLOSED_PROPOSAL_LIMIT = ENV["CLOSED_PROPOSAL_LIMIT"] || 10
   include TokenAuth
 
   skip_before_action :authenticate_user!, only: [:approve]
@@ -17,7 +17,7 @@ class ProposalsController < ApplicationController
   end
 
   def index
-    @closed_proposal_limit = CLOSED_PROPOSAL_LIMIT
+    @closed_proposal_limit = CLOSED_PROPOSAL_LIMIT.to_i
     @pending_data = listing.pending
     @pending_review_data = listing.pending_review
     @approved_data = listing.approved.alter_query { |rel| rel.limit(@closed_proposal_limit) }
