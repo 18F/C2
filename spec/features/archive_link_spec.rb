@@ -1,6 +1,6 @@
 feature "Archive link" do
   scenario "displays archive link when more than limit" do
-    with_env_vars(CLOSED_PROPOSAL_LIMIT: '2') do
+    ClimateControl.modify CLOSED_PROPOSAL_LIMIT: '2' do
       user = create(:user)
       approver = create(:user)
       2.times.map do |i|
@@ -17,7 +17,7 @@ feature "Archive link" do
   end
 
   scenario "hides archive link when less than or equal to limit" do
-    with_env_vars(CLOSED_PROPOSAL_LIMIT: '2') do
+    ClimateControl.modify CLOSED_PROPOSAL_LIMIT: '2' do
       user = create(:user)
       approver = create(:user)
       wo = create(:ncr_work_order, requester: user)
