@@ -6,7 +6,9 @@ feature "reports", elasticsearch: true do
   scenario "provides Save as Report button on search results page", :js do
     proposals = populate_proposals
 
-    visit query_proposals_path(text: proposals.first.name)
+    es_execute_with_retries 3 do
+      visit query_proposals_path(text: proposals.first.name)
+    end
 
     click_on "Save as Report"
     fill_in "saved-search-name", with: "my test report"

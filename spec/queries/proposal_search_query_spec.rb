@@ -19,8 +19,10 @@ describe ProposalSearchQuery, elasticsearch: true do
       proposal = test_client_request.proposal
       proposal.reindex
       refresh_index
-      results = ProposalSearchQuery.new(current_user: proposal.requester).execute(proposal.id.to_s)
-      expect(results.to_a).to eq([proposal])
+      es_execute_with_retries 3 do
+        results = ProposalSearchQuery.new(current_user: proposal.requester).execute(proposal.id.to_s)
+        expect(results.to_a).to eq([proposal])
+      end
     end
 
     it "returns the Proposal when searching by public_id" do
@@ -29,9 +31,11 @@ describe ProposalSearchQuery, elasticsearch: true do
       proposal.update_attribute(:public_id, 'foobar') # skip callback, which would overwrite this
       proposal.reindex
       refresh_index
-      searcher = ProposalSearchQuery.new(current_user: proposal.requester)
-      results = searcher.execute("foobar")
-      expect(results.to_a).to eq([proposal])
+      es_execute_with_retries 3 do
+        searcher = ProposalSearchQuery.new(current_user: proposal.requester)
+        results = searcher.execute("foobar")
+        expect(results.to_a).to eq([proposal])
+      end
     end
 
     it "can operate on an a relation" do
@@ -41,8 +45,10 @@ describe ProposalSearchQuery, elasticsearch: true do
       refresh_index
       relation = Proposal.where(id: proposal.id + 1)
       user = proposal.requester
-      results = ProposalSearchQuery.new(relation: relation, current_user: user).execute(proposal.id.to_s)
-      expect(results.to_a).to eq([])
+      es_execute_with_retries 3 do
+        results = ProposalSearchQuery.new(relation: relation, current_user: user).execute(proposal.id.to_s)
+        expect(results.to_a).to eq([])
+      end
     end
 
     it "returns an empty list for no matches" do
@@ -50,8 +56,10 @@ describe ProposalSearchQuery, elasticsearch: true do
       test_client_request.proposal.reindex
       refresh_index
       user = test_client_request.proposal.requester
-      results = ProposalSearchQuery.new(current_user: user).execute('asgsfgsfdbsd')
-      expect(results.to_a).to eq([])
+      es_execute_with_retries 3 do
+        results = ProposalSearchQuery.new(current_user: user).execute('asgsfgsfdbsd')
+        expect(results.to_a).to eq([])
+      end
     end
 
     context Ncr::WorkOrder do
@@ -60,8 +68,10 @@ describe ProposalSearchQuery, elasticsearch: true do
           work_order = create(:ncr_work_order, attr_name => 'foo')
           work_order.proposal.reindex
           refresh_index
-          results = ProposalSearchQuery.new(current_user: work_order.requester).execute('foo')
-          expect(results.to_a).to eq([work_order.proposal])
+          es_execute_with_retries 3 do
+            results = ProposalSearchQuery.new(current_user: work_order.requester).execute('foo')
+            expect(results.to_a).to eq([work_order.proposal])
+          end
         end
       end
     end
@@ -72,8 +82,10 @@ describe ProposalSearchQuery, elasticsearch: true do
           procurement = create(:gsa18f_procurement, attr_name => 'foo')
           procurement.proposal.reindex
           refresh_index
-          results = ProposalSearchQuery.new(current_user: procurement.requester).execute('foo')
-          expect(results.to_a).to eq([procurement.proposal])
+          es_execute_with_retries 3 do
+            results = ProposalSearchQuery.new(current_user: procurement.requester).execute('foo')
+            expect(results.to_a).to eq([procurement.proposal])
+          end
         end
       end
     end
@@ -96,10 +108,12 @@ describe ProposalSearchQuery, elasticsearch: true do
 
       refresh_index
 
-      searcher = ProposalSearchQuery.new(current_user: user)
-      expect(searcher.execute('199').to_a).to eq([proposal1, proposal2])
-      expect(searcher.execute('1600').to_a).to eq([proposal3, proposal2])
-      expect(searcher.execute('199 rolly').to_a).to eq([proposal2])
+      es_execute_with_retries 3 do
+        searcher = ProposalSearchQuery.new(current_user: user)
+        expect(searcher.execute('199').to_a).to eq([proposal1, proposal2])
+        expect(searcher.execute('1600').to_a).to eq([proposal3, proposal2])
+        expect(searcher.execute('199 rolly').to_a).to eq([proposal2])
+      end
     end
   end
 end
