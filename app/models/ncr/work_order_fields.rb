@@ -17,7 +17,10 @@ module Ncr
     end
 
     def display
-      attributes_for_view.push(["Org code", work_order.organization_code_and_name])
+      attributes_for_view.push(
+        ["Org code", work_order.organization_code_and_name],
+        ["Approving official", work_order.approving_official.try(:email_address)]
+      )
     end
 
     private
@@ -27,7 +30,7 @@ module Ncr
     def default
       [
         :amount,
-        :approving_official_email,
+        :approving_official_id,
         :building_number,
         :cl_number,
         :description,
@@ -43,7 +46,7 @@ module Ncr
     end
 
     def attributes_for_view
-      attributes = relevant(work_order.expense_type) - [:ncr_organization_id]
+      attributes = relevant(work_order.expense_type) - [:ncr_organization_id, :approving_official_id]
       attributes.map do |attribute|
         [
           Ncr::WorkOrder.human_attribute_name(attribute),

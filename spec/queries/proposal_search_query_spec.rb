@@ -87,7 +87,7 @@ describe ProposalSearchQuery, elasticsearch: true do
 
       test_client_request2 = create(:test_client_request, project_title: "199 rolly chairs for 1600 Penn Ave")
       proposal2 = test_client_request2.proposal
-      test_client_request2.add_observer(user.email_address)
+      test_client_request2.add_observer(user)
       proposal2.reindex
 
       proposal3 = create(:proposal, id: 1600, requester: user)

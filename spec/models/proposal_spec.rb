@@ -142,14 +142,14 @@ describe Proposal do
     it "includes observers" do
       observer = create(:user)
       proposal = create(:proposal, requester: observer)
-      proposal.add_observer(observer.email_address)
+      proposal.add_observer(observer)
       expect(proposal.subscribers).to eq [observer]
     end
 
     it "removes duplicates" do
       requester = create(:user)
       proposal = create(:proposal, requester: requester)
-      proposal.add_observer(requester.email_address)
+      proposal.add_observer(requester)
       expect(proposal.subscribers).to eq [requester]
     end
   end
@@ -387,7 +387,7 @@ describe Proposal do
         observer_adder: nil
       ).and_return(observation_creator_double)
 
-      proposal.add_observer(observer.email_address)
+      proposal.add_observer(observer)
 
       expect(observation_creator_double).to have_received(:run)
     end

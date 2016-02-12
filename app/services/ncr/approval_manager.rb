@@ -4,11 +4,11 @@ module Ncr
       @work_order = work_order
     end
 
-    def system_approver_emails
+    def system_approvers
       if %w(BA60 BA61).include?(work_order.expense_type)
-        ba_6x_approver_emails
+        ba_6x_approvers
       else
-        [ba_80_approver_email]
+        [ba_80_approver]
       end
     end
 
@@ -26,24 +26,28 @@ module Ncr
 
     delegate :proposal, to: :work_order
 
-    # Check the approvers, accounting for frozen approving official
-    def approvers_emails
-      emails = system_approver_emails
-      if work_order.approver_email_frozen?
-        emails.unshift(work_order.approving_official.email_address)
-      else
-        emails.unshift(work_order.approving_official_email)
+    def set_up_as_approvers
+      original_approvers = proposal.reload.individual_steps.non_pending.map(&:user)
+      force_approvers(approvers)
+      notify_removed_approvers(original_approvers)
+    end
+
+    def set_up_as_observers
+      approvers.each do |user|
+        work_order.add_observer(user)
       end
-      emails
+      # skip state machine
+      proposal.update(status: "approved")
+    end
+
+    def approvers
+      system_approvers.unshift(work_order.approving_official)
     end
 
     # Generally shouldn't be called directly as it doesn't account for
     # emergencies, or notify removed approvers
-    def force_approvers(emails)
-      individuals = emails.map do |email|
-        user = User.for_email(email)
-        user.update!(client_slug: "ncr")
-        # Reuse existing approvals, if present
+    def force_approvers(users)
+      individuals = users.map do |user|
         proposal.existing_step_for(user) || Steps::Approval.new(user: user)
       end
       proposal.root_step = Steps::Serial.new(child_approvals: individuals)
@@ -55,7 +59,7 @@ module Ncr
       Dispatcher.on_approver_removal(proposal, removed_approvers_to_notify)
     end
 
-    def ba_6x_approver_emails
+    def ba_6x_approvers
       results = []
 
       unless work_order.for_whsc_organization?
@@ -67,26 +71,12 @@ module Ncr
       results
     end
 
-    def ba_80_approver_email
+    def ba_80_approver
       if work_order.for_ool_organization?
         Ncr::Mailboxes.ool_ba80_budget
       else
         Ncr::Mailboxes.ba80_budget
       end
-    end
-
-    def set_up_as_observers
-      approvers_emails.each do |email|
-        work_order.add_observer(email)
-      end
-      # skip state machine
-      proposal.update(status: "approved")
-    end
-
-    def set_up_as_approvers
-      original_approvers = proposal.individual_steps.non_pending.map(&:user)
-      force_approvers(approvers_emails)
-      notify_removed_approvers(original_approvers)
     end
   end
 end

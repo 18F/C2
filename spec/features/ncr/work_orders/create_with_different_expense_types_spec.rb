@@ -32,7 +32,7 @@ feature "Create NCR Work orders with different expense types", :js do
       fill_in_selectized("ncr_work_order_building_number", "Test Building")
       fill_in_selectized("ncr_work_order_vendor", "Test vendor")
       fill_in "Amount", with: 123.45
-      fill_in_selectized("ncr_work_order_approving_official_email", approver.email_address)
+      fill_in_selectized("ncr_work_order_approving_official", approver.email_address)
       click_on "Submit for approval"
 
       expect(page).to have_content("Proposal submitted")
@@ -53,7 +53,7 @@ feature "Create NCR Work orders with different expense types", :js do
       fill_in_selectized("ncr_work_order_building_number", "Test Building")
       fill_in_selectized("ncr_work_order_vendor", "Test vendor")
       fill_in "Amount", with: 123.45
-      fill_in_selectized("ncr_work_order_approving_official_email", approver.email_address)
+      fill_in_selectized("ncr_work_order_approving_official", approver.email_address)
       click_on "Submit for approval"
 
       expect(page).to have_content("Proposal submitted")

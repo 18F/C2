@@ -23,7 +23,7 @@ module Ncr
       if users.empty?
         fail "Missing User with role #{role_name} -- did you run rake db:migrate and rake db:seed?"
       end
-      users.first.email_address
+      users.first
     end
   end
 end

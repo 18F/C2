@@ -5,6 +5,29 @@ describe Ncr::WorkOrder do
 
   describe "Associations" do
     it { should belong_to(:ncr_organization) }
+    it { should belong_to(:approving_official) }
+  end
+
+  describe "Validations" do
+    it "does not allow approving official to be changed if the first step is not actionable" do
+      work_order = create(:ncr_work_order)
+      work_order.setup_approvals_and_observers
+      approving_official_step = work_order.reload.individual_steps.first
+      approving_official_step.update(status: "approved")
+
+      work_order.approving_official = create(:user, client_slug: "ncr")
+
+      expect(work_order).not_to be_valid
+    end
+
+    it "does allow approving official to be changed if the first step is actionable" do
+      work_order = create(:ncr_work_order)
+      work_order.setup_approvals_and_observers
+
+      work_order.approving_official = create(:user, client_slug: "ncr")
+
+      expect(work_order).to be_valid
+    end
   end
 
   describe "#editable?" do

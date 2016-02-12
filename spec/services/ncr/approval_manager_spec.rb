@@ -1,20 +1,34 @@
 describe Ncr::ApprovalManager do
   describe '#setup_approvals_and_observers' do
-    let (:ba61_tier_one_email) { Ncr::Mailboxes.ba61_tier1_budget }
-    let (:ba61_tier_two_email) { Ncr::Mailboxes.ba61_tier2_budget }
+    let (:ba61_tier_one) { Ncr::Mailboxes.ba61_tier1_budget }
+    let (:ba61_tier_two) { Ncr::Mailboxes.ba61_tier2_budget }
 
     it "creates approvers when not an emergency" do
       wo = create(:ncr_work_order, expense_type: 'BA61')
       manager = Ncr::ApprovalManager.new(wo)
       manager.setup_approvals_and_observers
       expect(wo.observations.length).to eq(0)
-      expect(wo.approvers.map(&:email_address)).to eq([
-        wo.approving_official_email,
-        ba61_tier_one_email,
-        ba61_tier_two_email
+      expect(wo.approvers).to eq([
+        wo.approving_official,
+        ba61_tier_one,
+        ba61_tier_two
       ])
       wo.reload
       expect(wo.approved?).to eq(false)
+    end
+
+    it "replaces approving official step when approving official changed to system approver delegate" do
+      new_user = create(:user)
+      user = create(:user)
+      work_order = create(:ncr_work_order, approving_official: user)
+      Ncr::ApprovalManager.new(work_order).setup_approvals_and_observers
+      create(:user_delegate, assignee: new_user, assigner: work_order.proposal.individual_steps.last.user)
+      work_order.update(approving_official: new_user)
+      Ncr::ApprovalManager.new(work_order).setup_approvals_and_observers
+
+      expect(work_order.proposal.individual_steps.count).to eq 3
+      expect(work_order.proposal.steps.where(user: user)).not_to be_present
+      expect(work_order.proposal.steps.where(user: new_user)).to be_present
     end
 
     it "reuses existing approvals" do
@@ -31,10 +45,10 @@ describe Ncr::ApprovalManager do
       wo = create(:ncr_work_order, expense_type: 'BA61', emergency: true)
       manager = Ncr::ApprovalManager.new(wo)
       manager.setup_approvals_and_observers
-      expect(wo.observers.map(&:email_address)).to match_array([
-        wo.approving_official_email,
-        ba61_tier_one_email,
-        ba61_tier_two_email
+      expect(wo.observers).to match_array([
+        wo.approving_official,
+        ba61_tier_one,
+        ba61_tier_two
       ].uniq)
       expect(wo.steps.length).to eq(0)
       wo.clear_association_cache
@@ -42,51 +56,54 @@ describe Ncr::ApprovalManager do
     end
 
     it "accounts for approver transitions when nothing's approved" do
+      email = "ao@example.com"
+      approving_official = create(:user, email_address: email)
       organization = create(:whsc_organization)
-      ba80_budget_email = Ncr::Mailboxes.ba80_budget
+      ba80_budget = Ncr::Mailboxes.ba80_budget
       wo = create(
         :ncr_work_order,
-        approving_official_email: "ao@example.com",
+        approving_official: approving_official,
         expense_type: "BA61",
       )
       manager = Ncr::ApprovalManager.new(wo)
       manager.setup_approvals_and_observers
-      expect(wo.approvers.map(&:email_address)).to eq [
-        "ao@example.com",
-        ba61_tier_one_email,
-        ba61_tier_two_email
+      expect(wo.approvers).to eq [
+        approving_official,
+        ba61_tier_one,
+        ba61_tier_two
       ]
       wo.update(ncr_organization: organization)
       manager.setup_approvals_and_observers
-      expect(wo.reload.approvers.map(&:email_address)).to eq [
-        "ao@example.com",
-        ba61_tier_two_email
+      expect(wo.reload.approvers).to eq [
+        approving_official,
+        ba61_tier_two
       ]
 
-      wo.approving_official_email = "ao2@example.com"
+      approving_official_2 = create(:user, email_address: "ao2@example.com")
+      wo.update(approving_official: approving_official_2)
       manager.setup_approvals_and_observers
-      expect(wo.reload.approvers.map(&:email_address)).to eq [
-        "ao2@example.com",
-        ba61_tier_two_email
+      expect(wo.reload.approvers).to eq [
+        approving_official_2,
+        ba61_tier_two
       ]
 
-      wo.approving_official_email = "ao@example.com"
+      wo.update(approving_official: approving_official)
       wo.update(expense_type: "BA80")
       manager.setup_approvals_and_observers
-      expect(wo.reload.approvers.map(&:email_address)).to eq [
-        "ao@example.com",
-        ba80_budget_email
+      expect(wo.reload.approvers).to eq [
+        approving_official,
+        ba80_budget
       ]
     end
 
     it "unsets the approval status" do
-      ba80_budget_email = Ncr::Mailboxes.ba80_budget
+      ba80_budget = Ncr::Mailboxes.ba80_budget
       wo = create(:ba80_ncr_work_order)
       manager = Ncr::ApprovalManager.new(wo)
       manager.setup_approvals_and_observers
-      expect(wo.approvers.map(&:email_address)).to eq [
-        wo.approving_official_email,
-        ba80_budget_email
+      expect(wo.approvers).to eq [
+        wo.approving_official,
+        ba80_budget
       ]
 
       wo.individual_steps.first.approve!
@@ -116,9 +133,9 @@ describe Ncr::ApprovalManager do
       wo = create(:ba80_ncr_work_order)
       manager = Ncr::ApprovalManager.new(wo)
       manager.setup_approvals_and_observers
-      delegate = create(:user)
-      wo.approvers.second.add_delegate(delegate)
-      wo.individual_steps.second.update(user: delegate)
+      delegate_user = create(:user)
+      wo.approvers.second.add_delegate(delegate_user)
+      wo.individual_steps.second.update(completer: delegate_user)
 
       wo.individual_steps.first.approve!
       wo.individual_steps.second.approve!
@@ -126,14 +143,14 @@ describe Ncr::ApprovalManager do
       manager.setup_approvals_and_observers
       wo.reload
       expect(wo.approved?).to be true
-      expect(wo.approvers.second).to eq delegate
+      expect(wo.individual_steps.second.completer).to eq delegate_user
     end
   end
 
-  describe '#system_approver_emails' do
+  describe '#system_approvers' do
     context "for a BA61 request" do
-      let (:ba61_tier_one_email) { Ncr::Mailboxes.ba61_tier1_budget }
-      let (:ba61_tier_two_email) { Ncr::Mailboxes.ba61_tier2_budget }
+      let (:ba61_tier_one) { Ncr::Mailboxes.ba61_tier1_budget }
+      let (:ba61_tier_two) { Ncr::Mailboxes.ba61_tier2_budget }
 
       it "skips the Tier 1 budget approver for WHSC" do
         ncr_organization =  create(:whsc_organization)
@@ -143,36 +160,36 @@ describe Ncr::ApprovalManager do
           ncr_organization: ncr_organization
         )
         manager = Ncr::ApprovalManager.new(work_order)
-        expect(manager.system_approver_emails).to eq([
-          ba61_tier_two_email
+        expect(manager.system_approvers).to eq([
+          ba61_tier_two
         ])
       end
 
       it "includes the Tier 1 budget approver for an unknown organization" do
-        work_order = create(:ncr_work_order, expense_type: 'BA61')
-        _manager = Ncr::ApprovalManager.new(work_order)
-        expect(work_order.system_approver_emails).to eq([
-          ba61_tier_one_email,
-          ba61_tier_two_email
+        work_order = create(:ncr_work_order, expense_type: "BA61")
+        manager = Ncr::ApprovalManager.new(work_order)
+        expect(manager.system_approvers).to eq([
+          ba61_tier_one,
+          ba61_tier_two
         ])
       end
     end
 
     context "for a BA80 request" do
       it "uses the general budget email" do
-        ba80_budget_email = Ncr::Mailboxes.ba80_budget
+        ba80_budget = Ncr::Mailboxes.ba80_budget
         work_order = create(:ba80_ncr_work_order)
         manager = Ncr::ApprovalManager.new(work_order)
-        expect(manager.system_approver_emails).to eq([ba80_budget_email])
+        expect(manager.system_approvers).to eq([ba80_budget])
       end
 
       it "uses the OOL budget email for their org code" do
-        budget_email = Ncr::Mailboxes.ool_ba80_budget
+        budget = Ncr::Mailboxes.ool_ba80_budget
         ool_organization = create(:ool_organization)
         work_order = create(:ba80_ncr_work_order, ncr_organization: ool_organization)
 
         manager = Ncr::ApprovalManager.new(work_order)
-        expect(manager.system_approver_emails).to eq([budget_email])
+        expect(manager.system_approvers).to eq([budget])
       end
     end
   end
