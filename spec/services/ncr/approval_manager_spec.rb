@@ -17,6 +17,20 @@ describe Ncr::ApprovalManager do
       expect(wo.approved?).to eq(false)
     end
 
+    it "replaces approving official step when approving official changed to system approver delegate" do
+      new_user = create(:user)
+      user = create(:user)
+      work_order = create(:ncr_work_order, approving_official: user)
+      Ncr::ApprovalManager.new(work_order).setup_approvals_and_observers
+      create(:user_delegate, assignee: new_user, assigner: work_order.proposal.individual_steps.last.user)
+      work_order.update(approving_official: new_user)
+      Ncr::ApprovalManager.new(work_order).setup_approvals_and_observers
+
+      expect(work_order.proposal.individual_steps.count).to eq 3
+      expect(work_order.proposal.steps.where(user: user)).not_to be_present
+      expect(work_order.proposal.steps.where(user: new_user)).to be_present
+    end
+
     it "reuses existing approvals" do
       wo = create(:ncr_work_order, expense_type: 'BA61')
       manager = Ncr::ApprovalManager.new(wo)
@@ -119,9 +133,9 @@ describe Ncr::ApprovalManager do
       wo = create(:ba80_ncr_work_order)
       manager = Ncr::ApprovalManager.new(wo)
       manager.setup_approvals_and_observers
-      delegate = create(:user)
-      wo.approvers.second.add_delegate(delegate)
-      wo.individual_steps.second.update(user: delegate)
+      delegate_user = create(:user)
+      wo.approvers.second.add_delegate(delegate_user)
+      wo.individual_steps.second.update(completer: delegate_user)
 
       wo.individual_steps.first.approve!
       wo.individual_steps.second.approve!
@@ -129,7 +143,7 @@ describe Ncr::ApprovalManager do
       manager.setup_approvals_and_observers
       wo.reload
       expect(wo.approved?).to be true
-      expect(wo.approvers.second).to eq delegate
+      expect(wo.individual_steps.second.completer).to eq delegate_user
     end
   end
 

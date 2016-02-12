@@ -137,14 +137,17 @@ class Proposal < ActiveRecord::Base
     user_delegates.exists?(assignee_id: user.id)
   end
 
-  def existing_step_for(user)
+  def existing_or_delegated_step_for(user)
     where_clause = <<-SQL
       user_id = :user_id
       OR user_id IN (SELECT assigner_id FROM user_delegates WHERE assignee_id = :user_id)
       OR user_id IN (SELECT assignee_id FROM user_delegates WHERE assigner_id = :user_id)
     SQL
-
     steps.where(where_clause, user_id: user.id).first
+  end
+
+  def existing_step_for(user)
+    steps.where(user: user).first
   end
 
   def subscribers
