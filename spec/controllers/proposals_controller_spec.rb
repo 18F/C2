@@ -165,13 +165,15 @@ describe ProposalsController do
 
         Proposal.__elasticsearch__.refresh_index!
 
-        get :query, text: "AAA"
-        query = assigns(:proposals_data).rows
+        es_execute_with_retries 3 do
+          get :query, text: "AAA"
+          query = assigns(:proposals_data).rows
 
-        expect(query.length).to be(3)
-        expect(query[0].id).to be(triple.id)
-        expect(query[1].id).to be(double.id)
-        expect(query[2].id).to be(single.id)
+          expect(query.length).to be(3)
+          expect(query[0].id).to be(triple.id)
+          expect(query[1].id).to be(double.id)
+          expect(query[2].id).to be(single.id)
+        end
       end
     end
   end
@@ -189,10 +191,12 @@ describe ProposalsController do
       end
       Proposal.__elasticsearch__.refresh_index!
 
-      get :download, text: "Work Order", format: "csv"
-      expect(response.body).to include "Work Order 29"
-      expect(response.headers["Content-Type"]).to eq "text/csv"
-      expect(response.body).not_to include("\n\n")
+      es_execute_with_retries 3 do
+        get :download, text: "Work Order", format: "csv"
+        expect(response.body).to include "Work Order 29"
+        expect(response.headers["Content-Type"]).to eq "text/csv"
+        expect(response.body).not_to include("\n\n")
+      end
     end
   end
 
