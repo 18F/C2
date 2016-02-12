@@ -16,7 +16,7 @@ class ProposalsController < ApplicationController
   end
 
   def index
-    @closed_proposal_limit = ENV["CLOSED_PROPOSAL_LIMIT"].to_i || 10
+    @closed_proposal_limit = ENV.fetch("CLOSED_PROPOSAL_LIMIT", 10).to_i
     @pending_data = listing.pending
     @pending_review_data = listing.pending_review
     @approved_data = listing.approved.alter_query { |rel| rel.limit(@closed_proposal_limit) }

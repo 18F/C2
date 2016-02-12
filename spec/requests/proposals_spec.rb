@@ -18,6 +18,7 @@ describe "proposals" do
         end
       end
     end
+  end
 
   describe 'GET /proposals/:id' do
     it "can be viewed by a delegate" do
