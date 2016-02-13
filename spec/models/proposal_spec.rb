@@ -2,15 +2,11 @@ describe Proposal do
   describe "Associatons" do
     it { should belong_to(:client_data).dependent(:destroy) }
     it { should have_many(:steps) }
-    it { should have_many(:delegates) }
     it { should have_many(:individual_steps) }
     it { should have_many(:attachments).dependent(:destroy) }
     it { should have_many(:comments).dependent(:destroy) }
     it { should have_many(:approval_steps) }
     it { should have_many(:purchase_steps) }
-    it { should have_many(:purchasers) }
-    it { should have_many(:approvers) }
-    it { should have_many(:step_users) }
   end
 
   describe "Validations" do

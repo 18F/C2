@@ -1,16 +1,13 @@
 shared_examples "client data" do
   describe "Associations" do
-    it { should have_one(:proposal) }
-    it { should have_many(:steps) }
+    it { should have_many(:comments) }
+    it { should have_many(:completers) }
     it { should have_many(:individual_steps) }
-    it { should have_many(:approvers) }
     it { should have_many(:observations) }
     it { should have_many(:observers) }
-    it { should have_many(:comments) }
+    it { should have_many(:steps) }
+    it { should have_one(:proposal) }
     it { should have_one(:requester) }
-    it { should have_many(:approvers) }
-    it { should have_many(:purchasers) }
-    it { should have_many(:completers) }
   end
 
   describe "Validations" do
