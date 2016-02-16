@@ -2,7 +2,8 @@ AllCops:
   Exclude:
     - 'bin/**/*'
     - 'db/**/*'
-  RunRailsCops: true
+Rails:
+  Enabled: true
 Metrics/LineLength:
   Enabled: false
 Style/CommentAnnotation:
