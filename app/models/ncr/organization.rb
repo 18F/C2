@@ -23,5 +23,9 @@ module Ncr
     def whsc?
       code == WHSC_CODE
     end
+
+    def ba_6x_tier1_team?
+      code.match(/^P11[7J4T1ACZ]....$/)
+    end
   end
 end
