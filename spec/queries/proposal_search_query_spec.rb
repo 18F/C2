@@ -10,8 +10,10 @@ describe ProposalSearchQuery, elasticsearch: true do
     it "returns an empty list for no Proposals" do
       user = create(:user, client_slug: "test")
       searcher = ProposalSearchQuery.new(current_user: user)
-      results = searcher.execute('')
-      expect(results.to_a).to eq([])
+      es_execute_with_retries 3 do
+        results = searcher.execute('')
+        expect(results.to_a).to eq([])
+      end
     end
 
     it "returns the Proposal when searching by ID" do
