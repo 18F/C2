@@ -284,8 +284,6 @@ GEM
     lumberjack (1.0.10)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
-    mail_view (2.0.4)
-      tilt
     mandrill-rails (1.4.1)
       activesupport (>= 3.0.3)
     method_source (0.8.2)
@@ -545,7 +543,6 @@ DEPENDENCIES
   konacha
   letter_opener
   letter_opener_web
-  mail_view
   mandrill-rails
   newrelic_rpm
   omniauth-myusa!

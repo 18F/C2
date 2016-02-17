@@ -1,0 +1,13 @@
+en:
+  activerecord:
+    attributes:
+      gsa18f/procurement:
+        recurring: "Recurring charge"
+      ncr/work_order:
+        cl_number: "CL number"
+        organization_code_and_name: "Org code / Service center"
+        code: "Work Order / Maximo Ticket Number"
+        rwa_number: "RWA Number"
+        soc_code: "Object field / SOC code"
+      observation:
+        user_reason_comment: "_%{user} added %{observer} as an observer, giving reason:_ `%{reason}`"

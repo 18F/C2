@@ -85,7 +85,10 @@ http://localhost:3000/proposals.
 
 ### Viewing the mailers
 
-As emails are sent, they will be visible at http://localhost:3000/letter_opener. If you are working on an email mailer/template, you can view all of them at http://localhost:3000/mail_view/.
+As emails are sent, they will be visible at http://localhost:3000/letter_opener.
+
+If you are working on an email mailer/template, you can view all of them at
+http://localhost:3000/rails/mailers.
 
 ## Running tests
 

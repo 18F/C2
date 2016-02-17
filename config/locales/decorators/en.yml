@@ -1,0 +1,15 @@
+en:
+  decorators:
+    steps:
+      approval:
+        execute_button: "Approve"
+        role_name: "Approver"
+        status:
+          please_act: "Please review"
+          waiting: "Waiting for review from:"
+      purchase:
+        execute_button: "Mark as Purchased"
+        role_name: "Purchaser"
+        status:
+          please_act: "Please purchase"
+          waiting: "Waiting for purchase from:"

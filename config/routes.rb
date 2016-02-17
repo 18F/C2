@@ -64,7 +64,6 @@ C2::Application.routes.draw do
 
   mount Peek::Railtie => "/peek"
   if Rails.env.development?
-    mount MailPreview => "mail_view"
     mount LetterOpenerWeb::Engine => "letter_opener"
   end
 end
