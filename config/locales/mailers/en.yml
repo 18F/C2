@@ -1,0 +1,7 @@
+en:
+  mailer:
+    greeting: Hi %{name}
+    cancellation_mailer:
+      cancellation_confirmation:
+        body: "This confirms your cancellation of this request: %{name} (%{public_id})"
+        link: "View This Request"
