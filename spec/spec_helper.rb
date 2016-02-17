@@ -20,6 +20,13 @@ WebMock.disable_net_connect!(allow_localhost: true, allow: 'codeclimate.com:443'
 require 'rack_session_access/capybara'
 
 require 'capybara/poltergeist'
+Capybara.register_driver :poltergeist do |app|
+  options = {
+    timeout: 60,
+    debug: ENV['CAPYBARA_DEBUG'] || false
+  }
+  Capybara::Poltergeist::Driver.new(app, options)
+end
 Capybara.javascript_driver = :poltergeist
 
 require 'pundit/rspec'
