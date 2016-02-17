@@ -1,7 +1,19 @@
 en:
   mailer:
-    greeting: Hi %{name}
+    generic_greeting: Hello
+    greeting: "Hi %{name}"
+    proposal_link: "View This Request"
+    feedback_footer:
+      "Find a bug, have a recommendation, or want to provide other feedback?
+      We'd love to <a target='_blank' href=%{feedback_url}>hear from you!</a>"
+    reason: " with given reason '%{reason}'"
     cancellation_mailer:
       cancellation_confirmation:
         body: "This confirms your cancellation of this request: %{name} (%{public_id})"
-        link: "View This Request"
+      cancellation_email:
+        body: "The request, %{name} (%{public_id}), has been cancelled"
+      proposal_fiscal_cancellation:
+        body:
+          "All unapproved credit card funding requests from the previous fiscal
+          year are being cancelled.  If the need still exists, please submit a new funding
+          request for the current fiscal year."

@@ -28,7 +28,11 @@ module MailerHelper
   end
 
   def cancellation_text(proposal, reason)
-    text = "The request, #{proposal.name} (#{proposal.public_id}), has been cancelled"
+    text = t(
+      "mailer.cancellation_mailer.cancellation_email.body",
+      name: proposal.name,
+      public_id: proposal.public_id
+    )
     add_reason(text, reason)
     text + "."
   end
@@ -48,7 +52,7 @@ module MailerHelper
 
   def add_reason(text, reason)
     if reason.present?
-      text << " with given reason '#{reason}'"
+      text << t("mailer.reason", reason: reason)
     end
   end
 end
