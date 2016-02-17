@@ -65,7 +65,7 @@ module Ncr
       if work_order.for_whsc_organization?
         # no tier 1
       elsif work_order.ba_6x_tier1_team?
-        results << Ncr::Mailboxes.ba61_tier1_budgetteam
+        results << Ncr::Mailboxes.ba61_tier1_budget_team
       else
         results << Ncr::Mailboxes.ba61_tier1_budget
       end

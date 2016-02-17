@@ -188,9 +188,9 @@ describe Ncr::ApprovalManager do
           ba61_work_order.setup_approvals_and_observers
           ba80_work_order.setup_approvals_and_observers
 
-          expect(ba60_work_order.budget_approvals.first.user_id).to eq(Ncr::Mailboxes.ba61_tier1_budgetteam.id)
-          expect(ba61_work_order.budget_approvals.first.user_id).to eq(Ncr::Mailboxes.ba61_tier1_budgetteam.id)
-          expect(ba80_work_order.budget_approvals.first.user_id).to_not eq(Ncr::Mailboxes.ba61_tier1_budgetteam.id)
+          expect(ba60_work_order.budget_approvals.first.user_id).to eq(Ncr::Mailboxes.ba61_tier1_budget_team.id)
+          expect(ba61_work_order.budget_approvals.first.user_id).to eq(Ncr::Mailboxes.ba61_tier1_budget_team.id)
+          expect(ba80_work_order.budget_approvals.first.user_id).to_not eq(Ncr::Mailboxes.ba61_tier1_budget_team.id)
         end
       end
     end

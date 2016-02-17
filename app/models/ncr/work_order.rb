@@ -51,7 +51,7 @@ module Ncr
 
     def self.all_system_approvers
       [
-        Ncr::Mailboxes.ba61_tier1_budgetteam,
+        Ncr::Mailboxes.ba61_tier1_budget_team,
         Ncr::Mailboxes.ba61_tier1_budget,
         Ncr::Mailboxes.ba61_tier2_budget,
         Ncr::Mailboxes.ba80_budget,
