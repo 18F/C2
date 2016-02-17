@@ -1,7 +1,7 @@
-include EnvVarSpecHelper
-include ReturnToHelper
+describe "proposals" do
+  include EnvVarSpecHelper
+  include ReturnToHelper
 
-describe 'proposals' do
   describe "DISABLE_CLIENT_SLUGS" do
     it "disallows any request for disabled client_slug" do
       with_env_var("DISABLE_CLIENT_SLUGS", "foo") do

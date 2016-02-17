@@ -2,7 +2,7 @@ describe "Display status text" do
   context "parallel approvals" do
     it "displays approved status" do
       proposal = create_proposal_with_parallel_approvers
-      proposal.individual_steps.each{ |approval| approval.approve! }
+      proposal.individual_steps.each { |approval| approval.approve! }
 
       login_as(proposal.requester)
       visit proposals_path
