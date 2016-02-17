@@ -59,6 +59,26 @@ describe Ncr::WorkOrder do
     end
   end
 
+  describe "#ba_6x_tier1_team?" do
+    it "is true for whitelist of organizations" do
+      org_letters = %w( 7 J 4 T 1 A C Z )
+      org_letters.each do |org_letter|
+        org_code = "P11#{org_letter}XXXX"
+        ncr_org = build(:ncr_organization, code: org_code)
+        work_order = build(:ncr_work_order, ncr_organization: ncr_org)
+
+        expect(work_order).to be_ba_6x_tier1_team
+      end
+    end
+
+    it "is false for non-listed organizations" do
+      ncr_org = build(:ncr_organization)
+      work_order = build(:ncr_work_order, ncr_organization: ncr_org)
+
+      expect(work_order).to_not be_ba_6x_tier1_team
+    end
+  end
+
   describe "#for_ool_organization?" do
     it "is true if org code is for an ool org" do
       organization = create(:ool_organization)
