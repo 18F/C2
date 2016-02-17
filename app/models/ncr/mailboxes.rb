@@ -1,5 +1,9 @@
 module Ncr
   module Mailboxes
+    def self.ba61_tier1_budget_team
+      approver_with_role("BA61_tier1_budget_team_approver")
+    end
+
     def self.ba61_tier1_budget
       approver_with_role("BA61_tier1_budget_approver")
     end

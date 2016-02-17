@@ -175,6 +175,26 @@ describe Ncr::ApprovalManager do
       end
     end
 
+    context "for a BA60 or BA61 request" do
+      it "uses BA61 tier1 team approver when org code matches" do
+        org_letters = %w( 7 J 4 T 1 A C Z )
+        org_letters.each do |org_letter|
+          org_code = "P11#{org_letter}XXXX"
+          ncr_org = create(:ncr_organization, code: org_code)
+          ba60_work_order = create(:ba60_ncr_work_order, ncr_organization: ncr_org)
+          ba61_work_order = create(:ba61_ncr_work_order, ncr_organization: ncr_org)
+          ba80_work_order = create(:ba80_ncr_work_order, ncr_organization: ncr_org)
+          ba60_work_order.setup_approvals_and_observers
+          ba61_work_order.setup_approvals_and_observers
+          ba80_work_order.setup_approvals_and_observers
+
+          expect(ba60_work_order.budget_approvals.first.user_id).to eq(Ncr::Mailboxes.ba61_tier1_budget_team.id)
+          expect(ba61_work_order.budget_approvals.first.user_id).to eq(Ncr::Mailboxes.ba61_tier1_budget_team.id)
+          expect(ba80_work_order.budget_approvals.first.user_id).to_not eq(Ncr::Mailboxes.ba61_tier1_budget_team.id)
+        end
+      end
+    end
+
     context "for a BA80 request" do
       it "uses the general budget email" do
         ba80_budget = Ncr::Mailboxes.ba80_budget

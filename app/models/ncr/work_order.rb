@@ -51,6 +51,7 @@ module Ncr
 
     def self.all_system_approvers
       [
+        Ncr::Mailboxes.ba61_tier1_budget_team,
         Ncr::Mailboxes.ba61_tier1_budget,
         Ncr::Mailboxes.ba61_tier2_budget,
         Ncr::Mailboxes.ba80_budget,
@@ -77,6 +78,10 @@ module Ncr
 
     def for_ool_organization?
       ncr_organization.try(:ool?)
+    end
+
+    def ba_6x_tier1_team?
+      expense_type.match(/^BA6[01]$/) && ncr_organization.try(:ba_6x_tier1_team?)
     end
 
     def organization_code_and_name
