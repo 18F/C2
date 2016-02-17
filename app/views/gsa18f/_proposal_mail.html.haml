@@ -2,7 +2,8 @@
   %table.w-container.main-container{ width: "800" }
     %tr
       %td
-        %h1.c2_header= "#{title} : #{proposal.name}"
+        %h1.c2_header
+          = link_to proposal.name, proposal_url(proposal),  { target: "C2" }
         .c2_description
           %p
             Requested by:
@@ -11,6 +12,7 @@
     = render partial: "shared/email_status"
 
     %tr
-      %td= client_partial(proposal.client_slug,
-        "proposal_properties",
-        locals: { proposal: proposal })
+      %td
+        = client_partial(proposal.client_slug,
+          "proposal_properties",
+            locals: { proposal: proposal })
