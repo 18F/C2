@@ -81,7 +81,7 @@ module Ncr
     end
 
     def ba_6x_tier1_team?
-      ncr_organization.try(:ba_6x_tier1_team?)
+      expense_type.match(/^BA6[01]$/) && ncr_organization.try(:ba_6x_tier1_team?)
     end
 
     def organization_code_and_name
