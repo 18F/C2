@@ -4,6 +4,7 @@ class ApplicationMailer < ActionMailer::Base
   include ProposalConversationThreading
 
   add_template_helper MailerHelper
+  add_template_helper ValueHelper
   add_template_helper ClientHelper
   add_template_helper MarkdownHelper
 
