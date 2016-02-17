@@ -1,3 +1,4 @@
 <%= observer_text(@observation, @reason) %>
 
-View Request: <%= proposal_url(@observation.proposal) %>
+<%= t("mailer.proposal_link_text",
+      proposal_url: proposal_url(@proposal)) %>

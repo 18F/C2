@@ -1,6 +1,5 @@
-Hi <%= @proposal.requester.full_name %>,
+<%= t("mailer.greeting", name: @proposal.requester.full_name) %>
 
-You just submitted a request for approval.
+<%= t("mailer.proposal_created_confirmation.body_text") %>
 
-View the proposal for details: <%= proposal_url(@proposal) %>
-
+<%= t("mailer.proposal_link_text", proposal_url: proposal_url(@proposal)) %>

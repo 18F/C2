@@ -1,5 +1,6 @@
-Hello,
+<%= t("mailer.generic_greeting") %>,
 
-An attachment has been added to <%= @proposal.name %> <%= @proposal.public_id %>.
+<%= t("mailer.new_attachment_email.body", name: @proposal.name, public_id: @proposal.public_id) %>
 
-View This Request: <%= proposal_url(@proposal) %>
+<%= t("mailer.proposal_link_text",
+      proposal_url: proposal_url(@proposal, anchor: "comments")) %>
