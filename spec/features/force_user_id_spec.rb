@@ -11,8 +11,9 @@ feature "Acts as a different User in request" do
   end
 
   scenario "respects FORCE_USER_ID to override current_user" do
+    user = create(:user, client_slug: "gsa18f")
+
     with_env_var("FORCE_USER_ID", user.id.to_s) do
-      user = create(:user, client_slug: "gsa18f")
       wo = create(:ncr_work_order, :with_approvers)
       login_as(wo.proposal.requester)
 
