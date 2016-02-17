@@ -55,4 +55,12 @@ module MailerHelper
       text << t("mailer.reason", reason: reason)
     end
   end
+
+  def complete_text(step)
+    if step.is_a?(Steps::Purchase)
+      t("mailer.approval_reply_received_email.purchased")
+    else
+      t("mailer.approval_reply_received_email.approved")
+    end
+  end
 end

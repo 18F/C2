@@ -48,7 +48,6 @@ class Mailer < ApplicationMailer
   def approval_reply_received_email(approval)
     proposal = approval.proposal.reload
     @step = approval
-    @alert_partial = "approvals_complete" if proposal.approved?
 
     send_proposal_email(
       from_email: user_email_with_name(approval.user),
