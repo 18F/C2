@@ -9,7 +9,7 @@ module ValueHelper
 
     # timezone adjustment is handled via browser-timezone-rails gem
     # so coerce into Time.zone explicitly
-    adjusted_time  = time.in_time_zone
+    adjusted_time = time.in_time_zone
     adjusted_time_str = adjusted_time.strftime("%b %-d, %Y at %l:%M%P")
 
     if ago
