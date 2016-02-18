@@ -1,16 +1,10 @@
-# Contains functions which make client selection/branching easier
 module ClientHelper
-  def client_partial(client_slug, path, args={})
-    client_slug ||= "default"
-    to_check = client_slug + "/" + path
-    default_check = "default/" + path
-
-    if lookup_context.template_exists?(to_check, [], true)
-      args[:partial] = to_check
-      render(args)
-    elsif lookup_context.template_exists?(default_check, [], true)
-      args[:partial] = default_check
-      render(args)
+  def client_specific_partial(user, partial_path)
+    partial = "#{user.client_slug}/#{partial_path}"
+    if lookup_context.template_exists?(partial, [], true)
+      partial
+    else
+      "shared/#{partial_path}"
     end
   end
 

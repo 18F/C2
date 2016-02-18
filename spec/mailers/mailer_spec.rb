@@ -80,12 +80,6 @@ describe Mailer do
       it 'renders a default template when an origin is not indicated' do
         expect(body).to include('Purchase Request')
       end
-
-      it 'renders a custom template for ncr work orders' do
-        create(:ncr_work_order, proposal: proposal)
-        proposal.reload
-        expect(body).to include('ncr-layout')
-      end
     end
 
     context 'alert templates' do

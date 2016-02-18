@@ -1,10 +1,10 @@
-describe "mailer/_email_reply.html.erb" do
+describe "mail_shared/_email_reply.html.erb" do
   it "renders 'Send a Comment' link with approve button" do
     approval = create(:approval)
     create(:api_token, step: approval)
     proposal = approval.proposal
     render(
-      partial: "mailer/email_reply",
+      partial: "mail_shared/email_reply",
       locals: { show_step_actions: true, step: approval.decorate, proposal: proposal }
     )
 
@@ -18,7 +18,7 @@ describe "mailer/_email_reply.html.erb" do
     create(:api_token, step: approval)
     proposal = approval.proposal
     render(
-      partial: "mailer/email_reply",
+      partial: "mail_shared/email_reply",
       locals: { show_step_actions: false, step: approval.decorate, proposal: proposal }
     )
 

@@ -21,12 +21,10 @@
 
     .col-md-12
       %table.col-md-12.data-container{border: 0}
-        = render partial: "shared/email_status"
+        = render partial: "shared/status"
 
   .row
-    = client_partial(@proposal.client_slug,
-    "proposal_properties",
-    locals: { proposal: @proposal })
+    = render partial: "shared/proposal_properties", locals: { proposal: @proposal }
   .row
     %table.tabular-data.observers
       %thead

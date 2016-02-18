@@ -1,4 +1,38 @@
 describe ClientHelper do
+  describe "#client_specific_partial" do
+    context "user does not have a client slug" do
+      it "returns the shared partial" do
+        user = create(:user, client_slug: nil)
+
+        partial = client_specific_partial(user, "header_links")
+
+        expect(partial).to eq "shared/header_links"
+      end
+    end
+
+    context "user has a client slug without a partial" do
+      it "returns the shared partial" do
+        expect(Proposal).to receive(:client_slugs).and_return(["blah blah"])
+        user = create(:user, client_slug: "blah blah")
+
+        partial = client_specific_partial(user, "header_links")
+
+        expect(partial).to eq "shared/header_links"
+      end
+    end
+
+    context "user has a client slug with a partial" do
+      it "returns the appropriate partial" do
+        user = create(:user, client_slug: "ncr")
+
+        partial = client_specific_partial(user, "header_links")
+
+        expect(partial).to eq "ncr/header_links"
+
+      end
+    end
+  end
+
   describe "#modify_client_button" do
     it "returns edit path for a client data type with edit path" do
       work_order = create(:ncr_work_order)
