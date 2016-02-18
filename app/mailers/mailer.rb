@@ -22,7 +22,8 @@ class Mailer < ApplicationMailer
     send_proposal_email(
       from_email: user_email_with_name(proposal.requester),
       to_email: to_email,
-      proposal: proposal
+      proposal: proposal,
+      template_name: "notification_for_subscriber"
     )
   end
 
