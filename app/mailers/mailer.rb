@@ -2,7 +2,6 @@ class Mailer < ApplicationMailer
   layout "mailer"
   add_template_helper ValueHelper
 
-  # Approver can approve/take other action
   def actions_for_approver(step, alert_partial = nil)
     @show_step_actions = true
     to_email = step.user_email_address
