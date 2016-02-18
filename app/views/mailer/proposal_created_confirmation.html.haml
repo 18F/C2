@@ -1,7 +1,7 @@
 %div
-  Hi #{@proposal.requester.full_name},
+  = t("mailer.greeting", name: @proposal.requester.full_name)
   %br
-  You just submitted a request for approval. Here are the details:
+  = t("mailer.proposal_created_confirmation.body")
 = render partial: "comments", locals: { comments: @proposal.comments }
 = render partial: "attachments", locals: { proposal: @proposal }
 = client_partial(@proposal.client_slug,

@@ -11,6 +11,18 @@ class MailerPreview < ActionMailer::Preview
     Mailer.approval_reply_received_email(received_approval)
   end
 
+  def new_attachment_email
+    Mailer.new_attachment_email(email, proposal)
+  end
+
+  def proposal_created_confirmation
+    Mailer.proposal_created_confirmation(proposal)
+  end
+
+  def notification_for_subscriber
+    Mailer.notification_for_subscriber(email, proposal)
+  end
+
   private
 
   def pending_approval

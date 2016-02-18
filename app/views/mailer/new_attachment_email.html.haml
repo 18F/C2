@@ -1,9 +1,10 @@
 %div
   %p
-    Hello,
+    = t("mailer.generic_greeting")
+    ,
     %br
-    An attachment has been added to #{@proposal.name} (#{@proposal.public_id}).
+    = t("mailer.new_attachment_email.body", name: @proposal.name, public_id: @proposal.public_id)
 
 %p
   %strong
-    = link_to "View This Request", proposal_url(@proposal), {target: 'C2'}
+    = link_to(t("mailer.proposal_link"), proposal_url(@proposal))

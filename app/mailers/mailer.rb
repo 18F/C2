@@ -23,7 +23,7 @@ class Mailer < ApplicationMailer
       from_email: user_email_with_name(proposal.requester),
       to_email: to_email,
       proposal: proposal,
-      template_name: "proposal_notification_email"
+      template_name: "notification_for_subscriber"
     )
   end
 
@@ -35,8 +35,14 @@ class Mailer < ApplicationMailer
     )
   end
 
+  def new_attachment_email(to_email, proposal)
+    send_proposal_email(
+      to_email: to_email,
+      proposal: proposal
+    )
+  end
+
   alias_method :proposal_observer_email, :general_proposal_email
-  alias_method :new_attachment_email, :general_proposal_email
 
   def proposal_created_confirmation(proposal)
     send_proposal_email(
