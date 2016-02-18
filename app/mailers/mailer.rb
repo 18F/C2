@@ -1,5 +1,5 @@
 class Mailer < ApplicationMailer
-  layout "mailer"
+  layout "basic"
   add_template_helper ValueHelper
 
   def actions_for_approver(step, alert_partial = nil)
