@@ -10,6 +10,7 @@ C2::Application.configure do
     authentication: "login",
     enable_starttls_auto: true
   }
+  config.action_controller.asset_host = ENV.fetch("ASSET_HOST", ENV.fetch("DEFAULT_URL_HOST"))
   config.active_support.deprecation = :notify
   config.assets.compile = true
   config.assets.digest = true
