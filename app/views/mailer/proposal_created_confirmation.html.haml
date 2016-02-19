@@ -26,3 +26,11 @@
   %tr
     %td.subheader
       = t("mailer.proposal_created_confirmation.approver_subheader")
+
+%table.one-third-width
+  - @proposal.individual_steps.each_with_index do |step, index|
+    %tr.approver
+      %td.subheader
+        = index + 1
+      %td.subheader
+        = step.user.full_name
