@@ -18,7 +18,7 @@ C2 is a fairly typical Rails application, so the setup is straightforward:
     git clone https://github.com/18F/C2.git
     cd C2
 
-    # Will print "DONE" if successful. NOTE: This will delete any existing records in your C2 database.
+    # Will print "DONE" if successful. NOTE: This will delete any existing records in your C2 database and add a few seed records.
     ./script/bootstrap
     ```
 

@@ -12,7 +12,7 @@ mkdir -p tmp/pids
 
 bundle
 
-bin/rake db:setup
+bin/rake dev:prime
 RAILS_ENV=test bin/rake db:setup
 
 echo "DONE"
