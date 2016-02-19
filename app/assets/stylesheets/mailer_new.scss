@@ -27,12 +27,13 @@ td.hero {
 }
 
 td.header {
-  padding: 1.5em;
+  padding-top: 1.5em;
   font-size: 40px;
   text-align: center;
 }
 
 .subheader {
+  padding-top: 1.5em;
   font-size: 24px;
   color: $light-grey;
   text-align: center;
@@ -44,7 +45,6 @@ p.email-button {
   border-radius: 25px;
   border: 2px solid $bright-blue;
   padding: 15px;
-  // margin: 20px 30px;
   display: block;
   text-align: center
 }

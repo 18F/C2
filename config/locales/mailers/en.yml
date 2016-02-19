@@ -17,7 +17,11 @@ en:
       approved: "Your request has been fully approved. See details below."
     proposal_created_confirmation:
       header_html: "Your new request <strong>%{proposal_name}</strong> has been submitted!"
-      subheader: "C2 is currently routing your request for approval. We'll let you know when everyone's signed off or if anything changes."
+      approver_subheader:
+        "Based on what you submitted, here's how we're routing your request:"
+      subheader:
+        "C2 is currently routing your request for approval. We'll let you know
+         when everyone's signed off or if anything changes."
       cta: "View or update request details"
       body_text: "You just submitted a request for approval."
     cancellation_mailer:
