@@ -45,8 +45,6 @@ class Mailer < ApplicationMailer
 
   def proposal_created_confirmation(proposal)
     @proposal = proposal.decorate
-    attachments.inline["icon-page-circle.png"] = File.read("#{Rails.root.join}/app/assets/images/emails/icon-page-circle.png".to_s)
-    attachments.inline["logo.png"] = File.read("#{Rails.root.join}/app/assets/images/emails/logo-c2-blue.png".to_s)
     assign_threading_headers(proposal)
     subject = "Request #{proposal.public_id}: #{proposal.name}"
     reply_email = reply_to_email().gsub('@', "+#{proposal.public_id}@")
