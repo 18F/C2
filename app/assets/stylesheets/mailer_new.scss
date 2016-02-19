@@ -11,6 +11,12 @@ table.two-thirds-width {
   margin-right: auto;
 }
 
+table.one-third-width {
+  width: 33%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 table.header {
   background: $bright-blue;
 }
