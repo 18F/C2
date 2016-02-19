@@ -38,11 +38,12 @@ rake import_users:one EMAIL=anna.smith@some.gov FIRST=Anna LAST=Smith CLIENT=gsa
 
 ## Team YAML
 
-18f has a repository of team information as YAML files. This script will
-import users from that format. Node that it overrides first name, last name,
-and client_slug if the user is already present. The script has only one
-parameter, `DIR`, which is the path to the "team" directory.
+18f has a repository of team information as YAML files found in the
+[`_data/team` directory of the Team API](https://github.com/18F/team-api.18f.gov/tree/master/_data/team).
+This script will import users from that format. Note that it overrides first
+name, last name, and client_slug if the user is already present. The script
+as only one parameter, `DIR`, which is the path to the "team" directory.
 
 ```
-rake import_users:team_yaml DIR=/path/to/data-private/team
+rake import_users:team_yaml DIR=/path/to/team-api.18f.gov/_data/team
 ```
