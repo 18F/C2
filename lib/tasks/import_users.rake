@@ -20,7 +20,7 @@ namespace :import_users do
   task team_yaml: :environment do
     dir = ENV['DIR']
     if !dir
-      raise "DIR must be specified. e.g. rake import_users:team_yaml DIR=/path/to/data-private/team/"
+      raise "DIR must be specified. e.g. rake import_users:team_yaml DIR=/path/to/team-api.18f.gov/_data/team"
     elsif !Dir.exists?(dir)
       raise "DIR (#{dir}) is not a directory"
     else
