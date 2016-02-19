@@ -1,5 +1,5 @@
 class Mailer < ApplicationMailer
-  layout "mailer"
+  layout "basic"
   add_template_helper ValueHelper
 
   def actions_for_approver(step, alert_partial = nil)
@@ -44,9 +44,18 @@ class Mailer < ApplicationMailer
   alias_method :proposal_observer_email, :general_proposal_email
 
   def proposal_created_confirmation(proposal)
-    send_proposal_email(
-      to_email: proposal.requester.email_address,
-      proposal: proposal
+    @proposal = proposal.decorate
+    attachments.inline["icon-page-circle.png"] = File.read("#{Rails.root.join}/app/assets/images/emails/icon-page-circle.png".to_s)
+    attachments.inline["logo.png"] = File.read("#{Rails.root.join}/app/assets/images/emails/logo-c2-blue.png".to_s)
+    assign_threading_headers(proposal)
+    subject = "Request #{proposal.public_id}: #{proposal.name}"
+    reply_email = reply_to_email().gsub('@', "+#{proposal.public_id}@")
+
+    mail(
+      to: proposal.requester.email_address,
+      subject: subject,
+      from: default_sender_email,
+      reply_to: reply_email
     )
   end
 
