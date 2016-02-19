@@ -1,10 +1,10 @@
-%table.full-width
+%table.full-width.header
   %tr
     %td.header
     %td
-      = image_tag "/assets/emails/icon-page-circle.png", class: "header-icon"
+      = image_tag asset_url("emails/icon-page-circle.png"), class: "header-icon"
 
-%table
+%table.full-width
   %tr
-    %td
-      = t("mailer.proposal_created_confirmation.body")
+    %td.subheader
+      = t("mailer.proposal_created_confirmation.body_html", proposal_name: @proposal.name)
