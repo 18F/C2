@@ -19,3 +19,10 @@
     %td
       %p.email-button
         = link_to t("mailer.proposal_created_confirmation.cta"), proposal_url(@proposal, targe: "_blank")
+
+%hr
+
+%table.two-thirds-width
+  %tr
+    %td.subheader
+      = t("mailer.proposal_created_confirmation.approver_subheader")
