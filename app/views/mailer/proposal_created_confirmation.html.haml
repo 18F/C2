@@ -1,10 +1,21 @@
 %table.full-width.header
   %tr
-    %td.header
+    %td.hero
     %td
       = image_tag asset_url("emails/icon-page-circle.png"), class: "header-icon"
 
-%table.full-width
+%table.two-thirds-width
+  %tr
+    %td.header
+      = t("mailer.proposal_created_confirmation.header_html", proposal_name: @proposal.name)
+
+%table.two-thirds-width
   %tr
     %td.subheader
-      = t("mailer.proposal_created_confirmation.body_html", proposal_name: @proposal.name)
+      = t("mailer.proposal_created_confirmation.subheader")
+
+%table.two-thirds-width
+  %tr
+    %td
+      %p.email-button
+        = link_to t("mailer.proposal_created_confirmation.cta"), proposal_url(@proposal, targe: "_blank")
