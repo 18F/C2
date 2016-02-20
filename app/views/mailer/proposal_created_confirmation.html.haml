@@ -29,8 +29,16 @@
 
 %table.one-third-width
   - @proposal.individual_steps.each_with_index do |step, index|
-    %tr.approver
+    %tr
       %td.subheader
         = index + 1
       %td.subheader
         = step.user.full_name
+
+%table.two-thirds-width.footer
+  %tr
+    %td.feedback-link
+      = t("mailer.proposal_created_confirmation.footer_html", feedback_url: feedback_url)
+  %tr
+    %td
+      = image_tag asset_url("emails/logo-c2-blue.png"), class: "footer-logo"
