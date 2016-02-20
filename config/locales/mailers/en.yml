@@ -24,7 +24,7 @@ en:
          when everyone's signed off or if anything changes."
       cta: "View or update request details"
       footer_html:
-        "Have <a href=%{feedback_url}>feedback</a>? We'd love to heard from you."
+        "Have <a href=%{feedback_url}>feedback</a>? We'd love to hear from you."
       body_text: "You just submitted a request for approval."
     cancellation_mailer:
       cancellation_confirmation:
