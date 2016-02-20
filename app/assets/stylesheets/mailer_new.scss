@@ -59,3 +59,20 @@ p.email-button {
   color: $bright-blue;
   text-decoration: none;
 }
+
+.feedback-link a:link {
+  color: $bright-blue;
+  text-decoration: underline;
+}
+
+.footer {
+  margin-top: 3em;
+  font-size: 24px;
+  color: $bright-blue;
+  text-align: center;
+}
+
+.footer-logo {
+  padding-top: 1em;
+  width: 25%;
+}
