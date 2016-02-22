@@ -1,10 +1,10 @@
 class CancellationMailerPreview < ActionMailer::Preview
-  def cancellation_email
-    CancellationMailer.cancellation_email(email, proposal)
+  def cancellation_notification
+    CancellationMailer.cancellation_notification(email, proposal, reason)
   end
 
   def cancellation_confirmation
-    CancellationMailer.cancellation_confirmation(proposal)
+    CancellationMailer.cancellation_confirmation(proposal, reason)
   end
 
   def proposal_fiscal_cancellation
@@ -15,6 +15,10 @@ class CancellationMailerPreview < ActionMailer::Preview
 
   def email
     "test@example.com"
+  end
+
+  def reason
+    "Example reason for cancelling proposal"
   end
 
   def proposal

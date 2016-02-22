@@ -43,10 +43,10 @@ class Dispatcher
     cancellation_notification_recipients = active_step_users(proposal) + active_observers(proposal)
 
     cancellation_notification_recipients.each do |recipient|
-      CancellationMailer.cancellation_email(recipient.email_address, proposal, reason).deliver_later
+      CancellationMailer.cancellation_notification(recipient.email_address, proposal, reason).deliver_later
     end
 
-    CancellationMailer.cancellation_confirmation(proposal).deliver_later
+    CancellationMailer.cancellation_confirmation(proposal, reason).deliver_later
   end
 
   def on_approval_approved(approval)
