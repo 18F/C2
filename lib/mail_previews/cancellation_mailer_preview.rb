@@ -7,8 +7,8 @@ class CancellationMailerPreview < ActionMailer::Preview
     CancellationMailer.cancellation_confirmation(proposal, reason)
   end
 
-  def proposal_fiscal_cancellation
-    CancellationMailer.proposal_fiscal_cancellation(proposal)
+  def fiscal_cancellation_notification
+    CancellationMailer.fiscal_cancellation_notification(proposal)
   end
 
   private

@@ -27,11 +27,11 @@ describe CancellationMailer do
     end
   end
 
-  describe "#proposal_fiscal_cancellation" do
+  describe "#fiscal_cancellation" do
     it "sends cancellation email for fiscal-year cleanup" do
       proposal = create(:proposal)
 
-      mail = CancellationMailer.proposal_fiscal_cancellation(proposal)
+      mail = CancellationMailer.fiscal_cancellation_notification(proposal)
 
       expect(mail.to).to eq([proposal.requester.email_address])
     end
