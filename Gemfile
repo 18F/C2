@@ -12,7 +12,6 @@ gem "autoprefixer-rails"
 gem "awesome_print"
 gem "aws-sdk"
 gem "bootstrap-sass"
-gem "blazer"
 gem "browser-timezone-rails"
 gem "climate_control"
 gem "clockwork", require: false
