@@ -11,7 +11,7 @@ class CancellationMailer < ApplicationMailer
       to: to_email,
       subject: subject(@proposal),
       from: default_sender_email,
-      reply_to: reply_email(proposal)
+      reply_to: reply_email(@proposal)
     )
   end
 
@@ -23,15 +23,19 @@ class CancellationMailer < ApplicationMailer
       to: proposal.requester.email_address,
       subject: subject(@proposal),
       from: default_sender_email,
-      reply_to: reply_email(proposal)
+      reply_to: reply_email(@proposal)
     )
   end
 
-  def proposal_fiscal_cancellation(proposal)
-    user = proposal.requester
-    send_proposal_email(
-      to_email: email_with_name(user.email_address, user.full_name),
-      proposal: proposal,
+  def fiscal_cancellation_notification(proposal)
+    @proposal = proposal.decorate
+    user = @proposal.requester
+
+    mail(
+      to: email_with_name(user.email_address, user.full_name),
+      subject: subject(@proposal),
+      from: default_sender_email,
+      reply_to: reply_email(@proposal)
     )
   end
 

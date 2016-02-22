@@ -1,0 +1,19 @@
+%table.full-width.header
+  %tr
+    %td.hero
+    %td
+      = image_tag "emails/icon-pencil-circle.png", class: "header-icon"
+
+%table.two-thirds-width
+  %tr
+    %td.header
+      = t("mailer.cancellation_mailer.fiscal_cancellation_notification.header")
+
+  %tr
+    %td.subheader
+      = t("mailer.cancellation_mailer.fiscal_cancellation_notification.reason")
+
+= render partial: "mail_shared/proposal_button",
+  locals: { button_text: t("mailer.cancellation_mailer.cta") }
+
+= render partial: "mail_shared/footer"
