@@ -17,10 +17,6 @@ table.one-third-width {
   margin-right: auto;
 }
 
-table.header {
-  background: $bright-blue;
-}
-
 td.hero {
   height: 4em;
 }
@@ -34,20 +30,20 @@ td.hero {
 
 td.header {
   padding-top: 1.5em;
-  font-size: 40px;
+  font-size: 32px;
   text-align: center;
 }
 
 .subheader {
   padding-top: 1.5em;
-  font-size: 24px;
+  font-size: 20px;
   color: $light-grey;
   text-align: center;
 }
 
 p.email-button {
-  margin: 1.5em;
-  font-size: 30px;
+  margin-top: 0.5em;
+  font-size: 18px;
   border-radius: 25px;
   border: 2px solid $bright-blue;
   padding: 15px;
@@ -67,7 +63,7 @@ p.email-button {
 
 .footer {
   margin-top: 3em;
-  font-size: 24px;
+  font-size: 18px;
   color: $bright-blue;
   text-align: center;
 }

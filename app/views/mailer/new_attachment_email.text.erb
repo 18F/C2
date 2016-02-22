@@ -1,6 +1,8 @@
-<%= t("mailer.generic_greeting") %>,
+<%= t("mailer.new_attachment_email.header",
+  user_name: @attachment_user.full_name,
+  proposal_name: @proposal.name) %>
 
-<%= t("mailer.new_attachment_email.body", name: @proposal.name, public_id: @proposal.public_id) %>
+<%= t("mailer.new_attachment_email.subheader") %>
 
-<%= t("mailer.proposal_link_text",
-      proposal_url: proposal_url(@proposal, anchor: "comments")) %>
+<%= t("mailer.new_attachment_email.cta") %>
+<%= proposal_url(@proposal) %>

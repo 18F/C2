@@ -8,7 +8,7 @@ class AttachmentsController < ApplicationController
     attachment.user = current_user
     if attachment.save
       flash[:success] = "You successfully added a attachment"
-      Dispatcher.deliver_attachment_emails(proposal)
+      Dispatcher.deliver_attachment_emails(proposal, attachment)
     else
       flash[:error] = attachment.errors.full_messages
     end
