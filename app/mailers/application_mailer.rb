@@ -19,6 +19,10 @@ class ApplicationMailer < ActionMailer::Base
     address.format
   end
 
+  def reply_email(proposal)
+    reply_to_email.gsub("@", "+#{proposal.public_id}@")
+  end
+
   def reply_to_email
     email_with_name(ENV["NOTIFICATION_REPLY_TO"] || "noreplyto@example.com", "C2")
   end

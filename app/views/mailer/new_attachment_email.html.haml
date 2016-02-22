@@ -1,10 +1,29 @@
-%div
-  %p
-    = t("mailer.generic_greeting")
-    ,
-    %br
-    = t("mailer.new_attachment_email.body", name: @proposal.name, public_id: @proposal.public_id)
+%table.full-width.header
+  %tr
+    %td.hero
+    %td
+      = image_tag "emails/icon-pencil-circle.png", class: "header-icon"
 
-%p
-  %strong
-    = link_to(t("mailer.proposal_link"), proposal_url(@proposal))
+%table.two-thirds-width
+  %tr
+    %td.header
+      = t("mailer.new_attachment_email.header_html",
+        user_name: @attachment_user.full_name,
+        proposal_name: @proposal.name)
+
+%table.two-thirds-width
+  %tr
+    %td.subheader
+      = t("mailer.new_attachment_email.subheader")
+
+%table.two-thirds-width
+  %tr
+    %td
+      %p.email-button
+        = link_to t("mailer.new_attachment_email.cta"), proposal_url(@proposal, target: "_blank")
+  %tr
+    %td
+      %p.email-button
+        = link_to t("mailer.new_attachment_email.cta_2"), proposal_url(@proposal, anchor: "comments", target: "_blank")
+
+= render partial: "mail_shared/footer"
