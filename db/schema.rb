@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160208182623) do
+ActiveRecord::Schema.define(version: 20160222185247) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -81,12 +81,12 @@ ActiveRecord::Schema.define(version: 20160208182623) do
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
   create_table "gsa18f_procurements", force: :cascade do |t|
-    t.string   "office",                       limit: 255
+    t.text     "office"
     t.text     "justification",                            default: "",      null: false
-    t.string   "link_to_product",              limit: 255, default: "",      null: false
+    t.text     "link_to_product",                          default: "",      null: false
     t.integer  "quantity"
     t.datetime "date_requested"
-    t.string   "additional_info",              limit: 255
+    t.text     "additional_info"
     t.decimal  "cost_per_unit"
     t.text     "product_name_and_description"
     t.boolean  "recurring",                                default: false,   null: false
@@ -143,7 +143,7 @@ ActiveRecord::Schema.define(version: 20160208182623) do
     t.integer  "client_data_id"
     t.string   "client_data_type", limit: 255
     t.integer  "requester_id"
-    t.string   "public_id"
+    t.string   "public_id",        limit: 255
   end
 
   add_index "proposals", ["client_data_id", "client_data_type"], name: "index_proposals_on_client_data_id_and_client_data_type", using: :btree
