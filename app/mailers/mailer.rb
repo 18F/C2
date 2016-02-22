@@ -26,7 +26,7 @@ class Mailer < ApplicationMailer
     )
   end
 
-  def general_proposal_email(to_email, proposal)
+  def proposal_observer_email(to_email, proposal)
     # TODO have the from_email be whomever triggered this notification
     send_proposal_email(
       to_email: to_email,
@@ -34,26 +34,31 @@ class Mailer < ApplicationMailer
     )
   end
 
-  def new_attachment_email(to_email, proposal)
-    send_proposal_email(
-      to_email: to_email,
-      proposal: proposal
-    )
-  end
-
-  alias_method :proposal_observer_email, :general_proposal_email
-
-  def proposal_created_confirmation(proposal)
+  def new_attachment_email(to_email, proposal, attachment)
     @proposal = proposal.decorate
+    @attachment_user = attachment.user
+    @attachment = attachment
     assign_threading_headers(proposal)
     subject = "Request #{proposal.public_id}: #{proposal.name}"
-    reply_email = reply_to_email.gsub("@", "+#{proposal.public_id}@")
 
     mail(
       to: proposal.requester.email_address,
       subject: subject,
       from: default_sender_email,
-      reply_to: reply_email
+      reply_to: reply_email(proposal)
+    )
+  end
+
+  def proposal_created_confirmation(proposal)
+    @proposal = proposal.decorate
+    assign_threading_headers(proposal)
+    subject = "Request #{proposal.public_id}: #{proposal.name}"
+
+    mail(
+      to: proposal.requester.email_address,
+      subject: subject,
+      from: default_sender_email,
+      reply_to: reply_email(proposal)
     )
   end
 
