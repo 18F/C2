@@ -1,6 +1,7 @@
 C2::Application.configure do
   config.action_mailer.preview_path = "#{Rails.root}/lib/mail_previews"
   config.action_mailer.register_preview_interceptor :css_inline_styler
+  config.action_mailer.asset_host = "http://localhost:5000"
   config.action_controller.perform_caching = false
   config.action_mailer.delivery_method = :letter_opener_web
   config.active_record.migration_error = :page_load
