@@ -1,0 +1,78 @@
+$light-grey: #585858;
+$bright-blue: #0744a4;
+
+table.full-width {
+  width: 100%;
+}
+
+table.two-thirds-width {
+  width: 66%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+table.one-third-width {
+  width: 33%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+table.header {
+  background: $bright-blue;
+}
+
+td.hero {
+  height: 4em;
+}
+
+.header-icon {
+  position: relative;
+  top: 2em;
+  display: block;
+  margin: 0 auto;
+}
+
+td.header {
+  padding-top: 1.5em;
+  font-size: 40px;
+  text-align: center;
+}
+
+.subheader {
+  padding-top: 1.5em;
+  font-size: 24px;
+  color: $light-grey;
+  text-align: center;
+}
+
+p.email-button {
+  margin: 1.5em;
+  font-size: 30px;
+  border-radius: 25px;
+  border: 2px solid $bright-blue;
+  padding: 15px;
+  display: block;
+  text-align: center
+}
+
+.email-button a:link {
+  color: $bright-blue;
+  text-decoration: none;
+}
+
+.feedback-link a:link {
+  color: $bright-blue;
+  text-decoration: underline;
+}
+
+.footer {
+  margin-top: 3em;
+  font-size: 24px;
+  color: $bright-blue;
+  text-align: center;
+}
+
+.footer-logo {
+  padding-top: 1em;
+  width: 25%;
+}

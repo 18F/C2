@@ -16,7 +16,15 @@ en:
       purchased: "Your request has been purchased. See details below."
       approved: "Your request has been fully approved. See details below."
     proposal_created_confirmation:
-      body: "You just submitted a request for approval. Here are the details:"
+      header_html: "Your new request <strong>%{proposal_name}</strong> has been submitted!"
+      approver_subheader:
+        "Based on what you submitted, here's how we're routing your request:"
+      subheader:
+        "C2 is currently routing your request for approval. We'll let you know
+         when everyone's signed off or if anything changes."
+      cta: "View or update request details"
+      footer_html:
+        "Have <a href=%{feedback_url}>feedback</a>? We'd love to hear from you."
       body_text: "You just submitted a request for approval."
     cancellation_mailer:
       cancellation_confirmation:

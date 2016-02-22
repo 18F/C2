@@ -1,10 +1,6 @@
 shared_examples "a proposal email" do
   include EnvVarSpecHelper
 
-  it "renders the subject" do
-    expect(mail.subject).to eq("Request #{proposal.public_id}")
-  end
-
   it "uses the configured sender email" do
     with_env_vars(
       "NOTIFICATION_FROM_EMAIL" => "reply@example.com",

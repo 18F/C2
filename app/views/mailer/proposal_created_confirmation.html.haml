@@ -1,7 +1,44 @@
-%div
-  = t("mailer.greeting", name: @proposal.requester.full_name)
-  %br
-  = t("mailer.proposal_created_confirmation.body")
-= render partial: "mail_shared/comments", locals: { comments: @proposal.comments }
-= render partial: "mail_shared/attachments", locals: { proposal: @proposal }
-= render partial: "mail_shared/proposal_mail", locals: { proposal: @proposal }
+%table.full-width.header
+  %tr
+    %td.hero
+    %td
+      = image_tag "https://s3-us-west-1.amazonaws.com/c-2/icon-page-circle.png", class: "header-icon"
+
+%table.two-thirds-width
+  %tr
+    %td.header
+      = t("mailer.proposal_created_confirmation.header_html", proposal_name: @proposal.name)
+
+%table.two-thirds-width
+  %tr
+    %td.subheader
+      = t("mailer.proposal_created_confirmation.subheader")
+
+%table.two-thirds-width
+  %tr
+    %td
+      %p.email-button
+        = link_to t("mailer.proposal_created_confirmation.cta"), proposal_url(@proposal, target: "_blank")
+
+%hr
+
+%table.two-thirds-width
+  %tr
+    %td.subheader
+      = t("mailer.proposal_created_confirmation.approver_subheader")
+
+%table.one-third-width
+  - @proposal.individual_steps.each_with_index do |step, index|
+    %tr
+      %td.subheader
+        = index + 1
+      %td.subheader
+        = step.user.full_name
+
+%table.two-thirds-width.footer
+  %tr
+    %td.feedback-link
+      = t("mailer.proposal_created_confirmation.footer_html", feedback_url: feedback_url)
+  %tr
+    %td
+      = image_tag "https://s3-us-west-1.amazonaws.com/c-2/logo-c2-blue.png", class: "footer-logo"
