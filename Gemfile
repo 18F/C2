@@ -12,6 +12,7 @@ gem "awesome_print"
 gem "aws-sdk"
 gem "bootstrap-sass"
 gem "browser-timezone-rails"
+gem "blazer"
 gem "climate_control"
 gem "clockwork", require: false
 gem "daemons" # for delayed_job
