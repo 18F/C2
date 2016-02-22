@@ -7,9 +7,15 @@ en:
     feedback_footer_html:
       "Find a bug, have a recommendation, or want to provide other feedback?
       We'd love to <a target='_blank' href=%{feedback_url}>hear from you!</a>"
+    footer_html:
+      "Have <a href=%{feedback_url}>feedback</a>? We'd love to hear from you."
     reason: " with given reason '%{reason}'"
     new_attachment_email:
-      body: "An attachment has been added to %{name} (%{public_id})."
+      header_html: "<strong>%{user_name}</strong> added an attachment to the request: %{proposal_name}"
+      header: "%{user_name} added an attachment to the request: %{proposal_name}"
+      subheader: "You can reply or review the full conversation on the request page."
+      cta: "View request details"
+      cta_2: "Add comment"
     approval_reply_received_email:
       body: "The approver, %{full_name}, %{status} request %{public_id}."
       details: "Please see below for more details."
@@ -23,8 +29,6 @@ en:
         "C2 is currently routing your request for approval. We'll let you know
          when everyone's signed off or if anything changes."
       cta: "View or update request details"
-      footer_html:
-        "Have <a href=%{feedback_url}>feedback</a>? We'd love to hear from you."
       body_text: "You just submitted a request for approval."
     cancellation_mailer:
       cancellation_confirmation:

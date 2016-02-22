@@ -45,9 +45,9 @@ module DispatcherMixin
       dispatcher.on_observer_added(observation, reason)
     end
 
-    def deliver_attachment_emails(proposal)
+    def deliver_attachment_emails(proposal, attachment)
       dispatcher = initialize_dispatcher(proposal)
-      dispatcher.deliver_attachment_emails(proposal)
+      dispatcher.deliver_attachment_emails(proposal, attachment)
     end
   end
 end
