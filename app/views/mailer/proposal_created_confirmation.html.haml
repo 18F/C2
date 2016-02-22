@@ -14,11 +14,8 @@
     %td.subheader
       = t("mailer.proposal_created_confirmation.subheader")
 
-%table.two-thirds-width
-  %tr
-    %td
-      %p.email-button
-        = link_to t("mailer.proposal_created_confirmation.cta"), proposal_url(@proposal, target: "_blank")
+= render partial: "mail_shared/proposal_button",
+  locals: { button_text: t("mailer.proposal_created_confirmation.cta") }
 
 %hr
 
