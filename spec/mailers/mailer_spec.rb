@@ -204,16 +204,16 @@ describe Mailer do
   end
 
   describe 'new_attachment_email' do
-    let(:mail) { Mailer.new_attachment_email(requester.email_address, proposal, attachment_user) }
+    let(:mail) { Mailer.new_attachment_email(requester.email_address, proposal, attachment) }
 
     it_behaves_like "a proposal email"
 
     it "includes the name of the user who added the attachment" do
-      expect(mail.body.encoded).to include(attachment_user.full_name)
+      expect(mail.body.encoded).to include(attachment.user.full_name)
     end
 
-    def attachment_user
-      @attachment_user ||= create(:user)
+    def attachment
+      @attachment ||= create(:attachment)
     end
   end
 end

@@ -31,20 +31,23 @@ describe Dispatcher do
     end
   end
 
-  describe '#deliver_attachment_emails' do
+  describe "#deliver_attachment_emails" do
     it "emails everyone currently involved in the proposal" do
       observer = create(:user)
       proposal.add_observer(observer)
-      dispatcher.deliver_attachment_emails(proposal)
+      attachment = create(:attachment, proposal: proposal)
+      dispatcher.deliver_attachment_emails(proposal, attachment)
       expect(email_recipients).to match_array(proposal.subscribers.map(&:email_address))
     end
 
     it "does not email pending approvers" do
-      dispatcher.deliver_attachment_emails(serial_proposal)
+      attachment = create(:attachment, proposal: proposal)
+      dispatcher.deliver_attachment_emails(serial_proposal, attachment)
       expect(email_recipients).to_not include(serial_proposal.approvers.last.email_address)
     end
 
     it "does not email delegates" do
+      attachment = create(:attachment, proposal: proposal)
       wo = create(:ncr_work_order, :with_approvers)
       tier_one_approver = wo.proposal.approvers.second
       delegate_one = create(:user, client_slug: 'ncr')
@@ -52,7 +55,7 @@ describe Dispatcher do
       tier_one_approver.add_delegate(delegate_one)
       tier_one_approver.add_delegate(delegate_two)
       wo.proposal.individual_steps.first.complete!
-      dispatcher.deliver_attachment_emails(wo.proposal)
+      dispatcher.deliver_attachment_emails(wo.proposal, attachment)
       expect(email_recipients).to_not include(delegate_one.email_address)
     end
   end

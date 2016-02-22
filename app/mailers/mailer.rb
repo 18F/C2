@@ -42,7 +42,7 @@ class Mailer < ApplicationMailer
     subject = "Request #{proposal.public_id}: #{proposal.name}"
 
     mail(
-      to: proposal.requester.email_address,
+      to: to_email,
       subject: subject,
       from: default_sender_email,
       reply_to: reply_email(proposal)
