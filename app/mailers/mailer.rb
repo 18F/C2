@@ -47,7 +47,7 @@ class Mailer < ApplicationMailer
     @proposal = proposal.decorate
     assign_threading_headers(proposal)
     subject = "Request #{proposal.public_id}: #{proposal.name}"
-    reply_email = reply_to_email().gsub("@", "+#{proposal.public_id}@")
+    reply_email = reply_to_email.gsub("@", "+#{proposal.public_id}@")
 
     mail(
       to: proposal.requester.email_address,
