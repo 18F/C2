@@ -7,10 +7,6 @@ class MailerPreview < ActionMailer::Preview
     Mailer.proposal_observer_email(email, proposal)
   end
 
-  def new_attachment_email
-    Mailer.new_attachment_email(email, proposal, attachment)
-  end
-
   def proposal_created_confirmation
     Mailer.proposal_created_confirmation(proposal)
   end
@@ -33,7 +29,12 @@ class MailerPreview < ActionMailer::Preview
     Proposal.last
   end
 
+<<<<<<< HEAD
   def attachment
     Attachment.last
+=======
+  def received_approval
+    Step.approved.last
+>>>>>>> 928a2c4... Move attachment email to its own mailer
   end
 end
