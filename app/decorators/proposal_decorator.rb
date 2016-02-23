@@ -21,22 +21,6 @@ class ProposalDecorator < Draper::Decorator
     end
   end
 
-  def generate_status_message
-    if object.steps.non_pending.empty?
-      progress_status_message
-    else
-      completed_status_message
-    end
-  end
-
-  def completed_status_message
-    "All #{number_approved} of #{total_approvers} approvals have been received. Please move forward with the purchase of ##{object.public_id}."
-  end
-
-  def progress_status_message
-    "#{number_approved} of #{total_approvers} approved."
-  end
-
   def waiting_text_for_status_in_table
     actionable_step = currently_awaiting_steps.first
     if actionable_step
@@ -49,7 +33,7 @@ class ProposalDecorator < Draper::Decorator
   end
 
   def step_text_for_user(key, user)
-    step = existing_step_for(user)
+    step = existing_or_delegated_step_for(user)
     klass = step.class.name.demodulize.downcase.to_sym
     scope = [:decorators, :steps, klass]
     I18n.t(key, scope: scope)

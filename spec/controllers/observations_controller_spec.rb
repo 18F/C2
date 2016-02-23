@@ -22,10 +22,10 @@ describe ObservationsController do
       login_as(proposal.requester)
       observer = create(:user, client_slug: nil)
 
-      post :create, proposal_id: proposal.id, observation: {user: {email_address: observer.email_address}}
+      post :create, proposal_id: proposal.id, observation: { user: { id: observer.id } }
       expect(flash[:success]).to eq("#{observer.full_name} has been added as an observer")
 
-      post :create, proposal_id: proposal.id, observation: {user: {email_address: observer.email_address}}
+      post :create, proposal_id: proposal.id, observation: { user: { id: observer.id } }
       expect(flash[:alert]).to eq("#{observer.email_address} is already an observer for this request")
     end
   end

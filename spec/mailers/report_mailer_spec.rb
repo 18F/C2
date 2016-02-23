@@ -1,17 +1,18 @@
 describe ReportMailer do
+  include EnvVarSpecHelper
+
   describe "#daily_budget_report" do
-    with_env_var("BUDGET_REPORT_RECIPIENT", "budget@example.com") do
-      it "works with no data" do
+    it "works with no data" do
+      with_env_var("BUDGET_REPORT_RECIPIENT", "budget@example.com") do
         expect {
           ReportMailer.daily_budget_report.deliver_later
         }.to_not raise_error
       end
+    end
 
-      it "reports on work orders" do
-        work_orders = 2.times.map do
-          create(:ncr_work_order, :with_approvers)
-        end
-
+    it "reports on work orders" do
+      with_env_var("BUDGET_REPORT_RECIPIENT", "budget@example.com") do
+        work_orders = create_list(:ncr_work_order, 2, :with_approvers)
         ReportMailer.daily_budget_report.deliver_now
 
         html = deliveries.last.body.encoded
@@ -30,8 +31,8 @@ describe ReportMailer do
   end
 
   describe "#weekly_fiscal_year_report" do
-    with_env_var("BUDGET_REPORT_RECIPIENT", "budget@example.com") do
-      it "works with no data" do
+    it "works with no data" do
+      with_env_var("BUDGET_REPORT_RECIPIENT", "budget@example.com") do
         year = 2014
 
         Timecop.freeze(Time.local(year)) do

@@ -8,7 +8,6 @@ module Ncr
       normalize_cl_number
       normalize_function_code
       normalize_soc_code
-      normalize_approving_official_email
     end
 
     private
@@ -39,12 +38,6 @@ module Ncr
         work_order.soc_code = work_order.soc_code.upcase
       else
         work_order.soc_code = nil
-      end
-    end
-
-    def normalize_approving_official_email
-      if work_order.approving_official_email.blank? && work_order.approvers.any?
-        work_order.approving_official_email = work_order.approvers.first.try(:email_address)
       end
     end
 

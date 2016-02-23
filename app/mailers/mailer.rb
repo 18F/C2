@@ -2,7 +2,6 @@ class Mailer < ApplicationMailer
   layout "mailer"
   add_template_helper ValueHelper
 
-  # Approver can approve/take other action
   def actions_for_approver(step, alert_partial = nil)
     @show_step_actions = true
     to_email = step.user_email_address
@@ -23,7 +22,7 @@ class Mailer < ApplicationMailer
       from_email: user_email_with_name(proposal.requester),
       to_email: to_email,
       proposal: proposal,
-      template_name: "proposal_notification_email"
+      template_name: "notification_for_subscriber"
     )
   end
 
@@ -35,8 +34,14 @@ class Mailer < ApplicationMailer
     )
   end
 
+  def new_attachment_email(to_email, proposal)
+    send_proposal_email(
+      to_email: to_email,
+      proposal: proposal
+    )
+  end
+
   alias_method :proposal_observer_email, :general_proposal_email
-  alias_method :new_attachment_email, :general_proposal_email
 
   def proposal_created_confirmation(proposal)
     send_proposal_email(
@@ -48,7 +53,6 @@ class Mailer < ApplicationMailer
   def approval_reply_received_email(approval)
     proposal = approval.proposal.reload
     @step = approval
-    @alert_partial = "approvals_complete" if proposal.approved?
 
     send_proposal_email(
       from_email: user_email_with_name(approval.user),

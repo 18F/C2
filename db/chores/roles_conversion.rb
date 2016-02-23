@@ -1,5 +1,6 @@
 class RolesConversion
   def ncr_budget_approvers
+    ba61_tier1_budget_team_approver
     ba61_tier1_budget_approver
     ba61_tier2_budget_approver
     ba80_budget_approver
@@ -12,6 +13,14 @@ class RolesConversion
   end
 
   private
+
+  def ba61_tier1_budget_team_approver
+    with_email_role_slug!(
+      "c2.budget.approver+ba61team@gmail.com",
+      "BA61_tier1_budget_team_approver",
+      "ncr"
+    )
+  end
 
   def ba61_tier1_budget_approver
     with_email_role_slug!(

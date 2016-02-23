@@ -1,9 +1,10 @@
 %div
   %p
-    Hello,
+    = t("mailer.generic_greeting")
+    ,
     %br
     = cancellation_text(@proposal, @reason)
 
 %p
   %strong
-    = link_to "View This Request", proposal_url(@proposal), {target: 'C2'}
+    = link_to(t("mailer.proposal_link"), proposal_url(@proposal))

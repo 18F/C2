@@ -1,23 +1,29 @@
 describe "client_slug confers authz rules" do
   it "rejects requests for user with no client_slug" do
     user = create(:user, client_slug: '')
+
     login_as(user)
-    visit '/ncr/work_orders/new'
+    visit new_ncr_work_order_path
+
     expect(page.status_code).to eq(403)
   end
 
   it "rejects requests for user with different client_slug" do
     user = create(:user, client_slug: 'gsa18f')
+
     login_as(user)
-    visit '/ncr/work_orders/new'
+    visit new_ncr_work_order_path
+
     expect(page.status_code).to eq(403)
   end
 
   it "allows Admin role" do
     user = create(:user, :admin, client_slug: '')
     approver = create(:user, client_slug: "ncr")
+
     login_as(user)
-    visit '/ncr/work_orders/new'
+    visit new_ncr_work_order_path
+
     expect(page.status_code).to eq(200)
     submit_ba60_work_order(approver)
     expect(page).to have_content('Proposal submitted!')
@@ -26,8 +32,10 @@ describe "client_slug confers authz rules" do
   it "allows same client_slug to create" do
     user = create(:user, client_slug: "ncr")
     approver = create(:user, client_slug: "ncr")
+
     login_as(user)
-    visit '/ncr/work_orders/new'
+    visit new_ncr_work_order_path
+
     expect(page.status_code).to eq(200)
     submit_ba60_work_order(approver)
     expect(page).to have_content('Proposal submitted!')
@@ -37,8 +45,9 @@ describe "client_slug confers authz rules" do
     ncr_user = create(:user, client_slug: "ncr")
     nil_user = create(:user, client_slug: '')
     approver = create(:user, client_slug: "ncr")
+
     login_as(ncr_user)
-    visit '/ncr/work_orders/new'
+    visit new_ncr_work_order_path
     submit_ba60_work_order(approver)
     proposal_path = current_path
     login_as(nil_user)
@@ -52,7 +61,7 @@ describe "client_slug confers authz rules" do
     approver = create(:user, client_slug: "ncr")
 
     login_as(ncr_user)
-    visit '/ncr/work_orders/new'
+    visit new_ncr_work_order_path
     submit_ba60_work_order(approver)
     proposal_path = current_path
     login_as(ncr_user2)
@@ -71,7 +80,7 @@ describe "client_slug confers authz rules" do
     submit_ba60_work_order(approver)
 
     expect(page.status_code).to eq(200)
-    expect_to_not_find_amongst_select_tag_options('observation_user_email_address', gsa_user.email_address)
+    expect_to_not_find_amongst_select_tag_options('observation_user_id', gsa_user.email_address)
   end
 
   private
@@ -88,7 +97,7 @@ describe "client_slug confers authz rules" do
   end
 
   def add_as_observer(user)
-    select user.email_address, from: 'observation_user_email_address'
+    select user.email_address, from: 'observation_user_id'
     fill_in "observation_reason", with: "observe thy ways"
     click_on 'Add an Observer'
   end

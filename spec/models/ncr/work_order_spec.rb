@@ -5,6 +5,29 @@ describe Ncr::WorkOrder do
 
   describe "Associations" do
     it { should belong_to(:ncr_organization) }
+    it { should belong_to(:approving_official) }
+  end
+
+  describe "Validations" do
+    it "does not allow approving official to be changed if the first step is not actionable" do
+      work_order = create(:ncr_work_order)
+      work_order.setup_approvals_and_observers
+      approving_official_step = work_order.reload.individual_steps.first
+      approving_official_step.update(status: "approved")
+
+      work_order.approving_official = create(:user, client_slug: "ncr")
+
+      expect(work_order).not_to be_valid
+    end
+
+    it "does allow approving official to be changed if the first step is actionable" do
+      work_order = create(:ncr_work_order)
+      work_order.setup_approvals_and_observers
+
+      work_order.approving_official = create(:user, client_slug: "ncr")
+
+      expect(work_order).to be_valid
+    end
   end
 
   describe "#editable?" do
@@ -33,6 +56,26 @@ describe Ncr::WorkOrder do
       work_order = build(:ncr_work_order, ncr_organization: organization)
 
       expect(work_order).not_to be_for_whsc_organization
+    end
+  end
+
+  describe "#ba_6x_tier1_team?" do
+    it "is true for whitelist of organizations" do
+      org_letters = %w( 7 J 4 T 1 A C Z )
+      org_letters.each do |org_letter|
+        org_code = "P11#{org_letter}XXXX"
+        ncr_org = build(:ncr_organization, code: org_code)
+        work_order = build(:ncr_work_order, ncr_organization: ncr_org)
+
+        expect(work_order).to be_ba_6x_tier1_team
+      end
+    end
+
+    it "is false for non-listed organizations" do
+      ncr_org = build(:ncr_organization)
+      work_order = build(:ncr_work_order, ncr_organization: ncr_org)
+
+      expect(work_order).to_not be_ba_6x_tier1_team
     end
   end
 

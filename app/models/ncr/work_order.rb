@@ -18,14 +18,14 @@ module Ncr
     include ClientDataMixin
     include PurchaseCardMixin
 
-    attr_accessor :approving_official_email
     # This is a hack to be able to attribute changes to the correct user. This attribute needs to be set explicitly, then the update comment will use them as the "commenter". Defaults to the requester.
     attr_accessor :modifier
 
     belongs_to :ncr_organization, class_name: Ncr::Organization
+    belongs_to :approving_official, class_name: User
 
-    validates :approving_official_email, presence: true
-    validates_email_format_of :approving_official_email
+    validates :approving_official, presence: true
+    validate :frozen_approving_official_not_changed
     validates :amount, presence: true
     validates :cl_number, format: {
       with: /\ACL\d{7}\z/,
@@ -49,8 +49,9 @@ module Ncr
       message: "must be three letters or numbers"
     }, allow_blank: true
 
-    def self.all_system_approver_emails
+    def self.all_system_approvers
       [
+        Ncr::Mailboxes.ba61_tier1_budget_team,
         Ncr::Mailboxes.ba61_tier1_budget,
         Ncr::Mailboxes.ba61_tier2_budget,
         Ncr::Mailboxes.ba80_budget,
@@ -67,10 +68,6 @@ module Ncr
       approval && !approval.actionable?
     end
 
-    def approver_changed?
-      approving_official && approving_official.email_address != approving_official_email
-    end
-
     def requires_approval?
       !emergency
     end
@@ -83,6 +80,10 @@ module Ncr
       ncr_organization.try(:ool?)
     end
 
+    def ba_6x_tier1_team?
+      expense_type.match(/^BA6[01]$/) && ncr_organization.try(:ba_6x_tier1_team?)
+    end
+
     def organization_code_and_name
       ncr_organization.try(:code_and_name)
     end
@@ -90,10 +91,6 @@ module Ncr
     def setup_approvals_and_observers
       manager = ApprovalManager.new(self)
       manager.setup_approvals_and_observers
-    end
-
-    def approving_official
-      approvers.first
     end
 
     def current_approver
@@ -143,11 +140,6 @@ module Ncr
       updated_at.to_i
     end
 
-    def system_approver_emails
-      manager = ApprovalManager.new(self)
-      manager.system_approver_emails
-    end
-
     def building_id
       regex = /\A(\w{8}) .*\z/
       if building_number && regex.match(building_number)
@@ -182,6 +174,14 @@ module Ncr
 
     def self.expense_type_options
       EXPENSE_TYPES.map { |expense_type| [expense_type, expense_type] }
+    end
+
+    private
+
+    def frozen_approving_official_not_changed
+      if persisted? && approving_official_id_changed? && approver_email_frozen?
+        errors.add(:approving_official, "Approving official cannot be changed")
+      end
     end
   end
 end

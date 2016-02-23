@@ -1,4 +1,6 @@
 describe Ncr::WorkOrderPolicy do
+  include EnvVarSpecHelper
+
   subject { described_class }
 
   permissions :can_edit? do
@@ -24,7 +26,7 @@ describe Ncr::WorkOrderPolicy do
 
     it "allows an observer to edit it" do
       observer = create(:user, client_slug: "ncr")
-      proposal.add_observer(observer.email_address)
+      proposal.add_observer(observer)
       expect(subject).to permit(observer, work_order)
     end
 
@@ -45,16 +47,18 @@ describe Ncr::WorkOrderPolicy do
       expect(subject).to permit(user, work_order)
     end
 
-    with_feature 'RESTRICT_ACCESS' do
-      it "allows someone with a GSA email to create" do
+    it "allows someone with a GSA email to create" do
+      with_env_var("RESTRICT_ACCESS", "true") do
         gsa_domain = "@example.net"
         stub_const("GsaPolicy::GSA_DOMAIN", gsa_domain)
         user = User.new(email_address: "user#{gsa_domain}", client_slug: "ncr")
         work_order = Ncr::WorkOrder.new
         expect(subject).to permit(user, work_order)
       end
+    end
 
-      it "doesn't allow someone with a non-GSA email to create" do
+    it "doesn't allow someone with a non-GSA email to create" do
+      with_env_var("RESTRICT_ACCESS", "true") do
         user = User.new(email_address: 'intruder@example.com', client_slug: "ncr")
         work_order = Ncr::WorkOrder.new
         expect(subject).not_to permit(user, work_order)

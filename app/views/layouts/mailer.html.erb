@@ -10,7 +10,9 @@
   <%= yield %>
   <hr>
   <div id="footer" class="inset">
-    <p>Find a bug, have a recommendation, or want to provide other feedback? We'd love to <a target="_blank" href="<%= feedback_url %>">hear from you!</a></p>
+    <p>
+    <%= t("mailer.feedback_footer_html", feedback_url: feedback_url) %>
+    </p>
   </div>
 </body>
 </html>

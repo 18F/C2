@@ -1,9 +1,10 @@
-describe 'proposals' do
+describe "proposals" do
+  include EnvVarSpecHelper
   include ReturnToHelper
 
   describe "DISABLE_CLIENT_SLUGS" do
-    with_env_var("DISABLE_CLIENT_SLUGS", "foo") do
-      it "disallows any request for disabled client_slug" do
+    it "disallows any request for disabled client_slug" do
+      with_env_var("DISABLE_CLIENT_SLUGS", "foo") do
         allow(Proposal).to receive(:client_slugs).and_return(%w(foo))
         proposal = create(:proposal)
         user = create(:user, client_slug: "foo")

@@ -18,7 +18,7 @@ C2 is a fairly typical Rails application, so the setup is straightforward:
     git clone https://github.com/18F/C2.git
     cd C2
 
-    # Will print "DONE" if successful. NOTE: This will delete any existing records in your C2 database.
+    # Will print "DONE" if successful. NOTE: This will delete any existing records in your C2 database and add a few seed records.
     ./script/bootstrap
     ```
 
@@ -85,7 +85,10 @@ http://localhost:3000/proposals.
 
 ### Viewing the mailers
 
-As emails are sent, they will be visible at http://localhost:3000/letter_opener. If you are working on an email mailer/template, you can view all of them at http://localhost:3000/mail_view/.
+As emails are sent, they will be visible at http://localhost:3000/letter_opener.
+
+If you are working on an email mailer/template, you can view all of them at
+http://localhost:3000/rails/mailers.
 
 ## Running tests
 

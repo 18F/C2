@@ -1,20 +1,10 @@
-All unapproved credit card funding requests from the previous fiscal year are being cancelled. 
-If the need still exists, please submit a new funding request for the current fiscal year.
-
+= t("mailer.cancellation_mailer.proposal_fiscal_cancellation.body")
 %table.reply-section
-  = client_partial(@proposal.client_slug, "email_header/" + @alert_partial.to_s)
-  %tr
-    %td.w-container.html-email-message
-      = client_partial(@proposal.client_slug,
-        "mail_prefix",
-        locals: { proposal: @proposal, title: "Purchase Request" })
+  - if @alert_partial
+    = render partial: "mail_shared/email_header/" + @alert_partial.to_s
 %div{style: "width:800px"}
-  = render partial: "mailer/comments",
-    locals: { comments: @proposal.comments }
-  = render partial: "mailer/attachments",
-    locals: { proposal: @proposal }
-  = client_partial(@proposal.client_slug,
-    "proposal_mail",
-    locals: { proposal: @proposal, title: "Purchase Request" })
-  = render partial: "mailer/email_reply",
+  = render partial: "mail_shared/comments", locals: { comments: @proposal.comments }
+  = render partial: "mail_shared/attachments", locals: { proposal: @proposal }
+  = render partial: "mail_shared/proposal_mail", locals: { proposal: @proposal }
+  = render partial: "mail_shared/email_reply",
     locals: { step: @step, show_step_actions: @show_step_actions, proposal: @proposal }

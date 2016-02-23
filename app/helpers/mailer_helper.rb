@@ -28,13 +28,17 @@ module MailerHelper
   end
 
   def cancellation_text(proposal, reason)
-    text = "The request, #{proposal.name} (#{proposal.public_id}), has been cancelled"
+    text = t(
+      "mailer.cancellation_mailer.cancellation_email.body",
+      name: proposal.name,
+      public_id: proposal.public_id
+    )
     add_reason(text, reason)
     text + "."
   end
 
   def observer_text(observation, reason = nil)
-    text = "You have been added as a subscriber to this request"
+    text = t("mailer.observer_mailer.on_observer_added.body")
     add_author(text, observation.created_by)
     add_reason(text, reason)
     text + "."
@@ -48,7 +52,15 @@ module MailerHelper
 
   def add_reason(text, reason)
     if reason.present?
-      text << " with given reason '#{reason}'"
+      text << t("mailer.reason", reason: reason)
+    end
+  end
+
+  def complete_text(step)
+    if step.is_a?(Steps::Purchase)
+      t("mailer.approval_reply_received_email.purchased")
+    else
+      t("mailer.approval_reply_received_email.approved")
     end
   end
 end

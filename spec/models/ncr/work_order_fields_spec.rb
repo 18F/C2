@@ -5,7 +5,7 @@ describe Ncr::WorkOrderFields do
 
       expect(fields).to eq([
         :amount,
-        :approving_official_email,
+        :approving_official_id,
         :building_number,
         :cl_number,
         :description,
@@ -26,7 +26,7 @@ describe Ncr::WorkOrderFields do
 
       expect(fields).to eq([
         :amount,
-        :approving_official_email,
+        :approving_official_id,
         :building_number,
         :cl_number,
         :code,
@@ -52,7 +52,6 @@ describe Ncr::WorkOrderFields do
 
       expect(fields).to eq([
          ["Amount", work_order.amount],
-         ["Approving official email", work_order.approving_official_email],
          ["Building number", work_order.building_number],
          ["CL number", work_order.cl_number],
          ["Description", work_order.description],
@@ -65,6 +64,7 @@ describe Ncr::WorkOrderFields do
          ["Vendor", work_order.vendor],
          ["Emergency", work_order.emergency],
          ["Org code", work_order.organization_code_and_name],
+         ["Approving official", work_order.approving_official.email_address],
       ])
     end
   end

@@ -1,0 +1,41 @@
+en:
+  mailer:
+    generic_greeting: Hello
+    greeting: "Hi %{name}"
+    proposal_link: "View This Request"
+    proposal_link_text: "View This Request: %{proposal_url}"
+    feedback_footer_html:
+      "Find a bug, have a recommendation, or want to provide other feedback?
+      We'd love to <a target='_blank' href=%{feedback_url}>hear from you!</a>"
+    reason: " with given reason '%{reason}'"
+    new_attachment_email:
+      body: "An attachment has been added to %{name} (%{public_id})."
+    approval_reply_received_email:
+      body: "The approver, %{full_name}, %{status} request %{public_id}."
+      details: "Please see below for more details."
+      purchased: "Your request has been purchased. See details below."
+      approved: "Your request has been fully approved. See details below."
+    proposal_created_confirmation:
+      body: "You just submitted a request for approval. Here are the details:"
+      body_text: "You just submitted a request for approval."
+    cancellation_mailer:
+      cancellation_confirmation:
+        body: "This confirms your cancellation of this request: %{name} (%{public_id})"
+      cancellation_email:
+        body: "The request, %{name} (%{public_id}), has been cancelled"
+      proposal_fiscal_cancellation:
+        body:
+          "All unapproved credit card funding requests from the previous fiscal
+          year are being cancelled.  If the need still exists, please submit a new funding
+          request for the current fiscal year."
+    comment_mailer:
+      comment_added_email:
+        body:
+          "%{full_name} added a comment on Request %{public_id} (%{name}):"
+        proposal_link_html:
+          "<a href=%{proposal_url} class='form-button'>View / Update Request</a>"
+        proposal_link: "View / Update Request: %{proposal_url}"
+    observer_mailer:
+      on_observer_added:
+        body: "You have been added as a subscriber to this request"
+

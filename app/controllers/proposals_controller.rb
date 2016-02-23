@@ -16,11 +16,10 @@ class ProposalsController < ApplicationController
   end
 
   def index
-    @CLOSED_PROPOSAL_LIMIT = 10
-
+    @closed_proposal_limit = ENV.fetch("CLOSED_PROPOSAL_LIMIT", 10).to_i
     @pending_data = listing.pending
     @pending_review_data = listing.pending_review
-    @approved_data = listing.approved.alter_query { |rel| rel.limit(@CLOSED_PROPOSAL_LIMIT) }
+    @approved_data = listing.approved.alter_query { |rel| rel.limit(@closed_proposal_limit) }
     @cancelled_data = listing.cancelled
   end
 
@@ -46,7 +45,7 @@ class ProposalsController < ApplicationController
   end
 
   def approve
-    step = proposal.existing_step_for(current_user)
+    step = proposal.existing_or_delegated_step_for(current_user)
     step.update_attributes!(completer: current_user)
     step.approve!
     flash[:success] = "You have approved #{proposal.public_id}."
@@ -73,8 +72,8 @@ class ProposalsController < ApplicationController
   end
 
   def history
-    @container = Query::Proposal::Versions.new(proposal).container
-    @container.set_state_from_params(params)
+    @container = ProposalVersionsQuery.new(proposal).container
+    @container.state_from_params = params
   end
 
   protected
@@ -99,7 +98,7 @@ class ProposalsController < ApplicationController
   end
 
   def listing
-    Query::Proposal::Listing.new(current_user, params)
+    ProposalListingQuery.new(current_user, params)
   end
 
   def check_search_params
@@ -125,7 +124,7 @@ class ProposalsController < ApplicationController
   end
 
   def build_search_dsl
-    Query::Proposal::SearchDSL.new(
+    ProposalSearchDsl.new(
       params: params,
       current_user: current_user,
       query: params[:text],

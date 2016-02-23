@@ -1,14 +1,26 @@
 shared_examples "a proposal email" do
+  include EnvVarSpecHelper
+
   it "renders the subject" do
     expect(mail.subject).to eq("Request #{proposal.public_id}")
   end
 
   it "uses the configured sender email" do
-    expect(mail.from).to eq(['reply@example.com'])
+    with_env_vars(
+      "NOTIFICATION_FROM_EMAIL" => "reply@example.com",
+      "NOTIFICATION_REPLY_TO" => "replyto@example.com"
+    ) do
+      expect(mail.from).to eq(['reply@example.com'])
+    end
   end
 
   it "uses the configured replyto email" do
-    expect(mail.reply_to).to eq(["replyto+#{proposal.public_id}@example.com"])
+    with_env_vars(
+      "NOTIFICATION_FROM_EMAIL" => "reply@example.com",
+      "NOTIFICATION_REPLY_TO" => "replyto@example.com"
+    ) do
+      expect(mail.reply_to).to eq(["replyto+#{proposal.public_id}@example.com"])
+    end
   end
 
   it "includes the appropriate headers for threading" do

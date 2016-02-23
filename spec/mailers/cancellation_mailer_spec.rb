@@ -7,9 +7,7 @@ describe CancellationMailer do
 
       mail = CancellationMailer.cancellation_email(user.email_address, proposal, reason)
 
-      expect(mail.body.encoded).to include(
-        "has been cancelled with given reason '#{reason}'."
-      )
+      expect(mail.body.encoded).to include(I18n.t("mailer.reason", reason: reason))
     end
   end
 

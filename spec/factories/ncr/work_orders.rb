@@ -7,7 +7,7 @@ FactoryGirl.define do
     building_number Ncr::BUILDING_NUMBERS[0]
     emergency false
     project_title "NCR Name"
-    sequence(:approving_official_email) {|n| "approver#{User.count}@example.com" }
+    association :approving_official, factory: :user, client_slug: "ncr"
     association :proposal, client_slug: "ncr"
 
     factory :ba60_ncr_work_order do
@@ -25,9 +25,6 @@ FactoryGirl.define do
 
     trait :with_approvers do
       association :proposal, :with_serial_approvers, client_slug: "ncr"
-      after :create do |wo|
-        wo.approving_official_email = wo.approving_official.email_address
-      end
     end
 
     trait :is_emergency do

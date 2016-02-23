@@ -1,0 +1,9 @@
+%table.reply-section
+  - if @alert_partial
+    = render partial: "mail_shared/email_header/" + @alert_partial.to_s
+%div{ style: "width:800px" }
+  = render partial: "mail_shared/comments", locals: { comments: @proposal.comments }
+  = render partial: "mail_shared/attachments", locals: { proposal: @proposal }
+  = render partial: "mail_shared/proposal_mail", locals: { proposal: @proposal }
+  = render partial: "mail_shared/email_reply",
+    locals: { step: @step, show_step_actions: @show_step_actions, proposal: @proposal }

@@ -8,7 +8,7 @@ gem "acts-as-taggable-on", "~> 3.4"
 gem "ar_outer_joins"
 gem "autoprefixer-rails"
 gem "awesome_print"
-gem "aws-sdk", "~> 1.6" # version restriction can be lifted once https://github.com/thoughtbot/paperclip/commit/523bd46c768226893f23889079a7aa9c73b57d68 is released
+gem "aws-sdk"
 gem "bootstrap-sass"
 gem "browser-timezone-rails"
 gem "climate_control"
@@ -38,7 +38,7 @@ gem "mandrill-rails"
 gem "newrelic_rpm"
 gem "omniauth-myusa", git: "https://github.com/18F/omniauth-myusa.git"
 gem "paper_trail"
-gem "paperclip"
+gem "paperclip", git: "https://github.com/thoughtbot/paperclip.git"
 gem "peek"
 gem "peek-delayed_job"
 gem "peek-performance_bar"
@@ -72,7 +72,6 @@ end
 group :development do
   gem "guard-rspec", require: false
   gem "guard-shell", require: false
-  gem "mail_view"
   gem "railroady"
   gem "letter_opener"
   gem "letter_opener_web"
