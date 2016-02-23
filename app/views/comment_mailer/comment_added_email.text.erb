@@ -1,9 +1,0 @@
-<%= t("mailer.comment_mailer.comment_added_email.body",
-      full_name: @comment.user.full_name,
-      public_id: @proposal.public_id,
-      name: @proposal.name) %>
-
-<%= @comment.comment_text %>
-
-<%= t("mailer.comment_mailer.comment_added_email.proposal_link",
-      proposal_url: proposal_url(@proposal, anchor: "comments")) %>

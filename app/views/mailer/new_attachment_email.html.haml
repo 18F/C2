@@ -19,11 +19,7 @@
 = render partial: "mail_shared/proposal_button",
   locals: { button_text: t("mailer.new_attachment_email.cta") }
 
-%table.two-thirds-width
-  %tr
-    %td.email-button
-      = link_to proposal_url(@proposal, anchor: "comments", target: "_blank") do
-        %p.email-button
-          = t("mailer.new_attachment_email.cta_2")
+= render partial: "mail_shared/proposal_comment_button",
+  locals: { button_text: t("mailer.new_attachment_email.cta_2") }
 
 = render partial: "mail_shared/footer"

@@ -46,12 +46,12 @@ en:
           year are being cancelled.  If the need still exists, please submit a new funding
           request for the current fiscal year."
     comment_mailer:
-      comment_added_email:
-        body:
-          "%{full_name} added a comment on Request %{public_id} (%{name}):"
-        proposal_link_html:
-          "<a href=%{proposal_url} class='form-button'>View / Update Request</a>"
-        proposal_link: "View / Update Request: %{proposal_url}"
+      comment_added_notification:
+        header: "%{user_name} added a comment to %{proposal_name}:"
+        subheader: "You can reply or review the full conversation on the request page."
+        comment_text: "Comment: %{comment_text}"
+        cta: "View request details"
+        cta_2: "Add comment"
     observer_mailer:
       on_observer_added:
         body: "You have been added as a subscriber to this request"
