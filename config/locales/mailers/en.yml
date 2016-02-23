@@ -31,12 +31,17 @@ en:
       cta: "View or update request details"
       body_text: "You just submitted a request for approval."
     cancellation_mailer:
+      cta: "View request details"
       cancellation_confirmation:
-        body: "This confirms your cancellation of this request: %{name} (%{public_id})"
-      cancellation_email:
-        body: "The request, %{name} (%{public_id}), has been cancelled"
-      proposal_fiscal_cancellation:
-        body:
+        header: "You cancelled this purchase request."
+        reason: "Reason for cancellation: %{reason}"
+      cancellation_notification:
+        header: "This purchase request has been cancelled by %{name}."
+        subheader: "If you still need to authorize a purchase, submit a new request."
+        reason: "Reason for cancellation: %{reason}"
+      fiscal_cancellation_notification:
+        header: "This purchase request has been cancelled."
+        reason:
           "All unapproved credit card funding requests from the previous fiscal
           year are being cancelled.  If the need still exists, please submit a new funding
           request for the current fiscal year."
