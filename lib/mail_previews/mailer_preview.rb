@@ -7,10 +7,6 @@ class MailerPreview < ActionMailer::Preview
     Mailer.proposal_observer_email(email, proposal)
   end
 
-  def approval_reply_received_email
-    Mailer.approval_reply_received_email(received_approval)
-  end
-
   def new_attachment_email
     Mailer.new_attachment_email(email, proposal, attachment)
   end
@@ -35,10 +31,6 @@ class MailerPreview < ActionMailer::Preview
 
   def proposal
     Proposal.last
-  end
-
-  def received_approval
-    Step.completed.last
   end
 
   def attachment

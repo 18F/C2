@@ -51,7 +51,7 @@ class Dispatcher
 
   def on_approval_approved(approval)
     if requires_approval_notice?(approval)
-      Mailer.approval_reply_received_email(approval).deliver_later
+      ApprovalMailer.approval_reply_received_email(approval).deliver_later
     end
 
     email_observers(approval.proposal)
