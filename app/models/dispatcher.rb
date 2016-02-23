@@ -34,7 +34,7 @@ class Dispatcher
       step = proposal.steps.find_by(user: user)
 
       if user_is_not_step_user?(step) || step_user_knows_about_proposal?(step)
-        Mailer.new_attachment_email(user.email_address, proposal, attachment).deliver_later
+        AttachmentMailer.new_attachment_notification(user.email_address, proposal, attachment).deliver_later
       end
     end
   end

@@ -34,21 +34,6 @@ class Mailer < ApplicationMailer
     )
   end
 
-  def new_attachment_email(to_email, proposal, attachment)
-    @proposal = proposal.decorate
-    @attachment_user = attachment.user
-    @attachment = attachment
-    assign_threading_headers(proposal)
-    subject = "Request #{proposal.public_id}: #{proposal.name}"
-
-    mail(
-      to: to_email,
-      subject: subject,
-      from: user_email_with_name(@attachment_user),
-      reply_to: reply_email(proposal)
-    )
-  end
-
   def proposal_created_confirmation(proposal)
     @proposal = proposal.decorate
     assign_threading_headers(proposal)

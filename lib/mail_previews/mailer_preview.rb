@@ -7,10 +7,6 @@ class MailerPreview < ActionMailer::Preview
     Mailer.proposal_observer_email(email, proposal)
   end
 
-  def new_attachment_email
-    Mailer.new_attachment_email(email, proposal, attachment)
-  end
-
   def proposal_created_confirmation
     Mailer.proposal_created_confirmation(proposal)
   end
@@ -31,9 +27,5 @@ class MailerPreview < ActionMailer::Preview
 
   def proposal
     Proposal.last
-  end
-
-  def attachment
-    Attachment.last
   end
 end
