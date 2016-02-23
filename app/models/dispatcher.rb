@@ -17,7 +17,7 @@ class Dispatcher
   end
 
   def email_sent_confirmation(proposal)
-    Mailer.proposal_created_confirmation(proposal).deliver_later
+    ProposalMailer.proposal_created_confirmation(proposal).deliver_later
   end
 
   def deliver_new_proposal_emails(proposal)
