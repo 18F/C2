@@ -61,3 +61,8 @@
                     Search
           %button#search-button.btn.btn-default.search{type: 'submit'}
             Search
+
+- if defined?(show_adv_search_ui) && show_adv_search_ui
+  <script type="text/javascript">var C2_SEARCH_UI_OPEN = true;</script>
+- else
+  <script type="text/javascript">var C2_SEARCH_UI_OPEN = false;</script>

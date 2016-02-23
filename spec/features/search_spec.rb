@@ -34,6 +34,17 @@ describe "searching", elasticsearch: true do
     expect(page).to have_content("(#{proposals.first.name}) AND (Amount:(#{proposals.first.client_data.amount}))")
   end
 
+  it "opens advanced search UI when ?search=true set", :js do
+    proposals = populate_proposals
+
+    visit proposals_path({search: true})
+    fill_in "test_client_request[client_data.amount]", with: proposals.first.client_data.amount
+    click_button "adv-search-button"
+
+    expect(current_path).to eq query_proposals_path
+    expect(page).to have_content(proposals.first.public_id)
+  end
+
   it "populates the search box on the results page", :js do
     visit proposals_path
     fill_in 'text', with: 'foo'
