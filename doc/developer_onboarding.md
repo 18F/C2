@@ -19,6 +19,8 @@ Create a [new issue](https://github.com/18F/C2/issues/new), and copy the [raw Ma
 * [ ] [Set up the Cloud Foundry CLI](https://docs.cloud.gov/getting-started/setup/) (which you will need to deploy)
 * [ ] [Learn more about Cloud Foundry](https://docs.cloud.gov)
 * [ ] Deploy C2 to `c2-dev` (or `c2-staging`)
+* [ ] [Set up your own development
+  app on Cloud Foundry](https://github.com/18F/C2/blog/master/doc/cloud_foundry_setup.md)
 * [ ] [Get added to the MailChimp account](production.md#getting-access) (and thus Mandrill)
 * [ ] Access support emails `capdevs@gsa.gov`, `communicart.sender@gsa.gov`, and `gatewaycommunicator`
     1. Make sure someone has requested/completed access for you (See tasks for @oldmember)
