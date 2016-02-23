@@ -1,6 +1,6 @@
 class CommentMailerPreview < ActionMailer::Preview
-  def comment_added_email
-    CommentMailer.comment_added_email(comment, email)
+  def comment_added_notification
+    CommentMailer.comment_added_notification(comment, email)
   end
 
   private

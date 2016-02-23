@@ -44,7 +44,7 @@ class Mailer < ApplicationMailer
     mail(
       to: to_email,
       subject: subject,
-      from: default_sender_email,
+      from: user_email_with_name(@attachment_user),
       reply_to: reply_email(proposal)
     )
   end
