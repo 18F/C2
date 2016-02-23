@@ -28,13 +28,4 @@ class MailerPreview < ActionMailer::Preview
   def proposal
     Proposal.last
   end
-
-<<<<<<< HEAD
-  def attachment
-    Attachment.last
-=======
-  def received_approval
-    Step.approved.last
->>>>>>> 928a2c4... Move attachment email to its own mailer
-  end
 end
