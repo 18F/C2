@@ -148,18 +148,4 @@ describe Mailer do
       expect(sender_names(mail)).to eq(["C2"])
     end
   end
-
-  describe 'new_attachment_email' do
-    let(:mail) { Mailer.new_attachment_email(requester.email_address, proposal, attachment) }
-
-    it_behaves_like "a proposal email"
-
-    it "includes the name of the user who added the attachment" do
-      expect(mail.body.encoded).to include(attachment.user.full_name)
-    end
-
-    def attachment
-      @attachment ||= create(:attachment)
-    end
-  end
 end
