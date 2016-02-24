@@ -5,13 +5,28 @@ class ProposalMailer < ApplicationMailer
   def proposal_created_confirmation(proposal)
     @proposal = proposal.decorate
     assign_threading_headers(proposal)
-    subject = "Request #{proposal.public_id}: #{proposal.name}"
 
     mail(
       to: proposal.requester.email_address,
-      subject: subject,
+      subject: subject(proposal),
       from: default_sender_email,
       reply_to: reply_email(proposal)
     )
+  end
+
+  def emergency_proposal_created_confirmation(proposal)
+    @proposal = proposal.decorate
+    assign_threading_headers(proposal)
+
+    mail(
+      to: proposal.requester.email_address,
+      subject: subject(proposal),
+      from: default_sender_email,
+      reply_to: reply_email(proposal)
+    )
+  end
+
+  def subject(proposal)
+    "Request #{proposal.public_id}: #{proposal.name}"
   end
 end

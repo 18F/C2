@@ -1,8 +1,50 @@
 class Dispatcher
-  include DispatcherMixin
+  def self.deliver_new_proposal_emails(proposal)
+    dispatcher = initialize_dispatcher(proposal)
+    dispatcher.deliver_new_proposal_emails(proposal)
+  end
 
-  def email_approver(approval)
-    send_notification_email(approval)
+  def self.on_approval_approved(approval)
+    dispatcher = initialize_dispatcher(approval.proposal)
+    dispatcher.on_approval_approved(approval)
+  end
+
+  def self.on_comment_created(comment)
+    dispatcher = initialize_dispatcher(comment.proposal)
+    dispatcher.on_comment_created(comment)
+  end
+
+  def self.email_step_user(step)
+    dispatcher = initialize_dispatcher(step.proposal)
+    dispatcher.email_step_user(step)
+  end
+
+  def self.on_proposal_update(proposal, modifier = nil)
+    dispatcher = initialize_dispatcher(proposal)
+    dispatcher.on_proposal_update(proposal, modifier)
+  end
+
+  def self.on_approver_removal(proposal, approvers)
+    dispatcher = initialize_dispatcher(proposal)
+    dispatcher.on_approver_removal(proposal, approvers)
+  end
+
+  def self.on_observer_added(observation, reason)
+    dispatcher = initialize_dispatcher(observation.proposal)
+    dispatcher.on_observer_added(observation, reason)
+  end
+
+  def self.deliver_attachment_emails(proposal, attachment)
+    dispatcher = initialize_dispatcher(proposal)
+    dispatcher.deliver_attachment_emails(proposal, attachment)
+  end
+
+  def self.initialize_dispatcher(proposal)
+    if proposal.client_slug == "ncr"
+      NcrDispatcher.new
+    else
+      LinearDispatcher.new
+    end
   end
 
   def email_observers(proposal)
@@ -16,17 +58,11 @@ class Dispatcher
     ObserverMailer.on_observer_added(observation, reason).deliver_later
   end
 
-  def email_sent_confirmation(proposal)
-    ProposalMailer.proposal_created_confirmation(proposal).deliver_later
-  end
-
   def deliver_new_proposal_emails(proposal)
-    proposal.currently_awaiting_steps.each do |approval|
-      email_approver(approval)
-    end
+    proposal.currently_awaiting_steps.each { |step| email_step_user(step) }
 
     email_observers(proposal)
-    email_sent_confirmation(proposal)
+    ProposalMailer.proposal_created_confirmation(proposal).deliver_later
   end
 
   def deliver_attachment_emails(proposal, attachment)
@@ -73,6 +109,10 @@ class Dispatcher
   end
 
   private
+
+  def email_step_user(step)
+    send_notification_email(step)
+  end
 
   def active_step_users(proposal)
     proposal.step_users.select do |user|
