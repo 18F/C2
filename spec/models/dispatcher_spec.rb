@@ -5,7 +5,7 @@ describe Dispatcher do
     it "uses the LinearDispatcher for non-NCR approvals" do
       create(:gsa18f_procurement, proposal: proposal)
       dispatcher_double = double
-      allow(dispatcher_double).to receive(:deliver_new_proposal_emais).with(proposal)
+      allow(dispatcher_double).to receive(:deliver_new_proposal_emails).with(proposal)
       allow(LinearDispatcher).to receive(:new).and_return(dispatcher_double)
 
       Dispatcher.deliver_new_proposal_emails(proposal)
