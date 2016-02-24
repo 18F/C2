@@ -1,4 +1,5 @@
 $light-grey: #585858;
+$lighter-grey: #f1f1f1;
 $bright-blue: #0744a4;
 
 table.full-width {
@@ -42,6 +43,21 @@ td.header {
   padding-top: 1.5em;
   font-size: 20px;
   color: $light-grey;
+  text-align: center;
+}
+
+.proposal-data-label {
+  font-size: 18px;
+  font-weight: bold;
+  color: $bright-blue;
+}
+
+.proposal-attributes {
+  background: $lighter-grey;
+
+}
+
+.proposal-attributes td {
   text-align: center;
 }
 
