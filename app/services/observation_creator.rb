@@ -56,7 +56,7 @@ class ObservationCreator
   end
 
   def send_observation_added_email
-    DispatchFinder.new(proposal).on_observer_added(observation, reason)
+    DispatchFinder.run(proposal).on_observer_added(observation, reason)
   end
 
   def observer_role
