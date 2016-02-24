@@ -37,11 +37,6 @@ describe Mailer do
       )
     end
 
-    it 'alerts subscribers that they have been removed' do
-      mail = Mailer.actions_for_approver(approval, 'removed')
-      expect(mail.body.encoded).to include('You have been removed from this request.')
-    end
-
     it "creates a new token" do
       expect(proposal.api_tokens).to eq([])
 
