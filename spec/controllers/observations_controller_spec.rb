@@ -2,22 +2,6 @@ describe ObservationsController do
   describe "#create" do
     let (:proposal) { create(:proposal) }
 
-    it "requires an email address" do
-      login_as(proposal.requester)
-      expect{ 
-        post :create, proposal_id: proposal.id
-      }.to raise_error(ActionController::ParameterMissing)
-      expect{ 
-        post :create, proposal_id: proposal.id, observation: {user: "abc"}
-      }.to raise_error(ActionController::ParameterMissing)
-      expect{ 
-        post :create, proposal_id: proposal.id, observation: {user: {name: "abc"}}
-      }.to raise_error(ActionController::ParameterMissing)
-      expect{ 
-        post :create, proposal_id: proposal.id, observation: {user: {email_address: ""}}
-      }.to raise_error(ActionController::ParameterMissing)
-    end
-
     it "gracefully warns on duplicates" do
       login_as(proposal.requester)
       observer = create(:user, client_slug: nil)
