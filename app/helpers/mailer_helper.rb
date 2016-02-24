@@ -58,9 +58,9 @@ module MailerHelper
 
   def complete_text(step)
     if step.is_a?(Steps::Purchase)
-      t("mailer.approval_reply_received_email.purchased")
+      t("mailer.approval_mailer.approval_reply_received_email.purchased")
     else
-      t("mailer.approval_reply_received_email.approved")
+      t("mailer.approval_mailer.approval_reply_received_email.approved")
     end
   end
 end

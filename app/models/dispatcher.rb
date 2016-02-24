@@ -69,7 +69,7 @@ class Dispatcher
 
   def on_approver_removal(removed_approvers)
     removed_approvers.each do|approver|
-      Mailer.notification_for_subscriber(approver.email_address, proposal, "removed").deliver_later
+      ApprovalMailer.approver_removed(approver.email_address, proposal).deliver_later
     end
   end
 
