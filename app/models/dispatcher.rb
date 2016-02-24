@@ -36,7 +36,7 @@ class Dispatcher
     end
   end
 
-  def deliver_cancellation_emails(reason)
+  def deliver_cancellation_emails(reason = nil)
     cancellation_notification_recipients = active_step_users + active_observers
 
     cancellation_notification_recipients.each do |recipient|
@@ -64,7 +64,7 @@ class Dispatcher
     end
   end
 
-  def on_proposal_update(modifier)
+  def on_proposal_update(modifier = nil)
   end
 
   def on_approver_removal(removed_approvers)
