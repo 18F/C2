@@ -238,7 +238,7 @@ class Proposal < ActiveRecord::Base
     if root_step
       root_step.initialize!
     end
-    Dispatcher.deliver_new_proposal_emails(self)
+    DispatchFinder.run(self).deliver_new_proposal_emails
   end
 
   # Returns True if the user is an "active" approver and has acted on the proposal

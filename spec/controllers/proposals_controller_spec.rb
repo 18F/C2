@@ -238,7 +238,7 @@ describe ProposalsController do
 
     it 'sends a cancellation email' do
       mock_dispatcher = double('dispatcher').as_null_object
-      allow(Dispatcher).to receive(:new).and_return(mock_dispatcher)
+      allow(DispatchFinder).to receive(:run).with(proposal).and_return(mock_dispatcher)
       expect(mock_dispatcher).to receive(:deliver_cancellation_emails)
 
       post :cancel, id: proposal.id, reason_input:'My test cancellation text'
