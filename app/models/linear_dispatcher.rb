@@ -10,7 +10,7 @@ class LinearDispatcher < Dispatcher
 
   def on_approval_approved(approval)
     if next_approval(approval)
-      email_approver(next_approval(approval))
+      email_step_user(next_approval(approval))
     end
 
     super

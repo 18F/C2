@@ -31,11 +31,11 @@ describe LinearDispatcher do
   end
 
   describe '#deliver_new_proposal_emails' do
-    it "sends emails to the first approver" do
+    it "sends emails to the first step user" do
       proposal = create(:proposal, :with_approver)
-      approval = proposal.individual_steps.first
+      step = proposal.individual_steps.first
 
-      expect(dispatcher).to receive(:email_approver).with(approval)
+      expect(dispatcher).to receive(:email_step_user).with(step)
 
       dispatcher.deliver_new_proposal_emails(proposal)
     end
