@@ -12,7 +12,7 @@ module Ncr
     def run
       work_order.setup_approvals_and_observers
       reapprove_if_necessary
-      Dispatcher.on_proposal_update(proposal, work_order.modifier)
+      DispatchFinder.run(proposal).on_proposal_update(work_order.modifier)
     end
 
     private
