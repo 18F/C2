@@ -26,6 +26,8 @@ class ProposalMailer < ApplicationMailer
     )
   end
 
+  private
+
   def subject(proposal)
     "Request #{proposal.public_id}: #{proposal.name}"
   end

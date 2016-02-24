@@ -18,16 +18,6 @@ describe ApprovalMailer do
       expect(sender_names(mail)).to eq([approver.full_name])
     end
 
-    context "comments" do
-      it "renders comments when present" do
-        create(:comment, comment_text: "My added comment", proposal: proposal)
-        expect(mail.body.encoded).to include("Comments")
-      end
-
-      it "does not render empty comments" do
-        expect(mail.body.encoded).to_not include("Comments")
-      end
-    end
 
     context "completed message" do
       it "displays when all requests have been approved" do
@@ -35,7 +25,7 @@ describe ApprovalMailer do
         final_approval.proposal   # create a dirty cache
         final_approval.approve!
         mail = ApprovalMailer.approval_reply_received_email(final_approval)
-        expect(mail.body.encoded).to include(I18n.t("mailer.approval_reply_received_email.approved"))
+        expect(mail.body.encoded).to include(I18n.t("mailer.approval_mailer.approval_reply_received_email.approved"))
       end
 
       it "displays purchase-step-specific language when final step is approved" do
@@ -45,28 +35,44 @@ describe ApprovalMailer do
         final_step.proposal   # create a dirty cache
         final_step.approve!
         mail = ApprovalMailer.approval_reply_received_email(final_step)
-        expect(mail.body.encoded).to include(I18n.t("mailer.approval_reply_received_email.purchased"))
+        expect(mail.body.encoded).to include(I18n.t("mailer.approval_mailer.approval_reply_received_email.purchased"))
       end
 
       it "does not display when requests are still pending" do
         mail = ApprovalMailer.approval_reply_received_email(approval)
 
-        expect(mail.body.encoded).not_to include(I18n.t("mailer.approval_reply_received_email.approved"))
+        expect(mail.body.encoded).not_to include(I18n.t("mailer.approval_mailer.approval_reply_received_email.approved"))
       end
     end
+  end
 
-    private
+  describe "#approval_reply_received_email" do
+    let(:mail) { ApprovalMailer.approver_removed(approver.email_address, proposal) }
 
-    def proposal
-      @proposal ||= create(:proposal, :with_serial_approvers)
+    before do
+      approval.approve!
     end
 
-    def approval
-      proposal.individual_steps.first
-    end
+    it_behaves_like "a proposal email"
 
-    def approver
-      approval.user
+    it "tells the user thet have been removed" do
+      expect(mail.body.encoded).to include(
+        I18n.t("mailer.approval_mailer.approver_removed.header")
+      )
     end
+  end
+
+  private
+
+  def proposal
+    @proposal ||= create(:proposal, :with_serial_approvers)
+  end
+
+  def approval
+    proposal.individual_steps.first
+  end
+
+  def approver
+    approval.user
   end
 end
