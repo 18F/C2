@@ -10,7 +10,7 @@ describe ProposalMailer do
       expect(mail.subject).to eq("Request #{proposal.public_id}: #{proposal.name}")
     end
 
-    it 'renders the receiver email' do
+    it "renders the receiver email" do
       expect(mail.to).to eq([proposal.requester.email_address])
     end
 
@@ -19,7 +19,17 @@ describe ProposalMailer do
     end
   end
 
+  describe "#emergency_proposal_created_confirmation" do
+    let(:mail) { ProposalMailer.emergency_proposal_created_confirmation(proposal) }
+
+    it_behaves_like "a proposal email"
+
+    it "contains information about the proposal" do
+      expect(mail.body.encoded).to include(proposal.client_data.name)
+    end
+  end
+
   def proposal
-    @proposal ||= create(:proposal)
+    @proposal ||= create(:ncr_work_order, :is_emergency).proposal
   end
 end

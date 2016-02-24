@@ -6,6 +6,40 @@ describe NcrDispatcher do
   let(:step_2) { steps.second }
   let(:ncr_dispatcher) { NcrDispatcher.new }
 
+  describe "#deliver_new_proposal_emails" do
+    context "emergency work order" do
+      it "sends the emergency proposal created confirmation" do
+        ncr_dispatcher = NcrDispatcher.new
+        work_order = create(:ncr_work_order, :is_emergency)
+        proposal = work_order.proposal
+        mailer_double = double(deliver_later: true)
+        allow(ProposalMailer).to receive(:emergency_proposal_created_confirmation).
+          with(proposal).
+          and_return(mailer_double)
+
+        ncr_dispatcher.deliver_new_proposal_emails(proposal)
+
+        expect(ProposalMailer).to have_received(:emergency_proposal_created_confirmation).with(proposal)
+      end
+    end
+
+    context "not an emergency work order" do
+      it "sends the proposal created confirmation" do
+        ncr_dispatcher = NcrDispatcher.new
+        work_order = create(:ncr_work_order)
+        proposal = work_order.proposal
+        mailer_double = double(deliver_later: true)
+        allow(ProposalMailer).to receive(:proposal_created_confirmation).
+          with(proposal).
+          and_return(mailer_double)
+
+        ncr_dispatcher.deliver_new_proposal_emails(proposal)
+
+        expect(ProposalMailer).to have_received(:proposal_created_confirmation).with(proposal)
+      end
+    end
+  end
+
   describe '#on_approval_approved' do
     it "sends to the requester for the last approval" do
       step_1.update_attribute(:status, 'accepted')  # skip workflow

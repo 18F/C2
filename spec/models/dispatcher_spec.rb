@@ -3,9 +3,14 @@ describe Dispatcher do
 
   describe ".deliver_new_proposal_emails" do
     it "uses the LinearDispatcher for non-NCR approvals" do
-      expect(proposal).to receive(:client_data).and_return(double(client_slug: "ncr"))
-      expect_any_instance_of(LinearDispatcher).to receive(:deliver_new_proposal_emails).with(proposal)
+      create(:gsa18f_procurement, proposal: proposal)
+      dispatcher_double = double
+      allow(dispatcher_double).to receive(:deliver_new_proposal_emais).with(proposal)
+      allow(LinearDispatcher).to receive(:new).and_return(dispatcher_double)
+
       Dispatcher.deliver_new_proposal_emails(proposal)
+
+      expect(dispatcher_double).to have_received(:deliver_new_proposal_emails).with(proposal)
     end
   end
 

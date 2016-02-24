@@ -1,7 +1,15 @@
-# This is a temporary way to handle a notification preference
-# that will eventually be managed at the user level
-# https://www.pivotaltracker.com/story/show/87656734
 class NcrDispatcher < LinearDispatcher
+  def deliver_new_proposal_emails(proposal)
+    email_observers(proposal)
+
+    if proposal.client_data.emergency?
+      ProposalMailer.emergency_proposal_created_confirmation(proposal).deliver_later
+    else
+      proposal.currently_awaiting_steps.each { |step| email_step_user(step) }
+      ProposalMailer.proposal_created_confirmation(proposal).deliver_later
+    end
+  end
+
   def requires_approval_notice?(approval)
     final_approval(approval.proposal) == approval
   end
@@ -10,10 +18,6 @@ class NcrDispatcher < LinearDispatcher
     proposal.individual_steps.last
   end
 
-  # Notify approvers who have already approved that this proposal has been
-  # modified. Also notify current approvers that the proposal has been updated.
-  # Do NOT notify the modifying user, if specified.
-  # https://www.pivotaltracker.com/story/show/100957216
   def on_proposal_update(proposal, modifier = nil)
     notify_approvers(proposal, modifier)
     notify_pending_approvers(proposal, modifier)
