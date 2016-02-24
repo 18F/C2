@@ -56,7 +56,7 @@ module Ncr
     def notify_removed_approvers(original_approvers)
       current_approvers = proposal.individual_steps.non_pending.map(&:user)
       removed_approvers_to_notify = original_approvers - current_approvers
-      Dispatcher.on_approver_removal(proposal, removed_approvers_to_notify)
+      DispatchFinder.run(proposal).on_approver_removal(removed_approvers_to_notify)
     end
 
     def ba_6x_approvers

@@ -3,38 +3,6 @@ class Dispatcher
     @proposal = proposal
   end
 
-  def self.deliver_new_proposal_emails(proposal)
-    self.new(proposal).deliver_new_proposal_emails
-  end
-
-  def self.deliver_attachment_emails(proposal, attachment)
-    self.new(proposal).deliver_attachment_emails(attachment)
-  end
-
-  def self.deliver_cancellation_emails(proposal, reason = nil)
-    self.new(proposal).deliver_cancellation_emails(reason)
-  end
-
-  def self.on_approval_approved(approval)
-    self.new(approval.proposal).on_approval_approved(approval)
-  end
-
-  def self.on_comment_created(comment)
-    self.new(comment.proposal).on_comment_created(comment)
-  end
-
-  def self.on_proposal_update(proposal, modifier = nil)
-    self.new(proposal).on_proposal_update(modifier)
-  end
-
-  def self.on_approver_removal(proposal, approvers)
-    self.new(proposal).on_approver_removal(approvers)
-  end
-
-  def self.on_observer_added(observation, reason)
-    self.new(observation.proposal).on_observer_added(observation, reason)
-  end
-
   def email_step_user(step)
     Mailer.actions_for_approver(step).deliver_later
   end
@@ -97,12 +65,6 @@ class Dispatcher
   end
 
   def on_proposal_update(modifier)
-    if proposal.client_slug == "ncr"
-      notify_approvers(modifier)
-      notify_pending_approvers(modifier)
-      notify_requester(modifier)
-      notify_observers(modifier)
-    end
   end
 
   def on_approver_removal(removed_approvers)
@@ -128,11 +90,7 @@ class Dispatcher
   end
 
   def requires_approval_notice?(approval)
-    if proposal.client_slug == "ncr"
-      final_approval == approval
-    else
-      true
-    end
+    true
   end
 
   def user_is_not_step_user?(step)
@@ -147,54 +105,5 @@ class Dispatcher
     if proposal.pending?
       proposal.currently_awaiting_steps.first
     end
-  end
-
-  def final_approval
-    proposal.individual_steps.last
-  end
-
-  def notify_approvers(modifier)
-    proposal.individual_steps.approved.each do |approval|
-      unless user_is_modifier?(approval.user, modifier)
-        Mailer.notification_for_subscriber(
-          approval.user_email_address,
-          proposal,
-          "already_approved",
-          approval
-        ).deliver_later
-      end
-    end
-  end
-
-  def notify_requester(modifier)
-    if proposal.requester != modifier
-      Mailer.notification_for_subscriber(proposal.requester.email_address, proposal, "updated").deliver_later
-    end
-  end
-
-  def notify_pending_approvers(modifier)
-    proposal.currently_awaiting_steps.each do |approval|
-      unless user_is_modifier?(approval.user, modifier)
-        if approval.api_token # Approver's been notified through some other means
-          Mailer.actions_for_approver(approval, "updated").deliver_later
-        else
-          Mailer.actions_for_approver(approval).deliver_later
-        end
-      end
-    end
-  end
-
-  def notify_observers(modifier)
-    proposal.observers.each do |observer|
-      unless user_is_modifier?(observer, modifier)
-        if observer.role_on(proposal).active_observer?
-          Mailer.notification_for_subscriber(observer.email_address, proposal, "updated").deliver_later
-        end
-      end
-    end
-  end
-
-  def user_is_modifier?(user, modifier)
-    modifier && user == modifier
   end
 end

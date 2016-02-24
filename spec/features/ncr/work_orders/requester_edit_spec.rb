@@ -82,8 +82,7 @@ feature "Requester edits their NCR work order", :js do
 
   scenario "allows requester to change the approving official" do
     approver = create(:user, client_slug: "ncr")
-    old_approver = ncr_proposal.approvers.first
-    expect(Dispatcher).to receive(:on_approver_removal).with(ncr_proposal, [old_approver])
+
     visit "/ncr/work_orders/#{work_order.id}/edit"
     fill_in_selectized("ncr_work_order_approving_official", approver.email_address)
     click_on "Update"

@@ -1,4 +1,5 @@
 describe NcrDispatcher do
+<<<<<<< 98f9ab478598a0313a427317a7810015752c66de
   let!(:work_order) { create(:ncr_work_order, :with_approvers) }
   let(:proposal) { work_order.proposal }
   let(:steps) { work_order.individual_steps }
@@ -70,12 +71,43 @@ describe NcrDispatcher do
       step_1.complete!
       deliveries.clear
       ncr_dispatcher.on_proposal_update(proposal)
+=======
+  describe "#on_approval_approved" do
+    it "notifies the user for the next pending step" do
+      work_order = create(:ncr_work_order, :with_approvers)
+      steps = work_order.individual_steps
+      step_1 = steps.first
+      step_2 = steps.second
+      step_1.update(status: "approved", approved_at: Time.current)
+      step_2.update(status: "actionable")
+
+      NcrDispatcher.new(work_order.proposal).on_approval_approved(step_1)
+
+      expect(email_recipients).to match_array([
+        step_2.user.email_address
+      ])
+    end
+  end
+
+  describe "#on_proposal_update" do
+    it "notifies approvers who have already approved" do
+      work_order =  create(:ncr_work_order, :with_approvers)
+      proposal = work_order.proposal
+      steps = work_order.individual_steps
+      step_1 = steps.first
+      step_1.approve!
+      deliveries.clear
+
+      NcrDispatcher.new(proposal).on_proposal_update
+
+>>>>>>> Sublcass Dispatcher with NcrDispatcher
       email = deliveries[0]
       expect(email.to).to eq([step_1.user.email_address])
       expect(email.html_part.body.to_s).to include("already approved")
       expect(email.html_part.body.to_s).to include("updated")
     end
 
+<<<<<<< 98f9ab478598a0313a427317a7810015752c66de
     it 'current approver if they have not be notified before' do
       ncr_dispatcher.on_proposal_update(proposal)
       email = deliveries[0]
@@ -87,12 +119,25 @@ describe NcrDispatcher do
     it 'current approver if they have be notified before' do
       create(:api_token, step: step_1)
       ncr_dispatcher.on_proposal_update(proposal)
+=======
+    it "current approver if they have been notified before" do
+      work_order =  create(:ncr_work_order, :with_approvers)
+      proposal = work_order.proposal
+      steps = work_order.individual_steps
+      step_1 = steps.first
+      deliveries.clear
+      create(:api_token, step: step_1)
+
+      NcrDispatcher.new(proposal).on_proposal_update
+
+>>>>>>> Sublcass Dispatcher with NcrDispatcher
       email = deliveries[0]
       expect(email.to).to eq([step_1.user.email_address])
       expect(email.html_part.body.to_s).not_to include("already approved")
       expect(email.html_part.body.to_s).to include("updated")
     end
 
+<<<<<<< 98f9ab478598a0313a427317a7810015752c66de
     it 'does not notify observer if they are the one making the update' do
       deliveries.clear
       email = 'requester@example.com'
@@ -115,6 +160,39 @@ describe NcrDispatcher do
       ncr_dispatcher.on_proposal_update(proposal, step_1.user)
       expect(step_1.user.email_address).to_not eq(proposal.requester.email_address)
       expect(email_recipients).to include(email)
+=======
+    it "does not notify observer if they are the one making the update" do
+      work_order =  create(:ncr_work_order, :with_approvers)
+      proposal = work_order.proposal
+      email = "requester@example.com"
+      user = create(:user, client_slug: "ncr", email_address: email)
+      proposal.add_observer(user)
+
+      NcrDispatcher.new(proposal).on_proposal_update(proposal.observers.first)
+
+      expect(email_recipients).to_not include(email)
+    end
+
+    it "does not notify approver if they are the one making the update" do
+      work_order =  create(:ncr_work_order, :with_approvers)
+      proposal = work_order.proposal
+      step_1 = work_order.individual_steps.first
+      email = step_1.user.email_address
+
+      NcrDispatcher.new(proposal).on_proposal_update(step_1.user)
+
+      expect(email_recipients).to_not include(email)
+    end
+
+    it "notifies requester if they are not the one making the update" do
+      work_order =  create(:ncr_work_order, :with_approvers)
+      proposal = work_order.proposal
+      step_1 = work_order.individual_steps.first
+
+      NcrDispatcher.new(proposal).on_proposal_update(step_1.user)
+
+      expect(email_recipients).to include(proposal.requester.email_address)
+>>>>>>> Sublcass Dispatcher with NcrDispatcher
     end
   end
 end
