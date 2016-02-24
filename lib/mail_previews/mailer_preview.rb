@@ -7,10 +7,6 @@ class MailerPreview < ActionMailer::Preview
     Mailer.proposal_observer_email(email, proposal)
   end
 
-  def proposal_created_confirmation
-    Mailer.proposal_created_confirmation(proposal)
-  end
-
   def notification_for_subscriber
     Mailer.notification_for_subscriber(email, proposal)
   end
