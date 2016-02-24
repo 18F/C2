@@ -3,10 +3,6 @@ class MailerPreview < ActionMailer::Preview
     Mailer.actions_for_approver(pending_approval)
   end
 
-  def proposal_observer_email
-    Mailer.proposal_observer_email(email, proposal)
-  end
-
   def notification_for_subscriber
     Mailer.notification_for_subscriber(email, proposal)
   end

@@ -26,14 +26,6 @@ class Mailer < ApplicationMailer
     )
   end
 
-  def proposal_observer_email(to_email, proposal)
-    # TODO have the from_email be whomever triggered this notification
-    send_proposal_email(
-      to_email: to_email,
-      proposal: proposal
-    )
-  end
-
   def resend(msg)
     @_message = Mail.new msg
     # we want to preserve the From name but not the email address, since gsa.gov
