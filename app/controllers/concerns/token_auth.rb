@@ -15,21 +15,15 @@ module TokenAuth
   def validate_access
     if not_signed_in?
       authorize(:api_token, :valid_and_not_delegate!, params)
-
       token = ApiToken.find_by(access_token: params[:cch])
       sign_in(token.user)
     end
 
-    # expire tokens regardless of how user logged in
-    tokens = ApiToken.joins(:step).where(steps: {
-      user_id: current_user, proposal_id: proposal})
-    tokens.where(used_at: nil).update_all(used_at: Time.zone.now)
-
+    current_user_tokens.where(used_at: nil).update_all(used_at: Time.zone.now)
     authorize(proposal, :can_complete!)
 
     if params[:version] && params[:version] != proposal.version.to_s
-      raise Pundit::NotAuthorizedError.new(
-        "This request has recently changed. Please review the modified request before approving.")
+      raise Pundit::NotAuthorizedError, "This request has recently changed. Please review the modified request before approving."
     end
   end
 
@@ -67,5 +61,13 @@ module TokenAuth
       flash[:error] = exception.message
       redirect_to proposal
     end
+  end
+
+  private
+
+  def current_user_tokens
+    ApiToken.joins(:step).where(
+      steps: { user_id: current_user, proposal_id: proposal }
+    )
   end
 end
