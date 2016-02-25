@@ -37,7 +37,8 @@
       = f.input :not_to_exceed,
         as: :radio_buttons,
         collection: [["Exact", false], ["Not to exceed", true]], label: false
-    = f.input :direct_pay
+    = f.input :direct_pay,
+        input_html: { data: popover_data_attrs("direct_pay") }
     = f.association :approving_official,
       disabled: @client_data_instance.proposal.approver_email_frozen?,
       collection: scoped_approver_options(@client_data_instance.ineligible_approvers),
