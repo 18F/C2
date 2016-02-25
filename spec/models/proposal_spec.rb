@@ -80,6 +80,26 @@ describe Proposal do
     end
   end
 
+  describe "#delegate?" do
+    context "user is a delegate for one of the step users" do
+      it "is true" do
+        user = create(:user)
+        proposal = create(:proposal, delegate: user)
+
+        expect(proposal.delegate?(user)).to eq true
+      end
+    end
+
+    context "user is not delegate for one of the step users" do
+      it "is false" do
+        user = create(:user)
+        proposal = create(:proposal)
+
+        expect(proposal.delegate?(user)).to eq false
+      end
+    end
+  end
+
   describe '#currently_awaiting_step_users' do
     it "gives a consistently ordered list when in parallel" do
       proposal = create(:proposal, :with_parallel_approvers)

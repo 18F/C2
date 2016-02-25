@@ -129,7 +129,7 @@ class Proposal < ActiveRecord::Base
   end
 
   def delegate?(user)
-    user_delegates.exists?(assignee_id: user.id)
+    delegates.include?(user)
   end
 
   def existing_or_delegated_step_for(user)
@@ -143,10 +143,6 @@ class Proposal < ActiveRecord::Base
 
   def delegates
     ProposalQuery.new(self).delegates
-  end
-
-  def user_delegates
-    ProposalQuery.new(self).user_delegates
   end
 
   def step_users

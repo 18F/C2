@@ -32,19 +32,6 @@ describe ProposalQuery do
     end
   end
 
-  describe "#user_delegates" do
-    it "returns user delegations for step users" do
-      user = create(:user)
-      proposal = create(:proposal, delegate: user)
-      other_user = create(:user)
-      create(:proposal, delegate: other_user)
-
-      user_delegates = ProposalQuery.new(proposal).user_delegates
-
-      expect(user_delegates).to match_array(user.incoming_delegations)
-    end
-  end
-
   describe "#delegates" do
     it "returns the assignees for the delegations" do
       user = create(:user)
