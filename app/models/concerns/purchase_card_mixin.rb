@@ -1,5 +1,5 @@
-# NOTE must define class method 'purchase_amount_column_name'
-# before 'include'-ing this concern
+# NOTE must define class method "purchase_amount_column_name"
+# before "include"-ing this concern
 module PurchaseCardMixin
   extend ActiveSupport::Concern
 
@@ -8,11 +8,11 @@ module PurchaseCardMixin
       fiscals = {
         2015      => 3000,
         2016      => 3500,
-        'default' => 3500,
+        "default" => 3500,
       }
       now = Time.zone.now
       this_fiscal = FiscalYearFinder.new(now.year, now.month).run
-      fiscals[this_fiscal] || fiscals['default']
+      fiscals[this_fiscal] || fiscals["default"]
     end
 
     validates name.constantize.purchase_amount_column_name, numericality: {

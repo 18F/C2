@@ -1,7 +1,7 @@
 <tr class="m-shared-email_status">
   <td colspan="2" padding="10">
     <table id="status-container-detail" width="770" class="col-md-12">
-      <tr class="status-header-container <%='cancelled' if @proposal.cancelled? %>">
+      <tr class="status-header-container <%="cancelled" if @proposal.cancelled? %>">
         <td>
           <strong>Status</strong>
         </td>
@@ -36,7 +36,7 @@
                       (<%= step.decorate.role_name %>)
                     </span>
                     <% if step.approved? %>
-                      <span class='timestamp'>on <%= date_with_tooltip(step.approved_at) %></span>
+                      <span class="timestamp">on <%= date_with_tooltip(step.approved_at) %></span>
                     <% end %>
                   </td>
                 </tr>

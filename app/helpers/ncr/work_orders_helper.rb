@@ -7,7 +7,7 @@ module Ncr
     end
 
     def building_options
-      custom = Ncr::WorkOrder.where.not(building_number: nil).pluck('DISTINCT building_number')
+      custom = Ncr::WorkOrder.where.not(building_number: nil).pluck("DISTINCT building_number")
       all = custom + Ncr::BUILDING_NUMBERS
       all.uniq.sort.map { |building| { name: building } }
     end
@@ -19,7 +19,7 @@ module Ncr
     end
 
     def vendor_options(vendor = nil)
-      all_vendors = Ncr::WorkOrder.where.not(vendor: nil).pluck('DISTINCT vendor')
+      all_vendors = Ncr::WorkOrder.where.not(vendor: nil).pluck("DISTINCT vendor")
       if vendor
         all_vendors.push(vendor)
       end
@@ -27,9 +27,9 @@ module Ncr
     end
 
     def expense_type_radio_button(form, expense_type)
-      content_tag :div, class: 'radio' do
+      content_tag :div, class: "radio" do
         form.label :expense_type, value: expense_type do
-          radio = form.radio_button(:expense_type, expense_type, 'data-filter-control' => 'expense-type', required: true)
+          radio = form.radio_button(:expense_type, expense_type, "data-filter-control" => "expense-type", required: true)
           radio + expense_type
         end
       end

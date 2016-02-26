@@ -7,7 +7,7 @@ module Api
     private
 
     def enable?
-      ENV['API_ENABLED'] == 'true'
+      ENV["API_ENABLED"] == "true"
     end
 
     def fail_if_not_enabled

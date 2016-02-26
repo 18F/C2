@@ -22,7 +22,7 @@ module FormHelper
 
   def flash_message(val)
     if val.is_a?(Enumerable)
-      val.join('. ')
+      val.join(". ")
     else
       val
     end
@@ -35,7 +35,7 @@ module FormHelper
   end
 
   def popover_data_attrs(key)
-    { toggle: 'popover', trigger: 'focus', html: true, placement: 'top',
+    { toggle: "popover", trigger: "focus", html: true, placement: "top",
       title: I18n.t("helpers.popover.#{key}.title"),
       content: I18n.t("helpers.popover.#{key}.content")
     }

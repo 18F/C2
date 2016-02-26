@@ -2,14 +2,14 @@
 - if attachments.any?
   %table.submodel-section
     %tr
-      %td.w-container{colspan: '2'}
+      %td.w-container{colspan: "2"}
         %strong Attachments
     - attachments.each do |attachment|
       %tr
-        %td.submodel-detail.first{valign: 'top'}
+        %td.submodel-detail.first{valign: "top"}
           %p
             = l(attachment.created_at.to_date)
-        %td.submodel-detail{valign: 'top'}
+        %td.submodel-detail{valign: "top"}
           %p
             %strong
               = attachment.user.full_name

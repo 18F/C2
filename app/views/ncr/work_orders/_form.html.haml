@@ -47,7 +47,7 @@
       prompt: :translate,
       input_html: { class: "js-selectize required" }
     - if @client_data_instance.new_record?
-      = render partial: 'attachments'
+      = render partial: "attachments"
     - else
       = field_set_tag "Budget codes" do
         = f.input :cl_number

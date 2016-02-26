@@ -7,7 +7,7 @@ module Api
           joins(:proposal).
           includes(proposal: [:requester, individual_steps: [:user]]).
           includes(:observers).
-          order('proposals.created_at DESC')
+          order("proposals.created_at DESC")
 
         if params[:limit]
           orders = orders.limit(params[:limit].to_i)

@@ -166,7 +166,7 @@ tr.proposal-property p {
 }
 
 .icon-approved {
-  background-image: image-url('icon-checkmark.gif');
+  background-image: image-url("icon-checkmark.gif");
   background-repeat: no-repeat;
   padding-left: 21px;
 }
@@ -251,7 +251,7 @@ tr.add-more-row {
 }
 
 body.webapp {
-  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 16px;
   color: black;
 
@@ -269,21 +269,21 @@ body.webapp {
 
 .controller-proposals {
   h1 {
-    font-family: Raleway, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: Raleway, "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 300;
     font-size: 38px;
     color: black;
   }
 
   h2 {
-    font-family: Raleway, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: Raleway, "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 300;
     font-size: 34px;
     padding-left: 0;
   }
 
   h3 {
-    font-family: Raleway, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: Raleway, "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 300;
     font-size: 24px;
     color: black;
@@ -344,7 +344,7 @@ body.webapp {
 
     &.approved {
       min-width: 155px;
-      background-image: image-url('icon-checkmark.gif');
+      background-image: image-url("icon-checkmark.gif");
       background-repeat: no-repeat;
       background-position: center -0.2em;
       padding-top: 15px;
@@ -352,7 +352,7 @@ body.webapp {
 
     &.pending {
       min-width: 155px;
-      background-image: image-url('icon-pending.png');
+      background-image: image-url("icon-pending.png");
       background-repeat: no-repeat;
       background-position: center -0.2em;
       padding-top: 20px;

@@ -8,18 +8,18 @@ class AddMinus
   setupButtons: (lis) ->
     lis.each (idx, li) =>
       $li = $(li)
-      remove = $(document.createElement('input'))
-                .attr({value: '-', type: 'button', class: "js-am-minus"})
+      remove = $(document.createElement("input"))
+                .attr({value: "-", type: "button", class: "js-am-minus"})
                 .click () => @remove($li)
-      add = $(document.createElement('input'))
-                .attr({value: '+', type: 'button', class: "js-am-plus"})
+      add = $(document.createElement("input"))
+                .attr({value: "+", type: "button", class: "js-am-plus"})
                 .click () => @add()
       $li.append(remove, add)
     @disableButtons()
 
   remove: ($li) ->
     $li.hide()
-    $li.find('input').not('.js-am-minus, .js-am-plus').val('')  # clear
+    $li.find("input").not(".js-am-minus, .js-am-plus").val("")  # clear
     @ul.append($li)  # move to bottom
     @disableButtons()
 
@@ -33,5 +33,5 @@ class AddMinus
     @ul.find(".js-am-plus").last().prop("disabled", true)
 
 $ ->
-  $('[data-add-minus]').each (idx, el) ->
+  $("[data-add-minus]").each (idx, el) ->
     new AddMinus($(el))

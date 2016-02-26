@@ -16,12 +16,12 @@ class ReportMailer < ApplicationMailer
 
   def weekly_fiscal_year_report(year)
     attachments["NCR_Work_Order_Report_FY#{year}.csv"] = Ncr::Reporter.new.build_fiscal_year_report_string(year)
-    to_email = ENV.fetch('BUDGET_REPORT_RECIPIENT')
+    to_email = ENV.fetch("BUDGET_REPORT_RECIPIENT")
 
     mail(
       to: to_email,
       subject: "FY#{year} NCR Budget Report",
-      body: 'The annual report is attached to this email.',
+      body: "The annual report is attached to this email.",
       from: sender_email
     )
   end
@@ -34,20 +34,20 @@ class ReportMailer < ApplicationMailer
 
   def csv_reports
     {
-      'approved-ba60-week' => @ba60_proposals,
-      'approved-ba61-week' => @ba61_proposals,
-      'approved-ba80-week' => @ba80_proposals,
+      "approved-ba60-week" => @ba60_proposals,
+      "approved-ba61-week" => @ba61_proposals,
+      "approved-ba80-week" => @ba80_proposals,
 
-      'pending-at-approving-official' => Ncr::Reporter.proposals_pending_approving_official,
-      'pending-at-budget' => Ncr::Reporter.proposals_pending_budget,
-      'pending-at-tier-one-approval' => Ncr::Reporter.proposals_tier_one_pending,
+      "pending-at-approving-official" => Ncr::Reporter.proposals_pending_approving_official,
+      "pending-at-budget" => Ncr::Reporter.proposals_pending_budget,
+      "pending-at-tier-one-approval" => Ncr::Reporter.proposals_tier_one_pending,
     }
   end
 
   def build_attachments
-    date = Time.now.utc.strftime('%Y-%m-%d')
+    date = Time.now.utc.strftime("%Y-%m-%d")
     csv_reports.each do |name, records|
-      attachments[name + '-' + date + '.csv'] = Ncr::Reporter.as_csv(records)
+      attachments[name + "-" + date + ".csv"] = Ncr::Reporter.as_csv(records)
     end
   end
 

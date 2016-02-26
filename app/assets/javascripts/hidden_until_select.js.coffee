@@ -1,6 +1,6 @@
 class HiddenUntilSelect
   constructor: ($root, @$dependent) ->
-    @$controller = $root.find("##{ @$dependent.attr('data-hide-until-select') }")
+    @$controller = $root.find("##{ @$dependent.attr("data-hide-until-select") }")
     @$controller.change => @checkHide()
     @checkHide()
 
