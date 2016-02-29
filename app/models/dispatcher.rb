@@ -52,7 +52,7 @@ class Dispatcher
     end
 
     if requires_approval_notice?(approval)
-      ApprovalMailer.approval_reply_received_email(approval).deliver_later
+      StepMailer.step_reply_received(approval).deliver_later
     end
 
     email_observers
@@ -67,9 +67,9 @@ class Dispatcher
   def on_proposal_update(modifier = nil)
   end
 
-  def on_approver_removal(removed_approvers)
-    removed_approvers.each do|approver|
-      ApprovalMailer.approver_removed(approver.email_address, proposal).deliver_later
+  def on_step_user_removal(removed_step_users)
+    removed_step_users.each do |user|
+      StepMailer.step_user_removed(user.email_address, proposal).deliver_later
     end
   end
 

@@ -7,12 +7,12 @@
 %table.two-thirds-width
   %tr
     %td.header
-      = t("mailer.approval_mailer.approver_removed.header")
+      = t("mailer.step_mailer.step_user_removed.header")
 
 %table.two-thirds-width
   %tr
     %td.subheader
-      = t("mailer.approval_mailer.approver_removed.subheader")
+      = t("mailer.step_mailer.step_user_removed.subheader")
 
 = render partial: "mail_shared/proposal_button",
-  locals: { button_text: t("mailer.approval_mailer.approver_removed.cta") }
+  locals: { button_text: t("mailer.step_mailer.step_user_removed.cta") }
