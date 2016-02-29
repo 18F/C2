@@ -3,12 +3,14 @@ en:
     steps:
       approval:
         execute_button: "Approve"
+        noun: "approval"
         role_name: "Approver"
         status:
           please_act: "Please review"
           waiting: "Waiting for review from:"
       purchase:
         execute_button: "Mark as Purchased"
+        noun: "purchase"
         role_name: "Purchaser"
         status:
           please_act: "Please purchase"
