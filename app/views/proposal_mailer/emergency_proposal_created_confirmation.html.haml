@@ -16,19 +16,9 @@
     %td.subheader
       = t("mailer.proposal_mailer.emergency_proposal_created_confirmation.subheader")
 
-%table.two-thirds-width.proposal-attributes
-  - Ncr::WorkOrderFields.new(@proposal.client_data).display.each_slice(2) do |fields|
-    %tr
-      %td
-        %p.proposal-data-label
-          = fields[0][0]
-        %p.proposal-data-attribute
-          = fields[0][1]
-      %td
-        %p.proposal-data-label
-          = fields[1][0]
-        %p.proposal-data-attribute
-          = fields[1][1]
+
+= render partial: "mail_shared/proposal_attributes",
+  locals: { proposal: @proposal }
 
 = render partial: "mail_shared/proposal_button",
   locals: { button_text: t("mailer.proposal_mailer.emergency_proposal_created_confirmation.cta") }

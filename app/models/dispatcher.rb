@@ -13,7 +13,7 @@ class Dispatcher
 
   def deliver_new_proposal_emails
     proposal.currently_awaiting_steps.each do |step|
-      email_step_user(step)
+      StepMailer.proposal_notification(step).deliver_later
     end
 
     email_observers

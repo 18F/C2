@@ -55,14 +55,32 @@ describe StepMailer do
 
     it_behaves_like "a proposal email"
 
-    it "tells the user thet have been removed" do
+    it "tells the user that they have been removed" do
       expect(mail.body.encoded).to include(
         I18n.t("mailer.step_mailer.step_user_removed.header")
       )
     end
   end
 
+  describe "#proposal_notification" do
+    let(:mail) { StepMailer.proposal_notification(step_with_client_data) }
+
+    it "displays purchase-step-specific language" do
+      expect(mail.body.encoded).to include(
+        step_with_client_data.decorate.noun
+      )
+    end
+  end
+
   private
+
+  def step_with_client_data
+    @step_with_client_data ||= client_data_proposal.individual_steps.first
+  end
+
+  def client_data_proposal
+    @client_data_proposal ||= create(:ncr_work_order, :with_approvers).proposal
+  end
 
   def proposal
     @proposal ||= create(:proposal, :with_serial_approvers)
