@@ -1,8 +1,8 @@
-class ApprovalMailer < ApplicationMailer
+class StepMailer < ApplicationMailer
   layout "basic"
   add_template_helper ValueHelper
 
-  def approval_reply_received_email(step)
+  def step_reply_received(step)
     proposal = step.proposal.reload
     @step = step
 
@@ -13,7 +13,7 @@ class ApprovalMailer < ApplicationMailer
     )
   end
 
-  def approver_removed(to_email, proposal)
+  def step_user_removed(to_email, proposal)
     @proposal = proposal.decorate
     assign_threading_headers(@proposal)
 
