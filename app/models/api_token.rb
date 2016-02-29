@@ -1,10 +1,10 @@
 class ApiToken < ActiveRecord::Base
-  has_paper_trail class_name: 'C2Version'
+  has_paper_trail class_name: "C2Version"
 
   before_create :set_expires_at
   has_secure_token :access_token
 
-  belongs_to :step, class_name: 'Steps::Individual'
+  belongs_to :step, class_name: "Steps::Individual"
   has_one :proposal, through: :step
   has_one :user, through: :step
 
@@ -13,8 +13,8 @@ class ApiToken < ActiveRecord::Base
   validates :step, presence: true
   validates :expires_at, presence: true, on: :save
 
-  scope :unexpired, -> { where('expires_at >= ?', Time.zone.now) }
-  scope :expired, -> { where('expires_at < ?', Time.zone.now) }
+  scope :unexpired, -> { where("expires_at >= ?", Time.zone.now) }
+  scope :expired, -> { where("expires_at < ?", Time.zone.now) }
   scope :unused, -> { where(used_at: nil) }
   scope :fresh, -> { unused.unexpired }
 

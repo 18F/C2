@@ -7,9 +7,9 @@ class CurrencyInput < SimpleForm::Inputs::Base
     merged_input_options.reverse_merge!(step: 0.01)
 
     input = @builder.number_field(attribute_name, merged_input_options)
-    currency_tag = template.content_tag(:div, '$', class: 'input-group-addon')
+    currency_tag = template.content_tag(:div, "$", class: "input-group-addon")
     input.prepend(currency_tag)
 
-    template.content_tag(:div, input, class: 'input-group')
+    template.content_tag(:div, input, class: "input-group")
   end
 end

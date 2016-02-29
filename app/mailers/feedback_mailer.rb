@@ -7,7 +7,7 @@ class FeedbackMailer < ApplicationMailer
 
     mail(
       to: self.class.support_email,
-      subject: '[C2] Feedback submission',
+      subject: "[C2] Feedback submission",
       from: from,
       cc: from,
       reply_to: from,
@@ -16,7 +16,7 @@ class FeedbackMailer < ApplicationMailer
   end
 
   def self.support_email
-    ENV['SUPPORT_EMAIL'] || 'tickets@18f.uservoice.com' # not sensitive, so hard coding
+    ENV["SUPPORT_EMAIL"] || "tickets@18f.uservoice.com" # not sensitive, so hard coding
   end
 
   protected

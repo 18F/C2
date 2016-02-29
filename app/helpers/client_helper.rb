@@ -13,7 +13,7 @@ module ClientHelper
 
     if client_data && client_data.editable?
       url = polymorphic_path(client_data, action: :edit)
-      link_to "Modify Request", url, class: 'form-button modify'
+      link_to "Modify Request", url, class: "form-button modify"
     else
       ""
     end

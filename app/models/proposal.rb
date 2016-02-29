@@ -5,7 +5,7 @@ class Proposal < ActiveRecord::Base
   include Searchable
   include FiscalYearMixin
 
-  has_paper_trail class_name: 'C2Version'
+  has_paper_trail class_name: "C2Version"
 
   CLIENT_MODELS = []  # this gets populated later
 
@@ -58,8 +58,8 @@ class Proposal < ActiveRecord::Base
   statuses.each do |status|
     scope status, -> { where(status: status) }
   end
-  scope :closed, -> { where(status: ['approved', 'cancelled']) } #TODO: Backfill to change approvals in 'reject' status to 'cancelled' status
-  scope :cancelled, -> { where(status: 'cancelled') }
+  scope :closed, -> { where(status: ["approved", "cancelled"]) } #TODO: Backfill to change approvals in "reject" status to "cancelled" status
+  scope :cancelled, -> { where(status: "cancelled") }
 
   # elasticsearch indexing setup
   MAX_SEARCH_RESULTS = 20
@@ -190,7 +190,7 @@ class Proposal < ActiveRecord::Base
 
   def eligible_observers
     if observations.count > 0
-      User.where(client_slug: client_slug).where('id not in (?)', observations.pluck('user_id'))
+      User.where(client_slug: client_slug).where("id not in (?)", observations.pluck("user_id"))
     else
       User.where(client_slug: client_slug)
     end
