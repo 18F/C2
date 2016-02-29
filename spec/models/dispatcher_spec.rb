@@ -2,6 +2,7 @@ describe Dispatcher do
   describe "#deliver_new_proposal_emails" do
     it "sends emails to the requester and first approver and observers" do
       proposal = create(:proposal, :with_approver, :with_observer)
+      create(:ncr_work_order, proposal: proposal)
 
       Dispatcher.new(proposal).deliver_new_proposal_emails
 
