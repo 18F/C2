@@ -67,7 +67,6 @@ C2::Application.routes.draw do
     mount LetterOpenerWeb::Engine => "letter_opener"
   end
 
-  # constraints lambda { |request| AuthConstraint.admin?(request) } do
   constraints ->(request){ AuthConstraint.admin?(request) } do
     mount Blazer::Engine, at: "blazer"
   end
