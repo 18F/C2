@@ -27,9 +27,9 @@ module Ncr
     delegate :proposal, to: :work_order
 
     def set_up_as_approvers
-      original_approvers = proposal.reload.individual_steps.non_pending.map(&:user)
+      original_step_users = proposal.reload.individual_steps.non_pending.map(&:user)
       force_approvers(approvers)
-      notify_removed_approvers(original_approvers)
+      notify_removed_step_users(original_step_users)
     end
 
     def set_up_as_observers
@@ -53,10 +53,10 @@ module Ncr
       proposal.root_step = Steps::Serial.new(child_steps: individuals)
     end
 
-    def notify_removed_approvers(original_approvers)
-      current_approvers = proposal.individual_steps.non_pending.map(&:user)
-      removed_approvers_to_notify = original_approvers - current_approvers
-      DispatchFinder.run(proposal).on_approver_removal(removed_approvers_to_notify)
+    def notify_removed_step_users(original_step_users)
+      current_step_users = proposal.individual_steps.non_pending.map(&:user)
+      removed_step_users_to_notify = original_step_users - current_step_users
+      DispatchFinder.run(proposal).on_step_user_removal(removed_step_users_to_notify)
     end
 
     def ba_6x_approvers

@@ -16,13 +16,13 @@ en:
       subheader: "You can reply or review the full conversation on the request page."
       cta: "View request details"
       cta_2: "Add comment"
-    approval_mailer:
-      approval_reply_received_email:
+    step_mailer:
+      step_reply_received:
         body: "The approver, %{full_name}, %{status} request %{public_id}."
         details: "Please see below for more details."
         purchased: "Your request has been purchased. See details below."
         approved: "Your request has been fully approved. See details below."
-      approver_removed:
+      step_user_removed:
         header: "You have been removed as an approver for this purchase request"
         subheader: "You don't need to take any additional action."
         cta: "View request details"

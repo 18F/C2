@@ -10,12 +10,12 @@
           = t("mailer.generic_greeting")
           ,
           %br
-          = t("mailer.approval_mailer.approval_reply_received_email.body",
+          = t("mailer.step_mailer.approval_reply_received.body",
             full_name: @step.user.full_name,
             status: @step.status,
             public_id: @proposal.public_id)
           %br
-          = t("mailer.approval_mailer.approval_reply_received_email.details")
+          = t("mailer.step_mailer.approval_reply_received.details")
 
       = render(partial: "mail_shared/email_reply",
         locals: { step: @step, show_step_actions: false, proposal: @proposal })
