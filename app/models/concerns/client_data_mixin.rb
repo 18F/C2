@@ -11,19 +11,19 @@ module ClientDataMixin
     has_one :proposal, as: :client_data
     has_many :steps, through: :proposal
     has_many :individual_steps, -> { individual }, class_name: "Steps::Individual", through: :proposal
-    has_many :approvers, through: :proposal
-    has_many :purchasers, through: :proposal
-    has_many :completers, through: :proposal
     has_many :observations, through: :proposal
     has_many :observers, through: :observations, source: :user
     has_many :comments, through: :proposal
     has_one :requester, through: :proposal
+    has_many :completers, through: :proposal
 
     accepts_nested_attributes_for :proposal
 
     validates :proposal, presence: true
 
     delegate(
+      :approvers,
+      :purchasers,
       :add_observer,
       :add_requester,
       :currently_awaiting_step_users,
