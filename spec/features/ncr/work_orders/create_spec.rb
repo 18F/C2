@@ -43,15 +43,26 @@ feature "Creating an NCR work order", :js do
       expect(page).to_not have_content("Approving official can't be blank")
     end
 
-    scenario "doesn't show the budget fields" do
+    scenario "shows tooltip for amount field" do
       login_as(requester)
       visit new_ncr_work_order_path
 
-      focus_field "ncr_work_order_amount"
+      page.find("#ncr_work_order_amount").trigger(:mouseover)
 
       expect(page).to have_content("$3,500 for supplies")
       expect(page).to have_content("$2,500 for services")
       expect(page).to have_content("$2,000 for construction")
+    end
+
+    scenario "shows tooltip for direct pay field" do
+      login_as(requester)
+      visit new_ncr_work_order_path
+
+      page.find("a", text: "direct pay").trigger(:mouseover)
+
+      expect(page).to have_content(
+        I18n.t("helpers.popover.direct_pay.content")
+      )
     end
 
     scenario "preserve form values on submission error" do
