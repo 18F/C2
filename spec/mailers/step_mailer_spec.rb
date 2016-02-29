@@ -1,8 +1,8 @@
-describe ApprovalMailer do
+describe StepMailer do
   include MailerSpecHelper
 
-  describe "#approval_reply_received_email" do
-    let(:mail) { ApprovalMailer.approval_reply_received_email(approval) }
+  describe "#step_user_reply" do
+    let(:mail) { StepMailer.step_reply_received(approval) }
 
     before do
       approval.approve!
@@ -24,8 +24,8 @@ describe ApprovalMailer do
         final_approval = proposal.individual_steps.last
         final_approval.proposal   # create a dirty cache
         final_approval.approve!
-        mail = ApprovalMailer.approval_reply_received_email(final_approval)
-        expect(mail.body.encoded).to include(I18n.t("mailer.approval_mailer.approval_reply_received_email.approved"))
+        mail = StepMailer.step_reply_received(final_approval)
+        expect(mail.body.encoded).to include(I18n.t("mailer.step_mailer.step_reply_received.approved"))
       end
 
       it "displays purchase-step-specific language when final step is approved" do
@@ -34,20 +34,20 @@ describe ApprovalMailer do
         final_step = proposal.individual_steps.last
         final_step.proposal   # create a dirty cache
         final_step.approve!
-        mail = ApprovalMailer.approval_reply_received_email(final_step)
-        expect(mail.body.encoded).to include(I18n.t("mailer.approval_mailer.approval_reply_received_email.purchased"))
+        mail = StepMailer.step_reply_received(final_step)
+        expect(mail.body.encoded).to include(I18n.t("mailer.step_mailer.step_reply_received.purchased"))
       end
 
       it "does not display when requests are still pending" do
-        mail = ApprovalMailer.approval_reply_received_email(approval)
+        mail = StepMailer.step_reply_received(approval)
 
-        expect(mail.body.encoded).not_to include(I18n.t("mailer.approval_mailer.approval_reply_received_email.approved"))
+        expect(mail.body.encoded).not_to include(I18n.t("mailer.step_mailer.step_reply_received.approved"))
       end
     end
   end
 
-  describe "#approval_reply_received_email" do
-    let(:mail) { ApprovalMailer.approver_removed(approver.email_address, proposal) }
+  describe "#step_reply_received" do
+    let(:mail) { StepMailer.step_user_removed(approver.email_address, proposal) }
 
     before do
       approval.approve!
@@ -57,7 +57,7 @@ describe ApprovalMailer do
 
     it "tells the user thet have been removed" do
       expect(mail.body.encoded).to include(
-        I18n.t("mailer.approval_mailer.approver_removed.header")
+        I18n.t("mailer.step_mailer.step_user_removed.header")
       )
     end
   end

@@ -2,7 +2,7 @@
   <%= complete_text(@step) %>
 <% end %>
 
-<%= t("mailer.approval_mailer.approval_reply_received_email.body",
+<%= t("mailer.step_mailer.step_reply_received.body",
       full_name: @step.user.full_name,
       status: @step.status,
       public_id: @proposal.public_id) %>
