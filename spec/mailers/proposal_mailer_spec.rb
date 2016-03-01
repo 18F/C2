@@ -29,6 +29,18 @@ describe ProposalMailer do
     end
   end
 
+  describe "#proposal_updated_step_complete_needs_re_review" do
+    let(:mail) { ProposalMailer.proposal_updated_step_complete_needs_re_review(proposal) }
+
+    it_behaves_like "a proposal email"
+  end
+
+  describe "#proposal_updated_step_complete" do
+    let(:mail) { ProposalMailer.proposal_updated_step_complete(proposal) }
+
+    it_behaves_like "a proposal email"
+  end
+
   describe "#proposal_complete" do
     let(:mail) { ProposalMailer.proposal_complete(proposal) }
 
@@ -36,6 +48,7 @@ describe ProposalMailer do
   end
 
   private
+
   def proposal
     @proposal ||= create(:ncr_work_order, :is_emergency).proposal
   end

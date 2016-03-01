@@ -1,6 +1,6 @@
 class NcrDispatcher < Dispatcher
-  def on_proposal_update(modifier = nil)
-    notify_approvers(modifier)
+  def on_proposal_update(modifier:, needs_review:)
+    notify_approvers(modifier, needs_review)
     notify_pending_approvers(modifier)
     notify_requester(modifier)
     notify_observers(modifier)
@@ -16,15 +16,14 @@ class NcrDispatcher < Dispatcher
     proposal.individual_steps.last
   end
 
-  def notify_approvers(modifier)
-    proposal.individual_steps.approved.each do |approval|
-      unless user_is_modifier?(approval.user, modifier)
-        Mailer.notification_for_subscriber(
-          approval.user_email_address,
-          proposal,
-          "already_approved",
-          approval
-        ).deliver_later
+  def notify_approvers(modifier, needs_review)
+    proposal.individual_steps.approved.each do |step|
+      unless user_is_modifier?(step.user, modifier)
+        if needs_review == true
+          ProposalMailer.proposal_updated_step_complete_needs_re_review(step, modifier).deliver_later
+        else
+          ProposalMailer.proposal_updated_step_complete(step, modifier).deliver_later
+        end
       end
     end
   end
