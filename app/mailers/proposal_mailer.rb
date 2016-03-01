@@ -26,6 +26,18 @@ class ProposalMailer < ApplicationMailer
     )
   end
 
+  def proposal_complete(proposal)
+    @proposal = proposal.decorate
+    assign_threading_headers(proposal)
+
+    mail(
+      to: proposal.requester.email_address,
+      subject: subject(proposal),
+      from: default_sender_email,
+      reply_to: reply_email(proposal)
+    )
+  end
+
   private
 
   def subject(proposal)

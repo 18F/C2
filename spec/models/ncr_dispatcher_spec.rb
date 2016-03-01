@@ -1,5 +1,5 @@
 describe NcrDispatcher do
-  describe "#on_approval_approved" do
+  describe "#step_complete" do
     it "notifies the user for the next pending step" do
       work_order = create(:ncr_work_order, :with_approvers)
       steps = work_order.individual_steps
@@ -8,7 +8,7 @@ describe NcrDispatcher do
       step_1.update(status: "approved", approved_at: Time.current)
       step_2.update(status: "actionable")
 
-      NcrDispatcher.new(work_order.proposal).on_approval_approved(step_1)
+      NcrDispatcher.new(work_order.proposal).step_complete(step_1)
 
       expect(email_recipients).to match_array([
         step_2.user.email_address
