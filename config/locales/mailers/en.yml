@@ -6,9 +6,9 @@ en:
     proposal_link_text: "View This Request: %{proposal_url}"
     feedback_footer_html:
       "Find a bug, have a recommendation, or want to provide other feedback?
-      We'd love to <a target='_blank' href=%{feedback_url}>hear from you!</a>"
+      We'd love to <a target='_blank' href='%{feedback_url}'>hear from you!</a>"
     footer_html:
-      "Have <a href=%{feedback_url}>feedback</a>? We'd love to hear from you."
+      "Have <a href='%{feedback_url}'>feedback</a>? We'd love to hear from you."
     reason: " with given reason '%{reason}'"
     new_attachment_email:
       header_html: "<strong>%{user_name}</strong> added an attachment to the request: %{proposal_name}"
@@ -55,6 +55,15 @@ en:
           "All unapproved credit card funding requests from the previous fiscal
           year are being cancelled.  If the need still exists, please submit a new funding
           request for the current fiscal year."
+    welcome_mailer:
+      welcome_notification:
+        header: "Welcome. You've been added as a user to the C2 purchase approval platform."
+        para1: "With C2, you won't need to  track down approvers, find unsorted emails from all over your inbox, or put together spreadsheets. C2 processes approvals securely and automatically, and it provides you the information you need to make the most of your budget."
+        para2_html: "By now you should have been trained on how it works, but if you have any questions, start with our <a href='%{help_url}'>Help page</a>."
+        para2: "By now you should have been trained on how it works, but if you have any questions, start with our Help Page: %{help_url} ."
+        para3_html: "We are continually working to improve C2, and where we focus our work depends in large part on what we hear from our users. So if you find a bug, have a recommendation, or want to provide other feedback, don't hesitate to let us know. <a href='%{feedback_url}'>We'd love to hear from you</a>!"
+        para3: "We are continually working to improve C2, and where we focus our work depends in large part on what we hear from our users. So if you find a bug, have a recommendation, or want to provide other feedback, don't hesitate to let us know. We'd love to hear from you via our feedback page: %{feedback_url} ."
+        signature: "- The C2 team at 18F"
     comment_mailer:
       comment_added_notification:
         header: "%{user_name} added a comment to %{proposal_name}:"
