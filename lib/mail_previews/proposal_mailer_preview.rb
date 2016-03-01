@@ -7,6 +7,10 @@ class ProposalMailerPreview < ActionMailer::Preview
     ProposalMailer.emergency_proposal_created_confirmation(proposal)
   end
 
+  def proposal_complete
+    ProposalMailer.proposal_complete(proposal)
+  end
+
   private
 
   def proposal

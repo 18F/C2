@@ -34,7 +34,7 @@ module Steps
         on_entry do
           update(approved_at: Time.zone.now)
           notify_parent_approved
-          DispatchFinder.run(self.proposal).on_approval_approved(self)
+          DispatchFinder.run(self.proposal).step_complete(self)
         end
 
         event :initialize, transitions_to: :actionable do
