@@ -3,7 +3,7 @@
     step_type_noun: @step.noun) %>
 
 <%= @step.action_name %>
-<%= proposal_url(@proposal) %>
+<%= generate_approve_url(@step) %>
 
 <%= t("mailer.step_mailer.proposal_notification.cta") %>
 <%= proposal_url(@proposal, anchor: "comments") %>
