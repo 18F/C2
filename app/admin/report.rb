@@ -1,5 +1,4 @@
 ActiveAdmin.register Report do
-
   permit_params :name, :query, :shared, :user_id
   hstore_editor
 
@@ -13,5 +12,4 @@ ActiveAdmin.register Report do
     end
     f.actions
   end
-      
 end
