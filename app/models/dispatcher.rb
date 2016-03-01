@@ -46,13 +46,15 @@ class Dispatcher
     CancellationMailer.cancellation_confirmation(proposal, reason).deliver_later
   end
 
-  def on_approval_approved(approval)
-    if next_approval(approval)
-      email_step_user(next_approval(approval))
+  def step_complete(step)
+    if next_approval(step)
+      email_step_user(next_approval(step))
     end
 
-    if requires_approval_notice?(approval)
-      StepMailer.step_reply_received(approval).deliver_later
+    if requires_approval_notice?(step) && proposal.pending?
+      StepMailer.step_reply_received(step).deliver_later
+    elsif proposal.approved?
+      ProposalMailer.proposal_complete(step.proposal).deliver_later
     end
 
     email_observers
