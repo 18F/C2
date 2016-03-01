@@ -253,6 +253,7 @@ class Proposal < ActiveRecord::Base
     if root_step
       root_step.initialize!
     end
+
     DispatchFinder.run(self).deliver_new_proposal_emails
   end
 
