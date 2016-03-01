@@ -28,7 +28,7 @@ class Report < ActiveRecord::Base
   end
 
   def default_query
-    { 'humanized' => '', 'text' => '' }
+    { "humanized" => "", "text" => "" }
   end
 
   def url
