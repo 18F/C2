@@ -1,7 +1,5 @@
 en:
   mailer:
-    approve: "Approve"
-    purchase: "Mark as purchased"
     generic_greeting: Hello
     greeting: "Hi %{name}"
     proposal_link: "View This Request"
@@ -28,10 +26,6 @@ en:
         header: "You have been removed as an approver for this purchase request"
         subheader: "You don't need to take any additional action."
         cta: "View request details"
-      proposal_notification:
-        header_html: "A new request submitted by <strong>%{requester_name}</strong> needs your %{step_type_noun}"
-        header: "A new request submitted by %{requester_name} needs your %{step_type_noun}"
-        cta: "Add comment"
     proposal_mailer:
       emergency_proposal_created_confirmation:
         header: "Your emergency request has been authorized."
@@ -49,6 +43,16 @@ en:
       proposal_completed:
         header: "Request completed"
         subheader: "All of your request's steps have been completed"
+      proposal_updated_step_complete:
+        header: "This request was modified, but no action is required"
+        subheader: "%{modifier_name} updated %{proposal_name} as follows:"
+        cta: "View request details"
+      proposal_updated_step_complete_needs_re_review:
+        header:
+          "This purchase request has been modified. Because it was already
+          completed, C2 is routing it for review again."
+        subheader: "%{modifier_name} updated %{proposal_name} as follows:"
+        cta: "View request details"
     cancellation_mailer:
       cta: "View request details"
       cancellation_confirmation:
