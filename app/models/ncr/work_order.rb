@@ -1,9 +1,9 @@
-require 'csv'
+require "csv"
 
 module Ncr
-  # Make sure all table names use 'ncr_XXX'
+  # Make sure all table names use "ncr_XXX"
   def self.table_name_prefix
-    'ncr_'
+    "ncr_"
   end
 
   EXPENSE_TYPES = %w(BA60 BA61 BA80)
@@ -124,7 +124,7 @@ module Ncr
     end
 
     def ba80?
-      self.expense_type == 'BA80'
+      self.expense_type == "BA80"
     end
 
     def not_ba60?

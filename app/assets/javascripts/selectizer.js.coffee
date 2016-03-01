@@ -1,25 +1,25 @@
 class Selectizer
   constructor: (el) ->
     @$el = $(el)
-    @dataAttr = @$el.attr('data-attr') || 'default_field'
-    @valueAttr = 'id'
+    @dataAttr = @$el.attr("data-attr") || "default_field"
+    @valueAttr = "id"
 
   isFreeForm: ->
-    @$el.is('input')
+    @$el.is("input")
 
   form_label: ->
-    id = @$el.attr('id')
+    id = @$el.attr("id")
     $("label[for=\"#{id}\"]").text()
 
   add_label: ->
-    @selectizeObj().$control_input.attr('aria-label', @form_label())
+    @selectizeObj().$control_input.attr("aria-label", @form_label())
 
   initialChoices: ->
-    initial = @$el.data('initial') || []
+    initial = @$el.data("initial") || []
     $.map initial, (val) =>   # must be an object with the appropriate attribute
       result = {}
-      result[@dataAttr] = val['name']
-      result[@valueAttr] = val['id'] || val['name']
+      result[@dataAttr] = val["name"]
+      result[@valueAttr] = val["id"] || val["name"]
       result
 
   selectizeOpts: ->
@@ -33,7 +33,7 @@ class Selectizer
     opts.labelField = @dataAttr
     opts.searchField = [@dataAttr]
     opts.valueField = @valueAttr
-    opts.sortField = [{field: '$score'}, {field: @dataAttr}]
+    opts.sortField = [{field: "$score"}, {field: @dataAttr}]
     opts
 
   enable: ->
@@ -44,7 +44,7 @@ class Selectizer
     @$el[0].selectize
 
 $ ->
-  $('.js-selectize').each (i, el) ->
+  $(".js-selectize").each (i, el) ->
     selectizer = new Selectizer(el)
     selectizer.enable()
     selectizer.add_label()

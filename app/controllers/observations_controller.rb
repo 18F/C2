@@ -29,7 +29,7 @@ class ObservationsController < ApplicationController
   end
 
   def observation_for_auth
-    if params[:action] == 'create'
+    if params[:action] == "create"
       Observation.new(proposal: @proposal)
     else
       observation

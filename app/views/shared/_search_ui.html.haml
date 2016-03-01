@@ -1,14 +1,14 @@
 .inset
   .row.m-search-ui
     .input-group
-      %input.search-terms.form-control{type: 'text', name: 'text', value: @text}
+      %input.search-terms.form-control{type: "text", name: "text", value: @text}
       .input-group-btn
         .btn-group{role: "group"}
           .dropdown.dropdown-lg
             %button.btn.btn-default.dropdown-toggle{type: "button", "data-toggle" => "dropdown", "aria-expanded" => "false"}
               %span.caret
             .dropdown-menu.dropdown-menu-right{role: "menu"}
-              %form.adv-search.form-horizontal{role: "form", action: query_proposals_path, method: 'get'}
+              %form.adv-search.form-horizontal{role: "form", action: query_proposals_path, method: "get"}
                 %fieldset
                   .form-group
                     %label{for: "#{current_user.client_model_slug}[status]"}
@@ -57,7 +57,12 @@
                         name: "#{current_user.client_model_slug}[created_at]", 
                         value: @adv_search.value_for("created_at"),
                       }
-                  %button#adv-search-button.btn.btn-primary{type: 'submit'}
+                  %button#adv-search-button.btn.btn-primary{type: "submit"}
                     Search
-          %button#search-button.btn.btn-default.search{type: 'submit'}
+          %button#search-button.btn.btn-default.search{type: "submit"}
             Search
+
+- if defined?(show_adv_search_ui) && show_adv_search_ui
+  <script type="text/javascript">var C2_SEARCH_UI_OPEN = true;</script>
+- else
+  <script type="text/javascript">var C2_SEARCH_UI_OPEN = false;</script>

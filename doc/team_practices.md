@@ -164,14 +164,14 @@ use.
 
 Example flow:
 
-    ```bash
-    cd /tmp && mkdir deploy-qa && cd deploy-qa
-    git clone git@github.com:18F/C2.git
-    cd C2
-    git checkout -b qa-fix-timezones
-    git merge -m 'temp qa branch' origin/fix-timezones
-    cf push c2-dev
-    ```
+```bash
+cd /tmp && mkdir deploy-qa && cd deploy-qa
+git clone git@github.com:18F/C2.git
+cd C2
+git checkout -b qa-fix-timezones
+git merge -m 'temp qa branch' origin/fix-timezones
+cf push c2-dev
+```
 
 If there are any problems, the Tester should comment on the PR and assign it to
 the Owner for follow-up.  The Owner should fix the problems and assign back to

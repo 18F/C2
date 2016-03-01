@@ -141,7 +141,7 @@ h1 {
 
     &.approved {
       min-width: 155px;
-      background-image: image-url('icon-checkmark.gif');
+      background-image: image-url("icon-checkmark.gif");
       background-repeat: no-repeat;
       background-position: center -0.2em;
       padding-top: 15px;
@@ -149,7 +149,7 @@ h1 {
 
     &.pending {
       min-width: 155px;
-      background-image: image-url('icon-pending.png');
+      background-image: image-url("icon-pending.png");
       background-repeat: no-repeat;
       background-position: center -0.2em;
       padding-top: 20px;
@@ -392,7 +392,7 @@ p.approved {
 }
 
 .icon-approved {
-  background-image: image-url('icon-checkmark.gif');
+  background-image: image-url("icon-checkmark.gif");
   background-repeat: no-repeat;
   padding-left: 21px;
 }

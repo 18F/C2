@@ -1,11 +1,11 @@
 module HashDiffDecorator
   def self.html_for(change)
     case change[0] # change type
-    when '+'
+    when "+"
       HashDiffDecorator::Added.new(change).to_html
-    when '~'
+    when "~"
       HashDiffDecorator::Modified.new(change).to_html
-    when '-'
+    when "-"
       HashDiffDecorator::Removed.new(change).to_html
     else
       change.inspect

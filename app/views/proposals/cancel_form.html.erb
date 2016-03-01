@@ -2,13 +2,13 @@
   <div class="row centered">
     <h1>Cancellation: <%= @proposal.name %></h1>
     <%= form_tag(cancel_proposal_path(@proposal), method: :post) do %>
-      <%= label_tag(:reason_input, 'Reason for cancellation') %><br/>
-      <%= text_area_tag 'reason_input', nil, size: '50x10' %>
+      <%= label_tag(:reason_input, "Reason for cancellation") %><br/>
+      <%= text_area_tag "reason_input", nil, size: "50x10" %>
       <p>
-        <%= submit_tag('Yes, cancel this request', class: 'form-button') %>
+        <%= submit_tag("Yes, cancel this request", class: "form-button") %>
       </p>
       <p>
-        <%= link_to 'I made a mistake. Take me back', proposal_path(@proposal) %>
+        <%= link_to "I made a mistake. Take me back", proposal_path(@proposal) %>
       </p>
     <% end %>
   </div>

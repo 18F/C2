@@ -19,8 +19,8 @@
     = f.input :link_to_product
     = f.input :cost_per_unit, as: :currency
     = f.input :quantity, input_html: { step: 1 }
-    = f.input :recurring, input_html: { 'data-filter-control' => 'recurring' }
-    %div{ 'data-filter-key' => 'recurring', 'data-filter-value' => 1 }
+    = f.input :recurring, input_html: { "data-filter-control" => "recurring" }
+    %div{ "data-filter-key" => "recurring", "data-filter-value" => 1 }
       = f.input :recurring_interval,
         collection: Gsa18f::Procurement::RECURRENCE,
         include_blank: false,
@@ -31,4 +31,4 @@
     = f.input :additional_info, as: :text
     = f.submit class: "form-button"
     - if @client_data_instance.persisted?
-      = link_to 'Discard Changes', proposal_url(@client_data_instance.proposal)
+      = link_to "Discard Changes", proposal_url(@client_data_instance.proposal)

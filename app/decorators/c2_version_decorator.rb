@@ -1,9 +1,9 @@
 class C2VersionDecorator < BaseDecorator
   def to_html
     case object.event
-    when 'create'
+    when "create"
       creation_html
-    when 'update'
+    when "update"
       update_html
     end
   end
@@ -18,7 +18,7 @@ class C2VersionDecorator < BaseDecorator
     combine_html([
       "Uploaded ",
       content_tag(:code, object.item.file_file_name),
-      '.'
+      "."
     ])
   end
 

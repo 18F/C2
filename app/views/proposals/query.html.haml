@@ -1,5 +1,5 @@
 - if display_search_ui?
-  = render partial: 'shared/search_ui'
+  = render partial: "shared/search_ui"
 
 .inset
   - page_title = @report ? @report.name : "Proposals participated in"
@@ -25,7 +25,7 @@
           %i.fa.fa-save
   = datespan_header(@start_date, @end_date)
   - if @proposals_data.rows.any?
-    = render partial: 'shared/table', locals: {container: @proposals_data}
+    = render partial: "shared/table", locals: {container: @proposals_data}
     - if @proposals_data.es_response
       #pages
         = paginate @proposals_data.es_response, current_page: (params[:page]||1).to_i

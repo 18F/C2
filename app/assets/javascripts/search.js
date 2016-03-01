@@ -1,5 +1,10 @@
 $(document).ready(function() {
 
+  /* open the Adv Search UI immediately if param set */
+  if (typeof C2_SEARCH_UI_OPEN != "undefined" && C2_SEARCH_UI_OPEN === true ) {
+    $(".m-search-ui button.dropdown-toggle").click();
+  }
+
   /* *** setup Adv Search UI *** */
   $(".m-search-ui button.search").click(function() {
     var btn = $(this);

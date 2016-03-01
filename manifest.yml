@@ -41,6 +41,5 @@ applications:
     NEW_RELIC_APP_NAME: C2 (Production)
     RESTRICT_ACCESS: true
     S3_BUCKET_NAME: c2-prod
-# TODO comment this in once provisioned
-#  services:
-#    - c2-prod-elasticsearch
+  services:
+    - c2-prod-elasticsearch

@@ -5,7 +5,7 @@ class Proposal < ActiveRecord::Base
   include Searchable
   include FiscalYearMixin
 
-  has_paper_trail class_name: 'C2Version'
+  has_paper_trail class_name: "C2Version"
 
   CLIENT_MODELS = []  # this gets populated later
 
@@ -35,15 +35,10 @@ class Proposal < ActiveRecord::Base
   has_many :individual_steps, ->{ individual }, class_name: "Steps::Individual"
   has_many :approval_steps, class_name: "Steps::Approval"
   has_many :purchase_steps, class_name: "Steps::Purchase"
-  has_many :step_users, through: :individual_steps, source: :user
-  has_many :approvers, through: :approval_steps, source: :user
-  has_many :purchasers, through: :purchase_steps, source: :user
   has_many :completers, through: :individual_steps, source: :completer
   has_many :api_tokens, through: :individual_steps
   has_many :attachments, dependent: :destroy
-  has_many :user_delegates, through: :step_users, source: :outgoing_delegations
   has_many :comments, dependent: :destroy
-  has_many :delegates, through: :user_delegates, source: :assignee
 
   has_many :observations, -> { where("proposal_roles.role_id in (select roles.id from roles where roles.name='observer')") }
   has_many :observers, through: :observations, source: :user
@@ -63,8 +58,8 @@ class Proposal < ActiveRecord::Base
   statuses.each do |status|
     scope status, -> { where(status: status) }
   end
-  scope :closed, -> { where(status: ['approved', 'cancelled']) } #TODO: Backfill to change approvals in 'reject' status to 'cancelled' status
-  scope :cancelled, -> { where(status: 'cancelled') }
+  scope :closed, -> { where(status: ["approved", "cancelled"]) } #TODO: Backfill to change approvals in "reject" status to "cancelled" status
+  scope :cancelled, -> { where(status: "cancelled") }
 
   # elasticsearch indexing setup
   MAX_SEARCH_RESULTS = 20
@@ -134,7 +129,7 @@ class Proposal < ActiveRecord::Base
   end
 
   def delegate?(user)
-    user_delegates.exists?(assignee_id: user.id)
+    delegates.include?(user)
   end
 
   def existing_or_delegated_step_for(user)
@@ -144,6 +139,22 @@ class Proposal < ActiveRecord::Base
       OR user_id IN (SELECT assignee_id FROM user_delegates WHERE assigner_id = :user_id)
     SQL
     steps.where(where_clause, user_id: user.id).first
+  end
+
+  def delegates
+    ProposalQuery.new(self).delegates
+  end
+
+  def step_users
+    ProposalQuery.new(self).step_users
+  end
+
+  def approvers
+    ProposalQuery.new(self).approvers
+  end
+
+  def purchasers
+    ProposalQuery.new(self).purchasers
   end
 
   def existing_step_for(user)
@@ -179,7 +190,7 @@ class Proposal < ActiveRecord::Base
 
   def eligible_observers
     if observations.count > 0
-      User.where(client_slug: client_slug).where('id not in (?)', observations.pluck('user_id'))
+      User.where(client_slug: client_slug).where("id not in (?)", observations.pluck("user_id"))
     else
       User.where(client_slug: client_slug)
     end

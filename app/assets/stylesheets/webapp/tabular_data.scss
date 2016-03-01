@@ -29,11 +29,11 @@
     }
 
     &.asc .table-header::after {
-      content: ' \25b2';
+      content: " \25b2";
     }
 
     &.desc .table-header::after {
-      content: ' \25bc';
+      content: " \25bc";
     }
   }
 }

@@ -1,6 +1,6 @@
 module MarkdownHelper
   def markdown(text)
-    text = text ? text : ''
+    text = text ? text : ""
     options = {
       filter_html:     true,
       hard_wrap:       true,

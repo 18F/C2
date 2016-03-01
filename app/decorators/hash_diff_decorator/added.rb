@@ -9,7 +9,7 @@ module HashDiffDecorator
         content_tag(:code, field),
         " was set to ",
         content_tag(:code, val),
-        '.'
+        "."
       ])
     end
   end

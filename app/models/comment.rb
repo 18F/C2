@@ -1,5 +1,5 @@
 class Comment < ActiveRecord::Base
-  has_paper_trail class_name: 'C2Version'
+  has_paper_trail class_name: "C2Version"
 
   belongs_to :proposal, touch: true
   belongs_to :user
@@ -29,10 +29,10 @@ class Comment < ActiveRecord::Base
   # TODO use i18n
   def self.attributes
     [
-      'commenter',
-      'comment text',
-      'created_at',
-      'updated_at'
+      "commenter",
+      "comment text",
+      "created_at",
+      "updated_at"
     ]
   end
 
