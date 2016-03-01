@@ -26,12 +26,12 @@ en:
         header: "You have been removed as an approver for this purchase request"
         subheader: "You don't need to take any additional action."
         cta: "View request details"
-        proposal_notification:
-          header_html:
-            "A new request submitted by <strong>%{requester_name}</strong> needs
-            your %{step_type_noun}"
-          header: "A new request submitted by %{requester_name} needs your %{step_type_noun}"
-          cta: "Add comment"
+      proposal_notification:
+        header_html:
+          "A new request submitted by <strong>%{requester_name}</strong> needs
+          your %{step_type_noun}"
+        header: "A new request submitted by %{requester_name} needs your %{step_type_noun}"
+        cta: "Add comment"
     proposal_mailer:
       emergency_proposal_created_confirmation:
         header: "Your emergency request has been authorized."
