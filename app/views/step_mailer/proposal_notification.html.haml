@@ -14,8 +14,12 @@
 = render partial: "mail_shared/proposal_attributes",
   locals: { proposal: @proposal }
 
-= render partial: "mail_shared/proposal_button",
-  locals: { button_text: @step.action_name}
+%table.two-thirds-width
+  %tr
+    %td.email-button
+      = link_to generate_approve_url(@step), target: "_blank" do
+        %p.email-button
+          = @step.action_name
 
 = render partial: "mail_shared/proposal_comment_button",
   locals: { button_text: t("mailer.step_mailer.proposal_notification.cta") }
