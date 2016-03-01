@@ -46,14 +46,6 @@ module MailerHelper
     end
   end
 
-  def proposal_attributes(proposal)
-    if proposal.client_data.is_a?(Ncr::WorkOrder)
-      Ncr::WorkOrderFields.new(proposal.client_data).display
-    elsif proposal.client_data.is_a?(Gsa18f::Procurement)
-      Gsa18f::ProcurementFields.new(proposal.client_data).display
-    end
-  end
-
   def complete_text(step)
     if step.is_a?(Steps::Purchase)
       t("mailer.step_mailer.step_reply_received.purchased")
