@@ -1,4 +1,6 @@
 describe "Approving a proposal" do
+  include EnvVarSpecHelper
+
   it "can be done by an approver" do
     Timecop.freeze do
       proposal = create(:proposal, :with_approver)
@@ -16,14 +18,16 @@ describe "Approving a proposal" do
   end
 
   it "doesn't send multiple emails to approvers who are also observers" do
-    proposal = create(:proposal, :with_approver)
-    proposal.add_observer(proposal.approvers.first)
+    with_env_var("NO_WELCOME_EMAIL", "true") do
+      proposal = create(:proposal, :with_approver)
+      proposal.add_observer(proposal.approvers.first)
 
-    login_as(proposal.approvers.first)
-    visit "/proposals/#{proposal.id}"
-    click_on("Approve")
+      login_as(proposal.approvers.first)
+      visit "/proposals/#{proposal.id}"
+      click_on("Approve")
 
-    expect(proposal.observers.length).to eq(1)
-    expect(deliveries.length).to eq(1)
+      expect(proposal.observers.length).to eq(1)
+      expect(deliveries.length).to eq(1)
+    end
   end
 end
