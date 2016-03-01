@@ -17,7 +17,7 @@ describe WelcomeMailer do
         I18n.t("mailer.welcome_mailer.welcome_notification.para1")
       )
       expect(body_no_newlines).to include(
-        I18n.t("mailer.welcome_mailer.welcome_notification.para2", help_url: help_url('index'))
+        I18n.t("mailer.welcome_mailer.welcome_notification.para2", help_url: help_url(''))
       )
       expect(body_no_newlines).to include(
         I18n.t("mailer.welcome_mailer.welcome_notification.para3", feedback_url: feedback_url)
