@@ -1,0 +1,22 @@
+%table.full-width.header
+  %tr
+    %td.hero
+    %td
+      = image_tag "emails/logo-c2-white.png", class: "header-icon"
+
+%table.full-width
+  %tr
+    %td.subheader
+      = t("mailer.welcome_mailer.welcome_notification.header")
+  %tr
+    %td.subheader
+      = t("mailer.welcome_mailer.welcome_notification.para1")
+  %tr 
+    %td.subheader
+      = t("mailer.welcome_mailer.welcome_notification.para2_html", help_url: help_url('') )
+  %tr
+    %td.subheader
+      = t("mailer.welcome_mailer.welcome_notification.para3_html", feedback_url: feedback_url )
+  %tr
+    %td.subheader
+      = t("mailer.welcome_mailer.welcome_notification.signature")
