@@ -14,11 +14,11 @@ class StepMailerPreview < ActionMailer::Preview
   private
 
   def step
-    Step.where.not(user: nil).last
+    Step.where(type: "Steps::Purchase").last
   end
 
   def proposal
-    Proposal.last
+    step.proposal
   end
 
   def to_email

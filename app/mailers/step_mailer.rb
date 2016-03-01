@@ -30,6 +30,10 @@ class StepMailer < ApplicationMailer
     assign_threading_headers(@proposal)
     @step = step.decorate
 
+    unless @step.api_token
+      @step.create_api_token
+    end
+
     mail(
       to: step.user.email_address,
       subject: subject(@proposal),
