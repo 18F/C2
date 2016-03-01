@@ -17,6 +17,12 @@ describe 'User creation when logging in with Oauth to view a protected page' do
     expect(new_user.last_name).to eq("Jetsonian")
   end
 
+  it "sends welcome email to a new user" do
+    expect { get '/auth/myusa/callback' }.to change { deliveries.length }.from(0).to(1)
+    welcome_mail = deliveries.first
+    expect(welcome_mail.subject).to eq("[TEST] Welcome to C2!")
+  end
+
   it "absence of first/last name does not throw error" do
     user = StructUser.new('somebody@example.com', nil, nil)
     setup_mock_auth(:myusa, user)
