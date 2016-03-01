@@ -41,6 +41,17 @@ describe 'User creation when logging in with Oauth to view a protected page' do
     }.to_not change { User.count }
   end
 
+  it "does not send welcome email to existing user" do
+    deliveries.clear
+    create(:user, email_address: 'george-test@example.com')
+
+    Timecop.travel(Time.current + 1.minute) do
+      expect {
+        get '/auth/myusa/callback'
+      }.to_not change { deliveries.length }
+    end
+  end
+
   it 'redirects a newly logged in user to the carts screen' do
     create(:user, email_address: 'george-test@example.com')
 
