@@ -1,0 +1,9 @@
+<%= t("mailer.step_mailer.proposal_notification.header",
+    requester_name: @proposal.requester.full_name,
+    step_type_noun: @step.noun) %>
+
+<%= @step.action_name %>
+<%= generate_approve_url(@step) %>
+
+<%= t("mailer.step_mailer.proposal_notification.cta") %>
+<%= proposal_url(@proposal, anchor: "comments") %>

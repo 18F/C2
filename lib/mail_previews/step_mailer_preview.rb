@@ -1,20 +1,24 @@
 class StepMailerPreview < ActionMailer::Preview
   def step_reply_received
-    StepMailer.step_reply_received(received_approval)
+    StepMailer.step_reply_received(step)
   end
 
   def step_user_removed
     StepMailer.step_user_removed(to_email, proposal)
   end
 
+  def proposal_notification
+    StepMailer.proposal_notification(step)
+  end
+
   private
 
-  def received_approval
-    Step.where.not(user: nil).last
+  def step
+    Step.where(type: "Steps::Purchase").last
   end
 
   def proposal
-    Proposal.last
+    step.proposal
   end
 
   def to_email
