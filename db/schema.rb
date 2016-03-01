@@ -150,12 +150,12 @@ ActiveRecord::Schema.define(version: 20160222185247) do
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
   create_table "gsa18f_procurements", force: :cascade do |t|
-    t.string   "office"
+    t.text     "office"
     t.text     "justification",                default: "",      null: false
-    t.string   "link_to_product",              default: "",      null: false
+    t.text     "link_to_product",              default: "",      null: false
     t.integer  "quantity"
     t.datetime "date_requested"
-    t.string   "additional_info"
+    t.text     "additional_info"
     t.decimal  "cost_per_unit"
     t.text     "product_name_and_description"
     t.boolean  "recurring",                    default: false,   null: false
@@ -176,21 +176,21 @@ ActiveRecord::Schema.define(version: 20160222185247) do
 
   create_table "ncr_work_orders", force: :cascade do |t|
     t.decimal  "amount"
-    t.string   "expense_type",          limit: 255
-    t.string   "vendor",                limit: 255
-    t.boolean  "not_to_exceed",                     default: false, null: false
-    t.string   "building_number",       limit: 255
-    t.boolean  "emergency",                         default: false, null: false
-    t.string   "rwa_number",            limit: 255
-    t.string   "code",                  limit: 255
-    t.string   "project_title",         limit: 255
+    t.string   "expense_type"
+    t.string   "vendor"
+    t.boolean  "not_to_exceed",         default: false, null: false
+    t.string   "building_number"
+    t.boolean  "emergency",             default: false, null: false
+    t.string   "rwa_number"
+    t.string   "code"
+    t.string   "project_title"
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "direct_pay",                        default: false, null: false
-    t.string   "cl_number",             limit: 255
-    t.string   "function_code",         limit: 255
-    t.string   "soc_code",              limit: 255
+    t.boolean  "direct_pay",            default: false, null: false
+    t.string   "cl_number"
+    t.string   "function_code"
+    t.string   "soc_code"
     t.integer  "ncr_organization_id"
     t.integer  "approving_official_id"
   end
@@ -212,7 +212,7 @@ ActiveRecord::Schema.define(version: 20160222185247) do
     t.integer  "client_data_id"
     t.string   "client_data_type"
     t.integer  "requester_id"
-    t.string   "public_id", limit: 255
+    t.string   "public_id"
     t.uuid     "visit_id"
   end
 
