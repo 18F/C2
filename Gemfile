@@ -3,7 +3,7 @@ ruby "2.2.3" # this should match `.ruby-version` and docs/setup.md
 
 gem "active_model_serializers"
 gem "activeadmin", git: "https://github.com/activeadmin/activeadmin.git"
-gem "activeadmin_hstore_editor" 
+gem "activeadmin_hstore_editor"
 gem "acts_as_list"
 gem "acts-as-taggable-on", "~> 3.4"
 gem "ar_outer_joins"
