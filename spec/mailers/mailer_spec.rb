@@ -77,26 +77,6 @@ describe Mailer do
       end
     end
 
-    context 'alert templates' do
-      it 'defaults to no specific header' do
-        mail = Mailer.actions_for_approver(approval)
-        expect(mail.body.encoded).not_to include('updated')
-        expect(mail.body.encoded).not_to include('already approved')
-      end
-
-      it 'uses already_approved as a particular template' do
-        mail = Mailer.actions_for_approver(approval, 'already_approved')
-        expect(mail.body.encoded).to include('updated')
-        expect(mail.body.encoded).to include('already approved')
-      end
-
-      it 'uses updated as a particular template' do
-        mail = Mailer.actions_for_approver(approval, 'updated')
-        expect(mail.body.encoded).to include('updated')
-        expect(mail.body.encoded).not_to include('already approved')
-      end
-    end
-
     describe "action buttons" do
       context "when the step requires approval" do
         it "email includes an 'Approve' button" do
