@@ -29,6 +29,13 @@ describe ProposalMailer do
     end
   end
 
+  describe "#proposal_complete" do
+    let(:mail) { ProposalMailer.proposal_complete(proposal) }
+
+    it_behaves_like "a proposal email"
+  end
+
+  private
   def proposal
     @proposal ||= create(:ncr_work_order, :is_emergency).proposal
   end

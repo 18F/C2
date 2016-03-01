@@ -96,21 +96,38 @@ describe Dispatcher do
     end
   end
 
-  describe "#on_approval_approved" do
-    it "notifies the requester and the user for the next pending step" do
-      procurement = create(:gsa18f_procurement, :with_steps)
-      steps = procurement.individual_steps
-      step_1 = steps.first
-      step_2 = steps.second
-      step_1.update(status: "approved", approved_at: Time.current)
-      step_2.update(status: "actionable")
+  describe "#step_complete" do
+    context "final step complete" do
+      it "notifies the requester that the proposal is complete" do
+        procurement = create(:gsa18f_procurement, :with_steps)
+        procurement.proposal.approve!
+        step_2 = procurement.individual_steps.last
+        allow(ProposalMailer).to receive(:proposal_complete).
+          with(procurement.proposal).
+          and_return(double(deliver_later: true))
 
-      Dispatcher.new(procurement.proposal).on_approval_approved(step_1)
+        Dispatcher.new(procurement.proposal).step_complete(step_2)
 
-      expect(email_recipients).to match_array([
-        step_2.user.email_address,
-        procurement.proposal.requester.email_address
-      ])
+        expect(ProposalMailer).to have_received(:proposal_complete).with(procurement.proposal)
+      end
+    end
+
+    context "final step not complete" do
+      it "notifies the requester and the user for the next pending step" do
+        procurement = create(:gsa18f_procurement, :with_steps)
+        steps = procurement.individual_steps
+        step_1 = steps.first
+        step_2 = steps.second
+        step_1.update(status: "approved", approved_at: Time.current)
+        step_2.update(status: "actionable")
+
+        Dispatcher.new(procurement.proposal).step_complete(step_1)
+
+        expect(email_recipients).to match_array([
+          step_2.user.email_address,
+          procurement.proposal.requester.email_address
+        ])
+      end
     end
   end
 

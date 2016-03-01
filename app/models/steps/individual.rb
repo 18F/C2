@@ -32,15 +32,9 @@ module Steps
 
       state :completed do
         on_entry do
-<<<<<<< 98f9ab478598a0313a427317a7810015752c66de
           update(completed_at: Time.zone.now)
           notify_parent_completed
-          Dispatcher.on_approval_approved(self)
-=======
-          update(approved_at: Time.zone.now)
-          notify_parent_approved
-          DispatchFinder.run(self.proposal).on_approval_approved(self)
->>>>>>> Sublcass Dispatcher with NcrDispatcher
+          DispatchFinder.run(self.proposal).step_complete(self)
         end
 
         event :initialize, transitions_to: :actionable do
