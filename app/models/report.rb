@@ -2,15 +2,15 @@ class Report < ActiveRecord::Base
   belongs_to :user
 
   def client_query
-    ProposalFieldedSearchQuery.new(JSON.parse(query)[user.client_model_slug])
+    ProposalFieldedSearchQuery.new(query[user.client_model_slug])
   end
 
   def text_query
-    JSON.parse(query)["text"]
+    query["text"]
   end
 
   def humanized_query
-    JSON.parse(query)["humanized"]
+    query["humanized"]
   end
 
   def query_string
@@ -23,9 +23,17 @@ class Report < ActiveRecord::Base
     end
   end
 
+  def query
+    super || default_query
+  end
+
+  def default_query
+    { "humanized" => "", "text" => "" }
+  end
+
   def url
     allowed_params = ["text", user.client_model_slug, "from", "size"]
-    params = JSON.parse(query).slice(*allowed_params)
+    params = query.slice(*allowed_params)
     params[:report] = id
     "#{Rails.application.routes.url_helpers.query_proposals_path}?#{params.to_query}"
   end

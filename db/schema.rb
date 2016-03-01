@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160222185247) do
+ActiveRecord::Schema.define(version: 20160301205720) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -150,7 +150,7 @@ ActiveRecord::Schema.define(version: 20160222185247) do
 
   create_table "reports", force: :cascade do |t|
     t.string   "name",                       null: false
-    t.text     "query",                      null: false
+    t.json     "query",                      null: false
     t.boolean  "shared",     default: false
     t.integer  "user_id",                    null: false
     t.datetime "created_at",                 null: false
