@@ -68,4 +68,3 @@ C2::Application.routes.draw do
     mount Blazer::Engine, at: "blazer"
   end
 end
-
