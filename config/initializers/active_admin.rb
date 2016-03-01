@@ -4,4 +4,6 @@ ActiveAdmin.setup do |config|
   config.logout_link_path = :destroy_admin_user_session_path
   config.batch_actions = true
   config.localize_format = :long
+  config.register_stylesheet 'active_admin/hstore_editor.css'
+  config.register_javascript 'active_admin/hstore_editor.js'
 end
