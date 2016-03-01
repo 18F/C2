@@ -1,6 +1,4 @@
 class CancellationMailer < ApplicationMailer
-  layout "basic"
-
   def cancellation_notification(to_email, proposal, reason = nil)
     @reason = reason
     @proposal = proposal.decorate

@@ -20,8 +20,6 @@ en:
       step_reply_received:
         body: "The approver, %{full_name}, %{status} request %{public_id}."
         details: "Please see below for more details."
-        purchased: "Your request has been purchased. See details below."
-        approved: "Your request has been fully approved. See details below."
       step_user_removed:
         header: "You have been removed as an approver for this purchase request"
         subheader: "You don't need to take any additional action."

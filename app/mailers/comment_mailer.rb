@@ -1,6 +1,4 @@
 class CommentMailer < ApplicationMailer
-  layout "basic"
-
   def comment_added_notification(comment, to_email)
     @comment = comment
     @proposal = comment.proposal

@@ -1,15 +1,14 @@
 class StepMailer < ApplicationMailer
-  layout "basic"
-  add_template_helper ValueHelper
-
   def step_reply_received(step)
-    proposal = step.proposal.reload
+    @proposal = step.proposal.decorate
+    assign_threading_headers(@proposal)
     @step = step
 
-    send_proposal_email(
-      from_email: user_email_with_name(step.user),
-      to_email: proposal.requester.email_address,
-      proposal: proposal
+    mail(
+      to: @proposal.requester.email_address,
+      subject: subject(@proposal),
+      from: user_email_with_name(@step.user),
+      reply_to: reply_email(@proposal)
     )
   end
 
@@ -26,7 +25,7 @@ class StepMailer < ApplicationMailer
   end
 
   def proposal_notification(step)
-    @proposal = step.proposal
+    @proposal = step.proposal.decorate
     assign_threading_headers(@proposal)
     @step = step.decorate
 
@@ -40,11 +39,5 @@ class StepMailer < ApplicationMailer
       from: user_email_with_name(@proposal.requester),
       reply_to: reply_email(@proposal)
     )
-  end
-
-  private
-
-  def subject(proposal)
-    "Request #{proposal.public_id}: #{proposal.name}"
   end
 end
