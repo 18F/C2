@@ -45,12 +45,4 @@ module MailerHelper
       text << t("mailer.reason", reason: reason)
     end
   end
-
-  def complete_text(step)
-    if step.is_a?(Steps::Purchase)
-      t("mailer.step_mailer.step_reply_received.purchased")
-    else
-      t("mailer.step_mailer.step_reply_received.approved")
-    end
-  end
 end

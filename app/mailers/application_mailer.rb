@@ -1,6 +1,5 @@
 class ApplicationMailer < ActionMailer::Base
   include Roadie::Rails::Automatic
-
   include ProposalConversationThreading
 
   add_template_helper MailerHelper
@@ -8,12 +7,14 @@ class ApplicationMailer < ActionMailer::Base
   add_template_helper ClientHelper
   add_template_helper MarkdownHelper
 
+  layout "email"
+
   default reply_to: proc { reply_to_email }
 
   protected
 
-  def email_to_user(user)
-    email_with_name(user.email_address, user.full_name)
+  def subject(proposal)
+    "Request #{proposal.public_id}: #{proposal.name}"
   end
 
   def email_with_name(email, name)

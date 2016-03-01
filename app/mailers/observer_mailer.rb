@@ -1,8 +1,5 @@
 class ObserverMailer < ApplicationMailer
-  layout "mailer"
-  add_template_helper ValueHelper
-
-  def observer_added_confirmation(observation, reason)
+  def observer_added_notification(observation, reason)
     @observation = observation
     @reason = reason
     observer = observation.user
@@ -11,23 +8,38 @@ class ObserverMailer < ApplicationMailer
     assign_threading_headers(@proposal)
 
     mail(
-      to: email_from_user(observer),
+      to: email_to_user(observer),
       subject: subject(@proposal),
       from: observation_added_from(observation),
       reply_to: reply_email(@proposal)
     )
   end
 
-  def observer_added_notification(user, proposal)
-    @proposal = proposal.decorate
+  def observer_removed_confirmation(observation)
+    @observation = observation
+    proposal = observation.proposal.decorate
 
     assign_threading_headers(proposal)
 
     mail(
-      to: email_from_user(user),
+      to: email_to_user(observation.user),
       subject: subject(proposal),
       from: default_sender_email,
       reply_to: reply_email(proposal)
+    )
+  end
+
+  def proposal_complete(user, proposal)
+    user = user
+    @proposal = proposal.decorate
+
+    assign_threading_headers(@proposal)
+
+    mail(
+      to: email_to_user(user),
+      subject: subject(@proposal),
+      from: default_sender_email,
+      reply_to: reply_email(@proposal)
     )
   end
 

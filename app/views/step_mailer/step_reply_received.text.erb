@@ -1,7 +1,3 @@
-<% if @proposal.completed? %>
-  <%= complete_text(@step) %>
-<% end %>
-
 <%= t("mailer.step_mailer.step_reply_received.body",
       full_name: @step.user.full_name,
       status: @step.status,

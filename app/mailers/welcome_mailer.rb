@@ -1,6 +1,4 @@
 class WelcomeMailer < ApplicationMailer
-  layout "basic"
-
   def welcome_notification(user)
     mail(
       to: email_to_user(user),
