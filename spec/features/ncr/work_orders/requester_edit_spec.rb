@@ -1,5 +1,6 @@
 feature "Requester edits their NCR work order", :js do
   include ProposalSpecHelper
+  include EnvVarSpecHelper
 
   let(:organization) { create(:ncr_organization) }
   let(:work_order) do
@@ -16,7 +17,9 @@ feature "Requester edits their NCR work order", :js do
 
   before do
     work_order.setup_approvals_and_observers
-    login_as(requester)
+    with_env_var("NO_WELCOME_EMAIL", "true") do
+      login_as(requester)
+    end
   end
 
   scenario "preserves previously selected values in dropdowns" do
