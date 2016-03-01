@@ -21,4 +21,7 @@
 //= require selectize
 //= require peek
 //= require peek/views/performance_bar
+//= require ahoy
 //= require_directory .
+
+ahoy.trackAll();
