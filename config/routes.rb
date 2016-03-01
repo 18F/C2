@@ -65,9 +65,7 @@ C2::Application.routes.draw do
   mount Peek::Railtie => "/peek"
   if Rails.env.development?
     mount LetterOpenerWeb::Engine => "letter_opener"
-  end
-
-  constraints ->(request) { AuthConstraint.admin?(request) } do
     mount Blazer::Engine, at: "blazer"
   end
 end
+
