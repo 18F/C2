@@ -1,5 +1,5 @@
 %table.two-thirds-width.proposal-attributes
-  - proposal_attributes(proposal).each_slice(2) do |fields|
+  - proposal.fields_for_display.each_slice(2) do |fields|
     %tr
       %td
         %p.proposal-data-label
