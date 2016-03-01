@@ -28,13 +28,12 @@ module StepManager
     end
   end
 
-  # Steps in which someone can take action
   def currently_awaiting_steps
     individual_steps.actionable
   end
 
   def currently_awaiting_step_users
-    step_users.merge(currently_awaiting_steps)
+    currently_awaiting_steps.map(&:user)
   end
 
   def awaiting_step_user?(user)

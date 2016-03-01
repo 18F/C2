@@ -46,11 +46,11 @@
               = form_for [@proposal, Observation.new] do |f|
                 = f.fields_for :user do |user_form|
                   .col-md-8.col-xs-12
-                    = user_form.collection_select :id, @proposal.eligible_observers, :id, :email_address, { include_blank: true }, class: 'js-selectize'
-                    = f.label :reason, "Reason for adding observer (optional): ", data: {'hide-until-select' => 'observation_user_id'}
-                    = text_field :observation, :reason, class: 'form-control', data: {'hide-until-select' => 'observation_user_id'}
+                    = user_form.collection_select :id, @proposal.eligible_observers, :id, :email_address, { include_blank: true }, class: "js-selectize"
+                    = f.label :reason, "Reason for adding observer (optional): ", data: {"hide-until-select" => "observation_user_id"}
+                    = text_field :observation, :reason, class: "form-control", data: {"hide-until-select" => "observation_user_id"}
                   .col-md-4.col-xs-12.righted
-                    = user_form.submit "Add an Observer", id: :add_subscriber, data: {'disable-if-empty' => 'observation_user_id'}
+                    = user_form.submit "Add an Observer", id: :add_subscriber, data: {"disable-if-empty" => "observation_user_id"}
 
 
 
@@ -75,7 +75,7 @@
         .col-xs-7.col-sm-6.text-area-info-web
           %p These comments will be sent to your requester through email
         .col-xs-5.col-sm-6.text-area-button
-          = submit_tag "Send a Comment", id: :add_a_comment, data: {'disable-if-empty' => 'comment_comment_text'}
+          = submit_tag "Send a Comment", id: :add_a_comment, data: {"disable-if-empty" => "comment_comment_text"}
 
     - if @proposal.comments.any?
       - @proposal.comments.reverse_each do |c|
@@ -103,7 +103,7 @@
         .col-xs-7.col-sm-6.text-area-info-web
           %p Attach a file (e.g. receipts, contract documents, etc.)
         %p.col-xs-5.col-sm-6.text-area-button
-          = submit_tag "Attach a File", id: :add_a_file, data: {'disable-if-empty' => 'attachment_file'}
+          = submit_tag "Attach a File", id: :add_a_file, data: {"disable-if-empty" => "attachment_file"}
     - @proposal.attachments.each do |attachment|
       .line-item
         .row
@@ -123,4 +123,4 @@
   .centered
     = form_tag(approve_proposal_path(@proposal, method: "POST")) do
       = hidden_field_tag :version, @proposal.version
-      = submit_tag @proposal.step_text_for_user(:execute_button, current_user), class: 'form-button'
+      = submit_tag @proposal.step_text_for_user(:execute_button, current_user), class: "form-button"

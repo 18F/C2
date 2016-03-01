@@ -36,7 +36,7 @@ class ProposalPolicy
 
   def use_case_namespace
     cls = self.class.to_s
-    cls.gsub("::#{cls.demodulize}", '')
+    cls.gsub("::#{cls.demodulize}", "")
   end
 
   def slug_matches?
@@ -44,7 +44,7 @@ class ProposalPolicy
   end
 
   def restricted?
-    ENV['RESTRICT_ACCESS'] == 'true'
+    ENV["RESTRICT_ACCESS"] == "true"
   end
 
   def requester?

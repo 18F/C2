@@ -1,19 +1,19 @@
 module ApplicationHelper
   def controller_name
-    params[:controller].gsub(/\W/, '-')
+    params[:controller].gsub(/\W/, "-")
   end
 
   def display_return_to_proposal
-    controller.is_a?(ProposalsController) && params[:action] == 'history'
+    controller.is_a?(ProposalsController) && params[:action] == "history"
   end
 
   def display_return_to_proposals
     controller.is_a?(ClientDataController) ||
-      (controller.is_a?(ProposalsController) && params[:action] != 'index')
+      (controller.is_a?(ProposalsController) && params[:action] != "index")
   end
 
   def auth_path
-    '/auth/myusa'
+    "/auth/myusa"
   end
 
   def display_profile_warning?

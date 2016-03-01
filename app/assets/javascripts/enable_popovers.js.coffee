@@ -4,4 +4,6 @@
 # UiHelper::popover_data_attrs()
 
 $ ->
-  $('[data-toggle="popover"]').popover()
+  $('[data-toggle="popover"]').popover({
+    trigger: "hover"
+  })

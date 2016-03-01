@@ -14,11 +14,11 @@ SimpleForm.setup do |config|
     b.use :error, wrap_with: { tag: :span, class: :error }
   end
 
-  config.boolean_label_class = 'checkbox'
+  config.boolean_label_class = "checkbox"
   config.boolean_style = :nested
-  config.button_class = 'btn'
+  config.button_class = "btn"
   config.default_wrapper = :default
-  config.error_notification_class = 'error_notification'
+  config.error_notification_class = "error_notification"
   config.error_notification_tag = :div
 
   # The asterisk for required fields is added by CSS - make it simply be the label text
