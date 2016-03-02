@@ -12,6 +12,10 @@ class ApplicationMailer < ActionMailer::Base
 
   protected
 
+  def email_from_user(user)
+    email_with_name(user.email_address, user.full_name)
+  end
+
   def email_with_name(email, name)
     # http://stackoverflow.com/a/8106387/358804
     address = Mail::Address.new(email)
