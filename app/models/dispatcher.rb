@@ -8,7 +8,7 @@ class Dispatcher
   end
 
   def on_observer_added(observation, reason)
-    ObserverMailer.on_observer_added(observation, reason).deliver_later
+    ObserverMailer.observer_added_confirmation(observation, reason).deliver_later
   end
 
   def deliver_new_proposal_emails
@@ -22,7 +22,7 @@ class Dispatcher
 
   def email_observers
     active_observers.each do |observer|
-      ObserverMailer.proposal_observer_email(observer.email_address, proposal).deliver_later
+      ObserverMailer.observer_added_notification(observer, proposal).deliver_later
     end
   end
 
