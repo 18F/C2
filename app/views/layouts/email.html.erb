@@ -8,7 +8,118 @@
     <%= render 'mail_shared/outlook_fix' %>
   </head>
   <body>
-    <%= yield %>
-    <%= render partial: "mail_shared/footer" %>
+    <table class="body">
+      <tr>
+        <td class="center" align="center" valign="top">
+          <center>
+            <!-- Start Header -->
+              <table class="row header">
+                <tr>
+                    <td class="center" align="center">
+                        <center>
+                            <table class="container">
+                                <tr>
+                                    <td class="wrapper last">
+                                        <table class="twelve columns">
+                                            <tr>
+                                                <td class="six sub-columns">
+                                                    <img src="http://placehold.it/200x50">
+                                                </td>
+                                                <td class="six sub-columns last" align="right" style="text-align:right; vertical-align:middle;">
+                                                    <span class="template-label">HERO</span>
+                                                </td>
+                                                <td class="expander"></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </center>
+                    </td>
+                </tr>
+              </table>
+              <br>
+            <!-- End Header -->
+
+            <!-- Start Container -->
+              <table class="container">
+                  <tr>
+                      <td>
+                          <table class="row">
+                              <tr>
+                                  <td class="wrapper last">
+                                      <table class="twelve columns">
+                                          <tr>
+                                              <td>
+                                                  <h1>Hi, Elijah Baily</h1>
+                                                  <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et.</p>
+                                                  <img width="580" height="300" src="http://placehold.it/580x300">
+                                              </td>
+                                              <td class="expander"></td>
+                                          </tr>
+                                      </table>
+                                  </td>
+                              </tr>
+                          </table>
+                          <table class="row callout">
+                              <tr>
+                                  <td class="wrapper last">
+                                      <table class="twelve columns">
+                                          <tr>
+                                              <td class="panel">
+                                                  <p>Phasellus dictum sapien a neque luctus cursus. Pellentesque sem dolor, fringilla et pharetra vitae. <a href="#">Click it! »</a></p>
+                                              </td>
+                                              <td class="expander"></td>
+                                          </tr>
+                                      </table>
+                                  </td>
+                              </tr>
+                          </table>
+                          <table class="row">
+                              <tr>
+                                  <td class="wrapper last">
+                                      <table class="twelve columns">
+                                          <tr>
+                                              <td>
+                                                  <h3>Title Ipsum <small>This is a note.</small></h3>
+                                                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                                              </td>
+                                              <td class="expander"></td>
+                                          </tr>
+                                      </table>
+                                  </td>
+                              </tr>
+                          </table>
+                          <table class="row">
+                              <tr>
+                                  <td class="wrapper last">
+                                      <table class="three columns">
+                                          <tr>
+                                              <td>
+                                                  <table class="button">
+                                                      <tr>
+                                                          <td>
+                                                              <a href="#">Click Me!</a>
+                                                          </td>
+                                                      </tr>
+                                                  </table>
+                                              </td>
+                                              <td class="expander"></td>
+                                          </tr>
+                                      </table>
+                                  </td>
+                              </tr>
+                          </table>
+                          <%= render partial: "mail_shared/footer" %>
+                          
+                      </td>
+                  </tr>
+              </table>
+              <%= yield %>
+            <!-- End Container -->
+          </center>
+        </td>
+      </tr>
+    </table>
   </body>
 </html>
