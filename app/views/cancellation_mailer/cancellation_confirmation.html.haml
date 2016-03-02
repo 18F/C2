@@ -1,12 +1,17 @@
-%div
-  %p
-    = t("mailer.greeting", name: @proposal.requester.full_name)
-    ,
-    %br
-      = t("mailer.cancellation_mailer.cancellation_confirmation.body",
-        name: @proposal.name,
-        public_id: @proposal.public_id)
+%table.full-width.header
+  %tr
+    %td.hero
+    %td
+      = image_tag "emails/icon-pencil-circle.png", class: "header-icon"
 
-%p
-  %strong
-    = link_to(t("mailer.proposal_link"), proposal_url(@proposal))
+%table.two-thirds-width
+  %tr
+    %td.header
+      = t("mailer.cancellation_mailer.cancellation_confirmation.header")
+
+  %tr
+    %td.subheader
+      = t("mailer.cancellation_mailer.cancellation_confirmation.reason", reason: @reason)
+
+= render partial: "mail_shared/proposal_button",
+  locals: { button_text: t("mailer.cancellation_mailer.cta") }

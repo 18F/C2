@@ -39,7 +39,7 @@ class ClientDataController < ApplicationController
   def create_client_data
     proposal = ClientDataCreator.new(@client_data_instance, current_user, attachment_params).run
     add_steps
-    Dispatcher.deliver_new_proposal_emails(proposal)
+    DispatchFinder.run(proposal).deliver_new_proposal_emails
   end
 
   def update_or_notify_of_no_changes

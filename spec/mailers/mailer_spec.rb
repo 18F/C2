@@ -37,11 +37,6 @@ describe Mailer do
       )
     end
 
-    it 'alerts subscribers that they have been removed' do
-      mail = Mailer.actions_for_approver(approval, 'removed')
-      expect(mail.body.encoded).to include('You have been removed from this request.')
-    end
-
     it "creates a new token" do
       expect(proposal.api_tokens).to eq([])
 
@@ -82,26 +77,6 @@ describe Mailer do
       end
     end
 
-    context 'alert templates' do
-      it 'defaults to no specific header' do
-        mail = Mailer.actions_for_approver(approval)
-        expect(mail.body.encoded).not_to include('updated')
-        expect(mail.body.encoded).not_to include('already approved')
-      end
-
-      it 'uses already_approved as a particular template' do
-        mail = Mailer.actions_for_approver(approval, 'already_approved')
-        expect(mail.body.encoded).to include('updated')
-        expect(mail.body.encoded).to include('already approved')
-      end
-
-      it 'uses updated as a particular template' do
-        mail = Mailer.actions_for_approver(approval, 'updated')
-        expect(mail.body.encoded).to include('updated')
-        expect(mail.body.encoded).not_to include('already approved')
-      end
-    end
-
     describe "action buttons" do
       context "when the step requires approval" do
         it "email includes an 'Approve' button" do
@@ -129,79 +104,5 @@ describe Mailer do
       mail = Mailer.notification_for_subscriber("abc@example.com", proposal, nil, approval)
       expect(mail.body.encoded).not_to have_link("Approve")
     end
-  end
-
-  describe "#approval_reply_received_email" do
-    let(:mail) { Mailer.approval_reply_received_email(approval) }
-
-    before do
-      approval.approve!
-    end
-
-    it_behaves_like "a proposal email"
-
-    it 'renders the receiver email' do
-      expect(mail.to).to eq([proposal.requester.email_address])
-    end
-
-    it "sets the sender name" do
-      expect(sender_names(mail)).to eq([approver.full_name])
-    end
-
-    context 'comments' do
-      it 'renders comments when present' do
-        create(:comment, comment_text: 'My added comment', proposal: proposal)
-        expect(mail.body.encoded).to include('Comments')
-      end
-
-      it 'does not render empty comments' do
-        expect(mail.body.encoded).to_not include('Comments')
-      end
-    end
-
-    context 'completed message' do
-      it 'displays when all requests have been approved' do
-        final_approval = proposal.individual_steps.last
-        final_approval.proposal   # create a dirty cache
-        final_approval.approve!
-        mail = Mailer.approval_reply_received_email(final_approval)
-        expect(mail.body.encoded).to include(I18n.t("mailer.approval_reply_received_email.approved"))
-      end
-
-      it 'displays purchase-step-specific language when final step is approved' do
-        proposal = create(:proposal, :with_approval_and_purchase, client_slug: "test")
-        proposal.individual_steps.first.approve!
-        final_step = proposal.individual_steps.last
-        final_step.proposal   # create a dirty cache
-        final_step.approve!
-        mail = Mailer.approval_reply_received_email(final_step)
-        expect(mail.body.encoded).to include(I18n.t("mailer.approval_reply_received_email.purchased"))
-      end
-
-      it 'does not display when requests are still pending' do
-        mail = Mailer.approval_reply_received_email(approval)
-        expect(mail.body.encoded).not_to include(I18n.t("mailer.approval_reply_received_email.approved"))
-      end
-    end
-  end
-
-  describe 'proposal_created_confirmation' do
-    let(:mail) { Mailer.proposal_created_confirmation(proposal) }
-
-    it_behaves_like "a proposal email"
-
-    it 'renders the receiver email' do
-      expect(mail.to).to eq([proposal.requester.email_address])
-    end
-
-    it "uses the default sender name" do
-      expect(sender_names(mail)).to eq(["C2"])
-    end
-  end
-
-  describe 'new_attachment_email' do
-    let(:mail) { Mailer.new_attachment_email(requester.email_address, proposal) }
-
-    it_behaves_like "a proposal email"
   end
 end

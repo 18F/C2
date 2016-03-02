@@ -1,0 +1,18 @@
+%table.full-width.header
+  %tr
+    %td.hero
+    %td
+      = image_tag "emails/icon-pencil-circle.png", class: "header-icon"
+
+%table.two-thirds-width
+  %tr
+    %td.header
+      = t("mailer.step_mailer.step_user_removed.header")
+
+%table.two-thirds-width
+  %tr
+    %td.subheader
+      = t("mailer.step_mailer.step_user_removed.subheader")
+
+= render partial: "mail_shared/proposal_button",
+  locals: { button_text: t("mailer.step_mailer.step_user_removed.cta") }

@@ -1,7 +1,4 @@
 class Mailer < ApplicationMailer
-  layout "mailer"
-  add_template_helper ValueHelper
-
   def actions_for_approver(step, alert_partial = nil)
     @show_step_actions = true
     to_email = step.user_email_address
@@ -17,47 +14,15 @@ class Mailer < ApplicationMailer
   def notification_for_subscriber(to_email, proposal, alert_partial = nil, step = nil)
     @step = step.decorate if step
     @alert_partial = alert_partial
+    @proposal = proposal.decorate
+    assign_threading_headers(@proposal)
 
-    send_proposal_email(
-      from_email: user_email_with_name(proposal.requester),
-      to_email: to_email,
-      proposal: proposal,
-      template_name: "notification_for_subscriber"
-    )
-  end
-
-  def general_proposal_email(to_email, proposal)
-    # TODO have the from_email be whomever triggered this notification
-    send_proposal_email(
-      to_email: to_email,
-      proposal: proposal
-    )
-  end
-
-  def new_attachment_email(to_email, proposal)
-    send_proposal_email(
-      to_email: to_email,
-      proposal: proposal
-    )
-  end
-
-  alias_method :proposal_observer_email, :general_proposal_email
-
-  def proposal_created_confirmation(proposal)
-    send_proposal_email(
-      to_email: proposal.requester.email_address,
-      proposal: proposal
-    )
-  end
-
-  def approval_reply_received_email(approval)
-    proposal = approval.proposal.reload
-    @step = approval
-
-    send_proposal_email(
-      from_email: user_email_with_name(approval.user),
-      to_email: proposal.requester.email_address,
-      proposal: proposal
+    mail(
+      from: user_email_with_name(proposal.requester),
+      to: to_email,
+      subject: subject(proposal),
+      template_name: "notification_for_subscriber",
+      reply_to: reply_email(@proposal)
     )
   end
 

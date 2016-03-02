@@ -12,7 +12,8 @@ module Ncr
     def run
       work_order.setup_approvals_and_observers
       reapprove_if_necessary
-      Dispatcher.on_proposal_update(proposal, work_order.modifier)
+      DispatchFinder.run(proposal).
+        on_proposal_update(modifier: work_order.modifier, needs_review: requires_budget_reapproval?)
     end
 
     private
@@ -25,8 +26,11 @@ module Ncr
     end
 
     def requires_budget_reapproval?
-      checker = Ncr::WorkOrderReapprovalChecker.new(work_order)
-      checker.requires_budget_reapproval?
+      @_requires_budget_reapproval ||= checker.requires_budget_reapproval?
+    end
+
+    def checker
+      Ncr::WorkOrderReapprovalChecker.new(work_order)
     end
   end
 end
