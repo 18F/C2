@@ -61,6 +61,7 @@ en:
       cta: "View request details"
       cancellation_confirmation:
         header: "You cancelled this purchase request."
+        subsection: "Cancelled by %{name}."
         reason: "Reason for cancellation: %{reason}"
       cancellation_notification:
         header: "This purchase request has been cancelled by %{name}."
