@@ -5,11 +5,12 @@
         %tr
           %td{:align => "center"}
             %center
-              %p{:style => "text-align:center;"}
+              %p{:class => "text-center paragraph-link-font"}
                 = t("mailer.footer_html", feedback_url: feedback_url)
         %tr
           %td{:align => "center"}
             %center
               %p{:style => "text-align:center;"}
-                = image_tag "emails/logo-c2-blue.png", {:style => "margin: 0 auto; float: none;"}
+                = link_to root_url do
+                  = image_tag "emails/logo-c2-blue.png", {:class => "center-no-float"}
           %td.expander
