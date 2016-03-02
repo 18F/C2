@@ -78,7 +78,7 @@
                                       %td{:class => 'icon-side-text'}
                                         %p{:class => 'styled-italic-side'}
                                           = t("mailer.new_attachment_email.header_html",
-                                            user_name: @attachment_user.full_name,
+                                            user_name: @comment.user.full_name,
                                             proposal_name: @proposal.name)
                                           %br/
                                           #{@proposal.created_at.strftime("%m/%d/%Y")} at #{@proposal.created_at.strftime("%I:%M %P")}
@@ -158,4 +158,3 @@
                                 = link_to root_url do
                                   = image_tag "emails/logo-c2-blue.png", {:class => "center-no-float"}
                           %td.expander
-      }
