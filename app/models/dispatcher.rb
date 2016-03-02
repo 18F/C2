@@ -66,7 +66,7 @@ class Dispatcher
     end
   end
 
-  def on_proposal_update(modifier = nil)
+  def on_proposal_update(modifier: nil, needs_reapproval: false)
   end
 
   def on_step_user_removal(removed_step_users)
