@@ -1,16 +1,7 @@
-%table.row
+%table.two-thirds-width.footer
   %tr
-    %td.wrapper.last
-      %table.twelve.columns
-        %tr
-          %td{:align => "center"}
-            %center
-              %p{:class => "text-center paragraph-link-font"}
-                = t("mailer.footer_html", feedback_url: feedback_url)
-        %tr
-          %td{:align => "center"}
-            %center
-              %p{:style => "text-align:center;"}
-                = link_to root_url do
-                  = image_tag "emails/logo-c2-blue.png", {:class => "center-no-float"}
-          %td.expander
+    %td.feedback-link
+      = t("mailer.footer_html", feedback_url: feedback_url)
+  %tr
+    %td
+      = image_tag "emails/logo-c2-blue.png", class: "footer-logo"
