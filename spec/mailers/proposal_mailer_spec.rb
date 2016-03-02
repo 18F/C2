@@ -6,7 +6,7 @@ describe ProposalMailer do
 
     it_behaves_like "a proposal email"
 
-    it "has the corect subject" do
+    it "has the correct subject" do
       expect(mail.subject).to eq("Request #{proposal.public_id}: #{proposal.name}")
     end
 
@@ -29,6 +29,20 @@ describe ProposalMailer do
     end
   end
 
+  describe "#proposal_updated_step_complete_needs_re_review" do
+    let(:proposal) { create(:proposal, :with_approver) }
+    let(:mail) { ProposalMailer.proposal_updated_step_complete_needs_re_review(proposal.individual_steps.first) }
+
+    it_behaves_like "a proposal email"
+  end
+
+  describe "#proposal_updated_step_complete" do
+    let(:proposal) { create(:proposal, :with_approver) }
+    let(:mail) { ProposalMailer.proposal_updated_step_complete(proposal.individual_steps.first) }
+
+    it_behaves_like "a proposal email"
+  end
+
   describe "#proposal_complete" do
     let(:mail) { ProposalMailer.proposal_complete(proposal) }
 
@@ -36,6 +50,7 @@ describe ProposalMailer do
   end
 
   private
+
   def proposal
     @proposal ||= create(:ncr_work_order, :is_emergency).proposal
   end
