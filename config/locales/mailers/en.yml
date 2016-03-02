@@ -11,7 +11,7 @@ en:
       "Have <a href='%{feedback_url}'>feedback</a>? We'd love to hear from you."
     reason: " with given reason '%{reason}'"
     new_attachment_email:
-      header_html: "<strong>%{user_name}</strong> added an attachment to the request: %{proposal_name}"
+      header_html: "Attachment added by %{user_name}"
       header: "%{user_name} added an attachment to the request: %{proposal_name}"
       subheader: "You can reply or review the full conversation on the request page."
       cta: "View request details"

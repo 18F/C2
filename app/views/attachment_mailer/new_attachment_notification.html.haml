@@ -42,8 +42,9 @@
                           %td
                             %h3{:style => 'text-align: center; max-width: 80%; margin: 0 auto;'}
                               = t("mailer.new_attachment_email.header_html",
-                              user_name: @attachment_user.full_name,
-                              proposal_name: @proposal.name)
+                                user_name: @attachment_user.full_name)
+                              %br/
+
                             %br
                           %td.expander
                 %table.row
@@ -51,34 +52,35 @@
                     %td.wrapper.last
                       %table.twelve.columns
                         %tr
-                          %td.panel
+                          %td.panel{:style => 'border-left: none; border-right: none; border-bottom: none; border-top: 10px solid #0744a4;'}
                             %table.row
                               %tr
                                 %td.wrapper
                                   %table.twelve.columns
                                     %tr
                                       %td
-                                        %h3
+                                        %h3{ :style => 'padding-left: 15px; padding-right: 15px; font-weight: 300;'}
                                           Activity
 
                                       %td.expander
                             %table.row
                               %tr
                                 %td.wrapper
-                                  %table.two.columns
+                                  %table.two.columns{:style => "width: 60px;"}
                                     %tr
                                       %td{:style => 'text-align: center;'}
-                                        = image_tag "emails/icon-clippedPage.png", class: "", :style => "float: none; margin: 0 auto; max-width: 40%; padding-right: 20px;"
+                                        = image_tag "emails/icon-clippedPage.png", class: "", :style => "float: none; margin: 0 auto; max-width: 40%;"
                                       %td.expander
                                 %td.wrapper.last
                                   %table.ten.columns
                                     %tr
-                                      %td{:style => "margin-top:40px;"}
-                                    %tr
-                                      %td
-                                        = t("mailer.new_attachment_email.header_html",
-                                          user_name: @attachment_user.full_name,
-                                          proposal_name: @proposal.name)
+                                      %td{:style => 'margin-top: 0px; margin-bottom: 0px;'}
+                                        %p{:style => 'margin-bottom: 0px; '}
+                                          = t("mailer.new_attachment_email.header_html",
+                                            user_name: @attachment_user.full_name,
+                                            proposal_name: @proposal.name)
+                                          %br/
+                                          #{@proposal.created_at.strftime("%m/%d/%Y")} at #{@proposal.created_at.strftime("%I:%M %P")}
                             %table.row
                               %tr
                                 %td.wrapper
@@ -97,7 +99,7 @@
                                   %table.ten.columns
                                     %tr
                                       %td{:style => 'padding-bottom: 0px;'}
-                                        %img{:src => "http://fakeimg.pl/500x300?text=FPO for image preview", :alt => "", :style => 'margin-top: 30px;'}/
+                                        %img{:src => "http://fakeimg.pl/500x300?text=FPO for image preview", :alt => "", :style => 'margin-top: 20px;'}/
                                       %td.expander
                             %table.row
                               %tr{:style => 'height: 20px;'}  
@@ -111,8 +113,9 @@
                               %table.twelve.columns
                                 %tr
                                   %td.sub-columns.center{:align => "center", :valign => "top"}
-                                    %center{ :style => 'margin-top: 30px; margin-bottom: 30px;' }
-                                      = t("mailer.new_attachment_email.subheader")
+                                    %center
+                                      %p{ :style => 'margin-top: 30px; margin-bottom: 30px; font-size: 18px; color: #555; max-width: 80%; text-align: center; line-height: 1.3em;' }
+                                        = t("mailer.new_attachment_email.subheader")
                 %table.row
                   %tr
                     %td.center{:align => "center"}
