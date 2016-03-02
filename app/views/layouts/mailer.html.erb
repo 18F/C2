@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>C2</title>
+  <meta name="viewport" content="width=device-width"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link rel="stylesheet" type="text/css" href="<%= stylesheet_url("mailer.css") %>">
+</head>
+<body class="c2-notification">
+  <%= yield %>
+  <hr>
+  <div id="footer" class="inset">
+    <p>
+    <%= t("mailer.feedback_footer_html", feedback_url: feedback_url) %>
+    </p>
+  </div>
+</body>
+</html>
