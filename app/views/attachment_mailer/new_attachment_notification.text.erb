@@ -1,0 +1,8 @@
+<%= t("mailer.new_attachment_email.header",
+  user_name: @attachment_user.full_name,
+  proposal_name: @proposal.name) %>
+
+<%= t("mailer.new_attachment_email.subheader") %>
+
+<%= t("mailer.new_attachment_email.cta") %>
+<%= proposal_url(@proposal) %>

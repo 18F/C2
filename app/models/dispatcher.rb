@@ -1,97 +1,98 @@
 class Dispatcher
-  include DispatcherMixin
-
-  def email_approver(approval)
-    send_notification_email(approval)
+  def initialize(proposal)
+    @proposal = proposal
   end
 
-  def email_observers(proposal)
-    active_observers = active_observers(proposal)
-    active_observers.each do |observer|
-      ObserverMailer.proposal_observer_email(observer.email_address, proposal).deliver_later
-    end
+  def email_step_user(step)
+    Mailer.actions_for_approver(step).deliver_later
   end
 
   def on_observer_added(observation, reason)
     ObserverMailer.on_observer_added(observation, reason).deliver_later
   end
 
-  def email_sent_confirmation(proposal)
-    Mailer.proposal_created_confirmation(proposal).deliver_later
-  end
-
-  def deliver_new_proposal_emails(proposal)
-    proposal.currently_awaiting_steps.each do |approval|
-      email_approver(approval)
+  def deliver_new_proposal_emails
+    proposal.currently_awaiting_steps.each do |step|
+      StepMailer.proposal_notification(step).deliver_later
     end
 
-    email_observers(proposal)
-    email_sent_confirmation(proposal)
+    email_observers
+    ProposalMailer.proposal_created_confirmation(proposal).deliver_later
   end
 
-  def deliver_attachment_emails(proposal)
+  def email_observers
+    active_observers.each do |observer|
+      ObserverMailer.proposal_observer_email(observer.email_address, proposal).deliver_later
+    end
+  end
+
+  def deliver_attachment_emails(attachment)
     proposal.subscribers_except_delegates.each do |user|
-      step = proposal.steps.find_by(user_id: user.id)
+      step = proposal.steps.find_by(user: user)
 
       if user_is_not_step_user?(step) || step_user_knows_about_proposal?(step)
-        Mailer.new_attachment_email(user.email_address, proposal).deliver_later
+        AttachmentMailer.new_attachment_notification(user.email_address, proposal, attachment).deliver_later
       end
     end
   end
 
-  def deliver_cancellation_emails(proposal, reason = nil)
-    cancellation_notification_recipients = active_step_users(proposal) + active_observers(proposal)
+  def deliver_cancellation_emails(reason = nil)
+    cancellation_notification_recipients = active_step_users + active_observers
 
     cancellation_notification_recipients.each do |recipient|
-      CancellationMailer.cancellation_email(recipient.email_address, proposal, reason).deliver_later
+      CancellationMailer.cancellation_notification(recipient.email_address, proposal, reason).deliver_later
     end
 
-    CancellationMailer.cancellation_confirmation(proposal).deliver_later
+    CancellationMailer.cancellation_confirmation(proposal, reason).deliver_later
   end
 
-  def on_approval_approved(approval)
-    if requires_approval_notice?(approval)
-      Mailer.approval_reply_received_email(approval).deliver_later
+  def step_complete(step)
+    if next_approval(step)
+      email_step_user(next_approval(step))
     end
 
-    email_observers(approval.proposal)
+    if requires_approval_notice?(step) && proposal.pending?
+      StepMailer.step_reply_received(step).deliver_later
+    elsif proposal.approved?
+      ProposalMailer.proposal_complete(step.proposal).deliver_later
+    end
+
+    email_observers
   end
 
   def on_comment_created(comment)
     comment.listeners.each do |user|
-      CommentMailer.comment_added_email(comment, user.email_address).deliver_later
+      CommentMailer.comment_added_notification(comment, user.email_address).deliver_later
     end
   end
 
-  def on_proposal_update(_proposal)
+  def on_proposal_update(modifier: nil, needs_reapproval: false)
   end
 
-  def on_approver_removal(proposal, removed_approvers)
-    removed_approvers.each do|approver|
-      Mailer.notification_for_subscriber(approver.email_address, proposal, "removed").deliver_later
+  def on_step_user_removal(removed_step_users)
+    removed_step_users.each do |user|
+      StepMailer.step_user_removed(user.email_address, proposal).deliver_later
     end
   end
 
   private
 
-  def active_step_users(proposal)
+  attr_reader :proposal
+
+  def active_step_users
     proposal.step_users.select do |user|
       proposal.is_active_step_user?(user)
     end
   end
 
-  def active_observers(proposal)
+  def active_observers
     proposal.observers.select do |observer|
       observer.role_on(proposal).active_observer?
     end
   end
 
-  def requires_approval_notice?(_approval)
+  def requires_approval_notice?(approval)
     true
-  end
-
-  def send_notification_email(approval)
-    Mailer.actions_for_approver(approval).deliver_later
   end
 
   def user_is_not_step_user?(step)
@@ -100,5 +101,11 @@ class Dispatcher
 
   def step_user_knows_about_proposal?(step)
     !step.pending?
+  end
+
+  def next_approval(approval)
+    if proposal.pending?
+      proposal.currently_awaiting_steps.first
+    end
   end
 end

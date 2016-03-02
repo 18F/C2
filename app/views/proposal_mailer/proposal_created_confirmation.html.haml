@@ -1,0 +1,33 @@
+%table.full-width.header
+  %tr
+    %td.hero
+    %td
+      = image_tag "emails/icon-page-circle.png", class: "header-icon"
+
+%table.two-thirds-width
+  %tr
+    %td.header
+      = t("mailer.proposal_mailer.proposal_created_confirmation.header_html", proposal_name: @proposal.name)
+
+%table.two-thirds-width
+  %tr
+    %td.subheader
+      = t("mailer.proposal_mailer.proposal_created_confirmation.subheader")
+
+= render partial: "mail_shared/proposal_button",
+  locals: { button_text: t("mailer.proposal_mailer.proposal_created_confirmation.cta") }
+
+%hr
+
+%table.two-thirds-width
+  %tr
+    %td.subheader
+      = t("mailer.proposal_mailer.proposal_created_confirmation.approver_subheader")
+
+%table.one-third-width
+  - @proposal.individual_steps.each_with_index do |step, index|
+    %tr
+      %td.subheader
+        = index + 1
+      %td.subheader
+        = step.user.full_name

@@ -1,5 +1,6 @@
 feature "Requester edits their NCR work order", :js do
   include ProposalSpecHelper
+  include EnvVarSpecHelper
 
   let(:organization) { create(:ncr_organization) }
   let(:work_order) do
@@ -16,7 +17,9 @@ feature "Requester edits their NCR work order", :js do
 
   before do
     work_order.setup_approvals_and_observers
-    login_as(requester)
+    with_env_var("NO_WELCOME_EMAIL", "true") do
+      login_as(requester)
+    end
   end
 
   scenario "preserves previously selected values in dropdowns" do
@@ -82,8 +85,7 @@ feature "Requester edits their NCR work order", :js do
 
   scenario "allows requester to change the approving official" do
     approver = create(:user, client_slug: "ncr")
-    old_approver = ncr_proposal.approvers.first
-    expect(Dispatcher).to receive(:on_approver_removal).with(ncr_proposal, [old_approver])
+
     visit "/ncr/work_orders/#{work_order.id}/edit"
     fill_in_selectized("ncr_work_order_approving_official", approver.email_address)
     click_on "Update"

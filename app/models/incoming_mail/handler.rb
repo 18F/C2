@@ -96,7 +96,7 @@ module IncomingMail
     end
 
     def send_comment_email(comment)
-      Dispatcher.on_comment_created(comment)
+      DispatchFinder.run(comment.proposal).on_comment_created(comment)
     end
   end
 end

@@ -1,7 +1,7 @@
 describe ObserverMailer do
   include MailerSpecHelper
 
-  describe ".on_observer_added" do
+  describe "#on_observer_added" do
     it "sends to the observer" do
       proposal = create(:proposal, :with_observer)
       observation = proposal.observations.first
@@ -36,7 +36,7 @@ describe ObserverMailer do
       proposal = create(:proposal)
       observer = create(:user)
       adder = create(:user)
-      reason = 'is an absolute ledge'
+      reason = "is an absolute ledge"
       proposal.add_observer(observer, adder, reason)
       observation = proposal.observations.first
 
@@ -48,7 +48,7 @@ describe ObserverMailer do
   describe ".proposal_observer_email" do
     let(:proposal) { create(:proposal) }
     let(:observer) { create(:user) }
-    let(:observation) { proposal.add_observer(observer) }
+    let(:observation) { create(:observation, user: observer, proposal: proposal) }
     let(:mail) { ObserverMailer.proposal_observer_email(observer.email_address, proposal) }
 
     it_behaves_like "a proposal email"

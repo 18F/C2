@@ -1,0 +1,160 @@
+%table.body
+  %tr
+    %td.center{:align => "center", :valign => "top"}
+      %center
+        / Start Header
+        %table.row.header
+          %tr
+            %td.center{:align => "center"}
+              %center
+                %table.container
+                  %tr
+                    %td.wrapper.last
+                      %table.twelve.columns
+                        %tr
+                          %td.sub-columns.center{:align => "center", :valign => "top"}
+                            %center
+                          %td.expander
+        %table.row
+          %tr
+            %td.center{:align => "center"}
+              %center
+                %table.container
+                  %tr
+                    %td.wrapper.last
+                      %table.twelve.columns
+                        %tr
+                          %td.sub-columns.center{:align => "center", :valign => "top"}
+                            %center
+                              = image_tag "emails/icon-pencil-circle.png", class: "no-float-image"
+                          %td.expander
+        
+          / End Header
+          / Start Container
+          %table.container
+            %tr
+              %td
+                %table.row
+                  %tr
+                    %td.wrapper.last
+                      %table.twelve.columns
+                        %tr
+                          %td
+                            %h3{:class => 'heading-center-top'}
+                              = t("mailer.comment_mailer.comment_added_notification.header",
+                                  user_name: @comment.user.full_name,
+                                  proposal_name: @proposal.name)
+                              %br/
+
+                            %br
+                          %td.expander
+                %table.row
+                  %tr
+                    %td.wrapper.last
+                      %table.twelve.columns
+                        %tr
+                          %td.panel{:class => 'panel-styled'}
+                            %table.row
+                              %tr
+                                %td.wrapper
+                                  %table.twelve.columns
+                                    %tr
+                                      %td
+                                        %h3{ :class => 'section-header-left'}
+                                          Activity
+
+                                      %td.expander
+                            %table.row
+                              %tr
+                                %td.wrapper{:class => 'no-bottom-padding'}
+                                  %table.two.columns{:class => "od-60px"}
+                                    %tr
+                                      %td{:class => 'text-center'}
+                                        = image_tag "emails/icon-speechBubble-blue.png", class: "image-sidebar"
+                                      %td.expander
+                                %td.wrapper.last{:class => 'no-bottom-padding'}
+                                  %table.ten.columns
+                                    %tr
+                                      %td{:class => 'icon-side-text'}
+                                        %p{:class => 'styled-italic-side'}
+                                          = t("mailer.new_attachment_email.header_html",
+                                            user_name: @comment.user.full_name,
+                                            proposal_name: @proposal.name)
+                                          %br/
+                                          #{@proposal.created_at.strftime("%m/%d/%Y")} at #{@proposal.created_at.strftime("%I:%M %P")}
+                            %table.row
+                              %tr
+                                %td.wrapper
+                                  %table.one.columns
+                                    %tr
+                                      %td
+                                      
+                                      %td.expander
+                                %td.wrapper{:class => 'left-border-two'}
+                                  %table.one.columns
+                                    %tr
+                                      %td
+                                      
+                                      %td.expander
+                                %td.wrapper.last{:class => 'no-bottom-padding'}
+                                  %table.ten.columns
+                                    %tr
+                                      %td{:class => 'no-bottom-padding'}
+                                        %p
+                                          = t("mailer.comment_mailer.comment_added_notification.comment_text",
+                                            comment_text: @comment.comment_text)
+                                      %td.expander
+                            %table.row
+                              %tr{:class => 'height-20'}  
+                %table.row
+                  %tr
+                    %td.wrapper.last{:class => 'padding-10'}
+                      %table.twelve.columns
+                        %tr
+                          %td.center{:align => "center", :valign => "top", :class => 'no-bottom-padding'}
+                            %center
+                              %p{ :class => 'paragraph-font-style' }
+                                = t("mailer.comment_mailer.comment_added_notification.subheader")
+                %table.row
+                  %tr
+                    %td.center{:align => "center"}
+                      %center
+                        %table.container
+                          %tr
+                            %td.wrapper.last
+                              %table.six.columns
+                                %tr
+                                  %td{:align => "center", :valign => "top"}
+                                    %table.medium-button.round
+                                      %tr
+                                        %td.sub-columns.center{:align => "center", :valign => "top"}
+                                          = link_to proposal_url(@proposal), target: "_blank" do
+                                            = t("mailer.comment_mailer.comment_added_notification.cta")
+                          %tr
+                            %td.wrapper.last
+                              %table.six.columns
+                                %tr
+                                  %td{:align => "center", :valign => "top"}
+                                    %table.medium-button.round
+                                      %tr
+                                        %td.sub-columns.center{:align => "center", :valign => "top"}
+                                          = link_to proposal_url(@proposal, anchor: "comments"), target: "_blank" do
+                                            = t("mailer.comment_mailer.comment_added_notification.cta_2")
+
+                          %td.expander
+                %table.row
+                  %tr
+                    %td.wrapper.last
+                      %table.twelve.columns
+                        %tr
+                          %td{:align => "center"}
+                            %center
+                              %p{:class => "text-center paragraph-link-font"}
+                                = t("mailer.footer_html", feedback_url: feedback_url)
+                        %tr
+                          %td{:align => "center"}
+                            %center
+                              %p{:style => "text-align:center;"}
+                                = link_to root_url do
+                                  = image_tag "emails/logo-c2-blue.png", {:class => "center-no-float"}
+                          %td.expander

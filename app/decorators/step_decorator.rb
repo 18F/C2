@@ -17,6 +17,10 @@ class StepDecorator < Draper::Decorator
     get_step_text(:execute_button)
   end
 
+  def noun
+    get_step_text(:noun)
+  end
+
   def waiting_text
     get_step_text("status.waiting")
   end

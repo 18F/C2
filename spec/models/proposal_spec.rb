@@ -378,8 +378,10 @@ describe Proposal do
   describe '#restart' do
     it "creates new API tokens" do
       proposal = create(:proposal, :with_parallel_approvers)
-      proposal.individual_steps.each do |approval|
-        create(:api_token, step: approval)
+      create(:ncr_work_order, proposal: proposal)
+
+      proposal.individual_steps.each do |step|
+        create(:api_token, step: step)
       end
 
       expect(proposal.api_tokens.size).to eq(2)
