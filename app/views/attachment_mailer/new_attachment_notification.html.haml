@@ -26,7 +26,7 @@
                         %tr
                           %td.sub-columns.center{:align => "center", :valign => "top"}
                             %center
-                              = image_tag "emails/icon-pencil-circle.png", class: "", :style => "float: none; margin: 20px auto 0;"
+                              = image_tag "emails/icon-pencil-circle.png", class: "no-float-image"
                           %td.expander
         
           / End Header
@@ -40,7 +40,7 @@
                       %table.twelve.columns
                         %tr
                           %td
-                            %h3{:style => 'text-align: center; max-width: 80%; margin: 0 auto;'}
+                            %h3{:class => 'heading-center-top'}
                               = t("mailer.new_attachment_email.header_html",
                                 user_name: @attachment_user.full_name)
                               %br/
@@ -52,30 +52,30 @@
                     %td.wrapper.last
                       %table.twelve.columns
                         %tr
-                          %td.panel{:style => 'border-left: none; border-right: none; border-bottom: none; border-top: 10px solid #0744a4;'}
+                          %td.panel{:class => 'panel-styled'}
                             %table.row
                               %tr
                                 %td.wrapper
                                   %table.twelve.columns
                                     %tr
                                       %td
-                                        %h3{ :style => 'padding-left: 15px; padding-right: 15px; font-weight: 300; margin-top: 5px;'}
+                                        %h3{ :class => 'section-header-left'}
                                           Activity
 
                                       %td.expander
                             %table.row
                               %tr
-                                %td.wrapper{:style => '    padding-bottom: 0px;'}
-                                  %table.two.columns{:style => "width: 60px;"}
+                                %td.wrapper{:class => 'no-bottom-padding'}
+                                  %table.two.columns{:class => "od-60px"}
                                     %tr
-                                      %td{:style => 'text-align: center;'}
-                                        = image_tag "emails/icon-clippedPage.png", class: "", :style => "float: none; margin: 0 auto; max-width: 40%;"
+                                      %td{:class => 'text-center'}
+                                        = image_tag "emails/icon-clippedPage.png", class: "image-sidebar"
                                       %td.expander
-                                %td.wrapper.last{:style => 'padding-bottom: 0px;'}
+                                %td.wrapper.last{:class => 'no-bottom-padding'}
                                   %table.ten.columns
                                     %tr
-                                      %td{:style => 'margin-top: 0px; margin-bottom: 0px; padding-bottom: 0px;'}
-                                        %p{:style => 'margin-bottom: 0px; font-style: italic; color: #888;'}
+                                      %td{:class => 'icon-side-text'}
+                                        %p{:class => 'styled-italic-side'}
                                           = t("mailer.new_attachment_email.header_html",
                                             user_name: @attachment_user.full_name,
                                             proposal_name: @proposal.name)
@@ -86,31 +86,31 @@
                                 %td.wrapper
                                   %table.one.columns
                                     %tr
-                                      %td{:style => 'text-align: center;'}
+                                      %td
                                       
                                       %td.expander
-                                %td.wrapper{:style => 'text-align: center; border-left: 2px solid #ccc;'}
+                                %td.wrapper{:class => 'left-border-two'}
                                   %table.one.columns
                                     %tr
                                       %td
                                       
                                       %td.expander
-                                %td.wrapper.last{:style => 'padding-bottom: 0px;'}
+                                %td.wrapper.last{:class => 'no-bottom-padding'}
                                   %table.ten.columns
                                     %tr
-                                      %td{:style => 'padding-bottom: 0px;'}
-                                        %img{:src => "http://fakeimg.pl/500x300?text=FPO for image preview", :alt => "", :style => 'margin-top: 20px; border: 1px solid #bbb;'}/
+                                      %td{:class => 'no-bottom-padding'}
+                                        %img{:src => "http://fakeimg.pl/500x300?text=FPO for image preview", :alt => "", :class => 'image-with-border'}/
                                       %td.expander
                             %table.row
-                              %tr{:style => 'height: 20px;'}  
+                              %tr{:class => 'height-20'}  
                 %table.row
                   %tr
-                    %td.wrapper.last{:style => 'padding: 10px;'}
+                    %td.wrapper.last{:class => 'padding-10'}
                       %table.twelve.columns
                         %tr
-                          %td.center{:align => "center", :valign => "top", :style => 'padding-bottom: 0px;'}
+                          %td.center{:align => "center", :valign => "top", :class => 'no-bottom-padding'}
                             %center
-                              %p{ :style => 'margin-top: 30px; margin-bottom: 30px; font-size: 18px; color: #555; max-width: 80%; text-align: center; line-height: 1.3em;' }
+                              %p{ :class => 'paragraph-font-style' }
                                 = t("mailer.new_attachment_email.subheader")
                 %table.row
                   %tr
