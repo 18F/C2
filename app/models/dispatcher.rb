@@ -26,7 +26,8 @@ class Dispatcher
 
   def email_observers
     active_observers.each do |observer|
-      ObserverMailer.observer_added_notification(observer, proposal).deliver_later
+      # TODO ActivityMailer here
+      #ObserverMailer.observer_added_notification(observer, proposal).deliver_later
     end
   end
 
