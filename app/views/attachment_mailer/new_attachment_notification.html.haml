@@ -26,7 +26,7 @@
                         %tr
                           %td.sub-columns.center{:align => "center", :valign => "top"}
                             %center
-                              = image_tag "emails/icon-pencil-circle.png", class: "header-icon", :style => "float: none; margin: 0 auto;"
+                              = image_tag "emails/icon-pencil-circle.png", class: "", :style => "float: none; margin: 20px auto 0;"
                           %td.expander
         %br
           / End Header
@@ -67,10 +67,12 @@
                                   %table.two.columns
                                     %tr
                                       %td{:style => 'text-align: center;'}
-                                        [X]
+                                        = image_tag "emails/icon-clippedPage.png", class: "", :style => "float: none; margin: 0 auto; max-width: 40%; padding-right: 20px;"
                                       %td.expander
                                 %td.wrapper.last
                                   %table.ten.columns
+                                    %tr
+                                      %td{:style => "margin-top:40px;"}
                                     %tr
                                       %td
                                         = t("mailer.new_attachment_email.header_html",
@@ -79,16 +81,22 @@
                             %table.row
                               %tr
                                 %td.wrapper
-                                  %table.two.columns
+                                  %table.one.columns
                                     %tr
                                       %td{:style => 'text-align: center;'}
-                                        |
+                                      
+                                      %td.expander
+                                %td.wrapper{:style => 'text-align: center; border-left: 1px solid #ccc;'}
+                                  %table.one.columns
+                                    %tr
+                                      %td
+                                      
                                       %td.expander
                                 %td.wrapper.last
                                   %table.ten.columns
                                     %tr
                                       %td
-                                        %img{:src => "http://fakeimg.pl/500x300?text=FPO for image preview", :alt => ""}/
+                                        %img{:src => "http://fakeimg.pl/500x300?text=FPO for image preview", :alt => "", :style => 'margin-top: 30px;'}/
                                       %td.expander
                 %table.row
                   %tr
