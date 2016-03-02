@@ -28,7 +28,7 @@
                             %center
                               = image_tag "emails/icon-pencil-circle.png", class: "", :style => "float: none; margin: 20px auto 0;"
                           %td.expander
-        %br
+        
           / End Header
           / Start Container
           %table.container
@@ -40,10 +40,11 @@
                       %table.twelve.columns
                         %tr
                           %td
-                            %h1{:style => 'text-align: center;'}
+                            %h3{:style => 'text-align: center; max-width: 80%; margin: 0 auto;'}
                               = t("mailer.new_attachment_email.header_html",
                               user_name: @attachment_user.full_name,
                               proposal_name: @proposal.name)
+                            %br
                           %td.expander
                 %table.row
                   %tr
@@ -86,18 +87,21 @@
                                       %td{:style => 'text-align: center;'}
                                       
                                       %td.expander
-                                %td.wrapper{:style => 'text-align: center; border-left: 1px solid #ccc;'}
+                                %td.wrapper{:style => 'text-align: center; border-left: 2px solid #ccc;'}
                                   %table.one.columns
                                     %tr
                                       %td
                                       
                                       %td.expander
-                                %td.wrapper.last
+                                %td.wrapper.last{:style => 'padding-bottom: 0px;'}
                                   %table.ten.columns
                                     %tr
-                                      %td
+                                      %td{:style => 'padding-bottom: 0px;'}
                                         %img{:src => "http://fakeimg.pl/500x300?text=FPO for image preview", :alt => "", :style => 'margin-top: 30px;'}/
                                       %td.expander
+                            %table.row
+                              %tr
+                                %br/            
                 %table.row
                   %tr
                     %td.center{:align => "center"}
