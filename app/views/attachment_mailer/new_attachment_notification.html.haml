@@ -59,23 +59,23 @@
                                   %table.twelve.columns
                                     %tr
                                       %td
-                                        %h3{ :style => 'padding-left: 15px; padding-right: 15px; font-weight: 300;'}
+                                        %h3{ :style => 'padding-left: 15px; padding-right: 15px; font-weight: 300; margin-top: 5px;'}
                                           Activity
 
                                       %td.expander
                             %table.row
                               %tr
-                                %td.wrapper
+                                %td.wrapper{:style => '    padding-bottom: 0px;'}
                                   %table.two.columns{:style => "width: 60px;"}
                                     %tr
                                       %td{:style => 'text-align: center;'}
                                         = image_tag "emails/icon-clippedPage.png", class: "", :style => "float: none; margin: 0 auto; max-width: 40%;"
                                       %td.expander
-                                %td.wrapper.last
+                                %td.wrapper.last{:style => 'padding-bottom: 0px;'}
                                   %table.ten.columns
                                     %tr
-                                      %td{:style => 'margin-top: 0px; margin-bottom: 0px;'}
-                                        %p{:style => 'margin-bottom: 0px; '}
+                                      %td{:style => 'margin-top: 0px; margin-bottom: 0px; padding-bottom: 0px;'}
+                                        %p{:style => 'margin-bottom: 0px; font-style: italic; color: #888;'}
                                           = t("mailer.new_attachment_email.header_html",
                                             user_name: @attachment_user.full_name,
                                             proposal_name: @proposal.name)
