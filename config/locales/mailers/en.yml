@@ -11,8 +11,8 @@ en:
       "Have <a href='%{feedback_url}'>feedback</a>? We'd love to hear from you."
     reason: " with given reason '%{reason}'"
     new_attachment_email:
-      header_html: "<strong>%{user_name}</strong> added an attachment to the request: %{proposal_name}"
-      header: "%{user_name} added an attachment to the request: %{proposal_name}"
+      header_html: "Attachment added by <span style='color: #333;'>%{user_name}</span>"
+      header: "Attachment added by %{user_name}"
       subheader: "You can reply or review the full conversation on the request page."
       cta: "View request details"
       cta_2: "Add comment"
@@ -61,6 +61,7 @@ en:
       cta: "View request details"
       cancellation_confirmation:
         header: "You cancelled this purchase request."
+        subsection: "Cancelled by %{name}."
         reason: "Reason for cancellation: %{reason}"
       cancellation_notification:
         header: "This purchase request has been cancelled by %{name}."
