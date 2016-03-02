@@ -9,6 +9,8 @@ en:
       We'd love to <a target='_blank' href='%{feedback_url}'>hear from you!</a>"
     footer_html:
       "Have <a href='%{feedback_url}'>feedback</a>? We'd love to hear from you."
+    footer:
+      "Have feedback? We'd love to hear from you at %{feedback_url}"
     reason: " with given reason '%{reason}'"
     new_attachment_email:
       header_html: "Attachment added by <span style='color: #333;'>%{user_name}</span>"
@@ -91,5 +93,7 @@ en:
         cta_2: "Add comment"
     observer_mailer:
       observer_added_confirmation:
-        header: "You have been added as a subscriber to this request by %{user_name}."
-
+        header: "You have been added as a subscriber to this request"
+      observer_removed_confirmation:
+        header: "You have been been removed as an observer for this purchase request."
+        body: "You don't need to take any additional action."
