@@ -1,7 +1,4 @@
 class Mailer < ApplicationMailer
-  layout "basic"
-  add_template_helper ValueHelper
-
   def actions_for_approver(step, alert_partial = nil)
     @show_step_actions = true
     to_email = step.user_email_address
@@ -17,12 +14,15 @@ class Mailer < ApplicationMailer
   def notification_for_subscriber(to_email, proposal, alert_partial = nil, step = nil)
     @step = step.decorate if step
     @alert_partial = alert_partial
+    @proposal = proposal.decorate
+    assign_threading_headers(@proposal)
 
-    send_proposal_email(
-      from_email: user_email_with_name(proposal.requester),
-      to_email: to_email,
-      proposal: proposal,
-      template_name: "notification_for_subscriber"
+    mail(
+      from: user_email_with_name(proposal.requester),
+      to: to_email,
+      subject: subject(proposal),
+      template_name: "notification_for_subscriber",
+      reply_to: reply_email(@proposal)
     )
   end
 
