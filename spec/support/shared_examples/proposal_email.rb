@@ -6,7 +6,7 @@ shared_examples "a proposal email" do
       "NOTIFICATION_FROM_EMAIL" => "reply@example.com",
       "NOTIFICATION_REPLY_TO" => "replyto@example.com"
     ) do
-      expect(mail.from).to eq(['reply@example.com'])
+      expect(mail.from).to eq(["reply@example.com"])
     end
   end
 

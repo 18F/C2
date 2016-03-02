@@ -1,7 +1,4 @@
 class ObserverMailer < ApplicationMailer
-  layout "mailer"
-  add_template_helper ValueHelper
-
   def observer_added_confirmation(observation, reason)
     @observation = observation
     @reason = reason
