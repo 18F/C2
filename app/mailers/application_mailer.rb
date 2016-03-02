@@ -12,7 +12,7 @@ class ApplicationMailer < ActionMailer::Base
 
   protected
 
-  def email_from_user(user)
+  def email_to_user(user)
     email_with_name(user.email_address, user.full_name)
   end
 
