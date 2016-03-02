@@ -7,8 +7,7 @@
 %table.two-thirds-width
   %tr 
     %td.header
-      = t("mailer.observer_mailer.observer_added_confirmation.header",
-        user_name: @observation.created_by.full_name)
+      = observer_text(@observation)
 
 %table.two-thirds-width
   %tr 

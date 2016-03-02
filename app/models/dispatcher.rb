@@ -11,6 +11,10 @@ class Dispatcher
     ObserverMailer.observer_added_confirmation(observation, reason).deliver_later
   end
 
+  def on_observer_removed(observation)
+    ObserverMailer.observer_removed_confirmation(observation).deliver_later
+  end
+
   def deliver_new_proposal_emails
     proposal.currently_awaiting_steps.each do |step|
       StepMailer.proposal_notification(step).deliver_later

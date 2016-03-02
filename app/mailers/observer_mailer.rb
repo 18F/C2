@@ -15,13 +15,14 @@ class ObserverMailer < ApplicationMailer
     )
   end
 
-  def observer_added_notification(user, proposal)
-    @proposal = proposal.decorate
+  def observer_removed_confirmation(observation)
+    @observation = observation
+    proposal = observation.proposal.decorate
 
     assign_threading_headers(proposal)
 
     mail(
-      to: email_to_user(user),
+      to: email_to_user(observation.user),
       subject: subject(proposal),
       from: default_sender_email,
       reply_to: reply_email(proposal)

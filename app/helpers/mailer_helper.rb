@@ -28,11 +28,10 @@ module MailerHelper
   end
 
   def observer_text(observation, reason = nil)
-    text = t("mailer.observer_mailer.observer_added_confirmation.header", user_name: observation.created_by.full_name)
-    if reason.present?
-      text += "\n"
-      text += "Reason: #{reason}."
-    end
+    text = t("mailer.observer_mailer.observer_added_confirmation.header")
+    add_author(text, observation.created_by)
+    add_reason(text, reason)
+    text + "."
   end
 
   def add_author(text, user)
