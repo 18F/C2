@@ -1,30 +1,30 @@
 %table.body
   %tr
-    %td.center{:align => "center", :valign => "top"}
+    %td.center{align: "center", valign: "top"}
       %center
         / Start Header
         %table.row.header
           %tr
-            %td.center{:align => "center"}
+            %td.center{align: "center"}
               %center
                 %table.container
                   %tr
                     %td.wrapper.last
                       %table.twelve.columns
                         %tr
-                          %td.sub-columns.center{:align => "center", :valign => "top"}
+                          %td.sub-columns.center{align: "center", valign: "top"}
                             %center
                           %td.expander
         %table.row
           %tr
-            %td.center{:align => "center"}
+            %td.center{align: "center"}
               %center
                 %table.container
                   %tr
                     %td.wrapper.last
                       %table.twelve.columns
                         %tr
-                          %td.sub-columns.center{:align => "center", :valign => "top"}
+                          %td.sub-columns.center{align: "center", valign: "top"}
                             %center
                               = image_tag "emails/icon-pencil-circle.png", class: "no-float-image"
                           %td.expander
@@ -40,7 +40,7 @@
                       %table.twelve.columns
                         %tr
                           %td
-                            %h3{:class => 'heading-center-top'}
+                            %h3{class: 'heading-center-top'}
                               = t("mailer.new_attachment_email.header_html",
                                 user_name: @attachment_user.full_name)
                               %br/
@@ -52,30 +52,30 @@
                     %td.wrapper.last
                       %table.twelve.columns
                         %tr
-                          %td.panel{:class => 'panel-styled'}
+                          %td.panel{class: 'panel-styled'}
                             %table.row
                               %tr
                                 %td.wrapper
                                   %table.twelve.columns
                                     %tr
                                       %td
-                                        %h3{ :class => 'section-header-left'}
+                                        %h3{ class: 'section-header-left'}
                                           Activity
 
                                       %td.expander
                             %table.row
                               %tr
-                                %td.wrapper{:class => 'no-bottom-padding'}
-                                  %table.two.columns{:class => "od-60px"}
+                                %td.wrapper{class: 'no-bottom-padding'}
+                                  %table.two.columns{class: "od-60px"}
                                     %tr
-                                      %td{:class => 'text-center'}
+                                      %td{class: 'text-center'}
                                         = image_tag "emails/icon-clippedPage.png", class: "image-sidebar"
                                       %td.expander
-                                %td.wrapper.last{:class => 'no-bottom-padding'}
+                                %td.wrapper.last{class: 'no-bottom-padding'}
                                   %table.ten.columns
                                     %tr
-                                      %td{:class => 'icon-side-text'}
-                                        %p{:class => 'styled-italic-side'}
+                                      %td{class: 'icon-side-text'}
+                                        %p{class: 'styled-italic-side'}
                                           = t("mailer.new_attachment_email.header_html",
                                             user_name: @attachment_user.full_name,
                                             proposal_name: @proposal.name)
@@ -89,52 +89,52 @@
                                       %td
                                       
                                       %td.expander
-                                %td.wrapper{:class => 'left-border-two'}
+                                %td.wrapper{class: 'left-border-two'}
                                   %table.one.columns
                                     %tr
                                       %td
                                       
                                       %td.expander
-                                %td.wrapper.last{:class => 'no-bottom-padding'}
+                                %td.wrapper.last{class: 'no-bottom-padding'}
                                   %table.ten.columns
                                     %tr
-                                      %td{:class => 'no-bottom-padding'}
-                                        %img{:src => "http://fakeimg.pl/500x300?text=Preview", :alt => "", :class => 'image-with-border'}/
+                                      %td{class: 'no-bottom-padding'}
+                                        %img{src: "http://fakeimg.pl/500x300?text=Preview", alt: "", class: 'image-with-border'}/
                                       %td.expander
                             %table.row
-                              %tr{:class => 'height-20'}  
+                              %tr{class: 'height-20'}  
                 %table.row
                   %tr
-                    %td.wrapper.last{:class => 'padding-10'}
+                    %td.wrapper.last{class: 'padding-10'}
                       %table.twelve.columns
                         %tr
-                          %td.center{:align => "center", :valign => "top", :class => 'no-bottom-padding'}
+                          %td.center{align: "center", valign: "top", class: 'no-bottom-padding'}
                             %center
-                              %p{ :class => 'paragraph-font-style' }
+                              %p{ class: 'paragraph-font-style' }
                                 = t("mailer.new_attachment_email.subheader")
                 %table.row
                   %tr
-                    %td.center{:align => "center"}
+                    %td.center{align: "center"}
                       %center
                         %table.container
                           %tr
                             %td.wrapper.last
                               %table.six.columns
                                 %tr
-                                  %td{:align => "center", :valign => "top"}
+                                  %td{align: "center", valign: "top"}
                                     %table.medium-button.round
                                       %tr
-                                        %td.sub-columns.center{:align => "center", :valign => "top"}
+                                        %td.sub-columns.center{align: "center", valign: "top"}
                                           = link_to proposal_url(@proposal), target: "_blank" do
                                             = t("mailer.new_attachment_email.cta")
                           %tr
                             %td.wrapper.last
                               %table.six.columns
                                 %tr
-                                  %td{:align => "center", :valign => "top"}
+                                  %td{align: "center", valign: "top"}
                                     %table.medium-button.round
                                       %tr
-                                        %td.sub-columns.center{:align => "center", :valign => "top"}
+                                        %td.sub-columns.center{align: "center", valign: "top"}
                                           = link_to proposal_url(@proposal, anchor: "comments"), target: "_blank" do
                                             = t("mailer.new_attachment_email.cta_2")
 
@@ -144,16 +144,16 @@
                     %td.wrapper.last
                       %table.twelve.columns
                         %tr
-                          %td{:align => "center"}
+                          %td{align: "center"}
                             %center
-                              %p{:class => "text-center paragraph-link-font"}
+                              %p{class: "text-center paragraph-link-font"}
                                 = t("mailer.footer_html", feedback_url: feedback_url)
                         %tr
-                          %td{:align => "center"}
+                          %td{align: "center"}
                             %center
-                              %p{:style => "text-align:center;"}
+                              %p{style: "text-align:center;"}
                                 = link_to root_url do
-                                  = image_tag "emails/logo-c2-blue.png", {:class => "center-no-float"}
+                                  = image_tag "emails/logo-c2-blue.png", {class: "center-no-float"}
                           %td.expander
 
 
