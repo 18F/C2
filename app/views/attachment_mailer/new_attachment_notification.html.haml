@@ -99,23 +99,19 @@
                                   %table.ten.columns
                                     %tr
                                       %td{:style => 'padding-bottom: 0px;'}
-                                        %img{:src => "http://fakeimg.pl/500x300?text=FPO for image preview", :alt => "", :style => 'margin-top: 20px;'}/
+                                        %img{:src => "http://fakeimg.pl/500x300?text=FPO for image preview", :alt => "", :style => 'margin-top: 20px; border: 1px solid #bbb;'}/
                                       %td.expander
                             %table.row
                               %tr{:style => 'height: 20px;'}  
                 %table.row
                   %tr
-                    %td.center{:align => "center"}
-                      %center
-                        %table.container
-                          %tr
-                            %td.wrapper.last
-                              %table.twelve.columns
-                                %tr
-                                  %td.sub-columns.center{:align => "center", :valign => "top"}
-                                    %center
-                                      %p{ :style => 'margin-top: 30px; margin-bottom: 30px; font-size: 18px; color: #555; max-width: 80%; text-align: center; line-height: 1.3em;' }
-                                        = t("mailer.new_attachment_email.subheader")
+                    %td.wrapper.last{:style => 'padding: 10px;'}
+                      %table.twelve.columns
+                        %tr
+                          %td.center{:align => "center", :valign => "top", :style => 'padding-bottom: 0px;'}
+                            %center
+                              %p{ :style => 'margin-top: 30px; margin-bottom: 30px; font-size: 18px; color: #555; max-width: 80%; text-align: center; line-height: 1.3em;' }
+                                = t("mailer.new_attachment_email.subheader")
                 %table.row
                   %tr
                     %td.center{:align => "center"}
