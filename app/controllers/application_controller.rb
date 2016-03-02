@@ -15,7 +15,15 @@ class ApplicationController < ActionController::Base
   before_action :check_disabled_client
   before_action :set_default_view_variables
 
+  after_action :track_action
+
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
+
+  def authenticate(scope = nil, block = nil)
+    constraints_for(:authenticate!, scope, block) do
+      yield
+    end
+  end
 
   protected
 
@@ -42,6 +50,10 @@ class ApplicationController < ActionController::Base
       exception = NotAuthorizedError.new("Client is disabled")
       fail exception
     end
+  end
+
+  def track_action
+    ahoy.track "Processed #{controller_name}##{action_name}", request.filtered_parameters
   end
 
   def render_disabled_client_message(message)
