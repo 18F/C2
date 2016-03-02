@@ -119,25 +119,24 @@
                         %table.container
                           %tr
                             %td.wrapper.last
-                              %table.twelve.columns
+                              %table.six.columns
                                 %tr
-                                  %td.sub-columns.center{:align => "center", :valign => "top"}
-                                    %center
-                                      = render partial: "mail_shared/proposal_button",
-                                        locals: { button_text: t("mailer.new_attachment_email.cta") }
-                %table.row
-                  %tr
-                    %td.center{:align => "center"}
-                      %center
-                        %table.container
+                                  %td{:align => "center", :valign => "top"}
+                                    %table.medium-button.round
+                                      %tr
+                                        %td.sub-columns.center{:align => "center", :valign => "top"}
+                                          = link_to proposal_url(@proposal), target: "_blank" do
+                                            = t("mailer.new_attachment_email.cta")
                           %tr
                             %td.wrapper.last
-                              %table.twelve.columns
+                              %table.six.columns
                                 %tr
-                                  %td.sub-columns.center{:align => "center", :valign => "top"}
-                                    %center
-                                      = render partial: "mail_shared/proposal_comment_button",
-                                        locals: { button_text: t("mailer.new_attachment_email.cta_2") }
+                                  %td{:align => "center", :valign => "top"}
+                                    %table.medium-button.round
+                                      %tr
+                                        %td.sub-columns.center{:align => "center", :valign => "top"}
+                                          = link_to proposal_url(@proposal, anchor: "comments"), target: "_blank" do
+                                            = t("mailer.new_attachment_email.cta_2")
 
                           %td.expander
                 = render partial: "mail_shared/footer"
