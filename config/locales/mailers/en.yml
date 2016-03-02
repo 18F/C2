@@ -89,6 +89,6 @@ en:
         cta: "View request details"
         cta_2: "Add comment"
     observer_mailer:
-      on_observer_added:
-        body: "You have been added as a subscriber to this request"
+      observer_added_confirmation:
+        header: "You have been added as a subscriber to this request by %{user_name}."
 
