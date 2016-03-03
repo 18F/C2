@@ -3,7 +3,7 @@
                   user_name: @attachment_user.full_name,
                   proposal_name: @proposal.name)
 - panel_action_date = @proposal.created_at.strftime("%m/%d/%Y") + " at " + @proposal.created_at.strftime("%I:%M %P")
-- panel_image = "http://fakeimg.pl/500x300?text=Preview"
+- panel_image = "http://fakeimg.pl/900x300?text=Preview"
 - cta_subheader = t("mailer.new_attachment_email.subheader")
 
 %table.body
@@ -24,21 +24,26 @@
               / End Hero
               
               / Start Panel Wrapper
+              = render partial: "mail_shared/panel/header"
+
+              = render partial: "mail_shared/panel/row_description", locals: { icon: icon, action: panel_action, datetime: panel_action_date}
+
+              = render partial: "mail_shared/panel/row_content", locals: { image: panel_image}
+
+
+
               %table.row
                 %tr
-                  %td.panel.panel-styled
-
-                    = render partial: "mail_shared/panel/header"
-                     
-                    = render partial: "mail_shared/panel/row_description", locals: { icon: icon, action: panel_action, datetime: panel_action_date}
-                    
-                    = render partial: "mail_shared/panel/row_content", locals: { image: panel_image}
-                    
-                    %table.row
-                      %tr{class: "height-20"}  
-                        / Padding-bottom fix
-
-                  / Panel Content End
+                  %td.wrapper.last.no-padding-top
+                    %table.twelve.columns
+                      %tr
+                        %td.panel.panel-styled-content.sub-grid
+                          
+                          %table.row
+                            %tr{class: "height-20"}  
+                              / Padding-bottom fix
+                        %td.expander
+                    / Panel Content End
 
               / Start Call To Action
               
@@ -48,19 +53,5 @@
              
               = render partial: "mail_shared/call_to_action/button", locals: { link_path: proposal_url(@proposal, anchor: "comments"), link_text: t("mailer.new_attachment_email.cta_2")}
               
-              %table.row
-                %tr
-                  %td.wrapper.last
-                    %table.twelve.columns
-                      %tr
-                        %td{align: "center"}
-                          %center
-                            %p{class: "text-center paragraph-link-font"}
-                              = t("mailer.footer_html", feedback_url: feedback_url)
-                      %tr
-                        %td{align: "center"}
-                          %center
-                            %p{style: "text-align:center;"}
-                              = link_to root_url do
-                                = image_tag "emails/logo-c2-blue.png", {class: "center-no-float"}
-                  %td.expander
+              = render partial: "mail_shared/footer_foundation"
+
