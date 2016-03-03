@@ -35,27 +35,40 @@ class ProposalMailer < ApplicationMailer
     )
   end
 
-  def proposal_updated_step_complete_needs_re_review(step, modifier = nil)
-    @step = step.decorate
-    unless @step.api_token
-      @step.create_api_token
-    end
-    @proposal = step.proposal.decorate
+  def proposal_updated_no_action_required(user, proposal, modifier = nil)
+    @proposal = proposal.decorate
     @modifier = modifier || NullUser.new
     assign_threading_headers(@proposal)
 
     mail(
-      to: step.user.email_address,
+      to: user.email_address,
       subject: subject(@proposal),
       from: default_sender_email,
       reply_to: reply_email(@proposal)
     )
   end
 
-  def proposal_updated_step_complete(step, modifier = nil)
-    @proposal = step.proposal.decorate
+  def proposal_updated_needs_re_review(user, proposal, modifier = nil)
+    @proposal = proposal.decorate
     @modifier = modifier || NullUser.new
     assign_threading_headers(@proposal)
+
+    mail(
+      to: user.email_address,
+      subject: subject(@proposal),
+      from: default_sender_email,
+      reply_to: reply_email(@proposal)
+    )
+  end
+
+  def proposal_updated_while_step_pending(step)
+    @step = step.decorate
+    @proposal = step.proposal.decorate
+    assign_threading_headers(@proposal)
+
+    unless @step.api_token
+      @step.create_api_token
+    end
 
     mail(
       to: step.user.email_address,
