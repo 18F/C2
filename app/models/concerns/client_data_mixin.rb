@@ -76,10 +76,10 @@ module ClientDataMixin
     def csv_fields
       field_values = []
       self.class.column_names.sort.each do |attribute|
-        if self.class.foreign_key_to_method_map[attribute]
-          field_values << send(self.class.foreign_key_to_method_map[attribute])
+        field_values << if self.class.foreign_key_to_method_map[attribute]
+          send(self.class.foreign_key_to_method_map[attribute])
         else
-          field_values << send(attribute)
+          send(attribute)
         end
       end
       field_values
