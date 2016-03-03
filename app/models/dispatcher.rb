@@ -20,14 +20,13 @@ class Dispatcher
       StepMailer.proposal_notification(step).deliver_later
     end
 
-    email_observers
+    email_observers("proposal created")
     ProposalMailer.proposal_created_confirmation(proposal).deliver_later
   end
 
-  def email_observers
+  def email_observers(activity)
     active_observers.each do |observer|
-      # TODO ActivityMailer here
-      #ObserverMailer.observer_added_notification(observer, proposal).deliver_later
+      ActivityMailer.activity_notification(observer, proposal, activity).deliver_later
     end
   end
 
@@ -62,7 +61,7 @@ class Dispatcher
       ProposalMailer.proposal_complete(step.proposal).deliver_later
     end
 
-    email_observers
+    email_observers("step completed")
   end
 
   def on_comment_created(comment)
