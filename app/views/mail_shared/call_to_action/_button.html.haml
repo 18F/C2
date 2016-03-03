@@ -1,12 +1,11 @@
-%table.row
-  %tr
-    %td
-      %table.six.columns
-        %tr
-          %td{align: "center", valign: "top"}
-            %table.medium-button.round
-              %tr
-                %td.sub-columns.last.center{align: "center", valign: "top"}
-                  = link_to link_path, target: "_blank" do
-                    = link_text
-    %td.expander
+%tr
+  %td
+    %table.six.columns.offset-by-three
+      %tr
+        %td{align: "center", valign: "top"}
+          %table.medium-button.round
+            %tr
+              %td.sub-columns.last.center{align: "center", valign: "top"}
+                = link_to link_path, target: "_blank" do
+                  = link_text
+  %td.expander
