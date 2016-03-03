@@ -50,62 +50,59 @@
                           %td.expander
                 %table.row
                   %tr
-                    %td.wrapper.last
-                      %table.twelve.columns
+                    %td.panel{class: "panel-styled"}
+                      %table.row
                         %tr
-                          %td.panel{class: "panel-styled"}
-                            %table.row
+                          %td.wrapper
+                            %table.twelve.columns
                               %tr
-                                %td.wrapper
-                                  %table.twelve.columns
-                                    %tr
-                                      %td
-                                        %h3{ class: "section-header-left"}
-                                          Activity
+                                %td
+                                  %h3{ class: "section-header-left"}
+                                    Activity
 
-                                      %td.expander
-                            %table.row
+                                %td.expander
+                      %table.row
+                        %tr
+                          %td.wrapper{class: "no-bottom-padding"}
+                            %table.two.columns{class: "od-60px"}
                               %tr
-                                %td.wrapper{class: "no-bottom-padding"}
-                                  %table.two.columns{class: "od-60px"}
-                                    %tr
-                                      %td{class: "text-center"}
-                                        = image_tag "emails/icon-speechBubble-blue.png", class: "image-sidebar"
-                                      %td.expander
-                                %td.wrapper.last{class: "no-bottom-padding"}
-                                  %table.ten.columns
-                                    %tr
-                                      %td{class: "icon-side-text"}
-                                        %p{class: "styled-italic-side"}
-                                          = t("mailer.new_attachment_email.header_html",
-                                            user_name: @comment.user.full_name,
-                                            proposal_name: @proposal.name)
-                                          %br/
-                                          #{@proposal.created_at.strftime("%m/%d/%Y")} at #{@proposal.created_at.strftime("%I:%M %P")}
-                            %table.row
+                                %td{class: "text-center"}
+                                  = image_tag "emails/icon-speechBubble-blue.png", class: "image-sidebar"
+                                %td.expander
+                          %td.wrapper.last{class: "no-bottom-padding"}
+                            %table.ten.columns
                               %tr
-                                %td.wrapper
-                                  %table.one.columns
-                                    %tr
-                                      %td
-                                      
-                                      %td.expander
-                                %td.wrapper{class: "left-border-two"}
-                                  %table.one.columns
-                                    %tr
-                                      %td
-                                      
-                                      %td.expander
-                                %td.wrapper.last{class: "no-bottom-padding"}
-                                  %table.ten.columns
-                                    %tr
-                                      %td{class: "no-bottom-padding"}
-                                        %p
-                                          = t("mailer.comment_mailer.comment_added_notification.comment_text",
-                                            comment_text: @comment.comment_text)
-                                      %td.expander
-                            %table.row
-                              %tr{class: "height-20"}  
+                                %td{class: "icon-side-text"}
+                                  %p{class: "styled-italic-side"}
+                                    = t("mailer.new_attachment_email.header_html",
+                                      user_name: @comment.user.full_name,
+                                      proposal_name: @proposal.name)
+                                    %br/
+                                    #{@proposal.created_at.strftime("%m/%d/%Y")} at #{@proposal.created_at.strftime("%I:%M %P")}
+                      %table.row
+                        %tr
+                          %td.wrapper
+                            %table.one.columns
+                              %tr
+                                %td
+                                
+                                %td.expander
+                          %td.wrapper{class: "left-border-two"}
+                            %table.one.columns
+                              %tr
+                                %td
+                                
+                                %td.expander
+                          %td.wrapper.last{class: "no-bottom-padding"}
+                            %table.ten.columns
+                              %tr
+                                %td{class: "no-bottom-padding"}
+                                  %p
+                                    = t("mailer.comment_mailer.comment_added_notification.comment_text",
+                                      comment_text: @comment.comment_text)
+                                %td.expander
+                      %table.row
+                        %tr{class: "height-20"}  
                 %table.row
                   %tr
                     %td.wrapper.last{class: "padding-10"}
