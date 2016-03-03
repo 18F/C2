@@ -21,18 +21,20 @@ C2 is a fairly typical Rails application, so the setup is straightforward:
     # Will print "DONE" if successful. NOTE: This will delete any existing records in your C2 database and add a few seed records.
     ./script/bootstrap
     ```
-
+1. Per [the Twelve-Factor guidelines](http://12factor.net/config), all necessary configuration should be possible through environment variables. See [`.env.example`](../.env.example) for the full list.
 1. [Register an application on MyUSA](https://alpha.my.usa.gov/applications/new).
-    * Set the 'Redirect uri' field to `[your_domain]/auth/myusa/callback`. For example, http://localhost:3000/auth/myusa/callback.
+    * Give the application a **Name** that gives MyUSA admins a good idea of what it is and who set it up; e.g. `Janet's laptop C2`
+    * Set the **Url** field to the URL for your setup. If you're running the app locally, the default URL is `http://localhost:3000/`
+    * Set the **Redirect uri** field to `[your_C2_url]/auth/myusa/callback` . For example, with the default URL: `http://localhost:3000/auth/myusa/callback`
     * In the "Select the API Scopes..." section, select:
         * Email Address
         * First Name
         * Last Name
-    * Note that the MyUSA app will need to be whitelisted on their end if you need other people to log into it. This matters for staging servers more than local development, so you probably don't need to worry about it.
+    * By default, new applications on MyUSA have a status of **Private**, which means that only the MyUSA user who registered the app can log in. If you need other people to log into your C2 setup, then your app will need a status of **Public**. (This matters for staging servers more than local development, so you probably don't need to worry about it.)
 
-1. Add the required `MYUSA_*` values in your [`.env`](../.env.example).
+    Since Public apps need to be approved by MyUSA admins before they're usable, it's best to leave the status as _Private_ when setting up, then [change it to _Public_ later](#myusa-wont-let-other-users-log-in).
 
-Per [the Twelve-Factor guidelines](http://12factor.net/config), all necessary configuration should be possible through environment variables. See [`.env.example`](../.env.example) for the full list.
+1. Once you've registered the application, MyUSA will give you two consumer key strings for saving: the _Public Key_ and _Secret Key_. Add these to your [`.env`](../.env.example), setting `MYUSA_KEY` to the Public Key and `MYUSA_SECRET` to the Secret Key.
 
 ### Troubleshooting
 
@@ -51,6 +53,10 @@ Per [the Twelve-Factor guidelines](http://12factor.net/config), all necessary co
 rbenv rehash
 gem install foreman
 ```
+
+#### MyUSA won't let other users log in
+
+This is likely because your MyUSA app registration is marked _Private_. To get _Public_ status, go to your [developer applications list](https://alpha.my.usa.gov/authorizations) and click **Request Public Access**; this will send a message to the MyUSA admins. (If your application's status hasn't changed after one business day, try mailing [the MyUSA team](mailto:myusa@gsa.gov); if you're an 18F employee, ask in the [`#myusa`](https://18f.slack.com/messages/myusa/) Slack channel.)
 
 ## Starting the application
 
@@ -123,4 +129,3 @@ or just [visit the project on Gemnasium](https://gemnasium.com/18F/C2).
 ```bash
 rake search:import NPROCS=2 FORCE=y
 ```
-
