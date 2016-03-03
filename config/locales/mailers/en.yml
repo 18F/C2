@@ -92,7 +92,7 @@ en:
         cta: "View request details"
         cta_2: "Add comment"
     observer_mailer:
-      observer_added_confirmation:
+      observer_added_notification:
         header: "You have been added as a subscriber to this request"
       observer_removed_confirmation:
         header: "You have been been removed as an observer for this purchase request."
