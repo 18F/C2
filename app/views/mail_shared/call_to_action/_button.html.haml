@@ -1,12 +1,9 @@
 %tr
-  %td
-    %table.row
-      %tr
-        %td.offset-by-three{align: "center", valign: "top"}
-          %table.six.button-wrap
-            %tr
-              %td.sub-columns.last.center{align: "center", valign: "top"}
-                %div.button-div
-                  = link_to link_path, target: "_blank" do
-                    = link_text
-  %td.expander
+  %td{align: "center"}
+    / [if !mso]><!--
+    %table.columns.six{align: "center"}
+      %td{align: "center"}
+        %div.button-div
+          = link_to link_path, target: "_blank" do
+            = link_text
+    / <![endif]
