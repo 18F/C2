@@ -28,7 +28,7 @@ module MailerHelper
   end
 
   def observer_text(observation, reason = nil)
-    text = t("mailer.observer_mailer.on_observer_added.body")
+    text = t("mailer.observer_mailer.observer_added_notification.header")
     add_author(text, observation.created_by)
     add_reason(text, reason)
     text + "."

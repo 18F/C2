@@ -8,7 +8,11 @@ class Dispatcher
   end
 
   def on_observer_added(observation, reason)
-    ObserverMailer.on_observer_added(observation, reason).deliver_later
+    ObserverMailer.observer_added_notification(observation, reason).deliver_later
+  end
+
+  def on_observer_removed(observation)
+    ObserverMailer.observer_removed_confirmation(observation).deliver_later
   end
 
   def deliver_new_proposal_emails
@@ -16,13 +20,13 @@ class Dispatcher
       StepMailer.proposal_notification(step).deliver_later
     end
 
-    email_observers
+    email_observers("proposal created")
     ProposalMailer.proposal_created_confirmation(proposal).deliver_later
   end
 
-  def email_observers
+  def email_observers(activity)
     active_observers.each do |observer|
-      ObserverMailer.proposal_observer_email(observer.email_address, proposal).deliver_later
+      ActivityMailer.activity_notification(observer, proposal, activity).deliver_later
     end
   end
 
@@ -57,7 +61,7 @@ class Dispatcher
       ProposalMailer.proposal_complete(step.proposal).deliver_later
     end
 
-    email_observers
+    email_observers("step completed")
   end
 
   def on_comment_created(comment)

@@ -30,7 +30,7 @@ class CancellationMailer < ApplicationMailer
     user = @proposal.requester
 
     mail(
-      to: email_with_name(user.email_address, user.full_name),
+      to: email_to_user(user),
       subject: subject(@proposal),
       from: default_sender_email,
       reply_to: reply_email(@proposal)

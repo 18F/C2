@@ -1,0 +1,24 @@
+%table.full-width.header
+  %tr 
+    %td.hero
+    %td 
+      = image_tag "emails/icon-pencil-circle.png", class: "header-icon"
+
+%table.two-thirds-width
+  %tr 
+    %td.header
+      = observer_text(@observation)
+
+%table.two-thirds-width
+  %tr 
+    %td.subheader
+      = @reason
+
+= render partial: "mail_shared/proposal_attributes",
+  locals: { proposal: @proposal }
+
+= render partial: "mail_shared/proposal_button",
+  locals: { button_text: t("mailer.comment_mailer.comment_added_notification.cta") }
+
+= render partial: "mail_shared/proposal_comment_button",
+  locals: { button_text: t("mailer.comment_mailer.comment_added_notification.cta_2") }

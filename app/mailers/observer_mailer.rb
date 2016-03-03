@@ -1,28 +1,43 @@
 class ObserverMailer < ApplicationMailer
-  def on_observer_added(observation, reason)
+  def observer_added_notification(observation, reason)
     @observation = observation
     @reason = reason
-    observer = @observation.user
-    @proposal =  observation.proposal.decorate
+    observer = observation.user
+    @proposal = observation.proposal.decorate
+
     assign_threading_headers(@proposal)
 
     mail(
-      to: observer.email_address,
-      from: default_sender_email,
+      to: email_to_user(observer),
       subject: subject(@proposal),
+      from: observation_added_from(observation),
       reply_to: reply_email(@proposal)
     )
   end
 
-  def proposal_observer_email(to_email, proposal)
-    @proposal = proposal.decorate
-    assign_threading_headers(@proposal)
+  def observer_removed_confirmation(observation)
+    @observation = observation
+    proposal = observation.proposal.decorate
+
+    assign_threading_headers(proposal)
 
     mail(
-      to: to_email,
+      to: email_to_user(observation.user),
+      subject: subject(proposal),
       from: default_sender_email,
-      subject: subject(@proposal),
-      reply_to: reply_email(@proposal)
+      reply_to: reply_email(proposal)
     )
+  end
+
+  private
+
+  def observation_added_from(observation)
+    adder = observation.created_by
+
+    if adder
+      user_email_with_name(adder)
+    else
+      default_sender_email
+    end
   end
 end

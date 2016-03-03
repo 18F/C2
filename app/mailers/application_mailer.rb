@@ -13,6 +13,10 @@ class ApplicationMailer < ActionMailer::Base
 
   protected
 
+  def email_to_user(user)
+    email_with_name(user.email_address, user.full_name)
+  end
+
   def subject(proposal)
     "Request #{proposal.public_id}: #{proposal.name}"
   end
