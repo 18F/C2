@@ -1,9 +1,10 @@
+- last == true ? last_class = "last" : last_class = ""
 %table.row
   %tr
     %td.wrapper.last.no-padding-top
       %table.twelve.columns
         %tr
-          %td.panel.panel-styled-content.sub-grid
+          %td.panel.panel-styled-content.sub-grid{class: last_class}
             %table
               %tr
                 %td.one.sub-columns
