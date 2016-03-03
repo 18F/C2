@@ -77,10 +77,10 @@ module ClientDataMixin
       field_values = []
       self.class.column_names.sort.each do |attribute|
         field_values << if self.class.foreign_key_to_method_map[attribute]
-          send(self.class.foreign_key_to_method_map[attribute])
-        else
-          send(attribute)
-        end
+                          send(self.class.foreign_key_to_method_map[attribute])
+                        else
+                          send(attribute)
+                        end
       end
       field_values
     end
