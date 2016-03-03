@@ -194,6 +194,7 @@ describe ProposalsController do
       es_execute_with_retries 3 do
         get :download, text: "Work Order", format: "csv"
         expect(response.body).to include "Work Order 29"
+        expect(response.body).to include proposals.last.client_data.approving_official.display_name
         expect(response.headers["Content-Type"]).to eq "text/csv"
         expect(response.body).not_to include("\n\n")
       end
