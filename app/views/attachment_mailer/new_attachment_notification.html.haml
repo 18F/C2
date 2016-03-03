@@ -15,39 +15,23 @@
 
         / Start Container
         %table.container
-          %tr
-            %td
-              / Start Header
-              = render partial: "mail_shared/email_header/hero_text", locals: { text: t("mailer.new_attachment_email.header_html", user_name: @attachment_user.full_name)}
-              / End Header
+          = render partial: "mail_shared/email_header/hero_text", locals: { text: t("mailer.new_attachment_email.header_html", user_name: @attachment_user.full_name)}
               
-              / Start Panel Wrapper
-              = render partial: "mail_shared/panel/header"
+          / Start Panel Wrapper
+          = render partial: "mail_shared/panel/header"
+          
+          = render partial: "mail_shared/panel/row_description", locals: { icon: icon, action: panel_action, datetime: panel_action_date}
+          
+          = render partial: "mail_shared/panel/row_content", locals: { image: panel_image, last: true}
 
-              = render partial: "mail_shared/panel/row_description", locals: { icon: icon, action: panel_action, datetime: panel_action_date}
+          = render partial: "mail_shared/panel/vertical_buffer"
+          / End Panel Wrapper
 
-              = render partial: "mail_shared/panel/row_content", locals: { image: panel_image, last: true}
-
-
-
-              %table.row
-                %tr
-                  %td.wrapper.last.no-padding-top
-                    %table.twelve.columns
-                      %tr
-                        %td.panel.panel-styled-content.sub-grid
-                          
-                          %table.row
-                            %tr{class: "height-20"}  
-                              / Padding-bottom fix
-                        %td.expander
-                    / Panel Content End
-
-              / Start Call To Action
-              
-              = render partial: "mail_shared/call_to_action/subheader", locals: { subheader: cta_subheader}
-          / End of table.container tr
+          = render partial: "mail_shared/call_to_action/subheader", locals: { subheader: cta_subheader}
+          
           = render partial: "mail_shared/call_to_action/button", locals: { link_path: proposal_url(@proposal), link_text: t("mailer.new_attachment_email.cta")}
+          
+          = render partial: "mail_shared/generic/vertical_buffer"
          
           = render partial: "mail_shared/call_to_action/button", locals: { link_path: proposal_url(@proposal, anchor: "comments"), link_text: t("mailer.new_attachment_email.cta_2")}
               
