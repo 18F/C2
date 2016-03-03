@@ -1,6 +1,8 @@
 class Report < ActiveRecord::Base
   belongs_to :user
 
+  visitable # Used to track user visit associated with processed report
+
   def client_query
     ProposalFieldedSearchQuery.new(query[user.client_model_slug])
   end

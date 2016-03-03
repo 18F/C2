@@ -6,4 +6,9 @@ ActiveAdmin.setup do |config|
   config.localize_format = :long
   config.register_stylesheet "active_admin/hstore_editor.css"
   config.register_javascript "active_admin/hstore_editor.js"
+  config.namespace :admin do |admin|
+    admin.build_menu do |menu|
+      menu.add label: "Tracking", priority: 99
+    end
+  end
 end
