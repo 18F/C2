@@ -5,13 +5,12 @@
         %td.wrapper.last.no-padding-top
           %table.twelve.columns
             %tr
-              %td.panel.panel-styled-content.sub-grid
-
-                %table
-                  %tr
-                    %td.one.sub-columns.hide-for-small
+              %td.panel.panel-styled-content.sub-grid{valign: "top"}
+                %table{valign: "top"}
+                  %tr{valign: "top"}
+                    %td.one.sub-columns.hide-for-small{valign: "top"}
                       = image_tag icon, class: "image-sidebar"
-                    %td.ten.sub-columns
+                    %td.ten.sub-columns{valign: "top"}
                       %p.styled-italic-side
                         = action.html_safe
                         %br/
