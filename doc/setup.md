@@ -21,7 +21,13 @@ C2 is a fairly typical Rails application, so the setup is straightforward:
     # Will print "DONE" if successful. NOTE: This will delete any existing records in your C2 database and add a few seed records.
     ./script/bootstrap
     ```
-1. Per [the Twelve-Factor guidelines](http://12factor.net/config), all necessary configuration should be possible through environment variables. See [`.env.example`](../.env.example) for the full list.
+1. Per [the Twelve-Factor guidelines](http://12factor.net/config), all necessary configuration should be possible through environment variables. (See [`.env.example`](../.env.example) for the full list.)
+
+    Your configuration will go in the `.env` file. Create it by copying `.env.example`:
+
+    ```bash
+    cp .env.example .env
+    ```
 1. [Register an application on MyUSA](https://alpha.my.usa.gov/applications/new).
     * Give the application a **Name** that gives MyUSA admins a good idea of what it is and who set it up; e.g. `Janet's laptop C2`
     * Set the **Url** field to the URL for your setup. If you're running the app locally, the default URL is `http://localhost:3000/`
