@@ -1,23 +1,27 @@
-/ [if !mso]><!--
-%table
-  %tr.row
-    %td.wrapper.last.show-for-small
-      %table.twelve.columns
-        %tr
-          %td
-            %h3.heading-center-top
-              = text
-              %br/
-/ <![endif]
-%table
-  %tr
-    %td.wrapper.last.row.hide-for-small
-      %table.twelve.columns
-        %tr
-          %td
-            %h3.text-center
-              = text
-              %br/
+%tr
+  %td
+    / [if !mso]><!--
+    %table.centered
+      %tr.row
+        %td.wrapper.last.show-for-small
+          %table.twelve.columns
+            %tr
+              %td
+                %h3.heading-center-top
+                  = text
+                  %br/
+%tr
+  %td
+    / <![endif]
+    %table.centered
+      %tr
+        %td.wrapper.last.row.hide-for-small
+          %table.twelve.columns
+            %tr
+              %td
+                %h3.text-center
+                  = text
+                  %br/
 
-            %br
-          %td.expander
+                %br
+              %td.expander
