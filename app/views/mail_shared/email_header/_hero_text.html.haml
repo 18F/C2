@@ -1,10 +1,19 @@
-%table.row
+%table.row.show-for-small
   %tr
     %td.wrapper.last
       %table.twelve.columns
         %tr
           %td
-            %h3{class: "heading-center-top"}
+            %h3.heading-center-top.text-center
+              = text
+              %br/
+%table.row.hide-for-small
+  %tr
+    %td.wrapper.last
+      %table.twelve.columns
+        %tr
+          %td
+            %h3.text-center
               = text
               %br/
 
