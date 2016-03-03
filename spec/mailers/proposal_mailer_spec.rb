@@ -49,6 +49,14 @@ describe ProposalMailer do
     it_behaves_like "a proposal email"
   end
 
+  describe "#proposal_updated_while_step_pending" do
+    let(:proposal) { create(:proposal, :with_approver) }
+    let(:step) { proposal.individual_steps.first }
+    let(:mail) { ProposalMailer.proposal_updated_while_step_pending(step) }
+
+    it_behaves_like "a proposal email"
+  end
+
   private
 
   def proposal

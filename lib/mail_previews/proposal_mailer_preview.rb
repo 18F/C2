@@ -11,12 +11,16 @@ class ProposalMailerPreview < ActionMailer::Preview
     ProposalMailer.proposal_complete(proposal)
   end
 
-  def proposal_updated_step_complete
-    ProposalMailer.proposal_updated_step_complete(step)
+  def proposal_updated_no_action_required
+    ProposalMailer.proposal_updated_no_action_required
   end
 
-  def proposal_updated_step_complete_needs_re_review
-    ProposalMailer.proposal_updated_step_complete_needs_re_review(step)
+  def proposal_updated_while_step_pending
+    ProposalMailer.proposal_updated_while_step_pending(step)
+  end
+
+  def proposal_updated_needs_re_review
+    ProposalMailer.proposal_updated_needs_re_review(user, proposal)
   end
 
   private
@@ -27,5 +31,9 @@ class ProposalMailerPreview < ActionMailer::Preview
 
   def step
     Steps::Approval.last
+  end
+
+  def user
+    User.last
   end
 end
