@@ -696,7 +696,7 @@ a:active {
 }
 
 a:visited {
-    color: #2ba6cb!important;
+    color: #0744a4!important;
 }
 
 h1 a,
@@ -753,7 +753,8 @@ table.button td,
 table.tiny-button td,
 table.small-button td,
 table.medium-button td,
-table.large-button td {
+table.large-button td,
+div.button-div {
     display: block;
     width: auto!important;
     text-align: center;
@@ -784,7 +785,8 @@ table.button td a,
 table.tiny-button td a,
 table.small-button td a,
 table.medium-button td a,
-table.large-button td a {
+table.large-button td a,
+div.button-div a {
     font-weight: normal;
     text-decoration: none;
     font-family: Helvetica, Arial, sans-serif;
@@ -811,13 +813,17 @@ table.large-button td a {
 
 table.button:hover td,
 table.button:visited td,
-table.button:active td {
+table.button:active td,
+div.button-div:hover,
+div.button-div:active {
     background: #0744a4!important;
 }
 
 table.button:hover td a,
 table.button:visited td a,
-table.button:active td a {
+table.button:active td a
+div.button-div:hover  a,
+div.button-div:active  a {
     color: #fff!important;
 }
 
@@ -825,6 +831,7 @@ table.button:hover td,
 table.tiny-button:hover td,
 table.small-button:hover td,
 table.medium-button:hover td,
+div.button-div:hover,
 table.large-button:hover td {
     background: #0744a4!important;
 }
@@ -843,8 +850,10 @@ table.medium-button:active td a,
 table.medium-button td a:visited,
 table.large-button:hover td a,
 table.large-button:active td a,
-table.large-button td a:visited {
-    color: #ffffff!important;
+table.large-button td a:visited,
+div.button-div:hover a,
+div.button-div:active a{
+    color: #ffffff !important;
 }
 
 table.secondary td {
