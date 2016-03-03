@@ -1,15 +1,16 @@
 %table.row
   %tr
-    %td.wrapper.last.no-bottom-padding
-      %table.two.columns.od-60px
+    %td.wrapper.last.no-padding-top
+      %table.twelve.columns
         %tr
-          %td.text-center
-            = image_tag icon, class: "image-sidebar"
-    %td.wrapper.last.no-bottom-padding
-      %table.ten.columns
-        %tr
-          %td.icon-side-text
-            %p.styled-italic-side
-              = action
-              %br/
-              = datetime
+          %td.panel.panel-styled-content.sub-grid
+
+            %table
+              %tr
+                %td.two.sub-columns
+                  = image_tag icon, class: "image-sidebar"
+                %td.ten.sub-columns
+                  %p.styled-italic-side
+                    = action
+                    %br/
+                    = datetime
