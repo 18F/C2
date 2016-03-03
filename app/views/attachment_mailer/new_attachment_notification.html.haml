@@ -3,7 +3,7 @@
                   user_name: @attachment_user.full_name,
                   proposal_name: @proposal.name)
 - panel_action_date = @proposal.created_at.strftime("%m/%d/%Y") + " at " + @proposal.created_at.strftime("%I:%M %P")
-- panel_image = "http://fakeimg.pl/900x300?text=Preview"
+- panel_image = image_path("emails/preview.png")
 - cta_subheader = t("mailer.new_attachment_email.subheader")
 
 %table.body
@@ -46,10 +46,10 @@
               / Start Call To Action
               
               = render partial: "mail_shared/call_to_action/subheader", locals: { subheader: cta_subheader}
-
-              = render partial: "mail_shared/call_to_action/button", locals: { link_path: proposal_url(@proposal), link_text: t("mailer.new_attachment_email.cta")}
-             
-              = render partial: "mail_shared/call_to_action/button", locals: { link_path: proposal_url(@proposal, anchor: "comments"), link_text: t("mailer.new_attachment_email.cta_2")}
+          / End of table.container tr
+          = render partial: "mail_shared/call_to_action/button", locals: { link_path: proposal_url(@proposal), link_text: t("mailer.new_attachment_email.cta")}
+         
+          = render partial: "mail_shared/call_to_action/button", locals: { link_path: proposal_url(@proposal, anchor: "comments"), link_text: t("mailer.new_attachment_email.cta_2")}
               
-              = render partial: "mail_shared/footer_foundation"
+          = render partial: "mail_shared/footer_foundation"
 
