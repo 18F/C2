@@ -11,13 +11,13 @@
     %td.center{align: "center", valign: "top"}
       %center
         = render partial: "mail_shared/email_header/topbar"
+        = render partial: "mail_shared/email_header/icon"
 
         / Start Container
         %table.container
           %tr
             %td
               / Start Header
-              = render partial: "mail_shared/email_header/icon"
               = render partial: "mail_shared/email_header/hero_text", locals: { text: t("mailer.new_attachment_email.header_html", user_name: @attachment_user.full_name)}
               / End Header
               
