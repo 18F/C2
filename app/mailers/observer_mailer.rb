@@ -1,5 +1,5 @@
 class ObserverMailer < ApplicationMailer
-  def observer_added_confirmation(observation, reason)
+  def observer_added_notification(observation, reason)
     @observation = observation
     @reason = reason
     observer = observation.user

@@ -8,7 +8,7 @@ class Dispatcher
   end
 
   def on_observer_added(observation, reason)
-    ObserverMailer.observer_added_confirmation(observation, reason).deliver_later
+    ObserverMailer.observer_added_notification(observation, reason).deliver_later
   end
 
   def on_observer_removed(observation)

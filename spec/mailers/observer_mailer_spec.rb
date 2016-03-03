@@ -1,12 +1,12 @@
 describe ObserverMailer do
   include MailerSpecHelper
 
-  describe "#observer_added_confirmation" do
+  describe "#observer_added_notification" do
     it "sends to the observer" do
       proposal = create(:proposal, :with_observer)
       observation = proposal.observations.first
 
-      mail = ObserverMailer.observer_added_confirmation(observation, nil)
+      mail = ObserverMailer.observer_added_notification(observation, nil)
 
       observer = observation.user
       expect(mail.to).to eq([observer.email_address])
@@ -20,7 +20,7 @@ describe ObserverMailer do
       observation = proposal.observations.first
       expect(observation.created_by).to eq(adder)
 
-      mail = ObserverMailer.observer_added_confirmation(observation, nil)
+      mail = ObserverMailer.observer_added_notification(observation, nil)
       expect(mail.body.encoded).to include("to this request by #{adder.full_name}")
     end
 
@@ -28,7 +28,7 @@ describe ObserverMailer do
       proposal = create(:proposal, :with_observer)
       observation = proposal.observations.first
 
-      mail = ObserverMailer.observer_added_confirmation(observation, nil)
+      mail = ObserverMailer.observer_added_notification(observation, nil)
       expect(mail.body.encoded).to_not include("to this request by ")
     end
 
@@ -40,7 +40,7 @@ describe ObserverMailer do
       proposal.add_observer(observer, adder, reason)
       observation = proposal.observations.first
 
-      mail = ObserverMailer.observer_added_confirmation(observation, reason)
+      mail = ObserverMailer.observer_added_notification(observation, reason)
       expect(mail.body.encoded).to include("with given reason '#{reason}'")
     end
   end
