@@ -29,22 +29,24 @@ describe ProposalMailer do
     end
   end
 
-  describe "#proposal_updated_step_complete_needs_re_review" do
-    let(:proposal) { create(:proposal, :with_approver) }
-    let(:mail) { ProposalMailer.proposal_updated_step_complete_needs_re_review(proposal.individual_steps.first) }
-
-    it_behaves_like "a proposal email"
-  end
-
-  describe "#proposal_updated_step_complete" do
-    let(:proposal) { create(:proposal, :with_approver) }
-    let(:mail) { ProposalMailer.proposal_updated_step_complete(proposal.individual_steps.first) }
-
-    it_behaves_like "a proposal email"
-  end
-
   describe "#proposal_complete" do
     let(:mail) { ProposalMailer.proposal_complete(proposal) }
+
+    it_behaves_like "a proposal email"
+  end
+
+  describe "#proposal_updated_no_action_required" do
+    let(:proposal) { create(:proposal, :with_approver) }
+    let(:user) { proposal.requester }
+    let(:mail) { ProposalMailer.proposal_updated_no_action_required(user, proposal) }
+
+    it_behaves_like "a proposal email"
+  end
+
+  describe "#proposal_updated_needs_re_review" do
+    let(:proposal) { create(:proposal, :with_approver) }
+    let(:user) { proposal.requester }
+    let(:mail) { ProposalMailer.proposal_updated_needs_re_review(user, proposal) }
 
     it_behaves_like "a proposal email"
   end
