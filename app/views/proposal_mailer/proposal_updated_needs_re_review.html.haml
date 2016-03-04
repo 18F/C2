@@ -1,0 +1,7 @@
+= t("mailer.proposal_mailer.proposal_updated_needs_re_review.header")
+= t("mailer.proposal_mailer.proposal_updated_needs_re_review.subheader",
+  modifier_name: @modifier.full_name,
+  proposal_name: @proposal.name)
+
+= render partial: "mail_shared/proposal_button",
+  locals: { button_text: t("mailer.proposal_mailer.proposal_updated_needs_re_review.cta") }

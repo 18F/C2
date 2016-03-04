@@ -50,14 +50,18 @@ en:
       proposal_completed:
         header: "Request completed"
         subheader: "All of your request's steps have been completed"
-      proposal_updated_step_complete:
+      proposal_updated_no_action_required:
         header: "This request was modified, but no action is required"
         subheader: "%{modifier_name} updated %{proposal_name} as follows:"
         cta: "View request details"
-      proposal_updated_step_complete_needs_re_review:
+      proposal_updated_while_step_pending:
+        header: "A purchase request awaiting your approval has been modified."
+        subheader: "Please review the request and the changes."
+        cta: "Add comment"
+      proposal_updated_needs_re_review:
         header:
-          "This purchase request has been modified. Because it was already
-          completed, C2 is routing it for review again."
+          "This purchase request has been modified and needs to be reapproved. C2 is
+          routing it for re-approval now. Please review the changes."
         subheader: "%{modifier_name} updated %{proposal_name} as follows:"
         cta: "View request details"
     cancellation_mailer:
