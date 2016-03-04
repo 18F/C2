@@ -14,7 +14,7 @@
     %td.center{align: "center", valign: "top"}
       %center
         = render partial: "mail_shared/email_header/topbar"
-        = render partial: "mail_shared/email_header/icon"
+        = render partial: "mail_shared/email_header/icon", locals: { icon: header_icon}
 
         / Start Container
         %table.container
