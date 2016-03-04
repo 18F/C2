@@ -73,13 +73,25 @@ module ClientDataMixin
       @_fk_map ||= Hash[reflect_on_all_associations(:belongs_to).map { |a| [a.foreign_key, a.name] }]
     end
 
+    def is_association_column?(column_name)
+      self.class.foreign_key_to_method_map.has_key?(column_name)
+    end
+
+    def association_value(column_name)
+      send(self.class.foreign_key_to_method_map[column_name])
+    end
+
+    def column_value(column_name)
+      send(column_name)
+    end
+
     def csv_fields
       field_values = []
-      self.class.column_names.sort.each do |attribute|
-        field_values << if self.class.foreign_key_to_method_map[attribute]
-                          send(self.class.foreign_key_to_method_map[attribute])
+      self.class.column_names.sort.each do |column_name|
+        field_values << if is_association_column?(column_name)
+                          association_value(column_name)
                         else
-                          send(attribute)
+                          column_value(column_name)
                         end
       end
       field_values
