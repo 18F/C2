@@ -36,4 +36,12 @@ describe Ncr::Organization do
       expect(organization).not_to be_whsc
     end
   end
+
+  describe "#to_s" do
+    it "stringifies to code_and_name" do
+      organization = build(:ncr_organization, code: Ncr::Organization::OOL_CODES.first)
+
+      expect(organization.to_s).to eq(organization.code_and_name)
+    end
+  end
 end

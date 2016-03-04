@@ -12,6 +12,10 @@ module Ncr
     validates :code, presence: true, uniqueness: true
     validates :name, presence: true
 
+    def to_s
+      code_and_name
+    end
+
     def code_and_name
       "#{code} #{name}"
     end
