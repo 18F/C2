@@ -1,7 +1,7 @@
 - header_icon = "emails/icon-pencil-circle.png"
-- icon = "emails/button-x-circled.png"
 - top_head = t("mailer.cancellation_mailer.cancellation_notification.header", 
                 name: @proposal.requester.full_name)
+- panel_icon = "emails/button-x-circled.png"
 - panel_action = t("mailer.cancellation_mailer.cancellation_notification.subheader")
 - panel_action_date = @proposal.created_at.strftime("%m/%d/%Y")+' at '+@proposal.created_at.strftime("%I:%M %P")
 - panel_text = t("mailer.cancellation_mailer.cancellation_notification.reason", reason: @reason)
@@ -21,7 +21,7 @@
           / Start Panel Wrapper
           = render partial: "mail_shared/panel/header"
           
-          = render partial: "mail_shared/panel/row_description", locals: { icon: icon, action: panel_action, datetime: panel_action_date}
+          = render partial: "mail_shared/panel/row_description", locals: { icon: panel_icon, action: panel_action, datetime: panel_action_date}
           
           = render partial: "mail_shared/panel/row_content_text", locals: { text: panel_text, last: true}
 
