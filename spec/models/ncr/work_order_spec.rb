@@ -30,6 +30,19 @@ describe Ncr::WorkOrder do
     end
   end
 
+  describe "#as_indexed_json" do
+    it "serializes associations" do
+      whsc_org = create(:whsc_organization)
+      work_order = create(:ncr_work_order, ncr_organization: whsc_org)
+
+      indexable = work_order.as_json
+      indexable[:ncr_organization] = whsc_org.as_json
+      indexable[:approving_official] = work_order.approving_official.display_name
+
+      expect(work_order.as_indexed_json).to eq(indexable)
+    end
+  end
+
   describe "#editable?" do
     it "is true" do
       work_order = build(:ncr_work_order)
