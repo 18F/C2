@@ -31,15 +31,7 @@ module Searchable
     end
 
     def self.rebuild_index
-      stager = Elasticsearch::Rails::HA::IndexStager.new(self.to_s)
-      indexer = Elasticsearch::Rails::HA::ParallelIndexer.new(
-        klass: self.to_s,
-        idx_name: stager.tmp_index_name,
-        nprocs: ENV.fetch("NPROCS", 1),
-        batch_size: ENV.fetch("BATCH", 100),
-        force: true,
-        verbose: false,
-      )
+      stager = index_stager
       indexer.run
       stager.alias_stage_to_tmp_index && stager.promote
       __elasticsearch__.refresh_index!
@@ -53,6 +45,23 @@ module Searchable
       else
         return ransack(*args, &block)
       end
+    end
+
+    private
+
+    def self.index_stager
+      Elasticsearch::Rails::HA::IndexStager.new(self.to_s)
+    end
+
+    def self.indexer
+      Elasticsearch::Rails::HA::ParallelIndexer.new(
+        klass: self.to_s,
+        idx_name: stager.tmp_index_name,
+        nprocs: ENV.fetch("NPROCS", 1),
+        batch_size: ENV.fetch("BATCH", 100),
+        force: true,
+        verbose: false
+      )
     end
   end
 end
