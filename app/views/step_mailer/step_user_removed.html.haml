@@ -1,18 +1,25 @@
-%table.full-width.header
-  %tr
-    %td.hero
-    %td
-      = image_tag "emails/icon-pencil-circle.png", class: "header-icon"
+- header_icon = "emails/icon-pencil-circle.png"
+- top_head = t("mailer.step_mailer.step_user_removed.header")
+- cta_subheader = t("mailer.step_mailer.step_user_removed.subheader")
+- proposal_link_text = t("mailer.step_mailer.step_user_removed.cta")
 
-%table.two-thirds-width
-  %tr
-    %td.header
-      = t("mailer.step_mailer.step_user_removed.header")
 
-%table.two-thirds-width
+%table.body
   %tr
-    %td.subheader
-      = t("mailer.step_mailer.step_user_removed.subheader")
+    %td.center{align: "center", valign: "top"}
+      %center
+        = render partial: "mail_shared/email_header/topbar"
+        = render partial: "mail_shared/email_header/icon", locals: { icon: header_icon}
 
-= render partial: "mail_shared/proposal_button",
-  locals: { button_text: t("mailer.step_mailer.step_user_removed.cta") }
+        / Start Container
+        %table.container
+          = render partial: "mail_shared/email_header/hero_text", locals: { text: top_head}
+
+          = render partial: "mail_shared/call_to_action/subheader", locals: { subheader: cta_subheader}
+          
+          = render partial: "mail_shared/call_to_action/button", locals: { link_path: proposal_url(@proposal), 
+            link_text: proposal_link_text}
+          
+          = render partial: "mail_shared/call_to_action/subheader", locals: { subheader: ''}
+
+          = render partial: "mail_shared/footer_foundation"
