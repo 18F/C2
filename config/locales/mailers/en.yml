@@ -34,6 +34,10 @@ en:
         header: "A new request submitted by %{requester_name} needs your %{step_type_noun}"
         cta: "Add comment"
     proposal_mailer:
+      generic_approval_name: 
+        step_1: "Approver"
+        step_2: "Budget Tier 1"
+        step_3: "Budget Tier 2"
       emergency_proposal_created_confirmation:
         header: "Your emergency request has been authorized."
         subheader: "As a reminder, here's what was approved:"

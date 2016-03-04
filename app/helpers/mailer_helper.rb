@@ -45,4 +45,5 @@ module MailerHelper
       text << t("mailer.reason", reason: reason)
     end
   end
+
 end
