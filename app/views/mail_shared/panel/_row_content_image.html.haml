@@ -1,0 +1,17 @@
+- last == true ? last_class = "last" : last_class = ""
+%tr
+  %td
+    %table.row
+      %tr
+        %td.wrapper.last.no-padding-top
+          %table.twelve.columns
+            %tr{valign: "top"}
+              %td.panel.panel-styled-content.sub-grid{class: last_class, valign: "top"}
+                %table{valign: "top"}
+                  %tr{valign: "top"}
+                    %td.half.sub-columns.hide-for-small
+                    %td.half.sub-columns.left-border-two.hide-for-small
+                    %td.ten.sub-columns{style: "text-align: center;", align: "center"}
+                      %img{src: image, alt: "", class: "image-with-border"}/
+              %td.expander
+
