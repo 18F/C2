@@ -3,7 +3,7 @@
     %center
       - @proposal.individual_steps.each_with_index do |step, index|
         - icon_name = 'emails/numbers/icon-number-' + (index + 1).to_s + '.png'
-        %table.six.columns
+        %table.eight.columns
           %tr
             %td.two.sub-columns.last
               = image_tag icon_name
