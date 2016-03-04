@@ -35,9 +35,7 @@ describe Ncr::WorkOrder do
       whsc_org = create(:whsc_organization)
       work_order = create(:ncr_work_order, ncr_organization: whsc_org)
 
-      indexable = work_order.as_json
-      indexable[:ncr_organization] = whsc_org.as_json
-      indexable[:approving_official] = work_order.approving_official.display_name
+      indexable = work_order.as_json({include: [:ncr_organization, :approving_official]})
 
       expect(work_order.as_indexed_json).to eq(indexable)
     end

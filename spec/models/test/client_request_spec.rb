@@ -12,8 +12,7 @@ describe Test::ClientRequest do
     it "serializes associations automatically" do
       client_request = build(:test_client_request)
 
-      indexable = client_request.as_json
-      indexable[:approving_official] = client_request.approving_official.as_json
+      indexable = client_request.as_json({include: [:approving_official]})
 
       expect(client_request.as_indexed_json).to eq(indexable)
     end
