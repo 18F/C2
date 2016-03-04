@@ -1,0 +1,8 @@
+%table.one-third-width
+  - @proposal.individual_steps.each_with_index do |step, index|
+    - icon_name = 'emails/numbers/icon-number-' + (index + 1).to_s + '.png'
+    %tr
+      %td.subheader
+        = image_tag icon_name
+      %td.subheader
+        = step.user.full_name
