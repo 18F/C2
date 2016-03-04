@@ -89,6 +89,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def to_s
+    display_name
+  end
+
   def last_requested_proposal
     proposals.order("created_at DESC").first
   end

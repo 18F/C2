@@ -161,6 +161,12 @@ describe User do
 
       expect(user.display_name).to eq "george.jetson@example.com"
     end
+
+    it "stringifies with #display_name" do
+      user = create(:user)
+
+      expect(user.to_s).to eq(user.display_name)
+    end
   end
 
   describe "#requires_profile_attention?" do
