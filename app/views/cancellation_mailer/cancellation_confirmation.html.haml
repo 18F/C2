@@ -1,5 +1,6 @@
-- icon = "emails/button-x-circled.png"
+- header_icon = "emails/icon-pencil-circle.png"
 - top_head = t("mailer.cancellation_mailer.cancellation_confirmation.header")
+- panel_icon = "emails/button-x-circled.png"
 - panel_action = t("mailer.cancellation_mailer.cancellation_confirmation.subsection", 
                                       name: User.find(@proposal.requester_id).full_name,
                                       proposal_name: @proposal.name)
@@ -21,7 +22,7 @@
           / Start Panel Wrapper
           = render partial: "mail_shared/panel/header"
           
-          = render partial: "mail_shared/panel/row_description", locals: { icon: icon, action: panel_action, datetime: panel_action_date}
+          = render partial: "mail_shared/panel/row_description", locals: { icon: panel_icon, action: panel_action, datetime: panel_action_date}
           
           = render partial: "mail_shared/panel/row_content_text", locals: { text: panel_text, last: true}
 
