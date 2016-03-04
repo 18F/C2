@@ -72,5 +72,9 @@ module ClientDataMixin
     def csv_fields
       self.class.column_names.sort.map { |attribute| send(attribute) }
     end
+
+    def as_indexed_json
+      as_json
+    end
   end
 end

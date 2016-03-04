@@ -59,6 +59,13 @@ module Ncr
       ]
     end
 
+    def as_indexed_json
+      hashed = as_json
+      hashed[:ncr_organization] = ncr_organization.as_json
+      hashed[:approving_official] = approving_official.display_name
+      hashed
+    end
+
     def fields_for_display
       Ncr::WorkOrderFields.new(self).display
     end
