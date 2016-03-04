@@ -31,8 +31,17 @@ module Searchable
     end
 
     def self.rebuild_index
-      __elasticsearch__.create_index! force: true
-      __elasticsearch__.import
+      stager = Elasticsearch::Rails::HA::IndexStager.new(self.to_s)
+      indexer = Elasticsearch::Rails::HA::ParallelIndexer.new(
+        klass: self.to_s,
+        idx_name: stager.tmp_index_name,
+        nprocs: ENV.fetch("NPROCS", 1),
+        batch_size: ENV.fetch("BATCH", 100),
+        force: true,
+        verbose: false,
+      )
+      indexer.run
+      stager.alias_stage_to_tmp_index && stager.promote
       __elasticsearch__.refresh_index!
     end
 
