@@ -1,8 +1,8 @@
 - header_icon = "emails/icon-pencil-circle.png"
-- icon = "emails/icon-speech_bubble-blue.png"
 - top_head = t("mailer.comment_mailer.comment_added_notification.header",
                                   user_name: @comment.user.full_name,
                                   proposal_name: @proposal.name)
+- panel_icon = "emails/icon-speech_bubble-blue.png"
 - panel_action = t("mailer.new_attachment_email.header_html",
                                       user_name: @comment.user.full_name,
                                       proposal_name: @proposal.name)
@@ -25,7 +25,7 @@
           / Start Panel Wrapper
           = render partial: "mail_shared/panel/header"
 
-          = render partial: "mail_shared/panel/row_description", locals: { icon: icon, action: panel_action, datetime: panel_action_date}
+          = render partial: "mail_shared/panel/row_description", locals: { icon: panel_icon, action: panel_action, datetime: panel_action_date}
 
           = render partial: "mail_shared/panel/row_content_text", locals: { text: panel_text, last: true}
 
