@@ -11,7 +11,7 @@
         requester_name: @proposal.requester.full_name,
         step_type_noun: @step.noun)
 
-= render partial: "mail_shared/proposal_attributes",
+= render partial: "mail_shared/panel/proposal_attributes",
   locals: { proposal: @proposal }
 
 %table.two-thirds-width
