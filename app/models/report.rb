@@ -1,5 +1,6 @@
 class Report < ActiveRecord::Base
   belongs_to :user
+  has_many :subscriptions, class_name: ScheduledReport, foreign_key: :report_id
 
   visitable # Used to track user visit associated with processed report
 
@@ -45,6 +46,14 @@ class Report < ActiveRecord::Base
     fielded_query = query[user.client_model_slug]
     params = ActionController::Parameters.new(text: text_query, client_param_name => fielded_query)
     ProposalListingQuery.new(user, params).query
+  end
+
+  def subscribed?(some_user)
+    subscriptions.where(user: some_user).any?
+  end
+
+  def subscription_for(some_user)
+    subscriptions.where(user: some_user)
   end
 
   def self.sql_for_user(user)

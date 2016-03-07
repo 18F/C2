@@ -52,4 +52,13 @@ describe Report do
 
     expect(proposal_data.rows.map(&:id)).to match_array(proposals.map(&:id))
   end
+
+  it "#subscriptions" do
+    owner = create(:user, client_slug: "test")
+    report = create(:report, query: { text: "something" }.to_json, user: owner)
+    scheduled_report = create(:scheduled_report, frequency: "daily", user: owner, report: report)
+
+    expect(report.subscribed?(owner)).to eq(true)
+    expect(report.subscription_for(owner)).to eq([scheduled_report])
+  end
 end
