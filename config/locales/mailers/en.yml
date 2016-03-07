@@ -20,6 +20,9 @@ en:
       cta: "View request details"
       cta_2: "Add comment"
     step_mailer:
+      step_next_approved:
+        body: "<span class='name-color'>%{full_name}</span> has approved your request. C2 has sent it to the next person."
+        cta: "View request details"
       step_reply_received:
         body: "The approver, %{full_name}, %{status} request %{public_id}."
         details: "Please see below for more details."
@@ -40,7 +43,8 @@ en:
         step_3: "Budget Tier 2"
       emergency_proposal_created_confirmation:
         header: "Your emergency request has been authorized."
-        subheader: "As a reminder, here's what was approved:"
+        subheader: "Please confirm the final amount paind. If it has changed since approval, update the request in C2."
+        subheader_foot: "As a reminder, here's what was approved:"
         cta: "View request details"
       proposal_created_confirmation:
         header_html: "Your new request <strong>%{proposal_name}</strong> has been submitted!"
