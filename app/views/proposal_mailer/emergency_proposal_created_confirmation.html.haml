@@ -28,15 +28,15 @@
 
         %hr/
         / Start Container
-        %table.container
+        %table.container.contain-attributes
           = render partial: "mail_shared/call_to_action/subheader", locals: { subheader: cta_subheader_foot}
 
           / Start Panel Wrapper
           = render partial: "mail_shared/panel/header_name", locals: { proposal: @proposal}
 
-          = render partial: "mail_shared/panel/row_text_wide", locals: { proposal: @proposal}
-
           = render partial: "mail_shared/panel/proposal_attributes", locals: { proposal: @proposal}
+
+          = render partial: "mail_shared/panel/vertical_buffer"
 
 
           = render partial: "mail_shared/approval/chain", locals: { proposal: @proposal }
