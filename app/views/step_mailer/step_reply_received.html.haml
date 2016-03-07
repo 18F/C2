@@ -1,21 +1,20 @@
 - header_icon = "emails/icon-page-circle.png"
 - top_head = t("mailer.step_mailer.step_reply_received.body",
-          full_name: @step.user.full_name,
-          status: @step.status,
-          public_id: @proposal.public_id)
-
+          full_name: @step.user.full_name)
 %table.body
   %tr
     %td.center{align: "center", valign: "top"}
       %center
         = render partial: "mail_shared/email_header/topbar"
+
         = render partial: "mail_shared/email_header/icon", locals: { icon: header_icon}
 
-        / Start Container
         %table.container
           = render partial: "mail_shared/email_header/hero_text", locals: { text: top_head}
 
-          = render partial: "mail_shared/approval/chain", locals: { proposal: @proposal }
+          = render partial: "mail_shared/approval/chain", locals: { proposal: @proposal,
+            status: @step.status,
+            public_id: @proposal.public_id }
           
           = render partial: "mail_shared/call_to_action/subheader", locals: { subheader: ''}
 

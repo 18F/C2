@@ -24,7 +24,7 @@ en:
         body: "<span class='name-color'>%{full_name}</span> has approved your request. C2 has sent it to the next person."
         cta: "View request details"
       step_reply_received:
-        body: "The approver, %{full_name}, %{status} request %{public_id}."
+        body: "<span class='name-color'>%{full_name}</span> approved your request. C2 has sent it to the next person."
         details: "Please see below for more details."
       step_user_removed:
         header: "You have been removed as an approver for this purchase request"
