@@ -13,7 +13,7 @@ class ClockTasks
 
   def self.scheduled_report_check
     now = Time.zone.now
-    ScheduledReporter.new(now).check
+    ScheduledReporter.new(now).run
   end
 
   class << self

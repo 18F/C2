@@ -8,7 +8,7 @@ class ScheduledReporter
     @check_time = check_time
   end
 
-  def check
+  def run
     if check_time.day == 1
       send_monthlies
     elsif check_time.monday?
@@ -50,6 +50,6 @@ class ScheduledReporter
   end
 
   def send_report(scheduled_report)
-    ReportMailer.scheduled_report(scheduled_report)
+    ReportMailer.scheduled_report(scheduled_report).deliver_later
   end
 end
