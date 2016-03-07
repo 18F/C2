@@ -8,12 +8,8 @@ class NcrDispatcher < Dispatcher
 
   private
 
-  def requires_approval_notice?(approval)
-    final_approval == approval
-  end
-
-  def final_approval
-    proposal.individual_steps.last
+  def requires_approval_notice?
+    false
   end
 
   def notify_approvers(modifier, needs_review)
@@ -65,8 +61,6 @@ class NcrDispatcher < Dispatcher
       end
     end
   end
-
-  private
 
   def user_is_modifier?(user, modifier)
     modifier && user == modifier

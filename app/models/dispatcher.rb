@@ -55,13 +55,15 @@ class Dispatcher
       email_step_user(next_approval(step))
     end
 
-    if requires_approval_notice?(step) && proposal.pending?
+    if requires_approval_notice? && proposal.pending?
       StepMailer.step_reply_received(step).deliver_later
+      email_observers("step completed")
+    elsif proposal.pending?
+      email_observers("step completed")
     elsif proposal.approved?
+      active_observers.each { |observer| ObserverMailer.proposal_complete(observer, proposal) }
       ProposalMailer.proposal_complete(step.proposal).deliver_later
     end
-
-    email_observers("step completed")
   end
 
   def on_comment_created(comment)
@@ -95,7 +97,7 @@ class Dispatcher
     end
   end
 
-  def requires_approval_notice?(approval)
+  def requires_approval_notice?
     true
   end
 
