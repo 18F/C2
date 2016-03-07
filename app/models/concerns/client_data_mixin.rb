@@ -96,5 +96,9 @@ module ClientDataMixin
       end
       field_values
     end
+
+    def as_indexed_json
+      as_json(include: self.class.foreign_key_to_method_map.values)
+    end
   end
 end

@@ -68,7 +68,6 @@ class Proposal < ActiveRecord::Base
   paginates_per MAX_SEARCH_RESULTS
   DEFAULT_INDEXED = {
     include: {
-      client_data: {},
       comments: {
         include: {
           user: { methods: [:display_name], only: [:display_name] }
@@ -113,6 +112,9 @@ class Proposal < ActiveRecord::Base
 
   def as_indexed_json(params = {})
     as_json(params.reverse_merge(DEFAULT_INDEXED)).tap do |json|
+      if client_data
+        json[:client_data] = client_data.as_indexed_json
+      end
       json[:subscribers] = subscribers.map { |user| { id: user.id, name: user.display_name } }
     end
   end
