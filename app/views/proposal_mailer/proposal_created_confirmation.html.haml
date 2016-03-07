@@ -1,10 +1,6 @@
 - header_icon = "emails/icon-page-circle.png"
 - top_head = t("mailer.proposal_mailer.proposal_created_confirmation.header_html", 
               proposal_name: @proposal.name)
-- panel_icon = "emails/button-x-circled.png"
-- panel_action = t("mailer.cancellation_mailer.cancellation_notification.subheader")
-- panel_action_date = @proposal.created_at.strftime("%m/%d/%Y")+' at '+@proposal.created_at.strftime("%I:%M %P")
-- panel_text = t("mailer.cancellation_mailer.cancellation_notification.reason", reason: @reason)
 - cta_subheader = t("mailer.proposal_mailer.proposal_created_confirmation.subheader")
 - proposal_link_text = t("mailer.proposal_mailer.proposal_created_confirmation.cta")
 - cta_subheader_foot = t("mailer.proposal_mailer.proposal_created_confirmation.approver_subheader")
@@ -35,8 +31,3 @@
           = render partial: "mail_shared/approval/chain", locals: { proposal: @proposal }
 
           = render partial: "mail_shared/footer_foundation"
-
-
-
-
-
