@@ -11,7 +11,8 @@ class ScheduledReporter
   def run
     if check_time.day == 1
       send_monthlies
-    elsif check_time.monday?
+    end
+    if check_time.monday?
       send_weeklies
     end
     send_dailies
