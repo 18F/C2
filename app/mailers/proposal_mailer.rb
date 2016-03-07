@@ -77,4 +77,5 @@ class ProposalMailer < ApplicationMailer
       reply_to: reply_email(@proposal)
     )
   end
+
 end

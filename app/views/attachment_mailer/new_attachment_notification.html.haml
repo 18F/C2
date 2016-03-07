@@ -1,7 +1,8 @@
-- icon = "emails/icon-clipped_page.png"
+- header_icon = "emails/icon-pencil-circle.png"
 - top_head = t("mailer.new_attachment_email.top_head",
               request_name: @proposal.name,
               user_name: @attachment_user.full_name)
+- panel_icon = "emails/icon-clipped_page.png"
 - panel_action = t("mailer.new_attachment_email.header",
                   user_name: @attachment_user.full_name,
                   proposal_name: @proposal.name)
@@ -14,7 +15,7 @@
     %td.center{align: "center", valign: "top"}
       %center
         = render partial: "mail_shared/email_header/topbar"
-        = render partial: "mail_shared/email_header/icon"
+        = render partial: "mail_shared/email_header/icon", locals: { icon: header_icon}
 
         / Start Container
         %table.container
@@ -23,7 +24,7 @@
           / Start Panel Wrapper
           = render partial: "mail_shared/panel/header"
 
-          = render partial: "mail_shared/panel/row_description", locals: { icon: icon, action: panel_action, datetime: panel_action_date}
+          = render partial: "mail_shared/panel/row_description", locals: { icon: panel_icon, action: panel_action, datetime: panel_action_date}
 
           = render partial: "mail_shared/panel/row_content_image", locals: { image: panel_image, last: true}
 

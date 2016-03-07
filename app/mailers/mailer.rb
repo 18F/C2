@@ -40,4 +40,5 @@ class Mailer < ApplicationMailer
       "X-C2-Original-From" => from_raw
     ) {} # no-op block so template error is avoided (body already in @_message)
   end
+
 end

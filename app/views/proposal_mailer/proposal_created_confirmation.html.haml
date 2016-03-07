@@ -1,33 +1,42 @@
-%table.full-width.header
+- header_icon = "emails/icon-page-circle.png"
+- top_head = t("mailer.proposal_mailer.proposal_created_confirmation.header_html", 
+              proposal_name: @proposal.name)
+- panel_icon = "emails/button-x-circled.png"
+- panel_action = t("mailer.cancellation_mailer.cancellation_notification.subheader")
+- panel_action_date = @proposal.created_at.strftime("%m/%d/%Y")+' at '+@proposal.created_at.strftime("%I:%M %P")
+- panel_text = t("mailer.cancellation_mailer.cancellation_notification.reason", reason: @reason)
+- cta_subheader = t("mailer.proposal_mailer.proposal_created_confirmation.subheader")
+- proposal_link_text = t("mailer.proposal_mailer.proposal_created_confirmation.cta")
+- cta_subheader_foot = t("mailer.proposal_mailer.proposal_created_confirmation.approver_subheader")
+
+%table.body
   %tr
-    %td.hero
-    %td
-      = image_tag "emails/icon-page-circle.png", class: "header-icon"
+    %td.center{align: "center", valign: "top"}
+      %center
+        = render partial: "mail_shared/email_header/topbar"
+        = render partial: "mail_shared/email_header/icon", locals: { icon: header_icon}
 
-%table.two-thirds-width
-  %tr
-    %td.header
-      = t("mailer.proposal_mailer.proposal_created_confirmation.header_html", proposal_name: @proposal.name)
+        / Start Container
+        %table.container
+          = render partial: "mail_shared/email_header/hero_text", locals: { text: top_head}
 
-%table.two-thirds-width
-  %tr
-    %td.subheader
-      = t("mailer.proposal_mailer.proposal_created_confirmation.subheader")
+          = render partial: "mail_shared/call_to_action/subheader", locals: { subheader: cta_subheader}
+          
+          = render partial: "mail_shared/call_to_action/button", locals: { link_path: proposal_url(@proposal), 
+            link_text: proposal_link_text}
+          
+          = render partial: "mail_shared/call_to_action/subheader", locals: { subheader: ''}
 
-= render partial: "mail_shared/proposal_button",
-  locals: { button_text: t("mailer.proposal_mailer.proposal_created_confirmation.cta") }
+        %hr/
+        / Start Container
+        %table.container
+          = render partial: "mail_shared/call_to_action/subheader", locals: { subheader: cta_subheader_foot}
 
-%hr
+          = render partial: "mail_shared/approval/chain", locals: { proposal: @proposal }
 
-%table.two-thirds-width
-  %tr
-    %td.subheader
-      = t("mailer.proposal_mailer.proposal_created_confirmation.approver_subheader")
+          = render partial: "mail_shared/footer_foundation"
 
-%table.one-third-width
-  - @proposal.individual_steps.each_with_index do |step, index|
-    %tr
-      %td.subheader
-        = index + 1
-      %td.subheader
-        = step.user.full_name
+
+
+
+
