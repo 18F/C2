@@ -43,7 +43,7 @@ en:
         step_3: "Budget Tier 2"
       emergency_proposal_created_confirmation:
         header: "Your emergency request has been authorized."
-        subheader: "Please confirm the final amount paind. If it has changed since approval, update the request in C2."
+        subheader: "Please confirm the final amount paid. If it has changed since approval, update the request in C2."
         subheader_foot: "As a reminder, here's what was approved:"
         cta: "View request details"
       proposal_created_confirmation:
