@@ -5,10 +5,14 @@ class AuthController < ApplicationController
   def oauth_callback
     auth = request.env["omniauth.auth"]
     return_to_path = fetch_return_to_path
-    do_user_auth(auth)
-    session[:token] = auth.credentials.token
-    flash[:success] = "You successfully signed in"
-    redirect_to return_to_path || proposals_path
+    begin
+      do_user_auth(auth)
+      session[:token] = auth.credentials.token
+      flash[:success] = "You successfully signed in"
+      redirect_to return_to_path || proposals_path
+    rescue => _error
+      render :failure
+    end
   end
 
   def failure
