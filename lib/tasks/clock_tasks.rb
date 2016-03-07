@@ -11,6 +11,11 @@ class ClockTasks
     ReportMailer.weekly_fiscal_year_report(fiscal_year).deliver_later
   end
 
+  def self.scheduled_report_check
+    now = Time.zone.now
+    ScheduledReporter.new(now).check
+  end
+
   class << self
      include ::NewRelic::Agent::Instrumentation::ControllerInstrumentation
      add_transaction_tracer :send_daily_ncr_budget_report, category: :task

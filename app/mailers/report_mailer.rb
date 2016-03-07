@@ -26,6 +26,17 @@ class ReportMailer < ApplicationMailer
     )
   end
 
+  def scheduled_report(scheduled_report)
+    attachments["#{scheduled_report.name}.csv"] = build_csv_report(scheduled_report.report)
+
+    mail(
+      to: email_to_user(scheduled_report.user),
+      subject: "[C2 Report] #{scheduled_report.name}",
+      body: "Your scheduled report is attached to this email."
+      from: sender_email
+    )
+  end
+
   private
 
   def proposals_query(expense_type)
@@ -57,5 +68,16 @@ class ReportMailer < ApplicationMailer
 
   def date
     Time.now.utc.strftime("%a %m/%d/%y (%Z)")
+  end
+
+  def build_csv_report(report)
+    proposal_data = report.run
+    user = report.user
+    csv_buf = ""
+    csv_buf += CSV.generate_line( [ProposalDecorator.csv_headers, user.client_model.csv_headers].flatten ).chomp
+    proposal_data.rows.each do |proposal|
+      csv_buf += CSV.generate_line( proposal.decorate.as_csv ).chomp
+    end
+    csv_buf
   end
 end

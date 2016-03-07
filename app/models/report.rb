@@ -40,6 +40,10 @@ class Report < ActiveRecord::Base
     "#{Rails.application.routes.url_helpers.query_proposals_path}?#{params.to_query}"
   end
 
+  def run
+    ProposalListingQuery.new(user, {text: text_query, user.client_model_slug => client_query}).query
+  end
+
   def self.sql_for_user(user)
     <<-SQL.gsub(/^ {6}/, "")
       SELECT * FROM reports
