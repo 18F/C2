@@ -7,6 +7,10 @@ class ObserverMailerPreview < ActionMailer::Preview
     ObserverMailer.observer_removed_confirmation(observation)
   end
 
+  def proposal_complete
+    ObserverMailer.proposal_complete(user, proposal)
+  end
+
   private
 
   def observation
