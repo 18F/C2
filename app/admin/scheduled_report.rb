@@ -7,7 +7,7 @@ ActiveAdmin.register ScheduledReport do
       f.input :report
       f.input :user
       f.input :frequency, as: :select, collection: ["daily", "weekly", "monthly"]
-    end   
+    end
     f.actions
   end
 end
