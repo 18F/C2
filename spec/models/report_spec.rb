@@ -36,4 +36,20 @@ describe Report do
     user = create(:user, client_slug: "test")
     expect(Report.sql_for_user(user)).to include "WHERE client_slug='#{user.client_slug}'"
   end
+
+  it "#run", :elasticsearch do
+    owner = create(:user, client_slug: "test")
+    report = create(:report, query: { text: "something" }.to_json, user: owner)
+    proposals = 3.times.map do |i|
+      tcr = create(:test_client_request, project_title: "something #{i}")
+      tcr.proposal.update(requester: owner)
+      tcr.proposal.reindex
+      tcr.proposal
+    end
+    Proposal.__elasticsearch__.refresh_index!
+
+    proposal_data = report.run
+
+    expect(proposal_data.rows.map(&:id)).to match_array(proposals.map(&:id))
+  end
 end
