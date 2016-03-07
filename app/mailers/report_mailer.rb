@@ -51,7 +51,7 @@ class ReportMailer < ApplicationMailer
 
       "pending-at-approving-official" => Ncr::Reporter.proposals_pending_approving_official,
       "pending-at-budget" => Ncr::Reporter.proposals_pending_budget,
-      "pending-at-tier-one-approval" => Ncr::Reporter.proposals_tier_one_pending,
+      "pending-at-tier-one-approval" => Ncr::Reporter.proposals_tier_one_pending
     }
   end
 
@@ -73,10 +73,17 @@ class ReportMailer < ApplicationMailer
   def build_csv_report(report)
     proposal_data = report.run
     user = report.user
+    csv_header(user) + csv_body(proposal_data)
+  end
+
+  def csv_header(user)
+    CSV.generate_line([ProposalDecorator.csv_headers, user.client_model.csv_headers].flatten).chomp
+  end
+
+  def csv_body(proposal_data)
     csv_buf = ""
-    csv_buf += CSV.generate_line( [ProposalDecorator.csv_headers, user.client_model.csv_headers].flatten ).chomp
     proposal_data.rows.each do |proposal|
-      csv_buf += CSV.generate_line( proposal.decorate.as_csv ).chomp
+      csv_buf += CSV.generate_line(proposal.decorate.as_csv).chomp
     end
     csv_buf
   end

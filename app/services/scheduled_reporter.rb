@@ -3,7 +3,7 @@ class ScheduledReporter
 
   def initialize(check_time)
     unless check_time.is_a?(Time)
-      raise ArgumentError.new "check_time must be a Time object"
+      raise ArgumentError, "check_time must be a Time object"
     end
     @check_time = check_time
   end
