@@ -38,7 +38,7 @@ describe ScheduledReporter do
       expect(deliveries.size).to eq(1)
     end
 
-    it "does not send weeklies on non-Mondays" do
+    it "only sends weeklies on Mondays" do
       deliveries.clear
       scheduled_report = weekly_scheduled_report
       tuesday = Time.zone.parse("2016-03-08")
