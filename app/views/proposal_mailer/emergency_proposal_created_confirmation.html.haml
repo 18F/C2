@@ -5,8 +5,8 @@
 - panel_action_date = @proposal.created_at.strftime("%m/%d/%Y")+' at '+@proposal.created_at.strftime("%I:%M %P")
 - panel_text = t("mailer.cancellation_mailer.cancellation_notification.reason", reason: @reason)
 - cta_subheader = t("mailer.proposal_mailer.emergency_proposal_created_confirmation.subheader")
-- proposal_link_text = t("mailer.proposal_mailer.proposal_created_confirmation.cta")
-- cta_subheader_foot = t("mailer.proposal_mailer.proposal_created_confirmation.approver_subheader")
+- proposal_link_text = t("mailer.proposal_mailer.emergency_proposal_created_confirmation.cta")
+- cta_subheader_foot = t("mailer.proposal_mailer.emergency_proposal_created_confirmation.subheader_foot")
 
 %table.body
   %tr
@@ -38,17 +38,10 @@
 
           = render partial: "mail_shared/panel/vertical_buffer"
 
+          = render partial: "mail_shared/call_to_action/subheader", locals: { subheader: ''}
 
-          = render partial: "mail_shared/approval/chain", locals: { proposal: @proposal }
+          = render partial: "mail_shared/call_to_action/button", locals: { link_path: proposal_url(@proposal), 
+            link_text: proposal_link_text}
 
           = render partial: "mail_shared/footer_foundation"
 
-
-%table.two-thirds-width
-  %tr
-    %td.subheader
-      = t("mailer.proposal_mailer.emergency_proposal_created_confirmation.subheader")
-
-
-= render partial: "mail_shared/proposal_button",
-  locals: { button_text: t("mailer.proposal_mailer.emergency_proposal_created_confirmation.cta") }
