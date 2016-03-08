@@ -52,7 +52,7 @@ describe 'Canceling a request' do
 
   context 'email' do
     context 'proposal without approver' do
-      it 'sends cancellation email to requester' do
+      it 'sends cancelation email to requester' do
         with_env_var("NO_WELCOME_EMAIL", "true") do
           proposal = create(:proposal)
 
@@ -66,7 +66,7 @@ describe 'Canceling a request' do
     end
 
     context "proposal with pending status" do
-      it "does not send cancellation email to approver" do
+      it "does not send cancelation email to approver" do
         with_env_var("NO_WELCOME_EMAIL", "true") do
           proposal = create(:proposal, :with_approver)
           proposal.individual_steps.first.update(status: 'pending')
@@ -82,7 +82,7 @@ describe 'Canceling a request' do
     end
 
    context "proposal with approver" do
-     it "sends cancellation emails to requester and approver" do
+     it "sends cancelation emails to requester and approver" do
        with_env_var("NO_WELCOME_EMAIL", "true") do
          proposal = create(:proposal, :with_approver)
 
@@ -98,7 +98,7 @@ describe 'Canceling a request' do
    end
 
    context "proposal with observer" do
-     it "sends cancellation email to observer" do
+     it "sends cancelation email to observer" do
        with_env_var("NO_WELCOME_EMAIL", "true") do
          proposal = create(:proposal, :with_observer)
 
@@ -112,7 +112,7 @@ describe 'Canceling a request' do
    end
   end
 
-  context 'entering in a reason cancellation' do
+  context 'entering in a reason cancelation' do
     it 'successfully saves comments, changes the request status' do
       proposal = create(:proposal)
       login_as(proposal.requester)
@@ -120,9 +120,9 @@ describe 'Canceling a request' do
       cancel_proposal(proposal)
 
       expect(current_path).to eq("/proposals/#{proposal.id}")
-      expect(page).to have_content('Your request has been cancelled')
+      expect(page).to have_content('Your request has been canceled')
       expect(proposal.reload.status).to eq('cancelled')
-      expect(proposal.reload.comments.last.comment_text).to eq('Request cancelled with comments: This is a good reason for the cancellation.')
+      expect(proposal.reload.comments.last.comment_text).to eq('Request canceled with comments: This is a good reason for the cancelation.')
     end
 
     it 'displays an error if the reason is blank' do
@@ -134,7 +134,7 @@ describe 'Canceling a request' do
       fill_in 'reason_input', with: ''
       click_on('Yes, cancel this request')
 
-      expect(page).to have_content('A reason for cancellation is required. Please indicate why this request needs to be cancelled.')
+      expect(page).to have_content('A reason for cancelation is required. Please indicate why this request needs to be canceled.')
     end
   end
 
@@ -163,7 +163,7 @@ describe 'Canceling a request' do
   def cancel_proposal(proposal)
     visit proposal_path(proposal)
     click_on('Cancel this request')
-    fill_in 'reason_input', with: 'This is a good reason for the cancellation.'
+    fill_in 'reason_input', with: 'This is a good reason for the cancelation.'
     click_on('Yes, cancel this request')
   end
 
