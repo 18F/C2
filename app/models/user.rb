@@ -40,6 +40,7 @@ class User < ActiveRecord::Base
   end
 
   def self.for_email(email)
+    fail("email not defined") unless email
     User.find_or_create_by(email_address: email.strip.downcase)
   end
 
