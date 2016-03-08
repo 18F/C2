@@ -1,5 +1,5 @@
 %table.reply-section
-  - if @proposal.approved?
+  - if @proposal.completed?
     %tr.success
       %td{ colspan: "2" }
         = complete_text(@step)

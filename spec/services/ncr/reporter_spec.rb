@@ -2,7 +2,7 @@ describe Ncr::Reporter do
   describe '.proposals_pending_approving_official' do
     it "only returns Proposals where the approving official is actionable" do
       partially_approved = create(:ncr_work_order, :with_approvers)
-      partially_approved.individual_steps.first.approve!
+      partially_approved.individual_steps.first.complete!
       actionable = create(:ncr_work_order, :with_approvers)
 
       expect(Ncr::Reporter.proposals_pending_approving_official).to eq([actionable.proposal])
@@ -15,7 +15,7 @@ describe Ncr::Reporter do
 
       actionable = create(:ncr_work_order, :with_approvers)
       # all but the last
-      actionable.individual_steps[0...-1].each(&:approve!)
+      actionable.individual_steps[0...-1].each(&:complete!)
 
       expect(Ncr::Reporter.proposals_pending_budget).to eq([actionable.proposal])
     end
@@ -32,7 +32,7 @@ describe Ncr::Reporter do
 
       approved_work_order = create(:ncr_work_order, :with_approvers)
       approved_work_order.setup_approvals_and_observers
-      approved_work_order.individual_steps.first.approve!
+      approved_work_order.individual_steps.first.complete!
 
       alt_work_order = create(:ncr_work_order, :with_approvers)
       alt_work_order.setup_approvals_and_observers
@@ -47,11 +47,11 @@ describe Ncr::Reporter do
       work_order.setup_approvals_and_observers
       proposal = work_order.proposal
       while proposal.currently_awaiting_steps.any?
-        proposal.currently_awaiting_steps.first.approve!
+        proposal.currently_awaiting_steps.first.complete!
       end
-      proposal.approve!
+      proposal.complete!
       proposal.reload
-      expect(proposal).to be_approved
+      expect(proposal).to be_completed
       expect(work_order.final_approver).to eq(work_order.approvers.last)
       csv = Ncr::Reporter.as_csv([proposal])
       expect(csv).to include(",#{work_order.decorate.current_approver_email_address}")
@@ -67,7 +67,7 @@ describe Ncr::Reporter do
       csv = Ncr::Reporter.as_csv([proposal])
       expect(csv).to include(",#{individual_approval_step.user.email_address}")
 
-      individual_approval_step.approve!
+      individual_approval_step.complete!
       official_approval_step = proposal.currently_awaiting_steps.first
       proposal.reload
       work_order.reload
@@ -75,7 +75,7 @@ describe Ncr::Reporter do
       csv = Ncr::Reporter.as_csv([proposal])
       expect(csv).to include(",#{official_approval_step.user.email_address}")
 
-      official_approval_step.approve!
+      official_approval_step.complete!
       budget_approval_step = proposal.currently_awaiting_steps.first
       proposal.reload
       work_order.reload
@@ -90,29 +90,29 @@ describe Ncr::Reporter do
       Timecop.freeze do
         current_year = Time.now.year
         beginning_of_year = Time.now.beginning_of_year
-        approved_proposal = create(:proposal, status: "approved")
-        cancelled_proposal = create(:proposal, status: "cancelled")
-        approved_work_order = create(
+        completed_proposal = create(:proposal, status: "completed")
+        canceled_proposal = create(:proposal, status: "canceled")
+        completed_work_order = create(
           :ncr_work_order,
           amount: 100,
           description: "an approved work order",
           created_at: beginning_of_year,
-          proposal: approved_proposal
+          proposal: completed_proposal
         )
-        cancelled_work_order = create(
+        canceled_work_order = create(
           :ncr_work_order,
           amount: 200,
           description: "a canclled work order",
           created_at: beginning_of_year,
-          proposal: cancelled_proposal
+          proposal: canceled_proposal
         )
 
         csv = Ncr::Reporter.new.build_fiscal_year_report_string(current_year)
 
-        expect(csv).to include(approved_work_order.amount.to_s)
-        expect(csv).not_to include(cancelled_work_order.amount.to_s)
-        expect(csv).to include(approved_work_order.description)
-        expect(csv).not_to include(cancelled_work_order.description)
+        expect(csv).to include(completed_work_order.amount.to_s)
+        expect(csv).not_to include(canceled_work_order.amount.to_s)
+        expect(csv).to include(completed_work_order.description)
+        expect(csv).not_to include(canceled_work_order.description)
       end
     end
   end

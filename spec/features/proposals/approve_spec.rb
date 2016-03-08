@@ -10,8 +10,8 @@ describe "Approving a proposal" do
       expect(page).to have_content("You have approved #{proposal.public_id}")
 
       approval = Proposal.last.individual_steps.first
-      expect(approval.status).to eq("approved")
-      expect(approval.approved_at.utc.to_s).to eq(Time.now.utc.to_s)
+      expect(approval.status).to eq("completed")
+      expect(approval.completed_at.utc.to_s).to eq(Time.now.utc.to_s)
     end
   end
 

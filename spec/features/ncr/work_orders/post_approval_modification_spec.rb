@@ -3,7 +3,7 @@ feature "post-approval modification" do
 
   scenario "doesn't require re-approval for the amount being decreased" do
     work_order.setup_approvals_and_observers
-    fully_approve(work_order.proposal)
+    fully_complete(work_order.proposal)
 
     login_as(work_order.requester)
     visit "/ncr/work_orders/#{work_order.id}/edit"
@@ -11,12 +11,12 @@ feature "post-approval modification" do
     click_on 'Update'
 
     work_order.reload
-    expect(work_order.status).to eq('approved')
+    expect(work_order.status).to eq("completed")
   end
 
   scenario "can do end-to-end re-approval" do
     work_order.setup_approvals_and_observers
-    fully_approve(work_order.proposal)
+    fully_complete(work_order.proposal)
 
     login_as(work_order.requester)
     visit "/ncr/work_orders/#{work_order.id}/edit"
@@ -33,8 +33,8 @@ feature "post-approval modification" do
     expect(work_order.status).to eq('pending')
     expect(work_order.proposal.root_step.status).to eq('actionable')
     expect(approval_statuses).to eq(%w(
-      approved
-      approved
+      completed
+      completed
       actionable
     ))
 
@@ -43,18 +43,18 @@ feature "post-approval modification" do
     click_on 'Approve'
 
     work_order.reload
-    expect(work_order.status).to eq('approved')
-    expect(work_order.proposal.root_step.status).to eq('approved')
+    expect(work_order.status).to eq('completed')
+    expect(work_order.proposal.root_step.status).to eq('completed')
     expect(approval_statuses).to eq(%w(
-      approved
-      approved
-      approved
+      completed
+      completed
+      completed
     ))
   end
 
   scenario "shows flash warning, only on edit page" do
     work_order.setup_approvals_and_observers
-    fully_approve(work_order.proposal)
+    fully_complete(work_order.proposal)
 
     login_as(work_order.requester)
     visit "/ncr/work_orders/#{work_order.id}/edit"
@@ -77,7 +77,7 @@ feature "post-approval modification" do
     expect(work_order.status).to eq('pending')
     expect(work_order.proposal.root_step.status).to eq('actionable')
     expect(approval_statuses).to eq(%w(
-      approved
+      completed
       actionable
       pending
     ))

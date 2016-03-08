@@ -22,11 +22,11 @@ en:
       cancellation_confirmation:
         body: "This confirms your cancellation of this request: %{name} (%{public_id})"
       cancellation_email:
-        body: "The request, %{name} (%{public_id}), has been cancelled"
+        body: "The request, %{name} (%{public_id}), has been canceled"
       proposal_fiscal_cancellation:
         body:
           "All unapproved credit card funding requests from the previous fiscal
-          year are being cancelled.  If the need still exists, please submit a new funding
+          year are being canceled.  If the need still exists, please submit a new funding
           request for the current fiscal year."
     comment_mailer:
       comment_added_email:

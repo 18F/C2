@@ -3,7 +3,7 @@ describe ProposalListingQuery do
   let(:user) { create(:user) }
 
   describe "when the user is a requester" do
-    [:pending, :approved, :cancelled].each do |status|
+    [:pending, :completed, :canceled].each do |status|
       describe "##{status}" do
         it "ignores app admin role and only returns the user's Proposals" do
           create(:proposal, status: status)
@@ -46,11 +46,11 @@ describe ProposalListingQuery do
         end
       end
 
-      context "and you have already approved the proposal, but it is not complete" do
+      context "and you have already completed the proposal, but it is not complete" do
         it "does not return the proposal" do
           proposal = create(:proposal, :with_serial_approvers)
           first_step = proposal.individual_steps.first
-          first_step.approve!
+          first_step.complete!
 
           proposals = ProposalListingQuery.new(first_step.user, params).pending_review
 
@@ -74,7 +74,7 @@ describe ProposalListingQuery do
       context "and the current waiting step lists you as purchaser" do
         it "returns the proposal" do
           proposal = create(:proposal, :with_approval_and_purchase)
-          proposal.individual_steps.first.approve!
+          proposal.individual_steps.first.complete!
           user = proposal.individual_steps.second.user
 
           proposals = ProposalListingQuery.new(user, params).pending_review

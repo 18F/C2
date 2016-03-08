@@ -5,54 +5,54 @@ describe Steps::Parallel do
     first = build(:approval, proposal: nil)
     second = build(:approval, proposal: nil)
     third = build(:approval, proposal: nil)
-    proposal.root_step = Steps::Parallel.new(child_approvals: [first, second, third])
+    proposal.root_step = Steps::Parallel.new(child_steps: [first, second, third])
 
     expect(proposal.root_step.reload.status).to eq('actionable')
     expect(first.reload.status).to eq('actionable')
     expect(second.reload.status).to eq('actionable')
     expect(third.reload.status).to eq('actionable')
 
-    first.approve!
+    first.complete!
     expect(proposal.root_step.reload.status).to eq('actionable')
-    expect(first.reload.status).to eq('approved')
+    expect(first.reload.status).to eq('completed')
     expect(second.reload.status).to eq('actionable')
     expect(third.reload.status).to eq('actionable')
 
-    third.approve!
+    third.complete!
     expect(proposal.root_step.reload.status).to eq('actionable')
-    expect(first.reload.status).to eq('approved')
+    expect(first.reload.status).to eq('completed')
     expect(second.reload.status).to eq('actionable')
-    expect(third.reload.status).to eq('approved')
+    expect(third.reload.status).to eq('completed')
 
-    second.approve!
-    expect(proposal.root_step.reload.status).to eq('approved')
-    expect(first.reload.status).to eq('approved')
-    expect(second.reload.status).to eq('approved')
-    expect(third.reload.status).to eq('approved')
+    second.complete!
+    expect(proposal.root_step.reload.status).to eq('completed')
+    expect(first.reload.status).to eq('completed')
+    expect(second.reload.status).to eq('completed')
+    expect(third.reload.status).to eq('completed')
   end
 
   it 'can be used for disjunctions (ORs)' do
     first = build(:approval, proposal: nil)
     second = build(:approval, proposal: nil)
     third = build(:approval, proposal: nil)
-    proposal.root_step = Steps::Parallel.new(min_children_needed: 2, child_approvals: [first, second, third])
+    proposal.root_step = Steps::Parallel.new(min_children_needed: 2, child_steps: [first, second, third])
 
-    first.reload.approve!
+    first.reload.complete!
     expect(proposal.root_step.reload.status).to eq('actionable')
-    expect(first.reload.status).to eq('approved')
+    expect(first.reload.status).to eq('completed')
     expect(second.reload.status).to eq('actionable')
     expect(third.reload.status).to eq('actionable')
 
-    third.approve!
-    expect(proposal.root_step.reload.status).to eq('approved')
-    expect(first.reload.status).to eq('approved')
+    third.complete!
+    expect(proposal.root_step.reload.status).to eq('completed')
+    expect(first.reload.status).to eq('completed')
     expect(second.reload.status).to eq('actionable')
-    expect(third.reload.status).to eq('approved')
+    expect(third.reload.status).to eq('completed')
 
-    second.approve!
-    expect(proposal.root_step.reload.status).to eq('approved')
-    expect(first.reload.status).to eq('approved')
-    expect(second.reload.status).to eq('approved')
-    expect(third.reload.status).to eq('approved')
+    second.complete!
+    expect(proposal.root_step.reload.status).to eq('completed')
+    expect(first.reload.status).to eq('completed')
+    expect(second.reload.status).to eq('completed')
+    expect(third.reload.status).to eq('completed')
   end
 end

@@ -9,7 +9,7 @@ describe MailerHelper do
 
       url = helper.generate_approve_url(approval)
       uri = Addressable::URI.parse(url)
-      expect(uri.path).to eq("/proposals/#{proposal.id}/approve")
+      expect(uri.path).to eq("/proposals/#{proposal.id}/complete")
       expect(uri.query_values).to eq(
         'cch' => token.access_token,
         'version' => '123'

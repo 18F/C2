@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160307161402) do
+ActiveRecord::Schema.define(version: 20160308231131) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -212,7 +212,7 @@ ActiveRecord::Schema.define(version: 20160307161402) do
     t.integer  "client_data_id"
     t.string   "client_data_type", limit: 255
     t.integer  "requester_id"
-    t.string   "public_id",        limit: 255
+    t.string   "public_id"
     t.uuid     "visit_id"
   end
 
@@ -252,7 +252,7 @@ ActiveRecord::Schema.define(version: 20160307161402) do
     t.datetime "updated_at"
     t.integer  "position"
     t.integer  "proposal_id"
-    t.datetime "approved_at"
+    t.datetime "completed_at"
     t.string   "type"
     t.integer  "parent_id"
     t.integer  "min_children_needed"

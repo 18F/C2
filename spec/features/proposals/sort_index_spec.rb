@@ -27,15 +27,15 @@ feature "Sort proposals on index page" do
   end
 
   it "does not allow clicks in one table to affect the order of the other" do
-    cancelled = create_list(:proposal, 2, status: "cancelled", observer: user)
+    canceled = create_list(:proposal, 2, status: "canceled", observer: user)
     create_list(:proposal, 2, observer: user)
 
     login_as(user)
     visit proposals_path
 
-    expect_order(cancelled_proposals_table, cancelled.reverse)
+    expect_order(canceled_proposals_table, canceled.reverse)
     within(pending_proposals_section) { click_on "Submitted" }
-    expect_order(cancelled_proposals_table, cancelled.reverse)
+    expect_order(canceled_proposals_table, canceled.reverse)
   end
 
   context "18F procurements" do

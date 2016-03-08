@@ -14,8 +14,8 @@ describe "viewing a work order" do
     expect(current_path).to eq("/ncr/work_orders/#{work_order.id}/edit")
   end
 
-  it "shows a edit link for an approved proposal" do
-    ncr_proposal.update_attribute(:status, 'approved') # avoid state machine
+  it "shows a edit link for a completed proposal" do
+    ncr_proposal.update(status: "completed") # avoid state machine
 
     visit "/proposals/#{ncr_proposal.id}"
     expect(page).to have_content('Modify Request')
@@ -34,10 +34,10 @@ describe "viewing a work order" do
     expect(page).not_to have_content('Modify Request')
   end
 
-  it "doesn't show a edit/cancel/add observer link from a cancelled proposal" do
+  it "doesn't show a edit/cancel/add observer link from a canceled proposal" do
     visit "/proposals/#{ncr_proposal.id}"
     expect(page).to have_content('Cancel this request')
-    ncr_proposal.update_attribute(:status, 'cancelled')
+    ncr_proposal.update_attribute(:status, 'canceled')
     visit "/proposals/#{ncr_proposal.id}"
     expect(page).not_to have_content('Modify Request')
   end
