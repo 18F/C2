@@ -5,9 +5,9 @@ class AttachmentDecorator < Draper::Decorator
 
   def file_preview
     if file.content_type =~ /\Aimage/
-      image_tag(file.url, alt: "", class: "image-with-border")
+      link_to image_tag(file.url, alt: "", class: "image-with-border"), file.url 
     else
-      link_to(file.original_filename, file.url)
+      return '<br><table class="button"><tr><td>' + link_to('Click to view ' + file.original_filename, file.url) + '</td></tr></table>'
     end
   end
 end
