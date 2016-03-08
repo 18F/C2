@@ -7,7 +7,7 @@
         - elsif step.status == 'pending'
           - icon_name = 'emails/numbers/icon-number-' + (index + 1).to_s + '-pending.png'
         - elsif step.status == 'approved'
-          - icon_name = 'emails/numbers/icon-approved.png'
+          - icon_name = 'emails/numbers/icon-number-' + (index + 1).to_s + '-past.png'
         %table.eight.columns
           %tr
             %td.two.sub-columns.last
