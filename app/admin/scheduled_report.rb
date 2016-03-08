@@ -8,6 +8,9 @@ ActiveAdmin.register ScheduledReport do
       f.input :user
       f.input :frequency, as: :select, collection: ["daily", "weekly", "monthly"]
     end
+    panel "Notes" do
+      "Weekly reports are sent on Mondays. Monthly reports are sent on the first day of the month."
+    end
     f.actions
   end
 end
