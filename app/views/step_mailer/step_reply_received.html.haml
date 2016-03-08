@@ -1,6 +1,8 @@
 - header_icon = "emails/icon-page-circle.png"
+
 - top_head = t("mailer.step_mailer.step_reply_received.body",
-          full_name: @step.user.full_name)
+              full_name: @last_approved_user.full_name)
+
 %table.body
   %tr
     %td.center{align: "center", valign: "top"}
