@@ -10,7 +10,8 @@ class AuthController < ApplicationController
       session[:token] = auth.credentials.token
       flash[:success] = "You successfully signed in"
       redirect_to return_to_path || proposals_path
-    rescue => _error
+    rescue => error
+      Rails.logger.error(error)
       render :failure
     end
   end
