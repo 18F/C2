@@ -37,7 +37,7 @@ en:
         header: "A new request submitted by %{requester_name} needs your %{step_type_noun}"
         cta: "Add comment"
     proposal_mailer:
-      generic_approval_name: 
+      generic_approval_name:
         step_1: "Approver"
         step_2: "Budget Tier 1"
         step_3: "Budget Tier 2"
@@ -72,21 +72,21 @@ en:
           routing it for re-approval now. Please review the changes."
         subheader: "%{modifier_name} updated %{proposal_name} as follows:"
         cta: "View request details"
-    cancellation_mailer:
+    cancelation_mailer:
       cta: "View request details"
-      cancellation_confirmation:
-        header: "You cancelled this purchase request."
+      cancelation_confirmation:
+        header: "You canceled this purchase request."
         subsection: "Cancelled by %{name}."
-        reason: "Reason for cancellation: %{reason}"
-      cancellation_notification:
-        header: "This purchase request has been cancelled by %{name}."
+        reason: "Reason for cancelation: %{reason}"
+      cancelation_notification:
+        header: "This purchase request has been canceled by %{name}."
         subheader: "If you still need to authorize a purchase, submit a new request."
-        reason: "Reason for cancellation: %{reason}"
-      fiscal_cancellation_notification:
-        header: "This purchase request has been cancelled."
+        reason: "Reason for cancelation: %{reason}"
+      fiscal_cancelation_notification:
+        header: "This purchase request has been canceled."
         reason:
           "All unapproved credit card funding requests from the previous fiscal
-          year are being cancelled.  If the need still exists, please submit a new funding
+          year are being canceled.  If the need still exists, please submit a new funding
           request for the current fiscal year."
     welcome_mailer:
       welcome_notification:

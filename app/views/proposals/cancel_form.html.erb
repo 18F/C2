@@ -2,7 +2,7 @@
   <div class="row centered">
     <h1>Cancellation: <%= @proposal.name %></h1>
     <%= form_tag(cancel_proposal_path(@proposal), method: :post) do %>
-      <%= label_tag(:reason_input, "Reason for cancellation") %><br/>
+      <%= label_tag(:reason_input, "Reason for cancelation") %><br/>
       <%= text_area_tag "reason_input", nil, size: "50x10" %>
       <p>
         <%= submit_tag("Yes, cancel this request", class: "form-button") %>

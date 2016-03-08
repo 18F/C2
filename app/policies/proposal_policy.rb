@@ -7,11 +7,11 @@ class ProposalPolicy
   end
 
   def can_complete!
-    step_user! && pending_step! && not_cancelled!
+    step_user! && pending_step! && not_canceled!
   end
 
   def can_edit!
-    (admin? || requester!) && not_approved! && not_cancelled!
+    (admin? || requester!) && not_approved! && not_canceled!
   end
 
   alias_method :can_update!, :can_edit!
@@ -28,7 +28,7 @@ class ProposalPolicy
   alias_method :can_new!, :can_create!
 
   def can_cancel!
-    (admin? || requester!) && not_cancelled!
+    (admin? || requester!) && not_canceled!
   end
   alias_method :can_cancel_form!, :can_cancel!
 
@@ -62,8 +62,8 @@ class ProposalPolicy
     )
   end
 
-  def not_cancelled!
-    check(!@proposal.cancelled?, "Sorry, this proposal has been cancelled.")
+  def not_canceled!
+    check(!@proposal.cancelled?, "Sorry, this proposal has been canceled.")
   end
 
   def step_user?

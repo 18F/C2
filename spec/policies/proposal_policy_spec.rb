@@ -147,7 +147,7 @@ describe ProposalPolicy do
       expect(ProposalPolicy).to permit(proposal.requester, proposal)
     end
 
-    it "does not allow a requester to edit a cancelled one" do
+    it "does not allow a requester to edit a canceled one" do
       proposal.cancel!
       expect(ProposalPolicy).not_to permit(proposal.requester, proposal)
     end
