@@ -7,35 +7,35 @@
                   user_name: @attachment_user.full_name,
                   proposal_name: @proposal.name)
 - panel_action_date = @proposal.created_at.strftime("%m/%d/%Y") + " at " + @proposal.created_at.strftime("%I:%M %P")
-- panel_image = image_path("emails/preview.png")
+- panel_image = @attachment.decorate.file_preview
 - cta_subheader = t("mailer.new_attachment_email.subheader")
 
 %table.container
-  = render partial: "mail_shared/email_header/hero_text", 
+  = render partial: "mail_shared/email_header/hero_text",
     locals: { text: top_head}
 
   / Start Panel Wrapper
   = render partial: "mail_shared/panel/header"
 
-  = render partial: "mail_shared/panel/row_description", 
-    locals: { icon: panel_icon, 
-              action: panel_action, 
+  = render partial: "mail_shared/panel/row_description",
+    locals: { icon: panel_icon,
+              action: panel_action,
               datetime: panel_action_date}
 
-  = render partial: "mail_shared/panel/row_content_image", 
-    locals: { image: panel_image, 
+  = render partial: "mail_shared/panel/row_content_image",
+    locals: { image: panel_image,
               last: true}
 
   = render partial: "mail_shared/panel/vertical_buffer"
   / End Panel Wrapper
 
-  = render partial: "mail_shared/call_to_action/subheader", 
+  = render partial: "mail_shared/call_to_action/subheader",
     locals: { subheader: cta_subheader}
 
-  = render partial: "mail_shared/call_to_action/button", 
-    locals: { link_path: proposal_url(@proposal), 
+  = render partial: "mail_shared/call_to_action/button",
+    locals: { link_path: proposal_url(@proposal),
               link_text: t("mailer.new_attachment_email.cta")}
 
-  = render partial: "mail_shared/call_to_action/button", 
-    locals: { link_path: proposal_url(@proposal, anchor: "comments"), 
+  = render partial: "mail_shared/call_to_action/button",
+    locals: { link_path: proposal_url(@proposal, anchor: "comments"),
               link_text: t("mailer.new_attachment_email.cta_2")}

@@ -14,6 +14,6 @@ class AttachmentMailerPreview < ActionMailer::Preview
   end
 
   def attachment
-    Attachment.last
+    Attachment.first
   end
 end
