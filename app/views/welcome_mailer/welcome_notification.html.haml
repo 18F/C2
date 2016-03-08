@@ -1,8 +1,6 @@
-
 - top_head = t("mailer.welcome_mailer.welcome_notification.header")
 - cta_subheader = t("mailer.step_mailer.step_user_removed.subheader")
 - proposal_link_text = t("mailer.step_mailer.step_user_removed.cta")
-
 
 %table.body
   %tr
@@ -13,17 +11,32 @@
 
         / Start Container
         %table.container
-          = render partial: "mail_shared/call_to_action/subheader", locals: {subheader: ""}
+          = render partial: "mail_shared/call_to_action/subheader", 
+            locals: {subheader: ""}
           
-          = render partial: "mail_shared/email_header/hero_text", locals: { text: top_head}
+          = render partial: "mail_shared/email_header/hero_text", 
+            locals: { text: top_head}
 
-          = render partial: "mail_shared/call_to_action/subheader", locals: { vertical: "no-top-margin", align: "align-left", subheader: t("mailer.welcome_mailer.welcome_notification.para1")}
+          = render partial: "mail_shared/call_to_action/subheader", 
+            locals: { vertical: "no-top-margin", 
+                      align: "align-left", 
+                      subheader: t("mailer.welcome_mailer.welcome_notification.para1")}
 
-          = render partial: "mail_shared/call_to_action/subheader", locals: { vertical: "no-top-margin", align: "align-left", subheader: t("mailer.welcome_mailer.welcome_notification.para2_html", help_url: help_url('') )}
+          = render partial: "mail_shared/call_to_action/subheader", 
+            locals: { vertical: "no-top-margin", 
+                      align: "align-left", 
+                      subheader: t("mailer.welcome_mailer.welcome_notification.para2_html", 
+                      help_url: help_url('') )}
 
-          = render partial: "mail_shared/call_to_action/subheader", locals: { vertical: "no-top-margin", align: "align-left", subheader: t("mailer.welcome_mailer.welcome_notification.para3_html", feedback_url: feedback_url )}
+          = render partial: "mail_shared/call_to_action/subheader", 
+            locals: { vertical: "no-top-margin", 
+                      align: "align-left", 
+                      subheader: t("mailer.welcome_mailer.welcome_notification.para3_html", 
+                      feedback_url: feedback_url )}
 
-          = render partial: "mail_shared/call_to_action/subheader", locals: { vertical: "no-top-margin", align: "align-left", subheader: t("mailer.welcome_mailer.welcome_notification.signature")}
+          = render partial: "mail_shared/call_to_action/subheader", 
+            locals: { vertical: "no-top-margin", 
+                      align: "align-left", 
+                      subheader: t("mailer.welcome_mailer.welcome_notification.signature")}
 
           = render partial: "mail_shared/footer_foundation"
-
