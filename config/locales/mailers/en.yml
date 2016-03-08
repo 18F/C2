@@ -12,13 +12,15 @@ en:
     footer:
       "Have feedback? We'd love to hear from you at %{feedback_url}"
     reason: " with given reason '%{reason}'"
-    new_attachment_email:
-      top_head: "Attachment added to <span class='name-color'>%{request_name}</span> by <span class='name-color'>%{user_name}</span>"
-      header: "Attachment added by <span class='name-color'>%{user_name}</span>"
-      header_html: "Attachment added by %{user_name}"
-      subheader: "You can reply or review the full conversation on the request page."
-      cta: "View request details"
-      cta_2: "Add comment"
+    attachment_mailer:
+      new_attachment_notification:
+        top_head: "Attachment added to <span class='name-color'>%{request_name}</span> by <span class='name-color'>%{user_name}</span>"
+        header: "Attachment added by <span class='name-color'>%{user_name}</span>"
+        header_html: "Attachment added by %{user_name}"
+        subheader: "You can reply or review the full conversation on the request page."
+        attachment_cta: "Click to view %{attachment_name}"
+        cta: "View request details"
+        cta_2: "Add comment"
     step_mailer:
       step_next_approved:
         body: "<span class='name-color'>%{full_name}</span> has approved your request. C2 has sent it to the next person."

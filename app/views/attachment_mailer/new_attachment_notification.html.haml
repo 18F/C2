@@ -1,14 +1,14 @@
 - content_for :header_icon, "emails/icon-pencil-circle.png"
-- top_head = t("mailer.new_attachment_email.top_head",
+- top_head = t("mailer.attachment_mailer.new_attachment_notification.top_head",
               request_name: @proposal.name,
               user_name: @attachment_user.full_name)
 - panel_icon = "emails/icon-clipped_page.png"
-- panel_action = t("mailer.new_attachment_email.header",
+- panel_action = t("mailer.attachment_mailer.new_attachment_notification.header",
                   user_name: @attachment_user.full_name,
                   proposal_name: @proposal.name)
 - panel_action_date = @proposal.created_at.strftime("%m/%d/%Y") + " at " + @proposal.created_at.strftime("%I:%M %P")
 - panel_image = @attachment.decorate.file_preview
-- cta_subheader = t("mailer.new_attachment_email.subheader")
+- cta_subheader = t("mailer.attachment_mailer.new_attachment_notification.subheader")
 
 %table.container
   = render partial: "mail_shared/email_header/hero_text",
@@ -23,8 +23,7 @@
               datetime: panel_action_date}
 
   = render partial: "mail_shared/panel/row_content_image",
-    locals: { image: panel_image,
-              last: true}
+    locals: { image: panel_image, image_link: proposal_path(@proposal), last: true}
 
   = render partial: "mail_shared/panel/vertical_buffer"
   / End Panel Wrapper
@@ -34,8 +33,8 @@
 
   = render partial: "mail_shared/call_to_action/button",
     locals: { link_path: proposal_url(@proposal),
-              link_text: t("mailer.new_attachment_email.cta")}
+              link_text: t("mailer.attachment_mailer.new_attachment_notification.cta")}
 
   = render partial: "mail_shared/call_to_action/button",
     locals: { link_path: proposal_url(@proposal, anchor: "comments"),
-              link_text: t("mailer.new_attachment_email.cta_2")}
+              link_text: t("mailer.attachment_mailer.new_attachment_notification.cta_2")}
