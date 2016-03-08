@@ -13,6 +13,11 @@
         %table.container
           = render partial: "mail_shared/call_to_action/subheader", 
             locals: {subheader: ""}
+
+          = render partial: "mail_shared/email_header/hero_text", 
+            locals: { style: "blue-bold", 
+                      text: t("mailer.welcome_mailer.welcome_notification.hello", 
+                      full_name: @user.full_name)}
           
           = render partial: "mail_shared/email_header/hero_text", 
             locals: { text: top_head}
