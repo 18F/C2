@@ -6,10 +6,7 @@ class AuthController < ApplicationController
     auth = request.env["omniauth.auth"]
     return_to_path = fetch_return_to_path
     begin
-      do_user_auth(auth)
-      session[:token] = auth.credentials.token
-      flash[:success] = "You successfully signed in"
-      redirect_to return_to_path || proposals_path
+      try_user_auth(auth, return_to_path)
     rescue EmailRequired => error
       Rails.logger.error(error)
       render :failure, status: 400
@@ -37,5 +34,12 @@ class AuthController < ApplicationController
     sign_out
     user = User.from_oauth_hash(auth)
     sign_in(user)
+  end
+
+  def try_user_auth
+    do_user_auth(auth)
+    session[:token] = auth.credentials.token
+    flash[:success] = "You successfully signed in"
+    redirect_to return_to_path || proposals_path
   end
 end
