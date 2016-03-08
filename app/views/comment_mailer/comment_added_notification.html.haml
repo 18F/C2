@@ -1,4 +1,4 @@
-- header_icon = "emails/icon-pencil-circle.png"
+- content_for :header_icon, "emails/icon-pencil-circle.png"
 - top_head = t("mailer.comment_mailer.comment_added_notification.header",
                                   user_name: @comment.user.full_name,
                                   proposal_name: @proposal.name)
@@ -11,44 +11,21 @@
                                       comment_text: @comment.comment_text)
 - cta_subheader = t("mailer.comment_mailer.comment_added_notification.subheader")
 
-%table.body
-  %tr
-    %td.center{align: "center", valign: "top"}
-      %center
-        = render partial: "mail_shared/email_header/topbar"
-        = render partial: "mail_shared/email_header/icon", 
-          locals: { icon: header_icon}
+%table.container
+  = render partial: "mail_shared/email_header/hero_text", locals: { text: top_head}
 
-        / Start Container
-        %table.container
-          = render partial: "mail_shared/email_header/hero_text", 
-            locals: { text: top_head}
+  / Start Panel Wrapper
+  = render partial: "mail_shared/panel/header"
 
-          / Start Panel Wrapper
-          = render partial: "mail_shared/panel/header"
+  = render partial: "mail_shared/panel/row_description", locals: { icon: panel_icon, action: panel_action, datetime: panel_action_date}
 
-          = render partial: "mail_shared/panel/row_description", 
-            locals: { icon: panel_icon, 
-                    action: panel_action, 
-                  datetime: panel_action_date}
+  = render partial: "mail_shared/panel/row_content_text", locals: { text: panel_text, last: true}
 
-          = render partial: "mail_shared/panel/row_content_text", 
-            locals: { text: panel_text, 
-                      last: true}
+  = render partial: "mail_shared/panel/vertical_buffer"
+  / End Panel Wrapper
 
-          = render partial: "mail_shared/panel/vertical_buffer"
-          / End Panel Wrapper
+  = render partial: "mail_shared/call_to_action/subheader", locals: { subheader: cta_subheader}
 
-          = render partial: "mail_shared/call_to_action/subheader", 
-            locals: { subheader: cta_subheader}
+  = render partial: "mail_shared/call_to_action/button", locals: { link_path: proposal_url(@proposal), link_text: t("mailer.comment_mailer.comment_added_notification.cta")}
 
-          = render partial: "mail_shared/call_to_action/button", 
-            locals: { link_path: proposal_url(@proposal), 
-                      link_text: t("mailer.comment_mailer.comment_added_notification.cta")}
-
-          = render partial: "mail_shared/call_to_action/button", 
-            locals: { link_path: proposal_url(@proposal, anchor: "comments"), 
-                      link_text: t("mailer.comment_mailer.comment_added_notification.cta_2")}
-
-          = render partial: "mail_shared/footer_foundation"
-
+  = render partial: "mail_shared/call_to_action/button", locals: { link_path: proposal_url(@proposal, anchor: "comments"), link_text: t("mailer.comment_mailer.comment_added_notification.cta_2")}
