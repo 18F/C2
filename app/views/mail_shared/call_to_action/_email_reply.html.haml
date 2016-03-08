@@ -1,0 +1,11 @@
+- if show_step_actions
+  = render partial: "mail_shared/call_to_action/button", 
+    locals: { link_path: generate_approve_url(step), 
+              link_text: step.action_name}
+  = render partial: "mail_shared/call_to_action/button", 
+    locals: { link_path: proposal_url(proposal, anchor: "comments"), 
+              link_text: "Or Send a Comment"}
+- else
+  = render partial: "mail_shared/call_to_action/button", 
+    locals: { link_path: proposal_url(proposal), 
+              link_text: "View This Request"}
