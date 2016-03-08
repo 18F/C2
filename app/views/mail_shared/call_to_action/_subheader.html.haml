@@ -1,3 +1,5 @@
+- vertical = !vertical.nil? ? vertical : ''
+
 %tr
   %td
     %table.row
@@ -7,5 +9,5 @@
             %tr
               %td.center{align: "center", valign: "top", class: "no-bottom-padding"}
                 %center
-                  %p{ class: "paragraph-font-style"}
+                  %p{ class: "paragraph-font-style " + vertical}
                     = subheader

@@ -17,12 +17,37 @@ h3.heading-center-top {
     text-align: center;
 }
 
+.contain-attributes .panel {
+    padding: 30px!important;
+}
+
+.proposal-bold{
+    margin-bottom: 20px;
+}
+
 .body .columns td.half, .body .column td.half {
     width: 4.15%;
 }
 
 .body .columns td.quart, .body .column td.quart {
     width: 2.4%;
+}
+
+p.no-top-margin.paragraph-font-style {
+    margin-top: 0px;
+}
+
+.proposal-data-label {
+  font-size: 18px;
+  font-weight: bold;
+  color: #0744a4;
+}
+
+p.proposal-data-label{
+    margin-bottom: 5px;
+}
+p.proposal-data-attribute{
+    margin-bottom: 15px;
 }
 
 h3.color-light .name-color{
@@ -1072,6 +1097,10 @@ table.columns .right-text-pad {
 }
 
 @media only screen and (max-width: 600px) {
+    .contain-attributes .panel {
+        padding-left: 10px!important;
+        padding-right: 10px!important;
+    }
     table[class="body"] img {
         width: auto!important;
         height: auto!important;
