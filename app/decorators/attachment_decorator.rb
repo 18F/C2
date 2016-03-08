@@ -1,13 +1,23 @@
 class AttachmentDecorator < Draper::Decorator
+  include Rails.application.routes.url_helpers
   include ActionView::Helpers::AssetTagHelper
   include ActionView::Helpers::UrlHelper
   delegate_all
 
   def file_preview
     if file.content_type =~ /\Aimage/
-      link_to image_tag(file.url, alt: "", class: "image-with-border"), file.url 
+      image_tag(file.url, alt: "", class: "image-with-border")
     else
-      return '<br><table class="button"><tr><td>' + link_to('Click to view ' + file.original_filename, file.url) + '</td></tr></table>'
+      "<br><table class='button'><tr><td>#{link_text}</td></tr></table>"
     end
+  end
+
+  private
+
+  def link_text
+    I18n.t(
+      "mailer.attachment_mailer.new_attachment_notification.attachment_cta",
+      attachment_name: file.original_filename
+    )
   end
 end
