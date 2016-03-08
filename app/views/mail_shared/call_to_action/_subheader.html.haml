@@ -1,7 +1,8 @@
+- height    = !height.nil?    ? ' ' + height    : ''
 - vertical  = !vertical.nil?  ? ' ' + vertical  : ''
 - align     = !align.nil?     ? ' ' + align     : ''
 
-%tr
+%tr{class: height}
   %td
     %table.row
       %tr
