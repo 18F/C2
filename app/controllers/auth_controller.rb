@@ -9,7 +9,7 @@ class AuthController < ApplicationController
       try_user_auth(auth, return_to_path)
     rescue EmailRequired => error
       Rails.logger.error(error)
-      render :failure, status: 400
+      render :failure, status: 200
     end
   end
 

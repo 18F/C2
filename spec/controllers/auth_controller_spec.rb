@@ -17,7 +17,7 @@ describe AuthController do
       request.env["omniauth.auth"] = OmniAuth.config.mock_auth[:myusa]
       get :oauth_callback, provider: :myusa
       expect(session[:user]).to be_nil
-      expect(response.status).to eq(400)
+      expect(response.status).to eq(200)
     end
   end
 end
