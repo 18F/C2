@@ -237,10 +237,10 @@ ActiveRecord::Schema.define(version: 20160307161402) do
   add_index "roles", ["name"], name: "roles_name_idx", unique: true, using: :btree
 
   create_table "scheduled_reports", force: :cascade do |t|
-    t.string   "name",       null: false
-    t.string   "frequency",  null: false
-    t.integer  "user_id",    null: false
-    t.integer  "report_id",  null: false
+    t.string   "name",                   null: false
+    t.integer  "frequency",  default: 0, null: false
+    t.integer  "user_id",                null: false
+    t.integer  "report_id",              null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

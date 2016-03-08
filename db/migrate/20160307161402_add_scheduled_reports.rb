@@ -2,7 +2,7 @@ class AddScheduledReports < ActiveRecord::Migration
   def change
     create_table :scheduled_reports do |t|
       t.string :name, null: false
-      t.string :frequency, null: false
+      t.integer :frequency, default: 0, null: false
       t.integer :user_id, null: false
       t.integer :report_id, null: false
       t.timestamps

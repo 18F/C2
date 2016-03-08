@@ -1,16 +1,5 @@
 class ScheduledReport < ActiveRecord::Base
+  enum frequency: { daily: 0, weekly: 1, monthly: 2 }
   belongs_to :user
   belongs_to :report
-
-  def monthly?
-    frequency == "monthly"
-  end
-
-  def weekly?
-    frequency == "weekly"
-  end
-
-  def daily?
-    frequency == "daily"
-  end
 end

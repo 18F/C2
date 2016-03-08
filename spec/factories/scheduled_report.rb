@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :scheduled_report do
     name "my scheduled report"
-    frequency "none"
+    frequency :daily
     association :user, factory: :user
     association :report, factory: :report
 
