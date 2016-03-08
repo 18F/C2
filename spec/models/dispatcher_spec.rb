@@ -111,6 +111,21 @@ describe Dispatcher do
 
         expect(ProposalMailer).to have_received(:proposal_complete).with(procurement.proposal)
       end
+
+      it "notifies the observers that the proposal is complete" do
+        proposal = create(:proposal, :with_approver, :with_observer)
+        observer = proposal.observers.first
+        work_order = create(:ncr_work_order, proposal: proposal)
+        work_order.proposal.approve!
+        step_2 = work_order.individual_steps.last
+        allow(ObserverMailer).to receive(:proposal_complete).
+          with(observer, proposal).
+          and_return(double(deliver_later: true))
+
+        Dispatcher.new(proposal).step_complete(step_2)
+
+        expect(ObserverMailer).to have_received(:proposal_complete).with(observer, proposal)
+      end
     end
 
     context "final step not complete" do

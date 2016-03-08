@@ -110,3 +110,7 @@ en:
       observer_removed_confirmation:
         header: "You have been been removed as an observer for this purchase request."
         body: "You don't need to take any additional action."
+      proposal_complete:
+        header: "This request has been completed."
+        cta: "View request details"
+

@@ -29,6 +29,20 @@ class ObserverMailer < ApplicationMailer
     )
   end
 
+  def proposal_complete(user, proposal)
+    user = user
+    @proposal = proposal.decorate
+
+    assign_threading_headers(@proposal)
+
+    mail(
+      to: email_to_user(user),
+      subject: subject(@proposal),
+      from: default_sender_email,
+      reply_to: reply_email(@proposal)
+    )
+  end
+
   private
 
   def observation_added_from(observation)

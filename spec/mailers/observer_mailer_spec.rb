@@ -56,4 +56,20 @@ describe ObserverMailer do
       expect(mail.to).to eq([observer.email_address])
     end
   end
+
+  describe "#proposal_complete" do
+    let(:mail) { ObserverMailer.proposal_complete(observer, proposal) }
+
+    it_behaves_like "a proposal email"
+  end
+
+  private
+
+  def proposal
+    @proposal ||= create(:proposal)
+  end
+
+  def observer
+    @observer ||= create(:observation).user
+  end
 end
