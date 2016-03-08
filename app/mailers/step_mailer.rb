@@ -4,6 +4,14 @@ class StepMailer < ApplicationMailer
     assign_threading_headers(@proposal)
     @step = step
 
+    # Iterate through steps to find the LAST 'approved' person
+    @proposal.individual_steps.each_with_index do |step, index|
+      if step.status == 'approved'
+        last_approved = User.find step.user_id
+      end
+    end
+    @last_approved_user = last_approved_user
+
     mail(
       to: @proposal.requester.email_address,
       subject: subject(@proposal),
