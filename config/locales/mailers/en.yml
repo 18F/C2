@@ -90,6 +90,7 @@ en:
           request for the current fiscal year."
     welcome_mailer:
       welcome_notification:
+        hello: "Hi %{full_name}"
         header: "Welcome. You've been added as a user to the C2 purchase approval platform."
         para1: "With C2, you won't need to  track down approvers, find unsorted emails from all over your inbox, or put together spreadsheets. C2 processes approvals securely and automatically, and it provides you the information you need to make the most of your budget."
         para2_html: "By now you should have been trained on how it works, but if you have any questions, start with our <a href='%{help_url}'>Help page</a>."
