@@ -36,7 +36,7 @@ class AuthController < ApplicationController
     sign_in(user)
   end
 
-  def try_user_auth
+  def try_user_auth(auth, return_to_path)
     do_user_auth(auth)
     session[:token] = auth.credentials.token
     flash[:success] = "You successfully signed in"
