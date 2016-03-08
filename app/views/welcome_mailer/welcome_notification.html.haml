@@ -5,14 +5,15 @@
 %table.body
   %tr
     %td.center{align: "center", valign: "top"}
-      %center
+      %center.grey-background
         = render partial: "mail_shared/email_header/topbar"
 
 
         / Start Container
         %table.container
           = render partial: "mail_shared/call_to_action/subheader", 
-            locals: {subheader: ""}
+            locals: { subheader: "", 
+                      height: 'half'}
 
           = render partial: "mail_shared/email_header/hero_text", 
             locals: { style: "blue-bold", 
@@ -21,6 +22,15 @@
           
           = render partial: "mail_shared/email_header/hero_text", 
             locals: { text: top_head}
+
+      %center
+
+
+        %table.container
+
+          = render partial: "mail_shared/call_to_action/subheader", 
+            locals: { subheader: "",
+                      height: 'half'}
 
           = render partial: "mail_shared/call_to_action/subheader", 
             locals: { vertical: "no-top-margin", 
