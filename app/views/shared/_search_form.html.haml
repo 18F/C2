@@ -59,7 +59,7 @@
     .form-group
       .checkbox
         %label
-          %input{type: "checkbox", name: "#{current_user.client_model_slug}[includes_attachment]"}
+          %input{type: "checkbox", name: "#{current_user.client_model_slug}[includes_attachment]", checked: @adv_search.value_for("num_attachments")}
           Includes attachment
 
     %button#adv-search-button.btn.btn-lg.btn-primary{type: "submit"}

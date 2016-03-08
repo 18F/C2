@@ -116,6 +116,7 @@ class Proposal < ActiveRecord::Base
         json[:client_data] = client_data.as_indexed_json
       end
       json[:subscribers] = subscribers.map { |user| { id: user.id, name: user.display_name } }
+      json[:num_attachments] = attachments.count
     end
   end
 
