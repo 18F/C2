@@ -1,5 +1,5 @@
-class CancellationMailer < ApplicationMailer
-  def cancellation_notification(to_email, proposal, reason = nil)
+class CancelationMailer < ApplicationMailer
+  def cancelation_notification(to_email, proposal, reason = nil)
     @reason = reason
     @proposal = proposal.decorate
     assign_threading_headers(@proposal)
@@ -12,7 +12,7 @@ class CancellationMailer < ApplicationMailer
     )
   end
 
-  def cancellation_confirmation(proposal, reason)
+  def cancelation_confirmation(proposal, reason)
     @reason = reason
     @proposal = proposal.decorate
     assign_threading_headers(@proposal)
@@ -25,7 +25,7 @@ class CancellationMailer < ApplicationMailer
     )
   end
 
-  def fiscal_cancellation_notification(proposal)
+  def fiscal_cancelation_notification(proposal)
     @proposal = proposal.decorate
     user = @proposal.requester
 
@@ -40,6 +40,6 @@ class CancellationMailer < ApplicationMailer
   private
 
   def subject(proposal)
-    "Request #{proposal.public_id} cancelled: #{proposal.name}"
+    "Request #{proposal.public_id} canceled: #{proposal.name}"
   end
 end

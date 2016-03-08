@@ -1,9 +1,0 @@
-<%= t("mailer.cancellation_mailer.cancellation_notification.header",
-      name: @proposal.requester.full_name) %>
-
-<%= t("mailer.cancellation_mailer.cancellation_notification.subheader") %>
-
-<%= t("mailer.cancellation_mailer.cancellation_notification.reason", reason: @reason) %>
-
-<%= t("mailer.cancellation_mailer.cta") %>
-<%= proposal_url(@proposal) %>

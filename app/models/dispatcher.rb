@@ -40,14 +40,14 @@ class Dispatcher
     end
   end
 
-  def deliver_cancellation_emails(reason = nil)
-    cancellation_notification_recipients = active_step_users + active_observers
+  def deliver_cancelation_emails(reason = nil)
+    cancelation_notification_recipients = active_step_users + active_observers
 
-    cancellation_notification_recipients.each do |recipient|
-      CancellationMailer.cancellation_notification(recipient.email_address, proposal, reason).deliver_later
+    cancelation_notification_recipients.each do |recipient|
+      CancelationMailer.cancelation_notification(recipient.email_address, proposal, reason).deliver_later
     end
 
-    CancellationMailer.cancellation_confirmation(proposal, reason).deliver_later
+    CancelationMailer.cancelation_confirmation(proposal, reason).deliver_later
   end
 
   def step_complete(step)

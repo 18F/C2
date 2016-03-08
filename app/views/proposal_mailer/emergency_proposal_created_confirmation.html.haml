@@ -1,47 +1,53 @@
 - header_icon = "emails/icon-truck-circle.png"
 - top_head = t("mailer.proposal_mailer.emergency_proposal_created_confirmation.header", proposal_name: @proposal.name)
 - panel_icon = "emails/button-x-circled.png"
-- panel_action = t("mailer.cancellation_mailer.cancellation_notification.subheader")
+- panel_action = t("mailer.proposal_mailer.emergency_proposal_created_confirmation.subheader")
 - panel_action_date = @proposal.created_at.strftime("%m/%d/%Y")+' at '+@proposal.created_at.strftime("%I:%M %P")
-- panel_text = t("mailer.cancellation_mailer.cancellation_notification.reason", reason: @reason)
+- panel_text = t("mailer.proposal_mailer.emergency_proposal_created_confirmation.reason", reason: @reason)
 - cta_subheader = t("mailer.proposal_mailer.emergency_proposal_created_confirmation.subheader")
 - proposal_link_text = t("mailer.proposal_mailer.emergency_proposal_created_confirmation.cta")
 - cta_subheader_foot = t("mailer.proposal_mailer.emergency_proposal_created_confirmation.subheader_foot")
 
 %table.body
   %tr
-    %td.center{align: "center", valign: "top"}
+    %td.center{ align: "center", valign: "top" }
       %center
         = render partial: "mail_shared/email_header/topbar"
-        = render partial: "mail_shared/email_header/icon", locals: { icon: header_icon}
+        = render partial: "mail_shared/email_header/icon",
+          locals: { icon: header_icon }
 
         / Start Container
         %table.container
-          = render partial: "mail_shared/email_header/hero_text", locals: { text: top_head}
+          = render partial: "mail_shared/email_header/hero_text",
+            locals: { text: top_head }
 
-          = render partial: "mail_shared/call_to_action/subheader", locals: { subheader: cta_subheader, vertical: 'no-top-margin'}
-          
-          = render partial: "mail_shared/call_to_action/button", locals: { link_path: proposal_url(@proposal), 
-            link_text: proposal_link_text}
-          
-          = render partial: "mail_shared/call_to_action/subheader", locals: { subheader: ''}
+          = render partial: "mail_shared/call_to_action/subheader",
+            locals: { subheader: cta_subheader, vertical: "no-top-margin" }
+
+          = render partial: "mail_shared/call_to_action/button",
+            locals: { link_path: proposal_url(@proposal), link_text: proposal_link_text }
+
+          = render partial: "mail_shared/call_to_action/subheader",
+            locals: { subheader: "" }
 
         %hr/
         / Start Container
         %table.container.contain-attributes
-          = render partial: "mail_shared/call_to_action/subheader", locals: { subheader: cta_subheader_foot}
+          = render partial: "mail_shared/call_to_action/subheader",
+            locals: { subheader: cta_subheader_foot }
 
           / Start Panel Wrapper
-          = render partial: "mail_shared/panel/header_name", locals: { proposal: @proposal}
+          = render partial: "mail_shared/panel/header_name", locals: { proposal: @proposal }
 
-          = render partial: "mail_shared/panel/proposal_attributes", locals: { proposal: @proposal}
+          = render partial: "mail_shared/panel/proposal_attributes",
+            locals: { proposal: @proposal }
 
           = render partial: "mail_shared/panel/vertical_buffer"
 
-          = render partial: "mail_shared/call_to_action/subheader", locals: { subheader: ''}
+          = render partial: "mail_shared/call_to_action/subheader",
+            locals: { subheader: "" }
 
-          = render partial: "mail_shared/call_to_action/button", locals: { link_path: proposal_url(@proposal), 
-            link_text: proposal_link_text}
+          = render partial: "mail_shared/call_to_action/button",
+            locals: { link_path: proposal_url(@proposal), link_text: proposal_link_text }
 
           = render partial: "mail_shared/footer_foundation"
-
