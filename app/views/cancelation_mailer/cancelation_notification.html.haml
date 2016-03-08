@@ -8,19 +8,28 @@
 - cta_subheader = t("mailer.cancelation_mailer.cancelation_notification.reason", reason: @reason)
 
 %table.container
-  = render partial: "mail_shared/email_header/hero_text", locals: { text: top_head}
+  = render partial: "mail_shared/email_header/hero_text", 
+    locals: { text: top_head}
       
   / Start Panel Wrapper
   = render partial: "mail_shared/panel/header"
   
-  = render partial: "mail_shared/panel/row_description", locals: { icon: panel_icon, action: panel_action, datetime: panel_action_date}
+  = render partial: "mail_shared/panel/row_description", 
+    locals: { icon: panel_icon, 
+              action: panel_action, 
+              datetime: panel_action_date}
   
-  = render partial: "mail_shared/panel/row_content_text", locals: { text: panel_text, last: true}
+  = render partial: "mail_shared/panel/row_content_text", 
+    locals: { text: panel_text, 
+              last: true}
 
   = render partial: "mail_shared/panel/vertical_buffer"
   / End Panel Wrapper
 
-  = render partial: "mail_shared/call_to_action/subheader", locals: { subheader: ''}
+  = render partial: "mail_shared/call_to_action/subheader", 
+    locals: { subheader: ''}
   
-  = render partial: "mail_shared/call_to_action/button", locals: { link_path: proposal_url(@proposal), link_text: t("mailer.cancellation_mailer.cta")}
+  = render partial: "mail_shared/call_to_action/button", 
+    locals: { link_path: proposal_url(@proposal), 
+              link_text: t("mailer.cancellation_mailer.cta")}
   
