@@ -1,0 +1,22 @@
+!!!
+%html
+  %head
+    %title C2
+    %meta{:content => "text/html; charset=US-ASCII", "http-equiv" => "Content-Type"}/
+    %meta{:content => "width=device-width", :name => "viewport"}/
+    %link{:href => stylesheet_url("mailer_new.css"), :rel => "stylesheet", :type => "text/css"}/
+    = render "mail_shared/inlined_styles"
+  %body
+    %table.body
+      %tr
+        %td.center{align: "center", valign: "top"}
+          %center
+            = render partial: "mail_shared/email_header/topbar"
+            - if !yield(:header_icon).empty?
+              = render partial: "mail_shared/email_header/icon", locals: { icon: yield(:header_icon)}
+
+            = yield
+          
+            %table.container
+              = render partial: "mail_shared/footer_foundation"
+
