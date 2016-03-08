@@ -2,25 +2,34 @@
 - top_head = t("mailer.cancellation_mailer.cancellation_confirmation.header")
 - panel_icon = "emails/button-x-circled.png"
 - panel_action = t("mailer.cancelation_mailer.cancelation_confirmation.subsection",
-                                      name: @proposal.requester.full_name,
-                                      proposal_name: @proposal.name)
+                  name: @proposal.requester.full_name,
+                  proposal_name: @proposal.name)
 - panel_action_date = @proposal.created_at.strftime("%m/%d/%Y")+' at '+@proposal.created_at.strftime("%I:%M %P")
 - panel_text = t("mailer.cancelation_mailer.cancelation_confirmation.reason", reason: @reason)
 - cta_subheader = t("mailer.cancelation_mailer.cancelation_confirmation.reason", reason: @reason)
 
 %table.container
-  = render partial: "mail_shared/email_header/hero_text", locals: { text: top_head}
+  = render partial: "mail_shared/email_header/hero_text", 
+    locals: { text: top_head}
       
   / Start Panel Wrapper
   = render partial: "mail_shared/panel/header"
   
-  = render partial: "mail_shared/panel/row_description", locals: { icon: panel_icon, action: panel_action, datetime: panel_action_date}
+  = render partial: "mail_shared/panel/row_description", 
+    locals: { icon: panel_icon, 
+              action: panel_action, 
+              datetime: panel_action_date}
   
-  = render partial: "mail_shared/panel/row_content_text", locals: { text: panel_text, last: true}
+  = render partial: "mail_shared/panel/row_content_text", 
+    locals: { text: panel_text, 
+              last: true}
 
   = render partial: "mail_shared/panel/vertical_buffer"
   / End Panel Wrapper
 
-  = render partial: "mail_shared/call_to_action/subheader", locals: { subheader: ''}
+  = render partial: "mail_shared/call_to_action/subheader", 
+    locals: { subheader: ''}
   
-  = render partial: "mail_shared/call_to_action/button", locals: { link_path: proposal_url(@proposal), link_text: t("mailer.cancellation_mailer.cta")}
+  = render partial: "mail_shared/call_to_action/button", 
+    locals: { link_path: proposal_url(@proposal), 
+              link_text: t("mailer.cancellation_mailer.cta")}

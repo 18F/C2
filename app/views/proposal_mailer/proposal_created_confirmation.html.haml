@@ -6,19 +6,25 @@
 - cta_subheader_foot = t("mailer.proposal_mailer.proposal_created_confirmation.approver_subheader")
 
 %table.container
-  = render partial: "mail_shared/email_header/hero_text", locals: { text: top_head}
+  = render partial: "mail_shared/email_header/hero_text", 
+    locals: { text: top_head}
 
-  = render partial: "mail_shared/call_to_action/subheader", locals: { subheader: cta_subheader}
+  = render partial: "mail_shared/call_to_action/subheader", 
+    locals: { subheader: cta_subheader}
   
-  = render partial: "mail_shared/call_to_action/button", locals: { link_path: proposal_url(@proposal), 
-    link_text: proposal_link_text}
+  = render partial: "mail_shared/call_to_action/button", 
+    locals: { link_path: proposal_url(@proposal), 
+              link_text: proposal_link_text}
   
-  = render partial: "mail_shared/call_to_action/subheader", locals: { subheader: ''}
+  = render partial: "mail_shared/call_to_action/subheader", 
+    locals: { subheader: ''}
 
 %hr/
 / Start Container
 %table.container
-  = render partial: "mail_shared/call_to_action/subheader", locals: { subheader: cta_subheader_foot}
+  = render partial: "mail_shared/call_to_action/subheader", 
+    locals: { subheader: cta_subheader_foot}
 
-  = render partial: "mail_shared/approval/chain", locals: { proposal: @proposal }
-  
+  = render partial: "mail_shared/approval/chain", 
+    locals: { proposal: @proposal }
+
