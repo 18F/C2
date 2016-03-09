@@ -53,7 +53,7 @@ class Report < ActiveRecord::Base
   end
 
   def subscription_for(some_user)
-    subscriptions.where(user: some_user)
+    subscriptions.where(user: some_user).first
   end
 
   def self.sql_for_user(user)

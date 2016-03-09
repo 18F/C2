@@ -32,7 +32,7 @@ module Searchable
 
     def self.rebuild_index
       stager = index_stager
-      indexer.run
+      indexer(stager).run
       stager.alias_stage_to_tmp_index && stager.promote
       __elasticsearch__.refresh_index!
     end
@@ -53,7 +53,7 @@ module Searchable
       Elasticsearch::Rails::HA::IndexStager.new(self.to_s)
     end
 
-    def self.indexer
+    def self.indexer(stager)
       Elasticsearch::Rails::HA::ParallelIndexer.new(
         klass: self.to_s,
         idx_name: stager.tmp_index_name,

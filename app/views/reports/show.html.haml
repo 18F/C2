@@ -1,22 +1,98 @@
 .inset
-  %h1 Report #{@report.id}
+  .inset.navlink
+    %a{href: reports_path}
+      %span.fa.fa-angle-left
+      My Reports
+    %span.fa.fa-bar-chart
 
-  %h3 #{@report.name}
+  .inset
+    .run-report{style: "float: right"}
+      = link_to @report.url, class: 'btn btn-default btn-primary', role: 'button' do
+        %i.fa.fa-play
+        Run this report
 
-  .run-link
-    = link_to "Run report", @report.url
+    %h1 #{@report.name}
 
-  .query
-    %pre
-      = @report.humanized_query
-  .raw-query
-    %pre
-      = JSON.pretty_generate(@report.query)
+    .inset.row
 
-  - if policy(@report).can_destroy?
-    = button_to "Delete", 
-      report_path(@report), 
-      method: :delete, 
-      data: {confirm: "Are you sure?"}, 
-      class: "btn btn-default", 
-      form_class: "form-inline"
+      .inset.col-md-7
+
+        %h2 Report criteria
+
+        .report-group
+          .field
+            Search in
+          .value
+            = proposal_status_value(@report.client_query.value_for("status")||"*")
+        .report-group
+          .field
+            Card Holder Name
+          .value
+            = @report.client_query.value_for("requester") || "Any"
+        .report-group
+          .field
+            Vendor
+          .value
+            = @report.client_query.value_for("client_data.vendor") || "Any"
+        .report-group
+          .field
+            Amount
+          .value
+            = @report.client_query.value_for("client_data.amount") || "Any"
+        - if current_user.client_model.expense_type_options.any?
+          .report-group
+            .field
+              Expense Type
+            .value
+              = @report.client_query.value_for("client_data.expense_type") || "Any"
+        .report-group
+          .field
+            Dated within
+          .value
+            = @report.client_query.value_for("created_within") || "Any"
+        .report-group
+          .field
+            Of Date
+          .value
+            = @report.client_query.value_for("created_at") || "Any"
+
+      .inset.col-md-5
+
+        %h2 Subscribe
+
+        %form.subscription{role: "form", action: (@subscribed ? scheduled_report_path(@subscription) : scheduled_reports_path), method: :post}
+          = token_tag
+          %input{type: "hidden", name: "_method", value: @subscribed ? "put" : "post"}
+          %input{type: "hidden", name: "report_id", value: @report.id}
+          %input{type: "hidden", name: "name", value: "#{@report.name} - #{current_user.full_name}"}
+          %fieldset
+            %legend Email this report to me...
+            .radio
+              %label
+                %input{type: "radio", name: "frequency", value: "daily", checked: @subscribed ? @subscription.daily? : false}
+                Daily
+              %label
+                %input{type: "radio", name: "frequency", value: "weekly", checked: @subscribed ? @subscription.weekly? : false}
+                Weekly
+              %label
+                %input{type: "radio", name: "frequency", value: "monthly", checked: @subscribed ? @subscription.monthly? : false}
+                Monthly
+              %label
+                %input{type: "radio", name: "frequency", value: "never", checked: @subscribed ? @subscription.never? : true}
+                Don't subscribe me
+
+            .actions
+              %button.btn.btn-default.btn-primary Save
+
+        %hr
+
+        .action-button
+        = button_to preview_report_path(@report), method: :post do
+          %i.fa.fa-envelope-o
+          Send this report to me now
+
+        - if current_user.admin? || policy(@report).can_destroy?
+          .action-button
+          = button_to @report, method: :delete, data: {confirm: "Are you sure?"} do
+            %i.fa.fa-trash
+            Delete report

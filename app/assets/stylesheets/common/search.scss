@@ -1,3 +1,5 @@
+@import "constants";
+
 // based on http://bootsnipp.com/snippets/featured/advanced-dropdown-search
 .m-search-ui {
   padding: 12px 0;
@@ -43,5 +45,33 @@
     .dropdown.dropdown-lg .dropdown-menu {
       min-width: 500px;
     }
+  }
+}
+
+form.subscription {
+  .radio {
+    label {
+      display: block;
+    }
+  }
+  fieldset {
+    legend {
+      color: $lightgray;
+    }
+  }
+}
+
+.action-button {
+  padding-bottom: 15px;
+}
+
+.report-group {
+  padding-bottom: 15px;
+
+  .field {
+    color: $lightgray;
+  }
+  .value {
+    font-weight: bold;
   }
 }
