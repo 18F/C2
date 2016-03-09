@@ -55,7 +55,7 @@ C2::Application.routes.draw do
       post :preview
     end
   end
-  resources :scheduled_reports, only: [:index, :show, :create, :destroy, :update]
+  resources :scheduled_reports, only: [:create, :update]
 
   namespace :ncr do
     resources :work_orders, except: [:index, :destroy]

@@ -21,22 +21,6 @@ class ScheduledReportsController < ApplicationController
     end
   end
 
-  def index
-    @scheduled_reports = current_user.scheduled_reports
-  end
-
-  def show
-    @scheduled_report = scheduled_report
-  end
-
-  def destroy
-    scheduled_report.destroy!
-    respond_to do |format|
-      format.json { render json: scheduled_report.as_json, status: 202 }
-      format.html { redirect_to reports_path }
-    end
-  end
-
   private
 
   def scheduled_report
