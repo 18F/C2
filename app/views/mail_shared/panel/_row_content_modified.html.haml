@@ -11,10 +11,11 @@
                   %tr{valign: "top"}
                     %td.half.sub-columns.hide-for-small
                     %td.half.sub-columns.left-border-two.hide-for-small
-                    %td.ten.sub-columns.no-margin-contained{style: "text-align: center;", align: "center", valign: "top"}
+                    %td.ten.sub-columns.modified-contained{style: "text-align: center;", align: "center", valign: "top"}
                       - changes.each do |change|
-                        %p.text-message
+                        %p.text-message.small-buffer
                           = t("mailer.proposal_mailer.proposal_updated_needs_re_review.change_result",
                             verb: change[:verb],
                             result: change[:result]).html_safe
+                    %td.expander
               %td.expander
