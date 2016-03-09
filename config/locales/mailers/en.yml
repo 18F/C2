@@ -63,7 +63,10 @@ en:
         header: "Request completed"
         subheader: "All of your request's steps have been completed"
       proposal_updated_no_action_required:
+        panel_preface: "Here are the updated request details:"
         header: "This request was modified, but no action is required"
+        modifier_action: "Modified by %{user_name}"
+        change_result: "<strong>%{verb}</strong> %{result}"
         subheader: "%{modifier_name} updated %{proposal_name} as follows:"
         cta: "View request details"
       proposal_updated_while_step_pending:
