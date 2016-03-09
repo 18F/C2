@@ -75,3 +75,10 @@ form.subscription {
     font-weight: bold;
   }
 }
+
+table.reports {
+  td.subscription, td.edit, td.run {
+    text-align: right;
+    font-size: 90%;
+  }
+}

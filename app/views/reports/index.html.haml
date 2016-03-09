@@ -13,11 +13,4 @@
 
   %hr
 
-  %ul.list-unstyled
-    - @reports.each do |report|
-      %li
-        = link_to(report.name, report_path(report))
-        (
-        = link_to("Run", report.url)
-        )
-
+  = render partial: "shared/reports_list"

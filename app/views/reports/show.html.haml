@@ -19,6 +19,13 @@
 
         %h2 Report criteria
 
+        - if @report.text_query.present?
+          .report-group
+            .field
+              Search terms
+            .value
+              = @report.text_query
+
         .report-group
           .field
             Search in
