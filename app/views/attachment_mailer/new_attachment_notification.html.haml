@@ -6,7 +6,7 @@
 - panel_action = t("mailer.attachment_mailer.new_attachment_notification.header",
                   user_name: @attachment_user.full_name,
                   proposal_name: @proposal.name)
-- panel_action_date = @proposal.created_at.strftime("%m/%d/%Y") + " at " + @proposal.created_at.strftime("%I:%M %P")
+- panel_action_date = @attachment.created_at.strftime("%m/%d/%Y") + " at " + @attachment.created_at.strftime("%I:%M %P")
 - panel_image = @attachment.decorate.file_preview
 - cta_subheader = t("mailer.attachment_mailer.new_attachment_notification.subheader")
 
