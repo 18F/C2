@@ -76,7 +76,7 @@ describe Report do
       scheduled_report = create(:scheduled_report, frequency: "daily", user: owner, report: report)
 
       expect(report.subscribed?(owner)).to eq(true)
-      expect(report.subscription_for(owner)).to eq([scheduled_report])
+      expect(report.subscription_for(owner)).to eq(scheduled_report)
     end
   end
 end
