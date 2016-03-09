@@ -9,7 +9,8 @@
                 %table{valign: "top"}
                   %tr{valign: "top"}
                     %td.one.sub-columns.hide-for-small{valign: "top"}
-                      = image_tag icon, class: "image-sidebar"
+                      = link_to @proposal do
+                        = image_tag icon, class: "image-sidebar"
                     %td.ten.sub-columns{valign: "top"}
                       %p.styled-italic-side
                         = action.html_safe
