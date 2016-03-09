@@ -3,7 +3,9 @@ describe Searchable do
     it "should rebuild the index", elasticsearch: true do
       create(:proposal)
 
-      expect(Proposal.rebuild_index).not_to raise
+      expect {
+        Proposal.rebuild_index
+      }.not_to raise_error
     end
   end
 end
