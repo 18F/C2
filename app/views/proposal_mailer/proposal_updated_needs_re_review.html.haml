@@ -73,12 +73,18 @@
                   action: attachment_action,
                   datetime: attachment_action_date}
 
+      = render partial: "mail_shared/panel/vertical_buffer"
+      
   = render partial: "mail_shared/panel/vertical_buffer"
 
 %table.container
 
   = render partial: "mail_shared/call_to_action/subheader", 
-  locals: { subheader: '' }
+    locals: { subheader: '' }
 
-= render partial: "mail_shared/proposal_button",
-  locals: { button_text: t("mailer.proposal_mailer.proposal_updated_needs_re_review.cta") }
+  / = render(partial: "mail_shared/call_to_action/email_reply",
+  /   locals: { step: @step, 
+  /             show_step_actions: true, 
+  /             proposal: @proposal })
+  
+  Button goes here
