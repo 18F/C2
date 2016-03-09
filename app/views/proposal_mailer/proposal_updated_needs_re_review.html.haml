@@ -51,13 +51,9 @@
     locals: { subheader: cta_subheader_foot}
 
   = render partial: "mail_shared/panel/header_name", 
-                  locals: { name: '123',
-                            subtext: "123123" }
+                  locals: { name: @proposal.name,
+                            subtext: @proposal.public_id }
   
-  = render partial: "mail_shared/panel/vertical_buffer"
-  
-  = render partial: "mail_shared/panel/vertical_buffer"
-
   = render partial: "mail_shared/panel/proposal_attributes",
     locals: { proposal: @proposal }
 
