@@ -3,8 +3,14 @@
               modifier_name: @modifier.full_name,
               proposal_name: @proposal.name)
 - cta_subheader = t("mailer.proposal_mailer.proposal_updated_needs_re_review.subheader")
-- proposal_link_text = t("mailer.proposal_mailer.proposal_created_confirmation.cta")
-- cta_subheader_foot = t("mailer.proposal_mailer.proposal_created_confirmation.approver_subheader")
+- proposal_link_text = t("mailer.proposal_mailer.proposal_updated_needs_re_review.cta")
+
+- panel_icon = "emails/button-circle.png"
+- panel_action = t("mailer.proposal_mailer.proposal_updated_needs_re_review.modifier_action", 
+                  user_name: @modifier.full_name)
+- panel_action_date = @proposal.created_at.strftime("%m/%d/%Y") + " at " + @proposal.created_at.strftime("%I:%M %P")
+
+- cta_subheader_foot = t("mailer.proposal_mailer.proposal_updated_needs_re_review.approver_subheader")
 
 %table.container
   = render partial: "mail_shared/email_header/hero_text", 
@@ -13,11 +19,27 @@
 
   = render partial: "mail_shared/call_to_action/subheader", 
     locals: { subheader: cta_subheader,
-              vertical: "no-top-margin"}
+              vertical: "no-top-margin" }
   
+  / Start Panel Wrapper
+  = render partial: "mail_shared/panel/header"
+
+  = render partial: "mail_shared/panel/row_description",
+    locals: { icon: panel_icon,
+              action: panel_action,
+              datetime: panel_action_date }
+
+  = render partial: "mail_shared/panel/row_content_modified", 
+    locals: { changes: @changes,
+              last: true}
+
+  = render partial: "mail_shared/panel/vertical_buffer"
+  / End Panel Wrapper
+
+
   = render partial: "mail_shared/call_to_action/button", 
     locals: { link_path: proposal_url(@proposal), 
-              link_text: proposal_link_text}
+              link_text: proposal_link_text }
   
   = render partial: "mail_shared/call_to_action/subheader", 
     locals: { subheader: ''}
