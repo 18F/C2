@@ -53,9 +53,11 @@
   = render partial: "mail_shared/panel/header_name", 
                   locals: { name: @proposal.name,
                             subtext: @proposal.public_id }
-  
+                              
   = render partial: "mail_shared/panel/proposal_attributes",
     locals: { proposal: @proposal }
+
+  = render partial: "mail_shared/panel/vertical_buffer"
 
 
 = render partial: "mail_shared/proposal_button",
