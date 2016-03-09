@@ -1,5 +1,7 @@
 <%= t("mailer.cancelation_mailer.fiscal_cancelation_notification.header") %>
 <%= t("mailer.cancelation_mailer.fiscal_cancelation_notification.reason") %>
 
-<%= t("mailer.cancelation_mailer.cta") %>
+<%= t("mailer.view_request_cta") %>
 <%= proposal_url(@proposal) %>
+
+<%= t("mailer.footer", feedback_url: feedback_url) %>

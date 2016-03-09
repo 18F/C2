@@ -1,4 +1,6 @@
 <%= t("mailer.proposal_mailer.emergency_proposal_created_confirmation.header", proposal_name: @proposal.name) %>
 
-<%= t("mailer.proposal_mailer.emergency_proposal_created_confirmation.cta") %>
+<%= t("mailer.view_request_cta") %>
 <%= proposal_url(@proposal) %>
+
+<%= t("mailer.footer", feedback_url: feedback_url) %>

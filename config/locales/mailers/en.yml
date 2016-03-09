@@ -1,12 +1,7 @@
 en:
   mailer:
-    generic_greeting: Hello
-    greeting: "Hi %{name}"
-    proposal_link: "View This Request"
-    proposal_link_text: "View This Request: %{proposal_url}"
-    feedback_footer_html:
-      "Find a bug, have a recommendation, or want to provide other feedback?
-      We'd love to <a target='_blank' href='%{feedback_url}'>hear from you!</a>"
+    view_request_cta: "View request details"
+    add_comment_cta: "Add comment"
     footer_html:
       "Have <a href='%{feedback_url}'>feedback</a>? We'd love to hear from you."
     footer:
@@ -19,19 +14,15 @@ en:
         header_html: "Attachment added by %{user_name}"
         subheader: "You can reply or review the full conversation on the request page."
         attachment_cta: "Click to view %{attachment_name}"
-        cta: "View request details"
-        cta_2: "Add comment"
     step_mailer:
       step_next_approved:
         body: "<span class='name-color'>%{full_name}</span> has approved your request. C2 has sent it to the next person."
-        cta: "View request details"
       step_reply_received:
         body: "<span class='name-color'>%{full_name}</span> approved your request. C2 has sent it to the next person."
         details: "Please see below for more details."
       step_user_removed:
         header: "You have been removed as an approver for this purchase request"
         subheader: "You don't need to take any additional action."
-        cta: "View request details"
       proposal_notification:
         step_status_html: '<strong>Request Status: <i>In Review</i></strong>'
         step_status: 'Request Status: In Review'
@@ -39,7 +30,6 @@ en:
           "A new request submitted by <strong>%{requester_name}</strong> needs
           your %{step_type_noun}"
         header: "A new request submitted by %{requester_name} needs your %{step_type_noun}"
-        cta: "Add comment"
     proposal_mailer:
       generic_approval_name:
         step_1: "Approver"
@@ -49,7 +39,6 @@ en:
         header: "Your emergency request has been authorized."
         subheader: "Please confirm the final amount paid. If it has changed since approval, update the request in C2."
         subheader_foot: "As a reminder, here's what was approved:"
-        cta: "View request details"
       proposal_created_confirmation:
         header_html: "Your new request <span class='name-color'>%{proposal_name}</span> has been submitted!"
         header: "Your new request %{proposal_name} has been submitted!"
@@ -68,11 +57,9 @@ en:
         modifier_action: "Modified by %{user_name}"
         change_result: "<strong>%{verb}</strong> %{result}"
         subheader: "%{modifier_name} updated %{proposal_name} as follows:"
-        cta: "View request details"
       proposal_updated_while_step_pending:
         header: "A purchase request awaiting your approval has been modified."
         subheader: "Please review the request and the changes."
-        cta: "Add comment"
       proposal_updated_needs_re_review:
         panel_preface: "Here are the updated request details:"
         modifier_action: "Modified by %{user_name}"
@@ -81,9 +68,7 @@ en:
         subheader:
           "This purchase request has been modified and needs to be reapproved. C2 is
           routing it for re-approval now. Please review the changes."
-        cta: "View request details"
     cancelation_mailer:
-      cta: "View request details"
       cancelation_confirmation:
         header: "You canceled this purchase request."
         subsection: "Cancelled by %{name}."
@@ -110,11 +95,9 @@ en:
         signature: "- The C2 team at 18F"
     comment_mailer:
       comment_added_notification:
+        activity_header: "Comment added by %{user_name},"
         header: "%{user_name} added a comment to %{proposal_name}:"
         subheader: "You can reply or review the full conversation on the request page."
-        comment_text: "Comment: %{comment_text}"
-        cta: "View request details"
-        cta_2: "Add comment"
     observer_mailer:
       observer_added_notification:
         header: "You have been added as a subscriber to this request"
@@ -123,5 +106,4 @@ en:
         body: "You don't need to take any additional action."
       proposal_complete:
         header: "This request has been completed."
-        cta: "View request details"
 

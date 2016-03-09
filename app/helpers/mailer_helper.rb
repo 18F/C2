@@ -1,4 +1,8 @@
 module MailerHelper
+  def time_and_date(date)
+    "#{date.strftime('%m/%d/%Y')} at #{date.strftime('%I:%M %P')}"
+  end
+
   def status_icon_tag(status, last_approver = false)
     base_url = root_url.gsub(/\?.*$/, "").chomp("/")
     bg_linear_image = base_url + image_path("bg_#{status}_status.gif")

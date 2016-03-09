@@ -1,15 +1,13 @@
 - content_for :header_icon, "emails/icon-pencil-circle.png"
 - top_head = t("mailer.proposal_mailer.proposal_updated_no_action_required.header")
-- cta_subheader = t("mailer.proposal_mailer.proposal_updated_no_action_required.subheader", 
-                    modifier_name: @modifier.full_name,
-                    proposal_name: @proposal.name)
+- cta_subheader = t("mailer.proposal_mailer.proposal_updated_no_action_required.subheader",
+  modifier_name: @modifier.full_name, proposal_name: @proposal.name)
 - panel_preface = t("mailer.proposal_mailer.proposal_updated_no_action_required.panel_preface")
 - proposal_link_text = t("mailer.proposal_mailer.proposal_updated_no_action_required.cta")
 - panel_icon = "emails/button-circle.png"
-- panel_action = t("mailer.proposal_mailer.proposal_updated_no_action_required.modifier_action", 
-                  user_name: @modifier.full_name)
-- panel_action_date = @proposal.created_at.strftime("%m/%d/%Y") + " at " + @proposal.created_at.strftime("%I:%M %P")
-
+- panel_action = t("mailer.proposal_mailer.proposal_updated_no_action_required.modifier_action",
+  user_name: @modifier.full_name)
+- panel_action_date = time_and_date(@proposal.updated_at)
 - cta_subheader_foot = t("mailer.proposal_mailer.proposal_updated_no_action_required.approver_subheader")
 
 %table.container
@@ -26,9 +24,7 @@
   = render partial: "mail_shared/panel/header"
 
   = render partial: "mail_shared/panel/row_description",
-    locals: { icon: panel_icon,
-              action: panel_action,
-              datetime: panel_action_date }
+    locals: { icon: panel_icon, action: panel_action, datetime: panel_action_date }
 
   = render partial: "mail_shared/panel/row_content_modified",
     locals: { comment: @comment, last: true }
@@ -41,7 +37,7 @@
               link_text: proposal_link_text }
 
   = render partial: "mail_shared/call_to_action/subheader",
-  locals: { subheader: "", height: "half" }
+    locals: { subheader: "", height: "half" }
 
 %hr/
 / Start Container
