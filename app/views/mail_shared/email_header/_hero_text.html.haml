@@ -1,6 +1,7 @@
-- style  = !style.nil?  ? '' + style  : ''
+- style  = !style.nil?  ? ' ' + style  : ''
+- vertical  = !vertical.nil?  ? ' ' + vertical  : ''
 
-%tr{class: style}
+%tr{class: style + vertical}
   %td
     %table.centered
       %tr

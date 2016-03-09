@@ -51,6 +51,10 @@ class ProposalMailer < ApplicationMailer
   def proposal_updated_needs_re_review(user, proposal, modifier = nil)
     @proposal = proposal.decorate
     @modifier = modifier || NullUser.new
+    
+    @step = proposal.currently_awaiting_steps
+    # Example ideal data to consume
+    @changes = [{verb: 'modified', result: 'this to that'},{verb: 'added', result: 'that'},{verb: 'modified', result: 'this to that'}]
     assign_threading_headers(@proposal)
 
     mail(

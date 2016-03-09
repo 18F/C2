@@ -1,15 +1,20 @@
+- subtext  = !subtext.nil?  ? subtext : false
+
 %tr
   %td   
     %table.row
       %tr
-        %td.wrapper.last
+        %td.wrapper.last.first
           %table.twelve.columns
             %tr
               %td.panel.panel-styled.sub-grid
                 %table
                   %tr
                     %td.twelve.sub-columns
+                      - if subtext
+                        %h5.subtext
+                          = subtext
                       %h3.proposal-bold
-                        = proposal.name
+                        = name
 
               %td.expander
