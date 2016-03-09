@@ -5,8 +5,8 @@ require "json"
 es_client_args = {
   transport_options: {
     request: {
-      timeout: 1800,
-      open_timeout: 1800,
+      timeout: 5*60,
+      open_timeout: 5*60,
     }
   },
   retry_on_failure: 5,
