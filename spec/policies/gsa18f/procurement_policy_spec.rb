@@ -1,4 +1,6 @@
 describe Gsa18f::ProcurementPolicy do
+  include EnvVarSpecHelper
+
   permissions :can_create? do
     it "allows a user with an arbitrary email to create" do
       user = User.new(email_address: 'user@example.com', client_slug: 'gsa18f')
@@ -6,16 +8,18 @@ describe Gsa18f::ProcurementPolicy do
       expect(Gsa18f::ProcurementPolicy).to permit(user, procurement)
     end
 
-    with_feature 'RESTRICT_ACCESS' do
-      it "allows someone with a GSA email to create" do
+    it "allows someone with a GSA email to create" do
+      with_env_var("RESTRICT_ACCESS", "true") do
         gsa_domain = "@example.net"
         stub_const("GsaPolicy::GSA_DOMAIN", gsa_domain)
         user = User.new(email_address: "user#{gsa_domain}", client_slug: 'gsa18f')
         procurement = Gsa18f::Procurement.new
         expect(Gsa18f::ProcurementPolicy).to permit(user, procurement)
       end
+    end
 
-      it "doesn't allow someone with a non-GSA email to create" do
+    it "doesn't allow someone with a non-GSA email to create" do
+      with_env_var("RESTRICT_ACCESS", "true") do
         user = User.new(email_address: 'intruder@example.com', client_slug: 'gsa18f')
         procurement = Gsa18f::Procurement.new
         expect(Gsa18f::ProcurementPolicy).not_to permit(user, procurement)

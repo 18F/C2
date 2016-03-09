@@ -17,8 +17,7 @@ module ReturnToHelper
   def return_to
     if params[:return_to] || session[:return_to]
       return_to = return_to_value
-      proper_sig = self.make_return_to(return_to.require(:name),
-                                       return_to.require(:path))[:sig]
+      proper_sig = make_return_to(return_to.require(:name), return_to.require(:path))[:sig]
       if return_to.require(:sig) == proper_sig
         session.delete(:return_to)
         return_to.permit([:path, :name])

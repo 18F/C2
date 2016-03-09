@@ -1,33 +1,17 @@
+require "paperclip/matchers"
+
 describe Attachment do
-  let (:proposal) { create(:proposal, :with_parallel_approvers) }
-  let (:attachment) { create(:attachment, proposal: proposal, user: proposal.requester) }
+  include Paperclip::Shoulda::Matchers
 
-  context "aws" do
-    before do
-      Paperclip::Attachment.default_options.merge!(
-        bucket: 'my-bucket',
-        s3_credentials: {
-          access_key_id: 'akey',
-          secret_access_key: 'skey'
-        },
-        s3_permissions: :private,
-        storage: :s3,
-      )
-    end
-    after do
-      Paperclip::Attachment.default_options[:storage] = :filesystem
-    end
+  describe "Associations" do
+    it { should belong_to(:proposal) }
+    it { should belong_to(:user) }
+  end
 
-    describe "#url" do
-      it "uses an expiring url with aws" do
-        url = Addressable::URI.parse(attachment.url)
-        query = url.query_values
-        expect(url.host).to eq('my-bucket.s3.amazonaws.com')
-        expect(query).to have_key('AWSAccessKeyId')
-        expect(query['AWSAccessKeyId']).to eq('akey')
-        expect(query).to have_key('Expires')
-        expect(query).to have_key('Signature')
-      end
-    end
+  describe "Validations" do
+    it { should have_attached_file(:file) }
+    it { should validate_presence_of(:file) }
+    it { should validate_presence_of(:proposal) }
+    it { should validate_presence_of(:user) }
   end
 end

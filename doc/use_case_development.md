@@ -15,7 +15,7 @@ Our codebase is (largely) split up into two sections: that which is core C2 code
 * Display of a single request (`show` page, emails, etc.)
     * Name
     * Public identifier
-    * Displayed properties (`relevant_fields`)
+    * Displayed properties (`fields_for_display`)
 * Dashboard (`/proposals`) – optional
     * Displayed properties
 * Policy – optional

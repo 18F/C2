@@ -13,12 +13,14 @@ def gsa18f_yaml_file(file_path)
   )
 end
 
+require_relative "../../db/chores/csv_user_importer"
+
 namespace :import_users do
   desc "Import users from a 18f team"
   task team_yaml: :environment do
     dir = ENV['DIR']
     if !dir
-      raise "DIR must be specified. e.g. rake import_users:team_yaml DIR=/path/to/data-private/team/"
+      raise "DIR must be specified. e.g. rake import_users:team_yaml DIR=/path/to/team-api.18f.gov/_data/team"
     elsif !Dir.exists?(dir)
       raise "DIR (#{dir}) is not a directory"
     else

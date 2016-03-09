@@ -1,14 +1,6 @@
 describe CommentMailer do
   include MailerSpecHelper
-
-  around(:each) do |example|
-    with_env_vars(
-      "NOTIFICATION_FROM_EMAIL" => "reply@example.com",
-      "NOTIFICATION_REPLY_TO" => "replyto@example.com"
-    ) do
-      example.run
-    end
-  end
+  include EnvVarSpecHelper
 
   describe "#comment_added_email" do
     it_behaves_like "a proposal email" do
@@ -38,11 +30,16 @@ describe CommentMailer do
 
       mail = CommentMailer.comment_added_email(comment, email_address)
 
-      expect(mail.body.encoded).to include("#{comment.user.full_name} added a comment")
+      expect(mail.body.encoded).to include(I18n.t(
+        "mailer.comment_mailer.comment_added_email.body",
+        full_name: comment.user.full_name,
+        public_id: comment.proposal.public_id,
+        name: comment.proposal.name
+      ))
     end
+  end
 
-    def email_address
-      "commenter@example.com"
-    end
+  def email_address
+    "commenter@example.com"
   end
 end

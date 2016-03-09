@@ -1,9 +1,9 @@
-require 'csv'
+require "csv"
 
 module Ncr
-  # Make sure all table names use 'ncr_XXX'
+  # Make sure all table names use "ncr_XXX"
   def self.table_name_prefix
-    'ncr_'
+    "ncr_"
   end
 
   EXPENSE_TYPES = %w(BA60 BA61 BA80)
@@ -15,18 +15,17 @@ module Ncr
       :amount
     end
 
-    include ValueHelper
-    include ProposalDelegate
+    include ClientDataMixin
     include PurchaseCardMixin
 
-    attr_accessor :approving_official_email
     # This is a hack to be able to attribute changes to the correct user. This attribute needs to be set explicitly, then the update comment will use them as the "commenter". Defaults to the requester.
     attr_accessor :modifier
 
-    after_initialize :set_defaults
+    belongs_to :ncr_organization, class_name: Ncr::Organization
+    belongs_to :approving_official, class_name: User
 
-    validates :approving_official_email, presence: true
-    validates_email_format_of :approving_official_email
+    validates :approving_official, presence: true
+    validate :frozen_approving_official_not_changed
     validates :amount, presence: true
     validates :cl_number, format: {
       with: /\ACL\d{7}\z/,
@@ -39,7 +38,7 @@ module Ncr
     }, allow_blank: true
     validates :project_title, presence: true
     validates :vendor, presence: true
-    validates :building_number, presence: true
+    validates :building_number, presence: true, if: :not_ba60?
     validates :rwa_number, presence: true, if: :ba80?
     validates :rwa_number, format: {
       with: /\A[a-zA-Z][0-9]{7}\z/,
@@ -50,83 +49,43 @@ module Ncr
       message: "must be three letters or numbers"
     }, allow_blank: true
 
-    FISCAL_YEAR_START_MONTH = 10 # 1-based
-    scope :for_fiscal_year, lambda { |year|
-      start_time = Time.zone.local(year - 1, FISCAL_YEAR_START_MONTH, 1)
-      end_time = start_time + 1.year
-      where(created_at: start_time...end_time)
-    }
-
-    def self.all_system_approver_emails
+    def self.all_system_approvers
       [
-        self.ba61_tier1_budget_mailbox,
-        self.ba61_tier2_budget_mailbox,
-        self.ba80_budget_mailbox,
-        self.ool_ba80_budget_mailbox,
+        Ncr::Mailboxes.ba61_tier1_budget_team,
+        Ncr::Mailboxes.ba61_tier1_budget,
+        Ncr::Mailboxes.ba61_tier2_budget,
+        Ncr::Mailboxes.ba80_budget,
+        Ncr::Mailboxes.ool_ba80_budget,
       ]
     end
 
-    def self.ba61_tier1_budget_mailbox
-      self.approver_with_role("BA61_tier1_budget_approver")
-    end
-
-    def self.ba61_tier2_budget_mailbox
-      self.approver_with_role("BA61_tier2_budget_approver")
-    end
-
-    def self.ba80_budget_mailbox
-      self.approver_with_role("BA80_budget_approver")
-    end
-
-    def self.ool_ba80_budget_mailbox
-      self.approver_with_role("OOL_BA80_budget_approver")
-    end
-
-    def self.approver_with_role(role_name)
-      users = User.with_role(role_name).where(client_slug: "ncr")
-
-      if users.empty?
-        fail "Missing User with role #{role_name} -- did you run rake db:migrate and rake db:seed?"
-      end
-
-      users.first.email_address
-    end
-
-    def self.relevant_fields(expense_type)
-      fields = self.default_fields
-
-      if expense_type == "BA61"
-        fields << :emergency
-      elsif expense_type == "BA80"
-        fields += [:rwa_number, :code]
-      end
-
-      fields
-    end
-
-    def self.default_fields
-      fields = self.column_names.map(&:to_sym) + [:approving_official_email]
-      fields - [:emergency, :rwa_number, :code, :created_at, :updated_at, :id]
-    end
-
-    def set_defaults
-      # not sure why the latter condition is necessary...was getting some weird errors from the tests without it. -AF 10/5/2015
-      if !self.approving_official_email && self.approvers.any?
-        self.approving_official_email = self.approvers.first.try(:email_address)
-      end
+    def fields_for_display
+      Ncr::WorkOrderFields.new(self).display
     end
 
     def approver_email_frozen?
-      approval = self.individual_steps.first
+      approval = individual_steps.first
       approval && !approval.actionable?
     end
 
-    def approver_changed?
-      self.approving_official && self.approving_official.email_address != approving_official_email
+    def requires_approval?
+      !emergency
     end
 
-    def requires_approval?
-      !self.emergency
+    def for_whsc_organization?
+      ncr_organization.try(:whsc?)
+    end
+
+    def for_ool_organization?
+      ncr_organization.try(:ool?)
+    end
+
+    def ba_6x_tier1_team?
+      expense_type.match(/^BA6[01]$/) && ncr_organization.try(:ba_6x_tier1_team?)
+    end
+
+    def organization_code_and_name
+      ncr_organization.try(:code_and_name)
     end
 
     def setup_approvals_and_observers
@@ -134,13 +93,9 @@ module Ncr
       manager.setup_approvals_and_observers
     end
 
-    def approving_official
-      approvers.first
-    end
-
     def current_approver
       if pending?
-        currently_awaiting_approvers.first
+        currently_awaiting_step_users.first
       elsif approving_official
         approving_official
       elsif emergency and approvers.empty?
@@ -157,63 +112,41 @@ module Ncr
     end
 
     def budget_approvals
-      self.individual_steps.offset(1)
+      individual_steps.offset(1)
     end
 
     def budget_approvers
-      self.approvers.merge(self.budget_approvals)
+      budget_approvals.map(&:completed_by)
     end
 
     def editable?
       true
     end
 
-    # Methods for Client Data interface
-    def fields_for_display
-      attributes = self.class.relevant_fields(expense_type)
-      attributes.map{|key| [WorkOrder.human_attribute_name(key), self[key]]}
-    end
-
-    # will return nil if the `org_code` is blank or not present in Organization list
-    def organization
-      # TODO reference by `code` rather than storing the whole thing
-      code = (org_code || '').split(' ', 2)[0]
-      Ncr::Organization.find(code)
-    end
-
     def ba80?
-      self.expense_type == 'BA80'
+      self.expense_type == "BA80"
+    end
+
+    def not_ba60?
+      expense_type != "BA60"
     end
 
     def total_price
-      self.amount || 0.0
+      amount || 0.0
     end
 
     # may be replaced with paper-trail or similar at some point
     def version
-      self.updated_at.to_i
-    end
-
-    def system_approver_emails
-      manager = ApprovalManager.new(self)
-      manager.system_approver_emails
-    end
-
-    def org_id
-      self.organization.try(:code)
+      updated_at.to_i
     end
 
     def building_id
       regex = /\A(\w{8}) .*\z/
-      if self.building_number && regex.match(self.building_number)
-        regex.match(self.building_number)[1]
+      if building_number && regex.match(building_number)
+        regex.match(building_number)[1]
       else
-        self.building_number
+        building_number
       end
-    end
-
-    def as_json
-      super.merge(org_id: self.org_id, building_id: self.building_id)
     end
 
     def name
@@ -225,8 +158,8 @@ module Ncr
     end
 
     def fiscal_year
-      year = self.created_at.nil? ? Time.zone.now.year : self.created_at.year
-      month = self.created_at.nil? ? Time.zone.now.month : self.created_at.month
+      year = created_at.nil? ? Time.zone.now.year : created_at.year
+      month = created_at.nil? ? Time.zone.now.month : created_at.month
       if month >= 10
         year += 1
       end
@@ -234,9 +167,21 @@ module Ncr
     end
 
     def restart_budget_approvals
-      self.budget_approvals.each(&:restart!)
-      self.proposal.reset_status
-      self.proposal.root_step.initialize!
+      budget_approvals.each(&:restart!)
+      proposal.reset_status
+      proposal.root_step.initialize!
+    end
+
+    def self.expense_type_options
+      EXPENSE_TYPES.map { |expense_type| [expense_type, expense_type] }
+    end
+
+    private
+
+    def frozen_approving_official_not_changed
+      if persisted? && approving_official_id_changed? && approver_email_frozen?
+        errors.add(:approving_official, "Approving official cannot be changed")
+      end
     end
   end
 end

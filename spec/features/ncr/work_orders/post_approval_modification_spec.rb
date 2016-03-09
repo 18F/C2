@@ -1,16 +1,11 @@
-describe "post-approval modification" do
+feature "post-approval modification" do
   include ProposalSpecHelper
 
-  let(:work_order) { create(:ncr_work_order) }
-
-  before do
+  scenario "doesn't require re-approval for the amount being decreased" do
     work_order.setup_approvals_and_observers
     fully_approve(work_order.proposal)
 
     login_as(work_order.requester)
-  end
-
-  it "doesn't require re-approval for the amount being decreased" do
     visit "/ncr/work_orders/#{work_order.id}/edit"
     fill_in 'Amount', with: work_order.amount - 1
     click_on 'Update'
@@ -19,7 +14,11 @@ describe "post-approval modification" do
     expect(work_order.status).to eq('approved')
   end
 
-  it "can do end-to-end re-approval" do
+  scenario "can do end-to-end re-approval" do
+    work_order.setup_approvals_and_observers
+    fully_approve(work_order.proposal)
+
+    login_as(work_order.requester)
     visit "/ncr/work_orders/#{work_order.id}/edit"
     fill_in 'Amount', with: work_order.amount + 1
     click_on 'Update'
@@ -53,11 +52,19 @@ describe "post-approval modification" do
     ))
   end
 
-  it "shows flash warning, only on edit page" do
+  scenario "shows flash warning, only on edit page" do
+    work_order.setup_approvals_and_observers
+    fully_approve(work_order.proposal)
+
+    login_as(work_order.requester)
     visit "/ncr/work_orders/#{work_order.id}/edit"
     expect(page).to have_content("You are about to modify a fully approved request")
     click_on "Discard Changes"
     expect(page).to_not have_content("You are about to modify a fully approved request")
+  end
+
+  def work_order
+    @_work_order ||= create(:ncr_work_order)
   end
 
   def approval_statuses

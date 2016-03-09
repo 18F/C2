@@ -17,20 +17,22 @@ class User < ActiveRecord::Base
   has_many :roles, through: :user_roles
   has_many :proposals, foreign_key: "requester_id", dependent: :destroy
 
-  has_many :outgoing_delegations, class_name: 'ApprovalDelegate', foreign_key: 'assigner_id'
+  has_many :outgoing_delegations, class_name: "UserDelegate", foreign_key: "assigner_id"
   has_many :outgoing_delegates, through: :outgoing_delegations, source: :assignee
 
-  has_many :incoming_delegations, class_name: 'ApprovalDelegate', foreign_key: 'assignee_id'
+  has_many :incoming_delegations, class_name: "UserDelegate", foreign_key: "assignee_id"
   has_many :incoming_delegates, through: :incoming_delegations, source: :assigner
 
   has_many :completed_steps, class_name: "Step", foreign_key: "completer"
+
+  has_many :reports
 
   def self.active
     where(active: true)
   end
 
   def self.sql_for_role_slug(role_name, slug)
-    self.with_role(role_name).select(:id).where(client_slug: slug).to_sql
+    with_role(role_name).select(:id).where(client_slug: slug).to_sql
   end
 
   def self.with_role(role_name)
@@ -38,6 +40,7 @@ class User < ActiveRecord::Base
   end
 
   def self.for_email(email)
+    raise(EmailRequired, "email missing") unless email.present?
     User.find_or_create_by(email_address: email.strip.downcase)
   end
 
@@ -53,9 +56,20 @@ class User < ActiveRecord::Base
 
   def self.from_oauth_hash(auth_hash)
     user_data = auth_hash.extra.raw_info.to_hash
-    user = self.for_email(user_data["email"])
+    unless user_data["email"].present?
+      raise EmailRequired, "no email in oauth hash"
+    end
+    user = for_email(user_data["email"])
     user.update_names_if_present(user_data)
     user
+  end
+
+  def client_model
+    Proposal.client_model_for(self)
+  end
+
+  def client_model_slug
+    client_model.to_s.underscore.tr("/", "_")
   end
 
   def add_role(role_name)
@@ -69,6 +83,18 @@ class User < ActiveRecord::Base
     else
       email_address
     end
+  end
+
+  def display_name
+    if full_name == email_address
+      email_address
+    else
+      "#{full_name} <#{email_address}>"
+    end
+  end
+
+  def to_s
+    display_name
   end
 
   def last_requested_proposal
@@ -102,7 +128,7 @@ class User < ActiveRecord::Base
   def update_names_if_present(user_data)
     %w(first_name last_name).each do |field|
       attr = field.to_sym
-      if user_data[field].present? && self.send(attr).blank?
+      if user_data[field].present? && send(attr).blank?
         update_attributes(attr => user_data[field])
       end
     end
@@ -114,5 +140,9 @@ class User < ActiveRecord::Base
 
   def requires_profile_attention?
     first_name.blank? || last_name.blank?
+  end
+
+  def all_reports
+    Report.for_user(self)
   end
 end

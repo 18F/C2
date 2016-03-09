@@ -2,26 +2,26 @@ module Ncr
   class WorkOrderDecorator < Draper::Decorator
     delegate_all
 
-    EMERGENCY_APPROVER_EMAIL = 'Emergency - Verbal Approval'
-    NO_APPROVER_FOUND = 'No Approver Found'
+    EMERGENCY_APPROVER_EMAIL = "Emergency - Verbal Approval"
+    NO_APPROVER_FOUND = "No Approver Found"
 
     def current_approver_email_address
-      approver_email_address(current_approver)
+      if proposal.approved?
+        final_approver_email_address
+      else
+        pending_approver_email_address
+      end
     end
+
+    private
 
     def final_approver_email_address
       approver_email_address(final_approver)
     end
 
-    def status_aware_approver_email_address
-      if proposal.approved?
-        final_approver_email_address
-      else
-        current_approver_email_address
-      end
+    def pending_approver_email_address
+      approver_email_address(proposal.currently_awaiting_step_users.first)
     end
-
-    private
 
     def approver_email_address(approver)
       if approver

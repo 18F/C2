@@ -1,10 +1,10 @@
 module Ncr
-  class WorkOrdersController < UseCaseController
+  class WorkOrdersController < ClientDataController
     # arbitrary number...number of upload fields that "ought to be enough for anybody"
     MAX_UPLOADS_ON_NEW = 10
 
     def new
-      work_order.approving_official_email = self.suggested_approver_email
+      work_order.approving_official = suggested_approver_email
       super
     end
 
@@ -14,7 +14,7 @@ module Ncr
     end
 
     def edit
-      if self.proposal.approved?
+      if proposal.approved?
         flash.now[:warning] = "You are about to modify a fully approved request. Changes will be logged and sent to approvers, and this request may require re-approval, depending on the change."
       end
 
@@ -32,7 +32,12 @@ module Ncr
     protected
 
     def work_order
-      @model_instance
+      @client_data_instance
+    end
+
+    def suggested_approver_email
+      last_proposal = current_user.last_requested_proposal
+      last_proposal.try(:client_data).try(:approving_official)
     end
 
     def record_changes
@@ -44,20 +49,11 @@ module Ncr
         work_order: work_order,
         flash: flash
       )
-      updater.after_update
-    end
-
-    def attribute_changes?
-      super || work_order.approver_changed?
+      updater.run
     end
 
     def model_class
       Ncr::WorkOrder
-    end
-
-    def suggested_approver_email
-      last_proposal = current_user.last_requested_proposal
-      last_proposal.try(:approvers).try(:first).try(:email_address) || ''
     end
 
     def permitted_params
@@ -71,13 +67,12 @@ module Ncr
     end
 
     def work_order_params
-      Ncr::WorkOrder.relevant_fields(params[:ncr_work_order][:expense_type])
+      Ncr::WorkOrderFields.new.relevant(params[:ncr_work_order][:expense_type])
     end
 
-    # @pre: work_order.approving_official_email is set
     def add_steps
       super
-      if self.errors.empty?
+      if errors.empty?
         work_order.setup_approvals_and_observers
       end
     end

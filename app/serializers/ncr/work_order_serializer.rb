@@ -12,11 +12,12 @@ module Ncr
       :id,
       :name,
       :not_to_exceed,
-      :org_code,
+      :organization_code_and_name,
       :rwa_number,
       :vendor
     )
 
     has_one :proposal
+    has_many :observers
   end
 end

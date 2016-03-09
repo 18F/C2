@@ -1,10 +1,10 @@
 class C2VersionDecorator < BaseDecorator
   def to_html
     case object.event
-    when 'create'
-      self.creation_html
-    when 'update'
-      self.update_html
+    when "create"
+      creation_html
+    when "update"
+      update_html
     end
   end
 
@@ -18,7 +18,7 @@ class C2VersionDecorator < BaseDecorator
     combine_html([
       "Uploaded ",
       content_tag(:code, object.item.file_file_name),
-      '.'
+      "."
     ])
   end
 
@@ -27,7 +27,7 @@ class C2VersionDecorator < BaseDecorator
     when Steps::Individual
       "#{user_name} was added as an approver."
     when Attachment
-      self.new_attachment_html
+      new_attachment_html
     when Comment
       "Commented: \"#{object.item.comment_text}\""
     when Observation

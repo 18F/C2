@@ -13,7 +13,7 @@ module ExceptionPolicy
     if method_str.end_with?("?")
       exc_method = method_str[0..-2] + "!"
       begin
-        self.send(exc_method, *arguments, &block)
+        send(exc_method, *arguments, &block)
       rescue Pundit::NotAuthorizedError
         false
       end

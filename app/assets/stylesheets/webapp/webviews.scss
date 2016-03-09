@@ -5,7 +5,6 @@
 }
 
 .inset {
-  max-width: $web-content-width;
   margin: 0 auto;
   padding: 0 25px;
   p {
@@ -13,7 +12,7 @@
   }
 }
 
-.communicart_description {
+.c2_description {
   img {
     margin-bottom: 7px;
   }
@@ -167,7 +166,7 @@ tr.proposal-property p {
 }
 
 .icon-approved {
-  background-image: image-url('icon-checkmark.gif');
+  background-image: image-url("icon-checkmark.gif");
   background-repeat: no-repeat;
   padding-left: 21px;
 }
@@ -252,11 +251,11 @@ tr.add-more-row {
 }
 
 body.webapp {
-  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 16px;
   color: black;
 
-  .communicart_header, h4.communicart_description, div.communicart_description p {
+  .c2_header, h4.c2_description, div.c2_description p {
     padding-right: 0;
     padding-left: 0;
     background-color: $white;
@@ -270,21 +269,21 @@ body.webapp {
 
 .controller-proposals {
   h1 {
-    font-family: Raleway, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: Raleway, "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 300;
     font-size: 38px;
     color: black;
   }
 
   h2 {
-    font-family: Raleway, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: Raleway, "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 300;
     font-size: 34px;
     padding-left: 0;
   }
 
   h3 {
-    font-family: Raleway, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: Raleway, "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 300;
     font-size: 24px;
     color: black;
@@ -294,6 +293,14 @@ body.webapp {
   .button_to input {
     text-decoration: underline;
     color: #0C75E1;
+  }
+  #pages {
+    a {
+      text-decoration: none;
+    }
+    .active a {
+      color: #fff;
+    }
   }
   p,
   .button_to input {
@@ -337,7 +344,7 @@ body.webapp {
 
     &.approved {
       min-width: 155px;
-      background-image: image-url('icon-checkmark.gif');
+      background-image: image-url("icon-checkmark.gif");
       background-repeat: no-repeat;
       background-position: center -0.2em;
       padding-top: 15px;
@@ -345,7 +352,7 @@ body.webapp {
 
     &.pending {
       min-width: 155px;
-      background-image: image-url('icon-pending.png');
+      background-image: image-url("icon-pending.png");
       background-repeat: no-repeat;
       background-position: center -0.2em;
       padding-top: 20px;
@@ -405,7 +412,7 @@ fieldset.required legend::after {
     padding: 0 0 0 15px;
   }
 
-  h1.communicart_header {
+  h1.c2_header {
     margin-bottom: 10px;
   }
 

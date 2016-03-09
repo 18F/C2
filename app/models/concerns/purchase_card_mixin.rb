@@ -1,26 +1,18 @@
-# NOTE must define class method 'purchase_amount_column_name'
-# before 'include'-ing this concern
+# NOTE must define class method "purchase_amount_column_name"
+# before "include"-ing this concern
 module PurchaseCardMixin
   extend ActiveSupport::Concern
 
   included do
-    def self.which_fiscal_year(year, month)
-      if month >= 10
-        year + 1
-      else
-        year
-      end
-    end
-
     def self.max_amount
       fiscals = {
         2015      => 3000,
         2016      => 3500,
-        'default' => 3500,
+        "default" => 3500,
       }
       now = Time.zone.now
-      this_fiscal = self.which_fiscal_year(now.year, now.month)
-      fiscals[this_fiscal] || fiscals['default']
+      this_fiscal = FiscalYearFinder.new(now.year, now.month).run
+      fiscals[this_fiscal] || fiscals["default"]
     end
 
     validates name.constantize.purchase_amount_column_name, numericality: {

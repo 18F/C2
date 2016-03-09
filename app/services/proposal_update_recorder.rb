@@ -24,7 +24,11 @@ class ProposalUpdateRecorder
   end
 
   def update_comment_format(key)
-    "#{bullet}*#{property_name(key)}* was changed " + former_value(key) + "to #{new_value(key)}"
+    if key =~ /id/
+      "#{bullet}*#{association_name(key)}* was changed " + former_association_value(key) + "to #{new_association_value(key)}"
+    else
+      "#{bullet}*#{property_name(key)}* was changed " + from(key) + "to #{new_value(key)}"
+    end
   end
 
   def bullet
@@ -39,8 +43,50 @@ class ProposalUpdateRecorder
     client_data.class.human_attribute_name(key)
   end
 
-  def former_value(key)
-    value = property_to_s(client_data.send(key + "_was"))
+  def association_name(key)
+    if key == "ncr_organization_id"
+      "Org code"
+    elsif key == "approving_official_id"
+      "Approving official"
+    end
+  end
+
+  def former_association_value(key)
+    if key == "ncr_organization_id"
+      former_ncr_organization(key) || ""
+    elsif key == "approving_official_id"
+      former_approving_official(key) || ""
+    end
+  end
+
+  def former_ncr_organization(key)
+    former_id = former_id(key)
+    if former_id.present? && Ncr::Organization.find(former_id)
+      "from #{Ncr::Organization.find(former_id).code_and_name} "
+    end
+  end
+
+  def former_approving_official(key)
+    former_id = former_id(key)
+    if former_id.present? && User.find(former_id)
+      "from #{User.find(former_id).email_address} "
+    end
+  end
+
+  def former_id(key)
+    former_value(key)
+  end
+
+  def new_association_value(key)
+    if key == "approving_official_id"
+      client_data.approving_official.email_address
+    elsif key == "ncr_organization_id"
+      client_data.ncr_organization.try(:code_and_name) || "*empty*"
+    end
+  end
+
+  def from(key)
+    value = former_value(key)
 
     if value.present?
       "from #{value} "
@@ -73,5 +119,9 @@ class ProposalUpdateRecorder
 
   def proposal
     client_data.proposal
+  end
+
+  def former_value(key)
+    property_to_s(client_data.send(key + "_was"))
   end
 end

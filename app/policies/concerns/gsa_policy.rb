@@ -6,10 +6,10 @@ module GsaPolicy
   end
 
   def gsa!
-    check(self.gsa_email?, "You must be logged in with a GSA email address to create")
+    check(gsa_email?, "You must be logged in with a GSA email address to create")
   end
 
   def gsa_if_restricted!
-    !self.restricted? || self.gsa!
+    !restricted? || gsa!
   end
 end

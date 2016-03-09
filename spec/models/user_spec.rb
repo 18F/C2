@@ -5,6 +5,7 @@ describe User do
      it { should have_many(:observations).dependent(:destroy) }
      it { should have_many(:user_roles).dependent(:destroy) }
      it { should have_many(:proposals).dependent(:destroy) }
+     it { should have_many(:reports) }
   end
 
   let(:user) { build(:user) }
@@ -41,6 +42,12 @@ describe User do
     it 'downcases and strips the email' do
       user = User.for_email('   miXedCaSe@eXaMple.com')
       expect(user.email_address).to eq('mixedcase@example.com')
+    end
+
+    it "raises error when email is empty" do
+      expect {
+        user = User.for_email("")
+      }.to raise_error EmailRequired
     end
   end
 
@@ -137,6 +144,37 @@ describe User do
     end
   end
 
+  describe "#display_name" do
+    it "uses full_name if not equal to email_address" do
+      user.first_name = "George"
+      user.last_name = "Jetson"
+      user.email_address = "george.jetson@example.com"
+      expect(user.display_name).to eq "George Jetson <george.jetson@example.com>"
+    end
+
+    it "returns the user's email address if no first name and last name" do
+      user.first_name = nil
+      user.last_name = nil
+      user.email_address = "george.jetson@example.com"
+
+      expect(user.display_name).to eq "george.jetson@example.com"
+    end
+
+    it "returns the user's email address if the first name and last name are blank" do
+      user.first_name = ""
+      user.last_name = ""
+      user.email_address = "george.jetson@example.com"
+
+      expect(user.display_name).to eq "george.jetson@example.com"
+    end
+
+    it "stringifies with #display_name" do
+      user = create(:user)
+
+      expect(user.to_s).to eq(user.display_name)
+    end
+  end
+
   describe "#requires_profile_attention?" do
     it "recognizes user needs to update their profile" do
       user = create(:user)
@@ -144,6 +182,20 @@ describe User do
       user.first_name = ""
       user.save!
       expect(user.requires_profile_attention?).to eq true
+    end
+  end
+
+  describe "#client_model" do
+    it "matches client_slug with client model name" do
+      user = create(:user, client_slug: "test")
+      expect(user.client_model).to eq Test::ClientRequest
+    end
+  end
+
+  describe "#client_model_slug" do
+    it "turns client_model into a slug" do
+      user = create(:user, client_slug: "test")
+      expect(user.client_model_slug).to eq "test_client_request"
     end
   end
 
@@ -155,6 +207,15 @@ describe User do
       expect {
         user.add_role(role.name)
       }.to change { user.roles.count }.from(0).to(1)
+    end
+  end
+
+  describe "#all_reports" do
+    it "gets all private and shared-by-client_slug" do
+      report = create(:report, shared: true, client_slug: "test")
+      test_user = create(:user, client_slug: "test")
+      report2 = create(:report, user: test_user)
+      expect(test_user.all_reports).to include(report, report2)
     end
   end
 end

@@ -1,12 +1,24 @@
 # C2
 
-[![Circle CI](https://circleci.com/gh/18F/C2.svg?style=svg)](https://circleci.com/gh/18F/C2) [![Code Climate](https://codeclimate.com/github/18F/C2/badges/gpa.svg)](https://codeclimate.com/github/18F/C2) [![Test Coverage](https://codeclimate.com/github/18F/C2/badges/coverage.svg)](https://codeclimate.com/github/18F/C2) [![Dependency Status](https://gemnasium.com/18F/C2.svg)](https://gemnasium.com/18F/C2) [![security](https://hakiri.io/github/18F/C2/hakiri.svg)](https://hakiri.io/github/18F/C2/hakiri)
+[![Circle CI](https://circleci.com/gh/18F/C2.svg?style=svg)](https://circleci.com/gh/18F/C2) [![Code Climate](https://codeclimate.com/github/18F/C2/badges/gpa.svg)](https://codeclimate.com/github/18F/C2) [![Test Coverage](https://codeclimate.com/github/18F/C2/badges/coverage.svg)](https://codeclimate.com/github/18F/C2) [![Dependency Status](https://gemnasium.com/18F/C2.svg)](https://gemnasium.com/18F/C2) [![security](https://hakiri.io/github/18F/C2/master.svg)](https://hakiri.io/github/18F/C2/master)
 
-a.k.a. Communicart, part of GSA's suite of Common Acquisition Platform (CAP) tools.
+C2 is part of GSA's suite of Common Acquisition Platform (CAP) tools.
+
+## Interested in using C2?
+
+C2's code is open source, which means you can clone the code in this
+repository, adapt it for your needs, and deploy it yourself.
+
+If you would prefer to use C2 as as hosted software solution for your
+organization, we would be happy to give you a demo.
+
+Please submit a [support ticket](https://cap.18f.gov/feedback) or join our
+[public Slack channel](https://chat.18f.gov/) (select "cap-public" from the
+dropdown) to learn more.
 
 ## Links
 
-* [Issue tracker](https://www.pivotaltracker.com/n/projects/1149728)
+* [Issue tracker](https://trello.com/b/kAW72R3m/c2-birthday-cake)
 * [Chat with us](https://chat.18f.gov/) (select "cap-public" from the dropdown)
 
 ## Documentation
@@ -25,5 +37,6 @@ a.k.a. Communicart, part of GSA's suite of Common Acquisition Platform (CAP) too
 
 ### Extras
 
+* [Analytics](doc/analytics.md)
 * [API](doc/api.md)
 * [Importing Users](doc/import_users.md)

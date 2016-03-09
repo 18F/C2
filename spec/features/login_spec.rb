@@ -9,4 +9,16 @@ feature "Login" do
       "You are not allowed to login because your account has been deactivated. Please contact an administrator."
     )
   end
+
+  scenario "myusa auth problem" do
+    user = create(:user)
+
+    login_as(user)
+
+    # something went wrong. What? No idea.
+
+    visit "/auth/failure?message=invalid_credentials"
+
+    expect(page).to have_content("There was a problem signing you in")
+  end
 end

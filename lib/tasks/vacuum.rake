@@ -1,3 +1,5 @@
+require_relative "../../db/chores/expired_record_cleaner"
+
 namespace :vacuum do
   desc "Clean up old fiscal year proposals"
   task old_proposals: :environment do

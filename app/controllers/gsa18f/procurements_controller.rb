@@ -1,7 +1,7 @@
 module Gsa18f
-  class ProcurementsController < UseCaseController
+  class ProcurementsController < ClientDataController
     def update
-      @model_instance.assign_attributes(permitted_params)
+      @client_data_instance.assign_attributes(permitted_params)
       super
     end
 
@@ -16,13 +16,13 @@ module Gsa18f
     end
 
     def procurement_params
-      Gsa18f::Procurement.relevant_fields(params[:gsa18f_procurement][:recurring])
+      Gsa18f::ProcurementFields.new.relevant(params[:gsa18f_procurement][:recurring])
     end
 
     def add_steps
       super
-      if self.errors.empty?
-        @model_instance.add_steps
+      if errors.empty?
+        @client_data_instance.add_steps
       end
     end
   end

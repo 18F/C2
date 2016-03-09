@@ -1,5 +1,5 @@
 describe Steps::Individual do
-  describe '#delegates' do
+  describe "#delegates" do
     it "returns a list of users" do
       approval = create(:approval)
       approver = approval.user
@@ -13,7 +13,6 @@ describe Steps::Individual do
   describe "#completed_by" do
     it "identifies completed_by" do
       approval = create(:approval)
-      approver = approval.user
       delegate = create(:user)
       approval.completer = delegate
       approval.save!

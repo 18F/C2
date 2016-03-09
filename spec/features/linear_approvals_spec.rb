@@ -26,6 +26,18 @@ describe 'Linear approvals' do
     expect(page).not_to have_button('Approve')
   end
 
+  it "shows the approver role next to each approver" do
+    proposal = create(:proposal, :with_approval_and_purchase, client_slug: "gsa18f")
+    approver = proposal.individual_steps.first.user
+    login_as(approver)
+    @proposal_page = ProposalPage.new
+    @proposal_page.load(proposal_id: proposal.id)
+    expect(@proposal_page).to be_displayed
+    expect(@proposal_page.status).to have_approvers count: 2
+    expect(@proposal_page.status.approvers.first.role.text).to match /Approver/
+    expect(@proposal_page.status.approvers.second.role.text).to match /Purchaser/
+  end
+
   def create_proposal
     @proposal ||= create(:proposal)
   end
@@ -37,7 +49,7 @@ describe 'Linear approvals' do
   end
 
   def create_serial_approval(child_approvals)
-    create_proposal.root_step = Steps::Parallel.new(child_approvals: child_approvals)
+    create_proposal.root_step = Steps::Serial.new(child_approvals: child_approvals)
   end
 
   def approve_approval_for(user)

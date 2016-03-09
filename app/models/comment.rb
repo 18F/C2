@@ -1,7 +1,7 @@
 class Comment < ActiveRecord::Base
-  has_paper_trail class_name: 'C2Version'
+  has_paper_trail class_name: "C2Version"
 
-  belongs_to :proposal
+  belongs_to :proposal, touch: true
   belongs_to :user
   delegate :full_name, :email_address, :to => :user, :prefix => true
 
@@ -12,16 +12,16 @@ class Comment < ActiveRecord::Base
   scope :normal_comments, ->{ where(update_comment: nil) } # we probably want `.where.not(update_comment: true)`, but that query isn't working as of 5bb8b4d385
   scope :update_comments, ->{ where(update_comment: true) }
 
-
   after_create :add_user_as_observer
+  visitable # Used to track user visit associated with processed comment
 
   # match .attributes
   def to_a
     [
-      self.user_email_address,
-      self.comment_text,
-      self.updated_at,
-      I18n.l(self.updated_at)
+      user_email_address,
+      comment_text,
+      updated_at,
+      I18n.l(updated_at)
     ]
   end
 
@@ -29,27 +29,27 @@ class Comment < ActiveRecord::Base
   # TODO use i18n
   def self.attributes
     [
-      'commenter',
-      'comment text',
-      'created_at',
-      'updated_at'
+      "commenter",
+      "comment text",
+      "created_at",
+      "updated_at"
     ]
   end
 
   def add_user_as_observer
-    self.proposal.add_observer(self.user.email_address)
+    proposal.add_observer(user)
   end
 
   # All of the users who should be notified when a comment is created
   # This is basically Proposal.users _minus_ future approvers
   def listeners
     users_to_notify = Set.new
-    users_to_notify += self.proposal.currently_awaiting_approvers
-    users_to_notify += self.proposal.individual_steps.approved.map(&:user)
-    users_to_notify += self.proposal.observers
-    users_to_notify << self.proposal.requester
+    users_to_notify += proposal.currently_awaiting_step_users
+    users_to_notify += proposal.individual_steps.approved.map(&:user)
+    users_to_notify += proposal.observers
+    users_to_notify << proposal.requester
     # Creator of comment doesn't need to be notified
-    users_to_notify.delete(self.user)
+    users_to_notify.delete(user)
     users_to_notify
   end
 end

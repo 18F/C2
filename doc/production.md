@@ -85,8 +85,6 @@ vcap@someinstance:~$ exit
 
 ## Logging
 
-All application logs are stored in an [ELK service](https://docs.cloud.gov/apps/durable-logging/).
+All application logs are stored via https://logs.cloud.gov/.
 
-The URL is based on the Cloud Foundry app name, e.g. https://cap-general-c2-prod-elk-kibana-proxy.18f.gov (for production). The credentials are available by contacting a C2 team member directly.
-
-Logs are searchable via the ELK service. Log data older than 14 days is automatically deleted.
+Logs are searchable via the Kibana UI, and are retained for 180 days.

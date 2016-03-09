@@ -1,6 +1,13 @@
 class ApplicationMailer < ActionMailer::Base
   include Roadie::Rails::Automatic
 
+  include ProposalConversationThreading
+
+  add_template_helper MailerHelper
+  add_template_helper ValueHelper
+  add_template_helper ClientHelper
+  add_template_helper MarkdownHelper
+
   default reply_to: proc { reply_to_email }
 
   protected
@@ -13,15 +20,15 @@ class ApplicationMailer < ActionMailer::Base
   end
 
   def reply_to_email
-    email_with_name(ENV['NOTIFICATION_REPLY_TO'] || 'noreplyto@some.gov', 'C2')
+    email_with_name(ENV["NOTIFICATION_REPLY_TO"] || "noreplyto@example.com", "C2")
   end
 
   def sender_email
-    email_with_name(ENV['NOTIFICATION_FROM_EMAIL'] || 'noreply@some.gov', 'C2')
+    email_with_name(ENV["NOTIFICATION_FROM_EMAIL"] || "noreply@example.com", "C2")
   end
 
   def resend_to_email
-    email_with_name(ENV['NOTIFICATION_FALLBACK_EMAIL'] || 'communicart.sender@gsa.gov', 'C2')
+    email_with_name(ENV["NOTIFICATION_FALLBACK_EMAIL"] || "communicart.sender@gsa.gov", "C2")
   end
 
   def default_sender_email

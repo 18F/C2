@@ -64,10 +64,25 @@ describe Step do
       proposal = create(:proposal)
       child1 = build(:approval, user: create(:user))
       child2 = build(:approval, user: create(:user))
-      proposal.root_step = build(:parallel_steps, child_approvals: [child1, child2])
+      proposal.root_step = build(:parallel_step, child_approvals: [child1, child2])
 
       expect(proposal).not_to receive(:approve!)
       child1.approve!
+    end
+  end
+
+  describe "database constraints" do
+    it "deletes steps when parent proposal is destroyed" do
+      proposal = create(:proposal)
+      step = create(:step, proposal: proposal)
+
+      expect(Step.exists?(step.id)).to eq true
+      expect(Proposal.exists?(proposal.id)).to eq true
+
+      proposal.destroy
+
+      expect(Step.exists?(step.id)).to eq false
+      expect(Proposal.exists?(proposal.id)).to eq false
     end
   end
 
@@ -85,15 +100,15 @@ describe Step do
 
     before :each do
       # @todo syntax for this will get cleaned up
-      and_clause = create(:parallel_steps, child_approvals: [
+      and_clause = create(:parallel_step, child_approvals: [
         create(:approval, user: amy),
         create(:approval, user: bob)
       ])
-      then_clause = create(:serial_steps, child_approvals: [
+      then_clause = create(:serial_step, child_approvals: [
         create(:approval, user: dan),
         create(:approval, user: erin)
       ])
-      proposal.root_step = create(:parallel_steps, min_children_needed: 2, child_approvals: [
+      proposal.root_step = create(:parallel_step, min_children_needed: 2, child_approvals: [
         and_clause,
         create(:approval, user: carrie),
         then_clause
@@ -103,61 +118,61 @@ describe Step do
     it "won't approve Amy and Bob -- needs two branches of the OR" do
       build_approvals
       expect_any_instance_of(Proposal).not_to receive(:approve!)
-      proposal.existing_approval_for(amy).approve!
-      proposal.existing_approval_for(bob).approve!
+      proposal.existing_or_delegated_step_for(amy).approve!
+      proposal.existing_or_delegated_step_for(bob).approve!
     end
 
     it "will approve if Amy, Bob, and Carrie approve -- two branches of the OR" do
       build_approvals
       expect_any_instance_of(Proposal).to receive(:approve!)
-      proposal.existing_approval_for(amy).approve!
-      proposal.existing_approval_for(bob).approve!
-      proposal.existing_approval_for(carrie).approve!
+      proposal.existing_or_delegated_step_for(amy).approve!
+      proposal.existing_or_delegated_step_for(bob).approve!
+      proposal.existing_or_delegated_step_for(carrie).approve!
     end
 
     it "won't approve Amy, Bob, Dan as Erin is also required (to complete the THEN)" do
       build_approvals
       expect_any_instance_of(Proposal).not_to receive(:approve!)
-      proposal.existing_approval_for(amy).approve!
-      proposal.existing_approval_for(bob).approve!
-      proposal.existing_approval_for(dan).approve!
+      proposal.existing_or_delegated_step_for(amy).approve!
+      proposal.existing_or_delegated_step_for(bob).approve!
+      proposal.existing_or_delegated_step_for(dan).approve!
     end
 
     it "will approve Amy, Bob, Dan, Erin -- two branches of the OR" do
       build_approvals
       expect_any_instance_of(Proposal).to receive(:approve!)
-      proposal.existing_approval_for(amy).approve!
-      proposal.existing_approval_for(bob).approve!
-      proposal.existing_approval_for(dan).approve!
-      proposal.existing_approval_for(erin).approve!
+      proposal.existing_or_delegated_step_for(amy).approve!
+      proposal.existing_or_delegated_step_for(bob).approve!
+      proposal.existing_or_delegated_step_for(dan).approve!
+      proposal.existing_or_delegated_step_for(erin).approve!
     end
 
     it "will approve Amy, Bob, Dan, Carrie -- two branches of the OR as Dan is irrelevant" do
       build_approvals
       expect_any_instance_of(Proposal).to receive(:approve!)
-      proposal.existing_approval_for(amy).approve!
-      proposal.existing_approval_for(bob).approve!
-      proposal.existing_approval_for(dan).approve!
-      proposal.existing_approval_for(carrie).approve!
+      proposal.existing_or_delegated_step_for(amy).approve!
+      proposal.existing_or_delegated_step_for(bob).approve!
+      proposal.existing_or_delegated_step_for(dan).approve!
+      proposal.existing_or_delegated_step_for(carrie).approve!
     end
 
     def build_approvals
       and_clause = build(
-        :parallel_steps,
+        :parallel_step,
         child_approvals: [
           build(:approval, user: amy),
           build(:approval, user: bob)
         ]
       )
       then_clause = build(
-        :parallel_steps,
+        :parallel_step,
         child_approvals: [
           build(:approval, user: dan),
           build(:approval, user: erin)
         ]
       )
       proposal.root_step = build(
-        :parallel_steps,
+        :parallel_step,
         min_children_needed: 2,
         child_approvals: [
           and_clause,

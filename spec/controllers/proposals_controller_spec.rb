@@ -1,6 +1,6 @@
 describe ProposalsController do
   include ReturnToHelper
-  let(:user) { create(:user) }
+  let(:user) { create(:user, client_slug: "test") }
 
   describe '#index' do
     before do
@@ -95,15 +95,16 @@ describe ProposalsController do
 
   end
 
-  describe '#query' do
+  describe '#query', elasticsearch: true do
     let!(:proposal) { create(:proposal, requester: user) }
     before do
       login_as(user)
     end
 
-    it 'should only include proposals user is a part of' do
+    it "requires valid search params" do
       get :query
-      expect(assigns(:proposals_data).rows).to eq([proposal])
+      expect(response).to redirect_to(proposals_path)
+      expect(flash[:alert]).to_not be_nil
     end
 
     it 'should filter results by date range' do
@@ -120,6 +121,14 @@ describe ProposalsController do
       get :query, start_date: '2012-05-04', end_date: '2012-05-06'
       expect(assigns(:proposals_data).rows).to eq([])
       Time.zone = prev_zone
+    end
+
+    it "filters results by proposal status" do
+      get :query, status: "pending"
+      expect(assigns(:proposals_data).rows).to eq([proposal])
+
+      get :query, status: "cancelled"
+      expect(assigns(:proposals_data).rows).to eq([])
     end
 
     it 'ignores bad input' do
@@ -143,18 +152,51 @@ describe ProposalsController do
 
     context 'search' do
       it 'plays nicely with TabularData' do
-        double, single, triple = 3.times.map { create(:proposal, requester: user) }
+        anon_user = create(:user)
+        login_as(anon_user)
+        double, single, triple = 3.times.map { create(:proposal, requester: anon_user) }
         double.update(public_id: 'AAA AAA')
         single.update(public_id: 'AAA')
         triple.update(public_id: 'AAA AAA AAA')
 
-        get :query, text: "AAA"
-        query = assigns(:proposals_data).rows
+        double.reindex
+        single.reindex
+        triple.reindex
 
-        expect(query.length).to be(3)
-        expect(query[0].id).to be(triple.id)
-        expect(query[1].id).to be(double.id)
-        expect(query[2].id).to be(single.id)
+        Proposal.__elasticsearch__.refresh_index!
+
+        es_execute_with_retries 3 do
+          get :query, text: "AAA"
+          query = assigns(:proposals_data).rows
+
+          expect(query.length).to be(3)
+          expect(query[0].id).to be(triple.id)
+          expect(query[1].id).to be(double.id)
+          expect(query[2].id).to be(single.id)
+        end
+      end
+    end
+  end
+
+  describe "#download", elasticsearch: true do
+    render_views
+
+    it "downloads results as CSV" do
+      login_as(user)
+      proposals = 30.times.map do |i|
+        wo = create(:test_client_request, project_title: "Work Order #{i}")
+        wo.proposal.update(requester: user)
+        wo.proposal.reindex
+        wo.proposal
+      end
+      Proposal.__elasticsearch__.refresh_index!
+
+      es_execute_with_retries 3 do
+        get :download, text: "Work Order", format: "csv"
+        expect(response.body).to include "Work Order 29"
+        expect(response.body).to include proposals.last.client_data.approving_official.display_name
+        expect(response.headers["Content-Type"]).to eq "text/csv"
+        expect(response.body).not_to include("\n\n")
       end
     end
   end
@@ -210,7 +252,7 @@ describe ProposalsController do
       approval = proposal.individual_steps.first
       token = create(:api_token, step: approval)
 
-      post :approve, id: proposal.id, cch: token.access_token
+      get :approve, id: proposal.id, cch: token.access_token
 
       expect(controller.send(:current_user)).to eq(approval.user)
     end
@@ -221,10 +263,9 @@ describe ProposalsController do
       token = create(:api_token, step: approval)
       approval.user.add_delegate(create(:user))
 
-      post :approve, id: proposal.id, cch: token.access_token
+      get :approve, id: proposal.id, cch: token.access_token
 
-      # TODO simplify this check
-      expect(response).to redirect_to(root_path(return_to: self.make_return_to("Previous", request.fullpath)))
+      expect(response).to redirect_to(root_path(return_to: make_return_to("Previous", request.fullpath)))
     end
 
     it "won't allow a missing token when using GET" do
@@ -271,7 +312,8 @@ describe ProposalsController do
       flash.clear
       post :approve, id: proposal.id
 
-      expect(response.status).to eq(403)
+      expect(response).to redirect_to(proposal_path(proposal))
+      expect(flash[:error]).to eq "A response has already been logged for this proposal"
     end
 
     it "won't allow different delegates to approve" do
@@ -291,7 +333,8 @@ describe ProposalsController do
       login_as(delegate2)
       post :approve, id: proposal.id
 
-      expect(response.status).to eq(403)
+      expect(response).to redirect_to(proposal_path(proposal))
+      expect(flash[:error]).to eq "A response has already been logged for this proposal"
     end
 
     it "allows a delegate to approve via the web UI" do

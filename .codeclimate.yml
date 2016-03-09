@@ -1,12 +1,4 @@
-# For an overview of the Code Climate Platform, see here:
-# http://docs.codeclimate.com/article/300-the-codeclimate-platform
-
-# For more details, see here:
-# http://docs.codeclimate.com/article/289-configuring-your-repository-via-codeclimate-yml#platform
-
-# For a list of all available engines, see here:
-# http://docs.codeclimate.com/article/296-engines-available-engines
-
+---
 engines:
   coffeelint:
     enabled: true
@@ -16,27 +8,24 @@ engines:
     enabled: true
   rubocop:
     enabled: true
-
-# Engines can analyze files and report issues on them, but you can separately
-# decide which files will receive ratings based on those issues. This is
-# specified by path patterns under the ratings key.
-
-# For more details see here:
-# http://docs.codeclimate.com/article/289-configuring-your-repository-via-codeclimate-yml#platform
-
+  bundler-audit:
+    enabled: true
+  brakeman:
+    enabled: true
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - ruby
+      - javascript
 ratings:
   paths:
-  - "app/**"
-  - "lib/**"
+  - app/**
+  - lib/**
   - "**.rb"
-
-# You can globally exclude files from being analyzed by any engine using the
-# exclude_paths key.
-
 exclude_paths:
-# https://github.com/codeclimate/codeclimate-csslint/pull/7
 - "**/*.scss"
-- "db/migrate/*"
-- "db/schema.rb"
-- "spec/**/*"
-- "vendor/**/*"
+- db/migrate/*
+- db/schema.rb
+- spec/**/*
+- vendor/**/*

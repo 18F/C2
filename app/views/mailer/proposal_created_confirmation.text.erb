@@ -1,0 +1,5 @@
+<%= t("mailer.greeting", name: @proposal.requester.full_name) %>
+
+<%= t("mailer.proposal_created_confirmation.body_text") %>
+
+<%= t("mailer.proposal_link_text", proposal_url: proposal_url(@proposal)) %>

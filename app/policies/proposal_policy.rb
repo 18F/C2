@@ -6,18 +6,20 @@ class ProposalPolicy
     @proposal = record
   end
 
-  def can_approve!
-    approver! && pending_approval! && not_cancelled!
+  def can_complete!
+    step_user! && pending_step! && not_cancelled!
   end
 
   def can_edit!
     (admin? || requester!) && not_approved! && not_cancelled!
   end
+
   alias_method :can_update!, :can_edit!
 
   def can_show!
-    check(self.visible_proposals.exists?(@proposal.id), "You are not allowed to see this proposal")
+    check(visible_proposals.exists?(@proposal.id), "You are not allowed to see this proposal")
   end
+
   alias_method :can_history!, :can_show!
 
   def can_create!
@@ -34,7 +36,7 @@ class ProposalPolicy
 
   def use_case_namespace
     cls = self.class.to_s
-    cls.gsub("::#{cls.demodulize}", '')
+    cls.gsub("::#{cls.demodulize}", "")
   end
 
   def slug_matches?
@@ -42,7 +44,7 @@ class ProposalPolicy
   end
 
   def restricted?
-    ENV['RESTRICT_ACCESS'] == 'true'
+    ENV["RESTRICT_ACCESS"] == "true"
   end
 
   def requester?
@@ -50,7 +52,7 @@ class ProposalPolicy
   end
 
   def requester!
-    check(self.requester?, "You are not the requester")
+    check(requester?, "You are not the requester")
   end
 
   def not_approved!
@@ -64,8 +66,8 @@ class ProposalPolicy
     check(!@proposal.cancelled?, "Sorry, this proposal has been cancelled.")
   end
 
-  def approver?
-    @proposal.approvers.exists?(@user.id)
+  def step_user?
+    @proposal.step_users.include?(@user) || @proposal.completers.exists?(@user.id)
   end
 
   def delegate?
@@ -76,9 +78,9 @@ class ProposalPolicy
     @user.admin?
   end
 
-  def approver!
+  def step_user!
     check(
-      self.approver? || self.delegate?,
+      step_user? || delegate?,
       "Sorry, you're not an approver on this proposal"
     )
   end
@@ -88,17 +90,17 @@ class ProposalPolicy
           "Sorry, you're not an observer on this proposal")
   end
 
-  def pending_approver?
-    @proposal.currently_awaiting_approvers.include?(@user)
+  def pending_step_user?
+    @proposal.currently_awaiting_step_users.include?(@user)
   end
 
   def pending_delegate?
-    ApprovalDelegate.where(assigner_id: @proposal.currently_awaiting_approvers, assignee: @user).exists?
+    UserDelegate.where(assigner_id: @proposal.currently_awaiting_step_users, assignee: @user).exists?
   end
 
-  def pending_approval!
-    check(self.pending_approver? || self.pending_delegate?,
-          "A response has already been logged a response for this proposal")
+  def pending_step!
+    check(pending_step_user? || pending_delegate?,
+          "A response has already been logged for this proposal")
   end
 
   def visible_proposals

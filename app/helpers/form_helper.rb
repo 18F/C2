@@ -7,22 +7,22 @@ module FormHelper
     options_for_select(options)
   end
 
-  def bootstrap_alert_class(key)
-    suffix = case key.to_sym
-             when :notice
-               'info'
-             when :error
-               'danger'
-             else
-               key
-             end
+  def bootstrap_alert_map
+    {
+      notice: "info",
+      error: "danger",
+      alert: "warning",
+    }
+  end
 
+  def bootstrap_alert_class(key)
+    suffix = bootstrap_alert_map[key.to_sym] || key
     "bg-#{suffix}"
   end
 
   def flash_message(val)
     if val.is_a?(Enumerable)
-      val.join('. ')
+      val.join(". ")
     else
       val
     end
@@ -35,7 +35,7 @@ module FormHelper
   end
 
   def popover_data_attrs(key)
-    { toggle: 'popover', trigger: 'focus', html: true, placement: 'top',
+    { toggle: "popover", trigger: "focus", html: true, placement: "top",
       title: I18n.t("helpers.popover.#{key}.title"),
       content: I18n.t("helpers.popover.#{key}.content")
     }

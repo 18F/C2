@@ -1,7 +1,6 @@
-feature 'Editing NCR work orders' do
-  let(:work_order) { create(:ncr_work_order, description: 'test') }
-
-  scenario 'current user is not the requester, approver, or observer' do
+feature "Editing NCR work order" do
+  scenario "current user is not the requester, approver, or observer" do
+    work_order = create(:ncr_work_order)
     stranger = create(:user, client_slug: "ncr")
     login_as(stranger)
 

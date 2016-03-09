@@ -15,7 +15,7 @@ module Steps
     self.abstract_class = true
 
     workflow do
-      on_transition { self.touch } # sets updated_at; https://github.com/geekq/workflow/issues/96
+      on_transition { touch } # sets updated_at; https://github.com/geekq/workflow/issues/96
 
       state :pending do
         event :initialize, transitions_to: :actionable
@@ -32,13 +32,13 @@ module Steps
 
       state :approved do
         on_entry do
-          self.update(approved_at: Time.zone.now)
-          self.notify_parent_approved
+          update(approved_at: Time.zone.now)
+          notify_parent_approved
           Dispatcher.on_approval_approved(self)
         end
 
         event :initialize, transitions_to: :actionable do
-          self.notify_parent_approved
+          notify_parent_approved
           halt  # prevent state transition
         end
 
@@ -49,12 +49,12 @@ module Steps
     protected
 
     def restart
-      self.api_token.try(:expire!)
+      api_token.try(:expire!)
       super
     end
 
     def user_is_not_requester
-      if user_id && user_id == proposal.requester_id
+      if user && user == proposal.requester
         errors.add(:user, "Cannot be Requester")
       end
     end

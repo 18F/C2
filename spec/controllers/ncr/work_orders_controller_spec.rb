@@ -12,11 +12,11 @@ describe Ncr::WorkOrdersController do
           building_number: Ncr::BUILDING_NUMBERS[0],
           emergency: "0",
           rwa_number: "A1234567",
-          org_code: Ncr::Organization.all[0],
+          ncr_organization_id: create(:ncr_organization).code_and_name,
           code: "Work Order",
           project_title: "Title",
           description: "Desc",
-          approving_official_email: "bob@example.com"
+          approving_official_id: approving_official.id
         }
       }
 
@@ -26,8 +26,8 @@ describe Ncr::WorkOrdersController do
       ncr = Ncr::WorkOrder.order(:id).last
 
       expect(ncr.code).to eq 'Work Order'
-      expect(ncr.approvers.first.email_address).to eq 'bob@example.com'
-      expect(email_recipients).to eq(['bob@example.com', ncr.requester.email_address].sort)
+      expect(ncr.approvers.first).to eq approving_official
+      expect(email_recipients).to eq([approving_official.email_address, ncr.requester.email_address].sort)
     end
   end
 
@@ -49,33 +49,22 @@ describe Ncr::WorkOrdersController do
       expect(flash[:warning]).to be_present
     end
 
-    it 'does not explode if editing an emergency' do
-      work_order = create(:ncr_work_order, :is_emergency,
-                                      requester: requester)
-      get :edit, {id: work_order.id}
+    it "does not explode if editing an emergency" do
+      work_order = create(
+        :ncr_work_order,
+        :is_emergency,
+        requester: requester
+      )
+
+      get :edit, { id: work_order.id }
     end
   end
 
   describe '#update' do
-    let (:work_order) { create(:ncr_work_order, :with_approvers) }
+    let (:work_order) { create(:ncr_work_order) }
     let (:requester) { work_order.proposal.requester }
     before do
       login_as(requester)
-    end
-
-    it 'does not modify the work order when there is a blank approver' do
-      post :update, {
-        id: work_order.id,
-        ncr_work_order: {
-          approving_official_email: '',
-          expense_type: 'BA61',
-          project_title: 'new name'
-        }
-      }
-      expect(flash[:success]).not_to be_present
-      expect(flash[:error]).to be_present
-      work_order.reload
-      expect(work_order.project_title).not_to eq('new name')
     end
 
     it 'does not modify the work order when there is a bad edit' do
@@ -84,7 +73,7 @@ describe Ncr::WorkOrdersController do
         ncr_work_order: {
           expense_type: 'BA61',
           amount: 999999,
-          approving_official_email: 'a@example.com'
+          approving_official_id: approving_official.id
         }
       }
       expect(flash[:success]).not_to be_present
@@ -107,7 +96,7 @@ describe Ncr::WorkOrdersController do
           ncr_work_order: {
             expense_type: 'BA61',
             amount: 99999,
-            approving_official_email: 'a@example.com'
+            approving_official_id: approving_official.id
           }
         }
         expect(flash[:success]).not_to be_present
@@ -128,32 +117,37 @@ describe Ncr::WorkOrdersController do
       expect(work_order.project_title).to eq(new_title)
     end
 
-    it 'allows the approver to be edited' do
+    it "allows the approver to be edited" do
+      work_order.setup_approvals_and_observers
+
       post :update, {
         id: work_order.id,
         ncr_work_order: {
          expense_type: 'BA61',
-         approving_official_email: 'a@example.com'
+         approving_official_id: approving_official.id
         }
       }
       work_order.reload
-      expect(work_order.approvers.first.email_address).to eq('a@example.com')
+      expect(work_order.approvers.first).to eq(approving_official)
     end
 
-    it 'does not modify the approver if already approved' do
-      work_order.individual_steps.first.approve!
+    it "does not modify the approver if already approved" do
+      work_order.setup_approvals_and_observers
+      work_order.reload.individual_steps.first.approve!
+
       post :update, {
         id: work_order.id,
         ncr_work_order: {
          expense_type: 'BA61',
-         approving_official_email: 'a@example.com'
+         approving_official_id: approving_official.id
         }
       }
       work_order.reload
-      expect(work_order.approvers.map(&:email_address)).not_to include('a@example.com')
+      expect(work_order.approvers).not_to include(approving_official)
     end
 
-    it 'will not modify emergency status on non-emergencies' do
+    it "will not modify emergency status on non-emergencies" do
+      work_order.setup_approvals_and_observers
       expect(work_order.steps.empty?).to be false
       expect(work_order.observers.empty?).to be true
 
@@ -162,7 +156,7 @@ describe Ncr::WorkOrdersController do
         ncr_work_order: {
          expense_type: 'BA61',
          emergency: '1',
-         approving_official_email: work_order.approvers.first.email_address
+         approving_official_id: work_order.approvers.first.id
         }
       }
 
@@ -172,7 +166,7 @@ describe Ncr::WorkOrdersController do
       expect(work_order.observers.empty?).to be true
     end
 
-    it 'will not modify emergency status on emergencies' do
+    it "will not modify emergency status on emergencies" do
       work_order = create(:ncr_work_order, :is_emergency, requester: requester)
       expect(work_order.steps.empty?).to be true
       expect(work_order.observers.empty?).to be false
@@ -180,10 +174,10 @@ describe Ncr::WorkOrdersController do
       post :update, {
         id: work_order.id,
         ncr_work_order: {
-         expense_type: 'BA61',
-         building_number: 'BillDing',
-         emergency: '0',
-         approving_official_email: work_order.observers.first.email_address
+         expense_type: "BA61",
+         building_number: "BillDing",
+         emergency: "0",
+         approving_official_id: work_order.observers.first.id
         }
       }
 
@@ -193,5 +187,11 @@ describe Ncr::WorkOrdersController do
       expect(work_order.steps.empty?).to be true
       expect(work_order.observers.empty?).to be false
     end
+  end
+
+  private
+
+  def approving_official
+    @_approving_official ||= create(:user, client_slug: "ncr")
   end
 end

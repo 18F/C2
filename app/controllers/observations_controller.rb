@@ -1,11 +1,12 @@
 class ObservationsController < ApplicationController
   before_action :find_proposal
-  before_action -> { authorize self.observation_for_auth }
+  before_action -> { authorize observation_for_auth }
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
 
   def create
-    new_observer = @proposal.add_observer(observer_email, current_user, params[:observation][:reason])
-    prep_create_response_msg(new_observer)
+    observer = User.find(observation_params)
+    observation = @proposal.add_observer(observer, current_user, params[:observation][:reason])
+    prep_create_response_msg(observer, observation)
     redirect_to proposal_path(@proposal)
   end
 
@@ -28,10 +29,10 @@ class ObservationsController < ApplicationController
   end
 
   def observation_for_auth
-    if params[:action] == 'create'
+    if params[:action] == "create"
       Observation.new(proposal: @proposal)
     else
-      self.observation
+      observation
     end
   end
 
@@ -39,16 +40,16 @@ class ObservationsController < ApplicationController
     @cached_observation ||= Observation.find(params[:id])
   end
 
-  def observer_email
-    params.permit(observation: { user: [:email_address] })
-      .require(:observation).require(:user).require(:email_address)
+  def observation_params
+    params.permit(observation: { user: [:id] })
+      .require(:observation).require(:user).require(:id)
   end
 
-  def prep_create_response_msg(observer)
-    if observer
-      flash[:success] = "#{observer.user.full_name} has been added as an observer"
+  def prep_create_response_msg(observer, observation)
+    if observation
+      flash[:success] = "#{observer.full_name} has been added as an observer"
     else
-      flash[:alert] = "#{observer_email} is already an observer for this request"
+      flash[:alert] = "#{observer.email_address} is already an observer for this request"
     end
   end
 

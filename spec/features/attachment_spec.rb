@@ -13,7 +13,7 @@ describe "Add attachments" do
     expect(page).to have_content(attachment.file_file_name)
   end
 
-  it "disables 'add attachment' button if no attachment is selected", js: true do
+  it "disables 'add attachment' button if no attachment is selected", :js do
     proposal = create(:proposal)
     login_as(proposal.requester)
 
@@ -50,7 +50,7 @@ describe "Add attachments" do
 
   it "emails everyone involved in the proposal" do
     expect(Dispatcher).to receive(:deliver_attachment_emails)
-    proposal.add_observer("wiley-cat@example.com")
+    proposal.add_observer(create(:user))
     visit proposal_path(proposal)
     page.attach_file('attachment[file]', "#{Rails.root}/app/assets/images/bg_approved_status.gif")
     click_on "Attach a File"

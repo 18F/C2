@@ -3,67 +3,112 @@ describe Ncr::WorkOrder do
 
   it_behaves_like "client data"
 
-  describe "#editabe?" do
+  describe "Associations" do
+    it { should belong_to(:ncr_organization) }
+    it { should belong_to(:approving_official) }
+  end
+
+  describe "Validations" do
+    it "does not allow approving official to be changed if the first step is not actionable" do
+      work_order = create(:ncr_work_order)
+      work_order.setup_approvals_and_observers
+      approving_official_step = work_order.reload.individual_steps.first
+      approving_official_step.update(status: "approved")
+
+      work_order.approving_official = create(:user, client_slug: "ncr")
+
+      expect(work_order).not_to be_valid
+    end
+
+    it "does allow approving official to be changed if the first step is actionable" do
+      work_order = create(:ncr_work_order)
+      work_order.setup_approvals_and_observers
+
+      work_order.approving_official = create(:user, client_slug: "ncr")
+
+      expect(work_order).to be_valid
+    end
+  end
+
+  describe "#as_indexed_json" do
+    it "serializes associations" do
+      whsc_org = create(:whsc_organization)
+      work_order = create(:ncr_work_order, ncr_organization: whsc_org)
+
+      indexable = work_order.as_json({include: [:ncr_organization, :approving_official]})
+
+      expect(work_order.as_indexed_json).to eq(indexable)
+    end
+  end
+
+  describe "#editable?" do
     it "is true" do
       work_order = build(:ncr_work_order)
       expect(work_order).to be_editable
     end
   end
 
-  describe ".relevant_fields" do
-    it "shows BA61 fields" do
-      expect(Ncr::WorkOrder.relevant_fields("BA61").sort).to eq([
-        :amount,
-        :approving_official_email,
-        :building_number,
-        :cl_number,
-        # No :code
-        :description,
-        :direct_pay,
-        :emergency,
-        :expense_type,
-        :function_code,
-        :not_to_exceed,
-        :org_code,
-        :project_title,
-        # No :rwa_number
-        :soc_code,
-        :vendor
-      ])
+  describe "#for_whsc_organization?" do
+    it "is true if the org code is for a whsc organization" do
+      organization = create(:whsc_organization)
+      work_order = build(:ncr_work_order, ncr_organization: organization)
+
+      expect(work_order).to be_for_whsc_organization
     end
 
-    it "shows BA80 fields" do
-      expect(Ncr::WorkOrder.relevant_fields("BA80").sort).to eq([
-        :amount,
-        :approving_official_email,
-        :building_number,
-        :cl_number,
-        :code,
-        :description,
-        :direct_pay,
-        # No Emergency
-        :expense_type,
-        :function_code,
-        :not_to_exceed,
-        :org_code,
-        :project_title,
-        :rwa_number,
-        :soc_code,
-        :vendor
-      ])
+    it "is false if org code is nil" do
+      work_order = build(:ncr_work_order, ncr_organization: nil)
+
+      expect(work_order).not_to be_for_whsc_organization
+    end
+
+    it "is false if org code is for a non-whsc org" do
+      organization = build(:ncr_organization)
+      work_order = build(:ncr_work_order, ncr_organization: organization)
+
+      expect(work_order).not_to be_for_whsc_organization
     end
   end
 
-  describe "#organization" do
-    it "returns the corresponding Organization instance" do
-      org = Ncr::Organization.all.last
-      work_order = build(:ncr_work_order, org_code: org.code)
-      expect(work_order.organization).to eq(org)
+  describe "#ba_6x_tier1_team?" do
+    it "is true for whitelist of organizations" do
+      org_letters = %w( 7 J 4 T 1 A C Z )
+      org_letters.each do |org_letter|
+        org_code = "P11#{org_letter}XXXX"
+        ncr_org = build(:ncr_organization, code: org_code)
+        work_order = build(:ncr_work_order, ncr_organization: ncr_org)
+
+        expect(work_order).to be_ba_6x_tier1_team
+      end
     end
 
-    it "returns nil for no #org_code" do
-      work_order = build(:ncr_work_order)
-      expect(work_order.organization).to eq(nil)
+    it "is false for non-listed organizations" do
+      ncr_org = build(:ncr_organization)
+      work_order = build(:ncr_work_order, ncr_organization: ncr_org)
+
+      expect(work_order).to_not be_ba_6x_tier1_team
+    end
+  end
+
+  describe "#for_ool_organization?" do
+    it "is true if org code is for an ool org" do
+      organization = create(:ool_organization)
+      work_order = build(:ncr_work_order, ncr_organization: organization)
+
+      expect(work_order).to be_for_ool_organization
+    end
+
+    it "is false if org code is nil" do
+      work_order = build(:ncr_work_order, ncr_organization: nil)
+
+      expect(work_order).not_to be_for_ool_organization
+    end
+
+    it "is false if org code is for non-ool org" do
+      organization = build(:ncr_organization)
+      work_order = build(:ncr_work_order, ncr_organization: organization)
+
+      expect(work_order).not_to be_for_ool_organization
     end
   end
 
@@ -179,18 +224,6 @@ describe Ncr::WorkOrder do
     end
   end
 
-  describe "#org_id" do
-    it "pulls out the organization id when present" do
-      wo = create(:ncr_work_order, org_code: 'P0000000 (192X,192M) PRIOR YEAR ACTIVITIES')
-      expect(wo.org_id).to eq("P0000000")
-    end
-
-    it "returns nil when no organization is present" do
-      wo = create(:ncr_work_order, org_code: nil)
-      expect(wo.org_id).to be_nil
-    end
-  end
-
   describe "#building_id" do
     it "pulls out the building id when an identifier is present" do
       wo = build(:ncr_work_order, building_number: "AB1234CD then some more")
@@ -206,20 +239,15 @@ describe Ncr::WorkOrder do
       wo = build(:ncr_work_order, building_number: nil)
       expect(wo.building_id).to be_nil
     end
-  end
 
-  describe "#current_approver" do
-    it "returns the first pending approver" do
-      wo = create(:ncr_work_order, :with_approvers)
-      expect(wo.current_approver).to eq(wo.approvers.first)
-      wo.individual_steps.first.approve!
-      expect(wo.current_approver).to eq(wo.approvers.second)
+    it "does not require if expense_type is BA60" do
+      wo = build(:ncr_work_order, expense_type: "BA60", building_number: nil)
+      expect(wo).to be_valid
     end
 
-    it "returns the first approver when fully approved" do
-      wo = create(:ncr_work_order, :with_approvers)
-      fully_approve(wo.proposal)
-      expect(wo.reload.current_approver).to eq(wo.approvers.first)
+    it "requires if expense_type is not BA60" do
+      wo = build(:ncr_work_order, expense_type: "BA61", building_number: nil)
+      expect(wo).to_not be_valid
     end
   end
 
@@ -254,6 +282,27 @@ describe Ncr::WorkOrder do
         actionable
         pending
       ))
+    end
+  end
+
+  describe "#budget_approvers" do
+    it "returns users assigned to budget approval steps" do
+      work_order = create(:ncr_work_order)
+      work_order.setup_approvals_and_observers
+      budget_mailbox_step = work_order.steps.last
+      user = budget_mailbox_step.user
+
+      expect(work_order.budget_approvers).to include(user)
+    end
+
+    it "returns users who completed budget approval steps" do
+      work_order = create(:ncr_work_order)
+      work_order.setup_approvals_and_observers
+      completer = create(:user)
+      budget_mailbox_step = work_order.steps.last
+      budget_mailbox_step.update(completer: completer)
+
+      expect(work_order.budget_approvers).to include(completer)
     end
   end
 end

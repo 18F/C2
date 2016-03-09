@@ -1,0 +1,22 @@
+en:
+  helpers:
+    submit:
+      # default for use case forms
+      create: "Submit for approval"
+      update: "Update"
+      # overrides
+      observation:
+        create: "Add"
+    popover:
+      ncr_amount:
+        title: "Transaction amount thresholds"
+        content: "$3,500 for supplies<br>$2,500 for services<br>$2,000 for construction"
+      direct_pay:
+        title: "Using direct pay"
+        content:
+          "Direct Pay refers to the simplified Pegasys invoice payment processes associated
+          with micro purchases (as defined in the GSA Acquisition Manual (GSAM)) where
+          credit card payments are not applicable. This payment process follows
+          acquisition procedures also referred to as Certified Invoice Procedures, found
+          in GSAM Section 513.370. Specific Pegasys procedures for Direct Pay processes
+          can be found in the Pegasys Finance Users Guide section 3."

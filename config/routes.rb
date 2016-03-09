@@ -4,11 +4,14 @@ C2::Application.routes.draw do
   get "/error" => "home#error"
   get "/profile"  => "profile#show"
   post "/profile" => "profile#update"
+  get "/summary" => "summary#index"
+  get "/summary/:fiscal_year" => "summary#index"
   get "/feedback" => "feedback#index"
   get "/feedback/thanks" => "feedback#thanks"
   post "/feedback" => "feedback#create"
 
   match "/auth/:provider/callback" => "auth#oauth_callback", via: [:get]
+  get "/auth/failure" => "auth#failure"
   post "/logout" => "auth#logout"
 
   resources :help, only: [:index, :show]
@@ -38,6 +41,7 @@ C2::Application.routes.draw do
 
     collection do
       get "archive"
+      get "download", defaults: { format: "csv" }
       get "query"
     end
 
@@ -45,6 +49,8 @@ C2::Application.routes.draw do
     resources :attachments, only: [:create, :destroy, :show]
     resources :observations, only: [:create, :destroy]
   end
+
+  resources :reports, only: [:index, :show, :create, :destroy]
 
   namespace :ncr do
     resources :work_orders, except: [:index, :destroy]
@@ -58,7 +64,7 @@ C2::Application.routes.draw do
 
   mount Peek::Railtie => "/peek"
   if Rails.env.development?
-    mount MailPreview => "mail_view"
     mount LetterOpenerWeb::Engine => "letter_opener"
+    mount Blazer::Engine, at: "blazer"
   end
 end

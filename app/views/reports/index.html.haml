@@ -1,0 +1,23 @@
+.inset
+  %h1
+    Manage Reports
+    %i.fa.fa-bar-chart
+
+  %p
+    Reports are saved searches. To create a new report,
+    = link_to("execute a search", proposals_path({search: true}))
+    and click "Save as Report".
+
+  %h4
+    = link_to("Create new Report", proposals_path({search: true}))
+
+  %hr
+
+  %ul.list-unstyled
+    - @reports.each do |report|
+      %li
+        = link_to(report.name, report_path(report))
+        (
+        = link_to("Run", report.url)
+        )
+

@@ -1,12 +1,10 @@
 - # Requires the "container" variable
 %table.tabular-data
   %thead
-    - # @todo: "header" class shouldn't be required (we're in thead)
-    %tr.header
+    %tr
       - container.columns.each do |column|
         %th{class: column.sort_dir}
-          - # @todo: why are there h5s in our table headers?
-          %h5
+          .table-header
             - if !container.frozen_sort && column.can_sort?
               - # long-form instead of link_to to avoid brakeman XSS warning
               %a{href: "?#{container.sort_params(request.query_parameters, column).to_query}"}
@@ -17,7 +15,6 @@
     - container.rows.each do |row|
       %tr
         - container.columns.each do |column|
-          %td
-            - formatter_tpl = "shared/formatter/" + column.formatter.to_s
-            - value = column.display(row)
-            = render partial: formatter_tpl, locals: {object: row, value: value}
+          %td{class: column.name}
+            = render(partial: "shared/formatter/" + column.formatter.to_s,
+              locals: { object: row, value: column.display(row) })

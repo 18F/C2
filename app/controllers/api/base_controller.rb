@@ -2,11 +2,12 @@ module Api
   class BaseController < ApplicationController
     before_action :fail_if_not_enabled
     skip_before_action :authenticate_user!
+    skip_before_action :check_disabled_client
 
     private
 
     def enable?
-      ENV['API_ENABLED'] == 'true'
+      ENV["API_ENABLED"] == "true"
     end
 
     def fail_if_not_enabled

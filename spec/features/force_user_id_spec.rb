@@ -1,20 +1,25 @@
-describe "Acts as a different User in request" do
-  let(:user) { create(:user, client_slug: 'gsa18f') }
+feature "Acts as a different User in request" do
+  include EnvVarSpecHelper
 
-  it "respects session for current_user" do
+  scenario "respects session for current_user" do
     wo = create(:ncr_work_order, :with_approvers)
     login_as(wo.proposal.requester)
-    visit "/profile"
-    expect(page.find('h2')).to have_content(wo.proposal.requester.email_address)
+
+    visit profile_path
+
+    expect(page.find("h2")).to have_content(wo.proposal.requester.email_address)
   end
 
-  it "respects FORCE_USER_ID to override current_user" do
-    with_env_var('FORCE_USER_ID', user.id.to_s) do
+  scenario "respects FORCE_USER_ID to override current_user" do
+    user = create(:user, client_slug: "gsa18f")
+
+    with_env_var("FORCE_USER_ID", user.id.to_s) do
       wo = create(:ncr_work_order, :with_approvers)
       login_as(wo.proposal.requester)
-      visit "/profile"
-      expect(page.find('h2')).to have_content(user.email_address)
+
+      visit profile_path
+
+      expect(page.find("h2")).to have_content(user.email_address)
     end
   end
-
 end

@@ -1,8 +1,6 @@
-# https://github.com/tomykaira/clockwork
+ENV["NEW_RELIC_DISPATCHER"] ||= "clockwork"
 
-ENV['NEW_RELIC_DISPATCHER'] ||= 'clockwork'
-
-require 'newrelic_rpm'
+require "newrelic_rpm"
 require "clockwork"
 require_relative "boot"
 require_relative "environment"
@@ -17,6 +15,10 @@ module Clockwork
 
     every(1.week, "report_mailer.weekly_fiscal_year_report", at: "Monday 03:30") do
       ClockTasks.send_weekly_fiscal_year_ncr_budget_report
+    end
+
+    every(1.day, "scheduled_report.check", at: "04:00") do
+      ClockTasks.scheduled_report_check
     end
   end
 end

@@ -1,5 +1,0 @@
-.alert.alert-notice
-  = observer_text(@observation, @reason)
-= client_partial(@observation.proposal.client_slug,
-  "proposal_mail",
-  locals: { proposal: @observation.proposal, title: "Purchase Request" })

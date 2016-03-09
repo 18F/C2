@@ -7,7 +7,7 @@
     background-color: #fff;
     padding: 15px;
 
-    table.approval_details {
+    table.approval-details {
       padding-top: 25px;
     }
   }
@@ -65,12 +65,14 @@
 
     img {
       float: left;
+      position: relative;
+      top: 5px;
     }
 
     .approver {
       padding-left: 7px;
       position: relative;
-      top: -5px;
     }
+
   }
 }

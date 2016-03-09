@@ -1,0 +1,8 @@
+<% if @proposal.approved? %>
+  <%= complete_text(@step) %>
+<% end %>
+
+<%= t("mailer.approval_reply_received_email.body",
+      full_name: @step.user.full_name,
+      status: @step.status,
+      public_id: @proposal.public_id) %>

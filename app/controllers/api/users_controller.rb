@@ -1,7 +1,7 @@
 module Api
   class UsersController < BaseController
     def index
-      users = User.order('id ASC')
+      users = User.order("id ASC")
 
       if params[:limit]
         users = users.limit(params[:limit].to_i)
@@ -10,7 +10,7 @@ module Api
         users = users.offset(params[:offset].to_i)
       end
 
-      render json: users, root: false, each_serializer: self.serializer
+      render json: users, root: false, each_serializer: serializer
     end
 
 

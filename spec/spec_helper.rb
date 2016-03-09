@@ -1,10 +1,9 @@
 require 'codeclimate-test-reporter'
+SimpleCov.formatters = [
+  SimpleCov::Formatter::HTMLFormatter,
+  CodeClimate::TestReporter::Formatter
+]
 SimpleCov.start 'rails' do
-  formatter SimpleCov::Formatter::MultiFormatter[
-    SimpleCov::Formatter::HTMLFormatter,
-    CodeClimate::TestReporter::Formatter
-  ]
-
   if ENV['CIRCLE_ARTIFACTS']
     dir = File.join(ENV['CIRCLE_ARTIFACTS'], 'coverage')
     coverage_dir(dir)
@@ -21,10 +20,18 @@ WebMock.disable_net_connect!(allow_localhost: true, allow: 'codeclimate.com:443'
 require 'rack_session_access/capybara'
 
 require 'capybara/poltergeist'
+Capybara.register_driver :poltergeist do |app|
+  options = {
+    timeout: 60,
+    debug: ENV['CAPYBARA_DEBUG'] || false
+  }
+  Capybara::Poltergeist::Driver.new(app, options)
+end
 Capybara.javascript_driver = :poltergeist
 
 require 'pundit/rspec'
 require 'factory_girl_rails'
+require 'site_prism'
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|

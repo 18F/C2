@@ -33,7 +33,7 @@ describe StepManager do
       approver1 = create(:user)
       approver2 = create(:user)
       approver3 = create(:user)
-      proposal = create(:proposal, flow: 'parallel')
+      proposal = create(:proposal)
       individuals = [approver1, approver2, approver3].map{ |u| Steps::Approval.new(user: u)}
 
       proposal.root_step = Steps::Parallel.new(child_approvals: individuals)
@@ -48,7 +48,7 @@ describe StepManager do
       approver1 = create(:user)
       approver2 = create(:user)
       approver3 = create(:user)
-      proposal = create(:proposal, flow: 'linear')
+      proposal = create(:proposal)
       individuals = [approver1, approver2, approver3].map{ |u| Steps::Approval.new(user: u)}
 
       proposal.root_step = Steps::Serial.new(child_approvals: individuals)
@@ -63,7 +63,7 @@ describe StepManager do
       approver1 = create(:user)
       approver2 = create(:user)
       approver3 = create(:user)
-      proposal = create(:proposal, flow: 'parallel')
+      proposal = create(:proposal)
       individuals = [Steps::Approval.new(user: approver1)]
       proposal.root_step = Steps::Parallel.new(child_approvals: individuals)
 
@@ -81,7 +81,7 @@ describe StepManager do
       approver1 = create(:user)
       approver2 = create(:user)
       approver3 = create(:user)
-      proposal = create(:proposal, flow: 'linear')
+      proposal = create(:proposal)
       approver1, approver2, approver3 = 3.times.map{ create(:user) }
       individuals = [approver1, approver2].map{ |u| Steps::Approval.new(user: u) }
       proposal.root_step = Steps::Serial.new(child_approvals: individuals)
@@ -102,7 +102,7 @@ describe StepManager do
     it 'does not modify a full approved parallel proposal' do
       approver1 = create(:user)
       approver2 = create(:user)
-      proposal = create(:proposal, flow: 'parallel')
+      proposal = create(:proposal)
       individuals = [approver1, approver2].map{ |u| Steps::Approval.new(user: u)}
       proposal.root_step = Steps::Parallel.new(child_approvals: individuals)
 
@@ -115,7 +115,7 @@ describe StepManager do
     it 'does not modify a full approved linear proposal' do
       approver1 = create(:user)
       approver2 = create(:user)
-      proposal = create(:proposal, flow: 'linear')
+      proposal = create(:proposal)
       individuals = [approver1, approver2].map{ |u| Steps::Approval.new(user: u)}
       proposal.root_step = Steps::Serial.new(child_approvals: individuals)
 

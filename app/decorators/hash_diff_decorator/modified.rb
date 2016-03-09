@@ -1,11 +1,11 @@
 module HashDiffDecorator
   class Modified < HashDiffDecorator::Base
     def prev_val
-      self.diff_val(change[2])
+      diff_val(change[2])
     end
 
     def current_val
-      self.diff_val(change[3])
+      diff_val(change[3])
     end
 
     def to_html

@@ -2,17 +2,17 @@ class @FieldFilter
   constructor: (@$fieldOrWrappers) ->
 
   isInput: ->
-    @$fieldOrWrappers.is(':input')
+    @$fieldOrWrappers.is(":input")
 
   toggleVisibility: (showOrHide) ->
     # https://www.paciellogroup.com/blog/2012/05/html5-accessibility-chops-hidden-and-aria-hidden/
-    @$fieldOrWrappers.attr('aria-hidden', !showOrHide)
+    @$fieldOrWrappers.attr("aria-hidden", !showOrHide)
 
   toggleEnabled: (enableOrDisable) ->
-    @$fieldOrWrappers.attr('disabled', !enableOrDisable)
+    @$fieldOrWrappers.attr("disabled", !enableOrDisable)
 
   toggleChildInputs: (enableOrDisable) ->
-    @$fieldOrWrappers.find(':input').attr('disabled', !enableOrDisable)
+    @$fieldOrWrappers.find(":input").attr("disabled", !enableOrDisable)
 
   toggle: (showOrHide) ->
     @toggleVisibility(showOrHide)
