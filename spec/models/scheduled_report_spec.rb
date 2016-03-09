@@ -22,4 +22,12 @@ describe ScheduledReport do
       expect(scheduled_report.daily?).to eq(false)
     end
   end
+
+  describe "#never?" do
+    it "recognizes never frequency (disabled)" do
+      scheduled_report = create(:scheduled_report, frequency: :never)
+      expect(scheduled_report.never?).to eq(true)
+      expect(scheduled_report.daily?).to eq(false)
+    end
+  end
 end
