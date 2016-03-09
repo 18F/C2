@@ -4,7 +4,7 @@
 - panel_action = t("mailer.cancelation_mailer.cancelation_confirmation.subsection",
                   name: @proposal.requester.full_name,
                   proposal_name: @proposal.name)
-- panel_action_date = time_and_date(@proposal.created_at)
+- panel_action_date = time_and_date(@proposal.updated_at)
 - panel_text = t("mailer.cancelation_mailer.cancelation_confirmation.reason", reason: @reason)
 - cta_subheader = t("mailer.cancelation_mailer.cancelation_confirmation.reason", reason: @reason)
 
