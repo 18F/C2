@@ -1,25 +1,64 @@
-%table.full-width.header
-  %tr
-    %td.hero
-    %td
-      = image_tag "emails/icon-page-circle.png", class: "header-icon"
+- content_for :header_icon, "emails/icon-page-circle.png"
+- top_head = t("mailer.step_mailer.proposal_notification.header_html",
+              requester_name: @proposal.requester.full_name,
+              step_type_noun: @step.noun)
+- cta_subheader = t("mailer.step_mailer.proposal_notification.step_status_html")
+- attachment_icon = "emails/icon-clipped_page.png"
 
-%table.two-thirds-width
-  %tr
-    %td.header
-      = t("mailer.step_mailer.proposal_notification.header_html",
-        requester_name: @proposal.requester.full_name,
-        step_type_noun: @step.noun)
 
-= render partial: "mail_shared/panel/proposal_attributes",
-  locals: { proposal: @proposal }
+%table.container
+  = render partial: "mail_shared/email_header/hero_text", 
+    locals: { text: top_head,
+              style: "no-margin-wrapper" }
 
-%table.two-thirds-width
-  %tr
-    %td.email-button
-      = link_to generate_approve_url(@step), target: "_blank" do
-        %p.email-button
-          = @step.action_name
+  = render partial: "mail_shared/call_to_action/subheader", 
+    locals: { subheader: cta_subheader,
+              vertical: "no-top-margin" }
+  
 
-= render partial: "mail_shared/proposal_comment_button",
-  locals: { button_text: t("mailer.step_mailer.proposal_notification.cta") }
+  = render partial: "mail_shared/approval/chain", 
+    locals: { proposal: @proposal }
+
+  = render partial: "mail_shared/call_to_action/subheader", 
+    locals: { subheader: '',
+              height: 'half' }
+
+%table.container.contain-attributes
+
+  = render partial: "mail_shared/panel/header_name", 
+                  locals: { name: @proposal.name,
+                            subtext: @proposal.public_id }
+
+  = render partial: "mail_shared/panel/proposal_attributes",
+    locals: { proposal: @proposal }
+
+  - if !@proposal.attachments.nil?
+
+    = render partial: "mail_shared/panel/vertical_buffer"
+
+    - @proposal.attachments.each do |attachment|
+      - attachment_action = t("mailer.attachment_mailer.new_attachment_notification.header",
+                              user_name: attachment.user.full_name,
+                              proposal_name: @proposal.name)
+      - attachment_action_date = attachment.created_at.strftime("%m/%d/%Y") + " at " + attachment.created_at.strftime("%I:%M %P")
+      = render partial: "mail_shared/panel/row_description",
+        locals: { icon: attachment_icon,
+                  action: attachment_action,
+                  datetime: attachment_action_date}
+
+      = render partial: "mail_shared/panel/vertical_buffer"
+      
+  = render partial: "mail_shared/panel/vertical_buffer"
+
+%table.container
+
+  = render partial: "mail_shared/call_to_action/subheader", 
+    locals: { subheader: '' }
+
+  = render(partial: "mail_shared/call_to_action/email_reply",
+    locals: { step: @step, 
+              show_step_actions: true, 
+              proposal: @proposal })
+
+
+
