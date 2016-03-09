@@ -49,7 +49,7 @@ en:
         subheader_foot: "As a reminder, here's what was approved:"
         cta: "View request details"
       proposal_created_confirmation:
-        header_html: "Your new request <strong>%{proposal_name}</strong> has been submitted!"
+        header_html: "Your new request <span class='name-color'>%{proposal_name}</span> has been submitted!"
         header: "Your new request %{proposal_name} has been submitted!"
         approver_subheader:
           "Based on what you submitted, here's how we're routing your request:"
@@ -69,10 +69,10 @@ en:
         subheader: "Please review the request and the changes."
         cta: "Add comment"
       proposal_updated_needs_re_review:
-        header:
+        header: "<span class='name-color'>%{proposal_name}</span> has been updated by <span class='name-color'>%{modifier_name}</span>."
+        subheader:
           "This purchase request has been modified and needs to be reapproved. C2 is
           routing it for re-approval now. Please review the changes."
-        subheader: "%{modifier_name} updated %{proposal_name} as follows:"
         cta: "View request details"
     cancelation_mailer:
       cta: "View request details"
