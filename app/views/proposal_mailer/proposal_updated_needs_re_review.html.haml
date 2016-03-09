@@ -53,9 +53,21 @@
   = render partial: "mail_shared/panel/header_name", 
                   locals: { name: @proposal.name,
                             subtext: @proposal.public_id }
-                              
+
   = render partial: "mail_shared/panel/proposal_attributes",
     locals: { proposal: @proposal }
+
+  - @proposal.attachments.each do |attachment|
+    - attachment_icon = "emails/icon-clipped_page.png"
+    - attachment_action = t("mailer.attachment_mailer.new_attachment_notification.header",
+                    user_name: attachment.user.full_name,
+                    proposal_name: @proposal.name)
+    - attachment_action_date = attachment.created_at.strftime("%m/%d/%Y") + " at " + attachment.created_at.strftime("%I:%M %P")
+    = render partial: "mail_shared/panel/row_description",
+      locals: { icon: attachment_icon,
+                action: attachment_action,
+                datetime: attachment_action_date}
+
 
   = render partial: "mail_shared/panel/vertical_buffer"
 
