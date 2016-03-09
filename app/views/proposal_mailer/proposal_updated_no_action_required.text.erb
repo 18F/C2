@@ -1,4 +1,9 @@
-<%= t("mailer.proposal_mailer.proposal_updated_step_complete.header") %>
+<%= t("mailer.proposal_mailer.proposal_updated_no_action_required.header") %>
+<%= t("mailer.proposal_mailer.proposal_updated_no_action_required.subheader",
+  modifier_name: @modifier.full_name,
+  proposal_name: @proposal.name) %>
 
-<%= t("mailer.proposal_mailer.proposal_updated_step_complete.cta") %>
+<%= t("mailer.view_request_cta") %>
 <%= proposal_url(@proposal) %>
+
+<%= t("mailer.footer", feedback_url: feedback_url) %>

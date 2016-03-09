@@ -2,3 +2,8 @@
       full_name: @step.user.full_name,
       status: @step.status,
       public_id: @proposal.public_id) %>
+
+<%= t("mailer.view_request_cta") %>
+<%= proposal_url(@proposal) %>
+
+<%= t("mailer.footer", feedback_url: feedback_url) %>

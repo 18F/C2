@@ -7,5 +7,7 @@
 <%= @step.action_name %>
 <%= generate_approve_url(@step) %>
 
-<%= t("mailer.step_mailer.proposal_notification.cta") %>
-<%= proposal_url(@proposal, anchor: "comments") %>
+<%= t("mailer.view_request_cta") %>
+<%= proposal_url(@proposal) %>
+
+<%= t("mailer.footer", feedback_url: feedback_url) %>

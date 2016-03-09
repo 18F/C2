@@ -2,10 +2,11 @@
   user_name: @comment.user.full_name,
   proposal_name: @proposal.name) %>
 
-<%= t("mailer.comment_mailer.comment_added_notification.comment_text",
-  comment_text: @comment.comment_text) %>
+<%= @comment.comment_text %>
 
 <%= t("mailer.comment_mailer.comment_added_notification.subheader") %>
 
-<%= t("mailer.comment_mailer.comment_added_notification.cta") %>
+<%= t("mailer.view_request_cta") %>
 <%= proposal_url(@proposal) %>
+
+<%= t("mailer.footer", feedback_url: feedback_url) %>
