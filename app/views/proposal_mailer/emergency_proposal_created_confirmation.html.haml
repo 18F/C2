@@ -31,7 +31,7 @@
 
   / Start Panel Wrapper
   = render partial: "mail_shared/panel/header_name", 
-    locals: { proposal: @proposal}
+    locals: { name: @proposal.name}
 
   = render partial: "mail_shared/panel/proposal_attributes", 
     locals: { proposal: @proposal}
