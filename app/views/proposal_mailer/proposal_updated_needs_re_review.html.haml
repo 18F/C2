@@ -1,5 +1,5 @@
 - content_for :header_icon, "emails/icon-pencil-circle.png"
-- top_head = t("mailer.proposal_mailer.proposal_updated_needs_re_review.header",
+- top_head = t("mailer.proposal_mailer.proposal_updated_needs_re_review.header_html",
               modifier_name: @modifier.full_name,
               proposal_name: @proposal.name)
 - cta_subheader = t("mailer.proposal_mailer.proposal_updated_needs_re_review.subheader")
@@ -9,7 +9,7 @@
 - panel_icon = "emails/button-circle.png"
 - panel_action = t("mailer.proposal_mailer.proposal_updated_needs_re_review.modifier_action",
                   user_name: @modifier.full_name)
-- panel_action_date = @proposal.created_at.strftime("%m/%d/%Y") + " at " + @proposal.created_at.strftime("%I:%M %P")
+- panel_action_date = @comment.created_at.strftime("%m/%d/%Y") + " at " + @comment.created_at.strftime("%I:%M %P")
 
 - cta_subheader_foot = t("mailer.proposal_mailer.proposal_updated_needs_re_review.approver_subheader")
 
