@@ -14,7 +14,7 @@ This API is currently in a very limited alpha, and is not enabled in any of our 
 Attribute | Type | Note
 --- | --- | ---
 `id` | integer |
-`status` | string | Can be `pending`, `actionable`, `approved`, or `cancelled`
+`status` | string | Can be `pending`, `actionable`, `approved`, or `canceled`
 `user` | [User](#user) | a.k.a. "the approver"
 
 ### [NCR](overview.md#national-capitol-region-ncr-service-centers) Work Order
@@ -45,7 +45,7 @@ Attribute | Type | Note
 `created_at` | string (time) |
 `id` | integer |
 `requester` | [User](#user) |
-`status` | string | Can be `pending`, `approved`, or `cancelled`
+`status` | string | Can be `pending`, `approved`, or `canceled`
 `updated_at` | string (time) |
 
 ### User

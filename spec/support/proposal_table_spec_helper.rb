@@ -25,8 +25,8 @@ module ProposalTableSpecHelper
     end
   end
 
-  def cancelled_proposals_table
-    within(cancelled_proposals_section) do
+  def canceled_proposals_table
+    within(canceled_proposals_section) do
       tables[0]
     end
   end
@@ -39,7 +39,7 @@ module ProposalTableSpecHelper
     "#proposals-pending"
   end
 
-  def cancelled_proposals_section
-    "#proposals-cancelled"
+  def canceled_proposals_section
+    "#proposals-canceled"
   end
 end

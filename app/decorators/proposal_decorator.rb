@@ -2,7 +2,7 @@ class ProposalDecorator < Draper::Decorator
   delegate_all
 
   def number_approved
-    object.individual_steps.approved.count
+    object.individual_steps.completed.count
   end
 
   def total_approvers

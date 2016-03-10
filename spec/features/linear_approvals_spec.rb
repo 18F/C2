@@ -48,11 +48,11 @@ describe 'Linear approvals' do
     end
   end
 
-  def create_serial_approval(child_approvals)
-    create_proposal.root_step = Steps::Serial.new(child_approvals: child_approvals)
+  def create_serial_approval(child_steps)
+    create_proposal.root_step = Steps::Serial.new(child_steps: child_steps)
   end
 
   def approve_approval_for(user)
-    create_proposal.individual_steps.where(user: user).first.approve!
+    create_proposal.individual_steps.where(user: user).first.complete!
   end
 end

@@ -1,19 +1,19 @@
 <tr class="m-shared-email_status">
   <td colspan="2" padding="10">
     <table id="status-container-detail" width="770" class="col-md-12">
-      <tr class="status-header-container <%="cancelled" if @proposal.cancelled? %>">
+      <tr class="status-header-container <%="canceled" if @proposal.canceled? %>">
         <td>
           <strong>Status</strong>
         </td>
         <td class="status-header">
           <%= status_icon_tag(@proposal.status) %>
           <strong><%= @proposal.status %></strong>
-          <%- unless @proposal.cancelled? %>
+          <%- unless @proposal.canceled? %>
             (<%= @proposal.number_approved %> of <%= @proposal.total_approvers %> steps completed)
           <%- end %>
         </td>
       </tr>
-      <%- unless @proposal.cancelled? %>
+      <%- unless @proposal.canceled? %>
         <tr class="status-header-container-detail">
           <td colspan="2">
             <table class="approval-details data-container">
@@ -35,8 +35,8 @@
                     <span class="approver-role">
                       (<%= step.decorate.role_name %>)
                     </span>
-                    <% if step.approved? %>
-                      <span class="timestamp">on <%= date_with_tooltip(step.approved_at) %></span>
+                    <% if step.completed? %>
+                      <span class="timestamp">on <%= date_with_tooltip(step.completed_at) %></span>
                     <% end %>
                   </td>
                 </tr>

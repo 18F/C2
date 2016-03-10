@@ -3,10 +3,10 @@ module ProposalSpecHelper
     proposal.individual_steps.pluck(:status)
   end
 
-  def fully_approve(proposal, completer = nil)
+  def fully_complete(proposal, completer = nil)
     proposal.individual_steps.each do |step|
       step.reload
-      step.approve!
+      step.complete!
       if completer
         step.update(completer: completer)
       end

@@ -17,5 +17,5 @@ class ProposalIndexPage < SitePrism::Page
   section :needing_review, RequestTableSection, "#proposals-pending-review"
   section :pending, RequestTableSection, "#proposals-pending"
   section :completed, RequestTableSection, "#proposals-completed"
-  section :cancelled, RequestTableSection, "#proposals-cancelled"
+  section :canceled, RequestTableSection, "#proposals-canceled"
 end

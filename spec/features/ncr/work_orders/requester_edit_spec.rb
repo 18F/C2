@@ -126,7 +126,7 @@ feature "Requester edits their NCR work order", :js do
   scenario "doesn't change approving list when delegated" do
     proposal = Proposal.last
     approving_official_step = proposal.individual_steps.first
-    approving_official_step.approve!
+    approving_official_step.complete!
     approval = proposal.individual_steps.second
     delegate_user = create(:user, email_address: "delegate@example.com")
     approval.user.add_delegate(delegate_user)
@@ -156,7 +156,7 @@ feature "Requester edits their NCR work order", :js do
   end
 
   scenario "has a disabled approving official email field if first approval is done" do
-    work_order.individual_steps.first.approve!
+    work_order.individual_steps.first.complete!
 
     visit edit_ncr_work_order_path(work_order)
 
@@ -166,7 +166,7 @@ feature "Requester edits their NCR work order", :js do
   end
 
   scenario "can update other fields if first approval is done" do
-    work_order.individual_steps.first.approve!
+    work_order.individual_steps.first.complete!
     visit edit_ncr_work_order_path(work_order)
 
     fill_in_selectized("ncr_work_order_building_number", Ncr::BUILDING_NUMBERS[1])
@@ -176,8 +176,8 @@ feature "Requester edits their NCR work order", :js do
     expect(page).to have_content(Ncr::BUILDING_NUMBERS[1])
   end
 
-  scenario "can be edited if approved" do
-    fully_approve(ncr_proposal)
+  scenario "can be edited if completed" do
+    fully_complete(ncr_proposal)
 
     visit "/ncr/work_orders/#{work_order.id}/edit"
     expect(current_path).to eq("/ncr/work_orders/#{work_order.id}/edit")

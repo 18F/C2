@@ -110,9 +110,9 @@ describe 'Canceling a request' do
       cancel_proposal(proposal)
 
       expect(current_path).to eq("/proposals/#{proposal.id}")
-      expect(page).to have_content('Your request has been cancelled')
-      expect(proposal.reload.status).to eq('cancelled')
-      expect(proposal.reload.comments.last.comment_text).to eq('Request cancelled with comments: This is a good reason for the cancellation.')
+      expect(page).to have_content('Your request has been canceled')
+      expect(proposal.reload.status).to eq('canceled')
+      expect(proposal.reload.comments.last.comment_text).to eq('Request canceled with comments: This is a good reason for the cancellation.')
     end
 
     it 'displays an error if the reason is blank' do
@@ -124,7 +124,7 @@ describe 'Canceling a request' do
       fill_in 'reason_input', with: ''
       click_on('Yes, cancel this request')
 
-      expect(page).to have_content('A reason for cancellation is required. Please indicate why this request needs to be cancelled.')
+      expect(page).to have_content('A reason for cancellation is required. Please indicate why this request needs to be canceled.')
     end
   end
 

@@ -106,7 +106,7 @@ class ProposalUpdateRecorder
   end
 
   def create_comment(comment_texts)
-    if client_data.approved?
+    if client_data.completed?
       comment_texts << "_Modified post-approval_"
     end
 

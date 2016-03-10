@@ -15,12 +15,12 @@ class ProposalListingQuery
     index_visible_container(:pending_review, filter: pending_review_filter).alter_query(&:pending)
   end
 
-  def approved
-    index_visible_container(:approved).alter_query(&:approved)
+  def completed
+    index_visible_container(:completed).alter_query(&:completed)
   end
 
-  def cancelled
-    index_visible_container(:cancelled).alter_query(&:cancelled)
+  def canceled
+    index_visible_container(:canceled).alter_query(&:canceled)
   end
 
   def closed
