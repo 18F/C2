@@ -1,5 +1,28 @@
-= t("mailer.observer_mailer.proposal_complete.header")
-= render partial: "mail_shared/panel/proposal_attributes",
-  locals: { proposal: @proposal }
-= render partial: "mail_shared/proposal_button",
-  locals: { button_text: t("mailer.view_request_cta") }
+- content_for :header_icon, "emails/icon-pencil-circle.png"
+- top_head = t("mailer.observer_mailer.proposal_complete.header")
+- proposal_link_text = t("mailer.observer_mailer.proposal_complete.cta")
+
+%table.container
+  = render partial: "mail_shared/email_header/hero_text", 
+    locals: { text: top_head }
+
+
+%table.container.contain-attributes
+  / Start Panel Wrapper
+  = render partial: "mail_shared/panel/header_name", 
+    locals: { name: @proposal.name,
+              subtext: @proposal.public_id }
+
+  = render partial: "mail_shared/panel/proposal_attributes", 
+    locals: { proposal: @proposal }
+
+  = render partial: "mail_shared/panel/attachment_items"
+
+  = render partial: "mail_shared/panel/vertical_buffer"
+
+  = render partial: "mail_shared/call_to_action/subheader", 
+    locals: { subheader: "" }
+
+  = render partial: "mail_shared/call_to_action/button", 
+    locals: { link_path: proposal_url(@proposal), 
+              link_text: proposal_link_text }
