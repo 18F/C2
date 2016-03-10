@@ -63,8 +63,8 @@ C2::Application.routes.draw do
   end
 
   mount Peek::Railtie => "/peek"
+  mount Blazer::Engine, at: "blazer"
   if Rails.env.development?
     mount LetterOpenerWeb::Engine => "letter_opener"
-    mount Blazer::Engine, at: "blazer"
   end
 end

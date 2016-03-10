@@ -1,3 +1,5 @@
+before_action: require_admin
+
 # see https://github.com/ankane/blazer for more info
 data_sources:
   main:
