@@ -1,80 +1,4 @@
 describe NcrDispatcher do
-  describe "#deliver_new_proposal_emails" do
-    context "emergency work order" do
-      it "sends the emergency proposal created confirmation" do
-        ncr_dispatcher = NcrDispatcher.new
-        work_order = create(:ncr_work_order, :is_emergency)
-        proposal = work_order.proposal
-        mailer_double = double(deliver_later: true)
-        allow(ProposalMailer).to receive(:emergency_proposal_created_confirmation).
-          with(proposal).
-          and_return(mailer_double)
-
-        ncr_dispatcher.deliver_new_proposal_emails(proposal)
-
-        expect(ProposalMailer).to have_received(:emergency_proposal_created_confirmation).with(proposal)
-      end
-    end
-
-    context "not an emergency work order" do
-      it "sends the proposal created confirmation" do
-        ncr_dispatcher = NcrDispatcher.new
-        work_order = create(:ncr_work_order)
-        proposal = work_order.proposal
-        mailer_double = double(deliver_later: true)
-        allow(ProposalMailer).to receive(:proposal_created_confirmation).
-          with(proposal).
-          and_return(mailer_double)
-
-        ncr_dispatcher.deliver_new_proposal_emails(proposal)
-
-        expect(ProposalMailer).to have_received(:proposal_created_confirmation).with(proposal)
-      end
-    end
-  end
-
-  describe '#on_approval_approved' do
-    it "sends to the requester for the last approval" do
-      step_1.update_attribute(:status, 'accepted')  # skip workflow
-      deliveries.clear
-
-      ncr_dispatcher.on_approval_approved(step_2)
-      expect(email_recipients).to include(work_order.requester.email_address)
-    end
-
-    it "doesn't send to the requester for the not-last approval" do
-      ncr_dispatcher.on_approval_approved(step_1)
-      expect(email_recipients).to_not include('requester@example.com')
-    end
-  end
-
-  describe '#requires_approval_notice?' do
-    it 'returns true when the approval is last in the approver list' do
-      expect(ncr_dispatcher.requires_approval_notice? step_2).to eq true
-    end
-
-    it 'return false when the approval is not last in the approver list' do
-      expect(ncr_dispatcher.requires_approval_notice? step_1).to eq false
-    end
-  end
-
-  describe "#step_complete" do
-    it "notifies the user for the next pending step" do
-      work_order = create(:ncr_work_order, :with_approvers)
-      steps = work_order.individual_steps
-      step_1 = steps.first
-      step_2 = steps.second
-      step_1.update(status: "approved", approved_at: Time.current)
-      step_2.update(status: "actionable")
-
-      NcrDispatcher.new(work_order.proposal).step_complete(step_1)
-
-      expect(email_recipients).to match_array([
-        step_2.user.email_address
-      ])
-    end
-  end
-
   describe "#on_proposal_update" do
     context "proposal needs to be re-reviewed" do
       it "notifies pending step users" do
@@ -114,7 +38,7 @@ describe NcrDispatcher do
         work_order = create(:ncr_work_order, :with_approvers)
         comment = create(:comment, proposal: work_order.proposal, user: work_order.requester)
         first_step = work_order.individual_steps.first
-        first_step.approve!
+        first_step.complete!
         allow(ProposalMailer).to receive(:proposal_updated_no_action_required).
           and_return(double(deliver_later: true))
         allow(ProposalMailer).to receive(:proposal_updated_no_action_required).

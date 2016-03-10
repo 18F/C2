@@ -60,7 +60,7 @@ class Dispatcher
       email_observers("step completed")
     elsif proposal.pending?
       email_observers("step completed")
-    elsif proposal.approved?
+    elsif proposal.completed?
       active_observers.each { |observer| ObserverMailer.proposal_complete(observer, proposal) }
       ProposalMailer.proposal_complete(step.proposal).deliver_later
     end
