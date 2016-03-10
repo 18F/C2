@@ -35,7 +35,7 @@ class ProposalMailer < ApplicationMailer
     )
   end
 
-  def proposal_updated_no_action_required(user = User.last, proposal = Proposal.last, modifier = nil)
+  def proposal_updated_no_action_required(user, proposal, modifier = nil)
     @proposal = proposal.decorate
     @modifier = modifier || NullUser.new
     # Example ideal data to consume
