@@ -1,30 +1,22 @@
-- header_icon = "emails/icon-page-circle.png"
+- content_for :header_icon, "emails/icon-page-circle.png"
 - top_head = t("mailer.step_mailer.step_reply_received.body",
           full_name: @last_completed_step_user.full_name)
-%table.body
-  %tr
-    %td.center{align: "center", valign: "top"}
-      %center
-        = render partial: "mail_shared/email_header/topbar"
 
-        = render partial: "mail_shared/email_header/icon", 
-                  locals: { icon: header_icon}
+%table.container
+  = render partial: "mail_shared/email_header/hero_text", 
+            locals: { text: top_head}
 
-        %table.container
-          = render partial: "mail_shared/email_header/hero_text", 
-                    locals: { text: top_head}
+  = render partial: "mail_shared/approval/chain", 
+            locals: { proposal: @proposal,
+                      status: @step.status,
+                      public_id: @proposal.public_id }
+  
+  = render partial: "mail_shared/call_to_action/subheader", 
+            locals: { subheader: ''}
 
-          = render partial: "mail_shared/approval/chain", 
-                    locals: { proposal: @proposal,
-                              status: @step.status,
-                              public_id: @proposal.public_id }
-          
-          = render partial: "mail_shared/call_to_action/subheader", 
-                    locals: { subheader: ''}
-
-          = render(partial: "mail_shared/call_to_action/email_reply",
-                    locals: { step: @step, 
-                              show_step_actions: false, 
-                              proposal: @proposal })
-          
-          = render partial: "mail_shared/footer_foundation"
+  = render(partial: "mail_shared/call_to_action/email_reply",
+            locals: { step: @step, 
+                      show_step_actions: false, 
+                      proposal: @proposal })
+  
+  = render partial: "mail_shared/footer_foundation"
