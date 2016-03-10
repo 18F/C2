@@ -6,7 +6,7 @@ describe ProposalUpdateRecorder do
         work_order = create(:ncr_work_order, description: description)
 
         work_order.description = ""
-        comment = ProposalUpdateRecorder.new(work_order).run
+        comment = ProposalUpdateRecorder.new(work_order, work_order.requester).run
 
         expect(comment).to be_update_comment
         expect(comment.comment_text).to eq("*Description* was changed from #{description} to *empty*")
@@ -20,7 +20,7 @@ describe ProposalUpdateRecorder do
         work_order = create(:ncr_work_order, approving_official: approver)
         work_order.approving_official = second_approver
 
-        comment = ProposalUpdateRecorder.new(work_order).run
+        comment = ProposalUpdateRecorder.new(work_order, work_order.requester).run
 
         expect(comment).to be_update_comment
         expect(comment.comment_text).to eq(
@@ -36,7 +36,7 @@ describe ProposalUpdateRecorder do
         work_order = create(:ncr_work_order, ncr_organization: org)
         work_order.ncr_organization = second_org
 
-        comment = ProposalUpdateRecorder.new(work_order).run
+        comment = ProposalUpdateRecorder.new(work_order, work_order.requester).run
 
         expect(comment).to be_update_comment
         expect(comment.comment_text).to eq(
@@ -51,7 +51,7 @@ describe ProposalUpdateRecorder do
       work_order.vendor = "Mario Brothers"
       work_order.amount = 123.45
 
-      comment = ProposalUpdateRecorder.new(work_order).run
+      comment = ProposalUpdateRecorder.new(work_order, work_order.requester).run
 
       expect(comment).to be_update_comment
       comment_text = "- *Vendor* was changed from Some Vend to Mario Brothers\n"
@@ -64,27 +64,17 @@ describe ProposalUpdateRecorder do
       work_order = create(:ncr_work_order, description: "")
 
       work_order.description = ""
-      comment = ProposalUpdateRecorder.new(work_order).run
+      comment = ProposalUpdateRecorder.new(work_order, work_order.requester).run
 
       expect(comment).to be_nil
     end
 
-    it "attributes the update comment to the requester by default" do
-      work_order = create(:ncr_work_order, vendor: "old")
-
-      work_order.vendor = "VenVenVen"
-      comment = ProposalUpdateRecorder.new(work_order).run
-
-      expect(comment.user).to eq(work_order.requester)
-    end
-
-    it "attributes the update comment to someone set explicitly" do
+    it "attributes the update comment to the user passed in" do
       work_order = create(:ncr_work_order, vendor: "old")
       modifier = create(:user, client_slug: "ncr")
-      work_order.modifier = modifier
 
       work_order.vendor = "VenVenVen"
-      comment = ProposalUpdateRecorder.new(work_order).run
+      comment = ProposalUpdateRecorder.new(work_order, modifier).run
 
       expect(comment.user).to eq(modifier)
     end
@@ -97,7 +87,7 @@ describe ProposalUpdateRecorder do
       work_order.vendor = "VenVenVen"
 
       expect {
-        ProposalUpdateRecorder.new(work_order).run
+        ProposalUpdateRecorder.new(work_order, work_order.requester).run
       }.to change { deliveries.length }.by(0)
     end
   end
