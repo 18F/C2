@@ -48,7 +48,7 @@ en:
           "C2 is currently routing your request for approval. We'll let you know
           when everyone's signed off or if anything changes."
         cta: "View or update request details"
-      proposal_completed:
+      proposal_complete:
         header: "Request completed"
         subheader_foot: "As a reminder, here's what was approved:"
         subheader: "All of your request's steps have been completed"
