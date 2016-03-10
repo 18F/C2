@@ -5,8 +5,8 @@ class ProposalsController < ApplicationController
   skip_before_action :check_disabled_client, only: [:approve, :complete]
   # TODO use Policy for all actions
   before_action -> { authorize proposal }, only: [:show, :cancel, :cancel_form, :history]
-  before_action :needs_token_on_get, only: :complete
-  before_action :validate_access, only: :complete
+  before_action :needs_token_on_get, only: [:approve, :complete]
+  before_action :validate_access, only: [:approve, :complete]
   helper_method :display_status
   add_template_helper ProposalsHelper
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
