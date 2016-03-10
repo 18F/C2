@@ -142,9 +142,8 @@ class Proposal < ActiveRecord::Base
   end
 
   def existing_or_delegated_actionable_step_for(user)
-    where_clause = sql_for_step_user_or_delegate
-    where_clause += " AND status = 'actionable'"
-    steps.where(where_clause, user_id: user.id).first
+    where_clause = "(#{sql_for_step_user_or_delegate}) AND status = :actionable"
+    steps.where(where_clause, user_id: user.id, actionable: :actionable).first
   end
 
   def delegates
