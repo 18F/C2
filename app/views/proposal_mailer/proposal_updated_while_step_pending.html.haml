@@ -17,10 +17,6 @@
   / Start Panel Wrapper
   = render partial: "mail_shared/panel/header"
 
-  = render partial: "mail_shared/panel/row_description",
-    locals: { icon: panel_icon,
-              action: panel_action,
-              datetime: panel_action_date }
 
   = render partial: "mail_shared/panel/row_content_modified",
     locals: { comment: @comment, last: true}
