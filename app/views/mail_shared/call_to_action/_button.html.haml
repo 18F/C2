@@ -1,9 +1,9 @@
+- link_state    = !link_state.nil?    ? ' ' + link_state    : ''
+
 %tr
   %td{align: "center"}
-    / [if !mso]><!--
     %table.columns.six{align: "center"}
       %td{align: "center"}
-        %div.button-div
+        %div.button-div{class: link_state}
           = link_to link_path, target: "_blank" do
             = link_text
-    / <![endif]

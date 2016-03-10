@@ -2,6 +2,7 @@ en:
   mailer:
     view_request_cta: "View request details"
     add_comment_cta: "Add comment"
+    update_description: "Here are the updated request details:"
     footer_html:
       "Have <a href='%{feedback_url}'>feedback</a>? We'd love to hear from you."
     footer:

@@ -65,7 +65,9 @@ class ProposalMailer < ApplicationMailer
 
   def proposal_updated_while_step_pending(step, comment)
     @step = step.decorate
+    @modifier = comment.user
     @proposal = step.proposal.decorate
+    @comment = comment
     assign_threading_headers(@proposal)
 
     unless @step.api_token
