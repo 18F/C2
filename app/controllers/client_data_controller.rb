@@ -44,9 +44,9 @@ class ClientDataController < ApplicationController
 
   def update_or_notify_of_no_changes
     if attribute_changes?
-      record_changes
+      comment = record_changes
       @client_data_instance.save
-      setup_and_email_approvers
+      setup_and_email_approvers(comment)
       flash[:success] = "Successfully modified!"
     else
       flash[:error] = "No changes were made to the request"

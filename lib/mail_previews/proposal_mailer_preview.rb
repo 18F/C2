@@ -12,15 +12,15 @@ class ProposalMailerPreview < ActionMailer::Preview
   end
 
   def proposal_updated_no_action_required
-    ProposalMailer.proposal_updated_no_action_required
+    ProposalMailer.proposal_updated_no_action_required(user, proposal, comment)
   end
 
   def proposal_updated_while_step_pending
-    ProposalMailer.proposal_updated_while_step_pending(step)
+    ProposalMailer.proposal_updated_while_step_pending(step, comment)
   end
 
   def proposal_updated_needs_re_review
-    ProposalMailer.proposal_updated_needs_re_review(user, proposal)
+    ProposalMailer.proposal_updated_needs_re_review(user, proposal, comment)
   end
 
   private
@@ -35,5 +35,9 @@ class ProposalMailerPreview < ActionMailer::Preview
 
   def user
     User.last
+  end
+
+  def comment
+    Comment.last
   end
 end

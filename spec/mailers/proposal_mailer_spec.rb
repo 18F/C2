@@ -38,7 +38,8 @@ describe ProposalMailer do
   describe "#proposal_updated_no_action_required" do
     let(:proposal) { create(:proposal, :with_approver) }
     let(:user) { proposal.requester }
-    let(:mail) { ProposalMailer.proposal_updated_no_action_required(user, proposal) }
+    let(:comment) { create(:comment, proposal: proposal) }
+    let(:mail) { ProposalMailer.proposal_updated_no_action_required(user, proposal, comment) }
 
     it_behaves_like "a proposal email"
   end
@@ -46,7 +47,8 @@ describe ProposalMailer do
   describe "#proposal_updated_needs_re_review" do
     let(:proposal) { create(:proposal, :with_approver) }
     let(:user) { proposal.requester }
-    let(:mail) { ProposalMailer.proposal_updated_needs_re_review(user, proposal) }
+    let(:comment) { create(:comment, proposal: proposal) }
+    let(:mail) { ProposalMailer.proposal_updated_needs_re_review(user, proposal, comment) }
 
     it_behaves_like "a proposal email"
   end
@@ -54,7 +56,8 @@ describe ProposalMailer do
   describe "#proposal_updated_while_step_pending" do
     let(:proposal) { create(:proposal, :with_approver) }
     let(:step) { proposal.individual_steps.first }
-    let(:mail) { ProposalMailer.proposal_updated_while_step_pending(step) }
+    let(:comment) { create(:comment, proposal: proposal) }
+    let(:mail) { ProposalMailer.proposal_updated_while_step_pending(step, comment) }
 
     it_behaves_like "a proposal email"
   end

@@ -1,10 +1,8 @@
 module Ncr
   class WorkOrderUpdater
-    attr_reader :flash, :work_order
-
-    def initialize(work_order:, flash:)
-      @flash = flash
+    def initialize(work_order:, update_comment:)
       @work_order = work_order
+      @update_comment = update_comment
     end
 
     delegate :proposal, to: :work_order
@@ -12,16 +10,22 @@ module Ncr
     def run
       work_order.setup_approvals_and_observers
       reapprove_if_necessary
-      DispatchFinder.run(proposal).
-        on_proposal_update(modifier: work_order.modifier, needs_review: requires_budget_reapproval?)
+      DispatchFinder.
+        run(proposal).
+        on_proposal_update(
+          modifier: work_order.modifier,
+          needs_review: requires_budget_reapproval?,
+          comment: @update_comment
+        )
     end
 
     private
 
+    attr_reader :work_order
+
     def reapprove_if_necessary
       if requires_budget_reapproval?
         work_order.restart_budget_approvals
-        flash[:success] = "Successfully modified! This request now needs to be re-approved by budget."
       end
     end
 
