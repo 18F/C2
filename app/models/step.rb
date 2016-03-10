@@ -5,7 +5,7 @@ class Step < ActiveRecord::Base
   workflow do # overwritten in child classes
     state :pending
     state :actionable
-    state :approved
+    state :completed
   end
 
   belongs_to :user
@@ -14,7 +14,7 @@ class Step < ActiveRecord::Base
   acts_as_list scope: :proposal
   belongs_to :parent, class_name: "Step"
 
-  has_many :child_approvals, class_name: "Step", foreign_key: "parent_id", dependent: :destroy
+  has_many :child_steps, class_name: "Step", foreign_key: "parent_id", dependent: :destroy
 
   validates :proposal, presence: true
   validates :user_id, uniqueness: { scope: :proposal_id }, allow_blank: true
@@ -25,12 +25,12 @@ class Step < ActiveRecord::Base
     scope status, -> { where(status: status) }
   end
   scope :non_pending, -> { where.not(status: "pending") }
-  scope :outstanding, -> { where.not(status: "approved") }
+  scope :outstanding, -> { where.not(status: "completed") }
 
   default_scope { order("position ASC") }
 
   def pre_order_tree_traversal
-    [self] + child_approvals.flat_map(&:pre_order_tree_traversal)
+    [self] + child_steps.flat_map(&:pre_order_tree_traversal)
   end
 
   def completed_by
@@ -45,15 +45,15 @@ class Step < ActiveRecord::Base
     end
   end
 
-  def notify_parent_approved
+  def notify_parent_completed
     if parent
-      parent.child_approved!(self)
+      parent.child_completed!(self)
     else
-      proposal.approve!
+      proposal.complete!
     end
   end
 
-  def children_approved?
-    child_approvals.outstanding.empty?
+  def children_completed?
+    child_steps.outstanding.empty?
   end
 end

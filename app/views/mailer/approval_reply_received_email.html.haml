@@ -1,0 +1,26 @@
+%table.reply-section
+  - if @proposal.completed?
+    %tr.success
+      %td{ colspan: "2" }
+        = complete_text(@step)
+  - else
+    %tr
+      %td.w-container.html-email-message
+        %p
+          = t("mailer.generic_greeting")
+          ,
+          %br
+          = t("mailer.approval_reply_received_email.body",
+            full_name: @step.user.full_name,
+            status: @step.status,
+            public_id: @proposal.public_id)
+          %br
+          = t("mailer.approval_reply_received_email.details")
+
+  %tr
+    %td
+      = render partial: "mail_shared/comments", locals: { comments: @proposal.comments }
+      = render partial: "mail_shared/attachments", locals: { proposal: @proposal }
+      = render partial: "mail_shared/proposal_mail", locals: { proposal: @proposal }
+      = render(partial: "mail_shared/email_reply",
+        locals: { step: @step, show_step_actions: false, proposal: @proposal })

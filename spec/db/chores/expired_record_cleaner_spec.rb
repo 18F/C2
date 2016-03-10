@@ -29,7 +29,7 @@ describe ExpiredRecordCleaner do
         expect(cleaner.vacuum_old_proposals).to eq([proposal.id])
         expect(deliveries.length).to eq(1)
         proposal.reload
-        expect(proposal.status).to eq("cancelled")
+        expect(proposal.status).to eq("canceled")
       end 
     end
   end
@@ -41,7 +41,7 @@ describe ExpiredRecordCleaner do
       cleaner.vacuum_proposal(proposal)
       expect(deliveries.length).to eq(1)
       proposal.reload
-      expect(proposal.status).to eq('cancelled')
+      expect(proposal.status).to eq('canceled')
     end
   end
 end

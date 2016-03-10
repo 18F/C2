@@ -28,9 +28,9 @@
   <div id="proposals-completed" class="row past-pr">
     <div class="col-md-12">
       <h3>Recently Completed Purchase Requests</h3>
-      <%- if @approved_data.rows.any? %>
+      <%- if @completed_data.rows.any? %>
         <div class="col-sm-12">
-          <%= render partial: "shared/table", locals: { container: @approved_data } %>
+          <%= render partial: "shared/table", locals: { container: @completed_data } %>
         </div>
 
         <div class="row">
@@ -43,13 +43,13 @@
     </div>
   </div>
 
-  <div id="proposals-cancelled" class="row past-pr">
-    <% if @cancelled_data.rows.any? %>
+  <div id="proposals-canceled" class="row past-pr">
+    <% if @canceled_data.rows.any? %>
       <div class="col-md-12">
         <h3>Cancelled Purchase Requests</h3>
       </div>
       <div class="col-sm-12">
-        <%= render partial: "shared/table", locals: { container: @cancelled_data } %>
+        <%= render partial: "shared/table", locals: { container: @canceled_data } %>
       </div>
     <% end %>
   </div>

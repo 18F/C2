@@ -96,11 +96,11 @@ module Ncr
     end
 
     def build_fiscal_year_report_string(year)
-      approved_work_orders = Ncr::WorkOrder.approved.for_fiscal_year(year)
+      completed_work_orders = Ncr::WorkOrder.completed.for_fiscal_year(year)
 
       CSV.generate do |csv|
         add_fiscal_year_report_headers(csv)
-        add_fiscal_year_report_body(csv, approved_work_orders)
+        add_fiscal_year_report_body(csv, completed_work_orders)
       end
     end
 
@@ -110,7 +110,7 @@ module Ncr
       csv << [
         "Id",
         "Amount",
-        "Date Approved",
+        "Date Completed",
         "Org Code",
         "CL#",
         "Budget Activity",
@@ -134,7 +134,7 @@ module Ncr
       csv << [
         work_order.proposal.public_id,
         work_order.amount,
-        find_approved_at(work_order),
+        find_completed_at(work_order),
         work_order.organization_code_and_name,
         work_order.cl_number,
         work_order.expense_type,
@@ -144,7 +144,7 @@ module Ncr
         work_order.vendor,
         work_order.description,
         work_order.proposal.requester.full_name,
-        find_approved_at(work_order)
+        find_completed_at(work_order)
       ]
     end
 
@@ -156,9 +156,9 @@ module Ncr
       end
     end
 
-    def find_approved_at(work_order)
+    def find_completed_at(work_order)
       if work_order.proposal.steps.last.present?
-        work_order.proposal.steps.last.approved_at
+        work_order.proposal.steps.last.completed_at
       else
         "no approvals"
       end

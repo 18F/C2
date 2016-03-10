@@ -76,6 +76,30 @@ describe ProposalSearchQuery, elasticsearch: true do
           end
         end
       end
+
+      it "returns the Proposal when searching ncr_organization by name" do
+        whsc_org = create(:whsc_organization)
+        work_order = create(:ncr_work_order, ncr_organization: whsc_org)
+        work_order.proposal.reindex
+        refresh_index
+        es_execute_with_retries 3 do
+          results = ProposalSearchQuery.new(current_user: work_order.requester).execute(whsc_org.code)
+          expect(results.to_a).to eq([work_order.proposal])
+        end
+      end
+
+      it "returns the Proposal when searching approving_official by name" do
+        work_order = create(:ncr_work_order)
+        work_order.proposal.reindex
+        refresh_index
+        approving_official = work_order.approving_official
+        es_execute_with_retries 3 do
+          results = ProposalSearchQuery.new(current_user: work_order.requester).execute(approving_official.email_address)
+          expect(results.to_a).to eq([work_order.proposal])
+          results = ProposalSearchQuery.new(current_user: work_order.requester).execute(approving_official.full_name)
+          expect(results.to_a).to eq([work_order.proposal])
+        end
+      end
     end
 
     context Gsa18f::Procurement do

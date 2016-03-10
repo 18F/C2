@@ -3,10 +3,6 @@ class Dispatcher
     @proposal = proposal
   end
 
-  def email_step_user(step)
-    Mailer.actions_for_approver(step).deliver_later
-  end
-
   def on_observer_added(observation, reason)
     ObserverMailer.observer_added_notification(observation, reason).deliver_later
   end
@@ -51,8 +47,8 @@ class Dispatcher
   end
 
   def step_complete(step)
-    if next_approval(step)
-      email_step_user(next_approval(step))
+    if next_step.present?
+      StepMailer.proposal_notification(next_step).deliver_later
     end
 
     if requires_approval_notice? && proposal.pending?
@@ -60,7 +56,7 @@ class Dispatcher
       email_observers("step completed")
     elsif proposal.pending?
       email_observers("step completed")
-    elsif proposal.approved?
+    elsif proposal.completed?
       active_observers.each { |observer| ObserverMailer.proposal_complete(observer, proposal) }
       ProposalMailer.proposal_complete(step.proposal).deliver_later
     end
@@ -109,7 +105,7 @@ class Dispatcher
     !step.pending?
   end
 
-  def next_approval(approval)
+  def next_step
     if proposal.pending?
       proposal.currently_awaiting_steps.first
     end

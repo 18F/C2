@@ -32,8 +32,10 @@ C2::Application.routes.draw do
   resources :proposals, only: [:index, :show] do
     member do
       get "approve"   # this route has special protection to prevent the confused deputy problem
-                      # if you are adding a new controller which performs an action, use post instead
+      get "complete"  # if you are adding a new controller which performs an action, use post instead
+      post "complete"
       post "approve"
+
       get "cancel_form"
       post "cancel"
       get "history"
@@ -65,5 +67,6 @@ C2::Application.routes.draw do
   mount Peek::Railtie => "/peek"
   if Rails.env.development?
     mount LetterOpenerWeb::Engine => "letter_opener"
+    mount Blazer::Engine, at: "blazer"
   end
 end

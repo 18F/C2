@@ -9,6 +9,7 @@ FactoryGirl.define do
         amount 123
         project_title "I am a test request"
         association :proposal, client_slug: "test"
+        association :approving_official, factory: :user, client_slug: "test"
 
         trait :with_approvers do
           association :proposal, :with_serial_approvers, client_slug: "test"

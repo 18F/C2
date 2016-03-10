@@ -11,7 +11,7 @@ class ProposalPolicy
   end
 
   def can_edit!
-    (admin? || requester!) && not_approved! && not_canceled!
+    (admin? || requester!) && not_completed! && not_canceled!
   end
 
   alias_method :can_update!, :can_edit!
@@ -55,15 +55,15 @@ class ProposalPolicy
     check(requester?, "You are not the requester")
   end
 
-  def not_approved!
+  def not_completed!
     check(
-      !@proposal.approved?,
-      "That proposal's already approved. New proposal?"
+      !@proposal.completed?,
+      "That proposal's already completed. New proposal?"
     )
   end
 
   def not_canceled!
-    check(!@proposal.cancelled?, "Sorry, this proposal has been canceled.")
+    check(!@proposal.canceled?, "Sorry, this proposal has been canceled.")
   end
 
   def step_user?

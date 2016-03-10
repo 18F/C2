@@ -4,6 +4,8 @@ module Test
   end
 
   class ClientRequest < ActiveRecord::Base
+    belongs_to :approving_official, class_name: User
+
     def self.purchase_amount_column_name
       :amount
     end
@@ -28,6 +30,7 @@ module Test
     ClientRequest.connection.create_table :test_client_requests do |t|
       t.decimal  :amount
       t.string   :project_title
+      t.integer  :approving_official_id
       t.datetime :created_at
       t.datetime :updated_at
     end

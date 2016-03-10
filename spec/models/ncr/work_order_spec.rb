@@ -13,7 +13,7 @@ describe Ncr::WorkOrder do
       work_order = create(:ncr_work_order)
       work_order.setup_approvals_and_observers
       approving_official_step = work_order.reload.individual_steps.first
-      approving_official_step.update(status: "approved")
+      approving_official_step.update(status: "completed")
 
       work_order.approving_official = create(:user, client_slug: "ncr")
 
@@ -27,6 +27,17 @@ describe Ncr::WorkOrder do
       work_order.approving_official = create(:user, client_slug: "ncr")
 
       expect(work_order).to be_valid
+    end
+  end
+
+  describe "#as_indexed_json" do
+    it "serializes associations" do
+      whsc_org = create(:whsc_organization)
+      work_order = create(:ncr_work_order, ncr_organization: whsc_org)
+
+      indexable = work_order.as_json({include: [:ncr_organization, :approving_official]})
+
+      expect(work_order.as_indexed_json).to eq(indexable)
     end
   end
 
@@ -244,13 +255,13 @@ describe Ncr::WorkOrder do
     it "returns the final approver" do
       wo = create(:ncr_work_order, :with_approvers)
       expect(wo.final_approver).to eq(wo.approvers.last)
-      wo.individual_steps.first.approve!
+      wo.individual_steps.first.complete!
       expect(wo.final_approver).to eq(wo.approvers.last)
     end
 
-    it "returns the last approver when fully approved" do
+    it "returns the last approver when fully completed" do
       wo = create(:ncr_work_order, :with_approvers)
-      fully_approve(wo.proposal)
+      fully_complete(wo.proposal)
       expect(wo.final_approver).to eq(wo.approvers.last)
     end
   end
@@ -260,14 +271,14 @@ describe Ncr::WorkOrder do
       work_order = create(:ncr_work_order)
       proposal = work_order.proposal
       work_order.setup_approvals_and_observers
-      fully_approve(proposal)
+      fully_complete(proposal)
 
       work_order.restart_budget_approvals
 
       expect(work_order.status).to eq('pending')
       expect(work_order.proposal.root_step.status).to eq('actionable')
       expect(linear_approval_statuses(proposal)).to eq(%w(
-        approved
+        completed
         actionable
         pending
       ))

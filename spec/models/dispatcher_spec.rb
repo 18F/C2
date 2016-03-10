@@ -41,7 +41,7 @@ describe Dispatcher do
       delegate_two = create(:user, client_slug: "ncr")
       tier_one_approver.add_delegate(delegate_one)
       tier_one_approver.add_delegate(delegate_two)
-      proposal.individual_steps.first.approve!
+      proposal.individual_steps.first.complete!
 
       Dispatcher.new(proposal).deliver_attachment_emails(attachment)
 
@@ -54,7 +54,7 @@ describe Dispatcher do
     it "sends a notification to the active step users" do
       mock_deliverer = double
       proposal = create(:proposal, :with_approval_and_purchase)
-      proposal.approval_steps.first.approve!
+      proposal.approval_steps.first.complete!
       allow(CancelationMailer).to receive(:cancelation_notification).and_return(mock_deliverer)
       allow(mock_deliverer).to receive(:deliver_later).exactly(2).times
 
@@ -101,7 +101,7 @@ describe Dispatcher do
     context "final step complete" do
       it "notifies the requester that the proposal is complete" do
         procurement = create(:gsa18f_procurement, :with_steps)
-        procurement.proposal.approve!
+        procurement.proposal.complete!
         step_2 = procurement.individual_steps.last
         allow(ProposalMailer).to receive(:proposal_complete).
           with(procurement.proposal).
@@ -116,7 +116,7 @@ describe Dispatcher do
         proposal = create(:proposal, :with_approver, :with_observer)
         observer = proposal.observers.first
         work_order = create(:ncr_work_order, proposal: proposal)
-        work_order.proposal.approve!
+        work_order.proposal.complete!
         step_2 = work_order.individual_steps.last
         allow(ObserverMailer).to receive(:proposal_complete).
           with(observer, proposal).
@@ -134,7 +134,7 @@ describe Dispatcher do
         steps = procurement.individual_steps
         step_1 = steps.first
         step_2 = steps.second
-        step_1.update(status: "approved", approved_at: Time.current)
+        step_1.update(status: "completed", completed_at: Time.current)
         step_2.update(status: "actionable")
 
         Dispatcher.new(procurement.proposal).step_complete(step_1)

@@ -3,7 +3,7 @@ FactoryGirl.define do
 
   factory :proposal do
     public_id
-    status 'pending'
+    status "pending"
     association :requester, factory: :user
 
     transient do
@@ -30,7 +30,7 @@ FactoryGirl.define do
     trait :with_parallel_approvers do
       after :create do |proposal, evaluator|
         ind = 2.times.map{ Steps::Approval.new(user: create(:user, client_slug: evaluator.client_slug)) }
-        proposal.root_step = Steps::Parallel.new(child_approvals: ind)
+        proposal.root_step = Steps::Parallel.new(child_steps: ind)
       end
     end
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160222185247) do
+ActiveRecord::Schema.define(version: 20160308231131) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,6 +30,34 @@ ActiveRecord::Schema.define(version: 20160222185247) do
   add_index "active_admin_comments", ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id", using: :btree
   add_index "active_admin_comments", ["namespace"], name: "index_active_admin_comments_on_namespace", using: :btree
   add_index "active_admin_comments", ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id", using: :btree
+
+  create_table "ahoy_events", id: :uuid, default: nil, force: :cascade do |t|
+    t.uuid     "visit_id"
+    t.integer  "user_id"
+    t.string   "name"
+    t.json     "properties"
+    t.datetime "time"
+  end
+
+  add_index "ahoy_events", ["time"], name: "index_ahoy_events_on_time", using: :btree
+  add_index "ahoy_events", ["user_id"], name: "index_ahoy_events_on_user_id", using: :btree
+  add_index "ahoy_events", ["visit_id"], name: "index_ahoy_events_on_visit_id", using: :btree
+
+  create_table "ahoy_messages", force: :cascade do |t|
+    t.string   "token"
+    t.text     "to"
+    t.integer  "user_id"
+    t.string   "user_type"
+    t.string   "mailer"
+    t.text     "subject"
+    t.text     "content"
+    t.datetime "sent_at"
+    t.datetime "opened_at"
+    t.datetime "clicked_at"
+  end
+
+  add_index "ahoy_messages", ["token"], name: "index_ahoy_messages_on_token", using: :btree
+  add_index "ahoy_messages", ["user_id", "user_type"], name: "index_ahoy_messages_on_user_id_and_user_type", using: :btree
 
   create_table "api_tokens", force: :cascade do |t|
     t.string   "access_token", limit: 255
@@ -53,6 +81,46 @@ ActiveRecord::Schema.define(version: 20160222185247) do
     t.datetime "updated_at"
   end
 
+  create_table "blazer_audits", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "query_id"
+    t.text     "statement"
+    t.string   "data_source"
+    t.datetime "created_at"
+  end
+
+  create_table "blazer_checks", force: :cascade do |t|
+    t.integer  "query_id"
+    t.string   "state"
+    t.text     "emails"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "blazer_dashboard_queries", force: :cascade do |t|
+    t.integer  "dashboard_id"
+    t.integer  "query_id"
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "blazer_dashboards", force: :cascade do |t|
+    t.text     "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "blazer_queries", force: :cascade do |t|
+    t.integer  "creator_id"
+    t.string   "name"
+    t.text     "description"
+    t.text     "statement"
+    t.string   "data_source"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "comments", force: :cascade do |t|
     t.text     "comment_text"
     t.datetime "created_at"
@@ -60,6 +128,7 @@ ActiveRecord::Schema.define(version: 20160222185247) do
     t.integer  "user_id"
     t.integer  "proposal_id"
     t.boolean  "update_comment"
+    t.uuid     "visit_id"
   end
 
   add_index "comments", ["proposal_id"], name: "index_comments_on_proposal_id", using: :btree
@@ -143,18 +212,20 @@ ActiveRecord::Schema.define(version: 20160222185247) do
     t.integer  "client_data_id"
     t.string   "client_data_type", limit: 255
     t.integer  "requester_id"
-    t.string   "public_id",        limit: 255
+    t.string   "public_id"
+    t.uuid     "visit_id"
   end
 
   add_index "proposals", ["client_data_id", "client_data_type"], name: "index_proposals_on_client_data_id_and_client_data_type", using: :btree
 
   create_table "reports", force: :cascade do |t|
     t.string   "name",                       null: false
-    t.text     "query",                      null: false
+    t.json     "query",                      null: false
     t.boolean  "shared",     default: false
     t.integer  "user_id",                    null: false
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
+    t.uuid     "visit_id"
   end
 
   create_table "roles", force: :cascade do |t|
@@ -165,6 +236,15 @@ ActiveRecord::Schema.define(version: 20160222185247) do
 
   add_index "roles", ["name"], name: "roles_name_idx", unique: true, using: :btree
 
+  create_table "scheduled_reports", force: :cascade do |t|
+    t.string   "name",                   null: false
+    t.integer  "frequency",  default: 0, null: false
+    t.integer  "user_id",                null: false
+    t.integer  "report_id",              null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "steps", force: :cascade do |t|
     t.integer  "user_id"
     t.string   "status",              limit: 255
@@ -172,7 +252,7 @@ ActiveRecord::Schema.define(version: 20160222185247) do
     t.datetime "updated_at"
     t.integer  "position"
     t.integer  "proposal_id"
-    t.datetime "approved_at"
+    t.datetime "completed_at"
     t.string   "type"
     t.integer  "parent_id"
     t.integer  "min_children_needed"
@@ -237,14 +317,49 @@ ActiveRecord::Schema.define(version: 20160222185247) do
 
   add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
 
+  create_table "visits", id: :uuid, default: nil, force: :cascade do |t|
+    t.uuid     "visitor_id"
+    t.string   "ip"
+    t.text     "user_agent"
+    t.text     "referrer"
+    t.text     "landing_page"
+    t.integer  "user_id"
+    t.string   "referring_domain"
+    t.string   "search_keyword"
+    t.string   "browser"
+    t.string   "os"
+    t.string   "device_type"
+    t.integer  "screen_height"
+    t.integer  "screen_width"
+    t.string   "country"
+    t.string   "region"
+    t.string   "city"
+    t.string   "postal_code"
+    t.decimal  "latitude"
+    t.decimal  "longitude"
+    t.string   "utm_source"
+    t.string   "utm_medium"
+    t.string   "utm_term"
+    t.string   "utm_content"
+    t.string   "utm_campaign"
+    t.datetime "started_at"
+  end
+
+  add_index "visits", ["user_id"], name: "index_visits_on_user_id", using: :btree
+
   add_foreign_key "attachments", "proposals", name: "proposal_id_fkey"
   add_foreign_key "attachments", "users", name: "user_id_fkey"
   add_foreign_key "comments", "proposals", name: "proposal_id_fkey"
   add_foreign_key "comments", "users", name: "user_id_fkey"
+  add_foreign_key "comments", "visits"
   add_foreign_key "proposal_roles", "proposals", name: "proposal_id_fkey"
   add_foreign_key "proposal_roles", "roles", name: "role_id_fkey"
   add_foreign_key "proposal_roles", "users", name: "user_id_fkey"
   add_foreign_key "proposals", "users", column: "requester_id", name: "requester_id_fkey"
+  add_foreign_key "proposals", "visits"
+  add_foreign_key "reports", "visits"
+  add_foreign_key "scheduled_reports", "reports"
+  add_foreign_key "scheduled_reports", "users"
   add_foreign_key "steps", "proposals", name: "proposal_id_fkey", on_delete: :cascade
   add_foreign_key "steps", "steps", column: "parent_id", name: "parent_id_fkey", on_delete: :cascade
   add_foreign_key "steps", "users", column: "completer_id", name: "completer_id_fkey"

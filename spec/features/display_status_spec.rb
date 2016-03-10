@@ -1,13 +1,13 @@
 describe "Display status text" do
   context "parallel approvals" do
-    it "displays approved status" do
+    it "displays complete status" do
       proposal = create_proposal_with_parallel_approvers
-      proposal.individual_steps.each { |approval| approval.approve! }
+      proposal.individual_steps.each { |approval| approval.complete! }
 
       login_as(proposal.requester)
       visit proposals_path
 
-      expect(page).to have_content("Approved")
+      expect(page).to have_content("Completed")
     end
 
     it "displays outstanding approvers" do
@@ -26,7 +26,7 @@ describe "Display status text" do
     it "excludes approved approvals" do
       proposal = create_proposal_with_parallel_approvers
       first_approval = proposal.individual_steps.first
-      first_approval.approve!
+      first_approval.complete!
       first_approver = first_approval.user
       all_approvers_except_first = proposal.approvers.offset(1)
 
@@ -62,7 +62,7 @@ describe "Display status text" do
     it "excludes approved approvals" do
       proposal = create_proposal_with_serial_approvers
       first_approval = proposal.individual_steps.first
-      first_approval.approve!
+      first_approval.complete!
       first_approver = first_approval.user
 
       login_as(proposal.requester)

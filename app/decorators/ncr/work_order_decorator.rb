@@ -6,7 +6,7 @@ module Ncr
     NO_APPROVER_FOUND = "No Approver Found"
 
     def current_approver_email_address
-      if proposal.approved?
+      if proposal.completed?
         final_approver_email_address
       else
         pending_approver_email_address

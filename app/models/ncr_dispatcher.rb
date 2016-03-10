@@ -13,7 +13,7 @@ class NcrDispatcher < Dispatcher
   end
 
   def notify_approvers(needs_review, comment)
-    proposal.individual_steps.approved.each do |step|
+    proposal.individual_steps.completed.each do |step|
       unless user_is_modifier?(step.user, comment.user)
         if needs_review == false
           ProposalMailer.

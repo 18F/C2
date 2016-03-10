@@ -21,8 +21,8 @@ describe ProposalPolicy do
         }
       end
 
-      it "does not allow when the user's already approved" do
-        approval.update_attribute(:status, 'approved')  # skip state machine
+      it "does not allow when the user's already completed" do
+        approval.update_attribute(:status, "completed")  # skip state machine
         expect(ProposalPolicy).not_to permit(approval.user, proposal)
       end
 
@@ -42,7 +42,7 @@ describe ProposalPolicy do
 
       it "allows when there's a pending purchase" do
         proposal = create(:proposal)
-        _first_approval = create(:approval_step, proposal: proposal, status: "approved")
+        _first_approval = create(:approval_step, proposal: proposal, status: "completed")
         purchase_step = create(:purchase_step, proposal: proposal, status: "actionable")
 
         expect(ProposalPolicy).to permit(purchase_step.user, proposal)
@@ -56,9 +56,9 @@ describe ProposalPolicy do
         expect(ProposalPolicy).not_to permit(second_approval.user, proposal)
       end
 
-      it "does not allow when the user's already approved" do
+      it "does not allow when the user's already completed" do
         proposal = create(:proposal)
-        first_approval = create(:approval_step, proposal: proposal, status: "approved")
+        first_approval = create(:approval_step, proposal: proposal, status: "completed")
         second_approval = create(:approval_step, proposal: proposal, status: "actionable")
 
         expect(ProposalPolicy).not_to permit(first_approval.user, proposal)
@@ -72,7 +72,7 @@ describe ProposalPolicy do
 
       it "allows pending delegates" do
         proposal = create(:proposal)
-        approval = create(:approval_step, proposal: proposal, status: "approved")
+        approval = create(:approval_step, proposal: proposal, status: "completed")
         purchase = create(:purchase_step, proposal: proposal, status: "actionable")
 
         delegate = create(:user)
@@ -136,8 +136,8 @@ describe ProposalPolicy do
       expect(ProposalPolicy).not_to permit(create(:user), proposal)
     end
 
-    it "does not allow an approved request to be edited" do
-      proposal.update_attribute(:status, 'approved')  # skip state machine
+    it "does not allow an completed request to be edited" do
+      proposal.update_attribute(:status, "completed")  # skip state machine
       expect(ProposalPolicy).not_to permit(proposal.requester, proposal)
     end
   end

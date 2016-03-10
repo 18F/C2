@@ -47,7 +47,7 @@ describe ProposalUpdateRecorder do
 
     it "includes extra information if modified post approval" do
       work_order = create(:ncr_work_order)
-      work_order.approve!
+      work_order.complete!
       work_order.vendor = "Mario Brothers"
       work_order.amount = 123.45
 

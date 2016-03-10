@@ -44,7 +44,7 @@ describe Ncr::WorkOrdersController do
     end
 
     it 'displays a warning message when editing a fully-approved proposal' do
-      fully_approve(work_order.proposal)
+      fully_complete(work_order.proposal)
       get :edit, {id: work_order.id}
       expect(flash[:warning]).to be_present
     end
@@ -133,7 +133,7 @@ describe Ncr::WorkOrdersController do
 
     it "does not modify the approver if already approved" do
       work_order.setup_approvals_and_observers
-      work_order.reload.individual_steps.first.approve!
+      work_order.reload.individual_steps.first.complete!
 
       post :update, {
         id: work_order.id,
