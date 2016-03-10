@@ -32,21 +32,7 @@
   = render partial: "mail_shared/panel/proposal_attributes",
     locals: { proposal: @proposal }
 
-  - if !@proposal.attachments.nil?
-
-    = render partial: "mail_shared/panel/vertical_buffer"
-
-    - @proposal.attachments.each do |attachment|
-      - attachment_action = t("mailer.attachment_mailer.new_attachment_notification.header",
-                              user_name: attachment.user.full_name,
-                              proposal_name: @proposal.name)
-      - attachment_action_date = attachment.created_at.strftime("%m/%d/%Y") + " at " + attachment.created_at.strftime("%I:%M %P")
-      = render partial: "mail_shared/panel/row_description",
-        locals: { icon: attachment_icon,
-                  action: attachment_action,
-                  datetime: attachment_action_date}
-
-      = render partial: "mail_shared/panel/vertical_buffer"
+  = render partial: "mail_shared/panel/attachment_items"
       
   = render partial: "mail_shared/panel/vertical_buffer"
 
