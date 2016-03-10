@@ -1,24 +1,45 @@
-%table.full-width.header
-  %tr 
-    %td.hero
-    %td 
-      = image_tag "emails/icon-pencil-circle.png", class: "header-icon"
+- content_for :header_icon, "emails/icon-page-circle.png"
+- top_head = observer_text(@observation)
+- cta_subheader = @reason
+- attachment_icon = "emails/icon-clipped_page.png"
 
-%table.two-thirds-width
-  %tr 
-    %td.header
-      = observer_text(@observation)
 
-%table.two-thirds-width
-  %tr 
-    %td.subheader
-      = @reason
+%table.container
+  = render partial: "mail_shared/email_header/hero_text", 
+    locals: { text: top_head,
+              style: "no-margin-wrapper" }
 
-= render partial: "mail_shared/panel/proposal_attributes",
-  locals: { proposal: @proposal }
+  = render partial: "mail_shared/call_to_action/subheader", 
+    locals: { subheader: cta_subheader,
+              vertical: "no-top-margin" }
+  
 
-= render partial: "mail_shared/proposal_button",
-  locals: { button_text: t("mailer.comment_mailer.comment_added_notification.cta") }
+  = render partial: "mail_shared/approval/chain", 
+    locals: { proposal: @proposal }
 
-= render partial: "mail_shared/proposal_comment_button",
-  locals: { button_text: t("mailer.comment_mailer.comment_added_notification.cta_2") }
+  = render partial: "mail_shared/call_to_action/subheader", 
+    locals: { subheader: '',
+              height: 'half' }
+
+%table.container.contain-attributes
+
+  = render partial: "mail_shared/panel/header_name", 
+                  locals: { name: @proposal.name,
+                            subtext: @proposal.public_id }
+
+  = render partial: "mail_shared/panel/proposal_attributes",
+    locals: { proposal: @proposal }
+
+  = render partial: "mail_shared/panel/attachment_items"
+      
+  = render partial: "mail_shared/panel/vertical_buffer"
+
+%table.container
+
+  = render partial: "mail_shared/call_to_action/subheader", 
+    locals: { subheader: '' }
+
+  = render(partial: "mail_shared/call_to_action/email_reply",
+    locals: { step: @step, 
+              show_step_actions: false, 
+              proposal: @proposal })
