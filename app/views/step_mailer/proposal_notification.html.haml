@@ -36,4 +36,6 @@
     locals: { subheader: "" }
 
   = render(partial: "mail_shared/call_to_action/email_reply",
-    locals: { step: @step, show_step_actions: true, proposal: @proposal })
+    locals: { step: @step, 
+              show_step_actions: true, 
+              proposal: @proposal })
