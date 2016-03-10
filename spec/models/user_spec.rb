@@ -43,6 +43,12 @@ describe User do
       user = User.for_email('   miXedCaSe@eXaMple.com')
       expect(user.email_address).to eq('mixedcase@example.com')
     end
+
+    it "raises error when email is empty" do
+      expect {
+        user = User.for_email("")
+      }.to raise_error EmailRequired
+    end
   end
 
   describe ".for_email_with_slug" do
