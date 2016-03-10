@@ -15,7 +15,6 @@ describe Ncr::WorkOrderUpdater do
       ).run
 
       expect(dispatch_double).to have_received(:on_proposal_update).with(
-        modifier: work_order.requester,
         needs_review: false,
         comment: comment
       )
