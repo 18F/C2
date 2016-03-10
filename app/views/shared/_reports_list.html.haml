@@ -3,7 +3,7 @@
   - current_user.all_reports.each do |report|
     %tr
       %td.name
-        = link_to(report.name, report_path(report))
+        = report.name
       %td.subscription
         = report.subscribed?(current_user) ? "Emailed to me #{report.subscription_for(current_user).frequency}" : ""
       %td.edit
