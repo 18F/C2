@@ -1,7 +1,7 @@
 before_action: require_admin
 data_sources:
   main:
-    url: <%= ENV["BLAZER_DATABASE_URL"] %>
+    url: <%= ENV["DATABASE_URL"] %>
     smart_variables:
     linked_columns:
     smart_columns:
