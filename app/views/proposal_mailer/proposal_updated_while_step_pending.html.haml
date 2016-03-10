@@ -5,10 +5,7 @@
 - proposal_link_text = t("mailer.view_request_cta")
 - attachment_icon = "emails/icon-clipped_page.png"
 - panel_icon = "emails/button-circle.png"
-- panel_action = t("mailer.proposal_mailer.proposal_updated_needs_re_review.modifier_action",
-                  user_name: @modifier.full_name)
 - panel_action_date = time_and_date(@proposal.updated_at)
-- cta_subheader_foot = t("mailer.proposal_mailer.proposal_updated_needs_re_review.approver_subheader")
 
 %table.container
   = render partial: "mail_shared/email_header/hero_text",
@@ -51,22 +48,9 @@
   = render partial: "mail_shared/panel/proposal_attributes",
     locals: { proposal: @proposal }
 
-  - if @proposal.attachments.any?
-    = render partial: "mail_shared/panel/vertical_buffer"
-
-    - @proposal.attachments.each do |attachment|
-      - attachment_action = t("mailer.attachment_mailer.new_attachment_notification.header",
-                              user_name: attachment.user.full_name,
-                              proposal_name: @proposal.name)
-      - attachment_action_date = time_and_date(attachment.created_at)
-      = render partial: "mail_shared/panel/row_description",
-        locals: { icon: attachment_icon,
-                  action: attachment_action,
-                  datetime: attachment_action_date }
-
-      = render partial: "mail_shared/panel/vertical_buffer"
-
   = render partial: "mail_shared/panel/vertical_buffer"
+
+  = render partial: "mail_shared/panel/attachment_items"
 
 %table.container
 
