@@ -10,7 +10,7 @@ describe "searching", elasticsearch: true do
     proposals = populate_proposals
 
     visit proposals_path
-    fill_in 'text', with: proposals.first.name
+    fill_in 'text', with: proposals.first.public_id
     click_button "search-button"
 
     expect(current_path).to eq query_proposals_path

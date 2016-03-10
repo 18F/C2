@@ -417,4 +417,13 @@ describe Proposal do
       expect(proposal.tag_list).to eq(["foo", "bar", "baz"])
     end
   end
+
+  describe "#as_indexed_json" do
+    it "counts attachments" do
+      proposal = create(:proposal)
+      attachment = create(:attachment, proposal: proposal, user: proposal.requester)
+
+      expect(proposal.as_indexed_json[:num_attachments]).to eq(1)
+    end
+  end
 end
