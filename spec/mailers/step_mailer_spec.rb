@@ -5,7 +5,7 @@ describe StepMailer do
     let(:mail) { StepMailer.step_reply_received(approval) }
 
     before do
-      approval.approve!
+      approval.complete!
     end
 
     it_behaves_like "a proposal email"
@@ -23,7 +23,7 @@ describe StepMailer do
     let(:mail) { StepMailer.step_user_removed(approver.email_address, proposal) }
 
     before do
-      approval.approve!
+      approval.complete!
     end
 
     it_behaves_like "a proposal email"

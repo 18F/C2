@@ -38,7 +38,7 @@ describe NcrDispatcher do
         work_order = create(:ncr_work_order, :with_approvers)
         comment = create(:comment, proposal: work_order.proposal, user: work_order.requester)
         first_step = work_order.individual_steps.first
-        first_step.approve!
+        first_step.complete!
         allow(ProposalMailer).to receive(:proposal_updated_no_action_required).
           and_return(double(deliver_later: true))
         allow(ProposalMailer).to receive(:proposal_updated_no_action_required).

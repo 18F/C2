@@ -33,7 +33,7 @@ module Steps
       state :completed do
         on_entry do
           update(completed_at: Time.zone.now)
-          notify_parent_approved
+          notify_parent_completed
           DispatchFinder.run(self.proposal).step_complete(self)
         end
 
