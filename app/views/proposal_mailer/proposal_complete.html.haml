@@ -27,10 +27,13 @@
 
   / Start Panel Wrapper
   = render partial: "mail_shared/panel/header_name", 
-    locals: { proposal: @proposal }
+    locals: { name: @proposal.name,
+              subtext: @proposal.public_id }
 
   = render partial: "mail_shared/panel/proposal_attributes", 
     locals: { proposal: @proposal }
+
+  = render partial: "mail_shared/panel/attachment_items"
 
   = render partial: "mail_shared/panel/vertical_buffer"
 
