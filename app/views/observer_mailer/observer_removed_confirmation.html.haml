@@ -1,15 +1,14 @@
-%table.full-width.header
-  %tr 
-    %td.hero
-    %td 
-      = image_tag "emails/icon-pencil-circle.png", class: "header-icon"
+- content_for :header_icon, "emails/icon-pencil-circle.png"
+- top_head = t("mailer.observer_mailer.observer_removed_confirmation.header")
+- cta_subheader = t("mailer.observer_mailer.observer_removed_confirmation.body")
+- proposal_link_text = t("mailer.proposal_mailer.proposal_created_confirmation.cta")
+- cta_subheader_foot = t("mailer.proposal_mailer.proposal_created_confirmation.approver_subheader")
 
-%table.two-thirds-width
-  %tr 
-    %td.header
-      = t("mailer.observer_mailer.observer_removed_confirmation.header")
+%table.container
+  = render partial: "mail_shared/email_header/hero_text", 
+    locals: { text: top_head}
 
-%table.two-thirds-width
-  %tr 
-    %td.subheader
-      = t("mailer.observer_mailer.observer_removed_confirmation.body")
+  = render partial: "mail_shared/call_to_action/subheader", 
+    locals: { subheader: cta_subheader,
+              vertical: 'no-top-margin' }
+  
