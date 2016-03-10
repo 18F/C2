@@ -26,6 +26,7 @@ class User < ActiveRecord::Base
   has_many :completed_steps, class_name: "Step", foreign_key: "completer"
 
   has_many :reports
+  has_many :scheduled_reports
 
   def self.active
     where(active: true)

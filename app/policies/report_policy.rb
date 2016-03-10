@@ -14,6 +14,10 @@ class ReportPolicy
     check(owner?, "You are not allowed to delete this Report.")
   end
 
+  def can_preview!
+    can_show!
+  end
+
   protected
 
   def can_show?
