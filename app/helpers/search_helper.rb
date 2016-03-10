@@ -4,7 +4,7 @@ module SearchHelper
   end
 
   def proposal_status_value(value_key)
-    proposal_status_option_values.select{ |pair| pair[1] == value_key }.first[0]
+    proposal_status_option_values.find { |pair| pair[1] == value_key }[0]
   end
 
   def proposal_status_option_values

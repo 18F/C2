@@ -21,7 +21,7 @@ class ScheduledReportPolicy
   protected
 
   def can_show?
-    owner? 
+    owner?
   end
 
   def can_destroy?
