@@ -13,7 +13,6 @@ module Ncr
       DispatchFinder.
         run(proposal).
         on_proposal_update(
-          modifier: work_order.modifier,
           needs_review: requires_budget_reapproval?,
           comment: @update_comment
         )

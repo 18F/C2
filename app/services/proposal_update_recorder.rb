@@ -1,8 +1,9 @@
 class ProposalUpdateRecorder
   include ValueHelper
 
-  def initialize(client_data)
+  def initialize(client_data, user)
     @client_data = client_data
+    @user = user
   end
 
   def run
@@ -17,7 +18,7 @@ class ProposalUpdateRecorder
 
   private
 
-  attr_accessor :client_data
+  attr_accessor :client_data, :user
 
   def changed_attributes
     @changed_attributes ||= client_data.changed_attributes.except(:updated_at)
@@ -113,7 +114,7 @@ class ProposalUpdateRecorder
     proposal.comments.create(
       comment_text: comment_texts.join("\n"),
       update_comment: true,
-      user: client_data.modifier || client_data.requester
+      user: user
     )
   end
 

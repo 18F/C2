@@ -1,9 +1,9 @@
 class NcrDispatcher < Dispatcher
-  def on_proposal_update(modifier:, needs_review:, comment:)
-    notify_approvers(modifier, needs_review, comment)
-    notify_pending_approvers(modifier, comment)
-    notify_requester(modifier, needs_review, comment)
-    notify_observers(modifier, needs_review, comment)
+  def on_proposal_update(needs_review:, comment:)
+    notify_approvers(needs_review, comment)
+    notify_pending_approvers(comment)
+    notify_requester(needs_review, comment)
+    notify_observers(needs_review, comment)
   end
 
   private
@@ -12,35 +12,35 @@ class NcrDispatcher < Dispatcher
     false
   end
 
-  def notify_approvers(modifier, needs_review, comment)
+  def notify_approvers(needs_review, comment)
     proposal.individual_steps.approved.each do |step|
-      unless user_is_modifier?(step.user, modifier)
+      unless user_is_modifier?(step.user, comment.user)
         if needs_review == false
           ProposalMailer.
-            proposal_updated_no_action_required(step.user, proposal, comment, modifier).
+            proposal_updated_no_action_required(step.user, proposal, comment).
             deliver_later
         end
       end
     end
   end
 
-  def notify_requester(modifier, needs_review, comment)
-    if proposal.requester != modifier
+  def notify_requester(needs_review, comment)
+    if proposal.requester != comment.user
       if needs_review == true
         ProposalMailer.
-          proposal_updated_needs_re_review(proposal.requester, proposal, comment, modifier).
+          proposal_updated_needs_re_review(proposal.requester, proposal, comment).
           deliver_later
       else
         ProposalMailer.
-          proposal_updated_no_action_required(proposal.requester, proposal, modifier, comment).
+          proposal_updated_no_action_required(proposal.requester, proposal, comment).
           deliver_later
       end
     end
   end
 
-  def notify_pending_approvers(modifier, comment)
+  def notify_pending_approvers(comment)
     proposal.currently_awaiting_steps.each do |step|
-      unless user_is_modifier?(step.user, modifier)
+      unless user_is_modifier?(step.user, comment.user)
         if step_user_already_notifier_about_proposal?(step)
           ProposalMailer.proposal_updated_while_step_pending(step, comment).deliver_later
         else
@@ -50,17 +50,17 @@ class NcrDispatcher < Dispatcher
     end
   end
 
-  def notify_observers(modifier, needs_review, comment)
+  def notify_observers(needs_review, comment)
     proposal.observers.each do |observer|
-      unless user_is_modifier?(observer, modifier)
+      unless user_is_modifier?(observer, comment.user)
         if observer.role_on(proposal).active_observer?
           if needs_review == true
             ProposalMailer.
-              proposal_updated_needs_re_review(observer, proposal, comment, modifier).
+              proposal_updated_needs_re_review(observer, proposal, comment).
               deliver_later
           else
             ProposalMailer.
-              proposal_updated_no_action_required(observer, proposal, comment, modifier).
+              proposal_updated_no_action_required(observer, proposal, comment).
               deliver_later
           end
         end
@@ -68,8 +68,8 @@ class NcrDispatcher < Dispatcher
     end
   end
 
-  def user_is_modifier?(user, modifier)
-    modifier && user == modifier
+  def user_is_modifier?(user, comment_user)
+    user == comment_user
   end
 
   def step_user_already_notifier_about_proposal?(step)
