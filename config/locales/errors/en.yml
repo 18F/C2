@@ -1,0 +1,6 @@
+en:
+  errors:
+    policies:
+      ncr:
+        work_order:
+          can_edit: "You must be the requester, approver, delegate, or observer to edit"
