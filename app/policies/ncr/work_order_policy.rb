@@ -9,8 +9,8 @@ module Ncr
 
     def can_edit!
       check(
-        requester? || step_user? || observer?,
-        "You must be the requester, approver, or observer to edit"
+        requester? || step_user? || delegate? || observer?,
+        "You must be the requester, approver, delegate, or observer to edit"
       )
     end
 
