@@ -1,5 +1,5 @@
 - if display_search_ui?
-  = render partial: "shared/search_ui"
+  = render partial: "shared/search_ui", locals: { show_adv_search_ui: params[:search] }
 
 .inset
   - page_title = @report ? @report.name : "Proposals participated in"

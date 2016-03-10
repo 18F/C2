@@ -20,7 +20,7 @@ module Gsa18f
       "Me! (Remote Worker)",
     ]
 
-    RECURRENCE = ["Daily", "Monthy", "Yearly"]
+    RECURRENCE = ["Daily", "Monthly", "Yearly"]
 
     PURCHASE_TYPES = {
       "Software" => 0,

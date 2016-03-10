@@ -12,8 +12,8 @@ class Comment < ActiveRecord::Base
   scope :normal_comments, ->{ where(update_comment: nil) } # we probably want `.where.not(update_comment: true)`, but that query isn't working as of 5bb8b4d385
   scope :update_comments, ->{ where(update_comment: true) }
 
-
   after_create :add_user_as_observer
+  visitable # Used to track user visit associated with processed comment
 
   # match .attributes
   def to_a
@@ -45,7 +45,7 @@ class Comment < ActiveRecord::Base
   def listeners
     users_to_notify = Set.new
     users_to_notify += proposal.currently_awaiting_step_users
-    users_to_notify += proposal.individual_steps.approved.map(&:user)
+    users_to_notify += proposal.individual_steps.completed.map(&:user)
     users_to_notify += proposal.observers
     users_to_notify << proposal.requester
     # Creator of comment doesn't need to be notified

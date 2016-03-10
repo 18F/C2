@@ -69,8 +69,36 @@ module ClientDataMixin
       column_names.sort.map { |attribute| human_attribute_name(attribute) }
     end
 
+    def self.foreign_key_to_method_map
+      @_fk_map ||= Hash[reflect_on_all_associations(:belongs_to).map { |a| [a.foreign_key, a.name] }]
+    end
+
+    def association_column?(column_name)
+      self.class.foreign_key_to_method_map.key?(column_name)
+    end
+
+    def association_value(column_name)
+      send(self.class.foreign_key_to_method_map[column_name])
+    end
+
+    def column_value(column_name)
+      send(column_name)
+    end
+
     def csv_fields
-      self.class.column_names.sort.map { |attribute| send(attribute) }
+      field_values = []
+      self.class.column_names.sort.each do |column_name|
+        field_values << if association_column?(column_name)
+                          association_value(column_name)
+                        else
+                          column_value(column_name)
+                        end
+      end
+      field_values
+    end
+
+    def as_indexed_json
+      as_json(include: self.class.foreign_key_to_method_map.values)
     end
   end
 end

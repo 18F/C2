@@ -56,7 +56,7 @@
 
 %ul#request-actions.centered
   - if policy(@proposal).can_edit?
-    - unless @proposal.cancelled?
+    - unless @proposal.canceled?
       %li
         = modify_client_button(@proposal)
   - if policy(@proposal).can_cancel?
@@ -121,6 +121,6 @@
 
 - if policy(@proposal).can_complete?
   .centered
-    = form_tag(approve_proposal_path(@proposal, method: "POST")) do
+    = form_tag(complete_proposal_path(@proposal, method: "POST")) do
       = hidden_field_tag :version, @proposal.version
       = submit_tag @proposal.step_text_for_user(:execute_button, current_user), class: "form-button"

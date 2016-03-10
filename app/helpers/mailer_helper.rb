@@ -28,7 +28,7 @@ module MailerHelper
   def generate_approve_url(approval)
     proposal = approval.proposal
     opts = { version: proposal.version, cch: approval.api_token.access_token }
-    approve_proposal_url(proposal, opts)
+    complete_proposal_url(proposal, opts)
   end
 
   def observer_text(observation, reason = nil)

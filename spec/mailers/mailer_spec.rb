@@ -30,7 +30,7 @@ describe Mailer do
     end
 
     it "uses the approval URL" do
-      expect(approval_uri.path).to eq("/proposals/#{proposal.id}/approve")
+      expect(approval_uri.path).to eq("/proposals/#{proposal.id}/complete")
       expect(approval_uri.query_values).to eq(
         'cch' => token.access_token,
         'version' => proposal.version.to_s
@@ -96,13 +96,6 @@ describe Mailer do
           expect(mail.body.encoded).to have_link('Mark as Purchased')
         end
       end
-    end
-  end
-
-  describe "notification_for_subscriber" do
-    it "doesn't include action buttons" do
-      mail = Mailer.notification_for_subscriber("abc@example.com", proposal, nil, approval)
-      expect(mail.body.encoded).not_to have_link("Approve")
     end
   end
 end

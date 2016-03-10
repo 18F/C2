@@ -1,4 +1,3 @@
-# A node in an approval chain that requires its children be approved in order
 module Steps
   class Serial < Step
     workflow do
@@ -15,24 +14,26 @@ module Steps
         event :initialize, transitions_to: :actionable do
           halt  # prevent state transition
         end
-        event :child_approved, transitions_to: :approved do |child|
+
+        event :child_completed, transitions_to: :completed do |child|
           init_child_after(child)
-          halt unless children_approved?
+          halt unless children_completed?
         end
-        event :force_approve, transitions_to: :approved
+
+        event :force_complete, transitions_to: :completed
         event :restart, transitions_to: :pending
       end
 
-      state :approved do
-        on_entry { notify_parent_approved }
+      state :completed do
+        on_entry { notify_parent_completed }
 
-        event :initialize, transitions_to: :approved do
-          notify_parent_approved
+        event :initialize, transitions_to: :completed do
+          notify_parent_completed
           halt  # prevent state transition
         end
 
-        event :child_approved, transitions_to: :approved do |_|
-          halt  # additional approvals do nothing
+        event :child_completed, transitions_to: :completed do |_|
+          halt  # additional completions do nothing
         end
 
         event :restart, transitions_to: :pending
@@ -40,18 +41,18 @@ module Steps
     end
 
     def on_actionable_entry(_, _)
-      first_approval = child_approvals.first
-      if first_approval
-        first_approval.initialize!
+      first_step = child_steps.first
+      if first_step
+        first_step.initialize!
       else
-        force_approve!
+        force_complete!
       end
     end
 
     # enforce initialization of children in sequence. If we hit one which is
-    # already approved, it will notify us, and then  we'll notify the next
-    def init_child_after(approval)
-      child_after = child_approvals.find_by("position > ?", approval.position)
+    # already completed, it will notify us, and then  we'll notify the next
+    def init_child_after(step)
+      child_after = child_steps.find_by("position > ?", step.position)
       if child_after
         child_after.initialize!
       end

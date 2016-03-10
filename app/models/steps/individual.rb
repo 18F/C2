@@ -26,19 +26,19 @@ module Steps
           halt  # prevent state transition
         end
 
-        event :approve, transitions_to: :approved
+        event :complete, transitions_to: :completed
         event :restart, transitions_to: :pending
       end
 
-      state :approved do
+      state :completed do
         on_entry do
-          update(approved_at: Time.zone.now)
+          update(completed_at: Time.zone.now)
           notify_parent_approved
           DispatchFinder.run(self.proposal).step_complete(self)
         end
 
         event :initialize, transitions_to: :actionable do
-          notify_parent_approved
+          notify_parent_completed
           halt  # prevent state transition
         end
 

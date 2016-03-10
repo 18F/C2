@@ -14,7 +14,7 @@ describe Ncr::ApprovalManager do
         ba61_tier_two
       ])
       wo.reload
-      expect(wo.approved?).to eq(false)
+      expect(wo.completed?).to eq(false)
     end
 
     it "replaces approving official step when approving official changed to system approver delegate" do
@@ -52,10 +52,10 @@ describe Ncr::ApprovalManager do
       ].uniq)
       expect(wo.steps.length).to eq(0)
       wo.clear_association_cache
-      expect(wo.approved?).to eq(true)
+      expect(wo.completed?).to eq(true)
     end
 
-    it "accounts for approver transitions when nothing's approved" do
+    it "accounts for approver transitions when nothing's completed" do
       email = "ao@example.com"
       approving_official = create(:user, email_address: email)
       organization = create(:whsc_organization)
@@ -106,9 +106,9 @@ describe Ncr::ApprovalManager do
         ba80_budget
       ]
 
-      wo.individual_steps.first.approve!
-      wo.individual_steps.second.approve!
-      expect(wo.reload.approved?).to be true
+      wo.individual_steps.first.complete!
+      wo.individual_steps.second.complete!
+      expect(wo.reload.completed?).to be true
 
       wo.update(expense_type: 'BA61')
       manager.setup_approvals_and_observers
@@ -137,12 +137,12 @@ describe Ncr::ApprovalManager do
       wo.approvers.second.add_delegate(delegate_user)
       wo.individual_steps.second.update(completer: delegate_user)
 
-      wo.individual_steps.first.approve!
-      wo.individual_steps.second.approve!
+      wo.individual_steps.first.complete!
+      wo.individual_steps.second.complete!
 
       manager.setup_approvals_and_observers
       wo.reload
-      expect(wo.approved?).to be true
+      expect(wo.completed?).to be true
       expect(wo.individual_steps.second.completer).to eq delegate_user
     end
   end

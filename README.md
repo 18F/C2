@@ -37,5 +37,6 @@ dropdown) to learn more.
 
 ### Extras
 
+* [Analytics](doc/analytics.md)
 * [API](doc/api.md)
 * [Importing Users](doc/import_users.md)

@@ -41,7 +41,7 @@ describe Dispatcher do
       delegate_two = create(:user, client_slug: "ncr")
       tier_one_approver.add_delegate(delegate_one)
       tier_one_approver.add_delegate(delegate_two)
-      proposal.individual_steps.first.approve!
+      proposal.individual_steps.first.complete!
 
       Dispatcher.new(proposal).deliver_attachment_emails(attachment)
 
@@ -54,7 +54,7 @@ describe Dispatcher do
     it "sends a notification to the active step users" do
       mock_deliverer = double
       proposal = create(:proposal, :with_approval_and_purchase)
-      proposal.approval_steps.first.approve!
+      proposal.approval_steps.first.complete!
       allow(CancelationMailer).to receive(:cancelation_notification).and_return(mock_deliverer)
       allow(mock_deliverer).to receive(:deliver_later).exactly(2).times
 

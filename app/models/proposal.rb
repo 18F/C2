@@ -11,25 +11,26 @@ class Proposal < ActiveRecord::Base
 
   workflow do
     state :pending do
-      event :approve, transitions_to: :approved
+      event :complete, transitions_to: :completed
       event :restart, transitions_to: :pending
-      event :cancel, transitions_to: :cancelled
+      event :cancel, transitions_to: :canceled
     end
-    state :approved do
+    state :completed do
       event :restart, transitions_to: :pending
-      event :cancel, transitions_to: :cancelled
-      event :approve, transitions_to: :approved do
+      event :cancel, transitions_to: :canceled
+      event :complete, transitions_to: :completed do
         halt  # no need to trigger a state transition
       end
     end
-    state :cancelled do
-      event :approve, transitions_to: :cancelled do
+    state :canceled do
+      event :complete, transitions_to: :canceled do
         halt  # can't escape
       end
     end
   end
 
   acts_as_taggable
+  visitable # Used to track user visit associated with processed proposal
 
   has_many :steps
   has_many :individual_steps, ->{ individual }, class_name: "Steps::Individual"
@@ -58,8 +59,8 @@ class Proposal < ActiveRecord::Base
   statuses.each do |status|
     scope status, -> { where(status: status) }
   end
-  scope :closed, -> { where(status: ["approved", "cancelled"]) } #TODO: Backfill to change approvals in "reject" status to "cancelled" status
-  scope :cancelled, -> { where(status: "cancelled") }
+  scope :closed, -> { where(status: ["completed", "canceled"]) }
+  scope :canceled, -> { where(status: "canceled") }
 
   # elasticsearch indexing setup
   MAX_SEARCH_RESULTS = 20
@@ -67,7 +68,6 @@ class Proposal < ActiveRecord::Base
   paginates_per MAX_SEARCH_RESULTS
   DEFAULT_INDEXED = {
     include: {
-      client_data: {},
       comments: {
         include: {
           user: { methods: [:display_name], only: [:display_name] }
@@ -112,7 +112,11 @@ class Proposal < ActiveRecord::Base
 
   def as_indexed_json(params = {})
     as_json(params.reverse_merge(DEFAULT_INDEXED)).tap do |json|
+      if client_data
+        json[:client_data] = client_data.as_indexed_json
+      end
       json[:subscribers] = subscribers.map { |user| { id: user.id, name: user.display_name } }
+      json[:num_attachments] = attachments.count
     end
   end
 
@@ -171,9 +175,9 @@ class Proposal < ActiveRecord::Base
   end
 
   def reset_status
-    unless cancelled?
-      if root_step.nil? || root_step.approved?
-        update(status: "approved")
+    unless canceled?
+      if root_step.nil? || root_step.completed?
+        update(status: "completed")
       else
         update(status: "pending")
       end
@@ -253,7 +257,7 @@ class Proposal < ActiveRecord::Base
     DispatchFinder.run(self).deliver_new_proposal_emails
   end
 
-  # Returns True if the user is an "active" approver and has acted on the proposal
+  # Returns True if the user is an "active" step user and has acted on the proposal
   def is_active_step_user?(user)
     individual_steps.non_pending.exists?(user: user)
   end

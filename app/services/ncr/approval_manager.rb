@@ -37,7 +37,7 @@ module Ncr
         work_order.add_observer(user)
       end
       # skip state machine
-      proposal.update(status: "approved")
+      proposal.update(status: "completed")
     end
 
     def approvers
@@ -50,7 +50,7 @@ module Ncr
       individuals = users.map do |user|
         proposal.existing_step_for(user) || Steps::Approval.new(user: user)
       end
-      proposal.root_step = Steps::Serial.new(child_approvals: individuals)
+      proposal.root_step = Steps::Serial.new(child_steps: individuals)
     end
 
     def notify_removed_step_users(original_step_users)
