@@ -60,7 +60,7 @@ class ClientDataController < ApplicationController
   def record_changes
   end
 
-  def setup_and_email_approvers
+  def setup_and_email_approvers(comment = nil)
   end
 
   def filtered_params
