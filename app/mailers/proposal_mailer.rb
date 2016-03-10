@@ -37,6 +37,7 @@ class ProposalMailer < ApplicationMailer
 
   def proposal_updated_no_action_required(user, proposal, comment)
     @proposal = proposal.decorate
+    @modifier = comment.user
     @comment = comment
     assign_threading_headers(@proposal)
 
@@ -50,6 +51,7 @@ class ProposalMailer < ApplicationMailer
 
   def proposal_updated_needs_re_review(user, proposal, comment)
     @proposal = proposal.decorate
+    @modifier = comment.user
     @comment = comment
     assign_threading_headers(@proposal)
 
