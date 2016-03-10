@@ -3,25 +3,24 @@ class ScheduledReportsController < ApplicationController
 
   def create
     scheduled_report = current_user.scheduled_reports.build(scheduled_report_params)
-    scheduled_report.save!
-    flash[:success] = "Your subscription has been updated to #{scheduled_report.frequency}."
-    respond_to do |format|
-      format.json { render json: scheduled_report.as_json, status: :created, location: scheduled_report }
-      format.html { redirect_to report_path(scheduled_report.report) }
-    end
+    save_and_respond(scheduled_report, :created)
   end
 
   def update
     scheduled_report.frequency = scheduled_report_params[:frequency]
-    scheduled_report.save!
-    flash[:success] = "Your subscription has been updated to #{scheduled_report.frequency}."
-    respond_to do |format|
-      format.json { render json: scheduled_report.as_json, location: scheduled_report }
-      format.html { redirect_to report_path(scheduled_report.report) }
-    end
+    save_and_respond(scheduled_report, :ok)
   end
 
   private
+
+  def save_and_respond(scheduled_report, status = 200)
+    scheduled_report.save!
+    flash[:success] = "Your subscription has been updated to #{scheduled_report.frequency}."
+    respond_to do |format|
+      format.json { render json: scheduled_report.as_json, status: status, location: scheduled_report }
+      format.html { redirect_to report_path(scheduled_report.report) }
+    end
+  end
 
   def scheduled_report
     @_scheduled_report ||= ScheduledReport.find(params[:id])
