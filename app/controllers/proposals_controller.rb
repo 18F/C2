@@ -49,10 +49,12 @@ class ProposalsController < ApplicationController
   end
 
   def complete
-    step = proposal.existing_or_delegated_step_for(current_user)
-    step.update_attributes!(completer: current_user)
-    step.complete!
-    flash[:success] = "You have approved #{proposal.public_id}."
+    step = proposal.existing_or_delegated_actionable_step_for(current_user)
+    if step
+      complete_step(step)
+    else
+      flash[:alert] = "There are no actionable steps available for you."
+    end
     redirect_to proposal
   end
 
@@ -144,5 +146,11 @@ class ProposalsController < ApplicationController
     if @adv_search.present?
       @search_query[current_user.client_model_slug] = @adv_search.to_h
     end
+  end
+
+  def complete_step(step)
+    step.update_attributes!(completer: current_user)
+    step.complete!
+    flash[:success] = "You have approved #{proposal.public_id}."
   end
 end
