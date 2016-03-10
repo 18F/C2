@@ -5,7 +5,7 @@ feature "Requester switches work order to WHSC", :js do
 
   before do
     work_order.setup_approvals_and_observers
-    work_order.individual_steps.first.approve!
+    work_order.individual_steps.first.complete!
     login_as(work_order.requester)
   end
 
@@ -36,7 +36,7 @@ feature "Requester switches work order to WHSC", :js do
       whsc_org = create(:whsc_organization)
       work_order = create(:ba80_ncr_work_order)
       work_order.setup_approvals_and_observers
-      work_order.individual_steps.first.approve!
+      work_order.individual_steps.first.complete!
       ncr_proposal = work_order.proposal
 
       approving_official = work_order.approving_official
@@ -54,7 +54,7 @@ feature "Requester switches work order to WHSC", :js do
         approving_official.email_address,
         Ncr::Mailboxes.ba61_tier2_budget.email_address
       ])
-      expect(work_order.individual_steps.first).to be_approved
+      expect(work_order.individual_steps.first).to be_completed
     end
   end
 end

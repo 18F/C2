@@ -34,40 +34,40 @@ describe Step do
     end
   end
 
-  describe '#approved_at' do
+  describe '#completed_at' do
     it 'is nil when pending' do
-      expect(approval.approved_at).to be_nil
+      expect(approval.completed_at).to be_nil
     end
 
     it 'is nil when actionable' do
       approval.initialize!
-      expect(approval.approved_at).to be_nil
+      expect(approval.completed_at).to be_nil
     end
 
     it 'is set when approved' do
       approval.initialize!
-      approval.approve!
-      expect(approval.approved_at).not_to be_nil
+      approval.complete!
+      expect(approval.completed_at).not_to be_nil
       approval.reload
-      expect(approval.approved_at).not_to be_nil
+      expect(approval.completed_at).not_to be_nil
     end
   end
 
   describe '#on_approved_entry' do
     it "notified the proposal if the root gets approved" do
-      expect(approval.proposal).to receive(:approve!).once
+      expect(approval.proposal).to receive(:complete!).once
       approval.initialize!
-      approval.approve!
+      approval.complete!
     end
 
     it "does not notify the proposal if a child gets approved" do
       proposal = create(:proposal)
       child1 = build(:approval, user: create(:user))
       child2 = build(:approval, user: create(:user))
-      proposal.root_step = build(:parallel_step, child_approvals: [child1, child2])
+      proposal.root_step = build(:parallel_step, child_steps: [child1, child2])
 
-      expect(proposal).not_to receive(:approve!)
-      child1.approve!
+      expect(proposal).not_to receive(:complete!)
+      child1.complete!
     end
   end
 
@@ -100,15 +100,15 @@ describe Step do
 
     before :each do
       # @todo syntax for this will get cleaned up
-      and_clause = create(:parallel_step, child_approvals: [
+      and_clause = create(:parallel_step, child_steps: [
         create(:approval, user: amy),
         create(:approval, user: bob)
       ])
-      then_clause = create(:serial_step, child_approvals: [
+      then_clause = create(:serial_step, child_steps: [
         create(:approval, user: dan),
         create(:approval, user: erin)
       ])
-      proposal.root_step = create(:parallel_step, min_children_needed: 2, child_approvals: [
+      proposal.root_step = create(:parallel_step, min_children_needed: 2, child_steps: [
         and_clause,
         create(:approval, user: carrie),
         then_clause
@@ -117,56 +117,56 @@ describe Step do
 
     it "won't approve Amy and Bob -- needs two branches of the OR" do
       build_approvals
-      expect_any_instance_of(Proposal).not_to receive(:approve!)
-      proposal.existing_or_delegated_step_for(amy).approve!
-      proposal.existing_or_delegated_step_for(bob).approve!
+      expect_any_instance_of(Proposal).not_to receive(:complete!)
+      proposal.existing_or_delegated_step_for(amy).complete!
+      proposal.existing_or_delegated_step_for(bob).complete!
     end
 
     it "will approve if Amy, Bob, and Carrie approve -- two branches of the OR" do
       build_approvals
-      expect_any_instance_of(Proposal).to receive(:approve!)
-      proposal.existing_or_delegated_step_for(amy).approve!
-      proposal.existing_or_delegated_step_for(bob).approve!
-      proposal.existing_or_delegated_step_for(carrie).approve!
+      expect_any_instance_of(Proposal).to receive(:complete!)
+      proposal.existing_or_delegated_step_for(amy).complete!
+      proposal.existing_or_delegated_step_for(bob).complete!
+      proposal.existing_or_delegated_step_for(carrie).complete!
     end
 
     it "won't approve Amy, Bob, Dan as Erin is also required (to complete the THEN)" do
       build_approvals
-      expect_any_instance_of(Proposal).not_to receive(:approve!)
-      proposal.existing_or_delegated_step_for(amy).approve!
-      proposal.existing_or_delegated_step_for(bob).approve!
-      proposal.existing_or_delegated_step_for(dan).approve!
+      expect_any_instance_of(Proposal).not_to receive(:complete!)
+      proposal.existing_or_delegated_step_for(amy).complete!
+      proposal.existing_or_delegated_step_for(bob).complete!
+      proposal.existing_or_delegated_step_for(dan).complete!
     end
 
     it "will approve Amy, Bob, Dan, Erin -- two branches of the OR" do
       build_approvals
-      expect_any_instance_of(Proposal).to receive(:approve!)
-      proposal.existing_or_delegated_step_for(amy).approve!
-      proposal.existing_or_delegated_step_for(bob).approve!
-      proposal.existing_or_delegated_step_for(dan).approve!
-      proposal.existing_or_delegated_step_for(erin).approve!
+      expect_any_instance_of(Proposal).to receive(:complete!)
+      proposal.existing_or_delegated_step_for(amy).complete!
+      proposal.existing_or_delegated_step_for(bob).complete!
+      proposal.existing_or_delegated_step_for(dan).complete!
+      proposal.existing_or_delegated_step_for(erin).complete!
     end
 
     it "will approve Amy, Bob, Dan, Carrie -- two branches of the OR as Dan is irrelevant" do
       build_approvals
-      expect_any_instance_of(Proposal).to receive(:approve!)
-      proposal.existing_or_delegated_step_for(amy).approve!
-      proposal.existing_or_delegated_step_for(bob).approve!
-      proposal.existing_or_delegated_step_for(dan).approve!
-      proposal.existing_or_delegated_step_for(carrie).approve!
+      expect_any_instance_of(Proposal).to receive(:complete!)
+      proposal.existing_or_delegated_step_for(amy).complete!
+      proposal.existing_or_delegated_step_for(bob).complete!
+      proposal.existing_or_delegated_step_for(dan).complete!
+      proposal.existing_or_delegated_step_for(carrie).complete!
     end
 
     def build_approvals
       and_clause = build(
         :parallel_step,
-        child_approvals: [
+        child_steps: [
           build(:approval, user: amy),
           build(:approval, user: bob)
         ]
       )
       then_clause = build(
         :parallel_step,
-        child_approvals: [
+        child_steps: [
           build(:approval, user: dan),
           build(:approval, user: erin)
         ]
@@ -174,7 +174,7 @@ describe Step do
       proposal.root_step = build(
         :parallel_step,
         min_children_needed: 2,
-        child_approvals: [
+        child_steps: [
           and_clause,
           build(:approval, user: carrie),
           then_clause

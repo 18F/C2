@@ -2,9 +2,9 @@ module SearchHelper
   def proposal_status_options(selected_value)
     options_for_select([
       ["All Requests", "*"],
-      ["Approved Requests", "approved"],
+      ["Completed Requests", "completed"],
       ["In progress Requests", "pending"],
-      ["Cancelled Requests", "cancelled"]
+      ["Cancelled Requests", "canceled"]
     ], selected_value)
   end
 

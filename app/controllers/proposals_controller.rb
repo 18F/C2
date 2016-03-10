@@ -1,12 +1,12 @@
 class ProposalsController < ApplicationController
   include TokenAuth
 
-  skip_before_action :authenticate_user!, only: [:approve]
-  skip_before_action :check_disabled_client, only: [:approve]
+  skip_before_action :authenticate_user!, only: [:approve, :complete]
+  skip_before_action :check_disabled_client, only: [:approve, :complete]
   # TODO use Policy for all actions
   before_action -> { authorize proposal }, only: [:show, :cancel, :cancel_form, :history]
-  before_action :needs_token_on_get, only: :approve
-  before_action :validate_access, only: :approve
+  before_action :needs_token_on_get, only: :complete
+  before_action :validate_access, only: :complete
   helper_method :display_status
   add_template_helper ProposalsHelper
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
@@ -19,8 +19,8 @@ class ProposalsController < ApplicationController
     @closed_proposal_limit = ENV.fetch("CLOSED_PROPOSAL_LIMIT", 10).to_i
     @pending_data = listing.pending
     @pending_review_data = listing.pending_review
-    @approved_data = listing.approved.alter_query { |rel| rel.limit(@closed_proposal_limit) }
-    @cancelled_data = listing.cancelled
+    @completed_data = listing.completed.alter_query { |rel| rel.limit(@closed_proposal_limit) }
+    @canceled_data = listing.canceled
   end
 
   def archive
@@ -34,20 +34,24 @@ class ProposalsController < ApplicationController
   def cancel
     if params[:reason_input].present?
       cancel_proposal_and_send_cancellation_emails
-      flash[:success] = "Your request has been cancelled"
+      flash[:success] = "Your request has been canceled"
       redirect_to proposal_path(proposal)
     else
       redirect_to(
         cancel_form_proposal_path(params[:id]),
-        alert: "A reason for cancellation is required. Please indicate why this request needs to be cancelled."
+        alert: "A reason for cancellation is required. Please indicate why this request needs to be canceled."
       )
     end
   end
 
   def approve
+    complete
+  end
+
+  def complete
     step = proposal.existing_or_delegated_step_for(current_user)
     step.update_attributes!(completer: current_user)
-    step.approve!
+    step.complete!
     flash[:success] = "You have approved #{proposal.public_id}."
     redirect_to proposal
   end
@@ -79,7 +83,7 @@ class ProposalsController < ApplicationController
   protected
 
   def cancel_proposal_and_send_cancellation_emails
-    comments = "Request cancelled with comments: " + params[:reason_input]
+    comments = "Request canceled with comments: " + params[:reason_input]
     proposal.cancel!
     proposal.comments.create!(comment_text: comments, user: current_user)
     Dispatcher.new.deliver_cancellation_emails(proposal, params[:reason_input])

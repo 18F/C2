@@ -41,8 +41,8 @@ describe Ncr::WorkOrderPolicy do
       expect(subject).not_to permit(create(:user), work_order)
     end
 
-    it "allows an approved request to be edited" do
-      proposal.update_attribute(:status, 'approved')  # skip state machine
+    it "allows an completed request to be edited" do
+      proposal.update_attribute(:status, "completed")  # skip state machine
       expect(subject).to permit(proposal.requester, work_order)
     end
   end

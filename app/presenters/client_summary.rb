@@ -3,8 +3,8 @@ class ClientSummary
   def initialize(fiscal_year, client_namespace)
     @fiscal_year = fiscal_year
     @client_namespace = client_namespace
-    @statuses = { cancelled: 0, pending: 0, approved: 0 }
-    @subtotals = { cancelled: 0, pending: 0, approved: 0 }
+    @statuses = { canceled: 0, pending: 0, completed: 0 }
+    @subtotals = { canceled: 0, pending: 0, completed: 0 }
   end
 
   def add_status(status)

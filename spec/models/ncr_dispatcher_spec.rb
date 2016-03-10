@@ -33,7 +33,7 @@ describe NcrDispatcher do
 
   describe '#on_proposal_update' do
     it 'notifies approvers who have already approved' do
-      step_1.approve!
+      step_1.complete!
       deliveries.clear
       ncr_dispatcher.on_proposal_update(proposal)
       email = deliveries[0]
