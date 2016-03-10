@@ -3,7 +3,7 @@ class StepMailer < ApplicationMailer
     @proposal = step.proposal.decorate
     assign_threading_headers(@proposal)
     @step = step
-    last_completed_step = @proposal.individual_steps.select { |step| step.status == "approved" }.last
+    last_completed_step = @proposal.individual_steps.select { |indidivudal_step| individual_step.status == "completed" }.last
     @last_completed_step_user = last_completed_step.user || @step.user
 
     mail(
