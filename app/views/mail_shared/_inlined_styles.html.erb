@@ -860,9 +860,22 @@ div.button-div {
     display: block;
     width: auto!important;
     text-align: center;
-    background: #fff;
+    background: #fff !important;
     border: 2px solid #0744a4;
-    color: #0744a4;
+    color: #0744a4 !important;
+    border-radius: 500px;
+    -moz-border-radius: 500px; 
+    -webkit-border-radius: 500px;
+    padding: 8px 0;
+}
+
+div.button-div.primary:hover {
+    display: block;
+    width: auto!important;
+    text-align: center;
+    background: #ddd !important;
+    border: 2px solid #0744a4;
+    color: #0744a4 !important;
     border-radius: 500px;
     -moz-border-radius: 500px; 
     -webkit-border-radius: 500px;
@@ -894,12 +907,14 @@ table.tiny-button td a,
 table.small-button td a,
 table.medium-button td a,
 table.large-button td a,
-div.button-div a {
+div.button-div a,
+div.button-div.primary:hover a {
     font-weight: normal;
     text-decoration: none;
     font-family: Helvetica, Arial, sans-serif;
-    color: #0744a4;
+    color: #0744a4 !important;
     font-size: 16px;
+    display: block;
 }
 
 table.tiny-button td a {
@@ -923,16 +938,18 @@ table.button:hover td,
 table.button:visited td,
 table.button:active td,
 div.button-div:hover,
-div.button-div:active {
-    background: #0744a4!important;
+div.button-div:active,
+div.button-div.primary {
+    background: #0744a4 !important;
 }
 
 table.button:hover td a,
 table.button:visited td a,
 table.button:active td a
 div.button-div:hover  a,
-div.button-div:active  a {
-    color: #fff!important;
+div.button-div.primary a,
+div.button-div:active  a{
+    color: #fff !important;
 }
 
 table.button:hover td,
@@ -941,7 +958,7 @@ table.small-button:hover td,
 table.medium-button:hover td,
 div.button-div:hover,
 table.large-button:hover td {
-    background: #0744a4!important;
+    background: #0744a4 !important;
 }
 
 table.button:hover td a,
