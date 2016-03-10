@@ -1,8 +1,8 @@
 class ProposalsController < ApplicationController
   include TokenAuth
 
-  skip_before_action :authenticate_user!, only: [:complete]
-  skip_before_action :check_disabled_client, only: [:complete]
+  skip_before_action :authenticate_user!, only: [:approve, :complete]
+  skip_before_action :check_disabled_client, only: [:approve, :complete]
   # TODO use Policy for all actions
   before_action -> { authorize proposal }, only: [:show, :cancel, :cancel_form, :history]
   before_action :needs_token_on_get, only: :complete
