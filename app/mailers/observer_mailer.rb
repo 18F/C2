@@ -8,7 +8,7 @@ class ObserverMailer < ApplicationMailer
     assign_threading_headers(@proposal)
 
     mail(
-      to: email_to_user(observer),
+      to: observer.email_address,
       subject: subject(@proposal),
       from: observation_added_from(observation),
       reply_to: reply_email(@proposal)
@@ -22,7 +22,7 @@ class ObserverMailer < ApplicationMailer
     assign_threading_headers(proposal)
 
     mail(
-      to: email_to_user(observation.user),
+      to: observation.user.email_address,
       subject: subject(proposal),
       from: default_sender_email,
       reply_to: reply_email(proposal)
@@ -36,7 +36,7 @@ class ObserverMailer < ApplicationMailer
     assign_threading_headers(@proposal)
 
     mail(
-      to: email_to_user(user),
+      to: user.email_address,
       subject: subject(@proposal),
       from: default_sender_email,
       reply_to: reply_email(@proposal)

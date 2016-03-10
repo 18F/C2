@@ -27,10 +27,9 @@ class CancelationMailer < ApplicationMailer
 
   def fiscal_cancelation_notification(proposal)
     @proposal = proposal.decorate
-    user = @proposal.requester
 
     mail(
-      to: email_to_user(user),
+      to: @proposal.requester.email_address,
       subject: subject(@proposal),
       from: default_sender_email,
       reply_to: reply_email(@proposal)

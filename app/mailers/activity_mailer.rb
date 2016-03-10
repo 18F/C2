@@ -6,7 +6,7 @@ class ActivityMailer < ApplicationMailer
     assign_threading_headers(@proposal)
 
     mail(
-      to: email_to_user(user),
+      to: user.email_address,
       subject: subject(@proposal),
       from: default_sender_email,
       reply_to: reply_email(@proposal)
