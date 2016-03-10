@@ -44,12 +44,11 @@ module Ncr
       ProposalUpdateRecorder.new(work_order).run
     end
 
-    def setup_and_email_approvers
-      updater = Ncr::WorkOrderUpdater.new(
+    def setup_and_email_approvers(comment)
+      Ncr::WorkOrderUpdater.new(
         work_order: work_order,
-        flash: flash
-      )
-      updater.run
+        update_comment: comment,
+      ).run
     end
 
     def model_class

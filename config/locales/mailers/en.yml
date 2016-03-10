@@ -76,7 +76,6 @@ en:
       proposal_updated_needs_re_review:
         panel_preface: "Here are the updated request details:"
         modifier_action: "Modified by %{user_name}"
-        change_result: "<strong>%{verb}</strong> %{result}"
         header: "<span class='name-color'>%{proposal_name}</span> has been updated by <span class='name-color'>%{modifier_name}</span>."
         subheader:
           "This purchase request has been modified and needs to be reapproved. C2 is

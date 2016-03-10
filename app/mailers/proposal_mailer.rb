@@ -35,11 +35,9 @@ class ProposalMailer < ApplicationMailer
     )
   end
 
-  def proposal_updated_no_action_required(user, proposal, modifier = nil)
+  def proposal_updated_no_action_required(user, proposal, comment)
     @proposal = proposal.decorate
-    @modifier = modifier || NullUser.new
-    # Example ideal data to consume
-    @changes = [{verb: 'modified', result: 'this to that'},{verb: 'added', result: 'that'},{verb: 'modified', result: 'this to that'}]
+    @comment = comment
     assign_threading_headers(@proposal)
 
     mail(
@@ -50,13 +48,9 @@ class ProposalMailer < ApplicationMailer
     )
   end
 
-  def proposal_updated_needs_re_review(user, proposal, modifier = nil)
+  def proposal_updated_needs_re_review(user, proposal, comment)
     @proposal = proposal.decorate
-    @modifier = modifier || NullUser.new
-    
-    @step = proposal.currently_awaiting_steps
-    # Example ideal data to consume
-    @changes = [{verb: 'modified', result: 'this to that'},{verb: 'added', result: 'that'},{verb: 'modified', result: 'this to that'}]
+    @comment = comment
     assign_threading_headers(@proposal)
 
     mail(
@@ -67,7 +61,7 @@ class ProposalMailer < ApplicationMailer
     )
   end
 
-  def proposal_updated_while_step_pending(step)
+  def proposal_updated_while_step_pending(step, comment)
     @step = step.decorate
     @proposal = step.proposal.decorate
     assign_threading_headers(@proposal)
@@ -83,5 +77,4 @@ class ProposalMailer < ApplicationMailer
       reply_to: reply_email(@proposal)
     )
   end
-
 end
