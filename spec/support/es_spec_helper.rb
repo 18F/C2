@@ -65,8 +65,8 @@ module EsSpecHelper
     begin
       retries -= 1
       response = block.call
-    rescue Elasticsearch::Transport::Transport::Errors::ServiceUnavailable => error
-      if retries > 0 && error.message.match(/all shards failed/)
+    rescue SearchUnavailable => _error
+      if retries > 0
         retry
       else
         puts "retries: #{retries}"
