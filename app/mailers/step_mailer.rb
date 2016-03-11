@@ -14,12 +14,12 @@ class StepMailer < ApplicationMailer
     )
   end
 
-  def step_user_removed(to_email, proposal)
+  def step_user_removed(user, proposal)
     @proposal = proposal.decorate
     assign_threading_headers(@proposal)
 
     mail(
-      to: to_email,
+      to: user.email_address,
       subject: subject(@proposal),
       from: user_email_with_name(@proposal.requester),
       reply_to: reply_email(@proposal)

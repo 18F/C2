@@ -20,19 +20,9 @@ describe StepMailer do
   end
 
   describe "#step_reply_received" do
-    let(:mail) { StepMailer.step_user_removed(approver.email_address, proposal) }
-
-    before do
-      approval.complete!
-    end
+    let(:mail) { StepMailer.step_user_removed(approver, proposal) }
 
     it_behaves_like "a proposal email"
-
-    it "tells the user that they have been removed" do
-      expect(mail.body.encoded).to include(
-        I18n.t("mailer.step_mailer.step_user_removed.header")
-      )
-    end
   end
 
   describe "#proposal_notification" do

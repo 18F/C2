@@ -1,6 +1,9 @@
 - header_icon = "emails/icon-pencil-circle.png"
 - top_head = t("mailer.step_mailer.step_user_removed.header")
-- cta_subheader = t("mailer.step_mailer.step_user_removed.subheader")
+- cta_subheader = t("mailer.step_mailer.step_user_removed.subheader_html",
+  proposal_public_id: @proposal.public_id,
+  proposal_name: @proposal.name,
+  full_name: @proposal.requester.full_name)
 - proposal_link_text = t("mailer.view_request_cta")
 
 
@@ -19,9 +22,3 @@
 
           = render partial: "mail_shared/call_to_action/subheader",
             locals: { subheader: cta_subheader }
-
-          = render partial: "mail_shared/call_to_action/button",
-            locals: { link_path: proposal_url(@proposal), link_text: proposal_link_text }
-
-          = render partial: "mail_shared/call_to_action/subheader",
-            locals: { subheader: "" }
