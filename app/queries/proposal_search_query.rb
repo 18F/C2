@@ -12,9 +12,9 @@ class ProposalSearchQuery
     @response = Proposal.search(dsl)
     begin
       if relation
-        @response.records.merge(relation).to_a
+        execute_es(@response).merge(relation)
       else
-        @response.records.to_a
+        execute_es(@response)
       end
     rescue Elasticsearch::Transport::Transport::ServerError => _error
       raise SearchUnavailable, I18n.t("errors.features.es.service_unavailable")
@@ -24,6 +24,11 @@ class ProposalSearchQuery
   end
 
   private
+
+  def execute_es(es_response)
+    es_response.took # trigger ES::Client
+    es_response.records
+  end
 
   def build_dsl(query)
     @dsl = ProposalSearchDsl.new(
