@@ -71,6 +71,8 @@ describe "Handles incoming email" do
   end
 
   it "should not create comment for non-subscriber and not add as observer" do
+    client_request = create(:test_client_request)
+    proposal = client_request.proposal
     mail = ProposalMailer.proposal_created_confirmation(proposal)
     user = create(:user)
     mandrill_event = mandrill_payload_from_message(mail)
@@ -84,6 +86,8 @@ describe "Handles incoming email" do
   end
 
   it "should parse proposal public_id from email headers" do
+    client_request = create(:test_client_request)
+    proposal = client_request.proposal
     mail = ProposalMailer.proposal_created_confirmation(proposal)
     mandrill_event = mandrill_payload_from_message(mail)
     mandrill_event[0]["msg"]["subject"] = "something vague"
@@ -96,6 +100,8 @@ describe "Handles incoming email" do
   end
 
   it "should handle Mandrill::WebHook::EventDecorator like raw JSON" do
+    client_request = create(:test_client_request)
+    proposal = client_request.proposal
     mail = ProposalMailer.proposal_created_confirmation(proposal)
     mandrill_event = mandrill_payload_from_message(mail)
     mandrill_event = mandrill_payload_from_message(mail)
