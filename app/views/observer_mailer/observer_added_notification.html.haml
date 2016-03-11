@@ -33,5 +33,5 @@
   = render partial: "mail_shared/call_to_action/subheader",
     locals: { subheader: "" }
 
-  = render(partial: "mail_shared/call_to_action/email_reply",
+  = render partial: "mail_shared/call_to_action/email_reply",
     locals: { step: @step, show_step_actions: false, proposal: @proposal })

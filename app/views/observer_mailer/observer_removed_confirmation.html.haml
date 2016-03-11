@@ -3,10 +3,8 @@
 - cta_subheader = t("mailer.observer_mailer.observer_removed_confirmation.body")
 
 %table.container
-  = render partial: "mail_shared/email_header/hero_text", 
+  = render partial: "mail_shared/email_header/hero_text",
     locals: { text: top_head}
 
-  = render partial: "mail_shared/call_to_action/subheader", 
-    locals: { subheader: cta_subheader,
-              vertical: 'no-top-margin' }
-  
+  = render partial: "mail_shared/call_to_action/subheader",
+    locals: { subheader: cta_subheader, vertical: 'no-top-margin' }

@@ -16,14 +16,7 @@ class Dispatcher
       StepMailer.proposal_notification(step).deliver_later
     end
 
-    email_observers("proposal created")
     ProposalMailer.proposal_created_confirmation(proposal).deliver_later
-  end
-
-  def email_observers(activity)
-    active_observers.each do |observer|
-      ActivityMailer.activity_notification(observer, proposal, activity).deliver_later
-    end
   end
 
   def deliver_attachment_emails(attachment)
@@ -53,9 +46,6 @@ class Dispatcher
 
     if requires_approval_notice? && proposal.pending?
       StepMailer.step_reply_received(step).deliver_later
-      email_observers("step completed")
-    elsif proposal.pending?
-      email_observers("step completed")
     elsif proposal.completed?
       active_observers.each { |observer| ObserverMailer.proposal_complete(observer, proposal) }
       ProposalMailer.proposal_complete(step.proposal).deliver_later
