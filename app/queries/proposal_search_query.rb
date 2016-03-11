@@ -10,10 +10,16 @@ class ProposalSearchQuery
   def execute(query)
     build_dsl(query)
     @response = Proposal.search(dsl)
-    if relation
-      @response.records.merge(relation)
-    else
-      @response.records
+    begin
+      if relation
+        @response.records.merge(relation).to_a
+      else
+        @response.records.to_a
+      end
+    rescue Elasticsearch::Transport::Transport::ServerError => _error
+      raise SearchUnavailable, I18n.t("errors.features.es.service_unavailable")
+    rescue Faraday::ConnectionFailed => _error
+      raise SearchUnavailable, I18n.t("errors.features.es.service_unavailable")
     end
   end
 

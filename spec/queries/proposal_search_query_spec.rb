@@ -7,12 +7,21 @@ describe ProposalSearchQuery, elasticsearch: true do
   end
 
   describe '#execute' do
+    it "raises custom error when Elasticsearch is not available" do
+      es_mock_connection_failed
+      user = create(:user, client_slug: "test")
+      searcher = ProposalSearchQuery.new(current_user: user)
+      expect {
+        searcher.execute(proposal.public_id)
+      }.to raise_error(SearchUnavailable, I18n.t("errors.features.es.service_unavailable"))
+    end
+
     it "returns an empty list for no Proposals" do
       user = create(:user, client_slug: "test")
       searcher = ProposalSearchQuery.new(current_user: user)
       es_execute_with_retries 3 do
         results = searcher.execute('')
-        expect(results.to_a).to eq([])
+        expect(results).to eq([])
       end
     end
 
@@ -23,7 +32,7 @@ describe ProposalSearchQuery, elasticsearch: true do
       refresh_index
       es_execute_with_retries 3 do
         results = ProposalSearchQuery.new(current_user: proposal.requester).execute(proposal.id.to_s)
-        expect(results.to_a).to eq([proposal])
+        expect(results).to eq([proposal])
       end
     end
 
@@ -36,7 +45,7 @@ describe ProposalSearchQuery, elasticsearch: true do
       es_execute_with_retries 3 do
         searcher = ProposalSearchQuery.new(current_user: proposal.requester)
         results = searcher.execute("foobar")
-        expect(results.to_a).to eq([proposal])
+        expect(results).to eq([proposal])
       end
     end
 
@@ -49,7 +58,7 @@ describe ProposalSearchQuery, elasticsearch: true do
       user = proposal.requester
       es_execute_with_retries 3 do
         results = ProposalSearchQuery.new(relation: relation, current_user: user).execute(proposal.id.to_s)
-        expect(results.to_a).to eq([])
+        expect(results).to eq([])
       end
     end
 
@@ -60,7 +69,7 @@ describe ProposalSearchQuery, elasticsearch: true do
       user = test_client_request.proposal.requester
       es_execute_with_retries 3 do
         results = ProposalSearchQuery.new(current_user: user).execute('asgsfgsfdbsd')
-        expect(results.to_a).to eq([])
+        expect(results).to eq([])
       end
     end
 
@@ -72,7 +81,7 @@ describe ProposalSearchQuery, elasticsearch: true do
           refresh_index
           es_execute_with_retries 3 do
             results = ProposalSearchQuery.new(current_user: work_order.requester).execute('foo')
-            expect(results.to_a).to eq([work_order.proposal])
+            expect(results).to eq([work_order.proposal])
           end
         end
       end
@@ -84,7 +93,7 @@ describe ProposalSearchQuery, elasticsearch: true do
         refresh_index
         es_execute_with_retries 3 do
           results = ProposalSearchQuery.new(current_user: work_order.requester).execute(whsc_org.code)
-          expect(results.to_a).to eq([work_order.proposal])
+          expect(results).to eq([work_order.proposal])
         end
       end
 
@@ -95,9 +104,9 @@ describe ProposalSearchQuery, elasticsearch: true do
         approving_official = work_order.approving_official
         es_execute_with_retries 3 do
           results = ProposalSearchQuery.new(current_user: work_order.requester).execute(approving_official.email_address)
-          expect(results.to_a).to eq([work_order.proposal])
+          expect(results).to eq([work_order.proposal])
           results = ProposalSearchQuery.new(current_user: work_order.requester).execute(approving_official.full_name)
-          expect(results.to_a).to eq([work_order.proposal])
+          expect(results).to eq([work_order.proposal])
         end
       end
     end
@@ -110,7 +119,7 @@ describe ProposalSearchQuery, elasticsearch: true do
           refresh_index
           es_execute_with_retries 3 do
             results = ProposalSearchQuery.new(current_user: procurement.requester).execute('foo')
-            expect(results.to_a).to eq([procurement.proposal])
+            expect(results).to eq([procurement.proposal])
           end
         end
       end
@@ -136,9 +145,9 @@ describe ProposalSearchQuery, elasticsearch: true do
 
       es_execute_with_retries 3 do
         searcher = ProposalSearchQuery.new(current_user: user)
-        expect(searcher.execute('199').to_a).to eq([proposal1, proposal2])
-        expect(searcher.execute('1600').to_a).to eq([proposal3, proposal2])
-        expect(searcher.execute('199 rolly').to_a).to eq([proposal2])
+        expect(searcher.execute('199')).to eq([proposal1, proposal2])
+        expect(searcher.execute('1600')).to eq([proposal3, proposal2])
+        expect(searcher.execute('199 rolly')).to eq([proposal2])
       end
     end
   end
@@ -154,6 +163,6 @@ end
 def dump_index
   if ENV["ES_DEBUG"]
     puts ANSI.blue{ "----------------- DUMP INDEX ---------------------" }
-    puts Proposal.search( "*" ).results.to_a.pretty_inspect
+    puts Proposal.search( "*" ).results.pretty_inspect
   end
 end

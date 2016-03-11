@@ -1,6 +1,18 @@
 require 'elasticsearch/extensions/test/cluster'
 
 module EsSpecHelper
+  def es_mock_bad_gateway
+    allow_any_instance_of(Elasticsearch::Transport::Client)
+      .to receive(:perform_request)
+      .and_raise(Elasticsearch::Transport::Transport::Errors::BadGateway, "oops, can't find ES service")
+  end
+
+  def es_mock_connection_failed
+    allow_any_instance_of(Elasticsearch::Transport::Client)
+      .to receive(:perform_request)
+      .and_raise(Faraday::ConnectionFailed, "oops, connection failed")
+  end
+
   def start_es_server
     # circleci has locally installed version of elasticsearch so alter PATH to find
     ENV["PATH"] = "./elasticsearch/bin:#{ENV["PATH"]}"

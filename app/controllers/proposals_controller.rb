@@ -61,7 +61,12 @@ class ProposalsController < ApplicationController
   def query
     check_search_params
     query_listing = listing
-    @proposals_data = query_listing.query
+    begin
+      @proposals_data = query_listing.query
+    rescue SearchUnavailable => error
+      flash[:error] = error.message
+      redirect_to proposals_path
+    end
 
     @start_date = query_listing.start_date
     @end_date = query_listing.end_date
