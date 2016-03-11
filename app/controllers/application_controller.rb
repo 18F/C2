@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   include Pundit
   include ReturnToHelper
   include MarkdownHelper
+  include AdminAuthenticator
 
   helper ValueHelper
   add_template_helper ClientHelper

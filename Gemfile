@@ -13,7 +13,7 @@ gem "awesome_print"
 gem "aws-sdk"
 gem "bootstrap-sass"
 gem "browser-timezone-rails"
-gem "blazer"
+gem "blazer", "~> 1.1.1"
 gem "climate_control"
 gem "clockwork", require: false
 gem "daemons" # for delayed_job
