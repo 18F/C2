@@ -1,5 +1,6 @@
 describe "Handles incoming email" do
   include EnvVarSpecHelper
+  include Test::ClientRequest
 
   it "should forward non-app email to NOTIFICATION_FALLBACK_EMAIL" do
     with_env_vars(NOTIFICATION_FALLBACK_EMAIL: "nowhere@example.com", NOTIFICATION_FROM_EMAIL: "noreply@example.com") do
@@ -30,6 +31,8 @@ describe "Handles incoming email" do
   end
 
   it "should create comment for request-related reply" do
+    client_request = create(:test_client_request)
+    proposal = client_request.proposal
     mail = ProposalMailer.proposal_created_confirmation(proposal)
     mandrill_event = mandrill_payload_from_message(mail)
 
@@ -41,6 +44,8 @@ describe "Handles incoming email" do
   end
 
   it "falls back to Sender if From is not valid" do
+    client_request = create(:test_client_request)
+    proposal = client_request.proposal
     mail = ProposalMailer.proposal_created_confirmation(proposal)
     create(:approval_step, proposal: proposal, status: "actionable")
     mandrill_event = mandrill_payload_from_message(mail)
@@ -54,6 +59,8 @@ describe "Handles incoming email" do
   end
 
   it "should create comment for requester" do
+    client_request = create(:test_client_request)
+    proposal = client_request.proposal
     mail = ProposalMailer.proposal_created_confirmation(proposal)
     create(:approval_step, proposal: proposal)
     mandrill_event = mandrill_payload_from_message(mail)
