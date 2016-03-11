@@ -8,14 +8,9 @@ class ProposalSearchQuery
   end
 
   def execute(query)
-    build_dsl(query)
-    @response = Proposal.search(dsl)
+    setup_query(query)
     begin
-      if relation
-        execute_es(@response).merge(relation)
-      else
-        execute_es(@response)
-      end
+      try_search
     rescue Elasticsearch::Transport::Transport::ServerError => _error
       raise SearchUnavailable, I18n.t("errors.features.es.service_unavailable")
     rescue Faraday::ConnectionFailed => _error
@@ -24,6 +19,19 @@ class ProposalSearchQuery
   end
 
   private
+
+  def setup_query(query)
+    build_dsl(query)
+    @response = Proposal.search(dsl)
+  end
+
+  def try_search
+    if relation
+      execute_es(response).merge(relation)
+    else
+      execute_es(response)
+    end
+  end
 
   def execute_es(es_response)
     es_response.took # trigger ES::Client
