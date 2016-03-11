@@ -63,7 +63,7 @@ class Dispatcher
 
   def on_step_user_removal(removed_step_users)
     removed_step_users.each do |user|
-      StepMailer.step_user_removed(user.email_address, proposal).deliver_later
+      StepMailer.step_user_removed(user, proposal).deliver_later
     end
   end
 

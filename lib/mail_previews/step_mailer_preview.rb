@@ -4,7 +4,7 @@ class StepMailerPreview < ActionMailer::Preview
   end
 
   def step_user_removed
-    StepMailer.step_user_removed(to_email, proposal)
+    StepMailer.step_user_removed(user, proposal)
   end
 
   def proposal_notification
@@ -21,7 +21,7 @@ class StepMailerPreview < ActionMailer::Preview
     Proposal.last
   end
 
-  def to_email
-    "test@example.com"
+  def user
+    proposal.approvers.last
   end
 end

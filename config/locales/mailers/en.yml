@@ -22,8 +22,13 @@ en:
         body: "<span class='name-color'>%{full_name}</span> approved your request. C2 has sent it to the next person."
         details: "Please see below for more details."
       step_user_removed:
-        header: "You have been removed as an approver for this purchase request"
-        subheader: "You don't need to take any additional action."
+        header: "You have been removed from this purchase request"
+        subheader:
+          "No further action is required on %{proposal_public_id}
+          %{proposal_name} submitted by %{full_name}."
+        subheader_html:
+          "No further action is required on <strong>%{proposal_public_id}
+          %{proposal_name}</strong> submitted by <strong>%{full_name}</strong>."
       proposal_notification:
         step_status_html: '<strong>Request Status: <i>In Review</i></strong>'
         step_status: 'Request Status: In Review'
