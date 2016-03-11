@@ -4,7 +4,7 @@
 
 The easiest way to create a bookmark right now is this:
 1. Find the space just below the address bar in your browser. It will either be empty or have other bookmarks.
-1. Click and drag the word Communicart below to that space.
+1. Click and drag the word Communicart from below to that space.
 
 **[Communicart](https://cap.18f.gov/)**
 
