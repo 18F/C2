@@ -1,6 +1,6 @@
 describe Dispatcher do
   describe "#deliver_new_proposal_emails" do
-    it "sends emails to the requester and first approver and observers" do
+    it "sends emails to the requester and first approver" do
       proposal = create(:proposal, :with_approver, :with_observer)
       create(:ncr_work_order, proposal: proposal)
 
@@ -8,7 +8,6 @@ describe Dispatcher do
 
       expect(email_recipients).to eq([
         proposal.approvers.first.email_address,
-        proposal.observers.first.email_address,
         proposal.requester.email_address
       ].sort)
     end
