@@ -38,16 +38,10 @@
   = render partial: "mail_shared/call_to_action/subheader",
     locals: { subheader: panel_preface }
 
-  = render partial: "mail_shared/panel/header_name",
-    locals: { name: @proposal.name, subtext: @proposal.public_id }
-
   = render partial: "mail_shared/panel/proposal_attributes",
     locals: { proposal: @proposal }
 
   = render partial: "mail_shared/panel/vertical_buffer"
-
-  = render partial: "mail_shared/panel/attachment_items",
-    locals: { proposal: @proposal }
 
 %table.container
 

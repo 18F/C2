@@ -8,9 +8,9 @@ describe "mail_shared/_email_reply.html.erb" do
       locals: { show_step_actions: true, step: approval.decorate, proposal: proposal }
     )
 
-    expect(rendered).to include "Approve"
-    expect(rendered).to include "Or Send a Comment"
-    expect(rendered).to_not include "View this request"
+    expect(rendered).to include approval.decorate.action_name
+    expect(rendered).to include I18n.t("mailer.view_or_modify_request_cta")
+    expect(rendered).not_to include I18n.t("mailer.view_request_cta")
   end
 
   it "renders 'View This Request' link without approve button" do
@@ -22,8 +22,8 @@ describe "mail_shared/_email_reply.html.erb" do
       locals: { show_step_actions: false, step: approval.decorate, proposal: proposal }
     )
 
-    expect(rendered).to_not include "Approve"
-    expect(rendered).to_not include "Or Send a Comment"
-    expect(rendered).to include "View This Request"
+    expect(rendered).not_to include approval.decorate.action_name
+    expect(rendered).not_to include I18n.t("mailer.view_or_modify_request_cta")
+    expect(rendered).to include I18n.t("mailer.view_request_cta")
   end
 end

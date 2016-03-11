@@ -24,13 +24,7 @@
     locals: { subheader: cta_subheader_foot }
 
   / Start Panel Wrapper
-  = render partial: "mail_shared/panel/header_name",
-    locals: { name: @proposal.name, subtext: @proposal.public_id }
-
   = render partial: "mail_shared/panel/proposal_attributes",
-    locals: { proposal: @proposal }
-
-  = render partial: "mail_shared/panel/attachment_items",
     locals: { proposal: @proposal }
 
   = render partial: "mail_shared/panel/vertical_buffer"

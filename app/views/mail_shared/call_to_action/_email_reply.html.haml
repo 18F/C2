@@ -1,12 +1,10 @@
 - if show_step_actions
-  = render partial: "mail_shared/call_to_action/button", 
-    locals: { link_path: generate_approve_url(step), 
-              link_text: step.action_name,
-              link_state: 'primary'}
-  = render partial: "mail_shared/call_to_action/button", 
-    locals: { link_path: proposal_url(proposal, anchor: "comments"), 
-              link_text: "Or Send a Comment"}
+  = render partial: "mail_shared/call_to_action/button",
+    locals: { link_path: generate_approve_url(step),
+    link_text: step.action_name, link_state: "primary" }
+  = render partial: "mail_shared/call_to_action/button",
+    locals: { link_path: proposal_url(proposal),
+    link_text: t("mailer.view_or_modify_request_cta") }
 - else
-  = render partial: "mail_shared/call_to_action/button", 
-    locals: { link_path: proposal_url(proposal), 
-              link_text: "View This Request"}
+  = render partial: "mail_shared/call_to_action/button",
+    locals: { link_path: proposal_url(proposal), link_text: t("mailer.view_request_cta")}

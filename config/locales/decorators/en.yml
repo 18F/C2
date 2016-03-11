@@ -4,6 +4,7 @@ en:
       approval:
         execute_button: "Approve"
         noun: "approval"
+        adjective: "approve"
         role_name: "Approver"
         status:
           please_act: "Please review"
@@ -11,6 +12,7 @@ en:
       purchase:
         execute_button: "Mark as Purchased"
         noun: "purchase"
+        adjective: "purchase"
         role_name: "Purchaser"
         status:
           please_act: "Please purchase"

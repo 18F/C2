@@ -1,3 +1,8 @@
+= render partial: "mail_shared/panel/header_name",
+  locals: { proposal_name: proposal.name,
+  requester_name: proposal.requester.full_name,
+  subtext: proposal.public_id }
+
 - proposal.fields_for_display.each_slice(2) do |fields|
   %tr
     %td.wrapper.last.no-padding-top
@@ -10,11 +15,17 @@
                   %p.proposal-data-label
                     = fields[0][0]
                   %p.proposal-data-attribute
-                    = fields[0][1]
+                    = property_to_s(fields[0][1])
                 %td.six.sub-columns{valign: "top"}
                   - if fields[1]
                     %p.proposal-data-label
                       = fields[1][0]
                     %p.proposal-data-attribute
-                      = fields[1][1]
+                      = property_to_s(fields[1][1])
           %td.expander
+
+= render partial: "mail_shared/panel/attachment_items",
+  locals: { proposal: proposal }
+
+= render partial: "mail_shared/panel/comment_items",
+  locals: { proposal: proposal }

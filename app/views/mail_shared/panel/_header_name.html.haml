@@ -1,7 +1,6 @@
 - subtext  = !subtext.nil?  ? subtext : false
-
 %tr
-  %td   
+  %td
     %table.row
       %tr
         %td.wrapper.last.first
@@ -11,10 +10,11 @@
                 %table
                   %tr
                     %td.twelve.sub-columns
-                      - if subtext
-                        %h5.subtext
-                          = subtext
+                      %h5.subtext
+                        = subtext
                       %h3.proposal-bold
-                        = name
+                        = proposal_name
+                      %p
+                        = t("mailer.requested_by", full_name: requester_name)
 
               %td.expander

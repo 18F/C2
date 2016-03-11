@@ -1,11 +1,9 @@
 - content_for :header_icon, "emails/icon-pencil-circle.png"
-- top_head = t("mailer.attachment_mailer.new_attachment_notification.top_head",
-              request_name: @proposal.name,
-              user_name: @attachment_user.full_name)
+- top_head = t("mailer.attachment_mailer.new_attachment_notification.header_html",
+  proposal_name: @proposal.name, user_name: @attachment_user.full_name)
 - panel_icon = "emails/icon-clipped_page.png"
-- panel_action = t("mailer.attachment_mailer.new_attachment_notification.header",
-                  user_name: @attachment_user.full_name,
-                  proposal_name: @proposal.name)
+- panel_action = t("mailer.attachment_mailer.new_attachment_notification.activity_description",
+  user_name: @attachment_user.full_name)
 - panel_action_date = time_and_date(@attachment.created_at)
 - panel_image = @attachment.decorate.file_preview
 - cta_subheader = t("mailer.attachment_mailer.new_attachment_notification.subheader")
@@ -18,9 +16,7 @@
   = render partial: "mail_shared/panel/header"
 
   = render partial: "mail_shared/panel/row_description",
-    locals: { icon: panel_icon,
-              action: panel_action,
-              datetime: panel_action_date}
+    locals: { icon: panel_icon, action: panel_action, datetime: panel_action_date}
 
   = render partial: "mail_shared/panel/row_content_image",
     locals: { image: panel_image, image_link: proposal_url(@proposal), last: true}

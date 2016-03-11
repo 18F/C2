@@ -1,35 +1,58 @@
 en:
   mailer:
-    view_request_cta: "View request details"
     add_comment_cta: "Add comment"
+    reason: " with given reason '%{reason}'"
+    reply_to_comment:
+      "You can send a comment to everyone in this request by replying to this email"
+    requested_by: "Requested by %{full_name}"
     update_description: "Here are the updated request details:"
+    view_or_modify_request_cta: "View or modify request"
+    view_request_cta: "View request details"
     footer_html:
       "Have <a href='%{feedback_url}'>feedback</a>? We'd love to hear from you."
     footer:
       "Have feedback? We'd love to hear from you at %{feedback_url}"
-    reason: " with given reason '%{reason}'"
+    last_attachment_detail:
+      one:
+        "<strong>1 Attachment</strong> <em>Uploaded by
+        <strong>%{full_name}</strong></em>"
+      other:
+        "<strong>%{count} Attachments</strong> <em>Last attachment uploaded by
+        <strong>%{full_name}</strong></em>"
+    last_comment_detail:
+      one:
+        "<strong>1 Comment</strong> <em>Added by <strong>%{full_name}</strong></em>"
+      other:
+        "<strong>%{count} Comments</strong> <em>Last comment added by
+        <strong>%{full_name}</strong></em>"
     attachment_mailer:
       new_attachment_notification:
-        top_head: "Attachment added to <span class='name-color'>%{request_name}</span> by <span class='name-color'>%{user_name}</span>"
-        header: "Attachment added by <span class='name-color'>%{user_name}</span>"
-        header_html: "Attachment added by %{user_name}"
+        header_html:
+          "Attachment added to <span class='name-color'>%{proposal_name}</span>
+           by <span class='name-color'>%{user_name}</span>"
+        header: "Attachment added to %{proposal_name} by %{user_name}"
+        activity_description: "Attachment added by %{user_name}"
         subheader: "You can reply or review the full conversation on the request page."
         attachment_cta: "Click to view %{attachment_name}"
     step_mailer:
       step_next_approved:
-        body: "<span class='name-color'>%{full_name}</span> has approved your request. C2 has sent it to the next person."
+        body:
+          "<span class='name-color'>%{full_name}</span> has approved your request.
+          C2 has sent it to the next person."
       step_reply_received:
-        body: "<span class='name-color'>%{full_name}</span> approved your request. C2 has sent it to the next person."
+        body:
+          "<span class='name-color'>%{full_name}</span> approved your request.
+          C2 has sent it to the next person."
         details: "Please see below for more details."
       step_user_removed:
         header: "You have been removed as an approver for this purchase request"
         subheader: "You don't need to take any additional action."
       proposal_notification:
-        step_status_html: '<strong>Request Status: <i>In Review</i></strong>'
-        step_status: 'Request Status: In Review'
+        proposal_status_html: '<strong>Request Status: <i>%{proposal_status}</i></strong>'
+        proposal_status: 'Request Status: %{proposal_status}'
         header_html:
-          "A new request submitted by <strong>%{requester_name}</strong> needs
-          your %{step_type_noun}"
+          "<strong>%{requester_name}</strong> has submitted a new request for
+          you to %{step_type_noun}"
         header: "A new request submitted by %{requester_name} needs your %{step_type_noun}"
     proposal_mailer:
       generic_approval_name:

@@ -1,9 +1,8 @@
 - content_for :header_icon, "emails/icon-page-circle.png"
 - top_head = t("mailer.step_mailer.proposal_notification.header_html",
-  requester_name: @proposal.requester.full_name, step_type_noun: @step.noun)
-- cta_subheader = t("mailer.step_mailer.proposal_notification.step_status_html")
-- attachment_icon = "emails/icon-clipped_page.png"
-
+  requester_name: @proposal.requester.full_name, step_type_noun: @step.adjective)
+- cta_subheader = t("mailer.step_mailer.proposal_notification.proposal_status_html",
+  proposal_status: @proposal.status)
 
 %table.container
   = render partial: "mail_shared/email_header/hero_text",
@@ -19,24 +18,17 @@
     locals: { subheader: "", height: "half" }
 
 %table.container.contain-attributes
-
-  = render partial: "mail_shared/panel/header_name",
-    locals: { name: @proposal.name, subtext: @proposal.public_id }
-
   = render partial: "mail_shared/panel/proposal_attributes",
-    locals: { proposal: @proposal }
-
-  = render partial: "mail_shared/panel/attachment_items",
     locals: { proposal: @proposal }
 
   = render partial: "mail_shared/panel/vertical_buffer"
 
 %table.container
-
   = render partial: "mail_shared/call_to_action/subheader",
     locals: { subheader: "" }
 
-  = render(partial: "mail_shared/call_to_action/email_reply",
-    locals: { step: @step, 
-              show_step_actions: true, 
-              proposal: @proposal })
+  = render partial: "mail_shared/call_to_action/subheader",
+    locals: { subheader: t("mailer.reply_to_comment") }
+
+  = render partial: "mail_shared/call_to_action/email_reply",
+    locals: { step: @step, show_step_actions: true, proposal: @proposal }
