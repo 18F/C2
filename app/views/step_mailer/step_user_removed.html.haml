@@ -1,0 +1,27 @@
+- header_icon = "emails/icon-pencil-circle.png"
+- top_head = t("mailer.step_mailer.step_user_removed.header")
+- cta_subheader = t("mailer.step_mailer.step_user_removed.subheader")
+- proposal_link_text = t("mailer.view_request_cta")
+
+
+%table.body
+  %tr
+    %td.center{align: "center", valign: "top"}
+      %center
+        = render partial: "mail_shared/email_header/topbar"
+        = render partial: "mail_shared/email_header/icon",
+          locals: { icon: header_icon }
+
+        / Start Container
+        %table.container
+          = render partial: "mail_shared/email_header/hero_text",
+            locals: { text: top_head }
+
+          = render partial: "mail_shared/call_to_action/subheader",
+            locals: { subheader: cta_subheader }
+
+          = render partial: "mail_shared/call_to_action/button",
+            locals: { link_path: proposal_url(@proposal), link_text: proposal_link_text }
+
+          = render partial: "mail_shared/call_to_action/subheader",
+            locals: { subheader: "" }

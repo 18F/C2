@@ -1,0 +1,8 @@
+<%= t("mailer.cancelation_mailer.cancelation_confirmation.header") %>
+
+<%= t("mailer.cancelation_mailer.cancelation_confirmation.reason", reason: @reason) %>
+
+<%= t("mailer.cancelation_mailer.cta") %>
+<%= proposal_url(@proposal) %>
+
+<%= t("mailer.footer", feedback_url: feedback_url) %>

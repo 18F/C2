@@ -1,0 +1,94 @@
+$light-grey: #585858;
+$lighter-grey: #f1f1f1;
+$bright-blue: #0744a4;
+
+table.full-width {
+  width: 100%;
+}
+
+table.two-thirds-width {
+  width: 66%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+table.one-third-width {
+  width: 33%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+td.hero {
+  height: 4em;
+}
+
+table.header {
+  background: $bright-blue;
+}
+
+.header-icon {
+  position: relative;
+  top: 2em;
+  display: block;
+  margin: 0 auto;
+}
+
+td.header {
+  padding-top: 1.5em;
+  font-size: 32px;
+  text-align: center;
+}
+
+.subheader {
+  padding-top: 1.5em;
+  font-size: 20px;
+  color: $light-grey;
+  text-align: center;
+}
+
+.proposal-data-label {
+  font-size: 18px;
+  font-weight: bold;
+  color: $bright-blue;
+}
+
+.proposal-attributes {
+  background: $lighter-grey;
+
+}
+
+.proposal-attributes td {
+  text-align: center;
+}
+
+p.email-button {
+  margin-top: 0.5em;
+  font-size: 18px;
+  border-radius: 25px;
+  border: 2px solid $bright-blue;
+  padding: 15px;
+  display: block;
+  text-align: center;
+  color: $bright-blue;
+}
+
+.email-button a:link {
+  text-decoration: none;
+}
+
+.feedback-link a:link {
+  color: $bright-blue;
+  text-decoration: underline;
+}
+
+.footer {
+  margin-top: 3em;
+  font-size: 18px;
+  color: $bright-blue;
+  text-align: center;
+}
+
+.footer-logo {
+  padding-top: 1em;
+  width: 25%;
+}

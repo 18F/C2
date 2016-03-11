@@ -1,0 +1,15 @@
+- link_state    = !link_state.nil?    ? ' ' + link_state    : ''
+
+%tr
+  %td
+    %table.row.center
+      %tr
+        %td.wrapper.last.center{ align: "center" }
+          %center
+            %table.six.columns
+              %tr
+                %td.center{ align: "center", valign: "top" }
+                  %div.button-div{class: link_state}
+                    = link_to link_path, target: "_blank" do
+                      = link_text
+                %td.expander

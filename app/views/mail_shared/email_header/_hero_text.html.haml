@@ -1,0 +1,17 @@
+- style  = !style.nil?  ? ' ' + style  : ''
+- vertical  = !vertical.nil?  ? ' ' + vertical  : ''
+
+%tr{class: style + vertical}
+  %td
+    %table.centered
+      %tr
+        %td.wrapper.last.row
+          %table.twelve.columns
+            %tr
+              %td
+                %h3.text-center.color-light
+                  = text.html_safe
+                  %br/
+
+                %br
+              %td.expander

@@ -1,0 +1,7 @@
+<%= t("mailer.proposal_mailer.proposal_updated_while_step_pending.header") %>
+<%= t("mailer.proposal_mailer.proposal_updated_while_step_pending.subheader") %>
+
+<%= t("mailer.add_comment_cta") %>
+<%= proposal_url(@proposal, anchor: "comments")  %>
+
+<%= t("mailer.footer", feedback_url: feedback_url) %>

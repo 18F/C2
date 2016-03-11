@@ -49,10 +49,15 @@ describe "Add attachments" do
   end
 
   it "emails everyone involved in the proposal" do
-    expect(Dispatcher).to receive(:deliver_attachment_emails)
+    dispatcher = double
+    allow(dispatcher).to receive(:deliver_attachment_emails)
+    allow(Dispatcher).to receive(:new).with(proposal).and_return(dispatcher)
     proposal.add_observer(create(:user))
+
     visit proposal_path(proposal)
     page.attach_file('attachment[file]', "#{Rails.root}/app/assets/images/bg_completed_status.gif")
     click_on "Attach a File"
+
+    expect(dispatcher).to have_received(:deliver_attachment_emails)
   end
 end

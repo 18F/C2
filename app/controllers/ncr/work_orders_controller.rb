@@ -24,7 +24,6 @@ module Ncr
     def update
       work_order.assign_attributes(permitted_params)
       Ncr::WorkOrderValueNormalizer.new(work_order).run
-      work_order.modifier = current_user
 
       super
     end
@@ -41,15 +40,14 @@ module Ncr
     end
 
     def record_changes
-      ProposalUpdateRecorder.new(work_order).run
+      ProposalUpdateRecorder.new(work_order, current_user).run
     end
 
-    def setup_and_email_approvers
-      updater = Ncr::WorkOrderUpdater.new(
+    def setup_and_email_approvers(comment)
+      Ncr::WorkOrderUpdater.new(
         work_order: work_order,
-        flash: flash
-      )
-      updater.run
+        update_comment: comment,
+      ).run
     end
 
     def model_class

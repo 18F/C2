@@ -1,12 +1,12 @@
 describe ObserverMailer do
   include MailerSpecHelper
 
-  describe ".on_observer_added" do
+  describe "#observer_added_notification" do
     it "sends to the observer" do
       proposal = create(:proposal, :with_observer)
       observation = proposal.observations.first
 
-      mail = ObserverMailer.on_observer_added(observation, nil)
+      mail = ObserverMailer.observer_added_notification(observation, nil)
 
       observer = observation.user
       expect(mail.to).to eq([observer.email_address])
@@ -20,7 +20,7 @@ describe ObserverMailer do
       observation = proposal.observations.first
       expect(observation.created_by).to eq(adder)
 
-      mail = ObserverMailer.on_observer_added(observation, nil)
+      mail = ObserverMailer.observer_added_notification(observation, nil)
       expect(mail.body.encoded).to include("to this request by #{adder.full_name}")
     end
 
@@ -28,7 +28,7 @@ describe ObserverMailer do
       proposal = create(:proposal, :with_observer)
       observation = proposal.observations.first
 
-      mail = ObserverMailer.on_observer_added(observation, nil)
+      mail = ObserverMailer.observer_added_notification(observation, nil)
       expect(mail.body.encoded).to_not include("to this request by ")
     end
 
@@ -36,29 +36,40 @@ describe ObserverMailer do
       proposal = create(:proposal)
       observer = create(:user)
       adder = create(:user)
-      reason = 'is an absolute ledge'
+      reason = "is an absolute ledge"
       proposal.add_observer(observer, adder, reason)
       observation = proposal.observations.first
 
-      mail = ObserverMailer.on_observer_added(observation, reason)
+      mail = ObserverMailer.observer_added_notification(observation, reason)
       expect(mail.body.encoded).to include("with given reason '#{reason}'")
     end
   end
 
-  describe ".proposal_observer_email" do
-    let(:proposal) { create(:proposal) }
-    let(:observer) { create(:user) }
-    let(:observation) { proposal.add_observer(observer) }
-    let(:mail) { ObserverMailer.proposal_observer_email(observer.email_address, proposal) }
+  describe "#observer_removed_notification" do
+    it "sends to the observer" do
+      proposal = create(:proposal, :with_observer)
+      observation = proposal.observations.first
 
-    it_behaves_like "a proposal email"
+      mail = ObserverMailer.observer_removed_confirmation(observation)
 
-    it "renders the receiver email" do
+      observer = observation.user
       expect(mail.to).to eq([observer.email_address])
     end
+  end
 
-    it "uses the default sender name" do
-      expect(sender_names(mail)).to eq(["C2"])
-    end
+  describe "#proposal_complete" do
+    let(:mail) { ObserverMailer.proposal_complete(observer, proposal) }
+
+    it_behaves_like "a proposal email"
+  end
+
+  private
+
+  def proposal
+    @proposal ||= create(:proposal)
+  end
+
+  def observer
+    @observer ||= create(:observation).user
   end
 end

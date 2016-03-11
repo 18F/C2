@@ -1,4 +1,8 @@
 module MailerHelper
+  def time_and_date(date)
+    "#{date.strftime('%m/%d/%Y')} at #{date.strftime('%I:%M %P')}"
+  end
+
   def status_icon_tag(status, last_approver = false)
     base_url = root_url.gsub(/\?.*$/, "").chomp("/")
     bg_linear_image = base_url + image_path("bg_#{status}_status.gif")
@@ -27,18 +31,8 @@ module MailerHelper
     complete_proposal_url(proposal, opts)
   end
 
-  def cancellation_text(proposal, reason)
-    text = t(
-      "mailer.cancellation_mailer.cancellation_email.body",
-      name: proposal.name,
-      public_id: proposal.public_id
-    )
-    add_reason(text, reason)
-    text + "."
-  end
-
   def observer_text(observation, reason = nil)
-    text = t("mailer.observer_mailer.on_observer_added.body")
+    text = t("mailer.observer_mailer.observer_added_notification.header")
     add_author(text, observation.created_by)
     add_reason(text, reason)
     text + "."
@@ -56,11 +50,4 @@ module MailerHelper
     end
   end
 
-  def complete_text(step)
-    if step.is_a?(Steps::Purchase)
-      t("mailer.approval_reply_received_email.purchased")
-    else
-      t("mailer.approval_reply_received_email.approved")
-    end
-  end
 end

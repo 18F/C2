@@ -128,7 +128,6 @@ ActiveRecord::Schema.define(version: 20160308231131) do
     t.integer  "user_id"
     t.integer  "proposal_id"
     t.boolean  "update_comment"
-    t.uuid     "visit_id"
   end
 
   add_index "comments", ["proposal_id"], name: "index_comments_on_proposal_id", using: :btree
@@ -212,8 +211,7 @@ ActiveRecord::Schema.define(version: 20160308231131) do
     t.integer  "client_data_id"
     t.string   "client_data_type", limit: 255
     t.integer  "requester_id"
-    t.string   "public_id"
-    t.uuid     "visit_id"
+    t.string   "public_id",        limit: 255
   end
 
   add_index "proposals", ["client_data_id", "client_data_type"], name: "index_proposals_on_client_data_id_and_client_data_type", using: :btree
@@ -225,7 +223,6 @@ ActiveRecord::Schema.define(version: 20160308231131) do
     t.integer  "user_id",                    null: false
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
-    t.uuid     "visit_id"
   end
 
   create_table "roles", force: :cascade do |t|
@@ -351,13 +348,10 @@ ActiveRecord::Schema.define(version: 20160308231131) do
   add_foreign_key "attachments", "users", name: "user_id_fkey"
   add_foreign_key "comments", "proposals", name: "proposal_id_fkey"
   add_foreign_key "comments", "users", name: "user_id_fkey"
-  add_foreign_key "comments", "visits"
   add_foreign_key "proposal_roles", "proposals", name: "proposal_id_fkey"
   add_foreign_key "proposal_roles", "roles", name: "role_id_fkey"
   add_foreign_key "proposal_roles", "users", name: "user_id_fkey"
   add_foreign_key "proposals", "users", column: "requester_id", name: "requester_id_fkey"
-  add_foreign_key "proposals", "visits"
-  add_foreign_key "reports", "visits"
   add_foreign_key "scheduled_reports", "reports"
   add_foreign_key "scheduled_reports", "users"
   add_foreign_key "steps", "proposals", name: "proposal_id_fkey", on_delete: :cascade

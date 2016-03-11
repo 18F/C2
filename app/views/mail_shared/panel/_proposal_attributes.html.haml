@@ -1,0 +1,20 @@
+- proposal.fields_for_display.each_slice(2) do |fields|
+  %tr
+    %td.wrapper.last.no-padding-top
+      %table.twelve.columns
+        %tr
+          %td.panel.panel-styled-content.sub-grid{valign: "top"}
+            %table{valign: "top"}
+              %tr{valign: "top"}
+                %td.six.sub-columns{valign: "top"}
+                  %p.proposal-data-label
+                    = fields[0][0]
+                  %p.proposal-data-attribute
+                    = fields[0][1]
+                %td.six.sub-columns{valign: "top"}
+                  - if fields[1]
+                    %p.proposal-data-label
+                      = fields[1][0]
+                    %p.proposal-data-attribute
+                      = fields[1][1]
+          %td.expander
