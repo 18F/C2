@@ -5,41 +5,38 @@
 - cta_subheader_foot = t("mailer.proposal_mailer.proposal_complete.subheader_foot")
 
 %table.container
-  = render partial: "mail_shared/email_header/hero_text", 
+  = render partial: "mail_shared/email_header/hero_text",
     locals: { text: top_head }
 
-  = render partial: "mail_shared/call_to_action/subheader", 
-    locals: { subheader: cta_subheader, 
-              vertical: "no-top-margin" }
-  
-  = render partial: "mail_shared/call_to_action/button", 
-    locals: { link_path: proposal_url(@proposal), 
-              link_text: proposal_link_text }
-  
-  = render partial: "mail_shared/call_to_action/subheader", 
+  = render partial: "mail_shared/call_to_action/subheader",
+    locals: { subheader: cta_subheader, vertical: "no-top-margin" }
+
+  = render partial: "mail_shared/call_to_action/button",
+    locals: { link_path: proposal_url(@proposal), link_text: proposal_link_text }
+
+  = render partial: "mail_shared/call_to_action/subheader",
     locals: { subheader: "" }
 
 %hr/
 
 %table.container.contain-attributes
-  = render partial: "mail_shared/call_to_action/subheader", 
+  = render partial: "mail_shared/call_to_action/subheader",
     locals: { subheader: cta_subheader_foot }
 
   / Start Panel Wrapper
-  = render partial: "mail_shared/panel/header_name", 
-    locals: { name: @proposal.name,
-              subtext: @proposal.public_id }
+  = render partial: "mail_shared/panel/header_name",
+    locals: { name: @proposal.name, subtext: @proposal.public_id }
 
-  = render partial: "mail_shared/panel/proposal_attributes", 
+  = render partial: "mail_shared/panel/proposal_attributes",
     locals: { proposal: @proposal }
 
-  = render partial: "mail_shared/panel/attachment_items"
+  = render partial: "mail_shared/panel/attachment_items",
+    locals: { proposal: @proposal }
 
   = render partial: "mail_shared/panel/vertical_buffer"
 
-  = render partial: "mail_shared/call_to_action/subheader", 
+  = render partial: "mail_shared/call_to_action/subheader",
     locals: { subheader: "" }
 
-  = render partial: "mail_shared/call_to_action/button", 
-    locals: { link_path: proposal_url(@proposal), 
-              link_text: proposal_link_text }
+  = render partial: "mail_shared/call_to_action/button",
+    locals: { link_path: proposal_url(@proposal), link_text: proposal_link_text }

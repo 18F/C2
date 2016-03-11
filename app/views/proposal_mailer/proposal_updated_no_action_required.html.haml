@@ -52,7 +52,8 @@
   = render partial: "mail_shared/panel/proposal_attributes",
     locals: { proposal: @proposal }
 
-  = render partial: "mail_shared/panel/attachment_items"
+  = render partial: "mail_shared/panel/attachment_items",
+    locals: { proposal: @proposal }
 
   = render partial: "mail_shared/panel/vertical_buffer"
 
