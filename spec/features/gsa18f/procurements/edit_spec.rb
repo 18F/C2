@@ -47,17 +47,17 @@ feature "Edit a Gsa18F procurement" do
     context "Approved status" do
       scenario "cannot be restarted" do
         login_as(requester)
-        proposal.update(status: "approved")
+        proposal.update(status: "completed")
 
         visit edit_gsa18f_procurement_path(procurement)
         expect(current_path).to eq(new_gsa18f_procurement_path)
-        expect(page).to have_content("already approved")
+        expect(page).to have_content("already completed")
       end
     end
 
     context "Approved status" do
       scenario "modify link not shown" do
-        proposal.update(status: "approved")
+        proposal.update(status: "completed")
         login_as(requester)
 
         visit proposal_path(proposal)

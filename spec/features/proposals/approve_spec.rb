@@ -10,9 +10,30 @@ describe "Approving a proposal" do
       expect(page).to have_content("You have approved #{proposal.public_id}")
 
       approval = Proposal.last.individual_steps.first
-      expect(approval.status).to eq("approved")
-      expect(approval.approved_at.utc.to_s).to eq(Time.now.utc.to_s)
+      expect(approval.status).to eq("completed")
+      expect(approval.completed_at.utc.to_s).to eq(Time.now.utc.to_s)
     end
+  end
+
+  it "distinguishes user with multiple actionable steps" do
+    proposal = create(:proposal, :with_serial_approvers)
+    first_approver = proposal.approvers.first
+    second_approver = proposal.approvers.last
+    second_approver.add_delegate(first_approver)
+
+    login_as(first_approver)
+    visit proposal_path(proposal)
+    click_on("Approve")
+
+    expect(current_path).to eq("/proposals/#{proposal.id}")
+    expect(page).to have_content("You have approved #{proposal.public_id}")
+
+    login_as(second_approver)
+    visit proposal_path(proposal)
+    click_on("Approve")
+
+    expect(current_path).to eq("/proposals/#{proposal.id}")
+    expect(page).to have_content("You have approved #{proposal.public_id}")
   end
 
   it "doesn't send multiple emails to approvers who are also observers" do

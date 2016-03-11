@@ -5,6 +5,7 @@ form.button_to {
   div {
     display: inline;
   }
+  button[type="submit"],
   input[type="submit"] {
     background: transparent;
     border: 0;
@@ -17,6 +18,9 @@ form.button_to {
     &:hover, &:active,  {
       background: transparent;
     }
+  }
+  button[type="submit"] {
+    color: #006be6;
   }
 }
 

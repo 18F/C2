@@ -6,6 +6,7 @@ describe User do
      it { should have_many(:user_roles).dependent(:destroy) }
      it { should have_many(:proposals).dependent(:destroy) }
      it { should have_many(:reports) }
+     it { should have_many(:scheduled_reports) }
   end
 
   let(:user) { build(:user) }

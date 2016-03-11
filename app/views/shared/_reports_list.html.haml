@@ -1,15 +1,14 @@
-%table.dashboard.table.table-striped.table-bordered
+%table.reports.dashboard.table.table-striped
   %tbody
   - current_user.all_reports.each do |report|
     %tr
-      %td
-        = link_to(report.name, report.url)
-      %td
-        [
-        = link_to("Edit", report_path(report))
-        ]
-
-.links
-  = link_to("Manage all Reports", reports_path)
-
-
+      %td.name
+        = report.name
+      %td.subscription
+        = report.subscribed?(current_user) ? "Emailed to me #{report.subscription_for(current_user).frequency}" : ""
+      %td.edit
+        = link_to("View details", report_path(report))
+      %td.run
+        = link_to report.url, class: 'btn btn-xs btn-default btn-primary', role: 'button' do
+          %i.fa.fa-play
+          Run Report

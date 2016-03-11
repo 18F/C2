@@ -1,0 +1,66 @@
+%form.adv-search.form-horizontal{role: "form", action: query_proposals_path, method: "get"}
+  %fieldset
+    .form-group
+      %label.inline.control-label{for: "#{current_user.client_model_slug}[status]"}
+        Search in
+      %select.short.form-control{name: "#{current_user.client_model_slug}[status]"}
+        = proposal_status_options(@adv_search.value_for("status"))
+    .form-group
+      %label.control-label{for: "#{current_user.client_model_slug}[requester]"}
+        Card Holder Name
+      %input.form-control{ type: "text",
+        name: "#{current_user.client_model_slug}[requester]",
+        value: @adv_search.value_for("requester"),
+      }   
+    .form-group
+      %label.control-label{for: "#{current_user.client_model_slug}[client_data.vendor]"}
+        Vendor Name
+      %input.form-control{ type: "text",
+        name: "#{current_user.client_model_slug}[client_data.vendor]",
+        value: @adv_search.value_for("client_data.vendor"),
+      }
+    - if current_user.client_model.expense_type_options.any?
+      .form-group.row
+        .col-xs-5
+          %label.control-label{for: "#{current_user.client_model_slug}[client_data.amount]"}
+            Amount
+          %input.form-control{ type: "text",
+            name: "#{current_user.client_model_slug}[client_data.amount]",
+            value: @adv_search.value_for("client_data.amount"),
+          }
+        .col-xs-5.right.wide
+          %label.control-label{for: "#{current_user.client_model_slug}[client_data.expense_type]"}
+            Expense Type
+          %select.form-control{name: "#{current_user.client_model_slug}[client_data.expense_type]"}
+            = proposal_expense_type_options(current_user.client_model, @adv_search.value_for("client_data.expense_type"))
+    - else
+      .form-group
+        %label.control-label{for: "#{current_user.client_model_slug}[client_data.amount]"}
+          Amount
+        %input.form-control{ type: "text",
+          name: "#{current_user.client_model_slug}[client_data.amount]",
+          value: @adv_search.value_for("client_data.amount"),
+        }
+
+    .form-group.row
+      .col-xs-5
+        %label.control-label{for: "#{current_user.client_model_slug}[created_within]"}
+          Date within
+        %select.form-control{name: "#{current_user.client_model_slug}[created_within]"}
+          = options_for_select([["1 year", "1 year"], ["6 months", "6 months"], ["1 month", "1 month"]], "1 year")
+      .col-xs-5.right.inline
+        %label.inline.control-label{for: "#{current_user.client_model_slug}[created_at]"}
+          of  
+        %input.short.form-control{ type: "date",
+          name: "#{current_user.client_model_slug}[created_at]", 
+          value: @adv_search.value_for("created_at"),
+        }
+
+    .form-group
+      .checkbox
+        %label
+          %input{type: "checkbox", name: "#{current_user.client_model_slug}[includes_attachment]", checked: @adv_search.value_for("num_attachments")}
+          Includes attachment
+
+    %button#adv-search-button.btn.btn-lg.btn-primary{type: "submit"}
+      Search

@@ -14,8 +14,8 @@ describe ProposalsController do
       get :index
       expect(assigns(:pending_review_data).rows.sort).to eq [proposal2]
       expect(assigns(:pending_data).rows.sort).to eq [proposal1]
-      expect(assigns(:approved_data).rows.sort).to be_empty
-      expect(assigns(:cancelled_data).rows.sort).to be_empty
+      expect(assigns(:completed_data).rows.sort).to be_empty
+      expect(assigns(:canceled_data).rows.sort).to be_empty
     end
   end
 
@@ -25,9 +25,7 @@ describe ProposalsController do
     end
 
     it 'should show all the closed proposals' do
-      2.times.map do |i|
-        create(:proposal, requester: user, status: 'approved')
-      end
+      create_list(:proposal, 2, requester: user, status: "completed")
       create(:proposal, requester: user)
 
       get :archive
@@ -127,7 +125,7 @@ describe ProposalsController do
       get :query, status: "pending"
       expect(assigns(:proposals_data).rows).to eq([proposal])
 
-      get :query, status: "cancelled"
+      get :query, status: "canceled"
       expect(assigns(:proposals_data).rows).to eq([])
     end
 
@@ -220,13 +218,13 @@ describe ProposalsController do
       expect(flash[:alert]).to eq 'You are not the requester'
     end
 
-    it 'should redirect for cancelled requests' do
-      proposal.update_attributes(status:'cancelled')
+    it 'should redirect for canceled requests' do
+      proposal.update_attributes(status:'canceled')
       login_as(proposal.requester)
 
       get :cancel_form, id: proposal.id
       expect(response).to redirect_to(proposal_path proposal.id)
-      expect(flash[:alert]).to eq 'Sorry, this proposal has been cancelled.'
+      expect(flash[:alert]).to eq 'Sorry, this proposal has been canceled.'
     end
   end
 
@@ -246,13 +244,13 @@ describe ProposalsController do
     end
   end
 
-  describe '#approve' do
+  describe "#complete" do
     it "signs the user in via the token" do
       proposal = create(:proposal, :with_approver)
       approval = proposal.individual_steps.first
       token = create(:api_token, step: approval)
 
-      get :approve, id: proposal.id, cch: token.access_token
+      get :complete, id: proposal.id, cch: token.access_token
 
       expect(controller.send(:current_user)).to eq(approval.user)
     end
@@ -263,7 +261,7 @@ describe ProposalsController do
       token = create(:api_token, step: approval)
       approval.user.add_delegate(create(:user))
 
-      get :approve, id: proposal.id, cch: token.access_token
+      get :complete, id: proposal.id, cch: token.access_token
 
       expect(response).to redirect_to(root_path(return_to: make_return_to("Previous", request.fullpath)))
     end
@@ -272,7 +270,7 @@ describe ProposalsController do
       proposal = create(:proposal, :with_approver)
       login_as(proposal.approvers.first)
 
-      get :approve, id: proposal.id
+      get :complete, id: proposal.id
 
       expect(response).to have_http_status(403)
     end
@@ -282,10 +280,10 @@ describe ProposalsController do
       approval = proposal.individual_steps.first
       token = create(:api_token, step: approval)
 
-      get :approve, id: proposal.id, cch: token.access_token
+      get :complete, id: proposal.id, cch: token.access_token
 
       approval.reload
-      expect(approval.approved?).to be(true)
+      expect(approval).to be_completed
     end
 
     it "doesn't allow a token to be reused" do
@@ -294,23 +292,23 @@ describe ProposalsController do
       token = create(:api_token, step: approval)
       token.use!
 
-      get :approve, id: proposal.id, cch: token.access_token
+      get :complete, id: proposal.id, cch: token.access_token
 
       expect(flash[:alert]).to include("Please sign in")
     end
 
-    it "won't allow the approval to be approved twice through the web ui" do
+    it "won't allow the approval to be completed twice through the web ui" do
       proposal = create(:proposal, :with_approver)
       login_as(proposal.approvers.first)
 
-      post :approve, id: proposal.id
+      post :complete, id: proposal.id
 
-      expect(proposal.reload.approved?).to be true
+      expect(proposal.reload).to be_completed
       expect(flash[:success]).not_to be_nil
       expect(flash[:alert]).to be_nil
 
       flash.clear
-      post :approve, id: proposal.id
+      post :complete, id: proposal.id
 
       expect(response).to redirect_to(proposal_path(proposal))
       expect(flash[:error]).to eq "A response has already been logged for this proposal"
@@ -324,14 +322,14 @@ describe ProposalsController do
       mailbox.add_delegate(delegate2)
       login_as(delegate1)
 
-      post :approve, id: proposal.id
+      post :complete, id: proposal.id
 
       expect(flash[:success]).not_to be_nil
       expect(flash[:alert]).to be_nil
 
       flash.clear
       login_as(delegate2)
-      post :approve, id: proposal.id
+      post :complete, id: proposal.id
 
       expect(response).to redirect_to(proposal_path(proposal))
       expect(flash[:error]).to eq "A response has already been logged for this proposal"
@@ -342,14 +340,14 @@ describe ProposalsController do
       mailbox = proposal.approvers.second
       delegate = create(:user)
       mailbox.add_delegate(delegate)
-      proposal.individual_steps.first.approve!
+      proposal.individual_steps.first.complete!
       login_as(delegate)
 
-      post :approve, id: proposal.id
+      post :complete, id: proposal.id
 
       expect(flash[:success]).not_to be_nil
       expect(flash[:alert]).to be_nil
-      expect(proposal.reload.approved?).to be true
+      expect(proposal.reload).to be_completed
     end
   end
 end

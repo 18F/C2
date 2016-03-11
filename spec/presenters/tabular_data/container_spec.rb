@@ -68,16 +68,16 @@ describe TabularData::Container do
   describe "#alter_query" do
     it "allows the query to be modified" do
       pending_proposal = create(:proposal)
-      approved = create(:proposal, status: "approved")
+      completed = create(:proposal, status: "completed")
       container = TabularData::Container.new(:name, engine: "Proposal")
 
       expect(container.rows).to include(pending_proposal)
-      expect(container.rows).to include(approved)
+      expect(container.rows).to include(completed)
 
       new_container = container.alter_query { |p| p.closed }
 
       expect(new_container.rows).not_to include(pending_proposal)
-      expect(new_container.rows).to include(approved)
+      expect(new_container.rows).to include(completed)
     end
   end
 

@@ -14,7 +14,7 @@ module Ncr
     end
 
     def edit
-      if proposal.approved?
+      if proposal.completed?
         flash.now[:warning] = "You are about to modify a fully approved request. Changes will be logged and sent to approvers, and this request may require re-approval, depending on the change."
       end
 

@@ -11,19 +11,19 @@ class Proposal < ActiveRecord::Base
 
   workflow do
     state :pending do
-      event :approve, transitions_to: :approved
+      event :complete, transitions_to: :completed
       event :restart, transitions_to: :pending
-      event :cancel, transitions_to: :cancelled
+      event :cancel, transitions_to: :canceled
     end
-    state :approved do
+    state :completed do
       event :restart, transitions_to: :pending
-      event :cancel, transitions_to: :cancelled
-      event :approve, transitions_to: :approved do
+      event :cancel, transitions_to: :canceled
+      event :complete, transitions_to: :completed do
         halt  # no need to trigger a state transition
       end
     end
-    state :cancelled do
-      event :approve, transitions_to: :cancelled do
+    state :canceled do
+      event :complete, transitions_to: :canceled do
         halt  # can't escape
       end
     end
@@ -59,8 +59,8 @@ class Proposal < ActiveRecord::Base
   statuses.each do |status|
     scope status, -> { where(status: status) }
   end
-  scope :closed, -> { where(status: ["approved", "cancelled"]) } #TODO: Backfill to change approvals in "reject" status to "cancelled" status
-  scope :cancelled, -> { where(status: "cancelled") }
+  scope :closed, -> { where(status: ["completed", "canceled"]) }
+  scope :canceled, -> { where(status: "canceled") }
 
   # elasticsearch indexing setup
   MAX_SEARCH_RESULTS = 20
@@ -116,6 +116,7 @@ class Proposal < ActiveRecord::Base
         json[:client_data] = client_data.as_indexed_json
       end
       json[:subscribers] = subscribers.map { |user| { id: user.id, name: user.display_name } }
+      json[:num_attachments] = attachments.count
     end
   end
 
@@ -136,12 +137,13 @@ class Proposal < ActiveRecord::Base
   end
 
   def existing_or_delegated_step_for(user)
-    where_clause = <<-SQL
-      user_id = :user_id
-      OR user_id IN (SELECT assigner_id FROM user_delegates WHERE assignee_id = :user_id)
-      OR user_id IN (SELECT assignee_id FROM user_delegates WHERE assigner_id = :user_id)
-    SQL
+    where_clause = sql_for_step_user_or_delegate
     steps.where(where_clause, user_id: user.id).first
+  end
+
+  def existing_or_delegated_actionable_step_for(user)
+    where_clause = "(#{sql_for_step_user_or_delegate}) AND status = :actionable"
+    steps.where(where_clause, user_id: user.id, actionable: :actionable).first
   end
 
   def delegates
@@ -174,9 +176,9 @@ class Proposal < ActiveRecord::Base
   end
 
   def reset_status
-    unless cancelled?
-      if root_step.nil? || root_step.approved?
-        update(status: "approved")
+    unless canceled?
+      if root_step.nil? || root_step.completed?
+        update(status: "completed")
       else
         update(status: "pending")
       end
@@ -255,7 +257,7 @@ class Proposal < ActiveRecord::Base
     Dispatcher.deliver_new_proposal_emails(self)
   end
 
-  # Returns True if the user is an "active" approver and has acted on the proposal
+  # Returns True if the user is an "active" step user and has acted on the proposal
   def is_active_step_user?(user)
     individual_steps.non_pending.exists?(user: user)
   end
@@ -281,5 +283,13 @@ class Proposal < ActiveRecord::Base
       reason: reason,
       observer_adder: adder
     ).run
+  end
+
+  def sql_for_step_user_or_delegate
+    <<-SQL
+      user_id = :user_id
+      OR user_id IN (SELECT assigner_id FROM user_delegates WHERE assignee_id = :user_id)
+      OR user_id IN (SELECT assignee_id FROM user_delegates WHERE assigner_id = :user_id)
+    SQL
   end
 end

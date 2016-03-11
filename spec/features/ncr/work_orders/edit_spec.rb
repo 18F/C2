@@ -6,6 +6,6 @@ feature "Editing NCR work order" do
 
     visit "/ncr/work_orders/#{work_order.id}/edit"
     expect(current_path).to eq("/ncr/work_orders/new")
-    expect(page).to have_content("You must be the requester, approver, or observer")
+    expect(page).to have_content(I18n.t("errors.policies.ncr.work_order.can_edit"))
   end
 end

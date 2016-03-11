@@ -11,14 +11,14 @@ describe LinearDispatcher do
 
     it "returns nil if all are non-pending" do
       proposal = create(:proposal, :with_approver)
-      proposal.individual_steps.first.approve!
+      proposal.individual_steps.first.complete!
       expect(dispatcher.next_pending_approval(proposal)).to eq(nil)
     end
 
     it "skips approved approvals" do
       proposal = create(:proposal, :with_serial_approvers)
       last_approval = proposal.individual_steps.last
-      proposal.individual_steps.first.approve!
+      proposal.individual_steps.first.complete!
 
       expect(dispatcher.next_pending_approval(proposal)).to eq(last_approval)
     end
@@ -53,7 +53,7 @@ describe LinearDispatcher do
     it "sends to the requester and the next approver" do
       proposal = create(:proposal, :with_serial_approvers)
       approval = proposal.individual_steps.first
-      approval.approve!   # calls on_approval_approved
+      approval.complete!   # calls on_approval_approved
       expect(email_recipients).to eq([
         proposal.approvers.second.email_address,
         proposal.requester.email_address
