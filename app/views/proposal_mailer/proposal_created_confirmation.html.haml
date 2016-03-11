@@ -1,32 +1,31 @@
-=@proposal.to_json
-
 - content_for :header_icon, "emails/icon-page-circle.png"
 - top_head = t("mailer.proposal_mailer.proposal_created_confirmation.header_html", 
               proposal_name: @proposal.name,
-              amount: @proposal.to_json)
+              amount: number_to_currency(@proposal.client_data.amount))
 - cta_subheader = t("mailer.proposal_mailer.proposal_created_confirmation.subheader")
 - proposal_link_text = t("mailer.proposal_mailer.proposal_created_confirmation.cta")
 - cta_subheader_foot = t("mailer.proposal_mailer.proposal_created_confirmation.approver_subheader")
 
 %table.container
   = render partial: "mail_shared/email_header/hero_text", 
-    locals: { text: top_head}
+    locals: { text: top_head }
 
   = render partial: "mail_shared/call_to_action/subheader", 
-    locals: { subheader: cta_subheader}
+    locals: { subheader: cta_subheader,
+              vertical: "no-top-margin" }
   
   = render partial: "mail_shared/call_to_action/button", 
     locals: { link_path: proposal_url(@proposal), 
-              link_text: proposal_link_text}
+              link_text: proposal_link_text }
   
   = render partial: "mail_shared/call_to_action/subheader", 
-    locals: { subheader: ''}
+    locals: { subheader: '' }
 
 %hr/
 / Start Container
 %table.container
   = render partial: "mail_shared/call_to_action/subheader", 
-    locals: { subheader: cta_subheader_foot}
+    locals: { subheader: cta_subheader_foot }
 
   = render partial: "mail_shared/approval/chain", 
     locals: { proposal: @proposal }
