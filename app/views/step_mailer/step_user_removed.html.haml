@@ -9,17 +9,19 @@
     %td.center{align: "center", valign: "top"}
       %center
         = render partial: "mail_shared/email_header/topbar"
-        = render partial: "mail_shared/email_header/icon", locals: { icon: header_icon}
+        = render partial: "mail_shared/email_header/icon",
+          locals: { icon: header_icon }
 
         / Start Container
         %table.container
-          = render partial: "mail_shared/email_header/hero_text", locals: { text: top_head}
+          = render partial: "mail_shared/email_header/hero_text",
+            locals: { text: top_head }
 
-          = render partial: "mail_shared/call_to_action/subheader", locals: { subheader: cta_subheader}
-          
-          = render partial: "mail_shared/call_to_action/button", locals: { link_path: proposal_url(@proposal), 
-            link_text: proposal_link_text}
-          
-          = render partial: "mail_shared/call_to_action/subheader", locals: { subheader: ''}
+          = render partial: "mail_shared/call_to_action/subheader",
+            locals: { subheader: cta_subheader }
 
-          = render partial: "mail_shared/footer_foundation"
+          = render partial: "mail_shared/call_to_action/button",
+            locals: { link_path: proposal_url(@proposal), link_text: proposal_link_text }
+
+          = render partial: "mail_shared/call_to_action/subheader",
+            locals: { subheader: "" }
