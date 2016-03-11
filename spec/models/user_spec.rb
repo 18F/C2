@@ -6,6 +6,7 @@ describe User do
      it { should have_many(:user_roles).dependent(:destroy) }
      it { should have_many(:proposals).dependent(:destroy) }
      it { should have_many(:reports) }
+     it { should have_many(:scheduled_reports) }
   end
 
   let(:user) { build(:user) }
@@ -42,6 +43,12 @@ describe User do
     it 'downcases and strips the email' do
       user = User.for_email('   miXedCaSe@eXaMple.com')
       expect(user.email_address).to eq('mixedcase@example.com')
+    end
+
+    it "raises error when email is empty" do
+      expect {
+        user = User.for_email("")
+      }.to raise_error EmailRequired
     end
   end
 

@@ -3,6 +3,8 @@
 # exceptions into "false". It also provides a short hand for raising a
 # specific exception message based on a guard condition
 module ExceptionPolicy
+  include ActionView::Helpers::TranslationHelper
+
   def initialize(user, record)
     @user = user
     @record = record

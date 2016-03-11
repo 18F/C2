@@ -32,8 +32,10 @@ C2::Application.routes.draw do
   resources :proposals, only: [:index, :show] do
     member do
       get "approve"   # this route has special protection to prevent the confused deputy problem
-                      # if you are adding a new controller which performs an action, use post instead
+      get "complete"  # if you are adding a new controller which performs an action, use post instead
+      post "complete"
       post "approve"
+
       get "cancel_form"
       post "cancel"
       get "history"
@@ -50,7 +52,12 @@ C2::Application.routes.draw do
     resources :observations, only: [:create, :destroy]
   end
 
-  resources :reports, only: [:index, :show, :create, :destroy]
+  resources :reports, only: [:index, :show, :create, :destroy] do
+    member do
+      post :preview
+    end
+  end
+  resources :scheduled_reports, only: [:create, :update]
 
   namespace :ncr do
     resources :work_orders, except: [:index, :destroy]

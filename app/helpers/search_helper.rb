@@ -1,11 +1,19 @@
 module SearchHelper
   def proposal_status_options(selected_value)
-    options_for_select([
+    options_for_select(proposal_status_option_values, selected_value)
+  end
+
+  def proposal_status_value(value_key)
+    proposal_status_option_values.find { |pair| pair[1] == value_key }[0]
+  end
+
+  def proposal_status_option_values
+    [
       ["All Requests", "*"],
-      ["Approved Requests", "approved"],
+      ["Completed Requests", "completed"],
       ["In progress Requests", "pending"],
-      ["Cancelled Requests", "cancelled"]
-    ], selected_value)
+      ["Cancelled Requests", "canceled"]
+    ]
   end
 
   def proposal_expense_type_options(client_model, selected_value)

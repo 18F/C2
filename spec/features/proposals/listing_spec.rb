@@ -44,11 +44,11 @@ describe "Listing Page" do
 
     it "should list the proposal in the proper section" do
       proposal = Proposal.last
-      proposal.update_attribute(:status, 'approved')
+      proposal.update(status: "completed")
       visit '/proposals'
       expect(page).not_to have_content("Cancelled Purchase Requests")
 
-      proposal.update_attribute(:status, 'cancelled')
+      proposal.update_attribute(:status, 'canceled')
       visit '/proposals'
       expect(page).to have_content("No recently completed purchase requests")
     end

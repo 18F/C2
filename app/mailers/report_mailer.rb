@@ -26,6 +26,17 @@ class ReportMailer < ApplicationMailer
     )
   end
 
+  def scheduled_report(name, report, user)
+    attachments["#{name}.csv"] = build_csv_report(report)
+
+    mail(
+      to: user.email_address,
+      subject: "[C2 Report] #{name}",
+      body: "Your scheduled report is attached to this email.",
+      from: sender_email
+    )
+  end
+
   private
 
   def proposals_query(expense_type)
@@ -40,7 +51,7 @@ class ReportMailer < ApplicationMailer
 
       "pending-at-approving-official" => Ncr::Reporter.proposals_pending_approving_official,
       "pending-at-budget" => Ncr::Reporter.proposals_pending_budget,
-      "pending-at-tier-one-approval" => Ncr::Reporter.proposals_tier_one_pending,
+      "pending-at-tier-one-approval" => Ncr::Reporter.proposals_tier_one_pending
     }
   end
 
@@ -57,5 +68,23 @@ class ReportMailer < ApplicationMailer
 
   def date
     Time.now.utc.strftime("%a %m/%d/%y (%Z)")
+  end
+
+  def build_csv_report(report)
+    proposal_data = report.run
+    user = report.user
+    csv_header(user) + csv_body(proposal_data)
+  end
+
+  def csv_header(user)
+    CSV.generate_line([ProposalDecorator.csv_headers, user.client_model.csv_headers].flatten).chomp
+  end
+
+  def csv_body(proposal_data)
+    csv_buf = ""
+    proposal_data.rows.each do |proposal|
+      csv_buf += CSV.generate_line(proposal.decorate.as_csv).chomp
+    end
+    csv_buf
   end
 end

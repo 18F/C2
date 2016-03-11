@@ -30,7 +30,7 @@ describe Mailer do
     end
 
     it "uses the approval URL" do
-      expect(approval_uri.path).to eq("/proposals/#{proposal.id}/approve")
+      expect(approval_uri.path).to eq("/proposals/#{proposal.id}/complete")
       expect(approval_uri.query_values).to eq(
         'cch' => token.access_token,
         'version' => proposal.version.to_s
@@ -135,7 +135,7 @@ describe Mailer do
     let(:mail) { Mailer.approval_reply_received_email(approval) }
 
     before do
-      approval.approve!
+      approval.complete!
     end
 
     it_behaves_like "a proposal email"
@@ -163,17 +163,17 @@ describe Mailer do
       it 'displays when all requests have been approved' do
         final_approval = proposal.individual_steps.last
         final_approval.proposal   # create a dirty cache
-        final_approval.approve!
+        final_approval.complete!
         mail = Mailer.approval_reply_received_email(final_approval)
         expect(mail.body.encoded).to include(I18n.t("mailer.approval_reply_received_email.approved"))
       end
 
       it 'displays purchase-step-specific language when final step is approved' do
         proposal = create(:proposal, :with_approval_and_purchase, client_slug: "test")
-        proposal.individual_steps.first.approve!
+        proposal.individual_steps.first.complete!
         final_step = proposal.individual_steps.last
         final_step.proposal   # create a dirty cache
-        final_step.approve!
+        final_step.complete!
         mail = Mailer.approval_reply_received_email(final_step)
         expect(mail.body.encoded).to include(I18n.t("mailer.approval_reply_received_email.purchased"))
       end

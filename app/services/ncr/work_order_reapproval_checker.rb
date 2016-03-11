@@ -7,7 +7,7 @@ module Ncr
     end
 
     def requires_budget_reapproval?
-      work_order.approved? &&
+      work_order.completed? &&
         work_order.requires_approval? &&
         !budget_approver? &&
         (amount_increased? || protected_fields_changed?)

@@ -26,6 +26,7 @@ class User < ActiveRecord::Base
   has_many :completed_steps, class_name: "Step", foreign_key: "completer"
 
   has_many :reports
+  has_many :scheduled_reports
 
   def self.active
     where(active: true)
@@ -40,6 +41,7 @@ class User < ActiveRecord::Base
   end
 
   def self.for_email(email)
+    raise(EmailRequired, "email missing") unless email.present?
     User.find_or_create_by(email_address: email.strip.downcase)
   end
 
@@ -55,6 +57,9 @@ class User < ActiveRecord::Base
 
   def self.from_oauth_hash(auth_hash)
     user_data = auth_hash.extra.raw_info.to_hash
+    unless user_data["email"].present?
+      raise EmailRequired, "no email in oauth hash"
+    end
     user = for_email(user_data["email"])
     user.update_names_if_present(user_data)
     user

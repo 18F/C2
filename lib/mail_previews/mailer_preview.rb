@@ -38,6 +38,6 @@ class MailerPreview < ActionMailer::Preview
   end
 
   def received_approval
-    Step.approved.last
+    Step.completed.last
   end
 end

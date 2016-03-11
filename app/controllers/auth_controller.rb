@@ -5,10 +5,12 @@ class AuthController < ApplicationController
   def oauth_callback
     auth = request.env["omniauth.auth"]
     return_to_path = fetch_return_to_path
-    do_user_auth(auth)
-    session[:token] = auth.credentials.token
-    flash[:success] = "You successfully signed in"
-    redirect_to return_to_path || proposals_path
+    begin
+      try_user_auth(auth, return_to_path)
+    rescue EmailRequired => error
+      Rails.logger.error(error)
+      render :failure, status: 200
+    end
   end
 
   def failure
@@ -32,5 +34,12 @@ class AuthController < ApplicationController
     sign_out
     user = User.from_oauth_hash(auth)
     sign_in(user)
+  end
+
+  def try_user_auth(auth, return_to_path)
+    do_user_auth(auth)
+    session[:token] = auth.credentials.token
+    flash[:success] = "You successfully signed in"
+    redirect_to return_to_path || proposals_path
   end
 end

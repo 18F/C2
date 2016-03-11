@@ -5,7 +5,7 @@ feature "Proposals index" do
     user = create(:user)
     _reviewable_proposals = create_list(:proposal, 2, :with_approver, observer: user)
     _pending_proposals = create_list(:proposal, 2, :with_approver, approver_user: user)
-    _cancelled = create_list(:proposal, 2, status: "cancelled", observer: user)
+    _canceled = create_list(:proposal, 2, status: "canceled", observer: user)
     @page = ProposalIndexPage.new
 
     login_as(user)
@@ -13,23 +13,23 @@ feature "Proposals index" do
 
     expect(@page.needing_review).to have_content('Please review')
     expect(@page.pending).to have_content('Waiting for review')
-    expect(@page.cancelled).to have_content('Cancelled')
+    expect(@page.canceled).to have_content('Cancelled')
   end
 
   scenario "defaults to sorted by created date" do
     user = create(:user)
     proposals = create_list(:proposal, 2, :with_approver, approver_user: user)
-    cancelled = create_list(:proposal, 2, :with_approver, status: "cancelled", approver_user: user)
+    canceled = create_list(:proposal, 2, :with_approver, status: "canceled", approver_user: user)
     @page = ProposalIndexPage.new
 
     login_as(user)
     @page.load
 
     expect(@page.needing_review.desc_column_header).to have_content "Submitted"
-    expect(@page.cancelled.desc_column_header).to have_content "Submitted"
+    expect(@page.canceled.desc_column_header).to have_content "Submitted"
 
     expect_order(@page.pending, proposals.reverse)
-    expect_order(@page.cancelled, cancelled.reverse)
+    expect_order(@page.canceled, canceled.reverse)
   end
 
   feature "The 'needing review' section" do
@@ -79,7 +79,7 @@ feature "Proposals index" do
       scenario "is correct for the user" do
         user = create(:user)
         purchase_proposal = create_proposal_with_approvers(create(:user), user)
-        purchase_proposal.individual_steps.first.approve!
+        purchase_proposal.individual_steps.first.complete!
         @page = ProposalIndexPage.new
 
         login_as(user)
@@ -110,7 +110,7 @@ feature "Proposals index" do
         user = create(:user)
         purchaser = create(:user)
         purchase_proposal = create_proposal_for_requester_with_approvers(user, create(:user), purchaser)
-        purchase_proposal.individual_steps.first.approve!
+        purchase_proposal.individual_steps.first.complete!
         @page = ProposalIndexPage.new
 
         login_as(user)

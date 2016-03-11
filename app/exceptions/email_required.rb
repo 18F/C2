@@ -1,0 +1,2 @@
+class EmailRequired < Exception
+end

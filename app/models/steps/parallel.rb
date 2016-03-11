@@ -1,5 +1,3 @@
-# A node in an approval chain that allows its child approvals to come in in
-# any order
 module Steps
   class Parallel < Step
     validates :min_children_needed, numericality: { allow_blank: true }
@@ -18,23 +16,25 @@ module Steps
         event :initialize, transitions_to: :actionable do
           halt  # prevent state transition
         end
-        event :child_approved, transitions_to: :approved do |_|
-          halt unless children_approved?
+
+        event :child_completed, transitions_to: :completed do |_|
+          halt unless children_completed?
         end
-        event :force_approve, transitions_to: :approved
+
+        event :force_complete, transitions_to: :completed
         event :restart, transitions_to: :pending
       end
 
-      state :approved do
-        on_entry { notify_parent_approved }
+      state :completed do
+        on_entry { notify_parent_completed }
 
-        event :initialize, transitions_to: :approved do
-          notify_parent_approved
+        event :initialize, transitions_to: :completed do
+          notify_parent_completed
           halt  # prevent state transition
         end
 
-        event :child_approved, transitions_to: :approved do |_|
-          halt  # additional approvals do nothing
+        event :child_completed, transitions_to: :completed do |_|
+          halt  # additional steps do nothing
         end
 
         event :restart, transitions_to: :pending
@@ -42,19 +42,19 @@ module Steps
     end
 
     def on_actionable_entry(_, _)
-      if child_approvals.any?
-        child_approvals.each(&:initialize!)
+      if child_steps.any?
+        child_steps.each(&:initialize!)
       else
-        force_approve!
+        force_complete!
       end
     end
 
     # overrides to allow for ratios. For example, if there are three child
-    # approvals, and min_children_needed is set to 2, only 2 of the 3 must
-    # approve. When min_children_needed is 1, we create an "OR" situation
-    def children_approved?
-      needed = min_children_needed || child_approvals.count
-      child_approvals.approved.count >= needed
+    # stpes, and min_children_needed is set to 2, only 2 of the 3 must
+    # complete. When min_children_needed is 1, we create an "OR" situation
+    def children_completed?
+      needed = min_children_needed || child_steps.count
+      child_steps.completed.count >= needed
     end
   end
 end

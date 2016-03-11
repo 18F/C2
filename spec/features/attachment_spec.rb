@@ -41,18 +41,18 @@ describe "Add attachments" do
     login_as(proposal.requester)
 
     visit proposal_path(proposal)
-    page.attach_file('attachment[file]', "#{Rails.root}/app/assets/images/bg_approved_status.gif")
+    page.attach_file('attachment[file]', "#{Rails.root}/app/assets/images/bg_completed_status.gif")
     click_on "Attach a File"
 
     expect(proposal.attachments.length).to eq 1
-    expect(proposal.attachments.last.file_file_name).to eq "bg_approved_status.gif"
+    expect(proposal.attachments.last.file_file_name).to eq "bg_completed_status.gif"
   end
 
   it "emails everyone involved in the proposal" do
     expect(Dispatcher).to receive(:deliver_attachment_emails)
     proposal.add_observer(create(:user))
     visit proposal_path(proposal)
-    page.attach_file('attachment[file]', "#{Rails.root}/app/assets/images/bg_approved_status.gif")
+    page.attach_file('attachment[file]', "#{Rails.root}/app/assets/images/bg_completed_status.gif")
     click_on "Attach a File"
   end
 end
