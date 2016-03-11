@@ -1,7 +1,7 @@
 - content_for :header_icon, "emails/icon-page-circle.png"
 - top_head = t("mailer.proposal_mailer.proposal_created_confirmation.header_html", 
               proposal_name: @proposal.name,
-              amount: number_to_currency(@proposal.client_data.amount))
+              amount: number_to_currency(@proposal.client_data.total_price))
 - cta_subheader = t("mailer.proposal_mailer.proposal_created_confirmation.subheader")
 - proposal_link_text = t("mailer.proposal_mailer.proposal_created_confirmation.cta")
 - cta_subheader_foot = t("mailer.proposal_mailer.proposal_created_confirmation.approver_subheader")

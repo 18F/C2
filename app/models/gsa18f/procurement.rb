@@ -64,10 +64,6 @@ module Gsa18f
       (cost_per_unit * quantity) || 0.0
     end
 
-    def amount
-      total_price
-    end
-
     # may be replaced with paper-trail or similar at some point
     def version
       updated_at.to_i
