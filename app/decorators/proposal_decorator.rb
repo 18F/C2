@@ -1,6 +1,10 @@
 class ProposalDecorator < Draper::Decorator
   delegate_all
 
+  def total_price
+    client_data.try(:total_price) || ""
+  end
+
   def number_approved
     object.individual_steps.completed.count
   end

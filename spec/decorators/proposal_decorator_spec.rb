@@ -1,4 +1,22 @@
 describe ProposalDecorator do
+  describe "#total_price" do
+    context "client data present" do
+      it "returns total price from client data" do
+        test_client_data = create(:test_client_request)
+        proposal = create(:proposal, client_data: test_client_data)
+
+        expect(proposal.decorate.total_price).to eq test_client_data.total_price
+      end
+    end
+
+    context "no client data" do
+      it "returns an empty string" do
+        proposal = create(:proposal)
+
+        expect(proposal.decorate.total_price).to eq ""
+      end
+    end
+  end
   describe "#waiting_text_for_status_in_table" do
     context "when the proposal has an actionable step" do
       it "returns the correct text" do
