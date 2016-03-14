@@ -7,4 +7,5 @@
     link_text: t("mailer.view_or_modify_request_cta") }
 - else
   = render partial: "mail_shared/call_to_action/button",
-    locals: { link_path: proposal_url(proposal), link_text: t("mailer.view_request_cta")}
+    locals: { link_path: proposal_url(proposal),
+    link_text: t("mailer.view_request_cta") }

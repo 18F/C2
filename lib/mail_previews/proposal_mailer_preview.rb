@@ -26,7 +26,7 @@ class ProposalMailerPreview < ActionMailer::Preview
   private
 
   def proposal
-    Proposal.last
+    step.proposal
   end
 
   def step
