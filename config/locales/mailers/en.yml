@@ -90,13 +90,12 @@ en:
         header: "A purchase request awaiting your approval has been modified."
         subheader: "Please review the request and the changes."
       proposal_updated_needs_re_review:
-        panel_preface: "Here are the updated request details:"
         modifier_action: "Modified by %{user_name}"
         header: "%{proposal_name} has been updated by %{modifier_name}."
         header_html: "<span class='name-color'>%{proposal_name}</span> has been updated by <span class='name-color'>%{modifier_name}</span>."
         subheader:
-          "This purchase request has been modified and needs to be reapproved. C2 is
-          routing it for re-approval now. Please review the changes."
+          "Because it was already completed, and needs to be reapproved, C2 is
+          routing it for review again."
     cancelation_mailer:
       cancelation_confirmation:
         header: "You canceled this purchase request."

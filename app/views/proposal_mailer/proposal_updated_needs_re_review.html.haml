@@ -3,14 +3,12 @@
               modifier_name: @modifier.full_name,
               proposal_name: @proposal.name)
 - cta_subheader = t("mailer.proposal_mailer.proposal_updated_needs_re_review.subheader")
-- panel_preface = t("mailer.proposal_mailer.proposal_updated_needs_re_review.panel_preface")
-- proposal_link_text = t("mailer.proposal_mailer.proposal_updated_needs_re_review.cta")
 - attachment_icon = "emails/icon-clipped_page.png"
 - panel_icon = "emails/button-circle.png"
 - panel_action = t("mailer.proposal_mailer.proposal_updated_needs_re_review.modifier_action",
-                  user_name: @modifier.full_name)
+  user_name: @modifier.full_name)
 - panel_action_date = time_and_date(@proposal.updated_at)
-- cta_subheader_foot = t("mailer.proposal_mailer.proposal_updated_needs_re_review.approver_subheader")
+- cta_subheader_foot = t("mailer.proposal_status_html", proposal_status: @proposal.status)
 
 %table.container
   = render partial: "mail_shared/email_header/hero_text",
@@ -33,19 +31,22 @@
   = render partial: "mail_shared/call_to_action/subheader",
     locals: { subheader: "" }
 
-  = render partial: "mail_shared/call_to_action/button",
-    locals: { link_path: proposal_url(@proposal),
-              link_text: proposal_link_text }
-
   = render partial: "mail_shared/call_to_action/subheader",
     locals: { subheader: "", height: "half" }
 
 %hr/
+
 / Start Container
 %table.container.contain-attributes
 
   = render partial: "mail_shared/call_to_action/subheader",
-    locals: { subheader: panel_preface }
+    locals: { subheader: cta_subheader_foot }
+
+  = render partial: "mail_shared/approval/chain",
+    locals: { proposal: @proposal }
+
+  = render partial: "mail_shared/call_to_action/subheader",
+    locals: { subheader: "" }
 
   = render partial: "mail_shared/panel/proposal_attributes",
     locals: { proposal: @proposal }
@@ -57,5 +58,9 @@
   = render partial: "mail_shared/call_to_action/subheader",
     locals: { subheader: "" }
 
-  = render(partial: "mail_shared/call_to_action/email_reply",
-    locals: { step: @step, show_step_actions: false, proposal: @proposal })
+  = render partial: "mail_shared/call_to_action/subheader",
+    locals: { subheader: t("mailer.reply_to_comment") }
+
+  = render partial: "mail_shared/call_to_action/button",
+    locals: { link_path: proposal_url(@proposal),
+    link_text: t("mailer.view_or_modify_request_cta") }
