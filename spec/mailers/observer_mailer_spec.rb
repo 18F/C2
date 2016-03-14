@@ -50,7 +50,7 @@ describe ObserverMailer do
       proposal = create(:proposal, :with_observer)
       observation = proposal.observations.first
 
-      mail = ObserverMailer.observer_removed_confirmation(observation)
+      mail = ObserverMailer.observer_removed_notification(observation)
 
       observer = observation.user
       expect(mail.to).to eq([observer.email_address])

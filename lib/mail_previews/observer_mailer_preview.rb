@@ -3,8 +3,8 @@ class ObserverMailerPreview < ActionMailer::Preview
     ObserverMailer.observer_added_notification(observation, reason)
   end
 
-  def observer_removed_confirmation
-    ObserverMailer.observer_removed_confirmation(observation)
+  def observer_removed_notification
+    ObserverMailer.observer_removed_notification(observation)
   end
 
   def proposal_complete

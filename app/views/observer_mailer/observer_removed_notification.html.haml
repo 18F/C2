@@ -1,6 +1,7 @@
 - content_for :header_icon, "emails/icon-pencil-circle.png"
-- top_head = t("mailer.observer_mailer.observer_removed_confirmation.header")
-- cta_subheader = t("mailer.observer_mailer.observer_removed_confirmation.body")
+- top_head = t("mailer.observer_mailer.observer_removed_notification.header")
+- cta_subheader = t("mailer.observer_mailer.observer_removed_notification.body_html",
+    public_id: @proposal.public_id, full_name: @proposal.requester.full_name)
 
 %table.container
   = render partial: "mail_shared/email_header/hero_text",

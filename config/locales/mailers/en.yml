@@ -128,8 +128,11 @@ en:
     observer_mailer:
       observer_added_notification:
         header: "You have been added as a subscriber to this request"
-      observer_removed_confirmation:
+      observer_removed_notification:
         header: "You have been been removed as an observer for this purchase request."
-        body: "You don't need to take any additional action."
+        body_html:
+         "No further action is required on <strong>%{public_id}</strong>
+         submitted by <strong>%{full_name}</strong>"
+        body: "No further action is required on %{public_id} submitted by %{full_name}"
       proposal_complete:
         header: "This request has been completed."
