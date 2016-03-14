@@ -1,8 +1,8 @@
-- content_for :header_icon, "emails/icon-thumbs-up-circle.png"
+- content_for :header_icon, "emails/icon-check-green-circle.png"
 - top_head = t("mailer.proposal_mailer.proposal_complete.header")
 - cta_subheader = t("mailer.proposal_mailer.proposal_complete.subheader")
-- proposal_link_text = t("mailer.proposal_mailer.proposal_complete.cta")
-- cta_subheader_foot = t("mailer.proposal_mailer.proposal_complete.subheader_foot")
+- proposal_link_text = t("mailer.view_request_cta")
+- cta_subheader_foot = t("mailer.proposal_status_html", proposal_status: @proposal.status)
 
 %table.container
   = render partial: "mail_shared/email_header/hero_text",
