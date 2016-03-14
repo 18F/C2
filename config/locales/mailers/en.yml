@@ -69,8 +69,8 @@ en:
         subheader: "Please confirm the final amount paid. If it has changed since approval, update the request in C2."
         subheader_foot: "As a reminder, here's what was approved:"
       proposal_created_confirmation:
-        header_html: "Your new request <span class='name-color'>%{proposal_name}</span> has been submitted!"
-        header: "Your new request %{proposal_name} has been submitted!"
+        header_html: "Your new request <span class='name-color'>%{proposal_name}</span> for <span class='name-color'>%{amount}</span> has been submitted!"
+        header: "Your new request %{proposal_name} for ${amount} has been submitted!"
         approver_subheader:
           "Based on what you submitted, here's how we're routing your request:"
         subheader:
