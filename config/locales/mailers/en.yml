@@ -12,6 +12,8 @@ en:
       "Have <a href='%{feedback_url}'>feedback</a>? We'd love to hear from you."
     footer:
       "Have feedback? We'd love to hear from you at %{feedback_url}"
+    proposal_status_html: "<strong>Request Status: <i>%{proposal_status}</i></strong>"
+    proposal_status: "Request Status: %{proposal_status}"
     last_attachment_detail:
       one:
         "<strong>1 Attachment</strong> <em>Uploaded by
@@ -78,10 +80,8 @@ en:
           when everyone's signed off or if anything changes."
         cta: "View or update request details"
       proposal_complete:
-        header: "Request completed"
-        subheader_foot: "As a reminder, here's what was approved:"
-        subheader: "All of your request's steps have been completed"
-        cta: "View request details"
+        header: "Request completed!"
+        subheader: "Everyone has signed off, and you can move forward."
       proposal_updated_no_action_required:
         panel_preface: "Here are the updated request details:"
         header: "This request was modified, but no action is required"
