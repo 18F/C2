@@ -1,5 +1,7 @@
 <%= t("mailer.observer_mailer.proposal_complete.header")%>
 
+<%= t("mailer.proposal_status", proposal_status: @proposal.status) %>
+
 <%= t("mailer.view_request_cta")%>
 <%= proposal_url(@proposal) %>
 
