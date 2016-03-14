@@ -1,20 +1,18 @@
 - content_for :header_icon, "emails/icon-pencil-circle.png"
 - top_head = t("mailer.proposal_mailer.proposal_updated_no_action_required.header")
-- cta_subheader = t("mailer.proposal_mailer.proposal_updated_no_action_required.subheader",
-  modifier_name: @modifier.full_name, proposal_name: @proposal.name)
-- panel_preface = t("mailer.proposal_mailer.proposal_updated_no_action_required.panel_preface")
-- proposal_link_text = t("mailer.proposal_mailer.proposal_updated_no_action_required.cta")
+- cta_subheader = t("mailer.proposal_mailer.proposal_updated_no_action_required.subheader_html",
+  public_id: @proposal.public_id,
+  requester_name: @proposal.requester.full_name,
+  proposal_status: @proposal.status)
+- proposal_link_text = t("mailer.view_request_cta")
+- panel_action = t("mailer.modifier_action", full_name: @modifier.full_name)
 - panel_icon = "emails/button-circle.png"
-- panel_action = t("mailer.proposal_mailer.proposal_updated_no_action_required.modifier_action",
-  user_name: @modifier.full_name)
 - panel_action_date = time_and_date(@proposal.updated_at)
-- cta_subheader_foot = t("mailer.proposal_mailer.proposal_updated_no_action_required.approver_subheader")
 
 %table.container
   = render partial: "mail_shared/email_header/hero_text",
     locals: { text: top_head, style: "no-margin-wrapper" }
 
-%hr
 %table.container
 
   = render partial: "mail_shared/call_to_action/subheader",
@@ -32,29 +30,10 @@
   = render partial: "mail_shared/call_to_action/subheader",
     locals: { subheader: "" }
 
+  = render partial: "mail_shared/call_to_action/subheader",
+    locals: { subheader: t("mailer.reply_to_comment") }
+
   = render partial: "mail_shared/call_to_action/button",
     locals: { link_path: proposal_url(@proposal),
               link_text: proposal_link_text }
 
-  = render partial: "mail_shared/call_to_action/subheader",
-    locals: { subheader: "", height: "half" }
-
-%hr/
-/ Start Container
-%table.container.contain-attributes
-
-  = render partial: "mail_shared/call_to_action/subheader",
-    locals: { subheader: panel_preface }
-
-  = render partial: "mail_shared/panel/proposal_attributes",
-    locals: { proposal: @proposal }
-
-  = render partial: "mail_shared/panel/vertical_buffer"
-
-%table.container
-
-  = render partial: "mail_shared/call_to_action/subheader",
-    locals: { subheader: "" }
-
-  = render(partial: "mail_shared/call_to_action/email_reply",
-    locals: { step: @step, show_step_actions: false, proposal: @proposal })

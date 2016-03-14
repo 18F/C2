@@ -1,7 +1,10 @@
 <%= t("mailer.proposal_mailer.proposal_updated_no_action_required.header") %>
 <%= t("mailer.proposal_mailer.proposal_updated_no_action_required.subheader",
-  modifier_name: @modifier.full_name,
-  proposal_name: @proposal.name) %>
+  public_id: @proposal.public_id,
+  requester_name: @proposal.requester.full_name,
+  proposal_status: @proposal.status) %>
+
+<%= @comment.comment_text %>
 
 <%= t("mailer.view_request_cta") %>
 <%= proposal_url(@proposal) %>

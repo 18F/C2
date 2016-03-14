@@ -1,6 +1,7 @@
 en:
   mailer:
     add_comment_cta: "Add comment"
+    modifier_action: "Modified by %{full_name}"
     reason: " with given reason '%{reason}'"
     reply_to_comment:
       "You can send a comment to everyone in this request by replying to this email"
@@ -81,15 +82,18 @@ en:
         subheader: "Everyone has signed off, and you can move forward."
       proposal_updated_no_action_required:
         panel_preface: "Here are the updated request details:"
-        header: "This request was modified, but no action is required"
-        modifier_action: "Modified by %{user_name}"
-        change_result: "<strong>%{verb}</strong> %{result}"
-        subheader: "%{modifier_name} updated %{proposal_name} as follows:"
+        header: "This purchase request was modified, but no action is required."
+        subheader:
+         "%{public_id} submitted by %{requester_name} is %{proposal_status}. It
+         has been updated as follows:"
+        subheader_html:
+         "<strong>%{public_id}</strong> submitted by
+          <strong>%{requester_name}</strong> is
+         <strong>%{proposal_status}</strong>. It has been updated as follows:"
       proposal_updated_while_step_pending:
         header: "A purchase request awaiting your approval has been modified."
         subheader: "Please review the request and the changes."
       proposal_updated_needs_re_review:
-        modifier_action: "Modified by %{user_name}"
         header: "%{proposal_name} has been updated by %{modifier_name}."
         header_html: "<span class='name-color'>%{proposal_name}</span> has been updated by <span class='name-color'>%{modifier_name}</span>."
         subheader:
