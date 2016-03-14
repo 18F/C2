@@ -8,7 +8,7 @@ class Dispatcher
   end
 
   def on_observer_removed(observation)
-    ObserverMailer.observer_removed_confirmation(observation).deliver_later
+    ObserverMailer.observer_removed_notification(observation).deliver_later
   end
 
   def deliver_new_proposal_emails
