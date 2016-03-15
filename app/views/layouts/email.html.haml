@@ -2,13 +2,15 @@
 %html
   %head
     %title C2
-    %meta{content: "text/html; charset=US-ASCII", "http-equiv" => "Content-Type"}/
-    %meta{content: "width=device-width", name: "viewport"}/
-    = render "mail_shared/inlined_styles"
+    %meta{ content: "text/html; charset=US-ASCII", "http-equiv" => "Content-Type" }/
+    %meta{ content: "width=device-width", name: "viewport" }/
+    = stylesheet_link_tag "email"
+    = stylesheet_link_tag "email-fullscreen", data: {"roadie-ignore" => ""} 
+
   %body
     %table.body
       %tr
-        %td.center{align: "center", valign: "top"}
+        %td.center{ align: "center", valign: "top" }
           %center
             = render partial: "mail_shared/email_header/topbar"
 
