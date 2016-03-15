@@ -103,8 +103,10 @@ en:
         subsection: "Cancelled by %{name}."
         reason: "Reason for cancelation: %{reason}"
       cancelation_notification:
+        header_html: "This purchase request has been canceled by <strong>%{name}</strong>."
         header: "This purchase request has been canceled by %{name}."
-        subheader: "If you still need to authorize a purchase, submit a new request."
+        subsection: "Canceled by %{name}."
+        subheader: "%{public_id} was submitted by %{full_name}"
         reason: "Reason for cancelation: %{reason}"
       fiscal_cancelation_notification:
         header: "This purchase request has been canceled."
