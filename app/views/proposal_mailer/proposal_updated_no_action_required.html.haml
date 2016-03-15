@@ -1,6 +1,6 @@
 - content_for :header_icon, "emails/icon-pencil-circle.png"
 - top_head = t("mailer.proposal_mailer.proposal_updated_no_action_required.header")
-- cta_subheader = t("mailer.proposal_mailer.proposal_updated_no_action_required.subheader_html",
+- cta_subheader = t("mailer.updated_subheader_html",
   public_id: @proposal.public_id,
   requester_name: @proposal.requester.full_name,
   proposal_status: @proposal.status)

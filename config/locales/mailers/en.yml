@@ -1,5 +1,12 @@
 en:
   mailer:
+    updated_subheader:
+      "%{public_id} submitted by %{requester_name} is %{proposal_status}. It
+      has been updated as follows:"
+    updated_subheader_html:
+      "<strong>%{public_id}</strong> submitted by
+      <strong>%{requester_name}</strong> is
+      <strong>%{proposal_status}</strong>. It has been updated as follows:"
     add_comment_cta: "Add comment"
     modifier_action: "Modified by %{full_name}"
     reason: " with given reason '%{reason}'"
@@ -31,11 +38,9 @@ en:
     attachment_mailer:
       new_attachment_notification:
         header_html:
-          "Attachment added to <span class='name-color'>%{proposal_name}</span>
-           by <span class='name-color'>%{user_name}</span>"
-        header: "Attachment added to %{proposal_name} by %{user_name}"
+          "<span class='name-color'>%{user_name}</span> added an attachment."
+        header: "%{user_name} added an attachment."
         activity_description: "Attachment added by %{user_name}"
-        subheader: "You can reply or review the full conversation on the request page."
         attachment_cta: "Click to view %{attachment_name}"
     step_mailer:
       step_next_approved:
@@ -83,13 +88,6 @@ en:
       proposal_updated_no_action_required:
         panel_preface: "Here are the updated request details:"
         header: "This purchase request was modified, but no action is required."
-        subheader:
-         "%{public_id} submitted by %{requester_name} is %{proposal_status}. It
-         has been updated as follows:"
-        subheader_html:
-         "<strong>%{public_id}</strong> submitted by
-          <strong>%{requester_name}</strong> is
-         <strong>%{proposal_status}</strong>. It has been updated as follows:"
       proposal_updated_while_step_pending:
         header: "A purchase request awaiting your approval has been modified."
         subheader: "Please review the request and the changes."
