@@ -101,9 +101,10 @@ en:
           routing it for review again."
     cancelation_mailer:
       cancelation_confirmation:
-        header: "You canceled this purchase request."
-        subsection: "Cancelled by %{name}."
+        header: "You have canceled this request."
+        subsection: "Canceled by %{name}."
         reason: "Reason for cancelation: %{reason}"
+        subheader: "%{public_id} was submitted by %{full_name}"
       cancelation_notification:
         header: "This purchase request has been canceled by %{name}."
         subheader: "If you still need to authorize a purchase, submit a new request."

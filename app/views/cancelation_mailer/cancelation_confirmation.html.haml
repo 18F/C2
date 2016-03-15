@@ -2,15 +2,19 @@
 - top_head = t("mailer.cancelation_mailer.cancelation_confirmation.header")
 - panel_icon = "emails/button-x-circled.png"
 - panel_action = t("mailer.cancelation_mailer.cancelation_confirmation.subsection",
-                  name: @proposal.requester.full_name,
-                  proposal_name: @proposal.name)
+  name: @proposal.requester.full_name)
 - panel_action_date = time_and_date(@proposal.updated_at)
 - panel_text = t("mailer.cancelation_mailer.cancelation_confirmation.reason", reason: @reason)
-- cta_subheader = t("mailer.cancelation_mailer.cancelation_confirmation.reason", reason: @reason)
+- cta_subheader = t("mailer.cancelation_mailer.cancelation_confirmation.subheader",
+  public_id: @proposal.public_id, full_name: @proposal.requester.full_name)
 
 %table.container
   = render partial: "mail_shared/email_header/hero_text",
     locals: { text: top_head }
+
+%table.container
+  = render partial: "mail_shared/call_to_action/subheader",
+    locals: { subheader: cta_subheader, vertical: "no-top-margin" }
 
   / Start Panel Wrapper
   = render partial: "mail_shared/panel/header"
