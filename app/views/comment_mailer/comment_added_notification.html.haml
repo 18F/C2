@@ -1,17 +1,24 @@
 - content_for :header_icon, "emails/icon-pencil-circle.png"
 - top_head = t("mailer.comment_mailer.comment_added_notification.header",
-              user_name: @comment.user.full_name,
-              proposal_name: @proposal.name)
+  user_name: @comment.user.full_name)
 - panel_icon = "emails/icon-speech_bubble-blue.png"
 - panel_action = t("mailer.comment_mailer.comment_added_notification.activity_header",
                   user_name: @comment.user.full_name )
 - panel_action_date = time_and_date(@comment.created_at)
 - panel_text = @comment.comment_text
-- cta_subheader = t("mailer.comment_mailer.comment_added_notification.subheader")
+- cta_subheader = t("mailer.updated_subheader_html",
+  public_id: @proposal.public_id,
+  requester_name: @proposal.requester.full_name,
+  proposal_status: @proposal.status)
 
 %table.container
   = render partial: "mail_shared/email_header/hero_text",
     locals: { text: top_head }
+
+  %table.container
+
+    = render partial: "mail_shared/call_to_action/subheader",
+      locals: { subheader: cta_subheader, vertical: "no-top-margin" }
 
   / Start Panel Wrapper
   = render partial: "mail_shared/panel/header"
@@ -28,12 +35,8 @@
   / End Panel Wrapper
 
   = render partial: "mail_shared/call_to_action/subheader",
-    locals: { subheader: cta_subheader }
+    locals: { subheader: t("mailer.reply_to_comment") }
 
   = render partial: "mail_shared/call_to_action/button",
     locals: { link_path: proposal_url(@proposal),
               link_text: t("mailer.view_request_cta") }
-
-  = render partial: "mail_shared/call_to_action/button",
-    locals: { link_path: proposal_url(@proposal, anchor: "comments"),
-              link_text: t("mailer.add_comment_cta") }
