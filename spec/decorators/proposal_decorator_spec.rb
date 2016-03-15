@@ -1,4 +1,27 @@
 describe ProposalDecorator do
+  describe "#detailed_status" do
+    context "pending" do
+      it "returns 'pending [next step type]'" do
+        proposal = create(:proposal, status: "pending")
+        create(:approval_step, status: "actionable", proposal: proposal)
+
+        decorator = ProposalDecorator.new(proposal)
+
+        expect(decorator.detailed_status).to eq "pending approval"
+
+      end
+    end
+
+    context "canceled or completed" do
+      it "returns regular status" do
+        proposal = build(:proposal, status: "canceled")
+
+        decorator = ProposalDecorator.new(proposal)
+
+        expect(decorator.detailed_status).to eq "canceled"
+      end
+    end
+  end
   describe "#total_price" do
     context "client data present" do
       it "returns total price from client data" do

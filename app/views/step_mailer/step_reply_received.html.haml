@@ -1,5 +1,5 @@
 - content_for :header_icon, "emails/icon-page-circle.png"
-- top_head = t("mailer.step_mailer.step_reply_received.body",
+- top_head = t("mailer.step_mailer.step_reply_received.body_html",
   full_name: @last_completed_step_user.full_name)
 
 %table.container
@@ -7,7 +7,7 @@
     locals: { text: top_head }
 
   = render partial: "mail_shared/approval/chain",
-    locals: { proposal: @proposal, status: @step.status, public_id: @proposal.public_id }
+    locals: { proposal: @proposal }
 
   = render partial: "mail_shared/call_to_action/subheader",
     locals: { subheader: "" }
