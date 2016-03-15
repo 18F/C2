@@ -1,8 +1,10 @@
 <%= t("mailer.attachment_mailer.new_attachment_notification.header",
-  user_name: @attachment_user.full_name,
-  proposal_name: @proposal.name) %>
+      user_name: @attachment_user.full_name) %>
 
-<%= t("mailer.attachment_mailer.new_attachment_notification.subheader") %>
+<%= t("mailer.updated_subheader",
+  public_id: @proposal.public_id,
+  requester_name: @proposal.requester.full_name,
+  proposal_status: @proposal.status) %>
 
 <%= t("mailer.view_request_cta") %>
 <%= proposal_url(@proposal) %>
