@@ -16,6 +16,15 @@ h3.heading-center-top {
     padding-top: 15px !important;
 } 
 
+.approval-chain td {
+    font-size: 13px;
+    line-height: 17px;
+}
+.approval-chain td.two.sub-columns.last img {
+    float: right;
+    padding-right: 15px;
+}
+
 h5.subtext{
     font-size: 14px;
     font-weight: bold;
