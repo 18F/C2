@@ -10,6 +10,14 @@ class ProposalDecorator < Draper::Decorator
     end
   end
 
+  def display_status
+    if object.pending?
+      "pending approval"
+    else
+      object.status
+    end
+  end
+
   def total_price
     client_data.try(:total_price) || ""
   end
@@ -24,14 +32,6 @@ class ProposalDecorator < Draper::Decorator
 
   def steps_in_list_order
     object.individual_steps.with_users
-  end
-
-  def display_status
-    if object.pending?
-      "pending approval"
-    else
-      object.status
-    end
   end
 
   def waiting_text_for_status_in_table

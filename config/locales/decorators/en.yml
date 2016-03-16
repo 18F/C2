@@ -1,6 +1,9 @@
 en:
   decorators:
     steps:
+      status:
+        completed: "Completed"
+        pending: "Pending"
       approval:
         execute_button: "Approve"
         noun: "approval"
