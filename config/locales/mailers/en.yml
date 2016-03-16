@@ -66,8 +66,8 @@ en:
       proposal_notification:
         header_html:
           "<strong>%{requester_name}</strong> has submitted a new request for
-          you to %{step_type_noun}"
-        header: "A new request submitted by %{requester_name} needs your %{step_type_noun}"
+          you to %{step_type_noun}."
+        header: "A new request submitted by %{requester_name} needs your %{step_type_noun}."
     proposal_mailer:
       emergency_proposal_created_confirmation:
         header: "Your emergency request has been completed."
