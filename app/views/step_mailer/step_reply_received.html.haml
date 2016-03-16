@@ -1,16 +1,24 @@
 - content_for :header_icon, "emails/icon-page-circle.png"
 - top_head = t("mailer.step_mailer.step_reply_received.body",
   full_name: @last_completed_step_user.full_name)
+- cta_subheader = t("mailer.proposal_status_html", proposal_status: @proposal.status)
 
 %table.container
   = render partial: "mail_shared/email_header/hero_text",
-    locals: { text: top_head }
-
-  = render partial: "mail_shared/approval/chain",
-    locals: { proposal: @proposal, status: @step.status, public_id: @proposal.public_id }
+    locals: { text: top_head, style: "no-margin-wrapper" }
 
   = render partial: "mail_shared/call_to_action/subheader",
+    locals: { subheader: cta_subheader }
+
+  = render partial: "mail_shared/approval/chain",
+    locals: { proposal: @proposal }
+
+%table.container
+  = render partial: "mail_shared/call_to_action/subheader",
     locals: { subheader: "" }
+
+  = render partial: "mail_shared/call_to_action/subheader",
+    locals: { subheader: t("mailer.reply_to_comment") }
 
   = render partial: "mail_shared/call_to_action/email_reply",
     locals: { step: @step, show_step_actions: false, proposal: @proposal }
