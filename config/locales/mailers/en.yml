@@ -56,7 +56,7 @@ en:
           C2 has sent it to the next person."
         details: "Please see below for more details."
       step_user_removed:
-        header: "You have been removed from this purchase request"
+        header: "You have been removed from this purchase request."
         subheader:
           "No further action is required on %{proposal_public_id}
           %{proposal_name} submitted by %{full_name}."
