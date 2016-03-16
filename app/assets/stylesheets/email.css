@@ -119,6 +119,10 @@ p.no-top-margin.paragraph-font-style {
     margin-top: 0px;
 }
 
+p.quarter-bottom-margin.paragraph-font-style {
+    margin: 4px;
+}
+
 p.half-bottom-margin.paragraph-font-style {
     margin: 8px;
 }
