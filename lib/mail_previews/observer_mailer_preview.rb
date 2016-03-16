@@ -1,4 +1,6 @@
 class ObserverMailerPreview < ActionMailer::Preview
+  include MailerPreviewHelpers
+
   def observer_added_notification
     ObserverMailer.observer_added_notification(observation, reason)
   end
@@ -8,7 +10,7 @@ class ObserverMailerPreview < ActionMailer::Preview
   end
 
   def proposal_complete
-    ObserverMailer.proposal_complete(user, proposal)
+    ObserverMailer.proposal_complete(user, completed_proposal)
   end
 
   private
@@ -19,13 +21,5 @@ class ObserverMailerPreview < ActionMailer::Preview
 
   def reason
     "I thought it was a good idea."
-  end
-
-  def user
-    User.for_email("test@example.com")
-  end
-
-  def proposal
-    Proposal.last
   end
 end
