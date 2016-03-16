@@ -7,9 +7,10 @@
   proposal_status: @proposal.detailed_status.capitalize)
 
 
-= render partial: "mail_shared/call_to_action/subheader",
-  locals: { subheader: "Emergency Request",
-            vertical: "no-top-margin",
+%table.container
+  = render partial: "mail_shared/call_to_action/subheader",
+    locals: { subheader: "Emergency Request",
+            vertical: "no-top-margin half-bottom-margin",
             wrapvert: "no-top",
             bold: "primary-text-color" }
 

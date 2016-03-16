@@ -2,7 +2,7 @@
     requester_name: @proposal.requester.full_name,
     step_type_noun: @step.noun) %>
 
-<%= t("mailer.proposal_status", proposal_status: @proposal.detailed_status) %>
+<%= t("mailer.proposal_status", proposal_status: @proposal.detailed_status.capitalize) %>
 
 <%= @step.action_name %>
 <%= generate_approve_url(@step) %>

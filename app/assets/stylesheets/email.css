@@ -119,6 +119,14 @@ p.no-top-margin.paragraph-font-style {
     margin-top: 0px;
 }
 
+p.half-bottom-margin.paragraph-font-style {
+    margin: 8px;
+}
+
+p.no-margin.paragraph-font-style {
+    margin: 0px;
+}
+
 .proposal-data-label {
   font-size: 18px;
   font-weight: bold;
