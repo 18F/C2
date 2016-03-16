@@ -1,6 +1,6 @@
 class StepMailerPreview < ActionMailer::Preview
   def step_reply_received
-    StepMailer.step_reply_received(step)
+    StepMailer.step_reply_received(completed_step)
   end
 
   def step_user_removed
@@ -12,6 +12,10 @@ class StepMailerPreview < ActionMailer::Preview
   end
 
   private
+
+  def completed_step
+    Step.where(status: "completed").last
+  end
 
   def step
     Step.where(type: "Steps::Approval").last
