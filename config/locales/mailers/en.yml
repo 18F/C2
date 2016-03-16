@@ -13,6 +13,7 @@ en:
     reply_to_comment:
       "You can send a comment to everyone in this request by replying to this email"
     requested_by: "Requested by %{full_name}"
+    step_number: "Step %{number}"
     update_description: "Here are the updated request details:"
     view_or_modify_request_cta: "View or modify request"
     view_request_cta: "View request details"

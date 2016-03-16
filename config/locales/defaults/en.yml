@@ -5,3 +5,4 @@ en:
   time:
     formats:
       default: "%b %-d, %Y at %I:%M%p %Z"
+      date: "%-m/%-d/%y"
