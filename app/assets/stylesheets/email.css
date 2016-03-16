@@ -97,7 +97,7 @@ center.grey-background{
 }
 
 .blue-bold h3{
-    font-weight: bold !important;
+    font-weight: normal !important;
     color: #0744a4 !important;
     margin-bottom: 0px !important;
 }
