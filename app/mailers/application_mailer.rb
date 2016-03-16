@@ -18,7 +18,12 @@ class ApplicationMailer < ActionMailer::Base
   end
 
   def subject(proposal)
-    "Request #{proposal.public_id}: #{proposal.name}"
+    if proposal.client_data_type == "Ncr::WorkOrder"
+      client_data = proposal.client_data
+      %(Request #{proposal.public_id}, #{client_data.organization_code_and_name}, #{client_data.building_id} from #{proposal.requester.email_address})
+    else
+      "Request #{proposal.public_id}"
+    end
   end
 
   def email_with_name(email, name)
