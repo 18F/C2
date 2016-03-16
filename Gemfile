@@ -95,10 +95,6 @@ group :test do
   gem "timecop"
   gem "webmock", require: false
   gem "zonebie"
-
-  # For better test reporting in CircleCI
-  # http://blog.circleci.com/announcing-detailed-test-failure-reporting/
-  gem "rspec_junit_formatter"
 end
 
 group :production do

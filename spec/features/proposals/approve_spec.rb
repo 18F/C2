@@ -17,6 +17,27 @@ describe "Approving a proposal" do
     end
   end
 
+  it "distinguishes user with multiple actionable steps" do
+    proposal = create(:proposal, :with_serial_approvers)
+    first_approver = proposal.approvers.first
+    second_approver = proposal.approvers.last
+    second_approver.add_delegate(first_approver)
+
+    login_as(first_approver)
+    visit proposal_path(proposal)
+    click_on("Approve")
+
+    expect(current_path).to eq("/proposals/#{proposal.id}")
+    expect(page).to have_content("You have approved #{proposal.public_id}")
+
+    login_as(second_approver)
+    visit proposal_path(proposal)
+    click_on("Approve")
+
+    expect(current_path).to eq("/proposals/#{proposal.id}")
+    expect(page).to have_content("You have approved #{proposal.public_id}")
+  end
+
   it "doesn't send multiple emails to approvers who are also observers" do
     with_env_var("NO_WELCOME_EMAIL", "true") do
       proposal = create(:proposal, :with_approver)

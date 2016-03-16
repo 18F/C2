@@ -1,5 +1,5 @@
 class ReportsController < ApplicationController
-  before_action -> { authorize report }, only: [:show, :destroy]
+  before_action -> { authorize report }, only: [:show, :destroy, :preview]
 
   def create
     report = current_user.reports.build(report_params)
@@ -15,6 +15,15 @@ class ReportsController < ApplicationController
 
   def show
     @report = report
+    @subscribed = report.subscribed?(current_user)
+    @subscription = report.subscription_for(current_user)
+  end
+
+  def preview
+    @report = report
+    ReportMailer.scheduled_report(report.name, report, current_user).deliver_later
+    flash[:success] = "The report has been sent."
+    redirect_to report_path(@report)
   end
 
   def destroy
