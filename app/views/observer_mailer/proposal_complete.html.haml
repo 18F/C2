@@ -12,7 +12,7 @@
 %table.container.contain-attributes
   / Start Panel Wrapper
   = render partial: "mail_shared/call_to_action/subheader",
-    locals: { subheader: cta_subheader, vertical: "no-top-margin", bold: "not-bold" }
+    locals: { subheader: cta_subheader, vertical: "", bold: "not-bold" }
 
   = render partial: "mail_shared/panel/proposal_attributes",
     locals: { proposal: @proposal }
