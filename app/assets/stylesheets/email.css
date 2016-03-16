@@ -6,7 +6,13 @@ img.no-float-image {
     margin: 10px auto 0;
 }
 
+.wrapper.no-top{
+    padding: 0px;
+}
 
+p.primary-text-color.primary-text-color{
+    color: #0744a4;
+}
 
 h3.heading-center-top {
     text-align: center;

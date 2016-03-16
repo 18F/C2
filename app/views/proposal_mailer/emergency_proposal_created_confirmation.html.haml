@@ -6,6 +6,13 @@
 - cta_subheader_foot = t("mailer.proposal_status_html",
   proposal_status: @proposal.detailed_status.capitalize)
 
+
+= render partial: "mail_shared/call_to_action/subheader",
+  locals: { subheader: "Emergency Request",
+            vertical: "no-top-margin",
+            wrapvert: "no-top",
+            bold: "primary-text-color" }
+
 %table.container
   = render partial: "mail_shared/email_header/hero_text",
     locals: { text: top_head }
