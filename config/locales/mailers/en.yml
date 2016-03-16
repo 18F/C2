@@ -131,7 +131,8 @@ en:
         subheader: "You can reply or review the full conversation on the request page."
     observer_mailer:
       observer_added_notification:
-        header: "You have been added as a subscriber to this request"
+        header: "You have been added as an observer to this purchase request."
+        subheader: "The request to make a %{amount} purchase is %{status}."
       observer_removed_notification:
         header: "You have been been removed as an observer for this purchase request."
         body_html:

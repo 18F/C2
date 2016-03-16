@@ -1,6 +1,8 @@
 - content_for :header_icon, "emails/icon-page-circle.png"
-- top_head = observer_text(@observation)
-- cta_subheader = @reason
+- top_head = t("mailer.observer_mailer.observer_added_notification.header" )
+- cta_subheader = t("mailer.observer_mailer.observer_added_notification.subheader", 
+                    amount: number_to_currency(@proposal.total_price),
+                    status: @proposal.status)
 - attachment_icon = "emails/icon-clipped_page.png"
 
 %table.container
