@@ -86,7 +86,7 @@ class ProposalsController < ApplicationController
     comments = "Request canceled with comments: " + params[:reason_input]
     proposal.cancel!
     proposal.comments.create!(comment_text: comments, user: current_user)
-    DispatchFinder.run(proposal).deliver_cancelation_emails(params[:reason_input])
+    DispatchFinder.run(proposal).deliver_cancelation_emails(current_user, params[:reason_input])
   end
 
   def proposal

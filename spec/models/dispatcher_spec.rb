@@ -57,7 +57,7 @@ describe Dispatcher do
       allow(CancelationMailer).to receive(:cancelation_notification).and_return(mock_deliverer)
       allow(mock_deliverer).to receive(:deliver_later).exactly(2).times
 
-      Dispatcher.new(proposal).deliver_cancelation_emails
+      Dispatcher.new(proposal).deliver_cancelation_emails(proposal.requester)
 
       expect(mock_deliverer).to have_received(:deliver_later).exactly(2).times
     end
@@ -68,31 +68,41 @@ describe Dispatcher do
       approver = proposal.approvers.first
       reason = "reason for cancelation"
       allow(CancelationMailer).to receive(:cancelation_notification).
-        with(approver.email_address, proposal, reason).
+        with(
+          recipient_email: approver.email_address,
+          canceler: proposal.requester,
+          proposal: proposal,
+          reason: reason
+        ).and_return(mock_deliverer)
+
+      expect(mock_deliverer).to receive(:deliver_later).once
+
+      Dispatcher.new(proposal).deliver_cancelation_emails(proposal.requester, reason)
+    end
+
+    it "sends email to actionable approvers + all observers + requester minus the canceler" do
+      mock_deliverer = double
+      user = create(:user)
+      proposal = create(:proposal, :with_approver, observer: user)
+      allow(CancelationMailer).to receive(:cancelation_notification).and_return(mock_deliverer)
+      canceler = proposal.approvers.first
+
+      expect(mock_deliverer).to receive(:deliver_later).twice
+
+      Dispatcher.new(proposal).deliver_cancelation_emails(canceler)
+    end
+
+    it "sends a confirmation email to the canceler" do
+      mock_deliverer = double
+      user = create(:user)
+      proposal = create(:proposal, :with_approval_and_purchase)
+      allow(CancelationMailer).to receive(:cancelation_confirmation).
+        with(canceler: user, proposal: proposal, reason: nil).
         and_return(mock_deliverer)
 
       expect(mock_deliverer).to receive(:deliver_later).once
 
-      Dispatcher.new(proposal).deliver_cancelation_emails(reason)
-    end
-
-    it "sends an email to each actionable approver" do
-      mock_deliverer = double
-      serial_proposal = create(:proposal, :with_serial_approvers)
-      allow(CancelationMailer).to receive(:cancelation_notification).and_return(mock_deliverer)
-      expect(serial_proposal.approvers.count).to eq 2
-      expect(mock_deliverer).to receive(:deliver_later).once
-
-      Dispatcher.new(serial_proposal).deliver_cancelation_emails
-    end
-
-    it "sends a confirmation email to the requester" do
-      mock_deliverer = double
-      proposal = create(:proposal, :with_approval_and_purchase)
-      allow(CancelationMailer).to receive(:cancelation_confirmation).and_return(mock_deliverer)
-      expect(mock_deliverer).to receive(:deliver_later).once
-
-      Dispatcher.new(proposal).deliver_cancelation_emails
+      Dispatcher.new(proposal).deliver_cancelation_emails(user)
     end
   end
 
