@@ -1,24 +1,26 @@
 class CancelationMailer < ApplicationMailer
-  def cancelation_notification(to_email, proposal, reason = nil)
+  def cancelation_notification(recipient_email: , canceler:, proposal:, reason: nil)
     @reason = reason
+    @user = canceler
     @proposal = proposal.decorate
     assign_threading_headers(@proposal)
 
     mail(
-      to: to_email,
+      to: recipient_email,
       subject: subject(@proposal),
       from: user_email_with_name(@proposal.requester),
       reply_to: reply_email(@proposal)
     )
   end
 
-  def cancelation_confirmation(proposal, reason)
+  def cancelation_confirmation(canceler:, proposal:, reason: nil)
+    @user = canceler
     @reason = reason
     @proposal = proposal.decorate
     assign_threading_headers(@proposal)
 
     mail(
-      to: proposal.requester.email_address,
+      to: @user.email_address,
       subject: subject(@proposal),
       from: default_sender_email,
       reply_to: reply_email(@proposal)

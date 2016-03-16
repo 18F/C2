@@ -1,5 +1,5 @@
 <%= t("mailer.cancelation_mailer.cancelation_notification.header",
-      name: @proposal.requester.full_name) %>
+      name: @user.full_name) %>
 
 <%= t("mailer.cancelation_mailer.cancelation_notification.subheader",
       public_id: @proposal.public_id, full_name: @proposal.requester.full_name) %>

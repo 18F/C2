@@ -2,7 +2,7 @@
 - top_head = t("mailer.cancelation_mailer.cancelation_confirmation.header")
 - panel_icon = "emails/button-x-circled.png"
 - panel_action = t("mailer.cancelation_mailer.cancelation_confirmation.subsection",
-  name: @proposal.requester.full_name)
+  name: @user.full_name)
 - panel_action_date = time_and_date(@proposal.updated_at)
 - panel_text = t("mailer.cancelation_mailer.cancelation_confirmation.reason", reason: @reason)
 - cta_subheader = t("mailer.cancelation_mailer.cancelation_confirmation.subheader",
