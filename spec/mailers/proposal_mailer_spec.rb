@@ -6,10 +6,6 @@ describe ProposalMailer do
 
     it_behaves_like "a proposal email"
 
-    it "has the correct subject" do
-      expect(mail.subject).to eq("Request #{proposal.public_id}: #{proposal.name}")
-    end
-
     it "renders the receiver email" do
       expect(mail.to).to eq([proposal.requester.email_address])
     end

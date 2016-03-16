@@ -38,10 +38,4 @@ class CancelationMailer < ApplicationMailer
       reply_to: reply_email(@proposal)
     )
   end
-
-  private
-
-  def subject(proposal)
-    "Request #{proposal.public_id} canceled: #{proposal.name}"
-  end
 end
