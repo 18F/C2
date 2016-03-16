@@ -1,4 +1,4 @@
-%tr{align: "center", valign: "top"}
+%tr.approval-chain{align: "center", valign: "top"}
   %td.wrapper.no-top-padding.last{align: "center", valign: "top"}
     %center
       - @proposal.individual_steps.each do |step|
@@ -8,10 +8,14 @@
               = image_tag step_status_icon(step)
             %td.ten.sub-columns.no-bottom-padding
               %b
-                = step_user_title(step)
+                = t("mailer.step_number", number: step.position - 1)
               %br/
               %span.lighter-text
-                = step.user.full_name
+                = "#{step.user.full_name}, #{step_user_title(step)}"
+              %br/
+              %span.lighter-text
+                %em
+                  = step.decorate.detailed_status
               - if step != @proposal.individual_steps.last
                 %hr/
             %td.expander
