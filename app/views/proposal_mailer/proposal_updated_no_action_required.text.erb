@@ -3,7 +3,7 @@
 <%= t("mailer.updated_subheader",
   public_id: @proposal.public_id,
   requester_name: @proposal.requester.full_name,
-  proposal_status: @proposal.detailed_status) %>
+  proposal_status: @proposal.detailed_status.capitalize) %>
 
 <%= @comment.comment_text %>
 

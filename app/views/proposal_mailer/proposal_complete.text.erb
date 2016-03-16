@@ -2,7 +2,7 @@
 
 <%= t("mailer.proposal_mailer.proposal_complete.subheader") %>
 
-<%= t("mailer.proposal_status", proposal_status: @proposal.detailed_status) %>
+<%= t("mailer.proposal_status", proposal_status: @proposal.detailed_status.capitalize) %>
 
 <%= t("mailer.view_request_cta") %>
 <%= proposal_url(@proposal) %>

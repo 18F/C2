@@ -3,7 +3,7 @@
 - cta_subheader = t("mailer.updated_subheader_html",
   public_id: @proposal.public_id,
   requester_name: @proposal.requester.full_name,
-  proposal_status: @proposal.detailed_status)
+  proposal_status: @proposal.detailed_status.capitalize)
 - proposal_link_text = t("mailer.view_request_cta")
 - panel_action = t("mailer.modifier_action", full_name: @modifier.full_name)
 - panel_icon = "emails/button-circle.png"

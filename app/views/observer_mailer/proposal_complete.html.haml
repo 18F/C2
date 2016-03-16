@@ -2,7 +2,7 @@
 - top_head = t("mailer.observer_mailer.proposal_complete.header")
 - proposal_link_text = t("mailer.view_request_cta")
 - cta_subheader = t("mailer.proposal_status_html",
-  proposal_status: @proposal.detailed_status)
+  proposal_status: @proposal.detailed_status.capitalize)
 
 %table.container
   = render partial: "mail_shared/email_header/hero_text",
