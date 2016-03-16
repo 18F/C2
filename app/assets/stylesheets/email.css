@@ -19,16 +19,17 @@ h3.heading-center-top {
 } 
 
 .approval-chain span{
-    white-space: nowrap;
 }
 
 .approval-chain td {
     font-size: 13px;
     line-height: 17px;
 }
+.approval-chain td.two.sub-columns.last {
+    padding-right: 15px;
+}
 .approval-chain td.two.sub-columns.last img {
     float: right;
-    padding-right: 15px;
 }
 
 h5.subtext{
@@ -764,7 +765,7 @@ h2 {
 }
 
 h3 {
-    font-size: 23px;
+    font-size: 28px;
 }
 
 h4 {
