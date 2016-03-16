@@ -11,7 +11,7 @@ en:
     modifier_action: "Modified by %{full_name}"
     reason: " with given reason '%{reason}'"
     reply_to_comment:
-      "You can send a comment to everyone in this request by replying to this email"
+      "You can send a comment to everyone in this request by replying to this email."
     requested_by: "Requested by %{full_name}"
     step_number: "Step %{number}"
     update_description: "Here are the updated request details:"
