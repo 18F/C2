@@ -1,29 +1,17 @@
 %tr{align: "center", valign: "top"}
   %td.wrapper.no-top-padding.last{align: "center", valign: "top"}
     %center
-      - @proposal.individual_steps.each_with_index do |step, index|
-        - if step.status == 'actionable'
-          - icon_name = 'emails/numbers/icon-number-' + (index + 1).to_s + '.png'
-        - elsif step.status == 'pending'
-          - icon_name = 'emails/numbers/icon-number-' + (index + 1).to_s + '-pending.png'
-        - elsif step.status == 'completed'
-          - icon_name = 'emails/numbers/icon-completed.png'
+      - @proposal.individual_steps.each do |step|
         %table.eight.columns
           %tr
             %td.two.sub-columns.last
-              = image_tag icon_name
+              = image_tag step_status_icon(step)
             %td.ten.sub-columns.no-bottom-padding
               %b
-                - case index
-                - when 0
-                  = t("mailer.proposal_mailer.generic_approval_name.step_1")
-                - when 1
-                  = t("mailer.proposal_mailer.generic_approval_name.step_2")
-                - when 2
-                  = t("mailer.proposal_mailer.generic_approval_name.step_3")
+                = step_user_title(step)
               %br/
               %span.lighter-text
                 = step.user.full_name
-              - if index != @proposal.individual_steps.count - 1
+              - if step != @proposal.individual_steps.last
                 %hr/
             %td.expander

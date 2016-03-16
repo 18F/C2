@@ -25,4 +25,36 @@ describe MailerHelper do
       }.to raise_error(NoMethodError) # TODO create a more specific error
     end
   end
+
+  describe "step_status_icon" do
+    context "step is actionable" do
+      it "returns actionable icon for position" do
+        step = create(:approval_step, status: "actionable", position: 2)
+
+        icon = step_status_icon(step)
+
+        expect(icon).to eq "emails/numbers/icon-number-1.png"
+      end
+    end
+
+    context "step is pending" do
+      it "returns pending icon for step number" do
+        step = create(:approval_step, status: "pending", position: 3)
+
+        icon = step_status_icon(step)
+
+        expect(icon).to eq "emails/numbers/icon-number-2-pending.png"
+      end
+    end
+
+    context "step is completed" do
+      it "returns completed icon" do
+        step = create(:approval_step, status: "completed", position: 4)
+
+        icon = step_status_icon(step)
+
+        expect(icon).to eq "emails/numbers/icon-completed.png"
+      end
+    end
+  end
 end

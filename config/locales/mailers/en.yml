@@ -49,6 +49,8 @@ en:
           C2 has sent it to the next person."
       step_reply_received:
         body:
+          "%{full_name} approved your request. C2 has sent it to the next person."
+        body_html:
           "<span class='name-color'>%{full_name}</span> approved your request.
           C2 has sent it to the next person."
         details: "Please see below for more details."
@@ -66,10 +68,6 @@ en:
           you to %{step_type_noun}"
         header: "A new request submitted by %{requester_name} needs your %{step_type_noun}"
     proposal_mailer:
-      generic_approval_name:
-        step_1: "Approver"
-        step_2: "Budget Tier 1"
-        step_3: "Budget Tier 2"
       emergency_proposal_created_confirmation:
         header: "Your emergency request has been completed."
         subheader: "If the actual purchase price changes, please update the request in C2."

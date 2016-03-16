@@ -1,6 +1,15 @@
 class ProposalDecorator < Draper::Decorator
   delegate_all
 
+  def detailed_status
+    if object.status == "pending" && object.individual_steps.any?
+      actionable_step = object.individual_steps.select { |individual_step| individual_step.status == "actionable" }.last
+      "pending #{actionable_step.decorate.noun}"
+    else
+      object.status
+    end
+  end
+
   def total_price
     client_data.try(:total_price) || ""
   end

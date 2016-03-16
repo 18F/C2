@@ -1,7 +1,5 @@
 <%= t("mailer.step_mailer.step_reply_received.body",
-      full_name: @step.user.full_name,
-      status: @step.status,
-      public_id: @proposal.public_id) %>
+      full_name: @last_completed_step_user.full_name) %>
 
 <%= t("mailer.view_request_cta") %>
 <%= proposal_url(@proposal) %>

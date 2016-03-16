@@ -3,28 +3,6 @@ module MailerHelper
     "#{date.strftime('%m/%d/%Y')} at #{date.strftime('%I:%M %P')}"
   end
 
-  def status_icon_tag(status, last_approver = false)
-    base_url = root_url.gsub(/\?.*$/, "").chomp("/")
-    bg_linear_image = base_url + image_path("bg_#{status}_status.gif")
-
-    image_tag(
-      base_url + image_path("icon-#{status}.png"),
-      class: "status-icon #{status} linear",
-      style: ("background-image: url('#{bg_linear_image}');" unless last_approver)
-    )
-  end
-
-  def generate_bookend_class(index, count)
-    case index
-    when count - 1
-      "class=last"
-    when 0
-      "class=first"
-    else
-      ""
-    end
-  end
-
   def generate_approve_url(approval)
     proposal = approval.proposal
     opts = { version: proposal.version, cch: approval.api_token.access_token }
@@ -50,4 +28,17 @@ module MailerHelper
     end
   end
 
+  def step_status_icon(step)
+    if step.status == "actionable"
+      "emails/numbers/icon-number-" + (step.position - 1).to_s + ".png"
+    elsif step.status == "pending"
+      "emails/numbers/icon-number-" + (step.position - 1).to_s + "-pending.png"
+    elsif step.status == "completed"
+      "emails/numbers/icon-completed.png"
+    end
+  end
+
+  def step_user_title(step)
+    step.decorate.role_name
+  end
 end
