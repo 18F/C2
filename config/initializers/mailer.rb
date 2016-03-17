@@ -10,7 +10,7 @@ end
 
 C2::Application.config.action_mailer.default_url_options ||= {
   scheme: ENV["DEFAULT_URL_SCHEME"] || default_scheme,
-  host: DEFAULT_URL_HOST,
+  host: ENV["DEFAULT_URL_HOST"],
   port: ENV["DEFAULT_URL_PORT"] || default_port
 }
 

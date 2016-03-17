@@ -20,7 +20,8 @@ class Dispatcher
   end
 
   def deliver_attachment_emails(attachment)
-    proposal.subscribers_except_delegates.each do |user|
+    recipients = proposal.subscribers_except_delegates - [attachment.user]
+    recipients.each do |user|
       step = proposal.steps.find_by(user: user)
 
       if user_is_not_step_user?(step) || step_user_knows_about_proposal?(step)

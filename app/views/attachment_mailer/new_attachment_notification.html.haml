@@ -27,7 +27,9 @@
     locals: { icon: panel_icon, action: panel_action, datetime: panel_action_date}
 
   = render partial: "mail_shared/panel/row_content_image",
-    locals: { image: panel_image, image_link: proposal_url(@proposal), last: true}
+    locals: { image: panel_image,
+    image_link: proposal_url(@proposal, anchor: "files"),
+    last: true }
 
   = render partial: "mail_shared/panel/vertical_buffer"
   / End Panel Wrapper

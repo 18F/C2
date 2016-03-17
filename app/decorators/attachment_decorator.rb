@@ -2,11 +2,17 @@ class AttachmentDecorator < Draper::Decorator
   include Rails.application.routes.url_helpers
   include ActionView::Helpers::AssetTagHelper
   include ActionView::Helpers::UrlHelper
+  default_url_options[:host] = ::Rails.application.routes.default_url_options[:host]
+
   delegate_all
 
   def file_preview
     if file.content_type =~ /\Aimage/
-      image_tag(file.url, alt: "", class: "image-with-border")
+      image_tag(
+        object.url,
+        alt: "",
+        class: "image-with-border"
+      )
     else
       "<br><table class='button'><tr><td>#{link_text}</td></tr></table>"
     end

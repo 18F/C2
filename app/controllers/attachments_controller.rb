@@ -27,6 +27,7 @@ class AttachmentsController < ApplicationController
   end
 
   protected
+
   def proposal
     @cached_proposal ||= Proposal.find(params[:proposal_id])
   end

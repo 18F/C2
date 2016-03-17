@@ -23,6 +23,17 @@ describe Dispatcher do
       expect(email_recipients).to match_array(proposal.subscribers.map(&:email_address))
     end
 
+    it "does not email person who added attachment" do
+      proposal = create(:proposal, :with_approver, :with_observer)
+      attachment = create(:attachment, proposal: proposal, user: proposal.requester)
+
+      Dispatcher.new(proposal).deliver_attachment_emails(attachment)
+
+      expect(email_recipients).to match_array(
+        proposal.subscribers.map(&:email_address) - [proposal.requester.email_address]
+      )
+    end
+
     it "does not email pending approvers" do
       proposal = create(:proposal, :with_serial_approvers, :with_observer)
       attachment = create(:attachment, proposal: proposal)
