@@ -106,6 +106,7 @@ en:
         header_html: "This purchase request has been canceled by <strong>%{name}</strong>."
         header: "This purchase request has been canceled by %{name}."
         subsection: "Canceled by %{name}."
+        subheader_html: "<strong>%{public_id}</strong> was submitted by <strong>%{full_name}</strong>"
         subheader: "%{public_id} was submitted by %{full_name}"
         reason: "Reason for cancelation: %{reason}"
       fiscal_cancelation_notification:
