@@ -38,17 +38,17 @@ describe "Approving a proposal" do
     expect(page).to have_content("You have approved #{proposal.public_id}")
   end
 
-  it "doesn't send multiple emails to approvers who are also observers" do
+  it "sends email to observers and requester when proposal is complete" do
     with_env_var("NO_WELCOME_EMAIL", "true") do
       proposal = create(:proposal, :with_approver)
       proposal.add_observer(proposal.approvers.first)
 
       login_as(proposal.approvers.first)
-      visit "/proposals/#{proposal.id}"
+      visit proposal_path(proposal)
       click_on("Approve")
 
       expect(proposal.observers.length).to eq(1)
-      expect(deliveries.length).to eq(1)
+      expect(deliveries.length).to eq(2)
     end
   end
 end
