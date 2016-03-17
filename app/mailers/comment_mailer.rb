@@ -2,6 +2,7 @@ class CommentMailer < ApplicationMailer
   def comment_added_notification(comment, to_email)
     @comment = comment
     @proposal = comment.proposal
+    @proposal = @proposal.decorate
     assign_threading_headers(@proposal)
 
     unless @comment.update_comment
