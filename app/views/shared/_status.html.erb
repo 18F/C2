@@ -6,8 +6,8 @@
           <strong>Status</strong>
         </td>
         <td class="status-header">
-          <%= status_icon_tag(@proposal.status) %>
-          <strong><%= @proposal.status %></strong>
+          <%= status_icon_tag(@proposal.display_status) %>
+          <strong><%= @proposal.display_status %></strong>
           <%- unless @proposal.canceled? %>
             (<%= @proposal.number_approved %> of <%= @proposal.total_approvers %> steps completed)
           <%- end %>

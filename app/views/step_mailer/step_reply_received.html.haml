@@ -1,7 +1,7 @@
 - content_for :header_icon, "emails/icon-page-circle.png"
 - top_head = t("mailer.step_mailer.step_reply_received.body_html",
   full_name: @last_completed_step_user.full_name)
-- cta_subheader = t("mailer.proposal_status_html", proposal_status: @proposal.status.capitalize)
+- cta_subheader = t("mailer.proposal_status_html", proposal_status: @proposal.display_status.capitalize)
 
 %table.container
   = render partial: "mail_shared/email_header/hero_text",
