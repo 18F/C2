@@ -12,9 +12,9 @@ class ProposalDecorator < Draper::Decorator
 
   def display_status
     if object.pending?
-      "pending approval"
+      "Pending approval"
     else
-      object.status
+      object.status.capitalize
     end
   end
 
