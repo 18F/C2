@@ -61,7 +61,7 @@ describe ReportMailer do
       end
       Proposal.__elasticsearch__.refresh_index!
 
-      email = ReportMailer.scheduled_report(scheduled_report)
+      email = ReportMailer.scheduled_report(scheduled_report.name, scheduled_report.report, scheduled_report.user)
 
       expect(email.to).to eq([owner.email_address])
       expect(email.attachments.size).to eq(1)

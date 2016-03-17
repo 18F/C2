@@ -26,12 +26,12 @@ class ReportMailer < ApplicationMailer
     )
   end
 
-  def scheduled_report(scheduled_report)
-    attachments["#{scheduled_report.name}.csv"] = build_csv_report(scheduled_report.report)
+  def scheduled_report(name, report, user)
+    attachments["#{name}.csv"] = build_csv_report(report)
 
     mail(
-      to: scheduled_report.user.email_address,
-      subject: "[C2 Report] #{scheduled_report.name}",
+      to: user.email_address,
+      subject: "[C2 Report] #{name}",
       body: "Your scheduled report is attached to this email.",
       from: sender_email
     )
