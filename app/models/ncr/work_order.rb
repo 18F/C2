@@ -63,6 +63,14 @@ module Ncr
       Ncr::WorkOrderFields.new(self).display
     end
 
+    def fields_for_email_display
+      Ncr::WorkOrderFields.new(self).email_display
+    end
+
+    def top_email_field
+      Ncr::WorkOrderFields.new(self).top_email_field
+    end
+
     def approver_email_frozen?
       approval = individual_steps.first
       approval && !approval.actionable?

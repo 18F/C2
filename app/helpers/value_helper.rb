@@ -24,11 +24,18 @@ module ValueHelper
   end
 
   def property_to_s(val)
-    # assume all decimals are currency
-    if decimal?(val)
+    if decimal?(val) # assume all decimals are currency
       number_to_currency(val)
+    elsif val.is_a?(ActiveSupport::TimeWithZone)
+      I18n.l(val, format: :date)
+    elsif val == true
+      "Yes"
+    elsif val == false
+      "No"
+    elsif val.present?
+      val
     else
-      val.to_s
+      "-"
     end
   end
 end

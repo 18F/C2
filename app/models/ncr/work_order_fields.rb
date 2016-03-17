@@ -23,6 +23,25 @@ module Ncr
       )
     end
 
+    def email_display
+      [
+        [amount_and_not_to_exceed, work_order.amount],
+        ["CL#", work_order.cl_number],
+        ["Expense Type", work_order.expense_type],
+        ["Function Code", work_order.function_code],
+        ["Vendor", work_order.vendor],
+        ["Object Field / SOC code", work_order.soc_code],
+        ["Building Number", work_order.building_number],
+        ["Org Code", work_order.organization_code_and_name],
+        ["Direct Pay", work_order.direct_pay],
+
+      ]
+    end
+
+    def top_email_field
+      work_order.description
+    end
+
     private
 
     attr_reader :work_order
@@ -52,6 +71,14 @@ module Ncr
           Ncr::WorkOrder.human_attribute_name(attribute),
           work_order.send(attribute)
         ]
+      end
+    end
+
+    def amount_and_not_to_exceed
+      if work_order.not_to_exceed?
+        "Not to exceed / Amount"
+      else
+        "Amount"
       end
     end
   end

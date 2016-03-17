@@ -18,6 +18,24 @@ module Gsa18f
       attributes_for_view.push(["Total Price", procurement.total_price])
     end
 
+    def email_display
+      [
+        ["Purchase Type", procurement.purchase_type],
+        ["Date Requested", procurement.date_requested],
+        ["Quantity", procurement.quantity],
+        ["Urgency", procurement.urgency_string],
+        ["Cost Per Unit", procurement.cost_per_unit],
+        ["Office", procurement.office],
+        ["Total Price", procurement.total_price],
+        ["Justification", procurement.justification],
+        ["Link to Product", procurement.link_to_product],
+        ["Additional Info", procurement.additional_info]
+      ]
+    end
+
+    def top_email_field
+    end
+
     private
 
     attr_reader :procurement
