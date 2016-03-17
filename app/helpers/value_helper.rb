@@ -32,10 +32,8 @@ module ValueHelper
       "Yes"
     elsif val == false
       "No"
-    elsif val.present?
-      val
     else
-      "-"
+      val
     end
   end
 end

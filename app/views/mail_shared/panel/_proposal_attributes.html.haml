@@ -16,13 +16,13 @@
                   %p.proposal-data-label
                     = fields[0][0]
                   %p.proposal-data-attribute
-                    = property_to_s(fields[0][1])
+                    = property_display_value(fields[0][1])
                 %td.six.sub-columns{ valign: "top" }
                   - if fields[1]
                     %p.proposal-data-label
                       = fields[1][0]
                     %p.proposal-data-attribute
-                      = property_to_s(fields[1][1])
+                      = property_display_value(fields[1][1])
           %td.expander
 
 = render partial: "mail_shared/panel/attachment_items",
