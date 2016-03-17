@@ -9,7 +9,7 @@
 - cta_subheader = t("mailer.updated_subheader_html",
   public_id: @proposal.public_id,
   requester_name: @proposal.requester.full_name,
-  proposal_status: @proposal.display_status.capitalize)
+  proposal_status: @proposal.status.capitalize)
 
 %table.container
   = render partial: "mail_shared/email_header/hero_text",
