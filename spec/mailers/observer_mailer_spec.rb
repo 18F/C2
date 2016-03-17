@@ -49,10 +49,10 @@ describe ObserverMailer do
     it "sends to the observer" do
       proposal = create(:proposal, :with_observer)
       observation = proposal.observations.first
-
-      mail = ObserverMailer.observer_removed_notification(observation)
-
       observer = observation.user
+
+      mail = ObserverMailer.observer_removed_notification(proposal, observer)
+
       expect(mail.to).to eq([observer.email_address])
     end
   end
