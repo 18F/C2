@@ -13,6 +13,25 @@ module Ncr
       end
     end
 
+    def email_display
+      [
+        [amount_and_not_to_exceed, object.amount],
+        [translated_key("cl_number"), object.cl_number],
+        [translated_key("expense_type"), object.expense_type],
+        [translated_key("function_code"), object.function_code],
+        [translated_key("vendor"), object.vendor],
+        [translated_key("soc_code"), object.soc_code],
+        [translated_key("building_number"), object.building_number],
+        [translated_key("org_code"), object.organization_code_and_name],
+        [translated_key("direct_pay"), object.direct_pay],
+
+      ]
+    end
+
+    def top_email_field
+      object.description
+    end
+
     private
 
     def final_approver_email_address
@@ -31,6 +50,18 @@ module Ncr
       else
         NO_APPROVER_FOUND
       end
+    end
+
+    def amount_and_not_to_exceed
+      if object.not_to_exceed?
+        translated_key("not_to_exceed_amount")
+      else
+        translated_key("amount")
+      end
+    end
+
+    def translated_key(key)
+      I18n.t("decorators.ncr/work_order.#{key}")
     end
   end
 end

@@ -1,4 +1,12 @@
 module MailerHelper
+  def property_display_value(field)
+    if field.present?
+      property_to_s(field)
+    else
+      "-"
+    end
+  end
+
   def time_and_date(date)
     "#{date.strftime('%m/%d/%Y')} at #{date.strftime('%I:%M %P')}"
   end

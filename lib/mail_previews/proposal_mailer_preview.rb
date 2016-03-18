@@ -26,7 +26,7 @@ class ProposalMailerPreview < ActionMailer::Preview
   private
 
   def proposal
-    step.proposal
+    Proposal.where(client_data_type: "Gsa18f::Procurement").last
   end
 
   def step
