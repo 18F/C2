@@ -22,6 +22,7 @@ class CommentsController < ApplicationController
 
   def proposal
     @cached_proposal ||= Proposal.find(params[:proposal_id])
+    @cached_proposal.decorate
   end
 
   def comment_params
