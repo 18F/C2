@@ -1,5 +1,18 @@
 feature "Approve a Gsa18F procurement" do
   context "when signed in as the approver" do
+    context "last step is completed" do
+      it "sends one email to the requester" do
+        procurement.individual_steps.first.complete!
+        deliveries.clear
+
+        login_as(purchaser)
+        visit proposal_path(proposal)
+        click_on("Mark as Purchased")
+
+        expect(deliveries.length).to eq(1)
+      end
+    end
+
     it "the step execution button is correctly marked" do
       login_as(approver)
 

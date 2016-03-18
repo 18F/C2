@@ -1,5 +1,3 @@
-# Represents a single user's ability to approve, the "leaves" of an approval
-# chain
 module Steps
   class Individual < Step
     belongs_to :user

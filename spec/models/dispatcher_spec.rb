@@ -121,8 +121,10 @@ describe Dispatcher do
     context "final step complete" do
       it "notifies the requester that the proposal is complete" do
         procurement = create(:gsa18f_procurement, :with_steps)
-        procurement.proposal.complete!
+        step_1 = procurement.individual_steps.first
         step_2 = procurement.individual_steps.last
+        step_1.complete!
+        step_2.reload.complete!
         allow(ProposalMailer).to receive(:proposal_complete).
           with(procurement.proposal).
           and_return(double(deliver_later: true))
@@ -136,15 +138,16 @@ describe Dispatcher do
         proposal = create(:proposal, :with_approver, :with_observer)
         observer = proposal.observers.first
         work_order = create(:ncr_work_order, proposal: proposal)
-        work_order.proposal.complete!
         step_2 = work_order.individual_steps.last
+        step_2.complete!
+        mailer_double = double(deliver_later: true)
         allow(ObserverMailer).to receive(:proposal_complete).
           with(observer, proposal).
-          and_return(double(deliver_later: true))
+          and_return(mailer_double)
 
         Dispatcher.new(proposal).step_complete(step_2)
 
-        expect(ObserverMailer).to have_received(:proposal_complete).with(observer, proposal)
+        expect(ObserverMailer).to have_received(:proposal_complete).once
       end
     end
 
