@@ -20,7 +20,7 @@ en:
         status:
           please_act: "Please purchase"
           waiting: "Waiting for purchase from:"
-    gsa/18f:
+    gsa18f/procurement:
       additional_info: "Additional Info"
       cost_per_unit: "Cost Per Unit"
       date_requested: "Date Requested"
