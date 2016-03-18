@@ -42,7 +42,7 @@ en:
           "<span class='name-color'>%{user_name}</span> added an attachment."
         header: "%{user_name} added an attachment."
         activity_description: "Attachment added by %{user_name}"
-        attachment_cta: "Click to view: %{attachment_name}"
+        attachment_cta: "%{attachment_name}"
     step_mailer:
       step_next_approved:
         body:
