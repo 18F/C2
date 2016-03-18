@@ -7,7 +7,7 @@
 - panel_action_date = time_and_date(@proposal.updated_at)
 - panel_action = t("mailer.modifier_action", full_name: @modifier.full_name)
 - cta_subheader_foot = t("mailer.proposal_status_html",
-  proposal_status: @proposal.detailed_status.capitalize)
+  proposal_status: @proposal.detailed_status)
 
 %table.container
   = render partial: "mail_shared/email_header/hero_text",
