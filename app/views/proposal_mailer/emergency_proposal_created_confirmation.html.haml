@@ -6,19 +6,27 @@
 - cta_subheader_foot = t("mailer.proposal_status_html",
   proposal_status: @proposal.detailed_status)
 
+
+%table.container
+  = render partial: "mail_shared/call_to_action/subheader",
+    locals: { subheader: "Emergency Request",
+            vertical: "no-top-margin half-bottom-margin",
+            wrapvert: "no-top",
+            bold: "primary-text-color" }
+
 %table.container
   = render partial: "mail_shared/email_header/hero_text",
     locals: { text: top_head }
 
   = render partial: "mail_shared/call_to_action/subheader",
     locals: { subheader: cta_subheader,
-              vertical: "no-top-margin" }
+              vertical: "" }
 
 %hr/
 
 %table.container.contain-attributes
   = render partial: "mail_shared/call_to_action/subheader",
-    locals: { subheader: cta_subheader_foot }
+    locals: { subheader: cta_subheader_foot, bold: "not-bold" }
 
   / Start Panel Wrapper
   = render partial: "mail_shared/panel/proposal_attributes",

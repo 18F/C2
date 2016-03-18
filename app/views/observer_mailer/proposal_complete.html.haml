@@ -12,7 +12,7 @@
 %table.container.contain-attributes
   / Start Panel Wrapper
   = render partial: "mail_shared/call_to_action/subheader",
-    locals: { subheader: cta_subheader, vertical: "no-top-margin" }
+    locals: { subheader: cta_subheader, vertical: "", bold: "not-bold" }
 
   = render partial: "mail_shared/panel/proposal_attributes",
     locals: { proposal: @proposal }
@@ -20,7 +20,10 @@
   = render partial: "mail_shared/panel/vertical_buffer"
 
   = render partial: "mail_shared/call_to_action/subheader",
-    locals: { subheader: "" }
+    locals: { subheader: "", vertical: "half" }
+
+  = render partial: "mail_shared/call_to_action/subheader",
+    locals: { subheader: "", vertical: "half" }
 
   = render partial: "mail_shared/call_to_action/button",
     locals: { link_path: proposal_url(@proposal), link_text: proposal_link_text }

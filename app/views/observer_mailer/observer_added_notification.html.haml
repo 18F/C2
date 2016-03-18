@@ -1,6 +1,7 @@
 - content_for :header_icon, "emails/icon-page-circle.png"
-- top_head = observer_text(@observation)
-- cta_subheader = @reason
+- top_head = t("mailer.observer_mailer.observer_added_notification.header" )
+- cta_subheader = t("mailer.observer_mailer.observer_added_notification.subheader", 
+                    reason: @reason)
 - attachment_icon = "emails/icon-clipped_page.png"
 
 %table.container
@@ -8,7 +9,7 @@
     locals: { text: top_head, style: "no-margin-wrapper" }
 
   = render partial: "mail_shared/call_to_action/subheader",
-    locals: { subheader: cta_subheader, vertical: "no-top-margin" }
+    locals: { bold: "not-bold", subheader: cta_subheader, vertical: "" }
 
   = render partial: "mail_shared/approval/chain",
     locals: { proposal: @proposal }

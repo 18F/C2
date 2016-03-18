@@ -11,7 +11,7 @@ en:
     modifier_action: "Modified by %{full_name}"
     reason: " with given reason '%{reason}'"
     reply_to_comment:
-      "You can send a comment to everyone in this request by replying to this email"
+      "You can send a comment to everyone in this request by replying to this email."
     requested_by: "Requested by %{full_name}"
     step_number: "Step %{number}"
     update_description: "Here are the updated request details:"
@@ -56,7 +56,7 @@ en:
           C2 has sent it to the next person."
         details: "Please see below for more details."
       step_user_removed:
-        header: "You have been removed from this purchase request"
+        header: "You have been removed from this purchase request."
         subheader:
           "No further action is required on %{proposal_public_id}
           %{proposal_name} submitted by %{full_name}."
@@ -66,8 +66,8 @@ en:
       proposal_notification:
         header_html:
           "<strong>%{requester_name}</strong> has submitted a new request for
-          you to %{step_type_noun}"
-        header: "A new request submitted by %{requester_name} needs your %{step_type_noun}"
+          you to %{step_type_noun}."
+        header: "A new request submitted by %{requester_name} needs your %{step_type_noun}."
     proposal_mailer:
       emergency_proposal_created_confirmation:
         header: "Your emergency request has been completed."
@@ -106,6 +106,7 @@ en:
         header_html: "This purchase request has been canceled by <strong>%{name}</strong>."
         header: "This purchase request has been canceled by %{name}."
         subsection: "Canceled by %{name}."
+        subheader_html: "<strong>%{public_id}</strong> was submitted by <strong>%{full_name}</strong>"
         subheader: "%{public_id} was submitted by %{full_name}"
         reason: "Reason for cancelation: %{reason}"
       fiscal_cancelation_notification:
@@ -131,7 +132,8 @@ en:
         subheader: "You can reply or review the full conversation on the request page."
     observer_mailer:
       observer_added_notification:
-        header: "You have been added as a subscriber to this request"
+        header: "You have been added as an observer to this purchase request."
+        subheader: "Reason: %{reason}"
       observer_removed_notification:
         header: "You have been been removed as an observer for this purchase request."
         body_html:

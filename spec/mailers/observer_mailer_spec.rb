@@ -12,18 +12,6 @@ describe ObserverMailer do
       expect(mail.to).to eq([observer.email_address])
     end
 
-    it "includes who they were added by" do
-      adder = create(:user)
-      PaperTrail.whodunnit = adder.id
-
-      proposal = create(:proposal, :with_observer)
-      observation = proposal.observations.first
-      expect(observation.created_by).to eq(adder)
-
-      mail = ObserverMailer.observer_added_notification(observation, nil)
-      expect(mail.body.encoded).to include("to this request by #{adder.full_name}")
-    end
-
     it "excludes who they were added by, if not available" do
       proposal = create(:proposal, :with_observer)
       observation = proposal.observations.first
@@ -41,7 +29,7 @@ describe ObserverMailer do
       observation = proposal.observations.first
 
       mail = ObserverMailer.observer_added_notification(observation, reason)
-      expect(mail.body.encoded).to include("with given reason '#{reason}'")
+      expect(mail.body.encoded).to include(reason)
     end
   end
 

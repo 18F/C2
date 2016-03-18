@@ -15,7 +15,7 @@
     locals: { text: top_head, style: "no-margin-wrapper" }
 
   = render partial: "mail_shared/call_to_action/subheader",
-    locals: { subheader: cta_subheader, vertical: "no-top-margin" }
+    locals: { subheader: cta_subheader, vertical: "" }
 
   / Start Panel Wrapper
   = render partial: "mail_shared/panel/header"
@@ -29,7 +29,7 @@
     locals: { comment: @comment, last: true}
 
   = render partial: "mail_shared/call_to_action/subheader",
-    locals: { subheader: "" }
+    locals: { subheader: "", height: "half" }
 
   = render partial: "mail_shared/call_to_action/subheader",
     locals: { subheader: "", height: "half" }
@@ -40,7 +40,7 @@
 %table.container.contain-attributes
 
   = render partial: "mail_shared/call_to_action/subheader",
-    locals: { subheader: cta_subheader_foot }
+    locals: {  bold: "not-bold", subheader: cta_subheader_foot }
 
   = render partial: "mail_shared/approval/chain",
     locals: { proposal: @proposal }

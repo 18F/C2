@@ -17,13 +17,6 @@ module MailerHelper
     complete_proposal_url(proposal, opts)
   end
 
-  def observer_text(observation, reason = nil)
-    text = t("mailer.observer_mailer.observer_added_notification.header")
-    add_author(text, observation.created_by)
-    add_reason(text, reason)
-    text + "."
-  end
-
   def add_author(text, user)
     if user
       text << " by #{user.full_name}"
