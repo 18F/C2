@@ -29,7 +29,7 @@ describe ObserverMailer do
       observation = proposal.observations.first
 
       mail = ObserverMailer.observer_added_notification(observation, reason)
-      expect(mail.body.encoded).to include("with given reason '#{reason}'")
+      expect(mail.body.encoded).to include(reason)
     end
   end
 
