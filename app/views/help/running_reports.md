@@ -11,7 +11,7 @@ If your computer asks which program to use to open the file, you can use any spr
 
 ## Saving a report to run again later
 
-1. Repeat the first three steps to run the report.
+1. Repeat the first three steps in the section on running and downloading a report.
 1. On the results page, click _Save as Report_.
 1. Choose a name for the report.
 
