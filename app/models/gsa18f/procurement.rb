@@ -52,14 +52,6 @@ module Gsa18f
       Gsa18f::ProcurementFields.new(self).display
     end
 
-    def fields_for_email_display
-      Gsa18f::ProcurementFields.new(self).email_display
-    end
-
-    def top_email_field
-      Gsa18f::ProcurementFields.new(self).top_email_field
-    end
-
     def add_steps
       steps = [
         Steps::Approval.new(user: User.for_email(Gsa18f::Procurement.approver_email)),

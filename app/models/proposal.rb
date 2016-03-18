@@ -239,20 +239,6 @@ class Proposal < ActiveRecord::Base
     end
   end
 
-  def fields_for_email_display
-    if client_data
-      client_data.public_send(:fields_for_email_display)
-    else
-      []
-    end
-  end
-
-  def top_email_field
-    if client_data
-      client_data.public_send(:top_email_field)
-    end
-  end
-
   # Be careful if altering the identifier. You run the risk of "expiring" all
   # pending approval emails
   def version

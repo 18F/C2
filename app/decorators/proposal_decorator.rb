@@ -59,4 +59,18 @@ class ProposalDecorator < Draper::Decorator
   def as_csv
     [public_id, created_at, requester.display_name, display_status, client_data.csv_fields].flatten
   end
+
+  def fields_for_email_display
+    if client_data
+      client_data.decorate.public_send(:email_display)
+    else
+      []
+    end
+  end
+
+  def top_email_field
+    if client_data
+      client_data.decorate.public_send(:top_email_field)
+    end
+  end
 end
