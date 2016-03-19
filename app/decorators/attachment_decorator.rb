@@ -14,7 +14,7 @@ class AttachmentDecorator < Draper::Decorator
         class: "image-with-border"
       )
     else
-      "#{link_text}"
+      link_text
     end
   end
 
