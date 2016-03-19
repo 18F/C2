@@ -11,8 +11,11 @@
                   %tr{valign: "top"}
                     %td.half.sub-columns.hide-for-small
                     %td.half.sub-columns.left-border-two.hide-for-small
-                    %td.ten.sub-columns{style: "text-align: center;", align: "center"}
-                      = link_to image_link, target: "_blank" do
-                        = image.html_safe
-              %td.expander
+                    %td.ten.sub-columns{style: "text-align: left;", align: "center"}
+                      %br
+                        %strong
+                          %u
+                            = link_to image_link, target: "_blank", style: "color: #555555" do
+                              = image.html_safe
+                    %td.expander
 
