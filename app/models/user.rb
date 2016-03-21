@@ -114,6 +114,10 @@ class User < ActiveRecord::Base
     roles.exists?(name: "client_admin")
   end
 
+  def gateway_admin?
+    roles.exists?(name: "gateway_admin")
+  end
+
   def admin?
     roles.exists?(name: "admin")
   end

@@ -91,8 +91,16 @@ describe User do
     end
   end
 
+  describe '#gateway_admin?' do
+    it 'is true if the user has the gateway_admin role' do
+      admin = create(:user, :gateway_admin)
+
+      expect(admin).to be_gateway_admin
+    end
+  end
+
   describe '#admin?' do
-    it 'is true of the user has the admin role' do
+    it 'is true if the user has the admin role' do
       admin = create(:user, :admin)
 
       expect(admin).to be_admin
@@ -100,7 +108,7 @@ describe User do
   end
 
   describe '#not_admin?' do
-    it 'is true of the user does not have the admin role' do
+    it 'is true if the user does not have the admin role' do
       user = create(:user)
 
       expect(user).to be_not_admin
@@ -108,7 +116,7 @@ describe User do
   end
 
   describe "#deactivated?" do
-    it "is true of user has active set to false" do
+    it "is true if user has active set to false" do
       user = build(:user, active: false)
 
       expect(user).to be_deactivated
