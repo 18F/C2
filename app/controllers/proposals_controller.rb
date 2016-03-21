@@ -97,7 +97,7 @@ class ProposalsController < ApplicationController
     headers["Content-Type"] = "text/csv"
   end
 
-  def cancel_proposal_and_send_cancellation_emails
+  def cancel_proposal_and_send_cancelation_emails
     comments = "Request canceled with comments: " + params[:reason_input]
     proposal.cancel!
     proposal.comments.create!(comment_text: comments, user: current_user)
