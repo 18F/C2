@@ -53,14 +53,14 @@ describe Step do
     end
   end
 
-  describe '#on_approved_entry' do
-    it "notified the proposal if the root gets approved" do
+  describe '#on_completed_entry' do
+    it "notified the proposal if the root gets completed" do
       expect(approval.proposal).to receive(:complete!).once
       approval.initialize!
       approval.complete!
     end
 
-    it "does not notify the proposal if a child gets approved" do
+    it "does not notify the proposal if a child gets completed" do
       proposal = create(:proposal)
       child1 = build(:approval, user: create(:user))
       child2 = build(:approval, user: create(:user))
