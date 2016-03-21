@@ -5,6 +5,8 @@ require "clockwork"
 require_relative "boot"
 require_relative "environment"
 
+C2::Application.load_tasks
+
 puts "Clockwork loaded."
 
 module Clockwork
