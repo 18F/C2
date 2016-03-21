@@ -134,7 +134,7 @@ module Ncr
     def total_price
       amount || 0.0
     end
-    
+
     # may be replaced with paper-trail or similar at some point
     def version
       updated_at.to_i
