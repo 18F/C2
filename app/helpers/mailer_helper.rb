@@ -1,9 +1,9 @@
 module MailerHelper
   def property_display_value(field)
-    if field.present?
-      property_to_s(field)
-    else
+    if field.nil?
       "-"
+    else
+      property_to_s(field)
     end
   end
 
