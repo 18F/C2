@@ -64,8 +64,8 @@ module EsSpecHelper
   def es_execute_with_retries(retries = 3, &block)
     begin
       retries -= 1
-      response = block.call
-    rescue SearchUnavailable => _error
+      block.call
+    rescue SearchUnavailable => error
       if retries > 0
         retry
       else
