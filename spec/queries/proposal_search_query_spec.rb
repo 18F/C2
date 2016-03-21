@@ -7,6 +7,15 @@ describe ProposalSearchQuery, elasticsearch: true do
   end
 
   describe '#execute' do
+    it "raises custom error when Elasticsearch is not available" do
+      es_mock_connection_failed
+      user = create(:user, client_slug: "test")
+      searcher = ProposalSearchQuery.new(current_user: user)
+      expect {
+        searcher.execute("foobar")
+      }.to raise_error(SearchUnavailable, I18n.t("errors.features.es.service_unavailable"))
+    end
+
     it "returns an empty list for no Proposals" do
       user = create(:user, client_slug: "test")
       searcher = ProposalSearchQuery.new(current_user: user)
@@ -154,6 +163,6 @@ end
 def dump_index
   if ENV["ES_DEBUG"]
     puts ANSI.blue{ "----------------- DUMP INDEX ---------------------" }
-    puts Proposal.search( "*" ).results.to_a.pretty_inspect
+    puts Proposal.search( "*" ).results.pretty_inspect
   end
 end

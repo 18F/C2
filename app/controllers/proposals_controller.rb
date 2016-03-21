@@ -60,7 +60,12 @@ class ProposalsController < ApplicationController
   def query
     check_search_params
     query_listing = listing
-    @proposals_data = query_listing.query
+    begin
+      @proposals_data = query_listing.query
+    rescue SearchUnavailable => error
+      flash[:error] = error.message
+      redirect_to proposals_path
+    end
 
     @start_date = query_listing.start_date
     @end_date = query_listing.end_date
@@ -69,11 +74,12 @@ class ProposalsController < ApplicationController
   def download
     params[:size] = :all
     params.delete(:page)
-    query_listing = listing
-    @proposals_data = query_listing.query
-    timestamp = Time.current.utc.strftime("%Y-%m-%d-%H-%M-%S")
-    headers["Content-Disposition"] = %(attachment; filename="C2-Proposals-#{timestamp}.csv")
-    headers["Content-Type"] = "text/csv"
+    begin
+      build_csv_download
+    rescue SearchUnavailable => error
+      flash[:error] = error.message
+      redirect_to proposals_path
+    end
   end
 
   def history
@@ -83,7 +89,15 @@ class ProposalsController < ApplicationController
 
   protected
 
-  def cancel_proposal_and_send_cancelation_emails
+  def build_csv_download
+    query_listing = listing
+    @proposals_data = query_listing.query
+    timestamp = Time.current.utc.strftime("%Y-%m-%d-%H-%M-%S")
+    headers["Content-Disposition"] = %(attachment; filename="C2-Proposals-#{timestamp}.csv")
+    headers["Content-Type"] = "text/csv"
+  end
+
+  def cancel_proposal_and_send_cancellation_emails
     comments = "Request canceled with comments: " + params[:reason_input]
     proposal.cancel!
     proposal.comments.create!(comment_text: comments, user: current_user)
