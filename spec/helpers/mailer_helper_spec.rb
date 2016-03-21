@@ -62,12 +62,12 @@ describe MailerHelper do
 
   describe "step_status_icon" do
     context "step is actionable" do
-      it "returns actionable icon for position" do
+      it "returns pending icon for step number" do
         step = create(:approval_step, status: "actionable", position: 2)
 
         icon = step_status_icon(step)
 
-        expect(icon).to eq "emails/numbers/icon-number-1.png"
+        expect(icon).to eq "emails/numbers/icon-number-1-pending.png"
       end
     end
 

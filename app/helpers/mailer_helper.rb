@@ -30,12 +30,10 @@ module MailerHelper
   end
 
   def step_status_icon(step)
-    if step.status == "actionable"
-      "emails/numbers/icon-number-" + (step.position - 1).to_s + ".png"
-    elsif step.status == "pending"
-      "emails/numbers/icon-number-" + (step.position - 1).to_s + "-pending.png"
-    elsif step.status == "completed"
+    if step.status == "completed"
       "emails/numbers/icon-completed.png"
+    else
+      "emails/numbers/icon-number-" + (step.position - 1).to_s + "-pending.png"
     end
   end
 
