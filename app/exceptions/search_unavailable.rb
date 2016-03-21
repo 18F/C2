@@ -1,0 +1,2 @@
+class SearchUnavailable < Exception
+end

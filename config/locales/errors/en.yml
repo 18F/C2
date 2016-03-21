@@ -1,5 +1,8 @@
 en:
   errors:
+    features:
+      es:
+        service_unavailable: "The search feature is temporarily unavailable"
     policies:
       ncr:
         work_order:

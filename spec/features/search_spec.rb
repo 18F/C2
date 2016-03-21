@@ -18,6 +18,18 @@ describe "searching", elasticsearch: true do
     expect(page).not_to have_content(proposals.last.name)
   end
 
+  it "gracefully handles ES connection errors", :js do
+    proposals = populate_proposals
+
+    visit proposals_path
+    es_mock_connection_failed
+    fill_in "text", with: proposals.first.name
+    click_button "search-button"
+
+    expect(current_path).to eq proposals_path
+    expect(page).to have_content(I18n.t("errors.features.es.service_unavailable"))
+  end
+
   it "provides advanced search", :js do
     proposals = populate_proposals
 
