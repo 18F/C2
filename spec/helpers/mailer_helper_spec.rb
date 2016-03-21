@@ -33,7 +33,7 @@ describe MailerHelper do
 
         icon = step_status_icon(step)
 
-        expect(icon).to eq "emails/numbers/icon-number-1.png"
+        expect(icon).to eq "emails/numbers/icon-number-1-pending.png"
       end
     end
 
