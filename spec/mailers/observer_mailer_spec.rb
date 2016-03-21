@@ -31,6 +31,20 @@ describe ObserverMailer do
       mail = ObserverMailer.observer_added_notification(observation, reason)
       expect(mail.body.encoded).to include(reason)
     end
+
+    it "does not include reason text if there is not one" do
+      proposal = create(:proposal)
+      observer = create(:user)
+      adder = create(:user)
+      proposal.add_observer(observer, adder, nil)
+      observation = proposal.observations.first
+
+      mail = ObserverMailer.observer_added_notification(observation, nil)
+      expect(mail.body.encoded).not_to include(
+        I18n.t("mailer.observer_mailer.observer_added_notification.subheader",
+               reason: nil)
+      )
+    end
   end
 
   describe "#observer_removed_notification" do
