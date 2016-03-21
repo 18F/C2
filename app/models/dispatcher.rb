@@ -54,7 +54,7 @@ class Dispatcher
       StepMailer.proposal_notification(next_step).deliver_later
     end
 
-    if requires_approval_notice? && proposal.reload.pending?
+    if requires_approval_notice? && proposal.pending?
       StepMailer.step_reply_received(step).deliver_later
     elsif proposal.completed?
       proposal.observers.each { |observer| ObserverMailer.proposal_complete(observer, proposal).deliver_later }
@@ -106,6 +106,6 @@ class Dispatcher
   end
 
   def next_step
-    proposal.currently_awaiting_steps.first
+    proposal.reload.currently_awaiting_steps.first
   end
 end
