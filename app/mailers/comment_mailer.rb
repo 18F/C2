@@ -1,5 +1,7 @@
 class CommentMailer < ApplicationMailer
   def comment_added_notification(comment, to_email)
+    add_inline_attachment("icon-pencil-circle.png")
+    add_inline_attachment("icon-speech_bubble-blue.png")
     @comment = comment
     @proposal = comment.proposal
     @proposal = @proposal.decorate

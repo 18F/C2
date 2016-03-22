@@ -1,4 +1,6 @@
 class FeedbackMailer < ApplicationMailer
+  skip_before_action :add_logo
+
   def feedback(sending_user, form_values)
     from = sending_user.try(:email_address) || form_values[:email] || default_sender_email
 

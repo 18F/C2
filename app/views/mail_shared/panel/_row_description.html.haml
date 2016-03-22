@@ -5,13 +5,13 @@
         %td.wrapper.last.no-padding-top
           %table.twelve.columns
             %tr
-              %td.panel.panel-styled-content.sub-grid{valign: "top"}
-                %table{valign: "top"}
-                  %tr{valign: "top"}
-                    %td.one.sub-columns.hide-for-small{valign: "top"}
+              %td.panel.panel-styled-content.sub-grid{ valign: "top" }
+                %table{ valign: "top" }
+                  %tr{ valign: "top" }
+                    %td.one.sub-columns.hide-for-small{ valign: "top" }
                       = link_to @proposal do
-                        = image_tag icon, class: "image-sidebar"
-                    %td.ten.sub-columns{valign: "top"}
+                        = image_tag attachments[icon].url, class: "image-sidebar"
+                    %td.ten.sub-columns{ valign: "top" }
                       %p.styled-italic-side
                         = action.html_safe
                         %br/

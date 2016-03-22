@@ -6,7 +6,7 @@
     count: proposal.comments.count,
     full_name: last_comment.user.full_name,
     proposal_name: proposal.name)
-  - comment_icon = "emails/icon-speech_bubble-blue.png"
+  - comment_icon = "icon-speech_bubble-blue.png"
   - comment_action_date = time_and_date(last_comment.created_at)
 
   = render partial: "mail_shared/panel/row_description",
