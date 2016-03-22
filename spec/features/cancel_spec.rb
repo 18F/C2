@@ -1,6 +1,4 @@
 describe 'Canceling a request' do
-  include EnvVarSpecHelper
-
   it 'shows a cancel link for the requester' do
     proposal = create(:proposal)
     login_as(proposal.requester)
@@ -50,64 +48,56 @@ describe 'Canceling a request' do
     expect(current_path).to eq("/proposals/#{proposal.id}/cancel_form")
   end
 
-  context 'email' do
-    context 'proposal without approver' do
-      it 'sends cancelation email to requester' do
-        with_env_var("NO_WELCOME_EMAIL", "true") do
-          proposal = create(:proposal)
+  context "email" do
+    context "proposal without approver" do
+      it "sends cancelation email to requester" do
+        proposal = create(:proposal)
 
-          login_as(proposal.requester)
+        login_as(proposal.requester)
 
-          expect {
-            cancel_proposal(proposal)
-          }.to change { deliveries.length }.from(0).to(1)
-        end
+        expect {
+          cancel_proposal(proposal)
+        }.to change { deliveries.length }.from(0).to(1)
       end
     end
 
     context "proposal with pending status" do
       it "does not send cancelation email to approver" do
-        with_env_var("NO_WELCOME_EMAIL", "true") do
-          proposal = create(:proposal, :with_approver)
-          proposal.individual_steps.first.update(status: 'pending')
+        proposal = create(:proposal, :with_approver)
+        proposal.individual_steps.first.update(status: 'pending')
 
-          login_as(proposal.requester)
+        login_as(proposal.requester)
 
-          expect {
-            cancel_proposal(proposal)
-          }.to change { deliveries.length }.from(0).to(1)
-          expect_one_email_sent_to(proposal.requester)
-        end
+        expect {
+          cancel_proposal(proposal)
+        }.to change { deliveries.length }.from(0).to(1)
+        expect_one_email_sent_to(proposal.requester)
       end
     end
 
    context "proposal with approver" do
      it "sends cancelation emails to requester and approver" do
-       with_env_var("NO_WELCOME_EMAIL", "true") do
-         proposal = create(:proposal, :with_approver)
+        proposal = create(:proposal, :with_approver)
 
-         login_as(proposal.requester)
+        login_as(proposal.requester)
 
-         expect {
-           cancel_proposal(proposal)
-         }.to change { deliveries.length }.from(0).to(2)
-         expect_one_email_sent_to(proposal.requester)
-         expect_one_email_sent_to(proposal.individual_steps.last.user)
-       end
+        expect {
+          cancel_proposal(proposal)
+        }.to change { deliveries.length }.from(0).to(2)
+        expect_one_email_sent_to(proposal.requester)
+        expect_one_email_sent_to(proposal.individual_steps.last.user)
      end
    end
 
    context "proposal with observer" do
      it "sends cancelation email to observer" do
-       with_env_var("NO_WELCOME_EMAIL", "true") do
-         proposal = create(:proposal, :with_observer)
+        proposal = create(:proposal, :with_observer)
 
-         login_as(proposal.requester)
-         cancel_proposal(proposal)
+        login_as(proposal.requester)
+        cancel_proposal(proposal)
 
-         expect_one_email_sent_to(proposal.requester)
-         expect_one_email_sent_to(proposal.observers.first)
-       end
+        expect_one_email_sent_to(proposal.requester)
+        expect_one_email_sent_to(proposal.observers.first)
      end
    end
   end
