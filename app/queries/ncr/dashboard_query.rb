@@ -11,6 +11,7 @@ module Ncr
         joins(:proposal).
         merge(policy_scope).
         select(*select_fields).
+        where.not(proposals: { status: "canceled" }).
         group("year", "month").
         order("year DESC", "month DESC")
     end
