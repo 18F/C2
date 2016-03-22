@@ -6,36 +6,42 @@
         Requests: Fiscal Year
         = summary.fiscal_year
       %tbody
-        %tr
+        %tr.status
           %th Pending
           %td
-            = summary.status(:pending)
+            %span.status_count
+              = summary.status(:pending)
             %span.percentage
               = number_to_percentage(summary.status_percent(:pending))
           %td.amount
-            = number_to_currency(summary.subtotal(:pending))
+            %span.subtotal
+              = number_to_currency(summary.subtotal(:pending))
             %span.percentage
               = number_to_percentage(summary.subtotal_percent(:pending))
-        %tr
-          %th Cancelled
+        %tr.status
+          %th Canceled
           %td
-            = summary.status(:canceled)
+            %span.status_count
+              = summary.status(:canceled)
             %span.percentage
               = number_to_percentage(summary.status_percent(:canceled))
           %td.amount
-            = number_to_currency(summary.subtotal(:canceled))
+            %span.subtotal
+              = number_to_currency(summary.subtotal(:canceled))
             %span.percentage
               = number_to_percentage(summary.subtotal_percent(:canceled))
-        %tr
-          %th Approved
+        %tr.status
+          %th Completed
           %td
-            = summary.status(:approved)
+            %span.status_count
+              = summary.status(:completed)
             %span.percentage
-              = number_to_percentage(summary.status_percent(:approved))
+              = number_to_percentage(summary.status_percent(:completed))
           %td.amount
-            = number_to_currency(summary.subtotal(:approved))
+            %span.subtotal
+              = number_to_currency(summary.subtotal(:completed))
             %span.percentage
-              = number_to_percentage(summary.subtotal_percent(:approved))
+              = number_to_percentage(summary.subtotal_percent(:completed))
         %tr
           %th Total
           %td
