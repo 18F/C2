@@ -4,8 +4,7 @@ require "newrelic_rpm"
 require "clockwork"
 require_relative "boot"
 require_relative "environment"
-
-C2::Application.load_tasks
+require_relative "../lib/tasks/clock_tasks"
 
 puts "Clockwork loaded."
 
