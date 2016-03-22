@@ -1,6 +1,4 @@
 describe "commenting" do
-  include EnvVarSpecHelper
-
   it "saves the comment" do
     proposal = create_and_visit_proposal
 
@@ -29,15 +27,13 @@ describe "commenting" do
   end
 
   it "sends an email" do
-    with_env_var("NO_WELCOME_EMAIL", "true") do
-      proposal = create_and_visit_proposal
+    proposal = create_and_visit_proposal
 
-      submit_comment
-      expect(email_recipients).to eq([
-        proposal.approvers.first.email_address,
-        proposal.approvers.second.email_address
-      ].sort)
-    end
+    submit_comment
+    expect(email_recipients).to eq([
+      proposal.approvers.first.email_address,
+      proposal.approvers.second.email_address
+    ].sort)
   end
 
   describe "when user is not yet an observer" do

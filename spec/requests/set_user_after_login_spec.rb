@@ -1,4 +1,6 @@
 describe 'User creation when logging in with Oauth to view a protected page' do
+  include EnvVarSpecHelper
+
   StructUser = Struct.new(:email_address, :first_name, :last_name)
 
   before do
@@ -18,11 +20,12 @@ describe 'User creation when logging in with Oauth to view a protected page' do
   end
 
   it "sends welcome email to a new user" do
-    deliveries.clear
-    expect { get '/auth/myusa/callback' }.to change { deliveries.length }.from(0).to(1)
-    welcome_mail = deliveries.first
-    expect(welcome_mail.subject).to eq("[TEST] Welcome to C2!")
-    deliveries.clear
+    with_env_var("WELCOME_EMAIL", "true") do
+      deliveries.clear
+      expect { get '/auth/myusa/callback' }.to change { deliveries.length }.from(0).to(1)
+      welcome_mail = deliveries.first
+      expect(welcome_mail.subject).to eq("[TEST] Welcome to C2!")
+    end
   end
 
   it "absence of first/last name does not throw error" do
