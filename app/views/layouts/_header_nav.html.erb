@@ -25,6 +25,11 @@
         <%= image_tag "img-cart.png", width: "18px", height: "16px" %>
       </li>
       <%= render client_specific_partial(current_user, "header_links") %>
+      <%- if current_user.gateway_admin? %>
+        <li>
+          <a href="/summary" id="summary-link">Summary</a>
+        </li>
+      <%- end %>
     </ul>
   </div>
 <%- end %>
