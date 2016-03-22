@@ -70,6 +70,7 @@ describe ReportMailer do
       csv = email.attachments.first.decode_body
       expect(csv).to include("something 1")
       expect(csv).to include("something 2")
+      expect(csv.split(/\n/).size).to eq(4)
     end
   end
 end

@@ -44,7 +44,7 @@ class Report < ActiveRecord::Base
   def run
     client_param_name = user.client_model_slug
     fielded_query = query[user.client_model_slug]
-    params = ActionController::Parameters.new(text: text_query, client_param_name => fielded_query)
+    params = ActionController::Parameters.new(text: text_query, client_param_name => fielded_query, size: :all)
     ProposalListingQuery.new(user, params).query
   end
 

@@ -77,13 +77,13 @@ class ReportMailer < ApplicationMailer
   end
 
   def csv_header(user)
-    CSV.generate_line([ProposalDecorator.csv_headers, user.client_model.csv_headers].flatten).chomp
+    CSV.generate_line([ProposalDecorator.csv_headers, user.client_model.csv_headers].flatten)
   end
 
   def csv_body(proposal_data)
     csv_buf = ""
     proposal_data.rows.each do |proposal|
-      csv_buf += CSV.generate_line(proposal.decorate.as_csv).chomp
+      csv_buf += CSV.generate_line(proposal.decorate.as_csv)
     end
     csv_buf
   end
