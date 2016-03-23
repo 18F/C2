@@ -1,37 +1,58 @@
 @import "constants";
 
-// based on http://bootsnipp.com/snippets/featured/advanced-dropdown-search
+.m-search-ui {
+  fieldset.basic {
+    .input-group-block {
+      display: block;
+    }
+  }
+}
+
+/*
 .m-search-ui {
   padding: 12px 0;
-  text-align: right;
-  width: 50%;
+  width: 40%;
   float: right;
 
   .search-terms {
+    border-right: 0px;
   }
 
-  .dropdown.dropdown-lg .dropdown-menu {
-    margin-top: -1px;
-    padding: 6px 20px;
+  .input-group-addon.magnifier {
+    border-left: 0px;
+    background-color: #fff;
   }
+
+  form {
+    border: 1px solid green;
+  }
+
+  fieldset.basic {
+    border: 1px solid blue;
+  }
+
+  fieldset.adv {
+    border: 1px solid red;
+    position: absolute;
+    z-index: 100;
+    background-color: #e3e3e3;
+  }
+
+  .adv-controls {
+    background-color: #f5f5f5;
+    margin-bottom: 0px;
+  }
+
   .input-group-btn .btn-group {
     display: flex !important;
-  }
-  .btn-group .btn {
-    border-radius: 0;
-    margin-left: -1px;
-  }
-  .btn-group .btn:last-child {
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
-  }
-  .btn-group .btn[type="submit"] {
-    border-top-left-radius: 4px;
-    border-bottom-left-radius: 4px;
   }
   .form-group .form-control:last-child {
     border-top-left-radius: 4px;
     border-bottom-left-radius: 4px;
+  }
+
+  .form-group.basic {
+    margin-bottom: 0px;
   }
   
   @media screen and (min-width: 768px) {
@@ -43,6 +64,7 @@
     }
   }
 }
+*/
 
 form.subscription {
   .radio {
@@ -79,6 +101,7 @@ table.reports {
   }
 }
 
+/*
 .adv-search {
   .short {
     width: auto;
@@ -136,3 +159,4 @@ table.reports {
     float: right;
   }
 }
+*/
