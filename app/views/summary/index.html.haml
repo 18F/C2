@@ -43,7 +43,10 @@
             %span.percentage
               = number_to_percentage(summary.subtotal_percent(:completed))
         %tr
-          %th Total
+          %th
+            Total
+            %br
+            %span.clarification (excludes canceled)
           %td
             = summary.status_sum
           %td.amount
