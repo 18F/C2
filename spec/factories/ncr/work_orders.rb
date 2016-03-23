@@ -33,7 +33,7 @@ FactoryGirl.define do
     end
 
     trait :with_observers do
-      association :proposal, :with_observers
+      association :proposal, :with_observers, client_slug: "ncr"
     end
   end
 end

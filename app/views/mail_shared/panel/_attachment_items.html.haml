@@ -1,0 +1,16 @@
+- if proposal.attachments.any?
+  = render partial: "mail_shared/panel/vertical_buffer"
+
+  - last_attachment = proposal.attachments.last
+  - attachment_action = t("mailer.last_attachment_detail",
+    count: proposal.attachments.count,
+    full_name: last_attachment.user.full_name,
+    proposal_name: proposal.name)
+  - attachment_action_date = time_and_date(last_attachment.created_at)
+
+  = render partial: "mail_shared/panel/row_description",
+    locals: { icon: "icon-clipped_page.png",
+    action: attachment_action,
+    datetime: attachment_action_date }
+
+  = render partial: "mail_shared/panel/vertical_buffer"

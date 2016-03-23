@@ -1,0 +1,42 @@
+- content_for :header_icon, "icon-pencil-circle.png"
+- top_head = t("mailer.attachment_mailer.new_attachment_notification.header_html",
+  user_name: @attachment_user.full_name)
+- panel_icon = "icon-clipped_page.png"
+- panel_action = t("mailer.attachment_mailer.new_attachment_notification.activity_description",
+  user_name: @attachment_user.full_name)
+- panel_action_date = time_and_date(@attachment.created_at)
+- panel_image = @attachment.decorate.file_preview
+- cta_subheader = t("mailer.updated_subheader_html",
+  public_id: @proposal.public_id,
+  requester_name: @proposal.requester.full_name,
+  proposal_status: @proposal.detailed_status)
+
+%table.container
+  = render partial: "mail_shared/email_header/hero_text",
+    locals: { text: top_head }
+
+%table.container
+
+  = render partial: "mail_shared/call_to_action/subheader",
+    locals: { subheader: cta_subheader, vertical: "" }
+
+  / Start Panel Wrapper
+  = render partial: "mail_shared/panel/header"
+
+  = render partial: "mail_shared/panel/row_description",
+    locals: { icon: panel_icon, action: panel_action, datetime: panel_action_date}
+
+  = render partial: "mail_shared/panel/row_content_image",
+    locals: { image: panel_image,
+    image_link: proposal_url(@proposal, anchor: "files"),
+    last: true }
+
+  = render partial: "mail_shared/panel/vertical_buffer"
+  / End Panel Wrapper
+
+  = render partial: "mail_shared/call_to_action/subheader",
+    locals: { subheader: t("mailer.reply_to_comment") }
+
+  = render partial: "mail_shared/call_to_action/button",
+    locals: { link_path: proposal_url(@proposal),
+              link_text: t("mailer.view_request_cta")}

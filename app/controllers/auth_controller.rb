@@ -30,10 +30,10 @@ class AuthController < ApplicationController
     end
   end
 
-  def do_user_auth(auth)
-    sign_out
-    user = User.from_oauth_hash(auth)
-    sign_in(user)
+  def send_welcome_mail(user)
+    if (Time.current - user.created_at) < 2.seconds
+      WelcomeMailer.welcome_notification(user).deliver_later
+    end
   end
 
   def try_user_auth(auth, return_to_path)
@@ -41,5 +41,14 @@ class AuthController < ApplicationController
     session[:token] = auth.credentials.token
     flash[:success] = "You successfully signed in"
     redirect_to return_to_path || proposals_path
+  end
+
+  def do_user_auth(auth)
+    sign_out
+    user = User.from_oauth_hash(auth)
+    if ENV["WELCOME_EMAIL"]
+      send_welcome_mail(user)
+    end
+    sign_in(user)
   end
 end

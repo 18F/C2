@@ -1,0 +1,11 @@
+<%= t("mailer.observer_mailer.observer_added_notification.header" ) %>
+
+<% if @reason.present? %>
+  <%= t("mailer.observer_mailer.observer_added_notification.subheader",
+        reason: @reason) %>
+<% end %>
+
+<%= t("mailer.view_request_cta") %>
+<%= proposal_url(@proposal) %>
+
+<%= t("mailer.footer", feedback_url: feedback_url) %>

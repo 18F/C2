@@ -1,0 +1,7 @@
+<%= t("mailer.step_mailer.step_reply_received.body",
+      full_name: @last_completed_step_user.full_name) %>
+
+<%= t("mailer.view_request_cta") %>
+<%= proposal_url(@proposal) %>
+
+<%= t("mailer.footer", feedback_url: feedback_url) %>

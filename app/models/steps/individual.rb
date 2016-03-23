@@ -1,5 +1,3 @@
-# Represents a single user's ability to approve, the "leaves" of an approval
-# chain
 module Steps
   class Individual < Step
     belongs_to :user
@@ -34,7 +32,7 @@ module Steps
         on_entry do
           update(completed_at: Time.zone.now)
           notify_parent_completed
-          Dispatcher.on_approval_approved(self)
+          DispatchFinder.run(self.proposal).step_complete(self)
         end
 
         event :initialize, transitions_to: :actionable do

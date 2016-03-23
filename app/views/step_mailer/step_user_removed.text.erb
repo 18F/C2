@@ -1,0 +1,9 @@
+<%= t("mailer.step_mailer.step_user_removed.header") %>
+
+<%= t("mailer.step_mailer.step_user_removed.subheader",
+  proposal_public_id: @proposal.public_id,
+  proposal_name: @proposal.name,
+  full_name: @proposal.requester.full_name)
+%>
+
+<%= t("mailer.footer", feedback_url: feedback_url) %>

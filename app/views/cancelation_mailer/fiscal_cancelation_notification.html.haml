@@ -1,0 +1,13 @@
+- content_for :header_icon, "icon-pencil-circle.png"
+- top_head = t("mailer.cancelation_mailer.fiscal_cancelation_notification.header")
+- cta_subheader = t("mailer.cancelation_mailer.fiscal_cancelation_notification.reason")
+
+%table.container
+  = render partial: "mail_shared/email_header/hero_text",
+    locals: { text: top_head }
+
+  = render partial: "mail_shared/call_to_action/subheader",
+    locals: { subheader: cta_subheader }
+
+  = render partial: "mail_shared/call_to_action/button",
+    locals: { link_path: proposal_url(@proposal), link_text: t("mailer.view_request_cta") }

@@ -5,7 +5,7 @@ module Ncr
         controller: "proposals",
         action: "show",
         id: proposal.id,
-        host: DEFAULT_URL_HOST
+        host: ENV["DEFAULT_URL_HOST"]
       )
     end
 

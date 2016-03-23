@@ -1,8 +1,13 @@
 en:
   decorators:
     steps:
+      status:
+        completed: "Completed"
+        pending: "Pending"
       approval:
         execute_button: "Approve"
+        noun: "approval"
+        adjective: "approve"
         role_name: "Approver"
         label: "Approval"
         status:
@@ -10,8 +15,34 @@ en:
           waiting: "Waiting for review from:"
       purchase:
         execute_button: "Mark as Purchased"
+        noun: "purchase"
+        adjective: "purchase"
         role_name: "Purchaser"
         label: "Purchase"
         status:
           please_act: "Please purchase"
           waiting: "Waiting for purchase from:"
+    gsa18f/procurement:
+      additional_info: "Additional Info"
+      cost_per_unit: "Cost Per Unit"
+      date_requested: "Date Requested"
+      justification: "Justification"
+      link_to_product: "Link to Product"
+      office: "Office"
+      purchase_type: "Purchase Type"
+      quantity: "Quantity"
+      total_price: "Total Price"
+      urgency: "Urgency"
+    ncr/work_order:
+      amount: "Amount"
+      building_number: "Building Number"
+      cl_number: "CL#"
+      code: "Work Order / Ticket #"
+      direct_pay: "Direct Pay"
+      expense_type: "Expense Type"
+      function_code: "Function Code"
+      not_to_exceed_amount: "Not to exceed / Amount"
+      org_code: "Org Code"
+      rwa_number: "RWA#"
+      soc_code: "Object Field / SOC Code"
+      vendor: "Vendor"

@@ -12,6 +12,18 @@ describe ValueHelper do
       val = BigDecimal.new('1.00')
       expect(helper.property_to_s(val)).to eq('$1.00')
     end
+
+    it "converts `true` to 'Yes'" do
+      value = helper.property_to_s(true)
+
+      expect(value).to eq "Yes"
+    end
+
+    it "converts `false` to 'No'" do
+      value = helper.property_to_s(false)
+
+      expect(value).to eq "No"
+    end
   end
 
   describe '#date_with_tooltip' do

@@ -7,7 +7,7 @@
         = proposal_status_options(@adv_search.value_for("status"))
     .form-group
       %label.control-label{for: "#{current_user.client_model_slug}[requester]"}
-        Card Holder Name
+        Requester name or email
       %input.form-control{ type: "text",
         name: "#{current_user.client_model_slug}[requester]",
         value: @adv_search.value_for("requester"),
