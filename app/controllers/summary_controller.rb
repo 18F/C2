@@ -10,13 +10,9 @@ class SummaryController < ApplicationController
   private
 
   def authorize
-    if !adminish_role? || (needs_client_slug? && !client_slug?)
+    if !current_user.any_admin? || (needs_client_slug? && !client_slug?)
       render "authorization_error", status: 403
     end
-  end
-
-  def adminish_role?
-    current_user.admin? || current_user.client_admin? || current_user.gateway_admin?
   end
 
   def needs_client_slug?

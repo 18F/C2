@@ -92,6 +92,10 @@ describe User do
   end
 
   describe '#gateway_admin?' do
+    it "returns false by default" do
+      expect(user).to_not be_a_client_admin
+    end
+
     it 'is true if the user has the gateway_admin role' do
       admin = create(:user, :gateway_admin)
 
@@ -100,12 +104,41 @@ describe User do
   end
 
   describe '#admin?' do
+    it "returns false by default" do
+      expect(user).to_not be_a_client_admin
+    end
+
     it 'is true if the user has the admin role' do
       admin = create(:user, :admin)
 
       expect(admin).to be_admin
     end
   end
+
+  describe "#any_admin?" do
+    it "returns false by default" do
+      expect(user).to_not be_any_admin
+    end
+
+    it "is true if the user has the admin role" do
+      admin = create(:user, :admin)
+
+      expect(admin).to be_any_admin
+    end
+
+    it "is true if the user has the gateway_admin role" do
+      gateway_admin = create(:user, :gateway_admin)
+
+      expect(gateway_admin).to be_any_admin
+    end
+
+    it "returns true when the user is a client admin" do
+      client_admin = create(:user, :client_admin)
+
+      expect(client_admin).to be_any_admin
+    end
+  end
+
 
   describe '#not_admin?' do
     it 'is true if the user does not have the admin role' do
