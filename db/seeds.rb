@@ -10,4 +10,3 @@ Role.find_or_create_by(name: 'admin')
 # the relevant ENV vars after it has run at least once.
 RolesConversion.new.ncr_budget_approvers
 RolesConversion.new.gsa18f_approvers
-RolesConversion.new.gateway_roles
