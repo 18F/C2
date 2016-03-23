@@ -64,10 +64,9 @@ class ProposalDecorator < Draper::Decorator
   end
 
   def self.csv_headers(proposal)
+    step_label = "Final Step Completed"
     if proposal
       step_label = proposal.decorate.final_step_label
-    else
-      step_label = "Final Step Completed"
     end
     ["Public ID", "Created", "Requester", "Status", step_label, "Duration"]
   end
