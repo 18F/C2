@@ -4,7 +4,7 @@
 <%= t("mailer.updated_subheader",
   public_id: @proposal.public_id,
   requester_name: @proposal.requester.full_name,
-  proposal_status: @proposal.display_status) %>
+  proposal_status: @proposal.detailed_status) %>
 
 <%= t("mailer.view_request_cta") %>
 <%= proposal_url(@proposal) %>
