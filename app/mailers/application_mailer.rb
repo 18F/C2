@@ -19,9 +19,14 @@ class ApplicationMailer < ActionMailer::Base
     add_inline_attachment("logo-c2-blue.png")
   end
 
-  def add_proposal_attributes_icons
-    add_inline_attachment("icon-clipped_page.png")
-    add_inline_attachment("icon-speech_bubble-blue.png")
+  def add_proposal_attributes_icons(proposal)
+    if proposal.attachments.any?
+      add_inline_attachment("icon-clipped_page.png")
+    end
+
+    if proposal.comments.any?
+      add_inline_attachment("icon-speech_bubble-blue.png")
+    end
   end
 
   def add_inline_attachment(file_name)

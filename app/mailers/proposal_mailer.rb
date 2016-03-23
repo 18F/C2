@@ -1,8 +1,8 @@
 class ProposalMailer < ApplicationMailer
   def emergency_proposal_created_confirmation(proposal)
-    add_proposal_attributes_icons
-    add_inline_attachment("icon-truck-circle.png")
     @proposal = proposal.decorate
+    add_proposal_attributes_icons(@proposal)
+    add_inline_attachment("icon-truck-circle.png")
     assign_threading_headers(@proposal)
 
     mail(
@@ -14,9 +14,9 @@ class ProposalMailer < ApplicationMailer
   end
 
   def proposal_complete(proposal)
-    add_inline_attachment("icon-check-green-circle.png")
-    add_proposal_attributes_icons
     @proposal = proposal.decorate
+    add_inline_attachment("icon-check-green-circle.png")
+    add_proposal_attributes_icons(@proposal)
     assign_threading_headers(@proposal)
 
     mail(
@@ -57,10 +57,10 @@ class ProposalMailer < ApplicationMailer
   end
 
   def proposal_updated_needs_re_review(user, proposal, comment)
-    add_proposal_attributes_icons
+    @proposal = proposal.decorate
+    add_proposal_attributes_icons(@proposal)
     add_inline_attachment("icon-pencil-circle.png")
     add_inline_attachment("button-circle.png")
-    @proposal = proposal.decorate
     @modifier = comment.user
     @comment = comment
     assign_threading_headers(@proposal)
@@ -74,12 +74,12 @@ class ProposalMailer < ApplicationMailer
   end
 
   def proposal_updated_while_step_pending(step, comment)
-    add_proposal_attributes_icons
+    @proposal = step.proposal.decorate
+    add_proposal_attributes_icons(@proposal)
     add_inline_attachment("icon-pencil-circle.png")
     add_inline_attachment("button-circle.png")
     @step = step.decorate
     @modifier = comment.user
-    @proposal = step.proposal.decorate
     @comment = comment
     assign_threading_headers(@proposal)
 

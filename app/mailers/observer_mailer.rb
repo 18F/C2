@@ -1,11 +1,11 @@
 class ObserverMailer < ApplicationMailer
   def observer_added_notification(observation, reason)
-    add_proposal_attributes_icons
+    @proposal = observation.proposal.decorate
+    add_proposal_attributes_icons(@proposal)
     add_inline_attachment("icon-page-circle.png")
     @observation = observation
     @reason = reason
     observer = observation.user
-    @proposal = observation.proposal.decorate
 
     assign_threading_headers(@proposal)
 
@@ -31,10 +31,10 @@ class ObserverMailer < ApplicationMailer
   end
 
   def proposal_complete(user, proposal)
-    add_proposal_attributes_icons
+    @proposal = proposal.decorate
+    add_proposal_attributes_icons(@proposal)
     add_inline_attachment("icon-check-green-circle.png")
     user = user
-    @proposal = proposal.decorate
 
     assign_threading_headers(@proposal)
 

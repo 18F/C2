@@ -29,9 +29,9 @@ class StepMailer < ApplicationMailer
   end
 
   def proposal_notification(step)
-    add_proposal_attributes_icons
-    add_inline_attachment("icon-page-circle.png")
     @proposal = step.proposal.decorate
+    add_proposal_attributes_icons(@proposal)
+    add_inline_attachment("icon-page-circle.png")
     assign_threading_headers(@proposal)
     @step = step.decorate
 
