@@ -25,7 +25,7 @@ class ClientSummary
 
   def total
     total = 0
-    @subtotals.each { |k,i| total += i unless k == :canceled }
+    @subtotals.each { |k, i| total += i unless k == :canceled }
     total
   end
 
@@ -47,7 +47,7 @@ class ClientSummary
 
   def inclusive_total
     total = 0
-    @subtotals.each { |k,i| total += i }
+    @subtotals.values.each { |i| total += i }
     total
   end
 end

@@ -2,17 +2,15 @@ class SummaryController < ApplicationController
   before_action :authorize
 
   def index
-    if current_user.gateway_admin?
-      client_namespaces = Proposal.client_slugs.map(&:titleize)
-    else
-      client_namespaces = [current_user.client_slug.titleize]
-    end
+    client_namespaces = if current_user.gateway_admin?
+                          Proposal.client_slugs
+                        else
+                          [current_user.client_slug]
+                        end
+                        .map(&:titleize)
 
     @summaries = client_namespaces.map do |cn|
-      ClientSummarizer.new(
-        client_namespace: cn,
-        fiscal_year: params[:fiscal_year]
-      ).run
+      get_client_summary(cn, params[:fiscal_year])
     end
   end
 
@@ -30,5 +28,12 @@ class SummaryController < ApplicationController
 
   def client_slug?
     current_user.client_slug.present?
+  end
+
+  def get_client_summary(client_namespace, fiscal_year)
+    ClientSummarizer.new(
+      client_namespace: client_namespace,
+      fiscal_year: fiscal_year
+    ).run
   end
 end
