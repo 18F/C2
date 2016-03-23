@@ -1,5 +1,5 @@
 class CancelationMailer < ApplicationMailer
-  def cancelation_notification(recipient_email: , canceler:, proposal:, reason: nil)
+  def cancelation_notification(recipient_email:, canceler:, proposal:, reason: nil)
     add_inline_attachment("icon-pencil-circle.png")
     add_inline_attachment("button-x-circled.png")
     @reason = reason

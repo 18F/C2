@@ -62,7 +62,7 @@ module Ncr
         [translated_key("vendor"), object.vendor],
         [translated_key("soc_code"), object.soc_code],
         [translated_key("building_number"), object.building_number],
-        [translated_key("org_code"), object.organization_code_and_name],
+        [translated_key("org_code"), object.organization_code_and_name]
       ]
     end
 

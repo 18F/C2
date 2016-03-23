@@ -7,7 +7,6 @@ class StepDecorator < Draper::Decorator
     elsif object.status = "completed"
       "#{I18n.t('decorators.steps.status.completed')} #{I18n.l(object.completed_at, format: :date)}"
     end
-
   end
 
   def display_status

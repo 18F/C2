@@ -46,7 +46,7 @@ module Ncr
     def setup_and_email_approvers(comment)
       Ncr::WorkOrderUpdater.new(
         work_order: work_order,
-        update_comment: comment,
+        update_comment: comment
       ).run
     end
 

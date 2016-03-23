@@ -23,5 +23,4 @@ module ApplicationHelper
   def display_search_ui?
     current_user && current_user.client_model && !client_disabled?
   end
-
 end

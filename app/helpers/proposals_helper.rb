@@ -22,5 +22,4 @@ module ProposalsHelper
       style: ("background-image: url('#{bg_linear_image}');" unless last_approver)
     )
   end
-
 end

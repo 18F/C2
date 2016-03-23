@@ -17,7 +17,6 @@ module Gsa18f
       ]
     end
 
-
     def top_email_field
     end
 
