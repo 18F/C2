@@ -1,5 +1,6 @@
 class ReportMailer < ApplicationMailer
   add_template_helper ReportHelper
+  skip_before_action :add_logo
 
   def daily_budget_report
     @ba60_proposals = proposals_query("BA60")

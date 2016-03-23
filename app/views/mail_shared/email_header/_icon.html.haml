@@ -10,5 +10,5 @@
                 %tr
                   %td{align: "center", valign: "top"}
                     %center
-                      = image_tag icon, class: "no-float-image"
+                      = image_tag attachments[icon].try(:url), class: "no-float-image"
                   %td.expander

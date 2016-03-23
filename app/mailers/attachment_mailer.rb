@@ -1,5 +1,7 @@
 class AttachmentMailer < ApplicationMailer
   def new_attachment_notification(to_email, proposal, attachment)
+    add_inline_attachment("icon-pencil-circle.png")
+    add_inline_attachment("icon-clipped_page.png")
     @proposal = proposal.decorate
     @attachment_user = attachment.user
     @attachment = attachment

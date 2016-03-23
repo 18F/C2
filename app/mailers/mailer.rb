@@ -1,9 +1,10 @@
 class Mailer < ApplicationMailer
   def resend(msg)
-    @_message = Mail.new msg
+    @_message = Mail.new(msg)
     # we want to preserve the From name but not the email address, since gsa.gov
     # will block any @gsa.gov From address. We still use it intact in reply-to.
     from_raw = @_message.header["From"].value
+
     mail(
       subject: @_message.subject,
       to: resend_to_email,

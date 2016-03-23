@@ -1,7 +1,7 @@
-- content_for :header_icon, "emails/icon-pencil-circle.png"
+- content_for :header_icon, "icon-pencil-circle.png"
 - top_head = t("mailer.attachment_mailer.new_attachment_notification.header_html",
   user_name: @attachment_user.full_name)
-- panel_icon = "emails/icon-clipped_page.png"
+- panel_icon = "icon-clipped_page.png"
 - panel_action = t("mailer.attachment_mailer.new_attachment_notification.activity_description",
   user_name: @attachment_user.full_name)
 - panel_action_date = time_and_date(@attachment.created_at)

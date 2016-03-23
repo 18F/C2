@@ -1,8 +1,7 @@
-- content_for :header_icon, "emails/icon-page-circle.png"
+- content_for :header_icon, "icon-page-circle.png"
 - top_head = t("mailer.observer_mailer.observer_added_notification.header" )
 - cta_subheader = t("mailer.observer_mailer.observer_added_notification.subheader",
                     reason: @reason)
-- attachment_icon = "emails/icon-clipped_page.png"
 
 %table.container
   = render partial: "mail_shared/email_header/hero_text",

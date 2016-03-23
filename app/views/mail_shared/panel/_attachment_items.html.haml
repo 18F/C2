@@ -6,10 +6,11 @@
     count: proposal.attachments.count,
     full_name: last_attachment.user.full_name,
     proposal_name: proposal.name)
-  - attachment_icon = "emails/icon-clipped_page.png"
   - attachment_action_date = time_and_date(last_attachment.created_at)
 
   = render partial: "mail_shared/panel/row_description",
-    locals: { icon: attachment_icon, action: attachment_action, datetime: attachment_action_date}
+    locals: { icon: "icon-clipped_page.png",
+    action: attachment_action,
+    datetime: attachment_action_date }
 
   = render partial: "mail_shared/panel/vertical_buffer"
