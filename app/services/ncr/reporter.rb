@@ -23,9 +23,17 @@ module Ncr
       ]
     end
 
+    def self.final_step_label(proposal)
+      if proposal
+        proposal.decorate.final_step_label
+      else
+        "Final Step Completed"
+      end
+    end
+
     def self.as_csv(proposals)
       CSV.generate do |csv|
-        csv << ["URL", "Requester", "Approver", "CL", "Function Code", "Soc Code", "Created", ProposalDecorator.final_step_label(proposals.first), "Duration"]
+        csv << ["URL", "Requester", "Approver", "CL", "Function Code", "Soc Code", "Created", final_step_label(proposals.first), "Duration"]
         proposals.each do |p|
           csv << make_csv_row(p.decorate)
         end
