@@ -1,6 +1,5 @@
 class ObserverMailer < ApplicationMailer
   def observer_added_notification(observation, reason)
-    add_approval_chain_attachments
     add_proposal_attributes_icons
     add_inline_attachment("icon-page-circle.png")
     @observation = observation

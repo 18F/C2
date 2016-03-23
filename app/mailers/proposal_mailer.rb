@@ -28,7 +28,6 @@ class ProposalMailer < ApplicationMailer
   end
 
   def proposal_created_confirmation(proposal)
-    add_approval_chain_attachments
     add_inline_attachment("icon-page-circle.png")
     @proposal = proposal.decorate
     assign_threading_headers(@proposal)
@@ -58,7 +57,6 @@ class ProposalMailer < ApplicationMailer
   end
 
   def proposal_updated_needs_re_review(user, proposal, comment)
-    add_approval_chain_attachments
     add_proposal_attributes_icons
     add_inline_attachment("icon-pencil-circle.png")
     add_inline_attachment("button-circle.png")
@@ -76,7 +74,6 @@ class ProposalMailer < ApplicationMailer
   end
 
   def proposal_updated_while_step_pending(step, comment)
-    add_approval_chain_attachments
     add_proposal_attributes_icons
     add_inline_attachment("icon-pencil-circle.png")
     add_inline_attachment("button-circle.png")
