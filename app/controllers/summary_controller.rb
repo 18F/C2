@@ -1,5 +1,6 @@
 class SummaryController < ApplicationController
-  before_action :authorize
+  before_action :block_non_admins
+  before_action :block_client_admins_without_client_slugs
 
   def index
     @summaries = titleized_client_namespaces.map do |cn|
@@ -9,14 +10,16 @@ class SummaryController < ApplicationController
 
   private
 
-  def authorize
-    if !current_user.any_admin? || (needs_client_slug? && !client_slug?)
+  def block_non_admins
+    unless current_user.any_admin?
       render "authorization_error", status: 403
     end
   end
 
-  def needs_client_slug?
-    current_user.client_admin?
+  def block_client_admins_without_client_slugs
+    if current_user.client_admin? && !client_slug?
+      render "authorization_error", status: 403
+    end
   end
 
   def client_slug?
