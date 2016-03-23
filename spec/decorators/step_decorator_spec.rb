@@ -1,4 +1,22 @@
 describe StepDecorator do
+  describe "#label" do
+    context "when the step is an approval" do
+      it "fetches the correct role text" do
+        user = build_stubbed(:user)
+        step = Steps::Approval.new(user: user).decorate
+        expect(step.label).to eq "Approval"
+      end
+    end
+
+    context "when the step is a purchase" do
+      it "fetches the correct role text" do
+        user = build_stubbed(:user)
+        step = Steps::Purchase.new(user: user).decorate
+        expect(step.label).to eq "Purchase"
+      end
+    end
+  end
+
   describe "#role_name" do
     context "when the step is an approval" do
       it "fetches the correct role text" do

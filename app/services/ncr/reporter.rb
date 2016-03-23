@@ -17,15 +17,17 @@ module Ncr
         proposal.client_data.cl_number,
         proposal.client_data.function_code,
         proposal.client_data.soc_code,
-        proposal.created_at
+        proposal.created_at,
+        proposal.final_completed_date,
+        proposal.total_completion_days
       ]
     end
 
     def self.as_csv(proposals)
       CSV.generate do |csv|
-        csv << ["URL", "Requester", "Approver", "CL", "Function Code", "Soc Code", "Created"]
+        csv << ["URL", "Requester", "Approver", "CL", "Function Code", "Soc Code", "Created", ProposalDecorator.final_step_label(proposals.first), "Duration"]
         proposals.each do |p|
-          csv << make_csv_row(p)
+          csv << make_csv_row(p.decorate)
         end
       end
     end

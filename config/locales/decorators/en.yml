@@ -4,12 +4,14 @@ en:
       approval:
         execute_button: "Approve"
         role_name: "Approver"
+        label: "Approval"
         status:
           please_act: "Please review"
           waiting: "Waiting for review from:"
       purchase:
         execute_button: "Mark as Purchased"
         role_name: "Purchaser"
+        label: "Purchase"
         status:
           please_act: "Please purchase"
           waiting: "Waiting for purchase from:"
