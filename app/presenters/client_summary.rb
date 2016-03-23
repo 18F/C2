@@ -35,12 +35,12 @@ class ClientSummary
 
   def status_sum
     total = 0
-    @statuses.values.each { |i| total += i }
+    @statuses.each { |k, i| total += i unless k == :canceled }
     total
   end
 
   def status_percent(status)
-    (status(status).to_f / status_sum) * 100
+    (status(status).to_f / inclusive_status_sum) * 100
   end
 
   private
@@ -48,6 +48,12 @@ class ClientSummary
   def inclusive_total
     total = 0
     @subtotals.values.each { |i| total += i }
+    total
+  end
+
+  def inclusive_status_sum
+    total = 0
+    @statuses.values.each { |i| total += i }
     total
   end
 end

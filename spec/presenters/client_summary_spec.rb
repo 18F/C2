@@ -1,15 +1,15 @@
 describe ClientSummary do
-  it "adds status" do
+  it "adds non-canceled status" do
     summary = ClientSummary.new(2016, "Test")
     summary.add_status("pending")
     summary.add_status("canceled")
     expect(summary.status(:pending)).to eq(1)
     expect(summary.status(:canceled)).to eq(1)
     expect(summary.status(:completed)).to eq(0)
-    expect(summary.status_sum).to eq(2)
+    expect(summary.status_sum).to eq(1)
   end
 
-  it "adds totals" do
+  it "adds non-canceled totals" do
     summary = ClientSummary.new(2016, "Test")
     pending_sub = 123
     canceled_sub = 456
