@@ -81,4 +81,57 @@ describe ProposalDecorator do
       end
     end
   end
+
+  describe "#final_completed_date and #total_completion_days" do
+    include ProposalSpecHelper
+
+    context "when the proposal is complete" do
+      it "returns completed_at date of last step" do
+        proposal = create(:proposal, :with_serial_approvers).decorate
+        fully_complete(proposal)
+        proposal.complete!
+        proposal.reload
+        proposal.created_at = 2.days.ago
+
+        expect(proposal.final_completed_date).to eq(proposal.individual_steps.last.completed_at)
+        expect(proposal.total_completion_days).to eq(2)
+      end
+    end
+
+    context "when the proposal is not complete" do
+      it "returns empty string for final_completed_date and total_completion_days" do
+        proposal = create(:proposal, :with_serial_approvers).decorate
+        proposal.created_at = 2.days.ago
+
+        expect(proposal.final_completed_date).to eq("")
+        expect(proposal.total_completion_days).to eq("")
+      end
+    end
+  end
+
+  describe "#final_step_label" do
+    context "purchase step" do
+      it "looks like a Purchase" do
+        proposal = create(:proposal, :with_approval_and_purchase).decorate
+
+        expect(proposal.final_step_label).to eq("Final Purchase Completed")
+      end
+    end
+
+    context "approval step" do
+      it "looks like an Approval" do
+        proposal = create(:proposal, :with_serial_approvers).decorate
+
+        expect(proposal.final_step_label).to eq("Final Approval Completed")
+      end
+    end
+
+    context "no step" do
+      it "uses generic label" do
+        proposal = create(:proposal).decorate
+
+        expect(proposal.final_step_label).to eq("Final Step Completed")
+      end
+    end
+  end
 end

@@ -17,6 +17,10 @@ class StepDecorator < Draper::Decorator
     end
   end
 
+  def label
+    get_step_text(:label)
+  end
+
   def role_name
     get_step_text(:role_name)
   end

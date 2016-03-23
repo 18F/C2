@@ -21,8 +21,32 @@ class ProposalDecorator < Draper::Decorator
     object.individual_steps.completed.count
   end
 
-  def total_approvers
+  def total_step_users
     object.individual_steps.count
+  end
+
+  def final_completed_date
+    if completed? && total_step_users > 0
+      object.individual_steps.last.completed_at
+    else
+      ""
+    end
+  end
+
+  def total_completion_days
+    if completed?
+      (final_completed_date.to_date - created_at.to_date).to_i
+    else
+      ""
+    end
+  end
+
+  def final_step_label
+    if total_step_users > 0
+      "Final #{object.individual_steps.last.decorate.label} Completed"
+    else
+      "Final Step Completed"
+    end
   end
 
   def steps_in_list_order
@@ -47,12 +71,16 @@ class ProposalDecorator < Draper::Decorator
     I18n.t(key, scope: scope)
   end
 
-  def self.csv_headers
-    ["Public ID", "Created", "Requester", "Status"]
+  def self.csv_headers(proposal)
+    step_label = "Final Step Completed"
+    if proposal
+      step_label = proposal.decorate.final_step_label
+    end
+    ["Public ID", "Created", "Requester", "Status", step_label, "Duration"]
   end
 
   def as_csv
-    [public_id, created_at, requester.display_name, detailed_status, client_data.csv_fields].flatten
+    [public_id, created_at, requester.display_name, detailed_status, final_completed_date, total_completion_days, client_data.csv_fields].flatten
   end
 
   def fields_for_email_display

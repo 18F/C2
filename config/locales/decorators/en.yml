@@ -9,6 +9,7 @@ en:
         noun: "approval"
         adjective: "approve"
         role_name: "Approver"
+        label: "Approval"
         status:
           please_act: "Please review"
           waiting: "Waiting for review from:"
@@ -17,6 +18,7 @@ en:
         noun: "purchase"
         adjective: "purchase"
         role_name: "Purchaser"
+        label: "Purchase"
         status:
           please_act: "Please purchase"
           waiting: "Waiting for purchase from:"
