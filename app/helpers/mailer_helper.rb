@@ -1,6 +1,6 @@
 module MailerHelper
   def property_display_value(field)
-    if field.nil?
+    if field.to_s == ""
       "-"
     else
       property_to_s(field)

@@ -31,6 +31,16 @@ describe MailerHelper do
         expect(display_value).to eq "-"
       end
     end
+
+    context "value is empty string" do
+      it "returns a dash" do
+        value = ""
+
+        display_value = helper.property_display_value(value)
+
+        expect(display_value).to eq "-"
+      end
+    end
   end
 
   describe '#generate_approve_url' do
