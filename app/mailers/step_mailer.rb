@@ -5,8 +5,7 @@ class StepMailer < ApplicationMailer
     @proposal = step.proposal.decorate
     assign_threading_headers(@proposal)
     @step = step
-    last_completed_step = @proposal.individual_steps.completed.last
-    @last_completed_step_user = last_completed_step.user || @step.user
+    @step_user = @step.user
 
     mail(
       to: @proposal.requester.email_address,
