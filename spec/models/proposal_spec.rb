@@ -425,5 +425,11 @@ describe Proposal do
 
       expect(proposal.as_indexed_json[:num_attachments]).to eq(1)
     end
+
+    it "uses requester.display_name as requester" do
+      proposal = create(:proposal)
+
+      expect(proposal.as_indexed_json[:requester]).to eq(proposal.requester.display_name)
+    end
   end
 end

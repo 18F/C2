@@ -77,9 +77,6 @@ class Proposal < ActiveRecord::Base
         include: {
           completed_by: { methods: [:display_name], only: [:display_name] }
         }
-      },
-      requester: {
-        methods: [:display_name], only: [:display_name]
       }
     }
   }
@@ -115,6 +112,7 @@ class Proposal < ActiveRecord::Base
       if client_data
         json[:client_data] = client_data.as_indexed_json
       end
+      json[:requester] = requester.display_name
       json[:subscribers] = subscribers.map { |user| { id: user.id, name: user.display_name } }
       json[:num_attachments] = attachments.count
     end
