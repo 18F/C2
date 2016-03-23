@@ -5,12 +5,12 @@ class ProposalDecorator < Draper::Decorator
     object.individual_steps.completed.count
   end
 
-  def total_approvers
+  def total_step_users
     object.individual_steps.count
   end
 
   def final_completed_date
-    if completed? && total_approvers > 0
+    if completed? && total_step_users > 0
       object.individual_steps.last.completed_at
     else
       ""
@@ -26,7 +26,7 @@ class ProposalDecorator < Draper::Decorator
   end
 
   def final_step_label
-    if total_approvers > 0
+    if total_step_users > 0
       "Final #{object.individual_steps.last.decorate.label} Completed"
     else
       "Final Step Completed"
