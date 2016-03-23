@@ -83,6 +83,21 @@ describe Ncr::Reporter do
       csv = Ncr::Reporter.as_csv([proposal])
       expect(csv).to include(",#{budget_approval_step.user.email_address}")
     end
+
+    it "shows final completed date and completion duration in days" do
+      work_order = create(:ncr_work_order, :with_approvers)
+      work_order.setup_approvals_and_observers
+      proposal = work_order.proposal
+      while proposal.currently_awaiting_steps.any?
+        proposal.currently_awaiting_steps.first.complete!
+      end
+      proposal.complete!
+      proposal.reload
+      expect(proposal).to be_completed
+      expect(work_order.final_approver).to eq(work_order.approvers.last)
+      csv = Ncr::Reporter.as_csv([proposal])
+      expect(csv).to include(",#{proposal.decorate.final_completed_date},#{proposal.decorate.total_completion_days}")
+    end
   end
 
   describe "#build_fiscal_year_report_string" do

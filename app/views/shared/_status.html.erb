@@ -9,7 +9,7 @@
           <%= status_icon_tag(@proposal.status) %>
           <strong><%= @proposal.status %></strong>
           <%- unless @proposal.canceled? %>
-            (<%= @proposal.number_approved %> of <%= @proposal.total_approvers %> steps completed)
+            (<%= @proposal.number_approved %> of <%= @proposal.total_step_users %> steps completed)
           <%- end %>
         </td>
       </tr>

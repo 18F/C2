@@ -1,0 +1,38 @@
+- content_for :header_icon, "icon-pencil-circle.png"
+- top_head = t("mailer.cancelation_mailer.cancelation_notification.header_html",
+  name: @user.full_name)
+- panel_icon = "button-x-circled.png"
+- panel_action_date = time_and_date(@proposal.created_at)
+- panel_action = t("mailer.cancelation_mailer.cancelation_notification.subsection",
+  name: @user.full_name)
+- panel_text = t("mailer.cancelation_mailer.cancelation_notification.reason", reason: @reason)
+- cta_subheader = t("mailer.cancelation_mailer.cancelation_notification.subheader_html",
+  public_id: @proposal.public_id,
+  full_name: @proposal.requester.full_name)
+
+%table.container
+  = render partial: "mail_shared/email_header/hero_text",
+    locals: { text: top_head }
+
+%table.container
+  = render partial: "mail_shared/call_to_action/subheader",
+    locals: { subheader: cta_subheader, vertical: "" }
+
+  / Start Panel Wrapper
+  = render partial: "mail_shared/panel/header"
+
+  = render partial: "mail_shared/panel/row_description",
+    locals: { icon: panel_icon,
+              action: panel_action,
+              datetime: panel_action_date }
+
+  = render partial: "mail_shared/panel/row_content_text",
+    locals: { text: panel_text, last: true }
+
+  = render partial: "mail_shared/panel/vertical_buffer"
+  / End Panel Wrapper
+
+  = render partial: "mail_shared/call_to_action/subheader",
+    locals: { subheader: "" }
+  = render partial: "mail_shared/call_to_action/button",
+    locals: { link_path: proposal_url(@proposal), link_text: t("mailer.view_request_cta") }

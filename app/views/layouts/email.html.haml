@@ -1,0 +1,23 @@
+!!!
+%html
+  %head
+    %title C2
+    %meta{ content: "text/html; charset=US-ASCII", "http-equiv" => "Content-Type" }/
+    %meta{ content: "width=device-width", name: "viewport" }/
+    = render "mail_shared/email_styles"
+    = render "mail_shared/mobile_email_styles"
+
+  %body
+    %table.body
+      %tr
+        %td.center{ align: "center", valign: "top" }
+          %center
+            = render partial: "mail_shared/email_header/topbar"
+
+            - if !yield(:header_icon).empty?
+              = render partial: "mail_shared/email_header/icon", locals: { icon: yield(:header_icon)}
+
+            = yield
+
+            %table.container.footer-bar
+              = render partial: "mail_shared/footer_foundation"

@@ -1,0 +1,41 @@
+- content_for :header_icon, "icon-truck-circle.png"
+- top_head = t("mailer.proposal_mailer.emergency_proposal_created_confirmation.header",
+  proposal_name: @proposal.name)
+- cta_subheader = t("mailer.proposal_mailer.emergency_proposal_created_confirmation.subheader")
+- proposal_link_text = t("mailer.view_request_cta")
+- cta_subheader_foot = t("mailer.proposal_status_html",
+  proposal_status: @proposal.capitalized_detailed_status)
+
+%table.container
+  = render partial: "mail_shared/call_to_action/subheader",
+    locals: { subheader: "Emergency Request",
+            vertical: "no-top-margin half-bottom-margin",
+            wrapvert: "no-top",
+            bold: "primary-text-color" }
+
+%table.container
+  = render partial: "mail_shared/email_header/hero_text",
+    locals: { text: top_head }
+
+  = render partial: "mail_shared/call_to_action/subheader",
+    locals: { subheader: cta_subheader,
+              vertical: "" }
+
+%hr/
+
+%table.container.contain-attributes
+  = render partial: "mail_shared/call_to_action/subheader",
+    locals: { subheader: cta_subheader_foot, bold: "not-bold" }
+
+  / Start Panel Wrapper
+  = render partial: "mail_shared/panel/proposal_attributes",
+    locals: { proposal: @proposal }
+
+  = render partial: "mail_shared/panel/vertical_buffer"
+
+  = render partial: "mail_shared/call_to_action/subheader",
+    locals: { subheader: "" }
+
+  = render partial: "mail_shared/call_to_action/button",
+    locals: { link_path: proposal_url(@proposal),
+              link_text: proposal_link_text }

@@ -1,5 +1,6 @@
 class ReportMailer < ApplicationMailer
   add_template_helper ReportHelper
+  skip_before_action :add_logo
 
   def daily_budget_report
     @ba60_proposals = proposals_query("BA60")
@@ -73,11 +74,11 @@ class ReportMailer < ApplicationMailer
   def build_csv_report(report)
     proposal_data = report.run
     user = report.user
-    csv_header(user) + csv_body(proposal_data)
+    csv_header(user, proposal_data) + csv_body(proposal_data)
   end
 
-  def csv_header(user)
-    CSV.generate_line([ProposalDecorator.csv_headers, user.client_model.csv_headers].flatten)
+  def csv_header(user, proposal_data)
+    CSV.generate_line([ProposalDecorator.csv_headers(proposal_data.rows.first), user.client_model.csv_headers].flatten)
   end
 
   def csv_body(proposal_data)

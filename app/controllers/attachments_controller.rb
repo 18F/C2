@@ -8,7 +8,7 @@ class AttachmentsController < ApplicationController
     attachment.user = current_user
     if attachment.save
       flash[:success] = "You successfully added a attachment"
-      Dispatcher.deliver_attachment_emails(proposal)
+      DispatchFinder.run(proposal).deliver_attachment_emails(attachment)
     else
       flash[:error] = attachment.errors.full_messages
     end
@@ -27,6 +27,7 @@ class AttachmentsController < ApplicationController
   end
 
   protected
+
   def proposal
     @cached_proposal ||= Proposal.find(params[:proposal_id])
   end

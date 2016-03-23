@@ -1,0 +1,45 @@
+- content_for :header_icon, nil
+- top_head = t("mailer.welcome_mailer.welcome_notification.header")
+
+%center.grey-background
+  %table.container
+    = render partial: "mail_shared/call_to_action/subheader",
+      locals: { subheader: "", height: "half" }
+
+    = render partial: "mail_shared/email_header/hero_text",
+      locals: { style: "blue-bold",
+                text: t("mailer.welcome_mailer.welcome_notification.hello",
+                full_name: @user.full_name) }
+
+    = render partial: "mail_shared/email_header/hero_text",
+      locals: { text: top_head }
+
+    = render partial: "mail_shared/call_to_action/subheader",
+      locals: { vertical: "half", subheader: "" }
+
+%table.container
+
+
+  = render partial: "mail_shared/call_to_action/subheader",
+    locals: { vertical: "half", subheader: "" }
+
+  = render partial: "mail_shared/call_to_action/subheader",
+    locals: { vertical: "no-top-margin quarter-bottom-margin",
+              align: "align-left",
+              subheader: t("mailer.welcome_mailer.welcome_notification.para1") }
+
+  = render partial: "mail_shared/call_to_action/subheader",
+    locals: { vertical: "no-top-margin quarter-bottom-margin",
+              align: "align-left",
+              subheader: t("mailer.welcome_mailer.welcome_notification.para2_html",
+              help_url: help_url('') ) }
+
+  = render partial: "mail_shared/call_to_action/subheader",
+    locals: { vertical: "no-top-margin quarter-bottom-margin",
+              align: "align-left",
+              subheader: t("mailer.welcome_mailer.welcome_notification.para3_html", feedback_url: feedback_url )}
+
+  = render partial: "mail_shared/call_to_action/subheader",
+    locals: { vertical: "no-margin",
+              align: "align-left",
+              subheader: t("mailer.welcome_mailer.welcome_notification.signature")}

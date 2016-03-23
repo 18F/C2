@@ -24,6 +24,10 @@ module Test
     def self.expense_type_options
       []
     end
+
+    def total_price
+      1
+    end
   end
 
   def self.setup_models

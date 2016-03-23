@@ -7,7 +7,6 @@ class ProposalsController < ApplicationController
   before_action -> { authorize proposal }, only: [:show, :cancel, :cancel_form, :history]
   before_action :needs_token_on_get, only: [:approve, :complete]
   before_action :validate_access, only: [:approve, :complete]
-  helper_method :display_status
   add_template_helper ProposalsHelper
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
 
@@ -33,13 +32,13 @@ class ProposalsController < ApplicationController
 
   def cancel
     if params[:reason_input].present?
-      cancel_proposal_and_send_cancellation_emails
+      cancel_proposal_and_send_cancelation_emails
       flash[:success] = "Your request has been canceled"
       redirect_to proposal_path(proposal)
     else
       redirect_to(
         cancel_form_proposal_path(params[:id]),
-        alert: "A reason for cancellation is required. Please indicate why this request needs to be canceled."
+        alert: "A reason for cancelation is required. Please indicate why this request needs to be canceled."
       )
     end
   end
@@ -98,11 +97,11 @@ class ProposalsController < ApplicationController
     headers["Content-Type"] = "text/csv"
   end
 
-  def cancel_proposal_and_send_cancellation_emails
+  def cancel_proposal_and_send_cancelation_emails
     comments = "Request canceled with comments: " + params[:reason_input]
     proposal.cancel!
     proposal.comments.create!(comment_text: comments, user: current_user)
-    Dispatcher.new.deliver_cancellation_emails(proposal, params[:reason_input])
+    DispatchFinder.run(proposal).deliver_cancelation_emails(current_user, params[:reason_input])
   end
 
   def proposal

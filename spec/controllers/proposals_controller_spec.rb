@@ -218,11 +218,12 @@ describe ProposalsController do
       expect(flash[:alert]).to eq 'You are not the requester'
     end
 
-    it 'should redirect for canceled requests' do
-      proposal.update_attributes(status:'canceled')
+    it "should redirect for canceled requests" do
+      proposal.update(status: "canceled")
       login_as(proposal.requester)
 
       get :cancel_form, id: proposal.id
+
       expect(response).to redirect_to(proposal_path proposal.id)
       expect(flash[:alert]).to eq 'Sorry, this proposal has been canceled.'
     end
@@ -235,12 +236,12 @@ describe ProposalsController do
       login_as(user)
     end
 
-    it 'sends a cancellation email' do
+    it 'sends a cancelation email' do
       mock_dispatcher = double('dispatcher').as_null_object
-      allow(Dispatcher).to receive(:new).and_return(mock_dispatcher)
-      expect(mock_dispatcher).to receive(:deliver_cancellation_emails)
+      allow(DispatchFinder).to receive(:run).with(proposal).and_return(mock_dispatcher)
+      expect(mock_dispatcher).to receive(:deliver_cancelation_emails)
 
-      post :cancel, id: proposal.id, reason_input:'My test cancellation text'
+      post :cancel, id: proposal.id, reason_input:'My test cancelation text'
     end
   end
 

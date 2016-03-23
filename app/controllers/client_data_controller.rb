@@ -39,14 +39,14 @@ class ClientDataController < ApplicationController
   def create_client_data
     proposal = ClientDataCreator.new(@client_data_instance, current_user, attachment_params).run
     add_steps
-    Dispatcher.deliver_new_proposal_emails(proposal)
+    DispatchFinder.run(proposal).deliver_new_proposal_emails
   end
 
   def update_or_notify_of_no_changes
     if attribute_changes?
-      record_changes
+      comment = record_changes
       @client_data_instance.save
-      setup_and_email_approvers
+      setup_and_email_approvers(comment)
       flash[:success] = "Successfully modified!"
     else
       flash[:error] = "No changes were made to the request"
@@ -60,7 +60,7 @@ class ClientDataController < ApplicationController
   def record_changes
   end
 
-  def setup_and_email_approvers
+  def setup_and_email_approvers(comment = nil)
   end
 
   def filtered_params

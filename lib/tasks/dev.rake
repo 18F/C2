@@ -8,6 +8,7 @@ if Rails.env.development? || Rails.env.test?
 
       work_order = create(:ncr_work_order)
       work_order.setup_approvals_and_observers
+      create(:attachment, proposal: work_order.proposal)
 
       procurement = create(:gsa18f_procurement)
       procurement.add_steps

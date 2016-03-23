@@ -378,8 +378,10 @@ describe Proposal do
   describe '#restart' do
     it "creates new API tokens" do
       proposal = create(:proposal, :with_parallel_approvers)
-      proposal.individual_steps.each do |approval|
-        create(:api_token, step: approval)
+      create(:ncr_work_order, proposal: proposal)
+
+      proposal.individual_steps.each do |step|
+        create(:api_token, step: step)
       end
 
       expect(proposal.api_tokens.size).to eq(2)
@@ -424,6 +426,12 @@ describe Proposal do
       attachment = create(:attachment, proposal: proposal, user: proposal.requester)
 
       expect(proposal.as_indexed_json[:num_attachments]).to eq(1)
+    end
+
+    it "uses requester.display_name as requester" do
+      proposal = create(:proposal)
+
+      expect(proposal.as_indexed_json[:requester]).to eq(proposal.requester.display_name)
     end
   end
 end

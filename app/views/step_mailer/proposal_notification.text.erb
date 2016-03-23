@@ -1,0 +1,14 @@
+<%= t("mailer.step_mailer.proposal_notification.header",
+    requester_name: @proposal.requester.full_name,
+    step_type_noun: @step.noun) %>
+
+  <%= t("mailer.proposal_status",
+        proposal_status: @proposal.capitalized_detailed_status) %>
+
+<%= @step.action_name %>
+<%= generate_approve_url(@step) %>
+
+<%= t("mailer.view_request_cta") %>
+<%= proposal_url(@proposal) %>
+
+<%= t("mailer.footer", feedback_url: feedback_url) %>

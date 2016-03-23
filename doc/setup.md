@@ -32,10 +32,7 @@ C2 is a fairly typical Rails application, so the setup is straightforward:
     * Give the application a **Name** that gives MyUSA admins a good idea of what it is and who set it up; e.g. `Janet's laptop C2`
     * Set the **Url** field to the URL for your setup. If you're running the app locally, the default URL is `http://localhost:3000/`
     * Set the **Redirect uri** field to `[your_C2_url]/auth/myusa/callback` . For example, with the default URL: `http://localhost:3000/auth/myusa/callback`
-    * In the "Select the API Scopes..." section, select:
-        * Email Address
-        * First Name
-        * Last Name
+    * In the "Select the API Scopes..." section, select **Email Address**.
     * By default, new applications on MyUSA have a status of **Private**, which means that only the MyUSA user who registered the app can log in. If you need other people to log into your C2 setup, then your app will need a status of **Public**. (This matters for staging servers more than local development, so you probably don't need to worry about it.)
 
     Since Public apps need to be approved by MyUSA admins before they're usable, it's best to leave the status as _Private_ when setting up, then [change it to _Public_ later](#myusa-wont-let-other-users-log-in).
