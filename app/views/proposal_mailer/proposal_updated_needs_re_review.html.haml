@@ -1,0 +1,65 @@
+- content_for :header_icon, "icon-pencil-circle.png"
+- top_head = t("mailer.proposal_mailer.proposal_updated_needs_re_review.header_html",
+              modifier_name: @modifier.full_name,
+              proposal_name: @proposal.name)
+- cta_subheader = t("mailer.proposal_mailer.proposal_updated_needs_re_review.subheader")
+- panel_icon = "button-circle.png"
+- panel_action = t("mailer.modifier_action", full_name: @modifier.full_name)
+- panel_action_date = time_and_date(@proposal.updated_at)
+- cta_subheader_foot = t("mailer.proposal_status_html",
+  proposal_status: @proposal.capitalized_detailed_status)
+
+%table.container
+  = render partial: "mail_shared/email_header/hero_text",
+    locals: { text: top_head, style: "no-margin-wrapper" }
+
+  = render partial: "mail_shared/call_to_action/subheader",
+    locals: { subheader: cta_subheader, vertical: "" }
+
+  / Start Panel Wrapper
+  = render partial: "mail_shared/panel/header"
+
+  = render partial: "mail_shared/panel/row_description",
+    locals: { icon: panel_icon,
+              action: panel_action,
+              datetime: panel_action_date }
+
+  = render partial: "mail_shared/panel/row_content_modified",
+    locals: { comment: @comment, last: true}
+
+  = render partial: "mail_shared/call_to_action/subheader",
+    locals: { subheader: "", height: "half" }
+
+  = render partial: "mail_shared/call_to_action/subheader",
+    locals: { subheader: "", height: "half" }
+
+%hr/
+
+/ Start Container
+%table.container.contain-attributes
+
+  = render partial: "mail_shared/call_to_action/subheader",
+    locals: {  bold: "not-bold", subheader: cta_subheader_foot }
+
+  = render partial: "mail_shared/approval/chain",
+    locals: { proposal: @proposal }
+
+  = render partial: "mail_shared/call_to_action/subheader",
+    locals: { subheader: "" }
+
+  = render partial: "mail_shared/panel/proposal_attributes",
+    locals: { proposal: @proposal }
+
+  = render partial: "mail_shared/panel/vertical_buffer"
+
+%table.container
+
+  = render partial: "mail_shared/call_to_action/subheader",
+    locals: { subheader: "" }
+
+  = render partial: "mail_shared/call_to_action/subheader",
+    locals: { subheader: t("mailer.reply_to_comment") }
+
+  = render partial: "mail_shared/call_to_action/button",
+    locals: { link_path: proposal_url(@proposal),
+    link_text: t("mailer.view_or_modify_request_cta") }

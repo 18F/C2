@@ -1,35 +1,17 @@
 module ProposalConversationThreading
   extend ActiveSupport::Concern
-  include ConversationThreading
-
-  def send_proposal_email(proposal:, to_email:, from_email: nil, template_name: nil)
-    @proposal = proposal.decorate
-
-    assign_threading_headers(proposal)
-    subject = subject(proposal)
-
-    reply_email = reply_to_email().gsub("@", "+#{proposal.public_id}@")
-
-    mail(
-      to: to_email,
-      subject: subject,
-      from: from_email || default_sender_email,
-      reply_to: reply_email,
-      template_name: template_name
-    )
-  end
 
   def assign_threading_headers(proposal)
-    msg_id = "<proposal-#{proposal.id}@#{DEFAULT_URL_HOST}>"
+    msg_id = "<proposal-#{proposal.id}@#{ENV['DEFAULT_URL_HOST']}>"
     self.thread_id = msg_id
   end
 
-  def subject(proposal)
-    if proposal.client_data_type == "Ncr::WorkOrder"
-      client_data = proposal.client_data
-      %(Request #{proposal.public_id}, #{client_data.organization_code_and_name}, #{client_data.building_id} from #{proposal.requester.email_address})
-    else
-      "Request #{proposal.public_id}"
-    end
+  def thread_id=(msg_id)
+    # http://www.jwz.org/doc/threading.html
+    headers["In-Reply-To"] = msg_id
+    headers["References"] = msg_id
+    # GMail-specific
+    # http://stackoverflow.com/a/25435722/358804
+    headers["X-Entity-Ref-ID"] = msg_id
   end
 end

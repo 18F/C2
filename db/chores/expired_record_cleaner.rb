@@ -21,7 +21,7 @@ class ExpiredRecordCleaner
     if !proposal.requester
       handle_no_requester(proposal)
     else
-      handle_cancellation(proposal)
+      handle_cancelation(proposal)
     end
   end
 
@@ -33,7 +33,7 @@ class ExpiredRecordCleaner
   end
 
   def notify_proposal_requester(proposal)
-    CancellationMailer.proposal_fiscal_cancellation(proposal).deliver_later
+    CancelationMailer.fiscal_cancelation_notification(proposal).deliver_later
   end
 
   def handle_no_requester(proposal)
@@ -47,7 +47,7 @@ class ExpiredRecordCleaner
     end
   end
 
-  def handle_cancellation(proposal)
+  def handle_cancelation(proposal)
     if @verbose && !Rails.env.test?
       STDERR.puts "#{proposal.public_id} -> #{proposal.requester.email_address}"
     end

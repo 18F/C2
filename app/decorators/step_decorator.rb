@@ -1,6 +1,14 @@
 class StepDecorator < Draper::Decorator
   delegate_all
 
+  def detailed_status
+    if object.status == "pending" || object.status == "actionable"
+      I18n.t("decorators.steps.status.pending")
+    elsif object.status = "completed"
+      "#{I18n.t('decorators.steps.status.completed')} #{I18n.l(object.completed_at, format: :date)}"
+    end
+  end
+
   def display_status
     if object.actionable?
       "pending"
@@ -15,6 +23,14 @@ class StepDecorator < Draper::Decorator
 
   def action_name
     get_step_text(:execute_button)
+  end
+
+  def noun
+    get_step_text(:noun)
+  end
+
+  def adjective
+    get_step_text(:adjective)
   end
 
   def waiting_text

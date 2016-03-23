@@ -53,14 +53,14 @@ describe Step do
     end
   end
 
-  describe '#on_approved_entry' do
-    it "notified the proposal if the root gets approved" do
+  describe '#on_completed_entry' do
+    it "notified the proposal if the root gets completed" do
       expect(approval.proposal).to receive(:complete!).once
       approval.initialize!
       approval.complete!
     end
 
-    it "does not notify the proposal if a child gets approved" do
+    it "does not notify the proposal if a child gets completed" do
       proposal = create(:proposal)
       child1 = build(:approval, user: create(:user))
       child2 = build(:approval, user: create(:user))
@@ -99,15 +99,20 @@ describe Step do
     let!(:proposal) { create(:proposal) }
 
     before :each do
+      allow(DispatchFinder).to receive(:run).with(proposal).and_return(
+        double(step_complete: true)
+      )
       # @todo syntax for this will get cleaned up
       and_clause = create(:parallel_step, child_steps: [
         create(:approval, user: amy),
         create(:approval, user: bob)
       ])
+
       then_clause = create(:serial_step, child_steps: [
         create(:approval, user: dan),
         create(:approval, user: erin)
       ])
+
       proposal.root_step = create(:parallel_step, min_children_needed: 2, child_steps: [
         and_clause,
         create(:approval, user: carrie),

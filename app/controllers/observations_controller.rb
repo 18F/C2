@@ -17,6 +17,7 @@ class ObservationsController < ApplicationController
     else
       redirect_path = proposal_path(proposal)
     end
+    DispatchFinder.run(proposal).on_observer_removed(observation.user)
     observation.destroy
     flash[:success] = "Removed Observation for #{proposal.public_id}"
     redirect_to redirect_path

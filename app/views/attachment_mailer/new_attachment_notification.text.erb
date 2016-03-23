@@ -1,0 +1,12 @@
+<%= t("mailer.attachment_mailer.new_attachment_notification.header",
+      user_name: @attachment_user.full_name) %>
+
+<%= t("mailer.updated_subheader",
+  public_id: @proposal.public_id,
+  requester_name: @proposal.requester.full_name,
+  proposal_status: @proposal.detailed_status) %>
+
+<%= t("mailer.view_request_cta") %>
+<%= proposal_url(@proposal) %>
+
+<%= t("mailer.footer", feedback_url: feedback_url) %>

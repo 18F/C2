@@ -1,4 +1,6 @@
 describe 'User creation when logging in with Oauth to view a protected page' do
+  include EnvVarSpecHelper
+
   StructUser = Struct.new(:email_address, :first_name, :last_name)
 
   before do
@@ -17,6 +19,15 @@ describe 'User creation when logging in with Oauth to view a protected page' do
     expect(new_user.last_name).to eq("Jetsonian")
   end
 
+  it "sends welcome email to a new user" do
+    with_env_var("WELCOME_EMAIL", "true") do
+      deliveries.clear
+      expect { get '/auth/myusa/callback' }.to change { deliveries.length }.from(0).to(1)
+      welcome_mail = deliveries.first
+      expect(welcome_mail.subject).to eq("[TEST] Welcome to C2!")
+    end
+  end
+
   it "absence of first/last name does not throw error" do
     user = StructUser.new('somebody@example.com', nil, nil)
     setup_mock_auth(:myusa, user)
@@ -31,6 +42,17 @@ describe 'User creation when logging in with Oauth to view a protected page' do
     expect {
       get '/auth/myusa/callback'
     }.to_not change { User.count }
+  end
+
+  it "does not send welcome email to existing user" do
+    deliveries.clear
+    create(:user, email_address: 'george-test@example.com')
+
+    Timecop.travel(Time.current + 1.minute) do
+      expect {
+        get '/auth/myusa/callback'
+      }.to_not change { deliveries.length }
+    end
   end
 
   it 'redirects a newly logged in user to the carts screen' do

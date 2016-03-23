@@ -1,0 +1,14 @@
+<%= t("mailer.proposal_mailer.proposal_created_confirmation.header",
+  proposal_name: @proposal.name) %>
+
+<%= t("mailer.proposal_mailer.proposal_created_confirmation.approver_subheader") %>
+
+<% @proposal.individual_steps.each_with_index do |step, index| %>
+  <%= "#{index + 1}" %>
+  <%= step.user.full_name %>
+<% end %>
+
+<%= t("mailer.proposal_mailer.proposal_created_confirmation.cta") %>
+<%= proposal_url(@proposal) %>
+
+<%= t("mailer.footer", feedback_url: feedback_url) %>

@@ -9,7 +9,7 @@ class CommentsController < ApplicationController
 
     if comment.save
       flash[:success] = "You successfully added a comment"
-      Dispatcher.on_comment_created(comment)
+      DispatchFinder.run(comment.proposal).on_comment_created(comment)
     else
       flash[:error] = comment.errors.full_messages
     end
@@ -22,6 +22,7 @@ class CommentsController < ApplicationController
 
   def proposal
     @cached_proposal ||= Proposal.find(params[:proposal_id])
+    @cached_proposal.decorate
   end
 
   def comment_params

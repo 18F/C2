@@ -1,47 +1,20 @@
 module MailerHelper
-  def status_icon_tag(status, last_approver = false)
-    base_url = root_url.gsub(/\?.*$/, "").chomp("/")
-    bg_linear_image = base_url + image_path("bg_#{status}_status.gif")
-
-    image_tag(
-      base_url + image_path("icon-#{status}.png"),
-      class: "status-icon #{status} linear",
-      style: ("background-image: url('#{bg_linear_image}');" unless last_approver)
-    )
+  def property_display_value(field)
+    if field.to_s == ""
+      "-"
+    else
+      property_to_s(field)
+    end
   end
 
-  def generate_bookend_class(index, count)
-    case index
-    when count - 1
-      "class=last"
-    when 0
-      "class=first"
-    else
-      ""
-    end
+  def time_and_date(date)
+    "#{date.strftime('%m/%d/%Y')} at #{date.strftime('%I:%M %P')}"
   end
 
   def generate_approve_url(approval)
     proposal = approval.proposal
     opts = { version: proposal.version, cch: approval.api_token.access_token }
     complete_proposal_url(proposal, opts)
-  end
-
-  def cancellation_text(proposal, reason)
-    text = t(
-      "mailer.cancellation_mailer.cancellation_email.body",
-      name: proposal.name,
-      public_id: proposal.public_id
-    )
-    add_reason(text, reason)
-    text + "."
-  end
-
-  def observer_text(observation, reason = nil)
-    text = t("mailer.observer_mailer.on_observer_added.body")
-    add_author(text, observation.created_by)
-    add_reason(text, reason)
-    text + "."
   end
 
   def add_author(text, user)
@@ -56,11 +29,15 @@ module MailerHelper
     end
   end
 
-  def complete_text(step)
-    if step.is_a?(Steps::Purchase)
-      t("mailer.approval_reply_received_email.purchased")
+  def step_status_icon(proposal_step)
+    if proposal_step.status == "completed"
+      "icon-completed.png"
     else
-      t("mailer.approval_reply_received_email.approved")
+      "icon-number-" + (proposal_step.position - 1).to_s + "-pending.png"
     end
+  end
+
+  def step_user_title(step)
+    step.decorate.role_name
   end
 end

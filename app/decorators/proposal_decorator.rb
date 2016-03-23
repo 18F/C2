@@ -1,6 +1,22 @@
 class ProposalDecorator < Draper::Decorator
   delegate_all
 
+  def detailed_status
+    if object.status == "pending" && actionable_steps.any?
+      "pending #{actionable_steps.last.decorate.noun}"
+    else
+      object.status
+    end
+  end
+
+  def capitalized_detailed_status
+    detailed_status.capitalize
+  end
+
+  def total_price
+    client_data.try(:total_price) || ""
+  end
+
   def number_approved
     object.individual_steps.completed.count
   end
@@ -11,14 +27,6 @@ class ProposalDecorator < Draper::Decorator
 
   def steps_in_list_order
     object.individual_steps.with_users
-  end
-
-  def display_status
-    if object.pending?
-      "pending approval"
-    else
-      object.status
-    end
   end
 
   def waiting_text_for_status_in_table
@@ -44,6 +52,26 @@ class ProposalDecorator < Draper::Decorator
   end
 
   def as_csv
-    [public_id, created_at, requester.display_name, display_status, client_data.csv_fields].flatten
+    [public_id, created_at, requester.display_name, detailed_status, client_data.csv_fields].flatten
+  end
+
+  def fields_for_email_display
+    if client_data
+      client_data.decorate.public_send(:email_display)
+    else
+      []
+    end
+  end
+
+  def top_email_field
+    if client_data
+      client_data.decorate.public_send(:top_email_field)
+    end
+  end
+
+  private
+
+  def actionable_steps
+    @actionable_steps ||= object.individual_steps.actionable
   end
 end

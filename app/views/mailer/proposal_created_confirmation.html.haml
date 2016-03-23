@@ -1,7 +1,0 @@
-%div
-  = t("mailer.greeting", name: @proposal.requester.full_name)
-  %br
-  = t("mailer.proposal_created_confirmation.body")
-= render partial: "mail_shared/comments", locals: { comments: @proposal.comments }
-= render partial: "mail_shared/attachments", locals: { proposal: @proposal }
-= render partial: "mail_shared/proposal_mail", locals: { proposal: @proposal }
