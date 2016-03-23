@@ -12,6 +12,10 @@ class RolesConversion
     gsa18f_purchaser
   end
 
+  def gateway_roles
+    gateway_admin
+  end
+
   private
 
   def ba61_tier1_budget_team_approver
@@ -67,6 +71,14 @@ class RolesConversion
       "some.purchaser@example.com",
       "gsa18f_purchaser",
       "gsa18f"
+    )
+  end
+
+  def gateway_admin
+    with_email_role_slug!(
+      "gateway_admin@example.com",
+      "gateway_admin",
+      nil
     )
   end
 

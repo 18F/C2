@@ -1,0 +1,27 @@
+@import "../common/constants";
+
+table.summary-table {
+  tr th {
+    width: 20%;
+  }
+
+  td {
+    text-align: right;
+  }
+
+  td.amount {
+    width: 40%;
+  }
+
+  .percentage {
+    padding-left: 1em;
+    color: $lightgray;
+    font-size: 80%;
+  }
+
+  .clarification {
+    color: $lightgray;
+    font-size: 80%;
+    font-weight: normal;
+  }
+}
