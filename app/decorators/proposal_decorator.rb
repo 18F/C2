@@ -69,7 +69,7 @@ class ProposalDecorator < Draper::Decorator
     else
       step_label = "Final Step Completed"
     end
-    ["Public ID", "Created", "Requester", "Status", step_label), "Duration"]
+    ["Public ID", "Created", "Requester", "Status", step_label, "Duration"]
   end
 
   def as_csv
