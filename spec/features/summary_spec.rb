@@ -1,6 +1,6 @@
 describe "Summary page" do
   it "lists all subtotals correctly" do
-    admin_user = create(:user, :admin, client_slug: 'ncr')
+    admin_user = create(:user, :client_admin, client_slug: 'ncr')
     status_counts = { pending: 3, canceled: 2, completed: 4 }
     create_proposals(status_counts)
     login_as(admin_user)
@@ -15,7 +15,7 @@ describe "Summary page" do
   end
 
   it "names the rows correctly" do
-    admin_user = create(:user, :admin, client_slug: 'ncr')
+    admin_user = create(:user, :client_admin, client_slug: 'ncr')
     login_as(admin_user)
     @page = SummaryPage.new
     @page.load
