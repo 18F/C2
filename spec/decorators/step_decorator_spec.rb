@@ -4,7 +4,7 @@ describe StepDecorator do
       it "fetches the correct role text" do
         user = build_stubbed(:user)
         step = Steps::Approval.new(user: user).decorate
-        expect(step.label).to eq "Approval"
+        expect(step.label).to eq I18n.t(:label, scope: [:decorators, :steps, :approval])
       end
     end
 
@@ -12,7 +12,7 @@ describe StepDecorator do
       it "fetches the correct role text" do
         user = build_stubbed(:user)
         step = Steps::Purchase.new(user: user).decorate
-        expect(step.label).to eq "Purchase"
+        expect(step.label).to eq I18n.t(:label, scope: [:decorators, :steps, :purchase])
       end
     end
   end
@@ -22,7 +22,7 @@ describe StepDecorator do
       it "fetches the correct role text" do
         user = build_stubbed(:user)
         step = Steps::Approval.new(user: user).decorate
-        expect(step.role_name).to eq "Approver"
+        expect(step.role_name).to eq I18n.t(:role_name, scope: [:decorators, :steps, :approval])
       end
     end
 
@@ -30,7 +30,7 @@ describe StepDecorator do
       it "fetches the correct role text" do
         user = build_stubbed(:user)
         step = Steps::Purchase.new(user: user).decorate
-        expect(step.role_name).to eq "Purchaser"
+        expect(step.role_name).to eq I18n.t(:role_name, scope: [:decorators, :steps, :purchase])
       end
     end
   end
@@ -40,7 +40,7 @@ describe StepDecorator do
       it "fetches the correct action text" do
         user = build_stubbed(:user)
         step = Steps::Approval.new(user: user).decorate
-        expect(step.action_name).to eq "Approve"
+        expect(step.action_name).to eq I18n.t(:execute_button, scope: [:decorators, :steps, :approval])
       end
     end
 
@@ -48,7 +48,7 @@ describe StepDecorator do
       it "fetches the correct action text" do
         user = build_stubbed(:user)
         step = Steps::Purchase.new(user: user).decorate
-        expect(step.action_name).to eq "Mark as Purchased"
+        expect(step.action_name).to eq I18n.t(:execute_button, scope: [:decorators, :steps, :purchase])
       end
     end
   end
@@ -58,7 +58,7 @@ describe StepDecorator do
       it "fetches the correct waiting text" do
         user = build_stubbed(:user)
         step = Steps::Approval.new(user: user).decorate
-        expect(step.waiting_text).to eq "Waiting for review from:"
+        expect(step.waiting_text).to eq I18n.t("status.waiting", scope: [:decorators, :steps, :approval])
       end
     end
 
@@ -66,7 +66,7 @@ describe StepDecorator do
       it "fetches the correct waiting text" do
         user = build_stubbed(:user)
         step = Steps::Purchase.new(user: user).decorate
-        expect(step.waiting_text).to eq "Waiting for purchase from:"
+        expect(step.waiting_text).to eq I18n.t("status.waiting", scope: [:decorators, :steps, :purchase])
       end
     end
   end
