@@ -2,14 +2,7 @@ class SummaryController < ApplicationController
   before_action :authorize
 
   def index
-    client_namespaces = if current_user.gateway_admin?
-                          Proposal.client_slugs
-                        else
-                          [current_user.client_slug]
-                        end
-                        .map(&:titleize)
-
-    @summaries = client_namespaces.map do |cn|
+    @summaries = titleized_client_namespaces.map do |cn|
       get_client_summary(cn, params[:fiscal_year])
     end
   end
@@ -17,7 +10,7 @@ class SummaryController < ApplicationController
   private
 
   def authorize
-    if !adminish_role? || (!client_slug? && !current_user.gateway_admin?)
+    if !adminish_role? || (needs_client_slug? && !client_slug?)
       render "authorization_error", status: 403
     end
   end
@@ -26,8 +19,21 @@ class SummaryController < ApplicationController
     current_user.admin? || current_user.client_admin? || current_user.gateway_admin?
   end
 
+  def needs_client_slug?
+    current_user.client_admin?
+  end
+
   def client_slug?
     current_user.client_slug.present?
+  end
+
+  def titleized_client_namespaces
+    namespaces = if current_user.client_admin?
+                   [current_user.client_slug]
+                 else
+                   Proposal.client_slugs
+                 end
+    namespaces.map(&:titleize)
   end
 
   def get_client_summary(client_namespace, fiscal_year)
