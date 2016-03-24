@@ -46,7 +46,7 @@
       %label.control-label{for: "#{current_user.client_model_slug}[created_within]"}
         Date within
       %select.form-control{name: "#{current_user.client_model_slug}[created_within]"}
-        = options_for_select([["Select duration", "", { disabled: true }], "1 year", "6 months", "1 month"], params[current_user.client_model_slug]["created_within"]||"")
+        = options_for_select([["Select duration", "", { disabled: true }], "1 year", "6 months", "1 month"], params.fetch(current_user.client_model_slug, {})["created_within"] || "")
     .col-xs-5.right.inline
       %label.inline.control-label{for: "#{current_user.client_model_slug}[created_at]"}
         of  
