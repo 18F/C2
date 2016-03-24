@@ -12,30 +12,34 @@ $(document).ready(function() {
   var buttonToggler = function() {
     var speed = 400;
     if (searchTerms.val().length == 0) {
+      $("#search-button").hide();
       $(".m-search-ui .input-group-addon.magnifier").fadeIn(speed);
-      $("#search-button").hide("fast");
     }
     else {
       if (!advOptionsVisible()) {
         $("#adv-options").show();
       }
+      $(".m-search-ui .input-group-addon.magnifier").hide();
       $("#search-button").fadeIn(speed);
-      $(".m-search-ui .input-group-addon.magnifier").hide("fast");
     }
   };
 
   var showAdvOptions = function() {
     $("fieldset.adv").show();
+    $("fieldset.controls").show();
     $("#adv-options").hide();
     $("#search-button").hide();
-    $(".m-search-ui .input-group-addon.magnifier").hide();
-    $("fieldset.basic .input-group").addClass("input-group-block");
+    $(".m-search-ui .input-group-addon.magnifier").show();
+    //$("fieldset.basic .input-group").addClass("input-group-block");
+    $(".m-search-ui").addClass("expanded");
   };
   var hideAdvOptions = function() {
     $("fieldset.adv").hide();
+    $("fieldset.controls").hide();
     $("#adv-options").show();
     buttonToggler();
-    $("fieldset.basic .input-group").removeClass("input-group-block");
+    //$("fieldset.basic .input-group").removeClass("input-group-block");
+    $(".m-search-ui").removeClass("expanded");
   };
   $("a.adv-options").click(function(e) {
     showAdvOptions();
@@ -59,7 +63,9 @@ $(document).ready(function() {
 
   // listen for change
   searchTerms.keyup(function(e) {
-    buttonToggler();
+    if (!advOptionsVisible()) {
+      buttonToggler();
+    }
   });
 
   searchTerms.focusin(function() {
@@ -76,39 +82,36 @@ $(document).ready(function() {
     }
   });
 
-  /* *** setup Adv Search UI *** */
+  // disable the form when we submit it
   $(".m-search-ui button.search").click(function() {
     var btn = $(this);
-    var searchForm = $('form.adv-search');
+    var searchForm = $('form.search');
     searchForm.submit();
     // IMPORTANT disable *AFTER* submit
     searchForm.find('fieldset').prop("disabled", true);
     btn.prop("disabled", true);
   });
-  /*
-  $('form.adv-search').on("submit", function(e) {
-    var searchForm = $(this);
-    var termsInput = $('.search-terms');
-    if (termsInput.val().length) {
-      var textInput = $('<input type="hidden" name="text">');
-      textInput.val(termsInput.val());
-      searchForm.append(textInput);
-    }
-    termsInput.prop("disabled", true);
-    return true;
-  });
-  */
+
+  // fetch search total for preview count
+  var updatePreviewCount = function() {
+    var countEl = $(".results-count-preview .count");
+    var randN = Math.floor((Math.random() * 10) + 1);
+    countEl.html(randN);
+
+  };
 
   // if any adv search form inputs change, fetch new preview total
   // the 'keyup' listener handles text input immediately (change waits for focus change)
-  $('form.adv-search :input').keyup(function(e) {
+  $('form.search :input').keyup(function(e) {
     var el = $(e.target);
-    console.log('adv search keyup: ', el[0].name);
+    //console.log('adv search keyup: ', el[0].name);
+    updatePreviewCount();
   });
   // the 'onchange' listener handles select/checkbox/radio immediately
-  $('form.adv-search :input').change(function(e) {
+  $('form.search :input').change(function(e) {
     var el = $(e.target);
-    console.log('adv search change: ', el[0].name);
+    //console.log('adv search change: ', el[0].name);
+    updatePreviewCount();
   });
 
   // ENTER key submits form

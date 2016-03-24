@@ -1,6 +1,6 @@
 .inset
   .row.m-search-ui
-    %form.adv-search{role: "form", action: query_proposals_path, method: "get"}
+    %form.form-horizontal.search{role: "form", action: query_proposals_path, method: "get"}
       %fieldset.basic
         .form-group.basic
           .input-group
@@ -17,7 +17,7 @@
             Advanced options
       = render partial: "shared/search_form"
 
-- if defined?(show_adv_search_ui) && show_adv_search_ui
+- if (defined?(show_adv_search_ui) && show_adv_search_ui) || @adv_search.to_s.length > 0
   <script type="text/javascript">var C2_SEARCH_UI_OPEN = true;</script>
 - else
   <script type="text/javascript">var C2_SEARCH_UI_OPEN = false;</script>

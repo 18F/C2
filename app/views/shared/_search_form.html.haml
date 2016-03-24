@@ -61,9 +61,17 @@
         %input{type: "checkbox", name: "#{current_user.client_model_slug}[includes_attachment]", checked: @adv_search.value_for("num_attachments")}
         Includes attachment
 
-  .form-group.adv-controls
+%fieldset.controls
+  .adv-controls.row
     %a.closer{href: "#"}
       &times; Close
 
-    %button#adv-search-button.btn.btn-lg.btn-primary{type: "submit"}
+    %button#adv-search-button.btn.btn-default.btn-primary{type: "submit"}
       Search
+      %i.fa.fa-search.fa-fw
+
+    .results-count-preview
+      %span.count
+        = (@proposals_data.es_response.results.total || 0)
+      results
+
