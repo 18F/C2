@@ -112,8 +112,8 @@ $(document).ready(function() {
     previewCountTimer = setTimeout(function() {
       $.get(url, function(resp) {
         countEl.html(resp.total);
-      }).fail(function() {
-        console.log('fail!', arguments);
+      }).fail(function(xhr, err, msg) {
+        console.log('fail!', msg);
       });
     }, 1000); // TODO experiment with this delay
   };
@@ -130,6 +130,13 @@ $(document).ready(function() {
     var el = $(e.target);
     //console.log('adv search change: ', el[0].name);
     updatePreviewCount();
+  });
+
+  $("a.resetter").click(function() {
+    var searchForm = $('form.search');
+    searchForm[0].reset();
+    updatePreviewCount();
+    return false;
   });
 
   // ENTER key submits form
