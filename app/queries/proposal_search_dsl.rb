@@ -74,14 +74,22 @@ class ProposalSearchDsl
   end
 
   def convert_created_at_to_range(fielded, relative_to_now = false)
-    high_end_range = Time.zone.parse(fielded[:created_at].to_s) || Time.current
-    within_parsed = fielded[:created_within].match(/^(\d+) (\w+)/)
-    return unless high_end_range && within_parsed
-    low_end_range = high_end_range.utc - within_parsed[1].to_i.send(within_parsed[2])
+    ranges = get_date_ranges(fielded[:created_at], fielded[:created_within])
+    return unless ranges
     if relative_to_now
-      fielded[:created_at] = "[#{low_end_range.iso8601} TO now]"
+      fielded[:created_at] = "[#{ranges[0].iso8601} TO now]"
     else
-      fielded[:created_at] = "[#{low_end_range.iso8601} TO #{high_end_range.utc.iso8601}]"
+      fielded[:created_at] = "[#{ranges[0].iso8601} TO #{ranges[1].utc.iso8601}]"
+    end
+  end
+
+  def get_date_ranges(created_at, created_within)
+    high_end_range = Time.zone.parse(created_at.to_s) || Time.current
+    within_parsed = created_within.match(/^(\d+) (\w+)/)
+    if high_end_range && within_parsed
+      [high_end_range.utc - within_parsed[1].to_i.send(within_parsed[2]), high_end_range]
+    else
+      false
     end
   end
 
