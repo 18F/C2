@@ -27,7 +27,7 @@ class SummaryController < ApplicationController
   end
 
   def titleized_client_namespaces
-    namespaces = if current_user.client_admin?
+    namespaces = if !(current_user.gateway_admin? || current_user.admin?)
                    [current_user.client_slug]
                  else
                    Proposal.client_slugs
