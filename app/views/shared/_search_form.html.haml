@@ -71,7 +71,7 @@
       %i.fa.fa-search.fa-fw
 
     .results-count-preview
-      - if @proposals_data.es_response
+      - if @proposals_data && @proposals_data.es_response
         %span.count
           = (@proposals_data.es_response.results.total || 0)
         results
