@@ -34,7 +34,7 @@ class ProposalDecorator < Draper::Decorator
   end
 
   def total_completion_days
-    if completed?
+    if completed? && total_step_users > 0
       (final_completed_date.to_date - created_at.to_date).to_i
     else
       ""
