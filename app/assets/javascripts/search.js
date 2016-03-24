@@ -12,7 +12,7 @@ $(document).ready(function() {
   // manage the basic search input button via the search-terms field
   var searchTerms = $(".m-search-ui .search-terms");
   var buttonToggler = function() {
-    if (searchTerms.val().length == 0) {
+    if (searchTerms && searchTerms.val() && searchTerms.val().length == 0) {
       $("#search-button").hide();
       $(".m-search-ui .input-group-addon.magnifier").fadeIn(FADE_SPEED);
     }
