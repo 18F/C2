@@ -45,6 +45,7 @@ C2::Application.routes.draw do
       get "archive"
       get "download", defaults: { format: "csv" }
       get "query"
+      get "query_count"
     end
 
     resources :comments, only: :create

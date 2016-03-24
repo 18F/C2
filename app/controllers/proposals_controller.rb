@@ -71,6 +71,15 @@ class ProposalsController < ApplicationController
     @end_date = query_listing.end_date
   end
 
+  def query_count
+    query
+    if @proposals_data
+      render json: { total: @proposals_data.es_response.results.total }
+    else
+      render json: { error: flash[:error] }
+    end
+  end
+
   def download
     params[:size] = :all
     params.delete(:page)

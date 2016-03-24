@@ -60,7 +60,7 @@ $(document).ready(function() {
     buttonToggler();
   }
 
-  // listen for change
+  // listen for change on basic search box
   searchTerms.keyup(function(e) {
     if (!advOptionsVisible()) {
       buttonToggler();
@@ -92,11 +92,30 @@ $(document).ready(function() {
   });
 
   // fetch search total for preview count
+  var previewCountTimer = 0;
+  var previewCountUrl = "";
   var updatePreviewCount = function() {
-    var countEl = $(".results-count-preview .count");
-    var randN = Math.floor((Math.random() * 10) + 1);
-    countEl.html(randN);
+    var countEl = $('.results-count-preview .count');
+    countEl.html('<i class="fa fa-spinner fa-pulse"></i>');
+    var searchForm = $('form.search');
+    var getParams = searchForm.serialize();
+    var url = searchForm.attr('action') + '_count?' + getParams;
+    if (url == previewCountUrl) {
+      return;
+    }
+    previewCountUrl = url;
 
+    if (previewCountTimer) {
+      clearTimeout(previewCountTimer);
+    }
+
+    previewCountTimer = setTimeout(function() {
+      $.get(url, function(resp) {
+        countEl.html(resp.total);
+      }).fail(function() {
+        console.log('fail!', arguments);
+      });
+    }, 1000); // TODO experiment with this delay
   };
 
   // if any adv search form inputs change, fetch new preview total
