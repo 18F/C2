@@ -16,7 +16,7 @@ class Dispatcher
       StepMailer.proposal_notification(step).deliver_later
     end
 
-    ProposalMailer.proposal_created_confirmation(proposal).deliver_later
+    deliver_proposal_created_confirmation
   end
 
   def deliver_attachment_emails(attachment)
@@ -107,5 +107,9 @@ class Dispatcher
 
   def next_step
     proposal.reload.currently_awaiting_steps.first
+  end
+
+  def deliver_proposal_created_confirmation
+    ProposalMailer.proposal_created_confirmation(proposal).deliver_later
   end
 end

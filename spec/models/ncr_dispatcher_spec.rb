@@ -1,4 +1,36 @@
 describe NcrDispatcher do
+  describe "#deliver_new_proposal_emails" do
+    context "work order is emergency" do
+      it "sends the emergency proposal created confirmation do the requester" do
+        work_order = create(:ncr_work_order, :is_emergency)
+        proposal = work_order.proposal
+
+        allow(ProposalMailer).to receive(:emergency_proposal_created_confirmation).
+          with(proposal).
+          and_return(double(deliver_later: true))
+
+        NcrDispatcher.new(proposal).deliver_new_proposal_emails
+
+        expect(ProposalMailer).to have_received(:emergency_proposal_created_confirmation).with(proposal)
+      end
+
+      context "work order is not emergency" do
+        it "sends the regular proposal created confirmation do the requester" do
+          work_order = create(:ncr_work_order)
+          proposal = work_order.proposal
+
+          allow(ProposalMailer).to receive(:proposal_created_confirmation).
+            with(proposal).
+            and_return(double(deliver_later: true))
+
+          NcrDispatcher.new(proposal).deliver_new_proposal_emails
+
+          expect(ProposalMailer).to have_received(:proposal_created_confirmation).with(proposal)
+        end
+      end
+    end
+  end
+
   describe "#on_proposal_update" do
     context "proposal needs to be re-reviewed" do
       it "notifies pending step users" do
