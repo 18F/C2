@@ -7,38 +7,37 @@ $(document).ready(function() {
     return $("fieldset.adv").is(":visible");
   };
 
+  var FADE_SPEED = 200;
+
   // manage the basic search input button via the search-terms field
   var searchTerms = $(".m-search-ui .search-terms");
   var buttonToggler = function() {
-    var speed = 400;
     if (searchTerms.val().length == 0) {
       $("#search-button").hide();
-      $(".m-search-ui .input-group-addon.magnifier").fadeIn(speed);
+      $(".m-search-ui .input-group-addon.magnifier").fadeIn(FADE_SPEED);
     }
     else {
       if (!advOptionsVisible()) {
-        $("#adv-options").show();
+        $("#adv-options").fadeIn(FADE_SPEED);
       }
       $(".m-search-ui .input-group-addon.magnifier").hide();
-      $("#search-button").fadeIn(speed);
+      $("#search-button").fadeIn(FADE_SPEED);
     }
   };
 
   var showAdvOptions = function() {
-    $("fieldset.adv").show();
+    $("fieldset.adv").fadeIn(FADE_SPEED);
     $("fieldset.controls").show();
     $("#adv-options").hide();
     $("#search-button").hide();
     $(".m-search-ui .input-group-addon.magnifier").show();
-    //$("fieldset.basic .input-group").addClass("input-group-block");
     $(".m-search-ui").addClass("expanded");
   };
   var hideAdvOptions = function() {
     $("fieldset.adv").hide();
     $("fieldset.controls").hide();
-    $("#adv-options").show();
+    $("#adv-options").fadeIn(FADE_SPEED);
     buttonToggler();
-    //$("fieldset.basic .input-group").removeClass("input-group-block");
     $(".m-search-ui").removeClass("expanded");
   };
   $("a.adv-options").click(function(e) {
@@ -70,7 +69,7 @@ $(document).ready(function() {
 
   searchTerms.focusin(function() {
     if (!advOptionsVisible()) {
-      $("#adv-options").show();
+      $("#adv-options").fadeIn(FADE_SPEED);
     }
   });
 
@@ -78,7 +77,7 @@ $(document).ready(function() {
     if (searchTerms.val().length == 0) {
       // use timeout to workaround click on adv-options button,
       // so that the click event can also fire.
-      window.setTimeout(function() { $("#adv-options").hide(); }, 200);
+      window.setTimeout(function() { $("#adv-options").hide(FADE_SPEED); }, 200);
     }
   });
 

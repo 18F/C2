@@ -3,7 +3,30 @@
 .m-search-ui {
   position: absolute;
   right: 0;
-  width: 40%;
+  width: 30%;
+
+  ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color: $placeholdergray;
+  }
+  :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: $placeholdergray;
+    opacity: 1;
+  }
+  ::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: $placeholdergray;
+    opacity: 1;
+  }
+  :-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: $placeholdergray;
+  }
+  :placeholder-shown { /* Standard (https://drafts.csswg.org/selectors-4/#placeholder) */
+    color: $placeholdergray;
+  }
+
+  .form-horizontal .form-group {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
 
   fieldset {
     padding: 15px 15px 0px 15px;
@@ -40,6 +63,7 @@
     .input-group-addon.magnifier {
       border-left: 0px;
       background-color: #fff;
+      color: $placeholdergray;
       border-top-right-radius: 4px;
       border-bottom-right-radius: 4px;
     }
@@ -51,7 +75,7 @@
   background-color: #e3e3e3;
 
   .input-group-addon.magnifier {
-    color: $lightgray;
+    color: $placeholdergray;
   }
 
   .form-group {
@@ -92,13 +116,6 @@
     #adv-search-button {
       float: right;
     }
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .m-search-ui {
-    position: relative;
-    min-width: 300px;
   }
 }
 
@@ -182,6 +199,54 @@ fieldset.adv {
 
     .col-xs-5.inline {
       vertical-align: bottom;
+    }
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  .m-search-ui {
+    min-width: 450px;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .m-search-ui {
+    position: relative;
+  }
+}
+
+@media screen and (max-width: 512px) {
+  .m-search-ui {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  fieldset.adv {
+    .form-group.row > * {
+      float: left;
+      display: block;
+    }
+    .form-group {
+      label.inline {
+        float: none;
+      }
+      .short {
+        width: 100%;
+      }
+      .col-xs-5 {
+        width: 100%;
+      }
+      .col-xs-5.right {
+        padding-left: 0px;
+      }
+      .col-xs-5.right.wide {
+        padding-left: 0px;
+        margin-top: 15px;
+      }
+      .col-xs-5.right.inline,
+      .col-xs-5.right.inline label {
+        margin-top: 15px;
+      }
     }
   }
 }
