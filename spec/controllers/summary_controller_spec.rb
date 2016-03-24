@@ -67,6 +67,16 @@ describe SummaryController do
           expect(assigns(:summaries).length).to eq(1)
           expect(assigns(:summaries)[0].client_namespace).to eq(client_admin_user.client_slug.titleize)
         end
+
+        context "and the user is also a regular or gateway admin" do
+          it "produces a summary for each client" do
+            client_admin_user = create(:user, :client_admin, client_slug: "ncr")
+            client_admin_user.add_role(:gateway_admin)
+            login_as(client_admin_user)
+            get :index
+            expect(assigns(:summaries).map(&:client_namespace).sort).to eq(Proposal.client_slugs.sort.map(&:titleize))
+          end
+        end
       end
     end
   end
