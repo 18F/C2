@@ -29,6 +29,10 @@ Capybara.register_driver :poltergeist do |app|
 end
 Capybara.javascript_driver = :poltergeist
 Capybara.default_max_wait_time = 10
+Capybara.server do |app, port|
+  require 'rack/handler/puma'
+  Rack::Handler::Puma.run(app, Port: port)
+end
 puts "phantomjs -v"
 system("phantomjs -v")
 
