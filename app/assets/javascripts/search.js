@@ -77,7 +77,7 @@ $(document).ready(function() {
     if (searchTerms.val().length == 0) {
       // use timeout to workaround click on adv-options button,
       // so that the click event can also fire.
-      window.setTimeout(function() { $("#adv-options").hide(FADE_SPEED); }, 200);
+      setTimeout(function() { $("#adv-options").hide(FADE_SPEED); }, 200);
     }
   });
 
