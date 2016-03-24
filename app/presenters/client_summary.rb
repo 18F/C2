@@ -25,21 +25,35 @@ class ClientSummary
 
   def total
     total = 0
-    @subtotals.values.each { |i| total += i }
+    @subtotals.each { |status, subtotal| total += subtotal unless status == :canceled }
     total
   end
 
   def subtotal_percent(status)
-    (subtotal(status).to_f / total) * 100
+    (subtotal(status).to_f / inclusive_total) * 100
   end
 
   def status_sum
     total = 0
-    @statuses.values.each { |i| total += i }
+    @statuses.each { |status, subtotal| total += subtotal unless status == :canceled }
     total
   end
 
   def status_percent(status)
-    (status(status).to_f / status_sum) * 100
+    (status(status).to_f / inclusive_status_sum) * 100
+  end
+
+  private
+
+  def inclusive_total
+    total = 0
+    @subtotals.values.each { |subtotal| total += subtotal }
+    total
+  end
+
+  def inclusive_status_sum
+    total = 0
+    @statuses.values.each { |subtotal| total += subtotal }
+    total
   end
 end

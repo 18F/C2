@@ -19,28 +19,20 @@ class ApplicationMailer < ActionMailer::Base
     add_inline_attachment("logo-c2-blue.png")
   end
 
-  def add_proposal_attributes_icons
-    add_inline_attachment("icon-clipped_page.png")
-    add_inline_attachment("icon-speech_bubble-blue.png")
+  def add_proposal_attributes_icons(proposal)
+    if proposal.attachments.any?
+      add_inline_attachment("icon-clipped_page.png")
+    end
+
+    if proposal.comments.any?
+      add_inline_attachment("icon-speech_bubble-blue.png")
+    end
   end
 
   def add_inline_attachment(file_name)
     attachments.inline[file_name] = File.read(
         "app/assets/images/emails/#{file_name}"
       )
-  end
-
-  def add_approval_chain_attachments
-    add_inline_number_attachment("icon-completed.png")
-    add_inline_number_attachment("icon-number-1-pending.png")
-    add_inline_number_attachment("icon-number-2-pending.png")
-    add_inline_number_attachment("icon-number-3-pending.png")
-  end
-
-  def add_inline_number_attachment(file_name)
-    attachments.inline[file_name] = File.read(
-      "app/assets/images/emails/numbers/#{file_name}"
-    )
   end
 
   def email_to_user(user)

@@ -75,4 +75,12 @@ class NcrDispatcher < Dispatcher
   def step_user_already_notifier_about_proposal?(step)
     step.api_token.present?
   end
+
+  def deliver_proposal_created_confirmation
+    if proposal.client_data.emergency?
+      ProposalMailer.emergency_proposal_created_confirmation(proposal).deliver_later
+    else
+      ProposalMailer.proposal_created_confirmation(proposal).deliver_later
+    end
+  end
 end
