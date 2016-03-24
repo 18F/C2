@@ -72,7 +72,7 @@ describe Ncr::WorkOrder do
 
   describe "#ba_6x_tier1_team?" do
     it "is true for whitelist of organizations" do
-      org_letters = %w( 7 J 4 T 1 A C Z )
+      org_letters = %w( 1 2 4 7 A C J T Z )
       org_letters.each do |org_letter|
         org_code = "P11#{org_letter}XXXX"
         ncr_org = build(:ncr_organization, code: org_code)
