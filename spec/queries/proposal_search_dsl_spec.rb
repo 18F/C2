@@ -64,23 +64,43 @@ describe ProposalSearchDsl do
     expect(dsl.to_hash[:from]).to eq( 2 * Proposal::MAX_SEARCH_RESULTS )
   end
 
-  it "parses date ranges" do
-    now = Time.zone.now
-    user = create(:user, client_slug: "test")
-    dsl = ProposalSearchDsl.new(
-      params: {
-        test_client_request: {
-          created_at: now.to_s,
-          created_within: "6 months",
-        }
-      },
-      query: "foo OR Bar",
-      current_user: user,
-      client_data_type: "Test::ClientRequest"
-    )
-    expect(dsl.composite_query_string).to eq(
-      "(foo OR Bar) AND (created_at:[#{(now.utc - 6.months).iso8601} TO #{now.utc.iso8601}])"
-    )
+  describe "parses date ranges" do
+    it "when created_at is present" do
+      now = Time.zone.now
+      user = create(:user, client_slug: "test")
+      dsl = ProposalSearchDsl.new(
+        params: {
+          test_client_request: {
+            created_at: now.to_s,
+            created_within: "6 months",
+          }
+        },
+        query: "foo OR Bar",
+        current_user: user,
+        client_data_type: "Test::ClientRequest"
+      )
+      expect(dsl.composite_query_string).to eq(
+        "(foo OR Bar) AND (created_at:[#{(now.utc - 6.months).iso8601} TO #{now.utc.iso8601}])"
+      )
+    end
+
+    it "when created_at is not present defaults to relative-to-now" do
+      now = Time.zone.now
+      user = create(:user, client_slug: "test")
+      dsl = ProposalSearchDsl.new(
+        params: {
+          test_client_request: {
+            created_within: "6 months",
+          }
+        },
+        query: "foo OR Bar",
+        current_user: user,
+        client_data_type: "Test::ClientRequest"
+      )
+      expect(dsl.composite_query_string).to eq(
+        "(foo OR Bar) AND (created_at:[#{(now.utc - 6.months).iso8601} TO now])"
+      )
+    end
   end
 
   it "#client_query" do

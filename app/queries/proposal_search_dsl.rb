@@ -34,7 +34,7 @@ class ProposalSearchDsl
   end
 
   def client_query
-    fielded = params[current_user.client_model_slug.to_sym]
+    fielded = params.dup[current_user.client_model_slug.to_sym]
     munge_fielded_params(fielded) if fielded
     ProposalFieldedSearchQuery.new(fielded)
   end
@@ -58,12 +58,14 @@ class ProposalSearchDsl
   def munge_fielded_params(fielded)
     if fielded[:created_at].present? && fielded[:created_within].present?
       convert_created_at_to_range(fielded)
+    elsif fielded[:created_within].present?
+      convert_created_at_to_range(fielded, true)
     end
     if fielded[:includes_attachment].present?
       convert_includes_attachment(fielded)
       fielded.delete(:includes_attachment)
     end
-    # do not calculate more than once, or when created_at is null
+    # do not calculate more than once
     fielded.delete(:created_within)
   end
 
@@ -71,12 +73,16 @@ class ProposalSearchDsl
     fielded[:num_attachments] = ">0"
   end
 
-  def convert_created_at_to_range(fielded)
-    high_end_range = Time.zone.parse(fielded[:created_at])
+  def convert_created_at_to_range(fielded, relative_to_now = false)
+    high_end_range = Time.zone.parse(fielded[:created_at].to_s) || Time.current
     within_parsed = fielded[:created_within].match(/^(\d+) (\w+)/)
     return unless high_end_range && within_parsed
     low_end_range = high_end_range.utc - within_parsed[1].to_i.send(within_parsed[2])
-    fielded[:created_at] = "[#{low_end_range.iso8601} TO #{high_end_range.utc.iso8601}]"
+    if relative_to_now
+      fielded[:created_at] = "[#{low_end_range.iso8601} TO now]"
+    else
+      fielded[:created_at] = "[#{low_end_range.iso8601} TO #{high_end_range.utc.iso8601}]"
+    end
   end
 
   def build_dsl
