@@ -31,7 +31,7 @@ module Ncr
       with: /\ACL\d{7}\z/,
       message: "must start with 'CL', followed by seven numbers"
     }, allow_blank: true
-    validates :expense_type, inclusion: {in: EXPENSE_TYPES}, presence: true
+    validates :expense_type, inclusion: { in: EXPENSE_TYPES }, presence: true
     validates :function_code, format: {
       with: /\APG[A-Z0-9]{3}\z/,
       message: "must start with 'PG', followed by three letters or numbers"
