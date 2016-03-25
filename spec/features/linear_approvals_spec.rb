@@ -1,12 +1,10 @@
 describe 'Linear approvals' do
-  let(:create_proposal) { create(:proposal) }
-
   it 'allows the approver to approve' do
-    proposal = create_proposal
+    proposal = create(:proposal)
     first_approver = create(:user)
     second_approver = create(:user)
     approvals = create_approvals_for([first_approver, second_approver])
-    create_serial_approval(approvals)
+    create_serial_approval(proposal, approvals)
 
     login_as(first_approver)
     visit proposal_path(proposal)
@@ -15,12 +13,12 @@ describe 'Linear approvals' do
   end
 
   it 'does not allow the approver to approve twice' do
-    proposal = create_proposal
+    proposal = create(:proposal)
     first_approver = create(:user)
     second_approver = create(:user)
     approvals = create_approvals_for([first_approver, second_approver])
-    create_serial_approval(approvals)
-    approve_approval_for(first_approver)
+    create_serial_approval(proposal, approvals)
+    approve_approval_for(proposal, first_approver)
 
     login_as(first_approver)
     visit proposal_path(proposal)
@@ -46,11 +44,11 @@ describe 'Linear approvals' do
     end
   end
 
-  def create_serial_approval(child_steps)
-    create_proposal.root_step = Steps::Serial.new(child_steps: child_steps)
+  def create_serial_approval(proposal, child_steps)
+    proposal.root_step = Steps::Serial.new(child_steps: child_steps)
   end
 
-  def approve_approval_for(user)
-    create_proposal.individual_steps.where(user: user).first.complete!
+  def approve_approval_for(proposal, user)
+    proposal.individual_steps.where(user: user).first.complete!
   end
 end

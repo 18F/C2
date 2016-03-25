@@ -96,6 +96,14 @@ describe ProposalDecorator do
         expect(proposal.final_completed_date).to eq(proposal.individual_steps.last.completed_at)
         expect(proposal.total_completion_days).to eq(2)
       end
+
+      it "returns empty string when no steps are defined" do
+        proposal = create(:proposal).decorate
+        proposal.complete!
+
+        expect(proposal.final_completed_date).to eq("")
+        expect(proposal.total_completion_days).to eq("")
+      end
     end
 
     context "when the proposal is not complete" do

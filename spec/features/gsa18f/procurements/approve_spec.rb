@@ -1,9 +1,4 @@
 feature "Approve a Gsa18F procurement" do
-  let(:approver) { Gsa18f::Procurement.user_with_role("gsa18f_approver") }
-  let(:purchaser) { Gsa18f::Procurement.user_with_role("gsa18f_purchaser") }
-  let(:proposal) { procurement.proposal }
-  let(:procurement) { create(:gsa18f_procurement, :with_steps) }
-
   context "when signed in as the approver" do
     context "last step is completed" do
       it "sends one email to the requester" do
@@ -20,6 +15,9 @@ feature "Approve a Gsa18F procurement" do
     end
 
     it "the step execution button is correctly marked" do
+      approver = Gsa18f::Procurement.user_with_role("gsa18f_approver")
+      proposal = create(:gsa18f_procurement, :with_steps).proposal
+
       login_as(approver)
 
       visit proposal_path(proposal)
@@ -28,6 +26,9 @@ feature "Approve a Gsa18F procurement" do
     end
 
     it "shows a cancel link for approver" do
+      approver = Gsa18f::Procurement.user_with_role("gsa18f_approver")
+      proposal = create(:gsa18f_procurement, :with_steps).proposal
+
       login_as(approver)
 
       visit proposal_path(proposal)
@@ -38,6 +39,10 @@ feature "Approve a Gsa18F procurement" do
 
   context "when signed in as the purchaser" do
     it "the step execution button is correctly marked" do
+      approver = Gsa18f::Procurement.user_with_role("gsa18f_approver")
+      purchaser = Gsa18f::Procurement.user_with_role("gsa18f_purchaser")
+      proposal = create(:gsa18f_procurement, :with_steps).proposal
+
       login_as(approver)
       visit proposal_path(proposal)
       click_on "Approve"
@@ -49,6 +54,9 @@ feature "Approve a Gsa18F procurement" do
     end
 
     it "does not show a cancel link for purchaser" do
+      purchaser = Gsa18f::Procurement.user_with_role("gsa18f_purchaser")
+      proposal = create(:gsa18f_procurement, :with_steps).proposal
+
       login_as(purchaser)
 
       visit proposal_path(proposal)
