@@ -17,7 +17,7 @@ ActiveAdmin.register User do
       roles = role_ids_to_roles
       User.transaction do
         user.save!
-        UserRole.create(roles.map{ |role| { user: user, role: role } })
+        UserRole.create(roles.map { |role| { user: user, role: role } })
       end
       redirect_to admin_user_path(user)
     end
