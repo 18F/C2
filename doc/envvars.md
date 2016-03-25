@@ -44,6 +44,11 @@ Defaults to communicart.sender@gsa.gov
 ## PORT
 ## RESTRICT_ACCESS=true
 
+## SKIP_TRACKING
+
+If set, the JavaScript AHoy events will *not* be fired, regardless of `Rails.env` setting. By default, AHoy
+events will fire in all non-`test` environments.
+
 ## SUPPORT_EMAIL
 
 The email address where all feedback and user support questions are sent.
