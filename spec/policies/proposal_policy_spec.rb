@@ -1,4 +1,6 @@
 describe ProposalPolicy do
+  let(:proposal) { create(:proposal, :with_parallel_approvers, :with_observers) }
+
   permissions :can_complete? do
     it "allows pending delegates" do
       proposal = create(:proposal, :with_parallel_approvers)
@@ -161,9 +163,5 @@ describe ProposalPolicy do
       admin.add_role("admin")
       expect(ProposalPolicy).to permit(admin, proposal)
     end
-  end
-
-  def proposal
-    @_proposal ||= create(:proposal, :with_parallel_approvers, :with_observers)
   end
 end

@@ -1,6 +1,8 @@
 feature "post-approval modification" do
   include ProposalSpecHelper
 
+  let(:work_order) { create(:ncr_work_order) }
+
   scenario "doesn't require re-approval for the amount being decreased" do
     work_order.setup_approvals_and_observers
     fully_complete(work_order.proposal)
@@ -61,10 +63,6 @@ feature "post-approval modification" do
     expect(page).to have_content("You are about to modify a fully approved request")
     click_on "Discard Changes"
     expect(page).to_not have_content("You are about to modify a fully approved request")
-  end
-
-  def work_order
-    @_work_order ||= create(:ncr_work_order)
   end
 
   def approval_statuses

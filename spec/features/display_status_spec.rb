@@ -1,4 +1,7 @@
 describe "Display status text" do
+  let(:create_proposal_with_parallel_approvers) { create(:proposal, :with_parallel_approvers) }
+  let(:create_proposal_with_serial_approvers) { create(:proposal, :with_serial_approvers) }
+
   context "parallel approvals" do
     it "displays complete status" do
       proposal = create_proposal_with_parallel_approvers
@@ -71,13 +74,5 @@ describe "Display status text" do
       expect(page).to have_content("Waiting for review from:")
       expect(page).not_to have_content(first_approver.full_name)
     end
-  end
-
-  def create_proposal_with_parallel_approvers
-    @proposal ||= create(:proposal, :with_parallel_approvers)
-  end
-
-  def create_proposal_with_serial_approvers
-    @proposal ||= create(:proposal, :with_serial_approvers)
   end
 end

@@ -1,4 +1,9 @@
 feature "Approve a Gsa18F procurement" do
+  let(:approver) { Gsa18f::Procurement.user_with_role("gsa18f_approver") }
+  let(:purchaser) { Gsa18f::Procurement.user_with_role("gsa18f_purchaser") }
+  let(:proposal) { procurement.proposal }
+  let(:procurement) { create(:gsa18f_procurement, :with_steps) }
+
   context "when signed in as the approver" do
     it "the step execution button is correctly marked" do
       login_as(approver)
@@ -36,21 +41,5 @@ feature "Approve a Gsa18F procurement" do
 
       expect(page).to_not have_content("Cancel this request")
     end
-  end
-
-  def approver
-    @_approver ||= Gsa18f::Procurement.user_with_role("gsa18f_approver")
-  end
-
-  def purchaser
-    @_purchaser ||= Gsa18f::Procurement.user_with_role("gsa18f_purchaser")
-  end
-
-  def proposal
-    @_proposal ||= procurement.proposal
-  end
-
-  def procurement
-    @_procurement ||= create(:gsa18f_procurement, :with_steps)
   end
 end
