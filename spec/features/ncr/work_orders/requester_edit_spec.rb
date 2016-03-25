@@ -14,7 +14,7 @@ feature "Requester edits their NCR work order", :js do
   let(:ncr_proposal) { work_order.proposal }
   let(:requester) { work_order.requester }
 
-  before do
+  before(:each) do
     work_order.setup_approvals_and_observers
     login_as(requester)
   end
