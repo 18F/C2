@@ -12,14 +12,15 @@
 
 C2 is a fairly typical Rails application, so the setup is straightforward:
 
-1. Run
+1. Run the setup script to create a user record for your email address, make
+   that user an admin, and add a few records for that user.
 
     ```bash
     git clone https://github.com/18F/C2.git
     cd C2
 
     # Will print "DONE" if successful. NOTE: This will delete any existing records in your C2 database and add a few seed records.
-    ./script/bootstrap
+    ./script/bootstrap YOUR_EMAIL@gsa.gov
     ```
 1. Per [the Twelve-Factor guidelines](http://12factor.net/config), all necessary configuration should be possible through environment variables. (See [`.env.example`](../.env.example) for the full list.)
 
@@ -70,23 +71,14 @@ open http://localhost:3000
 
 ## Populating with data
 
-Once you've authed locally, there will be a `user` record associated with your
-email address. There won't be much for you to see until your client slug is set,
-so find your user record and set it to `ncr`:
+The `bootstrap` script you ran during installation creates a user record for the
+email address passed in (which should be yours), makes that user an admin, and
+creates relevant records for that user.
+
+If you'd like to generate more records, you can run the following rake task:
 
 ```bash
-bin/rails c
-user = User.find_by(email_address: 'example@gsa.gov')
-user.update(client_slug: 'ncr')
-```
-
-Now you will see the link to create a new work order locally.
-
-If you'd like to seed your dashboard with work orders, you can run this rake
-task:
-
-```bash
-bin/rake populate:ncr:for_user[example@gsa.gov]
+bin/rake populate:ncr:for_user[YOUR_EMAIL@gsa.gov]
 ```
 
 Now you should see 25 pending purchase requests at

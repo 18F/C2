@@ -1,14 +1,16 @@
 class ProposalMailerPreview < ActionMailer::Preview
+  include MailerPreviewHelpers
+
   def proposal_created_confirmation
     ProposalMailer.proposal_created_confirmation(proposal)
   end
 
   def emergency_proposal_created_confirmation
-    ProposalMailer.emergency_proposal_created_confirmation(proposal)
+    ProposalMailer.emergency_proposal_created_confirmation(completed_proposal)
   end
 
   def proposal_complete
-    ProposalMailer.proposal_complete(proposal)
+    ProposalMailer.proposal_complete(completed_proposal)
   end
 
   def proposal_updated_no_action_required
@@ -21,23 +23,5 @@ class ProposalMailerPreview < ActionMailer::Preview
 
   def proposal_updated_needs_re_review
     ProposalMailer.proposal_updated_needs_re_review(user, proposal, comment)
-  end
-
-  private
-
-  def proposal
-    Proposal.where.not(individual_steps: []).last
-  end
-
-  def step
-    Steps::Approval.last
-  end
-
-  def user
-    User.last
-  end
-
-  def comment
-    Comment.last
   end
 end
