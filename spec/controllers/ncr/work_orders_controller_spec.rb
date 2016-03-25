@@ -1,10 +1,9 @@
 describe Ncr::WorkOrdersController do
   include ProposalSpecHelper
 
-  let(:approving_official) { create(:user, client_slug: "ncr") }
-
   describe "#create" do
     it "sends an email to the first approver" do
+      approving_official = create(:user, client_slug: "ncr")
       params = {
         ncr_work_order: {
           amount: "111.22",
@@ -70,6 +69,7 @@ describe Ncr::WorkOrdersController do
     end
 
     it 'does not modify the work order when there is a bad edit' do
+      approving_official = create(:user, client_slug: "ncr")
       post :update, {
         id: work_order.id,
         ncr_work_order: {
@@ -78,6 +78,7 @@ describe Ncr::WorkOrdersController do
           approving_official_id: approving_official.id
         }
       }
+
       expect(flash[:success]).not_to be_present
       expect(flash[:error]).to be_present
       work_order.reload
@@ -93,6 +94,7 @@ describe Ncr::WorkOrdersController do
         end
         load 'app/models/ncr/work_order.rb'
 
+        approving_official = create(:user, client_slug: "ncr")
         post :update, {
           id: work_order.id,
           ncr_work_order: {
@@ -121,6 +123,7 @@ describe Ncr::WorkOrdersController do
 
     it "allows the approver to be edited" do
       work_order.setup_approvals_and_observers
+      approving_official = create(:user, client_slug: "ncr")
 
       post :update, {
         id: work_order.id,
@@ -130,12 +133,14 @@ describe Ncr::WorkOrdersController do
         }
       }
       work_order.reload
+
       expect(work_order.approvers.first).to eq(approving_official)
     end
 
     it "does not modify the approver if already approved" do
       work_order.setup_approvals_and_observers
       work_order.reload.individual_steps.first.complete!
+      approving_official = create(:user, client_slug: "ncr")
 
       post :update, {
         id: work_order.id,
@@ -145,6 +150,7 @@ describe Ncr::WorkOrdersController do
         }
       }
       work_order.reload
+
       expect(work_order.approvers).not_to include(approving_official)
     end
 

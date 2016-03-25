@@ -1,10 +1,7 @@
 describe "Display status text" do
-  let(:create_proposal_with_parallel_approvers) { create(:proposal, :with_parallel_approvers) }
-  let(:create_proposal_with_serial_approvers) { create(:proposal, :with_serial_approvers) }
-
   context "parallel approvals" do
     it "displays complete status" do
-      proposal = create_proposal_with_parallel_approvers
+      proposal = create(:proposal, :with_parallel_approvers)
       proposal.individual_steps.each { |approval| approval.complete! }
 
       login_as(proposal.requester)
@@ -14,7 +11,7 @@ describe "Display status text" do
     end
 
     it "displays outstanding approvers" do
-      proposal = create_proposal_with_parallel_approvers
+      proposal = create(:proposal, :with_parallel_approvers)
 
       login_as(proposal.requester)
       visit proposals_path
@@ -27,7 +24,7 @@ describe "Display status text" do
     end
 
     it "excludes approved approvals" do
-      proposal = create_proposal_with_parallel_approvers
+      proposal = create(:proposal, :with_parallel_approvers)
       first_approval = proposal.individual_steps.first
       first_approval.complete!
       first_approver = first_approval.user
@@ -47,7 +44,7 @@ describe "Display status text" do
 
   context "serial approvals" do
     it "displays the first approver" do
-      proposal = create_proposal_with_serial_approvers
+      proposal = create(:proposal, :with_serial_approvers)
       first_approval = proposal.individual_steps.first
       first_approver = first_approval.user
       all_approvers_except_first = proposal.approvers.offset(1)
@@ -63,7 +60,7 @@ describe "Display status text" do
     end
 
     it "excludes approved approvals" do
-      proposal = create_proposal_with_serial_approvers
+      proposal = create(:proposal, :with_serial_approvers)
       first_approval = proposal.individual_steps.first
       first_approval.complete!
       first_approver = first_approval.user

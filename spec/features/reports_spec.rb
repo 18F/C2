@@ -1,12 +1,8 @@
 feature "reports", elasticsearch: true do
-  let(:user) { create(:user, client_slug: "test") }
-
-  before do
-    login_as(user)
-  end
-
   scenario "provides Save as Report button on search results page", :js do
-    proposals = populate_proposals
+    user = create(:user, client_slug: "test")
+    proposals = populate_proposals(user)
+    login_as(user)
 
     es_execute_with_retries 3 do
       visit query_proposals_path(text: proposals.first.name)
