@@ -4,7 +4,7 @@ RSpec.configure do |config|
   ]
   retry_count = ENV.fetch("RSPEC_RETRIES", 3).to_i
   config.around(:each) do |spec|
-    retry_count.times do |i| 
+    retry_count.times do |i|
       spec.run
       example = spec.example
 
@@ -13,13 +13,17 @@ RSpec.configure do |config|
       end 
  
       # If we got to this point, then a retry-able exception has been thrown by the spec
-      e_line = example.instance_variable_get '@example_block'
+      e_line = example.location_rerun_argument
       puts "Error (#{example.exception.class} - #{example.exception}) occurred while running rspec example (#{e_line}"
  
       if i < retry_count
-        example.instance_variable_set('@exception', nil)
         puts "Re-running rspec example (#{e_line}. Retry count #{i+1} of #{retry_count}"
-      end   
+
+        # do not clear exception if we run out of tries
+        if i < (retry_count - 1)
+          example.instance_variable_set('@exception', nil)
+        end
+      end
     end   
   end
 end
