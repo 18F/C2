@@ -176,11 +176,9 @@ describe ProposalsController do
 
       it "returns JSON for preview count" do
         login_as(user)
-        proposals = 3.times.map do |i|
-          wo = create(:test_client_request, project_title: "Work Order #{i}")
-          wo.proposal.update(requester: user)
+        3.times.map do |i|
+          wo = create(:test_client_request, project_title: "Work Order #{i}", requester: user)
           wo.proposal.reindex
-          wo.proposal
         end
         Proposal.__elasticsearch__.refresh_index!
 
