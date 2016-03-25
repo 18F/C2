@@ -20,7 +20,7 @@ Create a [new issue](https://github.com/18F/C2/issues/new), and copy the [raw Ma
 * [ ] [Learn more about Cloud Foundry](https://docs.cloud.gov)
 * [ ] Deploy C2 to `c2-dev` (or `c2-staging`)
 * [ ] [Set up your own development
-  app on Cloud Foundry](https://github.com/18F/C2/blog/master/doc/cloud_foundry_setup.md)
+  app on Cloud Foundry](https://github.com/18F/C2/blob/master/doc/cloud_foundry_setup.md)
 * [ ] [Get added to the MailChimp account](production.md#getting-access) (and thus Mandrill)
 * [ ] Access support emails `capdevs@gsa.gov`, `communicart.sender@gsa.gov`, and `gatewaycommunicator`
     1. Make sure someone has requested/completed access for you (See tasks for @oldmember)
@@ -34,7 +34,7 @@ Create a [new issue](https://github.com/18F/C2/issues/new), and copy the [raw Ma
 * [ ] [Add to Trello](https://trello.com/b/kAW72R3m/c2-birthday-cake)
 * [ ] Add to [@18F/cap](https://github.com/orgs/18F/teams/cap) team on GitHub
 * [ ] Add to support emails: `capdevs`, `communicart.sender`, and `gatewaycommunicator` through [IT Service Desk](https://gsa.service-now.com)
-* [ ] Send access information for developer test emails: `gsa.approver`, `communicart.budget.approver`, and `communicart.ofm.approver`)
+* [ ] Send access information for developer test email: `gsa.approver@gmail.com`
 * [ ] [Add to New Relic](https://rpm.newrelic.com/accounts/921394)
 * [ ] Add to calendar items: standups, IPM, and story grooming sessions
 * [ ] Schedule a code walkthrough
@@ -51,4 +51,3 @@ Create a [new issue](https://github.com/18F/C2/issues/new), and copy the [raw Ma
 * [ ] Access to [User Voice](https://www.uservoice.com/)
 * [ ] Access to [Stories on Board](https://www.storiesonboard.com/)
 * [ ] Link to Google Drive files
-
