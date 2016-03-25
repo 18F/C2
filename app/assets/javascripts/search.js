@@ -20,7 +20,6 @@ $(document).ready(function() {
 
   var FADE_SPEED = 200;
 
-  // manage the basic search input button via the search-terms field
   var buttonToggler = function() {
     if (searchTerms && searchTerms.val() && searchTerms.val().length == 0) {
       searchButton.hide();
@@ -60,8 +59,6 @@ $(document).ready(function() {
     return false;
   });
 
-  // initial visibility
-  // open the Adv Search UI immediately if param set 
   if (typeof C2_SEARCH_UI_OPEN != "undefined" && C2_SEARCH_UI_OPEN === true ) {
     showAdvOptions();
   }
@@ -70,7 +67,6 @@ $(document).ready(function() {
     buttonToggler();
   }
 
-  // listen for change on basic search box
   searchTerms.keyup(function(e) {
     if (!advOptionsVisible()) {
       buttonToggler();
@@ -91,7 +87,6 @@ $(document).ready(function() {
     }
   });
 
-  // disable the form when we submit it
   allSearchButtons.click(function() {
     var btn = $(this);
     searchForm.submit();
@@ -100,7 +95,6 @@ $(document).ready(function() {
     btn.prop("disabled", true);
   });
 
-  // fetch search total for preview count
   var previewCountTimer = 0;
   var previewCountUrl = "";
   var updatePreviewCount = function() {
@@ -125,13 +119,12 @@ $(document).ready(function() {
     }, 1000); // TODO experiment with this delay
   };
 
-  // if any adv search form inputs change, fetch new preview total
   // the 'keyup' listener handles text input immediately (change waits for focus change)
   searchForm.find(':input').keyup(function(e) {
     var el = $(e.target);
     updatePreviewCount();
   });
-  // the 'onchange' listener handles select/checkbox/radio immediately
+  // the 'change' listener handles select/checkbox/radio immediately
   searchForm.find(':input').change(function(e) {
     var el = $(e.target);
     updatePreviewCount();
