@@ -8,7 +8,7 @@ module Gsa18f
       fields = default
 
       if recurring
-        fields += [:recurring_interval, :recurring_length]
+        fields += [:recurring, :recurring_interval, :recurring_length]
       end
 
       fields
