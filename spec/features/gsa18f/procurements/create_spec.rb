@@ -7,6 +7,8 @@ feature "Create a Gsa18F procurement" do
 
   context "user signed in" do
     scenario "saves a Proposal with the attributes" do
+      requester = create(:user, client_slug: "gsa18f")
+
       login_as(requester)
       visit new_gsa18f_procurement_path
 
@@ -29,6 +31,8 @@ feature "Create a Gsa18F procurement" do
 
     context "invalid input" do
       scenario "shows error and preserve form inputs" do
+        requester = create(:user, client_slug: "gsa18f")
+
         login_as(requester)
         visit new_gsa18f_procurement_path
 
@@ -42,9 +46,5 @@ feature "Create a Gsa18F procurement" do
         expect(find_field("Cost per unit").value).to eq("10000")
       end
     end
-  end
-
-  def requester
-    @_requester ||= create(:user, client_slug: "gsa18f")
   end
 end

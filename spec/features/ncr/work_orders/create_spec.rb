@@ -4,6 +4,8 @@ feature "Creating an NCR work order", :js do
       approver = create(:user, client_slug: "ncr")
       organization = create(:ncr_organization)
       project_title = "buying stuff"
+      requester = create(:user, client_slug: "ncr")
+
       login_as(requester)
 
       visit new_ncr_work_order_path
@@ -29,6 +31,8 @@ feature "Creating an NCR work order", :js do
     end
 
     scenario "flash message on error does not persist" do
+      requester = create(:user, client_slug: "ncr")
+
       login_as(requester)
 
       visit new_ncr_work_order_path
@@ -44,6 +48,8 @@ feature "Creating an NCR work order", :js do
     end
 
     scenario "shows tooltip for amount field" do
+      requester = create(:user, client_slug: "ncr")
+
       login_as(requester)
       visit new_ncr_work_order_path
 
@@ -55,6 +61,8 @@ feature "Creating an NCR work order", :js do
     end
 
     scenario "shows tooltip for direct pay field" do
+      requester = create(:user, client_slug: "ncr")
+
       login_as(requester)
       visit new_ncr_work_order_path
 
@@ -66,6 +74,8 @@ feature "Creating an NCR work order", :js do
     end
 
     scenario "preserve form values on submission error" do
+      requester = create(:user, client_slug: "ncr")
+
       login_as(requester)
       visit new_ncr_work_order_path
 
@@ -81,6 +91,7 @@ feature "Creating an NCR work order", :js do
     end
 
     scenario "includes previously entered buildings" do
+      requester = create(:user, client_slug: "ncr")
       create(:ncr_work_order, building_number: "BillDing")
       login_as(requester)
 
@@ -88,10 +99,6 @@ feature "Creating an NCR work order", :js do
 
       expect_page_to_have_selectized_options("ncr_work_order_building_number", "BillDing")
     end
-  end
-
-  def requester
-    @_requester ||= create(:user, client_slug: "ncr")
   end
 
   def focus_field(field_id)

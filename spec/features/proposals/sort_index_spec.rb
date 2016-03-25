@@ -2,6 +2,7 @@ feature "Sort proposals on index page" do
   include ProposalTableSpecHelper
 
   it "allows other table headers to be clicked to sort" do
+    user = create(:user)
     proposals = create_list(:proposal, 3, observer: user)
     proposals[0].requester.update(email_address: "bbb@example.com")
     proposals[1].requester.update(email_address: "ccc@example.com")
@@ -16,6 +17,7 @@ feature "Sort proposals on index page" do
   end
 
   it "allows the user to click on a title again to change order" do
+    user = create(:user)
     proposals = create_list(:proposal, 4, observer: user)
 
     login_as(user)
@@ -27,6 +29,7 @@ feature "Sort proposals on index page" do
   end
 
   it "does not allow clicks in one table to affect the order of the other" do
+    user = create(:user)
     canceled = create_list(:proposal, 2, status: "canceled", observer: user)
     create_list(:proposal, 2, observer: user)
 
@@ -90,9 +93,5 @@ feature "Sort proposals on index page" do
         procurement.update(proposal: create(:proposal, observer: user))
       end
     end
-  end
-
-  def user
-    @_user ||= create(:user)
   end
 end

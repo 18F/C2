@@ -2,6 +2,10 @@ feature "Edit a Gsa18F procurement" do
   context "User is requester" do
     context "procurement has pending status" do
       scenario "can be modified" do
+        requester = create(:user, client_slug: "gsa18f")
+        procurement = create(:gsa18f_procurement, :with_steps, requester: requester, urgency: 10)
+        proposal = procurement.proposal
+
         login_as(requester)
         visit edit_gsa18f_procurement_path(procurement)
 
@@ -18,6 +22,10 @@ feature "Edit a Gsa18F procurement" do
     end
 
     scenario "can edit via link from proposal" do
+      requester = create(:user, client_slug: "gsa18f")
+      procurement = create(:gsa18f_procurement, :with_steps, requester: requester, urgency: 10)
+      proposal = procurement.proposal
+
       login_as(requester)
       visit proposal_path(proposal)
 
@@ -27,6 +35,9 @@ feature "Edit a Gsa18F procurement" do
     end
 
     scenario "clicks update without changing any input" do
+      requester = create(:user, client_slug: "gsa18f")
+      procurement = create(:gsa18f_procurement, :with_steps, requester: requester, urgency: 10)
+
       login_as(requester)
       visit edit_gsa18f_procurement_path(procurement)
 
@@ -36,6 +47,10 @@ feature "Edit a Gsa18F procurement" do
     end
 
     it "clicks discard changes link" do
+      requester = create(:user, client_slug: "gsa18f")
+      procurement = create(:gsa18f_procurement, :with_steps, requester: requester, urgency: 10)
+      proposal = procurement.proposal
+
       login_as(requester)
       visit edit_gsa18f_procurement_path(procurement)
 
@@ -46,6 +61,10 @@ feature "Edit a Gsa18F procurement" do
 
     context "Approved status" do
       scenario "cannot be restarted" do
+        requester = create(:user, client_slug: "gsa18f")
+        procurement = create(:gsa18f_procurement, :with_steps, requester: requester, urgency: 10)
+        proposal = procurement.proposal
+
         login_as(requester)
         proposal.update(status: "completed")
 
@@ -57,6 +76,10 @@ feature "Edit a Gsa18F procurement" do
 
     context "Approved status" do
       scenario "modify link not shown" do
+        requester = create(:user, client_slug: "gsa18f")
+        procurement = create(:gsa18f_procurement, :with_steps, requester: requester, urgency: 10)
+        proposal = procurement.proposal
+
         proposal.update(status: "completed")
         login_as(requester)
 
@@ -69,6 +92,10 @@ feature "Edit a Gsa18F procurement" do
 
   context "User is not requester" do
     scenario "cannot be edited" do
+      requester = create(:user, client_slug: "gsa18f")
+      procurement = create(:gsa18f_procurement, :with_steps, requester: requester, urgency: 10)
+      proposal = procurement.proposal
+
       procurement.set_requester(create(:user))
       login_as(requester)
 
@@ -76,17 +103,5 @@ feature "Edit a Gsa18F procurement" do
       expect(current_path).to eq(new_gsa18f_procurement_path)
       expect(page).to have_content("You are not the requester")
     end
-  end
-
-  def requester
-    @_requester ||= create(:user, client_slug: "gsa18f")
-  end
-
-  def procurement
-    @_procurement ||= create(:gsa18f_procurement, :with_steps, requester: requester, urgency: 10)
-  end
-
-  def proposal
-    @_proposal ||= procurement.proposal
   end
 end

@@ -1,5 +1,6 @@
 feature "Create NCR work order with attachment" do
   scenario "allows attachments to be added during intake without JS" do
+    requester = create(:user, client_slug: "ncr")
     login_as(requester)
     visit new_ncr_work_order_path
 
@@ -10,6 +11,7 @@ feature "Create NCR work order with attachment" do
   end
 
   scenario "allows attachments to be added during intake with JS", :js do
+    requester = create(:user, client_slug: "ncr")
     login_as(requester)
     visit new_ncr_work_order_path
 
@@ -25,9 +27,5 @@ feature "Create NCR work order with attachment" do
     expect(page).to have_selector(".js-am-minus", count: 2)
     expect(page).to have_selector(".js-am-plus", count: 2)
     expect(page).to have_selector("input[type=file]", count: 2)
-  end
-
-  def requester
-    @_requester ||= create(:user, client_slug: "ncr")
   end
 end

@@ -1,7 +1,5 @@
 describe ScheduledReportsController do
-  def user
-    @_user ||= create(:user, client_slug: "test")
-  end
+  let(:user) { create(:user, client_slug: "test") }
 
   before do
     login_as(user)
