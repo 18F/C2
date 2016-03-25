@@ -34,7 +34,7 @@ organization: cap
 1. If your deploy has a destructive migration,
     * [Take a snapshot](http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CreateSnapshot.html) of [the database](https://console.aws.amazon.com/rds/home?region=us-east-1#dbinstances:).
     * Note that you may see exceptions if doing a zero-downtime deployment, as the old copies of the application are expecting the old data format.
-1. Install [cf-blue-green](https://github.com/18F/cf-blue-green) v0.2.1+.
+1. Install [autopilot](https://github.com/concourse/autopilot).
 1. Run `cf target -o cap -s general`.
 1. Deploy the application
     * If you want to do an official "release" to production, run [`./script/release`](../script/release), which will:

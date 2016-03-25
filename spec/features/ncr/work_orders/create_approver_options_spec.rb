@@ -1,9 +1,8 @@
 feature "Approver options during create", :js do
-  let(:requester) { create(:user, client_slug: "ncr") }
-
   scenario "inactive users do not appear as potential approvers" do
     approver = create(:user, client_slug: "ncr")
     inactive_user = create(:user, client_slug: "ncr", active: false)
+    requester = create(:user, client_slug: "ncr")
 
     login_as(requester)
     visit new_ncr_work_order_path
@@ -17,6 +16,7 @@ feature "Approver options during create", :js do
 
   scenario "does not show system approver emails as approver options" do
     _approving_official = create(:user, client_slug: "ncr")
+    requester = create(:user, client_slug: "ncr")
 
     login_as(requester)
     visit new_ncr_work_order_path
@@ -31,6 +31,8 @@ feature "Approver options during create", :js do
   end
 
   scenario "does not show requester as approver option" do
+    requester = create(:user, client_slug: "ncr")
+
     login_as(requester)
     visit new_ncr_work_order_path
 
@@ -42,6 +44,8 @@ feature "Approver options during create", :js do
 
   scenario "defaults to no approver if there was no previous request" do
     _approver = create(:user, client_slug: "ncr")
+    requester = create(:user, client_slug: "ncr")
+
     login_as(requester)
 
     visit new_ncr_work_order_path
@@ -54,6 +58,7 @@ feature "Approver options during create", :js do
 
   scenario "defaults to the approver from the last request" do
     client_data = create(:ncr_work_order)
+    requester = create(:user, client_slug: "ncr")
     create(:proposal, client_data: client_data, requester: requester, client_slug: "ncr")
 
     login_as(requester)

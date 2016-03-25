@@ -16,13 +16,6 @@ module Ncr
       fields
     end
 
-    def display
-      attributes_for_view.push(
-        ["Org code", work_order.organization_code_and_name],
-        ["Approving official", work_order.approving_official.try(:email_address)]
-      )
-    end
-
     private
 
     attr_reader :work_order
@@ -43,16 +36,6 @@ module Ncr
         :soc_code,
         :vendor,
       ]
-    end
-
-    def attributes_for_view
-      attributes = relevant(work_order.expense_type) - [:ncr_organization_id, :approving_official_id]
-      attributes.map do |attribute|
-        [
-          Ncr::WorkOrder.human_attribute_name(attribute),
-          work_order.send(attribute)
-        ]
-      end
     end
   end
 end

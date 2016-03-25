@@ -162,6 +162,21 @@ pull request. QA can be done on the `c2-dev` or `c2-staging` environment. Check
 with your teammates (on Slack) to see which environment might already be in
 use.
 
+You can also set up your own development app to prevent the need to check with
+teammates about QAing on shared instances. See the [set up your own development
+app on Cloud
+Foundry](https://github.com/18F/C2/blob/master/doc/cloud_foundry_setup.md) docs
+for more information on how to do this.
+
+In these non-production Cloud Foundry instances, the system approver email
+addresses are all set to an extension of `gsa.approver@gsa.gov` via the `seed`
+task. For example, the 18F approver email address is set to
+`gsa.approver+18f_approver@gmail.com`. This still goes to
+`gsa.approver@gmail.com` because gmail ignores anything after the `+`.
+
+This is a shared email inbox that C2 developers all have access to, similar to
+the way shared inboxes are used by C2 system approvers in production.
+
 Example flow:
 
 ```bash

@@ -1,7 +1,6 @@
 feature "Create NCR Work orders with different expense types", :js do
-  let(:requester) { create(:user, client_slug: "ncr") }
-
   scenario "hides fields based on expense" do
+    requester = create(:user, client_slug: "ncr")
     login_as(requester)
     visit new_ncr_work_order_path
 
@@ -25,6 +24,7 @@ feature "Create NCR Work orders with different expense types", :js do
   context "BA61 emergency request" do
     scenario "approves request automatically" do
       approver = create(:user, client_slug: "ncr")
+      requester = create(:user, client_slug: "ncr")
       login_as(requester)
       visit new_ncr_work_order_path
 
@@ -45,6 +45,7 @@ feature "Create NCR Work orders with different expense types", :js do
   context "BA61 emergency request selected and then unselected" do
     scenario "request is not set as emergency" do
       approver = create(:user, client_slug: "ncr")
+      requester = create(:user, client_slug: "ncr")
       login_as(requester)
       visit new_ncr_work_order_path
 
@@ -65,6 +66,7 @@ feature "Create NCR Work orders with different expense types", :js do
 
   context "expense type is BA60" do
     scenario "building id is not required" do
+      requester = create(:user, client_slug: "ncr")
       login_as(requester)
       visit new_ncr_work_order_path
       select_expense_type("ba60")
@@ -75,6 +77,7 @@ feature "Create NCR Work orders with different expense types", :js do
 
   context "expense type is not BA60" do
     scenario "building id is required" do
+      requester = create(:user, client_slug: "ncr")
       login_as(requester)
       visit new_ncr_work_order_path
       ["ba61", "ba80"].each do |expense_type|
@@ -86,6 +89,7 @@ feature "Create NCR Work orders with different expense types", :js do
 
   context "selects BA60 and then unselects BA60" do
     scenario "building id is required" do
+      requester = create(:user, client_slug: "ncr")
       login_as(requester)
       visit new_ncr_work_order_path
       select_expense_type("ba60")

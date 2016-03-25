@@ -8,14 +8,10 @@ module Gsa18f
       fields = default
 
       if recurring
-        fields += [:recurring_interval, :recurring_length]
+        fields += [:recurring, :recurring_interval, :recurring_length]
       end
 
       fields
-    end
-
-    def display
-      attributes_for_view.push(["Total Price", procurement.total_price])
     end
 
     private
@@ -35,12 +31,6 @@ module Gsa18f
         :quantity,
         :urgency,
       ]
-    end
-
-    def attributes_for_view
-      relevant(procurement.recurring).map do |attribute|
-        [Gsa18f::Procurement.human_attribute_name(attribute), procurement.send(attribute)]
-      end
     end
   end
 end

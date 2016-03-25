@@ -20,7 +20,7 @@ class RolesConversion
 
   def ba61_tier1_budget_team_approver
     with_email_role_slug!(
-      "c2.budget.approver+ba61team@gmail.com",
+      "gsa.approver+ba61_team@gmail.com",
       "BA61_tier1_budget_team_approver",
       "ncr"
     )
@@ -28,7 +28,7 @@ class RolesConversion
 
   def ba61_tier1_budget_approver
     with_email_role_slug!(
-      "c2.budget.approver+ba61@gmail.com",
+      "gsa.approver+ba61_tier1@gmail.com",
       "BA61_tier1_budget_approver",
       "ncr"
     )
@@ -36,7 +36,7 @@ class RolesConversion
 
   def ba61_tier2_budget_approver
     with_email_role_slug!(
-      "c2.ofm.approver@gmail.com",
+      "gsa.approver+ba61_tier2@gmail.com",
       "BA61_tier2_budget_approver",
       "ncr"
     )
@@ -44,7 +44,7 @@ class RolesConversion
 
   def ba80_budget_approver
     with_email_role_slug!(
-      "c2.budget.approver+ba80@gmail.com",
+      "gsa.approver+ba80@gmail.com",
       "BA80_budget_approver",
       "ncr"
     )
@@ -52,7 +52,7 @@ class RolesConversion
 
   def ool_ba80_budget_approver
     with_email_role_slug!(
-      "c2.budget.approver+ool_ba80@gmail.com",
+      "gsa.approver+ool_ba80@gmail.com",
       "OOL_BA80_budget_approver",
       "ncr"
     )
@@ -60,7 +60,7 @@ class RolesConversion
 
   def gsa18f_approver
     with_email_role_slug!(
-      "some.approver@example.com",
+      "gsa.approver+18f_approver@gmail.com",
       "gsa18f_approver",
       "gsa18f"
     )
@@ -68,7 +68,7 @@ class RolesConversion
 
   def gsa18f_purchaser
     with_email_role_slug!(
-      "some.purchaser@example.com",
+      "gsa.approver+18f_purchaser@gmail.com",
       "gsa18f_purchaser",
       "gsa18f"
     )
@@ -76,7 +76,7 @@ class RolesConversion
 
   def gateway_admin
     with_email_role_slug!(
-      "gateway_admin@example.com",
+      "gsa.approver+gateway_admin@gmail.com",
       "gateway_admin",
       nil
     )

@@ -1,6 +1,4 @@
 feature "Create a Gsa18F procurement" do
-  let(:requester) { create(:user, client_slug: "gsa18f") }
-
   scenario "user not signed in" do
     visit new_gsa18f_procurement_path
 
@@ -9,6 +7,8 @@ feature "Create a Gsa18F procurement" do
 
   context "user signed in" do
     scenario "saves a Proposal with the attributes" do
+      requester = create(:user, client_slug: "gsa18f")
+
       login_as(requester)
       visit new_gsa18f_procurement_path
 
@@ -31,6 +31,8 @@ feature "Create a Gsa18F procurement" do
 
     context "invalid input" do
       scenario "shows error and preserve form inputs" do
+        requester = create(:user, client_slug: "gsa18f")
+
         login_as(requester)
         visit new_gsa18f_procurement_path
 

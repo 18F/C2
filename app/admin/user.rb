@@ -11,6 +11,36 @@ ActiveAdmin.register User do
   # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
   permit_params :active, :first_name, :last_name, :email_address, :client_slug, role_ids: []
 
+  controller do
+    def create
+      user = User.new(user_params)
+      roles = role_ids_to_roles
+      User.transaction do
+        user.save!
+        UserRole.create(roles.map { |role| { user: user, role: role } })
+      end
+      redirect_to admin_user_path(user)
+    end
+
+    def user_params
+      params.require(:user).permit(:active, :first_name, :last_name, :email_address, :client_slug)
+    end
+
+    def role_id_params
+      params.require(:user).permit(role_ids: [])[:role_ids]
+    end
+
+    def role_ids_to_roles
+      roles = []
+      role_id_params.each do |id|
+        next unless id.present?
+        role = Role.find(id) or next
+        roles << role
+      end
+      roles
+    end
+  end
+
   # /:id/edit page
   form do |f|
     f.inputs "Profile" do

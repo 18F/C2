@@ -1,7 +1,6 @@
 describe "admin" do
-  let(:user) { create(:user) }
-
   it "requires admin role to access" do
+    user = create(:user)
     login_as(user)
 
     get "/admin"
@@ -16,6 +15,7 @@ describe "admin" do
   end
 
   it "user is an admin" do
+    user = create(:user)
     user.add_role("admin")
     login_as(user)
 

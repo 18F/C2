@@ -34,7 +34,7 @@ class ProposalDecorator < Draper::Decorator
   end
 
   def total_completion_days
-    if completed?
+    if completed? && total_step_users > 0
       (final_completed_date.to_date - created_at.to_date).to_i
     else
       ""
@@ -83,9 +83,17 @@ class ProposalDecorator < Draper::Decorator
     [public_id, created_at, requester.display_name, detailed_status, final_completed_date, total_completion_days, client_data.csv_fields].flatten
   end
 
+  def fields_for_display
+    if client_data
+      client_data.decorate.display
+    else
+      []
+    end
+  end
+
   def fields_for_email_display
     if client_data
-      client_data.decorate.public_send(:email_display)
+      client_data.decorate.email_display
     else
       []
     end
@@ -93,7 +101,7 @@ class ProposalDecorator < Draper::Decorator
 
   def top_email_field
     if client_data
-      client_data.decorate.public_send(:top_email_field)
+      client_data.decorate.top_email_field
     end
   end
 

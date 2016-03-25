@@ -29,7 +29,7 @@ module Ncr
     end
 
     def ba_6x_tier1_team?
-      code.match(/^P11[7J4T1ACZ]....$/)
+      code.match(/^P11[1247ACJTZ]....$/)
     end
   end
 end

@@ -124,7 +124,11 @@ module Ncr
     end
 
     def ba80?
-      self.expense_type == "BA80"
+      expense_type == "BA80"
+    end
+
+    def ba61?
+      expense_type == "BA61"
     end
 
     def not_ba60?

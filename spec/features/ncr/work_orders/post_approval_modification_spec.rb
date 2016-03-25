@@ -1,9 +1,8 @@
 feature "post-approval modification" do
   include ProposalSpecHelper
 
-  let(:work_order) { create(:ncr_work_order) }
-
   scenario "doesn't require re-approval for the amount being decreased" do
+    work_order = create(:ncr_work_order)
     work_order.setup_approvals_and_observers
     fully_complete(work_order.proposal)
 
@@ -17,6 +16,7 @@ feature "post-approval modification" do
   end
 
   scenario "can do end-to-end re-approval" do
+    work_order = create(:ncr_work_order)
     work_order.setup_approvals_and_observers
     fully_complete(work_order.proposal)
 
@@ -25,7 +25,7 @@ feature "post-approval modification" do
     fill_in 'Amount', with: work_order.amount + 1
     click_on 'Update'
 
-    expect_budget_approvals_restarted
+    expect_budget_approvals_restarted(work_order)
 
     login_as(work_order.budget_approvers.first)
     visit "/proposals/#{work_order.proposal.id}"
@@ -34,7 +34,7 @@ feature "post-approval modification" do
     work_order.reload
     expect(work_order.status).to eq('pending')
     expect(work_order.proposal.root_step.status).to eq('actionable')
-    expect(approval_statuses).to eq(%w(
+    expect(approval_statuses(work_order)).to eq(%w(
       completed
       completed
       actionable
@@ -47,7 +47,7 @@ feature "post-approval modification" do
     work_order.reload
     expect(work_order.status).to eq('completed')
     expect(work_order.proposal.root_step.status).to eq('completed')
-    expect(approval_statuses).to eq(%w(
+    expect(approval_statuses(work_order)).to eq(%w(
       completed
       completed
       completed
@@ -55,6 +55,7 @@ feature "post-approval modification" do
   end
 
   scenario "shows flash warning, only on edit page" do
+    work_order = create(:ncr_work_order)
     work_order.setup_approvals_and_observers
     fully_complete(work_order.proposal)
 
@@ -65,16 +66,16 @@ feature "post-approval modification" do
     expect(page).to_not have_content("You are about to modify a fully approved request")
   end
 
-  def approval_statuses
+  def approval_statuses(work_order)
     linear_approval_statuses(work_order.proposal)
   end
 
-  def expect_budget_approvals_restarted
+  def expect_budget_approvals_restarted(work_order)
     work_order.reload
 
     expect(work_order.status).to eq('pending')
     expect(work_order.proposal.root_step.status).to eq('actionable')
-    expect(approval_statuses).to eq(%w(
+    expect(approval_statuses(work_order)).to eq(%w(
       completed
       actionable
       pending

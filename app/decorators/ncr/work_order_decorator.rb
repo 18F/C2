@@ -21,6 +21,16 @@ module Ncr
       end
     end
 
+    def display
+      if object.ba80?
+        base_fields + [rwa_field, work_order_ticket_number]
+      elsif object.ba61?
+        base_fields + [emergency_field]
+      else
+        base_fields
+      end
+    end
+
     def top_email_field
       object.description
     end
@@ -62,7 +72,25 @@ module Ncr
         [translated_key("vendor"), object.vendor],
         [translated_key("soc_code"), object.soc_code],
         [translated_key("building_number"), object.building_number],
-        [translated_key("org_code"), object.organization_code_and_name]
+        [translated_key("org_code"), object.organization_code_and_name],
+        [direct_pay_field]
+      ]
+    end
+
+    def base_fields
+      [
+        [translated_key("project_title"), object.project_title],
+        [translated_key("description"), object.description],
+        [translated_key("approving_official"), object.approving_official],
+        [amount_and_not_to_exceed, object.amount],
+        [translated_key("building_number"), object.building_number],
+        [translated_key("cl_number"), object.cl_number],
+        [translated_key("expense_type"), object.expense_type],
+        [translated_key("function_code"), object.function_code],
+        [translated_key("vendor"), object.vendor],
+        [translated_key("soc_code"), object.soc_code],
+        [translated_key("org_code"), object.organization_code_and_name],
+        direct_pay_field
       ]
     end
 
@@ -72,6 +100,10 @@ module Ncr
 
     def work_order_ticket_number
       [translated_key("code"), object.code]
+    end
+
+    def emergency_field
+      [translated_key("emergency"), object.emergency]
     end
 
     def direct_pay_field
