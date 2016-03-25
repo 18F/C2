@@ -7,7 +7,7 @@ $(document).ready(function() {
   });
 
   // defined inline on HTML page
-  if (typeof C2_SEARCH_QUERY != "undefined") {
+  if (typeof C2_SEARCH_QUERY !== "undefined") {
     $("#save-search-query").text(C2_SEARCH_QUERY.humanized);
   }
   $("#save-search form").on("submit", function(e) {
@@ -26,7 +26,7 @@ $(document).ready(function() {
     // See http://stackoverflow.com/questions/16707743/html5-required-validation-not-working
     $("#save-search-submit").click();
 
-    if (typeof savedSearchForm[0].checkValidity == "function" && !savedSearchForm[0].checkValidity()) {
+    if (typeof savedSearchForm[0].checkValidity === "function" && !savedSearchForm[0].checkValidity()) {
       return;
     }
 
