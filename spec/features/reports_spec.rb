@@ -15,7 +15,7 @@ feature "reports", elasticsearch: true do
     expect(page).to have_content("Saved as report my test report") 
   end
 
-  def populate_proposals
+  def populate_proposals(user)
     proposals = 2.times.map do |i|
       wo = create(:test_client_request, project_title: "Work Order #{i}")
       wo.proposal.update(requester: user)
