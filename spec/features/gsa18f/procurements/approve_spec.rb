@@ -2,6 +2,10 @@ feature "Approve a Gsa18F procurement" do
   context "when signed in as the approver" do
     context "last step is completed" do
       it "sends one email to the requester" do
+        purchaser = Gsa18f::Procurement.user_with_role("gsa18f_purchaser")
+        procurement = create(:gsa18f_procurement, :with_steps)
+        proposal = procurement.proposal
+
         procurement.individual_steps.first.complete!
         deliveries.clear
 
