@@ -120,7 +120,7 @@ $(document).ready(function() {
       $.get(url, function(resp) {
         countEl.html(resp.total);
       }).fail(function(xhr, err, msg) {
-        console.log('fail!', msg);
+        $.error(msg);
       });
     }, 1000); // TODO experiment with this delay
   };
@@ -129,13 +129,11 @@ $(document).ready(function() {
   // the 'keyup' listener handles text input immediately (change waits for focus change)
   searchForm.find(':input').keyup(function(e) {
     var el = $(e.target);
-    //console.log('adv search keyup: ', el[0].name);
     updatePreviewCount();
   });
   // the 'onchange' listener handles select/checkbox/radio immediately
   searchForm.find(':input').change(function(e) {
     var el = $(e.target);
-    //console.log('adv search change: ', el[0].name);
     updatePreviewCount();
   });
 
