@@ -1,4 +1,8 @@
 feature "Edit a Gsa18F procurement" do
+  let(:requester) { create(:user, client_slug: "gsa18f") }
+  let(:procurement) { create(:gsa18f_procurement, :with_steps, requester: requester, urgency: 10) }
+  let(:proposal) { procurement.proposal }
+
   context "User is requester" do
     context "procurement has pending status" do
       scenario "can be modified" do
@@ -76,17 +80,5 @@ feature "Edit a Gsa18F procurement" do
       expect(current_path).to eq(new_gsa18f_procurement_path)
       expect(page).to have_content("You are not the requester")
     end
-  end
-
-  def requester
-    @_requester ||= create(:user, client_slug: "gsa18f")
-  end
-
-  def procurement
-    @_procurement ||= create(:gsa18f_procurement, :with_steps, requester: requester, urgency: 10)
-  end
-
-  def proposal
-    @_proposal ||= procurement.proposal
   end
 end

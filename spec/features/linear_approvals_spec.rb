@@ -1,4 +1,6 @@
 describe 'Linear approvals' do
+  let(:create_proposal) { create(:proposal) }
+
   it 'allows the approver to approve' do
     proposal = create_proposal
     first_approver = create(:user)
@@ -36,10 +38,6 @@ describe 'Linear approvals' do
     expect(@proposal_page.status).to have_approvers count: 2
     expect(@proposal_page.status.approvers.first.role.text).to match /Approver/
     expect(@proposal_page.status.approvers.second.role.text).to match /Purchaser/
-  end
-
-  def create_proposal
-    @proposal ||= create(:proposal)
   end
 
   def create_approvals_for(users)

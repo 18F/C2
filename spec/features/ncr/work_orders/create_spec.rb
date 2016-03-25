@@ -1,4 +1,6 @@
 feature "Creating an NCR work order", :js do
+  let(:requester) { create(:user, client_slug: "ncr") }
+
   context "when signed in as an NCR user" do
     scenario "saves a Proposal with the attributes" do
       approver = create(:user, client_slug: "ncr")
@@ -88,10 +90,6 @@ feature "Creating an NCR work order", :js do
 
       expect_page_to_have_selectized_options("ncr_work_order_building_number", "BillDing")
     end
-  end
-
-  def requester
-    @_requester ||= create(:user, client_slug: "ncr")
   end
 
   def focus_field(field_id)

@@ -1,4 +1,6 @@
 feature "Create NCR Work orders with different expense types", :js do
+  let(:requester) { create(:user, client_slug: "ncr") }
+
   scenario "hides fields based on expense" do
     login_as(requester)
     visit new_ncr_work_order_path
@@ -90,10 +92,6 @@ feature "Create NCR Work orders with different expense types", :js do
       select_expense_type("ba80")
       expect_building_id_to_be_required
     end
-  end
-
-  def requester
-    @_requester ||= create(:user, client_slug: "ncr")
   end
 
   def select_expense_type(expense_type)

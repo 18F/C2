@@ -1,4 +1,16 @@
 describe ApiTokenPolicy do
+  let(:token) { create(:api_token, step: approval) }
+  let(:approval) { proposal.individual_steps.first }
+  let(:proposal) { create(:proposal, :with_approver) }
+  let(:approver) { approval.user }
+  let(:approval_params_with_token) do
+    {
+      cch: token.access_token,
+      id: proposal.id.to_s,
+      approver_action: "approve"
+    }.with_indifferent_access
+  end
+
   permissions :valid? do
     it "allows valid parameters" do
       expect(ApiTokenPolicy).to permit(approval_params_with_token, :api_token)
@@ -38,29 +50,5 @@ describe ApiTokenPolicy do
 
       expect(ApiTokenPolicy).not_to permit(approval_params_with_token, :api_token)
     end
-  end
-
-  def approval_params_with_token
-    @approval_params_with_token ||= {
-      cch: token.access_token,
-      id: proposal.id.to_s,
-      approver_action: "approve"
-    }.with_indifferent_access
-  end
-
-  def token
-    @token ||= create(:api_token, step: approval)
-  end
-
-  def proposal
-    @proposal ||= create(:proposal, :with_approver)
-  end
-
-  def approval
-    @approval ||= proposal.individual_steps.first
-  end
-
-  def approver
-    @approver ||= approval.user
   end
 end

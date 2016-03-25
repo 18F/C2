@@ -1,6 +1,8 @@
 feature "Sort proposals on index page" do
   include ProposalTableSpecHelper
 
+  let(:user) { create(:user) }
+
   it "allows other table headers to be clicked to sort" do
     proposals = create_list(:proposal, 3, observer: user)
     proposals[0].requester.update(email_address: "bbb@example.com")
@@ -90,9 +92,5 @@ feature "Sort proposals on index page" do
         procurement.update(proposal: create(:proposal, observer: user))
       end
     end
-  end
-
-  def user
-    @_user ||= create(:user)
   end
 end
