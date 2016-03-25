@@ -14,10 +14,6 @@ module Gsa18f
       fields
     end
 
-    def display
-      attributes_for_view.push(["Total Price", procurement.total_price])
-    end
-
     private
 
     attr_reader :procurement
@@ -35,12 +31,6 @@ module Gsa18f
         :quantity,
         :urgency,
       ]
-    end
-
-    def attributes_for_view
-      relevant(procurement.recurring).map do |attribute|
-        [Gsa18f::Procurement.human_attribute_name(attribute), procurement.send(attribute)]
-      end
     end
   end
 end

@@ -43,29 +43,4 @@ describe Ncr::WorkOrderFields do
       ])
     end
   end
-
-  describe "#display" do
-    it "returns relevant fields for the work order passed in" do
-      work_order = build(:ncr_work_order, expense_type: "BA61")
-
-      fields = Ncr::WorkOrderFields.new(work_order).display
-
-      expect(fields).to eq([
-         ["Amount", work_order.amount],
-         ["Building number", work_order.building_number],
-         ["CL number", work_order.cl_number],
-         ["Description", work_order.description],
-         ["Direct pay", work_order.direct_pay],
-         ["Expense type", work_order.expense_type],
-         ["Function code", work_order.function_code],
-         ["Not to exceed", work_order.not_to_exceed],
-         ["Project title", work_order.project_title],
-         ["Object field / SOC code", work_order.soc_code],
-         ["Vendor", work_order.vendor],
-         ["Emergency", work_order.emergency],
-         ["Org code", work_order.organization_code_and_name],
-         ["Approving official", work_order.approving_official.email_address],
-      ])
-    end
-  end
 end
