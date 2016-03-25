@@ -66,12 +66,12 @@ describe ProposalSearchDsl do
 
   describe "parses date ranges" do
     it "when created_at is present" do
-      now = Time.zone.now
+      some_time = Time.zone.parse("2016-03-25T02:55:57Z")
       user = create(:user, client_slug: "test")
       dsl = ProposalSearchDsl.new(
         params: {
           test_client_request: {
-            created_at: now.to_s,
+            created_at: some_time.to_s,
             created_within: "6 months",
           }
         },
@@ -80,7 +80,7 @@ describe ProposalSearchDsl do
         client_data_type: "Test::ClientRequest"
       )
       expect(dsl.composite_query_string).to eq(
-        "(foo OR Bar) AND (created_at:[#{(now.utc - 6.months).iso8601} TO #{now.utc.iso8601}])"
+        "(foo OR Bar) AND (created_at:[#{(some_time.utc - 6.months).iso8601} TO #{some_time.utc.iso8601}])"
       )
     end
 
