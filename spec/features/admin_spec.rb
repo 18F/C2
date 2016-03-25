@@ -63,4 +63,21 @@ describe "admin" do
 
     expect(page).to have_content("Re-index Proposals")
   end
+
+  it "creates new User" do
+    user = create(:user)
+    user.add_role("admin")
+    login_as(user)
+
+    visit new_admin_user_path
+
+    fill_in "user[first_name]", with: "test"
+    fill_in "user[last_name]", with: "user"
+    fill_in "user[email_address]", with: "testuser@example.com"
+    select "test", from: "user[client_slug]"
+    select "observer", from: "user[role_ids][]"
+    click_button "Create User"
+
+    expect(page).to have_content("test user <testuser@example.com>")
+  end
 end
