@@ -1,4 +1,6 @@
 feature "reports", elasticsearch: true do
+  let(:user) { create(:user, client_slug: "test") }
+
   before do
     login_as(user)
   end
@@ -15,10 +17,6 @@ feature "reports", elasticsearch: true do
     click_on "Save"
 
     expect(page).to have_content("Saved as report my test report") 
-  end
-
-  def user
-    @_user ||= create(:user, client_slug: "test")
   end
 
   def populate_proposals

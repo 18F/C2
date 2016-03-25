@@ -1,6 +1,8 @@
 describe Ncr::WorkOrdersController do
   include ProposalSpecHelper
 
+  let(:approving_official) { create(:user, client_slug: "ncr") }
+
   describe "#create" do
     it "sends an email to the first approver" do
       params = {
@@ -187,11 +189,5 @@ describe Ncr::WorkOrdersController do
       expect(work_order.steps.empty?).to be true
       expect(work_order.observers.empty?).to be false
     end
-  end
-
-  private
-
-  def approving_official
-    @_approving_official ||= create(:user, client_slug: "ncr")
   end
 end

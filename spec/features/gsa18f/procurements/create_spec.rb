@@ -1,4 +1,6 @@
 feature "Create a Gsa18F procurement" do
+  let(:requester) { create(:user, client_slug: "gsa18f") }
+
   scenario "user not signed in" do
     visit new_gsa18f_procurement_path
 
@@ -42,9 +44,5 @@ feature "Create a Gsa18F procurement" do
         expect(find_field("Cost per unit").value).to eq("10000")
       end
     end
-  end
-
-  def requester
-    @_requester ||= create(:user, client_slug: "gsa18f")
   end
 end

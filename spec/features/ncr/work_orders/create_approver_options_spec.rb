@@ -1,4 +1,6 @@
 feature "Approver options during create", :js do
+  let(:requester) { create(:user, client_slug: "ncr") }
+
   scenario "inactive users do not appear as potential approvers" do
     approver = create(:user, client_slug: "ncr")
     inactive_user = create(:user, client_slug: "ncr", active: false)
@@ -61,9 +63,5 @@ feature "Approver options during create", :js do
       "ncr_work_order_approving_official",
       client_data.approving_official.email_address
     )
-  end
-
-  def requester
-    @_requester ||= create(:user, client_slug: "ncr")
   end
 end

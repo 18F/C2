@@ -1,7 +1,6 @@
 feature "Requester switches work order to WHSC", :js do
   let(:work_order) { create(:ncr_work_order) }
   let(:ncr_proposal) { work_order.proposal }
-  let!(:approver) { create(:user) }
 
   before do
     work_order.setup_approvals_and_observers
