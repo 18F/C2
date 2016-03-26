@@ -18,10 +18,14 @@ $(document).ready(function() {
     return advOptsFieldset.is(":visible");
   };
 
+  var searchTermsHasFocus = function() {
+    return searchTerms.is(":focus");
+  };
+
   var FADE_SPEED = 200;
 
   var buttonToggler = function() {
-    if (searchTerms && searchTerms.val() && searchTerms.val().length == 0) {
+    if (searchTerms && (!searchTerms.val() || searchTerms.val().length == 0)) {
       searchButton.hide();
       searchMagGlass.fadeIn(FADE_SPEED);
     }
@@ -64,7 +68,9 @@ $(document).ready(function() {
   }
   else {
     hideAdvOptions();
-    buttonToggler();
+    if (!searchTermsHasFocus()) {
+      advOptsButton.hide();
+    }
   }
 
   searchTerms.keyup(function(e) {
@@ -114,7 +120,7 @@ $(document).ready(function() {
       $.get(url, function(resp) {
         countEl.html(resp.total);
       }).fail(function(xhr, err, msg) {
-        $.error(msg);
+        countEl.html(0);
       });
     }, 1000); // TODO experiment with this delay
   };

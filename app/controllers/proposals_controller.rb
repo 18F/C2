@@ -73,7 +73,9 @@ class ProposalsController < ApplicationController
 
   def query_count
     query
-    if @proposals_data
+    if performed?
+      render json: { total: 0 }
+    elsif @proposals_data
       render json: { total: @proposals_data.es_response.results.total }
     else
       render json: { error: flash[:error] }

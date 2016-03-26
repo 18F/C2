@@ -1,6 +1,7 @@
 @import "constants";
 
 .m-search-ui {
+  z-index: 100;
   position: absolute;
   right: 0;
   width: 30%;
