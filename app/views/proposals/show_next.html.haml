@@ -23,7 +23,7 @@
             Requested on:
             %strong
               %span 
-                = @proposal.created_at.strftime("%b %d, %Y at %l:%M%P") 
+                = @proposal.created_at.strftime("%b %d, %Y at %l:%M%P")                 
 .row
   .medium-6.column
     .card-for-approvals
@@ -34,39 +34,20 @@
               %h2
                 Approvals
             .content-content.column
-              .row.step-state.column.state-completed
-                .medium-2.column.text-center
-                  %img{:alt => "", :src => "http://fakeimg.pl/32x32"}
-                .medium-10.column
-                  %span.step-index.step-data
-                    Step 1
-                  %span.approver.step-data
-                    %span.approval-name> communicart.budget.approver+ba61@gmail.com
-                    ,
-                    %span.approver-role Approver
-                  %span.approver-status.step-data
-              .row.step-state.column.state-active
-                .medium-2.column.text-center
-                  %img{:alt => "", :src => "http://fakeimg.pl/32x32"}
-                .medium-10.column
-                  %span.step-index.step-data
-                    Step 2
-                  %span.approver.step-data
-                    %span.approval-name> ncr-wpm-ba61cc@gsa.gov
-                    ,
-                    %span.approver-role Approver
-                  %span.approver-status.step-data
-              .row.step-state.column.state-pending
-                .medium-2.column.text-center
-                  %img{:alt => "", :src => "http://fakeimg.pl/32x32"}
-                .medium-10.column
-                  %span.step-index.step-data
-                    Step 3
-                  %span.approver.step-data
-                    %span.approval-name> ncr_ba61_budgetrequests@gsa.gov
-                    ,
-                    %span.approver-role Approver
-                  %span.approver-status.step-data
+              - @proposal.steps.each do |step|
+                - if !step.user_id.nil?
+                  .row.step-state.column.state-completed
+                    .medium-2.column.text-center
+                      %img{:alt => "", :src => "http://fakeimg.pl/32x32"}
+                    .medium-10.column
+                      %span.step-index.step-data
+                        Step #{step.position - 1}
+                      %span.approver.step-data
+                        %span.approval-name                         
+                          #{User.find(step.user_id).full_name},
+                        %span.approver-role #{step_user_title(step)}
+                      %span.approver-status.step-data
+                    
     .card-for-activity
       .row
         .medium-12.column
