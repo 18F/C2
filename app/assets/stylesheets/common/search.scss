@@ -1,9 +1,11 @@
 @import "constants";
 
 .m-search-ui {
+  z-index: 100;
   position: absolute;
   right: 0;
   width: 30%;
+  min-width: 450px;
 
   ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
     color: $placeholdergray;
@@ -50,6 +52,8 @@
 
     #adv-options a {
       background-color: #e3e3e3;
+      text-decoration: underline;
+      color: #0C75E1;
     }
 
     .input-group-block {
@@ -204,12 +208,6 @@ fieldset.adv {
     .col-xs-5.inline {
       vertical-align: bottom;
     }
-  }
-}
-
-@media screen and (max-width: 1100px) {
-  .m-search-ui {
-    min-width: 450px;
   }
 }
 

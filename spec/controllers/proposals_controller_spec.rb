@@ -189,6 +189,17 @@ describe ProposalsController do
           expect(response.body).to eq({total: 3}.to_json)
         end
       end
+
+      it "returns valid JSON for preview count error" do
+        login_as(user)
+
+        es_execute_with_retries 3 do
+          get :query_count
+          expect(response.status).to eq 200
+          expect(response.headers["Content-Type"]).to include "application/json"
+          expect(response.body).to eq({total: 0}.to_json)
+        end
+      end
     end
   end
 
