@@ -1,6 +1,5 @@
 describe "searching", elasticsearch: true do
   let(:user){ create(:user, client_slug: "test") }
-  let!(:approver){ create(:user) }
 
   before do
     login_as(user)
