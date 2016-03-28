@@ -12,6 +12,7 @@ class ProposalsController < ApplicationController
 
   def show
     @proposal = proposal.decorate
+    render "show_next"
   end
 
   def index

@@ -1,0 +1,100 @@
+.card {
+  font-size: 14px;
+  label{
+    font-size: 12px;
+  }
+  textarea {
+    resize: none;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+  a.button:last-child{
+    margin-right: 0px;
+  }
+  h2{
+    color: #40759C;
+  }
+  .content-content{
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+  .card-head{
+
+    a.button{
+      border-color: white;
+      padding: 0.5em 1.4em 0.7em;
+      font-size: 0.7rem;
+      font-weight: normal;
+      text-transform: none;
+      margin-right: 0px;
+      &.status-wrap{
+        background: $white;
+        border: none;
+        padding: 0.7em 3.5em;
+        text-transform: uppercase !important;
+        font-size: 11px;
+        color: $dark-gray;
+        .status-value{
+          font-size: 15px;
+          font-weight: bold;
+          text-transform: none;
+        }
+        &:hover{
+          background: $primary-color;
+        }
+      }
+      &:hover{
+        color: darken($primary-color, 10%);
+        background: white;
+      }
+    }
+    padding-top: 15px;
+    padding-bottom: 6px;
+    background: $backgroundColor;
+  }
+  overflow: hidden;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  border-radius: 2px;
+  margin-bottom: 20px;
+  .title {
+    line-height: 3rem;
+    font-size: 1.5rem;
+    font-weight: 300;
+  }
+  .content {
+    padding: 1.3rem;
+    font-weight: 300;
+    border-radius: 0 0 2px 2px;
+  }
+  p {
+    margin-bottom: 15px;
+    font-size: 16px;
+  }
+  .action {
+    border-top: 1px solid rgba(160, 160, 160, 0.2);
+    padding: 1.3rem;
+  }
+  a {
+    word-wrap: break-word;
+    color: #ffab40;
+    transition: color 0.3s ease;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .image {
+    position: relative;
+    .title {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      padding: 1.3rem;
+      color: #fff;
+    }
+    img {
+      border-radius: 2px 2px 0 0;
+    }
+  }
+}
+
+

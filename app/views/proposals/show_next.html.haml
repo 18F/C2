@@ -1,0 +1,230 @@
+= stylesheet_link_tag "redesign/app"
+
+
+.row
+  .medium-12.column
+    .card
+      .card-head.column
+        %a.large.button.secondary.fr.status-wrap{:href => ""}
+          Status:
+          %span.status-value 
+            = @proposal.status.capitalize
+        %h3
+          = @proposal.public_id
+        %h1.c2n_header
+          = @proposal.name
+        .c2n_description
+          %p
+            Requested by:
+            %strong
+              = @proposal.requester.full_name
+            Requested on:
+            %strong
+              %span 
+                = @proposal.created_at.strftime("%b %d, %Y at %l:%M%P") 
+.row
+  .medium-6.column
+    .card-for-approvals
+      .row
+        .medium-12.column
+          .card
+            .card-head.column
+              %h2
+                Approvals
+            .content-content.column
+              .row.step-state.column.state-completed
+                .medium-2.column.text-center
+                  %img{:alt => "", :src => "http://fakeimg.pl/32x32"}
+                .medium-10.column
+                  %span.step-index.step-data
+                    Step 1
+                  %span.approver.step-data
+                    %span.approval-name> communicart.budget.approver+ba61@gmail.com
+                    ,
+                    %span.approver-role Approver
+                  %span.approver-status.step-data
+              .row.step-state.column.state-active
+                .medium-2.column.text-center
+                  %img{:alt => "", :src => "http://fakeimg.pl/32x32"}
+                .medium-10.column
+                  %span.step-index.step-data
+                    Step 2
+                  %span.approver.step-data
+                    %span.approval-name> ncr-wpm-ba61cc@gsa.gov
+                    ,
+                    %span.approver-role Approver
+                  %span.approver-status.step-data
+              .row.step-state.column.state-pending
+                .medium-2.column.text-center
+                  %img{:alt => "", :src => "http://fakeimg.pl/32x32"}
+                .medium-10.column
+                  %span.step-index.step-data
+                    Step 3
+                  %span.approver.step-data
+                    %span.approval-name> ncr_ba61_budgetrequests@gsa.gov
+                    ,
+                    %span.approver-role Approver
+                  %span.approver-status.step-data
+    .card-for-activity
+      .row
+        .medium-12.column
+          .card
+            .card-head
+              %h2.content-wrap-level
+                Activity
+            .content-content
+              .row.column
+                .medium-12.column
+                  %textarea{:cols => "30", :id => "", :name => "", :placeholder => "Add a comment", :rows => "5"}
+              .medium-12.column.text-right
+                %a.button.round.secondary{:href => ""}
+                  %span.plus +
+                  Attachment
+                %a.button.round.primary{:href => ""} Send
+              .row.column
+                .medium-12.column.status-feed-wrapper
+                  .row.status-feed-item.status-attachment-block
+                    .medium-2.column.text-center.status-feed-timeline
+                      %img{:alt => "", :src => "http://fakeimg.pl/20x20"}
+                    .medium-10.column.status-feed-content
+                      .title-block
+                        %span.status-action Document attached by Amber Reed
+                        %span.time-from 1 hour ago
+                      .item-block
+                        %img{:alt => "", :src => "http://fakeimg.pl/35x35"}
+                          %a{:href => ""} Vendor_Estimate.pdf
+                  .row.status-feed-item.status-comment-block
+                    .medium-2.column.text-center.status-feed-timeline
+                      %img{:alt => "", :src => "http://fakeimg.pl/20x20"}
+                    .medium-10.column.status-feed-content
+                      .title-block
+                        %span.status-action Comment added by Amber Reed
+                        %span.time-from 1 hour ago
+                      .item-block
+                        %p Yes! I really need paint
+                  .row.status-feed-item.status-modification-block
+                    .medium-2.column.text-center.status-feed-timeline
+                      %img{:alt => "", :src => "http://fakeimg.pl/20x20"}
+                    .medium-10.column.status-feed-content
+                      .title-block
+                        %span.status-action Request modified by Carol Remsberg
+                        %span.time-from 1 day ago
+                      .item-block
+                        %ul
+                          %li
+                            Function code was changed to
+                            %b PGA42
+                          %li
+                            Object field / SOC code was changed to
+                            %b L04
+                  .row.status-feed-item.status-creation-block
+                    .medium-2.column.text-center.status-feed-timeline
+                      %img{:alt => "", :src => "http://fakeimg.pl/20x20"}
+                    .medium-10.column.status-feed-content
+                      .title-block
+                        %span.status-action Request submitted by Raphy Villas
+                        %span.time-from 3/10/16
+                      .item-block
+                        %p
+                .medium-12.column.status-feed-actions.text-right
+                  .row.column
+                    %a.button.secondary{:href => ""} View history
+                    %a.button.primary{:href => ""} Show all
+  .medium-6.column
+    .card-for-request-details
+      .row
+        .medium-12.column
+          .card
+            .card-head.column
+              %h2
+                Request Details
+                %a.button.secondary.fr.large Add / Edit
+            .content-content.column
+              .row
+                .medium-12.column
+                  %p.request-detail Computer needed for new developer
+              .row.request-content-wrapper
+                .medium-6.column.medium-table-cell.right-border
+                  .detail-wrapper
+                    %label.detail-element Expense type
+                    %span.detail-value BA60
+                  .detail-wrapper
+                    %label.detail-element Direct pay
+                    %span.detail-value No
+                .medium-6.column.medium-table-cell
+                  .detail-wrapper
+                    %label.detail-element Org code
+                    %span.detail-value P04M0001 (192X,192M) NON-INFRASTRUCTURE INFO TECHNOLOGY BR.
+                  .detail-wrapper
+                    %label.detail-element Function code
+                    %span.detail-value -
+                  .detail-wrapper
+                    %label.detail-element Object field / SOC code
+                    %span.detail-value -
+                  .primary.callout.no-margin-bottom.no-padding-bottom
+                    .row
+                      .medium-4.column
+                        %strong Total
+                      .medium-8.column
+                        .detail-wrapper
+                          %label.detail-element Exact
+                          %span.detail-value
+                            %h4
+                              %b $999.00
+              .row.column
+                .medium-12.callout.primary.column.medium-centered
+                  .row
+                    .medium-12.column
+                      %h5
+                        %b Line Item
+                  .row
+                    .medium-6.column
+                      .detail-wrapper
+                        %label.detail-element Vendor
+                        %span.detail-value Apple Inc.
+                      .detail-wrapper
+                        %label.detail-element CL number
+                        %span.detail-value -
+                    .medium-6.column
+                      .detail-wrapper
+                        %label.detail-element Building number
+                        %span.detail-value DC0000NA - NEBRASKA AVE COMPLEX
+                      .primary.callout.no-margin-bottom.no-padding-bottom
+                        .row
+                          .medium-4.column
+                            %strong Total
+                          .medium-8.column
+                            .detail-wrapper
+                              %label.detail-element Exact
+                              %span.detail-value
+                                %h4
+                                  %b $999.00
+    .card-for-purchase-details
+      .row
+        .medium-12.column
+          .card
+            .card-head.column
+              %h2
+                Purchase Details
+                %a.button.secondary.fr.large Add / Edit
+            .content-content.column
+              .row
+                .medium-12.column
+                  %p Details here
+                  .item-block
+                    %img{:alt => "", :src => "http://fakeimg.pl/35x35"}
+                      %a{:href => ""} Vendor_Estimate.pdf
+    .card-for-observers
+      .row
+        .medium-12.column
+          .card
+            .card-head.column
+              %h2
+                Observers
+                %a.button.secondary.fr.large Add / Edit
+            .content-content.column
+              %ul
+                %li Leonard Bogdonoff (Requester)
+                %li communicart.budget.approver+ba61@gmail.com (Approver)
+                %li ncr-wpm-ba61cc@gsa.gov (Approver)
+                %li ncr_ba61_budgetrequests@gsa.gov (Approver)

@@ -1,0 +1,17 @@
+.step-state{
+  margin-bottom: 20px;
+  span{
+    word-wrap: break-word;
+  }
+  .step-data{
+    display: block;
+  }
+  .step-index{
+    font-weight: bold;
+  }
+  .approver-status{
+    font-style: italic;
+  }
+}
+
+
