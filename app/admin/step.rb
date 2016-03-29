@@ -3,7 +3,7 @@ ActiveAdmin.register Step do
 
   filter :status
 
-  permit_params :status, :completed_id, :user_id
+  permit_params :status, :completer_id, :user_id
 
   index do
     column :id
