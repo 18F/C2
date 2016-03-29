@@ -8,12 +8,12 @@ module ClientHelper
     end
   end
 
-  def modify_client_button(proposal)
+  def modify_client_button(proposal, link_text = "Modify Request", link_class = "form-button modify")
     client_data = proposal.client_data
 
     if client_data && client_data.editable?
       url = polymorphic_path(client_data, action: :edit)
-      link_to "Modify Request", url, class: "form-button modify"
+      link_to link_text, url, class: link_class
     else
       ""
     end
