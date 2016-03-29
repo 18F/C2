@@ -7,13 +7,10 @@
   .medium-table-cell{
     float: none !important;
     display: table-cell;
-    // &:first-child{
-    //   padding-left: 0px;
-    // }
-  
-    // &:last-child{
-    //   padding-right: 0px;
-    // }
   }
 
+  .background-color-column{
+    position: relative;
+  }
 }
+

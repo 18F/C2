@@ -1,0 +1,44 @@
+.status-feed-content{
+  padding-bottom: 20px;  
+}
+
+.status-feed-wrapper{
+  &:last-child{
+    .status-feed-content{
+      padding-bottom: 0px;
+    }
+    margin-bottom: 20px;
+  }
+}
+
+.request-history-wrapper{
+  margin-bottom: 20px;
+}
+
+@media screen and (min-width: 40em){
+ 
+  .background-color-column .dot-circle{
+    overflow: hidden;
+    border-radius: 50px;
+    background: #C5DCED;
+    width: 23px;
+    height: 23px;
+    margin: auto;
+    position: absolute;
+    left: 0px;
+    right: 0px;
+  }
+
+  .background-color-column:before {
+    content: "";
+    display: block;
+    height: 100%;
+    background: #C5DCED;
+    width: 3px;
+    position: absolute;
+    margin: auto;
+    left: 0px;
+    right: 0px;
+  }
+
+}
