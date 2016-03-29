@@ -52,9 +52,11 @@ describe ReportsController do
     it "sends email with report to current user" do
       deliveries.clear
       my_report = create(:report, user: user)
-      post :preview, id: my_report.id
-      expect(response.status).to eq 302
-      expect(deliveries.size).to eq 1
+      es_execute_with_retries 3 do
+        post :preview, id: my_report.id
+        expect(response.status).to eq 302
+        expect(deliveries.size).to eq 1
+      end
     end
   end
 end
