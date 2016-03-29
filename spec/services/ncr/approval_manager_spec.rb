@@ -177,7 +177,7 @@ describe Ncr::ApprovalManager do
 
     context "for a BA60 or BA61 request" do
       it "uses BA61 tier1 team approver when org code matches" do
-        org_letters = %w( 7 J 4 T 1 A C Z )
+        org_letters = %w( 1 4 7 A C J T Z )
         org_letters.each do |org_letter|
           org_code = "P11#{org_letter}XXXX"
           ncr_org = create(:ncr_organization, code: org_code)
