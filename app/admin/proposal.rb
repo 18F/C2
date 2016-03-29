@@ -20,7 +20,6 @@ ActiveAdmin.register Proposal do
       row :name
       row :status
       row :requester
-      row :client_data
       row :created_at
       row :updated_at
     end
