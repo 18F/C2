@@ -434,4 +434,14 @@ describe Proposal do
       expect(proposal.as_indexed_json[:requester]).to eq(proposal.requester.display_name)
     end
   end
+
+  describe "#fully_complete!" do
+    it "handles all steps and status" do
+      proposal = create(:proposal, :with_serial_approvers)
+
+      proposal.fully_complete!
+
+      expect(proposal.status).to eq 'completed'
+    end
+  end
 end
