@@ -259,11 +259,10 @@ class Proposal < ActiveRecord::Base
   def fully_complete!(completer = nil)
     individual_steps.each do |step|
       step.reload
-      unless step.completed?
-        step.complete!
-        if completer
-          step.update(completer: completer)
-        end
+      next if step.completed?
+      step.complete!
+      if completer
+        step.update(completer: completer)
       end
     end
     complete!
