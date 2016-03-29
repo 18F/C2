@@ -21,7 +21,7 @@ ActiveAdmin.register Step do
   # /:id/edit page
   form do |f|
     f.inputs "Step" do
-      f.input :status, collection: ['pending', 'actionable', 'completed']
+      f.input :status, collection: %w(pending actionable completed)
       f.input :completer
       f.input :user
     end
