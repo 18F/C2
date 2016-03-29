@@ -63,52 +63,10 @@
                 %a.button.round.secondary{:href => ""}
                   %span.plus +
                   Attachment
-                %a.button.round.primary{:href => ""} Send
-              .row.column
-                .medium-12.column.status-feed-wrapper
-                  .row.status-feed-item.status-attachment-block
-                    .medium-2.column.text-center.status-feed-timeline
-                      %img{:alt => "", :src => "http://fakeimg.pl/20x20"}
-                    .medium-10.column.status-feed-content
-                      .title-block
-                        %span.status-action Document attached by Amber Reed
-                        %span.time-from 1 hour ago
-                      .item-block
-                        %img{:alt => "", :src => "http://fakeimg.pl/35x35"}
-                          %a{:href => ""} Vendor_Estimate.pdf
-                  .row.status-feed-item.status-comment-block
-                    .medium-2.column.text-center.status-feed-timeline
-                      %img{:alt => "", :src => "http://fakeimg.pl/20x20"}
-                    .medium-10.column.status-feed-content
-                      .title-block
-                        %span.status-action Comment added by Amber Reed
-                        %span.time-from 1 hour ago
-                      .item-block
-                        %p Yes! I really need paint
-                  .row.status-feed-item.status-modification-block
-                    .medium-2.column.text-center.status-feed-timeline
-                      %img{:alt => "", :src => "http://fakeimg.pl/20x20"}
-                    .medium-10.column.status-feed-content
-                      .title-block
-                        %span.status-action Request modified by Carol Remsberg
-                        %span.time-from 1 day ago
-                      .item-block
-                        %ul
-                          %li
-                            Function code was changed to
-                            %b PGA42
-                          %li
-                            Object field / SOC code was changed to
-                            %b L04
-                  .row.status-feed-item.status-creation-block
-                    .medium-2.column.text-center.status-feed-timeline
-                      %img{:alt => "", :src => "http://fakeimg.pl/20x20"}
-                    .medium-10.column.status-feed-content
-                      .title-block
-                        %span.status-action Request submitted by Raphy Villas
-                        %span.time-from 3/10/16
-                      .item-block
-                        %p
+                %a.button.round.primary{:href => ""} Send              
+                
+                = render partial: "shared/request_history", locals: {history: @history}
+
                 .medium-12.column.status-feed-actions.text-right
                   .row.column
                     %a.button.secondary{:href => ""} View history

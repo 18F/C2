@@ -1,0 +1,17 @@
+.row.column
+  - history.reverse.each do |old_action|
+    - history_user = User.find old_action.whodunnit
+    .medium-12.column.status-feed-wrapper.text-left
+      .row.status-feed-item.status-attachment-block
+        .medium-2.column.text-center.status-feed-timeline
+          %img{:alt => "", :src => "http://fakeimg.pl/20x20"}
+        .medium-10.column.status-feed-content
+          .title-block
+            %span.status-action #{old_action.item_type} #{old_action.event}d by #{history_user.full_name}
+            %span.time-from 
+              = date_with_tooltip(old_action.created_at, true)
+          .item-block
+            = old_action.object
+
+    %br/
+    %br/

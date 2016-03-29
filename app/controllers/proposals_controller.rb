@@ -12,7 +12,11 @@ class ProposalsController < ApplicationController
 
   def show
     @proposal = proposal.decorate
-    render "show_next"
+    # cookies[:detail] = "new"
+    if cookies[:detail] == "new"
+      @history = ProposalVersionsQuery.new(proposal).container.query
+      render "show_next"
+    end
   end
 
   def index
