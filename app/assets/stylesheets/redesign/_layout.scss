@@ -1,10 +1,11 @@
 @media screen and (min-width: 40em){
   
   .medium-table-row{
-    display: table-row;
+    display: table;
   }
 
   .medium-table-cell{
+    float: none !important;
     display: table-cell;
     // &:first-child{
     //   padding-left: 0px;
