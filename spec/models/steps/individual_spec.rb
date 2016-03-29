@@ -46,7 +46,7 @@ describe Steps::Individual do
       step.update_attributes!(completer_id: user, completed_at: Time.current)
       step.complete!
 
-      expect(step.status).to eq('completed')
+      expect(step.completed?).to eq(true)
 
       step.restart!
 
