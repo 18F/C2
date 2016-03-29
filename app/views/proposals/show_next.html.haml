@@ -69,8 +69,8 @@
 
                 .medium-12.column.status-feed-actions.text-right
                   .row.column
-                    %a.button.secondary{:href => ""} View history
-                    %a.button.primary{:href => ""} Show all
+                    = link_to 'View history', history_proposal_path(@proposal), class: "button secondary"
+                    %a.button.primary.status-toggle-all Show all
   .medium-6.column
     .card-for-request-details
       .row
