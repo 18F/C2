@@ -48,6 +48,8 @@ module Steps
 
     def restart
       api_token.try(:expire!)
+      self.completer_id = nil
+      self.completed_at = nil
       super
     end
 
