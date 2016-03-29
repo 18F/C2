@@ -2,13 +2,15 @@
   padding-bottom: 20px;  
 }
 
-.status-feed-wrapper{
-  &:last-child{
-    .status-feed-content{
-      padding-bottom: 0px;
-    }
-    margin-bottom: 20px;
+.status-feed-wrapper.status-contracted{
+  display: none;
+}
+
+.status-feed-wrapper.status-expanded:last-child{
+  .status-feed-content{
+    padding-bottom: 0px;
   }
+  margin-bottom: 20px;
 }
 
 .request-history-wrapper{
@@ -16,7 +18,6 @@
 }
 
 @media screen and (min-width: 40em){
- 
   .background-color-column .dot-circle{
     overflow: hidden;
     border-radius: 50px;
