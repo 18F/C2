@@ -83,7 +83,7 @@ class ProposalsController < ApplicationController
     params.delete(:page)
     begin
       build_csv_download
-    rescue SearchUnavailable => error
+    rescue SearchBadQuery, SearchUnavailable => error
       flash[:error] = error.message
       redirect_to proposals_path
     end
@@ -99,7 +99,7 @@ class ProposalsController < ApplicationController
   def try_search(query_listing)
     begin
       @proposals_data = query_listing.query
-    rescue SearchUnavailable => error
+    rescue SearchBadQuery, SearchUnavailable => error
       flash[:error] = error.message
       false
     end

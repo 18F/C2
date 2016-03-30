@@ -3,6 +3,7 @@ en:
     features:
       es:
         service_unavailable: "The search feature is temporarily unavailable"
+        bad_query: "There was a problem with your search terms. Please check your syntax."
     policies:
       ncr:
         work_order:
