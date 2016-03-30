@@ -10,19 +10,19 @@
           - proposal.steps.each do |step|
             - if !step.user_id.nil?
               - index = index + 1
-              .row.step-state.column.state-completed
-                .medium-2.column.text-center
+              .row.step-state.column.state-completed.medium-table-row
+                .medium-2.column.text-center.medium-table-cell.step-status-wrapper
                   - if step.status == "completed"
                     = image_tag 'numbers/icon-completed-green.png'
                   - elsif step.status == "actionable"
                     = image_tag 'numbers/icon-completed-activity-' + index.to_s + '.png'
                   - elsif step.status == "pending"
                     = image_tag 'numbers/icon-pending-activity-' + index.to_s + '.png'
-                .medium-10.column
+                .medium-10.column.step-content-wrapper.medium-table-cell
                   %span.step-index.step-data
                     Step #{step.position - 1}
                   %span.approver.step-data
-                    %span.approval-name                         
+                    %span.approval-name
                       #{User.find(step.user_id).full_name},
                     %span.approver-role #{step_user_title(step)}
                   - if !step.completed_at.blank? && step.status != "actionable" && step.status != "pending"

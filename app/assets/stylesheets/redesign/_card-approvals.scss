@@ -1,5 +1,16 @@
 .step-state{
-  margin-bottom: 20px;
+  position: relative;
+
+  .step-status-wrapper:before{
+    border-left: 4px solid black;
+    content: "";
+    left: 0px;
+    position: absolute;
+  }
+  .step-content-wrapper{
+    padding-bottom: 20px;
+    vertical-align: top;
+  }
   span{
     word-wrap: break-word;
   }
