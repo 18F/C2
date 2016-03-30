@@ -9,7 +9,7 @@
         .content-content.column
           %ul
             - SubscriberList.new(proposal).triples.each do |user, role_str, observation|
-              %li
+              %li.observer-list-item
                 = user.full_name
                 = "(#{role_str})" if role_str
                 - if observation && policy(observation).can_destroy?
