@@ -1,5 +1,31 @@
 .step-state{
-  margin-bottom: 20px;
+  position: relative;
+
+  .step-status-wrapper{
+    position: relative;
+    &.step-status-completed:before{
+      width: 3px;
+      content: "";
+      position: absolute;
+      height: 100%;
+      background: #355E7D;
+      margin: auto;
+      right: 0px;
+      left: 0px;
+      z-index: 1;
+    }
+    img{
+      position: absolute;
+      left: 0px;
+      right: 0px;
+      margin: auto;
+      z-index: 2;
+    }
+  }
+  .step-content-wrapper{
+    padding-bottom: 20px;
+    vertical-align: top;
+  }
   span{
     word-wrap: break-word;
   }
