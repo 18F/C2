@@ -28,7 +28,7 @@ class HistoryEvent < SimpleDelegator
   end
 
   def to_partial_path
-    "history/" + partial_name
+    "proposals/details/history/" + partial_name
   end
 
   def partial_name
