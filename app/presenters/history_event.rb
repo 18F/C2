@@ -12,15 +12,23 @@ class HistoryEvent < SimpleDelegator
   end
 
   def comment_text
-    if item_type == "Comment"
-      Comment.find(item_id).comment_text
-    end
+    Comment.find(item_id).comment_text # don't know why reify doesn't work here
   end
 
   def attachment
-    if item_type == "Attachment"
-      Attachment.find(item_id)
-    end
+    Attachment.find(item_id)
+  end
+
+  # TODO: Move some of this into StepDecorator
+
+  def step_count
+    reify.position - 1
+  end
+
+  def step_action_description
+    step = reify.decorate
+    "Step " + step_count.to_s + ": " +
+      step.completed + " by " + step.completed_by.full_name
   end
 
   def model
@@ -30,6 +38,8 @@ class HistoryEvent < SimpleDelegator
   def to_partial_path
     "proposals/details/history/" + partial_name
   end
+
+  private
 
   def partial_name
     case item_type

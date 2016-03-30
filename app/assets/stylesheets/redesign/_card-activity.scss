@@ -24,4 +24,17 @@
       }
     }
   }
+
+  .title-block.step{
+    background-color: $backgroundColor;
+    border-radius: 5px;
+    padding: 5px;
+
+    .status-action{
+      display: inline;
+      font-weight: normal;
+      font-style: italic;
+    }
+
+  }
 }

@@ -70,4 +70,6 @@ describe StepDecorator do
       end
     end
   end
+
+  pending "#completed"
 end

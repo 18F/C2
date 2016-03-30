@@ -9,6 +9,7 @@ en:
         noun: "approval"
         adjective: "approve"
         role_name: "Approver"
+        completed: "Approved"
         label: "Approval"
         status:
           please_act: "Please review"
@@ -17,6 +18,7 @@ en:
         execute_button: "Mark as Purchased"
         noun: "purchase"
         adjective: "purchase"
+        completed: "Purchased"
         role_name: "Purchaser"
         label: "Purchase"
         status:
