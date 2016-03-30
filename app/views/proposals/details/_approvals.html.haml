@@ -10,7 +10,7 @@
           - proposal.steps.each do |step|
             - if !step.user_id.nil?
               - index = index + 1
-              .row.step-state.column.state-completed.medium-table-row
+              .row.step-state.column.medium-table-row{class: "step-status-" + step.status}
                 .medium-2.column.text-center.medium-table-cell.step-status-wrapper
                   - if step.status == "completed"
                     = image_tag 'numbers/icon-completed-green.png'
