@@ -14,14 +14,32 @@
 
 .observer-list-item .button_to {
   position: absolute;
-  right: 0px;
+  right: 3px;
   &:hover{
     border-bottom: 1px solid #3373B1;
   }
 }
 
+.observer-list-item {
+  position: relative;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 3px;
+  padding-right: 3px;
+  border-bottom: 1px solid #E8E8E8;
+}
+
+li.observer-list-item:hover {
+  background: lighten(#E8E8E8, 5%);
+}
+
 .observer-list-item .button_to input[type="submit"]:focus {
   outline: none;
+}
+
+ul.observer-list{
+  list-style: none;
+  margin: 0px 0px 15px 0px;
 }
 
 .observer-list-item .button_to:before {
