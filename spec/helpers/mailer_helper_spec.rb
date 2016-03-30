@@ -77,7 +77,7 @@ describe MailerHelper do
 
         icon = step_status_icon(step)
 
-        expect(icon).to eq "emails/numbers/icon-number-1-pending.png"
+        expect(icon).to eq "numbers/icon-number-1-pending.png"
       end
     end
 
@@ -87,7 +87,7 @@ describe MailerHelper do
 
         icon = step_status_icon(step)
 
-        expect(icon).to eq "emails/numbers/icon-number-2-pending.png"
+        expect(icon).to eq "numbers/icon-number-2-pending.png"
       end
     end
 
@@ -97,7 +97,7 @@ describe MailerHelper do
 
         icon = step_status_icon(step)
 
-        expect(icon).to eq "emails/numbers/icon-completed.png"
+        expect(icon).to eq "numbers/icon-completed.png"
       end
     end
   end

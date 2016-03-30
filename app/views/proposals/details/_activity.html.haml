@@ -1,0 +1,46 @@
+.card-for-activity
+  .row
+    .medium-12.column
+      .card
+        .card-head
+          %h2.content-wrap-level
+            Activity
+        .content-content
+          = form_for [@proposal, Comment.new] do |f|
+            .row.column
+              .medium-12.column
+                = f.text_area :comment_text, rows: 5, placeholder: "Add a comment"
+            .row
+              .medium-12.column.text-right.request-history-wrapper
+                .column
+                  %label.attachment-container
+                    %a{class: "button secondary round"}
+                      %span.plus +
+                      Attachment
+                      = f.file_field :file, { style: "display: none" }
+                  = submit_tag "Send", data: {"disable-if-empty" => "comment_comment_text"}, class: "button primary round no-margin-bottom"
+
+            .row
+              .medium-12.column
+                .column
+                  .row.column
+                    - index = 0
+                    - history_style = ""
+                    - history.events.reverse.each do |event|
+                      - history_style = index > 4 ? "contracted" : "expanded"
+                      - index_class = index == history.events.count - 1 ? "status-index-last" : "status-index-" + index.to_s
+                      - classes = "status-" + history_style + " " + index_class
+                      .medium-12.column.status-feed-wrapper.text-left.row{ class: classes }
+                        .medium-table-row.medium-12.status-feed-item.status-attachment-block.no-margin-bottom
+                          .hide-for-small-only.medium-table-cell.medium-2.column.text-center.status-feed-timeline.background-color-column
+                            .dot-circle
+                          .medium-table-cell.medium-10.column.status-feed-content
+                            = render partial: event, locals: { event: event }
+                      - index = index + 1
+
+
+            .row
+              .medium-12.column.status-feed-actions.text-right
+                .column
+                  = link_to 'View history', history_proposal_path(@proposal), class: "button secondary"
+                  %a.button.primary.status-toggle-all Show all
