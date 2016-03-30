@@ -28,4 +28,14 @@ module SearchHelper
       0
     end
   end
+
+  def created_at_time_string(dtim_string)
+    if dtim_string.to_s.match(/TO now/)
+      ""
+    elsif dtim_string.present? && Time.parse(dtim_string)
+      Time.parse(dtim_string).strftime("%F")
+    else
+      ""
+    end
+  end
 end
