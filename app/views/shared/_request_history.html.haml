@@ -1,20 +1,14 @@
 .row.column
   - index = 0
   - history_style = ""
-  - history.reverse.each do |old_action|
+  - history.events.reverse.each do |event|
     - history_style = index > 4 ? "contracted" : "expanded"
-    - history_user = User.find old_action.whodunnit
-    - index_class = index == history.count - 1 ? "status-index-last" : "status-index-" + index.to_s
+    - index_class = index == history.events.count - 1 ? "status-index-last" : "status-index-" + index.to_s
     - classes = "status-" + history_style + " " + index_class
     .medium-12.column.status-feed-wrapper.text-left.row{ class: classes }
       .medium-table-row.medium-12.status-feed-item.status-attachment-block.no-margin-bottom
         .hide-for-small-only.medium-table-cell.medium-2.column.text-center.status-feed-timeline.background-color-column
           .dot-circle
         .medium-table-cell.medium-10.column.status-feed-content
-          .title-block
-            %span.status-action #{old_action.item_type} #{old_action.event}d by #{history_user.full_name}
-            %span.time-from 
-              = date_with_tooltip(old_action.created_at, true)
-          .item-block
-            = old_action.object
+          = render partial: event, locals: { event: event }
     - index = index + 1
