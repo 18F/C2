@@ -24,7 +24,7 @@
   .background-color-column .dot-circle{
     overflow: hidden;
     border-radius: 50px;
-    background: #C5DCED;
+    background: $backgroundColor;
     width: 23px;
     height: 23px;
     margin: auto;
@@ -37,7 +37,7 @@
     content: "";
     display: block;
     height: 100%;
-    background: #C5DCED;
+    background: $backgroundColor;
     width: 3px;
     position: absolute;
     margin: auto;

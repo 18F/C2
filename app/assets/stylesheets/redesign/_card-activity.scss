@@ -1,12 +1,27 @@
-.status-feed-item{
-  margin-bottom: 15px;
-}
+.card-for-activity{
+  .status-feed-item{
+    margin-bottom: 15px;
+  }
 
-.status-action{
-  display: block;
-  font-weight: bold;
-}
+  .status-action{
+    display: block;
+    font-weight: bold;
+  }
 
-.time-from{
-  font-style: italic;
+  .time-from{
+    font-style: italic;
+  }
+
+  .item-block.attachment{
+    a {
+      color: $dark-gray;
+      font-size: 80%;
+      text-decoration: underline;
+
+      img {
+        color: $backgroundColor;
+        margin-right: 10px;
+      }
+    }
+  }
 }
