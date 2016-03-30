@@ -7,7 +7,7 @@
             Observers
             = modify_client_button(proposal, "Add / Edit", "button secondary fr large")
         .content-content.column
-          %ul
+          %ul.observer-list
             - SubscriberList.new(proposal).triples.each do |user, role_str, observation|
               %li.observer-list-item
                 = user.full_name
