@@ -104,7 +104,6 @@ $(document).ready(function() {
   var previewCountTimer = 0;
   var previewCountUrl = "";
   var updatePreviewCount = function() {
-    countEl.html('<i class="fa fa-spinner fa-pulse"></i>');
     var getParams = searchForm.serialize();
     var url = searchForm.attr('action') + '_count?' + getParams;
     if (url == previewCountUrl) {
