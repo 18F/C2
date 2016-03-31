@@ -1,8 +1,6 @@
 describe "admin" do
   it "does not allow Delete of Users" do
-    user = create(:user)
-    user.add_role("admin")
-    login_as(user)
+    user = login_as_admin_user
 
     visit admin_users_path
 
@@ -10,12 +8,10 @@ describe "admin" do
   end
 
   it "does not allow editing of user delegates" do
-    user = create(:user)
-    user.add_role("admin")
+    user = login_as_admin_user
     other_user = create(:user)
     user_delegate = create(:user_delegate, assigner: user, assignee: other_user)
 
-    login_as(user)
     visit edit_admin_user_path(user)
     visit admin_user_delegate_path(user_delegate)
 
@@ -23,10 +19,8 @@ describe "admin" do
   end
 
   it "does not allow delete of proposals" do
-    user = create(:user)
-    user.add_role("admin")
+    user = login_as_admin_user
     _proposal = create(:proposal)
-    login_as(user)
 
     visit admin_proposals_path
 
@@ -34,10 +28,8 @@ describe "admin" do
   end
 
   it "does not allow edit of proposals" do
-    user = create(:user)
-    user.add_role("admin")
+    user = login_as_admin_user
     _proposal = create(:proposal)
-    login_as(user)
 
     visit admin_proposals_path
 
@@ -45,10 +37,8 @@ describe "admin" do
   end
 
   it "shows user.display_name when viewing User records" do
-    user = create(:user)
-    user.add_role("admin")
+    user = login_as_admin_user
     proposal = create(:proposal, requester: user)
-    login_as(user)
 
     visit admin_proposals_path
 
@@ -56,8 +46,7 @@ describe "admin" do
   end
 
   it "contains reindex button link" do
-    user = create(:user, :admin)
-    login_as(user)
+    user = login_as_admin_user
 
     visit admin_dashboard_path
 
@@ -65,9 +54,7 @@ describe "admin" do
   end
 
   it "creates new User" do
-    user = create(:user)
-    user.add_role("admin")
-    login_as(user)
+    user = login_as_admin_user
 
     visit new_admin_user_path
 
@@ -79,5 +66,24 @@ describe "admin" do
     click_button "Create User"
 
     expect(page).to have_content("test user <testuser@example.com>")
+  end
+
+  it "triggers actions on Complete button click" do
+    user = login_as_admin_user
+    proposal = create(:proposal, :with_serial_approvers)
+
+    deliveries.clear
+    visit admin_proposal_path(proposal)
+    click_link "Complete"
+
+    expect(deliveries.count).to eq(3)
+    proposal.reload
+    expect(proposal).to be_completed
+  end
+
+  def login_as_admin_user
+    user = create(:user, :admin)
+    login_as(user)
+    user
   end
 end
