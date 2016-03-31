@@ -8,3 +8,9 @@ en:
       ncr:
         work_order:
           can_edit: "You must be the requester, approver, delegate, or observer to edit"
+      api_token:
+        nonexistent: "Something went wrong with the token (nonexistent)"
+        expired: "Something went wrong with the token (expired)"
+        used: "Something went wrong with the token (already used)"
+        wrong_proposal: "Something went wrong with the token (wrong proposal)"
+        not_delegate: "You must first sign in"

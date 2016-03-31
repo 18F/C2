@@ -24,26 +24,26 @@ class ApiTokenPolicy
   def exists!
     check(
       @api_token.present?,
-      "Something went wrong with the token (nonexistent)"
+      I18n.t("errors.policies.api_token.nonexistent")
     )
   end
 
   def not_expired!
-    check(!@api_token.expired?, "Something went wrong with the token (expired)")
+    check(!@api_token.expired?, I18n.t("errors.policies.api_token.expired"))
   end
 
   def not_used!
-    check(!@api_token.used?, "Something went wrong with the token (already used)")
+    check(!@api_token.used?, I18n.t("errors.policies.api_token.used"))
   end
 
   def correct_proposal!
     check(
       @api_token.proposal.id == @params[:id].to_i,
-      "Something went wrong with the token (wrong proposal)"
+      I18n.t("errors.policies.api_token.wrong_proposal")
     )
   end
 
   def not_delegate!
-    check(@api_token.user.outgoing_delegations.empty?, "You must first sign in")
+    check(@api_token.user.outgoing_delegations.empty?, I18n.t("errors.policies.api_token.not_delegate"))
   end
 end
