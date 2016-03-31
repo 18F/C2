@@ -1,5 +1,5 @@
 @media screen and (min-width: 40em){
-  
+
   .medium-table-row{
     display: table;
   }
@@ -17,4 +17,9 @@
 
 .medium-auto-column{
   width: auto;
+}
+
+.inset {
+  padding-left: 0.9375rem;
+  padding-right: 0.9375rem;
 }
