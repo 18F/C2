@@ -31,3 +31,7 @@ en:
       report:
         show_permission: "You are not allowed to view this Report."
         destroy_permission: "You are not allowed to delete this Report."
+      scheduled_report:
+        show_permission: "You are not allowed to view this Scheduled Report."
+        destroy_permission: "You are not allowed to delete this Scheduled Report."
+        update_permission: "You are not allowed to update this Scheduled Report."
