@@ -118,7 +118,7 @@ $(document).ready(function() {
     previewCountTimer = setTimeout(function() {
       $.get(url, function(resp) {
         countEl.html(resp.total);
-        if (parseInt(resp.total) == 1) {
+        if (parseInt(resp.total, 10) == 1) {
           countEl.next().html('result');
         }
         else {
