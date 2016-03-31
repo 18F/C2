@@ -28,7 +28,9 @@
   .title-block.step{
     background-color: $backgroundColor;
     border-radius: 5px;
-    padding: 5px;
+    padding: 5px 5px 5px 10px;
+    position: relative;
+    left: -10px;
 
     .status-action{
       display: inline;
