@@ -173,6 +173,35 @@ describe ProposalsController do
           expect(query[2].id).to be(single.id)
         end
       end
+
+      it "returns JSON for preview count" do
+        login_as(user)
+        proposals = 3.times.map do |i|
+          wo = create(:test_client_request, project_title: "Work Order #{i}")
+          wo.proposal.update(requester: user)
+          wo.proposal.reindex
+          wo.proposal
+        end
+        Proposal.__elasticsearch__.refresh_index!
+
+        es_execute_with_retries 3 do
+          get :query_count, text: "work order"
+          expect(response.status).to eq 200
+          expect(response.headers["Content-Type"]).to include "application/json"
+          expect(response.body).to eq({total: 3}.to_json)
+        end
+      end
+
+      it "returns valid JSON for preview count error" do
+        login_as(user)
+
+        es_execute_with_retries 3 do
+          get :query_count
+          expect(response.status).to eq 200
+          expect(response.headers["Content-Type"]).to include "application/json"
+          expect(response.body).to eq({total: 0}.to_json)
+        end
+      end
     end
   end
 

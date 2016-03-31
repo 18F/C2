@@ -34,11 +34,10 @@ describe "searching", elasticsearch: true do
 
     visit proposals_path
     fill_in "text", with: proposals.first.name
-    dropdown_button = find("button.dropdown-toggle")
-    dropdown_button.trigger("click") # open dropdown
+    adv_options = find("a.adv-options")
+    adv_options.trigger("click")
     fill_in "test_client_request[client_data.amount]", with: proposals.first.client_data.amount
-    dropdown_button.trigger("click") # close dropdown
-    click_button "search-button"
+    click_button "adv-search-button"
 
     expect(current_path).to eq query_proposals_path
     expect(page).to have_content(proposals.first.public_id)
