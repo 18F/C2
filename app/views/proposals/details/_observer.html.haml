@@ -5,7 +5,7 @@
         .card-head.column
           %h2
             Observers
-            = modify_client_button(proposal, "Modify", "button secondary fr large edit-icon")
+            = modify_client_button(proposal, "<span>Modify</span>".html_safe, "button secondary fr large edit-icon")
         .content-content.column
           %ul.observer-list
             - SubscriberList.new(proposal).triples.each do |user, role_str, observation|
