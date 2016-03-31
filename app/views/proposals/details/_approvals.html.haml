@@ -11,14 +11,14 @@
             - if !step.user_id.nil?
               - index = index + 1
               .row.step-state.column.medium-table-row{class: "step-status-" + step.status}
-                .medium-2.column.text-center.medium-table-cell.step-status-wrapper
+                .medium-icon-col.text-center.medium-table-cell.step-status-wrapper
                   - if step.status == "completed"
                     = image_tag 'numbers/icon-completed-green.png'
                   - elsif step.status == "actionable"
                     = image_tag 'numbers/icon-completed-activity-' + index.to_s + '.png'
                   - elsif step.status == "pending"
                     = image_tag 'numbers/icon-pending-activity-' + index.to_s + '.png'
-                .medium-10.column.step-content-wrapper.medium-table-cell
+                .medium-auto-column.step-content-wrapper.medium-table-cell
                   %span.step-index.step-data
                     Step #{step.position - 1}
                   %span.approver.step-data

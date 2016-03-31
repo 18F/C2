@@ -5,11 +5,30 @@
         .card-head.column
           %h2
             Purchase Details
-            = modify_client_button(@proposal, "Add / Edit", "button secondary fr large")
+            = modify_client_button(@proposal, "Modify", "button secondary edit-icon fr large")
         .content-content.column
           .row
             .medium-12.column
-              %p Details here
-              .item-block
-                %img{:alt => "", :src => "http://fakeimg.pl/35x35"}
-                  %a{:href => ""} Vendor_Estimate.pdf
+              %h3 Attachments to this proposal
+          - @proposal.attachments.each do |attachment|
+            .row.item-block
+              .medium-2.column.text-right
+                %a{href: proposal_attachment_path(@proposal, attachment)}
+                  = image_tag "icon-attachment.svg"
+              .medium-10.column
+                .row
+                  .medium-12.column
+                    %a{href: proposal_attachment_path(@proposal, attachment)}
+                      <strong>#{attachment.file_file_name}</strong>
+                .row
+                  .medium-8.column
+                    Uploaded by <strong>#{attachment.user.full_name}</strong> on <strong>#{date_with_tooltip(attachment.created_at, true)}</strong>
+                  .medium-4.column.text-right
+                    - if policy(attachment).can_destroy?
+                      = button_to "Delete", proposal_attachment_path(@proposal, attachment), method: :delete, data: {confirm: "Are you sure?"}, class: "text-right"
+        - if @proposal.attachments.empty?
+          .content-content.column
+            .row
+              .medium-12.column
+                .item-block
+                  %p.empty-list-label No attachments have been added yet

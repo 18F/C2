@@ -27,7 +27,7 @@
       if($('.detail-value').css('display') == 'none') {
         $('.request-detail-edit').text('View');
       } else {
-        $('.request-detail-edit').text('Add / Edit');
+        $('.request-detail-edit').text('Modify');
       }
     });
   }

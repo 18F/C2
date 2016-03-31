@@ -23,16 +23,36 @@
   .content-content{
     padding-top: 15px;
     padding-bottom: 15px;
+    padding-left: 25px;
+    padding-right: 25px;
   }
   .card-head{
-
+    a.edit-icon:before {
+        content: "";
+        display: block;
+        width: 21px;
+        height: 21px;
+        background-image: image-url("icon-edit.png");
+        background-repeat: no-repeat;
+        position: absolute;
+        left: 11px;
+        top: 0px;
+    }
+    h2{
+      margin-bottom: 0px;
+    }
     a.button{
+      position: absolute;
       border-color: white;
-      padding: 0.5em 1.4em 0.7em;
-      font-size: 0.7rem;
+      padding: 0.7em 3.9em 0.7em;
+      font-size: 0.9rem;
       font-weight: normal;
       text-transform: none;
       margin-right: 0px;
+      margin-bottom: 0px;
+      right: 19px;
+      top: 50%;
+      margin-top: -1.2em;
       &.status-wrap{
         background: $white;
         border: none;
@@ -54,8 +74,11 @@
         background: white;
       }
     }
-    padding-top: 15px;
-    padding-bottom: 6px;
+    position: relative;
+    padding-top: 20px;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 20px;
     background: $backgroundColor;
   }
   overflow: hidden;
@@ -84,7 +107,6 @@
     word-wrap: break-word;
     color: #ffab40;
     transition: color 0.3s ease;
-    text-transform: uppercase;
     text-decoration: none;
   }
   .image {

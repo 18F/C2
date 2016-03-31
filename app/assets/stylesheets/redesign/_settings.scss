@@ -50,7 +50,7 @@ $global-width: rem-calc(1200);
 $global-lineheight: 1.5;
 $foundation-palette: (
   primary: #3F5F7D, 
-  backgroundColor: #C5DCED, 
+  backgroundColor: #DAEAf5, 
   secondary: transparent,
   success: #8ECC76,
   warning: #ffae00,
@@ -118,7 +118,7 @@ $header-sizes: (
     'h6': 16,
   ),
   medium: (
-    'h1': 28,
+    'h1': 32,
     'h2': 22,
     'h3': 20,
     'h4': 18,
@@ -127,7 +127,7 @@ $header-sizes: (
   ),
 );
 $header-color: inherit;
-$header-lineheight: 1.4;
+$header-lineheight: 1.2;
 $header-margin-bottom: 0.5rem;
 $header-text-rendering: optimizeLegibility;
 $small-font-size: 80%;
