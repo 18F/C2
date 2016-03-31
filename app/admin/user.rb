@@ -69,6 +69,20 @@ ActiveAdmin.register User do
       row("Roles") { user.roles.map(&:name).join(", ") }
     end
 
+    panel "Delegates To" do
+      table_for user.outgoing_delegations do |tbl|
+        tbl.column("ID") { |delegation| link_to delegation.id, admin_user_delegate_path(delegation) }
+        tbl.column("User")  { |delegation| link_to delegation.assignee.display_name, admin_user_path(delegation.assignee) }
+      end
+    end
+
+    panel "Delegate For" do
+      table_for user.incoming_delegations do |tbl|
+        tbl.column("ID") { |delegation| link_to delegation.id, admin_user_delegate_path(delegation) }
+        tbl.column("User")  { |delegation| link_to delegation.assigner.display_name, admin_user_path(delegation.assigner) }
+      end
+    end
+
     panel "Proposals" do
       table_for user.proposals.order("created_at DESC") do |tbl|
         tbl.column("ID") { |proposal| link_to proposal.public_id, admin_proposal_path(proposal) }
