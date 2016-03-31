@@ -41,10 +41,6 @@ ActiveAdmin.register Proposal do
     link_to "Re-index", reindex_admin_proposal_path(proposal), "data-method" => :post, title: "Re-index this proposal"
   end
 
-  action_item :restart, only: [:show] do
-    link_to "Restart", restart_admin_proposal_path(proposal), "data-method" => :post, title: "Re-start the steps for this proposal"
-  end
-
   action_item :fully_complete, only: [:show] do
     link_to "Complete", fully_complete_admin_proposal_path(proposal), "data-method" => :post, title: "Fully complete this proposal"
   end
@@ -52,12 +48,6 @@ ActiveAdmin.register Proposal do
   member_action :reindex, method: :post do
     resource.delay.reindex
     flash[:alert] = "Re-index scheduled!"
-    redirect_to admin_proposal_path(resource)
-  end
-
-  member_action :restart, method: :post do
-    resource.restart
-    flash[:alert] = "Restarted!"
     redirect_to admin_proposal_path(resource)
   end
 
