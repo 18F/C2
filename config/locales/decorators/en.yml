@@ -45,6 +45,7 @@ en:
       cl_number: "CL#"
       code: "Work Order / Ticket #"
       direct_pay: "Direct Pay"
+      emergency: "Emergency"
       expense_type: "Expense Type"
       function_code: "Function Code"
       not_to_exceed_amount: "Not to exceed / Amount"
