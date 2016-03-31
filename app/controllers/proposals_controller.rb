@@ -15,6 +15,7 @@ class ProposalsController < ApplicationController
     cookies[:detail] = "new"
     if cookies[:detail] == "new"
       @history = HistoryList.new(proposal)
+      @client_data_instance ||= proposal.client_data
       render "show_next"
     end
   end
