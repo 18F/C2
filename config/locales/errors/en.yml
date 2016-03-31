@@ -16,3 +16,5 @@ en:
         not_delegate: "You must first sign in"
       attachment:
         destroy_permission: "Only the original author can delete an attachment"
+      gsa:
+        gsa_email_required: "You must be logged in with a GSA email address to create"
