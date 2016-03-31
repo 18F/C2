@@ -10,29 +10,50 @@
           = simple_form_for @client_data_instance, html: { multipart: true }, defaults: { wrapper_html: { class: 'detail-form' } } do |f|
             .row
               .medium-12.column
-                %p.request-detail.detail-value Computer needed for new developer
+                %p.request-detail.detail-value
+                  = @client_data_instance.description
                 = f.input :description, class: "detail-form"
             .row.request-content-wrapper
               .medium-6.column.medium-table-cell.right-border
                 .detail-wrapper
                   %label.detail-element Expense type
-                  %span.detail-value BA60
-                  = field_set_tag "Expense type / Program", class: "expense-type required" do
+                  %span.detail-value
+                    = @client_data_instance.expense_type
+                  = field_set_tag "Expense type / Program", class: "expense-type required detail-form" do
                     = expense_type_radio_button(f, "BA60")
                     = expense_type_radio_button(f, "BA61")
+                    = f.input :emergency,
+                      disabled: @client_data_instance.persisted?,
+                      wrapper_html: { data: { filter_key: "expense-type", filter_value: "BA61" } }
+                    = expense_type_radio_button(f, "BA80")
+                    = render partial: "ncr/work_orders/ba_80_fields",
+                      locals: { f: f }
                 .detail-wrapper
                   %label.detail-element Direct pay
-                  %span.detail-value No
+                  %span.detail-value
+                    = @client_data_instance.direct_pay ? "Yes" : "No"
+                .detail-wrapper
+                  = f.input :direct_pay,
+                      label: t("simple_form.labels.ncr_work_order.direct_pay_html"),
+                      label_html: { data: popover_data_attrs("direct_pay") }
               .medium-6.column.medium-table-cell
                 .detail-wrapper
-                  %label.detail-element Org code
+                  %label.detail-element Org code / Service center
                   %span.detail-value P04M0001 (192X,192M) NON-INFRASTRUCTURE INFO TECHNOLOGY BR.
+                  = f.association :ncr_organization,
+                    as: :select,
+                    prompt: :translate,
+                    input_html: { class: "js-selectize", data: { initial: JSON.generate(organization_options) }}
                 .detail-wrapper
                   %label.detail-element Function code
-                  %span.detail-value -
+                  %span.detail-value
+                    = @client_data_instance.function_code
+                  = f.input :function_code
                 .detail-wrapper
                   %label.detail-element Object field / SOC code
-                  %span.detail-value -
+                  %span.detail-value
+                    = @client_data_instance.soc_code
+                  = f.input :soc_code
                 .primary.callout.no-margin-bottom.no-padding-bottom
                   .row
                     .medium-4.column

@@ -10,6 +10,10 @@
     font-size: 14px;
     margin-top: 10px;
   }
+  input[type=text] {
+    border-radius: 5px;
+    font-size: 14px;
+  }
   a.button:last-child{
     margin-right: 0px;
   }
@@ -97,5 +101,3 @@
     }
   }
 }
-
-
