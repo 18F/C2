@@ -34,7 +34,7 @@ ActiveAdmin.register Step do
         if step_params[:completer_id].empty?
           step.update_attributes!(completer: current_user)
         end
-        if !step.completed_at
+        unless step.completed_at
           step.update_attributes!(completed_at: Time.current)
         end
       end
