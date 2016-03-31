@@ -15,7 +15,7 @@ module Gsa18f
     def can_cancel!
       not_canceled! && check(
         (approver? || delegate? || requester? || admin?) && !purchaser?,
-        "Sorry, you are neither the requester, approver, or delegate"
+        I18n.t("errors.policies.gsa18f.cancel_permission")
       )
     end
     alias_method :can_cancel_form!, :can_cancel!
