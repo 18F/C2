@@ -85,21 +85,23 @@ describe ProposalSearchDsl do
     end
 
     it "when created_at is not present defaults to relative-to-now" do
-      now = Time.zone.now
-      user = create(:user, client_slug: "test")
-      dsl = ProposalSearchDsl.new(
-        params: {
-          test_client_request: {
-            created_within: "6 months",
-          }
-        },
-        query: "foo OR Bar",
-        current_user: user,
-        client_data_type: "Test::ClientRequest"
-      )
-      expect(dsl.composite_query_string).to eq(
-        "(foo OR Bar) AND (created_at:[#{(now.utc - 6.months).iso8601} TO now])"
-      )
+      Timecop.freeze do
+        six_months_ago = (Time.current.utc - 6.months).iso8601
+        user = create(:user, client_slug: "test")
+        dsl = ProposalSearchDsl.new(
+          params: {
+            test_client_request: {
+              created_within: "6 months",
+            }
+          },
+          query: "foo OR Bar",
+          current_user: user,
+          client_data_type: "Test::ClientRequest"
+        )
+        expect(dsl.composite_query_string).to eq(
+          "(foo OR Bar) AND (created_at:[#{six_months_ago} TO now])"
+        )
+      end
     end
   end
 
