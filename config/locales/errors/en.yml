@@ -28,3 +28,6 @@ en:
         step_permission: "Sorry, you're not an approver on this proposal"
         observer_permission: "Sorry, you're not an observer on this proposal"
         step_complete: "A response has already been logged for this proposal"
+      report:
+        show_permission: "You are not allowed to view this Report."
+        destroy_permission: "You are not allowed to delete this Report."

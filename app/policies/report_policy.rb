@@ -7,11 +7,11 @@ class ReportPolicy
   end
 
   def can_show!
-    check(can_show?, "You are not allowed to view this Report.")
+    check(can_show?, I18n.t("errors.policies.report.show_permission"))
   end
 
   def can_destroy!
-    check(owner?, "You are not allowed to delete this Report.")
+    check(owner?, I18n.t("errors.policies.report.destroy_permission"))
   end
 
   def can_preview!
