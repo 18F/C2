@@ -1,3 +1,11 @@
+.medium-activity-icon-col{
+  width: 23px;
+}
+
+.status-feed-content{
+  padding-left: 20px;
+}
+
 .card-for-activity{
   .status-feed-item{
     margin-bottom: 15px;
@@ -30,7 +38,6 @@
     border-radius: 5px;
     padding: 5px 5px 5px 10px;
     position: relative;
-    left: -10px;
 
     .status-action{
       display: inline;

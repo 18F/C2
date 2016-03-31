@@ -1,3 +1,7 @@
+.medium-icon-col{
+    width: 35px;
+}
+
 .step-state{
   position: relative;
 
@@ -23,6 +27,7 @@
     }
   }
   .step-content-wrapper{
+    padding-left: 20px;
     padding-bottom: 20px;
     vertical-align: top;
   }
@@ -39,5 +44,3 @@
     font-style: italic;
   }
 }
-
-
