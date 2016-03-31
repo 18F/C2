@@ -18,3 +18,5 @@ en:
         destroy_permission: "Only the original author can delete an attachment"
       gsa:
         gsa_email_required: "You must be logged in with a GSA email address to create"
+      gsa18f:
+        cancel_permission: "Sorry, you are neither the requester, approver, or delegate"
