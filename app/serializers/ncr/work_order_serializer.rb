@@ -5,7 +5,6 @@ module Ncr
     attributes(
       :amount,
       :building_number,
-      :code,
       :description,
       :emergency,
       :expense_type,
@@ -14,7 +13,8 @@ module Ncr
       :not_to_exceed,
       :organization_code_and_name,
       :rwa_number,
-      :vendor
+      :vendor,
+      :work_order_code
     )
 
     has_one :proposal

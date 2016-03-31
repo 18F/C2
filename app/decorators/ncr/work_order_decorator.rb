@@ -99,7 +99,7 @@ module Ncr
     end
 
     def work_order_ticket_number
-      [translated_key("code"), object.code]
+      [translated_key("work_order_code"), object.work_order_code]
     end
 
     def emergency_field
