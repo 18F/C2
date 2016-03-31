@@ -9,7 +9,43 @@
         .content-content.column
           .row
             .medium-12.column
-              %p Details here
-              .item-block
-                %img{:alt => "", :src => "http://fakeimg.pl/35x35"}
-                  %a{:href => ""} Vendor_Estimate.pdf
+              %h3 Attachments to this proposal
+          - @proposal.attachments.each do |attachment|
+            .row.item-block
+              .medium-2.column.text-right
+                %a{href: proposal_attachment_path(@proposal, attachment)}
+                  %img{:alt => "", :src => "http://fakeimg.pl/35x35"}
+              .medium-10.column
+                %a{href: proposal_attachment_path(@proposal, attachment)}
+                  <strong>#{attachment.file_file_name}</strong>
+                  Uploaded by #{attachment.user.full_name} on #{date_with_tooltip(attachment.created_at, true)}
+        - if @proposal.attachments.empty?
+          .content-content.column
+            .row
+              .medium-12.column
+                .item-block
+                  %p.empty-list-label No attachments have been added yet
+
+#files
+  = form_for [@proposal, Attachment.new] do |f|
+    .line-item
+      .row= f.file_field :file
+    .row.text-area-info-container
+      .col-xs-7.col-sm-6.text-area-info-web
+        %p Attach a file (e.g. receipts, contract documents, etc.)
+      %p.col-xs-5.col-sm-6.text-area-button
+        = submit_tag "Attach a File", id: :add_a_file, data: {"disable-if-empty" => "attachment_file"}
+  - @proposal.attachments.each do |attachment|
+    .line-item
+      .row
+        %p.col-sm-5.col-xs-12
+          %a{href: proposal_attachment_path(@proposal, attachment)}
+            = attachment.file_file_name
+        %p.col-sm-3.col-xs-6
+          %strong= attachment.user.full_name
+        %p.col-sm-3.col-xs-5.date.righted
+          = date_with_tooltip(attachment.created_at, true)
+        - if policy(attachment).can_destroy?
+          = button_to "Delete", proposal_attachment_path(@proposal, attachment), method: :delete, data: {confirm: "Are you sure?"}, class: "col-sm-1 col-xs-1 righted"
+  - if @proposal.attachments.empty?
+    %p.empty-list-label No attachments have been added yet
