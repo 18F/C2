@@ -81,6 +81,22 @@ describe "admin" do
     expect(proposal).to be_completed
   end
 
+  it "triggers no actions on Step edit" do
+    user = login_as_admin_user
+    proposal = create(:proposal, :with_serial_approvers)
+    first_step = proposal.individual_steps.first
+
+    deliveries.clear
+    visit edit_admin_step_path(first_step)
+    expect(page).to have_content("actionable")
+
+    select "completed", from: "step[status]"
+    click_button "Update Approval"
+
+    expect(page).to have_content("Approval was successfully updated")
+    expect(deliveries.count).to eq(0)
+  end
+
   def login_as_admin_user
     user = create(:user, :admin)
     login_as(user)
