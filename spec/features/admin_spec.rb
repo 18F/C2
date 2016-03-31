@@ -81,7 +81,7 @@ describe "admin" do
     expect(proposal).to be_completed
   end
 
-  it "triggers no actions on Step edit" do
+  it "triggers actions on Step edit" do
     user = login_as_admin_user
     proposal = create(:proposal, :with_serial_approvers)
     first_step = proposal.individual_steps.first
@@ -95,6 +95,9 @@ describe "admin" do
 
     expect(page).to have_content("Approval was successfully updated")
     expect(deliveries.count).to eq(0)
+    first_step.reload
+    expect(first_step.completed_at).to_not be_nil
+    expect(first_step.completer).to eq(user)
   end
 
   def login_as_admin_user
