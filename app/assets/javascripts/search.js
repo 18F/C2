@@ -118,6 +118,12 @@ $(document).ready(function() {
     previewCountTimer = setTimeout(function() {
       $.get(url, function(resp) {
         countEl.html(resp.total);
+        if (parseInt(resp.total, 10) == 1) {
+          countEl.next().html('result');
+        }
+        else {
+          countEl.next().html('results');
+        }
       }).fail(function(xhr, err, msg) {
         countEl.html(0);
       });
