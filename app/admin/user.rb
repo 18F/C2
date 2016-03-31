@@ -11,6 +11,10 @@ ActiveAdmin.register User do
   # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
   permit_params :active, :first_name, :last_name, :email_address, :client_slug, role_ids: []
 
+  action_item :add_delegate, only: [:edit, :show] do
+    link_to "Add Delegate", new_admin_user_delegate_path(user_delegate: { assigner_id: user.id })
+  end
+
   controller do
     def create
       user = User.new(user_params)
