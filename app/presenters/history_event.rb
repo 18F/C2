@@ -49,6 +49,8 @@ class HistoryEvent < SimpleDelegator
       "approval"
     when "Steps::Purchase"
       "purchase"
+    else
+      item_type
     end
   end
 end

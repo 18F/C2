@@ -12,6 +12,7 @@ class HistoryList
     versions.reject do |version|
       version.item_type == "Ncr::WorkOrder" ||
         version.item_type == "Gsa18f::Procurement" ||
+        version.item_type == "Step" || # TODO: What's creating these?
         (version.event == "create" &&
           !%w(Proposal Attachment Comment Observation Steps::Serial).include?(version.item_type))
     end
