@@ -43,7 +43,6 @@ en:
       amount: "Amount"
       building_number: "Building Number"
       cl_number: "CL#"
-      code: "Work Order / Ticket #"
       direct_pay: "Direct Pay"
       expense_type: "Expense Type"
       function_code: "Function Code"
@@ -52,3 +51,4 @@ en:
       rwa_number: "RWA#"
       soc_code: "Object Field / SOC Code"
       vendor: "Vendor"
+      work_order_code: "Work Order / Ticket #"

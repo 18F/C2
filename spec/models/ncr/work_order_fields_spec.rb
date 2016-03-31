@@ -29,7 +29,6 @@ describe Ncr::WorkOrderFields do
         :approving_official_id,
         :building_number,
         :cl_number,
-        :code,
         :description,
         :direct_pay,
         :expense_type,
@@ -39,7 +38,8 @@ describe Ncr::WorkOrderFields do
         :project_title,
         :rwa_number,
         :soc_code,
-        :vendor
+        :vendor,
+        :work_order_code
       ])
     end
   end

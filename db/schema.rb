@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160308231131) do
+ActiveRecord::Schema.define(version: 20160331143230) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -182,7 +182,7 @@ ActiveRecord::Schema.define(version: 20160308231131) do
     t.string   "building_number",       limit: 255
     t.boolean  "emergency",                         default: false, null: false
     t.string   "rwa_number",            limit: 255
-    t.string   "code",                  limit: 255
+    t.string   "work_order_code",       limit: 255
     t.string   "project_title",         limit: 255
     t.text     "description"
     t.datetime "created_at"
@@ -212,7 +212,7 @@ ActiveRecord::Schema.define(version: 20160308231131) do
     t.integer  "client_data_id"
     t.string   "client_data_type", limit: 255
     t.integer  "requester_id"
-    t.string   "public_id"
+    t.string   "public_id",        limit: 255
     t.uuid     "visit_id"
   end
 
