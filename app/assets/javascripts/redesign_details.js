@@ -23,7 +23,7 @@
     console.log("setting edit button");
     $('.request-detail-edit').on('click', function(e) {
       e.preventDefault();
-      $('.detail-form,.detail-element,.detail-value').toggle();
+      $('.detail-form,.detail-element,.detail-value,.detail-view').toggle();
       if($('.detail-value').css('display') == 'none') {
         $('.request-detail-edit').text('View');
       } else {
