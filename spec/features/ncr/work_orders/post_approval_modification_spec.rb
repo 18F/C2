@@ -25,7 +25,7 @@ feature "post-approval modification" do
     fill_in 'Amount', with: work_order.amount + 1
     click_on 'Update'
 
-    expect_budget_approvals_restarted(work_order)
+    expect_budget_approvals_restarted(work_order, page)
 
     login_as(work_order.budget_approvers.first)
     visit "/proposals/#{work_order.proposal.id}"
@@ -70,7 +70,7 @@ feature "post-approval modification" do
     linear_approval_statuses(work_order.proposal)
   end
 
-  def expect_budget_approvals_restarted(work_order)
+  def expect_budget_approvals_restarted(work_order, page)
     work_order.reload
 
     expect(work_order.status).to eq('pending')
@@ -82,7 +82,10 @@ feature "post-approval modification" do
     ))
 
     approver = work_order.budget_approvers.first
+    expect(approver.email_address).to eq(Ncr::Mailboxes.ba61_tier1_budget.email_address)
     reapproval_mail = deliveries.find { |mail| mail.to.include?(approver.email_address) }
     expect(reapproval_mail.html_part.body).to include('Approve')
+    approver_page_row = page.find(:css, ".step-row.pending.position-1")
+    expect(approver_page_row).to have_content(approver.email_address)
   end
 end
