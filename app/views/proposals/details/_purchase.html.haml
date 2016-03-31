@@ -12,10 +12,10 @@
               %h3 Attachments to this proposal
           - @proposal.attachments.each do |attachment|
             .row.item-block
-              .medium-2.column.text-right
+              .medium-purchase-icon-col.text-right
                 %a{href: proposal_attachment_path(@proposal, attachment)}
                   = image_tag "icon-attachment.svg"
-              .medium-10.column
+              .medium-auto-column.column.notice-attachment-wrapper
                 .row
                   .medium-12.column
                     %a{href: proposal_attachment_path(@proposal, attachment)}
