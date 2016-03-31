@@ -30,10 +30,10 @@ module SearchHelper
   end
 
   def created_at_time_string(dtim_string)
-    if dtim_string.to_s.match(/TO now/)
+    if dtim_string.to_s =~ /TO now/
       ""
-    elsif dtim_string.present? && Time.parse(dtim_string)
-      Time.parse(dtim_string).strftime("%F")
+    elsif dtim_string.present? && Time.zone.parse(dtim_string)
+      Time.zone.parse(dtim_string).strftime("%F")
     else
       ""
     end
