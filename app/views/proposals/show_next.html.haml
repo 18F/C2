@@ -9,10 +9,10 @@
   .medium-6.column
     = render partial: "proposals/details/approvals", locals: { proposal: @proposal }
     = render partial: "proposals/details/activity", locals: { proposal: @proposal, history: @history }
-    = render partial: "proposals/details/observer", locals: { proposal: @proposal }
 
   .medium-6.column
     = render partial: "proposals/details/request_details", locals: { proposal: @proposal }
     = render partial: "proposals/details/purchase", locals: { proposal: @proposal }
+    = render partial: "proposals/details/observer", locals: { proposal: @proposal }
 
 = render partial: "proposals/details/action", locals: { proposal: @proposal }
