@@ -21,6 +21,9 @@
   vertical-align: top;
 }
 
+.status-expanded .status-arrow{
+  transform: rotate(180deg);
+}
 .card-for-activity{
   .status-feed-item{
     margin-bottom: 15px;

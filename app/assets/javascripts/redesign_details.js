@@ -12,9 +12,9 @@
       e.preventDefault();
       $('.status-contracted').toggleClass('status-expanded');
       if($('.status-contracted').hasClass('status-expanded')){
-        $('.status-toggle-all').text('Minimize');
+        $('.status-toggle-all.status-text').text('Minimize');
       } else {
-        $('.status-toggle-all').text('Show all');
+        $('.status-toggle-all.status-text').text('Show all');
       }
     });
   }
