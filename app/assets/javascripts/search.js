@@ -93,12 +93,14 @@ $(document).ready(function() {
     }
   });
 
-  allSearchButtons.click(function() {
+  allSearchButtons.click(function(e) {
+    e.stopPropagation();
     var btn = $(this);
     searchForm.submit();
     // IMPORTANT disable *AFTER* submit
     searchForm.find('fieldset').prop("disabled", true);
     btn.prop("disabled", true);
+    return false; // disable normal browser button action
   });
 
   var previewCountTimer = 0;
