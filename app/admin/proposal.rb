@@ -3,6 +3,11 @@ ActiveAdmin.register Proposal do
 
   permit_params :status
 
+  filter :client_data_type
+  filter :status
+  filter :created_at
+  filter :updated_at
+
   index do
     column :id
     column :status
