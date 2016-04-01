@@ -1,21 +1,16 @@
-.row
-  .medium-12.column
-    .card
-      .card-head.column
-        %a.large.button.secondary.fr.status-wrap{:href => ""}
-          Status:
-          %span.status-value 
-            = proposal.status.capitalize
-        %h3
-          = proposal.public_id
-        %h1.c2n_header
-          = proposal.name
-        .c2n_description
-          %p
-            Requested by:
-            %strong
-              = proposal.requester.full_name
-            Requested on:
-            %strong
-              %span 
-                = proposal.created_at.strftime("%b %d, %Y at %l:%M%P")   
+
+.card
+  .card-head.column
+    %h3
+      = proposal.public_id
+    %h1.c2n_header
+      = proposal.name
+    .c2n_description
+      %p
+        Requested by:
+        %strong
+          = proposal.requester.full_name
+        Requested on:
+        %strong
+          %span 
+            = proposal.created_at.strftime("%b %d, %Y at %l:%M%P")   

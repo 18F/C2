@@ -3,7 +3,10 @@
 %script
   $('body').removeClass('webapp controller-proposals');
 
-= render partial: "proposals/details/summary", locals: { proposal: @proposal }
+.row
+  .medium-12.column.wrap-hard
+    = render partial: "proposals/details/status", locals: { proposal: @proposal }
+    = render partial: "proposals/details/summary", locals: { proposal: @proposal }
 
 .row
   .medium-6.column
