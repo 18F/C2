@@ -60,10 +60,28 @@
                       %strong Total
                     .medium-8.column
                       .detail-wrapper
-                        %label.detail-element Exact
+                        %label.detail-element
+                          = @client_data_instance.not_to_exceed ? "Not to exceed" : "Exact"
                         %span.detail-value
                           %h4
-                            %b $999.00
+                            %b
+                              = @client_data_instance.amount
+                .no-margin-bottom.no-padding-bottom.detail-form
+                  .row
+                    .medium-4.column
+                      %strong Total
+                    .medium-8.column
+                      = f.input :not_to_exceed,
+                        collection: [["Exact", false], ["Not to exceed", true]],
+                        label: false, include_blank: false
+                      %span
+                        = f.input :amount,
+                          as: :currency,
+                          label_html: { class: "sr-only" },
+                          input_html: { data: popover_data_attrs("ncr_amount") }
+
+
+
           .row.column
             .medium-12.callout.primary.column.medium-centered
               .row
