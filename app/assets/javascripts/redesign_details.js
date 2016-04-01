@@ -44,7 +44,7 @@ detailsApp.setupDataObject = function($elem) {
     console.log("Value: " + elemDataValue);
     var parent = self.data;
 
-    for (var i = elemDataKeyArray.length - 2; i >= 0; i--) {
+    for (var i = 0; i <= elemDataKeyArray.length - 2; i++) {
       var elKey = elemDataKeyArray[i];
       if(parent[elKey] == undefined){
         parent[elKey] = {};
