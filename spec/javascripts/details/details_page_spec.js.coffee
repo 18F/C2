@@ -11,6 +11,8 @@ describe "detailsApp", ->
         <input data-card-key="requestDetails-directPay" data-card-value="false" />
         <input data-card-key="requestDetails-orgCode" data-card-value="4" />
         <input data-card-key="requestDetails-functionCode" data-card-value="" />
+        <input data-card-key="requestDetails-listItem-item" data-card-value="gah" />
+        <input data-card-key="purchaseDetails-hasAttachment" data-card-value="false" />
       </div>
     ')
 
@@ -44,3 +46,5 @@ describe "detailsApp", ->
       expect(detailsApp.data.requestDetails.directPay).to.equal(false)
       expect(detailsApp.data.requestDetails.orgCode).to.equal(4)
       expect(detailsApp.data.requestDetails.functionCode).to.equal("")
+      expect(detailsApp.data.purchaseDetails.hasAttachment).to.equal(false)
+      expect(detailsApp.data.requestDetails.listItem.item).to.equal("gah")
