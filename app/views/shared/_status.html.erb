@@ -20,7 +20,7 @@
               <%- last_status = nil %>
               <%- @proposal.steps_in_list_order.each_with_index do |step,index| %>
                 <%- display_status = step.decorate.display_status %>
-                <tr class="approval-row step-row <%= display_status %> position-<%= index %>">
+                <tr class="approval-row step-row <%= step.status %> position-<%= index %>">
                   <td>
                     <%- if display_status != last_status %>
                       <strong><%= display_status %></strong>

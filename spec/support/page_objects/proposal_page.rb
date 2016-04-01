@@ -6,6 +6,7 @@ end
 
 class StatusSection < SitePrism::Section
   sections :approvers, ApproverSection, ".approval-details .approval-row"
+  sections :actionable, ApproverSection, ".step-row.actionable"
 end
 
 class ProposalPage < SitePrism::Page
