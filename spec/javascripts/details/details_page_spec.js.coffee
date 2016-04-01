@@ -5,14 +5,14 @@
 
 describe "detailsApp", ->
   getContent = ->
-    $("
+    $('
       <div data-card-requestDetails="">
         <input data-card-requestDetails-expenseType="BA60" />
         <input data-card-requestDetails-directPay="false" />
         <input data-card-requestDetails-orgCode="p04" />
         <input data-card-requestDetails-functionCode="" />
       </div>
-    ")
+    ')
 
   describe "object", ->
     it "should exist", ->
