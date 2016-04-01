@@ -41,7 +41,7 @@ detailsApp.setupDataObject = function($elem) {
     var elemDataKey = $(elem).data('card-key');
     var elemDataKeyArray = elemDataKey.split('-');
     var elemDataValue = $(elem).data('card-value');
-    console.log("Value: " + elemDataValue);
+    // console.log("Value: " + elemDataValue);
     var parent = self.data;
 
     for (var i = 0; i <= elemDataKeyArray.length - 2; i++) {
@@ -51,7 +51,7 @@ detailsApp.setupDataObject = function($elem) {
       }
       parent = parent[elKey];
     }
-    console.log("Parent: ", elemDataKeyArray[elemDataKeyArray.length-1]);
+    // console.log("Parent: ", elemDataKeyArray[elemDataKeyArray.length-1]);
     parent[elemDataKeyArray[elemDataKeyArray.length-1]] = elemDataValue;
   })
   console.dir(self.data);
