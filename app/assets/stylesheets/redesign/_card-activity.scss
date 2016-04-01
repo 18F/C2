@@ -7,6 +7,20 @@
   padding-left: 20px;
 }
 
+.status-toggle-all.status-arrow{
+  height: 23px;
+  width: 23px;
+  padding: 0px;
+  line-height: 19px;
+}
+.status-toggle-all.status-text{
+  color: $primary-color;
+  font-weight: 600;
+  display: inline-block;
+  height: 25px;
+  vertical-align: top;
+}
+
 .card-for-activity{
   .status-feed-item{
     margin-bottom: 15px;
@@ -45,6 +59,5 @@
       font-weight: normal;
       font-style: italic;
     }
-
   }
 }

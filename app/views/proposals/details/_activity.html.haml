@@ -40,7 +40,9 @@
 
 
             .row
-              .medium-12.column.status-feed-actions.text-right
+              .medium-12.column.status-feed-actions
                 %div
-                  = link_to 'View history', history_proposal_path(@proposal), class: "button secondary"
-                  %a.button.primary.status-toggle-all Show all
+                  %a.button.primary.status-toggle-all.status-arrow
+                    ↓
+                  %a.primary.status-toggle-all.status-text 
+                    Show all
