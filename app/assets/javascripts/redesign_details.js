@@ -32,6 +32,8 @@ detailsApp.setupRequestDetailsToggle = function() {
   });
 }
 
+
+
 $(document).ready(function(){
   detailsApp.blastOff();
 });
