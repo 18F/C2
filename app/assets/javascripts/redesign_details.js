@@ -1,39 +1,37 @@
-(function(){
+var detailsApp = detailsApp || {};
 
-  var details_app = details_app || {};
+detailsApp.blastOff = function(){
+  this.setupStatusToggle();
+  this.setupRequestDetailsToggle();
+}
 
-  details_app.blastOff = function(){
-    this.setup_status_toggle();
-    this.setup_request_details_toggle();
-  }
+detailsApp.data = {}
 
-  details_app.setup_status_toggle = function(){
-    $('.status-toggle-all').on('click', function(e){
-      e.preventDefault();
-      $('.status-contracted').toggleClass('status-expanded');
-      if($('.status-contracted').hasClass('status-expanded')){
-        $('.status-toggle-all.status-text').text('Minimize');
-      } else {
-        $('.status-toggle-all.status-text').text('Show all');
-      }
-    });
-  }
-
-  details_app.setup_request_details_toggle = function() {
-    console.log("setting edit button");
-    $('.request-detail-edit').on('click', function(e) {
-      e.preventDefault();
-      $('.detail-form,.detail-element,.detail-value,.detail-view').toggle();
-      if($('.detail-value').css('display') == 'none') {
-        $('.request-detail-edit').text('View');
-      } else {
-        $('.request-detail-edit').text('Modify');
-      }
-    });
-  }
-
-  $(document).ready(function(){
-    details_app.blastOff();
+detailsApp.setupStatusToggle = function(){
+  $('.status-toggle-all').on('click', function(e){
+    e.preventDefault();
+    $('.status-contracted').toggleClass('status-expanded');
+    if($('.status-contracted').hasClass('status-expanded')){
+      $('.status-toggle-all.status-text').text('Minimize');
+    } else {
+      $('.status-toggle-all.status-text').text('Show all');
+    }
   });
+}
 
-})();
+detailsApp.setupRequestDetailsToggle = function() {
+  console.log("setting edit button");
+  $('.request-detail-edit').on('click', function(e) {
+    e.preventDefault();
+    $('.detail-form,.detail-element,.detail-value,.detail-view').toggle();
+    if($('.detail-value').css('display') == 'none') {
+      $('.request-detail-edit span').text('View');
+    } else {
+      $('.request-detail-edit span').text('Modify');
+    }
+  });
+}
+
+$(document).ready(function(){
+  detailsApp.blastOff();
+});
