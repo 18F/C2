@@ -32,6 +32,30 @@ detailsApp.setupRequestDetailsToggle = function() {
   });
 }
 
+detailsApp.setupDataObject = function($elem) {
+  
+  var self = this;
+  var cardKeys = $elem.find("[data-card-key]");
+
+  cardKeys.each( function(index, elem) {
+    var elemDataKey = $(elem).data('card-key');
+    var elemDataKeyArray = elemDataKey.split('-');
+    var elemDataValue = $(elem).data('card-value');
+    console.log("Value: " + elemDataValue);
+    var parent = self.data;
+
+    for (var i = elemDataKeyArray.length - 2; i >= 0; i--) {
+      var elKey = elemDataKeyArray[i];
+      if(parent[elKey] == undefined){
+        parent[elKey] = {};
+      }
+      parent = parent[elKey];
+    }
+    console.log("Parent: ", elemDataKeyArray[elemDataKeyArray.length-1]);
+    parent[elemDataKeyArray[elemDataKeyArray.length-1]] = elemDataValue;
+  })
+  console.dir(self.data);
+}
 
 
 $(document).ready(function(){

@@ -7,10 +7,10 @@ describe "detailsApp", ->
   getContent = ->
     $('
       <div data-card-requestDetails="">
-        <input data-card-requestDetails-expenseType="BA60" />
-        <input data-card-requestDetails-directPay="false" />
-        <input data-card-requestDetails-orgCode="p04" />
-        <input data-card-requestDetails-functionCode="" />
+        <input data-card-key="requestDetails-expenseType" data-card-value="BA60" />
+        <input data-card-key="requestDetails-directPay" data-card-value="false" />
+        <input data-card-key="requestDetails-orgCode" data-card-value="4" />
+        <input data-card-key="requestDetails-functionCode" data-card-value="" />
       </div>
     ')
 
@@ -20,9 +20,12 @@ describe "detailsApp", ->
 
   describe "#blastOff()", ->
     it "should exist", ->
-      expect(detailsApp.blastOff()).to.be.a("function")
+      expect(detailsApp.blastOff).to.be.a("function")
 
   describe "#setupDataObject", ->
+    it "should exist", ->
+      expect(detailsApp.setupDataObject).to.be.a("function")
+
     it "should create the initial data object", ->
       detailsApp.setupDataObject( getContent() )
       
@@ -38,6 +41,6 @@ describe "detailsApp", ->
       detailsApp.setupDataObject( getContent() )
       
       expect(detailsApp.data.requestDetails.expenseType).to.equal("BA60")
-      expect(detailsApp.data.requestDetails.directPay).to.equal("false")
-      expect(detailsApp.data.requestDetails.orgCode).to.equal("p04")
+      expect(detailsApp.data.requestDetails.directPay).to.equal(false)
+      expect(detailsApp.data.requestDetails.orgCode).to.equal(4)
       expect(detailsApp.data.requestDetails.functionCode).to.equal("")
