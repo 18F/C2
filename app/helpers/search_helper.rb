@@ -33,7 +33,7 @@ module SearchHelper
     if dtim_string.to_s =~ /TO now/
       ""
     elsif dtim_string.present? && Time.zone.parse(dtim_string)
-      Time.zone.parse(dtim_string).strftime("%F")
+      Time.zone.parse(dtim_string).utc.strftime("%F")
     else
       ""
     end
