@@ -21,9 +21,9 @@
                     %a{href: proposal_attachment_path(@proposal, attachment)}
                       <strong>#{attachment.file_file_name}</strong>
                 .row
-                  .medium-8.column
+                  .medium-11.column
                     Uploaded by <strong>#{attachment.user.full_name}</strong> on <strong>#{date_with_tooltip(attachment.created_at, true)}</strong>
-                  .medium-4.column.text-right
+                  .medium-1.column.text-right
                     - if policy(attachment).can_destroy?
                       = button_to "Delete", proposal_attachment_path(@proposal, attachment), method: :delete, data: {confirm: "Are you sure?"}, class: "text-right"
         - if @proposal.attachments.empty?
