@@ -1,12 +1,10 @@
-.row.action-bar-wrapper
+.action-bar-wrapper
   .medium-12.column
-    .card
-      .card-head.column
-        %ul#request-actions.centered
-          - if policy(@proposal).can_edit?
-            - unless @proposal.canceled?
-              %li
-                = modify_client_button(@proposal, "Modify Request", "button primary fr large")
-          - if policy(@proposal).can_cancel?
-            %li.fl.cancel-action
-              = link_to "Cancel this request", cancel_form_proposal_path
+    %ul#request-actions.centered
+      - if policy(@proposal).can_edit?
+        - unless @proposal.canceled?
+          %li.fr
+            = modify_client_button(@proposal, "Modify Request", "button primary fr large")
+      - if policy(@proposal).can_cancel?
+        %li.fl.cancel-action
+          = link_to "Cancel this request", cancel_form_proposal_path

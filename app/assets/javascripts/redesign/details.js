@@ -1,5 +1,6 @@
 "use strict";
 
+var data = {};
 var detailsApp = detailsApp || {};
 
 detailsApp.blastOff = function(){
