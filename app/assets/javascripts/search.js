@@ -24,6 +24,16 @@ $(document).ready(function() {
 
   var FADE_SPEED = 200;
 
+  var showAdvOptsButton = function() {
+    advOptsButton.fadeIn(FADE_SPEED);
+    searchTerms.addClass('search-terms-adv-show');
+  };
+
+  var hideAdvOptsButton = function() {
+    advOptsButton.hide();
+    searchTerms.removeClass('search-terms-adv-show');
+  };
+
   var buttonToggler = function() {
     if (searchTerms && (!searchTerms.val() || searchTerms.val().length == 0)) {
       searchButton.hide();
@@ -31,7 +41,7 @@ $(document).ready(function() {
     }
     else {
       if (!advOptionsVisible()) {
-        advOptsButton.fadeIn(FADE_SPEED);
+        showAdvOptsButton();
       }
       searchMagGlass.hide();
       searchButton.fadeIn(FADE_SPEED);
@@ -41,7 +51,7 @@ $(document).ready(function() {
   var showAdvOptions = function() {
     advOptsFieldset.fadeIn(FADE_SPEED);
     advOptsControlsFieldset.show();
-    advOptsButton.hide();
+    hideAdvOptsButton();
     searchButton.hide();
     searchMagGlass.show();
     searchUI.addClass("expanded");
@@ -49,7 +59,7 @@ $(document).ready(function() {
   var hideAdvOptions = function() {
     advOptsFieldset.hide();
     advOptsControlsFieldset.hide();
-    advOptsButton.fadeIn(FADE_SPEED);
+    showAdvOptsButton();
     buttonToggler();
     searchUI.removeClass("expanded");
   };
@@ -69,7 +79,7 @@ $(document).ready(function() {
   else {
     hideAdvOptions();
     if (!searchTermsHasFocus()) {
-      advOptsButton.hide();
+      hideAdvOptsButton();
     }
   }
 
@@ -81,7 +91,7 @@ $(document).ready(function() {
 
   searchTerms.focusin(function() {
     if (!advOptionsVisible()) {
-      advOptsButton.fadeIn(FADE_SPEED);
+      showAdvOptsButton();
     }
   });
 
@@ -89,7 +99,7 @@ $(document).ready(function() {
     if (searchTerms.val().length == 0) {
       // use timeout to workaround click on adv-options button,
       // so that the click event can also fire.
-      setTimeout(function() { advOptsButton.hide(FADE_SPEED); }, 200);
+      setTimeout(function() { hideAdvOptsButton(); }, 200);
     }
   });
 
