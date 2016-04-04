@@ -11,4 +11,13 @@ ul#breadcrumb-nav{
   width: 100%;
   padding-left: 0.9375rem;
   padding-right: 0.9375rem;
+  .cancel-action{
+    margin: 0px;
+  }
+}
+
+div.inset{
+  max-width: 75rem;
+  margin-left: auto;
+  margin-right: auto;
 }

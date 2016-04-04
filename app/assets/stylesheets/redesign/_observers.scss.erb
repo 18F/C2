@@ -15,7 +15,8 @@
 .observer-list-item .button_to {
   position: absolute;
   right: 3px;
-  &:hover{
+  line-height: 16px;
+  &:hover {
     border-bottom: 1px solid #3373B1;
   }
 }
@@ -31,6 +32,9 @@
 
 li.observer-list-item:hover {
   background: lighten(#E8E8E8, 5%);
+  .button_to:before {
+    opacity: .7;
+  }
 }
 
 .observer-list-item .button_to input[type="submit"]:focus {
@@ -54,5 +58,4 @@ ul.observer-list{
   bottom: 0px;
   left: -20px;
   background-image: image-url('remove-x.png');
-  background-color: white;
 }

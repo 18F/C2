@@ -1,3 +1,6 @@
+= javascript_include_tag "vendors/sugar"
+= javascript_include_tag "vendors/jquery.my"
+= javascript_include_tag "redesign/details"
 = stylesheet_link_tag "redesign/app"
 
 %script
@@ -5,7 +8,6 @@
 
 .row
   .medium-12.column.wrap-hard
-    = render partial: "proposals/details/status", locals: { proposal: @proposal }
     = render partial: "proposals/details/summary", locals: { proposal: @proposal }
 
 .row
@@ -15,7 +17,7 @@
 
   .medium-6.column
     = render partial: "proposals/details/request_details", locals: { proposal: @proposal }
-    = render partial: "proposals/details/purchase", locals: { proposal: @proposal }
+    = # render partial: "proposals/details/purchase", locals: { proposal: @proposal }
     = render partial: "proposals/details/observer", locals: { proposal: @proposal }
 
 = render partial: "proposals/details/action", locals: { proposal: @proposal }

@@ -39,12 +39,14 @@ describe "detailsApp", ->
       expect(detailsApp.data.requestDetails).to.be.a("object")
       expect(detailsApp.data.requestDetails.expenseType).to.be.a("string")
     
-    it "should fill object values correctly", ->
+    it "should fill object values one level deep correctly", ->
       detailsApp.setupDataObject( getContent() )
-      
       expect(detailsApp.data.requestDetails.expenseType).to.equal("BA60")
       expect(detailsApp.data.requestDetails.directPay).to.equal(false)
       expect(detailsApp.data.requestDetails.orgCode).to.equal(4)
       expect(detailsApp.data.requestDetails.functionCode).to.equal("")
       expect(detailsApp.data.purchaseDetails.hasAttachment).to.equal(false)
+      
+    it "should fill object values two levels deep correctly", ->
+      detailsApp.setupDataObject( getContent() )
       expect(detailsApp.data.requestDetails.listItem.item).to.equal("gah")
