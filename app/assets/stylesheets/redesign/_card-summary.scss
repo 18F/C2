@@ -15,14 +15,13 @@
 }
 
 span.status-wrap{
-  position: absolute;
-  top: -5em;
-  right: 0.9375rem;
   color: #494949;
   border-radius: 5px;
   font-size: 10px;
   text-transform: uppercase;
-  padding: 0.45em 4.3em 0.65em;
+  padding: 0.15em 2em 0.35em;
+  display: inline-block;
+  margin-right: 20px;
   span.status-value{
     font-size: 14px;
     text-transform: none;

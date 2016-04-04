@@ -6,7 +6,13 @@
     %h1.c2n_header
       = proposal.name
     .c2n_description
+
+
       %p
+        %span.status-wrap{ class: "status-is-" + @proposal.status }
+          Status:
+          %span.status-value 
+            = @proposal.status.capitalize
         Requested by:
         %strong
           = proposal.requester.full_name
