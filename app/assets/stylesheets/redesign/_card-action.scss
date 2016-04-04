@@ -5,3 +5,13 @@
 .cancel-action{
   color: $primary-color;
 }
+
+.action-bar-wrapper{
+  position: fixed;
+  width: 100%;
+  margin: auto;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  z-index: 10;
+}
