@@ -8,4 +8,12 @@ class UserSerializer < ActiveModel::Serializer
 
     # leaving out personal info for now - see FullUserSerializer
   )
+
+  def created_at
+    object.created_at.utc
+  end
+
+  def updated_at
+    object.updated_at.utc
+  end
 end
