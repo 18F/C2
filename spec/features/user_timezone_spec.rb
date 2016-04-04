@@ -28,8 +28,8 @@ feature "timezone" do
     end
   end
 
-  scenario "user.timezone used if set" do
-    user = create(:user, client_slug: "test", timezone: "EST")
+  scenario "user.timezone used if set", :js do
+    user = create(:user, client_slug: "test", timezone: User::DEFAULT_TIMEZONE)
     proposal = create(:proposal, client_slug: "test", requester: user)
     login_as(user)
 
