@@ -10,4 +10,12 @@ class ProposalSerializer < ActiveModel::Serializer
 
   has_one :requester
   has_many :individual_steps, root: :steps
+
+  def created_at
+    object.created_at.utc
+  end
+
+  def updated_at
+    object.updated_at.utc
+  end
 end

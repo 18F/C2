@@ -6,7 +6,7 @@
     count: proposal.attachments.count,
     full_name: last_attachment.user.full_name,
     proposal_name: proposal.name)
-  - attachment_action_date = time_and_date(last_attachment.created_at)
+  - attachment_action_date = time_and_date(last_attachment.created_at, user_timezone(@recipient))
 
   = render partial: "mail_shared/panel/row_description",
     locals: { icon: "icon-clipped_page.png",

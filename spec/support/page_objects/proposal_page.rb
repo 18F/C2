@@ -9,9 +9,14 @@ class StatusSection < SitePrism::Section
   sections :actionable, ApproverSection, ".step-row.actionable"
 end
 
+class DescriptionSection < SitePrism::Section
+  element :submitted, "p.submitted strong span"
+end
+
 class ProposalPage < SitePrism::Page
   set_url "/proposals/{proposal_id}"
   set_url_matcher /\/proposals\/(\d+)?/
 
   section :status, StatusSection, "#status-container-detail"
+  section :description, DescriptionSection, ".c2_description"
 end
