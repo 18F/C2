@@ -15,4 +15,20 @@
   #edit-request-details {
     display: none;
   }
+
+  .line-item-block {
+    .callout {
+      margin-bottom: 0;
+    }
+
+    .line-item-controls {
+      text-align: right;
+      margin-bottom: 1rem;
+
+      a {
+        padding-left: 1rem;
+        font-size: 80%;
+      }
+    }
+  }
 }

@@ -8,22 +8,22 @@
         = field_set_tag "Expense type / Program", class: "expense-type required" do
           = expense_type_radio_button(f, "BA60")
           = expense_type_radio_button(f, "BA61")
+          = expense_type_radio_button(f, "BA80")
           = f.input :emergency,
             disabled: @client_data_instance.persisted?,
             wrapper_html: { data: { filter_key: "expense-type", filter_value: "BA61" } }
-          = expense_type_radio_button(f, "BA80")
           = render partial: "ncr/work_orders/ba_80_fields",
             locals: { f: f }
       .detail-wrapper
         = f.input :direct_pay,
             label: t("simple_form.labels.ncr_work_order.direct_pay_html"),
             label_html: { data: popover_data_attrs("direct_pay") }
-    .medium-6.column.medium-table-cell
       .detail-wrapper
         = f.association :ncr_organization,
           as: :select,
           prompt: :translate,
           input_html: { class: "js-selectize", data: { initial: JSON.generate(organization_options) }}
+    .medium-6.column.medium-table-cell
       .detail-wrapper
         = f.input :function_code
       .detail-wrapper
@@ -42,22 +42,48 @@
                 label_html: { class: "sr-only" },
                 input_html: { data: popover_data_attrs("ncr_amount") }
 
-  .row.column
+  .row.column.line-item-block
     .medium-12.callout.primary.column.medium-centered
       .row
         .medium-12.column
           %h5
-            %b Line Item
+            %b Line Item 1
       .row
         .medium-6.column
           .detail-wrapper
             = f.input :vendor,
               input_html: { class: "js-selectize required", data: { initial: JSON.generate(vendor_options(@client_data_instance.vendor)) }}
           .detail-wrapper
-            = f.input :cl_number
+            = f.input :building_number,
+              input_html: { class: "js-selectize required", data: { initial: JSON.generate(building_options) }}
         .medium-6.column
+          .detail-wrapper
+            = f.input :cl_number
+          .detail-wrapper
+            = f.input :amount, as: :currency
+    .medium-12.line-item-controls
+      %a.line-item-control#line-item-duplicate Duplicate
+      %a.line-item-control#line-item-remove Remove
+
+  .row.column.line-item-block
+    .medium-12.callout.primary.column.medium-centered
+      .row
+        .medium-12.column
+          %h5
+            %b Line Item 2
+      .row
+        .medium-6.column
+          .detail-wrapper
+            = f.input :vendor,
+              input_html: { class: "js-selectize required", data: { initial: JSON.generate(vendor_options("Treutel LLC")) }, value: "Treutel LLC" }
           .detail-wrapper
             = f.input :building_number,
               input_html: { class: "js-selectize required", data: { initial: JSON.generate(building_options) }}
+        .medium-6.column
           .detail-wrapper
-            = f.input :amount, as: :currency
+            = f.input :cl_number
+          .detail-wrapper
+            = f.input :amount, as: :currency, input_html: { value: '400.00' }
+    .medium-12.line-item-controls
+      %a.line-item-control#line-item-duplicate Duplicate
+      %a.line-item-control#line-item-remove Remove
