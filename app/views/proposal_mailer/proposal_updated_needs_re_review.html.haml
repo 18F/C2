@@ -5,7 +5,7 @@
 - cta_subheader = t("mailer.proposal_mailer.proposal_updated_needs_re_review.subheader")
 - panel_icon = "button-circle.png"
 - panel_action = t("mailer.modifier_action", full_name: @modifier.full_name)
-- panel_action_date = time_and_date(@proposal.updated_at)
+- panel_action_date = time_and_date(@proposal.updated_at, user_timezone(@recipient))
 - cta_subheader_foot = t("mailer.proposal_status_html",
   proposal_status: @proposal.capitalized_detailed_status)
 

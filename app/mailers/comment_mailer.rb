@@ -5,6 +5,7 @@ class CommentMailer < ApplicationMailer
     @comment = comment
     @proposal = comment.proposal
     @proposal = @proposal.decorate
+    @recipient = User.for_email(to_email)
     assign_threading_headers(@proposal)
 
     unless @comment.update_comment

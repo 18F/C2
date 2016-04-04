@@ -5,6 +5,7 @@ class AttachmentMailer < ApplicationMailer
     @proposal = proposal.decorate
     @attachment_user = attachment.user
     @attachment = attachment
+    @recipient = User.for_email(to_email)
     assign_threading_headers(@proposal)
 
     mail(

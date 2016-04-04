@@ -1,6 +1,7 @@
 class ProposalMailer < ApplicationMailer
   def emergency_proposal_created_confirmation(proposal)
     @proposal = proposal.decorate
+    @recipient = @proposal.requester
     add_proposal_attributes_icons(@proposal)
     add_inline_attachment("icon-truck-circle.png")
     assign_threading_headers(@proposal)
@@ -15,6 +16,7 @@ class ProposalMailer < ApplicationMailer
 
   def proposal_complete(proposal)
     @proposal = proposal.decorate
+    @recipient = @proposal.requester
     add_inline_attachment("icon-check-green-circle.png")
     add_proposal_attributes_icons(@proposal)
     assign_threading_headers(@proposal)
@@ -30,6 +32,7 @@ class ProposalMailer < ApplicationMailer
   def proposal_created_confirmation(proposal)
     add_inline_attachment("icon-page-circle.png")
     @proposal = proposal.decorate
+    @recipient = @proposal.requester
     assign_threading_headers(@proposal)
 
     mail(
@@ -46,6 +49,7 @@ class ProposalMailer < ApplicationMailer
     @proposal = proposal.decorate
     @modifier = comment.user
     @comment = comment
+    @recipient = user
     assign_threading_headers(@proposal)
 
     mail(
@@ -63,6 +67,7 @@ class ProposalMailer < ApplicationMailer
     add_inline_attachment("button-circle.png")
     @modifier = comment.user
     @comment = comment
+    @recipient = user
     assign_threading_headers(@proposal)
 
     mail(
@@ -81,6 +86,7 @@ class ProposalMailer < ApplicationMailer
     @step = step.decorate
     @modifier = comment.user
     @comment = comment
+    @recipient = step.user
     assign_threading_headers(@proposal)
 
     unless @step.api_token
