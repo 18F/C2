@@ -3,9 +3,16 @@ var detailsApp = detailsApp || {};
 detailsApp.blastOff = function(){
   this.setupStatusToggle();
   this.setupRequestDetailsToggle();
+  this.setupEvents();
 }
 
 detailsApp.data = {}
+
+detailsApp.setupEvents = function(){
+  $(window).on('scroll', function(e){
+    
+  })
+}
 
 detailsApp.setupStatusToggle = function(){
   $('.status-toggle-all').on('click', function(e){
