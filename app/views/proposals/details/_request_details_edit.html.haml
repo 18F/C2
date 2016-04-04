@@ -40,7 +40,7 @@
               = f.input :amount,
                 as: :currency,
                 label_html: { class: "sr-only" },
-                input_html: { data: popover_data_attrs("ncr_amount") }
+                input_html: { data: popover_data_attrs("ncr_amount"), value: sprintf("%.2f", @client_data_instance.amount) }
 
   .row.column.line-item-block
     .medium-12.callout.primary.column.medium-centered
@@ -60,7 +60,7 @@
           .detail-wrapper
             = f.input :cl_number
           .detail-wrapper
-            = f.input :amount, as: :currency
+            = f.input :amount, as: :currency, input_html: { value: sprintf("%.2f", @client_data_instance.amount) }
     .medium-12.line-item-controls
       %a.line-item-control#line-item-duplicate Duplicate
       %a.line-item-control#line-item-remove Remove

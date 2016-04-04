@@ -46,7 +46,7 @@
                       %span.detail-value
                         %h4
                           %b
-                            = @client_data_instance.amount
+                            = sprintf("%.2f", @client_data_instance.amount)
 
           .row.column
             .medium-12.callout.primary.column.medium-centered
@@ -78,7 +78,7 @@
                           %span.detail-value
                             %h4
                               %b
-                                = @client_data_instance.amount
+                                = sprintf("%.2f", @client_data_instance.amount)
 
           .row.column
             .medium-12.callout.primary.column.medium-centered
