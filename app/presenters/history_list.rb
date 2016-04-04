@@ -13,6 +13,8 @@ class HistoryList
       version.item_type == "Ncr::WorkOrder" ||
         version.item_type == "Gsa18f::Procurement" ||
         version.item_type == "Step" || # TODO: What's creating these?
+        (version.event == "update" &&
+          version.item_type == "Proposal") || # TODO: include once they're properly formatted
         (version.event == "create" &&
           !%w(Proposal Attachment Comment Observation Steps::Serial).include?(version.item_type))
     end
