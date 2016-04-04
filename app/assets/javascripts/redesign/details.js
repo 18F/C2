@@ -12,7 +12,7 @@ detailsApp.data = {}
 
 detailsApp.setupEvents = function(){
   $(window).on('scroll', function(e){
-    
+
   })
 }
 
@@ -29,14 +29,16 @@ detailsApp.setupStatusToggle = function(){
 }
 
 detailsApp.setupRequestDetailsToggle = function() {
-  $('.request-detail-edit').on('click', function(e) {
+  var $editButton = $(".request-detail-edit-button");
+  $editButton.on("click", function(e) {
     e.preventDefault();
-    $('.detail-form,.detail-element,.detail-value,.detail-view').toggle();
-    if($('.detail-value').css('display') == 'none') {
-      $('.request-detail-edit span').text('View');
+    $('#edit-request-details,#view-request-details').toggle();
+    if($('#view-request-details').css('display') == 'none') {
+      $('span', $editButton).text('View');
     } else {
-      $('.request-detail-edit span').text('Modify');
+      $('span', $editButton).text('Modify');
     }
+    return false;
   });
 }
 
