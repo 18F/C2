@@ -3,8 +3,8 @@ module BrowserTimezoneRails
     private
 
     def time_zone_to_use
-      if respond_to?(:current_user) && current_user && current_user.timezone.present?
-        current_user.timezone
+      if @current_user && @current_user.timezone.present?
+        @current_user.timezone
       else
         browser_timezone.presence || Time.zone
       end
