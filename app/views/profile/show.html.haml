@@ -16,7 +16,7 @@
 
     .form-group.timezone
       %label.string.control-label Timezone
-      = time_zone_select :user, :timezone, ActiveSupport::TimeZone.us_zones, default: current_user.timezone
+      = time_zone_select :user, :timezone, ActiveSupport::TimeZone.us_zones, default: (current_user.timezone || Time.zone.name)
 
     .form-group.controls
       %input.btn.btn-default.form-button{type: "submit", name: "submit", value: "Update profile"}
