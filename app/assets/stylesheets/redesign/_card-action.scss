@@ -1,5 +1,9 @@
 ul#request-actions{
-  margin-bottom: 0px;
+  max-width: 1120px;
+  margin: auto;
+  height: 70px;
+  vertical-align: middle;
+  padding-top: 20px;
   li{
     margin: 0px;
   }
@@ -17,4 +21,5 @@ ul#request-actions{
   left: 0px;
   right: 0px;
   z-index: 10;
+  background: white;
 }
