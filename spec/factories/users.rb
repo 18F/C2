@@ -4,6 +4,7 @@ FactoryGirl.define do
     sequence(:email_address) {|n| "user#{n}@example.com" }
     sequence(:first_name) {|n| "FirstName#{n}" }
     sequence(:last_name) {|n| "LastName#{n}" }
+    timezone { Time.zone }
 
     trait :active do
       active true
