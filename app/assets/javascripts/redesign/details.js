@@ -77,8 +77,8 @@ detailsApp.setupRequestDetailsToggle = function() {
   var $editButton = $(".request-detail-edit-button");
   $editButton.on("click", function(e) {
     e.preventDefault();
-    $('#edit-request-details,#view-request-details').toggle();
-    if($('#view-request-details').css('display') == 'none') {
+    $('.card-for-request-details').toggleClass('card-edit-mode');
+    if( !$('.card-for-request-details').hasClass('card-edit-mode') ) {
       $('span', $editButton).text('View');
     } else {
       $('span', $editButton).text('Modify');
