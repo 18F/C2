@@ -1,11 +1,19 @@
 @import "constants";
 
+.inset.search {
+  background-color: #eee;
+  height: 4em;
+  margin-right: 25px;
+  margin-left: 10px;
+}
+
 .m-search-ui {
   z-index: 100;
   position: absolute;
   right: 0;
   width: 30%;
   min-width: 450px;
+  padding-right: 25px;
 
   ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
     color: $placeholdergray;
@@ -94,6 +102,10 @@
 
 .m-search-ui.expanded {
   background-color: #e3e3e3;
+  margin-right: 35px;
+  padding-right: 0px;
+  border: 1px solid #ccc;
+  border-radius: 2px;
 
   .input-group-addon.magnifier {
     color: $magnifiergray;
