@@ -5,7 +5,7 @@ var detailsApp = detailsApp || {};
 detailsApp.blastOff = function(){
   this.setupEvents();
   this.setupCards();
-  this.saveTemplateDefault();
+  this.setupData();
 }
 
 detailsApp.templates = {
@@ -19,14 +19,20 @@ detailsApp.templates = {
 
 detailsApp.data = {
   editMode: {
-    all: false,
+    "all": false,
     ".card-for-approvals": false,
     ".card-for-activity": false,
     ".card-for-request-details": false,
     ".card-for-observers": false,
     ".action-bar-wrapper": false
-  }
+  },
+  formValue: {}
 }
+
+detailsApp.setupData = function(){
+  this.saveTemplateDefault();
+  this.generateCardObjects();
+};
 
 detailsApp.setupEvents = function(){
   $('input, textarea, select, radio').on('change, keypress', function(e){
@@ -96,6 +102,52 @@ detailsApp.setupDataObject = function($elem) {
   })
 }
 
+detailsApp.updateStaticElements = function($elem) {
+  var self = this;
+  var cardKeys = $elem.find('div[data-card-key]')
+                      .add($elem.find('span[data-card-key]'));
+
+  cardKeys.each(function(index, elem) {
+    var $elem = $(elem);
+    var newValue = self.lookup($elem.data('card-key'));
+    $elem.text(newValue);
+    $elem.data('card-value', newValue);
+  });
+};
+
+// Currently only goes 2 levels deep
+detailsApp.lookup = function(elemDataKey) {
+  var self = this;
+  var elemDataKeyArray = elemDataKey.split("-");
+  var parentKey = elemDataKeyArray[0];
+  var childKey = elemDataKeyArray[1];
+  if (self.data[parentKey] !== undefined) {
+    return self.data[parentKey][childKey];
+  }
+}
+
+
+detailsApp.setupDataObject = function($elem) {
+  var self = this;
+  var cardKeys = $elem.find('[data-card-key]');
+
+  cardKeys.each( function(index, elem) {
+    var elemDataKey = $(elem).data('card-key');
+    var elemDataKeyArray = elemDataKey.split('-');
+    var elemDataValue = $(elem).data('card-value');
+    var parent = self.data;
+
+    for (var i = 0; i <= elemDataKeyArray.length - 2; i++) {
+      var elKey = elemDataKeyArray[i];
+      if(parent[elKey] === undefined){
+        parent[elKey] = {};
+      }
+      parent = parent[elKey];
+    }
+    parent[elemDataKeyArray[elemDataKeyArray.length-1]] = elemDataValue;
+  })
+}
+
 detailsApp.fieldChanged = function(e){
   // console.log('Field changed: ', e);
   if (detailsApp.data.editMode == true){
@@ -104,6 +156,40 @@ detailsApp.fieldChanged = function(e){
     this.defaultActionBar(e);
   }
 };
+
+detailsApp.generateCardObjects = function(){
+  var self = this;
+  $('.card form').each(function(i, parentItem){
+    var formNameKey = $(parentItem).attr('action');
+    var formNameObject = {};
+    var $inputFields = $(parentItem).find('textarea, input, select, radio');
+
+    $inputFields.each(function(j, childItem){
+      var nameKey = $(childItem).attr('name');
+      formNameObject[nameKey] = $(childItem).val();
+    });
+
+    var deepObjectCopy = jQuery.extend(true, {}, formNameObject);
+    self.data.formValue[formNameKey] = deepObjectCopy;
+  });
+  console.log(self.data.formValue);
+}
+
+detailsApp.getCardObject = function(actionValue){
+  var selector = '[action="'+ actionValue +'"]';
+  var formNameObject = {};
+  var $inputFields = $(selector).find('textarea, input, select, radio');
+
+  $inputFields.each(function(j, childItem){
+    var nameKey = $(childItem).attr('name');
+    formNameObject[nameKey] = $(childItem).val();
+  });
+
+  var deepObjectCopy = jQuery.extend(true, {}, formNameObject);
+  
+  console.log(deepObjectCopy);
+  return deepObjectCopy;
+}
 
 detailsApp.setupObserverController = function(){
   var $observers = $('.observer-list');
@@ -180,7 +266,8 @@ detailsApp.lookup = function(elemDataKey) {
   }
 }
 
+window.detailsApp = detailsApp;
+
 $(document).ready(function(){
   detailsApp.blastOff();
 });
-
