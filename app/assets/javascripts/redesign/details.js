@@ -51,7 +51,7 @@ detailsApp.setupCards = function(){
 }
 
 detailsApp.setupInputFields = function(){
-  $('input, textarea, select, radio, .selectize-input div').each(function(i, item){
+  $('form, input, textarea, select, radio, .selectize-input div').each(function(i, item){
     $(item).attr('data-field-guid', detailsApp.guid());
   });
 }
