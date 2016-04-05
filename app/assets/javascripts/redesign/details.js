@@ -27,7 +27,7 @@ detailsApp.data = {
     ".card-for-observers": false,
     ".action-bar-wrapper": false
   },
-  formValue: {}
+  fieldUID: {}
 }
 
 detailsApp.setupData = function(){
@@ -52,7 +52,7 @@ detailsApp.setupCards = function(){
 
 detailsApp.setupInputFields = function(){
   $('input, textarea, select, radio, .selectize-input div').each(function(i, item){
-    $(item).data('field-guid', detailsApp.guid());
+    $(item).attr('data-field-guid', detailsApp.guid());
   });
 }
 
@@ -125,7 +125,7 @@ detailsApp.lookup = function(elemDataKey) {
 
 detailsApp.fieldChanged = function(e, el){
   var $form = $(el).closest('form');
-  var guidValue = $form.data('field-guid');
+  var guidValue = $form.attr('data-field-guid');
   var objectDiff = this.checkObjectDifference(guidValue);
   console.log(objectDiff);
   if (objectDiff["changed"] == "object change"){
@@ -149,32 +149,32 @@ detailsApp.defaultActionBar = function(e){
 detailsApp.generateCardObjects = function(){
   var self = this;
   $('.card form').each(function(i, parentItem){
-    var formNameKey = $(parentItem).data('field-guid');
+    var formNameKey = $(parentItem).attr('data-field-guid');
     var formNameObject = {};
-    var $inputFields = $(parentItem).find('textarea, input, select, radio');
+    var $inputFields = $(parentItem).find('.selectize-input div, textarea, input, select, radio');
 
     $inputFields.each(function(j, childItem){
-      var nameKey = $(childItem).data('field-guid');
+      var nameKey = $(childItem).attr('data-field-guid');
       formNameObject[nameKey] = $(childItem).val();
     });
 
     var deepObjectCopy = jQuery.extend(true, {}, formNameObject);
-    self.data.formValue[formNameKey] = deepObjectCopy;
+    self.data.fieldUID[formNameKey] = deepObjectCopy;
   });
-  console.log(self.data.formValue);
+  console.log(self.data.fieldUID);
 }
 
 detailsApp.checkObjectDifference = function(guidValue){
-  return objectDiff.diff(detailsApp.data.formValue[guidValue], detailsApp.getCardObject(guidValue));
+  return objectDiff.diff(detailsApp.data.fieldUID[guidValue], detailsApp.getCardObject(guidValue));
 }
 
 detailsApp.getCardObject = function(guidValue){
   var selector = '[data-field-guid="'+ guidValue +'"]';
   var formNameObject = {};
-  var $inputFields = $(selector).find('textarea, input, select, radio');
+  var $inputFields = $(selector).find('.selectize-input div, textarea, input, select, radio');
 
   $inputFields.each(function(j, childItem){
-    var nameKey = $(childItem).data('field-guid');
+    var nameKey = $(childItem).attr('data-field-guid');
     formNameObject[nameKey] = $(childItem).val();
   });
 
