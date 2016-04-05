@@ -9,6 +9,3 @@
             = modify_client_button(@proposal, "Save", "button primary fr large")
           %li.fr.cancel-button.action-edit
             = link_to("Cancel", @proposal, class: "button secondary fr large")
-      - if policy(@proposal).can_cancel?
-        %li.fl.cancel-action
-          = link_to "Cancel this request", cancel_form_proposal_path

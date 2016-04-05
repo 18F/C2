@@ -11,6 +11,14 @@ a.button{
   &:hover{
     background: darken($primary-color, 15%);
   }
+  outline: none;
+  &:focus{
+    outline: none;
+  }
+}
+
+a.button.secondary:focus{
+  color: $primary-color;
 }
 
 p{
