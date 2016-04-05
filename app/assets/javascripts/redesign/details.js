@@ -38,6 +38,7 @@ detailsApp.setupCards = function(){
   this.setupStatusToggle();
   this.setupRequestDetailsToggle();
   this.setupCommentController();
+  this.setupObserverController();
 }
 
 detailsApp.setupStatusToggle = function(){
@@ -104,6 +105,23 @@ detailsApp.fieldChanged = function(e){
   }
 };
 
+detailsApp.setupObserverController = function(){
+  var $observers = $('.observer-list');
+  var form = '<form class="button_to remove_ajax"><input data-confirm="Are you sure?" type="submit" value="Remove" /></form>'
+
+  $('form#new_observation').submit(function(){
+    var valuesToSubmit = $(this).serialize();
+    var value = $('form#new_observation :selected').text();
+    $observers.append('<li class="observer-list-item">' + value + form + '</li>');
+    return false;//prevents default
+  });
+  
+  $(document).on('submit','form.remove_ajax',function(){
+    $(this).parent().remove();
+    return false;
+  });
+}
+
 detailsApp.setupCommentController = function(){
   var $comments = $('#comments');
   var current_user = $('div.current_user').html();
@@ -164,23 +182,5 @@ detailsApp.lookup = function(elemDataKey) {
 
 $(document).ready(function(){
   detailsApp.blastOff();
-});
-
-
-$(document).ready(function(){
-  var $observers = $('.observer-list');
-  var form = '<form class="button_to remove_ajax"><input data-confirm="Are you sure?" type="submit" value="Remove" /></form>'
-
-  $('form#new_observation').submit(function(){
-    var valuesToSubmit = $(this).serialize();
-    var value = $('form#new_observation :selected').text();
-    $observers.append('<li class="observer-list-item">' + value + form + '</li>');
-    return false;//prevents default
-  });
-  
-  $(document).on('submit','form.remove_ajax',function(){
-    $(this).parent().remove();
-    return false;
-  });
 });
 
