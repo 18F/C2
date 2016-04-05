@@ -134,6 +134,10 @@ describe ProposalSearchQuery, elasticsearch: true do
     end
 
     it "returns the Proposals by rank, weighting id matches above all else" do
+      # explicit db clean call here because we are manually assigning IDs
+      # and auto-retry means we must avoid collisions.
+      DatabaseCleaner.start
+
       user = create(:user, client_slug: "test")
 
       proposal1 = create(:proposal, id: 199, requester: user)
