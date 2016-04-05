@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160331203347) do
+ActiveRecord::Schema.define(version: 20160401201034) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -304,6 +304,7 @@ ActiveRecord::Schema.define(version: 20160331203347) do
     t.datetime "updated_at"
     t.string   "client_slug",   limit: 255
     t.boolean  "active",                    default: true
+    t.string   "timezone",      limit: 255, default: "UTC"
   end
 
   create_table "versions", force: :cascade do |t|

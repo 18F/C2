@@ -6,6 +6,7 @@ class ObserverMailer < ApplicationMailer
     @observation = observation
     @reason = reason
     observer = observation.user
+    @recipient = observer
 
     assign_threading_headers(@proposal)
 
@@ -20,6 +21,7 @@ class ObserverMailer < ApplicationMailer
   def observer_removed_notification(proposal, user)
     add_inline_attachment("icon-pencil-circle.png")
     @proposal = proposal.decorate
+    @recipient = user
     assign_threading_headers(@proposal)
 
     mail(
@@ -35,7 +37,7 @@ class ObserverMailer < ApplicationMailer
     add_proposal_attributes_icons(@proposal)
     add_inline_attachment("icon-check-green-circle.png")
     user = user
-
+    @recipient = user
     assign_threading_headers(@proposal)
 
     mail(

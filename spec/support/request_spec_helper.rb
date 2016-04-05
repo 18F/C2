@@ -11,7 +11,7 @@ module RequestSpecHelper
   end
 
   def time_to_json(time)
-    time.iso8601(3)
+    time.utc.iso8601(3)
   end
 
   # Add support for testing `options` requests in rspec.
