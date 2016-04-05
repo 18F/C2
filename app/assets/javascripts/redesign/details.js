@@ -8,7 +8,15 @@ detailsApp.blastOff = function(){
   this.setupEvents();
 }
 
-detailsApp.data = {}
+detailsApp.data = {
+  editMode: {
+    all: false,
+    "card-for-approvals": false,
+    "card-for-activity": false,
+    "card-for-request-details": false,
+    "card-for-observers": false
+  }
+}
 
 detailsApp.setupEvents = function(){
   $('input, textarea, select, radio').on('change, keypress', function(e){
@@ -64,7 +72,13 @@ detailsApp.setupDataObject = function($elem) {
 }
 
 detailsApp.fieldChanged = function(e){
-  console.log('Field changed: ', e);
+  // console.log('Field changed: ', e);
+  this.updateActionBar(e);
+};
+
+detailsApp.updateActionBar = function(e){
+  console.log(e);
+  $('#edit-request-details form')
 };
 
 detailsApp.updateStaticElements = function($elem) {
