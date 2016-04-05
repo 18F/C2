@@ -175,6 +175,10 @@ detailsApp.generateCardObjects = function(){
   console.log(self.data.formValue);
 }
 
+detailsApp.checkObjectDifference = function(formAction){
+  return objectDiff.diff(detailsApp.data.formValue[formAction], detailsApp.getCardObject(formAction));
+}
+
 detailsApp.getCardObject = function(actionValue){
   var selector = '[action="'+ actionValue +'"]';
   var formNameObject = {};
@@ -187,7 +191,6 @@ detailsApp.getCardObject = function(actionValue){
 
   var deepObjectCopy = jQuery.extend(true, {}, formNameObject);
   
-  console.log(deepObjectCopy);
   return deepObjectCopy;
 }
 
