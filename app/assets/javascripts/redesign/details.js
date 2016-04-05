@@ -43,11 +43,11 @@ detailsApp.setupEvents = function(){
 }
 
 detailsApp.setupCards = function(){
+  this.setupInputFields();
   this.setupStatusToggle();
   this.setupRequestDetailsToggle();
   this.setupCommentController();
   this.setupObserverController();
-  this.setupInputFields();
 }
 
 detailsApp.setupInputFields = function(){
@@ -168,8 +168,8 @@ detailsApp.checkObjectDifference = function(guidValue){
   return objectDiff.diff(detailsApp.data.formValue[guidValue], detailsApp.getCardObject(guidValue));
 }
 
-detailsApp.getCardObject = function(fieldGuidValue){
-  var selector = '[data-field-guid="'+ actionValue +'"]';
+detailsApp.getCardObject = function(guidValue){
+  var selector = '[data-field-guid="'+ guidValue +'"]';
   var formNameObject = {};
   var $inputFields = $(selector).find('textarea, input, select, radio');
 
