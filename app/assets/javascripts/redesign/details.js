@@ -41,6 +41,11 @@ detailsApp.setupEvents = function(){
     var el = this;
     self.debounce(self.fieldChanged(e, el), 50);
   });
+  $('.save-button a').on('click', function(e){
+    e.preventDefault();
+    self.setupDataObject();
+    self.defaultActionBar();
+  })
 }
 
 detailsApp.setupCards = function(){
