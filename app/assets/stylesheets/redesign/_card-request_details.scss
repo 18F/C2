@@ -1,12 +1,12 @@
 .card-for-request-details{
-  .details-edit{
+  .detail-edit{
     display: none;
   }
   &.card-edit-mode{
-    .details-edit{
+    .detail-edit{
       display: block;
     }
-    .details-display{
+    .detail-display{
       display: none;
     }
   }
