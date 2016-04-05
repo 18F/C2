@@ -7,8 +7,16 @@ module MailerHelper
     end
   end
 
-  def time_and_date(date)
-    "#{date.strftime('%m/%d/%Y')} at #{date.strftime('%I:%M %P')}"
+  def time_and_date(date, zone = User::DEFAULT_TIMEZONE)
+    str = ""
+    Time.use_zone zone do
+      str = "#{date.in_time_zone.strftime('%m/%d/%Y')} at #{date.in_time_zone.strftime('%I:%M %P')}"
+    end
+    str
+  end
+
+  def user_timezone(user)
+    user.timezone || User::DEFAULT_TIMEZONE
   end
 
   def generate_approve_url(approval)

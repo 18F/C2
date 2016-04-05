@@ -43,6 +43,18 @@ describe MailerHelper do
     end
   end
 
+  describe "#time_and_date" do
+    it "respects user timezone" do
+      user = create(:user)
+      now = Time.current
+      user_now = nil
+      Time.use_zone user.timezone do
+        user_now = now.in_time_zone
+      end
+      expect(time_and_date(now, user_timezone(user))).to include(user_now.strftime('%I:%M %P'))
+    end
+  end
+
   describe '#generate_approve_url' do
     it "returns a URL" do
       approval = create(:approval)

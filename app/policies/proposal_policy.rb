@@ -17,7 +17,7 @@ class ProposalPolicy
   alias_method :can_update!, :can_edit!
 
   def can_show!
-    check(visible_proposals.exists?(@proposal.id), "You are not allowed to see this proposal")
+    check(visible_proposals.exists?(@proposal.id), I18n.t("errors.policies.proposal.show_permission"))
   end
 
   alias_method :can_history!, :can_show!
@@ -52,18 +52,18 @@ class ProposalPolicy
   end
 
   def requester!
-    check(requester?, "You are not the requester")
+    check(requester?, I18n.t("errors.policies.proposal.requester_permission"))
   end
 
   def not_completed!
     check(
       !@proposal.completed?,
-      "That proposal's already completed. New proposal?"
+      I18n.t("errors.policies.proposal.completed")
     )
   end
 
   def not_canceled!
-    check(!@proposal.canceled?, "Sorry, this proposal has been canceled.")
+    check(!@proposal.canceled?, I18n.t("errors.policies.proposal.canceled"))
   end
 
   def step_user?
@@ -81,13 +81,12 @@ class ProposalPolicy
   def step_user!
     check(
       step_user? || delegate?,
-      "Sorry, you're not an approver on this proposal"
+      I18n.t("errors.policies.proposal.step_permission")
     )
   end
 
   def observer!
-    check(@proposal.observers.include?(@user),
-          "Sorry, you're not an observer on this proposal")
+    check(@proposal.observers.include?(@user), I18n.t("errors.policies.proposal.observer_permission"))
   end
 
   def pending_step_user?
@@ -99,8 +98,7 @@ class ProposalPolicy
   end
 
   def pending_step!
-    check(pending_step_user? || pending_delegate?,
-          "A response has already been logged for this proposal")
+    check(pending_step_user? || pending_delegate?, I18n.t("errors.policies.proposal.step_complete"))
   end
 
   def visible_proposals

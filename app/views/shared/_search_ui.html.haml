@@ -1,18 +1,23 @@
 .inset
   .row.m-search-ui
-    .input-group
-      %input.search-terms.form-control{type: "text", name: "text", value: @text}
-      .input-group-btn
-        .btn-group{role: "group"}
-          .dropdown.dropdown-lg
-            %button.btn.btn-default.dropdown-toggle{type: "button", "data-toggle" => "dropdown", "aria-expanded" => "false"}
-              %span.fa.fa-angle-down
-            .dropdown-menu.dropdown-menu-right{role: "menu"}
-              = render partial: "shared/search_form"
-          %button#search-button.btn.btn-default.search{type: "submit"}
-            Search
+    %form.form-horizontal.search{role: "form", action: query_proposals_path, method: "get"}
+      %fieldset.basic
+        .form-group.basic
+          .input-group
+            %input.search-terms.form-control{autocomplete: "off", type: "text", name: "text", value: @text, placeholder: "Search"}
+            .input-group-addon.magnifier
+              %i.fa.fa-search.fa-fw
+            .input-group-btn
+              %button#search-button.btn.btn-default.btn-primary.search{type: "submit"}
+                Search
+                %i.fa.fa-search.fa-fw
+        #adv-options.form-group
+          %a.btn.btn-default.adv-options
+            %i.fa.fa-plus
+            Advanced options
+      = render partial: "shared/search_form"
 
-- if defined?(show_adv_search_ui) && show_adv_search_ui
+- if (defined?(show_adv_search_ui) && show_adv_search_ui) || @adv_search.to_s.length > 0
   <script type="text/javascript">var C2_SEARCH_UI_OPEN = true;</script>
 - else
   <script type="text/javascript">var C2_SEARCH_UI_OPEN = false;</script>

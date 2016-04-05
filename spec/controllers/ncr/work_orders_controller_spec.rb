@@ -14,7 +14,7 @@ describe Ncr::WorkOrdersController do
           emergency: "0",
           rwa_number: "A1234567",
           ncr_organization_id: create(:ncr_organization).code_and_name,
-          code: "Work Order",
+          work_order_code: "Work Order",
           project_title: "Title",
           description: "Desc",
           approving_official_id: approving_official.id
@@ -26,7 +26,7 @@ describe Ncr::WorkOrdersController do
       post :create, params
       ncr = Ncr::WorkOrder.order(:id).last
 
-      expect(ncr.code).to eq 'Work Order'
+      expect(ncr.work_order_code).to eq 'Work Order'
       expect(ncr.approvers.first).to eq approving_official
       expect(email_recipients).to eq([approving_official.email_address, ncr.requester.email_address].sort)
     end

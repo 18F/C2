@@ -26,6 +26,7 @@ feature "post-approval modification" do
     click_on 'Update'
 
     expect_budget_approvals_restarted(work_order)
+    expect_actionable_step_is_budget_approver(work_order)
 
     login_as(work_order.budget_approvers.first)
     visit "/proposals/#{work_order.proposal.id}"
@@ -82,7 +83,18 @@ feature "post-approval modification" do
     ))
 
     approver = work_order.budget_approvers.first
+    expect(approver.email_address).to eq(Ncr::Mailboxes.ba61_tier1_budget.email_address)
     reapproval_mail = deliveries.find { |mail| mail.to.include?(approver.email_address) }
     expect(reapproval_mail.html_part.body).to include('Approve')
+  end
+
+  def expect_actionable_step_is_budget_approver(work_order)
+    proposal_page = ProposalPage.new
+    proposal_page.load(proposal_id: work_order.proposal.id)
+
+    expect(proposal_page).to be_displayed
+    expect(proposal_page.status).to have_approvers count: 3
+    approver_page_row = proposal_page.status.actionable.first
+    expect(approver_page_row.name).to have_content(work_order.budget_approvers.first.email_address)
   end
 end

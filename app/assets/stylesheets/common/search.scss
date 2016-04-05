@@ -1,45 +1,128 @@
 @import "constants";
 
-// based on http://bootsnipp.com/snippets/featured/advanced-dropdown-search
 .m-search-ui {
-  padding: 12px 0;
-  text-align: right;
-  width: 50%;
-  float: right;
+  z-index: 100;
+  position: absolute;
+  right: 0;
+  width: 30%;
+  min-width: 450px;
 
-  .search-terms {
+  ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color: $placeholdergray;
+  }
+  :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: $placeholdergray;
+    opacity: 1;
+  }
+  ::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: $placeholdergray;
+    opacity: 1;
+  }
+  :-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: $placeholdergray;
+  }
+  :placeholder-shown { /* Standard (https://drafts.csswg.org/selectors-4/#placeholder) */
+    color: $placeholdergray;
   }
 
-  .dropdown.dropdown-lg .dropdown-menu {
-    margin-top: -1px;
-    padding: 6px 20px;
+  .form-horizontal .form-group {
+    margin-left: 0px;
+    margin-right: 0px;
   }
-  .input-group-btn .btn-group {
-    display: flex !important;
+
+  fieldset {
+    padding: 15px 15px 0px 15px;
   }
-  .btn-group .btn {
-    border-radius: 0;
-    margin-left: -1px;
+
+  .form-control:focus {
+    border-color: #ccc;
   }
-  .btn-group .btn:last-child {
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
-  }
-  .btn-group .btn[type="submit"] {
-    border-top-left-radius: 4px;
-    border-bottom-left-radius: 4px;
-  }
-  .form-group .form-control:last-child {
-    border-top-left-radius: 4px;
-    border-bottom-left-radius: 4px;
-  }
-  
-  @media screen and (min-width: 768px) {
-    .dropdown.dropdown-lg {
-      position: static !important;
+
+  fieldset.basic {
+    margin-bottom: 15px;
+
+    .form-group {
+      margin-bottom: 0px;
     }
-    .dropdown.dropdown-lg .dropdown-menu {
-      min-width: 500px;
+
+    .search-terms {
+      border-right: 0px;
+      box-shadow: none;
+    }
+
+    #adv-options a {
+      background-color: #e3e3e3;
+      text-decoration: underline;
+      color: #0C75E1;
+    }
+
+    .input-group-block {
+      display: block;
+      input {
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+      }
+    }
+
+    .input-group-addon.magnifier {
+      border-left: 0px;
+      background-color: #fff;
+      color: $placeholdergray;
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px;
+    }
+
+  }
+}
+
+.m-search-ui.expanded {
+  background-color: #e3e3e3;
+
+  .input-group-addon.magnifier {
+    color: $placeholdergray;
+  }
+
+  .form-group {
+    label {
+      font-size: 90%;
+    }
+  }
+
+  fieldset.basic {
+    margin-bottom: 0px;
+  }
+
+  fieldset.controls {
+    padding: 15px 0px 15px 15px;
+    background-color: #f5f5f5;
+  }
+
+  .resetter {
+    font-size: 90%;
+  }
+
+  .adv-controls {
+    padding: 0px 15px;
+    margin-bottom: 0px;
+
+    .closer {
+      font-size: 90%;
+      text-decoration: none;
+      display: block;
+      float: left;
+      margin-top: 8px;
+    }
+
+    .results-count-preview {
+      float: right;
+      font-size: 90%;
+      font-weight: bold;
+      margin-top: 8px;
+      padding-right: 15px;
+    }
+
+    #adv-search-button {
+      float: right;
     }
   }
 }
@@ -79,19 +162,14 @@ table.reports {
   }
 }
 
-.adv-search {
+fieldset.adv {
   .short {
     width: auto;
-  }
-
-  .form-group.row {
-    font-size: 0;
   }
 
   .form-group.row > * {
     float: none;
     display: inline-block;
-    font-size: 14px;
   }
 
   .form-group {
@@ -131,8 +209,46 @@ table.reports {
       vertical-align: bottom;
     }
   }
+}
 
-  #adv-search-button {
-    float: right;
+@media screen and (max-width: 1024px) {
+  .m-search-ui {
+    position: relative;
+  }
+}
+
+@media screen and (max-width: 512px) {
+  .m-search-ui {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  fieldset.adv {
+    .form-group.row > * {
+      float: left;
+      display: block;
+    }
+    .form-group {
+      label.inline {
+        float: none;
+      }
+      .short {
+        width: 100%;
+      }
+      .col-xs-5 {
+        width: 100%;
+      }
+      .col-xs-5.right {
+        padding-left: 0px;
+      }
+      .col-xs-5.right.wide {
+        padding-left: 0px;
+        margin-top: 15px;
+      }
+      .col-xs-5.right.inline,
+      .col-xs-5.right.inline label {
+        margin-top: 15px;
+      }
+    }
   }
 }

@@ -256,6 +256,18 @@ class Proposal < ActiveRecord::Base
     DispatchFinder.run(self).deliver_new_proposal_emails
   end
 
+  def fully_complete!(completer = nil)
+    individual_steps.each do |step|
+      step.reload
+      next if step.completed?
+      step.complete!
+      if completer
+        step.update(completer: completer)
+      end
+    end
+    complete!
+  end
+
   # Returns True if the user is an "active" step user and has acted on the proposal
   def is_active_step_user?(user)
     individual_steps.non_pending.exists?(user: user)

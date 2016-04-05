@@ -6,6 +6,11 @@ end
 
 class StatusSection < SitePrism::Section
   sections :approvers, ApproverSection, ".approval-details .approval-row"
+  sections :actionable, ApproverSection, ".step-row.actionable"
+end
+
+class DescriptionSection < SitePrism::Section
+  element :submitted, "p.submitted strong span"
 end
 
 class ProposalPage < SitePrism::Page
@@ -13,4 +18,5 @@ class ProposalPage < SitePrism::Page
   set_url_matcher /\/proposals\/(\d+)?/
 
   section :status, StatusSection, "#status-container-detail"
+  section :description, DescriptionSection, ".c2_description"
 end

@@ -7,7 +7,7 @@
 - proposal_link_text = t("mailer.view_request_cta")
 - panel_action = t("mailer.modifier_action", full_name: @modifier.full_name)
 - panel_icon = "button-circle.png"
-- panel_action_date = time_and_date(@proposal.updated_at)
+- panel_action_date = time_and_date(@proposal.updated_at, user_timezone(@recipient))
 
 %table.container
   = render partial: "mail_shared/email_header/hero_text",

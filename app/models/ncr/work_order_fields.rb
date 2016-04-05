@@ -10,7 +10,7 @@ module Ncr
       if expense_type == "BA61"
         fields << :emergency
       elsif expense_type == "BA80"
-        fields += [:rwa_number, :code]
+        fields += [:rwa_number, :work_order_code]
       end
 
       fields

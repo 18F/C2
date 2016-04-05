@@ -1,66 +1,85 @@
-%form.adv-search.form-horizontal{role: "form", action: query_proposals_path, method: "get"}
-  %fieldset
-    .form-group
-      %label.inline.control-label{for: "#{current_user.client_model_slug}[status]"}
-        Search in
-      %select.short.form-control{name: "#{current_user.client_model_slug}[status]"}
-        = proposal_status_options(@adv_search.value_for("status"))
-    .form-group
-      %label.control-label{for: "#{current_user.client_model_slug}[requester]"}
-        Requester name or email
-      %input.form-control{ type: "text",
-        name: "#{current_user.client_model_slug}[requester]",
-        value: @adv_search.value_for("requester"),
-      }   
-    .form-group
-      %label.control-label{for: "#{current_user.client_model_slug}[client_data.vendor]"}
-        Vendor Name
-      %input.form-control{ type: "text",
-        name: "#{current_user.client_model_slug}[client_data.vendor]",
-        value: @adv_search.value_for("client_data.vendor"),
-      }
-    - if current_user.client_model.expense_type_options.any?
-      .form-group.row
-        .col-xs-5
-          %label.control-label{for: "#{current_user.client_model_slug}[client_data.amount]"}
-            Amount
-          %input.form-control{ type: "text",
-            name: "#{current_user.client_model_slug}[client_data.amount]",
-            value: @adv_search.value_for("client_data.amount"),
-          }
-        .col-xs-5.right.wide
-          %label.control-label{for: "#{current_user.client_model_slug}[client_data.expense_type]"}
-            Expense Type
-          %select.form-control{name: "#{current_user.client_model_slug}[client_data.expense_type]"}
-            = proposal_expense_type_options(current_user.client_model, @adv_search.value_for("client_data.expense_type"))
-    - else
-      .form-group
+%fieldset.adv
+  .form-group
+    %label.inline.control-label{for: "#{current_user.client_model_slug}[status]"}
+      Search in
+    %select.short.form-control{name: "#{current_user.client_model_slug}[status]"}
+      = proposal_status_options(@adv_search.value_for("status"))
+  .form-group
+    %label.control-label{for: "#{current_user.client_model_slug}[requester]"}
+      Requester Name or Email
+    %input.form-control{ type: "text",
+      name: "#{current_user.client_model_slug}[requester]",
+      value: @adv_search.value_for("requester"),
+    }   
+  .form-group
+    %label.control-label{for: "#{current_user.client_model_slug}[client_data.vendor]"}
+      Vendor Name
+    %input.form-control{ type: "text",
+      name: "#{current_user.client_model_slug}[client_data.vendor]",
+      value: @adv_search.value_for("client_data.vendor"),
+    }
+  - if current_user.client_model.expense_type_options.any?
+    .form-group.row
+      .col-xs-5
         %label.control-label{for: "#{current_user.client_model_slug}[client_data.amount]"}
           Amount
         %input.form-control{ type: "text",
           name: "#{current_user.client_model_slug}[client_data.amount]",
           value: @adv_search.value_for("client_data.amount"),
         }
-
-    .form-group.row
-      .col-xs-5
-        %label.control-label{for: "#{current_user.client_model_slug}[created_within]"}
-          Date within
-        %select.form-control{name: "#{current_user.client_model_slug}[created_within]"}
-          = options_for_select([["1 year", "1 year"], ["6 months", "6 months"], ["1 month", "1 month"]], "1 year")
-      .col-xs-5.right.inline
-        %label.inline.control-label{for: "#{current_user.client_model_slug}[created_at]"}
-          of  
-        %input.short.form-control{ type: "date",
-          name: "#{current_user.client_model_slug}[created_at]", 
-          value: @adv_search.value_for("created_at"),
-        }
-
+      .col-xs-5.right.wide
+        %label.control-label{for: "#{current_user.client_model_slug}[client_data.expense_type]"}
+          Expense Type
+        %select.form-control{name: "#{current_user.client_model_slug}[client_data.expense_type]"}
+          = proposal_expense_type_options(current_user.client_model, @adv_search.value_for("client_data.expense_type"))
+  - else
     .form-group
-      .checkbox
-        %label
-          %input{type: "checkbox", name: "#{current_user.client_model_slug}[includes_attachment]", checked: @adv_search.value_for("num_attachments")}
-          Includes attachment
+      %label.control-label{for: "#{current_user.client_model_slug}[client_data.amount]"}
+        Amount
+      %input.form-control{ type: "text",
+        name: "#{current_user.client_model_slug}[client_data.amount]",
+        value: @adv_search.value_for("client_data.amount"),
+      }
 
-    %button#adv-search-button.btn.btn-lg.btn-primary{type: "submit"}
+  .form-group.row
+    .col-xs-5
+      %label.control-label{for: "#{current_user.client_model_slug}[created_within]"}
+        Date within
+      %select.form-control{name: "#{current_user.client_model_slug}[created_within]"}
+        = options_for_select([["Select duration", ""], "1 year", "6 months", "1 month"], params.fetch(current_user.client_model_slug, {})["created_within"] || "")
+    .col-xs-5.right.inline
+      %label.inline.control-label{for: "#{current_user.client_model_slug}[created_at]"}
+        of  
+      %input.placeholder.short.form-control{ type: "text",
+        name: "#{current_user.client_model_slug}[created_at]", 
+        value: created_at_time_string(@adv_search.value_for("created_at")),
+        placeholder: "now",
+        onfocus: 'this.type="date"',
+        onblur: 'this.type="text"',
+      }
+
+  .form-group
+    .checkbox
+      %label
+        %input{type: "checkbox", name: "#{current_user.client_model_slug}[includes_attachment]", checked: @adv_search.value_for("num_attachments")}
+        Includes attachment
+
+  .form-group
+    %a.resetter{href: "#"}
+      Reset search
+
+%fieldset.controls
+  .adv-controls.row
+    %a.closer{href: "#"}
+      &times; Close
+
+    %button#adv-search-button.search.btn.btn-default.btn-primary{type: "submit"}
       Search
+      %i.fa.fa-search.fa-fw
+
+    .results-count-preview
+      %span.count
+        = search_results_total(@proposals_data)
+      %span
+        results
+

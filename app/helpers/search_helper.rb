@@ -20,4 +20,22 @@ module SearchHelper
     expense_types = client_model.expense_type_options.unshift(["Any type", "*"])
     options_for_select(expense_types, selected_value)
   end
+
+  def search_results_total(proposals_data)
+    if proposals_data && proposals_data.es_response
+      proposals_data.es_response.results.total || 0
+    else
+      0
+    end
+  end
+
+  def created_at_time_string(dtim_string)
+    if dtim_string.to_s =~ /TO now/
+      ""
+    elsif dtim_string.present? && Time.zone.parse(dtim_string)
+      Time.zone.parse(dtim_string).utc.strftime("%F")
+    else
+      ""
+    end
+  end
 end

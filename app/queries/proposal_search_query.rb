@@ -11,6 +11,9 @@ class ProposalSearchQuery
     setup_query(query)
     begin
       try_search
+    rescue Elasticsearch::Transport::Transport::Errors::BadRequest => error
+      Rails.logger.warn(error)
+      raise SearchBadQuery, I18n.t("errors.features.es.bad_query")
     rescue Elasticsearch::Transport::Transport::ServerError => _error
       raise SearchUnavailable, I18n.t("errors.features.es.service_unavailable")
     rescue Faraday::ConnectionFailed => _error

@@ -1,95 +1,157 @@
 $(document).ready(function() {
 
-  /* open the Adv Search UI immediately if param set */
+  var searchUI = $(".m-search-ui");
+  var advOptsFieldset = $("fieldset.adv");
+  var advOptsControlsFieldset = $("fieldset.controls");
+  var searchTerms = $(".m-search-ui .search-terms");
+  var searchButton = $("#search-button");
+  var searchMagGlass = $(".m-search-ui .input-group-addon.magnifier");
+  var advOptsButton = $("#adv-options");
+  var advOptsToggler = $("a.adv-options");
+  var advOptsCloser = $(".adv-controls .closer");
+  var allSearchButtons = $(".m-search-ui button.search");
+  var searchForm = $("form.search");
+  var countEl = $(".results-count-preview .count");
+  var advOptsResetter = $("a.resetter");
+
+  var advOptionsVisible = function() {
+    return advOptsFieldset.is(":visible");
+  };
+
+  var searchTermsHasFocus = function() {
+    return searchTerms.is(":focus");
+  };
+
+  var FADE_SPEED = 200;
+
+  var buttonToggler = function() {
+    if (searchTerms && (!searchTerms.val() || searchTerms.val().length == 0)) {
+      searchButton.hide();
+      searchMagGlass.fadeIn(FADE_SPEED);
+    }
+    else {
+      if (!advOptionsVisible()) {
+        advOptsButton.fadeIn(FADE_SPEED);
+      }
+      searchMagGlass.hide();
+      searchButton.fadeIn(FADE_SPEED);
+    }
+  };
+
+  var showAdvOptions = function() {
+    advOptsFieldset.fadeIn(FADE_SPEED);
+    advOptsControlsFieldset.show();
+    advOptsButton.hide();
+    searchButton.hide();
+    searchMagGlass.show();
+    searchUI.addClass("expanded");
+  };
+  var hideAdvOptions = function() {
+    advOptsFieldset.hide();
+    advOptsControlsFieldset.hide();
+    advOptsButton.fadeIn(FADE_SPEED);
+    buttonToggler();
+    searchUI.removeClass("expanded");
+  };
+  advOptsToggler.click(function(e) {
+    showAdvOptions();
+    return false;
+  });
+
+  advOptsCloser.click(function() {
+    hideAdvOptions();
+    return false;
+  });
+
   if (typeof C2_SEARCH_UI_OPEN != "undefined" && C2_SEARCH_UI_OPEN === true ) {
-    $(".m-search-ui button.dropdown-toggle").click();
+    showAdvOptions();
+  }
+  else {
+    hideAdvOptions();
+    if (!searchTermsHasFocus()) {
+      advOptsButton.hide();
+    }
   }
 
-  /* *** setup Adv Search UI *** */
-  $(".m-search-ui button.search").click(function() {
+  searchTerms.keyup(function(e) {
+    if (!advOptionsVisible()) {
+      buttonToggler();
+    }
+  });
+
+  searchTerms.focusin(function() {
+    if (!advOptionsVisible()) {
+      advOptsButton.fadeIn(FADE_SPEED);
+    }
+  });
+
+  searchTerms.focusout(function(e) {
+    if (searchTerms.val().length == 0) {
+      // use timeout to workaround click on adv-options button,
+      // so that the click event can also fire.
+      setTimeout(function() { advOptsButton.hide(FADE_SPEED); }, 200);
+    }
+  });
+
+  allSearchButtons.click(function(e) {
+    e.stopPropagation();
     var btn = $(this);
-    var searchForm = $('form.adv-search');
     searchForm.submit();
     // IMPORTANT disable *AFTER* submit
     searchForm.find('fieldset').prop("disabled", true);
     btn.prop("disabled", true);
-  });
-  $('form.adv-search').on("submit", function(e) {
-    var searchForm = $(this);
-    var termsInput = $('.search-terms');
-    if (termsInput.val().length) {
-      var textInput = $('<input type="hidden" name="text">');
-      textInput.val(termsInput.val());
-      searchForm.append(textInput);
-    }
-    termsInput.prop("disabled", true);
-    return true;
+    return false; // disable normal browser button action
   });
 
-  var clickOnEnter = function(e, cls) {
-    if (e.keyCode === 13) {
-      $(cls).trigger("click");
+  var previewCountTimer = 0;
+  var previewCountUrl = "";
+  var updatePreviewCount = function() {
+    var getParams = searchForm.serialize();
+    var url = searchForm.attr('action') + '_count?' + getParams;
+    if (url == previewCountUrl) {
+      return;
     }
+    previewCountUrl = url;
+
+    if (previewCountTimer) {
+      clearTimeout(previewCountTimer);
+    }
+
+    previewCountTimer = setTimeout(function() {
+      $.get(url, function(resp) {
+        countEl.html(resp.total);
+        if (parseInt(resp.total, 10) == 1) {
+          countEl.next().html('result');
+        }
+        else {
+          countEl.next().html('results');
+        }
+      }).fail(function(xhr, err, msg) {
+        countEl.html(0);
+      });
+    }, 1000); // TODO experiment with this delay
   };
-  $(".search-terms").keyup(function(e) {
-    clickOnEnter(e, ".m-search-ui button.search");
+
+  // the 'keyup' listener handles text input immediately (change waits for focus change)
+  searchForm.find(':input').keyup(function(e) {
+    var el = $(e.target);
+    updatePreviewCount();
+  });
+  // the 'change' listener handles select/checkbox/radio immediately
+  searchForm.find(':input').change(function(e) {
+    var el = $(e.target);
+    updatePreviewCount();
   });
 
-  /* *** setup Save as Report *** */
-  $("#save-search form input").keyup(function(e) {
-    clickOnEnter(e, "#save-search-button");
+  advOptsResetter.click(function() {
+    searchForm[0].reset();
+    updatePreviewCount();
+    return false;
   });
 
-  // defined inline on HTML page
-  if (typeof C2_SEARCH_QUERY != "undefined") {
-    $("#save-search-query").text(C2_SEARCH_QUERY.humanized);
-  }
-  $("#save-search form").on("submit", function(e) {
-    e.preventDefault();
-  });
-  $("#save-search-button").click(function() {
-    var btn = $(this);
-    var savedSearchForm = $("#save-search form");
-
-    // clear any errors and start fresh
-    savedSearchForm.find('.form-alert').remove();
-
-    // must have real submit button to trigger HTML5 form validation,
-    // but our visible button is outside the <form>.
-    // So, we use an invisible button to leverage the browser's validation.
-    // See http://stackoverflow.com/questions/16707743/html5-required-validation-not-working
-    $("#save-search-submit").click();
-
-    if (typeof savedSearchForm[0].checkValidity == "function" && !savedSearchForm[0].checkValidity()) {
-      return;
+  searchTerms.keyup(function(e) {
+    if (e.keyCode === 13) {
+      searchButton.trigger("click");
     }
-
-    var savedSearchName = savedSearchForm.find("[name='saved-search-name']");
-    if (!savedSearchName.val()) {
-      return;
-    }
-
-    // validation ok -- fire the XHR
-    savedSearchForm.find('input').prop("disabled", true);
-    btn.prop("disabled", true);
-    $.post("/reports.json", {
-      query: JSON.stringify(C2_SEARCH_QUERY),
-      name: savedSearchName.val()
-    })
-    .fail(function(payload) {
-      savedSearchForm.append($('<div class="form-alert alert alert-danger">Something went wrong! Please try again or <a href="/feedback">contact your administrator</a>.</div>'));
-    })
-    .done(function(payload) {
-      var successAlert = $('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">x</button>Saved as report <strong>'+savedSearchName.val()+'</strong>!</div>');
-      $("#query-links").after(successAlert);
-      $("#save-search").modal('hide');
-      $(".alert-success").fadeTo(2000, 500).slideUp(500, function() { $(".alert-success").alert('close'); });
-    })
-    .always(function(payload) {
-      savedSearchForm.find('input').prop("disabled", false);
-      btn.prop("disabled", false);
-    });
-
   });
-
 });

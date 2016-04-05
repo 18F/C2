@@ -16,6 +16,14 @@ describe ProposalSearchQuery, elasticsearch: true do
       }.to raise_error(SearchUnavailable, I18n.t("errors.features.es.service_unavailable"))
     end
 
+    it "raises custom error when we feed Elasticsearch faulty search syntax" do
+      user = create(:user, client_slug: "test")
+      searcher = ProposalSearchQuery.new(current_user: user)
+      expect {
+        searcher.execute("ffo)")
+      }.to raise_error(SearchBadQuery, I18n.t("errors.features.es.bad_query"))
+    end
+
     it "returns an empty list for no Proposals" do
       user = create(:user, client_slug: "test")
       searcher = ProposalSearchQuery.new(current_user: user)
@@ -126,6 +134,10 @@ describe ProposalSearchQuery, elasticsearch: true do
     end
 
     it "returns the Proposals by rank, weighting id matches above all else" do
+      # explicit db clean call here because we are manually assigning IDs
+      # and auto-retry means we must avoid collisions.
+      DatabaseCleaner.start
+
       user = create(:user, client_slug: "test")
 
       proposal1 = create(:proposal, id: 199, requester: user)

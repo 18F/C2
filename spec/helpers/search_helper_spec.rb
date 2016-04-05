@@ -16,4 +16,18 @@ describe SearchHelper do
       expect(helper.proposal_expense_type_options(Ncr::WorkOrder, "")).to include(%Q(<option value="*">Any type</option>))
     end
   end
+
+  describe "#created_at_time_string" do
+    it "returns empty string for 'now' range" do
+      expect(helper.created_at_time_string("then TO now")).to eq ""
+    end
+
+    it "returns ISO Y-M-D format for parseable datetime" do
+      expect(helper.created_at_time_string("2016-03-30T18:55:47Z")).to eq "2016-03-30"
+    end
+
+    it "returns empty string by default" do
+      expect(helper.created_at_time_string(nil)).to eq ""
+    end
+  end
 end

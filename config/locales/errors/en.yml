@@ -3,7 +3,35 @@ en:
     features:
       es:
         service_unavailable: "The search feature is temporarily unavailable"
+        bad_query: "There was a problem with your search terms. Please check your syntax."
     policies:
       ncr:
         work_order:
           can_edit: "You must be the requester, approver, delegate, or observer to edit"
+      api_token:
+        nonexistent: "Something went wrong with the token (nonexistent)"
+        expired: "Something went wrong with the token (expired)"
+        used: "Something went wrong with the token (already used)"
+        wrong_proposal: "Something went wrong with the token (wrong proposal)"
+        not_delegate: "You must first sign in"
+      attachment:
+        destroy_permission: "Only the original author can delete an attachment"
+      gsa:
+        gsa_email_required: "You must be logged in with a GSA email address to create"
+      gsa18f:
+        cancel_permission: "Sorry, you are neither the requester, approver, or delegate"
+      proposal:
+        show_permission: "You are not allowed to see this proposal"
+        requester_permission: "You are not the requester"
+        completed: "That proposal's already completed. New proposal?"
+        canceled: "Sorry, this proposal has been canceled."
+        step_permission: "Sorry, you're not an approver on this proposal"
+        observer_permission: "Sorry, you're not an observer on this proposal"
+        step_complete: "A response has already been logged for this proposal"
+      report:
+        show_permission: "You are not allowed to view this Report."
+        destroy_permission: "You are not allowed to delete this Report."
+      scheduled_report:
+        show_permission: "You are not allowed to view this Scheduled Report."
+        destroy_permission: "You are not allowed to delete this Scheduled Report."
+        update_permission: "You are not allowed to update this Scheduled Report."

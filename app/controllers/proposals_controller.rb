@@ -66,15 +66,22 @@ class ProposalsController < ApplicationController
   def query
     check_search_params
     query_listing = listing
-    begin
-      @proposals_data = query_listing.query
-    rescue SearchUnavailable => error
-      flash[:error] = error.message
+    unless @proposals_data = try_search(query_listing)
       redirect_to proposals_path
     end
-
     @start_date = query_listing.start_date
     @end_date = query_listing.end_date
+  end
+
+  def query_count
+    set_search_params
+    if !valid_search_params?
+      render json: { total: 0 }
+    elsif @proposals_data = try_search(listing)
+      render json: { total: @proposals_data.es_response.results.total }
+    else
+      render json: { error: flash[:error] }
+    end
   end
 
   def download
@@ -82,7 +89,7 @@ class ProposalsController < ApplicationController
     params.delete(:page)
     begin
       build_csv_download
-    rescue SearchUnavailable => error
+    rescue SearchBadQuery, SearchUnavailable => error
       flash[:error] = error.message
       redirect_to proposals_path
     end
@@ -94,6 +101,15 @@ class ProposalsController < ApplicationController
   end
 
   protected
+
+  def try_search(query_listing)
+    begin
+      @proposals_data = query_listing.query
+    rescue SearchBadQuery, SearchUnavailable => error
+      flash[:error] = error.message
+      false
+    end
+  end
 
   def build_csv_download
     query_listing = listing
@@ -126,12 +142,16 @@ class ProposalsController < ApplicationController
     ProposalListingQuery.new(current_user, params)
   end
 
-  def check_search_params
+  def set_search_params
     @dsl = build_search_dsl
     @text = params[:text]
     @adv_search = @dsl.client_query
     build_search_query
     find_search_report
+  end
+
+  def check_search_params
+    set_search_params
     unless valid_search_params?
       flash[:alert] = "Please enter one or more search criteria"
       redirect_to proposals_path

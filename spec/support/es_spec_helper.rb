@@ -67,6 +67,7 @@ module EsSpecHelper
       block.call
     rescue SearchUnavailable => error
       if retries > 0
+        sleep 0.5
         retry
       else
         puts "retries: #{retries}"

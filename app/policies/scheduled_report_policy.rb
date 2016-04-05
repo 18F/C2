@@ -7,15 +7,15 @@ class ScheduledReportPolicy
   end
 
   def can_show!
-    check(can_show?, "You are not allowed to view this Scheduled Report.")
+    check(can_show?, I18n.t("errors.policies.scheduled_report.show_permission"))
   end
 
   def can_update!
-    check(owner?, "You are not allowed to update this Scheduled Report.")
+    check(owner?, I18n.t("errors.policies.scheduled_report.update_permission"))
   end
 
   def can_destroy!
-    check(owner?, "You are not allowed to delete this Scheduled Report.")
+    check(owner?, I18n.t("errors.policies.scheduled_report.destroy_permission"))
   end
 
   protected

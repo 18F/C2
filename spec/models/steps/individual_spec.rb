@@ -38,5 +38,24 @@ describe Steps::Individual do
         approval.restart!
       }.to_not raise_error
     end
+
+    it "resets completed_by and completed_at" do
+      completer_user = create(:user)
+      assigned_user = create(:user)
+      step = create(:approval_step, user: assigned_user)
+      step.initialize!
+      step.update_attributes!(completer: completer_user, completed_at: Time.current)
+      step.complete!
+
+      expect(step.completed_by).to eq(completer_user)
+      expect(step.completed?).to eq(true)
+
+      step.restart!
+
+      expect(step.pending?).to eq(true)
+      expect(step.completer).to be_nil
+      expect(step.completed_at).to be_nil
+      expect(step.completed_by).to eq(assigned_user)
+    end
   end
 end

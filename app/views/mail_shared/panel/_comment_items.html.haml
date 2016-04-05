@@ -7,7 +7,7 @@
     full_name: last_comment.user.full_name,
     proposal_name: proposal.name)
   - comment_icon = "icon-speech_bubble-blue.png"
-  - comment_action_date = time_and_date(last_comment.created_at)
+  - comment_action_date = time_and_date(last_comment.created_at, user_timezone(@recipient))
 
   = render partial: "mail_shared/panel/row_description",
     locals: { icon: comment_icon, action: comment_action, datetime: comment_action_date}

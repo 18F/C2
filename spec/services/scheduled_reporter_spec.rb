@@ -23,7 +23,9 @@ describe ScheduledReporter do
 
       scheduled_reporter = ScheduledReporter.new(Time.current)
 
-      scheduled_reporter.run
+      es_execute_with_retries 3 do
+        scheduled_reporter.run
+      end
 
       expect(deliveries.size).to eq(1)
     end
@@ -33,7 +35,10 @@ describe ScheduledReporter do
       scheduled_report = weekly_scheduled_report
       monday = Time.zone.parse("2016-03-07")
       reporter = ScheduledReporter.new(monday)
-      reporter.run
+
+      es_execute_with_retries 3 do
+        reporter.run
+      end
 
       expect(deliveries.size).to eq(1)
     end
@@ -43,7 +48,10 @@ describe ScheduledReporter do
       scheduled_report = weekly_scheduled_report
       tuesday = Time.zone.parse("2016-03-08")
       reporter = ScheduledReporter.new(tuesday)
-      reporter.run
+
+      es_execute_with_retries 3 do
+        reporter.run
+      end
 
       expect(deliveries.size).to eq(0)
     end
@@ -53,7 +61,10 @@ describe ScheduledReporter do
       scheduled_report = monthly_scheduled_report
       first_day_of_month = Time.zone.parse("2016-04-01")
       reporter = ScheduledReporter.new(first_day_of_month)
-      reporter.run
+
+      es_execute_with_retries 3 do
+        reporter.run
+      end
 
       expect(deliveries.size).to eq(1)
     end
@@ -63,7 +74,10 @@ describe ScheduledReporter do
       scheduled_report = monthly_scheduled_report
       second_day_of_month = Time.zone.parse("2016-04-02")
       reporter = ScheduledReporter.new(second_day_of_month)
-      reporter.run
+
+      es_execute_with_retries 3 do
+        reporter.run
+      end
 
       expect(deliveries.size).to eq(0)
     end
