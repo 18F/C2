@@ -76,6 +76,10 @@ $(document).ready(function() {
   if (typeof C2_SEARCH_UI_OPEN != "undefined" && C2_SEARCH_UI_OPEN === true ) {
     showAdvOptions();
   }
+  else if (typeof C2_SEARCH_ADV_QUERY != "undefined" && C2_SEARCH_ADV_QUERY === true) {
+    hideAdvOptions();
+    showAdvOptsButton();
+  }
   else {
     hideAdvOptions();
     if (!searchTermsHasFocus()) {
