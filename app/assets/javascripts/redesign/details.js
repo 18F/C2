@@ -52,7 +52,7 @@ detailsApp.setupCards = function(){
 
 detailsApp.setupInputFields = function(){
   $('input, textarea, select, radio, .selectize-input div').each(function(i, item){
-    $(item).data('guid', detailsApp.guid());
+    $(item).data('field-guid', detailsApp.guid());
   })
 }
 
@@ -125,8 +125,8 @@ detailsApp.lookup = function(elemDataKey) {
 
 detailsApp.fieldChanged = function(e, el){
   var $form = $(el).closest('form');
-  var formAction = $form.attr('action');
-  var objectDiff = this.checkObjectDifference(formAction);
+  var guidValue = $form.data('field-guid');
+  var objectDiff = this.checkObjectDifference(guidValue);
   console.log(objectDiff);
   if (objectDiff["changed"] == "object change"){
     $form.closest('.card').addClass('card-edited');
@@ -149,12 +149,12 @@ detailsApp.defaultActionBar = function(e){
 detailsApp.generateCardObjects = function(){
   var self = this;
   $('.card form').each(function(i, parentItem){
-    var formNameKey = $(parentItem).attr('action');
+    var formNameKey = $(parentItem).data('field-guid');
     var formNameObject = {};
     var $inputFields = $(parentItem).find('textarea, input, select, radio');
 
     $inputFields.each(function(j, childItem){
-      var nameKey = $(childItem).attr('name');
+      var nameKey = $(childItem).data('field-guid');
       formNameObject[nameKey] = $(childItem).val();
     });
 
@@ -164,17 +164,17 @@ detailsApp.generateCardObjects = function(){
   console.log(self.data.formValue);
 }
 
-detailsApp.checkObjectDifference = function(formAction){
-  return objectDiff.diff(detailsApp.data.formValue[formAction], detailsApp.getCardObject(formAction));
+detailsApp.checkObjectDifference = function(guidValue){
+  return objectDiff.diff(detailsApp.data.formValue[guidValue], detailsApp.getCardObject(guidValue));
 }
 
-detailsApp.getCardObject = function(actionValue){
-  var selector = '[action="'+ actionValue +'"]';
+detailsApp.getCardObject = function(fieldGuidValue){
+  var selector = '[data-field-guid="'+ actionValue +'"]';
   var formNameObject = {};
   var $inputFields = $(selector).find('textarea, input, select, radio');
 
   $inputFields.each(function(j, childItem){
-    var nameKey = $(childItem).attr('name');
+    var nameKey = $(childItem).data('field-guid');
     formNameObject[nameKey] = $(childItem).val();
   });
 
