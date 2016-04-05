@@ -156,8 +156,10 @@ detailsApp.fieldChanged = function(e, el){
   var objectDiff = this.checkObjectDifference(formAction);
   console.log(objectDiff);
   if (objectDiff["changed"] == "object change"){
+    $form.closest('.card').addClass('card-edited');
     this.updateActionBar(e);
   } else {
+    $form.closest('.card').removeClass('card-edited');
     this.defaultActionBar(e);
   }
 };
