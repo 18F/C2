@@ -35,8 +35,10 @@ detailsApp.setupData = function(){
 };
 
 detailsApp.setupEvents = function(){
-  $('input, textarea, select, radio').on('change, keypress', function(e){
-    detailsApp.fieldChanged(e);
+  var self = this;
+  $('input, textarea, select, radio').on('change, keypress, blur, focus', function(e){
+    var el = this;
+    self.debounce(self.fieldChanged(e, el), 50);
   });
 }
 
@@ -148,14 +150,28 @@ detailsApp.setupDataObject = function($elem) {
   })
 }
 
-detailsApp.fieldChanged = function(e){
-  // console.log('Field changed: ', e);
-  if (detailsApp.data.editMode == true){
+detailsApp.fieldChanged = function(e, el){
+  var $form = $(el).closest('form');
+  var formAction = $form.attr('action');
+  var objectDiff = this.checkObjectDifference(formAction);
+  console.log(objectDiff);
+  if (objectDiff["changed"] == "object change"){
     this.updateActionBar(e);
   } else {
     this.defaultActionBar(e);
   }
 };
+
+detailsApp.updateActionBar = function(e){
+  // console.log(e);
+  // $('#edit-request-details form');
+};
+
+detailsApp.defaultActionBar = function(e){
+  // console.log(e);
+  // $('#edit-request-details form');
+};
+
 
 detailsApp.generateCardObjects = function(){
   var self = this;
@@ -235,16 +251,6 @@ detailsApp.setupCommentController = function(){
   });
 }
 
-detailsApp.updateActionBar = function(e){
-  console.log(e);
-  $('#edit-request-details form');
-};
-
-detailsApp.defaultActionBar = function(e){
-  console.log(e);
-  $('#edit-request-details form');
-};
-
 detailsApp.updateStaticElements = function($elem) {
   var self = this;
   var cardKeys = $elem.find('div[data-card-key]')
@@ -268,6 +274,21 @@ detailsApp.lookup = function(elemDataKey) {
     return self.data[parentKey][childKey];
   }
 }
+
+detailsApp.debounce = function(func, wait, immediate) {
+  var timeout;
+  return function() {
+    var context = this, args = arguments;
+    var later = function() {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
+    };
+    var callNow = immediate && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow) func.apply(context, args);
+  };
+};
 
 window.detailsApp = detailsApp;
 
