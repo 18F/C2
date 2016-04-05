@@ -36,13 +36,16 @@ ul#request-actions{
   position: fixed;
   width: 100%;
   margin: auto;
-  bottom: 0px;
+  bottom: -100px;
   left: 0px;
   right: 0px;
   z-index: 10;
   background: #e8e8e8;
   box-shadow: 0px -10px 50px -30px black;
+  -webkit-transition: bottom .3s;
+  transition: bottom .3s;
   &.edit-mode{
+    bottom: 0px;
     background: white;
   }
 }
