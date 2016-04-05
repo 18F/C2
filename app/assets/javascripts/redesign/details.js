@@ -163,13 +163,11 @@ detailsApp.fieldChanged = function(e, el){
 };
 
 detailsApp.updateActionBar = function(e){
-  // console.log(e);
-  // $('#edit-request-details form');
+  $('#request-actions').addClass('edit-mode');
 };
 
 detailsApp.defaultActionBar = function(e){
-  // console.log(e);
-  // $('#edit-request-details form');
+  $('#request-actions').removeClass('edit-mode');
 };
 
 

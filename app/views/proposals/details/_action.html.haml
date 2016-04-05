@@ -3,11 +3,11 @@
     %ul#request-actions.centered
       - if policy(@proposal).can_edit?
         - unless @proposal.canceled?
-          %li.fr.modify-button
+          %li.fr.modify-button.action-default
             = modify_client_button(@proposal, "Modify Request", "button primary fr large")
-          %li.fr.save-button
+          %li.fr.save-button.action-edit
             = modify_client_button(@proposal, "Save", "button primary fr large")
-          %li.fr.cancel-button
+          %li.fr.cancel-button.action-edit
             = link_to("Cancel", @proposal, class: "button secondary fr large")
       - if policy(@proposal).can_cancel?
         %li.fl.cancel-action

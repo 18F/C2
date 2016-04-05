@@ -7,6 +7,17 @@ ul#request-actions{
   li{
     margin: 0px;
   }
+  .action-edit{
+    display: none;
+  }
+  &.edit-mode{
+    .action-edit{
+      display: inline-block;
+    }
+    .action-default{
+      display: none;
+    } 
+  }
 }
 
 .cancel-action{
