@@ -99,28 +99,42 @@
               .row
                 .medium-6.column
                   .detail-wrapper
-                    %label.detail-element Vendor
-                    %span.detail-value{id: 'vendor-' + @client_data_instance.id.to_s }
-                      = @client_data_instance.vendor || "-"
+                    .detail-edit
+                      = f.input :vendor,
+                        input_html: { class: "js-selectize required", data: { initial: JSON.generate(vendor_options(@client_data_instance.vendor)) }}
+                    .detail-display
+                      %label.detail-element Vendor
+                      %span.detail-value{id: 'vendor-' + @client_data_instance.id.to_s }
+                        = @client_data_instance.vendor || "-"
                   .detail-wrapper
-                    %label.detail-element Building number
-                    %span.detail-value{id: 'building_number-' + @client_data_instance.id.to_s }
-                      = @client_data_instance.building_number
+                    .detail-edit
+                      = f.input :building_number,
+                        input_html: { class: "js-selectize required", data: { initial: JSON.generate(building_options) }}
+                    .detail-display
+                      %label.detail-element Building number
+                      %span.detail-value{id: 'building_number-' + @client_data_instance.id.to_s }
+                        = @client_data_instance.building_number
                 .medium-6.column
                   .detail-wrapper
-                    %label.detail-element CL number
-                    %span.detail-value{id: 'cl_number-' + @client_data_instance.id.to_s }
-                      = @client_data_instance.cl_number || "-"
+                    .detail-edit
+                      = f.input :cl_number
+                    .detail-display
+                      %label.detail-element CL number
+                      %span.detail-value{id: 'cl_number-' + @client_data_instance.id.to_s }
+                        = @client_data_instance.cl_number || "-"
                   .primary.callout.detail-view.no-margin-bottom.no-padding-bottom
-                    .row
-                      .medium-4.column
-                        %strong Total
-                      .medium-8.column
-                        .detail-wrapper
-                          %span.detail-value
-                            %h4
-                              %b{id: 'amount-' + @client_data_instance.id.to_s }
-                                = sprintf("%.2f", @client_data_instance.amount)
+                    .detail-edit
+                      = f.input :amount, as: :currency, input_html: { value: sprintf("%.2f", @client_data_instance.amount) }
+                    .detail-display
+                      .row
+                        .medium-4.column
+                          %strong Total
+                        .medium-8.column
+                          .detail-wrapper
+                            %span.detail-value
+                              %h4
+                                %b{id: 'amount-' + @client_data_instance.id.to_s }
+                                  = sprintf("%.2f", @client_data_instance.amount)
 
           .row.column
             .medium-12.callout.primary.column.medium-centered
@@ -131,23 +145,37 @@
               .row
                 .medium-6.column
                   .detail-wrapper
-                    %label.detail-element Vendor
-                    %span.detail-value Treutel LLC
+                    .detail-edit
+                      = f.input :vendor,
+                        input_html: { class: "js-selectize required", data: { initial: JSON.generate(vendor_options("Treutel LLC")) }, value: "Treutel LLC" }
+                    .detail-display
+                      %label.detail-element Vendor
+                      %span.detail-value Treutel LLC
                   .detail-wrapper
-                    %label.detail-element Building number
-                    %span.detail-value{id: 'building_number-' + @client_data_instance.id.to_s }
-                      = @client_data_instance.building_number
+                    .detail-edit
+                      = f.input :building_number,
+                        input_html: { class: "js-selectize required", data: { initial: JSON.generate(building_options) }}
+                    .detail-display
+                      %label.detail-element Building number
+                      %span.detail-value{id: 'building_number-' + @client_data_instance.id.to_s }
+                        = @client_data_instance.building_number
                 .medium-6.column
                   .detail-wrapper
-                    %label.detail-element CL number
-                    %span.detail-value.missing-cl-number
-                      Missing CL
+                    .detail-edit
+                      = f.input :cl_number, input_html: { class: "missing-cl-number" }
+                    .detail-display
+                      %label.detail-element CL number
+                      %span.detail-value.missing-cl-number
+                        Missing CL
                   .primary.callout.detail-view.no-margin-bottom.no-padding-bottom
-                    .row
-                      .medium-4.column
-                        %strong Total
-                      .medium-8.column
-                        .detail-wrapper
-                          %span.detail-value
-                            %h4
-                              %b 400.00
+                    .detail-edit
+                      = f.input :amount, as: :currency, input_html: { value: '400.00' }
+                    .detail-display
+                      .row
+                        .medium-4.column
+                          %strong Total
+                        .medium-8.column
+                          .detail-wrapper
+                            %span.detail-value
+                              %h4
+                                %b 400.00
