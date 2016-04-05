@@ -162,15 +162,10 @@ detailsApp.lookup = function(elemDataKey) {
   }
 }
 
-
 $(document).ready(function(){
   detailsApp.blastOff();
 });
 
-//AJAX comment functionality
-$(document).ready(function(){
-  
-});
 
 $(document).ready(function(){
   var $observers = $('.observer-list');
