@@ -52,7 +52,7 @@ detailsApp.setupCards = function(){
 
 detailsApp.setupInputFields = function(){
   $('input, textarea, select, radio, .selectize-input div').each(function(i, item){
-    $(item).data('')
+    $(item).data('guid', detailsApp.guid());
   })
 }
 
@@ -138,11 +138,11 @@ detailsApp.fieldChanged = function(e, el){
 };
 
 detailsApp.updateActionBar = function(e){
-  $('#request-actions').addClass('edit-mode');
+  $('.action-bar-wrapper').addClass('edit-mode');
 };
 
 detailsApp.defaultActionBar = function(e){
-  $('#request-actions').removeClass('edit-mode');
+  $('.action-bar-wrapper').removeClass('edit-mode');
 };
 
 
