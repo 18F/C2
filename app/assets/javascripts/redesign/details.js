@@ -43,7 +43,7 @@ detailsApp.setupEvents = function(){
   });
   $('.save-button a').on('click', function(e){
     e.preventDefault();
-    self.setupDataObject();
+    self.generateCardObjects();
     self.defaultActionBar();
   })
 }
@@ -93,27 +93,6 @@ detailsApp.saveTemplateDefault = function() {
     detailsApp.templates[key] = $("." + key).html();
   });
   console.log(self.templates);
-}
-
-detailsApp.setupDataObject = function($elem) {
-  var self = this;
-  var cardKeys = $elem.find('[data-card-key]');
-
-  cardKeys.each( function(index, elem) {
-    var elemDataKey = $(elem).data('card-key');
-    var elemDataKeyArray = elemDataKey.split('-');
-    var elemDataValue = $(elem).data('card-value');
-    var parent = self.data;
-
-    for (var i = 0; i <= elemDataKeyArray.length - 2; i++) {
-      var elKey = elemDataKeyArray[i];
-      if(parent[elKey] === undefined){
-        parent[elKey] = {};
-      }
-      parent = parent[elKey];
-    }
-    parent[elemDataKeyArray[elemDataKeyArray.length-1]] = elemDataValue;
-  })
 }
 
 detailsApp.fieldChanged = function(e, el){
