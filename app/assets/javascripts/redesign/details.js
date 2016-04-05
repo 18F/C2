@@ -1,6 +1,5 @@
 "use strict";
 
-var data = {};
 var detailsApp = detailsApp || {};
 
 detailsApp.blastOff = function(){
@@ -12,9 +11,9 @@ detailsApp.blastOff = function(){
 detailsApp.data = {}
 
 detailsApp.setupEvents = function(){
-  $(window).on('scroll', function(e){
-
-  })
+  $('input').on('changed', function(e){
+    console.log(this, " changed");
+  });
 }
 
 detailsApp.setupStatusToggle = function(){
