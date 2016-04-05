@@ -29,6 +29,22 @@
       margin-bottom: 0;
     }
 
+    .line-item-add {
+      text-align: left;
+      font-weight: bold;
+
+      a.button {
+        height: 23px;
+        width: 23px;
+        padding: 0;
+        line-height: 19px;
+      }
+
+      a.add-text {
+        vertical-align: top;
+      }
+    }
+
     .line-item-controls {
       text-align: right;
       margin-bottom: 1rem;
