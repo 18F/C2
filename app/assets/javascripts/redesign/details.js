@@ -3,9 +3,18 @@
 var detailsApp = detailsApp || {};
 
 detailsApp.blastOff = function(){
-  this.setupStatusToggle();
-  this.setupRequestDetailsToggle();
   this.setupEvents();
+  this.setupCards();
+  this.saveTemplateDefault();
+}
+
+detailsApp.templates = {
+  "action-bar-wrapper": "",
+  "card-for-approvals": "",
+  "card-for-activity": "",
+  "card-for-request-details": "",
+  "card-for-observers": "",
+  "action-bar-wrapper": ""
 }
 
 detailsApp.data = {
@@ -14,7 +23,8 @@ detailsApp.data = {
     "card-for-approvals": false,
     "card-for-activity": false,
     "card-for-request-details": false,
-    "card-for-observers": false
+    "card-for-observers": false,
+    "action-bar-wrapper": false
   }
 }
 
@@ -22,6 +32,12 @@ detailsApp.setupEvents = function(){
   $('input, textarea, select, radio').on('change, keypress', function(e){
     detailsApp.fieldChanged(e);
   });
+}
+
+detailsApp.setupCards = function(){
+  this.setupStatusToggle();
+  this.setupRequestDetailsToggle();
+  this.setupCommentController();
 }
 
 detailsApp.setupStatusToggle = function(){
@@ -50,6 +66,14 @@ detailsApp.setupRequestDetailsToggle = function() {
   });
 }
 
+detailsApp.saveTemplateDefault = function() {
+  console.log('saveTemplateDefault');
+  var self = this;
+  $.each(self.templates, function(i, item){
+    console.log(item);
+  });
+}
+
 detailsApp.setupDataObject = function($elem) {
   var self = this;
   var cardKeys = $elem.find('[data-card-key]');
@@ -73,12 +97,45 @@ detailsApp.setupDataObject = function($elem) {
 
 detailsApp.fieldChanged = function(e){
   // console.log('Field changed: ', e);
-  this.updateActionBar(e);
+  if (detailsApp.data.editMode == true){
+    this.updateActionBar(e);
+  } else {
+    this.defaultActionBar(e);
+  }
 };
+
+detailsApp.setupCommentController = function(){
+  var $comments = $('#comments');
+  var current_user = $('div.current_user').html();
+  $('form#new_comment').submit(function() {  
+      var valuesToSubmit = $(this).serialize();
+      var value = $('form#new_comment textarea').val();
+      $('form#new_comment textarea').val("");
+      $.ajax({
+          type: "POST",
+          url: $(this).attr('action'), //sumbits it to the given url of the form
+          data: valuesToSubmit,
+          dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+      }).done(function(json){
+          console.log("success", json);
+      }).fail(function(json){
+        console.log("failed", valuesToSubmit);
+      }).always(function(json){
+        var comment = "<div class='column medium-12 row status-expanded status-feed-wrapper status-index-0 text-left'><div class='medium-table-row medium-12 status-feed-item status-attachment-block no-margin-bottom'><div class='hide-for-small-only medium-table-cell medium-activity-icon-col text-center status-feed-timeline background-color-column'><div class='dot-circle'></div></div><div class='medium-table-cell medium-auto-column status-feed-content'><div class='title-block'><span class='status-action'>Comment created by " + current_user + "</span><span class='time-from'><span title='Apr 4, 2016 at  3:03pm'>less than a minute ago</span></span></div><div class='item-block'>" + value + "</div></div></div></div>";
+        $comments.prepend(comment);
+      });
+      return false; // prevents normal behaviour
+  });
+}
 
 detailsApp.updateActionBar = function(e){
   console.log(e);
-  $('#edit-request-details form')
+  $('#edit-request-details form');
+};
+
+detailsApp.defaultActionBar = function(e){
+  console.log(e);
+  $('#edit-request-details form');
 };
 
 detailsApp.updateStaticElements = function($elem) {
@@ -112,27 +169,7 @@ $(document).ready(function(){
 
 //AJAX comment functionality
 $(document).ready(function(){
-  var $comments = $('#comments');
-  var current_user = $('div.current_user').html();
-  $('form#new_comment').submit(function() {  
-      var valuesToSubmit = $(this).serialize();
-      var value = $('form#new_comment textarea').val();
-      $('form#new_comment textarea').val("");
-      $.ajax({
-          type: "POST",
-          url: $(this).attr('action'), //sumbits it to the given url of the form
-          data: valuesToSubmit,
-          dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
-      }).done(function(json){
-          console.log("success", json);
-      }).fail(function(json){
-        console.log("failed", valuesToSubmit);
-      }).always(function(json){
-        var comment = "<div class='column medium-12 row status-expanded status-feed-wrapper status-index-0 text-left'><div class='medium-table-row medium-12 status-feed-item status-attachment-block no-margin-bottom'><div class='hide-for-small-only medium-table-cell medium-activity-icon-col text-center status-feed-timeline background-color-column'><div class='dot-circle'></div></div><div class='medium-table-cell medium-auto-column status-feed-content'><div class='title-block'><span class='status-action'>Comment created by " + current_user + "</span><span class='time-from'><span title='Apr 4, 2016 at  3:03pm'>less than a minute ago</span></span></div><div class='item-block'>" + value + "</div></div></div></div>";
-        $comments.prepend(comment);
-      });
-      return false; // prevents normal behaviour
-  });
+  
 });
 
 $(document).ready(function(){
