@@ -1,3 +1,17 @@
+.card-for-request-details{
+  .details-edit{
+    display: none;
+  }
+  &.card-edit-mode{
+    .details-edit{
+      display: block;
+    }
+    .details-display{
+      display: none;
+    }
+  }
+}
+
 .card{
   label{
     color: $primary-color;
