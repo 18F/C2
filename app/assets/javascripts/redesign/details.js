@@ -156,7 +156,7 @@ detailsApp.checkObjectDifference = function(guidValue){
 }
 
 detailsApp.getCardObject = function(guidValue){
-  var selector = '[data-field-guid="'+ guidValue +'"]';
+  var selector = '.card-for-request-details [data-field-guid="'+ guidValue +'"]';
   var formNameObject = {};
   var $inputFields = $(selector).find('.selectize-input div, textarea, input, select, radio');
 
