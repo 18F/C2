@@ -28,6 +28,8 @@ class User < ActiveRecord::Base
   has_many :reports
   has_many :scheduled_reports
 
+  DEFAULT_TIMEZONE = "Eastern Time (US & Canada)"
+
   def self.active
     where(active: true)
   end

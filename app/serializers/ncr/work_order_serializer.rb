@@ -19,5 +19,13 @@ module Ncr
 
     has_one :proposal
     has_many :observers
+
+    def created_at
+      object.created_at.utc
+    end
+
+    def updated_at
+      object.updated_at.utc
+    end
   end
 end

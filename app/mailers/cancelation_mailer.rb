@@ -6,6 +6,7 @@ class CancelationMailer < ApplicationMailer
     @user = canceler
     @proposal = proposal.decorate
     assign_threading_headers(@proposal)
+    @recipient = User.for_email(recipient_email)
 
     mail(
       to: recipient_email,
@@ -22,6 +23,7 @@ class CancelationMailer < ApplicationMailer
     @reason = reason
     @proposal = proposal.decorate
     assign_threading_headers(@proposal)
+    @recipient = @user
 
     mail(
       to: @user.email_address,
@@ -35,6 +37,7 @@ class CancelationMailer < ApplicationMailer
     add_inline_attachment("icon-pencil-circle.png")
     @proposal = proposal.decorate
     user = @proposal.requester
+    @recipient = user
 
     mail(
       to: email_to_user(user),

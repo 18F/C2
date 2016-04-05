@@ -3,7 +3,7 @@
 - panel_icon = "button-x-circled.png"
 - panel_action = t("mailer.cancelation_mailer.cancelation_confirmation.subsection",
   name: @user.full_name)
-- panel_action_date = time_and_date(@proposal.updated_at)
+- panel_action_date = time_and_date(@proposal.updated_at, user_timezone(@recipient))
 - panel_text = t("mailer.cancelation_mailer.cancelation_confirmation.reason", reason: @reason)
 - cta_subheader = t("mailer.cancelation_mailer.cancelation_confirmation.subheader",
   public_id: @proposal.public_id, full_name: @proposal.requester.full_name)

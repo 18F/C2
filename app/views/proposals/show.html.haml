@@ -14,7 +14,7 @@
           Requested by:
           %strong
             = @proposal.requester.full_name
-        %p
+        %p.submitted
           Submitted:
           %strong
             = date_with_tooltip(@proposal.created_at, true)

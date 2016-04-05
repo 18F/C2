@@ -1,9 +1,23 @@
 .inset
   %h2= "Welcome, #{current_user.full_name} <#{current_user.email_address}>"
   = form_tag(profile_path, method: :post) do
-    %label.string.control-label First Name
-    %input.form-control{type: "text", name: "first_name", value: current_user.first_name}
-    %label.string.control-label Last Name
-    %input.form-control{type: "text", name: "last_name", value: current_user.last_name}
-    %input.form-button{type: "submit", name: "submit", value: "Update profile"}
-    
+    .form-group.updated-at
+      .help-block
+        Last updated:
+        = date_with_tooltip current_user.updated_at
+
+    .form-group.first-name
+      %label.string.control-label First Name
+      %input.form-control{type: "text", name: "user[first_name]", value: current_user.first_name}
+
+    .form-group.last-name
+      %label.string.control-label Last Name
+      %input.form-control{type: "text", name: "user[last_name]", value: current_user.last_name}
+
+    .form-group.timezone
+      %label.string.control-label Timezone
+      = time_zone_select :user, :timezone, ActiveSupport::TimeZone.us_zones, default: (current_user.timezone || Time.zone.name)
+
+    .form-group.controls
+      %input.btn.btn-default.form-button{type: "submit", name: "submit", value: "Update profile"}
+
