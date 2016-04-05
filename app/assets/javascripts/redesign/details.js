@@ -47,6 +47,13 @@ detailsApp.setupCards = function(){
   this.setupRequestDetailsToggle();
   this.setupCommentController();
   this.setupObserverController();
+  this.setupInputFields();
+}
+
+detailsApp.setupInputFields = function(){
+  $('input, textarea, select, radio, .selectize-input div').each(function(i, item){
+    $(item).data('')
+  })
 }
 
 detailsApp.setupStatusToggle = function(){
@@ -104,18 +111,6 @@ detailsApp.setupDataObject = function($elem) {
   })
 }
 
-detailsApp.updateStaticElements = function($elem) {
-  var self = this;
-  var cardKeys = $elem.find('div[data-card-key]')
-                      .add($elem.find('span[data-card-key]'));
-
-  cardKeys.each(function(index, elem) {
-    var $elem = $(elem);
-    var newValue = self.lookup($elem.data('card-key'));
-    $elem.text(newValue);
-    $elem.data('card-value', newValue);
-  });
-};
 
 // Currently only goes 2 levels deep
 detailsApp.lookup = function(elemDataKey) {
@@ -126,28 +121,6 @@ detailsApp.lookup = function(elemDataKey) {
   if (self.data[parentKey] !== undefined) {
     return self.data[parentKey][childKey];
   }
-}
-
-
-detailsApp.setupDataObject = function($elem) {
-  var self = this;
-  var cardKeys = $elem.find('[data-card-key]');
-
-  cardKeys.each( function(index, elem) {
-    var elemDataKey = $(elem).data('card-key');
-    var elemDataKeyArray = elemDataKey.split('-');
-    var elemDataValue = $(elem).data('card-value');
-    var parent = self.data;
-
-    for (var i = 0; i <= elemDataKeyArray.length - 2; i++) {
-      var elKey = elemDataKeyArray[i];
-      if(parent[elKey] === undefined){
-        parent[elKey] = {};
-      }
-      parent = parent[elKey];
-    }
-    parent[elemDataKeyArray[elemDataKeyArray.length-1]] = elemDataValue;
-  })
 }
 
 detailsApp.fieldChanged = function(e, el){
@@ -264,16 +237,16 @@ detailsApp.updateStaticElements = function($elem) {
   });
 };
 
-// Currently only goes 2 levels deep
-detailsApp.lookup = function(elemDataKey) {
-  var self = this;
-  var elemDataKeyArray = elemDataKey.split("-");
-  var parentKey = elemDataKeyArray[0];
-  var childKey = elemDataKeyArray[1];
-  if (self.data[parentKey] !== undefined) {
-    return self.data[parentKey][childKey];
+
+detailsApp.guid = function(){
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
   }
+  return s4() + '-' + s4() + '-' + s4();
 }
+
 
 detailsApp.debounce = function(func, wait, immediate) {
   var timeout;
