@@ -20,11 +20,11 @@ detailsApp.templates = {
 detailsApp.data = {
   editMode: {
     all: false,
-    "card-for-approvals": false,
-    "card-for-activity": false,
-    "card-for-request-details": false,
-    "card-for-observers": false,
-    "action-bar-wrapper": false
+    ".card-for-approvals": false,
+    ".card-for-activity": false,
+    ".card-for-request-details": false,
+    ".card-for-observers": false,
+    ".action-bar-wrapper": false
   }
 }
 
@@ -67,11 +67,11 @@ detailsApp.setupRequestDetailsToggle = function() {
 }
 
 detailsApp.saveTemplateDefault = function() {
-  console.log('saveTemplateDefault');
   var self = this;
-  $.each(self.templates, function(i, item){
-    console.log(item);
+  $.each(self.templates, function(key, value){
+    detailsApp.templates[key] = $("." + key).html();
   });
+  console.log(self.templates);
 }
 
 detailsApp.setupDataObject = function($elem) {
