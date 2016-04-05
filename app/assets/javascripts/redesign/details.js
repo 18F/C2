@@ -37,7 +37,7 @@ detailsApp.setupData = function(){
 
 detailsApp.setupEvents = function(){
   var self = this;
-  $('.card-for-request-details').find('form, input, textarea, select, radio').on('change, keypress, blur, focus, keyup', function(e){
+  $('.card-for-request-details').find('input, textarea, select, radio').on('change', function(e){
     var el = this;
     self.debounce(self.fieldChanged(e, el), 50);
   });
@@ -100,12 +100,36 @@ detailsApp.fieldChanged = function(e, el){
   var guidValue = $form.attr('data-field-guid');
   var objectDiff = this.checkObjectDifference(guidValue);
   console.log(objectDiff);
+  this.updateStaticSibling(el);
   if (objectDiff["changed"] == "object change"){
     $form.closest('.card').addClass('card-edited');
     this.updateActionBar(e);
   } else {
     $form.closest('.card').removeClass('card-edited');
     this.defaultActionBar(e);
+  }
+};
+
+detailsApp.updateStaticSibling = function(el) {
+  var value = this.getPrintableValue(el);
+  var staticEl = $(el).closest(".detail-wrapper").find(".detail-value");
+  $(staticEl).text(value);
+};
+
+detailsApp.getPrintableValue = function(el) {
+  switch(el.tagName) {
+    case "SELECT":
+      return $(":selected", el).text();
+    case "INPUT":
+      if (el.type == "checkbox") {
+        return el.checked ? "Yes" : "No";
+      } else if (el.type == "text" && el.value.trim() == "") {
+        return "-";
+      } else {
+        $(el).val();
+      }
+    default:
+      return $(el).val();
   }
 };
 
