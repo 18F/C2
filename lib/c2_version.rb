@@ -19,6 +19,9 @@ class C2Version < PaperTrail::Version
       HashDiff.diff({}, attributes)
     when 'update'
       prev = previous
+      unless prev
+        fail("No previous version for #{self.pretty_inspect}")
+      end
       HashDiff.diff(prev.attributes, attributes)
     else
       # not sure what makes the most sense here...
