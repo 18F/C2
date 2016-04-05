@@ -3,6 +3,8 @@
     %ul#request-actions.centered
       - if policy(@proposal).can_edit?
         - unless @proposal.canceled?
+          %li.fl.action-edit
+            Save your changes to modify your request
           %li.fr.modify-button.action-default
             = modify_client_button(@proposal, "Modify Request", "button primary fr large")
           %li.fr.save-button.action-edit
