@@ -1,12 +1,7 @@
 describe "searching", elasticsearch: true do
-  let(:user){ create(:user, client_slug: "test") }
-
-  before do
-    login_as(user)
-  end
-
   it "displays relevant results", :js do
     proposals = populate_proposals
+    login_as(proposals.first.requester)
 
     visit proposals_path
     fill_in 'text', with: proposals.first.public_id
@@ -19,6 +14,7 @@ describe "searching", elasticsearch: true do
 
   it "gracefully handles ES connection errors", :js do
     proposals = populate_proposals
+    login_as(proposals.first.requester)
 
     visit proposals_path
     es_mock_connection_failed
@@ -31,6 +27,7 @@ describe "searching", elasticsearch: true do
 
   it "provides advanced search", :js do
     proposals = populate_proposals
+    login_as(proposals.first.requester)
 
     visit proposals_path
     fill_in "text", with: proposals.first.name
@@ -46,6 +43,7 @@ describe "searching", elasticsearch: true do
 
   it "opens advanced search UI when ?search=true set", :js do
     proposals = populate_proposals
+    login_as(proposals.first.requester)
 
     visit proposals_path({search: true})
     fill_in "test_client_request[client_data.amount]", with: proposals.first.client_data.amount
@@ -56,6 +54,9 @@ describe "searching", elasticsearch: true do
   end
 
   it "populates the search box on the results page", :js do
+    user = create(:user, client_slug: "test")
+    login_as(user)
+
     visit proposals_path
     fill_in 'text', with: 'foo'
     click_button "search-button"
@@ -75,6 +76,7 @@ describe "searching", elasticsearch: true do
 
   it "contains Download link to CSV", :js do
     proposals = populate_proposals
+    login_as(proposals.first.requester)
 
     visit proposals_path
     fill_in "text", with: proposals.first.name
@@ -84,9 +86,10 @@ describe "searching", elasticsearch: true do
   end
 
   def populate_proposals
+    requester = create(:user, client_slug: "test")
     proposals = 2.times.map do |i|
       wo = create(:test_client_request, project_title: "Work Order #{i}")
-      wo.proposal.update(requester: user)
+      wo.proposal.update(requester: requester)
       wo.proposal.reindex
       wo.proposal
     end
