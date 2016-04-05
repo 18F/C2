@@ -16,6 +16,14 @@
     display: none;
   }
 
+  input.missing-cl-number {
+    border-color: red;
+  }
+
+  span.missing-cl-number {
+    color: red;
+  }
+
   .line-item-block {
     .callout {
       margin-bottom: 0;

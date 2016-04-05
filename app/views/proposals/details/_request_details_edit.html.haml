@@ -81,7 +81,7 @@
               input_html: { class: "js-selectize required", data: { initial: JSON.generate(building_options) }}
         .medium-6.column
           .detail-wrapper
-            = f.input :cl_number
+            = f.input :cl_number, input_html: { class: "missing-cl-number" }
           .detail-wrapper
             = f.input :amount, as: :currency, input_html: { value: '400.00' }
     .medium-12.line-item-controls
