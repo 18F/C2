@@ -12,7 +12,10 @@ class ProposalsController < ApplicationController
 
   def show
     @proposal = proposal.decorate
-    cookies[:detail] = "new"
+    if params[:detail]
+      cookies[:detail] = params[:detail]
+    end
+    
     if cookies[:detail] == "new"
       @history = HistoryList.new(proposal)
       @client_data_instance ||= proposal.client_data
