@@ -16,7 +16,15 @@ module Ncr
     private
 
     def budget_approver?
-      work_order.budget_approvers.include?(current_user)
+      work_order.budget_approvers.include?(current_user) || tier2_budget_approver_delegates?
+    end
+
+    def tier2_budget_approver_delegates?
+      tier2_budget_approvers.any? { |tier2_user| tier2_user.delegates_to?(current_user) }
+    end
+
+    def tier2_budget_approvers
+      [Ncr::Mailboxes.ba61_tier2_budget, Ncr::Mailboxes.ba80_budget, Ncr::Mailboxes.ool_ba80_budget]
     end
 
     def current_user
