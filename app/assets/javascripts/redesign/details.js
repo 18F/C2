@@ -111,18 +111,6 @@ detailsApp.setupDataObject = function($elem) {
   })
 }
 
-
-// Currently only goes 2 levels deep
-detailsApp.lookup = function(elemDataKey) {
-  var self = this;
-  var elemDataKeyArray = elemDataKey.split("-");
-  var parentKey = elemDataKeyArray[0];
-  var childKey = elemDataKeyArray[1];
-  if (self.data[parentKey] !== undefined) {
-    return self.data[parentKey][childKey];
-  }
-}
-
 detailsApp.fieldChanged = function(e, el){
   var $form = $(el).closest('form');
   var guidValue = $form.attr('data-field-guid');
@@ -144,7 +132,6 @@ detailsApp.updateActionBar = function(e){
 detailsApp.defaultActionBar = function(e){
   $('.action-bar-wrapper').removeClass('edit-mode');
 };
-
 
 detailsApp.generateCardObjects = function(){
   var self = this;
@@ -223,20 +210,6 @@ detailsApp.setupCommentController = function(){
       return false; // prevents normal behaviour
   });
 }
-
-detailsApp.updateStaticElements = function($elem) {
-  var self = this;
-  var cardKeys = $elem.find('div[data-card-key]')
-                      .add($elem.find('span[data-card-key]'));
-
-  cardKeys.each(function(index, elem) {
-    var $elem = $(elem);
-    var newValue = self.lookup($elem.data('card-key'));
-    $elem.text(newValue);
-    $elem.data('card-value', newValue);
-  });
-};
-
 
 detailsApp.guid = function(){
   function s4() {
