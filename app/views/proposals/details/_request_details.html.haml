@@ -11,17 +11,17 @@
         .content-content.column#view-request-details
           .row
             .medium-12.column
-              %p.request-detail.detail-value
+              %p.request-detail.detail-value{id: 'detail_value-description'}
                 = @client_data_instance.description
           .row.request-content-wrapper
             .medium-6.column.medium-table-cell.right-border
               .detail-wrapper
                 %label.detail-element Expense type
-                %span.detail-value
+                %span.detail-value{id: 'detail_value-expense_type'}
                   = @client_data_instance.expense_type
               .detail-wrapper
                 %label.detail-element Direct pay
-                %span.detail-value
+                %span.detail-value{id: 'detail_value-direct_pay'}
                   = @client_data_instance.direct_pay ? "Yes" : "No"
               .detail-wrapper
                 %label.detail-element Org code / Service center
@@ -29,11 +29,11 @@
             .medium-6.column.medium-table-cell
               .detail-wrapper
                 %label.detail-element Function code
-                %span.detail-value
+                %span.detail-value{id: 'detail_value-function_code'}
                   = @client_data_instance.function_code || "-"
               .detail-wrapper
                 %label.detail-element Object field / SOC code
-                %span.detail-value
+                %span.detail-value{id: 'detail_value-soc_code'}
                   = @client_data_instance.soc_code || "-"
               .primary.callout.detail-view.no-margin-bottom.no-padding-bottom
                 .row
@@ -41,11 +41,11 @@
                     %strong Total
                   .medium-8.column
                     .detail-wrapper
-                      %label.detail-element
+                      %label.detail-element{id: 'detail_value-not_to_exceed'}
                         = @client_data_instance.not_to_exceed ? "Not to exceed" : "Exact"
                       %span.detail-value
                         %h4
-                          %b
+                          %b{id: 'detail_value-amount'}
                             = sprintf("%.2f", @client_data_instance.amount)
 
           .row.column
@@ -58,16 +58,16 @@
                 .medium-6.column
                   .detail-wrapper
                     %label.detail-element Vendor
-                    %span.detail-value
+                    %span.detail-value{id: 'detail_value-vendor'}
                       = @client_data_instance.vendor || "-"
                   .detail-wrapper
                     %label.detail-element Building number
-                    %span.detail-value
+                    %span.detail-value{id: 'detail_value-building_number'}
                       = @client_data_instance.building_number
                 .medium-6.column
                   .detail-wrapper
                     %label.detail-element CL number
-                    %span.detail-value
+                    %span.detail-value{id: 'detail_value-cl_number'}
                       = @client_data_instance.cl_number || "-"
                   .primary.callout.detail-view.no-margin-bottom.no-padding-bottom
                     .row
@@ -77,7 +77,7 @@
                         .detail-wrapper
                           %span.detail-value
                             %h4
-                              %b
+                              %b{id: 'detail_value-amount'}
                                 = sprintf("%.2f", @client_data_instance.amount)
 
           .row.column
@@ -93,7 +93,7 @@
                     %span.detail-value Treutel LLC
                   .detail-wrapper
                     %label.detail-element Building number
-                    %span.detail-value
+                    %span.detail-value{id: 'detail_value-building_number'}
                       = @client_data_instance.building_number
                 .medium-6.column
                   .detail-wrapper
