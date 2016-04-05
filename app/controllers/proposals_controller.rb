@@ -15,8 +15,9 @@ class ProposalsController < ApplicationController
     if params[:detail]
       cookies[:detail] = params[:detail]
     end
-    
-    if cookies[:detail] == "new"
+
+    @mode = cookies[:detail]
+    if %w(new edit view).include?(@mode)
       @history = HistoryList.new(proposal)
       @client_data_instance ||= proposal.client_data
       render "show_next"

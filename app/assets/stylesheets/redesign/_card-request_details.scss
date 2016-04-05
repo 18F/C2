@@ -2,7 +2,7 @@
   .detail-edit{
     display: none;
   }
-  &.card-edit-mode{
+  .edit-mode & {
     .detail-edit{
       display: block;
     }
