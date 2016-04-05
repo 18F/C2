@@ -10,6 +10,9 @@ ul#request-actions{
   .action-edit{
     display: none;
   }
+  .save-button .button{
+    background: #8ecc76;
+  }
 }
 .edit-mode{
   ul#request-actions{
@@ -19,6 +22,9 @@ ul#request-actions{
     .action-default{
       display: none;
     } 
+    .cancel-action{
+      display: none;
+    }
   }
 }
 
