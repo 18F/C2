@@ -11,8 +11,8 @@ detailsApp.blastOff = function(){
 detailsApp.data = {}
 
 detailsApp.setupEvents = function(){
-  $('input').on('changed', function(e){
-    console.log(this, " changed");
+  $('input, textarea, select, radio').on('change, keypress', function(e){
+    detailsApp.fieldChanged(e);
   });
 }
 
@@ -62,6 +62,10 @@ detailsApp.setupDataObject = function($elem) {
     parent[elemDataKeyArray[elemDataKeyArray.length-1]] = elemDataValue;
   })
 }
+
+detailsApp.fieldChanged = function(e){
+  console.log('Field changed: ', e);
+};
 
 detailsApp.updateStaticElements = function($elem) {
   var self = this;
