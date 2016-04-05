@@ -11,12 +11,12 @@
       %p
         %span.status-wrap{ class: "status-is-" + @proposal.status }
           Status:
-          %span.status-value 
+          %span.status-value
             = @proposal.status.capitalize
         Requested by:
-        %strong
+        %strong.requested-by-name
           = proposal.requester.full_name
         Requested on:
         %strong
-          %span 
-            = proposal.created_at.strftime("%b %d, %Y at %l:%M%P")   
+          %span
+            = proposal.created_at.strftime("%b %d, %Y at %l:%M%P")
