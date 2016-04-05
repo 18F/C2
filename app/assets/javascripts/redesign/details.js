@@ -3,6 +3,7 @@
 var detailsApp = detailsApp || {};
 
 detailsApp.blastOff = function(){
+  this.setupInputFields();
   this.setupEvents();
   this.setupCards();
   this.setupData();
@@ -43,7 +44,6 @@ detailsApp.setupEvents = function(){
 }
 
 detailsApp.setupCards = function(){
-  this.setupInputFields();
   this.setupStatusToggle();
   this.setupRequestDetailsToggle();
   this.setupCommentController();
@@ -53,7 +53,7 @@ detailsApp.setupCards = function(){
 detailsApp.setupInputFields = function(){
   $('input, textarea, select, radio, .selectize-input div').each(function(i, item){
     $(item).data('field-guid', detailsApp.guid());
-  })
+  });
 }
 
 detailsApp.setupStatusToggle = function(){
