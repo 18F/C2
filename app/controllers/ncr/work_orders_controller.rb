@@ -31,8 +31,14 @@ module Ncr
     protected
 
     def work_order
-      @client_data_instance.modifier = current_user
+      assign_modifier
       @client_data_instance
+    end
+
+    def assign_modifier
+      if @client_data_instance
+        @client_data_instance.modifier = current_user
+      end
     end
 
     def suggested_approver_email
