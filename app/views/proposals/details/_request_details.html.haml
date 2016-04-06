@@ -5,7 +5,8 @@
         .card-head.column
           %h2
             Request Details
-            = modify_client_button(@proposal, "<span>#{@mode == "edit" ? "View" : "Modify"}</span>".html_safe, "button secondary edit-icon fr large request-detail-edit-button")
+            - if @mode != "edit"
+              = modify_client_button(@proposal, "<span>#{@mode == "edit" ? "View" : "Modify"}</span>".html_safe, "button secondary edit-icon fr large request-detail-edit-button")
         .content-content.column#view-request-details
           = simple_form_for @client_data_instance, html: { multipart: true } do |f|
             .row
