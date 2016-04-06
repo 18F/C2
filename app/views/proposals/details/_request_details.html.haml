@@ -89,7 +89,7 @@
                             %b.detail-value{id: 'amount-' + @client_data_instance.id.to_s }
                               = sprintf("%.2f", @client_data_instance.amount)
 
-            .row.column
+            .row.column.line-item-block
               .medium-12.callout.primary.column.medium-centered
                 .row
                   .medium-12.column
@@ -133,8 +133,11 @@
                               %h4
                                 %b.detail-value{id: 'amount-' + @client_data_instance.id.to_s }
                                   = sprintf("%.2f", @client_data_instance.amount)
+              .medium-12.line-item-controls
+                %a.line-item-control#line-item-duplicate Duplicate
+                %a.line-item-control#line-item-remove Remove
 
-            .row.column
+            .row.column.line-item-block
               .medium-12.callout.primary.column.medium-centered
                 .row
                   .medium-12.column
@@ -175,3 +178,9 @@
                           .medium-8.column
                             %span
                               %h4.detail-value 400.00
+              .medium-12.line-item-controls
+                %a.line-item-control#line-item-duplicate Duplicate
+                %a.line-item-control#line-item-remove Remove
+              .medium-12.line-item-add
+                %a.button +
+                %a.add-text Add Line Item
