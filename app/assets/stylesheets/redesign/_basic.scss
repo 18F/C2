@@ -91,5 +91,11 @@ input[type="submit"].button{
 }
 
 .callout .callout.primary{
-  background: darken(#C5DCED, 4%);
+  .view-mode & {
+    background: darken(#C5DCED, 4%);
+  }
+
+  .edit-mode & {
+    padding: 0;
+  }
 }
