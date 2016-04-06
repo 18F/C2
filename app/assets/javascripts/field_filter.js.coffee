@@ -12,7 +12,7 @@ class @FieldFilter
     @$fieldOrWrappers.attr("disabled", !enableOrDisable)
 
   toggleChildInputs: (enableOrDisable) ->
-    @$fieldOrWrappers.find(":input").attr("disabled", !enableOrDisable)
+    @$fieldOrWrappers.find(":input").not(".respect-disabled").attr("disabled", !enableOrDisable)
 
   toggle: (showOrHide) ->
     @toggleVisibility(showOrHide)
