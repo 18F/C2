@@ -31,6 +31,7 @@ module Ncr
     protected
 
     def work_order
+      @client_data_instance.modifier = current_user
       @client_data_instance
     end
 
