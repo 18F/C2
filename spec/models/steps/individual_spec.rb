@@ -51,6 +51,7 @@ describe Steps::Individual do
       expect(step.completed?).to eq(true)
 
       step.restart!
+      step.reload
 
       expect(step.pending?).to eq(true)
       expect(step.completer).to be_nil
