@@ -44,6 +44,7 @@ en:
       building_number: "Building Number"
       cl_number: "CL#"
       direct_pay: "Direct Pay"
+      emergency: "Emergency"
       expense_type: "Expense Type"
       function_code: "Function Code"
       not_to_exceed_amount: "Not to exceed / Amount"

@@ -50,7 +50,7 @@ module Steps
     end
 
     # overrides to allow for ratios. For example, if there are three child
-    # stpes, and min_children_needed is set to 2, only 2 of the 3 must
+    # steps, and min_children_needed is set to 2, only 2 of the 3 must
     # complete. When min_children_needed is 1, we create an "OR" situation
     def children_completed?
       needed = min_children_needed || child_steps.count
