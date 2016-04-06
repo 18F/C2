@@ -7,16 +7,15 @@ detailsApp.blastOff = function(){
   this.setupEvents();
   this.setupCards();
   this.setupData();
-}
+};
 
 detailsApp.templates = {
   "action-bar-wrapper": "",
   "card-for-approvals": "",
   "card-for-activity": "",
   "card-for-request-details": "",
-  "card-for-observers": "",
-  "action-bar-wrapper": ""
-}
+  "card-for-observers": ""
+};
 
 detailsApp.data = {
   editMode: {
@@ -28,7 +27,7 @@ detailsApp.data = {
     ".action-bar-wrapper": false
   },
   fieldUID: {}
-}
+};
 
 detailsApp.setupData = function(){
   this.saveTemplateDefault();
@@ -37,75 +36,75 @@ detailsApp.setupData = function(){
 
 detailsApp.setupEvents = function(){
   var self = this;
-  $('.card-for-request-details').find('input, textarea, select, radio').on('change', function(e){
+  $(".card-for-request-details").find("input, textarea, select, radio").on("change", function(e){
     var el = this;
     self.debounce(self.fieldChanged(e, el), 50);
   });
-  $('.save-button a').on('click', function(e){
+  $(".save-button a").on("click", function(e){
     e.preventDefault();
     self.generateCardObjects();
     self.defaultActionBar();
-  })
-}
+  });
+};
 
 detailsApp.setupCards = function(){
   this.setupStatusToggle();
   this.setupRequestDetailsToggle();
   this.setupCommentController();
   this.setupObserverController();
-}
+};
 
 detailsApp.setupInputFields = function(){
-  $('form, input, textarea, select, radio, .selectize-input div').each(function(i, item){
-    $(item).attr('data-field-guid', detailsApp.guid());
+  $("form, input, textarea, select, radio, .selectize-input div").each(function(i, item){
+    $(item).attr("data-field-guid", detailsApp.guid());
   });
-}
+};
 
 detailsApp.setupStatusToggle = function(){
-  $('.status-toggle-all').on('click', function(e){
+  $(".status-toggle-all").on("click", function(e){
     e.preventDefault();
-    $('.status-contracted').toggleClass('status-expanded');
-    if($('.status-contracted').hasClass('status-expanded')){
-      $('.status-toggle-all.status-text').text('Minimize');
+    $(".status-contracted").toggleClass("status-expanded");
+    if($(".status-contracted").hasClass("status-expanded")){
+      $(".status-toggle-all.status-text").text("Minimize");
     } else {
-      $('.status-toggle-all.status-text').text('Show all');
+      $(".status-toggle-all.status-text").text("Show all");
     }
   });
-}
+};
 
 detailsApp.setupRequestDetailsToggle = function() {
   var $editButton = $(".request-detail-edit-button");
   $editButton.on("click", function(e) {
     e.preventDefault();
-    $('#mode-parent').toggleClass('edit-mode').toggleClass('view-mode');
-    if( !$('#mode-parent').hasClass('view-mode') ) {
-      $('span', $editButton).text('View');
+    $("#mode-parent").toggleClass("edit-mode").toggleClass("view-mode");
+    if( !$("#mode-parent").hasClass("view-mode") ) {
+      $("span", $editButton).text("View");
     } else {
-      $('span', $editButton).text('Modify');
+      $("span", $editButton).text("Modify");
     }
     return false;
   });
-}
+};
 
 detailsApp.saveTemplateDefault = function() {
   var self = this;
-  $.each(self.templates, function(key, value){
+  $.each(self.templates, function(key){
     detailsApp.templates[key] = $("." + key).html();
   });
   console.log(self.templates);
-}
+};
 
 detailsApp.fieldChanged = function(e, el){
-  var $form = $(el).closest('form');
-  var guidValue = $form.attr('data-field-guid');
+  var $form = $(el).closest("form");
+  var guidValue = $form.attr("data-field-guid");
   var objectDiff = this.checkObjectDifference(guidValue);
   console.log(objectDiff);
   this.updateStaticSibling(el);
-  if (objectDiff["changed"] == "object change"){
-    $form.closest('.card').addClass('card-edited');
+  if (objectDiff["changed"] === "object change"){
+    $form.closest(".card").addClass("card-edited");
     this.updateActionBar(e);
   } else {
-    $form.closest('.card').removeClass('card-edited');
+    $form.closest(".card").removeClass("card-edited");
     this.defaultActionBar(e);
   }
 };
@@ -121,90 +120,90 @@ detailsApp.getPrintableValue = function(el) {
     case "SELECT":
       return $(":selected", el).text();
     case "INPUT":
-      if (el.type == "checkbox") {
+      if (el.type === "checkbox") {
         return el.checked ? "Yes" : "No";
-      } else if (el.type == "text" && el.value.trim() == "") {
+      } else if (el.type === "text" && el.value.trim() === "") {
         return "-";
       } else {
-        $(el).val();
+        return $(el).val();
       }
+      break;
     default:
       return $(el).val();
   }
 };
 
-detailsApp.updateActionBar = function(e){
-  $('.action-bar-wrapper').addClass('edit-mode');
+detailsApp.updateActionBar = function(){
+  $(".action-bar-wrapper").addClass("edit-mode");
 };
 
-detailsApp.defaultActionBar = function(e){
-  $('.action-bar-wrapper').removeClass('edit-mode');
+detailsApp.defaultActionBar = function(){
+  $(".action-bar-wrapper").removeClass("edit-mode");
 };
 
 detailsApp.generateCardObjects = function(){
   var self = this;
-  $('.card form').each(function(i, parentItem){
-    var formNameKey = $(parentItem).attr('data-field-guid');
+  $(".card form").each(function(i, parentItem){
+    var formNameKey = $(parentItem).attr("data-field-guid");
     var formNameObject = {};
-    var $inputFields = $(parentItem).find('.selectize-input div, textarea, input, select, radio');
+    var $inputFields = $(parentItem).find(".selectize-input div, textarea, input, select, radio");
 
     $inputFields.each(function(j, childItem){
-      var nameKey = $(childItem).attr('data-field-guid');
+      var nameKey = $(childItem).attr("data-field-guid");
       formNameObject[nameKey] = $(childItem).val();
     });
 
     var deepObjectCopy = jQuery.extend(true, {}, formNameObject);
     self.data.fieldUID[formNameKey] = deepObjectCopy;
   });
-  console.log(self.data.fieldUID);
-}
+};
 
 detailsApp.checkObjectDifference = function(guidValue){
   return objectDiff.diff(detailsApp.data.fieldUID[guidValue], detailsApp.getCardObject(guidValue));
-}
+};
 
 detailsApp.getCardObject = function(guidValue){
-  var selector = '.card-for-request-details [data-field-guid="'+ guidValue +'"]';
+  var selector = ".card-for-request-details [data-field-guid='"+ guidValue +"']";
   var formNameObject = {};
-  var $inputFields = $(selector).find('.selectize-input div, textarea, input, select, radio');
+  var $inputFields = $(selector).find(".selectize-input div, textarea, input, select, radio");
 
   $inputFields.each(function(j, childItem){
-    var nameKey = $(childItem).attr('data-field-guid');
+    var nameKey = $(childItem).attr("data-field-guid");
     formNameObject[nameKey] = $(childItem).val();
   });
 
   var deepObjectCopy = jQuery.extend(true, {}, formNameObject);
-  
+
   return deepObjectCopy;
-}
+};
 
 detailsApp.setupObserverController = function(){
-  var $observers = $('.observer-list');
-  var form = '<form class="button_to remove_ajax"><input data-confirm="Are you sure?" type="submit" value="Remove" /></form>'
+  var $observers = $(".observer-list");
+  var form = "<form class='button_to remove_ajax'><input data-confirm='Are you sure?' type='submit' value='Remove' /></form>"
 
-  $('form#new_observation').submit(function(){
+  $("form#new_observation").submit(function(){
     var valuesToSubmit = $(this).serialize();
-    var value = $('form#new_observation :selected').text();
-    $observers.append('<li class="observer-list-item">' + value + form + '</li>');
+    var value = $("form#new_observation :selected").text();
+    $observers.append("<li class='observer-list-item'>" + value + form + "</li>");
     return false;//prevents default
   });
-  
-  $(document).on('submit','form.remove_ajax',function(){
+
+  $(document).on("submit","form.remove_ajax",function(){
     $(this).parent().remove();
     return false;
   });
-}
+};
 
 detailsApp.setupCommentController = function(){
-  var $comments = $('#comments');
-  var current_user = $('div.current_user').html();
-  $('form#new_comment').submit(function() {  
+  var $comments = $("#comments");
+  var current_user = $("div.current_user").html();
+  $("form#new_comment").submit(function() {
       var valuesToSubmit = $(this).serialize();
-      var value = $('form#new_comment textarea').val();
-      $('form#new_comment textarea').val("");
+      var value = $("form#new_comment textarea").val();
+      $("form#new_comment textarea").val("");
       $.ajax({
           type: "POST",
-          url: $(this).attr('action'), //sumbits it to the given url of the form
+          url: $(this).attr("action"), //sumbits it to the given url of the form
           data: valuesToSubmit,
           dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
       }).done(function(json){
@@ -217,7 +216,7 @@ detailsApp.setupCommentController = function(){
       });
       return false; // prevents normal behaviour
   });
-}
+};
 
 detailsApp.guid = function(){
   function s4() {
@@ -225,8 +224,8 @@ detailsApp.guid = function(){
       .toString(16)
       .substring(1);
   }
-  return s4() + '-' + s4() + '-' + s4();
-}
+  return s4() + "-" + s4() + "-" + s4();
+};
 
 
 detailsApp.debounce = function(func, wait, immediate) {
