@@ -36,7 +36,7 @@ detailsApp.setupData = function(){
 
 detailsApp.setupEvents = function(){
   var self = this;
-  $(".card-for-request-details").find("input, textarea, select, radio").on("change", function(e){
+  $(".card-for-request-details").find("input, textarea, select, radio").on("change keypress blur focus keyup", function(e){
     var el = this;
     self.debounce(self.fieldChanged(e, el), 50);
   });
@@ -55,7 +55,7 @@ detailsApp.setupCards = function(){
 };
 
 detailsApp.setupInputFields = function(){
-  $("form, input, textarea, select, radio, .selectize-input div").each(function(i, item){
+  $("form, input, textarea, select, radio").each(function(i, item){
     $(item).attr("data-field-guid", detailsApp.guid());
   });
 };
