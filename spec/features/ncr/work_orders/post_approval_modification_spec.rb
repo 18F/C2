@@ -55,6 +55,31 @@ feature "post-approval modification" do
     ))
   end
 
+  scenario "budget approver does not trigger re-approval" do
+    work_order = create(:ncr_work_order, amount: "123")
+    work_order.setup_approvals_and_observers
+    fully_complete(work_order.proposal)
+    budget_approver_delegate = create(:user, client_slug: "ncr")
+    create(:user_delegate, assigner: work_order.budget_approvers.last, assignee: budget_approver_delegate)
+
+    login_as(budget_approver_delegate)
+    visit "/ncr/work_orders/#{work_order.id}/edit"
+    fill_in 'Amount', with: work_order.amount + 1
+    click_on "Update"
+
+    work_order.reload
+
+    expect(page.status_code).to eq(200)
+    expect(page).to have_content("Success")
+    expect(work_order.status).to eq("completed")
+    expect(work_order.proposal.root_step.status).to eq("completed")
+    expect(approval_statuses(work_order)).to eq(%w(
+      completed
+      completed
+      completed
+    ))
+  end
+
   scenario "shows flash warning, only on edit page" do
     work_order = create(:ncr_work_order)
     work_order.setup_approvals_and_observers
