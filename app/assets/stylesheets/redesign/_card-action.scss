@@ -17,7 +17,7 @@ ul#request-actions{
     margin-right: 20px;
   }
 }
-.edit-mode{
+.edit-actions{
   ul#request-actions{
     .action-edit{
       display: inline-block;
@@ -47,7 +47,7 @@ ul#request-actions{
   box-shadow: 0px -10px 50px -30px black;
   -webkit-transition: bottom .3s;
   transition: bottom .3s;
-  &.edit-mode{
+  &.edit-actions{
     bottom: 0px;
     background: white;
   }

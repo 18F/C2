@@ -99,6 +99,14 @@ class ProposalDecorator < Draper::Decorator
     end
   end
 
+  def fields_for_input
+    if client_data
+      client_data.decorate.display
+    else
+      []
+    end
+  end
+
   def top_email_field
     if client_data
       client_data.decorate.top_email_field

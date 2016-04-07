@@ -134,11 +134,11 @@ detailsApp.getPrintableValue = function(el) {
 };
 
 detailsApp.updateActionBar = function(){
-  $(".action-bar-wrapper").addClass("edit-mode");
+  $(".action-bar-wrapper").addClass("edit-actions");
 };
 
 detailsApp.defaultActionBar = function(){
-  $(".action-bar-wrapper").removeClass("edit-mode");
+  $(".action-bar-wrapper").removeClass("edit-actions");
 };
 
 detailsApp.generateCardObjects = function(){

@@ -77,6 +77,23 @@ module Ncr
       ]
     end
 
+    def details_fields
+      [
+        [translated_key("expense_type"), object.expense_type],
+        [translated_key("org_code"), object.organization_code_and_name],
+        [translated_key("rwa_number"), object.rwa_number],
+        [translated_key("function_code"), object.function_code],
+        [translated_key("work_order_code"), object.work_order_code],
+        [translated_key("soc_code"), object.soc_code],
+        direct_pay_field,
+        [translated_key("vendor"), object.vendor],
+        [translated_key("building_number"), object.building_number],
+        [translated_key("cl_number"), object.cl_number],
+        [translated_key("emergency"), object.emergency],
+        [amount_and_not_to_exceed, object.amount]
+      ]
+    end
+
     def base_fields
       [
         [translated_key("project_title"), object.project_title],
