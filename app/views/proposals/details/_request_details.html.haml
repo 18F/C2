@@ -31,7 +31,7 @@
                         .detail-display
                           %label.detail-element
                             = field[:value][0]
-                          %p.proposal-data-attribute
+                          %span.detail-value{id: field[:key] + '-' + @client_data_instance.id.to_s }
                             = request_details_form_value field[:value][1]
                         .detail-edit
                           %label.detail-element

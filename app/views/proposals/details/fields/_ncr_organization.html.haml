@@ -1,4 +1,5 @@
 = f.association :ncr_organization,
   as: :select,
   prompt: :translate,
-  input_html: { class: "js-selectize", data: { initial: JSON.generate(organization_options) }}
+  input_html: { class: "js-selectize", data: { initial: JSON.generate(organization_options) }},
+  label: false

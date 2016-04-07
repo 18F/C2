@@ -2,8 +2,8 @@
   = expense_type_radio_button(f, "BA60")
   = expense_type_radio_button(f, "BA61")
   = expense_type_radio_button(f, "BA80")
-  = f.input method,
+  = f.input :emergency,
     disabled: @client_data_instance.persisted?,
-    wrapper_html: { data: { filter_key: "expense-type", filter_value: "BA61" } }
+    wrapper_html: { data: { filter_key: "expense-type", filter_value: "BA61" } }, label: false
   = render partial: "ncr/work_orders/ba_80_fields",
     locals: { f: f }

@@ -90,14 +90,8 @@ module Ncr
         key: "ncr_organization", 
         value: [translated_key("org_code"), object.organization_code_and_name]
       }, {
-        key: "rwa_number", 
-        value: [translated_key("rwa_number"), object.rwa_number]
-      }, {
         key: "function_code", 
         value: [translated_key("function_code"), object.function_code]
-      }, {
-        key: "work_order_code", 
-        value: [translated_key("work_order_code"), object.work_order_code]
       }, {
         key: "soc_code", 
         value: [translated_key("soc_code"), object.soc_code]
