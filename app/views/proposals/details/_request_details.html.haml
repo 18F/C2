@@ -20,33 +20,27 @@
             
 
             - proposal.fields_for_input.each_slice(2) do |fields|
-              .medium-12.medium-table-row
-                .medium-6.medium-table-cell.right-border{ valign: "top" }
-                  .detail-wrapper
-                    .detail-display
-                      %label.detail-element
-                        = fields[0][0]
-                      %p.proposal-data-attribute
-                        = property_display_value(fields[0][1])
-                    .detail-edit
-                      %label.detail-element
-                        = fields[0][0]
-                      %p.proposal-data-attribute
-                        
-                .medium-6.medium-table-cell{ valign: "top" }
-                  - if fields[1]
-                    .detail-wrapper
-                      .detail-display
-                        %label.detail-element
-                          = fields[1][0]
-                        %p.proposal-data-attribute
-                          = property_display_value(fields[1][1])
-                      .detail-edit
-                        %label.detail-element
-                          = fields[1][0]
-                        %p.proposal-data-attribute
-                          
-
+              - i = 0
+              - border_class = "right-border"
+              - 2.times do
+                - field = fields[i]
+                .medium-12.medium-table-row
+                  - if field
+                    .medium-6.medium-table-cell{ valign: "top", class: border_class }
+                      .detail-wrapper
+                        .detail-display
+                          %label.detail-element
+                            = field[:value][0]
+                          %p.proposal-data-attribute
+                            = property_display_value(field[:value][1])
+                        .detail-edit
+                          %label.detail-element
+                            = field[:value][0]
+                          %p.proposal-data-attribute
+                            = f.input field[:key]
+                - i = i + 1
+                - border_class = ""
+                       
 
 
 

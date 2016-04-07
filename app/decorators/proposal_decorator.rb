@@ -101,7 +101,7 @@ class ProposalDecorator < Draper::Decorator
 
   def fields_for_input
     if client_data
-      client_data.decorate.details_fields
+      client_data.decorate.display_details
     else
       []
     end

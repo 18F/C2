@@ -31,6 +31,11 @@ module Ncr
       end
     end
 
+
+    def display_details
+      details_fields
+    end
+
     def top_email_field
       object.description
     end
@@ -79,18 +84,55 @@ module Ncr
 
     def details_fields
       [
-        [translated_key("expense_type"), object.expense_type],
-        [translated_key("org_code"), object.organization_code_and_name],
-        [translated_key("rwa_number"), object.rwa_number],
-        [translated_key("function_code"), object.function_code],
-        [translated_key("work_order_code"), object.work_order_code],
-        [translated_key("soc_code"), object.soc_code],
-        direct_pay_field,
-        [translated_key("vendor"), object.vendor],
-        [translated_key("building_number"), object.building_number],
-        [translated_key("cl_number"), object.cl_number],
-        [translated_key("emergency"), object.emergency],
-        [amount_and_not_to_exceed, object.amount]
+        {
+          key: "expense_type",
+          value: [translated_key("expense_type"), object.expense_type],
+        },
+        {
+          key: "ncr_organization",
+          value: [translated_key("org_code"), object.organization_code_and_name],
+        },
+        {
+          key: "rwa_number",
+          value: [translated_key("rwa_number"), object.rwa_number],
+        },
+        {
+          key: "function_code",
+          value: [translated_key("function_code"), object.function_code],
+        },
+        {
+          key: "work_order_code",
+          value: [translated_key("work_order_code"), object.work_order_code],
+        },
+        {
+          key: "soc_code",
+          value: [translated_key("soc_code"), object.soc_code],
+        },
+        {
+          key: "direct_pay",
+          value: direct_pay_field,
+          
+        },
+        {
+          key: "vendor",
+          value: [translated_key("vendor"), object.vendor],
+        },
+        {
+          key: "building_number",
+          value: [translated_key("building_number"), object.building_number],
+        },
+        {
+          key: "cl_number",
+          value: [translated_key("cl_number"), object.cl_number],
+        },
+        {
+          key: "emergency",
+          value: [translated_key("emergency"), object.emergency],
+        },
+        {
+          key: "amount",
+          value: [amount_and_not_to_exceed, object.amount]
+        },
       ]
     end
 
