@@ -22,9 +22,9 @@
             - proposal.fields_for_input.each_slice(2) do |fields|
               - i = 0
               - border_class = "right-border"
-              - 2.times do
-                - field = fields[i]
-                .medium-12.medium-table-row
+              .medium-12.medium-table-row
+                - 2.times do
+                  - field = fields[i]
                   - if field
                     .medium-6.medium-table-cell{ valign: "top", class: border_class }
                       .detail-wrapper
@@ -32,14 +32,14 @@
                           %label.detail-element
                             = field[:value][0]
                           %p.proposal-data-attribute
-                            = property_display_value(field[:value][1])
+                            = request_details_form_value field[:value][1]
                         .detail-edit
                           %label.detail-element
                             = field[:value][0]
                           %p.proposal-data-attribute
-                            = f.input field[:key]
-                - i = i + 1
-                - border_class = ""
+                            = request_details_form_field field[:key], f
+                  - i = i + 1
+                  - border_class = ""
                        
 
 
