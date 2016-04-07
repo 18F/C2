@@ -47,10 +47,11 @@ module Steps
     protected
 
     def restart
-      api_token.try(:expire!)
-      self.completer_id = nil
-      self.completed_at = nil
-      super
+      self.class.transaction do
+        api_token.try(:expire!)
+        update_attributes!(completer_id: nil, completed_at: nil)
+        super
+      end
     end
 
     def user_is_not_requester
