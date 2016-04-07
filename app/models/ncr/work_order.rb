@@ -171,9 +171,12 @@ module Ncr
     end
 
     def restart_budget_approvals
-      budget_approvals.each(&:restart!)
-      proposal.reset_status
-      proposal.root_step.initialize!
+      proposal.class.transaction do
+        budget_approvals.each(&:restart!)
+        proposal.reset_status
+        proposal.root_step.initialize!
+        proposal.add_restart_comment(modifier)
+      end
     end
 
     def self.expense_type_options

@@ -78,7 +78,7 @@
           = submit_tag "Send a Comment", id: :add_a_comment, data: {"disable-if-empty" => "comment_comment_text"}
 
     - if @proposal.comments.any?
-      - @proposal.comments.reverse_each do |c|
+      - @proposal.comments.each do |c|
         %div{class: "line-item #{c.update_comment ? "comment-update" : ""}"}
           .row
             %p.comment-sender.col-sm-6.col-xs-12
