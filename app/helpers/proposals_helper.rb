@@ -27,13 +27,7 @@ module ProposalsHelper
     return property_display_value(value)
   end
 
-  def request_details_form_field method, form
-    case method
-    when false
-
-    else
-      result = form.input method
-    end  
-    return result
+  def request_details_form_field method, f
+    render partial: 'proposals/details/fields/' + method, locals: { method: method, f: f }
   end
 end
