@@ -92,6 +92,7 @@ group :test do
   gem "shoulda-matchers"
   gem "simplecov"
   gem "site_prism"
+  gem "test_after_commit"
   gem "timecop"
   gem "webmock", require: false
   gem "zonebie"
