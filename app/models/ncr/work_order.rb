@@ -175,7 +175,9 @@ module Ncr
         budget_approvals.each(&:restart!)
         proposal.reset_status
         proposal.root_step.initialize!
-        proposal.add_restart_comment(modifier)
+        if modifier
+          proposal.add_restart_comment(modifier)
+        end
       end
     end
 

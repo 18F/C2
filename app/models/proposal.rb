@@ -12,7 +12,9 @@ class Proposal < ActiveRecord::Base
   workflow do
     state :pending do
       event :complete, transitions_to: :completed do
-        add_completed_comment
+        if individual_steps.any?
+          add_completed_comment
+        end
       end
       event :restart, transitions_to: :pending
       event :cancel, transitions_to: :canceled
@@ -223,7 +225,7 @@ class Proposal < ActiveRecord::Base
 
   def add_completed_comment
     completer = individual_steps.last.completed_by
-    comments.create(
+    comments.create_without_callback(
       comment_text: I18n.t(
         "activerecord.attributes.proposal.user_completed_comment",
         user: completer.full_name
@@ -235,7 +237,7 @@ class Proposal < ActiveRecord::Base
 
   def add_restart_comment(user)
     fail("User required") unless user.is_a?(User)
-    comments.create(
+    comments.create_without_callback(
       comment_text: I18n.t(
         "activerecord.attributes.proposal.user_restart_comment",
         user: user.full_name
