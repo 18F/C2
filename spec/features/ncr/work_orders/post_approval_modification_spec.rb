@@ -28,6 +28,12 @@ feature "post-approval modification" do
     expect_budget_approvals_restarted(work_order)
     expect_actionable_step_is_budget_approver(work_order)
 
+    restart_comment = I18n.t(
+      "activerecord.attributes.proposal.user_restart_comment",
+      user: work_order.requester.full_name
+    ).gsub(/`/, "")
+    expect(page).to have_content(restart_comment)
+
     login_as(work_order.budget_approvers.first)
     visit "/proposals/#{work_order.proposal.id}"
     click_on 'Approve'
@@ -53,6 +59,11 @@ feature "post-approval modification" do
       completed
       completed
     ))
+    completed_comment = I18n.t(
+      "activerecord.attributes.proposal.user_completed_comment",
+      user: work_order.budget_approvers.second.full_name
+    ).gsub(/`/, "")
+    expect(page).to have_content(completed_comment)
   end
 
   scenario "budget approver does not trigger re-approval" do
