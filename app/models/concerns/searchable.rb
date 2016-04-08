@@ -22,7 +22,7 @@ module Searchable
 
     after_commit on: [:destroy] do
       if Rails.env.test?
-        self.class.track_reindex(self, false)
+        self.class.removed_from_index << self.id
       else
         delay.remove_from_index
       end
