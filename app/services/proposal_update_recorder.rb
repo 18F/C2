@@ -99,7 +99,7 @@ class ProposalUpdateRecorder
   def new_value(key)
     value = property_to_s(client_data[key])
 
-    if value.empty?
+    if value.blank?
       "*empty*"
     else
       value
