@@ -4,6 +4,6 @@ class FixVersionsItemTypeForSteps < ActiveRecord::Migration
   end
 
   def down
-    execute "UPDATE versions SET item_type = 'Approval' WHERE item_type = 'Steps::Approval'"
+    execute "UPDATE versions SET item_type = 'Steps::Approval' WHERE item_type = 'Approval'"
   end
 end
