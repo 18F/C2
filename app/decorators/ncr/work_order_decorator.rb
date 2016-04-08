@@ -108,9 +108,6 @@ module Ncr
         key: "cl_number", 
         value: [translated_key("cl_number"), object.cl_number]
       }, {
-        key: "emergency", 
-        value: [translated_key("emergency"), object.emergency]
-      }, {
         key: "amount", 
         value: [amount_and_not_to_exceed, object.amount]
       }]

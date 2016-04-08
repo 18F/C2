@@ -82,6 +82,10 @@ input[type="submit"].button{
   border-right: 1px solid lighten($primary-color, 35%);
 }
 
+.left-border{
+  border-left: 1px solid lighten($primary-color, 35%);
+}
+
 .no-margin-bottom{
   margin-bottom: 0px !important;
 }

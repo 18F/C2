@@ -18,113 +18,34 @@
                     = @client_data_instance.description
               
             
-
+                      
             - proposal.fields_for_input.each_slice(2) do |fields|
               - i = 0
-              - border_class = "right-border"
-              .medium-12.medium-table-row
-                - 2.times do
-                  - field = fields[i]
-                  - if field
-                    .medium-6.medium-table-cell{ valign: "top", class: border_class }
-                      .detail-wrapper
-                        .detail-display
-                          %label.detail-element
-                            = field[:value][0]
-                          %span.detail-value{id: field[:key] + '-' + @client_data_instance.id.to_s }
-                            = request_details_form_value field[:value][1]
-                        .detail-edit
-                          %label.detail-element
-                            = field[:value][0]
-                          %p.proposal-data-attribute
-                            = request_details_form_field field[:key], f
-                  - i = i + 1
-                  - border_class = ""
+              - border_class = ""
+              .row
+                .medium-12.medium-table-row
+                  - 2.times do
+                    - field = fields[i]
+                    - if field
+                      .column.medium-6.medium-table-cell{ valign: "top", class: border_class }
+                        .detail-wrapper
+                          .detail-display
+                            %label.detail-element
+                              = field[:value][0]
+                            %span.detail-value{id: field[:key] + '-' + @client_data_instance.id.to_s }
+                              = request_details_form_value field[:value][1]
+                          .detail-edit
+                            %label.detail-element
+                              = field[:value][0]
+                            %p.proposal-data-attribute
+                              = request_details_form_field field[:key], f
+                    - i = i + 1
+                    - border_class = "left-border"
                        
 
 
-
-
-            .row.request-content-wrapper
-              .medium-6.column.medium-table-cell.right-border
-                .detail-wrapper
-                  .detail-edit
-                    = field_set_tag "Expense type / Program", class: "expense-type required" do
-                      = expense_type_radio_button(f, "BA60")
-                      = expense_type_radio_button(f, "BA61")
-                      = expense_type_radio_button(f, "BA80")
-                      = f.input :emergency,
-                        disabled: @client_data_instance.persisted?,
-                        wrapper_html: { data: { filter_key: "expense-type", filter_value: "BA61" } }
-                      = render partial: "ncr/work_orders/ba_80_fields",
-                        locals: { f: f }
-                  .detail-display
-                    %label.detail-element Expense type
-                    %span.detail-value{id: 'expense_type-' + @client_data_instance.id.to_s }
-                      = @client_data_instance.expense_type
-                .detail-wrapper
-                  .detail-edit
-                    = f.input :direct_pay,
-                      label: t("simple_form.labels.ncr_work_order.direct_pay_html"),
-                      label_html: { data: popover_data_attrs("direct_pay") }
-                  .detail-display
-                    %label.detail-element Direct pay
-                    %span.detail-value{id: 'direct_pay-' + @client_data_instance.id.to_s }
-                      = @client_data_instance.direct_pay ? "Yes" : "No"
-                .detail-wrapper
-                  .detail-edit
-                    = f.association :ncr_organization,
-                      as: :select,
-                      prompt: :translate,
-                      input_html: { class: "js-selectize", data: { initial: JSON.generate(organization_options) }}
-                  .detail-display
-                    %label.detail-element Org code / Service center
-                    %span.detail-value P04M0001 (192X,192M) NON-INFRASTRUCTURE INFO TECHNOLOGY BR.
-              .medium-6.column.medium-table-cell
-                .detail-wrapper
-                  .detail-edit
-                    = f.input :function_code
-                  .detail-display
-                    %label.detail-element Function code
-                    %span.detail-value{id: 'function_code-' + @client_data_instance.id.to_s }
-                      = @client_data_instance.function_code || "-"
-                .detail-wrapper
-                  .detail-edit
-                    = f.input :soc_code
-                  .detail-display
-                    %label.detail-element Object field / SOC code
-                    %span.detail-value{id: 'soc_code-' + @client_data_instance.id.to_s }
-                      = @client_data_instance.soc_code || "-"
-                .primary.callout.no-margin-bottom.no-padding-bottom
-                  .row
-                    .medium-4.column
-                      %strong Total
-                    .medium-8.column
-                      .detail-wrapper
-                        .detail-display
-                          %label.detail-element.detail-value{id: 'not_to_exceed-' + @client_data_instance.id.to_s }
-                            = @client_data_instance.not_to_exceed ? "Not to exceed" : "Exact"
-                        .detail-edit
-                          = f.input :not_to_exceed,
-                            collection: [["Exact", false], ["Not to exceed", true]],
-                            label: false, include_blank: false
-                      .detail-wrapper
-                        %span.detail-edit
-                          = f.input :amount,
-                            as: :currency,
-                            label_html: { class: "sr-only" },
-                            input_html: { data: popover_data_attrs("ncr_amount"), value: sprintf("%.2f", @client_data_instance.amount) }
-                        %span.detail-display
-                          %h4
-                            %b.detail-value{id: 'amount-' + @client_data_instance.id.to_s }
-                              = sprintf("%.2f", @client_data_instance.amount)
-
             .row.column.line-item-block
               .medium-12.callout.primary.column.medium-centered
-                .row
-                  .medium-12.column
-                    %h5
-                      %b Line Item 1
                 .row
                   .medium-6.column
                     .detail-wrapper
@@ -163,55 +84,4 @@
                               %h4
                                 %b.detail-value{id: 'amount-' + @client_data_instance.id.to_s }
                                   = sprintf("%.2f", @client_data_instance.amount)
-              .medium-12.line-item-controls
-                %a.line-item-control#line-item-duplicate Duplicate
-                %a.line-item-control#line-item-remove Remove
-
-            .row.column.line-item-block
-              .medium-12.callout.primary.column.medium-centered
-                .row
-                  .medium-12.column
-                    %h5
-                      %b Line Item 2
-                .row
-                  .medium-6.column
-                    .detail-wrapper
-                      .detail-edit
-                        = f.input :vendor,
-                          input_html: { class: "js-selectize required", data: { initial: JSON.generate(vendor_options("Treutel LLC")) }, value: "Treutel LLC" }
-                      .detail-display
-                        %label.detail-element Vendor
-                        %span.detail-value Treutel LLC
-                    .detail-wrapper
-                      .detail-edit
-                        = f.input :building_number,
-                          input_html: { class: "js-selectize required", data: { initial: JSON.generate(building_options) }}
-                      .detail-display
-                        %label.detail-element Building number
-                        %span.detail-value{id: 'building_number-' + @client_data_instance.id.to_s }
-                          = @client_data_instance.building_number
-                  .medium-6.column
-                    .detail-wrapper
-                      .detail-edit
-                        = f.input :cl_number, input_html: { class: "missing-cl-number" }
-                      .detail-display
-                        %label.detail-element CL number
-                        %span.detail-value.missing-cl-number
-                          Missing CL
-                    .primary.callout.detail-wrapper.no-margin-bottom.no-padding-bottom
-                      .detail-edit
-                        = f.input :amount, as: :currency, input_html: { value: '400.00' }
-                      .detail-display
-                        .row
-                          .medium-4.column
-                            %strong Total
-                          .medium-8.column
-                            %span
-                              %h4
-                                %b.detail-value 400.00
-              .medium-12.line-item-controls
-                %a.line-item-control#line-item-duplicate Duplicate
-                %a.line-item-control#line-item-remove Remove
-              .medium-12.line-item-add
-                %a.button +
-                %a.add-text Add Line Item
+          
