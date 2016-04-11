@@ -36,6 +36,9 @@ GEM
       activejob (= 4.2.5.2)
       mail (~> 2.5, >= 2.5.4)
       rails-dom-testing (~> 1.0, >= 1.0.5)
+    actionmailer-text (0.1.1)
+      actionmailer
+      htmlentities
     actionpack (4.2.5.2)
       actionview (= 4.2.5.2)
       activesupport (= 4.2.5.2)
@@ -251,6 +254,7 @@ GEM
     html_pipeline_rails (0.1.0)
       github-markdown
       html-pipeline
+    htmlentities (4.3.4)
     i18n (0.7.0)
     inherited_resources (1.6.0)
       actionpack (>= 3.2, < 5)
@@ -519,6 +523,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  actionmailer-text
   active_model_serializers
   activeadmin!
   activeadmin_hstore_editor

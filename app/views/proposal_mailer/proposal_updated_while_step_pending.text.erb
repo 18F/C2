@@ -1,9 +1,0 @@
-<%= t("mailer.proposal_mailer.proposal_updated_while_step_pending.header") %>
-<%= t("mailer.proposal_mailer.proposal_updated_while_step_pending.subheader") %>
-
-<%= @comment.comment_text %>
-
-<%= @step.action_name %>
-<%= generate_approve_url(@step) %>
-
-<%= t("mailer.footer", feedback_url: feedback_url) %>
