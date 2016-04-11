@@ -1,4 +1,8 @@
 C2::Application.routes.draw do
+  use_doorkeeper do
+    controllers :applications => 'oauth/applications'
+  end
+
   ActiveAdmin.routes(self)
   root to: "home#index"
   get "/error" => "home#error"
@@ -26,6 +30,9 @@ C2::Application.routes.draw do
       end
 
       resources :users, only: [:index]
+    end
+    scope :v2 do
+      resources :proposals
     end
   end
 

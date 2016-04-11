@@ -160,6 +160,8 @@ GEM
       delayed_job (>= 3.0, < 5)
     diff-lcs (1.2.5)
     docile (1.1.5)
+    doorkeeper (3.1.0)
+      railties (>= 3.2)
     dotenv (2.1.0)
     dotenv-rails (2.1.0)
       dotenv (= 2.1.0)
@@ -541,6 +543,7 @@ DEPENDENCIES
   daemons
   database_cleaner
   delayed_job_active_record
+  doorkeeper
   dotenv-rails
   draper
   elasticsearch-dsl
