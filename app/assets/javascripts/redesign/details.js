@@ -139,6 +139,7 @@ detailsApp.getPrintableValue = function(el) {
 
 detailsApp.postActionSaveHook = function(){
   $(".request-detail-edit-button").click();
+  this.showNotification('You updates have been saved.');
 }
 
 detailsApp.updateActionBar = function(){
@@ -147,16 +148,15 @@ detailsApp.updateActionBar = function(){
 };
 
 detailsApp.defaultActionBar = function(){
-  this.showNotification('You updates have been saved.');
   $(".action-bar-wrapper .save-button a").attr('disabled', true);
   $(".action-bar-wrapper").removeClass("edit-actions");
 };
 
 detailsApp.showNotification = function(message){
-  $('action-bar-status .action-status-value').text(message);
-  $('action-bar-status').addClass('show');
+  $('.action-bar-status .action-status-value').text(message);
+  $('.action-bar-status').fadeIn();
   window.setTimeout(function(){
-    $('action-bar-status').removeClass('show');
+    $('.action-bar-status').fadeOut();
   }, 3000);
 }
 
