@@ -2,6 +2,8 @@ module Api
   class ProposalsController < BaseController
     rescue_from ActiveRecord::RecordNotFound, with: :proposal_not_found_error
 
+    before_action -> { authorize proposal }, only: [:show]
+
     def show
       render json: ProposalSerializer.new(proposal).to_json
     end

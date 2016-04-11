@@ -30,7 +30,7 @@ class ApplicationController < ActionController::Base
   # We are overriding this method to account for ExceptionPolicies
   def authorize(record, query = nil, user = nil)
     check_disabled_client
-    user ||= @current_user
+    user ||= current_user
     policy = ::PolicyFinder.policy_for(user, record)
 
     # use the action as a default permission

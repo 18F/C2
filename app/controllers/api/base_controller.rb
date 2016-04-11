@@ -28,5 +28,9 @@ module Api
         render json: { error: "Client disabled" }, status: 403
       end
     end
+
+    def auth_errors(exception)
+      render json: { error: exception.message }, status: 403
+    end
   end
 end
