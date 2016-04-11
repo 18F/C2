@@ -1,9 +1,7 @@
 ul#request-actions{
   max-width: 1120px;
   margin: auto;
-  height: 70px;
   vertical-align: middle;
-  padding-top: 20px;
   li{
     margin: 0px;
   }
@@ -35,18 +33,34 @@ ul#request-actions{
   color: $primary-color;
 }
 
-.action-bar-wrapper{
+.action-bar-template{
   position: fixed;
   width: 100%;
   margin: auto;
-  bottom: 0px;
   left: 0px;
   right: 0px;
   z-index: 10;
-  background: #e8e8e8;
-  box-shadow: 0px -10px 50px -30px black;
   -webkit-transition: bottom .3s;
   transition: bottom .3s;
+}
+
+$action-bar-wrapper-height: 70px;
+
+.action-bar-status{
+  .status-bar{
+    padding-top: 7px;
+  }
+  height: 40px;
+  background: #589D42;
+  bottom:  $action-bar-wrapper-height;
+  color: white;
+  font-weight: bold;
+}
+
+.action-bar-wrapper{
+  height: $action-bar-wrapper-height;
+  bottom:  0px;
+  background: #e8e8e8;
   &.edit-actions{
     bottom: 0px;
     background: white;
