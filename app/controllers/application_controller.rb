@@ -101,6 +101,8 @@ class ApplicationController < ActionController::Base
       User.find ENV["FORCE_USER_ID"]
     elsif session[:user] && session[:user]["email"]
       User.find_or_create_by(email_address: session[:user]["email"])
+    elsif doorkeeper_token
+      doorkeeper_token.application.owner
     end
   end
 

@@ -8,6 +8,7 @@ class ProposalSerializer < ActiveModel::Serializer
     :updated_at
   )
 
+  has_one :client_data
   has_one :requester
   has_many :individual_steps, root: :steps
 

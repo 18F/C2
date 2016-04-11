@@ -79,7 +79,7 @@ module Searchable
         nprocs: ENV.fetch("NPROCS", 1),
         batch_size: ENV.fetch("BATCH", 100),
         force: true,
-        verbose: false
+        verbose: ENV.fetch("ES_DEBUG", false)
       )
     end
   end
