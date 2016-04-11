@@ -1,8 +1,5 @@
 en:
   mailer:
-    updated_subheader:
-      "%{public_id} submitted by %{requester_name} is %{proposal_status}. It
-      has been updated as follows:"
     updated_subheader_html:
       "<strong>%{public_id}</strong> submitted by
       <strong>%{requester_name}</strong> is
@@ -18,11 +15,8 @@ en:
     view_or_modify_request_cta: "View or modify request"
     view_request_cta: "View request details"
     footer_html:
-      "Have <a href='%{feedback_url}'>feedback</a>? We'd love to hear from you."
-    footer:
-      "Have feedback? We'd love to hear from you at %{feedback_url}"
+      "Have <a href=\"%{feedback_url}\">feedback</a>? We'd love to hear from you."
     proposal_status_html: "<strong>Request Status: <i>%{proposal_status}</i></strong>"
-    proposal_status: "Request Status: %{proposal_status}"
     last_attachment_detail:
       one:
         "<strong>1 Attachment</strong> <em>Uploaded by
@@ -40,7 +34,6 @@ en:
       new_attachment_notification:
         header_html:
           "<span class='name-color'>%{user_name}</span> added an attachment."
-        header: "%{user_name} added an attachment."
         activity_description: "Attachment added by %{user_name}"
         attachment_cta: "%{attachment_name}"
     step_mailer:
@@ -49,17 +42,12 @@ en:
           "<span class='name-color'>%{full_name}</span> has approved your request.
           C2 has sent it to the next person."
       step_reply_received:
-        body:
-          "%{full_name} approved your request. C2 has sent it to the next person."
         body_html:
           "<span class='name-color'>%{full_name}</span> approved your request.
           C2 has sent it to the next person."
         details: "Please see below for more details."
       step_user_removed:
         header: "You have been removed from this purchase request."
-        subheader:
-          "No further action is required on %{proposal_public_id}
-          %{proposal_name} submitted by %{full_name}."
         subheader_html:
           "No further action is required on <strong>%{proposal_public_id}
           %{proposal_name}</strong> submitted by <strong>%{full_name}</strong>."
@@ -67,14 +55,12 @@ en:
         header_html:
           "<strong>%{requester_name}</strong> has submitted a new request for
           you to %{step_type_noun}."
-        header: "A new request submitted by %{requester_name} needs your %{step_type_noun}."
     proposal_mailer:
       emergency_proposal_created_confirmation:
         header: "Your emergency request has been completed."
         subheader: "If the actual purchase price changes, please update the request in C2."
       proposal_created_confirmation:
         header_html: "Your new request <span class='name-color'>%{proposal_name}</span> for <span class='name-color'>%{amount}</span> has been submitted!"
-        header: "Your new request %{proposal_name} for ${amount} has been submitted!"
         approver_subheader:
           "Based on what you submitted, here's how we're routing your request:"
         subheader:
@@ -91,7 +77,6 @@ en:
         header: "A purchase request awaiting your approval has been modified."
         subheader: "Please review the request and the changes."
       proposal_updated_needs_re_review:
-        header: "%{proposal_name} has been updated by %{modifier_name}."
         header_html: "<span class='name-color'>%{proposal_name}</span> has been updated by <span class='name-color'>%{modifier_name}</span>."
         subheader:
           "Because it was already completed, and needs to be reapproved, C2 is
@@ -104,10 +89,8 @@ en:
         subheader: "%{public_id} was submitted by %{full_name}"
       cancelation_notification:
         header_html: "This purchase request has been canceled by <strong>%{name}</strong>."
-        header: "This purchase request has been canceled by %{name}."
         subsection: "Canceled by %{name}."
         subheader_html: "<strong>%{public_id}</strong> was submitted by <strong>%{full_name}</strong>"
-        subheader: "%{public_id} was submitted by %{full_name}"
         reason: "Reason for cancelation: %{reason}"
       fiscal_cancelation_notification:
         header: "This purchase request has been canceled."
@@ -120,10 +103,8 @@ en:
         hello: "Hi, %{full_name}"
         header: "Welcome. You've been added as a user to the C2 purchase approval platform."
         para1: "With C2, you won't need to  track down approvers, find unsorted emails from all over your inbox, or put together spreadsheets. C2 processes approvals securely and automatically, and it provides you the information you need to make the most of your budget."
-        para2_html: "By now you should have been trained on how it works, but if you have any questions, start with our <a href='%{help_url}'>Help page</a>."
-        para2: "By now you should have been trained on how it works, but if you have any questions, start with our Help Page: %{help_url} ."
-        para3_html: "We are continually working to improve C2, and where we focus our work depends in large part on what we hear from our users. So if you find a bug, have a recommendation, or want to provide other feedback, don't hesitate to let us know. <a href='%{feedback_url}'>We'd love to hear from you</a>!"
-        para3: "We are continually working to improve C2, and where we focus our work depends in large part on what we hear from our users. So if you find a bug, have a recommendation, or want to provide other feedback, don't hesitate to let us know. We'd love to hear from you via our feedback page: %{feedback_url} ."
+        para2_html: "By now you should have been trained on how it works, but if you have any questions, start with our <a href=\"%{help_url}\">Help page</a>."
+        para3_html: "We are continually working to improve C2, and where we focus our work depends in large part on what we hear from our users. So if you find a bug, have a recommendation, or want to provide other feedback, don't hesitate to let us know. <a href=\"%{feedback_url}\">We'd love to hear from you</a>!"
         signature: "- The C2 team at 18F"
     comment_mailer:
       comment_added_notification:
@@ -139,6 +120,5 @@ en:
         body_html:
          "No further action is required on <strong>%{public_id}</strong>
          submitted by <strong>%{full_name}</strong>"
-        body: "No further action is required on %{public_id} submitted by %{full_name}"
       proposal_complete:
         header: "This request has been completed."

@@ -61,6 +61,7 @@ gem "turbolinks"
 gem "uglifier"
 gem "validates_email_format_of"
 gem "workflow"
+gem "actionmailer-text"
 
 group :test, :development do
   gem "bullet", require: false # use BULLET_ENABLED=true
