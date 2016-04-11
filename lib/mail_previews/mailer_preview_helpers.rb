@@ -12,7 +12,7 @@ module MailerPreviewHelpers
   end
 
   def comment
-    Comment.last
+    Comment.normal_comments.last
   end
 
   def email

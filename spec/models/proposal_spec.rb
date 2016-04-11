@@ -444,4 +444,14 @@ describe Proposal do
       expect(proposal.status).to eq 'completed'
     end
   end
+
+  describe "searchable callbacks" do
+    it "should reindex when observer is added without comment" do
+      Proposal.clear_index_tracking
+      proposal = create(:proposal)
+      observation = create(:observation, proposal: proposal)
+
+      expect(Proposal.reindexed.count).to eq(2)
+    end
+  end
 end

@@ -16,7 +16,11 @@ module Ncr
     private
 
     def budget_approver?
-      work_order.budget_approvers.include?(current_user)
+      work_order.budget_approvers.include?(current_user) || shares_budget_approver_delegator?
+    end
+
+    def shares_budget_approver_delegator?
+      Ncr::WorkOrder.all_system_approvers.any? { |delegator| delegator.delegates_to?(current_user) }
     end
 
     def current_user

@@ -11,6 +11,17 @@ describe ProposalUpdateRecorder do
         expect(comment).to be_update_comment
         expect(comment.comment_text).to eq("*Description* was changed from #{description} to *empty*")
       end
+
+      it "adds a changed comment for nil value" do
+        cl_number = "CL2074950"
+        work_order = create(:ncr_work_order, cl_number: cl_number)
+
+        work_order.cl_number = nil
+        comment = ProposalUpdateRecorder.new(work_order, work_order.requester).run
+
+        expect(comment).to be_update_comment
+        expect(comment.comment_text).to eq("*CL number* was changed from #{cl_number} to *empty*")
+      end
     end
 
     context "approving official value changed" do

@@ -5,19 +5,25 @@ module Searchable
     include Elasticsearch::Model
 
     after_commit on: [:create] do
-      unless Rails.env.test?
+      if Rails.env.test?
+        self.class.reindexed << self.id
+      else
         delay.reindex
       end
     end
 
     after_commit on: [:update] do
-      unless Rails.env.test?
+      if Rails.env.test?
+        self.class.reindexed << self.id
+      else
         delay.reindex
       end
     end
 
     after_commit on: [:destroy] do
-      unless Rails.env.test?
+      if Rails.env.test?
+        self.class.removed_from_index << self.id
+      else
         delay.remove_from_index
       end
     end
@@ -28,6 +34,19 @@ module Searchable
 
     def remove_from_index
       __elasticsearch__.destroy_document
+    end
+
+    def self.reindexed
+      @@reindexed ||= []
+    end
+
+    def self.removed_from_index
+      @@removed_from_index ||= []
+    end
+
+    def self.clear_index_tracking
+      @@reindexed = []
+      @@removed_from_index = []
     end
 
     def self.rebuild_index
