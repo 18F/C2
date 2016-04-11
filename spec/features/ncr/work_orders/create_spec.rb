@@ -37,7 +37,7 @@ feature "Creating an NCR work order", :js do
 
       visit new_ncr_work_order_path
       fill_in "Project title", with: "test"
-      choose "BA60"
+      choose "BA61"
       fill_in_selectized("ncr_work_order_vendor", "ACME")
       fill_in 'Amount', with: 123.45
       click_on "Submit for approval"
