@@ -51,7 +51,7 @@ class NcrDispatcher < Dispatcher
   end
 
   def notify_observers(needs_review, comment)
-    proposal.only_observers.each do |observer|
+    only_observers.each do |observer|
       unless user_is_modifier?(observer, comment.user)
         if observer.role_on(proposal).observer_only?
           if needs_review == true
