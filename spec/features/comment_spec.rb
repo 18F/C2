@@ -1,21 +1,13 @@
 describe "commenting" do
   it "saves the comment" do
     proposal = create_and_visit_proposal
+    comment_text = "this is a great comment"
 
-    submit_comment
-    expect(current_path).to eq("/proposals/#{proposal.id}")
+    submit_comment(comment_text)
 
-    proposal.reload
-    expect(proposal.comments.map(&:comment_text)).to eq(['foo'])
-  end
-
-  it "warns if the comment body is empty" do
-    proposal = create_and_visit_proposal
-
-    submit_comment("")
-
-    expect(current_path).to eq("/proposals/#{proposal.id}")
-    expect(page).to have_content("can't be blank")
+    expect(current_path).to eq(proposal_path(proposal))
+    expect(page).to have_content(comment_text)
+    expect(page).to have_content("You successfully added a comment")
   end
 
   it "disables attachments if none is selected", js: true do
@@ -26,16 +18,6 @@ describe "commenting" do
     expect(find("#add_a_comment").disabled?).to be(false)
   end
 
-  it "sends an email" do
-    proposal = create_and_visit_proposal
-
-    submit_comment
-    expect(email_recipients).to eq([
-      proposal.approvers.first.email_address,
-      proposal.approvers.second.email_address
-    ].sort)
-  end
-
   describe "when user is not yet an observer" do
     it "adds current user to the observers list" do
       proposal = create(:proposal, :with_parallel_approvers)
@@ -43,7 +25,7 @@ describe "commenting" do
       user = create(:user)
       approver.add_delegate(user) # so user can see proposal
       login_as(user)
-      visit "/proposals/#{proposal.id}"
+      visit proposal_path(proposal)
 
       expect(proposal.observers).to_not include(user)
       submit_comment
@@ -51,16 +33,18 @@ describe "commenting" do
       expect(proposal.observers).to include(user)
     end
   end
-end
 
-def create_and_visit_proposal
-  proposal = create(:proposal, :with_parallel_approvers)
-  login_as(proposal.requester)
-  visit "/proposals/#{proposal.id}"
-  proposal
-end
+  private
 
-def submit_comment(text = "foo")
-  fill_in "comment[comment_text]", with: text
-  click_on "Send a Comment"
+  def create_and_visit_proposal
+    proposal = create(:proposal, :with_parallel_approvers)
+    login_as(proposal.requester)
+    visit proposal_path(proposal)
+    proposal
+  end
+
+  def submit_comment(text = "foo")
+    fill_in "comment[comment_text]", with: text
+    click_on "Send a Comment"
+  end
 end
