@@ -40,11 +40,33 @@ ul#request-actions{
   left: 0px;
   right: 0px;
   z-index: 10;
-  -webkit-transition: bottom .3s;
-  transition: bottom .3s;
 }
 
-$action-bar-wrapper-height: 110px;
+$action-bar-wrapper-height-small: 60px;
+.action-bar-status{
+  bottom:  $action-bar-wrapper-height-small;
+}
+
+.action-bar-wrapper{
+  height: $action-bar-wrapper-height-small;
+  padding-top: 10px;
+}
+
+@media screen and ( min-height: 800px ){
+  $action-bar-wrapper-height: 110px;
+  .action-bar-status{
+    .status-bar{
+      padding-top: 7px;
+    }
+    bottom:  $action-bar-wrapper-height;
+  }
+
+  .action-bar-wrapper{
+    height: $action-bar-wrapper-height;
+    padding-top: 20px;
+  }
+}
+
 
 .action-bar-status{
   .status-bar{
@@ -52,14 +74,11 @@ $action-bar-wrapper-height: 110px;
   }
   height: 40px;
   background: #589D42;
-  bottom:  $action-bar-wrapper-height;
   color: white;
   font-weight: bold;
 }
 
 .action-bar-wrapper{
-  padding-top: 20px;
-  height: $action-bar-wrapper-height;
   bottom:  0px;
   background: #e8e8e8;
   &.edit-actions{
@@ -67,3 +86,4 @@ $action-bar-wrapper-height: 110px;
     background: white;
   }
 }
+
