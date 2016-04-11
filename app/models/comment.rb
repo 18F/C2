@@ -46,17 +46,4 @@ class Comment < ActiveRecord::Base
   def add_user_as_observer
     proposal.add_observer(user)
   end
-
-  # All of the users who should be notified when a comment is created
-  # This is basically Proposal.users _minus_ future approvers
-  def listeners
-    users_to_notify = Set.new
-    users_to_notify += proposal.currently_awaiting_step_users
-    users_to_notify += proposal.individual_steps.completed.map(&:user)
-    users_to_notify += proposal.observers
-    users_to_notify << proposal.requester
-    # Creator of comment doesn't need to be notified
-    users_to_notify.delete(user)
-    users_to_notify
-  end
 end

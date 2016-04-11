@@ -6,7 +6,7 @@ class RolePicker
     @proposal = proposal
   end
 
-  def active_observer?
+  def observer_only?
     observer? && !active_step_user? && !requester?
   end
 
