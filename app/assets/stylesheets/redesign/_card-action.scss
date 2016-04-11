@@ -44,7 +44,7 @@ ul#request-actions{
   transition: bottom .3s;
 }
 
-$action-bar-wrapper-height: 70px;
+$action-bar-wrapper-height: 110px;
 
 .action-bar-status{
   .status-bar{
@@ -58,6 +58,7 @@ $action-bar-wrapper-height: 70px;
 }
 
 .action-bar-wrapper{
+  padding-top: 20px;
   height: $action-bar-wrapper-height;
   bottom:  0px;
   background: #e8e8e8;
