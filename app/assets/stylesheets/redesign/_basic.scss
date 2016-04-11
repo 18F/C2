@@ -52,6 +52,10 @@ input.button.secondary
   }
 }
 
+a.status-toggle-all{
+  border-radius: 50px;
+}
+
 input[type="submit"].button{
   display: inline-block;
   text-align: center;
@@ -62,7 +66,7 @@ input[type="submit"].button{
   transition: background-color 0.25s ease-out, color 0.25s ease-out;
   vertical-align: middle;
   border: 1px solid transparent;
-  border-radius: 50px;
+  border-radius: 4px;
   padding: 0.45em 1.6em;
   margin: 0 0 1rem 0;
   font-size: 0.8rem;

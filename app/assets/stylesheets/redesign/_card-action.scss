@@ -5,9 +5,6 @@ ul#request-actions{
   li{
     margin: 0px;
   }
-  .action-edit{
-    display: none;
-  }
   .save-button .button{
     background: #8ecc76;
   }
@@ -17,12 +14,6 @@ ul#request-actions{
 }
 .edit-actions{
   ul#request-actions{
-    .action-edit{
-      display: inline-block;
-    }
-    .action-default{
-      display: none;
-    } 
     .cancel-action{
       display: none;
     }
@@ -34,6 +25,7 @@ ul#request-actions{
 }
 
 .action-bar-template{
+  border-top: 1px solid #e0e2e3;
   position: fixed;
   width: 100%;
   margin: auto;
@@ -44,7 +36,11 @@ ul#request-actions{
 
 $action-bar-wrapper-height-small: 60px;
 .action-bar-status{
+  display: none;
   bottom:  $action-bar-wrapper-height-small;
+  &.show{
+    display: block;
+  }
 }
 
 .action-bar-wrapper{
@@ -80,10 +76,16 @@ $action-bar-wrapper-height-small: 60px;
 
 .action-bar-wrapper{
   bottom:  0px;
-  background: #e8e8e8;
+  background: #f2f4f5;
+  > div{
+    opacity: .7;
+  }
   &.edit-actions{
+    > div{
+      opacity: 1;
+    }
     bottom: 0px;
-    background: white;
+    background: #f2f4f5;
   }
 }
 

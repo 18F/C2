@@ -42,8 +42,12 @@ detailsApp.setupEvents = function(){
   });
   $(".save-button a").on("click", function(e){
     e.preventDefault();
-    self.generateCardObjects();
-    self.defaultActionBar();
+    var valid = true;
+    if(valid){
+      self.postActionSaveHook();
+      self.generateCardObjects();
+      self.defaultActionBar();
+    }
   });
 };
 
@@ -133,13 +137,28 @@ detailsApp.getPrintableValue = function(el) {
   }
 };
 
+detailsApp.postActionSaveHook = function(){
+  $(".request-detail-edit-button").click();
+}
+
 detailsApp.updateActionBar = function(){
   $(".action-bar-wrapper").addClass("edit-actions");
+  $(".action-bar-wrapper .save-button a").attr('disabled', false);
 };
 
 detailsApp.defaultActionBar = function(){
+  this.showNotification('You updates have been saved.');
+  $(".action-bar-wrapper .save-button a").attr('disabled', true);
   $(".action-bar-wrapper").removeClass("edit-actions");
 };
+
+detailsApp.showNotification = function(message){
+  $('action-bar-status .action-status-value').text(message);
+  $('action-bar-status').addClass('show');
+  window.setTimeout(function(){
+    $('action-bar-status').removeClass('show');
+  }, 3000);
+}
 
 detailsApp.generateCardObjects = function(){
   var self = this;
@@ -173,7 +192,6 @@ detailsApp.getCardObject = function(guidValue){
   });
 
   var deepObjectCopy = jQuery.extend(true, {}, formNameObject);
-
   return deepObjectCopy;
 };
 
@@ -200,6 +218,8 @@ detailsApp.setupCommentController = function(){
   $("form#new_comment").submit(function() {
       var valuesToSubmit = $(this).serialize();
       var value = $("form#new_comment textarea").val();
+      var comment = "<div class='column medium-12 row status-expanded status-feed-wrapper status-index-0 text-left'><div class='medium-table-row medium-12 status-feed-item status-attachment-block no-margin-bottom'><div class='hide-for-small-only medium-table-cell medium-activity-icon-col text-center status-feed-timeline background-color-column'><div class='dot-circle'></div></div><div class='medium-table-cell medium-auto-column status-feed-content'><div class='title-block'><span class='status-action'>Comment created by " + current_user + "</span><span class='time-from'><span title='Apr 4, 2016 at  3:03pm'>less than a minute ago</span></span></div><div class='item-block'>" + value + "</div></div></div></div>";
+      $comments.prepend(comment);
       $("form#new_comment textarea").val("");
       $.ajax({
           type: "POST",
@@ -211,8 +231,6 @@ detailsApp.setupCommentController = function(){
       }).fail(function(json){
         console.log("failed", valuesToSubmit);
       }).always(function(json){
-        var comment = "<div class='column medium-12 row status-expanded status-feed-wrapper status-index-0 text-left'><div class='medium-table-row medium-12 status-feed-item status-attachment-block no-margin-bottom'><div class='hide-for-small-only medium-table-cell medium-activity-icon-col text-center status-feed-timeline background-color-column'><div class='dot-circle'></div></div><div class='medium-table-cell medium-auto-column status-feed-content'><div class='title-block'><span class='status-action'>Comment created by " + current_user + "</span><span class='time-from'><span title='Apr 4, 2016 at  3:03pm'>less than a minute ago</span></span></div><div class='item-block'>" + value + "</div></div></div></div>";
-        $comments.prepend(comment);
       });
       return false; // prevents normal behaviour
   });

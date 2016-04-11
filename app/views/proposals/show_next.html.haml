@@ -12,7 +12,7 @@
     .medium-12.column.wrap-hard
       = render partial: "proposals/details/summary", locals: { proposal: @proposal }
 
-  .row
+  .row.footer-buffer
     .medium-6.column
       = render partial: "proposals/details/approvals", locals: { proposal: @proposal }
       = render partial: "proposals/details/activity", locals: { proposal: @proposal, history: @history }
