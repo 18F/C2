@@ -1,5 +1,5 @@
-describe "commenting" do
-  it "saves the comment" do
+feature "commenting" do
+  scenario "saves the comment" do
     proposal = create_and_visit_proposal
     comment_text = "this is a great comment"
 
@@ -10,7 +10,7 @@ describe "commenting" do
     expect(page).to have_content("You successfully added a comment")
   end
 
-  it "disables attachments if none is selected", js: true do
+  scenario "disables attachments if none is selected", js: true do
     create_and_visit_proposal
 
     expect(find("#add_a_comment").disabled?).to be(true)
@@ -18,8 +18,8 @@ describe "commenting" do
     expect(find("#add_a_comment").disabled?).to be(false)
   end
 
-  describe "when user is not yet an observer" do
-    it "adds current user to the observers list" do
+  context "when user is not yet an observer" do
+    scenario "adds current user to the observers list" do
       proposal = create(:proposal, :with_parallel_approvers)
       approver = proposal.approvers.first
       user = create(:user)
