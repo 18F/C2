@@ -57,13 +57,18 @@ class ProposalsController < ApplicationController
   end
 
   def complete
-    step = proposal.existing_or_delegated_actionable_step_for(current_user)
-    if step
-      complete_step(step)
-    else
-      flash[:alert] = "There are no actionable steps available for you."
+    respond_to do |format|
+      format.js
+      format.html{
+        step = proposal.existing_or_delegated_actionable_step_for(current_user)
+        if step
+          complete_step(step)
+        else
+          flash[:alert] = "There are no actionable steps available for you."
+        end
+        redirect_to proposal
+      }
     end
-    redirect_to proposal
   end
 
   def query
