@@ -4,4 +4,4 @@ user = @observer
 observation = @observation
 proposal = @proposal 
 %>
-var observer_row = "<%= escape_javascript (render partial: "proposals/details/observer_row", locals: { user: user, role_str: true, observation: observation, proposal: proposal }) %>";
+var observer_row = "<%= escape_javascript (render partial: "proposals/details/observer_row", locals: { user: user, role_str: false, observation: observation, proposal: proposal }) %>";
