@@ -110,7 +110,7 @@ module Gsa18f
       users.first
     end
 
-    def self.permitted_params(params, procurement_instance)
+    def self.permitted_params(params, _procurement_instance)
       permitted = Gsa18f::ProcurementFields.new.relevant(params[:gsa18f_procurement][:recurring])
       params.require(:gsa18f_procurement).permit(*permitted)
     end
