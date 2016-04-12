@@ -12,7 +12,7 @@
                 = user.full_name
                 = "(#{role_str})" if role_str
                 - if observation && policy(observation).can_destroy?
-                  = button_to "Remove", proposal_observation_path(proposal, observation), method: :delete, data: {confirm: "Are you sure?"}
+                  = button_to "", proposal_observation_path(proposal, observation), method: :delete, data: {confirm: "Are you sure?"}
 
           - if policy(Observation.new(proposal: proposal)).can_create?
             = form_for [proposal, Observation.new] do |f|
