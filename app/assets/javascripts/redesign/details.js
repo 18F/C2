@@ -198,7 +198,7 @@ detailsApp.getCardObject = function(guidValue){
 
 detailsApp.setupObserverController = function(){
   var $observers = $(".observer-list");
-  var form = "<form class='button_to remove_ajax'><input data-confirm='Are you sure?' type='submit' value='Remove' /></form>"
+  var form = "<form class='button_to remove_ajax'><input data-confirm='Are you sure?' type='submit' value='' /></form>"
 
   $("form#new_observation").submit(function(){
     var valuesToSubmit = $(this).serialize();
