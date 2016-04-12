@@ -139,6 +139,7 @@ detailsApp.getPrintableValue = function(el) {
 
 detailsApp.postActionSaveHook = function(){
   $(".request-detail-edit-button").click();
+  $('#request-details-card [type="submit"]').click();
   this.showNotification('You updates have been saved.');
 }
 
