@@ -107,10 +107,10 @@ module ClientDataMixin
     def self.permitted_params(_params, _client_data_instance)
     end
 
-    def setup_and_email_subscribers(comment)
+    def setup_and_email_subscribers(_comment)
     end
 
-    def normalize_input(current_user)
+    def normalize_input(_current_user)
     end
   end
 end
