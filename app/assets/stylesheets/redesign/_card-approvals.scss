@@ -3,13 +3,13 @@
   width: 35px;
 }
 
-.step-row:last-child .step-status-wrapper:before {
-  display: none;
-}
 
 .step-row{
   position: relative;
 
+  &:last-child .step-status-wrapper:before {
+    display: none;
+  }
   &.step-status-completed .step-status-wrapper:before{
     width: 2px;
     content: "";
