@@ -2,7 +2,30 @@ module Api
   class ProposalsController < BaseController
     rescue_from ActiveRecord::RecordNotFound, with: :proposal_not_found_error
 
-    before_action -> { authorize proposal }, only: [:show]
+    before_action -> { authorize proposal }, only: [:update, :show]
+
+    def create
+      if proposal = create_proposal
+        DispatchFinder.run(proposal).deliver_new_proposal_emails
+        render json: ProposalSerializer.new(proposal).to_json
+      else
+        render json: {
+          errors: errors,
+          message: "Failed to create proposal"
+        }, status: 400
+      end
+    end
+
+    def update
+      if update_proposal
+        render json: ProposalSerializer.new(proposal).to_json
+      else
+        render json: {
+          errors: errors,
+          message: "Failed to update proposal"
+        }, status: 400
+      end
+    end
 
     def show
       render json: ProposalSerializer.new(proposal).to_json
@@ -20,6 +43,46 @@ module Api
  
     private
 
+    def create_proposal
+      @client_data_instance = create_client_data_instance
+      @client_data_instance.build_proposal(requester: current_user)
+      if errors.empty?
+        proposal = ClientDataCreator.new(@client_data_instance, current_user, attachment_params).run
+        @client_data_instance.initialize_steps
+        proposal
+      else
+        false
+      end
+    end
+
+    def update_client_data_instance
+      @client_data_instance = proposal.client_data
+      client_model_class = @client_data_instance.class
+      @client_data_instance.assign_attributes(client_model_class.permitted_params(params, @client_data_instance))
+    end
+
+    def update_proposal
+      update_client_data_instance
+      if errors.any?
+        false
+      else
+        comment = ProposalUpdateRecorder.new(@client_data_instance, current_user).run
+        @client_data_instance.save
+        @client_data_instance.setup_and_email_subscribers(comment)
+        proposal.reload
+      end
+    end
+
+    def create_client_data_instance
+      client_model_class = current_user.client_model
+      client_model_class.new(client_model_class.permitted_params(params, nil))
+    end
+
+    def errors
+      @client_data_instance.validate
+      @client_data_instance.errors.full_messages
+    end
+
     def proposal_not_found_error
       render json: {
         message: "Proposal not found",
@@ -29,6 +92,10 @@ module Api
 
     def proposal
       Proposal.find(params[:id])
+    end
+
+    def attachment_params
+      params.permit(attachments: [])[:attachments] || []
     end
   end
 end

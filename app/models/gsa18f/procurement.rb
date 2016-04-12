@@ -52,6 +52,10 @@ module Gsa18f
       Gsa18f::ProcurementFields.new(self).display
     end
 
+    def initialize_steps
+      add_steps
+    end
+
     def add_steps
       steps = [
         Steps::Approval.new(user: User.for_email(Gsa18f::Procurement.approver_email)),
@@ -104,6 +108,11 @@ module Gsa18f
       end
 
       users.first
+    end
+
+    def self.permitted_params(params, procurement_instance)
+      permitted = Gsa18f::ProcurementFields.new.relevant(params[:gsa18f_procurement][:recurring])
+      params.require(:gsa18f_procurement).permit(*permitted)
     end
   end
 end

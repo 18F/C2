@@ -5,7 +5,8 @@ class ProposalSerializer < ActiveModel::Serializer
     :created_at,
     :id,
     :status,
-    :updated_at
+    :updated_at,
+    :client_data_type
   )
 
   has_one :client_data

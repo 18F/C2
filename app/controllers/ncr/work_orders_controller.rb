@@ -8,22 +8,10 @@ module Ncr
       super
     end
 
-    def create
-      Ncr::WorkOrderValueNormalizer.new(work_order).run
-      super
-    end
-
     def edit
       if proposal.completed?
         flash.now[:warning] = "You are about to modify a fully approved request. Changes will be logged and sent to approvers, and this request may require re-approval, depending on the change."
       end
-
-      super
-    end
-
-    def update
-      work_order.assign_attributes(permitted_params)
-      Ncr::WorkOrderValueNormalizer.new(work_order).run
 
       super
     end
@@ -51,10 +39,7 @@ module Ncr
     end
 
     def setup_and_email_approvers(comment)
-      Ncr::WorkOrderUpdater.new(
-        work_order: work_order,
-        update_comment: comment
-      ).run
+      work_order.setup_and_email_subscribers(comment)
     end
 
     def model_class
@@ -62,17 +47,7 @@ module Ncr
     end
 
     def permitted_params
-      fields = work_order_params
-
-      if work_order
-        fields.delete(:emergency) # emergency field cannot be edited
-      end
-
-      params.require(:ncr_work_order).permit(*fields)
-    end
-
-    def work_order_params
-      Ncr::WorkOrderFields.new.relevant(params[:ncr_work_order][:expense_type])
+      Ncr::WorkOrder.permitted_params(params, work_order)
     end
 
     def add_steps

@@ -61,6 +61,17 @@ module Foo
       project_title
     end
 
+    def initialize_steps
+      steps = [
+        Steps::Approval.new(user: User.for_email('some-approver-mailbox@example.com')),
+        Steps::Purchase.new(user: User.for_email('some-purchaser-mailbox@example.com')),
+      ]
+      proposal.add_initial_steps(steps)
+    end
+
+    def self.permitted_params(params, foo_spending_request_instance)
+      params.require(:foo_spending_request).permit(:project_title, :amount)
+    end
   end
 end
 ```
@@ -117,12 +128,7 @@ module Foo
     end
 
     def permitted_params
-      fields = spending_request_params
-      params.require(:foo_spending_request).permit(*fields)
-    end
-
-    def spending_request_params
-      Foo::SpendingRequest.relevant_fields()
+      Foo::SpendingRequest.permitted_params(params, spending_request)
     end
   end
 end

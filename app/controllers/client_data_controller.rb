@@ -43,6 +43,8 @@ class ClientDataController < ApplicationController
   end
 
   def update_or_notify_of_no_changes
+    @client_data_instance.assign_attributes(filtered_params)
+    @client_data_instance.normalize_input
     if attribute_changes?
       comment = record_changes
       @client_data_instance.save
@@ -73,6 +75,7 @@ class ClientDataController < ApplicationController
 
   def build_client_data_instance
     @client_data_instance = model_class.new(filtered_params)
+    @client_data_instance.normalize_input
     @client_data_instance.build_proposal(requester: current_user)
   end
 
@@ -105,5 +108,6 @@ class ClientDataController < ApplicationController
 
   # Hook for adding additional approvers
   def add_steps
+    @client_data_instance.initialize_steps
   end
 end

@@ -1,19 +1,8 @@
 module Api
   class BaseController < ApplicationController
     prepend_before_action :doorkeeper_authorize!
-    prepend_before_action :fail_if_not_enabled
 
     private
-
-    def enable?
-      ENV["API_ENABLED"] == "true"
-    end
-
-    def fail_if_not_enabled
-      unless enable?
-        render json: {error: "Not authorized"}, status: 403
-      end
-    end
 
     def authenticate_user!
       if not_signed_in?

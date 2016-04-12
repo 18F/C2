@@ -100,5 +100,17 @@ module ClientDataMixin
     def as_indexed_json
       as_json(include: self.class.foreign_key_to_method_map.values)
     end
+
+    def initialize_steps
+    end
+
+    def self.permitted_params(params, client_data_instance)
+    end
+
+    def setup_and_email_subscribers(comment)
+    end
+
+    def normalize_input
+    end
   end
 end

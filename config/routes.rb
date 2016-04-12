@@ -23,9 +23,11 @@ C2::Application.routes.draw do
   # mandrill-rails
   resource :inbox, controller: "inbox", only: [:show, :create]
 
-  namespace :api do
-    scope :v2 do
-      resources :proposals
+  if ENV["API_ENABLED"] == "true"
+    namespace :api do
+      scope :v2 do
+        resources :proposals
+      end
     end
   end
 
