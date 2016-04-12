@@ -12,7 +12,7 @@
           = simple_form_for @client_data_instance, html: { multipart: true }, remote: true do |f|
             - excluded_values = ["direct_pay", "vendor", "building_number", "cl_number", "amount", "description"]
             .row
-              .medium-12.column
+              .medium-12.column.detail-wrapper
                 .detail-edit
                   = f.input :description, label: false
                 .detail-display
