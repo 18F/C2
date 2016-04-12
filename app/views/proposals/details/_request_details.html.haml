@@ -13,7 +13,7 @@
             .row
               .medium-12.column
                 .detail-edit
-                  = f.input :description 
+                  = f.input :description, label: false
                 .detail-display
                   %p.request-detail.detail-value{id: 'description-' + @client_data_instance.id.to_s }
                     = @client_data_instance.description
