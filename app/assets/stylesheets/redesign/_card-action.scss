@@ -53,7 +53,7 @@ $action-bar-wrapper-height-small: 60px;
   padding-top: 10px;
 }
 
-@media screen and ( min-height: 800px ){
+@media screen and ( min-height: 700px ){
   $action-bar-wrapper-height: 110px;
   .action-bar-status{
     .status-bar{
