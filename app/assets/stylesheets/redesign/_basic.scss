@@ -17,6 +17,16 @@ a.button{
   }
 }
 
+ul#breadcrumb-nav{
+  margin: 0px;
+  width: auto;
+  padding-top: 0.9375rem;
+  padding-bottom: 0.9375rem;
+  li{
+    display: none;
+  }
+}
+
 a.button.secondary:focus{
   color: $primary-color;
 }

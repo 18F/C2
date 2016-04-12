@@ -9,7 +9,7 @@
   .medium-12.column
     %ul#request-actions.centered
       %li.fl.modify-button.action-default
-        = link_to("Go back", :back, class: "button secondary fr large")
+        = link_to("Go back", proposals_path, class: "button secondary fr large")
       
       - if policy(@proposal).can_complete?
         %li.fr.modify-button.action-default.action-approve
