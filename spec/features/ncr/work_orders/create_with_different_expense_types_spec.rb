@@ -37,8 +37,10 @@ feature "Create NCR Work orders with different expense types", :js do
       fill_in_selectized("ncr_work_order_approving_official", approver.email_address)
       click_on "Submit for approval"
 
-      expect(page).to have_content("Proposal submitted")
-      expect(page).to have_content("0 of 0 steps completed")
+      @page = ProposalPage.new
+      expect(@page).to be_displayed
+      expect(@page.success_alert).to have_content("Proposal submitted")
+      expect(@page.status.approvers.length).to eq(0)
     end
   end
 
@@ -59,8 +61,10 @@ feature "Create NCR Work orders with different expense types", :js do
       fill_in_selectized("ncr_work_order_approving_official", approver.email_address)
       click_on "Submit for approval"
 
-      expect(page).to have_content("Proposal submitted")
-      expect(page).to have_content("0 of 3 steps completed")
+      @page = ProposalPage.new
+      expect(@page).to be_displayed
+      expect(@page.success_alert).to have_content("Proposal submitted")
+      expect(@page.status.approvers.length).to eq(3)
     end
   end
 

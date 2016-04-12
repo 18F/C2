@@ -1,7 +1,7 @@
-.card-for-request-details
-  .row
-    .medium-12.column
-      .card{id: "data_instance-" + @client_data_instance.id.to_s}
+.row
+  .medium-12.column
+    .card#request-details-card
+      - if @client_data_instance && @proposal.client_slug == "ncr"
         .card-head.column
           %h2
             Request Details
@@ -12,13 +12,11 @@
             .row
               .medium-12.column
                 .detail-edit
-                  = f.input :description 
+                  = f.input :description
                 .detail-display
                   %p.request-detail.detail-value{id: 'description-' + @client_data_instance.id.to_s }
                     = @client_data_instance.description
-              
-            
-                      
+
             - proposal.fields_for_input.each_slice(2) do |fields|
               - i = 0
               - border_class = ""
@@ -41,8 +39,6 @@
                               = request_details_form_field field[:key], f
                     - i = i + 1
                     - border_class = "left-border"
-                       
-
 
             .row.column.line-item-block
               .medium-12.callout.primary.column.medium-centered
@@ -84,4 +80,3 @@
                               %h4
                                 %b.detail-value{id: 'amount-' + @client_data_instance.id.to_s }
                                   = sprintf("%.2f", @client_data_instance.amount)
-          

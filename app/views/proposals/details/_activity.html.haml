@@ -18,7 +18,7 @@
                       %span.plus +
                       Attachment
                       = f.file_field :file, { style: "display: none" }
-                  = submit_tag "Send", data: {"disable-if-empty" => "comment_comment_text"}, class: "button primary round no-margin-bottom"
+                  = submit_tag "Send", id: "add_a_comment", data: {"disable-if-empty" => "comment_comment_text"}, class: "button primary round no-margin-bottom"
 
             .row
               .medium-12.column
@@ -44,7 +44,7 @@
                 %div
                   %a.button.primary.status-toggle-all.status-arrow
                     ↓
-                  %a.primary.status-toggle-all.status-text 
+                  %a.primary.status-toggle-all.status-text
                     Show all
 %div.current_user{:style=>"display:none;"}
   = current_user.full_name

@@ -1,5 +1,8 @@
 .title-block
-  %span.status-action #{event.item_type} #{event.event_type}d by #{event.user.full_name}
+  %span.status-action
+  #{event.item_type} #{event.event_type}d
+  - if event.user
+    by #{event.user.full_name}
   %span.time-from
     = date_with_tooltip(event.created_at, true)
 .item-block

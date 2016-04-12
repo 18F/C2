@@ -75,7 +75,7 @@ feature "Observers" do
     login_as(observer)
 
     visit proposal_path(proposal)
-    delete_button = find('table.observers .button_to input[value="Remove"]')
+    delete_button = find('li.observer-list-item .button_to input[value="Remove"]')
     delete_button.click
 
     expect(page).to have_content("Removed Observation for ")
@@ -89,7 +89,7 @@ feature "Observers" do
 
     visit proposal_path(proposal)
 
-    within(".observers") do
+    within(".observer-list") do
       expect(page).to have_content("#{purchaser.email_address} (Purchaser)")
     end
   end

@@ -3,7 +3,7 @@
   width: 35px;
 }
 
-.step-state{
+.step-row{
   position: relative;
 
   &.step-status-completed .step-status-wrapper:before{
@@ -41,7 +41,7 @@
   .step-index{
     font-weight: bold;
   }
-  .approver-status{
+  .step-user-status{
     font-style: italic;
   }
 }
