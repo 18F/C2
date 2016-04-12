@@ -59,7 +59,8 @@ describe Test::ClientRequest do
   describe "#normalize_input" do
     it "currently does nothing" do
       client_request = create(:test_client_request)
-      expect(client_request.normalize_input).to eq nil
+      modifier = client_request.proposal.requester
+      expect(client_request.normalize_input(modifier)).to eq nil
     end
   end
 end

@@ -16,18 +16,6 @@ module Ncr
       super
     end
 
-    def create
-      assign_modifier
-
-      super
-    end
-
-    def update
-      assign_modifier
-
-      super
-    end
-
     protected
 
     def work_order

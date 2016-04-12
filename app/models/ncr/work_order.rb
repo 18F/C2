@@ -204,7 +204,8 @@ module Ncr
       ).run
     end
 
-    def normalize_input
+    def normalize_input(current_user)
+      self.modifier = current_user
       Ncr::WorkOrderValueNormalizer.new(self).run
     end
 

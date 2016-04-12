@@ -110,7 +110,7 @@ module ClientDataMixin
     def setup_and_email_subscribers(comment)
     end
 
-    def normalize_input
+    def normalize_input(current_user)
     end
   end
 end

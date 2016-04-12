@@ -26,7 +26,7 @@ class ClientDataController < ApplicationController
 
   def update
     @client_data_instance.assign_attributes(filtered_params)
-    @client_data_instance.normalize_input
+    @client_data_instance.normalize_input(current_user)
     if errors.empty?
       update_or_notify_of_no_changes
       redirect_to proposal
@@ -75,7 +75,7 @@ class ClientDataController < ApplicationController
 
   def build_client_data_instance
     @client_data_instance = model_class.new(filtered_params)
-    @client_data_instance.normalize_input
+    @client_data_instance.normalize_input(current_user)
     @client_data_instance.build_proposal(requester: current_user)
   end
 
