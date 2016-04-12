@@ -5,7 +5,7 @@
         .card-head.column
           %h2
             Request Details
-            - if @mode != "edit"
+            - if @mode != "edit" && !@proposal.completed?
               = modify_client_button(@proposal, "<span>#{@mode == "edit" ? "View" : "Modify"}</span>".html_safe, "button secondary edit-icon fr large request-detail-edit-button")
         .content-content.column#view-request-details
           = simple_form_for @client_data_instance, html: { multipart: true } do |f|
@@ -39,31 +39,37 @@
             .row.column.line-item-block
               .medium-12.callout.primary.column.medium-centered
                 .row
-                  .medium-6.column
+                  .medium-12.column
                     .detail-wrapper
+                      %label.detail-element Vendor
                       .detail-edit
                         = f.input :vendor,
                           input_html: { class: "js-selectize required", data: { initial: JSON.generate(vendor_options(@client_data_instance.vendor)) }}
                       .detail-display
-                        %label.detail-element Vendor
                         %span.detail-value{id: 'vendor-' + @client_data_instance.id.to_s }
                           = @client_data_instance.vendor || "-"
                     .detail-wrapper
+                      %label.detail-element CL number
+                      .detail-edit
+                        = f.input :cl_number, label: false
+                      .detail-display
+                        %span.detail-value{id: 'cl_number-' + @client_data_instance.id.to_s }
+                          = @client_data_instance.cl_number || "-"
+
+
+                    .detail-wrapper
+                      %label.detail-element Building number
                       .detail-edit
                         = f.input :building_number,
                           input_html: { class: "js-selectize required", data: { initial: JSON.generate(building_options) }}
                       .detail-display
-                        %label.detail-element Building number
                         %span.detail-value{id: 'building_number-' + @client_data_instance.id.to_s }
                           = @client_data_instance.building_number
+            .row.column.line-item-block
+              .medium-12.primary.column.medium-centered
+                .row
                   .medium-6.column
-                    .detail-wrapper
-                      .detail-edit
-                        = f.input :cl_number
-                      .detail-display
-                        %label.detail-element CL number
-                        %span.detail-value{id: 'cl_number-' + @client_data_instance.id.to_s }
-                          = @client_data_instance.cl_number || "-"
+                  .medium-6.column
                     .primary.callout.detail-wrapper.no-margin-bottom.no-padding-bottom
                       .detail-edit
                         = f.input :amount, as: :currency, input_html: { value: sprintf("%.2f", @client_data_instance.amount) }

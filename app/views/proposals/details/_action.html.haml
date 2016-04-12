@@ -17,7 +17,7 @@
             = submit_tag @proposal.step_text_for_user(:execute_button, current_user), class: "form-button button primary large"
             = hidden_field_tag :version, @proposal.version
       
-      - if policy(@proposal).can_edit?
+      - if policy(@proposal).can_edit? && !@proposal.completed?
         - unless @proposal.canceled?
           %li.fr.save-button.action-edit
             = modify_client_button(@proposal, "Save", "button primary fr large", true)
