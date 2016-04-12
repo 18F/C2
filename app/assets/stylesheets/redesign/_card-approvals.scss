@@ -3,11 +3,10 @@
   width: 35px;
 }
 
-.step-state:last-child .step-status-wrapper:before {
+.step-row:last-child .step-status-wrapper:before {
   display: none;
 }
 
-.step-state,
 .step-row{
   position: relative;
 
