@@ -25,6 +25,8 @@ class ClientDataController < ApplicationController
   end
 
   def update
+    @client_data_instance.assign_attributes(filtered_params)
+    @client_data_instance.normalize_input
     if errors.empty?
       update_or_notify_of_no_changes
       redirect_to proposal
@@ -43,8 +45,6 @@ class ClientDataController < ApplicationController
   end
 
   def update_or_notify_of_no_changes
-    @client_data_instance.assign_attributes(filtered_params)
-    @client_data_instance.normalize_input
     if attribute_changes?
       comment = record_changes
       @client_data_instance.save
