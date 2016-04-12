@@ -1,5 +1,36 @@
 .card {
-
+  .selectize-input.items.has-options.full.has-items:hover {
+    height: auto;
+    overflow: visible;
+    padding: 0px;
+    .item{
+      width: auto;
+      position: absolute;
+      background: white;
+      padding: 6px 12px;
+      border: 1px solid #cccccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      box-shadow: none;
+    }
+  }
+  .selectize-input.items{
+    height: 2.4375rem;
+    font-size: 14px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    overflow: hidden;
+    .item{
+      vertical-align: text-top;
+      width: 1000px;
+    }
+    input{
+      height: auto;
+    }
+  }
+  .selectize-input > * {
+    vertical-align: text-top;
+  }
   .radio {
     display: inline-block;
     margin-right: 15px;
