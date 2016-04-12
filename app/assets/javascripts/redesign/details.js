@@ -196,21 +196,9 @@ detailsApp.getCardObject = function(guidValue){
   return deepObjectCopy;
 };
 
-detailsApp.setupObserverController = function(){
+detailsApp.setupObserverController = function(newRow){
   var $observers = $(".observer-list");
-  var form = "<form class='button_to remove_ajax'><input data-confirm='Are you sure?' type='submit' value='' /></form>"
-
-  $("form#new_observation").submit(function(){
-    var valuesToSubmit = $(this).serialize();
-    var value = $("form#new_observation :selected").text();
-    $observers.append("<li class='observer-list-item'>" + value + form + "</li>");
-    // return false;//prevents default
-  });
-
-  $(document).on("submit","form.remove_ajax",function(){
-    $(this).parent().remove();
-    // return false;
-  });
+  $observers.append(newRow);
 };
 
 detailsApp.setupCommentController = function(){
