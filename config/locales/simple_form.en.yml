@@ -28,4 +28,4 @@ en:
         link_to_product: "Search <a href='https://www.gsaadvantage.gov/advantage/main/start_page.do' target='_blank'>GSA Advantage</a> first; then <a href='http://www.amazon.com' target='_blank'>Amazon;</a> then other vendor. Paste link here."
         recurring_length: "e.g. Number of Days, Months, Years"
       ncr_work_order:
-        description: "Include request details (e.g. Room Number, Estimated number of hours)"
+        # description: "Include request details (e.g. Room Number, Estimated number of hours)"
