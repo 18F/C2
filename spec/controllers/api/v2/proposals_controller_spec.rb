@@ -3,17 +3,12 @@ describe Api::ProposalsController do
     ENV["API_ENABLED"] = "true"
   end
 
-  let(:token) { double :acceptable? => true }
-
-  before do
-    allow(controller).to receive(:doorkeeper_token) {token} # => RSpec 3
-  end
-
   describe "GET" do
     it "fetches a specific proposal" do
-      test_request = create(:test_client_request, :with_approvers)
+      user = mock_api_doorkeeper_pass
+      test_request = create(:test_client_request, :with_approvers, requester: user)
 
-      login_as(test_request.proposal.requester)
+      login_as(user)
       get :show, id: test_request.proposal.id
 
       expect(response.status).to eq(200)
@@ -22,7 +17,7 @@ describe Api::ProposalsController do
 
     it "fetches a list of proposals", :elasticsearch do
       es_execute_with_retries 3 do
-        user = create(:user, client_slug: "test")
+        user = mock_api_doorkeeper_pass
         test_requests = 3.times.map do |i|
           tr = create(:test_client_request, :with_approvers, requester: user)
           tr.proposal.reindex
@@ -30,7 +25,6 @@ describe Api::ProposalsController do
         end
         Proposal.__elasticsearch__.refresh_index!
 
-        login_as(user)
         get :index, text: "test request"
 
         expect(response.status).to eq(200)

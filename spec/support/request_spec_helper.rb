@@ -1,6 +1,7 @@
 module RequestSpecHelper
   def get_json(url)
     get(url)
+    puts response.pretty_inspect
     JSON.parse(response.body)
   end
 
@@ -21,5 +22,13 @@ module RequestSpecHelper
     integration_session.__send__(:process, :options, *args).tap do
       copy_session_variables!
     end
+  end
+
+  def mock_api_doorkeeper_pass
+    user = create(:user, client_slug: "test")
+    dummy_app = double owner: user
+    dummy_token = double :acceptable? => true, application: dummy_app
+    allow_any_instance_of(Api::BaseController).to receive(:doorkeeper_token) {dummy_token}
+    user
   end
 end

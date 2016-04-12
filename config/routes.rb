@@ -24,13 +24,6 @@ C2::Application.routes.draw do
   resource :inbox, controller: "inbox", only: [:show, :create]
 
   namespace :api do
-    scope :v1 do
-      namespace :ncr do
-        resources :work_orders, only: [:index]
-      end
-
-      resources :users, only: [:index]
-    end
     scope :v2 do
       resources :proposals
     end

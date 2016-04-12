@@ -1,4 +1,34 @@
 describe "API v2" do
+  describe "CORS" do
+    it "sets the Access-Control-Allow-Origin header to allow requests from anywhere" do
+      mock_api_doorkeeper_pass
+
+      get "/api/v2/proposals", {}, cors_headers
+
+      expect(response.headers['Access-Control-Allow-Origin']).to eq(cors_origin)
+    end 
+
+    it "allows general HTTP methods (GET/POST/PUT)" do
+      mock_api_doorkeeper_pass
+
+      get "/api/v2/proposals", {}, cors_headers
+
+      allowed_http_methods = response.header['Access-Control-Allow-Methods']
+      %w{GET POST PUT}.each do |method|
+        expect(allowed_http_methods).to include(method)
+      end 
+    end 
+
+    it "supports OPTIONS requests" do
+      mock_api_doorkeeper_pass
+
+      options "/api/v2/proposals", {}, cors_headers
+
+      expect(response.status).to eq(200)
+      expect(response.body).to eq('')
+    end 
+  end
+
   describe "authenticate" do
     it "returns valid oauth token" do
       user = create(:user, client_slug: "test")
@@ -20,6 +50,17 @@ describe "API v2" do
 
       expect(response.status).to eq(403)
     end
+  end
+
+  def cors_headers
+    {
+      "HTTP_ORIGIN" => cors_origin,
+      "HTTP_ACCESS_CONTROL_REQUEST_METHOD" => "GET"
+    }
+  end
+
+  def cors_origin
+    "http://corsexample.com/"
   end
 
   def response_json

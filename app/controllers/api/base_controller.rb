@@ -1,7 +1,7 @@
 module Api
   class BaseController < ApplicationController
-    before_action :fail_if_not_enabled
-    before_action :doorkeeper_authorize!
+    prepend_before_action :doorkeeper_authorize!
+    prepend_before_action :fail_if_not_enabled
 
     private
 
@@ -11,7 +11,7 @@ module Api
 
     def fail_if_not_enabled
       unless enable?
-        render json: {error: 403, message: "Not authorized"}, status: 403
+        render json: {error: "Not authorized"}, status: 403
       end
     end
 
