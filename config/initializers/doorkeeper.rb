@@ -7,7 +7,6 @@ Doorkeeper.configure do
     if current_user
       current_user
     else
-      puts "warden: #{warden.pretty_inspect}"
       warden.authenticate!(scope: :user)
     end
   end

@@ -99,7 +99,13 @@ class ApplicationController < ActionController::Base
   def find_current_user
     if ENV["FORCE_USER_ID"] && !Rails.env.production?
       User.find ENV["FORCE_USER_ID"]
-    elsif session[:user] && session[:user]["email"]
+    else
+      find_current_user_via_session_or_doorkeeper
+    end
+  end
+
+  def find_current_user_via_session_or_doorkeeper
+    if session[:user] && session[:user]["email"]
       User.find_or_create_by(email_address: session[:user]["email"])
     elsif doorkeeper_token
       doorkeeper_token.application.owner

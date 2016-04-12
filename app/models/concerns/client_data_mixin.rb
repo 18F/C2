@@ -104,7 +104,7 @@ module ClientDataMixin
     def initialize_steps
     end
 
-    def self.permitted_params(params, client_data_instance)
+    def self.permitted_params(_params, _client_data_instance)
     end
 
     def setup_and_email_subscribers(comment)

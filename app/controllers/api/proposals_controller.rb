@@ -39,8 +39,8 @@ module Api
       rescue SearchBadQuery, SearchUnavailable => error
         render json: { error: error.message }, status: 500
       end
-    end    
- 
+    end
+
     private
 
     def create_proposal

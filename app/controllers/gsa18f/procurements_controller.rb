@@ -1,6 +1,5 @@
 module Gsa18f
   class ProcurementsController < ClientDataController
-
     protected
 
     def model_class

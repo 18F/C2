@@ -12,7 +12,7 @@ describe Api::ProposalsController do
   end
 
   describe "#index" do
-    xit "fetches a list of proposals", :elasticsearch do
+    it "fetches a list of proposals", :elasticsearch do
       es_execute_with_retries 3 do
         user = mock_api_doorkeeper_pass
         test_requests = 3.times.map do |i|
