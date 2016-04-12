@@ -11,7 +11,11 @@ class Proposal < ActiveRecord::Base
 
   workflow do
     state :pending do
-      event :complete, transitions_to: :completed
+      event :complete, transitions_to: :completed do
+        if individual_steps.any?
+          add_completed_comment
+        end
+      end
       event :restart, transitions_to: :pending
       event :cancel, transitions_to: :canceled
     end
@@ -39,7 +43,7 @@ class Proposal < ActiveRecord::Base
   has_many :completers, through: :individual_steps, source: :completer
   has_many :api_tokens, through: :individual_steps
   has_many :attachments, dependent: :destroy
-  has_many :comments, dependent: :destroy
+  has_many :comments, -> { order(created_at: :desc) }, dependent: :destroy
 
   has_many :observations, -> { where("proposal_roles.role_id in (select roles.id from roles where roles.name='observer')") }
   has_many :observers, through: :observations, source: :user
@@ -217,6 +221,30 @@ class Proposal < ActiveRecord::Base
       fail "#{email} is an approver on this Proposal -- cannot also be Requester"
     end
     set_requester(user)
+  end
+
+  def add_completed_comment
+    completer = individual_steps.last.completed_by
+    comments.create_without_callback(
+      comment_text: I18n.t(
+        "activerecord.attributes.proposal.user_completed_comment",
+        user: completer.full_name
+      ),
+      update_comment: true,
+      user: completer
+    )
+  end
+
+  def add_restart_comment(user)
+    fail("User required") unless user.is_a?(User)
+    comments.create_without_callback(
+      comment_text: I18n.t(
+        "activerecord.attributes.proposal.user_restart_comment",
+        user: user.full_name
+      ),
+      update_comment: true,
+      user: user
+    )
   end
 
   def set_requester(user)

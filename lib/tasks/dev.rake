@@ -40,10 +40,10 @@ if Rails.env.development? || Rails.env.test?
         comment_text: Faker::Hacker.say_something_smart,
         user: step.user
       )
-      create(:attachment, file: file, proposal: proposal, user: step.user)
+      create(:attachment, file: temp_file, proposal: proposal, user: step.user)
     end
 
-    def file
+    def temp_file
       File.new(Rails.root.join("spec", "support", "fixtures", "icon-user.png"))
     end
 

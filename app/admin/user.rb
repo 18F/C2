@@ -11,6 +11,10 @@ ActiveAdmin.register User do
   # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
   permit_params :active, :first_name, :last_name, :email_address, :client_slug, :timezone, role_ids: []
 
+  action_item :add_delegate, only: [:edit, :show] do
+    link_to "Add Delegate", new_admin_user_delegate_path(user_delegate: { assigner_id: user.id })
+  end
+
   controller do
     def create
       user = User.new(user_params)
@@ -69,6 +73,20 @@ ActiveAdmin.register User do
       row :active
       row :updated_at
       row("Roles") { user.roles.map(&:name).join(", ") }
+    end
+
+    panel "Delegates To" do
+      table_for user.outgoing_delegations do |tbl|
+        tbl.column("ID") { |delegation| link_to delegation.id, admin_user_delegate_path(delegation) }
+        tbl.column("User")  { |delegation| link_to delegation.assignee.display_name, admin_user_path(delegation.assignee) }
+      end
+    end
+
+    panel "Delegate For" do
+      table_for user.incoming_delegations do |tbl|
+        tbl.column("ID") { |delegation| link_to delegation.id, admin_user_delegate_path(delegation) }
+        tbl.column("User")  { |delegation| link_to delegation.assigner.display_name, admin_user_path(delegation.assigner) }
+      end
     end
 
     panel "Proposals" do

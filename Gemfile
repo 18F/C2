@@ -61,6 +61,7 @@ gem "turbolinks"
 gem "uglifier"
 gem "validates_email_format_of"
 gem "workflow"
+gem "actionmailer-text"
 
 group :test, :development do
   gem "bullet", require: false # use BULLET_ENABLED=true
@@ -92,6 +93,7 @@ group :test do
   gem "shoulda-matchers"
   gem "simplecov"
   gem "site_prism"
+  gem "test_after_commit"
   gem "timecop"
   gem "webmock", require: false
   gem "zonebie"

@@ -6,10 +6,10 @@ $(document).ready( function() {
     if (radio.attr("id").match(/_ba60$/)) {
       buildingPicker.removeClass("required");
       buildingPicker.find("*").removeClass("required");
-    }   
+    }
     else {
       buildingPicker.addClass("required");
       buildingPicker.find("*").addClass("required");
-    }   
-  })  
+    }
+  })
 });

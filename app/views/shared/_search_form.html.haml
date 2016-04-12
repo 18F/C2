@@ -1,8 +1,8 @@
 %fieldset.adv
   .form-group
-    %label.inline.control-label{for: "#{current_user.client_model_slug}[status]"}
+    %label.control-label{for: "#{current_user.client_model_slug}[status]"}
       Search in
-    %select.short.form-control{name: "#{current_user.client_model_slug}[status]"}
+    %select.form-control{name: "#{current_user.client_model_slug}[status]"}
       = proposal_status_options(@adv_search.value_for("status"))
   .form-group
     %label.control-label{for: "#{current_user.client_model_slug}[requester]"}

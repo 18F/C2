@@ -1,4 +1,6 @@
 ActiveAdmin.register UserDelegate do
+  config.filters = false
+
   actions :index, :new, :show, :create, :destroy
 
   permit_params :assigner_id, :assignee_id

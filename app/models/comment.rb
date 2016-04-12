@@ -15,6 +15,13 @@ class Comment < ActiveRecord::Base
   after_create :add_user_as_observer
   visitable # Used to track user visit associated with processed comment
 
+  def self.create_without_callback(params)
+    skip_callback(:create, :after, :add_user_as_observer)
+    c = create(params)
+    set_callback(:create, :after, :add_user_as_observer)
+    c
+  end
+
   # match .attributes
   def to_a
     [

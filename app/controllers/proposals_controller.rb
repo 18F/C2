@@ -15,7 +15,6 @@ class ProposalsController < ApplicationController
     if params[:detail]
       cookies[:detail] = params[:detail]
     end
-
     @mode = cookies[:detail]
     if %w(new edit view).include?(@mode)
       @history = HistoryList.new(proposal)

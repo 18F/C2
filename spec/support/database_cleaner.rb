@@ -19,6 +19,7 @@ RSpec.configure do |config|
 
   config.after(:each) do
     ActionMailer::Base.deliveries.clear
+    Proposal.clear_index_tracking
     DatabaseCleaner.clean
     if Capybara.current_driver != :rack_test
       Rails.application.load_seed
