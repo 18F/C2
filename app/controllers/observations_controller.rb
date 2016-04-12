@@ -6,6 +6,8 @@ class ObservationsController < ApplicationController
   def create
     observer = User.find(observation_params)
     observation = @proposal.add_observer(observer, current_user, params[:observation][:reason])
+    @observer = observer
+    @observation = observation
     respond_to do |format|
       format.html { 
         prep_create_response_msg(observer, observation)
@@ -14,7 +16,6 @@ class ObservationsController < ApplicationController
       format.js { 
         render file: 'proposals/js/observations.js.erb'
       }
-
     end
   end
 
