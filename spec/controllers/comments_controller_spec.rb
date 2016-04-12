@@ -1,12 +1,12 @@
 describe CommentsController do
-  describe 'permission checking' do
+  describe "permission checking" do
     let (:proposal) { create(:proposal, :with_parallel_approvers, :with_observers) }
     let (:params) {
-      { proposal_id: proposal.id, comment: { comment_text: 'Some comment' }}
+      { proposal_id: proposal.id, comment: { comment_text: "Some comment" }}
     }
 
-    context 'requester comments' do
-      it 'allows the requester to comment' do
+    context "requester comments" do
+      it "allows the requester to comment" do
         login_as(proposal.requester)
         post :create, params
         expect(flash[:success]).to be_present
@@ -14,7 +14,7 @@ describe CommentsController do
         expect(response).to redirect_to(proposal)
       end
 
-      it 'sends a comment email to approvers and observers' do
+      it "sends a comment email to approvers and observers" do
         login_as(proposal.requester)
 
         expect {
@@ -23,7 +23,19 @@ describe CommentsController do
       end
     end
 
-    it 'allows an approver to comment' do
+    context "comment fails to save" do
+      it "shows a helpful error messsage" do
+        login_as(proposal.approvers[0])
+
+        post :create, { proposal_id: proposal.id, comment: { comment_text: "" }}
+
+        expect(flash[:success]).not_to be_present
+        expect(flash[:error]).to be_present
+        expect(response).to redirect_to(proposal_path(proposal))
+      end
+    end
+
+    it "allows an approver to comment" do
       login_as(proposal.approvers[0])
       post :create, params
       expect(flash[:success]).to be_present
@@ -31,7 +43,7 @@ describe CommentsController do
       expect(response).to redirect_to(proposal)
     end
 
-    it 'allows an observer to comment' do
+    it "allows an observer to comment" do
       login_as(proposal.observers[0])
       post :create, params
       expect(flash[:success]).to be_present
@@ -39,7 +51,7 @@ describe CommentsController do
       expect(response).to redirect_to(proposal)
     end
 
-    it 'allows a delegate to comment' do
+    it "allows a delegate to comment and adds delegate as observer" do
       approver = proposal.approvers.first
       delegate = create(:user)
       approver.add_delegate(delegate)
@@ -49,10 +61,11 @@ describe CommentsController do
       expect {
         post :create, params
       }.to change{ proposal.comments.count }.from(0).to(1)
-      expect(Comment.last.user).to eq(delegate)
+      expect(proposal.comments.last.user).to eq(delegate)
+      expect(proposal.observers).to include(delegate)
     end
 
-    it 'does not allow others to comment' do
+    it "does not allow others to comment" do
       login_as(create(:user))
       post :create, params
       expect(response.status).to eq(403)
