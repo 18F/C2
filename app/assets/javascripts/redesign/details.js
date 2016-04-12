@@ -204,12 +204,12 @@ detailsApp.setupObserverController = function(){
     var valuesToSubmit = $(this).serialize();
     var value = $("form#new_observation :selected").text();
     $observers.append("<li class='observer-list-item'>" + value + form + "</li>");
-    return false;//prevents default
+    // return false;//prevents default
   });
 
   $(document).on("submit","form.remove_ajax",function(){
     $(this).parent().remove();
-    return false;
+    // return false;
   });
 };
 
