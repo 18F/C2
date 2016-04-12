@@ -3,6 +3,10 @@
   width: 35px;
 }
 
+.step-state:last-child .step-status-wrapper:before {
+  display: none;
+}
+
 .step-state{
   position: relative;
 
