@@ -8,12 +8,7 @@
         .content-content.column
           %ul.observer-list
             - SubscriberList.new(proposal).triples.each do |user, role_str, observation|
-              %li.observer-list-item
-                = user.full_name
-                = "(#{role_str})" if role_str
-                - if observation && policy(observation).can_destroy?
-                  = button_to "", proposal_observation_path(proposal, observation), method: :delete, data: {confirm: "Are you sure?"}
-
+              = render partial: "proposals/details/observer_row", locals: { user: user, role_str: role_str, observation: observation, proposal: proposal }
           - if policy(Observation.new(proposal: proposal)).can_create?
             = form_for [proposal, Observation.new], remote: true do |f|
               = f.fields_for :user do |user_form|
