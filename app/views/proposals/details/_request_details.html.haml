@@ -8,7 +8,6 @@
             - if @mode != "edit"
               = modify_client_button(@proposal, "<span>#{@mode == "edit" ? "View" : "Modify"}</span>".html_safe, "button secondary edit-icon fr large request-detail-edit-button")
         .content-content.column#view-request-details
-          = @client_data_instance.to_json
           = simple_form_for @client_data_instance, html: { multipart: true } do |f|
             - excluded_values = ["direct_pay", "vendor", "building_number", "cl_number", "amount", "description"]
             .row
