@@ -11,12 +11,10 @@
       %li.fl.modify-button.action-default
         = link_to("Go back", :back, class: "button secondary fr large")
       
-      = policy(@proposal).can_complete?
-      = policy(@proposal).to_json
       - if policy(@proposal).can_complete?
-        %li.fr.modify-button.action-default
+        %li.fr.modify-button.action-default.action-approve
           = form_tag(complete_proposal_path(@proposal, method: "POST")) do
-            = submit_tag @proposal.step_text_for_user(:execute_button, current_user), class: "form-button"
+            = submit_tag @proposal.step_text_for_user(:execute_button, current_user), class: "form-button button primary large"
             = hidden_field_tag :version, @proposal.version
       
       - if policy(@proposal).can_edit?

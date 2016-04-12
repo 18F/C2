@@ -4,6 +4,9 @@ ul#request-actions{
   vertical-align: middle;
   li{
     margin: 0px;
+    &.action-approve{
+      margin-left: 20px;
+    }
   }
   .save-button .button{
     background: #8ecc76;
@@ -19,6 +22,8 @@ ul#request-actions{
     }
   }
 }
+
+
 
 .cancel-action{
   color: $primary-color;
