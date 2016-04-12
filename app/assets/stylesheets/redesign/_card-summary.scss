@@ -19,15 +19,20 @@
 }
 
 span.status-wrap{
+  margin-top: 20px;
+  @media screen and (min-width: 40em){
+    margin-top: 0px;
+    float: right;
+    border: 1px solid white;
+    max-width: 170px;
+  }
   padding: 20px;
-  max-width: 170px;
   color: #494949;
   border-radius: 5px;
   font-size: 14px;
   text-transform: uppercase;
   display: inline-block;
   margin-right: 0px;
-  border: 1px solid white;
   span.status-value{
     display: block;
     font-size: 16px;
