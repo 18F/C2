@@ -36,7 +36,7 @@ detailsApp.setupData = function(){
 
 detailsApp.setupEvents = function(){
   var self = this;
-  $(".card-for-request-details").find("input, textarea, select, radio").on("change keypress blur focus keyup", function(e){
+  $("#request-actions").find("input, textarea, select, radio").on("change keypress blur focus keyup", function(e){
     var el = this;
     self.debounce(self.fieldChanged(e, el), 50);
   });
