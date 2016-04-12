@@ -8,7 +8,7 @@ class HistoryEvent < SimpleDelegator
   end
 
   def user
-    User.find whodunnit
+    whodunnit ? User.find(whodunnit) : nil
   end
 
   def comment_text
