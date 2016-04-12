@@ -19,22 +19,24 @@
 }
 
 span.status-wrap{
+  padding: 20px;
+  max-width: 170px;
+  margin: 0 auto;
   color: #494949;
   border-radius: 5px;
-  font-size: 10px;
+  font-size: 14px;
   text-transform: uppercase;
-  padding: 0.15em 2em 0.35em;
   display: inline-block;
   margin-right: 20px;
+  border: 1px solid white;
   span.status-value{
-    font-size: 14px;
+    display: block;
+    font-size: 16px;
     text-transform: none;
     font-weight: bold;
   }
   &.status-is-pending{
-    background: #F1EA73;
   }
   &.status-is-completed{
-    background: #8ECC76;
   }
 }
