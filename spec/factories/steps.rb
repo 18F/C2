@@ -2,11 +2,9 @@ FactoryGirl.define do
   factory :step do
     proposal
     user
-  end
 
-  factory :approval_step, class: Steps::Approval do
-    proposal
-    user
+    factory :approval_step, class: Steps::Approval do
+    end
 
     factory :serial_step, class: Steps::Serial do
     end

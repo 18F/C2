@@ -39,7 +39,7 @@ FactoryGirl.define do
         first_approver = create(:user, client_slug: evaluator.client_slug)
         second_approver = create(:user, client_slug: evaluator.client_slug)
         steps = [
-          create(:approval, user: first_approver),
+          create(:approval_step, user: first_approver),
           create(:purchase_step, user: second_approver)
         ]
         proposal.add_initial_steps(steps)

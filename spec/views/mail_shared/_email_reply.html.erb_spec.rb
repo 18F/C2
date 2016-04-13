@@ -1,6 +1,6 @@
 describe "mail_shared/_email_reply.html.erb" do
   it "renders 'Send a Comment' link with approve button" do
-    approval = create(:approval)
+    approval = create(:approval_step)
     create(:api_token, step: approval)
     proposal = approval.proposal
     render(
@@ -14,7 +14,7 @@ describe "mail_shared/_email_reply.html.erb" do
   end
 
   it "renders 'View This Request' link without approve button" do
-    approval = create(:approval)
+    approval = create(:approval_step)
     create(:api_token, step: approval)
     proposal = approval.proposal
     render(

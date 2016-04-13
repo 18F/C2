@@ -57,7 +57,7 @@ describe MailerHelper do
 
   describe '#generate_approve_url' do
     it "returns a URL" do
-      approval = create(:approval)
+      approval = create(:approval_step)
       token = create(:api_token, step: approval)
       proposal = approval.proposal
 
@@ -73,7 +73,7 @@ describe MailerHelper do
     end
 
     it "throws an error if there's no token" do
-      approval = build(:approval)
+      approval = build(:approval_step)
       expect(approval.api_token).to eq(nil)
 
       expect {

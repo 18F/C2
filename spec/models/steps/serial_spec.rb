@@ -1,8 +1,8 @@
 describe Steps::Serial do
   it 'cascades to the next approver' do
     proposal = create(:proposal)
-    first = build(:approval, proposal: proposal)
-    second = build(:approval, proposal: proposal)
+    first = build(:approval_step, proposal: proposal)
+    second = build(:approval_step, proposal: proposal)
     proposal.root_step = Steps::Serial.new(child_steps: [first, second])
 
     expect(proposal.root_step.reload.status).to eq('actionable')
