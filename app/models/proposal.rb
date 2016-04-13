@@ -37,11 +37,10 @@ class Proposal < ActiveRecord::Base
   visitable # Used to track user visit associated with processed proposal
 
   has_many :steps
-  has_many :individual_steps, ->{ individual }, class_name: "Steps::Individual"
   has_many :approval_steps, class_name: "Steps::Approval"
   has_many :purchase_steps, class_name: "Steps::Purchase"
-  has_many :completers, through: :individual_steps, source: :completer
-  has_many :api_tokens, through: :individual_steps
+  has_many :completers, through: :steps, source: :completer
+  has_many :api_tokens, through: :steps
   has_many :attachments, dependent: :destroy
   has_many :comments, -> { order(created_at: :desc) }, dependent: :destroy
 

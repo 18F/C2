@@ -8,6 +8,7 @@ class Step < ActiveRecord::Base
     state :completed
   end
 
+  has_one :api_token, -> { fresh }, foreign_key: "step_id"
   belongs_to :user
   belongs_to :proposal, touch: true
   belongs_to :completer, class_name: "User"
@@ -18,8 +19,8 @@ class Step < ActiveRecord::Base
 
   validates :proposal, presence: true
   validates :user_id, uniqueness: { scope: :proposal_id }, allow_blank: true
-
-  scope :individual, -> { where(type: ["Steps::Approval", "Steps::Purchase"]).order("position ASC") }
+  scope :individual, -> { where.not(type: ["Steps::Serial", "Steps::Parallel"]).order("position ASC") }
+  scope :with_users, -> { includes :user }
 
   statuses.each do |status|
     scope status, -> { where(status: status) }
