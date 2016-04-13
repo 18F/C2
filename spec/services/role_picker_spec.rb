@@ -15,7 +15,7 @@ describe RolePicker do
       it "is true when user is proposal approver" do
         proposal = create(:proposal)
         approver = create(:user)
-        create(:approval, user: approver, proposal: proposal)
+        create(:approval_step, user: approver, proposal: proposal)
 
         roles = RolePicker.new(approver, proposal)
 
@@ -51,7 +51,7 @@ describe RolePicker do
       it "is true when user is active approver" do
         proposal = create(:proposal)
         approver = create(:user)
-        create(:approval, user: approver, proposal: proposal, status: "actionable")
+        create(:approval_step, user: approver, proposal: proposal, status: "actionable")
 
         roles = RolePicker.new(approver, proposal)
 

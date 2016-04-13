@@ -3,8 +3,8 @@ describe StepManager do
     it "creates a new step series with the steps" do
       proposal = create(:proposal)
       expect(proposal.steps).to be_empty
-      new_step1 = create(:approval)
-      new_step2 = create(:approval)
+      new_step1 = create(:approval_step)
+      new_step2 = create(:approval_step)
       proposal.add_initial_steps([new_step1, new_step2])
 
       aggregate_failures "testing steps" do

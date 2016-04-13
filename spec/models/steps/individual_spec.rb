@@ -1,7 +1,7 @@
 describe Steps::Individual do
   describe "#delegates" do
     it "returns a list of users" do
-      approval = create(:approval)
+      approval = create(:approval_step)
       approver = approval.user
       delegate = create(:user)
       approver.add_delegate(delegate)
@@ -12,11 +12,11 @@ describe Steps::Individual do
 
   describe "#completed_by" do
     it "identifies completed_by" do
-      approval = create(:approval)
+      approval = create(:approval_step)
       delegate = create(:user)
       approval.completer = delegate
       approval.save!
-      approval_self = create(:approval)
+      approval_self = create(:approval_step)
 
       expect(approval.completed_by).to eq delegate
       expect(approval_self.completed_by).to eq approval_self.user
@@ -25,7 +25,7 @@ describe Steps::Individual do
 
   describe '#restart!' do
     it "expires the API token" do
-      approval = create(:approval, status: 'actionable')
+      approval = create(:approval_step, status: 'actionable')
       token = approval.create_api_token!
       expect(token.expired?).to eq(false)
       approval.restart!
@@ -33,7 +33,7 @@ describe Steps::Individual do
     end
 
     it "handles a missing API token" do
-      approval = create(:approval, status: 'actionable')
+      approval = create(:approval_step, status: 'actionable')
       expect {
         approval.restart!
       }.to_not raise_error

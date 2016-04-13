@@ -40,7 +40,7 @@ describe 'Linear approvals' do
 
   def create_approvals_for(users)
     users.each_with_index.map do |user, index|
-      create(:approval, user: user, position: index + 1)
+      create(:approval_step, user: user, position: index + 1)
     end
   end
 

@@ -2,9 +2,9 @@ describe Steps::Parallel do
   let (:proposal) { create(:proposal) }
 
   it 'allows approvals in any order' do
-    first = build(:approval, proposal: nil)
-    second = build(:approval, proposal: nil)
-    third = build(:approval, proposal: nil)
+    first = build(:approval_step, proposal: nil)
+    second = build(:approval_step, proposal: nil)
+    third = build(:approval_step, proposal: nil)
     proposal.root_step = Steps::Parallel.new(child_steps: [first, second, third])
 
     expect(proposal.root_step.reload.status).to eq('actionable')
@@ -32,9 +32,9 @@ describe Steps::Parallel do
   end
 
   it 'can be used for disjunctions (ORs)' do
-    first = build(:approval, proposal: nil)
-    second = build(:approval, proposal: nil)
-    third = build(:approval, proposal: nil)
+    first = build(:approval_step, proposal: nil)
+    second = build(:approval_step, proposal: nil)
+    third = build(:approval_step, proposal: nil)
     proposal.root_step = Steps::Parallel.new(min_children_needed: 2, child_steps: [first, second, third])
 
     first.reload.complete!
