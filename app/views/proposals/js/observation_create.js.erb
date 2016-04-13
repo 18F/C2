@@ -7,4 +7,5 @@
 (function(){
   var observerRow = "<%= escape_javascript (render partial: "proposals/details/observer_row", locals: { user: user, role_str: false, observation: observation, proposal: proposal }) %>";
   detailsApp.setupObserverController(observerRow);
+  detailsApp.reinitObserverRemove();
 })

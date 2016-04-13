@@ -159,6 +159,21 @@ detailsApp.showNotification = function(message){
   window.setTimeout(function(){
     $('.action-bar-status').fadeOut();
   }, 3000);
+};
+
+detailsApp.reinitObserverRemove = function(){
+  var self = this;
+  $('form.button_to [type="submit"]').on('click', function(e){
+    e.preventDefault();
+    self.triggerObserverRemove(this);
+  });
+};
+
+detailsApp.triggerObserverRemove = function(el){
+  this.loadRemoveConfirmModal(el);
+}
+
+detailsApp.loadRemoveConfirmModal = function(el){
 }
 
 detailsApp.generateCardObjects = function(){
