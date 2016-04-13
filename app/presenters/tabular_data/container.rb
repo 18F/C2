@@ -27,6 +27,10 @@ module TabularData
       apply_filter(results)
     end
 
+    def total
+      rows.offset(0).limit(nil).count
+    end
+
     def apply_filter(results)
       if @filter
         @filter.call(results)

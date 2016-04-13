@@ -9,7 +9,7 @@ class ProposalSerializer < ActiveModel::Serializer
     :client_data_type
   )
 
-  has_one :client_data
+  has_one :client_data, serializer: ClientDataSerializer
   has_one :requester
   has_many :individual_steps, root: :steps
 
