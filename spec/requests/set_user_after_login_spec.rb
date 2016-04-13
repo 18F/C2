@@ -24,7 +24,7 @@ describe 'User creation when logging in with Oauth to view a protected page' do
       deliveries.clear
       expect { get '/auth/myusa/callback' }.to change { deliveries.length }.from(0).to(1)
       welcome_mail = deliveries.first
-      expect(welcome_mail.subject).to eq("[TEST] Welcome to C2!")
+      expect(welcome_mail.subject).to eq("Welcome to C2!")
     end
   end
 
