@@ -1,6 +1,7 @@
 module Api
   class ProposalsController < BaseController
     rescue_from ActiveRecord::RecordNotFound, with: :proposal_not_found_error
+    rescue_from ClientModelMismatch, with: :auth_errors
 
     before_action -> { authorize proposal }, only: [:update, :show]
 
@@ -43,7 +44,14 @@ module Api
 
     private
 
+    def check_client_model
+      unless params.fetch(current_user.client_model_slug, false)
+        raise ClientModelMismatch, "Invalid client model"
+      end
+    end
+
     def create_proposal
+      check_client_model
       @client_data_instance = create_client_data_instance
       @client_data_instance.build_proposal(requester: current_user)
       if errors.empty?

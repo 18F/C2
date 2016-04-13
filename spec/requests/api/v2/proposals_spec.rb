@@ -52,6 +52,20 @@ describe "API v2" do
     end
   end
 
+  describe "POST proposal" do
+    it "returns 403 when trying to create proposal in different client model" do
+      user = create(:user, client_slug: "ncr")
+      oauth_application = oauth_application(user)
+      oauth_token = oauth_token(oauth_application)
+
+      post "/api/v2/proposals",
+        { test_client_request: { project_title: "i am a test", amount: 123.00 } },
+        { Authorization: oauth_authz_header(oauth_token) }
+
+      expect(response.status).to eq(403)
+    end
+  end
+
   def cors_headers
     {
       "HTTP_ORIGIN" => cors_origin,
