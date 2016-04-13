@@ -25,7 +25,7 @@ C2::Application.routes.draw do
 
   if ENV["API_ENABLED"] == "true"
     namespace :api do
-      scope :v2 do
+      namespace :v2 do
         resources :proposals
       end
     end

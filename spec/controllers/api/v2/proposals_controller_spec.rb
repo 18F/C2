@@ -1,4 +1,4 @@
-describe Api::ProposalsController do
+describe Api::V2::ProposalsController do
   describe "#show" do
     it "fetches a specific proposal" do
       user = mock_api_doorkeeper_pass
