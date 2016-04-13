@@ -10,6 +10,9 @@
   - if @reason.present?
     = render partial: "mail_shared/call_to_action/subheader",
       locals: { bold: "not-bold", subheader: cta_subheader, vertical: "" }
+  - else
+    = render partial: "mail_shared/call_to_action/subheader",
+      locals: { bold: "not-bold", subheader: "", vertical: "" }
 
   = render partial: "mail_shared/approval/chain",
     locals: { proposal: @proposal }
