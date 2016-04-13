@@ -22,6 +22,4 @@ RSpec.configure do |config|
 
   Capybara.default_host = 'http://localhost:3000'
   OmniAuth.config.test_mode = true
-  ENV["DISABLE_SANDBOX_WARNING"] = "true"
-  ENV["DEFAULT_URL_HOST"] = "example.com"
 end
