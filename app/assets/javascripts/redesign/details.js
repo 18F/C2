@@ -165,15 +165,22 @@ detailsApp.reinitObserverRemove = function(){
   var self = this;
   $('form.button_to [type="submit"]').on('click', function(e){
     e.preventDefault();
-    self.triggerObserverRemove(this);
+    var formRemoveButtonGuid = $(this).attr('data-field-guid');
+    self.triggerObserverRemove(formRemoveButtonGuid);
   });
 };
 
-detailsApp.triggerObserverRemove = function(el){
-  this.loadRemoveConfirmModal(el);
+detailsApp.triggerObserverRemove = function(guid){
+  this.loadRemoveConfirmModal(guid);
 }
 
-detailsApp.loadRemoveConfirmModal = function(el){
+detailsApp.loadRemoveConfirmModal = function(){
+  var removeFormGuid = $(this).attr('data-remove-guid');
+  $('[data-field-guid="' + removeFormGuid + '"]').parent().remove();
+}
+
+detailsApp.deleteObserverRow = function(){
+  $(this).data()
 }
 
 detailsApp.generateCardObjects = function(){
