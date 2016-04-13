@@ -14,7 +14,7 @@ class ObservationsController < ApplicationController
         redirect_to proposal_path(@proposal)
       }
       format.js { 
-        render file: 'proposals/js/observation_create.js.erb'
+        render file: "proposals/js/observation_create.js.erb"
       }
     end
   end
@@ -34,7 +34,7 @@ class ObservationsController < ApplicationController
         redirect_to redirect_path
       }
       format.js { 
-        render file: 'proposals/js/observation_destroy.js.erb'
+        render file: "proposals/js/observation_destroy.js.erb"
       }
     end
   end
