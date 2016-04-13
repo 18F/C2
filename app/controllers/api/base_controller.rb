@@ -2,7 +2,7 @@ module Api
   class BaseController < ApplicationController
     prepend_before_action :doorkeeper_authorize!
 
-    protect_from_forgery with: :null_session, if: Proc.new { |c| c.request.format.json? }
+    protect_from_forgery with: :null_session, if: proc { |c| c.request.format.json? }
 
     private
 
