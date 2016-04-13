@@ -174,6 +174,10 @@ detailsApp.triggerObserverRemove = function(guid){
   this.loadRemoveConfirmModal(guid);
 }
 
+/* 
+ * Element clicked should have "data-remove-guid" with the GUID 
+ * use GUID to find "data-field-guid" and target parent()
+ */
 detailsApp.loadRemoveConfirmModal = function(){
   var removeFormGuid = $(this).attr('data-remove-guid');
   $('[data-field-guid="' + removeFormGuid + '"]').parent().remove();
