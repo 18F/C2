@@ -21,6 +21,28 @@ module StepManager
     reset_status
   end
 
+  def reset_status
+    unless canceled?
+      if root_step.nil? || root_step.completed?
+        update(status: "completed")
+      else
+        update(status: "pending")
+      end
+    end
+  end
+
+  def root_step
+    steps.find_by(parent: nil)
+  end
+
+  def parallel?
+    root_step.type == "Steps::Parallel"
+  end
+
+  def serial?
+    root_step.type == "Steps::Serial"
+  end
+
   def clean_up_old_steps(old_steps, step_list)
     # destroy any old steps that are not a part of step list
     (old_steps - step_list).each do |step|
