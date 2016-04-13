@@ -189,7 +189,7 @@ detailsApp.deleteObserverRow = function(){
 
 detailsApp.generateCardObjects = function(){
   var self = this;
-  $(".card form").each(function(i, parentItem){
+  $("#request-details-card form").each(function(i, parentItem){
     var formNameKey = $(parentItem).attr("data-field-guid");
     var formNameObject = {};
     var $inputFields = $(parentItem).find(".selectize-input div, textarea, input, select, radio");
