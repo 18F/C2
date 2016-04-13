@@ -18,11 +18,16 @@ module Oauth
     end
 
     def authenticate_user!
-      current_user
+      unless current_user
+        flash[:error] = "You must login to access OAuth Applications"
+        redirect_to "/"
+      end
     end
 
     def current_user
-      User.find_by(email_address: session[:user]["email"])
+      if session[:user] && session[:user]["email"]
+        User.find_by(email_address: session[:user]["email"])
+      end
     end
   end
 end
