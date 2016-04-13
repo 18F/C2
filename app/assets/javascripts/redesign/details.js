@@ -65,15 +65,13 @@ detailsApp.setupInputFields = function(){
 };
 
 detailsApp.setupStatusToggle = function(){
-  $(".status-toggle-all").on("click", function(e){
-    e.preventDefault();
-    $(".status-contracted").toggleClass("status-expanded");
-    if($(".status-contracted").hasClass("status-expanded")){
-      $(".status-toggle-all.status-text").text("Minimize");
-    } else {
-      $(".status-toggle-all.status-text").text("Show all");
-    }
-  });
+  if ($(".status-toggle-all")) {
+    $(".status-toggle-all").on("click", function (e) {
+      e.preventDefault();
+      $(".status-contracted").toggleClass("status-expanded");
+      $(".status-contract-action,.status-expand-action").toggle();
+    });
+  }
 };
 
 detailsApp.setupRequestDetailsToggle = function() {
@@ -196,21 +194,9 @@ detailsApp.getCardObject = function(guidValue){
   return deepObjectCopy;
 };
 
-detailsApp.setupObserverController = function(){
+detailsApp.setupObserverController = function(newRow){
   var $observers = $(".observer-list");
-  var form = "<form class='button_to remove_ajax'><input data-confirm='Are you sure?' type='submit' value='Remove' /></form>"
-
-  $("form#new_observation").submit(function(){
-    var valuesToSubmit = $(this).serialize();
-    var value = $("form#new_observation :selected").text();
-    $observers.append("<li class='observer-list-item'>" + value + form + "</li>");
-    return false;//prevents default
-  });
-
-  $(document).on("submit","form.remove_ajax",function(){
-    $(this).parent().remove();
-    return false;
-  });
+  $observers.append(newRow);
 };
 
 detailsApp.setupCommentController = function(){

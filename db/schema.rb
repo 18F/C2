@@ -225,7 +225,6 @@ ActiveRecord::Schema.define(version: 20160406142950) do
     t.integer  "user_id",                    null: false
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
-    t.uuid     "visit_id"
   end
 
   create_table "roles", force: :cascade do |t|
@@ -358,7 +357,6 @@ ActiveRecord::Schema.define(version: 20160406142950) do
   add_foreign_key "proposal_roles", "users", name: "user_id_fkey"
   add_foreign_key "proposals", "users", column: "requester_id", name: "requester_id_fkey"
   add_foreign_key "proposals", "visits"
-  add_foreign_key "reports", "visits"
   add_foreign_key "scheduled_reports", "reports"
   add_foreign_key "scheduled_reports", "users"
   add_foreign_key "steps", "proposals", name: "proposal_id_fkey", on_delete: :cascade
