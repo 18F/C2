@@ -18,6 +18,7 @@ gem "climate_control"
 gem "clockwork", require: false
 gem "daemons" # for delayed_job
 gem "delayed_job_active_record"
+gem "doorkeeper"
 gem "dotenv-rails", require: "dotenv/rails-now"
 gem "draper"
 gem "kaminari"

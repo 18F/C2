@@ -28,6 +28,8 @@ class User < ActiveRecord::Base
   has_many :reports
   has_many :scheduled_reports
 
+  has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
+
   DEFAULT_TIMEZONE = "Eastern Time (US & Canada)"
 
   def self.active

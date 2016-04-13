@@ -185,6 +185,30 @@ module Ncr
       EXPENSE_TYPES.map { |expense_type| [expense_type, expense_type] }
     end
 
+    def initialize_steps
+      setup_approvals_and_observers
+    end
+
+    def self.permitted_params(params, work_order_instance)
+      permitted = Ncr::WorkOrderFields.new.relevant(params[:ncr_work_order][:expense_type])
+      if work_order_instance
+        permitted.delete(:emergency) # emergency field cannot be edited
+      end
+      params.require(:ncr_work_order).permit(*permitted)
+    end
+
+    def setup_and_email_subscribers(comment)
+      Ncr::WorkOrderUpdater.new(
+        work_order: self,
+        update_comment: comment
+      ).run
+    end
+
+    def normalize_input(current_user)
+      self.modifier = current_user
+      Ncr::WorkOrderValueNormalizer.new(self).run
+    end
+
     private
 
     def frozen_approving_official_not_changed

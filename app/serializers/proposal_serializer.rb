@@ -5,9 +5,11 @@ class ProposalSerializer < ActiveModel::Serializer
     :created_at,
     :id,
     :status,
-    :updated_at
+    :updated_at,
+    :client_data_type
   )
 
+  has_one :client_data, serializer: ClientDataSerializer
   has_one :requester
   has_many :individual_steps, root: :steps
 

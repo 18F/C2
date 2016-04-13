@@ -1,4 +1,6 @@
 module RequestSpecHelper
+  include ApiSpecHelper
+
   def get_json(url)
     get(url)
     JSON.parse(response.body)

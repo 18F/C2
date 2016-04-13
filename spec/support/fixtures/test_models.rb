@@ -26,7 +26,18 @@ module Test
     end
 
     def total_price
-      1
+      amount
+    end
+
+    def self.permitted_params(params, client_request_instance)
+      params.require(:test_client_request).permit(:project_title, :amount, :approving_official_id)
+    end
+
+    def initialize_steps
+    end
+
+    def public_identifier
+      "TEST-#{id}"
     end
   end
 

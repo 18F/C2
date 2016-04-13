@@ -1,4 +1,8 @@
 C2::Application.routes.draw do
+  use_doorkeeper do
+    controllers applications: "oauth/applications"
+  end
+
   ActiveAdmin.routes(self)
   root to: "home#index"
   get "/error" => "home#error"
@@ -19,13 +23,11 @@ C2::Application.routes.draw do
   # mandrill-rails
   resource :inbox, controller: "inbox", only: [:show, :create]
 
-  namespace :api do
-    scope :v1 do
-      namespace :ncr do
-        resources :work_orders, only: [:index]
+  if ENV["API_ENABLED"] == "true"
+    namespace :api do
+      namespace :v2 do
+        resources :proposals
       end
-
-      resources :users, only: [:index]
     end
   end
 
