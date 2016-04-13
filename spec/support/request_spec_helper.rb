@@ -1,7 +1,6 @@
 module RequestSpecHelper
   def get_json(url)
     get(url)
-    puts response.pretty_inspect
     JSON.parse(response.body)
   end
 
