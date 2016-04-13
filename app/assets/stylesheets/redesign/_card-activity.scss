@@ -3,8 +3,12 @@
   width: 23px;
 }
 
-.status-feed-content{
+.status-feed-content {
   padding-left: 20px;
+}
+
+.status-expand-action {
+  display: none;
 }
 
 .status-toggle-all.status-arrow{
@@ -19,12 +23,21 @@
   display: inline-block;
   height: 25px;
   vertical-align: top;
+  padding-left: 20px;
+
+  .status-count {
+    font-weight: normal;
+  }
 }
 
 .status-expanded .status-arrow{
   transform: rotate(180deg);
 }
 .card-for-activity{
+  h3 {
+    font-weight: normal;
+  }
+
   .status-feed-item{
     margin-bottom: 15px;
   }

@@ -4,21 +4,19 @@
       .card
         .card-head
           %h2
-            Activity
+            = t(".header")
         .content-content
           = form_for [@proposal, Comment.new] do |f|
             .row
               .medium-12.column
-                = f.text_area :comment_text, rows: 5, placeholder: "Add a comment"
+                %h3
+                  = t(".comment_form.headline")
+                .subhead
+                  = t(".comment_form.subhead")
+                = f.text_area :comment_text, rows: 5
             .row
               .medium-12.column.text-right.request-history-wrapper
-                %div
-                  %label.attachment-container
-                    %a{class: "button secondary round"}
-                      %span.plus +
-                      Attachment
-                      = f.file_field :file, { style: "display: none" }
-                  = submit_tag "Send", id: "add_a_comment", data: {"disable-if-empty" => "comment_comment_text"}, class: "button primary round no-margin-bottom"
+                = submit_tag t(".button.send"), id: "add_a_comment", data: {"disable-if-empty" => "comment_comment_text"}, class: "button primary round no-margin-bottom"
 
             .row
               .medium-12.column
@@ -38,13 +36,21 @@
                             = render partial: event, locals: { event: event }
                       - index = index + 1
 
-
-            .row
-              .medium-12.column.status-feed-actions.status-contracted
-                %div
-                  %a.button.primary.status-toggle-all.status-arrow
-                    ↓
-                  %a.primary.status-toggle-all.status-text
-                    Show all
+            - if history.events.length > 5
+              .row.status-feed-actions
+                .medium-12.column.status-contract-action
+                  %div
+                    %a.button.primary.status-toggle-all.status-arrow
+                      ↓
+                    %a.primary.status-toggle-all.status-text
+                      = t(".button.show_all_activity")
+                      %span.status-count
+                        = t(".button.hidden_activity_count", count: history.events.length - 5)
+                .medium-12.column.status-expand-action
+                  %div
+                    %a.button.primary.status-toggle-all.status-arrow
+                      ↑
+                    %a.primary.status-toggle-all.status-text
+                      = t(".button.minimize_activity")
 %div.current_user{:style=>"display:none;"}
   = current_user.full_name

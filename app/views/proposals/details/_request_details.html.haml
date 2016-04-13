@@ -17,7 +17,7 @@
                 .detail-display
                   %p.request-detail.detail-value{id: 'description-' + @client_data_instance.id.to_s }
                     = @client_data_instance.description
-              
+
 
             - proposal.fields_for_input.each do |fields|
               - if !excluded_values.include? fields[:key]
@@ -34,7 +34,6 @@
                         .detail-edit
                           %label.detail-element
                             = field[:value][0]
-                          %p.proposal-data-attribute
                             = request_details_form_field field[:key], f
 
             .row.column.line-item-block
