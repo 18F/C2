@@ -74,5 +74,6 @@ C2::Application.routes.draw do
   if Rails.env.development?
     mount LetterOpenerWeb::Engine => "letter_opener"
     mount Blazer::Engine, at: "blazer"
+    mount Konacha::Engine, at: "konacha" if defined?(Konacha)
   end
 end

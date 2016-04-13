@@ -31,6 +31,7 @@ detailsApp.data = {
 
 detailsApp.setupData = function(){
   this.saveTemplateDefault();
+  this.setupFormEl();
   this.generateCardObjects();
 };
 
@@ -45,6 +46,7 @@ detailsApp.setupEvents = function(){
     var valid = true;
     if(valid){
       self.postActionSaveHook();
+      self.setupFormEl();
       self.generateCardObjects();
       self.defaultActionBar();
     }
@@ -73,6 +75,10 @@ detailsApp.setupStatusToggle = function(){
     });
   }
 };
+
+detailsApp.setupFormEl = function() {
+  this.data.$el = $("#request-details-card form");
+}
 
 detailsApp.setupRequestDetailsToggle = function() {
   var $editButton = $(".request-detail-edit-button");
@@ -187,7 +193,8 @@ detailsApp.deleteObserverRow = function(){
 
 detailsApp.generateCardObjects = function(){
   var self = this;
-  $("#request-details-card form").each(function(i, parentItem){
+  var $el = self.data.$el;
+  $el.each(function(i, parentItem){
     var formNameKey = $(parentItem).attr("data-field-guid");
     var formNameObject = {};
     var $inputFields = $(parentItem).find(".selectize-input div, textarea, input, select, radio");
