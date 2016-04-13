@@ -65,15 +65,13 @@ detailsApp.setupInputFields = function(){
 };
 
 detailsApp.setupStatusToggle = function(){
-  $(".status-toggle-all").on("click", function(e){
-    e.preventDefault();
-    $(".status-contracted").toggleClass("status-expanded");
-    if($(".status-contracted").hasClass("status-expanded")){
-      $(".status-toggle-all.status-text").text("Minimize");
-    } else {
-      $(".status-toggle-all.status-text").text("Show all");
-    }
-  });
+  if ($(".status-toggle-all")) {
+    $(".status-toggle-all").on("click", function (e) {
+      e.preventDefault();
+      $(".status-contracted").toggleClass("status-expanded");
+      $(".status-contract-action,.status-expand-action").toggle();
+    });
+  }
 };
 
 detailsApp.setupRequestDetailsToggle = function() {
