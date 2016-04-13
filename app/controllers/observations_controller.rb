@@ -14,7 +14,7 @@ class ObservationsController < ApplicationController
         redirect_to proposal_path(@proposal)
       }
       format.js { 
-        render file: 'proposals/js/observations.js.erb'
+        render file: 'proposals/js/observation_create.js.erb'
       }
     end
   end
@@ -28,8 +28,15 @@ class ObservationsController < ApplicationController
     end
     DispatchFinder.run(proposal).on_observer_removed(observation.user)
     observation.destroy
-    flash[:success] = "Removed Observation for #{proposal.public_id}"
-    redirect_to redirect_path
+    respond_to do |format|
+      format.html { 
+        flash[:success] = "Removed Observation for #{proposal.public_id}"
+        redirect_to redirect_path
+      }
+      format.js { 
+        render file: 'proposals/js/observation_destroy.js.erb'
+      }
+    end
   end
 
   protected
