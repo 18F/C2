@@ -41,7 +41,7 @@ class NcrDispatcher < Dispatcher
   def notify_pending_approvers(comment)
     proposal.currently_awaiting_steps.each do |step|
       unless user_is_modifier?(step.user, comment.user)
-        if step_user_already_notifier_about_proposal?(step)
+        if step_user_already_notified_about_proposal?(step)
           ProposalMailer.proposal_updated_while_step_pending(step, comment).deliver_later
         else
           StepMailer.proposal_notification(step).deliver_later
@@ -51,9 +51,9 @@ class NcrDispatcher < Dispatcher
   end
 
   def notify_observers(needs_review, comment)
-    proposal.observers.each do |observer|
+    only_observers.each do |observer|
       unless user_is_modifier?(observer, comment.user)
-        if observer.role_on(proposal).active_observer?
+        if observer.role_on(proposal).observer_only?
           if needs_review == true
             ProposalMailer.
               proposal_updated_needs_re_review(observer, proposal, comment).
@@ -72,7 +72,7 @@ class NcrDispatcher < Dispatcher
     user == comment_user
   end
 
-  def step_user_already_notifier_about_proposal?(step)
+  def step_user_already_notified_about_proposal?(step)
     step.api_token.present?
   end
 

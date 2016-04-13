@@ -170,6 +170,29 @@ describe Proposal do
     end
   end
 
+  describe "subscribers_except_future_step_users" do
+    let (:proposal) { create(:proposal, :with_serial_approvers, :with_observers) }
+
+    it "includes the requester" do
+      expect(proposal.subscribers_except_future_step_users).to include(proposal.requester)
+    end
+
+    it "includes an observer" do
+      expect(proposal.subscribers_except_future_step_users).to include(proposal.observers.first)
+    end
+
+    it "includes approved approvers" do
+      individuals = proposal.individual_steps
+      individuals += [Steps::Approval.new(user: create(:user))]
+      proposal.root_step = Steps::Serial.new(child_steps: individuals)
+      expect(proposal.approvers.length).to eq(3)
+      proposal.individual_steps.first.complete!
+      expect(proposal.subscribers_except_future_step_users).to include(proposal.approvers[0])
+      expect(proposal.subscribers_except_future_step_users).to include(proposal.approvers[1])
+      expect(proposal.subscribers_except_future_step_users).not_to include(proposal.approvers[2])
+    end
+  end
+
   describe "#eligible_observers" do
     it "identifies eligible observers" do
       observer = create(:user, client_slug: nil)

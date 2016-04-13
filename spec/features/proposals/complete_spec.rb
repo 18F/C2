@@ -1,20 +1,4 @@
-describe "Approving a proposal" do
-  it "can be done by an approver" do
-    Timecop.freeze do
-      proposal = create(:proposal, :with_approver)
-      login_as(proposal.approvers.first)
-      visit "/proposals/#{proposal.id}"
-      click_on("Approve")
-
-      expect(current_path).to eq("/proposals/#{proposal.id}")
-      expect(page).to have_content("You have approved #{proposal.public_id}")
-
-      approval = Proposal.last.individual_steps.first
-      expect(approval.status).to eq("completed")
-      expect(approval.completed_at.utc.to_s).to eq(Time.now.utc.to_s)
-    end
-  end
-
+describe "Completing a proposal" do
   it "distinguishes user with multiple actionable steps" do
     proposal = create(:proposal, :with_serial_approvers)
     first_approver = proposal.approvers.first
@@ -25,20 +9,20 @@ describe "Approving a proposal" do
     visit proposal_path(proposal)
     click_on("Approve")
 
-    expect(current_path).to eq("/proposals/#{proposal.id}")
+    expect(current_path).to eq(proposal_path(proposal))
     expect(page).to have_content("You have approved #{proposal.public_id}")
 
     login_as(second_approver)
     visit proposal_path(proposal)
     click_on("Approve")
 
-    expect(current_path).to eq("/proposals/#{proposal.id}")
+    expect(current_path).to eq(proposal_path(proposal))
     expect(page).to have_content("You have approved #{proposal.public_id}")
   end
 
   it "sends email to observers and requester when proposal is complete" do
     proposal = create(:proposal, :with_approver)
-    proposal.add_observer(proposal.approvers.first)
+    proposal.add_observer(create(:user))
 
     login_as(proposal.approvers.first)
     visit proposal_path(proposal)

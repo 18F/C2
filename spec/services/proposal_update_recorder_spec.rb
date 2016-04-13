@@ -90,7 +90,7 @@ describe ProposalUpdateRecorder do
       expect(comment.user).to eq(modifier)
     end
 
-    it "does not send a comment email for the update comment to proposal listeners" do
+    it "does not send a comment email for the update comment to proposal subscribers" do
       work_order = create(:ncr_work_order, vendor: "old")
       listener = create(:user, client_slug: "ncr")
       work_order.proposal.add_observer(listener)

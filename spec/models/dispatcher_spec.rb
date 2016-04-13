@@ -179,4 +179,23 @@ describe Dispatcher do
       expect(email_recipients).to eq []
     end
   end
+
+  describe "#on_comment_created" do 
+    it "does not send an email to commenter" do
+      proposal = create(:proposal)
+      comment_user = create(:user, email_address: "comment_user@example.com")
+      comment = create(:comment, proposal: proposal, user: comment_user)
+      some_user = create(:user)
+      mailer_double = double(deliver_later: true)
+      allow(proposal).to receive(:subscribers_except_future_step_users).and_return([some_user, comment_user])
+      allow(CommentMailer).to receive(:comment_added_notification).
+        with(comment, some_user.email_address).
+        and_return(mailer_double)
+
+      Dispatcher.new(proposal).on_comment_created(comment)
+
+      expect(CommentMailer).to have_received(:comment_added_notification).
+        with(comment, some_user.email_address)
+    end
+  end
 end

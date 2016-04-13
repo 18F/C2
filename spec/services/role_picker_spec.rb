@@ -69,7 +69,7 @@ describe RolePicker do
       end
     end
 
-    describe "#active_observer?" do
+    describe "#observer_only?" do
       it "is true when user is observer and not active approver" do
         observer = create(:user)
         observation = create(:observation, user: observer)
@@ -77,7 +77,7 @@ describe RolePicker do
 
         roles = RolePicker.new(observer, proposal)
 
-        expect(roles).to be_active_observer
+        expect(roles).to be_observer_only
       end
     end
   end

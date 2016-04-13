@@ -173,6 +173,11 @@ class Proposal < ActiveRecord::Base
     results.compact.uniq
   end
 
+  def subscribers_except_future_step_users
+    results = currently_awaiting_step_users + individual_steps.completed.map(&:user) + observers + [requester]
+    results.compact.uniq
+  end
+
   def subscribers_except_delegates
     subscribers - delegates
   end

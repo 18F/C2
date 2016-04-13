@@ -31,7 +31,7 @@ class Dispatcher
   end
 
   def deliver_cancelation_emails(canceler, reason = nil)
-    cancelation_notification_recipients = [proposal.requester] + active_step_users + active_observers - [canceler]
+    cancelation_notification_recipients = [proposal.requester] + active_step_users + only_observers - [canceler]
 
     cancelation_notification_recipients.each do |recipient|
       CancelationMailer.cancelation_notification(
@@ -57,13 +57,13 @@ class Dispatcher
     if requires_approval_notice? && proposal.pending?
       StepMailer.step_reply_received(step).deliver_later
     elsif proposal.completed?
-      proposal.observers.each { |observer| ObserverMailer.proposal_complete(observer, proposal).deliver_later }
+      only_observers.each { |observer| ObserverMailer.proposal_complete(observer, proposal).deliver_later }
       ProposalMailer.proposal_complete(step.proposal).deliver_later
     end
   end
 
   def on_comment_created(comment)
-    comment.listeners.each do |user|
+    comment_subscribers(comment).each do |user|
       CommentMailer.comment_added_notification(comment, user.email_address).deliver_later
     end
   end
@@ -87,9 +87,9 @@ class Dispatcher
     end
   end
 
-  def active_observers
+  def only_observers
     proposal.observers.select do |observer|
-      observer.role_on(proposal).active_observer?
+      observer.role_on(proposal).observer_only?
     end
   end
 
@@ -111,5 +111,9 @@ class Dispatcher
 
   def deliver_proposal_created_confirmation
     ProposalMailer.proposal_created_confirmation(proposal).deliver_later
+  end
+
+  def comment_subscribers(comment)
+    proposal.subscribers_except_future_step_users - [comment.user]
   end
 end
