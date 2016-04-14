@@ -1,6 +1,6 @@
 .title-block
   %span.status-action #{event.item_type} #{event.event_type}d by #{event.user.full_name}
   %span.time-from
-    = date_with_tooltip(event.created_at, true)
+    = date_with_tooltip(event.created_at, recent_time_only: true)
 .item-block
   = event.comment_text

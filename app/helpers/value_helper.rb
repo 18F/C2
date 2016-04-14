@@ -1,7 +1,7 @@
 module ValueHelper
   include ActionView::Helpers::NumberHelper
 
-  def date_with_tooltip(time, ago = false)
+  def date_with_tooltip(time, ago: false, recent_time_only: false)
     # make sure we are dealing with a Time object
     unless time.is_a?(Time)
       time = Time.zone.parse(time.to_s)
@@ -14,6 +14,9 @@ module ValueHelper
 
     if ago
       content_tag("span", time_ago_in_words(adjusted_time) + " ago", title: adjusted_time_str)
+    elsif recent_time_only && adjusted_time < Date.yesterday
+      adjusted_date_str = adjusted_time.strftime("%b %-d, %Y")
+      content_tag("span", adjusted_date_str, title: adjusted_time_str)
     else
       content_tag("span", adjusted_time_str, title: adjusted_time_str)
     end

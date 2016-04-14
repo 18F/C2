@@ -22,7 +22,7 @@
                       <strong>#{attachment.file_file_name}</strong>
                 .row
                   .medium-11.column
-                    Uploaded by <strong>#{attachment.user.full_name}</strong> on <strong>#{date_with_tooltip(attachment.created_at, true)}</strong>
+                    Uploaded by <strong>#{attachment.user.full_name}</strong> on <strong>#{date_with_tooltip(attachment.created_at, ago: true, recent_time_only: true)}</strong>
                   .medium-1.column.text-right
                     - if policy(attachment).can_destroy?
                       = button_to "Delete", proposal_attachment_path(@proposal, attachment), method: :delete, data: {confirm: "Are you sure?"}, class: "text-right"
