@@ -171,6 +171,17 @@ describe StepManager do
     end
   end
 
+  describe "#individual_steps" do
+    it "returns purchase and approval steps" do
+      proposal = create(:proposal, :with_approval_and_purchase)
+
+      steps = proposal.individual_steps
+
+      expect(proposal.steps.length).to eq(3)
+      expect(steps.length).to eq(2)
+    end
+  end
+
   describe "#parallel?" do
     it "is true if the root step is a parallel step" do
       proposal = create(:proposal, steps: [create(:parallel_step)])

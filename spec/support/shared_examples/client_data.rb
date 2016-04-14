@@ -2,7 +2,6 @@ shared_examples "client data" do
   describe "Associations" do
     it { should have_many(:comments) }
     it { should have_many(:completers) }
-    it { should have_many(:individual_steps) }
     it { should have_many(:observations) }
     it { should have_many(:observers) }
     it { should have_many(:steps) }
@@ -18,6 +17,7 @@ shared_examples "client data" do
     it { should delegate_method(:add_observer).to(:proposal) }
     it { should delegate_method(:add_requester).to(:proposal) }
     it { should delegate_method(:currently_awaiting_step_users).to(:proposal) }
+    it { should delegate_method(:individual_steps).to(:proposal) }
     it { should delegate_method(:set_requester).to(:proposal) }
     it { should delegate_method(:status).to(:proposal) }
   end

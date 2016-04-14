@@ -10,7 +10,6 @@ module ClientDataMixin
 
     has_one :proposal, as: :client_data
     has_many :steps, through: :proposal
-    has_many :individual_steps, -> { individual }, class_name: "Steps::Individual", through: :proposal
     has_many :observations, through: :proposal
     has_many :observers, through: :observations, source: :user
     has_many :comments, through: :proposal
@@ -28,6 +27,7 @@ module ClientDataMixin
       :add_requester,
       :currently_awaiting_step_users,
       :ineligible_approvers,
+      :individual_steps,
       :set_requester,
       :status,
       to: :proposal
