@@ -12,6 +12,13 @@ class ProposalsController < ApplicationController
 
   def show
     @proposal = proposal.decorate
+    cookies[:detail] = params[:detail]
+    mode = cookies[:detail]
+    if mode == "view"
+      @history = HistoryList.new(proposal)
+      @client_data_instance ||= proposal.client_data
+      render "show_next"
+    end
   end
 
   def index
