@@ -91,6 +91,16 @@ describe ProposalsController do
       end
     end
 
+    context 'details beta' do
+      it 'should render the show_next view' do
+        proposal = create(:proposal, requester: user)
+        get :show, id: proposal.id, detail: "new"
+        expect(response.status).to eq(200)
+        expect(response).to render_template("show_next")
+        expect(response).to_not render_template("show")
+      end
+    end
+
   end
 
   describe '#query', elasticsearch: true do
