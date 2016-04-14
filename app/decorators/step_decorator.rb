@@ -17,6 +17,10 @@ class StepDecorator < Draper::Decorator
     end
   end
 
+  def action_status
+    "Step #{position - 1}: #{completed} by #{completed_by.full_name}"
+  end
+
   def label
     get_step_text(:label)
   end

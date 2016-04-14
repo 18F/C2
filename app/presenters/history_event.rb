@@ -1,5 +1,6 @@
 require "delegate"
 
+# HistoryEvent wraps & delegates to C2Version
 class HistoryEvent < SimpleDelegator
   include ActiveModel::Conversion
 
@@ -19,16 +20,8 @@ class HistoryEvent < SimpleDelegator
     Attachment.find(item_id)
   end
 
-  # TODO: Move some of this into StepDecorator
-
-  def step_count
-    reify.position - 1
-  end
-
-  def step_action_description
-    step = reify.decorate
-    "Step " + step_count.to_s + ": " +
-      step.completed + " by " + step.completed_by.full_name
+  def decorate
+    reify.decorate
   end
 
   def model
