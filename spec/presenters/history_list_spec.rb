@@ -1,11 +1,11 @@
 describe HistoryList do
   describe 'contents' do
-    it "limits to the specified Proposal" do
+    it "First event in history should be create" do
       prop1 = create(:proposal)
-      _prop2 = create(:proposal)
 
-      query = HistoryList.new(prop1).container.query
-      expect(query).to eq(prop1.versions.reverse)
+      history = HistoryList.new(prop1)
+      first_event = history.events.first.event
+      expect(first_event).to eq("create")
     end
   end
 end
