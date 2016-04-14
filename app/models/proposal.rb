@@ -122,20 +122,12 @@ class Proposal < ActiveRecord::Base
     end
   end
 
-  def root_step
-    steps.where(parent: nil).first
-  end
-
-  def parallel?
-    root_step.type == "Steps::Parallel"
-  end
-
-  def serial?
-    root_step.type == "Steps::Serial"
-  end
-
   def delegate?(user)
     delegates.include?(user)
+  end
+
+  def existing_step_for(user)
+    steps.where(user: user).first
   end
 
   def existing_or_delegated_step_for(user)
@@ -164,10 +156,6 @@ class Proposal < ActiveRecord::Base
     ProposalQuery.new(self).purchasers
   end
 
-  def existing_step_for(user)
-    steps.where(user: user).first
-  end
-
   def subscribers
     results = approvers + purchasers + observers + delegates + [requester]
     results.compact.uniq
@@ -180,16 +168,6 @@ class Proposal < ActiveRecord::Base
 
   def subscribers_except_delegates
     subscribers - delegates
-  end
-
-  def reset_status
-    unless canceled?
-      if root_step.nil? || root_step.completed?
-        update(status: "completed")
-      else
-        update(status: "pending")
-      end
-    end
   end
 
   def has_subscriber?(user)
