@@ -2,7 +2,7 @@ describe AttachmentMailer do
   include MailerSpecHelper
 
   describe "#new_attachment_notification" do
-    let(:mail) { AttachmentMailer.new_attachment_notification(requester.email_address, proposal, attachment) }
+    let(:mail) { AttachmentMailer.new_attachment_notification(requester, proposal, attachment) }
 
     it_behaves_like "a proposal email"
 
@@ -15,7 +15,7 @@ describe AttachmentMailer do
     end
 
     def proposal
-      @proposal ||= create(:proposal, :with_parallel_approvers)
+      @proposal ||= create(:proposal)
     end
 
     def requester

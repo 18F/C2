@@ -3,7 +3,7 @@ describe CancelationMailer do
     let(:proposal) { create(:proposal) }
     let(:user) { create(:user) }
     let(:mail) { CancelationMailer.cancelation_notification(
-      recipient_email: user.email_address,
+      recipient: user,
       canceler: user,
       proposal: proposal
     ) }
@@ -16,7 +16,7 @@ describe CancelationMailer do
       reason = "cancelation reason"
 
       mail = CancelationMailer.cancelation_notification(
-        recipient_email: user.email_address,
+        recipient: user,
         canceler: user,
         proposal: proposal,
         reason: reason

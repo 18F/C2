@@ -16,6 +16,19 @@ class ApplicationMailer < ActionMailer::Base
 
   protected
 
+  def send_email(to:, proposal:, from: default_sender_email)
+    mail(
+      to: email_to_user(to),
+      subject: subject(proposal),
+      from: from,
+      reply_to: reply_email(proposal)
+    )
+  end
+
+  def email_to_user(user)
+    email_with_name(user.email_address, user.full_name)
+  end
+
   def add_logo
     add_inline_attachment("logo-c2-blue.png")
   end
@@ -28,16 +41,35 @@ class ApplicationMailer < ActionMailer::Base
     if proposal.comments.any?
       add_inline_attachment("icon-speech_bubble-blue.png")
     end
+
+    add_approval_chain_attachments(proposal)
+  end
+
+  def add_approval_chain_attachments(proposal)
+    add_completed_icon(proposal)
+    add_pending_icons(proposal)
+  end
+
+  def add_completed_icon(proposal)
+    if proposal.individual_steps.completed.any?
+      add_inline_attachment("numbers/icon-completed.png")
+    end
+  end
+
+  def add_pending_icons(proposal)
+    proposal.individual_steps.each do |proposal_step|
+      if proposal_step.status != "completed"
+        add_inline_attachment(
+          "numbers/icon-number-" + (proposal_step.position - 1).to_s + "-pending.png"
+        )
+      end
+    end
   end
 
   def add_inline_attachment(file_name)
     attachments.inline[file_name] = File.read(
         "app/assets/images/emails/#{file_name}"
       )
-  end
-
-  def email_to_user(user)
-    email_with_name(user.email_address, user.full_name)
   end
 
   def subject(proposal)

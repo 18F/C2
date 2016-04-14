@@ -1,6 +1,6 @@
 - content_for :header_icon, "icon-page-circle.png"
 - top_head = t("mailer.step_mailer.step_reply_received.body_html",
-  full_name: @step_user.full_name)
+  full_name: @step.user.full_name)
 - cta_subheader = t("mailer.proposal_status_html",
   proposal_status: @proposal.capitalized_detailed_status)
 

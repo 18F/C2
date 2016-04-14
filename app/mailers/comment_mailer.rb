@@ -1,19 +1,17 @@
 class CommentMailer < ApplicationMailer
-  def comment_added_notification(comment, to_email)
+  def comment_added_notification(comment, user)
+    @comment = comment
+    @proposal = comment.proposal.decorate
+    @recipient = user
     add_inline_attachment("icon-pencil-circle.png")
     add_inline_attachment("icon-speech_bubble-blue.png")
-    @comment = comment
-    @proposal = comment.proposal
-    @proposal = @proposal.decorate
-    @recipient = User.for_email(to_email)
     assign_threading_headers(@proposal)
 
     unless @comment.update_comment
-      mail(
-        to: to_email,
-        subject: subject(@proposal),
-        from: user_email_with_name(comment.user),
-        reply_to: reply_email(@proposal)
+      send_email(
+        to: @recipient,
+        from: user_email_with_name(@comment.user),
+        proposal: @proposal
       )
     end
   end

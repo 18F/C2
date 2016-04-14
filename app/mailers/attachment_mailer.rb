@@ -1,18 +1,16 @@
 class AttachmentMailer < ApplicationMailer
-  def new_attachment_notification(to_email, proposal, attachment)
+  def new_attachment_notification(user, proposal, attachment)
+    @proposal = proposal.decorate
+    @attachment = attachment
+    @recipient = user
     add_inline_attachment("icon-pencil-circle.png")
     add_inline_attachment("icon-clipped_page.png")
-    @proposal = proposal.decorate
-    @attachment_user = attachment.user
-    @attachment = attachment
-    @recipient = User.for_email(to_email)
     assign_threading_headers(@proposal)
 
-    mail(
-      to: to_email,
-      subject: subject(@proposal),
-      from: user_email_with_name(@attachment_user),
-      reply_to: reply_email(@proposal)
+    send_email(
+      to: @recipient,
+      from: user_email_with_name(@attachment.user),
+      proposal: @proposal
     )
   end
 end

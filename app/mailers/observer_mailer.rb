@@ -1,51 +1,37 @@
 class ObserverMailer < ApplicationMailer
   def observer_added_notification(observation, reason)
     @proposal = observation.proposal.decorate
-    add_proposal_attributes_icons(@proposal)
-    add_inline_attachment("icon-page-circle.png")
     @observation = observation
     @reason = reason
-    observer = observation.user
-    @recipient = observer
-
+    @recipient = observation.user
+    add_proposal_attributes_icons(@proposal)
+    add_inline_attachment("icon-page-circle.png")
     assign_threading_headers(@proposal)
 
-    mail(
-      to: email_to_user(observer),
-      subject: subject(@proposal),
+    send_email(
+      to: @recipient,
       from: observation_added_from(observation),
-      reply_to: reply_email(@proposal)
+      proposal: @proposal
     )
   end
 
   def observer_removed_notification(proposal, user)
-    add_inline_attachment("icon-pencil-circle.png")
     @proposal = proposal.decorate
     @recipient = user
+    add_inline_attachment("icon-pencil-circle.png")
     assign_threading_headers(@proposal)
 
-    mail(
-      to: email_to_user(user),
-      subject: subject(@proposal),
-      from: default_sender_email,
-      reply_to: reply_email(@proposal)
-    )
+    send_email(to: @recipient, proposal: @proposal)
   end
 
   def proposal_complete(user, proposal)
     @proposal = proposal.decorate
+    @recipient = user
     add_proposal_attributes_icons(@proposal)
     add_inline_attachment("icon-check-green-circle.png")
-    user = user
-    @recipient = user
     assign_threading_headers(@proposal)
 
-    mail(
-      to: email_to_user(user),
-      subject: subject(@proposal),
-      from: default_sender_email,
-      reply_to: reply_email(@proposal)
-    )
+    send_email(to: @recipient, proposal: @proposal)
   end
 
   private

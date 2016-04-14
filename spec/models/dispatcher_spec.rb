@@ -80,7 +80,7 @@ describe Dispatcher do
       reason = "reason for cancelation"
       allow(CancelationMailer).to receive(:cancelation_notification).
         with(
-          recipient_email: approver.email_address,
+          recipient: approver,
           canceler: proposal.requester,
           proposal: proposal,
           reason: reason

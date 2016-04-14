@@ -46,7 +46,7 @@ describe "Handles incoming email" do
     client_request = create(:test_client_request)
     proposal = client_request.proposal
     mail = ProposalMailer.proposal_created_confirmation(proposal)
-    create(:approval_step, proposal: proposal, status: "actionable")
+    create(:approval_step, proposal: proposal, position: 2, status: "actionable")
     mandrill_event = mandrill_payload_from_message(mail)
     mandrill_event[0]["msg"]["from_email"] = "not-a-valid-user@example.com"
     mandrill_event[0]["msg"]["headers"]["Sender"] = proposal.requester.email_address
@@ -61,7 +61,7 @@ describe "Handles incoming email" do
     client_request = create(:test_client_request)
     proposal = client_request.proposal
     mail = ProposalMailer.proposal_created_confirmation(proposal)
-    create(:approval_step, proposal: proposal)
+    create(:approval_step, proposal: proposal, position: 2)
     mandrill_event = mandrill_payload_from_message(mail)
     mandrill_event[0]["msg"]["from_email"] = proposal.requester.email_address
 
