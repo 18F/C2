@@ -2,31 +2,62 @@
 
 ***If you are running the server and want to enable the API, set the environment variable `API_ENABLED=true`.***
 
-This API is currently in a very limited alpha, and is not enabled in any of our deployments. Note that this API may change at any time, without warning.
+The API design is evolving. Backwards-incompatible changes will result in a version change.
+
+The lastest version is *v2*.
 
 ## Schemas
 
 * All decimals are strings ([more info](https://github.com/rails-api/active_model_serializers/issues/202))
 * All times are in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format
 
-### Step
+### Proposal
+
+Each proposal object is composed of a few attributes and some child objects.
+
+### Attributes
 
 Attribute | Type | Note
 --- | --- | ---
-`id` | integer |
-`status` | string | Can be `pending`, `actionable`, `approved`, or `canceled`
-`user` | [User](#user) | a.k.a. "the approver"
+`id` | integer | primary identifier
+`status` | string | one of: `pending`, `cancelled`, `complete`
+`created_at` | string | timestamp
+`updated_at` | string | timestamp
+`client_data_type` | string | name of the client data class
 
-### [NCR](overview.md#national-capitol-region-ncr-service-centers) Work Order
+### Requester
+
+Who created the proposal. Refers to a [User](#user) record.
+
+Attribute | Type | Note
+--- | --- | ---
+`id` | integer | primary identifier
+`created_at` | string | timestamp
+`updated_at` | string | timestamp
+
+### Steps
+
+Array of step objects.
+
+Attribute | Type | Note
+--- | --- | ---
+`id` | integer | primary identifier
+`status` | string | Can be `pending`, `actionable`, `approved`, or `canceled`
+`user` | [User](#user) | who needs to complete the step
+
+### Client data
+
+The `client_data` object is the client-specific set of attributes. The attribute names
+will vary based on the client. For example, [NCR](overview.md#national-capitol-region-ncr-service-centers) Work Order:
 
 Attribute | Type | Note
 --- | --- | ---
 `amount` | string (decimal) | The cost of the work order
 `building_number` | string | ([full list](../config/data/ncr.yaml))
-`code` | `null` for BA61, string for BA80 | Identifier for the type of work
+`work_order_code` | `null` for BA61, string for BA80 | Identifier for the type of work
 `description` | string |
 `emergency` | boolean | Whether the work order was pre-approved or not (can only be `true` for BA61)
-`expense_type` | string | `BA61` or `BA80`
+`expense_type` | string | `BA60`, `BA61` or `BA80`
 `id` | integer |
 `name` | string |
 `not_to_exceed` | boolean | If the `amount` is exact, or an upper limit
@@ -35,33 +66,11 @@ Attribute | Type | Note
 `rwa_number` | `null` for BA61, string for BA80 | Essentially the internal bank account number
 `vendor` | string |
 
-### Proposal
-
-The central, generic data structure that maintains workflow information.
-
-Attribute | Type | Note
---- | --- | ---
-`steps` | [ [Step](#step) ] |
-`created_at` | string (time) |
-`id` | integer |
-`requester` | [User](#user) |
-`status` | string | Can be `pending`, `approved`, or `canceled`
-`updated_at` | string (time) |
-
-### User
-
-Attribute | Type | Note
---- | --- | ---
-`created_at` | string (time) |
-`email_address` | string | only shown when logged in
-`first_name` | string | only shown when logged in
-`id` | integer |
-`last_name` | string | only shown when logged in
-`updated_at` | string (time) |
-
 ## Endpoints
 
-### `GET /api/v1/users.json`
+### `GET /api/v2/proposals`
+
+Fetch one or more proposals matching a query. Default is all proposals to which you are subscribed.
 
 #### Query parameters
 
@@ -69,88 +78,28 @@ All are optional.
 
 Name | Values
 --- | ---
-`limit` | an integer >= 0
-`offset` | an integer >= 0
+`size` | an integer >= 0
+`from` | an integer >= 0
+`limit` | alias for `size`
+`offset` | alias for `from`
+`status` | one of `pending`, `cancelled`, `complete`
+`start_date` | timestamp string
+`end_date` | timestamp.string
+`text` | full-text search string. See https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html#query-string-syntax
 
 ##### Example
 
-https://c2-dev.cf.18f.us/api/v1/users.json?limit=5&offset=10
+https://cap.18f.gov/api/v2/proposals?size=5&from=10&text=foo
 
-#### Response
+### `GET /api/v2/proposals/:id`
 
-Returns an array of [Users](#user).
-
-```javascript
-[
-  {
-    "created_at": "2015-01-10T07:05:42.445Z",
-    "email_address": "liono@some-dot-gov.gov",
-    "first_name": "Liono",
-    "id": 43,
-    "last_name": "Appolo",
-    "updated_at": "2015-01-10T07:05:42.445Z"
-  },
-  // ...
-]
-```
-
-### `GET /api/v1/ncr/work_orders.json`
+Fetch a specific [Proposal](#proposal).
 
 #### Query parameters
 
-All are optional.
-
-Name | Values
---- | ---
-`limit` | an integer >= 0
-`offset` | an integer >= 0
+None
 
 ##### Example
 
-https://c2-dev.cf.18f.us/api/v1/ncr/work_orders.json?limit=5&offset=10
+https://cap.18f.gov/api/v2/proposals/12345
 
-#### Response
-
-Returns an array of [Work Orders](#ncr-work-order), in descending order of creation.
-
-```javascript
-[
-  {
-    "amount": "1000.00",
-    "building_number": "DC0017ZZ ,WHITE HOUSE-WEST WING1600 PA AVE. NW",
-    "code": "ABC",
-    "description": "Existing paint is starting to crack.",
-    "emergency": false,
-    "expense_type": "BA80",
-    "id": 16,
-    "name": "Blue paint for the Blue Room",
-    "not_to_exceed": false,
-    "office": "P1121209 Security Management",
-    "proposal": {
-      "steps": [
-        {
-          "id": 92,
-          "status": "pending",
-          "user": {
-            "created_at": "2015-01-10T07:05:42.445Z",
-            "id": 43,
-            "updated_at": "2015-01-10T07:05:42.445Z"
-          }
-        }
-      ],
-      "created_at": "2015-02-21T07:05:42.445Z",
-      "id": 12,
-      "requester": {
-        "created_at": "2015-02-10T07:05:42.445Z",
-        "id": 71,
-        "updated_at": "2015-02-10T07:05:42.445Z"
-      },
-      "status": "pending",
-      "updated_at": "2015-03-28T01:13:33.564Z"
-    },
-    "rwa_number": "123456A",
-    "vendor": "ACME Corp"
-  },
-  // ...
-]
-```
