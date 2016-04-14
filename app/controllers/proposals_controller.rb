@@ -14,7 +14,7 @@ class ProposalsController < ApplicationController
     @proposal = proposal.decorate
     cookies[:detail] = params[:detail]
     mode = cookies[:detail]
-    if mode == "view"
+    if mode == "new"
       @client_data_instance ||= proposal.client_data
       render "show_next"
     end
