@@ -6,6 +6,33 @@ The API design is evolving. Backwards-incompatible changes will result in a vers
 
 The lastest version is *v2*.
 
+## Clients
+
+See e.g. https://github.com/18F/c2-api-client-ruby for a ready-to-use API client. It handles
+all the authentication for you.
+
+## Authentication
+
+Authentication is provided with OAuth2. You must:
+
+* create an application with OAuth keys via https://cap.18f.gov/oauth/applications
+* authorize your new application (click the **Authorize** button)
+* use your OAuth keys to obtain a Bearer auth token
+* include your Bearer auth token with every API request
+
+Example:
+
+```bash
+% export MY_OAUTH_KEY=your-key-here
+% export MY_OAUTH_SECRET=your-secret-here
+% export MY_CREDS=`echo "$MY_OAUTH_KEY:$MY_OAUTH_SECRET" | base64`
+% curl -i -X POST -H "Authorization: Basic $MY_CREDS" \
+  -d 'grant_type=client_credentials' \
+  https://cap.18f.gov/oauth/token
+```
+
+Take note of the `access_token` string value in the response. You will use it below.
+
 ## Schemas
 
 * All decimals are strings ([more info](https://github.com/rails-api/active_model_serializers/issues/202))
@@ -87,9 +114,12 @@ Name | Values
 `end_date` | timestamp.string
 `text` | full-text search string. See https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html#query-string-syntax
 
-##### Example
+#### Example
 
-https://cap.18f.gov/api/v2/proposals?size=5&from=10&text=foo
+```bash
+% curl -H 'Authorization: Bearer your-auth-token' \
+  https://cap.18f.gov/api/v2/proposals?size=5&from=10&text=foo
+```
 
 ### `GET /api/v2/proposals/:id`
 
@@ -99,7 +129,37 @@ Fetch a specific [Proposal](#proposal).
 
 None
 
-##### Example
+#### Example
 
-https://cap.18f.gov/api/v2/proposals/12345
+```bash
+% curl -H 'Authorization: Bearer your-auth-token' \
+  https://cap.18f.gov/api/v2/proposals/12345
+```
 
+### `POST /api/v2/proposals`
+
+Create a new [Proposal](#proposal). The root key is the client model slug, e.g. `ncr_work_order`.
+
+#### Example
+
+```bash
+% curl -i -X POST -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer your-auth-token' \
+  --data @proposal.json \
+  https://cap.18f.gov/api/v2/proposals
+```
+
+where `proposal.json` looks like:
+
+```json
+{
+  "gsa18f_procurement": {
+    "product_name_and_description": "some stuff",
+    "cost_per_unit": 123.0,
+    "quantity": 1,
+    "justification": "because because because",
+    "link_to_product": "18f.gov",
+    "purchase_type": "Software"
+  }
+}
+```
