@@ -4,7 +4,7 @@
       = render partial: "proposals/details/summary", locals: { proposal: @proposal }
   .row.footer-buffer
     .medium-6.column
-
+      = render partial: "proposals/details/approvals", locals: { proposal: @proposal }
     .medium-6.column
       .row
         .medium-12.column.wrap-hard
