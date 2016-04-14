@@ -65,6 +65,7 @@ gem "actionmailer-text"
 
 group :test, :development do
   gem "bullet", require: false # use BULLET_ENABLED=true
+  gem "chai-jquery-rails"
   gem "database_cleaner"
   gem "konacha"
   gem "pry-byebug"
