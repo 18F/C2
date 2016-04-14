@@ -8,9 +8,9 @@ describe 'Canceling a request' do
     expect(page).to have_content('Cancel this request')
   end
 
-  it 'does not show a cancel link for non-requesters' do
-    proposal = create(:proposal, :with_approver)
-    login_as(proposal.approvers.first)
+  it "does not show a cancel link for non-actionable user" do
+    proposal = create(:proposal, :with_serial_approvers)
+    login_as(proposal.approvers.last)
 
     visit proposal_path(proposal)
 
@@ -46,6 +46,26 @@ describe 'Canceling a request' do
     click_on('Cancel this request')
 
     expect(current_path).to eq("/proposals/#{proposal.id}/cancel_form")
+  end
+
+  context "step completers" do
+    it "allows actionable step completer to cancel" do
+      proposal = create(:proposal, :with_serial_approvers)
+      login_as(proposal.approvers[0])
+
+      cancel_proposal(proposal)
+
+      expect(current_path).to eq(proposal_path(proposal))
+    end
+
+    it "disallows non-actionable step completer to cancel" do
+      proposal = create(:proposal, :with_serial_approvers)
+      login_as(proposal.approvers.last)
+
+      visit proposal_path(proposal)
+
+      expect(page).to_not have_content("Cancel this request")
+    end
   end
 
   context "email" do
@@ -140,8 +160,8 @@ describe 'Canceling a request' do
     end
 
     it 'redirects for non-requesters' do
-      proposal = create(:proposal, :with_approver)
-      login_as(proposal.approvers.first)
+      proposal = create(:proposal, :with_serial_approvers)
+      login_as(proposal.approvers.last)
 
       visit cancel_form_proposal_path(proposal)
 
