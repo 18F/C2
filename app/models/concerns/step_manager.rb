@@ -35,6 +35,10 @@ module StepManager
     steps.find_by(parent: nil)
   end
 
+  def individual_steps
+    steps.individual
+  end
+
   def parallel?
     root_step.type == "Steps::Parallel"
   end

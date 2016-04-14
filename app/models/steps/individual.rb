@@ -1,14 +1,11 @@
 module Steps
   class Individual < Step
-    belongs_to :user
-    has_one :api_token, -> { fresh }, foreign_key: "step_id"
     has_many :delegations, through: :user, source: :outgoing_delegations
     has_many :delegates, through: :delegations, source: :assignee
 
     validate :user_is_not_requester
     validates :user, presence: true
     delegate :full_name, :email_address, to: :user, prefix: true
-    scope :with_users, -> { includes :user }
 
     self.abstract_class = true
 
