@@ -10,14 +10,21 @@ class HistoryList
 
   def filter_versions(versions)
     versions.reject do |version|
-      version.item_type == "Ncr::WorkOrder" ||
-        version.item_type == "Gsa18f::Procurement" ||
+      version_is_client_data?(version) ||
+        version_is_ignored_type_creation?(version) ||
         version.item_type == "Step" || # TODO: What's creating these?
         (version.event == "update" &&
-          version.item_type == "Proposal") || # TODO: include once they're properly formatted
-        (version.event == "create" &&
-          !%w(Proposal Attachment Comment Observation Steps::Serial).include?(version.item_type))
+          version.item_type == "Proposal") # TODO: include once they're properly formatted
     end
+  end
+
+  def version_is_client_data?(version)
+    Proposal.client_model_names.include?(version.item_type)
+  end
+
+  def version_is_ignored_type_creation?(version)
+    version.event == "create" &&
+      !%w(Proposal Attachment Comment Observation Steps::Serial).include?(version.item_type)
   end
 
   def make_events(versions)
