@@ -113,6 +113,8 @@ Attribute | Type | Note
 Consult the [client data models](https://github.com/18F/C2/blob/master/app/models) themselves
 for details on specific required attributes.
 
+All attributes for `client_data` are present in responses, regardless of whether they have a value assigned.
+
 ## Endpoints
 
 ### `GET /api/v2/proposals`
