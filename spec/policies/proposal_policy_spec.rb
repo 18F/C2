@@ -162,9 +162,21 @@ describe ProposalPolicy do
       expect(ProposalPolicy).not_to permit(proposal.requester, proposal)
     end
 
-    it "doesn't allow an approver to cancel it" do
-      proposal = create(:proposal, :with_parallel_approvers, :with_observers)
-      expect(ProposalPolicy).not_to permit(proposal.approvers[0], proposal)
+    it "allows an actionable approver to cancel it" do
+      proposal = create(:proposal, :with_serial_approvers, :with_observers)
+      expect(ProposalPolicy).to permit(proposal.approvers[0], proposal)
+    end
+
+    it "allows a delegate of an actionable approver to cancel it" do
+      proposal = create(:proposal, :with_serial_approvers, :with_observers)
+      delegate = create(:user)
+      proposal.approvers[0].add_delegate(delegate)
+      expect(ProposalPolicy).to permit(delegate, proposal)
+    end
+
+    it "does not allow pending approver to cancel it" do
+      proposal = create(:proposal, :with_serial_approvers, :with_observers)
+      expect(ProposalPolicy).not_to permit(proposal.approvers[1], proposal)
     end
 
     it "allows admins to cancel" do
