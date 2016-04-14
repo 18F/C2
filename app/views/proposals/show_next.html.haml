@@ -11,3 +11,4 @@
           - if policy(@proposal).can_cancel?
             %div.fr.cancel-action
               = link_to "Cancel this request", cancel_form_proposal_path, class: "button secondary large cancel-request-button"
+  = render partial: "proposals/details/action", locals: { proposal: @proposal }
