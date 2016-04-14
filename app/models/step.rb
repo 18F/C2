@@ -15,22 +15,29 @@ class Step < ActiveRecord::Base
   acts_as_list scope: :proposal
   belongs_to :parent, class_name: "Step"
 
-  has_many :child_steps, 
-    -> { order("position ASC") },
+  has_many(
+    :child_steps,
+    -> { position_order },
     class_name: "Step",
     foreign_key: "parent_id",
     dependent: :destroy
+  )
 
   validates :proposal, presence: true
   validates :user_id, uniqueness: { scope: :proposal_id }, allow_blank: true
 
-  scope :individual, 
-    -> { where.not(type: ["Steps::Serial", "Steps::Parallel"]).order("position ASC") }
+  scope(
+    :individual,
+    -> { where.not(type: ["Steps::Serial", "Steps::Parallel"]).position_order }
+  )
+
+  scope :position_order, -> { order(position: :asc) }
   scope :with_users, -> { includes :user }
 
   statuses.each do |status|
     scope status, -> { where(status: status) }
   end
+
   scope :non_pending, -> { where.not(status: "pending") }
   scope :outstanding, -> { where.not(status: "completed") }
 
