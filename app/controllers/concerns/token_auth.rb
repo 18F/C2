@@ -23,7 +23,7 @@ module TokenAuth
     authorize(proposal, :can_complete!)
 
     if params[:version] && params[:version] != proposal.version.to_s
-      raise Pundit::NotAuthorizedError, "This request has recently changed. Please review the modified request before approving."
+      raise Pundit::NotAuthorizedError, I18n.t("errors.policies.api_token.version_mismatch")
     end
   end
 
@@ -32,11 +32,11 @@ module TokenAuth
     when :api_token
       render_api_token_exception(exception)
     when Proposal
-      if exception.message == "A response has already been logged for this proposal"
+      if exception.message == I18n.t("errors.policies.proposal.step_complete")
         flash[:error] = exception.message
         redirect_to proposal
       else
-        render "authorization_error", status: 403, locals: { msg: "You are not allowed to see that proposal." }
+        render "authorization_error", status: 403, locals: { msg: I18n.t("errors.policies.proposal.show_permission") }
       end
     else
       render_other_exception(exception)
@@ -50,7 +50,7 @@ module TokenAuth
     else
       return_to_param = make_return_to("Previous", request.fullpath)
       session[:return_to] = return_to_param
-      redirect_to root_path(return_to: return_to_param), alert: "Please sign in to complete this action."
+      redirect_to root_path(return_to: return_to_param), alert: I18n.t("errors.policies.api_token.not_delegate")
     end
   end
 

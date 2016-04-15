@@ -14,6 +14,7 @@ en:
         used: "Something went wrong with the token (already used)"
         wrong_proposal: "Something went wrong with the token (wrong proposal)"
         not_delegate: "You must first sign in"
+        version_mismatch: "This request has recently changed. Please review the modified request before approving."
       attachment:
         destroy_permission: "Only the original author can delete an attachment"
       gsa:

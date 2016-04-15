@@ -102,7 +102,7 @@ class ProposalPolicy
   end
 
   def pending_step!
-    check(pending_step_user? || pending_delegate?, I18n.t("errors.policies.proposal.step_complete"))
+    check(pending_step_user_or_delegate?, I18n.t("errors.policies.proposal.step_complete"))
   end
 
   def visible_proposals

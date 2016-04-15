@@ -60,7 +60,7 @@ class ProposalsController < ApplicationController
     if step
       complete_step(step)
     else
-      flash[:alert] = "There are no actionable steps available for you."
+      flash[:alert] = I18n.t("errors.policies.proposal.step_complete")
     end
     redirect_to proposal
   end
