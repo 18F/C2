@@ -23,11 +23,11 @@ module ProposalsHelper
     )
   end
 
-  def request_details_form_value value
-    return property_display_value(value)
+  def request_details_form_value(value)
+    property_display_value(value)
   end
 
-  def request_details_form_field method, f
+  def request_details_form_field(method, f)
     render partial: 'proposals/details/fields/' + method, locals: { method: method, f: f }
   end
 end
