@@ -14,15 +14,7 @@ class C2Version < PaperTrail::Version
   end
 
   def diff
-    case event
-    when "create"
-      HashDiff.diff({}, attributes)
-    when "update"
-      prev = previous or fail("No previous version for #{self.pretty_inspect}")
-      HashDiff.diff(prev.attributes, attributes)
-    else
-      # not sure what makes the most sense here...
-      nil
-    end
+    next_version = self.next || item
+    HashDiff.diff((attributes || {}), next_version.attributes)
   end
 end
