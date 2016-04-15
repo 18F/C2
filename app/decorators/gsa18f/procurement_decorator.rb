@@ -56,35 +56,76 @@ module Gsa18f
     def detail_fields_config
       [
         { 
-          value: ["description"],
+          value: ["office"],
           style: {
             column: 1,
           },
         },
         { 
-          value: ["_remaining"],
+          value: ["purchase_type"],
           style: {
             column: 1,
           },
         },
         { 
-          value: ["vendor", "building_number", "cl_number"],
+          value: ["product_name_and_description"],
           style: {
             column: 1,
-            background: "color-card"
           },
         },
         { 
-          value: ["direct_pay"],
+          value: ["justification"],
           style: {
-            column: 2,
+            column: 1,
+          },
+        },
+        { 
+          value: ["link_to_product"],
+          style: {
+            column: 1,
+          },
+        },
+        { 
+          value: ["cost_per_unit"],
+          style: {
+            column: 1,
+          },
+        },
+        { 
+          value: ["quantity"],
+          style: {
+            column: 1,
+          },
+        },
+        { 
+          value: ["recurring"],
+          style: {
+            column: 1,
+          },
+        },
+        { 
+          value: ["date_requested"],
+          style: {
+            column: 1,
+          },
+        },
+        { 
+          value: ["urgency"],
+          style: {
+            column: 1,
+          },
+        },
+        { 
+          value: ["additional_info"],
+          style: {
+            column: 1,
           },
         },
         { 
           value: ["amount"],
           style: {
             column: 2,
-            background: "color-card"
+            background: "small-color-card"
           },
         }
       ]

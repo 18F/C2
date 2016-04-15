@@ -122,7 +122,13 @@ module Ncr
           },
         },
         { 
-          value: ["_remaining"],
+          value: ["expense_type"],
+          style: {
+            column: 1,
+          },
+        },
+        { 
+          value: ["ncr_organization"],
           style: {
             column: 1,
           },
@@ -158,7 +164,7 @@ module Ncr
           value: ["amount"],
           style: {
             column: 2,
-            background: "color-card"
+            background: "small-color-card"
           },
         }
       ]
