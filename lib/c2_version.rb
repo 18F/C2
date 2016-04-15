@@ -13,12 +13,8 @@ class C2Version < PaperTrail::Version
     end
   end
 
-  def live_version
-    item
-  end
-
   def diff
-    next_version = self.next || live_version
+    next_version = self.next || item
     HashDiff.diff((attributes || {}), next_version.attributes)
   end
 end
