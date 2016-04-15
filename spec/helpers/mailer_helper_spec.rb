@@ -1,48 +1,4 @@
 describe MailerHelper do
-  describe "#property_display_value" do
-    context "value is present" do
-      it "calls `property_to_s`" do
-        value = "value"
-        allow(helper).to receive(:property_to_s).with(value)
-
-        helper.property_display_value(value)
-
-        expect(helper).to have_received(:property_to_s).with(value)
-      end
-    end
-
-    context "value is false" do
-      it "calfls `property_to_s`" do
-        value = false
-        allow(helper).to receive(:property_to_s).with(value)
-
-        helper.property_display_value(value)
-
-        expect(helper).to have_received(:property_to_s).with(value)
-      end
-    end
-
-    context "value is nil" do
-      it "returns a dash" do
-        value = nil
-
-        display_value = helper.property_display_value(value)
-
-        expect(display_value).to eq "-"
-      end
-    end
-
-    context "value is empty string" do
-      it "returns a dash" do
-        value = ""
-
-        display_value = helper.property_display_value(value)
-
-        expect(display_value).to eq "-"
-      end
-    end
-  end
-
   describe "#time_and_date" do
     it "respects user timezone" do
       user = create(:user)

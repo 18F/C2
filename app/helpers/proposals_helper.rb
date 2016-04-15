@@ -22,9 +22,4 @@ module ProposalsHelper
       style: ("background-image: url('#{bg_linear_image}');" unless last_approver)
     )
   end
-
-  def request_details_form_value(value)
-    property_display_value(value)
-  end
-
 end

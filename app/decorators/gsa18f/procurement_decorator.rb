@@ -33,6 +33,22 @@ module Gsa18f
       ] + recurring_fields
     end
 
+    def new_display
+      [
+        { partial: "gsa18f/fields/office" },
+        { partial: "gsa18f/fields/purchase_type" },
+        { partial: "gsa18f/fields/product_name_and_description" },
+        { partial: "gsa18f/fields/justification" },
+        { partial: "gsa18f/fields/link_to_product" },
+        { partial: "gsa18f/fields/cost_per_unit" },
+        { partial: "gsa18f/fields/quantity" },
+        { partial: "gsa18f/fields/recurring" },
+        { partial: "gsa18f/fields/date_requested" },
+        { partial: "gsa18f/fields/urgency" },
+        { partial: "gsa18f/fields/additional_info" }
+      ]
+    end
+
     def top_email_field
     end
 
@@ -51,84 +67,6 @@ module Gsa18f
       else
         []
       end
-    end
-
-    def detail_fields_config
-      [
-        { 
-          value: ["office"],
-          style: {
-            column: 1,
-          },
-        },
-        { 
-          value: ["purchase_type"],
-          style: {
-            column: 1,
-          },
-        },
-        { 
-          value: ["product_name_and_description"],
-          style: {
-            column: 1,
-          },
-        },
-        { 
-          value: ["justification"],
-          style: {
-            column: 1,
-          },
-        },
-        { 
-          value: ["link_to_product"],
-          style: {
-            column: 1,
-          },
-        },
-        { 
-          value: ["cost_per_unit"],
-          style: {
-            column: 1,
-          },
-        },
-        { 
-          value: ["quantity"],
-          style: {
-            column: 1,
-          },
-        },
-        { 
-          value: ["recurring"],
-          style: {
-            column: 1,
-          },
-        },
-        { 
-          value: ["date_requested"],
-          style: {
-            column: 1,
-          },
-        },
-        { 
-          value: ["urgency"],
-          style: {
-            column: 1,
-          },
-        },
-        { 
-          value: ["additional_info"],
-          style: {
-            column: 1,
-          },
-        },
-        { 
-          value: ["amount"],
-          style: {
-            column: 2,
-            background: "small-color-card"
-          },
-        }
-      ]
     end
   end
 end
