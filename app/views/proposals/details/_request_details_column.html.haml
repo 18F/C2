@@ -1,0 +1,11 @@
+.row
+  .medium-12.column.detail-wrapper
+    .detail-display
+      %label.detail-element
+        = field[:value][0]
+      %span.detail-value{ id: field[:key] + '-' + @client_data_instance.id.to_s }
+        = request_details_form_value field[:value][1]
+    .detail-edit
+      %label.detail-element
+        = field[:value][0]
+        = request_details_form_field field[:key], f
