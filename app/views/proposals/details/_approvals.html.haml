@@ -1,0 +1,32 @@
+.card-for-approvals
+  .row
+    .medium-12.column
+      .card#steps-card
+        .card-head.column
+          %h2
+            Approvals
+        .content-content.column
+          - index = 0
+          - proposal.steps.each do |step|
+            - if !step.user_id.nil?
+              - index = index + 1
+              .row.step-row.column.medium-table-row{class: "step-status-" + step.status}
+                .medium-icon-col.text-center.medium-table-cell.step-status-wrapper
+                  - if step.status == "completed"
+                    = image_tag 'numbers/icon-completed-green.png'
+                  - elsif step.status == "actionable"
+                    = image_tag 'numbers/icon-completed-activity-' + index.to_s + '.png'
+                  - elsif step.status == "pending"
+                    = image_tag 'numbers/icon-pending-activity-' + index.to_s + '.png'
+                .medium-auto-column.step-content-wrapper.medium-table-cell
+                  %span.step-index.step-data
+                    Step #{step.position - 1}
+                  %span.step-data
+                    %span.step-user-name
+                      #{User.find(step.user_id).full_name},
+                    %span.step-user-role #{step_user_title(step)}
+                  - if !step.completed_at.blank? && step.status != "actionable" && step.status != "pending"
+                    %span.step-user-status.step-data
+                      = step.status.capitalize + " "
+                      %span.step-timestamp
+                        = step.completed_at.strftime("%m/%d/%Y %I:%M%p")
