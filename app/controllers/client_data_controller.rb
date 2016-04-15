@@ -106,8 +106,9 @@ class ClientDataController < ApplicationController
     params.permit(attachments: [])[:attachments] || []
   end
 
-  # Hook for adding additional approvers
   def add_steps
-    @client_data_instance.initialize_steps
+    if errors.empty?
+      @client_data_instance.initialize_steps
+    end
   end
 end

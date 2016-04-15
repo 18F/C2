@@ -48,15 +48,7 @@ module Gsa18f
     validates :purchase_type, presence: true
     validates :recurring_interval, presence: true, if: :recurring
 
-    def fields_for_display
-      Gsa18f::ProcurementFields.new(self).display
-    end
-
     def initialize_steps
-      add_steps
-    end
-
-    def add_steps
       steps = [
         Steps::Approval.new(user: User.for_email(Gsa18f::Procurement.approver_email)),
         Steps::Purchase.new(user: User.for_email(Gsa18f::Procurement.purchaser_email)),

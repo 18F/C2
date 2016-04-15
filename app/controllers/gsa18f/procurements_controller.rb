@@ -9,12 +9,5 @@ module Gsa18f
     def permitted_params
       Gsa18f::Procurement.permitted_params(params, @client_data_instance)
     end
-
-    def add_steps
-      super
-      if errors.empty?
-        @client_data_instance.add_steps
-      end
-    end
   end
 end
