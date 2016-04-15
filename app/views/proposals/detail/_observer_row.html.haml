@@ -1,5 +1,6 @@
 %li.observer-list-item
   = user.full_name
-  = "(#{role_str})" if role_str
+  - if role_str.present?
+    = "(#{role_str})"
   - if observation && policy(observation).can_destroy?
     = button_to "", proposal_observation_path(proposal, observation), method: :delete, data: {confirm: "Are you sure?"}, remote: true
