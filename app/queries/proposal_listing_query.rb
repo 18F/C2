@@ -123,7 +123,6 @@ class ProposalListingQuery
     unless params[:text] || params[user.client_model_slug.to_sym]
       limit = params[:size] || params[:limit] || Proposal::MAX_SEARCH_RESULTS
       offset = params[:from] || 0
-      puts "applying limit=#{limit} offset=#{offset}"
       proposals_data.alter_query { |proposal| proposal.limit(limit).offset(offset) }
     end
   end
