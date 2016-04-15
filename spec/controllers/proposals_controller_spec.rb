@@ -91,16 +91,17 @@ describe ProposalsController do
       end
     end
 
-    context 'details beta' do
+  end
+
+  describe '#show + new details' do
+    context 'cookie triggered view' do
       it 'should render the show_next view' do
-        proposal = create(:proposal, requester: user)
-        get :show, id: proposal.id, detail: "new"
+        setup_proposal_page
         expect(response.status).to eq(200)
         expect(response).to render_template("show_next")
         expect(response).to_not render_template("show")
       end
     end
-
   end
 
   describe '#query', elasticsearch: true do
@@ -387,5 +388,11 @@ describe ProposalsController do
       expect(flash[:alert]).to be_nil
       expect(proposal.reload).to be_completed
     end
+  end
+
+  def setup_proposal_page
+    login_as(user)
+    proposal = create(:proposal, requester: user)
+    get :show, id: proposal.id, detail: "new"
   end
 end

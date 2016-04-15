@@ -1,0 +1,24 @@
+.action-bar-template.action-bar-status
+  .medium-12.column.status-bar
+    %ul#request-actions.centered
+      %li.fl.modify-button.action-default
+        %span.action-status-value
+          Your updates have been saved.
+  
+.action-bar-template.action-bar-wrapper
+  .medium-12.column
+    %ul#request-actions.centered
+      %li.fl.modify-button.action-default
+        = link_to("Go back", proposals_path, class: "button secondary fr large")
+      
+      - if policy(@proposal).can_complete?
+        %li.fr.modify-button.action-default.action-approve
+          = form_tag(complete_proposal_path(@proposal, method: "POST", remote: true)) do
+            = submit_tag @proposal.step_text_for_user(:execute_button, current_user), class: "form-button button primary large"
+            = hidden_field_tag :version, @proposal.version
+      
+      - if policy(@proposal).can_edit? && !@proposal.completed? && policy(@proposal).not_canceled?
+        %li.fr.save-button.action-edit
+          = modify_client_button(@proposal, "Save", "button primary fr large", true)
+        %li.fr.cancel-button.action-edit
+          = link_to("Cancel", @proposal, class: "button secondary fr large")
