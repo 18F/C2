@@ -1,0 +1,8 @@
+= f.input :not_to_exceed,
+  collection: [["Exact", false], ["Not to exceed", true]],
+  label: false, include_blank: false
+
+= f.input :amount,
+  as: :currency,
+  label_html: { class: "sr-only" },
+  input_html: { data: popover_data_attrs("ncr_amount"), value: sprintf("%.2f", @client_data_instance.amount) }
