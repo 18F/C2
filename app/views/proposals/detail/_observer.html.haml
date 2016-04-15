@@ -9,7 +9,7 @@
           %ul.observer-list
             - @subscriber_list.each do |user, role_str, observation|
               = render partial: "proposals/details/observer_row", locals: { user: user, role_str: role_str, observation: observation, proposal: proposal }
-          - if policy(Observation.new(proposal: proposal)).can_create?
+          - if policy(@observation).can_create?
             = form_for [proposal, Observation.new], remote: true do |f|
               = f.fields_for :user do |user_form|
                 .row
