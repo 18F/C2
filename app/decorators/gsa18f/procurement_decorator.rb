@@ -52,5 +52,42 @@ module Gsa18f
         []
       end
     end
+
+    def detail_fields_config
+      [
+        { 
+          value: ["description"],
+          style: {
+            column: 1,
+          },
+        },
+        { 
+          value: ["_remaining"],
+          style: {
+            column: 1,
+          },
+        },
+        { 
+          value: ["vendor", "building_number", "cl_number"],
+          style: {
+            column: 1,
+            background: "color-card"
+          },
+        },
+        { 
+          value: ["direct_pay"],
+          style: {
+            column: 2,
+          },
+        },
+        { 
+          value: ["amount"],
+          style: {
+            column: 2,
+            background: "color-card"
+          },
+        }
+      ]
+    end
   end
 end
