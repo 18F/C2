@@ -16,6 +16,8 @@ class ProposalsController < ApplicationController
     mode = cookies[:detail]
     if mode == "new"
       @client_data_instance ||= proposal.client_data
+      @subscriber_list = SubscriberList.new(proposal).triples
+      @observation = Observation.new(proposal: proposal)
       render "show_next"
     end
   end
