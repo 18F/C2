@@ -68,7 +68,7 @@ feature "Requester edits their NCR work order", :js do
     click_on "Update"
 
     expect(deliveries.length).to eq(2)
-    expect(deliveries.last).to have_content("observer@example.com")
+    expect(deliveries.last).to have_content(user.full_name)
   end
 
   scenario "does not resave unchanged requests" do

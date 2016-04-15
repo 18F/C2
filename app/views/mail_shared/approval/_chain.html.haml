@@ -5,7 +5,7 @@
         %table.eight.columns
           %tr
             %td.two.sub-columns.last
-              = image_tag step_status_icon(step)
+              = image_tag attachments[step_status_icon(step)].try(:url)
             %td.ten.sub-columns.no-bottom-padding
               %b
                 = t("mailer.step_number", number: step.position - 1)

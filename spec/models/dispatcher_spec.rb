@@ -80,7 +80,7 @@ describe Dispatcher do
       reason = "reason for cancelation"
       allow(CancelationMailer).to receive(:cancelation_notification).
         with(
-          recipient_email: approver.email_address,
+          recipient: approver,
           canceler: proposal.requester,
           proposal: proposal,
           reason: reason
@@ -189,13 +189,13 @@ describe Dispatcher do
       mailer_double = double(deliver_later: true)
       allow(proposal).to receive(:subscribers_except_future_step_users).and_return([some_user, comment_user])
       allow(CommentMailer).to receive(:comment_added_notification).
-        with(comment, some_user.email_address).
+        with(comment, some_user).
         and_return(mailer_double)
 
       Dispatcher.new(proposal).on_comment_created(comment)
 
       expect(CommentMailer).to have_received(:comment_added_notification).
-        with(comment, some_user.email_address)
+        with(comment, some_user)
     end
   end
 end

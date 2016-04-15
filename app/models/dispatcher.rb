@@ -25,7 +25,7 @@ class Dispatcher
       step = proposal.steps.find_by(user: user)
 
       if user_is_not_step_user?(step) || step_user_knows_about_proposal?(step)
-        AttachmentMailer.new_attachment_notification(user.email_address, proposal, attachment).deliver_later
+        AttachmentMailer.new_attachment_notification(user, proposal, attachment).deliver_later
       end
     end
   end
@@ -35,7 +35,7 @@ class Dispatcher
 
     cancelation_notification_recipients.each do |recipient|
       CancelationMailer.cancelation_notification(
-        recipient_email: recipient.email_address,
+        recipient: recipient,
         canceler: canceler,
         proposal: proposal,
         reason: reason
@@ -64,7 +64,7 @@ class Dispatcher
 
   def on_comment_created(comment)
     comment_subscribers(comment).each do |user|
-      CommentMailer.comment_added_notification(comment, user.email_address).deliver_later
+      CommentMailer.comment_added_notification(comment, user).deliver_later
     end
   end
 

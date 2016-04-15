@@ -39,9 +39,9 @@ module MailerHelper
 
   def step_status_icon(proposal_step)
     if proposal_step.status == "completed"
-      "numbers/icon-completed.png"
+      "icon-completed.png"
     else
-      "numbers/icon-number-" + (proposal_step.position - 1).to_s + "-pending.png"
+      "icon-number-" + (proposal_step.position - 1).to_s + "-pending.png"
     end
   end
 
