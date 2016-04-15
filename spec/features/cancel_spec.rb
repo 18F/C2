@@ -58,6 +58,17 @@ describe 'Canceling a request' do
       expect(current_path).to eq(proposal_path(proposal))
     end
 
+    it "allows actionable step delegate to cancel" do
+      delegate = create(:user)
+      proposal = create(:proposal, :with_serial_approvers)
+      proposal.approvers[0].add_delegate(delegate)
+      login_as(delegate)
+
+      cancel_proposal(proposal)
+
+      expect(current_path).to eq(proposal_path(proposal))
+    end
+
     it "disallows non-actionable step completer to cancel" do
       proposal = create(:proposal, :with_serial_approvers)
       login_as(proposal.approvers.last)
