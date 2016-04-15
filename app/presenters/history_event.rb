@@ -8,15 +8,13 @@ class HistoryEvent < SimpleDelegator
     model.event
   end
 
-  def user
-    whodunnit ? User.find(whodunnit) : nil
-  end
-
   def comment_text
-    Comment.find(item_id).comment_text # don't know why reify doesn't work here
+    # For some reason, paper_trail's "reify" doesn't work with comment versions
+    Comment.find(item_id).comment_text
   end
 
   def attachment
+    # "reify" not working with attachment versions either
     Attachment.find(item_id)
   end
 
