@@ -28,7 +28,7 @@ class ProposalPolicy
   alias_method :can_new!, :can_create!
 
   def can_cancel!
-    (admin? || requester!) && not_canceled!
+    (pending_step_user_or_delegate? || admin? || requester!) && not_canceled!
   end
   alias_method :can_cancel_form!, :can_cancel!
 
@@ -95,6 +95,10 @@ class ProposalPolicy
 
   def pending_delegate?
     UserDelegate.where(assigner_id: @proposal.currently_awaiting_step_users, assignee: @user).exists?
+  end
+
+  def pending_step_user_or_delegate?
+    (pending_step_user? || pending_delegate?)
   end
 
   def pending_step!
