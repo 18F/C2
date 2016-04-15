@@ -27,42 +27,4 @@ module ProposalsHelper
     property_display_value(value)
   end
 
-  def request_details_form_field(method, f)
-    render partial: 'proposals/details/fields/' + method, locals: { method: method, f: f }
-  end
-
-  def render_field_order
-    [
-      { 
-        order: 0,
-        value: ["description"]
-        style: {
-          column: 1,
-        },
-      },
-      { 
-        order: -1,
-        style: {
-        value: ["amount"]
-          column: 2,
-          background: "color-card"
-        },
-      },
-      { 
-        order: -2,
-        value: ["direct_pay"]
-        style: {
-          column: 2,
-        },
-      },
-      { 
-        order: -3,
-        style: {
-        value: ["vendor", "building_number", "cl_number"]
-          column: 1,
-          background: "color-card"
-        },
-      },
-    ]
-  end
 end
