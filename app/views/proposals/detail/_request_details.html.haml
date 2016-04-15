@@ -1,0 +1,85 @@
+.row
+  .medium-12.column
+    .card#request-details-card
+      - if @client_data_instance && @proposal.client_slug == "ncr"
+        .card-head.column
+          %h2
+            Request Details
+            - if @mode != "edit" && !@proposal.completed?
+              = modify_client_button(@proposal, "<span>#{@mode == "edit" ? "View" : "Modify"}</span>".html_safe, "button secondary edit-icon fr large request-detail-edit-button")
+        .content-content.column#view-request-details
+          = simple_form_for @client_data_instance, html: { multipart: true }, remote: true do |f|
+            - excluded_values = ["direct_pay", "vendor", "building_number", "cl_number", "amount", "description"]
+            .row
+              .medium-12.column.detail-wrapper
+                .detail-edit
+                  = f.input :description, label: false
+                .detail-display
+                  %p.request-detail.detail-value{id: 'description-' + @client_data_instance.id.to_s }
+                    = @client_data_instance.description
+
+
+            - proposal.fields_for_input.each do |fields|
+              - if !excluded_values.include? fields[:key]
+                .row
+                  .medium-12.column
+                    - field = fields
+                    - if field
+                      .detail-wrapper
+                        .detail-display
+                          %label.detail-element
+                            = field[:value][0]
+                          %span.detail-value{id: field[:key] + '-' + @client_data_instance.id.to_s }
+                            = request_details_form_value field[:value][1]
+                        .detail-edit
+                          %label.detail-element
+                            = field[:value][0]
+                            = request_details_form_field field[:key], f
+
+            .row.column.line-item-block
+              .medium-12.callout.primary.column.medium-centered
+                .row
+                  .medium-12.column
+                    .detail-wrapper
+                      %label.detail-element Vendor
+                      .detail-edit
+                        = f.input :vendor,
+                          input_html: { class: "js-selectize required", data: { initial: JSON.generate(vendor_options(@client_data_instance.vendor)) }}
+                      .detail-display
+                        %span.detail-value{id: 'vendor-' + @client_data_instance.id.to_s }
+                          = @client_data_instance.vendor || "-"
+                    .detail-wrapper
+                      %label.detail-element CL number
+                      .detail-edit
+                        = f.input :cl_number, label: false
+                      .detail-display
+                        %span.detail-value{id: 'cl_number-' + @client_data_instance.id.to_s }
+                          = @client_data_instance.cl_number || "-"
+
+
+                    .detail-wrapper
+                      %label.detail-element Building number
+                      .detail-edit
+                        = f.input :building_number,
+                          input_html: { class: "js-selectize required", data: { initial: JSON.generate(building_options) }}
+                      .detail-display
+                        %span.detail-value{id: 'building_number-' + @client_data_instance.id.to_s }
+                          = @client_data_instance.building_number
+            .row.column.line-item-block
+              .medium-12.primary.column.medium-centered
+                .row
+                  .medium-6.column
+                  .medium-6.column
+                    .primary.callout.detail-wrapper.no-margin-bottom.no-padding-bottom
+                      .detail-edit
+                        = f.input :amount, as: :currency, input_html: { value: sprintf("%.2f", @client_data_instance.amount) }
+                      .detail-display
+                        .row
+                          .medium-4.column
+                            %strong Total
+                          .medium-8.column
+                            %span
+                              %h4
+                                %b.detail-value{id: 'amount-' + @client_data_instance.id.to_s }
+                                  = sprintf("%.2f", @client_data_instance.amount)
+            = submit_tag "Submit", hidden: true;
