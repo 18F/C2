@@ -152,35 +152,35 @@ describe ProposalPolicy do
 
   permissions :can_cancel? do
     it "allows the requester to cancel it" do
-      proposal = create(:proposal, :with_parallel_approvers, :with_observers)
+      proposal = create(:proposal, :with_parallel_approvers)
       expect(ProposalPolicy).to permit(proposal.requester, proposal)
     end
 
     it "does not allow a requester to edit a canceled one" do
-      proposal = create(:proposal, :with_parallel_approvers, :with_observers)
+      proposal = create(:proposal, :with_parallel_approvers)
       proposal.cancel!
       expect(ProposalPolicy).not_to permit(proposal.requester, proposal)
     end
 
     it "allows an actionable approver to cancel it" do
-      proposal = create(:proposal, :with_serial_approvers, :with_observers)
+      proposal = create(:proposal, :with_serial_approvers)
       expect(ProposalPolicy).to permit(proposal.approvers[0], proposal)
     end
 
     it "allows a delegate of an actionable approver to cancel it" do
-      proposal = create(:proposal, :with_serial_approvers, :with_observers)
+      proposal = create(:proposal, :with_serial_approvers)
       delegate = create(:user)
       proposal.approvers[0].add_delegate(delegate)
       expect(ProposalPolicy).to permit(delegate, proposal)
     end
 
     it "does not allow pending approver to cancel it" do
-      proposal = create(:proposal, :with_serial_approvers, :with_observers)
+      proposal = create(:proposal, :with_serial_approvers)
       expect(ProposalPolicy).not_to permit(proposal.approvers[1], proposal)
     end
 
     it "allows admins to cancel" do
-      proposal = create(:proposal, :with_parallel_approvers, :with_observers)
+      proposal = create(:proposal, :with_parallel_approvers)
       admin = create(:user)
       admin.add_role("admin")
       expect(ProposalPolicy).to permit(admin, proposal)
