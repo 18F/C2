@@ -21,4 +21,4 @@
         %span.status-wrap.medium-12.small-12{ class: "status-is-" + @proposal.status }
           Status:
           %span.status-value
-            = @proposal.status.capitalize
+            = @proposal.capitalized_detailed_status
