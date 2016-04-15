@@ -18,7 +18,7 @@ class HistoryEvent < SimpleDelegator
     Attachment.find(item_id)
   end
 
-  def decorate
+  def decorate_item
     reify.decorate
   end
 
