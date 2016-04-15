@@ -333,7 +333,7 @@ describe ProposalsController do
 
       get :complete, id: proposal.id, cch: token.access_token
 
-      expect(flash[:alert]).to include("Please sign in")
+      expect(flash[:alert]).to include(I18n.t("errors.policies.api_token.not_delegate"))
     end
 
     it "won't allow the approval to be completed twice through the web ui" do
@@ -350,7 +350,7 @@ describe ProposalsController do
       post :complete, id: proposal.id
 
       expect(response).to redirect_to(proposal_path(proposal))
-      expect(flash[:error]).to eq "A response has already been logged for this proposal"
+      expect(flash[:error]).to eq I18n.t("errors.policies.proposal.step_complete")
     end
 
     it "won't allow different delegates to approve" do
@@ -371,7 +371,7 @@ describe ProposalsController do
       post :complete, id: proposal.id
 
       expect(response).to redirect_to(proposal_path(proposal))
-      expect(flash[:error]).to eq "A response has already been logged for this proposal"
+      expect(flash[:error]).to eq I18n.t("errors.policies.proposal.step_complete")
     end
 
     it "allows a delegate to approve via the web UI" do
