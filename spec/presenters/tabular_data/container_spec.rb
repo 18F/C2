@@ -155,13 +155,6 @@ describe TabularData::Container do
   end
 
   describe "#size" do
-    it "parses size or limit param" do
-      container = TabularData::Container.new(:abc, { engine: "Proposal" })
-      container.state_from_params = ActionController::Parameters.new(limit: 4)
-
-      expect(container.size).to eq(4)
-    end
-
     it "defaults to MAX_SEARCH_RESULTS" do
       container = TabularData::Container.new(:abc, { engine: "Proposal" })
       container.state_from_params = ActionController::Parameters.new()
@@ -180,13 +173,6 @@ describe TabularData::Container do
   end
 
   describe "#from" do
-    it "treats like offset" do
-      container = TabularData::Container.new(:abc, { engine: "Proposal" })
-      container.state_from_params = ActionController::Parameters.new(offset: 2)
-
-      expect(container.from).to eq(2)
-    end
-
     it "derives from page param" do
       container = TabularData::Container.new(:abc, { engine: "Proposal" })
       container.state_from_params = ActionController::Parameters.new(page: 2, size: 2)
