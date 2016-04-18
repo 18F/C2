@@ -18,7 +18,7 @@ class StepDecorator < Draper::Decorator
   end
 
   def action_status
-    I18n.t('decorators.steps.summary.action', display_position: object.position - 1,
+    I18n.t("decorators.steps.summary.action", display_position: object.position - 1,
                                               completed: completed,
                                               name: object.completed_by.full_name)
   end
