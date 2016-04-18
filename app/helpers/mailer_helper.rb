@@ -1,12 +1,4 @@
 module MailerHelper
-  def property_display_value(field)
-    if field.to_s == ""
-      "-"
-    else
-      property_to_s(field)
-    end
-  end
-
   def time_and_date(date, zone = User::DEFAULT_TIMEZONE)
     str = ""
     Time.use_zone zone do

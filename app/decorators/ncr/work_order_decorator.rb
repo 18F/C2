@@ -31,6 +31,19 @@ module Ncr
       end
     end
 
+    def new_display
+      [
+        { partial: "ncr/fields/description" },
+        { partial: "ncr/fields/expense_type" },
+        { partial: "ncr/fields/ncr_organization" },
+        { partial: "ncr/fields/vendor" },
+        { partial: "ncr/fields/building_number" },
+        { partial: "ncr/fields/cl_number" },
+        { partial: "ncr/fields/direct_pay" },
+        { partial: "ncr/fields/amount" }
+      ]
+    end
+
     def top_email_field
       object.description
     end

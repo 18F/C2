@@ -19,8 +19,12 @@ module ValueHelper
     end
   end
 
-  def decimal?(val)
-    val.is_a?(Numeric) && !val.is_a?(Integer)
+  def property_display_value(field)
+    if field.to_s == ""
+      "-"
+    else
+      property_to_s(field)
+    end
   end
 
   def property_to_s(val)
@@ -35,5 +39,9 @@ module ValueHelper
     else
       val
     end
+  end
+
+  def decimal?(val)
+    val.is_a?(Numeric) && !val.is_a?(Integer)
   end
 end
