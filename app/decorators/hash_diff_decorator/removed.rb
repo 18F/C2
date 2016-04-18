@@ -2,7 +2,7 @@ module HashDiffDecorator
   class Removed < HashDiffDecorator::Base
     def to_html
       combine_html([
-        content_tag(:code, field),
+        content_tag(:span, field),
         " was removed."
       ])
     end

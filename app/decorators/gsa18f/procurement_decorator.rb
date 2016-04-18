@@ -52,11 +52,11 @@ module Gsa18f
     def top_email_field
     end
 
-    private
-
     def translated_key(key)
       I18n.t("decorators.gsa18f/procurement.#{key}")
     end
+
+    private
 
     def recurring_fields
       if recurring

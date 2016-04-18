@@ -3,11 +3,15 @@ module HashDiffDecorator
     alias_method :change, :__getobj__
 
     def change_type
-      change[0]
+      change[:type]
     end
 
     def field
-      change[1]
+      if decorated_object && decorated_object.respond_to?(:translated_key)
+        decorated_object.translated_key(change[:field])
+      else
+        change[:field]
+      end
     end
 
     def to_html
@@ -15,6 +19,10 @@ module HashDiffDecorator
     end
 
     protected
+
+    def decorated_object
+      change[:object]
+    end
 
     def diff_val(val)
       if val.nil?
