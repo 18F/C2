@@ -133,8 +133,6 @@ Name | Values
 --- | ---
 `size` | an integer >= 0 (defaults to 20)
 `from` | an integer >= 0 (defaults to 0)
-`limit` | alias for `size`
-`offset` | alias for `from`
 `status` | one of `pending`, `cancelled`, `complete`
 `start_date` | timestamp string
 `end_date` | timestamp.string

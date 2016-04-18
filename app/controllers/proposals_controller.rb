@@ -161,7 +161,10 @@ class ProposalsController < ApplicationController
   end
 
   def valid_search_params?
-    @text.present? || @adv_search.present? || (params[:start_date].present? && params[:end_date].present?)
+    @text.present? ||
+    @adv_search.present? ||
+    (params[:start_date].present? && params[:end_date].present?) ||
+    params[:status].present?
   end
 
   def find_search_report

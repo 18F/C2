@@ -26,9 +26,11 @@
   = datespan_header(@start_date, @end_date)
   - if @proposals_data.rows.any?
     = render partial: "shared/table", locals: {container: @proposals_data}
-    - if @proposals_data.es_response
-      #pages
+    #pages
+      - if @proposals_data.es_response
         = paginate @proposals_data.es_response, current_page: (params[:page]||1).to_i
+      - else
+        = paginate @proposals_data, current_page: (params[:page]||1).to_i
   - if @proposals_data.rows.empty?
     .empty-list-label
       No results
