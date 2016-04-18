@@ -1,0 +1,52 @@
+.medium-icon-col{
+  min-width: 35px;
+  width: 35px;
+}
+
+
+.step-row{
+  position: relative;
+
+  &:last-child .step-status-wrapper:before {
+    display: none;
+  }
+  &.step-status-completed .step-status-wrapper:before{
+    width: 2px;
+    content: "";
+    position: absolute;
+    height: 100%;
+    background: #355E7D;
+    margin: auto;
+    right: 0px;
+    left: 0px;
+    z-index: 1;
+  }
+  .step-status-wrapper{
+    position: relative;
+    img{
+      position: absolute;
+      left: 0px;
+      right: 0px;
+      margin: auto;
+      z-index: 2;
+    }
+  }
+  .step-content-wrapper{
+    padding-left: 20px;
+    padding-bottom: 20px;
+    vertical-align: top;
+  }
+  span{
+    word-wrap: break-word;
+    word-break: break-word;
+  }
+  .step-data{
+    display: block;
+  }
+  .step-index{
+    font-weight: bold;
+  }
+  .step-user-status{
+    font-style: italic;
+  }
+}

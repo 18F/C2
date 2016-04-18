@@ -1,0 +1,118 @@
+.medium-activity-icon-col{
+  min-width: 23px;
+  width: 23px;
+}
+
+.status-feed-content {
+  padding-left: 20px;
+  padding-bottom: 20px;
+}
+
+.status-feed-wrapper.status-contracted{
+  display: none;
+  &.status-expanded{
+    display: block;
+  }
+}
+
+.status-expand-action {
+  display: none;
+}
+
+.status-toggle-all.status-arrow{
+  height: 23px;
+  width: 23px;
+  padding: 0px;
+  line-height: 19px;
+}
+
+.status-toggle-all.status-text{
+  color: $primary-color;
+  font-weight: 600;
+  display: inline-block;
+  height: 25px;
+  vertical-align: top;
+  padding-left: 20px;
+
+  .status-count {
+    font-weight: normal;
+  }
+}
+
+.card-for-activity{
+  h3 {
+    font-weight: normal;
+  }
+
+  .status-feed-item{
+    margin-bottom: 15px;
+  }
+
+  .status-action{
+    display: block;
+    font-weight: bold;
+  }
+
+  .time-from{
+    font-style: italic;
+  }
+
+  .item-block.attachment{
+    a {
+      color: $dark-gray;
+      font-size: 80%;
+      text-decoration: underline;
+
+      img {
+        color: $backgroundColor;
+        margin-right: 10px;
+      }
+    }
+  }
+
+  .title-block.step{
+    background-color: $backgroundColor;
+    border-radius: 5px;
+    padding: 5px 5px 5px 10px;
+    position: relative;
+
+    .status-action{
+      display: inline;
+      font-weight: normal;
+      font-style: italic;
+    }
+  }
+}
+
+.request-history-wrapper{
+  margin-bottom: 20px;
+}
+
+@media screen and (min-width: 40em){
+  .background-color-column .dot-circle{
+    overflow: hidden;
+    border-radius: 50px;
+    background: $backgroundColor;
+    width: 23px;
+    height: 23px;
+    margin: auto;
+    position: absolute;
+    left: 0px;
+    right: 0px;
+  }
+
+  .background-color-column:before {
+    content: "";
+    display: block;
+    height: 100%;
+    background: $backgroundColor;
+    width: 2px;
+    position: absolute;
+    margin: auto;
+    left: 0px;
+    right: 0px;
+  }
+
+}
+
+
