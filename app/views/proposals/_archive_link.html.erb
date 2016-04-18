@@ -1,5 +1,5 @@
 <div class="col-sm-2">
-  <% unless @completed_data.rows.size < @closed_proposal_limit %>
-    <%= link_to "View the archive", archive_proposals_path %>
+  <% unless container.size < @closed_proposal_limit %>
+    <%= link_to "View all #{status}", query_proposals_path(status: status) %>
   <% end %>
 </div>

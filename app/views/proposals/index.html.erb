@@ -34,7 +34,7 @@
         </div>
 
         <div class="row">
-          <%= render partial: "archive_link" %>
+          <%= render partial: "archive_link", locals: { container: @completed_data, status: "completed" } %>
         </div>
 
       <%- else %>
@@ -47,9 +47,12 @@
     <% if @canceled_data.rows.any? %>
       <div class="col-md-12">
         <h3>Cancelled Purchase Requests</h3>
-      </div>
-      <div class="col-sm-12">
-        <%= render partial: "shared/table", locals: { container: @canceled_data } %>
+        <div class="col-sm-12">
+          <%= render partial: "shared/table", locals: { container: @canceled_data } %>
+        </div>
+        <div class="row">
+          <%= render partial: "archive_link", locals: { container: @canceled_data, status: "canceled" } %>
+        </div>
       </div>
     <% end %>
   </div>

@@ -32,14 +32,14 @@ module TabularData
     end
 
     def size
-      @initial_params[:size] || @initial_params[:limit] || Proposal::MAX_SEARCH_RESULTS
+      (@initial_params[:size] || @initial_params[:limit] || Proposal::MAX_SEARCH_RESULTS).to_i
     end
 
     def from
       if @initial_params[:page]
         (@initial_params[:page].to_i - 1) * size.to_i
       else
-        @initial_params[:from] || @initial_params[:offset] || 0
+        (@initial_params[:from] || @initial_params[:offset] || 0).to_i
       end
     end
 

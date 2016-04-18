@@ -27,11 +27,11 @@ class ProposalsController < ApplicationController
     @pending_data = listing.pending
     @pending_review_data = listing.pending_review
     @completed_data = listing.completed.alter_query { |rel| rel.limit(@closed_proposal_limit) }
-    @canceled_data = listing.canceled
+    @canceled_data = listing.canceled.alter_query { |rel| rel.limit(@closed_proposal_limit) }
   end
 
   def archive
-    @proposals_data = listing.closed
+    redirect_to query_proposals_path(status: "completed")
   end
 
   def cancel_form
