@@ -5,6 +5,6 @@
   %span.time-from
     = date_with_tooltip(event.created_at, true)
 .item-block.attachment
-  %a{href: proposal_attachment_path(@proposal, event.attachment)}
+  %a{href: proposal_attachment_path(@proposal, event.item)}
     = image_tag "icon-attachment.svg"
-    = event.attachment.file_file_name
+    = event.item.file_file_name
