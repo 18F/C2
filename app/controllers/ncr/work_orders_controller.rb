@@ -49,12 +49,5 @@ module Ncr
     def permitted_params
       Ncr::WorkOrder.permitted_params(params, work_order)
     end
-
-    def add_steps
-      super
-      if errors.empty?
-        work_order.setup_approvals_and_observers
-      end
-    end
   end
 end

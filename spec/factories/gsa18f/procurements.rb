@@ -10,7 +10,7 @@ FactoryGirl.define do
     association :proposal, client_slug: "gsa18f"
 
     trait :with_steps do
-      after(:create) { |procurement| procurement.add_steps }
+      after(:create) { |procurement| procurement.initialize_steps }
     end
   end
 end

@@ -59,10 +59,6 @@ module Ncr
       ]
     end
 
-    def fields_for_display
-      Ncr::WorkOrderFields.new(self).display
-    end
-
     def approver_email_frozen?
       approval = individual_steps.first
       approval && !approval.actionable?
