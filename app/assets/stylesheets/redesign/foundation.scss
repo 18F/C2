@@ -18,35 +18,8 @@
 @import 'components/visibility';
 @import 'components/float';
 @import 'components/button';
-@import 'components/button-group';
-@import 'components/accordion-menu';
-@import 'components/accordion';
-@import 'components/badge';
-@import 'components/breadcrumbs';
 @import 'components/callout';
-@import 'components/close-button';
-@import 'components/drilldown';
-@import 'components/dropdown-menu';
-@import 'components/dropdown';
-@import 'components/flex';
-@import 'components/flex-video';
 @import 'components/label';
-@import 'components/media-object';
-@import 'components/menu';
-@import 'components/menu-icon';
-@import 'components/off-canvas';
-@import 'components/orbit';
-@import 'components/pagination';
-@import 'components/progress-bar';
-@import 'components/reveal';
-@import 'components/slider';
-@import 'components/sticky';
-@import 'components/switch';
-@import 'components/table';
-@import 'components/tabs';
-@import 'components/title-bar';
-@import 'components/top-bar';
-@import 'components/thumbnail';
 @import 'components/tooltip';
 
 @mixin foundation-everything($flex: false) {
