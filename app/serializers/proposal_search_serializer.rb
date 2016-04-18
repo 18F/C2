@@ -1,4 +1,6 @@
 class ProposalSearchSerializer < ActiveModel::Serializer
+  delegate :current_page, :from, :size, to: :object
+
   attributes(
     :current_page,
     :from,
@@ -6,18 +8,6 @@ class ProposalSearchSerializer < ActiveModel::Serializer
     :size,
     :total
   )
-
-  def size
-    object.size
-  end
-
-  def from
-    object.from
-  end
-
-  def current_page
-    object.current_page
-  end
 
   def total
     object.es_response ? object.es_response.results.total : object.total
