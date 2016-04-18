@@ -12,7 +12,7 @@ feature "Archive link" do
       login_as(user)
       visit proposals_path
 
-      expect(page).to have_content("View the archive")
+      expect(page).to have_content("View all completed")
     end
   end
 
@@ -27,7 +27,21 @@ feature "Archive link" do
       login_as(user)
       visit proposals_path
 
-      expect(page).to_not have_content("View the archive")
+      expect(page).to_not have_content("View all completed")
+    end
+  end
+
+  scenario "adds archive link for canceled proposals" do
+    ClimateControl.modify CLOSED_PROPOSAL_LIMIT: "2" do
+      user = create(:user)
+      3.times.map do |i|
+        create(:proposal, requester: user, status: "canceled")
+      end
+
+      login_as(user)
+      visit proposals_path
+
+      expect(page).to have_content("View all canceled")
     end
   end
 end

@@ -1,5 +1,5 @@
 <div class="col-sm-2">
-  <% unless container.size < @closed_proposal_limit %>
+  <% unless container.rows.size < @closed_proposal_limit %>
     <%= link_to "View all #{status}", query_proposals_path(status: status) %>
   <% end %>
 </div>
