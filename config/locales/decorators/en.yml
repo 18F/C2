@@ -1,6 +1,8 @@
 en:
   decorators:
     steps:
+      summary:
+        action: "Step %{display_position}: %{completed} by %{name}"
       status:
         completed: "Completed"
         pending: "Pending"
@@ -10,6 +12,7 @@ en:
         adjective: "approve"
         role_name: "Approver"
         label: "Approval"
+        completed: "Approved"
         status:
           please_act: "Please review"
           waiting: "Waiting for review from:"
@@ -19,6 +22,7 @@ en:
         adjective: "purchase"
         role_name: "Purchaser"
         label: "Purchase"
+        completed: "Purchased"
         status:
           please_act: "Please purchase"
           waiting: "Waiting for purchase from:"
@@ -33,7 +37,7 @@ en:
       quantity: "Quantity"
       total_price: "Total Price"
       urgency: "Urgency"
-      product_name_and_description: "Product name and descripton"
+      product_name_and_description: "Product name and description"
       recurring_interval: "Recurring interval"
       recurring_length: "Recurring length"
     ncr/work_order:
