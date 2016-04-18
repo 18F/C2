@@ -120,4 +120,84 @@ describe TabularData::Container do
       end
     end
   end
+
+  describe "#total" do
+    it "gets grand total regardless of page size" do
+      create_list(:proposal, 5)
+      container = TabularData::Container.new(:abc, { engine: "Proposal" })
+      container.state_from_params = ActionController::Parameters.new(size: 4)
+
+      expect(container.size).to eq(4)
+      expect(container.total).to eq(5)
+    end
+  end
+
+  describe "#size" do
+    it "parses size or limit param" do
+      container = TabularData::Container.new(:abc, { engine: "Proposal" })
+      container.state_from_params = ActionController::Parameters.new(limit: 4)
+
+      expect(container.size).to eq(4)
+    end
+
+    it "defaults to MAX_SEARCH_RESULTS" do
+      container = TabularData::Container.new(:abc, { engine: "Proposal" })
+      container.state_from_params = ActionController::Parameters.new()
+
+      expect(container.size).to eq(Proposal::MAX_SEARCH_RESULTS)
+    end
+  end
+
+  describe "#current_page" do
+    it "does pagination math" do
+      container = TabularData::Container.new(:abc, { engine: "Proposal" })
+      container.state_from_params = ActionController::Parameters.new(from: 2, size: 2)
+
+      expect(container.current_page).to eq(2)
+    end
+  end
+
+  describe "#from" do
+    it "treats like offset" do
+      container = TabularData::Container.new(:abc, { engine: "Proposal" })
+      container.state_from_params = ActionController::Parameters.new(offset: 2)
+
+      expect(container.from).to eq(2)
+    end
+
+    it "derives from page param" do
+      container = TabularData::Container.new(:abc, { engine: "Proposal" })
+      container.state_from_params = ActionController::Parameters.new(page: 2, size: 2)
+
+      expect(container.from).to eq(2)
+    end
+  end
+
+  describe "#page" do
+    it "uses params[:page]" do
+      container = TabularData::Container.new(:abc, { engine: "Proposal" })
+      container.state_from_params = ActionController::Parameters.new(page: 2)
+
+      expect(container.page).to eq(2)
+    end
+  end
+
+  describe "#total_pages" do
+    it "does the pagination math" do
+      create_list(:proposal, 5)
+      container = TabularData::Container.new(:abc, { engine: "Proposal" })
+      container.state_from_params = ActionController::Parameters.new(from: 2, size: 2)
+
+      expect(container.current_page).to eq(2)
+    end
+  end
+
+  describe "#limit_value" do
+    it "passes to #size" do
+      container = TabularData::Container.new(:abc, { engine: "Proposal" })
+      container.state_from_params = ActionController::Parameters.new(size: 4)
+
+      expect(container.limit_value).to eq(4)
+    end
+  end
 end
