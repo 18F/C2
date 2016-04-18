@@ -31,7 +31,7 @@ class ProposalsController < ApplicationController
   end
 
   def archive
-    redirect_to query_proposals_path(status: "completed")
+    redirect_to query_proposals_path(text: "status:completed")
   end
 
   def cancel_form
