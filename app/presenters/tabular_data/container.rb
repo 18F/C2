@@ -17,6 +17,14 @@ module TabularData
       self
     end
 
+    def apply_limit(limit)
+      alter_query { |rel| rel.limit(limit) }
+    end
+
+    def apply_offset(offset)
+      alter_query { |rel| rel.offset(offset) }
+    end
+
     def rows
       results = @query
 

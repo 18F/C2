@@ -26,8 +26,8 @@ class ProposalsController < ApplicationController
     @closed_proposal_limit = ENV.fetch("CLOSED_PROPOSAL_LIMIT", 10).to_i
     @pending_data = listing.pending
     @pending_review_data = listing.pending_review
-    @completed_data = listing.completed.alter_query { |rel| rel.limit(@closed_proposal_limit) }
-    @canceled_data = listing.canceled.alter_query { |rel| rel.limit(@closed_proposal_limit) }
+    @completed_data = listing.completed.apply_limit(@closed_proposal_limit)
+    @canceled_data = listing.canceled.apply_limit(@closed_proposal_limit)
   end
 
   def archive

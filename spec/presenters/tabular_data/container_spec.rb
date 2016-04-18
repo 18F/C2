@@ -121,6 +121,28 @@ describe TabularData::Container do
     end
   end
 
+  describe "#apply_limit" do
+    it "constrains the query to :limit" do
+      create_list(:proposal, 5)
+      container = TabularData::Container.new(:abc, { engine: "Proposal" })
+      container.state_from_params = ActionController::Parameters.new
+
+      expect(container.apply_limit(4)).to eq(container)
+      expect(container.rows.size).to eq(4)
+    end
+  end
+
+  describe "#apply_offset" do
+    it "constrains the query to a specific starting point" do
+      create_list(:proposal, 5)
+      container = TabularData::Container.new(:abc, { engine: "Proposal" })
+      container.state_from_params = ActionController::Parameters.new
+
+      expect(container.apply_offset(4)).to eq(container)
+      expect(container.rows.size).to eq(1)
+    end
+  end
+
   describe "#total" do
     it "gets grand total regardless of page size" do
       create_list(:proposal, 5)
