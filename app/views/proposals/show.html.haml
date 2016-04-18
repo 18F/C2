@@ -95,7 +95,7 @@
       %p.empty-list-label No comments have been added yet
 
   #files
-    %h3 Attachments to this proposal
+    %h3 Attachments to this proposals
     = form_for [@proposal, Attachment.new] do |f|
       .line-item
         .row= f.file_field :file

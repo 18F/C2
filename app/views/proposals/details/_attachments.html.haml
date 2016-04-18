@@ -1,0 +1,32 @@
+.card-for-purchase-details
+  .row
+    .medium-12.column
+      .card
+        .card-head.column
+          %h2
+            Attachments
+            = #modify_client_button(@proposal, "<span>Attach File</span>".html_safe, "button secondary attach-icon fr large")
+        .content-content.column
+          .row
+            .medium-12.column
+              = form_for [@proposal, Attachment.new] do |f|
+                = f.file_field :file
+                = submit_tag "Attach a file", id: :add_a_file, data: {"disable-if-empty" => "attachment_file"}, class: "button primary round no-margin-bottom"
+          .row
+            .medium-12.column
+              %h3 Attachments to this proposal
+              %ul.attachment-list
+                - @proposal.attachments.each do |attachment|
+                  %li.attachment-list-item
+                    %a{href: proposal_attachment_path(@proposal, attachment)}
+                      = image_tag "icon-attachment.svg"
+                    %a{href: proposal_attachment_path(@proposal, attachment)}
+                      <strong>#{attachment.file_file_name}</strong>
+                    - if policy(attachment).can_destroy?
+                      = button_to "", proposal_attachment_path(@proposal, attachment), method: :delete, data: {confirm: "Are you sure?"}, class: "text-right"
+              - if @proposal.attachments.empty?
+                .content-content.column
+                  .row
+                    .medium-12.column
+                      .item-block
+                        %p.empty-list-label No attachments have been added yet

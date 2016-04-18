@@ -20,6 +20,7 @@
     .medium-6.column
       = render partial: "proposals/details/request_details", locals: { proposal: @proposal }
       = # render partial: "proposals/details/purchase", locals: { proposal: @proposal }
+      = render partial: "proposals/details/attachments", locals: { proposal: @proposal }
       = render partial: "proposals/details/observer", locals: { proposal: @proposal }
       .row
         .medium-12.column.wrap-hard
