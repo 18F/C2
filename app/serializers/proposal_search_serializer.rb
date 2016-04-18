@@ -1,10 +1,10 @@
 class ProposalSearchSerializer < ActiveModel::Serializer
   attributes(
-    :total,
-    :size,
-    :from,
     :current_page,
-    :proposals
+    :from,
+    :proposals,
+    :size,
+    :total
   )
 
   def size
