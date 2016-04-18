@@ -34,9 +34,7 @@ feature "Archive link" do
   scenario "adds archive link for canceled proposals" do
     ClimateControl.modify CLOSED_PROPOSAL_LIMIT: "2" do
       user = create(:user)
-      3.times.map do |i|
-        create(:proposal, requester: user, status: "canceled")
-      end
+      create_list(:proposal, 3, requester: user, status: "canceled")
 
       login_as(user)
       visit proposals_path
