@@ -83,6 +83,14 @@ class ProposalDecorator < Draper::Decorator
     [public_id, created_at, requester.display_name, detailed_status, final_completed_date, total_completion_days, client_data.csv_fields].flatten
   end
 
+  def fields_for_details
+    if client_data
+      client_data.decorate.detail_fields_config
+    else
+      []
+    end
+  end
+
   def fields_for_display
     if client_data
       client_data.decorate.display

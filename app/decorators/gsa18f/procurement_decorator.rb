@@ -52,5 +52,83 @@ module Gsa18f
         []
       end
     end
+
+    def detail_fields_config
+      [
+        { 
+          value: ["office"],
+          style: {
+            column: 1,
+          },
+        },
+        { 
+          value: ["purchase_type"],
+          style: {
+            column: 1,
+          },
+        },
+        { 
+          value: ["product_name_and_description"],
+          style: {
+            column: 1,
+          },
+        },
+        { 
+          value: ["justification"],
+          style: {
+            column: 1,
+          },
+        },
+        { 
+          value: ["link_to_product"],
+          style: {
+            column: 1,
+          },
+        },
+        { 
+          value: ["cost_per_unit"],
+          style: {
+            column: 1,
+          },
+        },
+        { 
+          value: ["quantity"],
+          style: {
+            column: 1,
+          },
+        },
+        { 
+          value: ["recurring"],
+          style: {
+            column: 1,
+          },
+        },
+        { 
+          value: ["date_requested"],
+          style: {
+            column: 1,
+          },
+        },
+        { 
+          value: ["urgency"],
+          style: {
+            column: 1,
+          },
+        },
+        { 
+          value: ["additional_info"],
+          style: {
+            column: 1,
+          },
+        },
+        { 
+          value: ["amount"],
+          style: {
+            column: 2,
+            background: "small-color-card"
+          },
+        }
+      ]
+    end
   end
 end

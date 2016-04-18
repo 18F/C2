@@ -1,0 +1,17 @@
+.row
+  .medium-12.column
+    .card#request-details-card
+      - if @client_data_instance
+        .card-head.column
+          %h2
+            Request Details
+            - if @mode != "edit" && !@proposal.completed?
+              = modify_client_button(@proposal, "<span>#{@mode == "edit" ? "View" : "Modify"}</span>".html_safe, "button secondary edit-icon fr large request-detail-edit-button")
+       
+        .content-content.column#view-request-details
+          = simple_form_for @client_data_instance, html: { multipart: true }, remote: true do |f|         
+            - field_configs.each do |field_config|
+              - proposal.fields_for_input.each do |fields|
+                = render partial: "proposals/details/request_details_column", locals: { field: field, f: form }
+
+            = submit_tag "Submit", hidden: true;

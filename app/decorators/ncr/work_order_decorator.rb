@@ -112,5 +112,63 @@ module Ncr
     def translated_key(key)
       I18n.t("decorators.ncr/work_order.#{key}")
     end
+
+    def detail_fields_config
+      [
+        { 
+          value: ["description"],
+          style: {
+            column: 1,
+          },
+        },
+        { 
+          value: ["expense_type"],
+          style: {
+            column: 1,
+          },
+        },
+        { 
+          value: ["ncr_organization"],
+          style: {
+            column: 1,
+          },
+        },
+        { 
+          value: ["vendor"],
+          style: {
+            column: 1,
+            background: "color-card"
+          },
+        },
+        { 
+          value: ["building_number"],
+          style: {
+            column: 1,
+            background: "color-card"
+          },
+        },
+        { 
+          value: ["cl_number"],
+          style: {
+            column: 1,
+            background: "color-card"
+          },
+        },
+        { 
+          value: ["direct_pay"],
+          style: {
+            column: 2,
+          },
+        },
+        { 
+          value: ["amount"],
+          style: {
+            column: 2,
+            background: "small-color-card"
+          },
+        }
+      ]
+    end
+
   end
 end
