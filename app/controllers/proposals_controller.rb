@@ -25,12 +25,12 @@ class ProposalsController < ApplicationController
     @closed_proposal_limit = ENV.fetch("CLOSED_PROPOSAL_LIMIT", 10).to_i
     @pending_data = listing.pending
     @pending_review_data = listing.pending_review
-    @completed_data = listing.completed.alter_query { |rel| rel.limit(@closed_proposal_limit) }
-    @canceled_data = listing.canceled
+    @completed_data = listing.completed.apply_limit(@closed_proposal_limit)
+    @canceled_data = listing.canceled.apply_limit(@closed_proposal_limit)
   end
 
   def archive
-    @proposals_data = listing.closed
+    redirect_to query_proposals_path(text: "status:completed")
   end
 
   def cancel_form
@@ -160,7 +160,10 @@ class ProposalsController < ApplicationController
   end
 
   def valid_search_params?
-    @text.present? || @adv_search.present? || (params[:start_date].present? && params[:end_date].present?)
+    @text.present? ||
+      @adv_search.present? ||
+      (params[:start_date].present? && params[:end_date].present?) ||
+      params[:status].present?
   end
 
   def find_search_report

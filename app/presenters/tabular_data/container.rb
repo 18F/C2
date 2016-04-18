@@ -17,6 +17,14 @@ module TabularData
       self
     end
 
+    def apply_limit(limit)
+      alter_query { |rel| rel.limit(limit) }
+    end
+
+    def apply_offset(offset)
+      alter_query { |rel| rel.offset(offset) }
+    end
+
     def rows
       results = @query
 
@@ -31,6 +39,34 @@ module TabularData
       rows.offset(0).limit(nil).count
     end
 
+    def size
+      (@initial_params[:size] || @initial_params[:limit] || Proposal::MAX_SEARCH_RESULTS).to_i
+    end
+
+    def from
+      if @initial_params[:page]
+        (@initial_params[:page].to_i - 1) * size.to_i
+      else
+        (@initial_params[:from] || @initial_params[:offset] || 0).to_i
+      end
+    end
+
+    def limit_value
+      size
+    end
+
+    def page
+      @initial_params[:page]
+    end
+
+    def current_page
+      from / size + 1
+    end
+
+    def total_pages
+      (total / size).ceil
+    end
+
     def apply_filter(results)
       if @filter
         @filter.call(results)
@@ -40,6 +76,7 @@ module TabularData
     end
 
     def state_from_params=(params)
+      @initial_params = params
       relevant = params.permit(tables: { @name => [:sort] })
       config = relevant.fetch(:tables, {}).fetch(@name, {}) || {}
 

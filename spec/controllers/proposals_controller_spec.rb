@@ -20,25 +20,10 @@ describe ProposalsController do
   end
 
   describe '#archive' do
-    before do
+    it "redirects to query by status" do
       login_as(user)
-    end
-
-    it 'should show all the closed proposals' do
-      create_list(:proposal, 2, requester: user, status: "completed")
-      create(:proposal, requester: user)
-
       get :archive
-
-      expect(assigns(:proposals_data).rows.size).to eq(2)
-    end
-
-    context 'smoke test' do
-      render_views
-
-      it 'does not explode' do
-        get :archive
-      end
+      expect(response).to redirect_to(query_proposals_url(text: "status:completed"))
     end
   end
 
