@@ -41,9 +41,8 @@ module Ncr
         { partial: "ncr/fields/cl_number" },
         { partial: "ncr/fields/direct_pay" },
         { partial: "ncr/fields/amount" }
-        ]
+      ]
     end
-
 
     def top_email_field
       object.description
@@ -126,6 +125,5 @@ module Ncr
     def translated_key(key)
       I18n.t("decorators.ncr/work_order.#{key}")
     end
-
   end
 end
