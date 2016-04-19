@@ -48,6 +48,10 @@ module Ncr
       object.description
     end
 
+    def translated_key(key)
+      I18n.t("decorators.ncr/work_order.#{key}")
+    end
+
     private
 
     def final_approver_email_address
@@ -120,10 +124,6 @@ module Ncr
 
     def direct_pay_field
       [translated_key("direct_pay"), object.direct_pay]
-    end
-
-    def translated_key(key)
-      I18n.t("decorators.ncr/work_order.#{key}")
     end
   end
 end

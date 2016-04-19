@@ -1,20 +1,20 @@
 module HashDiffDecorator
   class Modified < HashDiffDecorator::Base
     def prev_val
-      diff_val(change[2])
+      diff_val(change[:val1])
     end
 
     def current_val
-      diff_val(change[3])
+      diff_val(change[:val2])
     end
 
     def to_html
       combine_html([
-        content_tag(:code, field),
+        content_tag(:span, field),
         " was changed from ",
-        content_tag(:code, prev_val),
+        content_tag(:strong, prev_val),
         " to ",
-        content_tag(:code, current_val)
+        content_tag(:strong, current_val)
       ])
     end
   end

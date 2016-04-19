@@ -42,7 +42,12 @@ class C2VersionDecorator < BaseDecorator
       changes = object.diff.map do |change|
         field = change[1]
         next if %w(created_at updated_at).include?(field)
-        hashdiff_to_html(change)
+        change_hash = { type: change[0],
+                        field: field,
+                        val1: change[2],
+                        val2: change[3],
+                        object: reify.decorate }
+        hashdiff_to_html(change_hash)
       end
       combine_html(changes.compact)
     end

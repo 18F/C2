@@ -27,4 +27,11 @@ describe Ncr::WorkOrderDecorator do
       expect(wo.current_approver_email_address).to eq(wo.approvers.last.email_address)
     end
   end
+
+  describe "#translated_key" do
+    it "fetches the correct translation" do
+      wo = build_stubbed(:ncr_work_order).decorate
+      expect(wo.translated_key("soc_code")).to eq I18n.t("decorators.ncr/work_order.soc_code")
+    end
+  end
 end
