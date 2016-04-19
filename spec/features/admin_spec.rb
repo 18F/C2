@@ -81,6 +81,19 @@ describe "admin" do
     expect(proposal).to be_completed
   end
 
+  it "does not trigger actions on Complete Without Notifications button click" do
+    user = login_as_admin_user
+    proposal = create(:proposal, :with_serial_approvers)
+
+    deliveries.clear
+    visit admin_proposal_path(proposal)
+    click_link "Complete without notifications"
+
+    expect(deliveries.count).to eq(0)
+    proposal.reload
+    expect(proposal).to be_completed
+  end
+
   it "triggers actions on Step edit" do
     user = login_as_admin_user
     proposal = create(:proposal, :with_serial_approvers)

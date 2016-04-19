@@ -266,10 +266,11 @@ class Proposal < ActiveRecord::Base
     DispatchFinder.run(self).deliver_new_proposal_emails
   end
 
-  def fully_complete!(completer = nil)
+  def fully_complete!(completer = nil, skip_notifications = false)
     individual_steps.each do |step|
       step.reload
       next if step.completed?
+      step.skip_notifications = skip_notifications
       step.complete!
       if completer
         step.update(completer: completer)

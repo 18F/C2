@@ -50,6 +50,10 @@ ActiveAdmin.register Proposal do
     link_to "Complete", fully_complete_admin_proposal_path(proposal), "data-method" => :post, title: "Fully complete this proposal"
   end
 
+  action_item :fully_complete_no_email, only: [:show] do
+    link_to "Complete without notifications", fully_complete_no_email_admin_proposal_path(proposal), "data-method" => :post, title: "Fully complete this proposal without sending notifications to affected subscribers"
+  end
+
   member_action :reindex, method: :post do
     resource.delay.reindex
     flash[:alert] = "Re-index scheduled!"
@@ -58,6 +62,12 @@ ActiveAdmin.register Proposal do
 
   member_action :fully_complete, method: :post do
     resource.fully_complete!(current_user)
+    flash[:alert] = "Completed!"
+    redirect_to admin_proposal_path(resource)
+  end
+
+  member_action :fully_complete_no_email, method: :post do
+    resource.fully_complete!(current_user, true)
     flash[:alert] = "Completed!"
     redirect_to admin_proposal_path(resource)
   end

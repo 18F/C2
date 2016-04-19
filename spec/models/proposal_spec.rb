@@ -239,6 +239,15 @@ describe Proposal do
 
       expect(proposal.status).to eq "completed"
     end
+
+    it "does not send notifications if explicitly prevented" do
+      proposal = create(:proposal, :with_serial_approvers)
+      deliveries.clear
+      proposal.fully_complete!(nil, true)
+
+      expect(proposal.status).to eq "completed"
+      expect(deliveries.count).to eq 0
+    end
   end
 
   describe "searchable callbacks" do

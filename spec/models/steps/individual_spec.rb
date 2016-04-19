@@ -59,4 +59,16 @@ describe Steps::Individual do
       expect(step.completed_by).to eq(assigned_user)
     end
   end
+
+  describe "#skip_notifications" do
+    it "does not dispatch emails when set to true" do
+      approval = create(:approval_step)
+      approval.skip_notifications = true
+      deliveries.clear
+
+      approval.initialize!
+      approval.complete!
+      expect(deliveries.count).to eq(0)
+    end
+  end
 end
