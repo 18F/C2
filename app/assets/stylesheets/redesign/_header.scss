@@ -1,4 +1,3 @@
-
 .mycart-link {
     clear: all;
     margin-top: -20px;
@@ -34,31 +33,25 @@ header{
     padding-right: 15px;
 }
 
-/* line 4, /Users/leonardbogdonoff/Spaceship/rails/c2/app/assets/stylesheets/common/header.scss */
 header a,
 header a:hover {
   color: #fff;
 }
-/* line 8, /Users/leonardbogdonoff/Spaceship/rails/c2/app/assets/stylesheets/common/header.scss */
 header .button_to input.login-link {
   color: #fff;
   text-decoration: underline;
   font-size: 14px;
 }
 
-/* line 15, /Users/leonardbogdonoff/Spaceship/rails/c2/app/assets/stylesheets/common/header.scss */
 #header-identity {
   display: inline-block;
 }
-/* line 18, /Users/leonardbogdonoff/Spaceship/rails/c2/app/assets/stylesheets/common/header.scss */
 #header-identity h1 {
   line-height: 44px;
   margin: 0;
   color: #fff;
 }
 
-
-/* line 30, /Users/leonardbogdonoff/Spaceship/rails/c2/app/assets/stylesheets/common/header.scss */
 ul#breadcrumb-nav {
   margin: 20px 0px 40px 10px;
 }
@@ -66,12 +59,10 @@ ul#breadcrumb-nav {
 ul#breadcrumb-nav li {
   list-style: none;
 }
-/* line 37, /Users/leonardbogdonoff/Spaceship/rails/c2/app/assets/stylesheets/common/header.scss */
 ul#breadcrumb-nav li a {
   color: #006be6;
 }
 
-/* line 43, /Users/leonardbogdonoff/Spaceship/rails/c2/app/assets/stylesheets/common/header.scss */
 #c2_logo {
   background-image: url(/assets/img-logo-c2-portal.png);
   background-repeat: no-repeat;
@@ -80,7 +71,6 @@ ul#breadcrumb-nav li a {
   text-indent: -2000px;
 }
 
-/* line 51, /Users/leonardbogdonoff/Spaceship/rails/c2/app/assets/stylesheets/common/header.scss */
 #profile-alert {
   padding: 1em;
   background-color: #eee;
