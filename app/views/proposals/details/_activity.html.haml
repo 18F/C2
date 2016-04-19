@@ -23,9 +23,9 @@
                 %div
                   .row.column#comments
                     - index = 0
-                    - history.events.reverse.each do |event|
+                    - @events.reverse.each do |event|
                       - history_style = index > 4 ? "contracted" : "expanded"
-                      - index_class = index == history.events.count - 1 ? "status-index-last" : "status-index-" + index.to_s
+                      - index_class = index == @events.count - 1 ? "status-index-last" : "status-index-" + index.to_s
                       - classes = "status-" + history_style + " " + index_class
                       .medium-12.column.status-feed-wrapper.row.comment{ class: classes }
                         .medium-table-row.medium-12.status-feed-item.no-margin-bottom
@@ -35,7 +35,7 @@
                             = render partial: event, locals: { event: event }
                       - index = index + 1
 
-            - if history.events.length > 5
+            - if @events.length > 5
               .row.status-feed-actions
                 .medium-12.column.status-contract-action
                   %div
@@ -44,7 +44,7 @@
                     %a.primary.status-toggle-all.status-text
                       = t(".button.show_all_activity")
                       %span.status-count
-                        = t(".button.hidden_activity_count", count: history.events.length - 5)
+                        = t(".button.hidden_activity_count", count: @events.length - 5)
                 .medium-12.column.status-expand-action
                   %div
                     %a.button.primary.status-toggle-all.status-arrow
