@@ -7,6 +7,8 @@ module Steps
     validates :user, presence: true
     delegate :full_name, :email_address, to: :user, prefix: true
 
+    attr_accessor :skip_notifications
+
     self.abstract_class = true
 
     workflow do
@@ -29,7 +31,9 @@ module Steps
         on_entry do
           update(completed_at: Time.zone.now)
           notify_parent_completed
-          DispatchFinder.run(self.proposal).step_complete(self)
+          unless skip_notifications
+            DispatchFinder.run(self.proposal).step_complete(self)
+          end
         end
 
         event :initialize, transitions_to: :actionable do
