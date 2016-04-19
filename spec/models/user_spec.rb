@@ -29,6 +29,15 @@ describe User do
     end
   end
 
+  describe "#anonymous" do
+    it "returns a temp anonymous User" do
+      user = User.anonymous
+
+      expect(user.id).to be_nil
+      expect(user.email_address).to eq("unknown@example.com")
+    end
+  end
+
   describe ".active" do
     it "returns users with active set to true" do
       User.destroy_all

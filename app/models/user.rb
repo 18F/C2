@@ -33,7 +33,7 @@ class User < ActiveRecord::Base
   DEFAULT_TIMEZONE = "Eastern Time (US & Canada)"
 
   def self.anonymous
-    new(first_name: 'Unknown', last_name: 'Unknown', email_address: 'unknown@example.com')
+    new(first_name: 'Unknown', last_name: 'User', email_address: 'unknown@example.com')
   end
 
   def self.active
