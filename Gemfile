@@ -62,6 +62,7 @@ gem "uglifier"
 gem "validates_email_format_of"
 gem "workflow"
 gem "actionmailer-text"
+gem 'remotipart', '~> 1.2'
 
 group :test, :development do
   gem "bullet", require: false # use BULLET_ENABLED=true

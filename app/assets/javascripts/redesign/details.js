@@ -14,7 +14,8 @@ detailsApp.templates = {
   "card-for-approvals": "",
   "card-for-activity": "",
   "card-for-request-details": "",
-  "card-for-observers": ""
+  "card-for-observers": "",
+  "card-for-attachments": ""
 };
 
 detailsApp.data = {
@@ -46,7 +47,7 @@ detailsApp.setupEvents = function(){
     var valid = true;
     if(valid){
       self.postActionSaveHook();
-      self.setupFormEl();
+      self.setupFormEl("#request-details-card");
       self.generateCardObjects();
       self.defaultActionBar();
     }
@@ -58,6 +59,7 @@ detailsApp.setupCards = function(){
   this.setupRequestDetailsToggle();
   this.setupCommentController();
   this.setupObserverController();
+  this.setupAttachmentController();
 };
 
 detailsApp.setupInputFields = function(){
@@ -76,8 +78,8 @@ detailsApp.setupStatusToggle = function(){
   }
 };
 
-detailsApp.setupFormEl = function() {
-  this.data.$el = $("#request-details-card form");
+detailsApp.setupFormEl = function(card) {
+  this.data.$el = $(card + " form");
 }
 
 detailsApp.setupRequestDetailsToggle = function() {
@@ -230,6 +232,22 @@ detailsApp.getCardObject = function(guidValue){
 detailsApp.setupObserverController = function(newRow){
   var $observers = $(".observer-list");
   $observers.append(newRow);
+};
+
+detailsApp.setupAttachmentController = function(){
+  // $("#new_attachment").on("ajax:remotipartComplete", function(e, data){
+  //   console.log("success");
+  //   console.log("data:",data);
+  //   // $("#new_attachment").append(xhr.responseText);
+  // }).on("ajax:error",function(e,data){
+  //   console.log("Error Data:", data);
+  // });
+  // var self = this;
+  // $("#add_a_file").on("click", function(e){
+  //   self.setupFormEl("#request-attachments-card");
+  //   self.generateCardObjects();
+  //   self.defaultActionBar();
+  // })
 };
 
 detailsApp.setupCommentController = function(){
