@@ -1,8 +1,6 @@
 @charset 'utf-8';
 
-@import 'settings';
-@import 'foundation';
-// @import 'motion-ui';
+@import 'foundation_custom';
 @import 'header';
 @import 'card';
 @import 'card-summary';
@@ -15,15 +13,3 @@
 @import 'breadcrumbs';
 @import 'basic';
 @import 'layout';
-
-
-@include foundation-global-styles;
-@include foundation-grid;
-@include foundation-typography;
-@include foundation-button;
-@include foundation-forms;
-@include foundation-callout;
-@include foundation-label;
-@include foundation-tooltip;
-@include foundation-visibility-classes;
-@include foundation-float-classes;
