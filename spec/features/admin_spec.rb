@@ -1,6 +1,6 @@
 describe "admin" do
   it "does not allow Delete of Users" do
-    user = login_as_admin_user
+    login_as_admin_user
 
     visit admin_users_path
 
@@ -8,7 +8,7 @@ describe "admin" do
   end
 
   it "does not allow editing of user delegates" do
-    user = login_as_admin_user
+    login_as_admin_user
     other_user = create(:user)
     user_delegate = create(:user_delegate, assigner: user, assignee: other_user)
 
@@ -19,7 +19,7 @@ describe "admin" do
   end
 
   it "does not allow delete of proposals" do
-    user = login_as_admin_user
+    login_as_admin_user
     _proposal = create(:proposal)
 
     visit admin_proposals_path
@@ -28,7 +28,7 @@ describe "admin" do
   end
 
   it "does not allow edit of proposals" do
-    user = login_as_admin_user
+    login_as_admin_user
     _proposal = create(:proposal)
 
     visit admin_proposals_path
@@ -38,7 +38,7 @@ describe "admin" do
 
   it "shows user.display_name when viewing User records" do
     user = login_as_admin_user
-    proposal = create(:proposal, requester: user)
+    create(:proposal, requester: user)
 
     visit admin_proposals_path
 
@@ -46,7 +46,7 @@ describe "admin" do
   end
 
   it "contains reindex button link" do
-    user = login_as_admin_user
+    login_as_admin_user
 
     visit admin_dashboard_path
 
@@ -54,7 +54,7 @@ describe "admin" do
   end
 
   it "creates new User" do
-    user = login_as_admin_user
+    login_as_admin_user
 
     visit new_admin_user_path
 
@@ -69,7 +69,7 @@ describe "admin" do
   end
 
   it "triggers actions on Complete button click" do
-    user = login_as_admin_user
+    login_as_admin_user
     proposal = create(:proposal, :with_serial_approvers)
 
     deliveries.clear
@@ -82,7 +82,7 @@ describe "admin" do
   end
 
   it "does not trigger actions on Complete Without Notifications button click" do
-    user = login_as_admin_user
+    login_as_admin_user
     proposal = create(:proposal, :with_serial_approvers)
 
     deliveries.clear
@@ -94,7 +94,7 @@ describe "admin" do
     expect(proposal).to be_completed
   end
 
-  it "triggers actions on Step edit" do
+  it "triggers actions, no email notifications, on Step edit" do
     user = login_as_admin_user
     proposal = create(:proposal, :with_serial_approvers)
     first_step = proposal.individual_steps.first
