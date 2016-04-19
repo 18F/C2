@@ -8,7 +8,7 @@ describe "admin" do
   end
 
   it "does not allow editing of user delegates" do
-    login_as_admin_user
+    user = login_as_admin_user
     other_user = create(:user)
     user_delegate = create(:user_delegate, assigner: user, assignee: other_user)
 
