@@ -1,0 +1,78 @@
+.mycart-link {
+    clear: all;
+    margin-top: -20px;
+}
+
+header{
+  width: 100%;
+  padding: 40px 10px 40px 35px;
+  background-color: #07519b;
+  color: #fff;
+  margin: 0 auto;
+}
+
+.header-nav {
+    display: inline-block;
+    float: right;
+    color: #fff;
+}
+
+.header-nav li {
+    display: inline-block;
+    padding-right: 12px;
+}
+
+.header-nav a {
+    color: #fff;
+}
+
+.container {
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+header a,
+header a:hover {
+  color: #fff;
+}
+header .button_to input.login-link {
+  color: #fff;
+  text-decoration: underline;
+  font-size: 14px;
+}
+
+#header-identity {
+  display: inline-block;
+}
+#header-identity h1 {
+  line-height: 44px;
+  margin: 0;
+  color: #fff;
+}
+
+ul#breadcrumb-nav {
+  margin: 20px 0px 40px 10px;
+}
+
+ul#breadcrumb-nav li {
+  list-style: none;
+}
+ul#breadcrumb-nav li a {
+  color: #006be6;
+}
+
+#c2_logo {
+  background-image: url(/assets/img-logo-c2-portal.png);
+  background-repeat: no-repeat;
+  width: 200px;
+  height: 30px;
+  text-indent: -2000px;
+}
+
+#profile-alert {
+  padding: 1em;
+  background-color: #eee;
+  text-align: center;
+}

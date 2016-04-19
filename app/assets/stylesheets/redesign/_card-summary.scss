@@ -1,0 +1,46 @@
+.c2n_description p{
+  margin-bottom: 0px;
+  font-size: 15px;
+
+  .requested-by-name {
+    padding-right: 2rem;
+  }
+}
+
+.c2n_header{
+  margin-bottom: 1.1rem;
+}
+
+.card-head{
+  h3{
+    margin-bottom: 0px;
+    color: #40759C;
+  }
+}
+
+span.status-wrap{
+  margin-top: 20px;
+  @media screen and (min-width: 40em){
+    margin-top: 0px;
+    float: right;
+    max-width: 170px;
+  }
+  border: 1px solid white;
+  padding: 20px;
+  color: #494949;
+  border-radius: 5px;
+  font-size: 14px;
+  text-transform: uppercase;
+  display: inline-block;
+  margin-right: 0px;
+  span.status-value{
+    display: block;
+    font-size: 16px;
+    text-transform: none;
+    font-weight: bold;
+  }
+  &.status-is-pending{
+  }
+  &.status-is-completed{
+  }
+}
