@@ -1,0 +1,96 @@
+ul#request-actions{
+  max-width: 1120px;
+  margin: auto;
+  vertical-align: middle;
+  li{
+    margin: 0px;
+    &.action-approve{
+      margin-left: 20px;
+    }
+  }
+  .save-button .button{
+    background: #8ecc76;
+  }
+  .cancel-button{
+    margin-right: 20px;
+  }
+}
+.edit-actions{
+  ul#request-actions{
+    .cancel-action{
+      display: none;
+    }
+  }
+}
+
+
+
+.cancel-action{
+  color: $primary-color;
+}
+
+.action-bar-template{
+  border-top: 1px solid #e0e2e3;
+  position: fixed;
+  width: 100%;
+  margin: auto;
+  left: 0px;
+  right: 0px;
+  z-index: 10;
+}
+
+$action-bar-wrapper-height-small: 60px;
+.action-bar-status{
+  display: none;
+  bottom:  $action-bar-wrapper-height-small;
+  &.show{
+    display: block;
+  }
+}
+
+.action-bar-wrapper{
+  height: $action-bar-wrapper-height-small;
+  padding-top: 10px;
+}
+
+@media screen and ( min-height: 700px ){
+  $action-bar-wrapper-height: 110px;
+  .action-bar-status{
+    .status-bar{
+      padding-top: 7px;
+    }
+    bottom:  $action-bar-wrapper-height;
+  }
+
+  .action-bar-wrapper{
+    height: $action-bar-wrapper-height;
+    padding-top: 20px;
+  }
+}
+
+
+.action-bar-status{
+  .status-bar{
+    padding-top: 7px;
+  }
+  height: 40px;
+  background: #589D42;
+  color: white;
+  font-weight: bold;
+}
+
+.action-bar-wrapper{
+  bottom:  0px;
+  background: #f2f4f5;
+  > div{
+    opacity: .7;
+  }
+  &.edit-actions{
+    > div{
+      opacity: 1;
+    }
+    bottom: 0px;
+    background: #f2f4f5;
+  }
+}
+
