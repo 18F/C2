@@ -1,5 +1,5 @@
-@import '../vendor/foundation/settings';
-@import '../vendor/foundation/foundation';
+@import 'foundation/settings';
+@import 'foundation/foundation';
 
 @include foundation-global-styles;
 @include foundation-grid;
