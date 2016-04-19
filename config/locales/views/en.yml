@@ -1,0 +1,13 @@
+en:
+  proposals:
+    details:
+      activity:
+        header: Timeline
+        comment_form:
+          headline: Add a comment
+          subhead: Your comment will be sent to all observers associated with this request.
+        button:
+          send: Send
+          show_all_activity: Show all activity
+          hidden_activity_count: (%{count} more)
+          minimize_activity: Minimize

@@ -17,6 +17,12 @@ class StepDecorator < Draper::Decorator
     end
   end
 
+  def action_status
+    I18n.t("decorators.steps.summary.action", display_position: object.position - 1,
+                                              completed: completed,
+                                              name: object.completed_by.full_name)
+  end
+
   def label
     get_step_text(:label)
   end
@@ -39,6 +45,10 @@ class StepDecorator < Draper::Decorator
 
   def waiting_text
     get_step_text("status.waiting")
+  end
+
+  def completed
+    get_step_text(:completed)
   end
 
   private

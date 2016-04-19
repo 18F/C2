@@ -121,9 +121,17 @@ class ProposalListingQuery
 
   def apply_paging_filter(proposals_data)
     unless params[:text] || params[user.client_model_slug.to_sym]
-      limit = params[:size] || params[:limit] || Proposal::MAX_SEARCH_RESULTS
-      offset = params[:from] || 0
+      limit = (params[:size] || Proposal::MAX_SEARCH_RESULTS).to_i
+      offset = calculate_offset(limit)
       proposals_data.alter_query { |proposal| proposal.limit(limit).offset(offset) }
+    end
+  end
+
+  def calculate_offset(limit)
+    if params[:page]
+      (params[:page].to_i - 1) * limit
+    else
+      (params[:from] || 0).to_i
     end
   end
 
