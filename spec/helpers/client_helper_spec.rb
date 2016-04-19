@@ -60,5 +60,13 @@ describe ClientHelper do
 
       expect(modify_client_button(proposal)).to eq ""
     end
+
+    it "returns empty string if proposal is canceled" do
+      work_order = create(:ncr_work_order)
+      proposal = work_order.proposal
+      proposal.cancel!
+
+      expect(modify_client_button(proposal)).to eq ""
+    end
   end
 end
