@@ -15,29 +15,47 @@ buildpack: https://github.com/cloudfoundry/ruby-buildpack.git
 applications:
 - name: c2-dev
   host: c2-dev
-  memory: 1024MB
+  memory: 640MB
   command: script/server_start
   env:
+    API_ENABLED: true
+    ASSET_HOST: https://c2-dev.18f.gov/
     DEFAULT_URL_HOST: c2-dev.18f.gov
     NEW_RELIC_APP_NAME: C2 (Development)
+    NOTIFICATION_FALLBACK_EMAIL: communicart.sender@gsa.gov
+    NOTIFICATION_FROM_EMAIL: dev-inbox@c2.18f.gov
+    NOTIFICATION_REPLY_TO: dev-inbox@c2.18f.gov
+    RESTRICT_ACCESS: true
     S3_BUCKET_NAME: c2-demo
+    S3_REGION: us-east-1
+    WELCOME_EMAIL: true
   services:
     - c2-dev-elasticsearch
+    - c2-dev-db
 - name: c2-dev-worker
   no-route: true
   command: script/worker-start
   memory: 640MB
   env:
+    API_ENABLED: true
+    ASSET_HOST: https://c2-dev.18f.gov/`
     DEFAULT_URL_HOST: c2-dev.18f.gov
     NEW_RELIC_APP_NAME: C2 (Development)
+    NOTIFICATION_FALLBACK_EMAIL: communicart.sender@gsa.gov
+    NOTIFICATION_FROM_EMAIL: dev-inbox@c2.18f.gov
+    NOTIFICATION_REPLY_TO: dev-inbox@c2.18f.gov
+    RESTRICT_ACCESS: true
     S3_BUCKET_NAME: c2-demo
+    S3_REGION: us-east-1
+    WELCOME_EMAIL: true
   services:
     - c2-dev-elasticsearch
+    - c2-dev-db
 
 # staging
 - name: c2-staging
   host: c2-staging
-  memory: 1024MB
+  memory: 640MB
   command: script/server_start
   env:
     DEFAULT_URL_HOST: c2-staging.18f.gov
@@ -61,7 +79,7 @@ applications:
   hosts:
   - cap
   - c2
-  memory: 1024MB
+  memory: 640MB
   instances: 2
   command: script/server_start
   env:
