@@ -64,6 +64,7 @@ gem "validates_email_format_of"
 gem "workflow"
 gem "actionmailer-text"
 gem "remotipart"
+gem "dropzonejs-rails"
 
 group :test, :development do
   gem "bullet", require: false # use BULLET_ENABLED=true

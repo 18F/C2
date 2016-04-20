@@ -2,24 +2,32 @@ class AttachmentsController < ApplicationController
   before_action ->{authorize proposal, :can_show!}, only: [:create, :show]
   before_action ->{authorize attachment}, only: [:destroy]
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
+  respond_to :js, only: [:create, :destroy]
 
   def create
-    attachment = proposal.attachments.build(attachments_params)
-    attachment.user = current_user
-    if attachment.save
-      flash[:success] = "You successfully added a attachment"
-      DispatchFinder.run(proposal).deliver_attachment_emails(attachment)
-    else
-      flash[:error] = attachment.errors.full_messages
-    end
+    @attachment = proposal.attachments.build(attachments_params)
 
-    redirect_to proposal
+    if @attachment.save
+      flash[:success] = "You successfully added a attachment"
+      DispatchFinder.run(proposal).deliver_attachment_emails(@attachment)
+      respond_to do |format|
+        format.js
+        format.html { redirect_to proposal }
+      end
+    else
+      flash[:error] = @attachment.errors.full_messages
+      redirect_to proposal 
+    end
   end
 
   def destroy
     attachment.destroy
     flash[:success] = "Deleted attachment"
-    redirect_to proposal_path(attachment.proposal)
+    @proposal = proposal
+    respond_to do |format|
+      format.js
+      format.html {redirect_to proposal_path(attachment.proposal)}
+    end
   end
 
   def show
@@ -37,7 +45,9 @@ class AttachmentsController < ApplicationController
   end
 
   def attachments_params
-    params.permit(attachment: [:file])[:attachment]
+    if params.permit(attachment: [:file])[:attachment]
+      params.permit(attachment: [:file])[:attachment].merge(user: current_user)
+    end
   end
 
   def auth_errors(exception)

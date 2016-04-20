@@ -1,8 +1,1 @@
-<% unless @attachment.errors.any? %>
-  if (window.detailsApp){
-    var card = '<%=j render partial: 'proposals/details/attachments', locals: { proposal: @attachment.proposal } %>'
-    detailsApp.attachmentListener(card);
-  }
-<% else %>
-
-<% end %>
+$("div.card-for-attachments div.attachments").html('<%=j render partial: 'proposals/details/attachment_list', locals: { proposal: @attachment.proposal } %>');
