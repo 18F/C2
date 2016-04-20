@@ -22,6 +22,8 @@ class AttachmentsController < ApplicationController
     @attachment.user = current_user
 
     if @attachment.save
+      format.html {redirect_to proposal}
+      format.js
       DispatchFinder.run(proposal).deliver_attachment_emails(@attachment)
     end
   end

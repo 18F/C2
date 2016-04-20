@@ -1,4 +1,13 @@
 <% unless @attachment.errors.any? %>
-  $("#new_attachment").append("File was uploaded! yes!");
+  // $("#new_attachment").append("File was uploaded! yes!");
   console.log("IT DID IT");
+  if (window.detailsApp){
+    var card = '<%=j render partial: 'proposals/details/attachments', locals: { proposal: @attachment.proposal } %>'
+    detailsApp.attachmentListener(card);
+  }
+  else{
+    console.log("No details app");
+  }
+<% else %>
+  console.log("there was an error");
 <% end %>

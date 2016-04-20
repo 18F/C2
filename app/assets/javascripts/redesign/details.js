@@ -250,6 +250,11 @@ detailsApp.setupAttachmentController = function(){
   // })
 };
 
+detailsApp.attachmentListener = function(card){
+  $("div.card-for-attachments").html(card);
+}
+
+
 detailsApp.setupCommentController = function(){
   var $comments = $("#comments");
   var current_user = $("div.current_user").html();
