@@ -234,24 +234,8 @@ detailsApp.setupObserverController = function(newRow){
   $observers.append(newRow);
 };
 
-detailsApp.setupAttachmentController = function(){
-  // $("#new_attachment").on("ajax:remotipartComplete", function(e, data){
-  //   console.log("success");
-  //   console.log("data:",data);
-  //   // $("#new_attachment").append(xhr.responseText);
-  // }).on("ajax:error",function(e,data){
-  //   console.log("Error Data:", data);
-  // });
-  // var self = this;
-  // $("#add_a_file").on("click", function(e){
-  //   self.setupFormEl("#request-attachments-card");
-  //   self.generateCardObjects();
-  //   self.defaultActionBar();
-  // })
-};
-
 detailsApp.attachmentListener = function(card){
-  $("div.card-for-attachments").html(card);
+  $("div.card-for-attachments ul.attachment-list").html(card);
 }
 
 

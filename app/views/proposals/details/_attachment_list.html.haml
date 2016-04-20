@@ -1,0 +1,8 @@
+- @proposal.attachments.each do |attachment|
+  %li.attachment-list-item
+    %a{href: proposal_attachment_path(@proposal, attachment)}
+      = image_tag "icon-attachment.svg"
+    %a{href: proposal_attachment_path(@proposal, attachment)}
+      <strong>#{attachment.file_file_name}</strong>
+    - if policy(attachment).can_destroy?
+      = button_to "", proposal_attachment_path(@proposal, attachment), method: :delete, data: {confirm: "Are you sure?"}, remote: true, class: "text-right"
