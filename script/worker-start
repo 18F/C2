@@ -3,5 +3,4 @@
 set -e
 set -x
 
-bundle exec bin/delayed_job -n 2 run &
-bundle exec clockwork config/clock.rb &
+foreman start -f Procfile.worker
