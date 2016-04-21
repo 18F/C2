@@ -38,7 +38,7 @@ applications:
   memory: 640MB
   env:
     API_ENABLED: true
-    ASSET_HOST: https://c2-dev.18f.gov/`
+    ASSET_HOST: https://c2-dev.18f.gov/
     DEFAULT_URL_HOST: c2-dev.18f.gov
     NEW_RELIC_APP_NAME: C2 (Development)
     NOTIFICATION_FALLBACK_EMAIL: communicart.sender@gsa.gov
