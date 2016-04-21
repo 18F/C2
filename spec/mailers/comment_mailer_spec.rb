@@ -2,6 +2,8 @@ describe CommentMailer do
   include MailerSpecHelper
   include EnvVarSpecHelper
 
+  let(:user) { create(:user) }
+
   describe "#comment_added_notification" do
     it_behaves_like "a proposal email" do
       let(:proposal) { create(:proposal) }
@@ -25,6 +27,14 @@ describe CommentMailer do
       expect(sender_names(mail)).to eq([comment.user.full_name])
     end
 
+    it "sets the sender full name if passed just an address" do
+      comment = create(:comment)
+
+      mail = CommentMailer.comment_added_notification(comment, user.email_address)
+
+      expect(sender_names(mail)).to eq([comment.user.full_name])
+    end
+
     it "includes the commenter full name in the email body" do
       comment = create(:comment)
 
@@ -36,9 +46,5 @@ describe CommentMailer do
         proposal_name: comment.proposal.name
       ))
     end
-  end
-
-  def user
-    @_user ||= create(:user)
   end
 end
