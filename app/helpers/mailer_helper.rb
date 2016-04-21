@@ -8,7 +8,7 @@ module MailerHelper
   end
 
   def user_timezone(user)
-    user.timezone || User::DEFAULT_TIMEZONE
+    user.timezone.present? ? user.timezone : User::DEFAULT_TIMEZONE
   end
 
   def generate_approve_url(approval)
