@@ -11,6 +11,26 @@ describe MailerHelper do
     end
   end
 
+  describe "#user_timezone" do
+    it "treats nil as default" do
+      user = create(:user)
+      user.timezone = nil
+      expect(user_timezone(user)).to eq(User::DEFAULT_TIMEZONE)
+    end
+
+    it "treats empty string as default" do
+      user = create(:user)
+      user.timezone = ""
+      expect(user_timezone(user)).to eq(User::DEFAULT_TIMEZONE)
+    end
+
+    it "reflects user-selected timezone" do
+      user = create(:user)
+      user.timezone = "Central Time (US & Canada)"
+      expect(user_timezone(user)).to eq("Central Time (US & Canada)")
+    end
+  end
+
   describe '#generate_approve_url' do
     it "returns a URL" do
       approval = create(:approval_step)
