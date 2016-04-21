@@ -22,7 +22,6 @@ applications:
     ASSET_HOST: https://c2-dev.18f.gov/
     DEFAULT_URL_HOST: c2-dev.18f.gov
     NEW_RELIC_APP_NAME: C2 (Development)
-    NOTIFICATION_FALLBACK_EMAIL: communicart.sender@gsa.gov
     NOTIFICATION_FROM_EMAIL: dev-inbox@c2.18f.gov
     NOTIFICATION_REPLY_TO: dev-inbox@c2.18f.gov
     RESTRICT_ACCESS: true
@@ -41,7 +40,6 @@ applications:
     ASSET_HOST: https://c2-dev.18f.gov/
     DEFAULT_URL_HOST: c2-dev.18f.gov
     NEW_RELIC_APP_NAME: C2 (Development)
-    NOTIFICATION_FALLBACK_EMAIL: communicart.sender@gsa.gov
     NOTIFICATION_FROM_EMAIL: dev-inbox@c2.18f.gov
     NOTIFICATION_REPLY_TO: dev-inbox@c2.18f.gov
     RESTRICT_ACCESS: true
@@ -58,21 +56,35 @@ applications:
   memory: 640MB
   command: script/server_start
   env:
+    ASSET_HOST: https://c2-staging.18f.gov/
     DEFAULT_URL_HOST: c2-staging.18f.gov
     NEW_RELIC_APP_NAME: C2 (Staging)
+    NOTIFICATION_FROM_EMAIL: staging-inbox@c2.18f.gov
+    NOTIFICATION_REPLY_TO: staging-inbox@c2.18f.gov
+    RESTRICT_ACCESS: false
     S3_BUCKET_NAME: c2-demo
+    S3_REGION: us-east-1
+    WELCOME_EMAIL: true
   services:
     - c2-staging-elasticsearch
+    - c2-staging-db
 - name: c2-staging-worker
   no-route: true
   command: script/worker-start
   memory: 640MB
   env:
+    ASSET_HOST: https://c2-staging.18f.gov/
     DEFAULT_URL_HOST: c2-staging.18f.gov
     NEW_RELIC_APP_NAME: C2 (Staging)
+    NOTIFICATION_FROM_EMAIL: staging-inbox@c2.18f.gov
+    NOTIFICATION_REPLY_TO: staging-inbox@c2.18f.gov
+    RESTRICT_ACCESS: false
     S3_BUCKET_NAME: c2-demo
+    S3_REGION: us-east-1
+    WELCOME_EMAIL: true
   services:
     - c2-staging-elasticsearch
+    - c2-staging-db
 
 # production
 - name: c2-prod
@@ -83,24 +95,32 @@ applications:
   instances: 2
   command: script/server_start
   env:
+    ASSET_HOST: https://cap.18f.gov/
     DEFAULT_URL_HOST: cap.18f.gov
     DISABLE_SANDBOX_WARNING: true
     GA_TRACKING_ID: UA-48605964-27
     NEW_RELIC_APP_NAME: C2 (Production)
     RESTRICT_ACCESS: true
     S3_BUCKET_NAME: c2-prod
+    S3_REGION: us-east-1
+    WELCOME_EMAIL: true
   services:
     - c2-prod-elasticsearch
+    - c2-prod-db
 - name: c2-prod-worker
   no-route: true
   command: script/worker-start
   memory: 640MB
   env:
+    ASSET_HOST: https://cap.18f.gov/
     DEFAULT_URL_HOST: cap.18f.gov
     DISABLE_SANDBOX_WARNING: true
     GA_TRACKING_ID: UA-48605964-27
     NEW_RELIC_APP_NAME: C2 (Production)
     RESTRICT_ACCESS: true
     S3_BUCKET_NAME: c2-prod
+    S3_REGION: us-east-1
+    WELCOME_EMAIL: true
   services:
     - c2-prod-elasticsearch
+    - c2-prod-db
