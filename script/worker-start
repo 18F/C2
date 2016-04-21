@@ -3,5 +3,5 @@
 set -e
 set -x
 
-bundle exec bin/delayed_job run &
+bundle exec bin/delayed_job -n 2 start &
 bundle exec clockwork config/clock.rb &
