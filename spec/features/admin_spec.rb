@@ -68,6 +68,14 @@ describe "admin" do
     expect(page).to have_content("test user <testuser@example.com>")
   end
 
+  it "uses compatible timezone strings for User profile editing" do
+    user = login_as_admin_user
+
+    visit admin_user_path(user)
+
+    expect(page).to_not have_content("(GMT-05:00) Eastern Time (US & Canada)")
+  end
+
   it "triggers actions on Complete button click" do
     login_as_admin_user
     proposal = create(:proposal, :with_serial_approvers)
