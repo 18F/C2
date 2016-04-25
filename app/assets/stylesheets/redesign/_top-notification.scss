@@ -1,7 +1,16 @@
 .top-notification-wrapper{
   background: #747779;
-  *{
+  height: 65px;
+  padding-top: 13px;
+  padding-bottom: 13px;
+  p{
+    padding-left: 10px;
+    display: inline-block;
     color: white;
+    line-height: 38px;
+    margin-bottom: 0px;
+    font-size: 16px;
+    word-break: break-word;
   }
   margin-bottom: 1.875rem;
 }

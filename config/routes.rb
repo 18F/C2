@@ -17,6 +17,7 @@ C2::Application.routes.draw do
   match "/auth/:provider/callback" => "auth#oauth_callback", via: [:get]
   get "/auth/failure" => "auth#failure"
   post "/logout" => "auth#logout"
+  
 
   resources :help, only: [:index, :show]
 
@@ -54,6 +55,7 @@ C2::Application.routes.draw do
     resources :attachments, only: [:create, :destroy, :show]
     resources :observations, only: [:create, :destroy]
   end
+  get "/proposals/revert_design" => "proposal#revert_design"
 
   resources :reports, only: [:index, :show, :create, :destroy] do
     member do
