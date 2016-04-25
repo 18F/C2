@@ -16,7 +16,7 @@
                 = proposal.created_at.strftime("%b %d, %Y at %l:%M%P")
         %h1.c2n_header
           = proposal.name
-      .medium-3.column.text-center
+      .medium-3.column.text-right
         %span.status-wrap.medium-12.small-12{ class: "status-is-" + @proposal.status }
           Status:
           %span.status-value
