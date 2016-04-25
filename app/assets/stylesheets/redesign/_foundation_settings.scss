@@ -40,7 +40,7 @@
 //  35. Tooltip
 //  36. Top Bar
 
-@import 'util/util';
+@import 'foundation/util/util';
 
 // 1. Global
 // ---------
@@ -60,7 +60,7 @@ $backgroundColor: map-get($foundation-palette, backgroundColor);
 $light-gray: #e6e6e6;
 $medium-gray: #cacaca;
 $dark-gray: #4A4A4A;
-$black: #0a0a0a;
+$black: #4A4A4A;
 $white: #fefefe;
 $body-background: $white;
 $body-font-color: $dark-gray;
