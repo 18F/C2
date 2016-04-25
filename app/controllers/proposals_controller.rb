@@ -12,7 +12,9 @@ class ProposalsController < ApplicationController
 
   def show
     @proposal = proposal.decorate
-    cookies[:detail] = params[:detail]
+    if !params[:detail].blank?
+      cookies[:detail] = params[:detail]
+    end
     mode = cookies[:detail]
     if mode == "new"
       @client_data_instance ||= proposal.client_data
@@ -32,6 +34,11 @@ class ProposalsController < ApplicationController
 
   def archive
     redirect_to query_proposals_path(text: "status:completed")
+  end
+
+  def revert_design
+    cookies[:detail] = nil
+    redirect_to proposals_path
   end
 
   def cancel_form

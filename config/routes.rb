@@ -32,6 +32,7 @@ C2::Application.routes.draw do
     end
   end
 
+  get "/proposals/revert_design" => "proposals#revert_design"
   resources :proposals, only: [:index, :show] do
     member do
       get "approve"   # this route has special protection to prevent the confused deputy problem
@@ -55,7 +56,6 @@ C2::Application.routes.draw do
     resources :attachments, only: [:create, :destroy, :show]
     resources :observations, only: [:create, :destroy]
   end
-  get "/proposals/revert_design" => "proposal#revert_design"
 
   resources :reports, only: [:index, :show, :create, :destroy] do
     member do
