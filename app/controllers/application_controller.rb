@@ -10,6 +10,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   helper_method :current_user, :signed_in?, :return_to, :client_disabled?
 
+  before_action :check_maintenance_mode
   before_action :authenticate_user!
   before_action :disable_peek_by_default
   before_action :check_disabled_client
@@ -50,6 +51,16 @@ class ApplicationController < ActionController::Base
       exception = NotAuthorizedError.new("Client is disabled")
       fail exception
     end
+  end
+
+  def check_maintenance_mode
+    if maintenance_mode?
+      render_maintenance
+    end
+  end
+
+  def render_maintenance
+    render "maintenance"
   end
 
   def track_action
@@ -114,6 +125,10 @@ class ApplicationController < ActionController::Base
 
   def client_disabled?
     current_user && (ENV["DISABLE_CLIENT_SLUGS"] || "").split(/,/).include?(current_user.client_slug)
+  end
+
+  def maintenance_mode?
+    ENV["MAINTENANCE_MODE"] == "true"
   end
 
   def sign_in(user)

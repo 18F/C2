@@ -31,6 +31,11 @@ In this example, the current_user for every request would be User `123` regardle
 ```
 
 ## GA_TRACKING_ID
+
+## MAINTENANCE_MODE
+
+Set to `true` to disable the app completely, showing a maintenance page for all pages.
+
 ## MYUSA_URL
 ## NEW_RELIC_APP_NAME
 ## NEW_RELIC_LICENSE_KEY
