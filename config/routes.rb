@@ -18,7 +18,6 @@ C2::Application.routes.draw do
   get "/auth/failure" => "auth#failure"
   post "/logout" => "auth#logout"
   
-
   resources :help, only: [:index, :show]
 
   # mandrill-rails
