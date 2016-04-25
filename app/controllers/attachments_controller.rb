@@ -10,13 +10,10 @@ class AttachmentsController < ApplicationController
     if @attachment.save
       flash[:success] = "You successfully added a attachment"
       DispatchFinder.run(proposal).deliver_attachment_emails(@attachment)
-      respond_to do |format|
-        format.js
-        format.html { redirect_to proposal }
-      end
+      respond_to_attachment
     else
       flash[:error] = @attachment.errors.full_messages
-      redirect_to proposal 
+      redirect_to proposal
     end
   end
 
@@ -52,5 +49,12 @@ class AttachmentsController < ApplicationController
 
   def auth_errors(exception)
     redirect_to proposals_path, alert: "You are not allowed to add an attachment to that proposal"
+  end
+
+  def respond_to_attachment
+    respond_to do |format|
+      format.js
+      format.html { redirect_to proposal }
+    end
   end
 end
