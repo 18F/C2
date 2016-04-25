@@ -12,7 +12,7 @@ class ProposalsController < ApplicationController
 
   def show
     @proposal = proposal.decorate
-    if !params[:detail].blank?
+    unless params[:detail].blank?
       cookies[:detail] = params[:detail]
     end
     mode = cookies[:detail]
