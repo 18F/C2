@@ -27,6 +27,9 @@ span.status-icon{
   .status-is-completed &{
     background: #9CD984;
   }
+  .status-is-canceled &{
+    background: #D8D8D8;
+  }
 
 }
 
