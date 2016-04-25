@@ -1,6 +1,12 @@
 # 18F Developer Onboarding Checklist
 
-Create a [new issue](https://github.com/18F/C2/issues/new), and copy the [raw Markdown](https://raw.githubusercontent.com/18F/C2/master/doc/developer_onboarding.md) from below into it:
+Create a [new issue](https://github.com/18F/C2/issues/new), and copy the [raw Markdown](https://raw.githubusercontent.com/18F/C2/master/doc/developer_onboarding.md) from below into it.
+
+You can replace the placeholder Github usernames like this:
+
+```
+cat doc/developer_onboarding.md | sed -e 's/@newmember/@their_name/' | sed -e 's/@oldmember/@your_name/'
+```
 
 ---
 
@@ -30,7 +36,6 @@ Create a [new issue](https://github.com/18F/C2/issues/new), and copy the [raw Ma
 ## Tasks for @oldmember
 
 * [ ] Add to Slack channels
-* [ ] [Add to the kanban board](https://trello.com/b/kAW72R3m/c2-birthday-cake)
 * [ ] [Add to Trello](https://trello.com/b/kAW72R3m/c2-birthday-cake)
 * [ ] Add to [@18F/cap](https://github.com/orgs/18F/teams/cap) team on GitHub
 * [ ] Add to support emails: `capdevs`, `communicart.sender`, and `gatewaycommunicator` through [IT Service Desk](https://gsa.service-now.com)

@@ -3,6 +3,10 @@ module Api
     class BaseController < ApplicationController
       protect_from_forgery with: :null_session, if: proc { |c| c.request.format.json? }
 
+      def render_maintenance
+        render json: { error: "The site is down for maintenance" }
+      end
+
       private
 
       def authenticate_user!
