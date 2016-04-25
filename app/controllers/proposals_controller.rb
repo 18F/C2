@@ -17,11 +17,15 @@ class ProposalsController < ApplicationController
     end
     mode = cookies[:detail]
     if mode == "new"
-      @client_data_instance ||= proposal.client_data
-      @subscriber_list = SubscriberList.new(@proposal).triples
-      @events = HistoryList.new(proposal).events
-      render "show_next"
+      show_next
     end
+  end
+
+  def show_next
+    @client_data_instance ||= proposal.client_data
+    @subscriber_list = SubscriberList.new(@proposal).triples
+    @events = HistoryList.new(proposal).events
+    render "show_next"
   end
 
   def index
