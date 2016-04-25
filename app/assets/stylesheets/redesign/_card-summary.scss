@@ -20,7 +20,8 @@ span.status-icon{
   height: 35px;
   border-radius: 30px;
   border: 1px solid white;
-  margin-bottom: -12px;
+  margin-bottom: -11px;
+  margin-left: 3px;
   .status-is-pending &{
     background: #F7DB7D;
   }
