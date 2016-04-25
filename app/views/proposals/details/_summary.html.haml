@@ -5,10 +5,7 @@
       .medium-9.column
         %h3
           = proposal.public_id
-        %h1.c2n_header
-          = proposal.name
         .c2n_description
-
           %p
             Requested by:
             %strong.requested-by-name
@@ -17,6 +14,8 @@
             %strong
               %span
                 = proposal.created_at.strftime("%b %d, %Y at %l:%M%P")
+        %h1.c2n_header
+          = proposal.name
       .medium-3.column.text-center
         %span.status-wrap.medium-12.small-12{ class: "status-is-" + @proposal.status }
           Status:
