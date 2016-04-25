@@ -19,6 +19,6 @@
 
       - if policy(@proposal).can_edit? && !@proposal.completed? && policy(@proposal).not_canceled?
         %li.fr.save-button.action-edit
-          = modify_client_button(@proposal)
+          = modify_client_button(@proposal, "Save", "button modify large")
         %li.fr.cancel-button.action-edit
           = link_to("Cancel", @proposal, class: "button secondary fr large")
