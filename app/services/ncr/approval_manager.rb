@@ -50,7 +50,14 @@ module Ncr
       individuals = users.map do |user|
         proposal.existing_step_for(user) || Steps::Approval.new(user: user)
       end
-      proposal.root_step = Steps::Serial.new(child_steps: individuals)
+      unless proposal.root_step && steps_share_parent?(proposal.root_step, individuals)
+        proposal.root_step = Steps::Serial.new(child_steps: individuals)
+      end
+    end
+
+    def steps_share_parent?(parent_step, new_steps)
+      old_steps = parent_step.child_steps
+      old_steps.size == new_steps.size && (old_steps & new_steps).size == old_steps.size
     end
 
     def notify_removed_step_users(original_step_users)
