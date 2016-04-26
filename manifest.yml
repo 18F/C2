@@ -100,6 +100,8 @@ applications:
     DISABLE_SANDBOX_WARNING: true
     GA_TRACKING_ID: UA-48605964-27
     NEW_RELIC_APP_NAME: C2 (Production)
+    NOTIFICATION_FROM_EMAIL: inbox@c2.18f.gov
+    NOTIFICATION_REPLY_TO: inbox@c2.18f.gov
     RESTRICT_ACCESS: true
     S3_BUCKET_NAME: c2-prod
     S3_REGION: us-east-1
@@ -117,6 +119,8 @@ applications:
     DISABLE_SANDBOX_WARNING: true
     GA_TRACKING_ID: UA-48605964-27
     NEW_RELIC_APP_NAME: C2 (Production)
+    NOTIFICATION_FROM_EMAIL: inbox@c2.18f.gov
+    NOTIFICATION_REPLY_TO: inbox@c2.18f.gov
     RESTRICT_ACCESS: true
     S3_BUCKET_NAME: c2-prod
     S3_REGION: us-east-1
