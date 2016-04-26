@@ -28,6 +28,15 @@ h1.c2n_header{
   color: #4A4A4A;
 }
 
+.button-back-wrapper .button{
+  padding-left: 11px;
+  span.arrow-el{
+    font-weight: 800;
+    margin-bottom: 1px;
+    display: inline-block;
+  }
+}
+
 .card-head{
   h2, h3{
     color: #40759C;
@@ -45,6 +54,7 @@ span.status-wrap{
   @media screen and (min-width: 40em){
     margin-top: 0px;
   }
+  font-weight: 300;
   color: #494949;
   padding-top: 0px;
   padding-bottom: 20px;
