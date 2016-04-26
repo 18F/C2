@@ -7,6 +7,21 @@
   }
 }
 
+.status-bar{
+  display: inline-block;
+  height: 4px;
+  &.status-is-pending{
+    background: #F7DB7D;
+  }
+  &.status-is-completed{
+    background: #9CD984;
+  }
+  &.status-is-canceled{
+    background: #D8D8D8;
+  }
+
+}
+
 .summary-card .card-head{
   background: #40759C;
   h3{
