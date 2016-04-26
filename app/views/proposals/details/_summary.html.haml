@@ -1,10 +1,22 @@
+.row 
+  .medium-12.column.text-left
+    %span.status-wrap.medium-12.small-12{ class: "status-is-" + proposal.status }
+      Request Status 
+      %span.status-value
+        = proposal.capitalized_detailed_status
+    - if proposal.status == "completed" && proposal.steps.last.completed_at
+      %span.completed-time
+        on 
+        = proposal.steps.last.completed_at.strftime("%b %d, %Y at %l:%M%P")
 
-.card
+.card.summary-card
   .card-head.column
     .row
-      .medium-9.column
+      .medium-12.column
         %h3
           = proposal.public_id
+        %h1.c2n_header
+          = proposal.name
         .c2n_description
           %p
             Requested by:
@@ -14,16 +26,4 @@
             %strong
               %span
                 = proposal.created_at.strftime("%b %d, %Y at %l:%M%P")
-        %h1.c2n_header
-          = proposal.name
-      .medium-3.column.text-right
-        %span.status-wrap.medium-12.small-12{ class: "status-is-" + proposal.status }
-          Status:
-          %span.status-value
-            = proposal.capitalized_detailed_status
-          %span.status-icon
-        - if proposal.status == "completed" && proposal.steps.last.completed_at
-          %span.completed-time
-            on 
-            = proposal.steps.last.completed_at.strftime("%b %d, %Y at %l:%M%P")
 
