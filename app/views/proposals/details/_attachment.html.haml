@@ -5,13 +5,13 @@
         .card-head.column
           %h2
             Attachments
-            = #modify_client_button(@proposal, "<span>Attach File</span>".html_safe, "button secondary attach-icon fr large")
+            <label for="attachment_file" class="button secondary attach-icon fr large">Attach File</lable>
         .content-content.column
           .row
             .medium-12.column
               = form_for [@proposal, Attachment.new], html: { multipart: true }, remote: true, authenticity_token: true do |f|
-                = f.file_field :file
-                = submit_tag "Attach a File", id: :add_a_file, data: {"disable-if-empty" => "attachment_file"}, class: "button primary round no-margin-bottom"
+                = f.file_field :file, class: "attachment-file-input"
+                = submit_tag "Attach a File", id: :add_a_file, data: {"disable-if-empty" => "attachment_file"}, class: "button primary round no-margin-bottom attachment-submit"
           .row
             .medium-12.column
               %h3 Attachments to this proposal
