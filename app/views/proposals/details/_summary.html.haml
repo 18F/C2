@@ -22,8 +22,8 @@
           %span.status-value
             = proposal.capitalized_detailed_status
           %span.status-icon
-        - if proposal.status == "completed"
+        - if proposal.status == "completed" && proposal.steps.last.completed_at
           %span.completed-time
             on 
-            = proposal.steps.last.updated_at.strftime("%b %d, %Y at %l:%M%P")
+            = proposal.steps.last.completed_at.strftime("%b %d, %Y at %l:%M%P")
 
