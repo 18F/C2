@@ -10,6 +10,7 @@
 .status-bar{
   display: block;
   height: 5px;
+  opacity: .8;
   &.status-is-pending{
     background: #F7DB7D;
   }
