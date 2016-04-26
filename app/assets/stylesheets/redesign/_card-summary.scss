@@ -44,15 +44,14 @@ h1.c2n_header{
 span.status-wrap{
   @media screen and (min-width: 40em){
     margin-top: 0px;
-    float: right;
   }
   color: #494949;
-  font-size: 11px;
-  text-transform: uppercase;
+  padding-top: 0px;
+  padding-bottom: 20px;
   display: inline-block;
   margin-right: 0px;
+  font-size: 24px;
   span.status-value{
-    font-size: 17px;
     text-transform: none;
     font-weight: bold;
   }

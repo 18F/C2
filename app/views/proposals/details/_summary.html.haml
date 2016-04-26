@@ -9,6 +9,10 @@
         on 
         = proposal.steps.last.completed_at.strftime("%b %d, %Y at %l:%M%P")
 
+.row 
+  .medium-12.column.text-left
+    = link_to("← Back to list", proposals_path, class: "button secondary large")
+
 .card.summary-card
   .card-head.column
     .row
