@@ -226,6 +226,14 @@ If the bug is actionable, a story can be created for it and prioritized in the
 `Ready to start`. If the story needs more discussion, it can be moved into
 `Needs Grooming` for the next grooming session.
 
+## JavaScript
+
+JavaScript should be testable through unit tests. We suggest breaking functionality in the following types of constructors.
+
+- Presentation and interaction
+- Data management and persistence
+- Overall application state
+- Setup and glue code to make the pieces work together
 
 ## Support
 
