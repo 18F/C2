@@ -52,7 +52,7 @@ ActiveAdmin.register User do
       f.input :first_name
       f.input :last_name
       f.input :active
-      f.input :timezone, as: :select, collection: ActiveSupport::TimeZone.us_zones
+      f.input :timezone, as: :select, collection: ActiveSupport::TimeZone.us_zones.map(&:name)
       f.input :client_slug, as: :select, include_blank: true, collection: Proposal.client_slugs
     end
     f.inputs "Roles" do
