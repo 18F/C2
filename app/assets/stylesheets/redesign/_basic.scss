@@ -10,6 +10,7 @@ body.action-show{
 a.button{
   &:hover{
     background: darken($primary-color, 15%);
+    text-decoration: none;
   }
   outline: none;
   &:focus{

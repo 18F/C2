@@ -54,8 +54,7 @@ describe "Add attachments" do
 
     visit "/proposals/#{proposal.id}?detail=new"
     page.attach_file('attachment[file]', "#{Rails.root}/app/assets/images/bg_completed_status.gif")
-    click_on "Attach a File"
-    
+    find('#add_a_file').trigger('click')
     within(".attachment-list") do 
       expect(page).to have_content("bg_completed_status.gif")
     end

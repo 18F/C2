@@ -7,6 +7,40 @@
   }
 }
 
+.status-bar{
+  display: block;
+  height: 5px;
+  opacity: .8;
+  &.status-is-pending{
+    background: #F7DB7D;
+  }
+  &.status-is-completed{
+    background: #9CD984;
+  }
+  &.status-is-canceled{
+    background: #D8D8D8;
+  }
+
+}
+
+.summary-status-wrapper{
+  margin-top: 1.875rem;
+}
+
+.summary-card .card-head{
+  background: #40759C;
+  h3{
+    color: #C5DCED;
+    margin-bottom: 0px;
+  }
+  h1, p, strong{
+    color: white;
+  }
+  h1{
+    margin-bottom: 12px;
+  }
+}
+
 h1.c2n_header{
   margin-bottom: 0px;
   font-size: 28px;
@@ -14,24 +48,14 @@ h1.c2n_header{
   color: #4A4A4A;
 }
 
-span.status-icon{
-  display: inline-block;
-  width: 30px;
-  height: 30px;
-  border-radius: 30px;
-  border: 1px solid white;
-  margin-bottom: -8px;
-  margin-left: 3px;
-  .status-is-pending &{
-    background: #F7DB7D;
+.button-back-wrapper .button{
+  padding-left: 11px;
+  span.arrow-el{
+    font-weight: 800;
+    margin-bottom: 1px;
+    display: inline-block;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   }
-  .status-is-completed &{
-    background: #9CD984;
-  }
-  .status-is-canceled &{
-    background: #D8D8D8;
-  }
-
 }
 
 .card-head{
@@ -40,9 +64,6 @@ span.status-icon{
     font-weight: 600;
     font-size: 19px;
   }
-}
-.card-head h3{
-  margin-bottom: 12px;
 }
 
 .completed-time{
@@ -53,15 +74,15 @@ span.status-icon{
 span.status-wrap{
   @media screen and (min-width: 40em){
     margin-top: 0px;
-    float: right;
   }
+  font-weight: 300;
   color: #494949;
-  font-size: 11px;
-  text-transform: uppercase;
+  padding-top: 0px;
+  padding-bottom: 20px;
   display: inline-block;
   margin-right: 0px;
+  font-size: 24px;
   span.status-value{
-    font-size: 17px;
     text-transform: none;
     font-weight: bold;
   }
