@@ -7,5 +7,5 @@ set -x
 # http://stackoverflow.com/a/6859838/358804
 PORT=${PORT-3000}
 
-bin/rake cf:on_first_instance db:migrate db:seed
-foreman start -p $PORT
+bundle exec rake cf:on_first_instance db:migrate db:seed
+bundle exec puma -p ${PORT} -C ./config/puma.rb

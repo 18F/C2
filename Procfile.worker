@@ -1,0 +1,2 @@
+worker: bin/delayed_job -n 2 run
+clock: bundle exec clockwork config/clock.rb
