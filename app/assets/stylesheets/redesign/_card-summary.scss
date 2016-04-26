@@ -8,8 +8,8 @@
 }
 
 .status-bar{
-  display: inline-block;
-  height: 4px;
+  display: block;
+  height: 5px;
   &.status-is-pending{
     background: #F7DB7D;
   }
@@ -20,6 +20,10 @@
     background: #D8D8D8;
   }
 
+}
+
+.summary-status-wrapper{
+  margin-top: 1.875rem;
 }
 
 .summary-card .card-head{
