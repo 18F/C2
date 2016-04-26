@@ -86,6 +86,13 @@ describe ProposalsController do
         expect(response).to render_template("show_next")
         expect(response).to_not render_template("show")
       end
+
+      it 'should disable cookie on revert' do
+        setup_proposal_page
+        request.env["HTTP_REFERER"] = "where_i_came_from" unless request.nil? or request.env.nil?
+        get :revert_design
+        expect(response.cookies["detail"]).to_not eq("new")
+      end
     end
   end
 

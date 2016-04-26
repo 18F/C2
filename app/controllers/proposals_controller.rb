@@ -12,14 +12,20 @@ class ProposalsController < ApplicationController
 
   def show
     @proposal = proposal.decorate
-    cookies[:detail] = params[:detail]
+    unless params[:detail].blank?
+      cookies[:detail] = params[:detail]
+    end
     mode = cookies[:detail]
     if mode == "new"
-      @client_data_instance ||= proposal.client_data
-      @subscriber_list = SubscriberList.new(@proposal).triples
-      @events = HistoryList.new(proposal).events
-      render "show_next"
+      show_next
     end
+  end
+
+  def show_next
+    @client_data_instance ||= proposal.client_data
+    @subscriber_list = SubscriberList.new(@proposal).triples
+    @events = HistoryList.new(proposal).events
+    render "show_next"
   end
 
   def index
@@ -32,6 +38,11 @@ class ProposalsController < ApplicationController
 
   def archive
     redirect_to query_proposals_path(text: "status:completed")
+  end
+
+  def revert_design
+    cookies[:detail] = nil
+    redirect_to :back
   end
 
   def cancel_form
