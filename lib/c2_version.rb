@@ -15,6 +15,17 @@ class C2Version < PaperTrail::Version
 
   def diff
     next_version = self.next || item
-    HashDiff.diff((attributes || {}), next_version.attributes)
+    HashDiff.diff((attributes || {}), hash_with_utc_times(next_version.attributes))
+  end
+
+  private
+
+  def hash_with_utc_times(hash)
+    hash.each do |key, value|
+      if value.is_a?(Time) && value.respond_to?(:utc)
+        hash[key] = value.utc
+      end
+    end
+    hash
   end
 end
