@@ -6,13 +6,15 @@ describe C2Version do
       test_client_request.save!
       versions = test_client_request.versions
       expect(versions.count).to eq(2)
-      expect(versions.last.diff[0]).to eq(["~", "project_title", "I am a test request", "something different"])
+      expect(versions.last.diff).to include(["~", "project_title", "I am a test request", "something different"])
     end
 
     it "converts all TimeWithZone objects to Time via .utc" do
       step = create(:approval_step, completed_at: Time.current)
       step.status = "actionable"
       step.save!
+
+      puts step.versions.last.diff
 
       expect(step.versions.last.diff.size).to eq(2)
       expect(step.versions.last.diff[0]).to eq(["~", "status", "pending", "actionable"])
