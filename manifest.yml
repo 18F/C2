@@ -15,7 +15,7 @@ buildpack: https://github.com/cloudfoundry/ruby-buildpack.git
 applications:
 - name: c2-dev
   host: c2-dev
-  memory: 640MB
+  memory: 1024MB
   command: script/server_start
   env:
     API_ENABLED: true
@@ -53,7 +53,7 @@ applications:
 # staging
 - name: c2-staging
   host: c2-staging
-  memory: 640MB
+  memory: 1024MB
   command: script/server_start
   env:
     ASSET_HOST: https://c2-staging.18f.gov/
@@ -91,7 +91,7 @@ applications:
   hosts:
   - cap
   - c2
-  memory: 640MB
+  memory: 1024MB
   instances: 2
   command: script/server_start
   env:
