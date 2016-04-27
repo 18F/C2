@@ -14,10 +14,8 @@ describe C2Version do
       step.status = "actionable"
       step.save!
 
-      puts step.versions.last.diff
-
-      expect(step.versions.last.diff.size).to eq(2)
-      expect(step.versions.last.diff[0]).to eq(["~", "status", "pending", "actionable"])
+      expect(step.versions.last.diff.select {|diff| diff[1] == "completed_at"}).to eq([])
+      expect(step.versions.last.diff).to include(["~", "status", "pending", "actionable"])
     end
   end
 end
