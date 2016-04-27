@@ -15,3 +15,13 @@ EditStateController.prototype._setup = function () {
     }
   });
 }
+
+EditStateController.prototype.getState = function () {
+  var state;
+  if(this.el.is(".edit-mode")){
+    state = true;
+  } else {
+    state = false;
+  }
+  return state;
+}
