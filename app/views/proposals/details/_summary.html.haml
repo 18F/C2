@@ -7,7 +7,7 @@
     - if proposal.status == "completed"
       %span.completed-time
         on 
-        = proposal.steps.order('position ASC').last.completed_at.strftime("%b %d, %Y at %l:%M%P")
+        = proposal.individual_steps.last.completed_at.strftime("%b %d, %Y at %l:%M%P")
 
 .row.button-back-wrapper
   .medium-12.column.text-left
