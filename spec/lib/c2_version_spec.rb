@@ -14,7 +14,9 @@ describe C2Version do
       step.status = "actionable"
       step.save!
 
-      expect(step.versions.last.diff.select {|diff| diff[1] == "completed_at"}).to eq([])
+      updated_at_diff = step.versions.last.diff.select { |diff| diff[1] == "updated_at" }.first
+      expect(updated_at_diff[2].zone).to eq("UTC")
+      expect(updated_at_diff[3].zone).to eq("UTC")
       expect(step.versions.last.diff).to include(["~", "status", "pending", "actionable"])
     end
   end
