@@ -53,8 +53,9 @@ describe "Add attachments" do
     login_as(proposal.requester)
 
     visit "/proposals/#{proposal.id}?detail=new"
-    page.attach_file('attachment[file]', "#{Rails.root}/app/assets/images/bg_completed_status.gif")
-    find('#add_a_file').trigger('click')
+    page.execute_script("$('#attachment_file').addClass('show-attachment-file');")
+    page.attach_file('attachment[file]', "#{Rails.root}/app/assets/images/bg_completed_status.gif", visible: false)
+  
     within(".attachment-list") do 
       expect(page).to have_content("bg_completed_status.gif")
     end

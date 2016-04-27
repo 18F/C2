@@ -2,22 +2,18 @@ class AttachmentsController < ApplicationController
   before_action ->{authorize proposal, :can_show!}, only: [:create, :show]
   before_action ->{authorize attachment}, only: [:destroy]
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
-  respond_to :json, only: [:create, :destroy]
+  respond_to :js, only: [:create, :destroy]
 
   def create
-    # binding.pry
     @attachment = proposal.attachments.build(attachments_params)
-
+    @proposal = proposal
     if @attachment.save
       flash[:success] = "You successfully added a attachment"
       DispatchFinder.run(proposal).deliver_attachment_emails(@attachment)
-      respond_to_attachment
-      # render json: { message: "success" }, :status => 200
     else
       flash[:error] = @attachment.errors.full_messages
-      respond_to_attachment
-      # render json: { error: @attachment.errors.full_messages.join(',')}, :status => 400
     end
+    respond_to_attachment
   end
 
   def destroy

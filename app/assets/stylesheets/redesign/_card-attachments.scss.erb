@@ -15,6 +15,7 @@
 .attachment-list-item .button_to {
   position: absolute;
   right: 3px;
+  top: 16px;
   line-height: 16px;
   &:hover {
     border-bottom: 1px solid #3373B1;
@@ -28,6 +29,10 @@
   padding-left: 3px;
   padding-right: 3px;
   border-bottom: 1px solid #E8E8E8;
+  .download-btn {
+    position: absolute;
+    right: 29px;
+  } 
 }
 
 li.attachment-list-item:hover {
@@ -66,4 +71,28 @@ ul.attachment-list{
   overflow: hidden;
   position: absolute;
   z-index: -1;
+}
+
+.show-attachment-file{
+  width:100% !important;
+  height: 100% !important;
+  opacity: 1 !important;
+  overflow: visible !important;
+  position: relative !important;
+  z-index:99 !important; 
+}
+
+.attachment-label p{
+  background-image: image-url('green-bar.png')
+}
+.attachment-loading{
+  color: #767676;
+  position:relative;
+  strong{
+    margin-left:25px;
+  }
+  img{
+    position:absolute;
+    left:3px;
+  }
 }
