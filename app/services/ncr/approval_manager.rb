@@ -47,15 +47,15 @@ module Ncr
     # Generally shouldn't be called directly as it doesn't account for
     # emergencies, or notify removed approvers
     def force_approvers(users)
-      individuals = users.map do |user|
+      new_child_steps = users.map do |user|
         proposal.existing_step_for(user) || Steps::Approval.new(user: user)
       end
-      unless proposal.root_step && steps_share_parent?(proposal.root_step, individuals)
-        proposal.root_step = Steps::Serial.new(child_steps: individuals)
+      unless proposal.root_step && child_steps_unchanged?(proposal.root_step, new_child_steps)
+        proposal.root_step = Steps::Serial.new(child_steps: new_child_steps)
       end
     end
 
-    def steps_share_parent?(parent_step, new_steps)
+    def child_steps_unchanged?(parent_step, new_steps)
       old_steps = parent_step.child_steps
       old_steps.size == new_steps.size && (old_steps & new_steps).size == old_steps.size
     end

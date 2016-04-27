@@ -35,10 +35,12 @@ describe Ncr::ApprovalManager do
       wo = create(:ncr_work_order, expense_type: 'BA61')
       manager = Ncr::ApprovalManager.new(wo)
       manager.setup_approvals_and_observers
+      root_step = wo.proposal.root_step
       first_approval = wo.individual_steps.first
 
       wo.reload.setup_approvals_and_observers
       expect(wo.individual_steps.first).to eq(first_approval)
+      expect(wo.proposal.root_step).to eq(root_step)
     end
 
     it "creates observers when in an emergency" do
