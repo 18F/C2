@@ -1,20 +1,22 @@
 var DetailsApp = function (){
   var mode = $('#mode-parent');
-
+  
   var stateEdit = new EditStateController(mode);
   var actionBar = new ActionBar('.action-bar-wrapper');
   
+  mode.on( "edit-mode:on", function( event ) {
+    actionBar.editMode();
+  });
+
+  mode.on( "edit-mode:off", function( event ) {
+    actionBar.defaultMode();
+  });
+
   return function(){
-    this.mode = mode;
-    this.state = {
-      edit: stateEdit
-    }
-    this.views = {
-      actionBar: actionBar
-    }
+    this.stateEdit = stateEdit;
     
     console.log('detailsApp init');
-    
+
     return this;
   }()
 }
