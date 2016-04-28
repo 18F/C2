@@ -8,6 +8,7 @@ var EditStateController = function (el) {
 }
 
 EditStateController.prototype._setup = function () {
+  this.state = "view";
   this._event();
 }
 
