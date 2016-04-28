@@ -19,7 +19,7 @@ describe 'EditMode', ->
       expect(mode.getState()).to.eql(false)
 
   describe '#toggleState()', ->
-    it "toggle state from in view mode to edit", ->
+    it "toggle state (1) from in view mode to edit", ->
       mode = new EditStateController(getContent())  
       mode.toggleState()
       expect(mode.state).to.eql('edit')
@@ -46,7 +46,6 @@ describe 'EditMode', ->
 
       expect(flag).to.eql(true)
   
-  describe '#edit-mode event', ->
     it "get the edit-mode:off", ->
       mode = new EditStateController(getContent())  
       flag = false

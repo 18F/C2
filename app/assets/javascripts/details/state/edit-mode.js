@@ -44,5 +44,4 @@ EditStateController.prototype.toggleState = function () {
     this.el.trigger("edit-mode:on");
   }
   var state = this.state;
-  console.log('Edit mode: ', state);
 }
