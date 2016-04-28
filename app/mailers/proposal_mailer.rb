@@ -22,7 +22,7 @@ class ProposalMailer < ApplicationMailer
   def proposal_created_confirmation(proposal)
     @proposal = proposal.decorate
     @recipient = @proposal.requester
-    add_proposal_attributes_icons(@proposal)
+    add_approval_chain_attachments(@proposal)
     add_inline_attachment("icon-page-circle.png")
     assign_threading_headers(@proposal)
 
