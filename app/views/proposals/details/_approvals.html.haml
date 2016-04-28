@@ -7,7 +7,7 @@
             Approvals
         .content-content.column
           - index = 0
-          - proposal.steps.each do |step|
+          - proposal.individual_steps.each do |step|
             - if !step.user_id.nil?
               - index = index + 1
               .row.step-row.column.medium-table-row{class: "step-status-" + step.status}
