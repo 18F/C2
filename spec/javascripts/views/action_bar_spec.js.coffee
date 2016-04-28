@@ -6,8 +6,11 @@ describe 'ActionBar', ->
   getContent = ->
     $(
       '<div class="action-bar-template action-bar-wrapper">
+        <div class="cancel-button">
+          <input disabled="disabled" type="button" value="Cancel">
+        </div>
         <div class="save-button">
-          <input type="button">
+          <input disabled="disabled" type="button" value="Save">
         </div>
       </div>'
     )
