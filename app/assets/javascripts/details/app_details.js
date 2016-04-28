@@ -1,7 +1,10 @@
 var DetailsApp = function (){
   var mode = $('#mode-parent');
+  var requestDetail = $('#request-details-card');
   
+  var stateDetailsRequest = new DetailsRequestForm(requestDetail);
   var stateEdit = new EditStateController(mode);
+
   var actionBar = new ActionBar('.action-bar-wrapper');
   
   mode.on( "edit-mode:on", function( event ) {
