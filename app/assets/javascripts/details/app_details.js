@@ -4,7 +4,7 @@ var DetailsApp = function (){
   var stateEdit = new EditStateController(mode);
   var actionBar = new ActionBar('.action-bar-wrapper');
   
-  var blastOff = function(){
+  return function(){
     this.mode = mode;
     this.state = {
       edit: stateEdit
@@ -12,16 +12,16 @@ var DetailsApp = function (){
     this.views = {
       actionBar: actionBar
     }
+    
+    console.log('detailsApp init');
+    
     return this;
-  }
-
-  return blastOff();
+  }()
 }
 
 var detailsApp;
 
 $(document).ready(function(){
-  console.log('detailsApp init');
   detailsApp = new DetailsApp();
 })
 
