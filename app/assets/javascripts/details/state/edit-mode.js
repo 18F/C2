@@ -1,7 +1,7 @@
 "use strict";
 
-var EditStateController = function () {
-  var el = $("#mode-parent");
+var EditStateController = function (el) {
+  var el = $(el);
   this.el = el;
   this._setup();
   return this;
