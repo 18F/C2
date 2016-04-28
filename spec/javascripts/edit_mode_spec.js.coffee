@@ -1,5 +1,5 @@
 #= require jquery
-#= require details/state/edit-mode
+#= require details/state/edit_mode
 #= require spec_helper
 
 describe 'EditMode', ->
@@ -57,6 +57,3 @@ describe 'EditMode', ->
       mode.toggleState()
 
       expect(flag).to.eql(true)
-
-
-
