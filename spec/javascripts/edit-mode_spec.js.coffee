@@ -1,9 +1,13 @@
 #= require jquery
-#= require field_filter
+#= require details/state/edit-mode
 
 describe 'EditMode', ->
+  getContent = ->
+    $('<div class="view-mode" id="mode-parent"></div>')
   describe 'events', ->
     it "sets up", ->
-      $edit = $('<div class="view-mode" id="mode-parent"></div>');
+      mode = new EditStateController(getContent())
+      expect(mode.state).to.eql('view')
+
 
 
