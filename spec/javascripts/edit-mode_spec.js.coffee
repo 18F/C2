@@ -39,8 +39,7 @@ describe 'EditMode', ->
       mode = new EditStateController(getContent())  
       flag = false
       
-      el = getContent
-      el.on 'edit-mode:on', ->
+      mode.el.on 'edit-mode:on', ->
         flag = true
       
       mode.toggleState()
@@ -52,10 +51,10 @@ describe 'EditMode', ->
       mode = new EditStateController(getContent())  
       flag = false
       
-      el = getContent
-      el.on 'edit-mode:off', ->
+      mode.el.on 'edit-mode:off', ->
         flag = true
       
+      mode.toggleState()
       mode.toggleState()
 
       expect(flag).to.eql(true)
