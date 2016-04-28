@@ -12,14 +12,14 @@ EditStateController.prototype._setup = function () {
 }
 
 EditStateController.prototype._event = function () {
-  this.el.on( "mode:toggle", function( event ) {
+  this.el.on( "edit-mode:toggle", function( event ) {
     var mode = $( this );
     if ( mode.is( ".edit-mode" ) ) {
       this.state = "edit";
-      this.el.trigger("editMode:on");
+      this.el.trigger("edit-mode:on");
     } else {
       this.state = "view";
-      this.el.trigger("editMode:off");
+      this.el.trigger("edit-mode:off");
     }
   });
 }
@@ -36,11 +36,11 @@ EditStateController.prototype.toggleState = function () {
   if ( this.el.is( ".edit-mode" ) ) {
     this.state = "view";
     this.el.addClass('view-mode').removeClass('edit-mode');
-    this.el.trigger("editMode:off");
+    this.el.trigger("edit-mode:off");
   } else {
     this.state = "edit";
     this.el.addClass('edit-mode').removeClass('view-mode');
-    this.el.trigger("editMode:on");
+    this.el.trigger("edit-mode:on");
   }
   var state = this.state;
   console.log('Edit mode: ', state);
