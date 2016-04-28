@@ -9,7 +9,7 @@ var DetailsApp = function (){
   });
 
   mode.on( "edit-mode:off", function( event ) {
-    actionBar.defaultMode();
+    actionBar.viewMode();
   });
 
   return function(){

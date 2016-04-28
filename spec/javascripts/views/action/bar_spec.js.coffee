@@ -1,6 +1,5 @@
 #= require jquery
 #= require details/state/edit_mode
-#= require details/views/edit_mode
 #= require details/app_details
 #= require spec_helper
 

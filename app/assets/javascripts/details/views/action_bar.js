@@ -3,7 +3,7 @@ var ActionBar = function (el) {
   return this;
 }
 
-ActionBar.prototype.defaultMode = function () {
+ActionBar.prototype.viewMode = function () {
   this.el.removeClass('edit-actions');
   this.el.find('.save-button a').attr('disabled', true);
 }
