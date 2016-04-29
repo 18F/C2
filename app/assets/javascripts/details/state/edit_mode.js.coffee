@@ -3,7 +3,7 @@ class EditStateController
     @el = $(el)
     @_setup()
     this
-  
+
   _setup: ->
     @state = "view"
     @_event()
@@ -12,12 +12,12 @@ class EditStateController
   _event: ->
     @el.on "edit-mode:toggle", (event) ->
       mode = $(this)
-      if mode.is ".edit-mode" 
+      if mode.is ".edit-mode"
         @state = "edit"
         @el.trigger "edit-mode:on"
       else
-        this.state = "view";
-        this.el.trigger "edit-mode:off"
+        @state = "view"
+        @el.trigger "edit-mode:off"
 
   getState: ->
     if @el.hasClass "edit-mode"
@@ -30,7 +30,7 @@ class EditStateController
       @stateTo 'view'
     else if @el.is ".view-mode"
       @stateTo 'edit'
-    
+
   stateTo: (state) ->
     @state = state
     newState = state + '-mode'
@@ -43,4 +43,3 @@ class EditStateController
       when "edit"
         @el.removeClass 'view-mode'
         @el.trigger 'edit-mode:on'
- 
