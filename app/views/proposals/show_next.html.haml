@@ -56,18 +56,17 @@
               %h2.content-wrap-level
                 Activity
             .content-content
-              .row.column
-                .medium-12.column
-                  = form_for [@proposal, Comment.new] do |f|
+              = form_for [@proposal, Comment.new] do |f|
+                .row.column
+                  .medium-12.column
                     = f.text_area :comment_text, rows: 5, placeholder: "Add a comment"
-                .medium-12.column.text-right.request-history-wrapper
-                  = form_for [@proposal, Attachment.new] do |f|
+                  .medium-12.column.text-right.request-history-wrapper
                     %label.attachment-container
                       %a{class: "button secondary round"}
                         %span.plus +
                         Attachment
                         = f.file_field :file, { style: "display: none" }
-                    %a.button.round.primary{:href => ""} Send              
+                    = submit_tag "Send", data: {"disable-if-empty" => "comment_comment_text"}, class: "button primary round no-margin-bottom"
                     
                     = render partial: "shared/request_history", locals: {history: @history}
 
