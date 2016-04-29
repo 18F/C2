@@ -13,6 +13,13 @@ a.button{
   }
 }
 
+label.attachment-container{
+  display: inline;
+  a{
+    margin: 0px !important;
+  }
+}
+
 .callout.primary.primary{
   background: $backgroundColor;
 }
@@ -22,7 +29,9 @@ a.button{
   line-height: 7px;
 }
 
-a.button.secondary{
+a.button.secondary,
+input.button.secondary
+{
   border: 1px solid $primary-color;
   color: $primary-color;
   &:hover{

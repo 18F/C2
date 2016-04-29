@@ -58,19 +58,23 @@
             .content-content
               .row.column
                 .medium-12.column
-                  %textarea{:cols => "30", :id => "", :name => "", :placeholder => "Add a comment", :rows => "5"}
-              .medium-12.column.text-right.request-history-wrapper
-                %a.button.round.secondary{:href => ""}
-                  %span.plus +
-                  Attachment
-                %a.button.round.primary{:href => ""} Send              
-                
-                = render partial: "shared/request_history", locals: {history: @history}
+                  = form_for [@proposal, Comment.new] do |f|
+                    = f.text_area :comment_text, rows: 5, placeholder: "Add a comment"
+                .medium-12.column.text-right.request-history-wrapper
+                  = form_for [@proposal, Attachment.new] do |f|
+                    %label.attachment-container
+                      %a{class: "button secondary round"}
+                        %span.plus +
+                        Attachment
+                        = f.file_field :file, { style: "display: none" }
+                    %a.button.round.primary{:href => ""} Send              
+                    
+                    = render partial: "shared/request_history", locals: {history: @history}
 
-                .medium-12.column.status-feed-actions.text-right
-                  .row.column
-                    = link_to 'View history', history_proposal_path(@proposal), class: "button secondary"
-                    %a.button.primary.status-toggle-all Show all
+                    .medium-12.column.status-feed-actions.text-right
+                      .row.column
+                        = link_to 'View history', history_proposal_path(@proposal), class: "button secondary"
+                        %a.button.primary.status-toggle-all Show all
   .medium-6.column
     .card-for-request-details
       .row
