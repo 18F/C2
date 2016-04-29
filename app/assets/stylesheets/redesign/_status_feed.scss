@@ -4,6 +4,9 @@
 
 .status-feed-wrapper.status-contracted{
   display: none;
+  &.status-expanded{
+    display: block;
+  }
 }
 
 .status-feed-wrapper.status-expanded:last-child{
