@@ -1,4 +1,13 @@
-$('.status-toggle-all').on('click', function(e){
-  e.preventDefaults();
-  $('.status-contracted').toggleClass('status-expanded') ;
+$(document).ready(function(){
+
+  $('.status-toggle-all').on('click', function(e){
+    e.preventDefault();
+    $('.status-contracted').toggleClass('status-expanded');
+    if($('.status-contracted').hasClass('status-expanded')){
+      $('.status-toggle-all').text('Minimize');
+    } else {
+      $('.status-toggle-all').text('Show all');
+    }
+  });
+
 });
