@@ -1,7 +1,12 @@
 class FixStepUserCompleter < ActiveRecord::Migration
+  class Proposal < ActiveRecord::Base
+    has_many :steps
+  end
+
   class Step < ActiveRecord::Base
     belongs_to :user
     belongs_to :completer, class_name: "User"
+    belongs_to :proposal
   end
 
   class User < ActiveRecord::Base
@@ -18,7 +23,8 @@ class FixStepUserCompleter < ActiveRecord::Migration
     steps_with_no_completer.each do |step|
       if user_is_delegate?(step)
         delegator = step.user.incoming_delegations.first.assigner
-        step.update_attributes!(completer: step.user, user: delegator)
+        next if proposal_has_step_user?(step.proposal, delegator)
+        execute "UPDATE steps SET completer_id=#{step.user_id}, user_id=#{delegator.id} WHERE id=#{step.id}"
       end
     end
   end
@@ -32,5 +38,9 @@ class FixStepUserCompleter < ActiveRecord::Migration
 
   def steps_with_no_completer
     Step.where(completer_id: nil, status: :completed).where.not(user_id: nil)
+  end
+
+  def proposal_has_step_user?(proposal, user)
+    proposal.steps.select { |step| step.user == user }.any?
   end
 end
