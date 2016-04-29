@@ -1,7 +1,8 @@
 # https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server
 
 workers 1
-threads_count = 3
+threads_count = Rails.env.test? ? 10 : 3
+
 threads threads_count, threads_count
 
 preload_app!
