@@ -1,7 +1,7 @@
 #= require jquery
-#= require edit_mode
+#= require edit_state_controller
 
-describe 'EditMode', ->
+describe 'EditStateController', ->
   getContent = ->
     $('
       <div class="view-mode" id="mode-parent"></div>
