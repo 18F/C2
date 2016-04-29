@@ -148,7 +148,7 @@ class ApplicationController < ActionController::Base
 
   def authenticate_user!
     if not_signed_in?
-      flash[:error] = "You need to sign in for access to this page."
+      flash[:error] = I18n.t("errors.authentication")
       return_to_param = make_return_to("Previous", request.fullpath)
       session[:return_to] = return_to_param
       redirect_to root_url(return_to: return_to_param)

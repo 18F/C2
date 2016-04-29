@@ -1,5 +1,6 @@
 en:
   errors:
+    authentication: "You need to sign in for access to this page."
     features:
       es:
         service_unavailable: "The search feature is temporarily unavailable"
