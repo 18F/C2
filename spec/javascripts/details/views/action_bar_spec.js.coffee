@@ -1,5 +1,5 @@
 #= require jquery
-#= require details/views/action_bar
+#= require action_bar
 
 describe 'ActionBar', ->
   getContent = ->
