@@ -11,3 +11,6 @@ $(document).ready(function(){
   });
 
 });
+
+var details_app = details_app || {};
+
