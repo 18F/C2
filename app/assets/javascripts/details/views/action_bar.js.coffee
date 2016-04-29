@@ -17,3 +17,5 @@ class ActionBar
     @el.addClass('edit-actions')
     @el.find('.save-button input').attr("disabled", false)
     return
+
+window.ActionBar = ActionBar
