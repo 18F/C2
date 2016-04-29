@@ -1,3 +1,4 @@
+
 class EditStateController
   constructor: (el) ->
     @el = $(el)
@@ -43,3 +44,5 @@ class EditStateController
       when "edit"
         @el.removeClass 'view-mode'
         @el.trigger 'edit-mode:on'
+
+window.EditStateController = EditStateController

@@ -1,5 +1,5 @@
 #= require jquery
-#= require edit_state_controller
+#= require details/state/edit_state_controller
 
 describe 'EditStateController', ->
   getContent = ->
