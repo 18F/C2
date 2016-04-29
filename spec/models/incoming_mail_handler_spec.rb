@@ -29,6 +29,22 @@ describe "Handles incoming email" do
     expect(deliveries.length).to eq(1)
   end
 
+  it "should discard email loops" do
+    with_env_vars(NOTIFICATION_FALLBACK_EMAIL: "nowhere@example.com", NOTIFICATION_FROM_EMAIL: "noreply@example.com") do
+      expect(deliveries.length).to eq(0)
+      mail = ProposalMailer.proposal_created_confirmation(proposal)
+      mandrill_event = mandrill_payload_from_message(mail)
+      mandrill_event[0]["msg"]["from_email"] = "nowhere@example.com"
+      mandrill_event[0]["msg"]["headers"]["Sender"] = "nowhere@example.com"
+      mandrill_event[0]["msg"]["headers"]["From"] = "nowhere@example.com"
+
+      resp = IncomingMail::Handler.new.handle(mandrill_event)
+
+      expect(resp.action).to eq(IncomingMail::Response::DROPPED)
+      expect(deliveries.length).to eq(0)
+    end
+  end
+
   it "should create comment for request-related reply" do
     client_request = create(:test_client_request)
     proposal = client_request.proposal
