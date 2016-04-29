@@ -15,5 +15,5 @@ class ActionBar
 
   editMode: ->
     @el.addClass('edit-actions')
-    @el.find('.save-button input').attr("disabled", false);
+    @el.find('.save-button input').attr("disabled", false)
     return
