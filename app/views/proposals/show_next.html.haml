@@ -8,7 +8,7 @@
 .row
   .medium-6.column
     = render partial: "proposals/details/approvals", locals: { proposal: @proposal }
-    = render partial: "proposals/details/activity", locals: { proposal: @proposal }
+    = render partial: "proposals/details/activity", locals: { proposal: @proposal, history: @history }
      
   .medium-6.column
     = render partial: "proposals/details/request_details", locals: { proposal: @proposal }
