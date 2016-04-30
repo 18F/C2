@@ -14,9 +14,9 @@
                 .medium-2.column.text-center
                   - if step.status == "completed"
                     = image_tag 'numbers/icon-completed-green.png'
-                  - if step.status == "actionable"
+                  - elsif step.status == "actionable"
                     = image_tag 'numbers/icon-completed-activity-' + index.to_s + '.png'
-                  - else
+                  - elsif step.status == "pending"
                     = image_tag 'numbers/icon-pending-activity-' + index.to_s + '.png'
                 .medium-10.column
                   %span.step-index.step-data
