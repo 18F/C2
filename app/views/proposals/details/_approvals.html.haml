@@ -6,11 +6,13 @@
           %h2
             Approvals
         .content-content.column
+          - index = 0
           - proposal.steps.each do |step|
             - if !step.user_id.nil?
+              - index = index + 1
               .row.step-state.column.state-completed
                 .medium-2.column.text-center
-                  %img{:alt => "", :src => "http://fakeimg.pl/32x32"}
+                  = image_tag 'numbers/icon-number-' + index.to_s + '-pending.png'
                 .medium-10.column
                   %span.step-index.step-data
                     Step #{step.position - 1}
