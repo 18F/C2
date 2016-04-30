@@ -1,4 +1,3 @@
-
 class EditStateController
   constructor: (el) ->
     @el = $(el)
