@@ -23,6 +23,6 @@
                     %span.approval-name                         
                       #{User.find(step.user_id).full_name},
                     %span.approver-role #{step_user_title(step)}
-                  %span.approver-status.step-data
-                    - if step.status != "actionable" && step.status == "pending"
-                      = step.status + " " + step.completed_at.strftime("%m/%d/%Y %I:%M%p")
+                  - if !step.completed_at.blank? && step.status != "actionable" && step.status != "pending"
+                    %span.approver-status.step-data
+                      = step.status.capitalize + " " + step.completed_at.strftime("%m/%d/%Y %I:%M%p")
