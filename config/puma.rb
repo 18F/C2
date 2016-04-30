@@ -1,7 +1,7 @@
 # https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server
 
 workers 1
-threads_count = 5
+threads_count = 0, 16
 
 threads threads_count, threads_count
 
