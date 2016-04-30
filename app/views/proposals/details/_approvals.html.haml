@@ -1,0 +1,21 @@
+.card-for-approvals
+  .row
+    .medium-12.column
+      .card
+        .card-head.column
+          %h2
+            Approvals
+        .content-content.column
+          - proposal.steps.each do |step|
+            - if !step.user_id.nil?
+              .row.step-state.column.state-completed
+                .medium-2.column.text-center
+                  %img{:alt => "", :src => "http://fakeimg.pl/32x32"}
+                .medium-10.column
+                  %span.step-index.step-data
+                    Step #{step.position - 1}
+                  %span.approver.step-data
+                    %span.approval-name                         
+                      #{User.find(step.user_id).full_name},
+                    %span.approver-role #{step_user_title(step)}
+                  %span.approver-status.step-data
