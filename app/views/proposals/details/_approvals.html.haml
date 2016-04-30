@@ -15,9 +15,9 @@
                   - if step.status == "completed"
                     = image_tag 'numbers/icon-completed-green.png'
                   - if step.status == "actionable"
-                    = image_tag 'numbers/icon-completed-activity-' + index.to_s + '-pending.png'
+                    = image_tag 'numbers/icon-completed-activity-' + index.to_s + '.png'
                   - else
-                    = image_tag 'numbers/icon-pending-activity-' + index.to_s + '-pending.png'
+                    = image_tag 'numbers/icon-pending-activity-' + index.to_s + '.png'
                 .medium-10.column
                   %span.step-index.step-data
                     Step #{step.position - 1}
