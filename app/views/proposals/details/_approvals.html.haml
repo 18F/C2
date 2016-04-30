@@ -12,7 +12,10 @@
               - index = index + 1
               .row.step-state.column.state-completed
                 .medium-2.column.text-center
-                  = image_tag 'numbers/icon-number-' + index.to_s + '-pending.png'
+                  - if step.status == "completed"
+                    = image_tag 'numbers/icon-completed-green.png'
+                  - else
+                    = image_tag 'numbers/icon-number-' + index.to_s + '-pending.png'
                 .medium-10.column
                   %span.step-index.step-data
                     Step #{step.position - 1}
@@ -21,3 +24,5 @@
                       #{User.find(step.user_id).full_name},
                     %span.approver-role #{step_user_title(step)}
                   %span.approver-status.step-data
+                    - if step.status != "actionable" && step.status == "pending"
+                      = step.status + " " + step.completed_at.strftime("%m/%d/%Y %I:%M%p")
