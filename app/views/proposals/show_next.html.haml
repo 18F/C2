@@ -1,6 +1,7 @@
 = stylesheet_link_tag "redesign/app"
 
 = javascript_include_tag "details/views/action_bar"
+= javascript_include_tag "details/state/edit_mode"
 
 #mode-parent.view-mode
   = render partial: "proposals/details/top_notification", locals: { proposal: @proposal }
