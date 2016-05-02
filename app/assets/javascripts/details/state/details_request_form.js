@@ -10,6 +10,7 @@ var DetailsRequestFormState = function (el) {
 }
 
 DetailsRequestFormState.prototype._setup = function(){
+  this._createGuid();
 }
 
 DetailsRequestFormState.prototype._guid = function(){
@@ -20,3 +21,10 @@ DetailsRequestFormState.prototype._guid = function(){
   }
   return s4() + "-" + s4() + "-" + s4();
 };
+
+DetailsRequestFormState.prototype._createGuid = function(){
+  var self = this;
+  this.el.find("form, input, textarea, select, radio").each(function(i, item){
+    $(item).attr("data-field-guid", self.guid());
+  });
+}
