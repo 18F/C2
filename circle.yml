@@ -6,6 +6,3 @@ dependencies:
     - gem update --system
   cache_directories:
     - elasticsearch
-database:
-  override:
-    - bundle exec rake db:create db:migrate
