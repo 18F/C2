@@ -1,6 +1,7 @@
 = stylesheet_link_tag "redesign/app"
 
-= javascript_include_tag "details/app"
+= javascript_include_tag "details/views/action_bar"
+= javascript_include_tag "details/state/edit_mode"
 
 #mode-parent.view-mode
   = render partial: "proposals/details/top_notification", locals: { proposal: @proposal }
@@ -10,17 +11,21 @@
   .row
     .medium-12.column.wrap-hard
       = render partial: "proposals/details/summary", locals: { proposal: @proposal }
+  
   .row.footer-buffer
     .medium-6.column
       = render partial: "proposals/details/approvals", locals: { proposal: @proposal }
       = render partial: "proposals/details/activity", locals: { proposal: @proposal, events: @events }
+  
     .medium-6.column
       = render partial: "proposals/details/request_details", locals: { proposal: @proposal }
       = render partial: "proposals/details/attachment", locals: { proposal: @proposal }
       = render partial: "proposals/details/observer", locals: { proposal: @proposal }
+  
       .row
         .medium-12.column.wrap-hard
           - if policy(@proposal).can_cancel?
             %div.fr.cancel-action
               = link_to "Cancel this request", cancel_form_proposal_path, class: "button secondary large cancel-request-button"
+  
   = render partial: "proposals/details/action", locals: { proposal: @proposal }

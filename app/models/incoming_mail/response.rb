@@ -6,6 +6,7 @@ module IncomingMail
     ERROR   = 0
     COMMENT = 1
     FORWARDED = 2
+    DROPPED = 3
 
     def initialize(params = {})
       params.each do |key, value|

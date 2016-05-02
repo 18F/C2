@@ -1,5 +1,7 @@
 module IncomingMail
   class Handler
+    include MailAddressing
+
     def initialize(params = {})
       params.each do |key, value|
         instance_variable_set("@#{key}", value)
@@ -35,9 +37,19 @@ module IncomingMail
       response
     end
 
+    def loop?(msg)
+      mail_msg = Mail.new(msg["raw_msg"])
+      from_raw = msg["headers"]["From"] || mail_msg.header["From"].value
+      from_raw == resend_to_email || resend_to_email.match("<#{from_raw}>")
+    end
+
     def forward_message(response, payload)
-      Mailer.resend(payload["msg"]["raw_msg"]).deliver_later
-      response.action = Response::FORWARDED
+      if loop?(payload["msg"])
+        response.action = Response::DROPPED
+      else
+        Mailer.resend(payload["msg"]["raw_msg"]).deliver_later
+        response.action = Response::FORWARDED
+      end
     end
 
     def identify_mail_type(payload)
