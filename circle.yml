@@ -1,10 +1,10 @@
-dependencies:
-  pre:
-    - cp .env.example .env
-    - bash ./build-elasticsearch.sh
-    - sudo curl --output /usr/local/bin/phantomjs https://s3.amazonaws.com/circle-downloads/phantomjs-2.1.1
-  cache_directories:
-    - elasticsearch
-database:
-  override:
-    - bundle exec rake db:setup
+# dependencies:
+#   pre:
+#     - cp .env.example .env
+#     - bash ./build-elasticsearch.sh
+#     - sudo curl --output /usr/local/bin/phantomjs https://s3.amazonaws.com/circle-downloads/phantomjs-2.1.1
+#   cache_directories:
+#     - elasticsearch
+# database:
+#   override:
+#     - bundle exec rake db:setup
