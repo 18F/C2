@@ -414,7 +414,7 @@ GEM
       activesupport (= 4.2.5.2)
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
-    rake (11.1.1)
+    rake (11.1.2)
     ransack (1.7.0)
       actionpack (>= 3.0)
       activerecord (>= 3.0)
@@ -621,5 +621,8 @@ DEPENDENCIES
   workflow
   zonebie
 
+RUBY VERSION
+   ruby 2.2.5p319
+
 BUNDLED WITH
-   1.11.2
+   1.12.1
