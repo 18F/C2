@@ -2,7 +2,8 @@
 
 workers 1
 
-threads_count = if ENV['RAILS_ENV'] == 'test' || ENV['RAILS_ENV'] == 'development'
+threads_count = 
+if ENV['RAILS_ENV'] == 'test' || ENV['RAILS_ENV'] == 'development'
   5
 else
   3
