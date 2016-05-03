@@ -2,7 +2,7 @@ var AttachmentCardController;
 
 AttachmentCardController = (function(){
 
-  function AttachmentCardController = function(el, opts){
+  function AttachmentCardController(el, opts){
     this.el = typeof el === "string" ? $(el) : el;
     this._setup(opts);
     return this;

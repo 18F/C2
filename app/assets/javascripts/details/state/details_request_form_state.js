@@ -1,7 +1,7 @@
 var DetailsRequestFormState;
 
 DetailsRequestFormState = (function(){
-  function DetailsRequestFormState = function (el) {
+  function DetailsRequestFormState(el) {
     this.el = $(el);
     this.data = {
       fieldUID: {}  

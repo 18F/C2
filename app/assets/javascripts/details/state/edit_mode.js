@@ -1,7 +1,7 @@
 var EditStateController;
 
 EditStateController = (function(){
-  function EditStateController = function(el) {
+  function EditStateController(el) {
     this.el = $(el);
     this._setup();
     return this;
