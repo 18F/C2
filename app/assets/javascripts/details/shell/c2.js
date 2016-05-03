@@ -17,14 +17,14 @@ C2 = (function() {
     this.formState.el.on("form:changed", function(){
       var hasChanged = false;
       if(hasChanged){
-        editMode.el.trigger("edit-mode:on")
+        this.editMode.el.trigger("edit-mode:on")
       } else {
-        editMode.el.trigger("edit-mode:off")
+        this.editMode.el.trigger("edit-mode:off")
       }
     }); 
 
     this.actionBar.el.on("button:save", function(){
-      var editMode = editMode.getState();
+      var editMode = this.editMode.getState();
       if(editMode){
       } else {
       }
