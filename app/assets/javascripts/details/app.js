@@ -1,3 +1,3 @@
 $(document).ready(function(){
-  // Do something here
+  var attachmentCardController = new AttachmentCardController(".card-for-attachments");
 });

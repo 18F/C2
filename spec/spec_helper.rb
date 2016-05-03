@@ -1,44 +1,46 @@
-require 'codeclimate-test-reporter'
+require "codeclimate-test-reporter"
+
 SimpleCov.formatters = [
   SimpleCov::Formatter::HTMLFormatter,
   CodeClimate::TestReporter::Formatter
 ]
-SimpleCov.start 'rails' do
-  if ENV['CIRCLE_ARTIFACTS']
-    dir = File.join(ENV['CIRCLE_ARTIFACTS'], 'coverage')
+SimpleCov.start "rails" do
+  if ENV["CIRCLE_ARTIFACTS"]
+    dir = File.join(ENV["CIRCLE_ARTIFACTS"], "coverage")
     coverage_dir(dir)
   end
 end
 
-require 'zonebie'
+require "zonebie"
 Zonebie.set_random_timezone
 
-require 'webmock/rspec'
+require "webmock/rspec"
 # localhost needed for omniauth
-WebMock.disable_net_connect!(allow_localhost: true, allow: 'codeclimate.com:443')
+WebMock.disable_net_connect!(allow_localhost: true, allow: "codeclimate.com:443")
 
-require 'rack_session_access/capybara'
+require "rack_session_access/capybara"
 
-require 'capybara/poltergeist'
+require "capybara/poltergeist"
 Capybara.register_driver :poltergeist do |app|
   options = {
     timeout: 60,
-    debug: ENV['CAPYBARA_DEBUG'] || false
+    debug: ENV["CAPYBARA_DEBUG"] || false
   }
   Capybara::Poltergeist::Driver.new(app, options)
 end
 Capybara.javascript_driver = :poltergeist
 Capybara.default_max_wait_time = 10
 Capybara.server do |app, port|
-  require 'rack/handler/puma'
+  require "rack/handler/puma"
   Rack::Handler::Puma.run(app, Port: port)
 end
+
 puts "phantomjs -v"
 system("phantomjs -v")
 
-require 'pundit/rspec'
-require 'factory_girl_rails'
-require 'site_prism'
+require "pundit/rspec"
+require "factory_girl_rails"
+require "site_prism"
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|

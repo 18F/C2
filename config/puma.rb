@@ -1,8 +1,9 @@
 # https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server
 
 workers 1
-threads_count = 0, 16
 
+test_mode = ENV['RAILS_ENV'] == 'test' || ENV['RAILS_ENV'] == 'development'
+threads_count = test_mode ? 6 : 3
 threads threads_count, threads_count
 
 preload_app!
