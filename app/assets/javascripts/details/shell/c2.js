@@ -19,8 +19,9 @@ C2 = (function() {
   }
 
   C2.prototype._actionBarSave = function(){
+    var self = this;
     this.actionBar.el.on("actionBarClicked:save", function(){
-      var editMode = this.editMode.getState();
+      var editMode = self.editMode.getState();
       if(editMode){
       } else {
       }
