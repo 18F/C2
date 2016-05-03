@@ -4,7 +4,7 @@ ActionBar = (function() {
   function ActionBar(el) {
     this.el = $(el);
     this._setup();
-    this;
+    return this;
   }
 
   ActionBar.prototype._setup = function() {
