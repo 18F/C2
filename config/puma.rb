@@ -5,7 +5,7 @@ workers 1
 if ENV['RAILS_ENV'] == 'test' || ENV['RAILS_ENV'] == 'development'
   threads 0, 16
 else
-  threads_count = 4
+  threads_count = 5
   threads threads_count, threads_count
 end
 
