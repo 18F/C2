@@ -27,9 +27,10 @@ describe 'ActionBar', ->
     it "save fires event when enabled", ->
       spy = false
       actionBar = new ActionBar(getContent())
-      actionBar.editMode()
-      actionBar.el.on "actionBarClicked:save", ->
+      actionBar.el.on("actionBarClicked:save", ->
         spy = true
+      )
+      actionBar.editMode()
       actionBar.el.find(".save-button input").click()
       expect(spy).to.eql(true)
 
@@ -37,10 +38,27 @@ describe 'ActionBar', ->
       spy = false
       actionBar = new ActionBar(getContent())
       actionBar.editMode()
+      actionBar.el.on( "actionBarClicked:cancel", ->
+        spy = true
+      )
+      actionBar.el.find(".cancel-button input").click()
+      expect(spy).to.eql(true)
+
+    it "save doesnt fire event when", ->
+      spy = false
+      actionBar = new ActionBar(getContent())
+      actionBar.el.on "actionBarClicked:save", ->
+        spy = true
+      actionBar.el.find(".save-button input").click()
+      expect(spy).to.eql(false)
+
+    it "cancel doesnt fire event when", ->
+      spy = false
+      actionBar = new ActionBar(getContent())
       actionBar.el.on "actionBarClicked:cancel", ->
         spy = true
       actionBar.el.find(".cancel-button input").click()
-      expect(spy).to.eql(true)
+      expect(spy).to.eql(false)
 
   describe '#editMode', ->
     it "set edit mode", ->
