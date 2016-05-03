@@ -13,3 +13,9 @@ formState.el.on("form:changed", function(){
     editMode.el.on("edit-mode:off", function(){
   }
 }); 
+
+DetailsRequestFormState.prototype._saveAction = function(){
+  var self = this;
+  $("#mode-parent").on("edit-mode:on", function(){
+  });
+}
