@@ -5,6 +5,7 @@ describe "Add attachments" do
                        user: proposal.requester) }
 
   before do
+    
     login_as(proposal.requester)
   end
 
@@ -55,10 +56,10 @@ describe "Add attachments" do
     visit "/proposals/#{proposal.id}?detail=new"
     page.execute_script("$('#attachment_file').addClass('show-attachment-file');")
     page.attach_file('attachment[file]', "#{Rails.root}/app/assets/images/bg_completed_status.gif", visible: false)
-  
     within(".attachment-list") do 
       expect(page).to have_content("bg_completed_status.gif")
     end
+    visit "/proposals/#{proposal.id}?detail=normal"
   end
 
   it "emails everyone involved in the proposal" do
