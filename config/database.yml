@@ -11,7 +11,7 @@ default: &default
 development:
   <<: *default
   database: c2_development
-  pool: 10
+  pool: 5
 test:
   <<: *default
   pool: 5

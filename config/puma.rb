@@ -3,11 +3,11 @@
 workers 1
 
 if ENV['RAILS_ENV'] == 'test' || ENV['RAILS_ENV'] == 'development'
-  threads 0, 16
-else
   threads_count = 5
-  threads threads_count, threads_count
+else
+  threads_count = 3
 end
+threads threads_count, threads_count
 
 preload_app!
 
