@@ -1,6 +1,5 @@
 #= require jquery
-#= require details/cards/attachment
-#= require spec_helper
+#= require details/views/attachment_card
 
 describe 'Attachment Card', ->
   getContent = ->
