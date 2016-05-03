@@ -23,6 +23,23 @@ describe 'ActionBar', ->
       actionBar = new ActionBar(getContent())  
       expect(actionBar.el.find('.save-button input').is(":disabled")).to.eql(true)
   
+  describe '#_events', ->
+    it "save fires event when enabled", ->
+      spy = false
+      actionBar = new ActionBar(getContent())
+      actionBar.el.on "actionBar:saveClicked", ->
+        spy = true
+      actionBar.find(".save-button input").click()
+      expect(spy).to.eql(true
+
+    it "cancel fires event when enabled", ->
+      spy = false
+      actionBar = new ActionBar(getContent())
+      actionBar.el.on "actionBar:cancelClicked", ->
+        spy = true
+      actionBar.find(".cancel-button input").click()
+      expect(spy).to.eql(true)
+
   describe '#editMode', ->
     it "set edit mode", ->
       actionBar = new ActionBar(getContent())  
