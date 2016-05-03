@@ -11,6 +11,15 @@ ActionBar = (function() {
     this.viewMode();
   };
 
+  ActionBar.prototype._event = function() {
+    this.el.find('.save-button input').on('click', function(){
+      this.el.trigger('actionBar:saveClicked');
+    });
+    this.el.find('.cancel-button input').on('click', function(){
+      this.el.trigger('actionBar:cancelClicked');
+    });
+  };
+
   ActionBar.prototype.viewMode = function() {
     this.el.removeClass('edit-actions');
     this.el.find('.save-button input').attr("disabled", "disabled");
