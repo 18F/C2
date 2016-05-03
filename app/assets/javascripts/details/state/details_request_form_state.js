@@ -39,7 +39,7 @@ DetailsRequestFormState.prototype._events = function(){
 }
 
 DetailsRequestFormState.prototype.fieldChanged = function(e, el){
-  
+  this.el.trigger("form:changed"); 
 }
 
 DetailsRequestFormState.prototype._saveAction = function(){
