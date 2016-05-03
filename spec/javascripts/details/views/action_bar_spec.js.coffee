@@ -28,10 +28,8 @@ describe 'ActionBar', ->
       spy = false
       actionBar = new ActionBar(getContent())
       actionBar.editMode()
-      actionBar.el.on "actionBar:saveClicked", ->
+      actionBar.el.on "actionBarClicked:save", ->
         spy = true
-      actionBar.el.find(".save-button input").click()
-      actionBar.el.find(".save-button input").click()
       actionBar.el.find(".save-button input").click()
       expect(spy).to.eql(true)
 
@@ -39,10 +37,8 @@ describe 'ActionBar', ->
       spy = false
       actionBar = new ActionBar(getContent())
       actionBar.editMode()
-      actionBar.el.on "actionBar:cancelClicked", ->
+      actionBar.el.on "actionBarClicked:cancel", ->
         spy = true
-      actionBar.el.find(".cancel-button input").click()
-      actionBar.el.find(".cancel-button input").click()
       actionBar.el.find(".cancel-button input").click()
       expect(spy).to.eql(true)
 

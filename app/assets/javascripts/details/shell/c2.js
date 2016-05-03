@@ -19,7 +19,7 @@ C2 = (function() {
   }
 
   C2.prototype._actionBarSave = function(){
-    this.actionBar.el.on("button:save", function(){
+    this.actionBar.el.on("actionBarClicked:save", function(){
       var editMode = this.editMode.getState();
       if(editMode){
       } else {
