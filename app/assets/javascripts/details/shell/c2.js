@@ -29,13 +29,14 @@ C2 = (function() {
 
   C2.prototype._formChanges = function(){
     var self = this,
+        editMode = this.editMode.el,
         hasChanged;
     this.formState.el.on("form:changed", function(){
       hasChanged = false;
       if(hasChanged){
-        self.editMode.el.trigger("edit-mode:on")
+        editMode.trigger("edit-mode:on")
       } else {
-        self.editMode.el.trigger("edit-mode:off")
+        editMode.trigger("edit-mode:off")
       }
     }); 
   }
