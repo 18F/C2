@@ -6,7 +6,7 @@
           %h2
             = t(".header")
         .content-content
-          = form_for [@proposal, Comment.new] do |f|
+          = form_for [@proposal, Comment.new], remote: true do |f|
             .row
               .medium-12.column
                 %h3
@@ -18,38 +18,6 @@
               .medium-12.column.text-right.request-history-wrapper
                 = submit_tag t(".button.send"), id: "add_a_comment", data: {"disable-if-empty" => "comment_comment_text"}, class: "button primary round no-margin-bottom"
 
-            .row
-              .medium-12.column
-                %div
-                  .row.column#comments
-                    - index = 0
-                    - events.reverse.each do |event|
-                      - history_style = index > 4 ? "contracted" : "expanded"
-                      - index_class = index == events.count - 1 ? "status-index-last" : "status-index-" + index.to_s
-                      - classes = "status-" + history_style + " " + index_class
-                      .medium-12.column.status-feed-wrapper.row.comment{ class: classes }
-                        .medium-table-row.medium-12.status-feed-item.no-margin-bottom
-                          .hide-for-small-only.medium-table-cell.medium-activity-icon-col.background-color-column
-                            .dot-circle
-                          .medium-table-cell.medium-auto-column.status-feed-content
-                            = render partial: event, locals: { event: event }
-                      - index = index + 1
-
-            - if events.length > 5
-              .row.status-feed-actions
-                .medium-12.column.status-contract-action
-                  %div
-                    %a.button.primary.status-toggle-all.status-arrow
-                      ↓
-                    %a.primary.status-toggle-all.status-text
-                      = t(".button.show_all_activity")
-                      %span.status-count
-                        = t(".button.hidden_activity_count", count: events.length - 5)
-                .medium-12.column.status-expand-action
-                  %div
-                    %a.button.primary.status-toggle-all.status-arrow
-                      ↑
-                    %a.primary.status-toggle-all.status-text
-                      = t(".button.minimize_activity")
+            = render partial: "proposals/details/comment_list", locals: {events: events}
 %div.current_user{:style=>"display:none;"}
   = current_user.full_name
