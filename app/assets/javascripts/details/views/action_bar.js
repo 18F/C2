@@ -16,12 +16,10 @@ ActionBar = (function() {
     var self = this;
     this.el.find('.save-button input').on('click', function(){
       self.el.trigger('actionBar:saveClicked');
-      console.log('Clicked');
     });
 
     this.el.find('.cancel-button input').on('click', function(){
       self.el.trigger('actionBar:cancelClicked');
-      console.log('Clicked');
     });
   };
 
