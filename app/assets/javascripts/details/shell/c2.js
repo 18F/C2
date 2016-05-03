@@ -14,21 +14,30 @@ C2 = (function() {
   }
 
   C2.prototype._events = function(){
-    this.formState.el.on("form:changed", function(){
-      var hasChanged = false;
-      if(hasChanged){
-        this.editMode.el.trigger("edit-mode:on")
-      } else {
-        this.editMode.el.trigger("edit-mode:off")
-      }
-    }); 
+    this._formChanges();
+    this._actionBarSave();
+  }
 
+  C2.prototype._actionBarSave = function(){
     this.actionBar.el.on("button:save", function(){
       var editMode = this.editMode.getState();
       if(editMode){
       } else {
       }
     });
+  }
+
+  C2.prototype._formChanges = function(){
+    var self = this,
+        hasChanged;
+    this.formState.el.on("form:changed", function(){
+      hasChanged = false;
+      if(hasChanged){
+        self.editMode.el.trigger("edit-mode:on")
+      } else {
+        self.editMode.el.trigger("edit-mode:off")
+      }
+    }); 
   }
   
   return C2;
