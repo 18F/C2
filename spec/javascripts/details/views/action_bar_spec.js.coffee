@@ -7,10 +7,10 @@ describe 'ActionBar', ->
       '<div class="action-bar-template action-bar-wrapper">
         <ul id="request-actions">
           <li class="cancel-button">
-            <input disabled="disabled" type="button" value="Cancel">
+            <input type="button" value="Cancel">
           </li>
           <li class="save-button">
-            <input disabled="disabled" type="button" value="Save">
+            <input type="button" value="Save">
           </li>
         </ul>
       </div>'
