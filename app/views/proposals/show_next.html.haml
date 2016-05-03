@@ -1,7 +1,11 @@
 = stylesheet_link_tag "redesign/app"
 
 = javascript_include_tag "details/views/action_bar"
+= javascript_include_tag "details/views/attachment_card"
+
 = javascript_include_tag "details/state/edit_mode"
+
+= javascript_include_tag "details/app"
 
 #mode-parent.view-mode
   = render partial: "proposals/details/top_notification", locals: { proposal: @proposal }
@@ -19,7 +23,8 @@
   
     .medium-6.column
       = render partial: "proposals/details/request_details", locals: { proposal: @proposal }
-      = render partial: "proposals/details/attachment", locals: { proposal: @proposal }
+      .card-for-attachments
+        = render partial: "proposals/details/attachment", locals: { proposal: @proposal }
       = render partial: "proposals/details/observer", locals: { proposal: @proposal }
   
       .row
