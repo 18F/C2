@@ -4,6 +4,7 @@ $(document).ready(function(){
 
 var editMode = new EditStateController('#mode-parent');
 var formState = new DetailsRequestFormState('#request-details-card');
+var actionBar = new ActionBar('#request-actions');
 
 formState.el.on("form:changed", function(){
   var hasChanged = false;
@@ -14,8 +15,11 @@ formState.el.on("form:changed", function(){
   }
 }); 
 
-DetailsRequestFormState.prototype._saveAction = function(){
-  var self = this;
-  $("#mode-parent").on("edit-mode:on", function(){
-  });
-}
+actionBar.el.on("button:save", function(){
+  var editMode = editMode.getState();
+  if(editMode){
+
+  } else {
+    
+  }
+});
