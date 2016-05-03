@@ -31,6 +31,8 @@ describe 'ActionBar', ->
       actionBar.el.on "actionBar:saveClicked", ->
         spy = true
       actionBar.el.find(".save-button input").click()
+      actionBar.el.find(".save-button input").click()
+      actionBar.el.find(".save-button input").click()
       expect(spy).to.eql(true)
 
     it "cancel fires event when enabled", ->
@@ -39,6 +41,8 @@ describe 'ActionBar', ->
       actionBar.editMode()
       actionBar.el.on "actionBar:cancelClicked", ->
         spy = true
+      actionBar.el.find(".cancel-button input").click()
+      actionBar.el.find(".cancel-button input").click()
       actionBar.el.find(".cancel-button input").click()
       expect(spy).to.eql(true)
 
