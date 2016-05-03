@@ -6,6 +6,6 @@ if defined?(Konacha)
   end
   Konacha.configure do |config|
     require "capybara/poltergeist"
-    config.driver    = :slow_poltergeist
+    config.driver = :slow_poltergeist
   end
 end
