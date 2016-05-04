@@ -74,6 +74,6 @@ AttachmentCardController = (function(){
   }
 
   return AttachmentCardController;
-})();
+}());
 
 window.AttachmentCardController = AttachmentCardController;

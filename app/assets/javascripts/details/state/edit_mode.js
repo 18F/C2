@@ -60,6 +60,6 @@ EditStateController = (function(){
 
   return EditStateController;
 
-})();
+}());
 
 window.EditStateController = EditStateController;
