@@ -35,6 +35,6 @@ ActionBar = (function() {
 
   return ActionBar;
 
-})();
+}());
 
 window.ActionBar = ActionBar;
