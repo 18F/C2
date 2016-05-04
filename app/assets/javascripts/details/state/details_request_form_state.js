@@ -35,7 +35,12 @@ DetailsRequestFormState = (function(){
     var self = this;
     this.el.find("input, textarea, select, radio").on("change keypress blur focus keyup", function(e){
       var el = this;
+      self.fieldChanged(e, el)
     });
+  }
+
+  DetailsRequestFormState.prototype.fieldChanged = function(e, el){
+    this.el.trigger("form:changed"); 
   }
 
   return DetailsRequestFormState;
