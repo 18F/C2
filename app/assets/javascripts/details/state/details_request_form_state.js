@@ -11,6 +11,7 @@ DetailsRequestFormState = (function(){
   }
   
   DetailsRequestFormState.prototype._setup = function(){
+    this._createGuid();
   }
 
   DetailsRequestFormState.prototype.guid = function(){
@@ -21,6 +22,14 @@ DetailsRequestFormState = (function(){
     }
     return s4() + "-" + s4() + "-" + s4();
   };
+
+  DetailsRequestFormState.prototype._createGuid = function(){
+    var self = this;
+    this.el.find("form, input, textarea, select, radio").each(function(i, item){
+      $(item).attr("data-field-guid", self.guid());
+    });
+  }
+
 
   return DetailsRequestFormState;
 
