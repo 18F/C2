@@ -13,15 +13,16 @@ ActionBar = (function() {
   };
 
   ActionBar.prototype._event = function() {
-    var self = this;
-    this.el.find('.save-button input').on('click', function(){
-      self.el.trigger('actionBarClicked:save');
-    });
-
-    this.el.find('.cancel-button input').on('click', function(){
-      self.el.trigger('actionBarClicked:cancel');
-    });
+    this._setupActionBarClicked('save');
+    this._setupActionBarClicked('cancel');
   };
+
+  ActionBar.prototype._setupActionBarClicked = function(buttonName) {
+    var self = this;
+    this.el.find('.' + buttonName + '-button input').on('click', function(){
+      self.el.trigger('actionBarClicked:' + buttonName);
+    });
+  }
 
   ActionBar.prototype.viewMode = function() {
     this.el.removeClass('edit-actions');
