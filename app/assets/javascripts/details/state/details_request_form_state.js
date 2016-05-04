@@ -12,6 +12,7 @@ DetailsRequestFormState = (function(){
   
   DetailsRequestFormState.prototype._setup = function(){
     this._createGuid();
+    this._events();
   }
 
   DetailsRequestFormState.prototype.guid = function(){
@@ -30,6 +31,9 @@ DetailsRequestFormState = (function(){
     });
   }
 
+  DetailsRequestFormState.prototype._events = function(){
+
+  }
 
   return DetailsRequestFormState;
 
