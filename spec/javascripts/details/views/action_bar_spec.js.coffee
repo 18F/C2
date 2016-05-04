@@ -41,14 +41,6 @@ describe 'ActionBar', ->
         flag = true
       actionBar.el.trigger('actionBarClicked:save')
       expect(flag).to.eql(true)
-
-    it "save doesnt fire event when disabled", ->
-      flag = false
-      actionBar = new ActionBar(getContent())
-      actionBar.el.on "actionBarClicked:save", ->
-        flag = true
-      actionBar.el.find(".save-button input").trigger('click')
-      expect(flag).to.eql(false)
   
   describe '#_events .cancel-button', ->
 
