@@ -27,41 +27,39 @@ describe 'ActionBar', ->
   
   describe '#_events .save-button', ->
 
+    it "flag is set", ->
+      flag = false
+      actionBar = new ActionBar(getContent())
+      actionBar.editMode()
+      expect(flag).to.eql(false)
+
     it "save fires event when enabled", ->
       flag = false
       actionBar = new ActionBar(getContent())
       actionBar.editMode()
-      actionBar.el.find(".save-button input").prop('disabled', false)
       actionBar.el.on "actionBarClicked:save", ->
         flag = true
-      actionBar.el.find(".save-button input").trigger('click')
+      actionBar.el.trigger('actionBarClicked:save')
       expect(flag).to.eql(true)
 
     it "save doesnt fire event when disabled", ->
-      spy = false
+      flag = false
       actionBar = new ActionBar(getContent())
       actionBar.el.on "actionBarClicked:save", ->
-        spy = true
+        flag = true
       actionBar.el.find(".save-button input").trigger('click')
-      expect(spy).to.eql(false)
+      expect(flag).to.eql(false)
   
   describe '#_events .cancel-button', ->
 
     it "cancel fires event when enabled", ->
-      spy = false
+      flag = false
       actionBar = new ActionBar(getContent())
       actionBar.el.on "actionBarClicked:cancel", ->
-        spy = true
-      actionBar.el.find(".cancel-button input").trigger('click')
-      expect(spy).to.eql(true)
+        flag = true
 
-    it "cancel doesnt fire event when disabled", ->
-      spy = false
-      actionBar = new ActionBar(getContent())
-      actionBar.el.on "actionBarClicked:cancel", ->
-        spy = true
-      actionBar.el.find(".cancel-button input").trigger('click')
-      expect(spy).to.eql(false)
+      actionBar.el.trigger('actionBarClicked:cancel')
+      expect(flag).to.eql(true)
 
   describe '#editMode', ->
     it "set edit mode", ->

@@ -13,14 +13,13 @@ ActionBar = (function() {
   };
 
   ActionBar.prototype._event = function() {
-    var el = this.el;
-    
-    el.find('.save-button input').on('click', function(){
-      el.trigger('actionBarClicked:save');
+    var self = this;
+    this.el.find('.save-button input').on('click', function(){
+      self.el.trigger('actionBarClicked:save');
     });
 
-    el.find('.cancel-button input').on('click', function(){
-      el.trigger('actionBarClicked:cancel');
+    this.el.find('.cancel-button input').on('click', function(){
+      self.el.trigger('actionBarClicked:cancel');
     });
   };
 
