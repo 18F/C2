@@ -17,6 +17,6 @@ C2 = (function() {
   
   return C2;
 
-})();
+}());
 
 window.C2 = C2;
