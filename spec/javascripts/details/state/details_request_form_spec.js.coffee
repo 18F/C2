@@ -16,3 +16,12 @@ describe 'DetailsRequestFormState', ->
         </form>
       </div>
     ')
+
+  describe '#_createGuid', ->
+    it "create the uid on form and input", ->
+      content = getContent()
+      form = new DetailsRequestFormState(content)  
+      form._setup()
+      guidFields = content.find('[data-field-guid]')
+      expect(guidFields.length).to.eql(3)
+      expect(guidFields.length).not.eql(2)
