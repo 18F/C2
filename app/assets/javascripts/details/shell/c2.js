@@ -14,6 +14,7 @@ C2 = (function() {
   }
 
   C2.prototype._events = function(){
+    this._formChanges();
     this._actionBarSave();
   }
 
@@ -29,6 +30,20 @@ C2 = (function() {
 
   C2.prototype.saveRequestDetailsChanges = function(){
     this.editMode.el.trigger("edit-mode:off")
+  }
+
+  C2.prototype._formChanges = function(){
+    var self = this,
+        editMode = this.editMode.el,
+        hasChanged;
+    this.formState.el.on("form:changed", function(){
+      hasChanged = false;
+      if(hasChanged){
+        editMode.trigger("edit-mode:on")
+      } else {
+        editMode.trigger("edit-mode:off")
+      }
+    }); 
   }
   
   return C2;
