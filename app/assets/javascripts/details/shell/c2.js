@@ -18,11 +18,11 @@ C2 = (function() {
   }
   
   C2.prototype._actionBarSave = function(){
-    var self = this;
-    this.actionBar.el.on("actionBarClicked:save", function(){
+    var actionBar = this.actionBar.el;
+    actionBar.on("actionBarClicked:save", function(){
       var editMode = self.editMode.getState();
       if(editMode){
-        self.saveRequestDetailsChanges();
+        actionBar.trigger("actionBarClicked:saved");
       } else {
       }
     });

@@ -13,3 +13,12 @@ describe 'C2', ->
       expect(c2.editMode instanceof EditStateController).to.eql(true)
       expect(c2.formState instanceof DetailsRequestFormState).to.eql(true)
       expect(c2.actionBar instanceof ActionBar).to.eql(true)
+
+  describe '_actionBarSave()', ->
+    it "event setup for actionBarClicked:save trigger", ->
+      flag = false
+      c2 = new C2() 
+      c2.actionBar.el.on("actionBarClicked:saved", ->
+        flag = true
+      c2.actionBar.el.trigger("actionBarClicked:save")
+      expect(flag).to.eql(true)
