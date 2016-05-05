@@ -5,12 +5,14 @@ describe 'ActionBar', ->
   getContent = ->
     $(
       '<div class="action-bar-template action-bar-wrapper">
-        <div class="cancel-button">
-          <input disabled="disabled" type="button" value="Cancel">
-        </div>
-        <div class="save-button">
-          <input disabled="disabled" type="button" value="Save">
-        </div>
+        <ul id="request-actions">
+          <li class="cancel-button">
+            <input type="button" value="Cancel">
+          </li>
+          <li class="save-button">
+            <input type="button" value="Save">
+          </li>
+        </ul>
       </div>'
     )
 
@@ -23,6 +25,34 @@ describe 'ActionBar', ->
       actionBar = new ActionBar(getContent())  
       expect(actionBar.el.find('.save-button input').is(":disabled")).to.eql(true)
   
+  describe '#_events .save-button', ->
+
+    it "flag is set", ->
+      flag = false
+      actionBar = new ActionBar(getContent())
+      actionBar.editMode()
+      expect(flag).to.eql(false)
+
+    it "save fires event when enabled", ->
+      flag = false
+      actionBar = new ActionBar(getContent())
+      actionBar.editMode()
+      actionBar.el.on "actionBarClicked:save", ->
+        flag = true
+      actionBar.el.trigger('actionBarClicked:save')
+      expect(flag).to.eql(true)
+  
+  describe '#_events .cancel-button', ->
+
+    it "cancel fires event when enabled", ->
+      flag = false
+      actionBar = new ActionBar(getContent())
+      actionBar.el.on "actionBarClicked:cancel", ->
+        flag = true
+
+      actionBar.el.trigger('actionBarClicked:cancel')
+      expect(flag).to.eql(true)
+
   describe '#editMode', ->
     it "set edit mode", ->
       actionBar = new ActionBar(getContent())  

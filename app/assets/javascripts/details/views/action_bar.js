@@ -8,8 +8,21 @@ ActionBar = (function() {
   }
 
   ActionBar.prototype._setup = function() {
+    this._event();
     this.viewMode();
   };
+
+  ActionBar.prototype._event = function() {
+    this._setupActionBarClicked('save');
+    this._setupActionBarClicked('cancel');
+  };
+
+  ActionBar.prototype._setupActionBarClicked = function(buttonName) {
+    var self = this;
+    this.el.find('.' + buttonName + '-button input').on('click', function(){
+      self.el.trigger('actionBarClicked:' + buttonName);
+    });
+  }
 
   ActionBar.prototype.viewMode = function() {
     this.el.removeClass('edit-actions');
