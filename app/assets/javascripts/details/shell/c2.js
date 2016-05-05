@@ -7,10 +7,31 @@ C2 = (function() {
   }
 
   C2.prototype._blastOff = function(){
-    this.attachmentCardController = new AttachmentCardController(".card-for-attachments");
-    this.editMode = new EditStateController('#mode-parent');
-    this.formState = new DetailsRequestFormState('#request-details-card');
-    this.actionBar = new ActionBar('.action-bar-wrapper');
+    this._setupConfig();
+    this._setupStates();
+    this._setupViews();
+  }
+
+  C2.prototype._setupConfig = function(){
+    var test = window.test || {};
+    this.config = {
+      editMode:       test.editMode         || '#mode-parent',
+      formState:      test.formState        || '#request-details-card',
+      attachmentCard: test.attachmentCard   || '.card-for-attachments',
+      actionBar:      test.actionBar        || '.action-bar-wrapper'
+    }
+  }
+
+  C2.prototype._setupStates = function(){
+    var config = this.config;
+    this.editMode = new EditStateController(config.editMode);
+    this.formState = new DetailsRequestFormState(config.formState);
+  }
+  
+  C2.prototype._setupViews = function(){
+    var config = this.config;
+    this.attachmentCardController = new AttachmentCardController(config.attachmentCard);
+    this.actionBar = new ActionBar(config.actionBar);
   }
 
   C2.prototype._events = function(){

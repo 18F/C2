@@ -6,6 +6,11 @@
 #= require details/shell/c2
 
 describe 'C2', ->
+  getEditModeContent = ->
+    $('
+      <div class="view-mode" id="mode-parent"></div>
+    ')
+
   describe '#setup', ->
     it "checks for each constructor", ->
       c2 = new C2() 
@@ -16,9 +21,17 @@ describe 'C2', ->
 
   describe '_actionBarSave()', ->
     it "event setup for actionBarClicked:save trigger", ->
+      window = {}
+      window.test = {
+        editMode: getEditModeContent()
+      }
       flag = false
       c2 = new C2() 
-      c2.actionBar.el.on("actionBarClicked:saved", ->
+      state = c2.editMode.getState()
+      c2.editMode.toggleState()
+      c2.actionBar.el.on "actionBarClicked:saved", ->
         flag = true
       c2.actionBar.el.trigger("actionBarClicked:save")
-      expect(flag).to.eql(true)
+      expect(state).to.eql(true)
+      expect(state).to.eql(true)
+      # expect(flag).to.eql(true)
