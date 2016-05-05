@@ -1,24 +1,23 @@
 var C2;
 C2 = (function() {
   
-  function C2(){
+  function C2(option = {}){
+    this._setupConfig(option);
     this._blastOff();
     this._events();
   }
 
   C2.prototype._blastOff = function(){
-    this._setupConfig();
     this._setupStates();
     this._setupViews();
   }
 
-  C2.prototype._setupConfig = function(){
-    var test = window.test || {};
+  C2.prototype._setupConfig = function(config){
     this.config = {
-      editMode:       test.editMode         || '#mode-parent',
-      formState:      test.formState        || '#request-details-card',
-      attachmentCard: test.attachmentCard   || '.card-for-attachments',
-      actionBar:      test.actionBar        || '.action-bar-wrapper'
+      editMode:       config.editMode         || '#mode-parent',
+      formState:      config.formState        || '#request-details-card',
+      attachmentCard: config.attachmentCard   || '.card-for-attachments',
+      actionBar:      config.actionBar        || '.action-bar-wrapper'
     }
   }
 

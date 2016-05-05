@@ -15,3 +15,11 @@ describe 'C2', ->
       expect(c2.editMode instanceof EditStateController).to.eql(true)
       expect(c2.formState instanceof DetailsRequestFormState).to.eql(true)
       expect(c2.actionBar instanceof ActionBar).to.eql(true)
+
+    it "check config passing test param actionBar", ->
+      test = "action-bar-test"
+      testParam = {
+        actionBar: test
+      }
+      c2 = new C2(testParam)
+      expect(c2.config.actionBar).to.eql(test)
