@@ -14,8 +14,20 @@ C2 = (function() {
   }
 
   C2.prototype._events = function(){
+    this._actionBarSave();
   }
   
+  C2.prototype._actionBarSave = function(){
+    var self = this;
+    this.actionBar.el.on("actionBarClicked:save", function(){
+      var editMode = self.editMode.getState();
+      if(editMode){
+        self.saveRequestDetailsChanges();
+      } else {
+      }
+    });
+  }
+
   return C2;
 
 }());
