@@ -9,6 +9,7 @@ C2 = (function() {
   C2.prototype._blastOff = function(){
     this.attachmentCardController = new AttachmentCardController(".card-for-attachments");
     this.editMode = new EditStateController('#mode-parent');
+    this.formState = new DetailsRequestFormState('#request-details-card');
     this.actionBar = new ActionBar('.action-bar-wrapper');
   }
 
