@@ -39,10 +39,10 @@ C2 = (function() {
   
   C2.prototype._actionBarSave = function(){
     var actionBar = this.actionBar.el;
-    actionBar.on("actionBarClicked:save", function(){
+    actionBar.on("action-bar-clicked:save", function(){
       var editMode = self.editMode.getState();
       if(editMode){
-        actionBar.trigger("actionBarClicked:saved");
+        actionBar.trigger("action-bar-clicked:saved");
       }
     });
   }

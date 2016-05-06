@@ -20,7 +20,7 @@ ActionBar = (function() {
   ActionBar.prototype._setupActionBarClicked = function(buttonName) {
     var self = this;
     this.el.find('.' + buttonName + '-button input').on('click', function(){
-      self.el.trigger('actionBarClicked:' + buttonName);
+      self.el.trigger('action-bar-clicked:' + buttonName);
     });
   }
 

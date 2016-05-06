@@ -24,19 +24,19 @@ describe 'ActionBar', ->
       flag = false
       actionBar = new ActionBar(getActionBarContent())
       actionBar.editMode()
-      actionBar.el.on "actionBarClicked:save", ->
+      actionBar.el.on "action-bar-clicked:save", ->
         flag = true
-      actionBar.el.trigger('actionBarClicked:save')
+      actionBar.el.trigger('action-bar-clicked:save')
       expect(flag).to.eql(true)
   
   describe '#_events .cancel-button', ->
     it "cancel fires event when enabled", ->
       flag = false
       actionBar = new ActionBar(getActionBarContent())
-      actionBar.el.on "actionBarClicked:cancel", ->
+      actionBar.el.on "action-bar-clicked:cancel", ->
         flag = true
 
-      actionBar.el.trigger('actionBarClicked:cancel')
+      actionBar.el.trigger('action-bar-clicked:cancel')
       expect(flag).to.eql(true)
 
   describe '#editMode', ->
