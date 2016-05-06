@@ -48,16 +48,20 @@ C2 = (function() {
   }
   
   C2.prototype._checkFieldChange = function(){
+    var formChanged = true;
+    var editMode = this.editMode;
     this.detailsRequestForm.el.on('form:changed', function(){
-
+      if (formChanged) {
+        editMode.stateTo('edit');
+      }
     });
   }
 
   C2.prototype._actionBarSave = function(){
     var detailsSaveEl = this.detailsSave.el;
     var actionBar = this.actionBar.el;
+    var editMode = this.editMode.getState();
     actionBar.on("action-bar-clicked:save", function(){
-      var editMode = self.editMode.getState();
       if(editMode){
         actionBar.trigger("action-bar-clicked:saved");
         detailsSaveEl.trigger("details-form:save");
