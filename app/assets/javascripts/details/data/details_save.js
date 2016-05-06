@@ -13,7 +13,7 @@ DetailsSave = (function() {
   DetailsSave.prototype._events = function(){
     var self = this;
     this.el.on( "details-form:save", function( event ) {
-      this.saveDetailsForm();
+      self.saveDetailsForm();
     });
   }
 
