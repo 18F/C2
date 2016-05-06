@@ -53,6 +53,20 @@ describe "Add attachments" do
     proposal = create(:proposal)
     login_as(proposal.requester)
 
+    visit proposal_path(proposal, detail: "new")
+    page.execute_script("$('#attachment_file').addClass('show-attachment-file');")
+    page.attach_file('attachment[file]', "#{Rails.root}/app/assets/images/bg_completed_status.gif", visible: false)
+    within(".attachment-list") do 
+      expect(page).to have_content("bg_completed_status.gif")
+    end
+    visit proposal_path(proposal, detail: "normal")
+  end
+
+
+  it "saves attachments submitted via the webform with js", :js do
+    proposal = create(:proposal)
+    login_as(proposal.requester)
+
     visit "/proposals/#{proposal.id}?detail=new"
     page.execute_script("$('#attachment_file').addClass('show-attachment-file');")
     page.attach_file('attachment[file]', "#{Rails.root}/app/assets/images/bg_completed_status.gif", visible: false)
