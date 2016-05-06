@@ -13,15 +13,15 @@ C2 = (function() {
     this._setupData();
   }
 
-  C2.prototype._setupConfig = function(config){
-    this.config = {
-      editMode:       config.editMode         || '#mode-parent',
-      formState:      config.requestDetails   || '#request-details-card',
-      detailsForm:    config.requestDetails   || '#request-details-card',
-      detailsSave:    config.requestDetails   || '#request-details-card',
-      attachmentCard: config.attachmentCard   || '.card-for-attachments',
-      actionBar:      config.actionBar        || '.action-bar-wrapper'
-    }
+  C2.prototype._setupConfig = function(co){
+    opt = {};
+    opt.editMode        = co.editMode       ? co.editMode       : '#mode-parent';
+    opt.formState       = co.requestDetails ? co.requestDetails : '#request-details-card';
+    opt.detailsForm     = co.requestDetails ? co.requestDetails : '#request-details-card';
+    opt.detailsSave     = co.requestDetails ? co.requestDetails : '#request-details-card';
+    opt.attachmentCard  = co.attachmentCard ? co.attachmentCard : '.card-for-attachments';
+    opt.actionBar       = co.actionBar      ? co.actionBar      : '.action-bar-wrapper';
+    this.config = opt;
   }
 
   C2.prototype._setupData = function(){
