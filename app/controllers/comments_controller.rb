@@ -13,8 +13,7 @@ class CommentsController < ApplicationController
     else
       flash[:error] = comment.errors.full_messages
     end
-
-    redirect_to proposal
+    respond_to_comment
   end
 
   protected
@@ -34,5 +33,14 @@ class CommentsController < ApplicationController
       status: 403,
       locals: { msg: "You are not allowed to see that proposal." }
     )
+  end
+
+  def respond_to_comment
+    respond_to do |format|
+      format.html { redirect_to proposal }
+      @events = HistoryList.new(proposal).events
+      @proposal = proposal
+      format.js
+    end
   end
 end

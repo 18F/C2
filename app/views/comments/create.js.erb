@@ -1,0 +1,6 @@
+$("div.card-for-activity").replaceWith('<%=j render partial: 'proposals/details/activity', locals: {events: @events} %>');
+$("div.card-for-activity textarea:first").focus();
+$("#add_a_comment").attr('disabled', true);
+$("div.card-for-activity textarea:first").on('input',function(){
+  $("#add_a_comment").attr('disabled', false);
+});
