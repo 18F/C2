@@ -10,16 +10,13 @@ DetailsSave = (function() {
   }
 
   DetailsSave.prototype._events = function(){
-    this.el.on( "details-save:toggle", function( event ) {
-      var mode = $( this );
-      if ( mode.is( ".edit-mode" ) ) {
-        this.state = "edit";
-        this.el.trigger("edit-mode:on");
-      } else {
-        this.state = "view";
-        this.el.trigger("edit-mode:off");
-      }
+    this.el.on( "details-form:save", function( event ) {
+      this.el.trigger("edit-mode:off");
     });
+  }
+
+  DetailsSave.prototype.saveDetailsForm = function(){
+    this.el.trigger( "details-form:save" );
   }
 
   return DetailsSave;
