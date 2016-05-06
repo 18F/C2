@@ -10,6 +10,28 @@ feature "commenting" do
     expect(page).to have_content("You successfully added a comment")
   end
 
+  scenario "saves the comment with javascript", js: true do
+    proposal = create_and_visit_proposal
+    visit "/proposals/#{proposal.id}?detail=new" 
+    comment_text = "this is a great comment"
+    js_submit_comment(comment_text, "#add_a_comment")
+    wait_for_ajax
+    within(".comment-list") do 
+      expect(page).to have_content(comment_text)
+    end
+    visit "/proposals/#{proposal.id}?detail=old"
+  end
+
+  scenario "Send button is disabled after submitting with javascript", js: true do
+    proposal = create_and_visit_proposal
+    visit "/proposals/#{proposal.id}?detail=new" 
+    comment_text = "this is a great comment"
+    js_submit_comment(comment_text, "#add_a_comment")
+    wait_for_ajax
+    expect(find("#add_a_comment").disabled?).to be(true)
+    visit "/proposals/#{proposal.id}?detail=old"
+  end
+
   scenario "disables attachments if none is selected", js: true do
     create_and_visit_proposal
 
@@ -43,8 +65,14 @@ feature "commenting" do
     proposal
   end
 
-  def submit_comment(text = "foo")
+  def submit_comment(text = "foo", submit = "Send a Comment")
     fill_in "comment[comment_text]", with: text
     click_on "Send a Comment"
   end
+
+  def js_submit_comment(text = "foo", submit = "#add_a_comment")
+    fill_in "comment[comment_text]", with: text
+    find(submit).trigger("click")
+  end
+
 end
