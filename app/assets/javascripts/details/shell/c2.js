@@ -62,11 +62,9 @@ C2 = (function() {
     var editModeEl = this.editMode.el;
     var actionBar = this.actionBar;
     editModeEl.on('edit-mode:on', function(){
-      console.log('edit mode on triggered');
       actionBar.editMode();
     });
     editModeEl.on('edit-mode:off', function(){
-      console.log('edit mode off triggered');
       actionBar.viewMode();
     });
   }
@@ -75,7 +73,6 @@ C2 = (function() {
     var detailsSaveEl = this.detailsSave.el;
     var actionBar = this.actionBar.el;
     actionBar.on("action-bar-clicked:save", function(){
-      console.log('Running action bar clicked save');
       actionBar.trigger("action-bar-clicked:saved");
       detailsSaveEl.trigger("details-form:save");
     });
