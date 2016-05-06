@@ -19,7 +19,7 @@ describe 'C2', ->
       c2 = new C2() 
       expect(c2.attachmentCardController instanceof AttachmentCardController).to.eql(true)
       expect(c2.editMode instanceof EditStateController).to.eql(true)
-      expect(c2.detailsForm instanceof DetailsRequestForm).to.eql(true)
+      expect(c2.detailsRequestForm instanceof DetailsRequestForm).to.eql(true)
       expect(c2.formState instanceof DetailsRequestFormState).to.eql(true)
       expect(c2.actionBar instanceof ActionBar).to.eql(true)
       expect(c2.detailsSave instanceof DetailsSave).to.eql(true)
@@ -76,3 +76,21 @@ describe 'C2', ->
       c2.actionBar.el.trigger("action-bar-clicked:save")
       expect(state).to.eql(true)
       expect(flag).to.eql(true)
+
+  describe '#events _checkFieldChange', ->
+    it "change state to edit when field changes", ->
+      testParams = setupC2TestParams()
+      c2 = new C2(testParams) 
+      c2.editMode.stateTo('view') # cue up state
+      expect(c2.editMode.getState()).to.eql(false)
+      c2.detailsRequestForm.el.trigger('form:changed')
+      expect(c2.editMode.getState()).to.eql(true)
+
+  describe '#events _actionBarState', ->
+    it "editMode is on when state when edit-mod:on", ->
+      testParams = setupC2TestParams()
+      c2 = new C2(testParams) 
+      c2.editMode.stateTo('view') # cue up state
+      c2.DetailsRequestForm.el.trigger('form:changed')
+      state = c2.editMode.getState() # state should be 'edit'
+      expect(state).to.eql(true)

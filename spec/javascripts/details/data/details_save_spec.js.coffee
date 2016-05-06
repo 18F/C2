@@ -17,12 +17,3 @@ describe 'DetailsSave', ->
         flag = true
       detailsSave.el.trigger('details-form:save')
       expect(flag).to.eql(true)
-
-  describe '#saveDetailsForm', ->
-    it "form is submitted by function", ->
-      flag = false
-      detailsSave = new DetailsSave(getRequestDetailsForm())  
-      detailsSave.el.find('form').on 'submit', ->
-        flag = true
-      detailsSave.saveDetailsForm()
-      expect(flag).to.eql(true)
