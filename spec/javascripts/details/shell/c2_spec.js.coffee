@@ -23,3 +23,16 @@ describe 'C2', ->
       }
       c2 = new C2(testParam)
       expect(c2.config.actionBar).to.eql(test)
+
+  describe '#test inits', ->
+    it "event setup for actionBarClicked:save trigger", ->
+      flag = false
+      testParams = setupC2TestParams()
+      c2 = new C2(testParams) 
+      c2.editMode.stateTo('edit')
+      state = c2.editMode.getState()
+      c2.actionBar.el.on "actionBarClicked:saved", ->
+        flag = true
+      c2.actionBar.el.trigger("actionBarClicked:save")
+      expect(state).to.eql(true)
+      expect(flag).to.eql(true)
