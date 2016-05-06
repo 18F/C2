@@ -4,15 +4,21 @@ C2 = (function() {
   function C2(option = {}){
     this._setupConfig(option);
     this._blastOff();
-    this._events();
   }
 
   C2.prototype._blastOff = function(){
     this._setupStates();
     this._setupViews();
     this._setupData();
+    this._setupEvents();
   }
 
+  C2.prototype._setupEvents = function(){
+    this._checkFieldChange();
+    this._actionBarSave();
+    this._actionBarState();
+  }
+  
   C2.prototype._setupConfig = function(co){
     opt = {};
     opt.editMode        = co.editMode       ? co.editMode       : '#mode-parent';
@@ -42,12 +48,6 @@ C2 = (function() {
     this.actionBar = new ActionBar(config.actionBar);
   }
 
-  C2.prototype._events = function(){
-    this._checkFieldChange();
-    this._actionBarSave();
-    this._actionBarState();
-  }
-  
   C2.prototype._checkFieldChange = function(){
     var formChanged = true;
     var editMode = this.editMode;
