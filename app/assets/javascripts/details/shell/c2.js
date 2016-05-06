@@ -43,7 +43,6 @@ C2 = (function() {
       var editMode = self.editMode.getState();
       if(editMode){
         actionBar.trigger("actionBarClicked:saved");
-      } else {
       }
     });
   }
