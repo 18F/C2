@@ -10,6 +10,7 @@ C2 = (function() {
   C2.prototype._blastOff = function(){
     this._setupStates();
     this._setupViews();
+    this._setupData();
   }
 
   C2.prototype._setupConfig = function(config){
@@ -22,7 +23,7 @@ C2 = (function() {
     }
   }
 
-  C2.prototype.setupData = function(){
+  C2.prototype._setupData = function(){
     var config = this.config;
     this.detailsSave = new DetailsSave(config.detailsSave);
   }
