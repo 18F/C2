@@ -17,6 +17,7 @@ C2 = (function() {
     this.config = {
       editMode:       config.editMode         || '#mode-parent',
       formState:      config.requestDetails   || '#request-details-card',
+      detailsForm:    config.requestDetails   || '#request-details-card',
       detailsSave:    config.requestDetails   || '#request-details-card',
       attachmentCard: config.attachmentCard   || '.card-for-attachments',
       actionBar:      config.actionBar        || '.action-bar-wrapper'
@@ -41,9 +42,16 @@ C2 = (function() {
   }
 
   C2.prototype._events = function(){
+    this._checkFieldChange();
     this._actionBarSave();
   }
   
+  C2.prototype._checkFieldChange = function(){
+    this.formState.el.on('form:changed', function(){
+
+    });
+  }
+
   C2.prototype._actionBarSave = function(){
     var detailsSaveEl = this.detailsSave.el;
     var actionBar = this.actionBar.el;
