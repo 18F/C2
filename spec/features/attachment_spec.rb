@@ -48,20 +48,6 @@ describe "Add attachments" do
     expect(proposal.attachments.length).to eq 1
     expect(proposal.attachments.last.file_file_name).to eq "bg_completed_status.gif"
   end
-
-  it "saves attachments submitted via the webform with js", :js do
-    proposal = create(:proposal)
-    login_as(proposal.requester)
-
-    visit proposal_path(proposal, detail: "new")
-    page.execute_script("$('#attachment_file').addClass('show-attachment-file');")
-    page.attach_file('attachment[file]', "#{Rails.root}/app/assets/images/bg_completed_status.gif", visible: false)
-    within(".attachment-list") do 
-      expect(page).to have_content("bg_completed_status.gif")
-    end
-    visit proposal_path(proposal, detail: "normal")
-  end
-
   it "emails everyone involved in the proposal" do
     dispatcher = double
     allow(dispatcher).to receive(:deliver_attachment_emails)
