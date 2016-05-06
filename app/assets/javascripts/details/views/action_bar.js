@@ -17,6 +17,10 @@ ActionBar = (function() {
     this._setupActionBarClicked('cancel');
   };
 
+  /**
+   * .on("action-bar-clicked:save")
+   * .on("action-bar-clicked:cancel")
+   */
   ActionBar.prototype._setupActionBarClicked = function(buttonName) {
     var self = this;
     this.el.find('.' + buttonName + '-button input').on('click', function(){
