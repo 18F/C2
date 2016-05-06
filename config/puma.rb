@@ -3,7 +3,7 @@
 workers 1
 
 test_mode = ENV['RAILS_ENV'] == 'test' || ENV['RAILS_ENV'] == 'development'
-threads_count = test_mode ? 10 : 3
+threads_count = test_mode ? 5 : 3
 threads threads_count, threads_count
 
 preload_app!
