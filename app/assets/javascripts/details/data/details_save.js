@@ -1,7 +1,8 @@
 var DetailsSave;
 DetailsSave = (function() {
   
-  function DetailsSave(option = {}){
+  function DetailsSave(el) {
+    this.el = $(el);
     this._blastOff();
   }
 
@@ -10,13 +11,14 @@ DetailsSave = (function() {
   }
 
   DetailsSave.prototype._events = function(){
+    var self = this;
     this.el.on( "details-form:save", function( event ) {
-      this.el.trigger("edit-mode:off");
+      this.saveDetailsForm();
     });
   }
 
   DetailsSave.prototype.saveDetailsForm = function(){
-    this.el.trigger( "details-form:save" );
+    this.el.find('form').submit();
   }
 
   return DetailsSave;
