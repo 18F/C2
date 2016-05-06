@@ -15,7 +15,8 @@ C2 = (function() {
   C2.prototype._setupConfig = function(config){
     this.config = {
       editMode:       config.editMode         || '#mode-parent',
-      formState:      config.formState        || '#request-details-card',
+      formState:      config.detailsForm      || '#request-details-card',
+      detailsSave:    config.detailsForm      || '#request-details-card',
       attachmentCard: config.attachmentCard   || '.card-for-attachments',
       actionBar:      config.actionBar        || '.action-bar-wrapper'
     }

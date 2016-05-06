@@ -1,9 +1,9 @@
 @setupC2TestParams = ->
   {
-    editMode: getEditModeContent(),
-    attachmentCard: getAttachmentContent(),
-    actionBar: getActionBarContent(),
-    requestDetails: getRequestDetailsContent()
+    editMode:         getEditModeContent(),
+    attachmentCard:   getAttachmentContent(),
+    actionBar:        getActionBarContent(),
+    requestDetails:   getRequestDetailsForm()
   }
 
 @getEditModeContent = ->
@@ -38,7 +38,7 @@
     </div>'
   )
 
-@getRequestDetailsContent = ->
+@getRequestDetailsForm = ->
   $('
     <div id="request-details-card">
       <form>

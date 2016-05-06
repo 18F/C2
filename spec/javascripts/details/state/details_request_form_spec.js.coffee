@@ -7,7 +7,7 @@ describe 'DetailsRequestFormState', ->
 
   describe '#_createGuid', ->
     it "create the uid on form and input", ->
-      content = getRequestDetailsContent()
+      content = getRequestDetailsForm()
       form = new DetailsRequestFormState(content)  
       form._setup()
       guidFields = content.find('[data-field-guid]')
@@ -17,7 +17,7 @@ describe 'DetailsRequestFormState', ->
   describe '#_event', ->
     it "form keypress is triggered on input field", ->
       test_ran = false
-      content = getRequestDetailsContent()
+      content = getRequestDetailsForm()
       form = new DetailsRequestFormState(content)  
       form._setup()
       first_field = content.find('input').first()
