@@ -37,6 +37,7 @@ C2 = (function() {
   
   C2.prototype._setupViews = function(){
     var config = this.config;
+    this.detailsRequestForm = new DetailsRequestForm(config.detailsForm);
     this.attachmentCardController = new AttachmentCardController(config.attachmentCard);
     this.actionBar = new ActionBar(config.actionBar);
   }

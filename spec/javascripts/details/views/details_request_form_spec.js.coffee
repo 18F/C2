@@ -9,7 +9,7 @@ describe 'DetailsRequestForm', ->
     it "form keypress is triggered on input field", ->
       test_ran = false
       content = getRequestDetailsForm()
-      form = new DetailsRequestFormState(content)  
+      form = new DetailsRequestForm(content)  
       form._setup()
       first_field = content.find('input').first()
       form.el.on 'form:changed', ( ->
