@@ -105,3 +105,24 @@ describe 'C2', ->
       c2.editMode.el.trigger('edit-mode:off')
       isEditMode = c2.actionBar.el.hasClass('edit-actions')
       expect(isEditMode).to.eql(false)
+  
+  describe '#events _actionBarSave', ->
+    it "action-bar-clicked:save is fired through action-bar-clicked:saved", ->
+      flag = false
+      testParams = setupC2TestParams()
+      c2 = new C2(testParams) 
+      c2.actionBar.el.on 'action-bar-clicked:saved', ->
+        flag = true
+      c2.actionBar.el.trigger('action-bar-clicked:save')
+      expect(flag).to.eql(true)
+    
+    it "action-bar-clicked:save is fired through details-form:save", ->
+      flag = false
+      testParams = setupC2TestParams()
+      c2 = new C2(testParams) 
+      c2.detailsSave.el.on 'details-form:save', ->
+        flag = true
+      c2.detailsSave.el.trigger('details-form:save')
+      expect(flag).to.eql(true)
+
+      
