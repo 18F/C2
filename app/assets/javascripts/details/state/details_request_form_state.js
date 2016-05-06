@@ -12,7 +12,6 @@ DetailsRequestFormState = (function(){
   
   DetailsRequestFormState.prototype._setup = function(){
     this._createGuid();
-    this._events();
   }
 
   DetailsRequestFormState.prototype.guid = function(){
@@ -29,18 +28,6 @@ DetailsRequestFormState = (function(){
     this.el.find("form, input, textarea, select, radio").each(function(i, item){
       $(item).attr("data-field-guid", self.guid());
     });
-  }
-
-  DetailsRequestFormState.prototype._events = function(){
-    var self = this;
-    this.el.find("input, textarea, select, radio").on("change keypress blur focus keyup", function(e){
-      var el = this;
-      self.fieldChanged(e, el)
-    });
-  }
-
-  DetailsRequestFormState.prototype.fieldChanged = function(e, el){
-    this.el.trigger("form:changed"); 
   }
 
   return DetailsRequestFormState;
