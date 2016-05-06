@@ -14,7 +14,6 @@ describe 'ActionBar', ->
       expect(actionBar.el.find('.save-button input').is(":disabled")).to.eql(true)
   
   describe '#_events .save-button', ->
-
     it "flag is set", ->
       flag = false
       actionBar = new ActionBar(getActionBarContent())
@@ -31,7 +30,6 @@ describe 'ActionBar', ->
       expect(flag).to.eql(true)
   
   describe '#_events .cancel-button', ->
-
     it "cancel fires event when enabled", ->
       flag = false
       actionBar = new ActionBar(getActionBarContent())
