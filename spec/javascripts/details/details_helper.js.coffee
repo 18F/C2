@@ -48,6 +48,7 @@
         <label>
           <input id="field_2">
         </label>
+        <input id="submit" type="Submit">
       </form>
     </div>
   ')

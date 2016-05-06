@@ -11,7 +11,7 @@ describe 'DetailsRequestFormState', ->
       form = new DetailsRequestFormState(content)  
       form._setup()
       guidFields = content.find('[data-field-guid]')
-      expect(guidFields.length).to.eql(3)
+      expect(guidFields.length).to.eql(4)
       expect(guidFields.length).not.eql(2)
   
   describe '#_event', ->
