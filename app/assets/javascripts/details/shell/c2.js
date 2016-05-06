@@ -48,7 +48,7 @@ C2 = (function() {
   }
   
   C2.prototype._checkFieldChange = function(){
-    this.formState.el.on('form:changed', function(){
+    this.detailsRequestForm.el.on('form:changed', function(){
 
     });
   }
