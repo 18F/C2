@@ -26,6 +26,38 @@ describe 'C2', ->
       c2 = new C2(testParam)
       expect(c2.config.actionBar).to.eql(test)
 
+    it "check config passing test param editMode", ->
+      test = "edit-mode-test"
+      testParam = {
+        editMode: test
+      }
+      c2 = new C2(testParam)
+      expect(c2.config.editMode).to.eql(test)
+
+    it "check config passing test param attachmentCard", ->
+      test = "attachment-card-test"
+      testParam = {
+        attachmentCard: test
+      }
+      c2 = new C2(testParam)
+      expect(c2.config.attachmentCard).to.eql(test)
+
+    it "check config passing test param formState", ->
+      test = "form-state-test"
+      testParam = {
+        requestDetails: test
+      }
+      c2 = new C2(testParam)
+      expect(c2.config.formState).to.eql(test)
+
+    it "check config passing test param detailsSave", ->
+      test = "details-save-test"
+      testParam = {
+        requestDetails: test
+      }
+      c2 = new C2(testParam)
+      expect(c2.config.detailsSave).to.eql(test)
+
   describe '#test inits', ->
     it "event setup for action-bar-clicked:save trigger", ->
       flag = false
