@@ -1,9 +1,11 @@
 @setupC2TestParams = ->
   {
-    editMode:         getEditModeContent(),
-    attachmentCard:   getAttachmentContent(),
-    actionBar:        getActionBarContent(),
-    requestDetails:   getRequestDetailsForm()
+    editMode: getEditModeContent(),
+    formState: getRequestDetailsForm(),
+    detailsForm: getRequestDetailsForm(),
+    detailsSave: getRequestDetailsForm(),
+    attachmentCard: getAttachmentContent(),
+    actionBar: getActionBarContent(),
   }
 
 @getEditModeContent = ->

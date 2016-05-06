@@ -51,7 +51,7 @@ describe 'C2', ->
     it "check config passing test param formState", ->
       test = "form-state-test"
       testParam = {
-        requestDetails: test
+        formState: test
       }
       c2 = new C2(testParam)
       expect(c2.config.formState).to.eql(test)
@@ -59,7 +59,7 @@ describe 'C2', ->
     it "check config passing test param detailsSave", ->
       test = "details-save-test"
       testParam = {
-        requestDetails: test
+        detailsSave: test
       }
       c2 = new C2(testParam)
       expect(c2.config.detailsSave).to.eql(test)
