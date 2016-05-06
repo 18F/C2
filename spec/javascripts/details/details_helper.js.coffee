@@ -1,3 +1,11 @@
+@setupC2TestParams = ->
+  {
+    editMode: getEditModeContent(),
+    attachmentCard: getAttachmentContent(),
+    actionBar: getActionBarContent(),
+    requestDetails: getRequestDetailsContent()
+  }
+
 @getEditModeContent = ->
   $('
     <div class="view-mode" id="mode-parent"></div>
