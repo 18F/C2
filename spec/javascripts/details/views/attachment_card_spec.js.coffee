@@ -1,23 +1,12 @@
 #= require jquery
 #= require details/views/attachment_card
+#= require details/details_helper
 
 describe 'Attachment Card', ->
-  getContent = ->
-    $('
-      <div class="card-for-attachments"></div>
-    ')
-    .html('
-      <label for="attachment_file" class="attachment-label">file label</label>
-        <form id="new_attachment">
-          <input id="attachment_file" type="file">
-          <button type="submit">
-        </form>
-        <ul class="attachment-list"></ul>
-    ')
 
   describe '#initialize', ->
     it "on load it returns controller with options", ->
-      controller = new AttachmentCardController(getContent())  
+      controller = new AttachmentCardController(getAttachmentContent())  
       expect(controller.label_class).to.eql('attachment-label')
       expect(controller.list_item_class).to.eql('attachment-list-item')
       expect(controller.loading_class).to.eql('attachment-loading')
@@ -29,26 +18,26 @@ describe 'Attachment Card', ->
 
   describe '#disableLabel()', ->
     it "disables the label of the file input", ->
-      content = getContent();
+      content = getAttachmentContent();
       controller = new AttachmentCardController(content)
       controller.disableLabel();
       expect(content.find('label').hasClass('disabled'))
 
   describe '#getListItem()', ->
     it "returns a attachment list item", ->
-      controller = new AttachmentCardController(getContent())
+      controller = new AttachmentCardController(getAttachmentContent())
       expect(controller.getListItem().html())
        .to
         .eql('<img class="attachment-loading-gif" src="/assets/spin.gif" alt="loading"><strong class="attachment-loading"></strong>')
 
   describe '#appendLoadingFile()', ->
     it "appends loading file to an empty list", ->
-      content = getContent()
+      content = getAttachmentContent()
       controller = new AttachmentCardController(content)
       controller.appendLoadingFile();
       expect(content.find('.attachment-list').html()).to.eql('<li class="attachment-list-item attachment-loading"><img class="attachment-loading-gif" src="/assets/spin.gif" alt="loading"><strong class="attachment-loading"></strong></li>')
     it "appends a second file after the first", ->
-      content = getContent()
+      content = getAttachmentContent()
       controller = new AttachmentCardController(content)
       controller.appendLoadingFile();
       controller.appendLoadingFile();
