@@ -86,6 +86,26 @@ describe 'C2', ->
       expect(state).to.eql(true)
       expect(flag).to.eql(true)
 
+  describe '#events _actionBarState', ->
+    it "editMode is on when state when edit-mode:on", ->
+      testParams = setupC2TestParams()
+      c2 = new C2(testParams)
+      isEditMode = c2.actionBar.el.hasClass('edit-actions')
+      expect(isEditMode).to.eql(false)
+      c2.editMode.el.trigger('edit-mode:on')
+      isEditMode = c2.actionBar.el.hasClass('edit-actions')
+      expect(isEditMode).to.eql(true)
+    
+    it "editMode is off when state when edit-mode:off", ->
+      testParams = setupC2TestParams()
+      c2 = new C2(testParams)
+      c2.editMode.el.trigger('edit-mode:on')
+      isEditMode = c2.actionBar.el.hasClass('edit-actions')
+      expect(isEditMode).to.eql(true)
+      c2.editMode.el.trigger('edit-mode:off')
+      isEditMode = c2.actionBar.el.hasClass('edit-actions')
+      expect(isEditMode).to.eql(false)
+  
   describe '#events _actionBarSave', ->
     it "action-bar-clicked:save is fired through action-bar-clicked:saved", ->
       flag = false

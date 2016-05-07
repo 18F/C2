@@ -52,6 +52,8 @@ C2 = (function() {
 
   C2.prototype._setupEvents = function(){
     this._checkFieldChange();
+    this._actionBarSave();
+    this._actionBarState();
   }
   
   C2.prototype._checkFieldChange = function(){
@@ -61,6 +63,17 @@ C2 = (function() {
       if (formChanged) {
         editMode.stateTo('edit');
       }
+    });
+  }
+
+  C2.prototype._actionBarState = function(){
+    var editModeEl = this.editMode.el;
+    var actionBar = this.actionBar;
+    editModeEl.on('edit-mode:on', function(){
+      actionBar.editMode();
+    });
+    editModeEl.on('edit-mode:off', function(){
+      actionBar.viewMode();
     });
   }
 
