@@ -63,3 +63,44 @@ describe 'C2', ->
       }
       c2 = new C2(testParam)
       expect(c2.config.detailsSave).to.eql(test)
+
+  describe '#events _checkFieldChange', ->
+    it "change state to edit when field changes", ->
+      testParams = setupC2TestParams()
+      c2 = new C2(testParams) 
+      c2.editMode.stateTo('view') # cue up state
+      expect(c2.editMode.getState()).to.eql(false)
+      c2.detailsRequestForm.el.trigger('form:changed')
+      expect(c2.editMode.getState()).to.eql(true)
+
+  describe '#action-bar-click inits', ->
+    it "event setup for action-bar-clicked:save trigger", ->
+      flag = false
+      testParams = setupC2TestParams()
+      c2 = new C2(testParams) 
+      c2.editMode.stateTo('edit')
+      state = c2.editMode.getState()
+      c2.actionBar.el.on "action-bar-clicked:saved", ->
+        flag = true
+      c2.actionBar.el.trigger("action-bar-clicked:save")
+      expect(state).to.eql(true)
+      expect(flag).to.eql(true)
+
+  describe '#events _actionBarSave', ->
+    it "action-bar-clicked:save is fired through action-bar-clicked:saved", ->
+      flag = false
+      testParams = setupC2TestParams()
+      c2 = new C2(testParams) 
+      c2.actionBar.el.on 'action-bar-clicked:saved', ->
+        flag = true
+      c2.actionBar.el.trigger('action-bar-clicked:save')
+      expect(flag).to.eql(true)
+    
+    it "action-bar-clicked:save is fired through details-form:save", ->
+      flag = false
+      testParams = setupC2TestParams()
+      c2 = new C2(testParams) 
+      c2.detailsSave.el.on 'details-form:save', ->
+        flag = true
+      c2.detailsSave.el.trigger('details-form:save')
+      expect(flag).to.eql(true)

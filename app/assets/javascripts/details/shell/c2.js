@@ -53,6 +53,16 @@ C2 = (function() {
   C2.prototype._setupEvents = function(){
     this._checkFieldChange();
   }
+  
+  C2.prototype._checkFieldChange = function(){
+    var formChanged = true;
+    var editMode = this.editMode;
+    this.detailsRequestForm.el.on('form:changed', function(){
+      if (formChanged) {
+        editMode.stateTo('edit');
+      }
+    });
+  }
 
   C2.prototype._actionBarSave = function(){
     var detailsSaveEl = this.detailsSave.el;
