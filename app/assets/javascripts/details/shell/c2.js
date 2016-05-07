@@ -1,4 +1,5 @@
 var C2;
+
 C2 = (function() {
   
   function C2(){
@@ -22,15 +23,18 @@ C2 = (function() {
 
   C2.prototype._setupData = function(){
     var config = this.config;
+    this.detailsSave = new DetailsSave(config.detailsSave);
   }
 
   C2.prototype._setupStates = function(){
     var config = this.config;
     this.editMode = new EditStateController(config.editMode);
+    this.formState = new DetailsRequestFormState(config.formState);
   }
   
   C2.prototype._setupViews = function(){
     var config = this.config;
+    this.detailsRequestForm = new DetailsRequestForm(config.detailsForm);
     this.attachmentCardController = new AttachmentCardController(config.attachmentCard);
     this.actionBar = new ActionBar(config.actionBar);
   }
