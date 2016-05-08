@@ -23,13 +23,20 @@ UndoCheck = (function(){
     });
   }
 
+  UndoCheck.prototype.hasChanged = function(){
+    if(this.startValue == this.el.html()){
+      return true;
+    }
+    return false;
+  }
+
   UndoCheck.prototype.saveState = function(){
     this.startValue = this.el.html();
   }
 
   UndoCheck.prototype.cancelChanges = function(){
     var self = this;
-    this.text.html(self.startValue);
+    this.el.html(self.startValue);
   }
 
   return UndoCheck;

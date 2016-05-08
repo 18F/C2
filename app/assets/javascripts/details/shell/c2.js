@@ -60,11 +60,13 @@ C2 = (function() {
   }
   
   C2.prototype._checkFieldChange = function(){
-    var formChanged = true;
+    var self = this;
     var editMode = this.editMode;
     this.detailsRequestForm.el.on('form:changed', function(){
-      if (formChanged) {
-        editMode.stateTo('edit');
+      if (self.undoCheck.hasChanged()) {
+        editMode.el.trigger('edit-mode:on');
+      } else {
+        editMode.el.trigger('edit-mode:off');
       }
     });
   }
@@ -81,9 +83,11 @@ C2 = (function() {
   }
 
   C2.prototype._setupActionBarCancel = function(){
+    var editModeEl = this.editMode.el;
     var actionBar = this.actionBar.el;
     var undoCheck = this.undoCheck.el;
     actionBar.on("action-bar-clicked:cancel", function(){
+      editModeEl.trigger('edit-mode:off');
       undoCheck.trigger("undo-check:cancel");
     });
   }
