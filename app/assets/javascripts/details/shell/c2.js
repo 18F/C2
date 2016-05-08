@@ -54,7 +54,8 @@ C2 = (function() {
 
   C2.prototype._setupEvents = function(){
     this._checkFieldChange();
-    this._actionBarSave();
+    this._setupActionBarSave();
+    this._setupActionBarCancel();
     this._actionBarState();
   }
   
@@ -79,10 +80,20 @@ C2 = (function() {
     });
   }
 
-  C2.prototype._actionBarSave = function(){
+  C2.prototype._setupActionBarCancel = function(){
+    var actionBar = this.actionBar.el;
+    var undoCheck = this.undoCheck.el;
+    actionBar.on("action-bar-clicked:cancel", function(){
+      undoCheck.trigger("undo-check:cancel");
+    });
+  }
+
+  C2.prototype._setupActionBarSave = function(){
     var detailsSaveEl = this.detailsSave.el;
     var actionBar = this.actionBar.el;
+    var undoCheck = this.undoCheck.el;
     actionBar.on("action-bar-clicked:save", function(){
+      undoCheck.trigger("undo-check:save");
       actionBar.trigger("action-bar-clicked:saved");
       detailsSaveEl.trigger("details-form:save");
     });
