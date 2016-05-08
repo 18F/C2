@@ -64,10 +64,6 @@ C2 = (function() {
     var editMode = this.editMode;
     this.detailsRequestForm.el.on('form:changed', function(){
       editMode.el.trigger('edit-mode:on');
-      console.log(self.undoCheck);
-      if (!self.undoCheck.hasChanged()) {
-        editMode.el.trigger('edit-mode:off');
-      }
     });
   }
 
