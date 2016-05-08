@@ -4,12 +4,13 @@ C2 = (function() {
   function C2(config){
     config = config || {};
     this.config = {
-      editMode:       '#mode-parent',
-      formState:      '#request-details-card',
+      actionBar:      '.action-bar-wrapper',
+      attachmentCard: '.card-for-attachments',
       detailsForm:    '#request-details-card',
       detailsSave:    '#request-details-card',
-      attachmentCard: '.card-for-attachments',
-      actionBar:      '.action-bar-wrapper'
+      editMode:       '#mode-parent',
+      formState:      '#request-details-card',
+      undoCheck:      '#request-details-card form',
     }
     this._overrideTestConfig(config);
     this._blastOff();
@@ -35,6 +36,7 @@ C2 = (function() {
   C2.prototype._setupData = function(){
     var config = this.config;
     this.detailsSave = new DetailsSave(config.detailsSave);
+    this.undoCheck = new UndoCheck(config.undoCheck);
   }
 
   C2.prototype._setupStates = function(){
