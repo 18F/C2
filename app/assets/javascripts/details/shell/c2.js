@@ -68,36 +68,38 @@ C2 = (function() {
   }
 
   C2.prototype._actionBarState = function(){
-    var editModeEl = this.editMode.el;
+    var editMode = this.editMode.el;
     var actionBar = this.actionBar;
-    editModeEl.on('edit-mode:on', function(){
+    editMode.on('edit-mode:on', function(){
       console.log('Running edit-mode:on');
       actionBar.editMode();
     });
-    editModeEl.on('edit-mode:off', function(){
+    editMode.on('edit-mode:off', function(){
       console.log('Running edit-mode:off');
       actionBar.viewMode();
     });
   }
 
   C2.prototype._setupActionBarCancel = function(){
-    var editModeEl = this.editMode.el;
+    var editMode = this.editMode.el;
     var actionBar = this.actionBar.el;
     var undoCheck = this.undoCheck.el;
+    var detailsRequestForm = this.detailsRequestForm;
     actionBar.on("action-bar-clicked:cancel", function(){
-      editModeEl.trigger('edit-mode:off');
+      editMode.trigger('edit-mode:off');
       undoCheck.trigger("undo-check:cancel");
+      detailsRequestForm._setup();
     });
   }
 
   C2.prototype._setupActionBarSave = function(){
-    var detailsSaveEl = this.detailsSave.el;
+    var detailsSave = this.detailsSave.el;
     var actionBar = this.actionBar.el;
     var undoCheck = this.undoCheck.el;
     actionBar.on("action-bar-clicked:save", function(){
       undoCheck.trigger("undo-check:save");
       actionBar.trigger("action-bar-clicked:saved");
-      detailsSaveEl.trigger("details-form:save");
+      detailsSave.trigger("details-form:save");
     });
   }
 
