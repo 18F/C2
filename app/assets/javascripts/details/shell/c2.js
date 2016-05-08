@@ -63,9 +63,9 @@ C2 = (function() {
     var self = this;
     var editMode = this.editMode;
     this.detailsRequestForm.el.on('form:changed', function(){
-      if (self.undoCheck.hasChanged()) {
-        editMode.el.trigger('edit-mode:on');
-      } else {
+      editMode.el.trigger('edit-mode:on');
+      console.log(self.undoCheck);
+      if (!self.undoCheck.hasChanged()) {
         editMode.el.trigger('edit-mode:off');
       }
     });
@@ -75,9 +75,11 @@ C2 = (function() {
     var editModeEl = this.editMode.el;
     var actionBar = this.actionBar;
     editModeEl.on('edit-mode:on', function(){
+      console.log('Running edit-mode:on');
       actionBar.editMode();
     });
     editModeEl.on('edit-mode:off', function(){
+      console.log('Running edit-mode:off');
       actionBar.viewMode();
     });
   }
