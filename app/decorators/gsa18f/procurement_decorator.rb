@@ -35,17 +35,28 @@ module Gsa18f
 
     def new_display
       [
-        { partial: "gsa18f/fields/office" },
-        { partial: "gsa18f/fields/purchase_type" },
-        { partial: "gsa18f/fields/product_name_and_description" },
-        { partial: "gsa18f/fields/justification" },
-        { partial: "gsa18f/fields/link_to_product" },
-        { partial: "gsa18f/fields/cost_per_unit" },
-        { partial: "gsa18f/fields/quantity" },
-        { partial: "gsa18f/fields/recurring" },
-        { partial: "gsa18f/fields/date_requested" },
-        { partial: "gsa18f/fields/urgency" },
-        { partial: "gsa18f/fields/additional_info" }
+        { key: "office",
+          partial: "gsa18f/fields/office" },
+        { key: "purchase_type",
+          partial: "gsa18f/fields/purchase_type" },
+        { key: "product_name_and_description",
+          partial: "gsa18f/fields/product_name_and_description" },
+        { key: "justification",
+          partial: "gsa18f/fields/justification" },
+        { key: "link_to_product",
+          partial: "gsa18f/fields/link_to_product" },
+        { key: "cost_per_unit",
+          partial: "gsa18f/fields/cost_per_unit" },
+        { key: "quantity",
+          partial: "gsa18f/fields/quantity" },
+        { key: "recurring",
+          partial: "gsa18f/fields/recurring" },
+        { key: "date_requested",
+          partial: "gsa18f/fields/date_requested" },
+        { key: "urgency",
+          partial: "gsa18f/fields/urgency" },
+        { key: "additional_info",
+          partial: "gsa18f/fields/additional_info" }
       ]
     end
 

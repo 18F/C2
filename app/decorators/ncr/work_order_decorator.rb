@@ -31,16 +31,25 @@ module Ncr
       end
     end
 
+
     def new_display
       [
-        { partial: "ncr/fields/description" },
-        { partial: "ncr/fields/expense_type" },
-        { partial: "ncr/fields/ncr_organization" },
-        { partial: "ncr/fields/vendor" },
-        { partial: "ncr/fields/building_number" },
-        { partial: "ncr/fields/cl_number" },
-        { partial: "ncr/fields/direct_pay" },
-        { partial: "ncr/fields/amount" }
+        { key: "description",
+          partial: "ncr/fields/description" },
+        { key: "expense_type",
+          partial: "ncr/fields/expense_type" },
+        { key: "ncr_organization",
+          partial: "ncr/fields/ncr_organization" },
+        { key: "vendor",
+          partial: "ncr/fields/vendor" },
+        { key: "building_number",
+          partial: "ncr/fields/building_number" },
+        { key: "cl_number",
+          partial: "ncr/fields/cl_number" },
+        { key: "direct_pay",
+          partial: "ncr/fields/direct_pay" },
+        { key: "amount",
+          partial: "ncr/fields/amount" }
       ]
     end
 

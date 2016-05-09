@@ -14,7 +14,7 @@
               .detail-wrapper
                 .detail-display
                   %label.detail-element
-                    = field[:value][0]
+                    = field[:key]
                   %span.detail-value{id: field[:key] + '-' + @client_data_instance.id.to_s }
                     = request_details_form_value field[:value][1]
                 .detail-edit
