@@ -16,9 +16,9 @@
                   %label.detail-element
                     = field[:key]
                   %span.detail-value{id: field[:key] + '-' + @client_data_instance.id.to_s }
-                    = request_details_form_value field[:value][1]
+                    = @proposal[field[:key]]
                 .detail-edit
                   %label.detail-element
                   %span.detail-value
-                    = render partial: field[:partial], locals: { f: f, proposal: proposal, client_data: client_data_instance }
+                    = render partial: field[:partial], locals: { f: f, proposal: @proposal, client_data: @client_data_instance }
             = submit_tag "Submit", hidden: true
