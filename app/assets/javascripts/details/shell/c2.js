@@ -51,6 +51,39 @@ C2 = (function() {
   }
 
   C2.prototype._setupEvents = function(){
+    this._checkFieldChange();
+    this._actionBarSave();
+    this._actionBarState();
+  }
+  
+  C2.prototype._checkFieldChange = function(){
+    var formChanged = true;
+    var editMode = this.editMode;
+    this.detailsRequestForm.el.on('form:changed', function(){
+      if (formChanged) {
+        editMode.stateTo('edit');
+      }
+    });
+  }
+
+  C2.prototype._actionBarState = function(){
+    var editModeEl = this.editMode.el;
+    var actionBar = this.actionBar;
+    editModeEl.on('edit-mode:on', function(){
+      actionBar.editMode();
+    });
+    editModeEl.on('edit-mode:off', function(){
+      actionBar.viewMode();
+    });
+  }
+
+  C2.prototype._actionBarSave = function(){
+    var detailsSaveEl = this.detailsSave.el;
+    var actionBar = this.actionBar.el;
+    actionBar.on("action-bar-clicked:save", function(){
+      actionBar.trigger("action-bar-clicked:saved");
+      detailsSaveEl.trigger("details-form:save");
+    });
   }
 
   return C2;
