@@ -10,7 +10,8 @@ C2 = (function() {
       detailsSave:    '#request-details-card',
       editMode:       '#mode-parent',
       formState:      '#request-details-card',
-      undoCheck:      '#request-details-card form'
+      undoCheck:      '#request-details-card form',
+      observerCard:   '.card-for-observers'
     }
     this._overrideTestConfig(config);
     this._blastOff();
@@ -50,6 +51,7 @@ C2 = (function() {
     var config = this.config;
     this.detailsRequestForm = new DetailsRequestForm(config.detailsForm);
     this.attachmentCardController = new AttachmentCardController(config.attachmentCard);
+    this.observerCardController = new ObserverCardController(config.observerCard);
     this.actionBar = new ActionBar(config.actionBar);
   }
 

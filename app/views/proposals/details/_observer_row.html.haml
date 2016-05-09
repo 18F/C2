@@ -3,4 +3,4 @@
   - if role_str.present?
     = "(#{role_str})"
   - if observation && policy(observation).can_destroy?
-    = button_to "", proposal_observation_path(proposal, observation), method: :delete, data: {confirm: "Are you sure?"}, remote: true
+    = button_to "", proposal_observation_path(proposal, observation), method: :delete, data: {confirm: "Are you sure?"}, remote: true, class: "observer-remove-button"

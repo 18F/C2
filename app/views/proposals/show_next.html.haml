@@ -20,7 +20,8 @@
       = render partial: "proposals/details/request_details", locals: { proposal: @proposal }
       .card-for-attachments
         = render partial: "proposals/details/attachment", locals: { proposal: @proposal }
-      = render partial: "proposals/details/observer", locals: { proposal: @proposal }
+      .card-for-observers
+        = render partial: "proposals/details/observer", locals: { proposal: @proposal }
   
       .row
         .medium-12.column.wrap-hard

@@ -10,10 +10,29 @@ AttachmentCardController = (function(){
 
   AttachmentCardController.prototype._setup = function(opts){
     opts = opts || {};
-    this.default_config = {label_class: "attachment-label", list_item_class: "attachment-list-item", loading_class: "attachment-loading", file_class: "attachment-loading-file", gif_class: "attachment-loading-gif",list_class: "attachment-list", form_id: "#new_attachment", gif_src: "/assets/spin.gif"};
+    this.default_config = this._getDefaultConfig();
     this._setDefaults(opts);
     this._event();
   }
+
+  AttachmentCardController.prototype._getDefaultConfig = function(){
+    return $.extend({ 
+      form_id: "#new_attachment",
+      gif_src: "/assets/spin.gif"
+    }, this._getDefaultClasses());
+  }
+
+  AttachmentCardController.prototype._getDefaultClasses = function(){
+    return {
+      label_class: "attachment-label",
+      list_item_class: "attachment-list-item",
+      loading_class: "attachment-loading",
+      file_class: "attachment-loading-file",
+      gif_class: "attachment-loading-gif",
+      list_class: "attachment-list"
+    }
+  }
+
 
   AttachmentCardController.prototype._setDefaults = function(opts){
     opts = opts || {};
