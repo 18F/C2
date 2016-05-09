@@ -23,7 +23,7 @@ UndoCheck = (function(){
 
   UndoCheck.prototype.hasChanged = function(){
     this.newValue = this.el.html();
-    if(this.startValue == this.newValue){
+    if(this.startValue != this.newValue){
       return true;
     } else {
       return false;
@@ -39,6 +39,12 @@ UndoCheck = (function(){
     this.el.html(self.startValue);
     this.resetSelectize();
     this.removeOldSelectize();
+    this.resetFilters();
+    self.startValue = this.el.html();
+  }
+
+  UndoCheck.prototype.resetFilters = function(){
+    Filter.setupFilter()
   }
 
   UndoCheck.prototype.resetSelectize = function(){

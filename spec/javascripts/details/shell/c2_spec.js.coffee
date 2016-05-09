@@ -75,13 +75,18 @@ describe 'C2', ->
       expect(c2.config.undoCheck).to.eql(test)
 
   describe '#events _checkFieldChange', ->
-    it "change state to edit when field changes", ->
+    it "check that field change is detected", ->
       testParams = setupC2TestParams()
       c2 = new C2(testParams) 
-      c2.editMode.stateTo('view') # cue up state
-      expect(c2.editMode.getState()).to.eql(false)
-      c2.detailsRequestForm.el.trigger('form:changed')
-      expect(c2.editMode.getState()).to.eql(true)
+      c2.editMode.stateTo('edit') # cue up state
+      first_field = c2.undoCheck.el.find('textarea')
+      expect(c2.undoCheck.hasChanged()).to.eql(false)
+      @triggerKeyDown(first_field, 72) # h
+      @triggerKeyDown(first_field, 69) # e
+      @triggerKeyDown(first_field, 76) # l
+      @triggerKeyDown(first_field, 76) # l
+      @triggerKeyDown(first_field, 79) # o
+      expect(c2.undoCheck.hasChanged()).to.eql(true)
 
   describe '#action-bar-click inits', ->
     it "event setup for action-bar-clicked:save trigger", ->

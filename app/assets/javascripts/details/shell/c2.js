@@ -63,17 +63,22 @@ C2 = (function() {
     var self = this;
     var editMode = this.editMode;
     this.detailsRequestForm.el.on('form:changed', function(){
-      editMode.el.trigger('edit-mode:on');
+      console.log('self.undoCheck.hasChanged(): ', self.undoCheck.hasChanged());
+      if(self.undoCheck.hasChanged()){
+        editMode.el.trigger('edit-mode:has-changed');
+      } else {
+        editMode.el.trigger('edit-mode:not-changed');
+      }
     });
   }
 
   C2.prototype._actionBarState = function(){
     var editMode = this.editMode.el;
     var actionBar = this.actionBar;
-    editMode.on('edit-mode:on', function(){
+    editMode.on('edit-mode:has-changed', function(){
       actionBar.editMode();
     });
-    editMode.on('edit-mode:off', function(){
+    editMode.on('edit-mode:not-changed', function(){
       actionBar.viewMode();
     });
   }

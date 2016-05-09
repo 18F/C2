@@ -25,3 +25,5 @@ class @FilterSet
   hide: ->
     filter = new FieldFilter(@children())
     filter.hide()
+
+window.FilterSet = FilterSet
