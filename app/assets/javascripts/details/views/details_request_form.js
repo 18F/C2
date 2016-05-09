@@ -25,7 +25,7 @@ DetailsRequestForm = (function(){
               $(el).attr('checked', 'true');
               break;
             case "checkbox":
-              if (el.checked == true){
+              if (el.checked === true){
                 $(el).attr('checked', 'false');
               } else {
                 $(el).attr('checked', 'true');

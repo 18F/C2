@@ -23,7 +23,7 @@ UndoCheck = (function(){
 
   UndoCheck.prototype.hasChanged = function(){
     this.newValue = this.el.html();
-    if(this.startValue != this.newValue){
+    if(this.startValue !== this.newValue){
       return true;
     } else {
       return false;

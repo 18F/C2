@@ -21,7 +21,7 @@ class @Filter
     $scope.find("[data-filter-control]").map (idx, control) ->
       new Filter($scope, $(control))
 
-  @setupFilter: ->
+  @setupFilter = ->
     $scope = $(document.body)
     filters = Filter.generateIn($scope)
     for filter in filters
