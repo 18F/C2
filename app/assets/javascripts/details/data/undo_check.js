@@ -41,6 +41,21 @@ UndoCheck = (function(){
   UndoCheck.prototype.cancelChanges = function(){
     var self = this;
     this.el.html(self.startValue);
+    this.resetSelectize();
+    this.removeOldSelectize();
+  }
+
+  UndoCheck.prototype.resetSelectize = function(){
+    this.el.find(".js-selectize").each(function(i, el) {
+      var selectizer;
+      selectizer = new Selectizer(el);
+      selectizer.enable();
+      return selectizer.add_label();
+    });
+  }
+
+  UndoCheck.prototype.removeOldSelectize = function(){
+    this.el.find('.form-group .js-selectize').not('.selectized').remove();
   }
 
   return UndoCheck;

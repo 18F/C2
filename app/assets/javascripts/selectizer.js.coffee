@@ -48,3 +48,5 @@ $ ->
     selectizer = new Selectizer(el)
     selectizer.enable()
     selectizer.add_label()
+
+window.Selectizer = Selectizer
