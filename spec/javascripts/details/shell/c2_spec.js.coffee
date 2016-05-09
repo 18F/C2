@@ -69,7 +69,7 @@ describe 'C2', ->
     it "check config passing test param undoCheck", ->
       test = "undo-check-test"
       testParam = {
-        detailsSave: test
+        undoCheck: test
       }
       c2 = new C2(testParam)
       expect(c2.config.undoCheck).to.eql(test)
