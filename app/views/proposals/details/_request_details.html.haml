@@ -11,6 +11,5 @@
         .content-content.column#view-request-details
           = simple_form_for @client_data_instance, html: { multipart: true }, remote: true do |f|
             - proposal.new_fields_for_display.each do |field|
-              = render partial: field[:partial],
-                locals: { f: f }
+              = request_detail_form field, f, @proposal, @client_data_instance
             = submit_tag "Submit", hidden: true
