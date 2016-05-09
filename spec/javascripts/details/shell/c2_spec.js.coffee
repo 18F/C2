@@ -5,6 +5,7 @@
 #= require details/views/attachment_card
 #= require details/views/details_request_form
 #= require details/data/details_save
+#= require details/data/undo_check
 #= require details/shell/c2
 #= require details/details_helper
 
@@ -23,6 +24,7 @@ describe 'C2', ->
       expect(c2.formState instanceof DetailsRequestFormState).to.eql(true)
       expect(c2.actionBar instanceof ActionBar).to.eql(true)
       expect(c2.detailsSave instanceof DetailsSave).to.eql(true)
+      expect(c2.undoCheck instanceof UndoCheck).to.eql(true)
 
     it "check config passing test param actionBar", ->
       test = "action-bar-test"
@@ -63,6 +65,14 @@ describe 'C2', ->
       }
       c2 = new C2(testParam)
       expect(c2.config.detailsSave).to.eql(test)
+
+    it "check config passing test param undoCheck", ->
+      test = "undo-check-test"
+      testParam = {
+        detailsSave: test
+      }
+      c2 = new C2(testParam)
+      expect(c2.config.undoCheck).to.eql(test)
 
   describe '#events _checkFieldChange', ->
     it "change state to edit when field changes", ->
