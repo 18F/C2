@@ -23,21 +23,4 @@ module ProposalsHelper
     )
   end
 
-  def request_detail_form field, f, proposal, client_data_instance
-    "<div class='detail-wrapper'>"
-      "<div class='detail-display'>"
-        "<label class='detail-element'>"
-          field.to_json
-          # field[:value][0]
-        "</label>"
-        # "<span class='detail-value' id='" + field[:key] + '-' + client_data_instance.id.to_s + "'>"
-          # request_details_form_value field[:value][1]
-        # "</span>"
-      "</div>"
-      "<div class='detail-edit'>"
-        render partial: field[:partial],
-          locals: { f: f, proposal: proposal, client_data: client_data_instance }
-      "</div>"
-    "</div>"
-  end
 end
