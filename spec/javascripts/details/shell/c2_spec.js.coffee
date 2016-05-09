@@ -8,6 +8,7 @@
 #= require details/data/undo_check
 #= require details/shell/c2
 #= require details/details_helper
+#= require spec_helper
 
 describe 'C2', ->
 

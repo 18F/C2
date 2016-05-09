@@ -15,6 +15,27 @@ DetailsRequestForm = (function(){
     var self = this;
     this.el.find("input, textarea, select, radio").on("change keypress blur focus keyup", function(e){
       var el = this;
+      switch(el.nodeName){
+        case "TEXTAREA":
+          $(el).text(el.value);
+          break;
+        case "INPUT":
+          switch(el.type){
+            case "radio":
+              $(el).attr('checked', 'true');
+              break;
+            case "checkbox":
+              if (el.checked == true){
+                $(el).attr('checked', 'false');
+              } else {
+                $(el).attr('checked', 'true');
+              }
+              break;
+          }
+          break;
+        default:
+          break;
+      }
       self.fieldChanged(e, el);
     });
 
