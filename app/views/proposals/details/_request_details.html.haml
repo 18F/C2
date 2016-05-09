@@ -16,7 +16,7 @@
                   %label.detail-element
                     = field[:key]
                   %span.detail-value{id: field[:key] + '-' + @client_data_instance.id.to_s }
-                    = @proposal[field[:key]]
+                    = @client_data_instance[field[:key]]
                 .detail-edit
                   %label.detail-element
                   %span.detail-value
