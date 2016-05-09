@@ -1,8 +1,8 @@
 var C2;
-
 C2 = (function() {
   
-  function C2(){
+  function C2(config){
+    config = config || {};
     this.config = {
       editMode:       '#mode-parent',
       formState:      '#request-details-card',
@@ -11,6 +11,7 @@ C2 = (function() {
       attachmentCard: '.card-for-attachments',
       actionBar:      '.action-bar-wrapper'
     }
+    this._overrideTestConfig(config);
     this._blastOff();
   }
 
@@ -19,6 +20,16 @@ C2 = (function() {
     this._setupViews();
     this._setupData();
     this._setupEvents();
+  }
+
+  C2.prototype._overrideTestConfig = function(config){
+    var opt = this.config;
+    $.each(opt, function(key, item){
+      if(config[key]){
+        opt[key] = config[key];
+      }
+    });
+    this.config = opt;
   }
 
   C2.prototype._setupData = function(){

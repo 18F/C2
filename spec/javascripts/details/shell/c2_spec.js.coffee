@@ -23,3 +23,43 @@ describe 'C2', ->
       expect(c2.formState instanceof DetailsRequestFormState).to.eql(true)
       expect(c2.actionBar instanceof ActionBar).to.eql(true)
       expect(c2.detailsSave instanceof DetailsSave).to.eql(true)
+
+    it "check config passing test param actionBar", ->
+      test = "action-bar-test"
+      testParam = {
+        actionBar: test
+      }
+      c2 = new C2(testParam)
+      expect(c2.config.actionBar).to.eql(test)
+
+    it "check config passing test param editMode", ->
+      test = "edit-mode-test"
+      testParam = {
+        editMode: test
+      }
+      c2 = new C2(testParam)
+      expect(c2.config.editMode).to.eql(test)
+
+    it "check config passing test param attachmentCard", ->
+      test = "attachment-card-test"
+      testParam = {
+        attachmentCard: test
+      }
+      c2 = new C2(testParam)
+      expect(c2.config.attachmentCard).to.eql(test)
+
+    it "check config passing test param formState", ->
+      test = "form-state-test"
+      testParam = {
+        formState: test
+      }
+      c2 = new C2(testParam)
+      expect(c2.config.formState).to.eql(test)
+
+    it "check config passing test param detailsSave", ->
+      test = "details-save-test"
+      testParam = {
+        detailsSave: test
+      }
+      c2 = new C2(testParam)
+      expect(c2.config.detailsSave).to.eql(test)
