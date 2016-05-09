@@ -32,6 +32,7 @@ UndoCheck = (function(){
 
   UndoCheck.prototype.saveState = function(){
     this.startValue = this.newValue;
+    self.startValue = this.el.html();
   }
 
   UndoCheck.prototype.cancelChanges = function(){

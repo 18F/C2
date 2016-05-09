@@ -15,7 +15,6 @@ DetailsRequestForm = (function(){
     var self = this;
     this.el.find("input, textarea, select, radio").on("change keypress blur focus keyup", function(e){
       var el = this;
-      $(el).$('#ncr_work_order_description').val();
       self.fieldChanged(e, el);
     });
   }
