@@ -34,9 +34,10 @@ C2 = (function() {
   }
 
   C2.prototype._setupData = function(){
-    var config = this.config;
-    this.detailsSave = new DetailsSave(config.detailsSave);
-    this.undoCheck = new UndoCheck(config.undoCheck);
+    var detailsConfig = this.config.detailsSave;
+    var undoConfig = this.config.undoCheck;
+    this.detailsSave = new DetailsSave(detailsConfig);
+    this.undoCheck = new UndoCheck(undoConfig);
   }
 
   C2.prototype._setupStates = function(){
@@ -65,9 +66,9 @@ C2 = (function() {
     var detailsForm = this.detailsRequestForm;
     detailsForm.el.on('edit-toggle:trigger', function(){
       if(editMode.getState()){
-        detailsForm.setEditMode();
+        detailsForm.setMode('edit');
       } else {
-        detailsForm.setViewMode();
+        detailsForm.setMode('view');
       }
     });
   }
