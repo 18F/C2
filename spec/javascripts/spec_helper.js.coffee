@@ -4,7 +4,7 @@
   states.get()
 
 @triggerKeyDown = (element, keyCode) ->
-  press = jQuery.Event("keypress");
+  press = jQuery.Event("keyup");
   press.ctrlKey = false;
   press.which = keyCode;
   element.trigger(press);
