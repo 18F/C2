@@ -71,11 +71,9 @@ C2 = (function() {
     var editMode = this.editMode.el;
     var actionBar = this.actionBar;
     editMode.on('edit-mode:on', function(){
-      console.log('Running edit-mode:on');
       actionBar.editMode();
     });
     editMode.on('edit-mode:off', function(){
-      console.log('Running edit-mode:off');
       actionBar.viewMode();
     });
   }
