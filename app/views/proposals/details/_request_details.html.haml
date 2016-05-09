@@ -14,7 +14,7 @@
               .detail-wrapper
                 .detail-display
                   %label.detail-element
-                    = field[:key]
+                    = t("decorators."+@current_user.client_slug+"/work_order."+field[:key]) 
                   %span.detail-value{id: field[:key] + '-' + @client_data_instance.id.to_s }
                     = @client_data_instance[field[:key]]
                 .detail-edit
