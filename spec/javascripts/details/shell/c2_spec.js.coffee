@@ -5,8 +5,10 @@
 #= require details/views/attachment_card
 #= require details/views/details_request_form
 #= require details/data/details_save
+#= require details/data/undo_check
 #= require details/shell/c2
 #= require details/details_helper
+#= require spec_helper
 
 describe 'C2', ->
 
@@ -23,6 +25,7 @@ describe 'C2', ->
       expect(c2.formState instanceof DetailsRequestFormState).to.eql(true)
       expect(c2.actionBar instanceof ActionBar).to.eql(true)
       expect(c2.detailsSave instanceof DetailsSave).to.eql(true)
+      expect(c2.undoCheck instanceof UndoCheck).to.eql(true)
 
     it "check config passing test param actionBar", ->
       test = "action-bar-test"
@@ -64,14 +67,13 @@ describe 'C2', ->
       c2 = new C2(testParam)
       expect(c2.config.detailsSave).to.eql(test)
 
-  describe '#events _checkFieldChange', ->
-    it "change state to edit when field changes", ->
-      testParams = setupC2TestParams()
-      c2 = new C2(testParams) 
-      c2.editMode.stateTo('view') # cue up state
-      expect(c2.editMode.getState()).to.eql(false)
-      c2.detailsRequestForm.el.trigger('form:changed')
-      expect(c2.editMode.getState()).to.eql(true)
+    it "check config passing test param undoCheck", ->
+      test = "undo-check-test"
+      testParam = {
+        undoCheck: test
+      }
+      c2 = new C2(testParam)
+      expect(c2.config.undoCheck).to.eql(test)
 
   describe '#action-bar-click inits', ->
     it "event setup for action-bar-clicked:save trigger", ->
@@ -92,20 +94,10 @@ describe 'C2', ->
       c2 = new C2(testParams)
       isEditMode = c2.actionBar.el.hasClass('edit-actions')
       expect(isEditMode).to.eql(false)
-      c2.editMode.el.trigger('edit-mode:on')
+      c2.editMode.el.trigger('edit-mode:has-changed')
       isEditMode = c2.actionBar.el.hasClass('edit-actions')
       expect(isEditMode).to.eql(true)
-    
-    it "editMode is off when state when edit-mode:off", ->
-      testParams = setupC2TestParams()
-      c2 = new C2(testParams)
-      c2.editMode.el.trigger('edit-mode:on')
-      isEditMode = c2.actionBar.el.hasClass('edit-actions')
-      expect(isEditMode).to.eql(true)
-      c2.editMode.el.trigger('edit-mode:off')
-      isEditMode = c2.actionBar.el.hasClass('edit-actions')
-      expect(isEditMode).to.eql(false)
-  
+
   describe '#events _actionBarSave', ->
     it "action-bar-clicked:save is fired through action-bar-clicked:saved", ->
       flag = false

@@ -11,7 +11,7 @@ DetailsRequestFormState = (function(){
   }
   
   DetailsRequestFormState.prototype._setup = function(){
-    this._createGuid();
+    this._processFields();
   }
 
   DetailsRequestFormState.prototype.guid = function(){
@@ -23,11 +23,22 @@ DetailsRequestFormState = (function(){
     return s4() + "-" + s4() + "-" + s4();
   };
 
-  DetailsRequestFormState.prototype._createGuid = function(){
+  DetailsRequestFormState.prototype._processFields = function(){
     var self = this;
     this.el.find("form, input, textarea, select, radio").each(function(i, item){
-      $(item).attr("data-field-guid", self.guid());
+      self.createGuid(item);
+      self.updateSavedValue(item);
     });
+  }
+
+  DetailsRequestFormState.prototype.createGuid = function(item){
+    var self = this;
+    $(item).attr("data-field-guid", self.guid());
+  }
+
+  DetailsRequestFormState.prototype.updateSavedValue = function(item){
+    var self = this;
+    $(item).attr("data-field-value", $(item).val());
   }
 
   return DetailsRequestFormState;

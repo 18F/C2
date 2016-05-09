@@ -6,6 +6,7 @@
     detailsSave: getRequestDetailsForm(),
     attachmentCard: getAttachmentContent(),
     actionBar: getActionBarContent(),
+    undoCheck: getRequestDetailsForm(),
   }
 
 @getEditModeContent = ->

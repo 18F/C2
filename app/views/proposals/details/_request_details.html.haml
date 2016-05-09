@@ -6,7 +6,7 @@
           %h2
             Request Details
             - if !@proposal.completed?
-              = link_to "<span>Edit</span>".html_safe, class: "button secondary edit-icon fr large request-detail-edit-button"
+              = "<button class='edit-toggle'>Edit</button>".html_safe
 
         .content-content.column#view-request-details
           = simple_form_for @client_data_instance, html: { multipart: true }, remote: true do |f|

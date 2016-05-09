@@ -28,3 +28,5 @@ class @FieldFilter
 
   hide: ->
     @toggle(false)
+
+window.FieldFilter = FieldFilter
