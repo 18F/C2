@@ -82,11 +82,8 @@ describe 'C2', ->
       c2.editMode.stateTo('edit') # cue up state
       first_field = c2.undoCheck.el.find('textarea')
       expect(c2.undoCheck.hasChanged()).to.eql(false)
-      @triggerKeyDown(first_field, 72) # h
-      @triggerKeyDown(first_field, 69) # e
-      @triggerKeyDown(first_field, 76) # l
-      @triggerKeyDown(first_field, 76) # l
-      @triggerKeyDown(first_field, 79) # o
+      first_field.text('hello')
+      first_field.trigger('change')
       expect(c2.undoCheck.hasChanged()).to.eql(true)
 
   describe '#action-bar-click inits', ->
