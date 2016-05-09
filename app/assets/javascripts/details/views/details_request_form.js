@@ -46,10 +46,10 @@ DetailsRequestForm = (function(){
   }
 
   DetailsRequestForm.prototype.setMode = function(type){
-    if (type == "view"){
+    if (type === "view"){
       this.el.removeClass('edit-fields');
       this.el.addClass('view-fields');
-    } else if (type == "edit") {
+    } else if (type === "edit") {
       this.el.removeClass('view-fields');
       this.el.addClass('edit-fields');
     }
