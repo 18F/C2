@@ -10,7 +10,7 @@ C2 = (function() {
       detailsSave:    '#request-details-card',
       editMode:       '#mode-parent',
       formState:      '#request-details-card',
-      undoCheck:      '#request-details-card form',
+      undoCheck:      '#request-details-card form'
     }
     this._overrideTestConfig(config);
     this._blastOff();
