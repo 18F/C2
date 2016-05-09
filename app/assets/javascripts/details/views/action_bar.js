@@ -38,7 +38,6 @@ ActionBar = (function() {
 
   ActionBar.prototype.viewMode = function() {
     this.el.removeClass('edit-actions');
-    this.el.find('.cancel-button input').attr("disabled", "disabled");
     this.el.find('.save-button input').attr("disabled", "disabled");
   };
 
