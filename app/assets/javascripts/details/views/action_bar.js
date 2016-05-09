@@ -15,13 +15,25 @@ ActionBar = (function() {
   ActionBar.prototype._event = function() {
     this._setupActionBarClicked('save');
     this._setupActionBarClicked('cancel');
+    this._saveTriggered();
   };
 
+  /**
+   * .on("action-bar-clicked:save")
+   * .on("action-bar-clicked:cancel")
+   */
   ActionBar.prototype._setupActionBarClicked = function(buttonName) {
     var self = this;
     this.el.find('.' + buttonName + '-button input').on('click', function(){
-      self.el.trigger('actionBarClicked:' + buttonName);
+      self.el.trigger('action-bar-clicked:' + buttonName);
     });
+  }
+
+  ActionBar.prototype._saveTriggered = function(buttonName) {
+    var actionBar = this;
+    actionBar.el.on('action-bar-clicked:saved', function(){
+      actionBar.viewMode();
+    })
   }
 
   ActionBar.prototype.viewMode = function() {

@@ -1,5 +1,6 @@
 #= require jquery
 #= require details/state/edit_mode
+#= require details/details_helper
 
 describe 'EditMode', ->
   getContent = ->
