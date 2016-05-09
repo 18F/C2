@@ -57,8 +57,21 @@ C2 = (function() {
     this._setupActionBarSave();
     this._setupActionBarCancel();
     this._actionBarState();
+    this._triggerEditToggle();
   }
   
+  C2.prototype._triggerEditToggle = function(){
+    var editMode = this.editMode;
+    var detailsForm = this.detailsRequestForm;
+    detailsForm.el.on('edit-toggle:trigger', function(){
+      if(editMode.getState()){
+        detailsForm.setEditMode();
+      } else {
+        detailsForm.setViewMode();
+      }
+    });
+  }
+
   C2.prototype._checkFieldChange = function(){
     var self = this;
     var editMode = this.editMode;

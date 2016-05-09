@@ -31,34 +31,11 @@ UndoCheck = (function(){
   }
 
   UndoCheck.prototype.saveState = function(){
-    this.startValue = this.newValue;
-    self.startValue = this.el.html();
+
   }
 
   UndoCheck.prototype.cancelChanges = function(){
-    var self = this;
-    this.el.html(self.startValue);
-    this.resetSelectize();
-    this.removeOldSelectize();
-    this.resetFilters();
-    self.startValue = this.el.html();
-  }
-
-  UndoCheck.prototype.resetFilters = function(){
-    Filter.setupFilter()
-  }
-
-  UndoCheck.prototype.resetSelectize = function(){
-    this.el.find(".js-selectize").each(function(i, el) {
-      var selectizer;
-      selectizer = new Selectizer(el);
-      selectizer.enable();
-      return selectizer.add_label();
-    });
-  }
-
-  UndoCheck.prototype.removeOldSelectize = function(){
-    this.el.find('.form-group .js-selectize').not('.selectized').remove();
+    
   }
 
   return UndoCheck;

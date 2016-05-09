@@ -17,6 +17,21 @@ DetailsRequestForm = (function(){
       var el = this;
       self.fieldChanged(e, el);
     });
+
+    this.el.find('.edit-toggle').on('click', function(e){
+      e.preventDefault();
+      self.el.toggle('edit-toggle:trigger');
+    });
+  }
+
+  DetailsRequestForm.prototype.setViewMode = function(){
+    this.el.removeClass('edit-fields');
+    this.el.addClass('view-fields');
+  }
+  
+  DetailsRequestForm.prototype.setEditMode = function(){
+    this.el.removeClass('view-fields');
+    this.el.addClass('edit-fields');
   }
 
   DetailsRequestForm.prototype.fieldChanged = function(e, el){
