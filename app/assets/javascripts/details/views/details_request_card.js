@@ -55,8 +55,6 @@ DetailsRequestForm = (function(){
   }
 
   DetailsRequestForm.prototype.updateViewModeContent = function(data){
-    console.log("DetailsRequestForm.prototype.updateViewModeContent: ", data);
-    alert('Success');
     var viewEl = this.el.find('#view-request-details')
     var content = data['response'];
     var id = content['id'];
@@ -68,6 +66,7 @@ DetailsRequestForm = (function(){
         self.updateContentFields(field, value);
       }
     });
+    this.el.trigger("form:updated");
   }
 
   DetailsRequestForm.prototype.setMode = function(type){

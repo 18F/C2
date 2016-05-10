@@ -57,8 +57,23 @@ C2 = (function() {
     this._checkFieldChange();
     this._setupActionBar();
     this._triggerEditToggle();
+    this._detailDataUpdate();
+    this._detailDataError();
   }
   
+  C2.prototype._detailDataUpdate = function(){
+    var self = this;
+    this.detailsSave.el.on('details-form:success', function(data){
+      self.detailsRequestForm.updateViewModeContent(data);
+    });
+  }
+
+  C2.prototype._detailDataError = function(){
+    this.detailsSave.el.on('details-form:error', function(data){
+      alert('error');
+    });
+  }
+
   C2.prototype._triggerEditToggle = function(){
     var self = this;
     this.detailsRequestForm.el.on('edit-toggle:trigger', function(){
@@ -94,6 +109,12 @@ C2 = (function() {
     this.actionBar.el.on("action-bar-clicked:saved", function(data){
       self.detailsRequestForm.updateViewModeContent(data);
       self.detailsSaved();
+    });
+    this.detailsRequestForm.el.on("form:responded", function(data){
+      self.detailsRequestForm.updateViewModeContent(data);
+    });
+    this.detailsRequestForm.el.on("form:saved", function(data){
+      self.actionBar.el.trigger("action-bar-clicked:saved");
     });
     this.editMode.el.on('edit-mode:has-changed', function(){
       self.actionBar.editMode();

@@ -31,11 +31,11 @@ class ClientDataController < ApplicationController
       format.js do
         if errors.empty?
           update_or_notify_of_no_changes
-          js_response = { status: 'success', response: @client_data_instance }
+          js_response = { status: "success", response: @client_data_instance }
         else
-          js_response = { status: 'error', response: errors }
+          js_response = { status: "error", response: errors }
         end
-        render js: 'c2.detailsRequestForm.updateViewModeContent(' + js_response.to_json + ');'
+        render js: "c2.detailsSave.trigger('details-form:respond', " + js_response.to_json + ");"
         return 
       end
     end
