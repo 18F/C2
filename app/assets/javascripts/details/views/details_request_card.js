@@ -12,7 +12,8 @@ DetailsRequestForm = (function(){
   }
 
   DetailsRequestForm.prototype._events = function(){
-    var self = this;
+    var self = this;    
+    
     this.el.find("input, textarea, select, radio").on("change keyup", function(e){
       var el = this;
       switch(el.nodeName){
