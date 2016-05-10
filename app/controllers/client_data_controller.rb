@@ -35,7 +35,7 @@ class ClientDataController < ApplicationController
         else
           js_response = { status: 'error', response: errors }
         end
-        render json: js_response
+        render js: 'window.responseUpdate = ' + js_response.to_json + '; console.log(responseUpdate);'
         return 
       end
     end
