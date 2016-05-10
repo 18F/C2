@@ -56,7 +56,6 @@ C2 = (function() {
   C2.prototype._setupEvents = function(){
     this._checkFieldChange();
     this._setupActionBar();
-    this._actionBarState();
     this._triggerEditToggle();
   }
   
@@ -83,16 +82,6 @@ C2 = (function() {
     });
   }
 
-  C2.prototype._actionBarState = function(){
-    var self = this;
-    this.editMode.el.on('edit-mode:has-changed', function(){
-      self.actionBar.editMode();
-    });
-    this.editMode.el.on('edit-mode:not-changed', function(){
-      self.actionBar.viewMode();
-    });
-  }
-
   C2.prototype._setupActionBar = function(){
     var self = this;
     this.actionBar.el.on("action-bar-clicked:cancel", function(){
@@ -100,6 +89,12 @@ C2 = (function() {
     });
     this.actionBar.el.on("action-bar-clicked:save", function(){
       self.detailsSaved();
+    });
+    this.editMode.el.on('edit-mode:has-changed', function(){
+      self.actionBar.editMode();
+    });
+    this.editMode.el.on('edit-mode:not-changed', function(){
+      self.actionBar.viewMode();
     });
   }
 
