@@ -54,6 +54,7 @@ label.attachment-container{
 
 a.button.secondary,
 input.button.secondary,
+button.button.secondary,
 label.button.secondary
 {
   border: 1px solid $primary-color;
@@ -68,7 +69,9 @@ a.status-toggle-all{
   border-radius: 50px;
 }
 
-input[type="submit"].button{
+input[type="submit"].button,
+button[type="submit"].button
+{
   display: inline-block;
   text-align: center;
   line-height: 1;

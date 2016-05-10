@@ -105,6 +105,9 @@ C2 = (function() {
     this.actionBar.cancelDisable();
     this.undoCheck.viewed = true;
   }
+ 
+  C2.prototype.processSaveRequest = function(){
+  }
   
   C2.prototype.detailsSaved = function(){
     this.undoCheck.el.trigger("undo-check:save");

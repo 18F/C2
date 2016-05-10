@@ -23,4 +23,6 @@
 //= require peek
 //= require peek/views/performance_bar
 //= require ahoy
+//= require ladda/spin.min
+//= require ladda/ladda.min
 //= require_directory .
