@@ -104,29 +104,31 @@ C2 = (function() {
   }
 
   C2.prototype._setupActionBarCancel = function(){
-    var editMode = this.editMode;
-    var actionBar = this.actionBar;
-    var undoCheck = this.undoCheck;
-    var detailsRequestForm = this.detailsRequestForm;
+    var self = this;
     actionBar.el.on("action-bar-clicked:cancel", function(){
-      console.log('Running cancel');
-      editMode.stateTo('view');
-      undoCheck.el.trigger("undo-check:cancel");
-      actionBar.viewMode();
-      actionBar.cancelDisable();
-      undoCheck.viewed = true;
+      self.detailsViewMode();
     });
   }
 
   C2.prototype._setupActionBarSave = function(){
-    var detailsSave = this.detailsSave.el;
-    var actionBar = this.actionBar.el;
-    var undoCheck = this.undoCheck.el;
+    var self = this;
     actionBar.on("action-bar-clicked:save", function(){
-      undoCheck.trigger("undo-check:save");
-      actionBar.trigger("action-bar-clicked:saved");
-      detailsSave.trigger("details-form:save");
+      self.detailsEditMode();
     });
+  }
+
+  C2.prototype.detailsViewMode = function(){
+    this.editMode.stateTo('view');
+    this.undoCheck.el.trigger("undo-check:cancel");
+    this.actionBar.viewMode();
+    this.actionBar.cancelDisable();
+    this.undoCheck.viewed = true;
+  }
+  
+  C2.prototype.detailsEditMode = function(){
+    this.undoCheck.el.trigger("undo-check:save");
+    this.actionBar.el.trigger("action-bar-clicked:saved");
+    this.detailsSave.el.trigger("details-form:save");
   }
 
   return C2;
