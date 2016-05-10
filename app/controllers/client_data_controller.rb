@@ -35,7 +35,7 @@ class ClientDataController < ApplicationController
         else
           js_response = { status: "error", response: errors }
         end
-        render js: "c2.detailsSave.trigger('details-form:respond', " + js_response.to_json + ");"
+        render js: "c2.detailsSave.el.trigger('details-form:respond', " + js_response.to_json + ");"
         return 
       end
     end
