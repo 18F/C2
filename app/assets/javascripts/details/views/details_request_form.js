@@ -41,7 +41,7 @@ DetailsRequestForm = (function(){
 
     this.el.find('.edit-toggle').on('click', function(e){
       e.preventDefault();
-      self.el.toggle('edit-toggle:trigger');
+      self.el.trigger('edit-toggle:trigger');
     });
   }
 
