@@ -26,26 +26,14 @@ class ClientDataController < ApplicationController
 
   def update
     @client_data_instance.assign_attributes(filtered_params)
-    @client_data_instance.normalize_input(current_user)
+    @client_data_instance.normalize_input(current_user) 
     respond_to do |format|
       format.js do
-        if errors.empty?
-          update_or_notify_of_no_changes
-          js_response = { status: "success", response: @client_data_instance }
-        else
-          js_response = { status: "error", response: errors }
-        end
-        render js: "c2.detailsSave.el.trigger('details-form:respond', " + js_response.to_json + ");"
+        update_js_behavior(@client_data_instance, errors)
         return 
       end
     end
-    if errors.empty?
-      update_or_notify_of_no_changes
-      redirect_to proposal
-    else
-      flash[:error] = errors
-      render :edit
-    end
+    update_behavior(proposal, errors)
   end
 
   protected
@@ -69,6 +57,26 @@ class ClientDataController < ApplicationController
 
   def attribute_changes?
     !@client_data_instance.changed_attributes.blank?
+  end
+
+  def update_js_behavior client_data_instance, errors
+    if errors.empty?
+      update_or_notify_of_no_changes
+      js_response = { status: "success", response: client_data_instance }
+    else
+      js_response = { status: "error", response: errors }
+    end
+    render js: "c2.detailsSave.el.trigger('details-form:respond', " + js_response.to_json + ");"
+  end
+
+  def update_behavior proposal, errors
+    if errors.empty?
+      update_or_notify_of_no_changes
+      redirect_to proposal
+    else
+      flash[:error] = errors
+      render :edit
+    end
   end
 
   def record_changes
