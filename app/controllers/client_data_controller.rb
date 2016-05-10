@@ -35,7 +35,7 @@ class ClientDataController < ApplicationController
         else
           js_response = { status: 'error', response: errors }
         end
-        render js: 'window.responseUpdate = ' + js_response.to_json + '; console.log(responseUpdate);'
+        render js: 'c2.detailsRequestForm.updateViewModeContent(' + js_response.to_json + ');'
         return 
       end
     end

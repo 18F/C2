@@ -49,6 +49,24 @@ DetailsRequestForm = (function(){
     this.el.find('.edit-toggle').text(text)
   }
 
+  DetailsRequestForm.prototype.updateContentFields = function(field, value){
+    $(field).text(value);
+  }
+
+  DetailsRequestForm.prototype.updateViewModeContent = function(data){
+    var viewEl = this.el.find('#view-request-details')
+    var content = data['response'];
+    var id = content['id'];
+    var self = this;
+    delete content['id'];
+    $.each(content, function(key, value){
+      var field = '#' + key + '-' + id;
+      if(value != null){
+        self.updateContentFields(field, value);
+      }
+    });
+  }
+
   DetailsRequestForm.prototype.setMode = function(type){
     if (type === "view"){
       this.el.removeClass('edit-fields');
