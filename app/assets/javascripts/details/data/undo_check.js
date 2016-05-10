@@ -3,6 +3,7 @@ var UndoCheck;
 UndoCheck = (function(){
   function UndoCheck(el) {
     this.el = $(el);
+    this.viewed = false;
     this._setup()
     this._events()
   }
@@ -23,7 +24,7 @@ UndoCheck = (function(){
 
   UndoCheck.prototype.hasChanged = function(){
     this.newValue = this.el.html();
-    if(this.startValue !== this.newValue){
+    if(this.startValue !== this.newValue || this.viewed){
       return true;
     } else {
       return false;

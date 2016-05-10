@@ -41,8 +41,12 @@ DetailsRequestForm = (function(){
 
     this.el.find('.edit-toggle').on('click', function(e){
       e.preventDefault();
-      self.el.toggle('edit-toggle:trigger');
+      self.el.trigger('edit-toggle:trigger');
     });
+  }
+
+  DetailsRequestForm.prototype.toggleButtonText = function(text){
+    this.el.find('.edit-toggle').text(text)
   }
 
   DetailsRequestForm.prototype.setMode = function(type){

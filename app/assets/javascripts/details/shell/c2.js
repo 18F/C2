@@ -55,69 +55,77 @@ C2 = (function() {
 
   C2.prototype._setupEvents = function(){
     this._checkFieldChange();
-    this._setupActionBarSave();
-    this._setupActionBarCancel();
-    this._actionBarState();
+    this._setupActionBar();
     this._triggerEditToggle();
   }
   
   C2.prototype._triggerEditToggle = function(){
-    var editMode = this.editMode;
-    var detailsForm = this.detailsRequestForm;
-    detailsForm.el.on('edit-toggle:trigger', function(){
-      if(editMode.getState()){
-        detailsForm.setMode('edit');
+    var self = this;
+    this.detailsRequestForm.el.on('edit-toggle:trigger', function(){
+      console.log('self.editMode.getState(): ', self.editMode.getState());
+      if(!self.editMode.getState()){
+        self.detailsEditMode();
       } else {
-        detailsForm.setMode('view');
+        self.detailsView();
       }
     });
   }
 
   C2.prototype._checkFieldChange = function(){
     var self = this;
-    var editMode = this.editMode;
     this.detailsRequestForm.el.on('form:changed', function(){
-      console.log('self.undoCheck.hasChanged(): ', self.undoCheck.hasChanged());
       if(self.undoCheck.hasChanged()){
-        editMode.el.trigger('edit-mode:has-changed');
+        self.editMode.el.trigger('edit-mode:has-changed');
       } else {
-        editMode.el.trigger('edit-mode:not-changed');
+        self.editMode.el.trigger('edit-mode:not-changed');
       }
     });
   }
 
-  C2.prototype._actionBarState = function(){
-    var editMode = this.editMode.el;
-    var actionBar = this.actionBar;
-    editMode.on('edit-mode:has-changed', function(){
-      actionBar.editMode();
+  C2.prototype._setupActionBar = function(){
+    var self = this;
+    this.actionBar.el.on("action-bar-clicked:cancel", function(){
+      self.detailsView();
     });
-    editMode.on('edit-mode:not-changed', function(){
-      actionBar.viewMode();
+    this.actionBar.el.on("action-bar-clicked:save", function(){
+      self.detailsSaved();
     });
-  }
-
-  C2.prototype._setupActionBarCancel = function(){
-    var editMode = this.editMode.el;
-    var actionBar = this.actionBar.el;
-    var undoCheck = this.undoCheck.el;
-    var detailsRequestForm = this.detailsRequestForm;
-    actionBar.on("action-bar-clicked:cancel", function(){
-      editMode.trigger('edit-mode:off');
-      undoCheck.trigger("undo-check:cancel");
-      detailsRequestForm._setup();
+    this.editMode.el.on('edit-mode:has-changed', function(){
+      self.actionBar.editMode();
+    });
+    this.editMode.el.on('edit-mode:not-changed', function(){
+      self.actionBar.viewMode();
     });
   }
 
-  C2.prototype._setupActionBarSave = function(){
-    var detailsSave = this.detailsSave.el;
-    var actionBar = this.actionBar.el;
-    var undoCheck = this.undoCheck.el;
-    actionBar.on("action-bar-clicked:save", function(){
-      undoCheck.trigger("undo-check:save");
-      actionBar.trigger("action-bar-clicked:saved");
-      detailsSave.trigger("details-form:save");
-    });
+  C2.prototype.detailsCancelled = function(){
+    this.editMode.stateTo('view');
+    this.undoCheck.el.trigger("undo-check:cancel");
+    this.actionBar.viewMode();
+    this.actionBar.cancelDisable();
+    this.undoCheck.viewed = true;
+  }
+  
+  C2.prototype.detailsSaved = function(){
+    this.undoCheck.el.trigger("undo-check:save");
+    this.actionBar.el.trigger("action-bar-clicked:saved");
+    this.detailsSave.el.trigger("details-form:save");
+  }
+  
+  C2.prototype.detailsEditMode = function(){
+    this.detailsRequestForm.el.trigger('form:changed');
+    this.actionBar.cancelActive();
+    this.editMode.stateTo('edit');
+    this.detailsRequestForm.toggleButtonText('Cancel');
+  }
+
+  C2.prototype.detailsView = function(){
+    this.actionBar.cancelDisable();
+    this.editMode.stateTo('view');
+    this.undoCheck.el.trigger("undo-check:cancel");
+    this.actionBar.viewMode();
+    this.detailsRequestForm.toggleButtonText('Edit');
+    this.undoCheck.viewed = true;
   }
 
   return C2;
