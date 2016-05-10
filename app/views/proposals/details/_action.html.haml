@@ -16,7 +16,7 @@
 
       - if policy(@proposal).can_edit? && !@proposal.completed? && policy(@proposal).not_canceled?
         %li.cancel-button
-          %input{ type: "button", class: "button secondary", value: "Cancel" }/
+          %input{ type: "button", class: "button secondary", value: "Cancel", disabled: true }/
 
         %li.save-button
           %input{ type: "button", class: "button large primary", value: "Save", disabled: true }/

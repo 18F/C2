@@ -62,6 +62,7 @@ C2 = (function() {
   }
   
   C2.prototype._triggerEditToggle = function(){
+    var actionBar = this.actionBar;
     var editMode = this.editMode;
     var detailsForm = this.detailsRequestForm;
     detailsForm.el.on('edit-toggle:trigger', function(){
@@ -69,7 +70,9 @@ C2 = (function() {
       console.log('editMode.getState(): ', editMode.getState());
       if(!editMode.getState()){
         editMode.stateTo('edit');
+        actionBar.cancelActive();
       } else {
+        actionBar.cancelDisable();
         editMode.stateTo('view');
       }
     });
@@ -100,14 +103,16 @@ C2 = (function() {
   }
 
   C2.prototype._setupActionBarCancel = function(){
-    var editMode = this.editMode.el;
-    var actionBar = this.actionBar.el;
+    var editMode = this.editMode;
+    var actionBar = this.actionBar;
     var undoCheck = this.undoCheck.el;
     var detailsRequestForm = this.detailsRequestForm;
-    actionBar.on("action-bar-clicked:cancel", function(){
-      editMode.trigger('edit-mode:off');
+    actionBar.el.on("action-bar-clicked:cancel", function(){
+      console.log('Running cancel');
+      editMode.stateTo('view');
       undoCheck.trigger("undo-check:cancel");
-      detailsRequestForm._setup();
+      actionBar.viewMode();
+      actionBar.cancelDisable();
     });
   }
 
