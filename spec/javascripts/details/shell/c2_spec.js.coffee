@@ -21,7 +21,7 @@ describe 'C2', ->
       c2 = new C2() 
       expect(c2.attachmentCardController instanceof AttachmentCardController).to.eql(true)
       expect(c2.editMode instanceof EditStateController).to.eql(true)
-      expect(c2.detailsRequestForm instanceof DetailsRequestForm).to.eql(true)
+      expect(c2.detailsRequestCard instanceof DetailsRequestCard).to.eql(true)
       expect(c2.formState instanceof DetailsRequestFormState).to.eql(true)
       expect(c2.actionBar instanceof ActionBar).to.eql(true)
       expect(c2.detailsSave instanceof DetailsSave).to.eql(true)

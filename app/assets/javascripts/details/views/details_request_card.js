@@ -1,17 +1,17 @@
-var DetailsRequestForm;
+var DetailsRequestCard;
 
-DetailsRequestForm = (function(){
-  function DetailsRequestForm(el) {
+DetailsRequestCard = (function(){
+  function DetailsRequestCard(el) {
     this.el = $(el);
     this._setup();
     return this;
   }
   
-  DetailsRequestForm.prototype._setup = function(){
+  DetailsRequestCard.prototype._setup = function(){
     this._events();
   }
 
-  DetailsRequestForm.prototype._events = function(){
+  DetailsRequestCard.prototype._events = function(){
     var self = this;    
     
     this.el.find("input, textarea, select, radio").on("change keyup", function(e){
@@ -46,15 +46,15 @@ DetailsRequestForm = (function(){
     });
   }
 
-  DetailsRequestForm.prototype.toggleButtonText = function(text){
+  DetailsRequestCard.prototype.toggleButtonText = function(text){
     this.el.find('.edit-toggle').text(text)
   }
 
-  DetailsRequestForm.prototype.updateContentFields = function(field, value){
+  DetailsRequestCard.prototype.updateContentFields = function(field, value){
     $(field).text(value);
   }
 
-  DetailsRequestForm.prototype.updateViewModeContent = function(data){
+  DetailsRequestCard.prototype.updateViewModeContent = function(data){
     var viewEl = this.el.find('#view-request-details')
     var content = data['response'];
     var id = content['id'];
@@ -69,7 +69,7 @@ DetailsRequestForm = (function(){
     this.el.trigger("form:updated");
   }
 
-  DetailsRequestForm.prototype.setMode = function(type){
+  DetailsRequestCard.prototype.setMode = function(type){
     if (type === "view"){
       this.el.removeClass('edit-fields');
       this.el.addClass('view-fields');
@@ -79,12 +79,12 @@ DetailsRequestForm = (function(){
     }
   }
 
-  DetailsRequestForm.prototype.fieldChanged = function(e, el){
+  DetailsRequestCard.prototype.fieldChanged = function(e, el){
     this.el.trigger("form:changed"); 
   }
 
-  return DetailsRequestForm;
+  return DetailsRequestCard;
 
 }());
 
-window.DetailsRequestForm = DetailsRequestForm;
+window.DetailsRequestCard = DetailsRequestCard;
