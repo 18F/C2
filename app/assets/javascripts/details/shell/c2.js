@@ -89,6 +89,7 @@ C2 = (function() {
     });
     this.actionBar.el.on("action-bar-clicked:save", function(){
       self.actionBar.el.trigger("action-bar-clicked:saving");
+      self.detailsSave.el.trigger("details-form:save");
     });
     this.actionBar.el.on("action-bar-clicked:saved", function(data){
       self.detailsRequestForm.updateViewModeContent(data);
@@ -116,7 +117,6 @@ C2 = (function() {
   C2.prototype.detailsSaved = function(){
     this.undoCheck.el.trigger("undo-check:save");
     this.actionBar.el.trigger("action-bar-clicked:saved");
-    this.detailsSave.el.trigger("details-form:save");
     this.detailsView();
   }
   
