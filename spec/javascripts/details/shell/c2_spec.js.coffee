@@ -3,7 +3,7 @@
 #= require details/state/details_request_form_state
 #= require details/views/action_bar
 #= require details/views/attachment_card
-#= require details/views/details_request_form
+#= require details/views/details_request_card
 #= require details/data/details_save
 #= require details/data/undo_check
 #= require details/shell/c2

@@ -6,7 +6,7 @@
           %h2
             Request Details
             - if !@proposal.completed?
-              = "<a class='edit-toggle'>Edit</a>".html_safe
+              = "<a class='edit-toggle button'>Edit</a>".html_safe
 
         .content-content.column#view-request-details
           = simple_form_for @client_data_instance, html: { multipart: true }, remote: true do |f|
