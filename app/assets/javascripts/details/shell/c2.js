@@ -62,57 +62,47 @@ C2 = (function() {
   }
   
   C2.prototype._triggerEditToggle = function(){
-    var actionBar = this.actionBar;
-    var editMode = this.editMode;
-    var detailsForm = this.detailsRequestForm;
-    detailsForm.el.on('edit-toggle:trigger', function(){
-      console.log('Triggering edit-toggle');
-      console.log('editMode.getState(): ', editMode.getState());
-      if(!editMode.getState()){
-        detailsForm.el.trigger('form:changed');
-        actionBar.cancelActive();
-        editMode.stateTo('edit');
+    var self = this;
+    self.detailsRequestForm.el.on('edit-toggle:trigger', function(){
+      if(!self.editMode.getState()){
+        self.detailsEditMode();
       } else {
-        actionBar.cancelDisable();
-        editMode.stateTo('view');
+        self.detailsViewMode();
       }
     });
   }
 
   C2.prototype._checkFieldChange = function(){
     var self = this;
-    var editMode = this.editMode;
     this.detailsRequestForm.el.on('form:changed', function(){
-      console.log('self.undoCheck.hasChanged(): ', self.undoCheck.hasChanged());
       if(self.undoCheck.hasChanged()){
-        editMode.el.trigger('edit-mode:has-changed');
+        self.editMode.el.trigger('edit-mode:has-changed');
       } else {
-        editMode.el.trigger('edit-mode:not-changed');
+        self.editMode.el.trigger('edit-mode:not-changed');
       }
     });
   }
 
   C2.prototype._actionBarState = function(){
-    var editMode = this.editMode.el;
-    var actionBar = this.actionBar;
-    editMode.on('edit-mode:has-changed', function(){
-      actionBar.editMode();
+    var self = this;
+    this.editMode.el.on('edit-mode:has-changed', function(){
+      self.actionBar.editMode();
     });
-    editMode.on('edit-mode:not-changed', function(){
-      actionBar.viewMode();
+    this.editMode.el.on('edit-mode:not-changed', function(){
+      self.actionBar.viewMode();
     });
   }
 
   C2.prototype._setupActionBarCancel = function(){
     var self = this;
-    actionBar.el.on("action-bar-clicked:cancel", function(){
+    this.actionBar.el.on("action-bar-clicked:cancel", function(){
       self.detailsViewMode();
     });
   }
 
   C2.prototype._setupActionBarSave = function(){
     var self = this;
-    actionBar.on("action-bar-clicked:save", function(){
+    this.actionBar.el.on("action-bar-clicked:save", function(){
       self.detailsEditMode();
     });
   }
