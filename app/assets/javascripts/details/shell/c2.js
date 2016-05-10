@@ -65,10 +65,12 @@ C2 = (function() {
     var editMode = this.editMode;
     var detailsForm = this.detailsRequestForm;
     detailsForm.el.on('edit-toggle:trigger', function(){
-      if(editMode.getState()){
-        detailsForm.setMode('edit');
+      console.log('Triggering edit-toggle');
+      console.log('editMode.getState(): ', editMode.getState());
+      if(!editMode.getState()){
+        editMode.stateTo('edit');
       } else {
-        detailsForm.setMode('view');
+        editMode.stateTo('view');
       }
     });
   }
