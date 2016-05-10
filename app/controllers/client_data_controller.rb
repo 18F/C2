@@ -27,26 +27,24 @@ class ClientDataController < ApplicationController
   def update
     @client_data_instance.assign_attributes(filtered_params)
     @client_data_instance.normalize_input(current_user)
-    if errors.empty?
-      respond_to do |format|
-        format.js{
-          
-        }
-        format.html{
+    respond_to do |format|
+      format.js do
+        if errors.empty?
           update_or_notify_of_no_changes
-          redirect_to proposal
-        }
-      end  
-    else
-      respond_to do |format|
-        format.js{
-
-        }
-        format.html{
-          flash[:error] = errors
-          render :edit
-        }
+          js_response = { status: 'success', response: @client_data_instance }
+        else
+          js_response = { status: 'error', response: errors }
+        end
+        render json: js_response
+        return 
       end
+    end
+    if errors.empty?
+      update_or_notify_of_no_changes
+      redirect_to proposal
+    else
+      flash[:error] = errors
+      render :edit
     end
   end
 
