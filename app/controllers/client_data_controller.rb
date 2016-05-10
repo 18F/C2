@@ -28,11 +28,25 @@ class ClientDataController < ApplicationController
     @client_data_instance.assign_attributes(filtered_params)
     @client_data_instance.normalize_input(current_user)
     if errors.empty?
-      update_or_notify_of_no_changes
-      redirect_to proposal
+      respond_to do |format|
+        format.js{
+          
+        }
+        format.html{
+          update_or_notify_of_no_changes
+          redirect_to proposal
+        }
+      end  
     else
-      flash[:error] = errors
-      render :edit
+      respond_to do |format|
+        format.js{
+
+        }
+        format.html{
+          flash[:error] = errors
+          render :edit
+        }
+      end
     end
   end
 
