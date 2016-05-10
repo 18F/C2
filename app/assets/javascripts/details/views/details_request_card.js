@@ -45,13 +45,15 @@ DetailsRequestForm = (function(){
     });
   }
 
+  DetailsRequestForm.prototype.toggleButtonText = function(text){
+    this.el.find('.edit-toggle').text(text)
+  }
+
   DetailsRequestForm.prototype.setMode = function(type){
     if (type === "view"){
-      this.el.find('.edit-toggle').text('Edit');
       this.el.removeClass('edit-fields');
       this.el.addClass('view-fields');
     } else if (type === "edit") {
-      this.el.find('.edit-toggle').text('Cancel');
       this.el.removeClass('view-fields');
       this.el.addClass('edit-fields');
     }

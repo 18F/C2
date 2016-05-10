@@ -126,6 +126,7 @@ C2 = (function() {
     this.detailsRequestForm.el.trigger('form:changed');
     this.actionBar.cancelActive();
     this.editMode.stateTo('edit');
+    this.detailsRequestForm.toggleButtonText('Cancel');
   }
 
   C2.prototype.detailsViewMode = function(){
@@ -133,6 +134,7 @@ C2 = (function() {
     this.editMode.stateTo('view');
     this.undoCheck.el.trigger("undo-check:cancel");
     this.actionBar.viewMode();
+    this.detailsRequestForm.toggleButtonText('Edit');
     this.undoCheck.viewed = true;
   }
 
