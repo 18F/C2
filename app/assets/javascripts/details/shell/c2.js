@@ -55,8 +55,7 @@ C2 = (function() {
 
   C2.prototype._setupEvents = function(){
     this._checkFieldChange();
-    this._setupActionBarSave();
-    this._setupActionBarCancel();
+    this._setupActionBar();
     this._actionBarState();
     this._triggerEditToggle();
   }
@@ -68,7 +67,7 @@ C2 = (function() {
       if(!self.editMode.getState()){
         self.detailsEditMode();
       } else {
-        self.detailsViewMode();
+        self.detailsView();
       }
     });
   }
@@ -94,15 +93,11 @@ C2 = (function() {
     });
   }
 
-  C2.prototype._setupActionBarCancel = function(){
+  C2.prototype._setupActionBar = function(){
     var self = this;
     this.actionBar.el.on("action-bar-clicked:cancel", function(){
-      self.detailsViewMode();
+      self.detailsView();
     });
-  }
-
-  C2.prototype._setupActionBarSave = function(){
-    var self = this;
     this.actionBar.el.on("action-bar-clicked:save", function(){
       self.detailsSaved();
     });
@@ -129,7 +124,7 @@ C2 = (function() {
     this.detailsRequestForm.toggleButtonText('Cancel');
   }
 
-  C2.prototype.detailsViewMode = function(){
+  C2.prototype.detailsView = function(){
     this.actionBar.cancelDisable();
     this.editMode.stateTo('view');
     this.undoCheck.el.trigger("undo-check:cancel");
