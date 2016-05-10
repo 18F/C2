@@ -74,15 +74,8 @@ C2 = (function() {
 
   C2.prototype._setupDetailsForm = function(){
     var self = this;  
-    this.detailsRequestCard.el.on('form:responded', function(event, data){
-      console.log("this.detailsRequestCard.el.on('form:responded', function(event, data){");
-      console.log(event);
-      self.detailsRequestCard.updateViewModeContent(data);
-    });
-    
-    this.detailsRequestCard.el.on('form:saved', function(event, data){
-      console.log("this.detailsRequestCard.el.on('form:saved', function(event, data){");
-      console.log(event);
+    this.detailsRequestCard.el.on('form:updated', function(event, data){
+      self.detailsSaved();
       self.actionBar.el.trigger("action-bar-clicked:saved");
     });
   }
@@ -90,14 +83,10 @@ C2 = (function() {
   C2.prototype._setupDetailsData = function(){
     var self = this;
     this.detailsSave.el.on('details-form:success', function(event, data){
-      console.log("this.detailsSave.el.on('details-form:success', function(event, data){");
-      console.log(event);
       self.detailsRequestCard.updateViewModeContent(data);
     });
 
     this.detailsSave.el.on('details-form:error', function(event, data){
-      console.log("this.detailsSave.el.on('details-form:error', function(event, data){");
-      console.log(event);
       alert('error');
     });
   }
@@ -133,11 +122,6 @@ C2 = (function() {
     this.actionBar.el.on("action-bar-clicked:save", function(){
       self.actionBar.el.trigger("action-bar-clicked:saving");
       self.detailsSave.el.trigger("details-form:save");
-    });
-    
-    this.actionBar.el.on("action-bar-clicked:saved", function(event, data){
-      self.detailsRequestCard.updateViewModeContent(data);
-      self.detailsSaved();
     });
   }
 

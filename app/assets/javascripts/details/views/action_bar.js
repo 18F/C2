@@ -36,7 +36,7 @@ ActionBar = (function() {
     actionBar.el.on('action-bar-clicked:saving', function(){
       actionBar.saveButton.start();
     })
-    actionBar.el.on('action-bar-clicked:saved', function(data){
+    actionBar.el.on('action-bar-clicked:saved', function(){
       actionBar.saveButton.stop();
       actionBar.viewMode();
     })

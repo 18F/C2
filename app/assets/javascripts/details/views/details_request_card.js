@@ -55,6 +55,8 @@ DetailsRequestCard = (function(){
   }
 
   DetailsRequestCard.prototype.updateViewModeContent = function(data){
+    console.log(data);
+    alert('Worked updateViewModeContent');
     var viewEl = this.el.find('#view-request-details')
     var content = data['response'];
     var id = content['id'];
