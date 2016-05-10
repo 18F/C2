@@ -26,11 +26,11 @@ class ClientDataController < ApplicationController
 
   def update
     @client_data_instance.assign_attributes(filtered_params)
-    @client_data_instance.normalize_input(current_user) 
+    @client_data_instance.normalize_input(current_user)
     respond_to do |format|
       format.js do
         update_js_behavior(@client_data_instance, errors)
-        return 
+        return
       end
     end
     update_behavior(proposal, errors)
@@ -59,7 +59,7 @@ class ClientDataController < ApplicationController
     !@client_data_instance.changed_attributes.blank?
   end
 
-  def update_js_behavior client_data_instance, errors
+  def update_js_behavior(client_data_instance, errors)
     if errors.empty?
       update_or_notify_of_no_changes
       js_response = { status: "success", response: client_data_instance }
@@ -69,7 +69,7 @@ class ClientDataController < ApplicationController
     render js: "c2.detailsSave.el.trigger('details-form:respond', " + js_response.to_json + ");"
   end
 
-  def update_behavior proposal, errors
+  def update_behavior(proposal, errors)
     if errors.empty?
       update_or_notify_of_no_changes
       redirect_to proposal

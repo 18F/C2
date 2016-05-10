@@ -56,7 +56,6 @@ DetailsRequestCard = (function(){
 
   DetailsRequestCard.prototype.updateViewModeContent = function(data){
     console.log(data);
-    alert('Worked updateViewModeContent');
     var viewEl = this.el.find('#view-request-details')
     var content = data['response'];
     var id = content['id'];
@@ -64,7 +63,7 @@ DetailsRequestCard = (function(){
     delete content['id'];
     $.each(content, function(key, value){
       var field = '#' + key + '-' + id;
-      if(value != null){
+      if(!(value === null)){
         self.updateContentFields(field, value);
       }
     });

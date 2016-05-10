@@ -87,7 +87,7 @@ C2 = (function() {
     });
 
     this.detailsSave.el.on('details-form:error', function(event, data){
-      alert('error');
+      console.log('error: ', data);
     });
   }
 
