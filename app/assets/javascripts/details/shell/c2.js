@@ -88,6 +88,10 @@ C2 = (function() {
       self.detailsView();
     });
     this.actionBar.el.on("action-bar-clicked:save", function(){
+      self.actionBar.el.trigger("action-bar-clicked:saving");
+    });
+    this.actionBar.el.on("action-bar-clicked:saved", function(data){
+      self.detailsRequestForm.updateViewModeContent(data);
       self.detailsSaved();
     });
     this.editMode.el.on('edit-mode:has-changed', function(){
