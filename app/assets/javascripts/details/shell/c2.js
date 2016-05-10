@@ -110,6 +110,7 @@ C2 = (function() {
     this.undoCheck.el.trigger("undo-check:save");
     this.actionBar.el.trigger("action-bar-clicked:saved");
     this.detailsSave.el.trigger("details-form:save");
+    this.detailsView();
   }
   
   C2.prototype.detailsEditMode = function(){
@@ -121,6 +122,7 @@ C2 = (function() {
 
   C2.prototype.detailsView = function(){
     this.actionBar.cancelDisable();
+    this.editMode.stateTo('view');
     this.editMode.stateTo('view');
     this.undoCheck.el.trigger("undo-check:cancel");
     this.actionBar.viewMode();
