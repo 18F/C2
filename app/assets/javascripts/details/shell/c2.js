@@ -56,25 +56,45 @@ C2 = (function() {
   C2.prototype._setupEvents = function(){
     this._checkFieldChange();
     this._setupActionBar();
-    this._triggerEditToggle();
-    this._detailDataUpdate();
-    this._detailDataError();
+    this._setupEditToggle();
+    this._setupDetailsData();
+    this._setupDetailsForm();
+    this._setupEditMode();
   }
   
-  C2.prototype._detailDataUpdate = function(){
-    var self = this;
-    this.detailsSave.el.on('details-form:success', function(data){
-      self.detailsRequestForm.updateViewModeContent(data);
+  C2.prototype._setupEditMode = function(){
+    var self = this;  
+    this.editMode.el.on('edit-mode:has-changed', function(){
+      self.actionBar.editMode();
+    });
+    this.editMode.el.on('edit-mode:not-changed', function(){
+      self.actionBar.viewMode();
     });
   }
 
-  C2.prototype._detailDataError = function(){
-    this.detailsSave.el.on('details-form:error', function(data){
+  C2.prototype._setupDetailsForm = function(){
+    var self = this;  
+    this.detailsRequestForm.el.on("form:responded", function(event, data){
+      self.detailsRequestForm.updateViewModeContent(data);
+    });
+    
+    this.detailsRequestForm.el.on("form:saved", function(event, data){
+      self.actionBar.el.trigger("action-bar-clicked:saved");
+    });
+  }
+
+  C2.prototype._setupDetailsData = function(){
+    var self = this;
+    this.detailsSave.el.on('details-form:success', function(event, data){
+      self.detailsRequestForm.updateViewModeContent(data);
+    });
+
+    this.detailsSave.el.on('details-form:error', function(event, data){
       alert('error');
     });
   }
 
-  C2.prototype._triggerEditToggle = function(){
+  C2.prototype._setupEditToggle = function(){
     var self = this;
     this.detailsRequestForm.el.on('edit-toggle:trigger', function(){
       console.log('self.editMode.getState(): ', self.editMode.getState());
@@ -106,21 +126,10 @@ C2 = (function() {
       self.actionBar.el.trigger("action-bar-clicked:saving");
       self.detailsSave.el.trigger("details-form:save");
     });
-    this.actionBar.el.on("action-bar-clicked:saved", function(data){
+    
+    this.actionBar.el.on("action-bar-clicked:saved", function(event, data){
       self.detailsRequestForm.updateViewModeContent(data);
       self.detailsSaved();
-    });
-    this.detailsRequestForm.el.on("form:responded", function(data){
-      self.detailsRequestForm.updateViewModeContent(data);
-    });
-    this.detailsRequestForm.el.on("form:saved", function(data){
-      self.actionBar.el.trigger("action-bar-clicked:saved");
-    });
-    this.editMode.el.on('edit-mode:has-changed', function(){
-      self.actionBar.editMode();
-    });
-    this.editMode.el.on('edit-mode:not-changed', function(){
-      self.actionBar.viewMode();
     });
   }
 
