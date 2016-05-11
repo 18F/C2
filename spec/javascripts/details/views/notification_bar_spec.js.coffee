@@ -10,7 +10,7 @@ describe 'Notification', ->
   describe '#setup', ->
     it "set in view mode", ->
       notification = new Notifications(getNotificationContent())  
-      expect(true).to.eql(false)
+      expect(notification instanceof Notifications).to.eql(true)
   
   describe '#_postNotification', ->
     it "create a notification", ->
