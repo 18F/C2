@@ -128,10 +128,12 @@ C2 = (function() {
   }
 
   C2.prototype.handleSaveError = function(data){
-    this.notification.el.trigger('notification:create', {
-      title: "Request Not Saved",
-      content: data['response'][0],
-      type: "alert"
+    $.each(data['response'], function(i, item){
+      this.notification.el.trigger('notification:create', {
+        title: "Request Not Saved",
+        content: item,
+        type: "alert"
+      });
     });
   }
 
