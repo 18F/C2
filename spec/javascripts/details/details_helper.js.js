@@ -20,7 +20,7 @@ this.getAttachmentContent = function() {
 };
 
 this.getActionBarContent = function() {
-  return $('<div class="action-bar-template action-bar-wrapper"> <ul id="request-actions"> <li class="cancel-button"> <input type="button" value="Cancel"> </li> <li class="save-button"> <input type="button" value="Save"> </li> </ul> </div>');
+  return $('<div class="action-bar-template"" id="action-bar-wrapper"> <ul id="request-actions"> <li class="cancel-button"> <input type="button" value="Cancel"> </li> <li class="save-button"> <input type="button" value="Save"> </li> </ul> </div>');
 };
 
 this.getRequestDetailsForm = function() {

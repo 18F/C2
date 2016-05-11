@@ -4,13 +4,14 @@ C2 = (function() {
   function C2(config){
     config = config || {};
     this.config = {
-      actionBar:      '.action-bar-wrapper',
+      actionBar:      '#action-bar-wrapper',
       attachmentCard: '.card-for-attachments',
       detailsForm:    '#request-details-card',
       detailsSave:    '#request-details-card',
       editMode:       '#mode-parent',
       formState:      '#request-details-card',
       undoCheck:      '#request-details-card form',
+      notifications:  '#action-bar-status',
       observerCard:   '.card-for-observers'
     }
     this._overrideTestConfig(config);

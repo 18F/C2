@@ -30,7 +30,7 @@
 
 @getActionBarContent = ->
   $(
-    '<div class="action-bar-template action-bar-wrapper">
+    '<div class="action-bar-template" id="action-bar-wrapper">
       <ul id="request-actions">
         <li class="cancel-button">
           <button value="Cancel">

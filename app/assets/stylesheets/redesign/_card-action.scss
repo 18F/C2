@@ -44,7 +44,7 @@ ul#request-actions{
 }
 
 $action-bar-wrapper-height-small: 60px;
-.action-bar-status{
+#action-bar-status{
   display: none;
   bottom:  $action-bar-wrapper-height-small;
   &.show{
@@ -52,28 +52,28 @@ $action-bar-wrapper-height-small: 60px;
   }
 }
 
-.action-bar-wrapper{
+#action-bar-wrapper{
   height: $action-bar-wrapper-height-small;
   padding-top: 10px;
 }
 
 @media screen and ( min-height: 700px ){
   $action-bar-wrapper-height: 110px;
-  .action-bar-status{
+  #action-bar-status{
     .status-bar{
       padding-top: 7px;
     }
     bottom:  $action-bar-wrapper-height;
   }
 
-  .action-bar-wrapper{
+  #action-bar-wrapper{
     height: $action-bar-wrapper-height;
     padding-top: 20px;
   }
 }
 
 
-.action-bar-status{
+#action-bar-status{
   .status-bar{
     padding-top: 7px;
   }
@@ -83,7 +83,7 @@ $action-bar-wrapper-height-small: 60px;
   font-weight: bold;
 }
 
-.action-bar-wrapper{
+#action-bar-wrapper{
   bottom:  0px;
   background: #f2f4f5;
   > div{
