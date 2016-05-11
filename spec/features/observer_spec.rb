@@ -50,6 +50,19 @@ feature "Observers" do
     visit "/proposals/#{proposal.id}?detail=old"
   end
 
+  scenario "allows observers to remove self with javascript", js: true do 
+    observer = create(:user)
+    proposal = create(:proposal, observer: observer)
+    login_as(observer)
+
+    visit "/proposals/#{proposal.id}?detail=new"
+    delete_button = find('.observer-remove-button')
+    delete_button.click
+    wait_for_ajax
+    expect(page).to have_content("Removed Observation for")
+    visit "/proposals/#{proposal.id}?detail=old"
+  end
+
   scenario "allows observers to be added by other observers" do
     proposal = create(:proposal, :with_observer)
     observer1 = proposal.observers.first
