@@ -54,6 +54,7 @@ C2 = (function() {
     this.attachmentCardController = new AttachmentCardController(config.attachmentCard);
     this.observerCardController = new ObserverCardController(config.observerCard);
     this.actionBar = new ActionBar(config.actionBar);
+    this.notification = new NotificationBars(config.notifications);
   }
 
   C2.prototype._setupEvents = function(){
@@ -78,7 +79,7 @@ C2 = (function() {
   C2.prototype._setupDetailsForm = function(){
     var self = this;  
     this.detailsRequestCard.el.on('form:updated', function(event, data){
-      self.detailsSaved();
+      self.detailsSaved(data);
       self.actionBar.el.trigger("action-bar-clicked:saved");
     });
   }
@@ -139,10 +140,11 @@ C2 = (function() {
   C2.prototype.processSaveRequest = function(){
   }
   
-  C2.prototype.detailsSaved = function(){
+  C2.prototype.detailsSaved = function(data){
     this.undoCheck.el.trigger("undo-check:save");
     this.actionBar.el.trigger("action-bar-clicked:saved");
     this.detailsView();
+    this.notification.create(data);
   }
   
   C2.prototype.detailsEditMode = function(){

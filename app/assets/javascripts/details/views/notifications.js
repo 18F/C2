@@ -16,11 +16,12 @@ NotificationBars = (function(){
   }
 
   NotificationBars.prototype.create = function(params){
+    console.log('Notification created');
     var notice = this._prepare(params);
-    this.postNotification(notice);
+    this._postNotification(notice);
   }
 
-  NotificationBars.prototype.postNotification = function(notice){
+  NotificationBars.prototype._postNotification = function(notice){
     this.el.find('ul').append(notice);
   }
 
@@ -31,7 +32,7 @@ NotificationBars = (function(){
     var timeout = (params['timeout']) ? params['timeout'] : false;
     
     var notice = '<li class="notice-type-' + type + ' notification-bar-el" data-timeout="' + timeout + '">' +
-      '<div><h4>' + title + '</h4><p>' + content + '</p></div>' + 
+      '<div class="row"><span class="notification-title">' + title + '</span><span class="notification-content">' + content + '</span></div>' + 
     '</li>';
     
     return notice

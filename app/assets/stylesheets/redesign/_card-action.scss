@@ -45,7 +45,11 @@ ul#request-actions{
 
 $action-bar-wrapper-height-small: 60px;
 #action-bar-status{
-  display: none;
+  ul{
+    margin: 0px;
+    li{
+    }
+  }
   bottom:  $action-bar-wrapper-height-small;
   &.show{
     display: block;
@@ -74,13 +78,15 @@ $action-bar-wrapper-height-small: 60px;
 
 
 #action-bar-status{
-  .status-bar{
+  .notification-bar-el{
     padding-top: 7px;
+    min-height: 40px;
+    background: #589D42;
+    color: white;
+    font-weight: bold;
+    opacity: .9;
+    border-top: 2px solid #4A8C35;
   }
-  height: 40px;
-  background: #589D42;
-  color: white;
-  font-weight: bold;
 }
 
 #action-bar-wrapper{
