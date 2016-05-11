@@ -32,10 +32,14 @@
     '<div class="action-bar-template action-bar-wrapper">
       <ul id="request-actions">
         <li class="cancel-button">
-          <input type="button" value="Cancel">
+          <button value="Cancel">
+            <span>Cancel</span>
+          </button>
         </li>
         <li class="save-button">
-          <input type="button" value="Save">
+          <button value="Save">
+            <span>Save</span>
+          </button>
         </li>
       </ul>
     </div>'

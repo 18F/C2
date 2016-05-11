@@ -1,4 +1,7 @@
 #= require jquery
+#= require ladda/spin.min
+#= require ladda/ladda.min
+#= require ladda/ladda.jquery.min
 #= require details/state/edit_mode
 #= require details/state/details_request_form_state
 #= require details/views/action_bar
@@ -75,19 +78,6 @@ describe 'C2', ->
       c2 = new C2(testParam)
       expect(c2.config.undoCheck).to.eql(test)
 
-  describe '#action-bar-click inits', ->
-    it "event setup for action-bar-clicked:save trigger", ->
-      flag = false
-      testParams = setupC2TestParams()
-      c2 = new C2(testParams) 
-      c2.editMode.stateTo('edit')
-      state = c2.editMode.getState()
-      c2.actionBar.el.on "action-bar-clicked:saved", ->
-        flag = true
-      c2.actionBar.el.trigger("action-bar-clicked:save")
-      expect(state).to.eql(true)
-      expect(flag).to.eql(true)
-
   describe '#events _actionBarState', ->
     it "editMode is on when state when edit-mode:on", ->
       testParams = setupC2TestParams()
@@ -98,16 +88,7 @@ describe 'C2', ->
       isEditMode = c2.actionBar.el.hasClass('edit-actions')
       expect(isEditMode).to.eql(true)
 
-  describe '#events _actionBarSave', ->
-    it "action-bar-clicked:save is fired through action-bar-clicked:saved", ->
-      flag = false
-      testParams = setupC2TestParams()
-      c2 = new C2(testParams) 
-      c2.actionBar.el.on 'action-bar-clicked:saved', ->
-        flag = true
-      c2.actionBar.el.trigger('action-bar-clicked:save')
-      expect(flag).to.eql(true)
-    
+  describe '#events _actionBarSave', -> 
     it "action-bar-clicked:save is fired through details-form:save", ->
       flag = false
       testParams = setupC2TestParams()

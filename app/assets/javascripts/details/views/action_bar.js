@@ -13,8 +13,7 @@ ActionBar = (function() {
   };
 
   ActionBar.prototype._event = function() {
-    this.saveButton = Ladda.create( document.querySelector( '.save-button button' ) );
-    Ladda.bind( '.save-button button' );
+    this.saveButton = this.el.find( '.save-button button' ).ladda( 'bind' );
     this._setupActionBarClicked('save');
     this._setupActionBarClicked('cancel');
     this._saveTriggered();
@@ -34,10 +33,10 @@ ActionBar = (function() {
   ActionBar.prototype._saveTriggered = function(buttonName) {
     var actionBar = this;
     actionBar.el.on('action-bar-clicked:saving', function(){
-      actionBar.saveButton.start();
+      actionBar.saveButton.ladda( 'start' );
     })
     actionBar.el.on('action-bar-clicked:saved', function(){
-      actionBar.saveButton.stop();
+      actionBar.saveButton.ladda( 'stop' );
       actionBar.viewMode();
     })
   }
