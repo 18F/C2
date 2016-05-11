@@ -111,13 +111,15 @@ C2 = (function() {
   }
 
   C2.prototype.handleSaveError = function(data){
-    $.each(data['response'], function(i, item){
+    console.log("C2.prototype.handleSaveError: ", data);
+    var response = data['response'];
+    for (var i = response.length - 1; i >= 0; i--) {
       this.notification.el.trigger('notification:create', {
         title: "Request Not Saved",
-        content: item,
+        content: response[i]['content'],
         type: "alert"
       });
-    });
+    }
   }
 
   C2.prototype._setupEditToggle = function(){
