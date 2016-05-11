@@ -95,7 +95,6 @@ C2 = (function() {
     var self = this;  
     this.detailsRequestCard.el.on('form:updated', function(event, data){
       self.detailsSaved(data);
-      self.actionBar.el.trigger("action-bar-clicked:saved");
     });
   }
 
