@@ -59,11 +59,14 @@ Notifications = (function(){
   }
 
   Notifications.prototype.clearAll = function(){
-  }
-
-  // Use the ID to select which to clear
-  Notifications.prototype.clearOne = function(id){
-    
+    var $notices = this.el.find('.notification-bar-el');
+    $notices.animate({
+      "min-height": "0px", 
+      height: "0px"
+    }, 500, 
+    function(){ 
+      $notices.remove();
+    });
   }
 
   return Notifications;

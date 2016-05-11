@@ -12,5 +12,18 @@ describe 'Notification', ->
       notification = new Notifications(getNotificationContent())  
       expect(true).to.eql(false)
   
-  describe '#create', ->
-    it "set in view mode", ->
+  describe '#_postNotification', ->
+    it "create a notification", ->
+
+  describe '#_closeButton', ->
+    it "make sure the close button deletes the notification", ->
+  
+  describe '#_prepare', ->
+    it "prepare a notification", ->
+    it "handle a notification without a title", ->
+    it "handle a notification without a content", ->
+    it "handle a notification without a type", ->
+    it "handle a notification with a timeout", ->
+  
+  describe '#clearAll', ->
+    it "remove all four notifications", ->
