@@ -105,7 +105,7 @@ C2 = (function() {
     });
 
     this.detailsSave.el.on('details-form:error', function(event, data){
-      console.log('error: ', data);
+      self.handleSaveError(data);
     });
   }
 
@@ -118,6 +118,14 @@ C2 = (function() {
       } else {
         self.detailsView();
       }
+    });
+  }
+
+  C2.prototype.handleSaveError = function(data){
+    this.notification.trigger('notification:create', {
+      title: "Request Not Saved",
+      content: data['response'][0],
+      status: "alert"
     });
   }
 
@@ -149,6 +157,11 @@ C2 = (function() {
     this.actionBar.viewMode();
     this.actionBar.cancelDisable();
     this.undoCheck.viewed = true;
+    this.notification.trigger('notification:create', {
+      title: "Canceled Change",
+      content: "",
+      status: "notice"
+    });
   }
  
   C2.prototype.processSaveRequest = function(){
@@ -158,7 +171,11 @@ C2 = (function() {
     this.undoCheck.el.trigger("undo-check:save");
     this.actionBar.el.trigger("action-bar-clicked:saved");
     this.detailsView();
-    this.notification.create(data);
+    this.notification.trigger('notification:create', {
+      title: "Changes Saved",
+      content: "Your changes were saved.",
+      status: "success"
+    });
   }
   
   C2.prototype.detailsEditMode = function(){
