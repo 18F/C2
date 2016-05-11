@@ -22,7 +22,18 @@ NotificationBars = (function(){
   }
 
   NotificationBars.prototype._postNotification = function(notice){
-    this.el.find('ul').append(notice);
+    this.el.find('ul').append(function() {
+      return $(notice).find('.close').on('click', function(){
+        $(this).parent().animate({
+          "min-height": "0px", 
+          height: "0px"
+        }, 
+        500, 
+        function(){ 
+          $(this).remove() 
+        });
+      });
+    })
   }
 
   NotificationBars.prototype._prepare = function(params){
@@ -32,7 +43,10 @@ NotificationBars = (function(){
     var timeout = (params['timeout']) ? params['timeout'] : false;
     
     var notice = '<li class="notice-type-' + type + ' notification-bar-el" data-timeout="' + timeout + '">' +
-      '<div class="row"><span class="notification-title">' + title + '</span><span class="notification-content">' + content + '</span></div>' + 
+      '<div class="row">' +
+        '<span class="notification-title">' + title + '</span><span class="notification-content">' + content + '</span>' +
+        '<button class="close">Close</button>' +
+      '</div>' +
     '</li>';
     
     return notice
