@@ -21,17 +21,23 @@ NotificationBars = (function(){
     this._postNotification(notice);
   }
 
+  NotificationBars.prototype._closeHook = function(el){
+    var $notice = $(el).parent();
+    $notice.animate({
+      "min-height": "0px", 
+      height: "0px"
+    }, 500, 
+    function(){ 
+      $notice.remove();
+    });
+  }
+
   NotificationBars.prototype._postNotification = function(notice){
+    var self = this;
     this.el.find('ul').append(function() {
       return $(notice).find('.close').on('click', function(){
-        $(this).parent().animate({
-          "min-height": "0px", 
-          height: "0px"
-        }, 
-        500, 
-        function(){ 
-          $(this).remove() 
-        });
+        var el = this;
+        self._closeHook(el);
       });
     })
   }
