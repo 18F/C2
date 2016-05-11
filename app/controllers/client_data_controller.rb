@@ -30,10 +30,11 @@ class ClientDataController < ApplicationController
     respond_to do |format|
       format.js do
         update_js_behavior(@client_data_instance, errors)
-        return
+      end
+      format.html do
+        update_behavior(proposal, errors)
       end
     end
-    update_behavior(proposal, errors)
   end
 
   protected
