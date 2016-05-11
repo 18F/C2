@@ -111,6 +111,16 @@ C2 = (function() {
     });
   }
 
+  C2.prototype.handleSaveError = function(data){
+    $.each(data['response'], function(i, item){
+      this.notification.el.trigger('notification:create', {
+        title: "Request Not Saved",
+        content: item,
+        type: "alert"
+      });
+    });
+  }
+
   C2.prototype._setupEditToggle = function(){
     var self = this;
     this.detailsRequestCard.el.on('edit-toggle:trigger', function(){
@@ -124,16 +134,6 @@ C2 = (function() {
           self.detailsView();
         }
       }
-    });
-  }
-
-  C2.prototype.handleSaveError = function(data){
-    $.each(data['response'], function(i, item){
-      this.notification.el.trigger('notification:create', {
-        title: "Request Not Saved",
-        content: item,
-        type: "alert"
-      });
     });
   }
 
