@@ -12,7 +12,7 @@ NotificationBars = (function(){
   }
 
   NotificationBars.prototype._events = function(){
-
+    this._closeButton()
   }
 
   NotificationBars.prototype.create = function(params){
@@ -21,24 +21,24 @@ NotificationBars = (function(){
     this._postNotification(notice);
   }
 
-  NotificationBars.prototype._closeHook = function(el){
-    var $notice = $(el).parent();
-    $notice.animate({
-      "min-height": "0px", 
-      height: "0px"
-    }, 500, 
-    function(){ 
-      $notice.remove();
-    });
+  NotificationBars.prototype._closeButton = function(el){
+    this.el.delegate('.close', 'click', function(){
+      var el = this;
+      var $notice = $(el).closest('.notification-bar-el');
+      $notice.animate({
+        "min-height": "0px", 
+        height: "0px"
+      }, 500, 
+      function(){ 
+        $notice.remove();
+      });
+    })
   }
 
   NotificationBars.prototype._postNotification = function(notice){
     var self = this;
     this.el.find('ul').append(function() {
-      return $(notice).find('.close').on('click', function(){
-        var el = this;
-        self._closeHook(el);
-      });
+      return $(notice);
     })
   }
 
@@ -48,12 +48,12 @@ NotificationBars = (function(){
     var content = (params['content']) ? params['content'] : '';
     var timeout = (params['timeout']) ? params['timeout'] : false;
     
-    var notice = '<li class="notice-type-' + type + ' notification-bar-el" data-timeout="' + timeout + '">' +
-      '<div class="row">' +
-        '<span class="notification-title">' + title + '</span><span class="notification-content">' + content + '</span>' +
-        '<button class="close">Close</button>' +
-      '</div>' +
-    '</li>';
+    var notice =  '<li class="notice-type-' + type + ' notification-bar-el" data-timeout="' + timeout + '">' +
+                    '<div class="row">' +
+                      '<span class="notification-title">' + title + '</span><span class="notification-content">' + content + '</span>' +
+                      '<button class="close">Close</button>' +
+                    '</div>' +
+                  '</li>';
     
     return notice
   }
