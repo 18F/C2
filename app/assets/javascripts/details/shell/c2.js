@@ -75,7 +75,8 @@ C2 = (function() {
    */
   C2.prototype._setupNotifications = function(){
     var self = this;  
-    this.notification.el.on('notification:create', function(data){
+    this.notification.el.on('notification:create', function(event, data){
+      console.log('Notification: ', data);
       self.notification.create(data);
     });
   }
@@ -123,10 +124,10 @@ C2 = (function() {
   }
 
   C2.prototype.handleSaveError = function(data){
-    this.notification.trigger('notification:create', {
+    this.notification.el.trigger('notification:create', {
       title: "Request Not Saved",
       content: data['response'][0],
-      status: "alert"
+      type: "alert"
     });
   }
 
@@ -158,10 +159,10 @@ C2 = (function() {
     this.actionBar.viewMode();
     this.actionBar.cancelDisable();
     this.undoCheck.viewed = true;
-    this.notification.trigger('notification:create', {
+    this.notification.el.trigger('notification:create', {
       title: "Canceled Change",
       content: "",
-      status: "notice"
+      type: "notice"
     });
   }
  
@@ -172,10 +173,10 @@ C2 = (function() {
     this.undoCheck.el.trigger("undo-check:save");
     this.actionBar.el.trigger("action-bar-clicked:saved");
     this.detailsView();
-    this.notification.trigger('notification:create', {
+    this.notification.el.trigger('notification:create', {
       title: "Changes Saved",
       content: "Your changes were saved.",
-      status: "success"
+      type: "success"
     });
   }
   
