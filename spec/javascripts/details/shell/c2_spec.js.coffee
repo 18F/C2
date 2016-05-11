@@ -98,3 +98,8 @@ describe 'C2', ->
         flag = true
       c2.detailsSave.el.trigger('details-form:save')
       expect(flag).to.eql(true)
+
+  describe '#events notification', -> 
+    it "checks for one success response", ->
+    it "checks for one errors", ->
+    it "checks for multiple errors", ->
