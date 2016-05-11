@@ -118,7 +118,11 @@ C2 = (function() {
       if(!self.editMode.getState()){
         self.detailsEditMode();
       } else {
-        self.detailsView();
+        if(self.undoCheck.hasChanged()){
+          self.detailsCancelled();
+        } else {
+          self.detailsView();
+        }
       }
     });
   }
@@ -145,7 +149,7 @@ C2 = (function() {
   C2.prototype._setupActionBar = function(){
     var self = this;
     this.actionBar.el.on("action-bar-clicked:cancel", function(){
-      self.detailsView();
+      self.detailsCancelled();
     });
     this.actionBar.el.on("action-bar-clicked:save", function(){
       self.actionBar.el.trigger("action-bar-clicked:saving");
