@@ -2,7 +2,7 @@
 
 ## Dependencies
 
-* Ruby 2.2.3
+* Ruby 2.2.5
 * PostgreSQL 9.x
 * Elasticsearch 1.5+
 * A [MyUSA](https://alpha.my.usa.gov/) account
