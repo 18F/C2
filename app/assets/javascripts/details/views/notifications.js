@@ -1,27 +1,27 @@
-var NotificationBars;
+var Notifications;
 
-NotificationBars = (function(){
-  function NotificationBars(el) {
+Notifications = (function(){
+  function Notifications(el) {
     this.el = $(el);
     this._setup();
     return this;
   }
   
-  NotificationBars.prototype._setup = function(){
+  Notifications.prototype._setup = function(){
     this._events();
   }
 
-  NotificationBars.prototype._events = function(){
+  Notifications.prototype._events = function(){
     this._closeButton()
   }
 
-  NotificationBars.prototype.create = function(params){
+  Notifications.prototype.create = function(params){
     console.log('Notification created');
     var notice = this._prepare(params);
     this._postNotification(notice);
   }
 
-  NotificationBars.prototype._closeButton = function(el){
+  Notifications.prototype._closeButton = function(el){
     this.el.delegate('.close', 'click', function(){
       var el = this;
       var $notice = $(el).closest('.notification-bar-el');
@@ -35,14 +35,14 @@ NotificationBars = (function(){
     })
   }
 
-  NotificationBars.prototype._postNotification = function(notice){
+  Notifications.prototype._postNotification = function(notice){
     var self = this;
     this.el.find('ul').append(function() {
       return $(notice);
     })
   }
 
-  NotificationBars.prototype._prepare = function(params){
+  Notifications.prototype._prepare = function(params){
     var type    = (params['type']) ? params['type'] : 'primary';
     var title   = (params['title']) ? params['title'] : '';
     var content = (params['content']) ? params['content'] : '';
@@ -58,16 +58,16 @@ NotificationBars = (function(){
     return notice
   }
 
-  NotificationBars.prototype.clearAll = function(){
+  Notifications.prototype.clearAll = function(){
   }
 
   // Use the ID to select which to clear
-  NotificationBars.prototype.clearOne = function(id){
+  Notifications.prototype.clearOne = function(id){
     
   }
 
-  return NotificationBars;
+  return Notifications;
 
 }());
 
-window.NotificationBars = NotificationBars;
+window.Notifications = Notifications;

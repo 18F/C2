@@ -54,7 +54,7 @@ C2 = (function() {
     this.attachmentCardController = new AttachmentCardController(config.attachmentCard);
     this.observerCardController = new ObserverCardController(config.observerCard);
     this.actionBar = new ActionBar(config.actionBar);
-    this.notification = new NotificationBars(config.notifications);
+    this.notification = new Notifications(config.notifications);
   }
 
   C2.prototype._setupEvents = function(){
