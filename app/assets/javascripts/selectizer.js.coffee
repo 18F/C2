@@ -1,4 +1,4 @@
-class Selectizer
+class @Selectizer
   constructor: (el) ->
     @$el = $(el)
     @dataAttr = @$el.attr("data-attr") || "default_field"

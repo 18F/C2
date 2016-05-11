@@ -5,6 +5,7 @@
     detailsForm: getRequestDetailsForm(),
     detailsSave: getRequestDetailsForm(),
     attachmentCard: getAttachmentContent(),
+    observerCard: getObserverContent(),
     actionBar: getActionBarContent(),
     undoCheck: getRequestDetailsForm(),
   }
@@ -55,3 +56,15 @@
       </form>
     </div>
   ')
+
+@getObserverContent = ->
+  $('
+    <div class="card-for-observers">
+      <ul class="observer-list"></ul>
+      <form class="new_observation" id="new_observation">
+      <select id="observation_user_id" class="js-selectize">
+        <option value="user1@test.com">user1@test.com</option>
+      </select>
+      <input class="form-field no-animation" style="display: inline;" data-hide-until-select="observation_user_id" type="text" name="observation[reason]" id="observation_reason"> 
+    </div>
+    ')

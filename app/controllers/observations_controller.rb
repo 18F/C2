@@ -7,20 +7,19 @@ class ObservationsController < ApplicationController
     observer = User.find(observation_params)
     observation = @proposal.add_observer(observer, current_user, params[:observation][:reason])
     prep_create_response_msg(observer, observation)
-    redirect_to proposal_path(@proposal)
+    respond_to_observer
   end
 
   def destroy
     proposal = observation.proposal
-    if current_user == observation.user
-      redirect_path = proposals_path
-    else
-      redirect_path = proposal_path(proposal)
-    end
     DispatchFinder.run(proposal).on_observer_removed(observation.user)
     observation.destroy
     flash[:success] = "Removed Observation for #{proposal.public_id}"
-    redirect_to redirect_path
+    if current_user == observation.user
+      redirect_to proposals_path
+    else
+      respond_to_observer
+    end
   end
 
   protected
@@ -60,5 +59,13 @@ class ObservationsController < ApplicationController
       status: 403,
       locals: { msg: "You are not allowed to add observers to that proposal. #{exception.message}" }
     )
+  end
+
+  def respond_to_observer
+    respond_to do |format|
+      format.html { redirect_to proposal_path(@proposal) }
+      @subscriber_list = SubscriberList.new(@proposal).triples
+      format.js
+    end
   end
 end
