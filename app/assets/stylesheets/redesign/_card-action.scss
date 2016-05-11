@@ -86,6 +86,14 @@ $action-bar-wrapper-height-small: 60px;
     font-weight: bold;
     opacity: .9;
     border-top: 2px solid #4A8C35;
+    &.notice-type-notice{
+      background: $secondary-color;
+      border-top: 2px solid darken($secondary-color, 5%);
+    },
+    &.notice-type-alert{
+      background: $alert-color;
+      border-top: 2px solid darken($alert-color, 5%);
+    }
   }
 }
 
