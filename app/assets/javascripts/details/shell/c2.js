@@ -116,7 +116,7 @@ C2 = (function() {
     for (var i = response.length - 1; i >= 0; i--) {
       this.notification.el.trigger('notification:create', {
         title: "Request Not Saved",
-        content: response[i]['content'],
+        content: response[i],
         type: "alert"
       });
     }
