@@ -106,6 +106,7 @@ C2 = (function() {
 
     this.detailsSave.el.on('details-form:error', function(event, data){
       self.handleSaveError(data);
+      self.actionBar.saveButtonLadda.ladda( 'stop' );
     });
   }
 
