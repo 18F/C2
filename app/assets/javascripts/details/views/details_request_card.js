@@ -1,18 +1,19 @@
-var DetailsRequestForm;
+var DetailsRequestCard;
 
-DetailsRequestForm = (function(){
-  function DetailsRequestForm(el) {
+DetailsRequestCard = (function(){
+  function DetailsRequestCard(el) {
     this.el = $(el);
     this._setup();
     return this;
   }
   
-  DetailsRequestForm.prototype._setup = function(){
+  DetailsRequestCard.prototype._setup = function(){
     this._events();
   }
 
-  DetailsRequestForm.prototype._events = function(){
-    var self = this;
+  DetailsRequestCard.prototype._events = function(){
+    var self = this;    
+    
     this.el.find("input, textarea, select, radio").on("change keyup", function(e){
       var el = this;
       switch(el.nodeName){
@@ -45,11 +46,31 @@ DetailsRequestForm = (function(){
     });
   }
 
-  DetailsRequestForm.prototype.toggleButtonText = function(text){
+  DetailsRequestCard.prototype.toggleButtonText = function(text){
     this.el.find('.edit-toggle').text(text)
   }
 
-  DetailsRequestForm.prototype.setMode = function(type){
+  DetailsRequestCard.prototype.updateContentFields = function(field, value){
+    $(field).text(value);
+  }
+
+  DetailsRequestCard.prototype.updateViewModeContent = function(data){
+    console.log(data);
+    var viewEl = this.el.find('#view-request-details')
+    var content = data['response'];
+    var id = content['id'];
+    var self = this;
+    delete content['id'];
+    $.each(content, function(key, value){
+      var field = '#' + key + '-' + id;
+      if(!(value === null)){
+        self.updateContentFields(field, value);
+      }
+    });
+    this.el.trigger("form:updated");
+  }
+
+  DetailsRequestCard.prototype.setMode = function(type){
     if (type === "view"){
       this.el.removeClass('edit-fields');
       this.el.addClass('view-fields');
@@ -59,12 +80,12 @@ DetailsRequestForm = (function(){
     }
   }
 
-  DetailsRequestForm.prototype.fieldChanged = function(e, el){
+  DetailsRequestCard.prototype.fieldChanged = function(e, el){
     this.el.trigger("form:changed"); 
   }
 
-  return DetailsRequestForm;
+  return DetailsRequestCard;
 
 }());
 
-window.DetailsRequestForm = DetailsRequestForm;
+window.DetailsRequestCard = DetailsRequestCard;

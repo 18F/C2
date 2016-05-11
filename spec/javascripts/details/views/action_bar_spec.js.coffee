@@ -1,6 +1,9 @@
 #= require jquery
+#= require ladda/ladda.min
+#= require ladda/ladda.jquery.min
 #= require details/views/action_bar
 #= require details/details_helper
+#= require ladda/spin.min
 
 describe 'ActionBar', ->
 
@@ -11,7 +14,7 @@ describe 'ActionBar', ->
     
     it "anchor link is not disabled", ->
       actionBar = new ActionBar(getActionBarContent())  
-      expect(actionBar.el.find('.save-button input').is(":disabled")).to.eql(true)
+      expect(actionBar.el.find('.save-button button').is(":disabled")).to.eql(true)
   
   describe '#_events .save-button', ->
     it "flag is set", ->
@@ -48,7 +51,7 @@ describe 'ActionBar', ->
     it "save button is not disabled", ->
       actionBar = new ActionBar(getActionBarContent())  
       actionBar.editMode()
-      expect(actionBar.el.find('.save-button input').is(":disabled")).to.eql(false)
+      expect(actionBar.el.find('.save-button button').is(":disabled")).to.eql(false)
   
   describe '#viewMode', ->
     it "set edit mode and revert to view mode", ->
@@ -61,4 +64,4 @@ describe 'ActionBar', ->
       actionBar = new ActionBar(getActionBarContent())  
       actionBar.editMode()
       actionBar.viewMode()
-      expect(actionBar.el.find('.save-button input').is(":disabled")).to.eql(true)
+      expect(actionBar.el.find('.save-button button').is(":disabled")).to.eql(true)

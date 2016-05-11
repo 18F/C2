@@ -49,7 +49,7 @@ C2 = (function() {
   
   C2.prototype._setupViews = function(){
     var config = this.config;
-    this.detailsRequestForm = new DetailsRequestForm(config.detailsForm);
+    this.detailsRequestCard = new DetailsRequestCard(config.detailsForm);
     this.attachmentCardController = new AttachmentCardController(config.attachmentCard);
     this.observerCardController = new ObserverCardController(config.observerCard);
     this.actionBar = new ActionBar(config.actionBar);
@@ -58,12 +58,44 @@ C2 = (function() {
   C2.prototype._setupEvents = function(){
     this._checkFieldChange();
     this._setupActionBar();
-    this._triggerEditToggle();
+    this._setupEditToggle();
+    this._setupDetailsData();
+    this._setupDetailsForm();
+    this._setupEditMode();
   }
   
-  C2.prototype._triggerEditToggle = function(){
+  C2.prototype._setupEditMode = function(){
+    var self = this;  
+    this.editMode.el.on('edit-mode:has-changed', function(){
+      self.actionBar.editMode();
+    });
+    this.editMode.el.on('edit-mode:not-changed', function(){
+      self.actionBar.viewMode();
+    });
+  }
+
+  C2.prototype._setupDetailsForm = function(){
+    var self = this;  
+    this.detailsRequestCard.el.on('form:updated', function(event, data){
+      self.detailsSaved();
+      self.actionBar.el.trigger("action-bar-clicked:saved");
+    });
+  }
+
+  C2.prototype._setupDetailsData = function(){
     var self = this;
-    this.detailsRequestForm.el.on('edit-toggle:trigger', function(){
+    this.detailsSave.el.on('details-form:success', function(event, data){
+      self.detailsRequestCard.updateViewModeContent(data);
+    });
+
+    this.detailsSave.el.on('details-form:error', function(event, data){
+      console.log('error: ', data);
+    });
+  }
+
+  C2.prototype._setupEditToggle = function(){
+    var self = this;
+    this.detailsRequestCard.el.on('edit-toggle:trigger', function(){
       console.log('self.editMode.getState(): ', self.editMode.getState());
       if(!self.editMode.getState()){
         self.detailsEditMode();
@@ -75,7 +107,7 @@ C2 = (function() {
 
   C2.prototype._checkFieldChange = function(){
     var self = this;
-    this.detailsRequestForm.el.on('form:changed', function(){
+    this.detailsRequestCard.el.on('form:changed', function(){
       if(self.undoCheck.hasChanged()){
         self.editMode.el.trigger('edit-mode:has-changed');
       } else {
@@ -90,13 +122,8 @@ C2 = (function() {
       self.detailsView();
     });
     this.actionBar.el.on("action-bar-clicked:save", function(){
-      self.detailsSaved();
-    });
-    this.editMode.el.on('edit-mode:has-changed', function(){
-      self.actionBar.editMode();
-    });
-    this.editMode.el.on('edit-mode:not-changed', function(){
-      self.actionBar.viewMode();
+      self.actionBar.el.trigger("action-bar-clicked:saving");
+      self.detailsSave.el.trigger("details-form:save");
     });
   }
 
@@ -107,18 +134,21 @@ C2 = (function() {
     this.actionBar.cancelDisable();
     this.undoCheck.viewed = true;
   }
+ 
+  C2.prototype.processSaveRequest = function(){
+  }
   
   C2.prototype.detailsSaved = function(){
     this.undoCheck.el.trigger("undo-check:save");
     this.actionBar.el.trigger("action-bar-clicked:saved");
-    this.detailsSave.el.trigger("details-form:save");
+    this.detailsView();
   }
   
   C2.prototype.detailsEditMode = function(){
-    this.detailsRequestForm.el.trigger('form:changed');
+    this.detailsRequestCard.el.trigger('form:changed');
     this.actionBar.cancelActive();
     this.editMode.stateTo('edit');
-    this.detailsRequestForm.toggleButtonText('Cancel');
+    this.detailsRequestCard.toggleButtonText('Cancel');
   }
 
   C2.prototype.detailsView = function(){
@@ -126,7 +156,7 @@ C2 = (function() {
     this.editMode.stateTo('view');
     this.undoCheck.el.trigger("undo-check:cancel");
     this.actionBar.viewMode();
-    this.detailsRequestForm.toggleButtonText('Edit');
+    this.detailsRequestCard.toggleButtonText('Edit');
     this.undoCheck.viewed = true;
   }
 

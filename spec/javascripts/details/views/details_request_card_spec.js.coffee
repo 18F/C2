@@ -3,13 +3,13 @@
 #= require spec_helper
 #= require details/details_helper
 
-describe 'DetailsRequestForm', ->
+describe 'DetailsRequestCard', ->
   
   describe '#_event', ->
     it "form keypress is triggered on input field", ->
       test_ran = false
       content = getRequestDetailsForm()
-      form = new DetailsRequestForm(content)  
+      form = new DetailsRequestCard(content)  
       form._setup()
       first_field = content.find('input').first()
       form.el.on 'form:changed', ( ->
