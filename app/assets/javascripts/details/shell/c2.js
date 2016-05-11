@@ -64,8 +64,22 @@ C2 = (function() {
     this._setupDetailsData();
     this._setupDetailsForm();
     this._setupEditMode();
+    this._setupNotifications();
   }
   
+  /**
+   * data['title']
+   * data['content']
+   * data['status']
+   * data['timeout'] (optional)
+   */
+  C2.prototype._setupNotifications = function(){
+    var self = this;  
+    this.notification.el.on('notification:create', function(data){
+      self.notification.create(data);
+    });
+  }
+
   C2.prototype._setupEditMode = function(){
     var self = this;  
     this.editMode.el.on('edit-mode:has-changed', function(){
