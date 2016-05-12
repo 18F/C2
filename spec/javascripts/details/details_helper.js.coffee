@@ -15,6 +15,15 @@
     <div class="view-mode" id="mode-parent"></div>
   ')
 
+@getNotificationContent = ->
+  $('
+    <div class="action-bar-template" id="action-bar-status">
+      <ul>
+        <div></div>
+      </ul>
+    </div>
+  ')
+
 @getAttachmentContent = ->
   $('
     <div class="card-for-attachments"></div>
@@ -30,7 +39,7 @@
 
 @getActionBarContent = ->
   $(
-    '<div class="action-bar-template action-bar-wrapper">
+    '<div class="action-bar-template" id="action-bar-wrapper">
       <ul id="request-actions">
         <li class="cancel-button">
           <button value="Cancel">

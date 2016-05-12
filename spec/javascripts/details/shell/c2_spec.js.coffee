@@ -8,6 +8,7 @@
 #= require details/views/attachment_card
 #= require details/views/details_request_card
 #= require details/views/observer_card
+#= require details/views/notifications
 #= require details/data/details_save
 #= require details/data/undo_check
 #= require details/shell/c2
@@ -98,3 +99,13 @@ describe 'C2', ->
         flag = true
       c2.detailsSave.el.trigger('details-form:save')
       expect(flag).to.eql(true)
+
+  describe '#events _setupNotifications', -> 
+    it "create the event hook that notification triggers", ->
+  
+  describe '#handleSaveError', -> 
+    it "checks for one errors", ->
+    it "checks for multiple errors", ->
+
+  describe '#events notification', -> 
+    it "checks for one success response", ->

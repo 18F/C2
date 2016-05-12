@@ -44,46 +44,60 @@ ul#request-actions{
 }
 
 $action-bar-wrapper-height-small: 60px;
-.action-bar-status{
-  display: none;
+#action-bar-status{
+  ul{
+    margin: 0px;
+    li{
+    }
+  }
   bottom:  $action-bar-wrapper-height-small;
   &.show{
     display: block;
   }
 }
 
-.action-bar-wrapper{
+#action-bar-wrapper{
   height: $action-bar-wrapper-height-small;
   padding-top: 10px;
 }
 
 @media screen and ( min-height: 700px ){
   $action-bar-wrapper-height: 110px;
-  .action-bar-status{
+  #action-bar-status{
     .status-bar{
       padding-top: 7px;
     }
     bottom:  $action-bar-wrapper-height;
   }
 
-  .action-bar-wrapper{
+  #action-bar-wrapper{
     height: $action-bar-wrapper-height;
     padding-top: 20px;
   }
 }
 
 
-.action-bar-status{
-  .status-bar{
+#action-bar-status{
+  .notification-bar-el{
     padding-top: 7px;
+    min-height: 40px;
+    background: #589D42;
+    color: white;
+    font-weight: bold;
+    opacity: .9;
+    border-top: 2px solid #4A8C35;
+    &.notice-type-notice{
+      background: $secondary-color;
+      border-top: 2px solid darken($secondary-color, 5%);
+    }
+    &.notice-type-alert{
+      background: $alert-color;
+      border-top: 2px solid darken($alert-color, 5%);
+    }
   }
-  height: 40px;
-  background: #589D42;
-  color: white;
-  font-weight: bold;
 }
 
-.action-bar-wrapper{
+#action-bar-wrapper{
   bottom:  0px;
   background: #f2f4f5;
   > div{

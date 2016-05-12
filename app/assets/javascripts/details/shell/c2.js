@@ -4,13 +4,14 @@ C2 = (function() {
   function C2(config){
     config = config || {};
     this.config = {
-      actionBar:      '.action-bar-wrapper',
+      actionBar:      '#action-bar-wrapper',
       attachmentCard: '.card-for-attachments',
       detailsForm:    '#request-details-card',
       detailsSave:    '#request-details-card',
       editMode:       '#mode-parent',
       formState:      '#request-details-card',
       undoCheck:      '#request-details-card form',
+      notifications:  '#action-bar-status',
       observerCard:   '.card-for-observers'
     }
     this._overrideTestConfig(config);
@@ -53,6 +54,7 @@ C2 = (function() {
     this.attachmentCardController = new AttachmentCardController(config.attachmentCard);
     this.observerCardController = new ObserverCardController(config.observerCard);
     this.actionBar = new ActionBar(config.actionBar);
+    this.notification = new Notifications(config.notifications);
   }
 
   C2.prototype._setupEvents = function(){
@@ -62,8 +64,23 @@ C2 = (function() {
     this._setupDetailsData();
     this._setupDetailsForm();
     this._setupEditMode();
+    this._setupNotifications();
   }
   
+  /**
+   * data['title']
+   * data['content']
+   * data['status']
+   * data['timeout'] (optional)
+   */
+  C2.prototype._setupNotifications = function(){
+    var self = this;  
+    this.notification.el.on('notification:create', function(event, data){
+      console.log('Notification: ', data);
+      self.notification.create(data);
+    });
+  }
+
   C2.prototype._setupEditMode = function(){
     var self = this;  
     this.editMode.el.on('edit-mode:has-changed', function(){
@@ -77,8 +94,7 @@ C2 = (function() {
   C2.prototype._setupDetailsForm = function(){
     var self = this;  
     this.detailsRequestCard.el.on('form:updated', function(event, data){
-      self.detailsSaved();
-      self.actionBar.el.trigger("action-bar-clicked:saved");
+      self.detailsSaved(data);
     });
   }
 
@@ -89,8 +105,21 @@ C2 = (function() {
     });
 
     this.detailsSave.el.on('details-form:error', function(event, data){
-      console.log('error: ', data);
+      self.handleSaveError(data);
+      self.actionBar.saveButtonLadda.ladda( 'stop' );
     });
+  }
+
+  C2.prototype.handleSaveError = function(data){
+    console.log("C2.prototype.handleSaveError: ", data);
+    var response = data['response'];
+    for (var i = response.length - 1; i >= 0; i--) {
+      this.notification.el.trigger('notification:create', {
+        title: "Request Not Saved",
+        content: response[i],
+        type: "alert"
+      });
+    }
   }
 
   C2.prototype._setupEditToggle = function(){
@@ -100,7 +129,11 @@ C2 = (function() {
       if(!self.editMode.getState()){
         self.detailsEditMode();
       } else {
-        self.detailsView();
+        if(self.undoCheck.hasChanged()){
+          self.detailsCancelled();
+        } else {
+          self.detailsView();
+        }
       }
     });
   }
@@ -119,7 +152,7 @@ C2 = (function() {
   C2.prototype._setupActionBar = function(){
     var self = this;
     this.actionBar.el.on("action-bar-clicked:cancel", function(){
-      self.detailsView();
+      self.detailsCancelled();
     });
     this.actionBar.el.on("action-bar-clicked:save", function(){
       self.actionBar.el.trigger("action-bar-clicked:saving");
@@ -133,15 +166,25 @@ C2 = (function() {
     this.actionBar.viewMode();
     this.actionBar.cancelDisable();
     this.undoCheck.viewed = true;
+    this.notification.el.trigger('notification:create', {
+      title: "Canceled Change",
+      content: "",
+      type: "notice"
+    });
   }
  
   C2.prototype.processSaveRequest = function(){
   }
   
-  C2.prototype.detailsSaved = function(){
+  C2.prototype.detailsSaved = function(data){
     this.undoCheck.el.trigger("undo-check:save");
     this.actionBar.el.trigger("action-bar-clicked:saved");
     this.detailsView();
+    this.notification.el.trigger('notification:create', {
+      title: "Changes Saved",
+      content: "Your changes were saved.",
+      type: "success"
+    });
   }
   
   C2.prototype.detailsEditMode = function(){

@@ -1,11 +1,7 @@
-.action-bar-template.action-bar-status
-  .medium-12.column.status-bar
-    %ul#request-actions.centered
-      %li.fl.modify-button.action-default
-        %span.action-status-value
-          Your updates have been saved.
+.action-bar-template#action-bar-status
+  %ul
   
-.action-bar-template.action-bar-wrapper
+.action-bar-template#action-bar-wrapper
   .medium-12.column
     %ul#request-actions.fr
       - if policy(@proposal).can_complete?
