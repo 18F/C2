@@ -16,7 +16,7 @@ class ObservationsController < ApplicationController
     observation.destroy
     flash[:success] = "Removed Observation for #{proposal.public_id}"
     if current_user == observation.user
-      redirect_to proposals_path
+      redirect_to_observer
     else
       respond_to_observer
     end
@@ -66,6 +66,14 @@ class ObservationsController < ApplicationController
       format.html { redirect_to proposal_path(@proposal) }
       @subscriber_list = SubscriberList.new(@proposal).triples
       format.js
+    end
+  end
+
+  def redirect_to_observer
+    respond_to do |format|
+      format.html { redirect_to proposals_path }
+      @redirect_path = proposals_path
+      format.js { render "shared/redirect" }
     end
   end
 end

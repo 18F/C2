@@ -1,0 +1,5 @@
+<% if @redirect_path %>
+  window.location = '<%= @redirect_path %>';
+<% else %>
+  window.location ='<%= proposals_path %>'
+<% end %>
