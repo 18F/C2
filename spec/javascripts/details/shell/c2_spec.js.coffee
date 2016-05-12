@@ -26,7 +26,7 @@ describe 'C2', ->
     it "checks for each constructor", ->
       c2 = new C2() 
       expect(c2.attachmentCardController instanceof AttachmentCardController).to.eql(true)
-      expect(c2.activityCardController instanceof activityCardController).to.eql(true)
+      expect(c2.activityCardController instanceof ActivityCardController).to.eql(true)
       expect(c2.editMode instanceof EditStateController).to.eql(true)
       expect(c2.detailsRequestCard instanceof DetailsRequestCard).to.eql(true)
       expect(c2.formState instanceof DetailsRequestFormState).to.eql(true)

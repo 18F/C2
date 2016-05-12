@@ -23,7 +23,7 @@ ActivityCardController = (function(){
           self.update(html, {focus: false});
         }, 
          error : function(xhr, textStatus, errorThrown ) {
-          if (textStatus == 'timeout') {
+          if (textStatus === "timeout") {
             this.tryCount++;
             if (this.tryCount <= this.retryLimit) {
               //try again
