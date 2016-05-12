@@ -16,6 +16,12 @@ class CommentsController < ApplicationController
     respond_to_comment
   end
 
+  def update_feed
+    events = HistoryList.new(proposal).events
+    @proposal = proposal
+    render partial: "proposals/details/activity", locals: { events: events }
+  end
+
   protected
 
   def proposal

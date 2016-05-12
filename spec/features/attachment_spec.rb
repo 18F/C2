@@ -56,7 +56,11 @@ describe "Add attachments" do
     visit "/proposals/#{proposal.id}?detail=new"
     page.execute_script("$('#attachment_file').addClass('show-attachment-file');")
     page.attach_file('attachment[file]', "#{Rails.root}/app/assets/images/bg_completed_status.gif", visible: false)
+    wait_for_ajax
     within(".attachment-list") do 
+      expect(page).to have_content("bg_completed_status.gif")
+    end
+    within(".card-for-activity") do
       expect(page).to have_content("bg_completed_status.gif")
     end
     visit "/proposals/#{proposal.id}?detail=normal"

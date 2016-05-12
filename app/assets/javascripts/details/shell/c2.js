@@ -8,6 +8,7 @@ C2 = (function() {
       attachmentCard: '.card-for-attachments',
       detailsForm:    '#request-details-card',
       detailsSave:    '#request-details-card',
+      activityCard:   '.card-for-activity',
       editMode:       '#mode-parent',
       formState:      '#request-details-card',
       undoCheck:      '#request-details-card form',
@@ -53,6 +54,7 @@ C2 = (function() {
     this.detailsRequestCard = new DetailsRequestCard(config.detailsForm);
     this.attachmentCardController = new AttachmentCardController(config.attachmentCard);
     this.observerCardController = new ObserverCardController(config.observerCard);
+    this.activityCardController = new ActivityCardController(config.activityCard);
     this.actionBar = new ActionBar(config.actionBar);
     this.notification = new Notifications(config.notifications);
   }

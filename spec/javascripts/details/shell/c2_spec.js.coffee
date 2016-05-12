@@ -7,6 +7,7 @@
 #= require details/views/action_bar
 #= require details/views/attachment_card
 #= require details/views/details_request_card
+#= require details/views/activity_card
 #= require details/views/observer_card
 #= require details/views/notifications
 #= require details/data/details_save

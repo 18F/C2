@@ -16,6 +16,7 @@ ObserverCardController = (function(){
     this.$el.html(html);
     this._selectize();
     this._hideUntilSelect();
+    $('.card-for-activity').trigger('activity-card:update');
   }
 
   ObserverCardController.prototype._selectize = function(){

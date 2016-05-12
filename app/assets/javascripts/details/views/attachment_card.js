@@ -15,6 +15,11 @@ AttachmentCardController = (function(){
     this._event();
   }
 
+  AttachmentCardController.prototype.update = function(html){
+    this.el.html(html);
+    $('.card-for-activity').trigger('activity-card:update');
+  }
+
   AttachmentCardController.prototype._getDefaultConfig = function(){
     return $.extend({ 
       form_id: "#new_attachment",
