@@ -5,15 +5,15 @@ C2 = (function() {
     config = config || {};
     this.config = {
       actionBar:      '#action-bar-wrapper',
-      attachmentCard: '.card-for-attachments',
+      attachmentCard: '#card-for-attachments',
       detailsForm:    '#request-details-card',
       detailsSave:    '#request-details-card',
-      activityCard:   '.card-for-activity',
+      activityCard:   '#card-for-activity',
       editMode:       '#mode-parent',
       formState:      '#request-details-card',
       undoCheck:      '#request-details-card form',
       notifications:  '#action-bar-status',
-      observerCard:   '.card-for-observers'
+      observerCard:   '#card-for-observers'
     }
     this._overrideTestConfig(config);
     this._blastOff();
@@ -67,6 +67,7 @@ C2 = (function() {
     this._setupDetailsForm();
     this._setupEditMode();
     this._setupNotifications();
+    this._setupActivityEvent();
   }
   
   /**
@@ -160,6 +161,27 @@ C2 = (function() {
       self.actionBar.el.trigger("action-bar-clicked:saving");
       self.detailsSave.el.trigger("details-form:save");
     });
+  }
+
+  C2.prototype._setupActivityEvent = function(){
+    var self = this;
+    this.attachmentCardController.el.on("attachment-card:updated", function(event, data){
+      self.activityCardController.el.trigger('activity-card:update');
+      self.createActivityNotification(data);
+    });
+  }
+
+  C2.prototype.createActivityNotification = function(data){
+    var params = {
+      title: "Attachment " + data.actionType,
+      type: data.noticeType
+    };
+    if (data.actionType === "delete"){
+      params.content =  data.fileName + " was deleted successfully.";
+    } else if (data.actionType === "create"){
+      params.content = data.fileName + " was uploaded successfully.";
+    }
+    this.notification.el.trigger('notification:create', params);
   }
 
   C2.prototype.detailsCancelled = function(){

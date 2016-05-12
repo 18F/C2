@@ -60,7 +60,7 @@ describe "Add attachments" do
     within(".attachment-list") do 
       expect(page).to have_content("bg_completed_status.gif")
     end
-    within(".card-for-activity") do
+    within("#card-for-activity") do
       expect(page).to have_content("bg_completed_status.gif")
     end
     visit "/proposals/#{proposal.id}?detail=normal"

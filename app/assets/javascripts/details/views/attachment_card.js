@@ -15,9 +15,9 @@ AttachmentCardController = (function(){
     this._event();
   }
 
-  AttachmentCardController.prototype.update = function(html){
+  AttachmentCardController.prototype.update = function(html, fileName){
     this.el.html(html);
-    $('.card-for-activity').trigger('activity-card:update');
+    this.el.trigger('attachment-card:updated', fileName);
   }
 
   AttachmentCardController.prototype._getDefaultConfig = function(){

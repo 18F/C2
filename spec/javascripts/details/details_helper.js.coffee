@@ -8,6 +8,7 @@
     observerCard: getObserverContent(),
     actionBar: getActionBarContent(),
     undoCheck: getRequestDetailsForm(),
+    activityCard: getActivityContent()
   }
 
 @getEditModeContent = ->
@@ -26,7 +27,7 @@
 
 @getAttachmentContent = ->
   $('
-    <div class="card-for-attachments"></div>
+    <div id="card-for-attachments"></div>
   ')
   .html('
     <label for="attachment_file" class="attachment-label">file label</label>
@@ -72,12 +73,22 @@
 
 @getObserverContent = ->
   $('
-    <div class="card-for-observers">
+    <div id="card-for-observers">
       <ul class="observer-list"></ul>
       <form class="new_observation" id="new_observation">
       <select id="observation_user_id" class="js-selectize">
         <option value="user1@test.com">user1@test.com</option>
       </select>
       <input class="form-field no-animation" style="display: inline;" data-hide-until-select="observation_user_id" type="text" name="observation[reason]" id="observation_reason"> 
+    </div>
+    ')
+
+@getActivityContent = ->
+  $('
+    <div id="card-for-activity">
+      <form class="new_comment" id="new_comment">
+        <textarea rows="5" name="comment[comment_text]" id="comment_comment_text"></textarea>
+        <input type="submit" name="commit" value="Send" id="add_a_comment">
+      </form>
     </div>
     ')
