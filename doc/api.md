@@ -92,7 +92,12 @@ Attribute | Type | Note
 ### Client data
 
 The `client_data` object is the client-specific set of attributes. The attribute names
-will vary based on the client. For example, [NCR](overview.md#national-capitol-region-ncr-service-centers) Work Order:
+will vary based on the client.
+
+See the [db schema](https://github.com/18F/C2/blob/master/db/schema.rb)
+for column names and constraints.
+
+For example, [NCR](overview.md#national-capitol-region-ncr-service-centers) Work Order:
 
 Attribute | Type | Note
 --- | --- | ---
@@ -111,7 +116,7 @@ Attribute | Type | Note
 `vendor` | string |
 
 Consult the [client data models](https://github.com/18F/C2/blob/master/app/models) themselves
-for details on specific required attributes.
+for details on specific required attributes, enums and other higher-level constraints.
 
 All attributes for `client_data` are present in responses, regardless of whether they have a value assigned.
 
