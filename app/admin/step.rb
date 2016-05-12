@@ -3,7 +3,7 @@ ActiveAdmin.register Step do
 
   filter :status
 
-  permit_params :status, :completer_id, :user_id
+  permit_params :completed_at, :completer_id, :status, :user_id
 
   index do
     column :id
@@ -44,8 +44,9 @@ ActiveAdmin.register Step do
   # /:id/edit page
   form do |f|
     f.inputs "Step" do
-      f.input :status, collection: %w(pending actionable completed)
+      f.input :completed_at
       f.input :completer
+      f.input :status, collection: %w(pending actionable completed)
       f.input :user
     end
     f.actions
