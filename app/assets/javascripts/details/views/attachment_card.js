@@ -15,6 +15,11 @@ AttachmentCardController = (function(){
     this._event();
   }
 
+  AttachmentCardController.prototype.update = function(html, fileName){
+    this.el.html(html);
+    this.el.trigger('attachment-card:updated', fileName);
+  }
+
   AttachmentCardController.prototype._getDefaultConfig = function(){
     return $.extend({ 
       form_id: "#new_attachment",

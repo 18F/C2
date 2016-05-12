@@ -1,1 +1,4 @@
-$("div.card-for-attachments div.attachments").html('<%=j render partial: 'proposals/details/attachment_list', locals: { proposal: @proposal } %>');
+c2.attachmentCardController.update('<%=j render partial: 'proposals/details/attachment' %>', 
+  { fileName: '<%=j @attachment_name %>',
+    actionType: 'delete',
+    noticeType: 'notice' });

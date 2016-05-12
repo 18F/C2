@@ -19,7 +19,7 @@ feature "Observers" do
     login_as(proposal.requester)
 
     visit "/proposals/#{proposal.id}?detail=new"
-    within('.card-for-observers') do
+    within('#card-for-observers') do
       fill_in_selectized("selectize-control", observer.email_address)
     end
     click_on "Add an Observer"
@@ -37,16 +37,29 @@ feature "Observers" do
     login_as(proposal.requester)
 
     visit "/proposals/#{proposal.id}?detail=new"
-    within('.card-for-observers') do
+    within('#card-for-observers') do
       fill_in_selectized("selectize-control", observer.email_address)
     end
     click_on "Add an Observer"
     wait_for_ajax
-    delete_button = find('.card-for-observers .observer-remove-button')
+    delete_button = find('#card-for-observers .observer-remove-button')
     delete_button.click
     within('.observer-list') do
       expect(page).to_not have_content("#{observer.full_name}")
     end
+    visit "/proposals/#{proposal.id}?detail=old"
+  end
+
+  scenario "allows observers to remove self with javascript", js: true do 
+    observer = create(:user)
+    proposal = create(:proposal, observer: observer)
+    login_as(observer)
+
+    visit "/proposals/#{proposal.id}?detail=new"
+    delete_button = find('.observer-remove-button')
+    delete_button.click
+    wait_for_ajax
+    expect(page).to have_content("Removed Observation for")
     visit "/proposals/#{proposal.id}?detail=old"
   end
 

@@ -7,6 +7,7 @@
 #= require details/views/action_bar
 #= require details/views/attachment_card
 #= require details/views/details_request_card
+#= require details/views/activity_card
 #= require details/views/observer_card
 #= require details/views/notifications
 #= require details/data/details_save
@@ -25,6 +26,7 @@ describe 'C2', ->
     it "checks for each constructor", ->
       c2 = new C2() 
       expect(c2.attachmentCardController instanceof AttachmentCardController).to.eql(true)
+      expect(c2.activityCardController instanceof ActivityCardController).to.eql(true)
       expect(c2.editMode instanceof EditStateController).to.eql(true)
       expect(c2.detailsRequestCard instanceof DetailsRequestCard).to.eql(true)
       expect(c2.formState instanceof DetailsRequestFormState).to.eql(true)
@@ -55,6 +57,14 @@ describe 'C2', ->
       }
       c2 = new C2(testParam)
       expect(c2.config.attachmentCard).to.eql(test)
+
+    it "check config passing test param activityCard", ->
+      test = "activity-card-test"
+      testParam = {
+        activityCard: test
+      }
+      c2 = new C2(testParam)
+      expect(c2.config.activityCard).to.eql(test)
 
     it "check config passing test param formState", ->
       test = "form-state-test"
