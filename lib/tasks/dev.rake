@@ -7,7 +7,7 @@ if Rails.env.development? || Rails.env.test?
       include FactoryGirl::Syntax::Methods
 
       email = args[:email]
-      user = User.find_or_create_by(email_address: email)
+      user = User.find_or_create_by!(email_address: email)
       user.update(client_slug: "ncr")
       role = Role.find_by(name: "admin")
       user.roles << role
