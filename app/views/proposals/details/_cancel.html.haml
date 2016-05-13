@@ -1,0 +1,11 @@
+.cancel-form
+  %h1
+    = proposal.name
+  = form_tag(cancel_proposal_path(@proposal), method: :post) do
+    = label_tag(:reason_input, "Reason for cancelation")
+    %br
+    = text_area_tag "reason_input", nil, size: "50x10"
+    %p
+      = submit_tag "YES, CANCEL", data: {"disable-if-empty" => "reason_input"}, class: "form-button"
+    %p
+      = link_to "NO, TAKE ME BACK", proposal_path(@proposal), class: "cancel-cancel-link"

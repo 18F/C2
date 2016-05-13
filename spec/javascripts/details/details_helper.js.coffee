@@ -8,7 +8,8 @@
     observerCard: getObserverContent(),
     actionBar: getActionBarContent(),
     undoCheck: getRequestDetailsForm(),
-    activityCard: getActivityContent()
+    activityCard: getActivityContent(),
+    cancelCard: getCancelCardContent()
   }
 
 @getEditModeContent = ->
@@ -91,4 +92,17 @@
         <input type="submit" name="commit" value="Send" id="add_a_comment">
       </form>
     </div>
+    ')
+
+@getCancelCardContent = ->
+  $('
+      <div class="cancel-modal">
+        <div class="cancel-form">
+          <form>
+            <textarea />
+            <input type="submit"></input>
+            <a class="cancel-cancel-link">Cancel</a>
+          </form>
+        </div>
+      </div>
     ')

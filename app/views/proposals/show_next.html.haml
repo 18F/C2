@@ -32,3 +32,6 @@
   
   = render partial: "proposals/details/action", locals: { proposal: @proposal }
   #proposal_id{ data: { proposal_id: @proposal.id } }
+
+#card-for-cancel.cancel-modal
+  = render partial: "proposals/details/cancel", locals: {proposal: @proposal}
