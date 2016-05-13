@@ -48,6 +48,7 @@ gem "peek-delayed_job"
 gem "peek-performance_bar"
 gem "peek-pg"
 gem "pg"
+gem "pry-rails"
 gem "puma"
 gem "pundit", ">= 1.0.0"  # Interface for Pundit::NotAuthorizedError changed in this version
 gem "rack-cors", require: "rack/cors"
@@ -70,7 +71,6 @@ group :test, :development do
   gem "database_cleaner"
   gem "konacha"
   gem "pry-byebug"
-  gem "pry-rails"
   gem "rspec-rails"
   gem "rack_session_access"
 end
