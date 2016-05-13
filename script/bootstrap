@@ -1,7 +1,15 @@
 #!/bin/sh
 
+# https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html
+# Terminates on some errors
 set -e
-set -x
+# Enables trace output
+# set -x
+
+if [[ $# -eq 0 ]]; then
+  echo "Usage: bootstrap <email address>"
+  exit
+fi
 
 # create config files, if not already present
 if [ ! -f .env ]; then
