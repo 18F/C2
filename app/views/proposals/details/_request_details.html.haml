@@ -10,15 +10,4 @@
 
         .content-content.column#view-request-details
           = simple_form_for @client_data_instance, html: { multipart: true }, remote: true do |f|
-            - proposal.new_fields_for_display.each do |field|
-              .detail-wrapper
-                .detail-display
-                  %label.detail-element
-                    = t("decorators."+@current_user.client_slug+"/work_order."+field[:key]) 
-                  %span.detail-value{id: field[:key] + '-' + @client_data_instance.id.to_s }
-                    = @client_data_instance[field[:key]]
-                .detail-edit
-                  %label.detail-element
-                  %span.detail-value
-                    = render partial: field[:partial], locals: { f: f, proposal: @proposal, client_data: @client_data_instance }
-            = submit_tag "Submit", hidden: true
+            = render @current_user.client_slug + '/request_details', locals: { f: f }
