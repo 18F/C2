@@ -6,7 +6,7 @@
         <div class="medium-up-2">
     - else
       .column{ id: field[:key] + '-wrapper'}
-        .detail-wrapper.row
+        .detail-wrapper
           .detail-display
             %label.detail-element
               = t("decorators."+@current_user.client_slug+"/work_order."+field[:key]) 
@@ -14,6 +14,7 @@
               = @client_data_instance[field[:key]]
           .detail-edit
             %label.detail-element
+              = t("decorators."+@current_user.client_slug+"/work_order."+field[:key]) 
             %span.detail-value
               = render partial: field[:partial], locals: { f: f, proposal: @proposal, client_data: @client_data_instance }
     - i = i + 1

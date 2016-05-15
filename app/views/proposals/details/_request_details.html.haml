@@ -9,4 +9,6 @@
               = "<a class='edit-toggle button'>Edit</a>".html_safe
 
         .content-content.column#view-request-details  
-          = render @current_user.client_slug + '/request_details'
+          .row
+            = render @current_user.client_slug + '/request_details'
+
