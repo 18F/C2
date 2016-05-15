@@ -1,73 +1,77 @@
-= simple_form_for @client_data_instance, html: { multipart: true }, remote: true do |f|
+- t_slug = "decorators." + @current_user.client_slug + "/work_order."
+- client_data = @client_data_instance
+- client_id = client_data.id.to_s
+= simple_form_for client_data, html: { multipart: true }, remote: true do |f|
   - i = 0
   - @proposal.new_fields_for_display.each do |field|
+    - key = field[:key]
+    - value_id = key + '-' + client_id
     - if i == 1
       :plain
         <div class="medium-up-2">
-    .column{ id: field[:key] + '-wrapper'}
-      .detail-wrapper.row{ class: field[:key] + "-wrapper"}
+    .column{ id: key + '-wrapper'}
+      .detail-wrapper.row{ class: key + "-wrapper"}
       
-        - if field[:key] == 'expense_type'
+        - if key == 'expense_type'
           .detail-display.column
             %label.detail-element
-              = t("decorators." + @current_user.client_slug + "/work_order." + "expense_type") 
-            %span.detail-value{id: field[:key] + '-' + @client_data_instance.id.to_s }
-              = @client_data_instance[:expense_type]
+              = t(t_slug + "expense_type") 
+            %span.detail-value{id: value_id }
+              = client_data[:expense_type]
 
           .detail-display.column
             %label.detail-element
-              = t("decorators." + @current_user.client_slug + "/work_order." + "emergency") 
-            %span.detail-value{id: field[:key] + '-' + @client_data_instance.id.to_s }
+              = t(t_slug + "emergency") 
+            %span.detail-value{id: value_id }
+
 
           .detail-display.column
             %label.detail-element
-              = t("decorators." + @current_user.client_slug + "/work_order." + "rwa_number") 
-            %span.detail-value{id: field[:key] + '-' + @client_data_instance.id.to_s }
-              = @client_data_instance[:rwa_number]
+              = t(t_slug + "rwa_number") 
+            %span.detail-value{id: value_id }
+              = client_data[:rwa_number]
 
           .detail-display.column
             %label.detail-element
-              = t("decorators." + @current_user.client_slug + "/work_order." + "work_order_code") 
-            %span.detail-value{id: field[:key] + '-' + @client_data_instance.id.to_s }
-              = @client_data_instance[:work_order_code]
+              = t(t_slug + "work_order_code") 
+            %span.detail-value{id: value_id }
+              = client_data[:work_order_code]
 
-        - elsif field[:key] == 'not_to_exceed'
-          - # See 'amount'
-
-        - elsif field[:key] == 'amount'
+        - elsif key == 'not_to_exceed' # See 'amount'
+        - elsif key == 'amount'
           .detail-display.column
             %label.detail-element
-              = t("decorators." + @current_user.client_slug + "/work_order." + "not_to_exceed") 
-            %span.detail-value{id: "not_to_exceed" + '-' + @client_data_instance.id.to_s }
-              = @client_data_instance[:not_to_exceed]
+              = t(t_slug + "not_to_exceed") 
+            %span.detail-value{id: "not_to_exceed" + '-' + client_id }
+              = client_data[:not_to_exceed]
           .detail-edit.column
             %label.detail-element
-              = t("decorators." + @current_user.client_slug + "/work_order." + "not_to_exceed") 
+              = t(t_slug + "not_to_exceed") 
             %span.detail-value
-              = render partial: field[:partial], locals: { f: f, proposal: @proposal, client_data: @client_data_instance }
+              = render partial: field[:partial], locals: { f: f, proposal: @proposal, client_data: client_data }
           
           .detail-display.column
             %label.detail-element
-              = t("decorators." + @current_user.client_slug + "/work_order." + "amount") 
-            %span.detail-value{id: "amount" + '-' + @client_data_instance.id.to_s }
-              = @client_data_instance[:amount]
+              = t(t_slug + "amount") 
+            %span.detail-value{id: "amount" + '-' + client_id }
+              = client_data[:amount]
           .detail-edit.column
             %label.detail-element
-              = t("decorators." + @current_user.client_slug + "/work_order." + "amount") 
+              = t(t_slug + "amount") 
             %span.detail-value
-              = render partial: field[:partial], locals: { f: f, proposal: @proposal, client_data: @client_data_instance }
+              = render partial: field[:partial], locals: { f: f, proposal: @proposal, client_data: client_data }
 
         - else
           .detail-display.column
             %label.detail-element
-              = t("decorators." + @current_user.client_slug + "/work_order." + field[:key]) 
-            %span.detail-value{id: field[:key] + '-' + @client_data_instance.id.to_s }
-              = @client_data_instance[field[:key]]
+              = t(t_slug + key) 
+            %span.detail-value{id: value_id }
+              = client_data[key]
           .detail-edit.column
             %label.detail-element
-              = t("decorators." + @current_user.client_slug + "/work_order." + field[:key]) 
+              = t(t_slug + key) 
             %span.detail-value
-              = render partial: field[:partial], locals: { f: f, proposal: @proposal, client_data: @client_data_instance }
+              = render partial: field[:partial], locals: { f: f, proposal: @proposal, client_data: client_data }
     - i = i + 1
   :plain
     </div>
