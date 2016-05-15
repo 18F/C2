@@ -4,17 +4,41 @@
     - if i == 1
       :plain
         <div class="medium-up-2">
-  
     .column{ id: field[:key] + '-wrapper'}
       .detail-wrapper.row
-        .detail-display
+        - if field[:key] == 'expense_type'
+          .detail-display.column
+            %label.detail-element
+              = t("decorators." + @current_user.client_slug + "/work_order." + "expense_type") 
+            %span.detail-value{id: field[:key] + '-' + @client_data_instance.id.to_s }
+              = @client_data_instance[:expense_type]
+
+          .detail-display.column
+            %label.detail-element
+              = t("decorators." + @current_user.client_slug + "/work_order." + "emergency") 
+            %span.detail-value{id: field[:key] + '-' + @client_data_instance.id.to_s }
+              = @client_data_instance[:emergency]
+
+          .detail-display.column
+            %label.detail-element
+              = t("decorators." + @current_user.client_slug + "/work_order." + "rwa_number") 
+            %span.detail-value{id: field[:key] + '-' + @client_data_instance.id.to_s }
+              = @client_data_instance[:rwa_number]
+
+          .detail-display.column
+            %label.detail-element
+              = t("decorators." + @current_user.client_slug + "/work_order." + "work_order_code") 
+            %span.detail-value{id: field[:key] + '-' + @client_data_instance.id.to_s }
+              = @client_data_instance[:work_order_code]
+        - else
+          .detail-display.column
+            %label.detail-element
+              = t("decorators." + @current_user.client_slug + "/work_order." + field[:key]) 
+            %span.detail-value{id: field[:key] + '-' + @client_data_instance.id.to_s }
+              = @client_data_instance[field[:key]]
+        .detail-edit.column
           %label.detail-element
-            = t("decorators."+@current_user.client_slug+"/work_order."+field[:key]) 
-          %span.detail-value{id: field[:key] + '-' + @client_data_instance.id.to_s }
-            = @client_data_instance[field[:key]]
-        .detail-edit
-          %label.detail-element
-            = t("decorators."+@current_user.client_slug+"/work_order."+field[:key]) 
+            = t("decorators." + @current_user.client_slug + "/work_order." + field[:key]) 
           %span.detail-value
             = render partial: field[:partial], locals: { f: f, proposal: @proposal, client_data: @client_data_instance }
     - i = i + 1
