@@ -10,9 +10,9 @@
       :plain
         <div class="medium-up-2">
     .column{ id: key + '-wrapper'}
-      .detail-wrapper.row{ class: key + "-wrapper"}
       
-        - if key == 'expense_type'
+      - if key == 'expense_type'
+        .detail-wrapper.row{ class: key + "-wrapper"}
           .detail-display.column
             %label.detail-element
               = t(t_slug + "expense_type") 
@@ -23,28 +23,32 @@
               = t(t_slug + key) 
             %span.detail-value
               = render partial: field[:partial], locals: { f: f, proposal: @proposal, client_data: client_data }
-          - if client_data[:expense_type] == 'BA60'
-          - elsif client_data[:expense_type] == 'BA61'
+        - if client_data[:expense_type] == 'BA60'
+        - elsif client_data[:expense_type] == 'BA61'
+          .detail-wrapper.row{ class: key + "-wrapper"}
             .detail-display.column
               %label.detail-element
                 = t(t_slug + "emergency") 
               %span.detail-value{id: value_id }
 
-          - elsif client_data[:expense_type] == 'BA80'
+        - elsif client_data[:expense_type] == 'BA80'
+          .detail-wrapper.row{ class: key + "-wrapper"}
             .detail-display.column
               %label.detail-element
                 = t(t_slug + "rwa_number") 
               %span.detail-value{id: value_id }
                 = client_data[:rwa_number]
 
+          .detail-wrapper.row{ class: key + "-wrapper"}
             .detail-display.column
               %label.detail-element
                 = t(t_slug + "work_order_code") 
               %span.detail-value{id: value_id }
                 = client_data[:work_order_code]
 
-        - elsif key == 'not_to_exceed' # See 'amount'
-        - elsif key == 'amount'
+      - elsif key == 'not_to_exceed' # See 'amount'
+      - elsif key == 'amount'
+        .detail-wrapper.row{ class: key + "-wrapper"}
           .detail-display.column
             %label.detail-element
               = t(t_slug + "not_to_exceed") 
@@ -55,7 +59,8 @@
               = t(t_slug + "not_to_exceed") 
             %span.detail-value
               = render partial: field[:partial], locals: { f: f, proposal: @proposal, client_data: client_data }
-          
+        
+        .detail-wrapper.row{ class: key + "-wrapper"}
           .detail-display.column
             %label.detail-element
               = t(t_slug + "amount") 
@@ -67,7 +72,8 @@
             %span.detail-value
               = render partial: field[:partial], locals: { f: f, proposal: @proposal, client_data: client_data }
 
-        - else
+      - else
+        .detail-wrapper.row{ class: key + "-wrapper"}
           .detail-display.column
             %label.detail-element
               = t(t_slug + key) 
