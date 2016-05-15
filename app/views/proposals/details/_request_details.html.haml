@@ -8,6 +8,5 @@
             - if !@proposal.completed?
               = "<a class='edit-toggle button'>Edit</a>".html_safe
 
-        .content-content.column#view-request-details
-          = simple_form_for @client_data_instance, html: { multipart: true }, remote: true do |f|
-            = render @current_user.client_slug + '/request_details', locals: { f: f }
+        .content-content.column#view-request-details  
+          = render @current_user.client_slug + '/request_details'
