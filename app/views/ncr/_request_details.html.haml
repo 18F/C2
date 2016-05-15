@@ -1,7 +1,10 @@
 = simple_form_for @client_data_instance, html: { multipart: true }, remote: true do |f|
-  = @proposal.new_fields_for_display[0][:key]
-  .medium-up-2
-    - @proposal.new_fields_for_display.each do |field|
+  - i = 0
+  - @proposal.new_fields_for_display.each do |field|
+    - if i == 1
+      :plain
+        <div class="medium-up-2">
+    - else
       .column{ id: field[:key] + '-wrapper'}
         .detail-wrapper.row
           .detail-display
@@ -13,4 +16,8 @@
             %label.detail-element
             %span.detail-value
               = render partial: field[:partial], locals: { f: f, proposal: @proposal, client_data: @client_data_instance }
-        = submit_tag "Submit", hidden: true
+    - i = i + 1
+  :plain
+    </div>
+
+  = submit_tag "Submit", hidden: true
