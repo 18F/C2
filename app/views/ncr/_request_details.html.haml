@@ -5,7 +5,8 @@
       :plain
         <div class="medium-up-2">
     .column{ id: field[:key] + '-wrapper'}
-      .detail-wrapper.row
+      .detail-wrapper.row{ class: field[:key] + "-wrapper"}
+      
         - if field[:key] == 'expense_type'
           .detail-display.column
             %label.detail-element
@@ -17,7 +18,6 @@
             %label.detail-element
               = t("decorators." + @current_user.client_slug + "/work_order." + "emergency") 
             %span.detail-value{id: field[:key] + '-' + @client_data_instance.id.to_s }
-              = @client_data_instance[:emergency]
 
           .detail-display.column
             %label.detail-element
@@ -30,17 +30,44 @@
               = t("decorators." + @current_user.client_slug + "/work_order." + "work_order_code") 
             %span.detail-value{id: field[:key] + '-' + @client_data_instance.id.to_s }
               = @client_data_instance[:work_order_code]
+
+        - elsif field[:key] == 'not_to_exceed'
+          - # See 'amount'
+
+        - elsif field[:key] == 'amount'
+          .detail-display.column
+            %label.detail-element
+              = t("decorators." + @current_user.client_slug + "/work_order." + "not_to_exceed") 
+            %span.detail-value{id: "not_to_exceed" + '-' + @client_data_instance.id.to_s }
+              = @client_data_instance[:not_to_exceed]
+          .detail-edit.column
+            %label.detail-element
+              = t("decorators." + @current_user.client_slug + "/work_order." + "not_to_exceed") 
+            %span.detail-value
+              = render partial: field[:partial], locals: { f: f, proposal: @proposal, client_data: @client_data_instance }
+          
+          .detail-display.column
+            %label.detail-element
+              = t("decorators." + @current_user.client_slug + "/work_order." + "amount") 
+            %span.detail-value{id: "amount" + '-' + @client_data_instance.id.to_s }
+              = @client_data_instance[:amount]
+          .detail-edit.column
+            %label.detail-element
+              = t("decorators." + @current_user.client_slug + "/work_order." + "amount") 
+            %span.detail-value
+              = render partial: field[:partial], locals: { f: f, proposal: @proposal, client_data: @client_data_instance }
+
         - else
           .detail-display.column
             %label.detail-element
               = t("decorators." + @current_user.client_slug + "/work_order." + field[:key]) 
             %span.detail-value{id: field[:key] + '-' + @client_data_instance.id.to_s }
               = @client_data_instance[field[:key]]
-        .detail-edit.column
-          %label.detail-element
-            = t("decorators." + @current_user.client_slug + "/work_order." + field[:key]) 
-          %span.detail-value
-            = render partial: field[:partial], locals: { f: f, proposal: @proposal, client_data: @client_data_instance }
+          .detail-edit.column
+            %label.detail-element
+              = t("decorators." + @current_user.client_slug + "/work_order." + field[:key]) 
+            %span.detail-value
+              = render partial: field[:partial], locals: { f: f, proposal: @proposal, client_data: @client_data_instance }
     - i = i + 1
   :plain
     </div>
