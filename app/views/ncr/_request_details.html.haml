@@ -18,24 +18,30 @@
               = t(t_slug + "expense_type") 
             %span.detail-value{id: value_id }
               = client_data[:expense_type]
-
-          .detail-display.column
+          .detail-edit.column
             %label.detail-element
-              = t(t_slug + "emergency") 
-            %span.detail-value{id: value_id }
+              = t(t_slug + key) 
+            %span.detail-value
+              = render partial: field[:partial], locals: { f: f, proposal: @proposal, client_data: client_data }
+          - if client_data[:expense_type] == 'BA60'
+          - elsif client_data[:expense_type] == 'BA61'
+            .detail-display.column
+              %label.detail-element
+                = t(t_slug + "emergency") 
+              %span.detail-value{id: value_id }
 
+          - elsif client_data[:expense_type] == 'BA80'
+            .detail-display.column
+              %label.detail-element
+                = t(t_slug + "rwa_number") 
+              %span.detail-value{id: value_id }
+                = client_data[:rwa_number]
 
-          .detail-display.column
-            %label.detail-element
-              = t(t_slug + "rwa_number") 
-            %span.detail-value{id: value_id }
-              = client_data[:rwa_number]
-
-          .detail-display.column
-            %label.detail-element
-              = t(t_slug + "work_order_code") 
-            %span.detail-value{id: value_id }
-              = client_data[:work_order_code]
+            .detail-display.column
+              %label.detail-element
+                = t(t_slug + "work_order_code") 
+              %span.detail-value{id: value_id }
+                = client_data[:work_order_code]
 
         - elsif key == 'not_to_exceed' # See 'amount'
         - elsif key == 'amount'
