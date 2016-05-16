@@ -10,9 +10,10 @@
     - if i == 1
       :plain
         <div class="medium-up-2">
+
     - if key == 'expense_type'
       = render partial: client_slug + "/fields/" + key, locals: { f: f, key: key, proposal: @proposal, client_data: client_data }
-      
+    
     - elsif key == 'not_to_exceed' # See 'amount'
     - elsif key == 'amount'
       .column{ id: key + '-wrapper'}
