@@ -1,4 +1,5 @@
 - t_slug = "decorators." + @current_user.client_slug + "/work_order."
+- client_slug = @current_user.client_slug
 - client_data = @client_data_instance
 - client_id = client_data.id.to_s
 = simple_form_for client_data, html: { multipart: true }, remote: true do |f|
@@ -9,58 +10,21 @@
     - if i == 1
       :plain
         <div class="medium-up-2">
-    .column{ id: key + '-wrapper'}
+    - if key == 'expense_type'
+      = render partial: client_slug + "/fields/" + key, locals: { f: f, key: key, proposal: @proposal, client_data: client_data }
       
-      - if key == 'expense_type'
-        .detail-wrapper.row{ class: key + "-wrapper"}
-          .detail-display.column
-            %label.detail-element
-              = t(t_slug + "expense_type") 
-            %span.detail-value{id: value_id }
-              = client_data[:expense_type]
-          .detail-edit.column
-            %label.detail-element
-              = t(t_slug + key) 
-            %span.detail-value
-              = render partial: field[:partial], locals: { f: f, proposal: @proposal, client_data: client_data }
-        - if client_data[:expense_type] == 'BA60'
-        - elsif client_data[:expense_type] == 'BA61'
-          .detail-wrapper.row{ class: key + "-wrapper"}
-            .detail-display.column
-              %label.detail-element
-                = t(t_slug + "emergency") 
-              %span.detail-value{id: value_id }
-
-        - elsif client_data[:expense_type] == 'BA80'
-          .detail-wrapper.row{ class: key + "-wrapper"}
-            .detail-display.column
-              %label.detail-element
-                = t(t_slug + "rwa_number") 
-              %span.detail-value{id: value_id }
-                = client_data[:rwa_number]
-
-          .detail-wrapper.row{ class: key + "-wrapper"}
-            .detail-display.column
-              %label.detail-element
-                = t(t_slug + "work_order_code") 
-              %span.detail-value{id: value_id }
-                = client_data[:work_order_code]
-
-      - elsif key == 'not_to_exceed' # See 'amount'
-      - elsif key == 'amount'
-        .detail-wrapper.row{ class: key + "-wrapper"}
+    - elsif key == 'not_to_exceed' # See 'amount'
+    - elsif key == 'amount'
+      .column{ id: key + '-wrapper'}
+        .detail-wrapper.row{ class: "not_to_exceed" + "-wrapper"}
           .detail-display.column
             %label.detail-element
               = t(t_slug + "not_to_exceed") 
             %span.detail-value{id: "not_to_exceed" + '-' + client_id }
               = client_data[:not_to_exceed]
-          .detail-edit.column
-            %label.detail-element
-              = t(t_slug + "not_to_exceed") 
-            %span.detail-value
-              = render partial: field[:partial], locals: { f: f, proposal: @proposal, client_data: client_data }
         
-        .detail-wrapper.row{ class: key + "-wrapper"}
+      .column{ id: key + '-wrapper'}
+        .detail-wrapper.row{ class: "amount" + "-wrapper"}
           .detail-display.column
             %label.detail-element
               = t(t_slug + "amount") 
@@ -70,9 +34,10 @@
             %label.detail-element
               = t(t_slug + "amount") 
             %span.detail-value
-              = render partial: field[:partial], locals: { f: f, proposal: @proposal, client_data: client_data }
+              = render partial: client_slug + "/fields/" + "amount", locals: { f: f, proposal: @proposal, client_data: client_data }
 
-      - else
+    - else
+      .column{ id: key + '-wrapper'}
         .detail-wrapper.row{ class: key + "-wrapper"}
           .detail-display.column
             %label.detail-element
