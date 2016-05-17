@@ -2,9 +2,9 @@
   .detail-wrapper.row{ class: key + "-wrapper"}
     .detail-display.column
       %label.detail-element
-        = t(t_slug + key) 
+        = t(t_slug + key)
       %span.detail-value{id: value_id }
-        = client_data[key]
+        = f.input key, label: t("simple_form.labels.ncr_work_order.direct_pay_html"), disabled: true
     .detail-edit.column
       %label.detail-element
         = t(t_slug + key) 

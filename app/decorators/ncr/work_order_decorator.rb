@@ -32,7 +32,7 @@ module Ncr
     end
 
     def new_display
-      [{ key: "description", partial: "ncr/fields/description" }, { key: "expense_type", partial: "ncr/fields/expense_type" }, { key: "ncr_organization", partial: "ncr/fields/ncr_organization" }, { key: "vendor", partial: "ncr/fields/vendor" }, { key: "building_number", partial: "ncr/fields/building_number" }, { key: "cl_number", partial: "ncr/fields/cl_number" }, { key: "direct_pay", partial: "ncr/fields/direct_pay" }, { key: "amount", partial: "ncr/fields/amount" }]
+      [{ key: "description", partial: "ncr/fields/description" }, { key: "expense_type", partial: "ncr/fields/expense_type" }, { key: "emergency", partial: "ncr/fields/emergency" }, { key: "rwa_number", partial: "ncr/fields/rwa_number" }, { key: "work_order_code", partial: "ncr/fields/work_order_code" }, { key: "ncr_organization", partial: "ncr/fields/ncr_organization" }, { key: "vendor", partial: "ncr/fields/vendor" }, { key: "building_number", partial: "ncr/fields/building_number" }, { key: "cl_number", partial: "ncr/fields/cl_number" }, { key: "direct_pay", partial: "ncr/fields/direct_pay" }, { key: "amount", partial: "ncr/fields/amount" }]
     end
 
     def top_email_field

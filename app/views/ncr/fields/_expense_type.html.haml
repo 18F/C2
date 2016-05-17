@@ -1,8 +1,3 @@
-- t_slug = "decorators." + @current_user.client_slug + "/work_order."
-- client_slug = @current_user.client_slug
-- client_data = @client_data_instance
-- client_id = client_data.id.to_s
-- value_id = key + '-' + client_id
 .column{ id: key + '-wrapper-1'}
   .detail-wrapper.row{ class: key + "-wrapper"}
     .detail-display.column
@@ -18,39 +13,3 @@
           = expense_type_radio_button(f, "BA60")
           = expense_type_radio_button(f, "BA61")
           = expense_type_radio_button(f, "BA80")
-.column{ id: key + '-wrapper-2', data: {"filter-key": "expense-type", "filter-value": "BA61"}}
-  .detail-wrapper.row{ class: key + "-wrapper"}
-    .detail-display.column
-      %label.detail-element
-        = t(t_slug + "emergency") 
-      %span.detail-value{id: value_id }
-        = client_data[:emergency]
-    .detail-edit.column
-      %label.detail-element
-        = t(t_slug + "emergency") 
-      %span.detail-value
-        = render partial: client_slug + "/fields/" + "emergency", locals: { f: f, proposal: @proposal, client_data: client_data }
-.column{ id: key + '-wrapper-3', data: {"filter-key": "expense-type", "filter-value": "BA80"}}
-  .detail-wrapper.row{ class: key + "-wrapper"}
-    .detail-display.column
-      %label.detail-element
-        = t(t_slug + "rwa_number") 
-      %span.detail-value{id: value_id }
-        = client_data[:rwa_number]
-    .detail-edit.column
-      %label.detail-element
-        = t(t_slug + "rwa_number")
-      %span.detail-value
-        = render partial: client_slug + "/fields/" + "rwa_number", locals: { f: f, proposal: @proposal, client_data: client_data }
-.column{ id: key + '-wrapper-4', data: {"filter-key": "expense-type", "filter-value": "BA80"}}
-  .detail-wrapper.row{ class: key + "-wrapper"}
-    .detail-display.column
-      %label.detail-element
-        = t(t_slug + "work_order_code") 
-      %span.detail-value{id: value_id }
-        = client_data[:work_order_code]
-    .detail-edit.column
-      %label.detail-element
-        = t(t_slug + "work_order_code") 
-      %span.detail-value
-        = render partial: client_slug + "/fields/" + "work_order_code", locals: { f: f, proposal: @proposal, client_data: client_data }
