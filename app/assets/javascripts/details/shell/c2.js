@@ -217,7 +217,7 @@ C2 = (function() {
     this.detailsRequestCard.el.trigger('form:changed');
     this.actionBar.cancelActive();
     this.editMode.stateTo('edit');
-    this.detailsRequestCard.toggleButtonText('Cancel');
+    this.detailsRequestCard.toggleMode('edit')
   }
 
   C2.prototype.detailsView = function(){
@@ -225,7 +225,7 @@ C2 = (function() {
     this.editMode.stateTo('view');
     this.undoCheck.el.trigger("undo-check:cancel");
     this.actionBar.viewMode();
-    this.detailsRequestCard.toggleButtonText('Modify');
+    this.detailsRequestCard.toggleMode('view')
     this.undoCheck.viewed = true;
   }
 

@@ -46,6 +46,19 @@ DetailsRequestCard = (function(){
     });
   }
 
+  DetailsRequestCard.prototype.toggleMode = function(mode){
+    switch (mode){
+      case 'view':
+        this.el.find('.grid-layout').removeClass('medium-up-1').addClass('medium-up-2');
+        this.toggleButtonText('Modify');
+        break;
+      case 'edit':
+        this.el.find('.grid-layout').removeClass('medium-up-2').addClass('medium-up-1');
+        this.toggleButtonText('Cancel');
+        break;
+    }
+  }
+
   DetailsRequestCard.prototype.toggleButtonText = function(text){
     this.el.find('.edit-toggle span').text(text)
   }
