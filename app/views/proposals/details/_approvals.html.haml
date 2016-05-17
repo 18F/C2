@@ -6,7 +6,7 @@
           %h2
             Approvals
         .content-content.column
-          - if @client_data_instance.emergency == true
+          - if @client_data_instance && @client_data_instance[:emergency] == true
             %h3 
               This request was an emergency and received a verbal Notice to Proceed (NTP)
           - else
