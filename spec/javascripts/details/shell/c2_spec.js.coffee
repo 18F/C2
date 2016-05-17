@@ -9,6 +9,7 @@
 #= require details/views/details_request_card
 #= require details/views/activity_card
 #= require details/views/observer_card
+#= require details/views/cancel_card
 #= require details/views/notifications
 #= require details/data/details_save
 #= require details/data/undo_check
@@ -33,6 +34,7 @@ describe 'C2', ->
       expect(c2.actionBar instanceof ActionBar).to.eql(true)
       expect(c2.detailsSave instanceof DetailsSave).to.eql(true)
       expect(c2.undoCheck instanceof UndoCheck).to.eql(true)
+      expect(c2.cancelCardController instanceof CancelCardController).to.eql(true)
 
     it "check config passing test param actionBar", ->
       test = "action-bar-test"
@@ -65,6 +67,14 @@ describe 'C2', ->
       }
       c2 = new C2(testParam)
       expect(c2.config.activityCard).to.eql(test)
+
+    it "check config passing test param cancelCard", ->
+      test = "cancel-card-test"
+      testParam = {
+        cancelCard: test
+      }
+      c2 = new C2(testParam)
+      expect(c2.config.cancelCard).to.eql(test)
 
     it "check config passing test param formState", ->
       test = "form-state-test"
