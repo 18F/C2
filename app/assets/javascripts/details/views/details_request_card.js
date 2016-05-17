@@ -96,6 +96,10 @@ DetailsRequestCard = (function(){
   DetailsRequestCard.prototype.updateTextFields = function(field, value){
     $(field).html(value);
   }
+  
+  DetailsRequestCard.prototype.updateCheckbox = function(field, value){
+    $(field)[0].checked = value;
+  }
 
   DetailsRequestCard.prototype.updateViewModeContent = function(data){
     console.log(data);
@@ -105,12 +109,12 @@ DetailsRequestCard = (function(){
     var self = this;
     delete content['id'];
     $.each(content, function(key, value){
-      var field = '#' + key + '-' + id + " .detail-value";
+      var field = '#' + key + '-' + id;
       
       if(value === true || value === false){
-        self.updateTextFields(field, );
+        self.updateCheckbox(field + ' input[type="checkbox"]', value);
       }else if(!(value === null)){
-        self.updateTextFields(field , value);
+        self.updateTextFields(field + " .detail-value", value);
       }
     });
     this.el.trigger("form:updated");
