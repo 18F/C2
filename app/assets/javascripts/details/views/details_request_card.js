@@ -70,7 +70,7 @@ DetailsRequestCard = (function(){
   }
 
   DetailsRequestCard.prototype.updateGrid = function(){
-    var klass = "grid-layout small-up-1";
+    var klass = "grid-layout small-up-1 ";
     switch (this.data.gridLayout) {
       case "one-column":
           klass = klass + "medium-up-1";
