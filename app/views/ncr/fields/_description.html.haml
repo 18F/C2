@@ -1,1 +1,13 @@
-= f.input :description
+.column{ id: key + '-wrapper'}
+  .detail-wrapper.row{ class: key + "-wrapper"}
+    .detail-display.column
+      %label.detail-element
+        = t(t_slug + key) 
+      %span.detail-value{id: value_id }
+        = client_data[key]
+    .detail-edit.column
+      %label.detail-element
+        = t(t_slug + key) 
+      %span.detail-value
+        = f.input :description
+

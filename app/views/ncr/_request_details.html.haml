@@ -11,45 +11,12 @@
       :plain
         <div class="small-up-1 medium-up-2 grid-layout">
 
-    - if key == 'expense_type'
-      = render partial: client_slug + "/fields/" + key, locals: { f: f, key: key, proposal: @proposal, client_data: client_data }
-    
-    - elsif key == 'not_to_exceed' # See 'amount'
+    - if key == 'not_to_exceed'
     - elsif key == 'amount'
-        
-      .column{ id: key + '-wrapper'}
-        .detail-wrapper.row{ class: "amount" + "-wrapper"}
-          .detail-display.column
-            .row
-              .medium-3.column
-                %label.detail-element
-                  = t(t_slug + "total") 
-              .medium-9.column
-                %span.detail-value{class: "not_to_exceed", id: "not_to_exceed" + '-' + client_id }
-                  - if client_data[:not_to_exceed]
-                    Not to exceed
-                %span.detail-value{class: "amount", id: "amount" + '-' + client_id }
-                  %strong
-                    = "$" + client_data[:amount].to_s
-          .detail-edit.column
-            %label.detail-element
-              = t(t_slug + "amount") 
-            %span.detail-value
-              = render partial: client_slug + "/fields/" + "amount", locals: { f: f, proposal: @proposal, client_data: client_data }
-
+      = render partial: client_slug + "/fields/" + "amount", locals: { f: f, proposal: @proposal, client_data: client_data }
     - else
-      .column{ id: key + '-wrapper'}
-        .detail-wrapper.row{ class: key + "-wrapper"}
-          .detail-display.column
-            %label.detail-element
-              = t(t_slug + key) 
-            %span.detail-value{id: value_id }
-              = client_data[key]
-          .detail-edit.column
-            %label.detail-element
-              = t(t_slug + key) 
-            %span.detail-value
-              = render partial: field[:partial], locals: { f: f, proposal: @proposal, client_data: client_data }
+      = render partial: field[:partial], locals: { f: f, proposal: @proposal, client_data: client_data }
+
     - i = i + 1
   :plain
     </div>
