@@ -187,11 +187,7 @@ C2 = (function() {
   }
 
   C2.prototype.detailsCancelled = function(){
-    this.editMode.stateTo('view');
-    this.undoCheck.el.trigger("undo-check:cancel");
-    this.actionBar.viewMode();
-    this.actionBar.cancelDisable();
-    this.undoCheck.viewed = true;
+    this.detailsView();
     this.notification.el.trigger('notification:create', {
       title: "Canceled Change",
       content: "",
@@ -214,18 +210,18 @@ C2 = (function() {
   }
   
   C2.prototype.detailsEditMode = function(){
+    this.detailsRequestCard.toggleMode('edit')
     this.detailsRequestCard.el.trigger('form:changed');
     this.actionBar.cancelActive();
     this.editMode.stateTo('edit');
-    this.detailsRequestCard.toggleMode('edit')
   }
 
   C2.prototype.detailsView = function(){
+    this.detailsRequestCard.toggleMode('view')
     this.actionBar.cancelDisable();
     this.editMode.stateTo('view');
     this.undoCheck.el.trigger("undo-check:cancel");
     this.actionBar.viewMode();
-    this.detailsRequestCard.toggleMode('view')
     this.undoCheck.viewed = true;
   }
 

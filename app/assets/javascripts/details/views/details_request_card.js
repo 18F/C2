@@ -73,16 +73,17 @@ DetailsRequestCard = (function(){
     var klass = "grid-layout small-up-1";
     switch (this.data.gridLayout) {
       case "one-column":
-          klass = "medium-up-1";
+          klass = klass + "medium-up-1";
         break;
       case "two-column":
-          klass = "medium-up-2";
+          klass = klass + "medium-up-2";
         break;
     }
     this.el.find('.grid-layout').attr('class', klass);
   }
 
   DetailsRequestCard.prototype.updateCard = function(){
+    console.log(this.data);
     this.updateGrid();
     this.updateButton();
   }
