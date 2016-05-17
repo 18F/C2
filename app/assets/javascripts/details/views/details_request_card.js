@@ -4,6 +4,10 @@ DetailsRequestCard = (function(){
   function DetailsRequestCard(el) {
     this.el = $(el);
     this._setup();
+    this.data = {
+      buttonText: "Modify",
+      gridLayout: "two-column"
+    }
     return this;
   }
   
@@ -49,14 +53,38 @@ DetailsRequestCard = (function(){
   DetailsRequestCard.prototype.toggleMode = function(mode){
     switch (mode){
       case 'view':
-        this.el.find('.grid-layout').removeClass('medium-up-1').addClass('medium-up-2');
-        this.toggleButtonText('Modify');
+        this.data.buttonText = "Modify";
+        this.data.gridLayout = "two-column";
         break;
       case 'edit':
-        this.el.find('.grid-layout').removeClass('medium-up-2').addClass('medium-up-1');
-        this.toggleButtonText('Cancel');
+        this.data.buttonText = "Cancel";
+        this.data.gridLayout = "one-column";
         break;
     }
+    this.updateCard();
+  }
+
+  DetailsRequestCard.prototype.updateButton = function(){
+    text = this.data.buttonText;
+    this.toggleButtonText(text);
+  }
+
+  DetailsRequestCard.prototype.updateGrid = function(){
+    var klass = "grid-layout small-up-1";
+    switch (this.data.gridLayout) {
+      case "one-column":
+          klass = "medium-up-1";
+        break;
+      case "two-column":
+          klass = "medium-up-2";
+        break;
+    }
+    this.el.find('.grid-layout').attr('class', klass);
+  }
+
+  DetailsRequestCard.prototype.updateCard = function(){
+    this.updateGrid();
+    this.updateButton();
   }
 
   DetailsRequestCard.prototype.toggleButtonText = function(text){
