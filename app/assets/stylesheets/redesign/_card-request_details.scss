@@ -21,6 +21,12 @@
 
 .detail-value{
   font-size: 16px;
+  &.amount{
+    font-weight: 800;
+    &:before{
+      content: "$ ";
+    }
+  }
 }
 
 .edit-mode{
