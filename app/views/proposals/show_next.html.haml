@@ -24,12 +24,6 @@
       #card-for-observers
         = render partial: "proposals/details/observer", locals: { proposal: @proposal }
   
-      .row
-        .medium-12.column.wrap-hard
-          - if policy(@proposal).can_cancel?
-            %div.fr.cancel-action
-              = link_to "Cancel this request", cancel_form_proposal_path, class: "button secondary large cancel-request-button"
-  
   = render partial: "proposals/details/action", locals: { proposal: @proposal }
   #proposal_id{ data: { proposal_id: @proposal.id } }
 
