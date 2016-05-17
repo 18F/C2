@@ -92,8 +92,9 @@ DetailsRequestCard = (function(){
     this.el.find('.edit-toggle span').text(text)
   }
 
-  DetailsRequestCard.prototype.updateContentFields = function(field, value){
-    $(field).text(value);
+
+  DetailsRequestCard.prototype.updateTextFields = function(field, value){
+    $(field).html(value);
   }
 
   DetailsRequestCard.prototype.updateViewModeContent = function(data){
@@ -104,9 +105,12 @@ DetailsRequestCard = (function(){
     var self = this;
     delete content['id'];
     $.each(content, function(key, value){
-      var field = '#' + key + '-' + id;
-      if(!(value === null)){
-        self.updateContentFields(field, value);
+      var field = '#' + key + '-' + id + " .detail-value";
+      
+      if(value === true || value === false){
+        self.updateTextFields(field, );
+      }else if(!(value === null)){
+        self.updateTextFields(field , value);
       }
     });
     this.el.trigger("form:updated");
