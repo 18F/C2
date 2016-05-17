@@ -108,15 +108,17 @@ DetailsRequestCard = (function(){
     var id = content['id'];
     var self = this;
     delete content['id'];
+    console.log('Entire size: ', content);
     $.each(content, function(key, value){
+      console.log('Running for ', key);
       var field = '#' + key + '-' + id;
-      
-      if(value === true || value === false){
+      if(key === "direct_pay"){
         self.updateCheckbox(field + ' input[type="checkbox"]', value);
-      }else if(!(value === null)){
+      } else if( !(value === null) ) {
         self.updateTextFields(field + " .detail-value", value);
       }
     });
+    console.log('Finished the looping');
     this.el.trigger("form:updated");
   }
 

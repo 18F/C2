@@ -199,9 +199,10 @@ C2 = (function() {
   }
   
   C2.prototype.detailsSaved = function(data){
+    console.log('C2.prototype.detailsSaved');
+    this.detailsView();
     this.undoCheck.el.trigger("undo-check:save");
     this.actionBar.el.trigger("action-bar-clicked:saved");
-    this.detailsView();
     this.notification.el.trigger('notification:create', {
       title: "Changes Saved",
       content: "Your changes were saved.",
