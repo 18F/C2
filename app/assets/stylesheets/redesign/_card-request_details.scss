@@ -92,11 +92,17 @@
 }
 
 .card{
+  textarea{
+    margin: 0 0 0.4rem;
+  }
+  .help-block{
+    font-size: 13px;
+  }
   label{
     color: $primary-color;
   }
   .detail-wrapper{
-    margin-bottom: 10px;
+    margin-bottom: 15px;
   }
   .request-detail{
     margin-bottom: 10px;
