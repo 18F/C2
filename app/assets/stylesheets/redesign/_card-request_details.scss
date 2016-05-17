@@ -22,6 +22,35 @@
   font-size: 16px;
 }
 
+.edit-mode{
+  #expense_type-wrapper-3{
+    .detail-wrapper{
+      border-radius: 10px 0px 0px 10px;
+      margin-left: 0px;
+    }
+  }
+  #expense_type-wrapper-4{
+    .detail-wrapper{
+      border-radius: 0px 10px 10px 0px;
+      margin-right: 0px;
+    }
+    clear: right;
+  }
+  #expense_type-wrapper-3,
+  #expense_type-wrapper-4{
+    .detail-wrapper.detail-wrapper{
+      padding-top: 10px;
+      margin-bottom: 0px;
+      background: #DBEAF5;
+    }
+    width: 50%;
+    float: left;
+    margin-bottom: 15px;
+    padding-top: 5px;
+  }
+}
+
+
 #amount-wrapper{
   padding-left: 30px;
 
