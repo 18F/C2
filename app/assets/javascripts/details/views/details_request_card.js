@@ -47,7 +47,7 @@ DetailsRequestCard = (function(){
   }
 
   DetailsRequestCard.prototype.toggleButtonText = function(text){
-    this.el.find('.edit-toggle').text(text)
+    this.el.find('.edit-toggle span').text(text)
   }
 
   DetailsRequestCard.prototype.updateContentFields = function(field, value){

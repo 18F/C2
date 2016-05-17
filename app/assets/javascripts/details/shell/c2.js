@@ -225,7 +225,7 @@ C2 = (function() {
     this.editMode.stateTo('view');
     this.undoCheck.el.trigger("undo-check:cancel");
     this.actionBar.viewMode();
-    this.detailsRequestCard.toggleButtonText('Edit');
+    this.detailsRequestCard.toggleButtonText('Modify');
     this.undoCheck.viewed = true;
   }
 
