@@ -13,7 +13,7 @@ DetailsSave = (function() {
   DetailsSave.prototype._events = function(){
     var self = this;
     this.el.on( "details-form:save", function( event, data ) {
-      self.saveDetailsForm();
+      self.saveDetailsForm(data);
     });
     this.el.on( "details-form:respond", function( event, data ) {
       self.receiveResponse(data);
@@ -38,7 +38,18 @@ DetailsSave = (function() {
     }
   }
 
-  DetailsSave.prototype.saveDetailsForm = function(){
+  DetailsSave.prototype.saveDetailsForm = function(data){
+    var self = this;
+    $.ajax({
+      url: this.el.find('form')[0].action,
+      headers: {
+        Accept : "text/javascript; charset=utf-8",
+        "Content-Type": 'application/x-www-form-urlencoded; charset=UTF-8'
+      },
+      type: 'POST',
+      data: self.el.find('form').serialize()
+      
+    });
     this.el.find('form').submit();
   }
 
