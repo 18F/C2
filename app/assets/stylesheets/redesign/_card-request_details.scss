@@ -22,6 +22,24 @@
   font-size: 16px;
 }
 
+#amount-wrapper{
+  .detail-value{
+    display: block;
+    &.amount{
+      font-size: 16px;
+    }
+    &.not_to_exceed{
+      font-size: 12px;
+    }
+  }
+  .detail-wrapper{
+    background: #EDF5FB;
+    border-radius: 4px;
+    padding-top: 9px;
+    padding-bottom: 11px;
+  }
+}
+
 .card{
   label{
     color: $primary-color;

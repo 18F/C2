@@ -16,21 +16,21 @@
     
     - elsif key == 'not_to_exceed' # See 'amount'
     - elsif key == 'amount'
-      .column{ id: key + '-wrapper'}
-        .detail-wrapper.row{ class: "not_to_exceed" + "-wrapper"}
-          .detail-display.column
-            %label.detail-element
-              = t(t_slug + "not_to_exceed") 
-            %span.detail-value{id: "not_to_exceed" + '-' + client_id }
-              = client_data[:not_to_exceed]
         
       .column{ id: key + '-wrapper'}
         .detail-wrapper.row{ class: "amount" + "-wrapper"}
           .detail-display.column
-            %label.detail-element
-              = t(t_slug + "amount") 
-            %span.detail-value{id: "amount" + '-' + client_id }
-              = client_data[:amount]
+            .row
+              .medium-3.column
+                %label.detail-element
+                  = t(t_slug + "total") 
+              .medium-9.column
+                %span.detail-value{class: "not_to_exceed", id: "not_to_exceed" + '-' + client_id }
+                  - if client_data[:not_to_exceed]
+                    Not to exceed
+                %span.detail-value{class: "amount", id: "amount" + '-' + client_id }
+                  %strong
+                    = "$" + client_data[:amount].to_s
           .detail-edit.column
             %label.detail-element
               = t(t_slug + "amount") 
