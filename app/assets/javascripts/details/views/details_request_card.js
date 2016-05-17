@@ -55,6 +55,7 @@ DetailsRequestCard = (function(){
       case 'view':
         this.data.buttonText = "Modify";
         this.data.gridLayout = "two-column";
+        this.scrollUp();
         break;
       case 'edit':
         this.data.buttonText = "Cancel";
@@ -139,6 +140,14 @@ DetailsRequestCard = (function(){
       this.el.removeClass('view-fields');
       this.el.addClass('edit-fields');
     }
+  }
+
+  DetailsRequestCard.prototype.scrollUp = function(){
+    console.log('scrollUp');
+    var self = this;
+    $('html, body').animate({
+      scrollTop:  self.el.offset().top
+    });
   }
 
   DetailsRequestCard.prototype.fieldChanged = function(e, el){

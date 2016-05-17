@@ -12,8 +12,7 @@
             - else
               Exactly
           %span.detail-value{class: "amount", id: "amount" + '-' + client_id }
-            %strong
-              = "$" + client_data[:amount].to_s
+            = client_data[:amount].to_s
     .detail-edit.column
       %label.detail-element
         = t(t_slug + "amount") 
