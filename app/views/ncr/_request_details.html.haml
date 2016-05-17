@@ -7,8 +7,15 @@
   - i = 0
   - @proposal.new_fields_for_display.each do |field|
     - key = field[:key]
-    - data = { f: f, proposal: @proposal, key: key, t_slug: "decorators." + @current_user.client_slug + "/work_order.", client_slug: @current_user.client_slug, client_data: @client_data_instance, client_id: client_data.id.to_s, value_id: key + '-' + client_id }
-    - value_id = key + '-' + client_id
+    - data = { |
+      f: f, |
+      proposal: @proposal,
+      key: key,
+      t_slug: "decorators." + @current_user.client_slug + "/work_order.",
+      client_slug: @current_user.client_slug,
+      client_data: @client_data_instance,
+      client_id: client_data.id.to_s,
+      value_id: key + '-' + client_id }
     
     - if i == 1
       :plain

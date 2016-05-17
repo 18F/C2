@@ -16,7 +16,6 @@ Notifications = (function(){
   }
 
   Notifications.prototype.create = function(params){
-    console.log('Notification created');
     var notice = this._prepare(params);
     this._postNotification(notice);
   }
