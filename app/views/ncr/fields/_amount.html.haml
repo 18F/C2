@@ -1,5 +1,5 @@
 .column{ id: key + '-wrapper'}
-  .detail-wrapper.row{ class: "amount" + "-wrapper"}
+  .detail-wrapper.row{ class: "amount" + "-wrapper" }
     .detail-display.column
       .row
         .medium-3.column
@@ -9,6 +9,8 @@
           %span.detail-value{class: "not_to_exceed", id: "not_to_exceed" + '-' + client_id }
             - if client_data[:not_to_exceed]
               Not to exceed
+            - else
+              Exactly
           %span.detail-value{class: "amount", id: "amount" + '-' + client_id }
             %strong
               = "$" + client_data[:amount].to_s

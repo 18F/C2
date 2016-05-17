@@ -1,9 +1,9 @@
 .column{ id: key + '-wrapper'}
-  .detail-wrapper.row{ class: key + "-wrapper"}
+  .detail-wrapper.row{ class: key + "-wrapper", id: value_id }
     .detail-display.column
       %label.detail-element
         = t(t_slug + key)
-      %span.detail-value{id: value_id }
+      %span.detail-value
         = f.input key, label: t("simple_form.labels.ncr_work_order.direct_pay_html"), disabled: true
     .detail-edit.column
       %label.detail-element

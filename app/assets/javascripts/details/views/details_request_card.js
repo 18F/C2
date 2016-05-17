@@ -114,8 +114,17 @@ DetailsRequestCard = (function(){
       var field = '#' + key + '-' + id;
       if(key === "direct_pay"){
         self.updateCheckbox(field + ' input[type="checkbox"]', value);
+      } else if(key === "not_to_exceed") {
+        if (value === true){
+          value = "Not to exceed";
+        } else {
+          value = "Exact";
+        }
+        self.updateTextFields(field + ".detail-value", value);
+      } else if(key === "amount") {
+        self.updateTextFields(field + ".detail-value", value);
       } else if( !(value === null) ) {
-        self.updateTextFields(field + " .detail-value", value);
+        self.updateTextFields(field + " .detail-display .detail-value", value);
       }
     });
     console.log('Finished the looping');

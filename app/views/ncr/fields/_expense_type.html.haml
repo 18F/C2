@@ -1,9 +1,9 @@
 .column{ id: key + '-wrapper-1'}
-  .detail-wrapper.row{ class: key + "-wrapper"}
+  .detail-wrapper.row{ class: key + "-wrapper", id: value_id }
     .detail-display.column
       %label.detail-element
         = t(t_slug + "expense_type") 
-      %span.detail-value{id: value_id }
+      %span.detail-value
         = client_data[:expense_type]
     .detail-edit.column
       %label.detail-element
