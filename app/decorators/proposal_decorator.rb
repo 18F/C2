@@ -94,7 +94,7 @@ class ProposalDecorator < Draper::Decorator
   def process_new_fields(fields, client)
     display = []
     fields.each do |field|
-      display << { key: field, partials: client + "/fields/" + field }
+      display << { key: field, partial: client + "/fields/" + field }
     end
     display
   end
