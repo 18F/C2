@@ -206,10 +206,8 @@ in production-ready shape.
 
 **`Deployed week of XX/XX`**
 
-Stories deployed each week should be kept in a list for that week. This helps
-the product manager communicate deployed changes to the product owner. The
-board should have a new list each week and lists older than 3 weeks should be
-archived.
+Stories deployed each week should be kept in a list for that week in `Deployed`. This helps
+the product manager communicate deployed changes to the product owner. The developer who does the production deployment is responsible for moving deployed stories from `Ready to Deploy` to the current week's list.
 
 **`Blocked`**
 
