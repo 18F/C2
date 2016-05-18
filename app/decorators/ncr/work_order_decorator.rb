@@ -5,6 +5,10 @@ module Ncr
     EMERGENCY_APPROVER_EMAIL = "Emergency - Verbal Approval"
     NO_APPROVER_FOUND = "No Approver Found"
 
+    def client_code
+      "ncr"
+    end
+
     def current_approver_email_address
       if proposal.completed?
         final_approver_email_address
@@ -32,7 +36,7 @@ module Ncr
     end
 
     def new_display
-      [{ key: "description", partial: "ncr/fields/description" }, { key: "expense_type", partial: "ncr/fields/expense_type" }, { key: "ncr_organization", partial: "ncr/fields/ncr_organization" }, { key: "vendor", partial: "ncr/fields/vendor" }, { key: "building_number", partial: "ncr/fields/building_number" }, { key: "cl_number", partial: "ncr/fields/cl_number" }, { key: "direct_pay", partial: "ncr/fields/direct_pay" }, { key: "amount", partial: "ncr/fields/amount" }]
+      %w(description expense_type emergency rwa_number work_order_code ncr_organization vendor building_number cl_number direct_pay amount)
     end
 
     def top_email_field

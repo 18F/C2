@@ -85,10 +85,18 @@ class ProposalDecorator < Draper::Decorator
 
   def new_fields_for_display
     if client_data
-      client_data.decorate.new_display
+      process_new_fields(client_data.decorate.new_display, client_data.decorate.client_code)
     else
       []
     end
+  end
+
+  def process_new_fields(fields, client)
+    display = []
+    fields.each do |field|
+      display << { key: field, partial: client + "/fields/" + field }
+    end
+    display
   end
 
   def fields_for_display

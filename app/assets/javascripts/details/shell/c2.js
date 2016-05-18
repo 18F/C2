@@ -79,10 +79,9 @@ C2 = (function() {
    * data['timeout'] (optional)
    */
   C2.prototype._setupNotifications = function(){
-    var self = this;  
+    var notice = this.notification;  
     this.notification.el.on('notification:create', function(event, data){
-      console.log('Notification: ', data);
-      self.notification.create(data);
+      notice.create(data);
     });
   }
 
@@ -116,21 +115,15 @@ C2 = (function() {
   }
 
   C2.prototype.handleSaveError = function(data){
-    console.log("C2.prototype.handleSaveError: ", data);
     var response = data['response'];
     for (var i = response.length - 1; i >= 0; i--) {
-      this.notification.el.trigger('notification:create', {
-        title: "Request Not Saved",
-        content: response[i],
-        type: "alert"
-      });
+      this.createNotification("Request Not Saved", response[i], "alert");
     }
   }
 
   C2.prototype._setupEditToggle = function(){
     var self = this;
     this.detailsRequestCard.el.on('edit-toggle:trigger', function(){
-      console.log('self.editMode.getState(): ', self.editMode.getState());
       if(!self.editMode.getState()){
         self.detailsEditMode();
       } else {
@@ -174,59 +167,50 @@ C2 = (function() {
   }
 
   C2.prototype.createActivityNotification = function(data){
-    var params = {
-      title: "Attachment " + data.actionType,
-      type: data.noticeType
-    };
+    var content;
     if (data.actionType === "delete"){
-      params.content =  data.fileName + " was deleted successfully.";
+      content = data.fileName + " was deleted successfully.";
     } else if (data.actionType === "create"){
-      params.content = data.fileName + " was uploaded successfully.";
+      content = data.fileName + " was uploaded successfully.";
     }
-    this.notification.el.trigger('notification:create', params);
+    this.createNotification("Attachment " + data.actionType, content, data.noticeType);
   }
 
   C2.prototype.detailsCancelled = function(){
-    this.editMode.stateTo('view');
-    this.undoCheck.el.trigger("undo-check:cancel");
-    this.actionBar.viewMode();
-    this.actionBar.cancelDisable();
-    this.undoCheck.viewed = true;
-    this.notification.el.trigger('notification:create', {
-      title: "Canceled Change",
-      content: "",
-      type: "notice"
-    });
+    this.detailsView();
+    this.createNotification("Canceled Change", "", "notice");
   }
  
-  C2.prototype.processSaveRequest = function(){
-  }
-  
   C2.prototype.detailsSaved = function(data){
+    this.detailsView();
     this.undoCheck.el.trigger("undo-check:save");
     this.actionBar.el.trigger("action-bar-clicked:saved");
-    this.detailsView();
-    this.notification.el.trigger('notification:create', {
-      title: "Changes Saved",
-      content: "Your changes were saved.",
-      type: "success"
-    });
+    this.createNotification("Changes Saved", "Your changes were saved.", "success");
   }
   
   C2.prototype.detailsEditMode = function(){
+    this.detailsRequestCard.toggleMode('edit')
     this.detailsRequestCard.el.trigger('form:changed');
     this.actionBar.cancelActive();
     this.editMode.stateTo('edit');
-    this.detailsRequestCard.toggleButtonText('Cancel');
   }
 
   C2.prototype.detailsView = function(){
+    this.detailsRequestCard.toggleMode('view')
     this.actionBar.cancelDisable();
     this.editMode.stateTo('view');
     this.undoCheck.el.trigger("undo-check:cancel");
     this.actionBar.viewMode();
-    this.detailsRequestCard.toggleButtonText('Edit');
     this.undoCheck.viewed = true;
+  }
+
+  C2.prototype.createNotification = function(title, content, type){
+    var param = {
+      title: title,
+      content: content,
+      type: type
+    }
+    this.notification.el.trigger('notification:create', param);
   }
 
   return C2;
