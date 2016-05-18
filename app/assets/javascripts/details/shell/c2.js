@@ -66,6 +66,7 @@ C2 = (function() {
     this._setupEditMode();
     this._setupNotifications();
     this._setupActivityEvent();
+    this._setupObserverEvent();
   }
   
   
@@ -193,8 +194,27 @@ C2 = (function() {
 
   /* End Activity */ 
 
+  /* Observer Activity */
 
-  /* Action Bar */ 
+  C2.prototype._setupObserverEvent = function(){
+    var notification = this.createObserverNotification;
+    this.observerCardController.el.on("observer-card:updated", function(event, data){
+      notification(data);
+    });
+  }
+
+  C2.prototype.createObserverNotification = function(data){
+    var params = {
+      title: "Observer " + data.actionType,
+      type: data.noticeType, 
+      content: data.content
+    }; 
+    this.notification.el.trigger('notification:create', params);
+  }
+
+  /* End Activity */
+
+   /* Action Bar */ 
 
   C2.prototype._setupActionBar = function(){
     var self = this;

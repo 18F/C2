@@ -1,1 +1,4 @@
-window.c2.observerCardController.update('<%=j render partial: 'proposals/details/observer', locals: {proposal: @proposal} %>');
+window.c2.observerCardController.update('<%=j render partial: 'proposals/details/observer', locals: {proposal: @proposal} %>', 
+  { content: '<%=j @js_notification[:content] %>',
+    actionType: 'added',
+    noticeType: '<%=j @js_notification[:noticeType] %>' });
