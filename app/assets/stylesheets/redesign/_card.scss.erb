@@ -41,7 +41,7 @@
   }
   .radio {
     display: inline-block;
-    margin-right: 15px;
+    margin-right: 13px;
     margin-bottom: 0px;
     margin-top: 0px;
   }
@@ -50,13 +50,20 @@
   .callout{
      border-radius: 4px;
   }
+  .detail-value label {
+    line-height: 16px;
+  }
   input, textarea{
     &.value-changed{
       background: #FFFDE8;  
     }
   } 
+  .form-group{
+    margin-bottom: 10px;
+  }
   label,legend{
     font-size: 12px;
+    line-height: 16px;
   }
   textarea {
     resize: none;
@@ -131,6 +138,10 @@
       right: 19px;
       top: 50%;
       margin-top: -1.2em;
+      background: transparent;
+      span{
+        color: #275989;
+      }
       &.status-wrap{
         background: $white;
         border: none;
@@ -154,8 +165,8 @@
         }
       }
       &:hover{
-        color: darken($primary-color, 10%);
-        background: white;
+        color: white;
+        background: $backgroundColor;
       }
     }
     position: relative;

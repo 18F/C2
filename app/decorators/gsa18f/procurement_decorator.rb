@@ -2,6 +2,10 @@ module Gsa18f
   class ProcurementDecorator < Draper::Decorator
     delegate_all
 
+    def client_code
+      "gsa18f"
+    end
+
     def email_display
       [
         [translated_key("purchase_type"), object.purchase_type],
@@ -34,7 +38,7 @@ module Gsa18f
     end
 
     def new_display
-      [{ key: "office", partial: "gsa18f/fields/office" }, { key: "purchase_type", partial: "gsa18f/fields/purchase_type" }, { key: "product_name_and_description", partial: "gsa18f/fields/product_name_and_description" }, { key: "justification", partial: "gsa18f/fields/justification" }, { key: "link_to_product", partial: "gsa18f/fields/link_to_product" }, { key: "cost_per_unit", partial: "gsa18f/fields/cost_per_unit" }, { key: "quantity", partial: "gsa18f/fields/quantity" }, { key: "recurring", partial: "gsa18f/fields/recurring" }, { key: "date_requested", partial: "gsa18f/fields/date_requested" }, { key: "urgency", partial: "gsa18f/fields/urgency" }, { key: "additional_info", partial: "gsa18f/fields/additional_info" }]
+      %w(office purchase_type product_name_and_description justification link_to_product cost_per_unit quantity recurring date_requested urgency additional_info)
     end
 
     def top_email_field

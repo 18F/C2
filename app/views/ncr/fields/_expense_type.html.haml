@@ -1,9 +1,15 @@
-= field_set_tag do
-  = expense_type_radio_button(f, "BA60")
-  = expense_type_radio_button(f, "BA61")
-  = expense_type_radio_button(f, "BA80")
-  = f.input :emergency,
-    disabled: @client_data_instance.persisted?,
-    wrapper_html: { data: { filter_key: "expense-type", filter_value: "BA61" } }
-  = render partial: "ncr/work_orders/ba_80_fields",
-    locals: { f: f }
+.column{ id: key + '-wrapper-1'}
+  .detail-wrapper.row{ class: key + "-wrapper", id: value_id }
+    .detail-display.column
+      %label.detail-element
+        = t(t_slug + "expense_type") 
+      %span.detail-value
+        = client_data[:expense_type]
+    .detail-edit.column
+      %label.detail-element
+        = t(t_slug + key) 
+      %span.detail-value
+        = field_set_tag do
+          = expense_type_radio_button(f, "BA60")
+          = expense_type_radio_button(f, "BA61")
+          = expense_type_radio_button(f, "BA80")

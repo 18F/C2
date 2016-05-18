@@ -1,4 +1,4 @@
-.column{ id: key + '-wrapper'}
+.column{ id: key + '-wrapper-2', data: {"filter-key": "expense-type", "filter-value": "BA61"}}
   .detail-wrapper.row{ class: key + "-wrapper", id: value_id}
     .detail-display.column
       %label.detail-element
@@ -9,5 +9,6 @@
       %label.detail-element
         = t(t_slug + key) 
       %span.detail-value
-        = f.input :vendor,
-          input_html: { class: "js-selectize required", data: { initial: JSON.generate(vendor_options(@client_data_instance.vendor)) }}, label: false
+        = f.input :emergency,
+          disabled: @client_data_instance.persisted?,
+          wrapper_html: { data: { filter_key: "expense-type", filter_value: "BA61" } }

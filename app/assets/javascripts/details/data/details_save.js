@@ -22,18 +22,14 @@ DetailsSave = (function() {
 
   DetailsSave.prototype.receiveResponse = function(data){
     var self = this;
-    console.log(data);
     switch (data['status']){
       case "success":
-        console.log('Success response');
         self.el.trigger( "details-form:success", data );
         break;
       case "error":
-        console.log('Error response');
         self.el.trigger( "details-form:error", data );
         break;
       default:
-        console.log('Unknown response');
         break;
     }
   }

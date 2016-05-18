@@ -1,3 +1,4 @@
+
 .row.summary-status-wrapper
   .medium-12.column.text-left
     %span.status-wrap.medium-12.small-12{ class: "status-is-" + proposal.status }
@@ -6,7 +7,10 @@
         = proposal.capitalized_detailed_status
     - if proposal.status == "completed"
       %span.completed-time
-        on 
+        on
+      - if @client_data_instance.emergency == true
+        = proposal.updated_at.strftime("%b %d, %Y at %l:%M%P")
+      - elsif @client_data_instance.emergency != true
         = proposal.individual_steps.last.completed_at.strftime("%b %d, %Y at %l:%M%P")
 
 .row.button-back-wrapper
@@ -33,4 +37,7 @@
             %strong
               %span
                 = proposal.created_at.strftime("%b %d, %Y at %l:%M%P")
+        - if policy(@proposal).can_cancel?
+          %div.fr.cancel-action
+            = link_to "Cancel this request", cancel_form_proposal_path, class: " secondary large cancel-request-button"
 
