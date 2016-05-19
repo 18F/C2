@@ -12,11 +12,11 @@ ObserverCardController = (function(){
     this.el = typeof el === "string" ? $(el) : el;
   }
 
-  ObserverCardController.prototype.update = function(html){
+  ObserverCardController.prototype.update = function(html, notificationData){
     this.el.html(html);
     this._selectize();
     this._hideUntilSelect();
-    this.el.trigger('observer-card:updated');
+    this.el.trigger('observer-card:updated', notificationData);
   }
 
   ObserverCardController.prototype._selectize = function(){

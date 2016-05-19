@@ -30,6 +30,24 @@ feature "Observers" do
     visit "/proposals/#{proposal.id}?detail=old"
   end
 
+  scenario "shows notification when observer is added with javascript", js: true do 
+    work_order = create(:ncr_work_order)
+    observer = create(:user, client_slug: "ncr")
+    proposal = work_order.proposal
+    login_as(proposal.requester)
+
+    visit "/proposals/#{proposal.id}?detail=new"
+    within('#card-for-observers') do
+      fill_in_selectized("selectize-control", observer.email_address)
+    end
+    click_on "Add an Observer"
+    wait_for_ajax
+
+    expect(page).to have_content("Observer added")
+
+    visit "/proposals/#{proposal.id}?detail=old"
+  end
+
   scenario "allows observers to be removed with javascript", js: true do 
     work_order = create(:ncr_work_order)
     observer = create(:user, client_slug: "ncr")
@@ -47,6 +65,27 @@ feature "Observers" do
     within('.observer-list') do
       expect(page).to_not have_content("#{observer.full_name}")
     end
+    visit "/proposals/#{proposal.id}?detail=old"
+  end
+
+  scenario "shows notification when observer is deleted with javascript", js: true do 
+    work_order = create(:ncr_work_order)
+    observer = create(:user, client_slug: "ncr")
+    proposal = work_order.proposal
+    login_as(proposal.requester)
+
+    visit "/proposals/#{proposal.id}?detail=new"
+    within('#card-for-observers') do
+      fill_in_selectized("selectize-control", observer.email_address)
+    end
+    click_on "Add an Observer"
+    wait_for_ajax
+    delete_button = find('#card-for-observers .observer-remove-button')
+    delete_button.click
+    wait_for_ajax
+
+    expect(page).to have_content("Observer removed")
+    
     visit "/proposals/#{proposal.id}?detail=old"
   end
 
