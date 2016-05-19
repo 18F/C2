@@ -26,4 +26,5 @@
 //= require ladda/spin.min
 //= require ladda/ladda.min
 //= require ladda/ladda.jquery.min
+//= require jquery.dirrty
 //= require_directory .

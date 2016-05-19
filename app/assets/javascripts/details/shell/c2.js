@@ -10,8 +10,7 @@ C2 = (function() {
       detailsSave:    '#request-details-card',
       activityCard:   '#card-for-activity',
       editMode:       '#mode-parent',
-      formState:      '#request-details-card',
-      undoCheck:      '#request-details-card form',
+      formState:      '#request-details-card form',
       notifications:  '#action-bar-status',
       observerCard:   '#card-for-observers',
       cancelCard:     '#card-for-cancel'
@@ -39,9 +38,7 @@ C2 = (function() {
 
   C2.prototype._setupData = function(){
     var detailsConfig = this.config.detailsSave;
-    var undoConfig = this.config.undoCheck;
     this.detailsSave = new DetailsSave(detailsConfig);
-    this.undoCheck = new UndoCheck(undoConfig);
   }
 
   C2.prototype._setupStates = function(){
@@ -62,7 +59,6 @@ C2 = (function() {
   }
 
   C2.prototype._setupEvents = function(){
-    this._checkFieldChange();
     this._setupActionBar();
     this._setupEditToggle();
     this._setupDetailsData();
@@ -72,25 +68,15 @@ C2 = (function() {
     this._setupActivityEvent();
   }
   
-  /**
-   * data['title']
-   * data['content']
-   * data['status']
-   * data['timeout'] (optional)
-   */
-  C2.prototype._setupNotifications = function(){
-    var notice = this.notification;  
-    this.notification.el.on('notification:create', function(event, data){
-      notice.create(data);
-    });
-  }
+  
+  /* Form */ 
 
   C2.prototype._setupEditMode = function(){
     var self = this;  
-    this.editMode.el.on('edit-mode:has-changed', function(){
+    this.formState.el.on('form:dirty', function(){
       self.actionBar.editMode();
     });
-    this.editMode.el.on('edit-mode:not-changed', function(){
+    this.formState.el.on('form:clean', function(){
       self.actionBar.viewMode();
     });
   }
@@ -99,6 +85,58 @@ C2 = (function() {
     var self = this;  
     this.detailsRequestCard.el.on('form:updated', function(event, data){
       self.detailsSaved(data);
+    });
+  }
+  
+  C2.prototype._setupEditToggle = function(){
+    var self = this;
+    this.detailsRequestCard.el.on('edit-toggle:trigger', function(){
+      if(!self.editMode.getState()){
+        self.detailsEditMode();
+      } else {
+        if(self.detailsRequestCard.el.is){
+          self.detailsCancelled();
+        } else {
+          self.detailsView();
+        }
+      }
+    });
+  }
+
+  C2.prototype.detailsCancelled = function(){
+    this.detailsView();
+    this.createNotification("Canceled Change", "", "notice");
+  }
+ 
+  C2.prototype.detailsSaved = function(data){
+    this.detailsView();
+    this.actionBar.el.trigger("action-bar-clicked:saved");
+    this.createNotification("Changes Saved", "Your changes were saved.", "success");
+  }
+  
+  C2.prototype.detailsEditMode = function(){
+    this.detailsRequestCard.toggleMode('edit')
+    this.actionBar.cancelActive();
+    this.editMode.stateTo('edit');
+  }
+
+  C2.prototype.detailsView = function(){
+    this.detailsRequestCard.toggleMode('view')
+    this.actionBar.cancelDisable();
+    this.editMode.stateTo('view');
+    this.actionBar.viewMode();
+  }
+
+  /* End Form */ 
+
+
+
+  /* Notice */ 
+
+  C2.prototype._setupNotifications = function(){
+    var notice = this.notification;  
+    this.notification.el.on('notification:create', function(event, data){
+      notice.create(data);
     });
   }
 
@@ -121,43 +159,20 @@ C2 = (function() {
     }
   }
 
-  C2.prototype._setupEditToggle = function(){
-    var self = this;
-    this.detailsRequestCard.el.on('edit-toggle:trigger', function(){
-      if(!self.editMode.getState()){
-        self.detailsEditMode();
-      } else {
-        if(self.undoCheck.hasChanged()){
-          self.detailsCancelled();
-        } else {
-          self.detailsView();
-        }
-      }
-    });
+  C2.prototype.createNotification = function(title, content, type){
+    var param = {
+      title: title,
+      content: content,
+      type: type
+    }
+    this.notification.el.trigger('notification:create', param);
   }
 
-  C2.prototype._checkFieldChange = function(){
-    var self = this;
-    this.detailsRequestCard.el.on('form:changed', function(){
-      if(self.undoCheck.hasChanged()){
-        self.editMode.el.trigger('edit-mode:has-changed');
-      } else {
-        self.editMode.el.trigger('edit-mode:not-changed');
-      }
-    });
-  }
+  /* End Notice */ 
 
-  C2.prototype._setupActionBar = function(){
-    var self = this;
-    this.actionBar.el.on("action-bar-clicked:cancel", function(){
-      self.detailsCancelled();
-    });
-    this.actionBar.el.on("action-bar-clicked:save", function(){
-      self.actionBar.el.trigger("action-bar-clicked:saving");
-      self.detailsSave.el.trigger("details-form:save");
-    });
-  }
 
+  /* Activity */ 
+  
   C2.prototype._setupActivityEvent = function(){
     var self = this;
     this.attachmentCardController.el.on("attachment-card:updated", function(event, data){
@@ -176,42 +191,23 @@ C2 = (function() {
     this.createNotification("Attachment " + data.actionType, content, data.noticeType);
   }
 
-  C2.prototype.detailsCancelled = function(){
-    this.detailsView();
-    this.createNotification("Canceled Change", "", "notice");
-  }
- 
-  C2.prototype.detailsSaved = function(data){
-    this.detailsView();
-    this.undoCheck.el.trigger("undo-check:save");
-    this.actionBar.el.trigger("action-bar-clicked:saved");
-    this.createNotification("Changes Saved", "Your changes were saved.", "success");
-  }
-  
-  C2.prototype.detailsEditMode = function(){
-    this.detailsRequestCard.toggleMode('edit')
-    this.detailsRequestCard.el.trigger('form:changed');
-    this.actionBar.cancelActive();
-    this.editMode.stateTo('edit');
+  /* End Activity */ 
+
+
+  /* Action Bar */ 
+
+  C2.prototype._setupActionBar = function(){
+    var self = this;
+    this.actionBar.el.on("action-bar-clicked:cancel", function(){
+      self.detailsCancelled();
+    });
+    this.actionBar.el.on("action-bar-clicked:save", function(){
+      self.actionBar.el.trigger("action-bar-clicked:saving");
+      self.detailsSave.el.trigger("details-form:save");
+    });
   }
 
-  C2.prototype.detailsView = function(){
-    this.detailsRequestCard.toggleMode('view')
-    this.actionBar.cancelDisable();
-    this.editMode.stateTo('view');
-    this.undoCheck.el.trigger("undo-check:cancel");
-    this.actionBar.viewMode();
-    this.undoCheck.viewed = true;
-  }
-
-  C2.prototype.createNotification = function(title, content, type){
-    var param = {
-      title: title,
-      content: content,
-      type: type
-    }
-    this.notification.el.trigger('notification:create', param);
-  }
+  /* End Action Bar */ 
 
   return C2;
 
