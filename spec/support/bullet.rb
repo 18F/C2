@@ -1,4 +1,5 @@
 if BULLET_ENABLED
+  puts "Bullet Enabled..."
   RSpec.configure do |config|
     config.before(:suite) do
       Bullet.raise = true
