@@ -89,8 +89,10 @@ var singleDs = [];
         var initialValue = $(this).attr("data-dirrty-initial-value");
         if($(this).val() != initialValue){
           $(this).attr("data-is-dirrty", "true");
+          $(this).parent().attr("data-child-is-dirrty", "true");
         }else{
           $(this).attr("data-is-dirrty", "false");
+          $(this).parent().attr("data-child-is-dirrty", "false");
         }
       });
       this.form.find("input[type=checkbox], input[type=radio]").each( function(){
@@ -98,8 +100,10 @@ var singleDs = [];
         if($(this).is(":checked") && initialValue != "checked"
           || !$(this).is(":checked") && initialValue == "checked"){
           $(this).attr("data-is-dirrty", "true");
+          $(this).parent().attr("data-child-is-dirrty", "true");
         }else{
           $(this).attr("data-is-dirrty", "false");
+          $(this).parent().attr("data-child-is-dirrty", "false");
         }
       });
       var isDirty = false;
