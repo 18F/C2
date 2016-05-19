@@ -52,9 +52,14 @@ Notifications = (function(){
     var el = $("#notification-id-" + id);
     var timeout = el.attr('data-timeout');
     var progress = new ProgressBar.Circle("#notification-id-" + id + " .close", { 
-      strokeWidth: 2
+      strokeWidth: 3,
+      duration: timeout,
+      color: '#40759C',
+      trailColor: '#DAEAf5',
+      trailWidth: 2,
+      svgStyle: null
     });
-    progress.animate(timeout, {}, function() {
+    progress.animate(1, function() {
       console.log("Running ", id);
       if(el.attr('data-clicked') !== true){
         self.clearOne(el);
