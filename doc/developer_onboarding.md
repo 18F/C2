@@ -41,6 +41,7 @@ cat doc/developer_onboarding.md | sed -e 's/@newmember/@their_name/' | sed -e 's
 * [ ] Add to support emails: `capdevs`, `communicart.sender`, and `gatewaycommunicator` through [IT Service Desk](https://gsa.service-now.com)
 * [ ] Send access information for developer test email: `gsa.approver@gmail.com`
 * [ ] [Add to New Relic](https://rpm.newrelic.com/accounts/921394)
+* [ ] [Add to New Relic notification channels](https://alerts.newrelic.com/accounts/921394/policies/34/channels)
 * [ ] Add to calendar items: standups, IPM, and story grooming sessions
 * [ ] Schedule a code walkthrough
 * [ ] Set up pairing session
