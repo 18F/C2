@@ -17,32 +17,6 @@ DetailsRequestCard = (function(){
 
   DetailsRequestCard.prototype._events = function(){
     var self = this;    
-    
-    this.el.find("input, textarea, select, radio").on("change keyup", function(e){
-      var el = this;
-      switch(el.nodeName){
-        case "TEXTAREA":
-          $(el).text(el.value);
-          break;
-        case "INPUT":
-          switch(el.type){
-            case "radio":
-              $(el).attr('checked', 'true');
-              break;
-            case "checkbox":
-              if (el.checked === true){
-                $(el).attr('checked', 'false');
-              } else {
-                $(el).attr('checked', 'true');
-              }
-              break;
-          }
-          break;
-        default:
-          break;
-      }
-      self.fieldChanged(e, el);
-    });
 
     this.el.find('.edit-toggle').on('click', function(e){
       e.preventDefault();
@@ -142,10 +116,6 @@ DetailsRequestCard = (function(){
     $('html, body').animate({
       scrollTop:  self.el.offset().top - 40
     });
-  }
-
-  DetailsRequestCard.prototype.fieldChanged = function(e, el){
-    this.el.trigger("form:changed"); 
   }
 
   return DetailsRequestCard;
