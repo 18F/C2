@@ -197,13 +197,15 @@ C2 = (function() {
   /* Observer Activity */
 
   C2.prototype._setupObserverEvent = function(){
-    var notification = this.createObserverNotification;
+    var self = this;
     this.observerCardController.el.on("observer-card:updated", function(event, data){
       notification(data);
+      self.createObserverNotification(data);
     });
   }
 
   C2.prototype.createObserverNotification = function(data){
+    console.log(this);
     var params = {
       title: "Observer " + data.actionType,
       type: data.noticeType, 
