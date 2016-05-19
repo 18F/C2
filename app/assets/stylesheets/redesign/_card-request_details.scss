@@ -12,6 +12,11 @@
   }
 }
 
+[data-child-is-dirrty="true"] .selectize-input,
+[data-is-dirrty="true"] {
+  border-color: #40759C;
+}
+
 .detail-element{
   font-size: 13px;
   font-weight: bold;
