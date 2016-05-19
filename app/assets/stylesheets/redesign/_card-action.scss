@@ -79,15 +79,23 @@ $action-bar-wrapper-height-small: 60px;
 
 #action-bar-status{
   .notification-bar-el{
+    min-height: 65px;
     padding-top: 7px;
-    min-height: 40px;
     background: #589D42;
-    color: white;
+    color: #494949;
     font-weight: bold;
+    font-size: 17px;
     opacity: .9;
     border-top: 2px solid #4A8C35;
+    display: flex;
+    flex-direction: column;
+    min-height: 65px;
+    justify-content: center;
+    .row{
+      width: 100%;
+    }
     &.notice-type-notice{
-      background: #8E8888;
+      background: #E8E8E8;
       border-top: 2px solid darken($secondary-color, 5%);
     }
     &.notice-type-alert{
