@@ -26,6 +26,20 @@ ul#request-actions{
   }
 }
 
+.notification-bar-el .close{
+  position: relative;
+  width: 40px;
+  height: 40px;
+  margin-top: -10px;
+  svg{
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+  }
+}
+
 .action-bar-template{
   transform: translateY(60px);
   transition: transform .3s ease-in;
