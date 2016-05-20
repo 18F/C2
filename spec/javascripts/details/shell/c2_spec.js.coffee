@@ -93,13 +93,6 @@ describe 'C2', ->
 
   describe '#events _actionBarState', ->
     it "editMode is on when state when edit-mode:on", ->
-      testParams = setupC2TestParams()
-      c2 = new C2(testParams)
-      isEditMode = c2.actionBar.el.hasClass('edit-actions')
-      expect(isEditMode).to.eql(false)
-      c2.formState.el.trigger('form:dirty')
-      isEditMode = c2.actionBar.el.hasClass('edit-actions')
-      expect(isEditMode).to.eql(true)
 
   describe '#events _actionBarSave', -> 
     it "action-bar-clicked:save is fired through details-form:save", ->
