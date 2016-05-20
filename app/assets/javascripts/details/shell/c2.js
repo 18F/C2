@@ -85,6 +85,7 @@ C2 = (function() {
   C2.prototype._setupDetailsForm = function(){
     var self = this;  
     this.detailsRequestCard.el.on('form:updated', function(event, data){
+      console.log('Double');
       self.detailsSaved(data);
     });
   }
