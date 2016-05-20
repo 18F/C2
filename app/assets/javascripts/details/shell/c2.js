@@ -106,14 +106,14 @@ C2 = (function() {
 
   C2.prototype.detailsCancelled = function(){
     this.detailsView();
-    this.createNotification("Canceled Change", "", "notice");
+    this.createNotification("Your changes have been discarded.", "", "notice");
   }
  
   C2.prototype.detailsSaved = function(data){
     this.detailsView();
     this.formState.initDirrty();
     this.actionBar.el.trigger("action-bar-clicked:saved");
-    this.createNotification("Changes Saved", "Your changes were saved.", "success");
+    this.createNotification("Your updates have been saved.", "", "success");
   }
   
   C2.prototype.detailsEditMode = function(){

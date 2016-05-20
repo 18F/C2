@@ -8,11 +8,19 @@ ul.request-actions{
       margin-left: 20px;
     }
   }
+  .button{
+    font-weight: bold;
+  }
   .save-button .button{
     background: #8ecc76;
+    color: #4A4A4A;
   }
   .cancel-button{
     margin-right: 20px;
+    .button{
+      background: #E8E8E8;
+      color: #4A4A4A;
+    }
   }
   .modify{
     margin: 0px;
@@ -119,13 +127,15 @@ $action-bar-wrapper-height-small: 60px;
     }
     &.notice-type-notice{
       background: #E8E8E8;
+      color: #494949;
       border-color: darken(#E8E8E8, 5%);
     }
     &.notice-type-success{
 
     }
     &.notice-type-alert{
-      background: $alert-color;
+      background: #F5EBEC;
+      color: #D0021B;
       border-color: darken($alert-color, 5%);
     }
   }

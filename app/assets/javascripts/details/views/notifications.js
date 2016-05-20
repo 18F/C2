@@ -57,16 +57,16 @@ Notifications = (function(){
       duration: timeout,
       color: '#40759C',
       trailColor: '#DAEAf5',
-      trailWidth: 2,
+      trailWidth: 3,
       svgStyle: null
     });
     progress.animate(1);
     var timer = window.setTimeout(function(){
       if(el.attr('data-clicked') !== true){
-        // self.clearOne(el);
+        self.clearOne(el);
       }
     }, timeout);
-    // this.notificationEvent(id, timer);
+    this.notificationEvent(id, timer);
   }
 
   Notifications.prototype.notificationEvent = function(id, timer){
