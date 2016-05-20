@@ -63,10 +63,10 @@ Notifications = (function(){
     progress.animate(1);
     var timer = window.setTimeout(function(){
       if(el.attr('data-clicked') !== true){
-        self.clearOne(el);
+        // self.clearOne(el);
       }
     }, timeout);
-    this.notificationEvent(id, timer);
+    // this.notificationEvent(id, timer);
   }
 
   Notifications.prototype.notificationEvent = function(id, timer){

@@ -30,7 +30,12 @@ ul.request-actions{
   position: relative;
   width: 40px;
   height: 40px;
-  margin-top: -10px;
+  margin-top: -8px;
+  font-size: 31px;
+  transition: opacity .2s ease-in;
+  &:hover{
+    opacity: 7;
+  }
   svg{
     width: 40px;
     height: 40px;
@@ -114,11 +119,14 @@ $action-bar-wrapper-height-small: 60px;
     }
     &.notice-type-notice{
       background: #E8E8E8;
-      border-top: 2px solid darken($secondary-color, 5%);
+      border-color: darken(#E8E8E8, 5%);
+    }
+    &.notice-type-success{
+
     }
     &.notice-type-alert{
       background: $alert-color;
-      border-top: 2px solid darken($alert-color, 5%);
+      border-color: darken($alert-color, 5%);
     }
   }
 }
