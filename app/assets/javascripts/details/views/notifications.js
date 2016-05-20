@@ -73,7 +73,7 @@ Notifications = (function(){
     var self = this;
     var el = $("#notification-id-" + id);
     el.on('click', function(e){
-      if( $(this).attr('data-clicked') == true ){
+      if( $(this).attr('data-clicked') === true ){
         self.initClose(id);
         $(this).attr('data-clicked', 'false');
       } else {
@@ -102,6 +102,9 @@ Notifications = (function(){
   }
 
   Notifications.prototype.clearOne = function(el){
+    el.find('*').animate({
+      opacity: 0
+    }, 100);
     el.animate({
       "min-height": "0px", 
       height: "0px"

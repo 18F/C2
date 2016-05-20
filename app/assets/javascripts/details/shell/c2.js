@@ -93,39 +93,33 @@ C2 = (function() {
     var self = this;
     this.detailsRequestCard.el.on('edit-toggle:trigger', function(){
       if(!self.editMode.getState()){
-        self.detailsEditMode();
+        self.detailsMode('edit');
       } else {
         if(self.detailsRequestCard.el.is){
           self.detailsCancelled();
         } else {
-          self.detailsView();
+          self.detailsMode('view');
         }
       }
     });
   }
 
   C2.prototype.detailsCancelled = function(){
-    this.detailsView();
+    this.detailsMode('view');
     this.createNotification("Your changes have been discarded.", "", "notice");
   }
  
   C2.prototype.detailsSaved = function(data){
-    this.detailsView();
+    this.detailsMode('view');
     this.formState.initDirrty();
     this.actionBar.el.trigger("action-bar-clicked:saved");
     this.createNotification("Your updates have been saved.", "", "success");
   }
   
-  C2.prototype.detailsEditMode = function(){
-    this.detailsRequestCard.toggleMode('edit')
-    this.editMode.stateTo('edit');
-    this.actionBar.editMode()
-  }
-
-  C2.prototype.detailsView = function(){
-    this.detailsRequestCard.toggleMode('view')
-    this.editMode.stateTo('view');
-    this.actionBar.viewMode();
+  C2.prototype.detailsMode = function(mode){
+    this.detailsRequestCard.toggleMode(mode)
+    this.editMode.stateTo(mode);
+    this.actionBar[mode + "Mode"]()
   }
 
   /* End Form */ 
