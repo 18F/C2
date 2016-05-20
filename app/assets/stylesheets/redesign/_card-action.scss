@@ -26,8 +26,13 @@ ul#request-actions{
   }
 }
 
-
-
+.action-bar-template{
+  transform: translateY(60px);
+  transition: transform .3s ease-in;
+  &.active{
+    transform: translateY(0px);  
+  }
+}
 
 .cancel-action{
   color: $primary-color;
