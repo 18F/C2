@@ -156,7 +156,7 @@ C2 = (function() {
   C2.prototype.handleSaveError = function(data){
     var response = data['response'];
     for (var i = response.length - 1; i >= 0; i--) {
-      this.createNotification("Request Not Saved", response[i], "alert");
+      this.createNotification(response[i], "", "alert");
     }
   }
 

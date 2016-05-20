@@ -90,7 +90,7 @@ Notifications = (function(){
     var title   = (params['title']) ? params['title'] : '';
     var content = (params['content']) ? params['content'] : '';
     var timeout = (params['timeout']) ? params['timeout'] : 3000;
-    
+
     var notice =  '<li id="notification-id-' + id + '" class="notice-type-' + type + ' notification-bar-el" data-timeout="' + timeout + '">' +
                     '<div class="row">' +
                       '<span class="notification-title">' + title + '</span><span class="notification-content">' + content + '</span>' +
