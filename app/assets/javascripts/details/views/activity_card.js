@@ -23,12 +23,8 @@ ActivityCardController = (function(){
     var self = this;
 
     this.el.on('click','.status-contract-action, .status-expand-action', function(){
-      self.el.find('.toggle-contracted')
-        .toggleClass('status-contracted')
-        .toggleClass('status-expanded');
-      self.el.find('.status-contract-action').toggle();
-      self.el.find('.status-expand-action').toggle();
-
+      var classes = ".status-contracted, .status-contract-action, .status-expand-action";
+      self.el.find(classes).toggle();
       return false;
     });
   }
