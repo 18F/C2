@@ -52,12 +52,20 @@ ActionBar = (function() {
   }
 
   ActionBar.prototype.viewMode = function() {
+    this.cancelDisable();
     $('.action-bar-template').removeClass('edit-actions');
-    this.el.find('.save-button button').attr("disabled", "disabled");
   }
 
   ActionBar.prototype.editMode = function() {
+    this.cancelActive();
     $('.action-bar-template').addClass('edit-actions');
+  };
+
+  ActionBar.prototype.saveDisable = function() {
+    this.el.find('.save-button button').attr("disabled", "disabled");
+  }
+
+  ActionBar.prototype.saveActive = function() {
     this.el.find('.save-button button').attr("disabled", false);
   };
 

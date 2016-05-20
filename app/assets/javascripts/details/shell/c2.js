@@ -75,12 +75,10 @@ C2 = (function() {
   C2.prototype._setupEditMode = function(){
     var self = this;  
     this.formState.el.on('form:dirty', function(){
-      console.log('self.actionBar.editMode();');
-      self.actionBar.editMode();
+      self.actionBar.saveActive();
     });
     this.formState.el.on('form:clean', function(){
-      console.log('self.actionBar.viewMode();');
-      self.actionBar.viewMode();
+      self.actionBar.saveDisable();
     });
   }
 
@@ -120,13 +118,12 @@ C2 = (function() {
   
   C2.prototype.detailsEditMode = function(){
     this.detailsRequestCard.toggleMode('edit')
-    this.actionBar.cancelActive();
     this.editMode.stateTo('edit');
+    this.actionBar.editMode()
   }
 
   C2.prototype.detailsView = function(){
     this.detailsRequestCard.toggleMode('view')
-    this.actionBar.cancelDisable();
     this.editMode.stateTo('view');
     this.actionBar.viewMode();
   }
