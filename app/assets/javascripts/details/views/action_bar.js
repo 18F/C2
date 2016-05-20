@@ -9,7 +9,7 @@ ActionBar = (function() {
 
   ActionBar.prototype._setup = function() {
     this._event();
-    this.viewMode();
+    this.setMode('view');
   };
 
   ActionBar.prototype._event = function() {
