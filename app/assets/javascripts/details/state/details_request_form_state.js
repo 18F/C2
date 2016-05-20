@@ -8,10 +8,14 @@ DetailsRequestFormState = (function(){
   }
   
   DetailsRequestFormState.prototype._setup = function(){ 
-    this.form = this.el.dirrty();
+    this.initDirrty();
     this._events();
   }
 
+  DetailsRequestFormState.prototype.initDirrty = function(){ 
+    this.form = this.el.dirrty();
+  }
+  
   DetailsRequestFormState.prototype._events = function(){ 
     var el = this.el;
     this.form.on("dirty", function(e){

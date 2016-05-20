@@ -111,6 +111,7 @@ C2 = (function() {
  
   C2.prototype.detailsSaved = function(data){
     this.detailsView();
+    this.formState.initDirrty();
     this.actionBar.el.trigger("action-bar-clicked:saved");
     this.createNotification("Changes Saved", "Your changes were saved.", "success");
   }
