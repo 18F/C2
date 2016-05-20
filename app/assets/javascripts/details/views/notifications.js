@@ -48,7 +48,6 @@ Notifications = (function(){
   }
 
   Notifications.prototype.initClose = function(id){
-    console.log("Running ", id);
     var self = this;
     var el = $("#notification-id-" + id);
     var timeout = el.attr('data-timeout');
