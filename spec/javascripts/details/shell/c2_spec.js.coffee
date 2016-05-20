@@ -120,3 +120,7 @@ describe 'C2', ->
 
   describe '#events notification', -> 
     it "checks for one success response", ->
+  
+  describe 'trigger events on dirrty', -> 
+    it "make sure dirrty is triggered on form", ->
+    it "make sure dirrty is reinit on save", ->
