@@ -48,6 +48,7 @@ Notifications = (function(){
   }
 
   Notifications.prototype.initClose = function(id){
+    console.log("Running ", id);
     var self = this;
     var el = $("#notification-id-" + id);
     var timeout = el.attr('data-timeout');
@@ -59,10 +60,26 @@ Notifications = (function(){
       trailWidth: 2,
       svgStyle: null
     });
-    progress.animate(1, function() {
-      console.log("Running ", id);
+    progress.animate(1);
+    var timer = window.setTimeout(function(){
       if(el.attr('data-clicked') !== true){
         self.clearOne(el);
+      }
+    }, timeout);
+    this.notificationEvent(id, timer);
+  }
+
+  Notifications.prototype.notificationEvent = function(id, timer){
+    var self = this;
+    var el = $("#notification-id-" + id);
+    el.on('click', function(e){
+      if( $(this).attr('data-clicked') == true ){
+        self.initClose(id);
+        $(this).attr('data-clicked', 'false');
+      } else {
+        clearTimeout(timer);
+        el.find('svg').remove();
+        $(this).attr('data-clicked', 'true');
       }
     });
   }
