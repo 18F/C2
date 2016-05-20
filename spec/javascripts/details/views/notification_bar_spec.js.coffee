@@ -27,3 +27,16 @@ describe 'Notification', ->
   
   describe '#clearAll', ->
     it "remove all four notifications", ->
+  
+  describe '#clearOne', ->
+    it "remove a single notification", ->
+  
+  describe '#initClose', ->
+    it "make sure notification bar closes after the init period with timeout", ->
+    it "cancel the auto close on click of the notification", ->
+
+  describe '#generate', ->
+    it "create the expected notification bar", ->
+    it "change params without timeout", ->
+    it "change params without title", ->
+    it "change params without type", ->
