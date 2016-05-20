@@ -1,7 +1,10 @@
+- if policy(@proposal).can_complete?
+  - can_complete_class = "user-can-complete"
+
 .action-bar-template#action-bar-status.action-bar-status
   %ul
   
-.action-bar-template#action-bar-wrapper.action-bar-wrapper
+.action-bar-template#action-bar-wrapper.action-bar-wrapper{ class: can_complete_class }
   .row
     .medium-12.column
       %ul#request-actions.request-actions.fr

@@ -156,6 +156,7 @@ C2 = (function() {
   C2.prototype.handleSaveError = function(data){
     var response = data['response'];
     for (var i = response.length - 1; i >= 0; i--) {
+      response[i]['timeout'] = 7500;
       this.createNotification(response[i], "", "alert");
     }
   }
