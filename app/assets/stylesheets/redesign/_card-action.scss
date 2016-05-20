@@ -10,8 +10,11 @@ ul.request-actions{
   }
   .button{
     font-weight: bold;
+    width: 134px;
+    height: 43px;
   }
   .save-button .button{
+    border-color: #8ecc76;
     background: #8ecc76;
     color: #4A4A4A;
   }
@@ -19,6 +22,7 @@ ul.request-actions{
     margin-right: 20px;
     .button{
       background: #E8E8E8;
+      border-color: #E8E8E8;
       color: #4A4A4A;
     }
   }
@@ -50,14 +54,6 @@ ul.request-actions{
     position: absolute;
     left: 0px;
     top: 3px;
-  }
-}
-
-.action-bar-template{
-  transform: translateY(60px);
-  transition: transform .3s ease-in;
-  &.edit-actions{
-    transform: translateY(0px);  
   }
 }
 
@@ -93,8 +89,17 @@ $action-bar-wrapper-height-small: 60px;
   padding-top: 10px;
 }
 
-@media screen and ( min-height: 700px ){
-  $action-bar-wrapper-height: 110px;
+.action-bar-template{
+  transform: translateY($action-bar-wrapper-height-small);
+  transition: transform .3s ease-in;
+  &.edit-actions{
+    transform: translateY(0px);  
+  }
+}
+
+
+@media screen and ( min-height: 600px ){
+  $action-bar-wrapper-height: 164px;
   .action-bar-status{
     .status-bar{
       padding-top: 7px;
@@ -106,6 +111,11 @@ $action-bar-wrapper-height-small: 60px;
     height: $action-bar-wrapper-height;
     padding-top: 20px;
   }
+
+  .action-bar-template{
+    transform: translateY($action-bar-wrapper-height);
+  }
+
 }
 
 

@@ -66,7 +66,7 @@ Notifications = (function(){
         self.clearOne(el);
       }
     }, timeout);
-    this.notificationEvent(id, timer);
+    // this.notificationEvent(id, timer);
   }
 
   Notifications.prototype.notificationEvent = function(id, timer){
