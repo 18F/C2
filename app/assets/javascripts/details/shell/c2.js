@@ -75,10 +75,10 @@ C2 = (function() {
   C2.prototype._setupEditMode = function(){
     var self = this;  
     this.formState.el.on('form:dirty', function(){
-      self.actionBar.editMode();
+      self.actionBar.barState('.save-button', false);
     });
     this.formState.el.on('form:clean', function(){
-      self.actionBar.viewMode();
+      self.actionBar.barState('.save-button', "disabled");
     });
   }
 
@@ -93,39 +93,33 @@ C2 = (function() {
     var self = this;
     this.detailsRequestCard.el.on('edit-toggle:trigger', function(){
       if(!self.editMode.getState()){
-        self.detailsEditMode();
+        self.detailsMode('edit');
       } else {
         if(self.detailsRequestCard.el.is){
           self.detailsCancelled();
         } else {
-          self.detailsView();
+          self.detailsMode('view');
         }
       }
     });
   }
 
   C2.prototype.detailsCancelled = function(){
-    this.detailsView();
-    this.createNotification("Canceled Change", "", "notice");
+    this.detailsMode('view');
+    this.createNotification("Your changes have been discarded.", "", "notice");
   }
  
   C2.prototype.detailsSaved = function(data){
-    this.detailsView();
+    this.detailsMode('view');
+    this.formState.initDirrty();
     this.actionBar.el.trigger("action-bar-clicked:saved");
-    this.createNotification("Changes Saved", "Your changes were saved.", "success");
+    this.createNotification("Your updates have been saved.", "", "success");
   }
   
-  C2.prototype.detailsEditMode = function(){
-    this.detailsRequestCard.toggleMode('edit')
-    this.actionBar.cancelActive();
-    this.editMode.stateTo('edit');
-  }
-
-  C2.prototype.detailsView = function(){
-    this.detailsRequestCard.toggleMode('view')
-    this.actionBar.cancelDisable();
-    this.editMode.stateTo('view');
-    this.actionBar.viewMode();
+  C2.prototype.detailsMode = function(mode){
+    this.detailsRequestCard.toggleMode(mode)
+    this.editMode.stateTo(mode);
+    this.actionBar.setMode(mode)
   }
 
   /* End Form */ 
@@ -156,7 +150,8 @@ C2 = (function() {
   C2.prototype.handleSaveError = function(data){
     var response = data['response'];
     for (var i = response.length - 1; i >= 0; i--) {
-      this.createNotification("Request Not Saved", response[i], "alert");
+      response[i]['timeout'] = 7500;
+      this.createNotification(response[i], "", "alert");
     }
   }
 
@@ -204,7 +199,6 @@ C2 = (function() {
   }
 
   C2.prototype.createObserverNotification = function(data){
-    console.log(this);
     var params = {
       title: "Observer " + data.actionType,
       type: data.noticeType, 

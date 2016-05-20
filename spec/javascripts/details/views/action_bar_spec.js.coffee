@@ -13,20 +13,18 @@ describe 'ActionBar', ->
       expect(actionBar.el.hasClass('edit-actions')).to.eql(false)
     
     it "anchor link is not disabled", ->
-      actionBar = new ActionBar(getActionBarContent())  
-      expect(actionBar.el.find('.save-button button').is(":disabled")).to.eql(true)
   
   describe '#_events .save-button', ->
     it "flag is set", ->
       flag = false
       actionBar = new ActionBar(getActionBarContent())
-      actionBar.editMode()
+      actionBar.setMode('edit')
       expect(flag).to.eql(false)
 
     it "save fires event when enabled", ->
       flag = false
       actionBar = new ActionBar(getActionBarContent())
-      actionBar.editMode()
+      actionBar.setMode('edit')
       actionBar.el.on "action-bar-clicked:save", ->
         flag = true
       actionBar.el.trigger('action-bar-clicked:save')
@@ -44,24 +42,11 @@ describe 'ActionBar', ->
 
   describe '#editMode', ->
     it "set edit mode", ->
-      actionBar = new ActionBar(getActionBarContent())  
-      actionBar.editMode()
-      expect(actionBar.el.hasClass('edit-actions')).to.eql(true)
     
     it "save button is not disabled", ->
-      actionBar = new ActionBar(getActionBarContent())  
-      actionBar.editMode()
-      expect(actionBar.el.find('.save-button button').is(":disabled")).to.eql(false)
-  
+      
   describe '#viewMode', ->
     it "set edit mode and revert to view mode", ->
-      actionBar = new ActionBar(getActionBarContent())  
-      actionBar.editMode()
-      actionBar.viewMode()
-      expect(actionBar.el.hasClass('edit-actions')).to.eql(false)
-
+      
     it "save button is disabled", ->
-      actionBar = new ActionBar(getActionBarContent())  
-      actionBar.editMode()
-      actionBar.viewMode()
-      expect(actionBar.el.find('.save-button button').is(":disabled")).to.eql(true)
+      

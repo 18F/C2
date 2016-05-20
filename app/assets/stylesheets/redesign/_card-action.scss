@@ -1,4 +1,4 @@
-ul#request-actions{
+ul.request-actions{
   max-width: 1120px;
   margin: auto;
   vertical-align: middle;
@@ -8,26 +8,68 @@ ul#request-actions{
       margin-left: 20px;
     }
   }
+  .button{
+    font-weight: bold;
+    width: 134px;
+    height: 43px;
+    outline: none;
+  }
   .save-button .button{
+    border-color: #8ecc76;
     background: #8ecc76;
+    color: #4A4A4A;
   }
   .cancel-button{
     margin-right: 20px;
+    .button{
+      background: #E8E8E8;
+      border-color: #E8E8E8;
+      color: #4A4A4A;
+    }
   }
   .modify{
     margin: 0px;
   }
 }
-.edit-actions{
-  ul#request-actions{
+.edit-actions,
+.user-can-complete{
+  ul.request-actions{
     .cancel-action{
       display: none;
     }
   }
 }
 
+.action-bar-wrapper.user-can-complete .cancel-button, 
+.action-bar-wrapper.user-can-complete .save-button,
+.action-bar-wrapper.user-can-complete.edit-actions .action-approve{
+    display: none;
+}
+.action-bar-wrapper.user-can-complete.edit-actions .cancel-button, 
+.action-bar-wrapper.user-can-complete.edit-actions .save-button {
+    display: inline-block;
+}
 
 
+.notification-bar-el .close{
+  position: relative;
+  width: 40px;
+  height: 40px;
+  margin-top: -8px;
+  font-size: 31px;
+  transition: opacity .2s ease-in;
+  outline: none;
+  &:hover{
+    opacity: 7;
+  }
+  svg{
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    left: 0px;
+    top: 3px;
+  }
+}
 
 .cancel-action{
   color: $primary-color;
@@ -44,7 +86,7 @@ ul#request-actions{
 }
 
 $action-bar-wrapper-height-small: 60px;
-#action-bar-status{
+.action-bar-status{
   ul{
     margin: 0px;
     li{
@@ -56,59 +98,86 @@ $action-bar-wrapper-height-small: 60px;
   }
 }
 
-#action-bar-wrapper{
+.action-bar-wrapper{
   height: $action-bar-wrapper-height-small;
   padding-top: 10px;
 }
 
-@media screen and ( min-height: 700px ){
-  $action-bar-wrapper-height: 110px;
-  #action-bar-status{
+.action-bar-template{
+  transform: translateY($action-bar-wrapper-height-small);
+  transition: transform .3s ease-in;
+  &.edit-actions,
+  &.user-can-complete{
+    transform: translateY(0px);  
+  }
+}
+
+
+@media screen and ( min-height: 600px ){
+  $action-bar-wrapper-height: 157px;
+  .action-bar-status{
     .status-bar{
       padding-top: 7px;
     }
     bottom:  $action-bar-wrapper-height;
   }
 
-  #action-bar-wrapper{
+  .action-bar-wrapper{
     height: $action-bar-wrapper-height;
     padding-top: 20px;
   }
+
+  .action-bar-template{
+    transform: translateY($action-bar-wrapper-height);
+  }
+
 }
 
 
-#action-bar-status{
+.action-bar-status{
   .notification-bar-el{
-    padding-top: 7px;
-    min-height: 40px;
+    min-height: 65px;
     background: #589D42;
-    color: white;
+    color: #494949;
     font-weight: bold;
+    font-size: 17px;
     opacity: .9;
     border-top: 2px solid #4A8C35;
+    display: flex;
+    flex-direction: column;
+    min-height: 65px;
+    justify-content: center;
+    .row{
+      width: 100%;
+    }
     &.notice-type-notice{
-      background: #8E8888;
-      border-top: 2px solid darken($secondary-color, 5%);
+      background: #E8E8E8;
+      color: #494949;
+      border-color: darken(#E8E8E8, 5%);
+    }
+    &.notice-type-success{
+
     }
     &.notice-type-alert{
-      background: $alert-color;
-      border-top: 2px solid darken($alert-color, 5%);
+      background: #F5EBEC;
+      color: #D0021B;
+      border-color: darken($alert-color, 5%);
     }
   }
 }
 
-#action-bar-wrapper{
+.action-bar-wrapper{
   bottom:  0px;
-  background: #f2f4f5;
+  background: #fff;
   > div{
     opacity: .7;
   }
-  &.edit-actions{
+  &.edit-actions,
+  &.user-can-complete{
     > div{
       opacity: 1;
     }
     bottom: 0px;
-    background: #f2f4f5;
   }
 }
 
