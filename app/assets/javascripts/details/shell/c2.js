@@ -119,7 +119,7 @@ C2 = (function() {
   C2.prototype.detailsMode = function(mode){
     this.detailsRequestCard.toggleMode(mode)
     this.editMode.stateTo(mode);
-    this.actionBar[mode + "Mode"]()
+    this.actionBar.setMode(mode)
   }
 
   /* End Form */ 
