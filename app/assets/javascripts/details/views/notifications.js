@@ -94,7 +94,7 @@ Notifications = (function(){
     var notice =  '<li id="notification-id-' + id + '" class="notice-type-' + type + ' notification-bar-el" data-timeout="' + timeout + '">' +
                     '<div class="row">' +
                       '<span class="notification-title">' + title + '</span><span class="notification-content">' + content + '</span>' +
-                      '<button class="close">Close</button>' +
+                      '<button class="close">&#215;</button>' +
                     '</div>' +
                   '</li>';
     
