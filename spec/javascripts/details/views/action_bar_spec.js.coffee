@@ -18,13 +18,13 @@ describe 'ActionBar', ->
     it "flag is set", ->
       flag = false
       actionBar = new ActionBar(getActionBarContent())
-      actionBar.editMode()
+      actionBar.setMode('edit')
       expect(flag).to.eql(false)
 
     it "save fires event when enabled", ->
       flag = false
       actionBar = new ActionBar(getActionBarContent())
-      actionBar.editMode()
+      actionBar.setMode('edit')
       actionBar.el.on "action-bar-clicked:save", ->
         flag = true
       actionBar.el.trigger('action-bar-clicked:save')

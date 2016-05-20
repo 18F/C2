@@ -39,35 +39,26 @@ ActionBar = (function() {
     })
     actionBar.el.on('action-bar-clicked:saved', function(){
       actionBar.saveButtonLadda.ladda( 'stop' );
-      actionBar.viewMode();
+      actionBar.setMode('view');
     })
   }
 
-  ActionBar.prototype.cancelDisable = function() {
-    this.el.find('.cancel-button button').attr("disabled", "disabled");
+  ActionBar.prototype.barState = function(el, state) {
+    this.el.find(el + ' button').attr("disabled", state);
   }
 
-  ActionBar.prototype.cancelActive = function() {
-    this.el.find('.cancel-button button').attr("disabled", false);
+  ActionBar.prototype.setMode = function(mode) {
+    switch(mode){
+      case "view":
+        this.barState('.cancel-button', "disabled");
+        $('.action-bar-template').removeClass('edit-actions');
+        break;
+      case "edit":
+        this.barState('.cancel-button', false);
+        $('.action-bar-template').addClass('edit-actions');
+        break;
+    }
   }
-
-  ActionBar.prototype.viewMode = function() {
-    this.cancelDisable();
-    $('.action-bar-template').removeClass('edit-actions');
-  }
-
-  ActionBar.prototype.editMode = function() {
-    this.cancelActive();
-    $('.action-bar-template').addClass('edit-actions');
-  };
-
-  ActionBar.prototype.saveDisable = function() {
-    this.el.find('.save-button button').attr("disabled", "disabled");
-  }
-
-  ActionBar.prototype.saveActive = function() {
-    this.el.find('.save-button button').attr("disabled", false);
-  };
 
   return ActionBar;
 

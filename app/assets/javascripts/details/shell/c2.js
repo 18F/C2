@@ -75,10 +75,10 @@ C2 = (function() {
   C2.prototype._setupEditMode = function(){
     var self = this;  
     this.formState.el.on('form:dirty', function(){
-      self.actionBar.saveActive();
+      self.actionBar.barState('.save-button', false);
     });
     this.formState.el.on('form:clean', function(){
-      self.actionBar.saveDisable();
+      self.actionBar.barState('.save-button', "disabled");
     });
   }
 
