@@ -1,7 +1,7 @@
 - if policy(@proposal).can_complete?
   - can_complete_class = "user-can-complete"
 
-.action-bar-template#action-bar-status.action-bar-status
+.action-bar-template#action-bar-status.action-bar-status{ class: can_complete_class }
   %ul
   
 .action-bar-template#action-bar-wrapper.action-bar-wrapper{ class: can_complete_class }
