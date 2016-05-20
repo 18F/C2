@@ -15,6 +15,25 @@ ActivityCardController = (function(){
 
   ActivityCardController.prototype._events = function(){
     var self = this;
+    this._setupUpdateEvent();
+    this._setupCommentListToggle();
+  }
+
+  ActivityCardController.prototype._setupCommentListToggle = function(){
+    var self = this;
+
+    this.el.on('click','.status-contract-action, .status-expand-action', function(){
+      self.el.find('.toggle-contracted')
+        .toggleClass('status-contracted')
+        .toggleClass('status-expanded');
+      self.el.find('.status-contract-action').toggle();
+      self.el.find('.status-expand-action').toggle();
+
+      return false;
+    });
+  }
+
+  ActivityCardController.prototype._setupUpdateEvent = function(){
     this.el.on("activity-card:update", function(){
       var proposal_id = $("#proposal_id").attr("data-proposal-id");
       $.ajax({ url: "/activity-feed/" + proposal_id + "/update_feed", 
