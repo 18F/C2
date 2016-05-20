@@ -29,7 +29,7 @@ ul#request-actions{
 .action-bar-template{
   transform: translateY(60px);
   transition: transform .3s ease-in;
-  &.active{
+  &.edit-actions{
     transform: translateY(0px);  
   }
 }

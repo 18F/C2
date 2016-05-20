@@ -52,12 +52,12 @@ ActionBar = (function() {
   }
 
   ActionBar.prototype.viewMode = function() {
-    this.el.removeClass('edit-actions');
+    $('.action-bar-template').removeClass('edit-actions');
     this.el.find('.save-button button').attr("disabled", "disabled");
   }
 
   ActionBar.prototype.editMode = function() {
-    this.el.addClass('edit-actions');
+    $('.action-bar-template').addClass('edit-actions');
     this.el.find('.save-button button').attr("disabled", false);
   };
 

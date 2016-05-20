@@ -75,9 +75,11 @@ C2 = (function() {
   C2.prototype._setupEditMode = function(){
     var self = this;  
     this.formState.el.on('form:dirty', function(){
+      console.log('self.actionBar.editMode();');
       self.actionBar.editMode();
     });
     this.formState.el.on('form:clean', function(){
+      console.log('self.actionBar.viewMode();');
       self.actionBar.viewMode();
     });
   }
