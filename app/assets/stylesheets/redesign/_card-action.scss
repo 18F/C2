@@ -12,6 +12,7 @@ ul.request-actions{
     font-weight: bold;
     width: 134px;
     height: 43px;
+    outline: none;
   }
   .save-button .button{
     border-color: #8ecc76;
@@ -45,6 +46,7 @@ ul.request-actions{
   margin-top: -8px;
   font-size: 31px;
   transition: opacity .2s ease-in;
+  outline: none;
   &:hover{
     opacity: 7;
   }
