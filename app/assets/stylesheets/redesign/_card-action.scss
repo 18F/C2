@@ -101,7 +101,7 @@ $action-bar-wrapper-height-small: 60px;
 
 
 @media screen and ( min-height: 600px ){
-  $action-bar-wrapper-height: 164px;
+  $action-bar-wrapper-height: 157px;
   .action-bar-status{
     .status-bar{
       padding-top: 7px;
@@ -155,7 +155,7 @@ $action-bar-wrapper-height-small: 60px;
 
 .action-bar-wrapper{
   bottom:  0px;
-  background: #f2f4f5;
+  background: #fff;
   > div{
     opacity: .7;
   }
@@ -164,7 +164,6 @@ $action-bar-wrapper-height-small: 60px;
       opacity: 1;
     }
     bottom: 0px;
-    background: #f2f4f5;
   }
 }
 
