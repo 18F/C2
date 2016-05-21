@@ -7,6 +7,7 @@ dependencies:
     - gem update bundler
   cache_directories:
     - elasticsearch
+    - .rvm
 test:
   override:
     - bundle exec rspec -r rspec_junit_formatter --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/junit.xml --tag '~js' --tag '~elasticsearch' --require rails_helper:
