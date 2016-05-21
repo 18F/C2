@@ -92,6 +92,7 @@ group :test do
   gem "codeclimate-test-reporter"
   gem "elasticsearch-extensions"
   gem "poltergeist"
+  gem 'rspec_junit_formatter', '0.2.2'
   gem "shoulda-matchers"
   gem "simplecov"
   gem "site_prism"
