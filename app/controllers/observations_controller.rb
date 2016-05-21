@@ -12,9 +12,9 @@ class ObservationsController < ApplicationController
 
   def destroy
     proposal = observation.proposal
+    prep_destroy_response_msg(proposal)
     DispatchFinder.run(proposal).on_observer_removed(observation.user)
     observation.destroy
-    flash[:success] = "Removed Observation for #{proposal.public_id}"
     check_user_and_respond
   end
 
@@ -44,9 +44,16 @@ class ObservationsController < ApplicationController
   def prep_create_response_msg(observer, observation)
     if observation
       flash[:success] = "#{observer.full_name} has been added as an observer"
+      create_js_notification "success", "#{observer.full_name} has been added as an observer"
     else
       flash[:alert] = "#{observer.email_address} is already an observer for this request"
+      create_js_notification "alert", "#{observer.email_address} is already an observer for this request"
     end
+  end
+
+  def prep_destroy_response_msg(proposal)
+    create_js_notification "notice", "#{observation.user.full_name} has been removed as an observer"
+    flash[:success] = "Removed Observation for #{proposal.public_id}"
   end
 
   def auth_errors(exception)
@@ -79,5 +86,9 @@ class ObservationsController < ApplicationController
     else
       respond_to_observer
     end
+  end
+
+  def create_js_notification(notice_type, content)
+    @js_notification = { noticeType: notice_type, content: content }
   end
 end

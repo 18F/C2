@@ -12,6 +12,11 @@
   }
 }
 
+[data-child-is-dirrty="true"] .selectize-input,
+[data-is-dirrty="true"] {
+  border-color: #40759C;
+}
+
 .detail-element{
   font-size: 13px;
   font-weight: bold;
@@ -30,21 +35,22 @@
 }
 
 .edit-mode{
-  #expense_type-wrapper-3{
+  .rwa_number-wrapper{
+    clear: none !important;
     .detail-wrapper{
       border-radius: 10px 0px 0px 10px;
       margin-left: 0px;
     }
   }
-  #expense_type-wrapper-4{
+  .work_order_code-wrapper{
+    clear: right !important;
     .detail-wrapper{
       border-radius: 0px 10px 10px 0px;
       margin-right: 0px;
     }
-    clear: right;
   }
-  #expense_type-wrapper-3,
-  #expense_type-wrapper-4{
+  .rwa_number-wrapper,
+  .work_order_code-wrapper{
     .detail-wrapper.detail-wrapper{
       padding-top: 10px;
       margin-bottom: 0px;
@@ -52,7 +58,7 @@
     }
     width: 50%;
     float: left;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     padding-top: 5px;
   }
 }
@@ -70,7 +76,7 @@
       font-size: 16px;
     }
     &.not_to_exceed{
-      padding-top: 3px;
+      padding-top: 0px;
       padding-bottom: 3px;
       font-size: 12px;
     }

@@ -44,9 +44,7 @@ DetailsSave = (function() {
       },
       type: 'POST',
       data: self.el.find('form').serialize()
-      
     });
-    this.el.find('form').submit();
   }
 
   return DetailsSave;

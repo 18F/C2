@@ -2,6 +2,7 @@
 #= require ladda/spin.min
 #= require ladda/ladda.min
 #= require ladda/ladda.jquery.min
+#= require jquery.dirrty
 #= require details/state/edit_mode
 #= require details/state/details_request_form_state
 #= require details/views/action_bar
@@ -12,7 +13,6 @@
 #= require details/views/cancel_card
 #= require details/views/notifications
 #= require details/data/details_save
-#= require details/data/undo_check
 #= require details/shell/c2
 #= require details/details_helper
 #= require spec_helper
@@ -33,7 +33,6 @@ describe 'C2', ->
       expect(c2.formState instanceof DetailsRequestFormState).to.eql(true)
       expect(c2.actionBar instanceof ActionBar).to.eql(true)
       expect(c2.detailsSave instanceof DetailsSave).to.eql(true)
-      expect(c2.undoCheck instanceof UndoCheck).to.eql(true)
       expect(c2.cancelCardController instanceof CancelCardController).to.eql(true)
 
     it "check config passing test param actionBar", ->
@@ -92,23 +91,8 @@ describe 'C2', ->
       c2 = new C2(testParam)
       expect(c2.config.detailsSave).to.eql(test)
 
-    it "check config passing test param undoCheck", ->
-      test = "undo-check-test"
-      testParam = {
-        undoCheck: test
-      }
-      c2 = new C2(testParam)
-      expect(c2.config.undoCheck).to.eql(test)
-
   describe '#events _actionBarState', ->
     it "editMode is on when state when edit-mode:on", ->
-      testParams = setupC2TestParams()
-      c2 = new C2(testParams)
-      isEditMode = c2.actionBar.el.hasClass('edit-actions')
-      expect(isEditMode).to.eql(false)
-      c2.editMode.el.trigger('edit-mode:has-changed')
-      isEditMode = c2.actionBar.el.hasClass('edit-actions')
-      expect(isEditMode).to.eql(true)
 
   describe '#events _actionBarSave', -> 
     it "action-bar-clicked:save is fired through details-form:save", ->
@@ -129,3 +113,7 @@ describe 'C2', ->
 
   describe '#events notification', -> 
     it "checks for one success response", ->
+  
+  describe 'trigger events on dirrty', -> 
+    it "make sure dirrty is triggered on form", ->
+    it "make sure dirrty is reinit on save", ->

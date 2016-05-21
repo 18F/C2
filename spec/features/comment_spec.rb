@@ -32,6 +32,24 @@ feature "commenting" do
     visit "/proposals/#{proposal.id}?detail=old"
   end
 
+  scenario "redesign page hides/shows comments after 5 comments", js: true do
+    proposal = create(:proposal, :with_parallel_approvers)
+    create(:comment, comment_text: "first comment", user: proposal.requester, proposal: proposal)
+    5.times do 
+      create(:comment, user: proposal.requester, proposal: proposal)
+    end
+    login_as(proposal.requester)
+    visit "/proposals/#{proposal.id}?detail=new"
+    expect(page).to_not have_content("first comment")
+    click_on("Show all activity")
+    expect(page).to have_content("first comment")
+    wait_for_ajax
+    click_on("Minimize")
+    expect(page).to_not have_content("first comment")
+
+    visit "/proposals/#{proposal.id}?detail=old"
+  end
+
   scenario "disables attachments if none is selected", js: true do
     create_and_visit_proposal
 

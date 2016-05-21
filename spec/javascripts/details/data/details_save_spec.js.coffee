@@ -11,9 +11,3 @@ describe 'DetailsSave', ->
 
   describe '#saveDetailsForm', ->
     it "form is submitted by event", ->
-      flag = false
-      detailsSave = new DetailsSave(getRequestDetailsForm())  
-      detailsSave.el.find('form').on 'submit', ->
-        flag = true
-      detailsSave.el.trigger('details-form:save')
-      expect(flag).to.eql(true)

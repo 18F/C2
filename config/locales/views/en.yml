@@ -11,3 +11,9 @@ en:
           show_all_activity: Show all activity
           hidden_activity_count: (%{count} more)
           minimize_activity: Minimize
+      comment_list:
+        button:
+          send: Send
+          show_all_activity: Show all activity
+          hidden_activity_count: (%{count} more)
+          minimize_activity: Minimize

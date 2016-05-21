@@ -3,21 +3,26 @@ var DetailsRequestFormState;
 DetailsRequestFormState = (function(){
   function DetailsRequestFormState(el) {
     this.el = $(el);
-    this.data = {
-      fieldUID: {}  
-    }
     this._setup();
     return this;
   }
   
-  DetailsRequestFormState.prototype._setup = function(){
-    this._processFields();
+  DetailsRequestFormState.prototype._setup = function(){ 
+    this.initDirrty();
+    this._events();
   }
 
-  DetailsRequestFormState.prototype._processFields = function(){
-    var self = this;
-    this.el.find("form, input, textarea, select, radio").each(function(i, item){
-    
+  DetailsRequestFormState.prototype.initDirrty = function(){ 
+    this.form = this.el.dirrty();
+  }
+  
+  DetailsRequestFormState.prototype._events = function(){ 
+    var el = this.el;
+    this.form.on("dirty", function(e){
+      el.trigger("form:dirty"); 
+    });
+    this.form.on("clean", function(e){
+      el.trigger("form:clean"); 
     });
   }
 
