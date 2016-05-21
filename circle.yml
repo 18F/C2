@@ -1,17 +1,15 @@
-machine:
-  ruby:
-    version: 2.2.5
 dependencies:
   pre:
     - cp .env.example .env
     - bash ./build-elasticsearch.sh
     - sudo curl --output /usr/local/bin/phantomjs https://s3.amazonaws.com/circle-downloads/phantomjs-2.1.1
     - gem update --system
+    - gem update bundler
   cache_directories:
     - elasticsearch
 test:
   override:
-    - RAILS_ENV=test bundle exec rspec -r rspec_junit_formatter --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/junit.xml --tag '~js' --tag '~elasticsearch' --require rails_helper:
+    - bundle exec rspec -r rspec_junit_formatter --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/junit.xml --tag '~js' --tag '~elasticsearch' --require rails_helper:
         parallel: true
         files:
           - spec/**/*_spec.rb
