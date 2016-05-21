@@ -6,7 +6,6 @@ dependencies:
     - gem update --system
     - gem update bundler
   cache_directories:
-    - /home/ubuntu/.rvm
     - elasticsearch
 test:
   override:
