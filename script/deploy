@@ -9,7 +9,7 @@ if [ $# -lt 1 ]; then
   exit 1
 fi
 
-if ! hash autopilot 2>/dev/null; then
+if ! $(cf plugins | grep -q "autopilot"); then
   echo "You need to install autopilot CF plugin: https://github.com/concourse/autopilot"
   exit 1
 fi
