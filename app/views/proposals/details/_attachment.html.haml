@@ -13,6 +13,5 @@
               = submit_tag "Attach a File", id: :add_a_file, data: {"disable-if-empty" => "attachment_file"}, class: "button primary round no-margin-bottom attachment-submit"
         .row
           .medium-12.column
-            %h3 Attachments to this proposal
             = render partial: "proposals/details/attachment_list",
               locals: { proposal: @proposal }
