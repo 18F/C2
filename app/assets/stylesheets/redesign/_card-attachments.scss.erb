@@ -32,7 +32,7 @@
   .download-btn {
     position: absolute;
     right: 29px;
-  } 
+  }
 }
 
 li.attachment-list-item:hover {
@@ -96,3 +96,16 @@ ul.attachment-list{
     left:3px;
   }
 }
+
+.remove-attachment-btn{
+    &:hover{
+      &::before{
+        content: "Remove";
+        font-style: italic;
+        position: absolute;
+        right: 30px;
+        top:14px;
+        color: #3373B1;
+      }
+    }
+  } 
