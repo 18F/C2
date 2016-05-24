@@ -6,4 +6,4 @@
   %span.time-from
     = date_with_tooltip(event.created_at, true)
 .item-block
-  = event.decorated_version.to_html.html_safe
+  = event.safe_html_diff

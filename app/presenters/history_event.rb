@@ -7,8 +7,8 @@ class HistoryEvent < SimpleDelegator
     __getobj__.event
   end
 
-  def decorated_version
-    C2VersionDecorator.new(__getobj__)
+  def safe_html_diff
+    decorated_version.to_html.html_safe
   end
 
   def to_partial_path
@@ -16,6 +16,10 @@ class HistoryEvent < SimpleDelegator
   end
 
   private
+
+  def decorated_version
+    C2VersionDecorator.new(__getobj__)
+  end
 
   def partial_name
     item_type.split("::").last.downcase
