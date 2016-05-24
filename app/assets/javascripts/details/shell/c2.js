@@ -221,12 +221,13 @@ C2 = (function() {
 
   C2.prototype._setupSaveModal = function(){
     var self = this;
-    this.modals.el.on("save_confirm-modal:confirmed", function(){
+    this.modals.el.on("save_confirm-modal:confirm", function(){
       self.actionBar.el.trigger("action-bar-clicked:saving");
       self.detailsSave.el.trigger("details-form:save");
+      self.modals.el.on("modal:close");
     });
-    this.modals.el.on("save_confirm-modal:canceled", function(){
-      
+    this.modals.el.on("save_confirm-modal:cancel", function(){
+      self.modals.el.on("modal:close");
     });
   }
 

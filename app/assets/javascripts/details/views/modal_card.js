@@ -32,11 +32,25 @@ ModalController = (function(){
       var modalType = $(el).attr('data-modal-type');
       self.create(modalType);
     });
+    this.el.on("modal:close", function(){
+      self._closeModal();
+    });
   }
 
-  ModalController.prototype._modalEvents = function(el){
+  ModalController.prototype._modalEvents = function(el, modalType){
     this._undoButtonSetup(el);
     this._buttonDependence(el);
+    this._createCustomEvents(el, modalType);
+  }
+
+  ModalController.prototype._createCustomEvents = function(el, modalType){
+    var self = this;
+    $(el).find('[data-modal-event]').each(function(i, item){
+      var event = $(item).attr('data-modal-event');
+      $(item).on('click', function(){
+        self.el.trigger(modalType + '-modal:' + event);
+      });
+    })
   }
 
   ModalController.prototype._buttonDependence = function(el){
@@ -91,7 +105,7 @@ ModalController = (function(){
     this.clear();
     var modal = this._setupModal(modalType);
     $('#modal-wrapper').append(modal);
-    this._modalEvents(modal);
+    this._modalEvents(modal, modalType);
     this._animate();
     $('#modal-wrapper').addClass('visible');
   }

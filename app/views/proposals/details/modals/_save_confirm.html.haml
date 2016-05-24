@@ -9,5 +9,5 @@
   %p{class: "popup-content-desc"}
     = desc
   %p
-    = button_tag cancel_button, class: "cancel-cancel-link form-button cancel-button"
-    = button_tag save_button, class: "form-button"
+    = button_tag cancel_button, class: "cancel-cancel-link form-button cancel-button", data: { "modal-event": "cancel" }
+    = button_tag save_button, class: "form-button", data: { "modal-event": "confirm" }
