@@ -37,13 +37,18 @@ modalCardController = (function(){
     });
   }
 
-  modalCardController.prototype._modalEvents = function(){
-    this._undoButtonSetup();
+  modalCardController.prototype._modalEvents = function(el){
+    this._undoButtonSetup(el);
+    this._buttonDependence(el);
   }
 
-  modalCardController.prototype._undoButtonSetup = function(){
+  modalCardController.prototype._buttonDependence = function(el){
+    checkRequiredForSubmit();
+  }
+
+  modalCardController.prototype._undoButtonSetup = function(el){
     var self = this;
-    this.el.find('.cancel-cancel-link').on('click', function(){
+    $(el).find('.cancel-cancel-link').on('click', function(){
       self._closeModal();
       return false;
     })
@@ -93,7 +98,7 @@ modalCardController = (function(){
     this.clear();
     var modal = this._setupModal(modalType);
     $('#modal-wrapper').append(modal);
-    this._modalEvents();
+    this._modalEvents(modal);
     this._animate();
     $('#modal-wrapper').addClass('visible');
   }
