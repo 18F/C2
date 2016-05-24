@@ -53,7 +53,7 @@ C2 = (function() {
     this.attachmentCardController = new AttachmentCardController(config.attachmentCard);
     this.observerCardController = new ObserverCardController(config.observerCard);
     this.activityCardController = new ActivityCardController(config.activityCard);
-    this.modalCardController = new modalCardController(config.modalCard);
+    this.modals = new modalCardController(config.modalCard);
     this.actionBar = new ActionBar(config.actionBar);
     this.notification = new Notifications(config.notifications);
   }
@@ -122,6 +122,20 @@ C2 = (function() {
     this.actionBar.setMode(mode)
   }
 
+  /* End Form */ 
+  
+
+  /* Modals */ 
+  
+  C2.prototype.cancelModal = function(){
+    var params = {
+      title: "You are about to cancel this request.", 
+      desc: "Cancelling a request permenantly removes it from C2 and notifies all approvers and observers.",
+      content: ".cancel-modal-content"
+    }
+    this.modals.create(params);
+  }
+  
   /* End Form */ 
 
 

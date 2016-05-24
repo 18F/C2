@@ -27,5 +27,5 @@
   = render partial: "proposals/details/action", locals: { proposal: @proposal }
   #proposal_id{ data: { proposal_id: @proposal.id } }
 
-#card-for-modal.popup-modal.fadeIn.animated
-  = render partial: "proposals/details/modal", locals: {proposal: @proposal}
+#card-for-modal.popup-modal
+  = render partial: "proposals/details/modal", locals: { proposal: @proposal }

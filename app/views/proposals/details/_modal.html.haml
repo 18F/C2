@@ -1,13 +1,7 @@
-.popup-content{role: "dialog", "aria-labelledby" => "popup-content-label", "aria-describedby" => "popup-content-desc" }
-  = button_tag "X", class: "cancel-cancel-link cancel-close-button"
-  %h4{id: "popup-content-label"}
-    You are about to cancel this request.
-  %p{id: "popup-content-desc"}
-    Cancelling a request permenantly removes it from C2 and notifies all approvers and observers.
-  = form_tag(cancel_proposal_path(@proposal), method: :post) do
-    = label_tag(:reason_input, "Please provide a reason for cancelation.")
-    = text_area_tag "reason_input", nil, size: "15x5"
-    %p
-      = button_tag "NO, TAKE ME BACK", class: "cancel-cancel-link form-button cancel-button"
-      = submit_tag "  YES, CANCEL  ", data: {"disable-if-empty" => "reason_input"}, class: "form-button"
-      
+#modal-wrapper.modal-wrapper
+#modal-template.modal-template
+  = render partial: "proposals/details/modals/template", locals: { proposal: @proposal }  
+#modal-content.modal-content
+  = render partial: "proposals/details/modals/cancel", locals: { proposal: @proposal }
+
+

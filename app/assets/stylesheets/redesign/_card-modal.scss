@@ -1,4 +1,7 @@
-.popup-modal{
+.modal-content, .modal-template{
+  display: none !important;
+}
+.modal-wrapper{
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */

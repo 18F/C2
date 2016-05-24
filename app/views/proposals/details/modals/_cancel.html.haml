@@ -1,0 +1,7 @@
+.cancel-modal-content
+  = form_tag(cancel_proposal_path(@proposal), method: :post) do
+    = label_tag(:reason_input, "Please provide a reason for cancelation.")
+    = text_area_tag "reason_input", nil, size: "15x5"
+    %p
+      = button_tag "NO, TAKE ME BACK", class: "cancel-cancel-link form-button cancel-button"
+      = submit_tag "  YES, CANCEL  ", data: { "disable-if-empty" => "reason_input" }, class: "form-button"

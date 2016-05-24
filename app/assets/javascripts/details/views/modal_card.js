@@ -4,6 +4,7 @@ modalCardController = (function(){
   
   function modalCardController(el, opts){
     this._setup(el, opts);
+    this.data = { id: 1 }
     this._events();
     return this;
   }
@@ -36,6 +37,30 @@ modalCardController = (function(){
       return false;
     })
   }
+
+  modalCardController.prototype.clear = function(){
+    $('#modal-wrapper').html("");
+  }
+
+  modalCardController.prototype.getId = function(){
+    var id = this.data.id;
+    this.data.id = this.data.id + 1;
+    return id;
+  }
+
+  modalCardController.prototype.create = function(params){
+    this.clear();
+    var title = params["title"] || false;
+    var description = params["desc"] || false;
+    var content = $(params["content"]).clone() || false;
+    var id = this.getId();
+    var modal = $('#modal-template').clone().attr('id', "modal-el-" + id);
+    modal.find('.popup-content-label').html(title);
+    modal.find('.popup-content-desc').html(description);
+    modal.find('.additional-content').html(content);
+    $('#modal-wrapper').append(modal);
+  }
+
   return modalCardController
 }());
 
