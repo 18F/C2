@@ -1,4 +1,8 @@
 .cancel-modal-content
+  %h4{class: "popup-content-label"}
+    You are about to cancel this request.
+  %p{class: "popup-content-desc"}
+    Cancelling a request permenantly removes it from C2 and notifies all approvers and observers.
   = form_tag(cancel_proposal_path(@proposal), method: :post) do
     = label_tag(:reason_input, "Please provide a reason for cancelation.")
     = text_area_tag "reason_input", nil, size: "15x5"

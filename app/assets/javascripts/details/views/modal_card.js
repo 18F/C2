@@ -7,11 +7,7 @@ ModalController = (function(){
     this.data = { 
       id: 1,
       modal: {
-        cancel: {
-          title: "You are about to cancel this request.", 
-          desc: "Cancelling a request permenantly removes it from C2 and notifies all approvers and observers.",
-          content: ".cancel-modal-content"
-        }
+        cancel: ".cancel-modal-content"
       }
     }
     return this;
@@ -82,14 +78,10 @@ ModalController = (function(){
   }
 
   ModalController.prototype._setupModal = function(modalType){
-    var data = this.data.modal[modalType];
-    var title = data["title"] || false;
-    var description = data["desc"] || false;
-    var content = $(data["content"]).clone() || false;
+    var selector = this.data.modal[modalType];
+    var content = $(selector).clone() || false;
     var id = this.getId();
     var modal = $('#modal-template').clone().attr('id', "modal-el-" + id).removeClass('modal-template');
-    modal.find('.popup-content-label').html(title);
-    modal.find('.popup-content-desc').html(description);
     modal.find('.additional-content').html(content);
     return modal;
   }
