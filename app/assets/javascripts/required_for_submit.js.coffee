@@ -13,6 +13,6 @@ window.checkRequiredForSubmit = ->
   $scope = $(document.body)
   $scope.find("[data-disable-if-empty]").each (idx, el) ->
     new RequiredForSubmit($scope, $(el))
-  
+
 $ ->
   window.checkRequiredForSubmit()
