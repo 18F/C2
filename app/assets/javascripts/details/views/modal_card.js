@@ -47,8 +47,11 @@ ModalController = (function(){
     var self = this;
     $(el).find('[data-modal-event]').each(function(i, item){
       var event = $(item).attr('data-modal-event');
+      console.log('Running over ', item);
       $(item).on('click', function(){
-        self.el.trigger(modalType + '-modal:' + event);
+        var eventName = modalType + '-modal:' + event;
+        console.log('Set up ', eventName);
+        self.el.trigger(eventName);
       });
     })
   }
