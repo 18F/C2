@@ -1,0 +1,7 @@
+#modal-wrapper.modal-wrapper
+#modal-template.modal-template
+  = render partial: "proposals/details/modals/template", locals: { proposal: @proposal }  
+#modal-content.modal-content
+  = render partial: "proposals/details/modals/cancel", locals: { proposal: @proposal }
+
+

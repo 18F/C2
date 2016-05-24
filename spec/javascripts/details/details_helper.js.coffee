@@ -9,7 +9,7 @@
     actionBar: getActionBarContent(),
     undoCheck: getRequestDetailsForm(),
     activityCard: getActivityContent(),
-    cancelCard: getCancelCardContent()
+    modalCard: getModalCardContent()
   }
 
 @getEditModeContent = ->
@@ -94,10 +94,10 @@
     </div>
     ')
 
-@getCancelCardContent = ->
+@getModalCardContent = ->
   $('
-      <div class="cancel-modal">
-        <div class="cancel-form">
+      <div class="popup-modal">
+        <div class="popup-content">
           <form>
             <textarea />
             <input type="submit"></input>

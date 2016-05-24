@@ -1,4 +1,10 @@
-.cancel-modal{
+.modal-content, .modal-template{
+  display: none !important;
+}
+.modal-wrapper{
+  &.visible{
+    display: block;
+  }
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
@@ -11,7 +17,7 @@
   background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
   padding: 0 15%;
   z-index: 900;
-  .cancel-form{
+  .popup-content{
     background-color: #fefefe;
     margin: 8% auto; /* 15% from the top and centered */
     padding: 20px 5%;

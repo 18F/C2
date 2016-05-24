@@ -21,11 +21,11 @@ describe 'Canceling a request' do
     proposal = create(:proposal)
     login_as(proposal.requester)
     visit "/proposals/#{proposal.id}?detail=new"
-    expect(page).to have_selector(".cancel-modal", visible: false)
+    expect(page).to have_selector(".popup-modal", visible: false)
     click_on('Cancel this request')
-    expect(page).to have_selector(".cancel-modal", visible: true)
+    expect(page).to have_selector(".popup-modal", visible: true)
     click_on('NO, TAKE ME BACK')
-    expect(page).to have_selector(".cancel-modal", visible: false)
+    expect(page).to have_selector(".popup-modal", visible: false)
     visit "/proposals/#{proposal.id}?detail=normal"
   end
 
