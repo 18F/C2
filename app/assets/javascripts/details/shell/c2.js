@@ -123,22 +123,6 @@ C2 = (function() {
   }
 
   /* End Form */ 
-  
-
-  /* Modals */ 
-  
-  C2.prototype.cancelModal = function(){
-    var params = {
-      title: "You are about to cancel this request.", 
-      desc: "Cancelling a request permenantly removes it from C2 and notifies all approvers and observers.",
-      content: ".cancel-modal-content"
-    }
-    this.modals.create(params);
-  }
-  
-  /* End Form */ 
-
-
 
   /* Notice */ 
 

@@ -4,7 +4,16 @@ modalCardController = (function(){
   
   function modalCardController(el, opts){
     this._setup(el, opts);
-    this.data = { id: 1 }
+    this.data = { 
+      id: 1,
+      modal: {
+        cancel: {
+          title: "You are about to cancel this request.", 
+          desc: "Cancelling a request permenantly removes it from C2 and notifies all approvers and observers.",
+          content: ".cancel-modal-content"
+        }
+      }
+    }
     return this;
   }
 
@@ -13,8 +22,22 @@ modalCardController = (function(){
     this.el = typeof el === "string" ? $(el) : el;
     this.cancelButton = this.cancelButton || $(".cancel-request-button");
   }
+  
+  modalCardController.prototype._setup = function(){
+    this._initTriggers();
+  }
 
-  modalCardController.prototype._events = function(){
+  modalCardController.prototype._initTriggers = function(){
+    var self = this;
+    $('[data-modal-type]').on('click', function(e){
+      var el = this;
+      e.preventDefault();
+      var modalType = $(el).attr('data-modal-type');
+      self.create(modalType);
+    });
+  }
+
+  modalCardController.prototype._modalEvents = function(){
     this._cancelRequestButtonSetup();
     this._undoButtonSetup();
   }
@@ -62,10 +85,11 @@ modalCardController = (function(){
     });
   }
 
-  modalCardController.prototype._setupModal = function(params){
-    var title = params["title"] || false;
-    var description = params["desc"] || false;
-    var content = $(params["content"]).clone() || false;
+  modalCardController.prototype._setupModal = function(modalType){
+    var data = this.data.modal[modalType];
+    var title = data["title"] || false;
+    var description = data["desc"] || false;
+    var content = $(data["content"]).clone() || false;
     var id = this.getId();
     var modal = $('#modal-template').clone().attr('id', "modal-el-" + id).removeClass('modal-template');
     modal.find('.popup-content-label').html(title);
@@ -74,11 +98,11 @@ modalCardController = (function(){
     return modal;
   }
 
-  modalCardController.prototype.create = function(params){
+  modalCardController.prototype.create = function(modalType){
     this.clear();
-    var modal = this._setupModal(params);
+    var modal = this._setupModal(modalType);
     $('#modal-wrapper').append(modal);
-    this._events();
+    this._modalEvents();
     this._animate();
     $('#modal-wrapper').addClass('visible');
   }
