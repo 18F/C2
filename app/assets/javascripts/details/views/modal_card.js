@@ -7,7 +7,8 @@ ModalController = (function(){
     this.data = { 
       id: 1,
       modal: {
-        cancel: ".cancel-modal-content"
+        cancel: ".cancel-modal-content",
+        save_confirm: ".save_confirm-modal-content"
       }
     }
     return this;

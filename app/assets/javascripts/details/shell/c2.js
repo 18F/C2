@@ -215,8 +215,18 @@ C2 = (function() {
       self.detailsCancelled();
     });
     this.actionBar.el.on("action-bar-clicked:save", function(){
+      
+    });
+  }
+
+  C2.prototype._setupSaveModal = function(){
+    var self = this;
+    this.modals.el.on("save_confirm-modal:confirmed", function(){
       self.actionBar.el.trigger("action-bar-clicked:saving");
       self.detailsSave.el.trigger("details-form:save");
+    });
+    this.modals.el.on("save_confirm-modal:canceled", function(){
+      
     });
   }
 
