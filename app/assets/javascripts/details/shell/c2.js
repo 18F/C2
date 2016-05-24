@@ -13,7 +13,7 @@ C2 = (function() {
       formState:      '#request-details-card form',
       notifications:  '#action-bar-status',
       observerCard:   '#card-for-observers',
-      modalCard:      '#card-for-modal'
+      modalCard:      '#modal-wrapper'
     }
     this._overrideTestConfig(config);
     this._blastOff();

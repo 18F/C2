@@ -3,7 +3,6 @@ var ModalController;
 ModalController = (function(){
   
   function ModalController(el, opts){
-    this._setup(el, opts);
     this.el = $(el);
     this.data = { 
       id: 1,
@@ -12,12 +11,12 @@ ModalController = (function(){
         save_confirm: ".save_confirm-modal-content"
       }
     }
+    this._setup(el, opts);
     return this;
   }
 
   ModalController.prototype._setup = function(el, opts){
     $.extend(this, opts);
-    this.el = typeof el === "string" ? $(el) : el;
     this.cancelButton = this.cancelButton || $(".cancel-request-button");
   }
   
