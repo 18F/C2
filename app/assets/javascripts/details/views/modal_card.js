@@ -4,6 +4,7 @@ ModalController = (function(){
   
   function ModalController(el, opts){
     this._setup(el, opts);
+    this.el = $(el);
     this.data = { 
       id: 1,
       modal: {
