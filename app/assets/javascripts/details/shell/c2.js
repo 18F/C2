@@ -229,6 +229,7 @@ C2 = (function() {
     });
     this.modals.el.on("save_confirm-modal:cancel", function(){
       self.modals.el.trigger("modal:close");
+      self.actionBar.saveButtonLadda.ladda( 'stop' );
     });
   }
 
