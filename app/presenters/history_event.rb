@@ -7,6 +7,10 @@ class HistoryEvent < SimpleDelegator
     __getobj__.event
   end
 
+  def decorated_version
+    C2VersionDecorator.new(__getobj__)
+  end
+
   def to_partial_path
     "proposals/details/history/" + partial_name
   end
