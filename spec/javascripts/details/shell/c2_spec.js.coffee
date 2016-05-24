@@ -33,7 +33,7 @@ describe 'C2', ->
       expect(c2.formState instanceof DetailsRequestFormState).to.eql(true)
       expect(c2.actionBar instanceof ActionBar).to.eql(true)
       expect(c2.detailsSave instanceof DetailsSave).to.eql(true)
-      expect(c2.cancelCardController instanceof CancelCardController).to.eql(true)
+      expect(c2.modalCardController instanceof modalCardController).to.eql(true)
 
     it "check config passing test param actionBar", ->
       test = "action-bar-test"
@@ -67,13 +67,13 @@ describe 'C2', ->
       c2 = new C2(testParam)
       expect(c2.config.activityCard).to.eql(test)
 
-    it "check config passing test param cancelCard", ->
+    it "check config passing test param modalCard", ->
       test = "cancel-card-test"
       testParam = {
-        cancelCard: test
+        modalCard: test
       }
       c2 = new C2(testParam)
-      expect(c2.config.cancelCard).to.eql(test)
+      expect(c2.config.modalCard).to.eql(test)
 
     it "check config passing test param formState", ->
       test = "form-state-test"

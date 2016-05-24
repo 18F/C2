@@ -13,7 +13,7 @@ C2 = (function() {
       formState:      '#request-details-card form',
       notifications:  '#action-bar-status',
       observerCard:   '#card-for-observers',
-      cancelCard:     '#card-for-cancel'
+      modalCard:      '#card-for-modal'
     }
     this._overrideTestConfig(config);
     this._blastOff();
@@ -53,7 +53,7 @@ C2 = (function() {
     this.attachmentCardController = new AttachmentCardController(config.attachmentCard);
     this.observerCardController = new ObserverCardController(config.observerCard);
     this.activityCardController = new ActivityCardController(config.activityCard);
-    this.cancelCardController = new CancelCardController(config.cancelCard);
+    this.modalCardController = new modalCardController(config.modalCard);
     this.actionBar = new ActionBar(config.actionBar);
     this.notification = new Notifications(config.notifications);
   }

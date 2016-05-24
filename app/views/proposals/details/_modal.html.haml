@@ -1,8 +1,8 @@
-.cancel-form{role: "dialog", "aria-labelledby" => "cancel-form-label", "aria-describedby" => "cancel-form-desc" }
+.popup-content{role: "dialog", "aria-labelledby" => "popup-content-label", "aria-describedby" => "popup-content-desc" }
   = button_tag "X", class: "cancel-cancel-link cancel-close-button"
-  %h4{id: "cancel-form-label"}
+  %h4{id: "popup-content-label"}
     You are about to cancel this request.
-  %p{id: "cancel-form-desc"}
+  %p{id: "popup-content-desc"}
     Cancelling a request permenantly removes it from C2 and notifies all approvers and observers.
   = form_tag(cancel_proposal_path(@proposal), method: :post) do
     = label_tag(:reason_input, "Please provide a reason for cancelation.")
