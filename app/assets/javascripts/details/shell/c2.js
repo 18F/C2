@@ -67,6 +67,7 @@ C2 = (function() {
     this._setupNotifications();
     this._setupActivityEvent();
     this._setupObserverEvent();
+    this._setupSaveModal();
   }
   
   
@@ -224,10 +225,10 @@ C2 = (function() {
     this.modals.el.on("save_confirm-modal:confirm", function(){
       self.actionBar.el.trigger("action-bar-clicked:saving");
       self.detailsSave.el.trigger("details-form:save");
-      self.modals.el.on("modal:close");
+      self.modals.el.trigger("modal:close");
     });
     this.modals.el.on("save_confirm-modal:cancel", function(){
-      self.modals.el.on("modal:close");
+      self.modals.el.trigger("modal:close");
     });
   }
 
