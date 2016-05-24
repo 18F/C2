@@ -1,4 +1,6 @@
+require "zonebie/rspec"
 require "codeclimate-test-reporter"
+
 
 SimpleCov.formatters = [
   SimpleCov::Formatter::HTMLFormatter,
@@ -11,8 +13,6 @@ SimpleCov.start "rails" do
   end
 end
 
-require "zonebie"
-Zonebie.set_random_timezone
 
 require "webmock/rspec"
 # localhost needed for omniauth
@@ -34,9 +34,6 @@ Capybara.server do |app, port|
   require "rack/handler/puma"
   Rack::Handler::Puma.run(app, Port: port)
 end
-
-puts "phantomjs -v"
-system("phantomjs -v")
 
 require "pundit/rspec"
 require "factory_girl_rails"
