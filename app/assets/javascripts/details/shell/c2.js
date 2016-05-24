@@ -226,6 +226,7 @@ C2 = (function() {
       self.actionBar.el.trigger("action-bar-clicked:saving");
       self.detailsSave.el.trigger("details-form:save");
       self.modals.el.trigger("modal:close");
+      self.actionBar.saveButtonLadda.ladda( 'stop' );
     });
     this.modals.el.on("save_confirm-modal:cancel", function(){
       self.modals.el.trigger("modal:close");
