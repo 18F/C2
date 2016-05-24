@@ -3,6 +3,7 @@
 #= require ladda/ladda.min
 #= require ladda/ladda.jquery.min
 #= require jquery.dirrty
+#= require required_for_submit
 #= require details/state/edit_mode
 #= require details/state/details_request_form_state
 #= require details/views/action_bar
@@ -10,7 +11,7 @@
 #= require details/views/details_request_card
 #= require details/views/activity_card
 #= require details/views/observer_card
-#= require details/views/cancel_card
+#= require details/views/modal_card
 #= require details/views/notifications
 #= require details/data/details_save
 #= require details/shell/c2
@@ -33,7 +34,7 @@ describe 'C2', ->
       expect(c2.formState instanceof DetailsRequestFormState).to.eql(true)
       expect(c2.actionBar instanceof ActionBar).to.eql(true)
       expect(c2.detailsSave instanceof DetailsSave).to.eql(true)
-      expect(c2.modalCardController instanceof modalCardController).to.eql(true)
+      expect(c2.modals instanceof ModalController).to.eql(true)
 
     it "check config passing test param actionBar", ->
       test = "action-bar-test"

@@ -1,8 +1,8 @@
-var modalCardController;
+var ModalController;
 
-modalCardController = (function(){
+ModalController = (function(){
   
-  function modalCardController(el, opts){
+  function ModalController(el, opts){
     this._setup(el, opts);
     this.data = { 
       id: 1,
@@ -17,17 +17,17 @@ modalCardController = (function(){
     return this;
   }
 
-  modalCardController.prototype._setup = function(el, opts){
+  ModalController.prototype._setup = function(el, opts){
     $.extend(this, opts);
     this.el = typeof el === "string" ? $(el) : el;
     this.cancelButton = this.cancelButton || $(".cancel-request-button");
   }
   
-  modalCardController.prototype._setup = function(){
+  ModalController.prototype._setup = function(){
     this._initTriggers();
   }
 
-  modalCardController.prototype._initTriggers = function(){
+  ModalController.prototype._initTriggers = function(){
     var self = this;
     $('[data-modal-type]').on('click', function(e){
       var el = this;
@@ -37,16 +37,16 @@ modalCardController = (function(){
     });
   }
 
-  modalCardController.prototype._modalEvents = function(el){
+  ModalController.prototype._modalEvents = function(el){
     this._undoButtonSetup(el);
     this._buttonDependence(el);
   }
 
-  modalCardController.prototype._buttonDependence = function(el){
+  ModalController.prototype._buttonDependence = function(el){
     checkRequiredForSubmit();
   }
 
-  modalCardController.prototype._undoButtonSetup = function(el){
+  ModalController.prototype._undoButtonSetup = function(el){
     var self = this;
     $(el).find('.cancel-cancel-link').on('click', function(){
       self._closeModal();
@@ -54,17 +54,17 @@ modalCardController = (function(){
     })
   }
 
-  modalCardController.prototype.clear = function(){
+  ModalController.prototype.clear = function(){
     $('#modal-wrapper').html("");
   }
 
-  modalCardController.prototype.getId = function(){
+  ModalController.prototype.getId = function(){
     var id = this.data.id;
     this.data.id = this.data.id + 1;
     return id;
   }
 
-  modalCardController.prototype._closeModal = function(){
+  ModalController.prototype._closeModal = function(){
     var self = this;
     $('#modal-wrapper').addClass('animated fadeOut');
     $('#modal-wrapper').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
@@ -74,14 +74,14 @@ modalCardController = (function(){
     });
   }
 
-  modalCardController.prototype._animate = function(){
+  ModalController.prototype._animate = function(){
     $('#modal-wrapper').addClass('animated fadeIn');
     $('#modal-wrapper').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
       $('#modal-wrapper').removeClass('animated fadeIn');
     });
   }
 
-  modalCardController.prototype._setupModal = function(modalType){
+  ModalController.prototype._setupModal = function(modalType){
     var data = this.data.modal[modalType];
     var title = data["title"] || false;
     var description = data["desc"] || false;
@@ -94,7 +94,7 @@ modalCardController = (function(){
     return modal;
   }
 
-  modalCardController.prototype.create = function(modalType){
+  ModalController.prototype.create = function(modalType){
     this.clear();
     var modal = this._setupModal(modalType);
     $('#modal-wrapper').append(modal);
@@ -103,7 +103,7 @@ modalCardController = (function(){
     $('#modal-wrapper').addClass('visible');
   }
 
-  return modalCardController
+  return ModalController
 }());
 
-window.modalCardController = modalCardController;
+window.ModalController = ModalController;

@@ -53,7 +53,7 @@ C2 = (function() {
     this.attachmentCardController = new AttachmentCardController(config.attachmentCard);
     this.observerCardController = new ObserverCardController(config.observerCard);
     this.activityCardController = new ActivityCardController(config.activityCard);
-    this.modals = new modalCardController(config.modalCard);
+    this.modals = new ModalController(config.modalCard);
     this.actionBar = new ActionBar(config.actionBar);
     this.notification = new Notifications(config.notifications);
   }
