@@ -30,6 +30,7 @@ ActivityCardController = (function(){
   }
 
   ActivityCardController.prototype._setupUpdateEvent = function(){
+    var self = this;
     this.el.on("activity-card:update", function(){
       var proposal_id = $("#proposal_id").attr("data-proposal-id");
       $.ajax({ url: "/activity-feed/" + proposal_id + "/update_feed", 
