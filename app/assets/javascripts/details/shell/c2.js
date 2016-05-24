@@ -138,10 +138,13 @@ C2 = (function() {
     var self = this;
     this.detailsSave.el.on('details-form:success', function(event, data){
       self.detailsRequestCard.updateViewModeContent(data);
+      self.actionBar.saveButtonLadda.ladda( 'stop' );
+      self.modals.el.trigger("modal:close");
     });
 
     this.detailsSave.el.on('details-form:error', function(event, data){
       self.handleSaveError(data);
+      self.modals.el.trigger("modal:close");
       self.actionBar.saveButtonLadda.ladda( 'stop' );
     });
   }
@@ -216,7 +219,7 @@ C2 = (function() {
       self.detailsCancelled();
     });
     this.actionBar.el.on("action-bar-clicked:save", function(){
-      
+      // triggers save_confirm-modal
     });
   }
 
@@ -225,8 +228,6 @@ C2 = (function() {
     this.modals.el.on("save_confirm-modal:confirm", function(){
       self.actionBar.el.trigger("action-bar-clicked:saving");
       self.detailsSave.el.trigger("details-form:save");
-      self.modals.el.trigger("modal:close");
-      self.actionBar.saveButtonLadda.ladda( 'stop' );
     });
     this.modals.el.on("save_confirm-modal:cancel", function(){
       self.modals.el.trigger("modal:close");
