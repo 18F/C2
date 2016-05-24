@@ -1,6 +1,16 @@
 en:
   proposals:
     details:
+      notification:
+        save:
+          title: Save your changes?
+          desc: Click Cancel to discard changes, or Save to update the request. Saving will notify %{count} observers.
+          cancel_button: Cancel
+          save_button: Save
+        cancel:
+          title:
+          desc:
+          verification:
       activity:
         header: Timeline
         comment_form:
