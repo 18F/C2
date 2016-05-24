@@ -12,9 +12,9 @@ class HistoryList
     versions.reject do |version|
       version_is_client_data?(version) ||
         version_is_ignored_type_creation?(version) ||
-        version.item_type == "Step" || # TODO: What's creating these?
-        (version.event == "update" &&
-          version.item_type == "Proposal") # TODO: include once they're properly formatted
+        version.item_type == "Step" #|| # TODO: What's creating these?
+        # (version.event == "update" &&
+        #   version.item_type == "Proposal") # TODO: include once they're properly formatted
     end
   end
 
