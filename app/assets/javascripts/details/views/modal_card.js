@@ -38,16 +38,7 @@ modalCardController = (function(){
   }
 
   modalCardController.prototype._modalEvents = function(){
-    this._cancelRequestButtonSetup();
     this._undoButtonSetup();
-  }
-
-  modalCardController.prototype._cancelRequestButtonSetup = function(){
-    var self = this;
-    this.cancelButton.on('click', function(){
-      self.el.find('textarea').focus();
-      return false;
-    });
   }
 
   modalCardController.prototype._undoButtonSetup = function(){
