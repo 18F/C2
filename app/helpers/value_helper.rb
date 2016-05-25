@@ -1,7 +1,7 @@
 module ValueHelper
   include ActionView::Helpers::NumberHelper
 
-  def date_with_tooltip(time, ago = false)
+  def date_with_tooltip(time, ago = false, opts = { truncate: false })
     # make sure we are dealing with a Time object
     unless time.is_a?(Time)
       time = Time.zone.parse(time.to_s)
@@ -10,10 +10,20 @@ module ValueHelper
     # timezone adjustment is handled via browser-timezone-rails gem
     # so coerce into Time.zone explicitly
     adjusted_time = time.in_time_zone
-    adjusted_time_str = adjusted_time.strftime("%b %-d, %Y at %l:%M%P")
+
+    # only show hours if its today
+    if opts[:truncate] && !time.today?
+      adjusted_time_str = adjusted_time.strftime("%b %-d, %Y")
+    else
+      adjusted_time_str = adjusted_time.strftime("%b %-d, %Y at %l:%M%P")
+    end
 
     if ago
-      content_tag("span", time_ago_in_words(adjusted_time) + " ago", title: adjusted_time_str)
+      if !time.today? && opts[:truncate]
+        content_tag("span", adjusted_time_str, title: adjusted_time_str)
+      else
+        content_tag("span", time_ago_in_words(adjusted_time) + " ago", title: adjusted_time_str)
+      end
     else
       content_tag("span", adjusted_time_str, title: adjusted_time_str)
     end

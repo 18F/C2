@@ -14,7 +14,7 @@
   .row.footer-buffer
     .medium-6.column
       = render partial: "proposals/details/approvals", locals: { proposal: @proposal }
-      #card-for-activity
+      #card-for-activity.card-for-activity
         = render partial: "proposals/details/activity", locals: { proposal: @proposal, events: @events }
   
     .medium-6.column
