@@ -23,6 +23,31 @@
 }
 
 .summary-card{
+  .view-title{
+    .display-content{ display: inline-block; }
+    .display-edit{ display: none; }
+  }
+  .edit-title{
+    .display-edit{ display: inline-block; }
+    .display-content{ display: none; }
+  }
+  .c2n_header {
+    .display-content{
+      vertical-align: middle;
+    }
+    .display-edit input{
+      margin: 0px;
+      padding: 0px;
+      background: none;
+      border: none;
+      outline: none;
+      color: white;
+      font-size: 28px;
+      font-weight: 800;
+      display: inline-block;
+      vertical-align: top;
+    }
+  }
   span.edit-icon{
     position: relative;
     display: inline-block;
