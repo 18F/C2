@@ -40,6 +40,10 @@ ul.request-actions{
   }
 }
 
+.action-bar-template.action-bar-status{
+  border-top: 0px;
+}
+
 .action-bar-wrapper.user-can-complete .cancel-button, 
 .action-bar-wrapper.user-can-complete .save-button,
 .action-bar-wrapper.user-can-complete.edit-actions .action-approve{
