@@ -8,6 +8,11 @@
   padding-bottom: 20px;
 }
 
+.button-back-wrapper .button{
+  height: 35px;
+  line-height: 21px;
+}
+
 .status-feed-wrapper.status-contracted{
   display: none;
   &.status-expanded{
