@@ -12,14 +12,14 @@ SummaryBar = (function() {
   };
 
   SummaryBar.prototype._event = function() {
-    var self = this;
+    var titleWrap = this.el.find('.c2n_header');
     this.el.find('#header-edit-text').on('click', function(){
-      if ( self.el.find('.summary-card . c2n_header').hasClass('view-title') ){
-        self.el.find('.summary-card . c2n_header').removeClass('view-title')
-        self.el.find('.summary-card . c2n_header').addClass('edit-title')
+      if ( titleWrap.hasClass('view-title') ){
+        titleWrap.removeClass('view-title')
+        titleWrap.addClass('edit-title')
       } else {
-        self.el.find('.summary-card . c2n_header').addClass('view-title')
-        self.el.find('.summary-card . c2n_header').removeClass('edit-title')
+        titleWrap.addClass('view-title')
+        titleWrap.removeClass('edit-title')
       }
     })
   };
