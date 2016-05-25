@@ -241,6 +241,9 @@ C2 = (function() {
     this.modals.el.on("save_confirm-modal:cancel", function(){
       self._closeModal();
     });
+    this.modals.el.on("modal:cancel", function(){
+      self.actionBar.stopLadda();
+    });
   }
 
   C2.prototype._closeModal = function(){

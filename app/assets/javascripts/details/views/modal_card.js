@@ -47,7 +47,7 @@ ModalController = (function(){
         var eventName = modalType + '-modal:' + event;
         self.el.trigger(eventName);
       });
-    })
+    });
   }
 
   ModalController.prototype._buttonDependence = function(el){
@@ -74,6 +74,7 @@ ModalController = (function(){
 
   ModalController.prototype._closeModal = function(){
     var self = this;
+    this.el.trigger('modal:cancel');
     $('#modal-wrapper').addClass('animated fadeOut');
     $('#modal-wrapper').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
       $('#modal-wrapper').removeClass('visible');
