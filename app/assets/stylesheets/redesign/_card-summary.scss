@@ -76,6 +76,8 @@
     border-radius: 4px;
     padding-left: 2px;
     padding-right: 17px;
+    vertical-align: sub;
+    vertical-align: -webkit-baseline-middle;
     &:hover{
       background: #2F5E7E;
       border: 1px solid #5F8CAE;
@@ -86,8 +88,6 @@
       }
     }
     .edit-button{
-      vertical-align: sub;
-      vertical-align: -webkit-baseline-middle;
       transition: all .2s ease;
       opacity: 0;
       width: 0px;
