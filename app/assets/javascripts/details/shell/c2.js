@@ -238,7 +238,7 @@ C2 = (function() {
       console.log(item);
       var l = $(item).ladda();
       l.ladda( 'start' );
-      $(item).find('button').attr('disabled', 'disabled').css('opacity', 0.5);
+      self.modals.el.find('button').attr('disabled', 'disabled').css('opacity', 0.5);
       self.actionBar.el.trigger("action-bar-clicked:saving");
       self.detailsSave.el.trigger("details-form:save");
     });
