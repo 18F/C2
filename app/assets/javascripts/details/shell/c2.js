@@ -230,11 +230,14 @@ C2 = (function() {
       self.detailsSave.el.trigger("details-form:save");
     });
     this.modals.el.on("save_confirm-modal:cancel", function(){
-      self.modals.el.trigger("modal:close");
-      self.actionBar.saveButtonLadda.ladda( 'stop' );
+      this._closeModal();
     });
   }
 
+  C2.prototype._closeModal = function(){
+    this.modals.el.trigger("modal:close");
+    this.actionBar.saveButtonLadda.ladda( 'stop' );
+  }
   /* End Action Bar */ 
 
   return C2;
