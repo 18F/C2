@@ -17,10 +17,6 @@ ModalController = (function(){
 
   ModalController.prototype._setup = function(el, opts){
     $.extend(this, opts);
-    this.cancelButton = this.cancelButton || $(".cancel-request-button");
-  }
-  
-  ModalController.prototype._setup = function(){
     this._initTriggers();
   }
 

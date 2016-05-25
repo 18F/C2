@@ -111,14 +111,24 @@ C2 = (function() {
   }
  
   C2.prototype.detailsSaved = function(data){
-    this.detailsMode('view');
     this.formState.initDirrty();
+    this.detailsMode('view');
     this.actionBar.el.trigger("action-bar-clicked:saved");
     this.activityCardController.el.trigger('activity-card:update');
     this.createNotification("Your updates have been saved.", "", "success");
   }
   
+  C2.prototype.triggerDirtyCheck = function(){
+    var dirtyCheck = this.formState.el.dirrty("isDirty");
+    if(dirtyCheck){
+      this.formState.el.trigger('form:dirty');
+    } else {
+      this.formState.el.trigger('form:clean');
+    }
+  }
+
   C2.prototype.detailsMode = function(mode){
+    this.triggerDirtyCheck()
     this.detailsRequestCard.toggleMode(mode)
     this.editMode.stateTo(mode);
     this.actionBar.setMode(mode)
@@ -139,14 +149,12 @@ C2 = (function() {
     var self = this;
     this.detailsSave.el.on('details-form:success', function(event, data){
       self.detailsRequestCard.updateViewModeContent(data);
-      self.actionBar.saveButtonLadda.ladda( 'stop' );
       self.modals.el.trigger("modal:close");
     });
 
     this.detailsSave.el.on('details-form:error', function(event, data){
       self.handleSaveError(data);
       self.modals.el.trigger("modal:close");
-      self.actionBar.saveButtonLadda.ladda( 'stop' );
     });
   }
 
@@ -231,13 +239,13 @@ C2 = (function() {
       self.detailsSave.el.trigger("details-form:save");
     });
     this.modals.el.on("save_confirm-modal:cancel", function(){
-      this._closeModal();
+      self._closeModal();
     });
   }
 
   C2.prototype._closeModal = function(){
     this.modals.el.trigger("modal:close");
-    this.actionBar.saveButtonLadda.ladda( 'stop' );
+    this.actionBar.stopLadda();
   }
   /* End Action Bar */ 
 
