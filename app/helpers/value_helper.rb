@@ -12,21 +12,12 @@ module ValueHelper
     adjusted_time = time.in_time_zone
 
     # only show hours if its today
-    if opts[:truncate] && !time.today?
-      adjusted_time_str = adjusted_time.strftime("%b %-d, %Y")
-    else
-      adjusted_time_str = adjusted_time.strftime("%b %-d, %Y at %l:%M%P")
-    end
-
-    if ago
-      if !time.today? && opts[:truncate]
-        content_tag("span", adjusted_time_str, title: adjusted_time_str)
-      else
-        content_tag("span", time_ago_in_words(adjusted_time) + " ago", title: adjusted_time_str)
-      end
-    else
-      content_tag("span", adjusted_time_str, title: adjusted_time_str)
-    end
+    adjusted_time_str = if opts[:truncate] && !time.today?
+                          adjusted_time.strftime("%b %-d, %Y")
+                        else
+                          adjusted_time.strftime("%b %-d, %Y at %l:%M%P")
+                        end
+    get_content_tag("span", adjusted_time, adjusted_time_str, ago, opts)
   end
 
   def property_display_value(field)
@@ -53,5 +44,19 @@ module ValueHelper
 
   def decimal?(val)
     val.is_a?(Numeric) && !val.is_a?(Integer)
+  end
+
+  private
+
+  def get_content_tag(element, adjusted_time, adjusted_time_str, ago, opts)
+    if ago
+      if !adjusted_time.today? && opts[:truncate]
+        content_tag(element, adjusted_time_str, title: adjusted_time_str)
+      else
+        content_tag(element, time_ago_in_words(adjusted_time) + " ago", title: adjusted_time_str)
+      end
+    else
+      content_tag(element, adjusted_time_str, title: adjusted_time_str)
+    end
   end
 end
