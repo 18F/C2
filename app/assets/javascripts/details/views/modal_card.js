@@ -45,7 +45,7 @@ ModalController = (function(){
       var event = $(item).attr('data-modal-event');
       $(item).on('click', function(){
         var eventName = modalType + '-modal:' + event;
-        self.el.trigger(eventName);
+        self.el.trigger(eventName, item);
       });
     });
   }

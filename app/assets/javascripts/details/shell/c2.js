@@ -234,11 +234,15 @@ C2 = (function() {
 
   C2.prototype._setupSaveModal = function(){
     var self = this;
-    this.modals.el.on("save_confirm-modal:confirm", function(){
+    this.modals.el.on("save_confirm-modal:confirm", function(event, item){
+      console.log(item);
+      var l = $(item).ladda();
+      l.ladda( 'start' );
+      $(item).find('button').attr('disabled', 'disabled').css('opacity', 0.5);
       self.actionBar.el.trigger("action-bar-clicked:saving");
       self.detailsSave.el.trigger("details-form:save");
     });
-    this.modals.el.on("save_confirm-modal:cancel", function(){
+    this.modals.el.on("save_confirm-modal:cancel", function(event, item){
       self._closeModal();
     });
     this.modals.el.on("modal:cancel", function(){
