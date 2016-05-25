@@ -13,7 +13,7 @@ C2 = (function() {
       formState:      '#request-details-card form',
       notifications:  '#action-bar-status',
       observerCard:   '#card-for-observers',
-      modalCard:      '#card-for-modal'
+      modalCard:      '#modal-wrapper'
     }
     this._overrideTestConfig(config);
     this._blastOff();
@@ -67,6 +67,7 @@ C2 = (function() {
     this._setupNotifications();
     this._setupActivityEvent();
     this._setupObserverEvent();
+    this._setupSaveModal();
   }
   
   
@@ -138,10 +139,13 @@ C2 = (function() {
     var self = this;
     this.detailsSave.el.on('details-form:success', function(event, data){
       self.detailsRequestCard.updateViewModeContent(data);
+      self.actionBar.saveButtonLadda.ladda( 'stop' );
+      self.modals.el.trigger("modal:close");
     });
 
     this.detailsSave.el.on('details-form:error', function(event, data){
       self.handleSaveError(data);
+      self.modals.el.trigger("modal:close");
       self.actionBar.saveButtonLadda.ladda( 'stop' );
     });
   }
@@ -216,11 +220,25 @@ C2 = (function() {
       self.detailsCancelled();
     });
     this.actionBar.el.on("action-bar-clicked:save", function(){
-      self.actionBar.el.trigger("action-bar-clicked:saving");
-      self.detailsSave.el.trigger("details-form:save");
+      // triggers save_confirm-modal
     });
   }
 
+  C2.prototype._setupSaveModal = function(){
+    var self = this;
+    this.modals.el.on("save_confirm-modal:confirm", function(){
+      self.actionBar.el.trigger("action-bar-clicked:saving");
+      self.detailsSave.el.trigger("details-form:save");
+    });
+    this.modals.el.on("save_confirm-modal:cancel", function(){
+      this._closeModal();
+    });
+  }
+
+  C2.prototype._closeModal = function(){
+    this.modals.el.trigger("modal:close");
+    this.actionBar.saveButtonLadda.ladda( 'stop' );
+  }
   /* End Action Bar */ 
 
   return C2;

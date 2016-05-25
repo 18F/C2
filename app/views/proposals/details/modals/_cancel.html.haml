@@ -1,7 +1,17 @@
+- title = t("proposals.details.notification.cancel.title")
+- desc = t("proposals.details.notification.cancel.desc")
+- form_reason = t("proposals.details.notification.cancel.form_reason")
+- save_button = t("proposals.details.notification.cancel.save_button")
+- cancel_button = t("proposals.details.notification.cancel.cancel_button")
+
 .cancel-modal-content
+  %h4{class: "popup-content-label"}
+    = title
+  %p{class: "popup-content-desc"}
+    = desc
   = form_tag(cancel_proposal_path(@proposal), method: :post) do
-    = label_tag(:reason_input, "Please provide a reason for cancelation.")
+    = label_tag(:reason_input, form_reason)
     = text_area_tag "reason_input", nil, size: "15x5"
     %p
-      = button_tag "NO, TAKE ME BACK", class: "cancel-cancel-link form-button cancel-button"
-      = submit_tag "  YES, CANCEL  ", data: { "disable-if-empty" => "reason_input" }, class: "form-button"
+      = button_tag cancel_button, class: "cancel-cancel-link form-button cancel-button"
+      = submit_tag save_button, data: { "disable-if-empty" => "reason_input" }, class: "form-button"

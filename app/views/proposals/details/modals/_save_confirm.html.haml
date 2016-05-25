@@ -1,0 +1,13 @@
+- title = t("proposals.details.notification.save.title")
+- desc = t("proposals.details.notification.save.desc", count: @subscriber_list.count)
+- cancel_button = t("proposals.details.notification.save.cancel_button")
+- save_button = t("proposals.details.notification.save.save_button")
+
+.save_confirm-modal-content 
+  %h4{class: "popup-content-label"}
+    = title
+  %p{class: "popup-content-desc"}
+    = desc
+  %p
+    = button_tag cancel_button, class: "cancel-cancel-link form-button cancel-button", data: { "modal-event": "cancel" }
+    = button_tag save_button, class: "form-button", data: { "modal-event": "confirm" }
