@@ -1,7 +1,20 @@
 .modal-content, .modal-template{
   display: none !important;
 }
+h4.popup-content-label{
+  font-size: 20px;
+}
+p.popup-content-desc{
+  font-size: 20px;
+  max-width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 0px;
+}
 .modal-wrapper{
+  .form-button{
+    min-width: 120px;
+  }
   &.visible{
     display: block;
   }
