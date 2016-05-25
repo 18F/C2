@@ -24,7 +24,6 @@
 
 .summary-card{
   span.edit-icon{
-    background: #2F5E7E;
     position: relative;
     display: inline-block;
     height: 18px;
@@ -43,15 +42,25 @@
     }
   }
   .header-edit-text{
-    background: #2F5E7E;
-    padding-left: 10px;
-    padding-right: 10px;
+    transition: all .2s ease;
     height: 35px;
-    border: 1px solid #5F8CAE;
     border-radius: 4px;
-    padding-left: 19px;
+    padding-left: 2px;
     padding-right: 17px;
+    &:hover{
+      background: #2F5E7E;
+      border: 1px solid #5F8CAE;
+      padding-left: 19px;
+      .edit-button{
+        opacity: 1;
+        width: auto;
+      }
+    }
     .edit-button{
+      transition: all .2s ease;
+      opacity: 0;
+      width: 0px;
+      overflow-x: hidden;
       font-size: 13px;
       font-weight: 300;
       color: #C5DCED;
