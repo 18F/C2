@@ -20,7 +20,47 @@
   &.status-is-canceled{
     background: #D8D8D8;
   }
+}
 
+.summary-card{
+  span.edit-icon{
+    background: #2F5E7E;
+    position: relative;
+    display: inline-block;
+    height: 18px;
+    width: 18px;
+    &:before {
+      content: "";
+      display: block;
+      width: 16px;
+      height: 16px;
+      background-image: url("/assets/icon-edit-light.png");
+      background-repeat: no-repeat;
+      position: absolute;
+      right: -3px;
+      top: 0px;
+      background-size: contain;
+    }
+  }
+  .header-edit-text{
+    background: #2F5E7E;
+    padding-left: 10px;
+    padding-right: 10px;
+    height: 35px;
+    border: 1px solid #5F8CAE;
+    border-radius: 4px;
+    padding-left: 19px;
+    padding-right: 17px;
+    .edit-button{
+      font-size: 13px;
+      font-weight: 300;
+      color: #C5DCED;
+      height: 23px;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 17px;
+    }
+  }
 }
 
 .summary-status-wrapper{

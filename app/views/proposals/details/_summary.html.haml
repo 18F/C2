@@ -27,7 +27,12 @@
         %h3
           = proposal.public_id
         %h1.c2n_header
-          = proposal.name
+          %span.header-content
+            = proposal.name
+          %button#header-edit-text.header-edit-text
+            %span.edit-button
+              Edit title
+            %span.edit-icon
         .c2n_description
           %p
             Requested by:
