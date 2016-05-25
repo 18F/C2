@@ -113,6 +113,7 @@ C2 = (function() {
     this.detailsMode('view');
     this.formState.initDirrty();
     this.actionBar.el.trigger("action-bar-clicked:saved");
+    this.activityCardController.el.trigger('activity-card:update');
     this.createNotification("Your updates have been saved.", "", "success");
   }
   
