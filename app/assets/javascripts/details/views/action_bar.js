@@ -38,9 +38,13 @@ ActionBar = (function() {
       actionBar.saveButtonLadda.ladda( 'start' );
     })
     actionBar.el.on('action-bar-clicked:saved', function(){
-      actionBar.saveButtonLadda.ladda( 'stop' );
+      actionBar.stopLadda();
       actionBar.setMode('view');
     })
+  }
+
+  ActionBar.prototype.stopLadda = function() {
+    this.saveButtonLadda.ladda( 'stop' );
   }
 
   ActionBar.prototype.barState = function(el, state) {

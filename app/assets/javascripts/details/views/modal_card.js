@@ -17,10 +17,6 @@ ModalController = (function(){
 
   ModalController.prototype._setup = function(el, opts){
     $.extend(this, opts);
-    this.cancelButton = this.cancelButton || $(".cancel-request-button");
-  }
-  
-  ModalController.prototype._setup = function(){
     this._initTriggers();
   }
 
@@ -49,9 +45,9 @@ ModalController = (function(){
       var event = $(item).attr('data-modal-event');
       $(item).on('click', function(){
         var eventName = modalType + '-modal:' + event;
-        self.el.trigger(eventName);
+        self.el.trigger(eventName, item);
       });
-    })
+    });
   }
 
   ModalController.prototype._buttonDependence = function(el){
@@ -78,6 +74,7 @@ ModalController = (function(){
 
   ModalController.prototype._closeModal = function(){
     var self = this;
+    this.el.trigger('modal:cancel');
     $('#modal-wrapper').addClass('animated fadeOut');
     $('#modal-wrapper').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
       $('#modal-wrapper').removeClass('visible');
