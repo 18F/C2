@@ -10,7 +10,7 @@ C2 = (function() {
       detailsSave:    '#request-details-card',
       activityCard:   '#card-for-activity',
       editMode:       '#mode-parent',
-      formState:      '#request-details-card form, #proposal-title-wrapper input',
+      formState:      '#request-details-card form, #proposal-title-wrapper form',
       notifications:  '#action-bar-status',
       observerCard:   '#card-for-observers',
       modalCard:      '#modal-wrapper',

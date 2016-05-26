@@ -3,4 +3,5 @@
     %span.display-content
       = @client_data_instance.project_title
     %span.display-edit
-      %input{ id: "proposal-title-input", type: "text", value: @client_data_instance.project_title }/
+      %form
+        %input{ id: "proposal-title-input", type: "text", value: @client_data_instance.project_title }/
