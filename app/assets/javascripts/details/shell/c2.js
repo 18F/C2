@@ -191,14 +191,17 @@ C2 = (function() {
   C2.prototype.createAttachmentNotification = function(data){
     var content;
     if (data.actionType === "delete"){
-      content = data.fileName + " was deleted successfully.";
+      content = data.response + " was deleted successfully.";
     } else if (data.actionType === "create"){
-      content = data.fileName + " was uploaded successfully.";
+      content = data.response + " was uploaded successfully.";
     }
-    else if (data.actionType === "error"){
-      content = "error. " + data.fileName;
+
+    if (data.actionType === "error"){
+      this.handleSaveError(data);
+    } else{
+      this.createNotification("Attachment ", content, data.noticeType);
     }
-    this.createNotification("Attachment ", content, data.noticeType);
+      
   }
 
   /* End Activity */ 
