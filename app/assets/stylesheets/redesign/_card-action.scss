@@ -108,10 +108,24 @@ $action-bar-wrapper-height-small: 60px;
   padding-top: 10px;
 }
 
+.edit-actions{
+  .edit-button{
+    display: none;
+  }
+}
+
+.view-actions{
+  .save-button,
+  .cancel-button{
+    display: none;
+  }
+}
+
 .action-bar-template{
   transform: translateY($action-bar-wrapper-height-small);
   transition: transform .3s ease-in;
   &.edit-actions,
+  &.view-actions,
   &.user-can-complete{
     transform: translateY(0px);  
   }

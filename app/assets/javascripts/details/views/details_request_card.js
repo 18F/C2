@@ -5,7 +5,6 @@ DetailsRequestCard = (function(){
     this.el = $(el);
     this._setup();
     this.data = {
-      buttonText: "Modify",
       gridLayout: "two-column"
     }
     return this;
@@ -27,21 +26,14 @@ DetailsRequestCard = (function(){
   DetailsRequestCard.prototype.toggleMode = function(mode){
     switch (mode){
       case 'view':
-        this.data.buttonText = "Modify";
         this.data.gridLayout = "two-column";
         this.scrollUp();
         break;
       case 'edit':
-        this.data.buttonText = "Cancel";
         this.data.gridLayout = "one-column";
         break;
     }
     this.updateCard();
-  }
-
-  DetailsRequestCard.prototype.updateButton = function(){
-    text = this.data.buttonText;
-    this.toggleButtonText(text);
   }
 
   DetailsRequestCard.prototype.updateGrid = function(){
@@ -59,7 +51,6 @@ DetailsRequestCard = (function(){
 
   DetailsRequestCard.prototype.updateCard = function(){
     this.updateGrid();
-    this.updateButton();
   }
 
   DetailsRequestCard.prototype.toggleButtonText = function(text){
