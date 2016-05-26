@@ -1,6 +1,6 @@
 var C2;
 C2 = (function() {
-  
+
   function C2(config){
     config = config || {};
     this.config = {
@@ -45,9 +45,9 @@ C2 = (function() {
   C2.prototype._setupStates = function(){
     var config = this.config;
     this.editMode = new EditStateController(config.editMode);
-    this.formState = new DetailsRequestFormState(config.formState);
+    this.formState = new FormChangeState(config.formState);
   }
-  
+
   C2.prototype._setupViews = function(){
     var config = this.config;
     this.detailsRequestCard = new DetailsRequestCard(config.detailsForm);
@@ -71,12 +71,12 @@ C2 = (function() {
     this._setupObserverEvent();
     this._setupSaveModal();
   }
-  
-  
-  /* Form */ 
+
+
+  /* Form */
 
   C2.prototype._setupEditMode = function(){
-    var self = this;  
+    var self = this;
     this.formState.el.on('form:dirty', function(){
       self.actionBar.barState('.save-button', false);
     });
@@ -86,12 +86,12 @@ C2 = (function() {
   }
 
   C2.prototype._setupDetailsForm = function(){
-    var self = this;  
+    var self = this;
     this.detailsRequestCard.el.on('form:updated', function(event, data){
       self.detailsSaved(data);
     });
   }
-  
+
   C2.prototype._setupEditToggle = function(){
     var self = this;
     this.detailsRequestCard.el.on('edit-toggle:trigger', function(){
@@ -111,7 +111,7 @@ C2 = (function() {
     this.detailsMode('view');
     this.createNotification("Your changes have been discarded.", "", "notice");
   }
- 
+
   C2.prototype.detailsSaved = function(data){
     this.formState.initDirrty();
     this.detailsMode('view');
@@ -119,7 +119,7 @@ C2 = (function() {
     this.activityCardController.el.trigger('activity-card:update');
     this.createNotification("Your updates have been saved.", "", "success");
   }
-  
+
   C2.prototype.triggerDirtyCheck = function(){
     var dirtyCheck = this.formState.el.dirrty("isDirty");
     if(dirtyCheck){
@@ -136,12 +136,12 @@ C2 = (function() {
     this.actionBar.setMode(mode);
   }
 
-  /* End Form */ 
+  /* End Form */
 
-  /* Notice */ 
+  /* Notice */
 
   C2.prototype._setupNotifications = function(){
-    var notice = this.notification;  
+    var notice = this.notification;
     this.notification.el.on('notification:create', function(event, data){
       notice.create(data);
     });
@@ -177,11 +177,11 @@ C2 = (function() {
     this.notification.el.trigger('notification:create', param);
   }
 
-  /* End Notice */ 
+  /* End Notice */
 
 
-  /* Activity */ 
-  
+  /* Activity */
+
   C2.prototype._setupActivityEvent = function(){
     var self = this;
     this.attachmentCardController.el.on("attachment-card:updated", function(event, data){
@@ -200,7 +200,7 @@ C2 = (function() {
     this.createNotification("Attachment " + data.actionType, content, data.noticeType);
   }
 
-  /* End Activity */ 
+  /* End Activity */
 
   /* Observer Activity */
 
@@ -214,15 +214,15 @@ C2 = (function() {
   C2.prototype.createObserverNotification = function(data){
     var params = {
       title: "Observer " + data.actionType,
-      type: data.noticeType, 
+      type: data.noticeType,
       content: data.content
-    }; 
+    };
     this.notification.el.trigger('notification:create', params);
   }
 
   /* End Activity */
 
-   /* Action Bar */ 
+   /* Action Bar */
 
   C2.prototype._setupActionBar = function(){
     var self = this;
@@ -258,7 +258,7 @@ C2 = (function() {
     this.modals.el.trigger("modal:close");
     this.actionBar.stopLadda();
   }
-  /* End Action Bar */ 
+  /* End Action Bar */
 
   return C2;
 

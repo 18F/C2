@@ -5,7 +5,7 @@
 #= require jquery.dirrty
 #= require required_for_submit
 #= require details/state/edit_mode
-#= require details/state/details_request_form_state
+#= require details/state/form_change_state
 #= require details/views/action_bar
 #= require details/views/attachment_card
 #= require details/views/details_request_card
@@ -22,16 +22,16 @@ describe 'C2', ->
 
   describe '#setup', ->
     it "checks for c2", ->
-      c2 = new C2() 
+      c2 = new C2()
       expect(c2 instanceof C2).to.eql(true)
-    
+
     it "checks for each constructor", ->
-      c2 = new C2() 
+      c2 = new C2()
       expect(c2.attachmentCardController instanceof AttachmentCardController).to.eql(true)
       expect(c2.activityCardController instanceof ActivityCardController).to.eql(true)
       expect(c2.editMode instanceof EditStateController).to.eql(true)
       expect(c2.detailsRequestCard instanceof DetailsRequestCard).to.eql(true)
-      expect(c2.formState instanceof DetailsRequestFormState).to.eql(true)
+      expect(c2.formState instanceof FormChangeState).to.eql(true)
       expect(c2.actionBar instanceof ActionBar).to.eql(true)
       expect(c2.detailsSave instanceof DetailsSave).to.eql(true)
       expect(c2.modals instanceof ModalController).to.eql(true)
@@ -95,31 +95,31 @@ describe 'C2', ->
   describe '#events _actionBarState', ->
     it "editMode is on when state when edit-mode:on", ->
 
-  describe '#events _actionBarSave', -> 
+  describe '#events _actionBarSave', ->
     it "action-bar-clicked:save is fired through details-form:save", ->
       flag = false
       testParams = setupC2TestParams()
-      c2 = new C2(testParams) 
+      c2 = new C2(testParams)
       c2.detailsSave.el.on 'details-form:save', ->
         flag = true
       c2.detailsSave.el.trigger('details-form:save')
       expect(flag).to.eql(true)
 
-  describe '#events _setupNotifications', -> 
+  describe '#events _setupNotifications', ->
     it "create the event hook that notification triggers", ->
-  
-  describe '#handleSaveError', -> 
+
+  describe '#handleSaveError', ->
     it "checks for one errors", ->
     it "checks for multiple errors", ->
 
-  describe '#events notification', -> 
+  describe '#events notification', ->
     it "checks for one success response", ->
-  
-  describe 'trigger events on dirrty', -> 
+
+  describe 'trigger events on dirrty', ->
     it "make sure dirrty is triggered on form", ->
     it "make sure dirrty is reinit on save", ->
-  
-  describe 'when request detail is interacted', -> 
+
+  describe 'when request detail is interacted', ->
     it "clicking modify will load the view in edit mode", ->
     it "clicking modify should not load any notifications", ->
     it "clicking cancel button from modify will revert to view mode", ->
