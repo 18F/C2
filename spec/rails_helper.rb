@@ -1,10 +1,10 @@
-ENV['RAILS_ENV'] ||= 'test'
-require 'spec_helper'
+ENV["RAILS_ENV"] ||= "test"
+require "spec_helper"
 require File.expand_path("../../config/environment", __FILE__)
-require 'rspec/rails'
+require "rspec/rails"
 require "shoulda/matchers"
 
-Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
+Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
 RSpec.configure do |config|
   config.fixture_path = "#{::Rails.root}/spec/support/fixtures"
@@ -19,6 +19,6 @@ RSpec.configure do |config|
     config.include IntegrationSpecHelper, type: type
   end
 
-  Capybara.default_host = 'http://localhost:3000'
+  Capybara.default_host = "http://localhost:3000"
   OmniAuth.config.test_mode = true
 end
