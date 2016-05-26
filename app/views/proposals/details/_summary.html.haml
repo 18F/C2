@@ -25,16 +25,12 @@
       .medium-12.column
         %h3
           = proposal.public_id
-        %h1.c2n_header.view-title
+        %h1.c2n_header.view-title#proposal_header
           %span.header-content
             %span.display-content
               = proposal.name
             %span.display-edit
               %input{ type: "text", value: proposal.name }/
-          %button#header-edit-text.header-edit-text
-            %span.edit-button
-              Edit title
-            %span.edit-icon
         .c2n_description
           %p
             Requested by:
