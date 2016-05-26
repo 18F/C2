@@ -195,7 +195,7 @@ C2 = (function() {
     } else if (data.actionType === "create"){
       content = data.fileName + " was uploaded successfully.";
     }
-    this.createNotification("Attachment " + data.actionType, content, data.noticeType);
+    this.createNotification("Attachment ", content, data.noticeType);
   }
 
   /* End Activity */ 
