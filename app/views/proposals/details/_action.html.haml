@@ -1,13 +1,12 @@
 - can_complete = policy(@proposal).can_complete?
 - can_edit = policy(@proposal).can_edit? && !@proposal.completed? && policy(@proposal).not_canceled?
+- can_complete_class = can_complete ? "user-can-complete" : ""
+- can_edit_class = can_edit ? "view-actions" : ""
 
-- if policy(@proposal).can_complete?
-  - can_complete_class = "user-can-complete"
-
-.action-bar-template#action-bar-status.action-bar-status{ class: can_complete_class }
+.action-bar-template#action-bar-status.action-bar-status{ class: can_complete_class + " " + can_edit_class }
   %ul
   
-.action-bar-template#action-bar-wrapper.action-bar-wrapper{ class: can_complete_class }
+.action-bar-template#action-bar-wrapper.action-bar-wrapper{ class: can_complete_class + " " + can_edit_class }
   .row
     .medium-12.column
       %ul#request-actions.request-actions.fr

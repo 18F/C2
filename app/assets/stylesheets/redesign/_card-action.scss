@@ -112,6 +112,7 @@ $action-bar-wrapper-height-small: 60px;
   transform: translateY($action-bar-wrapper-height-small);
   transition: transform .3s ease-in;
   &.edit-actions,
+  &.view-actions,
   &.user-can-complete{
     transform: translateY(0px);  
   }
