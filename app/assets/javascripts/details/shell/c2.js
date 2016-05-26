@@ -133,7 +133,7 @@ C2 = (function() {
     this.triggerDirtyCheck()
     this.detailsRequestCard.toggleMode(mode)
     this.editMode.stateTo(mode);
-    this.actionBar.setMode(mode)
+    this.actionBar.setMode(mode);
   }
 
   /* End Form */ 
@@ -231,6 +231,9 @@ C2 = (function() {
     });
     this.actionBar.el.on("action-bar-clicked:save", function(){
       // triggers save_confirm-modal
+    });
+    this.actionBar.el.on("action-bar-clicked:edit", function(){
+      self.detailsMode('edit');
     });
   }
 

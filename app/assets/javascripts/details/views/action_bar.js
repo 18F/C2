@@ -18,6 +18,7 @@ ActionBar = (function() {
     this.saveButtonLadda = this.saveButton.ladda();
     this._setupActionBarClicked('save');
     this._setupActionBarClicked('cancel');
+    this._setupActionBarClicked('edit');
     this._saveTriggered();
   };
 
@@ -55,11 +56,11 @@ ActionBar = (function() {
     switch(mode){
       case "view":
         this.barState('.cancel-button', "disabled");
-        $('.action-bar-template').removeClass('edit-actions');
+        $('.action-bar-template').removeClass('edit-actions').addClass('view-actions');
         break;
       case "edit":
         this.barState('.cancel-button', false);
-        $('.action-bar-template').addClass('edit-actions');
+        $('.action-bar-template').removeClass('view-actions').addClass('edit-actions');
         break;
     }
   }
