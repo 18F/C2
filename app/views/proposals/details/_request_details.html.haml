@@ -5,8 +5,6 @@
         .card-head.column
           %h2
             Request Details
-            - if !@proposal.completed? && !@proposal.canceled?
-              = "<a class='edit-toggle button edit-icon'><span>Modify</span></a>".html_safe
 
         .content-content.column#view-request-details  
           .row
