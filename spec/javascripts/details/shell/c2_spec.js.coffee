@@ -118,3 +118,13 @@ describe 'C2', ->
   describe 'trigger events on dirrty', -> 
     it "make sure dirrty is triggered on form", ->
     it "make sure dirrty is reinit on save", ->
+  
+  describe 'when request detail is interacted', -> 
+    it "clicking modify will load the view in edit mode", ->
+    it "clicking modify should not load any notifications", ->
+    it "clicking cancel button from modify will revert to view mode", ->
+    it "clicking cancel in action bar will revert to view mode", ->
+    it "clicking save in action bar will load modal for save confirm", ->
+    it "clicking cancel button in save confirm will close modal", ->
+    it "clicking -x- button in save confirm will close modal", ->
+    it "make sure dirrty is reinit on save", ->
