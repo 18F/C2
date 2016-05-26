@@ -1,5 +1,5 @@
 feature "reports", elasticsearch: true do
-  scenario "provides Save as Report button on search results page", :js do
+  scenario "provides Save as Report button on search results page", js: true do
     user = create(:user, client_slug: "test")
     proposals = populate_proposals(user)
     login_as(user)
@@ -12,7 +12,7 @@ feature "reports", elasticsearch: true do
     fill_in "saved-search-name", with: "my test report"
     click_on "Save"
 
-    expect(page).to have_content("Saved as report my test report") 
+    expect(page).to have_content("Saved as report my test report")
   end
 
   def populate_proposals(user)
