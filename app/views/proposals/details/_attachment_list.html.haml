@@ -1,6 +1,7 @@
 .attachments
   %ul.attachment-list
     - proposal.attachments.each do |attachment|
+      - next if attachment.id.nil?
       %li.attachment-list-item
         %a{href: proposal_attachment_path(proposal, attachment)}
           = image_tag "icon-attachment.svg"

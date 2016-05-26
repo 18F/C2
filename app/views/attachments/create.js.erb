@@ -1,4 +1,11 @@
-c2.attachmentCardController.update('<%=j render partial: 'proposals/details/attachment' %>', 
-  { fileName: '<%=j @attachment.file_file_name %>',
-    actionType: 'create',
-    noticeType: 'success' });
+<% unless @attachment.errors.any? %>
+  c2.attachmentCardController.update('<%=j render partial: 'proposals/details/attachment' %>', 
+    { fileName: '<%=j @attachment.file_file_name %>',
+      actionType: 'create',
+      noticeType: 'success' });
+<% else %>
+  c2.attachmentCardController.update('<%=j render partial: 'proposals/details/attachment' %>', 
+    { fileName: '<%=j @attachment.errors.full_messages.first %>',
+      actionType: 'error',
+      noticeType: 'alert' });
+<% end %>
