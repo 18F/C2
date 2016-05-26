@@ -20,7 +20,87 @@
   &.status-is-canceled{
     background: #D8D8D8;
   }
+}
 
+.summary-card{
+  .view-title{
+    .display-content{ display: inline-block; }
+    .display-edit{ display: none; }
+  }
+  .edit-title{
+    .display-edit{ display: inline-block; }
+    .display-content{ display: none; }
+  }
+  .c2n_header {
+    .display-content{
+      vertical-align: sub;
+      vertical-align: -webkit-baseline-middle;
+      height: 39px;
+    }
+    .display-edit input{
+      padding: 0px 7px;
+      background: #305F7E;
+      border: none;
+      outline: none;
+      color: white;
+      font-size: 28px;
+      font-weight: 800;
+      display: inline-block;
+      vertical-align: top;
+      margin-left: -7px;
+      margin-top: 5px;
+      margin-bottom: 3px;
+    }
+  }
+  span.edit-icon{
+    position: relative;
+    display: inline-block;
+    height: 18px;
+    width: 18px;
+    &:before {
+      content: "";
+      display: block;
+      width: 16px;
+      height: 16px;
+      background-image: url("/assets/icon-edit-light.png");
+      background-repeat: no-repeat;
+      position: absolute;
+      right: -3px;
+      top: 0px;
+      background-size: contain;
+    }
+  }
+  .header-edit-text{
+    transition: all .2s ease;
+    height: 35px;
+    border-radius: 4px;
+    padding-left: 2px;
+    padding-right: 17px;
+    vertical-align: sub;
+    vertical-align: -webkit-baseline-middle;
+    &:hover{
+      background: #2F5E7E;
+      border: 1px solid #5F8CAE;
+      padding-left: 19px;
+      .edit-button{
+        opacity: 1;
+        width: auto;
+      }
+    }
+    .edit-button{
+      transition: all .2s ease;
+      opacity: 0;
+      width: 0px;
+      overflow-x: hidden;
+      font-size: 13px;
+      font-weight: 300;
+      color: #C5DCED;
+      height: 23px;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 17px;
+    }
+  }
 }
 
 .summary-status-wrapper{
@@ -56,14 +136,6 @@ h1.c2n_header{
     margin-bottom: 1px;
     display: inline-block;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  }
-}
-
-.card-head{
-  h2, h3{
-    color: #3A6E93;
-    font-weight: 600;
-    font-size: 19px;
   }
 }
 

@@ -3,7 +3,7 @@ class ProposalDecorator < Draper::Decorator
 
   def detailed_status
     if object.status == "pending" && actionable_steps.any?
-      "pending #{actionable_steps.last.decorate.noun}"
+      "pending"
     else
       object.status
     end

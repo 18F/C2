@@ -5,8 +5,6 @@
 #mode-parent.view-mode
   = render partial: "proposals/details/top_notification", locals: { proposal: @proposal }
 
-  .status-bar.medium-12.small-12{ class: "status-is-" + @proposal.status }
-
   .row
     .medium-12.column.wrap-hard
       = render partial: "proposals/details/summary", locals: { proposal: @proposal }

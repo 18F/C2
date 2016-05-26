@@ -1,4 +1,3 @@
-
 .row.summary-status-wrapper
   .medium-12.column.text-left
     %span.status-wrap.medium-12.small-12{ class: "status-is-" + proposal.status }
@@ -18,16 +17,24 @@
     = link_to proposals_path, class: "button secondary" do
       %span.arrow-el
         ← 
-      Back to List
+      Back to Requests
 
-.card.summary-card
+.card.summary-card#summary-card
   .card-head.column
     .row
       .medium-12.column
         %h3
           = proposal.public_id
-        %h1.c2n_header
-          = proposal.name
+        %h1.c2n_header.view-title
+          %span.header-content
+            %span.display-content
+              = proposal.name
+            %span.display-edit
+              %input{ type: "text", value: proposal.name }/
+          %button#header-edit-text.header-edit-text
+            %span.edit-button
+              Edit title
+            %span.edit-icon
         .c2n_description
           %p
             Requested by:

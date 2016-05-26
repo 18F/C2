@@ -13,7 +13,8 @@ C2 = (function() {
       formState:      '#request-details-card form',
       notifications:  '#action-bar-status',
       observerCard:   '#card-for-observers',
-      modalCard:      '#modal-wrapper'
+      modalCard:      '#modal-wrapper',
+      summaryBar:     '#summary-card'
     }
     this._overrideTestConfig(config);
     this._blastOff();
@@ -56,6 +57,7 @@ C2 = (function() {
     this.modals = new ModalController(config.modalCard);
     this.actionBar = new ActionBar(config.actionBar);
     this.notification = new Notifications(config.notifications);
+    this.summaryBar = new SummaryBar(config.summaryBar);
   }
 
   C2.prototype._setupEvents = function(){

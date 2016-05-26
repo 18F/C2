@@ -7,7 +7,7 @@ describe ProposalDecorator do
 
         decorator = ProposalDecorator.new(proposal)
 
-        expect(decorator.detailed_status).to eq "pending approval"
+        expect(decorator.detailed_status).to eq "pending"
 
       end
     end
