@@ -32,10 +32,9 @@ module EsSpecHelper
   end
 
   def es_server_running?
-    cmd = "ps x | grep 'es.path.data=/tmp/elasticsearch_test' | grep -v grep > /dev/null; echo $?"
-    result = (`#{cmd}`.strip == "0")
-    debug { "Running? #{result}" }
-    result
+    `ps x | grep 'es.path.data=/tmp/elasticsearch_test' | grep -v grep`
+    debug { "Running? #{$CHILD_STATUS.success?}" }
+    $CHILD_STATUS.success?
   end
 
   def create_es_index(klass)
