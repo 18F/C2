@@ -50,7 +50,7 @@ gem "peek-pg"
 gem "pg"
 gem "pry-rails"
 gem "puma"
-gem "pundit", ">= 1.0.0"  # Interface for Pundit::NotAuthorizedError changed in this version
+gem "pundit", ">= 1.0.0" # Interface for Pundit::NotAuthorizedError changed in this version
 gem "rack-cors", require: "rack/cors"
 gem "rails"
 gem "redcarpet"
@@ -91,6 +91,7 @@ group :test do
   gem "capybara"
   gem "codeclimate-test-reporter"
   gem "elasticsearch-extensions"
+  gem "fivemat"
   gem "fuubar"
   gem "poltergeist"
   gem "rspec_junit_formatter"
