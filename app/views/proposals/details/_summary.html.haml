@@ -1,7 +1,7 @@
 .row.summary-status-wrapper
   .medium-12.column.text-left
     %span.status-wrap.medium-12.small-12{ class: "status-is-" + proposal.status }
-      Request Status 
+      Request Status
       %span.status-value
         = proposal.capitalized_detailed_status
     - if proposal.status == "completed"
@@ -16,7 +16,7 @@
   .medium-12.column.text-left
     = link_to proposals_path, class: "button secondary" do
       %span.arrow-el
-        ← 
+        ←
       Back to Requests
 
 .card.summary-card#summary-card
@@ -25,12 +25,7 @@
       .medium-12.column
         %h3
           = proposal.public_id
-        %h1.c2n_header.view-title#proposal_header
-          %span.header-content
-            %span.display-content
-              = proposal.name
-            %span.display-edit
-              %input{ type: "text", value: proposal.name }/
+        = render @current_user.client_slug + '/fields/title'
         .c2n_description
           %p
             Requested by:

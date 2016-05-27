@@ -22,14 +22,17 @@
   }
 }
 
+.view-mode .summary-card{
+  .display-content{ display: inline-block; }
+  .display-edit{ display: none; }
+}
+.edit-mode .summary-card{
+  .display-edit{ display: inline-block; }
+  .display-content{ display: none; }
+}
 .summary-card{
-  .view-title{
-    .display-content{ display: inline-block; }
-    .display-edit{ display: none; }
-  }
-  .edit-title{
-    .display-edit{ display: inline-block; }
-    .display-content{ display: none; }
+  .display-edit{
+    min-width: 75%;
   }
   .c2n_header {
     .display-content{
