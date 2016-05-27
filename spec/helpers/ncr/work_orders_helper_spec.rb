@@ -1,6 +1,6 @@
 describe Ncr::WorkOrdersHelper do
   describe '#scoped_approver_options' do
-    it 'includes existing users' do
+    it "includes existing users" do
       expect(helper.scoped_approver_options.size).to eq(0)
       users = create_list(:user, 2, client_slug: "ncr")
 

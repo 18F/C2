@@ -1,5 +1,5 @@
 describe "client_slug confers authz rules" do
-  before(:all) do
+  before(:each) do
     @ncr_user     = create :user, client_slug: "ncr"
     @ncr_approver = create :user, client_slug: "ncr"
     @gsa_user     = create :user, client_slug: "gsa18f"
