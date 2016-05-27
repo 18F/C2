@@ -16,7 +16,10 @@ guard :rspec, cmd: "bin/rspec" do
   watch(%r{^app/views/(.+)/.*\.(erb|haml|slim)$})     { |m| "spec/features/#{m[1]}_spec.rb" }
 end
 
-guard :shell do
-  watch(%r{^app/assets/javascripts/(.+)\.js(\.coffee)?$}) { |m| `bin/rake konacha:run SPEC=#{m[1]}_spec` }
-  watch(%r{^spec/javascripts/(.+)\.js(\.coffee)?$}) { |m| `bin/rake konacha:run SPEC=#{m[1]}` }
-end
+# We're not using this at the moment. Also, its output obscures the (previous)
+# RSpec results when all tests are run.
+
+# guard :shell do
+#   watch(%r{^app/assets/javascripts/(.+)\.js(\.coffee)?$}) { |m| `bin/rake konacha:run SPEC=#{m[1]}_spec` }
+#   watch(%r{^spec/javascripts/(.+)\.js(\.coffee)?$}) { |m| `bin/rake konacha:run SPEC=#{m[1]}` }
+# end
