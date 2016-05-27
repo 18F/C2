@@ -16,7 +16,7 @@ guard :rspec, cmd: "bin/rspec" do
   watch(%r{^app/views/(.+)/.*\.(erb|haml|slim)$})     { |m| "spec/features/#{m[1]}_spec.rb" }
 end
 
-# We're not using this at the moment. Also, its output obscures the (previous)
+# We're not using this at the moment. Also, its output obscures the preceding
 # RSpec results when all tests are run.
 
 # guard :shell do
