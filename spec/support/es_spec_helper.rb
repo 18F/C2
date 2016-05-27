@@ -48,7 +48,6 @@ module EsSpecHelper
       force: search.index_exists?(index: klass.index_name),
       index: klass.index_name
     )
-    # search.refresh_index!
     search.import(return: "errors", batch_size: 200) do |resp|
       # show errors immediately (rather than buffering them)
       errors += resp["items"].select { |k, _v| k.values.first["error"] }
