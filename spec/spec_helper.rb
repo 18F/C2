@@ -1,4 +1,3 @@
-require "zonebie/rspec"
 require "codeclimate-test-reporter"
 
 
