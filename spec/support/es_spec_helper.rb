@@ -71,6 +71,7 @@ module EsSpecHelper
   end
 
   # h/t https://devmynd.com/blog/2014-2-dealing-with-failing-elasticserach-tests/
+  # rubocop:disable Metrics/MethodLength
   def es_execute_with_retries(retries = 3)
     begin
       retries -= 1
@@ -85,6 +86,7 @@ module EsSpecHelper
       end
     end
   end
+  # rubocop:enable Metrics/MethodLength
 
   def debug
     if ENV["ES_DEBUG"]

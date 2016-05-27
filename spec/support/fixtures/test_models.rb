@@ -29,7 +29,7 @@ module Test
       amount
     end
 
-    def self.permitted_params(params, client_request_instance)
+    def self.permitted_params(params, _client_request_instance)
       params.require(:test_client_request).permit(:project_title, :amount, :approving_official_id)
     end
 
@@ -56,7 +56,7 @@ module Test
     ClientRequest.connection.drop_table :test_client_requests
   end
 
-  # we must defer loading the factory till after we have defined our namespace,
+  # We must defer loading the factory until we have defined our namespace,
   # so call this explicitly to work around rails app load order.
   require File.join(Rails.root, "spec/factories/test/client_request.rb")
 end
