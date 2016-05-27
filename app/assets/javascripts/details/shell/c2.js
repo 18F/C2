@@ -8,6 +8,7 @@ C2 = (function() {
       attachmentCard: '#card-for-attachments',
       detailsForm:    '#request-details-card',
       detailsSave:    '#request-details-card',
+      detailsSaveAll: '#request-details-card, #summary-card',
       activityCard:   '#card-for-activity',
       editMode:       '#mode-parent',
       formState:      '#request-details-card form, #proposal-title-wrapper form',
@@ -39,7 +40,8 @@ C2 = (function() {
 
   C2.prototype._setupData = function(){
     var detailsConfig = this.config.detailsSave;
-    this.detailsSave = new DetailsSave(detailsConfig);
+    var detailsDataConfig = this.config.detailsSaveAll;
+    this.detailsSave = new DetailsSave(detailsConfig, detailsDataConfig);
   }
 
   C2.prototype._setupStates = function(){
@@ -150,6 +152,7 @@ C2 = (function() {
   C2.prototype._setupDetailsData = function(){
     var self = this;
     this.detailsSave.el.on('details-form:success', function(event, data){
+      self.summaryBar.updateViewContent(data);
       self.detailsRequestCard.updateViewModeContent(data);
       self.modals.el.trigger("modal:close");
     });

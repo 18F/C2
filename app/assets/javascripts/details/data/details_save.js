@@ -1,8 +1,9 @@
 var DetailsSave;
 DetailsSave = (function() {
-  
-  function DetailsSave(el) {
+
+  function DetailsSave(el, dataEl) {
     this.el = $(el);
+    this.dataEl = $(dataEl);
     this._blastOff();
   }
 
@@ -36,6 +37,7 @@ DetailsSave = (function() {
 
   DetailsSave.prototype.saveDetailsForm = function(data){
     var self = this;
+    var formData = this.dataEl.find('form').serialize();
     $.ajax({
       url: this.el.find('form')[0].action,
       headers: {
@@ -43,7 +45,7 @@ DetailsSave = (function() {
         "Content-Type": 'application/x-www-form-urlencoded; charset=UTF-8'
       },
       type: 'POST',
-      data: self.el.find('form').serialize()
+      data: formData
     });
   }
 

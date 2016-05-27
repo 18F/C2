@@ -11,6 +11,7 @@
 #= require details/views/details_request_card
 #= require details/views/activity_card
 #= require details/views/observer_card
+#= require details/views/summary_bar
 #= require details/views/modal_card
 #= require details/views/notifications
 #= require details/data/details_save
@@ -34,6 +35,7 @@ describe 'C2', ->
       expect(c2.formState instanceof FormChangeState).to.eql(true)
       expect(c2.actionBar instanceof ActionBar).to.eql(true)
       expect(c2.detailsSave instanceof DetailsSave).to.eql(true)
+      expect(c2.summaryBar instanceof SummaryBar).to.eql(true)
       expect(c2.modals instanceof ModalController).to.eql(true)
 
     it "check config passing test param actionBar", ->
@@ -67,6 +69,14 @@ describe 'C2', ->
       }
       c2 = new C2(testParam)
       expect(c2.config.activityCard).to.eql(test)
+
+    it "check config passing test param summaryBar", ->
+      test = "summary-bar"
+      testParam = {
+        summaryBar: test
+      }
+      c2 = new C2(testParam)
+      expect(c2.config.summaryBar).to.eql(test)
 
     it "check config passing test param modalCard", ->
       test = "cancel-card-test"

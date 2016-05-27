@@ -3,7 +3,7 @@
 - client_data = @client_data_instance
 - client_id = client_data.id.to_s
 
-= simple_form_for client_data, html: { multipart: true }, remote: true do |f|
+= simple_form_for @client_data_instance, html: { multipart: true }, remote: true do |f|
   - i = 0
   - @proposal.new_fields_for_display.each do |field|
     - key = field[:key]
@@ -16,7 +16,7 @@
       client_data: @client_data_instance,
       client_id: client_data.id.to_s,
       value_id: key + '-' + client_id }
-    
+
     - if i == 1
       :plain
         <div class="small-up-1 medium-up-2 grid-layout">

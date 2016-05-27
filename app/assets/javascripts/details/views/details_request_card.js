@@ -9,13 +9,13 @@ DetailsRequestCard = (function(){
     }
     return this;
   }
-  
+
   DetailsRequestCard.prototype._setup = function(){
     this._events();
   }
 
   DetailsRequestCard.prototype._events = function(){
-    var self = this;    
+    var self = this;
 
     this.el.find('.edit-toggle').on('click', function(e){
       e.preventDefault();
@@ -27,7 +27,6 @@ DetailsRequestCard = (function(){
     switch (mode){
       case 'view':
         this.data.gridLayout = "two-column";
-        this.scrollUp();
         break;
       case 'edit':
         this.data.gridLayout = "one-column";
@@ -61,9 +60,9 @@ DetailsRequestCard = (function(){
   DetailsRequestCard.prototype.updateTextFields = function(field, value){
     $(field).html(value);
   }
-  
+
   DetailsRequestCard.prototype.updateCheckbox = function(field, value){
-    $(field)[0].checked = value;
+    $(field).prop('checked', value);
   }
 
   DetailsRequestCard.prototype.updateViewModeContent = function(data){
@@ -71,7 +70,6 @@ DetailsRequestCard = (function(){
     var content = data['response'];
     var id = content['id'];
     var self = this;
-    delete content['id'];
     $.each(content, function(key, value){
       var field = '#' + key + '-' + id;
       if(key === "direct_pay"){
@@ -100,13 +98,6 @@ DetailsRequestCard = (function(){
       this.el.removeClass('view-fields');
       this.el.addClass('edit-fields');
     }
-  }
-
-  DetailsRequestCard.prototype.scrollUp = function(){
-    var self = this;
-    $('html, body').animate({
-      scrollTop:  self.el.offset().top - 40
-    });
   }
 
   return DetailsRequestCard;
