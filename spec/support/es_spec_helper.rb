@@ -40,8 +40,15 @@ module EsSpecHelper
   def create_es_index(klass)
     errors = []
     completed = 0
+    search = klass.__elasticsearch__
+
     output_if_debug_true { "Creating Index for class #{klass}" }
-    klass.__elasticsearch__.create_index!(force: true, index: klass.index_name)
+    if search.index_exists?(index: klass.index_name)
+      klass.__elasticsearch__.create_index!(force: true, index: klass.index_name)
+    else
+      klass.__elasticsearch__.create_index!(index: klass.index_name)
+    end
+
     klass.__elasticsearch__.refresh_index!
     klass.__elasticsearch__.import(return: "errors", batch_size: 200) do |resp|
       # show errors immediately (rather than buffering them)
@@ -85,7 +92,7 @@ end
 
 RSpec.configure do |config|
   include EsSpecHelper
-  config.before :each, elasticsearch: true do
+  config.before :suite do
     start_es_server unless es_server_running?
     create_es_index(Proposal)
   end
