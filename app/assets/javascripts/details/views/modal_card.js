@@ -9,7 +9,8 @@ ModalController = (function(){
       modal: {
         cancel: ".cancel-modal-content",
         save_confirm: ".save_confirm-modal-content",
-        attachment_confirm: ".attachment-modal-content"
+        attachment_confirm: ".attachment-modal-content", 
+        observer_confirm: ".observer-modal-content"
       }
     }
     this._setup(el, opts);

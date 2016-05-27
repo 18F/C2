@@ -9,7 +9,7 @@
           <strong>#{attachment.file_file_name}</strong>
         - if policy(attachment).can_destroy?
           %span.remove-attachment-btn.text-right
-            = button_to "", proposal_attachment_path(proposal, attachment), method: :delete, data: {confirm_REMOVETHIS: "Are you sure?", "modal-type": "attachment_confirm"}, remote: true, class: "text-right", "aria-label": "Remove #{ attachment.file_file_name } attachment"
+            = button_to "", proposal_attachment_path(proposal, attachment), method: :delete, data: {"modal-type": "attachment_confirm"}, remote: true, class: "text-right", "aria-label": "Remove #{ attachment.file_file_name } attachment"
   - if proposal.attachments.empty?
     .content-content.column
       .row

@@ -18,6 +18,11 @@ en:
           desc: Click Cancel to keep this attachment on the list, or Save to confirm the removal.
           cancel_button: Cancel
           save_button: Save
+        observer:
+          title: Remove this observer?
+          desc: Click Cancel to keep this observer on the list, or Save to confirm the removal.
+          cancel_button: Cancel
+          save_button: Save
 
       activity:
         header: Timeline

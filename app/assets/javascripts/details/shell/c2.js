@@ -73,6 +73,7 @@ C2 = (function() {
     this._setupObserverEvent();
     this._setupSaveModal();
     this._setupAttachmentModel();
+    this._setupObserverModel();
   }
 
 
@@ -267,9 +268,21 @@ C2 = (function() {
   C2.prototype._setupAttachmentModel = function(){
     var self = this;
     this.modals.el.on("attachment_confirm-modal:confirm", function(event, item, sourceEl){
-      $(sourceEl).parent().submit();
-      self._closeModal();
+      self._submitAndClose(sourceEl);
     });
+  }
+
+  C2.prototype._setupObserverModel = function(){
+    var self = this;
+    this.modals.el.on("observer_confirm-modal:confirm", function(event, item, sourceEl){
+      self._submitAndClose(sourceEl);
+    });
+  }
+
+  C2.prototype._submitAndClose = function(sourceEl){
+    var self = this;
+    $(sourceEl).parent().submit();
+    self._closeModal();
   }
 
   C2.prototype._closeModal = function(){
