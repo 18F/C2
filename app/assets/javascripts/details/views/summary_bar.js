@@ -15,11 +15,10 @@ SummaryBar = (function() {
     var content = data['response'];
     var id = content['id'];
     var self = this;
-    delete content['id'];
     $.each(content, function(key, value){
       var field = '#' + key + '-' + id;
       if( !(value === null) ) {
-        self.updateTextFields(field + " .display-value", value);
+        self.updateTextFields(field + " .detail-value", value);
       }
     });
     this.el.trigger("form:updated");

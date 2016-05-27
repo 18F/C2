@@ -70,9 +70,9 @@ DetailsRequestCard = (function(){
     var content = data['response'];
     var id = content['id'];
     var self = this;
-    delete content['id'];
     $.each(content, function(key, value){
       var field = '#' + key + '-' + id;
+      console.log(field);
       if(key === "direct_pay"){
         self.updateCheckbox(field + ' input[type="checkbox"]', value);
       } else if(key === "not_to_exceed") {
@@ -85,6 +85,8 @@ DetailsRequestCard = (function(){
       } else if(key === "amount") {
         self.updateTextFields(field + ".detail-value", value);
       } else if( !(value === null) ) {
+        console.log(field);
+        console.log(value);
         self.updateTextFields(field + " .detail-display .detail-value", value);
       }
     });

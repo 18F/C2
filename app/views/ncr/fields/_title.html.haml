@@ -2,8 +2,8 @@
   = simple_form_for @client_data_instance, html: { multipart: true }, include_hidden: false, remote: true do |f|
     - value_id = "project_title" + '-' + @client_data_instance.id.to_s
     %span.detail-display{ id: value_id }
-      %span.display-value
+      %span.detail-value
         = @client_data_instance.project_title
-      %span.display-edit
+      %span.detail-edit
         %form
           = f.input :project_title, label: false

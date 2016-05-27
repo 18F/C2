@@ -23,19 +23,20 @@
 }
 
 .view-mode .summary-card{
-  .display-value{ display: inline-block; }
-  .display-edit{ display: none; }
+  .detail-value{ display: inline-block; }
+  .detail-edit{ display: none; }
 }
 .edit-mode .summary-card{
-  .display-edit{ display: inline-block; }
-  .display-value{ display: none; }
+  .detail-edit{ display: inline-block; }
+  .detail-value{ display: none; }
 }
 .summary-card{
-  .display-edit{
+  .detail-edit{
     min-width: 75%;
   }
   .c2n_header {
-    .display-value{
+    .detail-value{
+      font-size: 28px;
       vertical-align: sub;
       vertical-align: -webkit-baseline-middle;
       height: 39px;
@@ -43,7 +44,7 @@
     .form-group{
       margin-bottom: 0px;
     }
-    .display-edit input[type=text]{
+    .detail-edit input[type=text]{
       padding: 0px 7px;
       background: #305F7E;
       border: none;
