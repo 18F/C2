@@ -43,14 +43,13 @@ module EsSpecHelper
     search = klass.__elasticsearch__
 
     output_if_debug_true { "Creating Index for class #{klass}" }
-    if search.index_exists?(index: klass.index_name)
-      klass.__elasticsearch__.create_index!(force: true, index: klass.index_name)
-    else
-      klass.__elasticsearch__.create_index!(index: klass.index_name)
-    end
-
-    klass.__elasticsearch__.refresh_index!
-    klass.__elasticsearch__.import(return: "errors", batch_size: 200) do |resp|
+    search.create_index!(
+      # Req'd by https://github.com/elastic/elasticsearch-rails/issues/571
+      force: search.index_exists?(index: klass.index_name),
+      index: klass.index_name
+    )
+    # search.refresh_index!
+    search.import(return: "errors", batch_size: 200) do |resp|
       # show errors immediately (rather than buffering them)
       errors += resp["items"].select { |k, _v| k.values.first["error"] }
       completed += resp["items"].size
@@ -64,7 +63,7 @@ module EsSpecHelper
     end
 
     output_if_debug_true { "Refreshing index for class #{klass}" }
-    klass.__elasticsearch__.refresh_index!
+    search.refresh_index!
   end
 
   # h/t https://devmynd.com/blog/2014-2-dealing-with-failing-elasticserach-tests/
