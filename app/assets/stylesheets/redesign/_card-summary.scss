@@ -31,6 +31,9 @@
   .display-content{ display: none; }
 }
 .summary-card{
+  .display-edit{
+    min-width: 75%;
+  }
   .c2n_header {
     .display-content{
       vertical-align: sub;
