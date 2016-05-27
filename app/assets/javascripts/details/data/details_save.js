@@ -37,6 +37,9 @@ DetailsSave = (function() {
 
   DetailsSave.prototype.saveDetailsForm = function(data){
     var self = this;
+    var formData = this.dataEl.find('form').serialize();
+    console.log("data sent: ", formData);
+    console.log(this.dataEl.find('form'));
     $.ajax({
       url: this.el.find('form')[0].action,
       headers: {
@@ -44,7 +47,7 @@ DetailsSave = (function() {
         "Content-Type": 'application/x-www-form-urlencoded; charset=UTF-8'
       },
       type: 'POST',
-      data: self.dataEl.find('form').serialize()
+      data: formData
     });
   }
 

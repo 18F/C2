@@ -152,6 +152,7 @@ C2 = (function() {
   C2.prototype._setupDetailsData = function(){
     var self = this;
     this.detailsSave.el.on('details-form:success', function(event, data){
+      self.summaryBar.updateViewContent(data);
       self.detailsRequestCard.updateViewModeContent(data);
       self.modals.el.trigger("modal:close");
     });
