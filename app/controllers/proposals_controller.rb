@@ -24,6 +24,7 @@ class ProposalsController < ApplicationController
   end
 
   def show_next
+    fail "client_data is nil in #{proposal}" if proposal.client_data.nil?
     @client_data_instance ||= proposal.client_data
     @subscriber_list = SubscriberList.new(@proposal).triples
     @events = HistoryList.new(proposal).events

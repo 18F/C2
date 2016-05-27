@@ -314,4 +314,8 @@ class Proposal < ActiveRecord::Base
       OR user_id IN (SELECT assignee_id FROM user_delegates WHERE assigner_id = :user_id)
     SQL
   end
+
+  def to_s
+    "[Proposal #{public_id}]"
+  end
 end
