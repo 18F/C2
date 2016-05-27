@@ -12,7 +12,6 @@ SummaryBar = (function() {
   };
 
   SummaryBar.prototype.updateViewContent = function(data) {
-    var viewEl = this.el.find('#proposal-title-wrapper .display-value')
     var content = data['response'];
     var id = content['id'];
     var self = this;
@@ -21,7 +20,7 @@ SummaryBar = (function() {
       var field = '#' + key + '-' + id;
       console.log(field);
       if( !(value === null) ) {
-        self.updateTextFields(field + " .detail-display .detail-value", value);
+        self.updateTextFields(field + " .display-value", value);
       }
     });
     this.el.trigger("form:updated");
