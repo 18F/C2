@@ -1,6 +1,12 @@
 describe "client_slug confers authz rules" do
+  before(:all) do
+    @ncr_user     = create :user, client_slug: "ncr"
+    @ncr_approver = create :user, client_slug: "ncr"
+    @gsa_user     = create :user, client_slug: "gsa18f"
+  end
+
   it "rejects requests for user with no client_slug" do
-    user = create(:user, client_slug: '')
+    user = create :user, client_slug: ""
 
     login_as(user)
     visit new_ncr_work_order_path
@@ -9,46 +15,40 @@ describe "client_slug confers authz rules" do
   end
 
   it "rejects requests for user with different client_slug" do
-    user = create(:user, client_slug: 'gsa18f')
-
-    login_as(user)
+    login_as(@gsa_user)
     visit new_ncr_work_order_path
 
     expect(page.status_code).to eq(403)
   end
 
   it "allows Admin role" do
-    user = create(:user, :admin, client_slug: '')
-    approver = create(:user, client_slug: "ncr")
+    user = create(:user, :admin, client_slug: "")
 
     login_as(user)
     visit new_ncr_work_order_path
 
     expect(page.status_code).to eq(200)
-    submit_ba60_work_order(approver)
-    expect(page).to have_content('Proposal submitted!')
+    submit_ba60_work_order(@ncr_approver)
+    expect(page).to have_content("Proposal submitted!")
   end
 
   it "allows same client_slug to create" do
     user = create(:user, client_slug: "ncr")
-    approver = create(:user, client_slug: "ncr")
 
     login_as(user)
     visit new_ncr_work_order_path
 
     expect(page.status_code).to eq(200)
-    submit_ba60_work_order(approver)
-    expect(page).to have_content('Proposal submitted!')
+    submit_ba60_work_order(@ncr_approver)
+    expect(page).to have_content("Proposal submitted!")
   end
 
   it "rejects different client_slug from viewing existing proposal" do
-    ncr_user = create(:user, client_slug: "ncr")
-    nil_user = create(:user, client_slug: '')
-    approver = create(:user, client_slug: "ncr")
+    nil_user = create(:user, client_slug: "")
 
-    login_as(ncr_user)
+    login_as(@ncr_user)
     visit new_ncr_work_order_path
-    submit_ba60_work_order(approver)
+    submit_ba60_work_order(@ncr_approver)
     proposal_path = current_path
     login_as(nil_user)
     visit proposal_path
@@ -56,13 +56,11 @@ describe "client_slug confers authz rules" do
   end
 
   it "rejects same client_slug non-subscriber to view existing proposal" do
-    ncr_user = create(:user, client_slug: "ncr")
     ncr_user2 = create(:user, client_slug: "ncr")
-    approver = create(:user, client_slug: "ncr")
 
-    login_as(ncr_user)
+    login_as(@ncr_user)
     visit new_ncr_work_order_path
-    submit_ba60_work_order(approver)
+    submit_ba60_work_order(@ncr_approver)
     proposal_path = current_path
     login_as(ncr_user2)
     visit proposal_path
@@ -71,35 +69,32 @@ describe "client_slug confers authz rules" do
   end
 
   it "rejects subscriber trying to add user with non-client_slug as observer" do
-    ncr_user = create(:user, client_slug: "ncr")
-    gsa_user = create(:user, client_slug: 'gsa18f')
-    approver = create(:user, client_slug: "ncr")
-    login_as(ncr_user)
+    login_as(@ncr_user)
 
     visit new_ncr_work_order_path
-    submit_ba60_work_order(approver)
+    submit_ba60_work_order(@ncr_approver)
 
     expect(page.status_code).to eq(200)
-    expect_to_not_find_amongst_select_tag_options('observation_user_id', gsa_user.email_address)
+    expect_to_not_find_amongst_select_tag_options("observation_user_id", @gsa_user.email_address)
   end
 
   private
 
   def submit_ba60_work_order(approver)
-    fill_in 'Project title', with: "blue shells"
-    fill_in 'Description', with: "desc content"
-    choose 'BA60'
-    fill_in 'Vendor', with: 'Yoshi'
-    fill_in 'Amount', with: 123.45
+    fill_in "Project title", with: "blue shells"
+    fill_in "Description", with: "desc content"
+    choose "BA60"
+    fill_in "Vendor", with: "Yoshi"
+    fill_in "Amount", with: 123.45
     select approver.email_address, from: "Approving official's email address"
-    fill_in 'Building number', with: Ncr::BUILDING_NUMBERS[0]
+    fill_in "Building number", with: Ncr::BUILDING_NUMBERS[0]
     find('input[name="commit"]').click
   end
 
   def add_as_observer(user)
-    select user.email_address, from: 'observation_user_id'
+    select user.email_address, from: "observation_user_id"
     fill_in "observation_reason", with: "observe thy ways"
-    click_on 'Add an Observer'
+    click_on "Add an Observer"
   end
 
   def expect_to_not_find_amongst_select_tag_options(field_name, value)
