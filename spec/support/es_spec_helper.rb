@@ -42,7 +42,7 @@ module EsSpecHelper
     completed = 0
     search = klass.__elasticsearch__
 
-    output_if_debug_true { "Creating Index for class #{klass}" }
+    debug { "Creating Index for class #{klass}" }
     search.create_index!(
       # Req'd by https://github.com/elastic/elasticsearch-rails/issues/571
       force: search.index_exists?(index: klass.index_name),
@@ -52,7 +52,7 @@ module EsSpecHelper
       # show errors immediately (rather than buffering them)
       errors += resp["items"].select { |k, _v| k.values.first["error"] }
       completed += resp["items"].size
-      output_if_debug_true { "Finished #{completed} items" }
+      debug { "Finished #{completed} items" }
       STDERR.flush
       STDOUT.flush
       if !errors.empty? && ENV["ES_DEBUG"]
@@ -61,7 +61,7 @@ module EsSpecHelper
       end
     end
 
-    output_if_debug_true { "Refreshing index for class #{klass}" }
+    debug { "Refreshing index for class #{klass}" }
     search.refresh_index!
   end
 
@@ -81,7 +81,7 @@ module EsSpecHelper
     end
   end
 
-  def output_if_debug_true
+  def debug
     if ENV["ES_DEBUG"]
       puts yield
     end
@@ -90,10 +90,12 @@ end
 
 RSpec.configure do |config|
   include EsSpecHelper
+
   config.before :suite do
     start_es_server unless es_server_running?
     create_es_index(Proposal)
   end
+
   config.after :suite do
     stop_es_server
   end
