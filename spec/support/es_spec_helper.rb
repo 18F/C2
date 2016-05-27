@@ -40,12 +40,12 @@ module EsSpecHelper
   def create_es_index(klass)
     debug { "Rebuilding index for #{klass}..." }
     search = klass.__elasticsearch__
-    create search, name: klass.index_name
-    import search
-    refresh search
+    _create search, name: klass.index_name
+    _import search
+    _refresh search
   end
 
-  def create(search, name: nil)
+  def _create(search, name: nil)
     debug { "  Creating index..." }
     search.create_index!(
       # Req'd by https://github.com/elastic/elasticsearch-rails/issues/571
@@ -54,7 +54,7 @@ module EsSpecHelper
     )
   end
 
-  def import(search)
+  def _import(search)
     debug { "  Importing data..." }
     search.import(return: "errors", batch_size: 200) do |resp|
       errors    = resp["items"].select { |k, _v| k.values.first["error"] }
@@ -65,7 +65,7 @@ module EsSpecHelper
     end
   end
 
-  def refresh(search)
+  def _refresh(search)
     debug { "  Refreshing index..." }
     search.refresh_index!
   end

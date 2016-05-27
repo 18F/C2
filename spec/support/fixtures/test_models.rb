@@ -43,7 +43,6 @@ module Test
 
   def self.setup_models
     conn = ClientRequest.connection
-    # conn.drop_table :test_client_requests if conn.table_exists? :test_client_requests
     conn.create_table(:test_client_requests, force: true) do |t|
       t.decimal  :amount
       t.string   :project_title
@@ -59,5 +58,5 @@ module Test
 
   # we must defer loading the factory till after we have defined our namespace,
   # so call this explicitly to work around rails app load order.
-  require Rails.root + "spec/factories/test/client_request.rb"
+  require File.join(Rails.root, "spec/factories/test/client_request.rb")
 end
