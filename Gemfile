@@ -91,6 +91,7 @@ group :test do
   gem "capybara"
   gem "codeclimate-test-reporter"
   gem "elasticsearch-extensions"
+  gem "fuubar"
   gem "poltergeist"
   gem "rspec_junit_formatter"
   gem "shoulda-matchers"
