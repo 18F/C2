@@ -72,8 +72,7 @@ C2 = (function() {
     this._setupAttachmentEvent();
     this._setupObserverEvent();
     this._setupSaveModal();
-    this._setupAttachmentModel();
-    this._setupObserverModel();
+    this._setupFormSubmitModal();
   }
 
 
@@ -224,10 +223,10 @@ C2 = (function() {
 
   C2.prototype.createObserverNotification = function(data){
     var params = {
-      title: "Observer " + data.actionType,
-      type: data.noticeType,
-      content: data.content
-    };
+      title: "Observer " + data.actionType+". ",
+      type: data.noticeType, 
+      content: data.response
+    }; 
     this.notification.el.trigger('notification:create', params);
   }
 
@@ -265,16 +264,10 @@ C2 = (function() {
     });
   }
 
-  C2.prototype._setupAttachmentModel = function(){
-    var self = this;
-    this.modals.el.on("attachment_confirm-modal:confirm", function(event, item, sourceEl){
-      self._submitAndClose(sourceEl);
-    });
-  }
-
-  C2.prototype._setupObserverModel = function(){
-    var self = this;
-    this.modals.el.on("observer_confirm-modal:confirm", function(event, item, sourceEl){
+  C2.prototype._setupFormSubmitModal = function(){
+    var self = this,
+      events = "attachment_confirm-modal:confirm observer_confirm-modal:confirm";
+    this.modals.el.on(events, function(event, item, sourceEl){
       self._submitAndClose(sourceEl);
     });
   }
