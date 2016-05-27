@@ -38,8 +38,6 @@ module EsSpecHelper
   end
 
   def create_es_index(klass)
-    errors = []
-    completed = 0
     search = klass.__elasticsearch__
 
     debug { "Creating Index for class #{klass}" }
@@ -50,8 +48,8 @@ module EsSpecHelper
     )
     search.import(return: "errors", batch_size: 200) do |resp|
       # show errors immediately (rather than buffering them)
-      errors += resp["items"].select { |k, _v| k.values.first["error"] }
-      completed += resp["items"].size
+      errors = resp["items"].select { |k, _v| k.values.first["error"] }
+      completed = resp["items"].size
       debug { "Finished #{completed} items" }
       STDERR.flush
       STDOUT.flush
