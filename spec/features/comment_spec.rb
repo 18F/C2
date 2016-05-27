@@ -11,7 +11,7 @@ feature "commenting" do
   end
 
   scenario "saves the comment with javascript", js: true do
-    proposal = create_and_visit_proposal
+    proposal = create_and_visit_proposal with_client_data: build(:ncr_work_order)
     visit "/proposals/#{proposal.id}?detail=new"
     comment_text = "this is a great comment"
     js_submit_comment(comment_text, "#add_a_comment")
@@ -25,7 +25,7 @@ feature "commenting" do
   end
 
   scenario "Send button is disabled after submitting with javascript", js: true do
-    proposal = create_and_visit_proposal
+    proposal = create_and_visit_proposal with_client_data: build(:ncr_work_order)
     visit "/proposals/#{proposal.id}?detail=new"
     comment_text = "this is a great comment"
     js_submit_comment(comment_text, "#add_a_comment")
@@ -37,7 +37,7 @@ feature "commenting" do
   end
 
   scenario "redesign page hides/shows comments after 5 comments", js: true do
-    proposal = new_parallel_proposal
+    proposal = new_parallel_proposal with_client_data: build(:ncr_work_order)
     create(:comment, comment_text: "first comment", user: proposal.requester, proposal: proposal)
     5.times do
       create(:comment, user: proposal.requester, proposal: proposal)
@@ -80,8 +80,8 @@ feature "commenting" do
 
   private
 
-  def create_and_visit_proposal
-    proposal = new_parallel_proposal
+  def create_and_visit_proposal(with_client_data: nil)
+    proposal = new_parallel_proposal with_client_data: with_client_data
     login_as(proposal.requester)
     visit proposal_path(proposal)
     proposal
@@ -97,7 +97,12 @@ feature "commenting" do
     find(submit).trigger("click")
   end
 
-  def new_parallel_proposal
-    create(:proposal, :with_parallel_approvers, client_slug: "ncr")
+  def new_parallel_proposal(with_client_data: nil)
+    create(
+      :proposal,
+      :with_parallel_approvers,
+      client_slug: "ncr",
+      client_data: with_client_data
+    )
   end
 end
