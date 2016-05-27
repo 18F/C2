@@ -18,7 +18,6 @@ SummaryBar = (function() {
     delete content['id'];
     $.each(content, function(key, value){
       var field = '#' + key + '-' + id;
-      console.log(field);
       if( !(value === null) ) {
         self.updateTextFields(field + " .display-value", value);
       }

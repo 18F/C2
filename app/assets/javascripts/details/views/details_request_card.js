@@ -27,7 +27,6 @@ DetailsRequestCard = (function(){
     switch (mode){
       case 'view':
         this.data.gridLayout = "two-column";
-        this.scrollUp();
         break;
       case 'edit':
         this.data.gridLayout = "one-column";
@@ -100,13 +99,6 @@ DetailsRequestCard = (function(){
       this.el.removeClass('view-fields');
       this.el.addClass('edit-fields');
     }
-  }
-
-  DetailsRequestCard.prototype.scrollUp = function(){
-    var self = this;
-    $('html, body').animate({
-      scrollTop:  self.el.offset().top - 40
-    });
   }
 
   return DetailsRequestCard;
