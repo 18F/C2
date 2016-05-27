@@ -12,19 +12,24 @@ SummaryBar = (function() {
   };
 
   SummaryBar.prototype.updateViewContent = function(data) {
-    var viewEl = this.el.find('#proposal-title-wrapper .display-content')
+    var viewEl = this.el.find('#proposal-title-wrapper .display-value')
     var content = data['response'];
     var id = content['id'];
     var self = this;
     delete content['id'];
     $.each(content, function(key, value){
       var field = '#' + key + '-' + id;
+      console.log(field);
       if( !(value === null) ) {
         self.updateTextFields(field + " .detail-display .detail-value", value);
       }
     });
     this.el.trigger("form:updated");
   };
+
+  SummaryBar.prototype.updateTextFields = function(field, value){
+    $(field).html(value);
+  }
 
   SummaryBar.prototype._event = function() {
     var titleWrap = this.el.find('.c2n_header');

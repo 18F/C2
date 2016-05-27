@@ -9,13 +9,13 @@ DetailsRequestCard = (function(){
     }
     return this;
   }
-  
+
   DetailsRequestCard.prototype._setup = function(){
     this._events();
   }
 
   DetailsRequestCard.prototype._events = function(){
-    var self = this;    
+    var self = this;
 
     this.el.find('.edit-toggle').on('click', function(e){
       e.preventDefault();
@@ -61,9 +61,9 @@ DetailsRequestCard = (function(){
   DetailsRequestCard.prototype.updateTextFields = function(field, value){
     $(field).html(value);
   }
-  
+
   DetailsRequestCard.prototype.updateCheckbox = function(field, value){
-    $(field)[0].checked = value;
+    $(field).prop('checked', value);
   }
 
   DetailsRequestCard.prototype.updateViewModeContent = function(data){
