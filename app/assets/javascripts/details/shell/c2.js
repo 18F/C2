@@ -67,7 +67,7 @@ C2 = (function() {
     this._setupDetailsForm();
     this._setupEditMode();
     this._setupNotifications();
-    this._setupActivityEvent();
+    this._setupAttachmentEvent();
     this._setupObserverEvent();
     this._setupSaveModal();
   }
@@ -182,22 +182,28 @@ C2 = (function() {
 
   /* Activity */
 
-  C2.prototype._setupActivityEvent = function(){
+  C2.prototype._setupAttachmentEvent = function(){
     var self = this;
     this.attachmentCardController.el.on("attachment-card:updated", function(event, data){
       self.activityCardController.el.trigger('activity-card:update');
-      self.createActivityNotification(data);
+      self.createAttachmentNotification(data);
     });
   }
 
-  C2.prototype.createActivityNotification = function(data){
+  C2.prototype.createAttachmentNotification = function(data){
     var content;
     if (data.actionType === "delete"){
-      content = data.fileName + " was deleted successfully.";
+      content = data.response + " was deleted successfully.";
     } else if (data.actionType === "create"){
-      content = data.fileName + " was uploaded successfully.";
+      content = data.response + " was uploaded successfully.";
     }
-    this.createNotification("Attachment " + data.actionType, content, data.noticeType);
+
+    if (data.actionType === "error"){
+      this.handleSaveError(data);
+    } else{
+      this.createNotification("Attachment ", content, data.noticeType);
+    }
+
   }
 
   /* End Activity */
