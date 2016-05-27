@@ -57,16 +57,11 @@ module EsSpecHelper
   def import(search)
     debug { "  Importing data..." }
     search.import(return: "errors", batch_size: 200) do |resp|
-      # show errors immediately (rather than buffering them)
       errors    = resp["items"].select { |k, _v| k.values.first["error"] }
       completed = resp["items"].size
       debug { "Finished #{completed} items" }
-      STDERR.flush
-      STDOUT.flush
-      if !errors.empty? && ENV["ES_DEBUG"]
-        STDOUT.puts "ERRORS in #{$PROCESS_ID}:"
-        STDOUT.puts errors.pretty_inspect
-      end
+      debug { "ERRORS in #{$PROCESS_ID}: #{errors.pretty_inspect}" } unless errors.empty?
+      [STDOUT, STDERR].each(&:flush)
     end
   end
 

@@ -42,7 +42,9 @@ module Test
   end
 
   def self.setup_models
-    ClientRequest.connection.create_table :test_client_requests do |t|
+    conn = ClientRequest.connection
+    # conn.drop_table :test_client_requests if conn.table_exists? :test_client_requests
+    conn.create_table(:test_client_requests, force: true) do |t|
       t.decimal  :amount
       t.string   :project_title
       t.integer  :approving_official_id
