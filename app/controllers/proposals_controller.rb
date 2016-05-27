@@ -11,6 +11,7 @@ class ProposalsController < ApplicationController
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
 
   def show
+    # TODO: Refactor to possibly use our authorization code.
     fail "User #{@current_user} has no client-slug" if @current_user.client_slug.blank?
     @proposal = proposal.decorate
     unless params[:detail].blank?
