@@ -1,8 +1,9 @@
 var DetailsSave;
 DetailsSave = (function() {
-  
-  function DetailsSave(el) {
+
+  function DetailsSave(el, dataEl) {
     this.el = $(el);
+    this.dataEl = $(dataEl);
     this._blastOff();
   }
 
@@ -43,7 +44,7 @@ DetailsSave = (function() {
         "Content-Type": 'application/x-www-form-urlencoded; charset=UTF-8'
       },
       type: 'POST',
-      data: self.el.find('form').serialize()
+      data: self.dataEl.find('form').serialize()
     });
   }
 
