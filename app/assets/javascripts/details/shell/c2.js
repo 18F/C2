@@ -72,6 +72,7 @@ C2 = (function() {
     this._setupAttachmentEvent();
     this._setupObserverEvent();
     this._setupSaveModal();
+    this._setupAttachmentModel();
   }
 
 
@@ -260,6 +261,14 @@ C2 = (function() {
     });
     this.modals.el.on("modal:cancel", function(){
       self.actionBar.stopLadda();
+    });
+  }
+
+  C2.prototype._setupAttachmentModel = function(){
+    var self = this;
+    this.modals.el.on("attachment_confirm-modal:confirm", function(event, item, sourceEl){
+      $(sourceEl).parent().submit();
+      self._closeModal();
     });
   }
 

@@ -8,7 +8,8 @@ ModalController = (function(){
       id: 1,
       modal: {
         cancel: ".cancel-modal-content",
-        save_confirm: ".save_confirm-modal-content"
+        save_confirm: ".save_confirm-modal-content",
+        attachment_confirm: ".attachment-modal-content"
       }
     }
     this._setup(el, opts);
@@ -22,10 +23,10 @@ ModalController = (function(){
 
   ModalController.prototype._initTriggers = function(){
     var self = this;
-    $('[data-modal-type]').on('click', function(e){
-      var el = this;
+    $('html').on('click','[data-modal-type]',function(e){
+      self.sourceEl = this;
       e.preventDefault();
-      var modalType = $(el).attr('data-modal-type');
+      var modalType = $(self.sourceEl).attr('data-modal-type');
       self.create(modalType);
     });
     this.el.on("modal:close", function(){
@@ -45,7 +46,7 @@ ModalController = (function(){
       var event = $(item).attr('data-modal-event');
       $(item).on('click', function(){
         var eventName = modalType + '-modal:' + event;
-        self.el.trigger(eventName, item);
+        self.el.trigger(eventName, [item, self.sourceEl]);
       });
     });
   }

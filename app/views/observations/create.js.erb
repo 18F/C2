@@ -1,4 +1,11 @@
-c2.observerCardController.update('<%=j render partial: 'proposals/details/observer', locals: {proposal: @proposal} %>', 
-  { content: '<%=j @js_notification[:content] %>',
-    actionType: 'added',
-    noticeType: '<%=j @js_notification[:noticeType] %>' });
+<% unless @js_notification.errors.any? %>
+  c2.observerCardController.update('<%=j render partial: 'proposals/details/observer', locals: {proposal: @proposal} %>', 
+    { response: '<%=j @js_notification[:content] %>',
+      actionType: 'added',
+      noticeType: '<%=j @js_notification[:noticeType] %>' });
+<% else %>
+  c2.observerCardController.update('<%=j render partial: 'proposals/details/observer', locals: {proposal: @proposal} %>', 
+    { response: '<%=j @js_notification[:content] %>',
+      actionType: 'error',
+      noticeType: 'alert' });
+<% end %>
