@@ -1,18 +1,19 @@
-require "zonebie/rspec"
 require "codeclimate-test-reporter"
 
-
-SimpleCov.formatters = [
-  SimpleCov::Formatter::HTMLFormatter,
-  CodeClimate::TestReporter::Formatter
-]
-SimpleCov.start "rails" do
-  if ENV["CIRCLE_ARTIFACTS"]
-    dir = File.join(ENV["CIRCLE_ARTIFACTS"], "coverage")
-    coverage_dir(dir)
+# Only run SimpleCov on Circle CI because it slows down the developer
+# experience when run locally.
+if ENV["CIRCLE_ARTIFACTS"]
+  SimpleCov.formatters = [
+    SimpleCov::Formatter::HTMLFormatter,
+    CodeClimate::TestReporter::Formatter
+  ]
+  SimpleCov.start "rails" do
+    if ENV["CIRCLE_ARTIFACTS"]
+      dir = File.join(ENV["CIRCLE_ARTIFACTS"], "coverage")
+      coverage_dir(dir)
+    end
   end
 end
-
 
 require "webmock/rspec"
 # localhost needed for omniauth
