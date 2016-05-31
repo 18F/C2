@@ -1,12 +1,22 @@
 .column{ id: key + '-wrapper'}
-  .detail-wrapper.row{ class: key + "-wrapper", id: value_id }
+  .detail-wrapper.row{ class: "cost_per_unit" + "-wrapper" }
     .detail-display.column
-      %label.detail-element
-        = t(t_slug + key)
-      %span.detail-value
-        = client_data[key]
+      .row
+        .medium-3.column
+          %label.detail-element
+            = t(t_slug + "total")
+        .medium-9.column
+          %span.detail-value{class: "quantity", id: "quantity" + '-' + client_id }
+            = client_data[:quantity].to_s
+          %span.detail-value{class: "cost_per_unit", id: "cost_per_unit" + '-' + client_id }
+            = client_data[:cost_per_unit].to_s
     .detail-edit.column
       %label.detail-element
-        = t(t_slug + key)
+        = t(t_slug + "cost_per_unit")
       %span.detail-value
-        = f.input :cost_per_unit, as: :currency
+        = f.input :quantity
+
+        = f.input :cost_per_unit,
+          as: :currency,
+          label_html: { class: "sr-only" },
+          input_html: { data: popover_data_attrs("ncr_amount"), value: sprintf("%.2f", @client_data_instance.cost_per_unit) }

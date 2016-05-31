@@ -1,24 +1,30 @@
 = simple_form_for @client_data_instance, html: { multipart: true }, remote: true do |f|
   - i = 0
   - @proposal.new_fields_for_display.each do |field|
+    - key = field[:key]
+    - data = { |
+      f: f, |
+      proposal: @proposal,
+      key: key,
+      t_slug: "decorators." + @current_user.client_slug + "/work_order.",
+      client_slug: @current_user.client_slug,
+      client_data: @client_data_instance,
+      client_id: @client_data_instance.id.to_s,
+      value_id: key + '-' + @client_data_instance.id.to_s }
+
     - if i == 1
       :plain
-        <div class="medium-up-2">
-  
-    .column{ id: field[:key] + '-wrapper'}
-      .detail-wrapper.row
-        .detail-display
-          %label.detail-element
-            = t("decorators." + @current_user.client_slug + "/work_order." + field[:key]) 
-          %span.detail-value{id: field[:key] + '-' + @client_data_instance.id.to_s }
-            = @client_data_instance[field[:key]]
-        .detail-edit
-          %label.detail-element
-            = t("decorators." + @current_user.client_slug + "/work_order." + field[:key]) 
-          %span.detail-value
-            = render partial: field[:partial], locals: { f: f, proposal: @proposal, client_data: @client_data_instance }
-    - i = i + 1
-  :plain
-    </div>
+        <div class="small-up-1 medium-up-2 grid-layout">
 
-  = submit_tag "Submit", hidden: true
+    - if key == 'quantity'
+    - elsif key == 'cost_per_unit'
+      = render partial: @current_user.client_slug + "/fields/" + "cost_per_unit", locals: data
+    - else
+      = render partial: field[:partial], locals: data
+
+    - i = i + 1
+
+:plain
+  </div>
+
+= submit_tag "Submit", hidden: true
