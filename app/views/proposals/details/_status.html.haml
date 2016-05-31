@@ -4,10 +4,10 @@
       .card#steps-card
         .card-head.column
           %h2
-            Approvals
+            Status
         .content-content.column
           - if @client_data_instance && @client_data_instance[:emergency] == true
-            %h3 
+            %h3
               This request was an emergency and received a verbal Notice to Proceed (NTP)
           - else
             - index = 0
