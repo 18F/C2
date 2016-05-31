@@ -9,10 +9,10 @@
       %label.detail-element
         = t(t_slug + key)
       %span.detail-value
-        = f.input :recurring, input_html: { "data-filter-control" => "recurring" }
+        = f.input :recurring, input_html: { "data-filter-control" => "recurring" }, label: false
         %div{ "data-filter-key" => "recurring", "data-filter-value" => 1 }
           = f.input :recurring_interval,
             collection: Gsa18f::Procurement::RECURRENCE,
             include_blank: false,
-            required: true
-          = f.input :recurring_length, step: 1
+            required: true, label: false
+          = f.input :recurring_length, step: 1, label: false

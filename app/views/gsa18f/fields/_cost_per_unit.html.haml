@@ -14,8 +14,8 @@
       %label.detail-element
         = t(t_slug + "cost_per_unit")
       %span.detail-value
-        = f.input :quantity
+        = f.input :quantity, label: false
 
         = f.input :cost_per_unit,
           as: :currency,
-          label_html: { class: "sr-only" }
+          label_html: { class: "sr-only" }, label: false

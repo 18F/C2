@@ -9,4 +9,4 @@
       %label.detail-element
         = t(t_slug + key)
       %span.detail-value
-        = f.input :urgency, collection: Gsa18f::Procurement::URGENCY, label_method: :last, value_method: :first
+        = f.input :urgency, collection: Gsa18f::Procurement::URGENCY, label_method: :last, value_method: :first, label: false
