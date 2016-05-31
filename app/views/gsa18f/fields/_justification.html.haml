@@ -1,1 +1,12 @@
-= f.input :product_name_and_description
+.column{ id: key + '-wrapper'}
+  .detail-wrapper.row{ class: key + "-wrapper", id: value_id }
+    .detail-display.column
+      %label.detail-element
+        = t(t_slug + key)
+      %span.detail-value
+        = client_data[key]
+    .detail-edit.column
+      %label.detail-element
+        = t(t_slug + key)
+      %span.detail-value
+        = f.input :product_name_and_description
