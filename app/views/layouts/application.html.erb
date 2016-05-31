@@ -19,11 +19,7 @@
     <%= render "peek/bar" %>
     <%= render "layouts/c2_header" %>
 
-    <div class="inset flash-container">
-      <% flash_list.each do |key, value| %>
-        <div class="row alert alert-<%= key %> <%= bootstrap_alert_class(key) %>"><%= value %></div>
-      <% end %>
-    </div>
+    <%= render "layouts/notices" %>
 
     <%= content_for?(:content) ? yield(:content) : yield %>
 

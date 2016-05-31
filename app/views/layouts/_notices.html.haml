@@ -1,0 +1,5 @@
+- if cookies[:detail] != "new"
+  .inset.flash-container
+    - flash_list.each do |key, value|
+      .row.alert{ class: "alert-" + key + " " + bootstrap_alert_class(key) }
+        = value
