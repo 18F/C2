@@ -28,12 +28,12 @@ module Gsa18f
         [translated_key("justification"), object.justification],
         [translated_key("date_requested"), object.date_requested],
         [translated_key("quantity"), object.quantity],
-        [translated_key("cost_per_unit"), object.cost_per_unit],
         [translated_key("total_price"), object.total_price],
         [translated_key("office"), object.office],
         [translated_key("urgency"), object.urgency_string],
         [translated_key("link_to_product"), object.link_to_product],
-        [translated_key("additional_info"), object.additional_info]
+        [translated_key("additional_info"), object.additional_info],
+        [translated_key("cost_per_unit"), object.cost_per_unit]
       ] + recurring_fields
     end
 
