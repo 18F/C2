@@ -3,25 +3,54 @@
 You've been pinged by New Relic. Don't panic! Here are the next steps to
 take to work out what's going on, who to tell and how to fix it.
 
-## Jump into Slack
+## Getting started
+
+### Jump into Slack
 
 You're likely not the only person who's seen the alert. Coordination will
 happen on Slack, so get on there first and see what people have ascertained
 already, to avoid duplication of work and stepping on each others' toes.
 
-## Acknowledge the alert
+### Appoint an Incident Commander
+
+This is the person who takes point on managing the alert and the checklist
+tasks around it. This person doesn't do all the work; rather, they coordinate
+the work being done, understand the most about what actions are
+being taken, and are keeping track of all this to make sure the incident is
+resolved fully.
+
+The appointment of an [Incident Commander](https://speakerdeck.com/alicegoldfuss/nrrd-911-ic-me-the-incident-commander-role)
+is standard practice in larger Operations orgs. But we're pretty small, and
+there's not as much coordination to do. Even so, it can save a lot of confusion
+to have one person whose job it is to stay on top of everything.
+
+The newly-appointed IC should announce themselves to the channel, and then take
+care of the remaining "Getting Started" items.
+
+### Acknowledge the alert
 
 The New Relic incident page (or the page on the mobile app) should have a
 big **Acknowledge** button. **Only press it once you're certain that the
 alert is being worked on** (by you or someone else).
 
-## Remember to close the NR incident afterwards
+### Create a Trello card for the discussion and links about the alert
 
-This may seem a little early to mention it, but it's **really important**:
-if the incident isn't closed once it's fixed then new ones won't be created
-by later problems, and new alerts won't go out. This has bitten us before.
+99% of the communication — everything more valuable than "hey, did
+anyone see this?" — goes into our Issue Tracker. Currently, that's Trello.
+Create a Trello card and post the link in Slack for others to see.
 
-## Work out what the problem is
+All of your notes about the problem and its resolution go into this ticket.
+Start by adding the Incident Management Checklist:
+
+ * Click the **Checklist** button
+ * In the **Copy Items From...** drop-down, choose `Incident Management Checklist`
+ (under `!! Incident Checklist Template`, at or near the top of the list)
+
+Then check off the items you've done already.
+
+## Diagnosis
+
+### Work out what the problem is
 
 Some of the [alert conditions](https://alerts.newrelic.com/accounts/921394/policies/34)
 check for the site being down, while others check for it being slow, or for
@@ -52,7 +81,7 @@ Quick guide to the alerts:
     low-traffic app, this can happen if one user is persistently triggering
     exceptions. Take a look at [the error analytics page](https://rpm.newrelic.com/accounts/921394/applications/5480870/filterable_errors#/heatmap?top_facet=transactionUiName&barchart=barchart&_k=t9mzsc).
 
-## Check the state of the production app
+### Check the state of the production app
 
 Firstly, [go look at the front page](https://cap.18f.gov/).
 
@@ -92,10 +121,20 @@ Important data to note from the above:
   * The `urls` from which C2 is accessible
   * For each instance, the `state`, `cpu`, `memory` and `disk`. `state` is the most important, but the other columns can indicate why performance issues are happening if those figures are close to their upper limits.
 
-## If the app is down
+### If the app is down
 
-## Diagnosing exceptions
+### Diagnosing exceptions
 
-## If you need to take the site offline for fixes
+## Resolution
+
+### If you need to take the site offline for fixes
 
 Put the site into **Maintenance Mode**.
+
+## Once the fix is in
+
+### Remember to close the NR incident
+
+Go to the New Relic incident page and manually close it.
+If the incident isn't closed once it's fixed then new ones won't be created
+by later problems, and new alerts won't go out. This has bitten us before.
