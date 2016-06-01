@@ -42,6 +42,9 @@ p.popup-content-desc{
     label{
       color: #42769A;
       font-weight: 500;
+      padding-bottom: 10px;
+      padding-top: 20px;
+      font-weight: bold;
     }
     h3{
       font-weight: bold;
@@ -57,8 +60,9 @@ p.popup-content-desc{
     }
     .cancel-close-button{
       position: absolute;
-      top: 10px;
-      right: 13px;
+      top: 0px;
+      right: 8px;
+      font-size: 30px;
     }
   }
 }
