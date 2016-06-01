@@ -8,8 +8,8 @@ en:
           cancel_button: Cancel
           save_button: Save
         cancel:
-          title: You are about to cancel this request.
-          desc: Cancelling a request permenantly removes it from C2 and notifies all approvers and observers.
+          title: Wait! You're about to cancel your request.
+          desc: Cancelling a request permenantly removes it from C2 and notifies all participants. Do you want to proceed?
           form_reason: Please provide a reason for cancelation.
           cancel_button: NO, TAKE ME BACK
           save_button: YES, CANCEL
