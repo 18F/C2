@@ -14,13 +14,9 @@ class ProposalsController < ApplicationController
     # TODO: Refactor to possibly use our authorization code.
     fail "User #{@current_user} has no client-slug" if @current_user.client_slug.blank?
     @proposal = proposal.decorate
-    unless params[:detail].blank?
-      cookies[:detail] = params[:detail]
-    end
+    cookies[:detail] = params[:detail] unless params[:detail].blank?
     mode = cookies[:detail]
-    if mode == "new"
-      show_next
-    end
+    show_next if mode == "new"
   end
 
   def show_next
