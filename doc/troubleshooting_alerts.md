@@ -85,9 +85,14 @@ Quick guide to the alerts:
 
 Firstly, [go look at the front page](https://cap.18f.gov/).
 
-  * If you see a nicely-formatted error in a white box on a grey background, that's probably coming from Rails. So Rails is running, but it can't render the front page for some reason. Take a look at [the error analytics page](https://rpm.newrelic.com/accounts/921394/applications/5480870/filterable_errors#/heatmap?top_facet=transactionUiName&barchart=barchart&_k=t9mzsc) and/or [the logs](https://logs.cloud.gov/).
+  * If you see a nicely-formatted error in a white box on a grey background,
+  that's probably coming from Rails. So Rails is running, but it can't render
+  the front page for some reason. Take a look at [the error analytics page](https://rpm.newrelic.com/accounts/921394/applications/5480870/filterable_errors#/heatmap?top_facet=transactionUiName&barchart=barchart&_k=t9mzsc) and/or [the logs](https://logs.cloud.gov/).
 
-  * If you see a plain-text error, such as `404 Not Found: Requested route ('cap.18f.gov') does not exist.` then Cloud Foundry can't find the app. This may mean that the app isn't running, or (less likely) that the routing has changed.
+  * If you see a plain-text error, such as `404 Not Found: Requested route
+  ('cap.18f.gov') does not exist.` then Cloud Foundry can't find the app. This
+  may mean that the app isn't running, or (less likely) that the routing has
+  changed.
 
 Then, check the state of the app in Cloud.gov:
 
@@ -119,7 +124,9 @@ Important data to note from the above:
 
   * The `usage` (2 instances with 1GB of RAM each)
   * The `urls` from which C2 is accessible
-  * For each instance, the `state`, `cpu`, `memory` and `disk`. `state` is the most important, but the other columns can indicate why performance issues are happening if those figures are close to their upper limits.
+  * For each instance, the `state`, `cpu`, `memory` and `disk`. `state` is the
+  most important, but the other columns can indicate why performance issues are
+  happening if those figures are close to their upper limits.
 
 ### If the app is down
 
