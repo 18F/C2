@@ -8,6 +8,7 @@ ModalController = (function(){
       id: 1,
       modal: {
         cancel: ".cancel-modal-content",
+        after_cancel: ".after-cancel-modal-content",
         save_confirm: ".save_confirm-modal-content",
         attachment_confirm: ".attachment-modal-content", 
         observer_confirm: ".observer-modal-content"
@@ -26,7 +27,10 @@ ModalController = (function(){
     var self = this;
     $('html').on('click','[data-modal-type]',function(e){
       self.sourceEl = this;
-      e.preventDefault();
+      var preventDefault = $(self.sourceEl).attr('data-modal-default') !== "true";
+      if(preventDefault){
+        e.preventDefault();
+      }
       var modalType = $(self.sourceEl).attr('data-modal-type');
       self.create(modalType);
     });
