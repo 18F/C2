@@ -39,7 +39,7 @@ class ProposalsController < ApplicationController
 
   def revert_design
     cookies[:detail] = nil
-    redirect_to :back
+    redirect_to proposal_path(proposal)
   end
 
   def cancel_form
