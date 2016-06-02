@@ -46,6 +46,9 @@
       margin-left: 0px;
     }
   }
+  .gsa18f_procurement_date_requested input{
+    width: 100%;
+  }
   .sub-card-right{
     clear: right !important;
     .detail-wrapper{
@@ -63,9 +66,12 @@
   .half-col-wrap{
     width: 50%;
     float: left;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
     padding-top: 5px;
     clear: none !important;
+  }
+  .recurring_length-wrapper.recurring_length-wrapper{
+    margin-bottom: 30px;
   }
 }
 

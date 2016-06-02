@@ -4,7 +4,7 @@
       %label.detail-element
         = t(t_slug + key)
       %span.detail-value
-        = client_data[key]
+        = Gsa18f::Procurement::URGENCY[client_data[key].to_i]
     .detail-edit.column
       %label.detail-element
         = t(t_slug + key)
