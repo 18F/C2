@@ -1,3 +1,7 @@
+.detail-edit .gsa18f_procurement_recurring_length .help-block{
+  position: absolute;
+}
+
 .card#request-details-card{
   .detail-edit{
     display: none;
@@ -36,14 +40,14 @@
 }
 
 .edit-mode{
-  .rwa_number-wrapper{
+  .rwa_number-wrapper, .recurring_interval-wrapper{
     clear: none !important;
     .detail-wrapper{
       border-radius: 10px 0px 0px 10px;
       margin-left: 0px;
     }
   }
-  .work_order_code-wrapper{
+  .work_order_code-wrapper, .recurring_length-wrapper{
     clear: right !important;
     .detail-wrapper{
       border-radius: 0px 10px 10px 0px;
@@ -51,7 +55,9 @@
     }
   }
   .rwa_number-wrapper,
-  .work_order_code-wrapper{
+  .work_order_code-wrapper,
+  .recurring_interval-wrapper,
+  .recurring_length-wrapper{
     .detail-wrapper.detail-wrapper{
       padding-top: 10px;
       margin-bottom: 0px;
