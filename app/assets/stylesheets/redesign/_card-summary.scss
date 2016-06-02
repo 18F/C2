@@ -44,7 +44,11 @@
     .form-group{
       margin-bottom: 0px;
     }
-    .detail-edit input[type=text]{
+    .detail-edit textarea{
+      height: 39px;
+    }
+    .detail-edit input[type=text],
+    .detail-edit textarea{
       padding: 0px 7px;
       background: #305F7E;
       border: none;
