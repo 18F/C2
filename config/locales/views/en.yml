@@ -13,6 +13,8 @@ en:
           form_reason: Please provide a reason for cancelation.
           cancel_button: NO, TAKE ME BACK
           save_button: YES, CANCEL
+        after_cancel:
+          title: You've canceled your request
         attachment:
           title: Remove this attachment?
           desc: Click Cancel to keep this attachment on the list, or Save to confirm the removal.

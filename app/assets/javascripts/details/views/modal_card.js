@@ -27,7 +27,10 @@ ModalController = (function(){
     var self = this;
     $('html').on('click','[data-modal-type]',function(e){
       self.sourceEl = this;
-      e.preventDefault();
+      var preventDefault = $(self.sourceEl).attr('data-modal-default') !== "true";
+      if(preventDefault){
+        e.preventDefault();
+      }
       var modalType = $(self.sourceEl).attr('data-modal-type');
       self.create(modalType);
     });
