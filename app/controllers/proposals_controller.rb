@@ -11,17 +11,16 @@ class ProposalsController < ApplicationController
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
 
   def show
+    # TODO: Refactor to possibly use our authorization code.
+    fail "User #{@current_user} has no client-slug" if @current_user.client_slug.blank?
     @proposal = proposal.decorate
-    unless params[:detail].blank?
-      cookies[:detail] = params[:detail]
-    end
+    cookies[:detail] = params[:detail] unless params[:detail].blank?
     mode = cookies[:detail]
-    if mode == "new"
-      show_next
-    end
+    show_next if mode == "new"
   end
 
   def show_next
+    fail "client_data is nil in #{proposal}" if proposal.client_data.nil?
     @client_data_instance ||= proposal.client_data
     @subscriber_list = SubscriberList.new(@proposal).triples
     @events = HistoryList.new(proposal).events
