@@ -48,13 +48,7 @@ class ProposalsController < ApplicationController
 
   def cancel
     if params[:reason_input].present?
-      cancel_proposal_and_send_cancelation_emails
-      flash[:success] = "Your request has been canceled"
-      if new_mode
-        redirect_to proposals_path
-      else
-        redirect_to proposal_path(proposal)
-      end
+      cancel_proposal
     else
       redirect_to(
         cancel_form_proposal_path(params[:id]),
@@ -215,5 +209,12 @@ class ProposalsController < ApplicationController
       cookies[:detail] = params[:detail]
     end
     cookies[:detail] == "new"
+  end
+
+  def cancel_proposal
+    cancel_proposal_and_send_cancelation_emails
+    flash[:success] = "Your request has been canceled"
+    redirect_path = new_mode ? proposals_path : proposal_path(proposal)
+    redirect_to redirect_path
   end
 end
