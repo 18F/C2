@@ -4,9 +4,9 @@
       %label.detail-element
         = t(t_slug + key)
       %span.detail-value
-        = client_data[key].strftime("%b %d, %Y")
+        = client_data[key]
     .detail-edit.column
       %label.detail-element
         = t(t_slug + key)
       %span.detail-value
-        = f.input :date_requested, as: :date, html5: true, label: false
+        = f.input :quantity, label: false

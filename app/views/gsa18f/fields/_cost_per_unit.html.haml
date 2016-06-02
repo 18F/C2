@@ -1,21 +1,14 @@
 .column{ id: key + '-wrapper'}
-  .detail-wrapper.row{ class: "cost_per_unit" + "-wrapper" }
+  .detail-wrapper.row{ class: key + "-wrapper", id: value_id }
     .detail-display.column
-      .row
-        .medium-3.column
-          %label.detail-element
-            = t(t_slug + "total")
-        .medium-9.column
-          %span.detail-value{class: "quantity", id: "quantity" + '-' + client_id }
-            = client_data[:quantity].to_s
-          %span.detail-value{class: "cost_per_unit", id: "cost_per_unit" + '-' + client_id }
-            = client_data[:cost_per_unit].to_s
+      %label.detail-element
+        = t(t_slug + key)
+      %span.detail-value
+        = client_data[key]
     .detail-edit.column
       %label.detail-element
-        = t(t_slug + "cost_per_unit")
+        = t(t_slug + key)
       %span.detail-value
-        = f.input :quantity, label: false
-
         = f.input :cost_per_unit,
           as: :currency,
           label_html: { class: "sr-only" }, label: false
