@@ -38,7 +38,7 @@ module Gsa18f
     end
 
     def new_display
-      %w(purchase_type date_requested quantity urgency cost_per_unit office link_to_product justification additional_info recurring recurring_interval recurring_length) end
+      %w(purchase_type date_requested quantity cost_per_unit urgency link_to_product office justification additional_info recurring recurring_interval recurring_length) end
     def top_email_field
     end
 
