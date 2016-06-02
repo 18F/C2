@@ -12,11 +12,8 @@ class ProposalsController < ApplicationController
 
   def show
     @proposal = proposal.decorate
-    unless params[:detail].blank?
-      cookies[:detail] = params[:detail]
-    end
-    mode = cookies[:detail]
-    if mode == "new"
+
+    if new_mode
       show_next
     end
   end
@@ -51,9 +48,7 @@ class ProposalsController < ApplicationController
 
   def cancel
     if params[:reason_input].present?
-      cancel_proposal_and_send_cancelation_emails
-      flash[:success] = "Your request has been canceled"
-      redirect_to proposal_path(proposal)
+      cancel_proposal
     else
       redirect_to(
         cancel_form_proposal_path(params[:id]),
@@ -207,5 +202,19 @@ class ProposalsController < ApplicationController
     step.update_attributes!(completer: current_user)
     step.complete!
     flash[:success] = "You have approved #{proposal.public_id}."
+  end
+
+  def new_mode
+    unless params[:detail].blank?
+      cookies[:detail] = params[:detail]
+    end
+    cookies[:detail] == "new"
+  end
+
+  def cancel_proposal
+    cancel_proposal_and_send_cancelation_emails
+    flash[:success] = "Your request has been canceled"
+    redirect_path = new_mode ? proposals_path : proposal_path(proposal)
+    redirect_to redirect_path
   end
 end
