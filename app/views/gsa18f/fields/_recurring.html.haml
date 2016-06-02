@@ -5,9 +5,9 @@
         = t(t_slug + key)
       %span.detail-value
         - if client_data[key]
-          = f.input key, disabled: true, label: false
+          %input{type: "checkbox", checked: true, disabled: true, label: false}
         - else
-          %input{type: "checkbox", disabled: true, label: false}
+          %input{type: "checkbox", checked: false, disabled: true, label: false}
     .detail-edit.column
       %label.detail-element
         = t(t_slug + key)
