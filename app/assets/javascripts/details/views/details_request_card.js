@@ -72,7 +72,7 @@ DetailsRequestCard = (function(){
     var self = this;
     $.each(content, function(key, value){
       var field = '#' + key + '-' + id;
-      if(key === "direct_pay"){
+      if(key === "direct_pay" || key === "recurring"){
         self.updateCheckbox(field + ' input[type="checkbox"]', value);
       } else if(key === "not_to_exceed") {
         if (value === true){
