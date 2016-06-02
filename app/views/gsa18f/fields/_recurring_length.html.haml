@@ -5,9 +5,9 @@
         = t(t_slug + key)
       %span.detail-value
         = client_data[key]
-    .detail-edit.column
+    .detail-edit.column{ "data-filter-key" => "recurring", "data-filter-value" => 1 }
       %label.detail-element
         = t(t_slug + key)
       %span.detail-value
-        %div{ "data-filter-key" => "recurring", "data-filter-value" => 1 }
+        %div
           = f.input :recurring_length, step: 1, label: false
