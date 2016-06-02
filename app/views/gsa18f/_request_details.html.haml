@@ -12,15 +12,11 @@
       client_id: @client_data_instance.id.to_s,
       value_id: key + '-' + @client_data_instance.id.to_s }
 
-    - if i == 1
+    - if i == 0
       :plain
         <div class="small-up-1 medium-up-2 grid-layout">
-
-    - if key == 'quantity'
-    - elsif key == 'cost_per_unit'
-      = render partial: @current_user.client_slug + "/fields/" + "cost_per_unit", locals: data
-    - else
-      = render partial: field[:partial], locals: data
+    
+    = render partial: field[:partial], locals: data
 
     - i = i + 1
 
