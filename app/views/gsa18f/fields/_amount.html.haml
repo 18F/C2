@@ -1,4 +1,5 @@
 - cost = @client_data_instance[:cost_per_unit] * @client_data_instance[:quantity]
+- t_slug = "decorators." + @current_user.client_slug + "/procurement."
 .column
   .detail-wrapper.row
 .column{ id: 'amount-wrapper'}
@@ -7,7 +8,7 @@
       .row
         .medium-3.column
           %label.detail-element
-            Total
+            = t(t_slug + "amount") 
         .medium-9.column
           %span.detail-value{class: "amount", id: "amount" + '-' + @client_data_instance.id.to_s }
             = number_with_precision(cost, precision: 2)
