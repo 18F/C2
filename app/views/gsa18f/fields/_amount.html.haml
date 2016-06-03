@@ -1,0 +1,13 @@
+- cost = @client_data_instance[:cost_per_unit] * @client_data_instance[:quantity]
+.column
+  .detail-wrapper.row
+.column{ id: 'amount-wrapper'}
+  .detail-wrapper.row{ class: "amount-wrapper" }
+    .detail-display.column
+      .row
+        .medium-3.column
+          %label.detail-element
+            Total
+        .medium-9.column
+          %span.detail-value{class: "amount", id: "amount" + '-' + @client_data_instance.id.to_s }
+            = number_with_precision(cost, precision: 2)
