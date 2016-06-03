@@ -17,15 +17,16 @@ SummaryBar = (function() {
     var self = this;
     $.each(content, function(key, value){
       var field = '#' + key + '-' + id;
+      var fieldSelector = field + " .detail-edit .detail-value";
       if( !(value === null) ) {
-        self.updateTextFields(field + " .detail-edit .detail-value", value);
+        self.updateTextFields(fieldSelector, value);
       }
     });
     this.el.trigger("form:updated");
   };
 
   SummaryBar.prototype.updateTextFields = function(field, value){
-    this.el.find(field).html(value);
+    this.el.trigger('update:textfield', { field: field, value: value });
   }
 
   SummaryBar.prototype._event = function() {
