@@ -111,16 +111,19 @@ C2 = (function() {
     });
   }
 
+  C2.prototype._setupViewUpdateEvents = function(item, jevent){
+    var self = this;
+    $(item).on(jevent, function(event, data){
+      self.updateView.el.trigger(jevent, data);
+    });
+  }
+
   C2.prototype._setupViewUpdate = function(){
     var self = this;
-    this.summaryBar.el.on('update:textfield', function(event, data){
-      self.updateView.el.trigger('update:textfield', data);
-    });
-    this.detailsRequestCard.el.on('update:textfield', function(event, data){
-      self.updateView.el.trigger('update:textfield', data);
-    });
-    this.detailsRequestCard.el.on('update:checkbox', function(event, data){
-      self.updateView.el.trigger('update:checkbox', data);
+    $.each([ self.summaryBar.el.selector, self.detailsRequestCard.el.selector ], function(i, item){
+      $.each([ "update:textfield", "update:checkbox" ], function(j, jevent){
+        self._setupViewUpdateEvents(item, jevent);
+      });
     });
   }
 
