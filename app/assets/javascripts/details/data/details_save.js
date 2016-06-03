@@ -13,13 +13,11 @@ DetailsSave = (function() {
 
   DetailsSave.prototype._events = function(){
     var self = this;
-    var saveForm = self.saveDetailsForm;
-    var getResponse = self.receiveResponse;
     this.el.on( "details-form:save", function( event, data ) {
-      saveForm(data);
+      self.saveDetailsForm(data);
     });
     this.el.on( "details-form:respond", function( event, data ) {
-      getResponse(data);
+      self.receiveResponse(data);
     });
   }
 
