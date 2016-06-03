@@ -1,5 +1,5 @@
 .column{ class: key + "-wrapper half-col-wrap sub-card sub-card-left", id: key + '-wrapper', "data-filter-key" => "recurring", "data-filter-value" => 1 }
-  .detail-wrapper.row{ id: value_id }
+  .detail-wrapper.row{ id: value_id, "data-" + key => Gsa18f::Procurement::RECURRENCE }
     .detail-display.column
       %label.detail-element
         = t(t_slug + key)

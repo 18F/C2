@@ -16,7 +16,7 @@ SummaryBar = (function() {
     var id = content['id'];
     var self = this;
     $.each(content, function(key, value){
-      var field = '#' + key + '-' + id;
+      var field = self.el.selector + ' #' + key + '-' + id;
       var fieldSelector = field + " .detail-edit .detail-value";
       if( !(value === null) ) {
         self.updateTextFields(fieldSelector, value);

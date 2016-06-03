@@ -66,7 +66,7 @@ DetailsRequestCard = (function(){
     var id = content['id'];
     var self = this;
     $.each(content, function(key, value){
-      var field = '#' + key + '-' + id;
+      var field = self.el.selector + ' #' + key + '-' + id;
       var fieldTarget = field + " .detail-display .detail-value";
       if(key === "not_to_exceed") {
         if (value === true){
