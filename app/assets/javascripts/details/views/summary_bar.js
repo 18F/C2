@@ -18,14 +18,14 @@ SummaryBar = (function() {
     $.each(content, function(key, value){
       var field = '#' + key + '-' + id;
       if( !(value === null) ) {
-        self.updateTextFields(field + " .detail-value", value);
+        self.updateTextFields(field + " .detail-edit .detail-value", value);
       }
     });
     this.el.trigger("form:updated");
   };
 
   SummaryBar.prototype.updateTextFields = function(field, value){
-    $(field).html(value);
+    this.el.find(field).html(value);
   }
 
   SummaryBar.prototype._event = function() {
