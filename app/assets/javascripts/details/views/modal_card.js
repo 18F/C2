@@ -112,6 +112,11 @@ ModalController = (function(){
     this._modalEvents(modal, modalType);
     this._animate();
     $('#modal-wrapper').addClass('visible');
+    this._focus();
+  }
+
+  ModalController.prototype._focus = function(){
+    $('#modal-wrapper .popup-content').focus();
   }
 
   return ModalController
