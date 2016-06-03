@@ -15,6 +15,7 @@ C2 = (function() {
       notifications:  '#action-bar-status',
       observerCard:   '#card-for-observers',
       modalCard:      '#modal-wrapper',
+      viewContainer:  '#mode-parent',
       summaryBar:     '#summary-card'
     }
     this._overrideTestConfig(config);
@@ -39,9 +40,9 @@ C2 = (function() {
   }
 
   C2.prototype._setupData = function(){
-    var detailsConfig = this.config.detailsSave;
-    var detailsDataConfig = this.config.detailsSaveAll;
-    this.detailsSave = new DetailsSave(detailsConfig, detailsDataConfig);
+    var config = this.config;
+    this.detailsSave = new DetailsSave(config.detailsSave, config.detailsSaveAll);
+    this.updateView = new UpdateView(config.viewContainer);
   }
 
   C2.prototype._setupStates = function(){
@@ -73,8 +74,21 @@ C2 = (function() {
     this._setupObserverEvent();
     this._setupSaveModal();
     this._setupFormSubmitModal();
+    this._setupViewUpdate();
   }
 
+  C2.prototype._setupViewUpdate = function(){
+    var self = this;
+    this.summaryBar.el.on('update:textfield', function(event, data){
+      self.updateView.trigger('update:textfield', data);
+    });
+    this.detailsRequestCard.el.on('update:textfield', function(event, data){
+      self.updateView.trigger('update:textfield', data);
+    });
+    this.detailsRequestCard.el.on('update:checkbox', function(event, data){
+      self.updateView.trigger('update:checkbox', data);
+    });
+  }
 
   /* Form */
 
