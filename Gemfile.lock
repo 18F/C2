@@ -601,7 +601,7 @@ DEPENDENCIES
   rack-cors
   rack_session_access
   railroady
-  rails
+  rails (= 4.2.5.2)
   rails_12factor
   redcarpet
   remotipart
