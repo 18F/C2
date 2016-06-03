@@ -73,21 +73,19 @@ DetailsRequestCard = (function(){
     $.each(content, function(key, value){
       var field = '#' + key + '-' + id;
       var fieldTarget = field + " .detail-display .detail-value";
-      if(key === "direct_pay" || key === "recurring"){
-        self.updateCheckbox(field + ' input[type="checkbox"]', value);
-      } else if(key === "not_to_exceed") {
+      if(key === "not_to_exceed") {
         if (value === true){
           value = "Not to exceed";
         } else {
           value = "Exact";
         }
-        self.updateTextFields(fieldTarget, value);
-      } else if(key === "amount") {
-        self.updateTextFields(fieldTarget, value);
       } else if(key === "date_requested") {
         value = moment(value).format("MMM Do YYYY")
-        self.updateTextFields(fieldTarget, value);
-      } else if( !(value === null) ) {
+      }
+      
+      if(key === "direct_pay" || key === "recurring"){
+        self.updateCheckbox(field + ' input[type="checkbox"]', value);
+      } else {
         self.updateTextFields(fieldTarget, value);
       }
     });
