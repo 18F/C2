@@ -58,7 +58,7 @@ DetailsRequestCard = (function(){
 
 
   DetailsRequestCard.prototype.updateTextFields = function(field, value){
-    $(field).html(value);
+    this.el.find(field).html(value);
   }
 
   DetailsRequestCard.prototype.updateCheckbox = function(field, value){
@@ -71,7 +71,8 @@ DetailsRequestCard = (function(){
     var id = content['id'];
     var self = this;
     $.each(content, function(key, value){
-      var field = '.detail-display #' + key + '-' + id;
+      var field = '#' + key + '-' + id;
+      var fieldTarget = field + " .detail-display .detail-value";
       if(key === "direct_pay" || key === "recurring"){
         self.updateCheckbox(field + ' input[type="checkbox"]', value);
       } else if(key === "not_to_exceed") {
@@ -80,11 +81,14 @@ DetailsRequestCard = (function(){
         } else {
           value = "Exact";
         }
-        self.updateTextFields(field + ".detail-value", value);
+        self.updateTextFields(fieldTarget, value);
       } else if(key === "amount") {
-        self.updateTextFields(field + ".detail-value", value);
+        self.updateTextFields(fieldTarget, value);
+      } else if(key === "date_requested") {
+        value = moment(value).format("MMM Do YYYY")
+        self.updateTextFields(fieldTarget, value);
       } else if( !(value === null) ) {
-        self.updateTextFields(field + " .detail-display .detail-value", value);
+        self.updateTextFields(fieldTarget, value);
       }
     });
     this.el.trigger("form:updated");
