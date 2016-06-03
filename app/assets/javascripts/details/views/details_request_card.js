@@ -56,13 +56,8 @@ DetailsRequestCard = (function(){
     this.el.find('.edit-toggle span').text(text)
   }
 
-
-  DetailsRequestCard.prototype.updateTextFields = function(field, value){
-    this.el.find(field).html(value);
-  }
-
-  DetailsRequestCard.prototype.updateCheckbox = function(field, value){
-    $(field).prop('checked', value);
+  DetailsRequestCard.prototype.updateField = function(field, value, type){
+    this.el.trigger('update:' + type, { field: field, value: value });
   }
 
   DetailsRequestCard.prototype.updateViewModeContent = function(data){
@@ -84,9 +79,9 @@ DetailsRequestCard = (function(){
       }
       
       if(key === "direct_pay" || key === "recurring"){
-        self.updateCheckbox(field + ' input[type="checkbox"]', value);
+        self.updateField(field + ' input[type="checkbox"]', value, "checkbox");
       } else {
-        self.updateTextFields(fieldTarget, value);
+        self.updateField(fieldTarget, value, "textfield");
       }
     });
     this.el.trigger("form:updated");
