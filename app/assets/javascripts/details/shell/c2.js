@@ -15,7 +15,7 @@ C2 = (function() {
       notifications:  '#action-bar-status',
       observerCard:   '#card-for-observers',
       modalCard:      '#modal-wrapper',
-      viewContainer:  '#mode-parent',
+      updateView:     '#mode-parent',
       summaryBar:     '#summary-card'
     }
     this._overrideTestConfig(config);
@@ -42,7 +42,7 @@ C2 = (function() {
   C2.prototype._setupData = function(){
     var config = this.config;
     this.detailsSave = new DetailsSave(config.detailsSave, config.detailsSaveAll);
-    this.updateView = new UpdateView(config.viewContainer);
+    this.updateView = new UpdateView(config.updateView);
   }
 
   C2.prototype._setupStates = function(){

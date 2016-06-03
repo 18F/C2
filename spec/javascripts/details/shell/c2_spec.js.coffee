@@ -3,6 +3,7 @@
 #= require ladda/ladda.min
 #= require ladda/ladda.jquery.min
 #= require jquery.dirrty
+#= require moment
 #= require required_for_submit
 #= require details/state/edit_mode
 #= require details/state/form_change_state
@@ -14,6 +15,7 @@
 #= require details/views/summary_bar
 #= require details/views/modal_card
 #= require details/views/notifications
+#= require details/data/update_view
 #= require details/data/details_save
 #= require details/shell/c2
 #= require details/details_helper
@@ -101,6 +103,14 @@ describe 'C2', ->
       }
       c2 = new C2(testParam)
       expect(c2.config.detailsSave).to.eql(test)
+
+    it "check config passing test param updateView", ->
+      test = "update-view"
+      testParam = {
+        updateView: test
+      }
+      c2 = new C2(testParam)
+      expect(c2.config.updateView).to.eql(test)
 
   describe '#events _actionBarState', ->
     it "editMode is on when state when edit-mode:on", ->
