@@ -21,7 +21,12 @@ UpdateView = (function() {
   }
 
   UpdateView.prototype.updateTextFields = function(data){
-    this.el.find(data['field']).html(data['value']);
+    var value = data['value'];
+    var key = this.el.find(data['field']).attr('data-key');
+    if(key){
+      value = key[value];
+    }
+    this.el.find(data['field']).html(value);
   }
 
 

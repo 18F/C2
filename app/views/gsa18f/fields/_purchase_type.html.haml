@@ -1,5 +1,5 @@
 .column.half-col-wrap{ id: key + '-wrapper'}
-  .detail-wrapper.row{ class: key + "-wrapper", id: value_id, "data-" + key => Gsa18f::Procurement::PURCHASE_TYPES.keys }
+  .detail-wrapper.row{ class: key + "-wrapper", id: value_id, "data-key" => Gsa18f::Procurement::PURCHASE_TYPES.keys }
     .detail-display.column
       %label.detail-element
         = t(t_slug + key)

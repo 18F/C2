@@ -77,22 +77,6 @@ C2 = (function() {
     this._setupViewUpdate();
   }
 
-  C2.prototype._setupViewUpdate = function(){
-    var self = this;
-    this.summaryBar.el.on('update:textfield', function(event, data){
-      console.log(data);
-      self.updateView.el.trigger('update:textfield', data);
-    });
-    this.detailsRequestCard.el.on('update:textfield', function(event, data){
-      console.log(data);
-      self.updateView.el.trigger('update:textfield', data);
-    });
-    this.detailsRequestCard.el.on('update:checkbox', function(event, data){
-      console.log(data);
-      self.updateView.el.trigger('update:checkbox', data);
-    });
-  }
-
   /* Form */
 
   C2.prototype._setupEditMode = function(){
@@ -124,6 +108,22 @@ C2 = (function() {
           self.detailsMode('view');
         }
       }
+    });
+  }
+
+  C2.prototype._setupViewUpdate = function(){
+    var self = this;
+    this.summaryBar.el.on('update:textfield', function(event, data){
+      console.log(data);
+      self.updateView.el.trigger('update:textfield', data);
+    });
+    this.detailsRequestCard.el.on('update:textfield', function(event, data){
+      console.log(data);
+      self.updateView.el.trigger('update:textfield', data);
+    });
+    this.detailsRequestCard.el.on('update:checkbox', function(event, data){
+      console.log(data);
+      self.updateView.el.trigger('update:checkbox', data);
     });
   }
 
