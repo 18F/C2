@@ -22,6 +22,10 @@
   background: #FFFDE8;
 }
 
+.cost_per_unit-wrapper .detail-display .detail-value:before {
+  content: "$";
+}
+
 .detail-element{
   font-size: 13px;
   font-weight: bold;
