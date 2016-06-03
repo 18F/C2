@@ -1,3 +1,7 @@
+.detail-edit .gsa18f_procurement_recurring_length .help-block{
+  position: absolute;
+}
+
 .card#request-details-card{
   .detail-edit{
     display: none;
@@ -18,6 +22,10 @@
   background: #FFFDE8;
 }
 
+.cost_per_unit-wrapper .detail-display .detail-value:before {
+  content: "$";
+}
+
 .detail-element{
   font-size: 13px;
   font-weight: bold;
@@ -36,31 +44,38 @@
 }
 
 .edit-mode{
-  .rwa_number-wrapper{
-    clear: none !important;
+  .sub-card-left{
     .detail-wrapper{
       border-radius: 10px 0px 0px 10px;
       margin-left: 0px;
     }
   }
-  .work_order_code-wrapper{
+  .gsa18f_procurement_date_requested input{
+    width: 100%;
+  }
+  .sub-card-right{
     clear: right !important;
     .detail-wrapper{
       border-radius: 0px 10px 10px 0px;
       margin-right: 0px;
     }
   }
-  .rwa_number-wrapper,
-  .work_order_code-wrapper{
+  .sub-card{
     .detail-wrapper.detail-wrapper{
       padding-top: 10px;
       margin-bottom: 0px;
       background: #DBEAF5;
     }
+  }
+  .half-col-wrap{
     width: 50%;
     float: left;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
     padding-top: 5px;
+    clear: none !important;
+  }
+  .recurring_length-wrapper.recurring_length-wrapper{
+    margin-bottom: 30px;
   }
 }
 

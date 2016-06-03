@@ -28,4 +28,5 @@
 //= require ladda/ladda.jquery.min
 //= require jquery.dirrty
 //= require progressbar
+//= require moment
 //= require_directory .

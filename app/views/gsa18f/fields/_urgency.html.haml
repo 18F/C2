@@ -1,1 +1,12 @@
-= f.input :urgency, collection: Gsa18f::Procurement::URGENCY, label_method: :last, value_method: :first
+.column{ id: key + '-wrapper'}
+  .detail-wrapper.row{ class: key + "-wrapper", id: value_id, "data-key" => Gsa18f::Procurement::URGENCY.to_json }
+    .detail-display.column
+      %label.detail-element
+        = t(t_slug + key)
+      %span.detail-value
+        = Gsa18f::Procurement::URGENCY[client_data[key].to_i]
+    .detail-edit.column
+      %label.detail-element
+        = t(t_slug + key)
+      %span.detail-value
+        = f.input :urgency, collection: Gsa18f::Procurement::URGENCY, label_method: :last, value_method: :first, label: false

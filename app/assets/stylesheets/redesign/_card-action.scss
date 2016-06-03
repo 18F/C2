@@ -44,12 +44,12 @@ ul.request-actions{
   border-top: 0px;
 }
 
-.action-bar-wrapper.user-can-complete .cancel-button, 
+.action-bar-wrapper.user-can-complete .cancel-button,
 .action-bar-wrapper.user-can-complete .save-button,
 .action-bar-wrapper.user-can-complete.edit-actions .action-approve{
     display: none;
 }
-.action-bar-wrapper.user-can-complete.edit-actions .cancel-button, 
+.action-bar-wrapper.user-can-complete.edit-actions .cancel-button,
 .action-bar-wrapper.user-can-complete.edit-actions .save-button {
     display: inline-block;
 }
@@ -103,7 +103,6 @@ $action-bar-wrapper-height-small: 60px;
 }
 
 .action-bar-wrapper{
-  opacity: .9;
   height: $action-bar-wrapper-height-small;
   padding-top: 10px;
 }
@@ -127,7 +126,7 @@ $action-bar-wrapper-height-small: 60px;
   &.edit-actions,
   &.view-actions,
   &.user-can-complete{
-    transform: translateY(0px);  
+    transform: translateY(0px);
   }
 }
 
@@ -160,7 +159,6 @@ $action-bar-wrapper-height-small: 60px;
     color: #494949;
     font-weight: bold;
     font-size: 17px;
-    opacity: .9;
     border-top: 2px solid #4A8C35;
     display: flex;
     flex-direction: column;
@@ -187,7 +185,7 @@ $action-bar-wrapper-height-small: 60px;
 
 .action-bar-wrapper{
   bottom:  0px;
-  background: #fff;
+  background: rgba(255,255,255,.9);
   > div{
     opacity: .7;
   }

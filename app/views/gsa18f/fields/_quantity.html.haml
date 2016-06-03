@@ -1,1 +1,12 @@
-= f.input :cost_per_unit, as: :currency
+.column{ class: key + "-wrapper half-col-wrap", id: key + '-wrapper'}
+  .detail-wrapper.row{ id: value_id }
+    .detail-display.column
+      %label.detail-element
+        = t(t_slug + key)
+      %span.detail-value
+        = client_data[key]
+    .detail-edit.column
+      %label.detail-element
+        = t(t_slug + key)
+      %span.detail-value
+        = f.input :quantity, label: false

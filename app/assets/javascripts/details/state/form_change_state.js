@@ -14,6 +14,7 @@ FormChangeState = (function(){
 
   FormChangeState.prototype.initDirrty = function(){
     this.form = this.el.dirrty();
+    $('[data-is-dirrty]').attr('data-is-dirrty', 'false');
   }
 
   FormChangeState.prototype._events = function(){
