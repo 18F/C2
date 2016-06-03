@@ -14,6 +14,7 @@ FormChangeState = (function(){
 
   FormChangeState.prototype.initDirrty = function(){
     this.form = this.el.dirrty();
+    console.log('re init triggered');
   }
 
   FormChangeState.prototype._events = function(){

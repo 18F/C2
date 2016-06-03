@@ -25,8 +25,6 @@ UpdateView = (function() {
     var selector = data['field'];
     var key = this.el.find(selector).parents('.detail-wrapper').attr('data-key');
     if(key){
-      console.log(selector);
-      console.log(key);
       key = JSON.parse(key);
       value = key[String(value)];
     }

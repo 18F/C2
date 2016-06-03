@@ -114,15 +114,12 @@ C2 = (function() {
   C2.prototype._setupViewUpdate = function(){
     var self = this;
     this.summaryBar.el.on('update:textfield', function(event, data){
-      console.log(data);
       self.updateView.el.trigger('update:textfield', data);
     });
     this.detailsRequestCard.el.on('update:textfield', function(event, data){
-      console.log(data);
       self.updateView.el.trigger('update:textfield', data);
     });
     this.detailsRequestCard.el.on('update:checkbox', function(event, data){
-      console.log(data);
       self.updateView.el.trigger('update:checkbox', data);
     });
   }
