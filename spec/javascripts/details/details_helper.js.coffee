@@ -1,6 +1,7 @@
 @setupC2TestParams = ->
   {
     editMode: getEditModeContent(),
+    updateView: getUpdateViewContent(),
     formState: getRequestDetailsForm(),
     detailsForm: getRequestDetailsForm(),
     detailsSave: getRequestDetailsForm(),
@@ -12,6 +13,11 @@
     summaryBar: getSummaryContent(),
     modalCard: getModalCardContent()
   }
+
+@getUpdateViewContent = ->
+  $('
+    <div id="mode-parent"></div>
+  ')
 
 @getEditModeContent = ->
   $('
