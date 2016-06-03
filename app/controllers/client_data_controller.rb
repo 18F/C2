@@ -67,7 +67,7 @@ class ClientDataController < ApplicationController
     else
       js_response = { status: "error", response: errors }
     end
-    render js: "c2.detailsSave.el.trigger('details-form:respond', " + js_response.to_json + ");"
+    render js: "console.log(" + js_response.to_json + "); c2.detailsSave.el.trigger('details-form:respond', " + js_response.to_json + ");"
   end
 
   def update_behavior(proposal, errors)
