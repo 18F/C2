@@ -75,7 +75,7 @@ DetailsRequestCard = (function(){
           value = "Exact";
         }
       } else if(key === "date_requested") {
-        value = moment(value).format("MMM Do YYYY")
+        value = moment(value).format("MMM Do, YYYY")
       }
       
       if(key === "direct_pay" || key === "recurring"){
