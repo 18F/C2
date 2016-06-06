@@ -139,6 +139,35 @@ describe User do
     end
   end
 
+  describe "#beta_user?" do
+    it "returns false by default" do
+      expect(user).to_not be_a_beta_user
+    end
+
+    it "is true if the user has the beta_user role" do
+      beta_user = create(:user, :beta_user)
+
+      expect(beta_user).to be_a_beta_user
+    end
+  end
+
+  describe "#remove_role" do
+    it "removes specified role" do
+      beta_user = create(:user, :beta_user)
+
+      beta_user.remove_role("beta_user")
+      expect(beta_user).to_not be_a_beta_user
+    end
+
+    it "doesn't remove other roles" do
+      user = create(:user)
+      user.add_role("beta_user")
+      user.add_role("admin")
+      user.remove_role("beta_user")
+
+      expect(user).to be_admin
+    end
+  end
 
   describe '#not_admin?' do
     it 'is true if the user does not have the admin role' do
