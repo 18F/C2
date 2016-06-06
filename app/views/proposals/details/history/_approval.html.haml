@@ -2,4 +2,4 @@
   %span.status-action
     = event.item.decorate.action_status
   %span.time-from
-    = event.created_at.strftime("%-m/%-d/%y")
+    = event.created_at.to_s(:datestamp)

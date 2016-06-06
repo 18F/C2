@@ -8,7 +8,7 @@
       %span.completed-time
         on
       - if @client_data_instance.emergency == true
-        = proposal.updated_at.strftime("%b %-d, %Y at %l:%M%P")
+        = proposal.updated_at.to_s(:pretty_datetime)
       - elsif @client_data_instance.emergency != true
         = proposal.individual_steps.last.completed_at.strftime("%b %-d, %Y at %l:%M%P")
 

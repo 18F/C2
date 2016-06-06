@@ -32,4 +32,4 @@
                       %span.step-user-status.step-data
                         = step.status.capitalize + " "
                         %span.step-timestamp
-                          = step.completed_at.strftime("%-m/%-d/%Y %I:%M%p")
+                          = step.completed_at.to_s(:timestamp)
