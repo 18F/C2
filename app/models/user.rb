@@ -82,6 +82,13 @@ class User < ActiveRecord::Base
     user_roles.find_or_create_by!(role: role)
   end
 
+  def remove_role(role_name)
+    role = Role.find_by(name: role_name)
+    if role
+      user_roles.find_by(role: role).destroy!
+    end
+  end
+
   def full_name
     if first_name.present? && last_name.present?
       "#{first_name} #{last_name}"
@@ -124,6 +131,10 @@ class User < ActiveRecord::Base
 
   def admin?
     roles.exists?(name: "admin")
+  end
+
+  def beta_user?
+    roles.exists?(name: "beta_user")
   end
 
   def any_admin?
