@@ -39,6 +39,7 @@ class ProposalsController < ApplicationController
 
   def revert_design
     cookies[:detail] = nil
+    current_user.remove_role("beta_user")
     redirect_to proposal_path(proposal)
   end
 
@@ -208,7 +209,7 @@ class ProposalsController < ApplicationController
     unless params[:detail].blank?
       cookies[:detail] = params[:detail]
     end
-    cookies[:detail] == "new"
+    cookies[:detail] == "new" || current_user.beta_user?
   end
 
   def cancel_proposal
