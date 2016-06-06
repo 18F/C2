@@ -2,7 +2,7 @@ class AttachmentMailerPreview < ActionMailer::Preview
   include MailerPreviewHelpers
 
   def new_attachment_notification
-    AttachmentMailer.new_attachment_notification(email, proposal, attachment)
+    AttachmentMailer.new_attachment_notification(new_user, proposal, attachment)
   end
 
   private
