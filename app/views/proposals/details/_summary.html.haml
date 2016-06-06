@@ -10,7 +10,7 @@
       - if @client_data_instance.emergency == true
         = proposal.updated_at.to_s(:pretty_datetime)
       - elsif @client_data_instance.emergency != true
-        = proposal.individual_steps.last.completed_at.strftime("%b %-d, %Y at %l:%M%P")
+        = proposal.individual_steps.last.completed_at.to_s(:pretty_datetime)
 
 .row.button-back-wrapper
   .medium-12.column.text-left
@@ -34,7 +34,7 @@
             Requested on:
             %strong
               %span
-                = proposal.created_at.strftime("%b %-d, %Y at %l:%M%P")
+                = proposal.created_at.to_s(:pretty_datetime)
         - if policy(@proposal).can_cancel?
           %div.fr.cancel-action
             = link_to "Cancel this request", cancel_form_proposal_path, class: " secondary large cancel-request-button", data: { "modal-type": "cancel" }
