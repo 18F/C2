@@ -17,6 +17,9 @@
   <body class="bodyclass webapp controller-<%= controller_name %> action-<%= params[:action] %>">
 
     <%= render "peek/bar" %>
+    
+    <%= render partial: "proposals/details/top_notification", locals: { proposal: @proposal } %>
+    
     <%= render "layouts/c2_header" %>
 
     <%= render "layouts/notices" %>
