@@ -92,7 +92,7 @@ describe ProposalsController do
       it 'should add beta_detail on activate' do
         setup_proposal_page
         request.env["HTTP_REFERER"] = "where_i_came_from" unless request.nil? or request.env.nil?
-        get :activate_detail_design
+        get :activate_design_proposal
         expect(user.beta_detail?).to eq(true)
       end
     end
@@ -101,7 +101,7 @@ describe ProposalsController do
       it 'should remove beta_detail on revert' do
         setup_proposal_page
         request.env["HTTP_REFERER"] = "where_i_came_from" unless request.nil? or request.env.nil?
-        get :revert_detail_design
+        get :revert_design_proposal
         expect(user.beta_detail?).to_not eq(true)
       end
     end
