@@ -1,0 +1,13 @@
+.column{ id: key + '-wrapper', class: key + "-wrapper half-col-wrap sub-card sub-card-right", "data-filter-key" => "recurring", "data-filter-value" => 1 }
+  .detail-wrapper.row{ id: value_id }
+    .detail-display.column
+      %label.detail-element
+        = t(t_slug + key)
+      %span.detail-value
+        = property_to_s(client_data[key])
+    .detail-edit.column
+      %label.detail-element
+        = t(t_slug + key)
+      %span.detail-value
+        %div
+          = f.input :recurring_length, step: 1, label: false

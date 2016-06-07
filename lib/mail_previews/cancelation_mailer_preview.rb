@@ -3,10 +3,10 @@ class CancelationMailerPreview < ActionMailer::Preview
 
   def cancelation_notification
     CancelationMailer.cancelation_notification(
+      recipient: new_user,
       canceler: user,
       proposal: canceled_proposal,
-      reason: reason,
-      recipient_email: email
+      reason: reason
     )
   end
 

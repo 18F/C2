@@ -37,9 +37,22 @@ class ProposalsController < ApplicationController
     redirect_to query_proposals_path(text: "status:completed")
   end
 
-  def revert_design
-    cookies[:detail] = nil
-    redirect_to proposal_path(proposal)
+  def revert_detail_design
+    current_user.remove_role("beta_detail")
+    if proposal
+      redirect_to proposal_path(proposal)
+    else
+      redirect_to proposals_path
+    end
+  end
+
+  def activate_detail_design
+    current_user.add_role("beta_detail")
+    if proposal
+      redirect_to proposal_path(proposal)
+    else
+      redirect_to proposals_path
+    end
   end
 
   def cancel_form
@@ -205,10 +218,7 @@ class ProposalsController < ApplicationController
   end
 
   def new_mode
-    unless params[:detail].blank?
-      cookies[:detail] = params[:detail]
-    end
-    cookies[:detail] == "new"
+    current_user.beta_user? && current_user.beta_detail?
   end
 
   def cancel_proposal

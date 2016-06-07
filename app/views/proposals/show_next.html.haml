@@ -1,9 +1,11 @@
+- content_for :top_notification do
+  = render partial: "proposals/details/top_notification", locals: { proposal: @proposal } 
+
 = stylesheet_link_tag "redesign/app"
 
 = render partial: 'layouts/new_javascript'
 
 #mode-parent.view-mode
-  = render partial: "proposals/details/top_notification", locals: { proposal: @proposal }
 
   .row
     .medium-12.column.wrap-hard
