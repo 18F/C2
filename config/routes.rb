@@ -42,6 +42,7 @@ C2::Application.routes.draw do
       get "cancel_form"
       post "cancel"
       get "history"
+      get "activate_design" => "proposals#activate_detail_design"
       get "revert_design" => "proposals#revert_detail_design"
     end
 

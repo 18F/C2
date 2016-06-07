@@ -1,6 +1,6 @@
 - content_for :top_notification do
-  - render partial: "proposals/details/top_notification", locals: { proposal: @proposal } 
-
+  = render partial: "proposals/details/top_notification", locals: { proposal: @proposal } 
+  
 - content_for :title, @proposal.name
 .inset
   .row

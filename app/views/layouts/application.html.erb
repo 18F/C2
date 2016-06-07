@@ -18,7 +18,7 @@
 
     <%= render "peek/bar" %>
     
-    <%= content_for?(:top_notification) ? yield(:top_notification) : yield %>
+    <%= content_for?(:top_notification) ? yield(:top_notification) : "" %>
     
     <%= render "layouts/c2_header" %>
 

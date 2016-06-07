@@ -42,6 +42,12 @@ class ProposalsController < ApplicationController
     redirect_to proposal_path(proposal)
   end
 
+
+  def activate_detail_design
+    current_user.add_role("beta_detail")
+    redirect_to proposal_path(proposal)
+  end
+
   def cancel_form
     @proposal = proposal.decorate
   end
