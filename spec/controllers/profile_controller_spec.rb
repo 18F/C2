@@ -16,7 +16,7 @@ describe ProfileController do
       user = create(:user)
       login_as(user)
       get :beta
-      expect(response).to redirect_to(:root_path)
+      expect(response).to redirect_to(:root)
       user.reload
       expect(user.beta_user?).to eq(true)
     end 

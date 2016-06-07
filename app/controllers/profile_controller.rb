@@ -17,6 +17,6 @@ class ProfileController < ApplicationController
     user = current_user
     user.add_role(:beta_user)
     flash[:success] = "Your account is now enabled for beta access to new features!"
-    redirect_to :root_path
+    redirect_to root_path
   end
 end
