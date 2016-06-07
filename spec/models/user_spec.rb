@@ -157,12 +157,6 @@ describe User do
       expect(user).to_not be_a_beta_detail
     end
 
-    it "is false if the user has the beta_detail role without beta_user" do
-      beta_detail = create(:user, :beta_detail)
-
-      expect(beta_detail).to_not be_a_beta_detail
-    end
-
     it "is true if the user has the beta_detail role with beta_user" do
       beta_detail = create(:user)
       beta_detail.add_role("beta_user")
@@ -178,8 +172,8 @@ describe User do
       beta_detail.add_role("beta_user")
       beta_detail.add_role("beta_detail")
 
-      beta_user.remove_role("beta_detail")
-      expect(beta_user).to be_a_beta_user
+      beta_detail.remove_role("beta_detail")
+      expect(beta_detail).to be_a_beta_user
     end
 
     it "remove beta_detail" do
@@ -187,8 +181,8 @@ describe User do
       beta_detail.add_role("beta_user")
       beta_detail.add_role("beta_detail")
 
-      beta_user.remove_role("beta_detail")
-      expect(beta_user).to_not be_a_beta_detail
+      beta_detail.remove_role("beta_detail")
+      expect(beta_detail).to_not be_a_beta_detail
     end
 
     it "doesn't remove other roles" do
