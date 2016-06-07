@@ -26,6 +26,13 @@ FactoryGirl.define do
       end
     end
 
+    trait :beta_detail do
+      after(:create) do |user|
+        user.roles << Role.find_or_create_by(name: 'beta_user')
+        user.roles << Role.find_or_create_by(name: 'beta_detail')
+      end
+    end
+
     trait :client_admin do
       after(:create) do |user|
         user.roles << Role.find_or_create_by(name: 'client_admin')
