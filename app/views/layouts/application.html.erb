@@ -18,7 +18,7 @@
 
     <%= render "peek/bar" %>
     
-    <%= render partial: "proposals/details/top_notification", locals: { proposal: @proposal } %>
+    <%= content_for?(:top_notification) ? yield(:top_notification) : yield %>
     
     <%= render "layouts/c2_header" %>
 
