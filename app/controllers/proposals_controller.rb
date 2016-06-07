@@ -42,17 +42,16 @@ class ProposalsController < ApplicationController
     if proposal
       redirect_to proposal_path(proposal)
     else
-      redirect_to proposals_path()
+      redirect_to proposals_path
     end
   end
-
 
   def activate_detail_design
     current_user.add_role("beta_detail")
     if proposal
       redirect_to proposal_path(proposal)
     else
-      redirect_to proposals_path()
+      redirect_to proposals_path
     end
   end
 
