@@ -52,19 +52,18 @@ feature "Observers" do
     work_order = create(:ncr_work_order)
     observer = create(:user, client_slug: "ncr")
     proposal = work_order.proposal
+    proposal.add_observer(observer)
     login_as(proposal.requester)
 
     visit "/proposals/#{proposal.id}?detail=new"
-    within('#card-for-observers') do
-      fill_in_selectized("selectize-control", observer.email_address)
-    end
-    click_on "Add an Observer"
-    wait_for_ajax
-    delete_button = find('#card-for-observers .observer-remove-button')
+    delete_button = find('.observer-remove-button')
     delete_button.click
-    within('.observer-list') do
-      expect(page).to_not have_content("#{observer.full_name}")
+
+    within(".observer-modal-content") do
+      click_on "Save"
     end
+    
+    expect(page).to_not have_content("#{observer.full_name}")
     visit "/proposals/#{proposal.id}?detail=old"
   end
 
@@ -72,20 +71,20 @@ feature "Observers" do
     work_order = create(:ncr_work_order)
     observer = create(:user, client_slug: "ncr")
     proposal = work_order.proposal
-    login_as(proposal.requester)
+    proposal.add_observer(observer)
+    login_as(observer)
 
     visit "/proposals/#{proposal.id}?detail=new"
-    within('#card-for-observers') do
-      fill_in_selectized("selectize-control", observer.email_address)
-    end
-    click_on "Add an Observer"
-    wait_for_ajax
-    delete_button = find('#card-for-observers .observer-remove-button')
+    delete_button = find('.observer-remove-button')
     delete_button.click
-    wait_for_ajax
 
-    expect(page).to have_content("Observer removed")
-    
+    within(".observer-modal-content") do
+      click_on "Save"
+    end
+    wait_for_ajax
+    sleep(50)
+    expect(page).to have_content("removed as an observer")
+    page.save_screenshot('./screen.png', full: true)
     visit "/proposals/#{proposal.id}?detail=old"
   end
 
@@ -93,14 +92,18 @@ feature "Observers" do
     work_order = create(:ncr_work_order)
     observer = create(:user, client_slug: "ncr")
     proposal = work_order.proposal
-    login_as(proposal.requester)
+    proposal.add_observer(observer)
+    login_as(observer)
 
     visit "/proposals/#{proposal.id}?detail=new"
-    page.save_screenshot('./screen.png', full: true)
     delete_button = find('.observer-remove-button')
     delete_button.click
-    wait_for_ajax
-    expect(page).to have_content("Removed Observation for")
+
+    within(".observer-modal-content") do
+      click_on "Save"
+    end
+
+    expect(page).to_not have_content("#{observer.full_name}")
     visit "/proposals/#{proposal.id}?detail=old"
   end
 
