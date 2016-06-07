@@ -86,12 +86,14 @@ describe ProposalsController do
         expect(response).to render_template("show_next")
         expect(response).to_not render_template("show")
       end
+    end
 
+    context 'cookie triggered view' do
       it 'should disable cookie on revert' do
         setup_proposal_page
         request.env["HTTP_REFERER"] = "where_i_came_from" unless request.nil? or request.env.nil?
         get :revert_detail_design
-        expect(response.cookies["detail"]).to_not eq("new")
+        expect(user.beta_user?).to_not eq(true)
       end
     end
   end
@@ -384,7 +386,9 @@ describe ProposalsController do
 
   def setup_proposal_page
     login_as(user)
+    user.add_role(:beta_user)
+    user.add_role(:beta_detail)
     proposal = create(:proposal, requester: user)
-    get :show, id: proposal.id, detail: "new"
+    get :show, id: proposal.id
   end
 end
