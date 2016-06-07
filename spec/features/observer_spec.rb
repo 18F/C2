@@ -90,11 +90,13 @@ feature "Observers" do
   end
 
   scenario "allows observers to remove self with javascript", js: true do 
-    observer = create(:user)
-    proposal = create(:proposal, observer: observer)
-    login_as(observer)
+    work_order = create(:ncr_work_order)
+    observer = create(:user, client_slug: "ncr")
+    proposal = work_order.proposal
+    login_as(proposal.requester)
 
     visit "/proposals/#{proposal.id}?detail=new"
+    page.save_screenshot('./screen.png', full: true)
     delete_button = find('.observer-remove-button')
     delete_button.click
     wait_for_ajax
