@@ -88,12 +88,12 @@ describe ProposalsController do
       end
     end
 
-    context 'cookie triggered view' do
-      it 'should disable cookie on revert' do
+    context 'revert detail triggered view' do
+      it 'should remove beta_detail on revert' do
         setup_proposal_page
         request.env["HTTP_REFERER"] = "where_i_came_from" unless request.nil? or request.env.nil?
         get :revert_detail_design
-        expect(user.beta_user?).to_not eq(true)
+        expect(user.beta_detail?).to_not eq(true)
       end
     end
   end
