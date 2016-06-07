@@ -32,7 +32,6 @@ C2::Application.routes.draw do
     end
   end
 
-  get "/proposals/revert_design" => "proposals#revert_detail_design"
   resources :proposals, only: [:index, :show] do
     member do
       get "approve"   # this route has special protection to prevent the confused deputy problem
@@ -43,7 +42,7 @@ C2::Application.routes.draw do
       get "cancel_form"
       post "cancel"
       get "history"
-      get "revert_design" => "proposals#revert_design"
+      get "revert_design" => "proposals#revert_detail_design"
     end
 
     collection do
