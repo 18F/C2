@@ -33,3 +33,6 @@
                         = step.status.capitalize + " "
                         %span.step-timestamp
                           = step.completed_at.strftime("%m/%d/%Y %I:%M%p")
+                    - elsif step.status == "actionable" || step.status == "pending"
+                      %span.step-user-status.step-data
+                        = "Pending"
