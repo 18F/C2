@@ -51,23 +51,22 @@ Notifications = (function(){
     var self = this;
     var el = $("#notification-id-" + id);
     var timeout = el.attr('data-timeout');
-    var param = { 
-      strokeWidth: 3,
-      color: '#40759C',
-      trailColor: '#DAEAf5',
-      trailWidth: 3,
-      svgStyle: null
+    if (timeout != "none"){
+      var progress = new ProgressBar.Circle("#notification-id-" + id + " .close", { 
+        strokeWidth: 3,
+        duration: timeout,
+        color: '#40759C',
+        trailColor: '#DAEAf5',
+        trailWidth: 3,
+        svgStyle: null
+      });
+      progress.animate(1);
+      var timer = window.setTimeout(function(){
+        if(el.attr('data-clicked') !== true){
+          self.clearOne(el);
+        }
+      }, timeout);
     }
-    if (timeout){
-      param['duration'] = timeout;
-    }
-    var progress = new ProgressBar.Circle("#notification-id-" + id + " .close", param);
-    progress.animate(1);
-    var timer = window.setTimeout(function(){
-      if(el.attr('data-clicked') !== true){
-        self.clearOne(el);
-      }
-    }, timeout);
     // this.notificationEvent(id, timer);
   }
 
@@ -87,6 +86,9 @@ Notifications = (function(){
   }
 
   Notifications.prototype._prepare = function(params){
+    if ( params['type'] == "alert" ){
+      params['timeout'] = "none";
+    }
     var id      = this.data.noticeId;
     var type    = (params['type']) ? params['type'] : 'primary';
     var title   = (params['title']) ? params['title'] : '';

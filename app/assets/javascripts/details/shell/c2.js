@@ -176,6 +176,7 @@ C2 = (function() {
     });
 
     this.detailsSave.el.on('details-form:error', function(event, data){
+      data['timeout'] = "none";
       self.handleSaveError(data);
       self.modals.el.trigger("modal:close");
     });
@@ -184,7 +185,7 @@ C2 = (function() {
   C2.prototype.handleSaveError = function(data){
     var response = data['response'];
     for (var i = response.length - 1; i >= 0; i--) {
-      response[i]['timeout'] = 7500;
+      response[i]['timeout'] = data['timeout'] || 7500;
       this.createNotification(response[i], "", "alert");
     }
   }
