@@ -258,6 +258,7 @@ C2 = (function() {
       self.detailsCancelled();
     });
     this.actionBar.el.on("action-bar-clicked:save", function(){
+      self.notification.clearAll();
       // triggers save_confirm-modal
     });
     this.actionBar.el.on("action-bar-clicked:edit", function(){
