@@ -11,43 +11,41 @@ feature "commenting" do
   end
 
   scenario "saves the comment with javascript", js: true do
-    proposal = create_and_visit_proposal
-    visit "/proposals/#{proposal.id}?detail=new" 
+    proposal = create_and_visit_proposal_beta
     comment_text = "this is a great comment"
     js_submit_comment(comment_text, "#add_a_comment")
     wait_for_ajax
     within(".comment-list") do 
       expect(page).to have_content(comment_text)
     end
-    visit "/proposals/#{proposal.id}?detail=old"
   end
 
-  scenario "Send button is disabled after submitting with javascript", js: true do
-    proposal = create_and_visit_proposal
-    visit "/proposals/#{proposal.id}?detail=new" 
+  scenario "Send button is disabled after submitting with javascript  in beta view", js: true do
+    proposal = create_and_visit_proposal_beta 
     comment_text = "this is a great comment"
     js_submit_comment(comment_text, "#add_a_comment")
     wait_for_ajax
     expect(find("#add_a_comment").disabled?).to be(true)
-    visit "/proposals/#{proposal.id}?detail=old"
   end
 
-  scenario "redesign page hides/shows comments after 5 comments", js: true do
-    proposal = create(:proposal, :with_parallel_approvers)
+  scenario "redesign page hides/shows comments after 5 comments in beta view", js: true do
+    work_order = create(:ncr_work_order, :with_beta_requester)
+    proposal = work_order.proposal
     create(:comment, comment_text: "first comment", user: proposal.requester, proposal: proposal)
     5.times do 
       create(:comment, user: proposal.requester, proposal: proposal)
     end
     login_as(proposal.requester)
-    visit "/proposals/#{proposal.id}?detail=new"
+    visit proposal_path(proposal)
+
     expect(page).to_not have_content("first comment")
     click_on("Show all activity")
+
     expect(page).to have_content("first comment")
     wait_for_ajax
     click_on("Minimize")
-    expect(page).to_not have_content("first comment")
 
-    visit "/proposals/#{proposal.id}?detail=old"
+    expect(page).to_not have_content("first comment")
   end
 
   scenario "disables attachments if none is selected", js: true do
@@ -78,6 +76,14 @@ feature "commenting" do
 
   def create_and_visit_proposal
     proposal = create(:proposal, :with_parallel_approvers)
+    login_as(proposal.requester)
+    visit proposal_path(proposal)
+    proposal
+  end
+
+  def create_and_visit_proposal_beta
+    work_order = create(:ncr_work_order, :with_beta_requester)
+    proposal = work_order.proposal
     login_as(proposal.requester)
     visit proposal_path(proposal)
     proposal
