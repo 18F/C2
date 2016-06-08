@@ -51,7 +51,7 @@ Notifications = (function(){
     var self = this;
     var el = $("#notification-id-" + id);
     var timeout = el.attr('data-timeout');
-    if (timeout != "none"){
+    if (timeout !== "none"){
       var progress = new ProgressBar.Circle("#notification-id-" + id + " .close", { 
         strokeWidth: 3,
         duration: timeout,
@@ -86,7 +86,7 @@ Notifications = (function(){
   }
 
   Notifications.prototype._prepare = function(params){
-    if ( params['type'] == "alert" ){
+    if ( params['type'] === "alert" ){
       params['timeout'] = "none";
     }
     var id      = this.data.noticeId;
