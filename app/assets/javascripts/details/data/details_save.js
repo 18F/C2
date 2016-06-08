@@ -28,6 +28,7 @@ DetailsSave = (function() {
         self.el.trigger( "details-form:success", data );
         break;
       case "error":
+        data['timeout'] = false;
         self.el.trigger( "details-form:error", data );
         break;
       default:
