@@ -50,10 +50,11 @@ describe "Add attachments" do
   end
 
   it "saves attachments submitted via the webform with js", :js do
-    proposal = create(:proposal)
+    work_order = create(:ncr_work_order, :with_beta_requester)
+    proposal = work_order.proposal
     login_as(proposal.requester)
 
-    visit "/proposals/#{proposal.id}?detail=new"
+    visit proposal_path(proposal)
     page.execute_script("$('#attachment_file').addClass('show-attachment-file');")
     page.attach_file('attachment[file]', "#{Rails.root}/app/assets/images/bg_completed_status.gif", visible: false)
     wait_for_ajax
@@ -63,7 +64,6 @@ describe "Add attachments" do
     within("#card-for-activity") do
       expect(page).to have_content("bg_completed_status.gif")
     end
-    visit "/proposals/#{proposal.id}?detail=normal"
   end
 
   it "emails everyone involved in the proposal" do
