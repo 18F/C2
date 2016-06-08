@@ -12,13 +12,13 @@ feature "Observers" do
     expect(page).to have_content("#{observer.full_name} has been added as an observer")
   end
 
-  scenario "allows observers to be added with javascript", js: true do 
-    work_order = create(:ncr_work_order)
+  scenario "allows observers to be added with javascript in the new detail view", js: true do 
+    work_order = create(:ncr_work_order, :with_beta_requester)
     observer = create(:user, client_slug: "ncr")
     proposal = work_order.proposal
     login_as(proposal.requester)
 
-    visit "/proposals/#{proposal.id}?detail=new"
+    visit proposal_path(proposal)
     within('#card-for-observers') do
       fill_in_selectized("selectize-control", observer.email_address)
     end
@@ -27,16 +27,15 @@ feature "Observers" do
     within('.observer-list') do
       expect(page).to have_content("#{observer.full_name}")
     end
-    visit "/proposals/#{proposal.id}?detail=old"
   end
 
-  scenario "shows notification when observer is added with javascript", js: true do 
-    work_order = create(:ncr_work_order)
+  scenario "shows notification when observer is added with javascript in the new detail view", js: true do 
+    work_order = create(:ncr_work_order, :with_beta_requester)
     observer = create(:user, client_slug: "ncr")
     proposal = work_order.proposal
     login_as(proposal.requester)
 
-    visit "/proposals/#{proposal.id}?detail=new"
+    visit proposal_path(proposal)
     within('#card-for-observers') do
       fill_in_selectized("selectize-control", observer.email_address)
     end
@@ -44,62 +43,61 @@ feature "Observers" do
     wait_for_ajax
 
     expect(page).to have_content("Observer added")
-
-    visit "/proposals/#{proposal.id}?detail=old"
   end
 
-  scenario "allows observers to be removed with javascript", js: true do 
-    work_order = create(:ncr_work_order)
+  scenario "allows observers to be removed with javascript in the new detail view", js: true do 
+    work_order = create(:ncr_work_order, :with_beta_requester)
     observer = create(:user, client_slug: "ncr")
     proposal = work_order.proposal
+    proposal.add_observer(observer)
     login_as(proposal.requester)
 
-    visit "/proposals/#{proposal.id}?detail=new"
-    within('#card-for-observers') do
-      fill_in_selectized("selectize-control", observer.email_address)
-    end
-    click_on "Add an Observer"
-    wait_for_ajax
-    delete_button = find('#card-for-observers .observer-remove-button')
-    delete_button.click
-    within('.observer-list') do
-      expect(page).to_not have_content("#{observer.full_name}")
-    end
-    visit "/proposals/#{proposal.id}?detail=old"
-  end
-
-  scenario "shows notification when observer is deleted with javascript", js: true do 
-    work_order = create(:ncr_work_order)
-    observer = create(:user, client_slug: "ncr")
-    proposal = work_order.proposal
-    login_as(proposal.requester)
-
-    visit "/proposals/#{proposal.id}?detail=new"
-    within('#card-for-observers') do
-      fill_in_selectized("selectize-control", observer.email_address)
-    end
-    click_on "Add an Observer"
-    wait_for_ajax
-    delete_button = find('#card-for-observers .observer-remove-button')
-    delete_button.click
-    wait_for_ajax
-
-    expect(page).to have_content("Observer removed")
-    
-    visit "/proposals/#{proposal.id}?detail=old"
-  end
-
-  scenario "allows observers to remove self with javascript", js: true do 
-    observer = create(:user)
-    proposal = create(:proposal, observer: observer)
-    login_as(observer)
-
-    visit "/proposals/#{proposal.id}?detail=new"
+    visit proposal_path(proposal)
     delete_button = find('.observer-remove-button')
     delete_button.click
+
+    within(".observer-modal-content") do
+      click_on "Save"
+    end
+    
+    expect(page).to_not have_content("#{observer.full_name}")
+  end
+
+  scenario "shows notification when observer is deleted with javascript in the new detail view", js: true do 
+    work_order = create(:ncr_work_order, :with_beta_requester)
+    observer = create(:user, :beta_detail, client_slug: "ncr")
+    proposal = work_order.proposal
+    proposal.add_observer(observer)
+    login_as(work_order.requester)
+    visit proposal_path(proposal)
+
+    delete_button = find('.observer-remove-button')
+    delete_button.click
+
+    within(".observer-modal-content") do
+      click_on "Save"
+    end
     wait_for_ajax
-    expect(page).to have_content("Removed Observation for")
-    visit "/proposals/#{proposal.id}?detail=old"
+
+    expect(page).to have_content("removed as an observer")
+  end
+
+  scenario "allows observers to remove self with javascript in the new detail view", js: true do 
+    work_order = create(:ncr_work_order)
+    observer = create(:user, :beta_detail, client_slug: "ncr")
+    proposal = work_order.proposal
+    proposal.add_observer(observer)
+    login_as(observer)
+
+    visit proposal_path(proposal)
+    delete_button = find('.observer-remove-button')
+    delete_button.click
+
+    within(".observer-modal-content") do
+      click_on "Save"
+    end
+
+    expect(page).to_not have_content("#{observer.full_name}")
   end
 
   scenario "allows observers to be added by other observers" do
