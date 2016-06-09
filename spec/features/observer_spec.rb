@@ -65,7 +65,7 @@ feature "Observers" do
 
   scenario "shows notification when observer is deleted with javascript in the new detail view", js: true do 
     work_order = create(:ncr_work_order, :with_beta_requester)
-    observer = create(:user, :beta_detail, client_slug: "ncr")
+    observer = create(:user, :beta_active, client_slug: "ncr")
     proposal = work_order.proposal
     proposal.add_observer(observer)
     login_as(work_order.requester)
@@ -84,7 +84,7 @@ feature "Observers" do
 
   scenario "allows observers to remove self with javascript in the new detail view and redirects", js: true do 
     work_order = create(:ncr_work_order)
-    observer = create(:user, :beta_detail, client_slug: "ncr")
+    observer = create(:user, :beta_active, client_slug: "ncr")
     proposal = work_order.proposal
     proposal.add_observer(observer)
     login_as(observer)

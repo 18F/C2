@@ -26,10 +26,10 @@ FactoryGirl.define do
       end
     end
 
-    trait :beta_detail do
+    trait :beta_active do
       after(:create) do |user|
         user.roles << Role.find_or_create_by(name: 'beta_user')
-        user.roles << Role.find_or_create_by(name: 'beta_detail')
+        user.roles << Role.find_or_create_by(name: 'beta_active')
       end
     end
 

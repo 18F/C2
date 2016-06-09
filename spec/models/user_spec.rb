@@ -151,46 +151,46 @@ describe User do
     end
   end
 
-  describe "#beta_detail?" do
+  describe "#beta_active?" do
     it "returns false by default" do
       expect(user).to_not be_a_beta_user
-      expect(user).to_not be_a_beta_detail
+      expect(user).to_not be_a_beta_active
     end
 
-    it "is true if the user has the beta_detail role with beta_user" do
-      beta_detail = create(:user)
-      beta_detail.add_role("beta_user")
-      beta_detail.add_role("beta_detail")
+    it "is true if the user has the beta_active role with beta_user" do
+      beta_active = create(:user)
+      beta_active.add_role("beta_user")
+      beta_active.add_role("beta_active")
 
-      expect(beta_detail).to be_a_beta_detail
+      expect(beta_active).to be_a_beta_active
     end
   end
 
   describe "#revert_detail_design" do
-    it "remove detail but not beta_user" do
-      beta_detail = create(:user)
-      beta_detail.add_role("beta_user")
-      beta_detail.add_role("beta_detail")
+    it "remove active but not beta_user" do
+      beta_active = create(:user)
+      beta_active.add_role("beta_user")
+      beta_active.add_role("beta_active")
 
-      beta_detail.remove_role("beta_detail")
-      expect(beta_detail).to be_a_beta_user
+      beta_active.remove_role("beta_active")
+      expect(beta_active).to be_a_beta_user
     end
 
-    it "remove beta_detail" do
-      beta_detail = create(:user)
-      beta_detail.add_role("beta_user")
-      beta_detail.add_role("beta_detail")
+    it "remove beta_active" do
+      beta_active = create(:user)
+      beta_active.add_role("beta_user")
+      beta_active.add_role("beta_active")
 
-      beta_detail.remove_role("beta_detail")
-      expect(beta_detail).to_not be_a_beta_detail
+      beta_active.remove_role("beta_active")
+      expect(beta_active).to_not be_a_beta_active
     end
 
     it "doesn't remove other roles" do
       user = create(:user)
       user.add_role("beta_user")
-      user.add_role("beta_detail")
+      user.add_role("beta_active")
       user.add_role("admin")
-      user.remove_role("beta_detail")
+      user.remove_role("beta_active")
 
       expect(user).to be_admin
     end

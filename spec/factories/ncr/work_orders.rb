@@ -40,7 +40,7 @@ FactoryGirl.define do
       after(:create) do |work_order|
         requester = work_order.requester
         requester.roles << Role.find_or_create_by(name: 'beta_user')
-        requester.roles << Role.find_or_create_by(name: 'beta_detail')
+        requester.roles << Role.find_or_create_by(name: 'beta_active')
       end
     end
   end

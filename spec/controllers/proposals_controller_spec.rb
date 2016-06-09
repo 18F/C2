@@ -89,20 +89,20 @@ describe ProposalsController do
     end
 
     context 'activate detail triggered view' do
-      it 'should add beta_detail on activate' do
+      it 'should add beta_active on activate' do
         setup_proposal_page
         request.env["HTTP_REFERER"] = "where_i_came_from" unless request.nil? or request.env.nil?
         get :activate_detail_design, id: @proposal.id
-        expect(user.beta_detail?).to eq(true)
+        expect(user.beta_active?).to eq(true)
       end
     end
 
     context 'revert detail triggered view' do
-      it 'should remove beta_detail on revert' do
+      it 'should remove beta_active on revert' do
         setup_proposal_page
         request.env["HTTP_REFERER"] = "where_i_came_from" unless request.nil? or request.env.nil?
         get :revert_detail_design, id: @proposal.id
-        expect(user.beta_detail?).to_not eq(true)
+        expect(user.beta_active?).to_not eq(true)
       end
     end
   end
@@ -396,7 +396,7 @@ describe ProposalsController do
   def setup_proposal_page
     login_as(user)
     user.add_role(:beta_user)
-    user.add_role(:beta_detail)
+    user.add_role(:beta_active)
     @proposal = create(:proposal, requester: user)
     get :show, id: @proposal.id
   end

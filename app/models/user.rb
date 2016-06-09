@@ -137,8 +137,8 @@ class User < ActiveRecord::Base
     roles.exists?(name: "beta_user")
   end
 
-  def beta_detail?
-    roles.exists?(name: "beta_detail")
+  def beta_active?
+    roles.exists?(name: "beta_active")
   end
 
   def any_admin?
