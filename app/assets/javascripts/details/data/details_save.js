@@ -20,10 +20,10 @@ DetailsSave = (function() {
       self.receiveResponse(data);
     });
     this.el.on( "details-form:success", function( event, data ) {
-      
+
     });
     this.el.on( "details-form:error", function( event, data ) {
-      
+
     });
   }
 
@@ -41,9 +41,14 @@ DetailsSave = (function() {
     }
   }
 
+  DetailsSave.prototype._prepareFormData = function(){
+    var formData = this.dataEl.find('form').serialize();
+    return formData;
+  }
+
   DetailsSave.prototype.saveDetailsForm = function(data){
     var self = this;
-    var formData = this.dataEl.find('form').serialize();
+    var formData = this._prepareFormData()
     $.ajax({
       url: this.el.find('form')[0].action,
       headers: {
