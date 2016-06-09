@@ -18,7 +18,7 @@ en:
           cancel_button: NO, TAKE ME BACK
           save_button: YES, CANCEL
         after_cancel:
-          title: You've canceled your request
+          title: You've canceled the request.
         attachment:
           title: Remove this attachment?
           desc: Click Cancel to keep this attachment on the list, or Save to confirm the removal.
