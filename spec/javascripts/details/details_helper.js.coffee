@@ -99,7 +99,7 @@
       <select id="observation_user_id" class="js-selectize">
         <option value="user1@test.com">user1@test.com</option>
       </select>
-      <input class="form-field no-animation" style="display: inline;" data-hide-until-select="observation_user_id" type="text" name="observation[reason]" id="observation_reason"> 
+      <input class="form-field no-animation" style="display: inline;" data-hide-until-select="observation_user_id" type="text" name="observation[reason]" id="observation_reason">
     </div>
     ')
 
@@ -107,7 +107,7 @@
   $('
     <div id="card-for-activity">
       <form class="new_comment" id="new_comment">
-        <textarea rows="5" name="comment[comment_text]" id="comment_comment_text"></textarea>
+        <textarea rows="5" name="comment[comment_text]" id="comment_comment_text" placeholder="Your comment will be sent to all observers associated with this request."></textarea>
         <input type="submit" name="commit" value="Send" id="add_a_comment">
       </form>
     </div>

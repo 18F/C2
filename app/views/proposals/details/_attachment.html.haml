@@ -15,4 +15,4 @@
             = render partial: "proposals/details/attachment_list",
               locals: { proposal: @proposal }
             - if !@proposal.completed? && !@proposal.canceled?
-              <label for="attachment_file" class="button secondary attach-icon fr large attachment-label">Attach File</lable>
+              <label for="attachment_file" class="button primary attach-icon large attachment-label">Attach File</lable>
