@@ -35,5 +35,13 @@ FactoryGirl.define do
     trait :with_observers do
       association :proposal, :with_observers, client_slug: "ncr"
     end
+
+    trait :with_beta_requester do
+      after(:create) do |work_order|
+        requester = work_order.requester
+        requester.roles << Role.find_or_create_by(name: 'beta_user')
+        requester.roles << Role.find_or_create_by(name: 'beta_detail')
+      end
+    end
   end
 end
