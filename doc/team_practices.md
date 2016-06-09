@@ -198,8 +198,10 @@ or bug fixes.
 
 **`Ready to Deploy`**
 
-Once a story has been QA'd and merged into `master`, it should be moved in the
-`Ready to deploy` list.
+Once a story has been QA'd and code reviewed, the code should be merged into master.
+The person code reviewing and/or QA-ing can merge this code into master by commenting `Ship it`
+and clicking on the `Merge pull request` button. Once the pull request is merged, the
+corresponding card should be moved in the `Ready to deploy` list.
 
 Production deployments may happen one to several times a week, so keep master
 in production-ready shape.
