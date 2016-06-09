@@ -19,6 +19,12 @@ DetailsSave = (function() {
     this.el.on( "details-form:respond", function( event, data ) {
       self.receiveResponse(data);
     });
+    this.el.on( "details-form:success", function( event, data ) {
+      
+    });
+    this.el.on( "details-form:error", function( event, data ) {
+      
+    });
   }
 
   DetailsSave.prototype.receiveResponse = function(data){
