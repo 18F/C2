@@ -16,8 +16,7 @@ $c2black-swatch: (
 );
 $c2success-swatch: (
   primary: #9CD984,
-  secondary: #444754,
-  tertiary: #71737A,
+  secondary: #80CD62,
 );
 $c2-warning: #F7DD7D;
 
@@ -49,7 +48,7 @@ $p-font-sizes: (
   font-family: $body-font-family !important;
 }
 .form-button{
-  border-color: $c2-success;
-  background: $c2-success;
+  border-color: map-get($c2success-swatch, primary);
+  background: map-get($c2success-swatch, primary);
   color: #4A4A4A;
 }
