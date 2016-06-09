@@ -165,11 +165,10 @@ $action-bar-wrapper-height-small: 60px;
 .action-bar-status{
   .notification-bar-el{
     min-height: 65px;
-    background: #589D42;
+    background: map-get($c2success-swatch, primary);
     color: #494949;
     font-weight: bold;
     font-size: 17px;
-    border-top: 2px solid #4A8C35;
     display: flex;
     flex-direction: column;
     min-height: 65px;

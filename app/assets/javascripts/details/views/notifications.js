@@ -9,7 +9,7 @@ Notifications = (function(){
     this._setup();
     return this;
   }
-  
+
   Notifications.prototype._setup = function(){
     this._events();
   }
@@ -28,10 +28,10 @@ Notifications = (function(){
       var el = this;
       var $notice = $(el).closest('.notification-bar-el');
       $notice.animate({
-        "min-height": "0px", 
+        "min-height": "0px",
         height: "0px"
-      }, 500, 
-      function(){ 
+      }, 500,
+      function(){
         $notice.remove();
       });
     })
@@ -51,7 +51,7 @@ Notifications = (function(){
     var self = this;
     var el = $("#notification-id-" + id);
     var timeout = el.attr('data-timeout');
-    var progress = new ProgressBar.Circle("#notification-id-" + id + " .close", { 
+    var progress = new ProgressBar.Circle("#notification-id-" + id + " .close", {
       strokeWidth: 3,
       duration: timeout,
       color: '#40759C',
@@ -96,7 +96,7 @@ Notifications = (function(){
                       '<button class="close">&#215;</button>' +
                     '</div>' +
                   '</li>';
-    
+
     return notice
   }
 
@@ -105,10 +105,10 @@ Notifications = (function(){
       opacity: 0
     }, 100);
     el.animate({
-      "min-height": "0px", 
+      "min-height": "0px",
       height: "0px"
-    }, 250, 
-    function(){ 
+    }, 250,
+    function(){
       el.remove();
     });
   }

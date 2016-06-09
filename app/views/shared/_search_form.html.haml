@@ -10,7 +10,7 @@
     %input.form-control{ type: "text",
       name: "#{current_user.client_model_slug}[requester]",
       value: @adv_search.value_for("requester"),
-    }   
+    }
   .form-group
     %label.control-label{for: "#{current_user.client_model_slug}[client_data.vendor]"}
       Vendor Name
@@ -49,9 +49,9 @@
         = options_for_select([["Select duration", ""], "1 year", "6 months", "1 month"], params.fetch(current_user.client_model_slug, {})["created_within"] || "")
     .col-xs-5.right.inline
       %label.inline.control-label{for: "#{current_user.client_model_slug}[created_at]"}
-        of  
+        of
       %input.placeholder.short.form-control{ type: "text",
-        name: "#{current_user.client_model_slug}[created_at]", 
+        name: "#{current_user.client_model_slug}[created_at]",
         value: created_at_time_string(@adv_search.value_for("created_at")),
         placeholder: "now",
         onfocus: 'this.type="date"',
@@ -82,4 +82,3 @@
         = search_results_total(@proposals_data)
       %span
         results
-
