@@ -17,7 +17,7 @@
                 .row.step-row.column.medium-table-row{class: "step-status-" + step.status}
                   .medium-icon-col.text-center.medium-table-cell.step-status-wrapper
                     %span.circle-wrapper{ class: "status-" + step.status }
-                      - if step.status != "completed"
+                      - if !step.completed?
                         = index.to_s
                       - else
                         = "✔"
@@ -28,11 +28,11 @@
                       %span.step-user-name
                         #{User.find(step.user_id).full_name},
                       %span.step-user-role #{step_user_title(step)}
-                    - if !step.completed_at.blank? && step.status != "actionable" && step.status != "pending"
+                    - if !step.completed_at.blank? && step.completed?
                       %span.step-user-status.step-data
                         = step.status.capitalize + " "
                         %span.step-timestamp
                           = step.completed_at.strftime("%m/%d/%Y %I:%M%p")
-                    - elsif step.status == "actionable" || step.status == "pending"
+                    - elsif !step.completed?
                       %span.step-user-status.step-data
                         = "Pending"
