@@ -9,7 +9,7 @@ describe Steps::Serial do
     expect(first.reload.status).to eq('actionable')
     expect(second.reload.status).to eq('pending')
 
-    first.complete!
+    first.complete!  # Defined in app/models/steps/serial.rb
     expect(proposal.root_step.reload.status).to eq('actionable')
     expect(first.reload.status).to eq('completed')
     expect(second.reload.status).to eq('actionable')

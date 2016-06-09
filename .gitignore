@@ -24,6 +24,7 @@ coverage
 .floo*
 .env*
 !.env.example
+/.idea
 
 # Ignore Cloud Foundry files
 cf-ssh.yml
