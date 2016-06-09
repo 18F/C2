@@ -159,8 +159,8 @@ describe User do
 
     it "is true if the user has the beta_active role with beta_user" do
       beta_active = create(:user)
-      beta_active.add_role("beta_user")
-      beta_active.add_role("beta_active")
+      beta_active.add_role(ROLE_BETA_USER)
+      beta_active.add_role(ROLE_BETA_ACTIVE)
 
       expect(beta_active).to be_a_beta_active
     end
@@ -169,28 +169,28 @@ describe User do
   describe "#revert_detail_design" do
     it "remove active but not beta_user" do
       beta_active = create(:user)
-      beta_active.add_role("beta_user")
-      beta_active.add_role("beta_active")
+      beta_active.add_role(ROLE_BETA_USER)
+      beta_active.add_role(ROLE_BETA_ACTIVE)
 
-      beta_active.remove_role("beta_active")
+      beta_active.remove_role(ROLE_BETA_ACTIVE)
       expect(beta_active).to be_a_beta_user
     end
 
     it "remove beta_active" do
       beta_active = create(:user)
-      beta_active.add_role("beta_user")
-      beta_active.add_role("beta_active")
+      beta_active.add_role(ROLE_BETA_USER)
+      beta_active.add_role(ROLE_BETA_ACTIVE)
 
-      beta_active.remove_role("beta_active")
+      beta_active.remove_role(ROLE_BETA_ACTIVE)
       expect(beta_active).to_not be_a_beta_active
     end
 
     it "doesn't remove other roles" do
       user = create(:user)
-      user.add_role("beta_user")
-      user.add_role("beta_active")
+      user.add_role(ROLE_BETA_USER)
+      user.add_role(ROLE_BETA_ACTIVE)
       user.add_role("admin")
-      user.remove_role("beta_active")
+      user.remove_role(ROLE_BETA_ACTIVE)
 
       expect(user).to be_admin
     end

@@ -39,8 +39,8 @@ FactoryGirl.define do
     trait :with_beta_requester do
       after(:create) do |work_order|
         requester = work_order.requester
-        requester.roles << Role.find_or_create_by(name: 'beta_user')
-        requester.roles << Role.find_or_create_by(name: 'beta_active')
+        requester.roles << Role.find_by!(name: ROLE_BETA_USER)
+        requester.roles << Role.find_by!(name: ROLE_BETA_ACTIVE)
       end
     end
   end
