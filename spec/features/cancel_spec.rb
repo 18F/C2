@@ -18,15 +18,14 @@ describe 'Canceling a request' do
   end
 
   it "shows/hide cancel form when link is selected on redesign", js: true do
-    proposal = create(:proposal)
-    login_as(proposal.requester)
-    visit "/proposals/#{proposal.id}?detail=new"
+    work_order = create(:ncr_work_order, :with_beta_requester)
+    login_as(work_order.proposal.requester)
+    visit proposal_path(work_order.proposal)
     expect(page).to have_selector(".popup-modal", visible: false)
     click_on('Cancel this request')
     expect(page).to have_selector(".popup-modal", visible: true)
     click_on('NO, TAKE ME BACK')
     expect(page).to have_selector(".popup-modal", visible: false)
-    visit "/proposals/#{proposal.id}?detail=normal"
   end
 
   it "shows cancel link for admins" do

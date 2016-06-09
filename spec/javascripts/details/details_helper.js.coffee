@@ -79,12 +79,12 @@
 @getRequestDetailsForm = ->
   $('
     <div id="request-details-card">
-      <form>
+      <form action="url">
         <label>
-          <input id="field_1">
+          <input id="field_1" name="field_1" value="10">
         </label>
         <label>
-          <input id="field_2">
+          <input id="field_2" name="field_2" value="ten">
         </label>
         <input id="submit" type="Submit">
       </form>

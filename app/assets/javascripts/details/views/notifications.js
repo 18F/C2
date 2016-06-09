@@ -9,7 +9,7 @@ Notifications = (function(){
     this._setup();
     return this;
   }
-
+  
   Notifications.prototype._setup = function(){
     this._events();
   }
@@ -28,10 +28,10 @@ Notifications = (function(){
       var el = this;
       var $notice = $(el).closest('.notification-bar-el');
       $notice.animate({
-        "min-height": "0px",
+        "min-height": "0px", 
         height: "0px"
-      }, 500,
-      function(){
+      }, 500, 
+      function(){ 
         $notice.remove();
       });
     })
@@ -51,20 +51,22 @@ Notifications = (function(){
     var self = this;
     var el = $("#notification-id-" + id);
     var timeout = el.attr('data-timeout');
-    var progress = new ProgressBar.Circle("#notification-id-" + id + " .close", {
-      strokeWidth: 3,
-      duration: timeout,
-      color: '#40759C',
-      trailColor: '#DAEAf5',
-      trailWidth: 3,
-      svgStyle: null
-    });
-    progress.animate(1);
-    var timer = window.setTimeout(function(){
-      if(el.attr('data-clicked') !== true){
-        self.clearOne(el);
-      }
-    }, timeout);
+    if (timeout !== "none"){
+      var progress = new ProgressBar.Circle("#notification-id-" + id + " .close", { 
+        strokeWidth: 3,
+        duration: timeout,
+        color: '#40759C',
+        trailColor: '#DAEAf5',
+        trailWidth: 3,
+        svgStyle: null
+      });
+      progress.animate(1);
+      var timer = window.setTimeout(function(){
+        if(el.attr('data-clicked') !== true){
+          self.clearOne(el);
+        }
+      }, timeout);
+    }
     // this.notificationEvent(id, timer);
   }
 
@@ -84,11 +86,14 @@ Notifications = (function(){
   }
 
   Notifications.prototype._prepare = function(params){
+    if ( params['type'] === "alert" ){
+      params['timeout'] = "none";
+    }
     var id      = this.data.noticeId;
     var type    = (params['type']) ? params['type'] : 'primary';
     var title   = (params['title']) ? params['title'] : '';
     var content = (params['content']) ? params['content'] : '';
-    var timeout = (params['timeout']) ? params['timeout'] : 3000;
+    var timeout = (params['timeout']) ? params['timeout'] : 5000;
 
     var notice =  '<li id="notification-id-' + id + '" class="notice-type-' + type + ' notification-bar-el" data-timeout="' + timeout + '">' +
                     '<div class="row">' +
@@ -96,7 +101,7 @@ Notifications = (function(){
                       '<button class="close">&#215;</button>' +
                     '</div>' +
                   '</li>';
-
+    
     return notice
   }
 
@@ -105,10 +110,10 @@ Notifications = (function(){
       opacity: 0
     }, 100);
     el.animate({
-      "min-height": "0px",
+      "min-height": "0px", 
       height: "0px"
-    }, 250,
-    function(){
+    }, 250, 
+    function(){ 
       el.remove();
     });
   }

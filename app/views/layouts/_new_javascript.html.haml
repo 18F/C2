@@ -17,4 +17,5 @@
 
 = javascript_include_tag "details/app"
 
-= javascript_include_tag "//ethn.io/32631.js", asyc: true
+- unless Rails.env.test?
+  = javascript_include_tag "//ethn.io/32631.js", asyc: true
