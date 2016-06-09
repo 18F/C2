@@ -9,10 +9,13 @@ feature "Observers" do
     select observer.email_address, from: "observation_user_id"
     click_on "Add an Observer"
 
-    expect(page).to have_content("#{observer.full_name} has been added as an observer")
+    expect(page).to have_content("#{observer.full_name} is now an observer.")
+
+    # TODO: is already an observer
   end
 
-  scenario "allows observers to be added with javascript in the new detail view", js: true do 
+
+  scenario "allows observers to be added with javascript in the new detail view", js: true do
     work_order = create(:ncr_work_order, :with_beta_requester)
     observer = create(:user, client_slug: "ncr")
     proposal = work_order.proposal
@@ -29,7 +32,7 @@ feature "Observers" do
     end
   end
 
-  scenario "shows notification when observer is added with javascript in the new detail view", js: true do 
+  scenario "shows notification when observer is added with javascript in the new detail view", js: true do
     work_order = create(:ncr_work_order, :with_beta_requester)
     observer = create(:user, client_slug: "ncr")
     proposal = work_order.proposal
@@ -45,7 +48,7 @@ feature "Observers" do
     expect(page).to have_content("Observer added")
   end
 
-  scenario "allows observers to be removed with javascript in the new detail view", js: true do 
+  scenario "allows observers to be removed with javascript in the new detail view", js: true do
     work_order = create(:ncr_work_order, :with_beta_requester)
     observer = create(:user, client_slug: "ncr")
     proposal = work_order.proposal
@@ -59,11 +62,11 @@ feature "Observers" do
     within(".observer-modal-content") do
       click_on "Save"
     end
-    
+
     expect(page).to_not have_content("#{observer.full_name}")
   end
 
-  scenario "shows notification when observer is deleted with javascript in the new detail view", js: true do 
+  scenario "shows notification when observer is deleted with javascript in the new detail view", js: true do
     work_order = create(:ncr_work_order, :with_beta_requester)
     observer = create(:user, :beta_detail, client_slug: "ncr")
     proposal = work_order.proposal
@@ -82,7 +85,7 @@ feature "Observers" do
     expect(page).to have_content("removed as an observer")
   end
 
-  scenario "allows observers to remove self with javascript in the new detail view", js: true do 
+  scenario "allows observers to remove self with javascript in the new detail view", js: true do
     work_order = create(:ncr_work_order)
     observer = create(:user, :beta_detail, client_slug: "ncr")
     proposal = work_order.proposal
