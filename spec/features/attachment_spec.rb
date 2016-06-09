@@ -5,7 +5,7 @@ describe "Add attachments" do
                        user: proposal.requester) }
 
   before do
-    
+
     login_as(proposal.requester)
   end
 
@@ -27,7 +27,7 @@ describe "Add attachments" do
     expect(page).to have_button("Delete")
     click_on("Delete")
     expect(current_path).to eq("/proposals/#{proposal.id}")
-    expect(page).to have_content("Deleted attachment")
+    expect(page).to have_content("You've deleted an attachment.")
     expect(Attachment.count).to be(0)
   end
 
@@ -58,7 +58,7 @@ describe "Add attachments" do
     page.execute_script("$('#attachment_file').addClass('show-attachment-file');")
     page.attach_file('attachment[file]', "#{Rails.root}/app/assets/images/bg_completed_status.gif", visible: false)
     wait_for_ajax
-    within(".attachment-list") do 
+    within(".attachment-list") do
       expect(page).to have_content("bg_completed_status.gif")
     end
     within("#card-for-activity") do

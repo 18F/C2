@@ -19,7 +19,7 @@ class AttachmentsController < ApplicationController
   def destroy
     @attachment_name = attachment.file_file_name
     attachment.destroy
-    flash[:success] = "Deleted attachment"
+    flash[:success] = "You've deleted an attachment."
     @proposal = proposal
     respond_to do |format|
       format.js
