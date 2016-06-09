@@ -15,16 +15,26 @@ ul.request-actions{
     outline: none;
   }
   .save-button .button{
-    border-color: #8ecc76;
-    background: #8ecc76;
+    border-color: map-get($c2success-swatch, primary);
+    background: map-get($c2success-swatch, primary);
     color: #4A4A4A;
+    &:hover{
+      background: map-get($c2success-swatch, secondary);
+      border-color: map-get($c2success-swatch, secondary);
+      color: #4A4A4A;
+    }
   }
   .cancel-button{
     margin-right: 20px;
     .button{
-      background: #E8E8E8;
-      border-color: #E8E8E8;
+      background: map-get($c2black-swatch, quinary);
+      border-color: map-get($c2black-swatch, quinary);
       color: #4A4A4A;
+      &:hover{
+        background: map-get($c2black-swatch, quaternary);
+        border-color: map-get($c2black-swatch, quaternary);
+        color: #4A4A4A;
+      }
     }
   }
   .modify{
@@ -168,9 +178,9 @@ $action-bar-wrapper-height-small: 60px;
       width: 100%;
     }
     &.notice-type-notice{
-      background: #E8E8E8;
+      background: map-get($c2black-swatch, quinary);
       color: #494949;
-      border-color: darken(#E8E8E8, 5%);
+      border-color: darken(map-get($c2black-swatch, quinary), 5%);
     }
     &.notice-type-success{
 
@@ -197,4 +207,3 @@ $action-bar-wrapper-height-small: 60px;
     bottom: 0px;
   }
 }
-
