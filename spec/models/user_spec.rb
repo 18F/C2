@@ -139,21 +139,15 @@ describe User do
     end
   end
 
-  describe "#beta_user?" do
+  describe "#in_beta_program?" do
     it "returns false by default" do
-      expect(user).to_not be_a_beta_user
-    end
-
-    it "is true if the user has the beta_user role" do
-      beta_user = create(:user, :beta_user)
-
-      expect(beta_user).to be_a_beta_user
+      expect(user).to_not be_in_beta_program
     end
   end
 
   describe "#beta_active?" do
     it "returns false by default" do
-      expect(user).to_not be_a_beta_user
+      expect(user).to_not be_in_beta_program
       expect(user).to_not be_a_beta_active
     end
 
@@ -173,7 +167,7 @@ describe User do
       beta_active.add_role(ROLE_BETA_ACTIVE)
 
       beta_active.remove_role(ROLE_BETA_ACTIVE)
-      expect(beta_active).to be_a_beta_user
+      expect(beta_active).to be_in_beta_program
     end
 
     it "remove beta_active" do
