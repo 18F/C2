@@ -57,7 +57,7 @@ en:
       function_code: "Function Code"
       not_to_exceed_amount: "Not to exceed / Amount"
       org_code: "Org Code"
-      ncr_organization_id: "Org Code"
+      ncr_organization: "Org Code"
       rwa_number: "RWA#"
       soc_code: "Object Field / SOC Code"
       vendor: "Vendor"
