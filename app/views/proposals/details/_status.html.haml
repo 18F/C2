@@ -35,4 +35,4 @@
                           = step.completed_at.strftime("%m/%d/%Y %I:%M%p")
                     - elsif !step.completed?
                       %span.step-user-status.step-data
-                        = "Pending"
+                        = t("decorators.steps.status.pending")
