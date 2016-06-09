@@ -5,7 +5,7 @@ en:
         beta:
           old: "We're updating this page! To use the older version, <a href=\"%{link}\">click here</a>."
           new: "We're updating this page! To use the newer version, <a href=\"%{link}\">click here</a>."
-          
+
         save:
           title: Save your changes?
           desc: Click Cancel to discard changes, or Save to update the request. Saving will notify %{count} observers.

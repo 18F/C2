@@ -8,7 +8,7 @@ class AttachmentsController < ApplicationController
     @attachment = proposal.attachments.build(attachments_params)
     @proposal = proposal
     if @attachment.save
-      flash[:success] = "You successfully added a attachment"
+      flash[:success] = "Success! You've added an attachment."
       DispatchFinder.run(proposal).deliver_attachment_emails(@attachment)
     else
       flash[:error] = @attachment.errors.full_messages
