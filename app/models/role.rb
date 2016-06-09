@@ -8,6 +8,8 @@ class Role < ActiveRecord::Base
   # exist in the database. Rails will run this code when it loads the
   # `Role` class at bootup.
   def self.ensure_system_roles_exist
+    # Don't run if in Circle CI setup
+    return unless ActiveRecord::Base.connection.table_exists? "roles"
     SYSTEM_ROLES.each { |r| Role.find_or_create_by!(name: r) }
   end
   ensure_system_roles_exist
