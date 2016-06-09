@@ -1,9 +1,9 @@
 FactoryGirl.define do
   factory :user do
     client_slug { nil }
-    sequence(:email_address) {|n| "user#{n}@example.com" }
-    sequence(:first_name) {|n| "FirstName#{n}" }
-    sequence(:last_name) {|n| "LastName#{n}" }
+    sequence(:email_address) { |n| "user#{n}@example.com" }
+    sequence(:first_name) { |n| "FirstName#{n}" }
+    sequence(:last_name) { |n| "LastName#{n}" }
     timezone { Time.zone.name }
 
     trait :active do
@@ -16,7 +16,7 @@ FactoryGirl.define do
 
     trait :admin do
       after(:create) do |user|
-        user.roles << Role.find_or_create_by(name: 'admin')
+        user.roles << Role.find_or_create_by(name: "admin")
       end
     end
 
@@ -35,13 +35,13 @@ FactoryGirl.define do
 
     trait :client_admin do
       after(:create) do |user|
-        user.roles << Role.find_or_create_by(name: 'client_admin')
+        user.roles << Role.find_or_create_by(name: "client_admin")
       end
     end
 
     trait :gateway_admin do
       after(:create) do |user|
-        user.roles << Role.find_or_create_by(name: 'gateway_admin')
+        user.roles << Role.find_or_create_by(name: "gateway_admin")
       end
     end
 
