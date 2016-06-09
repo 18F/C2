@@ -1,8 +1,4 @@
 describe User do
-  before(:all) do
-    Role.ensure_system_roles_exist
-  end
-
   describe "Associations" do
     it { should have_many(:steps).dependent(:destroy) }
     it { should have_many(:comments).dependent(:destroy) }
