@@ -22,7 +22,7 @@
     
     <%= render "layouts/c2_header" %>
 
-    <% if !@current_user.beta_user? && !@current_user.beta_detail? %>
+    <% if !@current_user.beta_user? && !@current_user.beta_detail? && controller_name == "proposals" && params[:action] == "show" %>
       <%= render "layouts/notices" %>
     <% end %>
 
