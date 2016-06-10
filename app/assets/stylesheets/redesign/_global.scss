@@ -1,0 +1,55 @@
+// Colors
+$c2blue-swatch: (
+  primary: #3A6E93,
+  secondary: #355E7D,
+  tertiary: #C5DCED,
+  quaternary: #DBEAF5,
+  quinary: #EDF5FB,
+);
+$c2black-swatch: (
+  primary: #333541,
+  secondary: #444754,
+  tertiary: #71737A,
+  quaternary: #CDD1D3,
+  quinary: #E8E8E8,
+  senary: #FAFAFA,
+);
+$c2success-swatch: (
+  primary: #9CD984,
+  secondary: #80CD62,
+  tertiary: #2B6E11,
+);
+$c2-warning: #F7DD7D;
+
+// Typography
+$body-font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !default;
+// https://www.smashingmagazine.com/2015/06/responsive-typography-with-sass-maps/
+$h1-font-sizes: (
+  null  : 28px,
+  small : 31px,
+  medium : 33px,
+  large: 36px
+);
+$p-font-sizes: (
+  null  : 15px,
+  small : 16px,
+  medium : 17px,
+  large: 19px
+);
+// Temp throwaway legacy overrides
+.controller-proposals {
+  h1,h2,h3,h4 {
+    font-family: $body-font-family;
+  }
+}
+.summary-status-wrapper{
+  font-family: $body-font-family;
+}
+.button{
+  font-family: $body-font-family !important;
+}
+.form-button{
+  border-color: map-get($c2success-swatch, primary);
+  background: map-get($c2success-swatch, primary);
+  color: #4A4A4A;
+}
