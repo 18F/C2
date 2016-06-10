@@ -22,7 +22,9 @@
     
     <%= render "layouts/c2_header" %>
 
-    <%= render "layouts/notices" %>
+    <% if !@current_user.beta_user? && !@current_user.beta_detail? %>
+      <%= render "layouts/notices" %>
+    <% end %>
 
     <%= content_for?(:content) ? yield(:content) : yield %>
 
