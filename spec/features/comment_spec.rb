@@ -1,4 +1,8 @@
 feature "commenting" do
+  before(:each) do
+    Role.ensure_system_roles_exist
+  end
+
   scenario "saves the comment" do
     proposal = create_and_visit_proposal
     comment_text = "this is a great comment"
@@ -15,13 +19,13 @@ feature "commenting" do
     comment_text = "this is a great comment"
     js_submit_comment(comment_text, "#add_a_comment")
     wait_for_ajax
-    within(".comment-list") do 
+    within(".comment-list") do
       expect(page).to have_content(comment_text)
     end
   end
 
   scenario "Send button is disabled after submitting with javascript  in beta view", js: true do
-    proposal = create_and_visit_proposal_beta 
+    proposal = create_and_visit_proposal_beta
     comment_text = "this is a great comment"
     js_submit_comment(comment_text, "#add_a_comment")
     wait_for_ajax
@@ -32,7 +36,7 @@ feature "commenting" do
     work_order = create(:ncr_work_order, :with_beta_requester)
     proposal = work_order.proposal
     create(:comment, comment_text: "first comment", user: proposal.requester, proposal: proposal)
-    5.times do 
+    5.times do
       create(:comment, user: proposal.requester, proposal: proposal)
     end
     login_as(proposal.requester)
