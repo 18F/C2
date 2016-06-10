@@ -8,25 +8,26 @@ en:
 
         save:
           title: Save your changes?
-          desc: Click Cancel to discard changes, or Save to update the request. Saving will notify %{count} observers.
+          desc: Click Save to update your request and notify %{count} participants, or click Cancel to discard your changes.
           cancel_button: Cancel
           save_button: Save
         cancel:
           title: Wait! You're about to cancel your request.
-          desc: Cancelling a request permenantly removes it from C2 and notifies all participants. Do you want to proceed?
-          form_reason: Please provide a reason for cancelation.
+          desc: Canceling a request permanently removes it from C2 and notifies all partcipants. Do you want to proceed?
+          form_reason: Why are you canceling?
           cancel_button: NO, TAKE ME BACK
           save_button: YES, CANCEL
         after_cancel:
           title: You've canceled the request.
         attachment:
           title: Remove this attachment?
-          desc: Click Cancel to keep this attachment on the list, or Save to confirm the removal.
+          desc: Click Save to confirm the removal, or click Cancel to keep this attachment.
           cancel_button: Cancel
           save_button: Save
         observer:
           title: Remove this observer?
-          desc: Click Cancel to keep this observer on the list, or Save to confirm the removal.
+          desc: Click Cancel to keep this observer, or click Save to confirm the removal.
+          desc: Click Save to confirm the removal, or click Cancel to keep this observer.
           cancel_button: Cancel
           save_button: Save
 
