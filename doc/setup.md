@@ -12,6 +12,11 @@
 
 C2 is a fairly typical Rails application, so the setup is straightforward:
 
+1. If you're installing on a development machine, we recommend using [`rbenv`](https://github.com/rbenv/rbenv/)
+   to manage your Ruby environment, especially since we've had problems with
+   `rvm`. On a Mac, [you can use Homebrew to install it](https://github.com/rbenv/rbenv#homebrew-on-mac-os-x)
+   (along with `ruby-build`).
+
 1. Run the setup script to create a user record for your email address, make
    that user an admin, and add a few records for that user.
 

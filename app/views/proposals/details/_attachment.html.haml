@@ -4,8 +4,6 @@
       .card-head.column
         %h2
           Attachments
-          - if !@proposal.completed? && !@proposal.canceled?
-            <label for="attachment_file" class="button secondary attach-icon fr large attachment-label">Attach File</lable>
       .content-content.column
         .row
           .medium-12.column
@@ -16,3 +14,5 @@
           .medium-12.column
             = render partial: "proposals/details/attachment_list",
               locals: { proposal: @proposal }
+            - if !@proposal.completed? && !@proposal.canceled?
+              <label for="attachment_file" class="button primary attach-icon large attachment-label">Attach File</lable>

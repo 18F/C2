@@ -15,7 +15,7 @@ class ObservationsController < ApplicationController
     prep_destroy_response_msg(proposal)
     DispatchFinder.run(proposal).on_observer_removed(observation.user)
     observation.destroy
-    check_user_and_respond
+    check_user_and_respond(proposal)
   end
 
   protected
@@ -80,8 +80,8 @@ class ObservationsController < ApplicationController
     end
   end
 
-  def check_user_and_respond
-    if current_user == observation.user
+  def check_user_and_respond(proposal)
+    if !proposal.subscribers.include?(current_user)
       redirect_to_observer
     else
       respond_to_observer

@@ -65,6 +65,13 @@ label.button.secondary
   }
 }
 
+.button-back-wrapper a.button.secondary{
+  &:hover{
+    color: white;
+    background: $primary-color;
+  } 
+}
+
 a.status-toggle-all{
   border-radius: 50px;
 }

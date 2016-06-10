@@ -4,11 +4,18 @@ module MailerPreviewHelpers
   end
 
   def completed_proposal
-    Proposal.completed.last
+    Proposal.completed.last || Proposal.last
   end
 
   def completed_step
-    Step.where(status: "completed").last
+    last_complete = Step.where(status: "completed").last
+    if last_complete
+      last_complete
+    else
+      stub = Step.last
+      stub.status = "completed"
+      stub
+    end
   end
 
   def comment
@@ -29,5 +36,9 @@ module MailerPreviewHelpers
 
   def user
     User.last
+  end
+
+  def new_user
+    User.new(email_address: "newuser@test.com")
   end
 end

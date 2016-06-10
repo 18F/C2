@@ -1,0 +1,10 @@
+- title = t("proposals.details.notification.after_cancel.title")
+- desc = t("proposals.details.notification.after_cancel.desc")
+
+.after-cancel-modal-content
+  %p{class: "popup-content-desc"}
+    = image_tag "trash_can.svg", alt: ""
+  %p{class: "popup-content-desc"}
+    = title
+  %h4{class: "popup-content-label"}
+    = proposal.public_id

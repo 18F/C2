@@ -4,7 +4,10 @@
       %label.detail-element
         = t(t_slug + key)
       %span.detail-value
-        = f.input key, label: t("simple_form.labels.ncr_work_order.direct_pay_html"), disabled: true
+        - if client_data[key]
+          %input{type: "checkbox", checked: true, disabled: true, label: t("simple_form.labels.ncr_work_order.direct_pay_html")}
+        - else
+          %input{type: "checkbox", checked: false, disabled: true, label: t("simple_form.labels.ncr_work_order.direct_pay_html")}
     .detail-edit.column
       %label.detail-element
         = t(t_slug + key) 

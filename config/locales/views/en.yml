@@ -2,6 +2,10 @@ en:
   proposals:
     details:
       notification:
+        beta:
+          old: "We're updating this page! To use the older version, <a href=\"%{link}\">click here</a>."
+          new: "We're updating this page! To use the newer version, <a href=\"%{link}\">click here</a>."
+
         save:
           title: Save your changes?
           desc: Click Cancel to discard changes, or Save to update the request. Saving will notify %{count} observers.
@@ -13,6 +17,8 @@ en:
           form_reason: Please provide a reason for cancelation.
           cancel_button: NO, TAKE ME BACK
           save_button: YES, CANCEL
+        after_cancel:
+          title: You've canceled your request
         attachment:
           title: Remove this attachment?
           desc: Click Cancel to keep this attachment on the list, or Save to confirm the removal.
@@ -28,7 +34,8 @@ en:
         header: Timeline
         comment_form:
           headline: Add a comment
-          subhead: Your comment will be sent to all observers associated with this request.
+          placeholder: Your comment will be sent to all observers associated with this request.
+          subhead: Latest activity
         button:
           send: Send
           show_all_activity: Show all activity

@@ -1,6 +1,9 @@
-.medium-12.top-notification-wrapper
-  .row
-    .medium-12.column
-      = image_tag 'icon-configuration.png'
+- if @current_user.beta_user?
+  - if @current_user.beta_detail?
+    .top-notification-wrapper
       %p
-        This is a beta version of the Request Details page. #{link_to 'Switch to previous design', proposals_revert_design_path} if you prefer.
+        = t("proposals.details.notification.beta.old", link: revert_design_proposal_path(proposal) ).html_safe
+  - else
+    .top-notification-wrapper
+      %p
+        = t("proposals.details.notification.beta.new", link: activate_design_proposal_path(proposal) ).html_safe

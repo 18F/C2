@@ -17,6 +17,9 @@
   <body class="bodyclass webapp controller-<%= controller_name %> action-<%= params[:action] %>">
 
     <%= render "peek/bar" %>
+    
+    <%= content_for?(:top_notification) ? yield(:top_notification) : "" %>
+    
     <%= render "layouts/c2_header" %>
 
     <%= render "layouts/notices" %>

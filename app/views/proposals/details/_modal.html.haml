@@ -4,6 +4,7 @@
 #modal-content.modal-content
   = render partial: "proposals/details/modals/save_confirm", locals: { proposal: @proposal }
   = render partial: "proposals/details/modals/cancel", locals: { proposal: @proposal }
+  = render partial: "proposals/details/modals/after_cancel", locals: { proposal: @proposal }
   = render partial: "proposals/details/modals/attachment", locals: { proposal: @proposal }
   = render partial: "proposals/details/modals/observer", locals: { proposal: @proposal }
 

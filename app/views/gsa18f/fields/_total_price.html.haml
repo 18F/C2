@@ -1,0 +1,23 @@
+- cost = @proposal.total_price
+- t_slug = "decorators." + @current_user.client_slug + "/procurement."
+.column
+  .detail-wrapper.row
+.column.amount-wrapper{ id: 'total_price-wrapper'}
+  .detail-wrapper.row{ class: "amount-wrapper total_price-wrapper" }
+    .detail-display.column
+      .row
+        .medium-3.column
+          %label.detail-element
+            = t(t_slug + "amount") 
+        .medium-9.column
+          %span.detail-value
+            = number_with_precision(cost, precision: 2)
+
+    .detail-edit.column
+      .row
+        .medium-3.column
+          %label.detail-element
+            = t(t_slug + "amount") 
+        .medium-9.column
+          %span.detail-value
+            = number_with_precision(cost, precision: 2)

@@ -11,9 +11,11 @@
 = javascript_include_tag "details/state/edit_mode"
 
 = javascript_include_tag "details/data/details_save"
+= javascript_include_tag "details/data/update_view"
 
 = javascript_include_tag "details/shell/c2"
 
 = javascript_include_tag "details/app"
 
-= javascript_include_tag "//ethn.io/32631.js", asyc: true
+- unless Rails.env.test?
+  = javascript_include_tag "//ethn.io/32631.js", asyc: true

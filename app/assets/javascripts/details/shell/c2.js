@@ -15,6 +15,7 @@ C2 = (function() {
       notifications:  '#action-bar-status',
       observerCard:   '#card-for-observers',
       modalCard:      '#modal-wrapper',
+      updateView:     '#mode-parent',
       summaryBar:     '#summary-card'
     }
     this._overrideTestConfig(config);
@@ -39,9 +40,9 @@ C2 = (function() {
   }
 
   C2.prototype._setupData = function(){
-    var detailsConfig = this.config.detailsSave;
-    var detailsDataConfig = this.config.detailsSaveAll;
-    this.detailsSave = new DetailsSave(detailsConfig, detailsDataConfig);
+    var config = this.config;
+    this.detailsSave = new DetailsSave(config.detailsSave, config.detailsSaveAll);
+    this.updateView = new UpdateView(config.updateView);
   }
 
   C2.prototype._setupStates = function(){
@@ -73,8 +74,8 @@ C2 = (function() {
     this._setupObserverEvent();
     this._setupSaveModal();
     this._setupFormSubmitModal();
+    this._setupViewUpdate();
   }
-
 
   /* Form */
 
@@ -107,6 +108,22 @@ C2 = (function() {
           self.detailsMode('view');
         }
       }
+    });
+  }
+
+  C2.prototype._setupViewUpdateEvents = function(item, jevent){
+    var self = this;
+    $(item).on(jevent, function(event, data){
+      self.updateView.el.trigger(jevent, data);
+    });
+  }
+
+  C2.prototype._setupViewUpdate = function(){
+    var self = this;
+    $.each([ self.summaryBar.el.selector, self.detailsRequestCard.el.selector ], function(i, item){
+      $.each([ "update:textfield", "update:checkbox" ], function(j, jevent){
+        self._setupViewUpdateEvents(item, jevent);
+      });
     });
   }
 
@@ -159,6 +176,7 @@ C2 = (function() {
     });
 
     this.detailsSave.el.on('details-form:error', function(event, data){
+      data['timeout'] = "none";
       self.handleSaveError(data);
       self.modals.el.trigger("modal:close");
     });
@@ -167,7 +185,7 @@ C2 = (function() {
   C2.prototype.handleSaveError = function(data){
     var response = data['response'];
     for (var i = response.length - 1; i >= 0; i--) {
-      response[i]['timeout'] = 7500;
+      response[i]['timeout'] = data['timeout'] || 7500;
       this.createNotification(response[i], "", "alert");
     }
   }
@@ -240,6 +258,7 @@ C2 = (function() {
       self.detailsCancelled();
     });
     this.actionBar.el.on("action-bar-clicked:save", function(){
+      self.notification.clearAll();
       // triggers save_confirm-modal
     });
     this.actionBar.el.on("action-bar-clicked:edit", function(){

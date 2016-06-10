@@ -14,4 +14,4 @@
     = text_area_tag "reason_input", nil, size: "15x5"
     %p
       = button_tag cancel_button, class: "cancel-cancel-link form-button cancel-button"
-      = submit_tag save_button, data: { "disable-if-empty" => "reason_input" }, class: "form-button"
+      = submit_tag save_button, data: { "disable-if-empty" => "reason_input", "modal-type": "after_cancel", "modal-default": "true" }, class: "form-button"

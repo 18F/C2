@@ -26,10 +26,10 @@ module Ncr
       all_vendors.uniq.sort_by(&:downcase).map { |vendor_name| { name: vendor_name } }
     end
 
-    def expense_type_radio_button(form, expense_type)
+    def expense_type_radio_button(form, expense_type, disabled = false)
       content_tag :div, class: "radio" do
         form.label :expense_type, value: expense_type do
-          radio = form.radio_button(:expense_type, expense_type, "data-filter-control" => "expense-type", required: true)
+          radio = form.radio_button(:expense_type, expense_type, "data-filter-control" => "expense-type", required: true, disabled: disabled)
           radio + expense_type
         end
       end

@@ -1,7 +1,15 @@
-= f.input :recurring, input_html: { "data-filter-control" => "recurring" }
-%div{ "data-filter-key" => "recurring", "data-filter-value" => 1 }
-  = f.input :recurring_interval,
-    collection: Gsa18f::Procurement::RECURRENCE,
-    include_blank: false,
-    required: true
-  = f.input :recurring_length, step: 1
+.column{ id: key + '-wrapper'}
+  .detail-wrapper.row{ class: key + "-wrapper", id: value_id }
+    .detail-display.column
+      %label.detail-element
+        = t(t_slug + key)
+      %span.detail-value
+        - if client_data[key]
+          %input{type: "checkbox", checked: true, disabled: true, label: false}
+        - else
+          %input{type: "checkbox", checked: false, disabled: true, label: false}
+    .detail-edit.column
+      %label.detail-element
+        = t(t_slug + key)
+      %span.detail-value
+        = f.input :recurring, input_html: { "data-filter-control" => "recurring" }, label: false

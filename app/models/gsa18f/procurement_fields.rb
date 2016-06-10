@@ -29,7 +29,7 @@ module Gsa18f
         :product_name_and_description,
         :purchase_type,
         :quantity,
-        :urgency,
+        :urgency
       ]
     end
   end

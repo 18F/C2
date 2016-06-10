@@ -9,6 +9,4 @@
       %label.detail-element
         = t(t_slug + key) 
       %span.detail-value
-        = f.input :emergency,
-          disabled: @client_data_instance.persisted?,
-          wrapper_html: { data: { filter_key: "expense-type", filter_value: "BA61" } }
+        = client_data[key]
