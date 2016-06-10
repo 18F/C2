@@ -7,7 +7,6 @@ C2::Application.routes.draw do
   root to: "home#index"
   get "/error" => "home#error"
   get "/profile" => "profile#show"
-  get "/beta" => "profile#beta"
   post "/profile" => "profile#update"
   get "/summary" => "summary#index"
   get "/summary/:fiscal_year" => "summary#index"
@@ -42,8 +41,6 @@ C2::Application.routes.draw do
       get "cancel_form"
       post "cancel"
       get "history"
-      get "activate_design" => "proposals#activate_detail_design"
-      get "revert_design" => "proposals#revert_detail_design"
     end
 
     collection do
