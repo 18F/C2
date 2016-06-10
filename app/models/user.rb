@@ -133,6 +133,8 @@ class User < ActiveRecord::Base
     roles.exists?(name: "admin")
   end
 
+  # If we want to select certain beta features, we can add
+  # a parameter `(feature: nil)`.
   def should_see_beta?
     in_beta_program? && roles.exists?(name: ROLE_BETA_ACTIVE)
   end
