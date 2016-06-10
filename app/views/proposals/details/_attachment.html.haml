@@ -4,7 +4,7 @@
       .card-head.column
         %h2
           Attachments
-          - if !@proposal.completed? && !@proposal.canceled?
+          - if !@proposal.canceled?
             <label for="attachment_file" class="button secondary attach-icon fr large attachment-label">Attach File</lable>
       .content-content.column
         .row

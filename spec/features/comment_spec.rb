@@ -43,7 +43,7 @@ feature "commenting" do
 
     expect(page).to have_content("first comment")
     wait_for_ajax
-    click_on("Minimize")
+    find(".minimize-activity").trigger("click")
 
     expect(page).to_not have_content("first comment")
   end
