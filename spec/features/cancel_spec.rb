@@ -1,8 +1,4 @@
 describe "Canceling a request" do
-  before(:all) do
-    Role.ensure_system_roles_exist
-  end
-
   it "shows a cancel link for the requester" do
     proposal = create(:proposal)
     login_as(proposal.requester)

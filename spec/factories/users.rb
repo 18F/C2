@@ -16,7 +16,7 @@ FactoryGirl.define do
 
     trait :admin do
       after(:create) do |user|
-        user.roles << Role.find_or_create_by(name: "admin")
+        user.roles << Role.find_by!(name: ROLE_ADMIN)
       end
     end
 
@@ -35,13 +35,13 @@ FactoryGirl.define do
 
     trait :client_admin do
       after(:create) do |user|
-        user.roles << Role.find_or_create_by(name: "client_admin")
+        user.roles << Role.find_by!(name: ROLE_CLIENT_ADMIN)
       end
     end
 
     trait :gateway_admin do
       after(:create) do |user|
-        user.roles << Role.find_or_create_by(name: "gateway_admin")
+        user.roles << Role.find_by!(name: ROLE_GATEWAY_ADMIN)
       end
     end
 

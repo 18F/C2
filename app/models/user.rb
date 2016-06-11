@@ -77,8 +77,10 @@ class User < ActiveRecord::Base
     client_model.to_s.underscore.tr("/", "_")
   end
 
+  # TODO: Remove this code which automatically creates roles because it's an invitation to
+  # data inconsistencies. (RS)
   def add_role(role_name)
-    role = Role.find_or_create_by!(name: role_name)
+    role = Role.find_or_create_by! name: role_name
     user_roles.find_or_create_by!(role: role)
   end
 

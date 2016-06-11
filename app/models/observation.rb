@@ -10,7 +10,7 @@ class Observation < ProposalRole
   after_initialize :init
 
   def init
-    self.role_id ||= Role.find_by!(name: ROLE_OBSERVER).id
+    self.role_id ||= Role.where(name: ROLE_OBSERVER).pluck(:id)
   end
 
   def creation_version

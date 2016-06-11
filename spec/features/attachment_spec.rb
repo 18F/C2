@@ -6,7 +6,6 @@ describe "Add attachments" do
   end
 
   before do
-    Role.ensure_system_roles_exist
     login_as(proposal.requester)
   end
 

@@ -1,8 +1,4 @@
 feature "Observers" do
-  before(:each) do
-    Role.ensure_system_roles_exist
-  end
-
   scenario "allows observers to be added" do
     work_order = create(:ncr_work_order)
     observer = create(:user, client_slug: "ncr")
