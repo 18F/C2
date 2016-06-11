@@ -395,8 +395,8 @@ describe ProposalsController do
 
   def setup_proposal_page
     login_as(user)
-    user.add_role(:beta_user)
-    user.add_role(:beta_active)
+    user.add_role(ROLE_BETA_USER)
+    user.add_role(ROLE_BETA_ACTIVE)
     @proposal = create(:proposal, requester: user)
     get :show, id: @proposal.id
   end

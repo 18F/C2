@@ -218,7 +218,7 @@ class ProposalsController < ApplicationController
   end
 
   def new_mode
-    current_user.beta_user? && current_user.beta_active?
+    current_user.should_see_beta?
   end
 
   def cancel_proposal
