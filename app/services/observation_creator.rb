@@ -60,6 +60,6 @@ class ObservationCreator
   end
 
   def observer_role
-    Role.find_or_create_by(name: "observer")
+    Role.find_by! name: ROLE_OBSERVER
   end
 end
