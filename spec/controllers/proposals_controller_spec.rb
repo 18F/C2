@@ -101,7 +101,7 @@ describe ProposalsController do
         setup_proposal_page
         request.env["HTTP_REFERER"] = "where_i_came_from" unless request.nil? or request.env.nil?
         get :revert_detail_design, id: @proposal.id
-        expect(user).not_to be_in_beta_program
+        expect(user.should_see_beta?).to be false
       end
     end
   end
