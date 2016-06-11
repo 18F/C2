@@ -1,5 +1,6 @@
-# Configuration for the C2 Application. The `01_` prefix ensures that this initializer is
-# executed first.
+# Configuration for the C2 Application.
+#
+# The `01_` prefix ensures that this initializer is executed first.
 
 SYSTEM_ROLES = [
   ROLE_BETA_USER    = "beta_user".freeze,
