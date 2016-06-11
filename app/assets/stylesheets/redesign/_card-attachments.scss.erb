@@ -1,6 +1,7 @@
 .attachment-list-item{
   .button_to{
-    float: right;
+    display: inherit;
+    margin: 10px 0;
   }
 }
 
@@ -10,16 +11,6 @@
 
 .attachment-list-item {
   position: relative;
-}
-
-.attachment-list-item .button_to {
-  position: absolute;
-  right: 3px;
-  top: 16px;
-  line-height: 16px;
-  &:hover {
-    border-bottom: 1px solid #3373B1;
-  }
 }
 
 .attachment-list-item {
@@ -51,18 +42,11 @@ ul.attachment-list{
   margin: 0px 0px 15px 0px;
 }
 
+
 .attachment-list-item .button_to input[type="submit"]{
-  &:hover{
-    background-image: image-url('remove-x.png');
-    background-repeat: no-repeat;
-    opacity: 1;
-  }
-  display: block;
-  width: 18px;
-  height: 18px;
-  background-repeat: no-repeat;
-  background-image: image-url('remove-x.png');
-  opacity: .8;
+  margin-top: 10px;
+  @include button();
+  text-decoration: inherit;
 }
 .attachment-file-input, .attachment-submit {
   width: 0.1px;
@@ -79,7 +63,7 @@ ul.attachment-list{
   opacity: 1 !important;
   overflow: visible !important;
   position: relative !important;
-  z-index:99 !important; 
+  z-index:99 !important;
 }
 
 .attachment-label p{
@@ -96,16 +80,3 @@ ul.attachment-list{
     left:3px;
   }
 }
-
-.remove-attachment-btn{
-    &:hover{
-      &::before{
-        content: "Remove";
-        font-style: italic;
-        position: absolute;
-        right: 30px;
-        top:14px;
-        color: #3373B1;
-      }
-    }
-  } 
