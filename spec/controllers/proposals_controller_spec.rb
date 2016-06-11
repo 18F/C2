@@ -7,7 +7,7 @@ describe ProposalsController do
       login_as(user)
     end
 
-    it "sets data fields" do
+    it 'sets data fields' do
       proposal1 = create(:proposal, requester: user)
       proposal2 = create(:proposal, :with_approver, approver_user: user)
 
@@ -32,8 +32,8 @@ describe ProposalsController do
       login_as(user)
     end
 
-    context "visitors" do
-      it "should allow the requester to see it" do
+    context 'visitors' do
+      it 'should allow the requester to see it' do
         proposal = create(:proposal, requester: user)
         get :show, id: proposal.id
         expect(response.status).to eq(200)
@@ -48,42 +48,61 @@ describe ProposalsController do
       end
     end
 
-    context "admins" do
+    context 'admins' do
       let(:requester) { create(:user) }
-      let(:proposal) { create(:proposal, requester_id: requester.id, client_data_type: "SomeCompany::SomethingApprovable") }
+      let(:proposal) { create(:proposal, requester_id: requester.id, client_data_type: 'SomeCompany::SomethingApprovable') }
 
       before do
-        allow(Proposal).to receive(:client_model_names).and_return(["SomeCompany::SomethingApprovable"])
+        allow(Proposal).to receive(:client_model_names).and_return(['SomeCompany::SomethingApprovable'])
         allow(Proposal).to receive(:client_slugs).and_return(%w(some_company some_other_company ncr))
       end
 
       it "allows admins to view requests of same client" do
-        user.add_role("client_admin")
-        user.update_attributes!(client_slug: "some_company")
+        user.add_role('client_admin')
+        user.update_attributes!(client_slug: 'some_company')
 
         get :show, id: proposal.id
         expect(response).not_to redirect_to(proposals_path)
-        expect(response.request.fullpath).to eq(proposal_path(proposal.id))
+        expect(response.request.fullpath).to eq(proposal_path proposal.id)
       end
 
       it "allows app admins to view requests outside of related client" do
-        user.update_attributes!(client_slug: "some_other_company")
-        user.add_role("admin")
+        user.update_attributes!(client_slug: 'some_other_company')
+        user.add_role('admin')
 
         get :show, id: proposal.id
         expect(response).not_to redirect_to(proposals_path)
-        expect(response.request.fullpath).to eq(proposal_path(proposal.id))
+        expect(response.request.fullpath).to eq(proposal_path proposal.id)
       end
     end
+
   end
 
   describe '#show + new details' do
-    context "cookie triggered view" do
-      it "should render the show_next view" do
+    context 'cookie triggered view' do
+      it 'should render the show_next view' do
         setup_proposal_page
         expect(response.status).to eq(200)
         expect(response).to render_template("show_next")
         expect(response).to_not render_template("show")
+      end
+    end
+
+    context 'activate detail triggered view' do
+      it 'should add beta_active on activate' do
+        setup_proposal_page
+        request.env["HTTP_REFERER"] = "where_i_came_from" unless request.nil? or request.env.nil?
+        get :activate_detail_design, id: @proposal.id
+        expect(user.beta_active?).to eq(true)
+      end
+    end
+
+    context 'revert detail triggered view' do
+      it 'should remove beta_active on revert' do
+        setup_proposal_page
+        request.env["HTTP_REFERER"] = "where_i_came_from" unless request.nil? or request.env.nil?
+        get :revert_detail_design, id: @proposal.id
+        expect(user.beta_active?).to_not eq(true)
       end
     end
   end
@@ -100,19 +119,18 @@ describe ProposalsController do
       expect(flash[:alert]).to_not be_nil
     end
 
-    it "should filter results by date range" do
+    it 'should filter results by date range' do
       prev_zone = Time.zone
-      Time.zone = "UTC"
+      Time.zone = 'UTC'
       past_proposal = create(
-        :proposal, created_at: Time.zone.local(2012, 5, 6), requester: user
-      )
+        :proposal, created_at: Time.zone.local(2012, 5, 6), requester: user)
       get :query
       expect(assigns(:proposals_data).rows).to eq([proposal, past_proposal])
 
-      get :query, start_date: "2012-05-04", end_date: "2012-05-07"
+      get :query, start_date: '2012-05-04', end_date: '2012-05-07'
       expect(assigns(:proposals_data).rows).to eq([past_proposal])
 
-      get :query, start_date: "2012-05-04", end_date: "2012-05-06"
+      get :query, start_date: '2012-05-04', end_date: '2012-05-06'
       expect(assigns(:proposals_data).rows).to eq([])
       Time.zone = prev_zone
     end
@@ -125,33 +143,33 @@ describe ProposalsController do
       expect(assigns(:proposals_data).rows).to eq([])
     end
 
-    it "ignores bad input" do
-      get :query, start_date: "dasdas"
+    it 'ignores bad input' do
+      get :query, start_date: 'dasdas'
       expect(assigns(:proposals_data).rows).to eq([proposal])
     end
 
     context "#datespan_header" do
       render_views
 
-      it "has a nice header for month spans" do
-        get :query, start_date: "2012-05-01", end_date: "2012-06-01"
+      it 'has a nice header for month spans' do
+        get :query, start_date: '2012-05-01', end_date: '2012-06-01'
         expect(response.body).to include("May 2012")
       end
 
-      it "has a generic header for other dates" do
-        get :query, start_date: "2012-05-02", end_date: "2012-06-02"
+      it 'has a generic header for other dates' do
+        get :query, start_date: '2012-05-02', end_date: '2012-06-02'
         expect(response.body).to include("2012-05-02 - 2012-06-02")
       end
     end
 
-    context "search" do
-      it "plays nicely with TabularData" do
+    context 'search' do
+      it 'plays nicely with TabularData' do
         anon_user = create(:user)
         login_as(anon_user)
-        double, single, triple = Array.new(3) { create(:proposal, requester: anon_user) }
-        double.update(public_id: "AAA AAA")
-        single.update(public_id: "AAA")
-        triple.update(public_id: "AAA AAA AAA")
+        double, single, triple = 3.times.map { create(:proposal, requester: anon_user) }
+        double.update(public_id: 'AAA AAA')
+        single.update(public_id: 'AAA')
+        triple.update(public_id: 'AAA AAA AAA')
 
         double.reindex
         single.reindex
@@ -172,7 +190,7 @@ describe ProposalsController do
 
       it "returns JSON for preview count" do
         login_as(user)
-        Array.new(3) do |i|
+        3.times.map do |i|
           wo = create(:test_client_request, project_title: "Work Order #{i}", requester: user)
           wo.proposal.reindex
         end
@@ -182,7 +200,7 @@ describe ProposalsController do
           get :query_count, text: "work order"
           expect(response.status).to eq 200
           expect(response.headers["Content-Type"]).to include "application/json"
-          expect(response.body).to eq({ total: 3 }.to_json)
+          expect(response.body).to eq({total: 3}.to_json)
         end
       end
 
@@ -193,7 +211,7 @@ describe ProposalsController do
           get :query_count
           expect(response.status).to eq 200
           expect(response.headers["Content-Type"]).to include "application/json"
-          expect(response.body).to eq({ total: 0 }.to_json)
+          expect(response.body).to eq({total: 0}.to_json)
         end
       end
     end
@@ -204,7 +222,7 @@ describe ProposalsController do
 
     it "downloads results as CSV" do
       login_as(user)
-      proposals = Array.new(30) do |i|
+      proposals = 30.times.map do |i|
         wo = create(:test_client_request, project_title: "Work Order #{i}")
         wo.proposal.update(requester: user)
         wo.proposal.reindex
@@ -225,7 +243,7 @@ describe ProposalsController do
   describe '#cancel_form' do
     let(:proposal) { create(:proposal) }
 
-    it "should allow the requester to see it" do
+    it 'should allow the requester to see it' do
       login_as(user)
       proposal.update_attributes(requester_id: user.id)
 
@@ -234,11 +252,11 @@ describe ProposalsController do
       expect(flash[:alert]).not_to be_present
     end
 
-    it "should redirect random users" do
+    it 'should redirect random users' do
       login_as(user)
       get :cancel_form, id: proposal.id
       expect(response).to redirect_to(proposal_path)
-      expect(flash[:alert]).to eq "You are not the requester"
+      expect(flash[:alert]).to eq 'You are not the requester'
     end
 
     it "should redirect for canceled requests" do
@@ -247,8 +265,8 @@ describe ProposalsController do
 
       get :cancel_form, id: proposal.id
 
-      expect(response).to redirect_to(proposal_path(proposal.id))
-      expect(flash[:alert]).to eq "Sorry, this proposal has been canceled."
+      expect(response).to redirect_to(proposal_path proposal.id)
+      expect(flash[:alert]).to eq 'Sorry, this proposal has been canceled.'
     end
   end
 
@@ -259,12 +277,12 @@ describe ProposalsController do
       login_as(user)
     end
 
-    it "sends a cancelation email" do
-      mock_dispatcher = double("dispatcher").as_null_object
+    it 'sends a cancelation email' do
+      mock_dispatcher = double('dispatcher').as_null_object
       allow(DispatchFinder).to receive(:run).with(proposal).and_return(mock_dispatcher)
       expect(mock_dispatcher).to receive(:deliver_cancelation_emails)
 
-      post :cancel, id: proposal.id, reason_input: "My test cancelation text"
+      post :cancel, id: proposal.id, reason_input:'My test cancelation text'
     end
   end
 
@@ -340,8 +358,7 @@ describe ProposalsController do
 
     it "won't allow different delegates to approve" do
       proposal = create(:proposal, :with_approver)
-      delegate1 = create(:user)
-      delegate2 = create(:user)
+      delegate1, delegate2 = create(:user), create(:user)
       mailbox = proposal.approvers.first
       mailbox.add_delegate(delegate1)
       mailbox.add_delegate(delegate2)
@@ -378,8 +395,8 @@ describe ProposalsController do
 
   def setup_proposal_page
     login_as(user)
-    user.add_role(ROLE_BETA_USER)
-    user.add_role(ROLE_BETA_ACTIVE)
+    user.add_role(:beta_user)
+    user.add_role(:beta_active)
     @proposal = create(:proposal, requester: user)
     get :show, id: @proposal.id
   end

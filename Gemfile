@@ -73,7 +73,6 @@ group :test, :development do
   gem "pry-byebug"
   gem "rspec-rails"
   gem "rack_session_access"
-  gem "seed_report", require: false
 end
 
 group :development do

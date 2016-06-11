@@ -12,4 +12,11 @@ class ProfileController < ApplicationController
     flash[:success] = "Your profile is updated!"
     redirect_to :profile
   end
+
+  def beta
+    user = current_user
+    user.add_role(ROLE_BETA_USER)
+    flash[:success] = "Your account is now enabled for beta access to new features!"
+    redirect_to root_path
+  end
 end

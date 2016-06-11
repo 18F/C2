@@ -5,7 +5,7 @@ describe "Add attachments" do
                        user: proposal.requester) }
 
   before do
-
+    
     login_as(proposal.requester)
   end
 
@@ -50,7 +50,6 @@ describe "Add attachments" do
   end
 
   it "saves attachments submitted via the webform with js", :js do
-    Role.ensure_system_roles_exist
     work_order = create(:ncr_work_order, :with_beta_requester)
     proposal = work_order.proposal
     login_as(proposal.requester)
@@ -59,7 +58,7 @@ describe "Add attachments" do
     page.execute_script("$('#attachment_file').addClass('show-attachment-file');")
     page.attach_file('attachment[file]', "#{Rails.root}/app/assets/images/bg_completed_status.gif", visible: false)
     wait_for_ajax
-    within(".attachment-list") do
+    within(".attachment-list") do 
       expect(page).to have_content("bg_completed_status.gif")
     end
     within("#card-for-activity") do
