@@ -93,7 +93,7 @@ describe ProposalsController do
         setup_proposal_page
         request.env["HTTP_REFERER"] = "where_i_came_from" unless request.nil? or request.env.nil?
         get :activate_detail_design, id: @proposal.id
-        expect(user.beta_active?).to eq(true)
+        expect(user.in_beta_program?).to eq(true)
       end
     end
 
@@ -102,7 +102,7 @@ describe ProposalsController do
         setup_proposal_page
         request.env["HTTP_REFERER"] = "where_i_came_from" unless request.nil? or request.env.nil?
         get :revert_detail_design, id: @proposal.id
-        expect(user.beta_active?).to_not eq(true)
+        expect(user.in_beta_program?).to_not eq(true)
       end
     end
   end
