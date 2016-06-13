@@ -39,7 +39,7 @@ class AuthController < ApplicationController
   def try_user_auth(auth, return_to_path)
     do_user_auth(auth)
     session[:token] = auth.credentials.token
-    flash[:success] = "You successfully signed in"
+    flash[:success] = "You are now signed in."
     redirect_to return_to_path || proposals_path
   end
 
