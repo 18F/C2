@@ -51,11 +51,7 @@ class User < ActiveRecord::Base
 
   def self.for_email_with_slug(email, client_slug)
     user = for_email(email)
-
-    unless user.client_slug
-      user.client_slug = client_slug
-    end
-
+    user.client_slug = client_slug unless user.client_slug
     user
   end
 
