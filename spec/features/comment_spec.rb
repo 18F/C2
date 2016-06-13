@@ -1,8 +1,4 @@
 feature "commenting" do
-  before(:each) do
-    Role.ensure_system_roles_exist
-  end
-
   scenario "saves the comment" do
     proposal = create_and_visit_proposal
     comment_text = "this is a great comment"

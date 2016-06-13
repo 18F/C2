@@ -1,8 +1,4 @@
 describe "admin" do
-  before(:all) do
-    Role.ensure_system_roles_exist
-  end
-
   it "does not allow Delete of Users" do
     login_as_admin_user
 
