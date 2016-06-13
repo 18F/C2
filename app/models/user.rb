@@ -84,9 +84,7 @@ class User < ActiveRecord::Base
 
   def remove_role(role_name)
     role = Role.find_by(name: role_name)
-    if role
-      user_roles.find_by(role: role).destroy!
-    end
+    user_roles.find_by(role: role)&.destroy!
   end
 
   def full_name
