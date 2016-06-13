@@ -2,6 +2,8 @@ AllCops:
   Exclude:
     - 'bin/**/*'
     - 'db/**/*'
+  TargetRubyVersion: 2.3
+
 Rails:
   Enabled: true
 Metrics/LineLength:
@@ -13,6 +15,8 @@ Style/Documentation:
 Style/DotPosition:
   Enabled: false
 Style/EmptyElse:
+  Enabled: false
+Style/FrozenStringLiteralComment:
   Enabled: false
 Style/GuardClause:
   Enabled: false
