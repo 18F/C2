@@ -1,11 +1,11 @@
-describe 'Canceling a request' do
-  it 'shows a cancel link for the requester' do
+describe "Canceling a request" do
+  it "shows a cancel link for the requester" do
     proposal = create(:proposal)
     login_as(proposal.requester)
 
     visit proposal_path(proposal)
 
-    expect(page).to have_content('Cancel this request')
+    expect(page).to have_content("Cancel this request")
   end
 
   it "does not show a cancel link for non-actionable user" do
@@ -14,7 +14,7 @@ describe 'Canceling a request' do
 
     visit proposal_path(proposal)
 
-    expect(page).to_not have_content('Cancel this request')
+    expect(page).to_not have_content("Cancel this request")
   end
 
   it "shows/hide cancel form when link is selected on redesign", js: true do
@@ -22,9 +22,9 @@ describe 'Canceling a request' do
     login_as(work_order.proposal.requester)
     visit proposal_path(work_order.proposal)
     expect(page).to have_selector(".popup-modal", visible: false)
-    click_on('Cancel this request')
+    click_on("Cancel this request")
     expect(page).to have_selector(".popup-modal", visible: true)
-    click_on('NO, TAKE ME BACK')
+    click_on("NO, TAKE ME BACK")
     expect(page).to have_selector(".popup-modal", visible: false)
   end
 
@@ -49,12 +49,12 @@ describe 'Canceling a request' do
     expect(page).to_not have_content("May not add observer")
   end
 
-  it 'prompts the requester for a reason' do
+  it "prompts the requester for a reason" do
     proposal = create(:proposal)
     login_as(proposal.requester)
 
     visit proposal_path(proposal)
-    click_on('Cancel this request')
+    click_on("Cancel this request")
 
     expect(current_path).to eq("/proposals/#{proposal.id}/cancel_form")
   end
@@ -97,42 +97,42 @@ describe 'Canceling a request' do
 
         login_as(proposal.requester)
 
-        expect {
+        expect do
           cancel_proposal(proposal)
-        }.to change { deliveries.length }.from(0).to(1)
+        end.to change { deliveries.length }.from(0).to(1)
       end
     end
 
     context "proposal with pending status" do
       it "does not send cancelation email to approver" do
         proposal = create(:proposal, :with_approver)
-        proposal.individual_steps.first.update(status: 'pending')
+        proposal.individual_steps.first.update(status: "pending")
 
         login_as(proposal.requester)
 
-        expect {
+        expect do
           cancel_proposal(proposal)
-        }.to change { deliveries.length }.from(0).to(1)
+        end.to change { deliveries.length }.from(0).to(1)
         expect_one_email_sent_to(proposal.requester)
       end
     end
 
-   context "proposal with approver" do
-     it "sends cancelation emails to requester and approver" do
+    context "proposal with approver" do
+      it "sends cancelation emails to requester and approver" do
         proposal = create(:proposal, :with_approver)
 
         login_as(proposal.requester)
 
-        expect {
+        expect do
           cancel_proposal(proposal)
-        }.to change { deliveries.length }.from(0).to(2)
+        end.to change { deliveries.length }.from(0).to(2)
         expect_one_email_sent_to(proposal.requester)
         expect_one_email_sent_to(proposal.individual_steps.last.user)
-     end
-   end
+      end
+    end
 
-   context "proposal with observer" do
-     it "sends cancelation email to observer" do
+    context "proposal with observer" do
+      it "sends cancelation email to observer" do
         proposal = create(:proposal, :with_observer)
 
         login_as(proposal.requester)
@@ -140,38 +140,38 @@ describe 'Canceling a request' do
 
         expect_one_email_sent_to(proposal.requester)
         expect_one_email_sent_to(proposal.observers.first)
-     end
-   end
+      end
+    end
   end
 
-  context 'entering in a reason cancelation' do
-    it 'successfully saves comments, changes the request status' do
+  context "entering in a reason cancelation" do
+    it "successfully saves comments, changes the request status" do
       proposal = create(:proposal)
       login_as(proposal.requester)
 
       cancel_proposal(proposal)
 
       expect(current_path).to eq("/proposals/#{proposal.id}")
-      expect(page).to have_content('Your request has been canceled')
-      expect(proposal.reload.status).to eq('canceled')
-      expect(proposal.reload.comments.last.comment_text).to eq('Request canceled with comments: This is a good reason for the cancelation.')
+      expect(page).to have_content("Your request has been canceled")
+      expect(proposal.reload.status).to eq("canceled")
+      expect(proposal.reload.comments.last.comment_text).to eq("Request canceled with comments: This is a good reason for the cancelation.")
     end
 
-    it 'displays an error if the reason is blank' do
+    it "displays an error if the reason is blank" do
       proposal = create(:proposal)
       login_as(proposal.requester)
 
       visit proposal_path(proposal)
-      click_on('Cancel this request')
-      fill_in 'reason_input', with: ''
-      click_on('Yes, cancel this request')
+      click_on("Cancel this request")
+      fill_in "reason_input", with: ""
+      click_on("Yes, cancel this request")
 
-      expect(page).to have_content('A reason for cancelation is required. Please indicate why this request needs to be canceled.')
+      expect(page).to have_content("A reason for cancelation is required. Please indicate why this request needs to be canceled.")
     end
   end
 
-  context 'Cancel landing page' do
-    it 'succesfully opens the page for a requester' do
+  context "Cancel landing page" do
+    it "succesfully opens the page for a requester" do
       proposal = create(:proposal)
       login_as(proposal.requester)
 
@@ -181,27 +181,27 @@ describe 'Canceling a request' do
       expect(current_path).to eq("/proposals/#{proposal.id}/cancel_form")
     end
 
-    it 'redirects for non-requesters' do
+    it "redirects for non-requesters" do
       proposal = create(:proposal, :with_serial_approvers)
       login_as(proposal.approvers.last)
 
       visit cancel_form_proposal_path(proposal)
 
-      expect(page).to have_content('You are not the requester')
+      expect(page).to have_content("You are not the requester")
       expect(current_path).to eq("/proposals/#{proposal.id}")
     end
   end
 
   def cancel_proposal(proposal)
     visit proposal_path(proposal)
-    click_on('Cancel this request')
-    fill_in 'reason_input', with: 'This is a good reason for the cancelation.'
-    click_on('Yes, cancel this request')
+    click_on("Cancel this request")
+    fill_in "reason_input", with: "This is a good reason for the cancelation."
+    click_on("Yes, cancel this request")
   end
 
   def expect_one_email_sent_to(user)
     expect(deliveries.select do |email|
       email.to.first == user.email_address
-    end.length).to eq (1)
+    end.length).to eq 1
   end
 end

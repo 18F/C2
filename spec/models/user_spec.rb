@@ -1,30 +1,30 @@
 describe User do
   describe "Associations" do
-     it { should have_many(:steps).dependent(:destroy) }
-     it { should have_many(:comments).dependent(:destroy) }
-     it { should have_many(:observations).dependent(:destroy) }
-     it { should have_many(:user_roles).dependent(:destroy) }
-     it { should have_many(:proposals).dependent(:destroy) }
-     it { should have_many(:reports) }
-     it { should have_many(:scheduled_reports) }
+    it { should have_many(:steps).dependent(:destroy) }
+    it { should have_many(:comments).dependent(:destroy) }
+    it { should have_many(:observations).dependent(:destroy) }
+    it { should have_many(:user_roles).dependent(:destroy) }
+    it { should have_many(:proposals).dependent(:destroy) }
+    it { should have_many(:reports) }
+    it { should have_many(:scheduled_reports) }
   end
 
   let(:user) { build(:user) }
 
-  context 'valid attributes' do
-    it 'should be valid' do
+  context "valid attributes" do
+    it "should be valid" do
       expect(user).to be_valid
     end
   end
 
-  context 'non-valid attributes' do
-    it 'missing email should not be valid' do
+  context "non-valid attributes" do
+    it "missing email should not be valid" do
       user.email_address = nil
       expect(user).to_not be_valid
     end
 
-    it 'poorly formatted email should not be valid' do
-      user.email_address = 'foo@bar'
+    it "poorly formatted email should not be valid" do
+      user.email_address = "foo@bar"
       expect(user).to_not be_valid
     end
   end
@@ -39,42 +39,42 @@ describe User do
     end
   end
 
-  describe '.for_email' do
-    it 'downcases and strips the email' do
-      user = User.for_email('   miXedCaSe@eXaMple.com')
-      expect(user.email_address).to eq('mixedcase@example.com')
+  describe ".for_email" do
+    it "downcases and strips the email" do
+      user = User.for_email("   miXedCaSe@eXaMple.com")
+      expect(user.email_address).to eq("mixedcase@example.com")
     end
 
     it "raises error when email is empty" do
-      expect {
+      expect do
         user = User.for_email("")
-      }.to raise_error EmailRequired
+      end.to raise_error EmailRequired
     end
   end
 
   describe ".for_email_with_slug" do
     it "downcases and strips the email and adds slug" do
-      user = User.for_email_with_slug('   miXedCaSe@eXaMple.com', 'foobar')
-      expect(user.email_address).to eq('mixedcase@example.com')
-      expect(user.client_slug).to eq('foobar')
+      user = User.for_email_with_slug("   miXedCaSe@eXaMple.com", "foobar")
+      expect(user.email_address).to eq("mixedcase@example.com")
+      expect(user.client_slug).to eq("foobar")
     end
   end
 
-  describe '.with_role' do
-    it 'returns all users with a particular Role' do
+  describe ".with_role" do
+    it "returns all users with a particular Role" do
       user1 = create(:user)
-      user1.add_role('foo')
+      user1.add_role("foo")
       user2 = create(:user)
-      user2.add_role('bar')
+      user2.add_role("bar")
 
-      expect(User.with_role('bar')).to eq([user2])
+      expect(User.with_role("bar")).to eq([user2])
     end
 
-    it 'returns all users with a particular role name' do
+    it "returns all users with a particular role name" do
       user1 = create(:user)
-      user1.add_role('foo')
+      user1.add_role("foo")
       user2 = create(:user)
-      user_role = user2.add_role('bar')
+      user_role = user2.add_role("bar")
 
       expect(User.with_role(user_role.role.name)).to eq([user2])
     end
@@ -86,7 +86,7 @@ describe User do
 
     it "returns true when the user is a client admin" do
       user.save!
-      user.add_role('client_admin')
+      user.add_role("client_admin")
       expect(user).to be_a_client_admin
     end
   end
@@ -96,7 +96,7 @@ describe User do
       expect(user).to_not be_a_client_admin
     end
 
-    it 'is true if the user has the gateway_admin role' do
+    it "is true if the user has the gateway_admin role" do
       admin = create(:user, :gateway_admin)
 
       expect(admin).to be_gateway_admin
@@ -108,7 +108,7 @@ describe User do
       expect(user).to_not be_a_client_admin
     end
 
-    it 'is true if the user has the admin role' do
+    it "is true if the user has the admin role" do
       admin = create(:user, :admin)
 
       expect(admin).to be_admin
@@ -139,65 +139,65 @@ describe User do
     end
   end
 
-  describe "#beta_user?" do
+  describe "#in_beta_program?" do
     it "returns false by default" do
-      expect(user).to_not be_a_beta_user
-    end
-
-    it "is true if the user has the beta_user role" do
-      beta_user = create(:user, :beta_user)
-
-      expect(beta_user).to be_a_beta_user
+      expect(user).to_not be_in_beta_program
     end
   end
 
-  describe "#beta_detail?" do
+  describe "#should_see_beta?" do
     it "returns false by default" do
-      expect(user).to_not be_a_beta_user
-      expect(user).to_not be_a_beta_detail
+      expect(user.should_see_beta?).to be false
     end
 
-    it "is true if the user has the beta_detail role with beta_user" do
-      beta_detail = create(:user)
-      beta_detail.add_role("beta_user")
-      beta_detail.add_role("beta_detail")
+    it "is false if only the beta-active role is enabled" do
+      misconfigured_user = create(:user)
+      misconfigured_user.add_role(ROLE_BETA_ACTIVE)
 
-      expect(beta_detail).to be_a_beta_detail
+      expect(misconfigured_user.should_see_beta?).to be false
+    end
+
+    it "is true if the user has the beta_active role with beta_user" do
+      beta_active = create(:user)
+      beta_active.add_role(ROLE_BETA_USER)
+      beta_active.add_role(ROLE_BETA_ACTIVE)
+
+      expect(beta_active.should_see_beta?).to be true
     end
   end
 
   describe "#revert_detail_design" do
-    it "remove detail but not beta_user" do
-      beta_detail = create(:user)
-      beta_detail.add_role("beta_user")
-      beta_detail.add_role("beta_detail")
+    it "remove active but not beta_user" do
+      beta_active = create(:user)
+      beta_active.add_role(ROLE_BETA_USER)
+      beta_active.add_role(ROLE_BETA_ACTIVE)
 
-      beta_detail.remove_role("beta_detail")
-      expect(beta_detail).to be_a_beta_user
+      beta_active.remove_role(ROLE_BETA_ACTIVE)
+      expect(beta_active).to be_in_beta_program
     end
 
-    it "remove beta_detail" do
-      beta_detail = create(:user)
-      beta_detail.add_role("beta_user")
-      beta_detail.add_role("beta_detail")
+    it "remove beta_active" do
+      beta_active = create(:user)
+      beta_active.add_role(ROLE_BETA_USER)
+      beta_active.add_role(ROLE_BETA_ACTIVE)
 
-      beta_detail.remove_role("beta_detail")
-      expect(beta_detail).to_not be_a_beta_detail
+      beta_active.remove_role(ROLE_BETA_ACTIVE)
+      expect(beta_active.should_see_beta?).to be false
     end
 
     it "doesn't remove other roles" do
       user = create(:user)
-      user.add_role("beta_user")
-      user.add_role("beta_detail")
+      user.add_role(ROLE_BETA_USER)
+      user.add_role(ROLE_BETA_ACTIVE)
       user.add_role("admin")
-      user.remove_role("beta_detail")
+      user.remove_role(ROLE_BETA_ACTIVE)
 
       expect(user).to be_admin
     end
   end
 
   describe '#not_admin?' do
-    it 'is true if the user does not have the admin role' do
+    it "is true if the user does not have the admin role" do
       user = create(:user)
 
       expect(user).to be_not_admin
@@ -219,26 +219,26 @@ describe User do
   end
 
   describe '#full_name' do
-    it 'return first name and last name' do
-      user.first_name = 'George'
-      user.last_name = 'Jetson'
-      expect(user.full_name).to eq 'George Jetson'
+    it "return first name and last name" do
+      user.first_name = "George"
+      user.last_name = "Jetson"
+      expect(user.full_name).to eq "George Jetson"
     end
 
     it "returns the user's email address if no first name and last name" do
       user.first_name = nil
       user.last_name = nil
-      user.email_address = 'george.jetson@example.com'
+      user.email_address = "george.jetson@example.com"
 
-      expect(user.full_name).to eq 'george.jetson@example.com'
+      expect(user.full_name).to eq "george.jetson@example.com"
     end
 
     it "returns the user's email address if the first name and last name are blank" do
-      user.first_name = ''
-      user.last_name = ''
-      user.email_address = 'george.jetson@example.com'
+      user.first_name = ""
+      user.last_name = ""
+      user.email_address = "george.jetson@example.com"
 
-      expect(user.full_name).to eq 'george.jetson@example.com'
+      expect(user.full_name).to eq "george.jetson@example.com"
     end
   end
 
@@ -302,9 +302,9 @@ describe User do
       user = create(:user)
       role = create(:role)
 
-      expect {
+      expect do
         user.add_role(role.name)
-      }.to change { user.roles.count }.from(0).to(1)
+      end.to change { user.roles.count }.from(0).to(1)
     end
   end
 

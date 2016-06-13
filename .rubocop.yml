@@ -2,6 +2,8 @@ AllCops:
   Exclude:
     - 'bin/**/*'
     - 'db/**/*'
+  TargetRubyVersion: 2.3
+
 Rails:
   Enabled: true
 Metrics/LineLength:
@@ -14,11 +16,17 @@ Style/DotPosition:
   Enabled: false
 Style/EmptyElse:
   Enabled: false
+Style/FrozenStringLiteralComment:
+  Enabled: false
 Style/GuardClause:
   Enabled: false
 Style/IfUnlessModifier:
-  # inline conditionals don't get picked up by simplecov, so preferable to avoid them
-  Enabled: false
+  # Enabled even though simplecov doesn't "catch these" (not sure what that means).
+  # Because: 1) A broken 3rd party saas app is not a compelling reason to code in
+  #          un-idiomatic Ruby. 2) We barely use and pay attention to simplecov.
+  #          3) This particular coding style is fairly core to ruby unlike, say, single-
+  #          vs. double quotes.
+  Enabled: true
 Style/RedundantBegin:
   Enabled: false
 Style/RedundantSelf:

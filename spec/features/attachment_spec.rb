@@ -1,11 +1,11 @@
 describe "Add attachments" do
-  let (:proposal) { create(:proposal, :with_parallel_approvers) }
-  let! (:attachment) {
+  let(:proposal) { create(:proposal, :with_parallel_approvers) }
+  let!(:attachment) do
     create(:attachment, proposal: proposal,
-                       user: proposal.requester) }
+                        user: proposal.requester)
+  end
 
   before do
-    
     login_as(proposal.requester)
   end
 
@@ -42,7 +42,7 @@ describe "Add attachments" do
     login_as(proposal.requester)
 
     visit proposal_path(proposal)
-    page.attach_file('attachment[file]', "#{Rails.root}/app/assets/images/bg_completed_status.gif")
+    page.attach_file("attachment[file]", "#{Rails.root}/app/assets/images/bg_completed_status.gif")
     click_on "Attach a File"
 
     expect(proposal.attachments.length).to eq 1
@@ -56,9 +56,9 @@ describe "Add attachments" do
 
     visit proposal_path(proposal)
     page.execute_script("$('#attachment_file').addClass('show-attachment-file');")
-    page.attach_file('attachment[file]', "#{Rails.root}/app/assets/images/bg_completed_status.gif", visible: false)
+    page.attach_file("attachment[file]", "#{Rails.root}/app/assets/images/bg_completed_status.gif", visible: false)
     wait_for_ajax
-    within(".attachment-list") do 
+    within(".attachment-list") do
       expect(page).to have_content("bg_completed_status.gif")
     end
     within("#card-for-activity") do
@@ -73,11 +73,9 @@ describe "Add attachments" do
     proposal.add_observer(create(:user))
 
     visit proposal_path(proposal)
-    page.attach_file('attachment[file]', "#{Rails.root}/app/assets/images/bg_completed_status.gif")
+    page.attach_file("attachment[file]", "#{Rails.root}/app/assets/images/bg_completed_status.gif")
     click_on "Attach a File"
 
     expect(dispatcher).to have_received(:deliver_attachment_emails)
   end
-
-
 end

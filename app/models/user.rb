@@ -77,8 +77,10 @@ class User < ActiveRecord::Base
     client_model.to_s.underscore.tr("/", "_")
   end
 
+  # TODO: Remove this code which automatically creates roles because it's an invitation to
+  # data inconsistencies. (RS)
   def add_role(role_name)
-    role = Role.find_or_create_by!(name: role_name)
+    role = Role.find_or_create_by! name: role_name
     user_roles.find_or_create_by!(role: role)
   end
 
@@ -133,12 +135,14 @@ class User < ActiveRecord::Base
     roles.exists?(name: "admin")
   end
 
-  def beta_user?
-    roles.exists?(name: "beta_user")
+  # If we want to select certain beta features, we can add
+  # a parameter `(feature: nil)`.
+  def should_see_beta?
+    in_beta_program? && roles.exists?(name: ROLE_BETA_ACTIVE)
   end
 
-  def beta_detail?
-    roles.exists?(name: "beta_detail")
+  def in_beta_program?
+    roles.exists?(name: ROLE_BETA_USER)
   end
 
   def any_admin?
