@@ -11,11 +11,12 @@ module ValueHelper
     # so coerce into Time.zone explicitly
     adjusted_time = time.in_time_zone
 
-    # only show hours if its today
+    # if the date is today, show the time as well; otherwise only
+    # show the date
     adjusted_time_str = if opts[:truncate] && !time.today?
-                          adjusted_time.strftime("%b %-d, %Y")
+                          adjusted_time.to_s(:pretty_date)
                         else
-                          adjusted_time.strftime("%b %-d, %Y at %l:%M%P")
+                          adjusted_time.to_s(:pretty_datetime)
                         end
     get_content_tag("span", adjusted_time, adjusted_time_str, ago, opts)
   end
