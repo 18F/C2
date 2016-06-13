@@ -28,6 +28,13 @@ Style/FrozenStringLiteralComment:
 Style/GuardClause:
   Enabled: true
 
+Style/IfUnlessModifier:
+  Description: >-
+                 Favor modifier if/unless usage when you have a
+                 single-line body.
+  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#if-as-a-modifier'
+  Enabled: false
+
 Style/RedundantBegin:
   Enabled: false
 
