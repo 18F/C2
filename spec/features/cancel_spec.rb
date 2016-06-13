@@ -156,7 +156,7 @@ describe "Canceling a request" do
       cancel_proposal(proposal)
 
       expect(current_path).to eq("/proposals/#{proposal.id}")
-      expect(page).to have_content("has been canceled")
+      expect(page).to have_content("canceled")
       expect(proposal.reload.status).to eq("canceled")
       expect(proposal.reload.comments.last.comment_text).to eq("Request canceled with comments: This is a good reason for the cancelation.")
     end
