@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  has_paper_trail class_name: 'C2Version'
+  has_paper_trail class_name: "C2Version"
 
   validates :client_slug, inclusion: {
     in: ->(_) { Proposal.client_slugs },
@@ -28,9 +28,9 @@ class User < ActiveRecord::Base
   has_many :reports
   has_many :scheduled_reports
 
-  has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
+  has_many :oauth_applications, class_name: "Doorkeeper::Application", as: :owner
 
-  DEFAULT_TIMEZONE = "Eastern Time (US & Canada)"
+  DEFAULT_TIMEZONE = "Eastern Time (US & Canada)".freeze
 
   def self.active
     where(active: true)
@@ -136,11 +136,15 @@ class User < ActiveRecord::Base
   # If we want to select certain beta features, we can add
   # a parameter `(feature: nil)`.
   def should_see_beta?
-    in_beta_program? && roles.exists?(name: ROLE_BETA_ACTIVE)
+    in_beta_program? && role?(ROLE_BETA_ACTIVE)
   end
 
   def in_beta_program?
     roles.exists?(name: ROLE_BETA_USER)
+  end
+
+  def role?(role_name)
+    roles.exists?(name: role_name)
   end
 
   def any_admin?
