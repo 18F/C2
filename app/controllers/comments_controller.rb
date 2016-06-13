@@ -8,7 +8,7 @@ class CommentsController < ApplicationController
     )
 
     if comment.save
-      flash[:success] = "You successfully added a comment"
+      flash[:success] = "Success! You've added an attachment."
       DispatchFinder.run(comment.proposal).on_comment_created(comment)
     else
       flash[:error] = comment.errors.full_messages

@@ -43,7 +43,7 @@ feature "Edit a Gsa18F procurement" do
 
       click_on "Update"
 
-      expect(page).to have_content("No changes were made to the request")
+      expect(page).to have_content("No changes were made to the request.")
     end
 
     it "clicks discard changes link" do

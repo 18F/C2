@@ -43,11 +43,11 @@ class ObservationsController < ApplicationController
 
   def prep_create_response_msg(observer, observation)
     if observation
-      flash[:success] = "#{observer.full_name} has been added as an observer"
-      create_js_notification "success", "#{observer.full_name} has been added as an observer"
+      flash[:success] = "#{observer.full_name} is now an observer."
+      create_js_notification "success", "#{observer.full_name} is now an observer."
     else
-      flash[:alert] = "#{observer.email_address} is already an observer for this request"
-      create_js_notification "alert", "#{observer.email_address} is already an observer for this request"
+      flash[:alert] = "#{observer.full_name} is already observing this request."
+      create_js_notification "alert", "#{observer.full_name} is already observing this request."
     end
   end
 
