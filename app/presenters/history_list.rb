@@ -6,6 +6,14 @@ class HistoryList
     @events = make_events(ProposalVersionsQuery.new(proposal).container.query)
   end
 
+  def filtered_approvals
+    @events.reject! do |event|
+      event.item_type == "Steps::Approval" && 
+        event.object.include?("status: actionable")
+    end
+    @events
+  end
+
   private
 
   def filter_versions(versions)
@@ -35,4 +43,5 @@ class HistoryList
       HistoryEvent.new(version)
     end
   end
+
 end

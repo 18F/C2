@@ -17,7 +17,7 @@ class CommentsController < ApplicationController
   end
 
   def update_feed
-    events = HistoryList.new(proposal).events
+    events = HistoryList.new(proposal).filtered_approvals
     @proposal = proposal
     render partial: "proposals/details/activity", locals: { events: events }
   end
