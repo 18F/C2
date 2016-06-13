@@ -35,7 +35,8 @@ en:
         header: Timeline
         comment_form:
           headline: Add a comment
-          subhead: Your comment will be sent to all request participants.
+          placeholder: Your comment will be sent to all observers associated with this request.
+          subhead: Latest activity
         button:
           send: Send
           show_all_activity: Show all activity
