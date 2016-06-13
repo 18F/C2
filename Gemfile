@@ -1,5 +1,6 @@
 source "https://rubygems.org"
 ruby "2.3.1" # this should match `.ruby-version` and doc/setup.md
+gem "rails", "4.2.5.2"
 
 gem "active_model_serializers"
 gem "activeadmin", git: "https://github.com/activeadmin/activeadmin.git"
@@ -52,7 +53,6 @@ gem "pry-rails"
 gem "puma"
 gem "pundit", ">= 1.0.0" # Interface for Pundit::NotAuthorizedError changed in this version
 gem "rack-cors", require: "rack/cors"
-gem "rails"
 gem "redcarpet"
 gem "roadie-rails"
 gem "sass-rails", ">= 3.2"
