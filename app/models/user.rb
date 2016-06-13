@@ -122,15 +122,15 @@ class User < ActiveRecord::Base
   end
 
   def client_admin?
-    roles.exists?(name: "client_admin")
+    role? ROLE_CLIENT_ADMIN
   end
 
   def gateway_admin?
-    roles.exists?(name: "gateway_admin")
+    role? ROLE_GATEWAY_ADMIN
   end
 
   def admin?
-    roles.exists?(name: "admin")
+    role? ROLE_ADMIN
   end
 
   # If we want to select certain beta features, we can add
@@ -140,11 +140,11 @@ class User < ActiveRecord::Base
   end
 
   def in_beta_program?
-    roles.exists?(name: ROLE_BETA_USER)
+    role? ROLE_BETA_USER
   end
 
   def role?(role_name)
-    roles.exists?(name: role_name)
+    roles.exists? name: role_name
   end
 
   def any_admin?
