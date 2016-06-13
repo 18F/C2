@@ -13,7 +13,9 @@ feature "Observers" do
     select observer.email_address, from: "observation_user_id"
     click_on "Add an Observer"
 
-    expect(page).to have_content("#{observer.full_name} has been added as an observer")
+    expect(page).to have_content("#{observer.full_name} is now an observer.")
+
+    # TODO: is already an observer
   end
 
   scenario "allows observers to be added with javascript in the new detail view", js: true do
@@ -61,7 +63,7 @@ feature "Observers" do
     delete_button.click
 
     within(".observer-modal-content") do
-      click_on "Save"
+      click_on "REMOVE"
     end
 
     expect(page).to_not have_content(observer.full_name.to_s)
@@ -79,7 +81,7 @@ feature "Observers" do
     delete_button.click
 
     within(".observer-modal-content") do
-      click_on "Save"
+      click_on "REMOVE"
     end
     wait_for_ajax
 
@@ -98,7 +100,7 @@ feature "Observers" do
     delete_button.click
 
     within(".observer-modal-content") do
-      click_on "Save"
+      click_on "REMOVE"
     end
 
     wait_for_ajax
@@ -117,7 +119,7 @@ feature "Observers" do
     delete_button.click
 
     within(".observer-modal-content") do
-      click_on "Save"
+      click_on "REMOVE"
     end
 
     wait_for_ajax
@@ -135,7 +137,7 @@ feature "Observers" do
     select observer2.email_address, from: "observation_user_id"
     click_on "Add an Observer"
 
-    expect(page).to have_content("#{observer2.full_name} has been added as an observer")
+    expect(page).to have_content("#{observer2.full_name} is now an observer.")
   end
 
   scenario "allows a user to add a reason when adding an observer" do
@@ -149,7 +151,7 @@ feature "Observers" do
     fill_in "observation_reason", with: reason
     click_on "Add an Observer"
 
-    expect(page).to have_content("#{observer.full_name} has been added as an observer")
+    expect(page).to have_content("#{observer.full_name} is now an observer.")
   end
 
   scenario "hides the reason field until a new observer is selected", :js do

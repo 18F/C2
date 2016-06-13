@@ -81,7 +81,7 @@ feature "post-approval modification" do
     work_order.reload
 
     expect(page.status_code).to eq(200)
-    expect(page).to have_content("Success")
+    expect(page).to have_content("Your changes have been saved and the request has been modified.")
     expect(work_order.status).to eq("completed")
     expect(work_order.proposal.root_step.status).to eq("completed")
     expect(approval_statuses(work_order)).to eq(%w(
@@ -98,7 +98,7 @@ feature "post-approval modification" do
 
     login_as(work_order.requester)
     visit "/ncr/work_orders/#{work_order.id}/edit"
-    expect(page).to have_content("You are about to modify a fully approved request")
+    expect(page).to have_content("Wait! You're about to change an approved request. Your changes will be logged and sent to approvers, and your action may require reapproval of the request.")
     click_on "Discard Changes"
     expect(page).to_not have_content("You are about to modify a fully approved request")
   end

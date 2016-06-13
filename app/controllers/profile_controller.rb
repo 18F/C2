@@ -9,7 +9,7 @@ class ProfileController < ApplicationController
     user.last_name = user_params[:last_name]
     user.timezone = user_params[:timezone] || User::DEFAULT_TIMEZONE
     user.save!
-    flash[:success] = "Your profile is updated!"
+    flash[:success] = "You've updated your profile."
     redirect_to :profile
   end
 

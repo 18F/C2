@@ -6,7 +6,6 @@ describe "Add attachments" do
   end
 
   before do
-    Role.ensure_system_roles_exist
     login_as(proposal.requester)
   end
 
@@ -28,7 +27,7 @@ describe "Add attachments" do
     expect(page).to have_button("Delete")
     click_on("Delete")
     expect(current_path).to eq("/proposals/#{proposal.id}")
-    expect(page).to have_content("Deleted attachment")
+    expect(page).to have_content("You've deleted an attachment.")
     expect(Attachment.count).to be(0)
   end
 
