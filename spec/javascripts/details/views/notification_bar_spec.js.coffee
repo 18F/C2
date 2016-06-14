@@ -15,7 +15,12 @@ describe 'Notification', ->
   
   describe '#_postNotification', ->
     it "create a notification", ->
-  
+      notification = new Notifications(getNotificationContent())  
+      expect(notification.el.find('ul li').length).to.eql(0)
+      notice = notification._prepare({type: "success", content: "This is content", title: ""})
+      notification._postNotification(notice)
+      expect(notification.el.find('ul li').length).to.eql(1)
+
   describe '#_prepareOnLoadNotifications', ->
     it "on page load, create a notification for each meta tag", ->
       notification = new Notifications(getNotificationContent())  
@@ -47,6 +52,7 @@ describe 'Notification', ->
       expect(notification.el.find('ul li').is(':animated')).to.eql(false)
       notification.el.find('ul li .close').trigger('click')
       expect(notification.el.find('ul li').is(':animated')).to.eql(true)
+  
   describe '#_prepare', ->
     it "prepare a notification", ->
     it "handle a notification without a title", ->
