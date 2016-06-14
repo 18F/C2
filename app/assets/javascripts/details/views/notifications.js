@@ -39,14 +39,15 @@ Notifications = (function(){
     this._postNotification(notice);
   }
 
-  Notifications.prototype._closeButton = function(el){
+  Notifications.prototype._closeButton = function(el, animateLength){
+    var time = animateLength || 500
     this.el.delegate('.close', 'click', function(){
       var el = this;
       var $notice = $(el).closest('.notification-bar-el');
       $notice.animate({
         "min-height": "0px", 
         height: "0px"
-      }, 500, 
+      }, time, 
       function(){ 
         $notice.remove();
       });

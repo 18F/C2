@@ -35,9 +35,18 @@ describe 'Notification', ->
       notification._prepareOnLoadNotifications(el)
       expect(notification.el.find('ul li .notification-content').text()).to.eql("Notification text here")
       expect(notification.el.find('ul li.notice-type-success').length).to.eql(1)
+
   describe '#_closeButton', ->
     it "make sure the close button deletes the notification", ->
-  
+      notification = new Notifications(getNotificationContent())  
+      el = $('
+        <meta name="flash-message" type="success" content="Notification text here">  
+      ')
+      notification._prepareOnLoadNotifications(el)
+      expect(notification.el.find('ul li').length).to.eql(1) 
+      expect(notification.el.find('ul li').is(':animated')).to.eql(false)
+      notification.el.find('ul li .close').trigger('click')
+      expect(notification.el.find('ul li').is(':animated')).to.eql(true)
   describe '#_prepare', ->
     it "prepare a notification", ->
     it "handle a notification without a title", ->
