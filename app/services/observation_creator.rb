@@ -11,10 +11,7 @@ class ObservationCreator
 
     if adding_observer_via_proposal_page?
       send_observation_added_email
-
-      if reason.present?
-        add_observation_comment
-      end
+      add_observation_comment if reason.present?
     end
 
     observation
@@ -26,7 +23,7 @@ class ObservationCreator
 
   def create_observation
     proposal.observations << observation
-    proposal.observers(true) #invalidate relation cache
+    proposal.observers(true) # invalidate relation cache
   end
 
   def proposal

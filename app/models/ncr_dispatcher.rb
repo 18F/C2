@@ -24,6 +24,9 @@ class NcrDispatcher < Dispatcher
     end
   end
 
+  # TODO Remove
+  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/AbcSize
   def notify_requester(needs_review, comment)
     if proposal.requester != comment.user
       if needs_review == true

@@ -1,4 +1,6 @@
 class CancelationMailer < ApplicationMailer
+  # TODO: Remove
+  # rubocop:disable Metrics/MethodLength
   def cancelation_notification(recipient:, canceler:, proposal:, reason: nil)
     @reason = reason
     @user = canceler
