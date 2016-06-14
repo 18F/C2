@@ -19,13 +19,11 @@ Notifications = (function(){
     var notices = [];
     var flashes = $('meta[name="flash-message"]');
     for (var i = flashes.length - 1; i >= 0; i--) {
-      var flash = $(flashes[i]);
-      var param = {
+      this.create({
         title: "",
-        content: flash.attr("content"),
-        type: flash.attr("type")
-      }
-      this.create(param);
+        content: $(flashes[i]).attr("content"),
+        type: $(flashes[i]).attr("type")
+      });
     }
   }
 
