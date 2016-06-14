@@ -162,11 +162,17 @@ C2 = (function() {
 
   C2.prototype._setupNotifications = function(){
     var notice = this.notification;
+    var self = this;
     this.notification.el.on('notification:create', function(event, data){
       notice.create(data);
     });
-    if(window.onLoadNotice !== undefined){
-      this.createNotification(window.onLoadNotice, "", "success");
+    if(window.onLoadNotices && window.onLoadNotices.length > 0){
+      window.setTimeout(function(){
+        for (var i = window.onLoadNotices.length - 1; i >= 0; i--) {
+          var notice = window.onLoadNotices[i];
+          self.createNotification(notice['message'], "", notice['type']);
+        }
+      }, 500);
     }
   }
 
