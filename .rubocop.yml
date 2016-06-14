@@ -25,9 +25,11 @@ Style/EmptyElse:
 Style/FrozenStringLiteralComment:
   Enabled: false
 
+# TODO: Change
 Style/GuardClause:
   Enabled: false
 
+# TODO: Change
 Style/IfUnlessModifier:
   Description: >-
                  Favor modifier if/unless usage when you have a
@@ -47,8 +49,9 @@ Style/SignalException:
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 
+# TODO: Change to always
 Style/AndOr:
-  EnforcedStyle: always
+  EnforcedStyle: conditionals
 
 ClassLength:
   Max: 250
