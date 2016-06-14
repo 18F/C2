@@ -10,13 +10,13 @@ describe 'Notification', ->
 
   describe '#setup', ->
     
-    it "set in view mode", ->
+    it "sets in view mode", ->
       notification = new Notifications(getNotificationContent())  
       expect(notification instanceof Notifications).to.eql(true)
   
   describe '#_postNotification', ->
     
-    it "create a notification without type", ->
+    it "creates a notification without type", ->
       notification = new Notifications(getNotificationContent())  
       expect(notification.el.find('ul li').length).to.eql(0)
       notice = notification._prepare({type: "", content: "This is content", title: ""})
@@ -26,7 +26,7 @@ describe 'Notification', ->
       expect(notification.el.find('ul li.notice-type-primary').length).to.eql(1)
       expect(notification.el.find('ul li .notification-content').text()).to.eql("This is content")
     
-    it "create a notification with type", ->
+    it "creates a notification with type", ->
       notification = new Notifications(getNotificationContent())  
       expect(notification.el.find('ul li').length).to.eql(0)
       notice = notification._prepare({type: "success", content: "This is content", title: ""})
@@ -35,7 +35,7 @@ describe 'Notification', ->
       expect(notification.el.find('ul li.notice-type-success').length).to.eql(1)
       expect(notification.el.find('ul li.notice-type-primary').length).to.eql(0)
     
-    it "create a notification with title", ->
+    it "creates a notification with title", ->
       notification = new Notifications(getNotificationContent())  
       expect(notification.el.find('ul li').length).to.eql(0)
       notice = notification._prepare({type: "success", content: "This is content", title: "This is a title"})
@@ -44,7 +44,7 @@ describe 'Notification', ->
 
   describe '#_prepareOnLoadNotifications', ->
     
-    it "on page load, create a notification for each meta tag", ->
+    it "creates a notification for each meta tag on page load", ->
       notification = new Notifications(getNotificationContent())  
       el = $('
         <meta name="flash-message" type="success" content="Notification text here">  
@@ -55,7 +55,7 @@ describe 'Notification', ->
       expect(notification.el.find('ul li').length).to.eql(2)
 
     
-    it "meta tag based notification should have all fields", ->
+    it "should have all fields in notifcation based on metas tag", ->
       notification = new Notifications(getNotificationContent())  
       el = $('
         <meta name="flash-message" type="success" content="Notification text here">  
@@ -66,7 +66,7 @@ describe 'Notification', ->
 
   describe '#_closeButton', ->
     
-    it "make sure the close button deletes the notification", ->
+    it "makes sure the close button deletes the notification", ->
       notification = new Notifications(getNotificationContent())  
       el = $('
         <meta name="flash-message" type="success" content="Notification text here">  
@@ -79,35 +79,35 @@ describe 'Notification', ->
   
   describe '#_prepare', ->
     
-    it "prepare a notification", ->
+    it "prepares a notification", ->
       notification = new Notifications(getNotificationContent())  
       expect(notification.el.find('ul li').length).to.eql(0)
       notice = notification._prepare({type: undefined, content: "", title: ""})
       expect($(notice).hasClass('notice-type-primary')).to.eql(true)
       expect($(notice).attr('data-timeout')).to.eql("5000")
     
-    it "handle a notification with alert", ->
+    it "handles a notification with alert", ->
       notification = new Notifications(getNotificationContent())  
       expect(notification.el.find('ul li').length).to.eql(0)
       notice = notification._prepare({type: "alert", content: "", title: ""})
       expect($(notice).attr('data-timeout')).to.not.eql("5000")
       expect($(notice).attr('data-timeout')).to.eql("none")
     
-    it "handle a notification without a content", ->
+    it "handles a notification without a content", ->
       notification = new Notifications(getNotificationContent())  
       expect(notification.el.find('ul li').length).to.eql(0)
       notice = notification._prepare({type: "alert", content: "", title: ""})
       expect($(notice).length).to.eql(1)
       expect($(notice).find('.notification-content').text()).to.eql("")
     
-    it "handle a notification without a type", ->
+    it "handles a notification without a type", ->
       notification = new Notifications(getNotificationContent())  
       expect(notification.el.find('ul li').length).to.eql(0)
       notice = notification._prepare({type: "alert", content: "", title: ""})
       expect($(notice).length).to.eql(1)
       expect($(notice).find('.notification-title').text()).to.eql("")
     
-    it "handle a notification with a timeout", ->
+    it "handles a notification with a timeout", ->
       notification = new Notifications(getNotificationContent())  
       expect(notification.el.find('ul li').length).to.eql(0)
       notice = notification._prepare({timeout: "10000", content: "", title: ""})
@@ -117,7 +117,7 @@ describe 'Notification', ->
   
   describe '#clearAll', ->
     
-    it "remove all four notifications", ->
+    it "removes all four notifications", ->
       notification = new Notifications(getNotificationContent())  
       expect(notification.el.find('ul li').length).to.eql(0)
       notice = notification._prepare({type: "", content: "This is content", title: ""})
@@ -135,8 +135,8 @@ describe 'Notification', ->
 
   describe '#clearOne', ->
     
-    it "remove a single notification", ->
-        notification = new Notifications(getNotificationContent())  
+    it "removes a single notification", ->
+      notification = new Notifications(getNotificationContent())  
       expect(notification.el.find('ul li').length).to.eql(0)
       notice = notification._prepare({type: "", content: "This is content", title: ""})
       notification._postNotification(notice)
