@@ -1,5 +1,7 @@
 - content_for :top_notification do
   = render partial: "proposals/details/top_notification", locals: { proposal: @proposal } 
+  - if flash[:success]
+    = render partial: "proposals/details/on_load_notification", locals: { message: flash[:success] } 
 
 = stylesheet_link_tag "redesign/app"
 

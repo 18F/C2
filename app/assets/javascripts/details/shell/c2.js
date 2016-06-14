@@ -165,6 +165,9 @@ C2 = (function() {
     this.notification.el.on('notification:create', function(event, data){
       notice.create(data);
     });
+    if(window.onLoadNotice !== undefined){
+      this.createNotification(window.onLoadNotice, "", "success");
+    }
   }
 
   C2.prototype._setupDetailsData = function(){
