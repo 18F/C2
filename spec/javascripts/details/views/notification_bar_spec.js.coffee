@@ -72,11 +72,36 @@ describe 'Notification', ->
   
   describe '#_prepare', ->
     it "prepare a notification", ->
-    it "handle a notification without a title", ->
+      notification = new Notifications(getNotificationContent())  
+      expect(notification.el.find('ul li').length).to.eql(0)
+      notice = notification._prepare({type: undefined, content: "", title: ""})
+      expect($(notice).hasClass('notice-type-primary')).to.eql(true)
+      expect($(notice).attr('data-timeout')).to.eql("5000")
+    it "handle a notification with alert", ->
+      notification = new Notifications(getNotificationContent())  
+      expect(notification.el.find('ul li').length).to.eql(0)
+      notice = notification._prepare({type: "alert", content: "", title: ""})
+      expect($(notice).attr('data-timeout')).to.not.eql("5000")
+      expect($(notice).attr('data-timeout')).to.eql("none")
     it "handle a notification without a content", ->
+      notification = new Notifications(getNotificationContent())  
+      expect(notification.el.find('ul li').length).to.eql(0)
+      notice = notification._prepare({type: "alert", content: "", title: ""})
+      expect($(notice).length).to.eql(1)
+      expect($(notice).find('.notification-content').text()).to.eql("")
     it "handle a notification without a type", ->
+      notification = new Notifications(getNotificationContent())  
+      expect(notification.el.find('ul li').length).to.eql(0)
+      notice = notification._prepare({type: "alert", content: "", title: ""})
+      expect($(notice).length).to.eql(1)
+      expect($(notice).find('.notification-title').text()).to.eql("")
     it "handle a notification with a timeout", ->
-  
+      notification = new Notifications(getNotificationContent())  
+      expect(notification.el.find('ul li').length).to.eql(0)
+      notice = notification._prepare({timeout: "10000", content: "", title: ""})
+      expect($(notice).length).to.eql(1)
+      expect($(notice).attr('data-timeout')).to.not.eql("5000")
+      expect($(notice).attr('data-timeout')).to.eql("10000")
   describe '#clearAll', ->
     it "remove all four notifications", ->
   
