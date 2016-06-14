@@ -27,7 +27,7 @@ Style/FrozenStringLiteralComment:
 
 # TODO: Change
 Style/GuardClause:
-  Enabled: false
+  Enabled: true
 
 # TODO: Change
 Style/IfUnlessModifier:
@@ -35,7 +35,7 @@ Style/IfUnlessModifier:
                  Favor modifier if/unless usage when you have a
                  single-line body.
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#if-as-a-modifier'
-  Enabled: false
+  Enabled: true
 
 Style/RedundantBegin:
   Enabled: false
@@ -51,7 +51,7 @@ Style/StringLiterals:
 
 # TODO: Change to always
 Style/AndOr:
-  EnforcedStyle: conditionals
+  EnforcedStyle: always
 
 ClassLength:
   Max: 250

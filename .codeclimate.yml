@@ -8,6 +8,9 @@ engines:
     enabled: true
   rubocop:
     enabled: true
+    checks:
+      Rubocop/Style/AndOr:
+        enabled: false
   bundler-audit:
     enabled: true
   brakeman:
