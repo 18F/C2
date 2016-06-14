@@ -102,12 +102,33 @@ describe 'Notification', ->
       expect($(notice).length).to.eql(1)
       expect($(notice).attr('data-timeout')).to.not.eql("5000")
       expect($(notice).attr('data-timeout')).to.eql("10000")
+  
   describe '#clearAll', ->
     it "remove all four notifications", ->
-  
+      notification = new Notifications(getNotificationContent())  
+      expect(notification.el.find('ul li').length).to.eql(0)
+      notice = notification._prepare({type: "", content: "This is content", title: ""})
+      notification._postNotification(notice)
+      expect(notification.el.find('ul li').length).to.eql(1)
+      notification._postNotification(notice)
+      expect(notification.el.find('ul li').length).to.eql(2)
+      notification._postNotification(notice)
+      notification._postNotification(notice)
+      expect(notification.el.find('ul li').length).to.eql(4)
+      expect(notification.el.find('ul li').last().is(':animated')).to.eql(false)
+      notification.clearAll()
+      expect(notification.el.find('ul li').first().is(':animated')).to.eql(true)
+      expect(notification.el.find('ul li').last().is(':animated')).to.eql(true)
   describe '#clearOne', ->
     it "remove a single notification", ->
-  
+        notification = new Notifications(getNotificationContent())  
+      expect(notification.el.find('ul li').length).to.eql(0)
+      notice = notification._prepare({type: "", content: "This is content", title: ""})
+      notification._postNotification(notice)
+      expect(notification.el.find('ul li').length).to.eql(1)
+      expect(notification.el.find('ul li').last().is(':animated')).to.eql(false)
+      notification.clearOne(notification.el.find('ul li'))
+      expect(notification.el.find('ul li').last().is(':animated')).to.eql(true)
   describe '#initClose', ->
     it "make sure notification bar closes after the init period with timeout", ->
     it "cancel the auto close on click of the notification", ->
