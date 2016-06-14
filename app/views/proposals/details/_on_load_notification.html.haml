@@ -1,9 +1,0 @@
-- message.each do |key, value|
-  :javascript
-    (function(){
-      $(document).ready( function() {
-        var notices = [] || window.onLoadNotices;
-        notices.push({message: "#{value}", type: "#{key}"});
-        window.onLoadNotices = notices;
-      } );
-    })();

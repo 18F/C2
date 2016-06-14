@@ -166,13 +166,15 @@ C2 = (function() {
     this.notification.el.on('notification:create', function(event, data){
       notice.create(data);
     });
-    if(window.onLoadNotices && window.onLoadNotices.length > 0){
-      window.setTimeout(function(){
-        for (var i = window.onLoadNotices.length - 1; i >= 0; i--) {
-          var notice = window.onLoadNotices[i];
-          self.createNotification(notice['message'], "", notice['type']);
-        }
-      }, 500);
+    this._prepareOnLoadNotifications()
+  }
+
+  C2.prototype._prepareOnLoadNotifications = function(){
+    var notices = [];
+    var flashes = $('meta[name="flash-message"]');
+    for (var i = flashes.length - 1; i >= 0; i--) {
+      var flash = $(flashes[i]);
+      self.createNotification(flash.attr('message'), "", flash.attr('type'));
     }
   }
 

@@ -12,6 +12,7 @@
     <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
     <%= render "layouts/analytics" %>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <%= render "layouts/meta_notice" %>
     <%= csrf_meta_tags %>
   </head>
   <body class="bodyclass webapp controller-<%= controller_name %> action-<%= params[:action] %>">
