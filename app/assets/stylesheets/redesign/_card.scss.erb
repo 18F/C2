@@ -1,6 +1,6 @@
 .card-head{
   h2, h3{
-    color: #3A6E93;
+    color: map-get($c2blue-swatch, primary);
     font-weight: 600;
     font-size: 20px;
   }
@@ -93,7 +93,7 @@
     margin-right: 0px;
   }
   h2{
-    color: #3A6E93;
+    color: map-get($c2blue-swatch, primary);
   }
   .content-content{
     padding-top: 30px;
@@ -234,5 +234,9 @@
     img {
       border-radius: 2px 2px 0 0;
     }
+  }
+  div[role=tooltip] {
+    background-color: map-get($c2blue-swatch, primary) !important;
+    color: white !important;
   }
 }
