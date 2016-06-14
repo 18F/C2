@@ -11,6 +11,10 @@ engines:
     checks:
       Rubocop/Style/AndOr:
         enabled: false
+      Rubocop/Style/GuardClause:
+        enabled: false
+      Rubocop/Style/IfUnlessModifier:
+        enabled: false
   bundler-audit:
     enabled: true
   brakeman:

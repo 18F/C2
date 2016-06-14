@@ -4,11 +4,11 @@ AllCops:
     - 'db/**/*'
   TargetRubyVersion: 2.3
 
-Rails:
-  Enabled: true
-
 Metrics/LineLength:
   Enabled: false
+
+Rails:
+  Enabled: true
 
 Style/CommentAnnotation:
   Enabled: false
@@ -25,11 +25,9 @@ Style/EmptyElse:
 Style/FrozenStringLiteralComment:
   Enabled: false
 
-# TODO: Change
 Style/GuardClause:
   Enabled: true
 
-# TODO: Change
 Style/IfUnlessModifier:
   Description: >-
                  Favor modifier if/unless usage when you have a
@@ -49,7 +47,6 @@ Style/SignalException:
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 
-# TODO: Change to always
 Style/AndOr:
   EnforcedStyle: always
 
