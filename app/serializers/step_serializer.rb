@@ -1,11 +1,14 @@
 class StepSerializer < ActiveModel::Serializer
-  # make sure to keep docs/api.md up-to-date
-
   attributes(
     :id,
-    :status
+    :status,
+    :completed_at,
+    :type
   )
 
   has_one :user
-  # TODO updated_at, as a proxy for when it was approved
+
+  def completed_at
+    object.completed_at.try(:utc)
+  end
 end
