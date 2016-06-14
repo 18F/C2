@@ -15,7 +15,7 @@ class ScheduledReportsController < ApplicationController
 
   def save_and_respond(scheduled_report, status = 200)
     scheduled_report.save!
-    flash[:success] = "Your subscription has been updated to #{scheduled_report.frequency}."
+    flash[:success] = "Subscription updated! You'll now receive #{scheduled_report.frequency} reports."
     respond_to do |format|
       format.json { render json: scheduled_report.as_json, status: status, location: scheduled_report }
       format.html { redirect_to report_path(scheduled_report.report) }

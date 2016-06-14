@@ -12,7 +12,7 @@ feature "Feedback page" do
     visit feedback_path
 
     expect(page).not_to have_content(
-      "You are not allowed to login because your account has been deactivated."
+      "Your account is no longer active. Please contact an administrator for details."
     )
   end
 
@@ -31,7 +31,7 @@ feature "Feedback page" do
     visit feedback_path
 
     expect(page).to have_content(
-      "You are not allowed to login because your account has been deactivated. Please contact an administrator."
+      "Your account is no longer active. Please contact an administrator for details."
     )
     expect(page).not_to have_content(inactive_user.email_address)
   end

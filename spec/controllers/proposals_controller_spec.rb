@@ -266,7 +266,7 @@ describe ProposalsController do
       get :cancel_form, id: proposal.id
 
       expect(response).to redirect_to(proposal_path proposal.id)
-      expect(flash[:alert]).to eq 'Sorry, this proposal has been canceled.'
+      expect(flash[:alert]).to eq 'Sorry, this request has been canceled.'
     end
   end
 

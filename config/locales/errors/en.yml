@@ -26,7 +26,7 @@ en:
         show_permission: "You are not allowed to see this proposal"
         requester_permission: "You are not the requester"
         completed: "That proposal's already completed. New proposal?"
-        canceled: "Sorry, this proposal has been canceled."
+        canceled: "Sorry, this request has been canceled."
         step_permission: "Sorry, you're not an approver on this proposal"
         observer_permission: "Sorry, you're not an observer on this proposal"
         step_complete: "A response has already been logged for this proposal"

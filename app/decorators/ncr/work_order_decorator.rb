@@ -36,7 +36,7 @@ module Ncr
     end
 
     def new_display
-      %w(description expense_type emergency rwa_number work_order_code ncr_organization vendor building_number cl_number function_code soc_code direct_pay amount)
+      %w(description expense_type emergency rwa_number work_order_code ncr_organization_id vendor building_number cl_number function_code soc_code direct_pay amount)
     end
 
     def top_email_field
