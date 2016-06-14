@@ -14,12 +14,29 @@ describe 'Notification', ->
       expect(notification instanceof Notifications).to.eql(true)
   
   describe '#_postNotification', ->
-    it "create a notification", ->
+    it "create a notification without type", ->
+      notification = new Notifications(getNotificationContent())  
+      expect(notification.el.find('ul li').length).to.eql(0)
+      notice = notification._prepare({type: "", content: "This is content", title: ""})
+      notification._postNotification(notice)
+      expect(notification.el.find('ul li').length).to.eql(1)
+      expect(notification.el.find('ul li.notice-type').length).to.eql(0)
+      expect(notification.el.find('ul li.notice-type-primary').length).to.eql(1)
+      expect(notification.el.find('ul li .notification-content').text()).to.eql("This is content")
+    it "create a notification with type", ->
       notification = new Notifications(getNotificationContent())  
       expect(notification.el.find('ul li').length).to.eql(0)
       notice = notification._prepare({type: "success", content: "This is content", title: ""})
       notification._postNotification(notice)
       expect(notification.el.find('ul li').length).to.eql(1)
+      expect(notification.el.find('ul li.notice-type-success').length).to.eql(1)
+      expect(notification.el.find('ul li.notice-type-primary').length).to.eql(0)
+    it "create a notification with title", ->
+      notification = new Notifications(getNotificationContent())  
+      expect(notification.el.find('ul li').length).to.eql(0)
+      notice = notification._prepare({type: "success", content: "This is content", title: "This is a title"})
+      notification._postNotification(notice)
+      expect(notification.el.find('ul li .notification-title').text()).to.eql("This is a title")
 
   describe '#_prepareOnLoadNotifications', ->
     it "on page load, create a notification for each meta tag", ->
