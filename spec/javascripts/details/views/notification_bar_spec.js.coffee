@@ -119,6 +119,7 @@ describe 'Notification', ->
       notification.clearAll()
       expect(notification.el.find('ul li').first().is(':animated')).to.eql(true)
       expect(notification.el.find('ul li').last().is(':animated')).to.eql(true)
+
   describe '#clearOne', ->
     it "remove a single notification", ->
         notification = new Notifications(getNotificationContent())  
@@ -129,12 +130,3 @@ describe 'Notification', ->
       expect(notification.el.find('ul li').last().is(':animated')).to.eql(false)
       notification.clearOne(notification.el.find('ul li'))
       expect(notification.el.find('ul li').last().is(':animated')).to.eql(true)
-  describe '#initClose', ->
-    it "make sure notification bar closes after the init period with timeout", ->
-    it "cancel the auto close on click of the notification", ->
-
-  describe '#generate', ->
-    it "create the expected notification bar", ->
-    it "change params without timeout", ->
-    it "change params without title", ->
-    it "change params without type", ->
