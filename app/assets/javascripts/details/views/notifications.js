@@ -22,8 +22,8 @@ Notifications = (function(){
       var flash = $(flashes[i]);
       var param = {
         title: "",
-        content: flash["content"],
-        type: flash["type"]
+        content: flash.attr("content"),
+        type: flash.attr("type")
       }
       this.create(param);
     }
