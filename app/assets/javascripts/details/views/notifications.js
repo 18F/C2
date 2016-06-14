@@ -12,6 +12,21 @@ Notifications = (function(){
   
   Notifications.prototype._setup = function(){
     this._events();
+    this._prepareOnLoadNotifications()
+  }
+
+  Notifications.prototype._prepareOnLoadNotifications = function(){
+    var notices = [];
+    var flashes = $('meta[name="flash-message"]');
+    for (var i = flashes.length - 1; i >= 0; i--) {
+      var flash = $(flashes[i]);
+      var param = {
+        title: "",
+        content: flash.attr("content"),
+        type: flash.attr("type")
+      }
+      this.create(param);
+    }
   }
 
   Notifications.prototype._events = function(){
