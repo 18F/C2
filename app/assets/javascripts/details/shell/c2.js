@@ -165,17 +165,6 @@ C2 = (function() {
     this.notification.el.on('notification:create', function(event, data){
       notice.create(data);
     });
-    this._prepareOnLoadNotifications()
-  }
-
-  C2.prototype._prepareOnLoadNotifications = function(){
-    var self = this;
-    var notices = [];
-    var flashes = $('meta[name="flash-message"]');
-    for (var i = flashes.length - 1; i >= 0; i--) {
-      var flash = $(flashes[i]);
-      self.createNotification(flash.attr('message'), "", flash.attr('type'));
-    }
   }
 
   C2.prototype._setupDetailsData = function(){
