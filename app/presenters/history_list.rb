@@ -8,7 +8,7 @@ class HistoryList
 
   def filtered_approvals
     @events.reject! do |event|
-      event.item_type == "Steps::Approval" && 
+      event.item_type == "Steps::Approval" &&
         event.object.include?("status: actionable")
     end
     @events
@@ -43,5 +43,4 @@ class HistoryList
       HistoryEvent.new(version)
     end
   end
-
 end
