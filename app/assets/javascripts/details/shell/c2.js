@@ -162,7 +162,6 @@ C2 = (function() {
 
   C2.prototype._setupNotifications = function(){
     var notice = this.notification;
-    var self = this;
     this.notification.el.on('notification:create', function(event, data){
       notice.create(data);
     });
@@ -170,6 +169,7 @@ C2 = (function() {
   }
 
   C2.prototype._prepareOnLoadNotifications = function(){
+    var self = this;
     var notices = [];
     var flashes = $('meta[name="flash-message"]');
     for (var i = flashes.length - 1; i >= 0; i--) {
