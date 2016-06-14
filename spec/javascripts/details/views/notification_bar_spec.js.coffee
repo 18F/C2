@@ -1,4 +1,5 @@
 #= require jquery
+#= require progressbar
 #= require ladda/ladda.min
 #= require ladda/ladda.jquery.min
 #= require details/views/notifications
@@ -14,6 +15,19 @@ describe 'Notification', ->
   
   describe '#_postNotification', ->
     it "create a notification", ->
+  
+  describe '#_prepareOnLoadNotifications', ->
+    it "on page load, create a notification for each meta tag", ->
+      notification = new Notifications(getNotificationContent())  
+      el = $('
+        <meta name="flash-message" type="success" content="Notification text here">  
+      ')
+      notification._prepareOnLoadNotifications(el)
+      expect(notification.el.find('ul li').length).to.eql(1)
+      notification._prepareOnLoadNotifications(el)
+      expect(notification.el.find('ul li').length).to.eql(2)
+
+    it "meta tag based notification should have all fields", ->
 
   describe '#_closeButton', ->
     it "make sure the close button deletes the notification", ->
