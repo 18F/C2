@@ -28,7 +28,13 @@ describe 'Notification', ->
       expect(notification.el.find('ul li').length).to.eql(2)
 
     it "meta tag based notification should have all fields", ->
-
+      notification = new Notifications(getNotificationContent())  
+      el = $('
+        <meta name="flash-message" type="success" content="Notification text here">  
+      ')
+      notification._prepareOnLoadNotifications(el)
+      expect(notification.el.find('ul li .notification-content').text()).to.eql("Notification text here")
+      expect(notification.el.find('ul li.notice-type-success').length).to.eql(1)
   describe '#_closeButton', ->
     it "make sure the close button deletes the notification", ->
   
