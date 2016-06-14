@@ -223,7 +223,7 @@ class ProposalsController < ApplicationController
 
   def cancel_proposal
     cancel_proposal_and_send_cancelation_emails
-    flash[:success] = "Your request has been canceled"
+    flash[:success] = "You've canceled the request."
     redirect_path = new_mode ? proposals_path : proposal_path(proposal)
     redirect_to redirect_path
   end

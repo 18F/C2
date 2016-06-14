@@ -8,42 +8,43 @@ en:
 
         save:
           title: Save your changes?
-          desc: Click Cancel to discard changes, or Save to update the request. Saving will notify %{count} observers.
-          cancel_button: Cancel
-          save_button: Save
+          desc: Click Save to update your request and notify %{count} participants, or click Cancel to discard your changes.
+          cancel_button: CANCEL
+          save_button: SAVE
         cancel:
           title: Wait! You're about to cancel your request.
-          desc: Cancelling a request permenantly removes it from C2 and notifies all participants. Do you want to proceed?
-          form_reason: Please provide a reason for cancelation.
+          desc: Canceling a request permanently removes it from C2 and notifies all partcipants. Do you want to proceed?
+          form_reason: Why are you canceling?
           cancel_button: NO, TAKE ME BACK
           save_button: YES, CANCEL
         after_cancel:
-          title: You've canceled your request
+          title: You've canceled the request.
         attachment:
           title: Remove this attachment?
-          desc: Click Cancel to keep this attachment on the list, or Save to confirm the removal.
-          cancel_button: Cancel
-          save_button: Save
+          desc: Click Remove to confirm the removal, or click Cancel to keep this attachment.
+          cancel_button: CANCEL
+          save_button: REMOVE
         observer:
           title: Remove this observer?
-          desc: Click Cancel to keep this observer on the list, or Save to confirm the removal.
-          cancel_button: Cancel
-          save_button: Save
+          desc: Click Cancel to keep this observer, or click Remove to confirm the removal.
+          desc: Click Remove to confirm the removal, or click Cancel to keep this observer.
+          cancel_button: CANCEL
+          save_button: REMOVE
 
       activity:
         header: Timeline
         comment_form:
           headline: Add a comment
-          placeholder: Your comment will be sent to all observers associated with this request.
+          placeholder: Your comment will be sent to all request participants.
           subhead: Latest activity
         button:
           send: Send
           show_all_activity: Show all activity
           hidden_activity_count: (%{count} more)
-          minimize_activity: Minimize
+          minimize_activity: Show less activity
       comment_list:
         button:
           send: Send
           show_all_activity: Show all activity
           hidden_activity_count: (%{count} more)
-          minimize_activity: Minimize
+          minimize_activity: Show less activity

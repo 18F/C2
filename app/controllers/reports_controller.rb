@@ -22,7 +22,7 @@ class ReportsController < ApplicationController
   def preview
     @report = report
     ReportMailer.scheduled_report(report.name, report, current_user).deliver_later
-    flash[:success] = "The report has been sent."
+    flash[:success] = "Success! The report has been sent."
     redirect_to report_path(@report)
   end
 

@@ -4,16 +4,16 @@ describe ObservationsController do
 
     it "requires an email address" do
       login_as(proposal.requester)
-      expect{ 
+      expect{
         post :create, proposal_id: proposal.id
       }.to raise_error(ActionController::ParameterMissing)
-      expect{ 
+      expect{
         post :create, proposal_id: proposal.id, observation: {user: "abc"}
       }.to raise_error(ActionController::ParameterMissing)
-      expect{ 
+      expect{
         post :create, proposal_id: proposal.id, observation: {user: {name: "abc"}}
       }.to raise_error(ActionController::ParameterMissing)
-      expect{ 
+      expect{
         post :create, proposal_id: proposal.id, observation: {user: {email_address: ""}}
       }.to raise_error(ActionController::ParameterMissing)
     end
@@ -23,10 +23,10 @@ describe ObservationsController do
       observer = create(:user, client_slug: nil)
 
       post :create, proposal_id: proposal.id, observation: { user: { id: observer.id } }
-      expect(flash[:success]).to eq("#{observer.full_name} has been added as an observer")
+      expect(flash[:success]).to eq("#{observer.full_name} is now an observer.")
 
       post :create, proposal_id: proposal.id, observation: { user: { id: observer.id } }
-      expect(flash[:alert]).to eq("#{observer.email_address} is already an observer for this request")
+      expect(flash[:alert]).to eq("#{observer.full_name} is already observing this request.")
     end
   end
 

@@ -19,7 +19,7 @@ module Oauth
 
     def authenticate_user!
       unless current_user
-        flash[:error] = "You must login to access OAuth Applications"
+        flash[:error] = "Please sign in to access authorized applications."
         redirect_to "/"
       end
     end

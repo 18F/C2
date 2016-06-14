@@ -76,7 +76,7 @@ feature "Requester edits their NCR work order", :js do
     click_on "Update"
 
     expect(current_path).to eq(proposal_path(work_order.proposal))
-    expect(page).to have_content("No changes were made to the request")
+    expect(page).to have_content("No changes were made to the request.")
     expect(deliveries.length).to eq(0)
   end
 
