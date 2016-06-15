@@ -306,6 +306,15 @@ describe User do
         user.add_role(role.name)
       end.to change { user.roles.count }.from(0).to(1)
     end
+
+    it "allows the user to immediately see its role" do
+      user = create(:user)
+      user.roles.clear
+
+      user.add_role ROLE_BETA_USER
+
+      expect(user.roles).not_to be_empty
+    end
   end
 
   describe "#all_reports" do
