@@ -74,8 +74,7 @@ class User < ActiveRecord::Base
   end
 
   def add_role(role_name)
-    role = Role.find_or_create_by!(name: role_name)
-    user_roles.find_or_create_by!(role: role)
+    roles << Role.find_or_create_by!(name: role_name)
   end
 
   def remove_role(role_name)

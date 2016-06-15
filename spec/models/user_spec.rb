@@ -47,7 +47,7 @@ describe User do
 
     it "raises error when email is empty" do
       expect do
-        user = User.for_email("")
+        User.for_email("")
       end.to raise_error EmailRequired
     end
   end
@@ -61,7 +61,7 @@ describe User do
   end
 
   describe ".with_role" do
-    it "returns all users with a particular Role" do
+    it "returns all users with a particular role name" do
       user1 = create(:user)
       user1.add_role("foo")
       user2 = create(:user)
@@ -69,16 +69,8 @@ describe User do
 
       expect(User.with_role("bar")).to eq([user2])
     end
-
-    it "returns all users with a particular role name" do
-      user1 = create(:user)
-      user1.add_role("foo")
-      user2 = create(:user)
-      user_role = user2.add_role("bar")
-
-      expect(User.with_role(user_role.role.name)).to eq([user2])
-    end
   end
+
   describe '#client_admin?' do
     it "returns false by default" do
       expect(user).to_not be_a_client_admin
