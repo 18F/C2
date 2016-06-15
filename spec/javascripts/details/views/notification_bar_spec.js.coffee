@@ -36,7 +36,7 @@ describe 'Notification', ->
 
   describe '#_prepareOnLoadNotifications', ->
     
-    it "creates a notification for each meta tag on page load", ->
+    it "creates a notification for one meta tag on page load", ->
       notification = new Notifications(getNotificationContent())  
       el = $('
         <meta name="flash-message" type="success" content="Notification text here">  
