@@ -38,7 +38,7 @@ class ProposalsController < ApplicationController
   end
 
   def revert_detail_design
-    current_user.remove_role("beta_detail")
+    current_user.remove_role(ROLE_BETA_ACTIVE)
     if proposal
       redirect_to proposal_path(proposal)
     else
@@ -47,7 +47,7 @@ class ProposalsController < ApplicationController
   end
 
   def activate_detail_design
-    current_user.add_role("beta_detail")
+    current_user.add_role(ROLE_BETA_ACTIVE)
     if proposal
       redirect_to proposal_path(proposal)
     else
@@ -218,7 +218,7 @@ class ProposalsController < ApplicationController
   end
 
   def new_mode
-    current_user.beta_user? && current_user.beta_detail?
+    current_user.should_see_beta?
   end
 
   def cancel_proposal

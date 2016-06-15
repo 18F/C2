@@ -5,13 +5,12 @@ class Observation < ProposalRole
   validates :user_id, presence: true
   validates :proposal_id, presence: true
 
-
   delegate :full_name, :email_address, to: :user, prefix: true
 
   after_initialize :init
 
   def init
-    self.role_id ||= Role.find_or_create_by(name: "observer").id
+    self.role_id ||= Role.find_by!(name: ROLE_OBSERVER).id
   end
 
   def creation_version
