@@ -11,7 +11,7 @@ class ProposalSerializer < ActiveModel::Serializer
 
   has_one :client_data, serializer: ClientDataSerializer
   has_one :requester
-  has_many :individual_steps, root: :steps
+  has_many :individual_steps, root: :steps, serializer: StepSerializer
 
   def created_at
     object.created_at.utc
