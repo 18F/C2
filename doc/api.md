@@ -76,17 +76,17 @@ Who created the proposal. Refers to a [User](#user) record.
 Attribute | Type | Note
 --- | --- | ---
 `id` | integer | primary identifier
-`created_at` | string | timestamp
-`updated_at` | string | timestamp
 
 ### Steps
 
-Array of step objects.
+Array of individual step objects.
 
 Attribute | Type | Note
 --- | --- | ---
 `id` | integer | primary identifier
-`status` | string | Can be `pending`, `actionable`, `approved`, or `canceled`
+`status` | string | Can be `pending`, `actionable`, `completed`, or `canceled`
+`completed_at` | string | timestamp, can be `null`
+`type` | string | timestamp, can be `Steps::Approval` or `Steps::Purchase`
 `user` | [User](#user) | who needs to complete the step
 
 ### Client data
