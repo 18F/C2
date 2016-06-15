@@ -18,26 +18,18 @@ describe 'Notification', ->
     
     it "creates a notification without type", ->
       notification = new Notifications(getNotificationContent())  
-      expect(notification.el.find('ul li').length).to.eql(0)
       notice = notification._prepare({type: "", content: "This is content", title: ""})
       notification._postNotification(notice)
-      expect(notification.el.find('ul li').length).to.eql(1)
-      expect(notification.el.find('ul li.notice-type').length).to.eql(0)
-      expect(notification.el.find('ul li.notice-type-primary').length).to.eql(1)
       expect(notification.el.find('ul li .notification-content').text()).to.eql("This is content")
     
     it "creates a notification with type", ->
       notification = new Notifications(getNotificationContent())  
-      expect(notification.el.find('ul li').length).to.eql(0)
       notice = notification._prepare({type: "success", content: "This is content", title: ""})
       notification._postNotification(notice)
-      expect(notification.el.find('ul li').length).to.eql(1)
       expect(notification.el.find('ul li.notice-type-success').length).to.eql(1)
-      expect(notification.el.find('ul li.notice-type-primary').length).to.eql(0)
     
     it "creates a notification with title", ->
       notification = new Notifications(getNotificationContent())  
-      expect(notification.el.find('ul li').length).to.eql(0)
       notice = notification._prepare({type: "success", content: "This is content", title: "This is a title"})
       notification._postNotification(notice)
       expect(notification.el.find('ul li .notification-title').text()).to.eql("This is a title")
@@ -51,8 +43,6 @@ describe 'Notification', ->
       ')
       notification._prepareOnLoadNotifications(el)
       expect(notification.el.find('ul li').length).to.eql(1)
-      notification._prepareOnLoadNotifications(el)
-      expect(notification.el.find('ul li').length).to.eql(2)
 
     
     it "should have all fields in notifcation based on metas tag", ->
@@ -71,8 +61,7 @@ describe 'Notification', ->
       el = $('
         <meta name="flash-message" type="success" content="Notification text here">  
       ')
-      notification._prepareOnLoadNotifications(el)
-      expect(notification.el.find('ul li').length).to.eql(1) 
+      notification._prepareOnLoadNotifications(el) 
       expect(notification.el.find('ul li').is(':animated')).to.eql(false)
       notification.el.find('ul li .close').trigger('click')
       expect(notification.el.find('ul li').is(':animated')).to.eql(true)
@@ -95,52 +84,36 @@ describe 'Notification', ->
     
     it "handles a notification without a content", ->
       notification = new Notifications(getNotificationContent())  
-      expect(notification.el.find('ul li').length).to.eql(0)
       notice = notification._prepare({type: "alert", content: "", title: ""})
-      expect($(notice).length).to.eql(1)
       expect($(notice).find('.notification-content').text()).to.eql("")
     
     it "handles a notification without a type", ->
       notification = new Notifications(getNotificationContent())  
-      expect(notification.el.find('ul li').length).to.eql(0)
       notice = notification._prepare({type: "alert", content: "", title: ""})
-      expect($(notice).length).to.eql(1)
       expect($(notice).find('.notification-title').text()).to.eql("")
     
     it "handles a notification with a timeout", ->
       notification = new Notifications(getNotificationContent())  
-      expect(notification.el.find('ul li').length).to.eql(0)
       notice = notification._prepare({timeout: "10000", content: "", title: ""})
-      expect($(notice).length).to.eql(1)
-      expect($(notice).attr('data-timeout')).to.not.eql("5000")
       expect($(notice).attr('data-timeout')).to.eql("10000")
   
   describe '#clearAll', ->
     
-    it "removes all four notifications", ->
+    it "removes all two notifications", ->
       notification = new Notifications(getNotificationContent())  
-      expect(notification.el.find('ul li').length).to.eql(0)
       notice = notification._prepare({type: "", content: "This is content", title: ""})
       notification._postNotification(notice)
-      expect(notification.el.find('ul li').length).to.eql(1)
       notification._postNotification(notice)
-      expect(notification.el.find('ul li').length).to.eql(2)
-      notification._postNotification(notice)
-      notification._postNotification(notice)
-      expect(notification.el.find('ul li').length).to.eql(4)
       expect(notification.el.find('ul li').last().is(':animated')).to.eql(false)
       notification.clearAll()
-      expect(notification.el.find('ul li').first().is(':animated')).to.eql(true)
       expect(notification.el.find('ul li').last().is(':animated')).to.eql(true)
 
   describe '#clearOne', ->
     
     it "removes a single notification", ->
       notification = new Notifications(getNotificationContent())  
-      expect(notification.el.find('ul li').length).to.eql(0)
       notice = notification._prepare({type: "", content: "This is content", title: ""})
       notification._postNotification(notice)
-      expect(notification.el.find('ul li').length).to.eql(1)
       expect(notification.el.find('ul li').last().is(':animated')).to.eql(false)
       notification.clearOne(notification.el.find('ul li'))
       expect(notification.el.find('ul li').last().is(':animated')).to.eql(true)
