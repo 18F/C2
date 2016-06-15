@@ -542,7 +542,7 @@ DEPENDENCIES
   ar_outer_joins
   autoprefixer-rails
   awesome_print
-  aws-sdk (< 2.0)
+  aws-sdk (~> 1.66.0)
   blazer
   bootstrap-sass
   browser-timezone-rails
