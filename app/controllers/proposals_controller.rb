@@ -39,6 +39,7 @@ class ProposalsController < ApplicationController
 
   def revert_detail_design
     current_user.remove_role("beta_detail")
+    cookies.permanent[:beta_reverted_survey] = "true"
     if proposal
       redirect_to proposal_path(proposal)
     else
