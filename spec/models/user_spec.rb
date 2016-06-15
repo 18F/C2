@@ -309,11 +309,7 @@ describe User do
 
     it "allows the user to immediately see its role" do
       user = create(:user)
-      user.roles.clear
-
-      user.add_role ROLE_BETA_USER
-
-      expect(user.roles).not_to be_empty
+      expect { user.add_role ROLE_BETA_USER }.to change { user.roles.size }.by(1)
     end
   end
 
