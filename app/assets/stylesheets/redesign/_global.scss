@@ -56,11 +56,12 @@ $header-color: map-get($c2blue-swatch, primary);
   color: #4A4A4A;
 }
 .card {
+  font-family: $body-font-family !important;
   div[role=tooltip] {
     background-color: map-get($c2blue-swatch, primary) !important;
     color: white !important;
     font-size: .8rem !important;
-  } 
+  }
 }
 .popover-title {
   background-color: map-get($c2blue-swatch, primary);
