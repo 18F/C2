@@ -1,5 +1,5 @@
 - cost = @proposal.total_price
-- t_slug = "decorators." + @current_user.client_slug + "/procurement."
+- t_slug = "decorators." + @proposal.requester.client_slug + "/procurement."
 .column
   .detail-wrapper.row
 .column.amount-wrapper{ id: 'total_price-wrapper'}

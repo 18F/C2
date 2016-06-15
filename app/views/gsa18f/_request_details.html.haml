@@ -6,7 +6,7 @@
       f: f, |
       proposal: @proposal,
       key: key,
-      t_slug: "decorators." + @current_user.client_slug + "/work_order.",
+      t_slug: "decorators." + @proposal.requester.client_slug + "/work_order.",
       client_slug: @current_user.client_slug,
       client_data: @client_data_instance,
       client_id: @client_data_instance.id.to_s,

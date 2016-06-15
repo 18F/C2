@@ -1,9 +1,9 @@
 %h1.c2n_header.view-title{ id: "proposal-title-wrapper" }
   = simple_form_for @client_data_instance, html: { multipart: true }, include_hidden: false, remote: true do |f|
-    - value_id = "product_name_and_description" + '-' + @client_data_instance.id.to_s
+    - value_id = "project_title" + '-' + @client_data_instance.id.to_s
     %span.detail-display{ id: value_id }
       %span.detail-value
-        = @client_data_instance.product_name_and_description
+        = @client_data_instance.project_title
       %span.detail-edit
         %form
-          = f.input :product_name_and_description, label: false
+          = f.input :project_title, label: false
