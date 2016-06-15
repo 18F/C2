@@ -3,7 +3,7 @@ FactoryGirl.define do
     name "i-am-a-role"
 
     trait :observer do
-      name "observer"
+      name ROLE_OBSERVER
     end
   end
 end

@@ -14,7 +14,6 @@ feature "Observers" do
     # TODO: is already an observer
   end
 
-
   scenario "allows observers to be added with javascript in the new detail view", js: true do
     work_order = create(:ncr_work_order, :with_beta_requester)
     observer = create(:user, client_slug: "ncr")
@@ -27,8 +26,8 @@ feature "Observers" do
     end
     click_on "Add an Observer"
     wait_for_ajax
-    within('.observer-list') do
-      expect(page).to have_content("#{observer.full_name}")
+    within(".observer-list") do
+      expect(page).to have_content(observer.full_name.to_s)
     end
   end
 
@@ -56,25 +55,25 @@ feature "Observers" do
     login_as(proposal.requester)
 
     visit proposal_path(proposal)
-    delete_button = find('.observer-remove-button')
+    delete_button = find(".observer-remove-button")
     delete_button.click
 
     within(".observer-modal-content") do
       click_on "REMOVE"
     end
 
-    expect(page).to_not have_content("#{observer.full_name}")
+    expect(page).to_not have_content(observer.full_name.to_s)
   end
 
   scenario "shows notification when observer is deleted with javascript in the new detail view", js: true do
     work_order = create(:ncr_work_order, :with_beta_requester)
-    observer = create(:user, :beta_detail, client_slug: "ncr")
+    observer = create(:user, :beta_active, client_slug: "ncr")
     proposal = work_order.proposal
     proposal.add_observer(observer)
     login_as(work_order.requester)
     visit proposal_path(proposal)
 
-    delete_button = find('.observer-remove-button')
+    delete_button = find(".observer-remove-button")
     delete_button.click
 
     within(".observer-modal-content") do
@@ -87,13 +86,13 @@ feature "Observers" do
 
   scenario "allows observers to remove self with javascript in the new detail view and redirects", js: true do
     work_order = create(:ncr_work_order)
-    observer = create(:user, :beta_detail, client_slug: "ncr")
+    observer = create(:user, :beta_active, client_slug: "ncr")
     proposal = work_order.proposal
     proposal.add_observer(observer)
     login_as(observer)
 
     visit proposal_path(proposal)
-    delete_button = find('.observer-remove-button')
+    delete_button = find(".observer-remove-button")
     delete_button.click
 
     within(".observer-modal-content") do
@@ -112,7 +111,7 @@ feature "Observers" do
     login_as(proposal.requester)
 
     visit proposal_path(proposal)
-    delete_button = find('.observer-remove-button')
+    delete_button = find(".observer-remove-button")
     delete_button.click
 
     within(".observer-modal-content") do
@@ -123,7 +122,6 @@ feature "Observers" do
     sleep(1)
     expect(current_path).to eq(proposal_path(proposal))
   end
-
 
   scenario "allows observers to be added by other observers" do
     proposal = create(:proposal, :with_observer)

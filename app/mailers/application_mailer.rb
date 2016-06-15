@@ -35,9 +35,7 @@ class ApplicationMailer < ActionMailer::Base
   end
 
   def add_proposal_attributes_icons(proposal)
-    if proposal.attachments.any?
-      add_inline_attachment("icon-clipped_page.png")
-    end
+    add_inline_attachment("icon-clipped_page.png") if proposal.attachments.any?
 
     if proposal.comments.any?
       add_inline_attachment("icon-speech_bubble-blue.png")
@@ -59,24 +57,23 @@ class ApplicationMailer < ActionMailer::Base
 
   def add_pending_icons(proposal)
     proposal.individual_steps.each do |proposal_step|
-      if proposal_step.status != "completed"
-        add_inline_number_icon_attachment(
-          "icon-number-" + (proposal_step.position - 1).to_s + "-pending.png"
-        )
-      end
+      next if proposal_step.status == "completed"
+      add_inline_number_icon_attachment(
+        "icon-number-" + (proposal_step.position - 1).to_s + "-pending.png"
+      )
     end
   end
 
   def add_inline_number_icon_attachment(file_name)
     attachments.inline[file_name] = File.read(
-        "app/assets/images/numbers/#{file_name}"
-      )
+      "app/assets/images/numbers/#{file_name}"
+    )
   end
 
   def add_inline_attachment(file_name)
     attachments.inline[file_name] = File.read(
-        "app/assets/images/emails/#{file_name}"
-      )
+      "app/assets/images/emails/#{file_name}"
+    )
   end
 
   def subject(proposal)

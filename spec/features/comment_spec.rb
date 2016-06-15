@@ -11,7 +11,7 @@ feature "commenting" do
   end
 
   scenario "saves the comment with javascript", js: true do
-    proposal = create_and_visit_proposal_beta
+    create_and_visit_proposal_beta
     comment_text = "this is a great comment"
     js_submit_comment(comment_text, "#add_a_comment")
     wait_for_ajax
@@ -21,7 +21,7 @@ feature "commenting" do
   end
 
   scenario "Send button is disabled after submitting with javascript  in beta view", js: true do
-    proposal = create_and_visit_proposal_beta
+    create_and_visit_proposal_beta
     comment_text = "this is a great comment"
     js_submit_comment(comment_text, "#add_a_comment")
     wait_for_ajax
@@ -89,7 +89,7 @@ feature "commenting" do
     proposal
   end
 
-  def submit_comment(text = "foo", submit = "Send a Comment")
+  def submit_comment(text = "foo", _submit = "Send a Comment")
     fill_in "comment[comment_text]", with: text
     click_on "Send a Comment"
   end
@@ -98,5 +98,4 @@ feature "commenting" do
     fill_in "comment[comment_text]", with: text
     find(submit).trigger("click")
   end
-
 end

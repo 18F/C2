@@ -15,6 +15,8 @@ class NcrDispatcher < Dispatcher
   def notify_approvers(needs_review, comment)
     proposal.individual_steps.completed.each do |step|
       unless user_is_modifier?(step.user, comment.user)
+        # TODO Remove
+        # rubocop:disable Style/Next
         if needs_review == false
           ProposalMailer.
             proposal_updated_no_action_required(step.user, proposal, comment).
@@ -24,6 +26,9 @@ class NcrDispatcher < Dispatcher
     end
   end
 
+  # TODO Remove
+  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/AbcSize
   def notify_requester(needs_review, comment)
     if proposal.requester != comment.user
       if needs_review == true
