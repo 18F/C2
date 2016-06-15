@@ -21,7 +21,7 @@ class ProposalsController < ApplicationController
   def show_next
     @client_data_instance ||= proposal.client_data
     @subscriber_list = SubscriberList.new(@proposal).triples
-    @events = HistoryList.new(proposal).events
+    @events = HistoryList.new(proposal).filtered_approvals
     render "show_next"
   end
 
