@@ -87,14 +87,11 @@ GEM
       execjs
       json
     awesome_print (1.6.1)
-    aws-sdk (2.0.48)
-      aws-sdk-resources (= 2.0.48)
-    aws-sdk-core (2.0.48)
-      builder (~> 3.0)
-      jmespath (~> 1.0)
-      multi_json (~> 1.0)
-    aws-sdk-resources (2.0.48)
-      aws-sdk-core (= 2.0.48)
+    aws-sdk (1.66.0)
+      aws-sdk-v1 (= 1.66.0)
+    aws-sdk-v1 (1.66.0)
+      json (~> 1.4)
+      nokogiri (>= 1.4.4)
     blazer (1.1.0)
       chartkick
       rails
@@ -258,8 +255,6 @@ GEM
       has_scope (~> 0.6.0.rc)
       railties (>= 3.2, < 5)
       responders
-    jmespath (1.2.4)
-      json_pure (>= 1.8.1)
     jquery-rails (4.1.0)
       rails-dom-testing (~> 1.0)
       railties (>= 4.2.0)
@@ -270,7 +265,6 @@ GEM
     jquery-ui-rails (5.0.5)
       railties (>= 3.2.16)
     json (1.8.3)
-    json_pure (1.8.3)
     jwt (1.5.1)
     kaminari (0.16.3)
       actionpack (>= 3.0.0)
@@ -548,7 +542,7 @@ DEPENDENCIES
   ar_outer_joins
   autoprefixer-rails
   awesome_print
-  aws-sdk (~> 2.0.0)
+  aws-sdk (< 2.0)
   blazer
   bootstrap-sass
   browser-timezone-rails
