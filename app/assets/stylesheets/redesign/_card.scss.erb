@@ -1,12 +1,14 @@
 .card-head{
   h2, h3{
-    color: #3A6E93;
+    color: map-get($c2blue-swatch, primary);
     font-weight: 600;
     font-size: 20px;
   }
 }
 
 .card {
+  font-size: 15px;
+  background: #fff;
   textarea, input{
     box-shadow: none;
   }
@@ -59,8 +61,6 @@
     margin-bottom: 0px;
     margin-top: 0px;
   }
-  font-size: 14px;
-  background: #fff;
   .callout{
      border-radius: 4px;
   }
@@ -76,7 +76,7 @@
     margin-bottom: 10px;
   }
   label,legend{
-    font-size: 12px;
+    font-size: 15px;
     line-height: 16px;
   }
   textarea {
@@ -93,7 +93,7 @@
     margin-right: 0px;
   }
   h2{
-    color: #3A6E93;
+    color: map-get($c2blue-swatch, primary);
   }
   .content-content{
     padding-top: 30px;
