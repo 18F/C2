@@ -5,12 +5,12 @@
         = t(t_slug + key)
       %span.detail-value
         - if client_data[key]
-          %input{type: "checkbox", checked: true, disabled: true, label: t("simple_form.labels.ncr_work_order.direct_pay_html")}
+          Yes
         - else
-          %input{type: "checkbox", checked: false, disabled: true, label: t("simple_form.labels.ncr_work_order.direct_pay_html")}
+          No
     .detail-edit.column
       %label.detail-element
-        = t(t_slug + key) 
+        = t(t_slug + key)
       %span.detail-value
         = f.input :direct_pay,
           label: t("simple_form.labels.ncr_work_order.direct_pay_html"),
