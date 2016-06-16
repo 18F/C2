@@ -106,6 +106,7 @@ class ApplicationController < ActionController::Base
   def current_user
     @current_user ||= find_current_user
   end
+  alias_method :current_resource_owner, :current_user
 
   def find_current_user
     if ENV["FORCE_USER_ID"] && !Rails.env.production?
