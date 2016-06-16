@@ -31,6 +31,7 @@ class User < ActiveRecord::Base
   has_many :oauth_applications, class_name: "Doorkeeper::Application", as: :owner
 
   has_many :visits
+  has_many :ahoy_events, through: :visits
 
   DEFAULT_TIMEZONE = "Eastern Time (US & Canada)".freeze
 

@@ -8,6 +8,7 @@ describe User do
     it { should have_many(:reports) }
     it { should have_many(:scheduled_reports) }
     it { should have_many(:visits) }
+    it { should have_many(:ahoy_events) }    
   end
 
   let(:user) { build(:user) }
