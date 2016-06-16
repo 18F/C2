@@ -14,5 +14,5 @@
           .medium-12.column
             = render partial: "proposals/details/attachment_list",
               locals: { proposal: @proposal }
-            - if !@proposal.completed? && !@proposal.canceled?
+            - if policy(@proposal).can_edit?
               <label for="attachment_file" class="button primary attach-icon large attachment-label">Attach File</lable>
