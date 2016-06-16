@@ -7,9 +7,9 @@
     - if proposal.status == "completed"
       %span.completed-time
         on
-      - if @client_data_instance.emergency == true
+      - if @client_data_instance.has_attribute?("emergency") && @client_data_instance.emergency == true
         = proposal.updated_at.to_s(:pretty_datetime)
-      - elsif @client_data_instance.emergency != true
+      - else
         = proposal.individual_steps.last.completed_at.to_s(:pretty_datetime)
 
 .row.button-back-wrapper
@@ -25,7 +25,7 @@
       .medium-12.column
         %h3
           = proposal.public_id
-        = render @current_user.client_slug + '/fields/title'
+        = render @proposal.client_slug + '/fields/title'
         .c2n_description
           %p
             Requested by:

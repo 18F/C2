@@ -6,4 +6,7 @@
   - else
     .top-notification-wrapper
       %p
-        = t("proposals.details.notification.beta.new", link: activate_design_proposal_path(proposal) ).html_safe
+        - if cookies[:beta_reverted_survey] == "true"
+          = t("proposals.details.notification.beta.reverted", link: activate_design_proposal_path(proposal) ).html_safe
+        - else
+          = t("proposals.details.notification.beta.new", link: activate_design_proposal_path(proposal) ).html_safe
