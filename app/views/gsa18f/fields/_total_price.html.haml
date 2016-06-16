@@ -1,5 +1,5 @@
 - cost = @proposal.total_price
-- t_slug = "decorators." + @current_user.client_slug + "/procurement."
+- t_slug = "decorators." + @proposal.client_slug + "/procurement."
 .column
   .detail-wrapper.row
 .column.amount-wrapper{ id: 'total_price-wrapper'}
@@ -8,7 +8,7 @@
       .row
         .medium-3.column
           %label.detail-element
-            = t(t_slug + "amount") 
+            = t(t_slug + "amount")
         .medium-9.column
           %span.detail-value
             = number_with_precision(cost, precision: 2)
@@ -17,7 +17,7 @@
       .row
         .medium-3.column
           %label.detail-element
-            = t(t_slug + "amount") 
+            = t(t_slug + "amount")
         .medium-9.column
           %span.detail-value
             = number_with_precision(cost, precision: 2)
