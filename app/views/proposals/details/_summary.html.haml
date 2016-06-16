@@ -25,7 +25,7 @@
       .medium-12.column
         %h3
           = proposal.public_id
-        = render @proposal.requester.client_slug + '/fields/title'
+        = render @proposal.client_slug + '/fields/title'
         .c2n_description
           %p
             Requested by:

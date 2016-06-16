@@ -7,4 +7,4 @@
             Request Details
         .content-content.column#view-request-details
           .row
-            = render client_specific_partial(@proposal.requester, '/request_details')
+            = render @proposal.client_slug + '/request_details'
