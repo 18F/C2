@@ -21,4 +21,8 @@ RSpec.configure do |config|
 
   Capybara.default_host = "http://localhost:3000"
   OmniAuth.config.test_mode = true
+
+  config.before(:each) do
+    Role.ensure_system_roles_exist
+  end
 end

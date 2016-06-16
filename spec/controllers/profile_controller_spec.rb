@@ -9,8 +9,8 @@ describe ProfileController do
       expect(user.first_name).to eq("Some")
       expect(user.last_name).to eq("Body")
       expect(user.timezone).to eq("foo/bar")
-    end 
-  end 
+    end
+  end
   describe "#beta" do
     it "adds beta_user status to users" do
       user = create(:user)
@@ -18,7 +18,7 @@ describe ProfileController do
       get :beta
       expect(response).to redirect_to(:root)
       user.reload
-      expect(user.beta_user?).to eq(true)
-    end 
-  end 
+      expect(user.in_beta_program?).to eq true
+    end
+  end
 end

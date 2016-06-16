@@ -11,19 +11,22 @@ Notifications = (function(){
   }
   
   Notifications.prototype._setup = function(){
+    var flashMessages = $('meta[name="flash-message"]');
     this._events();
-    this._prepareOnLoadNotifications()
+    this._prepareOnLoadNotifications(flashMessages);
   }
 
-  Notifications.prototype._prepareOnLoadNotifications = function(){
+  Notifications.prototype._prepareOnLoadNotifications = function(flashMessages){
     var notices = [];
-    var flashes = $('meta[name="flash-message"]');
+    var flashes = flashMessages;
     for (var i = flashes.length - 1; i >= 0; i--) {
-      this.create({
+      var flash = $(flashes[i]);
+      var param = {
         title: "",
-        content: $(flashes[i]).attr("content"),
-        type: $(flashes[i]).attr("type")
-      });
+        content: flash.attr("content"),
+        type: flash.attr("type")
+      }
+      this.create(param);
     }
   }
 
@@ -63,22 +66,24 @@ Notifications = (function(){
   Notifications.prototype.initClose = function(id){
     var self = this;
     var el = $("#notification-id-" + id);
-    var timeout = el.attr('data-timeout');
-    if (timeout !== "none"){
-      var progress = new ProgressBar.Circle("#notification-id-" + id + " .close", { 
-        strokeWidth: 3,
-        duration: timeout,
-        color: '#40759C',
-        trailColor: '#DAEAf5',
-        trailWidth: 3,
-        svgStyle: null
-      });
-      progress.animate(1);
-      var timer = window.setTimeout(function(){
-        if(el.attr('data-clicked') !== true){
-          self.clearOne(el);
-        }
-      }, timeout);
+    if (el.length > 0){
+      var timeout = el.attr('data-timeout');
+      if (timeout !== "none"){
+        var progress = new ProgressBar.Circle("#notification-id-" + id + " .close", { 
+          strokeWidth: 3,
+          duration: timeout,
+          color: '#40759C',
+          trailColor: '#DAEAf5',
+          trailWidth: 3,
+          svgStyle: null
+        });
+        progress.animate(1);
+        var timer = window.setTimeout(function(){
+          if(el.attr('data-clicked') !== true){
+            self.clearOne(el);
+          }
+        }, timeout);
+      }
     }
     // this.notificationEvent(id, timer);
   }

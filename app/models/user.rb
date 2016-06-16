@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  has_paper_trail class_name: 'C2Version'
+  has_paper_trail class_name: "C2Version"
 
   validates :client_slug, inclusion: {
     in: ->(_) { Proposal.client_slugs },
@@ -28,9 +28,9 @@ class User < ActiveRecord::Base
   has_many :reports
   has_many :scheduled_reports
 
-  has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
+  has_many :oauth_applications, class_name: "Doorkeeper::Application", as: :owner
 
-  DEFAULT_TIMEZONE = "Eastern Time (US & Canada)"
+  DEFAULT_TIMEZONE = "Eastern Time (US & Canada)".freeze
 
   def self.active
     where(active: true)
@@ -51,11 +51,7 @@ class User < ActiveRecord::Base
 
   def self.for_email_with_slug(email, client_slug)
     user = for_email(email)
-
-    unless user.client_slug
-      user.client_slug = client_slug
-    end
-
+    user.client_slug = client_slug unless user.client_slug
     user
   end
 
@@ -78,15 +74,13 @@ class User < ActiveRecord::Base
   end
 
   def add_role(role_name)
-    role = Role.find_or_create_by!(name: role_name)
-    user_roles.find_or_create_by!(role: role)
+    new_role = Role.find_or_create_by!(name: role_name)
+    roles << new_role unless roles.include?(new_role)
   end
 
   def remove_role(role_name)
     role = Role.find_by(name: role_name)
-    if role
-      user_roles.find_by(role: role).destroy!
-    end
+    user_roles.find_by(role: role)&.destroy!
   end
 
   def full_name
@@ -122,23 +116,29 @@ class User < ActiveRecord::Base
   end
 
   def client_admin?
-    roles.exists?(name: "client_admin")
+    role? ROLE_CLIENT_ADMIN
   end
 
   def gateway_admin?
-    roles.exists?(name: "gateway_admin")
+    role? ROLE_GATEWAY_ADMIN
   end
 
   def admin?
-    roles.exists?(name: "admin")
+    role? ROLE_ADMIN
   end
 
-  def beta_user?
-    roles.exists?(name: "beta_user")
+  # If we want to select certain beta features, we can add
+  # a parameter `(feature: nil)`.
+  def should_see_beta?
+    in_beta_program? && role?(ROLE_BETA_ACTIVE)
   end
 
-  def beta_detail?
-    roles.exists?(name: "beta_detail")
+  def in_beta_program?
+    role? ROLE_BETA_USER
+  end
+
+  def role?(role_name)
+    roles.exists? name: role_name
   end
 
   def any_admin?

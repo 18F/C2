@@ -24,18 +24,20 @@ $c2-warning: #F7DD7D;
 // Typography
 $body-font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !default;
 // https://www.smashingmagazine.com/2015/06/responsive-typography-with-sass-maps/
-$h1-font-sizes: (
-  null  : 28px,
-  small : 31px,
-  medium : 33px,
-  large: 36px
-);
-$p-font-sizes: (
-  null  : 15px,
-  small : 16px,
-  medium : 17px,
-  large: 19px
-);
+// $h1-font-sizes: (
+//   null  : 28px,
+//   small : 31px,
+//   medium : 33px,
+//   large: 36px
+// );
+// $p-font-sizes: (
+//   null  : 15px,
+//   small : 16px,
+//   medium : 17px,
+//   large: 19px
+// );
+$header-color: map-get($c2blue-swatch, primary);
+
 // Temp throwaway legacy overrides
 .controller-proposals {
   h1,h2,h3,h4 {
@@ -52,4 +54,21 @@ $p-font-sizes: (
   border-color: map-get($c2success-swatch, primary);
   background: map-get($c2success-swatch, primary);
   color: #4A4A4A;
+}
+.card {
+  font-family: $body-font-family !important;
+  div[role=tooltip] {
+    background-color: map-get($c2blue-swatch, primary) !important;
+    color: white !important;
+    font-size: .8rem !important;
+  }
+}
+.popover-title {
+  background-color: map-get($c2blue-swatch, primary);
+  border-bottom: none;
+  color: #ffffff !important;
+  font-size: 1rem !important;
+}
+.popover.top > .arrow:after {
+  border-top-color: map-get($c2blue-swatch, primary) !important;
 }

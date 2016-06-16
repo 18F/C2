@@ -32,6 +32,7 @@
 }
 
 .status-toggle-all.status-text{
+  font-size: 13px;
   color: $primary-color;
   font-weight: 600;
   display: inline-block;
@@ -46,7 +47,9 @@
 
 .card-for-activity{
   h3 {
-    font-weight: normal;
+    font-weight: bold;
+    color: $header-color;
+    font-size: 15px;
   }
 
   .status-feed-item{
@@ -119,5 +122,3 @@
   }
 
 }
-
-
