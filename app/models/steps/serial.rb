@@ -24,6 +24,7 @@ module Steps
         event :restart, transitions_to: :pending
       end
 
+      # The equivalent of `def complete!`
       state :completed do
         on_entry { notify_parent_completed }
 
