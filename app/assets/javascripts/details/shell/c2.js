@@ -105,7 +105,7 @@ C2 = (function() {
       total = parseInt(data['quantity'], 10) * parseInt(data['cost_per_unit'], 10);
       params = { field: ".total_price-wrapper .detail-value", value: total };
       console.log(params);
-      self.updateView.el.trigger("update:textField", params);
+      self.updateView.el.trigger("update:textfield", params);
     }
   }
 
