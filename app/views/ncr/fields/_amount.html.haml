@@ -4,7 +4,7 @@
       .row
         .medium-3.column
           %label.detail-element
-            = t(t_slug + "total") 
+            = t(t_slug + "total")
         .medium-9.column
           %span.detail-value{class: "not_to_exceed", id: "not_to_exceed" + '-' + client_id }
             - if client_data[:not_to_exceed]
@@ -12,10 +12,10 @@
             - else
               Exactly
           %span.detail-value{class: "amount", id: "amount" + '-' + client_id }
-            = client_data[:amount].to_s
+            = sprintf("%.2f",client_data[:amount])
     .detail-edit.column
       %label.detail-element
-        = t(t_slug + "amount") 
+        = t(t_slug + "amount")
       %span.detail-value
         = f.input :not_to_exceed,
           collection: [["Exact", false], ["Not to exceed", true]],
