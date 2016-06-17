@@ -101,8 +101,8 @@ C2 = (function() {
     var self = this;
     var total, params;
     if(data['quantity'] !== undefined && data['cost_per_unit'] !== undefined){
-      total = parseInt(data['quantity'], 10) * parseInt(data['cost_per_unit'], 10);
-      params = { field: ".total_price-wrapper .detail-value", value: total };
+      total = parseFloat(data['quantity'], 10) * parseFloat(data['cost_per_unit'], 10);
+      params = { field: ".total_price-wrapper .detail-value", value: total.toFixed(2) };
       self.updateView.el.trigger("update:textfield", params);
     }
   }
