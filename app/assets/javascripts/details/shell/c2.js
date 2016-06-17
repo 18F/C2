@@ -93,7 +93,18 @@ C2 = (function() {
     var self = this;
     this.detailsRequestCard.el.on('form:updated', function(event, data){
       self.detailsSaved(data);
+      self.checkClientSpecific(data);
     });
+  }
+
+  C2.prototype.checkClientSpecific = function(data){
+    var self = this;
+    var total, data;
+    if(data['quantity'] === undefined && data['cost_per_unit'] === undefined){
+      total = parseInt(data['quantity'], 10) * parseInt(data['cost_per_unit'], 10);
+      data = { field: ".total_price-wrapper .detail-value", value: total };
+      self.updateView.el.trigger("update:textField", data);
+    }
   }
 
   C2.prototype._setupEditToggle = function(){
