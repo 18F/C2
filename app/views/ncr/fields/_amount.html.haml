@@ -1,27 +1,36 @@
 .column{ id: key + '-wrapper'}
-  .detail-wrapper.row{ class: "amount" + "-wrapper" }
+  .detail-wrapper.row{ class: "not_to_exceed" + "-wrapper", id: "not_to_exceed" + '-' + client_id }
     .detail-display.column
       .row
-        .medium-3.column
+        .medium-4.column
           %label.detail-element
             = t(t_slug + "total")
-        .medium-9.column
-          %span.detail-value{class: "not_to_exceed", id: "not_to_exceed" + '-' + client_id }
+        .medium-8.column
+          %span.detail-value{class: "not_to_exceed" }
             - if client_data[:not_to_exceed]
               Not to exceed
             - else
               Exactly
-          %span.detail-value{class: "amount", id: "amount" + '-' + client_id }
-            = sprintf("%.2f",client_data[:amount])
     .detail-edit.column
       %label.detail-element
-        = t(t_slug + "amount")
-      %span.detail-value
+      %span.detail-value{class: "not_to_exceed"}
         = f.input :not_to_exceed,
           collection: [["Exact", false], ["Not to exceed", true]],
           label: false,
           include_blank: false
 
+  .detail-wrapper.row{ class: "amount" + "-wrapper", id: "amount" + '-' + client_id }
+    .detail-display.column
+      .row
+        .medium-4.column
+          %label.detail-element
+            = t(t_slug + "amount")
+        .medium-8.column
+          %span.detail-value{class: "amount" }
+            = client_data["amount"]
+    .detail-edit.column
+      %label.detail-element
+      %span.detail-value
         = f.input :amount,
           as: :currency,
           label_html: { class: "sr-only" },
