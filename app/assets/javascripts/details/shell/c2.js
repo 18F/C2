@@ -98,11 +98,13 @@ C2 = (function() {
   }
 
   C2.prototype.checkClientSpecific = function(data){
+    console.log(data);
     var self = this;
     var total, params;
-    if(data['quantity'] === undefined && data['cost_per_unit'] === undefined){
+    if(data['quantity'] !== undefined && data['cost_per_unit'] !== undefined){
       total = parseInt(data['quantity'], 10) * parseInt(data['cost_per_unit'], 10);
       params = { field: ".total_price-wrapper .detail-value", value: total };
+      console.log(params);
       self.updateView.el.trigger("update:textField", params);
     }
   }
