@@ -79,6 +79,10 @@
   }
 }
 
+.not_to_exceed-wrapper, .not_to_exceed-wrapper .column, .not_to_exceed-wrapper .form-group {
+  padding-bottom: 0px !important;
+  margin-bottom: 0px !important;
+}
 
 #amount-wrapper{
   padding-left: 30px;
