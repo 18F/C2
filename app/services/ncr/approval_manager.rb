@@ -8,7 +8,7 @@ module Ncr
       if %w(BA60 BA61).include?(work_order.expense_type)
         ba_6x_approvers
       else
-        [ba_80_approver]
+        ba_80_approvers
       end
     end
 
@@ -41,7 +41,7 @@ module Ncr
     end
 
     def approvers
-      system_approvers.unshift(work_order.approving_official)
+      [work_order.approving_official] + system_approvers
     end
 
     # Generally shouldn't be called directly as it doesn't account for
@@ -66,8 +66,13 @@ module Ncr
       DispatchFinder.run(proposal).on_step_user_removal(removed_step_users_to_notify)
     end
 
+    def should_add_budget_approvers_to_6x?
+      true
+    end
+
     def ba_6x_approvers
       results = []
+      return results unless should_add_budget_approvers_to_6x?
 
       if work_order.for_whsc_organization?
         # no tier 1
@@ -82,11 +87,11 @@ module Ncr
       results
     end
 
-    def ba_80_approver
+    def ba_80_approvers
       if work_order.for_ool_organization?
-        Ncr::Mailboxes.ool_ba80_budget
+        [Ncr::Mailboxes.ool_ba80_budget]
       else
-        Ncr::Mailboxes.ba80_budget
+        [Ncr::Mailboxes.ba80_budget]
       end
     end
   end

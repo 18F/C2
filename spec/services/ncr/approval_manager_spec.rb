@@ -154,26 +154,39 @@ describe Ncr::ApprovalManager do
       let (:ba61_tier_one) { Ncr::Mailboxes.ba61_tier1_budget }
       let (:ba61_tier_two) { Ncr::Mailboxes.ba61_tier2_budget }
 
-      it "skips the Tier 1 budget approver for WHSC" do
-        ncr_organization =  create(:whsc_organization)
-        work_order = create(
-          :ncr_work_order,
-          expense_type: "BA61",
-          ncr_organization: ncr_organization
-        )
-        manager = Ncr::ApprovalManager.new(work_order)
-        expect(manager.system_approvers).to eq([
-          ba61_tier_two
-        ])
+      context "when budget approvers are automatically added" do
+        it "skips the Tier 1 budget approver for WHSC" do
+          ncr_organization =  create(:whsc_organization)
+          work_order = create(
+            :ncr_work_order,
+            expense_type: "BA61",
+            ncr_organization: ncr_organization
+          )
+          manager = Ncr::ApprovalManager.new(work_order)
+          allow(manager).to receive(:should_add_budget_approvers_to_6x?).and_return(true)
+          expect(manager.system_approvers).to eq([
+            ba61_tier_two
+          ])
+        end
+
+        it "includes the Tier 1 budget approver for an unknown organization" do
+          work_order = create(:ncr_work_order, expense_type: "BA61")
+          manager = Ncr::ApprovalManager.new(work_order)
+          allow(manager).to receive(:should_add_budget_approvers_to_6x?).and_return(true)
+          expect(manager.system_approvers).to eq([
+            ba61_tier_one,
+            ba61_tier_two
+          ])
+        end
       end
 
-      it "includes the Tier 1 budget approver for an unknown organization" do
-        work_order = create(:ncr_work_order, expense_type: "BA61")
-        manager = Ncr::ApprovalManager.new(work_order)
-        expect(manager.system_approvers).to eq([
-          ba61_tier_one,
-          ba61_tier_two
-        ])
+      context "when budget approvers are not automatically added" do
+        it "does not include any budget approvers" do
+          work_order = create(:ncr_work_order, expense_type: "BA61")
+          manager = Ncr::ApprovalManager.new(work_order)
+          allow(manager).to receive(:should_add_budget_approvers_to_6x?).and_return(false)
+          expect(manager.system_approvers).to eq([])
+        end
       end
     end
 
