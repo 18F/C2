@@ -54,9 +54,7 @@ class ApplicationController < ActionController::Base
   end
 
   def check_maintenance_mode
-    if maintenance_mode?
-      render_maintenance
-    end
+    render_maintenance if maintenance_mode?
   end
 
   def render_maintenance
@@ -106,6 +104,8 @@ class ApplicationController < ActionController::Base
   def current_user
     @current_user ||= find_current_user
   end
+  # ahoy_matey gem uses this accessor:
+  alias current_resource_owner current_user
 
   def find_current_user
     if ENV["FORCE_USER_ID"] && !Rails.env.production?
@@ -162,15 +162,11 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_admin_user!
-    if current_user.not_admin?
-      render "authorization_error", status: 403
-    end
+    render "authorization_error", status: 403 if current_user.not_admin?
   end
 
   def disable_peek_by_default
-    if cookies[:peek].nil?
-      cookies[:peek] = false
-    end
+    cookies[:peek] = false if cookies[:peek].nil?
   end
 
   def not_signed_in?
