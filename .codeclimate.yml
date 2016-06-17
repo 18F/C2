@@ -11,6 +11,8 @@ engines:
     checks:
       Rubocop/Style/AndOr:
         enabled: false
+      Rubocop/Style/ExtraSpacing:
+        enabled: false
       Rubocop/Style/GuardClause:
         enabled: false
       Rubocop/Style/IfUnlessModifier:
