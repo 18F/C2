@@ -23,9 +23,24 @@ C2 = (function() {
   }
 
   C2.prototype._blastOff = function(){
-    this._setupStates();
-    this._setupViews();
-    this._setupData();
+    var config = this.config;
+    // Data
+    this.detailsSave = new DetailsSave(config.detailsSave, config.detailsSaveAll);
+    this.updateView = new UpdateView(config.updateView);
+
+    // State
+    this.editMode = new EditStateController(config.editMode);
+    this.formState = new FormChangeState(config.formState);
+
+    // Views
+    this.detailsRequestCard = new DetailsRequestCard(config.detailsForm);
+    this.attachmentCardController = new AttachmentCardController(config.attachmentCard);
+    this.observerCardController = new ObserverCardController(config.observerCard);
+    this.activityCardController = new ActivityCardController(config.activityCard);
+    this.modals = new ModalController(config.modalCard);
+    this.actionBar = new ActionBar(config.actionBar);
+    this.notification = new Notifications(config.notifications);
+    this.summaryBar = new SummaryBar(config.summaryBar);
     this._setupEvents();
   }
 
@@ -37,30 +52,6 @@ C2 = (function() {
       }
     });
     this.config = opt;
-  }
-
-  C2.prototype._setupData = function(){
-    var config = this.config;
-    this.detailsSave = new DetailsSave(config.detailsSave, config.detailsSaveAll);
-    this.updateView = new UpdateView(config.updateView);
-  }
-
-  C2.prototype._setupStates = function(){
-    var config = this.config;
-    this.editMode = new EditStateController(config.editMode);
-    this.formState = new FormChangeState(config.formState);
-  }
-
-  C2.prototype._setupViews = function(){
-    var config = this.config;
-    this.detailsRequestCard = new DetailsRequestCard(config.detailsForm);
-    this.attachmentCardController = new AttachmentCardController(config.attachmentCard);
-    this.observerCardController = new ObserverCardController(config.observerCard);
-    this.activityCardController = new ActivityCardController(config.activityCard);
-    this.modals = new ModalController(config.modalCard);
-    this.actionBar = new ActionBar(config.actionBar);
-    this.notification = new Notifications(config.notifications);
-    this.summaryBar = new SummaryBar(config.summaryBar);
   }
 
   C2.prototype._setupEvents = function(){
