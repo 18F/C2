@@ -545,7 +545,7 @@ DEPENDENCIES
   acts-as-taggable-on (~> 3.4)
   acts_as_list
   addressable
-  ahoy_matey
+  ahoy_matey (~> 1.4.0)
   ar_outer_joins
   autoprefixer-rails
   awesome_print
