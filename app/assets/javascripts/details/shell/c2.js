@@ -159,7 +159,6 @@ C2 = (function() {
   /* End Form */
 
   /* Notice */
-
   C2.prototype._setupNotifications = function(){
     var notice = this.notification;
     this.notification.el.on('notification:create', function(event, data){
@@ -242,9 +241,9 @@ C2 = (function() {
   C2.prototype.createObserverNotification = function(data){
     var params = {
       title: "Observer " + data.actionType+". ",
-      type: data.noticeType, 
+      type: data.noticeType,
       content: data.response
-    }; 
+    };
     this.notification.el.trigger('notification:create', params);
   }
 
