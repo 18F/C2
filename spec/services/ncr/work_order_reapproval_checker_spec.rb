@@ -5,6 +5,7 @@ describe Ncr::WorkOrderReapprovalChecker do
     context "when the amount has been changed" do
       it "returns false by when the amount is decreased" do
         work_order = create(:ncr_work_order)
+        work_order.setup_approvals_and_observers
         work_order.complete!
 
         work_order.update!(amount: work_order.amount - 1)
@@ -15,6 +16,7 @@ describe Ncr::WorkOrderReapprovalChecker do
 
       it "returns true if amount is increased" do
         work_order = create(:ncr_work_order)
+        work_order.setup_approvals_and_observers
         work_order.complete!
 
         work_order.update!(amount: work_order.amount + 1)
@@ -27,6 +29,7 @@ describe Ncr::WorkOrderReapprovalChecker do
     context "when details have other than amount have been changed" do
       it "returns true if one of the protected fields is changed" do
         work_order = create(:ncr_work_order, function_code: "PGABC")
+        work_order.setup_approvals_and_observers
         work_order.complete!
 
         work_order.update!(function_code: "PG123")
@@ -37,6 +40,7 @@ describe Ncr::WorkOrderReapprovalChecker do
 
       it "returns false if a protected field is set for the first time" do
         work_order = create(:ncr_work_order, function_code: nil)
+        work_order.setup_approvals_and_observers
         work_order.complete!
 
         work_order.update!(function_code: "PG123")
@@ -47,6 +51,7 @@ describe Ncr::WorkOrderReapprovalChecker do
 
       it "returns false if none of the protected fields are changed" do
         work_order = create(:ncr_work_order)
+        work_order.setup_approvals_and_observers
         work_order.complete!
 
         work_order.update!(created_at: Time.zone.now)
@@ -102,6 +107,20 @@ describe Ncr::WorkOrderReapprovalChecker do
 
         expect(work_order.budget_approvers).to_not include(diff_delegate_user)
         expect(work_order.budget_approvers).to include(delegate_user)
+        expect(checker.requires_budget_reapproval?).to eq(false)
+      end
+    end
+
+    context "when the proposal has no budget approval steps" do
+      it "returns false" do
+        work_order = create(:ncr_work_order, expense_type: "BA61")
+        manager = Ncr::ApprovalManager.new(work_order)
+        allow(manager).to receive(:should_add_budget_approvers_to_6x?).and_return(false)
+        manager.setup_approvals_and_observers
+        work_order.complete!
+        work_order.update!(amount: work_order.amount + 1)
+        checker = Ncr::WorkOrderReapprovalChecker.new(work_order)
+
         expect(checker.requires_budget_reapproval?).to eq(false)
       end
     end
