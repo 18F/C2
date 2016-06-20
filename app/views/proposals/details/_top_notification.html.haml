@@ -7,6 +7,8 @@
     .top-notification-wrapper
       %p
         - if cookies[:beta_reverted_survey] == "true"
+          - cookies.delete :beta_reverted_survey
+          = javascript_include_tag "//ethn.io/55009.js", async: true
           = t("proposals.details.notification.beta.reverted", link: activate_design_proposal_path(proposal) ).html_safe
         - else
           = t("proposals.details.notification.beta.new", link: activate_design_proposal_path(proposal) ).html_safe
