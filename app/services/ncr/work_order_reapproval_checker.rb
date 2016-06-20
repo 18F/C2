@@ -25,7 +25,7 @@ module Ncr
     end
 
     def proposal_has_budget_approvals?
-      work_order.budget_approvals.length > 0
+      !work_order.budget_approvals.empty?
     end
 
     def current_user

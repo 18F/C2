@@ -232,14 +232,14 @@ describe Ncr::ApprovalManager do
   describe "#should_add_budget_approvers_to_6x?" do
     it "returns true before July 5 2016" do
       manager = Ncr::ApprovalManager.new(nil)
-      Timecop.freeze(Time.local(2015, 9, 1, 10, 5, 0)) do
+      Timecop.freeze(Time.zone.local(2015, 9, 1, 10, 5, 0)) do
         expect(manager.should_add_budget_approvers_to_6x?).to be true
       end
     end
 
     it "returns false on or after July 5 2016" do
       manager = Ncr::ApprovalManager.new(nil)
-      Timecop.freeze(Time.local(2016, 7, 5, 8, 0, 0)) do
+      Timecop.freeze(Time.zone.local(2016, 7, 5, 8, 0, 0)) do
         expect(manager.should_add_budget_approvers_to_6x?).to be false
       end
     end
