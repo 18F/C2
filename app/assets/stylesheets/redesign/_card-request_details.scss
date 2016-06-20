@@ -22,8 +22,10 @@
   background: #FFFDE8;
 }
 
-.cost_per_unit-wrapper .detail-display .detail-value:before {
-  content: "$";
+.cost_per_unit-wrapper, .total_price-wrapper {
+  .detail-display .detail-value:before{
+    content: "$";
+  }
 }
 
 .detail-element{

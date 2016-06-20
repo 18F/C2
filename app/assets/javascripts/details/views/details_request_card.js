@@ -90,7 +90,7 @@ DetailsRequestCard = (function(){
         self.updateField(fieldTarget, value, "textfield");
       }
     });
-    this.el.trigger("form:updated");
+    this.el.trigger("form:updated", data['response']);
   }
 
   DetailsRequestCard.prototype.setMode = function(type){
