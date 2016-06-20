@@ -21,7 +21,8 @@ module Ncr
     end
 
     def should_add_budget_approvers_to_6x?
-      Time.zone.now <= Time.zone.local(2016, 7, 5, 0, 0, 0)
+      START_OF_NEW_POLICY = Time.zone.local(2016, 7, 5, 0, 0, 0)
+      Time.zone.now <= START_OF_NEW_POLICY
     end
 
     private
