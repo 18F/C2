@@ -1,4 +1,6 @@
 module Ncr
+  START_OF_NEW_6X_APPROVAL_POLICY = Time.zone.local(2016, 7, 5, 0, 0, 0)
+
   class ApprovalManager
     def initialize(work_order)
       @work_order = work_order
@@ -21,8 +23,7 @@ module Ncr
     end
 
     def should_add_budget_approvers_to_6x?
-      START_OF_NEW_POLICY = Time.zone.local(2016, 7, 5, 0, 0, 0)
-      Time.zone.now <= START_OF_NEW_POLICY
+      Time.zone.now < START_OF_NEW_6X_APPROVAL_POLICY
     end
 
     private
