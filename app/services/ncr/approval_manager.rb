@@ -20,6 +20,10 @@ module Ncr
       end
     end
 
+    def should_add_budget_approvers_to_6x?
+      Time.zone.now <= Time.local(2016, 7, 5, 0, 0, 0)
+    end
+
     private
 
     attr_reader :work_order
@@ -64,10 +68,6 @@ module Ncr
       current_step_users = proposal.individual_steps.non_pending.map(&:user)
       removed_step_users_to_notify = original_step_users - current_step_users
       DispatchFinder.run(proposal).on_step_user_removal(removed_step_users_to_notify)
-    end
-
-    def should_add_budget_approvers_to_6x?
-      true
     end
 
     def ba_6x_approvers
