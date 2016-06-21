@@ -1,6 +1,9 @@
 require "#{Rails.root}/db/chores/expired_record_cleaner"
 
 describe ExpiredRecordCleaner do
+  before(:all) { ENV["DISABLE_EMAIL"] = nil }
+  after(:all)  { ENV["DISABLE_EMAIL"] = "Yes" }
+
   describe "fiscal year" do
     it "parses fiscal start date" do
       Timecop.freeze(Time.zone.parse('2015-10-02')) do
@@ -30,7 +33,7 @@ describe ExpiredRecordCleaner do
         expect(deliveries.length).to eq(1)
         proposal.reload
         expect(proposal.status).to eq("canceled")
-      end 
+      end
     end
   end
 
@@ -45,4 +48,3 @@ describe ExpiredRecordCleaner do
     end
   end
 end
-
