@@ -1,5 +1,7 @@
 class StepMailer < ApplicationMailer
   def step_reply_received(step)
+    return if Rails.env.test? && ENV["DISABLE_OUTBOUND_EMAIL"]
+
     @proposal = step.proposal.decorate
     @step = step
     @recipient = @proposal.requester
@@ -15,6 +17,8 @@ class StepMailer < ApplicationMailer
   end
 
   def step_user_removed(user, proposal)
+    return if Rails.env.test? && ENV["DISABLE_OUTBOUND_EMAIL"]
+
     @proposal = proposal.decorate
     @recipient = user
     add_inline_attachment("icon-pencil-circle.png")
@@ -28,6 +32,8 @@ class StepMailer < ApplicationMailer
   end
 
   def proposal_notification(step)
+    return if Rails.env.test? && ENV["DISABLE_OUTBOUND_EMAIL"]
+
     @proposal = step.proposal.decorate
     @step = step.decorate
     @recipient = step.user
