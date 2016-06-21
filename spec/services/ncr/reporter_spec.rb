@@ -47,14 +47,13 @@ describe Ncr::Reporter do
     end
 
     it "shows current approver for pending work orders" do
-      DatabaseCleaner.strategy = :truncation
       work_order = create(:ncr_work_order, :with_approvers)
       work_order.setup_approvals_and_observers
       proposal = work_order.proposal
 
       individual_approval_step = proposal.currently_awaiting_steps.first
       expect(work_order.current_approver).to eq(individual_approval_step.user)
-      csv = Ncr::Reporter.as_csv([proposal])
+      csv = Ncr::Reporter.as_csv([proposal]) # Crashing, nil error
       expect(csv).to include(",#{individual_approval_step.user.email_address}")
 
       individual_approval_step.complete!
