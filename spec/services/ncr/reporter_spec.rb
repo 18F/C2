@@ -1,18 +1,17 @@
 describe Ncr::Reporter do
-  describe ".proposals_pending_approving_official" do
+  before(:all) { @partially_approved = create(:ncr_work_order, :with_approvers) }
+
+  describe "#proposals_pending_approving_official" do
     it "only returns Proposals where the approving official is actionable" do
-      partially_approved = create(:ncr_work_order, :with_approvers)
-      partially_approved.individual_steps.first.complete!
+      @partially_approved.individual_steps.first.complete!
       actionable = create(:ncr_work_order, :with_approvers)
 
       expect(Ncr::Reporter.proposals_pending_approving_official).to eq([actionable.proposal])
     end
   end
 
-  describe ".proposals_pending_budget" do
+  describe "#proposals_pending_budget" do
     it "only returns Proposals where the budget approver is actionable" do
-      create(:ncr_work_order, :with_approvers)
-
       actionable = create(:ncr_work_order, :with_approvers)
       # all but the last
       actionable.individual_steps[0...-1].each(&:complete!)
@@ -21,27 +20,19 @@ describe Ncr::Reporter do
     end
   end
 
-  describe ".proposals_tier_one_pending" do
+  describe "#proposals_tier_one_pending" do
     it "only returns Proposals where Tier One approval is actionable" do
-      whs_work_order = create(
-        :ncr_work_order,
-        :with_approvers,
-        ncr_organization: create(:whsc_organization)
-      )
-      whs_work_order.setup_approvals_and_observers
-
-      approved_work_order = create(:ncr_work_order, :with_approvers)
-      approved_work_order.setup_approvals_and_observers
-      approved_work_order.individual_steps.first.complete!
+      @partially_approved.setup_approvals_and_observers
+      @partially_approved.individual_steps.first.complete!
 
       alt_work_order = create(:ncr_work_order, :with_approvers)
       alt_work_order.setup_approvals_and_observers
 
-      expect(Ncr::Reporter.proposals_tier_one_pending).to eq([approved_work_order.proposal])
+      expect(Ncr::Reporter.proposals_tier_one_pending).to eq([@partially_approved.proposal])
     end
   end
 
-  describe ".as_csv" do
+  describe "#as_csv" do
     it "shows final approver for completed work orders" do
       work_order = create(:ncr_work_order, :with_approvers)
       work_order.setup_approvals_and_observers
