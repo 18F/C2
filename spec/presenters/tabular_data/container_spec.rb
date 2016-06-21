@@ -1,4 +1,7 @@
 describe TabularData::Container do
+  before(:all) { DatabaseCleaner.strategy = :truncation }
+  after(:all) { DatabaseCleaner.strategy = :transaction }
+
   describe "#initialize" do
     it "sets the columns" do
       config = {
@@ -109,9 +112,10 @@ describe TabularData::Container do
         { other: 2 }
       ]
 
+      orig_length = container.rows.length
       invalids.each do |invalid|
         container.state_from_params = ActionController::Parameters.new(invalid)
-        expect(container.rows.length).to eq(3)
+        expect(container.rows.length).to eq orig_length
       end
     end
   end
