@@ -1,5 +1,5 @@
 describe Ncr::Reporter do
-  before(:all) do
+  before(:each) do
     @work_order           = create(:ncr_work_order, :with_approvers)
     @completed_work_order = create(:ncr_work_order, :with_approvers).tap(&:setup_approvals_and_observers)
   end
