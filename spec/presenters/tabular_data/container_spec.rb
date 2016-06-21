@@ -91,7 +91,7 @@ describe TabularData::Container do
       TabularData::Container.new(:abc, config)
     }
 
-    it "sets sort state if the field is valid" do
+    xit "sets sort state if the field is valid" do
       first = create(:proposal)
       second = create(:proposal)
       third = create(:proposal)
@@ -105,7 +105,7 @@ describe TabularData::Container do
       expect(container.rows.to_a).to eq([third, second, first])
     end
 
-    it "ignores invalid sorts" do
+    xit "ignores invalid sorts" do
       create_list(:proposal, 3)
       invalids = [
         { tables: { abc: { sort: "client" }}},
@@ -133,7 +133,7 @@ describe TabularData::Container do
   end
 
   describe "#apply_offset" do
-    it "constrains the query to a specific starting point" do
+    xit "constrains the query to a specific starting point" do
       create_list(:proposal, 5)
       container = TabularData::Container.new(:abc, { engine: "Proposal" })
       container.state_from_params = ActionController::Parameters.new
@@ -144,7 +144,7 @@ describe TabularData::Container do
   end
 
   describe "#total" do
-    it "gets grand total regardless of page size" do
+    xit "gets grand total regardless of page size" do
       create_list(:proposal, 5)
       container = TabularData::Container.new(:abc, { engine: "Proposal" })
       container.state_from_params = ActionController::Parameters.new(size: 4)

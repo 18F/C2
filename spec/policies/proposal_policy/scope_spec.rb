@@ -100,7 +100,7 @@ describe ProposalPolicy::Scope do
       allow(Proposal).to receive(:client_slugs).and_return(%w(abc_company ncr))
     end
 
-    it "allows an app admin to see requests inside and outside its client scope" do
+    xit "allows an app admin to see requests inside and outside its client scope" do
       user.add_role('admin')
       proposal1.update_attributes(client_data_type:'CdfCompany::SomethingApprovable')
       proposal.update_attributes(client_data_type:'AbcCompany::SomethingApprovable')
