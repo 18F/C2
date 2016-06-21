@@ -1,4 +1,7 @@
 feature "Approve a NCR work order" do
+  before(:all) { ENV["DISABLE_EMAIL"] = nil }
+  after(:all)  { ENV["DISABLE_EMAIL"] = "Yes" }
+
   context "when signed in as the approver" do
     context "last step is completed" do
       it "sends one email to the requester" do
