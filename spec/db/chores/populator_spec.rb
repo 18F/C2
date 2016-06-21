@@ -1,11 +1,8 @@
 require "#{Rails.root}/db/chores/populator"
 
 describe Populator do
-  before(:all) do
-    @orig_dbc_strategy = DatabaseCleaner.strategy
-    DatabaseCleaner.strategy = :truncation
-  end
-  after(:all) { DatabaseCleaner.strategy = @orig_dbc_strategy }
+  before(:all) { DatabaseCleaner.strategy = :truncation }
+  after(:all) { DatabaseCleaner.strategy = :transaction }
 
   describe '#random_ncr_data' do
     it "creates the specified number of work orders" do

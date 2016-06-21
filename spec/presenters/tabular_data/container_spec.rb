@@ -1,9 +1,6 @@
 describe TabularData::Container do
-  before(:all) do
-    @orig_dbc_strategy = DatabaseCleaner.strategy
-    DatabaseCleaner.strategy = :truncation
-  end
-  after(:all) { DatabaseCleaner.strategy = @orig_dbc_strategy }
+  before(:all) { DatabaseCleaner.strategy = :truncation }
+  after(:all) { DatabaseCleaner.strategy = :transaction }
 
   describe "#initialize" do
     it "sets the columns" do
