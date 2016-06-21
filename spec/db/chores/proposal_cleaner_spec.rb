@@ -5,10 +5,11 @@ describe ProposalCleaner do
     it "removes proposals without client data" do
       _client_data_with_proposal = create(:ncr_work_order)
       create(:proposal, client_data: nil)
+      orig_count = Proposal.count
 
-      expect {
-        ProposalCleaner.new.run
-      }.to change { Proposal.count }.from(2).to(1)
+      ProposalCleaner.new.run
+
+      expect(Proposal.count).to eq(orig_count - 1)
     end
 
     it "removes client data without a proposal" do
