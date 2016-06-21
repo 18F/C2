@@ -18,7 +18,7 @@ class ApplicationMailer < ActionMailer::Base
   protected
 
   def send_email(to:, proposal:, from: default_sender_email)
-    return if Rails.env.test? && ENV["DISABLE_OUTBOUND_EMAIL"]
+    return if Rails.env.test? && ENV["DISABLE_EMAIL"]
 
     mail(
       to: email_to_user(to),

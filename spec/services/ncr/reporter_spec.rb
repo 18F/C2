@@ -1,12 +1,12 @@
 describe Ncr::Reporter do
   before(:all) do
-    ENV["DISABLE_OUTBOUND_EMAIL"] = "Yes"
+    ENV["DISABLE_EMAIL"] = "Yes"
     @work_order           = create(:ncr_work_order, :with_approvers)
     @completed_work_order = create(:ncr_work_order, :with_approvers).tap(&:setup_approvals_and_observers)
   end
 
   after(:all) do
-    ENV["DISABLE_OUTBOUND_EMAIL"] = nil
+    ENV["DISABLE_EMAIL"] = nil
   end
 
   describe "#proposals_pending_approving_official" do
@@ -52,26 +52,28 @@ describe Ncr::Reporter do
     end
 
     it "shows current approver for pending work orders" do
-      proposal = @completed_work_order.proposal
+      work_order = create(:ncr_work_order, :with_approvers)
+      work_order.setup_approvals_and_observers
+      proposal = work_order.proposal
 
       individual_approval_step = proposal.currently_awaiting_steps.first
-      expect(@completed_work_order.current_approver).to eq(individual_approval_step.user)
-      csv = Ncr::Reporter.as_csv([proposal])
+      expect(work_order.current_approver).to eq(individual_approval_step.user)
+      csv = Ncr::Reporter.as_csv([proposal]) # Crashing, nil error
       expect(csv).to include(",#{individual_approval_step.user.email_address}")
 
       individual_approval_step.complete!
       official_approval_step = proposal.currently_awaiting_steps.first
       proposal.reload
-      @completed_work_order.reload
-      expect(@completed_work_order.current_approver).to eq(official_approval_step.user)
+      work_order.reload
+      expect(work_order.current_approver).to eq(official_approval_step.user)
       csv = Ncr::Reporter.as_csv([proposal])
       expect(csv).to include(",#{official_approval_step.user.email_address}")
 
       official_approval_step.complete!
       budget_approval_step = proposal.currently_awaiting_steps.first
       proposal.reload
-      @completed_work_order.reload
-      expect(@completed_work_order.current_approver).to eq(budget_approval_step.user)
+      work_order.reload
+      expect(work_order.current_approver).to eq(budget_approval_step.user)
       csv = Ncr::Reporter.as_csv([proposal])
       expect(csv).to include(",#{budget_approval_step.user.email_address}")
     end
