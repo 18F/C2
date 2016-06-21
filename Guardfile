@@ -1,4 +1,6 @@
-guard :rspec, cmd: "bin/rspec" do
+# Exclude features from the command to run all specs. Guard will still run features if a
+# feature spec is changed.
+guard :rspec, cmd: "bin/rspec --exclude-pattern 'spec/features/**/*_spec.rb'" do
   watch(%r{^spec/.+_spec\.rb$})
   watch(%r{^lib/(.+)\.rb$})     { |m| "spec/lib/#{m[1]}_spec.rb" }
   watch("spec/spec_helper.rb")  { "spec" }
