@@ -1,7 +1,4 @@
 describe CommentsController do
-  before(:all) { ENV["DISABLE_EMAIL"] = nil }
-  after(:all)  { ENV["DISABLE_EMAIL"] = "Yes" }
-
   describe "permission checking" do
     let(:proposal) { create(:proposal, :with_parallel_approvers, :with_observers) }
     let(:params) do

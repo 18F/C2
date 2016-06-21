@@ -1,18 +1,18 @@
 describe Ncr::ApprovalManager do
   describe '#setup_approvals_and_observers' do
-    let (:ba61_tier_one) { Ncr::Mailboxes.ba61_tier1_budget }
-    let (:ba61_tier_two) { Ncr::Mailboxes.ba61_tier2_budget }
+    let(:ba61_tier_one) { Ncr::Mailboxes.ba61_tier1_budget }
+    let(:ba61_tier_two) { Ncr::Mailboxes.ba61_tier2_budget }
 
     it "creates approvers when not an emergency" do
-      wo = create(:ncr_work_order, expense_type: 'BA61')
+      wo = create(:ncr_work_order, expense_type: "BA61")
       manager = Ncr::ApprovalManager.new(wo)
       manager.setup_approvals_and_observers
       expect(wo.observations.length).to eq(0)
       expect(wo.approvers).to eq([
-        wo.approving_official,
-        ba61_tier_one,
-        ba61_tier_two
-      ])
+                                   wo.approving_official,
+                                   ba61_tier_one,
+                                   ba61_tier_two
+                                 ])
       wo.reload
       expect(wo.completed?).to eq(false)
     end
@@ -32,7 +32,7 @@ describe Ncr::ApprovalManager do
     end
 
     it "reuses existing approvals" do
-      wo = create(:ncr_work_order, expense_type: 'BA61')
+      wo = create(:ncr_work_order, expense_type: "BA61")
       manager = Ncr::ApprovalManager.new(wo)
       manager.setup_approvals_and_observers
       root_step = wo.proposal.root_step
@@ -44,7 +44,7 @@ describe Ncr::ApprovalManager do
     end
 
     it "creates observers when in an emergency" do
-      wo = create(:ncr_work_order, expense_type: 'BA61', emergency: true)
+      wo = create(:ncr_work_order, expense_type: "BA61", emergency: true)
       manager = Ncr::ApprovalManager.new(wo)
       manager.setup_approvals_and_observers
       expect(wo.observers).to match_array([
@@ -112,13 +112,13 @@ describe Ncr::ApprovalManager do
       wo.individual_steps.second.complete!
       expect(wo.reload.completed?).to be true
 
-      wo.update(expense_type: 'BA61')
+      wo.update(expense_type: "BA61")
       manager.setup_approvals_and_observers
       expect(wo.reload.pending?).to be true
     end
 
     it "does not re-add observers on emergencies" do
-      wo = create(:ncr_work_order, expense_type: 'BA61', emergency: true)
+      wo = create(:ncr_work_order, expense_type: "BA61", emergency: true)
       manager = Ncr::ApprovalManager.new(wo)
       manager.setup_approvals_and_observers
 
@@ -155,7 +155,7 @@ describe Ncr::ApprovalManager do
       let (:ba61_tier_two) { Ncr::Mailboxes.ba61_tier2_budget }
 
       it "skips the Tier 1 budget approver for WHSC" do
-        ncr_organization =  create(:whsc_organization)
+        ncr_organization = create(:whsc_organization)
         work_order = create(
           :ncr_work_order,
           expense_type: "BA61",
@@ -163,17 +163,17 @@ describe Ncr::ApprovalManager do
         )
         manager = Ncr::ApprovalManager.new(work_order)
         expect(manager.system_approvers).to eq([
-          ba61_tier_two
-        ])
+                                                 ba61_tier_two
+                                               ])
       end
 
       it "includes the Tier 1 budget approver for an unknown organization" do
         work_order = create(:ncr_work_order, expense_type: "BA61")
         manager = Ncr::ApprovalManager.new(work_order)
         expect(manager.system_approvers).to eq([
-          ba61_tier_one,
-          ba61_tier_two
-        ])
+                                                 ba61_tier_one,
+                                                 ba61_tier_two
+                                               ])
       end
     end
 
