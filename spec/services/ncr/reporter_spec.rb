@@ -1,5 +1,5 @@
 describe Ncr::Reporter do
-  describe '.proposals_pending_approving_official' do
+  describe ".proposals_pending_approving_official" do
     it "only returns Proposals where the approving official is actionable" do
       partially_approved = create(:ncr_work_order, :with_approvers)
       partially_approved.individual_steps.first.complete!
@@ -9,7 +9,7 @@ describe Ncr::Reporter do
     end
   end
 
-  describe '.proposals_pending_budget' do
+  describe ".proposals_pending_budget" do
     it "only returns Proposals where the budget approver is actionable" do
       create(:ncr_work_order, :with_approvers)
 
@@ -41,7 +41,7 @@ describe Ncr::Reporter do
     end
   end
 
-  describe '.as_csv' do
+  describe ".as_csv" do
     it "shows final approver for completed work orders" do
       work_order = create(:ncr_work_order, :with_approvers)
       work_order.setup_approvals_and_observers
@@ -103,8 +103,8 @@ describe Ncr::Reporter do
   describe "#build_fiscal_year_report_string" do
     it "includes information about approved NCR work orders for fiscal year passed in" do
       Timecop.freeze do
-        current_year = Time.now.year
-        beginning_of_year = Time.now.beginning_of_year
+        current_year = Time.zone.now.year
+        beginning_of_year = Time.zone.now.beginning_of_year
         completed_proposal = create(:proposal, status: "completed")
         canceled_proposal = create(:proposal, status: "canceled")
         completed_work_order = create(
