@@ -54,7 +54,7 @@ module Test
   end
 
   def self.teardown_models
-    # ClientRequest.connection.drop_table :test_client_requests
+    ClientRequest.connection.drop_table :test_client_requests
   end
 
   # We must defer loading the factory until we have defined our namespace,
