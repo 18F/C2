@@ -1,12 +1,15 @@
 describe Ncr::Reporter do
-  before(:all) { @partially_approved = create(:ncr_work_order, :with_approvers) }
+  before(:all) do
+    @work_order           = create(:ncr_work_order, :with_approvers)
+    @completed_work_order = create(:ncr_work_order, :with_approvers).tap(&:setup_approvals_and_observers)
+  end
 
   describe "#proposals_pending_approving_official" do
     it "only returns Proposals where the approving official is actionable" do
-      @partially_approved.individual_steps.first.complete!
-      actionable = create(:ncr_work_order, :with_approvers)
+      @work_order.individual_steps.first.complete!
 
-      expect(Ncr::Reporter.proposals_pending_approving_official).to eq([actionable.proposal])
+      expect(Ncr::Reporter.proposals_pending_approving_official).to include(@completed_work_order.proposal)
+      expect(Ncr::Reporter.proposals_pending_approving_official).not_to include(@work_order.proposal)
     end
   end
 
@@ -22,30 +25,24 @@ describe Ncr::Reporter do
 
   describe "#proposals_tier_one_pending" do
     it "only returns Proposals where Tier One approval is actionable" do
-      @partially_approved.setup_approvals_and_observers
-      @partially_approved.individual_steps.first.complete!
+      @completed_work_order.individual_steps.first.complete!
 
-      alt_work_order = create(:ncr_work_order, :with_approvers)
-      alt_work_order.setup_approvals_and_observers
-
-      expect(Ncr::Reporter.proposals_tier_one_pending).to eq([@partially_approved.proposal])
+      expect(Ncr::Reporter.proposals_tier_one_pending).to eq([@completed_work_order.proposal])
     end
   end
 
   describe "#as_csv" do
     it "shows final approver for completed work orders" do
-      work_order = create(:ncr_work_order, :with_approvers)
-      work_order.setup_approvals_and_observers
-      proposal = work_order.proposal
+      proposal = @completed_work_order.proposal
       while proposal.currently_awaiting_steps.any?
         proposal.currently_awaiting_steps.first.complete!
       end
       proposal.complete!
       proposal.reload
       expect(proposal).to be_completed
-      expect(work_order.final_approver).to eq(work_order.approvers.last)
+      expect(@completed_work_order.final_approver).to eq(@completed_work_order.approvers.last)
       csv = Ncr::Reporter.as_csv([proposal])
-      expect(csv).to include(",#{work_order.decorate.current_approver_email_address}")
+      expect(csv).to include(",#{@completed_work_order.decorate.current_approver_email_address}")
     end
 
     it "shows current approver for pending work orders" do
