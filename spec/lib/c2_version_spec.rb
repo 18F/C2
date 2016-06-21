@@ -1,4 +1,7 @@
 describe C2Version do
+  before(:each) { PaperTrail.enabled = true }
+  after(:each) { PaperTrail.enabled = false }
+
   describe "#diff" do
     it "compares this version (before) with the next (after)" do
       test_client_request = create(:test_client_request)

@@ -1,4 +1,7 @@
 describe HistoryList do
+  before(:each) { PaperTrail.enabled = true }
+  after(:each) { PaperTrail.enabled = false }
+
   describe '#events' do
     it "returns proposal creation as the first event" do
       proposal = create(:proposal)
@@ -26,7 +29,6 @@ describe HistoryList do
         expect(history.events.collect(&:item_type)).to include("Ncr::WorkOrder")
       end
     end
-
 
     context "when the history contains step creation" do
       it "filters the step creation events out" do

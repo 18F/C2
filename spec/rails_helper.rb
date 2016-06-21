@@ -24,5 +24,6 @@ RSpec.configure do |config|
 
   config.before(:each) do
     Role.ensure_system_roles_exist
+    PaperTrail.enabled = false
   end
 end

@@ -1,4 +1,7 @@
 describe ProposalVersionsQuery do
+  before(:each) { PaperTrail.enabled = true }
+  after(:each) { PaperTrail.enabled = false }
+
   describe '#container' do
     it "limits to the specified Proposal" do
       prop1 = create(:proposal)
