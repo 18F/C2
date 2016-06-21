@@ -11,8 +11,8 @@ RSpec.configure do |config|
 
   config.before(:each, js: true) do
     # :truncation is slow and conservative
-    # :transaction is fast and more error-prone
-    DatabaseCleaner.strategy = :truncation
+    # :transaction is fast and more aggressive
+    DatabaseCleaner.strategy = :transaction
   end
 
   config.before(:each) do
@@ -23,10 +23,5 @@ RSpec.configure do |config|
     ActionMailer::Base.deliveries.clear
     Proposal.clear_index_tracking
     DatabaseCleaner.clean
-    Rails.application.load_seed if Capybara.current_driver != :rack_test
-  end
-
-  config.after(:suite) do
-    Test.teardown_models
   end
 end
