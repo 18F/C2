@@ -4,13 +4,13 @@ describe TabularData::Container do
       config = {
         engine: "Proposal",
         column_configs: { a: true, b: true, c: true },
-        columns: ["a", "b", "c"]
+        columns: %w(a b c)
       }
 
       container = TabularData::Container.new(:a_name, config)
 
       expect(container.columns.length).to eq(3)
-      expect(container.columns.map(&:name)).to eq(["a", "b", "c"])
+      expect(container.columns.map(&:name)).to eq(%w(a b c))
     end
 
     it "does not modify the query if there are no joins" do
@@ -35,7 +35,7 @@ describe TabularData::Container do
       config = {
         engine: "Proposal",
         column_configs: { a: true, b: true },
-        columns: ["a", "b"],
+        columns: %w(a b),
         sort: "-a"
       }
 
@@ -51,7 +51,7 @@ describe TabularData::Container do
       config = {
         engine: "Proposal",
         column_configs: { a: true, b: true },
-        columns: ["a", "b"],
+        columns: %w(a b),
         sort: "-a",
         frozen_sort: true
       }
@@ -74,7 +74,7 @@ describe TabularData::Container do
       expect(container.rows).to include(pending_proposal)
       expect(container.rows).to include(completed)
 
-      new_container = container.alter_query { |p| p.closed }
+      new_container = container.alter_query(&:closed)
 
       expect(new_container.rows).not_to include(pending_proposal)
       expect(new_container.rows).to include(completed)
@@ -82,35 +82,30 @@ describe TabularData::Container do
   end
 
   describe "#state_from_params=" do
-    let(:container) {
+    let(:container) do
       config = {
         engine: "Proposal",
-        column_configs: { id: true, client: { virtual: true }},
-        columns: ["id", "client"]
+        column_configs: { id: true, client: { virtual: true } },
+        columns: %w(id client)
       }
       TabularData::Container.new(:abc, config)
-    }
+    end
 
     it "sets sort state if the field is valid" do
-      first = create(:proposal)
-      second = create(:proposal)
-      third = create(:proposal)
+      3.times { build(:proposal) }
+      container.state_from_params = ActionController::Parameters.new(tables: { abc: { sort: "id" } })
+      sorted_order = container.rows.to_a
 
-      container.state_from_params = ActionController::Parameters.new(tables: { abc: { sort: "id" }})
-
-      expect(container.rows.to_a).to eq([first, second, third])
-
-      container.state_from_params = ActionController::Parameters.new(tables: { abc: { sort: "-id" }})
-
-      expect(container.rows.to_a).to eq([third, second, first])
+      container.state_from_params = ActionController::Parameters.new(tables: { abc: { sort: "-id" } })
+      expect(container.rows.to_a).to eq sorted_order.reverse
     end
 
     it "ignores invalid sorts" do
       create_list(:proposal, 3)
       invalids = [
-        { tables: { abc: { sort: "client" }}},
-        { tables: { abc: { sort: "asdasd" }}},
-        { tables: { abc: "aaaa" }},
+        { tables: { abc: { sort: "client" } } },
+        { tables: { abc: { sort: "asdasd" } } },
+        { tables: { abc: "aaaa" } },
         { other: 2 }
       ]
 
@@ -124,7 +119,7 @@ describe TabularData::Container do
   describe "#apply_limit" do
     it "constrains the query to :limit" do
       create_list(:proposal, 5)
-      container = TabularData::Container.new(:abc, { engine: "Proposal" })
+      container = TabularData::Container.new(:abc, engine: "Proposal")
       container.state_from_params = ActionController::Parameters.new
 
       expect(container.apply_limit(4)).to eq(container)
@@ -135,7 +130,7 @@ describe TabularData::Container do
   describe "#apply_offset" do
     it "constrains the query to a specific starting point" do
       create_list(:proposal, 5)
-      container = TabularData::Container.new(:abc, { engine: "Proposal" })
+      container = TabularData::Container.new(:abc, engine: "Proposal")
       container.state_from_params = ActionController::Parameters.new
 
       expect(container.apply_offset(4)).to eq(container)
@@ -146,18 +141,20 @@ describe TabularData::Container do
   describe "#total" do
     it "gets grand total regardless of page size" do
       create_list(:proposal, 5)
-      container = TabularData::Container.new(:abc, { engine: "Proposal" })
+      container = TabularData::Container.new(:abc, engine: "Proposal")
+      orig_total = container.total
+
       container.state_from_params = ActionController::Parameters.new(size: 4)
 
-      expect(container.size).to eq(4)
-      expect(container.total).to eq(5)
+      expect(container.size).to eq 4
+      expect(container.total).to eq orig_total
     end
   end
 
   describe "#size" do
     it "defaults to MAX_SEARCH_RESULTS" do
-      container = TabularData::Container.new(:abc, { engine: "Proposal" })
-      container.state_from_params = ActionController::Parameters.new()
+      container = TabularData::Container.new(:abc, engine: "Proposal")
+      container.state_from_params = ActionController::Parameters.new
 
       expect(container.size).to eq(Proposal::MAX_SEARCH_RESULTS)
     end
@@ -165,7 +162,7 @@ describe TabularData::Container do
 
   describe "#current_page" do
     it "does pagination math" do
-      container = TabularData::Container.new(:abc, { engine: "Proposal" })
+      container = TabularData::Container.new(:abc, engine: "Proposal")
       container.state_from_params = ActionController::Parameters.new(from: 2, size: 2)
 
       expect(container.current_page).to eq(2)
@@ -174,7 +171,7 @@ describe TabularData::Container do
 
   describe "#from" do
     it "derives from page param" do
-      container = TabularData::Container.new(:abc, { engine: "Proposal" })
+      container = TabularData::Container.new(:abc, engine: "Proposal")
       container.state_from_params = ActionController::Parameters.new(page: 2, size: 2)
 
       expect(container.from).to eq(2)
@@ -183,7 +180,7 @@ describe TabularData::Container do
 
   describe "#page" do
     it "uses params[:page]" do
-      container = TabularData::Container.new(:abc, { engine: "Proposal" })
+      container = TabularData::Container.new(:abc, engine: "Proposal")
       container.state_from_params = ActionController::Parameters.new(page: 2)
 
       expect(container.page).to eq(2)
@@ -193,7 +190,7 @@ describe TabularData::Container do
   describe "#total_pages" do
     it "does the pagination math" do
       create_list(:proposal, 5)
-      container = TabularData::Container.new(:abc, { engine: "Proposal" })
+      container = TabularData::Container.new(:abc, engine: "Proposal")
       container.state_from_params = ActionController::Parameters.new(from: 2, size: 2)
 
       expect(container.current_page).to eq(2)
@@ -202,7 +199,7 @@ describe TabularData::Container do
 
   describe "#limit_value" do
     it "passes to #size" do
-      container = TabularData::Container.new(:abc, { engine: "Proposal" })
+      container = TabularData::Container.new(:abc, engine: "Proposal")
       container.state_from_params = ActionController::Parameters.new(size: 4)
 
       expect(container.limit_value).to eq(4)

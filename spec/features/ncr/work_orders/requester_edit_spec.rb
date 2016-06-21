@@ -1,6 +1,9 @@
 feature "Requester edits their NCR work order", :js do
   include ProposalSpecHelper
 
+  before(:all) { ENV["DISABLE_EMAIL"] = nil }
+  after(:all)  { ENV["DISABLE_EMAIL"] = "Yes" }
+
   def requester
     @work_order.requester
   end
@@ -10,7 +13,6 @@ feature "Requester edits their NCR work order", :js do
   end
 
   before(:each) do
-    Rails.logger.debug "BEGIN before(:each)"
     @organization = create(:ncr_organization)
     @work_order = create(
       :ncr_work_order,
@@ -24,7 +26,6 @@ feature "Requester edits their NCR work order", :js do
       login_as(requester)
       @logged_in_once = true
     end
-    Rails.logger.debug "END   before(:each)"
   end
 
   scenario "preserves previously selected values in dropdowns" do
