@@ -11,8 +11,8 @@ RSpec.configure do |config|
 
   config.before(:each, js: true) do
     # :truncation is slow and conservative
-    # :transaction is fast and aggressive
-    DatabaseCleaner.strategy = :transaction
+    # :transaction is fast and more error-prone
+    DatabaseCleaner.strategy = :truncation
   end
 
   config.before(:each) do
