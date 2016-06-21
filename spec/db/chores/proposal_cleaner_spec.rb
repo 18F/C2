@@ -1,6 +1,9 @@
 require "#{Rails.root}/db/chores/proposal_cleaner"
 
 describe ProposalCleaner do
+  before(:all) { ENV["DISABLE_EMAIL"] = nil }
+  after(:all)  { ENV["DISABLE_EMAIL"] = "Yes" }
+
   describe "#run" do
     it "removes proposals without client data" do
       _client_data_with_proposal = create(:ncr_work_order)

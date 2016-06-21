@@ -1,6 +1,9 @@
 describe ClientDataCreator do
   include ActionDispatch::TestProcess
 
+  before(:all) { ENV["DISABLE_EMAIL"] = nil }
+  after(:all)  { ENV["DISABLE_EMAIL"] = "Yes" }
+
   describe "#run" do
     it "saves the model instance" do
       client_data_instance = build(:ncr_work_order)
