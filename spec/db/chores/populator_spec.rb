@@ -2,7 +2,7 @@ require "#{Rails.root}/db/chores/populator"
 
 describe Populator do
   describe '#random_ncr_data' do
-    xit "creates the specified number of work orders" do
+    it "creates the specified number of work orders" do
       num_proposals = 5
       expect {
         Populator.new.random_ncr_data(num_proposals: num_proposals)
@@ -11,7 +11,7 @@ describe Populator do
   end
 
   describe '#uniform_ncr_data' do
-    xit 'creates the specified number of work orders' do
+    it 'creates the specified number of work orders' do
       n = 5
       expect {
         Populator.new.uniform_ncr_data(n: n)

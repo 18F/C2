@@ -1,9 +1,6 @@
 describe HistoryList do
-  before(:each) { PaperTrail.enabled = true }
-  after(:each) { PaperTrail.enabled = false }
-
   describe '#events' do
-    xit "returns proposal creation as the first event" do
+    it "returns proposal creation as the first event" do
       proposal = create(:proposal)
 
       history = described_class.new(proposal)
@@ -20,7 +17,7 @@ describe HistoryList do
     end
 
     context "when the history contains client data update events" do
-      xit "does not filter client data update events out" do
+      it "does not filter client data update events out" do
         work_order = create(:ncr_work_order)
         work_order.update(function_code: "PG999")
         work_order.save!

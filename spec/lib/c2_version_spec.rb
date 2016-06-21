@@ -1,9 +1,6 @@
 describe C2Version do
-  before(:each) { PaperTrail.enabled = true }
-  after(:each) { PaperTrail.enabled = false }
-
   describe "#diff" do
-    xit "compares this version (before) with the next (after)" do
+    it "compares this version (before) with the next (after)" do
       test_client_request = create(:test_client_request)
       test_client_request.project_title = "something different"
       test_client_request.save!
@@ -12,7 +9,7 @@ describe C2Version do
       expect(versions.last.diff).to include(["~", "project_title", "I am a test request", "something different"])
     end
 
-    xit "converts all TimeWithZone objects to Time via .utc" do
+    it "converts all TimeWithZone objects to Time via .utc" do
       step = create(:approval_step, completed_at: Time.current)
       step.status = "actionable"
       step.save!

@@ -1,7 +1,4 @@
 describe ProposalVersionsQuery do
-  before(:each) { PaperTrail.enabled = true }
-  after(:each) { PaperTrail.enabled = false }
-
   describe '#container' do
     it "limits to the specified Proposal" do
       prop1 = create(:proposal)
@@ -11,7 +8,7 @@ describe ProposalVersionsQuery do
       expect(container.rows).to eq(prop1.versions.reverse)
     end
 
-    xit "includes approvals" do
+    it "includes approvals" do
       prop1 = create(:proposal, :with_approver)
 
       container = ProposalVersionsQuery.new(prop1).container
