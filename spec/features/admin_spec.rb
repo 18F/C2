@@ -1,4 +1,7 @@
 describe "admin" do
+  before(:all) { ENV["DISABLE_EMAIL"] = nil }
+  after(:all)  { ENV["DISABLE_EMAIL"] = "Yes" }
+
   it "does not allow Delete of Users" do
     login_as_admin_user
 
