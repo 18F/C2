@@ -1,7 +1,5 @@
 class ProposalMailer < ApplicationMailer
   def emergency_proposal_created_confirmation(proposal)
-    return if Rails.env.test? && ENV["DISABLE_OUTBOUND_EMAIL"]
-
     @proposal = proposal.decorate
     @recipient = @proposal.requester
     add_proposal_attributes_icons(@proposal)
@@ -12,8 +10,6 @@ class ProposalMailer < ApplicationMailer
   end
 
   def proposal_complete(proposal)
-    return if Rails.env.test? && ENV["DISABLE_OUTBOUND_EMAIL"]
-
     @proposal = proposal.decorate
     @recipient = @proposal.requester
     add_inline_attachment("icon-check-green-circle.png")
@@ -24,8 +20,6 @@ class ProposalMailer < ApplicationMailer
   end
 
   def proposal_created_confirmation(proposal)
-    return if Rails.env.test? && ENV["DISABLE_OUTBOUND_EMAIL"]
-
     @proposal = proposal.decorate
     @recipient = @proposal.requester
     add_approval_chain_attachments(@proposal)
@@ -36,8 +30,6 @@ class ProposalMailer < ApplicationMailer
   end
 
   def proposal_updated_no_action_required(user, proposal, comment)
-    return if Rails.env.test? && ENV["DISABLE_OUTBOUND_EMAIL"]
-
     @proposal = proposal.decorate
     @modifier = comment.user
     @comment = comment
@@ -50,8 +42,6 @@ class ProposalMailer < ApplicationMailer
   end
 
   def proposal_updated_needs_re_review(user, proposal, comment)
-    return if Rails.env.test? && ENV["DISABLE_OUTBOUND_EMAIL"]
-
     @proposal = proposal.decorate
     @modifier = comment.user
     @comment = comment
@@ -65,8 +55,6 @@ class ProposalMailer < ApplicationMailer
   end
 
   def proposal_updated_while_step_pending(step, comment)
-    return if Rails.env.test? && ENV["DISABLE_OUTBOUND_EMAIL"]
-
     @proposal = step.proposal.decorate
     @step = step.decorate
     @modifier = comment.user
