@@ -7,9 +7,7 @@ module ProposalSpecHelper
     proposal.individual_steps.each do |step|
       step.reload
       step.complete!
-      if completer
-        step.update(completer: completer)
-      end
+      step.update(completer: completer) if completer
     end
   end
 end

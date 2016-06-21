@@ -8,8 +8,8 @@ feature "post-approval modification" do
 
     login_as(work_order.requester)
     visit "/ncr/work_orders/#{work_order.id}/edit"
-    fill_in 'Amount', with: work_order.amount - 1
-    click_on 'Update'
+    fill_in "Amount", with: work_order.amount - 1
+    click_on "Update"
 
     work_order.reload
     expect(work_order.status).to eq("completed")
@@ -22,8 +22,8 @@ feature "post-approval modification" do
 
     login_as(work_order.requester)
     visit "/ncr/work_orders/#{work_order.id}/edit"
-    fill_in 'Amount', with: work_order.amount + 1
-    click_on 'Update'
+    fill_in "Amount", with: work_order.amount + 1
+    click_on "Update"
 
     expect_budget_approvals_restarted(work_order)
     expect_actionable_step_is_budget_approver(work_order)
@@ -31,38 +31,38 @@ feature "post-approval modification" do
     restart_comment = I18n.t(
       "activerecord.attributes.proposal.user_restart_comment",
       user: work_order.requester.full_name
-    ).gsub(/`/, "")
+    ).delete("`")
     expect(page).to have_content(restart_comment)
 
     login_as(work_order.budget_approvers.first)
     visit "/proposals/#{work_order.proposal.id}"
-    click_on 'Approve'
+    click_on "Approve"
 
     work_order.reload
-    expect(work_order.status).to eq('pending')
-    expect(work_order.proposal.root_step.status).to eq('actionable')
+    expect(work_order.status).to eq("pending")
+    expect(work_order.proposal.root_step.status).to eq("actionable")
     expect(approval_statuses(work_order)).to eq(%w(
-      completed
-      completed
-      actionable
-    ))
+                                                  completed
+                                                  completed
+                                                  actionable
+                                                ))
 
     login_as(work_order.budget_approvers.second)
     visit "/proposals/#{work_order.proposal.id}"
-    click_on 'Approve'
+    click_on "Approve"
 
     work_order.reload
-    expect(work_order.status).to eq('completed')
-    expect(work_order.proposal.root_step.status).to eq('completed')
+    expect(work_order.status).to eq("completed")
+    expect(work_order.proposal.root_step.status).to eq("completed")
     expect(approval_statuses(work_order)).to eq(%w(
-      completed
-      completed
-      completed
-    ))
+                                                  completed
+                                                  completed
+                                                  completed
+                                                ))
     completed_comment = I18n.t(
       "activerecord.attributes.proposal.user_completed_comment",
       user: work_order.budget_approvers.second.full_name
-    ).gsub(/`/, "")
+    ).delete("`")
     expect(page).to have_content(completed_comment)
   end
 
@@ -75,7 +75,7 @@ feature "post-approval modification" do
 
     login_as(budget_approver_delegate)
     visit "/ncr/work_orders/#{work_order.id}/edit"
-    fill_in 'Amount', with: work_order.amount + 1
+    fill_in "Amount", with: work_order.amount + 1
     click_on "Update"
 
     work_order.reload
@@ -85,10 +85,10 @@ feature "post-approval modification" do
     expect(work_order.status).to eq("completed")
     expect(work_order.proposal.root_step.status).to eq("completed")
     expect(approval_statuses(work_order)).to eq(%w(
-      completed
-      completed
-      completed
-    ))
+                                                  completed
+                                                  completed
+                                                  completed
+                                                ))
   end
 
   scenario "shows flash warning, only on edit page" do
@@ -110,18 +110,18 @@ feature "post-approval modification" do
   def expect_budget_approvals_restarted(work_order)
     work_order.reload
 
-    expect(work_order.status).to eq('pending')
-    expect(work_order.proposal.root_step.status).to eq('actionable')
+    expect(work_order.status).to eq("pending")
+    expect(work_order.proposal.root_step.status).to eq("actionable")
     expect(approval_statuses(work_order)).to eq(%w(
-      completed
-      actionable
-      pending
-    ))
+                                                  completed
+                                                  actionable
+                                                  pending
+                                                ))
 
     approver = work_order.budget_approvers.first
     expect(approver.email_address).to eq(Ncr::Mailboxes.ba61_tier1_budget.email_address)
     reapproval_mail = deliveries.find { |mail| mail.to.include?(approver.email_address) }
-    expect(reapproval_mail.html_part.body).to include('Approve')
+    expect(reapproval_mail.html_part.body).to include("Approve")
   end
 
   def expect_actionable_step_is_budget_approver(work_order)
