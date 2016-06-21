@@ -47,7 +47,6 @@ describe Ncr::Reporter do
     end
 
     it "shows current approver for pending work orders" do
-      DatabaseCleaner.strategy = :truncation
       work_order = create(:ncr_work_order, :with_approvers)
       work_order.setup_approvals_and_observers
       proposal = work_order.proposal
@@ -90,6 +89,8 @@ describe Ncr::Reporter do
 
   describe "#build_fiscal_year_report_string" do
     it "includes information about approved NCR work orders for fiscal year passed in" do
+      DatabaseCleaner.strategy = :truncation
+
       Timecop.freeze do
         current_year = Time.zone.now.year
         beginning_of_year = Time.zone.now.beginning_of_year

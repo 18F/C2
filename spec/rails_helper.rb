@@ -31,7 +31,6 @@ end
 # Increase speed by minimizing I/O through reduced logging
 Rails.logger.level = 4
 
-if false
 # Hack by Jose Valim for all threads to share one DB connection This works on Capybara
 # because it starts the web server in a thread.
 # http://blog.plataformatec.com.br/2011/12/three-tips-to-improve-the-performance-of-your-test-suite/
@@ -44,4 +43,3 @@ class ActiveRecord::Base
   end
 end
 ActiveRecord::Base.shared_connection = ActiveRecord::Base.connection
-end
