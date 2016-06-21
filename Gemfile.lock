@@ -592,7 +592,7 @@ DEPENDENCIES
   mandrill-rails
   newrelic_rpm
   omniauth-myusa
-  paper_trail
+  paper_trail (~> 4.1.0)
   paperclip (= 4.3.6)
   peek
   peek-delayed_job

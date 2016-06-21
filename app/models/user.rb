@@ -118,6 +118,10 @@ class User < ActiveRecord::Base
     outgoing_delegations.exists?(assignee: other)
   end
 
+  def any_admin?
+    admin? || client_admin? || gateway_admin?
+  end
+
   def client_admin?
     role? ROLE_CLIENT_ADMIN
   end
@@ -140,16 +144,16 @@ class User < ActiveRecord::Base
     role? ROLE_BETA_USER
   end
 
-  def role?(role_name)
-    roles.exists? name: role_name
-  end
-
-  def any_admin?
-    admin? || client_admin? || gateway_admin?
-  end
-
   def not_admin?
     !admin?
+  end
+
+  def role?(role_name)
+    role_names.include? role_name
+  end
+
+  def role_names
+    @role_names ||= roles.pluck(:name)
   end
 
   def deactivated?

@@ -21,9 +21,7 @@ RSpec.configure do |config|
     ActionMailer::Base.deliveries.clear
     Proposal.clear_index_tracking
     DatabaseCleaner.clean
-    if Capybara.current_driver != :rack_test
-      Rails.application.load_seed
-    end
+    Rails.application.load_seed if Capybara.current_driver != :rack_test
   end
 
   config.after(:suite) do

@@ -43,6 +43,7 @@ module Test
 
   def self.setup_models
     conn = ClientRequest.connection
+    return if conn.table_exists? "test_client_requests"
     conn.create_table(:test_client_requests, force: true) do |t|
       t.decimal  :amount
       t.string   :project_title
@@ -53,7 +54,7 @@ module Test
   end
 
   def self.teardown_models
-    ClientRequest.connection.drop_table :test_client_requests
+    # ClientRequest.connection.drop_table :test_client_requests
   end
 
   # We must defer loading the factory until we have defined our namespace,
