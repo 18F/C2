@@ -1,6 +1,9 @@
 describe WelcomeMailer do
   include Rails.application.routes.url_helpers
 
+  before(:all) { ENV["DISABLE_EMAIL"] = nil }
+  after(:all)  { ENV["DISABLE_EMAIL"] = "Yes" }
+
   describe "#welcome_notification" do
     it "includes the welcome text" do
       user = create(:user)

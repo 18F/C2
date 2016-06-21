@@ -1,6 +1,9 @@
 describe ProposalMailer do
   include MailerSpecHelper
 
+  before(:all) { ENV["DISABLE_EMAIL"] = nil }
+  after(:all)  { ENV["DISABLE_EMAIL"] = "Yes" }
+
   describe "#proposal_created_confirmation" do
     let(:mail) { ProposalMailer.proposal_created_confirmation(proposal) }
 

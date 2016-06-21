@@ -1,4 +1,7 @@
 describe Ncr::WorkOrdersHelper do
+  before(:all) { ENV["DISABLE_EMAIL"] = nil }
+  after(:all)  { ENV["DISABLE_EMAIL"] = "Yes" }
+
   describe '#scoped_approver_options' do
     it "includes existing users" do
       expect(helper.scoped_approver_options.size).to eq(0)

@@ -1,12 +1,7 @@
 describe Ncr::Reporter do
   before(:all) do
-    ENV["DISABLE_EMAIL"] = "Yes"
     @work_order           = create(:ncr_work_order, :with_approvers)
     @completed_work_order = create(:ncr_work_order, :with_approvers).tap(&:setup_approvals_and_observers)
-  end
-
-  after(:all) do
-    ENV["DISABLE_EMAIL"] = nil
   end
 
   describe "#proposals_pending_approving_official" do
