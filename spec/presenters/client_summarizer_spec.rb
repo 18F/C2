@@ -15,7 +15,7 @@ describe ClientSummarizer do
   end
 
   describe "Ncr::WorkOrder" do
-    it "builds summary" do
+    xit "builds summary" do
       create(:ncr_work_order, amount: 123)
       summarizer = ClientSummarizer.new(client_namespace: "Ncr")
       summary = summarizer.run
