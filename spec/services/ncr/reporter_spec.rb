@@ -41,48 +41,45 @@ describe Ncr::Reporter do
       proposal.reload
       expect(proposal).to be_completed
       expect(@completed_work_order.final_approver).to eq(@completed_work_order.approvers.last)
+
       csv = Ncr::Reporter.as_csv([proposal])
       expect(csv).to include(",#{@completed_work_order.decorate.current_approver_email_address}")
     end
 
     it "shows current approver for pending work orders" do
-      work_order = create(:ncr_work_order, :with_approvers)
-      work_order.setup_approvals_and_observers
-      proposal = work_order.proposal
+      proposal = @completed_work_order.proposal
 
       individual_approval_step = proposal.currently_awaiting_steps.first
-      expect(work_order.current_approver).to eq(individual_approval_step.user)
+      expect(@completed_work_order.current_approver).to eq(individual_approval_step.user)
       csv = Ncr::Reporter.as_csv([proposal])
       expect(csv).to include(",#{individual_approval_step.user.email_address}")
 
       individual_approval_step.complete!
       official_approval_step = proposal.currently_awaiting_steps.first
       proposal.reload
-      work_order.reload
-      expect(work_order.current_approver).to eq(official_approval_step.user)
+      @completed_work_order.reload
+      expect(@completed_work_order.current_approver).to eq(official_approval_step.user)
       csv = Ncr::Reporter.as_csv([proposal])
       expect(csv).to include(",#{official_approval_step.user.email_address}")
 
       official_approval_step.complete!
       budget_approval_step = proposal.currently_awaiting_steps.first
       proposal.reload
-      work_order.reload
-      expect(work_order.current_approver).to eq(budget_approval_step.user)
+      @completed_work_order.reload
+      expect(@completed_work_order.current_approver).to eq(budget_approval_step.user)
       csv = Ncr::Reporter.as_csv([proposal])
       expect(csv).to include(",#{budget_approval_step.user.email_address}")
     end
 
     it "shows final completed date and completion duration in days" do
-      work_order = create(:ncr_work_order, :with_approvers)
-      work_order.setup_approvals_and_observers
-      proposal = work_order.proposal
+      proposal = @completed_work_order.proposal
       while proposal.currently_awaiting_steps.any?
         proposal.currently_awaiting_steps.first.complete!
       end
       proposal.complete!
       proposal.reload
       expect(proposal).to be_completed
-      expect(work_order.final_approver).to eq(work_order.approvers.last)
+      expect(@completed_work_order.final_approver).to eq(@completed_work_order.approvers.last)
       csv = Ncr::Reporter.as_csv([proposal])
       expect(csv).to include(",#{proposal.decorate.final_completed_date},#{proposal.decorate.total_completion_days}")
     end
