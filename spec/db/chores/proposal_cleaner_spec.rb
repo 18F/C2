@@ -16,10 +16,11 @@ describe ProposalCleaner do
       _ncr_with_proposal = create(:ncr_work_order)
       ncr_without_proposal = build(:ncr_work_order, proposal: nil)
       ncr_without_proposal.save(validate: false)
+      orig_count = Ncr::WorkOrder.count
 
-      expect {
-        ProposalCleaner.new.run
-      }.to change { Ncr::WorkOrder.count }.from(2).to(1)
+      ProposalCleaner.new.run
+
+      expect(Ncr::WorkOrder.count).to eq(orig_count - 1)
 
       _18f_with_proposal = create(:gsa18f_procurement)
       gsa_without_proposal = build(:gsa18f_procurement, proposal: nil)
