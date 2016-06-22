@@ -45,6 +45,13 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
 
+  config.around(:example, email: true) do |example|
+    default_value = ENV["DISABLE_EMAIL"]
+    ENV["DISABLE_EMAIL"] = nil
+    example.run
+    ENV["DISABLE_EMAIL"] = default_value
+  end
+
   config.include FactoryGirl::Syntax::Methods
   config.raise_errors_for_deprecations!
   config.backtrace_exclusion_patterns << %r{/gems/}
