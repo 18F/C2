@@ -50,7 +50,6 @@ gem "peek-performance_bar"
 gem "peek-pg"
 gem "pg"
 gem "pry-rails"
-gem "puma"
 gem "pundit", ">= 1.0.0" # Interface for Pundit::NotAuthorizedError changed in this version
 gem "rack-cors", require: "rack/cors"
 gem "redcarpet"
@@ -65,6 +64,10 @@ gem "validates_email_format_of"
 gem "workflow"
 gem "actionmailer-text"
 gem "remotipart"
+
+group :development, :production do
+  gem "puma"
+end
 
 group :test, :development do
   gem "bullet", require: false # use BULLET_ENABLED=true

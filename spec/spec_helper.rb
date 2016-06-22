@@ -1,6 +1,5 @@
 require "codeclimate-test-reporter"
 
-
 # Only run SimpleCov on Circle CI because it slows down the developer
 # experience when run locally.
 if ENV["CIRCLE_ARTIFACTS"]
@@ -32,10 +31,6 @@ Capybara.register_driver :poltergeist do |app|
 end
 Capybara.javascript_driver = :poltergeist
 Capybara.default_max_wait_time = 10
-Capybara.server do |app, port|
-  require "rack/handler/puma"
-  Rack::Handler::Puma.run(app, Port: port)
-end
 
 require "pundit/rspec"
 require "factory_girl_rails"
@@ -55,3 +50,6 @@ RSpec.configure do |config|
   config.backtrace_exclusion_patterns << %r{/gems/}
   config.order = :random
 end
+
+require "zonebie/rspec"
+Zonebie.quiet = true
