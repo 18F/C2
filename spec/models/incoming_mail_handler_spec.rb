@@ -1,6 +1,9 @@
 describe "Handles incoming email" do
   include EnvVarSpecHelper
 
+  before(:all) { ENV["DISABLE_EMAIL"] = nil }
+  after(:all)  { ENV["DISABLE_EMAIL"] = "Yes" }
+
   it "should forward non-app email to NOTIFICATION_FALLBACK_EMAIL" do
     with_env_vars(NOTIFICATION_FALLBACK_EMAIL: "nowhere@example.com", NOTIFICATION_FROM_EMAIL: "noreply@example.com") do
       expect(deliveries.length).to eq(0)

@@ -6,10 +6,6 @@ describe Step do
 
   describe "Validations" do
     it { should validate_presence_of(:proposal) }
-    it do
-      create(:approval_step) # needed for spec, see https://github.com/thoughtbot/shoulda-matchers/issues/194
-      should validate_uniqueness_of(:user_id).scoped_to(:proposal_id)
-    end
   end
 
   let(:approval) { create(:approval_step) }

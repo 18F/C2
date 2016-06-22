@@ -1,4 +1,7 @@
 describe CancelationMailer do
+  before(:all) { ENV["DISABLE_EMAIL"] = nil }
+  after(:all)  { ENV["DISABLE_EMAIL"] = "Yes" }
+
   describe "#cancelation_notification" do
     let(:proposal) { create(:proposal) }
     let(:user) { create(:user) }

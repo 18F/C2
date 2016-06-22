@@ -1,4 +1,7 @@
 describe ObservationCreator do
+  before(:all) { ENV["DISABLE_EMAIL"] = nil }
+  after(:all)  { ENV["DISABLE_EMAIL"] = "Yes" }
+
   describe "#run" do
     it "creates a new observation for the user id and proposal id passed in" do
       proposal = create(:proposal)

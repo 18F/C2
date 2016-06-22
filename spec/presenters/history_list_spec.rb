@@ -27,7 +27,6 @@ describe HistoryList do
       end
     end
 
-
     context "when the history contains step creation" do
       it "filters the step creation events out" do
         proposal = create(:proposal, :with_serial_approvers)

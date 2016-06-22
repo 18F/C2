@@ -1,6 +1,9 @@
 describe ReportMailer do
   include EnvVarSpecHelper
 
+  before(:all) { ENV["DISABLE_EMAIL"] = nil }
+  after(:all)  { ENV["DISABLE_EMAIL"] = "Yes" }
+
   describe "#daily_budget_report" do
     it "works with no data" do
       with_env_var("BUDGET_REPORT_RECIPIENT", "budget@example.com") do

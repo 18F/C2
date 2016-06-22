@@ -1,4 +1,7 @@
 describe NcrDispatcher do
+  before(:all) { ENV["DISABLE_EMAIL"] = nil }
+  after(:all)  { ENV["DISABLE_EMAIL"] = "Yes" }
+
   describe "#deliver_new_proposal_emails" do
     context "work order is emergency" do
       it "sends the emergency proposal created confirmation do the requester" do

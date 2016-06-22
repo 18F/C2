@@ -65,9 +65,7 @@ class ProposalMailer < ApplicationMailer
     add_inline_attachment("button-circle.png")
     assign_threading_headers(@proposal)
 
-    unless @step.api_token
-      @step.create_api_token
-    end
+    @step.create_api_token unless @step.api_token
 
     send_email(to: @recipient, proposal: @proposal)
   end
