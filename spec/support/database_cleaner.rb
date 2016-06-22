@@ -1,6 +1,7 @@
 RSpec.configure do |config|
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)
+    Role.ensure_system_roles_exist
     Test.setup_models
     Rails.application.load_seed
   end

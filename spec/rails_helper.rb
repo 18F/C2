@@ -23,16 +23,12 @@ RSpec.configure do |config|
 
   Capybara.default_host = "http://localhost:3000"
   OmniAuth.config.test_mode = true
-
-  config.before(:each) do
-    Role.ensure_system_roles_exist
-  end
 end
 
 # Increase speed by minimizing I/O through reduced logging
 Rails.logger.level = 4
 
-# Hack by Jose Valim for all threads to share one DB connection This works on Capybara
+# Hack by Jose Valim for all threads to share one DB connection. This works on Capybara
 # because it starts the web server in a thread.
 # http://blog.plataformatec.com.br/2011/12/three-tips-to-improve-the-performance-of-your-test-suite/
 # rubocop:disable Style/ClassAndModuleChildren
