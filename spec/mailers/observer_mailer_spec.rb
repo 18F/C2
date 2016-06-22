@@ -1,6 +1,9 @@
 describe ObserverMailer do
   include MailerSpecHelper
 
+  before(:all) { ENV["DISABLE_EMAIL"] = nil }
+  after(:all)  { ENV["DISABLE_EMAIL"] = "Yes" }
+
   describe "#observer_added_notification" do
     it "sends to the observer" do
       proposal = create(:proposal, :with_observer)

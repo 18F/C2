@@ -1,4 +1,7 @@
 feature "Requester switches work order to WHSC", :js do
+  before(:all) { ENV["DISABLE_EMAIL"] = nil }
+  after(:all)  { ENV["DISABLE_EMAIL"] = "Yes" }
+
   let(:work_order) { create(:ncr_work_order) }
   let(:ncr_proposal) { work_order.proposal }
 

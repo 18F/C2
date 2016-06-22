@@ -58,5 +58,5 @@ module Test
 
   # We must defer loading the factory until we have defined our namespace,
   # so call this explicitly to work around rails app load order.
-  require File.join(Rails.root, "spec/factories/test/client_request.rb")
+  require Rails.root.join("spec/factories/test/client_request.rb")
 end

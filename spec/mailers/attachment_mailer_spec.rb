@@ -1,6 +1,9 @@
 describe AttachmentMailer do
   include MailerSpecHelper
 
+  before(:all) { ENV["DISABLE_EMAIL"] = nil }
+  after(:all)  { ENV["DISABLE_EMAIL"] = "Yes" }
+
   describe "#new_attachment_notification" do
     let(:mail) { AttachmentMailer.new_attachment_notification(requester, proposal, attachment) }
 

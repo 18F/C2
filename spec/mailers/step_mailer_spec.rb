@@ -1,6 +1,9 @@
 describe StepMailer do
   include MailerSpecHelper
 
+  before(:all) { ENV["DISABLE_EMAIL"] = nil }
+  after(:all)  { ENV["DISABLE_EMAIL"] = "Yes" }
+
   describe "#step_user_reply" do
     let(:mail) { StepMailer.step_reply_received(approval) }
 

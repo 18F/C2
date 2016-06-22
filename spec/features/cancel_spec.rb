@@ -1,4 +1,7 @@
 describe "Canceling a request" do
+  before(:all) { ENV["DISABLE_EMAIL"] = nil }
+  after(:all)  { ENV["DISABLE_EMAIL"] = "Yes" }
+
   it "shows a cancel link for the requester" do
     proposal = create(:proposal)
     login_as(proposal.requester)

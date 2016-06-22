@@ -42,7 +42,7 @@ gem "kaminari-bootstrap", "~> 3.0.1"
 gem "mandrill-rails"
 gem "newrelic_rpm"
 gem "omniauth-myusa"
-gem "paper_trail"
+gem "paper_trail", "~> 4.1.0"
 gem "paperclip", "4.3.6"
 gem "peek"
 gem "peek-delayed_job"
@@ -50,7 +50,6 @@ gem "peek-performance_bar"
 gem "peek-pg"
 gem "pg"
 gem "pry-rails"
-gem "puma"
 gem "pundit", ">= 1.0.0" # Interface for Pundit::NotAuthorizedError changed in this version
 gem "rack-cors", require: "rack/cors"
 gem "redcarpet"
@@ -65,6 +64,10 @@ gem "validates_email_format_of"
 gem "workflow"
 gem "actionmailer-text"
 gem "remotipart"
+
+group :development, :production do
+  gem "puma"
+end
 
 group :test, :development do
   gem "bullet", require: false # use BULLET_ENABLED=true
