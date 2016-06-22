@@ -55,6 +55,7 @@ en:
       emergency: "Emergency"
       expense_type: "Expense Type"
       function_code: "Function Code"
+      not_to_exceed: "Not to exceed"
       not_to_exceed_amount: "Not to exceed / Amount"
       org_code: "Org Code"
       ncr_organization_id: "Org Code"
