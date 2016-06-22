@@ -1,4 +1,5 @@
 ENV["RAILS_ENV"] ||= "test"
+ENV["DISABLE_EMAIL"] = "Yes"
 
 require "spec_helper"
 require File.expand_path("../../config/environment", __FILE__)
