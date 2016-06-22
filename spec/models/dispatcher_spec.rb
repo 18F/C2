@@ -1,7 +1,4 @@
-describe Dispatcher do
-  before(:all) { ENV["DISABLE_EMAIL"] = nil }
-  after(:all)  { ENV["DISABLE_EMAIL"] = "Yes" }
-
+describe Dispatcher, email: true do
   describe "#deliver_new_proposal_emails" do
     it "sends emails to the requester and first approver" do
       proposal = create(:proposal, :with_approver, :with_observer)

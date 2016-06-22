@@ -1,7 +1,4 @@
 describe "admin" do
-  before(:all) { ENV["DISABLE_EMAIL"] = nil }
-  after(:all)  { ENV["DISABLE_EMAIL"] = "Yes" }
-
   it "does not allow Delete of Users" do
     login_as_admin_user
 
@@ -79,7 +76,7 @@ describe "admin" do
     expect(page).to_not have_content("(GMT-05:00) Eastern Time (US & Canada)")
   end
 
-  it "triggers actions on Complete button click" do
+  it "triggers actions on Complete button click", email: true do
     login_as_admin_user
     proposal = create(:proposal, :with_serial_approvers)
 

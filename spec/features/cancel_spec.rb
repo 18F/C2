@@ -1,7 +1,4 @@
 describe "Canceling a request" do
-  before(:all) { ENV["DISABLE_EMAIL"] = nil }
-  after(:all)  { ENV["DISABLE_EMAIL"] = "Yes" }
-
   it "shows a cancel link for the requester" do
     proposal = create(:proposal)
     login_as(proposal.requester)
@@ -93,7 +90,7 @@ describe "Canceling a request" do
     end
   end
 
-  context "email" do
+  context "email", email: true do
     context "proposal without approver" do
       it "sends cancelation email to requester" do
         proposal = create(:proposal)

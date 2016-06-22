@@ -1,10 +1,7 @@
 describe Ncr::WorkOrdersController do
   include ProposalSpecHelper
 
-  describe "#create" do
-    before(:all) { ENV["DISABLE_EMAIL"] = nil }
-    after(:all)  { ENV["DISABLE_EMAIL"] = "Yes" }
-
+  describe "#create", email: true do
     it "sends an email to the first approver" do
       approving_official = create(:user, client_slug: "ncr")
       params = {

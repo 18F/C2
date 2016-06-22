@@ -1,7 +1,4 @@
 describe ObservationCreator do
-  before(:all) { ENV["DISABLE_EMAIL"] = nil }
-  after(:all)  { ENV["DISABLE_EMAIL"] = "Yes" }
-
   describe "#run" do
     it "creates a new observation for the user id and proposal id passed in" do
       proposal = create(:proposal)
@@ -16,7 +13,7 @@ describe ObservationCreator do
     end
 
     context "with an adder but no reason" do
-      it "sends an observer added email" do
+      it "sends an observer added email", email: true do
         proposal = create(:proposal)
         observer = create(:user)
         adder = create(:user)
@@ -67,7 +64,7 @@ describe ObservationCreator do
         expect(proposal.comments.first.comment_text).to include reason
       end
 
-      it "sends a comment email" do
+      it "sends a comment email", email: true do
         proposal = create(:proposal)
         observer = create(:user)
         adder = create(:user)

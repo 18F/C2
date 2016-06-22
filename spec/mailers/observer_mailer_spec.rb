@@ -1,8 +1,5 @@
-describe ObserverMailer do
+describe ObserverMailer, email: true do
   include MailerSpecHelper
-
-  before(:all) { ENV["DISABLE_EMAIL"] = nil }
-  after(:all)  { ENV["DISABLE_EMAIL"] = "Yes" }
 
   describe "#observer_added_notification" do
     it "sends to the observer" do

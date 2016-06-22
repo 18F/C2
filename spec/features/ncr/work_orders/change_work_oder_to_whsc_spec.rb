@@ -1,7 +1,4 @@
 feature "Requester switches work order to WHSC", :js do
-  before(:all) { ENV["DISABLE_EMAIL"] = nil }
-  after(:all)  { ENV["DISABLE_EMAIL"] = "Yes" }
-
   let(:work_order) { create(:ncr_work_order) }
   let(:ncr_proposal) { work_order.proposal }
 
@@ -12,7 +9,7 @@ feature "Requester switches work order to WHSC", :js do
   end
 
   context "as a BA61" do
-    scenario "notifies the removed approver" do
+    scenario "notifies the removed approver", email: true do
       whsc_org = create(:whsc_organization)
       expect(work_order).to_not be_for_whsc_organization
       deliveries.clear

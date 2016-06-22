@@ -1,8 +1,5 @@
-describe FeedbackMailer do
+describe FeedbackMailer, email: true do
   include EnvVarSpecHelper
-
-  before(:all) { ENV["DISABLE_EMAIL"] = nil }
-  after(:all)  { ENV["DISABLE_EMAIL"] = "Yes" }
 
   describe 'feedback' do
     it "sends from the submitter" do
