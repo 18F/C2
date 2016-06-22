@@ -11,5 +11,11 @@ cause the later ones to fail.
 Common Fixes to Try
 -------------------
 * Change a `before(:all)` to `before(:each)`.
-* Enable email sending.
+* Enable email sending with this code at the top of the spec file:
+
+```ruby
+before(:all) { ENV["DISABLE_EMAIL"] = nil }
+after(:all)  { ENV["DISABLE_EMAIL"] = "Yes" }
+```
+
 * Enable `:truncation` Database Cleaner strategy.
