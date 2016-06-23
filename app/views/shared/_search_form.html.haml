@@ -18,6 +18,8 @@
       name: "#{current_user.client_model_slug}[client_data.vendor]",
       value: @adv_search.value_for("client_data.vendor"),
     }
+
+  / TODO: Refactor this code which chooses between 18F vs. NCR
   - if current_user.client_model.expense_type_options.any?
     .form-group.row
       .col-xs-5
