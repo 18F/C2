@@ -90,12 +90,13 @@ describe "searching", elasticsearch: true do
       proposals = populate_proposals
       login_as(proposals.first.requester)
 
-      visit proposals_path
+      @page = ProposalIndexPage.new
+      @page.load
       fill_in "text", with: proposals.first.name
       adv_options = find("a.adv-options")
       adv_options.trigger("click")
 
-      expect(page).to have_content "Org Code"
+      expect(@page.advanced_search).to have_org_code
     end
   end
 
