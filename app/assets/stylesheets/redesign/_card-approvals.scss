@@ -18,8 +18,7 @@
     display: block;
     line-height: 30px;
     &.status-pending {
-      border-color: #9c9c9c;
-      color: #9c9c9c;
+      opacity: 0.5;
     }
     &.status-completed{
       background: #8ecc76;
