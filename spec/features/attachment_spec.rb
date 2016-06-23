@@ -7,6 +7,9 @@ describe "Add attachments" do
 
   before do
     login_as(proposal.requester)
+    stub_request(:put, /.*c2-prod.s3.amazonaws.com.*/)
+    stub_request(:head, /.*c2-prod.s3.amazonaws.com.*/)
+    stub_request(:delete, /.*c2-prod.s3.amazonaws.com.*/)
   end
 
   it "is visible on a proposal" do
