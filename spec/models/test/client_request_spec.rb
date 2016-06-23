@@ -48,7 +48,7 @@ describe Test::ClientRequest do
     end
   end
 
-  describe "#setup_and_email_subscribers" do
+  describe "#setup_and_email_subscribers", :email do
     it "currently does nothing" do
       client_request = create(:test_client_request)
       expect(client_request.setup_and_email_subscribers("hello world")).to eq nil

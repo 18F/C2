@@ -46,11 +46,19 @@ RSpec.configure do |config|
   end
 
   config.around(:example, email: true) do |example|
-    default_value = ENV["DISABLE_EMAIL"]
-    ENV["DISABLE_EMAIL"] = nil
+    orig_value = ActionMailer::Base.perform_deliveries
+    ActionMailer::Base.perform_deliveries = true
+
     example.run
-    ENV["DISABLE_EMAIL"] = default_value
+
+    ActionMailer::Base.deliveries.clear
+    ActionMailer::Base.perform_deliveries = orig_value
   end
+
+  # config.after(:each) do |example|
+  #   deliveries = ActionMailer::Base.deliveries
+  #   puts "#{deliveries.size} deliveries after #{example.inspect}" if deliveries.size > 0
+  # end
 
   config.include FactoryGirl::Syntax::Methods
   config.raise_errors_for_deprecations!

@@ -1,6 +1,7 @@
 RSpec.configure do |config|
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)
+    ActionMailer::Base.deliveries.clear
     Role.ensure_system_roles_exist
     Test.setup_models
     Rails.application.load_seed
@@ -21,7 +22,6 @@ RSpec.configure do |config|
   end
 
   config.after(:each) do
-    ActionMailer::Base.deliveries.clear
     Proposal.clear_index_tracking
     DatabaseCleaner.clean
   end

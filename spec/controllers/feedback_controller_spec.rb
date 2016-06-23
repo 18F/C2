@@ -1,4 +1,4 @@
-describe FeedbackController do
+describe FeedbackController, :email do
   describe '#create' do
     # it 'sends an email when feedback is submitted' do
     #   post :create, {
