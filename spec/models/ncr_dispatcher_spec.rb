@@ -1,4 +1,4 @@
-describe NcrDispatcher, :email do
+describe NcrDispatcher do
   describe "#deliver_new_proposal_emails" do
     context "work order is emergency" do
       it "sends the emergency proposal created confirmation do the requester" do
@@ -145,7 +145,7 @@ describe NcrDispatcher, :email do
     end
 
     it "does not notify observer if they are the one making the update" do
-      work_order =  create(:ncr_work_order, :with_approvers)
+      work_order = create(:ncr_work_order, :with_approvers)
       user = create(:user, client_slug: "ncr")
       proposal = work_order.proposal
       proposal.add_observer(user)
@@ -159,7 +159,7 @@ describe NcrDispatcher, :email do
     end
 
     it "does not notify approver if they are the one making the update" do
-      work_order =  create(:ncr_work_order, :with_approvers)
+      work_order = create(:ncr_work_order, :with_approvers)
       step_1 = work_order.individual_steps.first
       comment = create(:comment, proposal: work_order.proposal, user: step_1.user)
       proposal = work_order.proposal
@@ -172,8 +172,8 @@ describe NcrDispatcher, :email do
       expect(email_recipients).to_not include(email)
     end
 
-    it "notifies requester if they are not the one making the update" do
-      work_order =  create(:ncr_work_order, :with_approvers)
+    it "notifies requester if they are not the one making the update", :email do
+      work_order = create(:ncr_work_order, :with_approvers)
       step_1 = work_order.individual_steps.first
       comment = create(:comment, proposal: work_order.proposal, user: step_1.user)
       proposal = work_order.proposal
