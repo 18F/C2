@@ -1,11 +1,8 @@
-describe CommentMailer do
+describe CommentMailer, :email do
   include MailerSpecHelper
   include EnvVarSpecHelper
 
   let(:user) { create(:user) }
-
-  before(:all) { ENV["DISABLE_EMAIL"] = nil }
-  after(:all)  { ENV["DISABLE_EMAIL"] = "Yes" }
 
   describe "#comment_added_notification" do
     it_behaves_like "a proposal email" do

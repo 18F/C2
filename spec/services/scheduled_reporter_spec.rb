@@ -14,12 +14,12 @@ describe ScheduledReporter do
     end
   end
 
-  describe "#run", :elasticsearch do
+  describe "#run", elasticsearch: true, email: true do
     it "always sends dailes" do
       deliveries.clear
       owner = create(:user)
       report = create(:report, query: { text: "something" }.to_json, user: owner)
-      scheduled_report = create(:scheduled_report, frequency: "daily", user: owner, report: report)
+      create(:scheduled_report, frequency: "daily", user: owner, report: report)
 
       scheduled_reporter = ScheduledReporter.new(Time.current)
 
@@ -31,8 +31,7 @@ describe ScheduledReporter do
     end
 
     it "sends weeklies on Mondays" do
-      deliveries.clear
-      scheduled_report = weekly_scheduled_report
+      create_weekly_scheduled_report
       monday = Time.zone.parse("2016-03-07")
       reporter = ScheduledReporter.new(monday)
 
@@ -45,7 +44,7 @@ describe ScheduledReporter do
 
     it "only sends weeklies on Mondays" do
       deliveries.clear
-      scheduled_report = weekly_scheduled_report
+      create_weekly_scheduled_report
       tuesday = Time.zone.parse("2016-03-08")
       reporter = ScheduledReporter.new(tuesday)
 
@@ -58,7 +57,7 @@ describe ScheduledReporter do
 
     it "sends monthlies on first day of the month" do
       deliveries.clear
-      scheduled_report = monthly_scheduled_report
+      create_monthly_scheduled_report
       first_day_of_month = Time.zone.parse("2016-04-01")
       reporter = ScheduledReporter.new(first_day_of_month)
 
@@ -71,7 +70,7 @@ describe ScheduledReporter do
 
     it "sends monthlies only on first day of the month" do
       deliveries.clear
-      scheduled_report = monthly_scheduled_report
+      create_monthly_scheduled_report
       second_day_of_month = Time.zone.parse("2016-04-02")
       reporter = ScheduledReporter.new(second_day_of_month)
 
@@ -83,15 +82,15 @@ describe ScheduledReporter do
     end
   end
 
-  def weekly_scheduled_report
+  def create_weekly_scheduled_report
     owner = create(:user)
     report = create(:report, query: { text: "something" }.to_json, user: owner)
-    scheduled_report = create(:scheduled_report, frequency: "weekly", user: owner, report: report)
+    create(:scheduled_report, frequency: "weekly", user: owner, report: report)
   end
 
-  def monthly_scheduled_report
+  def create_monthly_scheduled_report
     owner = create(:user)
     report = create(:report, query: { text: "something" }.to_json, user: owner)
-    scheduled_report = create(:scheduled_report, frequency: "monthly", user: owner, report: report)
+    create(:scheduled_report, frequency: "monthly", user: owner, report: report)
   end
 end

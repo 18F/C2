@@ -15,9 +15,7 @@ feature "post-approval modification" do
     expect(work_order.status).to eq("completed")
   end
 
-  scenario "can do end-to-end re-approval" do
-    ENV["DISABLE_EMAIL"] = nil
-
+  scenario "can do end-to-end re-approval", :email do
     work_order = create(:ncr_work_order)
     work_order.setup_approvals_and_observers
     fully_complete(work_order.proposal)
@@ -66,8 +64,6 @@ feature "post-approval modification" do
       user: work_order.budget_approvers.second.full_name
     ).delete("`")
     expect(page).to have_content(completed_comment)
-
-    ENV["DISABLE_EMAIL"] = "Yes"
   end
 
   scenario "budget approver does not trigger re-approval" do

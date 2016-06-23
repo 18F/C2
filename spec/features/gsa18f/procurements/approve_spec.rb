@@ -1,10 +1,7 @@
 feature "Approve a Gsa18F procurement" do
   context "when signed in as the approver" do
     context "last step is completed" do
-      before(:all) { ENV["DISABLE_EMAIL"] = nil }
-      after(:all)  { ENV["DISABLE_EMAIL"] = "Yes" }
-
-      it "sends one email to the requester" do
+      it "sends one email to the requester", :email do
         purchaser = Gsa18f::Procurement.user_with_role("gsa18f_purchaser")
         procurement = create(:gsa18f_procurement, :with_steps)
         proposal = procurement.proposal

@@ -14,16 +14,12 @@ describe CommentsController do
         expect(response).to redirect_to(proposal)
       end
 
-      it "sends a comment email to approvers and observers" do
-        ENV["DISABLE_EMAIL"] = nil
-
+      it "sends a comment email to approvers and observers", :email do
         login_as(proposal.requester)
 
         expect do
           post :create, params
         end.to change { deliveries.length }.from(0).to(4)
-
-        ENV["DISABLE_EMAIL"] = "Yes"
       end
     end
 

@@ -49,8 +49,7 @@ describe ReportsController do
   end
 
   describe "#preview", :elasticsearch do
-    it "sends email with report to current user" do
-      deliveries.clear
+    it "sends email with report to current user", :email do
       my_report = create(:report, user: user)
       es_execute_with_retries 3 do
         post :preview, id: my_report.id

@@ -1,9 +1,6 @@
 describe ClientDataCreator do
   include ActionDispatch::TestProcess
 
-  before(:all) { ENV["DISABLE_EMAIL"] = nil }
-  after(:all)  { ENV["DISABLE_EMAIL"] = "Yes" }
-
   describe "#run" do
     # TODO: Fix this brittle test
     #
