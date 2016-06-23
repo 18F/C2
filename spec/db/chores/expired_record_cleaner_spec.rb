@@ -39,7 +39,7 @@ describe ExpiredRecordCleaner do
   end
 
   describe ".vacuum_proposal" do
-    it "cleans up specific proposal", email: true do
+    it "cleans up specific proposal", :email do
       proposal = create(:proposal)
       cleaner = ExpiredRecordCleaner.new(Time.zone.now, ok_to_act: true)
       cleaner.vacuum_proposal(proposal)

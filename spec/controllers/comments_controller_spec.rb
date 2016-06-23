@@ -14,7 +14,7 @@ describe CommentsController do
         expect(response).to redirect_to(proposal)
       end
 
-      it "sends a comment email to approvers and observers", email: true do
+      it "sends a comment email to approvers and observers", :email do
         login_as(proposal.requester)
 
         expect do

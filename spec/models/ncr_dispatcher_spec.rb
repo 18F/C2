@@ -1,4 +1,4 @@
-describe NcrDispatcher, email: true do
+describe NcrDispatcher, :email do
   describe "#deliver_new_proposal_emails" do
     context "work order is emergency" do
       it "sends the emergency proposal created confirmation do the requester" do

@@ -1,8 +1,8 @@
 describe Ncr::WorkOrdersController do
   include ProposalSpecHelper
 
-  describe "#create", email: true do
-    it "sends an email to the first approver" do
+  describe "#create" do
+    it "sends an email to the first approver", :email do
       approving_official = create(:user, client_slug: "ncr")
       params = {
         ncr_work_order: {
@@ -26,27 +26,27 @@ describe Ncr::WorkOrdersController do
       post :create, params
       ncr = Ncr::WorkOrder.order(:id).last
 
-      expect(ncr.work_order_code).to eq 'Work Order'
+      expect(ncr.work_order_code).to eq "Work Order"
       expect(ncr.approvers.first).to eq approving_official
       expect(email_recipients).to eq([approving_official.email_address, ncr.requester.email_address].sort)
     end
   end
 
   describe "#edit" do
-    let (:work_order) { create(:ncr_work_order, :with_approvers) }
-    let (:requester) { work_order.proposal.requester }
+    let(:work_order) { create(:ncr_work_order, :with_approvers) }
+    let(:requester) { work_order.proposal.requester }
     before do
       login_as(requester)
     end
 
     it "does not display a message when the proposal is not fully approved" do
-      get :edit, { id: work_order.id }
+      get :edit, id: work_order.id
       expect(flash[:warning]).not_to be_present
     end
 
     it "displays a warning message when editing a fully-approved proposal" do
       fully_complete(work_order.proposal)
-      get :edit, { id: work_order.id }
+      get :edit, id: work_order.id
       expect(flash[:warning]).to be_present
     end
 
@@ -57,7 +57,7 @@ describe Ncr::WorkOrdersController do
         requester: requester
       )
 
-      get :edit, { id: work_order.id }
+      get :edit, id: work_order.id
     end
   end
 
@@ -68,19 +68,17 @@ describe Ncr::WorkOrdersController do
       login_as(requester)
       approving_official = create(:user, client_slug: "ncr")
 
-      post :update, {
-        id: work_order.id,
-        ncr_work_order: {
-          expense_type: "BA61",
-          amount: 999999,
-          approving_official_id: approving_official.id
-        }
-      }
+      post :update, id: work_order.id,
+                    ncr_work_order: {
+                      expense_type: "BA61",
+                      amount: 999_999,
+                      approving_official_id: approving_official.id
+                    }
 
       expect(flash[:success]).not_to be_present
       expect(flash[:error]).to be_present
       work_order.reload
-      expect(work_order.amount).not_to eq(999999)
+      expect(work_order.amount).not_to eq(999_999)
     end
 
     it "respects FY start date for setting default max amount" do
@@ -89,14 +87,12 @@ describe Ncr::WorkOrdersController do
       login_as(requester)
 
       approving_official = create(:user, client_slug: "ncr")
-      post :update, {
-        id: work_order.id,
-        ncr_work_order: {
-          expense_type: "BA61",
-          amount: 99999,
-          approving_official_id: approving_official.id
-        }
-      }
+      post :update, id: work_order.id,
+                    ncr_work_order: {
+                      expense_type: "BA61",
+                      amount: 99_999,
+                      approving_official_id: approving_official.id
+                    }
       expect(flash[:success]).not_to be_present
       expect(flash[:error]).to eq(["Amount must be less than or equal to $3,500.00"])
     end
@@ -106,12 +102,10 @@ describe Ncr::WorkOrdersController do
       requester = work_order.proposal.requester
       login_as(requester)
       new_title = "new title"
-      post :update, {
-        id: work_order.id,
-        ncr_work_order: {
-         project_title: new_title,
-        }
-      }
+      post :update, id: work_order.id,
+                    ncr_work_order: {
+                      project_title: new_title
+                    }
 
       work_order.reload
       expect(work_order.project_title).to eq(new_title)
@@ -124,13 +118,11 @@ describe Ncr::WorkOrdersController do
       work_order.setup_approvals_and_observers
       approving_official = create(:user, client_slug: "ncr")
 
-      post :update, {
-        id: work_order.id,
-        ncr_work_order: {
-         expense_type: "BA61",
-         approving_official_id: approving_official.id
-        }
-      }
+      post :update, id: work_order.id,
+                    ncr_work_order: {
+                      expense_type: "BA61",
+                      approving_official_id: approving_official.id
+                    }
       work_order.reload
 
       expect(work_order.approvers.first).to eq(approving_official)
@@ -144,13 +136,11 @@ describe Ncr::WorkOrdersController do
       work_order.reload.individual_steps.first.complete!
       approving_official = create(:user, client_slug: "ncr")
 
-      post :update, {
-        id: work_order.id,
-        ncr_work_order: {
-         expense_type: "BA61",
-         approving_official_id: approving_official.id
-        }
-      }
+      post :update, id: work_order.id,
+                    ncr_work_order: {
+                      expense_type: "BA61",
+                      approving_official_id: approving_official.id
+                    }
       work_order.reload
 
       expect(work_order.approvers).not_to include(approving_official)
@@ -164,14 +154,12 @@ describe Ncr::WorkOrdersController do
       expect(work_order.steps.empty?).to be false
       expect(work_order.observers.empty?).to be true
 
-      post :update, {
-        id: work_order.id,
-        ncr_work_order: {
-         expense_type: "BA61",
-         emergency: "1",
-         approving_official_id: work_order.approvers.first.id
-        }
-      }
+      post :update, id: work_order.id,
+                    ncr_work_order: {
+                      expense_type: "BA61",
+                      emergency: "1",
+                      approving_official_id: work_order.approvers.first.id
+                    }
 
       work_order.reload
       expect(work_order).not_to be_emergency
@@ -186,15 +174,13 @@ describe Ncr::WorkOrdersController do
       expect(work_order.steps.empty?).to be true
       expect(work_order.observers.empty?).to be false
 
-      post :update, {
-        id: work_order.id,
-        ncr_work_order: {
-         expense_type: "BA61",
-         building_number: "BillDing",
-         emergency: "0",
-         approving_official_id: work_order.observers.first.id
-        }
-      }
+      post :update, id: work_order.id,
+                    ncr_work_order: {
+                      expense_type: "BA61",
+                      building_number: "BillDing",
+                      emergency: "0",
+                      approving_official_id: work_order.observers.first.id
+                    }
 
       work_order.reload
       expect(work_order.emergency).to be true

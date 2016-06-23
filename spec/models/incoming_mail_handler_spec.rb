@@ -1,4 +1,4 @@
-describe "Handles incoming email", email: true do
+describe "Handles incoming email", :email do
   include EnvVarSpecHelper
 
   it "should forward non-app email to NOTIFICATION_FALLBACK_EMAIL" do

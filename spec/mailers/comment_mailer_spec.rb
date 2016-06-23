@@ -1,4 +1,4 @@
-describe CommentMailer, email: true do
+describe CommentMailer, :email do
   include MailerSpecHelper
   include EnvVarSpecHelper
 

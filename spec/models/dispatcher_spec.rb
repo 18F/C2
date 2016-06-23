@@ -1,4 +1,4 @@
-describe Dispatcher, email: true do
+describe Dispatcher, :email do
   describe "#deliver_new_proposal_emails" do
     it "sends emails to the requester and first approver" do
       proposal = create(:proposal, :with_approver, :with_observer)

@@ -1,4 +1,4 @@
-describe StepMailer, email: true do
+describe StepMailer, :email do
   include MailerSpecHelper
 
   describe "#step_user_reply" do

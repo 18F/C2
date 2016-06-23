@@ -1,4 +1,4 @@
-describe WelcomeMailer, email: true do
+describe WelcomeMailer, :email do
   include Rails.application.routes.url_helpers
 
   describe "#welcome_notification" do

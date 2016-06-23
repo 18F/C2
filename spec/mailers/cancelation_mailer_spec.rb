@@ -1,4 +1,4 @@
-describe CancelationMailer, email: true do
+describe CancelationMailer, :email do
 
   describe "#cancelation_notification" do
     let(:proposal) { create(:proposal) }

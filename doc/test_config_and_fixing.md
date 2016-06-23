@@ -14,7 +14,7 @@ Common Fixes to Try
 * Enable email sending by adding the `email` flag to the test or group. For example:
 
 ```ruby
-describe "MyEmailSenderClass", email: true do
+describe "MyEmailSenderClass", :email do
   ...
 end
 ```

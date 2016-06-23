@@ -65,7 +65,7 @@ feature "Requester edits their NCR work order", :js do
     )
   end
 
-  scenario "notifies observers of changes", email: true do
+  scenario "notifies observers of changes", :email do
     user = create(:user, client_slug: "ncr", email_address: "observer@example.com")
     @work_order.add_observer(user)
     visit edit_ncr_work_order_path(@work_order)
@@ -77,7 +77,7 @@ feature "Requester edits their NCR work order", :js do
     expect(deliveries.last).to have_content(user.full_name)
   end
 
-  scenario "does not resave unchanged requests", email: true do
+  scenario "does not resave unchanged requests", :email do
     visit edit_ncr_work_order_path(@work_order)
     click_on "Update"
 
@@ -110,7 +110,7 @@ feature "Requester edits their NCR work order", :js do
     expect(proposal.approvers.second.email_address).to eq(Ncr::Mailboxes.ba80_budget.email_address)
   end
 
-  context "proposal changes from BA80 to BA61", email: true do
+  context "proposal changes from BA80 to BA61", :email do
     scenario "removed tier 1 approver is notified if approval is not pending" do
       @work_order.update(expense_type: "BA61")
       tier_one_approver = Ncr::Mailboxes.ba61_tier1_budget

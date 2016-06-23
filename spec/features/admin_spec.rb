@@ -76,7 +76,7 @@ describe "admin" do
     expect(page).to_not have_content("(GMT-05:00) Eastern Time (US & Canada)")
   end
 
-  it "triggers actions on Complete button click", email: true do
+  it "triggers actions on Complete button click", :email do
     login_as_admin_user
     proposal = create(:proposal, :with_serial_approvers)
 
