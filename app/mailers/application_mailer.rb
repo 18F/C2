@@ -15,11 +15,18 @@ class ApplicationMailer < ActionMailer::Base
 
   default reply_to: proc { reply_to_email }
 
+  # Allow email to be disabled in test by setting
+  # `ActionMailer::Base.perform_deliveries = false`
+  #
+  # @Overrides ActionMailer::Base#mail
+  def mail(headers, &hash)
+    return if Rails.env.test? && !ActionMailer::Base.perform_deliveries
+    super
+  end
+
   protected
 
   def send_email(to:, proposal:, from: default_sender_email)
-    return if Rails.env.test? && ENV["DISABLE_EMAIL"]
-
     mail(
       to: email_to_user(to),
       subject: subject(proposal),
