@@ -5,6 +5,8 @@ class C2VersionDecorator < BaseDecorator
       creation_html
     when "update"
       update_html
+    when "destroy"
+      destroy_html
     end
   end
 
@@ -51,6 +53,11 @@ class C2VersionDecorator < BaseDecorator
       end
       combine_html(changes.compact)
     end
+  end
+
+  def destroy_html
+    destroyed = object.reify
+    "#{destroyed.file_file_name}"
   end
 
   def hashdiff_to_html(change)
