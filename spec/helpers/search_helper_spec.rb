@@ -17,6 +17,17 @@ describe SearchHelper do
     end
   end
 
+  describe "#proposal_org_code_options" do
+    it "returns a complete list of org code options" do
+      org1 = create(:ncr_organization)
+      org2 = create(:whsc_organization)
+
+      org_code_options = helper.proposal_org_code_options(Ncr::WorkOrder, "")
+      expect(org_code_options).to include(%Q(<option value="">#{org1.name}</option>))
+      expect(org_code_options).to include(%Q(<option value="">#{org2.name}</option>))
+    end
+  end
+
   describe "#created_at_time_string" do
     it "returns empty string for 'now' range" do
       expect(helper.created_at_time_string("then TO now")).to eq ""

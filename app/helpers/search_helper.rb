@@ -21,6 +21,11 @@ module SearchHelper
     options_for_select(expense_types, selected_value)
   end
 
+  def proposal_org_code_options(client_model, selected_value)
+    org_codes = Ncr::WorkOrdersHelper.organization_options.unshift(["Any code", "*"])
+    options_for_select(org_codes, selected_value)
+  end
+
   def search_results_total(proposals_data)
     if proposals_data && proposals_data.es_response
       proposals_data.es_response.results.total || 0
