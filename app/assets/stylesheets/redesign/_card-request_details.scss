@@ -88,7 +88,11 @@
   padding-bottom: 0px !important;
   margin-bottom: 0px !important;
 }
-
+#total-wrapper {
+  .detail-display {
+    display: block !important;
+  }
+}
 #amount-wrapper{
   padding: 20px 15px 0 15px;
   background: #EDF5FB;
