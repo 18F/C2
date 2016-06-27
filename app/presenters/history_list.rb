@@ -4,7 +4,7 @@ class HistoryList
   def initialize(proposal)
     @proposal = proposal
     @events = make_events(ProposalVersionsQuery.new(proposal).container.query)
-    add_deleted_attachments()
+    add_deleted_attachments
   end
 
   def filtered_approvals
@@ -40,12 +40,19 @@ class HistoryList
   end
 
   def add_deleted_attachments
-    @events += PaperTrail::Version.
-      where(event: 'destroy', item_type: 'Attachment').
+    attachments = deleted_attachments
+    unless attachments.empty?
+      @events += attachments
+      @events.sort_by!(&:created_at)
+    end
+  end
+
+  def deleted_attachments
+    PaperTrail::Version.
+      where(event: "destroy", item_type: "Attachment").
       where_object(proposal_id: @proposal.id).map do |version|
         HistoryEvent.new(version)
       end
-    @events.sort_by &:created_at
   end
 
   def make_events(versions)

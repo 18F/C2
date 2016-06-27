@@ -57,7 +57,7 @@ class C2VersionDecorator < BaseDecorator
 
   def destroy_html
     destroyed = object.reify
-    "#{destroyed.file_file_name}"
+    destroyed.file_file_name.to_s
   end
 
   def hashdiff_to_html(change)
