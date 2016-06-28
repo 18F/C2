@@ -27,7 +27,7 @@
       .row
         .medium-12.column
           %span.detail-value{class: "amount" }
-            = client_data["amount"]
+            = number_with_precision(client_data["amount"], precision: 2)
     .detail-edit.column
       %label.detail-element
       %span.detail-value
