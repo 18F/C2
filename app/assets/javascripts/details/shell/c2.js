@@ -131,7 +131,7 @@ C2 = (function() {
 
   C2.prototype.detailsCancelled = function(){
     this.detailsMode('view');
-    this.createNotification("Your changes have been discarded.", "", "notice");
+    this.createNotification("Your modifications have not been saved. Click modify to continue.", "", "notice");
   }
 
   C2.prototype.detailsSaved = function(data){
