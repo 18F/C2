@@ -33,6 +33,7 @@ describe ClientDataCreator do
     end
 
     it "creates attachments for the proposal if attachments present" do
+      stub_request(:put, /.*c2-prod.s3.amazonaws.com.*/)
       client_data_instance = build(:ncr_work_order, proposal: nil)
       user = create(:user)
       attachment_params = [
