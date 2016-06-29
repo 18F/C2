@@ -12,12 +12,12 @@ dependencies:
         ls ~/rvm_binaries
       fi
     - rvm --default use 2.3.1
+    - gem update --system
+    - gem update bundler
   pre:
     - cp .env.example .env
     - bash ./build-elasticsearch.sh
     - sudo curl --output /usr/local/bin/phantomjs https://s3.amazonaws.com/circle-downloads/phantomjs-2.1.1
-    - gem update --system
-    - gem update bundler
   cache_directories:
     - elasticsearch
     - ~/rvm_binaries
