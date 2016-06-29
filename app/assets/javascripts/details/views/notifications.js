@@ -13,14 +13,13 @@ Notifications = (function(){
   }
   
   Notifications.prototype._setup = function(){
-    var flashMessages = $('meta[name="flash-message"]');
     this._events();
-    this._prepareOnLoadNotifications(flashMessages);
+    this.createOnLoadNotifications();
   }
 
-  Notifications.prototype._prepareOnLoadNotifications = function(flashMessages){
+  Notifications.prototype.createOnLoadNotifications = function(){
     var notices = [];
-    var flashes = flashMessages;
+    var flashes = $('meta[name="flash-message"]');
     for (var i = flashes.length - 1; i >= 0; i--) {
       var flash = $(flashes[i]);
       var param = {
@@ -34,11 +33,6 @@ Notifications = (function(){
 
   Notifications.prototype._events = function(){
     this._closeButton()
-  }
-
-  Notifications.prototype.create = function(params){
-    this._prepare(params);
-    this._postNotification();
   }
 
   Notifications.prototype._closeButton = function(el){
@@ -57,13 +51,14 @@ Notifications = (function(){
 
   Notifications.prototype._postNotification = function(){
     var self = this;
-    var id = this.data.noticeId;
     var noticeBar = $(self.data.currentNotice);
     if(self.data.currentNotice !== self.data.pastNotice){
-      this.data.pastNotice = self.data.currentNotice;
-      this.data.noticeId = this.data.noticeId + 1;
+      self.data.noticeId = self.data.noticeId + 1;
+      var id = "notification-id-" + self.data.noticeId;
+      noticeBar.attr("id", id); 
       this.el.find('ul').append(noticeBar);
-      this.initClose(id)
+      this.initClose(id);
+      this.data.pastNotice = self.data.currentNotice;
     }
   }
 
@@ -107,17 +102,17 @@ Notifications = (function(){
     });
   }
 
-  Notifications.prototype._prepare = function(params){
+  Notifications.prototype.create = function(params){
     if ( params['type'] === "alert" ){
       params['timeout'] = "none";
     }
     var id      = this.data.noticeId;
-    var type    = (params['type']) ? params['type'] : 'primary';
-    var title   = (params['title']) ? params['title'] : '';
+    var type    = (params['type'])    ? params['type']    : 'primary';
+    var title   = (params['title'])   ? params['title']   : '';
     var content = (params['content']) ? params['content'] : '';
     var timeout = (params['timeout']) ? params['timeout'] : 5000;
 
-    var notice =  '<li id="notification-id-' + id + '" class="notice-type-' + type + ' notification-bar-el" data-timeout="' + timeout + '">' +
+    var notice =  '<li class="notice-type-' + type + ' notification-bar-el" data-timeout="' + timeout + '">' +
                     '<div class="row">' +
                       '<span class="notification-title">' + title + '</span><span class="notification-content">' + content + '</span>' +
                       '<button class="close">&#215;</button>' +
@@ -125,6 +120,7 @@ Notifications = (function(){
                   '</li>';
     
     this.data.currentNotice = notice;
+    this._postNotification();
   }
 
   Notifications.prototype.clearOne = function(el){
