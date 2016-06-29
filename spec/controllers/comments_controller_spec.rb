@@ -1,9 +1,9 @@
 describe CommentsController do
   describe "permission checking" do
-    let (:proposal) { create(:proposal, :with_parallel_approvers, :with_observers) }
-    let (:params) {
-      { proposal_id: proposal.id, comment: { comment_text: "Some comment" }}
-    }
+    let(:proposal) { create(:proposal, :with_parallel_approvers, :with_observers) }
+    let(:params) do
+      { proposal_id: proposal.id, comment: { comment_text: "Some comment" } }
+    end
 
     context "requester comments" do
       it "allows the requester to comment" do
@@ -14,12 +14,12 @@ describe CommentsController do
         expect(response).to redirect_to(proposal)
       end
 
-      it "sends a comment email to approvers and observers" do
+      it "sends a comment email to approvers and observers", :email do
         login_as(proposal.requester)
 
-        expect {
+        expect do
           post :create, params
-        }.to change { deliveries.length }.from(0).to(4)
+        end.to change { deliveries.length }.from(0).to(4)
       end
     end
 
@@ -27,7 +27,7 @@ describe CommentsController do
       it "shows a helpful error messsage" do
         login_as(proposal.approvers[0])
 
-        post :create, { proposal_id: proposal.id, comment: { comment_text: "" }}
+        post :create, proposal_id: proposal.id, comment: { comment_text: "" }
 
         expect(flash[:success]).not_to be_present
         expect(flash[:error]).to be_present
@@ -58,9 +58,9 @@ describe CommentsController do
 
       login_as(delegate)
 
-      expect {
+      expect do
         post :create, params
-      }.to change{ proposal.comments.count }.from(0).to(1)
+      end.to change { proposal.comments.count }.from(0).to(1)
       expect(proposal.comments.last.user).to eq(delegate)
       expect(proposal.observers).to include(delegate)
     end

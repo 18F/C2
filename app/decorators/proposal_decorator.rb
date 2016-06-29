@@ -27,7 +27,7 @@ class ProposalDecorator < Draper::Decorator
 
   def final_completed_date
     if completed? && total_step_users > 0
-      object.individual_steps.last.completed_at
+      object.individual_steps.last.completed_at # TODO: Is sometimes nil
     else
       ""
     end

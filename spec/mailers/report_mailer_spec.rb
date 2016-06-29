@@ -1,4 +1,4 @@
-describe ReportMailer do
+describe ReportMailer, :email do
   include EnvVarSpecHelper
 
   describe "#daily_budget_report" do

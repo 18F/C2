@@ -3,7 +3,9 @@ var Notifications;
 Notifications = (function(){
   function Notifications(el) {
     this.data = {
-      noticeId: 0
+      noticeId: 0,
+      lastNotice: "",
+      currentNotice: ""
     }
     this.el = $(el);
     this._setup();
@@ -35,8 +37,8 @@ Notifications = (function(){
   }
 
   Notifications.prototype.create = function(params){
-    var notice = this._prepare(params);
-    this._postNotification(notice);
+    this._prepare(params);
+    this._postNotification();
   }
 
   Notifications.prototype._closeButton = function(el){
@@ -53,14 +55,16 @@ Notifications = (function(){
     })
   }
 
-  Notifications.prototype._postNotification = function(notice){
+  Notifications.prototype._postNotification = function(){
     var self = this;
     var id = this.data.noticeId;
-    var noticeBar = $(notice);
-
-    this.data.noticeId = this.data.noticeId + 1;
-    this.el.find('ul').append(noticeBar);
-    this.initClose(id)
+    var noticeBar = $(self.data.currentNotice);
+    if(self.data.currentNotice !== self.data.pastNotice){
+      this.data.pastNotice = self.data.currentNotice;
+      this.data.noticeId = this.data.noticeId + 1;
+      this.el.find('ul').append(noticeBar);
+      this.initClose(id)
+    }
   }
 
   Notifications.prototype.initClose = function(id){
@@ -120,7 +124,7 @@ Notifications = (function(){
                     '</div>' +
                   '</li>';
     
-    return notice
+    this.data.currentNotice = notice;
   }
 
   Notifications.prototype.clearOne = function(el){

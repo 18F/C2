@@ -1,6 +1,6 @@
-describe FeedbackController do
+describe FeedbackController, :email do
   describe '#create' do
-    # xit 'sends an email when feedback is submitted' do
+    # it 'sends an email when feedback is submitted' do
     #   post :create, {
     #     bug: 'Yes',
     #     context: 'Some context here',

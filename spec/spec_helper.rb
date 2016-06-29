@@ -31,10 +31,6 @@ Capybara.register_driver :poltergeist do |app|
 end
 Capybara.javascript_driver = :poltergeist
 Capybara.default_max_wait_time = 10
-Capybara.server do |app, port|
-  require "rack/handler/puma"
-  Rack::Handler::Puma.run(app, Port: port)
-end
 
 require "pundit/rspec"
 require "factory_girl_rails"
@@ -49,8 +45,26 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
 
+  config.around(:example, email: true) do |example|
+    orig_value = ActionMailer::Base.perform_deliveries
+    ActionMailer::Base.perform_deliveries = true
+
+    example.run
+
+    ActionMailer::Base.deliveries.clear
+    ActionMailer::Base.perform_deliveries = orig_value
+  end
+
+  # config.after(:each) do |example|
+  #   deliveries = ActionMailer::Base.deliveries
+  #   puts "#{deliveries.size} deliveries after #{example.inspect}" if deliveries.size > 0
+  # end
+
   config.include FactoryGirl::Syntax::Methods
   config.raise_errors_for_deprecations!
   config.backtrace_exclusion_patterns << %r{/gems/}
   config.order = :random
 end
+
+require "zonebie/rspec"
+Zonebie.quiet = true

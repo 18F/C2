@@ -1,26 +1,32 @@
 feature "Requester edits their NCR work order", :js do
   include ProposalSpecHelper
 
-  let(:organization) { create(:ncr_organization) }
-  let(:work_order) do
-    create(
+  def requester
+    @work_order.requester
+  end
+
+  def ncr_proposal
+    @work_order.proposal
+  end
+
+  before(:each) do
+    @organization = create(:ncr_organization)
+    @work_order = create(
       :ncr_work_order,
       building_number: Ncr::BUILDING_NUMBERS[0],
-      ncr_organization: organization,
+      ncr_organization: @organization,
       vendor: "test vendor",
       description: "test"
     )
-  end
-  let(:ncr_proposal) { work_order.proposal }
-  let(:requester) { work_order.requester }
-
-  before(:each) do
-    work_order.setup_approvals_and_observers
-    login_as(requester)
+    unless @logged_in_once
+      @work_order.setup_approvals_and_observers
+      login_as(requester)
+      @logged_in_once = true
+    end
   end
 
   scenario "preserves previously selected values in dropdowns" do
-    visit edit_ncr_work_order_path(work_order)
+    visit edit_ncr_work_order_path(@work_order)
 
     expect_page_to_have_selected_selectize_option(
       "ncr_work_order_building_number",
@@ -28,7 +34,7 @@ feature "Requester edits their NCR work order", :js do
     )
     expect_page_to_have_selected_selectize_option(
       "ncr_work_order_ncr_organization",
-      organization.code_and_name
+      @organization.code_and_name
     )
     expect_page_to_have_selected_selectize_option(
       "ncr_work_order_vendor",
@@ -36,13 +42,13 @@ feature "Requester edits their NCR work order", :js do
     )
     expect_page_to_have_selected_selectize_option(
       "ncr_work_order_approving_official",
-      work_order.approving_official.email_address
+      @work_order.approving_official.email_address
     )
   end
 
   scenario "creates a comment when editing" do
     new_org = create(:ncr_organization, code: "XZP", name: "Test test")
-    visit edit_ncr_work_order_path(work_order)
+    visit edit_ncr_work_order_path(@work_order)
 
     fill_in "Description", with: "New Description"
     fill_in_selectized("ncr_work_order_building_number", Ncr::BUILDING_NUMBERS[1])
@@ -55,14 +61,14 @@ feature "Requester edits their NCR work order", :js do
       "Building number was changed from #{Ncr::BUILDING_NUMBERS[0]} to #{Ncr::BUILDING_NUMBERS[1]}"
     )
     expect(page).to have_content(
-      "Org code was changed from #{organization.code_and_name} to #{new_org.code_and_name}"
+      "Org code was changed from #{@organization.code_and_name} to #{new_org.code_and_name}"
     )
   end
 
-  scenario "notifies observers of changes" do
+  scenario "notifies observers of changes", :email do
     user = create(:user, client_slug: "ncr", email_address: "observer@example.com")
-    work_order.add_observer(user)
-    visit edit_ncr_work_order_path(work_order)
+    @work_order.add_observer(user)
+    visit edit_ncr_work_order_path(@work_order)
 
     fill_in "Description", with: "Observer changes"
     click_on "Update"
@@ -71,11 +77,11 @@ feature "Requester edits their NCR work order", :js do
     expect(deliveries.last).to have_content(user.full_name)
   end
 
-  scenario "does not resave unchanged requests" do
-    visit edit_ncr_work_order_path(work_order)
+  scenario "does not resave unchanged requests", :email do
+    visit edit_ncr_work_order_path(@work_order)
     click_on "Update"
 
-    expect(current_path).to eq(proposal_path(work_order.proposal))
+    expect(current_path).to eq(proposal_path(@work_order.proposal))
     expect(page).to have_content("No changes were made to the request.")
     expect(deliveries.length).to eq(0)
   end
@@ -83,7 +89,7 @@ feature "Requester edits their NCR work order", :js do
   scenario "allows requester to change the approving official" do
     approver = create(:user, client_slug: "ncr")
 
-    visit "/ncr/work_orders/#{work_order.id}/edit"
+    visit "/ncr/work_orders/#{@work_order.id}/edit"
     fill_in_selectized("ncr_work_order_approving_official", approver.email_address)
     click_on "Update"
 
@@ -93,7 +99,7 @@ feature "Requester edits their NCR work order", :js do
   end
 
   scenario "allows requester to change the expense type" do
-    visit edit_ncr_work_order_path(work_order)
+    visit edit_ncr_work_order_path(@work_order)
 
     choose "BA80"
     fill_in "RWA Number", with: "a1234567"
@@ -104,14 +110,14 @@ feature "Requester edits their NCR work order", :js do
     expect(proposal.approvers.second.email_address).to eq(Ncr::Mailboxes.ba80_budget.email_address)
   end
 
-  context "proposal changes from BA80 to BA61" do
+  context "proposal changes from BA80 to BA61", :email do
     scenario "removed tier 1 approver is notified if approval is not pending" do
-      work_order.update(expense_type: "BA61")
+      @work_order.update(expense_type: "BA61")
       tier_one_approver = Ncr::Mailboxes.ba61_tier1_budget
       approval = tier_one_approver.steps.where(proposal: ncr_proposal).first
       approval.update(status: "actionable")
 
-      visit edit_ncr_work_order_path(work_order)
+      visit edit_ncr_work_order_path(@work_order)
       choose "BA80"
       fill_in "RWA Number", with: "a1234567"
       click_on "Update"
@@ -131,7 +137,7 @@ feature "Requester edits their NCR work order", :js do
     approval.user.add_delegate(delegate_user)
     approval.update(completer: delegate_user)
 
-    visit edit_ncr_work_order_path(work_order)
+    visit edit_ncr_work_order_path(@work_order)
     fill_in "Description", with: "New Description that shouldn't change the approver list"
     click_on "Update"
 
@@ -139,7 +145,7 @@ feature "Requester edits their NCR work order", :js do
   end
 
   scenario "has 'Discard Changes' link" do
-    visit edit_ncr_work_order_path(work_order)
+    visit edit_ncr_work_order_path(@work_order)
 
     click_link "Discard Changes"
 
@@ -147,7 +153,7 @@ feature "Requester edits their NCR work order", :js do
   end
 
   scenario "can change approving official email if first approval not done" do
-    visit edit_ncr_work_order_path(work_order)
+    visit edit_ncr_work_order_path(@work_order)
 
     within(".ncr_work_order_approving_official") do
       expect(page).not_to have_css(".disabled")
@@ -155,9 +161,9 @@ feature "Requester edits their NCR work order", :js do
   end
 
   scenario "has a disabled approving official email field if first approval is done" do
-    work_order.individual_steps.first.complete!
+    @work_order.individual_steps.first.complete!
 
-    visit edit_ncr_work_order_path(work_order)
+    visit edit_ncr_work_order_path(@work_order)
 
     within(".ncr_work_order_approving_official") do
       expect(page).to have_css(".disabled")
@@ -165,8 +171,8 @@ feature "Requester edits their NCR work order", :js do
   end
 
   scenario "can update other fields if first approval is done" do
-    work_order.individual_steps.first.complete!
-    visit edit_ncr_work_order_path(work_order)
+    @work_order.individual_steps.first.complete!
+    visit edit_ncr_work_order_path(@work_order)
 
     fill_in_selectized("ncr_work_order_building_number", Ncr::BUILDING_NUMBERS[1])
     click_on "Update"
@@ -178,26 +184,26 @@ feature "Requester edits their NCR work order", :js do
   scenario "can be edited if completed" do
     fully_complete(ncr_proposal)
 
-    visit "/ncr/work_orders/#{work_order.id}/edit"
-    expect(current_path).to eq("/ncr/work_orders/#{work_order.id}/edit")
+    visit "/ncr/work_orders/#{@work_order.id}/edit"
+    expect(current_path).to eq("/ncr/work_orders/#{@work_order.id}/edit")
   end
 
   scenario "allows the requester to edit the budget-related fields" do
-    visit "/ncr/work_orders/#{work_order.id}/edit"
+    visit "/ncr/work_orders/#{@work_order.id}/edit"
 
     fill_in "CL number", with: "CL1234567"
     fill_in "Function code", with: "PG123"
     fill_in "Object field / SOC code", with: "789"
     click_on "Update"
 
-    work_order.reload
-    expect(work_order.cl_number).to eq("CL1234567")
-    expect(work_order.function_code).to eq("PG123")
-    expect(work_order.soc_code).to eq("789")
+    @work_order.reload
+    expect(@work_order.cl_number).to eq("CL1234567")
+    expect(@work_order.function_code).to eq("PG123")
+    expect(@work_order.soc_code).to eq("789")
   end
 
   scenario "disables the emergency field", :js do
-    visit edit_ncr_work_order_path(work_order)
+    visit edit_ncr_work_order_path(@work_order)
 
     within(".ncr_work_order_emergency") do
       expect(page).to have_css(".disabled")

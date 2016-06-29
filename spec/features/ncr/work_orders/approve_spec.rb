@@ -1,7 +1,7 @@
 feature "Approve a NCR work order" do
   context "when signed in as the approver" do
     context "last step is completed" do
-      it "sends one email to the requester" do
+      it "sends one email to the requester", :email do
         work_order = create(:ncr_work_order, :with_approvers)
         approver = work_order.individual_steps.last.user
         work_order.individual_steps.first.complete!

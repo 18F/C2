@@ -36,7 +36,7 @@ describe "Completing a proposal" do
     expect(page).to have_content(I18n.t("errors.policies.proposal.step_complete"))
   end
 
-  it "sends email to observers and requester when proposal is complete" do
+  it "sends email to observers and requester when proposal is complete", :email do
     proposal = create(:proposal, :with_approver)
     proposal.add_observer(create(:user))
 

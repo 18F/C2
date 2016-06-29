@@ -9,7 +9,7 @@ feature "Requester switches work order to WHSC", :js do
   end
 
   context "as a BA61" do
-    scenario "notifies the removed approver" do
+    scenario "notifies the removed approver", :email do
       whsc_org = create(:whsc_organization)
       expect(work_order).to_not be_for_whsc_organization
       deliveries.clear

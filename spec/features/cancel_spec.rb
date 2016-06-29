@@ -90,7 +90,7 @@ describe "Canceling a request" do
     end
   end
 
-  context "email" do
+  context "email", :email do
     context "proposal without approver" do
       it "sends cancelation email to requester" do
         proposal = create(:proposal)

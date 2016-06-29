@@ -20,7 +20,7 @@ describe "proposals" do
     end
   end
 
-  describe 'GET /proposals/:id' do
+  describe "GET /proposals/:id" do
     it "can be viewed by a delegate" do
       delegate = create(:user)
       proposal = create(:proposal, delegate: delegate)
@@ -32,7 +32,7 @@ describe "proposals" do
     end
   end
 
-  describe 'POST /proposals/:id/complete' do
+  describe "POST /proposals/:id/complete" do
     def expect_status(proposal, status, app_status)
       proposal.reload
       proposal.steps.each do |approval|
@@ -46,7 +46,7 @@ describe "proposals" do
       post "/proposals/#{proposal.id}/complete"
 
       expect(response.status).to redirect_to(root_path(return_to: make_return_to("Previous", request.fullpath)))
-      expect_status(proposal, 'pending', 'actionable')
+      expect_status(proposal, "pending", "actionable")
     end
 
     it "fails if user is not involved with the request" do
@@ -57,7 +57,7 @@ describe "proposals" do
       post "/proposals/#{proposal.id}/complete"
 
       expect(response.status).to eq(403)
-      expect_status(proposal, 'pending', 'actionable')
+      expect_status(proposal, "pending", "actionable")
     end
 
     it "succeeds as a delegate" do
@@ -67,7 +67,7 @@ describe "proposals" do
       login_as(delegate)
       post "/proposals/#{proposal.id}/complete"
 
-      expect_status(proposal, 'completed', 'completed')
+      expect_status(proposal, "completed", "completed")
     end
 
     context "signed in as the approver" do
@@ -82,20 +82,20 @@ describe "proposals" do
         post "/proposals/#{proposal.id}/complete"
 
         expect(response).to redirect_to("/proposals/#{proposal.id}")
-        expect_status(proposal, 'completed', 'completed')
+        expect_status(proposal, "completed", "completed")
       end
 
       describe "version number" do
         it "works if the version matches" do
           expect_any_instance_of(Proposal).to receive(:version).and_return(123)
           post "/proposals/#{proposal.id}/complete", version: 123
-          expect_status(proposal, 'completed', 'completed')
+          expect_status(proposal, "completed", "completed")
         end
 
         it "fails if the versions don't match" do
           expect_any_instance_of(Proposal).to receive(:version).and_return(456)
           post "/proposals/#{proposal.id}/complete", version: 123
-          expect_status(proposal, 'pending', 'actionable')
+          expect_status(proposal, "pending", "actionable")
           # TODO check for message on the page
         end
       end
@@ -110,7 +110,7 @@ describe "proposals" do
         post "/proposals/#{proposal.id}/complete", cch: token.access_token
 
         expect(response).to redirect_to("/proposals/#{proposal.id}")
-        expect_status(proposal, 'completed', 'completed')
+        expect_status(proposal, "completed", "completed")
       end
 
       it "marks the token as used" do
@@ -134,9 +134,9 @@ describe "proposals" do
 
         expect(response).to redirect_to("/proposals/#{proposal.id}/complete?cch=#{token.access_token}")
 
-        get response.headers['Location']
+        get response.headers["Location"]
 
-        expect_status(proposal, 'completed', 'completed')
+        expect_status(proposal, "completed", "completed")
         expect(session[:return_to]).to be_nil
         expect(session[:user]).to_not be_nil
       end

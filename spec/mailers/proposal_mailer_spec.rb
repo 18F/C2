@@ -1,4 +1,4 @@
-describe ProposalMailer do
+describe ProposalMailer, :email do
   include MailerSpecHelper
 
   describe "#proposal_created_confirmation" do

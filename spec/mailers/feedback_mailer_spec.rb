@@ -1,4 +1,4 @@
-describe FeedbackMailer do
+describe FeedbackMailer, :email do
   include EnvVarSpecHelper
 
   describe 'feedback' do

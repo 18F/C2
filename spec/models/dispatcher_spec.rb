@@ -1,4 +1,4 @@
-describe Dispatcher do
+describe Dispatcher, :email do
   describe "#deliver_new_proposal_emails" do
     it "sends emails to the requester and first approver" do
       proposal = create(:proposal, :with_approver, :with_observer)
@@ -180,7 +180,7 @@ describe Dispatcher do
     end
   end
 
-  describe "#on_comment_created" do 
+  describe "#on_comment_created" do
     it "does not send an email to commenter" do
       proposal = create(:proposal)
       comment_user = create(:user, email_address: "comment_user@example.com")

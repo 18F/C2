@@ -1,4 +1,4 @@
-describe ObserverMailer do
+describe ObserverMailer, :email do
   include MailerSpecHelper
 
   describe "#observer_added_notification" do

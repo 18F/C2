@@ -13,7 +13,7 @@ describe ObservationCreator do
     end
 
     context "with an adder but no reason" do
-      it "sends an observer added email" do
+      it "sends an observer added email", :email do
         proposal = create(:proposal)
         observer = create(:user)
         adder = create(:user)
@@ -64,7 +64,7 @@ describe ObservationCreator do
         expect(proposal.comments.first.comment_text).to include reason
       end
 
-      it "sends a comment email" do
+      it "sends a comment email", :email do
         proposal = create(:proposal)
         observer = create(:user)
         adder = create(:user)

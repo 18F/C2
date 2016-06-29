@@ -1,4 +1,4 @@
-describe AttachmentMailer do
+describe AttachmentMailer, :email do
   include MailerSpecHelper
 
   describe "#new_attachment_notification" do

@@ -3,5 +3,5 @@ def deliveries
 end
 
 def email_recipients
-  deliveries.map {|email| email.to[0] }.sort
+  deliveries.map { |email| email.to[0] }.sort
 end
