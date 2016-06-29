@@ -10,6 +10,9 @@ Metrics/LineLength:
 Rails:
   Enabled: true
 
+Style/AndOr:
+  EnforcedStyle: always
+
 Style/CommentAnnotation:
   Enabled: false
 
@@ -47,8 +50,8 @@ Style/SignalException:
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 
-Style/AndOr:
-  EnforcedStyle: always
+Style/TrailingCommaInArguments:
+  Enabled: false
 
 ClassLength:
   Max: 250
