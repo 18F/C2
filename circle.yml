@@ -7,14 +7,15 @@ dependencies:
       else
         mkdir ~/rvm_binaries || true
         rvm install 2.3.1
-        gem update --system
         gem install bundler
         cd ~/rvm_binaries && rvm prepare 2.3.1
         ls ~/rvm_binaries
       fi
     - rvm --default use 2.3.1
+    - gem update --system
+    - gem update bundler
   pre:
-    - bundle install --without development test
+    - cp .env.example .env
     - bash ./build-elasticsearch.sh
     - sudo curl --output /usr/local/bin/phantomjs https://s3.amazonaws.com/circle-downloads/phantomjs-2.1.1
   cache_directories:
