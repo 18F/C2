@@ -16,7 +16,8 @@ C2 = (function() {
       observerCard:   '#card-for-observers',
       modalCard:      '#modal-wrapper',
       updateView:     '#mode-parent',
-      summaryBar:     '#summary-card'
+      summaryBar:     '#summary-card',
+      approvalCard:     '#card-for-approvals'
     }
     this._overrideTestConfig(config);
     this._blastOff();
@@ -37,6 +38,7 @@ C2 = (function() {
     this.attachmentCardController = new AttachmentCardController(config.attachmentCard);
     this.observerCardController = new ObserverCardController(config.observerCard);
     this.activityCardController = new ActivityCardController(config.activityCard);
+    this.approvalCardController = new ApprovalCardController(config.approvalCard);
     this.modals = new ModalController(config.modalCard);
     this.actionBar = new ActionBar(config.actionBar);
     this.notification = new Notifications(config.notifications);
@@ -139,6 +141,7 @@ C2 = (function() {
     this.detailsMode('view');
     this.actionBar.el.trigger("action-bar-clicked:saved");
     this.activityCardController.el.trigger('activity-card:update');
+    this.approvalCardController.el.trigger('status-card:update');
     this.createNotification("Your updates have been saved.", "", "success");
   }
 
