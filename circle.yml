@@ -1,6 +1,13 @@
-dependencies:
+machine:
   pre:
     - sudo curl --output /usr/local/bin/phantomjs https://s3.amazonaws.com/circle-downloads/phantomjs-2.1.1
+
+dependencies:
+  cache_directories:
+    - elasticsearch
+    - ~/rvm_binaries
+
+  override:
     - |
       if [[ -e ~/rvm_binaries/ruby-2.3.1.tar.bz2 ]]
       then
@@ -20,9 +27,7 @@ dependencies:
     - bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3 --without development production
     - cp .env.example .env
     - bash ./build-elasticsearch.sh
-  cache_directories:
-    - elasticsearch
-    - ~/rvm_binaries
+
 test:
   override:
     - bundle exec rspec -r rspec_junit_formatter --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/junit.xml --tag '~js' --require rails_helper:
