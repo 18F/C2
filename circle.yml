@@ -1,11 +1,14 @@
 dependencies:
   pre:
+    - sudo curl --output /usr/local/bin/phantomjs https://s3.amazonaws.com/circle-downloads/phantomjs-2.1.1
     - |
       if [[ -e ~/rvm_binaries/ruby-2.3.1.tar.bz2 ]]
       then
+        echo "Found the cached Ruby..."
         rvm mount ~/rvm_binaries/ruby-2.3.1.tar.bz2
         rvm --default use 2.3.1
       else
+        echo "Could not find the cached Ruby..."
         mkdir ~/rvm_binaries || true
         rvm install 2.3.1
         rvm --default use 2.3.1
@@ -17,7 +20,6 @@ dependencies:
     - bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3 --without development production
     - cp .env.example .env
     - bash ./build-elasticsearch.sh
-    - sudo curl --output /usr/local/bin/phantomjs https://s3.amazonaws.com/circle-downloads/phantomjs-2.1.1
   cache_directories:
     - elasticsearch
     - ~/rvm_binaries
