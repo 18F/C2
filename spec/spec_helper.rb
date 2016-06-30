@@ -64,4 +64,6 @@ RSpec.configure do |config|
   config.raise_errors_for_deprecations!
   config.backtrace_exclusion_patterns << %r{/gems/}
   config.order = :random
+
+  require "zonebie/rspec"
 end

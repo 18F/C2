@@ -1,5 +1,5 @@
 module Ncr
-  START_OF_NEW_6X_APPROVAL_POLICY = Time.zone.local(2016, 7, 5, 0, 0, 0)
+  START_OF_NEW_6X_APPROVAL_POLICY = "2016-07-05 00:00".in_time_zone("America/New_York")
 
   class ApprovalManager
     def initialize(work_order)
