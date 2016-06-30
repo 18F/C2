@@ -6,6 +6,10 @@ describe AttachmentsController do
       attachment: { file: fixture_file_upload('icon-user.png', 'image/png') }
     }}
 
+    before do
+      stub_request(:put, /.*c2-prod.s3.amazonaws.com.*/)
+    end
+
     it "allows the requester to add an attachment" do
       login_as(proposal.requester)
       post :create, params

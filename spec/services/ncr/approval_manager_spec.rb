@@ -151,29 +151,42 @@ describe Ncr::ApprovalManager do
 
   describe '#system_approvers' do
     context "for a BA61 request" do
-      let (:ba61_tier_one) { Ncr::Mailboxes.ba61_tier1_budget }
-      let (:ba61_tier_two) { Ncr::Mailboxes.ba61_tier2_budget }
+      let(:ba61_tier_one) { Ncr::Mailboxes.ba61_tier1_budget }
+      let(:ba61_tier_two) { Ncr::Mailboxes.ba61_tier2_budget }
 
-      it "skips the Tier 1 budget approver for WHSC" do
-        ncr_organization = create(:whsc_organization)
-        work_order = create(
-          :ncr_work_order,
-          expense_type: "BA61",
-          ncr_organization: ncr_organization
-        )
-        manager = Ncr::ApprovalManager.new(work_order)
-        expect(manager.system_approvers).to eq([
-                                                 ba61_tier_two
-                                               ])
+      context "when budget approvers are automatically added" do
+        it "skips the Tier 1 budget approver for WHSC" do
+          ncr_organization = create(:whsc_organization)
+          work_order = create(
+            :ncr_work_order,
+            expense_type: "BA61",
+            ncr_organization: ncr_organization
+          )
+          manager = Ncr::ApprovalManager.new(work_order)
+          allow(manager).to receive(:should_add_budget_approvers_to_6x?).and_return(true)
+          expect(manager.system_approvers).to eq([
+                                                   ba61_tier_two
+                                                 ])
+        end
+
+        it "includes the Tier 1 budget approver for an unknown organization" do
+          work_order = create(:ncr_work_order, expense_type: "BA61")
+          manager = Ncr::ApprovalManager.new(work_order)
+          allow(manager).to receive(:should_add_budget_approvers_to_6x?).and_return(true)
+          expect(manager.system_approvers).to eq([
+                                                   ba61_tier_one,
+                                                   ba61_tier_two
+                                                 ])
+        end
       end
 
-      it "includes the Tier 1 budget approver for an unknown organization" do
-        work_order = create(:ncr_work_order, expense_type: "BA61")
-        manager = Ncr::ApprovalManager.new(work_order)
-        expect(manager.system_approvers).to eq([
-                                                 ba61_tier_one,
-                                                 ba61_tier_two
-                                               ])
+      context "when budget approvers are not automatically added" do
+        it "does not include any budget approvers" do
+          work_order = create(:ncr_work_order, expense_type: "BA61")
+          manager = Ncr::ApprovalManager.new(work_order)
+          allow(manager).to receive(:should_add_budget_approvers_to_6x?).and_return(false)
+          expect(manager.system_approvers).to eq([])
+        end
       end
     end
 
@@ -212,6 +225,23 @@ describe Ncr::ApprovalManager do
 
         manager = Ncr::ApprovalManager.new(work_order)
         expect(manager.system_approvers).to eq([budget])
+      end
+    end
+  end
+
+  describe "#should_add_budget_approvers_to_6x?" do
+    before(:each) { @manager = Ncr::ApprovalManager.new(nil) }
+
+    it "returns true before July 5 2016" do
+      Timecop.freeze("2016-07-04 16:55".in_time_zone("America/New_York")) do
+        # binding.pry
+        expect(@manager.should_add_budget_approvers_to_6x?).to be true
+      end
+    end
+
+    it "returns false on or after July 5 2016" do
+      Timecop.freeze("2016-07-05 08:00".in_time_zone("America/New_York")) do
+        expect(@manager.should_add_budget_approvers_to_6x?).to be false
       end
     end
   end

@@ -7,6 +7,9 @@ describe "Add attachments" do
 
   before do
     login_as(proposal.requester)
+    stub_request(:put, /.*c2-prod.s3.amazonaws.com.*/)
+    stub_request(:head, /.*c2-prod.s3.amazonaws.com.*/)
+    stub_request(:delete, /.*c2-prod.s3.amazonaws.com.*/)
   end
 
   it "is visible on a proposal" do
@@ -64,6 +67,20 @@ describe "Add attachments" do
     within("#card-for-activity") do
       expect(page).to have_content("bg_completed_status.gif")
     end
+  end
+
+  it "deletes attachments with js", :js do 
+    work_order = create(:ncr_work_order, :with_beta_requester)
+    proposal = work_order.proposal 
+    create(:attachment, proposal: proposal,
+                        user: proposal.requester)
+    login_as(proposal.requester)
+    visit proposal_path(proposal)
+
+    click_on "Remove"
+    click_on "REMOVE"
+    wait_for_ajax
+    expect(page).to have_content("Attachment removed")
   end
 
   it "emails everyone involved in the proposal" do

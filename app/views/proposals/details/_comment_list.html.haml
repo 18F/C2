@@ -7,13 +7,14 @@
           - history_style = index > 4 ? "contracted" : "expanded"
           - index_class = index == events.count - 1 ? "status-index-last" : "status-index-" + index.to_s
           - classes = "status-#{history_style} #{index_class}"
-          .medium-12.column.status-feed-wrapper.row.comment{ class: classes }
-            .medium-table-row.medium-12.status-feed-item.no-margin-bottom
-              .hide-for-small-only.medium-table-cell.medium-activity-icon-col.background-color-column
-                .dot-circle
-              .medium-table-cell.medium-auto-column.status-feed-content
-                = render partial: event, locals: { event: event }
-          - index = index + 1
+          - if !event.nil?
+            .medium-12.column.status-feed-wrapper.row.comment{ class: classes }
+              .medium-table-row.medium-12.status-feed-item.no-margin-bottom
+                .hide-for-small-only.medium-table-cell.medium-activity-icon-col.background-color-column
+                  .dot-circle
+                .medium-table-cell.medium-auto-column.status-feed-content
+                  = render partial: event, locals: { event: event }
+            - index = index + 1
 
 - if events.length > 5
   .row.status-feed-actions

@@ -15,6 +15,7 @@ C2::Application.routes.draw do
   get "/feedback/thanks" => "feedback#thanks"
   post "/feedback" => "feedback#create"
   get "/activity-feed/:proposal_id/update_feed" => "comments#update_feed"
+  get "/approval-feed/:id/update_approvals" => "proposals#update_approvals_card"
 
   match "/auth/:provider/callback" => "auth#oauth_callback", via: [:get]
   get "/auth/failure" => "auth#failure"

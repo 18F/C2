@@ -1,11 +1,23 @@
-.title-block
-  %span.status-action 
-    #{event.item_type} #{event.event_type}d
-    - if event.user
-      by #{event.user.full_name}
+- unless event.event_type == "destroy"
+  .title-block
+    %span.status-action
+      #{event.item_type} #{event.event_type}d
+      - if event.user
+        by #{event.user.full_name}
+    %span.time-from
+      = date_with_tooltip(event.created_at, true, { truncate: true })
+  .item-block.attachment
+    %a{href: proposal_attachment_path(@proposal, event.item)}
+      = image_tag "icon-attachment.svg"
+      = event.item.file_file_name
+- else
+  - attachment = event.reify
+  .title-block
+  %span.status-action
+    Attachment removed
+    - if attachment.user
+      by #{attachment.user.full_name}
   %span.time-from
     = date_with_tooltip(event.created_at, true, { truncate: true })
-.item-block.attachment
-  %a{href: proposal_attachment_path(@proposal, event.item)}
-    = image_tag "icon-attachment.svg"
-    = event.item.file_file_name
+.item-block
+  = event.safe_html_diff

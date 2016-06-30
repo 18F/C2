@@ -122,6 +122,11 @@ class ProposalsController < ApplicationController
     @container.state_from_params = params
   end
 
+  def update_approvals_card
+    @proposal = proposal.decorate
+    render partial: "proposals/details/status", locals: { proposal: @proposal }
+  end
+
   protected
 
   def try_search(query_listing)
