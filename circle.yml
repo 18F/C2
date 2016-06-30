@@ -1,9 +1,5 @@
 dependencies:
   pre:
-    - cp .env.example .env
-    - bash ./build-elasticsearch.sh
-    - sudo curl --output /usr/local/bin/phantomjs https://s3.amazonaws.com/circle-downloads/phantomjs-2.1.1
-  override:
     - |
       if [[ -e ~/rvm_binaries/ruby-2.3.1.tar.bz2 ]]
       then
@@ -19,6 +15,9 @@ dependencies:
         ls ~/rvm_binaries
       fi
     - bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3 --without development production
+    - cp .env.example .env
+    - bash ./build-elasticsearch.sh
+    - sudo curl --output /usr/local/bin/phantomjs https://s3.amazonaws.com/circle-downloads/phantomjs-2.1.1
   cache_directories:
     - elasticsearch
     - ~/rvm_binaries
