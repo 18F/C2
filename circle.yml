@@ -5,25 +5,9 @@ machine:
 dependencies:
   cache_directories:
     - elasticsearch
-    - ~/rvm_binaries
+    - ~/.rvm
 
   pre:
-    - |
-      if [[ -e ~/rvm_binaries/ruby-2.3.1.tar.bz2 ]]
-      then
-        echo "Found the cached Ruby..."
-        rvm mount ~/rvm_binaries/ruby-2.3.1.tar.bz2
-        rvm --default use 2.3.1
-      else
-        echo "Could not find the cached Ruby..."
-        mkdir ~/rvm_binaries || true
-        rvm install 2.3.1
-        rvm --default use 2.3.1
-        gem update --system
-        gem install bundler rake
-        cd ~/rvm_binaries && rvm prepare 2.3.1
-        ls ~/rvm_binaries
-      fi
     - bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3 --without development production
     - cp .env.example .env
     - bash ./build-elasticsearch.sh
