@@ -51,6 +51,12 @@ describe Gsa18f::Procurement do
 
       expect(procurement.purchase_type).to eq "Other"
     end
+
+    it "associates 5 with Micropurchase" do
+      procurement = build(:gsa18f_procurement, purchase_type: 5)
+
+      expect(procurement.purchase_type).to eq "Micropurchase"
+    end
   end
 
   describe "#editable?" do
