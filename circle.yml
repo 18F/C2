@@ -8,7 +8,9 @@ dependencies:
     - ~/.rvm
 
   pre:
-    - bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3 --without development production
+    - gem update --system
+    - gem install bundler rake
+    - gem update bundler rake
     - cp .env.example .env
     - bash ./build-elasticsearch.sh
 
