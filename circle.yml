@@ -7,6 +7,7 @@ dependencies:
       else
         mkdir ~/rvm_binaries || true
         rvm install 2.3.1
+        rvm --default use 2.3.1
         gem update --system
         gem install bundler rake
         cd ~/rvm_binaries && rvm prepare 2.3.1
@@ -16,7 +17,7 @@ dependencies:
   pre:
     - cp .env.example .env
     - rvm --default use 2.3.1
-    - bundle install --without development production
+    - bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3 --without development production
     - bash ./build-elasticsearch.sh
     - sudo curl --output /usr/local/bin/phantomjs https://s3.amazonaws.com/circle-downloads/phantomjs-2.1.1
   cache_directories:
@@ -24,8 +25,6 @@ dependencies:
     - ~/rvm_binaries
 test:
   override:
-    - gem list
-    - ruby --version
     - bundle exec rspec -r rspec_junit_formatter --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/junit.xml --tag '~js' --require rails_helper:
         parallel: true
         files:
