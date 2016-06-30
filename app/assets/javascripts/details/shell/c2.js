@@ -131,7 +131,13 @@ C2 = (function() {
 
   C2.prototype.detailsCancelled = function(){
     this.detailsMode('view');
-    this.createNotification("Your modifications have not been saved. Click modify to continue.", "", "notice");
+    var message;
+    if(this.formState.el.dirrty("isDirty")){
+      message = "Your modifications have not been saved. Click modify to continue.";
+    } else {
+      message = "Modification canceled. No changes were made.";
+    }
+    this.createNotification(message, "", "notice");
   }
 
   C2.prototype.detailsSaved = function(data){
