@@ -104,7 +104,6 @@ group :test do
   gem "test_after_commit"
   gem "timecop"
   gem "webmock", require: false
-  gem "zonebie"
 end
 
 group :production do

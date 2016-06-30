@@ -65,6 +65,3 @@ RSpec.configure do |config|
   config.backtrace_exclusion_patterns << %r{/gems/}
   config.order = :random
 end
-
-require "zonebie/rspec"
-Zonebie.quiet = true
