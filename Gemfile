@@ -99,7 +99,6 @@ group :test do
   gem "poltergeist"
   gem "rspec_junit_formatter"
   gem "shoulda-matchers"
-  gem "simplecov"
   gem "site_prism"
   gem "test_after_commit"
   gem "timecop"

@@ -5,7 +5,6 @@ machine:
 dependencies:
   cache_directories:
     - elasticsearch
-    # - ~/.rvm  # Too slow; it's faster just to install ruby
 
   pre:
     - gem update --system

@@ -1,7 +1,7 @@
 require "codeclimate-test-reporter"
 
-# Only run SimpleCov on Circle CI because it slows down the developer
-# experience when run locally.
+# Only run SimpleCov on Circle CI because it slows down the developer experience when run
+# locally.
 if ENV["CIRCLE_ARTIFACTS"]
   SimpleCov.formatters = [
     SimpleCov::Formatter::HTMLFormatter,
