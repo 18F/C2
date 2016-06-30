@@ -1,7 +1,7 @@
 require "codeclimate-test-reporter"
 
-# Only run SimpleCov on Circle CI because it slows down the developer
-# experience when run locally.
+# Only run SimpleCov on Circle CI because it slows down the developer experience when run
+# locally.
 if ENV["CIRCLE_ARTIFACTS"]
   SimpleCov.formatters = [
     SimpleCov::Formatter::HTMLFormatter,
@@ -64,7 +64,6 @@ RSpec.configure do |config|
   config.raise_errors_for_deprecations!
   config.backtrace_exclusion_patterns << %r{/gems/}
   config.order = :random
-end
 
-require "zonebie/rspec"
-Zonebie.quiet = true
+  require "zonebie/rspec"
+end

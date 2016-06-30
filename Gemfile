@@ -2,6 +2,7 @@ source "https://rubygems.org"
 ruby "2.3.1" # this should match `.ruby-version` and doc/setup.md
 gem "rails", "4.2.5.2"
 
+gem "actionmailer-text"
 gem "active_model_serializers"
 gem "activeadmin", git: "https://github.com/activeadmin/activeadmin.git"
 gem "activeadmin_hstore_editor"
@@ -20,7 +21,6 @@ gem "clockwork", require: false
 gem "daemons" # for delayed_job
 gem "delayed_job_active_record"
 gem "doorkeeper"
-gem "dotenv-rails", require: "dotenv/rails-now"
 gem "draper"
 gem "elasticsearch-dsl"
 gem "elasticsearch-model"
@@ -53,6 +53,7 @@ gem "pry-rails"
 gem "pundit", ">= 1.0.0" # Interface for Pundit::NotAuthorizedError changed in this version
 gem "rack-cors", require: "rack/cors"
 gem "redcarpet"
+gem "remotipart"
 gem "roadie-rails"
 gem "sass-rails", ">= 3.2"
 gem "simple_form"
@@ -62,8 +63,6 @@ gem "turbolinks"
 gem "uglifier"
 gem "validates_email_format_of"
 gem "workflow"
-gem "actionmailer-text"
-gem "remotipart"
 
 group :development, :production do
   gem "puma"
@@ -72,6 +71,7 @@ end
 group :test, :development do
   gem "bullet", require: false # use BULLET_ENABLED=true
   gem "database_cleaner"
+  gem "dotenv-rails", require: "dotenv/rails-now"
   gem "konacha"
   gem "pry-byebug"
   gem "rspec-rails"
@@ -99,7 +99,6 @@ group :test do
   gem "poltergeist"
   gem "rspec_junit_formatter"
   gem "shoulda-matchers"
-  gem "simplecov"
   gem "site_prism"
   gem "test_after_commit"
   gem "timecop"
