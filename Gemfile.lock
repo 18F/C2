@@ -619,7 +619,6 @@ DEPENDENCIES
   shoulda-matchers
   simple_form
   simple_form_object
-  simplecov
   site_prism
   spring
   spring-commands-rspec

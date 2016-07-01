@@ -233,13 +233,14 @@ describe Ncr::ApprovalManager do
     before(:each) { @manager = Ncr::ApprovalManager.new(nil) }
 
     it "returns true before July 5 2016" do
-      Timecop.freeze(Time.zone.local(2016, 7, 4, 17, 0, 0)) do
+      Timecop.freeze("2016-07-04 16:55".in_time_zone("America/New_York")) do
+        # binding.pry
         expect(@manager.should_add_budget_approvers_to_6x?).to be true
       end
     end
 
     it "returns false on or after July 5 2016" do
-      Timecop.freeze(Time.zone.local(2016, 7, 5, 8, 0, 0)) do
+      Timecop.freeze("2016-07-05 08:00".in_time_zone("America/New_York")) do
         expect(@manager.should_add_budget_approvers_to_6x?).to be false
       end
     end
