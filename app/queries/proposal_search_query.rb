@@ -14,9 +14,11 @@ class ProposalSearchQuery
     rescue Elasticsearch::Transport::Transport::Errors::BadRequest => error
       Rails.logger.warn(error)
       raise SearchBadQuery, I18n.t("errors.features.es.bad_query")
-    rescue Elasticsearch::Transport::Transport::ServerError => _error
+    rescue Elasticsearch::Transport::Transport::ServerError => error
+      Rails.logger.warn(error)
       raise SearchUnavailable, I18n.t("errors.features.es.service_unavailable")
-    rescue Faraday::ConnectionFailed => _error
+    rescue Faraday::ConnectionFailed => error
+      Rails.logger.warn(error)
       raise SearchUnavailable, I18n.t("errors.features.es.service_unavailable")
     end
   end
