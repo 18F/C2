@@ -12,7 +12,7 @@ module Ncr
       all.uniq.sort.map { |building| { name: building } }
     end
 
-    def self.organization_options
+    def organization_options
       Ncr::Organization.all.map do |org|
         { name: org.code_and_name, id: org.id }
       end
