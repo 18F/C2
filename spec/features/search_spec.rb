@@ -86,17 +86,30 @@ describe "searching", elasticsearch: true do
       expect(page).to have_content("(#{proposals.first.name}) AND (Amount:(#{proposals.first.client_data.amount}))")
     end
 
-    it "has an Org Code field", :js do
-      proposals = populate_proposals
-      login_as(proposals.first.requester)
+    it "shows NCR users an Org Code field", :js do
+      ncr_user = create(:user, client_slug: "ncr")
+      login_as(ncr_user)
 
       @page = ProposalIndexPage.new
       @page.load
-      fill_in "text", with: proposals.first.name
+      fill_in "text", with: "blah"
       adv_options = find("a.adv-options")
       adv_options.trigger("click")
 
       expect(@page.advanced_search).to have_org_code
+    end
+
+    it "shows NCR users Building Number field", :js do
+      ncr_user = create(:user, client_slug: "ncr")
+      login_as(ncr_user)
+
+      @page = ProposalIndexPage.new
+      @page.load
+      fill_in "text", with: "blah"
+      adv_options = find("a.adv-options")
+      adv_options.trigger("click")
+
+      expect(@page.advanced_search).to have_building_number
     end
   end
 

@@ -24,8 +24,13 @@
     .form-group
       %label.control-label{for: "#{current_user.client_model_slug}[client_data.vendor]"}
         Org Code
-      %select.form-control{name: "#{current_user.client_model_slug}[client_data.expense_type]"}
-        = proposal_expense_type_options(current_user.client_model, @adv_search.value_for("client_data.expense_type"))
+      %select.form-control{name: "#{current_user.client_model_slug}[client_data.ncr_organization_id]", id: "select_org_code"}
+        = proposal_org_code_options(current_user.client_model, @adv_search.value_for("client_data.ncr_organization_id"))
+    .form-group
+      %label.control-label{for: "#{current_user.client_model_slug}[client_data.vendor]"}
+        Building Number
+      %select.form-control{name: "#{current_user.client_model_slug}[client_data.building_number]", id: "select_building_number"}
+        = proposal_building_number_options(@adv_search.value_for("client_data.building_number"))
     .form-group.row
       .col-xs-5
         %label.control-label{for: "#{current_user.client_model_slug}[client_data.amount]"}
