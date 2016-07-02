@@ -23,10 +23,10 @@ module SearchHelper
     options_for_select(expense_types, selected_value)
   end
 
-  def proposal_org_code_options(client_model, selected_value)
+  def proposal_org_code_options(selected_value)
     org_codes_hash = organization_options
-    org_codes_array = org_codes_hash.map { |h| [ h[:name], h[:id].to_s ] }
-    org_codes_array.sort! { |a,b| a[0] <=> b[0] }
+    org_codes_array = org_codes_hash.map { |h| [h[:name], h[:id].to_s] }
+    org_codes_array.sort! { |a, b| a[0] <=> b[0] }
     org_codes_array.unshift(["Any code", "*"])
     options_for_select(org_codes_array, selected_value)
   end

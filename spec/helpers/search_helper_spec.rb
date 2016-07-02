@@ -22,7 +22,7 @@ describe SearchHelper do
       org1 = create(:ncr_organization)
       org2 = create(:whsc_organization)
 
-      org_code_options = helper.proposal_org_code_options(Ncr::WorkOrder, "")
+      org_code_options = helper.proposal_org_code_options("")
       expect(org_code_options).to include(%Q(<option value="#{org1.id}">#{org1.code_and_name}</option>))
       expect(org_code_options).to include(%Q(<option value="#{org2.id}">#{org2.code_and_name}</option>))
     end

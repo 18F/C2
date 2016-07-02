@@ -25,7 +25,7 @@
       %label.control-label{for: "#{current_user.client_model_slug}[client_data.vendor]"}
         Org Code
       %select.form-control{name: "#{current_user.client_model_slug}[client_data.ncr_organization_id]", id: "select_org_code"}
-        = proposal_org_code_options(current_user.client_model, @adv_search.value_for("client_data.ncr_organization_id"))
+        = proposal_org_code_options(@adv_search.value_for("client_data.ncr_organization_id"))
     .form-group
       %label.control-label{for: "#{current_user.client_model_slug}[client_data.vendor]"}
         Building Number
