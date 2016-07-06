@@ -21,6 +21,7 @@ gem "clockwork", require: false
 gem "daemons" # for delayed_job
 gem "delayed_job_active_record"
 gem "doorkeeper"
+gem "dotenv-rails", require: "dotenv/rails-now"
 gem "draper"
 gem "elasticsearch-dsl"
 gem "elasticsearch-model"
@@ -71,7 +72,6 @@ end
 group :test, :development do
   gem "bullet", require: false # use BULLET_ENABLED=true
   gem "database_cleaner"
-  gem "dotenv-rails", require: "dotenv/rails-now"
   gem "konacha"
   gem "pry-byebug"
   gem "rspec-rails"
