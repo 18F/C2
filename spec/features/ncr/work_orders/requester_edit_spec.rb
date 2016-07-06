@@ -12,7 +12,7 @@ feature "Requester edits their NCR work order", :js do
   before(:each) do
     @organization = create(:ncr_organization)
     @work_order = create(
-      :ncr_work_order,
+      :ba61_ncr_work_order,
       building_number: Ncr::BUILDING_NUMBERS[0],
       ncr_organization: @organization,
       vendor: "test vendor",

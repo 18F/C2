@@ -8,11 +8,7 @@ describe Ncr::ApprovalManager do
       manager = Ncr::ApprovalManager.new(wo)
       manager.setup_approvals_and_observers
       expect(wo.observations.length).to eq(0)
-      expect(wo.approvers).to eq([
-                                   wo.approving_official,
-                                   ba61_tier_one,
-                                   ba61_tier_two
-                                 ])
+      expect(wo.approvers).to eq([wo.approving_official])
       wo.reload
       expect(wo.completed?).to eq(false)
     end
@@ -26,7 +22,7 @@ describe Ncr::ApprovalManager do
       work_order.update(approving_official: new_user)
       Ncr::ApprovalManager.new(work_order).setup_approvals_and_observers
 
-      expect(work_order.proposal.individual_steps.count).to eq 3
+      expect(work_order.proposal.individual_steps.count).to eq 2
       expect(work_order.proposal.steps.where(user: user)).not_to be_present
       expect(work_order.proposal.steps.where(user: new_user)).to be_present
     end
@@ -48,9 +44,7 @@ describe Ncr::ApprovalManager do
       manager = Ncr::ApprovalManager.new(wo)
       manager.setup_approvals_and_observers
       expect(wo.observers).to match_array([
-        wo.approving_official,
-        ba61_tier_one,
-        ba61_tier_two
+        wo.approving_official
       ].uniq)
       expect(wo.steps.length).to eq(0)
       wo.clear_association_cache
@@ -69,25 +63,16 @@ describe Ncr::ApprovalManager do
       )
       manager = Ncr::ApprovalManager.new(wo)
       manager.setup_approvals_and_observers
-      expect(wo.approvers).to eq [
-        approving_official,
-        ba61_tier_one,
-        ba61_tier_two
-      ]
+      expect(wo.approvers).to eq [approving_official]
+
       wo.update(ncr_organization: organization)
       manager.setup_approvals_and_observers
-      expect(wo.reload.approvers).to eq [
-        approving_official,
-        ba61_tier_two
-      ]
+      expect(wo.reload.approvers).to eq [approving_official]
 
       approving_official_2 = create(:user, email_address: "ao2@example.com")
       wo.update(approving_official: approving_official_2)
       manager.setup_approvals_and_observers
-      expect(wo.reload.approvers).to eq [
-        approving_official_2,
-        ba61_tier_two
-      ]
+      expect(wo.reload.approvers).to eq [approving_official_2]
 
       wo.update(approving_official: approving_official)
       wo.update(expense_type: "BA80")
@@ -123,12 +108,12 @@ describe Ncr::ApprovalManager do
       manager.setup_approvals_and_observers
 
       expect(wo.steps).to be_empty
-      expect(wo.observers.count).to be 3
+      expect(wo.observers.count).to be 1
 
       manager.setup_approvals_and_observers
       wo.reload
       expect(wo.steps).to be_empty
-      expect(wo.observers.count).to be 3
+      expect(wo.observers.count).to be 1
     end
 
     it "handles the delegate then update scenario" do
