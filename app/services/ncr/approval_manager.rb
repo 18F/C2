@@ -1,4 +1,6 @@
 module Ncr
+  START_OF_NEW_6X_APPROVAL_POLICY = "2016-07-05 00:00".in_time_zone("America/New_York")
+
   class ApprovalManager
     def initialize(work_order)
       @work_order = work_order
@@ -8,7 +10,7 @@ module Ncr
       if %w(BA60 BA61).include?(work_order.expense_type)
         ba_6x_approvers
       else
-        [ba_80_approver]
+        ba_80_approvers
       end
     end
 
@@ -18,6 +20,10 @@ module Ncr
       else
         set_up_as_observers
       end
+    end
+
+    def should_add_budget_approvers_to_6x?
+      Time.zone.now < START_OF_NEW_6X_APPROVAL_POLICY
     end
 
     private
@@ -41,7 +47,7 @@ module Ncr
     end
 
     def approvers
-      system_approvers.unshift(work_order.approving_official)
+      [work_order.approving_official] + system_approvers
     end
 
     # Generally shouldn't be called directly as it doesn't account for
@@ -68,6 +74,7 @@ module Ncr
 
     def ba_6x_approvers
       results = []
+      return results unless should_add_budget_approvers_to_6x?
 
       if work_order.for_whsc_organization?
         # no tier 1
@@ -82,11 +89,11 @@ module Ncr
       results
     end
 
-    def ba_80_approver
+    def ba_80_approvers
       if work_order.for_ool_organization?
-        Ncr::Mailboxes.ool_ba80_budget
+        [Ncr::Mailboxes.ool_ba80_budget]
       else
-        Ncr::Mailboxes.ba80_budget
+        [Ncr::Mailboxes.ba80_budget]
       end
     end
   end

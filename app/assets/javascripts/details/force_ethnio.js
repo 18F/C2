@@ -4,5 +4,8 @@ window.Ethnio = {
   debug_mode : false,
   display_interval : 1,
   check_cookies: false,
-  fast_start: true
+  fast_start: true,
+  close: function(){
+    $("[id*=ethnio-screener-]").remove();
+  }
 }

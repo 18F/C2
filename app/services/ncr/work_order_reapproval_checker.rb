@@ -9,18 +9,23 @@ module Ncr
     def requires_budget_reapproval?
       work_order.completed? &&
         work_order.requires_approval? &&
-        !budget_approver? &&
+        !user_is_budget_approver? &&
+        proposal_has_budget_approvals? &&
         (amount_increased? || protected_fields_changed?)
     end
 
     private
 
-    def budget_approver?
+    def user_is_budget_approver?
       work_order.budget_approvers.include?(current_user) || shares_budget_approver_delegator?
     end
 
     def shares_budget_approver_delegator?
       Ncr::WorkOrder.all_system_approvers.any? { |delegator| delegator.delegates_to?(current_user) }
+    end
+
+    def proposal_has_budget_approvals?
+      !work_order.budget_approvals.empty?
     end
 
     def current_user

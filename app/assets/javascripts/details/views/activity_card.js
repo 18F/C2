@@ -3,14 +3,17 @@ var ActivityCardController;
 ActivityCardController = (function(){
   
   function ActivityCardController(el, opts){
-    this._setup(el, opts);
+    $.extend(this, new ViewHelper());
+    this.defaultSetup(el,opts);
     return this;
   }
 
-  ActivityCardController.prototype._setup = function(el,opts){
-    $.extend(this,opts)
+  ActivityCardController.prototype._setConstants = function(el,opts){
     this.el = typeof el === "string" ? $(el) : el;
-    this._events();
+    this.proposalId = $("#proposal_id").attr("data-proposal-id");
+    this.updateUrl = "/activity-feed/" + this.proposalId + "/update_feed";
+    this.updateEvent = "activity-card:update";
+    this.updateCallback = this.setCommentForm;
   }
 
   ActivityCardController.prototype._events = function(){
@@ -29,33 +32,9 @@ ActivityCardController = (function(){
     });
   }
 
-  ActivityCardController.prototype._setupUpdateEvent = function(){
-    var self = this;
-    this.el.on("activity-card:update", function(){
-      var proposal_id = $("#proposal_id").attr("data-proposal-id");
-      $.ajax({ url: "/activity-feed/" + proposal_id + "/update_feed", 
-        retry_limi: 5,
-        success: function(html){
-          self.update(html, {focus: false});
-        }, 
-         error : function(xhr, textStatus, errorThrown ) {
-          if (textStatus === "timeout") {
-            this.tryCount++;
-            if (this.tryCount <= this.retryLimit) {
-              //try again
-              $.ajax(this);
-              return;
-            }            
-            return;
-          }
-        } 
-      });
-    });
-  }
 
-  ActivityCardController.prototype.update = function(html, opts){
-    opts = opts || {focus: true};
-    this.el.html(html);
+  ActivityCardController.prototype.setCommentForm = function(opts){
+    opts = opts || {focus: false};
     if (opts.focus){
       this.el.find("textarea:first").focus();
     }
