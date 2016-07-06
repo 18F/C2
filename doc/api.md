@@ -174,7 +174,7 @@ Create a new [Proposal](#proposal). The root key is the client model slug, e.g. 
 ```bash
 % curl -i -X POST -H 'Content-Type: application/json' \
   -H 'Authorization: Bearer your-access-token' \
-  --data @proposal.json \
+  --data proposal.json \
   https://cap.18f.gov/api/v2/proposals
 ```
 
@@ -189,6 +189,32 @@ where `proposal.json` looks like:
     "justification": "because because because",
     "link_to_product": "18f.gov",
     "purchase_type": "Software"
+  }
+}
+```
+
+### `PUT /api/v2/proposals/:id`
+
+Update a specific [Proposal](#proposal).
+
+#### Example
+
+```bash
+% curl -i -X PUT -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer your-access-token' \
+  --data proposal.json \
+  https://cap.18f.gov/api/v2/proposals/123
+```
+
+where `proposal.json` looks like:
+
+```json
+{
+  "gsa18f_procurement": {
+    "product_name_and_description": "New product name",
+    "cost_per_unit": 125.0,
+    "quantity": 3,
+    "justification": "really because because because",
   }
 }
 ```
