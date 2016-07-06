@@ -52,7 +52,6 @@ class ReportMailer < ApplicationMailer
 
       "pending-at-approving-official" => Ncr::Reporter.proposals_pending_approving_official,
       "pending-at-budget" => Ncr::Reporter.proposals_pending_budget,
-      "pending-at-tier-one-approval" => Ncr::Reporter.proposals_tier_one_pending
     }
   end
 
