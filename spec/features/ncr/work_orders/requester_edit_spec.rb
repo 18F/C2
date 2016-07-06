@@ -110,29 +110,9 @@ feature "Requester edits their NCR work order", :js do
     expect(proposal.approvers.second.email_address).to eq(Ncr::Mailboxes.ba80_budget.email_address)
   end
 
-  context "proposal changes from BA80 to BA61", :email do
-    scenario "removed tier 1 approver is notified if approval is not pending" do
-      @work_order.update(expense_type: "BA61")
-      tier_one_approver = Ncr::Mailboxes.ba61_tier1_budget
-      approval = tier_one_approver.steps.where(proposal: ncr_proposal).first
-      approval.update(status: "actionable")
-
-      visit edit_ncr_work_order_path(@work_order)
-      choose "BA80"
-      fill_in "RWA Number", with: "a1234567"
-      click_on "Update"
-
-      expect(deliveries.count do |email|
-        email.to.first == tier_one_approver.email_address
-      end).to eq 1
-    end
-  end
-
   scenario "doesn't change approving list when delegated" do
     proposal = Proposal.last
-    approving_official_step = proposal.individual_steps.first
-    approving_official_step.complete!
-    approval = proposal.individual_steps.second
+    approval = proposal.individual_steps.first
     delegate_user = create(:user, email_address: "delegate@example.com")
     approval.user.add_delegate(delegate_user)
     approval.update(completer: delegate_user)
