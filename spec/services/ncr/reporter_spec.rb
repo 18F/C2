@@ -23,14 +23,6 @@ describe Ncr::Reporter do
     end
   end
 
-  describe "#proposals_tier_one_pending" do
-    it "only returns Proposals where Tier One approval is actionable" do
-      @completed_work_order.individual_steps.first.complete!
-
-      expect(Ncr::Reporter.proposals_tier_one_pending).to eq([@completed_work_order.proposal])
-    end
-  end
-
   describe "#as_csv" do
     it "shows final approver for completed work orders" do
       proposal = @completed_work_order.proposal
@@ -47,16 +39,10 @@ describe Ncr::Reporter do
     end
 
     it "shows current approver for pending work orders" do
-      work_order = create(:ncr_work_order, :with_approvers)
+      work_order = create(:ncr_work_order)
       work_order.setup_approvals_and_observers
       proposal = work_order.proposal
 
-      individual_approval_step = proposal.currently_awaiting_steps.first
-      expect(work_order.current_approver).to eq(individual_approval_step.user)
-      csv = Ncr::Reporter.as_csv([proposal]) # Crashing, nil error
-      expect(csv).to include(",#{individual_approval_step.user.email_address}")
-
-      individual_approval_step.complete!
       official_approval_step = proposal.currently_awaiting_steps.first
       proposal.reload
       work_order.reload

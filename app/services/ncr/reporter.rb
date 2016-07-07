@@ -53,58 +53,6 @@ module Ncr
         .sort_by { |pr| pr.client_data.expense_type }
     end
 
-    def self.proposals_tier_one_pending
-      Proposal.find_by_sql(proposals_tier_one_pending_sql)
-    end
-
-    def self.proposals_tier_one_pending_sql
-      approver_sql = proposals_tier_one_pending_approver_sql
-      work_order_sql = proposals_tier_one_work_order_sql
-
-      <<-SQL
-        SELECT * FROM proposals
-        WHERE proposals.status='pending'
-        AND proposals.client_data_type='Ncr::WorkOrder'
-        AND proposals.client_data_id IN (#{work_order_sql})
-        AND proposals.id IN (#{approver_sql})
-      SQL
-    end
-
-    def self.proposals_tier_one_pending_approver_sql
-      tier_one_sql = User.sql_for_role_slug("BA61_tier1_budget_approver", "ncr")
-
-      <<-SQL
-        SELECT a.proposal_id FROM steps AS a
-        WHERE a.status='actionable' AND a.user_id IN (#{tier_one_sql})
-      SQL
-    end
-
-    def self.proposals_tier_one_work_order_sql
-      <<-SQL
-        #{work_orders_for_non_whsc_orgs} UNION #{work_orders_without_orgs}
-      SQL
-    end
-
-    def self.work_orders_for_non_whsc_orgs
-      <<-SQL
-        SELECT ncr_work_orders.id
-        FROM ncr_work_orders
-        JOIN ncr_organizations
-        ON ncr_work_orders.ncr_organization_id = ncr_organizations.id
-        WHERE ncr_organizations.code != '#{Ncr::Organization::WHSC_CODE}'
-        AND ncr_work_orders.expense_type IN ('BA60','BA61')
-      SQL
-    end
-
-    def self.work_orders_without_orgs
-      <<-SQL
-        SELECT ncr_work_orders.id
-        FROM ncr_work_orders
-        WHERE ncr_work_orders.ncr_organization_id IS NULL
-        AND ncr_work_orders.expense_type IN ('BA60','BA61')
-      SQL
-    end
-
     def build_fiscal_year_report_string(year)
       completed_work_orders = Ncr::WorkOrder.completed.for_fiscal_year(year)
 
