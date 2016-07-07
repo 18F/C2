@@ -41,23 +41,9 @@ DetailsSave = (function() {
     }
   }
 
-  DetailsSave.prototype._prepareFormData = function(){
-    var formData = this.dataEl.find('form').serialize();
-    return formData;
-  }
-
   DetailsSave.prototype.saveDetailsForm = function(data){
     var self = this;
-    var formData = this._prepareFormData()
-    $.ajax({
-      url: this.el.find('form')[0].action,
-      headers: {
-        Accept : "text/javascript; charset=utf-8",
-        "Content-Type": 'application/x-www-form-urlencoded; charset=UTF-8'
-      },
-      type: 'POST',
-      data: formData
-    });
+    this.dataEl.find('form').submit();
   }
 
   return DetailsSave;
