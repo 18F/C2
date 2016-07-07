@@ -6,11 +6,13 @@
       %span.detail-value
         = client_data.organization_code_and_name
     .detail-edit.column
-      %label.detail-element
+      %label.detail-element{ for: "ncr_organization_code" }
         = t(t_slug + key) 
       %span.detail-value
         = f.association :ncr_organization,
           as: :select,
           prompt: :translate,
-          input_html: { class: "js-selectize", data: { initial: JSON.generate(organization_options) }},
+          input_html: { class: "js-selectize", data: { initial: JSON.generate(organization_options) },
+          id: "ncr_work_order_organization_code",
+          "data-reapproval" => "#{reapproval}" },
           label: false

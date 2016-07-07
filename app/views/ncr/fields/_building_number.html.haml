@@ -6,8 +6,8 @@
       %span.detail-value
         = client_data[key]
     .detail-edit.column
-      %label.detail-element
+      %label.detail-element{ for: "ncr_work_order_building_number"}
         = t(t_slug + key) 
       %span.detail-value
         = f.input :building_number,
-          input_html: { class: "js-selectize required", data: { initial: JSON.generate(building_options) }}, label: false
+          input_html: { class: "js-selectize required", data: { initial: JSON.generate(building_options) }, "data-reapproval" => "#{reapproval}" }, label: false

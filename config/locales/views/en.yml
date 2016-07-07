@@ -12,6 +12,11 @@ en:
           desc: Click Save to update your request and notify %{count} participants, or click Cancel to discard your changes.
           cancel_button: CANCEL
           save_button: SAVE
+        reapproval:
+          title: "Wait! Updating <span class=\"custom-modal-content\">this</span> will require re-approval."
+          desc: Do you want to proceed?
+          cancel_button: DISCARD CHANGE 
+          save_button: SAVE CHANGES
         cancel:
           title: Wait! You're about to cancel your request.
           desc: Canceling a request permanently removes it from C2 and notifies all partcipants. Do you want to proceed?

@@ -6,7 +6,8 @@
       %span.detail-value
         = client_data[key]
     .detail-edit.column
-      %label.detail-element
+      %label.detail-element{ for: "ncr_work_order_function_code" }
         = t(t_slug + key) 
       %span.detail-value
-        = f.input :function_code, label: false
+        = f.input :function_code, label: false, 
+        input_html: { "data-reapproval" => "#{reapproval}" }
