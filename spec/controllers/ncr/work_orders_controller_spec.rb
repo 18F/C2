@@ -70,7 +70,7 @@ describe Ncr::WorkOrdersController do
 
       post :update, id: work_order.id,
                     ncr_work_order: {
-                      expense_type: "BA61",
+                      expense_type: "BA80",
                       amount: 999_999,
                       approving_official_id: approving_official.id
                     }
@@ -89,7 +89,7 @@ describe Ncr::WorkOrdersController do
       approving_official = create(:user, client_slug: "ncr")
       post :update, id: work_order.id,
                     ncr_work_order: {
-                      expense_type: "BA61",
+                      expense_type: "BA80",
                       amount: 99_999,
                       approving_official_id: approving_official.id
                     }
@@ -120,7 +120,7 @@ describe Ncr::WorkOrdersController do
 
       post :update, id: work_order.id,
                     ncr_work_order: {
-                      expense_type: "BA61",
+                      expense_type: "BA80",
                       approving_official_id: approving_official.id
                     }
       work_order.reload
@@ -138,7 +138,7 @@ describe Ncr::WorkOrdersController do
 
       post :update, id: work_order.id,
                     ncr_work_order: {
-                      expense_type: "BA61",
+                      expense_type: "BA80",
                       approving_official_id: approving_official.id
                     }
       work_order.reload
@@ -147,7 +147,7 @@ describe Ncr::WorkOrdersController do
     end
 
     it "will not modify emergency status on non-emergencies" do
-      work_order = create(:ncr_work_order)
+      work_order = create(:ba61_ncr_work_order)
       requester = work_order.proposal.requester
       login_as(requester)
       work_order.setup_approvals_and_observers
@@ -170,7 +170,7 @@ describe Ncr::WorkOrdersController do
     it "will not modify emergency status on emergencies" do
       requester = create(:user, client_slug: "ncr")
       login_as(requester)
-      work_order = create(:ncr_work_order, :is_emergency, requester: requester)
+      work_order = create(:ba61_ncr_work_order, :is_emergency, requester: requester)
       expect(work_order.steps.empty?).to be true
       expect(work_order.observers.empty?).to be false
 
