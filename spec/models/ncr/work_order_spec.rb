@@ -76,7 +76,7 @@ describe Ncr::WorkOrder do
       org_letters.each do |org_letter|
         org_code = "P11#{org_letter}XXXX"
         ncr_org = build(:ncr_organization, code: org_code)
-        work_order = build(:ncr_work_order, ncr_organization: ncr_org)
+        work_order = build(:ba61_ncr_work_order, ncr_organization: ncr_org)
 
         expect(work_order).to be_ba_6x_tier1_team
       end
@@ -84,7 +84,7 @@ describe Ncr::WorkOrder do
 
     it "is false for non-listed organizations" do
       ncr_org = build(:ncr_organization)
-      work_order = build(:ncr_work_order, ncr_organization: ncr_org)
+      work_order = build(:ba61_ncr_work_order, ncr_organization: ncr_org)
 
       expect(work_order).to_not be_ba_6x_tier1_team
     end
@@ -280,7 +280,6 @@ describe Ncr::WorkOrder do
       expect(linear_approval_statuses(proposal)).to eq(%w(
         completed
         actionable
-        pending
       ))
     end
   end
