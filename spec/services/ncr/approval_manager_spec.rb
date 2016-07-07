@@ -8,11 +8,7 @@ describe Ncr::ApprovalManager do
       manager = Ncr::ApprovalManager.new(wo)
       manager.setup_approvals_and_observers
       expect(wo.observations.length).to eq(0)
-      expect(wo.approvers).to eq([
-                                   wo.approving_official,
-                                   ba61_tier_one,
-                                   ba61_tier_two
-                                 ])
+      expect(wo.approvers).to eq([wo.approving_official])
       wo.reload
       expect(wo.completed?).to eq(false)
     end
@@ -26,7 +22,7 @@ describe Ncr::ApprovalManager do
       work_order.update(approving_official: new_user)
       Ncr::ApprovalManager.new(work_order).setup_approvals_and_observers
 
-      expect(work_order.proposal.individual_steps.count).to eq 3
+      expect(work_order.proposal.individual_steps.count).to eq 2
       expect(work_order.proposal.steps.where(user: user)).not_to be_present
       expect(work_order.proposal.steps.where(user: new_user)).to be_present
     end
@@ -48,9 +44,7 @@ describe Ncr::ApprovalManager do
       manager = Ncr::ApprovalManager.new(wo)
       manager.setup_approvals_and_observers
       expect(wo.observers).to match_array([
-        wo.approving_official,
-        ba61_tier_one,
-        ba61_tier_two
+        wo.approving_official
       ].uniq)
       expect(wo.steps.length).to eq(0)
       wo.clear_association_cache
@@ -69,25 +63,16 @@ describe Ncr::ApprovalManager do
       )
       manager = Ncr::ApprovalManager.new(wo)
       manager.setup_approvals_and_observers
-      expect(wo.approvers).to eq [
-        approving_official,
-        ba61_tier_one,
-        ba61_tier_two
-      ]
+      expect(wo.approvers).to eq [approving_official]
+
       wo.update(ncr_organization: organization)
       manager.setup_approvals_and_observers
-      expect(wo.reload.approvers).to eq [
-        approving_official,
-        ba61_tier_two
-      ]
+      expect(wo.reload.approvers).to eq [approving_official]
 
       approving_official_2 = create(:user, email_address: "ao2@example.com")
       wo.update(approving_official: approving_official_2)
       manager.setup_approvals_and_observers
-      expect(wo.reload.approvers).to eq [
-        approving_official_2,
-        ba61_tier_two
-      ]
+      expect(wo.reload.approvers).to eq [approving_official_2]
 
       wo.update(approving_official: approving_official)
       wo.update(expense_type: "BA80")
@@ -98,23 +83,26 @@ describe Ncr::ApprovalManager do
       ]
     end
 
-    it "unsets the approval status" do
-      ba80_budget = Ncr::Mailboxes.ba80_budget
-      wo = create(:ba80_ncr_work_order)
-      manager = Ncr::ApprovalManager.new(wo)
-      manager.setup_approvals_and_observers
-      expect(wo.approvers).to eq [
-        wo.approving_official,
-        ba80_budget
-      ]
+    describe "when changing expense type on a proposal which has only been approved by the approving official" do
+      context "from one with budget approvers to one without" do
+        it "changes the approval status" do
+          ba80_budget = Ncr::Mailboxes.ba80_budget
+          wo = create(:ba80_ncr_work_order)
+          manager = Ncr::ApprovalManager.new(wo)
+          manager.setup_approvals_and_observers
+          expect(wo.approvers).to eq [
+            wo.approving_official,
+            ba80_budget
+          ]
 
-      wo.individual_steps.first.complete!
-      wo.individual_steps.second.complete!
-      expect(wo.reload.completed?).to be true
+          wo.individual_steps.first.complete!
+          expect(wo.reload.completed?).to be false
 
-      wo.update(expense_type: "BA61")
-      manager.setup_approvals_and_observers
-      expect(wo.reload.pending?).to be true
+          wo.update(expense_type: "BA61")
+          manager.setup_approvals_and_observers
+          expect(wo.reload.completed?).to be true
+        end
+      end
     end
 
     it "does not re-add observers on emergencies" do
@@ -123,12 +111,12 @@ describe Ncr::ApprovalManager do
       manager.setup_approvals_and_observers
 
       expect(wo.steps).to be_empty
-      expect(wo.observers.count).to be 3
+      expect(wo.observers.count).to be 1
 
       manager.setup_approvals_and_observers
       wo.reload
       expect(wo.steps).to be_empty
-      expect(wo.observers.count).to be 3
+      expect(wo.observers.count).to be 1
     end
 
     it "handles the delegate then update scenario" do
@@ -186,26 +174,6 @@ describe Ncr::ApprovalManager do
           manager = Ncr::ApprovalManager.new(work_order)
           allow(manager).to receive(:should_add_budget_approvers_to_6x?).and_return(false)
           expect(manager.system_approvers).to eq([])
-        end
-      end
-    end
-
-    context "for a BA60 or BA61 request" do
-      it "uses BA61 tier1 team approver when org code matches" do
-        org_letters = %w( 1 4 7 A C J T Z )
-        org_letters.each do |org_letter|
-          org_code = "P11#{org_letter}XXXX"
-          ncr_org = create(:ncr_organization, code: org_code)
-          ba60_work_order = create(:ba60_ncr_work_order, ncr_organization: ncr_org)
-          ba61_work_order = create(:ba61_ncr_work_order, ncr_organization: ncr_org)
-          ba80_work_order = create(:ba80_ncr_work_order, ncr_organization: ncr_org)
-          ba60_work_order.setup_approvals_and_observers
-          ba61_work_order.setup_approvals_and_observers
-          ba80_work_order.setup_approvals_and_observers
-
-          expect(ba60_work_order.budget_approvals.first.user_id).to eq(Ncr::Mailboxes.ba61_tier1_budget_team.id)
-          expect(ba61_work_order.budget_approvals.first.user_id).to eq(Ncr::Mailboxes.ba61_tier1_budget_team.id)
-          expect(ba80_work_order.budget_approvals.first.user_id).to_not eq(Ncr::Mailboxes.ba61_tier1_budget_team.id)
         end
       end
     end

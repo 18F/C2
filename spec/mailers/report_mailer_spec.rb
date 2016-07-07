@@ -22,7 +22,7 @@ describe ReportMailer, :email do
         end
 
         attachments = deliveries.last.attachments
-        expect(attachments.size).to eq 6
+        expect(attachments.size).to eq 5
         attachments.each do |attachment|
           expect(attachment).to be_a_kind_of(Mail::Part)
           expect(attachment.content_type).to match('text/comma-separated-values')
