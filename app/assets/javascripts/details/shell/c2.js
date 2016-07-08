@@ -211,7 +211,6 @@ C2 = (function() {
     if ( this.lastNotice !== stringParam){
       this.lastNotice = stringParam;
       this.notification.el.trigger('notification:create', param);
-    } else {
     }
   }
 
