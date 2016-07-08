@@ -123,14 +123,20 @@ ModalController = (function(){
   }
 
   ModalController.prototype._formRequiresReapproval = function(){
+    var fields = $("[data-reapproval='true'][data-is-dirrty='true']");
+    return fields.length > 0;
+  }
+
+  ModalController.prototype._getReapprovalLabels = function(){
     var fields = $("[data-reapproval='true'][data-is-dirrty='true']"),
         field_names = [];
     if(fields.length < 1){
       return false;
     }
+
     for (var i = fields.length - 1; i >= 0; i--){
       var $field = $(fields[i]);
-      if($field.attr("name").includes("[amount]")){
+      if($field && $field.attr("name") && $field.attr("name").indexOf("[amount]") > -1){
         var initAmount = parseFloat($field.attr("data-dirrty-initial-value"));
         var newAmount = parseFloat($field.val());
         if(newAmount < initAmount){
@@ -140,7 +146,7 @@ ModalController = (function(){
       }
       field_names.push($("label[for='"+$field.attr('id')+"']").text());
     }
-    return fields.length > 0 ? field_names.join(', ') : false;
+    return field_names.join(', ')
   }
 
   ModalController.prototype._updateModalContent = function(modalType, content){
@@ -158,9 +164,8 @@ ModalController = (function(){
     }
     else if(modal === 'save_confirm'){
       //returns "save_confirm" or "reapproval_confirm"
-      var reapprovalFields = this._formRequiresReapproval();
-      if(reapprovalFields){
-        this._updateModalContent("reapproval_confirm", reapprovalFields)
+      if(this._formRequiresReapproval()){
+        this._updateModalContent("reapproval_confirm", this._getReapprovalLabels())
         return "reapproval_confirm";  
       }
       else{
