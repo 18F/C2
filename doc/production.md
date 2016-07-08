@@ -6,6 +6,7 @@ To spin up a server and connect to the production database, execute:
 
 ```bash
 $ script/cssh c2-prod
+$ RAILS_ENV=production bundle exec rails console
 ```
 
 18F's [deployments](http://12factor.net/codebase) of C2 live in AWS, and are
