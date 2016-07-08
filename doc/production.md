@@ -2,6 +2,13 @@
 
 Live at https://cap.18f.gov.
 
+To spin up a server and connect to the production database, execute:
+
+```bash
+$ script/cssh c2-prod
+$ RAILS_ENV=production bundle exec rails console
+```
+
 18F's [deployments](http://12factor.net/codebase) of C2 live in AWS, and are
 deployed via [Cloud Foundry](http://www.cloudfoundry.org). See [the 18F Cloud
 Foundry documentation](https://docs.cloud.gov) for more details on how to inspect

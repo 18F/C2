@@ -1,4 +1,6 @@
 module SearchHelper
+  include Ncr::WorkOrdersHelper
+
   def proposal_status_options(selected_value)
     options_for_select(proposal_status_option_values, selected_value)
   end
@@ -19,6 +21,20 @@ module SearchHelper
   def proposal_expense_type_options(client_model, selected_value)
     expense_types = client_model.expense_type_options.unshift(["Any type", "*"])
     options_for_select(expense_types, selected_value)
+  end
+
+  def proposal_org_code_options(selected_value)
+    org_codes_hash = organization_options
+    org_codes_array = org_codes_hash.map { |h| [h[:name], h[:id].to_s] }
+    org_codes_array.sort! { |a, b| a[0] <=> b[0] }
+    org_codes_array.unshift(["Any code", "*"])
+    options_for_select(org_codes_array, selected_value)
+  end
+
+  def proposal_building_number_options(selected_value)
+    building_numbers = Ncr::BUILDING_NUMBERS.clone
+    building_numbers.unshift(["Any building", "*"])
+    options_for_select(building_numbers, selected_value)
   end
 
   def search_results_total(proposals_data)
