@@ -17,8 +17,9 @@ C2 = (function() {
       modalCard:      '#modal-wrapper',
       updateView:     '#mode-parent',
       summaryBar:     '#summary-card',
-      approvalCard:     '#card-for-approvals'
+      approvalCard:   '#card-for-approvals'
     }
+    this.lastNotice = {};
     this._overrideTestConfig(config);
     this._blastOff();
   }
@@ -206,7 +207,12 @@ C2 = (function() {
       content: content,
       type: type
     }
-    this.notification.el.trigger('notification:create', param);
+    var stringParam = JSON.stringify(param);
+    if ( this.lastNotice !== stringParam){
+      this.lastNotice = stringParam;
+      this.notification.el.trigger('notification:create', param);
+    } else {
+    }
   }
 
   /* End Notice */
@@ -318,3 +324,4 @@ C2 = (function() {
 }());
 
 window.C2 = C2;
+
