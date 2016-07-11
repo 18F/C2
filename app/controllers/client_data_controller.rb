@@ -6,6 +6,7 @@ class ClientDataController < ApplicationController
   before_action -> { authorize proposal }, only: [:edit, :update]
   before_action :build_client_data_instance, only: [:new, :create]
   before_action :find_client_data_instance, only: [:edit, :update]
+  before_action :setup_flash_manager
 
   def new
   end
@@ -13,10 +14,10 @@ class ClientDataController < ApplicationController
   def create
     if errors.empty?
       create_client_data
-      flash[:success] = "Proposal submitted!"
+      @flashManager.show(flash, "success", "Proposal submitted!")
       redirect_to proposal
     else
-      flash.now[:error] = errors
+      @flashManager.show(flash, "error", errors)
       render :new
     end
   end
@@ -50,13 +51,9 @@ class ClientDataController < ApplicationController
       comment = record_changes
       @client_data_instance.save
       setup_and_email_approvers(comment)
-      if current_user.should_see_beta?
-        flash.now[:success] = "Your changes have been saved and the request has been modified."
-      else
-        flash[:success] = "Your changes have been saved and the request has been modified."
-      end
+      @flashManager.show(flash, "success", "Your changes have been saved and the request has been modified.")
     else
-      flash[:error] = "No changes were made to the request."
+      @flashManager.show(flash, "error", "No changes were made to the request.")
     end
   end
 
@@ -79,11 +76,7 @@ class ClientDataController < ApplicationController
       update_or_notify_of_no_changes
       redirect_to proposal
     else
-      if current_user.should_see_beta?
-        flash.now[:error] = errors
-      else
-        flash[:error] = errors
-      end
+      @flashManager.show(flash, "error", errors)
       render :edit
     end
   end
@@ -139,5 +132,9 @@ class ClientDataController < ApplicationController
     if errors.empty?
       @client_data_instance.initialize_steps
     end
+  end
+
+  def setup_flash_manager
+    @flashManager = @current_user.should_see_beta? ? FlashWithNow.new() : FlashWithoutNow.new()
   end
 end
