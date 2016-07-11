@@ -14,10 +14,10 @@ class ClientDataController < ApplicationController
   def create
     if errors.empty?
       create_client_data
-      @flashManager.show(flash, "success", "Proposal submitted!")
+      @flash_manager.show(flash, "success", "Proposal submitted!")
       redirect_to proposal
     else
-      @flashManager.show(flash, "error", errors)
+      @flash_manager.show(flash, "error", errors)
       render :new
     end
   end
@@ -51,9 +51,9 @@ class ClientDataController < ApplicationController
       comment = record_changes
       @client_data_instance.save
       setup_and_email_approvers(comment)
-      @flashManager.show(flash, "success", "Your changes have been saved and the request has been modified.")
+      @flash_manager.show(flash, "success", "Your changes have been saved and the request has been modified.")
     else
-      @flashManager.show(flash, "error", "No changes were made to the request.")
+      @flash_manager.show(flash, "error", "No changes were made to the request.")
     end
   end
 
@@ -76,7 +76,7 @@ class ClientDataController < ApplicationController
       update_or_notify_of_no_changes
       redirect_to proposal
     else
-      @flashManager.show(flash, "error", errors)
+      @flash_manager.show(flash, "error", errors)
       render :edit
     end
   end
@@ -135,6 +135,6 @@ class ClientDataController < ApplicationController
   end
 
   def setup_flash_manager
-    @flashManager = @current_user.should_see_beta? ? FlashWithNow.new() : FlashWithoutNow.new()
+    @flash_manager = @current_user.should_see_beta? ? FlashWithNow.new : FlashWithoutNow.new
   end
 end
