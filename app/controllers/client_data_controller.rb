@@ -50,9 +50,9 @@ class ClientDataController < ApplicationController
       comment = record_changes
       @client_data_instance.save
       setup_and_email_approvers(comment)
-      flash[:success] = "Your changes have been saved and the request has been modified."
+      flash.now[:success] = "Your changes have been saved and the request has been modified."
     else
-      flash[:error] = "No changes were made to the request."
+      flash.now[:error] = "No changes were made to the request."
     end
   end
 
@@ -75,7 +75,7 @@ class ClientDataController < ApplicationController
       update_or_notify_of_no_changes
       redirect_to proposal
     else
-      flash[:error] = errors
+      flash.now[:error] = errors
       render :edit
     end
   end
