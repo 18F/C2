@@ -13,7 +13,11 @@ class ClientDataController < ApplicationController
   def create
     if errors.empty?
       create_client_data
-      flash[:success] = "Proposal submitted!"
+      if current_user.should_see_beta?
+        flash.now[:success] = "Proposal submitted!"
+      else
+        flash[:success] = "Proposal submitted!"
+      end
       redirect_to proposal
     else
       flash.now[:error] = errors
@@ -50,9 +54,17 @@ class ClientDataController < ApplicationController
       comment = record_changes
       @client_data_instance.save
       setup_and_email_approvers(comment)
-      flash.now[:success] = "Your changes have been saved and the request has been modified."
+      if current_user.should_see_beta?
+        flash.now[:success] = "Your changes have been saved and the request has been modified."
+      else
+        flash[:success] = "Your changes have been saved and the request has been modified."
+      end
     else
-      flash.now[:error] = "No changes were made to the request."
+      if current_user.should_see_beta?
+        flash.now[:error] = "No changes were made to the request."
+      else
+        flash[:error] = "No changes were made to the request."
+      end
     end
   end
 
@@ -75,7 +87,11 @@ class ClientDataController < ApplicationController
       update_or_notify_of_no_changes
       redirect_to proposal
     else
-      flash.now[:error] = errors
+      if current_user.should_see_beta?
+        flash.now[:error] = errors
+      else
+        flash[:error] = errors
+      end
       render :edit
     end
   end
