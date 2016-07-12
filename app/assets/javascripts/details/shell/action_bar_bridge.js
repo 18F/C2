@@ -48,13 +48,13 @@ ActionBarBridge = (function() {
   ActionBarBridge.prototype._setupActionBar = function(){
     var self = this;
     this.actionBar.el.on("action-bar-clicked:cancel", function(){
-      self.detailsCancelled();
+      C2.detailsCancelled();
     });
     this.actionBar.el.on("action-bar-clicked:save", function(){
-      self.notification.clearAll();
+      C2.notification.clearAll();
     });
     this.actionBar.el.on("action-bar-clicked:edit", function(){
-      self.detailsMode('edit');
+      C2.detailsMode('edit');
     });
   }
 

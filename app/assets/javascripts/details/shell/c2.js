@@ -58,7 +58,6 @@ C2 = (function() {
   }
 
   C2.prototype._setupEvents = function(){
-    this._setupActionBar();
     this._setupEditToggle();
     this._setupDetailsData();
     this._setupDetailsForm();
@@ -66,8 +65,6 @@ C2 = (function() {
     this._setupNotifications();
     this._setupAttachmentEvent();
     this._setupObserverEvent();
-    this._setupSaveModal();
-    this._setupFormSubmitModal();
     this._setupViewUpdate();
   }
 
@@ -265,58 +262,6 @@ C2 = (function() {
 
   /* End Activity */
 
-   /* Action Bar */
-
-  C2.prototype._setupActionBar = function(){
-    var self = this;
-    this.actionBar.el.on("action-bar-clicked:cancel", function(){
-      self.detailsCancelled();
-    });
-    this.actionBar.el.on("action-bar-clicked:save", function(){
-      self.notification.clearAll();
-      // triggers save_confirm-modal
-    });
-    this.actionBar.el.on("action-bar-clicked:edit", function(){
-      self.detailsMode('edit');
-    });
-  }
-
-  C2.prototype._setupSaveModal = function(){
-    var self = this;
-    this.modals.el.on("save_confirm-modal:confirm", function(event, item){
-      var l = $(item).ladda();
-      l.ladda( 'start' );
-      self.modals.el.find('button').attr('disabled', 'disabled').css('opacity', 0.5);
-      self.actionBar.el.trigger("action-bar-clicked:saving");
-      self.detailsSave.el.trigger("details-form:save");
-    });
-    this.modals.el.on("save_confirm-modal:cancel", function(event, item){
-      self._closeModal();
-    });
-    this.modals.el.on("modal:cancel", function(){
-      self.actionBar.stopLadda();
-    });
-  }
-
-  C2.prototype._setupFormSubmitModal = function(){
-    var self = this,
-      events = "attachment_confirm-modal:confirm observer_confirm-modal:confirm";
-    this.modals.el.on(events, function(event, item, sourceEl){
-      self._submitAndClose(sourceEl);
-    });
-  }
-
-  C2.prototype._submitAndClose = function(sourceEl){
-    var self = this;
-    $(sourceEl).parent().submit();
-    self._closeModal();
-  }
-
-  C2.prototype._closeModal = function(){
-    this.modals.el.trigger("modal:close");
-    this.actionBar.stopLadda();
-  }
-  /* End Action Bar */
 
   return C2;
 
