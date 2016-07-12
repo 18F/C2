@@ -73,7 +73,7 @@ ActionBarBridge = (function() {
 
   ActionBarBridge.prototype.checkTimeout = function(l){
     var self = this;
-    window.setTimeout(function(){
+    window.setTimeout(function(l){
       if(l.ladda( 'isLoading' )){
         l.ladda( 'stop' );
         self.enableModalButtons();
