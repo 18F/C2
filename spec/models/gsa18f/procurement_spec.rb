@@ -51,6 +51,12 @@ describe Gsa18f::Procurement do
 
       expect(procurement.purchase_type).to eq "Other"
     end
+
+    it "associates 5 with Micropurchase" do
+      procurement = build(:gsa18f_procurement, purchase_type: 5)
+
+      expect(procurement.purchase_type).to eq "Micropurchase"
+    end
   end
 
   describe "#editable?" do
@@ -74,6 +80,26 @@ describe Gsa18f::Procurement do
       proposal = procurement.proposal
 
       expect(procurement.public_identifier).to eq "##{proposal.id}"
+    end
+  end
+
+  describe " #purchaser_email" do
+    let(:user) { double("user") }
+
+    it "returns a micropurchase specific email" do
+      allow(Gsa18f::Procurement).to receive(:user_with_role).with("gsa18f_micropurchase_purchaser").and_return(user)
+      allow(user).to receive(:email_address) { "micropurchaser@somedotorg.org" }
+      procurement = build(:gsa18f_procurement, purchase_type: 5)
+
+      expect(Gsa18f::Procurement.purchaser_email "Micropurchase").to eq "micropurchaser@somedotorg.org"
+    end
+
+    it "returns a default email purchaser email" do
+      allow(Gsa18f::Procurement).to receive(:user_with_role).with("gsa18f_purchaser").and_return(user)
+      allow(user).to receive(:email_address) { "defaultpurchaser@somedotorg.org" }
+      procurement = build(:gsa18f_procurement, purchase_type: 1)
+
+      expect(Gsa18f::Procurement.purchaser_email "Software").to eq "defaultpurchaser@somedotorg.org"
     end
   end
 end
