@@ -7,6 +7,7 @@ ActionBarBridge = (function() {
       actionBar:      '#action-bar-wrapper',
       detailsSave:    '#request-details-card',
       notifications:  '#action-bar-status',
+      editMode:       '#mode-parent',
       modalCard:      '#modal-wrapper',
       updateView:     '#mode-parent',
     }
@@ -16,9 +17,13 @@ ActionBarBridge = (function() {
 
   ActionBarBridge.prototype._blastOff = function(){
     var config = this.config;
+
     // Data
     this.detailsSave = new DetailsSave(config.detailsSave, config.detailsSaveAll);
     this.updateView = new UpdateView(config.updateView);
+
+    // State
+    this.editMode = new EditStateController(config.editMode);
 
     // Views
     this.modals = new ModalController(config.modalCard);
@@ -48,13 +53,13 @@ ActionBarBridge = (function() {
   ActionBarBridge.prototype._setupActionBar = function(){
     var self = this;
     this.actionBar.el.on("action-bar-clicked:cancel", function(){
-      C2.detailsCancelled();
+      self.editMode.el.trigger('details:cancelled');
     });
     this.actionBar.el.on("action-bar-clicked:save", function(){
-      C2.notification.clearAll();
+      self.notification.clearAll();
     });
     this.actionBar.el.on("action-bar-clicked:edit", function(){
-      C2.detailsMode('edit');
+      self.editMode.el.trigger('details:edit-mode');
     });
   }
 
@@ -66,7 +71,7 @@ ActionBarBridge = (function() {
     this.modals.el.find('button').attr('disabled', 'disabled').css('opacity', 0.5);
   }
 
-  ActionBarBridge.prototype.checktimeout = function(l){
+  ActionBarBridge.prototype.checkTimeout = function(l){
     var self = this;
     window.setTimeout(function(){
       if(l.ladda( 'isLoading' )){
