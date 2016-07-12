@@ -39,29 +39,15 @@ feature "post-approval modification" do
     click_on "Approve"
 
     work_order.reload
-    expect(work_order.status).to eq("pending")
-    expect(work_order.proposal.root_step.status).to eq("actionable")
-    expect(approval_statuses(work_order)).to eq(%w(
-                                                  completed
-                                                  completed
-                                                  actionable
-                                                ))
-
-    login_as(work_order.budget_approvers.second)
-    visit "/proposals/#{work_order.proposal.id}"
-    click_on "Approve"
-
-    work_order.reload
     expect(work_order.status).to eq("completed")
     expect(work_order.proposal.root_step.status).to eq("completed")
     expect(approval_statuses(work_order)).to eq(%w(
                                                   completed
                                                   completed
-                                                  completed
                                                 ))
     completed_comment = I18n.t(
       "activerecord.attributes.proposal.user_completed_comment",
-      user: work_order.budget_approvers.second.full_name
+      user: work_order.budget_approvers.first.full_name
     ).delete("`")
     expect(page).to have_content(completed_comment)
   end
@@ -85,7 +71,6 @@ feature "post-approval modification" do
     expect(work_order.status).to eq("completed")
     expect(work_order.proposal.root_step.status).to eq("completed")
     expect(approval_statuses(work_order)).to eq(%w(
-                                                  completed
                                                   completed
                                                   completed
                                                 ))
@@ -115,11 +100,10 @@ feature "post-approval modification" do
     expect(approval_statuses(work_order)).to eq(%w(
                                                   completed
                                                   actionable
-                                                  pending
                                                 ))
 
     approver = work_order.budget_approvers.first
-    expect(approver.email_address).to eq(Ncr::Mailboxes.ba61_tier1_budget.email_address)
+    expect(approver.email_address).to eq(Ncr::Mailboxes.ba80_budget.email_address)
     reapproval_mail = deliveries.find { |mail| mail.to.include?(approver.email_address) }
     expect(reapproval_mail.html_part.body).to include("Approve")
   end
@@ -129,7 +113,7 @@ feature "post-approval modification" do
     proposal_page.load(proposal_id: work_order.proposal.id)
 
     expect(proposal_page).to be_displayed
-    expect(proposal_page.status).to have_approvers count: 3
+    expect(proposal_page.status).to have_approvers count: 2
     approver_page_row = proposal_page.status.actionable.first
     expect(approver_page_row.name).to have_content(work_order.budget_approvers.first.email_address)
   end
