@@ -44,6 +44,9 @@ C2 = (function() {
     this.actionBar = new ActionBar(config.actionBar);
     this.notification = new Notifications(config.notifications);
     this.summaryBar = new SummaryBar(config.summaryBar);
+
+    this.actionBridge = new ActionBarBridge();
+
     this._setupEvents();
   }
 
@@ -77,6 +80,12 @@ C2 = (function() {
     });
     this.formState.el.on('form:clean', function(){
       self.actionBar.barState('.save-button', "disabled");
+    });
+    this.editMode.el.on('details:edit-mode', function(){
+      self.detailsMode('edit');
+    });
+    this.editMode.el.on('details:cancelled', function(){
+      self.detailsCancelled();
     });
   }
 
