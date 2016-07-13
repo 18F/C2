@@ -28,13 +28,13 @@
         = render @proposal.client_slug + '/fields/title'
         .c2n_description
           %p
-            Requested by:
+            Requested by
             %strong.requested-by-name
               = proposal.requester.full_name
-            Requested on:
+            on
             %strong
               %span
                 = proposal.created_at.to_s(:pretty_datetime)
         - if policy(@proposal).can_cancel?
           %div.fr.cancel-action
-            = link_to "Cancel this request", cancel_form_proposal_path, class: " secondary large cancel-request-button", data: { "modal-type": "cancel" }
+            = link_to "Cancel request", cancel_form_proposal_path, class: " secondary large cancel-request-button", data: { "modal-type": "cancel" }
