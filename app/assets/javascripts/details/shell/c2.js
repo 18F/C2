@@ -92,6 +92,8 @@ C2 = (function() {
   C2.prototype._setupDetailsForm = function(){
     var self = this;
     this.detailsRequestCard.el.on('form:updated', function(event, data){
+      console.log('Form updates running');
+      console.log(data);
       self.detailsSaved(data);
       self.checkClientSpecific(data);
     });
@@ -200,6 +202,7 @@ C2 = (function() {
   }
 
   C2.prototype.handleSaveError = function(data){
+    console.log(data);
     var response = data['response'];
     for (var i = response.length - 1; i >= 0; i--) {
       response[i]['timeout'] = data['timeout'] || 7500;

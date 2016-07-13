@@ -71,16 +71,6 @@ ActionBarBridge = (function() {
     this.modals.el.find('button').attr('disabled', 'disabled').css('opacity', 0.5);
   }
 
-  ActionBarBridge.prototype.checkTimeout = function(l){
-    var self = this;
-    window.setTimeout(function(l){
-      if(l.ladda( 'isLoading' )){
-        l.ladda( 'stop' );
-        self.enableModalButtons();
-      }
-    }, 7500);
-  }
-
   ActionBarBridge.prototype._setupSaveModal = function(){
     var self = this;
     this.modals.el.on("save_confirm-modal:confirm", function(event, item){
@@ -89,7 +79,6 @@ ActionBarBridge = (function() {
       self.disableModalButtons();
       self.actionBar.el.trigger("action-bar-clicked:saving");
       self.detailsSave.el.trigger("details-form:save");
-      self.checkTimeout(l);
     });
     this.modals.el.on("save_confirm-modal:cancel", function(event, item){
       self._closeModal();
