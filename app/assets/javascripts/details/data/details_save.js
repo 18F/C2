@@ -8,26 +8,33 @@ DetailsSave = (function() {
   }
 
   DetailsSave.prototype._blastOff = function(){
+    console.log('DetailsSave: _blastOff');
     this._events();
   }
 
   DetailsSave.prototype._events = function(){
+    console.log('DetailsSave: _events');
     var self = this;
     this.el.on( "details-form:save", function( event, data ) {
+      console.log('Event: details-form:save');
       self.saveDetailsForm(data);
     });
     this.el.on( "details-form:respond", function( event, data ) {
+      console.log('Event: details-form:respond');
       self.receiveResponse(data);
     });
     this.el.on( "details-form:success", function( event, data ) {
+      console.log('Event: details-form:success');
 
     });
     this.el.on( "details-form:error", function( event, data ) {
+      console.log('Event: details-form:error');
 
     });
   }
 
   DetailsSave.prototype.receiveResponse = function(data){
+    console.log('DetailsSave: receiveResponse');
     var self = this;
     switch (data['status']){
       case "success":
@@ -41,9 +48,31 @@ DetailsSave = (function() {
     }
   }
 
+  DetailsSave.prototype._prepareFormData = function(){
+    console.log('DetailsSave: _prepareFormData');
+    var formData = this.el.find('form').serialize();
+    var dataEl = this.dataEl;
+    formData = formData + '&' + dataEl.find('form [data-is-dirrty]').serialize();
+    console.log(formData);
+    return formData;
+  }
+
   DetailsSave.prototype.saveDetailsForm = function(data){
+    console.log('DetailsSave: saveDetailsForm');
     var self = this;
-    this.dataEl.find('form').submit();
+    var formData = this._prepareFormData()
+    console.log('Submitting form');
+    var url = self.el.find('form').attr("action");
+    $.ajax({
+      url: url,
+      headers: {
+        Accept : "text/javascript; charset=utf-8",
+        "Content-Type": 'application/x-www-form-urlencoded; charset=UTF-8'
+      },
+      type: 'POST',
+      data: formData
+    });
+    self.el.find('form').submit();
   }
 
   return DetailsSave;
