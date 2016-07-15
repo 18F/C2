@@ -8,7 +8,7 @@ C2 = (function() {
       attachmentCard: '#card-for-attachments',
       detailsForm:    '#request-details-card',
       detailsSave:    '#request-details-card',
-      detailsSaveAll: '#request-details-card, #summary-card',
+      detailsSaveAll: '#summary-card',
       activityCard:   '#card-for-activity',
       editMode:       '#mode-parent',
       formState:      '#request-details-card form, #proposal-title-wrapper form',
@@ -80,10 +80,14 @@ C2 = (function() {
     console.log('c2.js: Running _setupEditMode');
     var self = this;
     this.formState.el.on('form:dirty', function(){
-      self.actionBar.barState('.save-button', false);
+      if(self.actionBar.el.find('.save-button button').attr('disabled') === "disabled" ){
+        self.actionBar.barState('.save-button', false);
+      }
     });
     this.formState.el.on('form:clean', function(){
-      self.actionBar.barState('.save-button', "disabled");
+      if(self.actionBar.el.find('.save-button button').attr('disabled') === undefined ){
+        self.actionBar.barState('.save-button', "disabled");
+      }
     });
     this.editMode.el.on('details:edit-mode', function(){
       self.detailsMode('edit');
