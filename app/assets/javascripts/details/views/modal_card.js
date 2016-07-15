@@ -42,7 +42,7 @@ ModalController = (function(){
       e.preventDefault();
     }
     var modalType = $(modal).attr('data-modal-type');
-    self.create(modalType);
+    this.create(modalType);
   }
 
   ModalController.prototype._modalEvents = function(el, modalType){
