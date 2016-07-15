@@ -240,7 +240,8 @@ C2 = (function() {
     }
     var stringParam = JSON.stringify(param);
     if ( this.lastNotice !== stringParam){
-      this.lastNotice = stringParam;
+      this.lastNotice = stringParam + this.actionBar.lastClick;
+      console.log(this.lastNotice);
       this.notification.el.trigger('notification:create', param);
     }
   }

@@ -3,6 +3,7 @@ var ActionBar;
 ActionBar = (function() {
   function ActionBar(el) {
     this.el = $(el);
+    this.lastClick = new Date();
     this._setup();
     return this;
   }
@@ -24,6 +25,10 @@ ActionBar = (function() {
     this._saveTriggered();
   };
 
+  ActionBar.prototype.updateClick = function() {
+    this.lastClick = new Date();
+  }
+
   /**
    * .on("action-bar-clicked:save")
    * .on("action-bar-clicked:cancel")
@@ -32,6 +37,7 @@ ActionBar = (function() {
     console.log("ActionBar: _setupActionBarClicked");
     var self = this;
     this.el.find('.' + buttonName + '-button button').on('click', function(){
+      self.updateClick();
       self.el.trigger('action-bar-clicked:' + buttonName);
     });
   }
