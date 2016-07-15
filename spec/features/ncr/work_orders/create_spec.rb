@@ -44,6 +44,7 @@ feature "Creating an NCR work order", :js do
 
       expect(page).to have_content("Approving official can't be blank")
       visit proposals_path
+      save_and_open_page
       expect(page).to_not have_content("Approving official can't be blank")
     end
 
