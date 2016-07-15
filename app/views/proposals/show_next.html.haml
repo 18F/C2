@@ -1,8 +1,8 @@
 - content_for :top_notification do
-  = render partial: "proposals/details/top_notification", locals: { proposal: @proposal } 
+  = render partial: "proposals/details/top_notification", locals: { proposal: @proposal }
 
 = stylesheet_link_tag "redesign/app"
-
+= stylesheet_link_tag "redesign/_print", media: "print"
 = render partial: 'layouts/new_javascript'
 
 #mode-parent.view-mode
