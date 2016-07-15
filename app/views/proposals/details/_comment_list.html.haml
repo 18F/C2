@@ -20,14 +20,15 @@
   .row.status-feed-actions
     .medium-12.column.status-contract-action
       %div
-        %a.button.primary.status-toggle-all.status-arrow
-          ↓
+        %a.button.primary.status-toggle-all.status-arrow.down
+          = image_tag "chevron.png"
         %a.primary.status-toggle-all.status-text{ href: "#", tabindex: "0" }
           = t(".button.show_all_activity")
           %span.status-count
             = t(".button.hidden_activity_count", count: events.length - 5)
     .medium-12.column.status-expand-action
       %div
-        %a.button.primary.status-toggle-all.status-arrow
+        %a.button.primary.status-toggle-all.status-arrow.up
+          = image_tag "chevron.png"
         %a.primary.status-toggle-all.status-text.minimize-activity{ href: "#", tabindex: "0" }
           = t(".button.minimize_activity")

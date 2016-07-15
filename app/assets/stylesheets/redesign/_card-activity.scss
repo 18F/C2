@@ -29,6 +29,12 @@
   width: 23px;
   padding: 0px;
   line-height: 19px;
+  &.down {
+    margin-top: 5px;
+  }
+  &.up {
+    transform: rotate(180deg);
+  }
 }
 
 .status-toggle-all.status-text{
@@ -65,15 +71,18 @@
     font-style: italic;
   }
 
-  .item-block.attachment{
-    a {
-      color: $dark-gray;
-      font-size: 80%;
-      text-decoration: underline;
+  .item-block {
+    color: map-get($c2black-swatch, secondary);
+    &.attachment {
+      a {
+        color: $dark-gray;
+        font-size: 80%;
+        text-decoration: underline;
 
-      img {
-        color: $backgroundColor;
-        margin-right: 10px;
+        img {
+          color: $backgroundColor;
+          margin-right: 10px;
+        }
       }
     }
   }
@@ -101,12 +110,13 @@
     overflow: hidden;
     border-radius: 50px;
     background: $backgroundColor;
-    width: 23px;
-    height: 23px;
+    width: 15px;
+    height: 15px;
     margin: auto;
     position: absolute;
     left: 0px;
     right: 0px;
+    top: 5px;
   }
 
   .background-color-column:before {
@@ -119,6 +129,7 @@
     margin: auto;
     left: 0px;
     right: 0px;
+    top: 5px;
   }
 
 }
