@@ -18,4 +18,5 @@ class ProposalIndexPage < SitePrism::Page
   section :pending, RequestTableSection, "#proposals-pending"
   section :completed, RequestTableSection, "#proposals-completed"
   section :canceled, RequestTableSection, "#proposals-canceled"
+  section :advanced_search, AdvancedSearchSection, ".m-search-ui"
 end

@@ -60,7 +60,7 @@ feature "Create NCR Work orders with different expense types", :js do
       click_on "Submit for approval"
 
       expect(page).to have_content("Proposal submitted")
-      expect(page).to have_content("0 of 3 steps completed")
+      expect(page).to have_content("0 of 1 steps completed")
     end
   end
 

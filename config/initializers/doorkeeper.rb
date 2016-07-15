@@ -4,8 +4,8 @@ Doorkeeper.configure do
   enable_application_owner confirmation: true
 
   resource_owner_authenticator do
-    if current_user
-      current_user
+    if session[:user] && session[:user]["email"]
+      User.find_by(email_address: session[:user]["email"])
     else
       warden.authenticate!(scope: :user)
     end

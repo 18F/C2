@@ -9,7 +9,7 @@ ViewHelper = (function(){
     var self = this;
     this.el.on(self.updateEvent, function(){
       $.ajax({ url: self.updateUrl, 
-        retry_limi: 5,
+        retryLimit: 5,
         success: function(html){
           self.update(html);
         }, 
