@@ -25,7 +25,7 @@ class C2VersionDecorator < BaseDecorator
     when Observation
       "#{user_name} was added as an observer."
     else
-      # don't display anything in the Modification column
+      ""
     end
   end
 
