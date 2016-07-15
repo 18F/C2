@@ -28,7 +28,7 @@ ModalController = (function(){
     console.log("modalController: _initTriggers");
     var self = this;
     $('html').on('click','[data-modal-type]',function(e){
-      self._prepModal();
+      self._prepModal(e);
     });
     this.el.on("modal:close", function(){
       self._closeModal();
