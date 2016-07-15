@@ -8,7 +8,7 @@ class HistoryEvent < SimpleDelegator
   end
 
   def safe_html_diff
-    decorated_version.to_html.html_safe
+    decorated_version.to_html
   end
 
   def to_partial_path
