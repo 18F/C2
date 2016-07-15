@@ -27,8 +27,9 @@ module Gsa18f
       "Training/Event" => 1,
       "Office Supply/Miscellaneous" => 2,
       "Hardware" => 3,
+      "Micropurchase" => 5,
       "Other" => 4,
-    }
+    }.freeze
 
     enum purchase_type: PURCHASE_TYPES
 
@@ -51,7 +52,7 @@ module Gsa18f
     def initialize_steps
       steps = [
         Steps::Approval.new(user: User.for_email(Gsa18f::Procurement.approver_email)),
-        Steps::Purchase.new(user: User.for_email(Gsa18f::Procurement.purchaser_email)),
+        Steps::Purchase.new(user: User.for_email(Gsa18f::Procurement.purchaser_email(purchase_type)))
       ]
       proposal.add_initial_steps(steps)
     end
@@ -89,8 +90,12 @@ module Gsa18f
       user_with_role("gsa18f_approver").email_address
     end
 
-    def self.purchaser_email
-      user_with_role("gsa18f_purchaser").email_address
+    def self.purchaser_email(request_type = nil)
+      if request_type == "Micropurchase"
+        user_with_role("gsa18f_micropurchase_purchaser").email_address
+      else
+        user_with_role("gsa18f_purchaser").email_address
+      end
     end
 
     def self.user_with_role(role_name)

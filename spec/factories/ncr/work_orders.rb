@@ -1,8 +1,9 @@
 FactoryGirl.define do
   factory :ncr_work_order, class: Ncr::WorkOrder do
     amount 1000
-    expense_type "BA61"
+    expense_type "BA80"
     vendor "Some Vend"
+    rwa_number "R1234567"
     not_to_exceed false
     building_number Ncr::BUILDING_NUMBERS[0]
     emergency false
@@ -12,10 +13,12 @@ FactoryGirl.define do
 
     factory :ba60_ncr_work_order do
       expense_type "BA60"
+      rwa_number nil
     end
 
     factory :ba61_ncr_work_order do
       expense_type "BA61"
+      rwa_number nil
     end
 
     factory :ba80_ncr_work_order do
