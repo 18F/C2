@@ -28,17 +28,22 @@ ModalController = (function(){
     console.log("modalController: _initTriggers");
     var self = this;
     $('html').on('click','[data-modal-type]',function(e){
-      self.sourceEl = this;
-      var preventDefault = $(self.sourceEl).attr('data-modal-default') !== "true";
-      if(preventDefault){
-        e.preventDefault();
-      }
-      var modalType = $(self.sourceEl).attr('data-modal-type');
-      self.create(modalType);
+      self._prepModal();
     });
     this.el.on("modal:close", function(){
       self._closeModal();
     });
+  }
+
+  ModalController.prototype._prepModal = function(e){
+    var self = this;
+    self.sourceEl = this;
+    var preventDefault = $(self.sourceEl).attr('data-modal-default') !== "true";
+    if(preventDefault){
+      e.preventDefault();
+    }
+    var modalType = $(self.sourceEl).attr('data-modal-type');
+    self.create(modalType);
   }
 
   ModalController.prototype._modalEvents = function(el, modalType){
