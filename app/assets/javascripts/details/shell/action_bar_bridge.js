@@ -16,6 +16,7 @@ ActionBarBridge = (function() {
   }
 
   ActionBarBridge.prototype._blastOff = function(){
+    console.log('ActionBarBridge: _blastOff');
     var config = this.config;
 
     // Data
@@ -33,6 +34,7 @@ ActionBarBridge = (function() {
   }
 
   ActionBarBridge.prototype._overrideTestConfig = function(config){
+    console.log('ActionBarBridge: _overrideTestConfig');
     var opt = this.config;
     $.each(opt, function(key, item){
       if(config[key]){
@@ -43,6 +45,7 @@ ActionBarBridge = (function() {
   }
 
   ActionBarBridge.prototype._setupEvents = function(){
+    console.log('ActionBarBridge: _setupEvents');
     this._setupActionBar();
     this._setupSaveModal();
     this._setupFormSubmitModal();
@@ -51,6 +54,7 @@ ActionBarBridge = (function() {
   /* Action Bar */
 
   ActionBarBridge.prototype._setupActionBar = function(){
+    console.log('ActionBarBridge: _setupActionBar');
     var self = this;
     this.actionBar.el.on("action-bar-clicked:cancel", function(){
       self.editMode.el.trigger('details:cancelled');
@@ -64,14 +68,17 @@ ActionBarBridge = (function() {
   }
 
   ActionBarBridge.prototype.enableModalButtons = function(){
+    console.log('ActionBarBridge: enableModalButtons');
     this.modals.el.find('button').attr('disabled', false).css('opacity', 1);
   }
 
   ActionBarBridge.prototype.disableModalButtons = function(){
+    console.log('ActionBarBridge: disableModalButtons');
     this.modals.el.find('button').attr('disabled', 'disabled').css('opacity', 0.5);
   }
 
   ActionBarBridge.prototype._setupSaveModal = function(){
+    console.log('ActionBarBridge: _setupSaveModal');
     var self = this;
     this.modals.el.on("save_confirm-modal:confirm", function(event, item){
       var l = $(item).ladda();
@@ -89,6 +96,7 @@ ActionBarBridge = (function() {
   }
 
   ActionBarBridge.prototype._setupFormSubmitModal = function(){
+    console.log('ActionBarBridge: _setupFormSubmitModal');
     var self = this,
       events = "attachment_confirm-modal:confirm observer_confirm-modal:confirm";
     this.modals.el.on(events, function(event, item, sourceEl){
@@ -97,12 +105,14 @@ ActionBarBridge = (function() {
   }
 
   ActionBarBridge.prototype._submitAndClose = function(sourceEl){
+    console.log('ActionBarBridge: _submitAndClose');
     var self = this;
     $(sourceEl).parent().submit();
     self._closeModal();
   }
 
   ActionBarBridge.prototype._closeModal = function(){
+    console.log('ActionBarBridge: _closeModal');
     this.modals.el.trigger("modal:close");
     this.actionBar.stopLadda();
   }
