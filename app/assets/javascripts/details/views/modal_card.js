@@ -28,21 +28,20 @@ ModalController = (function(){
     console.log("modalController: _initTriggers");
     var self = this;
     $('html').on('click','[data-modal-type]',function(e){
-      self._prepModal(e);
+      var modal = this;
+      self._prepModal(e, modal);
     });
     this.el.on("modal:close", function(){
       self._closeModal();
     });
   }
 
-  ModalController.prototype._prepModal = function(e){
-    var self = this;
-    self.sourceEl = this;
-    var preventDefault = $(self.sourceEl).attr('data-modal-default') !== "true";
+  ModalController.prototype._prepModal = function(e, modal){
+    var preventDefault = $(modal).attr('data-modal-default') !== "true";
     if(preventDefault){
       e.preventDefault();
     }
-    var modalType = $(self.sourceEl).attr('data-modal-type');
+    var modalType = $(modal).attr('data-modal-type');
     self.create(modalType);
   }
 
@@ -113,10 +112,15 @@ ModalController = (function(){
 
   ModalController.prototype._setupModal = function(modalType){
     console.log("modalController: _setupModal");
+    console.log("modalController param: ", modalType);
     var selector = this.data.modal[modalType];
     var content = $(selector).clone() || false;
     var id = this.getId();
     var modal = $('#modal-template').clone().attr('id', "modal-el-" + id).removeClass('modal-template');
+    console.log('selector: ', selector);
+    console.log('content: ', content);
+    console.log('id: ', id);
+    console.log('modal: ', modal);
     modal.find('.additional-content').html(content);
     return modal;
   }
