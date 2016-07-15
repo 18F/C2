@@ -130,15 +130,25 @@ Important data to note from the above:
 
 ### If the app is down
 
+_This section still needs filling. If you have experience, please contribute!_
+
 ### Diagnosing exceptions
 
+_This section still needs filling. If you have experience, please contribute!_
+
 ## Resolution
+
+_This section still needs filling. If you have experience, please contribute!_
 
 ### If you need to take the site offline for fixes
 
 Put the site into **Maintenance Mode**.
 
+_This section still needs filling. If you have experience, please contribute!_
+
 ## Once the fix is in
+
+_This section still needs filling. If you have experience, please contribute!_
 
 ### Remember to close the NR incident
 
