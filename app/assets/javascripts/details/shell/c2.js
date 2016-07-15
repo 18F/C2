@@ -27,6 +27,7 @@ C2 = (function() {
   C2.prototype._blastOff = function(){
     console.log('c2.js: Running _blastOff');
     var config = this.config;
+    var self = this;
     // Data
     this.detailsSave = new DetailsSave(config.detailsSave, config.detailsSaveAll);
     this.updateView = new UpdateView(config.updateView);
@@ -46,7 +47,7 @@ C2 = (function() {
     this.notification = new Notifications(config.notifications);
     this.summaryBar = new SummaryBar(config.summaryBar);
 
-    this.actionBridge = new ActionBarBridge();
+    this.actionBridge = new ActionBarBridge(self);
 
     this._setupEvents();
   }

@@ -1,7 +1,8 @@
 var ActionBarBridge;
 ActionBarBridge = (function() {
 
-  function ActionBarBridge(config){
+  function ActionBarBridge(c2, config){
+    this.c2 = c2;
     config = config || {};
     this.config = {
       actionBar:      '#action-bar-wrapper',
@@ -19,17 +20,18 @@ ActionBarBridge = (function() {
     console.log('ActionBarBridge: _blastOff');
     var config = this.config;
 
+
     // Data
-    this.detailsSave = new DetailsSave(config.detailsSave, config.detailsSaveAll);
-    this.updateView = new UpdateView(config.updateView);
+    this.detailsSave = this.c2.detailsSave;
+    this.updateView = this.c2.updateView;
 
     // State
-    this.editMode = new EditStateController(config.editMode);
+    this.editMode = this.c2.editMode;
 
     // Views
-    this.modals = new ModalController(config.modalCard);
-    this.actionBar = new ActionBar(config.actionBar);
-    this.notification = new Notifications(config.notifications);
+    this.modals = this.c2.modals;
+    this.actionBar = this.c2.actionBar;
+    this.notification = this.c2.notification;
     this._setupEvents();
   }
 
