@@ -6,12 +6,14 @@
         -# %a{href: proposal_attachment_path(proposal, attachment)}
         -#   = image_tag "icon-attachment.svg"
         .row
+          %div.proposal-attachment_icon.small-1.columns
+            =image_tag  "attachment.png", :class => "attachment-icon"
           %div.proposal-attachment_path.small-10.columns
             %a{href: proposal_attachment_path(proposal, attachment)}
               #{attachment.file_file_name}
-          %div.remove-attachment-btn.text-right.small-2.columns
+          %div.remove-attachment-btn.text-right.small-1.columns
           - if policy(attachment).can_destroy?
-            = button_to "Remove", proposal_attachment_path(proposal, attachment), method: :delete, data: {"modal-type": "attachment_confirm"}, remote: true, class: "button primary round no-margin-bottom", "aria-label": "Remove #{ attachment.file_file_name } attachment"
+            = button_to "", proposal_attachment_path(proposal, attachment), method: :delete, data: {"modal-type": "attachment_confirm"}, remote: true, class: "button primary round no-margin-bottom remove-button", "aria-label": "Remove #{ attachment.file_file_name } attachment"
   - if proposal.attachments.empty?
     .content-content.column
       .row

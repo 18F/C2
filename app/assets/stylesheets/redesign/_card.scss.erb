@@ -12,6 +12,19 @@
   textarea, input{
     box-shadow: none;
   }
+  .remove-button{
+    &:hover{
+      background-image: image-url('remove.png') !important;
+      background-repeat: no-repeat !important;
+      opacity: 1;
+    }
+    display: block;
+    width: 23px;
+    height: 23px;
+    background-repeat: no-repeat !important;
+    background-image: image-url('remove.png') !important;
+    opacity: .8;
+  }
   .form-control{
     min-height: 39px;
   }
@@ -50,6 +63,7 @@
     }
     input{
       height: auto;
+      width: 100% !important;
     }
   }
   .selectize-input > * {
