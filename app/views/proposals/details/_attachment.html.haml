@@ -14,4 +14,6 @@
           .medium-12.column
             = render partial: "proposals/details/attachment_list",
               locals: { proposal: @proposal }
-            <label for="attachment_file" class="button primary attach-icon large attachment-label">Attach File</lable>
+            %label.button.primary.attach-icon.large.attachment-label{:for => "attachment_file"}
+              Attach File
+              = image_tag  "attachment.png", :class => "attachment-icon"
