@@ -25,6 +25,19 @@ class ClientDataController < ApplicationController
   def edit
   end
 
+  def validate
+    @client_data_instance.assign_attributes(filtered_params)
+    @client_data_instance.normalize_input(current_user)
+    respond_to do |format|
+      format.js do
+        validate_js_behavior(@client_data_instance, errors)
+      end
+      format.html do
+        validate_behavior(proposal, errors)
+      end
+    end
+  end
+
   def update
     @client_data_instance.assign_attributes(filtered_params)
     @client_data_instance.normalize_input(current_user)
@@ -68,7 +81,11 @@ class ClientDataController < ApplicationController
     else
       js_response = { status: "error", response: errors }
     end
-    render js: "c2.detailsSave.el.trigger('details-form:respond', " + js_response.to_json + ");"
+    if params[:validate] == "true"
+      render js: "c2.detailsSave.el.trigger('details-form:validation', " + js_response.to_json + ");"
+    else
+      render js: "c2.detailsSave.el.trigger('details-form:respond', " + js_response.to_json + ");"
+    end
   end
 
   def update_behavior(proposal, errors)
