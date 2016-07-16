@@ -23,14 +23,31 @@ DetailsSave = (function() {
       console.log('Event: details-form:respond');
       self.receiveResponse(data);
     });
+    this.el.on( "details-form:validate", function( event, data ) {
+      console.log('Event: details-form:respond');
+      self.receiveValidation(data);
+    });
     this.el.on( "details-form:success", function( event, data ) {
       console.log('Event: details-form:success');
-
     });
     this.el.on( "details-form:error", function( event, data ) {
       console.log('Event: details-form:error');
-
     });
+  }
+
+  DetailsSave.prototype.receiveValidation = function(data){
+    console.log('DetailsSave: receiveValidation');
+    var self = this;
+    switch (data['status']){
+      case "success":
+        self.el.find('form').submit();
+        break;
+      case "error":
+        self.el.trigger( "details-form:error", data );
+        break;
+      default:
+        break;
+    }
   }
 
   DetailsSave.prototype.receiveResponse = function(data){
@@ -76,8 +93,6 @@ DetailsSave = (function() {
     console.log('Submitting form');
     var url = self.el.find('form').attr("action");
     self.validateFields(url, formData);
-    // self.el.find('form').submit();
-
   }
 
   return DetailsSave;
