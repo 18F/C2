@@ -40,6 +40,7 @@ DetailsSave = (function() {
     var self = this;
     switch (data['status']){
       case "success":
+        console.log('Submitting form');
         self.el.find('form').submit();
         break;
       case "error":
@@ -90,7 +91,7 @@ DetailsSave = (function() {
     console.log('DetailsSave: saveDetailsForm');
     var self = this;
     var formData = this._prepareFormData();
-    console.log('Submitting form');
+    console.log('Validating form');
     var url = self.el.find('form').attr("action");
     self.validateFields(url, formData);
   }

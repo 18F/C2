@@ -82,7 +82,7 @@ class ClientDataController < ApplicationController
       js_response = { status: "error", response: errors }
     end
     if params[:validate] == "true"
-      render js: "c2.detailsSave.el.trigger('details-form:validation', " + js_response.to_json + ");"
+      render js: "c2.detailsSave.el.trigger('details-form:validate', " + js_response.to_json + ");"
     else
       render js: "c2.detailsSave.el.trigger('details-form:respond', " + js_response.to_json + ");"
     end
