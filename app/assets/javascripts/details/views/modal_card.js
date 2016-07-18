@@ -26,21 +26,17 @@ ModalController = (function(){
   ModalController.prototype._initTriggers = function(){
     var self = this;
     $('html').on('click','[data-modal-type]',function(e){
-      var modal = this;
-      self._prepModal(e, modal);
+      self.sourceEl = this;
+      var preventDefault = $(self.sourceEl).attr('data-modal-default') !== "true";
+      if(preventDefault){
+        e.preventDefault();
+      }
+      var modalType = $(self.sourceEl).attr('data-modal-type');
+      self.create(modalType);
     });
     this.el.on("modal:close", function(){
       self._closeModal();
     });
-  }
-
-  ModalController.prototype._prepModal = function(e, modal){
-    var preventDefault = $(modal).attr('data-modal-default') !== "true";
-    if(preventDefault){
-      e.preventDefault();
-    }
-    var modalType = $(modal).attr('data-modal-type');
-    this.create(modalType);
   }
 
   ModalController.prototype._modalEvents = function(el, modalType){
