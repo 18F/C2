@@ -46,21 +46,26 @@ ul.observer-list{
   margin: 0px 0px 15px 0px;
 }
 
-.observer-list-item .button_to input[type="submit"]{
-  &:hover{
-    background-image: image-url('remove-x.png');
-    background-repeat: no-repeat;
-    opacity: 1;
+.card-for-observers {
+  #new_observation {
+    .selectize-input {
+      margin-bottom: 12px;
+    }
+    .not-full {
+      &:before {
+        content: 'Add an observer';
+      }
+    }
+    label {
+      color: map-get($c2black-swatch, primary);
+      margin: 10px 0 5px 0;
+    }
+    input[disabled] {
+      display: none !important;
+    }
   }
-  display: block;
-  width: 18px;
-  height: 18px;
-  background-repeat: no-repeat;
-  background-image: image-url('remove-x.png');
-  opacity: .8;
-}
-
-.card-for-observers .selectize-dropdown{
-  position:relative !important;
-  top: 1px !important;
+  .selectize-dropdown{
+    position:relative !important;
+    top: 1px !important;
+  }
 }

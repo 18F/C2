@@ -22,7 +22,7 @@ describe "Canceling a request" do
     login_as(work_order.proposal.requester)
     visit proposal_path(work_order.proposal)
     expect(page).to have_selector(".popup-modal", visible: false)
-    click_on("Cancel this request")
+    click_on("Cancel request")
     expect(page).to have_selector(".popup-modal", visible: true)
     click_on("NO, TAKE ME BACK")
     expect(page).to have_selector(".popup-modal", visible: false)

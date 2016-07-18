@@ -136,6 +136,9 @@
 .card{
   textarea{
     margin: 0 0 0.4rem;
+    &::-webkit-input-placeholder {
+        color: map-get($c2black-swatch, tertiary);
+    }
   }
   .help-block{
     font-size: 13px;
