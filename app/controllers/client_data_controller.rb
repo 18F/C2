@@ -131,7 +131,7 @@ class ClientDataController < ApplicationController
     if errors.empty?
       update_or_notify_of_no_changes
       status = "success"
-      reponse = client_data_instance
+      response = client_data_instance
     else
       status = "error"
       response = errors
