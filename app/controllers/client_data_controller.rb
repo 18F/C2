@@ -130,10 +130,13 @@ class ClientDataController < ApplicationController
   def process_js_response(client_data_instance, errors)
     if errors.empty?
       update_or_notify_of_no_changes
-      js_response = { status: "success", response: client_data_instance }
+      status = "success"
+      reponse = client_data_instance
     else
-      js_response = { status: "error", response: errors }
+      status = "error"
+      response = errors
     end
+    { status: status, response: response }
   end
 
   def add_steps
