@@ -25,19 +25,6 @@ class ClientDataController < ApplicationController
   def edit
   end
 
-  def validate
-    @client_data_instance.assign_attributes(filtered_params)
-    @client_data_instance.normalize_input(current_user)
-    respond_to do |format|
-      format.js do
-        validate_js_behavior(@client_data_instance, errors)
-      end
-      format.html do
-        validate_behavior(proposal, errors)
-      end
-    end
-  end
-
   def update
     @client_data_instance.assign_attributes(filtered_params)
     @client_data_instance.normalize_input(current_user)
