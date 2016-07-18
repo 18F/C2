@@ -7,6 +7,8 @@
 #= require required_for_submit
 #= require details/state/edit_mode
 #= require details/state/form_change_state
+#= require details/views/view_helper
+#= require details/views/approvals_card
 #= require details/views/action_bar
 #= require details/views/attachment_card
 #= require details/views/details_request_card
@@ -18,6 +20,7 @@
 #= require details/data/update_view
 #= require details/data/details_save
 #= require details/shell/c2
+#= require details/shell/action_bar_bridge
 #= require details/details_helper
 #= require spec_helper
 
