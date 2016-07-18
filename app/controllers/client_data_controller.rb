@@ -17,7 +17,8 @@ class ClientDataController < ApplicationController
       @flash_manager.show(flash, "success", "Proposal submitted!")
       redirect_to proposal
     else
-      @flash_manager.show(flash, "error", errors)
+      flash_now = FlashWithNow.new
+      flash_now.show(flash, "error", errors)
       render :new
     end
   end
