@@ -75,12 +75,7 @@ class ClientDataController < ApplicationController
   end
 
   def update_js_behavior(client_data_instance, errors)
-    if errors.empty?
-      update_or_notify_of_no_changes
-      js_response = { status: "success", response: client_data_instance }
-    else
-      js_response = { status: "error", response: errors }
-    end
+    js_response = process_js_response(client_data_instance, errors)
     if params[:validate] == "true"
       render js: "c2.detailsSave.el.trigger('details-form:validate', " + js_response.to_json + ");"
     else
@@ -143,6 +138,16 @@ class ClientDataController < ApplicationController
 
   def attachment_params
     params.permit(attachments: [])[:attachments] || []
+  end
+
+  def process_js_response(client_data_instance, errors)
+    if errors.empty?
+      update_or_notify_of_no_changes
+      js_response = { status: "success", response: client_data_instance }
+    else
+      js_response = { status: "error", response: errors }
+    end
+    return js_response
   end
 
   def add_steps
