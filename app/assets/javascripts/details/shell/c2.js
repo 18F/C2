@@ -25,7 +25,6 @@ C2 = (function() {
   }
 
   C2.prototype._blastOff = function(){
-    console.log('c2.js: Running _blastOff');
     var config = this.config;
     var self = this;
     // Data
@@ -53,7 +52,6 @@ C2 = (function() {
   }
 
   C2.prototype._overrideTestConfig = function(config){
-    console.log('c2.js: Running _overrideTestConfig');
     var opt = this.config;
     $.each(opt, function(key, item){
       if(config[key]){
@@ -64,7 +62,6 @@ C2 = (function() {
   }
 
   C2.prototype._setupEvents = function(){
-    console.log('c2.js: Running _setupEvents');
     this._setupEditToggle();
     this._setupDetailsData();
     this._setupDetailsForm();
@@ -78,7 +75,6 @@ C2 = (function() {
   /* Form */
 
   C2.prototype._setupEditMode = function(){
-    console.log('c2.js: Running _setupEditMode');
     var self = this;
     this.formState.el.on('form:dirty', function(){
       if(self.actionBar.el.find('.save-button button').attr('disabled') === "disabled" ){
@@ -99,18 +95,14 @@ C2 = (function() {
   }
 
   C2.prototype._setupDetailsForm = function(){
-    console.log('c2.js: Running _setupDetailsForm');
     var self = this;
     this.detailsRequestCard.el.on('form:updated', function(event, data){
-      console.log('Form updates running');
-      console.log(data);
       self.detailsSaved(data);
       self.checkClientSpecific(data);
     });
   }
 
   C2.prototype.checkClientSpecific = function(data){
-    console.log('c2.js: Running checkClientSpecific');
     var self = this;
     var total, params;
     if(data['quantity'] !== undefined && data['cost_per_unit'] !== undefined){
@@ -121,7 +113,6 @@ C2 = (function() {
   }
 
   C2.prototype._setupEditToggle = function(){
-    console.log('c2.js: Running _setupEditToggle');
     var self = this;
     this.detailsRequestCard.el.on('edit-toggle:trigger', function(){
       if(!self.editMode.getState()){
@@ -137,7 +128,6 @@ C2 = (function() {
   }
 
   C2.prototype._setupViewUpdateEvents = function(item, jevent){
-    console.log('c2.js: Running _setupViewUpdateEvents');
     var self = this;
     $(item).on(jevent, function(event, data){
       self.updateView.el.trigger(jevent, data);
@@ -145,7 +135,6 @@ C2 = (function() {
   }
 
   C2.prototype._setupViewUpdate = function(){
-    console.log('c2.js: Running _setupViewUpdate');
     var self = this;
     $.each([ self.summaryBar.el.selector, self.detailsRequestCard.el.selector ], function(i, item){
       $.each([ "update:textfield", "update:checkbox" ], function(j, jevent){
@@ -155,7 +144,6 @@ C2 = (function() {
   }
 
   C2.prototype.detailsCancelled = function(){
-    console.log('c2.js: Running detailsCancelled');
     this.detailsMode('view');
     var message;
     if(this.formState.el.dirrty("isDirty")){
@@ -167,7 +155,6 @@ C2 = (function() {
   }
 
   C2.prototype.detailsSaved = function(data){
-    console.log('c2.js: Running detailsSaved');
     this.formState.initDirrty();
     this.detailsMode('view');
     this.actionBar.el.trigger("action-bar-clicked:saved");
@@ -177,7 +164,6 @@ C2 = (function() {
   }
 
   C2.prototype.triggerDirtyCheck = function(){
-    console.log('c2.js: Running triggerDirtyCheck');
     var dirtyCheck = this.formState.el.dirrty("isDirty");
     if(dirtyCheck){
       this.formState.el.trigger('form:dirty');
@@ -187,7 +173,6 @@ C2 = (function() {
   }
 
   C2.prototype.detailsMode = function(mode){
-    console.log('c2.js: Running detailsMode');
     this.triggerDirtyCheck()
     this.detailsRequestCard.toggleMode(mode)
     this.editMode.stateTo(mode);
@@ -198,7 +183,6 @@ C2 = (function() {
 
   /* Notice */
   C2.prototype._setupNotifications = function(){
-    console.log('c2.js: Running _setupNotifications');
     var notice = this.notification;
     this.notification.el.on('notification:create', function(event, data){
       notice.create(data);
@@ -206,7 +190,6 @@ C2 = (function() {
   }
 
   C2.prototype._setupDetailsData = function(){
-    console.log('c2.js: Running _setupDetailsData');
     var self = this;
     this.detailsSave.el.on('details-form:success', function(event, data){
       self.summaryBar.updateViewContent(data);
@@ -222,8 +205,6 @@ C2 = (function() {
   }
 
   C2.prototype.handleSaveError = function(data){
-    console.log('c2.js: Running handleSaveError');
-    console.log(data);
     var response = data['response'];
     for (var i = response.length - 1; i >= 0; i--) {
       response[i]['timeout'] = data['timeout'] || 7500;
@@ -232,7 +213,6 @@ C2 = (function() {
   }
 
   C2.prototype.createNotification = function(title, content, type){
-    console.log('c2.js: Running createNotification');
     var param = {
       title: title,
       content: content,
@@ -241,7 +221,6 @@ C2 = (function() {
     var stringParam = JSON.stringify(param);
     if ( this.lastNotice !== stringParam){
       this.lastNotice = stringParam + this.actionBar.lastClick;
-      console.log(this.lastNotice);
       this.notification.el.trigger('notification:create', param);
     }
   }
@@ -252,7 +231,6 @@ C2 = (function() {
   /* Activity */
 
   C2.prototype._setupAttachmentEvent = function(){
-    console.log('c2.js: Running _setupAttachmentEvent');
     var self = this;
     this.attachmentCardController.el.on("attachment-card:updated", function(event, data){
       self.activityCardController.el.trigger('activity-card:update');
@@ -261,7 +239,6 @@ C2 = (function() {
   }
 
   C2.prototype.createAttachmentNotification = function(data){
-    console.log('c2.js: Running createAttachmentNotification');
     var content;
     if (data.actionType === "delete"){
       content = data.response + " was deleted successfully.";
@@ -282,7 +259,6 @@ C2 = (function() {
   /* Observer Activity */
 
   C2.prototype._setupObserverEvent = function(){
-    console.log('c2.js: Running _setupObserverEvent');
     var self = this;
     this.observerCardController.el.on("observer-card:updated", function(event, data){
       self.createObserverNotification(data);
@@ -290,7 +266,6 @@ C2 = (function() {
   }
 
   C2.prototype.createObserverNotification = function(data){
-    console.log('c2.js: Running createObserverNotification');
     var params = {
       title: "Observer " + data.actionType+". ",
       type: data.noticeType,

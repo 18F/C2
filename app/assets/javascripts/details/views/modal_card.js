@@ -19,13 +19,11 @@ ModalController = (function(){
   }
 
   ModalController.prototype._setup = function(el, opts){
-    console.log("modalController: _setup");
     $.extend(this, opts);
     this._initTriggers();
   }
 
   ModalController.prototype._initTriggers = function(){
-    console.log("modalController: _initTriggers");
     var self = this;
     $('html').on('click','[data-modal-type]',function(e){
       var modal = this;
@@ -46,14 +44,12 @@ ModalController = (function(){
   }
 
   ModalController.prototype._modalEvents = function(el, modalType){
-    console.log("modalController: _modalEvents");
     this._undoButtonSetup(el);
     this._buttonDependence(el);
     this._createCustomEvents(el, modalType);
   }
 
   ModalController.prototype._createCustomEvents = function(el, modalType){
-    console.log("modalController: _createCustomEvents");
     var self = this;
     $(el).find('[data-modal-event]').each(function(i, item){
       var event = $(item).attr('data-modal-event');
@@ -65,12 +61,10 @@ ModalController = (function(){
   }
 
   ModalController.prototype._buttonDependence = function(el){
-    console.log("modalController: _buttonDependence");
     checkRequiredForSubmit();
   }
 
   ModalController.prototype._undoButtonSetup = function(el){
-    console.log("modalController: _undoButtonSetup");
     var self = this;
     $(el).find('.cancel-cancel-link').on('click', function(){
       self._closeModal();
@@ -79,19 +73,16 @@ ModalController = (function(){
   }
 
   ModalController.prototype.clear = function(){
-    console.log("modalController: clear");
     $('#modal-wrapper').html("");
   }
 
   ModalController.prototype.getId = function(){
-    console.log("modalController: getId");
     var id = this.data.id;
     this.data.id = this.data.id + 1;
     return id;
   }
 
   ModalController.prototype._closeModal = function(){
-    console.log("modalController: _closeModal");
     var self = this;
     this.el.trigger('modal:cancel');
     $('#modal-wrapper').addClass('animated fadeOut');
@@ -103,7 +94,6 @@ ModalController = (function(){
   }
 
   ModalController.prototype._animate = function(){
-    console.log("modalController: _animate");
     $('#modal-wrapper').addClass('animated fadeIn');
     $('#modal-wrapper').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
       $('#modal-wrapper').removeClass('animated fadeIn');
@@ -111,22 +101,15 @@ ModalController = (function(){
   }
 
   ModalController.prototype._setupModal = function(modalType){
-    console.log("modalController: _setupModal");
-    console.log("modalController param: ", modalType);
     var selector = this.data.modal[modalType];
     var content = $(selector).clone() || false;
     var id = this.getId();
     var modal = $('#modal-template').clone().attr('id', "modal-el-" + id).removeClass('modal-template');
-    console.log('selector: ', selector);
-    console.log('content: ', content);
-    console.log('id: ', id);
-    console.log('modal: ', modal);
     modal.find('.additional-content').html(content);
     return modal;
   }
 
   ModalController.prototype.create = function(modalType){
-    console.log("modalController: create");
     this.clear();
     var modal = this._setupModal(modalType);
     $('#modal-wrapper').append(modal);
@@ -137,7 +120,6 @@ ModalController = (function(){
   }
 
   ModalController.prototype._focus = function(){
-    console.log("modalController: _focus");
     $('#modal-wrapper .popup-content').focus();
   }
 

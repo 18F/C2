@@ -9,13 +9,11 @@ ActionBar = (function() {
   }
 
   ActionBar.prototype._setup = function() {
-    console.log("ActionBar: _setup");
     this._event();
     this.setMode('view');
   };
 
   ActionBar.prototype._event = function() {
-    console.log("ActionBar: _event");
     this.saveButton = this.el.find( '.save-button button' );
     this.saveButton.ladda( 'bind' );
     this.saveButtonLadda = this.saveButton.ladda();
@@ -34,7 +32,6 @@ ActionBar = (function() {
    * .on("action-bar-clicked:cancel")
    */
   ActionBar.prototype._setupActionBarClicked = function(buttonName) {
-    console.log("ActionBar: _setupActionBarClicked");
     var self = this;
     this.el.find('.' + buttonName + '-button button').on('click', function(){
       self.updateClick();
@@ -43,7 +40,6 @@ ActionBar = (function() {
   }
 
   ActionBar.prototype._saveTriggered = function(buttonName) {
-    console.log("ActionBar: _saveTriggered");
     var actionBar = this;
     actionBar.el.on('action-bar-clicked:saving', function(){
       actionBar.saveButtonLadda.ladda( 'start' );
@@ -55,17 +51,14 @@ ActionBar = (function() {
   }
 
   ActionBar.prototype.stopLadda = function() {
-    console.log("ActionBar: stopLadda");
     this.saveButtonLadda.ladda( 'stop' );
   }
 
   ActionBar.prototype.barState = function(el, state) {
-    console.log("ActionBar: barState");
     this.el.find(el + ' button').attr("disabled", state);
   }
 
   ActionBar.prototype.setMode = function(mode) {
-    console.log("ActionBar: setMode");
     switch(mode){
       case "view":
         this.barState('.cancel-button', "disabled");
