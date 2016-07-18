@@ -20,7 +20,6 @@ DetailsSave = (function() {
       self.receiveResponse(data);
     });
     this.el.on( "details-form:validate", function( event, data ) {
-      var self = this;
       switch (data['status']){
         case "success":
           self.el.find('form').submit();
