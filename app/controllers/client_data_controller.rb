@@ -134,7 +134,6 @@ class ClientDataController < ApplicationController
     else
       js_response = { status: "error", response: errors }
     end
-    return js_response
   end
 
   def add_steps
