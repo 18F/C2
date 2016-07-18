@@ -19,5 +19,3 @@
       by #{attachment.user.full_name}
   %span.time-from
     = date_with_tooltip(event.created_at, true, { truncate: true })
-.item-block
-  = event.safe_html_diff
