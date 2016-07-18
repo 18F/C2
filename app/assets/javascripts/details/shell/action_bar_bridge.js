@@ -35,13 +35,7 @@ ActionBarBridge = (function() {
   }
 
   ActionBarBridge.prototype._overrideTestConfig = function(config){
-    var opt = this.config;
-    $.each(opt, function(key, item){
-      if(config[key]){
-        opt[key] = config[key];
-      }
-    });
-    this.config = opt;
+    this.config = config;
   }
 
   ActionBarBridge.prototype._setupEvents = function(){
