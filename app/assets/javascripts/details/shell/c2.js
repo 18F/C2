@@ -76,10 +76,14 @@ C2 = (function() {
   C2.prototype._setupEditMode = function(){
     var self = this;
     this.formState.el.on('form:dirty', function(){
-      self.actionBar.barState('.save-button', false);
+      if(self.actionBar.el.find('.save-button button').attr('disabled') === "disabled" ){
+        self.actionBar.barState('.save-button', false);
+      }
     });
     this.formState.el.on('form:clean', function(){
-      self.actionBar.barState('.save-button', "disabled");
+      if(self.actionBar.el.find('.save-button button').attr('disabled') === undefined ){
+        self.actionBar.barState('.save-button', "disabled");
+      }
     });
   }
 
