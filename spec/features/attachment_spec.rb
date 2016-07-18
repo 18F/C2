@@ -69,15 +69,15 @@ describe "Add attachments" do
     end
   end
 
-  it "deletes attachments with js", :js do 
+  it "deletes attachments with js", :js do
     work_order = create(:ncr_work_order, :with_beta_requester)
-    proposal = work_order.proposal 
+    proposal = work_order.proposal
     create(:attachment, proposal: proposal,
                         user: proposal.requester)
     login_as(proposal.requester)
     visit proposal_path(proposal)
-
-    click_on "Remove"
+    save_and_open_page
+    page.find('.attachment-list-item').find('.remove-button').click
     click_on "REMOVE"
     wait_for_ajax
     expect(page).to have_content("Attachment removed")
