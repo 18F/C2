@@ -31,9 +31,7 @@ ActivityCardController = (function(){
   ActivityCardController.prototype.initButton = function(){
     var self = this;
     this.el.on('click', self.data.buttonSelector, function(){
-      console.log('was clicked');
       if( self.el.find(self.data.buttonSelector).attr('disabled') !== "disabled" ){
-        console.log('was not disabled');
         self.submitComment();
       }
     });
