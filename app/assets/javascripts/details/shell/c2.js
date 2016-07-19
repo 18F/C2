@@ -7,8 +7,7 @@ C2 = (function() {
       actionBar:      '#action-bar-wrapper',
       attachmentCard: '#card-for-attachments',
       detailsForm:    '#mode-parent',
-      detailsSave:    '#request-details-card',
-      detailsSaveAll: '#request-details-card, #summary-card',
+      detailsSave:    '#mode-parent',
       activityCard:   '#card-for-activity',
       editMode:       '#mode-parent',
       formState:      '#request-details-card form, #proposal-title-wrapper form',
@@ -26,7 +25,7 @@ C2 = (function() {
   C2.prototype._blastOff = function(){
     var config = this.config;
     // Data
-    this.detailsSave = new DetailsSave(config.detailsSave, config.detailsSaveAll);
+    this.detailsSave = new DetailsSave(config.detailsSave);
     this.updateView = new UpdateView(config.updateView);
 
     // State
