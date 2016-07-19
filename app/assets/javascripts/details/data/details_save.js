@@ -3,7 +3,7 @@ DetailsSave = (function() {
 
   function DetailsSave(el) {
     this.el = $(el);
-    this.dataEl = $(dataEl).find('form.request-details-form');
+    this.dataEl = this.el.find('form.request-details-form');
     this._blastOff();
   }
 
