@@ -1,9 +1,9 @@
 var DetailsSave;
 DetailsSave = (function() {
 
-  function DetailsSave(el, dataEl) {
+  function DetailsSave(el) {
     this.el = $(el);
-    this.dataEl = $(dataEl);
+    this.dataEl = $(dataEl).find('.request-details-form');
     this._blastOff();
   }
 
