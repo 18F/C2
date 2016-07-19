@@ -30,17 +30,26 @@ ActivityCardController = (function(){
 
   ActivityCardController.prototype._setupButton = function(){
     var self = this;
-    var $button = $(self.data.buttonSelector);
+    var $button = this.el.find(self.data.buttonSelector);
     $button.on('click', function(){
       if( !$button.attr('disabled') !== true ){
-        var params = {
-          url: self.data.url,
-          data: $(self.data.contentselector).serialize(),
-          method: "POST"
-        }
-        $.ajax(params);
+        self.submitComment();
       }
     });
+  }
+
+  ActivityCardController.prototype.submitComment = function(){
+    var self = this;
+    var params = {
+      url: self.data.url,
+      headers: {
+        Accept : "text/javascript; charset=utf-8",
+        "Content-Type": 'application/x-www-form-urlencoded; charset=UTF-8'
+      },
+      data: self.el.find(self.data.contentSelector).serialize(),
+      type: "POST"
+    }
+    $.ajax(params);
   }
 
   ActivityCardController.prototype._setupCommentListToggle = function(){
@@ -59,9 +68,9 @@ ActivityCardController = (function(){
     if (opts.focus){
       this.el.find("textarea:first").focus();
     }
-    this.el.find("#add_a_comment").attr('disabled', true);
-    this.el.find("textarea:first").on('input',function(){
-      $("#add_a_comment").attr('disabled', false);
+    this.el.find(self.data.buttonSelector).attr('disabled', true);
+    this.el.find(self.data.contentselector).on('input',function(){
+      this.el.find(self.data.buttonSelector).attr('disabled', false);
     });
   }
 
