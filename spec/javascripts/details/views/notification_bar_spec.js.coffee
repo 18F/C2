@@ -18,20 +18,17 @@ describe 'Notification', ->
     
     it "creates a notification without type", ->
       notification = new Notifications(getNotificationContent())  
-      notice = notification._prepare({type: "", content: "This is content", title: ""})
-      notification._postNotification(notice)
+      notice = notification.create({type: "", content: "This is content", title: ""})
       expect(notification.el.find('ul li .notification-content').text()).to.eql("This is content")
     
     it "creates a notification with type", ->
       notification = new Notifications(getNotificationContent())  
-      notice = notification._prepare({type: "success", content: "This is content", title: ""})
-      notification._postNotification(notice)
+      notice = notification.create({type: "success", content: "This is content", title: ""})
       expect(notification.el.find('ul li.notice-type-success').length).to.eql(1)
     
     it "creates a notification with title", ->
       notification = new Notifications(getNotificationContent())  
-      notice = notification._prepare({type: "success", content: "This is content", title: "This is a title"})
-      notification._postNotification(notice)
+      notice = notification.create({type: "success", content: "This is content", title: "This is a title"})
       expect(notification.el.find('ul li .notification-title').text()).to.eql("This is a title")
 
   describe '#_prepareOnLoadNotifications', ->
@@ -71,30 +68,35 @@ describe 'Notification', ->
     it "prepares a notification", ->
       notification = new Notifications(getNotificationContent())  
       expect(notification.el.find('ul li').length).to.eql(0)
-      notice = notification._prepare({type: undefined, content: "", title: ""})
+      notice = notification.create({type: "", content: "", title: ""})
+      notice = $(notification.data.currentNotice)
       expect($(notice).hasClass('notice-type-primary')).to.eql(true)
       expect($(notice).attr('data-timeout')).to.eql("5000")
     
     it "handles a notification with alert", ->
       notification = new Notifications(getNotificationContent())  
       expect(notification.el.find('ul li').length).to.eql(0)
-      notice = notification._prepare({type: "alert", content: "", title: ""})
+      notice = notification.create({type: "alert", content: "", title: ""})
+      notice = $(notification.data.currentNotice)
       expect($(notice).attr('data-timeout')).to.not.eql("5000")
       expect($(notice).attr('data-timeout')).to.eql("none")
     
     it "handles a notification without a content", ->
       notification = new Notifications(getNotificationContent())  
-      notice = notification._prepare({type: "alert", content: "", title: ""})
+      notice = notification.create({type: "alert", content: "", title: ""})
+      notice = $(notification.data.currentNotice)
       expect($(notice).find('.notification-content').text()).to.eql("")
     
     it "handles a notification without a type", ->
       notification = new Notifications(getNotificationContent())  
-      notice = notification._prepare({type: "alert", content: "", title: ""})
+      notice = notification.create({type: "alert", content: "", title: ""})
+      notice = $(notification.data.currentNotice)
       expect($(notice).find('.notification-title').text()).to.eql("")
     
     it "handles a notification with a timeout", ->
       notification = new Notifications(getNotificationContent())  
-      notice = notification._prepare({timeout: "10000", content: "", title: ""})
+      notice = notification.create({timeout: "10000", content: "", title: ""})
+      notice = $(notification.data.currentNotice)
       expect($(notice).attr('data-timeout')).to.eql("10000")
   
   describe '#clearAll', ->
