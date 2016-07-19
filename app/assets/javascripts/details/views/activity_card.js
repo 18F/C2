@@ -1,9 +1,14 @@
 var ActivityCardController;
 
 ActivityCardController = (function(){
-  
+
   function ActivityCardController(el, opts){
     $.extend(this, new ViewHelper());
+    this.data = {
+      url: "/proposals/7/comments",
+      buttonSelector: "#add_a_comment",
+      contentSelector: "#comment_text_content"
+    }
     this.defaultSetup(el,opts);
     return this;
   }
@@ -18,8 +23,24 @@ ActivityCardController = (function(){
 
   ActivityCardController.prototype._events = function(){
     var self = this;
+    this._setupButton();
     this._setupUpdateEvent();
     this._setupCommentListToggle();
+  }
+
+  ActivityCardController.prototype._setupButton = function(){
+    var self = this;
+    var $button = $(self.data.buttonSelector);
+    $button.on('click', function(){
+      if( !$button.attr('disabled') !== true ){
+        var params = {
+          url: self.data.url,
+          data: $(self.data.contentselector).serialize(),
+          method: "POST"
+        }
+        $.ajax(params);
+      }
+    });
   }
 
   ActivityCardController.prototype._setupCommentListToggle = function(){
