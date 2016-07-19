@@ -6,7 +6,7 @@
       %span.detail-value
         = client_data[key]
     .detail-edit.column
-      %label.detail-element
+      %label.detail-element{ for: "ncr_work_order_rwa_number"}
         = t(t_slug + key) 
       %span.detail-value
-        = f.input :rwa_number, required: true, wrapper_html: { data: { filter_key: "expense-type", filter_value: "BA80" } }, label: false
+        = f.input :rwa_number, required: true, wrapper_html: { data: { filter_key: "expense-type", filter_value: "BA80" } }, label: false, "data-reapproval" => reapproval

@@ -121,6 +121,10 @@ class ProposalDecorator < Draper::Decorator
     end
   end
 
+  def ncr?
+    client_data_type == "Ncr::WorkOrder"
+  end
+
   private
 
   def actionable_steps

@@ -1,0 +1,38 @@
+@media print {
+  .hide-for-print { display: none !important; }
+  * {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+  }
+  .top-notification-wrapper, .sandbox-banner, header, #breadcrumb-nav, div[id^="ethnio-screener"], input, .button, textarea, .detail-edit, .popup-modal, [class*="selectize"], .status-contract-action, .status-expand-action, .circle-wrapper {
+    display: none !important;
+  }
+  .status-feed-item {
+    margin-bottom: 10px;
+  }
+  .card {
+
+  }
+  #comments .comment {
+    display: block !important;
+  }
+  h1, .h1, h2, .h2, h3, .h3 {
+    margin-top: 0 !important;
+  }
+  .content-content .column{
+    padding-top: 3px !important;
+    padding-bottom: 6px !important;
+  }
+  .summary-status-wrapper, #summary-card, #steps-card, #card-for-activity, #request-details-card, #card-for-attachments, #card-for-observers {
+    padding-top: 10px !important;
+    padding-bottom: 20px !important;
+    border-bottom: 1px solid #333;
+  }
+  .row{
+    margin-left: 15px !important;
+    margin-right: 15px !important;
+  }
+  .comment-list, #comments, .comment, .content-content .row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}

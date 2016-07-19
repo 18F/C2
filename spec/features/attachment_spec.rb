@@ -52,7 +52,7 @@ describe "Add attachments" do
     expect(proposal.attachments.last.file_file_name).to eq "bg_completed_status.gif"
   end
 
-  it "saves attachments submitted via the webform with js", :js do
+  it "saves attachments submitted via the webform with js", :js, js_errors: false do
     work_order = create(:ncr_work_order, :with_beta_requester)
     proposal = work_order.proposal
     login_as(proposal.requester)

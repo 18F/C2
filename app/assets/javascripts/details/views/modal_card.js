@@ -11,7 +11,8 @@ ModalController = (function(){
         after_cancel: ".after-cancel-modal-content",
         save_confirm: ".save_confirm-modal-content",
         attachment_confirm: ".attachment-modal-content", 
-        observer_confirm: ".observer-modal-content"
+        observer_confirm: ".observer-modal-content", 
+        reapproval_confirm: ".reapproval_confirm-modal-content"
       }
     }
     this._setup(el, opts);
@@ -26,17 +27,21 @@ ModalController = (function(){
   ModalController.prototype._initTriggers = function(){
     var self = this;
     $('html').on('click','[data-modal-type]',function(e){
-      self.sourceEl = this;
-      var preventDefault = $(self.sourceEl).attr('data-modal-default') !== "true";
-      if(preventDefault){
-        e.preventDefault();
-      }
-      var modalType = $(self.sourceEl).attr('data-modal-type');
-      self.create(modalType);
+      self._modalClickEvents(e, this);
     });
     this.el.on("modal:close", function(){
       self._closeModal();
     });
+  }
+
+  ModalController.prototype._modalClickEvents = function(e, that){
+    this.sourceEl = that;
+    var preventDefault = $(this.sourceEl).attr('data-modal-default') !== "true";
+    if(preventDefault){
+      e.preventDefault();
+    }
+    var modalType = this._getModalType($(this.sourceEl).attr('data-modal-type'));
+    this.create(modalType);
   }
 
   ModalController.prototype._modalEvents = function(el, modalType){
@@ -106,6 +111,8 @@ ModalController = (function(){
   }
 
   ModalController.prototype.create = function(modalType){
+    // modalType = this._setCustomModalBehavior(modalType);
+
     this.clear();
     var modal = this._setupModal(modalType);
     $('#modal-wrapper').append(modal);
@@ -115,8 +122,56 @@ ModalController = (function(){
     this._focus();
   }
 
+  ModalController.prototype._formRequiresReapproval = function(){
+    var fields = $("[data-reapproval='true'][data-is-dirrty='true']");
+    return fields.length > 0;
+  }
+
+  ModalController.prototype._getReapprovalLabels = function(){
+    var fields = $("[data-reapproval='true'][data-is-dirrty='true']"),
+        field_names = [];
+    if(fields.length < 1){
+      return false;
+    }
+
+    for (var i = fields.length - 1; i >= 0; i--){
+      var $field = $(fields[i]);
+      if($field && $field.attr("name") && $field.attr("name").indexOf("[amount]") > -1){
+        var initAmount = parseFloat($field.attr("data-dirrty-initial-value"));
+        var newAmount = parseFloat($field.val());
+        if(newAmount < initAmount){
+          fields.splice(i, 1);
+          continue;
+        }
+      }
+      field_names.push($("label[for='"+$field.attr('id')+"']").text());
+    }
+    return field_names.join(', ')
+  }
+
+  ModalController.prototype._updateModalContent = function(modalType, content){
+    var selector = this.data.modal[modalType];
+    $(selector + " .custom-modal-content").html(content);
+  }
+
   ModalController.prototype._focus = function(){
     $('#modal-wrapper .popup-content').focus();
+  }
+
+  ModalController.prototype._getModalType = function(modal){
+    if(modal !== 'save_confirm'){
+      return modal
+    }
+    else if(modal === 'save_confirm'){
+      //returns "save_confirm" or "reapproval_confirm"
+      if(this._formRequiresReapproval()){
+        this._updateModalContent("reapproval_confirm", this._getReapprovalLabels())
+        return "reapproval_confirm";  
+      }
+      else{
+        return "save_confirm";
+      } 
+    }
   }
 
   return ModalController

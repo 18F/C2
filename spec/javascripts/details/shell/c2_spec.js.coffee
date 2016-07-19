@@ -15,6 +15,8 @@
 #= require details/views/summary_bar
 #= require details/views/modal_card
 #= require details/views/notifications
+#= require details/views/view_helper
+#= require details/views/approvals_card
 #= require details/data/update_view
 #= require details/data/details_save
 #= require details/shell/c2

@@ -8,7 +8,7 @@
         = form_for [@proposal, Comment.new], remote: true do |f|
           .row
             .medium-12.column
-              %h3
+              %h3.hide-for-print
                 = t(".comment_form.headline")
               = f.text_area :comment_text, rows: 5, placeholder: "#{t('.comment_form.placeholder')}"
           .row
