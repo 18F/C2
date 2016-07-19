@@ -6,7 +6,7 @@ C2 = (function() {
     this.config = {
       actionBar:      '#action-bar-wrapper',
       attachmentCard: '#card-for-attachments',
-      detailsForm:    '#request-details-card',
+      detailsForm:    '#mode-parent',
       detailsSave:    '#request-details-card',
       detailsSaveAll: '#request-details-card, #summary-card',
       activityCard:   '#card-for-activity',
@@ -16,7 +16,6 @@ C2 = (function() {
       observerCard:   '#card-for-observers',
       modalCard:      '#modal-wrapper',
       updateView:     '#mode-parent',
-      summaryBar:     '#summary-card',
       approvalCard:   '#card-for-approvals'
     }
     this.lastNotice = {};
@@ -43,7 +42,6 @@ C2 = (function() {
     this.modals = new ModalController(config.modalCard);
     this.actionBar = new ActionBar(config.actionBar);
     this.notification = new Notifications(config.notifications);
-    this.summaryBar = new SummaryBar(config.summaryBar);
     this._setupEvents();
   }
 
@@ -129,7 +127,7 @@ C2 = (function() {
 
   C2.prototype._setupViewUpdate = function(){
     var self = this;
-    $.each([ self.summaryBar.el.selector, self.detailsRequestCard.el.selector ], function(i, item){
+    $.each([ self.detailsRequestCard.el.selector ], function(i, item){
       $.each([ "update:textfield", "update:checkbox" ], function(j, jevent){
         self._setupViewUpdateEvents(item, jevent);
       });
@@ -185,7 +183,6 @@ C2 = (function() {
   C2.prototype._setupDetailsData = function(){
     var self = this;
     this.detailsSave.el.on('details-form:success', function(event, data){
-      self.summaryBar.updateViewContent(data);
       self.detailsRequestCard.updateViewModeContent(data);
       self.modals.el.trigger("modal:close");
     });
