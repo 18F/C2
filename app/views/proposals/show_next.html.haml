@@ -7,7 +7,7 @@
 
 #mode-parent.view-mode
 
-  = simple_form_for @client_data_instance, html: { multipart: true }, remote: true do |f|
+  = simple_form_for @client_data_instance, html: { multipart: true, class: "request-details-form" }, remote: true do |f|
     - @form = f
     .row
       .medium-12.column.wrap-hard
