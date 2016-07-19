@@ -1,8 +1,8 @@
 - content_for :top_notification do
-  = render partial: "proposals/details/top_notification", locals: { proposal: @proposal } 
+  = render partial: "proposals/details/top_notification", locals: { proposal: @proposal }
 
 = stylesheet_link_tag "redesign/app"
-
+= stylesheet_link_tag "redesign/_print", media: "print"
 = render partial: 'layouts/new_javascript'
 
 #mode-parent.view-mode
@@ -12,18 +12,18 @@
       = render partial: "proposals/details/summary", locals: { proposal: @proposal }
 
   .row.footer-buffer
-    .medium-6.column
-      #card-for-approvals.card-for-approvals
-        = render partial: "proposals/details/status", locals: { proposal: @proposal }
-      #card-for-activity.card-for-activity
-        = render partial: "proposals/details/activity", locals: { proposal: @proposal, events: @events }
-
-    .medium-6.column
+    .medium-6.medium-push-6.column
       = render partial: "proposals/details/request_details", locals: { proposal: @proposal }
       #card-for-attachments
         = render partial: "proposals/details/attachment", locals: { proposal: @proposal }
       #card-for-observers.card-for-observers
         = render partial: "proposals/details/observer", locals: { proposal: @proposal }
+
+    .medium-6.medium-pull-6.column
+      #card-for-approvals.card-for-approvals
+        = render partial: "proposals/details/status", locals: { proposal: @proposal }
+      #card-for-activity.card-for-activity
+        = render partial: "proposals/details/activity", locals: { proposal: @proposal, events: @events }
 
   = render partial: "proposals/details/action", locals: { proposal: @proposal }
   #proposal_id{ data: { proposal_id: @proposal.id } }
