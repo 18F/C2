@@ -130,7 +130,9 @@ Important data to note from the above:
 
 ### If the app is down
 
-_This section still needs filling. If you have experience, please contribute!_
+_This section still needs filling. If you have experience, please contribute!
+We need something here about bringing the site back up. Possibly a `cf restage`,
+maybe more?_
 
 ### Diagnosing exceptions
 
@@ -144,14 +146,63 @@ _This section still needs filling. If you have experience, please contribute!_
 
 Put the site into **Maintenance Mode**.
 
-_This section still needs filling. If you have experience, please contribute!_
+_Something also about notifying users that
+there's a service disruption? We don't currently have a way of doing this
+beyond Maintenance Mode._
 
 ## Once the fix is in
 
-_This section still needs filling. If you have experience, please contribute!_
+### Confirm that the fix is deployed and that things are working as expected
+
+... and that you've taken the site out of Maintenance Mode.
 
 ### Remember to close the NR incident
 
 Go to the New Relic incident page and manually close it.
 If the incident isn't closed once it's fixed then new ones won't be created
 by later problems, and new alerts won't go out. This has bitten us before.
+
+### Notify users that service has been restored
+
+... assuming that users were notified of the disruption in the first place.
+
+_In the case of a downtime lasting a noticeably long time (say, more than half
+an hour) perhaps some extra-proactive communications should happen?_
+
+### Write a post-mortem
+
+A single team member should be responsible for the post-mortem. Usually it's
+the Incident Commander (see above).
+
+Not only are good post-mortem write-ups useful for educating stakeholders and
+team members about the causes and effects of a problem, but the post-mortem
+process often turns up root cause and process issues for the team to address.
+
+Read some more about [post-mortems](https://victorops.com/blog/post-mortem-reporting/),
+making them [blameless](https://codeascraft.com/2012/05/22/blameless-postmortems/)
+and some basic root cause analysis in the form of [Five Whys](https://www.mindtools.com/pages/article/newTMC_5W.htm).
+
+### Get sign-off on the post-mortem from the team
+
+This can be done either individually or in a meeting. Team members may also
+add their own additional information and analyses to the document.
+
+### Act on the post-mortem recommendations
+
+Failure incidents almost always have an addressable root cause, and often more
+than one. The post-mortem document should end with recommendations for addressing
+them. Any recommendations that aren't immediately implementable should be added
+to the project plan.
+
+### Share the post-mortem
+
+... with anyone for whom it might be useful or important. Stakeholders? Wider
+18F engineering? This is a teachable moment! Also, it's good to reassure
+customers/stakeholders that we're actively working to stop this kind of
+disruption.
+
+### Amend this document
+
+I bet there are generally-applicable (and possibly C2-specific) lessons you've
+learned during this incident that are worthwhile remembering for the future.
+Open a pull request and make an edit!
