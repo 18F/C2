@@ -6,15 +6,11 @@ C2 = (function() {
     this.config = {
       actionBar:      '#action-bar-wrapper',
       attachmentCard: '#card-for-attachments',
-      detailsForm:    '#mode-parent',
-      detailsSave:    '#mode-parent',
+      formContainer:  '#mode-parent',
       activityCard:   '#card-for-activity',
-      editMode:       '#mode-parent',
-      formState:      '#request-details-card form, #proposal-title-wrapper form',
       notifications:  '#action-bar-status',
       observerCard:   '#card-for-observers',
       modalCard:      '#modal-wrapper',
-      updateView:     '#mode-parent',
       approvalCard:   '#card-for-approvals'
     }
     this.lastNotice = {};
@@ -25,15 +21,15 @@ C2 = (function() {
   C2.prototype._blastOff = function(){
     var config = this.config;
     // Data
-    this.detailsSave = new DetailsSave(config.detailsSave);
-    this.updateView = new UpdateView(config.updateView);
+    this.detailsSave = new DetailsSave(config.formContainer);
+    this.updateView = new UpdateView(config.formContainer);
 
     // State
-    this.editMode = new EditStateController(config.editMode);
-    this.formState = new FormChangeState(config.formState);
+    this.editMode = new EditStateController(config.formContainer);
+    this.formState = new FormChangeState(config.formContainer);
 
     // Views
-    this.detailsRequestCard = new DetailsRequestCard(config.detailsForm);
+    this.detailsRequestCard = new DetailsRequestCard(config.formContainer);
     this.attachmentCardController = new AttachmentCardController(config.attachmentCard);
     this.observerCardController = new ObserverCardController(config.observerCard);
     this.activityCardController = new ActivityCardController(config.activityCard);
