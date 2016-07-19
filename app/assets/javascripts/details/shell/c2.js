@@ -61,7 +61,6 @@ C2 = (function() {
     this._setupObserverEvent();
     this._setupSaveModal();
     this._setupFormSubmitModal();
-    this._setupViewUpdate();
   }
 
   /* Form */
@@ -110,22 +109,6 @@ C2 = (function() {
           self.detailsMode('view');
         }
       }
-    });
-  }
-
-  C2.prototype._setupViewUpdateEvents = function(item, jevent){
-    var self = this;
-    $(item).on(jevent, function(event, data){
-      self.updateView.el.trigger(jevent, data);
-    });
-  }
-
-  C2.prototype._setupViewUpdate = function(){
-    var self = this;
-    $.each([ self.detailsRequestCard.el.selector ], function(i, item){
-      $.each([ "field_update:textfield", "field_update:checkbox" ], function(j, jevent){
-        self._setupViewUpdateEvents(item, jevent);
-      });
     });
   }
 

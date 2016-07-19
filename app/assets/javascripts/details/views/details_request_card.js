@@ -73,7 +73,7 @@ DetailsRequestCard = (function(){
   }
 
   DetailsRequestCard.prototype.updateField = function(field, value, type){
-    this.el.trigger('update:' + type, { field: field, value: value });
+    this.el.trigger('field_update:' + type, { field: field, value: value });
   }
 
   DetailsRequestCard.prototype.defineValue = function(key, value){
