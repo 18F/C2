@@ -12,7 +12,6 @@
 #= require details/views/details_request_card
 #= require details/views/activity_card
 #= require details/views/observer_card
-#= require details/views/summary_bar
 #= require details/views/modal_card
 #= require details/views/notifications
 #= require details/views/view_helper
