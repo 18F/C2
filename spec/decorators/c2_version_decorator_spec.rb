@@ -27,7 +27,7 @@ describe C2VersionDecorator do
     it "doesn't break for unknown classes" do
       version = double(C2Version, event: 'create', item: double)
       decorated = C2VersionDecorator.new(version)
-      expect(decorated.to_html).to eq(nil)
+      expect(decorated.to_html).to eq("")
     end
   end
 end
