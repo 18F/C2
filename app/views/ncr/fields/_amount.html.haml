@@ -34,4 +34,4 @@
         = f.input :amount,
           as: :currency,
           label_html: { class: "sr-only" },
-          input_html: { data: popover_data_attrs("ncr_amount"), value: sprintf("%.2f", @client_data_instance.amount) }
+          input_html: { data: popover_data_attrs("ncr_amount"), value: sprintf("%.2f", @client_data_instance.amount), "data-reapproval" => reapproval }

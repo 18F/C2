@@ -88,6 +88,20 @@ feature "post-approval modification" do
     expect(page).to_not have_content("You are about to modify a fully approved request")
   end
 
+  scenario "shows modal warning on new details page", :js do
+    work_order = create(:ncr_work_order, :with_beta_requester)
+    work_order.setup_approvals_and_observers
+    proposal = work_order.proposal
+    fully_complete(proposal)
+    
+    login_as(proposal.requester)
+    visit proposal_path(proposal)
+    click_on "Modify"
+    fill_in "Amount", with: work_order.amount + 1
+    find(".save-button button").trigger("click")
+    expect(page).to have_content("Wait! Updating Amount will require re-approval.")
+  end
+
   def approval_statuses(work_order)
     linear_approval_statuses(work_order.proposal)
   end

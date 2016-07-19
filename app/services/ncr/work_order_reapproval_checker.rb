@@ -7,14 +7,26 @@ module Ncr
     end
 
     def requires_budget_reapproval?
-      work_order.completed? &&
-        work_order.requires_approval? &&
-        !user_is_budget_approver? &&
-        proposal_has_budget_approvals? &&
+      work_order_status &&
         (amount_increased? || protected_fields_changed?)
     end
 
+    def could_require_budget_reapproval?
+      work_order_status
+    end
+
+    def protected_fields_list
+      protected_fields + [:amount]
+    end
+
     private
+
+    def work_order_status
+      work_order.completed? &&
+        work_order.requires_approval? &&
+        !user_is_budget_approver? &&
+        proposal_has_budget_approvals?
+    end
 
     def user_is_budget_approver?
       work_order.budget_approvers.include?(current_user) || shares_budget_approver_delegator?
