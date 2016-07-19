@@ -94,7 +94,7 @@ C2 = (function() {
     if(data['quantity'] !== undefined && data['cost_per_unit'] !== undefined){
       total = parseFloat(data['quantity'], 10) * parseFloat(data['cost_per_unit'], 10);
       params = { field: ".total_price-wrapper .detail-value", value: total.toFixed(2) };
-      self.updateView.el.trigger("update:textfield", params);
+      self.updateView.el.trigger("field_update:textfield", params);
     }
   }
 
@@ -123,7 +123,7 @@ C2 = (function() {
   C2.prototype._setupViewUpdate = function(){
     var self = this;
     $.each([ self.detailsRequestCard.el.selector ], function(i, item){
-      $.each([ "update:textfield", "update:checkbox" ], function(j, jevent){
+      $.each([ "field_update:textfield", "field_update:checkbox" ], function(j, jevent){
         self._setupViewUpdateEvents(item, jevent);
       });
     });

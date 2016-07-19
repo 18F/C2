@@ -13,10 +13,10 @@ UpdateView = (function() {
   UpdateView.prototype._events = function(){
     var self = this;
     var el = this.el;
-    el.on('update:textfield', function(event, data){
+    el.on('field_update:textfield', function(event, data){
       self.updateTextFields(data);
     });
-    el.on('update:checkbox', function(event, data){
+    el.on('field_update:checkbox', function(event, data){
       self.updateCheckbox(data);
     });
   }
