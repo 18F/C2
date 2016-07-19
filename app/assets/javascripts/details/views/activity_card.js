@@ -70,7 +70,6 @@ ActivityCardController = (function(){
     this.el.find(self.data.contentselector).on('input',function(){
       this.el.find(self.data.buttonSelector).attr('disabled', false);
     });
-    this.initButton();
   }
 
 
