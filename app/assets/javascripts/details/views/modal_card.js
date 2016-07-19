@@ -1,16 +1,16 @@
 var ModalController;
 
 ModalController = (function(){
-
+  
   function ModalController(el, opts){
     this.el = $(el);
-    this.data = {
+    this.data = { 
       id: 1,
       modal: {
         cancel: ".cancel-modal-content",
         after_cancel: ".after-cancel-modal-content",
         save_confirm: ".save_confirm-modal-content",
-        attachment_confirm: ".attachment-modal-content",
+        attachment_confirm: ".attachment-modal-content", 
         observer_confirm: ".observer-modal-content"
       }
     }
