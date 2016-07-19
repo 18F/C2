@@ -16,10 +16,6 @@ dependencies:
 test:
   override:
     - bundle exec rspec -r rspec_junit_formatter --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/junit.xml --require rails_helper:
-<<<<<<< HEAD
-
-=======
->>>>>>> 788019553e2bd797360131a6f19badb2aa2c4702
         parallel: true
         files:
           - spec/**/*_spec.rb
