@@ -23,16 +23,17 @@ ActivityCardController = (function(){
 
   ActivityCardController.prototype._events = function(){
     var self = this;
-    this._setupButton();
+    this.initButton();
     this._setupUpdateEvent();
     this._setupCommentListToggle();
   }
 
-  ActivityCardController.prototype._setupButton = function(){
+  ActivityCardController.prototype.initButton = function(){
     var self = this;
-    var $button = this.el.find(self.data.buttonSelector);
-    $button.on('click', function(){
-      if( !$button.attr('disabled') !== true ){
+    this.el.on('click', self.data.buttonSelector, function(){
+      console.log('was clicked');
+      if( self.el.find(self.data.buttonSelector).attr('disabled') !== "disabled" ){
+        console.log('was not disabled');
         self.submitComment();
       }
     });
@@ -62,16 +63,16 @@ ActivityCardController = (function(){
     });
   }
 
-
   ActivityCardController.prototype.setCommentForm = function(opts){
     opts = opts || {focus: false};
     if (opts.focus){
-      this.el.find("textarea:first").focus();
+      this.el.find(self.data.contentselector).focus();
     }
     this.el.find(self.data.buttonSelector).attr('disabled', true);
     this.el.find(self.data.contentselector).on('input',function(){
       this.el.find(self.data.buttonSelector).attr('disabled', false);
     });
+    this.initButton();
   }
 
 
