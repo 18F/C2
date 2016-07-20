@@ -91,7 +91,7 @@ feature "commenting" do
 
   def submit_comment(text = "foo", _submit = "Send a Comment")
     fill_in "comment[comment_text]", with: text
-    click_on "Send a Comment"
+    click_on "Send"
   end
 
   def js_submit_comment(text = "foo", submit = "#add_a_comment")
