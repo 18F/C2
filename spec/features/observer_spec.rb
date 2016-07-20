@@ -44,7 +44,7 @@ feature "Observers" do
     click_on "Add an Observer"
     wait_for_ajax
 
-    expect(page).to have_content("Observer added")
+    expect(page).to have_content("is now an observer.")
   end
 
   scenario "allows observers to be removed with javascript in the new detail view", js: true do

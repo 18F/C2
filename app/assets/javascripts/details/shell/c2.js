@@ -260,7 +260,6 @@ C2 = (function() {
 
   C2.prototype.createObserverNotification = function(data){
     var params = {
-      title: "Observer " + data.actionType+". ",
       type: data.noticeType,
       content: data.response
     };
