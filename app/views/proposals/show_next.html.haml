@@ -22,7 +22,7 @@
     .medium-6.medium-pull-6.column
       #card-for-approvals.card-for-approvals
         = render partial: "proposals/details/status", locals: { proposal: @proposal }
-      #card-for-activity.card-for-activity
+      #card-for-activity.card-for-activity{ data: { proposal_id: @proposal.id } }
         = render partial: "proposals/details/activity", locals: { proposal: @proposal, events: @events }
 
   = render partial: "proposals/details/action", locals: { proposal: @proposal }

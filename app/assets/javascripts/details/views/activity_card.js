@@ -4,8 +4,9 @@ ActivityCardController = (function(){
 
   function ActivityCardController(el, opts){
     $.extend(this, new ViewHelper());
+    var proposal_id = $(this.el).data('proposal-id');
     this.data = {
-      url: "/proposals/7/comments",
+      url: "/proposals/" + proposal_id + "/comments",
       buttonSelector: "#add_a_comment",
       contentSelector: "#comment_text_content"
     }
