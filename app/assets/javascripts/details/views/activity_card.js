@@ -62,6 +62,7 @@ ActivityCardController = (function(){
   }
 
   ActivityCardController.prototype.setCommentForm = function(opts){
+    var self = this;
     opts = opts || {focus: false};
     if (opts.focus){
       this.el.find(self.data.contentselector).focus();
