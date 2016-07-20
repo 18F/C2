@@ -31,14 +31,14 @@ ActivityCardController = (function(){
   ActivityCardController.prototype.initButton = function(){
     var self = this;
     this.el.on('click', self.data.buttonSelector, function(){
-      self.l = $(self.data.buttonSelector).ladda();
+      self.laddaButton = $(self.data.buttonSelector).ladda();
       if( self.el.find(self.data.buttonSelector).attr('disabled') !== "disabled" ){
-        self.l.ladda( 'start' );
+        self.laddaButton.ladda( 'start' );
         self.submitComment();
       } else {
-        self.l.ladda( 'start' );
+        self.laddaButton.ladda( 'start' );
         window.setTimeout(function(){}, 300);
-        self.l.ladda( 'stop' );
+        self.laddaButton.ladda( 'stop' );
       }
     });
   }
@@ -69,7 +69,7 @@ ActivityCardController = (function(){
 
   ActivityCardController.prototype.setCommentForm = function(opts){
     var self = this;
-    self.l.ladda( 'stop' );
+    self.laddaButton.ladda( 'stop' );
     opts = opts || {focus: false};
     if (opts.focus){
       this.el.find(self.data.contentselector).focus();
