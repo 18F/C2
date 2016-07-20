@@ -70,7 +70,6 @@ ActivityCardController = (function(){
 
   ActivityCardController.prototype.setCommentForm = function(opts){
     var self = this;
-    self.laddaButton.ladda( 'stop' );
     opts = opts || {focus: false};
     if (opts.focus){
       this.el.find(self.data.contentselector).focus();
@@ -79,6 +78,7 @@ ActivityCardController = (function(){
     this.el.find(self.data.contentselector).on('input',function(){
       this.el.find(self.data.buttonSelector).attr('disabled', false);
     });
+    self.laddaButton.ladda( 'stop' );
   }
 
 
