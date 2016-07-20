@@ -11,16 +11,14 @@ ActivityCardController = (function(){
   ActivityCardController.prototype._setConstants = function(el,opts){
     var self = this;
     this.el = typeof el === "string" ? $(el) : el;
-    this.laddaButton = $(self.data.buttonSelector).ladda();
     this.proposalId = $("#proposal_id").attr("data-proposal-id");
     this.updateUrl = "/activity-feed/" + this.proposalId + "/update_feed";
     this.updateEvent = "activity-card:update";
     this.updateCallback = this.setCommentForm;
-    this.data = {
-      url: "/proposals/" + self.proposalId + "/comments",
-      buttonSelector: "#add_a_comment",
-      contentSelector: "#comment_text_content"
-    }
+    this.laddaButton = $(self.data.buttonSelector).ladda();
+    this.commentUrl = "/proposals/" + self.proposalId + "/comments";
+    this.buttonSelector = "#add_a_comment";
+    this.contentSelector = "#comment_text_content";
   }
 
   ActivityCardController.prototype._events = function(){
@@ -32,9 +30,9 @@ ActivityCardController = (function(){
 
   ActivityCardController.prototype.initButton = function(){
     var self = this;
-    this.el.on('click', self.data.buttonSelector, function(){
-      self.laddaButton = $(self.data.buttonSelector).ladda();
-      if( self.el.find(self.data.buttonSelector).attr('disabled') !== "disabled" ){
+    this.el.on('click', self.buttonSelector, function(){
+      self.laddaButton = $(self.buttonSelector).ladda();
+      if( self.el.find(self.buttonSelector).attr('disabled') !== "disabled" ){
         self.laddaButton.ladda( 'start' );
         self.submitComment();
       } else {
@@ -48,12 +46,12 @@ ActivityCardController = (function(){
   ActivityCardController.prototype.submitComment = function(){
     var self = this;
     var params = {
-      url: self.data.url,
+      url: self.commentUrl,
       headers: {
         Accept : "text/javascript; charset=utf-8",
         "Content-Type": 'application/x-www-form-urlencoded; charset=UTF-8'
       },
-      data: self.el.find(self.data.contentSelector).serialize(),
+      data: self.el.find(self.contentSelector).serialize(),
       type: "POST"
     }
     $.ajax(params);
@@ -73,11 +71,11 @@ ActivityCardController = (function(){
     var self = this;
     opts = opts || {focus: false};
     if (opts.focus){
-      this.el.find(self.data.contentselector).focus();
+      this.el.find(self.contentselector).focus();
     }
-    this.el.find(self.data.buttonSelector).attr('disabled', true);
-    this.el.find(self.data.contentselector).on('input',function(){
-      this.el.find(self.data.buttonSelector).attr('disabled', false);
+    this.el.find(self.buttonSelector).attr('disabled', true);
+    this.el.find(self.contentselector).on('input',function(){
+      this.el.find(self.buttonSelector).attr('disabled', false);
     });
     self.laddaButton.ladda( 'stop' );
   }
