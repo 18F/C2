@@ -4,22 +4,22 @@ ActivityCardController = (function(){
 
   function ActivityCardController(el, opts){
     $.extend(this, new ViewHelper());
-    var proposal_id = $(this.el).data('proposal-id');
-    this.data = {
-      url: "/proposals/" + proposal_id + "/comments",
-      buttonSelector: "#add_a_comment",
-      contentSelector: "#comment_text_content"
-    }
     this.defaultSetup(el,opts);
     return this;
   }
 
   ActivityCardController.prototype._setConstants = function(el,opts){
+    var self = this;
     this.el = typeof el === "string" ? $(el) : el;
     this.proposalId = $("#proposal_id").attr("data-proposal-id");
     this.updateUrl = "/activity-feed/" + this.proposalId + "/update_feed";
     this.updateEvent = "activity-card:update";
     this.updateCallback = this.setCommentForm;
+    this.data = {
+      url: "/proposals/" + self.proposalId + "/comments",
+      buttonSelector: "#add_a_comment",
+      contentSelector: "#comment_text_content"
+    }
   }
 
   ActivityCardController.prototype._events = function(){
