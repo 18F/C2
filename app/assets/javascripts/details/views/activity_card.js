@@ -11,6 +11,7 @@ ActivityCardController = (function(){
   ActivityCardController.prototype._setConstants = function(el,opts){
     var self = this;
     this.el = typeof el === "string" ? $(el) : el;
+    this.laddaButton = $(self.data.buttonSelector).ladda();
     this.proposalId = $("#proposal_id").attr("data-proposal-id");
     this.updateUrl = "/activity-feed/" + this.proposalId + "/update_feed";
     this.updateEvent = "activity-card:update";
