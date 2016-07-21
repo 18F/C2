@@ -32,7 +32,7 @@ ViewHelper = (function(){
     opts = opts || {focus: false};
     this.el.html(html);
     if(this.updateCallback){
-      this.updateCallback();
+      this.updateCallback(html, opts);
     }
   }
 
@@ -40,6 +40,35 @@ ViewHelper = (function(){
     $.extend(this,opts)
     this._setConstants(el,opts);
     this._events();
+  }
+
+  ViewHelper.prototype.initButton = function(){
+    var self = this;
+    this.el.on('click', self.buttonSelector, function(){
+      self.laddaButton = $(self.buttonSelector).ladda();
+      if( self.el.find(self.buttonSelector).attr('disabled') !== "disabled" ){
+        self.laddaButton.ladda( 'start' );
+        self.submitForm();
+      } else {
+        self.laddaButton.ladda( 'start' );
+        window.setTimeout(function(){}, 300);
+        self.laddaButton.ladda( 'stop' );
+      }
+    });
+  }
+
+  ViewHelper.prototype.submitForm = function(){
+    var self = this;
+    var params = {
+      url: self.submitUrl,
+      headers: {
+        Accept : "text/javascript; charset=utf-8",
+        "Content-Type": 'application/x-www-form-urlencoded; charset=UTF-8'
+      },
+      data: self.el.find(self.contentSelector).serialize(),
+      type: "post"
+    }
+    $.ajax(params);
   } 
 
   return ViewHelper;
