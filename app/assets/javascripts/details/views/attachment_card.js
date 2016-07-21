@@ -21,9 +21,13 @@ AttachmentCardController = (function(){
   }
 
   AttachmentCardController.prototype._getDefaultConfig = function(){
-    return $.extend({ 
+    var proposalId = $("#proposal_id").attr("data-proposal-id");
+    return $.extend({
       form_id: "#new_attachment",
-      gif_src: "/assets/spin.gif"
+      gif_src: "/assets/spin.gif",
+      attachmentUrl: "/proposals/" + proposalId + "/attachments",
+      buttonSelector: "[for'attachment_file']",
+      contentSelector: "input[type='file']"
     }, this._getDefaultClasses());
   }
 
@@ -94,7 +98,17 @@ AttachmentCardController = (function(){
   }
 
   AttachmentCardController.prototype.submitForm = function(){
-    this.el.find("form" + this.form_id).submit();
+    var self = this;
+    var params = {
+      url: self.attachmentUrl,
+      headers: {
+        Accept : "text/javascript; charset=utf-8",
+        "Content-Type": 'application/x-www-form-urlencoded; charset=UTF-8'
+      },
+      data: self.el.find(self.contentSelector).serialize(),
+      type: "POST"
+    }
+    $.ajax(params);
   }
 
   return AttachmentCardController;
