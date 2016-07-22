@@ -62,7 +62,11 @@ p.popup-content-desc{
       margin-right: 20px;
     }
     input:disabled{
-      border-color: #E8E8E8;
+      // border-color: #E8E8E8;
+      background-color: map-get($c2success-swatch, primary);
+      opacity: 0.6;
+      height: 50px;
+      padding-top: 13px;
     }
     .cancel-close-button{
       position: absolute;
