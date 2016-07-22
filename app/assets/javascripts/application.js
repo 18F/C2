@@ -12,10 +12,11 @@
 //
 //= require jquery
 //= require jquery.cookie
+//= require underscore
+//= require jack_up
 //= require jstz
 //= require browser_timezone_rails/set_time_zone
 //= require jquery_ujs
-//= require jquery-fileupload
 //= require bootstrap-sprockets
 //= require selectize
 //= require peek
