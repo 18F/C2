@@ -3,35 +3,35 @@
     .row
       %label.detail-element
         = t(t_slug + "total")
-.column{ id: key + '-wrapper'}
-  .row
-  .detail-wrapper.row{ class: "not_to_exceed" + "-wrapper", id: "not_to_exceed" + '-' + client_id }
-    .detail-display.column
-      .row
-        .medium-12.column
-          %span.detail-value{class: "not_to_exceed" }
-            - if client_data[:not_to_exceed]
-              Not to exceed
-            - else
-              Exactly
-    .detail-edit.column
-      %label.detail-element
-      %span.detail-value{class: "not_to_exceed"}
-        = f.input :not_to_exceed,
-          collection: [["Exact", false], ["Not to exceed", true]],
-          label: false,
-          include_blank: false
+      .column{ id: key + '-wrapper'}
+        .row
+        .detail-wrapper.row{ class: "not_to_exceed" + "-wrapper", id: "not_to_exceed" + '-' + client_id }
+          .detail-display.column
+            .row
+              .medium-12.column
+                %span.detail-value{class: "not_to_exceed" }
+                  - if client_data[:not_to_exceed]
+                    Not to exceed
+                  - else
+                    Exactly
+          .detail-edit.column
+            %label.detail-element
+            %span.detail-value{class: "not_to_exceed"}
+              = f.input :not_to_exceed,
+                collection: [["Exact", false], ["Not to exceed", true]],
+                label: false,
+                include_blank: false
 
-  .detail-wrapper.row{ class: "amount" + "-wrapper", id: "amount" + '-' + client_id }
-    .detail-display.column
-      .row
-        .medium-12.column
-          %span.detail-value{class: "amount" }
-            = number_with_precision(client_data["amount"], precision: 2)
-    .detail-edit.column
-      %label.detail-element
-      %span.detail-value
-        = f.input :amount,
-          as: :currency,
-          label_html: { class: "sr-only" },
-          input_html: { data: popover_data_attrs("ncr_amount"), value: sprintf("%.2f", @client_data_instance.amount), "data-reapproval" => reapproval }
+        .detail-wrapper.row{ class: "amount" + "-wrapper", id: "amount" + '-' + client_id }
+          .detail-display.column
+            .row
+              .medium-12.column
+                %span.detail-value{class: "amount" }
+                  = number_with_precision(client_data["amount"], precision: 2)
+          .detail-edit.column
+            %label.detail-element
+            %span.detail-value
+              = f.input :amount,
+                as: :currency,
+                label_html: { class: "sr-only" },
+                input_html: { data: popover_data_attrs("ncr_amount"), value: sprintf("%.2f", @client_data_instance.amount), "data-reapproval" => reapproval }
