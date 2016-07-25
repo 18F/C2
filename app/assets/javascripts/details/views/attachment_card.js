@@ -66,9 +66,9 @@ AttachmentCardController = (function(){
 
   AttachmentCardController.prototype.getFileName = function(){
     var self = this;
-    var file = self.el.find("input[type='file']").prop("files");
-    if (file.length > 0 && file[0] !== undefined){
-      return file[0].name;
+    var file = self.el.find("input[type='file']");
+    if (file.length > 0 && file.prop("files")[0] !== undefined){
+      return this.el.find("input[type='file']").prop("files")[0].name;
     } else {
       return false;
     }
