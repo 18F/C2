@@ -256,8 +256,6 @@ GEM
       has_scope (~> 0.6.0.rc)
       railties (>= 3.2, < 5)
       responders
-    jack_up (0.2.0)
-      rails (~> 4.0)
     jquery-rails (4.1.0)
       rails-dom-testing (~> 1.0)
       railties (>= 4.2.0)
@@ -581,7 +579,6 @@ DEPENDENCIES
   has_secure_token
   hashdiff
   html_pipeline_rails
-  jack_up
   jquery-rails
   kaminari
   kaminari-bootstrap (~> 3.0.1)
