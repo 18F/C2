@@ -18,7 +18,7 @@ class AttachmentsController < ApplicationController
 
   def get_attachment(params)
     if @current_user.should_see_beta?
-      proposal.attachments.build(file: params[:attachment], user_id: @current_user.id)
+      proposal.attachments.build(file: params[:attachment], user: @current_user)
     else
       proposal.attachments.build(attachments_params)
     end
