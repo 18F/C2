@@ -40,6 +40,9 @@
 
 .detail-value{
   font-size: 16px;
+  &:empty{
+    content: "--";
+  }
   &.amount{
     font-weight: 800;
     &:before{
@@ -69,7 +72,7 @@
     .detail-wrapper.detail-wrapper{
       padding-top: 10px;
       margin-bottom: 0px;
-      background: #DBEAF5;
+      background: map-get($c2blue-swatch, quinary);
     }
   }
   .half-col-wrap{
@@ -94,12 +97,13 @@
   }
 }
 #amount-wrapper{
-  padding: 20px 15px 0 15px;
-  background: #EDF5FB;
+  padding: 10px 15px 0 15px;
+  background: map-get($c2blue-swatch, quinary);
   border-radius: 4px;
   max-width: 96%;
   float: left;
   margin-left: 10px;
+  margin-top: 10px;
   .detail-element{
     color: #272727;
   }
@@ -122,17 +126,15 @@
   .detail-value{
     display: block;
     &.amount{
-      font-size: 16px;
+      font-size: 1.6em;
     }
     &.not_to_exceed{
       padding-top: 0px;
       padding-bottom: 3px;
-      font-size: 12px;
     }
   }
   .detail-wrapper{
-    padding-top: 9px;
-    padding-bottom: 11px;
+    padding-bottom: 2px;
   }
 }
 
