@@ -36,7 +36,6 @@ gem "has_secure_token"
 gem "haml"
 gem "hashdiff"
 gem "html_pipeline_rails"
-gem 'jack_up'
 gem "jquery-rails"
 gem "kaminari"
 gem "kaminari-bootstrap", "~> 3.0.1"
