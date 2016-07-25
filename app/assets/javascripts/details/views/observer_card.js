@@ -3,17 +3,28 @@ var ObserverCardController;
 ObserverCardController = (function(){
   
   function ObserverCardController(el, opts){
-    this._setup(el,opts);
+    $.extend(this, new ViewHelper());
+    this.defaultSetup(el,opts);
     return this;
   }
 
-  ObserverCardController.prototype._setup = function(el,opts){
-    $.extend(this,opts)
-    this.el = typeof el === "string" ? $(el) : el;
+  ObserverCardController.prototype._events = function(){
+    this.initButton();
   }
 
-  ObserverCardController.prototype.update = function(html, notificationData){
-    this.el.html(html);
+  ObserverCardController.prototype._setConstants = function(el,opts){
+    var self = this;
+    this.el = typeof el === "string" ? $(el) : el;
+    this.proposalId = $("#proposal_id").attr("data-proposal-id");
+    this.updateEvent = "observer-card:update";
+    this.updateCallback = this.setObserverForm;
+    this.laddaButton = $(self.buttonSelector).ladda();
+    this.submitUrl = "/proposals/" + self.proposalId + "/observations";
+    this.buttonSelector = "#add_subscriber";
+    this.contentSelector = ".observation-input";
+  }
+
+  ObserverCardController.prototype.setObserverForm = function(html, notificationData){
     this._selectize();
     this._hideUntilSelect();
     this.el.trigger('observer-card:updated', notificationData);

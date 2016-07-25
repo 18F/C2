@@ -16,7 +16,7 @@ ActivityCardController = (function(){
     this.updateEvent = "activity-card:update";
     this.updateCallback = this.setCommentForm;
     this.laddaButton = $(self.buttonSelector).ladda();
-    this.commentUrl = "/proposals/" + self.proposalId + "/comments";
+    this.submitUrl = "/proposals/" + self.proposalId + "/comments";
     this.buttonSelector = "#add_a_comment";
     this.contentSelector = "#comment_text_content";
   }
@@ -26,35 +26,6 @@ ActivityCardController = (function(){
     this.initButton();
     this._setupUpdateEvent();
     this._setupCommentListToggle();
-  }
-
-  ActivityCardController.prototype.initButton = function(){
-    var self = this;
-    this.el.on('click', self.buttonSelector, function(){
-      self.laddaButton = $(self.buttonSelector).ladda();
-      if( self.el.find(self.buttonSelector).attr('disabled') !== "disabled" ){
-        self.laddaButton.ladda( 'start' );
-        self.submitComment();
-      } else {
-        self.laddaButton.ladda( 'start' );
-        window.setTimeout(function(){}, 300);
-        self.laddaButton.ladda( 'stop' );
-      }
-    });
-  }
-
-  ActivityCardController.prototype.submitComment = function(){
-    var self = this;
-    var params = {
-      url: self.commentUrl,
-      headers: {
-        Accept : "text/javascript; charset=utf-8",
-        "Content-Type": 'application/x-www-form-urlencoded; charset=UTF-8'
-      },
-      data: self.el.find(self.contentSelector).serialize(),
-      type: "POST"
-    }
-    $.ajax(params);
   }
 
   ActivityCardController.prototype._setupCommentListToggle = function(){
