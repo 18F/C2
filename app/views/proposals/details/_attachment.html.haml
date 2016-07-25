@@ -4,15 +4,10 @@
       .card-head.column
         %h2
           Attachments
-      .content-content.column
+      .content-content.column.file-drop
         .row
           .medium-12.column
-            .file-drop
-              %span{ 'data-placeholder' => 'Drop files here' } Drop files here
-
-            %input.standard-attachment{ name: 'standard_attachment', accept: '*/*', type: :file, multiple: :multiple }
-
-            = file_field_tag :file, class: "attachment-file-input", name: "attachment[file]", id: "attachment_file"
+            %input.standard-attachment{ class: "attachment-file-input", name: "attachment[file]", id: "attachment_file", accept: '*/*', type: :file, multiple: :multiple }
             = button_tag "Attach a File", id: :add_a_file, data: {"disable-if-empty" => "attachment_file"}, class: "button primary round no-margin-bottom attachment-submit"
         .row
           .medium-12.column
