@@ -5,11 +5,7 @@ class AttachmentsController < ApplicationController
   respond_to :js, only: [:create, :destroy]
 
   def create
-    if current_user.should_see_beta?
-      @attachment = proposal.attachments.build(file: params[:attachment], user_id: @current_user.id)
-    else
-      @attachment = proposal.attachments.build(attachments_params)
-    end
+    @attachment = get_attachment(params)
     @proposal = proposal
     if @attachment.save
       flash[:success] = "Success! You've added an attachment."
@@ -18,6 +14,14 @@ class AttachmentsController < ApplicationController
       flash[:error] = @attachment.errors.full_messages
     end
     respond_to_attachment
+  end
+
+  def get_attachment(params)
+    if @current_user.should_see_beta?
+      proposal.attachments.build(file: params[:attachment], user_id: @current_user.id)
+    else
+      proposal.attachments.build(attachments_params)
+    end
   end
 
   def destroy
