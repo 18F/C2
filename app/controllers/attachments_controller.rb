@@ -52,7 +52,7 @@ class AttachmentsController < ApplicationController
   def attachments_params
     if params.permit(attachment: [:file])[:attachment]
       params.permit(attachment: [:file])[:attachment].merge(user: current_user)
-    elsif
+    elsif params.permit(:attachment)[:attachment]
       params.permit(:attachment)[:attachment]
       params[:file] = params[:attachment]
       params[:user] = current_user
