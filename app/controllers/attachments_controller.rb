@@ -5,7 +5,11 @@ class AttachmentsController < ApplicationController
   respond_to :js, only: [:create, :destroy]
 
   def create
-    @attachment = proposal.attachments.build(attachments_params)
+    if current_user.should_see_beta?
+      @attachment = proposal.attachments.build(file: params[:attachment], user_id: @current_user.id)
+    else
+      @attachment = proposal.attachments.build(attachments_params)
+    end
     @proposal = proposal
     if @attachment.save
       flash[:success] = "Success! You've added an attachment."
@@ -44,6 +48,10 @@ class AttachmentsController < ApplicationController
   def attachments_params
     if params.permit(attachment: [:file])[:attachment]
       params.permit(attachment: [:file])[:attachment].merge(user: current_user)
+    elsif
+      params.permit(:attachment)[:attachment]
+      params[:file] = params[:attachment]
+      params[:user] = current_user
     end
   end
 
