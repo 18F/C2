@@ -513,7 +513,6 @@ GEM
     uglifier (2.7.2)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
-    underscore-rails (1.8.3)
     uniform_notifier (1.9.0)
     user_agent_parser (2.3.0)
     uuidtools (2.1.5)
@@ -622,7 +621,6 @@ DEPENDENCIES
   test_after_commit
   timecop
   uglifier
-  underscore-rails
   validates_email_format_of
   webmock
   workflow
