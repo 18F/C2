@@ -52,7 +52,7 @@ class AttachmentsController < ApplicationController
   def attachments_params
     if @current_user.should_see_beta? && params[:attachment] != "undefined"
       beta_attachment_params(params)
-    else
+    elsif params.permit(attachment: [:file])[:attachment]
       params.permit(attachment: [:file])[:attachment].merge(user: current_user)
     end
   end
