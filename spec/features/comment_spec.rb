@@ -20,14 +20,6 @@ feature "commenting" do
     end
   end
 
-  scenario "Send button is disabled after submitting with javascript  in beta view", js: true do
-    create_and_visit_proposal_beta
-    comment_text = "this is a great comment"
-    js_submit_comment(comment_text, "#add_a_comment")
-    wait_for_ajax
-    expect(find("#add_a_comment").disabled?).to be(true)
-  end
-
   scenario "redesign page hides/shows comments after 5 comments in beta view", js: true do
     work_order = create(:ncr_work_order, :with_beta_requester)
     proposal = work_order.proposal

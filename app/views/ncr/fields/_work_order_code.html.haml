@@ -2,11 +2,10 @@
   .detail-wrapper.row{id: value_id }
     .detail-display.column
       %label.detail-element
-        = t(t_slug + key) 
+        = t(t_slug + key)
       %span.detail-value
-        = client_data[key]
     .detail-edit.column
       %label.detail-element
-        = t(t_slug + key) 
+        = t(t_slug + key)
       %span.detail-value
         = f.input :work_order_code, wrapper_html: { data: { filter_key: "expense-type", filter_value: "BA80" } }, label: false
