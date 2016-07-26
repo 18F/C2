@@ -5,7 +5,7 @@ class AttachmentsController < ApplicationController
   respond_to :js, only: [:create, :destroy]
 
   def create
-    @attachment = get_attachment(params)
+    @attachment = construct_attachment
     @proposal = proposal
     if @attachment.save
       flash[:success] = "Success! You've added an attachment."
@@ -16,8 +16,8 @@ class AttachmentsController < ApplicationController
     respond_to_attachment
   end
 
-  def get_attachment(params)
-    if @current_user.should_see_beta?
+  def construct_attachment
+    if @current_user.should_see_beta? && params[:attachment] != "undefined"
       proposal.attachments.build(file: params[:attachment], user: @current_user)
     else
       proposal.attachments.build(attachments_params)
@@ -50,17 +50,15 @@ class AttachmentsController < ApplicationController
   end
 
   def attachments_params
-    if params.permit(attachment: [:file])[:attachment]
-      params.permit(attachment: [:file])[:attachment].merge(user: current_user)
-    elsif @current_user.should_see_beta?
+    if @current_user.should_see_beta? && params[:attachment] != "undefined"
       beta_attachment_params(params)
+    else
+      params.permit(attachment: [:file])[:attachment].merge(user: current_user)
     end
   end
 
   def beta_attachment_params(params)
-    params.permit(:attachment)[:attachment]
-    params[:file] = params[:attachment]
-    params[:user] = current_user
+    params.permit(:attachment)[:attachment].merge(file: params[:attachment], user: current_user)
   end
 
   def auth_errors(exception)
