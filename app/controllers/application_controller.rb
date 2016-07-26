@@ -146,6 +146,10 @@ class ApplicationController < ActionController::Base
     current_user.present?
   end
 
+  def setup_flash_manager
+    @flash_manager = @current_user.should_see_beta? ? FlashWithNow.new : FlashWithoutNow.new
+  end
+
   def authenticate_user!
     if not_signed_in?
       flash[:error] = I18n.t("errors.authentication")
