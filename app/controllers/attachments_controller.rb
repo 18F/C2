@@ -8,19 +8,14 @@ class AttachmentsController < ApplicationController
   def create
     @attachment = proposal.attachments.build(attachments_params)
     @proposal = proposal
-    if @attachment.save
-      flash[:success] = "Success! You've added an attachment."
-      DispatchFinder.run(proposal).deliver_attachment_emails(@attachment)
-    else
-      flash[:error] = @attachment.errors.full_messages
-    end
+    create_flash_manager(flash)
     respond_to_attachment
   end
 
   def destroy
     @attachment_name = attachment.file_file_name
     attachment.destroy
-    flash[:success] = "You've deleted an attachment."
+    @flash_manager.show(flash, "success", "You've deleted an attachment.")
     @proposal = proposal
     respond_to do |format|
       format.js
@@ -30,6 +25,15 @@ class AttachmentsController < ApplicationController
 
   def show
     redirect_to attachment.url
+  end
+
+  def create_flash_manager(flash)
+    if @attachment.save
+      @flash_manager.show(flash, "success", "Success! You've added an attachment.")
+      DispatchFinder.run(@proposal).deliver_attachment_emails(@attachment)
+    else
+      @flash_manager.show(flash, "error", @attachment.errors.full_messages)
+    end
   end
 
   protected
@@ -62,5 +66,4 @@ class AttachmentsController < ApplicationController
   def setup_flash_manager
     @flash_manager = @current_user.should_see_beta? ? FlashWithNow.new : FlashWithoutNow.new
   end
-
 end
