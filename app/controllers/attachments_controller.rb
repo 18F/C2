@@ -1,6 +1,7 @@
 class AttachmentsController < ApplicationController
   before_action ->{authorize proposal, :can_show!}, only: [:create, :show]
   before_action ->{authorize attachment}, only: [:destroy]
+  before_action :setup_flash_manager
   rescue_from Pundit::NotAuthorizedError, with: :auth_errors
   respond_to :js, only: [:create, :destroy]
 
@@ -57,4 +58,9 @@ class AttachmentsController < ApplicationController
       format.html { redirect_to proposal }
     end
   end
+  
+  def setup_flash_manager
+    @flash_manager = @current_user.should_see_beta? ? FlashWithNow.new : FlashWithoutNow.new
+  end
+
 end
