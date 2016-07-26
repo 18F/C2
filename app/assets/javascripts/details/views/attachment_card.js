@@ -21,7 +21,7 @@ AttachmentCardController = (function(){
   }
 
   AttachmentCardController.prototype._getDefaultConfig = function(){
-    return $.extend({ 
+    return $.extend({
       form_id: "#new_attachment",
       gif_src: "/assets/spin.gif"
     }, this._getDefaultClasses());
@@ -53,7 +53,7 @@ AttachmentCardController = (function(){
 
   AttachmentCardController.prototype._event = function(){
     var self = this;
-    $(document).on("change",this.form_id + " input[type='file']", function(){
+    $(document).on("change", self.el.find("input[type='file']"), function(){
       self.disableLabel();
       self.appendLoadingFile();
       self.submitForm();
@@ -61,7 +61,11 @@ AttachmentCardController = (function(){
   }
 
   AttachmentCardController.prototype.getFileName = function(){
-    return this.el.find(this.form_id + " input[type='file']").val().split("\\").pop();
+    var self = this;
+    var file = self.el.find("input[type='file']");
+    if (file.prop("files").length !== 0){
+      return this.el.find("input[type='file']").prop("files")[0].name;
+    }
   }
 
   AttachmentCardController.prototype.disableLabel = function(){
@@ -94,7 +98,22 @@ AttachmentCardController = (function(){
   }
 
   AttachmentCardController.prototype.submitForm = function(){
-    this.el.find("form" + this.form_id).submit();
+    var proposalId = $("#proposal_id").attr("data-proposal-id");
+    var formData = new FormData();
+    var self = this;
+    formData.append("attachment", self.el.find('[type="file"]').prop('files')[0] );
+    $.ajax({
+      url: '/proposals/' + proposalId + '/attachments',  //Server script to process data
+      type: 'POST',
+      data: formData,
+      cache: false,
+      headers: {
+        'X-Transaction': 'POST Example',
+        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      },
+      contentType: false,
+      processData: false
+    });
   }
 
   return AttachmentCardController;
