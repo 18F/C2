@@ -74,7 +74,7 @@
     height: 80px;
   }
   #add_a_comment:disabled {
-    display: none;
+    visibility: hidden;
   }
   .item-block {
     color: map-get($c2black-swatch, secondary);
