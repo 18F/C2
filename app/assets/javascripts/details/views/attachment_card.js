@@ -21,9 +21,13 @@ AttachmentCardController = (function(){
   }
 
   AttachmentCardController.prototype._getDefaultConfig = function(){
+    var proposalId = $("#proposal_id").attr("data-proposal-id");
     return $.extend({
       form_id: "#new_attachment",
-      gif_src: "/assets/spin.gif"
+      gif_src: "/assets/spin.gif",
+      attachmentUrl: "/proposals/" + proposalId + "/attachments",
+      buttonSelector: "[for=attachment_file']",
+      contentSelector: "input[type='file']"
     }, this._getDefaultClasses());
   }
 
