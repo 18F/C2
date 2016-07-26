@@ -16,11 +16,12 @@
                 - index = index + 1
                 .row.step-row.column.medium-table-row{class: "step-status-" + step.status}
                   .medium-icon-col.text-center.medium-table-cell.step-status-wrapper
-                    %span.circle-wrapper{ class: "status-" + step.status }
-                      - if !step.completed?
+                    - if !step.completed?
+                      %span.circle-wrapper{ class: "status-" + step.status }
                         = index.to_s
-                      - else
-                        = "✔"
+                    - else
+                      %span.circle-complete{ class: "status-" + step.status }
+                        = image_tag "check.png"
                   .medium-auto-column.step-content-wrapper.medium-table-cell
                     %span.step-index.step-data
                       Step #{ index.to_s }

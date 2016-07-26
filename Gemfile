@@ -85,6 +85,7 @@ group :development do
   gem "quiet_assets"
   gem "spring"
   gem "spring-commands-rspec"
+  gem 'meta_request'
 end
 
 group :test do

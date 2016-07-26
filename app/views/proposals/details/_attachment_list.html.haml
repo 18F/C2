@@ -15,8 +15,8 @@
           - if policy(attachment).can_destroy?
             = button_to "", proposal_attachment_path(proposal, attachment), method: :delete, data: {"modal-type": "attachment_confirm"}, remote: true, class: "button primary round no-margin-bottom remove-button", "aria-label": "Remove #{ attachment.file_file_name } attachment"
   - if proposal.attachments.empty?
-    .content-content.column
+    .content-content.no-attachments.column
       .row
         .medium-12.column
           .item-block
-            %p.empty-list-label No attachments have been added yet
+            %p.empty-list-label No attachments have been added.
