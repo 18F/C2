@@ -8,6 +8,8 @@ engines:
     enabled: true
   rubocop:
     enabled: true
+    exclude_fingerprints:
+    - 348b45047efd6d1aa39a460705e5a494
     checks:
       Rubocop/Style/AndOr:
         enabled: false
