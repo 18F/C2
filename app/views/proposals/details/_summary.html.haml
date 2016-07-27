@@ -25,7 +25,7 @@
       .medium-12.column
         %h3
           = proposal.public_id
-        = render @proposal.client_slug + '/fields/title'
+        = render partial: @proposal.client_slug + '/fields/title', locals: { f: @form }
         .c2n_description
           %p
             Requested by
