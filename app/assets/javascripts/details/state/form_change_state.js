@@ -2,7 +2,7 @@ var FormChangeState;
 
 FormChangeState = (function(){
   function FormChangeState(el) {
-    this.el = $(el);
+    this.el = $(el).find('form.request-details-form');
     this._setup();
     return this;
   }

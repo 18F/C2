@@ -21,6 +21,21 @@ DetailsRequestCard = (function(){
       e.preventDefault();
       self.el.trigger('edit-toggle:trigger');
     });
+
+    this._summaryBarEvents();
+  }
+
+  DetailsRequestCard.prototype._summaryBarEvents = function(){
+    var titleWrap = this.el.find('.c2n_header');
+    this.el.find('#header-edit-text').on('click', function(){
+      if ( titleWrap.hasClass('view-title') ){
+        titleWrap.removeClass('view-title')
+        titleWrap.addClass('edit-title')
+      } else {
+        titleWrap.addClass('view-title')
+        titleWrap.removeClass('edit-title')
+      }
+    })
   }
 
   DetailsRequestCard.prototype.toggleMode = function(mode){
@@ -77,7 +92,6 @@ DetailsRequestCard = (function(){
   }
 
   DetailsRequestCard.prototype.updateViewModeContent = function(data){
-    var viewEl = this.el.find('#view-request-details')
     var content = this.formatData(data['response']);
     var id = content['id'];
     var self = this;
@@ -111,9 +125,9 @@ DetailsRequestCard = (function(){
 
   DetailsRequestCard.prototype.formatMoney = function(num,c, d, t){
     var n = num;
-    
-    var s = n < 0 ? "-" : "", 
-    i = parseInt(n = Math.abs(+n || 0).toFixed(c), 10) + "", 
+
+    var s = n < 0 ? "-" : "",
+    i = parseInt(n = Math.abs(+n || 0).toFixed(c), 10) + "",
     j = (j = i.length) > 3 ? j % 3 : 0;
    return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
  };
