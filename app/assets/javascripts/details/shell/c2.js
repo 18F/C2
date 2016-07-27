@@ -114,22 +114,6 @@ C2 = (function() {
     });
   }
 
-  C2.prototype._setupViewUpdateEvents = function(item, jevent){
-    var self = this;
-    $(item).on(jevent, function(event, data){
-      self.updateView.el.trigger(jevent, data);
-    });
-  }
-
-  C2.prototype._setupViewUpdate = function(){
-    var self = this;
-    $.each([ self.summaryBar.el.selector, self.detailsRequestCard.el.selector ], function(i, item){
-      $.each([ "update:textfield", "update:checkbox" ], function(j, jevent){
-        self._setupViewUpdateEvents(item, jevent);
-      });
-    });
-  }
-
   C2.prototype.detailsCancelled = function(){
     this.detailsMode('view');
     var message;
@@ -179,7 +163,6 @@ C2 = (function() {
   C2.prototype._setupDetailsData = function(){
     var self = this;
     this.detailsSave.el.on('details-form:success', function(event, data){
-      self.summaryBar.updateViewContent(data);
       self.detailsRequestCard.updateViewModeContent(data);
       self.modals.el.trigger("modal:close");
     });
