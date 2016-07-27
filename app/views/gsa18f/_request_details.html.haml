@@ -2,7 +2,7 @@
 - @proposal.new_fields_for_display.each do |field|
   - key = field[:key]
   - data = { |
-    f: f, |
+    f: @form, |
     proposal: @proposal,
     key: key,
     t_slug: "decorators." + @proposal.client_slug + "/work_order.",
