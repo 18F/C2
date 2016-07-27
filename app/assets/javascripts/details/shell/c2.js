@@ -6,17 +6,11 @@ C2 = (function() {
     this.config = {
       actionBar:      '#action-bar-wrapper',
       attachmentCard: '#card-for-attachments',
-      detailsForm:    '#request-details-card',
-      detailsSave:    '#request-details-card',
-      detailsSaveAll: '#request-details-card, #summary-card',
+      formContainer:  '#mode-parent',
       activityCard:   '#card-for-activity',
-      editMode:       '#mode-parent',
-      formState:      '#request-details-card form, #proposal-title-wrapper form',
       notifications:  '#action-bar-status',
       observerCard:   '#card-for-observers',
       modalCard:      '#modal-wrapper',
-      updateView:     '#mode-parent',
-      summaryBar:     '#summary-card',
       approvalCard:   '#card-for-approvals'
     }
     this.lastNotice = {};
@@ -27,15 +21,15 @@ C2 = (function() {
   C2.prototype._blastOff = function(){
     var config = this.config;
     // Data
-    this.detailsSave = new DetailsSave(config.detailsSave, config.detailsSaveAll);
-    this.updateView = new UpdateView(config.updateView);
+    this.detailsSave = new DetailsSave(config.formContainer);
+    this.updateView = new UpdateView(config.formContainer);
 
     // State
-    this.editMode = new EditStateController(config.editMode);
-    this.formState = new FormChangeState(config.formState);
+    this.editMode = new EditStateController(config.formContainer);
+    this.formState = new FormChangeState(config.formContainer);
 
     // Views
-    this.detailsRequestCard = new DetailsRequestCard(config.detailsForm);
+    this.detailsRequestCard = new DetailsRequestCard(config.formContainer);
     this.attachmentCardController = new AttachmentCardController(config.attachmentCard);
     this.observerCardController = new ObserverCardController(config.observerCard);
     this.activityCardController = new ActivityCardController(config.activityCard);
@@ -43,7 +37,6 @@ C2 = (function() {
     this.modals = new ModalController(config.modalCard);
     this.actionBar = new ActionBar(config.actionBar);
     this.notification = new Notifications(config.notifications);
-    this.summaryBar = new SummaryBar(config.summaryBar);
     this._setupEvents();
   }
 
@@ -68,7 +61,6 @@ C2 = (function() {
     this._setupObserverEvent();
     this._setupSaveModal();
     this._setupFormSubmitModal();
-    this._setupViewUpdate();
   }
 
   /* Form */
@@ -101,7 +93,7 @@ C2 = (function() {
     if(data['quantity'] !== undefined && data['cost_per_unit'] !== undefined){
       total = parseFloat(data['quantity'], 10) * parseFloat(data['cost_per_unit'], 10);
       params = { field: ".total_price-wrapper .detail-value", value: total.toFixed(2) };
-      self.updateView.el.trigger("update:textfield", params);
+      self.updateView.el.trigger("field_update:textfield", params);
     }
   }
 
@@ -117,22 +109,6 @@ C2 = (function() {
           self.detailsMode('view');
         }
       }
-    });
-  }
-
-  C2.prototype._setupViewUpdateEvents = function(item, jevent){
-    var self = this;
-    $(item).on(jevent, function(event, data){
-      self.updateView.el.trigger(jevent, data);
-    });
-  }
-
-  C2.prototype._setupViewUpdate = function(){
-    var self = this;
-    $.each([ self.summaryBar.el.selector, self.detailsRequestCard.el.selector ], function(i, item){
-      $.each([ "update:textfield", "update:checkbox" ], function(j, jevent){
-        self._setupViewUpdateEvents(item, jevent);
-      });
     });
   }
 
@@ -185,7 +161,6 @@ C2 = (function() {
   C2.prototype._setupDetailsData = function(){
     var self = this;
     this.detailsSave.el.on('details-form:success', function(event, data){
-      self.summaryBar.updateViewContent(data);
       self.detailsRequestCard.updateViewModeContent(data);
       self.modals.el.trigger("modal:close");
     });

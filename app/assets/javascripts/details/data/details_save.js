@@ -1,9 +1,9 @@
 var DetailsSave;
 DetailsSave = (function() {
 
-  function DetailsSave(el, dataEl) {
+  function DetailsSave(el) {
     this.el = $(el);
-    this.dataEl = $(dataEl);
+    this.dataEl = this.el.find('form.request-details-form');
     this._blastOff();
   }
 
@@ -43,7 +43,7 @@ DetailsSave = (function() {
 
   DetailsSave.prototype.saveDetailsForm = function(data){
     var self = this;
-    this.dataEl.find('form').submit();
+    this.dataEl.submit();
   }
 
   return DetailsSave;

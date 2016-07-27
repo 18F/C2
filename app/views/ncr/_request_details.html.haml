@@ -1,32 +1,29 @@
-= simple_form_for @client_data_instance, html: { multipart: true }, remote: true do |f|
-  - i = 0
-  - reapproval_required = @proposal.ncr? ? Ncr::WorkOrderReapprovalChecker.new(@proposal.client_data).could_require_budget_reapproval? : false
-  - @proposal.new_fields_for_display.each do |field|
-    - key = field[:key]
-    - data = { |
-      f: f, |
-      proposal: @proposal,
-      key: key,
-      t_slug: "decorators." + @current_user.client_slug + "/work_order.",
-      client_slug: @current_user.client_slug,
-      client_data: @client_data_instance,
-      client_id: @client_data_instance.id.to_s,
-      value_id: key + '-' + @client_data_instance.id.to_s,
-      reapproval: reapproval_required }
+- i = 0
+- reapprovalRequired = @proposal.ncr? ? Ncr::WorkOrderReapprovalChecker.new(@proposal.client_data).could_require_budget_reapproval? : false
+- @proposal.new_fields_for_display.each do |field|
+  - key = field[:key]
+  - data = { |
+    f: @form, |
+    proposal: @proposal,
+    key: key,
+    t_slug: "decorators." + @current_user.client_slug + "/work_order.",
+    client_slug: @current_user.client_slug,
+    client_data: @client_data_instance,
+    client_id: @client_data_instance.id.to_s,
+    value_id: key + '-' + @client_data_instance.id.to_s,
+    reapproval: reapprovalRequired }
 
-    - if i == 1
-      :plain
-        <div class="grid-layout">
+  - if i == 1
+    :plain
+      <div class="grid-layout">
 
-    - if key == 'not_to_exceed'
-    - elsif key == 'amount'
-      = render partial: @proposal.client_slug + "/fields/amount", locals: data
-    - else
-      = render partial: field[:partial], locals: data
+  - if key == 'not_to_exceed'
+  - elsif key == 'amount'
+    = render partial: @proposal.client_slug + "/fields/amount", locals: data
+  - else
+    = render partial: field[:partial], locals: data
 
-    - i = i + 1
+  - i = i + 1
 
 :plain
   </div>
-
-= submit_tag "Submit", hidden: true
