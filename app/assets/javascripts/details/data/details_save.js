@@ -3,7 +3,7 @@ DetailsSave = (function() {
 
   function DetailsSave(el, dataEl) {
     this.el = $(el);
-    this.dataEl = this.el.find('form.request-details-form');
+    this.dataEl = $(dataEl);
     this._blastOff();
   }
 
@@ -19,11 +19,21 @@ DetailsSave = (function() {
     this.el.on( "details-form:respond", function( event, data ) {
       self.receiveResponse(data);
     });
+    this.el.on( "details-form:validate", function( event, data ) {
+      switch (data['status']){
+        case "success":
+          self.el.find('form').submit();
+          break;
+        case "error":
+          self.el.trigger( "details-form:error", data );
+          break;
+        default:
+          break;
+      }
+    });
     this.el.on( "details-form:success", function( event, data ) {
-
     });
     this.el.on( "details-form:error", function( event, data ) {
-
     });
   }
 
@@ -41,9 +51,30 @@ DetailsSave = (function() {
     }
   }
 
+  DetailsSave.prototype._prepareFormData = function(){
+    var formData = this.el.find('form').serialize();
+    var dataEl = this.dataEl;
+    formData = formData + '&' + dataEl.find('form [data-is-dirrty]').serialize();
+    return formData;
+  }
+
+  DetailsSave.prototype.validateFields = function(url, formData){
+    $.ajax({
+      url: url + "?validate=true",
+      headers: {
+        Accept : "text/javascript; charset=utf-8",
+        "Content-Type": 'application/x-www-form-urlencoded; charset=UTF-8'
+      },
+      type: 'POST',
+      data: formData
+    });
+  }
+
   DetailsSave.prototype.saveDetailsForm = function(data){
     var self = this;
-    this.dataEl.submit();
+    var formData = this._prepareFormData();
+    var url = self.el.find('form').attr("action");
+    self.validateFields(url, formData);
   }
 
   return DetailsSave;
