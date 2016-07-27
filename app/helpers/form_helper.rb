@@ -11,7 +11,7 @@ module FormHelper
     {
       notice: "info",
       error: "danger",
-      alert: "warning",
+      alert: "warning"
     }
   end
 
@@ -20,22 +20,27 @@ module FormHelper
     "bg-#{suffix}"
   end
 
-  def flash_message(val)
-    if val.is_a?(Enumerable)
-      val.join(". ")
-    else
-      val
+  def flash_list
+    flash.map do |key, message|
+      [key, flash_message_html(message)]
     end
   end
 
-  def flash_list
-    flash.map do |key, val|
-      [key, flash_message(val)]
+  def flash_message_html(message)
+    if message.respond_to? :map
+      [
+        "<ul>",
+        message.map { |err| "<li>#{err}.</li>" },
+        "</ul>"
+      ].join.html_safe
+    else
+      message
     end
   end
 
   def popover_data_attrs(key)
-    { toggle: "popover", trigger: "focus", html: true, placement: "top",
+    {
+      toggle: "popover", trigger: "focus", html: true, placement: "top",
       title: I18n.t("helpers.popover.#{key}.title"),
       content: I18n.t("helpers.popover.#{key}.content")
     }
