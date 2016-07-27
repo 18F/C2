@@ -58,18 +58,18 @@ AttachmentCardController = (function(){
   AttachmentCardController.prototype._event = function(){
     var self = this;
     $(document).on("change", self.el.find("input[type='file']"), function(){
-      self.disableLabel();
-      self.appendLoadingFile();
-      self.submitForm();
+      if (self.el.find("input[type='file']").prop("files").length !== 0){
+        self.disableLabel();
+        self.appendLoadingFile();
+        self.submitForm();
+      }
     })
   }
 
   AttachmentCardController.prototype.getFileName = function(){
     var self = this;
     var file = self.el.find("input[type='file']");
-    if (file.prop("files").length !== 0){
-      return this.el.find("input[type='file']").prop("files")[0].name;
-    }
+    return file.prop("files")[0].name;
   }
 
   AttachmentCardController.prototype.disableLabel = function(){
