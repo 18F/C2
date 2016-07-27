@@ -134,8 +134,4 @@ class ClientDataController < ApplicationController
       @client_data_instance.initialize_steps
     end
   end
-
-  def setup_flash_manager
-    @flash_manager = @current_user.should_see_beta? ? FlashWithNow.new : FlashWithoutNow.new
-  end
 end
