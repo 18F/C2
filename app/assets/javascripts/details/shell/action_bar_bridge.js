@@ -1,4 +1,5 @@
 var ActionBarBridge;
+
 ActionBarBridge = (function() {
 
   function ActionBarBridge(c2, config){
