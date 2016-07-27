@@ -10,7 +10,6 @@
     actionBar: getActionBarContent(),
     undoCheck: getRequestDetailsForm(),
     activityCard: getActivityContent(),
-    summaryBar: getSummaryContent(),
     modalCard: getModalCardContent()
   }
 
@@ -22,18 +21,6 @@
 @getEditModeContent = ->
   $('
     <div class="view-mode" id="mode-parent"></div>
-  ')
-
-@getSummaryContent = ->
-  $('
-    <div class="summary-card" id="summary-card">
-      <h1 class="c2n_header">
-        <span class="detail-display">
-          <span class="detail-value"></span>
-          <span class="detail-edit"></span>
-        </span>
-      </h1>
-    </div>
   ')
 
 @getNotificationContent = ->
