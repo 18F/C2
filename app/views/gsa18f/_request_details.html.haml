@@ -1,26 +1,23 @@
-= simple_form_for @client_data_instance, html: { multipart: true }, remote: true do |f|
-  - i = 0
-  - @proposal.new_fields_for_display.each do |field|
-    - key = field[:key]
-    - data = { |
-      f: f, |
-      proposal: @proposal,
-      key: key,
-      t_slug: "decorators." + @proposal.client_slug + "/work_order.",
-      client_slug: @current_user.client_slug,
-      client_data: @client_data_instance,
-      client_id: @client_data_instance.id.to_s,
-      value_id: key + '-' + @client_data_instance.id.to_s }
+- i = 0
+- @proposal.new_fields_for_display.each do |field|
+  - key = field[:key]
+  - data = { |
+    f: f, |
+    proposal: @proposal,
+    key: key,
+    t_slug: "decorators." + @proposal.client_slug + "/work_order.",
+    client_slug: @current_user.client_slug,
+    client_data: @client_data_instance,
+    client_id: @client_data_instance.id.to_s,
+    value_id: key + '-' + @client_data_instance.id.to_s }
 
-    - if i == 0
-      :plain
-        <div class="grid-layout">
+  - if i == 0
+    :plain
+      <div class="grid-layout">
 
-    = render partial: field[:partial], locals: data
+  = render partial: field[:partial], locals: data
 
-    - i = i + 1
+  - i = i + 1
 
 :plain
-  </div>
-
-= submit_tag "Submit", hidden: true
+</div>
