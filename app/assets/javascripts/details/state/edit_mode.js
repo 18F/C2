@@ -10,6 +10,19 @@ EditStateController = (function(){
   EditStateController.prototype._setup = function () {
     this.state = "view";
     this._event();
+    this._saving();
+  }
+
+  EditStateController.prototype._saving = function () {
+    jQuery.ajaxSetup({
+      beforeSend: function(xhr) {
+        $('#spinner').show();
+      },
+      // runs after AJAX requests complete, successfully or not
+      complete: function(xhr, status){
+        $('#spinner').hide();
+      }
+    });
   }
 
   EditStateController.prototype._event = function () {
