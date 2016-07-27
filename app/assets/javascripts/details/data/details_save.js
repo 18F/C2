@@ -22,7 +22,7 @@ DetailsSave = (function() {
     this.el.on( "details-form:validate", function( event, data ) {
       switch (data['status']){
         case "success":
-          self.el.find('form').submit();
+          self.el.find('form.request-details-form').submit();
           break;
         case "error":
           self.el.trigger( "details-form:error", data );
@@ -52,9 +52,8 @@ DetailsSave = (function() {
   }
 
   DetailsSave.prototype._prepareFormData = function(){
-    var formData = this.el.find('form').serialize();
+    var formData = this.el.find('form.request-details-form').serialize();
     var dataEl = this.dataEl;
-    formData = formData + '&' + dataEl.find('form [data-is-dirrty]').serialize();
     return formData;
   }
 
@@ -73,7 +72,7 @@ DetailsSave = (function() {
   DetailsSave.prototype.saveDetailsForm = function(data){
     var self = this;
     var formData = this._prepareFormData();
-    var url = self.el.find('form').attr("action");
+    var url = self.el.find('form.request-details-form').attr("action");
     self.validateFields(url, formData);
   }
 
