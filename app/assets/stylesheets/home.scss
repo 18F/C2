@@ -18,6 +18,18 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 
+#header{
+  background-color: #07519B;
+  color: #07519B;
+  background-attachment: fixed, fixed,  fixed;
+  background-position: top left,  center center,  center center;
+  background-size: auto,  cover,  cover;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+  min-height: 388px;
+}
+
 .photon-header-nav-container {
   position: absolute;
   right: 0;
