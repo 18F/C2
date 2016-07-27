@@ -62,7 +62,6 @@ C2 = (function() {
     this._setupObserverEvent();
     this._setupSaveModal();
     this._setupFormSubmitModal();
-    this._setupViewUpdate();
   }
 
   /* Form */

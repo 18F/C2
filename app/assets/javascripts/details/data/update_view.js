@@ -29,7 +29,7 @@ UpdateView = (function() {
       key = JSON.parse(key);
       value = key[String(value)];
     }
-    this.el.find(data['field']).html(value);
+    $(data['field']).html(value);
   }
 
 
