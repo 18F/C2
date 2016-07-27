@@ -37,7 +37,6 @@ C2 = (function() {
     this.modals = new ModalController(config.modalCard);
     this.actionBar = new ActionBar(config.actionBar);
     this.notification = new Notifications(config.notifications);
-    this.summaryBar = new SummaryBar(config.summaryBar);
     this._setupEvents();
   }
 
