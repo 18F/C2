@@ -9,7 +9,4 @@
       %label.detail-element
         = t(t_slug + key) 
       %span.detail-value
-        = field_set_tag do
-          = expense_type_radio_button(f, "BA60", true)
-          = expense_type_radio_button(f, "BA61", true)
-          = expense_type_radio_button(f, "BA80", true)
+        = client_data[:expense_type]
