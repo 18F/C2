@@ -19,6 +19,7 @@
 #= require details/data/update_view
 #= require details/data/details_save
 #= require details/shell/c2
+#= require details/shell/action_bar_bridge
 #= require details/details_helper
 #= require spec_helper
 

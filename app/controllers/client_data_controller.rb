@@ -63,13 +63,12 @@ class ClientDataController < ApplicationController
   end
 
   def update_js_behavior(client_data_instance, errors)
-    if errors.empty?
-      update_or_notify_of_no_changes
-      js_response = { status: "success", response: client_data_instance }
+    js_response = process_js_response(client_data_instance, errors)
+    if params[:validate] == "true"
+      render js: "c2.detailsSave.el.trigger('details-form:validate', " + js_response.to_json + ");"
     else
-      js_response = { status: "error", response: errors }
+      render js: "c2.detailsSave.el.trigger('details-form:respond', " + js_response.to_json + ");"
     end
-    render js: "c2.detailsSave.el.trigger('details-form:respond', " + js_response.to_json + ");"
   end
 
   def update_behavior(proposal, errors)
@@ -129,9 +128,22 @@ class ClientDataController < ApplicationController
     params.permit(attachments: [])[:attachments] || []
   end
 
+  def process_js_response(client_data_instance, errors)
+    if errors.empty?
+      update_or_notify_of_no_changes
+      { status: "success", response: client_data_instance }
+    else
+      { status: "error", response: errors }
+    end
+  end
+
   def add_steps
     if errors.empty?
       @client_data_instance.initialize_steps
     end
+  end
+
+  def setup_flash_manager
+    @flash_manager = @current_user.should_see_beta? ? FlashWithNow.new : FlashWithoutNow.new
   end
 end
