@@ -26,7 +26,7 @@ AttachmentCardController = (function(){
       form_id: "#new_attachment",
       gif_src: "/assets/spin.gif",
       attachmentUrl: "/proposals/" + proposalId + "/attachments",
-      buttonSelector: "[for=attachment_file']",
+      buttonSelector: "label.attachment-label",
       contentSelector: "input[type='file']"
     }, this._getDefaultClasses());
   }
