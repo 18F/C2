@@ -74,7 +74,10 @@
     height: 80px;
   }
   #add_a_comment:disabled {
-    // visibility: hidden;
+    opacity: 0;
+    &[data-loading]{
+      opacity: 1;
+    }
   }
   .item-block {
     color: map-get($c2black-swatch, secondary);

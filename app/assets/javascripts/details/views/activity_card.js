@@ -26,6 +26,17 @@ ActivityCardController = (function(){
     this.initButton();
     this._setupUpdateEvent();
     this._setupCommentListToggle();
+    this.el.on('focus input propertychange', '[name="comment[comment_text]"]', function(){
+      if ($('[name="comment[comment_text]"]').val() === ""){
+        $(self.buttonSelector).attr('disabled', true);
+      } else {
+        $(self.buttonSelector).attr('disabled', false);
+      }
+    });
+  }
+
+  ActivityCardController.prototype.onButtonPress = function(){
+    $('[name="comment[comment_text]"]').attr('disabled', true);
   }
 
   ActivityCardController.prototype._setupCommentListToggle = function(){
@@ -44,13 +55,18 @@ ActivityCardController = (function(){
     if (opts.focus){
       this.el.find(self.contentselector).focus();
     }
-    this.el.find(self.buttonSelector).attr('disabled', true);
-    this.el.find(self.contentselector).on('input',function(){
-      this.el.find(self.buttonSelector).attr('disabled', false);
-    });
-    self.laddaButton.ladda( 'stop' );
+
+    $('[name="comment[comment_text]"]').attr('disabled', false);
+    this.setupReloadButtonState();
   }
 
+  ActivityCardController.prototype.setupReloadButtonState = function(){
+    var self = this;
+    self.laddaButton.ladda( 'stop' );
+    self.laddaButton = self.laddaButton.ladda();
+    self.laddaButton.attr('disabled', true);
+    $(self.contentselector).focus();
+  }
 
   return ActivityCardController;
 

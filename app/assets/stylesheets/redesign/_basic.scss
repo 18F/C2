@@ -69,7 +69,7 @@ label.button.secondary
   &:hover{
     color: white;
     background: $primary-color;
-  } 
+  }
 }
 
 a.status-toggle-all{
@@ -84,8 +84,8 @@ button[type="submit"].button
   line-height: 1;
   cursor: pointer;
   -webkit-appearance: none;
-  -webkit-transition: background-color 0.25s ease-out, color 0.25s ease-out;
-  transition: background-color 0.25s ease-out, color 0.25s ease-out;
+  -webkit-transition: background-color 0.25s ease-out, color 0.25s ease-out, opacity .3s ease-in;;
+  transition: background-color 0.25s ease-out, color 0.25s ease-out, opacity .3s ease-in;;
   vertical-align: middle;
   border: 1px solid transparent;
   border-radius: 4px;

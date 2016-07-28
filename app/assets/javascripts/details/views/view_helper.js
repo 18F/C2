@@ -8,11 +8,11 @@ ViewHelper = (function(){
   ViewHelper.prototype._setupUpdateEvent = function(){
     var self = this;
     this.el.on(self.updateEvent, function(){
-      $.ajax({ url: self.updateUrl, 
+      $.ajax({ url: self.updateUrl,
         retryLimit: 5,
         success: function(html){
           self.update(html);
-        }, 
+        },
          error : function(xhr, textStatus, errorThrown ) {
           if (textStatus === "timeout") {
             this.tryCount++;
@@ -20,10 +20,10 @@ ViewHelper = (function(){
               //try again
               $.ajax(this);
               return;
-            }            
+            }
             return;
           }
-        } 
+        }
       });
     });
   }
@@ -49,6 +49,9 @@ ViewHelper = (function(){
       if( self.el.find(self.buttonSelector).attr('disabled') !== "disabled" ){
         self.laddaButton.ladda( 'start' );
         self.submitForm();
+        if(self.onButtonPress){
+          self.onButtonPress();
+        }
       } else {
         self.laddaButton.ladda( 'start' );
         window.setTimeout(function(){}, 300);
@@ -69,7 +72,7 @@ ViewHelper = (function(){
       type: "post"
     }
     $.ajax(params);
-  } 
+  }
 
   return ViewHelper;
 }());
