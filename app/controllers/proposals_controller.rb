@@ -31,6 +31,14 @@ class ProposalsController < ApplicationController
     @pending_review_data = listing.pending_review
     @completed_data = listing.completed.apply_limit(@closed_proposal_limit)
     @canceled_data = listing.canceled.apply_limit(@closed_proposal_limit)
+
+    if list_beta?
+      index_redesign
+    end
+  end
+
+  def index_redesign
+    render "index_next"
   end
 
   def archive
@@ -225,6 +233,10 @@ class ProposalsController < ApplicationController
 
   def new_mode
     current_user.should_see_beta?
+  end
+
+  def list_beta?
+    current_user.should_see_beta? ROLE_BETA_LIST_VIEW
   end
 
   def cancel_proposal
