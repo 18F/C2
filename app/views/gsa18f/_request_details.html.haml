@@ -9,6 +9,7 @@
     client_slug: @current_user.client_slug,
     client_data: @client_data_instance,
     client_id: @client_data_instance.id.to_s,
+    client_field: blank_field_default(client_data[key]),
     value_id: key + '-' + @client_data_instance.id.to_s }
 
   - if i == 0

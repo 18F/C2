@@ -2,11 +2,11 @@
   .detail-wrapper.row{ id: value_id }
     .detail-display.column
       %label.detail-element
-        = t(t_slug + key) 
+        = t(t_slug + key)
       %span.detail-value
-        = client_data[key]
+        = client_field
     .detail-edit.column
       %label.detail-element{ for: "ncr_work_order_rwa_number"}
-        = t(t_slug + key) 
+        = t(t_slug + key)
       %span.detail-value
         = f.input :rwa_number, required: true, wrapper_html: { data: { filter_key: "expense-type", filter_value: "BA80" } }, label: false, "data-reapproval" => reapproval

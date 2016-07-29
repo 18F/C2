@@ -1,7 +1,6 @@
 - i = 0
 - reapproval_required = @proposal.ncr? ? Ncr::WorkOrderReapprovalChecker.new(@proposal.client_data).could_require_budget_reapproval? : false
 - @proposal.new_fields_for_display.each do |field|
-  - key = field[:key]
   - data = { |
     f: @form, |
     proposal: @proposal,
@@ -10,6 +9,7 @@
     client_slug: @current_user.client_slug,
     client_data: @client_data_instance,
     client_id: @client_data_instance.id.to_s,
+    client_field: blank_field_default(client_data[key]),
     value_id: key + '-' + @client_data_instance.id.to_s,
     reapproval: reapproval_required }
 
