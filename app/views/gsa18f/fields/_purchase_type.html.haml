@@ -4,7 +4,7 @@
       %label.detail-element
         = t(t_slug + key)
       %span.detail-value
-        = Gsa18f::Procurement::PURCHASE_TYPES.keys[client_data[key].to_i]
+        = Gsa18f::Procurement::PURCHASE_TYPES.keys[client_field.to_i]
     .detail-edit.column
       %label.detail-element
         = t(t_slug + key)

@@ -2,11 +2,11 @@
   .detail-wrapper.row{ class: key + "-wrapper", id: value_id }
     .detail-display.column
       %label.detail-element
-        = t(t_slug + key) 
+        = t(t_slug + key)
       %span.detail-value
-        = client_data[key]
+        = client_field
     .detail-edit.column
       %label.detail-element
-        = t(t_slug + key) 
+        = t(t_slug + key)
       %span.detail-value
         = f.input :cl_number, label: false

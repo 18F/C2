@@ -23,4 +23,11 @@ module ApplicationHelper
   def display_search_ui?
     current_user && current_user.client_model && !client_disabled?
   end
+
+  def blank_field_default(field)
+    if field.blank?
+      field = "--".to_s
+    end
+    field
+  end
 end
