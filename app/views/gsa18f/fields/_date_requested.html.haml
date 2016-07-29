@@ -1,6 +1,6 @@
-- time = client_data[key]
+- time = client_field
 - if !time.blank?
-  - time = client_data[key].strftime("%b %d, %Y")
+  - time = client_field.strftime("%b %d, %Y")
 .column.half-col-wrap{ id: key + '-wrapper'}
   .detail-wrapper.row{ class: key + "-wrapper", id: value_id }
     .detail-display.column

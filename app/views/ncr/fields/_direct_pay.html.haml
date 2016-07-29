@@ -4,7 +4,7 @@
       %label.detail-element
         = t(t_slug + key)
       %span.detail-value
-        - if client_data[key]
+        - if client_field != "--"
           Yes
         - else
           No
