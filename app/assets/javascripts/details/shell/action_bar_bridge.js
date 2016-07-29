@@ -61,7 +61,7 @@ ActionBarBridge = (function() {
   }
 
   ActionBarBridge.prototype.setEditMode = function(){
-    this.editMode.el.trigger('details:edit-mode');  
+    this.editMode.el.trigger('details:edit-mode');
   }
 
   ActionBarBridge.prototype.enableModalButtons = function(){
@@ -93,13 +93,25 @@ ActionBarBridge = (function() {
     var self = this,
       events = "attachment_confirm-modal:confirm observer_confirm-modal:confirm";
     this.modals.el.on(events, function(event, item, sourceEl){
+      console.log("sourceEl: ", sourceEl);
       self._submitAndClose(sourceEl);
     });
   }
 
   ActionBarBridge.prototype._submitAndClose = function(sourceEl){
     var self = this;
-    $(sourceEl).parent().submit();
+    var url = $(sourceEl).data('delete-url');
+    $.ajax({
+      url: url,
+      headers: {
+        Accept : "text/javascript; charset=utf-8",
+        "Content-Type": 'application/x-www-form-urlencoded; charset=UTF-8'
+      },
+      type: 'POST',
+      data: {
+        _method: "delete"
+      }
+    });
     self._closeModal();
   }
 
