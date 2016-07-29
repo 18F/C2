@@ -10,6 +10,5 @@ class Role < ActiveRecord::Base
   def self.ensure_system_roles_exist
     SYSTEM_ROLES.each { |r| Role.find_or_create_by!(name: r) }
   end
-
   ensure_system_roles_exist if connected? && connection.table_exists?("roles")
 end

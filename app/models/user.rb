@@ -136,8 +136,9 @@ class User < ActiveRecord::Base
 
   # If we want to select certain beta features, we can add
   # a parameter `(feature: nil)`.
-  def should_see_beta?
-    in_beta_program? && role?(ROLE_BETA_ACTIVE)
+  def should_see_beta?(feature = nil)
+    feature = feature ? role?(feature) : true
+    in_beta_program? && role?(ROLE_BETA_ACTIVE) && feature
   end
 
   def in_beta_program?
