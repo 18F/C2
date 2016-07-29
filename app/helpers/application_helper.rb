@@ -25,6 +25,9 @@ module ApplicationHelper
   end
 
   def blank_field_default(field)
-    field = field.blank? ? "--" : field
+    if field.blank?
+      field = "--".to_s
+    end
+    field
   end
 end
