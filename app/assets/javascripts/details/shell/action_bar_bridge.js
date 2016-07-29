@@ -93,7 +93,6 @@ ActionBarBridge = (function() {
     var self = this,
       events = "attachment_confirm-modal:confirm observer_confirm-modal:confirm";
     this.modals.el.on(events, function(event, item, sourceEl){
-      console.log("sourceEl: ", sourceEl);
       self._submitAndClose(sourceEl);
     });
   }
