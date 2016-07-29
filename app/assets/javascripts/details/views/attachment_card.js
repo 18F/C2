@@ -42,7 +42,6 @@ AttachmentCardController = (function(){
     }
   }
 
-
   AttachmentCardController.prototype._setDefaults = function(opts){
     opts = opts || {};
     var self = this;
@@ -65,6 +64,7 @@ AttachmentCardController = (function(){
       }
     })
   }
+
 
   AttachmentCardController.prototype.getFileName = function(){
     var self = this;
