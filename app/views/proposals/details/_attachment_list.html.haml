@@ -13,7 +13,7 @@
               #{attachment.file_file_name}
           %div.remove-attachment-btn.text-right.small-1.columns
           - if policy(attachment).can_destroy?
-            = button_to "", proposal_attachment_path(proposal, attachment), method: :delete, data: {"modal-type": "attachment_confirm"}, remote: true, class: "button primary round no-margin-bottom remove-button", "aria-label": "Remove #{ attachment.file_file_name } attachment"
+            = button_to "", proposal_attachment_path(proposal, attachment), method: :delete, data: {"modal-type": "attachment_confirm"}, remote: true, class: "remove-button", "aria-label": "Remove #{ attachment.file_file_name } attachment"
   - if proposal.attachments.empty?
     .content-content.no-attachments.column
       .row

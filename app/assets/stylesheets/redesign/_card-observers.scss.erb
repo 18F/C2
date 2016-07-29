@@ -1,10 +1,10 @@
 .observer-list-item{
-  .button_to{
+  .remove-button{
     float: right;
   }
 }
 
-.observer-list-item .button_to input[type="submit"]{
+.observer-list-item input[type="submit"]{
   color: #3373B1;
 }
 
@@ -12,7 +12,7 @@
   position: relative;
 }
 
-.observer-list-item .button_to {
+.observer-list-item {
   position: absolute;
   right: 3px;
   line-height: 16px;
@@ -29,12 +29,12 @@
 
 li.observer-list-item:hover {
   background: lighten(#E8E8E8, 5%);
-  .button_to:before {
+  .remove-button:before {
     opacity: .7;
   }
 }
 
-.observer-list-item .button_to input[type="submit"]:focus {
+.observer-list-item input[type="submit"]:focus {
   outline: none;
 }
 
