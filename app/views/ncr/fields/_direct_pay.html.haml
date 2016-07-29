@@ -1,13 +1,11 @@
 .column{ id: key + '-wrapper'}
   .detail-wrapper.row{ class: key + "-wrapper", id: value_id }
-    .detail-display.column
-      %label.detail-element
-        = t(t_slug + key)
-      %span.detail-value
-        - if client_field != "--"
-          Yes
-        - else
-          No
+    - if client_field != "--"
+      .detail-display.column
+        %label.detail-element
+          = t(t_slug + key)
+        %span.detail-value
+          Direct pay will be used
     .detail-edit.column
       %label.detail-element
         = t(t_slug + key)
