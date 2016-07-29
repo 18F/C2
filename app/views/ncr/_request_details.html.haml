@@ -1,17 +1,18 @@
 - i = 0
 - reapproval_required = @proposal.ncr? ? Ncr::WorkOrderReapprovalChecker.new(@proposal.client_data).could_require_budget_reapproval? : false
 - @proposal.new_fields_for_display.each do |field|
-  - data = { |
-    f: @form, |
-    proposal: @proposal,
-    key: key,
-    t_slug: "decorators." + @current_user.client_slug + "/work_order.",
-    client_slug: @current_user.client_slug,
-    client_data: @client_data_instance,
-    client_id: @client_data_instance.id.to_s,
-    client_field: blank_field_default(client_data[key]),
-    value_id: key + '-' + @client_data_instance.id.to_s,
-    reapproval: reapproval_required }
+  - key = field[:key]
+  - data = {}
+  - data[:f] = @form
+  - data[:proposal] = @proposal
+  - data[:key] = key
+  - data[:t_slug] = "decorators." + @current_user.client_slug + "/work_order."
+  - data[:client_slug] = @current_user.client_slug
+  - data[:client_data] = @client_data_instance
+  - data[:client_id] = @client_data_instance.id.to_s
+  - data[:client_field] = blank_field_default(@client_data_instance[key])
+  - data[:value_id] = key + '-' + @client_data_instance.id.to_s
+  - data[:reapproval] = reapproval_required
 
   - if i == 1
     :plain
