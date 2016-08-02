@@ -1,19 +1,20 @@
 <% content_for :title, "My Requests" %>
 <%= render 'layouts/scripts' %>
 
-<% if display_search_ui? %>
-<%= render partial: "shared/search_ui", locals: { show_adv_search_ui: params[:search] } %>
-<% end %>
-<div class="inset">
-
-  <div id="proposals-unfiltered" class="row">
-    <div class="col-md-12">
-      <h3>All Purchase Requests</h3>
-      <% if @unfiltered_data.rows.any? %>
-        <%= render partial: "shared/table_next", locals: { container: @unfiltered_data } %>
-      <% else %>
-        <p class="empty-list-label">No purchase requests</p>
-      <% end %>
-    </div>
+<div id="proposals-unfiltered" class="row">
+  <div class="medium-6 column">
+    <h3>Requests</h3>
+  </div>
+  <div class="medium-6 column">
+    <% if display_search_ui? %>
+      <%= render partial: "shared/search_ui", locals: { show_adv_search_ui: params[:search] } %>
+    <% end %>
+  </div>
+  <div class="medium-12 column">
+    <% if @unfiltered_data.rows.any? %>
+      <%= render partial: "shared/table_next", locals: { container: @unfiltered_data } %>
+    <% else %>
+      <p class="empty-list-label">No purchase requests</p>
+    <% end %>
   </div>
 </div>
