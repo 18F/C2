@@ -15,11 +15,24 @@ table.dataTable thead .sorting_desc_disabled {
 }
 
 
-.dataTables_wrapper{
+.dataTables_wrapper.dataTables_wrapper{
   font-size: 14px;
   #tabular-data_filter{
     display: none;
   }
+  tr{
+    td, td a{
+      color: #4a4a4a;
+      text-decoration: none;
+    }
+    &.even{
+      background: #fff;
+    }
+    &.odd{
+      background: #f8f8f8;
+    }
+  }
+
   .tabular-data th{
     background: #3a6e93;
     padding: 10px;
