@@ -1,13 +1,13 @@
 <% content_for :title, "My Requests" %>
 <%= render 'layouts/scripts' %>
 
-<div id="proposals-unfiltered" class="row">
+<div id="proposals-unfiltered" class="proposals-unfiltered row">
   <div class="medium-6 column">
     <h3>Requests</h3>
   </div>
   <div class="medium-6 column">
     <% if display_search_ui? %>
-      <%= render partial: "shared/search_ui", locals: { show_adv_search_ui: params[:search] } %>
+      <%= render partial: "shared/search_ui_next", locals: { show_adv_search_ui: params[:search] } %>
     <% end %>
   </div>
   <div class="medium-12 column">
