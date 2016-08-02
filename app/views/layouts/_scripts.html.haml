@@ -23,3 +23,19 @@
 
 - unless Rails.env.test?
   = javascript_include_tag "https://www.ethn.io/32631.js", async: true
+
+= stylesheet_link_tag "DataTables/dataTables.foundation.css"
+= stylesheet_link_tag "DataTables/buttons.foundation.css"
+= stylesheet_link_tag "DataTables/fixedColumns.foundation.css"
+= stylesheet_link_tag "DataTables/fixedHeader.foundation.css"
+= stylesheet_link_tag "DataTables/responsive.foundation.css"
+
+= javascript_include_tag "DataTables/jquery.dataTables.js"
+= javascript_include_tag "DataTables/dataTables.foundation.js"
+= javascript_include_tag "DataTables/dataTables.buttons.js"
+= javascript_include_tag "DataTables/buttons.foundation.js"
+= javascript_include_tag "DataTables/buttons.colVis.js"
+= javascript_include_tag "DataTables/buttons.print.js"
+= javascript_include_tag "DataTables/dataTables.fixedColumns.js"
+= javascript_include_tag "DataTables/dataTables.fixedHeader.js"
+= javascript_include_tag "DataTables/dataTables.responsive.js"
