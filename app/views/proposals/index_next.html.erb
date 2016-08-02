@@ -4,14 +4,13 @@
 <% if display_search_ui? %>
 <%= render partial: "shared/search_ui", locals: { show_adv_search_ui: params[:search] } %>
 <% end %>
-<h2>LIST BETA VIEW</h2>
 <div class="inset">
 
   <div id="proposals-pending" class="row pending-pr">
     <div class="col-md-12">
       <h3>All Purchase Requests</h3>
       <% if @unfiltered_data.rows.any? %>
-        <%= render partial: "shared/table", locals: { container: @unfiltered_data } %>
+        <%= render partial: "shared/table_next", locals: { container: @unfiltered_data } %>
       <% else %>
         <p class="empty-list-label">No purchase requests</p>
       <% end %>
