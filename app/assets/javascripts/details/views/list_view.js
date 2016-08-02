@@ -8,12 +8,15 @@ ListViewDataTable = (function(){
   }
 
   ListViewDataTable.prototype._setup = function(){
-    this.el.DataTable( {
+    this.dataTable = this.el.DataTable( {
         // destroy: true,
-        // dom: 'Bfrtip',
-        // buttons: [
-          // 'colvis'
-        // ],
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'colvis',
+                columns: ':not(:first-child)'
+            }
+        ],
         "paging":   false,
         "info":     false,
         responsive: true
