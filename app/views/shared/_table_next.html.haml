@@ -6,9 +6,7 @@
         %th{class: column.sort_dir}
           .table-header
             - if !container.frozen_sort && column.can_sort?
-              - # long-form instead of link_to to avoid brakeman XSS warning
-              %a{href: "?#{container.sort_params(request.query_parameters, column).to_query}"}
-                = column.header
+              = column.header
             - else
               = column.header
   %tbody

@@ -9,10 +9,13 @@ ListViewDataTable = (function(){
 
   ListViewDataTable.prototype._setup = function(){
     this.el.DataTable( {
-        dom: 'Bfrtip',
-        buttons: [
+        // destroy: true,
+        // dom: 'Bfrtip',
+        // buttons: [
           // 'colvis'
-        ],
+        // ],
+        "paging":   false,
+        "info":     false,
         responsive: true
     } );
   }
