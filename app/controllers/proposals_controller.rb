@@ -13,7 +13,7 @@ class ProposalsController < ApplicationController
   def show
     @proposal = proposal.decorate
 
-    if new_mode
+    if detail_beta?
       show_next
     end
   end
@@ -232,18 +232,18 @@ class ProposalsController < ApplicationController
     flash[:success] = "You have approved #{proposal.public_id}."
   end
 
-  def new_mode
-    current_user.should_see_beta?
+  def detail_beta?
+    current_user.should_see_beta?("BETA_FEATURE_DETAIL_VIEW")
   end
 
   def list_beta?
-    true
+    current_user.should_see_beta?("BETA_FEATURE_LIST_VIEW")
   end
 
   def cancel_proposal
     cancel_proposal_and_send_cancelation_emails
     flash[:success] = "You've canceled the request."
-    redirect_path = new_mode ? proposals_path : proposal_path(proposal)
+    redirect_path = detail_beta? ? proposals_path : proposal_path(proposal)
     redirect_to redirect_path
   end
 end
