@@ -26,13 +26,7 @@ class ProposalsController < ApplicationController
   end
 
   def index
-    @closed_proposal_limit = ENV.fetch("CLOSED_PROPOSAL_LIMIT", 10).to_i
-    @unfiltered_data = listing.all
-    @pending_data = listing.pending
-    @pending_review_data = listing.pending_review
-    @completed_data = listing.completed.apply_limit(@closed_proposal_limit)
-    @canceled_data = listing.canceled.apply_limit(@closed_proposal_limit)
-
+    setup_index_instance
     if list_beta?
       index_redesign
     end
@@ -44,6 +38,15 @@ class ProposalsController < ApplicationController
 
   def archive
     redirect_to query_proposals_path(text: "status:completed")
+  end
+
+  def setup_index_instance
+    @closed_proposal_limit = ENV.fetch("CLOSED_PROPOSAL_LIMIT", 10).to_i
+    @unfiltered_data = listing.all
+    @pending_data = listing.pending
+    @pending_review_data = listing.pending_review
+    @completed_data = listing.completed.apply_limit(@closed_proposal_limit)
+    @canceled_data = listing.canceled.apply_limit(@closed_proposal_limit)
   end
 
   def revert_detail_design
