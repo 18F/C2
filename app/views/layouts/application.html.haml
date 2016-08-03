@@ -27,12 +27,17 @@
     - if current_user.should_see_beta?("BETA_FEATURE_LIST_VIEW")
       .medium-9.column.large-10.medium-offset-3.large-offset-2
         = content_for?(:content) ? yield(:content) : yield
+        - unless @skip_footer
+          #footer.inset
+            %p
+              Find a bug, have a recommendation, or want to provide other feedback? We'd love to
+              %a{:href => feedback_path, :target => "_blank"} hear from you!
       :plain
         </div>
     - else
       = content_for?(:content) ? yield(:content) : yield
-    - unless @skip_footer
-      #footer.inset
-        %p
-          Find a bug, have a recommendation, or want to provide other feedback? We'd love to
-          %a{:href => feedback_path, :target => "_blank"} hear from you!
+      - unless @skip_footer
+        #footer.inset
+          %p
+            Find a bug, have a recommendation, or want to provide other feedback? We'd love to
+            %a{:href => feedback_path, :target => "_blank"} hear from you!
