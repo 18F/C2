@@ -31,10 +31,7 @@ class ProposalsController < ApplicationController
     @pending_review_data = listing.pending_review
     @completed_data = listing.completed.apply_limit(@closed_proposal_limit)
     @canceled_data = listing.canceled.apply_limit(@closed_proposal_limit)
-
-    if list_beta?
-      index_redesign
-    end
+    beta_index_setup
   end
 
   def index_redesign
@@ -43,6 +40,13 @@ class ProposalsController < ApplicationController
 
   def archive
     redirect_to query_proposals_path(text: "status:completed")
+  end
+
+  def beta_index_setup
+    if list_beta?
+      @unfiltered_data = listing.all
+      index_redesign
+    end
   end
 
   def revert_detail_design

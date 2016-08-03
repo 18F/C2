@@ -7,6 +7,10 @@ class ProposalListingQuery
     @user = user
   end
 
+  def all
+    index_visible_container(:all)
+  end
+
   def pending
     index_visible_container(:pending, filter: pending_filter).alter_query(&:pending)
   end
