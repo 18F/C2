@@ -11,6 +11,7 @@ C2 = (function() {
       notifications:  '#action-bar-status',
       observerCard:   '#card-for-observers',
       modalCard:      '#modal-wrapper',
+      listView:       "#tabular-data",
       approvalCard:   '#card-for-approvals'
     }
     this.lastNotice = {};
@@ -39,6 +40,7 @@ C2 = (function() {
     this.actionBar = new ActionBar(config.actionBar);
     this.notification = new Notifications(config.notifications);
     this.actionBridge = new ActionBarBridge(self);
+    this.listview = new ListViewDataTable(config.listView)
     this._setupEvents();
   }
 
