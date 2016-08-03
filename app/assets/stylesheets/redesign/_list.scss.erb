@@ -90,6 +90,12 @@ table#tabular-data {
     content: "";
   }
   tr{
+    td{
+      border-right: 1px solid #eee;
+      &.sorting_1{
+        border-left: 1px solid #eee;
+      }
+    }
     td, td a{
       color: #4a4a4a;
       text-decoration: none;
