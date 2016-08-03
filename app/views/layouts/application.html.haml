@@ -21,9 +21,9 @@
       = render "layouts/c2_header_next"
     - else
       = render "layouts/c2_header"
-    = render "layouts/notices"
+      = render "layouts/notices"
     - if current_user.should_see_beta?("BETA_FEATURE_LIST_VIEW")
-      .medium-9.column
+      .medium-9.column.large-10
         = content_for?(:content) ? yield(:content) : yield
     - else
       = content_for?(:content) ? yield(:content) : yield
