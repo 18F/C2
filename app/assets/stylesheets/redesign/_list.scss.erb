@@ -37,6 +37,48 @@ table#tabular-data {
   }
 }
 
+.proposals-unfiltered{
+  position: relative;
+  a.resetter{
+    display: block;
+    padding-bottom: 15px;
+    padding-top: 10px;
+    text-decoration: underline;
+  }
+  .fa-search:before{
+    font-size: 20px;
+  }
+  .m-search-ui.expanded .adv-controls{
+    padding-left: 0px;
+  }
+  div.search{
+    position: relative;
+    height: 4em;
+    .m-search-ui.row{
+      @media screen and (min-width: 40em){
+        float: right;
+        right: 0px;
+      }
+      margin-left: 0px;
+      padding-right: 0px;
+    }
+    .form-group{
+      margin-bottom: 0px;
+    }
+    fieldset.adv{
+      background-color: rgb(227, 227, 227);
+    }
+  }
+  .form-horizontal .control-label {
+    text-align: left;
+    font-weight: bold;
+  }
+  .input-group,
+  .form-control,
+  [type='text'], [type='password'], [type='date'], [type='datetime'], [type='datetime-local'], [type='month'], [type='week'], [type='email'], [type='number'], [type='search'], [type='tel'], [type='time'], [type='url'], [type='color'], textarea{
+    margin-bottom: 0px;
+  }
+}
 
 #tabular-data_wrapper{
   a.buttons-colvis{
