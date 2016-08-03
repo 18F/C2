@@ -8,7 +8,7 @@ describe ProposalListingQuery do
         it "ignores app admin role and only returns the user's Proposals" do
           create(:proposal, status: status)
           proposal = create(:proposal, requester: user, status: status)
-          user.add_role('admin')
+          user.add_role("admin")
           listing = ProposalListingQuery.new(user, params)
           expect(listing.send(status).rows).to eq([proposal])
         end
@@ -16,7 +16,7 @@ describe ProposalListingQuery do
         context "with an arbitrary client" do
           before do
             user.update_attribute(:client_slug, "ncr")
-            user.add_role('client_admin')
+            user.add_role("client_admin")
           end
 
           it "ignores client_admin role and only displays the user's Proposals" do
