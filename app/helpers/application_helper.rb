@@ -32,6 +32,6 @@ module ApplicationHelper
   end
 
   def list_view_conditions
-    (controller_name == "proposals" && params[:action] == "index" && current_user.should_see_beta?("BETA_FEATURE_LIST_VIEW"))
+    (controller_name == "proposals" && params[:action] == "index" && !@current_user.nil? && @current_user.should_see_beta?("BETA_FEATURE_LIST_VIEW"))
   end
 end
