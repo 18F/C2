@@ -1,9 +1,7 @@
 - if signed_in?
   .mycart-link
     %ul.header-nav
-      %li
-        = link_to "Requests", proposals_path
-        = image_tag "img-cart.png", width: "18px", height: "16px"
+
       = render client_specific_partial(current_user, "header_links")
       - if current_user.any_admin?
         %li
