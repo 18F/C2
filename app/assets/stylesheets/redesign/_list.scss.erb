@@ -14,12 +14,114 @@ table.dataTable thead .sorting_desc_disabled {
   background-image: url("<%= asset_path 'DataTables/sort_desc_disabled.png' %>");
 }
 
+.full-width-row{
+  position: relative;
+  max-width: 100%;
+}
+
+.sidebar-home{
+  #header-identity{
+    text-align: center;
+    img{
+      padding-top: 10px;
+      padding-bottom: 10px;
+      max-width: 300px;
+      width: 80%;
+    }
+    a{
+      display: block;
+    }
+  }
+  @media screen and (min-width: 40em){
+    position: absolute;
+    margin-left: 0px;
+    padding-left: 0px;
+  }
+  height: 100%;
+  .sidebar-wrapper{
+    background: #333541;
+    position: relative;
+    height: 100%;
+  }
+  .new-request-button, .reports-button{
+    background: #333541;
+  }
+  .side-secondary-nav{
+    list-style: none;
+    font-size: 14px;
+    color: white;
+    clear: both;
+    padding-top: 1em;
+    a{
+      color: #c5dced;
+    }
+  }
+  .header-nav{
+    margin-left: 0px;
+    li{
+      &:first-child{
+        border-top: 2px solid #5a5b60;
+      }
+      border-bottom: 2px solid #5a5b60;
+      width: 100%;
+      padding: 0px;
+      background: #444754;
+      a{
+        display: block;
+        padding: 15px 20px;
+        width: 100%;
+        font-weight: bold;
+        color: white;
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+ul.inline-list{
+  margin: 0px;
+  &.has-dividers{
+    li{
+      padding-left: 10px;
+      padding-right: 5px;
+      &:first-child{
+        &:before{
+          border: none;
+        }
+      }
+      position: relative;
+      &:before{
+        content: "";
+        height: 12px;
+        position: absolute;
+        left: 0px;
+        border-left: 1px solid #ccc;
+        top: 0px;
+        bottom: 0px;
+        margin: auto;
+      }
+    }
+  }
+  li{
+    display: inline;
+    a, .button_to input{
+      font-size: 14px;
+      text-decoration: none;
+      color: #2d5a79;
+    }
+  }
+}
+
+.header-user{
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+
 table#tabular-data {
   width: 100%!important;
 }
 
 .proposals-unfiltered{
-  padding-top: 2em;
   h3{
     margin-bottom: 1em;
     color: #4a4a4a;

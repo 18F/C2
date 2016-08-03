@@ -1,0 +1,25 @@
+- unless ENV["DISABLE_SANDBOX_WARNING"] == "true"
+  = render partial: "shared/sandbox_warning"
+
+
+.sidebar-home.medium-3.column.large-2
+  .sidebar-wrapper
+    #header-identity
+      - if signed_in?
+        = link_to proposals_path do
+          = image_tag "logo-c2.png"
+      - else
+        = link_to root_path do
+          = image_tag "logo-c2.png"
+
+    = render "layouts/header_nav_next"
+.header-user.medium-9.column.large-10.medium-offset-3.large-offset-2
+  - if signed_in?
+    %ul.inline-list.text-right.has-dividers
+      %li
+        = link_to current_user.email_address, profile_path
+      - if current_user.any_admin?
+        %li
+          %a#summary-link{:href => "/summary"} Summary
+      %li
+        = button_to "Logout", "/logout", method: :post, class: "login-link"
