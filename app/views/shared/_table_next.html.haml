@@ -1,0 +1,18 @@
+- # Requires the "container" variable
+%table.tabular-data#tabular-data
+  %thead
+    %tr
+      - container.columns.each do |column|
+        %th{class: column.sort_dir}
+          .table-header
+            - if !container.frozen_sort && column.can_sort?
+              = column.header
+            - else
+              = column.header
+  %tbody
+    - container.rows.each do |row|
+      %tr
+        - container.columns.each do |column|
+          %td{class: column.name}
+            = render(partial: "shared/formatter/" + column.formatter.to_s,
+              locals: { object: row, value: column.display(row) })
