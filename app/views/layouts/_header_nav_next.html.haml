@@ -2,3 +2,6 @@
   %ul.header-nav
     = render client_specific_partial(current_user, "header_links_next")
 
+  %ul.side-secondary-nav
+    %li
+      = link_to "Help", help_index_path

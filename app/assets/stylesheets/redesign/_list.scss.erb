@@ -34,10 +34,23 @@ table.dataTable thead .sorting_desc_disabled {
   .new-request-button, .reports-button{
     background: #333541;
   }
+  .side-secondary-nav{
+    list-style: none;
+    font-size: 14px;
+    color: white;
+    clear: both;
+    padding-top: 1em;
+    a{
+      color: #c5dced;
+    }
+  }
   .header-nav{
     margin-left: 0px;
     li{
-      border-top: 2px solid #5a5b60;
+      &:first-child{
+        border-top: 2px solid #5a5b60;
+      }
+      border-bottom: 2px solid #5a5b60;
       width: 100%;
       padding: 0px;
       background: #444754;
