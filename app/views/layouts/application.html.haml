@@ -17,14 +17,14 @@
   %body{:class => "bodyclass webapp controller-#{controller_name} action-#{params[:action]}"}
     = render "peek/bar"
     = content_for?(:top_notification) ? yield(:top_notification) : ""
-    - if current_user.should_see_beta?("BETA_FEATURE_LIST_VIEW")
+    - if list_view_conditions
       :plain
         <div class="row full-width-row">
       = render "layouts/c2_header_next"
     - else
       = render "layouts/c2_header"
       = render "layouts/notices"
-    - if current_user.should_see_beta?("BETA_FEATURE_LIST_VIEW")
+    - if list_view_conditions
       .medium-9.column.large-10.medium-offset-3.large-offset-2
         = content_for?(:content) ? yield(:content) : yield
         - unless @skip_footer
