@@ -1,0 +1,7 @@
+- unless ENV["DISABLE_SANDBOX_WARNING"] == "true"
+  = render partial: "shared/sandbox_warning"
+.sidebar.container.medium-3.column
+  #header-identity
+    #c2_logo C2
+    %h1 Approval Portal
+  = render "layouts/header_nav"
