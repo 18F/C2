@@ -1,6 +1,5 @@
 - if signed_in?
   %ul.header-nav
-
     = render client_specific_partial(current_user, "header_links_next")
     - if current_user.any_admin?
       %li
