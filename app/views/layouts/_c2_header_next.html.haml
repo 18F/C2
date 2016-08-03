@@ -3,11 +3,12 @@
 
 
 .sidebar-home.medium-3.column.large-2
-  #header-identity
-    #c2_logo C2
-    %h1 Approval Portal
-  = render "layouts/header_nav_next"
-.header-user.medium-9.column.large-10
+  .sidebar-wrapper
+    #header-identity
+      #c2_logo C2
+      %h1 Approval Portal
+    = render "layouts/header_nav_next"
+.header-user.medium-9.column.large-10.medium-offset-3.large-offset-2
   - if signed_in?
     %ul.inline-list.text-right.has-dividers
       %li

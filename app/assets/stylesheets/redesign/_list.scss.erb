@@ -14,6 +14,25 @@ table.dataTable thead .sorting_desc_disabled {
   background-image: url("<%= asset_path 'DataTables/sort_desc_disabled.png' %>");
 }
 
+.full-width-row{
+  position: relative;
+  max-width: 100%;
+}
+
+.sidebar-home{
+  @media screen and (min-width: 40em){
+    position: absolute;
+    padding-left: 0px;
+  }
+  height: 100%;
+  margin-left: 0px;
+  padding-left: 0px;
+  .sidebar-wrapper{
+    background: #333541;
+    position: relative;
+  }
+}
+
 ul.inline-list{
   margin: 0px;
   &.has-dividers{
