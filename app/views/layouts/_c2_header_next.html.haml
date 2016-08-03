@@ -18,5 +18,8 @@
     %ul.inline-list.text-right.has-dividers
       %li
         = link_to current_user.email_address, profile_path
+      - if current_user.any_admin?
+        %li
+          %a#summary-link{:href => "/summary"} Summary
       %li
         = button_to "Logout", "/logout", method: :post, class: "login-link"
