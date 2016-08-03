@@ -5,8 +5,13 @@
 .sidebar-home.medium-3.column.large-2
   .sidebar-wrapper
     #header-identity
-      #c2_logo C2
-      %h1 Approval Portal
+      - if signed_in?
+        = link_to proposals_path do
+          = image_tag "http://fakeimg.pl/300x50"
+      - else
+        = link_to root_path do
+          = image_tag "http://fakeimg.pl/300x50"
+
     = render "layouts/header_nav_next"
 .header-user.medium-9.column.large-10.medium-offset-3.large-offset-2
   - if signed_in?
