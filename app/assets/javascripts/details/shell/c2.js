@@ -41,7 +41,8 @@ C2 = (function() {
     this.actionBar = new ActionBar(config.actionBar);
     this.notification = new Notifications(config.notifications);
     this.actionBridge = new ActionBarBridge(self);
-    this.listview = new ListViewDataTable(config.listView)
+    this.listview = new ListViewDataTable(config.listView);
+    this.sidebarNav = new SidebarNav(config.sidebarNav);
     this._setupEvents();
   }
 
