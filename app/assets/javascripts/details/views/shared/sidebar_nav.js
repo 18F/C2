@@ -15,9 +15,19 @@ SidebarNav = (function(){
     var self = this;
     this.el.on('click', "a", function(event){
       var el = this;
-      event.preventDefault();
+      if(self.shouldLink){
+        event.preventDefault();
+      }
       self.triggerSidebar(event, el);
     });
+  }
+
+  SidebarNav.prototype.shouldLink = function(){
+    if( $('body').hasClass('controller-proposals action-index') ){
+      return true;
+    } else {
+      return false;
+    }
   }
 
   SidebarNav.prototype.setActive = function(el){
