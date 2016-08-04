@@ -66,18 +66,78 @@ table.dataTable thead .sorting_desc_disabled {
   .header-nav{
     margin-left: 0px;
     li{
+      position: relative;
+
       &.requests-button{
         border-bottom: none;
       }
-      &.reports-button{
+      .reports-button{
         border-top: 2px solid #5a5b60;
       }
       &.request-related-button{
-        padding-left: 20px;
-        padding-right: 20px;
         border: none;
+        position: relative;
         a{
+          position: relative;
+          padding-left: 40px;
+          width: 100%;
+          display: block;
+        }
+        &:before{
+          content: "";
+          display: block;
+          position: absolute;
+          width: 70%;
+          top: 0px;
           border-top: 2px solid #5a5b60;
+          left: 0px;
+          right: 0px;
+          margin: auto;
+        }
+        &.active, &:focus, &:hover{
+          &:before {
+            border: none;
+            content: "";
+            position: absolute;
+            height: 100%;
+            right: -20px;
+            width: 100%;
+          }
+        }
+      }
+      &.view-all-button-wrapper{
+        &.active, &:focus, &:hover{
+          &:before {
+            background: yellow;
+          }
+        }
+      }
+      &.pending-button-wrapper{
+        &.active, &:focus, &:hover{
+          &:before {
+            background: blue;
+          }
+        }
+      }
+      &.completed-button-wrapper{
+        &.active, &:focus, &:hover{
+          &:before {
+            background: orange;
+          }
+        }
+      }
+      &.canceled-button-wrapper{
+        &.active, &:focus, &:hover{
+          &:before {
+            background: red;
+          }
+        }
+      }
+      &.reports-button-wrapper{
+        &.active, &:focus, &:hover{
+          &:before {
+            background: purple;
+          }
         }
       }
       &:first-child{
@@ -178,12 +238,19 @@ table#tabular-data {
     position: relative;
     height: 4em;
     .m-search-ui.row{
-      margin: auto;
-      @media screen and (min-width: 40em){
+      fieldset.basic{
+        padding-right: 0em;
+      }
+      @media screen and (min-width: 64em){
         float: right;
         right: 0px;
+      }
+      @media screen and (min-width: 40em){
         margin-left: 0px;
         padding-right: 0px;
+      }
+      @media screen and (min-width: 40em) and (max-width: 64em){
+        margin: auto !important;
       }
     }
     .form-group{
