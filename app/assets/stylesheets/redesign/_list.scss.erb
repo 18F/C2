@@ -20,6 +20,12 @@ table.dataTable thead .sorting_desc_disabled {
 }
 
 .sidebar-home{
+  @media screen and (max-width: 40em){
+    padding: 0px;
+  }
+  .header-nav{
+    width: 100%;
+  }
   #header-identity{
     text-align: center;
     img{
@@ -157,12 +163,13 @@ table#tabular-data {
     position: relative;
     height: 4em;
     .m-search-ui.row{
+      margin: auto;
       @media screen and (min-width: 40em){
         float: right;
         right: 0px;
+        margin-left: 0px;
+        padding-right: 0px;
       }
-      margin-left: 0px;
-      padding-right: 0px;
     }
     .form-group{
       margin-bottom: 0px;
