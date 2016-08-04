@@ -21,14 +21,14 @@ SidebarNav = (function(){
   }
 
   SidebarNav.prototype.setActive = function(el){
-    this.el.find('li').removeClass('active');
+    this.el.find('a').removeClass('active');
     $(el).addClass('active');
   }
 
   SidebarNav.prototype.triggerSidebar = function(event, el){
     var trigger = $(el).data('trigger');
     this.setActive(el);
-    this.el.trigger('button:' + trigger);
+    this.el.trigger('sidebar:button', trigger);
   }
 
   return SidebarNav;
