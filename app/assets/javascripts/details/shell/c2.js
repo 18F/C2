@@ -38,8 +38,10 @@ C2 = (function() {
     this.modals = new ModalController(config.modalCard);
     this.actionBar = new ActionBar(config.actionBar);
     this.notification = new Notifications(config.notifications);
+
     this.actionBridge = new ActionBarBridge(self);
     this.listViewBridge = new ListViewBridge(self);
+
     this._setupEvents();
   }
 

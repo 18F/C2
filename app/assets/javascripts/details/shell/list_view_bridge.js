@@ -7,7 +7,7 @@ ListViewBridge = (function() {
     config = config || {};
     this.config = {
       listView:       "#tabular-data",
-      sidebarNav:     "#sidebar-home",
+      sidebarNav:     "#sidebar-home"
     }
     this._overrideTestConfig(config);
     this._blastOff();
