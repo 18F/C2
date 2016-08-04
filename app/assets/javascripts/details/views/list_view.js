@@ -21,6 +21,39 @@ ListViewDataTable = (function(){
         "info":     false,
         responsive: true
     } );
+    this._events();
+  }
+
+  ListViewDataTable.prototype._events = function(){
+    var self = this;
+    this.el.on('dataTableView:canceled', function(){
+      self.viewCanceled();
+    });
+    this.el.on('dataTableView:pending', function(){
+      self.viewPending();
+    });
+    this.el.on('dataTableView:completed', function(){
+      self.viewCompleted();
+    });
+    this.el.on('dataTableView:all', function(){
+      self.viewAll();
+    });
+  }
+
+  ListViewDataTable.prototype.viewPending = function(){
+    this.dataTable.column(':contains(Status)').search('Waiting for review from').draw()
+  }
+
+  ListViewDataTable.prototype.viewCanceled = function(){
+    this.dataTable.column(':contains(Status)').search('Canceled').draw()
+  }
+
+  ListViewDataTable.prototype.viewAll = function(){
+    this.dataTable.column(':contains(Status)').search('').draw()
+  }
+
+  ListViewDataTable.prototype.viewCompleted = function(){
+    this.dataTable.column(':contains(Status)').search('Completed').draw()
   }
 
   return ListViewDataTable;

@@ -1,0 +1,8 @@
+%li.request-related-button.view-all-button-wrapper{ class: check_active_sidebar("view-all") }
+  = link_to "View all", proposals_path, class: "view-all-button"
+%li.request-related-button.pending-button-wrapper{ class: check_active_sidebar("pending") }
+  = link_to "Pending", proposals_path, class: "pending-button"
+%li.request-related-button.completed-button-wrapper{ class: check_active_sidebar("completed") }
+  = link_to "Completed", proposals_path, class: "completed-button"
+%li.request-related-button.canceled-button-wrapper{ class: check_active_sidebar("canceled") }
+  = link_to "Canceled", proposals_path, class: "canceled-button"

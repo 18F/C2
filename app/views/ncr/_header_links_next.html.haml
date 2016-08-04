@@ -2,13 +2,8 @@
   = link_to "New request", new_ncr_work_order_path, class: "new-request-button"
 %li.requests-button
   = link_to "Requests", proposals_path
-%li.request-related-button.view-all-button-wrapper
-  = link_to "View all", proposals_path, class: "view-all-button"
-%li.request-related-button.pending-button-wrapper
-  = link_to "Pending", proposals_path, class: "pending-button"
-%li.request-related-button.completed-button-wrapper
-  = link_to "Completed", proposals_path, class: "completed-button"
-%li.request-related-button.canceled-button-wrapper
-  = link_to "Canceled", proposals_path, class: "canceled-button"
+
+= render 'layouts/sidebar_shared'
+
 %li
   = link_to 'Reports', ncr_dashboard_path, class: "reports-button"
