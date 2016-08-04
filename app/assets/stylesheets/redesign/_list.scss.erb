@@ -212,6 +212,36 @@ table#tabular-data {
   }
 }
 
+div.dt-button-collection.dt-button-collection{
+  width: 193px;
+  .buttons-columnVisibility{
+    width: 100%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-align: left;
+    padding-left: 30px;
+    padding-right: 0px;
+    position: relative;
+    &:before{
+      content: "☐";
+      display: block;
+      width: 13px;
+      height: 13px;
+      position: absolute;
+      background: none;
+      left: 8px;
+      top: 0px;
+      bottom: 0px;
+      margin: auto;
+      font-size: 22px;
+      line-height: 10px;
+    }
+    &.active:before{
+      content: "☒";
+    }
+  }
+}
+
 .dataTables_wrapper{
   font-size: 14px;
   #tabular-data_filter{
