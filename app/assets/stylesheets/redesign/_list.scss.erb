@@ -14,6 +14,7 @@ table.dataTable thead .sorting_desc_disabled {
   background-image: url("<%= asset_path 'DataTables/sort_desc_disabled.png' %>");
 }
 
+
 .full-width-row{
   position: relative;
   max-width: 100%;
@@ -65,6 +66,20 @@ table.dataTable thead .sorting_desc_disabled {
   .header-nav{
     margin-left: 0px;
     li{
+      &.requests-button{
+        border-bottom: none;
+      }
+      &.reports-button{
+        border-top: 2px solid #5a5b60;
+      }
+      &.request-related-button{
+        padding-left: 20px;
+        padding-right: 20px;
+        border: none;
+        a{
+          border-top: 2px solid #5a5b60;
+        }
+      }
       &:first-child{
         border-top: 2px solid #5a5b60;
       }
@@ -74,7 +89,7 @@ table.dataTable thead .sorting_desc_disabled {
       background: #444754;
       a{
         display: block;
-        padding: 15px 20px;
+        padding: 20px 20px;
         width: 100%;
         font-weight: bold;
         color: white;
