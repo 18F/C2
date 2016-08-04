@@ -16,19 +16,24 @@ ListViewBridge = (function() {
   ListViewBridge.prototype._blastOff = function(){
     var config = this.config;
 
-    this.listview = new ListViewDataTable(config.listView);
-    this.sidebarNav = new SidebarNav(config.sidebarNav);
+    this.listview = this.c2.listView;
+    this.sidebarNav = this.c2.sidebarNav;
 
     this._setupEvents();
   }
+
 
   ListViewBridge.prototype._overrideTestConfig = function(config){
     this.config = config;
   }
 
   ListViewBridge.prototype._setupEvents = function(){
+    var self = this;
+    this.sidebarNav.el.on('sidebar:button', function(event, data){
+      console.log(data);
+      self.listview.el.trigger("dataTableView:" + data);
+    })
   }
-
 
   return ListViewBridge;
 
