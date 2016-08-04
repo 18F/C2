@@ -12,6 +12,7 @@ C2 = (function() {
       observerCard:   '#card-for-observers',
       modalCard:      '#modal-wrapper',
       listView:       "#tabular-data",
+      sidebarNav:     "#sidebar-home",
       approvalCard:   '#card-for-approvals'
     }
     this.lastNotice = {};
