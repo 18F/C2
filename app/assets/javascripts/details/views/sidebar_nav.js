@@ -20,11 +20,17 @@ SidebarNav = (function(){
     });
   }
 
+  SidebarNav.prototype.setActive = function(el){
+    this.el.find('li').removeClass('active');
+    $(el).addClass('active');
+  }
+
   SidebarNav.prototype.triggerSidebar = function(event, el){
     console.log(event);
     console.log(el);
     this.lastEvent = event;
     this.lastEl = el;
+    this.setActive(el);
   }
 
   return SidebarNav;
