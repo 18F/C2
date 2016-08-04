@@ -8,7 +8,14 @@ SidebarNav = (function(){
   }
 
   SidebarNav.prototype._setup = function(){
+    this.checkUrl();
     this._events();
+  }
+
+  SidebarNav.prototype.checkUrl = function(){
+    if(location.pathname === "/proposals"){
+      $('.view-all-button').addClass('active');
+    }
   }
 
   SidebarNav.prototype._events = function(){
