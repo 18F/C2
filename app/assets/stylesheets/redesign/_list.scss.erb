@@ -99,6 +99,7 @@ table.dataTable thead .sorting_desc_disabled {
         &.active, &:focus, &:hover{
           a{
             color: #333541;
+            outline: none;
           }
           &:before {
             border: none;
@@ -116,11 +117,35 @@ table.dataTable thead .sorting_desc_disabled {
             background: #c5dced;
           }
         }
+        &.active{
+          &:focus, &:hover{
+            &:before{
+              background: darken(#c5dced, 10%);
+            }
+          }
+        }
+        &:hover{
+          &:before{
+            background: darken(#c5dced, 20%);
+          }
+        }
       }
       &.pending-button-wrapper{
         &.active, &:focus, &:hover{
           &:before {
             background: #f7dd7d;
+          }
+        }
+        &.active{
+          &:focus, &:hover{
+            &:before{
+              background: darken(#f7dd7d, 10%);
+            }
+          }
+        }
+        &:hover{
+          &:before{
+            background: darken(#f7dd7d, 20%);
           }
         }
       }
@@ -130,11 +155,35 @@ table.dataTable thead .sorting_desc_disabled {
             background: #9CD984;
           }
         }
+        &.active{
+          &:focus, &:hover{
+            &:before{
+              background: darken(#9CD984, 10%);
+            }
+          }
+        }
+        &:hover{
+          &:before{
+            background: darken(#9CD984, 20%);
+          }
+        }
       }
       &.canceled-button-wrapper{
         &.active, &:focus, &:hover{
           &:before {
             background: #CDD1D3;
+          }
+        }
+        &.active{
+          &:focus, &:hover{
+            &:before{
+              background: darken(#CDD1D3, 10%);
+            }
+          }
+        }
+        &:hover{
+          &:before{
+            background: darken(#CDD1D3, 20%);
           }
         }
       }
