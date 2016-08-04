@@ -13,34 +13,18 @@ SidebarNav = (function(){
 
   SidebarNav.prototype._events = function(){
     var self = this;
-    this.el.on('dataTableView:canceled', function(){
-      self.viewCanceled();
-    });
-    this.el.on('dataTableView:pending', function(){
-      self.viewPending();
-    });
-    this.el.on('dataTableView:completed', function(){
-      self.viewCompleted();
-    });
-    this.el.on('dataTableView:all', function(){
-      self.viewAll();
+    this.el.on('click', "a", function(event){
+      var el = this;
+      event.preventDefault();
+      self.triggerSidebar(event, el);
     });
   }
 
-  SidebarNav.prototype.viewPending = function(){
-    this.dataTable.column(':contains(Status)').search('Waiting for review from').draw();
-  }
-
-  SidebarNav.prototype.viewCanceled = function(){
-    this.dataTable.column(':contains(Status)').search('Canceled').draw();
-  }
-
-  SidebarNav.prototype.viewAll = function(){
-    this.dataTable.column(':contains(Status)').search('').draw();
-  }
-
-  SidebarNav.prototype.viewCompleted = function(){
-    this.dataTable.column(':contains(Status)').search('Completed').draw();
+  SidebarNav.prototype.triggerSidebar = function(event, el){
+    console.log(event);
+    console.log(el);
+    this.lastEvent = event;
+    this.lastEl = el;
   }
 
   return SidebarNav;
