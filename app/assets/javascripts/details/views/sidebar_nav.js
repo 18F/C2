@@ -26,11 +26,9 @@ SidebarNav = (function(){
   }
 
   SidebarNav.prototype.triggerSidebar = function(event, el){
-    console.log(event);
-    console.log(el);
-    this.lastEvent = event;
-    this.lastEl = el;
+    var trigger = $(el).data('trigger');
     this.setActive(el);
+    this.el.trigger('button:' + trigger);
   }
 
   return SidebarNav;
