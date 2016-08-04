@@ -82,6 +82,7 @@ table.dataTable thead .sorting_desc_disabled {
           padding-left: 40px;
           width: 100%;
           display: block;
+          font-weight: normal;
         }
         &:before{
           content: "";
@@ -93,8 +94,12 @@ table.dataTable thead .sorting_desc_disabled {
           left: 0px;
           right: 0px;
           margin: auto;
+          border-radius: 3px;
         }
         &.active, &:focus, &:hover{
+          a{
+            color: #333541;
+          }
           &:before {
             border: none;
             content: "";
@@ -107,9 +112,6 @@ table.dataTable thead .sorting_desc_disabled {
       }
       &.view-all-button-wrapper{
         &.active, &:focus, &:hover{
-          a{
-            color: #333541;
-          }
           &:before {
             background: #c5dced;
           }
@@ -125,7 +127,7 @@ table.dataTable thead .sorting_desc_disabled {
       &.completed-button-wrapper{
         &.active, &:focus, &:hover{
           &:before {
-            background: #CDD1D3;
+            background: #9CD984;
           }
         }
       }
