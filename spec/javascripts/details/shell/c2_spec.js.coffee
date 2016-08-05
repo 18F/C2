@@ -3,23 +3,23 @@
 describe 'C2', ->
 
   describe '#setup', ->
+    c2 = new C2()
+
     it "checks for c2", ->
-      c2 = new C2()
       expect(c2 instanceof C2).to.eql(true)
 
     it "checks for each constructor", ->
-      c2 = new C2()
-
       expect(c2.actionBridge instanceof ActionBarBridge).to.eql(true)
       expect(c2.listViewBridge instanceof ListViewBridge).to.eql(true)
 
   describe '#setup data', ->
+    c2 = new C2()
+
     it "check constructor detailsSave", ->
       expect(c2.detailsSave instanceof DetailsSave).to.eql(true)
 
     it "check config passing test param detailsSave", ->
       test = "#mode-parent"
-      c2 = new C2()
       expect(c2.config.formContainer).to.eql(test)
 
     it "check constructor updateView", ->
@@ -27,29 +27,21 @@ describe 'C2', ->
 
     it "check config passing test param updateView", ->
       test = "#mode-parent"
-      c2 = new C2()
       expect(c2.config.formContainer).to.eql(test)
 
 
   describe '#setup state', ->
+    c2 = new C2()
 
     it "check constructor editMode", ->
       expect(c2.editMode instanceof EditStateController).to.eql(true)
 
-    it "check config passing test param editMode", ->
-      test = "#mode-parent"
-      c2 = new C2()
-      expect(c2.config.editMode).to.eql(test)
-
     it "check constructor formState", ->
       expect(c2.formState instanceof FormChangeState).to.eql(true)
 
-    it "check config passing test param formState", ->
-      test = "#mode-parent"
-      c2 = new C2()
-      expect(c2.config.formState).to.eql(test)
-
   describe '#setup views', ->
+    c2 = new C2()
+
     it "check constructor attachmentCardController", ->
       expect(c2.attachmentCardController instanceof AttachmentCardController).to.eql(true)
 
@@ -65,11 +57,6 @@ describe 'C2', ->
     it "check constructor detailsRequestCard", ->
       expect(c2.detailsRequestCard instanceof DetailsRequestCard).to.eql(true)
 
-    it "check config passing test param detailsRequestCard", ->
-      test = "#mode-parent"
-      c2 = new C2()
-      expect(c2.config.detailsRequestCard).to.eql(test)
-
     it "check config passing test param attachmentCard", ->
       test = "attachment-card-test"
       testParam = {
@@ -77,14 +64,6 @@ describe 'C2', ->
       }
       c2 = new C2(testParam)
       expect(c2.config.attachmentCard).to.eql(test)
-
-    it "check config passing test param observerCardController", ->
-      test = "observer-card-test"
-      testParam = {
-        observerCardController: test
-      }
-      c2 = new C2(testParam)
-      expect(c2.config.observerCardController).to.eql(test)
 
     it "check config passing test param activityCard", ->
       test = "activity-card-test"
@@ -94,13 +73,6 @@ describe 'C2', ->
       c2 = new C2(testParam)
       expect(c2.config.activityCard).to.eql(test)
 
-    it "check config passing test param approvalCardController", ->
-      test = "approval-card-test"
-      testParam = {
-        approvalCardController: test
-      }
-      c2 = new C2(testParam)
-      expect(c2.config.approvalCardController).to.eql(test)
 
     it "check constructor modals", ->
       expect(c2.modals instanceof ModalController).to.eql(true)
@@ -126,14 +98,6 @@ describe 'C2', ->
 
     it "check constructor notification", ->
       expect(c2.notification instanceof Notifications).to.eql(true)
-
-    it "check config passing test param notification", ->
-      test = "notification-bar-test"
-      testParam = {
-        notification: test
-      }
-      c2 = new C2(testParam)
-      expect(c2.config.notification).to.eql(test)
 
     it "check config passing test param listView", ->
       test = "listView-bar-test"
