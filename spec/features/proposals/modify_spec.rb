@@ -7,7 +7,7 @@ describe "Modify Proposal Spec" do
     js_activate_modify_proposal
     expect(page).to have_selector(title_selector, visible: true)
     js_modify_proposal(new_title_text, title_selector)
-    expect(page).find(".proposal-title-wrapper .detail-value") have_content(new_title_text)
+    expect(page).find(".proposal-title-wrapper .detail-value").to have_content(new_title_text)
   end
 
   private
