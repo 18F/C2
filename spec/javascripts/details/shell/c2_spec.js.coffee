@@ -9,40 +9,40 @@ describe 'C2', ->
 
     it "checks for each constructor", ->
       c2 = new C2()
-      expect(c2.detailsSave instanceof DetailsSave).to.eql(true)
-      expect(c2.updateView instanceof UpdateView).to.eql(true)
-
-      expect(c2.editMode instanceof EditStateController).to.eql(true)
-      expect(c2.formState instanceof FormChangeState).to.eql(true)
-
-      expect(c2.detailsRequestCard instanceof DetailsRequestCard).to.eql(true)
-      expect(c2.attachmentCardController instanceof AttachmentCardController).to.eql(true)
-      expect(c2.observerCardController instanceof ObserverCardController).to.eql(true)
-      expect(c2.activityCardController instanceof ActivityCardController).to.eql(true)
-      expect(c2.approvalCardController instanceof ApprovalCardController).to.eql(true)
-      expect(c2.modals instanceof ModalController).to.eql(true)
-      expect(c2.actionBar instanceof ActionBar).to.eql(true)
-      expect(c2.notification instanceof Notifications).to.eql(true)
 
       expect(c2.actionBridge instanceof ActionBarBridge).to.eql(true)
       expect(c2.listViewBridge instanceof ListViewBridge).to.eql(true)
 
   describe '#setup data', ->
+    it "check constructor detailsSave", ->
+      expect(c2.detailsSave instanceof DetailsSave).to.eql(true)
+
     it "check config passing test param detailsSave", ->
       test = "#mode-parent"
       c2 = new C2()
       expect(c2.config.formContainer).to.eql(test)
+
+    it "check constructor updateView", ->
+      expect(c2.updateView instanceof UpdateView).to.eql(true)
 
     it "check config passing test param updateView", ->
       test = "#mode-parent"
       c2 = new C2()
       expect(c2.config.formContainer).to.eql(test)
 
+
   describe '#setup state', ->
+
+    it "check constructor editMode", ->
+      expect(c2.editMode instanceof EditStateController).to.eql(true)
+
     it "check config passing test param editMode", ->
       test = "#mode-parent"
       c2 = new C2()
       expect(c2.config.editMode).to.eql(test)
+
+    it "check constructor formState", ->
+      expect(c2.formState instanceof FormChangeState).to.eql(true)
 
     it "check config passing test param formState", ->
       test = "#mode-parent"
@@ -50,6 +50,20 @@ describe 'C2', ->
       expect(c2.config.formState).to.eql(test)
 
   describe '#setup views', ->
+    it "check constructor attachmentCardController", ->
+      expect(c2.attachmentCardController instanceof AttachmentCardController).to.eql(true)
+
+    it "check constructor observerCardController", ->
+      expect(c2.observerCardController instanceof ObserverCardController).to.eql(true)
+
+    it "check constructor activityCardController", ->
+      expect(c2.activityCardController instanceof ActivityCardController).to.eql(true)
+
+    it "check constructor approvalCardController", ->
+      expect(c2.approvalCardController instanceof ApprovalCardController).to.eql(true)
+
+    it "check constructor detailsRequestCard", ->
+      expect(c2.detailsRequestCard instanceof DetailsRequestCard).to.eql(true)
 
     it "check config passing test param detailsRequestCard", ->
       test = "#mode-parent"
@@ -88,6 +102,9 @@ describe 'C2', ->
       c2 = new C2(testParam)
       expect(c2.config.approvalCardController).to.eql(test)
 
+    it "check constructor modals", ->
+      expect(c2.modals instanceof ModalController).to.eql(true)
+
     it "check config passing test param modalCard", ->
       test = "cancel-card-test"
       testParam = {
@@ -96,6 +113,9 @@ describe 'C2', ->
       c2 = new C2(testParam)
       expect(c2.config.modalCard).to.eql(test)
 
+    it "check constructor actionBar", ->
+      expect(c2.actionBar instanceof ActionBar).to.eql(true)
+
     it "check config passing test param actionBar", ->
       test = "action-bar-test"
       testParam = {
@@ -103,6 +123,9 @@ describe 'C2', ->
       }
       c2 = new C2(testParam)
       expect(c2.config.actionBar).to.eql(test)
+
+    it "check constructor notification", ->
+      expect(c2.notification instanceof Notifications).to.eql(true)
 
     it "check config passing test param notification", ->
       test = "notification-bar-test"
