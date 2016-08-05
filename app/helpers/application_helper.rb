@@ -35,7 +35,4 @@ module ApplicationHelper
     (controller_name == "proposals" && params[:action] == "index" && !@current_user.nil? && @current_user.should_see_beta?("BETA_FEATURE_LIST_VIEW"))
   end
 
-  def check_active_sidebar(type)
-    controller_check = (controller_name == "proposals" && params[:action] == "index")
-  end
 end
