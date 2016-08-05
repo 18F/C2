@@ -29,46 +29,31 @@ describe 'C2', ->
 
   describe '#setup data', ->
     it "check config passing test param detailsSave", ->
-      test = "details-save-test"
-      testParam = {
-        detailsSave: test
-      }
-      c2 = new C2(testParam)
-      expect(c2.config.detailsSave).to.eql(test)
+      test = "#mode-parent"
+      c2 = new C2()
+      expect(c2.config.formContainer).to.eql(test)
 
     it "check config passing test param updateView", ->
-      test = "update-view"
-      testParam = {
-        updateView: test
-      }
-      c2 = new C2(testParam)
-      expect(c2.config.updateView).to.eql(test)
+      test = "#mode-parent"
+      c2 = new C2()
+      expect(c2.config.formContainer).to.eql(test)
 
   describe '#setup state', ->
     it "check config passing test param editMode", ->
-      test = "edit-mode-test"
-      testParam = {
-        editMode: test
-      }
-      c2 = new C2(testParam)
+      test = "#mode-parent"
+      c2 = new C2()
       expect(c2.config.editMode).to.eql(test)
 
     it "check config passing test param formState", ->
-      test = "form-state-test"
-      testParam = {
-        formState: test
-      }
-      c2 = new C2(testParam)
+      test = "#mode-parent"
+      c2 = new C2()
       expect(c2.config.formState).to.eql(test)
 
   describe '#setup views', ->
 
     it "check config passing test param detailsRequestCard", ->
-      test = "attachment-card-test"
-      testParam = {
-        detailsRequestCard: test
-      }
-      c2 = new C2(testParam)
+      test = "#mode-parent"
+      c2 = new C2()
       expect(c2.config.detailsRequestCard).to.eql(test)
 
     it "check config passing test param attachmentCard", ->
