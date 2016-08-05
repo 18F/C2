@@ -19,7 +19,7 @@
     = content_for?(:top_notification) ? yield(:top_notification) : ""
     - if list_view_conditions
       :plain
-        <div class="row full-width-row">
+        <div class="row full-width-row content-parent">
       = render "layouts/c2_header_next"
     - else
       = render "layouts/c2_header"
