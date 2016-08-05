@@ -8,7 +8,7 @@ SidebarNav = (function(){
   }
 
   SidebarNav.prototype._setup = function(){
-    this.setSidebarOptions();
+    this.navOptions = this.setSidebarOptions();
     this.checkUrl();
     this._events();
   }
@@ -20,7 +20,7 @@ SidebarNav = (function(){
       var trigger = $(item).data('trigger');
       options.push(trigger)
     });
-    this.navOptions = options;
+    return options;
   }
 
   SidebarNav.prototype.checkUrl = function(){
