@@ -16,10 +16,13 @@
 #= require details/views/notifications
 #= require details/views/view_helper
 #= require details/views/approvals_card
+#= require details/views/list/list_view
+#= require details/views/shared/sidebar_nav
 #= require details/data/update_view
 #= require details/data/details_save
 #= require details/shell/c2
 #= require details/shell/action_bar_bridge
+#= require details/shell/list_view_bridge
 #= require details/details_helper
 #= require spec_helper
 
@@ -32,14 +35,23 @@ describe 'C2', ->
 
     it "checks for each constructor", ->
       c2 = new C2()
-      expect(c2.attachmentCardController instanceof AttachmentCardController).to.eql(true)
-      expect(c2.activityCardController instanceof ActivityCardController).to.eql(true)
-      expect(c2.editMode instanceof EditStateController).to.eql(true)
-      expect(c2.detailsRequestCard instanceof DetailsRequestCard).to.eql(true)
-      expect(c2.formState instanceof FormChangeState).to.eql(true)
-      expect(c2.actionBar instanceof ActionBar).to.eql(true)
       expect(c2.detailsSave instanceof DetailsSave).to.eql(true)
+      expect(c2.updateView instanceof UpdateView).to.eql(true)
+
+      expect(c2.editMode instanceof EditStateController).to.eql(true)
+      expect(c2.formState instanceof FormChangeState).to.eql(true)
+
+      expect(c2.detailsRequestCard instanceof DetailsRequestCard).to.eql(true)
+      expect(c2.attachmentCardController instanceof AttachmentCardController).to.eql(true)
+      expect(c2.observerCardController instanceof ObserverCardController).to.eql(true)
+      expect(c2.activityCardController instanceof ActivityCardController).to.eql(true)
+      expect(c2.approvalCardController instanceof ApprovalCardController).to.eql(true)
       expect(c2.modals instanceof ModalController).to.eql(true)
+      expect(c2.actionBar instanceof ActionBar).to.eql(true)
+      expect(c2.notification instanceof Notifications).to.eql(true)
+
+      expect(c2.actionBridge instanceof ActionBarBridge).to.eql(true)
+      expect(c2.listViewBridge instanceof ListViewBridge).to.eql(true)
 
     it "check config passing test param actionBar", ->
       test = "action-bar-test"
