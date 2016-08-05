@@ -8,8 +8,19 @@ SidebarNav = (function(){
   }
 
   SidebarNav.prototype._setup = function(){
+    this.setSidebarOptions();
     this.checkUrl();
     this._events();
+  }
+
+  SidebarNav.prototype.setSidebarOptions = function(){
+    var options = [];
+    var triggers = this.el.find('[data-trigger]');
+    triggers.each(function(i, item){
+      var trigger = $(item).data('trigger');
+      options.push(trigger)
+    });
+    this.navOptions = options;
   }
 
   SidebarNav.prototype.checkUrl = function(){
@@ -24,7 +35,11 @@ SidebarNav = (function(){
   }
 
   SidebarNav.prototype.checkAnchorValue = function(anchor){
-    this.el.find('[data-trigger="' + anchor + '"]').parent().addClass('active');
+    var self = this;
+    if($.inArray(anchor, self.navOptions) === -1){
+      anchor = "all"
+    }
+    this.el.find('.request-related-button [data-trigger="' + anchor + '"]').parent().addClass('active');
   }
 
   SidebarNav.prototype.defaultStart = function(){
