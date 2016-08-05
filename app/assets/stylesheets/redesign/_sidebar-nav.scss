@@ -2,6 +2,8 @@
 .sidebar-home{
   height: auto !important;
   min-height: 100%;
+  padding-right: 0em;
+  background: #333541;
   @media screen and (max-width: 40em){
     padding: 0px;
   }
