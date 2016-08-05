@@ -43,7 +43,7 @@ SidebarNav = (function(){
   }
 
   SidebarNav.prototype.shouldLink = function(el){
-    var linkCondition = $('body').hasClass('controller-proposals action-index') && $(el).data('trigger') !== undefined);
+    var linkCondition = ( $('body').hasClass('controller-proposals action-index') && $(el).data('trigger') !== undefined );
     if( linkCondition ){
       return true;
     } else {
