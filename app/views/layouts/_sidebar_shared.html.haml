@@ -1,4 +1,4 @@
-%li.request-related-button.view-all-button-wrapper{ class: check_active_sidebar("view-all") }
+%li.request-related-button.view-all-button-wrapper.active{ class: check_active_sidebar("view-all") }
   = link_to "View all", proposals_path, class: "view-all-button", data: { trigger: "all" }
 %li.request-related-button.pending-button-wrapper{ class: check_active_sidebar("pending") }
   = link_to "Pending", proposals_path, class: "pending-button", data: { trigger: "pending" }
