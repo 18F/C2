@@ -57,8 +57,13 @@ SidebarNav = (function(){
 
   SidebarNav.prototype.triggerSidebar = function(event, el){
     var trigger = $(el).data('trigger');
+    var $parent = $(el).parent();
     document.location.hash = trigger;
-    this.setActive(el);
+    if( $parent.hasClass('request-related-button') ){
+      this.setActive(el);
+    } else if ($parent.hasClass('requests-button')) {
+      this.defaultStart();
+    }
     this.el.trigger('sidebar:button', trigger);
   }
 
