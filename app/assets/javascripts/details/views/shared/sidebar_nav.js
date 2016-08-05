@@ -14,7 +14,7 @@ SidebarNav = (function(){
 
   SidebarNav.prototype.checkUrl = function(){
     if(location.pathname === "/proposals"){
-      $('.view-all-button').addClass('active');
+      $('.view-all-button').parent().addClass('active');
     }
   }
 
