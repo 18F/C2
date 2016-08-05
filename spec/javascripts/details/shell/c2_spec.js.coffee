@@ -53,54 +53,7 @@ describe 'C2', ->
       expect(c2.actionBridge instanceof ActionBarBridge).to.eql(true)
       expect(c2.listViewBridge instanceof ListViewBridge).to.eql(true)
 
-    it "check config passing test param actionBar", ->
-      test = "action-bar-test"
-      testParam = {
-        actionBar: test
-      }
-      c2 = new C2(testParam)
-      expect(c2.config.actionBar).to.eql(test)
-
-    it "check config passing test param editMode", ->
-      test = "edit-mode-test"
-      testParam = {
-        editMode: test
-      }
-      c2 = new C2(testParam)
-      expect(c2.config.editMode).to.eql(test)
-
-    it "check config passing test param attachmentCard", ->
-      test = "attachment-card-test"
-      testParam = {
-        attachmentCard: test
-      }
-      c2 = new C2(testParam)
-      expect(c2.config.attachmentCard).to.eql(test)
-
-    it "check config passing test param activityCard", ->
-      test = "activity-card-test"
-      testParam = {
-        activityCard: test
-      }
-      c2 = new C2(testParam)
-      expect(c2.config.activityCard).to.eql(test)
-
-    it "check config passing test param modalCard", ->
-      test = "cancel-card-test"
-      testParam = {
-        modalCard: test
-      }
-      c2 = new C2(testParam)
-      expect(c2.config.modalCard).to.eql(test)
-
-    it "check config passing test param formState", ->
-      test = "form-state-test"
-      testParam = {
-        formState: test
-      }
-      c2 = new C2(testParam)
-      expect(c2.config.formState).to.eql(test)
-
+  describe '#setup data', ->
     it "check config passing test param detailsSave", ->
       test = "details-save-test"
       testParam = {
@@ -116,6 +69,105 @@ describe 'C2', ->
       }
       c2 = new C2(testParam)
       expect(c2.config.updateView).to.eql(test)
+
+  describe '#setup state', ->
+    it "check config passing test param editMode", ->
+      test = "edit-mode-test"
+      testParam = {
+        editMode: test
+      }
+      c2 = new C2(testParam)
+      expect(c2.config.editMode).to.eql(test)
+
+    it "check config passing test param formState", ->
+      test = "form-state-test"
+      testParam = {
+        formState: test
+      }
+      c2 = new C2(testParam)
+      expect(c2.config.formState).to.eql(test)
+
+  describe '#setup views', ->
+
+    it "check config passing test param detailsRequestCard", ->
+      test = "attachment-card-test"
+      testParam = {
+        detailsRequestCard: test
+      }
+      c2 = new C2(testParam)
+      expect(c2.config.detailsRequestCard).to.eql(test)
+
+    it "check config passing test param attachmentCard", ->
+      test = "attachment-card-test"
+      testParam = {
+        attachmentCard: test
+      }
+      c2 = new C2(testParam)
+      expect(c2.config.attachmentCard).to.eql(test)
+
+    it "check config passing test param observerCardController", ->
+      test = "observer-card-test"
+      testParam = {
+        observerCardController: test
+      }
+      c2 = new C2(testParam)
+      expect(c2.config.observerCardController).to.eql(test)
+
+    it "check config passing test param activityCard", ->
+      test = "activity-card-test"
+      testParam = {
+        activityCard: test
+      }
+      c2 = new C2(testParam)
+      expect(c2.config.activityCard).to.eql(test)
+
+    it "check config passing test param approvalCardController", ->
+      test = "approval-card-test"
+      testParam = {
+        approvalCardController: test
+      }
+      c2 = new C2(testParam)
+      expect(c2.config.approvalCardController).to.eql(test)
+
+    it "check config passing test param modalCard", ->
+      test = "cancel-card-test"
+      testParam = {
+        modalCard: test
+      }
+      c2 = new C2(testParam)
+      expect(c2.config.modalCard).to.eql(test)
+
+    it "check config passing test param actionBar", ->
+      test = "action-bar-test"
+      testParam = {
+        actionBar: test
+      }
+      c2 = new C2(testParam)
+      expect(c2.config.actionBar).to.eql(test)
+
+    it "check config passing test param notification", ->
+      test = "notification-bar-test"
+      testParam = {
+        notification: test
+      }
+      c2 = new C2(testParam)
+      expect(c2.config.notification).to.eql(test)
+
+    it "check config passing test param listView", ->
+      test = "listView-bar-test"
+      testParam = {
+        listView: test
+      }
+      c2 = new C2(testParam)
+      expect(c2.config.listView).to.eql(test)
+
+    it "check config passing test param sidebarNav", ->
+      test = "sidebarNav-bar-test"
+      testParam = {
+        sidebarNav: test
+      }
+      c2 = new C2(testParam)
+      expect(c2.config.sidebarNav).to.eql(test)
 
   describe '#events _actionBarState', ->
     it "editMode is on when state when edit-mode:on", ->
