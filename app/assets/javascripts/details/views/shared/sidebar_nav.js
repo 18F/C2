@@ -37,9 +37,10 @@ SidebarNav = (function(){
   SidebarNav.prototype.checkAnchorValue = function(anchor){
     var self = this;
     if($.inArray(anchor, self.navOptions) === -1){
-      anchor = "all"
+      anchor = "all";
     }
     this.el.find('.request-related-button [data-trigger="' + anchor + '"]').parent().addClass('active');
+    this.updateUrl(anchor);
   }
 
   SidebarNav.prototype.defaultStart = function(){
@@ -66,6 +67,10 @@ SidebarNav = (function(){
     }
   }
 
+  SidebarNav.prototype.updateUrl = function(anchor){
+    document.location.hash = anchor;
+  }
+
   SidebarNav.prototype.setActive = function(el){
     this.el.find('li').removeClass('active');
     $(el).parent().addClass('active');
@@ -75,7 +80,7 @@ SidebarNav = (function(){
     var trigger = $(el).data('trigger');
     if(trigger !== undefined){
       var $parent = $(el).parent();
-      document.location.hash = trigger;
+      this.updateUrl(trigger);
       if( $parent.hasClass('request-related-button') ){
         this.setActive(el);
       } else if ($parent.hasClass('requests-button')) {
