@@ -1,7 +1,7 @@
 describe "Modify Proposal Spec" do
   scenario "update existing proposal successfully", js: true do
     proposal = create_and_visit_proposal_beta
-    title_selector = '[name="ncr_work_order[project_title]"]'
+    title_selector = 'ncr_work_order[project_title]'
     new_title_text = "New title text"
     expect(page).to have_selector(title_selector, visible: false)
     js_activate_modify_proposal
@@ -17,7 +17,7 @@ describe "Modify Proposal Spec" do
   end
 
 
-  def js_modify_proposal(text = "foo", selector = '[name="ncr_work_order[project_title]"]', submit = ".request-actions .save-button button")
+  def js_modify_proposal(text = "foo", selector = 'ncr_work_order[project_title]', submit = ".request-actions .save-button button")
     fill_in selector, with: text
     find(submit).trigger("click")
     find(".save_confirm-modal-content .form-button").trigger("click")
