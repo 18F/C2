@@ -28,7 +28,7 @@ SidebarNav = (function(){
   }
 
   SidebarNav.prototype.defaultStart = function(){
-    $('.view-all-button').parent().addClass('active');
+    this.setActive($('.view-all-button'));
   }
 
   SidebarNav.prototype._events = function(){
