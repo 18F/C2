@@ -19,13 +19,17 @@
     = content_for?(:top_notification) ? yield(:top_notification) : ""
     - if list_view_conditions
       :plain
-        <div class="row full-width-row">
+        <div class="row full-width-row content-parent">
       = render "layouts/c2_header_next"
     - else
       = render "layouts/c2_header"
       = render "layouts/notices"
     - if list_view_conditions
+      - unless ENV["DISABLE_SANDBOX_WARNING"] == "true"
+        .medium-9.large-10.medium-offset-3.large-offset-2
+          = render partial: "shared/sandbox_warning"
       .medium-9.column.large-10.medium-offset-3.large-offset-2
+        = render partial: "layouts/user_header"
         = content_for?(:content) ? yield(:content) : yield
         - unless @skip_footer
           #footer.inset

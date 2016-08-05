@@ -11,8 +11,9 @@ C2 = (function() {
       notifications:  '#action-bar-status',
       observerCard:   '#card-for-observers',
       modalCard:      '#modal-wrapper',
+      approvalCard:   '#card-for-approvals',
       listView:       "#tabular-data",
-      approvalCard:   '#card-for-approvals'
+      sidebarNav:     "#sidebar-home"
     }
     this.lastNotice = {};
     this._overrideTestConfig(config);
@@ -39,8 +40,12 @@ C2 = (function() {
     this.modals = new ModalController(config.modalCard);
     this.actionBar = new ActionBar(config.actionBar);
     this.notification = new Notifications(config.notifications);
+    this.listView = new ListViewDataTable(config.listView);
+    this.sidebarNav = new SidebarNav(config.sidebarNav);
+
     this.actionBridge = new ActionBarBridge(self);
-    this.listview = new ListViewDataTable(config.listView)
+    this.listViewBridge = new ListViewBridge(self);
+
     this._setupEvents();
   }
 
