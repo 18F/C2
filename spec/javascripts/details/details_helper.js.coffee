@@ -1,3 +1,39 @@
+#= require jquery
+#= require ladda/spin.min
+#= require ladda/ladda.min
+#= require ladda/ladda.jquery.min
+#= require jquery.dirrty
+#= require moment
+#= require DataTables/jquery.dataTables
+#= require DataTables/dataTables.foundation
+#= require DataTables/dataTables.buttons
+#= require DataTables/buttons.foundation
+#= require DataTables/buttons.colVis
+#= require DataTables/buttons.print
+#= require DataTables/dataTables.fixedColumns
+#= require DataTables/dataTables.fixedHeader
+#= require DataTables/dataTables.responsive
+#= require required_for_submit
+#= require details/state/edit_mode
+#= require details/state/form_change_state
+#= require details/views/action_bar
+#= require details/views/attachment_card
+#= require details/views/details_request_card
+#= require details/views/activity_card
+#= require details/views/observer_card
+#= require details/views/modal_card
+#= require details/views/notifications
+#= require details/views/view_helper
+#= require details/views/approvals_card
+#= require details/views/list/list_view
+#= require details/views/shared/sidebar_nav
+#= require details/data/update_view
+#= require details/data/details_save
+#= require details/shell/c2
+#= require details/shell/action_bar_bridge
+#= require details/shell/list_view_bridge
+#= require spec_helper
+
 @setupC2TestParams = ->
   {
     editMode: getEditModeContent(),

@@ -1,0 +1,10 @@
+%li.requests-button
+  = link_to "Requests", proposals_path, anchor: "all", data: { trigger: "all" }
+%li.request-related-button.view-all-button-wrapper
+  = link_to "View all", proposals_path, anchor: "all", class: "view-all-button", data: { trigger: "all" }
+%li.request-related-button.pending-button-wrapper
+  = link_to "Pending", proposals_path, anchor: "pending", class: "pending-button", data: { trigger: "pending" }
+%li.request-related-button.completed-button-wrapper
+  = link_to "Completed", proposals_path, anchor: "completed", class: "completed-button", data: { trigger: "completed" }
+%li.request-related-button.canceled-button-wrapper
+  = link_to "Canceled", proposals_path, anchor: "canceled", class: "canceled-button", data: { trigger: "canceled" }
