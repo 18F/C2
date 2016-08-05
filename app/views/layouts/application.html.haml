@@ -26,6 +26,8 @@
       = render "layouts/notices"
     - if list_view_conditions
       .medium-9.column.large-10.medium-offset-3.large-offset-2
+        - unless ENV["DISABLE_SANDBOX_WARNING"] == "true"
+          = render partial: "shared/sandbox_warning"
         = content_for?(:content) ? yield(:content) : yield
         - unless @skip_footer
           #footer.inset
