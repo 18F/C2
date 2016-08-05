@@ -35,15 +35,16 @@ SidebarNav = (function(){
     var self = this;
     this.el.on('click', "a", function(event){
       var el = this;
-      if(self.shouldLink){
+      if(self.shouldLink(el)){
         event.preventDefault();
       }
       self.triggerSidebar(event, el);
     });
   }
 
-  SidebarNav.prototype.shouldLink = function(){
-    if( $('body').hasClass('controller-proposals action-index') ){
+  SidebarNav.prototype.shouldLink = function(el){
+    var linkCondition = $('body').hasClass('controller-proposals action-index') && $(el).data('trigger') !== undefined);
+    if( linkCondition ){
       return true;
     } else {
       return false;
@@ -57,14 +58,16 @@ SidebarNav = (function(){
 
   SidebarNav.prototype.triggerSidebar = function(event, el){
     var trigger = $(el).data('trigger');
-    var $parent = $(el).parent();
-    document.location.hash = trigger;
-    if( $parent.hasClass('request-related-button') ){
-      this.setActive(el);
-    } else if ($parent.hasClass('requests-button')) {
-      this.defaultStart();
+    if(trigger !== undefined){
+      var $parent = $(el).parent();
+      document.location.hash = trigger;
+      if( $parent.hasClass('request-related-button') ){
+        this.setActive(el);
+      } else if ($parent.hasClass('requests-button')) {
+        this.defaultStart();
+      }
+      this.el.trigger('sidebar:button', trigger);
     }
-    this.el.trigger('sidebar:button', trigger);
   }
 
   return SidebarNav;
