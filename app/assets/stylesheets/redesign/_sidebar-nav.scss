@@ -56,7 +56,6 @@
       &.request-related-button{
         border: none;
         position: relative;
-        overflow: hidden;
         a{
           position: relative;
           padding-left: 40px;
@@ -74,7 +73,7 @@
           left: 0px;
           right: 0px;
           margin: auto;
-          border-radius: 3px;
+          border-radius: 3px 0px 0px 3px;
         }
         &.active, &:focus, &:hover{
           a{
@@ -86,7 +85,7 @@
             content: "";
             position: absolute;
             height: 100%;
-            right: -10.1%;
+            right: 0px;
             width: 90%;
           }
         }
