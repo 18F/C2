@@ -4,6 +4,15 @@
 #= require ladda/ladda.jquery.min
 #= require jquery.dirrty
 #= require moment
+#= require "DataTables/jquery.dataTables.js"
+#= require "DataTables/dataTables.foundation.js"
+#= require "DataTables/dataTables.buttons.js"
+#= require "DataTables/buttons.foundation.js"
+#= require "DataTables/buttons.colVis.js"
+#= require "DataTables/buttons.print.js"
+#= require "DataTables/dataTables.fixedColumns.js"
+#= require "DataTables/dataTables.fixedHeader.js"
+#= require "DataTables/dataTables.responsive.js"
 #= require required_for_submit
 #= require details/state/edit_mode
 #= require details/state/form_change_state
