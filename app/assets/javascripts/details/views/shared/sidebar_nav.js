@@ -13,9 +13,22 @@ SidebarNav = (function(){
   }
 
   SidebarNav.prototype.checkUrl = function(){
-    if(location.pathname === "/proposals"){
-      $('.view-all-button').parent().addClass('active');
+    var anchorValue;
+    var strippedUrl = document.location.toString().split("#");
+    if (strippedUrl.length > 1){
+      anchorValue = strippedUrl[1];
+      this.checkAnchorValue(anchorValue);
+    } else if(location.pathname === "/proposals") {
+      this.defaultStart();
     }
+  }
+
+  SidebarNav.prototype.checkAnchorValue = function(anchor){
+    this.el.find('[data-trigger="' + anchor + '"]').parent().addClass('active');
+  }
+
+  SidebarNav.prototype.defaultStart = function(){
+    $('.view-all-button').parent().addClass('active');
   }
 
   SidebarNav.prototype._events = function(){
@@ -44,6 +57,7 @@ SidebarNav = (function(){
 
   SidebarNav.prototype.triggerSidebar = function(event, el){
     var trigger = $(el).data('trigger');
+    document.location.hash = trigger;
     this.setActive(el);
     this.el.trigger('sidebar:button', trigger);
   }

@@ -85,8 +85,11 @@
             content: "";
             position: absolute;
             height: 100%;
-            right: 0px;
-            width: 90%;
+            width: 100%;
+            @media screen and (min-width: 40em){
+              right: -10.01%;
+              width: 90%;
+            }
           }
         }
       }
