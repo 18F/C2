@@ -21,6 +21,7 @@ ListViewDataTable = (function(){
         "info":     false,
         responsive: true
     } );
+    this.statusColumn = this.dataTable.column(':contains(Status)');
     this._events();
   }
 
@@ -41,19 +42,19 @@ ListViewDataTable = (function(){
   }
 
   ListViewDataTable.prototype.viewPending = function(){
-    this.dataTable.column(':contains(Status)').search('Waiting for review from').draw();
+    this.statusColumn.search('Waiting for review from').draw();
   }
 
   ListViewDataTable.prototype.viewCanceled = function(){
-    this.dataTable.column(':contains(Status)').search('Canceled').draw();
+    this.statusColumn.search('Canceled').draw();
   }
 
   ListViewDataTable.prototype.viewAll = function(){
-    this.dataTable.column(':contains(Status)').search('').draw();
+    this.statusColumn.search('').draw();
   }
 
   ListViewDataTable.prototype.viewCompleted = function(){
-    this.dataTable.column(':contains(Status)').search('Completed').draw();
+    this.statusColumn.search('Completed').draw();
   }
 
   return ListViewDataTable;
