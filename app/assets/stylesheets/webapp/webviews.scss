@@ -392,6 +392,12 @@ body.webapp {
 #footer {
   margin-top: 4em;
   text-align: center;
+  padding-bottom: 65px;
+}
+@media screen and ( min-height: 600px ){
+  #footer {
+    padding-bottom: 160px;
+  }
 }
 
 label.required::after,
