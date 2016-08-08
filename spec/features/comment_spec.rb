@@ -15,6 +15,7 @@ feature "commenting" do
     comment_text = "this is a great comment"
     js_submit_comment(comment_text, "#add_a_comment")
     wait_for_ajax
+    page.save_screenshot('./tmp/screen.png', full: true)
     within(".comment-list") do
       expect(page).to have_content(comment_text)
     end
