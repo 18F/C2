@@ -24,6 +24,7 @@ DetailsSave = (function() {
         case "success":
           console.log('case "success":', data);
           self.submitFormFields(data);
+          self.el.find('form.request-details-form').submit();
           break;
         case "error":
           console.log('case "error":', data);
@@ -59,7 +60,7 @@ DetailsSave = (function() {
     return formData;
   }
 
-  DetailsSave.prototype.submitFields = function(url, formData, params){
+  DetailsSave.prototype.submitFields = function(params){
     var url = this.el.find('form.request-details-form').attr("action");
     var formData = this._prepareFormData();
     $.ajax({

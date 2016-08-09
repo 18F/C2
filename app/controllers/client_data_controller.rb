@@ -31,7 +31,8 @@ class ClientDataController < ApplicationController
     @client_data_instance.normalize_input(current_user)
     respond_to do |format|
       format.js do
-        update_js_behavior(@client_data_instance, errors)
+        js_response = process_js_response(errors)
+        update_js_behavior(js_response)
       end
       format.html do
         update_behavior(proposal, errors)
@@ -62,12 +63,11 @@ class ClientDataController < ApplicationController
     !@client_data_instance.changed_attributes.blank?
   end
 
-  def update_js_behavior(client_data_instance, errors)
-    js_response = process_js_response(client_data_instance, errors)
+  def update_js_behavior(js_response)
     if params[:validate] == "true"
-      render js: "c2.detailsSave.el.trigger('details-form:validate', " + js_response.to_json + ");"
+      render js: js_response_function('validate', js_response)
     else
-      render js: "c2.detailsSave.el.trigger('details-form:respond', " + js_response.to_json + ");"
+      render js: js_response_function('respond', js_response)
     end
   end
 
@@ -79,6 +79,11 @@ class ClientDataController < ApplicationController
       @flash_manager.show(flash, "error", errors)
       render :edit
     end
+  end
+
+  def js_response_function(request_type, js_response)
+    response = "c2.detailsSave.el.trigger('details-form:" + request_type + "', " + js_response.to_json + "); console.log(" + js_response.to_json + ");"
+    return response
   end
 
   def record_changes
@@ -128,10 +133,10 @@ class ClientDataController < ApplicationController
     params.permit(attachments: [])[:attachments] || []
   end
 
-  def process_js_response(client_data_instance, errors)
+  def process_js_response(errors)
     if errors.empty?
       update_or_notify_of_no_changes
-      { status: "success", response: client_data_instance }
+      { status: "success", response: @client_data_instance }
     else
       { status: "error", response: errors }
     end
