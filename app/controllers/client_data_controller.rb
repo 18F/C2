@@ -31,7 +31,7 @@ class ClientDataController < ApplicationController
     @client_data_instance.normalize_input(current_user)
     respond_to do |format|
       format.js do
-        js_response = process_js_response(client_data_instance, errors)
+        js_response = process_js_response(errors)
         update_js_behavior(js_response)
       end
       format.html do
@@ -133,10 +133,10 @@ class ClientDataController < ApplicationController
     params.permit(attachments: [])[:attachments] || []
   end
 
-  def process_js_response(client_data_instance, errors)
+  def process_js_response(errors)
     if errors.empty?
       update_or_notify_of_no_changes
-      { status: "success", response: client_data_instance }
+      { status: "success", response: @client_data_instance }
     else
       { status: "error", response: errors }
     end
