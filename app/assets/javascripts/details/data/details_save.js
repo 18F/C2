@@ -13,8 +13,8 @@ DetailsSave = (function() {
 
   DetailsSave.prototype._events = function(){
     var self = this;
-    this.el.on( "details-form:save", function( event ) {
-      self.validateFormFields();
+    this.el.on( "details-form:save", function( event, data ) {
+      self.saveDetailsForm(data);
     });
     this.el.on( "details-form:respond", function( event, data ) {
       self.receiveResponse(data);
@@ -58,11 +58,9 @@ DetailsSave = (function() {
     return formData;
   }
 
-  DetailsSave.prototype.submitFields = function(params){
-    var url = this.el.find('form.request-details-form').attr("action");
-    var formData = this._prepareFormData();
+  DetailsSave.prototype.validateFields = function(url, formData){
     $.ajax({
-      url: url + params,
+      url: url + "?validate=true",
       headers: {
         Accept : "text/javascript; charset=utf-8",
         "Content-Type": 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -72,12 +70,11 @@ DetailsSave = (function() {
     });
   }
 
-  DetailsSave.prototype.validateFormFields = function(){
-    this.submitFields("?validate=true");
-  }
-
-  DetailsSave.prototype.submitFormFields = function(){
-    this.submitFields("");
+  DetailsSave.prototype.saveDetailsForm = function(data){
+    var self = this;
+    var formData = this._prepareFormData();
+    var url = self.el.find('form.request-details-form').attr("action");
+    self.validateFields(url, formData);
   }
 
   return DetailsSave;
