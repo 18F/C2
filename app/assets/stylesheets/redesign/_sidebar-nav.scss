@@ -63,9 +63,11 @@ span.request-count {
     margin-left: 0px;
     li{
       position: relative;
-
       &.requests-button{
         border-bottom: none;
+        &:hover, &:focus{
+          background: darken(#444754, 5%);
+        }
       }
       .reports-button{
         border-top: 2px solid #5a5b60;
