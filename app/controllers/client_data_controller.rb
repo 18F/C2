@@ -65,9 +65,9 @@ class ClientDataController < ApplicationController
   def update_js_behavior(client_data_instance, errors)
     js_response = process_js_response(client_data_instance, errors)
     if params[:validate] == "true"
-      render js: "c2.detailsSave.el.trigger('details-form:validate', " + js_response.to_json + ");"
+      render js: js_response_function('validate')
     else
-      render js: "c2.detailsSave.el.trigger('details-form:respond', " + js_response.to_json + ");"
+      render js: js_response_function('respond')
     end
   end
 
@@ -79,6 +79,11 @@ class ClientDataController < ApplicationController
       @flash_manager.show(flash, "error", errors)
       render :edit
     end
+  end
+
+  def js_response_function(request_type)
+    response = "c2.detailsSave.el.trigger('details-form:" + request_type + "', " + js_response.to_json + "); console.log(" + js_response.to_json + ");"
+    return response
   end
 
   def record_changes
