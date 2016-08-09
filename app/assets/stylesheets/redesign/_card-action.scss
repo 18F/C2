@@ -54,6 +54,13 @@ ul.request-actions{
   border-top: 0px;
 }
 
+.action-bar-wrapper.action-bar-template{
+  .row.row {
+    margin: 0 auto;
+    float: none;
+  }
+}
+
 .action-bar-wrapper.user-can-complete .cancel-button,
 .action-bar-wrapper.user-can-complete .save-button,
 .action-bar-wrapper.user-can-complete.edit-actions .action-approve{
