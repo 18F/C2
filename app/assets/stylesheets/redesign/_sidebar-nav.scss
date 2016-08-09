@@ -61,18 +61,28 @@ span.request-count {
   }
   .header-nav{
     margin-left: 0px;
+    background: #444754;
     li{
       position: relative;
-      &.requests-button{
-        border-bottom: none;
-        &:hover, &:focus{
-          a{
-            color: #cccccc;
-          }
-        }
-      }
       .reports-button{
         border-top: 2px solid #5a5b60;
+      }
+      &.button-divider{
+        display: block;
+        width: 70%;
+        height: 2px;
+        background: #5a5b60;
+        margin: auto;
+      }
+      &.requests-button{
+        &:focus, &:hover{
+          a, span.request-count{
+            outline: none;
+          }
+          &:hover{
+            background: #323641;
+          }
+        }
       }
       &.request-related-button{
         border: none;
@@ -80,27 +90,38 @@ span.request-count {
         a{
           font-size: 14px;
           position: relative;
-          padding-left: 40px;
+          padding-left: 15%;
           width: 100%;
           display: block;
           font-weight: normal;
         }
-        &:before{
-          content: "";
-          display: block;
-          position: absolute;
-          width: 70%;
-          top: 0px;
-          border-top: 2px solid #5a5b60;
-          left: 0px;
-          right: 0px;
-          margin: auto;
-          border-radius: 3px 0px 0px 3px;
+        &.view-all-button-wrapper:before{
+          border-top: none;
+        }
+        &.active{
+          a, span.request-count{
+            color: #333541;
+          }
         }
         &.active, &:focus, &:hover{
           a, span.request-count{
-            color: #333541;
             outline: none;
+          }
+          &:hover{
+            background: #323641;
+          }
+          &.active{
+            &:hover{
+              background: #444754;
+            }
+            &:before{
+              background: #C5DCED;
+            }
+            &:hover{
+              &:before{
+                background: #DBEAF5;
+              }
+            }
           }
           &:before {
             border: none;
@@ -112,82 +133,6 @@ span.request-count {
               right: -10.01%;
               width: 90%;
             }
-          }
-        }
-      }
-      &.view-all-button-wrapper{
-        &.active, &:focus, &:hover{
-          &:before {
-            background: #c5dced;
-          }
-        }
-        &.active{
-          &:focus, &:hover{
-            &:before{
-              background: darken(#c5dced, 10%);
-            }
-          }
-        }
-        &:hover{
-          &:before{
-            background: lighten(#c5dced, 5%);
-          }
-        }
-      }
-      &.pending-button-wrapper{
-        &.active, &:focus, &:hover{
-          &:before {
-            background: #f7dd7d;
-          }
-        }
-        &.active{
-          &:focus, &:hover{
-            &:before{
-              background: darken(#f7dd7d, 10%);
-            }
-          }
-        }
-        &:hover{
-          &:before{
-            background: lighten(#f7dd7d, 5%);
-          }
-        }
-      }
-      &.completed-button-wrapper{
-        &.active, &:focus, &:hover{
-          &:before {
-            background: #9CD984;
-          }
-        }
-        &.active{
-          &:focus, &:hover{
-            &:before{
-              background: darken(#9CD984, 10%);
-            }
-          }
-        }
-        &:hover{
-          &:before{
-            background: lighten(#9CD984, 5%);
-          }
-        }
-      }
-      &.canceled-button-wrapper{
-        &.active, &:focus, &:hover{
-          &:before {
-            background: #CDD1D3;
-          }
-        }
-        &.active{
-          &:focus, &:hover{
-            &:before{
-              background: darken(#CDD1D3, 10%);
-            }
-          }
-        }
-        &:hover{
-          &:before{
-            background: lighten(#CDD1D3, 5%);
           }
         }
       }
