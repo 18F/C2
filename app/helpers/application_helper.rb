@@ -42,15 +42,14 @@ module ApplicationHelper
   def get_proposal_count(type, listing)
     case type
     when "pending"
-      count = listing.pending_review.query.count
+      listing.pending_review.query.count
     when "completed"
-      count = listing.completed.query.count
+      listing.completed.query.count
     when "canceled"
-      count = listing.canceled.query.count
+      listing.canceled.query.count
     else
       ""
     end
-    count = (count == 0) ? "" : count 
   end
 
   def list_view_conditions
