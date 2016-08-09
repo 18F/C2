@@ -64,8 +64,9 @@ span.request-count {
     background: #444754;
     li{
       position: relative;
+      border-top: 2px solid #5a5b60;
       .reports-button{
-        border-top: 2px solid #5a5b60;
+        border-bottom: 2px solid #5a5b60;
       }
       &.button-divider{
         display: block;
@@ -130,16 +131,12 @@ span.request-count {
             height: 100%;
             width: 100%;
             @media screen and (min-width: 40em){
-              right: -10.01%;
+              right: 0px;
               width: 90%;
             }
           }
         }
       }
-      &:first-child{
-        border-top: 2px solid #5a5b60;
-      }
-      border-bottom: 2px solid #5a5b60;
       width: 100%;
       padding: 0px;
       background: #444754;
