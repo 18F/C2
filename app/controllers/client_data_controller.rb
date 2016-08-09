@@ -31,7 +31,8 @@ class ClientDataController < ApplicationController
     @client_data_instance.normalize_input(current_user)
     respond_to do |format|
       format.js do
-        update_js_behavior(@client_data_instance, errors)
+        js_response = process_js_response(client_data_instance, errors)
+        update_js_behavior(js_response)
       end
       format.html do
         update_behavior(proposal, errors)
@@ -62,12 +63,11 @@ class ClientDataController < ApplicationController
     !@client_data_instance.changed_attributes.blank?
   end
 
-  def update_js_behavior(client_data_instance, errors)
-    js_response = process_js_response(client_data_instance, errors)
+  def update_js_behavior(js_response)
     if params[:validate] == "true"
-      render js: js_response_function('validate')
+      render js: js_response_function('validate', js_response)
     else
-      render js: js_response_function('respond')
+      render js: js_response_function('respond', js_response)
     end
   end
 
@@ -81,7 +81,7 @@ class ClientDataController < ApplicationController
     end
   end
 
-  def js_response_function(request_type)
+  def js_response_function(request_type, js_response)
     response = "c2.detailsSave.el.trigger('details-form:" + request_type + "', " + js_response.to_json + "); console.log(" + js_response.to_json + ");"
     return response
   end
