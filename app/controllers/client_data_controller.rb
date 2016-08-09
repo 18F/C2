@@ -30,7 +30,7 @@ class ClientDataController < ApplicationController
     prepare_client_data_for_update(filtered_params, current_user)
     respond_to do |format|
       format.js do
-        js_response = process_js_response(client_data_instance, errors)
+        js_response = process_js_response(@client_data_instance, errors)
         update_js_behavior(js_response)
       end
       format.html do
