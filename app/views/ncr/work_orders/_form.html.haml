@@ -20,8 +20,9 @@
         wrapper_html: { data: { filter_key: "expense-type", filter_value: "BA61" } },
         input_html: { class: "respect-disabled", value: @client_data_instance.emergency }
       = expense_type_radio_button(f, "BA80")
-      = render partial: "ba_80_fields",
-        locals: { f: f }
+      - if @client_data_instance[:expense_type] == "BA80"
+        = render partial: "ba_80_fields",
+          locals: { f: f }
     = f.input :building_number,
       input_html: { class: "js-selectize required", data: { initial: JSON.generate(building_options) }}
     = f.association :ncr_organization,
