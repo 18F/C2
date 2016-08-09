@@ -1,12 +1,12 @@
 describe "Modify Proposal Spec" do
   scenario "update existing title field on proposal successfully", js: true do
     proposal = create_and_visit_proposal_beta
-    title_selector = 'ncr_work_order_project_title'
+    field_selector = 'ncr_work_order_project_title'
     new_title_text = "New title text"
-    expect(page).to have_selector('#' + title_selector, visible: false)
+    expect(page).to have_selector('#' + field_selector, visible: false)
     js_activate_modify_proposal
-    expect(page).to have_selector('#' + title_selector, visible: true)
-    js_modify_proposal(new_title_text, title_selector)
+    expect(page).to have_selector('#' + field_selector, visible: true)
+    js_modify_proposal(new_title_text, field_selector)
     within("#proposal-title-wrapper") do
       within(".detail-value") do
         expect(page).to have_content(new_title_text)
@@ -16,12 +16,12 @@ describe "Modify Proposal Spec" do
 
   scenario "update existing description field on proposal successfully", js: true do
     proposal = create_and_visit_proposal_beta
-    title_selector = 'ncr_work_order_description'
+    field_selector = 'ncr_work_order_description'
     new_title_text = "New description text"
-    expect(page).to have_selector('#' + title_selector, visible: false)
+    expect(page).to have_selector('#' + field_selector, visible: false)
     js_activate_modify_proposal
-    expect(page).to have_selector('#' + title_selector, visible: true)
-    js_modify_proposal(new_title_text, title_selector)
+    expect(page).to have_selector('#' + field_selector, visible: true)
+    js_modify_proposal(new_title_text, field_selector)
     within("#description-wrapper") do
       within(".detail-value") do
         expect(page).to have_content(new_title_text)
@@ -29,14 +29,26 @@ describe "Modify Proposal Spec" do
     end
   end
 
+  scenario "modify function code and get error", js: true do
+    proposal = create_and_visit_proposal_beta
+    field_selector = 'ncr_work_order_function_code'
+    new_title_text = "wrong123"
+    error_message = "Function code must start with 'PG', followed by three letters or numbers"
+    expect(page).to have_selector('#' + field_selector, visible: false)
+    js_activate_modify_proposal
+    expect(page).to have_selector('#' + field_selector, visible: true)
+    js_modify_proposal(new_title_text, field_selector)
+    expect(page).to have_content(error_message)
+  end
+
   scenario "submit content in form, then cancel submission", js: true do
     proposal = create_and_visit_proposal_beta
-    title_selector = 'ncr_work_order_project_title'
+    field_selector = 'ncr_work_order_project_title'
     new_title_text = "New title text"
-    expect(page).to have_selector('#' + title_selector, visible: false)
+    expect(page).to have_selector('#' + field_selector, visible: false)
     js_activate_modify_proposal
-    expect(page).to have_selector('#' + title_selector, visible: true)
-    js_cancel_before_modify_proposal(new_title_text, title_selector)
+    expect(page).to have_selector('#' + field_selector, visible: true)
+    js_cancel_before_modify_proposal(new_title_text, field_selector)
     within("#proposal-title-wrapper") do
       within(".detail-value") do
         expect(page).not_to have_content(new_title_text)
