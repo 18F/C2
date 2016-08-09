@@ -182,6 +182,7 @@ $action-bar-wrapper-height-small: 60px;
     min-height: 65px;
     justify-content: center;
     .row{
+      margin: 0 auto;
       width: 100%;
     }
     &.notice-type-notice{
