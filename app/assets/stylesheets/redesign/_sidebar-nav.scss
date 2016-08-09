@@ -45,6 +45,9 @@ span.request-count {
   }
   .new-request-button, .reports-button{
     background: #333541;
+    &:hover, &:focus{
+      background: darken(#333541, 5%);
+    }
   }
   .side-secondary-nav{
     list-style: none;
