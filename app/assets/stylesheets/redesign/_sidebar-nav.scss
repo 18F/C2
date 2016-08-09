@@ -91,7 +91,7 @@ span.request-count {
           border-radius: 3px 0px 0px 3px;
         }
         &.active, &:focus, &:hover{
-          a{
+          a, span.request-count{
             color: #333541;
             outline: none;
           }
