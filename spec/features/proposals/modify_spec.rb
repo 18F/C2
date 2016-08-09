@@ -1,4 +1,20 @@
 describe "Modify Proposal Spec" do
+  scenario "update existing title field on proposal successfully", js: true do
+    proposal = create_and_visit_proposal_beta
+    title_selector = 'ncr_work_order_project_title'
+    new_title_text = "New title text"
+    expect(page).to have_selector('#' + title_selector, visible: false)
+    js_activate_modify_proposal
+    expect(page).to have_selector('#' + title_selector, visible: true)
+    js_modify_proposal(new_title_text, title_selector)
+    within("#proposal-title-wrapper") do
+      within(".detail-value") do
+        expect(page).to have_content(new_title_text)
+      end
+    end
+  end
+
+
   private
 
   def js_activate_modify_proposal(modify = "ul.request-actions .edit-button button")
