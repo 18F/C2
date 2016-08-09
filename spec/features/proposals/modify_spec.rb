@@ -14,6 +14,21 @@ describe "Modify Proposal Spec" do
     end
   end
 
+  scenario "update existing description field on proposal successfully", js: true do
+    proposal = create_and_visit_proposal_beta
+    title_selector = 'ncr_work_order_description'
+    new_title_text = "New description text"
+    expect(page).to have_selector('#' + title_selector, visible: false)
+    js_activate_modify_proposal
+    expect(page).to have_selector('#' + title_selector, visible: true)
+    js_modify_proposal(new_title_text, title_selector)
+    within("#description-wrapper") do
+      within(".detail-value") do
+        expect(page).to have_content(new_title_text)
+      end
+    end
+  end
+
   scenario "submit content in form, then cancel submission", js: true do
     proposal = create_and_visit_proposal_beta
     title_selector = 'ncr_work_order_project_title'
