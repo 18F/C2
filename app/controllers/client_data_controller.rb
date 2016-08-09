@@ -27,11 +27,10 @@ class ClientDataController < ApplicationController
   end
 
   def update
-    @client_data_instance.assign_attributes(filtered_params)
-    @client_data_instance.normalize_input(current_user)
+    prepare_client_data_for_update(filtered_params, current_user)
     respond_to do |format|
       format.js do
-        js_response = process_js_response(errors)
+        js_response = process_js_response(client_data_instance, errors)
         update_js_behavior(js_response)
       end
       format.html do
@@ -65,9 +64,9 @@ class ClientDataController < ApplicationController
 
   def update_js_behavior(js_response)
     if params[:validate] == "true"
-      render js: js_response_function('validate', js_response)
+      render js: js_response_function("validate", js_response)
     else
-      render js: js_response_function('respond', js_response)
+      render js: js_response_function("respond", js_response)
     end
   end
 
@@ -82,8 +81,12 @@ class ClientDataController < ApplicationController
   end
 
   def js_response_function(request_type, js_response)
-    response = "c2.detailsSave.el.trigger('details-form:" + request_type + "', " + js_response.to_json + "); console.log(" + js_response.to_json + ");"
-    return response
+    "c2.detailsSave.el.trigger('details-form:" + request_type + "', " + js_response.to_json + "); console.log(" + js_response.to_json + ");"
+  end
+
+  def prepare_client_data_for_update(filtered_params, current_user)
+    @client_data_instance.assign_attributes(filtered_params)
+    @client_data_instance.normalize_input(current_user)
   end
 
   def record_changes
@@ -133,10 +136,10 @@ class ClientDataController < ApplicationController
     params.permit(attachments: [])[:attachments] || []
   end
 
-  def process_js_response(errors)
+  def process_js_response(client_data_instance, errors)
     if errors.empty?
       update_or_notify_of_no_changes
-      { status: "success", response: @client_data_instance }
+      { status: "success", response: client_data_instance }
     else
       { status: "error", response: errors }
     end
