@@ -16,6 +16,10 @@ body.action-show{
   padding-right: 15px;
 }
 
+.content-parent #footer{
+  margin-top: 1em;
+}
+
 a.button{
   &:hover{
     background: darken($primary-color, 15%);
