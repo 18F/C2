@@ -32,8 +32,6 @@ UpdateView = (function() {
     if(value === "" || value === null){
       value = "--";
     }
-    console.log("target: ", data['field']);
-    console.log({ field: data['field'], value: value});
     $(data['field']).html(value);
   }
 
