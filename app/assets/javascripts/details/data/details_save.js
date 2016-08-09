@@ -22,12 +22,10 @@ DetailsSave = (function() {
     this.el.on( "details-form:validate", function( event, data ) {
       switch (data['status']){
         case "success":
-          console.log('case "success":', data);
           self.submitFormFields(data);
           self.el.find('form.request-details-form').submit();
           break;
         case "error":
-          console.log('case "error":', data);
           self.el.trigger( "details-form:error", data );
           break;
         default:
