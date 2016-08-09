@@ -36,13 +36,17 @@ module ApplicationHelper
       return 0
     end
     listing = ProposalListingQuery.new(@current_user, params)
+    get_proposal_count(type, listing)
+  end
+
+  def get_proposal_count(type, listing)
     case type
-      when 'pending'
-        listing.pending_review.query.count
-      when 'completed'
-        listing.completed.query.count
-      when 'canceled'
-        listing.canceled.query.count
+    when "pending"
+      listing.pending_review.query.count
+    when "completed"
+      listing.completed.query.count
+    when "canceled"
+      listing.canceled.query.count
     else
       ""
     end
