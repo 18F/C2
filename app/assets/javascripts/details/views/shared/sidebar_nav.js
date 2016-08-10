@@ -53,8 +53,8 @@ SidebarNav = (function(){
       var el = this;
       if(self.shouldLink(el)){
         event.preventDefault();
+        self.triggerSidebar(event, el);
       }
-      self.triggerSidebar(event, el);
     });
   }
 
