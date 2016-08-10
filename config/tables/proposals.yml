@@ -91,16 +91,12 @@ ncr:
     - vendor
     - expense_type
     - building_number
-    - emergency
     - rwa_number
     - work_order_code
     - direct_pay
     - cl_number
     - function_code
     - soc_code
-    - ncr_organization_id
-    - approving_official_id
-
 
 gsa18f:
   <<: *DEFAULT
