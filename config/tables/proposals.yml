@@ -54,9 +54,6 @@ default: &DEFAULT
     building_number:
       header: Building Number
       display: client_data.building_number
-    emergency:
-      header: Emergency
-      display: client_data.emergency
     rwa_number:
       header: RWA Number
       display: client_data.rwa_number
@@ -75,12 +72,6 @@ default: &DEFAULT
     soc_code:
       header: SOC Code
       display: client_data.soc_code
-    ncr_organization_id:
-      header: ncr_organization_id
-      display: client_data.ncr_organization_id
-    approving_official_id:
-      header: Approving Official
-      display: User.find(client_data.approving_official_id).email_address
   columns:
     - public_id
     - name
