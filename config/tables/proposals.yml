@@ -45,6 +45,9 @@ default: &DEFAULT
       header: Purchase Type
       db: gsa18f_procurements.purchase_type
       display: client_data.purchase_type
+    vendor:
+      header: vendor
+      display: client_data.vendor
   columns:
     - public_id
     - name
@@ -61,7 +64,8 @@ ncr:
     - total_price
     - status
     - created_at
-
+    - vendor
+    
 gsa18f:
   <<: *DEFAULT
   columns:
