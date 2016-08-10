@@ -46,8 +46,41 @@ default: &DEFAULT
       db: gsa18f_procurements.purchase_type
       display: client_data.purchase_type
     vendor:
-      header: vendor
+      header: Vendor
       display: client_data.vendor
+    expense_type:
+      header: Expense Type
+      display: client_data.expense_type
+    building_number:
+      header: Building Number
+      display: client_data.building_number
+    emergency:
+      header: Emergency
+      display: client_data.emergency
+    rwa_number:
+      header: RWA Number
+      display: client_data.rwa_number
+    work_order_code:
+      header: Work Order Code
+      display: client_data.work_order_code
+    direct_pay:
+      header: Direct Pay
+      display: client_data.direct_pay
+    cl_number:
+      header: CL Number
+      display: client_data.cl_number
+    function_code:
+      header: Function Code
+      display: client_data.function_code
+    soc_code:
+      header: SOC Code
+      display: client_data.soc_code
+    ncr_organization_id:
+      header: ncr_organization_id
+      display: client_data.ncr_organization_id
+    approving_official_id:
+      header: Approving Official
+      display: User.find(client_data.approving_official_id).email_address
   columns:
     - public_id
     - name
@@ -65,7 +98,19 @@ ncr:
     - status
     - created_at
     - vendor
-    
+    - expense_type
+    - building_number
+    - emergency
+    - rwa_number
+    - work_order_code
+    - direct_pay
+    - cl_number
+    - function_code
+    - soc_code
+    - ncr_organization_id
+    - approving_official_id
+
+
 gsa18f:
   <<: *DEFAULT
   columns:
