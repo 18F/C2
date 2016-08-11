@@ -64,14 +64,14 @@ span.request-count {
     background: #444754;
     li{
       position: relative;
-      border-top: 2px solid #5a5b60;
+      border-top: 1px solid #5a5b60;
       .reports-button{
-        border-bottom: 2px solid #5a5b60;
+        border-bottom: 1px solid #5a5b60;
       }
       &.button-divider{
         display: block;
         width: 70%;
-        height: 2px;
+        height: 1px;
         background: #5a5b60;
         margin: auto;
       }
