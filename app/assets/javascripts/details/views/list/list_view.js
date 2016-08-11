@@ -8,23 +8,25 @@ ListViewDataTable = (function(){
   }
 
   ListViewDataTable.prototype._setup = function(){
-    this.dataTable = this.el.DataTable( {
-        // destroy: true,
-        dom: 'Bfrtip',
-        buttons: [
-            {
-                extend: 'colvis',
-                columns: ':not(:first-child)'
-            }
-        ],
-        "paging":   false,
-        "info":     false,
-        stateSave: true,
-        responsive: true
-    } );
-    this.statusColumn = this.dataTable.column(':contains(Status)');
-    this._events();
-    this.prepList();
+    if( this.el.length > 0 ){
+      this.dataTable = this.el.DataTable( {
+          // destroy: true,
+          dom: 'Bfrtip',
+          buttons: [
+              {
+                  extend: 'colvis',
+                  columns: ':not(:first-child)'
+              }
+          ],
+          "paging":   false,
+          "info":     false,
+          stateSave: true,
+          responsive: true
+      } );
+      this.statusColumn = this.dataTable.column(':contains(Status)');
+      this._events();
+      this.prepList();
+    }
   }
 
   ListViewDataTable.prototype._events = function(){
@@ -69,9 +71,9 @@ ListViewDataTable = (function(){
   }
   ListViewDataTable.prototype.prepList = function(){
     if (typeof(Storage) !== "undefined") {
-      if (localStorage.getItem('savedColState') !== undefined && localStorage.getItem('savedColState') == "setup"){
-        this.hideExtraCols();
+      if (localStorage.getItem('savedColState') !== undefined && localStorage.savedColState == "setup"){
       } else {
+        this.hideExtraCols();
         localStorage.setItem('savedColState', 'setup');
       }
     } else {
