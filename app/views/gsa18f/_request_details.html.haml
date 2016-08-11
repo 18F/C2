@@ -1,6 +1,7 @@
 - i = 0
 - @proposal.new_fields_for_display.each do |field|
   - key = field[:key]
+  - data = {}
   - data[:f] = @form
   - data[:proposal] = @proposal
   - data[:key] = key
