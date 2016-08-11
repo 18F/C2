@@ -1,3 +1,13 @@
+span.request-count {
+  position: absolute;
+  right: 15%;
+  top: 0px;
+  bottom: 0px;
+  margin: auto;
+  display: block;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
 
 .sidebar-home{
   height: auto !important;
@@ -35,6 +45,9 @@
   }
   .new-request-button, .reports-button{
     background: #333541;
+    &:hover, &:focus{
+      background: darken(#333541, 5%);
+    }
   }
   .side-secondary-nav{
     list-style: none;
@@ -50,9 +63,13 @@
     margin-left: 0px;
     li{
       position: relative;
-
       &.requests-button{
         border-bottom: none;
+        &:hover, &:focus{
+          a{
+            color: #cccccc;
+          }
+        }
       }
       .reports-button{
         border-top: 2px solid #5a5b60;
@@ -81,7 +98,7 @@
           border-radius: 3px 0px 0px 3px;
         }
         &.active, &:focus, &:hover{
-          a{
+          a, span.request-count{
             color: #333541;
             outline: none;
           }

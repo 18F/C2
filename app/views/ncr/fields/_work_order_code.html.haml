@@ -1,12 +1,13 @@
-.column{ class: key + "-wrapper half-col-wrap sub-card sub-card-right", id: key + '-wrapper-4', data: {"filter-key": "expense-type", "filter-value": "BA80"}}
-  .detail-wrapper.row{id: value_id }
-    .detail-display.column
-      %label.detail-element
-        = t(t_slug + key)
-      %span.detail-value
-        = client_field
-    .detail-edit.column
-      %label.detail-element
-        = t(t_slug + key)
-      %span.detail-value
-        = f.input :work_order_code, wrapper_html: { data: { filter_key: "expense-type", filter_value: "BA80" } }, label: false
+- if @client_data_instance[:expense_type] == "BA80"
+  .column{ class: key + "-wrapper half-col-wrap sub-card sub-card-right", id: key + '-wrapper-4', data: {"filter-key": "expense-type", "filter-value": "BA80"}}
+    .detail-wrapper.row{id: value_id }
+      .detail-display.column
+        %label.detail-element
+          = t(t_slug + key)
+        %span.detail-value
+          = client_field
+      .detail-edit.column
+        %label.detail-element
+          = t(t_slug + key)
+        %span.detail-value
+          = f.input :work_order_code, wrapper_html: { data: { filter_key: "expense-type", filter_value: "BA80" } }, label: false

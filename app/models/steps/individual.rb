@@ -3,7 +3,6 @@ module Steps
     has_many :delegations, through: :user, source: :outgoing_delegations
     has_many :delegates, through: :delegations, source: :assignee
 
-    validate :user_is_not_requester
     validates :user, presence: true
     delegate :full_name, :email_address, to: :user, prefix: true
 
@@ -52,12 +51,6 @@ module Steps
         api_token.try(:expire!)
         update_attributes!(completer_id: nil, completed_at: nil)
         super
-      end
-    end
-
-    def user_is_not_requester
-      if user && user == proposal.requester
-        errors.add(:user, "Cannot be Requester")
       end
     end
   end

@@ -1,12 +1,13 @@
-.column{ class: key + "-wrapper half-col-wrap sub-card sub-card-left", id: key + '-wrapper-3', data: {"filter-key": "expense-type", "filter-value": "BA80"}}
-  .detail-wrapper.row{ id: value_id }
-    .detail-display.column
-      %label.detail-element
-        = t(t_slug + key)
-      %span.detail-value
-        = client_field
-    .detail-edit.column
-      %label.detail-element{ for: "ncr_work_order_rwa_number"}
-        = t(t_slug + key)
-      %span.detail-value
-        = f.input :rwa_number, required: true, wrapper_html: { data: { filter_key: "expense-type", filter_value: "BA80" } }, label: false, "data-reapproval" => reapproval
+- if @client_data_instance[:expense_type] == "BA80"
+  .column{ class: key + "-wrapper half-col-wrap sub-card sub-card-left", id: key + '-wrapper-3', data: {"filter-key": "expense-type", "filter-value": "BA80"}}
+    .detail-wrapper.row{ id: value_id }
+      .detail-display.column
+        %label.detail-element
+          = t(t_slug + key)
+        %span.detail-value
+          = client_field
+      .detail-edit.column
+        %label.detail-element{ for: "ncr_work_order_rwa_number"}
+          = t(t_slug + key)
+        %span.detail-value
+          = f.input :rwa_number, required: true, wrapper_html: { data: { filter_key: "expense-type", filter_value: "BA80" } }, label: false, "data-reapproval" => reapproval

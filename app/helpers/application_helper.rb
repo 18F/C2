@@ -31,7 +31,31 @@ module ApplicationHelper
     field
   end
 
+  def proposal_count(type)
+    if @current_user.nil?
+      return 0
+    end
+    listing = ProposalListingQuery.new(@current_user, params)
+    get_proposal_count(type, listing)
+  end
+
+  def get_proposal_count(type, listing)
+    case type
+    when "pending"
+      listing.pending_review.query.count
+    when "completed"
+      listing.completed.query.count
+    when "canceled"
+      listing.canceled.query.count
+    else
+      ""
+    end
+  end
+
   def list_view_conditions
-    (controller_name == "proposals" && params[:action] == "index" && !@current_user.nil? && @current_user.should_see_beta?("BETA_FEATURE_LIST_VIEW"))
+    user_condition = (!@current_user.nil? && @current_user.should_see_beta?("BETA_FEATURE_LIST_VIEW"))
+    action_condition = (params[:action] == "index" || params[:action] == "show")
+    controller_condition = (controller_name == "proposals")
+    (controller_condition && action_condition && user_condition)
   end
 end
