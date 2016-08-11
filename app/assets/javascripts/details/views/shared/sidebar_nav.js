@@ -56,6 +56,9 @@ SidebarNav = (function(){
         self.triggerSidebar(event, el);
       }
     });
+    this.el.on("check-url", function(){
+      self.checkUrl();
+    });
   }
 
   SidebarNav.prototype.shouldLink = function(el){

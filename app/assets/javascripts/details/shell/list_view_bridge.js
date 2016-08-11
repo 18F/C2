@@ -20,6 +20,7 @@ ListViewBridge = (function() {
     this.sidebarNav = this.c2.sidebarNav;
 
     this._setupEvents();
+    this._saveStateLoaded();
   }
 
 
@@ -33,6 +34,13 @@ ListViewBridge = (function() {
       console.log(data);
       self.listview.el.trigger("dataTableView:" + data);
     })
+  }
+
+  ListViewBridge.prototype._saveStateLoaded = function(){
+    var self = this;
+    this.listView.dataTable.on( 'stateLoaded.dt', function (e, settings, data) {
+      self.sidebarNav.el.trigger('check-url');
+    } );
   }
 
   return ListViewBridge;

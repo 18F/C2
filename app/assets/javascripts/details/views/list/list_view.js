@@ -71,7 +71,7 @@ ListViewDataTable = (function(){
   }
   ListViewDataTable.prototype.prepList = function(){
     if (typeof(Storage) !== "undefined") {
-      if (localStorage.getItem('savedColState') !== undefined && localStorage.savedColState == "setup"){
+      if ( localStorage.getItem('savedColState') !== undefined && localStorage.savedColState == "setup" ){
       } else {
         this.hideExtraCols();
         localStorage.setItem('savedColState', 'setup');
