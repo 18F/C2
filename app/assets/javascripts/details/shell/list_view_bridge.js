@@ -31,7 +31,6 @@ ListViewBridge = (function() {
   ListViewBridge.prototype._setupEvents = function(){
     var self = this;
     this.sidebarNav.el.on('sidebar:button', function(event, data){
-      console.log(data);
       self.listView.el.trigger("dataTableView:" + data);
     })
   }
@@ -39,7 +38,7 @@ ListViewBridge = (function() {
   ListViewBridge.prototype._saveStateLoaded = function(){
     var self = this;
     this.listView.dataTable.on( 'stateLoaded.dt', function (e, settings, data) {
-      self.sidebarNav.el.trigger('check-url');
+      self.sidebarNav.el.trigger('refresh-list');
     } );
   }
 

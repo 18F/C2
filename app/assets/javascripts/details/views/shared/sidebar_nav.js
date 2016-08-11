@@ -59,6 +59,10 @@ SidebarNav = (function(){
     this.el.on("check-url", function(){
       self.checkUrl();
     });
+    });
+    this.el.on("refresh-list", function(){
+      self.refreshActive();
+    });
   }
 
   SidebarNav.prototype.shouldLink = function(el){
@@ -77,6 +81,16 @@ SidebarNav = (function(){
   SidebarNav.prototype.setActive = function(el){
     this.el.find('li').removeClass('active');
     $(el).parent().addClass('active');
+  }
+
+  SidebarNav.prototype.getActive = function(){
+    this.el.find('.active [data-trigger]').attr('data-trigger');
+  }
+
+  SidebarNav.prototype.refreshActive = function(){
+    var self = this;
+    var activeState = self.getActive();
+    this.el.trigger('sidebar:button', activeState);
   }
 
   SidebarNav.prototype.triggerSidebar = function(event, el){
