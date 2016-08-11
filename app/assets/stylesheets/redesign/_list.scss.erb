@@ -217,19 +217,20 @@ div.dt-button-collection.dt-button-collection{
     td, td a{
       color: #4a4a4a;
       text-decoration: none;
+      &:hover{
+        background: #E8E8E8;
+      }
     }
     &.even{
       background: hsla(0,0%,100%,1);;
-      &:hover{
-        background: hsla(0,0%,85%,1);
-      }
     }
     &.odd{
       background: hsla(0,0%,97%,1);
-      &:hover{
-        background: hsla(0,0%,85%,1);
-      }
     }
+  }
+
+  td.public_id a {
+    font-weight: bold;
   }
 
   .tabular-data th{
