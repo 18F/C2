@@ -45,6 +45,33 @@ default: &DEFAULT
       header: Purchase Type
       db: gsa18f_procurements.purchase_type
       display: client_data.purchase_type
+    vendor:
+      header: Vendor
+      display: client_data.vendor
+    expense_type:
+      header: Expense Type
+      display: client_data.expense_type
+    building_number:
+      header: Building Number
+      display: client_data.building_number
+    rwa_number:
+      header: RWA Number
+      display: client_data.rwa_number
+    work_order_code:
+      header: Work Order Code
+      display: client_data.work_order_code
+    direct_pay:
+      header: Direct Pay
+      display: client_data.direct_pay
+    cl_number:
+      header: CL Number
+      display: client_data.cl_number
+    function_code:
+      header: Function Code
+      display: client_data.function_code
+    soc_code:
+      header: SOC Code
+      display: client_data.soc_code
   columns:
     - public_id
     - name
@@ -61,6 +88,15 @@ ncr:
     - total_price
     - status
     - created_at
+    - vendor
+    - expense_type
+    - building_number
+    - rwa_number
+    - work_order_code
+    - direct_pay
+    - cl_number
+    - function_code
+    - soc_code
 
 gsa18f:
   <<: *DEFAULT
