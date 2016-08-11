@@ -36,10 +36,7 @@ ListViewBridge = (function() {
   }
 
   ListViewBridge.prototype._saveStateLoaded = function(){
-    var self = this;
-    this.listView.dataTable.on( 'stateLoaded.dt', function (e, settings, data) {
-      self.sidebarNav.el.trigger('refresh-list');
-    } );
+    this.sidebarNav.el.trigger('refresh-list');
   }
 
   return ListViewBridge;

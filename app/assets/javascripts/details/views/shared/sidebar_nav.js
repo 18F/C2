@@ -59,7 +59,6 @@ SidebarNav = (function(){
     this.el.on("check-url", function(){
       self.checkUrl();
     });
-    });
     this.el.on("refresh-list", function(){
       self.refreshActive();
     });
@@ -84,12 +83,11 @@ SidebarNav = (function(){
   }
 
   SidebarNav.prototype.getActive = function(){
-    this.el.find('.active [data-trigger]').attr('data-trigger');
+    return this.el.find('.active [data-trigger]').attr('data-trigger');
   }
 
   SidebarNav.prototype.refreshActive = function(){
-    var self = this;
-    var activeState = self.getActive();
+    var activeState = this.getActive();
     this.el.trigger('sidebar:button', activeState);
   }
 
