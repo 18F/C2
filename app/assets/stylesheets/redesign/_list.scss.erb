@@ -181,9 +181,12 @@ table#tabular-data {
   }
   tr{
     td{
-      border-right: 1px solid #eee;
+      border-left: 1px solid #eee;
       &.sorting_1{
         border-left: 1px solid #eee;
+      }
+      &:first-child{
+        border-left: none;
       }
     }
     td, td a{
