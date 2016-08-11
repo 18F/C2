@@ -57,6 +57,15 @@ ListViewDataTable = (function(){
     this.statusColumn.search('Completed').draw();
   }
 
+  ListViewDataTable.prototype.prepList = function(){
+    for(i = 0; i < this.dataTable.columns()[0].length; i++){
+      var colCount = this.dataTable.column(i);
+      if(i > 5){
+        colCount.visible(false);
+      }
+    }
+  }
+
   return ListViewDataTable;
 
 }());
