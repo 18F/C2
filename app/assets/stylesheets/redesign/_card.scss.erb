@@ -10,6 +10,33 @@
   padding-bottom: 70px;
 }
 
+[class*=hint--] {
+  top: 24px;
+  right: 9%;
+  z-index: 1;
+  color: map-get($c2blue-swatch, primary);
+  border-radius: 50%;
+  border: 2px solid map-get($c2blue-swatch, primary);
+  width: 21px;
+  height: 21px;
+  text-align: center;
+  margin-right: -25px;
+  font-size: 12px;
+  font-weight: 900;
+  font-family: sans-serif;
+  cursor: pointer;
+}
+[class*=hint--]:after {
+  background: map-get($c2blue-swatch, primary) !important;
+  text-shadow: none !important;
+  text-align: left;
+  padding: 15px !important;
+  font-weight: normal;
+}
+.hint--bottom-left:before {
+  border-bottom-color: map-get($c2blue-swatch, primary) !important;
+}
+
 .card {
   font-size: 15px;
   background: #fff;
