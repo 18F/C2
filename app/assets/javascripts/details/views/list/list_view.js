@@ -59,12 +59,23 @@ ListViewDataTable = (function(){
     this.statusColumn.search('Completed').draw();
   }
 
-  ListViewDataTable.prototype.prepList = function(){
+  ListViewDataTable.prototype.hideExtraCols = function(){
     for(i = 0; i < this.dataTable.columns()[0].length; i++){
       var colCount = this.dataTable.column(i);
       if(i > 5){
         colCount.visible(false);
       }
+    }
+  }
+  ListViewDataTable.prototype.prepList = function(){
+    if (typeof(Storage) !== "undefined") {
+      if (localStorage.getItem('savedColState') !== undefined && localStorage.getItem('savedColState') == "setup"){
+        this.hideExtraCols();
+      } else {
+        localStorage.setItem('savedColState', 'setup');
+      }
+    } else {
+      this.hideExtraCols();
     }
   }
 
