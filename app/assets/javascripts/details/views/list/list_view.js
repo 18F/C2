@@ -19,6 +19,7 @@ ListViewDataTable = (function(){
         ],
         "paging":   false,
         "info":     false,
+        stateSave: true,
         responsive: true
     } );
     this.statusColumn = this.dataTable.column(':contains(Status)');
