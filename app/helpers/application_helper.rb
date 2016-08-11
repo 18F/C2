@@ -33,7 +33,7 @@ module ApplicationHelper
 
   def is_current_proposal_status(type)
     if !@proposal.nil? &&@proposal.status == type
-      klass = " active "
+      " active "
     end
   end
 
