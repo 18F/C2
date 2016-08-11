@@ -31,8 +31,8 @@ module ApplicationHelper
     field
   end
 
-  def is_current_proposal_status(type)
-    if !@proposal.nil? &&@proposal.status == type
+  def current_proposal_status?(type)
+    if !@proposal.nil? && @proposal.status == type
       " active "
     end
   end
