@@ -23,6 +23,7 @@ ListViewDataTable = (function(){
     } );
     this.statusColumn = this.dataTable.column(':contains(Status)');
     this._events();
+    this.prepList();
   }
 
   ListViewDataTable.prototype._events = function(){
