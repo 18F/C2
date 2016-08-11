@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 ruby "2.3.1" # this should match `.ruby-version` and doc/setup.md
-gem "rails", "4.2.5.2"
+gem "rails", "4.2.7.1"
 
 gem "actionmailer-text"
 gem "active_model_serializers"
