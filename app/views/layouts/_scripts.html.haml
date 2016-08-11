@@ -1,5 +1,6 @@
 = stylesheet_link_tag "redesign/app"
 = stylesheet_link_tag "redesign/_print", media: "print"
+= stylesheet_link_tag "hint.min.css"
 
 = javascript_include_tag "details/views/view_helper"
 = javascript_include_tag "details/views/action_bar"
@@ -23,6 +24,7 @@
 = javascript_include_tag "details/shell/list_view_bridge"
 
 = javascript_include_tag "details/app"
+= javascript_include_tag "foundation/foundation"
 
 - unless Rails.env.test?
   = javascript_include_tag "https://www.ethn.io/32631.js", async: true
