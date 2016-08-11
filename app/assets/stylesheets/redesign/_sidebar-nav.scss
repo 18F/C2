@@ -64,15 +64,15 @@ span.request-count {
     background: #444754;
     li{
       position: relative;
-      border-top: 1px solid #5a5b60;
+      border-top: 1px solid #71737A;
       .reports-button{
-        border-bottom: 1px solid #5a5b60;
+        border-bottom: 1px solid #71737A;
       }
       &.button-divider{
         display: block;
         width: 70%;
         height: 1px;
-        background: #5a5b60;
+        background: #71737A;
         margin: auto;
       }
       &.requests-button{
@@ -81,7 +81,7 @@ span.request-count {
             outline: none;
           }
           &:hover{
-            background: #323641;
+            background: #71737A;
           }
         }
       }
@@ -109,11 +109,11 @@ span.request-count {
             outline: none;
           }
           &:hover{
-            background: #323641;
+            background: #71737A;
           }
           &.active{
             &:hover{
-              background: #444754;
+              background: #DBEAF5;
             }
             &:before{
               background: #C5DCED;
