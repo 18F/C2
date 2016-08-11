@@ -1,5 +1,6 @@
 .row
   .medium-12.column
+    %span.hint--bottom-left.hint--rounded.hint--bounce.hint--medium.fr{"aria-label" => "Observers of a request are notified when the request is updated, commented on, or approved."} ?
     .card
       .card-head.column
         %h2
@@ -8,7 +9,7 @@
         - if policy(Observation.new(proposal: @proposal)).can_create?
           .row
             .medium-12.column
-              = select_tag "observation[user][id]", 
+              = select_tag "observation[user][id]",
                 options_from_collection_for_select( proposal.eligible_observers, :id, :email_address),
                 class: "js-selectize observation-input", include_blank: true
               = label :reason,
