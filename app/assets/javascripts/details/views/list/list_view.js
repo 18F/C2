@@ -44,10 +44,8 @@ ListViewDataTable = (function(){
       self.viewAll();
     });
     this.el.on('click', 'tr *', function(){
-      console.log('Clicked el');
       var el = this;
       if(!$(el).parents('.public_id').length && !$(el).hasClass('public_id')){
-        console.log('El not public_id');
         var link = $(this).closest('tr').find('a').first().attr('href');
         window.location.href = link;
       }

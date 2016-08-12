@@ -81,7 +81,7 @@ class ClientDataController < ApplicationController
   end
 
   def js_response_function(request_type, js_response)
-    "c2.detailsSave.el.trigger('details-form:" + request_type + "', " + js_response.to_json + "); console.log(" + js_response.to_json + ");"
+    "c2.detailsSave.el.trigger('details-form:" + request_type + "', " + js_response.to_json + ");"
   end
 
   def prepare_client_data_for_update(filtered_params, current_user)
