@@ -36,7 +36,7 @@ module TabularData
     def display(row)
       field_components = @display_field.split(".")
       field_components.inject(row) do |object, field|
-        if field == "created_at"
+        if field == "created_at" && object.try(field).respond_to?("strftime")
           object.try(field).strftime("%m/%d/%Y %I:%M%p")
         else
           object.try(field)
