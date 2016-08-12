@@ -14,9 +14,27 @@ span.request-count {
   min-height: 100%;
   padding-right: 0em;
   background: #333541;
-  max-width: 250px;
+  @media screen and (min-width: 40em){
+    max-width: 250px;
+  }
   @media screen and (max-width: 40em){
     padding: 0px;
+    width: 100%;
+    .request-related-button.active{
+      a{
+        margin-left: 0px !important;
+        &:before{
+          background: #C5DCED;
+        }
+      }
+      &:hover{
+        a{
+          &:before{
+            background: #DBEAF5;
+          }
+        }
+      }
+    }
   }
   .header-nav{
     width: 100%;
@@ -91,12 +109,55 @@ span.request-count {
         border: none;
         position: relative;
         a{
+          margin-left: 10px;
           font-size: 14px;
           position: relative;
-          padding-left: 20%;
+          padding-left: 24%;
           width: 100%;
           display: block;
           font-weight: normal;
+          position: relative;
+          &:before{
+            content: "";
+            width: 20px;
+            height: 20px;
+            display: block;
+            position: absolute;
+            left: 6%;
+            margin: auto;
+            top: 0px;
+            bottom: 0px;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+          }
+          &[data-trigger='all']:before{
+            background-image: url("<%= asset_path('sidenav/box.png') %>");
+          }
+          &[data-trigger='pending']:before{
+            background-image: url("<%= asset_path('sidenav/pending.png') %>");
+          }
+          &[data-trigger='completed']:before{
+            background-image: url("<%= asset_path('sidenav/check.png') %>");
+          }
+          &[data-trigger='canceled']:before{
+            background-image: url("<%= asset_path('sidenav/folder.png') %>");
+          }
+        }
+        &.active a,
+        &:focus a{
+          &[data-trigger='all']:before{
+            background-image: url("<%= asset_path('sidenav/box-dark.png') %>");
+          }
+          &[data-trigger='pending']:before{
+            background-image: url("<%= asset_path('sidenav/pending-dark.png') %>");
+          }
+          &[data-trigger='completed']:before{
+            background-image: url("<%= asset_path('sidenav/check-dark.png') %>");
+          }
+          &[data-trigger='canceled']:before{
+            background-image: url("<%= asset_path('sidenav/folder-dark.png') %>");
+          }
         }
         &.view-all-button-wrapper:before{
           border-top: none;
@@ -114,9 +175,9 @@ span.request-count {
             background: #71737A;
           }
           &.active{
-            &:hover{
-              background: #DBEAF5;
-            }
+            // &:hover{
+            //   background: #DBEAF5;
+            // }
             &:before{
               background: #C5DCED;
             }
@@ -134,7 +195,7 @@ span.request-count {
             width: 100%;
             @media screen and (min-width: 40em){
               right: 0px;
-              width: 90%;
+              width: 93%;
             }
           }
         }
@@ -143,6 +204,7 @@ span.request-count {
       padding: 0px;
       background: #444754;
       a{
+        text-align: left;
         display: block;
         padding: 20px 20px;
         width: 100%;
