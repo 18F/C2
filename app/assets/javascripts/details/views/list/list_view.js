@@ -43,6 +43,30 @@ ListViewDataTable = (function(){
     this.el.on('dataTableView:all', function(){
       self.viewAll();
     });
+    this.el.on('click', 'table:not(.collapsed) tr *', function(){
+      var link = $(this).closest('tr').find('a').first().attr('href');
+      window.location.href = link;
+    });
+    this.el.find('tr').mouseenter(function(){
+      console.log('this.el.mouseenter(function(){');
+      var el = $(this).closest('tr');
+      self.removeActiveRow(el);
+      self.addActiveRow(el);
+    }).mouseleave(function(){
+      console.log('}).mouseleave(function(){');
+      var el = $(this).closest('tr');
+      self.removeActiveRow(el);
+    });
+  }
+
+  ListViewDataTable.prototype.removeActiveRow = function(el){
+    console.log('ListViewDataTable.prototype.removeActiveRow = function(el){');
+    this.el.find('tr').removeClass('active-row');
+  }
+
+  ListViewDataTable.prototype.addActiveRow = function(el){
+    console.log('ListViewDataTable.prototype.addActiveRow = function(el){');
+    $(el).addClass('active-row');
   }
 
   ListViewDataTable.prototype.viewPending = function(){
