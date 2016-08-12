@@ -59,6 +59,22 @@ feature "Proposals index" do
     end
   end
 
+  feature "new feature flag" do
+    context "when the user hasn't seen a feature" do
+      scenario "shows an icon when the user hasn't seen the help doc", :js do
+        beta_active = create(:user, :beta_active, client_slug: "ncr")
+
+        login_as(beta_active)
+        visit proposals_path
+        expect(page.find('.new-features-button img')['src']).to have_content('new_feature_icon.svg')
+        click_on "New features"
+
+        visit proposals_path
+        expect(page.find('.new-features-button img')['src']).to have_content('new_feature_icon_none.svg')
+      end
+    end
+  end
+
 
   feature "status field text" do
     context "when the user is an approver" do

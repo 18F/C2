@@ -45,7 +45,7 @@ span.request-count {
     position: relative;
     height: 100%;
   }
-  .new-request-button, .reports-button{
+  .new-request-button, .reports-button, .new-features-button{
     background: #333541;
     &:hover, &:focus{
       background: darken(#333541, 5%);
@@ -67,7 +67,7 @@ span.request-count {
     li{
       position: relative;
       border-top: 1px solid #71737A;
-      .reports-button{
+      .new-features-button{
         border-bottom: 1px solid #71737A;
       }
       &.button-divider{

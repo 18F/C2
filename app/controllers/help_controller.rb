@@ -10,6 +10,8 @@ class HelpController < ApplicationController
   def show
     page = params[:id]
     # prevent rendering of any non-help template
+    @new_features = new_features_page?(page)
+
     if page_names.include?(page)
       render "help/#{page}"
     else
@@ -17,8 +19,11 @@ class HelpController < ApplicationController
     end
   end
 
-
   protected
+  
+  def new_features_page?(page)
+    page == "new_features"
+  end
 
   def page_names
     dir = Rails.root.join("app", "views", "help", "*.md")
