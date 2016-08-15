@@ -39,6 +39,7 @@ gem "jquery-rails"
 gem "kaminari"
 gem "kaminari-bootstrap", "~> 3.0.1"
 gem "mandrill-rails"
+gem 'mountain_view'
 gem "newrelic_rpm"
 gem "omniauth-myusa"
 gem "paper_trail", "~> 4.1.0"

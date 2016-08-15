@@ -309,6 +309,8 @@ GEM
     mimemagic (0.3.2)
     mini_portile2 (2.1.0)
     minitest (5.9.0)
+    mountain_view (0.9.1)
+      rails (>= 3.2.0)
     multi_json (1.11.2)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
@@ -593,6 +595,7 @@ DEPENDENCIES
   letter_opener_web
   mandrill-rails
   meta_request
+  mountain_view
   newrelic_rpm
   omniauth-myusa
   paper_trail (~> 4.1.0)

@@ -82,4 +82,7 @@ C2::Application.routes.draw do
     mount Konacha::Engine, at: "konacha" if defined?(Konacha)
     mount Blazer::Engine, at: "blazer"
   end
+
+  mount MountainView::Engine => "/mountain_view"
+
 end
