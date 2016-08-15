@@ -43,6 +43,29 @@ ListViewDataTable = (function(){
     this.el.on('dataTableView:all', function(){
       self.viewAll();
     });
+    this.el.on('click', 'tr *', function(){
+      var el = this;
+      if(!$(el).parents('.public_id').length && !$(el).hasClass('public_id')){
+        var link = $(this).closest('tr').find('a').first().attr('href');
+        window.location.href = link;
+      }
+    });
+    this.el.find('tr').mouseenter(function(){
+      var el = $(this).closest('tr');
+      self.removeActiveRow(el);
+      self.addActiveRow(el);
+    }).mouseleave(function(){
+      var el = $(this).closest('tr');
+      self.removeActiveRow(el);
+    });
+  }
+
+  ListViewDataTable.prototype.removeActiveRow = function(el){
+    this.el.find('tr').removeClass('active-row');
+  }
+
+  ListViewDataTable.prototype.addActiveRow = function(el){
+    $(el).addClass('active-row');
   }
 
   ListViewDataTable.prototype.viewPending = function(){
