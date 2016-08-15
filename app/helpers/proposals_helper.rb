@@ -24,10 +24,14 @@ module ProposalsHelper
   end
 
   def get_new_feature_image_tag(new_feature_date)
-    if cookies[new_feature_date]
+    if user_seen_new_features_help?(new_feature_date)
       image_tag("new_feature_icon_none.svg", alt: "New Feature")
     else
       image_tag("new_feature_icon.svg", alt: "No New Feature")
     end
+  end
+
+  def user_seen_new_features_help?(new_feature_date)
+    current_user.new_features_date == new_feature_date
   end
 end
