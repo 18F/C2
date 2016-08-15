@@ -20,7 +20,6 @@ class HelpController < ApplicationController
   end
 
   protected
-  
   def new_features_page?(page)
     page == "new_features"
   end
