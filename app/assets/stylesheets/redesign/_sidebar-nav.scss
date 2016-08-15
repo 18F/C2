@@ -1,9 +1,20 @@
+span.request-count {
+  position: absolute;
+  right: 15%;
+  top: 0px;
+  bottom: 0px;
+  margin: auto;
+  display: block;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
 
 .sidebar-home{
   height: auto !important;
   min-height: 100%;
   padding-right: 0em;
   background: #333541;
+  max-width: 250px;
   @media screen and (max-width: 40em){
     padding: 0px;
   }
@@ -12,11 +23,12 @@
   }
   #header-identity{
     text-align: center;
+    min-height: 110px;
     img{
-      padding-top: 10px;
-      padding-bottom: 10px;
+      padding-top: 35px;
+      padding-bottom: 35px;
       max-width: 300px;
-      width: 80%;
+      width: 70%;
     }
     a{
       display: block;
@@ -35,6 +47,9 @@
   }
   .new-request-button, .reports-button{
     background: #333541;
+    &:hover, &:focus{
+      background: darken(#333541, 5%);
+    }
   }
   .side-secondary-nav{
     list-style: none;
@@ -48,14 +63,29 @@
   }
   .header-nav{
     margin-left: 0px;
+    background: #444754;
     li{
       position: relative;
-
-      &.requests-button{
-        border-bottom: none;
-      }
+      border-top: 1px solid #71737A;
       .reports-button{
-        border-top: 2px solid #5a5b60;
+        border-bottom: 1px solid #71737A;
+      }
+      &.button-divider{
+        display: block;
+        width: 70%;
+        height: 1px;
+        background: #71737A;
+        margin: auto;
+      }
+      &.requests-button{
+        &:focus, &:hover{
+          a, span.request-count{
+            outline: none;
+          }
+          &:hover{
+            background: #71737A;
+          }
+        }
       }
       &.request-related-button{
         border: none;
@@ -63,27 +93,38 @@
         a{
           font-size: 14px;
           position: relative;
-          padding-left: 40px;
+          padding-left: 20%;
           width: 100%;
           display: block;
           font-weight: normal;
         }
-        &:before{
-          content: "";
-          display: block;
-          position: absolute;
-          width: 70%;
-          top: 0px;
-          border-top: 2px solid #5a5b60;
-          left: 0px;
-          right: 0px;
-          margin: auto;
-          border-radius: 3px 0px 0px 3px;
+        &.view-all-button-wrapper:before{
+          border-top: none;
+        }
+        &.active{
+          a, span.request-count{
+            color: #333541;
+          }
         }
         &.active, &:focus, &:hover{
-          a{
-            color: #333541;
+          a, span.request-count{
             outline: none;
+          }
+          &:hover{
+            background: #71737A;
+          }
+          &.active{
+            &:hover{
+              background: #DBEAF5;
+            }
+            &:before{
+              background: #C5DCED;
+            }
+            &:hover{
+              &:before{
+                background: #DBEAF5;
+              }
+            }
           }
           &:before {
             border: none;
@@ -92,92 +133,12 @@
             height: 100%;
             width: 100%;
             @media screen and (min-width: 40em){
-              right: -10.01%;
+              right: 0px;
               width: 90%;
             }
           }
         }
       }
-      &.view-all-button-wrapper{
-        &.active, &:focus, &:hover{
-          &:before {
-            background: #c5dced;
-          }
-        }
-        &.active{
-          &:focus, &:hover{
-            &:before{
-              background: darken(#c5dced, 10%);
-            }
-          }
-        }
-        &:hover{
-          &:before{
-            background: lighten(#c5dced, 5%);
-          }
-        }
-      }
-      &.pending-button-wrapper{
-        &.active, &:focus, &:hover{
-          &:before {
-            background: #f7dd7d;
-          }
-        }
-        &.active{
-          &:focus, &:hover{
-            &:before{
-              background: darken(#f7dd7d, 10%);
-            }
-          }
-        }
-        &:hover{
-          &:before{
-            background: lighten(#f7dd7d, 5%);
-          }
-        }
-      }
-      &.completed-button-wrapper{
-        &.active, &:focus, &:hover{
-          &:before {
-            background: #9CD984;
-          }
-        }
-        &.active{
-          &:focus, &:hover{
-            &:before{
-              background: darken(#9CD984, 10%);
-            }
-          }
-        }
-        &:hover{
-          &:before{
-            background: lighten(#9CD984, 5%);
-          }
-        }
-      }
-      &.canceled-button-wrapper{
-        &.active, &:focus, &:hover{
-          &:before {
-            background: #CDD1D3;
-          }
-        }
-        &.active{
-          &:focus, &:hover{
-            &:before{
-              background: darken(#CDD1D3, 10%);
-            }
-          }
-        }
-        &:hover{
-          &:before{
-            background: lighten(#CDD1D3, 5%);
-          }
-        }
-      }
-      &:first-child{
-        border-top: 2px solid #5a5b60;
-      }
-      border-bottom: 2px solid #5a5b60;
       width: 100%;
       padding: 0px;
       background: #444754;

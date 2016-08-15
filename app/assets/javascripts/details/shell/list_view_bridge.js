@@ -16,10 +16,11 @@ ListViewBridge = (function() {
   ListViewBridge.prototype._blastOff = function(){
     var config = this.config;
 
-    this.listview = this.c2.listView;
+    this.listView = this.c2.listView;
     this.sidebarNav = this.c2.sidebarNav;
 
     this._setupEvents();
+    this._saveStateLoaded();
   }
 
 
@@ -30,9 +31,12 @@ ListViewBridge = (function() {
   ListViewBridge.prototype._setupEvents = function(){
     var self = this;
     this.sidebarNav.el.on('sidebar:button', function(event, data){
-      console.log(data);
-      self.listview.el.trigger("dataTableView:" + data);
+      self.listView.el.trigger("dataTableView:" + data);
     })
+  }
+
+  ListViewBridge.prototype._saveStateLoaded = function(){
+    this.sidebarNav.el.trigger('refresh-list');
   }
 
   return ListViewBridge;

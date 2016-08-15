@@ -1,6 +1,7 @@
 - i = 0
 - @proposal.new_fields_for_display.each do |field|
   - key = field[:key]
+  - data = {}
   - data[:f] = @form
   - data[:proposal] = @proposal
   - data[:key] = key
@@ -11,13 +12,9 @@
   - data[:client_field] = blank_field_default(@client_data_instance[key])
   - data[:value_id] = key + '-' + @client_data_instance.id.to_s
 
-  - if i == 0
-    :plain
-      <div class="grid-layout">
+
 
   = render partial: field[:partial], locals: data
 
   - i = i + 1
 
-:plain
-</div>

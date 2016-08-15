@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 ruby "2.3.1" # this should match `.ruby-version` and doc/setup.md
-gem "rails", "4.2.5.2"
+gem "rails", "4.2.7.1"
 
 gem "actionmailer-text"
 gem "active_model_serializers"
@@ -42,7 +42,7 @@ gem "mandrill-rails"
 gem "newrelic_rpm"
 gem "omniauth-myusa"
 gem "paper_trail", "~> 4.1.0"
-gem "paperclip", "4.3.6"
+gem "paperclip", "~> 5.0.0"
 gem "peek"
 gem "peek-delayed_job"
 gem "peek-performance_bar"
