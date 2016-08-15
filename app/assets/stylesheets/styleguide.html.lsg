@@ -1,0 +1,5 @@
+@scss redesign/app.scss
+
+@title My Living Style Guide
+
+@import **/*.lsg

@@ -291,6 +291,12 @@ GEM
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
       ruby_dep (~> 1.2)
+    livingstyleguide (2.0.0)
+      minisyntax (>= 0.2.5)
+      redcarpet
+      sass
+      thor
+      tilt
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
     lumberjack (1.0.10)
@@ -308,6 +314,7 @@ GEM
     mime-types-data (3.2016.0521)
     mimemagic (0.3.2)
     mini_portile2 (2.1.0)
+    minisyntax (0.2.5)
     minitest (5.9.0)
     multi_json (1.11.2)
     multi_xml (0.5.5)
@@ -591,6 +598,7 @@ DEPENDENCIES
   konacha
   letter_opener
   letter_opener_web
+  livingstyleguide
   mandrill-rails
   meta_request
   newrelic_rpm
