@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160810233031) do
+ActiveRecord::Schema.define(version: 20160815205309) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -339,14 +339,15 @@ ActiveRecord::Schema.define(version: 20160810233031) do
   add_index "user_roles", ["user_id", "role_id"], name: "index_user_roles_on_user_id_and_role_id", unique: true, using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "email_address", limit: 255
-    t.string   "first_name",    limit: 255
-    t.string   "last_name",     limit: 255
+    t.string   "email_address",     limit: 255
+    t.string   "first_name",        limit: 255
+    t.string   "last_name",         limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "client_slug",   limit: 255
-    t.boolean  "active",                    default: true
-    t.string   "timezone",      limit: 255, default: "Eastern Time (US & Canada)"
+    t.string   "client_slug",       limit: 255
+    t.boolean  "active",                        default: true
+    t.string   "timezone",          limit: 255, default: "Eastern Time (US & Canada)"
+    t.string   "new_features_date"
   end
 
   create_table "versions", force: :cascade do |t|

@@ -1,6 +1,10 @@
 - if signed_in?
+  - render template: "help/new_features"
+  - new_feature_image = get_new_feature_image_tag(yield(:new_feature_date))
   %ul.header-nav
     = render client_specific_partial(current_user, "header_links_next")
+    %li
+      = link_to new_feature_image + "New features", "/help/new_features", class: "new-features-button"
 
   %ul.side-secondary-nav
     %li
