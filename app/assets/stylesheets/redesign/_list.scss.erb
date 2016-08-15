@@ -27,6 +27,10 @@ div.dt-button-background.dt-button-background{
   vertical-align: middle;
 }
 
+tr.active-row:hover .public_id a, .active-row td.public_id a{
+  text-decoration: underline!important;
+}
+
 .content-main-wrapper{
   padding-top: 1em;
   .inline-list a{
@@ -90,6 +94,9 @@ ul.inline-list{
 
 table#tabular-data {
   width: 100%!important;
+  tr.active-row{
+    background: yellow;
+  }
 }
 
 .proposals-unfiltered{
@@ -236,7 +243,9 @@ div.dt-button-collection.dt-button-collection{
     td, td a{
       color: #4a4a4a;
       text-decoration: none;
-      &:hover{
+    }
+    &:hover{
+      td, td a{
         background: #E8E8E8;
       }
     }
