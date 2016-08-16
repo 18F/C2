@@ -1,6 +1,11 @@
 %ul
   - @pages.each do |page|
     - # this is a hack to capture the :title from each page: render the template, without actually outputting it
+
+    - #Skip New Features article for now
+    - if page == "new_features"
+      - next
+
     - render template: "help/#{page}"
     %li
       - # @todo: approvers: As an approver, how do I manage requests?
