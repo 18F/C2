@@ -7,5 +7,7 @@
       - else
         = link_to root_path do
           = image_tag "logo-c2.png"
-
-    = render "layouts/header_nav_next"
+      %button.button#header-toggle
+        Menu
+    .link-container
+      = render "layouts/header_nav_next"
