@@ -62,6 +62,13 @@ SidebarNav = (function(){
     this.el.on("refresh-list", function(){
       self.refreshActive();
     });
+    this.el.find('#header-toggle').on('click', function(){
+      if( self.el.find('.link-container').hasClass('visible') ){
+        self.el.find('.link-container').removeClass('visible');
+      } else {
+        self.el.find('.link-container').addClass('visible');
+      }
+    })
   }
 
   SidebarNav.prototype.shouldLink = function(el){
