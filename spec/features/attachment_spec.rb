@@ -76,7 +76,6 @@ describe "Add attachments" do
                         user: proposal.requester)
     login_as(proposal.requester)
     visit proposal_path(proposal)
-    save_and_open_page
     page.find('.attachment-list-item').find('.remove-button').click
     click_on "REMOVE"
     wait_for_ajax
