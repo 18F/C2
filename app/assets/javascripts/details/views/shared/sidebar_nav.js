@@ -63,13 +63,11 @@ SidebarNav = (function(){
       self.refreshActive();
     });
     this.el.find('#header-toggle').on('click', function(){
-      self.el.find('.link-container').on('on', function(){
-        if( self.el.find('.link-container').hasClass('visible') ){
-          self.el.find('.link-container').removeClass('visible');
-        } else {
-          self.el.find('.link-container').addClass('visible');
-        }
-      })
+      if( self.el.find('.link-container').hasClass('visible') ){
+        self.el.find('.link-container').removeClass('visible');
+      } else {
+        self.el.find('.link-container').addClass('visible');
+      }
     })
   }
 
