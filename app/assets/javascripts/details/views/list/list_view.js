@@ -43,11 +43,13 @@ ListViewDataTable = (function(){
     this.el.on('dataTableView:all', function(){
       self.viewAll();
     });
-    this.el.on('click', 'tr *', function(){
+    this.el.on('click', 'tbody tr *', function(){
       var el = this;
       if(!$(el).parents('.public_id').length && !$(el).hasClass('public_id')){
         var link = $(this).closest('tr').find('a').first().attr('href');
-        window.location.href = link;
+        if(link){
+          window.location.href = link;  
+        }
       }
     });
     this.el.find('tr').mouseenter(function(){
