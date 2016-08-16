@@ -14,6 +14,20 @@ span.request-count {
   min-height: 100%;
   padding-right: 0em;
   background: #333541;
+  @media screen and (max-width: 40em){
+    .link-container{
+      position: absolute;
+      left: 0px;
+      width: 100%;
+      z-index: 101;
+      display: none;
+      background: #333541;
+      padding-bottom: 1em;
+    }
+    .link-container.visible{
+      display: block;
+    }
+  }
   @media screen and (min-width: 40em){
     max-width: 250px;
   }
@@ -42,11 +56,31 @@ span.request-count {
   #header-identity{
     text-align: center;
     min-height: 110px;
+    button{
+      display: none;
+    }
+    @media screen and (max-width: 40em){
+      button{
+        display: block;
+        position: absolute;
+        margin: auto;
+        top: 10px;
+        right: 10px;
+      }
+      min-height: 47px;
+    }
     img{
       padding-top: 35px;
       padding-bottom: 35px;
       max-width: 300px;
       width: 70%;
+      @media screen and (max-width: 40em){
+        margin-left: 1em;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        max-width: 160px;
+        width: 100%;
+      }
     }
     a{
       display: block;
@@ -193,8 +227,8 @@ span.request-count {
             position: absolute;
             height: 100%;
             width: 100%;
+            right: 0px;
             @media screen and (min-width: 40em){
-              right: 0px;
               width: 93%;
             }
           }
