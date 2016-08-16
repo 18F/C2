@@ -65,8 +65,10 @@ SidebarNav = (function(){
     this.el.find('#header-toggle').on('click', function(){
       if( self.el.find('.link-container').hasClass('visible') ){
         self.el.find('.link-container').removeClass('visible');
+        self.el.find('#header-toggle').html('Menu');
       } else {
         self.el.find('.link-container').addClass('visible');
+        self.el.find('#header-toggle').html('Close');
       }
     })
   }
