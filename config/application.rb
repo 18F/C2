@@ -4,6 +4,8 @@ require 'elasticsearch/rails/instrumentation'
 
 Bundler.require(:default, Rails.env)
 
+config.assets.precompile += ["styleguide.html"]
+
 module C2
   class Application < Rails::Application
     # https://git.io/ETVYsQ

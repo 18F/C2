@@ -1,0 +1,21 @@
+# Cards
+
+```
+<div class="card-for-approvals" id="card-for-approvals">
+  <div class="card-for-approvals">
+    <div class="row">
+      <div class="medium-12 column">
+        <div class="card" id="steps-card">
+          <div class="card-head column">
+            <h2>
+              Status
+            </h2>
+          </div>
+          <div class="content-content column">
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

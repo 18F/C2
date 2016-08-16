@@ -1,0 +1,12 @@
+# Buttons
+
+```
+<a href="fake.html" class="button">Button text</a>
+```
+
+```
+<button class="button">Button text</button>
+```
+
+```
+<input type="button" class="button" value="Button text">
