@@ -31,11 +31,11 @@ default: &DEFAULT
         END
       formatter: review_status
     created_at:
-      formatter: date
+      # formatter: date
       header: Submitted
       display: client_data.created_at
     updated_at:
-      formatter: date
+      # formatter: date
       header: Last Updated
       display: client_data.updated_at
     total_price:
