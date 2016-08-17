@@ -64,13 +64,20 @@ SidebarNav = (function(){
     });
     this.el.find('#header-toggle').on('click', function(){
       if( self.el.find('.link-container').hasClass('visible') ){
-        self.el.find('.link-container').removeClass('visible');
-        self.el.find('#header-toggle').html('Menu');
+        self.headerToggle(false, "Menu");
       } else {
-        self.el.find('.link-container').addClass('visible');
-        self.el.find('#header-toggle').html('Close');
+        self.headerToggle(true, "Close");
       }
     })
+  }
+
+  SidebarNav.prototype.headerToggle = function(isShown, text){
+    if(isShown){
+      this.el.find('.link-container').addClass('visible');
+    } else {
+      this.el.find('.link-container').removeClass('visible');
+    }
+    self.el.find('#header-toggle').html(text);
   }
 
   SidebarNav.prototype.shouldLink = function(el){
