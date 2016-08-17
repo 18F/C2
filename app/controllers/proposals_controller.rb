@@ -49,23 +49,13 @@ class ProposalsController < ApplicationController
     end
   end
 
-  def revert_detail_design
-    current_user.remove_role(ROLE_BETA_ACTIVE)
-    cookies.permanent[:beta_reverted_survey] = "true"
-    if proposal
-      redirect_to proposal_path(proposal)
+  def toggle_active_beta
+    if current_user.active_beta_user?
+      current_user.remove_role(ROLE_BETA_ACTIVE)
     else
-      redirect_to proposals_path
+      current_user.add_role(ROLE_BETA_ACTIVE)
     end
-  end
-
-  def activate_detail_design
-    current_user.add_role(ROLE_BETA_ACTIVE)
-    if proposal
-      redirect_to proposal_path(proposal)
-    else
-      redirect_to proposals_path
-    end
+    redirect_to(:back)
   end
 
   def cancel_form

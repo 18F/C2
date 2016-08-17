@@ -139,6 +139,11 @@ class User < ActiveRecord::Base
     in_beta_program? && active_beta_user? && feature
   end
 
+  def can_see_beta?(feature = nil)
+    feature = feature ? ENV[feature] == "true" : true
+    in_beta_program? && feature
+  end
+
   def in_beta_program?
     role? ROLE_BETA_USER
   end
