@@ -48,7 +48,7 @@ default: &DEFAULT
     vendor:
       header: vendor
       display: client_data.vendor
-      
+
   columns:
     - public_id
     - name
@@ -138,7 +138,6 @@ ncr:
     soc_code:
       header: SOC Code
       display: client_data.soc_code
-
 
 gsa18f:
   <<: *DEFAULT
