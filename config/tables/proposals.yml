@@ -48,6 +48,7 @@ default: &DEFAULT
     vendor:
       header: vendor
       display: client_data.vendor
+      
   columns:
     - public_id
     - name
@@ -74,6 +75,7 @@ ncr:
     - cl_number
     - function_code
     - soc_code
+
   column_configs:
     public_id:
       header: ID
@@ -137,6 +139,7 @@ ncr:
       header: SOC Code
       display: client_data.soc_code
 
+
 gsa18f:
   <<: *DEFAULT
   columns:
@@ -148,3 +151,54 @@ gsa18f:
     - created_at
     - urgency
     - purchase_type
+    - office
+    - link_to_product
+    - date_requested
+    - cost_per_unit
+  column_configs:
+    public_id:
+      header: ID
+      formatter: link
+    name:
+      virtual: true
+      header: Request
+      formatter: link
+    requester:
+      db: requester.email_address
+      display: requester.email_address
+    status:
+      db: >
+        CASE proposals.status
+        WHEN 'pending' THEN 1
+        WHEN 'approved' THEN 2
+        ELSE 3
+        END
+      formatter: review_status
+    created_at:
+      # formatter: date
+      header: Submitted
+      display: client_data.created_at
+    total_price:
+      db: COALESCE(ncr_work_orders.amount, gsa18f_procurements.cost_per_unit * gsa18f_procurements.quantity, 0)
+      display: client_data.total_price
+      formatter: currency
+    urgency:
+      header: Urgency
+      db: gsa18f_procurements.urgency
+      display: client_data.urgency_string
+    purchase_type:
+      header: Purchase Type
+      db: gsa18f_procurements.purchase_type
+      display: client_data.purchase_type
+    office:
+      header: Office
+      display: client_data.office
+    link_to_product:
+      header: Link To Product
+      display: client_data.link_to_product
+    date_requested:
+      header: Date Requested
+      display: client_data.date_requested
+    cost_per_unit:
+      header: Cost Per Unit
+      display: client_data.cost_per_unit
