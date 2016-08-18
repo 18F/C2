@@ -48,6 +48,51 @@ default: &DEFAULT
     vendor:
       header: vendor
       display: client_data.vendor
+    expense_type:
+      header: Expense Type
+      display: client_data.expense_type
+    building_number:
+      header: Building Number
+      display: client_data.building_number
+    rwa_number:
+      header: RWA Number
+      display: client_data.rwa_number
+    work_order_code:
+      header: Work Order Code
+      display: client_data.work_order_code
+    direct_pay:
+      header: Direct Pay
+      display: client_data.direct_pay
+    cl_number:
+      header: CL Number
+      display: client_data.cl_number
+    function_code:
+      header: Function Code
+      display: client_data.function_code
+    soc_code:
+      header: SOC Code
+      display: client_data.soc_code
+    urgency:
+      header: Urgency
+      db: gsa18f_procurements.urgency
+      display: client_data.urgency_string
+    purchase_type:
+      header: Purchase Type
+      db: gsa18f_procurements.purchase_type
+      display: client_data.purchase_type
+    office:
+      header: Office
+      display: client_data.office
+    link_to_product:
+      header: Link To Product
+      display: client_data.link_to_product
+    date_requested:
+      header: Date Requested
+      display: client_data.date_requested
+    cost_per_unit:
+      header: Cost Per Unit
+      display: client_data.cost_per_unit
+
 
   columns:
     - public_id
@@ -76,69 +121,6 @@ ncr:
     - function_code
     - soc_code
 
-  column_configs:
-    public_id:
-      header: ID
-      formatter: link
-    name:
-      virtual: true
-      header: Request
-      formatter: link
-    requester:
-      db: requester.email_address
-      display: requester.email_address
-    status:
-      db: >
-        CASE proposals.status
-        WHEN 'pending' THEN 1
-        WHEN 'approved' THEN 2
-        ELSE 3
-        END
-      formatter: review_status
-    created_at:
-      # formatter: date
-      header: Submitted
-      display: client_data.created_at
-    total_price:
-      db: COALESCE(ncr_work_orders.amount, gsa18f_procurements.cost_per_unit * gsa18f_procurements.quantity, 0)
-      display: client_data.total_price
-      formatter: currency
-    urgency:
-      header: Urgency
-      db: gsa18f_procurements.urgency
-      display: client_data.urgency_string
-    purchase_type:
-      header: Purchase Type
-      db: gsa18f_procurements.purchase_type
-      display: client_data.purchase_type
-    vendor:
-      header: Vendor
-      display: client_data.vendor
-    expense_type:
-      header: Expense Type
-      display: client_data.expense_type
-    building_number:
-      header: Building Number
-      display: client_data.building_number
-    rwa_number:
-      header: RWA Number
-      display: client_data.rwa_number
-    work_order_code:
-      header: Work Order Code
-      display: client_data.work_order_code
-    direct_pay:
-      header: Direct Pay
-      display: client_data.direct_pay
-    cl_number:
-      header: CL Number
-      display: client_data.cl_number
-    function_code:
-      header: Function Code
-      display: client_data.function_code
-    soc_code:
-      header: SOC Code
-      display: client_data.soc_code
-
 gsa18f:
   <<: *DEFAULT
   columns:
@@ -154,50 +136,4 @@ gsa18f:
     - link_to_product
     - date_requested
     - cost_per_unit
-  column_configs:
-    public_id:
-      header: ID
-      formatter: link
-    name:
-      virtual: true
-      header: Request
-      formatter: link
-    requester:
-      db: requester.email_address
-      display: requester.email_address
-    status:
-      db: >
-        CASE proposals.status
-        WHEN 'pending' THEN 1
-        WHEN 'approved' THEN 2
-        ELSE 3
-        END
-      formatter: review_status
-    created_at:
-      # formatter: date
-      header: Submitted
-      display: client_data.created_at
-    total_price:
-      db: COALESCE(ncr_work_orders.amount, gsa18f_procurements.cost_per_unit * gsa18f_procurements.quantity, 0)
-      display: client_data.total_price
-      formatter: currency
-    urgency:
-      header: Urgency
-      db: gsa18f_procurements.urgency
-      display: client_data.urgency_string
-    purchase_type:
-      header: Purchase Type
-      db: gsa18f_procurements.purchase_type
-      display: client_data.purchase_type
-    office:
-      header: Office
-      display: client_data.office
-    link_to_product:
-      header: Link To Product
-      display: client_data.link_to_product
-    date_requested:
-      header: Date Requested
-      display: client_data.date_requested
-    cost_per_unit:
-      header: Cost Per Unit
-      display: client_data.cost_per_unit
+
