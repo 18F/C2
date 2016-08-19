@@ -49,15 +49,6 @@ class ProposalsController < ApplicationController
     end
   end
 
-  def toggle_active_beta
-    if current_user.active_beta_user?
-      current_user.remove_role(ROLE_BETA_ACTIVE)
-    else
-      current_user.add_role(ROLE_BETA_ACTIVE)
-    end
-    redirect_to(:back)
-  end
-
   def cancel_form
     @proposal = proposal.decorate
   end

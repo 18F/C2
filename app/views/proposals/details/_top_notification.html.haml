@@ -2,7 +2,8 @@
   - if @current_user.should_see_beta?
     .top-notification-wrapper
       %p
-        = t("proposals.details.notification.beta.old", link: proposals_toggle_active_beta_path ).html_safe
+        = t("proposals.details.notification.beta.old")
+        = link_to "click here", user_path(current_user, user: {update_beta_active: true}), method: :patch
   - else
     .top-notification-wrapper
       %p
@@ -11,6 +12,8 @@
           = javascript_include_tag "details/force_ethnio"
           = javascript_include_tag "https://www.ethn.io/55009.js", async: true
           
-          = t("proposals.details.notification.beta.reverted", link: proposals_toggle_active_beta_path ).html_safe
+          = t("proposals.details.notification.beta.reverted")
+          = link_to "click here", user_path(current_user, user: {update_beta_active: true}), method: :patch
         - else
-          = t("proposals.details.notification.beta.new", link: proposals_toggle_active_beta_path ).html_safe
+          = t("proposals.details.notification.beta.new")
+          = link_to "click here", user_path(current_user, user: {update_beta_active: true}), method: :patch

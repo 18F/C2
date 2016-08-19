@@ -20,7 +20,8 @@ C2::Application.routes.draw do
   match "/auth/:provider/callback" => "auth#oauth_callback", via: [:get]
   get "/auth/failure" => "auth#failure"
   post "/logout" => "auth#logout"
-  get "/proposals/toggle_active_beta" => "proposals#toggle_active_beta"
+  resources :users, only: [:update]
+
   resources :help, only: [:index, :show]
 
   # mandrill-rails

@@ -86,24 +86,6 @@ describe ProposalsController do
         expect(response).to_not render_template("show")
       end
     end
-
-    context "activate detail triggered view" do
-      it "should add beta_active on activate" do
-        setup_proposal_page
-        request.env["HTTP_REFERER"] = "where_i_came_from" unless request.nil? or request.env.nil?
-        get :activate_detail_design, id: @proposal.id
-        expect(user).to be_in_beta_program
-      end
-    end
-
-    context "revert detail triggered view" do
-      it "should remove beta_active on revert" do
-        setup_proposal_page
-        request.env["HTTP_REFERER"] = "where_i_came_from" unless request.nil? or request.env.nil?
-        get :revert_detail_design, id: @proposal.id
-        expect(user.should_see_beta?).to be false
-      end
-    end
   end
 
   describe '#query', elasticsearch: true do
