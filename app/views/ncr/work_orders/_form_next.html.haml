@@ -71,6 +71,6 @@
           = f.input :soc_code
 
       = f.submit class: "form-button"
-      
+
       - if @client_data_instance.persisted?
         = link_to "Discard Changes", proposal_path(@client_data_instance.proposal), class: "discard-link"
