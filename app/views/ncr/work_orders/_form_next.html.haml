@@ -3,19 +3,15 @@
 = render partial: 'layouts/scripts'
 
 .request-form-next
-  %h2
-    National Capital Region
-  %h3
-    Purchase Card Approval Request
+  .row
+    .medium-7.medium-offset-2.columns
 
-  %p
-    %em
-      * Indicates a required field
+      %h2
+        National Capital Region
+      %h3
+        Purchase Card Approval Request
 
-  = simple_form_for @client_data_instance, html: { multipart: true } do |f|
-    .row
-      .medium-12.column.wrap-hard
-
+      = simple_form_for @client_data_instance, html: { multipart: true } do |f|
         %h4
           Request details
         = f.input :project_title
