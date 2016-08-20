@@ -13,8 +13,11 @@
     = simple_form_for @client_data_instance, html: { multipart: true } do |f|
       %h4
         Request details
+
       = f.input :project_title
+
       = f.input :description
+
       = field_set_tag "Expense type", class: "expense-type" do
         = expense_type_radio_button(f, "BA60")
         = expense_type_radio_button(f, "BA61")
@@ -25,14 +28,18 @@
         = expense_type_radio_button(f, "BA80")
         = render partial: "ba_80_fields",
           locals: { f: f }
+
       = f.input :building_number,
         input_html: { class: "js-selectize required", data: { initial: JSON.generate(building_options) }}
+
       = f.association :ncr_organization,
         as: :select,
         prompt: :translate,
         input_html: { class: "js-selectize", data: { initial: JSON.generate(organization_options) }}
+
       = f.input :vendor,
         input_html: { class: "js-selectize required", data: { initial: JSON.generate(vendor_options(@client_data_instance.vendor)) }}
+
       = field_set_tag "Amount", class: "required" do
         = f.input :amount,
           as: :currency,
@@ -41,9 +48,11 @@
         = f.input :not_to_exceed,
           as: :radio_buttons,
           collection: [["Exact", false], ["Not to exceed", true]], label: false
+
       = f.input :direct_pay,
           label: t("simple_form.labels.ncr_work_order.direct_pay_html"),
           label_html: { data: popover_data_attrs("direct_pay") }
+
       = f.association :approving_official,
         disabled: @client_data_instance.proposal.approver_email_frozen?,
         collection: scoped_approver_options(@client_data_instance.ineligible_approvers),
@@ -52,6 +61,7 @@
         value_method: :id,
         prompt: :translate,
         input_html: { class: "js-selectize required" }
+
       - if @client_data_instance.new_record?
         = render partial: "attachments"
       - else
@@ -59,6 +69,8 @@
           = f.input :cl_number
           = f.input :function_code
           = f.input :soc_code
+
       = f.submit class: "form-button"
+      
       - if @client_data_instance.persisted?
         = link_to "Discard Changes", proposal_path(@client_data_instance.proposal), class: "discard-link"
