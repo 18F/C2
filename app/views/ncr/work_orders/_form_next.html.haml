@@ -53,6 +53,9 @@
           label: t("simple_form.labels.ncr_work_order.direct_pay_html"),
           label_html: { data: popover_data_attrs("direct_pay") }
 
+      %h4
+        Approver
+
       = f.association :approving_official,
         disabled: @client_data_instance.proposal.approver_email_frozen?,
         collection: scoped_approver_options(@client_data_instance.ineligible_approvers),

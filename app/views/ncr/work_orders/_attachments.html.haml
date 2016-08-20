@@ -1,5 +1,8 @@
+%h4
+  Attachments
+
 .form-group
-  = field_set_tag "Attachments" do
+  = field_set_tag "" do
     %ul.attachments{ data: { add_minus: true } }
       - Ncr::WorkOrdersController::MAX_UPLOADS_ON_NEW.times do
         %li
