@@ -150,7 +150,7 @@ class User < ActiveRecord::Base
   end
 
   def active_beta_user?
-    role? ROLE_BETA_ACTIVE
+    role?(ROLE_BETA_ACTIVE) && in_beta_program?
   end
 
   def toggle_active_beta
