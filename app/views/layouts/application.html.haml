@@ -1,5 +1,6 @@
 !!!
 %html{:lang => "en"}
+
   %head
     %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
     %title
@@ -14,17 +15,20 @@
     %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1", :name => "viewport"}/
     = render "layouts/meta_notice"
     = csrf_meta_tags
+
   %body{:class => "bodyclass webapp controller-#{controller_name} action-#{params[:action]}"}
     = render "peek/bar"
     = content_for?(:top_notification) ? yield(:top_notification) : ""
-    - if list_view_conditions
+
+    - if list_view_conditions?
       :plain
         <div class="row full-width-row content-parent">
       = render "layouts/c2_header_next"
     - else
       = render "layouts/c2_header"
       = render "layouts/notices"
-    - if list_view_conditions
+
+    - if list_view_conditions?
       - unless ENV["DISABLE_SANDBOX_WARNING"] == "true"
         .medium-9.large-10.medium-offset-3.large-offset-2
           = render partial: "shared/sandbox_warning"
