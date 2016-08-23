@@ -20,7 +20,7 @@
     = render "peek/bar"
     = content_for?(:top_notification) ? yield(:top_notification) : ""
 
-    - if list_view_conditions?
+    - if show_beta_layout?
       :plain
         <div class="row full-width-row content-parent">
       = render "layouts/c2_header_next"
@@ -28,7 +28,7 @@
       = render "layouts/c2_header"
       = render "layouts/notices"
 
-    - if list_view_conditions?
+    - if show_beta_layout?
       - unless ENV["DISABLE_SANDBOX_WARNING"] == "true"
         .medium-9.large-10.medium-offset-3.large-offset-2
           = render partial: "shared/sandbox_warning"
