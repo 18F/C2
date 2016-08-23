@@ -18,7 +18,7 @@ class AttachmentsController < ApplicationController
   end
 
   def construct_attachment
-    if @current_user.should_see_beta? && params[:attachment] != "undefined"
+    if @current_user.active_beta_user? && params[:attachment] != "undefined"
       proposal.attachments.build(file: params[:attachment], user: @current_user)
     else
       proposal.attachments.build(attachments_params)
@@ -51,7 +51,7 @@ class AttachmentsController < ApplicationController
   end
 
   def attachments_params
-    if @current_user.should_see_beta? && params[:attachment] != "undefined"
+    if @current_user.active_beta_user? && params[:attachment] != "undefined"
       beta_attachment_params(params)
     elsif params.permit(attachment: [:file])[:attachment]
       params.permit(attachment: [:file])[:attachment].merge(user: current_user)
@@ -74,6 +74,6 @@ class AttachmentsController < ApplicationController
   end
 
   def setup_flash_manager
-    @flash_manager = @current_user.should_see_beta? ? FlashWithNow.new : FlashWithoutNow.new
+    @flash_manager = @current_user.active_beta_user? ? FlashWithNow.new : FlashWithoutNow.new
   end
 end

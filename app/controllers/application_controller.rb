@@ -147,7 +147,7 @@ class ApplicationController < ActionController::Base
   end
 
   def setup_flash_manager
-    @flash_manager = @current_user.should_see_beta? ? FlashWithNow.new : FlashWithoutNow.new
+    @flash_manager = @current_user.active_beta_user? ? FlashWithNow.new : FlashWithoutNow.new
   end
 
   def authenticate_user!
