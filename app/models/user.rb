@@ -140,7 +140,7 @@ class User < ActiveRecord::Base
   end
 
   def can_see_beta?(beta_feature = nil)
-    feature_enabled = beta_feature == nil || ENV[beta_feature] == "true"
+    feature_enabled = beta_feature.nil? || ENV[beta_feature] == "true"
     in_beta_program? && feature_enabled
   end
 
