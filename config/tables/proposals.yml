@@ -31,9 +31,11 @@ default: &DEFAULT
         END
       formatter: review_status
     created_at:
-      # formatter: date
+      formatter: date
       header: Submitted
-      display: client_data.created_at
+    updated_at:
+      formatter: date
+      header: Last Updated
     total_price:
       db: COALESCE(ncr_work_orders.amount, gsa18f_procurements.cost_per_unit * gsa18f_procurements.quantity, 0)
       display: client_data.total_price
@@ -89,6 +91,7 @@ ncr:
     - total_price
     - status
     - created_at
+    - updated_at
     - vendor
     - expense_type
     - building_number
