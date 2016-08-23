@@ -1,5 +1,5 @@
-- if @current_user.can_see_beta?
-  - if @current_user.should_see_beta?
+- if @current_user.in_beta_program?
+  - if @current_user.active_beta_user?
     .top-notification-wrapper
       %p
         = t("proposals.details.notification.beta.old")

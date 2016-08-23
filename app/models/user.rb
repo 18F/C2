@@ -134,13 +134,14 @@ class User < ActiveRecord::Base
     role? ROLE_ADMIN
   end
 
-  def should_see_beta?(feature = nil)
-    feature = feature ? ENV[feature] == "true" : true
-    in_beta_program? && active_beta_user? && feature
+  def should_see_beta?(feature)
+    can_see_beta?(feature) && active_beta_user?
   end
 
-  def can_see_beta?(beta_feature = nil)
-    feature_enabled = beta_feature.nil? || ENV[beta_feature] == "true"
+  # Does the user have permission to see this beta feature?
+  def can_see_beta?(feature)
+    fail "No feature given" unless feature
+    feature_enabled = ENV[feature] == "true"
     in_beta_program? && feature_enabled
   end
 
