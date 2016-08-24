@@ -8,6 +8,7 @@ ListViewDataTable = (function(){
   }
 
   ListViewDataTable.prototype._setup = function(){
+    var self = this;
     if( this.el.length > 0 ){
       this.dataTable = this.el.DataTable( {
           // destroy: true,
@@ -18,66 +19,7 @@ ListViewDataTable = (function(){
                   columns: ':not(:first-child)'
               }
           ],
-          columnDefs: [ {
-            targets: 2,
-            render: $.fn.dataTable.render.ellipsis( 20 )
-          },
-          {
-            targets: 1,
-            render: $.fn.dataTable.render.ellipsis( 20 )
-          },
-          {
-            targets: 3,
-            render: $.fn.dataTable.render.ellipsis( 20 )
-          },
-          {
-            targets: 4,
-            render: $.fn.dataTable.render.ellipsis( 20 )
-          }, 
-          {
-            targets: 5,
-            render: $.fn.dataTable.render.ellipsis( 20 )
-          }, 
-          {
-            targets: 6,
-            render: $.fn.dataTable.render.ellipsis( 20 )
-          }, 
-          {
-            targets: 7,
-            render: $.fn.dataTable.render.ellipsis( 20 )
-          }, 
-          {
-            targets: 8,
-            render: $.fn.dataTable.render.ellipsis( 20 )
-          }, 
-          {
-            targets: 9,
-            render: $.fn.dataTable.render.ellipsis( 20 )
-          }, 
-          {
-            targets: 10,
-            render: $.fn.dataTable.render.ellipsis( 20 )
-          }, 
-          {
-            targets: 11,
-            render: $.fn.dataTable.render.ellipsis( 20 )
-          }, 
-          {
-            targets: 12,
-            render: $.fn.dataTable.render.ellipsis( 20 )
-          }, 
-          {
-            targets: 13,
-            render: $.fn.dataTable.render.ellipsis( 20 )
-          }, 
-          {
-            targets: 14,
-            render: $.fn.dataTable.render.ellipsis( 20 )
-          }, 
-          {
-            targets: 15,
-            render: $.fn.dataTable.render.ellipsis( 20 )
-          }],
+          columnDefs: self.renderConfig,
           "paging":   false,
           "info":     false,
           stateSave: true,
@@ -87,6 +29,66 @@ ListViewDataTable = (function(){
       this._events();
       this.prepList();
     }
+  }
+
+  ListViewDataTable.prototype.renderConfig = function(){
+    var config = [ {
+      targets: 2,
+      render: $.fn.dataTable.render.ellipsis( 20 )
+    },
+    {
+      targets: 3,
+      render: $.fn.dataTable.render.ellipsis( 20 )
+    },
+    {
+      targets: 4,
+      render: $.fn.dataTable.render.ellipsis( 20 )
+    }, 
+    {
+      targets: 5,
+      render: $.fn.dataTable.render.ellipsis( 20 )
+    }, 
+    {
+      targets: 6,
+      render: $.fn.dataTable.render.ellipsis( 20 )
+    }, 
+    {
+      targets: 7,
+      render: $.fn.dataTable.render.ellipsis( 20 )
+    }, 
+    {
+      targets: 8,
+      render: $.fn.dataTable.render.ellipsis( 20 )
+    }, 
+    {
+      targets: 9,
+      render: $.fn.dataTable.render.ellipsis( 20 )
+    }, 
+    {
+      targets: 10,
+      render: $.fn.dataTable.render.ellipsis( 20 )
+    }, 
+    {
+      targets: 11,
+      render: $.fn.dataTable.render.ellipsis( 20 )
+    }, 
+    {
+      targets: 12,
+      render: $.fn.dataTable.render.ellipsis( 20 )
+    }, 
+    {
+      targets: 13,
+      render: $.fn.dataTable.render.ellipsis( 20 )
+    }, 
+    {
+      targets: 14,
+      render: $.fn.dataTable.render.ellipsis( 20 )
+    }, 
+    {
+      targets: 15,
+      render: $.fn.dataTable.render.ellipsis( 20 )
+    }];
+    return config;
   }
 
   ListViewDataTable.prototype._events = function(){
