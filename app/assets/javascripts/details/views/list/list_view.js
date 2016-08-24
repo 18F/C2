@@ -32,7 +32,8 @@ ListViewDataTable = (function(){
   }
 
   ListViewDataTable.prototype.renderConfig = function(){
-    var config = [ {
+    var config = [ 
+    {
       targets: 2,
       render: $.fn.dataTable.render.ellipsis( 20 )
     },
