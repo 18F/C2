@@ -19,7 +19,7 @@ ListViewDataTable = (function(){
                   columns: ':not(:first-child)'
               }
           ],
-          columnDefs: self.renderConfig,
+          columnDefs: self.renderConfig(),
           "paging":   false,
           "info":     false,
           stateSave: true,
