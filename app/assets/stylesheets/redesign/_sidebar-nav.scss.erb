@@ -33,6 +33,8 @@ span.request-count {
   }
   .request-related-button.active:hover{
     background: #444754 !important;
+    margin: 0px!important;
+    border: none!important;
   }
   @media screen and (max-width: 40em){
     padding: 0px;
@@ -42,11 +44,19 @@ span.request-count {
         margin-left: 0px !important;
         &:before{
           background: #C5DCED;
+          margin-top: -1px;
+          margin-bottom: -1px;
+          border-top: 1px solid #C5DCED;
+          border-bottom: 1px solid #C5DCED;
         }
       }
       &:hover{
         a{
           &:before{
+            margin-top: -1px;
+            margin-bottom: -1px;
+            border-top: 1px solid #DBEAF5;
+            border-bottom: 1px solid #DBEAF5;
             background: #DBEAF5;
           }
         }
@@ -209,6 +219,10 @@ span.request-count {
             outline: none;
           }
           &:hover{
+            margin-top: -1px;
+            margin-bottom: -1px;
+            border-top: 1px solid #71737A;
+            border-bottom: 1px solid #71737A;
             background: #71737A;
           }
           &.active{
