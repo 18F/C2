@@ -18,6 +18,66 @@ ListViewDataTable = (function(){
                   columns: ':not(:first-child)'
               }
           ],
+          columnDefs: [ {
+            targets: 2,
+            render: $.fn.dataTable.render.ellipsis( 20 )
+          },
+          {
+            targets: 1,
+            render: $.fn.dataTable.render.ellipsis( 20 )
+          },
+          {
+            targets: 3,
+            render: $.fn.dataTable.render.ellipsis( 20 )
+          },
+          {
+            targets: 4,
+            render: $.fn.dataTable.render.ellipsis( 20 )
+          }, 
+          {
+            targets: 5,
+            render: $.fn.dataTable.render.ellipsis( 20 )
+          }, 
+          {
+            targets: 6,
+            render: $.fn.dataTable.render.ellipsis( 20 )
+          }, 
+          {
+            targets: 7,
+            render: $.fn.dataTable.render.ellipsis( 20 )
+          }, 
+          {
+            targets: 8,
+            render: $.fn.dataTable.render.ellipsis( 20 )
+          }, 
+          {
+            targets: 9,
+            render: $.fn.dataTable.render.ellipsis( 20 )
+          }, 
+          {
+            targets: 10,
+            render: $.fn.dataTable.render.ellipsis( 20 )
+          }, 
+          {
+            targets: 11,
+            render: $.fn.dataTable.render.ellipsis( 20 )
+          }, 
+          {
+            targets: 12,
+            render: $.fn.dataTable.render.ellipsis( 20 )
+          }, 
+          {
+            targets: 13,
+            render: $.fn.dataTable.render.ellipsis( 20 )
+          }, 
+          {
+            targets: 14,
+            render: $.fn.dataTable.render.ellipsis( 20 )
+          }, 
+          {
+            targets: 15,
+            render: $.fn.dataTable.render.ellipsis( 20 )
+          }],
           "paging":   false,
           "info":     false,
           stateSave: true,
