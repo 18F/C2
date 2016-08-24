@@ -1,4 +1,8 @@
 <% content_for :title, "My Requests" %>
+<% content_for :top_notification do %>
+  <% render partial: "proposals/details/top_notification" %>
+<% end %>
+
 <%= render 'layouts/scripts' %>
 
 <div id="proposals-unfiltered" class="proposals-unfiltered row">

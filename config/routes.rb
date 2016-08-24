@@ -20,6 +20,8 @@ C2::Application.routes.draw do
   match "/auth/:provider/callback" => "auth#oauth_callback", via: [:get]
   get "/auth/failure" => "auth#failure"
   post "/logout" => "auth#logout"
+  resources :users, only: [:update]
+
   resources :help, only: [:index, :show]
 
   # mandrill-rails
@@ -43,8 +45,6 @@ C2::Application.routes.draw do
       get "cancel_form"
       post "cancel"
       get "history"
-      get "activate_design" => "proposals#activate_detail_design"
-      get "revert_design" => "proposals#revert_detail_design"
     end
 
     collection do

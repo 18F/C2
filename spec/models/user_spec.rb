@@ -139,16 +139,16 @@ describe User do
     end
   end
 
-  describe "#should_see_beta?" do
+  describe "#active_beta_user?" do
     it "returns false by default" do
-      expect(user.should_see_beta?).to be false
+      expect(user.active_beta_user?).to be false
     end
 
     it "is false if only the beta-active role is enabled" do
       misconfigured_user = create(:user)
       misconfigured_user.add_role(ROLE_BETA_ACTIVE)
 
-      expect(misconfigured_user.should_see_beta?).to be false
+      expect(misconfigured_user.active_beta_user?).to be false
     end
 
     it "is true if the user has the beta_active role with beta_user" do
@@ -156,7 +156,7 @@ describe User do
       beta_active.add_role(ROLE_BETA_USER)
       beta_active.add_role(ROLE_BETA_ACTIVE)
 
-      expect(beta_active.should_see_beta?).to be true
+      expect(beta_active.active_beta_user?).to be true
     end
   end
 
@@ -176,7 +176,7 @@ describe User do
       beta_active.add_role(ROLE_BETA_ACTIVE)
 
       beta_active.remove_role(ROLE_BETA_ACTIVE)
-      expect(beta_active.should_see_beta?).to be false
+      expect(beta_active.active_beta_user?).to be false
     end
 
     it "doesn't remove other roles" do

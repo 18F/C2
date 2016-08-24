@@ -3,8 +3,8 @@ en:
     details:
       notification:
         beta:
-          old: "We're updating this page! To use the older version, <a href=\"%{link}\">click here</a>."
-          new: "We're updating this page! To use the newer version, <a href=\"%{link}\">click here</a>."
+          old: "We're updating this page! To use the older version, "
+          new: "We're updating this page! To use the newer version, "
           reverted: "You're no longer using the new version. <a href=\"https://ethn.io/55009\">Tell us why</a>. To use the new version, <a href=\"%{link}\">click here</a>."
 
         save:
