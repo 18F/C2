@@ -178,6 +178,22 @@ table#tabular-data {
 }
 
 #tabular-data_wrapper{
+  .button.dropdown::after {
+    content: '';
+    border: none;
+    border-color: transparent;
+    border-top-style: none;
+    border-bottom-width: 0;
+    position: relative;
+    top: 0px;
+    float: right;
+    margin-left: 1.6em;
+    display: inline-block;
+    background-image: url("<%= asset_path 'DataTables/sort_desc_disabled.png' %>");
+    height: 19px;
+    width: 19px;
+    margin-top: -5px;
+  }
   a.buttons-colvis{
     color: white;
     text-decoration: none;
