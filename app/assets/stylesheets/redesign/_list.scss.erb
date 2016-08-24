@@ -94,7 +94,7 @@ ul.inline-list{
     a, .button_to input{
       font-size: 14px;
       text-decoration: none;
-      color: #2d5a79;
+      color: #4a4a4a;
     }
   }
 }
@@ -113,6 +113,11 @@ table#tabular-data {
 
 
 .proposals-unfiltered{
+  
+  table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td:first-child:before, table.dataTable.dtr-inline.collapsed > tbody > tr.parent > th:first-child:before {
+    background-color: #2d5a79;
+  }
+
   #search-button{
     padding: 8px 12px 7px;
   }
