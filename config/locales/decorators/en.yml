@@ -15,7 +15,9 @@ en:
         completed: "Approved"
         status:
           please_act: "Please review"
-          waiting: "Pending - Waiting for review from:"
+          waiting: |
+          "Pending
+          Waiting for review from:"
       purchase:
         execute_button: "Mark as Purchased"
         noun: "purchase"
