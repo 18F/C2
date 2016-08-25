@@ -58,6 +58,15 @@ td.total_price {
     text-align: right;
 }
 
+
+div.dt-button-collection.dt-button-collection{
+  background-color: #3a6e93;
+  .active{
+    background-color: #2d5a79;
+  }
+}
+
+
 .tabular-data{
   display: block;
   overflow: hidden;
@@ -171,8 +180,10 @@ table#tabular-data {
 .buttons-columnVisibility:hover,
 .buttons-columnVisibility:focus
 {
-  background-color: #8aa5c3;
+  background-color: transparent;
+  opacity: .9;
   &.active{
+    opacity: 1;
     background-color: #3a6e93;
   }
 }
@@ -287,23 +298,6 @@ div.dt-button-collection.dt-button-collection{
     padding-left: 30px;
     padding-right: 0px;
     position: relative;
-    &:before{
-      content: "☐";
-      display: block;
-      width: 13px;
-      height: 13px;
-      position: absolute;
-      background: none;
-      left: 8px;
-      top: 0px;
-      bottom: 0px;
-      margin: auto;
-      font-size: 22px;
-      line-height: 10px;
-    }
-    &.active:before{
-      content: "☒";
-    }
   }
 }
 
