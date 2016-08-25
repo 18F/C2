@@ -152,7 +152,7 @@ When a reviewer is done with code review, they can start doing QA for the story
 or indicate that the story needs to be QA'd. If the reviewer is going to QA the
 feature, they should comment that they will be QAing on the pull request. If QA
 is needed by someone else (e.g. Design QA), the reviewer should add the label `QA-needed`
-to the pull request.
+to the pull request and ping a potential QA tester.
 
 QA requires the Tester to deploy to `c2-dev` or `c2-staging` to confirm that the
 feature works as expected in a production environment. If the QA instructions
@@ -162,7 +162,8 @@ request author or product manager for QA instructions.
 The QA Tester indicates that they are QA-ing the change by making a comment on the
 pull request and assigning to him or herself. QA can be done on the `c2-dev` or `c2-staging`
 environment. Check with your teammates (on Slack) to see which environment might
-already be in use.
+already be in use. Once QA has been verified, the tester should give the thumbsup and/or
+"Ship it", indicating the pull request can be merged.
 
 You can also set up your own development app to prevent the need to check with
 teammates about QAing on shared instances. See the [set up your own development
