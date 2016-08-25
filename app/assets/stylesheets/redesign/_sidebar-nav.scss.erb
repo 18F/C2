@@ -9,11 +9,22 @@ span.request-count {
   padding-bottom: 20px;
 }
 
+.login-link{
+  color: #4a4a4a;
+}
+
 .sidebar-home{
   height: auto !important;
   min-height: 100%;
   padding-right: 0em;
   background: #333541;
+  a.new-request-button:before {
+    content: "+";
+    position: absolute;
+    right: 10%;
+    font-size: 1.3em;
+    line-height: 1.2em;
+  }
   @media screen and (max-width: 40em){
     .link-container{
       position: absolute;
@@ -33,6 +44,8 @@ span.request-count {
   }
   .request-related-button.active:hover{
     background: #444754 !important;
+    margin: 0px!important;
+    border: none!important;
   }
   @media screen and (max-width: 40em){
     padding: 0px;
@@ -42,11 +55,19 @@ span.request-count {
         margin-left: 0px !important;
         &:before{
           background: #C5DCED;
+          margin-top: -1px;
+          margin-bottom: -1px;
+          border-top: 1px solid #C5DCED;
+          border-bottom: 1px solid #C5DCED;
         }
       }
       &:hover{
         a{
           &:before{
+            margin-top: -1px;
+            margin-bottom: -1px;
+            border-top: 1px solid #DBEAF5;
+            border-bottom: 1px solid #DBEAF5;
             background: #DBEAF5;
           }
         }
@@ -58,7 +79,7 @@ span.request-count {
   }
   #header-identity{
     text-align: center;
-    min-height: 100px;
+    min-height: 80px;
     button{
       display: none;
     }
@@ -73,8 +94,8 @@ span.request-count {
       min-height: 47px;
     }
     img{
-      padding-top: 35px;
-      padding-bottom: 35px;
+      padding-top: 20px;
+      padding-bottom: 20px;
       max-width: 300px;
       width: 80%;
       @media screen and (max-width: 40em){
@@ -100,10 +121,10 @@ span.request-count {
     position: relative;
     height: 100%;
   }
-  .new-request-button, .reports-button, .new-features-button{
+  .new-request-button, .reports-button{
     background: #333541;
     &:hover, &:focus{
-      background: darken(#333541, 5%);
+      background: #71737A;
     }
   }
   .side-secondary-nav{
@@ -209,6 +230,10 @@ span.request-count {
             outline: none;
           }
           &:hover{
+            margin-top: -1px;
+            margin-bottom: -1px;
+            border-top: 1px solid #71737A;
+            border-bottom: 1px solid #71737A;
             background: #71737A;
           }
           &.active{

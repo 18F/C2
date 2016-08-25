@@ -117,7 +117,7 @@ feature "Proposals index" do
         @page.load
 
         expect(@page.pending.requests[0].public_id_link.text).to eq approval_proposal.public_id
-        expect(@page.pending.requests[0].status.text).to eq "Waiting for review from: #{approver.full_name}"
+        expect(@page.pending.requests[0].status.text).to eq "Pending Waiting for review from: #{approver.full_name}"
       end
     end
 

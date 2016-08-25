@@ -8,6 +8,7 @@ ListViewDataTable = (function(){
   }
 
   ListViewDataTable.prototype._setup = function(){
+    var self = this;
     if( this.el.length > 0 ){
       this.dataTable = this.el.DataTable( {
           // destroy: true,
@@ -18,31 +19,52 @@ ListViewDataTable = (function(){
                   columns: ':not(:first-child)'
               }
           ],
+          columnDefs: self.renderConfig(),
           "paging":   false,
           "info":     false,
-          stateSave: true,
+          stateSave:  true,
           responsive: true
       } );
       this.statusColumn = this.dataTable.column(':contains(Status)');
       this._events();
       this.prepList();
+      this.prepareEllipsisFields();
     }
+  }
+
+  ListViewDataTable.prototype.renderConfig = function(){
+    var config = [];
+    var count = this.el.find('thead th').length - 1;  
+    for (var i = count - 1; i >= 0; i--) {
+      if (i === 0 || i === 1 || i === 5){ continue; }
+      var el = {
+        targets: i,
+        render: $.fn.dataTable.render.ellipsis( 25 )
+      }
+      config.push(el);
+    }
+    return config;
   }
 
   ListViewDataTable.prototype._events = function(){
     var self = this;
+
     this.el.on('dataTableView:canceled', function(){
       self.viewCanceled();
     });
+
     this.el.on('dataTableView:pending', function(){
       self.viewPending();
     });
+
     this.el.on('dataTableView:completed', function(){
       self.viewCompleted();
     });
+
     this.el.on('dataTableView:all', function(){
       self.viewAll();
     });
+
     this.el.on('click', 'tbody tr *', function(){
       var el = this;
       if(!$(el).parents('.public_id').length && !$(el).hasClass('public_id')){
@@ -52,6 +74,7 @@ ListViewDataTable = (function(){
         }
       }
     });
+
     this.el.find('tr').mouseenter(function(){
       var el = $(this).closest('tr');
       self.removeActiveRow(el);
@@ -60,6 +83,24 @@ ListViewDataTable = (function(){
       var el = $(this).closest('tr');
       self.removeActiveRow(el);
     });
+
+    this.el.find('tbody td').hover(function(){
+      if($(this).find('.ellipsis').length > 0){
+        $(this).addClass('show-ellipsis');
+      }
+    }, function(){
+      $(this).removeClass('show-ellipsis');
+    })
+  }
+
+  ListViewDataTable.prototype.prepareEllipsisFields = function(el){
+    this.el.find('tbody td').each(function(i, item){
+      var ellipsis = $(item).find('.ellipsis');
+      if ( ellipsis.length > 0 ){
+        ellipsis.clone().html(ellipsis.attr('title')).removeClass('ellipsis').addClass('unellipsised').appendTo(item);
+      }
+    });
+    this.el.find('tr').removeClass('active-row');
   }
 
   ListViewDataTable.prototype.removeActiveRow = function(el){
