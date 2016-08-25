@@ -32,7 +32,7 @@ module ApplicationHelper
   end
 
   def current_proposal_status?(type)
-    if !@proposal.nil? && @proposal.status == type
+    if @proposal&.status == type
       " active "
     end
   end
