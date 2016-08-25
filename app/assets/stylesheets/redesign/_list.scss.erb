@@ -28,6 +28,28 @@ div.dt-button-background.dt-button-background{
   }
 }
 
+tbody tr td{
+  position: relative;
+  .unellipsised{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: auto;
+    display: none;
+    padding: 10px;
+    z-index: 1;
+    background: #E8E8E8;
+  }
+  &.show-ellipsis{
+    .unellipsised{
+      display: inline-block;
+    }
+    .ellipsis{
+      visibility: hidden;
+    }
+  }
+}
+
 td.total_price {
     text-align: right;
 }
