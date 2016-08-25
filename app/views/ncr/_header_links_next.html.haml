@@ -1,5 +1,5 @@
-%li{class: "request-related-button #{show_beta_new_request? ? 'active' : ''}"}
-  = link_to "New request", new_ncr_work_order_path, class: ""
+%li{class: "new-request-button #{show_beta_new_request? ? 'active' : ''}"}
+  = link_to "New request&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;＋".html_safe, new_ncr_work_order_path, class: ""
 
 = render 'layouts/sidebar_shared'
 
