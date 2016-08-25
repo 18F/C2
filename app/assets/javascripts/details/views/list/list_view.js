@@ -33,7 +33,7 @@ ListViewDataTable = (function(){
 
   ListViewDataTable.prototype.renderConfig = function(){
     var config = [];
-    var count = this.dataTable.columns()[0].length
+    var count = this.el.find('thead th').length - 1;  
     for (var i = count - 1; i >= 0; i--) {
       var el = {
         targets: count,
