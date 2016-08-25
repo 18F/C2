@@ -3,12 +3,10 @@
 = render partial: 'layouts/scripts'
 
 .row
-  .medium-7.medium-offset-2.columns
+  .medium-7.medium-offset-1.columns
 
-    %h2
-      National Capital Region
     %h3
-      Purchase Card Approval Request
+      New Purchase Card Approval Request
 
     = simple_form_for @client_data_instance, html: { multipart: true } do |f|
       %h4
