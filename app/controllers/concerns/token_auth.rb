@@ -3,6 +3,7 @@ module TokenAuth
 
   included do
     rescue_from Pundit::NotAuthorizedError, with: :auth_errors
+    rescue_from ActionController::InvalidAuthenticityToken, with: :authenticity_token_exception
   end
 
   # As a security precaution, certain actions must be POSTed to.
@@ -13,17 +14,21 @@ module TokenAuth
   end
 
   def validate_access
-    if not_signed_in?
-      authorize(:api_token, :valid_and_not_delegate!, params)
-      token = ApiToken.find_by(access_token: params[:cch])
-      sign_in(token.user)
-    end
+    validate_signed_in
 
     current_user_tokens.where(used_at: nil).update_all(used_at: Time.zone.now)
     authorize(proposal, :can_complete!)
 
     if params[:version] && params[:version] != proposal.version.to_s
       raise Pundit::NotAuthorizedError, I18n.t("errors.policies.api_token.version_mismatch")
+    end
+  end
+
+  def validate_signed_in
+    if not_signed_in?
+      authorize(:api_token, :valid_and_not_delegate!, params)
+      token = ApiToken.find_by(access_token: params[:cch])
+      sign_in(token.user)
     end
   end
 
@@ -41,6 +46,11 @@ module TokenAuth
     else
       render_other_exception(exception)
     end
+  end
+
+  def authenticity_token_exception
+    flash[:error] = "Your session has expired. Please sign in."
+    redirect_to root_path
   end
 
   def render_api_token_exception(exception)
