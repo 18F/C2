@@ -24,6 +24,10 @@
   position: relative;
 }
 
+#footer{
+  clear: both;
+}
+
 .footer-buffer{
   padding-bottom: 70px;
   @media screen and ( min-height: 800px ){

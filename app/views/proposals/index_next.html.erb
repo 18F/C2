@@ -4,15 +4,15 @@
 <% end %>
 
 <div id="proposals-unfiltered" class="proposals-unfiltered">
-  <div class="medium-12 large-6 column">
-    <h3>Requests</h3>
-  </div>
-  <div class="medium-12 large-6 column">
+  <div class="medium-12 large-6 large-push-6 column">
     <% if display_search_ui? %>
       <%= render partial: "shared/search_ui", locals: { show_adv_search_ui: params[:search] } %>
     <% end %>
   </div>
-  <div class="medium-12 column">
+  <div class="medium-12 large-6 large-pull-6 column">
+    <h3>Requests</h3>
+  </div>
+  <div class="medium-12 column" style='clear:both'>
     <% if @unfiltered_data.rows.any? %>
       <%= render partial: "shared/table_next", locals: { container: @unfiltered_data } %>
     <% else %>
