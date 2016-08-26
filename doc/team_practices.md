@@ -111,7 +111,7 @@ tests](https://github.com/18F/C2/blob/master/doc/setup.md#running-tests) and
 **`Code Review`**
 
 When a pull request is opened for a change, the author moves the Trello card to
-the code review list. Once a card is moved to this list, the team uses
+the `Code Review / QA ` list. Once a card is moved to this list, the team uses
 assignment in the GitHub pull request rather than in Trello.
 
 The PR should link to the Trello card and include a brief description of the
@@ -142,25 +142,28 @@ step, the code reviewer should indicate that updates are needed and assign the
 author to the pull request in Github but does not need to move the Trello card
 back to In Progress.
 
-There should be no more than 3 cards in Code Review at a time. If there are,
+There should be no more than 3 cards in Code Review / QA at a time. If there are,
 developers should prioritize reviewing code over writing new code for features
 or bug fixes.
 
 **`QA`**
 
-When a reviewer is done with code review, they should move the related Trello
-card to the `QA` list in Trello. If the reviewer is going to QA the feature,
-they should comment that they will be QAing on the pull request.
+When a reviewer is done with code review, they can start doing QA for the story
+or indicate that the story needs to be QA'd. If the reviewer is going to QA the
+feature, they should comment that they will be QAing on the pull request. If QA
+is needed by someone else (e.g. Design QA), the reviewer should add the label `QA-needed`
+to the pull request and ping a potential QA tester.
 
 QA requires the Tester to deploy to `c2-dev` or `c2-staging` to confirm that the
 feature works as expected in a production environment. If the QA instructions
 are missing from the Trello card, the person doing QA should ask the pull
 request author or product manager for QA instructions.
 
-The Tester indicates that they are QA-ing the change by making a comment on the
-pull request. QA can be done on the `c2-dev` or `c2-staging` environment. Check
-with your teammates (on Slack) to see which environment might already be in
-use.
+The QA Tester indicates that they are QA-ing the change by making a comment on the
+pull request and assigning to him or herself. QA can be done on the `c2-dev` or `c2-staging`
+environment. Check with your teammates (on Slack) to see which environment might
+already be in use. Once QA has been verified, the tester should give the thumbsup and/or
+"Ship it", indicating the pull request can be merged.
 
 You can also set up your own development app to prevent the need to check with
 teammates about QAing on shared instances. See the [set up your own development
