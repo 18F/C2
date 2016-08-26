@@ -97,14 +97,17 @@ ul.request-actions{
   color: $primary-color;
 }
 
-.action-bar-template{
-  border-top: 1px solid #e0e2e3;
+.action-bar-container{
   position: fixed;
   width: 100%;
   margin: auto;
   left: 0px;
   right: 0px;
   z-index: 10;
+}
+
+.action-bar-template{
+  border-top: 1px solid #e0e2e3;
 }
 
 $action-bar-wrapper-height-small: 60px;
@@ -148,6 +151,12 @@ $action-bar-wrapper-height-small: 60px;
   }
 }
 
+
+@media screen and ( min-width: 60em ){
+  .action-bar-padding{
+    padding-left: 250px;
+  }
+}
 
 @media screen and ( min-height: 600px ){
   $action-bar-wrapper-height: 157px;
@@ -201,8 +210,11 @@ $action-bar-wrapper-height-small: 60px;
   }
 }
 
-.action-bar-wrapper{
+.action-bar-container{
   bottom:  0px;
+}
+
+.action-bar-wrapper{
   background: rgba(255,255,255,.9);
   > div{
     opacity: .7;
