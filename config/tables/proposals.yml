@@ -40,37 +40,38 @@ default: &DEFAULT
       db: COALESCE(ncr_work_orders.amount, gsa18f_procurements.cost_per_unit * gsa18f_procurements.quantity, 0)
       display: client_data.total_price
       formatter: currency
+      header: Price
     urgency:
       header: Urgency
       db: gsa18f_procurements.urgency
       display: client_data.urgency_string
     purchase_type:
-      header: Purchase Type
+      header: Purchase
       db: gsa18f_procurements.purchase_type
       display: client_data.purchase_type
     vendor:
       header: Vendor
       display: client_data.vendor
     expense_type:
-      header: Expense Type
+      header: Expense
       display: client_data.expense_type
     building_number:
-      header: Building Number
+      header: Building
       display: client_data.building_number
     rwa_number:
-      header: RWA Number
+      header: RWA
       display: client_data.rwa_number
     work_order_code:
-      header: Work Order Code
+      header: WO Code
       display: client_data.work_order_code
     direct_pay:
       header: Direct Pay
       display: client_data.direct_pay
     cl_number:
-      header: CL Number
+      header: CL
       display: client_data.cl_number
     function_code:
-      header: Function Code
+      header: Function
       display: client_data.function_code
     soc_code:
       header: SOC Code
