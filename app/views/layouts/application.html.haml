@@ -14,6 +14,8 @@
     %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1", :name => "viewport"}/
     = render "layouts/meta_notice"
     = csrf_meta_tags
+    - if list_view_conditions
+      = render partial: 'layouts/scripts'
   %body{:class => "bodyclass webapp controller-#{controller_name} action-#{params[:action]}"}
     = render "peek/bar"
     = content_for?(:top_notification) ? yield(:top_notification) : ""
