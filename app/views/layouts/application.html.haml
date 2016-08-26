@@ -16,7 +16,7 @@
     = csrf_meta_tags
     - if list_view_conditions
       = render partial: 'layouts/scripts'
-  %body{:class => "bodyclass webapp controller-#{controller_name} action-#{params[:action]}"}
+  %body{:class => "bodyclass webapp controller-#{controller_name} action-#{params[:action]} #{list_view_conditions ? "beta-list" : ""}"}
     = render "peek/bar"
     = content_for?(:top_notification) ? yield(:top_notification) : ""
     - if list_view_conditions
