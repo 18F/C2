@@ -62,10 +62,10 @@ default: &DEFAULT
       header: RWA
       display: client_data.rwa_number
     work_order_code:
-      header: WO Code
+      header: WO
       display: client_data.work_order_code
     direct_pay:
-      header: Direct Pay
+      header: Direct
       display: client_data.direct_pay
     cl_number:
       header: CL
@@ -74,7 +74,7 @@ default: &DEFAULT
       header: Function
       display: client_data.function_code
     soc_code:
-      header: SOC Code
+      header: SOC
       display: client_data.soc_code
   columns:
     - public_id
