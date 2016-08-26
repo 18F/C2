@@ -2,6 +2,7 @@
 # * model_class
 # * permitted_params
 class ClientDataController < ApplicationController
+  include TokenAuth
   before_action -> { authorize model_class }, only: [:new, :create]
   before_action -> { authorize proposal }, only: [:edit, :update]
   before_action :build_client_data_instance, only: [:new, :create]
