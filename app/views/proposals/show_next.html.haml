@@ -1,13 +1,11 @@
 - content_for :top_notification do
   = render partial: "proposals/details/top_notification", locals: { proposal: @proposal }
 
-= render partial: 'layouts/scripts'
-
 #mode-parent.view-mode
 
   = simple_form_for @client_data_instance, html: { multipart: true, class: "request-details-form" }, remote: true do |f|
     - @form = f
-    .row
+    .row.cards-wrapper
       .medium-12.column.wrap-hard
         = render partial: "proposals/details/summary", locals: { proposal: @proposal }
 

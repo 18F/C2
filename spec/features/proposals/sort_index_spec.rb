@@ -80,7 +80,7 @@ feature "Sort proposals on index page" do
         [office_supply_procurement.proposal, training_procurement.proposal, software_procurement.proposal]
       )
 
-      within(pending_proposals_section) { click_on "Purchase Type" }
+      within(pending_proposals_section) { click_on "Purchase" }
 
       expect_order(
         pending_proposals_table,

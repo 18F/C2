@@ -5,28 +5,30 @@
 - cant_edit_or_complete_class = !can_complete && !can_edit ? "hide-action-bar" : "" 
 - state_classes = can_complete_class + " " + can_edit_class + " " + cant_edit_or_complete_class
 
-.action-bar-template#action-bar-status.action-bar-status{ class: state_classes }
-  %ul
+.action-bar-container
+  .action-bar-padding
+    .action-bar-template#action-bar-status.action-bar-status{ class: state_classes }
+      %ul
 
-.action-bar-template#action-bar-wrapper.action-bar-wrapper{ class: state_classes }
-  .row
-    .medium-12.column
-      %ul#request-actions.request-actions.fr
-        - if can_complete
-          %li.fr.modify-button.action-default.action-approve
-            = form_tag(complete_proposal_path(@proposal, method: "POST", remote: true)) do
-              = submit_tag @proposal.step_text_for_user(:execute_button, current_user), class: "form-button button primary large"
-              = hidden_field_tag :version, @proposal.version
+    .action-bar-template#action-bar-wrapper.action-bar-wrapper{ class: state_classes }
+      .row
+        .medium-12.column
+          %ul#request-actions.request-actions.fr
+            - if can_complete
+              %li.fr.modify-button.action-default.action-approve
+                = form_tag(complete_proposal_path(@proposal, method: "POST", remote: true)) do
+                  = submit_tag @proposal.step_text_for_user(:execute_button, current_user), class: "form-button button primary large"
+                  = hidden_field_tag :version, @proposal.version
 
-        - if can_edit
-          %li.edit-button
-            %button{ class: "button secondary", value: "Modify", disabled: false }
-              %span MODIFY
+            - if can_edit
+              %li.edit-button
+                %button{ class: "button secondary", value: "Modify", disabled: false }
+                  %span MODIFY
 
-          %li.cancel-button
-            %button{ class: "button secondary", value: "Cancel", disabled: true }
-              %span CANCEL
+              %li.cancel-button
+                %button{ class: "button secondary", value: "Cancel", disabled: true }
+                  %span CANCEL
 
-          %li.save-button
-            %button{ class: "ladda-button button large primary", value: "Save", disabled: true, data: { "modal-type": "save_confirm", style: "expand-right" } }
-              %span SAVE
+              %li.save-button
+                %button{ class: "ladda-button button large primary", value: "Save", disabled: true, data: { "modal-type": "save_confirm", style: "expand-right" } }
+                  %span SAVE

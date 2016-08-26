@@ -24,7 +24,7 @@ div.dt-button-background.dt-button-background{
 
 .dataTables_wrapper{
   table.dataTable thead .sorting, table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc, table.dataTable thead .sorting_asc_disabled, table.dataTable thead .sorting_desc_disabled {
-    background-position: 100% 80%;
+    background-position: 100% center;
   }
 }
 
@@ -156,7 +156,7 @@ table#tabular-data {
 }
 
 
-.proposals-unfiltered{
+.beta-list{
 
   table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td:first-child:before, table.dataTable.dtr-inline.collapsed > tbody > tr.parent > th:first-child:before {
     background-color: #2d5a79;
@@ -191,6 +191,9 @@ table#tabular-data {
 
 .proposals-unfiltered{
   position: relative;
+}
+
+.beta-list{
   .tabular-data tr{
     border-bottom: none;
   }
@@ -206,12 +209,44 @@ table#tabular-data {
   .m-search-ui.expanded .adv-controls{
     padding-left: 0px;
   }
+  @media screen and (min-width: 60em){
+    .dt-buttons.button-group{
+      position: absolute;
+      top: 0px;
+      z-index: 2003;
+    }
+  }
+  @media screen and (max-width: 60em){
+    .dt-buttons.button-group{
+      text-align: left;
+    }
+    th:first-child{
+      width: auto !important;
+    }
+    th{
+      width: 100% !important;
+    }
+  }
   div.search{
+    clear: both;
     position: relative;
     height: 4em;
     margin-bottom: 1em;
+    @media screen and (max-width: 60em){
+      height: auto;
+    }
     .m-search-ui.row{
       margin-right: 0px;
+
+      @media screen and (max-width: 60em){
+        margin: 0px;
+        width: 100%;
+        padding: 0px;
+        fieldset.basic{
+          padding: 0px;
+          margin: 0px;
+        }
+      }
       fieldset.basic{
         padding-right: 0em;
       }
@@ -219,11 +254,11 @@ table#tabular-data {
         float: right;
         right: 0px;
       }
-      @media screen and (min-width: 40em){
+      @media screen and (min-width: 60em){
         margin-left: 0px;
         padding-right: 0px;
       }
-      @media screen and (min-width: 40em) and (max-width: 64em){
+      @media screen and (min-width: 60em) and (max-width: 64em){
         margin: auto !important;
       }
     }
@@ -245,7 +280,12 @@ table#tabular-data {
   }
 }
 
+a.button.small.buttons-columnVisibility:hover {
+  opacity: 0.7;
+}
+
 #tabular-data_wrapper{
+  padding-top: 29px;
   .button.dropdown::after {
     content: '';
     border: none;
@@ -256,7 +296,7 @@ table#tabular-data {
     top: 0px;
     float: right;
     display: inline-block;
-    background-image: url("<%= asset_path 'DataTables/sort_desc_disabled.png' %>");
+    background-image: url("<%= asset_path 'DataTables/down_arrow.png' %>");
     height: 19px;
     width: 19px;
     margin-left: 10px;
@@ -290,15 +330,23 @@ table#tabular-data {
 }
 
 div.dt-button-collection.dt-button-collection{
-  width: 193px;
+  width: 180px;
+  padding-top: 33px;
+  z-index: 2002;
+  border: none;
+  margin-top: -29px;
   .buttons-columnVisibility{
     width: 100%;
     padding-top: 5px;
     padding-bottom: 5px;
     text-align: left;
-    padding-left: 30px;
+    padding-left: 16px;
     padding-right: 0px;
     position: relative;
+    color: #DBEAF5;
+    &.active{
+      color: white;
+    }
   }
 }
 
@@ -332,7 +380,7 @@ div.dt-button-collection.dt-button-collection{
   .tabular-data th{
     background: #3a6e93;
     padding: 10px;
-    vertical-align: text-bottom;
+    vertical-align: text-top;
     &.sorting_desc, &.sorting_asc{
       background-color: #2d5a79;
     }
