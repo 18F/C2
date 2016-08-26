@@ -41,4 +41,18 @@ describe "viewing a work order" do
     visit "/proposals/#{ncr_proposal.id}"
     expect(page).not_to have_content('Modify Request')
   end
+
+  it "shows Emergency on non ba61 requests - (redesigned page)", :js do
+    work_order = create(:ba61_ncr_work_order, :with_beta_requester)
+    login_as(work_order.requester)
+    visit "/proposals/#{work_order.id}"
+    expect(page).to have_content('Emergency')
+  end
+
+  it "doesn't shows Emergency on non ba61 requests - (redesigned page)", :js do
+    work_order = create(:ba80_ncr_work_order, :with_beta_requester)
+    login_as(work_order.requester)
+    visit "/proposals/#{work_order.id}"
+    expect(page).to_not have_content('Emergency')
+  end
 end
