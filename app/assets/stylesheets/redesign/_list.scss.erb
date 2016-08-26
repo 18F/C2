@@ -209,6 +209,13 @@ table#tabular-data {
   .m-search-ui.expanded .adv-controls{
     padding-left: 0px;
   }
+  @media screen and (min-width: 60em){
+    .dt-buttons.button-group{
+      position: absolute;
+      top: 0px;
+      z-index: 2003;
+    }
+  }
   @media screen and (max-width: 60em){
     .dt-buttons.button-group{
       text-align: left;
@@ -274,6 +281,7 @@ table#tabular-data {
 }
 
 #tabular-data_wrapper{
+  padding-top: 29px;
   .button.dropdown::after {
     content: '';
     border: none;
@@ -318,7 +326,10 @@ table#tabular-data {
 }
 
 div.dt-button-collection.dt-button-collection{
-  width: 193px;
+  width: 180px;
+  padding-top: 33px;
+  z-index: 2002;
+  margin-top: -29px;
   .buttons-columnVisibility{
     width: 100%;
     padding-top: 5px;
