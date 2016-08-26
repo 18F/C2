@@ -25,9 +25,9 @@ module ProposalsHelper
 
   def get_new_feature_image_tag(new_feature_date)
     if user_seen_new_features_help?(new_feature_date)
-      image_tag("new_feature_icon_none.svg", alt: "New Feature")
+      image_tag("new_feature_icon_none.svg", alt: "No New Feature")
     else
-      image_tag("new_feature_icon.svg", alt: "No New Feature")
+      image_tag("new_feature_icon.svg", alt: "New Feature")
     end
   end
 

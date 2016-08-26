@@ -11,7 +11,6 @@ class HelpController < ApplicationController
     page = params[:id]
     # prevent rendering of any non-help template
     @new_features = new_features_page?(page)
-
     if page_names.include?(page)
       render "help/#{page}"
     else
