@@ -206,12 +206,36 @@ table#tabular-data {
   .m-search-ui.expanded .adv-controls{
     padding-left: 0px;
   }
+  @media screen and (max-width: 40em){
+    .dt-buttons.button-group{
+      text-align: left;
+    }
+    th:first-child{
+      width: auto !important;
+    }
+    th{
+      width: 100%;
+    }
+  }
   div.search{
     position: relative;
     height: 4em;
     margin-bottom: 1em;
+    @media screen and (max-width: 40em){
+      height: auto;
+    }
     .m-search-ui.row{
       margin-right: 0px;
+
+      @media screen and (max-width: 40em){
+        margin: 0px;
+        width: 100%;
+        padding: 0px;
+        fieldset.basic{
+          padding: 0px;
+          margin: 0px;
+        }
+      }
       fieldset.basic{
         padding-right: 0em;
       }
