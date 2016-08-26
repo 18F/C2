@@ -1,5 +1,5 @@
 - if signed_in?
-  %ul.inline-list.text-right.has-dividers.column
+  %ul.inline-list.text-right.has-dividers.column.user-link-wrap
     %li
       = link_to current_user.email_address, profile_path
     - if current_user.any_admin?
