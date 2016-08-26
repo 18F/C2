@@ -21,7 +21,7 @@
   - if key == 'not_to_exceed'
   - elsif key == 'amount'
     = render partial: @proposal.client_slug + "/fields/amount", locals: data
-  - else 
+  - else
     = render partial: field[:partial], locals: data
 
   - i = i + 1
