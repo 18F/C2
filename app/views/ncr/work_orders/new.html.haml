@@ -1,1 +1,1 @@
-= render "form"
+= render ENV['BETA_NEW_REQUEST'] == 'true' ? 'form_next' : "form"

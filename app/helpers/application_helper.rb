@@ -32,7 +32,7 @@ module ApplicationHelper
   end
 
   def current_proposal_status?(type)
-    if !@proposal.nil? && @proposal.status == type
+    if @proposal&.status == type
       " active "
     end
   end
@@ -58,10 +58,22 @@ module ApplicationHelper
     end
   end
 
-  def list_view_conditions
-    user_condition = (!@current_user.nil? && @current_user.should_see_beta?("BETA_FEATURE_LIST_VIEW"))
+  def show_beta_layout?
+    show_beta_list_view? || show_beta_new_request?
+  end
+
+  private
+
+  def show_beta_list_view?
+    user_condition = @current_user&.should_see_beta?("BETA_FEATURE_LIST_VIEW")
     action_condition = (params[:action] == "index" || params[:action] == "show")
     controller_condition = (controller_name == "proposals")
-    (controller_condition && action_condition && user_condition)
+    controller_condition && action_condition && user_condition
+  end
+
+  def show_beta_new_request?
+    controller_name == "ncr-work_orders" &&
+      params.fetch(:action) == "new" &&
+      @current_user&.should_see_beta?("BETA_NEW_REQUEST")
   end
 end
