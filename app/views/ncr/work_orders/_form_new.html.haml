@@ -140,6 +140,5 @@
         %span.detail-value
           = f.input :amount,
             as: :currency,
-            label_html: { class: "sr-only" },
-            input_html: { data: popover_data_attrs("ncr_amount"), value: sprintf("%.2f", @client_data_instance.amount) }
+            label_html: { class: "sr-only" }
 
