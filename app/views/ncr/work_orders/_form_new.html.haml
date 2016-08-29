@@ -125,7 +125,7 @@
           = t(t_slug + "total")
   .column{ id: "not_to_exceed" + '-wrapper'}
     .row
-    .detail-wrapper.row{ class: "not_to_exceed" + "-wrapper", id: "not_to_exceed" + '-' + client_id }
+    .detail-wrapper.row{ class: "not_to_exceed" + "-wrapper" }
       .detail-edit.column
         %label.detail-element
         %span.detail-value{class: "not_to_exceed"}
@@ -134,7 +134,7 @@
             label: false,
             include_blank: false
 
-    .detail-wrapper.row{ class: "amount" + "-wrapper", id: "amount" + '-' + client_id }
+    .detail-wrapper.row{ class: "amount" + "-wrapper" }
       .detail-edit.column
         %label.detail-element
         %span.detail-value
