@@ -3,6 +3,14 @@ var ListViewDataTable;
 ListViewDataTable = (function(){
   function ListViewDataTable(el) {
     this.el = $(el);
+    this.defaultCols = ["ID",
+      "Request",
+      "Requester",
+      "Price",
+      "Status",
+      "Submitted",
+      "Building",
+      "CL"];
     this._setup();
     return this;
   }
@@ -129,12 +137,19 @@ ListViewDataTable = (function(){
 
   ListViewDataTable.prototype.hideExtraCols = function(){
     for(i = 0; i < this.dataTable.columns()[0].length; i++){
-      var colCount = this.dataTable.column(i);
-      if(i > 5){
-        colCount.visible(false);
+      var colCount = this.dataTable.column(i),
+      col_name = this.colName(colCount);
+
+      if(this.defaultCols.indexOf(col_name) === -1){
+        colCount.visible(false)
       }
     }
   }
+
+  ListViewDataTable.prototype.colName = function(column){
+    return $(column.header()).text().replace(/^\s+|\s+$/g, "");
+  }
+
   ListViewDataTable.prototype.prepList = function(){
     if (typeof(Storage) !== "undefined") {
       if ( !localStorage.savedColState || localStorage.savedColState !== "setup" ){
