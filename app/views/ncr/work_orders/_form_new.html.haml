@@ -1,14 +1,15 @@
 - content_for :title, "NCR Request"
+- t_slug = "decorators." + "ncr" + "/work_order."
 
 = simple_form_for @client_data_instance, html: { multipart: true } do |f|
   
-  .column{ id: "title" + '-wrapper'}
-    .detail-wrapper.row{ class: "title-wrapper" }
+  .column{ id: "project_title" + '-wrapper'}
+    .detail-wrapper.row{ class: "project_title-wrapper" }
       .detail-edit.column
         %label.detail-element
-          = t(t_slug + "title")
+          = t(t_slug + "project_title")
         %span.detail-value
-          = f.input :title, label: false
+          = f.input :project_title, label: false
   
   .column{ id: "description" + '-wrapper'}
     .detail-wrapper.row{ class: "description-wrapper" }
