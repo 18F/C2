@@ -1,0 +1,13 @@
+.row.full-width-row.content-parent
+  = render "layouts/c2_header_next"
+  - unless ENV["DISABLE_SANDBOX_WARNING"] == "true"
+    .medium-9.large-10.medium-offset-3.large-offset-2
+      = render partial: "shared/sandbox_warning"
+  .medium-9.column.large-12.medium-offset-3.large-offset-2.content-main-wrapper
+    = render partial: "layouts/user_header"
+    = content_for?(:content) ? yield(:content) : yield
+    - unless @skip_footer
+      #footer.inset
+        %p
+          Find a bug, have a recommendation, or want to provide other feedback? We'd love to
+          %a{:href => feedback_path, :target => "_blank"} hear from you!

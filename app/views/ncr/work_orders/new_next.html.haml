@@ -1,0 +1,17 @@
+.medium-12.column
+  .card#request-details-card
+    - if @client_data_instance
+      .card-head.column
+        %h2
+          Request Details
+      .content-content.column#view-request-details
+        .row
+          = render 'ncr/request_details'
+
+.medium-12.column
+  #card-for-attachments
+    = render partial: "proposals/details/attachment", locals: { proposal: @proposal }
+
+.medium-12.column
+  #card-for-observers.card-for-observers
+    = render partial: "proposals/details/observer", locals: { proposal: @proposal }
