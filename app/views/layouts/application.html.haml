@@ -20,6 +20,6 @@
     = render "peek/bar"
     = content_for?(:top_notification) ? yield(:top_notification) : ""
     - if list_view_conditions
-      = render 'application_next'
+      = render 'layouts/application_next'
     - else
-      = render 'application_old'
+      = render 'layouts/application_old'
