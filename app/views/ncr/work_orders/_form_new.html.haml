@@ -25,15 +25,17 @@
         %label.detail-element
           = t(t_slug + "expense_type") 
         %span.detail-value
-          = client_data[:expense_type]
+          = field_set_tag "Expense type / Program", class: "expense-type required" do
+            = expense_type_radio_button(f, "BA60")
+            = expense_type_radio_button(f, "BA61")
+            = f.input :emergency,
+              disabled: @client_data_instance.persisted?,
+              wrapper_html: { data: { filter_key: "expense-type", filter_value: "BA61" } },
+              input_html: { class: "respect-disabled", value: @client_data_instance.emergency }
+            = expense_type_radio_button(f, "BA80")
+            = render partial: "ba_80_fields",
+              locals: { f: f }
 
-  .column{ id: "expense_type" + '-wrapper-2', data: {"filter-key": "expense-type", "filter-value": "BA61"}}
-    .detail-wrapper.row{ class: "expense_type" + "-wrapper" }
-      .detail-edit.column
-        %label.detail-element
-          = t(t_slug + "expense_type")
-        %span.detail-value
-          = client_field
 
   .column{ class: "rwa_number" + "-wrapper half-col-wrap sub-card sub-card-left", id: "rwa_number" + '-wrapper-3', data: {"filter-key": "expense-type", "filter-value": "BA80"}}
     .detail-wrapper.row{  }
@@ -41,7 +43,7 @@
         %label.detail-element{ for: "ncr_work_order_rwa_number"}
           = t(t_slug + "rwa_number")
         %span.detail-value
-          = f.input :rwa_number, required: true, wrapper_html: { data: { filter_key: "expense-type", filter_value: "BA80" } }, label: false, "data-reapproval" => reapproval
+          = f.input :rwa_number, required: true, wrapper_html: { data: { filter_key: "expense-type", filter_value: "BA80" } }, label: false
 
   .column{ class: "work_order_code" + "-wrapper half-col-wrap sub-card sub-card-right", id: "work_order_code" + '-wrapper-4', data: {"filter-key": "expense-type", "filter-value": "BA80"}}
     .detail-wrapper.row{ }
@@ -58,7 +60,7 @@
           = t(t_slug + "building_number")
         %span.detail-value
           = f.input :building_number,
-            input_html: { class: "js-selectize required", data: { initial: JSON.generate(building_options) }, "data-reapproval" => reapproval }, label: false
+            input_html: { class: "js-selectize required", data: { initial: JSON.generate(building_options) } }, label: false
 
   .column{ id: "ncr_organization" + '-wrapper'}
     .detail-wrapper.row{ class: "ncr_organization" + "-wrapper" }
@@ -70,8 +72,7 @@
             as: :select,
             prompt: :translate,
             input_html: { class: "js-selectize", data: { initial: JSON.generate(organization_options) },
-            id: "ncr_work_order_organization_code",
-            "data-reapproval" => reapproval },
+            id: "ncr_work_order_organization_code" },
             label: false
 
   .column{ id: "vendor" + '-wrapper'}
@@ -89,7 +90,7 @@
         %label.detail-element{ for: "ncr_work_order_soc_code"}
           = t(t_slug + "soc_code")
         %span.detail-value
-          = f.input :soc_code, label: false, "data-reapproval" => reapproval
+          = f.input :soc_code, label: false
 
   .column{ id: "function_code" + '-wrapper'}
     .detail-wrapper.row{ class: "function_code" + "-wrapper" }
@@ -97,8 +98,7 @@
         %label.detail-element{ for: "ncr_work_order_function_code" }
           = t(t_slug + "function_code")
         %span.detail-value
-          = f.input :function_code, label: false,
-          input_html: { "data-reapproval" => reapproval }
+          = f.input :function_code, label: false
 
   .column{ id: "cl_number" + '-wrapper'}
     .detail-wrapper.row{ class: "cl_number" + "-wrapper" }
@@ -141,5 +141,5 @@
           = f.input :amount,
             as: :currency,
             label_html: { class: "sr-only" },
-            input_html: { data: popover_data_attrs("ncr_amount"), value: sprintf("%.2f", @client_data_instance.amount), "data-reapproval" => reapproval }
+            input_html: { data: popover_data_attrs("ncr_amount"), value: sprintf("%.2f", @client_data_instance.amount) }
 
