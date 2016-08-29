@@ -6,7 +6,7 @@
           Request Details
       .content-content.column#view-request-details
         .row
-          = render 'ncr/request_details'
+          = render 'ncr/work_orders/form_new', locals: { client_slug: "ncr" }
 
 .medium-12.column
   #card-for-attachments
@@ -15,3 +15,5 @@
 .medium-12.column
   #card-for-observers.card-for-observers
     = render partial: "proposals/details/observer", locals: { proposal: @proposal }
+
+#proposal_id{ data: { proposal_id: @proposal.id } }

@@ -1,0 +1,144 @@
+- content_for :title, "NCR Request"
+
+= simple_form_for @client_data_instance, html: { multipart: true } do |f|
+  
+  .column{ id: "title" + '-wrapper'}
+    .detail-wrapper.row{ class: "title-wrapper" }
+      .detail-edit.column
+        %label.detail-element
+          = t(t_slug + "title")
+        %span.detail-value
+          = f.input :title, label: false
+  
+  .column{ id: "description" + '-wrapper'}
+    .detail-wrapper.row{ class: "description-wrapper" }
+      .detail-edit.column
+        %label.detail-element
+          = t(t_slug + "description")
+        %span.detail-value
+          = f.input :description, label: false
+
+  .column{ id: "expense_type" + '-wrapper-1'}
+    .detail-wrapper.row{ class: "expense_type" + "-wrapper", id: value_id }
+      .detail-edit.column
+        %label.detail-element
+          = t(t_slug + "expense_type") 
+        %span.detail-value
+          = client_data[:expense_type]
+
+  .column{ id: "expense_type" + '-wrapper-2', data: {"filter-key": "expense-type", "filter-value": "BA61"}}
+    .detail-wrapper.row{ class: "expense_type" + "-wrapper", id: value_id}
+      .detail-edit.column
+        %label.detail-element
+          = t(t_slug + "expense_type")
+        %span.detail-value
+          = client_field
+
+  .column{ class: "rwa_number" + "-wrapper half-col-wrap sub-card sub-card-left", id: "rwa_number" + '-wrapper-3', data: {"filter-key": "expense-type", "filter-value": "BA80"}}
+    .detail-wrapper.row{ id: value_id }
+      .detail-edit.column
+        %label.detail-element{ for: "ncr_work_order_rwa_number"}
+          = t(t_slug + "rwa_number")
+        %span.detail-value
+          = f.input :rwa_number, required: true, wrapper_html: { data: { filter_key: "expense-type", filter_value: "BA80" } }, label: false, "data-reapproval" => reapproval
+
+  .column{ class: "work_order_code" + "-wrapper half-col-wrap sub-card sub-card-right", id: "work_order_code" + '-wrapper-4', data: {"filter-key": "expense-type", "filter-value": "BA80"}}
+    .detail-wrapper.row{id: value_id }
+      .detail-edit.column
+        %label.detail-element
+          = t(t_slug + "work_order_code")
+        %span.detail-value
+          = f.input :work_order_code, wrapper_html: { data: { filter_key: "expense-type", filter_value: "BA80" } }, label: false
+
+  .column{ id: "building_number" + '-wrapper'}
+    .detail-wrapper.row{ class: "building_number" + "-wrapper", id: value_id }
+      .detail-edit.column
+        %label.detail-element{ for: "ncr_work_order_building_number"}
+          = t(t_slug + "building_number")
+        %span.detail-value
+          = f.input :building_number,
+            input_html: { class: "js-selectize required", data: { initial: JSON.generate(building_options) }, "data-reapproval" => reapproval }, label: false
+
+  .column{ id: "ncr_organization" + '-wrapper'}
+    .detail-wrapper.row{ class: "ncr_organization" + "-wrapper", id: value_id }
+      .detail-edit.column
+        %label.detail-element{ for: "ncr_organization_code" }
+          = t(t_slug + "ncr_organization") 
+        %span.detail-value
+          = f.association :ncr_organization,
+            as: :select,
+            prompt: :translate,
+            input_html: { class: "js-selectize", data: { initial: JSON.generate(organization_options) },
+            id: "ncr_work_order_organization_code",
+            "data-reapproval" => reapproval },
+            label: false
+
+  .column{ id: "vendor" + '-wrapper'}
+    .detail-wrapper.row{ class: "vendor" + "-wrapper", id: value_id}
+      .detail-edit.column
+        %label.detail-element
+          = t(t_slug + "vendor")
+        %span.detail-value
+          = f.input :vendor,
+            input_html: { class: "js-selectize required", data: { initial: JSON.generate(vendor_options(@client_data_instance.vendor)) }}, label: false
+
+  .column{ id: "soc_code" + '-wrapper'}
+    .detail-wrapper.row{ class: "soc_code" + "-wrapper", id: value_id }
+      .detail-edit.column
+        %label.detail-element{ for: "ncr_work_order_soc_code"}
+          = t(t_slug + "soc_code")
+        %span.detail-value
+          = f.input :soc_code, label: false, "data-reapproval" => reapproval
+
+  .column{ id: "function_code" + '-wrapper'}
+    .detail-wrapper.row{ class: "function_code" + "-wrapper", id: value_id }
+      .detail-edit.column
+        %label.detail-element{ for: "ncr_work_order_function_code" }
+          = t(t_slug + "function_code")
+        %span.detail-value
+          = f.input :function_code, label: false,
+          input_html: { "data-reapproval" => reapproval }
+
+  .column{ id: "cl_number" + '-wrapper'}
+    .detail-wrapper.row{ class: "cl_number" + "-wrapper", id: value_id }
+      .detail-edit.column
+        %label.detail-element
+          = t(t_slug + "cl_number")
+        %span.detail-value
+          = f.input :cl_number, label: false
+
+  .column{ id: "direct_pay" + '-wrapper'}
+    .detail-wrapper.row{ class: "direct_pay" + "-wrapper", id: value_id }
+      .detail-edit.column
+        %label.detail-element
+          = t(t_slug + "direct_pay")
+        %span.detail-value
+          = f.input :direct_pay,
+            label: t("simple_form.labels.ncr_work_order.direct_pay_html"),
+            label_html: { data: popover_data_attrs("direct_pay") }
+
+  .column{ id: 'total-wrapper'}
+    .detail-display.column
+      .row
+        %label.detail-element
+          = t(t_slug + "total")
+  .column{ id: "not_to_exceed" + '-wrapper'}
+    .row
+    .detail-wrapper.row{ class: "not_to_exceed" + "-wrapper", id: "not_to_exceed" + '-' + client_id }
+      .detail-edit.column
+        %label.detail-element
+        %span.detail-value{class: "not_to_exceed"}
+          = f.input :not_to_exceed,
+            collection: [["Exact", false], ["Not to exceed", true]],
+            label: false,
+            include_blank: false
+
+    .detail-wrapper.row{ class: "amount" + "-wrapper", id: "amount" + '-' + client_id }
+      .detail-edit.column
+        %label.detail-element
+        %span.detail-value
+          = f.input :amount,
+            as: :currency,
+            label_html: { class: "sr-only" },
+            input_html: { data: popover_data_attrs("ncr_amount"), value: sprintf("%.2f", @client_data_instance.amount), "data-reapproval" => reapproval }
+
