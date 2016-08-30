@@ -1,6 +1,8 @@
 - content_for :title, "NCR Request"
 - t_slug = "decorators." + "ncr" + "/work_order."
 
+#proposal_id{ data: { proposal_id: @proposal.id } }
+
 = simple_form_for @client_data_instance, html: { multipart: true } do |f|
   
   .column{ id: "project_title" + '-wrapper'}
@@ -126,7 +128,7 @@
           = t(t_slug + "total")
   .column{ id: "not_to_exceed" + '-wrapper'}
     .row
-      .column.medium-4
+      .column.medium-5
         .detail-edit
           %label.detail-element
           %span.detail-value{class: "not_to_exceed"}
@@ -135,11 +137,12 @@
               label: false,
               include_blank: false
 
-      .column.medium-4
+      .column.medium-5
         .detail-edit
           %label.detail-element
           %span.detail-value
             = f.input :amount,
               as: :currency,
               label_html: { class: "sr-only" }
+      .column.medium-2
 
