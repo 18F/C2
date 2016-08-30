@@ -1,11 +1,39 @@
-.medium-12.column.edit-mode.new-form-wrapper
-  .card#request-details-card
-    - if @client_data_instance
-      .card-head.column
-        %h2
-          Request Details
-      .content-content.column#view-request-details
-        .row
-          = render 'ncr/work_orders/form_new', locals: { client_slug: "ncr" }
 
-= render partial: "proposals/details/save_action", locals: { proposal: @proposal }
+= simple_form_for @client_data_instance, html: { multipart: true } do |f|
+  - @form = f
+  .medium-12.column.edit-mode.new-form-wrapper
+    .card#request-details-card
+      - if @client_data_instance
+        .card-head.column
+          %h2
+            Request Details
+        .content-content.column#view-request-details
+          .row
+            = render 'ncr/work_orders/form_new', locals: { client_slug: "ncr" }
+  .medium-12.column.edit-mode.new-form-wrapper
+    .card#approvers-card
+      - if @client_data_instance
+        .card-head.column
+          %h2
+            Approving Official
+        .content-content.column#view-request-details
+          .row
+            = f.association :approving_official,
+              disabled: @client_data_instance.proposal.approver_email_frozen?,
+              collection: scoped_approver_options(@client_data_instance.ineligible_approvers),
+              as: :select,
+              label_method: :email_address,
+              value_method: :id,
+              prompt: :translate,
+              input_html: { class: "js-selectize required" }
+  .medium-12.column.edit-mode.new-form-wrapper
+    .card#attachments-ard
+      - if @client_data_instance
+        .card-head.column
+          %h2
+            Approving Official
+        .content-content.column#view-request-details
+          .row
+            = render partial: "attachments"
+
+  = render partial: "proposals/details/save_action", locals: { proposal: @proposal }

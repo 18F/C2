@@ -1,23 +1,12 @@
-- can_complete = policy(@proposal).can_complete?
-- can_edit = policy(@proposal).can_edit?
-- can_complete_class = can_complete ? "user-can-complete" : ""
-- can_edit_class = can_edit ? "view-actions" : ""
-- cant_edit_or_complete_class = !can_complete && !can_edit ? "hide-action-bar" : "" 
-- state_classes = can_complete_class + " " + can_edit_class + " " + cant_edit_or_complete_class
-
+- f = @form
 .action-bar-container
   .action-bar-padding
-    .action-bar-template#action-bar-status.action-bar-status{ class: state_classes }
-      %ul
-
-    .action-bar-template#action-bar-wrapper.action-bar-wrapper{ class: state_classes }
+    .action-bar-template#action-bar-wrapper.action-bar-wrapper
       .row
         .medium-12.column
           %ul#request-actions.request-actions.fr
             %li.back-button
-              %button{ class: "button secondary", value: "Cancel", disabled: false }
-                %span CANCEL
+              - if @client_data_instance.persisted?
+                = link_to "CANCEL", proposal_path(@client_data_instance.proposal), class: "button secondary"
             %li.submit-button
-              %button{ class: "button secondary", value: "Submit", disabled: false }
-                %span SUBMIT
-
+              = f.submit "SUBMIT", class: "button secondary", disabled: false 
