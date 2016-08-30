@@ -9,10 +9,10 @@ class AddMinus
     lis.each (idx, li) =>
       $li = $(li)
       remove = $(document.createElement("input"))
-                .attr({value: "-", type: "button", class: "js-am-minus button"})
+                .attr({value: "-", type: "button", class: "js-am-minus button tiny"})
                 .click () => @remove($li)
       add = $(document.createElement("input"))
-                .attr({value: "+", type: "button", class: "js-am-plus button"})
+                .attr({value: "+", type: "button", class: "js-am-plus button tiny"})
                 .click () => @add()
       $li.append(remove, add)
     @disableButtons()
