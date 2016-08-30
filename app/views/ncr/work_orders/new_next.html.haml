@@ -1,4 +1,4 @@
-.medium-12.column.edit-mode
+.medium-12.column.edit-mode.new-form-wrapper
   .card#request-details-card
     - if @client_data_instance
       .card-head.column
@@ -8,11 +8,11 @@
         .row
           = render 'ncr/work_orders/form_new', locals: { client_slug: "ncr" }
 
-.medium-12.column
+.medium-12.column.new-form-wrapper
   #card-for-attachments
     = render partial: "proposals/details/attachment", locals: { proposal: @proposal }
 
-.medium-12.column
+.medium-12.column.new-form-wrapper
   #card-for-observers.card-for-observers
     = render partial: "proposals/details/observer", locals: { proposal: @proposal }
 
