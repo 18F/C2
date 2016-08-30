@@ -37,13 +37,13 @@ module ApplicationHelper
     end
   end
 
-  def is_new_request_page
+  def new_request_page?
     if (controller.is_a?(Ncr::WorkOrdersController) || controller.is_a?(Gsa18f::ProcurementsController)) && params[:action] == "new"
       "active"
     end
   end
 
-  def is_new_report_page
+  def new_report_page?
     if controller.is_a?(ReportsController) || controller.is_a?(Ncr::DashboardController)  || controller.is_a?(Gsa18f::DashboardController)
       "active"
     end

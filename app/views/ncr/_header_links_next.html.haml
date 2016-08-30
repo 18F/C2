@@ -1,7 +1,7 @@
 %li
-  = link_to "New request", new_ncr_work_order_path, class: "new-request-button #{is_new_request_page}"
+  = link_to "New request", new_ncr_work_order_path, class: "new-request-button #{new_request_page?}"
 
 = render 'layouts/sidebar_shared'
 
 %li
-  = link_to 'Reports', ncr_dashboard_path, class: "reports-button #{is_new_report_page}"
+  = link_to 'Reports', ncr_dashboard_path, class: "reports-button #{new_report_page?}"
