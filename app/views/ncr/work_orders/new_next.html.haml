@@ -7,3 +7,5 @@
       .content-content.column#view-request-details
         .row
           = render 'ncr/work_orders/form_new', locals: { client_slug: "ncr" }
+
+= render partial: "proposals/details/action", locals: { proposal: @proposal }
