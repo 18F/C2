@@ -55,6 +55,7 @@ span.request-count {
   @media screen and (max-width: 60em){
     padding: 0px;
     width: 100%;
+    li:not(.request-related-button),
     .request-related-button.active{
       a{
         margin-left: 0px !important;
@@ -277,5 +278,17 @@ span.request-count {
         text-decoration: none;
       }
     }
+  }
+}
+li.requests-button:hover {
+  margin-bottom: -1px;
+  border-bottom: 1px solid #71737a;
+}
+
+a.new-request-button.active {
+  background: #C5DCED;
+  color: #333541!important;
+  &:hover{
+    background: #DBEAF5;
   }
 }
