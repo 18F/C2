@@ -36,6 +36,12 @@
             Approving Official
         .content-content.column#view-request-details
           .row
-            = render partial: "attachments"
+            .form-group
+              = field_set_tag "" do
+                %ul.attachments{ data: { add_minus: true } }
+                  - Ncr::WorkOrdersController::MAX_UPLOADS_ON_NEW.times do
+                    %li
+                      = file_field_tag "attachments[]"
+
 
   = render partial: "proposals/details/save_action", locals: { proposal: @proposal }
