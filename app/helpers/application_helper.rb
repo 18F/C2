@@ -37,6 +37,18 @@ module ApplicationHelper
     end
   end
 
+  def new_request_page?
+    if (controller.is_a?(Ncr::WorkOrdersController) || controller.is_a?(Gsa18f::ProcurementsController)) && params[:action] == "new"
+      "active"
+    end
+  end
+
+  def new_report_page?
+    if controller.is_a?(ReportsController) || controller.is_a?(Ncr::DashboardController) || controller.is_a?(Gsa18f::DashboardController)
+      "active"
+    end
+  end
+
   def proposal_count(type)
     if @current_user.nil?
       return 0
