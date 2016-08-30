@@ -37,6 +37,13 @@ module ApplicationHelper
     end
   end
 
+  def is_new_request_page
+    if controller.is_a?(ClientDataController) ||
+      (controller.is_a?(ProposalsController) && params[:action] != "new")
+      "active"
+    end
+  end
+
   def proposal_count(type)
     if @current_user.nil?
       return 0
