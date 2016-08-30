@@ -7,14 +7,16 @@ class AddMinus
 
   setupButtons: (lis) ->
     klass = "button tiny"
+    minusKlass = "js-am-minus " + klass
+    plusKlass = "js-am-plus " + klass
     lis.each (idx, li) =>
       $li = $(li)
       remove = $(document.createElement("input"))
-                .attr({value: "-", type: "button", class: "js-am-minus " + klass})
-                .click () => @remove($li)
+              .attr({value: "-", type: "button", class: minusKlass})
+              .click () => @remove($li)
       add = $(document.createElement("input"))
-                .attr({value: "+", type: "button", class: "js-am-plus " + klass})
-                .click () => @add()
+              .attr({value: "+", type: "button", class: plusKlass})
+              .click () => @add()
       $li.append(remove, add)
     @disableButtons()
 
