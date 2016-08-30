@@ -14,10 +14,6 @@
   - data[:value_id] = key + '-' + @client_data_instance.id.to_s
   - data[:reapproval] = reapproval_required
 
-  - if i == 1
-    :plain
-      <div class="grid-layout">
-
   - if key == 'not_to_exceed'
   - elsif key == 'amount'
     = render partial: @proposal.client_slug + "/fields/amount", locals: data
@@ -25,6 +21,3 @@
     = render partial: field[:partial], locals: data
 
   - i = i + 1
-
-:plain
-  </div>
