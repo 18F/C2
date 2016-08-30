@@ -13,10 +13,13 @@
 
 .card,
 .card .content-content{
-  overflow: visible !important;
+  overflow: visible;
   clear: left;
   display: block;
   float: none !important;
+  &.summary-card{
+    overflow: hidden;
+  }
 }
 
 .new-form-wrapper{
