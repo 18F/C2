@@ -38,8 +38,7 @@ module ApplicationHelper
   end
 
   def is_new_request_page
-    if controller.is_a?(ClientDataController) ||
-      (controller.is_a?(ProposalsController) && params[:action] != "new")
+    if (controller.is_a?(ClientDataController) && params[:action] != "new")
       "active"
     end
   end
