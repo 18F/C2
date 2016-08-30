@@ -45,7 +45,7 @@ module ApplicationHelper
   end
 
   def is_new_report_page
-    if (controller.is_a?(ReportsController) || controller.is_a?(DashboardController))
+    if controller.is_a?(ReportsController) || controller.is_a?(Ncr::DashboardController)  || controller.is_a?(Gsa18f::DashboardController)
       "active"
     end
   end
