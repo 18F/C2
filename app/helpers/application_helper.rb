@@ -44,6 +44,12 @@ module ApplicationHelper
     end
   end
 
+  def is_new_report_page
+    if (controller.is_a?(ReportsController))
+      "active"
+    end
+  end
+
   def proposal_count(type)
     if @current_user.nil?
       return 0
