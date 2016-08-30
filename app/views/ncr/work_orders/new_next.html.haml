@@ -18,14 +18,16 @@
             Approving Official
         .content-content.column#view-request-details
           .row
-            = f.association :approving_official,
-              disabled: @client_data_instance.proposal.approver_email_frozen?,
-              collection: scoped_approver_options(@client_data_instance.ineligible_approvers),
-              as: :select,
-              label_method: :email_address,
-              value_method: :id,
-              prompt: :translate,
-              input_html: { class: "js-selectize required" }
+            .medium-12.column
+              = f.association :approving_official,
+                disabled: @client_data_instance.proposal.approver_email_frozen?,
+                collection: scoped_approver_options(@client_data_instance.ineligible_approvers),
+                as: :select,
+                label: false,
+                label_method: :email_address,
+                value_method: :id,
+                prompt: :translate,
+                input_html: { class: "js-selectize required" }
   .medium-12.column.edit-mode.new-form-wrapper
     .card#attachments-ard
       - if @client_data_instance
