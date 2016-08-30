@@ -28,13 +28,11 @@
           = field_set_tag "", { class: "expense-type required" } do
             = expense_type_radio_button(f, "BA60")
             = expense_type_radio_button(f, "BA61")
+            = expense_type_radio_button(f, "BA80")
             = f.input :emergency,
               disabled: @client_data_instance.persisted?,
               wrapper_html: { data: { filter_key: "expense-type", filter_value: "BA61" } },
               input_html: { class: "respect-disabled", value: @client_data_instance.emergency }
-            = expense_type_radio_button(f, "BA80")
-            = render partial: "ba_80_fields",
-              locals: { f: f }
 
 
   .column{ class: "rwa_number" + "-wrapper half-col-wrap sub-card sub-card-left", id: "rwa_number" + '-wrapper-3', data: {"filter-key": "expense-type", "filter-value": "BA80"}}
@@ -52,6 +50,9 @@
           = t(t_slug + "work_order_code")
         %span.detail-value
           = f.input :work_order_code, wrapper_html: { data: { filter_key: "expense-type", filter_value: "BA80" } }, label: false
+
+  .column{ id: "building_number" + '-wrapper'}
+    .detail-wrapper.row{ class: "building_number" + "-wrapper" }
 
   .column{ id: "building_number" + '-wrapper'}
     .detail-wrapper.row{ class: "building_number" + "-wrapper" }
@@ -126,21 +127,19 @@
   .column{ id: "not_to_exceed" + '-wrapper'}
     .row
       .column.medium-6
-        .detail-wrapper.row{ class: "not_to_exceed" + "-wrapper" }
-          .detail-edit.column
-            %label.detail-element
-            %span.detail-value{class: "not_to_exceed"}
-              = f.input :not_to_exceed,
-                collection: [["Exact", false], ["Not to exceed", true]],
-                label: false,
-                include_blank: false
+        .detail-edit
+          %label.detail-element
+          %span.detail-value{class: "not_to_exceed"}
+            = f.input :not_to_exceed,
+              collection: [["Exact", false], ["Not to exceed", true]],
+              label: false,
+              include_blank: false
 
       .column.medium-6
-        .detail-wrapper.row{ class: "amount" + "-wrapper" }
-          .detail-edit.column
-            %label.detail-element
-            %span.detail-value
-              = f.input :amount,
-                as: :currency,
-                label_html: { class: "sr-only" }
+        .detail-edit
+          %label.detail-element
+          %span.detail-value
+            = f.input :amount,
+              as: :currency,
+              label_html: { class: "sr-only" }
 
