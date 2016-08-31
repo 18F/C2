@@ -20,6 +20,7 @@ C2::Application.routes.draw do
   match "/auth/:provider/callback" => "auth#oauth_callback", via: [:get]
   get "/auth/failure" => "auth#failure"
   post "/logout" => "auth#logout"
+  patch "/users/update_list_view_config" => "users#update_list_view_config"
   resources :users, only: [:update]
 
   resources :help, only: [:index, :show]

@@ -12,6 +12,8 @@
     = javascript_include_tag "application"
     = render "layouts/analytics"
     %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1", :name => "viewport"}/
+    - if @list_view_config
+      %meta{ name: "list_view_config", :content => @list_view_config.html_safe }
     = render "layouts/meta_notice"
     = csrf_meta_tags
     - if list_view_conditions

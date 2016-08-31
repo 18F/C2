@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160815205309) do
+ActiveRecord::Schema.define(version: 20160831150925) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -348,6 +348,7 @@ ActiveRecord::Schema.define(version: 20160815205309) do
     t.boolean  "active",                        default: true
     t.string   "timezone",          limit: 255, default: "Eastern Time (US & Canada)"
     t.string   "new_features_date"
+    t.text     "list_view_config"
   end
 
   create_table "versions", force: :cascade do |t|
