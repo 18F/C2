@@ -1,4 +1,6 @@
 describe "client_slug confers authz rules" do
+  include EnvVarSpecHelper
+  
   before(:each) do
     @ncr_user     = create :user, client_slug: "ncr"
     @ncr_approver = create :user, client_slug: "ncr"
