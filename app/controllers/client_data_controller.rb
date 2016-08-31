@@ -11,12 +11,15 @@ class ClientDataController < ApplicationController
 
   def new
     if current_user.should_see_beta?("BETA_FEATURE_LIST_VIEW")
-      @proposal = Proposal.new
-      @proposal = @proposal.decorate
-      @subscriber_list = SubscriberList.new(@proposal).triples
-      @attachments = @proposal.attachments.build
-      render "new_next"
+      new_form
     end
+  end
+  
+  def new_form
+    @proposal = Proposal.new
+    @proposal = @proposal.decorate
+    @subscriber_list = SubscriberList.new(@proposal).triples
+    @attachments = @proposal.attachments.build
   end
 
   def create
@@ -27,7 +30,11 @@ class ClientDataController < ApplicationController
     else
       flash_now = FlashWithNow.new
       flash_now.show(flash, "error", errors)
-      render :new
+      if current_user.should_see_beta?("BETA_FEATURE_LIST_VIEW")
+        render "new_next"
+      else
+        render :new
+      end
     end
   end
 
