@@ -74,7 +74,7 @@ ListConfig = (function(){
       },
       {
         targets: "th-value-soc",
-        "width": "95px",
+        "width": "95px"
       }
     ]
     return config;

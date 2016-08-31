@@ -40,9 +40,8 @@ ListViewDataTable = (function(){
           "paging":   false,
           "info":     false,
           stateSave:  true,
-          // responsive: true
+          responsive: true
       };
-      console.log(config);
       this.dataTable = this.el.DataTable(config);
       this.statusColumn = this.dataTable.column(':contains(Status)');
       this._events();
