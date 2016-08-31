@@ -14,6 +14,7 @@ ul.request-actions{
     height: 43px;
     outline: none;
   }
+  .submit-button .button,
   .save-button .button{
     border-color: map-get($c2success-swatch, primary);
     background: map-get($c2success-swatch, primary);
@@ -24,6 +25,7 @@ ul.request-actions{
       color: #4A4A4A;
     }
   }
+  .back-button,
   .cancel-button{
     margin-right: 20px;
     .button{
@@ -66,6 +68,7 @@ ul.request-actions{
 .action-bar-wrapper.user-can-complete.edit-actions .action-approve{
     display: none;
 }
+.action-bar-wrapper.user-can-complete.edit-actions .back-button,
 .action-bar-wrapper.user-can-complete.edit-actions .cancel-button,
 .action-bar-wrapper.user-can-complete.edit-actions .save-button {
     display: inline-block;

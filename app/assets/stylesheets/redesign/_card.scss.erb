@@ -4,6 +4,24 @@
   }
 }
 
+.card{
+  border-radius: 0px 0px 4px 4px;
+}
+.card-head{
+  border-radius: 4px 4px 0px 0px;
+}
+
+.card,
+.card .content-content{
+  overflow: visible;
+  clear: left;
+  display: block;
+  float: none !important;
+  &.summary-card{
+    overflow: hidden;
+  }
+}
+
 .new-form-wrapper{
   max-width: 650px;
   .edit-mode .sub-card .detail-wrapper.detail-wrapper{
@@ -271,9 +289,6 @@
     padding-bottom: 20px;
     background: $backgroundColor;
   }
-  overflow: hidden;
-  // box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-  border-radius: 4px;
   margin-bottom: 1.875rem;
   .title {
     line-height: 3rem;

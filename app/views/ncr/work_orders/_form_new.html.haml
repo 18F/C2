@@ -1,148 +1,147 @@
+- f = @form
 - content_for :title, "NCR Request"
 - t_slug = "decorators." + "ncr" + "/work_order."
 
 #proposal_id{ data: { proposal_id: @proposal.id } }
-
-= simple_form_for @client_data_instance, html: { multipart: true } do |f|
   
-  .column{ id: "project_title" + '-wrapper'}
-    .detail-wrapper.row{ class: "project_title-wrapper" }
-      .detail-edit.column
-        %label.detail-element
-          = t(t_slug + "project_title")
-        %span.detail-value
-          = f.input :project_title, label: false
-  
-  .column{ id: "description" + '-wrapper'}
-    .detail-wrapper.row{ class: "description-wrapper" }
-      .detail-edit.column
-        %label.detail-element
-          = t(t_slug + "description")
-        %span.detail-value
-          = f.input :description, label: false
+.column{ id: "project_title" + '-wrapper'}
+  .detail-wrapper.row{ class: "project_title-wrapper" }
+    .detail-edit.column
+      %label.detail-element
+        = t(t_slug + "project_title")
+      %span.detail-value
+        = f.input :project_title, label: false
 
-  .column{ id: "expense_type" + '-wrapper-1'}
-    .detail-wrapper.row{ class: "expense_type" + "-wrapper" }
-      .detail-edit.column
-        %label.detail-element
-          = t(t_slug + "expense_type") 
-        %span.detail-value
-          = field_set_tag "", { class: "expense-type required" } do
-            = expense_type_radio_button(f, "BA60")
-            = expense_type_radio_button(f, "BA61")
-            = expense_type_radio_button(f, "BA80")
-            = f.input :emergency,
-              disabled: @client_data_instance.persisted?,
-              wrapper_html: { data: { filter_key: "expense-type", filter_value: "BA61" } },
-              input_html: { class: "respect-disabled", value: @client_data_instance.emergency }
+.column{ id: "description" + '-wrapper'}
+  .detail-wrapper.row{ class: "description-wrapper" }
+    .detail-edit.column
+      %label.detail-element
+        = t(t_slug + "description")
+      %span.detail-value
+        = f.input :description, label: false
+
+.column{ id: "expense_type" + '-wrapper-1'}
+  .detail-wrapper.row{ class: "expense_type" + "-wrapper" }
+    .detail-edit.column
+      %label.detail-element
+        = t(t_slug + "expense_type") 
+      %span.detail-value
+        = field_set_tag "", { class: "expense-type required" } do
+          = expense_type_radio_button(f, "BA60")
+          = expense_type_radio_button(f, "BA61")
+          = expense_type_radio_button(f, "BA80")
+          = f.input :emergency,
+            disabled: @client_data_instance.persisted?,
+            wrapper_html: { data: { filter_key: "expense-type", filter_value: "BA61" } },
+            input_html: { class: "respect-disabled", value: @client_data_instance.emergency }
 
 
-  .column{ class: "rwa_number" + "-wrapper half-col-wrap sub-card sub-card-left", id: "rwa_number" + '-wrapper-3', data: {"filter-key": "expense-type", "filter-value": "BA80"}}
-    .detail-wrapper.row{  }
-      .detail-edit.column
-        %label.detail-element{ for: "ncr_work_order_rwa_number"}
-          = t(t_slug + "rwa_number")
-        %span.detail-value
-          = f.input :rwa_number, required: true, wrapper_html: { data: { filter_key: "expense-type", filter_value: "BA80" } }, label: false
+.column{ class: "rwa_number" + "-wrapper half-col-wrap sub-card sub-card-left", id: "rwa_number" + '-wrapper-3', data: {"filter-key": "expense-type", "filter-value": "BA80"}}
+  .detail-wrapper.row{  }
+    .detail-edit.column
+      %label.detail-element{ for: "ncr_work_order_rwa_number"}
+        = t(t_slug + "rwa_number")
+      %span.detail-value
+        = f.input :rwa_number, required: true, wrapper_html: { data: { filter_key: "expense-type", filter_value: "BA80" } }, label: false
 
-  .column{ class: "work_order_code" + "-wrapper half-col-wrap sub-card sub-card-right", id: "work_order_code" + '-wrapper-4', data: {"filter-key": "expense-type", "filter-value": "BA80"}}
-    .detail-wrapper.row{ }
-      .detail-edit.column
-        %label.detail-element
-          = t(t_slug + "work_order_code")
-        %span.detail-value
-          = f.input :work_order_code, wrapper_html: { data: { filter_key: "expense-type", filter_value: "BA80" } }, label: false
+.column{ class: "work_order_code" + "-wrapper half-col-wrap sub-card sub-card-right", id: "work_order_code" + '-wrapper-4', data: {"filter-key": "expense-type", "filter-value": "BA80"}}
+  .detail-wrapper.row{ }
+    .detail-edit.column
+      %label.detail-element
+        = t(t_slug + "work_order_code")
+      %span.detail-value
+        = f.input :work_order_code, wrapper_html: { data: { filter_key: "expense-type", filter_value: "BA80" } }, label: false
 
-  .column{ id: "building_number" + '-wrapper'}
-    .detail-wrapper.row{ class: "building_number" + "-wrapper" }
+.column{ id: "building_number" + '-wrapper'}
+  .detail-wrapper.row{ class: "building_number" + "-wrapper" }
 
-  .column{ id: "building_number" + '-wrapper'}
-    .detail-wrapper.row{ class: "building_number" + "-wrapper" }
-      .detail-edit.column
-        %label.detail-element{ for: "ncr_work_order_building_number"}
-          = t(t_slug + "building_number")
-        %span.detail-value
-          = f.input :building_number,
-            input_html: { class: "js-selectize required", data: { initial: JSON.generate(building_options) } }, label: false
+.column{ id: "building_number" + '-wrapper'}
+  .detail-wrapper.row{ class: "building_number" + "-wrapper" }
+    .detail-edit.column
+      %label.detail-element{ for: "ncr_work_order_building_number"}
+        = t(t_slug + "building_number")
+      %span.detail-value
+        = f.input :building_number,
+          input_html: { class: "js-selectize required", data: { initial: JSON.generate(building_options) } }, label: false
 
-  .column{ id: "ncr_organization" + '-wrapper'}
-    .detail-wrapper.row{ class: "ncr_organization" + "-wrapper" }
-      .detail-edit.column
-        %label.detail-element{ for: "ncr_organization_code" }
-          = t(t_slug + "ncr_organization") 
-        %span.detail-value
-          = f.association :ncr_organization,
-            as: :select,
-            prompt: :translate,
-            input_html: { class: "js-selectize", data: { initial: JSON.generate(organization_options) },
-            id: "ncr_work_order_organization_code" },
-            label: false
+.column{ id: "ncr_organization" + '-wrapper'}
+  .detail-wrapper.row{ class: "ncr_organization" + "-wrapper" }
+    .detail-edit.column
+      %label.detail-element{ for: "ncr_organization_code" }
+        = t(t_slug + "ncr_organization") 
+      %span.detail-value
+        = f.association :ncr_organization,
+          as: :select,
+          prompt: :translate,
+          input_html: { class: "js-selectize", data: { initial: JSON.generate(organization_options) },
+          id: "ncr_work_order_organization_code" },
+          label: false
 
-  .column{ id: "vendor" + '-wrapper'}
-    .detail-wrapper.row{ class: "vendor" + "-wrapper" }
-      .detail-edit.column
-        %label.detail-element
-          = t(t_slug + "vendor")
-        %span.detail-value
-          = f.input :vendor,
-            input_html: { class: "js-selectize required", data: { initial: JSON.generate(vendor_options(@client_data_instance.vendor)) }}, label: false
+.column{ id: "vendor" + '-wrapper'}
+  .detail-wrapper.row{ class: "vendor" + "-wrapper" }
+    .detail-edit.column
+      %label.detail-element
+        = t(t_slug + "vendor")
+      %span.detail-value
+        = f.input :vendor,
+          input_html: { class: "js-selectize required", data: { initial: JSON.generate(vendor_options(@client_data_instance.vendor)) }}, label: false
 
-  .column{ id: "soc_code" + '-wrapper'}
-    .detail-wrapper.row{ class: "soc_code" + "-wrapper" }
-      .detail-edit.column
-        %label.detail-element{ for: "ncr_work_order_soc_code"}
-          = t(t_slug + "soc_code")
-        %span.detail-value
-          = f.input :soc_code, label: false
+.column{ id: "soc_code" + '-wrapper'}
+  .detail-wrapper.row{ class: "soc_code" + "-wrapper" }
+    .detail-edit.column
+      %label.detail-element{ for: "ncr_work_order_soc_code"}
+        = t(t_slug + "soc_code")
+      %span.detail-value
+        = f.input :soc_code, label: false
 
-  .column{ id: "function_code" + '-wrapper'}
-    .detail-wrapper.row{ class: "function_code" + "-wrapper" }
-      .detail-edit.column
-        %label.detail-element{ for: "ncr_work_order_function_code" }
-          = t(t_slug + "function_code")
-        %span.detail-value
-          = f.input :function_code, label: false
+.column{ id: "function_code" + '-wrapper'}
+  .detail-wrapper.row{ class: "function_code" + "-wrapper" }
+    .detail-edit.column
+      %label.detail-element{ for: "ncr_work_order_function_code" }
+        = t(t_slug + "function_code")
+      %span.detail-value
+        = f.input :function_code, label: false
 
-  .column{ id: "cl_number" + '-wrapper'}
-    .detail-wrapper.row{ class: "cl_number" + "-wrapper" }
-      .detail-edit.column
-        %label.detail-element
-          = t(t_slug + "cl_number")
-        %span.detail-value
-          = f.input :cl_number, label: false
+.column{ id: "cl_number" + '-wrapper'}
+  .detail-wrapper.row{ class: "cl_number" + "-wrapper" }
+    .detail-edit.column
+      %label.detail-element
+        = t(t_slug + "cl_number")
+      %span.detail-value
+        = f.input :cl_number, label: false
 
-  .column{ id: "direct_pay" + '-wrapper'}
-    .detail-wrapper.row{ class: "direct_pay" + "-wrapper" }
-      .detail-edit.column
-        %label.detail-element
-          = t(t_slug + "direct_pay")
-        %span.detail-value
-          = f.input :direct_pay,
-            label: t("simple_form.labels.ncr_work_order.direct_pay_html"),
-            label_html: { data: popover_data_attrs("direct_pay") }
+.column{ id: "direct_pay" + '-wrapper'}
+  .detail-wrapper.row{ class: "direct_pay" + "-wrapper" }
+    .detail-edit.column
+      %label.detail-element
+        = t(t_slug + "direct_pay")
+      %span.detail-value
+        = f.input :direct_pay,
+          label: t("simple_form.labels.ncr_work_order.direct_pay_html"),
+          label_html: { data: popover_data_attrs("direct_pay") }
 
-  .column{ id: 'total-wrapper'}
-    .detail-display.column
-      .row
-        %label.detail-element
-          = t(t_slug + "total")
-  .column{ id: "not_to_exceed" + '-wrapper'}
+.column{ id: 'total-wrapper'}
+  .detail-display.column
     .row
-      .column.medium-5
-        .detail-edit
-          %label.detail-element
-          %span.detail-value{class: "not_to_exceed"}
-            = f.input :not_to_exceed,
-              collection: [["Exact", false], ["Not to exceed", true]],
-              label: false,
-              include_blank: false
+      %label.detail-element
+        = t(t_slug + "total")
+.column{ id: "not_to_exceed" + '-wrapper'}
+  .row
+    .column.medium-5
+      .detail-edit
+        %label.detail-element
+        %span.detail-value{class: "not_to_exceed"}
+          = f.input :not_to_exceed,
+            collection: [["Exact", false], ["Not to exceed", true]],
+            label: false,
+            include_blank: false
 
-      .column.medium-5
-        .detail-edit
-          %label.detail-element
-          %span.detail-value
-            = f.input :amount,
-              as: :currency,
-              label_html: { class: "sr-only" }
-      .column.medium-2
+    .column.medium-5
+      .detail-edit
+        %label.detail-element
+        %span.detail-value
+          = f.input :amount,
+            as: :currency,
+            label_html: { class: "sr-only" }
+    .column.medium-2
 
