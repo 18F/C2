@@ -12,6 +12,8 @@ ListConfig = (function(){
       },
       {
         targets: "th-value-requester",
+        "width": "200px",
+        render: $.fn.dataTable.render.ellipsis( 25 )
       },
       {
         targets: "th-value-status",
