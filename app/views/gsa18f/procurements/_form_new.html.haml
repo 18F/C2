@@ -102,6 +102,3 @@
         = t(t_slug + "additional_info")
       %span.detail-value
         = f.input :additional_info, label: false, as: :text
-        = f.submit class: "form-button"
-        - if @client_data_instance.persisted?
-          = link_to "Discard Changes", proposal_url(@client_data_instance.proposal)
