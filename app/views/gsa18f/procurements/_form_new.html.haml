@@ -35,19 +35,22 @@
       %span.detail-value
         = f.input :link_to_product, label: false
 .column{ id: "cost_per_unit" + '-wrapper'}
-  .detail-wrapper.row{ class: "cost_per_unit-wrapper" }
-    .detail-edit.column
-      %label.detail-element
-        = t(t_slug + "cost_per_unit")
-      %span.detail-value
-        = f.input :cost_per_unit, label: false, as: :currency
-.column{ id: "quantity" + '-wrapper'}
-  .detail-wrapper.row{ class: "quantity-wrapper" }
-    .detail-edit.column
-      %label.detail-element
-        = t(t_slug + "quantity")
-      %span.detail-value
-        = f.input :quantity, label: false, input_html: { step: 1 }
+  .row
+    .column.medium-5
+      .detail-wrapper.row{ class: "cost_per_unit-wrapper" }
+        .detail-edit.column
+          %label.detail-element
+            = t(t_slug + "cost_per_unit")
+          %span.detail-value
+            = f.input :cost_per_unit, label: false, as: :currency
+    .column.medium-5
+      .detail-wrapper.row{ class: "quantity-wrapper" }
+        .detail-edit.column
+          %label.detail-element
+            = t(t_slug + "quantity")
+          %span.detail-value
+            = f.input :quantity, label: false, input_html: { step: 1 }
+    .column.medium-2
 .column{ id: "recurring" + '-wrapper'}
   .detail-wrapper.row{ class: "recurring-wrapper" }
     .detail-edit.column
@@ -57,29 +60,34 @@
         = f.input :recurring, label: false, input_html: { "data-filter-control" => "recurring" }
         %div{ "data-filter-key" => "recurring", "data-filter-value" => 1 }
 .column{ id: "recurring_interval" + '-wrapper'}
-  .detail-wrapper.row{ class: "recurring_interval-wrapper" }
-    .detail-edit.column
-      %label.detail-element
-        = t(t_slug + "recurring_interval")
-      %span.detail-value
-        = f.input :recurring_interval, label: false,
-          collection: Gsa18f::Procurement::RECURRENCE,
-          include_blank: false,
-          required: true
-.column{ id: "recurring_length" + '-wrapper'}
-  .detail-wrapper.row{ class: "recurring_length-wrapper" }
-    .detail-edit.column
-      %label.detail-element
-        = t(t_slug + "recurring_length")
-      %span.detail-value
-        = f.input :recurring_length, label: false, step: 1
+  .row{ "data-filter-key" => "recurring", "data-filter-value" => 1 }
+    .column.medium-5
+      .detail-wrapper.row{ class: "recurring_interval-wrapper" }
+        .detail-edit.column
+          %label.detail-element
+            = t(t_slug + "recurring_interval")
+          %span.detail-value
+            = f.input :recurring_interval, label: false,
+              collection: Gsa18f::Procurement::RECURRENCE,
+              include_blank: false,
+              required: true
+    .column.medium-5
+      .detail-wrapper.row{ class: "recurring_length-wrapper" }
+        .detail-edit.column
+          %label.detail-element
+            = t(t_slug + "recurring_length")
+          %span.detail-value
+            = f.input :recurring_length, label: false, step: 1
+    .column.medium-2
 .column{ id: "date_requested" + '-wrapper'}
-  .detail-wrapper.row{ class: "date_requested-wrapper" }
-    .detail-edit.column
-      %label.detail-element
-        = t(t_slug + "date_requested")
-      %span.detail-value
-        = f.input :date_requested, label: false, as: :date, html5: true
+  .row
+    .column.medium-5
+      .detail-wrapper.row{ class: "date_requested-wrapper" }
+        .detail-edit.column
+          %label.detail-element
+            = t(t_slug + "date_requested")
+          %span.detail-value
+            = f.input :date_requested, label: false, as: :date, html5: true
 .column{ id: "urgency" + '-wrapper'}
   .detail-wrapper.row{ class: "urgency-wrapper" }
     .detail-edit.column
