@@ -1,0 +1,15 @@
+
+= simple_form_for @client_data_instance, html: { multipart: true } do |f|
+  - @form = f
+  .medium-12.column.edit-mode.new-form-wrapper
+    .card#request-details-card
+      - if @client_data_instance
+        .card-head.column
+          %h2
+            Request Details
+        .content-content.column#view-request-details
+          .row
+            = render 'gsa18f/procurements/form_new', locals: { client_slug: "gsa18f" }
+
+
+  = render partial: "proposals/details/save_action", locals: { proposal: @proposal }

@@ -40,7 +40,7 @@ default: &DEFAULT
       db: COALESCE(ncr_work_orders.amount, gsa18f_procurements.cost_per_unit * gsa18f_procurements.quantity, 0)
       display: client_data.total_price
       formatter: currency
-      header: Price
+      header: Amount
     urgency:
       header: Urgency
       db: gsa18f_procurements.urgency

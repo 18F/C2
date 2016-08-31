@@ -25,12 +25,8 @@ ListConfig = (function(){
         "width": "150px"
       },
       {
-        "targets": 'th-value-price',
+        "targets": 'th-value-amount',
         "width": "100px"
-      },
-      {
-        targets: "th-value-price",
-        "width": "170px"
       },
       {
         targets: "th-value-urgency"
