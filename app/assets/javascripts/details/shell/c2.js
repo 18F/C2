@@ -40,7 +40,8 @@ C2 = (function() {
     this.modals = new ModalController(config.modalCard);
     this.actionBar = new ActionBar(config.actionBar);
     this.notification = new Notifications(config.notifications);
-    this.listView = new ListViewDataTable(config.listView);
+    this.listConfig = new ListConfig();
+    this.listView = new ListViewDataTable(config.listView, self.listConfig);
     this.sidebarNav = new SidebarNav(config.sidebarNav);
 
     this.actionBridge = new ActionBarBridge(self);

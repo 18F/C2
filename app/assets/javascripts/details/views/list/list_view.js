@@ -1,7 +1,7 @@
 var ListViewDataTable;
 
 ListViewDataTable = (function(){
-  function ListViewDataTable(el) {
+  function ListViewDataTable(el, config) {
     this.el = $(el);
     this.defaultCols = ["ID",
       "Request",
@@ -11,14 +11,23 @@ ListViewDataTable = (function(){
       "Submitted",
       "Building",
       "CL"];
+    this.listConfig = config;
     this._setup();
     return this;
   }
 
+  ListViewDataTable.prototype.addThClass = function(){
+    this.el.find('th').each(function(i, item){
+      var thValue = $(item).find('.table-header').html().trim().replace(" ", "-").toLowerCase();
+      var klass = "th-value-" + thValue;
+      $(this).addClass(klass);
+    });
+  }
   ListViewDataTable.prototype._setup = function(){
     var self = this;
+    this.addThClass();
     if( this.el.length > 0 ){
-      this.dataTable = this.el.DataTable( {
+      var config =  {
           // destroy: true,
           dom: 'Bfrtip',
           buttons: [
@@ -27,31 +36,18 @@ ListViewDataTable = (function(){
                   columns: ':not(:first-child)'
               }
           ],
-          columnDefs: self.renderConfig(),
+          columnDefs: self.listConfig,
           "paging":   false,
           "info":     false,
           stateSave:  true,
           responsive: true
-      } );
+      };
+      this.dataTable = this.el.DataTable(config);
       this.statusColumn = this.dataTable.column(':contains(Status)');
       this._events();
       this.prepList();
       this.prepareEllipsisFields();
     }
-  }
-
-  ListViewDataTable.prototype.renderConfig = function(){
-    var config = [];
-    var count = this.el.find('thead th').length - 1;  
-    for (var i = count - 1; i >= 0; i--) {
-      if (i === 0 || i === 1 || i === 5){ continue; }
-      var el = {
-        targets: i,
-        render: $.fn.dataTable.render.ellipsis( 25 )
-      }
-      config.push(el);
-    }
-    return config;
   }
 
   ListViewDataTable.prototype._events = function(){
