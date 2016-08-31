@@ -4,11 +4,11 @@ ListConfig = (function(){
   function ListConfig() {
     var config = [
       {
-        targets: "th-value-id",
+        targets: "th-value-id"
       },
       {
         targets: "th-value-request",
-        "width": "230px",
+        "width": "230px"
       },
       {
         targets: "th-value-requester",
@@ -22,22 +22,22 @@ ListConfig = (function(){
       },
       {
         targets: "th-value-submitted",
-        "width": "150px",
+        "width": "150px"
       },
       {
         "targets": 'th-value-price',
-        "width": "100px",
+        "width": "100px"
       },
       {
         targets: "th-value-price",
-        "width": "170px",
+        "width": "170px"
       },
       {
-        targets: "th-value-urgency",
+        targets: "th-value-urgency"
       },
       {
         targets: "th-value-purchase",
-        "width": "20%",
+        "width": "20%"
       },
       {
         targets: "th-value-vendor",
@@ -46,7 +46,7 @@ ListConfig = (function(){
       },
       {
         targets: "th-value-expense",
-        "width": "60px",
+        "width": "60px"
       },
       {
         targets: "th-value-building",
@@ -55,22 +55,22 @@ ListConfig = (function(){
       },
       {
         targets: "th-value-rwa",
-        "width": "95px",
+        "width": "95px"
       },
       {
         targets: "th-value-wo",
-        "width": "95px",
+        "width": "95px"
       },
       {
-        targets: "th-value-direct",
+        targets: "th-value-direct"
       },
       {
         targets: "th-value-cl",
-        "width": "95px",
+        "width": "95px"
       },
       {
         targets: "th-value-function",
-        "width": "20%",
+        "width": "20%"
       },
       {
         targets: "th-value-soc",
