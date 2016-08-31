@@ -1,6 +1,6 @@
 describe "client_slug confers authz rules" do
   include EnvVarSpecHelper
-  
+
   before(:each) do
     @ncr_user     = create :user, client_slug: "ncr"
     @ncr_approver = create :user, client_slug: "ncr"
@@ -82,16 +82,18 @@ describe "client_slug confers authz rules" do
 
   scenario "load 18f new request page in beta view" do
     with_env_var("BETA_FEATURE_LIST_VIEW", "true") do
+      user = @gsa_user
       login_as(@gsa_user)
       user.add_role(ROLE_BETA_USER)
       user.add_role(ROLE_BETA_ACTIVE)
-      visit new_18f_procurement_path
+      visit new_gsa18f_procurement_path
       expect(page).to have_content("Request Details")
     end
   end
 
   scenario "load ncr new request page in beta view" do
     with_env_var("BETA_FEATURE_LIST_VIEW", "true") do
+      user = @ncr_user
       login_as(@ncr_user)
       user.add_role(ROLE_BETA_USER)
       user.add_role(ROLE_BETA_ACTIVE)
