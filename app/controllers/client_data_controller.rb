@@ -11,15 +11,11 @@ class ClientDataController < ApplicationController
 
   def new
     if current_user.should_see_beta?("BETA_FEATURE_LIST_VIEW")
-      new_form
+      @proposal = Proposal.new
+      @proposal = @proposal.decorate
+      @subscriber_list = SubscriberList.new(@proposal).triples
+      @attachments = @proposal.attachments.build
     end
-  end
-  
-  def new_form
-    @proposal = Proposal.new
-    @proposal = @proposal.decorate
-    @subscriber_list = SubscriberList.new(@proposal).triples
-    @attachments = @proposal.attachments.build
   end
 
   def create
