@@ -73,4 +73,8 @@ module ApplicationHelper
   def list_view_conditions
     !@current_user.nil? && @current_user.should_see_beta?("BETA_FEATURE_LIST_VIEW")
   end
+
+  def detail_view_conditions
+    !@current_user.nil? && @current_user.should_see_beta?("BETA_FEATURE_DETAIL_VIEW")
+  end
 end
