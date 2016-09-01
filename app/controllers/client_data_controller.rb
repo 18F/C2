@@ -15,6 +15,7 @@ class ClientDataController < ApplicationController
       @proposal = @proposal.decorate
       @subscriber_list = SubscriberList.new(@proposal).triples
       @attachments = @proposal.attachments.build
+      render "new_next"
     end
   end
 
