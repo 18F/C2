@@ -27,11 +27,15 @@ class ClientDataController < ApplicationController
     else
       flash_now = FlashWithNow.new
       flash_now.show(flash, "error", errors)
-      if current_user.should_see_beta?("BETA_FEATURE_LIST_VIEW")
-        render "new_next"
-      else
-        render :new
-      end
+      revalidate_new
+    end
+  end
+
+  def revalidate_new
+    if current_user.should_see_beta?("BETA_FEATURE_LIST_VIEW")
+      render "new_next"
+    else
+      render :new
     end
   end
 
