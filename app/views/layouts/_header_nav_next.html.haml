@@ -6,6 +6,8 @@
 
   %ul.side-secondary-nav
     %li
+      = link_to "Reports", "/#{current_user.client_slug}/dashboard"
+    %li
       = link_to "/help/new_features", class: "new-features-button" do
         = "New features "
         = new_feature_image.html_safe
