@@ -2,6 +2,7 @@
 <% content_for :top_notification do %>
   <% render partial: "proposals/details/top_notification" %>
 <% end %>
+<meta name="list_view_config" content='<%= @list_view_config.html_safe %>'>
 
 <div id="proposals-unfiltered" class="proposals-unfiltered">
   <div class="medium-12 large-6 large-push-6 column">
