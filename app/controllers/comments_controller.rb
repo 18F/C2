@@ -7,7 +7,7 @@ class CommentsController < ApplicationController
       comment_params.merge(proposal: proposal, user: current_user)
     )
     if comment.save
-      flash[:success] = "Success! You've added an attachment."
+      flash[:success] = "Success! You've added a comment."
       DispatchFinder.run(comment.proposal).on_comment_created(comment)
     else
       flash[:error] = comment.errors.full_messages

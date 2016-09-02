@@ -7,7 +7,7 @@ feature "commenting" do
 
     expect(current_path).to eq(proposal_path(proposal))
     expect(page).to have_content(comment_text)
-    expect(page).to have_content("Success! You've added an attachment.")
+    expect(page).to have_content("Success! You've added a comment.")
   end
 
   scenario "saves the comment with javascript", js: true do
