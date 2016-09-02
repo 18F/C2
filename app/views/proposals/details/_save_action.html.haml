@@ -6,7 +6,6 @@
         .medium-12.column
           %ul#request-actions.request-actions.fr
             %li.back-button
-              - if @client_data_instance.persisted?
-                = link_to "CANCEL", proposal_path(@client_data_instance.proposal), class: "button secondary"
+              = link_to "CANCEL", proposals_path, class: "button secondary"
             %li.submit-button
               = f.submit "SUBMIT", class: "button secondary", disabled: false 
