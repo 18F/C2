@@ -35,6 +35,7 @@ class ProposalsController < ApplicationController
   end
 
   def index_redesign
+    @list_view_config = current_user.list_view_config || "nil"
     render "index_next"
   end
 

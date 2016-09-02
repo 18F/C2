@@ -26,6 +26,7 @@ ListViewDataTable = (function(){
   ListViewDataTable.prototype._setup = function(){
     var self = this;
     this.addThClass();
+    this.setListViewConfig();
     if( this.el.length > 0 ){
       var config =  {
           // destroy: true,
@@ -40,14 +41,57 @@ ListViewDataTable = (function(){
           "paging":   false,
           "info":     false,
           stateSave:  true,
-          responsive: true
+          responsive: true,
+          stateSaveCallback: function ( settings, data ) {
+            self.saveListViewConfig(data);
+          },
+          stateLoadCallback: function ( ) {
+            try {
+              return self.listViewConfig;
+            } catch (e) {
+              console.log("Failed to load list view config");
+            }
+          }
       };
       this.dataTable = this.el.DataTable(config);
+  
       this.statusColumn = this.dataTable.column(':contains(Status)');
       this._events();
       this.prepList();
       this.prepareEllipsisFields();
     }
+  }
+
+  ListViewDataTable.prototype.setListViewConfig = function(){
+    var config = $("meta[name='list_view_config']").attr('content');
+    if(config && config !== "nil"){
+      this.listViewConfig = JSON.parse(config);
+    }
+  }
+
+  ListViewDataTable.prototype.saveListViewConfig = function(data){
+    var data_string = JSON.stringify(data);
+    $.ajax({
+      type: "PATCH",
+      dataType: "script",
+      url: '/users/update_list_view_config',
+      contentType: 'application/json',
+      data: JSON.stringify({listViewConfig: data_string})
+    });
+  }
+
+  ListViewDataTable.prototype.renderConfig = function(){
+    var config = [];
+    var count = this.el.find('thead th').length - 1;  
+    for (var i = count - 1; i >= 0; i--) {
+      if (i === 0 || i === 1 || i === 5){ continue; }
+      var el = {
+        targets: i,
+        render: $.fn.dataTable.render.ellipsis( 25 )
+      }
+      config.push(el);
+    }
+    return config;
   }
 
   ListViewDataTable.prototype._events = function(){
@@ -147,12 +191,7 @@ ListViewDataTable = (function(){
   }
 
   ListViewDataTable.prototype.prepList = function(){
-    if (typeof(Storage) !== "undefined") {
-      if ( !localStorage.savedColState || localStorage.savedColState !== "setup" ){
-        this.hideExtraCols();
-        localStorage.setItem('savedColState', 'setup');
-      }
-    } else {
+    if (!this.listViewConfig || this.listViewConfig === "nil" ){
       this.hideExtraCols();
     }
   }
