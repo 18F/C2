@@ -87,7 +87,7 @@ describe "client_slug confers authz rules" do
       user.add_role(ROLE_BETA_USER)
       user.add_role(ROLE_BETA_ACTIVE)
       visit new_gsa18f_procurement_path
-      expect(page).to have_content("Request Details")
+      expect(page).to have_content("Request details")
     end
   end
 
@@ -98,7 +98,7 @@ describe "client_slug confers authz rules" do
       user.add_role(ROLE_BETA_USER)
       user.add_role(ROLE_BETA_ACTIVE)
       visit new_ncr_work_order_path
-      expect(page).to have_content("Request Details")
+      expect(page).to have_content("Request details")
     end
   end
 
