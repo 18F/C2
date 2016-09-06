@@ -1,18 +1,19 @@
 $(document).ready(function() {
 
-  var searchUI = $(".m-search-ui");
-  var advOptsFieldset = $("fieldset.adv");
-  var advOptsControlsFieldset = $("fieldset.controls");
-  var searchTerms = $(".m-search-ui .search-terms");
-  var searchButton = $("#search-button");
-  var searchMagGlass = $(".m-search-ui .input-group-addon.magnifier");
-  var advOptsButton = $("#adv-options");
-  var advOptsToggler = $("a.adv-options");
-  var advOptsCloser = $(".adv-controls .closer");
-  var allSearchButtons = $(".m-search-ui button.search");
-  var searchForm = $("form.search");
-  var countEl = $(".results-count-preview .count");
-  var advOptsResetter = $("a.resetter");
+  var searchUI = $(".m-search-ui"),
+  advOptsFieldset = $("fieldset.adv"),
+  advOptsControlsFieldset = $("fieldset.controls"),
+  searchTerms = $(".m-search-ui .search-terms"),
+  searchButton = $("#search-button"),
+  searchMagGlass = $(".m-search-ui .input-group-addon.magnifier"),
+  advOptsButton = $("#adv-options"),
+  advOptsToggler = $("a.adv-options"),
+  advOptsCloser = $(".adv-controls .closer"),
+  allSearchButtons = $(".m-search-ui button.search"),
+  searchForm = $("form.search"),
+  countEl = $(".results-count-preview .count"),
+  advOptsResetter = $("a.resetter"),
+  formHasFocus = false;
 
   var advOptionsVisible = function() {
     return advOptsFieldset.is(":visible");
@@ -40,9 +41,6 @@ $(document).ready(function() {
       searchMagGlass.fadeIn(FADE_SPEED);
     }
     else {
-      if (!advOptionsVisible()) {
-        showAdvOptsButton();
-      }
       searchMagGlass.hide();
       searchButton.fadeIn(FADE_SPEED);
     }
@@ -59,10 +57,10 @@ $(document).ready(function() {
   var hideAdvOptions = function() {
     advOptsFieldset.hide();
     advOptsControlsFieldset.hide();
-    showAdvOptsButton();
     buttonToggler();
     searchUI.removeClass("expanded");
   };
+
   advOptsToggler.click(function(e) {
     showAdvOptions();
     return false;
@@ -95,16 +93,46 @@ $(document).ready(function() {
 
   searchTerms.focusin(function() {
     if (!advOptionsVisible()) {
-      showAdvOptsButton();
+      showAdvOptions();
     }
   });
 
-  searchTerms.focusout(function(e) {
+  searchForm.on("focusout",function(e) {
     if (searchTerms.val().length == 0) {
       // use timeout to workaround click on adv-options button,
       // so that the click event can also fire.
+      // console.log(searchForm.find('input').is(':focus'));
       setTimeout(function() { hideAdvOptsButton(); }, 200);
+      setTimeout(function() { 
+        if(!formHasFocus){
+          hideAdvOptions();
+          hideAdvOptsButton();
+        }
+      }, 200);
     }
+  });
+  $('body').on("click", function(e){
+    formHasFocus = false;
+    setTimeout(function(){
+      if(!formHasFocus){
+        hideAdvOptions();
+        hideAdvOptsButton();
+      }
+    }, 200)
+  });
+
+  searchForm.find("button, input, select, a, div, label").on("focusout", function(e) {
+    formHasFocus = false;
+  });
+
+  searchForm.on("click", function(e) {
+    formHasFocus = true;
+    setTimeout(function(){formHasFocus = true;}, 10);
+  });
+
+  searchForm.find("button, input, select, a, div, label").on("focusin", function(e) {
+    formHasFocus = true;
+    setTimeout(function(){formHasFocus = true;}, 10);
   });
 
   allSearchButtons.click(function(e) {

@@ -5,7 +5,7 @@ describe "searching", elasticsearch: true do
 
     visit proposals_path
     fill_in "text", with: proposals.first.public_id
-    click_button "search-button"
+    click_button "Search"
 
     expect(current_path).to eq query_proposals_path
     expect(page).to have_content(proposals.first.public_id)
@@ -19,7 +19,7 @@ describe "searching", elasticsearch: true do
     visit proposals_path
     es_mock_connection_failed
     fill_in "text", with: proposals.first.name
-    click_button "search-button"
+    click_button "Search"
 
     expect(current_path).to eq proposals_path
     expect(page).to have_content(I18n.t("errors.features.es.service_unavailable"))
@@ -43,7 +43,7 @@ describe "searching", elasticsearch: true do
 
     visit proposals_path
     fill_in "text", with: "foo"
-    click_button "search-button"
+    click_button "Search"
 
     expect(current_path).to eq("/proposals/query")
     field = find_field("text")
@@ -64,7 +64,7 @@ describe "searching", elasticsearch: true do
 
     visit proposals_path
     fill_in "text", with: proposals.first.name
-    click_button "search-button"
+    click_button "Search"
 
     expect(page).to have_content("Download")
   end
@@ -76,8 +76,6 @@ describe "searching", elasticsearch: true do
 
       visit proposals_path
       fill_in "text", with: proposals.first.name
-      adv_options = find("a.adv-options")
-      adv_options.trigger("click")
       fill_in "test_client_request[client_data.amount]", with: proposals.first.client_data.amount
       click_button "adv-search-button"
 
@@ -93,8 +91,6 @@ describe "searching", elasticsearch: true do
       @page = ProposalIndexPage.new
       @page.load
       fill_in "text", with: "blah"
-      adv_options = find("a.adv-options")
-      adv_options.trigger("click")
 
       expect(@page.advanced_search).to have_org_code
     end
@@ -106,8 +102,6 @@ describe "searching", elasticsearch: true do
       @page = ProposalIndexPage.new
       @page.load
       fill_in "text", with: "blah"
-      adv_options = find("a.adv-options")
-      adv_options.trigger("click")
 
       expect(@page.advanced_search).to have_building_number
     end
