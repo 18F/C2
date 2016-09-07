@@ -16,7 +16,7 @@ module ApplicationHelper
     if provider == :myusa
       "/auth/myusa"
     elsif provider == :cg
-      "https://login.cloud.gov/oauth/authorize?client_id=#{ENV.fetch('APP_ID')}&response_type=code"
+      "https://login.cloud.gov/oauth/authorize?client_id=#{ENV.fetch('CG_APP_ID')}&response_type=code"
     end
   end
 
