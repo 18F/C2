@@ -1,4 +1,13 @@
 GIT
+  remote: https://github.com/18F/omniauth-cg
+  revision: ce705ba3ed2ef5e1957b3ebce83ad6f82a6939e8
+  branch: cloud-gov-changeover
+  specs:
+    omniauth-cg (0.0.1)
+      omniauth (~> 1.0)
+      omniauth-oauth2 (= 1.3.1)
+
+GIT
   remote: https://github.com/activeadmin/activeadmin.git
   revision: ca94d1ccb1894ccbaedc40f6a6b948d1423b90bb
   specs:
@@ -594,6 +603,7 @@ DEPENDENCIES
   mandrill-rails
   meta_request
   newrelic_rpm
+  omniauth-cg!
   omniauth-myusa
   paper_trail (~> 4.1.0)
   paperclip (~> 5.0.0)
