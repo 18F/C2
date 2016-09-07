@@ -14,6 +14,9 @@ ul.request-actions{
     height: 43px;
     outline: none;
   }
+  .back-button .button{
+    line-height: 30px;
+  }
   .submit-button .button,
   .save-button .button{
     border-color: map-get($c2success-swatch, primary);
