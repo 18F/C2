@@ -17,6 +17,8 @@ module ApplicationHelper
       "/auth/myusa"
     elsif provider == :cg
       "https://login.cloud.gov/oauth/authorize?client_id=#{ENV.fetch('CG_APP_ID')}&response_type=code"
+    else
+      raise "Unknown OAuth provider #{provider}"
     end
   end
 
