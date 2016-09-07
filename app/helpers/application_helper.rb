@@ -31,10 +31,7 @@ module ApplicationHelper
   end
 
   def blank_field_default(field)
-    if field.blank?
-      field = "--".to_s
-    end
-    field
+    field.blank? ? "--" : field
   end
 
   def current_proposal_status?(type)
@@ -56,9 +53,8 @@ module ApplicationHelper
   end
 
   def proposal_count(type)
-    if @current_user.nil?
-      return 0
-    end
+    return 0 if @current_user.nil?
+
     listing = ProposalListingQuery.new(@current_user, params)
     get_proposal_count(type, listing)
   end
