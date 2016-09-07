@@ -12,8 +12,12 @@ module ApplicationHelper
       (controller.is_a?(ProposalsController) && params[:action] != "index")
   end
 
-  def auth_path
-    "/auth/myusa"
+  def auth_url(provider:)
+    if provider == :myusa
+      "/auth/myusa"
+    elsif provider == :cg
+      "https://login.cloud.gov/oauth/authorize?client_id=#{ENV.fetch('APP_ID')}&response_type=code"
+    end
   end
 
   def display_profile_warning?
