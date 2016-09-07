@@ -1,6 +1,6 @@
 module Ncr
   class WorkOrdersController < ClientDataController
-    # arbitrary number....number of upload fields that "ought to be enough for anybody"
+    # arbitrary number...number of upload fields that "ought to be enough for anybody"
     MAX_UPLOADS_ON_NEW = 10
 
     def new
