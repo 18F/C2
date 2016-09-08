@@ -12,5 +12,10 @@ Rails.application.config.middleware.use OmniAuth::Builder do
                                               token_url: "/oauth/authorize"
                                             }
 
-  provider :cg, CG_KEY, CG_SECRET
+  provider :cg,
+           CG_KEY,
+           CG_SECRET,
+           client_options: {
+             site: "https://login.cloud.gov/oauth/authorize?client_id=#{CG_KEY}&response_type=code"
+           }
 end
