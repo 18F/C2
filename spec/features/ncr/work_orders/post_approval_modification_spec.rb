@@ -114,6 +114,7 @@ feature "post-approval modification" do
     click_on "Modify"
     fill_in "Amount", with: new_amount
     find(".save-button button").trigger("click")
+    sleep(5)
     click_on "SAVE CHANGES"
     expect(page).to have_content(new_amount)
   end
