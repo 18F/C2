@@ -13,13 +13,10 @@ module ApplicationHelper
   end
 
   def auth_url(provider:)
-    if provider == :myusa
-      "/auth/myusa"
-    elsif provider == :cg
-      "https://login.cloud.gov/oauth/authorize?client_id=#{ENV.fetch('CG_APP_ID')}&response_type=code"
-    else
-      raise "Unknown OAuth provider #{provider}"
-    end
+    {
+      myusa: "/auth/myusa",
+      cg:    "https://login.cloud.gov/oauth/authorize?client_id=#{ENV.fetch('CG_APP_ID')}&response_type=code"
+    }.fetch(provider)
   end
 
   def display_profile_warning?
@@ -35,9 +32,7 @@ module ApplicationHelper
   end
 
   def current_proposal_status?(type)
-    if !@proposal.nil? && @proposal.status == type
-      " active "
-    end
+    " active " if !@proposal.nil? && @proposal.status == type
   end
 
   def new_request_page?
