@@ -1,5 +1,5 @@
-%li.requests-button
-  = link_to proposals_path(anchor: "all"), data: { trigger: "all" } do
+%li.requests-button.no-hover
+  %span.button-stub
     Requests
 %li.button-divider
 %li.request-related-button.view-all-button-wrapper{ class: current_proposal_status?('all') } 
