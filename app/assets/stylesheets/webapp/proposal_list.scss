@@ -20,3 +20,21 @@
     margin-top: 0;
   }
 }
+
+tr td, tr th{
+  display: none;
+}
+
+
+.beta-list tr td, .beta-list tr th{
+  display: table-cell;
+}
+
+tr td:nth-child(1), tr th:nth-child(1),
+tr td:nth-child(2), tr th:nth-child(2),
+tr td:nth-child(3), tr th:nth-child(3),
+tr td:nth-child(4), tr th:nth-child(4),
+tr td:nth-child(5), tr th:nth-child(5),
+tr td:nth-child(6), tr th:nth-child(6){
+  display: table-cell
+}
