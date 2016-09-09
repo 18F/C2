@@ -41,7 +41,7 @@
           name: "#{current_user.client_model_slug}[client_data.amount]",
           value: @adv_search.value_for("client_data.amount"),
         }
-      .col-xs-5.right.wide
+      .col-xs-5.right.wide.expense-type-search-field
         %label.control-label{for: "#{current_user.client_model_slug}[client_data.expense_type]"}
           Expense Type
         %select.form-control{name: "#{current_user.client_model_slug}[client_data.expense_type]"}
@@ -61,7 +61,7 @@
         Date within
       %select.form-control{name: "#{current_user.client_model_slug}[created_within]"}
         = options_for_select([["Select duration", ""], "1 year", "6 months", "1 month"], params.fetch(current_user.client_model_slug, {})["created_within"] || "")
-    .col-xs-5.right.inline.no-padding-left
+    .col-xs-5.right.inline.no-padding-left.second-col-width
       %label.inline.control-label.list-date-label{for: "#{current_user.client_model_slug}[created_at]"}
         of
       %input.placeholder.short.form-control{ type: "text",
