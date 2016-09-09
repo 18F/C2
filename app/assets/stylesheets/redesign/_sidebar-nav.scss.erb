@@ -310,6 +310,35 @@ li.requests-button:hover {
   border-bottom: 1px solid #71737a;
 }
 
+@-webkit-keyframes fadeIt {
+  0%   { background-color: #FFFFFF; }
+  50%  { background-color: #DBEAF5; }
+  100% { background-color: #C5DCED; }
+}
+@-moz-keyframes fadeIt {
+  0%   { background-color: #FFFFFF; }
+  50%  { background-color: #DBEAF5; }
+  100% { background-color: #C5DCED; }
+}
+@-o-keyframes fadeIt {
+  0%   { background-color: #FFFFFF; }
+  50%  { background-color: #DBEAF5; }
+  100% { background-color: #C5DCED; }
+}
+@keyframes fadeIt {
+  0%   { background-color: #FFFFFF; }
+  50%  { background-color: #DBEAF5; }
+  100% { background-color: #C5DCED; }
+}
+
+.request-related-buttons.active a:before{
+   background-image:none !important;
+    -webkit-animation: fadeIt .3s ease-in-out; 
+       -moz-animation: fadeIt .3s ease-in-out; 
+         -o-animation: fadeIt .3s ease-in-out; 
+            animation: fadeIt .3s ease-in-out; 
+}
+
 
 a.new-request-button,
 a.reports-button{
