@@ -96,8 +96,17 @@
   }
 }
 
+.beta-list .resetter{
+  position: absolute;
+  left: 15px;
+}
+
 .beta-list fieldset.basic.search-container {
     padding: 0px;
+}
+
+.beta-list #adv-search-button{
+  margin-bottom: 0px;
 }
 
 .beta-list{
