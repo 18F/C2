@@ -4,7 +4,7 @@
     %title C2
     = favicon_link_tag
     %meta{"http-equiv" => "content-type", content: "text/html; charset=utf-8"}
-    /[if lte IE 8]
+    = stylesheet_link_tag "redesign/app"
     = stylesheet_link_tag "home"
     = render "layouts/analytics"
     %noscript
