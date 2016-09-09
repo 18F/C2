@@ -23,16 +23,24 @@
         %div
           = render partial: "layouts/user_header"
     .row.full-width-row
-      %section.small-12#header
+      %section.small-12.header
         .small-6.small-centered
           %h1 Approvals Without the Hassle
           %p C2 makes government acquisition more efficient by allowing purchase card holders to purchase as quickly and accurately as possible. The results? More time for your staff, better policy adherence, and the knowledge you need to spend more effectively.
     .row.full-width-row
       %section.small-6.small-centered
         %p Join agencies like the National Capital Region and 18F in reclaiming time from your inbox and simplifying your approvals.
-    .row.full-width-row#get_started
+        %a{href: "http://www.google.com/recaptcha/mailhide/d?k=01ogt_819WwIwW1ynH9oBRyA==&c=fE9b5Up5uMr-1x-8y_Pvc67z-d_YL31mnSOZ86f6A1c=", class: "button primary"} Contact us to get started
+
+
+    .row.full-width-row.get_started
       %section.small-6.small-centered
-        %p Join agencies like the National Capital Region and 18F in reclaiming time from your inbox and simplifying your approvals.
+        %div.screenshot.fl
+          = image_tag "screenshots/reporting.png", alt: "Screenshot: Reporting Dashboard"
+        %div.get_started--descriptor
+          %p
+            %strong Spending Insights
+            &nbsp; make the most of your budget
     .row.full-width-row
       %section.small-6.small-centered
         %p Developers, help us refine our product. Fork us on github.
