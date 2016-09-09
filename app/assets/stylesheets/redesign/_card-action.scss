@@ -147,13 +147,15 @@ $action-bar-wrapper-height-small: 70px;
   }
 }
 
-.action-bar-template{
-  transform: translateY($action-bar-wrapper-height-small);
-  transition: transform .3s ease-in;
-  &.edit-actions,
-  &.view-actions,
-  &.user-can-complete{
-    transform: translateY(0px);
+body.near-fullscreen{
+  .action-bar-template{
+    transform: translateY($action-bar-wrapper-height-small);
+    transition: transform .3s ease-in;
+    &.edit-actions,
+    &.view-actions,
+    &.user-can-complete{
+      transform: translateY(0px);
+    }
   }
 }
 
@@ -164,7 +166,7 @@ $action-bar-wrapper-height-small: 70px;
   }
 }
 
-@media screen and ( min-height: 600px ){
+body.near-fullscreen{
   $action-bar-wrapper-height: 157px;
   .action-bar-status{
     .status-bar{
