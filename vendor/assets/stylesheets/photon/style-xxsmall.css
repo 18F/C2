@@ -1,0 +1,29 @@
+/*
+	Photon by HTML5 UP
+	html5up.net | @n33co
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+*/
+
+/* Basic */
+
+	html, body {
+		min-width: 320px;
+	}
+
+/* Main */
+
+	.main {
+		padding: 2em 1em 0.1em 1em;
+	}
+
+/* Header */
+
+	#header {
+		padding: 3em 1em 3em 1em;
+	}
+
+/* Footer */
+
+	#footer {
+		padding: 2em 1em 2em 1em;
+	}
