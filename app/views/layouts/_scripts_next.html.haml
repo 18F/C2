@@ -1,7 +1,3 @@
-= stylesheet_link_tag "redesign/app"
-= stylesheet_link_tag "redesign/_print", media: "print"
-= stylesheet_link_tag "hint.min.css"
-
 = javascript_include_tag "details/views/view_helper"
 = javascript_include_tag "details/views/action_bar"
 = javascript_include_tag "details/views/attachment_card"
@@ -28,12 +24,6 @@
 
 - unless Rails.env.test?
   = javascript_include_tag "https://www.ethn.io/32631.js", async: true
-
-= stylesheet_link_tag "DataTables/dataTables.foundation.css"
-= stylesheet_link_tag "DataTables/buttons.foundation.css"
-= stylesheet_link_tag "DataTables/fixedColumns.foundation.css"
-= stylesheet_link_tag "DataTables/fixedHeader.foundation.css"
-= stylesheet_link_tag "DataTables/responsive.foundation.css"
 
 = javascript_include_tag "DataTables/jquery.dataTables.js"
 = javascript_include_tag "DataTables/dataTables.foundation.js"

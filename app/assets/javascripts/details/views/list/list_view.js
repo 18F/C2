@@ -45,6 +45,9 @@ ListViewDataTable = (function(){
           stateSaveCallback: function ( settings, data ) {
             self.saveListViewConfig(data);
           },
+          "initComplete": function( settings, json ) {
+            $('body').addClass('datatable-loaded');
+          },
           stateLoadCallback: function ( ) {
             try {
               return self.listViewConfig;

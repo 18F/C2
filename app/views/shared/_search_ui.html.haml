@@ -13,7 +13,7 @@
                   Search
                   %i.fa.fa-search.fa-fw
           #adv-options.form-group
-            %a.btn.btn-default.adv-options
+            %a.btn.btn-default.adv-options{style: "display: none;"}
               %span.plus +
               Advanced options
         = render partial: "shared/search_form"
@@ -29,17 +29,17 @@
   .search
     .row.m-search-ui
       %form.form-horizontal.search{role: "form", action: query_proposals_path, method: "get"}
-        %fieldset.basic
+        %fieldset.basic.search-container
           .form-group.basic
             .input-group
               %input.search-terms.form-control{autocomplete: "off", type: "text", name: "text", value: @text, placeholder: "Search"}
               .input-group-addon.magnifier
                 %i.fa.fa-search.fa-fw
-              .input-group-btn
+              .input-group-btn.hidden
                 %button#search-button.btn.btn-default.btn-primary.search{type: "submit"}
                   Search
                   %i.fa.fa-search.fa-fw
-          #adv-options.form-group
+          #adv-options.form-group{style: "display: none;"}
             %a.btn.btn-default.adv-options
               %span.plus +
               Advanced options

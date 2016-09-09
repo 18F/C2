@@ -51,6 +51,7 @@ span.request-count {
     background: #444754 !important;
     margin: 0px!important;
     border: none!important;
+
   }
   @media screen and (max-width: 60em){
     padding: 0px;
@@ -77,6 +78,7 @@ span.request-count {
     }
   }
   .header-nav{
+    overflow: hidden;
     width: 100%;
   }
   #header-identity{
@@ -148,6 +150,12 @@ span.request-count {
       border-top: 1px solid #71737A;
       .new-features-button{
         border-bottom: 1px solid #71737A;
+      }
+      &.no-hover{
+        background: #444754!important;
+        &:hover{
+          border-bottom-color: #444754 !important;
+        }
       }
       &.button-divider{
         display: block;
@@ -233,6 +241,10 @@ span.request-count {
             outline: none;
           }
           &:hover{
+            a{
+              margin-left: -5px;
+            }
+            margin-left: 15px;
             margin-top: -1px;
             margin-bottom: -1px;
             border-top: 1px solid #71737A;
@@ -250,6 +262,9 @@ span.request-count {
               &:before{
                 background: #DBEAF5;
               }
+              a{
+                margin-left: 10px;
+              }
             }
           }
           &:before {
@@ -260,7 +275,7 @@ span.request-count {
             width: 100%;
             right: 0px;
             @media screen and (min-width: 60em){
-              width: 93%;
+              width: 235px;
             }
           }
         }
@@ -268,7 +283,8 @@ span.request-count {
       width: 100%;
       padding: 0px;
       background: #444754;
-      a{
+      a,
+      span.button-stub{
         text-align: left;
         display: block;
         padding: 20px 20px;
@@ -284,6 +300,60 @@ li.requests-button:hover {
   margin-bottom: -1px;
   border-bottom: 1px solid #71737a;
 }
+
+span.button-stub:hover{
+  border: none!important;
+}
+
+li.requests-button:hover {
+  margin-bottom: -1px;
+  border-bottom: 1px solid #71737a;
+}
+
+@-webkit-keyframes fadeIt {
+  0%   { background-color: #FFFFFF; }
+  100%  { background-color: #DBEAF5; }
+}
+@-moz-keyframes fadeIt {
+  0%   { background-color: #FFFFFF; }
+  100%  { background-color: #DBEAF5; }
+}
+@-o-keyframes fadeIt {
+  0%   { background-color: #FFFFFF; }
+  100%  { background-color: #DBEAF5; }
+}
+@keyframes fadeIt {
+  0%   { background-color: #FFFFFF; }
+  100%  { background-color: #DBEAF5; }
+}
+
+
+
+.controller-proposals.action-index.beta-list{
+  .request-related-button:before{
+    width: 225px !important;
+    -webkit-transition: width .2s;
+            transition: width .2s;
+  }
+  &.datatable-loaded{
+    .request-related-button.active:before{
+       -webkit-transition: width .2s;
+            transition: width .2s;
+      width: 235px !important;
+    } 
+  }
+}
+
+.request-related-button.active:before, 
+.request-related-button.active:hover:before
+{
+   background-image:none !important;
+    -webkit-animation: fadeIt .3s ease-in-out; 
+       -moz-animation: fadeIt .3s ease-in-out; 
+         -o-animation: fadeIt .3s ease-in-out; 
+            animation: fadeIt .3s ease-in-out; 
+}
+
 
 a.new-request-button,
 a.reports-button{

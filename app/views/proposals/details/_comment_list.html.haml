@@ -9,7 +9,7 @@
           - index_class = index == events.count - 1 ? "status-index-last" : "status-index-" + index.to_s
           - classes = "status-#{history_style} #{index_class}"
           - event_render = render partial: event, locals: { event: event }
-          - unless event.nil? || event_list.include?(event_render)
+          - unless event.nil? || (event.event === "update" && event_list.include?(event_render))
             - event_list << event_render
             .medium-12.column.status-feed-wrapper.row.comment{ class: classes }
               .medium-table-row.medium-12.status-feed-item.no-margin-bottom
