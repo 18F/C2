@@ -1,4 +1,6 @@
 %fieldset.adv
+  %a.closer{href: "#"}
+    Close
   .form-group
     %label.control-label{for: "#{current_user.client_model_slug}[status]"}
       Search in
@@ -82,12 +84,9 @@
 
 %fieldset.controls
   .adv-controls.row
-    %a.closer{href: "#"}
-      &times; Close
 
-    %button#adv-search-button.search.btn.btn-default.btn-primary{type: "submit"}
+    %button#adv-search-button.search.button{type: "submit"}
       Search
-      %i.fa.fa-search.fa-fw
 
     .results-count-preview
       %span.count

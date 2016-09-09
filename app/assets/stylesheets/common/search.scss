@@ -96,11 +96,15 @@
   }
 }
 
+.beta-list fieldset.basic.search-container {
+    padding: 0px;
+}
+
 .m-search-ui.expanded {
   background-color: #e3e3e3;
   margin-right: 35px;
   padding-right: 0px;
-  border: 1px solid #ccc;
+  // border: 1px solid #ccc;
   border-radius: 2px;
 
   .input-group-addon.magnifier {
@@ -130,14 +134,6 @@
     padding: 0px 15px;
     margin-bottom: 0px;
 
-    .closer {
-      font-size: 90%;
-      text-decoration: none;
-      display: block;
-      float: left;
-      margin-top: 8px;
-    }
-
     .results-count-preview {
       float: right;
       font-size: 90%;
@@ -149,6 +145,16 @@
     #adv-search-button {
       float: right;
     }
+  }
+
+  .closer {
+    position: absolute;
+    right: 15px;
+    font-size: 90%;
+    text-decoration: none;
+    display: block;
+    float: left;
+    margin-top: 8px;
   }
 }
 
