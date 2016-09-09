@@ -57,7 +57,7 @@ AttachmentCardController = (function(){
   AttachmentCardController.prototype._event = function(){
     var self = this;
     $(document).on("change", self.el.find("input[type='file']"), function(){
-      if (self.el.find("input[type='file']").prop("files").length !== 0){
+      if (self.el.find("input[type='file']").prop("files") && self.el.find("input[type='file']").prop("files").length !== 0){
         self.disableLabel();
         self.appendLoadingFile();
         self.submitForm();
