@@ -81,6 +81,12 @@
 
 %fieldset.controls
   .adv-controls.row
+    .results-count-preview
+      %span.count
+        = search_results_total(@proposals_data)
+      %span
+        results
+  .adv-controls.row
     .form-group
       %a.resetter{href: "#"}
         Reset
@@ -88,8 +94,3 @@
     %button#adv-search-button.search.button{type: "submit"}
       Search
 
-    .results-count-preview
-      %span.count
-        = search_results_total(@proposals_data)
-      %span
-        results
