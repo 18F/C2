@@ -1,0 +1,16 @@
+.home_redesign{
+  section {
+    padding: 4rem 0px;
+  }
+  #header {
+    background-color: map-get($c2blue-swatch, secondary);
+    color: white;
+    p {
+      color: white;
+    }
+  }
+  #get_started {
+    background-color: map-get($c2blue-swatch, quinary);
+
+  }
+}
