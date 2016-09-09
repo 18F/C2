@@ -151,6 +151,12 @@ span.request-count {
       .new-features-button{
         border-bottom: 1px solid #71737A;
       }
+      &.no-hover{
+        background: #444754!important;
+        &:hover{
+          border-bottom: none !important;
+        }
+      }
       &.button-divider{
         display: block;
         width: 82%;
@@ -255,6 +261,9 @@ span.request-count {
             &:hover{
               &:before{
                 background: #DBEAF5;
+              }
+              a{
+                margin-left: -5px;
               }
             }
           }
