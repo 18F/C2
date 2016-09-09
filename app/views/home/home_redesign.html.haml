@@ -21,8 +21,8 @@
           - flash_list.each do |key, value|
             %div{class: "alert alert-#{key} #{bootstrap_alert_class(key)}"}
               = sanitize value
-          .photon-header-nav-container
-            = render "layouts/header_nav"
+          %div
+            = render partial: "layouts/user_header"
           .inner
             %span.icon.major
               = image_tag "img-logo-c2-portal.png", alt: "C2 Logo"

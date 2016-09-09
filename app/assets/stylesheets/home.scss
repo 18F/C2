@@ -14,43 +14,43 @@
  *= require common/button_to
  *= require modules/layouts/header_nav
  */
-// 
-// @import "bootstrap-sprockets";
-// @import "bootstrap";
-//
-// #header{
-//   background-color: #07519B;
-//   color: #07519B;
-//   background-attachment: fixed, fixed,  fixed;
-//   background-position: top left,  center center,  center center;
-//   background-size: auto,  cover,  cover;
-//   overflow: hidden;
-//   position: relative;
-//   text-align: center;
-//   min-height: 388px;
-// }
-//
-// .photon-header-nav-container {
-//   position: absolute;
-//   right: 0;
-//   top: 40px;
-//   z-index: 2;
-//   @media (max-width: 800px) {
-//     position: inherit;
-//     display: block;
-//     top: 0;
-//   }
-// }
-//
-// .alert {
-//   margin-top: -1em;
-//   margin-bottom: 1em;
-//
-//   &.bg-danger, &.bg-warning {
-//     color: #000;
-//   }
-// }
-//
-// section#footer {
-//   padding: 1em 0;
-// }
+
+@import "bootstrap-sprockets";
+@import "bootstrap";
+
+#header{
+  background-color: #07519B;
+  color: #07519B;
+  background-attachment: fixed, fixed,  fixed;
+  background-position: top left,  center center,  center center;
+  background-size: auto,  cover,  cover;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+  min-height: 388px;
+}
+
+.photon-header-nav-container {
+  position: absolute;
+  right: 0;
+  top: 40px;
+  z-index: 2;
+  @media (max-width: 800px) {
+    position: inherit;
+    display: block;
+    top: 0;
+  }
+}
+
+.alert {
+  margin-top: -1em;
+  margin-bottom: 1em;
+
+  &.bg-danger, &.bg-warning {
+    color: #000;
+  }
+}
+
+section#footer {
+  padding: 1em 0;
+}
