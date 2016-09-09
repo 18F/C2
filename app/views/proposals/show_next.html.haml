@@ -1,6 +1,3 @@
-- if !list_view_conditions && detail_view_conditions
-  = render partial: 'layouts/scripts'
-
 - content_for :top_notification do
   = render partial: "proposals/details/top_notification", locals: { proposal: @proposal }
 

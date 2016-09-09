@@ -1,4 +1,6 @@
-%fieldset.adv
+%fieldset.adv{style: "display: none;"}
+  %a.closer{href: "#"}
+    Close
   .form-group
     %label.control-label{for: "#{current_user.client_model_slug}[status]"}
       Search in
@@ -39,7 +41,7 @@
           name: "#{current_user.client_model_slug}[client_data.amount]",
           value: @adv_search.value_for("client_data.amount"),
         }
-      .col-xs-5.right.wide
+      .col-xs-5.right.wide.expense-type-search-field
         %label.control-label{for: "#{current_user.client_model_slug}[client_data.expense_type]"}
           Expense Type
         %select.form-control{name: "#{current_user.client_model_slug}[client_data.expense_type]"}
@@ -59,7 +61,7 @@
         Date within
       %select.form-control{name: "#{current_user.client_model_slug}[created_within]"}
         = options_for_select([["Select duration", ""], "1 year", "6 months", "1 month"], params.fetch(current_user.client_model_slug, {})["created_within"] || "")
-    .col-xs-5.right.inline.no-padding-left
+    .col-xs-5.right.inline.no-padding-left.second-col-width
       %label.inline.control-label.list-date-label{for: "#{current_user.client_model_slug}[created_at]"}
         of
       %input.placeholder.short.form-control{ type: "text",
@@ -76,21 +78,19 @@
         %input{type: "checkbox", name: "#{current_user.client_model_slug}[includes_attachment]", checked: @adv_search.value_for("num_attachments")}
         Includes attachment
 
-  .form-group
-    %a.resetter{href: "#"}
-      Reset search
 
-%fieldset.controls
+%fieldset.controls{style: "display: none;"}
   .adv-controls.row
-    %a.closer{href: "#"}
-      &times; Close
-
-    %button#adv-search-button.search.btn.btn-default.btn-primary{type: "submit"}
-      Search
-      %i.fa.fa-search.fa-fw
-
     .results-count-preview
       %span.count
         = search_results_total(@proposals_data)
       %span
         results
+  .adv-controls.row
+    .form-group
+      %a.resetter{href: "#"}
+        Reset
+
+    %button#adv-search-button.search.button{type: "submit"}
+      Search
+
