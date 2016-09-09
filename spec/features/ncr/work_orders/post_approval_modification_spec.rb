@@ -102,6 +102,24 @@ feature "post-approval modification" do
     expect(page).to have_content("Wait! Updating Amount will require re-approval.")
   end
 
+  scenario "allows you to edit an approved work order on redesign", :js do
+    work_order = create(:ncr_work_order, :with_beta_requester)
+    work_order.setup_approvals_and_observers
+    proposal = work_order.proposal
+    fully_complete(proposal)
+    
+    login_as(proposal.requester)
+    visit proposal_path(proposal)
+    new_amount = work_order.amount + 1
+    click_on "Modify"
+    fill_in "Amount", with: new_amount
+    find(".save-button button").trigger("click")
+    wait_for_ajax
+    click_on "SAVE CHANGES"
+    wait_for_ajax
+    expect(page).to have_content(new_amount)
+  end
+
   def approval_statuses(work_order)
     linear_approval_statuses(work_order.proposal)
   end

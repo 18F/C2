@@ -59,8 +59,8 @@
         Date within
       %select.form-control{name: "#{current_user.client_model_slug}[created_within]"}
         = options_for_select([["Select duration", ""], "1 year", "6 months", "1 month"], params.fetch(current_user.client_model_slug, {})["created_within"] || "")
-    .col-xs-5.right.inline
-      %label.inline.control-label{for: "#{current_user.client_model_slug}[created_at]"}
+    .col-xs-5.right.inline.no-padding-left
+      %label.inline.control-label.list-date-label{for: "#{current_user.client_model_slug}[created_at]"}
         of
       %input.placeholder.short.form-control{ type: "text",
         name: "#{current_user.client_model_slug}[created_at]",

@@ -74,7 +74,7 @@ ActionBarBridge = (function() {
 
   ActionBarBridge.prototype._setupSaveModal = function(){
     var self = this;
-    this.modals.el.on("save_confirm-modal:confirm", function(event, item){
+    this.modals.el.on("save_confirm-modal:confirm reapproval_confirm-modal:confirm", function(event, item){
       var l = $(item).ladda();
       l.ladda( 'start' );
       self.disableModalButtons();
