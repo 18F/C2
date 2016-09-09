@@ -78,12 +78,12 @@
         %input{type: "checkbox", name: "#{current_user.client_model_slug}[includes_attachment]", checked: @adv_search.value_for("num_attachments")}
         Includes attachment
 
-  .form-group
-    %a.resetter{href: "#"}
-      Reset search
 
 %fieldset.controls
   .adv-controls.row
+    .form-group
+      %a.resetter{href: "#"}
+        Reset
 
     %button#adv-search-button.search.button{type: "submit"}
       Search
