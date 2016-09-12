@@ -11,8 +11,20 @@
   }
   .get_started {
     background-color: map-get($c2blue-swatch, quinary);
+    section {
+      border-bottom: 1px solid map-get($c2black-swatch, quaternary);
+      &:last-child {
+        border-bottom: none;
+      }
+    }
     img {
       max-width: 260px;
+    }
+    .descriptor {
+      p {
+        margin-left: 20rem;
+        margin-top: 3rem;
+      }
     }
   }
 }
