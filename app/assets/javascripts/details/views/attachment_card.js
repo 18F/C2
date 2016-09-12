@@ -63,9 +63,9 @@ AttachmentCardController = (function(){
         var fileName = "";
         if(e.target.files.length > 0){
           fileName = e.target.files[0].name;
-          $(this).cloest('label').addClass('disabled');
+          $(this).closest('label').addClass('disabled');
         } else {
-          $(this).cloest('label').removeClass('disabled');
+          $(this).closest('label').removeClass('disabled');
         }
         $(this).closest('li').find('.file-name').html(fileName)
       });

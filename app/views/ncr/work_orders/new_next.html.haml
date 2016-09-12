@@ -40,11 +40,13 @@
               = field_set_tag "" do
                 %ul.attachments{ data: { add_minus: true } }
                   - Ncr::WorkOrdersController::MAX_UPLOADS_ON_NEW.times do
-                    %li
+                    %li.attachment-button-wrap
                       %label.button.primary.attach-icon.large.attachment-label
-                        Attach a File 
+                        Attach a File
                         = image_tag  "attachment.png", :class => "attachment-icon"
                         = file_field_tag "attachments[]", { style: "display: none;" }
+                      %p.file-name
+
 
 
   = render partial: "proposals/details/save_action", locals: { proposal: @proposal }
