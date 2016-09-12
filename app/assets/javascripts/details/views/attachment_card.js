@@ -56,13 +56,21 @@ AttachmentCardController = (function(){
 
   AttachmentCardController.prototype._event = function(){
     var self = this;
-    $(document).on("change", self.el.find("input[type='file']"), function(){
-      if (self.el.find("input[type='file']").prop("files") && self.el.find("input[type='file']").prop("files").length !== 0){
-        self.disableLabel();
-        self.appendLoadingFile();
-        self.submitForm();
-      }
-    })
+    var $body = $("body");
+    if($body.hasClass('action-new')){
+      $('input[type="file"]').change(function(e){
+        var fileName = e.target.files[0].name;
+        alert('The file "' + fileName +  '" has been selected.');
+      });
+    } else if($body.hasClass('action-show')) {
+      $(document).on("change", self.el.find("input[type='file']"), function(){
+        if (self.el.find("input[type='file']").prop("files") && self.el.find("input[type='file']").prop("files").length !== 0){
+          self.disableLabel();
+          self.appendLoadingFile();
+          self.submitForm();
+        }
+      })
+    }
   }
 
 
