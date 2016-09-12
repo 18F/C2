@@ -7,6 +7,7 @@
   margin-left: 10px;
 }
 
+
 .m-search-ui {
   z-index: 100;
   position: absolute;
@@ -96,11 +97,38 @@
   }
 }
 
+.expense-type-search-field, .second-col-width{
+  width: 240px;
+}
+
+.beta-list .form-control {
+    height: 2.4375rem;
+}
+
+.beta-list .resetter{
+  position: absolute;
+  left: 15px;
+}
+
+.beta-list fieldset.basic.search-container {
+    padding: 0px;
+}
+
+.beta-list #adv-search-button{
+  margin-bottom: 0px;
+}
+
+.beta-list{
+  fieldset.adv .form-group .col-xs-5.right.wide {
+    padding-left: 38px;
+  }
+}
+
 .m-search-ui.expanded {
   background-color: #e3e3e3;
   margin-right: 35px;
   padding-right: 0px;
-  border: 1px solid #ccc;
+  // border: 1px solid #ccc;
   border-radius: 2px;
 
   .input-group-addon.magnifier {
@@ -119,7 +147,7 @@
 
   fieldset.controls {
     padding: 15px 0px 15px 15px;
-    background-color: #f5f5f5;
+    background-color: #f2f2f2;
   }
 
   .resetter {
@@ -129,17 +157,11 @@
   .adv-controls {
     padding: 0px 15px;
     margin-bottom: 0px;
-
-    .closer {
-      font-size: 90%;
-      text-decoration: none;
-      display: block;
-      float: left;
-      margin-top: 8px;
-    }
+    padding-bottom: 10px;
+    padding-right: 20px;
 
     .results-count-preview {
-      float: right;
+      float: left;
       font-size: 90%;
       font-weight: bold;
       margin-top: 8px;
@@ -148,7 +170,18 @@
 
     #adv-search-button {
       float: right;
+      min-width: 130px;
     }
+  }
+
+  .closer {
+    position: absolute;
+    right: 15px;
+    font-size: 90%;
+    text-decoration: none;
+    display: block;
+    float: left;
+    margin-top: 0px;
   }
 }
 
@@ -249,6 +282,7 @@ fieldset.adv {
   }
 
   fieldset.adv {
+    padding-top: 5px;
     .form-group.row > * {
       float: left;
       display: block;

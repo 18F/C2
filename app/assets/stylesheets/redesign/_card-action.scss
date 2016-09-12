@@ -187,6 +187,8 @@ $action-bar-wrapper-height-small: 70px;
 
 .action-bar-status{
   .notification-bar-el{
+    padding-left: 35px;
+    padding-right: 35px;
     min-height: 65px;
     background: map-get($c2success-swatch, primary);
     color: #494949;

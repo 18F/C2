@@ -3,17 +3,20 @@
     %div
       .row.column#comments
         - index = 0
+        - event_list = []
         - events.reverse.each do |event|
           - history_style = index > 4 ? "contracted" : "expanded"
           - index_class = index == events.count - 1 ? "status-index-last" : "status-index-" + index.to_s
           - classes = "status-#{history_style} #{index_class}"
-          - if !event.nil?
+          - event_render = render partial: event, locals: { event: event }
+          - unless event.nil? || (event.event === "update" && event_list.include?(event_render))
+            - event_list << event_render
             .medium-12.column.status-feed-wrapper.row.comment{ class: classes }
               .medium-table-row.medium-12.status-feed-item.no-margin-bottom
                 .hide-for-small-only.medium-table-cell.medium-activity-icon-col.background-color-column
                   .dot-circle
                 .medium-table-cell.medium-auto-column.status-feed-content
-                  = render partial: event, locals: { event: event }
+                  = event_render
             - index = index + 1
 
 - if events.length > 5
