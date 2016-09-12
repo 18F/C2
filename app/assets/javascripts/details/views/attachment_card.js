@@ -59,12 +59,19 @@ AttachmentCardController = (function(){
     var $body = $("body");
     if($body.hasClass('action-new')){
       $('input[type="file"]').change(function(e){
-        var fileName = e.target.files[0].name;
-        alert('The file "' + fileName +  '" has been selected.');
+        console.log(this);
+        var fileName = "";
+        if(e.target.files.length > 0){
+          fileName = e.target.files[0].name;
+          $(this).cloest('label').addClass('disabled');
+        } else {
+          $(this).cloest('label').removeClass('disabled');
+        }
+        $(this).closest('li').find('.file-name').html(fileName)
       });
     } else if($body.hasClass('action-show')) {
       $(document).on("change", self.el.find("input[type='file']"), function(){
-        if (self.el.find("input[type='file']").prop("files") && self.el.find("input[type='file']").prop("files").length !== 0){
+        if (self.el.find("input[type='file']").prop("files").length !== 0){
           self.disableLabel();
           self.appendLoadingFile();
           self.submitForm();
