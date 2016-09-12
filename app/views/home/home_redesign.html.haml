@@ -11,17 +11,21 @@
     = render "layouts/analytics"
     %noscript
   %body.home_redesign
-    .row
+    .row.full-width-row
       -# = render "layouts/c2_header_next"
       - unless ENV["DISABLE_SANDBOX_WARNING"] == "true"
         .small-12
           = render partial: "shared/sandbox_warning"
-      .small-12
         - flash_list.each do |key, value|
-          %div{class: "alert alert-#{key} #{bootstrap_alert_class(key)}"}
+          %div{class: "alert alert-box alert-#{key} small-12"}
             = sanitize value
-        %div
-          = render partial: "layouts/user_header"
+      .small-6.small-centered.menu
+        %ul.primary.fl
+          %li
+            %a{:href => "/"} Help
+          %li
+            %a{:href => "/"} New Features
+        = render partial: "layouts/user_header"
     .row.full-width-row
       %section.small-12.header
         .small-6.small-centered
@@ -29,8 +33,13 @@
           %p C2 makes government acquisition more efficient by allowing purchase card holders to purchase as quickly and accurately as possible. The results? More time for your staff, better policy adherence, and the knowledge you need to spend more effectively.
     .row.full-width-row
       %section.small-6.small-centered
-        %p Join agencies like the National Capital Region and 18F in reclaiming time from your inbox and simplifying your approvals.
-        %a{href: "http://www.google.com/recaptcha/mailhide/d?k=01ogt_819WwIwW1ynH9oBRyA==&c=fE9b5Up5uMr-1x-8y_Pvc67z-d_YL31mnSOZ86f6A1c=", class: "button primary"} Contact us to get started
+        %p
+          Join agencies like the
+          %a{href:'http://www.gsa.gov/portal/content/104717'}National Capital Region
+          and
+          %a{href:'https://18f.gsa.gov/'}18F 
+          in reclaiming time from your inbox and simplifying your approvals.
+        %a{href: "http://www.google.com/recaptcha/mailhide/d?k=01ogt_819WwIwW1ynH9oBRyA==&c=fE9b5Up5uMr-1x-8y_Pvc67z-d_YL31mnSOZ86f6A1c=", class: "button primary large"} Contact us to get started
 
 
     .row.full-width-row.get_started
@@ -57,4 +66,6 @@
             make the most of your budget
     .row.full-width-row
       %section.small-6.small-centered
-        %p Developers, help us refine our product. Fork us on github.
+        %p
+          Developers, help us refine our product.
+          %a{href:'https://github.com/18F/C2'}Fork us on github.

@@ -2,6 +2,37 @@
   section {
     padding: 4rem 0px;
   }
+  .menu {
+    .primary {
+      margin-left: 0;
+      li {
+        display: inline;
+        font-size: 14px;
+        &:last-child {
+          margin-left: 7px;
+        }
+      }
+    }
+    .user-link-wrap {
+      max-width: 75%;
+      .button_to {
+        display: inline;
+        input[type="submit"] {
+          font-size: 14px;
+          text-decoration: none;
+          color: #4a4a4a;
+          background: transparent;
+          border: 0;
+          padding: 0;
+          box-shadow: none;
+          -webkit-transition: none;
+          transition: none;
+          text-transform: none;
+          font-weight: inherit;
+        }
+      }
+    }
+  }
   .header {
     background-color: map-get($c2blue-swatch, secondary);
     color: white;
