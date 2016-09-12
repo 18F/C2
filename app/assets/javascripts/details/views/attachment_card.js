@@ -59,7 +59,6 @@ AttachmentCardController = (function(){
     var $body = $("body");
     if($body.hasClass('action-new')){
       $('input[type="file"]').change(function(e){
-        console.log(this);
         var fileName = "";
         if(e.target.files.length > 0){
           fileName = e.target.files[0].name;
