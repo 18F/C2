@@ -132,7 +132,8 @@
           = f.input :not_to_exceed,
             collection: [["Exact", false], ["Not to exceed", true]],
             label: false,
-            include_blank: false
+            include_blank: false, 
+            input_html: { class: "js-selectize" }
 
     .column.medium-5
       .detail-edit
