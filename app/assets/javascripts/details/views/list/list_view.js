@@ -57,7 +57,7 @@ ListViewDataTable = (function(){
           }
       };
       this.dataTable = this.el.DataTable(config);
-  
+
       this.statusColumn = this.dataTable.column(':contains(Status)');
       this._events();
       this.prepList();
@@ -85,7 +85,7 @@ ListViewDataTable = (function(){
 
   ListViewDataTable.prototype.renderConfig = function(){
     var config = [];
-    var count = this.el.find('thead th').length - 1;  
+    var count = this.el.find('thead th').length - 1;
     for (var i = count - 1; i >= 0; i--) {
       if (i === 0 || i === 1 || i === 5){ continue; }
       var el = {
@@ -121,7 +121,7 @@ ListViewDataTable = (function(){
       if(!$(el).parents('.public_id').length && !$(el).hasClass('public_id')){
         var link = $(this).closest('tr').find('a').first().attr('href');
         if(link){
-          window.location.href = link;  
+          window.location.href = link;
         }
       }
     });
@@ -163,7 +163,7 @@ ListViewDataTable = (function(){
   }
 
   ListViewDataTable.prototype.viewPending = function(){
-    this.statusColumn.search('Waiting for review from').draw();
+    this.statusColumn.search('Waiting for|Pending|Please review|Please purchase', true, false, true).draw();
   }
 
   ListViewDataTable.prototype.viewCanceled = function(){

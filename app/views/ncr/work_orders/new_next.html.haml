@@ -28,7 +28,7 @@
                 value_method: :id,
                 prompt: :translate,
                 input_html: { class: "js-selectize required" }
-  .medium-12.column.edit-mode.new-form-wrapper
+  .medium-12.column.edit-mode.new-form-wrapper#card-for-attachments
     .card#attachments-ard
       - if @client_data_instance
         .card-head.column
@@ -40,8 +40,13 @@
               = field_set_tag "" do
                 %ul.attachments{ data: { add_minus: true } }
                   - Ncr::WorkOrdersController::MAX_UPLOADS_ON_NEW.times do
-                    %li
-                      = file_field_tag "attachments[]"
+                    %li.attachment-button-wrap
+                      %label.button.primary.attach-icon.large.attachment-label
+                        Attach a File
+                        = image_tag  "attachment.png", :class => "attachment-icon"
+                        = file_field_tag "attachments[]", { style: "display: none;" }
+                      %p.file-name
+
 
 
   = render partial: "proposals/details/save_action", locals: { proposal: @proposal }

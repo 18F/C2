@@ -10,9 +10,11 @@ ActionBar = (function() {
   ActionBar.prototype._setup = function() {
     this._event();
     this.setMode('view');
+    this.checkIfFullScreen();
   };
 
   ActionBar.prototype._event = function() {
+    var self = this;
     this.saveButton = this.el.find( '.save-button button' );
     this.saveButton.ladda( 'bind' );
     this.saveButtonLadda = this.saveButton.ladda();
@@ -20,7 +22,20 @@ ActionBar = (function() {
     this._setupActionBarClicked('cancel');
     this._setupActionBarClicked('edit');
     this._saveTriggered();
+    
+    $(window).smartresize(function(){
+      self.checkIfFullScreen();
+    });
+
   };
+
+  ActionBar.prototype.checkIfFullScreen = function() {
+    if(screen.height < window.innerHeight + 200){
+      $("body").addClass('near-fullscreen');
+    } else {
+      $("body").removeClass('near-fullscreen');
+    }
+  }
 
   /**
    * .on("action-bar-clicked:save")

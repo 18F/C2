@@ -22,7 +22,7 @@
   .detail-wrapper.row{ class: "expense_type" + "-wrapper" }
     .detail-edit.column
       %label.detail-element
-        = t(t_slug + "expense_type") 
+        = t(t_slug + "expense_type")
       %span.detail-value
         = field_set_tag "", { class: "expense-type required" } do
           = expense_type_radio_button(f, "BA60")
@@ -66,7 +66,7 @@
   .detail-wrapper.row{ class: "ncr_organization" + "-wrapper" }
     .detail-edit.column
       %label.detail-element{ for: "ncr_organization_code" }
-        = t(t_slug + "ncr_organization") 
+        = t(t_slug + "ncr_organization")
       %span.detail-value
         = f.association :ncr_organization,
           as: :select,
@@ -83,30 +83,6 @@
       %span.detail-value
         = f.input :vendor,
           input_html: { class: "js-selectize required", data: { initial: JSON.generate(vendor_options(@client_data_instance.vendor)) }}, label: false
-
-.column{ id: "soc_code" + '-wrapper'}
-  .detail-wrapper.row{ class: "soc_code" + "-wrapper" }
-    .detail-edit.column
-      %label.detail-element{ for: "ncr_work_order_soc_code"}
-        = t(t_slug + "soc_code")
-      %span.detail-value
-        = f.input :soc_code, label: false
-
-.column{ id: "function_code" + '-wrapper'}
-  .detail-wrapper.row{ class: "function_code" + "-wrapper" }
-    .detail-edit.column
-      %label.detail-element{ for: "ncr_work_order_function_code" }
-        = t(t_slug + "function_code")
-      %span.detail-value
-        = f.input :function_code, label: false
-
-.column{ id: "cl_number" + '-wrapper'}
-  .detail-wrapper.row{ class: "cl_number" + "-wrapper" }
-    .detail-edit.column
-      %label.detail-element
-        = t(t_slug + "cl_number")
-      %span.detail-value
-        = f.input :cl_number, label: false
 
 .column{ id: "direct_pay" + '-wrapper'}
   .detail-wrapper.row{ class: "direct_pay" + "-wrapper" }
