@@ -87,7 +87,7 @@ p.popup-content-desc{
   position: absolute;
   bottom:20px;
   right: 25px;
-  &:hover{
+  &:hover, &:focus{
     color: #ffffff;
   }
 }
