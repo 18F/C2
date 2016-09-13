@@ -20,12 +20,23 @@
           %div{class: "alert alert-box alert-#{key} small-12"}
             = sanitize value
       .small-6.small-centered.menu
-        %ul.primary.fl
+        - if signed_in?
+          %ul.primary.fl
+            %li
+              = link_to "Requests", proposals_path
+            = render client_specific_partial(current_user, "header_links")
+            %li
+              = link_to current_user.email_address, profile_path
+            - if current_user.any_admin?
+              %li
+                %a#summary-link{:href => "/summary"} Summary
+            %li
+              = button_to "Logout", "/logout", method: :post, class: "login-link"
+        %ul.secondary.fl
           %li
-            %a{:href => "/"} Help
+            %a{:href => "/help"} Help
           %li
-            %a{:href => "/"} New Features
-        = render partial: "layouts/user_header"
+            %a{:href => "/help/new_features"} New Features
     .row.full-width-row
       %section.small-12.header
         .small-6.small-centered
