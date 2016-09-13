@@ -133,7 +133,7 @@ feature "Proposals index" do
         @page.load
 
         expect(@page.pending.requests[0].public_id_link.text).to eq purchase_proposal.public_id
-        expect(@page.pending.requests[0].status.text).to eq "Waiting for purchase from: #{purchaser.full_name}"
+        expect(@page.pending.requests[0].status.text).to eq "Pending Waiting for purchase from: #{purchaser.full_name}"
       end
     end
   end
