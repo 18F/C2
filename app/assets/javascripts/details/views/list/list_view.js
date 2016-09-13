@@ -163,7 +163,7 @@ ListViewDataTable = (function(){
   }
 
   ListViewDataTable.prototype.viewPending = function(){
-    this.statusColumn.search('Waiting for|Pending|review').draw();
+    this.statusColumn.search('Waiting for|Pending|Please review|Please purchase').draw();
   }
 
   ListViewDataTable.prototype.viewCanceled = function(){

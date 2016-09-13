@@ -28,7 +28,10 @@ en:
         completed: "Purchased"
         status:
           please_act: "Please purchase"
-          waiting: "Waiting for purchase from:"
+          waiting: |
+            Pending
+
+            Waiting for purchase from:
     gsa18f/procurement:
       amount: "Total"
       additional_info: "Additional Info"
