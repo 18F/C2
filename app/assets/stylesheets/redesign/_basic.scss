@@ -72,7 +72,7 @@ label.button.secondary
 {
   border: 1px solid $primary-color;
   color: $primary-color;
-  &:hover{
+  &:hover, &:focus{
     color: white;
     background: $primary-color;
   }
