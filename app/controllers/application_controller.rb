@@ -134,6 +134,7 @@ class ApplicationController < ActionController::Base
   def sign_in(user)
     session[:user] ||= {}
     session[:user]["email"] = user.email_address
+    user.check_beta_state
     @current_user = user
   end
 

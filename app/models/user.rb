@@ -161,6 +161,13 @@ class User < ActiveRecord::Base
     end
   end
 
+  def check_beta_state
+    if ENV["REDESIGN_DEFAULT_VIEW"] == "true" && !in_beta_program?
+      add_role(ROLE_BETA_USER)
+      add_role(ROLE_BETA_ACTIVE)
+    end
+  end
+
   def not_admin?
     !admin?
   end
