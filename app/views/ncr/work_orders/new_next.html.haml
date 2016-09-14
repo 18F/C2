@@ -23,11 +23,12 @@
                 disabled: @client_data_instance.proposal.approver_email_frozen?,
                 collection: scoped_approver_options(@client_data_instance.ineligible_approvers),
                 as: :select,
-                label: false,
+                label: "Approving Official",
                 label_method: :email_address,
                 value_method: :id,
                 prompt: :translate,
-                input_html: { class: "js-selectize required" }
+                input_html: { class: "js-selectize required" },
+                label_html: { class: "sr-only" }
   .medium-12.column.edit-mode.new-form-wrapper#card-for-attachments
     .card#attachments-ard
       - if @client_data_instance

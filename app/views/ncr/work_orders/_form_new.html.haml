@@ -5,7 +5,7 @@
 .column{ id: "project_title" + '-wrapper'}
   .detail-wrapper.row{ class: "project_title-wrapper" }
     .detail-edit.column
-      %label.detail-element
+      %label.detail-element{ for: "ncr_work_order_project_title" }
         = t(t_slug + "project_title")
       %span.detail-value
         = f.input :project_title, label: false
@@ -13,7 +13,7 @@
 .column{ id: "description" + '-wrapper'}
   .detail-wrapper.row{ class: "description-wrapper" }
     .detail-edit.column
-      %label.detail-element
+      %label.detail-element{ for: "ncr_work_order_description" }
         = t(t_slug + "description")
       %span.detail-value
         = f.input :description, label: false
@@ -21,17 +21,19 @@
 .column{ id: "expense_type" + '-wrapper-1'}
   .detail-wrapper.row{ class: "expense_type" + "-wrapper" }
     .detail-edit.column
-      %label.detail-element
-        = t(t_slug + "expense_type")
-      %span.detail-value
-        = field_set_tag "", { class: "expense-type required" } do
-          = expense_type_radio_button(f, "BA60")
-          = expense_type_radio_button(f, "BA61")
-          = expense_type_radio_button(f, "BA80")
-          = f.input :emergency,
-            disabled: @client_data_instance.persisted?,
-            wrapper_html: { data: { filter_key: "expense-type", filter_value: "BA61" } },
-            input_html: { class: "respect-disabled", value: @client_data_instance.emergency }
+      %fieldset
+        %legend
+          %label.detail-element
+            = t(t_slug + "expense_type")
+        %span.detail-value
+          = field_set_tag "", { class: "expense-type required" } do
+            = expense_type_radio_button(f, "BA60")
+            = expense_type_radio_button(f, "BA61")
+            = expense_type_radio_button(f, "BA80")
+            = f.input :emergency,
+              disabled: @client_data_instance.persisted?,
+              wrapper_html: { data: { filter_key: "expense-type", filter_value: "BA61" } },
+              input_html: { class: "respect-disabled", value: @client_data_instance.emergency }
 
 
 .column{ class: "rwa_number" + "-wrapper half-col-wrap sub-card sub-card-left", id: "rwa_number" + '-wrapper-3', data: {"filter-key": "expense-type", "filter-value": "BA80"}}
@@ -78,7 +80,7 @@
 .column{ id: "vendor" + '-wrapper'}
   .detail-wrapper.row{ class: "vendor" + "-wrapper" }
     .detail-edit.column
-      %label.detail-element
+      %label.detail-element{ for: "ncr_work_order_vendor" }
         = t(t_slug + "vendor")
       %span.detail-value
         = f.input :vendor,
@@ -108,7 +110,8 @@
           = f.input :not_to_exceed,
             collection: [["Exact", false], ["Not to exceed", true]],
             label: false,
-            include_blank: false
+            include_blank: false,
+            input_html: { "aria-label" => "Total" }
 
     .column.medium-5
       .detail-edit
@@ -116,6 +119,7 @@
         %span.detail-value
           = f.input :amount,
             as: :currency,
-            label_html: { class: "sr-only" }
+            label_html: { class: "sr-only" },
+            input_html: { "aria-label" => "Total" }
     .column.medium-2
 
