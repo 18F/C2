@@ -58,10 +58,12 @@ span.request-count {
     width: 100%;
     li:not(.request-related-button),
     .request-related-button.active{
-      a{
-        // margin-left: 10px !important;
-        &:before{
-          background: #C5DCED;
+      a:before{
+        background: #C5DCED;
+      }
+      &:hover{
+        a:before{
+          background: #DBEAF5;
         }
       }
     }
