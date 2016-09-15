@@ -59,6 +59,7 @@ gem "simple_form"
 gem "simple_form_object"
 gem "sprockets-rails", "< 3" # https://github.com/jfirebaugh/konacha/issues/216
 gem "uglifier"
+gem "useragent"
 gem "validates_email_format_of"
 gem "workflow"
 

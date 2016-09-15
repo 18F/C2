@@ -523,6 +523,7 @@ GEM
       json (>= 1.8.0)
     uniform_notifier (1.9.0)
     user_agent_parser (2.3.0)
+    useragent (0.16.8)
     uuidtools (2.1.5)
     validates_email_format_of (1.6.3)
       i18n
@@ -629,13 +630,14 @@ DEPENDENCIES
   test_after_commit
   timecop
   uglifier
+  useragent
   validates_email_format_of
   webmock
   workflow
   zonebie
 
 RUBY VERSION
-   ruby 2.2.5p319
+   ruby 2.3.1p112
 
 BUNDLED WITH
-   1.12.5
+   1.13.0
