@@ -10,4 +10,8 @@
         = t(t_slug + key)
       %span.detail-value
         = f.input :building_number,
-          input_html: { class: "js-selectize required", data: { initial: JSON.generate(building_options) }, "data-reapproval" => reapproval }, label: false
+          input_html: { class: "js-selectize required", 
+          data: { initial: JSON.generate(building_options) },
+          "data-reapproval" => reapproval },
+          label: "Building Number",
+          label_html: { class: "sr-only" }
