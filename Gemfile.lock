@@ -523,7 +523,6 @@ GEM
       json (>= 1.8.0)
     uniform_notifier (1.9.0)
     user_agent_parser (2.3.0)
-    useragent (0.16.8)
     uuidtools (2.1.5)
     validates_email_format_of (1.6.3)
       i18n
@@ -556,6 +555,7 @@ DEPENDENCIES
   awesome_print
   aws-sdk (~> 2.2.15)
   blazer
+  browser
   browser-timezone-rails
   bullet
   capybara
@@ -630,7 +630,6 @@ DEPENDENCIES
   test_after_commit
   timecop
   uglifier
-  useragent
   validates_email_format_of
   webmock
   workflow
