@@ -56,23 +56,13 @@ span.request-count {
   @media screen and (max-width: 60em){
     padding: 0px;
     width: 100%;
-    li:not(.request-related-button),
     .request-related-button.active{
-      a{
-        margin-left: 0px !important;
-        &:before{
-          background: #C5DCED;
-        }
+      a:before{
+        background: #C5DCED;
       }
       &:hover{
-        a{
-          &:before{
-            margin-top: -1px;
-            margin-bottom: -1px;
-            border-top: 1px solid #DBEAF5;
-            border-bottom: 1px solid #DBEAF5;
-            background: #DBEAF5;
-          }
+        a:before{
+          background: #DBEAF5;
         }
       }
     }
@@ -331,27 +321,31 @@ li.requests-button:hover {
 
 .controller-proposals.action-index.beta-list{
   .request-related-button:before{
-    width: 225px !important;
-    -webkit-transition: width .2s;
-            transition: width .2s;
+    @media screen and (min-width: 60em){
+      width: 225px !important;
+      -webkit-transition: width .2s;
+              transition: width .2s;
+    }
   }
   &.datatable-loaded{
     .request-related-button.active:before{
        -webkit-transition: width .2s;
             transition: width .2s;
-      width: 235px !important;
-    } 
+      @media screen and (min-width: 60em){
+        width: 235px !important;
+      }
+    }
   }
 }
 
-.request-related-button.active:before, 
+.request-related-button.active:before,
 .request-related-button.active:hover:before
 {
    background-image:none !important;
-    -webkit-animation: fadeIt .3s ease-in-out; 
-       -moz-animation: fadeIt .3s ease-in-out; 
-         -o-animation: fadeIt .3s ease-in-out; 
-            animation: fadeIt .3s ease-in-out; 
+    -webkit-animation: fadeIt .3s ease-in-out;
+       -moz-animation: fadeIt .3s ease-in-out;
+         -o-animation: fadeIt .3s ease-in-out;
+            animation: fadeIt .3s ease-in-out;
 }
 
 
