@@ -10,4 +10,7 @@
         = t(t_slug + key)
       %span.detail-value
         = f.input :vendor,
-          input_html: { class: "js-selectize required", data: { initial: JSON.generate(vendor_options(@client_data_instance.vendor)) }}, label: false
+          input_html: { class: "js-selectize required",
+          data: { initial: JSON.generate(vendor_options(@client_data_instance.vendor)) }},
+          label: "Vendor",
+          label_html: { class: "sr-only" }

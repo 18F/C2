@@ -9,8 +9,13 @@
         .row
           .medium-12.column
             %h3.hide-for-print
-              = t(".comment_form.headline")
-            = text_area_tag "comment_text_content", nil, rows: 5, placeholder: "#{t('.comment_form.placeholder')}", name: "comment[comment_text]"
+              %label{ for: "comment_text_content" }
+                = t(".comment_form.headline")
+            = text_area_tag "comment_text_content",
+              nil,
+              rows: 5,
+              placeholder: "#{t('.comment_form.placeholder')}",
+              name: "comment[comment_text]"
         .row
           .medium-12.column.text-right.request-history-wrapper
             = button_tag t(".button.send"), id: "add_a_comment", data: {"disable-if-empty" => "comment_text_content"}, class: "button primary round no-margin-bottom"

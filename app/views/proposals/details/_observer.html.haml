@@ -9,9 +9,13 @@
         - if policy(Observation.new(proposal: @proposal)).can_create?
           .row
             .medium-12.column
+              = label_tag "observation_user_id", 
+                "add an observer",
+                class: "sr-only"
               = select_tag "observation[user][id]",
                 options_from_collection_for_select( proposal.eligible_observers, :id, :email_address),
-                class: "js-selectize observation-input", include_blank: true
+                class: "js-selectize observation-input", include_blank: true,
+                "aria-label" => "Add an Observer"
               = label :reason,
                 "Reason for adding observer (optional): ",
                 data: { "hide-until-select" => "observation_user_id" }

@@ -6,7 +6,7 @@
       %span.detail-value
         = client_field
     .detail-edit.column
-      %label.detail-element
+      %label.detail-element{ for: "ncr_work_order_cl_number"}
         = t(t_slug + key)
       %span.detail-value
         = f.input :cl_number, label: false

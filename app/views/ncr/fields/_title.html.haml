@@ -5,4 +5,6 @@
       %span.detail-value
         = @client_data_instance.project_title
       %span.detail-edit
-        = f.input :project_title, label: false
+        = f.input :project_title, 
+        label: "Project Title",
+        label_html: { class: "sr-only" }
