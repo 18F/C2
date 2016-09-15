@@ -22,8 +22,7 @@ class ClientDataController < ApplicationController
   def create
     if errors.empty?
       create_client_data
-      @flash_manager.show(flash, "success", "Proposal submitted!")
-      redirect_to proposal
+      redirect_to proposal, flash: { success: "Proposal submitted!" }
     else
       flash_now = FlashWithNow.new
       flash_now.show(flash, "error", errors)

@@ -1,8 +1,10 @@
 .row.full-width-row.content-parent
   = render "layouts/c2_header_next"
-  - unless ENV["DISABLE_SANDBOX_WARNING"] == "true"
-    .large-12
+  .large-12.banner-container
+    - unless ENV["DISABLE_SANDBOX_WARNING"] == "true"
       = render partial: "shared/sandbox_warning"
+    - unless ENV["DISABLE_BROWSER_WARNING"] == "true"
+      = render partial: "shared/browser_warning"
   .medium-9.column.large-12.medium-offset-3.large-offset-2.content-main-wrapper
     = render partial: "layouts/user_header"
     = content_for?(:content) ? yield(:content) : yield
