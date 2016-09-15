@@ -59,7 +59,7 @@ class ApplicationMailer < ActionMailer::Base
   end
 
   def add_completed_icon(proposal)
-    if proposal.individual_steps.completed.any?
+    if proposal.individual_steps.completed.any? && proposal.individual_steps.length > 1
       add_inline_number_icon_attachment("icon-completed.png")
     end
   end
