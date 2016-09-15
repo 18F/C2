@@ -1,0 +1,6 @@
+- browser = Browser.new(request.env["HTTP_USER_AGENT"])
+- if !browser.webkit?
+	%div{class: "banner-element"}
+		%span
+			This website is optimized for moden web browsers.
+			%a{href: "https://google.com/chrome"} Download Chrome. 
