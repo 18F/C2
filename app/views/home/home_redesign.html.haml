@@ -19,7 +19,7 @@
         - flash_list.each do |key, value|
           %div{class: "alert alert-box alert-#{key} small-12"}
             = sanitize value
-      .small-6.small-centered.menu
+      .small-10.medium-6.small-centered.menu
         - if signed_in?
           %ul.primary.fl
             %li
@@ -39,11 +39,11 @@
             %a{:href => "/help/new_features"} New Features
     .row.full-width-row
       %section.small-12.header
-        .small-6.small-centered
+        .small-10.medium-6.small-centered
           %h1 Approvals Without the Hassle
           %p C2 makes government acquisition more efficient by allowing purchase card holders to purchase as quickly and accurately as possible. The results? More time for your staff, better policy adherence, and the knowledge you need to spend more effectively.
     .row.full-width-row
-      %section.small-6.small-centered
+      %section.small-10.medium-6.small-centered
         %p
           Join agencies like the
           %a{href:'http://www.gsa.gov/portal/content/104717'}National Capital Region
@@ -54,29 +54,29 @@
 
 
     .row.full-width-row.get_started
-      %section.small-6.small-centered
-        %div.screenshot.fl
+      %section.small-10.medium-6.small-centered
+        %div.screenshot
           = image_tag "screenshots/custom_intake.png", alt: "Screenshot: Custom intake"
         %div.descriptor
           %p
             %strong Custom intake
             capture the data you care about
-      %section.small-6.small-centered
-        %div.screenshot.fl
+      %section.small-10.medium-6.small-centered
+        %div.screenshot
           = image_tag "screenshots/centralized_approval_flow.png", alt: "Screenshot: Centralized approval flow"
         %div.descriptor
           %p
             %strong Centralized approval flow
             securely manages all your records
-      %section.small-6.small-centered
-        %div.screenshot.fl
+      %section.small-10.medium-6.small-centered
+        %div.screenshot
           = image_tag "screenshots/spending_insights.png", alt: "Screenshot: Spending insights"
         %div.descriptor
           %p
             %strong Spending insights
             make the most of your budget
     .row.full-width-row
-      %section.small-6.small-centered
+      %section.small-10.medium-6.small-centered
         %p
           Developers, help us refine our product.
           %a{href:'https://github.com/18F/C2'}Fork us on github.

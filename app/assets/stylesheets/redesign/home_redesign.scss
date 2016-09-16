@@ -16,7 +16,8 @@
       input[type="submit"] {
         font-size: 14px;
         text-decoration: none;
-        color: map-get($c2blue-swatch, primary);;
+        color: map-get($c2blue-swatch, primary);
+        text-align: left;
         background: transparent;
         border: 0;
         padding: 0;
@@ -43,13 +44,22 @@
         border-bottom: none;
       }
     }
+    .screenshot {
+      @include breakpoint(medium) {
+        float: left;
+      }
+    }
     img {
       max-width: 260px;
     }
     .descriptor {
       p {
-        margin-left: 20rem;
-        margin-top: 3rem;
+        max-width: 260px;
+        margin-top: 1rem;
+        @include breakpoint(medium) {
+          margin-left: 20rem;
+          margin-top: 3rem;
+        }
       }
     }
   }
