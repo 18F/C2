@@ -9,12 +9,12 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
- *= require common/header
- *= require common/sandbox_banner
- *= require common/button_to
  *= require modules/layouts/header_nav
  */
 
+@import "common/header";
+@import "common/sandbox_banner";
+@import "common/button_to";
 @import "bootstrap-sprockets";
 @import "bootstrap";
 
