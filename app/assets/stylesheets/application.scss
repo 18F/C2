@@ -11,8 +11,8 @@
  *= require_self
  *= require normalize
  *= require peek
- *= require "webapp"
- *= require "common"
+ *= require webapp
+ *= require common
  *= require peek/views/performance_bar
  *= require ladda/ladda-themeless.min
  */

@@ -7,6 +7,11 @@ body{
   position: relative;
 }
 
+.beta-list .form-group.contains-field{
+  margin-left: -0.9375rem;
+  margin-right: -0.9375rem;
+}
+
 body.beta-list{
   background: #f7f7f7;
 }
@@ -18,6 +23,21 @@ body.beta-list{
 
 .content-parent #footer{
   margin-top: 1em;
+}
+
+.input-group-addon.magnifier {
+  width: 1%;
+  white-space: nowrap;
+  vertical-align: middle;
+  display: table-cell;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1;
+  text-align: center;
+  border-top: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
 }
 
 a.button{
