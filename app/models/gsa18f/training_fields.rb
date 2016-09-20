@@ -5,13 +5,7 @@ module Gsa18f
     end
 
     def relevant(recurring)
-      fields = default
-
-      if recurring
-        fields += [:recurring, :recurring_interval, :recurring_length]
-      end
-
-      fields
+      default
     end
 
     private
@@ -20,16 +14,19 @@ module Gsa18f
 
     def default
       [
-        :additional_info,
-        :cost_per_unit,
-        :date_requested,
-        :justification,
-        :link_to_product,
-        :office,
-        :product_name_and_description,
-        :purchase_type,
-        :quantity,
-        :urgency
+       :duty_station,
+       :supervisor_id,
+       :title_of_training,
+       :training_provider,
+       :purpose,
+       :justification,
+       :link,
+       :instructions,
+       :NFS_form,
+       :cost_per_unit,
+       :estimated_travel_expenses,
+       :start_date,
+       :end_date
       ]
     end
   end

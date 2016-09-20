@@ -41,13 +41,13 @@ module Gsa18f
     include ClientDataMixin
     include PurchaseCardMixin
 
-    validates :cost_per_unit, presence: true
-    validates :quantity, numericality: {
-      greater_than_or_equal_to: 1
-    }, presence: true
-    validates :product_name_and_description, presence: true
-    validates :purchase_type, presence: true
-    validates :recurring_interval, presence: true, if: :recurring
+    # validates :cost_per_unit, presence: true
+    # validates :quantity, numericality: {
+    #   greater_than_or_equal_to: 1
+    # }, presence: true
+    # validates :product_name_and_description, presence: true
+    # validates :purchase_type, presence: true
+    # validates :recurring_interval, presence: true, if: :recurring
 
     def initialize_steps
       steps = [
@@ -57,8 +57,12 @@ module Gsa18f
       proposal.add_initial_steps(steps)
     end
 
+    def product_name_and_description
+      title_of_training
+    end
+
     def total_price
-      (cost_per_unit * quantity) || 0.0
+      (cost_per_unit) || 0.0
     end
 
     # may be replaced with paper-trail or similar at some point
@@ -75,7 +79,7 @@ module Gsa18f
     end
 
     def urgency_string
-      URGENCY[urgency]
+      ""
     end
 
     def public_identifier
