@@ -30,7 +30,6 @@ gem "elasticsearch-rails-ha", "~> 1.0.5"
 gem "email_reply_parser"
 gem "factory_girl_rails"
 gem "faker"
-gem "font-awesome-sass"
 gem "foreman", require: false
 gem "has_secure_token"
 gem "haml"
