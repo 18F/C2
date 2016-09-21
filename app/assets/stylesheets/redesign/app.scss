@@ -1,9 +1,10 @@
 @charset 'utf-8';
 
+@import 'forms';
+@import 'normalize';
 @import 'foundation_custom';
 @import 'global';
 @import 'header';
-@import 'forms';
 @import 'input-group';
 @import 'card';
 @import 'card-summary';
