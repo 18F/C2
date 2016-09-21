@@ -48,13 +48,13 @@ module Gsa18f
     # validates :product_name_and_description, presence: true
     # validates :purchase_type, presence: true
     # validates :recurring_interval, presence: true, if: :recurring
-
-    def initialize_steps
-      steps = [
-        Steps::Approval.new(user: User.for_email(Gsa18f::Procurement.approver_email)),
-        Steps::Purchase.new(user: User.for_email(Gsa18f::Procurement.purchaser_email(purchase_type)))
+    def steps_list
+      [
+        Steps::Approval.new(user: User.for_email(Gsa18f::Procurement.approver_email))
       ]
-      proposal.add_initial_steps(steps)
+    end
+    def initialize_steps
+      proposal.add_initial_steps(steps_list)
     end
 
     def product_name_and_description
@@ -95,24 +95,15 @@ module Gsa18f
     end
 
     def self.purchaser_email(request_type = nil)
-      if request_type == "Micropurchase"
-        user_with_role("gsa18f_micropurchase_purchaser").email_address
-      else
-        user_with_role("gsa18f_purchaser").email_address
-      end
+      user_with_role("gsa18f_purchaser").email_address
     end
 
     def self.user_with_role(role_name)
-      users = User.active.with_role(role_name).where(client_slug: "gsa18f")
-      if users.empty?
-        fail "Missing User with role #{role_name} -- did you run rake db:migrate and rake db:seed?"
-      end
-
-      users.first
+      Gsa18f::Procurement.user_with_role(role_name)
     end
 
     def self.permitted_params(params, _procurement_instance)
-      permitted = Gsa18f::TrainingFields.new.relevant(params[:gsa18f_training][:recurring])
+      permitted = Gsa18f::TrainingFields.new.relevant
       params.require(:gsa18f_training).permit(*permitted)
     end
   end

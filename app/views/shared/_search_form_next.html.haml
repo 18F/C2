@@ -1,0 +1,104 @@
+%fieldset.adv{style: "display: none;"}
+  %a.closer{href: "#"}
+    Close
+  .form-group
+    %label.control-label{for: "#{current_user.client_model_slug}[status]"}
+      Search in
+    %select.form-control{name: "#{current_user.client_model_slug}[status]", id: "#{current_user.client_model_slug}[status]"}
+      = proposal_status_options(@adv_search.value_for("status"))
+  .form-group
+    %label.control-label{for: "#{current_user.client_model_slug}[requester]"}
+      Requester Name or Email
+    %input.form-control{ type: "text",
+      name: "#{current_user.client_model_slug}[requester]",
+      id: "#{current_user.client_model_slug}[requester]",
+      value: @adv_search.value_for("requester"),
+    }
+  .form-group
+    %label.control-label{for: "#{current_user.client_model_slug}[client_data.vendor]"}
+      Vendor Name
+    %input.form-control{ type: "text",
+      name: "#{current_user.client_model_slug}[client_data.vendor]",
+      id: "#{current_user.client_model_slug}[client_data.vendor]",
+      value: @adv_search.value_for("client_data.vendor"),
+    }
+
+  / TODO: Refactor this code which chooses between 18F vs. NCR
+  - if current_user.client_model.expense_type_options.any?
+    .form-group
+      %label.control-label{for: "select_org_code"}
+        Org Code
+      %select.form-control{name: "#{current_user.client_model_slug}[client_data.ncr_organization_id]", id: "select_org_code"}
+        = proposal_org_code_options(@adv_search.value_for("client_data.ncr_organization_id"))
+    .form-group
+      %label.control-label{for: "select_building_number"}
+        Building Number
+      %select.form-control{name: "#{current_user.client_model_slug}[client_data.building_number]", id: "select_building_number"}
+        = proposal_building_number_options(@adv_search.value_for("client_data.building_number"))
+    .form-group.contains-field
+      .medium-6.column
+        %label.control-label{for: "#{current_user.client_model_slug}[client_data.amount]"}
+          Amount
+        %input.form-control{ type: "text",
+          name: "#{current_user.client_model_slug}[client_data.amount]",
+          id: "#{current_user.client_model_slug}[client_data.amount]",
+          value: @adv_search.value_for("client_data.amount"),
+        }
+      .medium-6.column
+        %label.control-label{for: "#{current_user.client_model_slug}[client_data.expense_type]"}
+          Expense Type
+        %select.form-control{name: "#{current_user.client_model_slug}[client_data.expense_type]",
+        id: "#{current_user.client_model_slug}[client_data.expense_type]"}
+          = proposal_expense_type_options(current_user.client_model, @adv_search.value_for("client_data.expense_type"))
+  - else
+    .form-group
+      %label.control-label{for: "#{current_user.client_model_slug}[client_data.amount]"}
+        Amount
+      %input.form-control{ type: "text",
+        name: "#{current_user.client_model_slug}[client_data.amount]",
+        id: "#{current_user.client_model_slug}[client_data.amount]",
+        value: @adv_search.value_for("client_data.amount"),
+      }
+
+  .form-group.contains-field
+    .medium-6.column
+      %label.control-label{for: "#{current_user.client_model_slug}[created_within]"}
+        Date within
+      %select.form-control{name: "#{current_user.client_model_slug}[created_within]",
+      id: "#{current_user.client_model_slug}[created_within]",
+      }
+        = options_for_select([["Select duration", ""], "1 year", "6 months", "1 month"], params.fetch(current_user.client_model_slug, {})["created_within"] || "")
+    .medium-6.column
+      %label.inline.control-label.list-date-label{for: "#{current_user.client_model_slug}[created_at]"}
+        of
+      %input.placeholder.short.form-control{ type: "text",
+        name: "#{current_user.client_model_slug}[created_at]",
+        value: created_at_time_string(@adv_search.value_for("created_at")),
+        placeholder: "now",
+        onfocus: 'this.type="date"',
+        onblur: 'this.type="text"',
+        "aria-label" => "date",
+      }
+
+  .form-group
+    .checkbox
+      %label
+        %input{type: "checkbox", name: "#{current_user.client_model_slug}[includes_attachment]", checked: @adv_search.value_for("num_attachments")}
+        Includes attachment
+
+
+%fieldset.controls{style: "display: none;"}
+  .adv-controls.row
+    .results-count-preview
+      %span.count
+        = search_results_total(@proposals_data)
+      %span
+        results
+  .adv-controls.row
+    .form-group
+      %a.resetter{href: "#"}
+        Reset
+
+    %button#adv-search-button.search.button{type: "submit"}
+      Search
+

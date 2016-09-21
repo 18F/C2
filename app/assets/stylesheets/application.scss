@@ -10,16 +10,10 @@
  *
  *= require_self
  *= require normalize
- *= require selectize.bootstrap3
  *= require peek
+ *= require webapp
+ *= require common
+ *= require selectize.bootstrap3
  *= require peek/views/performance_bar
  *= require ladda/ladda-themeless.min
- *= require_tree ./common
- *= require_tree ./webapp
  */
-
-@import "bootstrap-sprockets";
-@import "bootstrap";
-
-@import "font-awesome-sprockets";
-@import "font-awesome";

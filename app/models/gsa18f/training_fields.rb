@@ -4,7 +4,7 @@ module Gsa18f
       @training = training
     end
 
-    def relevant(recurring)
+    def relevant
       default
     end
 
@@ -14,19 +14,10 @@ module Gsa18f
 
     def default
       [
-       :duty_station,
-       :supervisor_id,
-       :title_of_training,
-       :training_provider,
-       :purpose,
-       :justification,
-       :link,
-       :instructions,
-       :NFS_form,
-       :cost_per_unit,
-       :estimated_travel_expenses,
-       :start_date,
-       :end_date
+        :duty_station, :supervisor_id, :title_of_training,
+        :training_provider, :purpose, :justification,
+        :link, :instructions, :NFS_form, :cost_per_unit,
+        :estimated_travel_expenses, :start_date, :end_date
       ]
     end
   end

@@ -1,3 +1,8 @@
+.form-group.contains-field{
+  margin-left: -0.9375rem;
+  margin-right: -0.9375rem;
+}
+
 .medium-table-row{
   display: table;
 }
@@ -5,6 +10,20 @@
 .medium-table-cell{
   float: none !important;
   display: table-cell;
+}
+
+.beta-list .m-search-ui .adv .form-group{
+  margin-bottom: .5em;
+  clear: both;
+  .checkbox{
+    padding-top: 15px;
+  }
+}
+
+label[for='ncr_work_order[created_at]'] {
+    margin-left: -30px;
+    margin-bottom: -30px;
+    padding-top: 30px;
 }
 
 .background-color-column{

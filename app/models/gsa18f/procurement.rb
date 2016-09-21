@@ -49,12 +49,15 @@ module Gsa18f
     validates :purchase_type, presence: true
     validates :recurring_interval, presence: true, if: :recurring
 
-    def initialize_steps
-      steps = [
+    def steps_list
+      [
         Steps::Approval.new(user: User.for_email(Gsa18f::Procurement.approver_email)),
         Steps::Purchase.new(user: User.for_email(Gsa18f::Procurement.purchaser_email(purchase_type)))
       ]
-      proposal.add_initial_steps(steps)
+    end
+
+    def initialize_steps
+      proposal.add_initial_steps(steps_list)
     end
 
     def total_price
