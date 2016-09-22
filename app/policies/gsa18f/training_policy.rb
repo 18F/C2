@@ -13,11 +13,18 @@ module Gsa18f
     alias can_new! can_create!
 
     def can_cancel!
-      not_canceled! && check((approver? || delegate? || requester? || admin?) && !purchaser?, I18n.t("errors.policies.gsa18f.cancel_permission"))
+      not_canceled! && check_user_statuses
     end
     alias can_cancel_form! can_cancel!
 
     protected
+
+    def check_user_statuses
+      check(
+        (approver? || delegate? || requester? || admin?) && !purchaser?,
+        I18n.t("errors.policies.gsa18f.cancel_permission")
+      )
+    end
 
     def purchaser?
       @training.purchaser == @user
