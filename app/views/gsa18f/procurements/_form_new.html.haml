@@ -49,6 +49,23 @@
           %span.detail-value
             = f.input :quantity, label: false, input_html: { step: 1 }
     .column.medium-2
+.column{ id: "is_tock_billable" + '-wrapper'}
+  .detail-wrapper.row{ class: "is_tock_billable" }
+    .detail-edit.column
+      %label.detail-element
+        = t(t_slug + "is_tock_billable")
+      %span.detail-value
+        = f.input :is_tock_billable, label: false, input_html: { "data-filter-control" => "is_tock_billable" }
+        %div{ "data-filter-key" => "is_tock_billable", "data-filter-value" => 1 }
+.column{ id: "tock_project" + '-wrapper'}
+  .row{ "data-filter-key" => "is_tock_billable", "data-filter-value" => 1 }
+    .column.medium-5
+      .detail-wrapper.row{ class: "tock_project-wrapper" }
+        .detail-edit.column
+          %label.detail-element
+            = t(t_slug + "tock_project")
+          %span.detail-value
+            = f.input :tock_project, label: false
 .column{ id: "recurring" + '-wrapper'}
   .detail-wrapper.row{ class: "recurring-wrapper" }
     .detail-edit.column
