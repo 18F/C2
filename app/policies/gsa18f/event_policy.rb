@@ -1,5 +1,5 @@
 module Gsa18f
-  class TrainingPolicy < ProposalPolicy
+  class EventPolicy < ProposalPolicy
     include GsaPolicy
 
     def initialize(user, record)

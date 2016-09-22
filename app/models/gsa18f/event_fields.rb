@@ -1,7 +1,7 @@
 module Gsa18f
-  class TrainingFields
-    def initialize(training = nil)
-      @training = training
+  class EventFields
+    def initialize(event = nil)
+      @event = event
     end
 
     def relevant
@@ -10,12 +10,12 @@ module Gsa18f
 
     private
 
-    attr_reader :training
+    attr_reader :event
 
     def default
       [
-        :duty_station, :supervisor_id, :title_of_training,
-        :training_provider, :purpose, :justification,
+        :name, :duty_station, :supervisor_id, :title_of_event,
+        :event_provider, :purpose, :justification,
         :link, :instructions, :NFS_form, :cost_per_unit,
         :estimated_travel_expenses, :start_date, :end_date
       ]

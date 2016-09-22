@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160921183933) do
+ActiveRecord::Schema.define(version: 20160922210540) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -149,6 +149,24 @@ ActiveRecord::Schema.define(version: 20160921183933) do
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
+  create_table "gsa18f_events", force: :cascade do |t|
+    t.string   "duty_station"
+    t.integer  "supervisor_id"
+    t.string   "title_of_training"
+    t.string   "training_provider"
+    t.string   "purpose"
+    t.string   "justification"
+    t.string   "link"
+    t.string   "instructions"
+    t.string   "nfs_form"
+    t.decimal  "cost_per_unit"
+    t.decimal  "estimated_travel_expenses"
+    t.date     "start_date"
+    t.date     "end_date"
+    t.datetime "updated_at"
+    t.datetime "created_at"
+  end
+
   create_table "gsa18f_procurements", force: :cascade do |t|
     t.text     "office"
     t.text     "justification",                            default: "",      null: false
@@ -165,24 +183,6 @@ ActiveRecord::Schema.define(version: 20160921183933) do
     t.datetime "updated_at"
     t.integer  "urgency"
     t.integer  "purchase_type",                                              null: false
-  end
-
-  create_table "gsa18f_trainings", force: :cascade do |t|
-    t.string   "duty_station"
-    t.integer  "supervisor_id"
-    t.string   "title_of_training"
-    t.string   "training_provider"
-    t.string   "purpose"
-    t.string   "justification"
-    t.string   "link"
-    t.string   "instructions"
-    t.string   "nfs_form"
-    t.decimal  "cost_per_unit"
-    t.decimal  "estimated_travel_expenses"
-    t.date     "start_date"
-    t.date     "end_date"
-    t.datetime "updated_at"
-    t.datetime "created_at"
   end
 
   create_table "ncr_organizations", force: :cascade do |t|

@@ -1,5 +1,5 @@
 module Gsa18f
-  class TrainingDecorator < Draper::Decorator
+  class EventDecorator < Draper::Decorator
     delegate_all
 
     def client_code

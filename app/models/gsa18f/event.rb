@@ -4,7 +4,7 @@ module Gsa18f
     "gsa18f_"
   end
 
-  class Training < ActiveRecord::Base
+  class Event < ActiveRecord::Base
     URGENCY = {
       10 => "I need it yesterday",
       20 => "I'm patient but would like w/in a week",
@@ -50,7 +50,7 @@ module Gsa18f
     # validates :recurring_interval, presence: true, if: :recurring
     def steps_list
       [
-        Steps::Approval.new(user: User.for_email(Gsa18f::Training.approver_email))
+        Steps::Approval.new(user: User.for_email(Gsa18f::Event.approver_email))
       ]
     end
 
@@ -104,8 +104,8 @@ module Gsa18f
     end
 
     def self.permitted_params(params, _procurement_instance)
-      permitted = Gsa18f::TrainingFields.new.relevant
-      params.require(:gsa18f_training).permit(*permitted)
+      permitted = Gsa18f::EventFields.new.relevant
+      params.require(:gsa18f_event).permit(*permitted)
     end
   end
 end
