@@ -29,6 +29,8 @@ module Gsa18f
         :product_name_and_description,
         :purchase_type,
         :quantity,
+        :is_tock_billable,
+        :tock_project,
         :urgency
       ]
     end
