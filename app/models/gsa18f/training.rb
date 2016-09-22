@@ -1,15 +1,15 @@
 module Gsa18f
   # Make sure all table names use 'gsa18f_XXX'
   def self.table_name_prefix
-    'gsa18f_'
+    "gsa18f_"
   end
 
   class Training < ActiveRecord::Base
     URGENCY = {
       10 => "I need it yesterday",
       20 => "I'm patient but would like w/in a week",
-      30 => "Whenever",
-    }
+      30 => "Whenever"
+    }.freeze
 
     OFFICES = [
       "DC",
@@ -17,10 +17,10 @@ module Gsa18f
       "Dayton",
       "New York",
       "San Francisco",
-      "Me! (Remote Worker)",
-    ]
+      "Me! (Remote Worker)"
+    ].freeze
 
-    RECURRENCE = ["Daily", "Monthly", "Yearly"]
+    RECURRENCE = %w(Daily Monthly Yearly).freeze
 
     PURCHASE_TYPES = {
       "Software" => 0,
@@ -28,7 +28,7 @@ module Gsa18f
       "Office Supply/Miscellaneous" => 2,
       "Hardware" => 3,
       "Micropurchase" => 5,
-      "Other" => 4,
+      "Other" => 4
     }.freeze
 
     enum purchase_type: PURCHASE_TYPES
@@ -50,9 +50,10 @@ module Gsa18f
     # validates :recurring_interval, presence: true, if: :recurring
     def steps_list
       [
-        Steps::Approval.new(user: User.for_email(Gsa18f::Procurement.approver_email))
+        Steps::Approval.new(user: User.for_email(Gsa18f::Training.approver_email))
       ]
     end
+
     def initialize_steps
       proposal.add_initial_steps(steps_list)
     end
@@ -62,7 +63,7 @@ module Gsa18f
     end
 
     def total_price
-      (cost_per_unit) || 0.0
+      cost_per_unit || 0.0
     end
 
     # may be replaced with paper-trail or similar at some point
@@ -94,7 +95,7 @@ module Gsa18f
       user_with_role("gsa18f_approver").email_address
     end
 
-    def self.purchaser_email(request_type = nil)
+    def self.purchaser_email
       user_with_role("gsa18f_purchaser").email_address
     end
 

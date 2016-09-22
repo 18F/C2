@@ -10,15 +10,12 @@ module Gsa18f
     def can_create!
       super && gsa_if_restricted!
     end
-    alias_method :can_new!, :can_create!
+    alias can_new! can_create!
 
     def can_cancel!
-      not_canceled! && check(
-        (approver? || delegate? || requester? || admin?) && !purchaser?,
-        I18n.t("errors.policies.gsa18f.cancel_permission")
-      )
+      not_canceled! && check((approver? || delegate? || requester? || admin?) && !purchaser?, I18n.t("errors.policies.gsa18f.cancel_permission"))
     end
-    alias_method :can_cancel_form!, :can_cancel!
+    alias can_cancel_form! can_cancel!
 
     protected
 
