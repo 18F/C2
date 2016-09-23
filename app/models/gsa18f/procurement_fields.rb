@@ -11,7 +11,7 @@ module Gsa18f
         fields += [:recurring, :recurring_interval, :recurring_length]
       end
 
-      fields
+      fields += [:is_tock_billable, :tock_project]
     end
 
     private
@@ -29,8 +29,6 @@ module Gsa18f
         :product_name_and_description,
         :purchase_type,
         :quantity,
-        :is_tock_billable,
-        :tock_project,
         :urgency
       ]
     end
