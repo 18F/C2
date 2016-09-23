@@ -12,9 +12,9 @@ feature "View Gsa18F procurement" do
   end
 
   scenario "requester cant see tock_project unless is_tock_billable is true" do
-    create_and_visit_proposal_beta
-    visit proposal_path(proposal)
+    proposal = create_and_visit_proposal_beta
     expect(page).not_to have_content("Tock Project")
+    js_activate_modify_proposal
     js_modify_checkbox
     expect(page).to have_content("Tock Project")
     visit proposal_path(proposal)
@@ -39,5 +39,6 @@ feature "View Gsa18F procurement" do
     proposal = procurement.proposal
     login_as(proposal.requester)
     visit proposal_path(proposal)
+    return proposal
   end
 end
