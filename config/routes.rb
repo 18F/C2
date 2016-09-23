@@ -74,6 +74,7 @@ C2::Application.routes.draw do
 
   namespace :gsa18f do
     resources :procurements, except: [:index, :destroy]
+    resources :events, except: [:index, :destroy]
     get "/dashboard" => "dashboard#index"
   end
 

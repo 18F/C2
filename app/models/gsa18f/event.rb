@@ -1,15 +1,15 @@
 module Gsa18f
   # Make sure all table names use 'gsa18f_XXX'
   def self.table_name_prefix
-    'gsa18f_'
+    "gsa18f_"
   end
 
-  class Procurement < ActiveRecord::Base
+  class Event < ActiveRecord::Base
     URGENCY = {
       10 => "I need it yesterday",
       20 => "I'm patient but would like w/in a week",
-      30 => "Whenever",
-    }
+      30 => "Whenever"
+    }.freeze
 
     OFFICES = [
       "DC",
@@ -17,10 +17,10 @@ module Gsa18f
       "Dayton",
       "New York",
       "San Francisco",
-      "Me! (Remote Worker)",
-    ]
+      "Me! (Remote Worker)"
+    ].freeze
 
-    RECURRENCE = ["Daily", "Monthly", "Yearly"]
+    RECURRENCE = %w(Daily Monthly Yearly).freeze
 
     PURCHASE_TYPES = {
       "Software" => 0,
@@ -28,7 +28,7 @@ module Gsa18f
       "Office Supply/Miscellaneous" => 2,
       "Hardware" => 3,
       "Micropurchase" => 5,
-      "Other" => 4,
+      "Other" => 4
     }.freeze
 
     enum purchase_type: PURCHASE_TYPES
@@ -41,18 +41,16 @@ module Gsa18f
     include ClientDataMixin
     include PurchaseCardMixin
 
-    validates :cost_per_unit, presence: true
-    validates :quantity, numericality: {
-      greater_than_or_equal_to: 1
-    }, presence: true
-    validates :product_name_and_description, presence: true
-    validates :purchase_type, presence: true
-    validates :recurring_interval, presence: true, if: :recurring
-
+    # validates :cost_per_unit, presence: true
+    # validates :quantity, numericality: {
+    #   greater_than_or_equal_to: 1
+    # }, presence: true
+    # validates :product_name_and_description, presence: true
+    # validates :purchase_type, presence: true
+    # validates :recurring_interval, presence: true, if: :recurring
     def steps_list
       [
-        Steps::Approval.new(user: User.for_email(Gsa18f::Procurement.approver_email)),
-        Steps::Purchase.new(user: User.for_email(Gsa18f::Procurement.purchaser_email(purchase_type)))
+        Steps::Approval.new(user: User.for_email(Gsa18f::Event.approver_email))
       ]
     end
 
@@ -60,8 +58,12 @@ module Gsa18f
       proposal.add_initial_steps(steps_list)
     end
 
+    def product_name_and_description
+      title_of_training
+    end
+
     def total_price
-      (cost_per_unit * quantity) || 0.0
+      cost_per_unit || 0.0
     end
 
     # may be replaced with paper-trail or similar at some point
@@ -78,7 +80,7 @@ module Gsa18f
     end
 
     def urgency_string
-      URGENCY[urgency]
+      ""
     end
 
     def public_identifier
@@ -93,26 +95,17 @@ module Gsa18f
       user_with_role("gsa18f_approver").email_address
     end
 
-    def self.purchaser_email(request_type = nil)
-      if request_type == "Micropurchase"
-        user_with_role("gsa18f_micropurchase_purchaser").email_address
-      else
-        user_with_role("gsa18f_purchaser").email_address
-      end
+    def self.purchaser_email
+      user_with_role("gsa18f_purchaser").email_address
     end
 
     def self.user_with_role(role_name)
-      users = User.active.with_role(role_name).where(client_slug: "gsa18f")
-      if users.empty?
-        fail "Missing User with role #{role_name} -- did you run rake db:migrate and rake db:seed?"
-      end
-
-      users.first
+      Gsa18f::Procurement.user_with_role(role_name)
     end
 
     def self.permitted_params(params, _procurement_instance)
-      permitted = Gsa18f::ProcurementFields.new.relevant(params[:gsa18f_procurement][:recurring])
-      params.require(:gsa18f_procurement).permit(*permitted)
+      permitted = Gsa18f::EventFields.new.relevant
+      params.require(:gsa18f_event).permit(*permitted)
     end
   end
 end

@@ -1,0 +1,15 @@
+- time = client_field
+- if !time.blank? && time != "--"
+  - time = client_field.strftime("%b %d, %Y")
+.column.half-col-wrap{ id: key + '-wrapper'}
+  .detail-wrapper.row{ class: key + "-wrapper", id: value_id }
+    .detail-display.column
+      %label.detail-element
+        = t(t_slug + key)
+      %span.detail-value
+        = time
+    .detail-edit.column
+      %label.detail-element
+        = t(t_slug + key)
+      %span.detail-value
+        = f.input :start_date, as: :date, html5: true, label: false
