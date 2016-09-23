@@ -35,12 +35,13 @@ module Gsa18f
         [translated_key("tock_project"), object.tock_project],
         [translated_key("link_to_product"), object.link_to_product],
         [translated_key("additional_info"), object.additional_info],
+        [translated_key("pegasys_document_number"), object.pegasys_document_number],
         [translated_key("cost_per_unit"), object.cost_per_unit]
       ] + recurring_fields
     end
 
     def new_display
-      %w(purchase_type office date_requested urgency quantity cost_per_unit link_to_product justification additional_info is_tock_billable tock_project recurring recurring_interval recurring_length total_price)
+      %w(purchase_type office date_requested urgency quantity cost_per_unit link_to_product justification additional_info is_tock_billable tock_project pegasys_document_number recurring recurring_interval recurring_length total_price)
     end
 
     def top_email_field
