@@ -32,9 +32,6 @@ module Gsa18f
       %w(purchase_type office date_requested urgency quantity cost_per_unit link_to_product justification additional_info is_tock_billable tock_project recurring recurring_interval recurring_length total_price)
     end
 
-    def top_email_field
-    end
-
     def translated_key(key)
       I18n.t("decorators.gsa18f/procurement.#{key}")
     end
