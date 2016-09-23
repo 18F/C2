@@ -11,7 +11,7 @@ feature "View Gsa18F procurement" do
     expect(page).to have_content(procurement.purchase_type)
   end
 
-  scenario "requester cant see tock_project unless is_tock_billable is true" do
+  scenario "requester cant see tock_project unless is_tock_billable is true", js: true do
     proposal = create_and_visit_proposal_beta
     visit proposal_path(proposal)
     expect(page).not_to have_content("Tock Project")
@@ -36,7 +36,7 @@ feature "View Gsa18F procurement" do
 
   def create_and_visit_proposal_beta
     requester = create(:user, client_slug: "gsa18f")
-    procurement = create(:gsa18f_procurement, :with_steps, requester: requester)
+    procurement = create(:gsa18f_procurement, :with_steps, requester: requester, urgency: 10)
     proposal = procurement.proposal
     login_as(proposal.requester)
     visit proposal_path(proposal)
