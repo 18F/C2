@@ -7,7 +7,7 @@ module Gsa18f
     end
 
     def email_display
-      translate_strings email_display_fields
+      translate_strings(email_display_fields)
     end
 
     def email_display_fields
@@ -15,7 +15,7 @@ module Gsa18f
     end
 
     def display
-      translate_strings new_display
+      translate_strings(new_display)
     end
 
     def translate_strings element_array
@@ -35,6 +35,5 @@ module Gsa18f
     def translated_key(key)
       I18n.t("decorators.gsa18f/procurement.#{key}")
     end
-
   end
 end
