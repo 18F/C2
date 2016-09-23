@@ -73,9 +73,9 @@ default: &DEFAULT
     function_code:
       header: Function
       display: client_data.function_code
-    soc_code:
-      header: SOC
-      display: client_data.soc_code
+    pegasys_document_number:
+      header: Pegasys
+      display: client_data.pegasys_document_number
   columns:
     - public_id
     - name
@@ -113,3 +113,4 @@ gsa18f:
     - created_at
     - urgency
     - purchase_type
+    - pegasys_document_number
