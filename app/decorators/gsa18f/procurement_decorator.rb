@@ -14,6 +14,9 @@ module Gsa18f
       %w(purchase_type date_requested quantity urgency cost_per_unit office total_price justification link_to_product additional_info)
     end
 
+    def top_email_field
+    end
+
     def display
       translate_strings(new_display)
     end
