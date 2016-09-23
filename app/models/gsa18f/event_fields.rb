@@ -14,10 +14,11 @@ module Gsa18f
 
     def default
       [
-        :name, :duty_station, :supervisor_id, :title_of_event,
-        :event_provider, :purpose, :justification,
-        :link, :instructions, :NFS_form, :cost_per_unit,
-        :estimated_travel_expenses, :start_date, :end_date
+        :duty_station, :supervisor_id, :title_of_event,
+        :event_provider, :type_of_event, :cost_per_unit,
+        :start_date, :end_date, :purpose, :justification, 
+        :link, :instructions, :free_event, :nfs_form, 
+        :travel_required, :estimated_travel_expenses
       ]
     end
   end

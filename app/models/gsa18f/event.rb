@@ -59,7 +59,7 @@ module Gsa18f
     end
 
     def product_name_and_description
-      title_of_training
+      title_of_event
     end
 
     def total_price

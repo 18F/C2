@@ -1,6 +1,6 @@
 - f = @form
-- content_for :title, "18F Training"
-- t_slug = "decorators." + "gsa18f" + "/training."
+- content_for :title, "18F Events"
+- t_slug = "decorators." + "gsa18f" + "/event."
 
 .column{ id: "duty_station-wrapper"}
   .detail-wrapper.row{ class: "duty_station-wrapper"}
@@ -20,14 +20,42 @@
   .detail-wrapper.row{ class: "duty_station-wrapper"}
     .detail-edit.column
       %span.detail-value
-        = f.input :title_of_training,
+        = f.input :title_of_event,
          label_html: { class: "detail-element" }
 
 .column{ id: "duty_station-wrapper"}
   .detail-wrapper.row{ class: "duty_station-wrapper"}
     .detail-edit.column
       %span.detail-value
-        = f.input :training_provider,
+        = f.input :event_provider,
+         label_html: { class: "detail-element" }
+
+.column{ id: "duty_station-wrapper"}
+  .detail-wrapper.row{ class: "duty_station-wrapper"}
+    .detail-edit.column
+      %span.detail-value
+        = f.input :type_of_event,
+         label_html: { class: "detail-element" }
+
+.column{ id: "duty_station-wrapper"}
+  .detail-wrapper.row{ class: "duty_station-wrapper"}
+    .detail-edit.column
+      %span.detail-value
+        = f.input :cost_per_unit,
+         label_html: { class: "detail-element" }
+
+.column{ id: "duty_station-wrapper"}
+  .detail-wrapper.row{ class: "duty_station-wrapper"}
+    .detail-edit.column
+      %span.detail-value
+        = f.input :start_date,
+         label_html: { class: "detail-element" }
+
+.column{ id: "duty_station-wrapper"}
+  .detail-wrapper.row{ class: "duty_station-wrapper"}
+    .detail-edit.column
+      %span.detail-value
+        = f.input :end_date,
          label_html: { class: "detail-element" }
 
 .column{ id: "duty_station-wrapper"}
@@ -62,6 +90,13 @@
   .detail-wrapper.row{ class: "duty_station-wrapper"}
     .detail-edit.column
       %span.detail-value
+        = f.input :free_event,
+         label_html: { class: "detail-element" }
+
+.column{ id: "duty_station-wrapper"}
+  .detail-wrapper.row{ class: "duty_station-wrapper"}
+    .detail-edit.column
+      %span.detail-value
         = f.input :nfs_form,
          label_html: { class: "detail-element" }
 
@@ -69,7 +104,7 @@
   .detail-wrapper.row{ class: "duty_station-wrapper"}
     .detail-edit.column
       %span.detail-value
-        = f.input :cost_per_unit,
+        = f.input :travel_required,
          label_html: { class: "detail-element" }
 
 .column{ id: "duty_station-wrapper"}
@@ -77,18 +112,4 @@
     .detail-edit.column
       %span.detail-value
         = f.input :estimated_travel_expenses,
-         label_html: { class: "detail-element" }
-
-.column{ id: "duty_station-wrapper"}
-  .detail-wrapper.row{ class: "duty_station-wrapper"}
-    .detail-edit.column
-      %span.detail-value
-        = f.input :start_date,
-         label_html: { class: "detail-element" }
-
-.column{ id: "duty_station-wrapper"}
-  .detail-wrapper.row{ class: "duty_station-wrapper"}
-    .detail-edit.column
-      %span.detail-value
-        = f.input :end_date,
          label_html: { class: "detail-element" }

@@ -17,8 +17,14 @@ module Gsa18f
     end
 
     def new_display
-      %w(duty_station supervisor_id title_of_training training_provider purpose justification link instructions nfs_form cost_per_unit estimated_travel_expenses start_date end_date)
+      %w( 
+          duty_station supervisor_id title_of_event 
+          event_provider type_of_event cost_per_unit start_date 
+          end_date purpose justification link instructions 
+          free_event nfs_form travel_required estimated_travel_expenses
+        )
     end
+        
 
     def top_email_field
     end
