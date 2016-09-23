@@ -27,7 +27,7 @@ feature "View Gsa18F procurement" do
   end
 
 
-  def js_modify_checkbox(text = "foo", selector = 'gsa18f_procurement[product_name_and_description]', submit = ".request-actions .save-button button")
+  def js_modify_checkbox(text = "foo", selector = 'gsa18f_procurement[is_tock_billable]', submit = ".request-actions .save-button button")
     find(:css, selector).set(true)
     find(submit).trigger("click")
     find('.save_confirm-modal-content .form-button[data-modal-event="confirm"]').trigger("click")
