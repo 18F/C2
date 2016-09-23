@@ -76,6 +76,15 @@ default: &DEFAULT
     pegasys_document_number:
       header: Pegasys
       display: client_data.pegasys_document_number
+    is_tock_billable:
+      header: Billable
+      display: client_data.is_tock_billable
+    tock_project:
+      header: Tock
+      display: client_data.tock_project
+    soc_code:
+      header: SOC
+      display: client_data.soc_code
   columns:
     - public_id
     - name
@@ -111,6 +120,9 @@ gsa18f:
     - total_price
     - status
     - created_at
+    - urgency
+    - is_tock_billable
+    - tock_project
     - urgency
     - purchase_type
     - pegasys_document_number
