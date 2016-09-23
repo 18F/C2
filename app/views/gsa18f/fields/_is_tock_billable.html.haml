@@ -1,0 +1,15 @@
+.column{ id: key + '-wrapper'}
+  .detail-wrapper.row{ class: key + "-wrapper", id: value_id }
+    .detail-display.column
+      %label.detail-element
+        = t(t_slug + key)
+      %span.detail-value
+        - if client_field != "--"
+          Yes
+        - else
+          No
+    .detail-edit.column
+      %label.detail-element
+        = t(t_slug + key)
+      %span.detail-value
+        = f.input :is_tock_billable, input_html: { "data-filter-control" => "is_tock_billable" }, label: false

@@ -1,0 +1,15 @@
+.column{ class: key + "-wrapper ", id: key + '-wrapper', "data-filter-key" => "is_tock_billable", "data-filter-value" => 1 }
+  .detail-wrapper.row{ id: value_id }
+    .detail-display.column
+      %label.detail-element
+        = t(t_slug + key)
+      %span.detail-value
+        = client_field
+    .detail-edit.column
+      %label.detail-element
+        = t(t_slug + key)
+      %span.detail-value
+        %div
+          = f.input :tock_project,
+            include_blank: false,
+            label: false

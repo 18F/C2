@@ -12,5 +12,13 @@ FactoryGirl.define do
     trait :with_steps do
       after(:create) { |procurement| procurement.initialize_steps }
     end
+
+    trait :with_beta_requester do
+      after(:create) do |procurement|
+        requester = procurement.requester
+        requester.roles << Role.find_by!(name: ROLE_BETA_USER)
+        requester.roles << Role.find_by!(name: ROLE_BETA_ACTIVE)
+      end
+    end
   end
 end

@@ -25,6 +25,7 @@ en:
         approving_official: "Type here to search"
     hints:
       gsa18f_procurement:
+        tock_project: "Billable project numbers can be found at <a href=\"http://tock.18f.gov/projects\" target=\"_blank\">www.tock.18f.gov/projects</a>. <i>Clicking the link will open a new window.</i>"
         link_to_product: "Search <a href='https://www.gsaadvantage.gov/advantage/main/start_page.do' target='_blank'>GSA Advantage</a> first; then <a href='http://www.amazon.com' target='_blank'>Amazon;</a> then other vendor. Paste link here."
         recurring_length: "e.g. Number of Days, Months, Years"
       ncr_work_order:
