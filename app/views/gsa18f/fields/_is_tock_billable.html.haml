@@ -4,10 +4,10 @@
       %label.detail-element
         = t(t_slug + key)
       %span.detail-value
-        - if client_field != "--"
-          %input{type: "checkbox", checked: true, disabled: true, label: false}
+        - if client_field == true
+          Yes
         - else
-          %input{type: "checkbox", checked: false, disabled: true, label: false}
+          No
     .detail-edit.column
       %label.detail-element
         = t(t_slug + key)
