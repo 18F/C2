@@ -12,17 +12,14 @@ feature "View Gsa18F procurement" do
   end
 
 
-  scenario "last step is completed" do
-    it "shows the pegasys document number", js: true do
-      create_and_visit_proposal_beta_last_step
+  scenario "after last step is completed shows the pegasys document number", js: true do
+    create_and_visit_proposal_beta_last_step
 
-      expect(page).not_to have_content("Pegasys Document Number")
-      click_on("Mark as Purchased")
+    expect(page).not_to have_content("Pegasys Document Number")
+    click_on("Mark as Purchased")
 
-      visit proposal_path(proposal)
-      expect(page).to have_content("Pegasys Document Number")
-
-    end
+    visit proposal_path(proposal)
+    expect(page).to have_content("Pegasys Document Number")
   end
 
   scenario "requester cant see tock_project unless is_tock_billable is true", js: true do
