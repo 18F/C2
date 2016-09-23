@@ -10,7 +10,6 @@ module Gsa18f
       translate_strings(email_display_fields, object)
     end
 
-
     def email_display_fields
       %w(purchase_type date_requested quantity urgency cost_per_unit office total_price justification link_to_product additional_info)
     end
@@ -33,7 +32,7 @@ module Gsa18f
     end
 
     def new_display
-      %w(purchase_type office date_requested urgency quantity cost_per_unit link_to_product justification additional_info is_tock_billable tock_project recurring recurring_interval recurring_length total_price, pegasys_display_number)
+      %w(purchase_type office date_requested urgency quantity cost_per_unit link_to_product justification additional_info is_tock_billable tock_project recurring recurring_interval recurring_length total_price pegasys_display_number)
     end
 
     def translated_key(key)
