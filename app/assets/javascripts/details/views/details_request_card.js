@@ -83,6 +83,14 @@ DetailsRequestCard = (function(){
       } else {
         value = "Exact";
       }
+    } else if(key === "tock_project") {
+      if (value === true){
+        value = "Yes";
+      } else {
+        value = "No";
+      }
+    } else if(key === "is_tock_billable") {
+      console.log(key, value);
     } else if(key === "date_requested") {
       value = moment(value).format("MMM Do, YYYY")
     } else if(key === "ncr_organization_id") {
