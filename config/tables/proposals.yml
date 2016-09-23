@@ -73,6 +73,12 @@ default: &DEFAULT
     function_code:
       header: Function
       display: client_data.function_code
+    is_tock_billable:
+      header: Billable
+      display: client_data.is_tock_billable
+    tock_project:
+      header: Tock
+      display: client_data.tock_project
     soc_code:
       header: SOC
       display: client_data.soc_code
@@ -111,5 +117,8 @@ gsa18f:
     - total_price
     - status
     - created_at
+    - urgency
+    - is_tock_billable
+    - tock_project
     - urgency
     - purchase_type
