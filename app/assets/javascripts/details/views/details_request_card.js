@@ -76,19 +76,20 @@ DetailsRequestCard = (function(){
     this.el.trigger('update:' + type, { field: field, value: value });
   }
 
+  DetailsRequestCard.prototype.updateBoolean = function(value, yesCondition, noCondition){
+    if(value){
+      return yesCondition;
+    } else {
+      return noCondition;
+    }
+  }
+
   DetailsRequestCard.prototype.defineValue = function(key, value){
+    var self = this;
     if(key === "not_to_exceed") {
-      if (value === true){
-        value = "Not to exceed";
-      } else {
-        value = "Exact";
-      }
+      value = self.updateBoolean(value, 'Not to exceed', 'Exact');
     } else if(key === "is_tock_billable") {
-      if (value === true){
-        value = "Yes";
-      } else {
-        value = "No";
-      }
+      value = self.updateBoolean(value, 'Yes', 'No');
     } else if(key === "date_requested") {
       value = moment(value).format("MMM Do, YYYY")
     } else if(key === "ncr_organization_id") {

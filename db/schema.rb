@@ -345,6 +345,14 @@ ActiveRecord::Schema.define(version: 20160923023903) do
 
   add_index "tags", ["name"], name: "index_tags_on_name", unique: true, using: :btree
 
+  create_table "test_client_requests", force: :cascade do |t|
+    t.decimal  "amount"
+    t.string   "project_title"
+    t.integer  "approving_official_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "user_delegates", force: :cascade do |t|
     t.integer  "assigner_id"
     t.integer  "assignee_id"
