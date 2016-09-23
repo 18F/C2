@@ -15,6 +15,7 @@ feature "View Gsa18F procurement" do
     proposal = create_and_visit_proposal_beta
     visit proposal_path(proposal)
     expect(page).not_to have_content("Tock Project")
+    save_and_open_screenshot
     js_activate_modify_proposal
     js_modify_checkbox
     expect(page).to have_content("Tock Project")
@@ -35,8 +36,7 @@ feature "View Gsa18F procurement" do
 
 
   def create_and_visit_proposal_beta
-    requester = create(:user, client_slug: "gsa18f")
-    procurement = create(:gsa18f_procurement, :with_steps, requester: requester, urgency: 10)
+    procurement = create(:gsa18f_procurement, :with_beta_requester)
     proposal = procurement.proposal
     login_as(proposal.requester)
     visit proposal_path(proposal)
