@@ -120,5 +120,4 @@ gsa18f:
     - urgency
     - is_tock_billable
     - tock_project
-    - urgency
     - purchase_type
