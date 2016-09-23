@@ -7,7 +7,7 @@ module Gsa18f
     end
 
     def email_display
-      translate_strings(email_display_fields)
+      translate_strings(email_display_fields, object)
     end
 
     def email_display_fields
@@ -18,10 +18,10 @@ module Gsa18f
     end
 
     def display
-      translate_strings(new_display)
+      translate_strings(new_display, object)
     end
 
-    def translate_strings(element_array)
+    def translate_strings(element_array, obj)
       stored_displays = []
       element_array.each do |display_el|
         display_string = obj.public_send(display_el) if obj.respond_to? display_el

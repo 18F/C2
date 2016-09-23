@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160922210540) do
+ActiveRecord::Schema.define(version: 20160923023903) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -185,6 +185,7 @@ ActiveRecord::Schema.define(version: 20160922210540) do
     t.integer  "purchase_type",                                  null: false
     t.boolean  "is_tock_billable"
     t.string   "tock_project"
+    t.string   "pegasys_document_number"
   end
 
   create_table "ncr_organizations", force: :cascade do |t|
