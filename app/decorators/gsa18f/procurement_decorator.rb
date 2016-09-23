@@ -31,6 +31,8 @@ module Gsa18f
         [translated_key("total_price"), object.total_price],
         [translated_key("office"), object.office],
         [translated_key("urgency"), object.urgency_string],
+        [translated_key("is_tock_billable"), object.is_tock_billable],
+        [translated_key("tock_project"), object.tock_project],
         [translated_key("link_to_product"), object.link_to_product],
         [translated_key("additional_info"), object.additional_info],
         [translated_key("cost_per_unit"), object.cost_per_unit]
@@ -38,7 +40,7 @@ module Gsa18f
     end
 
     def new_display
-      %w(purchase_type office date_requested urgency quantity cost_per_unit link_to_product justification additional_info recurring recurring_interval recurring_length total_price)
+      %w(purchase_type office date_requested urgency quantity cost_per_unit link_to_product justification additional_info is_tock_billable tock_project recurring recurring_interval recurring_length total_price)
     end
 
     def top_email_field
