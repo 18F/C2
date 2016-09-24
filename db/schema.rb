@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160922210540) do
+ActiveRecord::Schema.define(version: 20160923202931) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -152,8 +152,8 @@ ActiveRecord::Schema.define(version: 20160922210540) do
   create_table "gsa18f_events", force: :cascade do |t|
     t.string   "duty_station"
     t.integer  "supervisor_id"
-    t.string   "title_of_training"
-    t.string   "training_provider"
+    t.string   "title_of_event"
+    t.string   "event_provider"
     t.string   "purpose"
     t.string   "justification"
     t.string   "link"
@@ -165,6 +165,9 @@ ActiveRecord::Schema.define(version: 20160922210540) do
     t.date     "end_date"
     t.datetime "updated_at"
     t.datetime "created_at"
+    t.text     "type_of_event"
+    t.boolean  "free_event",                default: false
+    t.boolean  "travel_required",           default: false
   end
 
   create_table "gsa18f_procurements", force: :cascade do |t|
