@@ -31,7 +31,7 @@ module Gsa18f
         translated_el = [translated_key(display_el), display_string]
         stored_displays << translated_el
       end
-      stored_displays
+      returned_value = stored_displays
     end
 
     def new_display
