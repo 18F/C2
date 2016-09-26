@@ -12,6 +12,8 @@ module Gsa18f
       end
 
       fields + [:is_tock_billable, :tock_project]
+
+      fields + [:client_billed]
     end
 
     private
