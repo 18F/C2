@@ -35,7 +35,10 @@
     .detail-edit.column
       %span.detail-value
         = f.input :type_of_event,
-         label_html: { class: "detail-element" }
+          collection: Gsa18f::Event::EVENT_TYPES.keys,
+          as: :radio_buttons,
+          include_blank: true,
+          label_html: { class: "detail-element" }
 
 .column{ id: "duty_station-wrapper"}
   .detail-wrapper.row{ class: "duty_station-wrapper"}
