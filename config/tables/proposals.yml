@@ -73,6 +73,9 @@ default: &DEFAULT
     function_code:
       header: Function
       display: client_data.function_code
+    pegasys_document_number:
+      header: Pegasys
+      display: client_data.pegasys_document_number
     is_tock_billable:
       header: Billable
       display: client_data.is_tock_billable
@@ -121,3 +124,4 @@ gsa18f:
     - is_tock_billable
     - tock_project
     - purchase_type
+    - pegasys_document_number

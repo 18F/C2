@@ -2,6 +2,14 @@
   position: absolute;
 }
 
+#pegasys_document_number-wrapper{
+  display: none;
+}
+
+.status-completed #pegasys_document_number-wrapper{
+  display: block;
+}
+
 .card#request-details-card{
   .detail-edit{
     display: none;

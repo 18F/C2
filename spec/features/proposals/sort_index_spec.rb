@@ -54,6 +54,7 @@ feature "Sort proposals on index page" do
       visit proposals_path
 
       expect_order(pending_proposals_table, procurements.reverse.map { |p| p.proposal })
+      save_and_open_page
       within(pending_proposals_section) { click_on "Urgency" }
 
       expect_order(

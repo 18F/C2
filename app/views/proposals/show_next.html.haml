@@ -9,7 +9,7 @@
       .medium-12.column.wrap-hard
         = render partial: "proposals/details/summary", locals: { proposal: @proposal }
 
-      .medium-6.medium-push-6.column
+      .medium-6.medium-push-6.column{class: "status-" + @proposal.status.downcase}
         = render partial: "proposals/details/request_details", locals: { proposal: @proposal }
         #card-for-attachments
           = render partial: "proposals/details/attachment", locals: { proposal: @proposal }
