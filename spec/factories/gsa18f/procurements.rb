@@ -20,5 +20,6 @@ FactoryGirl.define do
         requester.roles << Role.find_by!(name: ROLE_BETA_ACTIVE)
       end
     end
+
   end
 end
