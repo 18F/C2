@@ -13,19 +13,24 @@ feature "View Gsa18F procurement" do
 
 
   scenario "after last step is completed shows the pegasys document number", js: true do
-    procurement = create(:gsa18f_procurement, :with_beta_requester)
+    procurement = create(:gsa18f_procurement, :with_beta_steps)
     proposal = procurement.proposal
+
     login_as(proposal.requester)
     visit proposal_path(proposal)
     expect(page).not_to have_content("Pegasys Document Number")
 
-    proposal.individual_steps.each do |step|
-      step.complete!
+
+    procurement.individual_steps.each do |step|
+      login_as(User.find(step.user_id))
+      visit proposal_path(proposal)
+      wait_for_ajax
+      click_on("Approve")
     end
+
 
     visit proposal_path(proposal)
     expect(page).to have_content("Pegasys Document Number")
-    save_and_open_page
   end
 
   scenario "requester cant see tock_project unless is_tock_billable is true", js: true do
