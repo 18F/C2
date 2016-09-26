@@ -1,0 +1,21 @@
+.controller-help {
+  .markdown {
+    padding-left: 0.9375rem;
+    max-width: 75%;
+    h2 {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+    h3 {
+      text-transform: uppercase;
+      font-size: 1rem;
+    }
+    p {
+      margin-bottom: 1.5rem;
+    }
+    img[alt='screenshot'] {
+      max-width: 500px;
+      max-height: 150px;
+    }
+  }
+}
