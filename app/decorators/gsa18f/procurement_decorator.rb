@@ -11,7 +11,10 @@ module Gsa18f
     end
 
     def email_display_fields
-      %w(purchase_type date_requested quantity urgency cost_per_unit office total_price justification link_to_product additional_info)
+      %w(purchase_type date_requested
+         quantity urgency cost_per_unit
+         office total_price justification
+         link_to_product additional_info)
     end
 
     def top_email_field
