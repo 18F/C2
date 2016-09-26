@@ -82,6 +82,9 @@ default: &DEFAULT
     tock_project:
       header: Tock
       display: client_data.tock_project
+    client_billed:
+      header: Billed
+      display: client_data.client_billed
     soc_code:
       header: SOC
       display: client_data.soc_code
@@ -125,3 +128,4 @@ gsa18f:
     - tock_project
     - purchase_type
     - pegasys_document_number
+    - client_billed
