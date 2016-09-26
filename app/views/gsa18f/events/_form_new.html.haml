@@ -10,11 +10,17 @@
          label_html: { class: "detail-element" }
 
 .column{ id: "duty_station-wrapper"}
-  .detail-wrapper.row{ class: "duty_station-wrapper"}
-    .detail-edit.column
-      %span.detail-value
-        = f.input :supervisor_id,
-         label_html: { class: "detail-element" }
+  .row
+    .column.medium-12
+      .detail-wrapper.row{ class: "duty_station-wrapper"}
+        .detail-edit.column
+          %label.detail-element{ for: "gsa18f_event_supervisor_id"}
+            Supervisor
+          %span.detail-value{class: "holo-chevron"}
+            = f.input :supervisor_id,
+              collection: User.all,
+              label: false,
+              label_html: { class: "detail-element" }
 
 .column{ id: "duty_station-wrapper"}
   .detail-wrapper.row{ class: "duty_station-wrapper"}

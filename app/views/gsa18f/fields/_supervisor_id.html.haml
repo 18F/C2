@@ -4,7 +4,12 @@
       %label.detail-element
         = t(t_slug + key)
       %span.detail-value
-        = client_field
+        = User.find(client_field).full_name
     .detail-edit.column
-      %span.detail-value
-        = f.input :supervisor_id, as: :text, label_html: { class: "detail-element "}
+      %label.detail-element{ for: "gsa18f_event_supervisor_id"}
+        Supervisor
+      %span.detail-value{class: "holo-chevron"}
+        = f.input :supervisor_id,
+          collection: User.all,
+          label: false,
+          selected: client_field
