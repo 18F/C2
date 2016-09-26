@@ -28,10 +28,9 @@ module Gsa18f
       stored_displays = []
       element_array.each do |display_el|
         display_string = obj.public_send(display_el) if obj.respond_to? display_el
-        translated_el = [translated_key(display_el), display_string]
-        stored_displays << translated_el
+        stored_displays << [translated_key(display_el), display_string]
       end
-      returned_value = stored_displays
+      stored_displays
     end
 
     def new_display
