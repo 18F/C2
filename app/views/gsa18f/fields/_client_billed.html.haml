@@ -4,7 +4,8 @@
       %label.detail-element
         = t(t_slug + key)
       %span.detail-value
-        = client_field
+        - if client_field == true
+          Yes
     .detail-edit.column
       %label.detail-element
         = t(t_slug + key)
