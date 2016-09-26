@@ -188,6 +188,7 @@ ActiveRecord::Schema.define(version: 20160923202931) do
     t.integer  "purchase_type",                                  null: false
     t.boolean  "is_tock_billable"
     t.string   "tock_project"
+    t.string   "pegasys_document_number"
   end
 
   create_table "ncr_organizations", force: :cascade do |t|

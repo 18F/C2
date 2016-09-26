@@ -11,6 +11,28 @@ feature "View Gsa18F procurement" do
     expect(page).to have_content(procurement.purchase_type)
   end
 
+
+  scenario "after last step is completed shows the pegasys document number", js: true do
+    procurement = create(:gsa18f_procurement, :with_beta_steps)
+    proposal = procurement.proposal
+
+    login_as(proposal.requester)
+    visit proposal_path(proposal)
+    expect(page).not_to have_content("Pegasys Document Number")
+
+
+    procurement.individual_steps.each do |step|
+      login_as(User.find(step.user_id))
+      visit proposal_path(proposal)
+      wait_for_ajax
+      click_on("Approve")
+    end
+
+
+    visit proposal_path(proposal)
+    expect(page).to have_content("Pegasys Document Number")
+  end
+
   scenario "requester cant see tock_project unless is_tock_billable is true", js: true do
     proposal = create_and_visit_proposal_beta
     visit proposal_path(proposal)
@@ -41,4 +63,5 @@ feature "View Gsa18F procurement" do
     visit proposal_path(proposal)
     return proposal
   end
+
 end
