@@ -22,6 +22,13 @@ module Gsa18f
 
     RECURRENCE = %w(Daily Monthly Yearly).freeze
 
+    EVENT_TYPES = {
+      "Conference" => 0,
+      "Training" => 1
+    }.freeze
+
+    enum type_of_event: EVENT_TYPES
+
     PURCHASE_TYPES = {
       "Software" => 0,
       "Training/Event" => 1,
@@ -59,7 +66,7 @@ module Gsa18f
     end
 
     def product_name_and_description
-      title_of_training
+      title_of_event
     end
 
     def total_price

@@ -1,0 +1,14 @@
+.column{ id: key + '-wrapper'}
+  .detail-wrapper.row{ class: key + "-wrapper", id: value_id }
+    .detail-display.column
+      %label.detail-element
+        = t(t_slug + key)
+      %span.detail-value
+        = Gsa18f::Event::EVENT_TYPES.keys[client_field.to_i]
+    .detail-edit.column
+      %span.detail-value
+        = f.input :type_of_event,
+          collection: Gsa18f::Event::EVENT_TYPES.keys,
+          as: :radio_buttons,
+          label_html: { class: "detail-element" },
+          checked: Gsa18f::Event::EVENT_TYPES.keys[client_field.to_i]

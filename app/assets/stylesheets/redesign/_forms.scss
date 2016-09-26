@@ -197,3 +197,7 @@ input[type="radio"][disabled],input[type="radio"].disabled,fieldset[disabled] in
 .radio.disabled label,fieldset[disabled] .radio label,.checkbox.disabled label,fieldset[disabled] .checkbox label {
     cursor: not-allowed
 }
+
+.gsa18f_event_type_of_event .radio {
+    display: block !important;
+}
