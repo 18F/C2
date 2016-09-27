@@ -1,6 +1,7 @@
 - f = @form
 - content_for :title, "18F Events"
 - t_slug = "decorators." + "gsa18f" + "/event."
+- supervisors = if User.with_role("gsa18f_supervisor").length > 0 then User.with_role("gsa18f_supervisor") else User.all end
 
 .column{ id: "duty_station-wrapper"}
   .detail-wrapper.row{ class: "duty_station-wrapper"}
@@ -18,7 +19,7 @@
             Supervisor
           %span.detail-value{class: "holo-chevron"}
             = f.input :supervisor_id,
-              collection: User.all,
+              collection: supervisors,
               label: false,
               label_html: { class: "detail-element" }
 
