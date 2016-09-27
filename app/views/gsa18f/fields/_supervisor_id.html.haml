@@ -1,3 +1,4 @@
+- supervisors = if User.with_role("gsa18f_supervisor").length > 0 then User.with_role("gsa18f_supervisor") else User.all end
 .column{ id: key + '-wrapper'}
   .detail-wrapper.row{ class: key + "-wrapper", id: value_id }
     .detail-display.column
@@ -10,6 +11,6 @@
         Supervisor
       %span.detail-value{class: "holo-chevron"}
         = f.input :supervisor_id,
-          collection: User.all,
+          collection: supervisors,
           label: false,
           selected: client_field
