@@ -1,3 +1,4 @@
+- supervisors = User.with_slug("gsa18f")
 .column{ id: key + '-wrapper'}
   .detail-wrapper.row{ class: key + "-wrapper", id: value_id }
     .detail-display.column
@@ -10,6 +11,6 @@
         Supervisor
       %span.detail-value{class: "holo-chevron"}
         = f.input :supervisor_id,
-          collection: User.all,
+          collection: supervisors,
           label: false,
           selected: client_field
