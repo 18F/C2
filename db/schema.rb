@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160923202931) do
+ActiveRecord::Schema.define(version: 20160926221019) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -189,6 +189,7 @@ ActiveRecord::Schema.define(version: 20160923202931) do
     t.boolean  "is_tock_billable"
     t.string   "tock_project"
     t.string   "pegasys_document_number"
+    t.boolean  "client_billed"
   end
 
   create_table "ncr_organizations", force: :cascade do |t|
@@ -347,14 +348,6 @@ ActiveRecord::Schema.define(version: 20160923202931) do
   end
 
   add_index "tags", ["name"], name: "index_tags_on_name", unique: true, using: :btree
-
-  create_table "test_client_requests", force: :cascade do |t|
-    t.decimal  "amount"
-    t.string   "project_title"
-    t.integer  "approving_official_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "user_delegates", force: :cascade do |t|
     t.integer  "assigner_id"

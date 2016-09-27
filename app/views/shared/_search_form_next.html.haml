@@ -60,6 +60,17 @@
         value: @adv_search.value_for("client_data.amount"),
       }
 
+  %h1
+    = current_user.client_model.to_s == "Gsa::Procurement"
+
+  - if current_user.client_model.expense_type_options.any?
+    .form-group
+      %label.control-label{for: "select_building_number"}
+        Building Number
+      %select.form-control{name: "#{current_user.client_model_slug}[client_data.building_number]", id: "select_building_number"}
+        = proposal_building_number_options(@adv_search.value_for("client_data.building_number"))
+
+
   .form-group.contains-field
     .medium-6.column
       %label.control-label{for: "#{current_user.client_model_slug}[created_within]"}
