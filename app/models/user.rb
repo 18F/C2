@@ -39,6 +39,10 @@ class User < ActiveRecord::Base
     where(active: true)
   end
 
+  def self.with_slug(slug)
+    User.where(client_slug: slug)
+  end
+
   def self.sql_for_role_slug(role_name, slug)
     with_role(role_name).select(:id).where(client_slug: slug).to_sql
   end
