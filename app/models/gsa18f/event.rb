@@ -59,7 +59,7 @@ module Gsa18f
       [
         Steps::Approval.new(user: User.for_email(Gsa18f::Event.talent_approver_email)),
         Steps::Approval.new(user: User.for_email(Gsa18f::Event.approver_email)),
-        Steps::Approval.new(user: User.for_email(Gsa18f::Event.purchaser_email)),
+        Steps::Approval.new(user: User.for_email(Gsa18f::Event.purchaser_email))
       ]
     end
 
