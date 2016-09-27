@@ -36,10 +36,20 @@ feature "View Gsa18F procurement" do
   scenario "requester cant see tock_project unless is_tock_billable is true", js: true do
     proposal = create_and_visit_proposal_beta
     visit proposal_path(proposal)
-    expect(page).not_to have_content("Tock Project")
+    expect(page).not_to have_content("Tock project number")
     js_activate_modify_proposal
     js_modify_checkbox
-    expect(page).to have_content("Tock Project")
+    expect(page).to have_content("Tock project number")
+    visit proposal_path(proposal)
+  end
+
+  scenario "requester cant see client_billed unless is_tock_billable is true", js: true do
+    proposal = create_and_visit_proposal_beta
+    visit proposal_path(proposal)
+    expect(page).not_to have_content("Client has been billed")
+    js_activate_modify_proposal
+    js_modify_checkbox
+    expect(page).to have_content("Client has been billed")
     visit proposal_path(proposal)
   end
 

@@ -51,6 +51,7 @@ en:
       pegasys_document_number: "Pegasys Document Number"
       recurring_interval: "Recurring interval"
       recurring_length: "Recurring length"
+      client_billed: "Client has been billed"
     ncr/work_order:
       project_title: "Project title"
       description: "Description"
