@@ -44,6 +44,7 @@ describe "Completing a proposal" do
     visit proposal_path(proposal)
     click_on("Approve")
 
+    visit proposal_path(proposal)
     expect(proposal.observers.length).to eq(1)
     expect(deliveries.length).to eq(2)
   end
