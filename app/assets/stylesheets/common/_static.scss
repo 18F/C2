@@ -21,3 +21,36 @@ h3 {
 [aria-hidden=true] {
   display: none !important;
 }
+
+
+.controller-help {
+  .markdown {
+    padding-left: 0.9375rem;
+    max-width: 85%;
+    h2 {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      clear: both;
+    }
+    h3 {
+      text-transform: uppercase;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      clear: both;
+    }
+    p {
+      margin-bottom: 1.5rem;
+    }
+    img[alt='screenshot'] {
+      max-width: 500px;
+      max-height: 150px;
+      float: left;
+      margin-bottom: 20px;
+      margin-right: 1rem;
+    }
+  }
+  #footer {
+    clear: both;
+  }
+}
