@@ -1,4 +1,4 @@
-- supervisors = if User.with_role("gsa18f_supervisor").length > 0 then User.with_role("gsa18f_supervisor") else User.all end
+- supervisors = User.with_slug("gsa18f")
 .column{ id: key + '-wrapper'}
   .detail-wrapper.row{ class: key + "-wrapper", id: value_id }
     .detail-display.column
