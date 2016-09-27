@@ -34,7 +34,7 @@ module Gsa18f
     end
 
     def new_display
-      %w(purchase_type office date_requested urgency quantity cost_per_unit link_to_product justification additional_info is_tock_billable tock_project recurring recurring_interval recurring_length total_price pegasys_document_number)
+      %w(purchase_type office date_requested urgency quantity cost_per_unit link_to_product justification additional_info is_tock_billable tock_project client_billed recurring recurring_interval pegasys_document_number recurring_length total_price)
     end
 
     def translated_key(key)

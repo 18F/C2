@@ -189,6 +189,7 @@ ActiveRecord::Schema.define(version: 20160927151121) do
     t.boolean  "is_tock_billable"
     t.string   "tock_project"
     t.string   "pegasys_document_number"
+    t.boolean  "client_billed"
   end
 
   create_table "ncr_organizations", force: :cascade do |t|

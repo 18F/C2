@@ -1,0 +1,13 @@
+.column{ id: key + '-wrapper', class: key + '-wrapper', "data-filter-key" => "is_tock_billable", "data-filter-value" => 1 }
+  .detail-wrapper.row{ class: key + "-wrapper", id: value_id }
+    .detail-display.column
+      %label.detail-element
+        = t(t_slug + key)
+      %span.detail-value
+        - if client_field == true
+          Yes
+    .detail-edit.column
+      %label.detail-element
+        = t(t_slug + key)
+      %span.detail-value
+        = f.input :client_billed, label: false
