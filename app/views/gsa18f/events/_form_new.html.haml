@@ -48,11 +48,13 @@
           label_html: { class: "detail-element" }
 
 .column{ id: "duty_station-wrapper"}
-  .detail-wrapper.row{ class: "duty_station-wrapper"}
-    .detail-edit.column
-      %span.detail-value
-        = f.input :cost_per_unit,
-         label_html: { class: "detail-element" }
+  .row
+    .column.medium-5
+      .detail-wrapper.row{ class: "duty_station-wrapper"}
+        .detail-edit.column
+          %span.detail-value
+            = f.input :cost_per_unit, as: :currency,
+             label_html: { class: "detail-element" }
 
 .column{ id: "duty_station-wrapper"}
   .row
