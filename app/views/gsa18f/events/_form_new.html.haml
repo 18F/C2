@@ -6,9 +6,11 @@
 .column{ id: "duty_station-wrapper"}
   .detail-wrapper.row{ class: "duty_station-wrapper"}
     .detail-edit.column
+      %label.detail-element
+        = t(t_slug + "duty_station")
       %span.detail-value
         = f.input :duty_station,
-         label_html: { class: "detail-element" }
+         label_html: { class: "detail-element" }, label: false
 
 .column{ id: "duty_station-wrapper"}
   .row
@@ -17,62 +19,76 @@
         .detail-edit.column
           %label.detail-element{ for: "gsa18f_event_supervisor_id"}
             Supervisor
+          %label.detail-element
+            = t(t_slug + "supervisor_id")
           %span.detail-value{class: "holo-chevron"}
             = f.input :supervisor_id,
               collection: supervisors,
               label: false,
-              label_html: { class: "detail-element" }
+              label_html: { class: "detail-element" }, label: false
 
 .column{ id: "duty_station-wrapper"}
   .detail-wrapper.row{ class: "duty_station-wrapper"}
     .detail-edit.column
+      %label.detail-element
+        = t(t_slug + "title_of_event")
       %span.detail-value
         = f.input :title_of_event,
-         label_html: { class: "detail-element" }
+         label_html: { class: "detail-element" }, label: false
 
 .column{ id: "duty_station-wrapper"}
   .detail-wrapper.row{ class: "duty_station-wrapper"}
     .detail-edit.column
+      %label.detail-element
+        = t(t_slug + "event_provider")
       %span.detail-value
         = f.input :event_provider,
-         label_html: { class: "detail-element" }
+         label_html: { class: "detail-element" }, label: false
 
 .column{ id: "duty_station-wrapper"}
   .detail-wrapper.row{ class: "duty_station-wrapper"}
     .detail-edit.column
+      %label.detail-element
+        = t(t_slug + "type_of_event")
       %span.detail-value
         = f.input :type_of_event,
           collection: Gsa18f::Event::EVENT_TYPES.keys,
           as: :radio_buttons,
           include_blank: true,
-          label_html: { class: "detail-element" }
+          label_html: { class: "detail-element" }, label: false
 
 .column{ id: "duty_station-wrapper"}
   .row
     .column.medium-5
       .detail-wrapper.row{ class: "duty_station-wrapper"}
         .detail-edit.column
+          %label.detail-element
+            = t(t_slug + "cost_per_unit")
           %span.detail-value
             = f.input :cost_per_unit, as: :currency,
-             label_html: { class: "detail-element" }
+             label_html: { class: "detail-element" }, label: false
 
 .column{ id: "duty_station-wrapper"}
   .row
     .column.medium-5.half-col-wrap.sub-card.sub-card-left
       .detail-wrapper.row{ class: "duty_station-wrapper"}
         .detail-edit.column
+          %label.detail-element
+            = t(t_slug + "start_date")
           %span.detail-value
             = f.input :start_date, as: :date, html5: true,
-             label_html: { class: "detail-element" },
+             label_html: { class: "detail-element" }, label: false,
              label: "Event start date",
              input_html: {class: "event-date"}
 
     .column.medium-5.half-col-wrap.sub-card.sub-card-right
       .detail-wrapper.row{ class: "duty_station-wrapper"}
         .detail-edit.column
+          %label.detail-element
+        = t(t_slug + "end_date")
           %span.detail-value
             = f.input :end_date, as: :date, html5: true,
-              label_html: { class: "detail-element" },
+              label_html: { class: "detail-element" }, label: false,
               label: "Event end date",
               input_html: {class: "event-date"}
     .column.medium-2
@@ -80,61 +96,77 @@
 .column{ id: "duty_station-wrapper"}
   .detail-wrapper.row{ class: "duty_station-wrapper"}
     .detail-edit.column
+      %label.detail-element
+        = t(t_slug + "purpose")
       %span.detail-value
         = f.input :purpose, as: :text,
-         label_html: { class: "detail-element" }
+         label_html: { class: "detail-element" }, label: false
 
 .column{ id: "duty_station-wrapper"}
   .detail-wrapper.row{ class: "duty_station-wrapper"}
     .detail-edit.column
+      %label.detail-element
+        = t(t_slug + "justification")
       %span.detail-value
         = f.input :justification, as: :text,
-         label_html: { class: "detail-element" }
+         label_html: { class: "detail-element" }, label: false
 
 .column{ id: "duty_station-wrapper"}
   .detail-wrapper.row{ class: "duty_station-wrapper"}
     .detail-edit.column
+      %label.detail-element
+        = t(t_slug + "link")
       %span.detail-value
         = f.input :link,
-         label_html: { class: "detail-element" }
+         label_html: { class: "detail-element" }, label: false
 
 .column{ id: "duty_station-wrapper"}
   .detail-wrapper.row{ class: "duty_station-wrapper"}
     .detail-edit.column
+      %label.detail-element
+        = t(t_slug + "instructions")
       %span.detail-value
         = f.input :instructions, as: :text,
-         label_html: { class: "detail-element" }
+         label_html: { class: "detail-element" }, label: false
 
 .column{ id: "duty_station-wrapper"}
   .detail-wrapper.row{ class: "duty_station-wrapper"}
     .detail-edit.column
+      %label.detail-element
+        = t(t_slug + "free_event")
       %span.detail-value
         = f.input :free_event,
-         label_html: { class: "detail-element" },
+         label_html: { class: "detail-element" }, label: false,
          input_html: { "data-filter-control" => "free_event" }
 
 .column{ id: "duty_station-wrapper", "data-filter-key" => "free_event", "data-filter-value" => 1 }
   .detail-wrapper.row{ class: "duty_station-wrapper"}
     .detail-edit.column
+      %label.detail-element
+        = t(t_slug + "nfs_form")
       %span.detail-value
         = f.input :nfs_form,
-         label_html: { class: "detail-element" }
+         label_html: { class: "detail-element" }, label: false
 
 .column{ id: "duty_station-wrapper"}
   .detail-wrapper.row{ class: "duty_station-wrapper"}
     .detail-edit.column
+      %label.detail-element
+        = t(t_slug + "travel_required")
       %span.detail-value
         = f.input :travel_required,
-         label_html: { class: "detail-element" },
+         label_html: { class: "detail-element" }, label: false,
          input_html: { "data-filter-control" => "travel_required" }
 
 .column{ class: "sub-card", id: "duty_station-wrapper", "data-filter-key" => "travel_required", "data-filter-value" => 1 }
   .detail-wrapper.row{ class: "duty_station-wrapper"}
     .column.medium-5
       .detail-edit.column
+        %label.detail-element
+        = t(t_slug + "estimated_travel_expenses")
         %span.detail-value
           = f.input :estimated_travel_expenses, as: :currency,
-           label_html: { class: "detail-element" }
+           label_html: { class: "detail-element" }, label: false
   .detail-wrapper.row{ class: "duty_station-wrapper"}
     .column.medium-12
       .detail-edit.column
