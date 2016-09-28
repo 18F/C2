@@ -75,6 +75,14 @@ class RolesConversion
     )
   end
 
+  def gsa18f_talent_approver
+    with_email_role_slug!(
+      "gsa.approver+18f_talent_approver@gmail.com",
+      "gsa18f_talent_approver",
+      "gsa18f"
+    )
+  end
+
   def gateway_admin
     with_email_role_slug!(
       "gsa.approver+gateway_admin@gmail.com",

@@ -1,5 +1,7 @@
 module Gsa18f
   class EventsController < ClientDataController
+    MAX_UPLOADS_ON_NEW = 10
+
     protected
 
     def model_class
