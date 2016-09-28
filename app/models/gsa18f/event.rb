@@ -57,7 +57,9 @@ module Gsa18f
     # validates :recurring_interval, presence: true, if: :recurring
     def steps_list
       [
-        Steps::Approval.new(user: User.for_email(Gsa18f::Event.approver_email))
+        Steps::Approval.new(user: User.for_email(Gsa18f::Event.talent_approver_email)),
+        Steps::Approval.new(user: User.for_email(Gsa18f::Event.approver_email)),
+        Steps::Approval.new(user: User.for_email(Gsa18f::Event.purchaser_email))
       ]
     end
 
@@ -96,6 +98,10 @@ module Gsa18f
 
     def purchaser
       purchasers.first
+    end
+
+    def self.talent_approver_email
+      user_with_role("gsa18f_talent_approver").email_address
     end
 
     def self.approver_email

@@ -1,7 +1,7 @@
 - f = @form
 - content_for :title, "18F Events"
 - t_slug = "decorators." + "gsa18f" + "/event."
-- supervisors = if User.with_role("gsa18f_supervisor").length > 0 then User.with_role("gsa18f_supervisor") else User.all end
+- supervisors = User.with_slug("gsa18f")
 
 .column{ id: "duty_station-wrapper"}
   .detail-wrapper.row{ class: "duty_station-wrapper"}
