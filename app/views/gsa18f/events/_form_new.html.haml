@@ -2,12 +2,16 @@
 - content_for :title, "18F Events"
 - t_slug = "decorators." + "gsa18f" + "/event."
 - supervisors = User.with_slug("gsa18f")
+- duty_station_help = "In what City and State do you work?"
+- justification_help = "How will this event improve current or develop new skills associated with your job? How does it align with 18F/TTS?"
+- instructions_help = "What does the ops team need to know in order to purchase this training? Please go through the steps to purchase (without paying) to see if there are any extras that someone else purchasing your training would need to know about (i.e. dietary preferences or T-shirt size for a conference with meals/T-shirts)"
 
 .column{ id: "duty_station-wrapper"}
   .detail-wrapper.row{ class: "duty_station-wrapper"}
     .detail-edit.column
       %label.detail-element
         = t(t_slug + "duty_station")
+        %span.hint--top-right.hint--rounded.hint--bounce.hint--medium.hint--inline{"aria-label" => duty_station_help} ?
       %span.detail-value
         = f.input :duty_station,
          label_html: { class: "detail-element" }, label: false
@@ -103,6 +107,7 @@
     .detail-edit.column
       %label.detail-element
         = t(t_slug + "justification")
+        %span.hint--top-right.hint--rounded.hint--bounce.hint--medium.hint--inline{"aria-label" => justification_help} ?
       %span.detail-value
         = f.input :justification, as: :text,
          label_html: { class: "detail-element" }, label: false
@@ -121,6 +126,7 @@
     .detail-edit.column
       %label.detail-element
         = t(t_slug + "instructions")
+        %span.hint--top-right.hint--rounded.hint--bounce.hint--large.hint--inline{"aria-label" => instructions_help} ?
       %span.detail-value
         = f.input :instructions, as: :text,
          label_html: { class: "detail-element" }, label: false
