@@ -72,14 +72,14 @@
   .detail-wrapper.row{ class: "duty_station-wrapper"}
     .detail-edit.column
       %span.detail-value
-        = f.input :purpose,
+        = f.input :purpose, as: :text,
          label_html: { class: "detail-element" }
 
 .column{ id: "duty_station-wrapper"}
   .detail-wrapper.row{ class: "duty_station-wrapper"}
     .detail-edit.column
       %span.detail-value
-        = f.input :justification,
+        = f.input :justification, as: :text,
          label_html: { class: "detail-element" }
 
 .column{ id: "duty_station-wrapper"}
@@ -93,7 +93,7 @@
   .detail-wrapper.row{ class: "duty_station-wrapper"}
     .detail-edit.column
       %span.detail-value
-        = f.input :instructions,
+        = f.input :instructions, as: :text,
          label_html: { class: "detail-element" }
 
 .column{ id: "duty_station-wrapper"}
