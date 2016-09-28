@@ -55,18 +55,17 @@
          label_html: { class: "detail-element" }
 
 .column{ id: "duty_station-wrapper"}
-  .detail-wrapper.row{ class: "duty_station-wrapper"}
-    .detail-edit.column
-      %span.detail-value
-        = f.input :start_date,
-         label_html: { class: "detail-element" }
+  .row
+    .column.medium-7
+      = f.input :start_date, as: :date, html5: true,
+       label_html: { class: "" }, 
+       label: "Event start date",
+       input_html: {class: "event-date"}
 
-.column{ id: "duty_station-wrapper"}
-  .detail-wrapper.row{ class: "duty_station-wrapper"}
-    .detail-edit.column
-      %span.detail-value
-        = f.input :end_date,
-         label_html: { class: "detail-element" }
+      = f.input :end_date, as: :date, html5: true,
+        label_html: { class: "" },
+        label: "Event end date",
+        input_html: {class: "event-date"}
 
 .column{ id: "duty_station-wrapper"}
   .detail-wrapper.row{ class: "duty_station-wrapper"}
