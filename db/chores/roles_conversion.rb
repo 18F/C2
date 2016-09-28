@@ -67,14 +67,6 @@ class RolesConversion
     )
   end
 
-  def gsa18f_talent_approver
-    with_email_role_slug!(
-      "gsa18f_talent_approver+18f_purchaser@gmail.com",
-      "gsa18f_talent_approver",
-      "gsa18f"
-    )
-  end
-
   def gsa18f_purchaser
     with_email_role_slug!(
       "gsa.approver+18f_purchaser@gmail.com",
