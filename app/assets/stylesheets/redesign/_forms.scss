@@ -201,3 +201,12 @@ input[type="radio"][disabled],input[type="radio"].disabled,fieldset[disabled] in
 .gsa18f_event_type_of_event .radio {
     display: block !important;
 }
+
+.beta-list .simple_form textarea.form-control.text {
+    height: auto;
+    min-height: 6em;
+}
+
+.beta-list .simple_form .sub-card .detail-wrapper {
+    padding-bottom: 10px;
+}
