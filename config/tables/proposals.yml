@@ -88,6 +88,60 @@ default: &DEFAULT
     soc_code:
       header: SOC
       display: client_data.soc_code
+    duty_station:
+      header: duty_station
+      display: client_data.duty_station
+    supervisor_id:
+      header: supervisor_id
+      display: client_data.supervisor_id
+    title_of_event:
+      header: title_of_event
+      display: client_data.title_of_event
+    event_provider:
+      header: event_provider
+      display: client_data.event_provider
+    purpose:
+      header: purpose
+      display: client_data.purpose
+    justification:
+      header: justification
+      display: client_data.justification
+    link:
+      header: link
+      display: client_data.link
+    instructions:
+      header: instructions
+      display: client_data.instructions
+    nfs_form:
+      header: nfs_form
+      display: client_data.nfs_form
+    cost_per_unit:
+      header: cost_per_unit
+      display: client_data.cost_per_unit
+    estimated_travel_expenses:
+      header: estimated_travel_expenses
+      display: client_data.estimated_travel_expenses
+    start_date:
+      header: start_date
+      display: client_data.start_date
+    end_date:
+      header: end_date
+      display: client_data.end_date
+    updated_at:
+      header: updated_at
+      display: client_data.updated_at
+    created_at:
+      header: created_at
+      display: client_data.created_at
+    type_of_event:
+      header: type_of_event
+      display: client_data.type_of_event
+    free_event:
+      header: free_event
+      display: client_data.free_event
+    travel_required:
+      header: travel_required
+      display: client_data.travel_required
   columns:
     - public_id
     - name
@@ -129,3 +183,21 @@ gsa18f:
     - purchase_type
     - pegasys_document_number
     - client_billed
+    - duty_station
+    - supervisor_id
+    - title_of_event
+    - event_provider
+    - purpose
+    - justification
+    - link
+    - instructions
+    - nfs_form
+    - cost_per_unit
+    - estimated_travel_expenses
+    - start_date
+    - end_date
+    - updated_at
+    - created_at
+    - type_of_event
+    - free_event
+    - travel_required
