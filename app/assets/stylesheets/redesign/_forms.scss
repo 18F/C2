@@ -210,3 +210,11 @@ input[type="radio"][disabled],input[type="radio"].disabled,fieldset[disabled] in
 .beta-list .simple_form .sub-card .detail-wrapper {
     padding-bottom: 10px;
 }
+
+.form-link-list li a{
+    text-decoration: underline;
+}
+
+.beta-list.sub-card label {
+    padding-bottom: 7px;
+}
