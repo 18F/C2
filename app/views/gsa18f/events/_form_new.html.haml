@@ -16,10 +16,10 @@
         = f.input :duty_station,
          label_html: { class: "detail-element" }, label: false
 
-.column{ id: "duty_station-wrapper"}
+.column{ id: "supervisor_id-wrapper"}
   .row
     .column.medium-12
-      .detail-wrapper.row{ class: "duty_station-wrapper"}
+      .detail-wrapper.row{ class: "supervisor_id-wrapper"}
         .detail-edit.column
           %label.detail-element
             = t(t_slug + "supervisor_id")
@@ -29,8 +29,8 @@
               label: false,
               label_html: { class: "detail-element" }, label: false
 
-.column{ id: "duty_station-wrapper"}
-  .detail-wrapper.row{ class: "duty_station-wrapper"}
+.column{ id: "title_of_event-wrapper"}
+  .detail-wrapper.row{ class: "title_of_event-wrapper"}
     .detail-edit.column
       %label.detail-element
         = t(t_slug + "title_of_event")
@@ -38,8 +38,8 @@
         = f.input :title_of_event,
          label_html: { class: "detail-element" }, label: false
 
-.column{ id: "duty_station-wrapper"}
-  .detail-wrapper.row{ class: "duty_station-wrapper"}
+.column{ id: "event_provider-wrapper"}
+  .detail-wrapper.row{ class: "event_provider-wrapper"}
     .detail-edit.column
       %label.detail-element
         = t(t_slug + "event_provider")
@@ -47,8 +47,8 @@
         = f.input :event_provider,
          label_html: { class: "detail-element" }, label: false
 
-.column{ id: "duty_station-wrapper"}
-  .detail-wrapper.row{ class: "duty_station-wrapper"}
+.column{ id: "type_of_event-wrapper"}
+  .detail-wrapper.row{ class: "type_of_event-wrapper"}
     .detail-edit.column
       %label.detail-element
         = t(t_slug + "type_of_event")
@@ -59,10 +59,10 @@
           include_blank: true,
           label_html: { class: "detail-element" }, label: false
 
-.column{ id: "duty_station-wrapper"}
+.column{ id: "cost_per_unit-wrapper"}
   .row
     .column.medium-5
-      .detail-wrapper.row{ class: "duty_station-wrapper"}
+      .detail-wrapper.row{ class: "cost_per_unit-wrapper"}
         .detail-edit.column
           %label.detail-element
             = t(t_slug + "cost_per_unit")
@@ -70,10 +70,10 @@
             = f.input :cost_per_unit, as: :currency,
              label_html: { class: "detail-element" }, label: false
 
-.column{ id: "duty_station-wrapper"}
+.column{ id: "start_date-wrapper"}
   .row
     .column.medium-5.half-col-wrap.sub-card.sub-card-left
-      .detail-wrapper.row{ class: "duty_station-wrapper"}
+      .detail-wrapper.row{ class: "start_date-wrapper"}
         .detail-edit.column
           %label.detail-element
             = t(t_slug + "start_date")
@@ -83,7 +83,7 @@
              input_html: {class: "event-date"}
 
     .column.medium-5.half-col-wrap.sub-card.sub-card-right
-      .detail-wrapper.row{ class: "duty_station-wrapper"}
+      .detail-wrapper.row{ class: "end_date-wrapper"}
         .detail-edit.column
           %label.detail-element
             = t(t_slug + "end_date")
@@ -93,8 +93,8 @@
               input_html: {class: "event-date"}
     .column.medium-2
 
-.column{ id: "duty_station-wrapper"}
-  .detail-wrapper.row{ class: "duty_station-wrapper"}
+.column{ id: "purpose-wrapper"}
+  .detail-wrapper.row{ class: "purpose-wrapper"}
     .detail-edit.column
       %label.detail-element
         = t(t_slug + "purpose")
@@ -102,8 +102,8 @@
         = f.input :purpose, as: :text,
          label_html: { class: "detail-element" }, label: false
 
-.column{ id: "duty_station-wrapper"}
-  .detail-wrapper.row{ class: "duty_station-wrapper"}
+.column{ id: "justification-wrapper"}
+  .detail-wrapper.row{ class: "justification-wrapper"}
     .detail-edit.column
       %label.detail-element
         = t(t_slug + "justification")
@@ -112,8 +112,8 @@
         = f.input :justification, as: :text,
          label_html: { class: "detail-element" }, label: false
 
-.column{ id: "duty_station-wrapper"}
-  .detail-wrapper.row{ class: "duty_station-wrapper"}
+.column{ id: "link-wrapper"}
+  .detail-wrapper.row{ class: "link-wrapper"}
     .detail-edit.column
       %label.detail-element
         = t(t_slug + "link")
@@ -121,8 +121,8 @@
         = f.input :link,
          label_html: { class: "detail-element" }, label: false
 
-.column{ id: "duty_station-wrapper"}
-  .detail-wrapper.row{ class: "duty_station-wrapper"}
+.column{ id: "instructions-wrapper"}
+  .detail-wrapper.row{ class: "instructions-wrapper"}
     .detail-edit.column
       %label.detail-element
         = t(t_slug + "instructions")
@@ -131,8 +131,8 @@
         = f.input :instructions, as: :text,
          label_html: { class: "detail-element" }, label: false
 
-.column{ id: "duty_station-wrapper"}
-  .detail-wrapper.row{ class: "duty_station-wrapper"}
+.column{ id: "free_event-wrapper"}
+  .detail-wrapper.row{ class: "free_event-wrapper"}
     .detail-edit.column
       %label.detail-element
         = t(t_slug + "free_event")
@@ -141,8 +141,8 @@
          label_html: { class: "detail-element" }, label: false,
          input_html: { "data-filter-control" => "free_event" }
 
-.column{ id: "duty_station-wrapper", "data-filter-key" => "free_event", "data-filter-value" => 1 }
-  .detail-wrapper.row{ class: "duty_station-wrapper"}
+.column{ id: "nfs_form-wrapper", "data-filter-key" => "free_event", "data-filter-value" => 1 }
+  .detail-wrapper.row{ class: "nfs_form-wrapper"}
     .detail-edit.column
       %label.detail-element
         = t(t_slug + "nfs_form")
@@ -150,8 +150,8 @@
         = f.input :nfs_form,
          label_html: { class: "detail-element" }, label: false
 
-.column{ id: "duty_station-wrapper"}
-  .detail-wrapper.row{ class: "duty_station-wrapper"}
+.column{ id: "travel_required-wrapper"}
+  .detail-wrapper.row{ class: "travel_required-wrapper"}
     .detail-edit.column
       %label.detail-element
         = t(t_slug + "travel_required")
@@ -160,8 +160,8 @@
          label_html: { class: "detail-element" }, label: false,
          input_html: { "data-filter-control" => "travel_required" }
 
-.column{ class: "sub-card", id: "duty_station-wrapper", "data-filter-key" => "travel_required", "data-filter-value" => 1 }
-  .detail-wrapper.row{ class: "duty_station-wrapper"}
+.column{ class: "sub-card", id: "estimated_travel_expenses-wrapper", "data-filter-key" => "travel_required", "data-filter-value" => 1 }
+  .detail-wrapper.row{ class: "estimated_travel_expenses-wrapper"}
     .column.medium-5
       .detail-edit.column
         %label.detail-element
@@ -169,7 +169,7 @@
         %span.detail-value
           = f.input :estimated_travel_expenses, as: :currency,
            label_html: { class: "detail-element" }, label: false
-  .detail-wrapper.row{ class: "duty_station-wrapper"}
+  .detail-wrapper.row{ class: "estimate-link-wrapper"}
     .column.medium-12
       .detail-edit.column
         %span.detail-value
