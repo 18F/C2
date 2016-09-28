@@ -175,7 +175,6 @@ gsa18f:
     - pegasys_document_number
     - client_billed
     - duty_station
-    - supervisor_id
     - title_of_event
     - event_provider
     - purpose
