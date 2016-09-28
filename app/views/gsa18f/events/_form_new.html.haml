@@ -130,7 +130,18 @@
 
 .column{ id: "duty_station-wrapper", "data-filter-key" => "travel_required", "data-filter-value" => 1 }
   .detail-wrapper.row{ class: "duty_station-wrapper"}
-    .detail-edit.column
-      %span.detail-value
-        = f.input :estimated_travel_expenses, as: :currency,
-         label_html: { class: "detail-element" }
+    .column.medium-5
+      .detail-edit.column
+        %span.detail-value
+          = f.input :estimated_travel_expenses, as: :currency,
+           label_html: { class: "detail-element" }
+  .detail-wrapper.row{ class: "duty_station-wrapper"}
+    .column.medium-12
+      .detail-edit.column
+        %span.detail-value
+          %label{class: "detail-element"}
+            Links to help estimate travel
+          %ul
+            %li
+              %a{:href => ""}
+                blah
