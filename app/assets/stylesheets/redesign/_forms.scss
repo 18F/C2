@@ -201,3 +201,19 @@ input[type="radio"][disabled],input[type="radio"].disabled,fieldset[disabled] in
 .gsa18f_event_type_of_event .radio {
     display: block !important;
 }
+
+.event-date {
+    width: 165px !important;
+}
+
+.gsa18f_event_end_date, .gsa18f_event_start_date {
+    display: inline !important;
+    div {
+        display: inline !important;
+    }
+    input, div, span, label {
+        /*display: inline !important;*/
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+}
