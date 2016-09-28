@@ -108,9 +108,10 @@
     .detail-edit.column
       %span.detail-value
         = f.input :free_event,
-         label_html: { class: "detail-element" }
+         label_html: { class: "detail-element" },
+         input_html: { "data-filter-control" => "free_event" }
 
-.column{ id: "duty_station-wrapper"}
+.column{ id: "duty_station-wrapper", "data-filter-key" => "free_event", "data-filter-value" => 1 }
   .detail-wrapper.row{ class: "duty_station-wrapper"}
     .detail-edit.column
       %span.detail-value
@@ -122,9 +123,10 @@
     .detail-edit.column
       %span.detail-value
         = f.input :travel_required,
-         label_html: { class: "detail-element" }
+         label_html: { class: "detail-element" },
+         input_html: { "data-filter-control" => "travel_required" }
 
-.column{ id: "duty_station-wrapper"}
+.column{ id: "duty_station-wrapper", "data-filter-key" => "travel_required", "data-filter-value" => 1 }
   .detail-wrapper.row{ class: "duty_station-wrapper"}
     .detail-edit.column
       %span.detail-value
