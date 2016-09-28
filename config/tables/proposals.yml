@@ -118,6 +118,7 @@ default: &DEFAULT
     estimated_travel_expenses:
       header: Estimated travel expenses
       display: client_data.estimated_travel_expenses
+      formatter: currency
     start_date:
       header: Event start date
       display: client_data.start_date
