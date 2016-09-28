@@ -68,6 +68,7 @@
             = t(t_slug + "cost_per_unit")
           %span.detail-value
             = f.input :cost_per_unit, as: :currency,
+              input_html: { value: 0 },
              label_html: { class: "detail-element" }, label: false
 
 .column{ id: "start_date-wrapper"}

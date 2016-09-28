@@ -29,32 +29,32 @@ module Gsa18f
 
     enum type_of_event: EVENT_TYPES
 
-    PURCHASE_TYPES = {
-      "Software" => 0,
-      "Training/Event" => 1,
-      "Office Supply/Miscellaneous" => 2,
-      "Hardware" => 3,
-      "Micropurchase" => 5,
-      "Other" => 4
-    }.freeze
-
-    enum purchase_type: PURCHASE_TYPES
-
     # must define before include PurchaseCardMixin
     def self.purchase_amount_column_name
       :cost_per_unit
     end
 
+    def self.min_purchase_amount
+      0
+    end
+
     include ClientDataMixin
     include PurchaseCardMixin
 
-    # validates :cost_per_unit, presence: true
-    # validates :quantity, numericality: {
-    #   greater_than_or_equal_to: 1
-    # }, presence: true
-    # validates :product_name_and_description, presence: true
-    # validates :purchase_type, presence: true
-    # validates :recurring_interval, presence: true, if: :recurring
+    validates :supervisor_id, presence: true
+    validates :duty_station, presence: true
+    validates :title_of_event, presence: true
+    validates :event_provider, presence: true
+    validates :purpose, presence: true
+    validates :justification, presence: true
+    validates :link, presence: true
+    validates :instructions, presence: true
+    validates :estimated_travel_expenses, numericality: {
+      greater_than_or_equal_to: 1,
+      message: "must be greater than or equal to #{ActiveSupport::NumberHelper.number_to_currency(1)}"
+    }, presence: true, if: :travel_required
+    validates :nfs_form, presence: true, if: :free_event
+
     def steps_list
       [
         Steps::Approval.new(user: User.for_email(Gsa18f::Event.talent_approver_email)),
