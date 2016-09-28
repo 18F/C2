@@ -88,6 +88,52 @@ default: &DEFAULT
     soc_code:
       header: SOC
       display: client_data.soc_code
+    duty_station:
+      header: Duty station
+      display: client_data.duty_station
+    supervisor_id:
+      header: Supervisor
+      display: client_data.supervisor_id
+    title_of_event:
+      header: Event title
+      display: client_data.title_of_event
+    event_provider:
+      header: Event provider
+      display: client_data.event_provider
+    purpose:
+      header: Event purpose
+      display: client_data.purpose
+    justification:
+      header: Justification
+      display: client_data.justification
+    link:
+      header: Event link
+      display: client_data.link
+    instructions:
+      header: Instructions
+      display: client_data.instructions
+    nfs_form:
+      header: Nfs form
+      display: client_data.nfs_form
+    estimated_travel_expenses:
+      header: Estimated travel expenses
+      display: client_data.estimated_travel_expenses
+      formatter: currency
+    start_date:
+      header: Event start date
+      display: client_data.start_date
+    end_date:
+      header: Event end date
+      display: client_data.end_date
+    type_of_event:
+      header: Event type
+      display: client_data.type_of_event
+    free_event:
+      header: Free event
+      display: client_data.free_event
+    travel_required:
+      header: Travel required
+      display: client_data.travel_required
   columns:
     - public_id
     - name
@@ -129,3 +175,15 @@ gsa18f:
     - purchase_type
     - pegasys_document_number
     - client_billed
+    - duty_station
+    - title_of_event
+    - event_provider
+    - purpose
+    - link
+    - nfs_form
+    - estimated_travel_expenses
+    - start_date
+    - end_date
+    - type_of_event
+    - free_event
+    - travel_required
