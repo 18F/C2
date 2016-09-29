@@ -6,45 +6,42 @@ feature "Create a Gsa18F event" do
   end
 
   context "user signed in" do
-    scenario "saves a Proposal with the attributes" do
-      requester = create(:user, client_slug: "gsa18f")
-
+    scenario "saves an event with the attributes", :js do
+      requester = create(:user, :beta_active, client_slug: "gsa18f" )
+      supervisor = create(:user, client_slug: "gsa18f", email_address: "supervisor@gsa.gov", first_name: "super")
       login_as(requester)
-      visit new_gsa18f_procurement_path
 
-      fill_in "Product name and description", with: "buying stuff"
-      select "Software", from: "gsa18f_procurement_purchase_type"
+      visit new_gsa18f_event_path
+
+      fill_in "gsa18f_event_duty_station", with: "DC"
+      select "supervisor@gsa.gov", from: "Supervisor"
+      fill_in "Title of event", with: "Test title"
+      fill_in "Event provider", with: "Test provider"
+      choose "gsa18f_event_type_of_event_conference"
+      fill_in "Cost of event (not including travel)", with:"200"
+      fill_in "Training start date", with: "12/12/2999"
+      fill_in "Training end date", with: "11/12/2999"
+      fill_in "Purpose of event", with: "Test purpose"
       fill_in "Justification", with: "because I need it"
-      fill_in "Link to product", with: "http://www.amazon.com"
-      fill_in "Cost per unit", with: 123.45
-      fill_in "Quantity", with: 6
-      fill_in "gsa18f_procurement_date_requested", with: "12/12/2999"
-      fill_in "gsa18f_procurement_additional_info", with: "none"
-      select Gsa18f::Procurement::URGENCY[10], from: "gsa18f_procurement_urgency"
-      select Gsa18f::Procurement::OFFICES[0], from: "gsa18f_procurement_office"
-      click_on "Submit for approval"
+      fill_in "Link to purchase event", with: "www.gsa.gov"
+      fill_in "Instructions to purchase event", with: "go buy it"
+
+      click_on "SUBMIT"
 
       proposal = requester.reload.proposals.last
       expect(page).to have_content("Proposal submitted")
+      expect(page).to have_content("DC")
+      expect(page).to have_content("super")
+      expect(page).to have_content("Test title")
+      expect(page).to have_content("Test provider")
+      expect(page).to have_content("Conference")
+      expect(page).to have_content("Dec 12, 2999")
+      expect(page).to have_content("Dec 11, 2999")
+      expect(page).to have_content("Test purpose")
+      expect(page).to have_content("because I need it")
+      expect(page).to have_content("www.gsa.gov")
+      expect(page).to have_content("go buy it")
       expect(current_path).to eq(proposal_path(proposal))
-    end
-
-    context "invalid input" do
-      scenario "shows error and preserve form inputs" do
-        requester = create(:user, client_slug: "gsa18f")
-
-        login_as(requester)
-        visit new_gsa18f_procurement_path
-
-        fill_in "Product name and description", with: "buying stuff"
-        fill_in "Quantity", with: 1
-        fill_in "Cost per unit", with: 10_000
-        click_on "Submit for approval"
-
-        expect(current_path).to eq(gsa18f_procurements_path)
-        expect(page).to have_content("Cost per unit must be less than or equal to $")
-        expect(find_field("Cost per unit").value).to eq("10000")
-      end
     end
   end
 end
