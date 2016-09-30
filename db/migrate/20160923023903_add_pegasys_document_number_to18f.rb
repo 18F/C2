@@ -3,6 +3,6 @@ class AddPegasysDocumentNumberTo18f < ActiveRecord::Migration
     add_column :gsa18f_procurements, :pegasys_document_number, :string
   end
   def down
-    drop_column :gsa18f_procurements, :pegasys_document_number, :string
+    remove_column :gsa18f_procurements, :pegasys_document_number, :string
   end
 end
