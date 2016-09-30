@@ -5,6 +5,7 @@
 - duty_station_help = "In what City and State do you work?"
 - justification_help = "How will this event improve current or develop new skills associated with your job? How does it align with 18F/TTS?"
 - instructions_help = "What does the ops team need to know in order to purchase this training? Please go through the steps to purchase (without paying) to see if there are any extras that someone else purchasing your training would need to know about (i.e. dietary preferences or T-shirt size for a conference with meals/T-shirts)"
+- free_event__help = "41CFR 304-1 to 304-3 requires approval to accept payment from a Non-Federal Source. The NFS form must be completed, including an itemized list of expenses that the event sponsor offered to pay. The NFS form will be reviewed by the Office of General Counsel and determine if payment may be accepted."
 
 .column{ id: "duty_station-wrapper"}
   .detail-wrapper.row{ class: "duty_station-wrapper"}
@@ -142,6 +143,7 @@
       %span.detail-value.check-left
         = f.input :free_event,
          label_html: { class: "detail-element" }, label: false
+        %span.hint--top-right.hint--rounded.hint--bounce.hint--large.hint--inline{"aria-label" => free_event__help} ?
         %label.detail-element{ for: "gsa18f_event_free_event" }
           = t(t_slug + "free_event")
         %p.help-block
