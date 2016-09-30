@@ -6,6 +6,11 @@ fieldset {
     min-width: 0
 }
 
+.detail-value.check-left .checkbox {
+    float: left;
+    margin: 0px;
+}
+
 .detail-value{
     .currency .input-group-addon {
         border-radius: 4px 0px 0px 4px;

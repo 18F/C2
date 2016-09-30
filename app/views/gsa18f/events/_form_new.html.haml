@@ -139,12 +139,12 @@
 .column{ id: "free_event-wrapper"}
   .detail-wrapper.row{ class: "free_event-wrapper"}
     .detail-edit.column
-      %label.detail-element
-        = t(t_slug + "free_event")
-      %span.detail-value
+      %span.detail-value.check-left
         = f.input :free_event,
          label_html: { class: "detail-element" }, label: false,
          input_html: { "data-filter-control" => "free_event" }
+        %label.detail-element
+          = t(t_slug + "free_event")
 
 .column{ id: "nfs_form-wrapper", "data-filter-key" => "free_event", "data-filter-value" => 1 }
   .detail-wrapper.row{ class: "nfs_form-wrapper"}
@@ -158,12 +158,12 @@
 .column{ id: "travel_required-wrapper"}
   .detail-wrapper.row{ class: "travel_required-wrapper"}
     .detail-edit.column
-      %label.detail-element
-        = t(t_slug + "travel_required")
-      %span.detail-value
+      %span.detail-value.check-left
         = f.input :travel_required,
          label_html: { class: "detail-element" }, label: false,
          input_html: { "data-filter-control" => "travel_required" }
+        %label.detail-element
+          = t(t_slug + "travel_required")
 
 .column{ class: "sub-card", id: "estimated_travel_expenses-wrapper", "data-filter-key" => "travel_required", "data-filter-value" => 1 }
   .detail-wrapper.row{ class: "estimated_travel_expenses-wrapper"}
