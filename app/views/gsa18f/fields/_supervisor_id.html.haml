@@ -1,11 +1,12 @@
 - supervisors = User.with_slug("gsa18f")
+- supervisor = if User.find(client_field) then User.find(client_field).full_name else "--" end
 .column{ id: key + '-wrapper'}
   .detail-wrapper.row{ class: key + "-wrapper", id: value_id }
     .detail-display.column
       %label.detail-element
         = t(t_slug + key)
       %span.detail-value
-        = User.find(client_field).full_name
+        = supervisor
     .detail-edit.column
       %label.detail-element{ for: "gsa18f_event_supervisor_id"}
         Supervisor
