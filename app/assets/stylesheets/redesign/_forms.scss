@@ -6,6 +6,35 @@ fieldset {
     min-width: 0
 }
 
+.detail-value.check-left .checkbox {
+    float: left;
+    margin: 0px;
+}
+
+.hint--top-left:before, .hint--top-right:before, .hint--top:before {
+    border-top-color: #3A6E93!important;
+}
+
+.detail-value{
+    .currency .input-group-addon {
+        border-radius: 4px 0px 0px 4px;
+        font-weight: bold;
+        background: white;
+        padding-right: 3px;
+    }
+    .currency.form-group .currency.form-control {
+        border-left: 0px solid white;
+        &:focus{
+            outline: none;
+            box-shadow: none;
+        }
+    }
+}
+
+.cost_per_unit-label-wrapper {
+    margin-bottom: 0px;
+}
+
 legend {
     display: block;
     width: 100%;
