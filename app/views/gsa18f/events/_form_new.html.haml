@@ -146,15 +146,6 @@
         %label.detail-element{ for: "gsa18f_event_free_event" }
           = t(t_slug + "free_event")
 
-.column{ id: "nfs_form-wrapper", "data-filter-key" => "free_event", "data-filter-value" => 1 }
-  .detail-wrapper.row{ class: "nfs_form-wrapper"}
-    .detail-edit.column
-      %label.detail-element{ for: "gsa18f_event_nfs_form" }
-        = t(t_slug + "nfs_form")
-      %span.detail-value
-        = f.input :nfs_form,
-         label_html: { class: "detail-element" }, label: false
-
 .column{ id: "travel_required-wrapper"}
   .detail-wrapper.row{ class: "travel_required-wrapper"}
     .detail-edit.column

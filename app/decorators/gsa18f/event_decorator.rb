@@ -20,7 +20,7 @@ module Gsa18f
       %w(duty_station supervisor_id title_of_event
         event_provider type_of_event cost_per_unit start_date
         end_date purpose justification link instructions
-        free_event nfs_form travel_required estimated_travel_expenses)
+        free_event travel_required estimated_travel_expenses)
     end
 
     def top_email_field
