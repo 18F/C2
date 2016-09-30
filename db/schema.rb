@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160927192531) do
+ActiveRecord::Schema.define(version: 20160930170849) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -158,7 +158,6 @@ ActiveRecord::Schema.define(version: 20160927192531) do
     t.string   "justification"
     t.string   "link"
     t.string   "instructions"
-    t.string   "nfs_form"
     t.decimal  "cost_per_unit"
     t.decimal  "estimated_travel_expenses"
     t.date     "start_date"
