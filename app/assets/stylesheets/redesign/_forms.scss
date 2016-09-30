@@ -11,6 +11,10 @@ fieldset {
     margin: 0px;
 }
 
+.hint--top-left:before, .hint--top-right:before, .hint--top:before {
+    border-top-color: #3A6E93!important;
+}
+
 .detail-value{
     .currency .input-group-addon {
         border-radius: 4px 0px 0px 4px;
