@@ -61,11 +61,15 @@
 
 .column{ id: "cost_per_unit-wrapper"}
   .row
-    .column.medium-5
+    .column.medium-12
       .detail-wrapper.row{ class: "cost_per_unit-wrapper"}
         .detail-edit.column
           %label.detail-element
             = t(t_slug + "cost_per_unit")
+  .row
+    .column.medium-5
+      .detail-wrapper.row{ class: "cost_per_unit-wrapper"}
+        .detail-edit.column
           %span.detail-value
             = f.input :cost_per_unit, as: :currency,
               input_html: { value: 0 },
