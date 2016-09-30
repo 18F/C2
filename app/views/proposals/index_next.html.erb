@@ -5,12 +5,12 @@
 <meta name="list_view_config" content='<%= @list_view_config.html_safe %>'>
 
 <div id="proposals-unfiltered" class="proposals-unfiltered">
-  <div class="medium-12 large-6 large-push-6 column">
-    <% if display_search_ui? %>
+  <% if display_search_ui? %>
+    <div class="medium-12 large-6 large-push-6 column">
       <%= render partial: "shared/search_ui", locals: { show_adv_search_ui: params[:search] } %>
-    <% end %>
-  </div>
-  <div class="medium-12 large-6 large-pull-6 column">
+    </div>
+  <% end %>
+  <div class="medium-12 large-6 <% if display_search_ui? %>large-pull-6<% end %> column">
     <h3>Requests</h3>
   </div>
   <div class="medium-12 column" style='clear:both'>
