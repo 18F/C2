@@ -15,6 +15,15 @@ fieldset {
     border-top-color: #3A6E93!important;
 }
 
+.detail-edit{
+    position: relative;
+}
+
+.free_event-wrapper span.hint--top-right {
+    position: absolute;
+    right: 40px!important;
+}
+
 .detail-value{
     .currency .input-group-addon {
         border-radius: 4px 0px 0px 4px;

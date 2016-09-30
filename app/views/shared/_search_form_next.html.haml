@@ -60,9 +60,6 @@
         value: @adv_search.value_for("client_data.amount"),
       }
 
-  %h1
-    = current_user.client_model.to_s == "Gsa::Procurement"
-
   - if current_user.client_model.expense_type_options.any?
     .form-group
       %label.control-label{for: "select_building_number"}
