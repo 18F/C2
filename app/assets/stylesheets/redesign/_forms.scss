@@ -10,11 +10,15 @@ fieldset {
     .currency .input-group-addon {
         border-radius: 4px 0px 0px 4px;
         font-weight: bold;
-        background: none;
+        background: white;
         padding-right: 3px;
     }
     .currency.form-group .currency.form-control {
         border-left: 0px solid white;
+        &:focus{
+            outline: none;
+            box-shadow: none;
+        }
     }
 }
 
