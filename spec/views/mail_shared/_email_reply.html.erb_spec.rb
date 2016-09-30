@@ -26,4 +26,31 @@ describe "mail_shared/_email_reply.html.erb" do
     expect(rendered).not_to include I18n.t("mailer.view_or_modify_request_cta")
     expect(rendered).to include I18n.t("mailer.view_request_cta")
   end
+
+  it "renders event requests without errors" do
+    proposal = create(:gsa18f_event).proposal
+    render(
+      partial: "mail_shared/panel/proposal_attributes",
+      locals: { proposal: proposal.decorate }
+    )
+    expect(rendered).not_to have_content("translation missing")
+  end
+
+  it "renders procurement requests without errors" do
+    proposal = create(:gsa18f_procurement).proposal
+    render(
+      partial: "mail_shared/panel/proposal_attributes",
+      locals: { proposal: proposal.decorate }
+    )
+    expect(rendered).not_to have_content("translation missing")
+  end
+
+  it "renders work order requests without errors" do
+    proposal = create(:ncr_work_order).proposal
+    render(
+      partial: "mail_shared/panel/proposal_attributes",
+      locals: { proposal: proposal.decorate }
+    )
+    expect(rendered).not_to have_content("translation missing")
+  end
 end
