@@ -25,7 +25,7 @@ en:
         approving_official: "Type here to search"
     hints:
       gsa18f_event:
-        nfs_form: "Download a blank <a href=\"https://drive.google.com/file/d/0B9DenuU408s4UHVsNFlqTEFpRGc/view\">NFS Travel Gift Worksheet</a>"
+        nfs_form: "Download a blank <a href=\"https://drive.google.com/file/d/0B9DenuU408s4UHVsNFlqTEFpRGc/view\" target=\"_blank\">NFS Travel Gift Worksheet</a>"
       gsa18f_procurement:
         tock_project: "Billable project numbers can be found at <a href=\"http://tock.18f.gov/projects\" target=\"_blank\">www.tock.18f.gov/projects</a>. <i>Clicking the link will open a new window.</i>"
         link_to_product: "Search <a href='https://www.gsaadvantage.gov/advantage/main/start_page.do' target='_blank'>GSA Advantage</a> first; then <a href='http://www.amazon.com' target='_blank'>Amazon;</a> then other vendor. Paste link here."
