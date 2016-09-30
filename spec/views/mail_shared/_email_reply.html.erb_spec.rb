@@ -1,4 +1,6 @@
 describe "mail_shared/_email_reply.html.erb" do
+  include EventSpecHelper
+  
   it "renders 'Send a Comment' link with approve button" do
     approval = create(:approval_step)
     create(:api_token, step: approval)
@@ -28,7 +30,7 @@ describe "mail_shared/_email_reply.html.erb" do
   end
 
   it "renders event requests without errors" do
-    proposal = create(:gsa18f_event).proposal
+    proposal = create_event
     render(
       partial: "mail_shared/panel/proposal_attributes",
       locals: { proposal: proposal.decorate }
