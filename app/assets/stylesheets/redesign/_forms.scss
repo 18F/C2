@@ -9,7 +9,9 @@ fieldset {
 .detail-value{
     .currency .input-group-addon {
         border-radius: 4px 0px 0px 4px;
+        font-weight: bold;
         background: none;
+        padding-right: 3px;
     }
     .currency.form-group .currency.form-control {
         border-left: 0px solid white;
