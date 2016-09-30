@@ -6,6 +6,16 @@ fieldset {
     min-width: 0
 }
 
+.detail-value{
+    .currency .input-group-addon {
+        border-radius: 4px 0px 0px 4px;
+        background: none;
+    }
+    .currency.form-group .currency.form-control {
+        border-left: 0px solid white;
+    }
+}
+
 legend {
     display: block;
     width: 100%;
