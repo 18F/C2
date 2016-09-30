@@ -1,5 +1,8 @@
-%li
-  = link_to "New purchase request", new_gsa18f_procurement_path, class: "new-request-button"
-  - if ENV["BETA_18F_TRAINING"] == "true"
-    = link_to "New event request", new_gsa18f_event_path, class: "new-request-button"
+- active_class_procurements = (controller_name == "gsa18f-procurements" && params[:action] == "new") ? " active" : ""
+- active_class_events = (controller_name == "gsa18f-events" && params[:action] == "new") ? " active" : ""
+%li.new-request-procurements
+  = link_to "New purchase request", new_gsa18f_procurement_path, class: "new-request-button" + active_class_procurements
+- if ENV["BETA_18F_TRAINING"] == "true"
+  %li.new-request-events
+    = link_to "New event request", new_gsa18f_event_path, class: "new-request-button" + active_class_events
 = render 'layouts/sidebar_shared'
