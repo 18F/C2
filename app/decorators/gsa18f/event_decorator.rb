@@ -27,7 +27,7 @@ module Gsa18f
     end
 
     def translated_key(key)
-      I18n.t("decorators.gsa18f/procurement.#{key}")
+      I18n.t("decorators.gsa18f/event.#{key}")
     end
 
     private
