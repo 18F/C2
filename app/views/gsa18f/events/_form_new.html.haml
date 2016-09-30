@@ -145,7 +145,7 @@
         %label.detail-element{ for: "gsa18f_event_free_event" }
           = t(t_slug + "free_event")
         %p.help-block
-          = t(t_slug + "free_event_link")
+          = t(t_slug + "free_event_link").html_safe
 
 .column{ id: "travel_required-wrapper"}
   .detail-wrapper.row{ class: "travel_required-wrapper"}
