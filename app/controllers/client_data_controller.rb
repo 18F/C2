@@ -1,6 +1,7 @@
 # Abstract controller - requires the following methods on the subclass
 # * model_class
 # * permitted_params
+# * format_client_data
 class ClientDataController < ApplicationController
   include TokenAuth
   before_action -> { authorize model_class }, only: [:new, :create]
@@ -45,6 +46,7 @@ class ClientDataController < ApplicationController
     prepare_client_data_for_update(filtered_params, current_user)
     respond_to do |format|
       format.js do
+        @client_data_instance = format_client_data(@client_data_instance)
         js_response = process_js_response(@client_data_instance, errors)
         update_js_behavior(js_response)
       end
