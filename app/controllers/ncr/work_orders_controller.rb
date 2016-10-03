@@ -46,6 +46,10 @@ module Ncr
       Ncr::WorkOrder
     end
 
+    def format_client_data client_data_instance
+      client_data_instance
+    end
+
     def permitted_params
       Ncr::WorkOrder.permitted_params(params, work_order)
     end

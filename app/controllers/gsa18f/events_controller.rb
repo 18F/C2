@@ -4,6 +4,10 @@ module Gsa18f
 
     protected
 
+    def format_client_data client_data_instance
+      client_data_instance
+    end
+
     def model_class
       Gsa18f::Event
     end
