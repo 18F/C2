@@ -11,6 +11,7 @@
   .detail-wrapper.row{ class: "duty_station-wrapper"}
     .detail-edit.column
       %label.detail-element{ for: "gsa18f_event_duty_station" }
+        * 
         = t(t_slug + "duty_station")
         %span.hint--top-right.hint--rounded.hint--bounce.hint--medium.hint--inline{"aria-label" => duty_station_help} ?
       %span.detail-value
@@ -23,6 +24,7 @@
       .detail-wrapper.row{ class: "supervisor_id-wrapper"}
         .detail-edit.column
           %label.detail-element{ for: "gsa18f_event_supervisor_id" }
+            * 
             = t(t_slug + "supervisor_id")
           %span.detail-value{class: "holo-chevron"}
             = f.input :supervisor_id,
@@ -34,6 +36,7 @@
   .detail-wrapper.row{ class: "title_of_event-wrapper"}
     .detail-edit.column
       %label.detail-element{ for: "gsa18f_event_title_of_event" }
+        * 
         = t(t_slug + "title_of_event")
       %span.detail-value
         = f.input :title_of_event,
@@ -43,6 +46,7 @@
   .detail-wrapper.row{ class: "event_provider-wrapper"}
     .detail-edit.column
       %label.detail-element{ for: "gsa18f_event_event_provider"}
+        * 
         = t(t_slug + "event_provider")
       %span.detail-value
         = f.input :event_provider,
@@ -52,6 +56,7 @@
   .detail-wrapper.row{ class: "type_of_event-wrapper"}
     .detail-edit.column
       %label.detail-element{ for: "gsa18f_event_type_of_event" }
+        * 
         = t(t_slug + "type_of_event")
       %span.detail-value
         = f.input :type_of_event,
@@ -103,6 +108,7 @@
   .detail-wrapper.row{ class: "purpose-wrapper"}
     .detail-edit.column
       %label.detail-element{ for: "gsa18f_event_purpose" }
+        * 
         = t(t_slug + "purpose")
       %span.detail-value
         = f.input :purpose, as: :text,
@@ -112,6 +118,7 @@
   .detail-wrapper.row{ class: "justification-wrapper"}
     .detail-edit.column
       %label.detail-element{ for: "gsa18f_event_justification" }
+        * 
         = t(t_slug + "justification")
         %span.hint--top-right.hint--rounded.hint--bounce.hint--medium.hint--inline{"aria-label" => justification_help} ?
       %span.detail-value
@@ -122,6 +129,7 @@
   .detail-wrapper.row{ class: "link-wrapper"}
     .detail-edit.column
       %label.detail-element{ for: "gsa18f_event_link" }
+        * 
         = t(t_slug + "link")
       %span.detail-value
         = f.input :link,
@@ -131,6 +139,7 @@
   .detail-wrapper.row{ class: "instructions-wrapper"}
     .detail-edit.column
       %label.detail-element{ for: "gsa18f_event_instructions" }
+        * 
         = t(t_slug + "instructions")
         %span.hint--top-right.hint--rounded.hint--bounce.hint--large.hint--inline{"aria-label" => instructions_help} ?
       %span.detail-value
@@ -164,6 +173,7 @@
     .column.medium-5
       .detail-edit.column
         %label.detail-element{ for: "gsa18f_event_estimated_travel_expenses" }
+          * 
           = t(t_slug + "estimated_travel_expenses")
         %span.detail-value
           = f.input :estimated_travel_expenses, as: :currency,
