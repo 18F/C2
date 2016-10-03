@@ -4,13 +4,6 @@ module PurchaseCardMixin
   extend ActiveSupport::Concern
 
   included do
-    MIN_AMOUNT =
-      if defined? name.constantize.min_purchase_amount
-        name.constantize.min_purchase_amount
-      else
-        1
-      end
-
     def self.max_amount
       fiscals = {
         2015      => 3000,
@@ -27,8 +20,8 @@ module PurchaseCardMixin
       message: "must be less than or equal to #{ActiveSupport::NumberHelper.number_to_currency(name.constantize.max_amount)}"
     }
     validates name.constantize.purchase_amount_column_name, numericality: {
-      greater_than_or_equal_to: MIN_AMOUNT,
-      message: "must be greater than or equal to #{ActiveSupport::NumberHelper.number_to_currency(MIN_AMOUNT)}"
+      greater_than_or_equal_to: 1.0,
+      message: "must be greater than or equal to #{ActiveSupport::NumberHelper.number_to_currency(1)}"
     }
   end
 end

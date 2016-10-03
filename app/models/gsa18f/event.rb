@@ -39,7 +39,6 @@ module Gsa18f
     end
 
     include ClientDataMixin
-    include PurchaseCardMixin
 
     validates :supervisor_id, presence: true
     validates :duty_station, presence: true
@@ -53,7 +52,10 @@ module Gsa18f
       greater_than_or_equal_to: 1,
       message: "must be greater than or equal to #{ActiveSupport::NumberHelper.number_to_currency(1)}"
     }, presence: true, if: :travel_required
-    validates :nfs_form, presence: true, if: :free_event
+    validates name.constantize.purchase_amount_column_name, numericality: {
+      greater_than_or_equal_to: 1.0,
+      message: "must be greater than or equal to #{ActiveSupport::NumberHelper.number_to_currency(1)}, unless the event is free."
+    }, presence: true, unless: :free_event
 
     def steps_list
       [
