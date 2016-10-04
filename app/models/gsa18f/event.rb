@@ -102,6 +102,38 @@ module Gsa18f
       purchasers.first
     end
 
+    def self.prepare_frontend(client_data_instance)
+      new_data = Hash.new
+      new_data[:edit] = Hash.new
+      new_data[:display] = Hash.new
+      client_data_instance.attributes.each do |key, value|
+
+        if client_data_instance[key].blank?
+          new_data[key] = "--"
+        end
+
+
+        case key
+          when "supervisor_id"
+            display_value = value
+            if client_data_instance.supervisor_id.is_a? Integer
+              id = client_data_instance.supervisor_id
+              supervisor = if User.find_by(id: id) then User.find(id).full_name else "--" end
+              display_value = supervisor
+            end
+            new_data[:edit][key] = value
+            new_data[:display][key] = display_value
+            new_data[key] = value
+          else
+            new_data[:edit][key] = value
+            new_data[:display][key] = value
+            new_data[key] = value
+        end
+      end
+      new_data.pry
+      return new_data
+    end
+
     def self.talent_approver_email
       user_with_role("gsa18f_talent_approver").email_address
     end
