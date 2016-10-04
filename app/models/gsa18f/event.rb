@@ -103,15 +103,12 @@ module Gsa18f
     end
 
     def self.prepare_frontend(client_data_instance)
-      new_data = Hash.new
-      new_data[:edit] = Hash.new
-      new_data[:display] = Hash.new
+      client_display = {}
       client_data_instance.attributes.each do |key, value|
-
+        client_display[key] = ""
         if client_data_instance[key].blank?
-          new_data[key] = "--"
+          client_display[key] = "--"
         end
-
 
         case key
           when "supervisor_id"
@@ -121,17 +118,12 @@ module Gsa18f
               supervisor = if User.find_by(id: id) then User.find(id).full_name else "--" end
               display_value = supervisor
             end
-            new_data[:edit][key] = value
-            new_data[:display][key] = display_value
-            new_data[key] = value
+            client_display[key] = display_value
           else
-            new_data[:edit][key] = value
-            new_data[:display][key] = value
-            new_data[key] = value
+            client_display[key] = value
         end
       end
-      new_data.pry
-      return new_data
+      return client_display
     end
 
     def self.talent_approver_email

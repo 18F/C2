@@ -1,7 +1,6 @@
 # Abstract controller - requires the following methods on the subclass
 # * model_class
 # * permitted_params
-# * format_client_data
 class ClientDataController < ApplicationController
   include TokenAuth
   before_action -> { authorize model_class }, only: [:new, :create]
@@ -46,8 +45,8 @@ class ClientDataController < ApplicationController
     prepare_client_data_for_update(filtered_params, current_user)
     respond_to do |format|
       format.js do
-        @client_data_instance = format_client_data(@client_data_instance)
-        js_response = process_js_response(@client_data_instance, errors)
+        @client_display_data = Proposal.prepare_display_data(proposal, @client_data_instance)
+        js_response = process_js_response(@client_data_instance, @client_display_data, errors)
         update_js_behavior(js_response)
       end
       format.html do
@@ -98,7 +97,7 @@ class ClientDataController < ApplicationController
   end
 
   def js_response_function(request_type, js_response)
-    "c2.detailsSave.el.trigger('details-form:" + request_type + "', " + js_response.to_json + ");"
+    "c2.detailsSave.el.trigger('details-form:" + request_type + "', " + js_response.to_json + ", "+ +");"
   end
 
   def prepare_client_data_for_update(filtered_params, current_user)
@@ -153,10 +152,10 @@ class ClientDataController < ApplicationController
     params.permit(attachments: [])[:attachments] || []
   end
 
-  def process_js_response(client_data_instance, errors)
+  def process_js_response(client_data_instance, client_display, errors)
     if errors.empty?
       update_or_notify_of_no_changes
-      { status: "success", response: client_data_instance }
+      { status: "success", response: client_data_instance, display: client_display }
     else
       { status: "error", response: errors }
     end
