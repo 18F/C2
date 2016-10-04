@@ -1,10 +1,12 @@
+- supervisors = User.with_slug("gsa18f")
+
 .column{ id: key + '-wrapper'}
   .detail-wrapper.row{ class: key + "-wrapper", id: value_id }
     .detail-display.column
       %label.detail-element
         = t(t_slug + key)
       %span.detail-value
-        = client_display
+        = client_field_display
     .detail-edit.column
       %label.detail-element{ for: "gsa18f_event_supervisor_id"}
         Supervisor
