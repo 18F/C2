@@ -9,7 +9,8 @@
   - data[:client_slug] = @current_user.client_slug
   - data[:client_data] = @client_data_instance
   - data[:client_id] = @client_data_instance.id.to_s
-  - data[:client_field] = blank_field_default(@client_data_instance[key])
+  - data[:client_field] = blank_field_default(@client_data_instance[key]['edit'])
+  - data[:client_display] = blank_field_default(@client_data_instance[key]['value'])
   - data[:value_id] = key + '-' + @client_data_instance.id.to_s
 
 
