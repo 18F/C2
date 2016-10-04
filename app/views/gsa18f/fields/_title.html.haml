@@ -1,7 +1,7 @@
 %h1.c2n_header.view-title{ id: "proposal-title-wrapper" }
-  - value_id = "product_name_and_description" + '-' + @client_data_instance.id.to_s
+  - value_id = "title_of_event" + '-' + @client_data_instance.id.to_s
   %span.detail-display{ id: value_id }
     %span.detail-value
-      = @client_data_instance.product_name_and_description
+      = @client_data_instance.title_of_event
     %span.detail-edit
-      = f.input :product_name_and_description, label: false
+      = f.input :title_of_event, label: false
