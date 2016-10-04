@@ -12,10 +12,7 @@ class ProposalsController < ApplicationController
 
   def show
     @proposal = proposal.decorate
-
-    if detail_beta?
-      show_next
-    end
+    show_next
   end
 
   def show_next
@@ -44,10 +41,8 @@ class ProposalsController < ApplicationController
   end
 
   def beta_index_setup
-    if list_beta?
-      @unfiltered_data = listing.all
-      index_redesign
-    end
+    @unfiltered_data = listing.all
+    index_redesign
   end
 
   def cancel_form
