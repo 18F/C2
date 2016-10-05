@@ -205,8 +205,6 @@ module Ncr
       Ncr::WorkOrderValueNormalizer.new(self).run
     end
 
-    private
-
     def self.prepare_frontend(client_data_instance)
       client_display = {}
       client_data_instance.attributes.each do |key, value|
@@ -219,6 +217,8 @@ module Ncr
       end
       client_display
     end
+
+    private
 
     def frozen_approving_official_not_changed
       if persisted? && approving_official_id_changed? && approver_email_frozen?
