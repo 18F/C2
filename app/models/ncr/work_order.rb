@@ -210,7 +210,7 @@ module Ncr
     def self.prepare_frontend(client_data_instance)
       client_display = {}
       client_data_instance.attributes.each do |key, value|
-        client_display[key] = "--" ? client_data_instance[key].blank? : client_display[key]
+        client_display[key] = client_data_instance[key].blank? ? "--" : client_display[key]
 
         case key
         when key
