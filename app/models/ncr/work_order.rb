@@ -207,6 +207,22 @@ module Ncr
 
     private
 
+    def self.prepare_frontend(client_data_instance)
+      client_display = {}
+      client_data_instance.attributes.each do |key, value|
+        client_display[key] = ""
+        if client_data_instance[key].blank?
+          client_display[key] = "--"
+        end
+
+        case key
+          else
+            client_display[key] = value
+        end
+      end
+      return client_display
+    end
+
     def frozen_approving_official_not_changed
       if persisted? && approving_official_id_changed? && approver_email_frozen?
         errors.add(:approving_official, "Approving official cannot be changed")
