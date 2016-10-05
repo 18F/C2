@@ -105,7 +105,7 @@ module Gsa18f
     def prepare_frontend_supervisor_id(value)
       if client_data_instance.supervisor_id.is_a? Integer
         id = client_data_instance.supervisor_id
-        supervisor = if User.find_by(id: id) then User.find(id).full_name else "--" end
+        supervisor = User.find_by(id: id) ? User.find(id).full_name : "--"
         value = supervisor
       end
       value
