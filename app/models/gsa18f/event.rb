@@ -119,8 +119,14 @@ module Gsa18f
     end
 
     def self.permitted_params(params, _procurement_instance)
+      params = self.update_title_params(params)
       permitted = Gsa18f::EventFields.new.relevant
       params.require(:gsa18f_event).permit(*permitted)
+    end
+
+    def self.update_title_params(params)
+      params["gsa18f_event"]["title_of_event"] = params["gsa18f_event"]["product_name_and_description"]
+      params
     end
   end
 end
