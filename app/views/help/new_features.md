@@ -5,7 +5,7 @@
 <% set_new_feature_date(@new_features, @new_feature_help_date) %>
 
 
-*November, 2016*
+*October, 2016*
 
 We have completely redesigned the visual look of C2 and taken what we’ve learned from our users to continue improving the way it works. Here are a few things we hope you enjoy:
 
