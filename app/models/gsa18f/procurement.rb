@@ -96,9 +96,8 @@ module Gsa18f
         if client_data_instance[key].blank?
           client_display[key] = "--"
         end
-
         case key
-          else
+          when key
             client_display[key] = value
         end
       end

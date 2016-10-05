@@ -216,7 +216,7 @@ module Ncr
         end
 
         case key
-          else
+          when key
             client_display[key] = value
         end
       end
