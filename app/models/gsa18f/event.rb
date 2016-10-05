@@ -102,28 +102,28 @@ module Gsa18f
       purchasers.first
     end
 
+    def prepare_frontend_supervisor_id(value)
+      if client_data_instance.supervisor_id.is_a? Integer
+        id = client_data_instance.supervisor_id
+        supervisor = if User.find_by(id: id) then User.find(id).full_name else "--" end
+        value = supervisor
+      end
+      value
+    end
+
     def self.prepare_frontend(client_data_instance)
       client_display = {}
       client_data_instance.attributes.each do |key, value|
-        client_display[key] = ""
-        if client_data_instance[key].blank?
-          client_display[key] = "--"
-        end
+        client_display[key] = "--" ? client_data_instance[key].blank? : client_display[key]
 
         case key
         when "supervisor_id"
-          display_value = value
-          if client_data_instance.supervisor_id.is_a? Integer
-            id = client_data_instance.supervisor_id
-            supervisor = if User.find_by(id: id) then User.find(id).full_name else "--" end
-            display_value = supervisor
-          end
-          client_display[key] = display_value
+          client_display[key] = prepare_frontend_supervisor_id(value, client_data_instance)
         else
           client_display[key] = value
         end
       end
-      return client_display
+      client_display
     end
 
     def self.talent_approver_email
