@@ -97,8 +97,8 @@ module Gsa18f
           client_display[key] = "--"
         end
         case key
-          when key
-            client_display[key] = value
+        when key
+          client_display[key] = value
         end
       end
       return client_display

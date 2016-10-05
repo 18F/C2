@@ -111,16 +111,16 @@ module Gsa18f
         end
 
         case key
-          when "supervisor_id"
-            display_value = value
-            if client_data_instance.supervisor_id.is_a? Integer
-              id = client_data_instance.supervisor_id
-              supervisor = if User.find_by(id: id) then User.find(id).full_name else "--" end
-              display_value = supervisor
-            end
-            client_display[key] = display_value
-          else
-            client_display[key] = value
+        when "supervisor_id"
+          display_value = value
+          if client_data_instance.supervisor_id.is_a? Integer
+            id = client_data_instance.supervisor_id
+            supervisor = if User.find_by(id: id) then User.find(id).full_name else "--" end
+            display_value = supervisor
+          end
+          client_display[key] = display_value
+        else
+          client_display[key] = value
         end
       end
       return client_display
