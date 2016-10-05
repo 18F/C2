@@ -45,7 +45,7 @@ class ClientDataController < ApplicationController
     prepare_client_data_for_update(filtered_params, current_user)
     respond_to do |format|
       format.js do
-        @client_display_data = Proposal.prepare_display_data(proposal, @client_data_instance)
+        @client_display_data = ProposalModifier.new(proposal, @client_data_instance)
         js_response = process_js_response(@client_data_instance, @client_display_data, errors)
         update_js_behavior(js_response)
       end
@@ -79,11 +79,8 @@ class ClientDataController < ApplicationController
   end
 
   def update_js_behavior(js_response)
-    if params[:validate] == "true"
-      render js: js_response_function("validate", js_response)
-    else
-      render js: js_response_function("respond", js_response)
-    end
+    status = params[:validate] == "true" ? "validate" : "respond"
+    render js: js_response_function(status, js_response)
   end
 
   def update_behavior(proposal, errors)
