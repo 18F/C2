@@ -296,10 +296,6 @@ class Proposal < ActiveRecord::Base
     CLIENT_MODELS.select { |cmodel| cmodel.slug_matches?(user) }[0]
   end
 
-  def self.prepare_display_data(proposal, client_data)
-    Object.const_get(proposal.client_data_type).prepare_frontend(client_data)
-  end
-
   private
 
   def create_new_observation(user, adder, reason)
