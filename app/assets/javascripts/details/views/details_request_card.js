@@ -99,7 +99,7 @@ DetailsRequestCard = (function(){
   }
 
   DetailsRequestCard.prototype.updateViewModeContent = function(data){
-    var content = this.formatData(data['response']);
+    var content = this.formatData(data['display']);
     var id = content['id'];
     var self = this;
     $.each(content, function(key, value){
