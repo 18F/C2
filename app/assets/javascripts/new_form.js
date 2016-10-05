@@ -7,7 +7,7 @@ $(document).ready(function(){
       }
     });
     if(formComplete){
-      $("input[type='submit']").addClass("form-complete")
+      $(".action-bar-container input[type='submit']").addClass("form-complete")
     }
   })
 });

@@ -122,6 +122,5 @@ module Gsa18f
       permitted = Gsa18f::EventFields.new.relevant
       params.require(:gsa18f_event).permit(*permitted)
     end
-
   end
 end
