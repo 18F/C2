@@ -64,7 +64,7 @@ Each proposal object is composed of a few attributes and some child objects.
 Attribute | Type | Note
 --- | --- | ---
 `id` | integer | primary identifier
-`status` | string | one of: `pending`, `cancelled`, `complete`
+`status` | string | one of: `pending`, `canceled`, `complete`
 `created_at` | string | timestamp
 `updated_at` | string | timestamp
 `client_data_type` | string | name of the client data class
@@ -138,7 +138,7 @@ Name | Values
 --- | ---
 `size` | an integer >= 0 (defaults to 20)
 `from` | an integer >= 0 (defaults to 0)
-`status` | one of `pending`, `cancelled`, `complete`
+`status` | one of `pending`, `canceled`, `complete`
 `start_date` | timestamp string
 `end_date` | timestamp.string
 `text` | full-text search string. See https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html#query-string-syntax
