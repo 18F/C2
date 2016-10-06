@@ -10,5 +10,5 @@ class ProposalModifier
 
   private
 
-  # attr_reader :proposal, :client_data
+  attr_accessor :proposal, :client_data
 end
