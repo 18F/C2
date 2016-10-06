@@ -211,11 +211,13 @@ module Ncr
         client_display[key] = client_data_instance[key].blank? ? "--" : client_display[key]
         client_display[key] = case key
                               when "not_to_exceed"
-                                if client_data_instance[key] == true
+                                if value == true
                                   "Not to exceed"
                                 else
                                   "Exact"
                                 end
+                              when "ncr_organization_id"
+                                Ncr::Organization.find(value)
                               else
                                 value
                               end

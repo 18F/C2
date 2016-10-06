@@ -96,8 +96,8 @@ DetailsRequestCard = (function(){
 
     } else if(key === "date_requested") {
       value = moment(value).format("MMM Do, YYYY")
-    } else if(key === "ncr_organization_id") {
-      value = $("#ncr_work_order_ncr_organization_id option").text();
+    // } else if(key === "ncr_organization_id") {
+      // value = $("#ncr_work_order_ncr_organization_id option").text();
     }
     return value;
   }
