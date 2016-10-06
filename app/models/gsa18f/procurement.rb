@@ -93,11 +93,16 @@ module Gsa18f
       client_display = {}
       client_data_instance.attributes.each do |key, value|
         client_display[key] = client_data_instance[key].blank? ? "--" : client_display[key]
-
-        case key
-        when key
-          client_display[key] = value
-        end
+        client_display[key] = case key
+                              when "is_tock_billable"
+                                if client_data_instance[key] == true
+                                  "Yes"
+                                else
+                                  "No"
+                                end
+                              else
+                                value
+                              end
       end
       client_display
     end
