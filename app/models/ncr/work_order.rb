@@ -210,7 +210,7 @@ module Ncr
       if data[key].nil?
         "--"
       elsif special_keys.include? key
-        self.send("display_update_" + key, value, client_data_instance)
+        self.send("display_update_" + key, value, key, client_data_instance)
       else
         value
       end
@@ -219,22 +219,22 @@ module Ncr
     def self.prepare_frontend(client_data_instance)
       client_display = {}
       client_data_instance.attributes.each do |key, value|
-        client_display[key] = update_display(client_data_instance, key, value)
+        client_display[key] = update_display(value, key, client_data_instance)
       end
       client_display
     end
 
     private
 
-    def display_update_not_to_exceed(value)
+    def display_update_not_to_exceed(value, key, data)
       value == true ? "Not to exceed" : "Exact"
     end
 
-    def display_update_ncr_organization_id(value)
+    def display_update_ncr_organization_id(value, key, data)
       Ncr::Organization.find(value)
     end
 
-    def display_update_direct_pay(value)
+    def display_update_direct_pay(value, key, data)
       value == true ? "Direct pay will be used" : "Direct pay will not be used"
     end
 

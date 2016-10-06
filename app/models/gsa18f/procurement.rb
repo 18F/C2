@@ -89,11 +89,11 @@ module Gsa18f
       purchasers.first
     end
 
-    def display_update_is_tock_billable(value, client_data_instance, key)
+    def display_update_is_tock_billable(value, key, data)
       client_data_instance[key] == true ? "Yes" : "No"
     end
 
-    def display_update_date_requested(value, client_data_instance, key)
+    def display_update_date_requested(value, key, data)
       value.strftime("%b %e, %Y")
     end
 
@@ -102,16 +102,16 @@ module Gsa18f
       if data[key].nil?
         "--"
       elsif special_keys.include? key
-        self.send("display_update_" + key, value, client_data_instance, key)
+        self.send("display_update_" + key, value, key, data)
       else
         value
       end
     end
 
-    def self.prepare_frontend(client_data_instance)
+    def self.prepare_frontend(data)
       client_display = {}
       client_data_instance.attributes.each do |key, value|
-        client_display[key] = update_display(client_data_instance, key, value)
+        client_display[key] = update_display(value, key, data)
       end
       client_display
     end
