@@ -1,4 +1,4 @@
-class ProposalModifier
+class ModifyProposal
   def initialize(proposal, client_data)
     @proposal = proposal
     @client_data = client_data
