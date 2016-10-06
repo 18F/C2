@@ -100,6 +100,8 @@ module Gsa18f
                                 else
                                   "No"
                                 end
+                              when "date_requested"
+                                value.strftime("%b %e, %Y")
                               else
                                 value
                               end

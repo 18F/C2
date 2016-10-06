@@ -76,14 +76,6 @@ DetailsRequestCard = (function(){
     this.el.trigger('update:' + type, { field: field, value: value });
   }
 
-  DetailsRequestCard.prototype.updateBoolean = function(value, yesCondition, noCondition){
-    if(value){
-      return yesCondition;
-    } else {
-      return noCondition;
-    }
-  }
-
   DetailsRequestCard.prototype.defineValue = function(key, value){
     var self = this;
     if(key === "date_requested") {
