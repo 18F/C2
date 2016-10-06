@@ -90,6 +90,10 @@ DetailsRequestCard = (function(){
       // value = self.updateBoolean(value, 'Not to exceed', 'Exact');
     // } else if(key === "is_tock_billable") {
       // value = self.updateBoolean(value, 'Yes', 'No');
+
+    // Need test for each condition
+    // Need to finish rest
+
     } else if(key === "date_requested") {
       value = moment(value).format("MMM Do, YYYY")
     } else if(key === "ncr_organization_id") {
