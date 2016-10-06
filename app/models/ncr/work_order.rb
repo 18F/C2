@@ -205,7 +205,7 @@ module Ncr
       Ncr::WorkOrderValueNormalizer.new(self).run
     end
 
-    def update_display(data, key, value)
+    def self.update_display(data, key, value)
       if data[key].nil?
         return "--"
       end
