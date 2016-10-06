@@ -206,16 +206,11 @@ module Ncr
     end
 
     def self.update_display(data, key, value)
+      special_keys = %w(not_to_exceed ncr_organization_id direct_pay)
       if data[key].nil?
-        return "--"
-      end
-      case key
-      when "not_to_exceed"
-        value == true ? "Not to exceed" : "Exact"
-      when "ncr_organization_id"
-        Ncr::Organization.find(value)
-      when "direct_pay"
-        value == true ? "Direct pay will be used" : "Direct pay will not be used"
+        "--"
+      elsif special_keys.include? key
+        self.send("display_update_" + key, value)
       else
         value
       end
@@ -230,6 +225,18 @@ module Ncr
     end
 
     private
+
+    def display_update_not_to_exceed(value)
+      value == true ? "Not to exceed" : "Exact"
+    end
+
+    def display_update_ncr_organization_id(value)
+      Ncr::Organization.find(value)
+    end
+
+    def display_update_direct_pay(value)
+      value == true ? "Direct pay will be used" : "Direct pay will not be used"
+    end
 
     def frozen_approving_official_not_changed
       if persisted? && approving_official_id_changed? && approver_email_frozen?
