@@ -95,11 +95,7 @@ module Gsa18f
         client_display[key] = client_data_instance[key].blank? ? "--" : client_display[key]
         client_display[key] = case key
                               when "is_tock_billable"
-                                if client_data_instance[key] == true
-                                  "Yes"
-                                else
-                                  "No"
-                                end
+                                client_data_instance[key] == true ? "Yes" : "No"
                               when "date_requested"
                                 value.strftime("%b %e, %Y")
                               else
