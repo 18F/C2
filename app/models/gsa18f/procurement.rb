@@ -89,18 +89,24 @@ module Gsa18f
       purchasers.first
     end
 
+    def update_display(data, key, value)
+      if data[key].nil?
+        return "--"
+      end
+      case key
+      when "is_tock_billable"
+        client_data_instance[key] == true ? "Yes" : "No"
+      when "date_requested"
+        value.strftime("%b %e, %Y")
+      else
+        value
+      end
+    end
+
     def self.prepare_frontend(client_data_instance)
       client_display = {}
       client_data_instance.attributes.each do |key, value|
-        client_display[key] = client_data_instance[key].blank? ? "--" : client_display[key]
-        client_display[key] = case key
-                              when "is_tock_billable"
-                                client_data_instance[key] == true ? "Yes" : "No"
-                              when "date_requested"
-                                value.strftime("%b %e, %Y")
-                              else
-                                value
-                              end
+        client_display[key] = update_display(client_data_instance, key, value)
       end
       client_display
     end

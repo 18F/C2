@@ -5,10 +5,10 @@ class ProposalModifier
   end
 
   def run
-    Object.const_get(@proposal.client_data_type).prepare_frontend(@client_data)
+    Object.const_get(@proposal.client_data_type).prepare_frontend(@client_data).run
   end
 
   private
 
-  attr_reader :proposal, :client_data
+  # attr_reader :proposal, :client_data
 end
