@@ -111,13 +111,16 @@ module Gsa18f
       value
     end
 
+    def display_update_supervisor_id(value, client_data_instance)
+      prepare_frontend_supervisor_id(value, client_data_instance)
+    end
+
     def update_display(data, key, value)
+      special_keys = %w(supervisor_id)
       if data[key].nil?
-        return "--"
-      end
-      case key
-      when "supervisor_id"
-        prepare_frontend_supervisor_id(value, client_data_instance)
+        "--"
+      elsif special_keys.include? key
+        self.send("display_update_" + key, value, client_data_instance)
       else
         value
       end

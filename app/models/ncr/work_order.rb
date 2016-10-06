@@ -210,7 +210,7 @@ module Ncr
       if data[key].nil?
         "--"
       elsif special_keys.include? key
-        self.send("display_update_" + key, value)
+        self.send("display_update_" + key, value, client_data_instance)
       else
         value
       end
