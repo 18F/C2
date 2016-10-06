@@ -1,20 +1,18 @@
 class PrepareDisplayFields
-  def initialize(value, key, client_data_instance, data)
-    @data = data
+  def initialize(value, key,  data)
     @value = value
     @key = key
-    @client_data_instance = client_data_instance
+    @data = data
   end
 
   def run
-    if data[key].nil?
+    if @data[@key].nil?
       "--"
     elsif special_keys.include? key
-      self.send("display_update_" + key, value, key, client_data_instance)
+      Object.const_get(@data.class).send("display_update_" + key, value, key, data)
     else
       value
     end
-    Object.const_get(@proposal.client_data_type).prepare_frontend(@client_data)
   end
 
   private
