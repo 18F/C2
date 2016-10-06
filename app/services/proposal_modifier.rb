@@ -5,7 +5,7 @@ class ProposalModifier
   end
 
   def run
-    Object.const_get(@proposal.client_data_type).prepare_frontend(@client_data).run
+    Object.const_get(@proposal.client_data_type).prepare_frontend(@client_data)
   end
 
   private

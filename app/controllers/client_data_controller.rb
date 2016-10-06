@@ -45,7 +45,7 @@ class ClientDataController < ApplicationController
     prepare_client_data_for_update(filtered_params, current_user)
     respond_to do |format|
       format.js do
-        @client_display_data = ProposalModifier.new(proposal, @client_data_instance)
+        @client_display_data = ProposalModifier.new(proposal, @client_data_instance).run
         js_response = process_js_response(@client_data_instance, @client_display_data, errors)
         update_js_behavior(js_response)
       end
