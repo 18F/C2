@@ -86,18 +86,8 @@ DetailsRequestCard = (function(){
 
   DetailsRequestCard.prototype.defineValue = function(key, value){
     var self = this;
-    // if(key === "not_to_exceed") {
-      // value = self.updateBoolean(value, 'Not to exceed', 'Exact');
-    // } else if(key === "is_tock_billable") {
-      // value = self.updateBoolean(value, 'Yes', 'No');
-
-    // Need test for each condition
-    // Need to finish rest
-
-    } else if(key === "date_requested") {
+    if(key === "date_requested") {
       value = moment(value).format("MMM Do, YYYY")
-    // } else if(key === "ncr_organization_id") {
-      // value = $("#ncr_work_order_ncr_organization_id option").text();
     }
     return value;
   }
