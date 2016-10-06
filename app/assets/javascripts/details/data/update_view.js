@@ -29,9 +29,6 @@ UpdateView = (function() {
       key = JSON.parse(key);
       value = key[String(value)];
     }
-    if(value === "" || value === null){
-      value = "--";
-    }
     $(data['field']).html(value);
   }
 
