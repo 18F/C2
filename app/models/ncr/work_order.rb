@@ -205,20 +205,26 @@ module Ncr
       Ncr::WorkOrderValueNormalizer.new(self).run
     end
 
+    def update_display(data, key, value)
+      if data[key].nil?
+        return "--"
+      end
+      case key
+      when "not_to_exceed"
+        value == true ? "Not to exceed" : "Exact"
+      when "ncr_organization_id"
+        Ncr::Organization.find(value)
+      when "direct_pay"
+        value == true ? "Direct pay will be used" : "Direct pay will not be used"
+      else
+        value
+      end
+    end
+
     def self.prepare_frontend(client_data_instance)
       client_display = {}
       client_data_instance.attributes.each do |key, value|
-        client_display[key] = client_data_instance[key].blank? ? "--" : client_display[key]
-        client_display[key] = case key
-                              when "not_to_exceed"
-                                value == true ? "Not to exceed" : "Exact"
-                              when "ncr_organization_id"
-                                Ncr::Organization.find(value)
-                              when "direct_pay"
-
-                              else
-                                value
-                              end
+        client_display[key] = update_display(client_data_instance, key, value)
       end
       client_display
     end
