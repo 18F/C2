@@ -115,13 +115,12 @@ module Gsa18f
       client_display = {}
       client_data_instance.attributes.each do |key, value|
         client_display[key] = client_data_instance[key].blank? ? "--" : client_display[key]
-
-        case key
-        when "supervisor_id"
-          client_display[key] = prepare_frontend_supervisor_id(value, client_data_instance)
-        else
-          client_display[key] = value
-        end
+        client_display[key] = case key
+                              when "supervisor_id"
+                                client_display[key] = prepare_frontend_supervisor_id(value, client_data_instance)
+                              else
+                                client_display[key] = value
+                              end
       end
       client_display
     end
