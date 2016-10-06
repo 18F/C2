@@ -117,9 +117,9 @@ module Gsa18f
         client_display[key] = client_data_instance[key].blank? ? "--" : client_display[key]
         client_display[key] = case key
                               when "supervisor_id"
-                                client_display[key] = prepare_frontend_supervisor_id(value, client_data_instance)
+                                prepare_frontend_supervisor_id(value, client_data_instance)
                               else
-                                client_display[key] = value
+                                value
                               end
       end
       client_display
