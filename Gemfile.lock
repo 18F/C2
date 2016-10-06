@@ -311,7 +311,6 @@ GEM
     multi_xml (0.5.5)
     multipart-post (2.0.0)
     nenv (0.3.0)
-    newrelic_rpm (3.14.2.312)
     nokogiri (1.6.8)
       mini_portile2 (~> 2.1.0)
       pkg-config (~> 1.1.7)
@@ -591,7 +590,6 @@ DEPENDENCIES
   letter_opener_web
   mandrill-rails
   meta_request
-  newrelic_rpm
   omniauth-myusa
   paper_trail (~> 4.1.0)
   paperclip (~> 5.0.0)

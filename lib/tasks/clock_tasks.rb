@@ -17,8 +17,8 @@ class ClockTasks
   end
 
   class << self
-     include ::NewRelic::Agent::Instrumentation::ControllerInstrumentation
-     add_transaction_tracer :send_daily_ncr_budget_report, category: :task
-     add_transaction_tracer :send_weekly_fiscal_year_ncr_budget_report, category: :task
+    #  include ::NewRelic::Agent::Instrumentation::ControllerInstrumentation
+    #  add_transaction_tracer :send_daily_ncr_budget_report, category: :task
+    #  add_transaction_tracer :send_weekly_fiscal_year_ncr_budget_report, category: :task
   end
 end

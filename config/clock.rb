@@ -1,6 +1,6 @@
 ENV["NEW_RELIC_DISPATCHER"] ||= "clockwork"
 
-require "newrelic_rpm"
+# require "newrelic_rpm"
 require "clockwork"
 require_relative "boot"
 require_relative "environment"
