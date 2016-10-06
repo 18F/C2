@@ -76,14 +76,6 @@ DetailsRequestCard = (function(){
     this.el.trigger('update:' + type, { field: field, value: value });
   }
 
-  DetailsRequestCard.prototype.defineValue = function(key, value){
-    var self = this;
-    if(key === "date_requested") {
-      value = moment(value).format("MMM Do, YYYY")
-    }
-    return value;
-  }
-
   DetailsRequestCard.prototype.updateViewModeContent = function(data){
     var content = this.formatData(data['display']);
     var id = content['id'];
@@ -91,7 +83,6 @@ DetailsRequestCard = (function(){
     $.each(content, function(key, value){
       var field = self.el.selector + ' #' + key + '-' + id;
       var fieldTarget = field + " .detail-display .detail-value";
-      value = self.defineValue(key, value);
       if(key === "direct_pay" || key === "recurring"){
         self.updateField(field + ' input[type="checkbox"]', value, "checkbox");
       } else {
