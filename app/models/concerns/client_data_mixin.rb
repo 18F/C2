@@ -108,6 +108,7 @@ module ClientDataMixin
     end
 
     def setup_and_email_subscribers(_comment)
+      puts 'setup and email subscribers - client mixin'
     end
 
     def normalize_input(_current_user)

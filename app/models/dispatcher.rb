@@ -69,6 +69,17 @@ class Dispatcher
   end
 
   def on_proposal_update(modifier: nil, needs_reapproval: false)
+    proposal.individual_steps.completed.each do |step|
+      unless user_is_modifier?(step.user, comment.user)
+        # TODO Remove
+        # rubocop:disable Style/Next
+        if needs_review == false
+          ProposalMailer.
+            proposal_updated_no_action_required(step.user, proposal, comment).
+            deliver_later
+        end
+      end
+    end
   end
 
   def on_step_user_removal(removed_step_users)

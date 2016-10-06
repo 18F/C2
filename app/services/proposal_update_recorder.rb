@@ -14,6 +14,12 @@ class ProposalUpdateRecorder
     if comment_texts.any?
       create_comment(comment_texts)
     end
+    DispatchFinder.
+        run(proposal).
+        on_proposal_update(
+          needs_review: requires_budget_reapproval?,
+          comment: @update_comment
+        )
   end
 
   private
