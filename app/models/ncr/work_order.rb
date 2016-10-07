@@ -205,23 +205,8 @@ module Ncr
       Ncr::WorkOrderValueNormalizer.new(self).run
     end
 
-    def self.update_display(data, key, value)
-      special_keys = %w(not_to_exceed ncr_organization_id direct_pay)
-      if data[key].nil?
-        "--"
-      elsif special_keys.include? key
-        self.send("display_update_" + key, value, key, client_data_instance)
-      else
-        value
-      end
-    end
-
-    def self.prepare_frontend(client_data_instance)
-      client_display = {}
-      client_data_instance.attributes.each do |key, value|
-        client_display[key] = update_display(value, key, client_data_instance)
-      end
-      client_display
+    def self.get_special_keys
+      special_keys = %w(is_tock_billable, date_requested)
     end
 
     private
