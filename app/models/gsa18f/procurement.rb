@@ -97,7 +97,7 @@ module Gsa18f
       obj[:value].strftime("%b %e, %Y")
     end
 
-    def self.get_special_keys
+    def self.load_special_keys
       %w(is_tock_billable, date_requested)
     end
 

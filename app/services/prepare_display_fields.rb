@@ -1,7 +1,7 @@
 class PrepareDisplayFields
   def initialize(client_data_instance)
     @obj = { data: client_data_instance }
-    @obj[:special_keys] = get_special_keys
+    @obj[:special_keys] = load_special_keys
   end
 
   def run
@@ -18,8 +18,8 @@ class PrepareDisplayFields
     client_display
   end
 
-  def get_special_keys
-    Object.const_get(@obj[:data].class.name).get_special_keys
+  def load_special_keys
+    Object.const_get(@obj[:data].class.name).load_special_keys
   end
 
   def modify_display
