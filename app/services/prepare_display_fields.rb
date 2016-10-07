@@ -26,7 +26,9 @@ class PrepareDisplayFields
     if @obj[:data][@obj[:key]].nil?
       "--"
     elsif @obj[:special_keys].include? @obj[:key]
-      Object.const_get(@obj[:data].class.name).send("display_update_" + @obj[:key], @obj)
+      class_name = @obj[:data].class.name
+      method_name = "display_update_" + @obj[:key]
+      Object.const_get(class_name).send(method_name, @obj)
     else
       @obj[:value]
     end
