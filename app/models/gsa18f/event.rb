@@ -111,25 +111,22 @@ module Gsa18f
       value
     end
 
-    def display_update_supervisor_id(value, key, data)
-      prepare_frontend_supervisor_id(value, data)
+    def display_update_supervisor_id(obj)
+      prepare_frontend_supervisor_id(obj[:value], obj[:data])
     end
 
-    def update_display(data, key, value)
-      special_keys = %w(supervisor_id)
-      if data[key].nil?
-        "--"
-      elsif special_keys.include? key
-        self.send("display_update_" + key, value, key, data)
-      else
-        value
-      end
+    def update_display(obj)
+      obj[:special_keys] = %w(supervisor_id)
+      PrepareDisplayFields.new(obj).run
     end
 
     def self.prepare_frontend(data)
       client_display = {}
+      obj = {data: data}
       client_data_instance.attributes.each do |key, value|
-        client_display[key] = update_display(value, key, data)
+        obj[:key] = key
+        obj[:value] = value
+        client_display[key] = update_display(display_value)
       end
       client_display
     end
