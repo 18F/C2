@@ -89,14 +89,6 @@ module Gsa18f
       purchasers.first
     end
 
-    def display_update_is_tock_billable(obj)
-      obj[:data][obj[:key]] == true ? "Yes" : "No"
-    end
-
-    def display_update_date_requested(obj)
-      obj[:value].strftime("%b %e, %Y")
-    end
-
     def self.special_keys
       %w(is_tock_billable date_requested)
     end
@@ -126,5 +118,14 @@ module Gsa18f
       permitted = Gsa18f::ProcurementFields.new.relevant(params[:gsa18f_procurement][:recurring])
       params.require(:gsa18f_procurement).permit(*permitted)
     end
+
+    def self.display_update_is_tock_billable(obj)
+      obj[:data][obj[:key]] == true ? "Yes" : "No"
+    end
+
+    def self.display_update_date_requested(obj)
+      obj[:value].strftime("%b %e, %Y")
+    end
+
   end
 end

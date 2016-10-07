@@ -102,15 +102,6 @@ module Gsa18f
       purchasers.first
     end
 
-    def display_update_supervisor_id(obj)
-      if obj[:data].supervisor_id.is_a? Integer
-        id = obj[:data].supervisor_id
-        supervisor = User.find_by(id: id) ? User.find(id).full_name : "--"
-        obj[:value] = supervisor
-      end
-      obj[:value]
-    end
-
     def self.special_keys
       %w(supervisor_id)
     end
@@ -134,6 +125,15 @@ module Gsa18f
     def self.permitted_params(params, _procurement_instance)
       permitted = Gsa18f::EventFields.new.relevant
       params.require(:gsa18f_event).permit(*permitted)
+    end
+
+    def self.display_update_supervisor_id(obj)
+      if obj[:data].supervisor_id.is_a? Integer
+        id = obj[:data].supervisor_id
+        supervisor = User.find_by(id: id) ? User.find(id).full_name : "--"
+        obj[:value] = supervisor
+      end
+      obj[:value]
     end
   end
 end
