@@ -16,12 +16,12 @@ class PrepareDisplayFields
       @obj[:value] = value
       client_display[key] = modify_display
     end
-    client_display['total_price'] = add_total_price
+    client_display["total_price"] = add_total_price
     client_display
   end
 
   def add_total_price
-    "%.2f" % Object.const_get(@obj[:data].class.name).find(@obj[:data].id).total_price
+    sprintf("%.2f", Object.const_get(@obj[:data].class.name).find(@obj[:data].id).total_price)
   end
 
   def load_special_keys

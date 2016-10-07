@@ -116,10 +116,10 @@ module Gsa18f
     end
 
     def self.special_keys
-      %w(recurring_interval recurring_length total_price
-        type_of_event urgency is_tock_billable date_requested
-        recurring client_billed end_date start_date
-        purchase_type office)
+      %w( recurring_interval recurring_length total_price
+          type_of_event urgency is_tock_billable date_requested
+          recurring client_billed end_date start_date
+          purchase_type office)
     end
 
     def self.display_update_office(obj)
@@ -139,7 +139,7 @@ module Gsa18f
     end
 
     def self.display_update_total_price(obj)
-      "%.2f" % Gsa18f::Procurement.find(obj[:data].id).total_price
+      sprintf("%.2f", Gsa18f::Procurement.find(obj[:data].id).total_price)
     end
 
     def self.display_update_type_of_event(obj)
