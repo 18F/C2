@@ -1,4 +1,6 @@
 feature "Create a Gsa18F event" do
+  include EventSpecHelper
+  
   scenario "user not signed in" do
     visit new_gsa18f_event_path
 
