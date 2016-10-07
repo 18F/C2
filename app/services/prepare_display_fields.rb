@@ -10,7 +10,7 @@ class PrepareDisplayFields
 
   def process_fields
     client_display = {}
-    client_data_instance.attributes.each do |key, value|
+    @obj[:data].attributes.each do |key, value|
       @obj[:key] = key
       @obj[:value] = value
       client_display[key] = modify_display
@@ -19,14 +19,14 @@ class PrepareDisplayFields
   end
 
   def get_special_keys
-    Object.const_get(@obj[:data].class).get_special_keys
+    Object.const_get(@obj[:data].class.name).get_special_keys
   end
 
   def modify_display
     if @obj[:data][@obj[:key]].nil?
       "--"
     elsif @obj[:special_keys].include? @obj[:key]
-      Object.const_get(@obj[:data].class).send("display_update_" + @obj[:key], @obj)
+      Object.const_get(@obj[:data].class.name).send("display_update_" + @obj[:key], @obj)
     else
       @obj[:value]
     end
