@@ -102,17 +102,13 @@ module Gsa18f
       purchasers.first
     end
 
-    def prepare_frontend_supervisor_id(value)
-      if client_data_instance.supervisor_id.is_a? Integer
-        id = client_data_instance.supervisor_id
-        supervisor = User.find_by(id: id) ? User.find(id).full_name : "--"
-        value = supervisor
-      end
-      value
-    end
-
     def display_update_supervisor_id(obj)
-      prepare_frontend_supervisor_id(obj[:value], obj[:data])
+      if obj[:data].supervisor_id.is_a? Integer
+        id = obj[:data].supervisor_id
+        supervisor = User.find_by(id: id) ? User.find(id).full_name : "--"
+        obj[:value] = supervisor
+      end
+      obj[:value]
     end
 
     def self.get_special_keys
