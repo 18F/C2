@@ -28,14 +28,21 @@ class PrepareDisplayFields
     Object.const_get(@obj[:data].class.name).special_keys
   end
 
+  def check_for_blank(value)
+    if value.nil? || value.blank?
+      "--"
+    else
+      value
+    end
+  end
+
   def modify_display
     data = @obj[:data]
     key = @obj[:key]
     value = @obj[:value]
+    value = check_for_blank(value)
     if @obj[:special_keys].include? key
       Object.const_get(data.class.name).send("display_update_" + key, @obj)
-    elsif value.nil? || value.blank?
-      "--"
     else
       value
     end
