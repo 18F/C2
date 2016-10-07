@@ -21,7 +21,7 @@ class PrepareDisplayFields
   end
 
   def add_total_price
-    Object.const_get(@obj[:data].class.name).find(@obj[:data].id).total_price
+    "%.2f" % Object.const_get(@obj[:data].class.name).find(@obj[:data].id).total_price
   end
 
   def load_special_keys
