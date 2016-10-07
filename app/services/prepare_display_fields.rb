@@ -25,10 +25,10 @@ class PrepareDisplayFields
   def modify_display
     data = @obj[:data]
     key = @obj[:key]
-    if data[key].nil?
-      "--"
-    elsif @obj[:special_keys].include? key
+    if @obj[:special_keys].include? key
       Object.const_get(data.class.name).send("display_update_" + key, @obj)
+    elsif data[key].nil? || data[key].blank?
+      "--"
     else
       @obj[:value]
     end
