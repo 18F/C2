@@ -89,31 +89,16 @@ module Gsa18f
       purchasers.first
     end
 
-    def display_update_is_tock_billable(value, key, data)
-      client_data_instance[key] == true ? "Yes" : "No"
+    def display_update_is_tock_billable(obj)
+      obj[:data][obj[:key]] == true ? "Yes" : "No"
     end
 
-    def display_update_date_requested(value, key, data)
-      value.strftime("%b %e, %Y")
+    def display_update_date_requested(obj)
+      obj[:value].strftime("%b %e, %Y")
     end
 
-    def update_display(data, key, value)
-      special_keys = %w(is_tock_billable, date_requested)
-      if data[key].nil?
-        "--"
-      elsif special_keys.include? key
-        self.send("display_update_" + key, value, key, data)
-      else
-        value
-      end
-    end
-
-    def self.prepare_frontend(data)
-      client_display = {}
-      client_data_instance.attributes.each do |key, value|
-        client_display[key] = update_display(value, key, data)
-      end
-      client_display
+    def self.get_special_keys
+      obj[:special_keys] = %w(is_tock_billable, date_requested)
     end
 
     def self.approver_email
