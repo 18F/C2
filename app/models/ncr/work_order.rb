@@ -211,16 +211,16 @@ module Ncr
 
     private
 
-    def display_update_not_to_exceed(value, key, data)
-      value == true ? "Not to exceed" : "Exact"
+    def display_update_not_to_exceed(obj)
+      obj[:value] == true ? "Not to exceed" : "Exact"
     end
 
-    def display_update_ncr_organization_id(value, key, data)
-      Ncr::Organization.find(value)
+    def display_update_ncr_organization_id(obj)
+      Ncr::Organization.find(obj[:value])
     end
 
-    def display_update_direct_pay(value, key, data)
-      value == true ? "Direct pay will be used" : "Direct pay will not be used"
+    def display_update_direct_pay(obj)
+      obj[:value] == true ? "Direct pay will be used" : "Direct pay will not be used"
     end
 
     def frozen_approving_official_not_changed
