@@ -45,8 +45,7 @@ class ClientDataController < ApplicationController
     prepare_client_data_for_update(filtered_params, current_user)
     respond_to do |format|
       format.js do
-        @client_display_data = PrepareDisplayFields.new(@client_data_instance).run
-        js_response = process_js_response(@client_data_instance, @client_display_data, errors)
+        js_response = process_js_response(errors)
         update_js_behavior(js_response)
       end
       format.html do
@@ -149,10 +148,11 @@ class ClientDataController < ApplicationController
     params.permit(attachments: [])[:attachments] || []
   end
 
-  def process_js_response(client_data_instance, client_display, errors)
+  def process_js_response(errors)
+    client_display_data = PrepareDisplayFields.new(@client_data_instance).run
     if errors.empty?
       update_or_notify_of_no_changes
-      { status: "success", response: client_data_instance, display: client_display }
+      { status: "success", response: @client_data_instance, display: client_display_data }
     else
       { status: "error", response: errors }
     end
