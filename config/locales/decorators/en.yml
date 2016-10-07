@@ -49,6 +49,7 @@ en:
       tock_project: "Tock project number"
       product_name_and_description: "Product name and description"
       pegasys_document_number: "Pegasys Document Number"
+      recurring: "Recurring"
       recurring_interval: "Recurring interval"
       recurring_length: "Recurring length"
       client_billed: "Client has been billed"
