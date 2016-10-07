@@ -6,19 +6,18 @@ feature "the values displayed on procurements" do
 
     visit new_gsa18f_procurement_path
 
-    select "Software", from: "Purchase Type"
-    fill_in "Product name and description", with: "Test title"
-    fill_in "Justification", with: "Test Justification"
-    fill_in "Event provider", with: "Test provider"
-    fill_in "Cost Per Unit", with:"200"
-    fill_in "Quantity", with:"33"
+    select "Software", from: "gsa18f_procurement[purchase_type]"
+    fill_in "gsa18f_procurement[product_name_and_description]", with: "Test title"
+    fill_in "gsa18f_procurement[justification]", with: "Test Justification"
+    fill_in "gsa18f_procurement[link_to_product]", with: "Test provider"
+    fill_in "gsa18f_procurement[cost_per_unit]", with:"200"
+    fill_in "gsa18f_procurement[quantity]", with:"33"
     find(:css, "#gsa18f_procurement_is_tock_billable").set(true)
     find(:css, "#gsa18f_procurement_recurring").set(true)
-    select "Monthly", from: "Recurring interval"
-    fill_in "Estimated travel expenses", with:"100"
-    fill_in "Recurring length", with:"19"
-    fill_in "Date Requested", with: "11/12/2999"
-    select "30", from: "Urgency"
+    select "Monthly", from: "gsa18f_procurement[recurring_interval]"
+    fill_in "gsa18f_procurement[recurring_length]", with:"19"
+    fill_in "gsa18f_procurement[date_requested]", with: "11/12/2999"
+    select 30, from: "gsa18f_procurement[urgency]"
 
     click_on "SUBMIT"
 
@@ -33,7 +32,6 @@ feature "the values displayed on procurements" do
     expect(page).to have_content("This is recurring")
     expect(page).to have_content("Monthly")
     expect(page).to have_content("19")
-
 
     expect(current_path).to eq(proposal_path(proposal))
   end
