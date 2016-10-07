@@ -3,15 +3,15 @@
 - t_slug = "decorators." + "gsa18f" + "/event."
 - supervisors = User.with_slug("gsa18f")
 - duty_station_help = "In what City and State do you work?"
-- justification_help = "How will this event improve current or develop new skills associated with your job? How does it align with 18F/TTS?"
-- instructions_help = "What does the ops team need to know in order to purchase this training? Please go through the steps to purchase (without paying) to see if there are any extras that someone else purchasing your training would need to know about (i.e. dietary preferences or T-shirt size for a conference with meals/T-shirts)"
+- justification_help = "How will this training or conference help you improve your skills or develop new ones?  How does it align with the goals of 18F and TTS?"
+- instructions_help = "What does the ops team need to know to purchase this training? Please go through the steps to purchase (without paying) to see what extra information an ops team member might need (for example, your dietary preferences or t-shirt size).  If training/conference is provided to employee for free or at a discounted price, add link to NFS form"
 - free_event__help = "41CFR 304-1 to 304-3 requires approval to accept payment from a Non-Federal Source. The NFS form must be completed, including an itemized list of expenses that the event sponsor offered to pay. The NFS form will be reviewed by the Office of General Counsel and determine if payment may be accepted."
 
 .column{ id: "duty_station-wrapper"}
   .detail-wrapper.row{ class: "duty_station-wrapper"}
     .detail-edit.column
       %label.detail-element{ for: "gsa18f_event_duty_station" }
-        * 
+        *
         = t(t_slug + "duty_station")
         %span.hint--top-right.hint--rounded.hint--bounce.hint--medium.hint--inline{"aria-label" => duty_station_help} ?
       %span.detail-value
@@ -24,7 +24,7 @@
       .detail-wrapper.row{ class: "supervisor_id-wrapper"}
         .detail-edit.column
           %label.detail-element{ for: "gsa18f_event_supervisor_id" }
-            * 
+            *
             = t(t_slug + "supervisor_id")
           %span.detail-value{class: "holo-chevron"}
             = f.input :supervisor_id,
@@ -36,7 +36,7 @@
   .detail-wrapper.row{ class: "title_of_event-wrapper"}
     .detail-edit.column
       %label.detail-element{ for: "gsa18f_event_title_of_event" }
-        * 
+        *
         = t(t_slug + "title_of_event")
       %span.detail-value
         = f.input :title_of_event,
@@ -46,7 +46,7 @@
   .detail-wrapper.row{ class: "event_provider-wrapper"}
     .detail-edit.column
       %label.detail-element{ for: "gsa18f_event_event_provider"}
-        * 
+        *
         = t(t_slug + "event_provider")
       %span.detail-value
         = f.input :event_provider,
@@ -56,7 +56,7 @@
   .detail-wrapper.row{ class: "type_of_event-wrapper"}
     .detail-edit.column
       %label.detail-element{ for: "gsa18f_event_type_of_event" }
-        * 
+        *
         = t(t_slug + "type_of_event")
       %span.detail-value
         = f.input :type_of_event,
@@ -108,7 +108,7 @@
   .detail-wrapper.row{ class: "purpose-wrapper"}
     .detail-edit.column
       %label.detail-element{ for: "gsa18f_event_purpose" }
-        * 
+        *
         = t(t_slug + "purpose")
       %span.detail-value
         = f.input :purpose, as: :text,
@@ -118,7 +118,7 @@
   .detail-wrapper.row{ class: "justification-wrapper"}
     .detail-edit.column
       %label.detail-element{ for: "gsa18f_event_justification" }
-        * 
+        *
         = t(t_slug + "justification")
         %span.hint--top-right.hint--rounded.hint--bounce.hint--medium.hint--inline{"aria-label" => justification_help} ?
       %span.detail-value
@@ -129,7 +129,7 @@
   .detail-wrapper.row{ class: "link-wrapper"}
     .detail-edit.column
       %label.detail-element{ for: "gsa18f_event_link" }
-        * 
+        *
         = t(t_slug + "link")
       %span.detail-value
         = f.input :link,
@@ -139,7 +139,7 @@
   .detail-wrapper.row{ class: "instructions-wrapper"}
     .detail-edit.column
       %label.detail-element{ for: "gsa18f_event_instructions" }
-        * 
+        *
         = t(t_slug + "instructions")
         %span.hint--top-right.hint--rounded.hint--bounce.hint--large.hint--inline{"aria-label" => instructions_help} ?
       %span.detail-value
@@ -170,30 +170,19 @@
 
 .column{ class: "sub-card", id: "estimated_travel_expenses-wrapper", "data-filter-key" => "travel_required", "data-filter-value" => 1 }
   .detail-wrapper.row{ class: "estimated_travel_expenses-wrapper"}
-    .column.medium-5
+    .column.medium-12
       .detail-edit.column
         %label.detail-element{ for: "gsa18f_event_estimated_travel_expenses" }
-          * 
+          *
           = t(t_slug + "estimated_travel_expenses")
+    .column.medium-5.end
+      .detail-edit.column
         %span.detail-value
           = f.input :estimated_travel_expenses, as: :currency,
            label_html: { class: "detail-element" }, label: false
-  .detail-wrapper.row{ class: "estimate-link-wrapper"}
     .column.medium-12
       .detail-edit.column
-        %span.detail-value
-          %label{class: "detail-element"}
-            Links to help estimate travel
-          %ul.form-link-list
-            %li
-              %a{:href => "https://docs.google.com/spreadsheets/d/1uJaGMXJOwURruaPdV7PU5B7Q22_iyF8Q2Gk2uamDG8Y/edit#gid=0", target: "_blank"}
-                A tool to estimate all of your expenses together and attach a budget
-            %li
-              %a{:href => "http://cpsearch.fas.gsa.gov/cpsearch/search.do?method=enter", target: "_blank"}
-                Look up flight/rail cost
-            %li
-              %a{:href => "http://www.gsa.gov/portal/category/104715", target: "_blank"}
-                Look up driving mileage rates
-            %li
-              %a{:href => "http://www.gsa.gov/portal/category/100120", target: "_blank"}
-                Look up per diem rates for lodging and meals
+        %p.help-block
+          %a{:href => "https://docs.google.com/spreadsheets/d/1uJaGMXJOwURruaPdV7PU5B7Q22_iyF8Q2Gk2uamDG8Y/edit#gid=0", target: "_blank"}
+            Use the tool here
+          to estimate your combined expenses (travel, per diem, lodging). When you’re done, download your final estimated budget as a PDF and attach before submitting.
