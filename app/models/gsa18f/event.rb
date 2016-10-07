@@ -111,7 +111,7 @@ module Gsa18f
       obj[:value]
     end
 
-    def self.load_special_keys
+    def self.special_keys
       %w(supervisor_id)
     end
 

@@ -205,7 +205,7 @@ module Ncr
       Ncr::WorkOrderValueNormalizer.new(self).run
     end
 
-    def self.load_special_keys
+    def self.special_keys
       %w(is_tock_billable date_requested)
     end
 

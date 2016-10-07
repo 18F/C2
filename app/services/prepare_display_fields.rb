@@ -19,7 +19,7 @@ class PrepareDisplayFields
   end
 
   def load_special_keys
-    Object.const_get(@obj[:data].class.name).load_special_keys
+    Object.const_get(@obj[:data].class.name).special_keys
   end
 
   def modify_display
