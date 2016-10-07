@@ -1,6 +1,6 @@
 feature "Create a Gsa18F event" do
   include EventSpecHelper
-  
+
   scenario "user not signed in" do
     visit new_gsa18f_event_path
 
@@ -17,7 +17,7 @@ feature "Create a Gsa18F event" do
 
       fill_in "gsa18f_event_duty_station", with: "DC"
       select "supervisor@gsa.gov", from: "Supervisor"
-      fill_in "Title of event", with: "Test title"
+      fill_in "Event title", with: "Test title"
       fill_in "Event provider", with: "Test provider"
       choose "gsa18f_event_type_of_event_conference"
       fill_in "Cost of event (not including travel)", with:"200"
