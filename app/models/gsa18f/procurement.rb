@@ -127,6 +127,10 @@ module Gsa18f
       obj[:data][obj[:key]] == true ? "This project is billable" : "This project is not billable"
     end
 
+    def self.display_update_client_billed(obj)
+      obj[:data][obj[:key]] == true ? "The client has been billed" : "The client has not been billed"
+    end
+
     def self.display_update_date_requested(obj)
       obj[:value].strftime("%b %e, %Y")
     end

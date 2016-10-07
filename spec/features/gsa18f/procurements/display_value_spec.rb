@@ -17,21 +17,22 @@ feature "the values displayed on procurements" do
     select "Monthly", from: "gsa18f_procurement[recurring_interval]"
     fill_in "gsa18f_procurement[recurring_length]", with:"19"
     fill_in "gsa18f_procurement[date_requested]", with: "11/12/2999"
-    select 30, from: "gsa18f_procurement[urgency]"
+    select "Whenever", from: "gsa18f_procurement[urgency]"
 
     click_on "SUBMIT"
 
     proposal = requester.reload.proposals.last
     expect(page).to have_content("Software")
-    expect(page).to have_content("Product name and description")
-    expect(page).to have_content("Justification")
-    expect(page).to have_content("Event provider")
+    expect(page).to have_content("Test title")
+    expect(page).to have_content("Test Justification")
+    expect(page).to have_content("Test provider")
     expect(page).to have_content("200")
     expect(page).to have_content("33")
     expect(page).to have_content("This project is billable")
     expect(page).to have_content("This is recurring")
     expect(page).to have_content("Monthly")
     expect(page).to have_content("19")
+    expect(page).to have_content("Whenever")
 
     expect(current_path).to eq(proposal_path(proposal))
   end
