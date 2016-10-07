@@ -20,7 +20,7 @@ class ProposalsController < ApplicationController
 
   def show_next
     @client_data_instance ||= proposal.client_data
-    @client_data_display = ModifyProposal.new(proposal, @client_data_instance).run
+    @client_data_display = PrepareDisplayFields.new(@client_data_instance).run
     @subscriber_list = SubscriberList.new(@proposal).triples
     @events = HistoryList.new(proposal).filtered_approvals
     render "show_next"
