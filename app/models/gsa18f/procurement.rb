@@ -116,7 +116,26 @@ module Gsa18f
     end
 
     def self.special_keys
-      %w(total_price type_of_event urgency is_tock_billable date_requested recurring client_billed end_date start_date)
+      %w(recurring_interval recurring_length total_price
+        type_of_event urgency is_tock_billable date_requested
+        recurring client_billed end_date start_date
+        purchase_type office)
+    end
+
+    def self.display_update_office(obj)
+      Gsa18f::Procurement::OFFICES[obj[:value].to_i]
+    end
+
+    def self.display_update_purchase_type(obj)
+      Gsa18f::Procurement::PURCHASE_TYPES.keys[obj[:value].to_i]
+    end
+
+    def self.display_update_recurring_interval(obj)
+      Gsa18f::Procurement::RECURRENCE[obj[:value].to_i]
+    end
+
+    def self.display_update_recurring_length(obj)
+      obj[:value].to_s
     end
 
     def self.display_update_total_price(obj)
