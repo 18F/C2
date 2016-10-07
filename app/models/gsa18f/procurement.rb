@@ -116,7 +116,11 @@ module Gsa18f
     end
 
     def self.special_keys
-      %w(type_of_event urgency is_tock_billable date_requested recurring client_billed end_date start_date)
+      %w(total_price type_of_event urgency is_tock_billable date_requested recurring client_billed end_date start_date)
+    end
+
+    def self.display_update_total_price(obj)
+      "%.2f" % obj[:data].total_price
     end
 
     def self.display_update_type_of_event(obj)
