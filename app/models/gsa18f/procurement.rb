@@ -116,19 +116,27 @@ module Gsa18f
     end
 
     def self.special_keys
-      %w(is_tock_billable date_requested recurring client_billed end_date start_date)
+      %w(type_of_event urgency is_tock_billable date_requested recurring client_billed end_date start_date)
+    end
+
+    def self.display_update_type_of_event(obj)
+      Gsa18f::Event::EVENT_TYPES.keys[obj[:value].to_i]
     end
 
     def self.display_update_recurring(obj)
-      obj[:data][obj[:key]] == true ? "This is recurring" : "This is not recurring"
+      obj[:value] == true ? "This is recurring" : "This is not recurring"
     end
 
     def self.display_update_is_tock_billable(obj)
-      obj[:data][obj[:key]] == true ? "This project is billable" : "This project is not billable"
+      obj[:value] == true ? "This project is billable" : "This project is not billable"
     end
 
     def self.display_update_client_billed(obj)
-      obj[:data][obj[:key]] == true ? "The client has been billed" : "The client has not been billed"
+      obj[:value] == true ? "The client has been billed" : "The client has not been billed"
+    end
+
+    def self.display_update_urgency(obj)
+      Gsa18f::Procurement::URGENCY[obj[:value].to_i]
     end
 
     def self.display_update_date_requested(obj)
