@@ -120,7 +120,7 @@ module Gsa18f
     end
 
     def self.display_update_is_tock_billable(obj)
-      obj[:data][obj[:key]] == true ? "Yes" : "No"
+      obj[:data][obj[:key]] == true ? "This project is billable" : "This project is not billable"
     end
 
     def self.display_update_date_requested(obj)
