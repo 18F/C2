@@ -25,9 +25,7 @@ class AuthController < ApplicationController
 
   def fetch_return_to_path
     return_to_struct = return_to
-    if return_to_struct && return_to_struct.key?("path")
-      return_to_struct[:path]
-    end
+    return_to_struct[:path] if return_to_struct && return_to_struct.key?("path")
   end
 
   def send_welcome_mail(user)
@@ -46,9 +44,7 @@ class AuthController < ApplicationController
   def do_user_auth(auth)
     sign_out
     user = User.from_oauth_hash(auth)
-    if ENV["WELCOME_EMAIL"]
-      send_welcome_mail(user)
-    end
+    send_welcome_mail(user) if ENV["WELCOME_EMAIL"]
     sign_in(user)
   end
 end
