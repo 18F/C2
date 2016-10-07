@@ -120,8 +120,7 @@ module Gsa18f
     end
 
     def self.display_update_total_price(obj)
-      # "%.2f" % Gsa18f::Procurement.find(obj[:data].id).total_price
-      obj[:data].id.pry
+      "%.2f" % Gsa18f::Procurement.find(obj[:data].id).total_price
     end
 
     def self.display_update_type_of_event(obj)
