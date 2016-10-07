@@ -206,7 +206,7 @@ module Ncr
     end
 
     def self.load_special_keys
-      %w(is_tock_billable, date_requested)
+      %w(is_tock_billable date_requested)
     end
 
     private
