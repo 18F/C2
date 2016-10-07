@@ -115,20 +115,8 @@ module Gsa18f
       prepare_frontend_supervisor_id(obj[:value], obj[:data])
     end
 
-    def update_display(obj)
+    def self.get_special_keys
       obj[:special_keys] = %w(supervisor_id)
-      PrepareDisplayFields.new(obj).run
-    end
-
-    def self.prepare_frontend(data)
-      client_display = {}
-      obj = {data: data}
-      client_data_instance.attributes.each do |key, value|
-        obj[:key] = key
-        obj[:value] = value
-        client_display[key] = update_display(display_value)
-      end
-      client_display
     end
 
     def self.talent_approver_email
