@@ -19,7 +19,7 @@ feature "Create a Gsa18F event" do
       select "supervisor@gsa.gov", from: "Supervisor"
       fill_in "Event title", with: "Test title"
       fill_in "Event provider", with: "Test provider"
-      choose "gsa18f_event_type_of_event_conference"
+      find("#gsa18f_event_type_of_event_conference").trigger("click")
       fill_in "Cost of event (not including travel)", with:"200"
       fill_in "Training start date", with: "12/12/2999"
       fill_in "Training end date", with: "11/12/2999"
