@@ -126,6 +126,5 @@ module Gsa18f
     def self.display_update_date_requested(obj)
       obj[:value].strftime("%b %e, %Y")
     end
-
   end
 end
