@@ -116,7 +116,7 @@ module Gsa18f
     end
 
     def self.special_keys
-      %w(is_tock_billable date_requested recurring client_billed)
+      %w(is_tock_billable date_requested recurring client_billed end_date start_date)
     end
 
     def self.display_update_recurring(obj)
@@ -132,6 +132,14 @@ module Gsa18f
     end
 
     def self.display_update_date_requested(obj)
+      obj[:value].strftime("%b %e, %Y")
+    end
+
+    def self.display_update_end_date(obj)
+      obj[:value].strftime("%b %e, %Y")
+    end
+
+    def self.display_update_start_date(obj)
       obj[:value].strftime("%b %e, %Y")
     end
   end
