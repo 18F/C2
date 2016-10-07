@@ -98,7 +98,7 @@ module Gsa18f
     end
 
     def self.get_special_keys
-      obj[:special_keys] = %w(is_tock_billable, date_requested)
+      %w(is_tock_billable, date_requested)
     end
 
     def self.approver_email

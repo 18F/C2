@@ -112,7 +112,7 @@ module Gsa18f
     end
 
     def self.get_special_keys
-      obj[:special_keys] = %w(supervisor_id)
+      %w(supervisor_id)
     end
 
     def self.talent_approver_email
