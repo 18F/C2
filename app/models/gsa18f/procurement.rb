@@ -89,10 +89,6 @@ module Gsa18f
       purchasers.first
     end
 
-    def self.special_keys
-      %w(is_tock_billable date_requested)
-    end
-
     def self.approver_email
       user_with_role("gsa18f_approver").email_address
     end
@@ -117,6 +113,10 @@ module Gsa18f
     def self.permitted_params(params, _procurement_instance)
       permitted = Gsa18f::ProcurementFields.new.relevant(params[:gsa18f_procurement][:recurring])
       params.require(:gsa18f_procurement).permit(*permitted)
+    end
+
+    def self.special_keys
+      %w(is_tock_billable date_requested recurring client_billed)
     end
 
     def self.display_update_recurring(obj)
