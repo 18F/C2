@@ -119,6 +119,10 @@ module Gsa18f
       params.require(:gsa18f_procurement).permit(*permitted)
     end
 
+    def self.display_update_recurring(obj)
+      obj[:data][obj[:key]] == true ? "This is recurring" : "This is not recurring"
+    end
+
     def self.display_update_is_tock_billable(obj)
       obj[:data][obj[:key]] == true ? "This project is billable" : "This project is not billable"
     end
