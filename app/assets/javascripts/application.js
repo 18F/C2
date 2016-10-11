@@ -23,6 +23,7 @@
 //= require ladda/ladda.min
 //= require ladda/ladda.jquery.min
 //= require jquery.dirrty
+//= require jquery.validate
 //= require progressbar
 //= require moment
 
