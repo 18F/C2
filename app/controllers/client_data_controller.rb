@@ -68,7 +68,7 @@ class ClientDataController < ApplicationController
       @client_data_instance.save
       setup_and_email_approvers(comment)
       @flash_manager.show(flash, "success", "Your changes have been saved and the request has been modified.")
-      DispatchFinder.run(proposal).on_proposal_update
+      # DispatchFinder.run(proposal).on_proposal_update
     else
       @flash_manager.show(flash, "error", "No changes were made to the request.")
     end

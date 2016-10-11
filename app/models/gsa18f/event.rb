@@ -66,6 +66,7 @@ module Gsa18f
     end
 
     def setup_and_email_subscribers(comment)
+      binding.pry
       Gsa18f::Gsa18fUpdater.new(
         work_order: self,
         update_comment: comment
