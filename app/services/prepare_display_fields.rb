@@ -43,7 +43,7 @@ class PrepareDisplayFields
     key = @obj[:key]
     value = @obj[:value]
 
-    if @obj[:special_keys].include? key && value != "--"
+    if @obj[:special_keys].include?(key) && value != "--"
       Object.const_get(data.class.name).send("display_update_" + key, @obj)
     else
       value
