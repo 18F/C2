@@ -27,6 +27,9 @@ AttachmentCardController = (function(){
               $('[required="required"]').each(function(i, item){
                 if(!item.validity.valid){
                   $(item).closest('.detail-wrapper').css('backgroundColor', "yellow");
+                  window.setTimeout(function(){
+                    $(item).closest('.detail-wrapper').css('backgroundColor', "white");
+                  }, 300);
                 } else {
                   $(item).closest('.detail-wrapper').css('backgroundColor', "white");
                 }
