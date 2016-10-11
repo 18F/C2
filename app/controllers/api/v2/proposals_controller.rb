@@ -75,6 +75,7 @@ module Api
         if errors.any?
           false
         else
+          binding.pry
           comment = ProposalUpdateRecorder.new(@client_data_instance, current_user).run
           @client_data_instance.save
           @client_data_instance.setup_and_email_subscribers(comment)

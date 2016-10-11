@@ -65,6 +65,13 @@ module Gsa18f
       ]
     end
 
+    def setup_and_email_subscribers(comment)
+      Gsa18f::Gsa18fUpdater.new(
+        work_order: self,
+        update_comment: comment
+      ).run
+    end
+
     def initialize_steps
       proposal.add_initial_steps(steps_list)
     end
