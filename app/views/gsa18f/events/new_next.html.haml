@@ -25,7 +25,7 @@
             Attachments
         .content-content.column#view-request-details
           .row
-            .form-group
+            .form-group.detail-wrapper
               = field_set_tag "" do
                 %ul.attachments{ data: { add_minus: true } }
                   - Gsa18f::EventsController::MAX_UPLOADS_ON_NEW.times do
