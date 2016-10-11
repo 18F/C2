@@ -27,7 +27,6 @@ feature "Edit a Gsa18F procurement" do
           click_on "SAVE"
           sleep(1)
         end
-        page.save_screenshot('../screen.png', full: true)
         expect(page).to have_content("event title edited")
         expect(page).to have_content("Event provider edited")
         expect(page).to have_content("1.11")

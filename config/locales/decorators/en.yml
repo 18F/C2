@@ -55,7 +55,7 @@ en:
     gsa18f/event:
       duty_station: "Duty station"
       supervisor_id: "Supervisor"
-      title_of_event: "Title of event"
+      title_of_event: "Event title"
       event_provider: "Event provider"
       type_of_event: "Type of event"
       cost_per_unit: "Cost of event (not including travel)"

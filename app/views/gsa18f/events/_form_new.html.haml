@@ -3,8 +3,8 @@
 - t_slug = "decorators." + "gsa18f" + "/event."
 - supervisors = User.with_slug("gsa18f")
 - duty_station_help = "In what City and State do you work?"
-- justification_help = "How will this event improve current or develop new skills associated with your job? How does it align with 18F/TTS?"
-- instructions_help = "What does the ops team need to know in order to purchase this training? Please go through the steps to purchase (without paying) to see if there are any extras that someone else purchasing your training would need to know about (i.e. dietary preferences or T-shirt size for a conference with meals/T-shirts)"
+- justification_help = "How will this training or conference help you improve your skills or develop new ones?  How does it align with the goals of 18F and TTS?"
+- instructions_help = "What does the ops team need to know to purchase this training? Please go through the steps to purchase (without paying) to see what extra information an ops team member might need (for example, your dietary preferences or t-shirt size).  If training/conference is provided to employee for free or at a discounted price, add link to NFS form"
 - free_event__help = "41CFR 304-1 to 304-3 requires approval to accept payment from a Non-Federal Source. The NFS form must be completed, including an itemized list of expenses that the event sponsor offered to pay. The NFS form will be reviewed by the Office of General Counsel and determine if payment may be accepted."
 
 .column{ id: "duty_station-wrapper"}
@@ -30,7 +30,7 @@
             = f.input :supervisor_id,
               collection: supervisors,
               label: false,
-              label_html: { class: "detail-element" }, label: false
+              label_html: { class: "detail-element" }
 
 .column{ id: "title_of_event-wrapper"}
   .detail-wrapper.row{ class: "title_of_event-wrapper"}
@@ -170,19 +170,18 @@
 
 .column{ class: "sub-card", id: "estimated_travel_expenses-wrapper", "data-filter-key" => "travel_required", "data-filter-value" => 1 }
   .detail-wrapper.row{ class: "estimated_travel_expenses-wrapper"}
-    .column.medium-5
+    .column.medium-12
       .detail-edit.column
         %label.detail-element{ for: "gsa18f_event_estimated_travel_expenses" }
           *
           = t(t_slug + "estimated_travel_expenses")
+    .column.medium-5.end
+      .detail-edit.column
         %span.detail-value
           = f.input :estimated_travel_expenses, as: :currency,
            label_html: { class: "detail-element" }, label: false
-  .detail-wrapper.row{ class: "estimate-link-wrapper"}
     .column.medium-12
       .detail-edit.column
-        %span.detail-value
-          %label{class: "detail-element"}
-
-            %a{:href => "https://docs.google.com/spreadsheets/d/1uJaGMXJOwURruaPdV7PU5B7Q22_iyF8Q2Gk2uamDG8Y/edit#gid=0", target: "_blank"}
-              Estimate all of your expenses here and attach a budget to your request
+        %p.help-block
+          %a{:href => "https://docs.google.com/spreadsheets/d/1uJaGMXJOwURruaPdV7PU5B7Q22_iyF8Q2Gk2uamDG8Y/edit#gid=0", target: "_blank"}
+            Estimate all of your expenses here and attach a budget to your request
