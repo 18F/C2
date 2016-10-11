@@ -65,10 +65,14 @@ module Gsa18f
       ]
     end
 
+    def setup_approvals_and_observers
+      manager = ApprovalManager.new(self)
+      manager.setup_approvals_and_observers
+    end
+
     def setup_and_email_subscribers(comment)
-      binding.pry
       Gsa18f::Gsa18fUpdater.new(
-        work_order: self,
+        gsa18f_proposal: self,
         update_comment: comment
       ).run
     end

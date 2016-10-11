@@ -68,7 +68,6 @@ class ClientDataController < ApplicationController
       @client_data_instance.save
       setup_and_email_approvers(comment)
       @flash_manager.show(flash, "success", "Your changes have been saved and the request has been modified.")
-      # DispatchFinder.run(proposal).on_proposal_update
     else
       @flash_manager.show(flash, "error", "No changes were made to the request.")
     end
@@ -106,9 +105,11 @@ class ClientDataController < ApplicationController
   end
 
   def record_changes
+    ProposalUpdateRecorder.new(@client_data_instance, current_user).run
   end
 
   def setup_and_email_approvers(comment = nil)
+    @client_data_instance.setup_and_email_subscribers(comment)
   end
 
   def filtered_params

@@ -8,7 +8,8 @@ module Gsa18f
     delegate :proposal, to: :gsa18f_proposal
 
     def run
-      gsa18f_proposal.setup_approvals_and_observers
+      puts "*"*50
+      # gsa18f_proposal.setup_approvals_and_observers
       reapprove_if_necessary
       DispatchFinder.
         run(proposal).

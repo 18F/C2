@@ -115,12 +115,12 @@ class Dispatcher
   end
 
   def notify_pending_approvers(comment)
-    proposal.currently_awaiting_steps.each do |step|
-      unless user_is_modifier?(step.user, comment.user)
-        if step_user_already_notified_about_proposal?(step)
-          ProposalMailer.proposal_updated_while_step_pending(step, comment).deliver_later
+    proposal.currently_awaiting_steps.each do |proposal_step|
+      unless user_is_modifier?(proposal_step.user, comment.user)
+        if step_user_already_notified_about_proposal?(proposal_step)
+          ProposalMailer.proposal_updated_while_step_pending(proposal_step, comment).deliver_later
         else
-          StepMailer.proposal_notification(step).deliver_later
+          StepMailer.proposal_notification(proposal_step).deliver_later
         end
       end
     end
