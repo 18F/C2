@@ -11,37 +11,17 @@ feature "Editing NCR work order" do
 
   context "work_order has pending status" do
     scenario "BA80 can be modified", :js do
-      approver = create(:user, client_slug: "ncr")
-      organization = create(:ncr_organization)
-      project_title = "buying stuff"
-      requester = create(:user, client_slug: "ncr")
-
-      login_as(requester)
-
-      visit new_ncr_work_order_path
-      fill_in 'Project title', with: "Project title"
-      fill_in 'Description', with: "desc content"
-      choose 'BA80'
-      fill_in 'RWA Number', with: 'F1234567'
-      fill_in_selectized("ncr_work_order_building_number", "Test building")
-      fill_in_selectized("ncr_work_order_vendor", "ACME")
-      fill_in 'Amount', with: 123.45
-      fill_in_selectized("ncr_work_order_approving_official", approver.email_address)
-      fill_in_selectized("ncr_work_order_ncr_organization", organization.code_and_name)
-      click_on "Submit for approval"
+      work_order_ba80 = create(:ba80_ncr_work_order, :with_beta_requester)
+      work_order_ba80.save!
+      login_as(work_order_ba80.requester)
+      visit proposal_path(work_order_ba80.proposal)
 
       click_on "MODIFY"
 
-      fill_in 'Project title', with: "New project title"
-      fill_in 'Description', with: "New desc content"
-      choose 'BA80'
-      fill_in 'RWA Number', with: 'F0000000'
-      fill_in_selectized("ncr_work_order_building_number", "New Test building")
-      fill_in_selectized("ncr_work_order_vendor", "New ACME")
-      fill_in 'Amount', with: 3.45
-      fill_in_selectized("ncr_work_order_approving_official", approver.email_address)
-      fill_in_selectized("ncr_work_order_ncr_organization", organization.code_and_name)
-      click_on "Submit for approval"
+      fill_in 'ncr_work_order[project_title]', with: "New project title"
+      fill_in 'ncr_work_order[description]', with: "New desc content"
+      fill_in 'ncr_work_order[rwa_number]', with: 'F0000000'
+      fill_in 'ncr_work_order[amount]', with: 3.45
 
       within(".action-bar-container") do
           click_on "SAVE"
@@ -54,12 +34,9 @@ feature "Editing NCR work order" do
 
       expect(page).to have_content("New project title")
       expect(page).to have_content("BA80")
-      expect(page).to have_content("New ACME")
       expect(page).to have_content("F0000000")
       expect(page).to have_content("New desc content")
       expect(page).to have_content("$3.45")
-      expect(page).to have_content("New Test building")
-      expect(page).to have_content(organization.code_and_name)
     end
   end
 end
