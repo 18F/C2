@@ -55,8 +55,17 @@ class ProposalUpdateRecorder
   def former_association_value(key)
     if key == "ncr_organization_id"
       former_ncr_organization(key) || ""
-    elsif key == "approving_official_id"
+    elsif key == "approving_official_id" || key == "supervisor_id"
       former_approving_official(key) || ""
+    elsif key == "event_provider"
+      former_event_provider(key)
+    end
+  end
+
+  def former_event_provider(key)
+    former_id = former_id(key)
+    if former_id.present? && Gsa18f::Event::EVENT_TYPES.find(former_id)
+      "from #{Gsa18f::Event::EVENT_TYPES.find(former_id).first[0]} "
     end
   end
 
@@ -83,6 +92,10 @@ class ProposalUpdateRecorder
       client_data.approving_official.email_address
     elsif key == "ncr_organization_id"
       client_data.ncr_organization.try(:code_and_name) || "*empty*"
+    elsif key == "supervisor_id"
+      User.find(cur_value(key)).email_address
+    elsif key == "event_provider"
+      Gsa18f::Event::EVENT_TYPES.find(cur_value(key)).first[0]
     end
   end
 
@@ -124,5 +137,9 @@ class ProposalUpdateRecorder
 
   def former_value(key)
     property_to_s(client_data.send(key + "_was"))
+  end
+
+  def cur_value(key)
+    property_to_s(client_data.send(key))
   end
 end
