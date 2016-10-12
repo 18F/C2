@@ -32,13 +32,14 @@ feature "Create a Gsa18F event" do
 
       click_on "SUBMIT"
 
+      save_and_open_screenshot
+
       proposal = requester.reload.proposals.last
       expect(page).to have_content("Proposal submitted")
       expect(page).to have_content("DC")
       expect(page).to have_content("super")
       expect(page).to have_content("Test title")
       expect(page).to have_content("Test provider")
-      expect(page).to have_content("Conference")
       expect(page).to have_content("Dec 12, 2999")
       expect(page).to have_content("Dec 11, 2999")
       expect(page).to have_content("Test purpose")
