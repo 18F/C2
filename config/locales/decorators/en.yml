@@ -65,7 +65,7 @@ en:
       justification: "Justification"
       link: "Link to purchase event"
       instructions: "Instructions to purchase event"
-      free_event_link: "Download <a href=\"https://drive.google.com/file/d/0B9DenuU408s4UHVsNFlqTEFpRGc/view\" target=\"_blank\">NFS Travel Gift Worksheet</a>"
+      free_event_link: "If yes, complete and attach the <a href=\"https://drive.google.com/file/d/0B9DenuU408s4UHVsNFlqTEFpRGc/view\" target=\"_blank\">NFS Travel Gift Worksheet</a> to your request."
       free_event: "The event is provided to employee for free or discounted price"
       nfs_form: "Link to NFS form"
       travel_required: "Travel is required for this request"
