@@ -27,6 +27,10 @@ feature "Create a Gsa18F event" do
       fill_in "Justification", with: "because I need it"
       fill_in "Link to purchase event", with: "www.gsa.gov"
       fill_in "Instructions to purchase event", with: "go buy it"
+      page.attach_file("attachments_", "#{Rails.root}/app/assets/images/bg_completed_status.gif")
+      click_on "Attach a File"
+
+
 
       click_on "SUBMIT"
 
