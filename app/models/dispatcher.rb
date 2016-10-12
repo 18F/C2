@@ -68,11 +68,13 @@ class Dispatcher
     end
   end
 
-  def on_proposal_update(needs_review:, comment:)
-    notify_approvers(needs_review, comment)
-    notify_pending_approvers(comment)
-    notify_requester(needs_review, comment)
-    notify_observers(needs_review, comment)
+  def on_proposal_update(needs_review: false, comment: nil)
+    if comment
+      notify_approvers(needs_review, comment)
+      notify_pending_approvers(comment)
+      notify_requester(needs_review, comment)
+      notify_observers(needs_review, comment)
+    end
   end
 
   def on_step_user_removal(removed_step_users)
