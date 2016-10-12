@@ -32,8 +32,6 @@ feature "Create a Gsa18F event" do
 
       click_on "SUBMIT"
 
-      save_and_open_screenshot
-
       proposal = requester.reload.proposals.last
       expect(page).to have_content("Proposal submitted")
       expect(page).to have_content("DC")
