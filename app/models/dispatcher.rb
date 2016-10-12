@@ -82,7 +82,7 @@ class Dispatcher
   end
 
   private
-  
+
   def notify_approvers(needs_review, comment)
     proposal.individual_steps.completed.each do |step|
       unless user_is_modifier?(step.user, comment.user)
@@ -151,7 +151,6 @@ class Dispatcher
   def step_user_already_notified_about_proposal?(step)
     step.api_token.present?
   end
-
 
   attr_reader :proposal
 
