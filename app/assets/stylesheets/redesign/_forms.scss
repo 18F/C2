@@ -62,6 +62,13 @@ label {
     margin-bottom: 5px;
     font-weight: bold
 }
+label.required:before {
+    content: "* ";
+}
+
+label.required:after { 
+    content: ""
+}
 
 input[type="search"] {
     box-sizing: border-box
