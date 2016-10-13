@@ -38,6 +38,7 @@ feature "Create a Gsa18F event" do
       expect(page).to have_content("super")
       expect(page).to have_content("Test title")
       expect(page).to have_content("Test provider")
+      expect(page).to have_content("Conference")
       expect(page).to have_content("Dec 12, 2999")
       expect(page).to have_content("Dec 11, 2999")
       expect(page).to have_content("Test purpose")
