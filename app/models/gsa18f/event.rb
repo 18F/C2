@@ -65,6 +65,18 @@ module Gsa18f
       ]
     end
 
+    def setup_approvals_and_observers
+      manager = ApprovalManager.new(self)
+      manager.setup_approvals_and_observers
+    end
+
+    def setup_and_email_subscribers(comment)
+      Gsa18f::Gsa18fUpdater.new(
+        gsa18f_proposal: self,
+        update_comment: comment
+      ).run
+    end
+
     def initialize_steps
       proposal.add_initial_steps(steps_list)
     end

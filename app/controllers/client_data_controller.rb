@@ -105,9 +105,11 @@ class ClientDataController < ApplicationController
   end
 
   def record_changes
+    ProposalUpdateRecorder.new(@client_data_instance, current_user).run
   end
 
   def setup_and_email_approvers(comment = nil)
+    @client_data_instance.setup_and_email_subscribers(comment)
   end
 
   def filtered_params

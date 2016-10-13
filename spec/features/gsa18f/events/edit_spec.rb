@@ -1,4 +1,4 @@
-feature "Edit a Gsa18F procurement" do
+feature "Edit a Gsa18F Event" do
   include EventSpecHelper
   context "User is requester" do
     context "event has pending status" do
