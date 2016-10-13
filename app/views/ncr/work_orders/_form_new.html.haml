@@ -5,7 +5,7 @@
 .column{ id: "project_title" + '-wrapper'}
   .detail-wrapper.row{ class: "project_title-wrapper" }
     .detail-edit.column
-      %label.detail-element{ for: "ncr_work_order_project_title" }
+      %label.detail-element.required{ for: "ncr_work_order_project_title" }
         = t(t_slug + "project_title")
       %span.detail-value
         = f.input :project_title, label: false
@@ -23,7 +23,7 @@
     .detail-edit.column
       %fieldset
         %legend
-          %label.detail-element
+          %label.detail-element.required
             = t(t_slug + "expense_type")
         %span.detail-value
           = field_set_tag "", { class: "expense-type required" } do
@@ -39,7 +39,7 @@
 .column{ class: "rwa_number" + "-wrapper half-col-wrap sub-card sub-card-left", id: "rwa_number" + '-wrapper-3', data: {"filter-key": "expense-type", "filter-value": "BA80"}}
   .detail-wrapper.row{  }
     .detail-edit.column
-      %label.detail-element{ for: "ncr_work_order_rwa_number"}
+      %label.detail-element.required{ for: "ncr_work_order_rwa_number"}
         = t(t_slug + "rwa_number")
       %span.detail-value
         = f.input :rwa_number, required: true, wrapper_html: { data: { filter_key: "expense-type", filter_value: "BA80" } }, label: false
@@ -80,7 +80,7 @@
 .column{ id: "vendor" + '-wrapper'}
   .detail-wrapper.row{ class: "vendor" + "-wrapper" }
     .detail-edit.column
-      %label.detail-element{ for: "ncr_work_order_vendor" }
+      %label.detail-element.required{ for: "ncr_work_order_vendor" }
         = t(t_slug + "vendor")
       %span.detail-value
         = f.input :vendor,
@@ -99,7 +99,7 @@
 .column{ id: 'total-wrapper'}
   .detail-display.column
     .row
-      %label.detail-element
+      %label.detail-element.required
         = t(t_slug + "total")
 .column{ id: "not_to_exceed" + '-wrapper'}
   .row
