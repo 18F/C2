@@ -2,11 +2,13 @@
   .detail-wrapper.row{ class: key + "-wrapper", id: value_id }
     .detail-display.column
       %label.detail-element
-        = t(t_slug + "expense_type") 
+        = t(t_slug + "expense_type")
       %span.detail-value
         = client_data[:expense_type]
     .detail-edit.column
       %label.detail-element
-        = t(t_slug + key) 
+        = t(t_slug + key)
       %span.detail-value
         = client_data[:expense_type]
+        %span{style: "display: none"}
+          = f.input :expense_type
