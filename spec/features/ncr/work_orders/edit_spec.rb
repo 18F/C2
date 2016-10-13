@@ -36,7 +36,7 @@ feature "Editing NCR work order" do
       expect(page).to have_content("BA80")
       expect(page).to have_content("F0000000")
       expect(page).to have_content("New desc content")
-      expect(page).to have_content("$3.45")
+      expect(page).to have_content("3.45")
     end
   end
 end
