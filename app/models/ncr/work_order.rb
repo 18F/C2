@@ -205,6 +205,22 @@ module Ncr
       Ncr::WorkOrderValueNormalizer.new(self).run
     end
 
+    def self.special_keys
+      %w(is_tock_billable date_requested)
+    end
+
+    def self.display_update_not_to_exceed(obj)
+      obj[:value] == true ? "Not to exceed" : "Exact"
+    end
+
+    def self.display_update_ncr_organization_id(obj)
+      Ncr::Organization.find(obj[:value])
+    end
+
+    def self.display_update_direct_pay(obj)
+      obj[:value] == true ? "Direct pay will be used" : "Direct pay will not be used"
+    end
+
     private
 
     def frozen_approving_official_not_changed

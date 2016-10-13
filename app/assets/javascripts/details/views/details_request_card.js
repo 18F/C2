@@ -76,36 +76,13 @@ DetailsRequestCard = (function(){
     this.el.trigger('update:' + type, { field: field, value: value });
   }
 
-  DetailsRequestCard.prototype.updateBoolean = function(value, yesCondition, noCondition){
-    if(value){
-      return yesCondition;
-    } else {
-      return noCondition;
-    }
-  }
-
-  DetailsRequestCard.prototype.defineValue = function(key, value){
-    var self = this;
-    if(key === "not_to_exceed") {
-      value = self.updateBoolean(value, 'Not to exceed', 'Exact');
-    } else if(key === "is_tock_billable") {
-      value = self.updateBoolean(value, 'Yes', 'No');
-    } else if(key === "date_requested") {
-      value = moment(value).format("MMM Do, YYYY")
-    } else if(key === "ncr_organization_id") {
-      value = $("#ncr_work_order_ncr_organization_id option").text();
-    }
-    return value;
-  }
-
   DetailsRequestCard.prototype.updateViewModeContent = function(data){
-    var content = this.formatData(data['response']);
+    var content = this.formatData(data['display']);
     var id = content['id'];
     var self = this;
     $.each(content, function(key, value){
       var field = self.el.selector + ' #' + key + '-' + id;
       var fieldTarget = field + " .detail-display .detail-value";
-      value = self.defineValue(key, value);
       if(key === "direct_pay" || key === "recurring"){
         self.updateField(field + ' input[type="checkbox"]', value, "checkbox");
       } else {

@@ -126,5 +126,64 @@ module Gsa18f
       permitted = Gsa18f::ProcurementFields.new.relevant(params[:gsa18f_procurement][:recurring])
       params.require(:gsa18f_procurement).permit(*permitted)
     end
+
+    def self.special_keys
+      %w( recurring_interval recurring_length total_price
+          type_of_event urgency is_tock_billable date_requested
+          recurring client_billed end_date start_date
+          purchase_type office)
+    end
+
+    def self.display_update_office(obj)
+      Gsa18f::Procurement::OFFICES[obj[:value].to_i]
+    end
+
+    def self.display_update_purchase_type(obj)
+      Gsa18f::Procurement::PURCHASE_TYPES.keys[obj[:value].to_i]
+    end
+
+    def self.display_update_recurring_interval(obj)
+      Gsa18f::Procurement::RECURRENCE[obj[:value].to_i]
+    end
+
+    def self.display_update_recurring_length(obj)
+      obj[:value].to_s
+    end
+
+    def self.display_update_total_price(obj)
+      format("%.2f", Gsa18f::Procurement.find(obj[:data].id).total_price)
+    end
+
+    def self.display_update_type_of_event(obj)
+      Gsa18f::Event::EVENT_TYPES.keys[obj[:value].to_i]
+    end
+
+    def self.display_update_recurring(obj)
+      obj[:value] == true ? "This is recurring" : "This is not recurring"
+    end
+
+    def self.display_update_is_tock_billable(obj)
+      obj[:value] == true ? "This project is billable" : "This project is not billable"
+    end
+
+    def self.display_update_client_billed(obj)
+      obj[:value] == true ? "The client has been billed" : "The client has not been billed"
+    end
+
+    def self.display_update_urgency(obj)
+      Gsa18f::Procurement::URGENCY[obj[:value].to_i]
+    end
+
+    def self.display_update_date_requested(obj)
+      obj[:value].strftime("%b %d, %Y")
+    end
+
+    def self.display_update_end_date(obj)
+      obj[:value].strftime("%b %d, %Y")
+    end
+
+    def self.display_update_start_date(obj)
+      obj[:value].strftime("%b %d, %Y")
+    end
   end
 end
