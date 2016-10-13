@@ -139,8 +139,6 @@ module Gsa18f
       params.require(:gsa18f_event).permit(*permitted)
     end
 
-
-
     def self.display_update_start_date(obj)
       obj[:value].strftime("%b %d, %Y")
     end
