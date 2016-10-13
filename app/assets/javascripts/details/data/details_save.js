@@ -17,9 +17,11 @@ DetailsSave = (function() {
       self.validateFormFields();
     });
     this.el.on( "details-form:respond", function( event, data ) {
+      console.log(data);
       self.receiveResponse(data);
     });
     this.el.on( "details-form:validate", function( event, data ) {
+      console.log(data);
       switch (data['status']){
         case "success":
           self.submitFormFields(data);
@@ -55,12 +57,14 @@ DetailsSave = (function() {
   DetailsSave.prototype._prepareFormData = function(){
     var formData = this.el.find('form.request-details-form').serialize();
     var dataEl = this.dataEl;
+    console.log(formData);
     return formData;
   }
 
   DetailsSave.prototype.submitFields = function(params){
     var url = this.el.find('form.request-details-form').attr("action");
     var formData = this._prepareFormData();
+    console.log(formData);
     $.ajax({
       url: url + params,
       headers: {
