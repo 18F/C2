@@ -163,15 +163,15 @@ module Gsa18f
     end
 
     def self.display_update_date_requested(obj)
-      obj[:value].strftime("%b %e, %Y")
+      obj[:value].strftime("%b %d, %Y")
     end
 
     def self.display_update_end_date(obj)
-      obj[:value].strftime("%b %e, %Y")
+      obj[:value].strftime("%b %d, %Y")
     end
 
     def self.display_update_start_date(obj)
-      obj[:value].strftime("%b %e, %Y")
+      obj[:value].strftime("%b %d, %Y")
     end
   end
 end
