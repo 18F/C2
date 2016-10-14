@@ -20,7 +20,7 @@
           Download
           %i.fa.fa-download
       %li
-        %a{ href: "#", onclick: '$("#save-search").modal()' }
+        %a{ href: "#", onclick: '$("#save-search").toggle("visible")', style: 'z-index: 9999; position: relative' }
           Save as Report
           %i.fa.fa-save
   = datespan_header(@start_date, @end_date)
@@ -39,22 +39,24 @@
   // global var referenced by search.js
   var C2_SEARCH_QUERY = #{@search_query.to_json}
 
-#save-search.modal.fade{ tabindex: "-1", role: "dialog", "aria-labelledby" => "save-search-modal-title"}
+#save-search.modal-wrapper.visible{ tabindex: "-1", role: "dialog", "aria-labelledby" => "save-search-modal-title"}
   .modal-dialog{ role: "document" }
-    .modal-content
-      .modal-header
-        %button.close{ type: "button", data: { dismiss: "modal" }, "aria-label" => "Close"}
-          %span{"aria-hidden" => "true"} &times;
-        %h4#save-search-modal-title.modal-title Save as Report
-      .modal-body
-        %form{ role: "form" }
-          %input#save-search-submit{ type: "submit", style: "display: none" }
-          .form-group
-            %label.control-label{ for: "saved-search-name" }
-              Name
-            %input.form-control.required{ type: "text", name: "saved-search-name", required: true }
-          .form-group
-            %pre#save-search-query
-      .modal-footer
-        %button.btn.btn-default{ type: "button", data: { dismiss: "modal" } } Cancel
-        %button#save-search-button.btn.btn-primary{ type: "submit" } Save
+    .popup-content
+      = button_tag "&times;".html_safe, class: "cancel-cancel-link cancel-close-button", :onclick => "javascript:$('#save-search').toggle('visible')"
+      .additional-content
+        / %button.close{ type: "button", data: { dismiss: "modal" }, "aria-label" => "Close"}
+        /   %span{"aria-hidden" => "true"} &times;
+        %h4.popup-content-label
+          Save as Report
+        .modal-body
+          %form{ role: "form" }
+            %input#save-search-submit{ type: "submit" }
+            .form-group
+              %label.control-label{ for: "saved-search-name" }
+                Name
+              %input.form-control.required{ type: "text", name: "saved-search-name", required: true }
+            .form-group
+              %pre#save-search-query
+        .modal-footer
+          %button.btn.btn-default{ type: "button", data: { dismiss: "modal" } } Cancel
+          %button#save-search-button.btn.btn-primary{ type: "submit" } Save
