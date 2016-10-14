@@ -15,7 +15,8 @@ module ApplicationHelper
   def auth_url(provider:)
     {
       myusa: "/auth/myusa",
-      cg:    "https://login.cloud.gov/oauth/authorize?client_id=#{ENV.fetch('CG_APP_ID')}&response_type=code"
+      # cg:    "https://login.cloud.gov/oauth/authorize?client_id=#{ENV.fetch('CG_APP_ID')}&response_type=code"
+      cg: '/auth/cg'
     }.fetch(provider)
   end
 

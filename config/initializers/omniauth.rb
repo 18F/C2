@@ -4,6 +4,7 @@ MYUSA_URL    = ENV["MYUSA_URL"] || "https://alpha.my.usa.gov"
 
 CG_KEY       = ENV.fetch "CG_APP_ID"
 CG_SECRET    = ENV.fetch "CG_APP_SECRET"
+CG_URL       = ENV["CG_URL"] || "https://login.cloud.gov"
 
 Rails.application.config.middleware.use OmniAuth::Builder do
   provider :myusa, MYUSA_KEY, MYUSA_SECRET, scope: "profile.email",
@@ -16,6 +17,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
            CG_KEY,
            CG_SECRET,
            client_options: {
-             site: "https://login.cloud.gov/oauth/authorize?client_id=#{CG_KEY}&response_type=code"
+             site: CG_URL,
+             token_url: "/oauth/authorize"
            }
 end
