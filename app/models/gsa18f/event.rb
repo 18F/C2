@@ -50,11 +50,11 @@ module Gsa18f
     validates :instructions, presence: true
     validates :estimated_travel_expenses, numericality: {
       greater_than_or_equal_to: 1,
-      message: "must be greater than or equal to #{ActiveSupport::NumberHelper.number_to_currency(1)}"
+      message: "Must be greater than or equal to #{ActiveSupport::NumberHelper.number_to_currency(1)}"
     }, presence: true, if: :travel_required
     validates name.constantize.purchase_amount_column_name, numericality: {
       greater_than_or_equal_to: 1.0,
-      message: "must be greater than or equal to #{ActiveSupport::NumberHelper.number_to_currency(1)}, unless the event is free."
+      message: "Must be greater than or equal to #{ActiveSupport::NumberHelper.number_to_currency(1)}, unless the event is free."
     }, presence: true, unless: :free_event
 
     def steps_list
