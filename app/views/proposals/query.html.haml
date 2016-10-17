@@ -22,7 +22,7 @@
       %li
         - if current_user.should_see_beta?("BETA_FEATURE_DETAIL_VIEW")
           %a{ href: "#", data: { "modal-type": "save_report", style: "expand-right" } }
-            Save as Report BETA
+            Save as Report
             %i.fa.fa-save
         - else
           %a{ href: "#", onclick: '$("#save-search").modal()' }
