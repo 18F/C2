@@ -43,6 +43,18 @@ $header-color: map-get($c2blue-swatch, primary);
   h1,h2,h3,h4 {
     font-family: $body-font-family;
   }
+  #query-links{
+    margin-top: 27px;
+    margin-bottom: 10px;
+    .list-inline{
+      margin-bottom: 0;
+    }
+    .button{
+      margin-bottom: 0;
+      text-decoration: none;
+      color: white;
+    }
+  }
 }
 .summary-status-wrapper{
   font-family: $body-font-family;

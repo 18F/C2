@@ -16,12 +16,12 @@
   #query-links.pull-right
     %ul.list-inline
       %li
-        %a{ href: "#{download_proposals_path}?#{request.query_parameters.to_query}" }
+        %a{ href: "#{download_proposals_path}?#{request.query_parameters.to_query}", class: "search button" }
           Download
           %i.fa.fa-download
       %li
         - if current_user.should_see_beta?("BETA_FEATURE_DETAIL_VIEW")
-          %a{ href: "#", data: { "modal-type": "save_report", style: "expand-right" } }
+          %a{ href: "#", data: { "modal-type": "save_report", style: "expand-right" }, class: "search button" }
             Save as Report
             %i.fa.fa-save
         - else
