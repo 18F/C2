@@ -38,10 +38,47 @@ $body-font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 // );
 $header-color: map-get($c2blue-swatch, primary);
 
-// Temp throwaway legacy overrides
+// Temp throwaway legacy overrides and things that don't yet have a home
+.controller-reports {
+  form.button_to button[type="submit"] {
+    display: inline-block;
+    text-align: center;
+    line-height: 1;
+    cursor: pointer;
+    -webkit-appearance: none;
+    -webkit-transition: background-color 0.25s ease-out, color 0.25s ease-out;
+    transition: background-color 0.25s ease-out, color 0.25s ease-out;
+    vertical-align: middle;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 0.45em 1.6em;
+    margin: 0 0 1rem 0;
+    font-size: 0.8rem;
+    background-color: #3a6e93;
+    color: #fefefe;
+  }
+}
 .controller-proposals {
   h1,h2,h3,h4 {
     font-family: $body-font-family;
+  }
+  #tabular-data_wrapper {
+    z-index: 1;
+    position: relative;
+  }
+  #query-links{
+    margin-top: 27px;
+    margin-bottom: 10px;
+    z-index: 3;
+    position: relative;
+    .list-inline{
+      margin-bottom: 0;
+    }
+    .button{
+      margin-bottom: 0;
+      text-decoration: none;
+      color: white;
+    }
   }
 }
 .summary-status-wrapper{
