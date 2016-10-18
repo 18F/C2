@@ -1,17 +1,18 @@
 var ModalController;
 
 ModalController = (function(){
-  
+
   function ModalController(el, opts){
     this.el = $(el);
-    this.data = { 
+    this.data = {
       id: 1,
       modal: {
         cancel: ".cancel-modal-content",
         after_cancel: ".after-cancel-modal-content",
         save_confirm: ".save_confirm-modal-content",
-        attachment_confirm: ".attachment-modal-content", 
-        observer_confirm: ".observer-modal-content", 
+        attachment_confirm: ".attachment-modal-content",
+        save_report: ".save_report-modal-content",
+        observer_confirm: ".observer-modal-content",
         reapproval_confirm: ".reapproval_confirm-modal-content"
       }
     }
@@ -166,11 +167,11 @@ ModalController = (function(){
       //returns "save_confirm" or "reapproval_confirm"
       if(this._formRequiresReapproval()){
         this._updateModalContent("reapproval_confirm", this._getReapprovalLabels())
-        return "reapproval_confirm";  
+        return "reapproval_confirm";
       }
       else{
         return "save_confirm";
-      } 
+      }
     }
   }
 
