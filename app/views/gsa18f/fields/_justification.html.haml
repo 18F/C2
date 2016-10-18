@@ -4,9 +4,9 @@
       %label.detail-element
         = t(t_slug + key)
       %span.detail-value
-        = property_to_s(client_field)
+        = client_field_display
     .detail-edit.column
-      %label.detail-element
+      %label.detail-element{for: "gsa18f_event_justification"}
         = t(t_slug + key)
       %span.detail-value
-        = f.input :product_name_and_description, label: false
+        = f.input :justification, label: false

@@ -5,7 +5,7 @@
 .column{ id: "purchase_type" + '-wrapper'}
   .detail-wrapper.row{ class: "purchase_type-wrapper" }
     .detail-edit.column
-      %label.detail-element
+      %label.detail-element.required
         = t(t_slug + "purchase_type")
       %span.detail-value
         = f.input :purchase_type, label: false,
@@ -14,7 +14,7 @@
 .column{ id: "product_name_and_description" + '-wrapper'}
   .detail-wrapper.row{ class: "product_name_and_description-wrapper" }
     .detail-edit.column
-      %label.detail-element
+      %label.detail-element.required
         = t(t_slug + "product_name_and_description")
       %span.detail-value
         = f.input :product_name_and_description, label: false
@@ -37,14 +37,14 @@
     .column.medium-5
       .detail-wrapper.row{ class: "cost_per_unit-wrapper" }
         .detail-edit.column
-          %label.detail-element
+          %label.detail-element.required
             = t(t_slug + "cost_per_unit")
           %span.detail-value
             = f.input :cost_per_unit, label: false, as: :currency
     .column.medium-5
       .detail-wrapper.row{ class: "quantity-wrapper" }
         .detail-edit.column
-          %label.detail-element
+          %label.detail-element.required
             = t(t_slug + "quantity")
           %span.detail-value
             = f.input :quantity, label: false, input_html: { step: 1 }

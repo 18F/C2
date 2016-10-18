@@ -17,6 +17,8 @@ class ProposalsController < ApplicationController
 
   def show_next
     @client_data_instance ||= proposal.client_data
+
+    @client_data_display = !@client_data_instance.nil? ? PrepareDisplayFields.new(@client_data_instance).run : @client_data_instance # Needed for tests to not fail
     @subscriber_list = SubscriberList.new(@proposal).triples
     @events = HistoryList.new(proposal).filtered_approvals
     render "show_next"

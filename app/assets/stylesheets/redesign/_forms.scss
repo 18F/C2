@@ -62,6 +62,13 @@ label {
     margin-bottom: 5px;
     font-weight: bold
 }
+label.required:before {
+    content: "* ";
+}
+
+label.required:after { 
+    content: ""
+}
 
 input[type="search"] {
     box-sizing: border-box
@@ -255,4 +262,11 @@ input[type="radio"][disabled],input[type="radio"].disabled,fieldset[disabled] in
 
 .beta-list.sub-card label {
     padding-bottom: 7px;
+}
+
+.form-complete {
+    background: map-get($c2success-swatch, primary) !important;
+    border-color: map-get($c2success-swatch, primary) !important;
+    opacity: 1;
+    color: #000000 !important;
 }

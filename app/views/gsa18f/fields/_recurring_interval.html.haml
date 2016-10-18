@@ -1,10 +1,10 @@
-.column{ class: key + "-wrapper half-col-wrap sub-card sub-card-left", id: key + '-wrapper', "data-filter-key" => "recurring", "data-filter-value" => 1 }
+.column{ id: key + '-wrapper', class: key + "-wrapper half-col-wrap sub-card sub-card-left", "data-filter-key" => "recurring", "data-filter-value" => 1 }
   .detail-wrapper.row{ id: value_id, "data-key" => Gsa18f::Procurement::RECURRENCE }
     .detail-display.column
       %label.detail-element
         = t(t_slug + key)
       %span.detail-value
-        = Gsa18f::Procurement::RECURRENCE[client_field.to_i]
+        = client_field_display
     .detail-edit.column
       %label.detail-element
         = t(t_slug + key)

@@ -2,6 +2,13 @@
 = simple_form_for @client_data_instance, html: { multipart: true } do |f|
   - @form = f
   .medium-12.column.edit-mode.new-form-wrapper
+    %h2
+      Welcome to the new 18F training request form!
+    %p
+      Before you begin, make sure your IDP has been approved — you’ll need to attach a PDF copy of it to your request.
+      %a{:href => "https://handbook.18f.gov/professional-development-and-training/#create-your-individual-development-plan-idp", target: "_blank"}
+        For more guidance on IDPs, please see the 18F Handbook.
+
     .card#request-details-card
       - if @client_data_instance
         .card-head.column

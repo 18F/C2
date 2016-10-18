@@ -50,11 +50,11 @@ module Gsa18f
     validates :instructions, presence: true
     validates :estimated_travel_expenses, numericality: {
       greater_than_or_equal_to: 1,
-      message: "must be greater than or equal to #{ActiveSupport::NumberHelper.number_to_currency(1)}"
+      message: "Must be greater than or equal to #{ActiveSupport::NumberHelper.number_to_currency(1)}"
     }, presence: true, if: :travel_required
     validates name.constantize.purchase_amount_column_name, numericality: {
       greater_than_or_equal_to: 1.0,
-      message: "must be greater than or equal to #{ActiveSupport::NumberHelper.number_to_currency(1)}, unless the event is free."
+      message: "Must be greater than or equal to #{ActiveSupport::NumberHelper.number_to_currency(1)}, unless the event is free."
     }, presence: true, unless: :free_event
 
     def steps_list
@@ -63,6 +63,18 @@ module Gsa18f
         Steps::Approval.new(user: User.for_email(Gsa18f::Event.approver_email)),
         Steps::Approval.new(user: User.for_email(Gsa18f::Event.purchaser_email))
       ]
+    end
+
+    def setup_approvals_and_observers
+      manager = ApprovalManager.new(self)
+      manager.setup_approvals_and_observers
+    end
+
+    def setup_and_email_subscribers(comment)
+      Gsa18f::Gsa18fUpdater.new(
+        gsa18f_proposal: self,
+        update_comment: comment
+      ).run
     end
 
     def initialize_steps
@@ -102,6 +114,10 @@ module Gsa18f
       purchasers.first
     end
 
+    def self.special_keys
+      %w(supervisor_id start_date end_date cost_per_unit)
+    end
+
     def self.talent_approver_email
       user_with_role("gsa18f_talent_approver").email_address
     end
@@ -121,6 +137,27 @@ module Gsa18f
     def self.permitted_params(params, _procurement_instance)
       permitted = Gsa18f::EventFields.new.relevant
       params.require(:gsa18f_event).permit(*permitted)
+    end
+
+    def self.display_update_start_date(obj)
+      obj[:value].strftime("%b %d, %Y")
+    end
+
+    def self.display_update_end_date(obj)
+      obj[:value].strftime("%b %d, %Y")
+    end
+
+    def self.display_update_cost_per_unit(obj)
+      format("%.2f", Gsa18f::Event.find(obj[:data].id).cost_per_unit)
+    end
+
+    def self.display_update_supervisor_id(obj)
+      if obj[:data].supervisor_id.is_a? Integer
+        id = obj[:data].supervisor_id
+        supervisor = User.find_by(id: id) ? User.find(id).full_name : "--"
+        obj[:value] = supervisor
+      end
+      obj[:value]
     end
   end
 end

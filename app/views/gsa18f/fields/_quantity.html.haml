@@ -1,10 +1,10 @@
-.column{ class: key + "-wrapper half-col-wrap", id: key + '-wrapper'}
+.column{ id: key + '-wrapper', class: key + "-wrapper half-col-wrap" }
   .detail-wrapper.row{ id: value_id }
     .detail-display.column
       %label.detail-element
         = t(t_slug + key)
       %span.detail-value
-        = client_field
+        = client_field_display
     .detail-edit.column
       %label.detail-element
         = t(t_slug + key)

@@ -1,10 +1,10 @@
-.column.half-col-wrap{ id: key + '-wrapper'}
+.column{ id: key + '-wrapper', class: "half-col-wrap"}
   .detail-wrapper.row{ class: key + "-wrapper", id: value_id, "data-key" => Gsa18f::Procurement::PURCHASE_TYPES.keys }
     .detail-display.column
       %label.detail-element
         = t(t_slug + key)
       %span.detail-value
-        = Gsa18f::Procurement::PURCHASE_TYPES.keys[client_field.to_i]
+        = client_field_display
     .detail-edit.column
       %label.detail-element
         = t(t_slug + key)

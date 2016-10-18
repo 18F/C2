@@ -1,4 +1,6 @@
 feature "Create a Gsa18F event" do
+  include EventSpecHelper
+
   scenario "user not signed in" do
     visit new_gsa18f_event_path
 
@@ -15,9 +17,9 @@ feature "Create a Gsa18F event" do
 
       fill_in "gsa18f_event_duty_station", with: "DC"
       select "supervisor@gsa.gov", from: "Supervisor"
-      fill_in "Title of event", with: "Test title"
+      fill_in "Event title", with: "Test title"
       fill_in "Event provider", with: "Test provider"
-      choose "gsa18f_event_type_of_event_conference"
+      find("#gsa18f_event_type_of_event_conference").trigger("click")
       fill_in "Cost of event (not including travel)", with:"200"
       fill_in "Training start date", with: "12/12/2999"
       fill_in "Training end date", with: "11/12/2999"
@@ -25,6 +27,8 @@ feature "Create a Gsa18F event" do
       fill_in "Justification", with: "because I need it"
       fill_in "Link to purchase event", with: "www.gsa.gov"
       fill_in "Instructions to purchase event", with: "go buy it"
+      execute_script("$('[name=\"attachments[]\"][required=\"required\"]').css('display', 'block')")
+      page.attach_file("attachments[]", "#{Rails.root}/app/assets/images/bg_completed_status.gif")
 
       click_on "SUBMIT"
 
@@ -34,7 +38,6 @@ feature "Create a Gsa18F event" do
       expect(page).to have_content("super")
       expect(page).to have_content("Test title")
       expect(page).to have_content("Test provider")
-      expect(page).to have_content("Conference")
       expect(page).to have_content("Dec 12, 2999")
       expect(page).to have_content("Dec 11, 2999")
       expect(page).to have_content("Test purpose")

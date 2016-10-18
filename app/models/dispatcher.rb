@@ -68,7 +68,13 @@ class Dispatcher
     end
   end
 
-  def on_proposal_update(modifier: nil, needs_reapproval: false)
+  def on_proposal_update(needs_review: false, comment: nil)
+    if comment
+      notify_approvers(needs_review, comment)
+      notify_pending_approvers(comment)
+      notify_requester(needs_review, comment)
+      notify_observers(needs_review, comment)
+    end
   end
 
   def on_step_user_removal(removed_step_users)
@@ -78,6 +84,75 @@ class Dispatcher
   end
 
   private
+
+  def notify_approvers(needs_review, comment)
+    proposal.individual_steps.completed.each do |step|
+      unless user_is_modifier?(step.user, comment.user)
+        # TODO Remove
+        # rubocop:disable Style/Next
+        if needs_review == false
+          ProposalMailer.
+            proposal_updated_no_action_required(step.user, proposal, comment).
+            deliver_later
+        end
+      end
+    end
+  end
+
+  # TODO Remove
+  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/AbcSize
+  def notify_requester(needs_review, comment)
+    if proposal.requester != comment.user
+      if needs_review == true
+        ProposalMailer.
+          proposal_updated_needs_re_review(proposal.requester, proposal, comment).
+          deliver_later
+      else
+        ProposalMailer.
+          proposal_updated_no_action_required(proposal.requester, proposal, comment).
+          deliver_later
+      end
+    end
+  end
+
+  def notify_pending_approvers(comment)
+    proposal.currently_awaiting_steps.each do |proposal_step|
+      unless user_is_modifier?(proposal_step.user, comment.user)
+        if step_user_already_notified_about_proposal?(proposal_step)
+          ProposalMailer.proposal_updated_while_step_pending(proposal_step, comment).deliver_later
+        else
+          StepMailer.proposal_notification(proposal_step).deliver_later
+        end
+      end
+    end
+  end
+
+  def notify_observers(needs_review, comment)
+    only_observers.each do |observer|
+      unless user_is_modifier?(observer, comment.user)
+        if observer.role_on(proposal).observer_only?
+          if needs_review == true
+            ProposalMailer.
+              proposal_updated_needs_re_review(observer, proposal, comment).
+              deliver_later
+          else
+            ProposalMailer.
+              proposal_updated_no_action_required(observer, proposal, comment).
+              deliver_later
+          end
+        end
+      end
+    end
+  end
+
+  def user_is_modifier?(user, comment_user)
+    user == comment_user
+  end
+
+  def step_user_already_notified_about_proposal?(step)
+    step.api_token.present?
+  end
 
   attr_reader :proposal
 
