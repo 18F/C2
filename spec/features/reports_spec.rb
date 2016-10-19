@@ -7,7 +7,7 @@ feature "reports", elasticsearch: true do
     es_execute_with_retries 3 do
       visit query_proposals_path(text: proposals.first.name)
     end
-
+    page.save_screenshot('../screen.png', full: true)
     click_on "Save as Report"
     fill_in "saved-search-name", with: "my test report"
     click_on "Save"
