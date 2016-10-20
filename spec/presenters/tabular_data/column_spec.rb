@@ -72,7 +72,7 @@ describe TabularData::Column do
 
     it 'accesses fields directly (display field overrides db)' do
       col = TabularData::Column.new(:expense_type, 'ncr_work_orders.expense_type', display: 'emergency')
-      expect(col.display(work_order)).to eq(work_order.emergency)
+      expect(col.display(work_order)).to eq("n/a")
     end
 
     it 'can read across objects' do
