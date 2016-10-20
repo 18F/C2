@@ -37,6 +37,9 @@
             %a{:href => "/help"} Help
           %li
             %a{:href => "/help/new_features"} New Features
+          - unless signed_in?
+            %li
+              = link_to "Sign in with MyUSA", auth_path
     .row.full-width-row
       %section.small-12.header
         .small-10.medium-6.small-centered

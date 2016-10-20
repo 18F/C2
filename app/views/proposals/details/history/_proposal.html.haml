@@ -6,4 +6,5 @@
   %span.time-from
     = date_with_tooltip(event.created_at, true, { truncate: true })
 .item-block
-  = event.object
+  %p
+    = event.object
