@@ -57,7 +57,6 @@ class Proposal < ActiveRecord::Base
     allow_blank: true
   }
 
-  validates :client_slug, presence: true
   validates :requester_id, presence: true
   validates :public_id, uniqueness: true, allow_nil: true
 

@@ -58,6 +58,9 @@ class ClientDataController < ApplicationController
 
   def create_client_data
     proposal = ClientDataCreator.new(@client_data_instance, current_user, attachment_params).run
+    proposal.creators_client_slug = current_user.client_slug
+    proposal.save
+    proposal.pry
     add_steps
     DispatchFinder.run(proposal).deliver_new_proposal_emails
   end
