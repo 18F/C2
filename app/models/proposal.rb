@@ -56,6 +56,7 @@ class Proposal < ActiveRecord::Base
     message: "%{value} is not a valid client model type. Valid client model types are: #{CLIENT_MODELS.inspect}",
     allow_blank: true
   }
+  validates :client_slug, presence: true
   validates :requester_id, presence: true
   validates :public_id, uniqueness: true, allow_nil: true
 
