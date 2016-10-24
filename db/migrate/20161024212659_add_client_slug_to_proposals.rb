@@ -1,5 +1,5 @@
 class AddClientSlugToProposals < ActiveRecord::Migration
   def change
-    add_column :proposals, :client_slug, :string
+    add_column :proposals, :creators_client_slug, :string
   end
 end

@@ -116,7 +116,6 @@ class ProposalSearchDsl
 
   def add_filter
     bools = build_filters
-
     if bools.any?
       @dsl.filter = Filter.new
       @dsl.filter.bool do
