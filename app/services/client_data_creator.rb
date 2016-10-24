@@ -10,6 +10,8 @@ class ClientDataCreator
     client_data.save
     create_attachments
     add_public_id
+    proposal.creators_client_slug = @user.client_slug
+    proposal.save
     proposal
   end
 
