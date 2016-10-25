@@ -24,7 +24,7 @@ describe ProposalSearchDsl do
       filter: {
         bool: {
           must: [
-            { term: { client_data_type: "Test::ClientRequest" } },
+            { term: { client_slug: "test" } },
             { term: { "subscribers.id" => user.id.to_s } }
           ]
         }
