@@ -141,7 +141,7 @@ class ProposalSearchDsl
   def client_data_filter
     searchdsl = self
     Filter.new do
-      term client_data_type: searchdsl.client_data_type
+      term client_slug: searchdsl.client_data_type
     end
   end
 
