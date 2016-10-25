@@ -70,7 +70,7 @@ class Proposal < ActiveRecord::Base
   MAX_SEARCH_RESULTS = 20
   MAX_DOWNLOAD_ROWS = 10_000
   paginates_per MAX_SEARCH_RESULTS
-  DEFAULT_INDEXED = PrepareProposalsElasticsearch.new().default_indexed
+  DEFAULT_INDEXED = PrepareProposalsElasticsearch.new.default_indexed
 
   settings index: {
     number_of_shards: 1, # increase this if we ever get more than N records
