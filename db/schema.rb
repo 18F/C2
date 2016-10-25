@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161024212659) do
+ActiveRecord::Schema.define(version: 20161024212669) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -278,9 +278,8 @@ ActiveRecord::Schema.define(version: 20161024212659) do
     t.integer  "client_data_id"
     t.string   "client_data_type"
     t.integer  "requester_id"
-    t.string   "public_id",            limit: 255
+    t.string   "public_id",        limit: 255
     t.uuid     "visit_id"
-    t.string   "creators_client_slug"
   end
 
   add_index "proposals", ["client_data_type", "client_data_id"], name: "index_proposals_on_client_data_type_and_client_data_id", using: :btree
