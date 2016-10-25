@@ -3,13 +3,12 @@ require "elasticsearch/dsl"
 class ProposalSearchDsl
   include Elasticsearch::DSL
 
-  attr_reader :params, :current_user, :query_str, :client_data_type, :creators_client_slug
+  attr_reader :params, :current_user, :query_str, :client_data_type
 
   def initialize(args)
     @query_str = args[:query]
     @client_data_type = args[:client_data_type] or fail ":client_data_type required"
     @current_user = args[:current_user]
-    @creators_client_slug = args[:creators_client_slug]
     @params = args[:params]
     build_dsl
   end
@@ -102,6 +101,7 @@ class ProposalSearchDsl
     add_filter
     add_sort
     add_pagination
+    @dsl.pry
   end
 
   def add_query
@@ -142,7 +142,7 @@ class ProposalSearchDsl
   def client_data_filter
     searchdsl = self
     Filter.new do
-      term client_data_type: searchdsl.client_data_type
+      term client_slug: searchdsl.current_user.client_slug.to_s
     end
   end
 

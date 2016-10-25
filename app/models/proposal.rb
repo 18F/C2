@@ -100,6 +100,7 @@ class Proposal < ActiveRecord::Base
       indexes :id, boost: 2
       indexes :public_id, type: "string", index: :not_analyzed, boost: 1.5
       indexes :client_data_type, type: "string", index: :not_analyzed
+      indexes :client_slug, type: "string", index: :not_analyzed
 
       indexes :client_data do
         indexes :amount, type: "float"
