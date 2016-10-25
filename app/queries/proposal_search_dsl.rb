@@ -9,6 +9,7 @@ class ProposalSearchDsl
     @query_str = args[:query]
     @client_data_type = args[:client_data_type] or fail ":client_data_type required"
     @current_user = args[:current_user]
+    @client_slug = @current_user.client_slug.to_s
     @params = args[:params]
     build_dsl
   end
@@ -129,7 +130,8 @@ class ProposalSearchDsl
 
   def build_filters
     bools = []
-    if client_data_type.present?
+    if @client_slug.present?
+      pry
       bools.push client_data_filter
     end
     if apply_authz?
