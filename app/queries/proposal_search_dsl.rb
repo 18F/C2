@@ -131,7 +131,6 @@ class ProposalSearchDsl
   def build_filters
     bools = []
     if @client_slug.present?
-      pry
       bools.push client_data_filter
     end
     if apply_authz?
