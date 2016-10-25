@@ -30,7 +30,7 @@ feature "Creating an NCR work order", :js do
       expect(page).to have_content("desc content")
     end
 
-    scenario "flash message on error does not persist" do
+    scenario "flash message on error does not persist", :js do
       requester = create(:user, client_slug: "ncr")
 
       login_as(requester)
@@ -38,10 +38,11 @@ feature "Creating an NCR work order", :js do
       visit new_ncr_work_order_path
       fill_in "Project title", with: "test"
       choose "BA61"
+      
       fill_in_selectized("ncr_work_order_vendor", "ACME")
       fill_in 'Amount', with: 123.45
-      click_on "Submit for approval"
-
+      click_on "SUBMIT"
+      page.save_screenshot('../screen.png', full: true)
       expect(page).to have_content("Approving official can't be blank")
       visit proposals_path
       expect(page).to_not have_content("Approving official can't be blank")
