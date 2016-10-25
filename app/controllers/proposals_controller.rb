@@ -199,7 +199,6 @@ class ProposalsController < ApplicationController
       params: params,
       current_user: current_user,
       query: params[:text],
-      creators_client_slug: current_user.client_slug.to_s,
       client_data_type: current_user.client_model.to_s
     )
   end
