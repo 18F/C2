@@ -6,6 +6,10 @@ default: &DEFAULT
       LEFT JOIN gsa18f_procurements
       ON (gsa18f_procurements.id = proposals.client_data_id
       AND proposals.client_data_type = 'Gsa18f::Procurement')
+    gsa18f_events: >
+      LEFT JOIN gsa18f_events
+      ON (gsa18f_events.id = proposals.client_data_id
+      AND proposals.client_data_type = 'Gsa18f::Event')
     ncr_work_orders: >
       LEFT JOIN ncr_work_orders
       ON (ncr_work_orders.id = proposals.client_data_id
