@@ -101,7 +101,6 @@ class ProposalSearchDsl
     add_filter
     add_sort
     add_pagination
-    @dsl.pry
   end
 
   def add_query
