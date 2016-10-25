@@ -3,4 +3,3 @@ module Ahoy
     Ahoy.geocode = false
   end
 end
-
