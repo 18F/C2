@@ -1,1 +1,9 @@
-= value
+- if !value.blank?
+  - if value == true
+    = "Yes"
+  - elsif value == false
+    = "No"
+  - else
+    = value
+- else
+  = "-"
