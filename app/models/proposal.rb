@@ -106,9 +106,13 @@ class Proposal < ActiveRecord::Base
       end
       json[:client_slug] = self.client_slug
       json[:requester] = requester.display_name
-      json[:subscribers] = subscribers.map { |user| { id: user.id, name: user.display_name } }
+      json[:subscribers] = index_subscribers(subscribers)
       json[:num_attachments] = attachments.count
     end
+  end
+
+  def index_subscribers(subscribers)
+    subscribers.map { |user| { id: user.id, name: user.display_name } }
   end
 
   def delegate?(user)
