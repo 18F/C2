@@ -85,7 +85,7 @@ feature "Proposals index" do
     expect(page).to have_selector('thead tr th', count: 5)
 
     resize_window_large
-    expect(page).to have_selector('thead tr th', count: 8)
+    expect(page).to have_selector('thead tr th', count: 7)
   end
 
   scenario "click on item on new index page to load new page", :js do
@@ -103,7 +103,9 @@ feature "Proposals index" do
     first('tbody tr td.name a').click
     sleep(1)
 
-    expect(current_path).to have_content("/proposals/1")
+    proposals = Proposal.where(status: "pending", requester_id: user.id)
+
+    expect(current_path).to have_content("/proposals/" + proposals.last.id.to_s)
   end
 
   scenario "filters new index page for canceled requests", :js do
