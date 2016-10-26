@@ -81,7 +81,7 @@ feature "Creating an NCR work order", :js do
       fill_in "Project title", with: "buying stuff"
       choose "BA80"
       fill_in_selectized("ncr_work_order_vendor", "ACME")
-      click_on "Submit for approval"
+      click_on "SUBMIT"
 
       expect_page_to_have_selected_selectize_option(
         "ncr_work_order_vendor",
