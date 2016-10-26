@@ -1,5 +1,6 @@
 feature "Proposals index" do
   include ProposalTableSpecHelper
+  include ResponsiveHelper
 
   scenario "filters pending proposals according to current_user" do
     user = create(:user)
@@ -60,6 +61,29 @@ feature "Proposals index" do
     sleep(1)
 
     expect(first('tbody tr td.public_id a')).to have_content('PUBLIC7')
+  end
+
+  scenario "Responsive layout should restructure based on screensize", :js do
+    work_order_ba80 = create(:ba80_ncr_work_order, :with_beta_requester)
+    user = work_order_ba80.requester
+    _reviewable_proposals = create_list(:proposal, 2, :with_approver, observer: user)
+    _pending_proposals = create_list(:proposal, 2, :with_approver, approver_user: user)
+    _canceled = create_list(:proposal, 2, status: "canceled", observer: user)
+
+    login_as(user)
+    visit "/proposals"
+
+    resize_window_to_mobile
+    expect(page).to have_selector('thead tr th', count: 4)
+
+    Capybara.page.driver.browser.resize(940, 800)
+    expect(page).to have_selector('thead tr th', count: 4)
+
+    resize_window_default
+    expect(page).to have_selector('thead tr th', count: 5)
+
+    resize_window_large
+    expect(page).to have_selector('thead tr th', count: 8)
   end
 
   scenario "click on item on new index page to load new page", :js do
