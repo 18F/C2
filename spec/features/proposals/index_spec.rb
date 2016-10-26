@@ -45,7 +45,7 @@ feature "Proposals index" do
     expect(page).to have_selector('tbody tr', count: 4)
   end
 
-  scenario "order list by descending alphabetical in new index page for pending requests", :js do
+  scenario "order list by descending alphabetical in new index page for all requests", :js do
     work_order_ba80 = create(:ba80_ncr_work_order, :with_beta_requester)
     user = work_order_ba80.requester
     _reviewable_proposals = create_list(:proposal, 2, :with_approver, observer: user)
@@ -60,7 +60,9 @@ feature "Proposals index" do
     first("th.th-value-id .table-header").click
     sleep(1)
 
-    expect(first('tbody tr td.public_id a')).to have_content('PUBLIC7')
+    @proposal = Proposal.all.last
+
+    expect(first('tbody tr td.public_id a')).to have_content(@proposal.public_id)
   end
 
   scenario "Responsive layout should restructure based on screensize", :js do
