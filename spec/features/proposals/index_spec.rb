@@ -60,9 +60,9 @@ feature "Proposals index" do
     first("th.th-value-id .table-header").click
     sleep(1)
 
-    @proposal = Proposal.all.last
+    pp = Proposal.search(user)
 
-    expect(first('tbody tr td.public_id a')).to have_content(@proposal.public_id)
+    expect(first('tbody tr td.public_id a')).to have_content(pp.result.last.public_id)
   end
 
   scenario "Responsive layout should restructure based on screensize", :js do
