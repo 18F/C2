@@ -137,7 +137,7 @@ feature "Proposals index" do
     first(".completed-button").click
     sleep(1)
 
-    expect(page).to have_selector('tbody tr', count: 0)
+    expect(page).to have_content('No matching records found')
   end
 
   scenario "defaults to sorted by created date" do
