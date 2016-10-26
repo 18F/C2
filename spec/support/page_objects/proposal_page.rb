@@ -11,6 +11,7 @@ end
 
 class DescriptionSection < SitePrism::Section
   element :submitted, "p.submitted strong span"
+  element :submitted_redesign, ".c2n_submitted"
 end
 
 class ProposalPage < SitePrism::Page
@@ -19,4 +20,5 @@ class ProposalPage < SitePrism::Page
 
   section :status, StatusSection, "#status-container-detail"
   section :description, DescriptionSection, ".c2_description"
+  section :description_redesign, DescriptionSection, ".c2n_description"
 end

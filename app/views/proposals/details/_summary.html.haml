@@ -26,7 +26,7 @@
               = proposal.requester.full_name
             on
             %strong
-              %span
+              %span.c2n_submitted
                 = proposal.created_at.to_s(:pretty_datetime)
         - if policy(@proposal).can_cancel?
           %div.fr.cancel-action
