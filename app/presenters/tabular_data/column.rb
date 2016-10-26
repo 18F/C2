@@ -36,7 +36,7 @@ module TabularData
     def display(row)
       field_components = @display_field.split(".")
       field_components.inject(row) do |object, field|
-        object.try(field)
+        object.try(field) || "n/a"
       end
     end
   end

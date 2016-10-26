@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-  $("#save-search form input").keyup(function(e) {
+  $("html").on("keyup", "#save-search form input", function(e) {
     if (e.keyCode === 13) {
       $("#save-search-button").trigger("click");
     }
@@ -10,10 +10,12 @@ $(document).ready(function() {
   if (typeof C2_SEARCH_QUERY !== "undefined") {
     $("#save-search-query").text(C2_SEARCH_QUERY.humanized);
   }
-  $("#save-search form").on("submit", function(e) {
+
+  $("html").on("submit", "#save-search form", function(e) {
     e.preventDefault();
   });
-  $("#save-search-button").click(function() {
+
+  $("html").on("click", "#save-search-button", function() {
     var btn = $(this);
     var savedSearchForm = $("#save-search form");
 
@@ -48,7 +50,11 @@ $(document).ready(function() {
     .done(function(payload) {
       var successAlert = $('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">x</button>Saved as report <strong>'+savedSearchName.val()+'</strong>!</div>');
       $("#query-links").after(successAlert);
-      $("#save-search").modal('hide');
+      if($('#save-search').hasClass('modal')){
+        $("#save-search").modal('hide');
+      } else {
+        $('.cancel-cancel-link').click();
+      }
       $(".alert-success").fadeTo(2000, 500).slideUp(500, function() { $(".alert-success").alert('close'); });
     })
     .always(function(payload) {

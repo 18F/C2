@@ -56,6 +56,7 @@ class Proposal < ActiveRecord::Base
     message: "%{value} is not a valid client model type. Valid client model types are: #{CLIENT_MODELS.inspect}",
     allow_blank: true
   }
+
   validates :requester_id, presence: true
   validates :public_id, uniqueness: true, allow_nil: true
 
@@ -69,20 +70,7 @@ class Proposal < ActiveRecord::Base
   MAX_SEARCH_RESULTS = 20
   MAX_DOWNLOAD_ROWS = 10_000
   paginates_per MAX_SEARCH_RESULTS
-  DEFAULT_INDEXED = {
-    include: {
-      comments: {
-        include: {
-          user: { methods: [:display_name], only: [:display_name] }
-        }
-      },
-      steps: {
-        include: {
-          completed_by: { methods: [:display_name], only: [:display_name] }
-        }
-      }
-    }
-  }
+  DEFAULT_INDEXED = PrepareProposalsElasticsearch.new.default_indexed
 
   settings index: {
     number_of_shards: 1, # increase this if we ever get more than N records
@@ -99,6 +87,7 @@ class Proposal < ActiveRecord::Base
       indexes :id, boost: 2
       indexes :public_id, type: "string", index: :not_analyzed, boost: 1.5
       indexes :client_data_type, type: "string", index: :not_analyzed
+      indexes :client_slug, type: "string", index: :not_analyzed
 
       indexes :client_data do
         indexes :amount, type: "float"
@@ -115,10 +104,15 @@ class Proposal < ActiveRecord::Base
       if client_data
         json[:client_data] = client_data.as_indexed_json
       end
+      json[:client_slug] = self.client_slug
       json[:requester] = requester.display_name
-      json[:subscribers] = subscribers.map { |user| { id: user.id, name: user.display_name } }
+      json[:subscribers] = index_subscribers(subscribers)
       json[:num_attachments] = attachments.count
     end
+  end
+
+  def index_subscribers(subscribers)
+    subscribers.map { |user| { id: user.id, name: user.display_name } }
   end
 
   def delegate?(user)
