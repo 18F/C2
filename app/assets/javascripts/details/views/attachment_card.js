@@ -19,7 +19,7 @@ AttachmentCardController = (function(){
   AttachmentCardController.prototype.clientCodeValidation = function(){
     $('#new_gsa18f_event [name="attachments[]"]').first().attr('required', 'required')
     var attachment = document.querySelector('#new_gsa18f_event [name="attachments[]"][required="required"]');
-    if (attachment !== null || attachment !== undefined){
+    if (attachment !== null && attachment !== undefined){
       $('.submit-button [type="submit"]').on('click', function(){
         if (!attachment.validity.valid){
           $('[required="required"]').each(function(i, item){
