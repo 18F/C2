@@ -12,19 +12,18 @@ feature "Creating an NCR work order", :js do
       fill_in 'Project title', with: project_title
       fill_in 'Description', with: "desc content"
       choose 'BA80'
-      fill_in 'RWA Number', with: 'F1234567'
+      fill_in 'RWA#', with: 'F1234567'
       fill_in_selectized("ncr_work_order_building_number", "Test building")
       fill_in_selectized("ncr_work_order_vendor", "ACME")
       fill_in 'Amount', with: 123.45
       fill_in_selectized("ncr_work_order_approving_official", approver.email_address)
       fill_in_selectized("ncr_work_order_ncr_organization", organization.code_and_name)
-      click_on "Submit for approval"
-
+      click_on "SUBMIT"
       expect(page).to have_content("Proposal submitted")
       expect(page).to have_content(project_title)
       expect(page).to have_content("BA80")
       expect(page).to have_content("ACME")
-      expect(page).to have_content("$123.45")
+      expect(page).to have_content("123.45")
       expect(page).to have_content("Test building")
       expect(page).to have_content(organization.code_and_name)
       expect(page).to have_content("desc content")
