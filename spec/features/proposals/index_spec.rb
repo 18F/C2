@@ -44,7 +44,7 @@ feature "Proposals index" do
     expect(page).to have_selector('tbody tr', count: 4)
   end
 
-  scenario "order list by descending alhabetical in new index page for pending requests", :js do
+  scenario "order list by descending alphabetical in new index page for pending requests", :js do
     work_order_ba80 = create(:ba80_ncr_work_order, :with_beta_requester)
     user = work_order_ba80.requester
     _reviewable_proposals = create_list(:proposal, 2, :with_approver, observer: user)
@@ -60,6 +60,24 @@ feature "Proposals index" do
     sleep(1)
 
     expect(first('tbody tr td.public_id a')).to have_content('PUBLIC7')
+  end
+
+  scenario "click on item on new index page to load new page", :js do
+    work_order_ba80 = create(:ba80_ncr_work_order, :with_beta_requester)
+    user = work_order_ba80.requester
+    _reviewable_proposals = create_list(:proposal, 2, :with_approver, observer: user)
+    _pending_proposals = create_list(:proposal, 2, :with_approver, approver_user: user)
+    _canceled = create_list(:proposal, 2, status: "canceled", observer: user)
+
+    login_as(user)
+
+    visit "/proposals"
+
+    expect(page).to have_css("tbody tr td.name a")
+    first('tbody tr td.name a').click
+    sleep(1)
+
+    expect(current_path).to have_content("/proposals/1")
   end
 
   scenario "filters new index page for canceled requests", :js do
