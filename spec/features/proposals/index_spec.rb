@@ -16,6 +16,68 @@ feature "Proposals index" do
     expect(@page.canceled).to have_content('Cancelled')
   end
 
+  scenario "load new index page based on current_user for all requests", :js do
+    work_order_ba80 = create(:ba80_ncr_work_order, :with_beta_requester)
+    user = work_order_ba80.requester
+    _reviewable_proposals = create_list(:proposal, 2, :with_approver, observer: user)
+    _pending_proposals = create_list(:proposal, 2, :with_approver, approver_user: user)
+    _canceled = create_list(:proposal, 2, status: "canceled", observer: user)
+    login_as(user)
+    visit "/proposals"
+    expect(page).to have_selector('tbody tr', count: 7)
+  end
+
+  scenario "filters new index page for pending requests", :js do
+    work_order_ba80 = create(:ba80_ncr_work_order, :with_beta_requester)
+    user = work_order_ba80.requester
+    _reviewable_proposals = create_list(:proposal, 2, :with_approver, observer: user)
+    _pending_proposals = create_list(:proposal, 2, :with_approver, approver_user: user)
+    _canceled = create_list(:proposal, 2, status: "canceled", observer: user)
+
+    login_as(user)
+
+    visit "/proposals"
+    expect(page).to have_css(".pending-button")
+    first(".pending-button").click
+    sleep(1)
+
+    expect(page).to have_selector('tbody tr', count: 4)
+  end
+
+  scenario "filters new index page for canceled requests", :js do
+    work_order_ba80 = create(:ba80_ncr_work_order, :with_beta_requester)
+    user = work_order_ba80.requester
+    _reviewable_proposals = create_list(:proposal, 2, :with_approver, observer: user)
+    _pending_proposals = create_list(:proposal, 2, :with_approver, approver_user: user)
+    _canceled = create_list(:proposal, 2, status: "canceled", observer: user)
+
+    login_as(user)
+
+    visit "/proposals"
+    expect(page).to have_css(".canceled-button")
+    first(".canceled-button").click
+    sleep(1)
+
+    expect(page).to have_selector('tbody tr', count: 2)
+  end
+
+  scenario "filters new index page for completed requests", :js do
+    work_order_ba80 = create(:ba80_ncr_work_order, :with_beta_requester)
+    user = work_order_ba80.requester
+    _reviewable_proposals = create_list(:proposal, 2, :with_approver, observer: user)
+    _pending_proposals = create_list(:proposal, 2, :with_approver, approver_user: user)
+    _canceled = create_list(:proposal, 2, status: "canceled", observer: user)
+
+    login_as(user)
+
+    visit "/proposals"
+    expect(page).to have_css(".completed-button")
+    first(".completed-button").click
+    sleep(1)
+
+    expect(page).to have_selector('tbody tr', count: 0)
+  end
+
   scenario "defaults to sorted by created date" do
     user = create(:user)
     proposals = create_list(:proposal, 2, :with_approver, approver_user: user)
