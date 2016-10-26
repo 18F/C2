@@ -11,8 +11,8 @@ feature "timezone" do
   end
 
   scenario "empty user.timezone defaults to browser-timezone cookie", :js do
-    user = create(:user, client_slug: "test", timezone: nil)
-    proposal = create(:proposal, client_slug: "test", requester: user)
+    user = create(:user, client_slug: "ncr", timezone: nil)
+    proposal = create(:ncr_work_order, requester: user).proposal
     login_as(user)
 
     expect(user.timezone).to be_nil
@@ -24,7 +24,7 @@ feature "timezone" do
 
     Time.use_zone browser_cookie_timezone do
       created_at_time = proposal_submitted_at(proposal)
-      expect(proposal_page.description.submitted[:title]).to eq(created_at_time)
+      expect(proposal_page.description_redesign.submitted_redesign.text).to eq(created_at_time)
     end
   end
 
