@@ -41,8 +41,9 @@ feature "Creating an NCR work order", :js do
       
       fill_in_selectized("ncr_work_order_vendor", "ACME")
       fill_in 'Amount', with: 123.45
-      click_on "SUBMIT"
       page.save_screenshot('../screen.png', full: true)
+      click_on "SUBMIT"
+      
       expect(page).to have_content("Approving official can't be blank")
       visit proposals_path
       expect(page).to_not have_content("Approving official can't be blank")
