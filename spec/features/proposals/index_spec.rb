@@ -1,5 +1,6 @@
 feature "Proposals index" do
   include ProposalTableSpecHelper
+  include ResponsiveHelper
 
   scenario "filters pending proposals according to current_user" do
     user = create(:user)
@@ -14,6 +15,131 @@ feature "Proposals index" do
     expect(@page.needing_review).to have_content('Please review')
     expect(@page.pending).to have_content('Waiting for review')
     expect(@page.canceled).to have_content('Cancelled')
+  end
+
+  scenario "load new index page based on current_user for all requests", :js do
+    work_order_ba80 = create(:ba80_ncr_work_order, :with_beta_requester)
+    user = work_order_ba80.requester
+    _reviewable_proposals = create_list(:proposal, 2, :with_approver, observer: user)
+    _pending_proposals = create_list(:proposal, 2, :with_approver, approver_user: user)
+    _canceled = create_list(:proposal, 2, status: "canceled", observer: user)
+    login_as(user)
+    visit "/proposals"
+    expect(page).to have_selector('tbody tr', count: 7)
+  end
+
+  scenario "filters new index page for pending requests", :js do
+    work_order_ba80 = create(:ba80_ncr_work_order, :with_beta_requester)
+    user = work_order_ba80.requester
+    _reviewable_proposals = create_list(:proposal, 2, :with_approver, observer: user)
+    _pending_proposals = create_list(:proposal, 2, :with_approver, approver_user: user)
+    _canceled = create_list(:proposal, 2, status: "canceled", observer: user)
+
+    login_as(user)
+
+    visit "/proposals"
+    expect(page).to have_css(".pending-button")
+    first(".pending-button").click
+    sleep(1)
+
+    expect(page).to have_selector('tbody tr', count: 4)
+  end
+
+  scenario "order list by descending alphabetical in new index page for all requests", :js do
+    work_order_ba80 = create(:ba80_ncr_work_order, :with_beta_requester)
+    user = work_order_ba80.requester
+    _reviewable_proposals = create_list(:proposal, 2, :with_approver, observer: user)
+    _pending_proposals = create_list(:proposal, 2, :with_approver, approver_user: user)
+    _canceled = create_list(:proposal, 2, status: "canceled", observer: user)
+
+    login_as(user)
+
+    visit "/proposals"
+
+    expect(page).to have_css("th.th-value-id .table-header")
+    first("th.th-value-id .table-header").click
+    sleep(1)
+
+    pp = Proposal.search(user)
+
+    expect(first('tbody tr td.public_id a')).to have_content(pp.result.last.public_id)
+  end
+
+  scenario "Responsive layout should restructure based on screensize", :js do
+    work_order_ba80 = create(:ba80_ncr_work_order, :with_beta_requester)
+    user = work_order_ba80.requester
+    _reviewable_proposals = create_list(:proposal, 2, :with_approver, observer: user)
+    _pending_proposals = create_list(:proposal, 2, :with_approver, approver_user: user)
+    _canceled = create_list(:proposal, 2, status: "canceled", observer: user)
+
+    login_as(user)
+    visit "/proposals"
+
+    resize_window_to_mobile
+    expect(page).to have_selector('thead tr th', count: 4)
+
+    Capybara.page.driver.browser.resize(940, 800)
+    expect(page).to have_selector('thead tr th', count: 4)
+
+    resize_window_default
+    expect(page).to have_selector('thead tr th', count: 5)
+
+    resize_window_large
+    expect(page).to have_selector('thead tr th', count: 7)
+  end
+
+  scenario "click on item on new index page to load new page", :js do
+    work_order_ba80 = create(:ba80_ncr_work_order, :with_beta_requester)
+    user = work_order_ba80.requester
+    _reviewable_proposals = create_list(:proposal, 2, :with_approver, observer: user)
+    _pending_proposals = create_list(:proposal, 2, :with_approver, approver_user: user)
+    _canceled = create_list(:proposal, 2, status: "canceled", observer: user)
+
+    login_as(user)
+
+    visit "/proposals"
+
+    expect(page).to have_css("tbody tr td.name a")
+    first('tbody tr td.name a').click
+    sleep(1)
+
+    proposals = Proposal.where(status: "pending", requester_id: user.id)
+
+    expect(current_path).to have_content("/proposals/" + proposals.last.id.to_s)
+  end
+
+  scenario "filters new index page for canceled requests", :js do
+    work_order_ba80 = create(:ba80_ncr_work_order, :with_beta_requester)
+    user = work_order_ba80.requester
+    _reviewable_proposals = create_list(:proposal, 2, :with_approver, observer: user)
+    _pending_proposals = create_list(:proposal, 2, :with_approver, approver_user: user)
+    _canceled = create_list(:proposal, 2, status: "canceled", observer: user)
+
+    login_as(user)
+
+    visit "/proposals"
+    expect(page).to have_css(".canceled-button")
+    first(".canceled-button").click
+    sleep(1)
+
+    expect(page).to have_selector('tbody tr', count: 2)
+  end
+
+  scenario "filters new index page for completed requests", :js do
+    work_order_ba80 = create(:ba80_ncr_work_order, :with_beta_requester)
+    user = work_order_ba80.requester
+    _reviewable_proposals = create_list(:proposal, 2, :with_approver, observer: user)
+    _pending_proposals = create_list(:proposal, 2, :with_approver, approver_user: user)
+    _canceled = create_list(:proposal, 2, status: "canceled", observer: user)
+
+    login_as(user)
+
+    visit "/proposals"
+    expect(page).to have_css(".completed-button")
+    first(".completed-button").click
+    sleep(1)
+
+    expect(page).to have_content('No matching records found')
   end
 
   scenario "defaults to sorted by created date" do
