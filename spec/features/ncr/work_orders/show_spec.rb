@@ -15,10 +15,10 @@ describe "viewing a work order" do
   end
 
   it "shows a edit link for a completed proposal" do
-    ncr_proposal.update(status: "completed") # avoid state machine
-
+    ncr_proposal.fully_complete!
     visit "/proposals/#{ncr_proposal.id}"
-    expect(page).to have_content('Modify Request')
+    expect(page).to have_content('MODIFY')
+    expect(page).to have_selector('.edit-button', visible: true)
   end
 
   it "does not show a edit link for another client" do
