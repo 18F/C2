@@ -1,7 +1,6 @@
 GIT
   remote: https://github.com/18F/omniauth-cg
-  revision: 454eb04dea6088b826feb6d10254db1995384e77
-  branch: cloud-gov-changeover
+  revision: a5696305f447f893ac54cf29b6c74540c23bde81
   specs:
     omniauth-cg (0.0.1)
       jwt
