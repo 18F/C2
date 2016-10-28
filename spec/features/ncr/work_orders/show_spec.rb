@@ -14,7 +14,7 @@ describe "viewing a work order" do
   end
 
   it "shows a edit link for a completed proposal" do
-    ncr_proposal.fully_complete!
+    # ncr_proposal.fully_complete!
     visit "/proposals/#{ncr_proposal.id}"
     expect(page).to have_content('MODIFY')
     expect(page).to have_selector('.edit-button', visible: true)
