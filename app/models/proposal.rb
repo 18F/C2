@@ -290,6 +290,14 @@ class Proposal < ActiveRecord::Base
     CLIENT_MODELS.select { |cmodel| cmodel.slug_matches?(user) }[0]
   end
 
+  def completed_at_date
+    if individual_steps.last.completed_at
+      individual_steps.last.completed_at.to_s(:pretty_datetime)
+    else
+      "--"
+    end
+  end
+
   private
 
   def create_new_observation(user, adder, reason)
