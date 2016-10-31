@@ -187,7 +187,7 @@ class Proposal < ActiveRecord::Base
     end
 
     unless existing_observation_for(user)
-      create_new_observation(user, adder, reason)
+      ProposalServices.new.create_new_observation(user, adder, reason, id)
     end
   end
 
@@ -299,15 +299,6 @@ class Proposal < ActiveRecord::Base
   end
 
   private
-
-  def create_new_observation(user, adder, reason)
-    ObservationCreator.new(
-      observer: user,
-      proposal_id: id,
-      reason: reason,
-      observer_adder: adder
-    ).run
-  end
 
   def sql_for_step_user_or_delegate
     <<-SQL
