@@ -12,8 +12,12 @@ module ApplicationHelper
       (controller.is_a?(ProposalsController) && params[:action] != "index")
   end
 
-  def auth_path
-    "/auth/myusa"
+  def auth_url(provider:)
+    {
+      myusa: "/auth/myusa",
+      # cg:    "https://login.cloud.gov/oauth/authorize?client_id=#{ENV.fetch('CG_APP_ID')}&response_type=code"
+      cg: "/auth/cg"
+    }.fetch(provider)
   end
 
   def display_profile_warning?
@@ -25,16 +29,11 @@ module ApplicationHelper
   end
 
   def blank_field_default(field)
-    if field.blank?
-      field = "--".to_s
-    end
-    field
+    field.blank? ? "--" : field
   end
 
   def current_proposal_status?(type)
-    if !@proposal.nil? && @proposal.status == type
-      " active "
-    end
+    " active " if !@proposal.nil? && @proposal.status == type
   end
 
   def new_request_page?
@@ -50,9 +49,8 @@ module ApplicationHelper
   end
 
   def proposal_count(type)
-    if @current_user.nil?
-      return 0
-    end
+    return 0 if @current_user.nil?
+
     listing = ProposalListingQuery.new(@current_user, params)
     get_proposal_count(type, listing)
   end
