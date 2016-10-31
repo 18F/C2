@@ -1,5 +1,6 @@
 class ProposalServices
-  def initialize
+  def initialize(proposal)
+    @proposal = proposal
   end
 
   def create_new_observation(user, adder, reason, id)

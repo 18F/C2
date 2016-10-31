@@ -124,12 +124,12 @@ class Proposal < ActiveRecord::Base
   end
 
   def existing_or_delegated_step_for(user)
-    where_clause = ProposalServices.new.sql_for_step_user_or_delegate
+    where_clause = ProposalServices.new(self).sql_for_step_user_or_delegate
     steps.where(where_clause, user_id: user.id).first
   end
 
   def existing_or_delegated_actionable_step_for(user)
-    where_clause = "(#{ProposalServices.new.sql_for_step_user_or_delegate}) AND status = :actionable"
+    where_clause = "(#{ProposalServices.new(self).sql_for_step_user_or_delegate}) AND status = :actionable"
     steps.where(where_clause, user_id: user.id, actionable: :actionable).first
   end
 
@@ -187,7 +187,7 @@ class Proposal < ActiveRecord::Base
     end
 
     unless existing_observation_for(user)
-      ProposalServices.new.create_new_observation(user, adder, reason, id)
+      ProposalServices.new(self).create_new_observation(user, adder, reason, id)
     end
   end
 
