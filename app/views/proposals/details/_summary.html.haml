@@ -10,7 +10,7 @@
       - if @client_data_instance.has_attribute?("emergency") && @client_data_instance.emergency == true
         = proposal.updated_at.to_s(:pretty_datetime)
       - else
-        = proposal.individual_steps.last.completed_at.to_s(:pretty_datetime)
+        = proposal.completed_at_date
 
 .card.summary-card#summary-card
   .card-head.column
