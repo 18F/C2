@@ -124,12 +124,12 @@ class Proposal < ActiveRecord::Base
   end
 
   def existing_or_delegated_step_for(user)
-    where_clause = sql_for_step_user_or_delegate
+    where_clause = ProposalServices.new.sql_for_step_user_or_delegate
     steps.where(where_clause, user_id: user.id).first
   end
 
   def existing_or_delegated_actionable_step_for(user)
-    where_clause = "(#{sql_for_step_user_or_delegate}) AND status = :actionable"
+    where_clause = "(#{ProposalServices.new.sql_for_step_user_or_delegate}) AND status = :actionable"
     steps.where(where_clause, user_id: user.id, actionable: :actionable).first
   end
 
@@ -296,15 +296,5 @@ class Proposal < ActiveRecord::Base
     else
       "--"
     end
-  end
-
-  private
-
-  def sql_for_step_user_or_delegate
-    <<-SQL
-      user_id = :user_id
-      OR user_id IN (SELECT assigner_id FROM user_delegates WHERE assignee_id = :user_id)
-      OR user_id IN (SELECT assignee_id FROM user_delegates WHERE assigner_id = :user_id)
-    SQL
   end
 end
