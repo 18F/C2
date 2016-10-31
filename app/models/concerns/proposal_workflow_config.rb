@@ -1,0 +1,3 @@
+module ProposalWorkflowConfig
+
+end
