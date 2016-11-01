@@ -10,6 +10,9 @@ Metrics/LineLength:
 Rails:
   Enabled: true
 
+Style/AccessorMethodName:
+  Enabled: false
+
 Style/AndOr:
   EnforcedStyle: always
 
