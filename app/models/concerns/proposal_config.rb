@@ -13,7 +13,7 @@ module ProposalConfig
     has_many :observations, -> { where("proposal_roles.role_id in (select roles.id from roles where roles.name='#{ROLE_OBSERVER}')") }
     has_many :observers, through: :observations, source: :user
     belongs_to :client_data, polymorphic: true, dependent: :destroy
-    belongs_to :requester, class_name: 'User'
+    belongs_to :requester, class_name: "User"
 
     delegate :client_slug, to: :client_data, allow_nil: true
 
@@ -23,7 +23,7 @@ module ProposalConfig
     statuses.each do |status|
       scope status, -> { where(status: status) }
     end
-    scope :closed, -> { where(status: ["completed", "canceled"]) }
+    scope :closed, -> { where(status: %w(completed canceled)) }
     scope :canceled, -> { where(status: "canceled") }
   end
 end
