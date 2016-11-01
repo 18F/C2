@@ -58,7 +58,7 @@ module ProposalSteps
   end
 
   def eligible_observers
-    if observations.count > 0
+    if observations.count.positive?
       User.where(client_slug: client_slug).where("id not in (?)", observations.pluck("user_id"))
     else
       User.where(client_slug: client_slug)
