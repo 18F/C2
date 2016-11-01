@@ -49,7 +49,7 @@ module ProposalSteps
     subscribers - delegates
   end
 
-  def has_subscriber?(user)
+  def subscriber?(user)
     subscribers.include?(user)
   end
 
