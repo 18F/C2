@@ -42,7 +42,7 @@ Style/IfUnlessModifier:
   Enabled: true
 
 Style/RaiseArgs:
-  EnforcedStyle: exploded
+  Enabled: false
 
 Style/RedundantBegin:
   Enabled: false
@@ -58,7 +58,6 @@ Style/SignalException:
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes
-
 
 Style/TrailingCommaInArguments:
   Enabled: false
