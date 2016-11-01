@@ -4,7 +4,6 @@ class Proposal < ActiveRecord::Base
   include StepManager
   include Searchable
   include FiscalYearMixin
-  # include ProposalWorkflowConfig
 
   has_paper_trail class_name: "C2Version"
 
