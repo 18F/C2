@@ -38,6 +38,9 @@ Style/IfUnlessModifier:
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#if-as-a-modifier'
   Enabled: true
 
+Style/RaiseArgs:
+  EnforcedStyle: exploded
+
 Style/RedundantBegin:
   Enabled: false
 
