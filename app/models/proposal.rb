@@ -37,11 +37,6 @@ class Proposal < ActiveRecord::Base
   acts_as_taggable
   visitable # Used to track user visit associated with processed proposal
 
-  has_many :observations, -> { where("proposal_roles.role_id in (select roles.id from roles where roles.name='#{ROLE_OBSERVER}')") }
-  has_many :observers, through: :observations, source: :user
-  belongs_to :client_data, polymorphic: true, dependent: :destroy
-  belongs_to :requester, class_name: 'User'
-
   delegate :client_slug, to: :client_data, allow_nil: true
 
   validates :client_data_type, inclusion: {
@@ -49,9 +44,6 @@ class Proposal < ActiveRecord::Base
     message: "%{value} is not a valid client model type. Valid client model types are: #{CLIENT_MODELS.inspect}",
     allow_blank: true
   }
-
-  validates :requester_id, presence: true
-  validates :public_id, uniqueness: true, allow_nil: true
 
   statuses.each do |status|
     scope status, -> { where(status: status) }
