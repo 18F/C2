@@ -19,16 +19,4 @@ module ProposalConfig
     validates :requester_id, presence: true
     validates :public_id, uniqueness: true, allow_nil: true
   end
-
-  def add_completed_comment
-    completer = individual_steps.last.completed_by
-    comments.create_without_callback(
-      comment_text: I18n.t(
-        "activerecord.attributes.proposal.user_completed_comment",
-        user: completer.full_name
-      ),
-      update_comment: true,
-      user: completer
-    )
-  end
 end
