@@ -13,8 +13,6 @@ engines:
     checks:
       Rubocop/Style/AndOr:
         enabled: false
-      Rubocop/Style/AccessorMethodName:
-        Enabled: false
       Rubocop/Style/ExtraSpacing:
         enabled: false
       Rubocop/Style/GuardClause:
