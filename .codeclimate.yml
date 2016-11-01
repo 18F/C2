@@ -13,11 +13,15 @@ engines:
     checks:
       Rubocop/Style/AndOr:
         enabled: false
+      Rubocop/Style/AccessorMethodName:
+        Enabled: false
       Rubocop/Style/ExtraSpacing:
         enabled: false
       Rubocop/Style/GuardClause:
         enabled: false
       Rubocop/Style/IfUnlessModifier:
+        enabled: false
+      Rubocop/Style/PredicateName:
         enabled: false
   bundler-audit:
     enabled: true

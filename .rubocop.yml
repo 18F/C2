@@ -50,11 +50,15 @@ Style/RedundantBegin:
 Style/RedundantSelf:
   Enabled: false
 
+Style/PredicateName:
+  Enabled: false
+
 Style/SignalException:
   Enabled: false
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes
+
 
 Style/TrailingCommaInArguments:
   Enabled: false
