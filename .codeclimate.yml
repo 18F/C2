@@ -19,6 +19,10 @@ engines:
         enabled: false
       Rubocop/Style/IfUnlessModifier:
         enabled: false
+      Rubocop/Style/RaiseArgs:
+        enabled: false
+      Rubocop/Style/PredicateName:
+        enabled: false
   bundler-audit:
     enabled: true
   brakeman:
