@@ -10,6 +10,9 @@ Metrics/LineLength:
 Rails:
   Enabled: true
 
+Style/AccessorMethodName:
+  Enabled: false
+
 Style/AndOr:
   EnforcedStyle: always
 
@@ -38,10 +41,16 @@ Style/IfUnlessModifier:
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#if-as-a-modifier'
   Enabled: true
 
+Style/RaiseArgs:
+  Enabled: false
+
 Style/RedundantBegin:
   Enabled: false
 
 Style/RedundantSelf:
+  Enabled: false
+
+Style/PredicateName:
   Enabled: false
 
 Style/SignalException:

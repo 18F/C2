@@ -79,7 +79,7 @@ module IncomingMail
 
       # cannot create comment for non-existent user, or
       # for user who is not already a subscriber
-      unless user && proposal.has_subscriber?(user)
+      unless user && proposal.subscriber?(user)
         return
       end
 
