@@ -17,6 +17,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
   provider :cg,
            CG_KEY,
            CG_SECRET,
+           scope: "profile.email",
            client_options: {
              site: CG_URL,
              token_url: "#{CG_TOKEN_URL}/oauth/token"
