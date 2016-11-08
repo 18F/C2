@@ -24,7 +24,6 @@ module Gsa18f
 
     PURCHASE_TYPES = {
       "Software" => 0,
-      "Training/Event" => 1,
       "Office Supply/Miscellaneous" => 2,
       "Hardware" => 3,
       "Micropurchase" => 5,

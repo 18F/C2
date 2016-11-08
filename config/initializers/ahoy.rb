@@ -1,5 +1,5 @@
 module Ahoy
   class Store < Ahoy::Stores::ActiveRecordStore
-    # customize here
+    Ahoy.geocode = false
   end
 end

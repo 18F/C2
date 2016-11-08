@@ -7,7 +7,7 @@
 
   .inset
     .run-report{style: "float: right"}
-      = link_to @report.url, class: 'btn btn-default btn-primary', role: 'button' do
+      = link_to @report.url, class: 'btn btn-default btn-primary button', role: 'button' do
         %i.fa.fa-play
         Run this report
 
@@ -94,12 +94,12 @@
         %hr
 
         .action-button
-        = button_to preview_report_path(@report), method: :post do
+        = button_to preview_report_path(@report),class: 'button', method: :post do
           %i.fa.fa-envelope-o
           Send this report to me now
 
         - if current_user.admin? || policy(@report).can_destroy?
           .action-button
-          = button_to @report, method: :delete, data: {confirm: "Are you sure?"} do
+          = button_to @report, class: 'button', method: :delete, data: {confirm: "Are you sure?"} do
             %i.fa.fa-trash
             Delete report
