@@ -2,6 +2,8 @@ source "https://rubygems.org"
 ruby "2.3.1" # this should match `.ruby-version` and doc/setup.md
 gem "rails", "4.2.7.1"
 
+gem 'railroady'
+
 gem "actionmailer-text"
 gem "active_model_serializers"
 gem "activeadmin", git: "https://github.com/activeadmin/activeadmin.git"
@@ -71,7 +73,7 @@ group :test, :development do
   gem "bullet", require: false # use BULLET_ENABLED=true
   gem "database_cleaner"
   gem "konacha"
-  gem "pry-byebug"
+  # gem "pry-byebug"
   gem "rspec-rails"
   gem "rack_session_access"
 end

@@ -116,7 +116,6 @@ GEM
     bullet (5.0.0)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.9.0)
-    byebug (8.2.1)
     callsite (0.0.11)
     capybara (2.6.2)
       addressable
@@ -374,9 +373,6 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
-    pry-byebug (3.3.0)
-      byebug (~> 8.0)
-      pry (~> 0.10)
     pry-rails (0.3.4)
       pry (>= 0.9.10)
     puma (2.16.0)
@@ -608,7 +604,6 @@ DEPENDENCIES
   peek-pg
   pg
   poltergeist
-  pry-byebug
   pry-rails
   puma
   pundit (>= 1.0.0)
