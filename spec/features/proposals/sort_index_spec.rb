@@ -66,10 +66,10 @@ feature "Sort proposals on index page" do
     scenario "can be sorted by purchase type" do
       user = create(:user, client_slug: "gsa18f")
       software_procurement = create(:gsa18f_procurement, purchase_type: "Software")
-      training_procurement = create(:gsa18f_procurement, purchase_type: "Training/Event")
       office_supply_procurement = create(:gsa18f_procurement, purchase_type: "Office Supply/Miscellaneous")
+      hardware_procurement = create(:gsa18f_procurement, purchase_type: "Hardware")
       add_user_as_observer(
-        [software_procurement, training_procurement, office_supply_procurement],
+        [software_procurement, office_supply_procurement, hardware_procurement],
         user
       )
 
@@ -78,14 +78,14 @@ feature "Sort proposals on index page" do
 
       expect_order(
         pending_proposals_table,
-        [office_supply_procurement.proposal, training_procurement.proposal, software_procurement.proposal]
+        [hardware_procurement.proposal, office_supply_procurement.proposal, software_procurement.proposal]
       )
 
       within(pending_proposals_section) { click_on "Purchase" }
 
       expect_order(
         pending_proposals_table,
-        [software_procurement.proposal, training_procurement.proposal, office_supply_procurement.proposal]
+        [software_procurement.proposal, office_supply_procurement.proposal, hardware_procurement.proposal]
       )
     end
 
