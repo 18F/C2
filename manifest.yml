@@ -34,6 +34,7 @@ applications:
   services:
     - c2-dev-elasticsearch
     - c2-dev-db
+    - c2-dev-ups
 - name: c2-dev-worker
   no-route: true
   command: script/worker-start
@@ -54,7 +55,7 @@ applications:
   services:
     - c2-dev-elasticsearch
     - c2-dev-db
-
+    - c2-dev-ups
 # staging
 - name: c2-staging
   host: c2-staging
@@ -76,6 +77,7 @@ applications:
   services:
     - c2-staging-elasticsearch
     - c2-staging-db
+    - c2-staging-ups
 - name: c2-staging-worker
   no-route: true
   command: script/worker-start
@@ -95,7 +97,7 @@ applications:
   services:
     - c2-staging-elasticsearch
     - c2-staging-db
-
+    - c2-staging-ups
 # production
 - name: c2-prod
   hosts:
@@ -123,6 +125,7 @@ applications:
   services:
     - c2-prod-elasticsearch
     - c2-prod-db
+    - c2-prod-ups
 - name: c2-prod-worker
   no-route: true
   command: script/worker-start
@@ -144,3 +147,4 @@ applications:
   services:
     - c2-prod-elasticsearch
     - c2-prod-db
+    - c2-prod-ups
