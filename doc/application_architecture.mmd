@@ -1,0 +1,91 @@
+%% Application Architecture
+graph LR
+  subgraph Overall C2 Application
+    rails
+    subgraph External Services
+      s3
+      newrelic
+      email
+    end
+    subgraph Authentication Services
+      login
+    end
+    subgraph Internal Services
+      worker
+      search
+      db
+    end
+  end
+
+%% Connections
+rails-->worker
+
+rails-->login
+
+rails-->db
+rails-->search
+
+rails-->s3
+rails-->newrelic
+
+worker-->db
+worker-->search
+worker-->email
+worker-->newrelic
+
+login-->rails
+db-->rails
+search-->rails
+s3-->rails
+
+
+%% Definitions
+s3["
+  <b>AWS S3</b><br>
+  S3_BUCKET_NAME: c2-prod<br>
+  S3_REGION: us-east-1
+"]
+email["
+  <b>Email</b><br>
+  Purpose: Email<br>
+  Service: SMTP<br>
+  Provider: Google Apps<br>
+  Domain: gsa.gov
+"]
+newrelic["<b>New Relic</b>"]
+rails["
+  <b>Server</b><br>
+  Purpose: Ruby on Rails<br>
+  Name: c2-prod<br>
+  Route: cap.18f.gov<br>
+  Code: https://github.com/cloudfoundry/ruby-buildpack.git<br>
+  Memory: 1074 MB<br>
+  Disk: 1074 MB
+"]
+worker["
+  <b>Worker</b><br>
+  Purpose: Ruby Worker<br>
+  Name: c2-prod-staging<br>
+  Route: No public routes<br>
+  Code: https://github.com/cloudfoundry/ruby-buildpack.git<br>
+  Memory: 671 MB<br>
+  Disk: 1074 MB
+"]
+search["
+  <b>ElasticSearch</b><br>
+  Purpose: Elasticsearch 1.7.1 <br>
+  Name: c2-prod-elasticsearch<br>
+  Service: elasticsearch-swarm-1.7.1<br>
+  Plan: 3x
+"]
+db["
+  <b>PostgreSQL Database</b><br>
+  Purpose: RDS Database Broker<br>
+  Name: c2-prod-db<br>
+  Service: rds<br>
+  Plan: shared-psql<br>
+"]
+login["
+  <b>Cloud.gov</b><br>
+  Purpose: oAuth <br>
+"]
