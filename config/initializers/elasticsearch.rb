@@ -19,7 +19,16 @@ if Rails.env.production?
   vcap_config.keys.each do |vcap_key|
     if vcap_key.match(/elasticsearch/)
       es_config = vcap_config[vcap_key]
-      es_client_args[:url] = es_config[0]["credentials"]["uri"]
+      if (es_config[0]["credentials"]["uri"])
+        es_client_args[:url] = es_config[0]["credentials"]["uri"]
+      else
+        es_client_args[:hosts] = [ {
+          host: es_config[0]["credentials"]["hostname"],
+          port: es_config[0]["credentials"]["port"],
+          user: es_config[0]["credentials"]["username"],
+          password: es_config[0]["credentials"]["password"]
+        } ]
+      end
     end
   end
 elsif Rails.env.test?
