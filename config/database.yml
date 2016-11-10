@@ -11,6 +11,10 @@ default: &default
 development:
   <<: *default
   database: c2_development
+  username: <%= ENV['DATABASE_USER'] or '' %>
+  password: <%= ENV['DATABASE_PASSWORD'] or '' %>
+  host: <%= ENV['DATABASE_HOST'] or '' %>
+
   pool: 6
 test:
   <<: *default
