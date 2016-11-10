@@ -15,6 +15,8 @@ The application is running on Cloud.gov's server infrustructure.
 
 ![Architecture](architecture.png)
 
+[Architecture flowchart is accessible in Mermaid](application_architecture.mmd).
+
 ## Approval Chains
 
 The order and requirements for a proposal to be "approved" are defined by an "approval chain". This is a hierarchical tree of `Approval` objects, with currently fall into three types:
