@@ -1,0 +1,15 @@
+db:
+   image: postgres:9
+web:
+    build: .
+    env_file: .env
+    environment:
+       DATABASE_USER: postgres
+       DATABASE_NAME: c2_development
+       DATABASE_HOST: db
+    volumes:
+      - .:/app
+    ports:
+      - "5000:5000"
+    links:
+      - db
