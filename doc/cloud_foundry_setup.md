@@ -128,14 +128,67 @@ Ensure that:
        be because health checks haven't been disabled. Ensure that
        `health-check-type: none` is set in the manifest file.
 
+## Exporting from Postgres to a backup file
 
-To export from pgsql in the E/W environment: 
- - SSH in using: `SSH LINE`
+### Exporting in the E/W cloud.gov environment
+
+ - On your local machine, go to the root directory of the C2 repo
+ - Ensure your CF target is the `c2` organisation, `general` space
+ - SSH in using: `./script/cssh c2-prod` _(... to export from the 
+   production database)_
  - In the SSH session:
-    - Install the PG tools: 
-    - Get the database URL: 
+    - Install the PG tools: `curl https://s3.amazonaws.com/18f-cf-cli/psql-9.4.4-ubuntu-14.04.tar.gz > psql.tgz; tar xzvf psql.tgz`
+    - Validate that you have a `DATABASE_URL` variable set: 
+      `echo $DATABASE_URL`
     - Create an export dump: `psql/bin/pg_dump --format=custom $DATABASE_URL > backup.pg`
- - `cf files c2-prod-ssh app/backup.pg | tail -n +4 > backup.pg`
+    - Don't quit the SSH session yet!
+ - In a separate terminal session on your local machine, download the
+   backup file (this may take a minute): 
+   `cf files c2-prod-ssh app/backup.pg | tail -n +4 > backup.pg`
+ - You should now have a large file named `backup.pg` in your current
+   directory, and you can quit that SSH session.
 
-To import a pgsql dump:
- - 
+## Importing a Postgres backup file to a GovCloud app
+
+### Pre-requisites
+
+ - On your local machine, go to the root directory of the C2 repo. 
+   (We're assuming that the `backup.pg` file, created above, is in the root directory)
+ - Ensure your CF target is set to the correct organization and space in
+   the GovCloud environment.
+ - In this case, we're going to assume that the app/environment to which
+   you're importing is `c2-dev`, and will be using that in the code below.
+   Tweak as appropriate.
+ - **This import process is destructive.** It will completely remove all
+   existing data from the database and replace it. If the loss of the target
+   database's existing contents is at all a cause for concern, back it up
+   first! (Probably using a variant of the export process above.)
+
+### Steps
+
+ - First, upload the backup file to the app:
+    - Get the app's GUID (and store it in an environment variable): ```bash
+        export IMPORT_APP_GUID=`cf app c2-dev --guid`
+      ```
+    - Get a one-time authorization code: `cf ssh-code`
+    - SFTP into the app: ```
+      sftp -P 2222 "cf:$IMPORT_APP_GUID/0@ssh.fr.cloud.gov"
+      ```
+    - When asked for a password, paste in the one-time code obtained above
+    - At the SFTP prompt:
+      - `put backup.pg`
+      - `quit`
+ - SSH in using: `cf ssh c2-dev` _(... or whichever app/environment)_
+ - In the SSH session:
+    - Install the PG tools: `curl https://s3.amazonaws.com/18f-cf-cli/psql-9.4.4-ubuntu-14.04.tar.gz > psql.tgz; tar xzvf psql.tgz`
+    - Import the backup file (this may take a few minutes, and may
+      produce one or two non-fatal errors at the start; ignore them unless
+      there are many, or the process dies/quits): ```
+        psql/bin/pg_restore --clean --no-owner --no-acl -d $DATABASE_URL backup.pg
+      ```
+    - The import process should end with a message like `WARNING: errors ignored on restore: 1`. That's fine.
+    - Quit the SSH session, then delete the `backup.pg` file, because if it
+      lingers in the same folder from which you do `cf push` or equivalent
+      then you'll be pointlessly uploading 100+ MB of Postgres dump every
+      time, and no one wins when that happens.
+
