@@ -1,7 +1,7 @@
 C2::Application.configure do
   config.action_controller.perform_caching = true
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.asset_host = ENV["ASSET_HOST"]
+  config.action_mailer.asset_host = EnvCredentials.asset_host
   config.action_mailer.smtp_settings = {
     address: "smtp.mandrillapp.com",
     port: 587,
