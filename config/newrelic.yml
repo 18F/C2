@@ -3,6 +3,7 @@ common: &default_settings
   monitor_mode: true
   developer_mode: false
   log_level: info
+  license_key: <%= EnvCredentials.new_relic_license_key %>
   browser_monitoring:
     auto_instrument: true
   audit_log:
