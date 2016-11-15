@@ -11,7 +11,7 @@ class EnvCredentials
     end
   end
 
-  def self.license_key
+  def self.new_relic_license_key
     if use_env_var?
       ENV["NEW_RELIC_LICENSE_KEY"]
     else
