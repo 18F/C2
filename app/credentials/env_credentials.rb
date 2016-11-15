@@ -1,6 +1,6 @@
 require 'concerns/user_provided_service'
 
-class S3Credentials
+class EnvCredentials
   extend UserProvidedService
 
   def self.api_enabled
