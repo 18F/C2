@@ -10,5 +10,5 @@ end
 required_keys = get_keys(".env.example")
 
 required_keys.each do |key|
-  ENV.fetch(key)
+  EnvCredentials.send(key.downcase)
 end
