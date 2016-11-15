@@ -1,4 +1,4 @@
-require 'concerns/user_provided_service'
+require 'concerns/user_provided_services'
 
 class EnvCredentials
   extend UserProvidedService
