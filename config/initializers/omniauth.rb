@@ -1,9 +1,9 @@
-MYUSA_KEY    = ENV.fetch "MYUSA_KEY"
-MYUSA_SECRET = ENV.fetch "MYUSA_SECRET"
+MYUSA_KEY    = EnvCredentials.myusa_key
+MYUSA_SECRET = EnvCredentials.myusa_secret
 MYUSA_URL    = ENV["MYUSA_URL"] || "https://alpha.my.usa.gov"
 
-CG_KEY       = ENV.fetch "CG_APP_ID"
-CG_SECRET    = ENV.fetch "CG_APP_SECRET"
+CG_KEY       = EnvCredentials.cg_app_id
+CG_SECRET    = EnvCredentials.cg_app_secret
 CG_URL       = ENV["CG_URL"] || "https://login.cloud.gov"
 CG_TOKEN_URL = ENV["CG_TOKEN_URL"] || "https://uaa.cloud.gov"
 

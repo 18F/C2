@@ -6,8 +6,8 @@ C2::Application.configure do
     address: "smtp.mandrillapp.com",
     port: 587,
     domain: ENV["SMTP_DOMAIN"] || "18f.gsa.gov",
-    user_name: ENV.fetch("SMTP_USERNAME"),
-    password: ENV.fetch("SMTP_PASSWORD"),
+    user_name: EnvCredentials.smtp_username,
+    password: EnvCredentials.smtp_password,
     authentication: "login",
     enable_starttls_auto: true
   }

@@ -1,11 +1,11 @@
-if ENV["S3_BUCKET_NAME"] && ENV["S3_ACCESS_KEY_ID"] && ENV["S3_SECRET_ACCESS_KEY"]
+if EnvCredentials.s3_bucket_name && EnvCredentials.s3_access_key_id && EnvCredentials.s3_secret_access_key
   Paperclip::Attachment.default_options.merge!(
-    bucket: ENV["S3_BUCKET_NAME"],
+    bucket: EnvCredentials.s3_bucket_name,
     s3_credentials: {
-      access_key_id: ENV["S3_ACCESS_KEY_ID"],
-      secret_access_key: ENV["S3_SECRET_ACCESS_KEY"],
+      access_key_id: EnvCredentials.s3_access_key_id,
+      secret_access_key: EnvCredentials.s3_secret_access_key,
     },
-    s3_region: ENV["S3_REGION"],
+    s3_region: EnvCredentials.s3_region,
     s3_permissions: :private,
     storage: :s3,
   )

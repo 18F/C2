@@ -99,27 +99,19 @@ class EnvCredentials
     end
   end
 
-  def self.new_relic_agent_enabled
+  def self.s3_secret_access_key
     if use_env_var?
-      ENV["NEW_RELIC_AGENT_ENABLED"]
+      ENV["S3_SECRET_ACCESS_KEY"]
     else
-      credentials('NEW_RELIC_AGENT_ENABLED')
+      credentials('S3_SECRET_ACCESS_KEY')
     end
   end
 
-  def self.new_relic_app_name
+  def self.s3_access_key_id
     if use_env_var?
-      ENV["NEW_RELIC_APP_NAME"]
+      ENV["S3_ACCESS_KEY_ID"]
     else
-      credentials('NEW_RELIC_APP_NAME')
-    end
-  end
-
-  def self.new_relic_license_key
-    if use_env_var?
-      ENV['NEW_RELIC_LICENSE_KEY']
-    else
-      credentials('NEW_RELIC_LICENSE_KEY')
+      credentials('S3_ACCESS_KEY_ID')
     end
   end
 
@@ -144,22 +136,6 @@ class EnvCredentials
       ENV["SECRET_TOKEN"]
     else
       credentials('SECRET_TOKEN')
-    end
-  end
-
-  def self.notification_from_email
-    if use_env_var?
-      ENV["NOTIFICATION_FROM_EMAIL"]
-    else
-      credentials('NOTIFICATION_FROM_EMAIL')
-    end
-  end
-
-  def self.notification_reply_to
-    if use_env_var?
-      ENV["NOTIFICATION_REPLY_TO"]
-    else
-      credentials('NOTIFICATION_REPLY_TO')
     end
   end
 
