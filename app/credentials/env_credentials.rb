@@ -3,22 +3,22 @@ require 'concerns/user_provided_service'
 class EnvCredentials
   extend UserProvidedService
 
-  def self.api_enabled
-    if use_env_var?
-      ENV["API_ENABLED"]
-    else
-      false
-      # credentials('API_ENABLED')
-    end
-  end
+  # def self.api_enabled
+  #   if use_env_var?
+  #     ENV["API_ENABLED"]
+  #   else
+  #     false
+  #     # credentials('API_ENABLED')
+  #   end
+  # end
 
-  def self.welcome_email
-    if use_env_var?
-      ENV["WELCOME_EMAIL"]
-    else
-      credentials('WELCOME_EMAIL')
-    end
-  end
+  # def self.welcome_email
+  #   if use_env_var?
+  #     ENV["WELCOME_EMAIL"]
+  #   else
+  #     credentials('WELCOME_EMAIL')
+  #   end
+  # end
 
   # def self.beta_18f_training
   #   if use_env_var?
