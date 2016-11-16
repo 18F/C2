@@ -16,7 +16,7 @@ common: &default_settings
   error_collector:
     enabled: true
     ignore_errors: "ActionController::RoutingError,Sinatra::NotFound"
-  license_key: <%= EnvCredentials.new_relic_license_key %>
+  license_key: REPLACE_ME_SOON_OKAY
 development:
   <<: *default_settings
   monitor_mode: true
