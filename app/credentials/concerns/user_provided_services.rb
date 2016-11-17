@@ -16,6 +16,6 @@ module UserProvidedService
   end
 
   def vcap_services
-    JSON.parse(ENV['VCAP_SERVICES'])
+    JSON.parse(ENV["VCAP_SERVICES"])
   end
 end
