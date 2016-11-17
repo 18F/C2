@@ -145,7 +145,12 @@ applications:
   services:
     - c2-prod-elasticsearch
     - c2-prod-db
-    - c2-prod-ups
+    - c2-prod-ups-s3
+    - c2-prod-ups-oauth
+    - c2-prod-ups-newrelic
+    - c2-prod-ups-email
+    - c2-prod-ups-app_param
+    - c2-prod-ups-app_config
 - name: c2-prod-worker
   no-route: true
   command: script/worker-start
@@ -167,4 +172,9 @@ applications:
   services:
     - c2-prod-elasticsearch
     - c2-prod-db
-    - c2-prod-ups
+    - c2-prod-ups-s3
+    - c2-prod-ups-oauth
+    - c2-prod-ups-newrelic
+    - c2-prod-ups-email
+    - c2-prod-ups-app_param
+    - c2-prod-ups-app_config
