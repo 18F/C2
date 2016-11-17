@@ -87,7 +87,12 @@ applications:
   services:
     - c2-staging-elasticsearch
     - c2-staging-db
-    - c2-staging-ups
+    - c2-staging-ups-s3
+    - c2-staging-ups-oauth
+    - c2-staging-ups-newrelic
+    - c2-staging-ups-email
+    - c2-staging-ups-app_param
+    - c2-staging-ups-app_config
 - name: c2-staging-worker
   no-route: true
   command: script/worker-start
@@ -107,7 +112,12 @@ applications:
   services:
     - c2-staging-elasticsearch
     - c2-staging-db
-    - c2-staging-ups
+    - c2-staging-ups-s3
+    - c2-staging-ups-oauth
+    - c2-staging-ups-newrelic
+    - c2-staging-ups-email
+    - c2-staging-ups-app_param
+    - c2-staging-ups-app_config
 # production
 - name: c2-prod
   hosts:
