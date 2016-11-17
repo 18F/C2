@@ -34,7 +34,12 @@ applications:
   services:
     - c2-dev-elasticsearch
     - c2-dev-db
-    - c2-dev-ups
+    - c2-dev-ups-s3
+    - c2-dev-ups-oauth
+    - c2-dev-ups-newrelic
+    - c2-dev-ups-email
+    - c2-dev-ups-app_param
+    - c2-dev-ups-app_config
 - name: c2-dev-worker
   no-route: true
   command: script/worker-start
@@ -55,7 +60,12 @@ applications:
   services:
     - c2-dev-elasticsearch
     - c2-dev-db
-    - c2-dev-ups
+    - c2-dev-ups-s3
+    - c2-dev-ups-oauth
+    - c2-dev-ups-newrelic
+    - c2-dev-ups-email
+    - c2-dev-ups-app_param
+    - c2-dev-ups-app_config
 # staging
 - name: c2-staging
   host: c2-staging
