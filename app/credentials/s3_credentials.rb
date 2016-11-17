@@ -1,4 +1,4 @@
-require 'concerns/user_provided_services'
+require "concerns/user_provided_services"
 
 class S3Credentials
   extend UserProvidedService
@@ -7,7 +7,7 @@ class S3Credentials
     if use_env_var?
       ENV["S3_SECRET_ACCESS_KEY"]
     else
-      credentials('S3_SECRET_ACCESS_KEY')
+      credentials("S3_SECRET_ACCESS_KEY")
     end
   end
 
@@ -15,7 +15,7 @@ class S3Credentials
     if use_env_var?
       ENV["S3_ACCESS_KEY_ID"]
     else
-      credentials('S3_ACCESS_KEY_ID')
+      credentials("S3_ACCESS_KEY_ID")
     end
   end
 
@@ -23,7 +23,7 @@ class S3Credentials
     if use_env_var?
       ENV["S3_BUCKET_NAME"]
     else
-      credentials('S3_BUCKET_NAME')
+      credentials("S3_BUCKET_NAME")
     end
   end
 
@@ -31,7 +31,7 @@ class S3Credentials
     if use_env_var?
       ENV["S3_REGION"]
     else
-      credentials('S3_REGION')
+      credentials("S3_REGION")
     end
   end
 end

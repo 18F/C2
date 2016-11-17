@@ -1,4 +1,4 @@
-require 'concerns/user_provided_services'
+require "concerns/user_provided_service"s
 
 class AppParamCredentials
   extend UserProvidedService
@@ -7,7 +7,7 @@ class AppParamCredentials
     if use_env_var?
       ENV["ASSET_HOST"]
     else
-      credentials('ASSET_HOST')
+      credentials("ASSET_HOST")
     end
   end
 
@@ -15,7 +15,7 @@ class AppParamCredentials
     if use_env_var?
       ENV["DEFAULT_URL_HOST"]
     else
-      credentials('DEFAULT_URL_HOST')
+      credentials("DEFAULT_URL_HOST")
     end
   end
 
@@ -23,7 +23,7 @@ class AppParamCredentials
     if use_env_var?
       ENV["SECRET_TOKEN"]
     else
-      credentials('SECRET_TOKEN')
+      credentials("SECRET_TOKEN")
     end
   end
 end

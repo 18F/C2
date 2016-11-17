@@ -1,4 +1,4 @@
-require 'concerns/user_provided_services'
+require "concerns/user_provided_services"
 
 class NewrelicCredentials
   extend UserProvidedService
@@ -7,7 +7,7 @@ class NewrelicCredentials
     if use_env_var?
       ENV["NEW_RELIC_APP_NAME"]
     else
-      credentials('NEW_RELIC_APP_NAME')
+      credentials("NEW_RELIC_APP_NAME")
     end
   end
 
@@ -15,7 +15,7 @@ class NewrelicCredentials
     if use_env_var?
       ENV["NEW_RELIC_LICENSE_KEY"]
     else
-      credentials('NEW_RELIC_LICENSE_KEY')
+      credentials("NEW_RELIC_LICENSE_KEY")
     end
   end
 end
