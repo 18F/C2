@@ -44,7 +44,7 @@ class AuthController < ApplicationController
   def do_user_auth(auth)
     sign_out
     user = User.from_oauth_hash(auth)
-    send_welcome_mail(user) if EnvCredentials.welcome_email
+    send_welcome_mail(user) if AppConfigCredentials.welcome_email
     sign_in(user)
   end
 end
