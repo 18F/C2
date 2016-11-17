@@ -1,4 +1,4 @@
-require 'concerns/user_provided_services'
+require "concerns/user_provided_services"
 
 class EnvCredentials
   extend UserProvidedService
@@ -7,7 +7,7 @@ class EnvCredentials
     if use_env_var?
       ENV["NEW_RELIC_APP_NAME"]
     else
-      credentials('NEW_RELIC_APP_NAME')
+      credentials("NEW_RELIC_APP_NAME")
     end
   end
 
@@ -15,7 +15,7 @@ class EnvCredentials
     if use_env_var?
       ENV["NEW_RELIC_LICENSE_KEY"]
     else
-      credentials('NEW_RELIC_LICENSE_KEY')
+      credentials("NEW_RELIC_LICENSE_KEY")
     end
   end
 
@@ -23,7 +23,7 @@ class EnvCredentials
     if use_env_var?
       ENV["API_ENABLED"]
     else
-      credentials('API_ENABLED')
+      credentials("API_ENABLED")
     end
   end
 
@@ -31,7 +31,7 @@ class EnvCredentials
     if use_env_var?
       ENV["WELCOME_EMAIL"]
     else
-      credentials('WELCOME_EMAIL')
+      credentials("WELCOME_EMAIL")
     end
   end
 
@@ -39,7 +39,7 @@ class EnvCredentials
     if use_env_var?
       ENV["BETA_18F_TRAINING"]
     else
-      credentials('BETA_18F_TRAINING')
+      credentials("BETA_18F_TRAINING")
     end
   end
 
@@ -47,7 +47,7 @@ class EnvCredentials
     if use_env_var?
       ENV["BETA_FEATURE_DETAIL_VIEW"]
     else
-      credentials('BETA_FEATURE_DETAIL_VIEW')
+      credentials("BETA_FEATURE_DETAIL_VIEW")
     end
   end
 
@@ -55,7 +55,7 @@ class EnvCredentials
     if use_env_var?
       ENV["BETA_FEATURE_LIST_VIEW"]
     else
-      credentials('BETA_FEATURE_LIST_VIEW')
+      credentials("BETA_FEATURE_LIST_VIEW")
     end
   end
 
@@ -63,7 +63,7 @@ class EnvCredentials
     if use_env_var?
       ENV["REDESIGN_DEFAULT_VIEW"]
     else
-      credentials('REDESIGN_DEFAULT_VIEW')
+      credentials("REDESIGN_DEFAULT_VIEW")
     end
   end
 
@@ -71,7 +71,7 @@ class EnvCredentials
     if use_env_var?
       ENV["ASSET_HOST"]
     else
-      credentials('ASSET_HOST')
+      credentials("ASSET_HOST")
     end
   end
 
@@ -79,7 +79,7 @@ class EnvCredentials
     if use_env_var?
       ENV["DEFAULT_URL_HOST"]
     else
-      credentials('DEFAULT_URL_HOST')
+      credentials("DEFAULT_URL_HOST")
     end
   end
 
@@ -87,7 +87,7 @@ class EnvCredentials
     if use_env_var?
       ENV["CG_APP_ID"]
     else
-      credentials('CG_APP_ID')
+      credentials("CG_APP_ID")
     end
   end
 
@@ -95,7 +95,7 @@ class EnvCredentials
     if use_env_var?
       ENV["CG_APP_SECRET"]
     else
-      credentials('CG_APP_SECRET')
+      credentials("CG_APP_SECRET")
     end
   end
 
@@ -103,15 +103,15 @@ class EnvCredentials
     if use_env_var?
       ENV["MYUSA_KEY"]
     else
-      credentials('MYUSA_KEY')
+      credentials("MYUSA_KEY")
     end
   end
 
   def self.myusa_secret
     if use_env_var?
-      ENV['MYUSA_SECRET']
+      ENV["MYUSA_SECRET"]
     else
-      credentials('MYUSA_SECRET')
+      credentials("MYUSA_SECRET")
     end
   end
 
@@ -119,7 +119,7 @@ class EnvCredentials
     if use_env_var?
       ENV["S3_SECRET_ACCESS_KEY"]
     else
-      credentials('S3_SECRET_ACCESS_KEY')
+      credentials("S3_SECRET_ACCESS_KEY")
     end
   end
 
@@ -127,7 +127,7 @@ class EnvCredentials
     if use_env_var?
       ENV["S3_ACCESS_KEY_ID"]
     else
-      credentials('S3_ACCESS_KEY_ID')
+      credentials("S3_ACCESS_KEY_ID")
     end
   end
 
@@ -135,7 +135,7 @@ class EnvCredentials
     if use_env_var?
       ENV["S3_BUCKET_NAME"]
     else
-      credentials('S3_BUCKET_NAME')
+      credentials("S3_BUCKET_NAME")
     end
   end
 
@@ -143,7 +143,7 @@ class EnvCredentials
     if use_env_var?
       ENV["S3_REGION"]
     else
-      credentials('S3_REGION')
+      credentials("S3_REGION")
     end
   end
 
@@ -151,7 +151,7 @@ class EnvCredentials
     if use_env_var?
       ENV["SECRET_TOKEN"]
     else
-      credentials('SECRET_TOKEN')
+      credentials("SECRET_TOKEN")
     end
   end
 
@@ -159,7 +159,7 @@ class EnvCredentials
     if use_env_var?
       ENV["SMTP_PASSWORD"]
     else
-      credentials('SMTP_PASSWORD')
+      credentials("SMTP_PASSWORD")
     end
   end
 
@@ -167,7 +167,7 @@ class EnvCredentials
     if use_env_var?
       ENV["SMTP_USERNAME"]
     else
-      credentials('SMTP_USERNAME')
+      credentials("SMTP_USERNAME")
     end
   end
 end

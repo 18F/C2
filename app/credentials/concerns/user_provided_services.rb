@@ -8,10 +8,10 @@ module UserProvidedService
   end
 
   def user_provided_service
-    vcap_services['user-provided'][0]['credentials']
+    vcap_services["user-provided"][0]["credentials"]
   end
 
   def vcap_services
-    JSON.parse(ENV['VCAP_SERVICES'])
+    JSON.parse(ENV["VCAP_SERVICES"])
   end
 end
