@@ -1,5 +1,7 @@
 class Proposal < ActiveRecord::Base
   include WorkflowModel
+  include ProposalSteps
+  include ProposalConfig
   include ValueHelper
   include StepManager
   include Searchable
@@ -36,19 +38,6 @@ class Proposal < ActiveRecord::Base
   acts_as_taggable
   visitable # Used to track user visit associated with processed proposal
 
-  has_many :steps
-  has_many :approval_steps, class_name: "Steps::Approval"
-  has_many :purchase_steps, class_name: "Steps::Purchase"
-  has_many :completers, through: :steps, source: :completer
-  has_many :api_tokens, through: :steps
-  has_many :attachments, dependent: :destroy
-  has_many :comments, -> { order(created_at: :desc) }, dependent: :destroy
-
-  has_many :observations, -> { where("proposal_roles.role_id in (select roles.id from roles where roles.name='#{ROLE_OBSERVER}')") }
-  has_many :observers, through: :observations, source: :user
-  belongs_to :client_data, polymorphic: true, dependent: :destroy
-  belongs_to :requester, class_name: 'User'
-
   delegate :client_slug, to: :client_data, allow_nil: true
 
   validates :client_data_type, inclusion: {
@@ -56,9 +45,6 @@ class Proposal < ActiveRecord::Base
     message: "%{value} is not a valid client model type. Valid client model types are: #{CLIENT_MODELS.inspect}",
     allow_blank: true
   }
-
-  validates :requester_id, presence: true
-  validates :public_id, uniqueness: true, allow_nil: true
 
   statuses.each do |status|
     scope status, -> { where(status: status) }
@@ -115,102 +101,6 @@ class Proposal < ActiveRecord::Base
     subscribers.map { |user| { id: user.id, name: user.display_name } }
   end
 
-  def delegate?(user)
-    delegates.include?(user)
-  end
-
-  def existing_step_for(user)
-    steps.where(user: user).first
-  end
-
-  def existing_or_delegated_step_for(user)
-    where_clause = sql_for_step_user_or_delegate
-    steps.where(where_clause, user_id: user.id).first
-  end
-
-  def existing_or_delegated_actionable_step_for(user)
-    where_clause = "(#{sql_for_step_user_or_delegate}) AND status = :actionable"
-    steps.where(where_clause, user_id: user.id, actionable: :actionable).first
-  end
-
-  def delegates
-    ProposalQuery.new(self).delegates
-  end
-
-  def step_users
-    ProposalQuery.new(self).step_users
-  end
-
-  def approvers
-    ProposalQuery.new(self).approvers
-  end
-
-  def purchasers
-    ProposalQuery.new(self).purchasers
-  end
-
-  def subscribers
-    results = approvers + purchasers + observers + delegates + [requester]
-    results.compact.uniq
-  end
-
-  def subscribers_except_future_step_users
-    results = currently_awaiting_step_users + individual_steps.completed.map(&:user) + observers + [requester]
-    results.compact.uniq
-  end
-
-  def subscribers_except_delegates
-    subscribers - delegates
-  end
-
-  def has_subscriber?(user)
-    subscribers.include?(user)
-  end
-
-  def existing_observation_for(user)
-    observations.find_by(user: user)
-  end
-
-  def eligible_observers
-    if observations.count > 0
-      User.where(client_slug: client_slug).where("id not in (?)", observations.pluck("user_id"))
-    else
-      User.where(client_slug: client_slug)
-    end
-  end
-
-  def add_observer(user, adder=nil, reason=nil)
-    # this authz check is here instead of in a Policy because the Policy classes
-    # are applied to the current_user, not (as in this case) the user being acted upon.
-    if client_data && !client_data.slug_matches?(user) && !user.admin?
-      fail Pundit::NotAuthorizedError.new("May not add observer belonging to a different organization.")
-    end
-
-    unless existing_observation_for(user)
-      create_new_observation(user, adder, reason)
-    end
-  end
-
-  def add_requester(email)
-    user = User.for_email(email)
-    if awaiting_step_user?(user)
-      fail "#{email} is an approver on this Proposal -- cannot also be Requester"
-    end
-    set_requester(user)
-  end
-
-  def add_completed_comment
-    completer = individual_steps.last.completed_by
-    comments.create_without_callback(
-      comment_text: I18n.t(
-        "activerecord.attributes.proposal.user_completed_comment",
-        user: completer.full_name
-      ),
-      update_comment: true,
-      user: completer
-    )
-  end
-
   def add_restart_comment(user)
     fail("User required") unless user.is_a?(User)
     comments.create_without_callback(
@@ -221,10 +111,6 @@ class Proposal < ActiveRecord::Base
       update_comment: true,
       user: user
     )
-  end
-
-  def set_requester(user)
-    update(requester: user)
   end
 
   def name
@@ -296,24 +182,5 @@ class Proposal < ActiveRecord::Base
     else
       "--"
     end
-  end
-
-  private
-
-  def create_new_observation(user, adder, reason)
-    ObservationCreator.new(
-      observer: user,
-      proposal_id: id,
-      reason: reason,
-      observer_adder: adder
-    ).run
-  end
-
-  def sql_for_step_user_or_delegate
-    <<-SQL
-      user_id = :user_id
-      OR user_id IN (SELECT assigner_id FROM user_delegates WHERE assignee_id = :user_id)
-      OR user_id IN (SELECT assignee_id FROM user_delegates WHERE assigner_id = :user_id)
-    SQL
   end
 end

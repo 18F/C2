@@ -28,12 +28,6 @@ describe Gsa18f::Procurement do
       expect(procurement.purchase_type).to eq "Software"
     end
 
-    it "associates 1 with training or event" do
-      procurement = build(:gsa18f_procurement, purchase_type: 1)
-
-      expect(procurement.purchase_type).to eq "Training/Event"
-    end
-
     it "associates 2 with office supply or miscelleanous" do
       procurement = build(:gsa18f_procurement, purchase_type: 2)
 
@@ -97,7 +91,7 @@ describe Gsa18f::Procurement do
     it "returns a default email purchaser email" do
       allow(Gsa18f::Procurement).to receive(:user_with_role).with("gsa18f_purchaser").and_return(user)
       allow(user).to receive(:email_address) { "defaultpurchaser@somedotorg.org" }
-      procurement = build(:gsa18f_procurement, purchase_type: 1)
+      procurement = build(:gsa18f_procurement, purchase_type: 2)
 
       expect(Gsa18f::Procurement.purchaser_email "Software").to eq "defaultpurchaser@somedotorg.org"
     end
