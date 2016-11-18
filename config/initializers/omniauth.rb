@@ -1,9 +1,9 @@
-MYUSA_KEY    = EnvCredentials.myusa_key
-MYUSA_SECRET = EnvCredentials.myusa_secret
+MYUSA_KEY    = OauthCredentials.myusa_key
+MYUSA_SECRET = OauthCredentials.myusa_secret
 MYUSA_URL    = ENV["MYUSA_URL"] || "https://alpha.my.usa.gov"
 
-CG_KEY       = EnvCredentials.cg_app_id
-CG_SECRET    = EnvCredentials.cg_app_secret
+CG_KEY       = OauthCredentials.cg_app_id
+CG_SECRET    = OauthCredentials.cg_app_secret
 CG_URL       = ENV["CG_URL"] || "https://login.cloud.gov"
 CG_TOKEN_URL = ENV["CG_TOKEN_URL"] || "https://uaa.cloud.gov"
 

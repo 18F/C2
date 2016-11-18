@@ -3,7 +3,7 @@ if Rails.env.production?
 end
 
 C2::Application.config.action_mailer.default_url_options ||= {
-  host: EnvCredentials.default_url_host,
+  host: AppParamCredentials.default_url_host,
   protocol: protocol || "http"
 }
 

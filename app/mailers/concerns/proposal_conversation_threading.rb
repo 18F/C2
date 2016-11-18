@@ -2,7 +2,7 @@ module ProposalConversationThreading
   extend ActiveSupport::Concern
 
   def assign_threading_headers(proposal)
-    msg_id = "<proposal-#{proposal.id}@#{EnvCredentials.default_url_host}>"
+    msg_id = "<proposal-#{proposal.id}@#{AppParamCredentials.default_url_host}>"
     self.thread_id = msg_id
   end
 
