@@ -28,7 +28,7 @@ C2::Application.routes.draw do
   # mandrill-rails
   resource :inbox, controller: "inbox", only: [:show, :create]
 
-  if ENV["API_ENABLED"] == "true"
+  if AppConfigCredentials.api_enabled == "true"
     namespace :api do
       namespace :v2 do
         resources :proposals
