@@ -33,6 +33,12 @@ engines:
       languages:
       - ruby
       - javascript
+
+    exclude_fingerprints:
+    - 723745172624c70737431734e7227dad
+    - 5a6ed15b3c21a7acd8338d8fa7a98a63
+    - de64cf3a4cb202d07f05cc83b0c67708
+    - ac193f2c601eab797ead45097b632186
 ratings:
   paths:
   - app/**
