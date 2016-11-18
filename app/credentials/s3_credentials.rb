@@ -7,7 +7,7 @@ class S3Credentials
     if use_env_var?
       ENV["S3_SECRET_ACCESS_KEY"]
     else
-      credentials(ENV["UPS_BASE"] + "s3")["S3_SECRET_ACCESS_KEY"]
+      credentials(base_name("s3"))["S3_SECRET_ACCESS_KEY"]
     end
   end
 
@@ -15,7 +15,7 @@ class S3Credentials
     if use_env_var?
       ENV["S3_ACCESS_KEY_ID"]
     else
-      credentials(ENV["UPS_BASE"] + "s3")["S3_ACCESS_KEY_ID"]
+      credentials(base_name("s3"))["S3_ACCESS_KEY_ID"]
     end
   end
 
@@ -23,7 +23,7 @@ class S3Credentials
     if use_env_var?
       ENV["S3_BUCKET_NAME"]
     else
-      credentials(ENV["UPS_BASE"] + "s3")["S3_BUCKET_NAME"]
+      credentials(base_name("s3"))["S3_BUCKET_NAME"]
     end
   end
 
@@ -31,7 +31,7 @@ class S3Credentials
     if use_env_var?
       ENV["S3_REGION"]
     else
-      credentials(ENV["UPS_BASE"] + "s3")["S3_REGION"]
+      credentials(base_name("s3"))["S3_REGION"]
     end
   end
 end

@@ -7,7 +7,7 @@ class AppConfigCredentials
     if use_env_var?
       ENV["API_ENABLED"]
     else
-      credentials(ENV["UPS_BASE"] + "app_config")["API_ENABLED"]
+      credentials(base_name("app_config"))["API_ENABLED"]
     end
   end
 
@@ -15,7 +15,7 @@ class AppConfigCredentials
     if use_env_var?
       ENV["WELCOME_EMAIL"]
     else
-      credentials(ENV["UPS_BASE"] + "app_config")["WELCOME_EMAIL"]
+      credentials(base_name("app_config"))["WELCOME_EMAIL"]
     end
   end
 
@@ -23,7 +23,7 @@ class AppConfigCredentials
     if use_env_var?
       ENV["BETA_18F_TRAINING"]
     else
-      credentials(ENV["UPS_BASE"] + "app_config")["BETA_18F_TRAINING"]
+      credentials(base_name("app_config"))["BETA_18F_TRAINING"]
     end
   end
 
@@ -31,7 +31,7 @@ class AppConfigCredentials
     if use_env_var?
       ENV["BETA_FEATURE_DETAIL_VIEW"]
     else
-      credentials(ENV["UPS_BASE"] + "app_config")["BETA_FEATURE_DETAIL_VIEW"]
+      credentials(base_name("app_config"))["BETA_FEATURE_DETAIL_VIEW"]
     end
   end
 
@@ -39,7 +39,7 @@ class AppConfigCredentials
     if use_env_var?
       ENV["BETA_FEATURE_LIST_VIEW"]
     else
-      credentials(ENV["UPS_BASE"] + "app_config")["BETA_FEATURE_LIST_VIEW"]
+      credentials(base_name("app_config"))["BETA_FEATURE_LIST_VIEW"]
     end
   end
 
@@ -47,7 +47,7 @@ class AppConfigCredentials
     if use_env_var?
       ENV["REDESIGN_DEFAULT_VIEW"]
     else
-      credentials(ENV["UPS_BASE"] + "app_config")["REDESIGN_DEFAULT_VIEW"]
+      credentials(base_name("app_config"))["REDESIGN_DEFAULT_VIEW"]
     end
   end
 end

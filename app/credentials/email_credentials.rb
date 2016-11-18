@@ -7,7 +7,7 @@ class EmailCredentials
     if use_env_var?
       ENV["SMTP_PASSWORD"]
     else
-      credentials(ENV["UPS_BASE"] + "email")["SMTP_PASSWORD"]
+      credentials(base_name("email"))["SMTP_PASSWORD"]
     end
   end
 
@@ -15,7 +15,7 @@ class EmailCredentials
     if use_env_var?
       ENV["SMTP_USERNAME"]
     else
-      credentials(ENV["UPS_BASE"] + "email")["SMTP_USERNAME"]
+      credentials(base_name("email"))["SMTP_USERNAME"]
     end
   end
 end

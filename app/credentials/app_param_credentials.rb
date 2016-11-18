@@ -1,21 +1,17 @@
-require "concerns/user_provided_service"s
+require "concerns/user_provided_services"
 
 class AppParamCredentials
   extend UserProvidedService
 
   def self.asset_host
-    if use_env_var?
-      ENV["ASSET_HOST"]
-    else
-      credentials(ENV["UPS_BASE"] + "app_param")["ASSET_HOST"]
-    end
+    ENV["ASSET_HOST"]
   end
 
   def self.default_url_host
     if use_env_var?
       ENV["DEFAULT_URL_HOST"]
     else
-      credentials(ENV["UPS_BASE"] + "app_param")["DEFAULT_URL_HOST"]
+      credentials(base_name("app_param"))["DEFAULT_URL_HOST"]
     end
   end
 
@@ -23,7 +19,7 @@ class AppParamCredentials
     if use_env_var?
       ENV["SECRET_TOKEN"]
     else
-      credentials(ENV["UPS_BASE"] + "app_param")["SECRET_TOKEN"]
+      credentials(base_name("app_param"))["SECRET_TOKEN"]
     end
   end
 end

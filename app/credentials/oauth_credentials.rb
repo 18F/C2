@@ -2,12 +2,12 @@ require "concerns/user_provided_services"
 
 class OauthCredentials
   extend UserProvidedService
-
+  
   def self.cg_app_id
     if use_env_var?
       ENV["CG_APP_ID"]
     else
-      credentials(ENV["UPS_BASE"] + "oauth")["CG_APP_ID"]
+      credentials(base_name("oauth"))["CG_APP_ID"]
     end
   end
 
@@ -15,7 +15,7 @@ class OauthCredentials
     if use_env_var?
       ENV["CG_APP_SECRET"]
     else
-      credentials(ENV["UPS_BASE"] + "oauth")["CG_APP_SECRET"]
+      credentials(base_name("oauth"))["CG_APP_SECRET"]
     end
   end
 
@@ -23,7 +23,7 @@ class OauthCredentials
     if use_env_var?
       ENV["MYUSA_KEY"]
     else
-      credentials(ENV["UPS_BASE"] + "oauth")["MYUSA_KEY"]
+      credentials(base_name("oauth"))["MYUSA_KEY"]
     end
   end
 
@@ -31,7 +31,7 @@ class OauthCredentials
     if use_env_var?
       ENV["MYUSA_SECRET"]
     else
-      credentials(ENV["UPS_BASE"] + "oauth")["MYUSA_SECRET"]
+      credentials(base_name("oauth"))["MYUSA_SECRET"]
     end
   end
 end
