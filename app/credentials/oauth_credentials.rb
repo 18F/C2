@@ -2,7 +2,7 @@ require "concerns/user_provided_services"
 
 class OauthCredentials
   extend UserProvidedService
-  
+
   def self.cg_app_id
     if use_env_var?
       ENV["CG_APP_ID"]
