@@ -9,8 +9,6 @@
       %p
         - if cookies[:beta_reverted_survey].nil?
           - cookies[:beta_reverted_survey] = "true"
-          = javascript_include_tag "details/force_ethnio"
-          = javascript_include_tag "https://www.ethn.io/55009.js", async: true
           = t("proposals.details.notification.beta.reverted").html_safe
         - elsif cookies[:beta_reverted_survey] == "true"
           = t("proposals.details.notification.beta.reverted").html_safe
