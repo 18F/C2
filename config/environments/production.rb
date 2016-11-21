@@ -1,13 +1,13 @@
 C2::Application.configure do
   config.action_controller.perform_caching = true
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.asset_host = ENV["ASSET_HOST"]
+  config.action_mailer.asset_host = AppParamCredentials.asset_host
   config.action_mailer.smtp_settings = {
     address: "smtp.mandrillapp.com",
     port: 587,
     domain: ENV["SMTP_DOMAIN"] || "18f.gsa.gov",
-    user_name: ENV.fetch("SMTP_USERNAME"),
-    password: ENV.fetch("SMTP_PASSWORD"),
+    user_name: EmailCredentials.smtp_username,
+    password: EmailCredentials.smtp_password,
     authentication: "login",
     enable_starttls_auto: true
   }

@@ -24,7 +24,7 @@ shared_examples "a proposal email" do
     mail.deliver_later
 
     %w(In-Reply-To References).each do |header|
-      expect(mail[header].value).to eq("<proposal-#{proposal.id}@#{ENV['DEFAULT_URL_HOST']}>")
+      expect(mail[header].value).to eq("<proposal-#{proposal.id}@#{AppParamCredentials.default_url_host}>")
     end
   end
 end
