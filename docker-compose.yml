@@ -1,3 +1,19 @@
+app:
+  build: .
+  env_file: .env
+  environment:
+    DATABASE_USER: postgres
+    DATABASE_NAME: c2_development
+    DATABASE_HOST: db
+  volumes:
+    - .:/app
+  ports:
+    - "5000:5000"
+  links:
+    - db
+    - elasticsearch
+  volumes_from:
+    - box
 box:
   image: busybox
   volumes:
@@ -14,19 +30,3 @@ db:
     - "5432"
   environment:
     - DATABASE_NAME=c2_development
-web:
-  build: .
-  env_file: .env
-  environment:
-    DATABASE_USER: postgres
-    DATABASE_NAME: c2_development
-    DATABASE_HOST: db
-  volumes:
-    - .:/app
-  ports:
-    - "5000:5000"
-  links:
-    - db
-    - elasticsearch
-  volumes_from:
-    - box

@@ -6,8 +6,15 @@ RUN apt-get update -qq && apt-get install -y \
   nodejs-legacy \
   npm
 RUN npm install -g phantomjs-prebuilt
-RUN mkdir /app
-WORKDIR /app
+
+ENV app /app
+RUN mkdir $app
+WORKDIR $app
+
+ENV BUNDLE_PATH /box
+
+ADD . $app
+
 ADD Gemfile /app/Gemfile
 ADD Gemfile.lock /app/Gemfile.lock
 RUN bundle install
