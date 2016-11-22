@@ -1,17 +1,16 @@
 feature "Create a Gsa18F procurement" do
   scenario "user not signed in", :js do
     visit new_gsa18f_procurement_path
-    page.save_screenshot('../screen.png', full: true)
     expect(page).to have_content("You need to sign in")
   end
 
   context "user signed in" do
-    scenario "saves a Proposal with the attributes" do
+    scenario "saves a Proposal with the attributes", :js do
       requester = create(:user, client_slug: "gsa18f")
 
       login_as(requester)
       visit new_gsa18f_procurement_path
-
+      page.save_screenshot('../screen.png', full: true)
       fill_in "Product name and description", with: "buying stuff"
       select "Software", from: "gsa18f_procurement_purchase_type"
       fill_in "Justification", with: "because I need it"
