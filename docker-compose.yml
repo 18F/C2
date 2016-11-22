@@ -1,10 +1,19 @@
+box:
+  image: busybox
+  volumes:
+    - /box
+
 elasticsearch:
   image: elasticsearch
   ports:
-  - "9200:9200"
-  - "9300:9300"
+    - "9200:9200"
+    - "9300:9300"
 db:
   image: postgres:9
+  ports:
+    - "5432"
+  environment:
+    - DATABASE_NAME=c2_development
 web:
   build: .
   env_file: .env
@@ -19,3 +28,5 @@ web:
   links:
     - db
     - elasticsearch
+  volumes_from:
+    - box
