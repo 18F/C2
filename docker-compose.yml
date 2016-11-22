@@ -12,12 +12,6 @@ app:
   links:
     - db
     - elasticsearch
-  volumes_from:
-    - box
-box:
-  image: busybox
-  volumes:
-    - /box
 
 elasticsearch:
   image: elasticsearch
