@@ -13,12 +13,12 @@
   %body.home_redesign
     .row.full-width-row
       -# = render "layouts/c2_header_next"
-      - unless ENV["DISABLE_SANDBOX_WARNING"] == "true"
-        .small-12
+      .small-12
+        - unless ENV["DISABLE_SANDBOX_WARNING"] == "true"
           = render partial: "shared/sandbox_warning"
-        - flash_list.each do |key, value|
-          %div{class: "alert alert-box alert-#{key} small-12"}
-            = sanitize value
+      - flash_list.each do |key, value|
+        %div{class: "alert alert-box alert-#{key} small-12"}
+          = sanitize value
       .small-10.medium-6.small-centered.menu
         - if signed_in?
           %ul.primary.fl
