@@ -3,24 +3,24 @@
 
 #mode-parent.view-mode
   - if @client_data_instance
-    = simple_form_for @client_data_instance, html: { multipart: true, class: "request-details-form" }, remote: true do |f|
-      - @form = f
-      .row.cards-wrapper
+    .row.cards-wrapper
+      = simple_form_for @client_data_instance, html: { multipart: true, class: "request-details-form" }, remote: true do |f|
+        - @form = f
         .medium-12.column.wrap-hard
           = render partial: "proposals/details/summary", locals: { proposal: @proposal }
 
-        .medium-6.medium-push-6.column{class: "status-" + @proposal.status.downcase}
+        .medium-6.column{class: "status-" + @proposal.status.downcase}
           = render partial: "proposals/details/request_details", locals: { proposal: @proposal }
           #card-for-attachments
             = render partial: "proposals/details/attachment", locals: { proposal: @proposal }
           #card-for-observers.card-for-observers
             = render partial: "proposals/details/observer", locals: { proposal: @proposal }
 
-        .medium-6.medium-pull-6.column
-          #card-for-approvals.card-for-approvals
-            = render partial: "proposals/details/status", locals: { proposal: @proposal }
-          #card-for-activity.card-for-activity
-            = render partial: "proposals/details/activity", locals: { proposal: @proposal, events: @events }
+      .medium-6.column
+        #card-for-approvals.card-for-approvals
+          = render partial: "proposals/details/status", locals: { proposal: @proposal }
+        #card-for-activity.card-for-activity
+          = render partial: "proposals/details/activity", locals: { proposal: @proposal, events: @events }
 
   = render partial: "proposals/details/action", locals: { proposal: @proposal }
   #proposal_id{ data: { proposal_id: @proposal.id } }

@@ -1,6 +1,9 @@
 <% content_for :title, "My Requests" %>
-<% content_for :top_notification do %>
-  <% render partial: "proposals/details/top_notification" %>
+<%# TODO: Remove this flag when making redesign permanent %>
+<% unless ENV["HIDE_DESIGN_TOGGLE"] %>
+  <% content_for :top_notification do %>
+    <% render partial: "proposals/details/top_notification" %>
+  <% end %>
 <% end %>
 <meta name="list_view_config" content='<%= @list_view_config.html_safe %>'>
 
