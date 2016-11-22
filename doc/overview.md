@@ -33,7 +33,7 @@ The approval chains are designed so that the `Proposal` needs to only communicat
 
 C2's main interface for most users is email. As a result, there are many cases where you may need to edit emails. The following will provide some basic understanding of the email logic to date.
 
-[More information about them here](email.md).
+[More information about them here](emails.md).
 
 ## User accounts
 
