@@ -29,6 +29,12 @@ The `Parallel` node has an additional configuration (`min_children_needed`), whi
 
 The approval chains are designed so that the `Proposal` needs to only communicate with the _root_ of the chain. See the approval specs for examples.
 
+## Emails
+
+C2's main interface for most users is email. As a result, there are many cases where you may need to edit emails. The following will provide some basic understanding of the email logic to date.
+
+[More information about them here](email.md).
+
 ## User accounts
 
 User records are created in C2 one of two ways:
