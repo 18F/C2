@@ -103,11 +103,31 @@ Ensure that:
 
  1. Choose a space, being one of `prod`, `staging` or `dev`. (If the only
     space you can see is `general`, you're on the East/West environment)
+ 1. TODO: Determine your instance's hostname
  1. make sure you have the right roles - need SpaceDeveloper
  1. create services (binding happens automatically thanks to the `services`
     section of `manifest.yml`)
     1. pgsql: `cf create-service aws-rds medium-psql c2-SPACE-db`
     1. elasticsearch: `cf create-service elasticsearch23 1x c2-SPACE-elasticsearch`
+ 1. TODO: Obtain cloud.gov authentication credentials
+ 1. Set up Mandrill mail delivery and receipt
+    1. Get Mandrill `SMTP_USERNAME` & `SMTP_PASSWORD`
+    1. If handling inbound mail, configure a Mandrill inbound mail webhook
+       1. To manage Mandrill, first ensure that you have Mandrill access (ask in #admin-mandrill)
+       1. Log into MailChimp and then visit https://mandrillapp.com/
+       1. On the left nav, click **Inbound**. Then choose the email domain
+          for the C2-using organization:
+          - For Acquisition Gateway: `c2.18f.gov`
+          - For 18F: `requests.18f.gov`
+       1. Look through the URLs in the *Webhooks* column. 
+          - If you find a URL already exists with the correct hostname for 
+            your new instance, then the **Route** on the left gives you the
+            email address to use for both `NOTIFICATION_FROM_EMAIL` and
+            `NOTIFICATION_REPLY_TO`.
+          - If you don't find a URL with the hostname, click **+ Add New
+            Route**. Choose an appropriate email username, and in **Post
+            To URL** enter an URL of the format `https://HOSTNAME/inbox` ,
+            where `HOSTNAME` is your instance's hostname.
  1. Set up environment vars
     1. on `c2-SPACE`:
         - `MYUSA_KEY`
@@ -167,13 +187,18 @@ Ensure that:
 ### Steps
 
  - First, upload the backup file to the app:
-    - Get the app's GUID (and store it in an environment variable): ```bash
-        export IMPORT_APP_GUID=`cf app c2-dev --guid`
-      ```
-    - Get a one-time authorization code: `cf ssh-code`
-    - SFTP into the app: ```
-      sftp -P 2222 "cf:$IMPORT_APP_GUID/0@ssh.fr.cloud.gov"
-      ```
+    - Get the app's GUID (and store it in an environment variable): 
+         
+          export IMPORT_APP_GUID=`cf app c2-dev --guid`
+
+    - Get a one-time authorization code:
+    
+          cf ssh-code
+
+    - SFTP into the app:
+
+          sftp -P 2222 "cf:$IMPORT_APP_GUID/0@ssh.fr.cloud.gov"
+    
     - When asked for a password, paste in the one-time code obtained above
     - At the SFTP prompt:
       - `put backup.pg`
@@ -183,9 +208,10 @@ Ensure that:
     - Install the PG tools: `curl https://s3.amazonaws.com/18f-cf-cli/psql-9.4.4-ubuntu-14.04.tar.gz > psql.tgz; tar xzvf psql.tgz`
     - Import the backup file (this may take a few minutes, and may
       produce one or two non-fatal errors at the start; ignore them unless
-      there are many, or the process dies/quits): ```
-        psql/bin/pg_restore --clean --no-owner --no-acl -d $DATABASE_URL backup.pg
-      ```
+      there are many, or the process dies/quits):
+      
+          psql/bin/pg_restore --clean --no-owner --no-acl -d $DATABASE_URL backup.pg
+      
     - The import process should end with a message like `WARNING: errors ignored on restore: 1`. That's fine.
     - Quit the SSH session, then delete the `backup.pg` file, because if it
       lingers in the same folder from which you do `cf push` or equivalent
