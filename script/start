@@ -1,5 +1,7 @@
 #!/bin/sh
 
+bundle check || bundle install
+
 set -e
 set -x
 
