@@ -14,14 +14,13 @@ feature "Create a Gsa18F procurement" do
       fill_in "Product name and description", with: "buying stuff"
       select "Software", from: "gsa18f_procurement_purchase_type"
       fill_in "Justification", with: "because I need it"
-      fill_in "Link to product", with: "http://www.amazon.com"
-      fill_in "Cost per unit", with: 123.45
+      fill_in "Link to Product", with: "http://www.amazon.com"
+      fill_in "Cost Per Unit", with: 123.45
       fill_in "Quantity", with: 6
       fill_in "gsa18f_procurement_date_requested", with: "12/12/2999"
       fill_in "gsa18f_procurement_additional_info", with: "none"
       select Gsa18f::Procurement::URGENCY[10], from: "gsa18f_procurement_urgency"
-      select Gsa18f::Procurement::OFFICES[0], from: "gsa18f_procurement_office"
-      click_on "Submit for approval"
+      click_on "SUBMIT"
 
       proposal = requester.reload.proposals.last
       expect(page).to have_content("Proposal submitted")
