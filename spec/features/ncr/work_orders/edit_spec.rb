@@ -21,7 +21,8 @@ feature "Editing NCR work order" do
       fill_in 'ncr_work_order[project_title]', with: "New project title"
       fill_in 'ncr_work_order[description]', with: "New desc content"
       fill_in 'ncr_work_order[rwa_number]', with: 'F0000000'
-      fill_in 'ncr_work_order[amount]', with: 3.45
+      fill_in 'ncr_work_order[not_to_exceed]', with: 3.45
+      fill_in 'ncr_work_order[amount]', with: true
 
       within(".action-bar-container") do
           click_on "SAVE"
@@ -37,6 +38,7 @@ feature "Editing NCR work order" do
       expect(page).to have_content("F0000000")
       expect(page).to have_content("New desc content")
       expect(page).to have_content("3.45")
+      expect(page).to have_content("Not to exceed")
     end
   end
 end
