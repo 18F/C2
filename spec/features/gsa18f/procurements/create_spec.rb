@@ -1,7 +1,7 @@
 feature "Create a Gsa18F procurement" do
-  scenario "user not signed in" do
+  scenario "user not signed in", :js do
     visit new_gsa18f_procurement_path
-
+    page.save_screenshot('../screen.png', full: true)
     expect(page).to have_content("You need to sign in")
   end
 

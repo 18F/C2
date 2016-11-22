@@ -6,8 +6,7 @@ feature "Editing NCR work order" do
 
     visit proposal_path(work_order.proposal)
     expect(current_path).to eq(proposal_path(work_order.proposal))
-    page.save_screenshot('../screen.png', full: true)
-    expect(page).to have_content(I18n.t("errors.policies.ncr.work_order.can_edit"))
+    expect(page).to have_content(I18n.t("errors.policies.proposal.show_permission"))
   end
 
   context "work_order has pending status" do
