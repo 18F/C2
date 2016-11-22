@@ -22,7 +22,7 @@ feature "Editing NCR work order" do
       fill_in 'ncr_work_order[description]', with: "New desc content"
       fill_in 'ncr_work_order[rwa_number]', with: 'F0000000'
       fill_in 'ncr_work_order[amount]', with: 3.45
-      select true, from: "ncr_work_order_not_to_exceed"
+      select "Not to exceed", from: "ncr_work_order_not_to_exceed"
 
       within(".action-bar-container") do
           click_on "SAVE"
