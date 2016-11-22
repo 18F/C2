@@ -1,15 +1,21 @@
+elasticsearch:
+  image: elasticsearch
+  ports:
+  - "9200:9200"
+  - "9300:9300"
 db:
-   image: postgres:9
+  image: postgres:9
 web:
-    build: .
-    env_file: .env
-    environment:
-       DATABASE_USER: postgres
-       DATABASE_NAME: c2_development
-       DATABASE_HOST: db
-    volumes:
-      - .:/app
-    ports:
-      - "5000:5000"
-    links:
-      - db
+  build: .
+  env_file: .env
+  environment:
+    DATABASE_USER: postgres
+    DATABASE_NAME: c2_development
+    DATABASE_HOST: db
+  volumes:
+    - .:/app
+  ports:
+    - "5000:5000"
+  links:
+    - db
+    - elasticsearch
