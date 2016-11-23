@@ -1,7 +1,7 @@
 ---
 name: C2
 uniqueID: MB18FIX020750/753
-version: <application version>
+version: 1.0.0
 # descriptions:
 # https://18f.gsa.gov/dashboard/
 phase: live
