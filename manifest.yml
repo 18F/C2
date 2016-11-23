@@ -43,6 +43,7 @@ applications:
     - c2-dev-ups-app_config
 - name: c2-dev-worker
   no-route: true
+  health-check-type: none
   command: script/worker-start
   memory: 640MB
   env:
@@ -98,6 +99,7 @@ applications:
     - c2-staging-ups-app_config
 - name: c2-staging-worker
   no-route: true
+  health-check-type: none
   command: script/worker-start
   memory: 640MB
   env:
@@ -158,6 +160,7 @@ applications:
     - c2-prod-ups-app_config
 - name: c2-prod-worker
   no-route: true
+  health-check-type: none
   command: script/worker-start
   memory: 640MB
   env:
