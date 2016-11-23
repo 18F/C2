@@ -35,7 +35,7 @@ describe "viewing a work order" do
 
   it "doesn't show a edit/cancel/add observer link from a canceled proposal" do
     visit "/proposals/#{ncr_proposal.id}"
-    expect(page).to have_content('Cancel this request')
+    expect(page).to have_content('Cancel request')
     ncr_proposal.update_attribute(:status, 'canceled')
     visit "/proposals/#{ncr_proposal.id}"
     expect(page).not_to have_content('Modify Request')

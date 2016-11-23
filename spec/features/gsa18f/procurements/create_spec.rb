@@ -36,12 +36,12 @@ feature "Create a Gsa18F procurement" do
 
         fill_in "Product name and description", with: "buying stuff"
         fill_in "Quantity", with: 1
-        fill_in "Cost per unit", with: 10_000
-        click_on "Submit for approval"
+        fill_in "Cost Per Unit", with: 10_000
+        click_on "SUBMIT"
 
         expect(current_path).to eq(gsa18f_procurements_path)
-        expect(page).to have_content("Cost per unit must be less than or equal to $")
-        expect(find_field("Cost per unit").value).to eq("10000")
+        expect(page).to have_content("must be less than or equal to $")
+        expect(find_field("Cost Per Unit").value).to eq("10000")
       end
     end
   end
