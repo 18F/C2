@@ -161,7 +161,7 @@ It's as simple as:
 $ docker-compose up
 ```
 
-And visiting `[the IP from boot2docker IP]:3000`.
+And visiting `[the IP from boot2docker IP]:5000`.
 
 The sample data will be populated in the database automatically.
 
