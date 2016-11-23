@@ -29,7 +29,7 @@ class PrepareDisplayFields
   end
 
   def check_for_blank(value)
-    if value.nil? || value.blank?
+    if value.nil? || (value.blank? && value != false)
       "--"
     else
       value
@@ -42,7 +42,6 @@ class PrepareDisplayFields
     data = @obj[:data]
     key = @obj[:key]
     value = @obj[:value]
-
     if @obj[:special_keys].include?(key) && value != "--"
       Object.const_get(data.class.name).send("display_update_" + key, @obj)
     else
