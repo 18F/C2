@@ -51,9 +51,8 @@ staff:
     email: bilal.chaudhry@karsun-llc.com
 leveraged-authorizations:
 - https://www.fedramp.gov/marketplace/compliant-systems/amazon-web-services-aws-eastwest-us-public-cloud/
-purpose: <link to README>
+purpose: https://cap.18f.gov/
 components:
-- <link to item under https://18f.gsa.gov/dashboard/>
 - https://github.com/18F/C2
 
 # these will be the same unless your architecture is especially complex
