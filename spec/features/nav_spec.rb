@@ -1,7 +1,7 @@
 describe "header nav" do
   describe "summary link" do
     context "if the user is an admin of some kind" do
-      it "is displayed" do
+      it "is displayed", :js do
         admin_user = create(:user, :admin)
         login_as(admin_user)
         @page = HomePage.new
