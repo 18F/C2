@@ -18,20 +18,4 @@ class OauthCredentials
       credentials(base_name("oauth"))["CG_APP_SECRET"]
     end
   end
-
-  def self.myusa_key
-    if use_env_var?
-      ENV["MYUSA_KEY"]
-    else
-      credentials(base_name("oauth"))["MYUSA_KEY"]
-    end
-  end
-
-  def self.myusa_secret
-    if use_env_var?
-      ENV["MYUSA_SECRET"]
-    else
-      credentials(base_name("oauth"))["MYUSA_SECRET"]
-    end
-  end
 end
