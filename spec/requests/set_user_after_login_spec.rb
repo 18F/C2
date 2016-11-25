@@ -5,12 +5,12 @@ describe "User creation when logging in with Oauth to view a protected page" do
 
   before do
     user = StructUser.new("george-test@example.com", "Georgie", "Jetsonian")
-    setup_mock_auth(:myusa, user)
+    setup_mock_auth(:cg, user)
   end
 
   it "creates a new user if the current user does not already exist" do
     expect do
-      get "/auth/myusa/callback"
+      get "/auth/cg/callback"
     end.to change { User.count }.by(1)
 
     new_user = User.last
@@ -21,7 +21,7 @@ describe "User creation when logging in with Oauth to view a protected page" do
 
   it "sends welcome email to a new user", :email do
     with_env_var("WELCOME_EMAIL", "true") do
-      expect { get "/auth/myusa/callback" }.to change { deliveries.length }.from(0).to(1)
+      expect { get "/auth/cg/callback" }.to change { deliveries.length }.from(0).to(1)
       welcome_mail = deliveries.first
       expect(welcome_mail.subject).to eq("Welcome to C2!")
     end
@@ -29,9 +29,9 @@ describe "User creation when logging in with Oauth to view a protected page" do
 
   it "absence of first/last name does not throw error" do
     user = StructUser.new("somebody@example.com", nil, nil)
-    setup_mock_auth(:myusa, user)
+    setup_mock_auth(:cg, user)
     expect do
-      get "/auth/myusa/callback"
+      get "/auth/cg/callback"
     end.to change { User.count }.by(1)
   end
 
@@ -39,7 +39,7 @@ describe "User creation when logging in with Oauth to view a protected page" do
     create(:user, email_address: "george-test@example.com")
 
     expect do
-      get "/auth/myusa/callback"
+      get "/auth/cg/callback"
     end.to_not change { User.count }
   end
 
@@ -49,7 +49,7 @@ describe "User creation when logging in with Oauth to view a protected page" do
 
     Timecop.travel(Time.current + 1.minute) do
       expect do
-        get "/auth/myusa/callback"
+        get "/auth/cg/callback"
       end.to_not change { deliveries.length }
     end
   end
@@ -58,7 +58,7 @@ describe "User creation when logging in with Oauth to view a protected page" do
     create(:user, email_address: "george-test@example.com")
 
     expect do
-      get "/auth/myusa/callback"
+      get "/auth/cg/callback"
     end.to_not change { User.count }
 
     expect(response).to redirect_to("/proposals")

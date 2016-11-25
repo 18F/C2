@@ -5,8 +5,8 @@ module FeatureSpecHelper
   end
 
   def login_as(user)
-    setup_mock_auth(:myusa, user)
-    visit '/auth/myusa'
+    setup_mock_auth(:cg, user)
+    visit '/auth/cg'
   end
 
   def fill_in_selectized(selectize_class, text)
