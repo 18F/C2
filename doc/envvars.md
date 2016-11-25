@@ -3,10 +3,6 @@
 This document describes the various environment variables available in the application
 and how they affect app behavior.
 
-## MYUSA_KEY
-
-## MYUSA_SECRET
-
 ## API_ENABLED=true
 ## BULLET_ENABLED=true
 ## BUDGET_REPORT_RECIPIENT
@@ -38,7 +34,6 @@ Set to `true` to disable the app completely, showing a maintenance page for all 
 Remember that you need to restart the app (`cf restart APPNAME`) for the change to
 take effect.
 
-## MYUSA_URL
 ## NEW_RELIC_APP_NAME
 ## NEW_RELIC_LICENSE_KEY
 ## NOTIFICATION_FROM_EMAIL
