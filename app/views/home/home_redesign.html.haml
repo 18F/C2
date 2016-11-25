@@ -38,10 +38,7 @@
             %a{:href => "/help/new_features"} New Features
           - unless signed_in?
             %li
-              - if ENV['BETA_CLOUD_GOV_LOGIN'] == 'true'
-                = link_to "Sign in with Cloud.gov", auth_url(provider: :cg)
-              - else
-                = link_to "Sign in with MyUSA", auth_url(provider: :myusa)
+              = link_to "Sign in with Cloud.gov", auth_url(provider: :cg)
     .row.full-width-row
       %section.small-12.header
         .small-10.medium-6.small-centered
