@@ -4,7 +4,7 @@ gem "rails", "4.2.7.1"
 
 gem "actionmailer-text", "~> 0.1.1"
 gem "active_model_serializers", "~> 0.9.4"
-gem "activeadmin", git: "https://github.com/activeadmin/activeadmin.git"
+gem "activeadmin", "~> 1.0.0.pre2"
 gem "activeadmin_hstore_editor", "0.0.5"
 gem "acts_as_list"
 gem "acts-as-taggable-on", "~> 3.4"
