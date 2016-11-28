@@ -75,6 +75,7 @@ applications:
   command: script/server_start
   env:
     ASSET_HOST: https://c2-staging.18f.gov/
+    BETA_CLOUD_GOV_LOGIN: true
     CG_APP_ID: nil
     CG_APP_SECRET: nil
     DEFAULT_URL_HOST: c2-staging.18f.gov
