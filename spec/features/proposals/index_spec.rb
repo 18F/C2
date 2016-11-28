@@ -2,21 +2,6 @@ feature "Proposals index" do
   include ProposalTableSpecHelper
   include ResponsiveHelper
 
-  scenario "filters pending proposals according to current_user" do
-    user = create(:user)
-    _reviewable_proposals = create_list(:proposal, 2, :with_approver, observer: user)
-    _pending_proposals = create_list(:proposal, 2, :with_approver, approver_user: user)
-    _canceled = create_list(:proposal, 2, status: "canceled", observer: user)
-    @page = ProposalIndexPage.new
-
-    login_as(user)
-    @page.load
-
-    expect(@page.needing_review).to have_content('Please review')
-    expect(@page.pending).to have_content('Waiting for review')
-    expect(@page.canceled).to have_content('Cancelled')
-  end
-
   scenario "load new index page based on current_user for all requests", :js do
     work_order_ba80 = create(:ba80_ncr_work_order, :with_beta_requester)
     user = work_order_ba80.requester

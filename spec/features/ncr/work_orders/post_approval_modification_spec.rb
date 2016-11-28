@@ -76,13 +76,17 @@ feature "post-approval modification" do
                                                 ))
   end
 
-  scenario "shows flash warning, only on edit page" do
+  scenario "shows flash warning, only on edit page", :js do
     work_order = create(:ncr_work_order)
     work_order.setup_approvals_and_observers
     fully_complete(work_order.proposal)
 
     login_as(work_order.requester)
-    visit "/ncr/work_orders/#{work_order.id}/edit"
+    visit proposal_path(work_order.proposal)
+    click_on "MODIFY"
+    sleep(1)
+    page.save_screenshot('../screen.png', full: true)
+    
     expect(page).to have_content("Wait! You're about to change an approved request. Your changes will be logged and sent to approvers, and your action may require reapproval of the request.")
     click_on "Discard Changes"
     expect(page).to_not have_content("You are about to modify a fully approved request")

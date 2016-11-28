@@ -7,7 +7,8 @@ feature "Create NCR work order with attachment" do
     expect(page).to have_content("Attachments")
     expect(page).not_to have_selector(".js-am-minus")
     expect(page).not_to have_selector(".js-am-plus")
-    expect(page).to have_selector("input[type=file]", count: 10)
+    
+    expect(page).to have_selector("input[type=\"file\"]", count: 10)
   end
 
   scenario "allows attachments to be added during intake with JS", :js do
