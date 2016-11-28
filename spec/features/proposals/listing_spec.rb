@@ -1,5 +1,5 @@
 describe "Listing Page" do
-  let!(:user){ create(:user) }
+  let!(:user){ create(:user, client_slug: "ncr") }
   let!(:default){ create(:proposal, requester: user) }
   let!(:ncr){
     ncr = create(:ncr_work_order)
@@ -40,17 +40,6 @@ describe "Listing Page" do
       visit '/proposals'
       expect(page).to have_content("Requester")
       expect(page).to have_content("#{default.name} #{default.requester.email_address}")
-    end
-
-    it "should list the proposal in the proper section" do
-      proposal = Proposal.last
-      proposal.update(status: "completed")
-      visit '/proposals'
-      expect(page).not_to have_content("Cancelled Purchase Requests")
-
-      proposal.update_attribute(:status, 'canceled')
-      visit '/proposals'
-      expect(page).to have_content("No recently completed purchase requests")
     end
   end
 
