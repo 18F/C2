@@ -33,7 +33,7 @@ module Ncr
     end
 
     def shares_budget_approver_delegator?
-      Ncr::WorkOrder.all_system_approvers.any? { |delegator| delegator.delegates_to?(current_user) }
+      work_order.budget_approvers.any? { |delegator| delegator.delegates_to?(current_user) }
     end
 
     def proposal_has_budget_approvals?
