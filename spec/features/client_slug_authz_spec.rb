@@ -70,16 +70,14 @@ describe "client_slug confers authz rules", :js do
     expect(page.status_code).to eq(403)
   end
 
-  it "rejects subscriber trying to add user with non-client_slug as observer" do
+  it "rejects subscriber trying to add user with non-client_slug as observer", js: false do
     login_as(@ncr_user)
 
-    visit new_ncr_work_order_path
-    submit_ba60_work_order(@ncr_approver)
+    # visit new_ncr_work_order_path
+    # submit_ba60_work_order(@ncr_approver)
+    proposal = create(:ncr_work_order, requester: @ncr_user).proposal
+    visit proposal_path(proposal)
 
-    expect(page.status_code).to eq(200)
-    within ".card-for-observers" do
-      expect(page).to_not have_content(@gsa_user.email_address)
-    end
     expect_to_not_find_amongst_select_tag_options("observation_user_id", @gsa_user.email_address)
   end
 
