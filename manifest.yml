@@ -30,8 +30,6 @@ applications:
     S3_REGION: us-east-1
     WELCOME_EMAIL: true
     REDESIGN_DEFAULT_VIEW: true
-    CG_APP_ID: nil
-    CG_APP_SECRET: nil
   services:
     - c2-dev-elasticsearch
     - c2-dev-db
@@ -57,8 +55,6 @@ applications:
     S3_BUCKET_NAME: c2-demo
     S3_REGION: us-east-1
     WELCOME_EMAIL: true
-    CG_APP_ID: nil
-    CG_APP_SECRET: nil
   services:
     - c2-dev-elasticsearch
     - c2-dev-db
@@ -113,8 +109,6 @@ applications:
     S3_BUCKET_NAME: c2-demo
     S3_REGION: us-east-1
     WELCOME_EMAIL: true
-    CG_APP_ID: nil
-    CG_APP_SECRET: nil
   services:
     - c2-staging-elasticsearch
     - c2-staging-db
@@ -147,8 +141,6 @@ applications:
     S3_REGION: us-east-1
     WELCOME_EMAIL: true
     REDESIGN_DEFAULT_VIEW: true
-    CG_APP_ID: nil
-    CG_APP_SECRET: nil
   services:
     - c2-prod-elasticsearch
     - c2-prod-db
@@ -175,8 +167,6 @@ applications:
     S3_BUCKET_NAME: c2-prod
     S3_REGION: us-east-1
     WELCOME_EMAIL: true
-    CG_APP_ID: nil
-    CG_APP_SECRET: nil
   services:
     - c2-prod-elasticsearch
     - c2-prod-db
