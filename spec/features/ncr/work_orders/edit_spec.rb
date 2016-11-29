@@ -30,6 +30,24 @@ feature "Editing NCR work order" do
       end
     end
 
+    scenario "notifies observers of changes", :email do
+      deliveries.clear
+      
+      work_order_ba80 = create(:ba80_ncr_work_order, :with_beta_requester)
+      work_order_ba80.save!
+      
+      user = create(:user, client_slug: "ncr", email_address: "observer@example.com")
+      work_order_ba80.add_observer(user)
+      login_as(work_order_ba80.requester)
+      visit proposal_path(work_order_ba80.proposal)
+
+      work_order_ba80.description = "New desc content"
+      work_order_ba80.save!
+
+      expect(deliveries.length).to eq(2)
+      expect(deliveries.last).to have_content(user.full_name)
+    end
+
     scenario "BA80 can be modified", :js do
       work_order_ba80 = create(:ba80_ncr_work_order, :with_beta_requester)
       work_order_ba80.save!
@@ -45,13 +63,13 @@ feature "Editing NCR work order" do
       select "Not to exceed", from: "ncr_work_order_not_to_exceed"
 
       within(".action-bar-container") do
-          click_on "SAVE"
-          sleep(1)
-        end
-        within("#card-for-modal") do
-          click_on "SAVE"
-          sleep(1)
-        end
+        click_on "SAVE"
+        sleep(1)
+      end
+      within("#card-for-modal") do
+        click_on "SAVE"
+        sleep(1)
+      end
 
       expect(page).to have_content("New project title")
       expect(page).to have_content("BA80")

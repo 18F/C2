@@ -25,7 +25,7 @@ feature "Requester edits their NCR work order", :js do
     end
   end
 
-  scenario "notifies observers of changes", :email, :js do
+  scenario "notifies observers of changes", :email do
     user = create(:user, client_slug: "ncr", email_address: "observer@example.com")
     @work_order.add_observer(user)
     visit edit_ncr_work_order_path(@work_order)
@@ -37,7 +37,7 @@ feature "Requester edits their NCR work order", :js do
     expect(deliveries.last).to have_content(user.full_name)
   end
 
-  scenario "does not resave unchanged requests", :email, :js do
+  scenario "does not resave unchanged requests", :email do
     visit edit_ncr_work_order_path(@work_order)
     click_on "Update"
 
