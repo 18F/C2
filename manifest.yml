@@ -72,15 +72,16 @@ applications:
   env:
     ASSET_HOST: https://c2-staging.18f.gov/
     DEFAULT_URL_HOST: c2-staging.18f.gov
+    HIDE_DESIGN_TOGGLE: true
     NEW_RELIC_APP_NAME: C2 (Staging)
-    UPS_BASE: c2-staging-ups
     NOTIFICATION_FROM_EMAIL: staging-inbox@c2.18f.gov
     NOTIFICATION_REPLY_TO: staging-inbox@c2.18f.gov
+    REDESIGN_DEFAULT_VIEW: true
     RESTRICT_ACCESS: false
     S3_BUCKET_NAME: c2-demo
     S3_REGION: us-east-1
     WELCOME_EMAIL: true
-    REDESIGN_DEFAULT_VIEW: true
+    UPS_BASE: c2-staging-ups
   services:
     - c2-staging-elasticsearch
     - c2-staging-db
