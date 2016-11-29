@@ -105,15 +105,14 @@ describe "client_slug confers authz rules", :js do
   private
 
   def submit_ba60_work_order(approver)
-    page.save_screenshot('../screen.png', full: true)
     fill_in "Project title", with: "blue shells"
     fill_in "Description", with: "desc content"
     choose "BA60"
-    fill_in "Vendor", with: "Yoshi"
+    fill_in_selectized("ncr_work_order_vendor", "Yoshi")
     fill_in "Amount", with: 123.45
     
-    select approver.email_address, from: "Approving official's email address"
-    fill_in "Building number", with: Ncr::BUILDING_NUMBERS[0]
+    fill_in_selectized("ncr_work_order_approving_official", approver.email_address)
+    fill_in_selectized("ncr_work_order_building_number", Ncr::BUILDING_NUMBERS[0])
     find('input[name="commit"]').click
   end
 
