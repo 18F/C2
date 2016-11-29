@@ -25,25 +25,6 @@ feature "Requester edits their NCR work order", :js do
     end
   end
 
-  scenario "creates a comment when editing", :js do
-    new_org = create(:ncr_organization, code: "XZP", name: "Test test")
-    visit edit_ncr_work_order_path(@work_order)
-
-    fill_in "Description", with: "New Description"
-    fill_in_selectized("ncr_work_order_building_number", Ncr::BUILDING_NUMBERS[1])
-    fill_in_selectized("ncr_work_order_ncr_organization", new_org.code_and_name)
-    click_on "Update"
-
-    expect(page).to have_content("Request modified by")
-    expect(page).to have_content("Description was changed from test to New Description")
-    expect(page).to have_content(
-      "Building number was changed from #{Ncr::BUILDING_NUMBERS[0]} to #{Ncr::BUILDING_NUMBERS[1]}"
-    )
-    expect(page).to have_content(
-      "Org code was changed from #{@organization.code_and_name} to #{new_org.code_and_name}"
-    )
-  end
-
   scenario "notifies observers of changes", :email, :js do
     user = create(:user, client_slug: "ncr", email_address: "observer@example.com")
     @work_order.add_observer(user)
