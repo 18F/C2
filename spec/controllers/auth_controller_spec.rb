@@ -13,9 +13,9 @@ describe AuthController do
     include IntegrationSpecHelper
     it "recovers gracefully from missing email address" do
       user = build(:user, email_address: "")
-      setup_mock_auth(:myusa, user)
-      request.env["omniauth.auth"] = OmniAuth.config.mock_auth[:myusa]
-      get :oauth_callback, provider: :myusa
+      setup_mock_auth(:cg, user)
+      request.env["omniauth.auth"] = OmniAuth.config.mock_auth[:cg]
+      get :oauth_callback, provider: :cg
       expect(session[:user]).to be_nil
       expect(response.status).to eq(200)
     end
