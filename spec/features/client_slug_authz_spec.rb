@@ -77,6 +77,9 @@ describe "client_slug confers authz rules", :js do
     submit_ba60_work_order(@ncr_approver)
 
     expect(page.status_code).to eq(200)
+    within ".card-for-observers" do
+      expect(page).to_not have_content(@gsa_user.email_address)
+    end
     expect_to_not_find_amongst_select_tag_options("observation_user_id", @gsa_user.email_address)
   end
 
