@@ -206,3 +206,41 @@ $ cf bind-service c2-staging c2-staging-ups-github
   keys. **Important**: when updating keys and/or values for a user-provided service,
   you must update *all* keys for that service. On update, Cloud Foundry removes
   all previous keys and values from the user-provided service being updated.
+
+### To deploy a new instance of the app
+
+Create the app (it's ok if the deploy fails):
+
+```
+$ cf push
+```
+
+Create the database service:
+
+```
+$ cf create-service rds shared-psql micropurchase-psql
+```
+
+Set up the database:
+
+```
+$ cf-ssh -f manifest.yml
+$~ bundle exec rake db:migrate
+```
+
+Restage the app:
+
+```
+cf restage micropurchase
+```
+
+### Services
+
+Cloud.gov offers multiple services to allow your application to expand its functionality.
+To list all the services and plans available to your organization you can run cf marketplace from your command line.
+
+To view the C2 services, you can run `cf services` from the command line. Each service has a process, configuration option, route and status. Using the `manifest.yml` file, services can be bound to process instances on deploys. Services can also be manually bound to server instances using:
+
+`cf bind-service APP_NAME SERVICE_INSTANCE [-c PARAMETERS_AS_JSON]`
+
+More details can be found using `cf help`
