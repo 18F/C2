@@ -12,7 +12,7 @@ module FeatureSpecHelper
   def fill_in_selectized(selectize_class, text)
     page.execute_script "$('.action-bar-container').toggle()"
     find(".#{selectize_class} .selectize-input input").native.send_keys(text) #fill the input text
-    find(:xpath, ("//div[@data-selectable and contains(., '#{text}')]")).click #wait for the input and then click on it
+    first(:xpath, ("//div[@data-selectable and contains(., '#{text}')]")).click #wait for the input and then click on it
     page.execute_script "$('.action-bar-container').toggle()"
   end
 
