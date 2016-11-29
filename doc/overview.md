@@ -17,6 +17,10 @@ The application is running on Cloud.gov's server infrustructure.
 
 [Architecture flowchart is accessible in Mermaid](application_architecture.mmd).
 
+### Hardware
+
+The C2 application, hosted on cloud.gov, is running on a single server instance with 1024 MB of memory. There is a seperate identical server instance running a worker process to handle delayed_job tasks. The two instances are bound to a RDB shared PostgreSQL database and ElasticSearch instance using cloud.gov's service binding methods.
+
 ## Approval Chains
 
 The order and requirements for a proposal to be "approved" are defined by an "approval chain". This is a hierarchical tree of `Approval` objects, with currently fall into three types:
