@@ -12,7 +12,19 @@ feature "Editing NCR work order" do
   end
 
   context "work_order has pending status" do
-    
+   
+    scenario "does not resave unchanged requests", :js do
+      
+      work_order_ba80 = create(:ba80_ncr_work_order, :with_beta_requester)
+      work_order_ba80.save!
+      login_as(work_order_ba80.requester)
+      visit proposal_path(work_order_ba80.proposal)
+      
+      click_on "MODIFY"
+
+      expect(page).to have_css('[data-modal-type="save_confirm"][disabled]')
+    end
+
     scenario "preserves previously selected values in dropdowns", :js do
       work_order_ba80 = create(:ba80_ncr_work_order, :with_beta_requester)
       work_order_ba80.save!

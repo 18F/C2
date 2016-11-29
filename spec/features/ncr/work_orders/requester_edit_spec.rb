@@ -25,15 +25,6 @@ feature "Requester edits their NCR work order", :js do
     end
   end
 
-  scenario "does not resave unchanged requests", :email do
-    visit edit_ncr_work_order_path(@work_order)
-    click_on "Update"
-
-    expect(current_path).to eq(proposal_path(@work_order.proposal))
-    expect(page).to have_content("No changes were made to the request.")
-    expect(deliveries.length).to eq(0)
-  end
-
   scenario "allows requester to change the approving official", :js do
     approver = create(:user, client_slug: "ncr")
 
