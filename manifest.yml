@@ -125,8 +125,6 @@ applications:
   env:
     API_ENABLED: true
     ASSET_HOST: https://cap.18f.gov/
-    CG_APP_ID: nil
-    CG_APP_SECRET: nil
     DEFAULT_URL_HOST: cap.18f.gov
     DISABLE_SANDBOX_WARNING: true
     GA_TRACKING_ID: UA-48605964-27
