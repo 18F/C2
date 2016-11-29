@@ -1,4 +1,6 @@
 feature "Editing NCR work order" do
+  include ProposalSpecHelper
+
   scenario "current user is not the requester, approver, or observer", :js do
     work_order = create(:ncr_work_order)
     stranger = create(:user, client_slug: "ncr")
@@ -10,6 +12,24 @@ feature "Editing NCR work order" do
   end
 
   context "work_order has pending status" do
+    
+    scenario "preserves previously selected values in dropdowns", :js do
+      work_order_ba80 = create(:ba80_ncr_work_order, :with_beta_requester)
+      work_order_ba80.save!
+      login_as(work_order_ba80.requester)
+      visit proposal_path(work_order_ba80.proposal)
+      
+      click_on "MODIFY"
+
+      within(".ncr_work_order_building_number") do
+        find(".selectize-control").click
+        within(".dropdown-active") do
+          expect(page).to have_content(Ncr::BUILDING_NUMBERS[0])
+        end
+        find(".selectize-control").click
+      end
+    end
+
     scenario "BA80 can be modified", :js do
       work_order_ba80 = create(:ba80_ncr_work_order, :with_beta_requester)
       work_order_ba80.save!

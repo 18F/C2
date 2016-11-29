@@ -25,27 +25,6 @@ feature "Requester edits their NCR work order", :js do
     end
   end
 
-  scenario "preserves previously selected values in dropdowns", :js do
-    visit edit_ncr_work_order_path(@work_order)
-
-    expect_page_to_have_selected_selectize_option(
-      "ncr_work_order_building_number",
-      Ncr::BUILDING_NUMBERS[0]
-    )
-    expect_page_to_have_selected_selectize_option(
-      "ncr_work_order_ncr_organization",
-      @organization.code_and_name
-    )
-    expect_page_to_have_selected_selectize_option(
-      "ncr_work_order_vendor",
-      "test vendor"
-    )
-    expect_page_to_have_selected_selectize_option(
-      "ncr_work_order_approving_official",
-      @work_order.approving_official.email_address
-    )
-  end
-
   scenario "creates a comment when editing", :js do
     new_org = create(:ncr_organization, code: "XZP", name: "Test test")
     visit edit_ncr_work_order_path(@work_order)
