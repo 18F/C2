@@ -11,7 +11,7 @@ feature "Login" do
     )
   end
 
-  scenario "myusa auth problem" do
+  scenario "cloud.gov auth problem" do
     user = create(:user)
 
     login_as(user)
