@@ -141,16 +141,14 @@ feature "Proposals index" do
 
   feature "status field text" do
     context "when the user is an approver" do
-      scenario "is correct for the user" do
+      it "is displays the appropriate text", :js do
         user = create(:user)
         approval_proposal = create_proposal_with_approvers(user, create(:user))
         @page = ProposalIndexPage.new
 
         login_as(user)
         @page.load
-
-        expect(@page.needing_review.requests[0].public_id_link.text).to eq approval_proposal.public_id
-        expect(@page.needing_review.requests[0].status.text).to eq "Please review"
+        expect(@page.first_status.text).to include "Please review"
       end
     end
 
