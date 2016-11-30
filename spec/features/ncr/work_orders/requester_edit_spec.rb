@@ -25,18 +25,6 @@ feature "Requester edits their NCR work order", :js do
     end
   end
 
-  scenario "allows requester to change the approving official", :js do
-    approver = create(:user, client_slug: "ncr")
-
-    visit "/ncr/work_orders/#{@work_order.id}/edit"
-    fill_in_selectized("ncr_work_order_approving_official", approver.email_address)
-    click_on "Update"
-
-    proposal = Proposal.last
-    expect(proposal.approvers.first.email_address).to eq approver.email_address
-    expect(proposal.individual_steps.first).to be_actionable
-  end
-
   scenario "allows requester to change the expense type", :js do
     visit edit_ncr_work_order_path(@work_order)
 
