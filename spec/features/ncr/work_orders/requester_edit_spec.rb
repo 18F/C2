@@ -25,39 +25,6 @@ feature "Requester edits their NCR work order", :js do
     end
   end
 
-  scenario "notifies observers of changes", :email do
-    user = create(:user, client_slug: "ncr", email_address: "observer@example.com")
-    @work_order.add_observer(user)
-    visit edit_ncr_work_order_path(@work_order)
-
-    fill_in "Description", with: "Observer changes"
-    click_on "Update"
-
-    expect(deliveries.length).to eq(2)
-    expect(deliveries.last).to have_content(user.full_name)
-  end
-
-  scenario "does not resave unchanged requests", :email do
-    visit edit_ncr_work_order_path(@work_order)
-    click_on "Update"
-
-    expect(current_path).to eq(proposal_path(@work_order.proposal))
-    expect(page).to have_content("No changes were made to the request.")
-    expect(deliveries.length).to eq(0)
-  end
-
-  scenario "allows requester to change the approving official", :js do
-    approver = create(:user, client_slug: "ncr")
-
-    visit "/ncr/work_orders/#{@work_order.id}/edit"
-    fill_in_selectized("ncr_work_order_approving_official", approver.email_address)
-    click_on "Update"
-
-    proposal = Proposal.last
-    expect(proposal.approvers.first.email_address).to eq approver.email_address
-    expect(proposal.individual_steps.first).to be_actionable
-  end
-
   scenario "allows requester to change the expense type", :js do
     visit edit_ncr_work_order_path(@work_order)
 
