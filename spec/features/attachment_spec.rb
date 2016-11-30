@@ -18,11 +18,12 @@ describe "Add attachments" do
   end
 
   it "disables 'add attachment' button if no attachment is selected", :js do
-    proposal = create(:proposal)
+    
     login_as(proposal.requester)
 
     visit proposal_path(proposal)
-    expect(page).to have_selector("input#add_a_file[disabled]")
+    execute_script("$('#add_a_file[disabled]').show()")
+    expect(page).to have_selector("#add_a_file[disabled]")
   end
 
   it "does not have a delete link for another" do
@@ -90,4 +91,8 @@ describe "Add attachments" do
 
   #   expect(dispatcher).to have_received(:deliver_attachment_emails)
   # end
+end
+
+def show_attachment_buttons
+    execute_script("$('input[type=file]').show()")
 end
