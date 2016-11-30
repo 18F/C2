@@ -25,18 +25,6 @@ feature "Requester edits their NCR work order", :js do
     end
   end
 
-  scenario "allows requester to change the expense type", :js do
-    visit edit_ncr_work_order_path(@work_order)
-
-    choose "BA80"
-    fill_in "RWA Number", with: "a1234567"
-    click_on "Update"
-
-    proposal = Proposal.last
-    expect(proposal.approvers.length).to eq(2)
-    expect(proposal.approvers.second.email_address).to eq(Ncr::Mailboxes.ba80_budget.email_address)
-  end
-
   scenario "doesn't change approving list when delegated", :js do
     proposal = Proposal.last
     approval = proposal.individual_steps.first
@@ -49,14 +37,6 @@ feature "Requester edits their NCR work order", :js do
     click_on "Update"
 
     expect(page).to have_content(delegate_user.full_name)
-  end
-
-  scenario "has 'Discard Changes' link", :js do
-    visit edit_ncr_work_order_path(@work_order)
-
-    click_link "Discard Changes"
-
-    expect(page).to have_current_path(proposal_path(ncr_proposal))
   end
 
   scenario "can change approving official email if first approval not done", :js do
