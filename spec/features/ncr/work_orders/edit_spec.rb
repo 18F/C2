@@ -48,8 +48,6 @@ feature "Editing NCR work order" do
       proposal = requester.proposals.last
 
       visit proposal_path(proposal)
-      
-      save_and_open_screenshot
 
       find(".card-for-observers .selectize-input input").native.send_keys( approver.email_address ) #fill the input text
       first(:xpath, ("//div[@data-selectable and contains(., '#{approver.email_address}')]")).click #wait for the input and then click on it
