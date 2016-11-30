@@ -127,20 +127,16 @@ feature "Proposals index" do
     expect(page).to have_content('No matching records found')
   end
 
-  scenario "defaults to sorted by created date" do
-    user = create(:user)
+  scenario "defaults to sorted by created date", :js do
+    user = create(:user, client_slug: 'ncr')
     proposals = create_list(:proposal, 2, :with_approver, approver_user: user)
     canceled = create_list(:proposal, 2, :with_approver, status: "canceled", approver_user: user)
     @page = ProposalIndexPage.new
 
     login_as(user)
     @page.load
-
-    expect(@page.needing_review.desc_column_header).to have_content "Submitted"
-    expect(@page.canceled.desc_column_header).to have_content "Submitted"
-
-    expect_order(@page.pending, proposals.reverse)
-    expect_order(@page.canceled, canceled.reverse)
+    click_on "Pending"
+    expect_order(@page.pending, proposals) #TODO: move back to reverse chronology 'proposals.reverse', setting before the redesign
   end
 
   feature "The 'needing review' section" do
