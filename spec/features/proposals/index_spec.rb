@@ -139,50 +139,6 @@ feature "Proposals index" do
     expect_order(@page.pending, proposals) #TODO: move back to reverse chronology 'proposals.reverse', setting before the redesign
   end
 
-  feature "The 'needing review' section" do
-    context "when there are requests that can be acted on by the user" do
-      scenario "contains those requests" do
-        user = create(:user)
-        proposal = create(:proposal, :with_approver, approver_user: user)
-
-        login_as(user)
-        @page = ProposalIndexPage.new
-        @page.load
-
-        expect(@page.needing_review).to have_content "Purchase Requests Needing Review"
-        expect(@page.needing_review.requests.first.public_id_link.text).to eq proposal.public_id
-      end
-    end
-
-    context "when there are no requests that can be acted on by the user" do
-      scenario "does not exist" do
-        login_as(create(:user))
-        @page = ProposalIndexPage.new
-        @page.load
-
-        expect(@page.needing_review).to_not have_content "Purchase Requests Needing Review"
-        expect(@page.needing_review.requests).to be_empty
-      end
-    end
-  end
-
-  feature "new feature flag" do
-    context "when the user hasn't seen a feature" do
-      scenario "shows an icon when the user hasn't seen the help doc", :js do
-        beta_active = create(:user, :beta_active, client_slug: "ncr")
-
-        login_as(beta_active)
-        visit proposals_path
-        expect(page.find('.new-features-button img')['src']).to have_content('new_feature_icon.svg')
-        click_on "New features"
-
-        visit proposals_path
-        expect(page.find('.new-features-button img')['src']).to have_content('new_feature_icon_none.svg')
-      end
-    end
-  end
-
-
   feature "status field text" do
     context "when the user is an approver" do
       scenario "is correct for the user" do
