@@ -68,12 +68,12 @@ C2::Application.routes.draw do
   resources :scheduled_reports, only: [:create, :update]
 
   namespace :ncr do
-    resources :work_orders, only: [:new]
+    resources :work_orders, only: [:new, :update, :create]
     get "/dashboard" => "dashboard#index"
   end
 
   namespace :gsa18f do
-    resources :procurements, only: [:new]
+    resources :procurements, only: [:new, :update, :create]
     resources :events, only: [:new]
     get "/dashboard" => "dashboard#index"
   end
