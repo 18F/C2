@@ -41,36 +41,6 @@ feature "Requester edits their NCR work order", :js do
     end
   end
 
-  before(:each) do
-    @organization = create(:ncr_organization)
-    @work_order = create(
-      :ba61_ncr_work_order,
-      building_number: Ncr::BUILDING_NUMBERS[0],
-      ncr_organization: @organization,
-      vendor: "test vendor",
-      description: "test"
-    )
-    unless @logged_in_once
-      @work_order.setup_approvals_and_observers
-      login_as(requester)
-      @logged_in_once = true
-    end
-  end
-
-  scenario "doesn't change approving list when delegated", :js do
-    proposal = Proposal.last
-    approval = proposal.individual_steps.first
-    delegate_user = create(:user, email_address: "delegate@example.com")
-    approval.user.add_delegate(delegate_user)
-    approval.update(completer: delegate_user)
-
-    visit edit_ncr_work_order_path(@work_order)
-    fill_in "Description", with: "New Description that shouldn't change the approver list"
-    click_on "Update"
-
-    expect(page).to have_content(delegate_user.full_name)
-  end
-
   scenario "can update other fields if first approval is done", :js do
     requester = create_new_proposal
     proposal = requester.proposals.last
@@ -100,6 +70,20 @@ feature "Requester edits their NCR work order", :js do
   end
 
   scenario "allows the requester to edit the budget-related fields", :js do
+    @organization = create(:ncr_organization)
+    @work_order = create(
+      :ba61_ncr_work_order,
+      building_number: Ncr::BUILDING_NUMBERS[0],
+      ncr_organization: @organization,
+      vendor: "test vendor",
+      description: "test"
+    )
+    unless @logged_in_once
+      @work_order.setup_approvals_and_observers
+      login_as(requester)
+      @logged_in_once = true
+    end
+
     login_as(@work_order.requester)
     visit proposal_path(@work_order.proposal)
 
