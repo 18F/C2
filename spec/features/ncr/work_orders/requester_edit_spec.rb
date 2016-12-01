@@ -40,19 +40,24 @@ feature "Requester edits their NCR work order", :js do
   end
 
   scenario "can change approving official email if first approval not done", :js do
-    visit edit_ncr_work_order_path(@work_order)
+    visit_ncr_request_with_approver
 
-    within(".ncr_work_order_approving_official") do
+    within(".card-for-observers") do
       expect(page).not_to have_css(".disabled")
     end
   end
 
   scenario "has a disabled approving official email field if first approval is done", :js do
+    @work_order = visit_ncr_request_with_approver
+    Capybara.page.driver.browser.resize(940, 3000)
+    save_and_open_screenshot
+
     @work_order.individual_steps.first.complete!
+    visit proposal_path(@work_order)
+    Capybara.page.driver.browser.resize(940, 3000)
+    save_and_open_screenshot
 
-    visit edit_ncr_work_order_path(@work_order)
-
-    within(".ncr_work_order_approving_official") do
+    within(".card-for-observers") do
       expect(page).to have_css(".disabled")
     end
   end
