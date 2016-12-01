@@ -93,15 +93,4 @@ feature "Requester edits their NCR work order", :js do
     expect(@work_order.function_code).to eq("PG123")
     expect(@work_order.soc_code).to eq("789")
   end
-
-  scenario "disables the emergency field", :js do
-    visit edit_ncr_work_order_path(@work_order)
-
-    within(".ncr_work_order_emergency") do
-      expect(page).to have_css(".disabled")
-      checkbox = page.find("input[type=checkbox]")
-      expect(checkbox["class"]).to include("respect-disabled")
-      expect(checkbox["disabled"]).to eq(true)
-    end
-  end
 end
