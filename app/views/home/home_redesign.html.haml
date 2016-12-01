@@ -7,18 +7,17 @@
     = favicon_link_tag
     %meta{"http-equiv" => "content-type", content: "text/html; charset=utf-8"}
     = stylesheet_link_tag "redesign/app"
-    = stylesheet_link_tag "home_redesign"
     = render "layouts/analytics"
     %noscript
   %body.home_redesign
-    .row.full-width-row
+    #header.row.full-width-row
       -# = render "layouts/c2_header_next"
-      - unless ENV["DISABLE_SANDBOX_WARNING"] == "true"
-        .small-12
+      .small-12
+        - unless ENV["DISABLE_SANDBOX_WARNING"] == "true"
           = render partial: "shared/sandbox_warning"
-        - flash_list.each do |key, value|
-          %div{class: "alert alert-box alert-#{key} small-12"}
-            = sanitize value
+      - flash_list.each do |key, value|
+        %div{class: "alert alert-box alert-#{key} small-12"}
+          = sanitize value
       .small-10.medium-6.small-centered.menu
         - if signed_in?
           %ul.primary.fl
@@ -39,7 +38,7 @@
             %a{:href => "/help/new_features"} New Features
           - unless signed_in?
             %li
-              = link_to "Sign in with MyUSA", auth_path
+              = link_to "Sign in with Cloud.gov", auth_url(provider: :cg)
     .row.full-width-row
       %section.small-12.header
         .small-10.medium-6.small-centered

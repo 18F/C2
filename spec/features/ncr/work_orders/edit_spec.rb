@@ -22,6 +22,7 @@ feature "Editing NCR work order" do
       fill_in 'ncr_work_order[description]', with: "New desc content"
       fill_in 'ncr_work_order[rwa_number]', with: 'F0000000'
       fill_in 'ncr_work_order[amount]', with: 3.45
+      select "Not to exceed", from: "ncr_work_order_not_to_exceed"
 
       within(".action-bar-container") do
           click_on "SAVE"
@@ -36,6 +37,7 @@ feature "Editing NCR work order" do
       expect(page).to have_content("BA80")
       expect(page).to have_content("F0000000")
       expect(page).to have_content("New desc content")
+      expect(page).to have_content("Not to exceed")
       expect(page).to have_content("3.45")
     end
   end

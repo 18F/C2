@@ -39,6 +39,8 @@ engines:
     - 5a6ed15b3c21a7acd8338d8fa7a98a63
     - de64cf3a4cb202d07f05cc83b0c67708
     - ac193f2c601eab797ead45097b632186
+    - b3f0319ee7c7f104c6d579b01fe8ebc5 # https://github.com/18F/C2/pull/1624
+
 ratings:
   paths:
   - app/**

@@ -17,6 +17,10 @@ The application is running on Cloud.gov's server infrustructure.
 
 [Architecture flowchart is accessible in Mermaid](application_architecture.mmd).
 
+### Hardware
+
+The C2 application, hosted on cloud.gov, is running on a single server instance with 1024 MB of memory. There is a seperate identical server instance running a worker process to handle delayed_job tasks. The two instances are bound to a RDB shared PostgreSQL database and ElasticSearch instance using cloud.gov's service binding methods.
+
 ## Approval Chains
 
 The order and requirements for a proposal to be "approved" are defined by an "approval chain". This is a hierarchical tree of `Approval` objects, with currently fall into three types:
@@ -29,16 +33,22 @@ The `Parallel` node has an additional configuration (`min_children_needed`), whi
 
 The approval chains are designed so that the `Proposal` needs to only communicate with the _root_ of the chain. See the approval specs for examples.
 
+## Emails
+
+C2's main interface for most users is email. As a result, there are many cases where you may need to edit emails. The following will provide some basic understanding of the email logic to date.
+
+[More information about them here](emails.md).
+
 ## User accounts
 
 User records are created in C2 one of two ways:
 
-* Via MyUSA, where they give C2 permission to use their email address via OAuth
+* Via Cloud.gov, where they give C2 permission to use their email address via OAuth
 * By being added as an approver or observer on a Proposal
 
 They can then log in one of two ways:
 
-* Via OAuth with MyUSA
+* Via OAuth with Cloud.gov
 * By clicking a link in a notification email, which contain a short-lived one-time-use token
 
 ### Roles
@@ -83,7 +93,7 @@ https://hub.18f.gov/request-supplies/
 
 The NCR use case was built around GSA service centers (paint shops, landscapers, etc.) needing approvals for their superiors and various budget officials for credit card purchases. They use the ["Serial" workflow](#approval-chains) where the steps include:
 
-1. The requester logs in via MyUSA.
+1. The requester logs in via Cloud.gov.
 1. The requester submits a new purchase request via the form at `/ncr/work_orders/new`.
 1. Their "approving officer" (the "AO" – their supervisor) receives an email notification with the request.
 1. If the AO approves, it goes to one or two other budget office approvers, depending on the type of request.

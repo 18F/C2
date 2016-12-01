@@ -95,3 +95,152 @@ vcap@someinstance:~$ exit
 All application logs are stored via https://logs.cloud.gov/.
 
 Logs are searchable via the Kibana UI, and are retained for 180 days.
+
+
+
+### Setting environment variables on staging or production
+
+Cloud.gov allows you to set environment variables manually, but they are wiped
+out by a zero-downtime deploy. To get around this issue, we are accessing
+environment variables via `Credentials` classes locally.
+
+The classes pick up environment variables set in the shell by the
+`UserProvidedService` module.
+
+If you're not using Cloud Foundry to deploy, just set the environment variables
+directly in your system.
+
+Steps to set new environment variables:
+
+1. Create a credentials class for accessing the value. Example:
+
+  ```ruby
+  # app/credentials/github_credentials.rb
+
+  class GithubCredentials
+
+    def self.client_id
+      ENV['C2_GITHUB_CLIENT_ID']
+    end
+
+    def self.secret
+      ENV['C2_GITHUB_SECRET']
+    end
+  end
+  ```
+
+1. Access the value with the class. Example:
+
+  ```ruby
+  Rails.application.config.middleware.use OmniAuth::Builder do
+    provider(
+      :github,
+      GithubCredentials.client_id,
+      GithubCredentials.secret,
+      scope: "user:email"
+    )
+  end
+  ```
+
+1. If the environment variable is needed to run the application locally, add the
+  environment variable to your local `.env` file for local usage. Also add it
+  to the `.env.example` file as documentation for other developers.
+
+  ```
+  # .env
+
+  C2_GITHUB_CLIENT_ID=super_secret_key
+  C2_GITHUB_SECRET=super_secret_secret
+  ```
+
+  ```
+  # .env.example
+
+  C2_GITHUB_CLIENT_ID=super_secret_key
+  C2_GITHUB_SECRET=super_secret_secret
+  ```
+
+1. Create a [user-provided service](https://docs.cloudfoundry.org/devguide/services/user-provided.html):
+
+  ```bash
+  $ cf cups c2-dev-ups-github -p "client_id, secret"
+  ```
+
+  The above command will interactively prompt you for your GitHub application
+  keys. **Important**: do not put quotes around input values. Cloud Foundry will
+  do this for you, so if you add a value with quotes it will have double quotes.
+
+  The naming convention strings together and dasherizes the user-provided
+  service name and the parameter names to produce environment variables. In the
+  example above, we are setting values for `C2_GITHUB_CLIENT_ID` and
+  `C2_GITHUB_SECRET` env vars ('c2-dev-ups-github' + 'client_id'
+  and 'c2-dev-ups-github' + 'secret')
+
+1. Add the service to the manifests:
+
+```
+# manifest.yml
+
+services:
+- c2-dev-ups-github
+```
+
+1. If you want to bind your service to the app before deploying, you can do so
+manually.
+
+```bash
+$ cf bind-service c2-staging c2-staging-ups-github
+```
+
+1. The service keys will automatically be bound to your app and translated into
+   environment variables on deploy (which happens via Travis CI).
+
+1. If you want to update the service parameter values, you can update the
+   user-provided service:
+
+  ```bash
+  $ cf uups c2-staging-ups-github -p 'client_id, secret'
+  ```
+
+  The above command will interactively prompt you for your GitHub application
+  keys. **Important**: when updating keys and/or values for a user-provided service,
+  you must update *all* keys for that service. On update, Cloud Foundry removes
+  all previous keys and values from the user-provided service being updated.
+
+### To deploy a new instance of the app
+
+Create the app (it's ok if the deploy fails):
+
+```
+$ cf push
+```
+
+Create the database service:
+
+```
+$ cf create-service rds shared-psql micropurchase-psql
+```
+
+Set up the database:
+
+```
+$ cf-ssh -f manifest.yml
+$~ bundle exec rake db:migrate
+```
+
+Restage the app:
+
+```
+cf restage micropurchase
+```
+
+### Services
+
+Cloud.gov offers multiple services to allow your application to expand its functionality.
+To list all the services and plans available to your organization you can run cf marketplace from your command line.
+
+To view the C2 services, you can run `cf services` from the command line. Each service has a process, configuration option, route and status. Using the `manifest.yml` file, services can be bound to process instances on deploys. Services can also be manually bound to server instances using:
+
+`cf bind-service APP_NAME SERVICE_INSTANCE [-c PARAMETERS_AS_JSON]`
+
+More details can be found using `cf help`

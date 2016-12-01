@@ -154,6 +154,8 @@ AttachmentCardController = (function(){
       },
       contentType: false,
       processData: false
+    }).done(function(){
+      $('body').find('form.request-details-form').submit();
     });
   }
 
