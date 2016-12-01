@@ -25,7 +25,6 @@ describe "Completing a proposal" do
     first_step = proposal.individual_steps.first
     first_approver = proposal.approvers.first
     first_step.update_attributes!(status: "foobar")
-    
     login_as(first_approver)
     visit proposal_path(proposal)
     page.save_screenshot('../screen.png', full: true)
