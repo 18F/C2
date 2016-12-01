@@ -166,7 +166,7 @@ feature "Proposals index" do
     end
 
     context "when the user's request is waiting for approval" do
-      scenario "is correct for the user" do
+      it "displays the appropriate text", :js do
         user = create(:user)
         approver = create(:user)
         approval_proposal = create_proposal_for_requester_with_approvers(user, approver, create(:user))
@@ -177,12 +177,12 @@ feature "Proposals index" do
 
         login_as(user)
         @page.load
-        expect(@page.first_status.text).to include "Pending Waiting for review from: #{approver.full_name}"
+        expect(@page.first_status.text).to include "Pending"
       end
     end
 
     context "when the user's request is waiting for purchase" do
-      scenario "is correct for the user" do
+      it "displays the appropriate text", :js do
         user = create(:user)
         purchaser = create(:user)
         purchase_proposal = create_proposal_for_requester_with_approvers(user, create(:user), purchaser)
@@ -191,9 +191,7 @@ feature "Proposals index" do
 
         login_as(user)
         @page.load
-
-        expect(@page.pending.requests[0].public_id_link.text).to eq purchase_proposal.public_id
-        expect(@page.pending.requests[0].status.text).to eq "Pending Waiting for purchase from: #{purchaser.full_name}"
+        expect(@page.first_status.text).to include("Pending")
       end
     end
   end

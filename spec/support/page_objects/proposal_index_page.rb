@@ -14,7 +14,7 @@ class ProposalIndexPage < SitePrism::Page
   set_url "/proposals"
   set_url_matcher(%r{\/proposals\/?})
 
-  section :first_status, RequestTableSection, ".tabular-data td.status"
+  section :first_status, RequestTableSection, ".ellipsis"
   section :pending, RequestTableSection, ".tabular-data"
   section :completed, RequestTableSection, "#proposals-completed"
   section :canceled, RequestTableSection, "#proposals-canceled"
