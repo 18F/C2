@@ -32,31 +32,19 @@ describe "Add attachments" do
     expect(page).not_to have_button("Delete")
   end
 
-  it "saves attachments submitted via the webform" do
-    proposal = create(:proposal)
-    login_as(proposal.requester)
-
-    visit proposal_path(proposal)
-    page.attach_file("attachment[file]", "#{Rails.root}/app/assets/images/bg_completed_status.gif")
-    click_on "Attach a File"
-
-    expect(proposal.attachments.length).to eq 1
-    expect(proposal.attachments.last.file_file_name).to eq "bg_completed_status.gif"
-  end
-
   it "saves attachments submitted via the webform with js", :js, js_errors: false do
     dispatcher = double
     allow(dispatcher).to receive(:deliver_attachment_emails)
     allow(Dispatcher).to receive(:new).with(proposal).and_return(dispatcher)
 
-    work_order = create(:ncr_work_order, :with_beta_requester)
-    proposal = work_order.proposal
     login_as(proposal.requester)
 
     visit proposal_path(proposal)
     page.execute_script("$('#attachment_file').addClass('show-attachment-file');")
     page.attach_file("attachment[file]", "#{Rails.root}/app/assets/images/bg_completed_status.gif", visible: false)
+    
     wait_for_ajax
+    page.save_screenshot('../screen.png', full: true)
     within(".attachment-list") do
       expect(page).to have_content("bg_completed_status.gif")
     end
