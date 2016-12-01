@@ -81,16 +81,29 @@ feature "Requester edits their NCR work order", :js do
   end
 
   scenario "allows the requester to edit the budget-related fields", :js do
-    visit "/ncr/work_orders/#{@work_order.id}/edit"
+    login_as(@work_order.requester)
+    visit proposal_path(@work_order.proposal)
 
-    fill_in "CL number", with: "CL1234567"
-    fill_in "Function code", with: "PG123"
-    fill_in "Object field / SOC code", with: "789"
-    click_on "Update"
+    click_on "MODIFY"
+
+    fill_in 'ncr_work_order[soc_code]', with: "789"
+    fill_in 'ncr_work_order[function_code]', with: "PG123"
+    fill_in 'ncr_work_order[cl_number]', with: 'CL0000000'
+    fill_in 'ncr_work_order[amount]', with: 3.45
+    select "Not to exceed", from: "ncr_work_order_not_to_exceed"
+
+    within(".action-bar-container") do
+      click_on "SAVE"
+      sleep(1)
+    end
+    within("#card-for-modal") do
+      click_on "SAVE"
+      sleep(1)
+    end
 
     @work_order.reload
-    expect(@work_order.cl_number).to eq("CL1234567")
-    expect(@work_order.function_code).to eq("PG123")
-    expect(@work_order.soc_code).to eq("789")
+    expect(page).to have_content("PG123")
+    expect(page).to have_content("CL0000000")
+    expect(page).to have_content("789")
   end
 end
