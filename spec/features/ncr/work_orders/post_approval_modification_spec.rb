@@ -7,9 +7,12 @@ feature "post-approval modification" do
     fully_complete(work_order.proposal)
 
     login_as(work_order.requester)
-    visit "/ncr/work_orders/#{work_order.id}/edit"
+    visit "/proposals/#{work_order.proposal.id}"
+    click_on "Modify"
     fill_in "Amount", with: work_order.amount - 1
-    click_on "Update"
+    save_and_open_page
+    click_on "SAVE CHANGES"
+    click_on "SAVE"
 
     work_order.reload
     expect(work_order.status).to eq("completed")
@@ -21,9 +24,11 @@ feature "post-approval modification" do
     fully_complete(work_order.proposal)
 
     login_as(work_order.requester)
-    visit "/ncr/work_orders/#{work_order.id}/edit"
+    visit "/proposals/#{work_order.proposal.id}"
+    click_on "Modify"
     fill_in "Amount", with: work_order.amount + 1
-    click_on "Update"
+    click_on "SAVE CHANGES"
+    click_on "SAVE"
 
     expect_budget_approvals_restarted(work_order)
     expect_actionable_step_is_budget_approver(work_order)
@@ -60,14 +65,14 @@ feature "post-approval modification" do
     create(:user_delegate, assigner: work_order.budget_approvers.last, assignee: budget_approver_delegate)
 
     login_as(budget_approver_delegate)
-    visit "/ncr/work_orders/#{work_order.id}/edit"
+    visit "/proposals/#{work_order.proposal.id}"
+    click_on "Modify"
     fill_in "Amount", with: work_order.amount + 1
-    click_on "Update"
-
+    click_on "SAVE"
+    click_on "SAVE"
     work_order.reload
 
     expect(page.status_code).to eq(200)
-    expect(page).to have_content("Your changes have been saved and the request has been modified.")
     expect(work_order.status).to eq("completed")
     expect(work_order.proposal.root_step.status).to eq("completed")
     expect(approval_statuses(work_order)).to eq(%w(
@@ -76,7 +81,7 @@ feature "post-approval modification" do
                                                 ))
   end
 
-  scenario "shows flash warning, only on edit page", :js do
+  scenario "shows flash warning, only on edit page" do
     work_order = create(:ncr_work_order)
     work_order.setup_approvals_and_observers
     fully_complete(work_order.proposal)
@@ -84,12 +89,9 @@ feature "post-approval modification" do
     login_as(work_order.requester)
     visit proposal_path(work_order.proposal)
     click_on "MODIFY"
-    sleep(1)
-    page.save_screenshot('../screen.png', full: true)
-    
-    expect(page).to have_content("Wait! You're about to change an approved request. Your changes will be logged and sent to approvers, and your action may require reapproval of the request.")
-    click_on "Discard Changes"
-    expect(page).to_not have_content("You are about to modify a fully approved request")
+    fill_in "Amount", with: work_order.amount + 1
+    click_on "SAVE"
+    expect(page).to have_content("Click Save to update your request and notify 3 participants, or click Cancel to discard your changes.")
   end
 
   scenario "shows modal warning on new details page", :js do
@@ -97,7 +99,7 @@ feature "post-approval modification" do
     work_order.setup_approvals_and_observers
     proposal = work_order.proposal
     fully_complete(proposal)
-    
+
     login_as(proposal.requester)
     visit proposal_path(proposal)
     click_on "Modify"
@@ -111,7 +113,7 @@ feature "post-approval modification" do
     work_order.setup_approvals_and_observers
     proposal = work_order.proposal
     fully_complete(proposal)
-    
+
     login_as(proposal.requester)
     visit proposal_path(proposal)
     new_amount = work_order.amount + 1
