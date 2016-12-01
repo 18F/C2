@@ -153,7 +153,7 @@ feature "Proposals index" do
     end
 
     context "when the user is a purchaser" do
-      scenario "is correct for the user" do
+      it "is displays the appropriate text", :js do
         user = create(:user)
         purchase_proposal = create_proposal_with_approvers(create(:user), user)
         purchase_proposal.individual_steps.first.complete!
@@ -161,9 +161,7 @@ feature "Proposals index" do
 
         login_as(user)
         @page.load
-
-        expect(@page.needing_review.requests[0].public_id_link.text).to eq purchase_proposal.public_id
-        expect(@page.needing_review.requests[0].status.text).to eq "Please purchase"
+        expect(@page.first_status.text).to include "Please purchase"
       end
     end
 
