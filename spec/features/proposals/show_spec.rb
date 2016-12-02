@@ -4,14 +4,6 @@ describe 'View a proposal' do
   let(:user) { create(:user) }
   let(:proposal) { create(:proposal, requester: user) }
 
-  it "doesn't show the link to the history for normal users" do
-    login_as(user)
-
-    visit proposal_path(proposal)
-
-    expect(page).to_not have_link("View history")
-  end
-
   it "displays a warning message when editing a fully-approved proposal", :js do
     work_order = create(:ncr_work_order, :with_approvers)
     requester = work_order.proposal.requester
