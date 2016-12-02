@@ -27,7 +27,7 @@ describe 'Linear approvals' do
   end
 
   it "shows the approver role next to each approver", :js do
-    proposal = create(:gsa18f_procurement, :with_steps)
+    proposal = create(:gsa18f_procurement, :with_steps).proposal
     approver = proposal.individual_steps.first.user
     login_as(approver)
     @proposal_page = ProposalPage.new
