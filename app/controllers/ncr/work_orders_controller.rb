@@ -9,10 +9,11 @@ module Ncr
     end
 
     def edit
+
       if proposal.completed?
         flash.now[:warning] = "Wait! You're about to change an approved request. Your changes will be logged and sent to approvers, and your action may require reapproval of the request."
       end
-
+      redirect_to proposal_path(proposal)
       super
     end
 
