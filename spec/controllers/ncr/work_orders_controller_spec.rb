@@ -32,29 +32,6 @@ describe Ncr::WorkOrdersController do
     end
   end
 
-  describe "#show in edit" do
-    let(:work_order) { create(:ncr_work_order, :with_approvers) }
-    let(:requester) { work_order.proposal.requester }
-    before do
-      login_as(requester)
-    end
-
-    it "does not display a message when the proposal is not fully approved" do
-      get :edit, id: work_order.proposal.id
-      expect(flash[:warning]).not_to be_present
-    end
-
-    it "does not explode if editing an emergency" do
-      work_order = create(
-        :ncr_work_order,
-        :is_emergency,
-        requester: requester
-      )
-
-      get :edit, id: work_order.proposal.id
-    end
-  end
-
   describe "#update" do
     it "does not modify the work order when there is a bad edit" do
       work_order = create(:ncr_work_order)
