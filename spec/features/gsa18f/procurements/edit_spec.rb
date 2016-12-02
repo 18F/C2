@@ -7,13 +7,14 @@ feature "Edit a Gsa18F procurement" do
         proposal = procurement.proposal
 
         login_as(requester)
-        visit edit_gsa18f_procurement_path(procurement)
+        visit proposal_path(procurement.proposal)
 
-        fill_in "Link to product", with: "http://www.submitted.com"
-        fill_in "Cost per unit", with: 123.45
-        fill_in "Quantity", with: 1
-        fill_in "Product name and description", with: "resubmitted"
-        click_on "Update"
+        click_on "MODIFY"
+        find("textarea#gsa18f_procurement_link_to_product").set "http://www.submitted.com"
+        find("#gsa18f_procurement_cost_per_unit").set "http://www.submitted.com"
+        find("#gsa18f_procurement_quantity").set 1
+        find("#gsa18f_procurement_product_name_and_description").set "resubmitted"
+        click_on "SAVE CHANGES"
 
         expect(current_path).to eq(proposal_path(proposal))
         expect(page).to have_content("http://www.submitted.com")
@@ -34,15 +35,16 @@ feature "Edit a Gsa18F procurement" do
       expect(page).to have_content("Modification canceled. No changes were made.")
     end
 
-    it "clicks discard changes link" do
+    it "clicks cancel changes link" do
       requester = create(:user, client_slug: "gsa18f")
       procurement = create(:gsa18f_procurement, :with_steps, requester: requester, urgency: 10)
       proposal = procurement.proposal
 
       login_as(requester)
-      visit edit_gsa18f_procurement_path(procurement)
+      visit proposal_path(procurement.proposal)
 
-      click_on "Discard Changes"
+      click_on "MODIFY"
+      page.find("div.save_confirm-modal-content .cancel-cancel-link").click
 
       expect(current_path).to eq(proposal_path(proposal))
     end
