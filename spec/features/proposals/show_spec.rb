@@ -1,15 +1,8 @@
 describe 'View a proposal' do
+  include ProposalSpecHelper
+  
   let(:user) { create(:user) }
   let(:proposal) { create(:proposal, requester: user) }
-
-  it "shows the link to the history for admins" do
-    user.add_role('admin')
-    login_as(user)
-
-    visit proposal_path(proposal)
-
-    expect(page).to have_link("View history")
-  end
 
   it "doesn't show the link to the history for normal users" do
     login_as(user)
@@ -17,5 +10,14 @@ describe 'View a proposal' do
     visit proposal_path(proposal)
 
     expect(page).to_not have_link("View history")
+  end
+
+  it "displays a warning message when editing a fully-approved proposal", :js do
+    work_order = create(:ncr_work_order, :with_approvers)
+    requester = work_order.proposal.requester
+    login_as(requester)
+    fully_complete(work_order.proposal)
+    visit proposal_path(work_order.proposal)
+    expect(page).to have_content("Wait! You're about to change an approved request. Your changes will be logged and sent to approvers, and your action may require reapproval of the request.")
   end
 end
