@@ -33,17 +33,20 @@ describe "Add attachments" do
   end
 
   it "saves attachments submitted via the webform with js", :js, js_errors: false do
+    new_proposal = create(:ncr_work_order, :with_approvers).proposal
     dispatcher = double
     allow(dispatcher).to receive(:deliver_attachment_emails)
-    allow(Dispatcher).to receive(:new).with(proposal).and_return(dispatcher)
+    allow(Dispatcher).to receive(:new).with(new_proposal).and_return(dispatcher)
 
-    login_as(proposal.requester)
+    login_as(new_proposal.requester)
 
-    visit proposal_path(proposal)
+    visit proposal_path(new_proposal)
+
     page.execute_script("$('#attachment_file').addClass('show-attachment-file');")
     page.attach_file("attachment[file]", "#{Rails.root}/app/assets/images/bg_completed_status.gif", visible: false)
     
-    wait_for_ajax
+    # wait_for_ajax
+    sleep(2)
     page.save_screenshot('../screen.png', full: true)
     within(".attachment-list") do
       expect(page).to have_content("bg_completed_status.gif")
