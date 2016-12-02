@@ -10,7 +10,6 @@ feature "post-approval modification" do
     visit "/proposals/#{work_order.proposal.id}"
     click_on "Modify"
     fill_in "Amount", with: work_order.amount - 1
-    save_and_open_page
     click_on "SAVE CHANGES"
     click_on "SAVE"
 
@@ -18,7 +17,10 @@ feature "post-approval modification" do
     expect(work_order.status).to eq("completed")
   end
 
-  scenario "can do end-to-end re-approval", :email do
+  scenario "can do end-to-end re-approval", :js do
+    orig_value = ActionMailer::Base.perform_deliveries
+    ActionMailer::Base.perform_deliveries = true
+
     work_order = create(:ncr_work_order)
     work_order.setup_approvals_and_observers
     fully_complete(work_order.proposal)
@@ -27,17 +29,20 @@ feature "post-approval modification" do
     visit "/proposals/#{work_order.proposal.id}"
     click_on "Modify"
     fill_in "Amount", with: work_order.amount + 1
-    click_on "SAVE CHANGES"
-    click_on "SAVE"
+
+    within(".action-bar-container") do
+      click_on "SAVE"
+      sleep(1)
+    end
+    within("#card-for-modal") do
+      click_on "SAVE"
+      sleep(1)
+    end
+
+    visit "/proposals/#{work_order.proposal.id}"
 
     expect_budget_approvals_restarted(work_order)
     expect_actionable_step_is_budget_approver(work_order)
-
-    restart_comment = I18n.t(
-      "activerecord.attributes.proposal.user_restart_comment",
-      user: work_order.requester.full_name
-    ).delete("`")
-    expect(page).to have_content(restart_comment)
 
     login_as(work_order.budget_approvers.first)
     visit "/proposals/#{work_order.proposal.id}"
@@ -50,11 +55,11 @@ feature "post-approval modification" do
                                                   completed
                                                   completed
                                                 ))
-    completed_comment = I18n.t(
-      "activerecord.attributes.proposal.user_completed_comment",
-      user: work_order.budget_approvers.first.full_name
-    ).delete("`")
+    completed_comment = "#{work_order.budget_approvers.first.email_address}, Approver Completed"
     expect(page).to have_content(completed_comment)
+
+    ActionMailer::Base.deliveries.clear
+    ActionMailer::Base.perform_deliveries = orig_value
   end
 
   scenario "budget approver does not trigger re-approval" do
