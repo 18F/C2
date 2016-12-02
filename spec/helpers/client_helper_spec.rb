@@ -34,7 +34,6 @@ describe ClientHelper do
   end
 
   describe "#modify_client_button" do
-
     it "returns empty string if proposal has no client data" do
       proposal = build(:proposal, client_data: nil)
 
