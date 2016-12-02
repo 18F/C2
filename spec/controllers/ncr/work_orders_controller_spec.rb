@@ -44,12 +44,6 @@ describe Ncr::WorkOrdersController do
       expect(flash[:warning]).not_to be_present
     end
 
-    it "displays a warning message when editing a fully-approved proposal" do
-      fully_complete(work_order.proposal)
-      get :edit, id: work_order.proposal.id
-      expect(flash[:warning]).to be_present
-    end
-
     it "does not explode if editing an emergency" do
       work_order = create(
         :ncr_work_order,
