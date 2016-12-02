@@ -95,6 +95,7 @@ group :test do
   gem "fivemat"
   gem "fuubar"
   gem "poltergeist", "~> 1.11.0"
+  gem 'phantomjs', :require => 'phantomjs/poltergeist'
   gem "rspec_junit_formatter"
   gem "shoulda-matchers"
   gem "site_prism"

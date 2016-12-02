@@ -355,6 +355,7 @@ GEM
       peek
       pg
     pg (0.18.4)
+    phantomjs (2.1.1.0)
     poltergeist (1.11.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
@@ -594,6 +595,7 @@ DEPENDENCIES
   peek-performance_bar
   peek-pg
   pg (~> 0.18.4)
+  phantomjs
   poltergeist (~> 1.11.0)
   pry-rails
   puma
