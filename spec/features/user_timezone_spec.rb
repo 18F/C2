@@ -47,6 +47,6 @@ feature "timezone" do
   end
 
   def proposal_submitted_at(proposal)
-    proposal.created_at.in_time_zone.strftime("%b %-d, %Y at %l:%M%P")
+    proposal.created_at.in_time_zone.strftime("%b %-d, %Y at %l:%M%P").sub("  ", " ")
   end
 end

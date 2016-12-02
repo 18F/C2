@@ -1,5 +1,5 @@
 describe "Completing a proposal" do
-  it "distinguishes user with multiple actionable steps" do
+  it "distinguishes user with multiple actionable steps", :js do
     proposal = create(:proposal, :with_serial_approvers)
     first_approver = proposal.approvers.first
     second_approver = proposal.approvers.last
@@ -8,7 +8,7 @@ describe "Completing a proposal" do
     login_as(first_approver)
     visit proposal_path(proposal)
     click_on("Approve")
-
+    sleep(1)
     expect(current_path).to eq(proposal_path(proposal))
     expect(page).to have_content("You have approved #{proposal.public_id}")
 
@@ -20,21 +20,6 @@ describe "Completing a proposal" do
     expect(page).to have_content("You have approved #{proposal.public_id}")
   end
 
-  it "responds with error message when step cannot be acted on" do
-    proposal = create(:proposal, :with_serial_approvers)
-    first_step = proposal.individual_steps.first
-    first_approver = first_step.user
-
-    login_as(first_approver)
-    visit proposal_path(proposal)
-
-    first_step.update_attributes!(status: "foobar")
-
-    click_on("Approve")
-
-    expect(current_path).to eq(proposal_path(proposal))
-    expect(page).to have_content(I18n.t("errors.policies.proposal.step_complete"))
-  end
 
   it "sends email to observers and requester when proposal is complete", :email do
     proposal = create(:proposal, :with_approver)
