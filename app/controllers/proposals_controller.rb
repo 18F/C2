@@ -14,7 +14,7 @@ class ProposalsController < ApplicationController
     @proposal = proposal.decorate
     if proposal.completed?
       flash_now = FlashWithNow.new
-      warning =  "Wait! You're about to change an approved request. Your changes will be logged and sent to approvers, and your action may require reapproval of the request."
+      warning = "Wait! You're about to change an approved request. Your changes will be logged and sent to approvers, and your action may require reapproval of the request."
       flash_now.show(flash, "warning", warning)
     end
     show_next
