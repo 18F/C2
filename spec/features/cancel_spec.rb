@@ -64,7 +64,7 @@ describe "Canceling a request" do
 
       cancel_proposal(proposal)
 
-      expect(current_path).to eq(proposal_path(proposal))
+      expect(current_path).to eq(proposals_path)
     end
 
     it "allows actionable step delegate to cancel", :js do
@@ -75,7 +75,7 @@ describe "Canceling a request" do
 
       cancel_proposal(proposal)
 
-      expect(current_path).to eq(proposal_path(proposal))
+      expect(current_path).to eq(proposals_path)
     end
 
     it "disallows non-actionable step completer to cancel" do
@@ -149,8 +149,8 @@ describe "Canceling a request" do
 
       cancel_proposal(proposal)
 
-      expect(current_path).to eq("/proposals/#{proposal.id}")
-      expect(page).to have_content("canceled")
+      expect(current_path).to eq(proposals_path)
+      expect(page).to have_content("Canceled")
       expect(proposal.reload.status).to eq("canceled")
       expect(proposal.reload.comments.last.comment_text).to eq("Request canceled with comments: This is a good reason for the cancelation.")
     end
