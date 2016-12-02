@@ -5,10 +5,10 @@ feature "Testing with PhantomJS" do
     visit new_ncr_work_order_path
     fill_in "Project title", with: "buying stuff"
     choose "BA60"
-    find("input[aria-label='Building number']").native.send_keys("BillDing")
-    find("input[aria-label='Vendor']").native.send_keys("ACME")
+    fill_in_selectized("ncr_work_order_building_number", "BillDing")
+    fill_in_selectized("ncr_work_order_vendor", "ACME")
     fill_in "Amount", with: "123"
-    click_on "Submit for approval"
+    click_on "SUBMIT"
     # if validation worked, the path would stay at new_ncr_work_order_path
     expect(current_path).to eq(ncr_work_orders_path)
   end

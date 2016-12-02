@@ -32,7 +32,7 @@ describe Ncr::WorkOrdersController do
     end
   end
 
-  describe "#edit" do
+  describe "#show in edit" do
     let(:work_order) { create(:ncr_work_order, :with_approvers) }
     let(:requester) { work_order.proposal.requester }
     before do
@@ -40,14 +40,8 @@ describe Ncr::WorkOrdersController do
     end
 
     it "does not display a message when the proposal is not fully approved" do
-      get :edit, id: work_order.id
+      get :edit, id: work_order.proposal.id
       expect(flash[:warning]).not_to be_present
-    end
-
-    it "displays a warning message when editing a fully-approved proposal" do
-      fully_complete(work_order.proposal)
-      get :edit, id: work_order.id
-      expect(flash[:warning]).to be_present
     end
 
     it "does not explode if editing an emergency" do
@@ -57,7 +51,7 @@ describe Ncr::WorkOrdersController do
         requester: requester
       )
 
-      get :edit, id: work_order.id
+      get :edit, id: work_order.proposal.id
     end
   end
 
