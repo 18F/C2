@@ -33,6 +33,7 @@ class ClientDataController < ApplicationController
   end
 
   def edit
+    redirect_to proposal_path(proposal)
   end
 
   def update
