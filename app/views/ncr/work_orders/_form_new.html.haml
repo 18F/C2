@@ -2,6 +2,8 @@
 - content_for :title, "NCR Request"
 - t_slug = "decorators." + "ncr" + "/work_order."
 
+- total_tooltip = "$3,500 for supplies<br>$2,500 for services<br>$2,000 for construction".html_safe
+
 .column{ id: "project_title" + '-wrapper'}
   .detail-wrapper.row{ class: "project_title-wrapper" }
     .detail-edit.column
@@ -101,6 +103,7 @@
     .row
       %label.detail-element.required
         = t(t_slug + "total")
+        %span#ncr_work_order_amount_label.hint--bottom-left.hint--rounded.hint--inline.hint--bounce.hint--medium.fr{"aria-label" => total_tooltip} ?
 .column{ id: "not_to_exceed" + '-wrapper'}
   .row
     .column.medium-5
