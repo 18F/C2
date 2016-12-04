@@ -65,9 +65,7 @@ feature "Creating an NCR work order", :js do
       fill_in_selectized("ncr_work_order_approving_official", approver.email_address)
       fill_in_selectized("ncr_work_order_ncr_organization", organization.code_and_name)
 
-      page.execute_script("$('#ncr_work_order_amount_label').click()")
-      Capybara.page.driver.browser.resize(1200,3000)
-      save_and_open_screenshot
+      page.execute_script("$('#ncr_work_order_amount_label').append($('#ncr_work_order_amount_label').attr('aria-label'))")
 
       expect(page).to have_content("$3,500 for supplies")
       expect(page).to have_content("$2,500 for services")
