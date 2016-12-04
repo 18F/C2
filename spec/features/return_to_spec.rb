@@ -36,7 +36,7 @@ describe "the return_to url option", elasticsearch: true do
 
   it "persists the original request URL over login and redirects after" do
     user = create(:user, client_slug: "ncr")
-    proposal = create(:ncr_work_order, requester: user)
+    proposal = create(:ncr_work_order, requester: user).proposal
 
     visit "/proposals/#{proposal.id}"
     expect(current_path).to eq("/")
