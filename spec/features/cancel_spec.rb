@@ -194,7 +194,6 @@ describe "Canceling a request" do
     sleep(2)
     fill_in "reason_input", with: "This is a good reason for the cancelation."
     click_on("YES, CANCEL")
-    save_and_open_screenshot
   end
 
   def expect_one_email_sent_to(user)
