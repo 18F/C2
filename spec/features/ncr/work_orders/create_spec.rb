@@ -37,7 +37,7 @@ feature "Creating an NCR work order", :js do
       visit new_ncr_work_order_path
       fill_in "Project title", with: "test"
       choose "BA61"
-      
+
       fill_in_selectized("ncr_work_order_vendor", "ACME")
       fill_in 'Amount', with: 123.45
       click_on "SUBMIT"
@@ -72,14 +72,14 @@ feature "Creating an NCR work order", :js do
       expect(page).to have_content("$2,000 for construction")
     end
 
-    scenario "shows tooltip for direct pay field" do
+    scenario "shows tooltip for direct pay field", :js do
       requester = create(:user, client_slug: "ncr")
 
       login_as(requester)
       visit new_ncr_work_order_path
 
-      page.find("a", text: "direct pay").trigger(:mouseover)
-
+      page.find("#direct_pay-wrapper #ncr_direct_pay_label", text: "?").hover
+      save_and_open_screenshot
       expect(page).to have_content(
         I18n.t("helpers.popover.direct_pay.content")
       )
