@@ -51,9 +51,7 @@ class AttachmentsController < ApplicationController
   end
 
   def attachments_params
-    if params.permit(attachment: [:file])[:attachment]
-      params.permit(attachment: [:file])[:attachment].merge(user: current_user)
-    end
+    params.permit(attachment: [:file])[:attachment]&.merge(user: current_user)
   end
 
   def auth_errors(exception)
