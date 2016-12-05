@@ -64,7 +64,7 @@ describe "Canceling a request" do
 
       cancel_proposal(proposal)
 
-      expect(current_path).to eq(proposals_path)
+      expect(page).to_not have_content("Request status canceled")
     end
 
     it "allows actionable step delegate to cancel", :js do
@@ -75,7 +75,7 @@ describe "Canceling a request" do
 
       cancel_proposal(proposal)
 
-      expect(current_path).to eq(proposals_path)
+      expect(page).to_not have_content("Request status canceled")
     end
 
     it "disallows non-actionable step completer to cancel" do
@@ -149,7 +149,7 @@ describe "Canceling a request" do
 
       cancel_proposal(proposal)
 
-      expect(current_path).to eq(proposals_path)
+      expect(page).to_not have_content("Request status canceled")
       expect(page).to have_content("Canceled")
       expect(proposal.reload.status).to eq("canceled")
       expect(proposal.reload.comments.last.comment_text).to eq("Request canceled with comments: This is a good reason for the cancelation.")
@@ -194,6 +194,7 @@ describe "Canceling a request" do
     sleep(2)
     fill_in "reason_input", with: "This is a good reason for the cancelation."
     click_on("YES, CANCEL")
+    save_and_open_screenshot
   end
 
   def expect_one_email_sent_to(user)
