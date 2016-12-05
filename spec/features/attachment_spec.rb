@@ -6,13 +6,13 @@ describe "Add attachments" do
   end
 
   before do
-    login_as(proposal.requester)
     stub_request(:put, /.*c2-prod.s3.amazonaws.com.*/)
     stub_request(:head, /.*c2-prod.s3.amazonaws.com.*/)
     stub_request(:delete, /.*c2-prod.s3.amazonaws.com.*/)
   end
 
   it "is visible on a proposal" do
+    login_as(proposal.requester)
     visit proposal_path(proposal)
     expect(page).to have_content(attachment.file_file_name)
   end
@@ -33,7 +33,7 @@ describe "Add attachments" do
   end
 
   it "saves attachments submitted via the webform with js", :js, js_errors: false do
-    new_proposal = create(:ncr_work_order, :with_approvers).proposal
+    new_proposal = create_new_proposal
     dispatcher = double
     allow(dispatcher).to receive(:deliver_attachment_emails)
     allow(Dispatcher).to receive(:new).with(new_proposal).and_return(dispatcher)
@@ -86,4 +86,27 @@ end
 
 def show_attachment_buttons
     execute_script("$('input[type=file]').show()")
+end
+
+def create_new_proposal
+  approver = create(:user, client_slug: "ncr")
+  organization = create(:ncr_organization)
+  project_title = "buying stuff"
+  requester = create(:user, client_slug: "ncr")
+
+  login_as(requester)
+
+  visit new_ncr_work_order_path
+  fill_in 'Project title', with: project_title
+  fill_in 'Description', with: "desc content"
+  choose 'BA80'
+  fill_in 'RWA#', with: 'F1234567'
+  fill_in_selectized("ncr_work_order_building_number", "Test building")
+  fill_in_selectized("ncr_work_order_vendor", "ACME")
+  fill_in 'Amount', with: 123.45
+  fill_in_selectized("ncr_work_order_approving_official", approver.email_address)
+  fill_in_selectized("ncr_work_order_ncr_organization", organization.code_and_name)
+  click_on "SUBMIT"
+  sleep(1)
+  Proposal.last
 end
