@@ -18,7 +18,7 @@ class AttachmentsController < ApplicationController
   end
 
   def construct_attachment
-    if @current_user.active_beta_user? && params[:attachment] != "undefined"
+    if params[:attachment] != "undefined"
       proposal.attachments.build(file: params[:attachment], user: @current_user)
     else
       proposal.attachments.build(attachments_params)
@@ -51,15 +51,9 @@ class AttachmentsController < ApplicationController
   end
 
   def attachments_params
-    if @current_user.active_beta_user? && params[:attachment] != "undefined"
-      beta_attachment_params(params)
-    elsif params.permit(attachment: [:file])[:attachment]
+    if params.permit(attachment: [:file])[:attachment]
       params.permit(attachment: [:file])[:attachment].merge(user: current_user)
     end
-  end
-
-  def beta_attachment_params(params)
-    params.permit(:attachment)[:attachment].merge(file: params[:attachment], user: current_user)
   end
 
   def auth_errors(exception)

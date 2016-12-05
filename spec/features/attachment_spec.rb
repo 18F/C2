@@ -44,10 +44,9 @@ describe "Add attachments" do
 
     page.execute_script("$('#attachment_file').addClass('show-attachment-file');")
     page.attach_file("attachment[file]", "#{Rails.root}/app/assets/images/bg_completed_status.gif", visible: false)
-    
-    # wait_for_ajax
-    sleep(2)
     page.save_screenshot('../screen.png', full: true)
+    wait_for_ajax
+    
     within(".attachment-list") do
       expect(page).to have_content("bg_completed_status.gif")
     end
@@ -89,10 +88,10 @@ def show_attachment_buttons
 end
 
 def create_new_proposal
-  approver = create(:user, client_slug: "ncr")
+  approver = create(:user, client_slug: "ncr", email_address: 'approver123@test.com')
   organization = create(:ncr_organization)
   project_title = "buying stuff"
-  requester = create(:user, client_slug: "ncr")
+  requester = create(:user, client_slug: "ncr", email_address: 'requester123@test.com')
 
   login_as(requester)
 
