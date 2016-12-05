@@ -93,6 +93,8 @@
     .detail-edit.column
       %label.detail-element
         = t(t_slug + "direct_pay")
+        %span#ncr_direct_pay_label.hint--top-right.hint--rounded.hint--inline.hint--bounce.hint--large{"aria-label" => I18n.t("helpers.popover.direct_pay.content") } ?
+
       %span.detail-value
         = f.input :direct_pay,
           label: t("simple_form.labels.ncr_work_order.direct_pay_html"),
