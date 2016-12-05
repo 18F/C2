@@ -72,19 +72,6 @@ feature "Creating an NCR work order", :js do
       expect(page).to have_content("$2,000 for construction")
     end
 
-    scenario "shows tooltip for direct pay field", :js do
-      requester = create(:user, client_slug: "ncr")
-
-      login_as(requester)
-      visit new_ncr_work_order_path
-
-      page.find("#direct_pay-wrapper #ncr_direct_pay_label", text: "?").hover
-      save_and_open_screenshot
-      expect(page).to have_content(
-        I18n.t("helpers.popover.direct_pay.content")
-      )
-    end
-
     scenario "preserve form values on submission error" do
       requester = create(:user, client_slug: "ncr")
 
