@@ -6,13 +6,13 @@ describe "Add attachments" do
   end
 
   before do
-    login_as(proposal.requester)
     stub_request(:put, /.*c2-prod.s3.amazonaws.com.*/)
     stub_request(:head, /.*c2-prod.s3.amazonaws.com.*/)
     stub_request(:delete, /.*c2-prod.s3.amazonaws.com.*/)
   end
 
   it "is visible on a proposal" do
+    login_as(proposal.requester)
     visit proposal_path(proposal)
     expect(page).to have_content(attachment.file_file_name)
   end
@@ -107,5 +107,6 @@ def create_new_proposal
   fill_in_selectized("ncr_work_order_approving_official", approver.email_address)
   fill_in_selectized("ncr_work_order_ncr_organization", organization.code_and_name)
   click_on "SUBMIT"
+  sleep(1)
   Proposal.last
 end
