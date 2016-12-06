@@ -36,7 +36,7 @@ gem "haml"
 gem "hashdiff"
 gem "html_pipeline_rails"
 gem "jquery-rails"
-gem 'js_cookie_rails'
+gem "js_cookie_rails"
 gem "kaminari"
 gem "kaminari-bootstrap", "~> 3.0.1"
 gem "mandrill-rails"
