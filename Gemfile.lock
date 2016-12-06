@@ -591,7 +591,7 @@ DEPENDENCIES
   hashdiff
   html_pipeline_rails
   jquery-rails
-  jquery-ui-rails (~> 4.2.1)
+  js_cookie_rails
   kaminari
   kaminari-bootstrap (~> 3.0.1)
   konacha
