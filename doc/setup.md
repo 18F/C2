@@ -5,7 +5,7 @@
 * Ruby 2.3.1
 * PostgreSQL 9.x
 * Elasticsearch 1.5+
-* A [MyUSA](https://alpha.my.usa.gov/) account
+* A [cloud.gov](https://alpha.my.usa.gov/) account
 * An SMTP server (`production` mode only)
 
 ## Installation

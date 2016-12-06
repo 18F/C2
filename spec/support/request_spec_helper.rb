@@ -8,8 +8,8 @@ module RequestSpecHelper
 
   # requires IntegrationSpecHelper
   def login_as(user)
-    setup_mock_auth(:myusa, user)
-    get '/auth/myusa/callback'
+    setup_mock_auth(:cg, user)
+    get '/auth/cg/callback'
   end
 
   def time_to_json(time)
