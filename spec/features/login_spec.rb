@@ -24,10 +24,12 @@ feature "Login" do
   end
 
   scenario "user logs in without env REDESIGN_DEFAULT_VIEW without being beta user" do
-    user = create(:user)
-    login_as(user)
-    expect(user.in_beta_program?).to eq(false)
-    expect(user.active_beta_user?).to eq(false)
+    with_env_var('REDESIGN_DEFAULT_VIEW', nil) do
+      user = create(:user)
+      login_as(user)
+      expect(user.in_beta_program?).to eq(false)
+      expect(user.active_beta_user?).to eq(false)
+    end
   end
 
   scenario "user logs in with env REDESIGN_DEFAULT_VIEW becomes beta user" do
