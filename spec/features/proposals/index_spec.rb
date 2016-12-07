@@ -45,26 +45,6 @@ feature "Proposals index" do
     expect(page).to have_selector('tbody tr', count: 4)
   end
 
-  scenario "order list by descending alphabetical in new index page for all requests", :js do
-    work_order_ba80 = create(:ba80_ncr_work_order, :with_beta_requester)
-    user = work_order_ba80.requester
-    _reviewable_proposals = create_list(:proposal, 2, :with_approver, observer: user)
-    _pending_proposals = create_list(:proposal, 2, :with_approver, approver_user: user)
-    _canceled = create_list(:proposal, 2, status: "canceled", observer: user)
-
-    login_as(user)
-
-    visit "/proposals"
-
-    expect(page).to have_css("th.th-value-id .table-header")
-    first("th.th-value-id .table-header").click
-    sleep(1)
-
-    pp = Proposal.search(user)
-
-    expect(first('tbody tr td.public_id a')).to have_content(pp.result.last.public_id)
-  end
-
   scenario "Responsive layout should restructure based on screensize", :js do
     work_order_ba80 = create(:ba80_ncr_work_order, :with_beta_requester)
     user = work_order_ba80.requester
