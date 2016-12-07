@@ -23,6 +23,7 @@ require "rack_session_access/capybara"
 
 require "capybara/poltergeist"
 Capybara.register_driver :poltergeist do |app|
+  Phantomjs.path
   options = {
     timeout: 60,
     debug: ENV["CAPYBARA_DEBUG"] || false,
