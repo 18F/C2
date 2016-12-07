@@ -16,13 +16,13 @@ describe ProposalSearchQuery, elasticsearch: true do
       }.to raise_error(SearchUnavailable, I18n.t("errors.features.es.service_unavailable"))
     end
 
-    # it "raises custom error when we feed Elasticsearch faulty search syntax" do
-    #   user = create(:user, client_slug: "test")
-    #   searcher = ProposalSearchQuery.new(current_user: user)
-    #   expect {
-    #     searcher.execute("ffo)")
-    #   }.to raise_error(SearchBadQuery, I18n.t("errors.features.es.bad_query"))
-    # end
+    it "raises custom error when we feed Elasticsearch faulty search syntax" do
+      user = create(:user, client_slug: "test")
+      searcher = ProposalSearchQuery.new(current_user: user)
+      expect {
+        searcher.execute("ffo)")
+      }.to raise_error(SearchBadQuery, I18n.t("errors.features.es.bad_query"))
+    end
 
     it "returns an empty list for no Proposals" do
       user = create(:user, client_slug: "test")
