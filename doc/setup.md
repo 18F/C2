@@ -5,7 +5,7 @@
 * Ruby 2.3.1
 * PostgreSQL 9.x
 * Elasticsearch 1.5+
-* A [cloud.gov](https://alpha.my.usa.gov/) account
+* A [cloud.gov](https://cloud.gov/) account
 * An SMTP server (`production` mode only)
 
 ## Installation
@@ -34,16 +34,21 @@ C2 is a fairly typical Rails application, so the setup is straightforward:
     ```bash
     cp .env.example .env
     ```
-1. [Register an application on MyUSA](https://alpha.my.usa.gov/applications/new).
-    * Give the application a **Name** that gives MyUSA admins a good idea of what it is and who set it up; e.g. `Janet's laptop C2`
+1. [Register an application on cloud.gov](https://cloud.gov/docs/apps/leveraging-authentication/#register-your-application-instances).
+    * Give the application a **Name** that gives cloud.gov admins a good idea of what it is and who set it up; e.g. `c2-prod`.
+      Optionally create multiple instances: `c2-prod`, `c2-staging`, `c2-dev`, for example.
     * Set the **Url** field to the URL for your setup. If you're running the app locally, the default URL is `http://localhost:3000/`
-    * Set the **Redirect uri** field to `[your_C2_url]/auth/myusa/callback` . For example, with the default URL: `http://localhost:3000/auth/myusa/callback`
-    * In the "Select the API Scopes..." section, select **Email Address**, **First Name**, and **Last Name**.
-    * By default, new applications on MyUSA have a status of **Private**, which means that only the MyUSA user who registered the app can log in. If you need other people to log into your C2 setup, then your app will need a status of **Public**. (This matters for staging servers more than local development, so you probably don't need to worry about it.)
+    * Set the **Redirect uri** field to `[your_C2_url]/auth/cg/callback` . For example, with the default URL: `http://localhost:3000/auth/cg/callback`
 
-    Since Public apps need to be approved by MyUSA admins before they're usable, it's best to leave the status as _Private_ when setting up, then [change it to _Public_ later](#myusa-wont-let-other-users-log-in).
+1. Once you've registered the application, cloud.gov will give you two consumer key strings for saving: the _App ID_ and _App Secret_. Add these to your [`.env`](../.env.example), setting `CG_APP_ID` to the App ID and `CG_APP_SECRET` to the App Secret.
 
-1. Once you've registered the application, MyUSA will give you two consumer key strings for saving: the _Public Key_ and _Secret Key_. Add these to your [`.env`](../.env.example), setting `MYUSA_KEY` to the Public Key and `MYUSA_SECRET` to the Secret Key.
+1. To test locally, you need to use fake-cloud.gov:
+    * Download the binary for [fake-cloud.gov](https://github.com/18F/cg-fake-uaa)
+    * From the directory your binary is in, run `chmod +x fake-cloud.gov`
+    * Run the binary, passing it the correct URL for your local instance's callback: `./fake-cloud.gov -callback-url http://localhost:3000/auth/cg/callback`
+
+    The fake version simply asks for an email address and redirects that email address back to your callback. It does
+    not look like the actual cloud.gov login flow.
 
 ### Troubleshooting
 
@@ -62,10 +67,6 @@ C2 is a fairly typical Rails application, so the setup is straightforward:
 rbenv rehash
 gem install foreman
 ```
-
-#### MyUSA won't let other users log in
-
-This is likely because your MyUSA app registration is marked _Private_. To get _Public_ status, go to your [developer applications list](https://alpha.my.usa.gov/authorizations) and click **Request Public Access**; this will send a message to the MyUSA admins. (If your application's status hasn't changed after one business day, try mailing [the MyUSA team](mailto:myusa@gsa.gov); if you're an 18F employee, ask in the [`#myusa`](https://18f.slack.com/messages/myusa/) Slack channel.)
 
 ## Starting the application
 
