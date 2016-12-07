@@ -1,14 +1,26 @@
 feature 'Approver edits NCR work order' do
   include ProposalSpecHelper
 
-  scenario 'keeps track of the modification' do
+  scenario 'keeps track of the modification', :js do
     work_order = create(:ncr_work_order, :with_approvers)
     approver = work_order.proposal.approvers.first
     login_as(approver)
 
-    visit "/ncr/work_orders/#{work_order.id}/edit"
-    fill_in 'CL number', with: 'CL1234567'
-    click_on 'Update'
+    visit proposal_path(work_order.proposal)
+    click_on "MODIFY"
+    
+    fill_in 'CL#', with: 'CL1234567'
+    within(".action-bar-container") do
+      click_on "SAVE"
+      sleep(1)
+    end
+    within("#card-for-modal") do
+     click_on "SAVE"
+     sleep(1)
+    end
+  
+    sleep(1)
+
 
     work_order.proposal.reload
     update_comments = work_order.proposal.comments.update_comments

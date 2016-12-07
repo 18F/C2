@@ -16,18 +16,9 @@
       %meta{ name: "list_view_config", :content => @list_view_config.html_safe }
     = render "layouts/meta_notice"
     = csrf_meta_tags
-    - if list_view_conditions || detail_view_conditions
-      = render partial: 'layouts/styles_next'
-    - else
-      = render partial: 'layouts/styles_old'
+    = render partial: 'layouts/styles_next'
   %body{:class => "bodyclass webapp controller-#{controller_name} action-#{params[:action]} #{list_view_conditions ? "beta-list" : ""}"}
     = render "peek/bar"
-    = content_for?(:top_notification) ? yield(:top_notification) : ""
-    - if list_view_conditions
-      = render 'layouts/application_next'
-    - else
-      = render 'layouts/application_old'
-    - if list_view_conditions || detail_view_conditions
-      = render partial: 'layouts/scripts_next'
-    - else 
-      = render partial: 'layouts/scripts_old'
+    / = content_for?(:top_notification) ? yield(:top_notification) : ""
+    = render 'layouts/application_next'
+    = render partial: 'layouts/scripts_next'

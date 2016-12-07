@@ -12,10 +12,12 @@ class ProposalsController < ApplicationController
 
   def show
     @proposal = proposal.decorate
-
-    if detail_beta?
-      show_next
+    if proposal.completed?
+      flash_now = FlashWithNow.new
+      warning = "Wait! You're about to change an approved request. Your changes will be logged and sent to approvers, and your action may require reapproval of the request."
+      flash_now.show(flash, "warning", warning)
     end
+    show_next
   end
 
   def show_next
@@ -46,10 +48,8 @@ class ProposalsController < ApplicationController
   end
 
   def beta_index_setup
-    if list_beta?
-      @unfiltered_data = listing.all
-      index_redesign
-    end
+    @unfiltered_data = listing.all
+    index_redesign
   end
 
   def cancel_form

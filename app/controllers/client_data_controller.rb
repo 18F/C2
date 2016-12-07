@@ -10,13 +10,11 @@ class ClientDataController < ApplicationController
   before_action :setup_flash_manager
 
   def new
-    if current_user.should_see_beta?("BETA_FEATURE_LIST_VIEW")
-      @proposal = Proposal.new
-      @proposal = @proposal.decorate
-      @subscriber_list = SubscriberList.new(@proposal).triples
-      @attachments = @proposal.attachments.build
-      render "new_next"
-    end
+    @proposal = Proposal.new
+    @proposal = @proposal.decorate
+    @subscriber_list = SubscriberList.new(@proposal).triples
+    @attachments = @proposal.attachments.build
+    render "new_next"
   end
 
   def create
@@ -31,14 +29,11 @@ class ClientDataController < ApplicationController
   end
 
   def revalidate_new
-    if current_user.should_see_beta?("BETA_FEATURE_LIST_VIEW")
-      render "new_next"
-    else
-      render :new
-    end
+    render "new_next"
   end
 
   def edit
+    redirect_to proposal_path(proposal)
   end
 
   def update
