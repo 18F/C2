@@ -37,7 +37,7 @@ feature "Approve a Gsa18F procurement" do
 
       visit proposal_path(proposal)
 
-      expect(page).to have_content("Cancel this request")
+      expect(page).to have_content("Cancel request")
     end
   end
 

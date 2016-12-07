@@ -1,54 +1,54 @@
-- if !list_view_conditions
-  .inset.search
-    .row.m-search-ui
-      %form.form-horizontal.search{role: "form", action: query_proposals_path, method: "get"}
-        %fieldset.basic
-          .form-group.basic
-            .input-group
-              %input.search-terms.form-control{autocomplete: "off", type: "text", name: "text", value: @text, placeholder: "Search"}
-              .input-group-addon.magnifier
+/ - if !list_view_conditions
+/   .inset.search
+/     .row.m-search-ui
+/       %form.form-horizontal.search{role: "form", action: query_proposals_path, method: "get"}
+/         %fieldset.basic
+/           .form-group.basic
+/             .input-group
+/               %input.search-terms.form-control{autocomplete: "off", type: "text", name: "text", value: @text, placeholder: "Search"}
+/               .input-group-addon.magnifier
+/                 %i.fa.fa-search.fa-fw
+/               .input-group-btn
+/                 %button#search-button.btn.btn-default.btn-primary.search{type: "submit"}
+/                   Search
+/                   %i.fa.fa-search.fa-fw
+/           #adv-options.form-group
+/             %a.btn.btn-default.adv-options{style: "display: none;"}
+/               %span.plus +
+/               Advanced options
+/         = render partial: "shared/search_form"
+
+/   - if (defined?(show_adv_search_ui) && show_adv_search_ui)
+/     <script type="text/javascript">var C2_SEARCH_UI_OPEN = true;</script>
+/   - else
+/     <script type="text/javascript">var C2_SEARCH_UI_OPEN = false;</script>
+
+/   - if @adv_search.to_s.length > 0
+/     <script type="text/javascript">var C2_SEARCH_ADV_QUERY = true;</script>
+/ - else
+.search
+  .row.m-search-ui
+    %form.form-horizontal.search{role: "form", action: query_proposals_path, method: "get"}
+      %fieldset.basic.search-container
+        .form-group.basic
+          .input-group
+            %input.search-terms.form-control{autocomplete: "off", type: "text", name: "text", value: @text, placeholder: "Search"}
+            .input-group-addon.magnifier
+              %i.fa.fa-search.fa-fw
+            .input-group-btn.hidden
+              %button#search-button.btn.btn-default.btn-primary.search{type: "submit"}
+                Search
                 %i.fa.fa-search.fa-fw
-              .input-group-btn
-                %button#search-button.btn.btn-default.btn-primary.search{type: "submit"}
-                  Search
-                  %i.fa.fa-search.fa-fw
-          #adv-options.form-group
-            %a.btn.btn-default.adv-options{style: "display: none;"}
-              %span.plus +
-              Advanced options
-        = render partial: "shared/search_form"
+        #adv-options.form-group{style: "display: none;"}
+          %a.btn.btn-default.adv-options
+            %span.plus +
+            Advanced options
+      = render partial: "shared/search_form_next"
 
-  - if (defined?(show_adv_search_ui) && show_adv_search_ui)
-    <script type="text/javascript">var C2_SEARCH_UI_OPEN = true;</script>
-  - else
-    <script type="text/javascript">var C2_SEARCH_UI_OPEN = false;</script>
-
-  - if @adv_search.to_s.length > 0
-    <script type="text/javascript">var C2_SEARCH_ADV_QUERY = true;</script>
+- if (defined?(show_adv_search_ui) && show_adv_search_ui)
+  <script type="text/javascript">var C2_SEARCH_UI_OPEN = true;</script>
 - else
-  .search
-    .row.m-search-ui
-      %form.form-horizontal.search{role: "form", action: query_proposals_path, method: "get"}
-        %fieldset.basic.search-container
-          .form-group.basic
-            .input-group
-              %input.search-terms.form-control{autocomplete: "off", type: "text", name: "text", value: @text, placeholder: "Search"}
-              .input-group-addon.magnifier
-                %i.fa.fa-search.fa-fw
-              .input-group-btn.hidden
-                %button#search-button.btn.btn-default.btn-primary.search{type: "submit"}
-                  Search
-                  %i.fa.fa-search.fa-fw
-          #adv-options.form-group{style: "display: none;"}
-            %a.btn.btn-default.adv-options
-              %span.plus +
-              Advanced options
-        = render partial: "shared/search_form_next"
+  <script type="text/javascript">var C2_SEARCH_UI_OPEN = false;</script>
 
-  - if (defined?(show_adv_search_ui) && show_adv_search_ui)
-    <script type="text/javascript">var C2_SEARCH_UI_OPEN = true;</script>
-  - else
-    <script type="text/javascript">var C2_SEARCH_UI_OPEN = false;</script>
-
-  - if @adv_search.to_s.length > 0
-    <script type="text/javascript">var C2_SEARCH_ADV_QUERY = true;</script>
+- if @adv_search.to_s.length > 0
+  <script type="text/javascript">var C2_SEARCH_ADV_QUERY = true;</script>

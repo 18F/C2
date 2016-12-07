@@ -20,14 +20,9 @@
           Download
           %i.fa.fa-download
       %li
-        - if current_user.should_see_beta?("BETA_FEATURE_DETAIL_VIEW")
-          %a{ href: "#", data: { "modal-type": "save_report", style: "expand-right" }, class: "search button" }
-            Save as Report
-            %i.fa.fa-save
-        - else
-          %a{ href: "#", onclick: '$("#save-search").modal()' }
-            Save as Report
-            %i.fa.fa-save
+        %a{ href: "#", data: { "modal-type": "save_report", style: "expand-right" }, class: "search button" }
+          Save as Report
+          %i.fa.fa-save
   = datespan_header(@start_date, @end_date)
   - if @proposals_data.rows.any?
     = render partial: "shared/table", locals: {container: @proposals_data}
@@ -44,45 +39,23 @@
   // global var referenced by search.js
   var C2_SEARCH_QUERY = #{@search_query.to_json}
 
-
-- if current_user.should_see_beta?("BETA_FEATURE_DETAIL_VIEW")
-  #card-for-modal.popup-modal
-    #modal-wrapper.modal-wrapper
-    #modal-template.modal-template
-      = render partial: "proposals/details/modals/template", locals: { proposal: @proposal }
-    #modal-content.modal-content
-      #save-search.save_report-modal-content
-        %h4{class: "popup-content-label"}
-          Save as Report
-        %p{class: "popup-content-desc"}
-          %form.text-left{ role: "form" }
-            %input#save-search-submit{ type: "submit", style: "display: none" }
-            .form-group
-              %label.control-label{ for: "saved-search-name" }
-                Name
-              %input.form-control.required{ type: "text", name: "saved-search-name", required: true }
-            .form-group
-              %pre#save-search-query
-        %p
-          = button_tag "Cancel", class: "cancel-cancel-link form-button cancel-button", data: { "modal-event": "cancel" }
-          = button_tag "Save", id: "save-search-button", class: "form-button", data: { "modal-event": "confirm" }
-- else
-  #save-search.modal.fade{ tabindex: "-1", role: "dialog", "aria-labelledby" => "save-search-modal-title"}
-    .modal-dialog{ role: "document" }
-      .modal-content
-        .modal-header
-          %button.close{ type: "button", data: { dismiss: "modal" }, "aria-label" => "Close"}
-            %span{"aria-hidden" => "true"} &times;
-          %h4#save-search-modal-title.modal-title Save as Report
-        .modal-body
-          %form{ role: "form" }
-            %input#save-search-submit{ type: "submit", style: "display: none" }
-            .form-group
-              %label.control-label{ for: "saved-search-name" }
-                Name
-              %input.form-control.required{ type: "text", name: "saved-search-name", required: true }
-            .form-group
-              %pre#save-search-query
-        .modal-footer
-          %button.btn.btn-default{ type: "button", data: { dismiss: "modal" } } Cancel
-          %button#save-search-button.btn.btn-primary{ type: "submit" } Save
+#card-for-modal.popup-modal
+  #modal-wrapper.modal-wrapper
+  #modal-template.modal-template
+    = render partial: "proposals/details/modals/template", locals: { proposal: @proposal }
+  #modal-content.modal-content
+    #save-search.save_report-modal-content
+      %h4{class: "popup-content-label"}
+        Save as Report
+      %p{class: "popup-content-desc"}
+        %form.text-left{ role: "form" }
+          %input#save-search-submit{ type: "submit", style: "display: none" }
+          .form-group
+            %label.control-label{ for: "saved-search-name" }
+              Name
+            %input#saved-search-name.form-control.required{ type: "text", name: "saved-search-name", required: true }
+          .form-group
+            %pre#save-search-query
+      %p
+        = button_tag "Cancel", class: "cancel-cancel-link form-button cancel-button", data: { "modal-event": "cancel" }
+        = button_tag "Save", id: "save-search-button", class: "form-button", data: { "modal-event": "confirm" }

@@ -9,16 +9,15 @@ describe "viewing a work order" do
 
   it "shows a edit link from a pending proposal" do
     visit "/proposals/#{ncr_proposal.id}"
-    expect(page).to have_content('Modify Request')
-    click_on('Modify Request')
-    expect(current_path).to eq("/ncr/work_orders/#{work_order.id}/edit")
+    expect(page).to have_content('MODIFY')
+    expect(page).to have_selector('.edit-button', visible: true)
   end
 
   it "shows a edit link for a completed proposal" do
-    ncr_proposal.update(status: "completed") # avoid state machine
-
+    # ncr_proposal.fully_complete!
     visit "/proposals/#{ncr_proposal.id}"
-    expect(page).to have_content('Modify Request')
+    expect(page).to have_content('MODIFY')
+    expect(page).to have_selector('.edit-button', visible: true)
   end
 
   it "does not show a edit link for another client" do
@@ -36,7 +35,7 @@ describe "viewing a work order" do
 
   it "doesn't show a edit/cancel/add observer link from a canceled proposal" do
     visit "/proposals/#{ncr_proposal.id}"
-    expect(page).to have_content('Cancel this request')
+    expect(page).to have_content('Cancel request')
     ncr_proposal.update_attribute(:status, 'canceled')
     visit "/proposals/#{ncr_proposal.id}"
     expect(page).not_to have_content('Modify Request')
