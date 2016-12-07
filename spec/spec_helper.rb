@@ -25,7 +25,8 @@ require "capybara/poltergeist"
 Capybara.register_driver :poltergeist do |app|
   options = {
     timeout: 60,
-    debug: ENV["CAPYBARA_DEBUG"] || false
+    debug: ENV["CAPYBARA_DEBUG"] || false,
+    phantomjs: Phantomjs.path
   }
   Capybara::Poltergeist::Driver.new(app, options)
 end
