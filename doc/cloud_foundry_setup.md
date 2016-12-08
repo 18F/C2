@@ -43,8 +43,6 @@ working on or QA someone else's work.
 1. Set the required env vars for your app. The required env vars are:
 
   - `DEFAULT_URL_HOST`: URL for your app, eg `c2-dev-jessieay.18f.gov`
-  - `MYUSA_KEY`: see section on MyUSA in https://github.com/18F/C2/blob/master/doc/setup.md
-  - `MYUSA_SECRET`: ditto above
   - `NEW_RELIC_APP_NAME`: you can use the dev app, which is called `C2 (Development)`
   - `NEW_RELIC_LICENSE_KEY`: copy value from env var in another app in the `dev` space
   - `S3_ACCESS_KEY_ID`: ditto above

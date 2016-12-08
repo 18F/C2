@@ -14,7 +14,6 @@ module ApplicationHelper
 
   def auth_url(provider:)
     {
-      myusa: "/auth/myusa",
       cg: "/auth/cg"
     }.fetch(provider)
   end

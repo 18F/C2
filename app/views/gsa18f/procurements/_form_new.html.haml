@@ -14,21 +14,21 @@
 .column{ id: "product_name_and_description" + '-wrapper'}
   .detail-wrapper.row{ class: "product_name_and_description-wrapper" }
     .detail-edit.column
-      %label.detail-element.required
+      %label.detail-element.required{ for: "gsa18f_procurement_product_name_and_description" }
         = t(t_slug + "product_name_and_description")
       %span.detail-value
         = f.input :product_name_and_description, label: false
 .column{ id: "justification" + '-wrapper'}
   .detail-wrapper.row{ class: "justification-wrapper" }
     .detail-edit.column
-      %label.detail-element
+      %label.detail-element{ for: "gsa18f_procurement_justification" }
         = t(t_slug + "justification")
       %span.detail-value
         = f.input :justification, label: false
 .column{ id: "link_to_product" + '-wrapper'}
   .detail-wrapper.row{ class: "link_to_product-wrapper" }
     .detail-edit.column
-      %label.detail-element
+      %label.detail-element{ for: "gsa18f_procurement_link_to_product" }
         = t(t_slug + "link_to_product")
       %span.detail-value
         = f.input :link_to_product, label: false
@@ -37,14 +37,14 @@
     .column.medium-5
       .detail-wrapper.row{ class: "cost_per_unit-wrapper" }
         .detail-edit.column
-          %label.detail-element.required
+          %label.detail-element.required{ for: "gsa18f_procurement_cost_per_unit" }
             = t(t_slug + "cost_per_unit")
           %span.detail-value
             = f.input :cost_per_unit, label: false, as: :currency
     .column.medium-5
       .detail-wrapper.row{ class: "quantity-wrapper" }
         .detail-edit.column
-          %label.detail-element.required
+          %label.detail-element.required{ for: "gsa18f_procurement_quantity" }
             = t(t_slug + "quantity")
           %span.detail-value
             = f.input :quantity, label: false, input_html: { step: 1 }
@@ -99,21 +99,21 @@
     .column.medium-5
       .detail-wrapper.row{ class: "date_requested-wrapper" }
         .detail-edit.column
-          %label.detail-element
+          %label.detail-element{ for: "gsa18f_procurement_date_requested" }
             = t(t_slug + "date_requested")
           %span.detail-value
             = f.input :date_requested, label: false, as: :date, html5: true
 .column{ id: "urgency" + '-wrapper'}
   .detail-wrapper.row{ class: "urgency-wrapper" }
     .detail-edit.column
-      %label.detail-element
+      %label.detail-element{ for: "gsa18f_procurement_urgency" }
         = t(t_slug + "urgency")
       %span.detail-value
         = f.input :urgency, label: false, collection: Gsa18f::Procurement::URGENCY, label_method: :last, value_method: :first
 .column{ id: "additional_info" + '-wrapper'}
   .detail-wrapper.row{ class: "additional_info-wrapper" }
     .detail-edit.column
-      %label.detail-element
+      %label.detail-element{ for: "gsa18f_procurement_additional_info" }
         = t(t_slug + "additional_info")
       %span.detail-value
         = f.input :additional_info, label: false, as: :text

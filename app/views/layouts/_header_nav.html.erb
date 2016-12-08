@@ -9,15 +9,9 @@
       <%= image_tag "icon-logout.png", alt: "Logout" %>
     </li>
   <%- else %>
-    <%- if ENV['BETA_CLOUD_GOV_LOGIN'] == 'true' %>
-      <li>
-        <%= link_to "Sign in with Cloud.gov", auth_url(provider: :cg) %>
-      </li>
-    <%- else %>
-      <li>
-        <%= link_to "Sign in with MyUSA", auth_url(provider: :myusa) %>
-      </li>
-    <%- end %>
+    <li>
+      <%= link_to "Sign in with Cloud.gov", auth_url(provider: :cg) %>
+    </li>
   <%- end %>
   <li>
     <%= link_to "Help", help_index_path %>

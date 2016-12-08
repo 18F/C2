@@ -206,7 +206,7 @@ module Ncr
     end
 
     def self.special_keys
-      %w(is_tock_billable date_requested)
+      %w(is_tock_billable date_requested not_to_exceed)
     end
 
     def self.display_update_not_to_exceed(obj)

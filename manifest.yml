@@ -30,8 +30,6 @@ applications:
     S3_REGION: us-east-1
     WELCOME_EMAIL: true
     REDESIGN_DEFAULT_VIEW: true
-    CG_APP_ID: nil
-    CG_APP_SECRET: nil
   services:
     - c2-dev-elasticsearch
     - c2-dev-db
@@ -58,8 +56,6 @@ applications:
     S3_BUCKET_NAME: c2-demo
     S3_REGION: us-east-1
     WELCOME_EMAIL: true
-    CG_APP_ID: nil
-    CG_APP_SECRET: nil
   services:
     - c2-dev-elasticsearch
     - c2-dev-db
@@ -77,17 +73,16 @@ applications:
   env:
     ASSET_HOST: https://c2-staging.18f.gov/
     DEFAULT_URL_HOST: c2-staging.18f.gov
+    HIDE_DESIGN_TOGGLE: true
     NEW_RELIC_APP_NAME: C2 (Staging)
-    UPS_BASE: c2-staging-ups
     NOTIFICATION_FROM_EMAIL: staging-inbox@c2.18f.gov
     NOTIFICATION_REPLY_TO: staging-inbox@c2.18f.gov
+    REDESIGN_DEFAULT_VIEW: true
     RESTRICT_ACCESS: false
     S3_BUCKET_NAME: c2-demo
     S3_REGION: us-east-1
     WELCOME_EMAIL: true
-    REDESIGN_DEFAULT_VIEW: true
-    CG_APP_ID: nil
-    CG_APP_SECRET: nil
+    UPS_BASE: c2-staging-ups
   services:
     - c2-staging-elasticsearch
     - c2-staging-db
@@ -113,8 +108,6 @@ applications:
     S3_BUCKET_NAME: c2-demo
     S3_REGION: us-east-1
     WELCOME_EMAIL: true
-    CG_APP_ID: nil
-    CG_APP_SECRET: nil
   services:
     - c2-staging-elasticsearch
     - c2-staging-db
@@ -134,21 +127,20 @@ applications:
   command: script/server_start
   env:
     API_ENABLED: true
-    UPS_BASE: c2-prod-ups
     ASSET_HOST: https://cap.18f.gov/
     DEFAULT_URL_HOST: cap.18f.gov
     DISABLE_SANDBOX_WARNING: true
     GA_TRACKING_ID: UA-48605964-27
+    HIDE_DESIGN_TOGGLE: true
     NEW_RELIC_APP_NAME: C2 (Production)
     NOTIFICATION_FROM_EMAIL: inbox@c2.18f.gov
     NOTIFICATION_REPLY_TO: inbox@c2.18f.gov
+    REDESIGN_DEFAULT_VIEW: true
     RESTRICT_ACCESS: true
     S3_BUCKET_NAME: c2-prod
     S3_REGION: us-east-1
+    UPS_BASE: c2-prod-ups
     WELCOME_EMAIL: true
-    REDESIGN_DEFAULT_VIEW: true
-    CG_APP_ID: nil
-    CG_APP_SECRET: nil
   services:
     - c2-prod-elasticsearch
     - c2-prod-db
@@ -176,8 +168,6 @@ applications:
     S3_BUCKET_NAME: c2-prod
     S3_REGION: us-east-1
     WELCOME_EMAIL: true
-    CG_APP_ID: nil
-    CG_APP_SECRET: nil
   services:
     - c2-prod-elasticsearch
     - c2-prod-db

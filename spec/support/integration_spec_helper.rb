@@ -1,12 +1,12 @@
 module IntegrationSpecHelper
-  def setup_mock_auth(service_name=:myusa, user=create(:user))
+  def setup_mock_auth(service_name=:cg, user=create(:user))
     OmniAuth.config.mock_auth[service_name] = OmniAuth::AuthHash.new(
       provider: service_name.to_s,
       raw_info: {
         'name' => "George Jetson"
       },
       uid: '12345',
-      nickname: 'georgejetsonmyusa',
+      nickname: 'georgejetsoncg',
       extra: {
         'raw_info' => {
           'email' => user.email_address,
