@@ -32,6 +32,12 @@ applications:
   services:
     - c2-dev-elasticsearch
     - c2-dev-db
+    - c2-dev-ups-s3
+    - c2-dev-ups-oauth
+    - c2-dev-ups-newrelic
+    - c2-dev-ups-email
+    - c2-dev-ups-app_param
+    - c2-dev-ups-app_config
 - name: c2-dev-worker
   no-route: true
   health-check-type: none
@@ -51,7 +57,12 @@ applications:
   services:
     - c2-dev-elasticsearch
     - c2-dev-db
-
+    - c2-dev-ups-s3
+    - c2-dev-ups-oauth
+    - c2-dev-ups-newrelic
+    - c2-dev-ups-email
+    - c2-dev-ups-app_param
+    - c2-dev-ups-app_config
 # staging
 - name: c2-staging
   host: c2-staging
@@ -71,6 +82,12 @@ applications:
   services:
     - c2-staging-elasticsearch
     - c2-staging-db
+    - c2-staging-ups-s3
+    - c2-staging-ups-oauth
+    - c2-staging-ups-newrelic
+    - c2-staging-ups-email
+    - c2-staging-ups-app_param
+    - c2-staging-ups-app_config
 - name: c2-staging-worker
   no-route: true
   command: script/worker-start
@@ -88,7 +105,12 @@ applications:
   services:
     - c2-staging-elasticsearch
     - c2-staging-db
-
+    - c2-staging-ups-s3
+    - c2-staging-ups-oauth
+    - c2-staging-ups-newrelic
+    - c2-staging-ups-email
+    - c2-staging-ups-app_param
+    - c2-staging-ups-app_config
 # production
 - name: c2-prod
   hosts:
@@ -114,6 +136,12 @@ applications:
   services:
     - c2-prod-elasticsearch
     - c2-prod-db
+    - c2-prod-ups-s3
+    - c2-prod-ups-oauth
+    - c2-prod-ups-newrelic
+    - c2-prod-ups-email
+    - c2-prod-ups-app_param
+    - c2-prod-ups-app_config
 - name: c2-prod-worker
   no-route: true
   command: script/worker-start
@@ -133,3 +161,9 @@ applications:
   services:
     - c2-prod-elasticsearch
     - c2-prod-db
+    - c2-prod-ups-s3
+    - c2-prod-ups-oauth
+    - c2-prod-ups-newrelic
+    - c2-prod-ups-email
+    - c2-prod-ups-app_param
+    - c2-prod-ups-app_config

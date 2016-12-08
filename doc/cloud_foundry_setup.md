@@ -130,16 +130,14 @@ Ensure that:
             where `HOSTNAME` is your instance's hostname.
  1. Set up environment vars
     1. on `c2-SPACE`:
-        - `MYUSA_KEY`
-        - `MYUSA_SECRET`
         - `ASSET_HOST`
         - `DEFAULT_URL_HOST`
+        - `UPS_BASE`
     1. on `c2-SPACE-worker`:
-        - `MYUSA_KEY`
-        - `MYUSA_SECRET`
         - `SECRET_TOKEN`
         - `SMTP_USERNAME`
         - `SMTP_PASSWORD`
+        - `UPS_BASE`
  1. Deploy app
     1. `cf push c2-SPACE -f manifest.yml`
  1. Deploy worker
