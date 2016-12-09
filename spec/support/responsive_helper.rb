@@ -13,7 +13,7 @@ module ResponsiveHelper
   end
 
   def resize_window_large
-    resize_window_by([1500, 768])
+    resize_window_by([1600, 768])
   end
 
   private
