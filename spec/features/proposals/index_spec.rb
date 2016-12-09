@@ -73,6 +73,8 @@ feature "Proposals index" do
     _canceled = create_list(:proposal, 2, status: "canceled", observer: user)
 
     login_as(user)
+    user.list_view_config = nil
+    user.save!
     visit "/proposals"
 
     resize_window_to_mobile
@@ -89,22 +91,16 @@ feature "Proposals index" do
   end
 
   scenario "click on item on new index page to load new page", :js do
-    work_order_ba80 = create(:ba80_ncr_work_order, :with_beta_requester)
+    work_order_ba80 = create(:ba80_ncr_work_order, :with_approvers, :with_beta_requester)
     user = work_order_ba80.requester
-    _reviewable_proposals = create_list(:proposal, 2, :with_approver, observer: user)
-    _pending_proposals = create_list(:proposal, 2, :with_approver, approver_user: user)
-    _canceled = create_list(:proposal, 2, status: "canceled", observer: user)
-
     login_as(user)
 
     visit "/proposals"
-
+    page.save_screenshot('../screen.png', full: true)
     expect(page).to have_css("tbody tr td.name a")
     first('tbody tr td.name a').click
     sleep(1)
-
     proposals = Proposal.where(status: "pending", requester_id: user.id)
-
     expect(current_path).to have_content("/proposals/" + proposals.last.id.to_s)
   end
 
