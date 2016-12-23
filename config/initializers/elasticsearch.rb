@@ -12,10 +12,32 @@ es_client_args = {
   retry_on_failure: 5,
 }
 
+def es_config_from_vcap(vcap)
+  vcap_config = JSON.parse(vcap)
+  es_config_keys = vcap_config.keys.select { |i| i.match(/elasticsearch/) }
+  if es_config_keys.length > 1
+    Rails.logger.warn "More than one CF service key containing 'elasticsearch'. Using the first."
+  end
+  es_config_from_service(vcap_config[es_config_keys.first][0])
+end
+
+def es_config_from_service(es_service)
+  if es_service["credentials"]["uri"]
+    es_client_args[:url] = es_service["credentials"]["uri"]
+  else
+    es_client_args[:hosts] = [{
+      host: es_service["credentials"]["hostname"],
+      port: es_service["credentials"]["port"],
+      user: es_service["credentials"]["username"],
+      password: es_service["credentials"]["password"]
+    }]
+  end
+end
+
 # we use "production" env for all things at cloud.gov
 if Rails.env.production?
   vcap = ENV["VCAP_SERVICES"]
-  es_service_config(vcap)
+  es_config_from_vcap(vcap)
 elsif Rails.env.test?
   es_client_args[:url] = "http://localhost:#{(ENV['TEST_CLUSTER_PORT'] || 9250)}"
 else
@@ -40,24 +62,3 @@ if ENV["ES_DEBUG"]
   es_client_args[:logger].debug "[#{Time.now.utc.iso8601}] Using Elasticsearch server #{es_client_args[:url]}"
 end
 
-def es_config_from_vcap(vcap)
-  vcap_config = JSON.parse(vcap)
-  es_config_keys = vcap_config.keys.select { |i| i.match(/elasticsearch/) }
-  if es_config_keys.length > 1
-    Rails.logger.warn "More than one CF service key containing 'elasticsearch'. Using the first."
-  end
-  es_config_from_service(vcap_config[vcap_key][0])
-end
-
-def es_config_from_service(es_service)
-  if es_service["credentials"]["uri"]
-    es_client_args[:url] = es_service["credentials"]["uri"]
-  else
-    es_client_args[:hosts] = [{
-      host: es_service["credentials"]["hostname"],
-      port: es_service["credentials"]["port"],
-      user: es_service["credentials"]["username"],
-      password: es_service["credentials"]["password"]
-    }]
-  end
-end
