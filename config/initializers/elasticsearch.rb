@@ -61,4 +61,3 @@ Elasticsearch::Model.client = Elasticsearch::Client.new(es_client_args)
 if ENV["ES_DEBUG"]
   es_client_args[:logger].debug "[#{Time.now.utc.iso8601}] Using Elasticsearch server #{es_client_args[:url]}"
 end
-
