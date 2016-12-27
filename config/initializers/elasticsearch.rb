@@ -6,10 +6,10 @@ es_client_args = {
   transport_options: {
     request: {
       timeout: 1 * 60,
-      open_timeout: 1 * 60,
+      open_timeout: 1 * 60
     }
   },
-  retry_on_failure: 5,
+  retry_on_failure: 5
 }
 
 def es_config_from_vcap(vcap)

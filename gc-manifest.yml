@@ -18,21 +18,12 @@ applications:
   memory: 1024MB
   command: script/server_start
   env:
-    API_ENABLED: true
-    ASSET_HOST: https://c2-dev.fr.cloud.gov/
-    DEFAULT_URL_HOST: c2-dev.fr.cloud.gov
-    NEW_RELIC_APP_NAME: C2 (Development)
     NOTIFICATION_FROM_EMAIL: dev-inbox@c2.18f.gov
     NOTIFICATION_REPLY_TO: dev-inbox@c2.18f.gov
-    RESTRICT_ACCESS: true
-    S3_BUCKET_NAME: c2-demo
-    S3_REGION: us-east-1
-    WELCOME_EMAIL: true
-    REDESIGN_DEFAULT_VIEW: true
   services:
     - c2-dev-elasticsearch
     - c2-dev-db
-    - c2-dev-ups-s3
+    - c2-dev-s3
     - c2-dev-ups-oauth
     - c2-dev-ups-newrelic
     - c2-dev-ups-email
@@ -44,20 +35,12 @@ applications:
   command: script/worker-start
   memory: 640MB
   env:
-    API_ENABLED: true
-    ASSET_HOST: https://c2-dev.fr.cloud.gov/
-    DEFAULT_URL_HOST: c2-dev.fr.cloud.gov
-    NEW_RELIC_APP_NAME: C2 (Development)
     NOTIFICATION_FROM_EMAIL: dev-inbox@c2.18f.gov
     NOTIFICATION_REPLY_TO: dev-inbox@c2.18f.gov
-    RESTRICT_ACCESS: true
-    S3_BUCKET_NAME: c2-demo
-    S3_REGION: us-east-1
-    WELCOME_EMAIL: true
   services:
     - c2-dev-elasticsearch
     - c2-dev-db
-    - c2-dev-ups-s3
+    - c2-dev-s3
     - c2-dev-ups-oauth
     - c2-dev-ups-newrelic
     - c2-dev-ups-email
@@ -69,20 +52,12 @@ applications:
   memory: 1024MB
   command: script/server_start
   env:
-    ASSET_HOST: https://c2-staging.18f.gov/
-    DEFAULT_URL_HOST: c2-staging.18f.gov
-    NEW_RELIC_APP_NAME: C2 (Staging)
     NOTIFICATION_FROM_EMAIL: staging-inbox@c2.18f.gov
     NOTIFICATION_REPLY_TO: staging-inbox@c2.18f.gov
-    RESTRICT_ACCESS: false
-    S3_BUCKET_NAME: c2-demo
-    S3_REGION: us-east-1
-    WELCOME_EMAIL: true
-    REDESIGN_DEFAULT_VIEW: true
   services:
     - c2-staging-elasticsearch
     - c2-staging-db
-    - c2-staging-ups-s3
+    - c2-staging-s3
     - c2-staging-ups-oauth
     - c2-staging-ups-newrelic
     - c2-staging-ups-email
@@ -93,19 +68,12 @@ applications:
   command: script/worker-start
   memory: 640MB
   env:
-    ASSET_HOST: https://c2-staging.18f.gov/
-    DEFAULT_URL_HOST: c2-staging.18f.gov
-    NEW_RELIC_APP_NAME: C2 (Staging)
     NOTIFICATION_FROM_EMAIL: staging-inbox@c2.18f.gov
     NOTIFICATION_REPLY_TO: staging-inbox@c2.18f.gov
-    RESTRICT_ACCESS: false
-    S3_BUCKET_NAME: c2-demo
-    S3_REGION: us-east-1
-    WELCOME_EMAIL: true
   services:
     - c2-staging-elasticsearch
     - c2-staging-db
-    - c2-staging-ups-s3
+    - c2-staging-s3
     - c2-staging-ups-oauth
     - c2-staging-ups-newrelic
     - c2-staging-ups-email
@@ -120,23 +88,15 @@ applications:
   instances: 2
   command: script/server_start
   env:
-    API_ENABLED: true
-    ASSET_HOST: https://cap.18f.gov/
-    DEFAULT_URL_HOST: cap.18f.gov
     DISABLE_SANDBOX_WARNING: true
     GA_TRACKING_ID: UA-48605964-27
-    NEW_RELIC_APP_NAME: C2 (Production)
     NOTIFICATION_FROM_EMAIL: inbox@c2.18f.gov
     NOTIFICATION_REPLY_TO: inbox@c2.18f.gov
     RESTRICT_ACCESS: true
-    S3_BUCKET_NAME: c2-prod
-    S3_REGION: us-east-1
-    WELCOME_EMAIL: true
-    REDESIGN_DEFAULT_VIEW: true
   services:
     - c2-prod-elasticsearch
     - c2-prod-db
-    - c2-prod-ups-s3
+    - c2-prod-s3
     - c2-prod-ups-oauth
     - c2-prod-ups-newrelic
     - c2-prod-ups-email
@@ -147,21 +107,15 @@ applications:
   command: script/worker-start
   memory: 640MB
   env:
-    ASSET_HOST: https://cap.18f.gov/
-    DEFAULT_URL_HOST: cap.18f.gov
     DISABLE_SANDBOX_WARNING: true
     GA_TRACKING_ID: UA-48605964-27
-    NEW_RELIC_APP_NAME: C2 (Production)
     NOTIFICATION_FROM_EMAIL: inbox@c2.18f.gov
     NOTIFICATION_REPLY_TO: inbox@c2.18f.gov
     RESTRICT_ACCESS: true
-    S3_BUCKET_NAME: c2-prod
-    S3_REGION: us-east-1
-    WELCOME_EMAIL: true
   services:
     - c2-prod-elasticsearch
     - c2-prod-db
-    - c2-prod-ups-s3
+    - c2-prod-s3
     - c2-prod-ups-oauth
     - c2-prod-ups-newrelic
     - c2-prod-ups-email
