@@ -2,7 +2,7 @@
 
 ## Dependencies
 
-* Ruby 2.3.1
+* Ruby 2.3.3
 * PostgreSQL 9.x
 * Elasticsearch 1.5+
 * A [cloud.gov](https://cloud.gov/) account
