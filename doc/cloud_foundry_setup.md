@@ -102,11 +102,14 @@ Ensure that:
  1. Choose a space, being one of `prod`, `staging` or `dev`. (If the only
     space you can see is `general`, you're on the East/West environment)
  1. TODO: Determine your instance's hostname
- 1. make sure you have the right roles - need SpaceDeveloper
+ 1. Make sure you have the `SpaceDeveloper` role in the current space.
+    If you already have the `OrgManager` role, all you need to do is:
+    `cf set-space-role USERNAME ORG SPACE SpaceDeveloper`
  1. create services (binding happens automatically thanks to the `services`
     section of `manifest.yml`)
     1. pgsql: `cf create-service aws-rds medium-psql c2-SPACE-db`
     1. elasticsearch: `cf create-service elasticsearch23 1x c2-SPACE-elasticsearch`
+    1. s3: `cf create-service s3`
  1. TODO: Obtain cloud.gov authentication credentials
  1. Set up Mandrill mail delivery and receipt
     1. Get Mandrill `SMTP_USERNAME` & `SMTP_PASSWORD`

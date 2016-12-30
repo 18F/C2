@@ -23,7 +23,7 @@ def es_config_from_vcap(vcap, es_client_args)
 end
 
 def es_config_from_service(es_service, es_client_args)
-  if es_service["credentials"]["uri"] 
+  if es_service["credentials"]["uri"]
     es_client_args[:url] = es_service["credentials"]["uri"]
   else
     es_client_args[:hosts] = [{
