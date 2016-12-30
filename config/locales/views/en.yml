@@ -3,7 +3,7 @@ en:
     details:
       notification:
         beta:
-          old: "We're updating this page! To use the older version, "
+          old: "We have updated this page! <a href=\"/help/new_features\">Learn more</a>. To use the older version, "
           new: "We're updating this page! To use the newer version, "
           reverted: "You're no longer using the new version. To use the new version, "
 
@@ -15,7 +15,7 @@ en:
         reapproval:
           title: "Wait! Updating <span class=\"custom-modal-content\">this</span> will require re-approval."
           desc: Do you want to proceed?
-          cancel_button: DISCARD CHANGE 
+          cancel_button: DISCARD CHANGE
           save_button: SAVE CHANGES
         cancel:
           title: Wait! You're about to cancel your request.
