@@ -1,0 +1,21 @@
+app:
+  build: .
+  command: ./script/start
+  volumes:
+    - .:/app
+  volumes_from:
+    - box
+  links:
+    - db
+
+box:
+  image: busybox
+  volumes:
+    - /box
+
+db:
+  image: postgres
+  ports:
+    - "5432"
+  environment:
+    - DATABASE_NAME=c2_development

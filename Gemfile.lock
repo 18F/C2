@@ -288,6 +288,7 @@ GEM
       actionmailer (>= 3.2)
       letter_opener (~> 1.0)
       railties (>= 3.2)
+    libv8 (3.16.14.15)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -427,6 +428,7 @@ GEM
     rb-inotify (0.9.7)
       ffi (>= 0.5.0)
     redcarpet (3.3.4)
+    ref (2.0.0)
     referer-parser (0.3.0)
     request_store (1.3.1)
     responders (2.3.0)
@@ -504,6 +506,9 @@ GEM
       sprockets (>= 2.8, < 4.0)
     test_after_commit (1.0.0)
       activerecord (>= 3.2)
+    therubyracer (0.12.2)
+      libv8 (~> 3.16.14.0)
+      ref
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (2.0.5)
@@ -618,6 +623,7 @@ DEPENDENCIES
   spring-commands-rspec
   sprockets-rails (< 3)
   test_after_commit
+  therubyracer
   timecop
   uglifier
   validates_email_format_of
