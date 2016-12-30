@@ -20,6 +20,7 @@ applications:
   env:
     NOTIFICATION_FROM_EMAIL: dev-inbox@c2.18f.gov
     NOTIFICATION_REPLY_TO: dev-inbox@c2.18f.gov
+    UPS_BASE: c2-dev-ups
   services:
     - c2-dev-elasticsearch
     - c2-dev-db
@@ -37,6 +38,7 @@ applications:
   env:
     NOTIFICATION_FROM_EMAIL: dev-inbox@c2.18f.gov
     NOTIFICATION_REPLY_TO: dev-inbox@c2.18f.gov
+    UPS_BASE: c2-dev-ups
   services:
     - c2-dev-elasticsearch
     - c2-dev-db
@@ -54,6 +56,7 @@ applications:
   env:
     NOTIFICATION_FROM_EMAIL: staging-inbox@c2.18f.gov
     NOTIFICATION_REPLY_TO: staging-inbox@c2.18f.gov
+    UPS_BASE: c2-staging-ups
   services:
     - c2-staging-elasticsearch
     - c2-staging-db
@@ -71,6 +74,7 @@ applications:
   env:
     NOTIFICATION_FROM_EMAIL: staging-inbox@c2.18f.gov
     NOTIFICATION_REPLY_TO: staging-inbox@c2.18f.gov
+    UPS_BASE: c2-staging-ups
   services:
     - c2-staging-elasticsearch
     - c2-staging-db
@@ -94,6 +98,7 @@ applications:
     NOTIFICATION_FROM_EMAIL: inbox@c2.18f.gov
     NOTIFICATION_REPLY_TO: inbox@c2.18f.gov
     RESTRICT_ACCESS: true
+    UPS_BASE: c2-prod-ups
   services:
     - c2-prod-elasticsearch
     - c2-prod-db
@@ -114,6 +119,7 @@ applications:
     NOTIFICATION_FROM_EMAIL: inbox@c2.18f.gov
     NOTIFICATION_REPLY_TO: inbox@c2.18f.gov
     RESTRICT_ACCESS: true
+    UPS_BASE: c2-prod-ups
   services:
     - c2-prod-elasticsearch
     - c2-prod-db
