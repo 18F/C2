@@ -7,7 +7,8 @@ class S3Credentials
     if use_env_var?
       ENV["S3_SECRET_ACCESS_KEY"]
     else
-      credentials(base_name("s3"))["S3_SECRET_ACCESS_KEY"]
+      vcap_services["s3"][0]["credentials"]["secret_access_key"]
+
     end
   end
 
@@ -15,7 +16,7 @@ class S3Credentials
     if use_env_var?
       ENV["S3_ACCESS_KEY_ID"]
     else
-      credentials(base_name("s3"))["S3_ACCESS_KEY_ID"]
+      vcap_services["s3"][0]["credentials"]["access_key_id"]
     end
   end
 
@@ -23,7 +24,7 @@ class S3Credentials
     if use_env_var?
       ENV["S3_BUCKET_NAME"]
     else
-      credentials(base_name("s3"))["S3_BUCKET_NAME"]
+      vcap_services["s3"][0]["credentials"]["bucket"]
     end
   end
 
@@ -31,7 +32,7 @@ class S3Credentials
     if use_env_var?
       ENV["S3_REGION"]
     else
-      credentials(base_name("s3"))["S3_REGION"]
+      vcap_services["s3"][0]["credentials"]["region"]
     end
   end
 end
