@@ -78,10 +78,51 @@ ActiveAdmin.register Proposal do
       column(proposal_attr.to_sym) { |proposal| proposal.attributes[proposal_attr] }
     end
     column(:requester) { |proposal| proposal.requester.display_name }
-    client_data_attributes = %w(expense_type vendor not_to_exceed building_number emergency rwa_number work_order_code project_title description direct_pay cl_number function_code soc_code ncr_organization_id)
-    client_data_attributes.each do |data_attr|
-      column(data_attr.to_sym) { |proposal| proposal.client_data.attributes[data_attr] }
+    column(:approving_offical_name) do |proposal|
+      get_user_display_name(proposal.client_data.attributes["approving_official_id"])
     end
-    column(:approving_offical_name) { |proposal| User.find(proposal.client_data.approving_official_id).display_name }
+    column(:approving_offical_email) do |proposal|
+      get_user_email(proposal.client_data.attributes["approving_official_id"])
+    end
+    client_data_attributes.each do |client_attribute|
+      column(client_attribute.to_sym) do |proposal|
+        get_client_data_attribute(proposal, client_attribute)
+      end
+    end
+  end
+end
+
+private
+
+def client_data_attributes
+  (
+    Ncr::WorkOrderFields.new.relevant("BA80") +
+    Ncr::WorkOrderFields.new.relevant("BA61") +
+    Gsa18f::ProcurementFields.new.relevant(true) +
+    Gsa18f::EventFields.new.relevant
+  ).uniq
+end
+
+def get_client_data_attribute(proposal, client_attribute)
+  if proposal.client_data[client_attribute]
+    proposal.client_data[client_attribute]
+  else
+    ""
+  end
+end
+
+def get_user_email(id)
+  if id
+    User.find(id).email_address
+  else
+    ""
+  end
+end
+
+def get_user_display_name(id)
+  if id
+    User.find(id).display_name
+  else
+    ""
   end
 end
