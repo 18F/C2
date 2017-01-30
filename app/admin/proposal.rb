@@ -71,4 +71,17 @@ ActiveAdmin.register Proposal do
     flash[:alert] = "Completed!"
     redirect_to admin_proposal_path(resource)
   end
+
+  csv do
+    proposal_attributes = %w(id status created_at updated_at client_data_type public_id visit_id)
+    proposal_attributes.each do |proposal_attr|
+      column(proposal_attr.to_sym) { |proposal| proposal.attributes[proposal_attr] }
+    end
+    column(:requester) { |proposal| proposal.requester.display_name }
+    client_data_attributes = %w(expense_type vendor not_to_exceed building_number emergency rwa_number work_order_code project_title description direct_pay cl_number function_code soc_code ncr_organization_id)
+    client_data_attributes.each do |data_attr|
+      column(data_attr.to_sym) { |proposal| proposal.client_data.attributes[data_attr] }
+    end
+    column(:approving_offical_name) { |proposal| User.find(proposal.client_data.approving_official_id).display_name }
+  end
 end
