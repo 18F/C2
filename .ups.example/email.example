@@ -1,0 +1,5 @@
+{
+     "SMTP_PASSWORD": "$email_password",
+     "SMTP_USERNAME": "devops@gsa.gov"
+     FIXME
+}

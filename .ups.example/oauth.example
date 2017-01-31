@@ -1,0 +1,5 @@
+{
+     "CG_APP_ID": "$hostname",
+     "CG_APP_SECRET": "$cf_app_secret"
+     FIXME
+}
