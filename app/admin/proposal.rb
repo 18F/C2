@@ -89,10 +89,17 @@ ActiveAdmin.register Proposal do
         get_client_data_attribute(proposal, client_attribute)
       end
     end
+    column(:attachments) do |proposal|
+      get_proposal_attachments(proposal)
+    end
   end
 end
 
 private
+
+def get_proposal_attachments(proposal)
+  proposal.attachments.map(&:url)
+end
 
 def client_data_attributes
   (
