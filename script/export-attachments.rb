@@ -5,11 +5,16 @@
 require "optparse"
 require "pry"
 require "csv"
-require "aws"
+# require "aws"
 
 EXPORT_DIR = "export/"
-CURRENT_PROPOSAL_FOLDER = "current_proposal"
+CURRENT_PROPOSAL_FOLDER = "export/current_proposal"
 FILEPATH_REGEX = /^https:\/\/[\w.-]+\/([^\?]+)\?/
+
+if !Dir.exists?(CURRENT_PROPOSAL_FOLDER)
+  Dir.mkdir(EXPORT_DIR)
+  Dir.mkdir(CURRENT_PROPOSAL_FOLDER)
+end
 
 # Read CSV filename from command line
 
@@ -59,20 +64,26 @@ last_completed = Dir.entries(EXPORT_DIR)[2..-1].map(&:to_i).sort[-1] || 0
 
 # empty current-proposal/
 Dir.foreach(CURRENT_PROPOSAL_FOLDER) do |filename|
-  if filename !~ /^./
-    unlink "#{CURRENT_PROPOSAL_FOLDER}/#{filename}"
+  if filename !~ /^\./
+    puts filename
+    fn = File.join(CURRENT_PROPOSAL_FOLDER, filename); 
+    File.delete(fn)
   end
 end
 
 # For each proposal record
-proposals.keys.sort.foreach do |id|
+proposals.keys.sort.each do |id|
   next if id < last_completed
   # for each attachment URL
-    proposals[id].foreach do |url|
+    proposals[id].each do |url|
       # strip URL down to file path
       match = url.match(FILEPATH_REGEX)
       if match
         filepath = match[1]
+        puts filepath
+      end
+    end
+end
       # fetch file into current-proposal/ folder
   # move to export/[proposal ID]/
 
