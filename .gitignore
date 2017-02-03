@@ -34,3 +34,10 @@ cf-ssh.yml
 
 # IDE files
 /.idea
+
+# Ignore all credential files
+app_config.json
+app_param.json
+email.json
+newrelic.json
+oauth.json

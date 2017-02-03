@@ -1,0 +1,5 @@
+{
+     "NEW_RELIC_APP_NAME": "$appname ($env)",
+     "NEW_RELIC_LICENSE_KEY": "$new_relic_license_key"
+     FIXME
+}

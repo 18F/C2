@@ -1,0 +1,8 @@
+{
+     "API_ENABLED": "true",
+     "BETA_18F_TRAINING": "true",
+     "BETA_FEATURE_DETAIL_VIEW": "true",
+     "BETA_FEATURE_LIST_VIEW": "true",
+     "REDESIGN_DEFAULT_VIEW": "true",
+     "WELCOME_EMAIL": "true"
+}

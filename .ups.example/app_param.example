@@ -1,0 +1,6 @@
+{
+     "ASSET_HOST": "https://$appname-$env.18f.gov/",
+     "DEFAULT_URL_HOST": "$appname-$env.18f.gov",
+     "SECRET_TOKEN": "$secret_token"
+     FIXME
+}

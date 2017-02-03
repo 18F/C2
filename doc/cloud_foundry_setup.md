@@ -99,36 +99,73 @@ Ensure that:
 
 ## Steps
 
+ 1. Know what the given App Name is. This depends on who the customer is,
+    the organisation, etc. We use this name when creating CF resources 
+    such as the main app, the worker, the services, etc. Usually, it's just
+    `c2` - in fact, as I'm writing these docs, it's the only App Name we have.
+    (We were meant to have `requests` at some point, and maybe others.)
+    If you don't know, ask someone else on your team. We'll refer to the App
+    Name as `$appname` lower in the docs. 
+
  1. Choose a space, being one of `prod`, `staging` or `dev`. (If the only
     space you can see is `general`, you're on the East/West environment)
- 1. TODO: Determine your instance's hostname
+    We'll refer to the env/space name as `$env` lower in the docs.
+
+ 1. Determine your instance's hostname. Unless it's a production instance,
+    the hostname is likely to be in the format `$appname-$env` - for example,
+    `c2-staging`. If you're creating a dev instance for yourself, and it's
+    going to live in the `dev` space with other developer instances, you
+    should include your name in the hostname - e.g. `c2-dev-alice`. We'll
+    refer to the hostname as `$hostname` lower in the docs.
+
  1. Make sure you have the `SpaceDeveloper` role in the current space.
     If you already have the `OrgManager` role, all you need to do is:
     `cf set-space-role USERNAME ORG SPACE SpaceDeveloper`
- 1. create services (binding happens automatically thanks to the `services`
+ 
+ 1. Create services (binding happens automatically thanks to the `services`
     section of `manifest.yml`)
     1. pgsql: `cf create-service aws-rds medium-psql c2-SPACE-db`
     1. elasticsearch: `cf create-service elasticsearch23 1x c2-SPACE-elasticsearch`
     1. s3: `cf create-service s3`
- 1. TODO: Obtain cloud.gov authentication credentials
+ 
+ 1. Create JSON files to store the data we'll load into User-Provided Services.
+    You'll need to copy these five files from the `.ups.example` folder into a new
+    temporary folder. Since they'll contain sensitive data, please make sure they're
+    not backed up anywhere:
+    - `app_config.json`
+    - `app_param.json`
+    - `email.json`
+    - `newrelic.json`
+    - `oauth.json`
+    To create these files, you'll need to copy the five files from the `.ups.example`
+    folder into a new temporary folder, and change the `.example` suffixes to `.json`.
+    Over the next few steps you'll set the configuration in these files and then
+    load them into the CF space as User-Provided Services.
+
+ 1. Obtain cloud.gov authentication credentials. Right now, these have to be
+    given by cloud.gov support staff. They will ask for a unique hostname, so
+    give them the `$hostname` mentioned earlier. Once you have the credentials,
+    put them in the `oauth.json` file and remove the `FIXME` string. 
+ 
  1. Set up Mandrill mail delivery and receipt
-    1. Get Mandrill `SMTP_USERNAME` & `SMTP_PASSWORD`
+    1. Get Mandrill `SMTP_USERNAME` & `SMTP_PASSWORD`. Set these in `email.json`
+       and remove the `FIXME` string.
     1. If handling inbound mail, configure a Mandrill inbound mail webhook
        1. To manage Mandrill, first ensure that you have Mandrill access (ask in #admin-mandrill)
        1. Log into MailChimp and then visit https://mandrillapp.com/
        1. On the left nav, click **Inbound**. Then choose the email domain
           for the C2-using organization:
-          - For Acquisition Gateway: `c2.18f.gov`
           - For 18F: `requests.18f.gov`
        1. Look through the URLs in the *Webhooks* column. 
           - If you find a URL already exists with the correct hostname for 
             your new instance, then the **Route** on the left gives you the
-            email address to use for both `NOTIFICATION_FROM_EMAIL` and
-            `NOTIFICATION_REPLY_TO`.
+            email address to use for both the `NOTIFICATION_FROM_EMAIL` and
+            `NOTIFICATION_REPLY_TO` environment variables.
           - If you don't find a URL with the hostname, click **+ Add New
             Route**. Choose an appropriate email username, and in **Post
             To URL** enter an URL of the format `https://HOSTNAME/inbox` ,
             where `HOSTNAME` is your instance's hostname.
+ 
  1. Set up environment vars
     1. on `c2-SPACE`:
         - `ASSET_HOST`
@@ -139,8 +176,10 @@ Ensure that:
         - `SMTP_USERNAME`
         - `SMTP_PASSWORD`
         - `UPS_BASE`
+ 
  1. Deploy app
     1. `cf push c2-SPACE -f manifest.yml`
+ 
  1. Deploy worker
     1. `cf push c2-SPACE-worker -f manifest.yml`
     1. If the worker process keeps dying and doesn't deploy properly, it may
