@@ -16,11 +16,8 @@ require 'fileutils'
 EXPORT_DIR = "export/"
 CURRENT_PROPOSAL_FOLDER = "export/current_proposal/"
 FILEPATH_REGEX = /^https:\/\/[\w.-]+\/([^\?]+)\?/
-
-if !Dir.exists?(CURRENT_PROPOSAL_FOLDER)
-  Dir.mkdir(EXPORT_DIR)
-  Dir.mkdir(CURRENT_PROPOSAL_FOLDER)
-end
+Dir.mkdir(EXPORT_DIR) if !Dir.exist?(EXPORT_DIR)
+Dir.mkdir(CURRENT_PROPOSAL_FOLDER) if !Dir.exist?(CURRENT_PROPOSAL_FOLDER)
 
 # Read CSV filename from command line
 
@@ -49,10 +46,10 @@ OptionParser.new do |opts|
   end
 end.parse!
 
-Aws.config.update({
+Aws.config.update(
   region: aws_region,
   credentials: Aws::Credentials.new(aws_access_key_id, aws_secret_access_key)
-})
+)
 
 if csv_filename =~ /\S/
   puts "Opening #{csv_filename}"
@@ -64,8 +61,8 @@ end
 # Build hash of proposal ID => array of attachment URLs
 proposals = {}
 
-CSV.foreach(csv_filename, { headers: true }) do |row|
-  proposals[row[0].to_i] = eval(row["Attachments"])
+CSV.foreach(csv_filename, headers: true ) do |row|
+  proposals[row[0].to_i] = row["Attachments"].gsub(/"|\[|\]/,"").split(',')
 end
 
 # TODO: Create export & current proposal folders, or
@@ -92,13 +89,12 @@ end
 def save_file directory, object_key, filename, bucket_name
   s3 = Aws::S3::Client.new(region:"us-gov-west-1")
   begin
-    file = File.open(File.join(directory,filename), 'wb' ) do |file|
-      reap = s3.get_object({ bucket: bucket_name, key: object_key }, target: file)
+    File.open(File.join(directory,filename), 'wb' ) do |file|
+      s3.get_object({ bucket: bucket_name, key: object_key }, target: file)
     end
   rescue Aws::S3::Errors::NoSuchKey
     puts "File Doesn't exist"
   end
-
 end
 
 # For each proposal record
@@ -124,10 +120,5 @@ proposals.keys.sort.each do |id|
     # move files to export/[proposal id]/
     FileUtils.cp_r "#{CURRENT_PROPOSAL_FOLDER}.", "#{EXPORT_DIR}#{id}"
 end
-      # fetch file into current-proposal/ folder
-  # move to export/[proposal ID]/
 
-# print "Done!"
 puts "Done!"
-
-
