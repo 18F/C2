@@ -5,19 +5,19 @@
 require "optparse"
 require "pry"
 require "csv"
-require 'net/http'
-require 'tempfile'
-require 'uri'
-require 'restclient'
-require 'aws-sdk'
-require 'fileutils'
+require "net/http"
+require "tempfile"
+require "uri"
+require "restclient"
+require "aws-sdk"
+require "fileutils"
 
+EXPORT_DIR = "export/".freeze
+CURRENT_PROPOSAL_FOLDER = "export/current_proposal/".freeze
+FILEPATH_REGEX = %r{/^https:\/\/[\w.-]+\/([^\?]+)\?/}
 
-EXPORT_DIR = "export/"
-CURRENT_PROPOSAL_FOLDER = "export/current_proposal/"
-FILEPATH_REGEX = /^https:\/\/[\w.-]+\/([^\?]+)\?/
-Dir.mkdir(EXPORT_DIR) if !Dir.exist?(EXPORT_DIR)
-Dir.mkdir(CURRENT_PROPOSAL_FOLDER) if !Dir.exist?(CURRENT_PROPOSAL_FOLDER)
+Dir.mkdir(EXPORT_DIR) unless Dir.exist?(EXPORT_DIR)
+Dir.mkdir(CURRENT_PROPOSAL_FOLDER) unless Dir.exist?(CURRENT_PROPOSAL_FOLDER)
 
 # Read CSV filename from command line
 
@@ -61,8 +61,8 @@ end
 # Build hash of proposal ID => array of attachment URLs
 proposals = {}
 
-CSV.foreach(csv_filename, headers: true ) do |row|
-  proposals[row[0].to_i] = row["Attachments"].gsub(/"|\[|\]/,"").split(',')
+CSV.foreach(csv_filename, headers: true) do |row|
+  proposals[row[0].to_i] = row["Attachments"].gsub(/"|\[|\]/, "").split(",")
 end
 
 # TODO: Create export & current proposal folders, or
@@ -78,18 +78,16 @@ def empty_current_proposal_dir
   Dir.foreach(CURRENT_PROPOSAL_FOLDER) do |filename|
     if filename !~ /^\./
       puts filename
-      fn = File.join(CURRENT_PROPOSAL_FOLDER, filename); 
+      fn = File.join(CURRENT_PROPOSAL_FOLDER, filename)
       File.delete(fn)
     end
   end
 end
 
-
-
-def save_file directory, object_key, filename, bucket_name
-  s3 = Aws::S3::Client.new(region:"us-gov-west-1")
+def save_file(directory, object_key, filename, bucket_name)
+  s3 = Aws::S3::Client.new(region: "us-gov-west-1")
   begin
-    File.open(File.join(directory,filename), 'wb' ) do |file|
+    File.open(File.join(directory, filename), "wb") do |file|
       s3.get_object({ bucket: bucket_name, key: object_key }, target: file)
     end
   rescue Aws::S3::Errors::NoSuchKey
@@ -99,26 +97,26 @@ end
 
 # For each proposal record
 proposals.keys.sort.each do |id|
-  next if id < last_completed || proposals[id].length < 1
+  next if id < last_completed || proposals[id].empty?
   # for each attachment URL
   puts "Proposal ID = #{id}"
   puts "# of Attachments = #{proposals[id].length}"
   empty_current_proposal_dir
-    proposals[id].each do |url|
-      # strip URL down to file path
-      match = url.match(FILEPATH_REGEX)
-      if match
-        filepath = match[1]
-        filename = filepath.match(/\/([^\/]+)\/?$/)[1]
-        object_key = match[1]
-        puts "object_key = #{object_key}"
-        puts "filename = #{filename}"
-        puts "full path = #{match[0]}"
-        save_file(CURRENT_PROPOSAL_FOLDER, object_key, filename, bucket_name)
-      end
-    end
-    # move files to export/[proposal id]/
-    FileUtils.cp_r "#{CURRENT_PROPOSAL_FOLDER}.", "#{EXPORT_DIR}#{id}"
+  proposals[id].each do |url|
+    # strip URL down to file path
+    match = url.match(FILEPATH_REGEX)
+    next unless match
+
+    filepath = match[1]
+    filename = filepath.match(%r{/\/([^\/]+)\/?$/})[1]
+    object_key = match[1]
+    puts "object_key = #{object_key}"
+    puts "filename = #{filename}"
+    puts "full path = #{match[0]}"
+    save_file(CURRENT_PROPOSAL_FOLDER, object_key, filename, bucket_name)
+  end
+  # move files to export/[proposal id]/
+  FileUtils.cp_r "#{CURRENT_PROPOSAL_FOLDER}.", "#{EXPORT_DIR}#{id}"
 end
 
 puts "Done!"
