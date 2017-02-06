@@ -16,9 +16,6 @@ EXPORT_DIR = "export/".freeze
 CURRENT_PROPOSAL_FOLDER = "export/current_proposal/".freeze
 FILEPATH_REGEX = %r{/^https:\/\/[\w.-]+\/([^\?]+)\?/}
 
-Dir.mkdir(EXPORT_DIR) unless Dir.exist?(EXPORT_DIR)
-Dir.mkdir(CURRENT_PROPOSAL_FOLDER) unless Dir.exist?(CURRENT_PROPOSAL_FOLDER)
-
 # Read CSV filename from command line
 
 csv_filename = ""
@@ -65,8 +62,8 @@ CSV.foreach(csv_filename, headers: true) do |row|
   proposals[row[0].to_i] = row["Attachments"].gsub(/"|\[|\]/, "").split(",")
 end
 
-# TODO: Create export & current proposal folders, or
-# check for their existence
+Dir.mkdir(EXPORT_DIR) unless Dir.exist?(EXPORT_DIR)
+Dir.mkdir(CURRENT_PROPOSAL_FOLDER) unless Dir.exist?(CURRENT_PROPOSAL_FOLDER)
 
 # Look in export/ folder for completed proposal folders
 # Find the highest folder number
