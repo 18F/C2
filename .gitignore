@@ -34,3 +34,6 @@ cf-ssh.yml
 
 # IDE files
 /.idea
+
+# Ignore Export Folder
+/export
