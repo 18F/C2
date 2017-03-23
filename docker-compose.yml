@@ -1,0 +1,48 @@
+version: '2'
+services:
+  web:
+    build: .
+    volumes:
+      - .:/app
+    depends_on:
+      - fake_cg
+      - db
+      - elasticsearch
+    volumes_from:
+      - box
+    ports:
+      - "3000:3000"
+    command: ./script/start
+    env_file: .env
+    links:
+      - db
+    environment:
+       DATABASE_USER: postgres
+       DATABASE_NAME: postgres
+       DATABASE_HOST: db
+       CG_URL: http://localhost:8080/oauth/authorize
+       CG_TOKEN_UR: http://localhost:8080/oauth/token
+
+  # caching gems according to
+  # https://medium.com/@fbzga/how-to-cache-bundle-install-with-docker-7bed453a5800#.fg6dken7e
+  box:
+    image: busybox
+    volumes:
+      - /box
+
+  db:
+    image: postgres
+    expose:
+      - "5432"
+
+  elasticsearch:
+    image: itzg/elasticsearch
+    expose:
+      - "9200"
+
+  fake_cg:
+    build:
+      context: .
+      dockerfile: Dockerfile.fake-cloud-gov
+    ports:
+      - "8080:8080"

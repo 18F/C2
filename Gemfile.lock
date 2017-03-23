@@ -605,6 +605,7 @@ DEPENDENCIES
   railroady
   rails (= 4.2.7.1)
   rails_12factor
+  rake (= 11.3.0)
   redcarpet
   roadie-rails
   rspec-rails
@@ -626,7 +627,7 @@ DEPENDENCIES
   zonebie
 
 RUBY VERSION
-   ruby 2.3.1p112
+   ruby 2.3.3p222
 
 BUNDLED WITH
-   1.13.6
+   1.14.6
