@@ -43,9 +43,13 @@ C2 is a fairly typical Rails application, so the setup is straightforward:
 1. Once you've registered the application, cloud.gov will give you two consumer key strings for saving: the _App ID_ and _App Secret_. Add these to your [`.env`](../.env.example), setting `CG_APP_ID` to the App ID and `CG_APP_SECRET` to the App Secret.
 
 1. To test locally, you need to use fake-cloud.gov:
-    * Download the binary for [fake-cloud.gov](https://github.com/18F/cg-fake-uaa)
-    * From the directory your binary is in, run `chmod +x fake-cloud.gov`
-    * Run the binary, passing it the correct URL for your local instance's callback: `./fake-cloud.gov -callback-url http://localhost:3000/auth/cg/callback`
+    * Download the binary for [cg-fake-uaa](https://github.com/18F/cg-fake-uaa)
+    * From the directory your binary is in, run `chmod +x cg-fake-uaa`
+    * Run the binary, passing it the correct URL for your local instance's callback: `./cg-fake-uaa -callback-url http://localhost:3000/auth/cg/callback`
+    * When `cg-fake-uaa` is run it will print an OAuth2 authorize URL and a token URL. 
+      In your C2 `.env` file, add these as  `CG_URL` and `CG_TOKEN_URL` respectively. (**Note:** At time of writing,
+      using the full token URL suggested by `cg-fake-uaa` will cause errors when trying to log in with C2. For the
+      moment, set `CG_TOKEN_URL` to just `http://localhost:8080/` (or whichever port `cg-fake-uaa` is using)
 
     The fake version simply asks for an email address and redirects that email address back to your callback. It does
     not look like the actual cloud.gov login flow.
