@@ -3,7 +3,7 @@ describe AttachmentsController do
     let (:proposal) { create(:proposal, :with_parallel_approvers, :with_observers) }
     let (:params) {{
       proposal_id: proposal.id,
-      attachment: { file: fixture_file_upload('icon-user.png', 'image/png') }
+      attachment: fixture_file_upload('icon-user.png', 'image/png')
     }}
 
     before do

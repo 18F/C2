@@ -1,12 +1,12 @@
 feature "Observers" do
-  scenario "allows observers to be added" do
+  scenario "allows observers to be added", :js do
     work_order = create(:ncr_work_order)
     observer = create(:user, client_slug: "ncr")
     proposal = work_order.proposal
     login_as(proposal.requester)
 
     visit proposal_path(proposal)
-    select observer.email_address, from: "observation_user_id"
+    fill_in_selectized("selectize-control", observer.email_address)
     click_on "Add an Observer"
 
     expect(page).to have_content("#{observer.full_name} is now an observer.")
@@ -123,27 +123,27 @@ feature "Observers" do
     expect(current_path).to eq(proposal_path(proposal))
   end
 
-  scenario "allows observers to be added by other observers" do
-    proposal = create(:proposal, :with_observer)
+  scenario "allows observers to be added by other observers", :js do
+    proposal = create(:ncr_work_order, :with_observers).proposal
     observer1 = proposal.observers.first
-    observer2 = create(:user, client_slug: nil)
+    observer2 = create(:user, client_slug: "ncr")
     login_as(observer1)
 
     visit proposal_path(proposal)
-    select observer2.email_address, from: "observation_user_id"
+    fill_in_selectized("selectize-control", observer2.email_address)
     click_on "Add an Observer"
 
     expect(page).to have_content("#{observer2.full_name} is now an observer.")
   end
 
-  scenario "allows a user to add a reason when adding an observer" do
+  scenario "allows a user to add a reason when adding an observer", :js do
     reason = "is the archbishop of banterbury"
-    proposal = create(:proposal)
-    observer = create(:user, client_slug: nil)
+    proposal = create(:ncr_work_order).proposal
+    observer = create(:user, client_slug: "ncr")
     login_as(proposal.requester)
 
     visit proposal_path(proposal)
-    select observer.email_address, from: "observation_user_id"
+    fill_in_selectized("selectize-control", observer.email_address)
     fill_in "observation_reason", with: reason
     click_on "Add an Observer"
 
@@ -151,8 +151,8 @@ feature "Observers" do
   end
 
   scenario "hides the reason field until a new observer is selected", :js do
-    proposal = create(:proposal)
-    observer = create(:user, client_slug: nil)
+    proposal = create(:ncr_work_order).proposal
+    observer = create(:user, client_slug: "ncr")
     login_as(proposal.requester)
 
     visit proposal_path(proposal)
@@ -166,8 +166,8 @@ feature "Observers" do
   end
 
   scenario "disables the submit button until a new observer is selected", :js do
-    proposal = create(:proposal)
-    observer = create(:user, client_slug: nil)
+    proposal = create(:ncr_work_order).proposal
+    observer = create(:user, client_slug: "ncr")
     login_as(proposal.requester)
 
     visit proposal_path(proposal)
@@ -180,19 +180,25 @@ feature "Observers" do
     expect(submit_button).to_not be_disabled
   end
 
-  scenario "observer can delete themselves as observer" do
-    observer = create(:user)
-    proposal = create(:proposal, observer: observer)
-    login_as(observer)
+  scenario "observer can delete themselves as observer", :js do
+    # observer = create(:user)
+    proposal = create(:ncr_work_order, :with_observers).proposal
+    proposal.observations.last.destroy!
+    proposal = Proposal.find(proposal.id)
+    observer = proposal.observers.first
+    login_as(proposal.observers.first)
 
     visit proposal_path(proposal)
-    delete_button = find('table.observers .button_to input[value="Remove"]')
+    delete_button = find('.observer-list .observer-remove-button')
     delete_button.click
-
-    expect(page).to have_content("Removed Observation for ")
+    sleep(1)
+    click_on "REMOVE"
+    sleep(1)
+    proposal = Proposal.find(proposal.id)
+    expect(proposal.observers.length).to eq(0)
   end
 
-  scenario "shows observer roles next to their names" do
+  scenario "shows observer roles next to their names", :js do
     proposal = create(:proposal)
     _procurement = create(:gsa18f_procurement, :with_steps, proposal: proposal)
     purchaser = User.with_role("gsa18f_purchaser").first
@@ -200,7 +206,7 @@ feature "Observers" do
 
     visit proposal_path(proposal)
 
-    within(".observers") do
+    within(".card-for-observers") do
       expect(page).to have_content("#{purchaser.email_address} (Purchaser)")
     end
   end

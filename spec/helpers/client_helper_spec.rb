@@ -34,45 +34,6 @@ describe ClientHelper do
   end
 
   describe "#modify_client_button" do
-    it "returns edit path for a client data type with edit path" do
-      work_order = create(:ncr_work_order)
-      proposal = work_order.proposal
-
-      expect(modify_client_button(proposal)).to eq(
-        link_to(
-          "Modify Request",
-          edit_ncr_work_order_path(work_order),
-          class: "form-button modify"
-        )
-      )
-    end
-
-    it "returns correct text in second param" do
-      work_order = create(:ncr_work_order)
-      proposal = work_order.proposal
-
-      expect(modify_client_button(proposal, "Different Text")).to eq(
-        link_to(
-          "Different Text",
-          edit_ncr_work_order_path(work_order),
-          class: "form-button modify"
-        )
-      )
-    end
-
-    it "returns correct class in third param" do
-      work_order = create(:ncr_work_order)
-      proposal = work_order.proposal
-
-      expect(modify_client_button(proposal, "Modify Proposal", "custom-class")).to eq(
-        link_to(
-          "Modify Proposal",
-          edit_ncr_work_order_path(work_order),
-          class: "custom-class"
-        )
-      )
-    end
-
     it "returns empty string if proposal has no client data" do
       proposal = build(:proposal, client_data: nil)
 

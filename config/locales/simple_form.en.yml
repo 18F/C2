@@ -13,7 +13,7 @@ en:
         additional_info: "Please include any additional information you feel we need to correctly execute the purchase"
       ncr_work_order:
         approving_official: "Approving official's email address"
-        direct_pay_html: "I am going to be using <a href='#' class='c2-tooltip'>direct pay</a> for this transaction"
+        direct_pay_html: "I am going to be using direct pay for this transaction"
         emergency: "This request was an emergency and I received a verbal Notice to Proceed (NTP)"
         ncr_organization: "Org code / Service center"
     placeholders:

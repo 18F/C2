@@ -1,4 +1,4 @@
-describe "client_slug confers authz rules" do
+describe "client_slug confers authz rules", :js do
   include EnvVarSpecHelper
 
   before(:each) do
@@ -70,13 +70,14 @@ describe "client_slug confers authz rules" do
     expect(page.status_code).to eq(403)
   end
 
-  it "rejects subscriber trying to add user with non-client_slug as observer" do
+  it "rejects subscriber trying to add user with non-client_slug as observer", js: false do
     login_as(@ncr_user)
 
-    visit new_ncr_work_order_path
-    submit_ba60_work_order(@ncr_approver)
+    # visit new_ncr_work_order_path
+    # submit_ba60_work_order(@ncr_approver)
+    proposal = create(:ncr_work_order, requester: @ncr_user).proposal
+    visit proposal_path(proposal)
 
-    expect(page.status_code).to eq(200)
     expect_to_not_find_amongst_select_tag_options("observation_user_id", @gsa_user.email_address)
   end
 
@@ -108,10 +109,11 @@ describe "client_slug confers authz rules" do
     fill_in "Project title", with: "blue shells"
     fill_in "Description", with: "desc content"
     choose "BA60"
-    fill_in "Vendor", with: "Yoshi"
+    fill_in_selectized("ncr_work_order_vendor", "Yoshi")
     fill_in "Amount", with: 123.45
-    select approver.email_address, from: "Approving official's email address"
-    fill_in "Building number", with: Ncr::BUILDING_NUMBERS[0]
+    
+    fill_in_selectized("ncr_work_order_approving_official", approver.email_address)
+    fill_in_selectized("ncr_work_order_building_number", Ncr::BUILDING_NUMBERS[0])
     find('input[name="commit"]').click
   end
 

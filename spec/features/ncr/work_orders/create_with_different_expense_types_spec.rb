@@ -4,21 +4,21 @@ feature "Create NCR Work orders with different expense types", :js do
     login_as(requester)
     visit new_ncr_work_order_path
 
-    expect(page).to have_no_field("RWA Number")
+    expect(page).to have_no_field("RWA#")
     expect(page).to have_no_field("Work Order")
     expect(page).to have_no_field("emergency")
 
     choose "BA61"
-    expect(page).to have_no_field("RWA Number")
+    expect(page).to have_no_field("RWA#")
     expect(page).to have_no_field("Work Order")
     expect(page).to have_field("emergency")
     expect(find_field("emergency", visible: false)).to be_visible
 
     choose "BA80"
-    expect(page).to have_field("RWA Number")
-    expect(page).to have_field("Work Order")
+    expect(page).to have_field("RWA#")
+    expect(page).to have_field("Work Order / Ticket #")
     expect(page).to have_no_field("emergency")
-    expect(find_field("RWA Number")).to be_visible
+    expect(find_field("RWA#")).to be_visible
   end
 
   context "BA61 emergency request" do
@@ -35,10 +35,9 @@ feature "Create NCR Work orders with different expense types", :js do
       fill_in_selectized("ncr_work_order_vendor", "Test vendor")
       fill_in "Amount", with: 123.45
       fill_in_selectized("ncr_work_order_approving_official", approver.email_address)
-      click_on "Submit for approval"
-
+      click_on "SUBMIT"
       expect(page).to have_content("Proposal submitted")
-      expect(page).to have_content("0 of 0 steps completed")
+      expect(page).to have_content("This request was an emergency and received a verbal Notice to Proceed (NTP)")
     end
   end
 
@@ -57,10 +56,11 @@ feature "Create NCR Work orders with different expense types", :js do
       fill_in_selectized("ncr_work_order_vendor", "Test vendor")
       fill_in "Amount", with: 123.45
       fill_in_selectized("ncr_work_order_approving_official", approver.email_address)
-      click_on "Submit for approval"
-
+      click_on "SUBMIT"
       expect(page).to have_content("Proposal submitted")
-      expect(page).to have_content("0 of 1 steps completed")
+      expect(page).to have_content("Step 1")
+      expect(page).to have_content("Approver Pending")
+      expect(page).to_not have_content("Step 2")
     end
   end
 
