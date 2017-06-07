@@ -1,7 +1,7 @@
 describe "User Delegates" do
-  it "allows delegate to approve a proposal" do
-    proposal = create(:proposal, :with_approver)
-    delegate = create(:user)
+  it "allows delegate to approve a proposal", :js do
+    proposal = create(:ncr_work_order, :with_approvers).proposal
+    delegate = create(:user, client_slug: "ncr")
     approver = proposal.approvers.first
     approver.add_delegate(delegate)
     approver.save!
@@ -15,10 +15,10 @@ describe "User Delegates" do
     expect(page).to have_content(delegate.full_name)
   end
 
-  it "delegates can view work order after approval by different delegate" do
-    proposal = create(:proposal, :with_approver)
-    delegate = create(:user)
-    delegate_two = create(:user)
+  it "delegates can view work order after approval by different delegate", :js do
+    proposal = create(:ncr_work_order, :with_approvers).proposal
+    delegate = create(:user, client_slug: "ncr")
+    delegate_two = create(:user, client_slug: "ncr")
     approver = proposal.approvers.first
     approver.add_delegate(delegate)
     approver.add_delegate(delegate_two)
