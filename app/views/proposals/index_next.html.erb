@@ -5,8 +5,8 @@
     <% render partial: "proposals/details/top_notification" %>
   <% end %>
 <% end %>
+<%= render "layouts/notices" %>
 <meta name="list_view_config" content='<%= @list_view_config.html_safe %>'>
-
 <div id="proposals-unfiltered" class="proposals-unfiltered">
   <% if display_search_ui? %>
     <div class="medium-12 large-6 large-push-6 column">

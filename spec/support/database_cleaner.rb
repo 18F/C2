@@ -1,6 +1,6 @@
 RSpec.configure do |config|
   config.before(:suite) do
-    DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner.strategy = :truncation
     ActionMailer::Base.deliveries.clear
     Role.ensure_system_roles_exist
     Test.setup_models
@@ -14,7 +14,7 @@ RSpec.configure do |config|
   config.before(:each, js: true) do
     # :truncation is slow and conservative
     # :transaction is fast and more aggressive
-    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.strategy = :truncation
   end
 
   config.before(:each) do

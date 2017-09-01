@@ -1,11 +1,10 @@
 describe "Canceling a request" do
-  it "shows a cancel link for the requester" do
-    proposal = create(:proposal)
+  it "shows a cancel link for the requester", :js do
+    proposal = create(:ncr_work_order).proposal
     login_as(proposal.requester)
 
     visit proposal_path(proposal)
-
-    expect(page).to have_content("Cancel this request")
+    expect(page).to have_content("Cancel request")
   end
 
   it "does not show a cancel link for non-actionable user" do
@@ -29,16 +28,16 @@ describe "Canceling a request" do
   end
 
   it "shows cancel link for admins" do
-    proposal = create(:proposal, :with_approver)
-    admin_user = create(:user, :admin)
+    proposal = create(:ncr_work_order).proposal
+    admin_user = create(:user, :admin, client_slug: 'ncr')
     login_as(admin_user)
 
     visit proposal_path(proposal)
 
-    expect(page).to have_content("Cancel this request")
+    expect(page).to have_content("Cancel request")
   end
 
-  it "allows admin to cancel a proposal even with different client_slug" do
+  it "allows admin to cancel a proposal even with different client_slug", :js do
     work_order = create(:ncr_work_order)
     proposal = work_order.proposal
     admin_user = create(:user, :admin, client_slug: "gsa18f")
@@ -49,51 +48,50 @@ describe "Canceling a request" do
     expect(page).to_not have_content("May not add observer")
   end
 
-  it "prompts the requester for a reason" do
-    proposal = create(:proposal)
+  it "prompts the requester for a reason", :js do
+    proposal = create(:ncr_work_order).proposal
     login_as(proposal.requester)
 
     visit proposal_path(proposal)
-    click_on("Cancel this request")
-
-    expect(current_path).to eq("/proposals/#{proposal.id}/cancel_form")
+    click_on("Cancel request")
+    expect(page).to have_selector('.cancel-modal-content', visible: true)
   end
 
   context "step completers" do
-    it "allows actionable step completer to cancel" do
-      proposal = create(:proposal, :with_serial_approvers)
+    it "allows actionable step completer to cancel", :js do
+      proposal = create(:ncr_work_order, :with_approvers).proposal
       login_as(proposal.approvers[0])
 
       cancel_proposal(proposal)
 
-      expect(current_path).to eq(proposal_path(proposal))
+      expect(page).to_not have_content("Request status canceled")
     end
 
-    it "allows actionable step delegate to cancel" do
-      delegate = create(:user)
-      proposal = create(:proposal, :with_serial_approvers)
+    it "allows actionable step delegate to cancel", :js do
+      delegate = create(:user, client_slug: "ncr")
+      proposal = create(:ncr_work_order, :with_approvers).proposal
       proposal.approvers[0].add_delegate(delegate)
       login_as(delegate)
 
       cancel_proposal(proposal)
 
-      expect(current_path).to eq(proposal_path(proposal))
+      expect(page).to_not have_content("Request status canceled")
     end
 
     it "disallows non-actionable step completer to cancel" do
-      proposal = create(:proposal, :with_serial_approvers)
+      proposal = create(:ncr_work_order, :with_approvers).proposal
       login_as(proposal.approvers.last)
 
       visit proposal_path(proposal)
 
-      expect(page).to_not have_content("Cancel this request")
+      expect(page).to_not have_content("Cancel request")
     end
   end
 
   context "email", :email do
     context "proposal without approver" do
-      it "sends cancelation email to requester" do
-        proposal = create(:proposal)
+      it "sends cancelation email to requester", :js do
+        proposal = create(:ncr_work_order).proposal
 
         login_as(proposal.requester)
 
@@ -104,8 +102,8 @@ describe "Canceling a request" do
     end
 
     context "proposal with pending status" do
-      it "does not send cancelation email to approver" do
-        proposal = create(:proposal, :with_approver)
+      it "does not send cancelation email to approver", :js do
+        proposal = create(:ncr_work_order, :with_approvers).proposal
         proposal.individual_steps.first.update(status: "pending")
 
         login_as(proposal.requester)
@@ -118,8 +116,8 @@ describe "Canceling a request" do
     end
 
     context "proposal with approver" do
-      it "sends cancelation emails to requester and approver" do
-        proposal = create(:proposal, :with_approver)
+      it "sends cancelation emails to requester and approver", :js do
+        proposal = create(:ncr_work_order, :with_approvers).proposal
 
         login_as(proposal.requester)
 
@@ -127,13 +125,13 @@ describe "Canceling a request" do
           cancel_proposal(proposal)
         end.to change { deliveries.length }.from(0).to(2)
         expect_one_email_sent_to(proposal.requester)
-        expect_one_email_sent_to(proposal.individual_steps.last.user)
+        expect_one_email_sent_to(proposal.individual_steps.first.user)
       end
     end
 
     context "proposal with observer" do
-      it "sends cancelation email to observer" do
-        proposal = create(:proposal, :with_observer)
+      it "sends cancelation email to observer", :js do
+        proposal = create(:ncr_work_order).proposal
 
         login_as(proposal.requester)
         cancel_proposal(proposal)
@@ -145,28 +143,26 @@ describe "Canceling a request" do
   end
 
   context "entering in a reason cancelation" do
-    it "successfully saves comments, changes the request status" do
-      proposal = create(:proposal)
+    it "successfully saves comments, changes the request status", :js do
+      proposal = create(:ncr_work_order).proposal
       login_as(proposal.requester)
 
       cancel_proposal(proposal)
 
-      expect(current_path).to eq("/proposals/#{proposal.id}")
-      expect(page).to have_content("canceled")
+      expect(page).to_not have_content("Request status canceled")
+      expect(page).to have_content("Canceled")
       expect(proposal.reload.status).to eq("canceled")
       expect(proposal.reload.comments.last.comment_text).to eq("Request canceled with comments: This is a good reason for the cancelation.")
     end
 
-    it "displays an error if the reason is blank" do
-      proposal = create(:proposal)
+    it "disables cancel button if the reason is blank", :js do
+      proposal = create(:ncr_work_order).proposal
       login_as(proposal.requester)
 
       visit proposal_path(proposal)
-      click_on("Cancel this request")
+      click_on("Cancel request")
       fill_in "reason_input", with: ""
-      click_on("Yes, cancel this request")
-
-      expect(page).to have_content("A reason for cancelation is required. Please indicate why this request needs to be canceled.")
+      expect(page).to have_button('YES, CANCEL', disabled: true)
     end
   end
 
@@ -182,21 +178,22 @@ describe "Canceling a request" do
     end
 
     it "redirects for non-requesters" do
-      proposal = create(:proposal, :with_serial_approvers)
+      proposal = create(:ncr_work_order, :with_approvers).proposal
       login_as(proposal.approvers.last)
 
       visit cancel_form_proposal_path(proposal)
 
-      expect(page).to have_content("You are not the requester")
+      expect(page).to have_content(" Authorization error You do not have access to this page.")
       expect(current_path).to eq("/proposals/#{proposal.id}")
     end
   end
 
   def cancel_proposal(proposal)
     visit proposal_path(proposal)
-    click_on("Cancel this request")
+    click_on("Cancel request")
+    sleep(2)
     fill_in "reason_input", with: "This is a good reason for the cancelation."
-    click_on("Yes, cancel this request")
+    click_on("YES, CANCEL")
   end
 
   def expect_one_email_sent_to(user)

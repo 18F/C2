@@ -1,5 +1,6 @@
 describe ProposalsController do
   include ReturnToHelper
+  
   let(:user) { create(:user, client_slug: "test") }
 
   describe '#index' do
