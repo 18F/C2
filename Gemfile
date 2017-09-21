@@ -18,6 +18,7 @@ gem "browser-timezone-rails"
 gem "blazer"
 gem "climate_control"
 gem "clockwork", require: false
+gem "commonmarker"
 gem "daemons" # for delayed_job
 gem "delayed_job_active_record", "~> 4.1.0"
 gem "doorkeeper", "~> 4.2.0"
@@ -61,7 +62,6 @@ gem "sprockets-rails", "< 3" # https://github.com/jfirebaugh/konacha/issues/216
 gem "uglifier"
 gem "validates_email_format_of"
 gem "workflow"
-gem "commonmarker"
 
 group :development, :production do
   gem "puma"
