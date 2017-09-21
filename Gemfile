@@ -61,6 +61,7 @@ gem "sprockets-rails", "< 3" # https://github.com/jfirebaugh/konacha/issues/216
 gem "uglifier"
 gem "validates_email_format_of"
 gem "workflow"
+gem "commonmarker"
 
 group :development, :production do
   gem "puma"
