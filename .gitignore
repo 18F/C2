@@ -37,3 +37,6 @@ cf-ssh.yml
 
 # Ignore Export Folder
 /export
+
+# Ignore cg-fake-uaa app
+cg-fake-uaa
