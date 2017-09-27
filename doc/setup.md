@@ -22,6 +22,7 @@ C2 is a fairly typical Rails application, so the setup is straightforward:
    rbenv init
    rbenv install 2.3.3
    gem install bundler
+   bundle
    ```
 
 1. Run the setup script to create a user record for your email address, make
@@ -67,13 +68,13 @@ C2 is a fairly typical Rails application, so the setup is straightforward:
 
 #### Can't create or connect to Elasticsearch
 
-* To install Elasticsearch locally and put it in your `$PATH`:
+* To install a compatible Elasticsearch locally:
 
 ```bash
 brew install elasticsearch@2.4
-export PATH=$PATH:/usr/local/opt/elasticsearch@2.4/bin
 ```
 
+* Note the `TEST_CLUSTER_COMMAND` in `.env.example`, you may need to un-comment it before tests will run.
 * Check that Elasticsearch is running (default is localhost:9200)
 * Set the `ES_URL` variable in [`.env`](../.env.example) to match your setup
 
