@@ -16,7 +16,7 @@ module ProposalSteps
 
   def existing_or_delegated_actionable_step_for(user)
     where_clause = "(#{ProposalServices.new(self).sql_for_step_user_or_delegate}) AND status = :actionable"
-    steps.find_by(where_clause, user_id: user.id, actionable: :actionable)
+    steps.where(sanitize_sql_array([where_clause, { user_id: user.id, actionable: :actionable }]))
   end
 
   def delegates
