@@ -1,12 +1,33 @@
 {
   "ignored_warnings": [
     {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "348c8a382df7e795a35237a5c73a4bf711da65aa03e1e7e1859c39cfa4ec3881",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/concerns/proposal_steps.rb",
+      "line": 19,
+      "link": "http://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "steps.find_by(\"(#{ProposalServices.new(self).sql_for_step_user_or_delegate}) AND status = :actionable\", :user_id => user.id, :actionable => :actionable)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "ProposalSteps",
+        "method": "existing_or_delegated_actionable_step_for"
+      },
+      "user_input": "ProposalServices.new(self).sql_for_step_user_or_delegate",
+      "confidence": "Weak",
+      "note": ""
+    },
+    {
       "warning_type": "Dynamic Render Path",
       "warning_code": 15,
       "fingerprint": "f80c20fad3f53c3fbd0b4f51ab1c5ad4d09fddba4548f56f6007f7581568b428",
+      "check_name": "Render",
       "message": "Render path contains parameter value",
       "file": "app/controllers/help_controller.rb",
-      "line": 11,
+      "line": 15,
       "link": "http://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
       "code": "render(action => \"help/#{params[:id]}\", {})",
       "render_path": null,
@@ -20,6 +41,6 @@
       "note": ""
     }
   ],
-  "updated": "2015-07-10 01:57:39 +0100",
-  "brakeman_version": "3.0.5"
+  "updated": "2017-10-03 20:30:58 -0600",
+  "brakeman_version": "3.7.2"
 }
