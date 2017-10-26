@@ -17,6 +17,14 @@ C2 is a fairly typical Rails application, so the setup is straightforward:
    `rvm`. On a Mac, [you can use Homebrew to install it](https://github.com/rbenv/rbenv#homebrew-on-mac-os-x)
    (along with `ruby-build`).
 
+   ```bash
+   brew install rbenv postgresql
+   rbenv init
+   rbenv install 2.3.3
+   gem install bundler
+   bundle
+   ```
+
 1. Run the setup script to create a user record for your email address, make
    that user an admin, and add a few records for that user.
 
@@ -29,11 +37,8 @@ C2 is a fairly typical Rails application, so the setup is straightforward:
     ```
 1. Per [the Twelve-Factor guidelines](http://12factor.net/config), all necessary configuration should be possible through environment variables. (See [`.env.example`](../.env.example) for the full list.)
 
-    Your configuration will go in the `.env` file. Create it by copying `.env.example`:
+    Your configuration will go in the `.env` file that the `bootstrap` script creates.  `.env.example` exists as an example.
 
-    ```bash
-    cp .env.example .env
-    ```
 1. [Register an application on cloud.gov](https://cloud.gov/docs/apps/leveraging-authentication/#register-your-application-instances).
     * Give the application a **Name** that gives cloud.gov admins a good idea of what it is and who set it up; e.g. `c2-prod`.
       Optionally create multiple instances: `c2-prod`, `c2-staging`, `c2-dev`, for example.
@@ -63,10 +68,18 @@ C2 is a fairly typical Rails application, so the setup is straightforward:
 
 #### Can't create or connect to Elasticsearch
 
+* To install a compatible Elasticsearch locally:
+
+```bash
+brew install elasticsearch@2.4
+```
+
+* Note the `TEST_CLUSTER_COMMAND` in `.env.example`, you may need to un-comment it before tests will run.
 * Check that Elasticsearch is running (default is localhost:9200)
 * Set the `ES_URL` variable in [`.env`](../.env.example) to match your setup
 
 #### If 'foreman' command not found, you may be using rbenv. If so, run the following...
+
 ```bash
 rbenv rehash
 gem install foreman
@@ -108,9 +121,14 @@ http://localhost:3000/rails/mailers.
 You will need to install [PhantomJS](http://phantomjs.org/download.html) and
 have it in your PATH. This is used for javascript and interface testing.
 
+```bash
+brew install phantomjs
+```
+
 ### Running the entire suite once
 
 ```bash
+rake db:test:prepare
 ./bin/rake
 ```
 
