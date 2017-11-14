@@ -12,7 +12,7 @@ class AuthController < ApplicationController
       render :failure, status: 200
     end
     
-    Rails.logger.info("Successful login: #{auth.info.email}")
+    Rails.logger.info("Successful login: #{auth.info}") 
   end
 
   def failure
