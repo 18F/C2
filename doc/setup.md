@@ -2,7 +2,7 @@
 
 ## Dependencies
 
-* Ruby 2.3.3
+* Ruby 2.3.5
 * PostgreSQL 9.x
 * Elasticsearch 1.5+
 * A [cloud.gov](https://cloud.gov/) account
@@ -20,7 +20,7 @@ C2 is a fairly typical Rails application, so the setup is straightforward:
    ```bash
    brew install rbenv postgresql
    rbenv init
-   rbenv install 2.3.3
+   rbenv install 2.3.5
    gem install bundler
    bundle
    ```
