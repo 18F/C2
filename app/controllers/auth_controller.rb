@@ -11,7 +11,6 @@ class AuthController < ApplicationController
       Rails.logger.error("Unsuccessful login: #{error}")
       render :failure, status: 200
     end
-    
     Rails.logger.info("Successful login: #{auth.info}") 
   end
 
