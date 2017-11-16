@@ -25,7 +25,7 @@ describe ReportMailer, :email do
         expect(attachments.size).to eq 5
         attachments.each do |attachment|
           expect(attachment).to be_a_kind_of(Mail::Part)
-          expect(attachment.content_type).to match('text/comma-separated-values')
+          expect(attachment.content_type).to match('text/csv')
         end
       end
     end
