@@ -33,7 +33,7 @@ applications:
   services:
     - c2-dev-elasticsearch
     - c2-dev-db
-    - c2-dev-ups-s3
+    - c2-dev-s3
     - c2-dev-ups-oauth
     - c2-dev-ups-newrelic
     - c2-dev-ups-email

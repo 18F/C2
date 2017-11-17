@@ -1,5 +1,5 @@
 source "https://rubygems.org"
-ruby "2.3.3" # this should match `.ruby-version` and doc/setup.md
+ruby "2.3.5" # this should match `.ruby-version` and doc/setup.md
 gem "rails", "4.2.7.1"
 
 gem "actionmailer-text", "~> 0.1.1"

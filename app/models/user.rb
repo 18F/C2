@@ -177,6 +177,7 @@ class User < ActiveRecord::Base
   end
 
   def role?(role_name)
+    Rails.logger.info("Authorization check: #{email_address}, #{role_name}")
     role_names.include? role_name
   end
 
