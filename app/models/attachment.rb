@@ -3,12 +3,14 @@ class Attachment < ActiveRecord::Base
 
   has_attached_file :file
   validates_attachment_content_type :file, content_type: [
-    /\Aapplication\/vnd\..*/,
+    /\Aapplication\/vnd\.ms-.*/,
+    /\Aapplication\/vnd\.oasis.*/,
+    /\Aapplication\/vnd\.openxmlformats.*/,
     "application/msword",
     "application/octet-stream",
     "application/pdf",
-    /image\/p?jpeg/,
-    /image\/(x-)?png/,
+    /\Aimage\/p?jpeg\z/,
+    /\Aimage\/(x-)?png\z/,
     "image/tiff",
     "text/rtf",
   ]
