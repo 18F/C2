@@ -2,7 +2,16 @@ class Attachment < ActiveRecord::Base
   has_paper_trail class_name: "C2Version"
 
   has_attached_file :file
-  do_not_validate_attachment_file_type :file
+  validates_attachment_content_type :file, content_type: [
+    /\Aapplication\/vnd\..*/,
+    "application/msword",
+    "application/octet-stream",
+    "application/pdf",
+    /image\/p?jpeg/,
+    /image\/(x-)?png/,
+    "image/tiff",
+    "text/rtf",
+  ]
 
   belongs_to :proposal
   belongs_to :user
