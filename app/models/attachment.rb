@@ -3,16 +3,16 @@ class Attachment < ActiveRecord::Base
 
   has_attached_file :file
   validates_attachment_content_type :file, content_type: [
-    /\Aapplication\/vnd\.ms-.*/,
-    /\Aapplication\/vnd\.oasis.*/,
-    /\Aapplication\/vnd\.openxmlformats.*/,
+    %r{\Aapplication\/vnd\.ms-.*},
+    %r{\Aapplication\/vnd\.oasis.*},
+    %r{\Aapplication\/vnd\.openxmlformats.*},
     "application/msword",
     "application/octet-stream",
     "application/pdf",
-    /\Aimage\/p?jpeg\z/,
-    /\Aimage\/(x-)?png\z/,
+    %r{\Aimage\/p?jpeg\z},
+    %r{\Aimage\/(x-)?png\z},
     "image/tiff",
-    "text/rtf",
+    "text/rtf"
   ]
 
   belongs_to :proposal
