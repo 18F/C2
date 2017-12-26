@@ -22,7 +22,7 @@ class Attachment < ActiveRecord::Base
   validates :proposal, presence: true
   validates :user, presence: true
 
-  validates_with AttachmentSizeValidator, attributes: :avatar, less_than: 30.megabytes
+  validates_with AttachmentSizeValidator, attributes: :file, less_than: 30.megabytes
 
   scope :with_users, -> { includes :user }
 
