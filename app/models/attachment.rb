@@ -22,6 +22,8 @@ class Attachment < ActiveRecord::Base
   validates :proposal, presence: true
   validates :user, presence: true
 
+  validates_with AttachmentSizeValidator, attributes: :avatar, less_than: 30.megabytes
+
   scope :with_users, -> { includes :user }
 
   # Default url for attachments expires after 10 minutes
