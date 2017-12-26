@@ -28,7 +28,7 @@ feature "Create a Gsa18F event" do
       fill_in "Link to purchase event", with: "www.gsa.gov"
       fill_in "Instructions to purchase event", with: "go buy it"
       execute_script("$('[name=\"attachments[]\"][required=\"required\"]').css('display', 'block')")
-      page.attach_file("attachments[]", "#{Rails.root}/app/assets/images/bg_completed_status.gif")
+      page.attach_file("attachments[]", "#{Rails.root}/app/assets/images/attachment.png")
 
       click_on "SUBMIT"
 
