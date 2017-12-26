@@ -18,11 +18,10 @@ class Attachment < ActiveRecord::Base
   belongs_to :proposal
   belongs_to :user
 
-  validates :file, presence: true
+  validates :file, presence: true,
+    size: { in: 0..30.megabytes }
   validates :proposal, presence: true
   validates :user, presence: true
-
-  validates_with AttachmentSizeValidator, attributes: :file, less_than: 30.megabytes
 
   scope :with_users, -> { includes :user }
 
