@@ -126,6 +126,8 @@ applications:
   instances: 2
   command: script/server_start
   env:
+    RAILS_ENV: production
+    RACK_ENV: production
     API_ENABLED: true
     ASSET_HOST: https://cap.18f.gov/
     DEFAULT_URL_HOST: cap.18f.gov
@@ -156,6 +158,8 @@ applications:
   command: script/worker-start
   memory: 640MB
   env:
+    RAILS_ENV: production
+    RACK_ENV: production
     ASSET_HOST: https://cap.18f.gov/
     DEFAULT_URL_HOST: cap.18f.gov
     DISABLE_SANDBOX_WARNING: true

@@ -18,6 +18,8 @@ module C2
       end
     end
 
+    config.force_ssl = true
+
     config.action_mailer.raise_delivery_errors = true
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.yml')]
     config.roadie.url_options = config.action_mailer.default_url_options
