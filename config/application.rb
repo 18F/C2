@@ -11,7 +11,7 @@ module C2
       allow do
         origins '*'
 
-        resource '*',
+        resource "/api/*",
           headers: :any,
           methods: [:get, :post, :delete, :put, :options, :head],
           max_age: 1728000
