@@ -18,7 +18,7 @@ module C2
       end
     end
 
-    config.force_ssl = true
+    config.force_ssl = Rails.env.production?
 
     config.action_mailer.raise_delivery_errors = true
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.yml')]
