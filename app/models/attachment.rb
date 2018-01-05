@@ -7,7 +7,6 @@ class Attachment < ActiveRecord::Base
     %r{\Aapplication\/vnd\.oasis.*},
     %r{\Aapplication\/vnd\.openxmlformats.*},
     "application/msword",
-    "application/octet-stream",
     "application/pdf",
     %r{\Aimage\/p?jpeg\z},
     %r{\Aimage\/(x-)?png\z},
