@@ -11,8 +11,7 @@ class Attachment < ActiveRecord::Base
     "application/pdf",
     %r{\Aimage\/p?jpeg\z},
     %r{\Aimage\/(x-)?png\z},
-    "image/tiff",
-    "text/rtf"
+    "image/tiff"
   ]
 
   belongs_to :proposal
