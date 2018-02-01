@@ -2,7 +2,7 @@
 
 ## Dependencies
 
-* Ruby 2.3.3
+* Ruby 2.3.5
 * PostgreSQL 9.x
 * Elasticsearch 1.5+
 * A [cloud.gov](https://cloud.gov/) account
@@ -17,6 +17,14 @@ C2 is a fairly typical Rails application, so the setup is straightforward:
    `rvm`. On a Mac, [you can use Homebrew to install it](https://github.com/rbenv/rbenv#homebrew-on-mac-os-x)
    (along with `ruby-build`).
 
+   ```bash
+   brew install rbenv postgresql
+   rbenv init
+   rbenv install 2.3.5
+   gem install bundler
+   bundle
+   ```
+
 1. Run the setup script to create a user record for your email address, make
    that user an admin, and add a few records for that user.
 
@@ -29,11 +37,8 @@ C2 is a fairly typical Rails application, so the setup is straightforward:
     ```
 1. Per [the Twelve-Factor guidelines](http://12factor.net/config), all necessary configuration should be possible through environment variables. (See [`.env.example`](../.env.example) for the full list.)
 
-    Your configuration will go in the `.env` file. Create it by copying `.env.example`:
+    Your configuration will go in the `.env` file that the `bootstrap` script creates.  `.env.example` exists as an example.
 
-    ```bash
-    cp .env.example .env
-    ```
 1. [Register an application on cloud.gov](https://cloud.gov/docs/apps/leveraging-authentication/#register-your-application-instances).
     * Give the application a **Name** that gives cloud.gov admins a good idea of what it is and who set it up; e.g. `c2-prod`.
       Optionally create multiple instances: `c2-prod`, `c2-staging`, `c2-dev`, for example.
@@ -43,9 +48,13 @@ C2 is a fairly typical Rails application, so the setup is straightforward:
 1. Once you've registered the application, cloud.gov will give you two consumer key strings for saving: the _App ID_ and _App Secret_. Add these to your [`.env`](../.env.example), setting `CG_APP_ID` to the App ID and `CG_APP_SECRET` to the App Secret.
 
 1. To test locally, you need to use fake-cloud.gov:
-    * Download the binary for [fake-cloud.gov](https://github.com/18F/cg-fake-uaa)
-    * From the directory your binary is in, run `chmod +x fake-cloud.gov`
-    * Run the binary, passing it the correct URL for your local instance's callback: `./fake-cloud.gov -callback-url http://localhost:3000/auth/cg/callback`
+    * Download the binary for [cg-fake-uaa](https://github.com/18F/cg-fake-uaa)
+    * From the directory your binary is in, run `chmod +x cg-fake-uaa`
+    * Run the binary, passing it the correct URL for your local instance's callback: `./cg-fake-uaa -callback-url http://localhost:3000/auth/cg/callback`
+    * When `cg-fake-uaa` is run it will print an OAuth2 authorize URL and a token URL. 
+      In your C2 `.env` file, add these as  `CG_URL` and `CG_TOKEN_URL` respectively. (**Note:** At time of writing,
+      using the full token URL suggested by `cg-fake-uaa` will cause errors when trying to log in with C2. For the
+      moment, set `CG_TOKEN_URL` to just `http://localhost:8080/` (or whichever port `cg-fake-uaa` is using)
 
     The fake version simply asks for an email address and redirects that email address back to your callback. It does
     not look like the actual cloud.gov login flow.
@@ -59,10 +68,18 @@ C2 is a fairly typical Rails application, so the setup is straightforward:
 
 #### Can't create or connect to Elasticsearch
 
+* To install a compatible Elasticsearch locally:
+
+```bash
+brew install elasticsearch@2.4
+```
+
+* Note the `TEST_CLUSTER_COMMAND` in `.env.example`, you may need to un-comment it before tests will run.
 * Check that Elasticsearch is running (default is localhost:9200)
 * Set the `ES_URL` variable in [`.env`](../.env.example) to match your setup
 
 #### If 'foreman' command not found, you may be using rbenv. If so, run the following...
+
 ```bash
 rbenv rehash
 gem install foreman
@@ -104,9 +121,14 @@ http://localhost:3000/rails/mailers.
 You will need to install [PhantomJS](http://phantomjs.org/download.html) and
 have it in your PATH. This is used for javascript and interface testing.
 
+```bash
+brew install phantomjs
+```
+
 ### Running the entire suite once
 
 ```bash
+rake db:test:prepare
 ./bin/rake
 ```
 

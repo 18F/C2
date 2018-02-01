@@ -8,9 +8,10 @@ class AuthController < ApplicationController
     begin
       try_user_auth(auth, return_to_path)
     rescue EmailRequired => error
-      Rails.logger.error(error)
+      Rails.logger.error("Unsuccessful login: #{error}")
       render :failure, status: 200
     end
+    Rails.logger.info("Successful login: #{auth.info}")
   end
 
   def failure

@@ -11,12 +11,14 @@ module C2
       allow do
         origins '*'
 
-        resource '*',
+        resource "/api/*",
           headers: :any,
           methods: [:get, :post, :delete, :put, :options, :head],
           max_age: 1728000
       end
     end
+
+    config.force_ssl = Rails.env.production?
 
     config.action_mailer.raise_delivery_errors = true
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.yml')]

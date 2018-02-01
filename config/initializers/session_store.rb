@@ -3,6 +3,7 @@
 C2::Application.config.session_store(
   :cookie_store,
   key: "_c2_session",
-  expire_after: 8.hours
+  expire_after: 8.hours,
+  secure: Rails.env.production?
   # domain: 'localhost'
 )
