@@ -9,11 +9,11 @@ WORKDIR $workdir
 
 ADD Gemfile $workdir/Gemfile
 ADD Gemfile.lock $workdir/Gemfile.lock
-ENV BUNDLE_PATH /box
-RUN bundle check || bundle install
+# ENV BUNDLE_PATH /box
+RUN bundle install
+COPY . $workdir
 
 RUN mkdir -p tmp/pids
 
-
-#RUN bin/rake "dev:prime[admin@gsa.gov]"
-#RUN bin/rake "populate:ncr:for_user[admin@gsa.gov]"
+# RUN bundle exec rake "dev:prime[admin@gsa.gov]"
+# RUN bundle exec rake "populate:ncr:for_user[admin@gsa.gov]"
