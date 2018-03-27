@@ -144,6 +144,7 @@ class ApplicationController < ActionController::Base
   end
 
   def signed_in?
+    Rails.logger.info("Authentication check: #{current_user}") if current_user
     current_user.present?
   end
 

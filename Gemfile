@@ -1,5 +1,5 @@
 source "https://rubygems.org"
-ruby "2.3.3" # this should match `.ruby-version` and doc/setup.md
+ruby "2.3.5" # this should match `.ruby-version` and doc/setup.md
 gem "rails", "4.2.7.1"
 
 gem "actionmailer-text", "~> 0.1.1"
@@ -42,7 +42,7 @@ gem "mandrill-rails"
 gem "newrelic_rpm"
 gem "omniauth-cg", git: "https://github.com/18F/omniauth-cg"
 gem "paper_trail", "~> 4.1.0"
-gem "paperclip", "~> 5.0.0"
+gem "paperclip", "~> 5.2.0"
 gem "peek"
 gem "peek-delayed_job"
 gem "peek-performance_bar"

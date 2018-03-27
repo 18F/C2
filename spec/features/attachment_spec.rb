@@ -45,11 +45,11 @@ describe "Add attachments" do
     login_as(proposal.requester)
 
     visit proposal_path(proposal)
-    page.attach_file("attachment[file]", "#{Rails.root}/app/assets/images/bg_completed_status.gif")
+    page.attach_file("attachment[file]", "#{Rails.root}/app/assets/images/attachment.png")
     click_on "Attach a File"
 
     expect(proposal.attachments.length).to eq 1
-    expect(proposal.attachments.last.file_file_name).to eq "bg_completed_status.gif"
+    expect(proposal.attachments.last.file_file_name).to eq "attachment.png"
   end
 
   it "saves attachments submitted via the webform with js", :js, js_errors: false do
@@ -59,13 +59,13 @@ describe "Add attachments" do
 
     visit proposal_path(proposal)
     page.execute_script("$('#attachment_file').addClass('show-attachment-file');")
-    page.attach_file("attachment[file]", "#{Rails.root}/app/assets/images/bg_completed_status.gif", visible: false)
+    page.attach_file("attachment[file]", "#{Rails.root}/app/assets/images/attachment.png", visible: false)
     wait_for_ajax
     within(".attachment-list") do
-      expect(page).to have_content("bg_completed_status.gif")
+      expect(page).to have_content("attachment.png")
     end
     within("#card-for-activity") do
-      expect(page).to have_content("bg_completed_status.gif")
+      expect(page).to have_content("attachment.png")
     end
   end
 
@@ -89,7 +89,7 @@ describe "Add attachments" do
     proposal.add_observer(create(:user))
 
     visit proposal_path(proposal)
-    page.attach_file("attachment[file]", "#{Rails.root}/app/assets/images/bg_completed_status.gif")
+    page.attach_file("attachment[file]", "#{Rails.root}/app/assets/images/attachment.png")
     click_on "Attach a File"
 
     expect(dispatcher).to have_received(:deliver_attachment_emails)

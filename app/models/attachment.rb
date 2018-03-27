@@ -2,7 +2,16 @@ class Attachment < ActiveRecord::Base
   has_paper_trail class_name: "C2Version"
 
   has_attached_file :file
-  do_not_validate_attachment_file_type :file
+  validates_attachment_content_type :file, content_type: [
+    %r{\Aapplication\/vnd\.ms-.*},
+    %r{\Aapplication\/vnd\.oasis.*},
+    %r{\Aapplication\/vnd\.openxmlformats.*},
+    "application/msword",
+    "application/pdf",
+    %r{\Aimage\/p?jpeg\z},
+    %r{\Aimage\/(x-)?png\z},
+    "image/tiff"
+  ]
 
   belongs_to :proposal
   belongs_to :user
@@ -10,6 +19,8 @@ class Attachment < ActiveRecord::Base
   validates :file, presence: true
   validates :proposal, presence: true
   validates :user, presence: true
+
+  validates_attachment :file, size: { in: 0..30.megabytes }
 
   scope :with_users, -> { includes :user }
 
