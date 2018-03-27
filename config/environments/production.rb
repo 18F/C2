@@ -5,7 +5,7 @@ C2::Application.configure do
   config.action_mailer.smtp_settings = {
     address: EmailCredentials.smtp_server,
     port: EmailCredentials.smtp_port,
-    domain: EmailCredentials.smtp_domain || "18f.gsa.gov",
+    domain: EmailCredentials.smtp_domain || "18f.gov",
     user_name: EmailCredentials.smtp_username,
     password: EmailCredentials.smtp_password,
     authentication: EmailCredentials.smtp_auth || "login",
