@@ -3,12 +3,12 @@ C2::Application.configure do
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.asset_host = AppParamCredentials.asset_host
   config.action_mailer.smtp_settings = {
-    address: "smtp.mandrillapp.com",
-    port: 587,
-    domain: ENV["SMTP_DOMAIN"] || "18f.gsa.gov",
+    address: EmailCredentials.smtp_server,
+    port: EmailCredentials.smtp_port,
+    domain: EmailCredentials.smtp_domain || "18f.gov",
     user_name: EmailCredentials.smtp_username,
     password: EmailCredentials.smtp_password,
-    authentication: "login",
+    authentication: EmailCredentials.smtp_auth || "login",
     enable_starttls_auto: true
   }
   config.active_support.deprecation = :notify
