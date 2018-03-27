@@ -18,4 +18,36 @@ class EmailCredentials
       credentials(base_name("email"))["SMTP_USERNAME"]
     end
   end
+
+  def self.smtp_domain
+    if use_env_var?
+      ENV["SMTP_DOMAIN"]
+    else
+      credentials(base_name("email"))["SMTP_DOMAIN"]
+    end
+  end
+
+  def self.smtp_server
+    if use_env_var?
+      ENV["SMTP_SERVER"]
+    else
+      credentials(base_name("email"))["SMTP_SERVER"]
+    end
+  end
+
+  def self.smtp_port
+    if use_env_var?
+      ENV["SMTP_PORT"]
+    else
+      credentials(base_name("email"))["SMTP_PORT"]
+    end
+  end
+
+  def self.smtp_auth
+    if use_env_var?
+      ENV["SMTP_AUTH"]
+    else
+      credentials(base_name("email"))["SMTP_AUTH"]
+    end
+  end
 end
