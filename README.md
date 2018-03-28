@@ -18,7 +18,6 @@ Please submit a [support ticket](https://cap.18f.gov/feedback) or join our
 ## Links
 
 * [Issue tracker](https://trello.com/b/kAW72R3m/c2-birthday-cake)
-* [Chat with us](https://chat.18f.gov/?channel=cap-public)
 
 ## Documentation
 
