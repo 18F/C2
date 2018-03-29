@@ -1,0 +1,70 @@
+---
+name: C2
+uniqueID: MB18FIX020750/753
+version: 1.0.0
+# descriptions:
+# https://18f.gsa.gov/dashboard/
+phase: live
+# `D26 Civilian Operations` is most common for 18F projects.
+# http://csrc.nist.gov/publications/nistpubs/800-60-rev1/SP800-60_Vol1-Rev1.pdf#page=23
+information-types:
+- <Dxx + name>
+
+# https://pages.18f.gov/before-you-ship/ato/levels/
+confidentiality: moderate
+integrity: moderate
+availability: moderate
+security-baseline: moderate
+
+system-type: <major|minor|general support>
+level-of-identity-assurance: <0 if no authentication, or a link to SSP of the forthcoming identity system>
+staff:
+  authorizing-official:
+    name: Noah Kunin
+    title: TTS Infrastructure Director
+    org: General Services Administration
+    unit: TTS
+    email: devops@gsa.gov
+  system-owner:
+    name: Noah Kunin
+    title: TTS Infrastructure Director
+    org: General Services Administration
+    unit: TTS
+    email: devops@gsa.gov
+  system-management:
+    name: Noah Kunin
+    title: TTS Infrastructure Director
+    org: General Services Administration
+    unit: TTS
+    email: devops@gsa.gov
+  system-security-officer:
+    name: Noah Kunin
+    title: TTS Infrastructure Director
+    org: General Services Administration
+    unit: TTS
+    email: devops@gsa.gov
+  technical-lead:
+    name: Bilal Chaudhry
+    title: Technical Lead
+    org: Karsun, LLC
+    unit:
+    email: bilal.chaudhry@karsun-llc.com
+leveraged-authorizations:
+- https://www.fedramp.gov/marketplace/compliant-systems/amazon-web-services-aws-eastwest-us-public-cloud/
+purpose: https://cap.18f.gov/
+components:
+- https://github.com/18F/C2
+
+# these will be the same unless your architecture is especially complex
+system-diagram: https://github.com/18F/C2/blob/master/doc/architecture.png
+network-diagram: https://github.com/18F/C2/blob/master/doc/architecture.png
+
+environments:
+- Cloud.gov
+user-types:
+  developer:
+    functions:
+    - deployment
+    - engineering
+controls:
+- <links to your security documentation>
