@@ -12,13 +12,11 @@ repository, adapt it for your needs, and deploy it yourself.
 If you would prefer to use C2 as as hosted software solution for your
 organization, we would be happy to give you a demo.
 
-Please submit a [support ticket](https://cap.18f.gov/feedback) or join our
-[public Slack channel](https://chat.18f.gov/?channel=cap-public) to learn more.
+Please submit a [support ticket](https://cap.18f.gov/feedback) to learn more.
 
 ## Links
 
 * [Issue tracker](https://trello.com/b/kAW72R3m/c2-birthday-cake)
-* [Chat with us](https://chat.18f.gov/?channel=cap-public)
 
 ## Documentation
 
