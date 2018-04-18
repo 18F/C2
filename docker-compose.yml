@@ -23,7 +23,7 @@ services:
        DATABASE_HOST: db
        RAILS_ENV: development
        CG_URL: http://0.0.0.0:8080/oauth/authorize
-       CG_TOKEN_URL: http://fake_cg:8080/oauth/token
+       CG_TOKEN_URL: http://fake_cg:8080
        CG_APP_ID: 1234567890
        CG_APP_SECRET: 1234567890
 
