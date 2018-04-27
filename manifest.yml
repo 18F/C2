@@ -36,7 +36,7 @@ applications:
     - c2-dev-s3
     - c2-dev-ups-oauth
     - c2-dev-ups-newrelic
-    - c2-dev-ups-email
+    - c2-dev-ups-aws
     - c2-dev-ups-app_param
     - c2-dev-ups-app_config
 - name: c2-dev-worker
@@ -62,7 +62,7 @@ applications:
     - c2-dev-ups-s3
     - c2-dev-ups-oauth
     - c2-dev-ups-newrelic
-    - c2-dev-ups-email
+    - c2-dev-ups-aws
     - c2-dev-ups-app_param
     - c2-dev-ups-app_config
 # staging
@@ -149,7 +149,7 @@ applications:
     - c2-prod-ups-s3
     - c2-prod-ups-oauth
     - c2-prod-ups-newrelic
-    - c2-prod-ups-email
+    - c2-prod-ups-aws
     - c2-prod-ups-app_param
     - c2-prod-ups-app_config
 - name: c2-prod-worker
@@ -178,6 +178,6 @@ applications:
     - c2-prod-ups-s3
     - c2-prod-ups-oauth
     - c2-prod-ups-newrelic
-    - c2-prod-ups-email
+    - c2-prod-ups-aws
     - c2-prod-ups-app_param
     - c2-prod-ups-app_config

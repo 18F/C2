@@ -97,6 +97,9 @@ GEM
       aws-sdk-resources (= 2.2.15)
     aws-sdk-core (2.2.15)
       jmespath (~> 1.0)
+    aws-sdk-rails (1.0.1)
+      aws-sdk-resources (~> 2)
+      railties (>= 3)
     aws-sdk-resources (2.2.15)
       aws-sdk-core (= 2.2.15)
     blazer (1.1.0)
@@ -551,6 +554,7 @@ DEPENDENCIES
   autoprefixer-rails
   awesome_print
   aws-sdk (~> 2.2.15)
+  aws-sdk-rails
   blazer
   browser
   browser-timezone-rails
