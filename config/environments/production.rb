@@ -1,16 +1,7 @@
 C2::Application.configure do
   config.action_controller.perform_caching = true
-  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.delivery_method = :aws_sdk
   config.action_mailer.asset_host = AppParamCredentials.asset_host
-  config.action_mailer.smtp_settings = {
-    address: EmailCredentials.smtp_server,
-    port: EmailCredentials.smtp_port,
-    domain: EmailCredentials.smtp_domain || "18f.gov",
-    user_name: EmailCredentials.smtp_username,
-    password: EmailCredentials.smtp_password,
-    authentication: EmailCredentials.smtp_auth || "login",
-    enable_starttls_auto: true
-  }
   config.active_support.deprecation = :notify
   config.assets.compile = true
   config.assets.digest = true
