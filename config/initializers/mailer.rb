@@ -19,3 +19,6 @@ unless ENV["DISABLE_SANDBOX_WARNING"] == "true"
 
   ActionMailer::Base.register_interceptor(PrefixEmailSubject)
 end
+
+# Register custom SES delivery method
+ActionMailer::Base.add_delivery_method :ses_mail_delivery, ::SesMailDelivery
