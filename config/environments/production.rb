@@ -1,6 +1,6 @@
 C2::Application.configure do
   config.action_controller.perform_caching = true
-  config.action_mailer.delivery_method = :aws_sdk
+  config.action_mailer.delivery_method = :ses_mail_delivery
   config.action_mailer.asset_host = AppParamCredentials.asset_host
   config.active_support.deprecation = :notify
   config.assets.compile = true
