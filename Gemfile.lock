@@ -615,6 +615,7 @@ DEPENDENCIES
   puma
   pundit (>= 1.0.0)
   quiet_assets
+  rack-attack
   rack-cors
   rack-raw-upload
   rack_session_access
@@ -646,4 +647,4 @@ RUBY VERSION
    ruby 2.3.5p376
 
 BUNDLED WITH
-   1.16.1
+   1.16.2

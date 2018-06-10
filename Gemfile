@@ -53,6 +53,7 @@ gem "pry-rails"
 gem "pundit", ">= 1.0.0" # Interface for Pundit::NotAuthorizedError changed in this version
 gem "rack-cors", require: "rack/cors"
 gem "rack-raw-upload"
+gem 'rack-attack'
 gem "rake", "11.3.0"
 gem "redcarpet"
 gem "roadie-rails"

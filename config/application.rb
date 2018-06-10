@@ -18,6 +18,8 @@ module C2
       end
     end
 
+    config.middleware.use Rack::Attack
+
     config.force_ssl = Rails.env.production?
 
     config.action_mailer.raise_delivery_errors = true
