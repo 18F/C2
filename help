@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <title>
+      Help -
+      C2
+    </title>
+    <link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css' rel='stylesheet'>
+    <link rel="stylesheet" media="all" href="/assets/application.self.css?body=1" />
+    <link rel="stylesheet" media="all" href="/assets/normalize.self.css?body=1" />
+    <link rel="stylesheet" media="all" href="/assets/peek/vendor/tipsy.self.css?body=1" />
+    <link rel="stylesheet" media="all" href="/assets/peek.self.css?body=1" />
+    <link rel="stylesheet" media="all" href="/assets/webapp.self.css?body=1" />
+    <link rel="stylesheet" media="all" href="/assets/common.self.css?body=1" />
+    <link rel="stylesheet" media="all" href="/assets/selectize.bootstrap3.self.css?body=1" />
+    <link rel="stylesheet" media="all" href="/assets/peek/views/performance_bar.self.css?body=1" />
+    <link rel="stylesheet" media="all" href="/assets/ladda/ladda-themeless.min.self.css?body=1" />
+    <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico" />
+    <!--[if lt IE 9]> <haml_loud> javascript_include_tag &quot;es5-shim.min.js&quot; </haml_loud> <![endif]-->
+    <script src="/assets/jquery.self.js?body=1"></script>
+    <script src="/assets/jquery.cookie.self.js?body=1"></script>
+    <script src="/assets/jstz.self.js?body=1"></script>
+    <script src="/assets/browser_timezone_rails/set_time_zone.self.js?body=1"></script>
+    <script src="/assets/jquery_ujs.self.js?body=1"></script>
+    <script src="/assets/selectize.self.js?body=1"></script>
+    <script src="/assets/peek/vendor/jquery.tipsy.self.js?body=1"></script>
+    <script src="/assets/peek.self.js?body=1"></script>
+    <script src="/assets/peek/views/performance_bar.self.js?body=1"></script>
+    <script src="/assets/ahoy.self.js?body=1"></script>
+    <script src="/assets/ladda/spin.min.self.js?body=1"></script>
+    <script src="/assets/ladda/ladda.min.self.js?body=1"></script>
+    <script src="/assets/ladda/ladda.jquery.min.self.js?body=1"></script>
+    <script src="/assets/jquery.dirrty.self.js?body=1"></script>
+    <script src="/assets/progressbar.self.js?body=1"></script>
+    <script src="/assets/moment.self.js?body=1"></script>
+    <script src="/assets/DataTables/jquery.dataTables.self.js?body=1"></script>
+    <script src="/assets/DataTables/dataTables.foundation.self.js?body=1"></script>
+    <script src="/assets/DataTables/dataTables.buttons.self.js?body=1"></script>
+    <script src="/assets/DataTables/buttons.foundation.self.js?body=1"></script>
+    <script src="/assets/DataTables/buttons.colVis.self.js?body=1"></script>
+    <script src="/assets/DataTables/buttons.print.self.js?body=1"></script>
+    <script src="/assets/DataTables/dataTables.fixedColumns.self.js?body=1"></script>
+    <script src="/assets/DataTables/dataTables.fixedHeader.self.js?body=1"></script>
+    <script src="/assets/DataTables/dataTables.ellipsis.self.js?body=1"></script>
+    <script src="/assets/DataTables/dataTables.responsive.self.js?body=1"></script>
+    <script src="/assets/jquery.smartresize.self.js?body=1"></script>
+    <script src="/assets/jquery-ui/core.self.js?body=1"></script>
+    <script src="/assets/jquery-ui/datepicker.self.js?body=1"></script>
+    <script src="/assets/jquery-ui/widget.self.js?body=1"></script>
+    <script src="/assets/jquery-ui/button.self.js?body=1"></script>
+    <script src="/assets/jquery-ui/mouse.self.js?body=1"></script>
+    <script src="/assets/jquery-ui/draggable.self.js?body=1"></script>
+    <script src="/assets/jquery-ui/position.self.js?body=1"></script>
+    <script src="/assets/jquery-ui/resizable.self.js?body=1"></script>
+    <script src="/assets/jquery-ui/dialog.self.js?body=1"></script>
+    <script src="/assets/jquery-ui/sortable.self.js?body=1"></script>
+    <script src="/assets/jquery-ui/tabs.self.js?body=1"></script>
+    <script src="/assets/active_admin/jquery_ui.self.js?body=1"></script>
+    <script src="/assets/active_admin/base.self.js?body=1"></script>
+    <script src="/assets/active_admin/lib/batch_actions.self.js?body=1"></script>
+    <script src="/assets/active_admin/lib/checkbox-toggler.self.js?body=1"></script>
+    <script src="/assets/active_admin/lib/dropdown-menu.self.js?body=1"></script>
+    <script src="/assets/active_admin/lib/flash.self.js?body=1"></script>
+    <script src="/assets/active_admin/lib/has_many.self.js?body=1"></script>
+    <script src="/assets/active_admin/lib/modal_dialog.self.js?body=1"></script>
+    <script src="/assets/active_admin/lib/per_page.self.js?body=1"></script>
+    <script src="/assets/active_admin/lib/table-checkbox-toggler.self.js?body=1"></script>
+    <script src="/assets/active_admin/ext/jquery-ui.self.js?body=1"></script>
+    <script src="/assets/active_admin/ext/jquery.self.js?body=1"></script>
+    <script src="/assets/active_admin/initializers/batch_actions.self.js?body=1"></script>
+    <script src="/assets/active_admin/initializers/datepicker.self.js?body=1"></script>
+    <script src="/assets/active_admin/initializers/filters.self.js?body=1"></script>
+    <script src="/assets/active_admin/initializers/tabs.self.js?body=1"></script>
+    <script src="/assets/active_admin.self.js?body=1"></script>
+    <script src="/assets/add_minus.self.js?body=1"></script>
+    <script src="/assets/ahoy_tracking.self.js?body=1"></script>
+    <script src="/assets/field_filter.self.js?body=1"></script>
+    <script src="/assets/filter.self.js?body=1"></script>
+    <script src="/assets/filter_set.self.js?body=1"></script>
+    <script src="/assets/flash_errors.self.js?body=1"></script>
+    <script src="/assets/hidden_until_select.self.js?body=1"></script>
+    <script src="/assets/ncr_work_orders.self.js?body=1"></script>
+    <script src="/assets/new_form.self.js?body=1"></script>
+    <script src="/assets/reports.self.js?body=1"></script>
+    <script src="/assets/required_for_submit.self.js?body=1"></script>
+    <script src="/assets/search.self.js?body=1"></script>
+    <script src="/assets/selectizer.self.js?body=1"></script>
+    <script src="/assets/application.self.js?body=1"></script>
+    
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1' name='viewport'>
+    
+    <meta name="csrf-param" content="authenticity_token" />
+    <meta name="csrf-token" content="52j5H7umNHsSEgOJz3T6+0qI6s2oU4PMqx5kVZ2rJGZ6Ab3IQiAur0EgDvowMPkjcvJx24EYh9GpkxIpSmY7/Q==" />
+    <link rel="stylesheet" media="screen" href="/assets/bootstrap.self.css?body=1" />
+    <link rel="stylesheet" media="screen" href="/assets/bootstrap-sprockets.self.css?body=1" />
+    <link rel="stylesheet" media="screen" href="/assets/selectize.bootstrap3.self.css?body=1" />
+  </head>
+  <body class='bodyclass webapp controller-help action-index '>
+    <div id="peek" class="development" data-request-id="89304cdf-dca5-45cc-83ca-ffa3ccf5c22b">
+      <div class="wrapper">
+          <div id="peek-view-performance-bar" class="view">
+            <span id="serverstats">...</span>
+    <ul class="performance-bar"></ul>
+    
+          </div>
+          <div id="peek-view-pg" class="view">
+            <strong><span data-defer-to="pg-duration">...</span> / <span data-defer-to="pg-calls">...</span></strong> pg
+    
+          </div>
+          <div id="peek-view-delayed-job" class="view">
+            <strong><span data-defer-to="delayed-job-queued">...</span> queued / <span data-defer-to="delayed-job-failed">...</span> failed</strong> delayed::job
+    
+          </div>
+      </div>
+    </div>
+    
+      <div class='banner-element'>
+      <span>
+        This sandbox site is for testing and training purposes only. To view and make live requests,
+        <a href='https://cap.18f.gov'>go to the live site.</a>
+      </span>
+    </div>
+    
+    <header>
+      <div class="container">
+        <div id="header-identity">
+          <div id="c2_logo">C2</div>
+          <h1>Approval Portal</h1>
+        </div>
+        <ul class="header-nav">
+        <li>
+          <a href="/auth/cg">Sign in with Cloud.gov</a>
+        </li>
+      <li>
+        <a href="/help">Help</a>
+      </li>
+    </ul>
+    
+      </div>
+    </header>
+    <div class='inset flash-container'>
+    </div>
+    <div class='markdown'>
+      <h1>
+        Help
+      </h1>
+      <ul>
+        <li>
+          <a href="/help/about">What is this application?
+          </a>
+        </li>
+        <li>
+          <a href="/help/adding_budget_codes">How do I add budget codes to a request?
+          </a>
+        </li>
+        <li>
+          <a href="/help/adding_observer_to_request">How does someone who is not a requester or approver follow the progress of a request?
+          </a>
+        </li>
+        <li>
+          <a href="/help/approver_out_of_office">What happens if someone in the approval chain is out of office?
+          </a>
+        </li>
+        <li>
+          <a href="/help/bookmarking">How can I bookmark Communicart so it’s easier to find my way back to?
+          </a>
+        </li>
+        <li>
+          <a href="/help/delegated_request">How do I submit a delegated request on behalf of a card holder?
+          </a>
+        </li>
+        <li>
+          <a href="/help/editing_user_profile">Can I add my name to my profile or change the name that shows up?
+          </a>
+        </li>
+        <li>
+          <a href="/help/email_conversations">Why can’t I find emails about a purchase request I’m involved in?
+          </a>
+        </li>
+        <li>
+          <a href="/help/email_filtering">Can I get purchase request emails to show up in my inbox differently from my other incoming email?
+          </a>
+        </li>
+        <li>
+          <a href="/help/email_reply_to_comment">How do I reply to comments on purchase requests?
+          </a>
+        </li>
+        <li>
+          <a href="/help/modifying_requests">What if I need to modify a request?
+          </a>
+        </li>
+        <li>
+          <a href="/help/modifying_requests_already_completed">What if I modify a request that is already completed?
+          </a>
+        </li>
+        <li>
+          <a href="/help/new_purchase_request">How do I submit a new credit card purchase request?
+          </a>
+        </li>
+        <li>
+          <a href="/help/printing">How do I print my request or save a copy as a PDF?
+          </a>
+        </li>
+        <li>
+          <a href="/help/proposal_process">What happens once a request is submitted?
+          </a>
+        </li>
+        <li>
+          <a href="/help/removing_self_observer">How can I remove myself from being an observer on a request?
+          </a>
+        </li>
+        <li>
+          <a href="/help/requests_over_3500">How do I submit a request that exceeds $3500?
+          </a>
+        </li>
+        <li>
+          <a href="/help/running_reports">How do I run reports on specific sets of requests?
+          </a>
+        </li>
+        <li>
+          <a href="/help/verbal_ntp_requests">How do I submit a verbal notice to proceed (NTP) request in case of emergency?
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class='inset' id='footer'>
+      <p>
+        Find a bug, have a recommendation, or want to provide other feedback? We'd love to
+        <a href='/feedback' target='_blank'>hear from you!</a>
+      </p>
+    </div>
+    <script src="/assets/bootstrap/transition.self.js?body=1"></script>
+    <script src="/assets/bootstrap/alert.self.js?body=1"></script>
+    <script src="/assets/bootstrap/button.self.js?body=1"></script>
+    <script src="/assets/bootstrap/carousel.self.js?body=1"></script>
+    <script src="/assets/bootstrap/collapse.self.js?body=1"></script>
+    <script src="/assets/bootstrap/dropdown.self.js?body=1"></script>
+    <script src="/assets/bootstrap/modal.self.js?body=1"></script>
+    <script src="/assets/bootstrap/tab.self.js?body=1"></script>
+    <script src="/assets/bootstrap/affix.self.js?body=1"></script>
+    <script src="/assets/bootstrap/scrollspy.self.js?body=1"></script>
+    <script src="/assets/bootstrap/tooltip.self.js?body=1"></script>
+    <script src="/assets/bootstrap/popover.self.js?body=1"></script>
+    <script src="/assets/bootstrap-sprockets.self.js?body=1"></script>
+    <script src="/assets/bootstrap/enable_popovers.self.js?body=1"></script>
+  </body>
+</html>
