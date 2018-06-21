@@ -105,6 +105,7 @@ group :test do
   gem "timecop"
   gem "webmock", require: false
   gem "zonebie"
+  gem 'rack-test', require: 'rack/test'
 end
 
 group :production do

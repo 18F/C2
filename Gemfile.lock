@@ -618,6 +618,7 @@ DEPENDENCIES
   rack-attack
   rack-cors
   rack-raw-upload
+  rack-test
   rack_session_access
   railroady
   rails (= 4.2.7.1)
