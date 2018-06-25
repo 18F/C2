@@ -1,4 +1,4 @@
-FROM ruby:2.3.5
+FROM ruby:2.3.7
 
 RUN apt-get update
 RUN apt-get install nodejs -y
