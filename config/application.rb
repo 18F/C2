@@ -20,6 +20,8 @@ module C2
 
     config.force_ssl = Rails.env.production?
 
+    config.middleware.use Rack::Attack
+
     config.action_mailer.raise_delivery_errors = true
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.yml')]
     config.roadie.url_options = config.action_mailer.default_url_options
