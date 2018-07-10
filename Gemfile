@@ -87,7 +87,7 @@ group :development do
   gem "quiet_assets"
   gem "spring"
   gem "spring-commands-rspec"
-  gem 'meta_request'
+  gem "meta_request"
 end
 
 group :test do
@@ -105,7 +105,7 @@ group :test do
   gem "timecop"
   gem "webmock", require: false
   gem "zonebie"
-  gem 'rack-test', require: 'rack/test'
+  gem "rack-test", require: "rack/test"
 end
 
 group :production do
