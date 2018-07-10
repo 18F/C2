@@ -1,5 +1,5 @@
 source "https://rubygems.org"
-ruby "2.3.5" # this should match `.ruby-version` and doc/setup.md
+ruby "2.3.7" # this should match `.ruby-version` and doc/setup.md
 gem "rails", "4.2.7.1"
 
 gem "actionmailer-text", "~> 0.1.1"
@@ -51,6 +51,7 @@ gem "peek-pg"
 gem "pg", "~> 0.18.4"
 gem "pry-rails"
 gem "pundit", ">= 1.0.0" # Interface for Pundit::NotAuthorizedError changed in this version
+gem "rack-attack"
 gem "rack-cors", require: "rack/cors"
 gem "rack-raw-upload"
 gem "rake", "11.3.0"
@@ -83,10 +84,10 @@ group :development do
   gem "railroady"
   gem "letter_opener"
   gem "letter_opener_web"
+  gem "meta_request"
   gem "quiet_assets"
   gem "spring"
   gem "spring-commands-rspec"
-  gem 'meta_request'
 end
 
 group :test do
@@ -97,6 +98,7 @@ group :test do
   gem "fivemat"
   gem "fuubar"
   gem "poltergeist", "~> 1.11.0"
+  gem "rack-test", require: "rack/test"
   gem "rspec_junit_formatter"
   gem "shoulda-matchers"
   gem "site_prism"

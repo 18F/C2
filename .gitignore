@@ -40,3 +40,7 @@ cf-ssh.yml
 
 # Ignore cg-fake-uaa app
 cg-fake-uaa
+
+
+# Ignore elasticsearch
+elasticsearch*

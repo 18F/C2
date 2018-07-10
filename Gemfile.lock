@@ -615,8 +615,10 @@ DEPENDENCIES
   puma
   pundit (>= 1.0.0)
   quiet_assets
+  rack-attack
   rack-cors
   rack-raw-upload
+  rack-test
   rack_session_access
   railroady
   rails (= 4.2.7.1)
@@ -643,7 +645,7 @@ DEPENDENCIES
   zonebie
 
 RUBY VERSION
-   ruby 2.3.5p376
+   ruby 2.3.7p456
 
 BUNDLED WITH
-   1.16.1
+   1.16.2
