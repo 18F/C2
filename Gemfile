@@ -98,6 +98,7 @@ group :test do
   gem "fivemat"
   gem "fuubar"
   gem "poltergeist", "~> 1.11.0"
+  gem "rack-test", require: "rack/test"
   gem "rspec_junit_formatter"
   gem "shoulda-matchers"
   gem "site_prism"
@@ -105,7 +106,6 @@ group :test do
   gem "timecop"
   gem "webmock", require: false
   gem "zonebie"
-  gem "rack-test", require: "rack/test"
 end
 
 group :production do
