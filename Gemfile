@@ -52,8 +52,8 @@ gem "pg", "~> 0.18.4"
 gem "pry-rails"
 gem "pundit", ">= 1.0.0" # Interface for Pundit::NotAuthorizedError changed in this version
 gem "rack-cors", require: "rack/cors"
+gem "rack-attack"
 gem "rack-raw-upload"
-gem 'rack-attack'
 gem "rake", "11.3.0"
 gem "redcarpet"
 gem "roadie-rails"
@@ -86,8 +86,8 @@ group :development do
   gem "letter_opener_web"
   gem "quiet_assets"
   gem "spring"
-  gem "spring-commands-rspec"
   gem "meta_request"
+  gem "spring-commands-rspec"
 end
 
 group :test do
