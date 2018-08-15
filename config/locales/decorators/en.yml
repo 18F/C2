@@ -45,7 +45,7 @@ en:
       total: "Total"
       total_price: "Total Price"
       urgency: "Urgency"
-      is_tock_billable: "Is this is a billable project?"
+      is_tock_billable: "Is this a billable project?"
       tock_project: "Tock project number"
       product_name_and_description: "Product name and description"
       pegasys_document_number: "Pegasys Document Number"
