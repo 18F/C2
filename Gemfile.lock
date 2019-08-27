@@ -131,7 +131,7 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
-    chartkick (1.4.1)
+    chartkick (3.2.1)
     climate_control (0.2.0)
     cliver (0.3.2)
     clockwork (1.2.0)
