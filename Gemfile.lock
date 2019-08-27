@@ -391,7 +391,7 @@ GEM
     rack-contrib (1.4.0)
       git-version-bump (~> 0.15)
       rack (~> 1.4)
-    rack-cors (0.4.0)
+    rack-cors (0.4.1)
     rack-raw-upload (1.1.1)
       multi_json
     rack-test (0.6.3)
