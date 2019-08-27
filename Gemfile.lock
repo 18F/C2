@@ -148,10 +148,10 @@ GEM
       execjs
     coffee-script-source (1.10.0)
     colorize (0.7.7)
-    concurrent-ruby (1.0.2)
+    concurrent-ruby (1.1.5)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
-    crass (1.0.2)
+    crass (1.0.4)
     css_parser (1.6.0)
       addressable
     daemons (1.2.3)
@@ -163,7 +163,7 @@ GEM
       delayed_job (>= 3.0, < 5)
     diff-lcs (1.2.5)
     docile (1.1.5)
-    doorkeeper (4.2.0)
+    doorkeeper (4.4.0)
       railties (>= 4.2)
     dotenv (2.1.0)
     dotenv-rails (2.1.0)
@@ -260,7 +260,7 @@ GEM
       github-markdown
       html-pipeline
     htmlentities (4.3.4)
-    i18n (0.9.3)
+    i18n (0.9.5)
       concurrent-ruby (~> 1.0)
     inherited_resources (1.6.0)
       actionpack (>= 3.2, < 5)
@@ -302,7 +302,7 @@ GEM
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
       ruby_dep (~> 1.2)
-    loofah (2.1.1)
+    loofah (2.2.3)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     lumberjack (1.0.10)
@@ -320,15 +320,15 @@ GEM
     mime-types-data (3.2016.0521)
     mimemagic (0.3.2)
     mini_mime (0.1.4)
-    mini_portile2 (2.3.0)
+    mini_portile2 (2.4.0)
     minitest (5.11.3)
     multi_json (1.11.2)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
     nenv (0.3.0)
     newrelic_rpm (3.17.1.326)
-    nokogiri (1.8.1)
-      mini_portile2 (~> 2.3.0)
+    nokogiri (1.10.4)
+      mini_portile2 (~> 2.4.0)
     notiffany (0.1.0)
       nenv (~> 0.1)
       shellany (~> 0.0)
@@ -385,7 +385,7 @@ GEM
       activesupport (>= 3.0.0)
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
-    rack (1.6.8)
+    rack (1.6.11)
     rack-attack (5.0.1)
       rack
     rack-contrib (1.4.0)
@@ -413,12 +413,12 @@ GEM
       sprockets-rails
     rails-deprecated_sanitizer (1.0.3)
       activesupport (>= 4.2.0.alpha)
-    rails-dom-testing (1.0.8)
-      activesupport (>= 4.2.0.beta, < 5.0)
+    rails-dom-testing (1.0.9)
+      activesupport (>= 4.2.0, < 5.0)
       nokogiri (~> 1.6)
       rails-deprecated_sanitizer (>= 1.0.1)
-    rails-html-sanitizer (1.0.3)
-      loofah (~> 2.0)
+    rails-html-sanitizer (1.2.0)
+      loofah (~> 2.2, >= 2.2.2)
     rails_12factor (0.0.3)
       rails_serve_static_assets
       rails_stdout_logging
@@ -519,11 +519,11 @@ GEM
       climate_control (>= 0.0.3, < 1.0)
     test_after_commit (1.0.0)
       activerecord (>= 3.2)
-    thor (0.19.1)
+    thor (0.19.4)
     thread_safe (0.3.6)
     tilt (2.0.5)
     timecop (0.8.1)
-    tzinfo (1.2.4)
+    tzinfo (1.2.5)
       thread_safe (~> 0.1)
     uglifier (2.7.2)
       execjs (>= 0.3.0)
@@ -573,7 +573,7 @@ DEPENDENCIES
   daemons
   database_cleaner
   delayed_job_active_record (~> 4.1.0)
-  doorkeeper (~> 4.2.0)
+  doorkeeper (~> 4.4.0)
   dotenv-rails
   draper
   elasticsearch-dsl (~> 0.1.3)

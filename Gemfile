@@ -21,7 +21,7 @@ gem "climate_control"
 gem "clockwork", require: false
 gem "daemons" # for delayed_job
 gem "delayed_job_active_record", "~> 4.1.0"
-gem "doorkeeper", "~> 4.2.0"
+gem "doorkeeper", "~> 4.4.0"
 gem "dotenv-rails", require: "dotenv/rails-now"
 gem "draper"
 gem "elasticsearch-dsl", "~> 0.1.3"
